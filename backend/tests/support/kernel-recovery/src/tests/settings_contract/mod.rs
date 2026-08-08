@@ -25,12 +25,12 @@ fn settings_schema_requires_ordered_typed_non_secret_definitions() {
     assert!(decode_settings_schema_v1(&schema.encode_to_vec()).is_ok());
     let mut defaulted = schema.clone();
     defaulted.definitions[0].default_value = Some(SettingValueV1 {
-        value: Some(hermes_runtime_protocol::v1::setting_value_v1::Value::DurationMillis(5_000)),
+        value: Some(makosh_runtime_protocol::v1::setting_value_v1::Value::DurationMillis(5_000)),
     });
     assert!(decode_settings_schema_v1(&defaulted.encode_to_vec()).is_ok());
     defaulted.definitions[0].default_value = Some(SettingValueV1 {
         value: Some(
-            hermes_runtime_protocol::v1::setting_value_v1::Value::StringValue("wrong".into()),
+            makosh_runtime_protocol::v1::setting_value_v1::Value::StringValue("wrong".into()),
         ),
     });
     assert!(decode_settings_schema_v1(&defaulted.encode_to_vec()).is_err());
@@ -50,7 +50,7 @@ fn settings_snapshot_requires_a_canonical_typed_value_set() {
     let mut wrong_type = snapshot.clone();
     wrong_type.values[0].value = Some(SettingValueV1 {
         value: Some(
-            hermes_runtime_protocol::v1::setting_value_v1::Value::StringValue(
+            makosh_runtime_protocol::v1::setting_value_v1::Value::StringValue(
                 "not a duration".into(),
             ),
         ),
@@ -73,7 +73,7 @@ fn duration_settings_snapshot() -> SettingsSnapshotV1 {
             setting_id: "sync.interval".into(),
             value: Some(SettingValueV1 {
                 value: Some(
-                    hermes_runtime_protocol::v1::setting_value_v1::Value::DurationMillis(1000),
+                    makosh_runtime_protocol::v1::setting_value_v1::Value::DurationMillis(1000),
                 ),
             }),
         }],
@@ -105,7 +105,7 @@ fn assert_oversized_setting_is_rejected(schema: &SettingsSchemaV1, snapshot: &Se
     let mut oversized = snapshot.clone();
     oversized.values[0].value = Some(SettingValueV1 {
         value: Some(
-            hermes_runtime_protocol::v1::setting_value_v1::Value::StringValue("x".repeat(8193)),
+            makosh_runtime_protocol::v1::setting_value_v1::Value::StringValue("x".repeat(8193)),
         ),
     });
     let string_schema = SettingsSchemaV1 {

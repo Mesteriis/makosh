@@ -1,8 +1,8 @@
 use thiserror::Error;
 
-use hermes_events_api::EventEnvelope;
+use makosh_events_api::EventEnvelope;
 
-const HERMES_EVENTS_STREAM: &str = "hermes_events";
+const MAKOSH_EVENTS_STREAM: &str = "makosh_events";
 
 #[derive(Clone)]
 pub struct NatsJetStreamEventBus {
@@ -17,7 +17,7 @@ impl NatsJetStreamEventBus {
         let context = async_nats::jetstream::new(client);
         context
             .get_or_create_stream(async_nats::jetstream::stream::Config {
-                name: HERMES_EVENTS_STREAM.to_owned(),
+                name: MAKOSH_EVENTS_STREAM.to_owned(),
                 subjects: vec!["signal.>".to_owned()],
                 ..Default::default()
             })

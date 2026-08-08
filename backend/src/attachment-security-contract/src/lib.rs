@@ -12,7 +12,7 @@ pub use candidate::{
 pub mod v1 {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.attachment_security.v1.rs"
+        "/makosh.attachment_security.v1.rs"
     ));
 }
 
@@ -21,4 +21,4 @@ include!(concat!(
     "/attachment_security_scan_candidate_schema.rs"
 ));
 
-pub const PACKAGE: &str = "hermes-attachment-security-contract";
+pub const PACKAGE: &str = "makosh-attachment-security-contract";

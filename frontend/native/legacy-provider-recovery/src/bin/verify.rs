@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use hermes_legacy_provider_recovery::{
+use makosh_legacy_provider_recovery::{
     LegacyProviderCandidateKindV1, LegacyProviderRecoveryBundleV1, LegacyProviderRecoveryErrorV1,
     LegacyProviderRecoverySecretPurposeV1, LegacyProviderRecoverySessionsV1,
 };
@@ -56,7 +56,7 @@ fn run() -> Result<VerificationReceiptV1, LegacyProviderRecoveryErrorV1> {
 }
 
 fn handle(
-    plan: &hermes_legacy_provider_recovery::LegacyProviderRecoveryPlanV1,
+    plan: &makosh_legacy_provider_recovery::LegacyProviderRecoveryPlanV1,
     kind: LegacyProviderCandidateKindV1,
 ) -> Result<&str, LegacyProviderRecoveryErrorV1> {
     plan.candidates

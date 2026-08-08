@@ -1,12 +1,12 @@
 import type {
 	ZulipAccountLifecycleReceiptV1,
-} from '../../../gen/hermes/zulip/account/v1/client_pb'
+} from '../../../gen/makosh/zulip/account/v1/client_pb'
 import type {
 	ZulipAccountStatusV1,
-} from '../../../gen/hermes/zulip/operational/v1/client_pb'
+} from '../../../gen/makosh/zulip/operational/v1/client_pb'
 import type {
 	ApplyOwnerManagedIntegrationSettingsReceiptV1,
-} from '../../../gen/hermes/gateway/v1/owner_module_settings_pb'
+} from '../../../gen/makosh/gateway/v1/owner_module_settings_pb'
 import { OwnerModuleSettingsClientV1 } from '../../../platform/settings/ownerModuleSettingsClient'
 import {
 	OwnerVaultActionV1,

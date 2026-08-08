@@ -1,5 +1,5 @@
 use super::*;
-use hermes_communications_api::accounts::ProviderAccount;
+use makosh_communications_api::accounts::ProviderAccount;
 
 // ---------------------------------------------------------------------------
 

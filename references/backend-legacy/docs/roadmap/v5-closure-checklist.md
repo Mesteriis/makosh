@@ -2,7 +2,7 @@
 
 ## Release Goal
 
-Version 5.0 is complete when Hermes Hub can use WhatsApp Web as a local-first, user-visible companion source while preserving source provenance, privacy, auditability, graph-backed recall and long-horizon personal knowledge workflows.
+Version 5.0 is complete when Макошь can use WhatsApp Web as a local-first, user-visible companion source while preserving source provenance, privacy, auditability, graph-backed recall and long-horizon personal knowledge workflows.
 
 ## In Scope
 

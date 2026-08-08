@@ -1,5 +1,5 @@
-use hermes_hub_backend::engines::risk::engine::RiskEngine;
-use hermes_hub_backend::engines::risk::models::{RiskAttentionStatus, RiskSeverity, RiskSignal};
+use makosh_hub_backend::engines::risk::engine::RiskEngine;
+use makosh_hub_backend::engines::risk::models::{RiskAttentionStatus, RiskSeverity, RiskSignal};
 
 #[test]
 fn risk_engine_derives_attention_status_from_unresolved_severity() {

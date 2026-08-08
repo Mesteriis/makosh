@@ -3,7 +3,7 @@
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     DistributionArtifactKindV1, DistributionManifestArtifactV1, DistributionManifestV1,
     ModuleDescriptorV1, ReleaseTrustRootKeyV1, ReleaseTrustRootV1, SignedDistributionManifestV1,
 };
@@ -122,8 +122,8 @@ impl InstalledSignedBundle {
         if artifacts.is_empty() {
             return Err("signed release must contain managed artifacts".to_owned());
         }
-        let kernel = root.join("Hermes.app/Contents/MacOS/hermes-kernel");
-        let resources = root.join("Hermes.app/Contents/Resources/hermes-kernel-release");
+        let kernel = root.join("Макошь.app/Contents/MacOS/makosh-kernel");
+        let resources = root.join("Макошь.app/Contents/Resources/makosh-kernel-release");
         let distribution = resources.join("distribution");
         std::fs::create_dir_all(
             kernel
@@ -175,7 +175,7 @@ fn install_artifacts(
     Ok(DistributionManifestV1 {
         major: 1,
         revision: 1,
-        distribution_id: "hermes-managed-runtime-conformance".to_owned(),
+        distribution_id: "makosh-managed-runtime-conformance".to_owned(),
         release_version: "1.0.0".to_owned(),
         build_id: "managed-runtime-conformance".to_owned(),
         target_triple: TARGET_TRIPLE.to_owned(),
@@ -350,12 +350,12 @@ fn write_release_signature(
         }],
     };
     std::fs::write(
-        resources.join("hermes-signed-distribution-manifest.pb"),
+        resources.join("makosh-signed-distribution-manifest.pb"),
         signed.encode_to_vec(),
     )
     .map_err(|error| error.to_string())?;
     std::fs::write(
-        resources.join("hermes-release-trust-root.pb"),
+        resources.join("makosh-release-trust-root.pb"),
         trust_root.encode_to_vec(),
     )
     .map_err(|error| error.to_string())
@@ -365,14 +365,14 @@ fn write_release_signature(
 mod tests {
     use std::time::{SystemTime, UNIX_EPOCH};
 
-    use hermes_runtime_protocol::validation::distribution::decode_distribution_manifest_v1;
+    use makosh_runtime_protocol::validation::distribution::decode_distribution_manifest_v1;
 
     use super::*;
 
     #[test]
     fn signs_native_dependency_as_an_exact_module_bound_release_artifact() {
         let root = std::env::temp_dir().join(format!(
-            "hermes-signed-native-dependency-{}-{}",
+            "makosh-signed-native-dependency-{}-{}",
             std::process::id(),
             SystemTime::now()
                 .duration_since(UNIX_EPOCH)
@@ -387,7 +387,7 @@ mod tests {
         let descriptor = ModuleDescriptorV1 {
             descriptor_major: 1,
             descriptor_revision: 1,
-            module_id: "hermes-telegram-runtime".to_owned(),
+            module_id: "makosh-telegram-runtime".to_owned(),
             owner_id: "telegram".to_owned(),
             ..Default::default()
         }
@@ -396,14 +396,14 @@ mod tests {
         InstalledSignedBundle::install_with_native_dependencies(
             &root,
             &[SignedRuntimeArtifact::new(
-                "hermes-telegram-runtime",
+                "makosh-telegram-runtime",
                 runtime,
                 descriptor,
             )],
             &[SignedNativeDependency::new(
                 "telegram-tdjson-v1",
                 dependency,
-                "hermes-telegram-runtime",
+                "makosh-telegram-runtime",
             )],
         )
         .expect("signed bundle");
@@ -411,7 +411,7 @@ mod tests {
         let signed = SignedDistributionManifestV1::decode(
             std::fs::read(
                 root.join(
-                    "Hermes.app/Contents/Resources/hermes-kernel-release/hermes-signed-distribution-manifest.pb",
+                    "Макошь.app/Contents/Resources/makosh-kernel-release/makosh-signed-distribution-manifest.pb",
                 ),
             )
             .expect("signed manifest")
@@ -429,7 +429,7 @@ mod tests {
             native.artifact_kind,
             DistributionArtifactKindV1::ModuleRuntimeNativeDependency as i32
         );
-        assert_eq!(native.bound_module_id, "hermes-telegram-runtime");
+        assert_eq!(native.bound_module_id, "makosh-telegram-runtime");
         assert_eq!(native.relative_path, "lib/telegram-tdjson-v1");
         assert!(native.descriptor_relative_path.is_empty());
         assert!(native.settings_schema_relative_path.is_empty());
@@ -440,7 +440,7 @@ mod tests {
     #[test]
     fn signs_executable_and_read_only_runtime_resources_as_distinct_kinds() {
         let root = std::env::temp_dir().join(format!(
-            "hermes-signed-runtime-resources-{}-{}",
+            "makosh-signed-runtime-resources-{}-{}",
             std::process::id(),
             SystemTime::now()
                 .duration_since(UNIX_EPOCH)
@@ -457,7 +457,7 @@ mod tests {
         let descriptor = ModuleDescriptorV1 {
             descriptor_major: 1,
             descriptor_revision: 1,
-            module_id: "hermes-attachment-text-extraction-runtime".to_owned(),
+            module_id: "makosh-attachment-text-extraction-runtime".to_owned(),
             owner_id: "attachment_text_extraction".to_owned(),
             ..Default::default()
         }
@@ -475,12 +475,12 @@ mod tests {
                 SignedRuntimeResource::native_executable(
                     "attachment_text_extraction.ocr.runner.v1",
                     runner,
-                    "hermes-attachment-text-extraction-runtime",
+                    "makosh-attachment-text-extraction-runtime",
                 ),
                 SignedRuntimeResource::read_only_data(
                     "attachment_text_extraction.ocr.eng.v1",
                     model,
-                    "hermes-attachment-text-extraction-runtime",
+                    "makosh-attachment-text-extraction-runtime",
                 ),
             ],
         )
@@ -489,7 +489,7 @@ mod tests {
         let signed = SignedDistributionManifestV1::decode(
             std::fs::read(
                 root.join(
-                    "Hermes.app/Contents/Resources/hermes-kernel-release/hermes-signed-distribution-manifest.pb",
+                    "Макошь.app/Contents/Resources/makosh-kernel-release/makosh-signed-distribution-manifest.pb",
                 ),
             )
             .expect("signed manifest")

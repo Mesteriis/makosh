@@ -1,12 +1,12 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_bulk_action_api::{
+use makosh_communication_bulk_action_api::{
     COMMUNICATION_BULK_ACTION_MODULE_ID_V1, COMMUNICATION_BULK_ACTION_OWNER_V1,
 };
-use hermes_communication_bulk_action_persistence::{
+use makosh_communication_bulk_action_persistence::{
     BulkDeliveryPersistenceErrorV1, CommunicationBulkActionPersistenceV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::{
         ManagedRuntimeClientDeliveryResponseV1, ManagedRuntimeControlResponseV1,
@@ -18,11 +18,11 @@ use hermes_runtime_protocol::{
         validate_module_client_request_v1, validate_module_client_response_v1,
     },
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 

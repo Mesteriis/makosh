@@ -1,6 +1,6 @@
 use thiserror::Error;
 
-use hermes_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::errors::EventStoreError;
 
 #[derive(Debug, Error)]
 pub enum PersonaTrustError {
@@ -11,7 +11,7 @@ pub enum PersonaTrustError {
     RiskEngine(#[from] crate::engines::risk::errors::RiskEngineError),
 
     #[error(transparent)]
-    Observation(#[from] hermes_observations_postgres::errors::ObservationStoreError),
+    Observation(#[from] makosh_observations_postgres::errors::ObservationStoreError),
 
     #[error(transparent)]
     Event(#[from] EventStoreError),

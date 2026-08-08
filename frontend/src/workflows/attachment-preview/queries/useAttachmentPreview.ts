@@ -6,7 +6,7 @@ import {
 	AttachmentPreviewStateV1,
 	type AttachmentPreviewStatusChangedV1,
 	type GetAttachmentPreviewResponseV1,
-} from '../../../gen/hermes/attachment_preview/v1/preview_pb'
+} from '../../../gen/makosh/attachment_preview/v1/preview_pb'
 import {
 	getAttachmentPreviewStatus,
 	readAttachmentPreview,

@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { ClientSurfaceAvailabilityStateV1 } from '../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import { ClientSurfaceAvailabilityStateV1 } from '../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import { clientSurfaceCatalog } from '../../platform/client-runtime/clientSurfaces'
 import { recoveryClientBootstrap } from '../../platform/gateway/clientBootstrap'
 import { compiledClientSurfaceAdapterIds } from '../client-surfaces/compiledClientSurfaceAdapters'

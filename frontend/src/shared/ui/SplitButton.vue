@@ -41,7 +41,7 @@ const emit = defineEmits<{
 const isOpen = ref(false)
 const rootRef = ref<HTMLElement | null>(null)
 const menuRef = ref<HTMLElement | { $el?: Element | null } | null>(null)
-const classes = computed(() => ['hermes-split-button', props.class])
+const classes = computed(() => ['makosh-split-button', props.class])
 const { cancelMouseLeaveDismiss, scheduleMouseLeaveDismiss } = useMouseLeaveDismiss(closeMenu, undefined, {
 	isOpen,
 	getBoundaryElements: () => [rootRef.value, menuRef.value]
@@ -87,7 +87,7 @@ function selectItem(item: NavigationItem): void {
 			@mouseleave="scheduleMouseLeaveDismiss"
 		>
 			<Button
-				class="hermes-split-button__main"
+				class="makosh-split-button__main"
 				:disabled="disabled"
 				:icon="icon"
 				:size="size"
@@ -99,7 +99,7 @@ function selectItem(item: NavigationItem): void {
 			</Button>
 			<DropdownMenuTrigger as-child>
 				<IconButton
-					class="hermes-split-button__toggle"
+					class="makosh-split-button__toggle"
 					icon="tabler:chevron-down"
 					:aria-expanded="isOpen"
 					:disabled="disabled || items.length === 0"
@@ -112,7 +112,7 @@ function selectItem(item: NavigationItem): void {
 		<DropdownMenuPortal>
 			<DropdownMenuContent
 				ref="menuRef"
-				class="hermes-split-button__menu"
+				class="makosh-split-button__menu"
 				:aria-label="menuLabel"
 				align="end"
 				side="bottom"
@@ -122,14 +122,14 @@ function selectItem(item: NavigationItem): void {
 			>
 				<DropdownMenuItem v-for="item in items" :key="item.id" as-child>
 					<button
-						class="hermes-split-button__item"
+						class="makosh-split-button__item"
 						role="menuitem"
 						type="button"
 						:aria-current="item.id === modelValue ? 'true' : undefined"
 						:disabled="item.disabled"
 						@click="selectItem(item)"
 					>
-						<Icon v-if="item.icon" :icon="item.icon" size="1rem" class="hermes-split-button__icon" aria-hidden="true" />
+						<Icon v-if="item.icon" :icon="item.icon" size="1rem" class="makosh-split-button__icon" aria-hidden="true" />
 						<span>{{ item.label }}</span>
 					</button>
 				</DropdownMenuItem>

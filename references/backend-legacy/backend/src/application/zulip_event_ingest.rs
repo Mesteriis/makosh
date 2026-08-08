@@ -1,11 +1,11 @@
 use crate::platform::secrets::store::SecretReferenceStore;
 use chrono::{DateTime, Utc};
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::{
     CommunicationProviderKind, ProviderAccount, ProviderAccountLookupPort,
     ProviderSecretBindingLookupPort,
 };
-use hermes_communications_api::evidence::{
+use makosh_communications_api::evidence::{
     CommunicationEvidencePort, CommunicationEvidencePortError, NewIngestionCheckpoint,
 };
 use serde_json::{Value, json};
@@ -15,20 +15,20 @@ use thiserror::Error;
 use crate::domains::communications::credentials::ProviderCredentialReader;
 use crate::domains::signal_hub::store::SignalHubError;
 use crate::domains::signal_hub::zulip::PostgresZulipSignalDispatch;
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
-use hermes_communications_postgres::store::CommunicationIngestionStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
 
 use crate::platform::secrets::resolver::SecretResolver;
-use hermes_provider_orchestration::{
+use makosh_provider_orchestration::{
     ProviderObservationOrchestrationError, record_and_dispatch_provider_observation,
 };
-use hermes_provider_zulip::client::{ZulipApiClient, ZulipClientConfig, ZulipClientError};
-use hermes_provider_zulip::event_mapper::{
+use makosh_provider_zulip::client::{ZulipApiClient, ZulipClientConfig, ZulipClientError};
+use makosh_provider_zulip::event_mapper::{
     ZulipEventMappingContext, ZulipEventMappingError, map_zulip_event_to_observation,
 };
-use hermes_signal_hub_api::raw_signals::{ProviderRawSignalPort, RawSignalPortError};
+use makosh_signal_hub_api::raw_signals::{ProviderRawSignalPort, RawSignalPortError};
 
 const ZULIP_EVENT_QUEUE_STREAM_ID: &str = "zulip:event_queue";
 const ZULIP_EVENT_TYPES: &[&str] = &["message", "reaction", "update_message", "delete_message"];
@@ -391,7 +391,7 @@ pub enum ZulipEventIngestWorkerError {
         provider_kind: &'static str,
     },
     #[error(transparent)]
-    AccountPort(#[from] hermes_communications_api::accounts::ProviderAccountPortError),
+    AccountPort(#[from] makosh_communications_api::accounts::ProviderAccountPortError),
     #[error("Zulip provider account `{account_id}` has invalid `{field}` config")]
     InvalidAccountConfig {
         account_id: String,

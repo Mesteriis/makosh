@@ -9,7 +9,7 @@ schema-agnostic fixture definitions.
 
 ### SignalSource
 
-Canonical source type known to Hermes.
+Canonical source type known to Макошь.
 
 Fields:
 

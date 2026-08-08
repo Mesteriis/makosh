@@ -8,8 +8,8 @@ use super::models::{ImportedDocument, ImportedDocumentWithProcessing, NewDocumen
 use super::rows::row_to_imported_document;
 use crate::domains::documents::processing::store::DocumentProcessingStore;
 use chrono::Utc;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 
 #[derive(Clone)]
 pub struct DocumentImportStore {

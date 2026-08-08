@@ -1,7 +1,7 @@
-use hermes_communication_reply_suggestion_persistence::{
+use makosh_communication_reply_suggestion_persistence::{
     CommunicationReplySuggestionPersistenceV1, ReplySuggestionPersistenceErrorV1,
 };
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ReplySuggestionEventRelayErrorV1 {

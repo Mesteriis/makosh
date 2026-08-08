@@ -34,7 +34,7 @@ test('managed module query RPC foundation is typed bounded and owner neutral', a
       ),
       readFile(
         new URL(
-          'src/platform/runtime_protocol/proto/hermes/runtime/v1/managed_runtime_control.proto',
+          'src/platform/runtime_protocol/proto/makosh/runtime/v1/managed_runtime_control.proto',
           BACKEND_ROOT,
         ),
         'utf8',
@@ -115,10 +115,10 @@ test('managed module query RPC foundation is typed bounded and owner neutral', a
   assert.match(queryRouter, /initial_owner_identity/);
   assert.match(queryRouter, /provider is ambiguous/);
   assert.match(queryStore, /validate_module_query_contracts/);
-  assert.match(migration, /hermes_kernel_module_query_rpc_route_request/);
-  assert.match(migration, /hermes_kernel_module_contract_dependency/);
+  assert.match(migration, /makosh_kernel_module_query_rpc_route_request/);
+  assert.match(migration, /makosh_kernel_module_contract_dependency/);
   assert.doesNotMatch(
     `${protocol}\n${validation}\n${control}\n${supervisor}\n${queryRouter}\n${queryStore}\n${migration}`,
-    /hermes_(?:communications|mail|telegram|whatsapp|zulip)|Communications|Mail|Telegram|WhatsApp|Zulip/,
+    /makosh_(?:communications|mail|telegram|whatsapp|zulip)|Communications|Mail|Telegram|WhatsApp|Zulip/,
   );
 });

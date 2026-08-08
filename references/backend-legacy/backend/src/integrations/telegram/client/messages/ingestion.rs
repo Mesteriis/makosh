@@ -1,6 +1,6 @@
 use serde_json::{Value, json};
 
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 
 use super::super::TELEGRAM_MESSAGE_RECORD_KIND;
 use super::super::errors::TelegramError;

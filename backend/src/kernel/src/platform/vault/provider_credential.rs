@@ -2,13 +2,13 @@
 
 use std::sync::Arc;
 
-use hermes_kernel_control_store::{ModuleRegistrationState, ModuleVaultPurposeRequestV1};
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store::{ModuleRegistrationState, ModuleVaultPurposeRequestV1};
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeProviderCredentialDeliveryV1, ManagedRuntimeProviderCredentialRequestV1,
     VaultCiphertextRouteDirectionV1, VaultCiphertextRouteV1,
 };
-use hermes_vault_protocol::{
+use makosh_vault_protocol::{
     LeaseAudienceV1, SecretClassV1, VaultActionV1, VaultLeaseIssueRequestV1, VaultPurposeRequestV1,
     VaultTransportBindingV1, VaultTransportCommandV1, VaultTransportDirectionV1,
     VaultTransportPublicKey, seal,
@@ -211,8 +211,8 @@ fn purpose_matches(
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::v1::ManagedRuntimeProviderCredentialRequestV1;
-    use hermes_vault_protocol::VaultActionV1;
+    use makosh_runtime_protocol::v1::ManagedRuntimeProviderCredentialRequestV1;
+    use makosh_vault_protocol::VaultActionV1;
 
     use super::{ModuleVaultPurposeRequestV1, purpose_matches};
 

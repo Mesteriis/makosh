@@ -50,22 +50,22 @@ WhatsApp остаётся integration owner:
 
 ```text
 owner_id  = whatsapp
-module_id = hermes-whatsapp-runtime
+module_id = makosh-whatsapp-runtime
 ```
 
 Функциональные units размещаются внутри существующих owner packages:
 
 ```text
-hermes-whatsapp-api          public query/realtime contracts and validation
-hermes-whatsapp-core         host observation to operational event mapping
-hermes-whatsapp-persistence  projections, search and replay journal
-hermes-whatsapp-runtime      route handlers and owner-local orchestration
-hermes-whatsapp-assembly     immutable descriptor/storage release artifacts
+makosh-whatsapp-api          public query/realtime contracts and validation
+makosh-whatsapp-core         host observation to operational event mapping
+makosh-whatsapp-persistence  projections, search and replay journal
+makosh-whatsapp-runtime      route handlers and owner-local orchestration
+makosh-whatsapp-assembly     immutable descriptor/storage release artifacts
 ```
 
 Это не разрешает aggregate runtime или cross-owner package. Read model,
 realtime journal и host ingestion должны иметь отдельные source modules,
-tests и причины изменения. `hermes-whatsapp-runtime` только композирует
+tests и причины изменения. `makosh-whatsapp-runtime` только композирует
 owner-local units.
 
 Communications не импортирует эти packages и не читает их storage.
@@ -78,7 +78,7 @@ WhatsApp видит из Communications только разрешённый neut
 
 ```text
 capability = whatsapp.operational.query.v1
-route      = /hermes.whatsapp.operational.v1.WhatsAppOperationalQueryService/Query
+route      = /makosh.whatsapp.operational.v1.WhatsAppOperationalQueryService/Query
 gate       = whatsapp_operational_read_v1
 ```
 
@@ -107,7 +107,7 @@ account и stable filter. Неизвестный, повреждённый ил�
 
 ```text
 capability = whatsapp.operational.realtime.v1
-route      = /hermes.whatsapp.operational.v1.WhatsAppOperationalRealtimeService/Replay
+route      = /makosh.whatsapp.operational.v1.WhatsAppOperationalRealtimeService/Replay
 gate       = whatsapp_operational_realtime_v1
 ```
 
@@ -198,7 +198,7 @@ Kernel/Core владеют только:
 
 Kernel, Gateway и Communications не:
 
-- импортируют `hermes-whatsapp-*`;
+- импортируют `makosh-whatsapp-*`;
 - декодируют WhatsApp query/event payload;
 - выбирают account/dialog/message/provider action;
 - читают WhatsApp tables;
@@ -219,7 +219,7 @@ generated client, integration-owned controller и UI cutover. Backend gates не
 Frontend cutover реализован отдельными SRP units:
 
 - generated query/replay messages и service descriptors в
-  `frontend/src/gen/hermes/whatsapp/operational`;
+  `frontend/src/gen/makosh/whatsapp/operational`;
 - route-specific ConnectRPC factories и validating gateways в
   `frontend/src/integrations/whatsapp/api`;
 - exact effective-account discovery и независимые read/replay controllers в
@@ -250,25 +250,25 @@ Gate открывается только при наличии:
 
 Gate реализован следующими отдельными units:
 
-- `hermes-whatsapp-api` публикует exact
+- `makosh-whatsapp-api` публикует exact
   `whatsapp.operational.query.v1` с отдельным descriptor set и typed query /
   response oneofs;
-- `hermes-whatsapp-core::operational` преобразует только typed host
+- `makosh-whatsapp-core::operational` преобразует только typed host
   observations и не восстанавливает отсутствующий metadata-only content;
 - WhatsApp Storage bundle revision 2 добавляет DDL-only owner-local
   projections, event journal, timestamped message/participant tombstones и
   resync control state;
-- `hermes-whatsapp-persistence::operational` атомарно deduplicate-ит host
+- `makosh-whatsapp-persistence::operational` атомарно deduplicate-ит host
   observation, применяет projection, пишет typed event и optional
   Communications outbox;
-- `hermes-whatsapp-runtime` проверяет exact configured account и обрабатывает
+- `makosh-whatsapp-runtime` проверяет exact configured account и обрабатывает
   новый route только через отдельный granted capability.
 
 Disposable managed conformance запускается так:
 
 ```bash
-HERMES_STORAGE_MANAGED_TEST_FILTER=managed_whatsapp_runtime_delivers_live_command_and_event_only_communications_handoff node scripts/test-authenticated-storage.mjs 1.97.0
-HERMES_STORAGE_MANAGED_TEST_FILTER=managed_whatsapp_runtime_uses_signed_kernel_admission_and_host_route_fencing node scripts/test-authenticated-storage.mjs 1.97.0
+MAKOSH_STORAGE_MANAGED_TEST_FILTER=managed_whatsapp_runtime_delivers_live_command_and_event_only_communications_handoff node scripts/test-authenticated-storage.mjs 1.97.0
+MAKOSH_STORAGE_MANAGED_TEST_FILTER=managed_whatsapp_runtime_uses_signed_kernel_admission_and_host_route_fencing node scripts/test-authenticated-storage.mjs 1.97.0
 ```
 
 Первый contour доказывает duplicate/out-of-order ingestion, bounded
@@ -291,12 +291,12 @@ generation и revoke/grant-epoch fencing.
 
 Gate реализован отдельными units:
 
-- `hermes-whatsapp-api` публикует отдельный protobuf package, descriptor set,
+- `makosh-whatsapp-api` публикует отдельный protobuf package, descriptor set,
   route и capability `whatsapp.operational.realtime.v1`;
-- `hermes-whatsapp-persistence::operational` читает append-only typed event
+- `makosh-whatsapp-persistence::operational` читает append-only typed event
   journal по exact account, сохраняет monotonic sequence и проверяет hash
   каждого события до replay;
-- `hermes-whatsapp-runtime::client_port` принимает replay только под отдельным
+- `makosh-whatsapp-runtime::client_port` принимает replay только под отдельным
   granted contract, а managed composition дополнительно проверяет configured
   account;
 - ответ содержит account, earliest/latest sequence, bounded ascending frames,

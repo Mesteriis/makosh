@@ -137,7 +137,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
             .await
             .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
         let affected = sqlx::query(
-            "UPDATE hermes_data.communication_delayed_delivery_operations
+            "UPDATE makosh_data.communication_delayed_delivery_operations
              SET state = $3, state_revision = state_revision + 1,
                  updated_at_unix_millis = $4
              WHERE logical_owner_id = $1 AND delayed_operation_id = $2
@@ -211,7 +211,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
             .await
             .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
         let affected = sqlx::query(
-            "UPDATE hermes_data.communication_delayed_delivery_operations
+            "UPDATE makosh_data.communication_delayed_delivery_operations
              SET state = $3, state_revision = state_revision + 1,
                  error_code = $4, updated_at_unix_millis = $5
              WHERE logical_owner_id = $1 AND delayed_operation_id = $2
@@ -277,7 +277,7 @@ async fn transition_to_due(
     claimed_at: i64,
 ) -> Result<(), DelayedDeliveryPersistenceErrorV1> {
     let affected = sqlx::query(
-        "UPDATE hermes_data.communication_delayed_delivery_operations
+        "UPDATE makosh_data.communication_delayed_delivery_operations
          SET state = $3, state_revision = state_revision + 1,
              updated_at_unix_millis = $4
          WHERE logical_owner_id = $1 AND delayed_operation_id = $2
@@ -303,7 +303,7 @@ async fn transition_to_dispatching(
     claimed_at: i64,
 ) -> Result<(), DelayedDeliveryPersistenceErrorV1> {
     let affected = sqlx::query(
-        "UPDATE hermes_data.communication_delayed_delivery_operations
+        "UPDATE makosh_data.communication_delayed_delivery_operations
          SET state = $3, state_revision = state_revision + 1,
              scheduler_run_id = $4, scheduler_lease_epoch = $5,
              scheduler_lease_expires_at_unix_millis = $6,
@@ -332,7 +332,7 @@ async fn insert_due_inbox(
     claimed_at: i64,
 ) -> Result<bool, DelayedDeliveryPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.communication_delayed_delivery_scheduler_inbox (
+        "INSERT INTO makosh_data.communication_delayed_delivery_scheduler_inbox (
            logical_owner_id, message_id, envelope_sha256,
            delayed_operation_id, received_at_unix_millis
          ) VALUES ($1, $2, $3, $4, $5)
@@ -355,7 +355,7 @@ async fn verify_due_inbox(
 ) -> Result<(), DelayedDeliveryPersistenceErrorV1> {
     let row = sqlx::query(
         "SELECT envelope_sha256, delayed_operation_id
-         FROM hermes_data.communication_delayed_delivery_scheduler_inbox
+         FROM makosh_data.communication_delayed_delivery_scheduler_inbox
          WHERE logical_owner_id = $1 AND message_id = $2",
     )
     .bind(&command.logical_owner_id)
@@ -381,7 +381,7 @@ async fn insert_receipt_outbox(
     created_at: i64,
 ) -> Result<(), DelayedDeliveryPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.communication_delayed_delivery_scheduler_receipt_outbox (
+        "INSERT INTO makosh_data.communication_delayed_delivery_scheduler_receipt_outbox (
            logical_owner_id, message_id, delayed_operation_id, receipt_kind,
            envelope_sha256, envelope_bytes, created_at_unix_millis
          ) VALUES ($1, $2, $3, $4, $5, $6, $7)",
@@ -411,7 +411,7 @@ async fn load_claim(
                 scheduler_run_id, scheduler_schedule_revision,
                 scheduler_lease_epoch, scheduler_lease_expires_at_unix_millis,
                 state
-         FROM hermes_data.communication_delayed_delivery_operations
+         FROM makosh_data.communication_delayed_delivery_operations
          WHERE logical_owner_id = $1 AND delayed_operation_id = $2",
     )
     .bind(logical_owner_id)

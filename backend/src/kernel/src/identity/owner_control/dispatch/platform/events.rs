@@ -2,15 +2,15 @@
 
 use std::path::Path;
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     ApplyPlatformEventsAuthorityAccountJwtRequestV1,
     ApplyPlatformEventsAuthorityAccountJwtResponseV1, BindPlatformEventsAuthorityReleaseRequestV1,
     BindPlatformEventsAuthorityReleaseResponseV1, ConfigurePlatformEventsAuthorityRequestV1,
     ConfigurePlatformEventsAuthorityResponseV1, StartPlatformEventsAuthorityRuntimeRequestV1,
     StartPlatformEventsAuthorityRuntimeResponseV1,
 };
-use hermes_kernel_control_store::PlatformEventsAuthorityConfigurationV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store::PlatformEventsAuthorityConfigurationV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use super::{OwnerControlSessions, OwnerResult, stop_if_active};
 use crate::platform::events::authority::{binding, launch};

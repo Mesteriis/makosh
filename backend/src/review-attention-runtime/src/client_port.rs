@@ -1,4 +1,4 @@
-use hermes_review_attention_api::wire::{
+use makosh_review_attention_api::wire::{
     ClearSnoozeV1, ReviewAttentionChangedV1, ReviewAttentionCommandRequestV1,
     ReviewAttentionCommandResponseV1, ReviewAttentionPageV1 as WirePage,
     ReviewAttentionQueryRequestV1, ReviewAttentionQueryResponseV1,
@@ -8,11 +8,11 @@ use hermes_review_attention_api::wire::{
     review_attention_query_request_v1::Operation as WireQuery,
     review_attention_query_response_v1::Result as WireQueryResult,
 };
-use hermes_review_attention_core::{
+use makosh_review_attention_core::{
     ReviewAttentionCommandV1, ReviewAttentionV1, ReviewDispositionV1, ReviewImportanceV1,
     ReviewTimestampV1,
 };
-use hermes_review_attention_persistence::{
+use makosh_review_attention_persistence::{
     ApplyReviewAttentionOperationV1, ReviewAttentionListFilterV1,
     ReviewAttentionPersistenceErrorV1, ReviewAttentionPersistenceV1,
     ReviewAttentionRealtimeTransitionV1,
@@ -211,10 +211,10 @@ fn persistence_error(error: ReviewAttentionPersistenceErrorV1) -> &'static str {
         | ReviewAttentionPersistenceErrorV1::StorageUnavailable => "unavailable",
         ReviewAttentionPersistenceErrorV1::OperationConflict => "operation_conflict",
         ReviewAttentionPersistenceErrorV1::Domain(
-            hermes_review_attention_core::ReviewAttentionErrorV1::RevisionConflict,
+            makosh_review_attention_core::ReviewAttentionErrorV1::RevisionConflict,
         ) => "stale_revision",
         ReviewAttentionPersistenceErrorV1::Domain(
-            hermes_review_attention_core::ReviewAttentionErrorV1::DismissedAttention,
+            makosh_review_attention_core::ReviewAttentionErrorV1::DismissedAttention,
         ) => "dismissed",
         ReviewAttentionPersistenceErrorV1::Domain(_) => "invalid_request",
     }

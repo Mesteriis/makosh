@@ -1,11 +1,11 @@
 //! Zulip-owned decoding of an admitted generic settings snapshot.
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     SettingApplyModeV1, SettingClientVisibilityV1, SettingDefinitionV1, SettingMutationAuthorityV1,
     SettingTargetScopeV1, SettingValueTypeV1, SettingsSchemaV1, SettingsSnapshotV1,
     setting_value_v1::Value,
 };
-use hermes_zulip_api::{ZulipAccountV1, validate_account};
+use makosh_zulip_api::{ZulipAccountV1, validate_account};
 use prost::Message;
 
 const ACCOUNT_ID: &str = "zulip.account_id";
@@ -100,7 +100,7 @@ fn invalid_settings() -> String {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::{
+    use makosh_runtime_protocol::{
         v1::{
             SettingClientVisibilityV1, SettingTargetScopeV1, SettingValueV1, SettingsSnapshotV1,
             SettingsValueEntryV1, setting_value_v1::Value,

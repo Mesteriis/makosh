@@ -5,7 +5,7 @@ import {
 	MailMessageFlagKindV1,
 	type MailMessageFlagOperationStatusV1,
 	MailMessageFlagStatusRequestV1Schema,
-} from '../../../gen/hermes/mail/message_flags/v1/client_pb'
+} from '../../../gen/makosh/mail/message_flags/v1/client_pb'
 import { getMailMessageFlagCommandConnectClient } from './mailMessageFlagCommandClient'
 import { getMailMessageFlagQueryConnectClient } from './mailMessageFlagQueryClient'
 

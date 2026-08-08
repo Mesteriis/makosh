@@ -12,7 +12,7 @@ Deliverables:
 - REST client for register queue, get events, stream/direct sends, edits,
   deletes, reactions and file upload;
 - provider event mapper to raw communication records and Signal Hub raw events;
-- single Hermes Lab script for stack management and scenario execution;
+- single Макошь Lab script for stack management and scenario execution;
 - one message scenario with trace metadata;
 - readiness script for local prerequisites.
 
@@ -126,9 +126,9 @@ Current backend status:
 
 - The controlled backend workflow and automatic account-scoped download worker
   are implemented and covered by integration regression tests.
-- Hermes Lab has a dedicated attachment scenario for upload, stream
+- Макошь Lab has a dedicated attachment scenario for upload, stream
   send-with-upload and same-realm download metadata reports.
-- Executed Hermes Lab `BACKEND=1` evidence covers automatic backend
+- Executed Макошь Lab `BACKEND=1` evidence covers automatic backend
   materialization against a real Zulip realm through the Zulip live harness.
 
 ## Phase 3: Review/Radar and task debugging
@@ -178,7 +178,7 @@ Current backend status:
 ## Phase 3a: Outbound command runtime
 
 Goal: execute durable Zulip provider commands without making REST the internal
-Hermes contract.
+Макошь contract.
 
 Deliverables:
 
@@ -257,7 +257,7 @@ Acceptance:
 
 Current status:
 
-- Zulip has a `make hermes-lab ACTION=compliance PROVIDER=zulip` report that
+- Zulip has a `make makosh-lab ACTION=compliance PROVIDER=zulip` report that
   aggregates scenario contracts, local Lab execution reports and backend live
   evidence into per-capability pass/pending/deferred status.
 - `BACKEND=1` refreshes machine-readable backend contract evidence for the

@@ -23,7 +23,7 @@ test('module-originated Scheduler control opens only with exact protocol and man
     ),
     readFile(
       new URL(
-        'src/platform/scheduler/protocol/proto/hermes/scheduler/v1/job_command.proto',
+        'src/platform/scheduler/protocol/proto/makosh/scheduler/v1/job_command.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -44,7 +44,7 @@ test('module-originated Scheduler control opens only with exact protocol and man
     ),
     readFile(
       new URL(
-        'src/platform/runtime_protocol/proto/hermes/runtime/v1/scheduler_runtime.proto',
+        'src/platform/runtime_protocol/proto/makosh/runtime/v1/scheduler_runtime.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -201,7 +201,7 @@ test('module-originated Scheduler control opens only with exact protocol and man
   assert.match(proto, /message SchedulerScheduleControlCommandV1/);
   assert.match(
     schedulerProtocol,
-    /SCHEDULER_RUNTIME_MODULE_ID_V1: &str = "hermes-scheduler-runtime"/,
+    /SCHEDULER_RUNTIME_MODULE_ID_V1: &str = "makosh-scheduler-runtime"/,
   );
   assert.match(proto, /message SchedulerScheduleControlResultV1/);
   assert.match(proto, /EnsureOneShotScheduleV1 ensure_one_shot/);

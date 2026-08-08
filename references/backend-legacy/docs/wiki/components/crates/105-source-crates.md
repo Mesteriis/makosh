@@ -27,7 +27,7 @@ generated_by: code-wiki-ru
 
 ## testkit
 
-`testkit` — инфраструктурный крейт для интеграционного тестирования Hermes Hub.
+`testkit` — инфраструктурный крейт для интеграционного тестирования Макошь.
 
 Предоставляет:
 
@@ -41,9 +41,9 @@ generated_by: code-wiki-ru
 #### `app`
 
 - `TestApp` — обёртка над `axum::Router` и `TestContext`, создаётся вызовом `TestApp::new().await`.
-- `config()` и варианты — создают `AppConfig` с тестовым API-секретом `hermes-test-api-secret` и опционально с URL базы данных.
+- `config()` и варианты — создают `AppConfig` с тестовым API-секретом `makosh-test-api-secret` и опционально с URL базы данных.
 - `router_for_context` строит маршрутизатор через `build_router_with_database`.
-- Вспомогательные функции для HTTP-запросов: `get`, `post_json`, `put_json`, `patch_json`, `delete` — добавляют заголовок `x-hermes-secret`.
+- Вспомогательные функции для HTTP-запросов: `get`, `post_json`, `put_json`, `patch_json`, `delete` — добавляют заголовок `x-makosh-secret`.
 
 #### `context`
 
@@ -57,7 +57,7 @@ generated_by: code-wiki-ru
 
 - `PostgresContainer` — запускает образ `pgvector/pgvector:0.8.2-pg16`, ожидает сообщение о готовности БД. Параметры БД: `testdb/testuser/testpass`.
 - `NatsContainer` — запускает образ `nats:2.11-alpine` с флагами `-js -sd /data`.
-- Оба контейнера могут переиспользовать порты, заданные переменными окружения `HERMES_TEST_POSTGRES_HOST_PORT` и `HERMES_TEST_NATS_HOST_PORT` (режим тестовой сессии).
+- Оба контейнера могут переиспользовать порты, заданные переменными окружения `MAKOSH_TEST_POSTGRES_HOST_PORT` и `MAKOSH_TEST_NATS_HOST_PORT` (режим тестовой сессии).
 
 #### `factories`
 
@@ -76,9 +76,9 @@ generated_by: code-wiki-ru
 - `TestVault` — временная директория с путями `vault_home`, `dev_key_path` и `vault_database_path`.
 - Функции `retain_test_vault_and_apply` удерживают `TestVault` в глобальном векторе до завершения процесса, чтобы временные файлы не удалились во время выполнения конфигурационных функций.
 
-### Утилита `hermes-test-session`
+### Утилита `makosh-test-session`
 
-Бинарный файл `hermes-test-session` запускает контейнеры PostgreSQL и NATS, экспортирует переменные окружения (`HERMES_TEST_SESSION_ID`, `HERMES_TEST_POSTGRES_HOST_PORT`, `HERMES_TEST_NATS_HOST_PORT`) и выполняет указанную команду. Завершается с кодом возврата команды.
+Бинарный файл `makosh-test-session` запускает контейнеры PostgreSQL и NATS, экспортирует переменные окружения (`MAKOSH_TEST_SESSION_ID`, `MAKOSH_TEST_POSTGRES_HOST_PORT`, `MAKOSH_TEST_NATS_HOST_PORT`) и выполняет указанную команду. Завершается с кодом возврата команды.
 
 ### Пример использования
 
@@ -104,10 +104,10 @@ async fn my_integration_test() {
 | Файл | Покрытые факты |
 |------|----------------|
 | `crates/testkit/src/lib.rs` | Назначение крейта, пример использования с `TestContext` и `TaskFactory`, список публичных модулей |
-| `crates/testkit/src/app.rs` | `TestApp`, конфигурации `AppConfig`, роутер, строители HTTP-запросов с заголовком `x-hermes-secret` |
+| `crates/testkit/src/app.rs` | `TestApp`, конфигурации `AppConfig`, роутер, строители HTTP-запросов с заголовком `x-makosh-secret` |
 | `crates/testkit/src/context.rs` | `TestContext`: изоляция баз, `OnceCell` для контейнеров, `database()`, `nats_server_url()`, `app_config*`, `Mutex` для создания БД |
 | `crates/testkit/src/containers/mod.rs` | Подмодули `nats` и `postgres` |
-| `crates/testkit/src/containers/nats.rs` | `NatsContainer`: образ `nats:2.11-alpine`, порт 4222, переменная `HERMES_TEST_NATS_HOST_PORT`, ожидание подключения с таймаутом |
+| `crates/testkit/src/containers/nats.rs` | `NatsContainer`: образ `nats:2.11-alpine`, порт 4222, переменная `MAKOSH_TEST_NATS_HOST_PORT`, ожидание подключения с таймаутом |
 | `crates/testkit/src/containers/postgres.rs` | `PostgresContainer`: образ `pgvector/pgvector:0.8.2-pg16`, пользователь/пароль/БД, создание баз, миграции, восстановление настроек, переменные окружения сессии |
 | `crates/testkit/src/factories/mod.rs` | Перечень фабрик (calendar_event, contact, document, email, organization, project, task) |
 | `crates/testkit/src/factories/calendar_event.rs` | `CalendarEventFactory`, параметры по умолчанию |
@@ -118,12 +118,12 @@ async fn my_integration_test() {
 | `crates/testkit/src/factories/project.rs` | `ProjectFactory`, статус по умолчанию `active`, префикс `proj:v1:test:` |
 | `crates/testkit/src/factories/task.rs` | `TaskFactory`, статус `new`, приоритет `0.5`, область `general` |
 | `crates/testkit/src/vault.rs` | `TestVault`, временная директория, удержание через `retain_test_vault_and_apply` |
-| `crates/testkit/src/bin/hermes_test_session.rs` | Бинарная утилита, переменные сессии, запуск команды с наследованием stdio |
+| `crates/testkit/src/bin/makosh_test_session.rs` | Бинарная утилита, переменные сессии, запуск команды с наследованием stdio |
 
 ## Исходные файлы
 
 - [`crates/testkit/src/app.rs`](../../../../crates/testkit/src/app.rs)
-- [`crates/testkit/src/bin/hermes_test_session.rs`](../../../../crates/testkit/src/bin/hermes_test_session.rs)
+- [`crates/testkit/src/bin/makosh_test_session.rs`](../../../../crates/testkit/src/bin/makosh_test_session.rs)
 - [`crates/testkit/src/containers/mod.rs`](../../../../crates/testkit/src/containers/mod.rs)
 - [`crates/testkit/src/containers/nats.rs`](../../../../crates/testkit/src/containers/nats.rs)
 - [`crates/testkit/src/containers/postgres.rs`](../../../../crates/testkit/src/containers/postgres.rs)
@@ -144,4 +144,4 @@ async fn my_integration_test() {
 Явных расхождений в предоставленных исходниках не обнаружено. Однако:
 
 - В doc-комментарии `TestContext` упоминается `make backend-test`, но сам Makefile в этом контексте отсутствует — нельзя подтвердить, актуальна ли таргетная команда.
-- Код опирается на API `hermes_hub_backend` (например, `build_router_with_database`, `run_migrations`). Изменение сигнатур этих функций могло бы привести к дрейфу, но исходные тексты backend в данном чанке не представлены, поэтому дрейф с ними не проверяем.
+- Код опирается на API `makosh_hub_backend` (например, `build_router_with_database`, `run_migrations`). Изменение сигнатур этих функций могло бы привести к дрейфу, но исходные тексты backend в данном чанке не представлены, поэтому дрейф с ними не проверяем.

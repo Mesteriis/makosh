@@ -1,7 +1,7 @@
 //! Fenced authorization facts that Storage Control turns into a binding.
 
-use hermes_kernel_control_store::{ModuleRegistryStore, ModuleStorageRequestV1, RuntimeTrustStore};
-use hermes_kernel_control_store_sqlite::StoreError;
+use makosh_kernel_control_store::{ModuleRegistryStore, ModuleStorageRequestV1, RuntimeTrustStore};
+use makosh_kernel_control_store_sqlite::StoreError;
 
 use crate::modules::capability::router::{self, ExternalCapabilityRouteRequest};
 

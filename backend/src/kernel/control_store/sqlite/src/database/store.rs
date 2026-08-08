@@ -2,7 +2,7 @@
 
 use std::path::{Path, PathBuf};
 
-use hermes_kernel_control_store::ControlStore;
+use makosh_kernel_control_store::ControlStore;
 use rusqlite::{Connection, OptionalExtension, params};
 
 use crate::StoreError;
@@ -82,7 +82,7 @@ fn create_version_one(
 ) -> Result<(), StoreError> {
     let transaction = connection.unchecked_transaction()?;
     transaction.execute_batch(
-        "CREATE TABLE hermes_kernel_control_store_metadata (
+        "CREATE TABLE makosh_kernel_control_store_metadata (
             singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
             schema_version INTEGER NOT NULL,
             instance_id TEXT NOT NULL,
@@ -90,7 +90,7 @@ fn create_version_one(
         ) STRICT;",
     )?;
     transaction.execute(
-        "INSERT INTO hermes_kernel_control_store_metadata
+        "INSERT INTO makosh_kernel_control_store_metadata
          (singleton, schema_version, instance_id, generation) VALUES (1, 1, ?1, ?2)",
         params![instance_id, generation],
     )?;
@@ -102,7 +102,7 @@ fn read_metadata(connection: &Connection) -> Result<(i64, String, i64, i64, i64)
     connection
         .query_row(
             "SELECT schema_version, instance_id, generation, identity_epoch, grant_epoch
-             FROM hermes_kernel_control_store_metadata WHERE singleton = 1",
+             FROM makosh_kernel_control_store_metadata WHERE singleton = 1",
             [],
             |row| {
                 Ok((

@@ -1,8 +1,8 @@
-use hermes_communication_cross_channel_forward_api::COMMUNICATION_CROSS_CHANNEL_FORWARD_MODULE_ID_V1;
-use hermes_communication_cross_channel_forward_persistence::{
+use makosh_communication_cross_channel_forward_api::COMMUNICATION_CROSS_CHANNEL_FORWARD_MODULE_ID_V1;
+use makosh_communication_cross_channel_forward_persistence::{
     CommunicationCrossChannelForwardPersistenceV1, CrossChannelForwardPersistenceErrorV1,
 };
-use hermes_communications_cross_channel_forward_source_api::{
+use makosh_communications_cross_channel_forward_source_api::{
     CrossChannelForwardSourceEnvelopeContextV1,
     build_cross_channel_forward_source_prepare_outbox_record_v1,
 };

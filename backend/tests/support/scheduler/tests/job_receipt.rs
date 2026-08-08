@@ -1,12 +1,12 @@
 //! Scheduler receipt validation without owner implementation code.
 
-use hermes_events_protocol::v1::{
+use makosh_events_protocol::v1::{
     AckDispositionV1, AckMetadataV1, AckStageV1, ActorKindV1, ActorRefV1, ContractRefV1,
     DurableEnvelopeV1, FenceKindV1, ResultMetadataV1, ResultOutcomeV1, SourceFenceV1, SourceRefV1,
     durable_envelope_v1::Semantics,
 };
-use hermes_scheduler::{SchedulerReceiptEnvelopeErrorV1, decode_job_run_receipt_envelope_v1};
-use hermes_scheduler_protocol::{
+use makosh_scheduler::{SchedulerReceiptEnvelopeErrorV1, decode_job_run_receipt_envelope_v1};
+use makosh_scheduler_protocol::{
     SchedulerReceiptValidationErrorV1, v1, validate_job_run_receipt_v1,
 };
 use prost::Message;

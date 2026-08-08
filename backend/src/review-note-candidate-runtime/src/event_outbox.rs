@@ -1,5 +1,5 @@
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
-use hermes_review_note_candidate_persistence::{
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_review_note_candidate_persistence::{
     ReviewNoteCandidatePersistenceErrorV1, ReviewNoteCandidatePersistenceV1,
 };
 

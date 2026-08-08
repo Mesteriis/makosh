@@ -12,9 +12,9 @@ Clarifies:
 
 ## Context
 
-Hermes Hub is a local-first Personal Memory System. The product model treats
+Макошь is a local-first Personal Memory System. The product model treats
 Communications as the primary ingestion spine: messages, meetings, calls and
-provider events enter Hermes as source evidence and become knowledge, memory,
+provider events enter Макошь as source evidence and become knowledge, memory,
 relationships, obligations, tasks, decisions and project context.
 
 The repository still contains email-heavy implementation boundaries because
@@ -23,7 +23,7 @@ exist as adjacent surfaces. Documentation needs one canonical model that
 explains how all interaction evidence enters the system.
 
 The user also approved a Polygraph concept: when a new message, document or
-event contradicts remembered knowledge, Hermes should detect the conflict and
+event contradicts remembered knowledge, Макошь should detect the conflict and
 surface it for review.
 
 ## Decision

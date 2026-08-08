@@ -3,7 +3,7 @@
 use std::collections::BTreeMap;
 
 use getrandom::fill;
-use hermes_vault_protocol::{
+use makosh_vault_protocol::{
     CredentialLeaseV1, LeaseAudienceV1, LeaseIdV1, VaultLeaseIssueRequestV1,
     validate_vault_instance_id,
 };
@@ -161,7 +161,7 @@ pub enum LeaseError {
 
 #[cfg(test)]
 mod tests {
-    use hermes_vault_protocol::{
+    use makosh_vault_protocol::{
         LeaseAudienceV1, SecretClassV1, VaultActionV1, VaultLeaseIssueRequestV1,
         VaultPurposeRequestV1,
     };

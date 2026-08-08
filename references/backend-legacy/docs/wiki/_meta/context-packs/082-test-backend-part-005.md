@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `test`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/tests/email_account_setup/gmail_service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_account_setup/gmail_service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_account_setup/gmail_service.rs`
 - Size bytes / Размер в байтах: `7361`
 - Included characters / Включено символов: `7361`
 - Truncated / Обрезано: `no`
@@ -65,14 +65,14 @@ use serde_json::{Value, json};
 
 use std::sync::Arc;
 
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore, EmailProviderKind,
     ProviderAccountSecretPurpose,
 };
-use hermes_hub_backend::integrations::mail::accounts::{
+use makosh_hub_backend::integrations::mail::accounts::{
     EmailAccountSetupService, GmailOAuthSetupRequest,
 };
-use hermes_hub_backend::platform::secrets::{
+use makosh_hub_backend::platform::secrets::{
     DatabaseEncryptedSecretVault, NewSecretReference, ResolvedSecret, SecretKind, SecretResolver,
     SecretStoreKind,
 };
@@ -265,7 +265,7 @@ async fn gmail_oauth_refresh_returns_runtime_access_token_and_updates_vault() {
 
 ### `backend/tests/email_account_setup/imap_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_account_setup/imap_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_account_setup/imap_api.rs`
 - Size bytes / Размер в байтах: `17260`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -279,21 +279,21 @@ use sqlx::Row;
 use tempfile::tempdir;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::calendar::events::CalendarAccountStore;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::calendar::events::CalendarAccountStore;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, CommunicationProviderAccountStore,
     CommunicationProviderSecretBindingStore, EmailProviderKind, ProviderAccountSecretPurpose,
 };
-use hermes_hub_backend::integrations::mail::accounts::{
+use makosh_hub_backend::integrations::mail::accounts::{
     EmailAccountSetupService, ImapAccountSetupRequest,
 };
-use hermes_hub_backend::platform::secrets::{
+use makosh_hub_backend::platform::secrets::{
     DatabaseEncryptedSecretVault, ResolvedSecret, SecretKind, SecretReferenceStore, SecretResolver,
     SecretStoreKind,
 };
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::vault::{HostVault, HostVaultConfig};
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::vault::{HostVault, HostVaultConfig};
 use testkit::context::TestContext;
 
 use super::support::{
@@ -396,13 +396,13 @@ async fn icloud_account_setup_api_creates_calendar_account_against_postgres() {
     let app = build_router_with_database(
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_home.to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     dev_key_path.to_str().expect("dev key path"),
                 ),
             ])
@@ -429,7 +429,7 @@ async fn icloud_account_setup_api_creates_calendar_account_against_postgres() {
                 "secret_kind": "app_password"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -612,13 +612,13 @@ async fn icloud_account_setup_api_creates_calendar_account_against_postgres() {
             .resolve(&smtp_reference)
             .await
             .expect("resolve smtp password")
-          
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/tests/email_account_setup/send_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_account_setup/send_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_account_setup/send_api.rs`
 - Size bytes / Размер в байтах: `15035`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -630,11 +630,11 @@ use sqlx::Row;
 use tempfile::tempdir;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 use super::support::{
@@ -655,13 +655,13 @@ async fn imap_send_api_queues_outbox_without_direct_smtp_against_postgres() {
     let config =
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_home.to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     dev_key_path.to_str().expect("dev key path"),
                 ),
             ])
@@ -694,7 +694,7 @@ async fn imap_send_api_queues_outbox_without_direct_smtp_against_postgres() {
                 "smtp_username": "sender@example.com"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("setup response");
@@ -708,11 +708,11 @@ async fn imap_send_api_queues_outbox_without_direct_smtp_against_postgres() {
                 "to": ["recipient@example.com"],
                 "cc": ["copy@example.com"],
                 "subject": "SMTP send test",
-                "body_text": "Message body from Hermes test.",
+                "body_text": "Message body from Макошь test.",
                 "confirmed_provider_write": true
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("send response");
@@ -790,13 +790,13 @@ async fn gmail_send_api_queues_outbox_without_direct_gmail_client_against_postgr
     let config =
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_home.to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     dev_key_path.to_str().expect("dev key path"),
                 ),
             ])
@@ -832,7 +832,7 @@ async fn gmail_send_api_queues_outbox_without_direct_gmail_client_against_postgr
                 "confirmed_provider_write": true
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("send response");
@@ -857,13 +857,13 @@ async fn imap_send_api_queues_without_smtp_password_binding_against_postgres() {
     let config =
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_home.to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     dev_key_path.to_str().expect("dev key path"),
                 ),
             ])
@@ -896,7 +896,7 @@ async fn imap_send_api_queues_without_smtp_password_binding_against_postgres() {
                 "smtp_username": "sender@example.com"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("setup response");
@@ -921,7 +921,7 @@ async fn imap_send_api_queues_without_smtp_password_binding_against_postgres() {
                 "confirmed_provider_write": true
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("send response");
@@ -947,7 +947,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/email_account_setup/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_account_setup/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_account_setup/support.rs`
 - Size bytes / Размер в байтах: `15334`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -968,13 +968,13 @@ use serde_json::{Value, json};
 use tokio::time::{Duration, sleep};
 use tower::ServiceExt;
 
-use hermes_hub_backend::domains::calendar::events::CalendarAccountStore;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::calendar::events::CalendarAccountStore;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, ProviderAccountSecretPurpose,
 };
-use hermes_hub_backend::platform::secrets::{SecretKind, SecretReferenceStore, SecretStoreKind};
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::vault::HostVault;
+use makosh_hub_backend::platform::secrets::{SecretKind, SecretReferenceStore, SecretStoreKind};
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::vault::HostVault;
 
 pub const LOCAL_API_TOKEN: &str = "account-setup-test-token";
 
@@ -1226,10 +1226,10 @@ pub async fn live_setup_context(
 
 pub fn secret_reference(
     secret_ref: &str,
-) -> hermes_hub_backend::platform::secrets::SecretReference {
+) -> makosh_hub_backend::platform::secrets::SecretReference {
     let now = chrono::Utc::now();
 
-    hermes_hub_backend::platform::secrets::SecretReference {
+    makosh_hub_backend::platform::secrets::SecretReference {
         secret_ref: secret_ref.to_owned(),
         secret_kind: SecretKind::OauthToken,
         store_kind: SecretStoreKind::DatabaseEncryptedVault,
@@ -1250,7 +1250,7 @@ pub fn json_request_with_token_and_actor(
         .method("POST")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -1275,7 +1275,7 @@ where
             "/api/v1/vault/collect-entropy",
             json!({ "events": vault_entropy_events(2_000) }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("entropy response");
@@ -1286,7 +1286,7 @@ where
             "/api/v1/vault/create",
             json!({}),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("vault create response");
@@ -1296,7 +1296,7 @@ where
 pub async fn wait_for_provider_account(
     communication_store: &CommunicationIngestionStore,
     account_id: &str,
-) -> hermes_hub_backend::domains::communications::core::ProviderAccount {
+) -> makosh_hub_backend::domains::communications::core::ProviderAccount {
     for _ in 0..50 {
         if let Some(account) = communication_store
             .provider_account(account_id)
@@ -1312,13 +1312,13 @@ pub async fn wait_for_provider_account(
 }
 
 pub async fn wait_for_secret_reference(
-   
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/tests/email_account_setup/vault_reconciliation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_account_setup/vault_reconciliation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_account_setup/vault_reconciliation.rs`
 - Size bytes / Размер в байтах: `11109`
 - Included characters / Включено символов: `11109`
 - Truncated / Обрезано: `no`
@@ -1329,14 +1329,14 @@ use sqlx::Row;
 use tempfile::tempdir;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::calendar::events::CalendarAccountStore;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::calendar::events::CalendarAccountStore;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, ProviderAccountSecretPurpose,
 };
-use hermes_hub_backend::platform::secrets::{SecretKind, SecretReferenceStore, SecretResolver};
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::vault::{HostVault, HostVaultConfig, SecretEntryContext};
+use makosh_hub_backend::platform::secrets::{SecretKind, SecretReferenceStore, SecretResolver};
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::vault::{HostVault, HostVaultConfig, SecretEntryContext};
 use testkit::context::TestContext;
 
 use super::support::{
@@ -1358,13 +1358,13 @@ async fn startup_reconciles_icloud_account_from_host_vault_manifest_after_postgr
     let config =
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_home.to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     dev_key_path.to_str().expect("dev key path"),
                 ),
             ])
@@ -1391,7 +1391,7 @@ async fn startup_reconciles_icloud_account_from_host_vault_manifest_after_postgr
                 "secret_kind": "app_password"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -1630,7 +1630,7 @@ async fn startup_reconciles_icloud_account_from_host_vault_manifest_after_postgr
 
 ### `backend/tests/email_account_setup_architecture.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_account_setup_architecture.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_account_setup_architecture.rs`
 - Size bytes / Размер в байтах: `1782`
 - Included characters / Включено символов: `1782`
 - Truncated / Обрезано: `no`
@@ -1694,7 +1694,7 @@ fn is_email_account_setup_test_file(path: &Path) -> bool {
 
 ### `backend/tests/email_fixture_export.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_fixture_export.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_fixture_export.rs`
 - Size bytes / Размер в байтах: `3907`
 - Included characters / Включено символов: `3907`
 - Truncated / Обрезано: `no`
@@ -1705,11 +1705,11 @@ use base64::engine::general_purpose::STANDARD as BASE64_STANDARD;
 use chrono::{TimeZone, Utc};
 use serde_json::json;
 
-use hermes_hub_backend::domains::communications::core::EmailProviderKind;
-use hermes_hub_backend::domains::communications::fixtures::export::{
+use makosh_hub_backend::domains::communications::core::EmailProviderKind;
+use makosh_hub_backend::domains::communications::fixtures::export::{
     EmailFixtureExportOptions, export_fixture_messages_from_sync_batch,
 };
-use hermes_hub_backend::integrations::mail::sync::{
+use makosh_hub_backend::integrations::mail::sync::{
     EmailSyncBatch, FetchedCommunicationSourceMessage,
 };
 
@@ -1809,7 +1809,7 @@ fn sync_batch_with_raw_message(raw: &str) -> EmailSyncBatch {
 
 ### `backend/tests/email_fixture_pipeline.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_fixture_pipeline.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_fixture_pipeline.rs`
 - Size bytes / Размер в байтах: `4762`
 - Included characters / Включено символов: `4762`
 - Truncated / Обрезано: `no`
@@ -1821,9 +1821,9 @@ use testkit::context::TestContext;
 use serde_json::json;
 use sqlx::Row;
 
-use hermes_hub_backend::domains::communications::core::EmailProviderKind;
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::email_fixture_pipeline::{
+use makosh_hub_backend::domains::communications::core::EmailProviderKind;
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::email_fixture_pipeline::{
     EmailFixturePipelineRequest, project_fixture_email_messages,
 };
 
@@ -1968,7 +1968,7 @@ fn unique_suffix() -> u128 {
 
 ### `backend/tests/email_import.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_import.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_import.rs`
 - Size bytes / Размер в байтах: `12657`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1980,17 +1980,17 @@ use testkit::context::TestContext;
 use chrono::{TimeZone, Utc};
 use serde_json::json;
 
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount,
 };
-use hermes_hub_backend::domains::communications::import::{
+use makosh_hub_backend::domains::communications::import::{
     FixtureEmailImportRequest, import_fixture_email_messages,
     import_fixture_email_messages_with_records,
 };
-use hermes_hub_backend::domains::communications::sources::{
+use makosh_hub_backend::domains::communications::sources::{
     FixtureCommunicationSourceMessage, parse_fixture_email_messages,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 
 #[test]
 fn fixture_email_source_parses_account_scoped_messages() {
@@ -2295,7 +2295,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/email_outbox.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_outbox.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_outbox.rs`
 - Size bytes / Размер в байтах: `22043`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2306,19 +2306,19 @@ use serde_json::json;
 use sqlx::Row;
 use testkit::context::TestContext;
 
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount,
     NewProviderAccountSecretBinding, ProviderAccountSecretPurpose,
 };
-use hermes_hub_backend::domains::communications::outbox::{
+use makosh_hub_backend::domains::communications::outbox::{
     CommunicationOutboxItem, CommunicationOutboxStatus, CommunicationOutboxStore,
     EmailOutboxDeliveryWorker, NewCommunicationOutboxItem, OutboxDeliveryError, OutboxEmailSender,
     OutboxRetryPolicy, OutboxSendReceipt, SmtpOutboxEmailSender, SmtpTransport,
 };
-use hermes_hub_backend::integrations::mail::send::{
+use makosh_hub_backend::integrations::mail::send::{
     EmailSendError, OutgoingEmail, SendResult, SmtpConfig,
 };
-use hermes_hub_backend::platform::secrets::{
+use makosh_hub_backend::platform::secrets::{
     InMemorySecretResolver, NewSecretReference, ResolvedSecret, SecretKind, SecretReferenceStore,
     SecretStoreKind,
 };
@@ -2639,7 +2639,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/email_provider_network.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_provider_network.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_provider_network.rs`
 - Size bytes / Размер в байтах: `20644`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2656,21 +2656,21 @@ use chrono::{TimeZone, Utc};
 use serde_json::json;
 use sqlx::Row;
 
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount,
 };
-use hermes_hub_backend::domains::communications::storage::{
+use makosh_hub_backend::domains::communications::storage::{
     CommunicationStorageStore, LocalCommunicationBlobStore,
 };
-use hermes_hub_backend::integrations::mail::gmail::client::{
+use makosh_hub_backend::integrations::mail::gmail::client::{
     GmailApiClient, GmailFetchOptions, ImapFetchOptions, ImapNetworkClient,
 };
-use hermes_hub_backend::integrations::mail::sync::{
+use makosh_hub_backend::integrations::mail::sync::{
     EmailSyncBatch, FetchedCommunicationSourceMessage,
 };
-use hermes_hub_backend::platform::secrets::ResolvedSecret;
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::email_sync_pipeline::{
+use makosh_hub_backend::platform::secrets::ResolvedSecret;
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::email_sync_pipeline::{
     record_email_sync_batch, record_email_sync_batch_with_mail_blobs,
 };
 
@@ -2998,13 +2998,13 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/email_rfc822.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_rfc822.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_rfc822.rs`
 - Size bytes / Размер в байтах: `7142`
 - Included characters / Включено символов: `7093`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::integrations::mail::rfc822::{
+use makosh_hub_backend::integrations::mail::rfc822::{
     ParsedEmailAttachmentDisposition, parse_rfc822_message,
 };
 
@@ -3102,7 +3102,7 @@ fn rfc822_parser_preserves_source_headers_with_folded_values() {
         "Subject: Folded headers\r\n",
         "From: Sender <sender@example.invalid>\r\n",
         "To: Recipient <recipient@example.invalid>\r\n",
-        "X-Hermes-Trace: first line\r\n",
+        "X-Макошь-Trace: first line\r\n",
         "\tcontinued line\r\n",
         "Content-Type: text/plain; charset=utf-8\r\n",
         "\r\n",
@@ -3112,7 +3112,7 @@ fn rfc822_parser_preserves_source_headers_with_folded_values() {
     let parsed = parse_rfc822_message(raw.as_bytes()).expect("parse folded header message");
 
     assert!(parsed.headers.contains(&(
-        "X-Hermes-Trace".to_owned(),
+        "X-Макошь-Trace".to_owned(),
         "first line continued line".to_owned()
     )));
     assert!(parsed.headers.contains(&(
@@ -3188,7 +3188,7 @@ fn rfc822_parser_decodes_legacy_cyrillic_message_bytes() {
 
 ### `backend/tests/email_sync.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_sync.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_sync.rs`
 - Size bytes / Размер в байтах: `10600`
 - Included characters / Включено символов: `10600`
 - Truncated / Обрезано: `no`
@@ -3199,14 +3199,14 @@ use testkit::context::TestContext;
 
 use serde_json::json;
 
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount,
     ProviderAccountSecretPurpose,
 };
-use hermes_hub_backend::integrations::mail::sync::{
+use makosh_hub_backend::integrations::mail::sync::{
     EmailSyncAdapterConfig, EmailSyncPlanError, plan_email_sync,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 
 #[tokio::test]
 async fn email_sync_plan_selects_provider_specific_credentials_and_streams_against_postgres() {
@@ -3496,16 +3496,16 @@ async fn live_sync_context(_test_name: &str) -> Option<(CommunicationIngestionSt
 trait IntoTestProviderAccount {
     fn into_test_provider_account(
         self,
-    ) -> hermes_hub_backend::domains::communications::core::ProviderAccount;
+    ) -> makosh_hub_backend::domains::communications::core::ProviderAccount;
 }
 
 impl IntoTestProviderAccount for NewProviderAccount {
     fn into_test_provider_account(
         self,
-    ) -> hermes_hub_backend::domains::communications::core::ProviderAccount {
+    ) -> makosh_hub_backend::domains::communications::core::ProviderAccount {
         let now = chrono::Utc::now();
 
-        hermes_hub_backend::domains::communications::core::ProviderAccount {
+        makosh_hub_backend::domains::communications::core::ProviderAccount {
             account_id: self.account_id,
             provider_kind: self.provider_kind,
             display_name: self.display_name,

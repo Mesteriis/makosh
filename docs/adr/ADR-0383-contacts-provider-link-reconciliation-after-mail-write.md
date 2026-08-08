@@ -78,13 +78,13 @@ Google create он впервые закрепляет returned entry ID. ICloud
 
 ## Границы и единицы сборки
 
-- `hermes-contacts-command-api` остаётся Contacts-owned public command unit и
+- `makosh-contacts-command-api` остаётся Contacts-owned public command unit и
   владеет только typed Mail-derived Contacts mutation contracts;
 - Contacts core не импортирует Mail, workflow или integration implementation;
 - Contacts persistence владеет link mutation, inbox и outbox transaction;
 - Contacts runtime получает отдельный handler ответственности, а не ветвление
   внутри identity-upsert handler;
-- `hermes-mail-contacts-sync-runtime` импортирует только public Contacts/Mail
+- `makosh-mail-contacts-sync-runtime` импортирует только public Contacts/Mail
   contracts и координирует terminal events;
 - Mail integration не импортирует Contacts packages;
 - Kernel/Core Gateway/Event Hub только допускают и маршрутизируют exact

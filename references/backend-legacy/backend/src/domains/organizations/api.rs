@@ -13,7 +13,7 @@ use super::core::evidence::{
     link_email_domain_projection_in_transaction, link_organization_in_transaction,
 };
 use super::core::identity::OrgIdentityStore;
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Organization {

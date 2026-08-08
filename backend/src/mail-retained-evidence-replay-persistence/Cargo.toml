@@ -1,5 +1,5 @@
 [package]
-name = "hermes-mail-retained-evidence-replay-persistence"
+name = "makosh-mail-retained-evidence-replay-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,16 +7,16 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "mail"
 surface = "persistence"
 
 [dependencies]
-hermes-attachment-security-contract = { path = "../attachment-security-contract" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-mail-retained-evidence-replay-contract = { path = "../mail-retained-evidence-replay-contract" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-attachment-security-contract = { path = "../attachment-security-contract" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-mail-retained-evidence-replay-contract = { path = "../mail-retained-evidence-replay-contract" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

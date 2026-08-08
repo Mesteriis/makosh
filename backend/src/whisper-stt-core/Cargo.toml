@@ -1,5 +1,5 @@
 [package]
-name = "hermes-whisper-stt-core"
+name = "makosh-whisper-stt-core"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,11 +7,11 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "whisper_stt"
 surface = "implementation"
 
 [dependencies]
-hermes-speech-to-text-api = { path = "../speech-to-text-api" }
-hermes-speech-transcript-artifact = { path = "../speech-transcript-artifact" }
+makosh-speech-to-text-api = { path = "../speech-to-text-api" }
+makosh-speech-transcript-artifact = { path = "../speech-transcript-artifact" }

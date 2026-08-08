@@ -9,12 +9,12 @@ import { fileURLToPath } from 'node:url';
 const backendRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const inputBuilder = join(backendRoot, 'scripts/build-local-platform-release-input.mjs');
 const platformBinaries = [
-  'hermes-blob-service',
-  'hermes-events-authority-runtime',
-  'hermes-scheduler-runtime',
-  'hermes-storage-runtime',
-  'hermes-telemetry-collector',
-  'hermes-vault-runtime',
+  'makosh-blob-service',
+  'makosh-events-authority-runtime',
+  'makosh-scheduler-runtime',
+  'makosh-storage-runtime',
+  'makosh-telemetry-collector',
+  'makosh-vault-runtime',
 ];
 
 function temporaryDirectory(prefix) {
@@ -78,7 +78,7 @@ function runBuilder(root, browserAssetsDirectory = null, generation = '7') {
       '--browser-bootstrap', browserBootstrap,
       '--output', output,
       '--descriptor-dir', descriptorDirectory,
-      '--distribution-id', 'hermes-desktop',
+      '--distribution-id', 'makosh-desktop',
       '--generation', generation,
       '--release-version', '0.1.0',
       '--build-id', 'local-platform-v1',
@@ -102,7 +102,7 @@ function createFixture(root, missingBinary = null) {
 }
 
 test('creates exact local platform runtime contracts before compiling a distribution', () => {
-  const root = temporaryDirectory('hermes-local-platform-release-');
+  const root = temporaryDirectory('makosh-local-platform-release-');
   try {
     createFixture(root);
     const { descriptorDirectory, output, result } = runBuilder(root);
@@ -124,7 +124,7 @@ test('creates exact local platform runtime contracts before compiling a distribu
     ]);
     const scheduler = input.artifacts.find((artifact) => artifact.artifact_id === 'platform.scheduler');
     assert.equal(scheduler.artifact_kind, 'module_runtime');
-    assert.equal(scheduler.relative_path, 'bin/hermes-scheduler-runtime');
+    assert.equal(scheduler.relative_path, 'bin/makosh-scheduler-runtime');
     assert.equal(readFileSync(scheduler.settings_schema.source_path).toString('hex'), '08011001');
     const descriptor = decodeFields(readFileSync(scheduler.descriptor.source_path));
     assert.equal(descriptor.get(2)?.[0], 2n);
@@ -141,7 +141,7 @@ test('creates exact local platform runtime contracts before compiling a distribu
 });
 
 test('includes exact compiled browser assets in the signed distribution input', () => {
-  const root = temporaryDirectory('hermes-local-platform-browser-assets-');
+  const root = temporaryDirectory('makosh-local-platform-browser-assets-');
   try {
     createFixture(root);
     const browserAssetsDirectory = join(root, 'browser-assets');
@@ -179,7 +179,7 @@ test('includes exact compiled browser assets in the signed distribution input', 
 });
 
 test('orders Vite asset identifiers by exact ASCII bytes across punctuation', () => {
-  const root = temporaryDirectory('hermes-local-platform-browser-asset-order-');
+  const root = temporaryDirectory('makosh-local-platform-browser-asset-order-');
   try {
     createFixture(root);
     const browserAssetsDirectory = join(root, 'browser-assets');
@@ -206,7 +206,7 @@ test('orders Vite asset identifiers by exact ASCII bytes across punctuation', ()
 });
 
 test('rejects a referenced browser asset outside the signed Gateway allowlist', () => {
-  const root = temporaryDirectory('hermes-local-platform-browser-invalid-asset-');
+  const root = temporaryDirectory('makosh-local-platform-browser-invalid-asset-');
   try {
     createFixture(root);
     const browserAssetsDirectory = join(root, 'browser-assets');
@@ -224,9 +224,9 @@ test('rejects a referenced browser asset outside the signed Gateway allowlist', 
 });
 
 test('rejects an incomplete platform inventory before creating contracts', () => {
-  const root = temporaryDirectory('hermes-local-platform-release-missing-');
+  const root = temporaryDirectory('makosh-local-platform-release-missing-');
   try {
-    createFixture(root, 'hermes-vault-runtime');
+    createFixture(root, 'makosh-vault-runtime');
     const { descriptorDirectory, output, result } = runBuilder(root);
     assert.equal(result.status, 1);
     assert.match(result.stderr, /platform\.vault binary is unavailable: ENOENT/);
@@ -239,7 +239,7 @@ test('rejects an incomplete platform inventory before creating contracts', () =>
 
 test('rejects a non-positive or unsafe distribution generation', () => {
   for (const generation of ['0', '-1', '9007199254740992']) {
-    const root = temporaryDirectory('hermes-local-platform-generation-');
+    const root = temporaryDirectory('makosh-local-platform-generation-');
     try {
       createFixture(root);
       const { output, result } = runBuilder(root, null, generation);

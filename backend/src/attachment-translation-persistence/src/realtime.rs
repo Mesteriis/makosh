@@ -1,4 +1,4 @@
-use hermes_attachment_translation_core::{
+use makosh_attachment_translation_core::{
     AttachmentTranslationRejectionCodeV1, AttachmentTranslationStateV1,
 };
 use sqlx::{Postgres, Row, Transaction};
@@ -41,7 +41,7 @@ impl crate::AttachmentTranslationPersistenceV1 {
             sqlx::query(
                 "SELECT realtime_sequence, run_id, state, state_revision,
                         rejection_code, occurred_at_unix_millis
-                 FROM hermes_data.attachment_translation_realtime
+                 FROM makosh_data.attachment_translation_realtime
                  WHERE logical_owner_id = $1 AND realtime_sequence > $2
                  ORDER BY realtime_sequence
                  LIMIT $3",
@@ -58,7 +58,7 @@ impl crate::AttachmentTranslationPersistenceV1 {
                  FROM (
                    SELECT realtime_sequence, run_id, state, state_revision,
                           rejection_code, occurred_at_unix_millis
-                   FROM hermes_data.attachment_translation_realtime
+                   FROM makosh_data.attachment_translation_realtime
                    WHERE logical_owner_id = $1
                    ORDER BY realtime_sequence DESC
                    LIMIT $2
@@ -82,13 +82,13 @@ pub(crate) async fn insert_realtime_transition(
     occurred_at_unix_millis: i64,
 ) -> Result<(), AttachmentTranslationPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.attachment_translation_realtime (
+        "INSERT INTO makosh_data.attachment_translation_realtime (
            logical_owner_id, run_id, state, state_revision,
            rejection_code, occurred_at_unix_millis
          )
          SELECT logical_owner_id, run_id, state, state_revision,
                 rejection_code, $1
-         FROM hermes_data.attachment_translation_runs
+         FROM makosh_data.attachment_translation_runs
          WHERE logical_owner_id = $2 AND run_id = $3",
     )
     .bind(occurred_at_unix_millis)

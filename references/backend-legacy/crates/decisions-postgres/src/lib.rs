@@ -1,10 +1,10 @@
 use chrono::{DateTime, Utc};
-use hermes_decisions_api::{
+use makosh_decisions_api::{
     DecisionEvidence, DecisionImpactedEntity, DecisionListFuture, DecisionListQuery,
     DecisionQueryError, DecisionRead, DecisionReadPort, DecisionUpsert, DecisionWriteError,
     DecisionWriteFuture, DecisionWritePort,
 };
-use hermes_observations_postgres::review_links::link_domain_entity_in_transaction;
+use makosh_observations_postgres::review_links::link_domain_entity_in_transaction;
 use serde_json::Value;
 use sqlx::{PgPool, Row};
 
@@ -75,7 +75,7 @@ impl DecisionPostgresReadQuery {
             .map_err(|e| DecisionWriteError::Failed(e.to_string()))?;
         let row = sqlx::query("UPDATE decisions SET review_state=$1, updated_at=now() WHERE decision_id=$2 RETURNING decision_id,title,status,rationale,alternatives,decided_by_entity_kind,decided_by_entity_id,decided_at,review_state,confidence::float8 AS confidence,metadata,created_at,updated_at").bind(review_state).bind(decision_id).fetch_optional(&mut *tx).await.map_err(|e| DecisionWriteError::Failed(e.to_string()))?.ok_or_else(|| DecisionWriteError::Failed("decision was not found".to_owned()))?;
         let result = to_read(row).map_err(|e| DecisionWriteError::Failed(e.to_string()))?;
-        hermes_observations_postgres::review_links::materialize_review_transition_link_in_transaction(&mut tx, observation_id, "decisions", "decision", &result.decision_id, "review_state", review_state, metadata).await.map_err(|e| DecisionWriteError::Failed(e.to_string()))?;
+        makosh_observations_postgres::review_links::materialize_review_transition_link_in_transaction(&mut tx, observation_id, "decisions", "decision", &result.decision_id, "review_state", review_state, metadata).await.map_err(|e| DecisionWriteError::Failed(e.to_string()))?;
         tx.commit()
             .await
             .map_err(|e| DecisionWriteError::Failed(e.to_string()))?;

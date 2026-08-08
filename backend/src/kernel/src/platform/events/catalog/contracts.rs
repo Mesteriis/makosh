@@ -2,7 +2,7 @@
 
 use std::collections::BTreeMap;
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleEventDeliveryPolicyV1, ModuleEventEnvelopeKindV1, ModuleEventRouteDirectionV1,
     ModuleEventRouteRequestV1,
 };

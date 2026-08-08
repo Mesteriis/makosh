@@ -1,8 +1,8 @@
 use chrono::Utc;
-use hermes_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
+use makosh_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
 
 use super::store::{SignalCapability, SignalCapabilityUpsert, SignalHubError, SignalHubStore};
-use hermes_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
+use makosh_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
 
 #[derive(Clone)]
 pub struct SignalHubCapabilityService {

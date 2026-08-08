@@ -1,4 +1,4 @@
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool, Row,
     postgres::{PgConnectOptions, PgPoolOptions, PgRow},
@@ -50,7 +50,7 @@ impl WhisperSttPersistenceV1 {
     }
 
     pub async fn verify_storage_ready(&self) -> Result<(), WhisperSttPersistenceErrorV1> {
-        sqlx::query("SELECT 1 FROM hermes_data.whisper_stt_runs LIMIT 0")
+        sqlx::query("SELECT 1 FROM makosh_data.whisper_stt_runs LIMIT 0")
             .execute(&self.pool)
             .await
             .map(|_| ())
@@ -64,7 +64,7 @@ impl WhisperSttPersistenceV1 {
         validate_accepted(&run)?;
         let identity = &run.identity;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.whisper_stt_runs (
+            "INSERT INTO makosh_data.whisper_stt_runs (
                logical_owner_id, request_id, request_digest, source_reference_id,
                source_declared_bytes, source_sha256, model_revision_sha256,
                provider_settings_revision, provider_policy_revision,
@@ -136,7 +136,7 @@ impl WhisperSttPersistenceV1 {
         validate_transition(&current, &transition)?;
         let ready = transition.next.ready.as_ref();
         let updated = sqlx::query(
-            "UPDATE hermes_data.whisper_stt_runs SET
+            "UPDATE makosh_data.whisper_stt_runs SET
                state_revision=$4, run_state=$5,
                transcript_reference_id=$6, transcript_declared_bytes=$7,
                transcript_sha256=$8, detected_language=$9, segment_count=$10,
@@ -177,7 +177,7 @@ const SELECT_RUN: &str = "
         provider_settings_revision, provider_policy_revision, state_revision, run_state,
         transcript_reference_id, transcript_declared_bytes, transcript_sha256,
         detected_language, segment_count, completeness, confidence_basis_points, reject_code
- FROM hermes_data.whisper_stt_runs
+ FROM makosh_data.whisper_stt_runs
  WHERE logical_owner_id=$1 AND request_id=$2";
 
 const SELECT_RUN_FOR_UPDATE: &str = "
@@ -186,7 +186,7 @@ const SELECT_RUN_FOR_UPDATE: &str = "
         provider_settings_revision, provider_policy_revision, state_revision, run_state,
         transcript_reference_id, transcript_declared_bytes, transcript_sha256,
         detected_language, segment_count, completeness, confidence_basis_points, reject_code
- FROM hermes_data.whisper_stt_runs
+ FROM makosh_data.whisper_stt_runs
  WHERE logical_owner_id=$1 AND request_id=$2
  FOR UPDATE";
 

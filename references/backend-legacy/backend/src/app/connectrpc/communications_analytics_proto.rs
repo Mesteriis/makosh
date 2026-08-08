@@ -1,4 +1,4 @@
-use hermes_connectrpc_contracts::hermes::communications::v1::{
+use makosh_connectrpc_contracts::makosh::communications::v1::{
     MailboxHealth as ProtoMailboxHealth, SenderStats as ProtoSenderStats,
     SubscriptionSource as ProtoSubscriptionSource,
 };

@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.contacts_mail_entry_inbox (
+CREATE TABLE makosh_data.contacts_mail_entry_inbox (
     logical_owner_id TEXT NOT NULL,
     command_message_id BYTEA NOT NULL,
     command_envelope_sha256 BYTEA NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE hermes_data.contacts_mail_entry_inbox (
     )
 );
 
-CREATE TABLE hermes_data.contacts_state (
+CREATE TABLE makosh_data.contacts_state (
     logical_owner_id TEXT NOT NULL,
     contact_id BYTEA NOT NULL,
     display_name TEXT NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE hermes_data.contacts_state (
     CHECK (updated_at_nanos BETWEEN 0 AND 999999999)
 );
 
-CREATE TABLE hermes_data.contacts_email_identities (
+CREATE TABLE makosh_data.contacts_email_identities (
     logical_owner_id TEXT NOT NULL,
     normalized_email TEXT NOT NULL,
     contact_id BYTEA NOT NULL,
@@ -67,9 +67,9 @@ CREATE TABLE hermes_data.contacts_email_identities (
 );
 
 CREATE INDEX contacts_email_contact_idx
-ON hermes_data.contacts_email_identities (logical_owner_id, contact_id);
+ON makosh_data.contacts_email_identities (logical_owner_id, contact_id);
 
-CREATE TABLE hermes_data.contacts_phone_identities (
+CREATE TABLE makosh_data.contacts_phone_identities (
     logical_owner_id TEXT NOT NULL,
     normalized_phone TEXT NOT NULL,
     contact_id BYTEA NOT NULL,
@@ -80,9 +80,9 @@ CREATE TABLE hermes_data.contacts_phone_identities (
 );
 
 CREATE INDEX contacts_phone_contact_idx
-ON hermes_data.contacts_phone_identities (logical_owner_id, contact_id);
+ON makosh_data.contacts_phone_identities (logical_owner_id, contact_id);
 
-CREATE TABLE hermes_data.contacts_provider_links (
+CREATE TABLE makosh_data.contacts_provider_links (
     logical_owner_id TEXT NOT NULL,
     provider_kind SMALLINT NOT NULL,
     source_account_id TEXT NOT NULL,
@@ -107,9 +107,9 @@ CREATE TABLE hermes_data.contacts_provider_links (
 );
 
 CREATE INDEX contacts_provider_contact_idx
-ON hermes_data.contacts_provider_links (logical_owner_id, contact_id);
+ON makosh_data.contacts_provider_links (logical_owner_id, contact_id);
 
-CREATE TABLE hermes_data.contacts_outbox (
+CREATE TABLE makosh_data.contacts_outbox (
     logical_owner_id TEXT NOT NULL,
     message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -126,5 +126,5 @@ CREATE TABLE hermes_data.contacts_outbox (
 );
 
 CREATE INDEX contacts_outbox_pending_idx
-ON hermes_data.contacts_outbox (logical_owner_id, created_at_unix_millis, message_id)
+ON makosh_data.contacts_outbox (logical_owner_id, created_at_unix_millis, message_id)
 WHERE published_at_unix_millis IS NULL;

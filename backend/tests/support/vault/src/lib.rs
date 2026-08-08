@@ -46,19 +46,19 @@ mod foundation {
     };
     use std::time::Duration;
 
-    use hermes_runtime_protocol::v1::{
+    use makosh_runtime_protocol::v1::{
         GetVaultRuntimeStatusRequestV1, VaultRuntimeControlRequestV1,
         VaultRuntimeControlResponseV1, VaultRuntimeStateV1,
         vault_runtime_control_request_v1::Operation,
         vault_runtime_control_response_v1::Result as ResponseResult,
     };
-    use hermes_vault_key_provider::WrappingKeyProvider;
-    use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-    use hermes_vault_protocol::{
+    use makosh_vault_key_provider::WrappingKeyProvider;
+    use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+    use makosh_vault_protocol::{
         LeaseAudienceV1, SecretClassV1, VaultActionV1, VaultLeaseIssueRequestV1,
         VaultProtocolError, VaultPurposeRequestV1,
     };
-    use hermes_vault_store_sqlcipher::{SecretRecordId, SecretRecordScope, VaultStore};
+    use makosh_vault_store_sqlcipher::{SecretRecordId, SecretRecordScope, VaultStore};
     use prost::Message;
     use tempfile::TempDir;
 
@@ -105,7 +105,7 @@ mod foundation {
             VaultStore::open(
                 &database_path,
                 &anchor_path,
-                &hermes_vault_key_provider::WrappingKey::from_bytes([17; 32]),
+                &makosh_vault_key_provider::WrappingKey::from_bytes([17; 32]),
             )
             .is_err()
         );
@@ -181,7 +181,7 @@ mod foundation {
     fn tamper_anchor_and_assert_rejected(
         database_path: &std::path::Path,
         anchor_path: &std::path::Path,
-        wrapping_key: &hermes_vault_key_provider::WrappingKey,
+        wrapping_key: &makosh_vault_key_provider::WrappingKey,
     ) {
         let mut tampered_anchor = std::fs::read(anchor_path).expect("anchor bytes");
         let last_byte = tampered_anchor.last_mut().expect("nonempty anchor");
@@ -271,7 +271,7 @@ mod foundation {
     fn assert_lease_fences(
         leases: &mut LeaseManager,
         audience: &LeaseAudienceV1,
-        original: &hermes_vault_protocol::CredentialLeaseV1,
+        original: &makosh_vault_protocol::CredentialLeaseV1,
     ) {
         let renewed = leases
             .issue(lease_request(3, 1, audience), 200)

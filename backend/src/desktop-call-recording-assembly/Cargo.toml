@@ -1,5 +1,5 @@
 [package]
-name = "hermes-desktop-call-recording-assembly"
+name = "makosh-desktop-call-recording-assembly"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,19 +8,19 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-desktop-call-recording-assembly"
+name = "makosh-desktop-call-recording-assembly"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "desktop_call_recording"
 surface = "assembly"
 
 [dependencies]
-hermes-desktop-call-recording-persistence = { path = "../desktop-call-recording-persistence" }
-hermes-desktop-call-recording-runtime = { path = "../desktop-call-recording-runtime" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-desktop-call-recording-persistence = { path = "../desktop-call-recording-persistence" }
+makosh-desktop-call-recording-runtime = { path = "../desktop-call-recording-runtime" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
 serde_json = "=1.0.150"

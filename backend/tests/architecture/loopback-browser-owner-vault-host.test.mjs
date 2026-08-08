@@ -76,10 +76,10 @@ test('make dev uses a separate fail-closed loopback Owner Vault host', async () 
   assert.match(adr, /Состояние реализации: Implemented/);
 
   assert.match(manifest, /development-server/);
-  assert.match(manifest, /hermes-owner-vault-development-host/);
+  assert.match(manifest, /makosh-owner-vault-development-host/);
   assert.match(server, /DEFAULT_LISTEN_ADDRESS: &str = "127\.0\.0\.1:9445"/);
   assert.match(server, /EXACT_BROWSER_ORIGIN: &str = "http:\/\/127\.0\.0\.1:5173"/);
-  assert.match(server, /x-hermes-development-host-proof/);
+  assert.match(server, /x-makosh-development-host-proof/);
   assert.match(server, /MAX_REQUEST_BYTES: usize = 256 \* 1024/);
   assert.match(server, /permissions\(\)\.mode\(\) & 0o077 != 0/);
   assert.match(server, /Zeroizing<String>/);
@@ -92,14 +92,14 @@ test('make dev uses a separate fail-closed loopback Owner Vault host', async () 
   assert.match(factory, /hasNativeOwnerVaultProvisioningHostV1/);
   assert.match(factory, /hasDevelopmentOwnerVaultProvisioningHostV1/);
   assert.match(factory, /UnavailableOwnerVaultProvisioningHostV1/);
-  assert.match(availability, /VITE_HERMES_DEV_OWNER_VAULT_HOST === '1'/);
+  assert.match(availability, /VITE_MAKOSH_DEV_OWNER_VAULT_HOST === '1'/);
 
-  assert.match(vite, /\/__hermes\/owner-vault-host\/v1/);
+  assert.match(vite, /\/__makosh\/owner-vault-host\/v1/);
   assert.match(vite, /request\.removeHeader\(DEVELOPMENT_HOST_PROOF_HEADER\)/);
   assert.match(vite, /request\.setHeader\(DEVELOPMENT_HOST_PROOF_HEADER, host\.proof\)/);
   assert.match(ensemble, /--features development-server/);
-  assert.match(ensemble, /hermes-owner-vault-development-host/);
-  assert.match(ensemble, /VITE_HERMES_DEV_OWNER_VAULT_HOST=1/);
-  assert.match(probe, /\/__hermes\/owner-vault-host\/v1\/start/);
-  assert.match(probe, /\/__hermes\/owner-vault-host\/v1\/cancel/);
+  assert.match(ensemble, /makosh-owner-vault-development-host/);
+  assert.match(ensemble, /VITE_MAKOSH_DEV_OWNER_VAULT_HOST=1/);
+  assert.match(probe, /\/__makosh\/owner-vault-host\/v1\/start/);
+  assert.match(probe, /\/__makosh\/owner-vault-host\/v1\/cancel/);
 });

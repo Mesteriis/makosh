@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Implement the approved Hermes surface primitives pack and expose it in Storybook under `Hermes UI/General/Surface` with Russian, English, and Spanish story copy.
+**Goal:** Implement the approved Макошь surface primitives pack and expose it in Storybook under `Макошь UI/General/Surface` with Russian, English, and Spanish story copy.
 
 **Architecture:** All components stay in `frontend/src/shared/ui` as presentation-only shared UI primitives. Styles live in `frontend/src/shared/ui/styles/surfaces.css` and are imported by the shared UI stylesheet index. Storybook examples live in `frontend/stories/ui` and use the existing Storybook locale globals.
 
@@ -103,7 +103,7 @@ Props:
 
 Class contract:
 
-- Always include `hermes-surface`
+- Always include `makosh-surface`
 - Include modifier classes for tone, padding, radius, bordered, and clip
 - Do not emit `hh-surface`
 
@@ -135,9 +135,9 @@ Props:
 
 Class contract:
 
-- Always include `hermes-card`
-- Include `hermes-card--interactive` only through `variant="interactive"`
-- Include `hermes-card--clip` only when `clip` is true
+- Always include `makosh-card`
+- Include `makosh-card--interactive` only through `variant="interactive"`
+- Include `makosh-card--clip` only when `clip` is true
 - Existing `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, and `CardFooter` remain supported
 
 ### Section
@@ -295,23 +295,23 @@ Move surface/card styling out of `data-display.css` into `surfaces.css`.
 
 `surfaces.css` must define:
 
-- `.hermes-surface`
-- `.hermes-paper`
-- `.hermes-panel`
-- `.hermes-card`
-- `.hermes-card-header`
-- `.hermes-card-title`
-- `.hermes-card-description`
-- `.hermes-card-content`
-- `.hermes-card-footer`
-- `.hermes-section`
-- `.hermes-accordion`
-- `.hermes-callout`
-- `.hermes-well`
-- `.hermes-fieldset`
-- `.hermes-toolbar-section`
-- `.hermes-stat-card`
-- `.hermes-action-card`
+- `.makosh-surface`
+- `.makosh-paper`
+- `.makosh-panel`
+- `.makosh-card`
+- `.makosh-card-header`
+- `.makosh-card-title`
+- `.makosh-card-description`
+- `.makosh-card-content`
+- `.makosh-card-footer`
+- `.makosh-section`
+- `.makosh-accordion`
+- `.makosh-callout`
+- `.makosh-well`
+- `.makosh-fieldset`
+- `.makosh-toolbar-section`
+- `.makosh-stat-card`
+- `.makosh-action-card`
 
 Overflow rule:
 
@@ -333,7 +333,7 @@ Meta:
 
 ```ts
 const meta = {
-	title: 'Hermes UI/General/Surface',
+	title: 'Макошь UI/General/Surface',
 	component: Surface
 } satisfies Meta<typeof Surface>
 ```
@@ -367,7 +367,7 @@ Update `general-story-copy.ts`:
 
 Update `storybookCoverage.boundary.test.ts`:
 
-- Add `Hermes UI/General/Surface` to `requiredGeneralTitles`
+- Add `Макошь UI/General/Surface` to `requiredGeneralTitles`
 - Keep the existing requirement that every story imports `./storybook-i18n`
 
 ## Implementation Tasks
@@ -379,7 +379,7 @@ Update `storybookCoverage.boundary.test.ts`:
   - Include new components: `Section`, `Accordion`, `Callout`, `Well`, `Fieldset`, `ToolbarSection`, `StatCard`, `ActionCard`
   - Assert all surface pack component source files do not import `@/domains`, `@/integrations`, `@/platform`, stores, routers, or network APIs
   - Assert `GeneralSurface.stories.ts` imports all surface pack components
-  - Add CSS assertions that `surfaces.css` contains `--clip` classes and no default `.hermes-surface` or `.hermes-card` block sets `overflow: hidden`
+  - Add CSS assertions that `surfaces.css` contains `--clip` classes and no default `.makosh-surface` or `.makosh-card` block sets `overflow: hidden`
   - Run:
 
 ```sh
@@ -387,7 +387,7 @@ cd frontend && pnpm exec vitest run src/shared/ui/surface.boundary.test.ts
 ```
 
 - [ ] Task 2: Normalize existing surface primitives
-  - Update `Surface.vue` to emit `hermes-surface` classes and the approved props
+  - Update `Surface.vue` to emit `makosh-surface` classes and the approved props
   - Update `Paper.vue` and `Panel.vue` to share the approved surface-like props and modifier classes
   - Update `Card.vue` to support `as`, `variant`, `density`, `selected`, `disabled`, and `clip`
   - Add `Surface.README.md`
@@ -453,7 +453,7 @@ cd frontend && pnpm exec vitest run src/shared/ui/storybookCoverage.boundary.tes
   - Add `frontend/stories/ui/GeneralSurface.stories.ts`
   - Add the `surfaces` copy object to `frontend/stories/ui/general-story-copy.ts`
   - Add `controls.surface` in `en`, `ru`, and `es`
-  - Add `Hermes UI/General/Surface` to `requiredGeneralTitles` in `storybookCoverage.boundary.test.ts`
+  - Add `Макошь UI/General/Surface` to `requiredGeneralTitles` in `storybookCoverage.boundary.test.ts`
   - The `OverlaySafety` story must render an open `Popover` inside a `Card` or `Section`
   - Run:
 
@@ -474,7 +474,7 @@ cd frontend && pnpm typecheck
 
 ```sh
 cd frontend && pnpm storybook:build
-cd frontend && HERMES_STORYBOOK_HOST=127.0.0.1 HERMES_STORYBOOK_PORT=6008 pnpm storybook:serve
+cd frontend && MAKOSH_STORYBOOK_HOST=127.0.0.1 MAKOSH_STORYBOOK_PORT=6008 pnpm storybook:serve
 cd frontend && pnpm exec test-storybook --url http://127.0.0.1:6008
 ```
 
@@ -482,18 +482,18 @@ cd frontend && pnpm exec test-storybook --url http://127.0.0.1:6008
   - Open the in-app browser to:
 
 ```text
-http://127.0.0.1:6008/?path=/story/hermes-ui-general-surface--overview&globals=theme:light;locale:ru
+http://127.0.0.1:6008/?path=/story/makosh-ui-general-surface--overview&globals=theme:light;locale:ru
 ```
 
 - [ ] Task 10: Update and compare visual baselines
   - Run after Storybook renders correctly:
 
 ```sh
-cd frontend && HERMES_STORYBOOK_PORT=6007 pnpm test:visual:update
-cd frontend && HERMES_STORYBOOK_PORT=6007 pnpm test:visual
+cd frontend && MAKOSH_STORYBOOK_PORT=6007 pnpm test:visual:update
+cd frontend && MAKOSH_STORYBOOK_PORT=6007 pnpm test:visual
 ```
 
-  - Review generated snapshots for the new `hermes-ui-general-surface` stories
+  - Review generated snapshots for the new `makosh-ui-general-surface` stories
   - Confirm there is no text overlap at 320, 375, 768, 1024, 1440, 1920, and 5120 widths
   - Confirm the `OverlaySafety` popover is visible outside the surface bounds
 
@@ -503,7 +503,7 @@ cd frontend && HERMES_STORYBOOK_PORT=6007 pnpm test:visual
 - [ ] `Section` is visibly not a card
 - [ ] Default surfaces do not clip overlays
 - [ ] `clip` is opt-in and visually testable
-- [ ] Storybook hierarchy contains `Hermes UI/General/Surface`
+- [ ] Storybook hierarchy contains `Макошь UI/General/Surface`
 - [ ] All stories use `ru`, `en`, and `es` copy through the locale global
 - [ ] No domain, provider, store, router, or network imports are introduced
 - [ ] README files explain intended use and misuse
@@ -521,7 +521,7 @@ cd frontend && HERMES_STORYBOOK_PORT=6007 pnpm test:visual
 
 - The approved surface primitives exist and are exported from `@/shared/ui`
 - Existing `Surface`, `Paper`, `Panel`, and `Card` are normalized without removing their intended roles
-- `Hermes UI/General/Surface` appears in Storybook with the seven required stories
+- `Макошь UI/General/Surface` appears in Storybook with the seven required stories
 - Storybook examples are localized for `ru`, `en`, and `es`
 - Overlay safety is visible in Storybook through an open popover inside a surface
 - Boundary tests pass for exports, docs, Storybook coverage, and UI-only ownership

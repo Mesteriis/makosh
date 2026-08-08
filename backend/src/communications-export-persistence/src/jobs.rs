@@ -1,7 +1,7 @@
-use hermes_communications_export_core::{
+use makosh_communications_export_core::{
     EvidenceExportDirectionV1, MAX_EXPORT_ARTIFACT_BYTES_V1, MAX_EXPORT_SOURCE_BYTES_V1,
 };
-use hermes_events_protocol::delivery::OutboxRecordV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
 use sqlx::{Postgres, Row, Transaction};
 
 use crate::{
@@ -94,7 +94,7 @@ impl CommunicationsExportPersistenceV1 {
             .await
             .map_err(|_| CommunicationsExportPersistenceErrorV1::StorageUnavailable)?;
         let inserted_job = sqlx::query(
-            "INSERT INTO hermes_data.communications_export_jobs (
+            "INSERT INTO makosh_data.communications_export_jobs (
                 export_id, logical_owner_id, state, requested_items, completed_items,
                 created_at_unix_seconds, updated_at_unix_seconds
              ) VALUES ($1, $2, $3, $4, 0, $5, $5)
@@ -113,7 +113,7 @@ impl CommunicationsExportPersistenceV1 {
         .map_err(|_| CommunicationsExportPersistenceErrorV1::StorageUnavailable)?;
         let existing_job: Option<(String, i32)> = sqlx::query_as(
             "SELECT logical_owner_id, requested_items
-             FROM hermes_data.communications_export_jobs
+             FROM makosh_data.communications_export_jobs
              WHERE export_id = $1",
         )
         .bind(export_id.as_slice())
@@ -131,7 +131,7 @@ impl CommunicationsExportPersistenceV1 {
         }
         for (ordinal, message_id) in message_ids.iter().enumerate() {
             sqlx::query(
-                "INSERT INTO hermes_data.communications_export_items (
+                "INSERT INTO makosh_data.communications_export_items (
                     export_id, ordinal, message_id
                  ) VALUES ($1, $2, $3)
                  ON CONFLICT (export_id, ordinal) DO NOTHING",
@@ -148,7 +148,7 @@ impl CommunicationsExportPersistenceV1 {
         }
         let existing_message_ids: Vec<Vec<u8>> = sqlx::query_scalar(
             "SELECT message_id
-             FROM hermes_data.communications_export_items
+             FROM makosh_data.communications_export_items
              WHERE export_id = $1
              ORDER BY ordinal",
         )
@@ -211,7 +211,7 @@ impl CommunicationsExportPersistenceV1 {
             .await
             .map_err(|_| CommunicationsExportPersistenceErrorV1::StorageUnavailable)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.communications_export_event_inbox (
+            "INSERT INTO makosh_data.communications_export_event_inbox (
                 message_id, envelope_sha256, event_kind, consumed_at_unix_seconds
              ) VALUES ($1, $2, 1, $3)
              ON CONFLICT (message_id) DO NOTHING",
@@ -225,7 +225,7 @@ impl CommunicationsExportPersistenceV1 {
         if inserted.rows_affected() == 0 {
             let existing: Option<Vec<u8>> = sqlx::query_scalar(
                 "SELECT envelope_sha256
-                 FROM hermes_data.communications_export_event_inbox
+                 FROM makosh_data.communications_export_event_inbox
                  WHERE message_id = $1",
             )
             .bind(result_message_id.as_slice())
@@ -240,8 +240,8 @@ impl CommunicationsExportPersistenceV1 {
         }
         let expected_ids: Vec<Vec<u8>> = sqlx::query_scalar(
             "SELECT item.message_id
-             FROM hermes_data.communications_export_items item
-             JOIN hermes_data.communications_export_jobs job
+             FROM makosh_data.communications_export_items item
+             JOIN makosh_data.communications_export_jobs job
                ON job.export_id = item.export_id
              WHERE item.export_id = $1 AND job.logical_owner_id = $2
              ORDER BY item.ordinal",
@@ -277,7 +277,7 @@ impl CommunicationsExportPersistenceV1 {
                 (BODY_UNAVAILABLE, None, None, None, None)
             };
             sqlx::query(
-                "UPDATE hermes_data.communications_export_items
+                "UPDATE makosh_data.communications_export_items
                  SET conversation_id = $3,
                      evidence_id = $4,
                      evidence_revision = $5,
@@ -292,7 +292,7 @@ impl CommunicationsExportPersistenceV1 {
                      source_custody_proof = $14
                  WHERE export_id = $1 AND ordinal = $2
                    AND EXISTS (
-                     SELECT 1 FROM hermes_data.communications_export_jobs job
+                     SELECT 1 FROM makosh_data.communications_export_jobs job
                      WHERE job.export_id = $1 AND job.logical_owner_id = $15
                    )",
             )
@@ -322,7 +322,7 @@ impl CommunicationsExportPersistenceV1 {
             .map_err(|_| CommunicationsExportPersistenceErrorV1::StorageUnavailable)?;
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.communications_export_jobs
+            "UPDATE makosh_data.communications_export_jobs
              SET state = $2,
                  source_result_message_id = $3,
                  updated_at_unix_seconds = $4
@@ -377,7 +377,7 @@ impl CommunicationsExportPersistenceV1 {
             .await
             .map_err(|_| CommunicationsExportPersistenceErrorV1::StorageUnavailable)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.communications_export_event_inbox (
+            "INSERT INTO makosh_data.communications_export_event_inbox (
                 message_id, envelope_sha256, event_kind, consumed_at_unix_seconds
              ) VALUES ($1, $2, 2, $3)
              ON CONFLICT (message_id) DO NOTHING",
@@ -391,7 +391,7 @@ impl CommunicationsExportPersistenceV1 {
         if inserted.rows_affected() == 0 {
             let existing: Option<Vec<u8>> = sqlx::query_scalar(
                 "SELECT envelope_sha256
-                 FROM hermes_data.communications_export_event_inbox
+                 FROM makosh_data.communications_export_event_inbox
                  WHERE message_id = $1",
             )
             .bind(result_message_id.as_slice())
@@ -405,7 +405,7 @@ impl CommunicationsExportPersistenceV1 {
             };
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.communications_export_jobs
+            "UPDATE makosh_data.communications_export_jobs
              SET state = $2,
                  source_result_message_id = $3,
                  rejection_code = $4,
@@ -464,7 +464,7 @@ impl CommunicationsExportPersistenceV1 {
             .map_err(|_| CommunicationsExportPersistenceErrorV1::StorageUnavailable)?;
         let export_id: Option<Vec<u8>> = sqlx::query_scalar(
             "SELECT export_id
-             FROM hermes_data.communications_export_jobs
+             FROM makosh_data.communications_export_jobs
              WHERE state = $1
                AND (claimed_by IS NULL OR lease_expires_at_unix_seconds <= $2)
              ORDER BY updated_at_unix_seconds, export_id
@@ -484,7 +484,7 @@ impl CommunicationsExportPersistenceV1 {
             return Ok(None);
         };
         sqlx::query(
-            "UPDATE hermes_data.communications_export_jobs
+            "UPDATE makosh_data.communications_export_jobs
              SET claimed_by = $2,
                  lease_expires_at_unix_seconds = $3,
                  updated_at_unix_seconds = $4
@@ -501,8 +501,8 @@ impl CommunicationsExportPersistenceV1 {
             "SELECT job.logical_owner_id, job.created_at_unix_seconds,
                     job.source_result_message_id,
                     inbox.envelope_sha256
-             FROM hermes_data.communications_export_jobs job
-             JOIN hermes_data.communications_export_event_inbox inbox
+             FROM makosh_data.communications_export_jobs job
+             JOIN makosh_data.communications_export_event_inbox inbox
                ON inbox.message_id = job.source_result_message_id
              WHERE job.export_id = $1",
         )
@@ -529,7 +529,7 @@ impl CommunicationsExportPersistenceV1 {
                     direction, occurred_at_unix_seconds, observed_at_unix_seconds,
                     participant_display_label, body_state, source_reference_id,
                     source_declared_bytes, source_sha256, source_custody_proof
-             FROM hermes_data.communications_export_items
+             FROM makosh_data.communications_export_items
              WHERE export_id = $1
              ORDER BY ordinal",
         )
@@ -574,7 +574,7 @@ impl CommunicationsExportPersistenceV1 {
             .await
             .map_err(|_| CommunicationsExportPersistenceErrorV1::StorageUnavailable)?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.communications_export_jobs
+            "UPDATE makosh_data.communications_export_jobs
              SET state = $2,
                  completed_items = requested_items,
                  artifact_reference_id = $3,
@@ -626,7 +626,7 @@ impl CommunicationsExportPersistenceV1 {
             return Err(CommunicationsExportPersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "UPDATE hermes_data.communications_export_jobs
+            "UPDATE makosh_data.communications_export_jobs
              SET claimed_by = NULL,
                  lease_expires_at_unix_seconds = NULL,
                  updated_at_unix_seconds = $3
@@ -662,7 +662,7 @@ impl CommunicationsExportPersistenceV1 {
             .await
             .map_err(|_| CommunicationsExportPersistenceErrorV1::StorageUnavailable)?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.communications_export_jobs
+            "UPDATE makosh_data.communications_export_jobs
              SET state = $2,
                  rejection_code = $3,
                  updated_at_unix_seconds = $4,
@@ -713,7 +713,7 @@ impl CommunicationsExportPersistenceV1 {
             "SELECT state, requested_items, completed_items,
                     artifact_reference_id, artifact_declared_bytes,
                     artifact_sha256, rejection_code
-             FROM hermes_data.communications_export_jobs
+             FROM makosh_data.communications_export_jobs
              WHERE export_id = $1 AND logical_owner_id = $2",
         )
         .bind(export_id.as_slice())
@@ -733,7 +733,7 @@ impl CommunicationsExportPersistenceV1 {
         }
         let rows = sqlx::query(
             "SELECT exact_envelope_bytes
-             FROM hermes_data.communications_export_outbox
+             FROM makosh_data.communications_export_outbox
              WHERE published_at_unix_seconds IS NULL
              ORDER BY created_at_unix_seconds, message_id
              LIMIT $1",
@@ -762,7 +762,7 @@ impl CommunicationsExportPersistenceV1 {
             return Err(CommunicationsExportPersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "UPDATE hermes_data.communications_export_outbox
+            "UPDATE makosh_data.communications_export_outbox
              SET published_at_unix_seconds = $2
              WHERE message_id = $1 AND published_at_unix_seconds IS NULL",
         )
@@ -781,7 +781,7 @@ async fn insert_exact_outbox(
     created_at_unix_seconds: i64,
 ) -> Result<(), CommunicationsExportPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.communications_export_outbox (
+        "INSERT INTO makosh_data.communications_export_outbox (
             message_id, envelope_sha256, exact_envelope_bytes,
             created_at_unix_seconds, published_at_unix_seconds
          ) VALUES ($1, $2, $3, $4, NULL)
@@ -799,7 +799,7 @@ async fn insert_exact_outbox(
     }
     let existing: Option<(Vec<u8>, Vec<u8>)> = sqlx::query_as(
         "SELECT envelope_sha256, exact_envelope_bytes
-         FROM hermes_data.communications_export_outbox
+         FROM makosh_data.communications_export_outbox
          WHERE message_id = $1",
     )
     .bind(outbox.message_id().as_slice())

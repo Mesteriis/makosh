@@ -1,13 +1,13 @@
 use std::{collections::BTreeMap, path::PathBuf, process::ExitCode};
 
-use hermes_attachment_preview_evidence_replay_assembly::materialize_attachment_preview_evidence_replay_release_assembly_v1;
+use makosh_attachment_preview_evidence_replay_assembly::materialize_attachment_preview_evidence_replay_release_assembly_v1;
 
 const OPTIONS: [&str; 3] = ["--build-id", "--output-dir", "--runtime"];
 
 fn main() -> ExitCode {
     let Some(arguments) = arguments(std::env::args().skip(1).collect()) else {
         return fail(
-            "usage: hermes-attachment-preview-evidence-replay-assembly --build-id <id> --output-dir <absolute-path> --runtime <absolute-path>",
+            "usage: makosh-attachment-preview-evidence-replay-assembly --build-id <id> --output-dir <absolute-path> --runtime <absolute-path>",
         );
     };
     if materialize_attachment_preview_evidence_replay_release_assembly_v1(

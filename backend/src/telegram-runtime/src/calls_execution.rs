@@ -1,14 +1,14 @@
-use hermes_telegram_call_media_contract::{
+use makosh_telegram_call_media_contract::{
     TelegramCallDiscardContextV1, TelegramCallMediaContractError, TelegramCallMediaEventV1,
     TelegramCallMediaFinalV1, TelegramCallMediaStateV1, TelegramCallReadyMaterialV1,
     TelegramCallSecretBytesV1, TelegramCallSignalingMediaPort,
 };
-use hermes_telegram_calls_core::{
+use makosh_telegram_calls_core::{
     TelegramCallCommand, TelegramCallFailureCategory, TelegramCallOperation,
     TelegramProviderCallState,
 };
-use hermes_telegram_calls_persistence::{TelegramCallsPersistence, TelegramCallsPersistenceError};
-use hermes_telegram_tdlib::{TdlibError, TdlibRequest, TdlibResponse, TdlibTransport};
+use makosh_telegram_calls_persistence::{TelegramCallsPersistence, TelegramCallsPersistenceError};
+use makosh_telegram_tdlib::{TdlibError, TdlibRequest, TdlibResponse, TdlibTransport};
 
 use crate::calls_client_port::{TelegramCallsCommandRuntime, TelegramCallsCommandRuntimeError};
 use crate::{TelegramRuntime, TelegramRuntimeAdmission};
@@ -61,7 +61,7 @@ impl<T: TdlibTransport> TelegramRuntime<T> {
 
     pub fn start_call_media_session(
         &mut self,
-        call: &hermes_telegram_calls_core::TelegramCallSession,
+        call: &makosh_telegram_calls_core::TelegramCallSession,
         material: TelegramCallReadyMaterialV1,
     ) -> Result<(), TelegramCallExecutionError> {
         let port = self
@@ -397,7 +397,7 @@ impl<T: TdlibTransport> TelegramRuntime<T> {
     fn call_protocol(
         &self,
     ) -> Result<
-        hermes_telegram_call_media_contract::TelegramCallProtocolV1,
+        makosh_telegram_call_media_contract::TelegramCallProtocolV1,
         TelegramCallFailureCategory,
     > {
         self.call_media
@@ -435,7 +435,7 @@ async fn required_call(
     persistence: &TelegramCallsPersistence,
     account_id: &str,
     call_session_id: &str,
-) -> Result<hermes_telegram_calls_core::TelegramCallSession, TelegramCallFailureCategory> {
+) -> Result<makosh_telegram_calls_core::TelegramCallSession, TelegramCallFailureCategory> {
     persistence
         .call(account_id, call_session_id)
         .await
@@ -478,14 +478,14 @@ mod tests {
     use std::collections::VecDeque;
     use std::rc::Rc;
 
-    use hermes_telegram_call_media_contract::{
+    use makosh_telegram_call_media_contract::{
         CALL_ENCRYPTION_KEY_BYTES, MAX_READY_TEXT_BYTES, MAX_SIGNALING_DATA_BYTES,
         TelegramCallMediaEventV1, TelegramCallMediaFinalV1, TelegramCallMediaStateV1,
         TelegramCallPeerProtocolV1, TelegramCallProtocolV1, TelegramCallReadyMaterialV1,
         TelegramCallReadyPlanV1, TelegramCallSecretBytesV1, TelegramCallSecretTextV1,
         TelegramCallServerKindV1, TelegramCallServerV1,
     };
-    use hermes_telegram_tdlib::TdlibProviderUpdate;
+    use makosh_telegram_tdlib::TdlibProviderUpdate;
 
     use super::*;
 
@@ -615,14 +615,14 @@ mod tests {
                 TelegramCallMediaEventV1::State(TelegramCallMediaStateV1::Established),
             ]),
         }));
-        let call = hermes_telegram_calls_core::TelegramCallSession {
+        let call = makosh_telegram_calls_core::TelegramCallSession {
             call_session_id: "call-1".to_owned(),
             account_id: "account-1".to_owned(),
             runtime_generation: 7,
             tdlib_call_id: 41,
             provider_call_unique_id: Some(43),
             provider_user_id: "user-1".to_owned(),
-            direction: hermes_telegram_calls_core::TelegramCallDirection::Outgoing,
+            direction: makosh_telegram_calls_core::TelegramCallDirection::Outgoing,
             state: TelegramProviderCallState::MediaReady,
             pending_created: true,
             pending_received: false,

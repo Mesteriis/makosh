@@ -1,4 +1,4 @@
-use hermes_communication_cross_channel_forward_core::CrossChannelForwardStateV1;
+use makosh_communication_cross_channel_forward_core::CrossChannelForwardStateV1;
 use sqlx::{Postgres, Row, Transaction};
 
 use crate::{
@@ -41,7 +41,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
             sqlx::query(
                 "SELECT realtime_sequence, forward_id, state, state_revision,
                         error_code, occurred_at_unix_millis
-                 FROM hermes_data.communication_cross_channel_forward_realtime
+                 FROM makosh_data.communication_cross_channel_forward_realtime
                  WHERE logical_owner_id = $1 AND realtime_sequence > $2
                  ORDER BY realtime_sequence
                  LIMIT $3",
@@ -58,7 +58,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
                  FROM (
                    SELECT realtime_sequence, forward_id, state, state_revision,
                           error_code, occurred_at_unix_millis
-                   FROM hermes_data.communication_cross_channel_forward_realtime
+                   FROM makosh_data.communication_cross_channel_forward_realtime
                    WHERE logical_owner_id = $1
                    ORDER BY realtime_sequence DESC
                    LIMIT $2
@@ -82,13 +82,13 @@ pub(crate) async fn insert_forward_transition(
     occurred_at_unix_millis: i64,
 ) -> Result<(), CrossChannelForwardPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.communication_cross_channel_forward_realtime (
+        "INSERT INTO makosh_data.communication_cross_channel_forward_realtime (
            logical_owner_id, forward_id, state_revision, state,
            error_code, occurred_at_unix_millis
          )
          SELECT logical_owner_id, forward_id, state_revision, state,
                 error_code, $1
-         FROM hermes_data.communication_cross_channel_forward_operations
+         FROM makosh_data.communication_cross_channel_forward_operations
          WHERE logical_owner_id = $2 AND forward_id = $3",
     )
     .bind(occurred_at_unix_millis)

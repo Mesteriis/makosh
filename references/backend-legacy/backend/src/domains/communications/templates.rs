@@ -461,7 +461,7 @@ mod tests {
         vars.insert("name".into(), "Alice".into());
         vars.insert("message".into(), "How are you?".into());
         let store = CommunicationTemplateStore::new(
-            PgPool::connect_lazy("postgres://localhost/hermes_test").unwrap(),
+            PgPool::connect_lazy("postgres://localhost/makosh_test").unwrap(),
         );
         let rendered = store.render(&tpl, &vars).unwrap();
         assert_eq!(rendered.subject, "Hello Alice");
@@ -482,7 +482,7 @@ mod tests {
         vars.insert("name".into(), "Alice".into());
         vars.insert("blank".into(), " ".into());
         let store = CommunicationTemplateStore::new(
-            PgPool::connect_lazy("postgres://localhost/hermes_test").unwrap(),
+            PgPool::connect_lazy("postgres://localhost/makosh_test").unwrap(),
         );
         let rendered = store.render(&tpl, &vars).unwrap();
         assert_eq!(rendered.subject, "Hello Alice");
@@ -507,13 +507,13 @@ mod tests {
         );
         let mut vars: HashMap<String, String> = HashMap::new();
         vars.insert("name".into(), "Alice".into());
-        vars.insert("project".into(), "Hermes".into());
+        vars.insert("project".into(), "Макошь".into());
         let store = CommunicationTemplateStore::new(
-            PgPool::connect_lazy("postgres://localhost/hermes_test").unwrap(),
+            PgPool::connect_lazy("postgres://localhost/makosh_test").unwrap(),
         );
         let rendered = store.render(&tpl, &vars).unwrap();
         assert_eq!(rendered.subject, "Hello {{ name");
-        assert_eq!(rendered.body, "Body {{ }} and Hermes {{ first name }}");
+        assert_eq!(rendered.body, "Body {{ }} and Макошь {{ first name }}");
         assert!(rendered.missing_variables.is_empty());
         assert!(rendered.unresolved_variables.is_empty());
         assert_eq!(

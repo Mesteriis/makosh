@@ -1,11 +1,11 @@
 //! Shared disposable Scheduler receipt persistence fixture.
 
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_scheduler_persistence::{
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_scheduler_persistence::{
     SchedulerPostgresStoreV1, SchedulerRunClaimV1, SchedulerRunTerminalResultV1,
     scheduler_storage_bundle_v1,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     ConcurrencyKeyV1, JobRunIdV1, MisfirePolicyV1, OverlapPolicyV1, RetryPolicyV1, ScheduleIdV1,
     SchedulePolicyV1, ScheduleRevisionV1, ScheduleRunLeaseV1, ScheduleTriggerV1,
     v1::{JobLeaseV1, JobRunOutcomeV1, JobRunReceiptV1},
@@ -13,7 +13,7 @@ use hermes_scheduler_protocol::{
 use sqlx::{PgPool, postgres::PgPoolOptions, query, query_scalar};
 
 pub const CLAIMED_AT: i64 = 1_000;
-const URL: &str = "HERMES_SCHEDULER_POSTGRES_URL";
+const URL: &str = "MAKOSH_SCHEDULER_POSTGRES_URL";
 
 pub async fn pending_published_dispatch() -> (PgPool, SchedulerPostgresStoreV1, SchedulerRunClaimV1)
 {
@@ -63,7 +63,7 @@ pub fn failed_result(claim: &SchedulerRunClaimV1) -> SchedulerRunTerminalResultV
 }
 
 pub async fn run_state(pool: &PgPool) -> String {
-    query_scalar("SELECT state FROM hermes_platform.scheduler_runs WHERE run_id = $1")
+    query_scalar("SELECT state FROM makosh_platform.scheduler_runs WHERE run_id = $1")
         .bind(vec![31_u8; 16])
         .fetch_one(pool)
         .await
@@ -71,21 +71,21 @@ pub async fn run_state(pool: &PgPool) -> String {
 }
 
 pub async fn acceptance_count(pool: &PgPool) -> i64 {
-    query_scalar("SELECT COUNT(*) FROM hermes_platform.scheduler_run_acceptances")
+    query_scalar("SELECT COUNT(*) FROM makosh_platform.scheduler_run_acceptances")
         .fetch_one(pool)
         .await
         .expect("acceptance count")
 }
 
 pub async fn active_runs(pool: &PgPool) -> i32 {
-    query_scalar("SELECT active_runs FROM hermes_platform.scheduler_concurrency")
+    query_scalar("SELECT active_runs FROM makosh_platform.scheduler_concurrency")
         .fetch_one(pool)
         .await
         .expect("active runs")
 }
 
 pub async fn retry_due_at(pool: &PgPool) -> Option<i64> {
-    query_scalar("SELECT next_attempt_at_unix_ms FROM hermes_platform.scheduler_run_retries")
+    query_scalar("SELECT next_attempt_at_unix_ms FROM makosh_platform.scheduler_run_retries")
         .fetch_one(pool)
         .await
         .expect("retry due")
@@ -96,7 +96,7 @@ pub fn required(name: &str) -> String {
 }
 
 async fn install_schema(pool: &PgPool) {
-    sqlx::raw_sql("DROP SCHEMA IF EXISTS hermes_platform CASCADE; CREATE SCHEMA hermes_platform;")
+    sqlx::raw_sql("DROP SCHEMA IF EXISTS makosh_platform CASCADE; CREATE SCHEMA makosh_platform;")
         .execute(pool)
         .await
         .expect("fresh receipt schema");
@@ -113,16 +113,16 @@ async fn install_schema(pool: &PgPool) {
 }
 
 async fn install_schedule(pool: &PgPool, key: &ConcurrencyKeyV1, policy: &SchedulePolicyV1) {
-    query("INSERT INTO hermes_platform.scheduler_schedules (schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms, updated_at_unix_ms) VALUES ($1, 1, 'platform', 'maintenance', 1, 'platform.maintenance', 1, $2, 'scope:technical', $3, 1, TRUE, $4, $5, $5)")
+    query("INSERT INTO makosh_platform.scheduler_schedules (schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms, updated_at_unix_ms) VALUES ($1, 1, 'platform', 'maintenance', 1, 'platform.maintenance', 1, $2, 'scope:technical', $3, 1, TRUE, $4, $5, $5)")
         .bind(vec![11_u8; 16]).bind(vec![7_u8; 32]).bind(key.value()).bind(policy.canonical_bytes()).bind(CLAIMED_AT)
         .execute(pool).await.expect("schedule");
 }
 
 async fn publish_dispatch(pool: &PgPool, claim: &SchedulerRunClaimV1) {
-    query("INSERT INTO hermes_platform.scheduler_dispatches (run_id, lease_epoch, message_id, envelope_sha256, exact_envelope_bytes, state, created_at_unix_ms) VALUES ($1, $2, $3, $4, $5, 'published', $6)")
+    query("INSERT INTO makosh_platform.scheduler_dispatches (run_id, lease_epoch, message_id, envelope_sha256, exact_envelope_bytes, state, created_at_unix_ms) VALUES ($1, $2, $3, $4, $5, 'published', $6)")
         .bind(claim.run_id().bytes().to_vec()).bind(claim.lease_epoch() as i64).bind(claim.dispatch_message_id().to_vec()).bind(vec![1_u8; 32]).bind(vec![2_u8]).bind(CLAIMED_AT)
         .execute(pool).await.expect("published dispatch");
-    query("UPDATE hermes_platform.scheduler_runs SET state = 'dispatched' WHERE run_id = $1")
+    query("UPDATE makosh_platform.scheduler_runs SET state = 'dispatched' WHERE run_id = $1")
         .bind(claim.run_id().bytes().to_vec())
         .execute(pool)
         .await

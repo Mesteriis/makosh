@@ -4,7 +4,7 @@ import { storybookLocaleFromGlobals } from './storybook-i18n'
 import { generalStoryCopy } from './general-story-copy'
 
 const meta = {
-	title: 'Hermes UI/General/Textarea',
+	title: 'Макошь UI/General/Textarea',
 	component: Textarea,
 	render: (_args, context) => ({
 		components: { FormField, FormLabel, Textarea },

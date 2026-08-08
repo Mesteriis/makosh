@@ -1,11 +1,11 @@
 //! Runs the encrypted Blob store behind the authenticated inherited channel.
 
-use hermes_blob_runtime::{
+use makosh_blob_runtime::{
     release::BlobCustodyReleaseLedgerV1,
     storage::BlobContentLifecycleStore,
     vault::{BlobVaultKeyLeaseAdapterV1, BlobVaultRouteContextV1},
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::{
         BlobRuntimeConfigurationV1, BlobRuntimeControlRequestV1, BlobRuntimeControlResponseV1,
         BlobRuntimeStateV1, BlobRuntimeStatusV1, GetBlobRuntimeStatusRequestV1,
@@ -19,7 +19,7 @@ use hermes_runtime_protocol::{
         validate_blob_runtime_status,
     },
 };
-use hermes_vault_protocol::LeaseAudienceV1;
+use makosh_vault_protocol::LeaseAudienceV1;
 use prost::Message;
 
 use super::{

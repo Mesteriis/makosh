@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.attachment_security_preview_delegation_inbox (
+CREATE TABLE makosh_data.attachment_security_preview_delegation_inbox (
   message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
   envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
   exact_envelope_bytes BYTEA NOT NULL CHECK (octet_length(exact_envelope_bytes) > 0),
@@ -13,7 +13,7 @@ CREATE TABLE hermes_data.attachment_security_preview_delegation_inbox (
   consumed_at_unix_seconds BIGINT NOT NULL
 );
 
-CREATE TABLE hermes_data.attachment_security_preview_delegation_outbox (
+CREATE TABLE makosh_data.attachment_security_preview_delegation_outbox (
   message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
   envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
   exact_envelope_bytes BYTEA NOT NULL CHECK (octet_length(exact_envelope_bytes) > 0),
@@ -21,9 +21,9 @@ CREATE TABLE hermes_data.attachment_security_preview_delegation_outbox (
   published_at_unix_seconds BIGINT
 );
 
-CREATE TABLE hermes_data.attachment_security_preview_delegation_jobs (
+CREATE TABLE makosh_data.attachment_security_preview_delegation_jobs (
   request_message_id BYTEA PRIMARY KEY REFERENCES
-    hermes_data.attachment_security_preview_delegation_inbox (message_id),
+    makosh_data.attachment_security_preview_delegation_inbox (message_id),
   request_id BYTEA NOT NULL UNIQUE CHECK (octet_length(request_id) = 16),
   current_reference_id BYTEA CHECK (current_reference_id IS NULL OR octet_length(current_reference_id) = 16),
   current_receipt_sha256 BYTEA CHECK (current_receipt_sha256 IS NULL OR octet_length(current_receipt_sha256) = 32),
@@ -39,7 +39,7 @@ CREATE TABLE hermes_data.attachment_security_preview_delegation_jobs (
   claimed_by TEXT CHECK (claimed_by IS NULL OR char_length(claimed_by) BETWEEN 1 AND 128),
   lease_expires_at_unix_seconds BIGINT,
   result_message_id BYTEA UNIQUE REFERENCES
-    hermes_data.attachment_security_preview_delegation_outbox (message_id),
+    makosh_data.attachment_security_preview_delegation_outbox (message_id),
   completed_at_unix_seconds BIGINT,
   CHECK (
     (rejection_code IS NULL AND current_reference_id IS NOT NULL
@@ -61,11 +61,11 @@ CREATE TABLE hermes_data.attachment_security_preview_delegation_jobs (
 );
 
 CREATE INDEX attachment_security_preview_delegation_jobs_pending_idx
-  ON hermes_data.attachment_security_preview_delegation_jobs (
+  ON makosh_data.attachment_security_preview_delegation_jobs (
     next_attempt_at_unix_seconds, request_message_id
   ) WHERE state = 1;
 
 CREATE INDEX attachment_security_preview_delegation_outbox_pending_idx
-  ON hermes_data.attachment_security_preview_delegation_outbox (
+  ON makosh_data.attachment_security_preview_delegation_outbox (
     created_at_unix_seconds, message_id
   ) WHERE published_at_unix_seconds IS NULL;

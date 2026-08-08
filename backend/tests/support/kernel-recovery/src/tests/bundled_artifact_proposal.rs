@@ -1,21 +1,21 @@
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BundledManagedArtifactProposalInputV1, ModuleDescriptorRegistrationRequestsV1,
     ModuleRegistration, ModuleRegistrationState, OperationIdV1,
 };
-use hermes_kernel_control_store_sqlite::{SqliteControlStore, StoreError};
+use makosh_kernel_control_store_sqlite::{SqliteControlStore, StoreError};
 
 use super::common::unique_target_root;
 
 #[test]
 fn bundled_artifact_proposal_is_atomic_idempotent_and_pending() {
-    let root = unique_target_root("hermes-bundled-artifact-proposal");
+    let root = unique_target_root("makosh-bundled-artifact-proposal");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
     let proposal = BundledManagedArtifactProposalInputV1::new(
         OperationIdV1::new([7; 16]),
         [8; 32],
-        "hermes-development",
+        "makosh-development",
         1,
         "communications.runtime.v1",
     );
@@ -59,7 +59,7 @@ fn bundled_artifact_proposal_is_atomic_idempotent_and_pending() {
     let conflicting = BundledManagedArtifactProposalInputV1::new(
         OperationIdV1::new([7; 16]),
         [9; 32],
-        "hermes-development",
+        "makosh-development",
         1,
         "communications.runtime.v1",
     );

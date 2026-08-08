@@ -48,7 +48,7 @@ pub(super) fn validate_provider_kind(value: &str) -> Result<(), AiControlCenterE
 
 pub(super) fn validate_cli_preset(value: &str) -> Result<(), AiControlCenterError> {
     match value.trim() {
-        "codex" | "claude" | "hermes" => Ok(()),
+        "codex" | "claude" | "makosh" => Ok(()),
         other => Err(AiControlCenterError::InvalidRequest(format!(
             "unsupported CLI command preset `{other}`"
         ))),

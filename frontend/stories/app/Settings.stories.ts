@@ -11,21 +11,21 @@ import {
 	ClientSettingValueEntryV1Schema,
 	ClientSettingValueV1Schema,
 	ClientSettingsApplyStateV1,
-} from '../../src/gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../src/gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	MailAccountCatalogV1Schema,
 	MailAccountReadinessV1,
 	MailAccountStatusV1Schema,
 	MailConnectorProfileV1,
 	MailProviderPathReadinessV1,
-} from '../../src/gen/hermes/mail/account/v1/client_pb'
+} from '../../src/gen/makosh/mail/account/v1/client_pb'
 import {
 	recoveryClientBootstrap,
 	type ClientBootstrapSnapshot,
 } from '../../src/platform/gateway/clientBootstrap'
 
 const meta = {
-	title: 'Hermes App/Settings/Clean Room',
+	title: 'Макошь App/Settings/Clean Room',
 	parameters: { layout: 'fullscreen' },
 } satisfies Meta
 
@@ -42,7 +42,7 @@ export const Mail: Story = {
 		msw: {
 			handlers: [
 				http.post(
-					'*/hermes.mail.account.v1.MailAccountCatalogService/List',
+					'*/makosh.mail.account.v1.MailAccountCatalogService/List',
 					() => new HttpResponse(
 						toBinary(MailAccountCatalogV1Schema, mailAccountCatalog()),
 						{ headers: { 'content-type': 'application/proto' } },
@@ -84,7 +84,7 @@ function settingsBootstrap(): ClientBootstrapSnapshot {
 	const recovery = recoveryClientBootstrap()
 	const mail = create(ClientModuleBootstrapV1Schema, {
 		registrationId: 'mail.owner.local',
-		moduleId: 'hermes-mail-runtime',
+		moduleId: 'makosh-mail-runtime',
 		grantEpoch: 4n,
 		capabilityIds: ['mail.delivery.v1', 'mail.sync.v1'],
 		sectionsEnabled: true,
@@ -109,9 +109,9 @@ function settingsBootstrap(): ClientBootstrapSnapshot {
 	const providerModules = [
 		mail,
 		...[
-			['telegram', 'hermes-telegram-runtime'],
-			['whatsapp', 'hermes-whatsapp-runtime'],
-			['zulip', 'hermes-zulip-runtime'],
+			['telegram', 'makosh-telegram-runtime'],
+			['whatsapp', 'makosh-whatsapp-runtime'],
+			['zulip', 'makosh-zulip-runtime'],
 		].map(([provider, moduleId]) => create(ClientModuleBootstrapV1Schema, {
 			registrationId: `${provider}.owner.local`,
 			moduleId,

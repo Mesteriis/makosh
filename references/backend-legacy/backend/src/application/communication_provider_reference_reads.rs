@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use crate::integrations::telegram::client::errors::TelegramError;
 use crate::integrations::telegram::client::models::message_references::TelegramMessageReferenceSummary;
-use hermes_communications_api::canonical::CanonicalMessageReadPort;
+use makosh_communications_api::canonical::CanonicalMessageReadPort;
 
 pub(crate) async fn list_reference_summaries(
     reads: &dyn CanonicalMessageReadPort,

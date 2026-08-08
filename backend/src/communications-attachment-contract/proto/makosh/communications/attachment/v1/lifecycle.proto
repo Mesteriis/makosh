@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package makosh.communications.attachment.v1;
+
+// Canonical owner event. It exposes the state transition, not Blob bytes,
+// provider locators, scanner details, or a generic verdict payload.
+message AttachmentSafetyStateChangedV1 {
+  bytes attachment_anchor_id = 1;
+  AttachmentSafetyStateV1 expected_state = 2;
+  AttachmentSafetyStateV1 next_state = 3;
+  bytes evidence_id = 4;
+  int64 observed_at_unix_seconds = 5;
+}
+
+enum AttachmentSafetyStateV1 {
+  ATTACHMENT_SAFETY_STATE_V1_UNSPECIFIED = 0;
+  ATTACHMENT_SAFETY_STATE_V1_DESCRIPTOR_ONLY = 1;
+  ATTACHMENT_SAFETY_STATE_V1_BLOB_PENDING = 2;
+  ATTACHMENT_SAFETY_STATE_V1_BLOB_ADMITTED = 3;
+  ATTACHMENT_SAFETY_STATE_V1_QUARANTINED = 4;
+  ATTACHMENT_SAFETY_STATE_V1_SAFE_FOR_DELIVERY = 5;
+  ATTACHMENT_SAFETY_STATE_V1_REJECTED = 6;
+}

@@ -22,19 +22,19 @@ const FIXTURE_MESSAGE: &[u8] = concat!(
     "From: source@example.test\r\n",
     "To: owner@example.test\r\n",
     "Subject: managed attachment evidence\r\n",
-    "Content-Type: multipart/mixed; boundary=hermes-fixture\r\n",
+    "Content-Type: multipart/mixed; boundary=makosh-fixture\r\n",
     "\r\n",
-    "--hermes-fixture\r\n",
+    "--makosh-fixture\r\n",
     "Content-Type: text/plain; charset=utf-8\r\n",
     "\r\n",
     "managed Mail body\r\n",
-    "--hermes-fixture\r\n",
+    "--makosh-fixture\r\n",
     "Content-Type: application/pdf; name=evidence.pdf\r\n",
     "Content-Disposition: attachment; filename=evidence.pdf\r\n",
     "Content-Transfer-Encoding: base64\r\n",
     "\r\n",
     "Y2xlYW4tcm9vbS1hdHRhY2htZW50\r\n",
-    "--hermes-fixture--\r\n",
+    "--makosh-fixture--\r\n",
 )
 .as_bytes();
 
@@ -216,7 +216,7 @@ fn serve_connection(mut stream: TcpStream, state: MailImapFixtureState) {
         .and_then(|_| stream.set_write_timeout(Some(Duration::from_secs(15))))
         .expect("configure loopback IMAP fixture connection");
     stream
-        .write_all(b"* OK Hermes IMAP4rev1 fixture ready\r\n")
+        .write_all(b"* OK makosh IMAP4rev1 fixture ready\r\n")
         .expect("write IMAP fixture greeting");
     let reader_stream = stream.try_clone().expect("clone fixture read stream");
     let mut lines = BufReader::new(reader_stream).lines();

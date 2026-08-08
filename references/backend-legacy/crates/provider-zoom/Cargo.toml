@@ -1,5 +1,5 @@
 [package]
-name = "hermes-provider-zoom"
+name = "makosh-provider-zoom"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.89"
@@ -7,7 +7,7 @@ publish = false
 license = "MIT"
 
 [dependencies]
-hermes-provider-api = { path = "../provider-api" }
+makosh-provider-api = { path = "../provider-api" }
 base64 = "0.22"
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 getrandom = "0.2"

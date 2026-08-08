@@ -1,6 +1,6 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_review_task_candidate_api::{
+use makosh_review_task_candidate_api::{
     REVIEW_TASK_CANDIDATE_CONTRACT_MAJOR_V1, REVIEW_TASK_CANDIDATE_MODULE_ID_V1,
     ReviewTaskCandidateEnvelopeContextV1, build_review_task_candidate_approved_outbox_record_v1,
     wire::{
@@ -12,17 +12,17 @@ use hermes_review_task_candidate_api::{
         ReviewTaskCandidateSummaryV1, TaskCandidateApprovedForPromotionV1,
     },
 };
-use hermes_review_task_candidate_core::{
+use makosh_review_task_candidate_core::{
     ReviewTaskCandidateDecisionV1, ReviewTaskCandidatePromotionStatusV1,
     ReviewTaskCandidateStateV1, ReviewTaskCandidateTimestampV1, ReviewTaskCandidateV1,
 };
-use hermes_review_task_candidate_persistence::{
+use makosh_review_task_candidate_persistence::{
     CheckReviewTaskCandidateDecisionReplayV1, DecideReviewTaskCandidateOperationV1,
     ReviewTaskCandidateDecisionOutcomeV1, ReviewTaskCandidateOutboxRecordV1,
     ReviewTaskCandidatePersistenceErrorV1, ReviewTaskCandidatePersistenceV1,
     ReviewTaskCandidateRealtimeTransitionV1,
 };
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
 use prost::Message;
@@ -340,7 +340,7 @@ fn timestamp_millis(value: ReviewTaskCandidateTimestampV1) -> Option<u64> {
 
 fn owner_device_actor_id(authenticated_device_id: &str) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.owner-device.actor.v1\0");
+    digest.update(b"makosh.owner-device.actor.v1\0");
     digest.update(authenticated_device_id.as_bytes());
     digest.finalize()[..16].try_into().expect("digest prefix")
 }

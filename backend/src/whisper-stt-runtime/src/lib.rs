@@ -27,4 +27,4 @@ pub use worker::{
     execute_whisper_stt_payload_v1,
 };
 
-pub const PACKAGE: &str = "hermes-whisper-stt-runtime";
+pub const PACKAGE: &str = "makosh-whisper-stt-runtime";

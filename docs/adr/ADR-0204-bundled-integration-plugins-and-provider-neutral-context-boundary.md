@@ -24,7 +24,7 @@
 
 ## Контекст
 
-Hermes одновременно решает две разные задачи:
+Макошь одновременно решает две разные задачи:
 
 1. даёт полноценный интерфейс для работы с конкретным каналом: Mail,
    Telegram, WhatsApp, Zulip и будущими интеграциями;
@@ -61,7 +61,7 @@ Reference frontend подтверждает необходимость отде�
 - общий `MessengerWorkspace.vue` импортирует Telegram types, что фиксируется
   как boundary debt и не переносится в clean-room архитектуру.
 
-Hermes не планирует marketplace, store или установку произвольных сторонних
+Макошь не планирует marketplace, store или установку произвольных сторонних
 плагинов. Термин «плагин» нужен для явного ownership,
 `ModuleDescriptorV1` и lifecycle, а не для remote distribution.
 
@@ -69,7 +69,7 @@ Hermes не планирует marketplace, store или установку пр
 
 ### Значение integration-плагина
 
-**Встроенный integration-плагин** — поставляемый вместе с Hermes модуль,
+**Встроенный integration-плагин** — поставляемый вместе с Макошь модуль,
 который владеет:
 
 - внешним протоколом и provider SDK;
@@ -128,7 +128,7 @@ reactions, participants, delivery state, join/leave, drafts, threading и
 контракта.
 
 Operational state является локальным представлением внешней системы и может
-быть durable, но не является canonical business truth Hermes. Его schema,
+быть durable, но не является canonical business truth Макошь. Его schema,
 tables, cursors и projections принадлежат integration-плагину и защищены
 storage grants владельца.
 
@@ -207,7 +207,7 @@ versioned operational/context contracts. Наличие или отсутств�
 меняет ownership integration/domain и не создаёт mobile-specific business API.
 
 Произвольный URL, JavaScript bundle, dynamic library или package не может
-добавить исполняемый frontend/backend код во время работы Hermes.
+добавить исполняемый frontend/backend код во время работы Макошь.
 
 `ModuleDescriptorV1` integration-плагина объявляет минимум:
 
@@ -326,7 +326,7 @@ integration-плагина с сохранением causation, correlation и e
 ### Каждый provider как business domain
 
 Отклонено: канал доставки не владеет Personas, Tasks, Knowledge или памятью и
-не должен становиться отдельной предметной моделью Hermes.
+не должен становиться отдельной предметной моделью Макошь.
 
 ### Один Communications-модуль со всеми provider implementations
 

@@ -1,5 +1,5 @@
-use hermes_events_api::EventEnvelope;
-use hermes_signal_hub_api::raw_signals::{
+use makosh_events_api::EventEnvelope;
+use makosh_signal_hub_api::raw_signals::{
     RawSignalPersistenceError, RawSignalPersistenceErrorKind,
 };
 use sqlx::postgres::PgPool;

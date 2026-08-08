@@ -21,9 +21,9 @@
 - Group / Группа: `reports`
 - Role / Роль: `config`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `reports/test-performance/backend-full.json`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/reports/test-performance/backend-full.json`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/reports/test-performance/backend-full.json`
 - Size bytes / Размер в байтах: `2328`
 - Included characters / Включено символов: `2328`
 - Truncated / Обрезано: `no`
@@ -68,7 +68,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
   "totalTests": 1401,
   "failedTests": 0,
   "flakyTests": [
-    "hermes-hub-backend::event_platform::event_outbox_dispatcher_publishes_pending_events_to_nats"
+    "makosh-backend::event_platform::event_outbox_dispatcher_publishes_pending_events_to_nats"
   ],
   "totalSeconds": 6710.525,
   "averageSeconds": 4.79,
@@ -76,61 +76,61 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
   "p99Seconds": 20.413,
   "slowest": [
     {
-      "id": "hermes-hub-backend::graph_api::search::graph_summary_returns_empty_state_for_empty_database",
+      "id": "makosh-backend::graph_api::search::graph_summary_returns_empty_state_for_empty_database",
       "timeSeconds": 34.693,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::tasks::task_checklist_against_postgres",
+      "id": "makosh-backend::tasks::task_checklist_against_postgres",
       "timeSeconds": 31.357,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::graph_api::neighborhood::graph_neighborhood_caps_depth_one_edges_nodes_and_evidence",
+      "id": "makosh-backend::graph_api::neighborhood::graph_neighborhood_caps_depth_one_edges_nodes_and_evidence",
       "timeSeconds": 29.265,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::tasks_api::mutations::task_post_subtask",
+      "id": "makosh-backend::tasks_api::mutations::task_post_subtask",
       "timeSeconds": 27.194,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::graph_api::neighborhood::graph_neighborhood_caps_evidence_for_returned_edges",
+      "id": "makosh-backend::graph_api::neighborhood::graph_neighborhood_caps_evidence_for_returned_edges",
       "timeSeconds": 26.858,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::tasks_api::mutations::task_post_relation",
+      "id": "makosh-backend::tasks_api::mutations::task_post_relation",
       "timeSeconds": 26.622,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::whatsapp::whatsapp_runtime_bridge_participant_reconciles_join_group_command_with_live_provenance",
+      "id": "makosh-backend::whatsapp::whatsapp_runtime_bridge_participant_reconciles_join_group_command_with_live_provenance",
       "timeSeconds": 26.523,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::whatsapp::whatsapp_runtime_bridge_presence_and_call_record_live_observed_source_in_raw_provenance",
+      "id": "makosh-backend::whatsapp::whatsapp_runtime_bridge_presence_and_call_record_live_observed_source_in_raw_provenance",
       "timeSeconds": 26.095,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::graph_api::neighborhood::graph_neighborhood_returns_selected_node_neighbors_edges_and_evidence",
+      "id": "makosh-backend::graph_api::neighborhood::graph_neighborhood_returns_selected_node_neighbors_edges_and_evidence",
       "timeSeconds": 25.841,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::graph_api::search::graph_nodes_returns_connected_picker_nodes_first",
+      "id": "makosh-backend::graph_api::search::graph_nodes_returns_connected_picker_nodes_first",
       "timeSeconds": 24.99,
       "failed": false,
       "flaky": false
@@ -141,7 +141,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `reports/test-performance/unit.json`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/reports/test-performance/unit.json`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/reports/test-performance/unit.json`
 - Size bytes / Размер в байтах: `2876`
 - Included characters / Включено символов: `2876`
 - Truncated / Обрезано: `no`
@@ -160,61 +160,61 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
   "p99Seconds": 9.608,
   "slowest": [
     {
-      "id": "hermes-hub-backend::integrations::telegram::runtime::manager::participants::participants_runtime_tests::sync_provider_roster_snapshots_appends_leave_reconciliation_after_absence_update",
+      "id": "makosh-backend::integrations::telegram::runtime::manager::participants::participants_runtime_tests::sync_provider_roster_snapshots_appends_leave_reconciliation_after_absence_update",
       "timeSeconds": 10.343,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::integrations::telegram::runtime::manager::chat_events::tests::publish_chat_unread_event_reconciles_mark_read_command_and_emits_events",
+      "id": "makosh-backend::integrations::telegram::runtime::manager::chat_events::tests::publish_chat_unread_event_reconciles_mark_read_command_and_emits_events",
       "timeSeconds": 9.797,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::integrations::telegram::runtime::manager::message_events::tests::publish_message_edited_event_skips_without_projected_message",
+      "id": "makosh-backend::integrations::telegram::runtime::manager::message_events::tests::publish_message_edited_event_skips_without_projected_message",
       "timeSeconds": 9.608,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::integrations::telegram::runtime::manager::message_events::tests::publish_message_created_event_publishes_signal_hub_raw_signal_instead_of_legacy_event",
+      "id": "makosh-backend::integrations::telegram::runtime::manager::message_events::tests::publish_message_created_event_publishes_signal_hub_raw_signal_instead_of_legacy_event",
       "timeSeconds": 9.447,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::integrations::telegram::runtime::manager::message_events::tests::publish_reaction_changed_event_skips_without_projected_message",
+      "id": "makosh-backend::integrations::telegram::runtime::manager::message_events::tests::publish_reaction_changed_event_skips_without_projected_message",
       "timeSeconds": 9.127,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::integrations::telegram::runtime::manager::chat_events::tests::publish_chat_position_event_reconciles_folder_add_and_remove_commands",
+      "id": "makosh-backend::integrations::telegram::runtime::manager::chat_events::tests::publish_chat_position_event_reconciles_folder_add_and_remove_commands",
       "timeSeconds": 9.061,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::integrations::telegram::runtime::manager::realtime_events::tests::telegram_runtime_event_bridge_skips_broadcast_when_runtime_paused",
+      "id": "makosh-backend::integrations::telegram::runtime::manager::realtime_events::tests::telegram_runtime_event_bridge_skips_broadcast_when_runtime_paused",
       "timeSeconds": 9.033,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::integrations::telegram::runtime::manager::realtime_events::typing_tests::publish_command_reconciled_events_appends_status_and_reconciled_records",
+      "id": "makosh-backend::integrations::telegram::runtime::manager::realtime_events::typing_tests::publish_command_reconciled_events_appends_status_and_reconciled_records",
       "timeSeconds": 8.961,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::integrations::telegram::runtime::manager::topic_events::tests::publish_topic_event_reconciles_topic_close_and_appends_runtime_events",
+      "id": "makosh-backend::integrations::telegram::runtime::manager::topic_events::tests::publish_topic_event_reconciles_topic_close_and_appends_runtime_events",
       "timeSeconds": 8.746,
       "failed": false,
       "flaky": false
     },
     {
-      "id": "hermes-hub-backend::integrations::telegram::runtime::manager::message_events::tests::publish_message_content_updated_event_skips_without_projected_message",
+      "id": "makosh-backend::integrations::telegram::runtime::manager::message_events::tests::publish_message_content_updated_event_skips_without_projected_message",
       "timeSeconds": 8.677,
       "failed": false,
       "flaky": false

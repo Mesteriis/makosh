@@ -6,7 +6,7 @@ use crate::StoreError;
 
 pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
     transaction.execute_batch(
-        "CREATE TABLE hermes_kernel_browser_device_identity (
+        "CREATE TABLE makosh_kernel_browser_device_identity (
             device_id TEXT PRIMARY KEY,
             owner_id TEXT NOT NULL,
             credential_id BLOB NOT NULL UNIQUE CHECK (length(credential_id) BETWEEN 1 AND 1024),
@@ -16,7 +16,7 @@ pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
             state TEXT NOT NULL CHECK (state IN ('active', 'revoked')),
             identity_epoch INTEGER NOT NULL CHECK (identity_epoch >= 1)
         ) STRICT;
-        UPDATE hermes_kernel_control_store_metadata SET schema_version = 29 WHERE singleton = 1;",
+        UPDATE makosh_kernel_control_store_metadata SET schema_version = 29 WHERE singleton = 1;",
     )?;
     Ok(())
 }

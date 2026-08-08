@@ -2,13 +2,13 @@ use std::ffi::OsString;
 use std::path::PathBuf;
 
 use crate::runtime_cli::parse_recovery_arguments;
-use hermes_scheduler::{SchedulerApprovedJobV1, map_approved_one_shot_schedule_v1};
-use hermes_scheduler_protocol::v1::{
+use makosh_scheduler::{SchedulerApprovedJobV1, map_approved_one_shot_schedule_v1};
+use makosh_scheduler_protocol::v1::{
     CancelOneShotScheduleV1, EnsureOneShotScheduleV1, JobKindV1, SchedulerScheduleControlCommandV1,
     SchedulerScheduleControlOutcomeV1, SchedulerScheduleControlResultV1,
     scheduler_schedule_control_command_v1::Operation,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     JobContractBindingV1, JobKindV1 as CanonicalJobKindV1, MisfirePolicyV1, OverlapPolicyV1,
     ScheduleTriggerV1, SchedulerScheduleControlValidationErrorV1,
     validate_scheduler_schedule_control_command_v1, validate_scheduler_schedule_control_result_v1,
@@ -22,7 +22,7 @@ fn scheduler_recovery_cli_accepts_only_fixed_non_secret_arguments() {
         "--port",
         "5432",
         "--database",
-        "hermes",
+        "makosh",
         "--username",
         "recovery",
         "--ssl-mode",
@@ -100,7 +100,7 @@ fn scheduler_recovery_cli_rejects_passwords_and_relative_files() {
         "--port",
         "5432",
         "--database",
-        "hermes",
+        "makosh",
         "--username",
         "recovery",
         "--ssl-mode",
@@ -121,7 +121,7 @@ fn scheduler_recovery_cli_rejects_passwords_and_relative_files() {
         "--port",
         "5432",
         "--database",
-        "hermes",
+        "makosh",
         "--username",
         "recovery",
         "--ssl-mode",

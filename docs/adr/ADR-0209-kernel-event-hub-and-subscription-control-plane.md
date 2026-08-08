@@ -2,7 +2,7 @@
 
 Статус: Принято
 Дата: 2026-07-15
-Состояние реализации: Foundation in progress. `hermes-events-jetstream`
+Состояние реализации: Foundation in progress. `makosh-events-jetstream`
 реализует NATS adapter boundary: отдельные Event Hub administration и runtime
 publisher connections, bounded topology reconciliation и strict subject grammar.
 Control Store atomically сохраняет exact descriptor-declared `EventRouteRequestV1`
@@ -69,7 +69,7 @@ Storage Control и managed-launch trust ADR-0225.
 ## Контекст
 
 NATS JetStream обеспечивает durable delivery, replay и consumer state, но сам
-по себе не является каталогом контрактов Hermes и не проверяет согласованность
+по себе не является каталогом контрактов Макошь и не проверяет согласованность
 signed `DistributionManifestV1`, exact validated `ModuleDescriptorV1`,
 capability grants и фактически созданных streams/consumers. Event Hub также не
 устанавливает executable trust: managed-launch integrity проверяется до запуска
@@ -93,7 +93,7 @@ failure domain. Поэтому контроль topology и доставка pay
 ### Роль Event Hub
 
 **Event Hub** — обязательная подсистема Kernel, являющаяся control plane над
-event topology Hermes. NATS JetStream остаётся data plane.
+event topology Макошь. NATS JetStream остаётся data plane.
 
 ```text
 Module outbox relay ───────────────→ NATS JetStream ───────────────→ Consumer
@@ -259,7 +259,7 @@ capabilities автоматически.
 - интерпретировать event payload или принимать business decisions;
 - создавать subject, stream или consumer вне
   `ModuleDescriptorV1`/Event Hub catalog;
-- выдавать module wildcard `hermes.>`;
+- выдавать module wildcard `makosh.>`;
 - хранить второй canonical event log внутри Event Hub;
 - автоматически удалять orphaned stream/consumer/message;
 - автоматически replay-ить DLQ или `unknown_outcome`;
@@ -310,7 +310,7 @@ surface. Для диагностики достаточно bounded technical te
 ## Проверка решения
 
 Architecture guard уже требует `event_hub` в составе единственного
-`hermes-kernel` и запрещает отдельный Event Hub package. Это только статическая
+`makosh-kernel` и запрещает отдельный Event Hub package. Это только статическая
 предпосылка: Event Hub runtime и перечисленные ниже executable scenarios ещё
 не реализованы.
 

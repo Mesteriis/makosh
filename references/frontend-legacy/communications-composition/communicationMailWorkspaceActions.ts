@@ -138,10 +138,10 @@ export function mailActionGroups(
       ]
     },
     {
-      id: 'hermes',
-      title: 'Hermes',
+      id: 'makosh',
+      title: 'Макошь',
       actions: [
-        mailAction('analyze', 'Analyze', 'Refresh Hermes analysis for this message.', 'tabler:brain', 'accent', 'communication.mail.analyze'),
+        mailAction('analyze', 'Analyze', 'Refresh Макошь analysis for this message.', 'tabler:brain', 'accent', 'communication.mail.analyze'),
         mailAction('translate', 'Translate', 'Translate this message for review.', 'tabler:language', 'accent', 'communication.mail.translate'),
         mailAction('extract-tasks', 'Extract tasks', 'Extract task candidates from this message.', 'tabler:checkbox', 'accent', 'communication.mail.extract_tasks'),
         mailAction('extract-notes', 'Extract notes', 'Extract note candidates from this message.', 'tabler:notes', 'accent', 'communication.mail.extract_notes')
@@ -224,5 +224,5 @@ function providerFlagActionDescription(
 ): string {
   if (providerFlagMutationAvailable) return synchronizedDescription
 
-  return 'Update Hermes local state. Provider sync is unavailable until this account has mail flag permissions.'
+  return 'Update Макошь local state. Provider sync is unavailable until this account has mail flag permissions.'
 }

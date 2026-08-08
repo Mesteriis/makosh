@@ -2,11 +2,11 @@
 
 use std::path::Path;
 
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     VaultCiphertextResponseV1, VaultCiphertextRouteDirectionV1, VaultCiphertextRouteV1,
 };
-use hermes_vault_protocol::VaultCiphertextFrameV1;
+use makosh_vault_protocol::VaultCiphertextFrameV1;
 
 use crate::platform::vault::managed_route::relay_kernel_authorized_route;
 use crate::runtime::lifecycle::supervisor::ManagedRuntimeRelay;

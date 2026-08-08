@@ -1,28 +1,28 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
 use axum::http::{Method, Request, StatusCode, header};
-use hermes_backend_testkit::factories::persona::PersonaFactory;
+use makosh_backend_testkit::factories::persona::PersonaFactory;
 use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::router::{build_router, build_router_with_database};
-use hermes_hub_backend::domains::organizations::enrichment::OrgEnrichmentStore;
-use hermes_hub_backend::platform::config::app_config::AppConfig;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::app::router::{build_router, build_router_with_database};
+use makosh_hub_backend::domains::organizations::enrichment::OrgEnrichmentStore;
+use makosh_hub_backend::platform::config::app_config::AppConfig;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const T: &str = "orgs-test-token";
 
 fn cfg() -> AppConfig {
-    hermes_backend_testkit::app::config_with_secret(T)
+    makosh_backend_testkit::app::config_with_secret(T)
 }
 
 fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("req")
 }
@@ -31,7 +31,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::from(body.to_string()))
         .expect("req")
 }
@@ -40,7 +40,7 @@ fn put(uri: &str, body: Value) -> Request<Body> {
         .method(Method::PUT)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::from(body.to_string()))
         .expect("req")
 }
@@ -64,7 +64,7 @@ fn enc(v: &str) -> String {
 async fn router(db: &str) -> axum::Router {
     let database = Database::connect(Some(db)).await.expect("db");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(T, db),
+        makosh_backend_testkit::app::config_with_secret_and_database_url(T, db),
         database,
     )
 }

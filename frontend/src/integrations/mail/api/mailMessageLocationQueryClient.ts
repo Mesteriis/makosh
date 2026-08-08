@@ -1,6 +1,6 @@
 import { createClient, type Client } from '@connectrpc/connect'
 
-import { MailMessageLocationQueryService } from '../../../gen/hermes/mail/message_location/v1/client_pb'
+import { MailMessageLocationQueryService } from '../../../gen/makosh/mail/message_location/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 let client: Client<typeof MailMessageLocationQueryService> | null = null

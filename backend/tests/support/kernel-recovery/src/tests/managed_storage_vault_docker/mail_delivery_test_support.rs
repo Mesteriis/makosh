@@ -2,11 +2,11 @@
 
 use std::time::{Duration, Instant};
 
-use hermes_mail_api::{
+use makosh_mail_api::{
     MailClientRequestV1, MailClientResponseV1, MailDeliveryOutcomeV1, MailDeliveryStatusRequestV1,
     client_contract::MailClientContractV1,
 };
-use hermes_mail_runtime::client_port::{
+use makosh_mail_runtime::client_port::{
     MailClientPortErrorV1, decode_module_response, encode_module_request,
 };
 
@@ -17,9 +17,9 @@ use crate::modules::capability::router::{
 use super::*;
 
 pub(super) const MAIL_DELIVERY_OBSERVATION_SUBJECT: &str =
-    "hermes.observation.v1.communications.communication_observed.v1";
+    "makosh.observation.v1.communications.communication_observed.v1";
 pub(super) const MAIL_DELIVERY_CANONICAL_EVENT_SUBJECT: &str =
-    "hermes.event.v1.communications.communication_evidence_recorded.v1";
+    "makosh.event.v1.communications.communication_evidence_recorded.v1";
 
 pub(super) fn route_mail_client(
     store: &SqliteControlStore,

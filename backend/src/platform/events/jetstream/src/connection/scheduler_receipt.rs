@@ -2,7 +2,7 @@
 //! receipt-delivery contract. It carries only opaque envelope bytes and ACK.
 
 use futures_util::StreamExt;
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     SchedulerReceiptDeliveryErrorV1, SchedulerReceiptDeliveryPortV1, SchedulerReceiptDeliveryV1,
 };
 

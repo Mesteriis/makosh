@@ -1,5 +1,5 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
@@ -7,28 +7,28 @@ use axum::http::{Request, StatusCode, header};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::ai::control_center::{
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::ai::control_center::{
     models::{AiModelAvailabilityUpdateRequest, AiModelRouteUpdateRequest},
     store::AiControlCenterStore,
 };
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::communications::attachment_text_extraction::AttachmentTextExtractionService;
-use hermes_hub_backend::domains::communications::messages::projection::project_raw_email_message;
-use hermes_hub_backend::domains::communications::messages::store::MessageProjectionStore;
-use hermes_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
-use hermes_hub_backend::domains::communications::storage::models::{
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::communications::attachment_text_extraction::AttachmentTextExtractionService;
+use makosh_hub_backend::domains::communications::messages::projection::project_raw_email_message;
+use makosh_hub_backend::domains::communications::messages::store::MessageProjectionStore;
+use makosh_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
+use makosh_hub_backend::domains::communications::storage::models::{
     CommunicationAttachmentDisposition, NewCommunicationAttachment, NewCommunicationBlob,
 };
-use hermes_hub_backend::domains::communications::storage::scanner::{
+use makosh_hub_backend::domains::communications::storage::scanner::{
     AttachmentSafetyScanReport, AttachmentSafetyScanStatus,
 };
-use hermes_hub_backend::domains::communications::storage::store::CommunicationStorageStore;
-use hermes_hub_backend::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
+use makosh_hub_backend::domains::communications::storage::store::CommunicationStorageStore;
+use makosh_hub_backend::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::settings::store::ApplicationSettingsStore;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::settings::store::ApplicationSettingsStore;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const LOCAL_API_TOKEN: &str = "v1comms-attachment-translation-test-token";
 
@@ -165,7 +165,7 @@ async fn v1_attachment_translation_blocks_external_ai_without_extracted_text_egr
     let seeded = seed_message_with_attachment(context.pool().clone()).await;
     extract_attachment_text(context.pool().clone(), &seeded.attachment_id).await;
     ApplicationSettingsStore::new(context.pool().clone())
-        .update_setting_value("ai.provider", &json!("omniroute"), "hermes-frontend")
+        .update_setting_value("ai.provider", &json!("omniroute"), "makosh-frontend")
         .await
         .expect("configure external AI runtime");
     let app = router(&context.connection_string()).await;
@@ -296,7 +296,7 @@ async fn router(database_url: &str) -> axum::Router {
         .await
         .expect("database connection");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url,
         ),
@@ -309,7 +309,7 @@ fn post(uri: &str, value: Value) -> Request<Body> {
         .method("POST")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .body(Body::from(value.to_string()))
         .expect("request")
 }
@@ -377,7 +377,7 @@ async fn configure_fake_ollama_setting(pool: &sqlx::PgPool, ollama_base_url: &st
         .update_setting_value(
             "ai.ollama_base_url",
             &json!(ollama_base_url),
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("fake Ollama setting");
@@ -394,7 +394,7 @@ async fn configure_fake_ollama_setting(pool: &sqlx::PgPool, ollama_base_url: &st
                 model_key: chat_model.to_owned(),
                 is_available: true,
             },
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("fake Ollama chat model availability");
@@ -406,7 +406,7 @@ async fn configure_fake_ollama_setting(pool: &sqlx::PgPool, ollama_base_url: &st
                 model_key: embedding_model.to_owned(),
                 is_available: true,
             },
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("fake Ollama embedding model availability");

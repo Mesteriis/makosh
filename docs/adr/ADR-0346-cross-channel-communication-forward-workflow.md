@@ -59,11 +59,11 @@ Communications, generic provider facade или импортом нескольк
 независимыми build units:
 
 ```text
-hermes-communication-cross-channel-forward-api
-hermes-communication-cross-channel-forward-core
-hermes-communication-cross-channel-forward-persistence
-hermes-communication-cross-channel-forward-runtime
-hermes-communication-cross-channel-forward-assembly
+makosh-communication-cross-channel-forward-api
+makosh-communication-cross-channel-forward-core
+makosh-communication-cross-channel-forward-persistence
+makosh-communication-cross-channel-forward-runtime
+makosh-communication-cross-channel-forward-assembly
 ```
 
 Public V1 command принимает только:

@@ -2226,7 +2226,7 @@ function runSelfTests() {
 		'workflow may use a persistence adapter without being treated as a domain store import',
 		backendBoundaryViolations(
 			'backend/src/workflows/zoom_signal_detection.rs',
-			'use crate::domains::signal_hub::SignalHubPort;\nuse hermes_events_postgres::store::EventStore;'
+			'use crate::domains::signal_hub::SignalHubPort;\nuse makosh_events_postgres::store::EventStore;'
 		).length === 0
 	);
 	assertSelfTest(

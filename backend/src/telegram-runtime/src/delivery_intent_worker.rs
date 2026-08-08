@@ -2,14 +2,14 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::managed_control::ManagedControlChannelV2;
-use hermes_telegram_api::TelegramOperationState;
-use hermes_telegram_delivery_intent_contract::wire::TelegramDeliveryIntentRejectCodeV1;
-use hermes_telegram_persistence::{
+use makosh_runtime_protocol::managed_control::ManagedControlChannelV2;
+use makosh_telegram_api::TelegramOperationState;
+use makosh_telegram_delivery_intent_contract::wire::TelegramDeliveryIntentRejectCodeV1;
+use makosh_telegram_persistence::{
     ClaimedTelegramDeliveryIntentJobV1, TELEGRAM_DELIVERY_INTENT_MAX_ATTEMPTS_V1,
     TelegramDeliveryIntentJobStateV1, TelegramDeliveryIntentStoreV1, TelegramDurablePersistence,
 };
-use hermes_telegram_tdlib::TdJsonTransport;
+use makosh_telegram_tdlib::TdJsonTransport;
 use sha2::{Digest, Sha256};
 
 use crate::{
@@ -337,7 +337,7 @@ fn result_context(
 }
 
 fn operation_completed_at(
-    operation: &hermes_telegram_api::TelegramOperation,
+    operation: &makosh_telegram_api::TelegramOperation,
     fallback_unix_seconds: i64,
 ) -> Result<i64, TelegramDeliveryIntentWorkerErrorV1> {
     operation
@@ -350,7 +350,7 @@ fn operation_completed_at(
 
 fn worker_id(runtime_instance_id: &str, runtime_generation: u64) -> String {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.telegram.delivery-intent.worker.v1");
+    hasher.update(b"makosh.telegram.delivery-intent.worker.v1");
     hasher.update(runtime_instance_id.as_bytes());
     hasher.update(runtime_generation.to_be_bytes());
     let digest: [u8; 32] = hasher.finalize().into();

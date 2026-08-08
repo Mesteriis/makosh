@@ -3,7 +3,7 @@
 mod cli;
 mod control;
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::BlobRuntimeConfigurationV1, validation::blob::validate_blob_runtime_configuration,
 };
 use prost::Message;
@@ -31,13 +31,13 @@ where
         cli::OfflineRecoveryCommand::Export {
             data_dir,
             destination,
-        } => hermes_blob_runtime::recovery::export_backup_offline(&data_dir, &destination)
+        } => makosh_blob_runtime::recovery::export_backup_offline(&data_dir, &destination)
             .map(|_| ()),
         cli::OfflineRecoveryCommand::Verify { source } => {
-            hermes_blob_runtime::recovery::verify_backup_offline(&source).map(|_| ())
+            makosh_blob_runtime::recovery::verify_backup_offline(&source).map(|_| ())
         }
         cli::OfflineRecoveryCommand::Restore { source, data_dir } => {
-            hermes_blob_runtime::recovery::restore_backup_offline(&source, &data_dir).map(|_| ())
+            makosh_blob_runtime::recovery::restore_backup_offline(&source, &data_dir).map(|_| ())
         }
     }
 }

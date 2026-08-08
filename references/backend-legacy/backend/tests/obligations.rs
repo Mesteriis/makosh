@@ -1,20 +1,20 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::Utc;
-use hermes_hub_backend::domains::obligations::errors::ObligationStoreError;
-use hermes_hub_backend::domains::obligations::models::states::ObligationReviewState;
-use hermes_hub_backend::domains::obligations::models::{
+use makosh_hub_backend::domains::obligations::errors::ObligationStoreError;
+use makosh_hub_backend::domains::obligations::models::states::ObligationReviewState;
+use makosh_hub_backend::domains::obligations::models::{
     entity_kind::ObligationEntityKind,
     evidence::NewObligationEvidence,
     obligation::NewObligation,
     source_kind::ObligationEvidenceSourceKind,
     states::{ObligationRiskState, ObligationStatus},
 };
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::workflows::graph_projection::service::GraphProjectionService;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::workflows::graph_projection::service::GraphProjectionService;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 use serde_json::{Value, json};
 use sqlx::Row;
 use sqlx::postgres::{PgPool, PgPoolOptions};
@@ -424,7 +424,7 @@ async fn live_obligation_context(_test_name: &str) -> Option<(PgPool, Obligation
 
 fn disconnected_obligation_store() -> ObligationStore {
     let pool = PgPoolOptions::new()
-        .connect_lazy("postgres://hermes:unused@127.0.0.1:1/hermes_hub")
+        .connect_lazy("postgres://makosh:unused@127.0.0.1:1/makosh_hub")
         .expect("create lazy test pool");
     ObligationStore::new(pool)
 }
@@ -435,4 +435,4 @@ fn unique_suffix() -> u128 {
         .expect("system clock after unix epoch")
         .as_nanos()
 }
-use hermes_hub_backend::domains::obligations::store::ObligationStore;
+use makosh_hub_backend::domains::obligations::store::ObligationStore;

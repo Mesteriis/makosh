@@ -1,4 +1,4 @@
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingErrorV1, StorageBindingFencesV1,
     StorageBindingIdentityV1, StorageEffectiveBudgetsV1,
     v1::{
@@ -12,7 +12,7 @@ fn binding_message() -> StorageBindingMessageV1 {
     StorageBindingMessageV1 {
         storage_instance_id: "storage_main".into(),
         storage_generation: 1,
-        database_id: "hermes".into(),
+        database_id: "makosh".into(),
         owner: "notes".into(),
         registration_id: "registration_notes".into(),
         runtime_instance_id: "runtime_notes".into(),
@@ -49,7 +49,7 @@ fn rejects_partial_fences_and_empty_bundle_digest() {
 fn rejects_identity_outside_the_storage_naming_contract() {
     let result = StorageBindingIdentityV1::new(
         "storage".into(),
-        "hermes".into(),
+        "makosh".into(),
         "Notes".into(),
         "registration".into(),
         "runtime".into(),

@@ -1,7 +1,7 @@
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     validate_reply_inference_request_v1, validate_reply_inference_result_v1,
 };
-use hermes_ai_inference_core::{AiInferenceRunStateV1, AiInferenceRunV1};
+use makosh_ai_inference_core::{AiInferenceRunStateV1, AiInferenceRunV1};
 
 pub const AI_INFERENCE_RECOVERY_LIMIT_V1: u32 = 128;
 
@@ -115,7 +115,7 @@ pub(crate) fn validate_persisted_settings(
 
 #[cfg(test)]
 mod tests {
-    use hermes_ai_contracts::{
+    use makosh_ai_contracts::{
         AI_CONTRACT_MAJOR_V1, AI_CONTRACT_REVISION_V1, AI_CONTRACTS_SCHEMA_SHA256,
         AI_LOCAL_EGRESS_POLICY_REVISION_V1, seal_reply_inference_request_v1,
         wire::{
@@ -124,7 +124,7 @@ mod tests {
             AiUseCaseV1, CommunicationReplySuggestionInferenceRequestV1,
         },
     };
-    use hermes_ai_inference_core::{
+    use makosh_ai_inference_core::{
         accept_reply_inference_v1, begin_reply_inference_v1, reject_reply_inference_v1,
     };
 

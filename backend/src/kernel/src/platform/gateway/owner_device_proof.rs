@@ -1,8 +1,8 @@
 //! Shared active-owner-device proof for public Core Gateway control ceremonies.
 
-use hermes_gateway_runtime::OwnerBrowserPrincipalV1;
-use hermes_kernel_control_store::BrowserDeviceStateV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_gateway_runtime::OwnerBrowserPrincipalV1;
+use makosh_kernel_control_store::BrowserDeviceStateV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use p256::ecdsa::{Signature, VerifyingKey, signature::Verifier};
 
 const LOOPBACK_DEVELOPMENT_SESSION_ID: &str = "loopback-development";

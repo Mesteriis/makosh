@@ -1,6 +1,6 @@
 //! SQLite persistence for the desired, non-secret Storage platform topology.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     PlatformStorageEndpointV1, PlatformStorageTopology, PlatformStorageTopologyInputV1,
     StorageDeploymentProfileV1,
 };
@@ -19,7 +19,7 @@ impl SqliteControlStore {
         let topology = topology.clone();
         self.with_connection(move |connection| {
             let changed = connection.execute(
-                "INSERT INTO hermes_kernel_platform_storage_topology (singleton, revision, storage_generation, storage_instance_id, database_id, deployment_profile, postgres_host, postgres_port, pgbouncer_host, pgbouncer_port, pgbouncer_backend_host, pgbouncer_backend_port, postgres_artifact_sha256, pgbouncer_artifact_sha256) VALUES (1, ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13) ON CONFLICT(singleton) DO UPDATE SET revision=excluded.revision, storage_generation=excluded.storage_generation, storage_instance_id=excluded.storage_instance_id, database_id=excluded.database_id, deployment_profile=excluded.deployment_profile, postgres_host=excluded.postgres_host, postgres_port=excluded.postgres_port, pgbouncer_host=excluded.pgbouncer_host, pgbouncer_port=excluded.pgbouncer_port, pgbouncer_backend_host=excluded.pgbouncer_backend_host, pgbouncer_backend_port=excluded.pgbouncer_backend_port, postgres_artifact_sha256=excluded.postgres_artifact_sha256, pgbouncer_artifact_sha256=excluded.pgbouncer_artifact_sha256 WHERE excluded.revision = hermes_kernel_platform_storage_topology.revision + 1 AND excluded.storage_generation > hermes_kernel_platform_storage_topology.storage_generation",
+                "INSERT INTO makosh_kernel_platform_storage_topology (singleton, revision, storage_generation, storage_instance_id, database_id, deployment_profile, postgres_host, postgres_port, pgbouncer_host, pgbouncer_port, pgbouncer_backend_host, pgbouncer_backend_port, postgres_artifact_sha256, pgbouncer_artifact_sha256) VALUES (1, ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13) ON CONFLICT(singleton) DO UPDATE SET revision=excluded.revision, storage_generation=excluded.storage_generation, storage_instance_id=excluded.storage_instance_id, database_id=excluded.database_id, deployment_profile=excluded.deployment_profile, postgres_host=excluded.postgres_host, postgres_port=excluded.postgres_port, pgbouncer_host=excluded.pgbouncer_host, pgbouncer_port=excluded.pgbouncer_port, pgbouncer_backend_host=excluded.pgbouncer_backend_host, pgbouncer_backend_port=excluded.pgbouncer_backend_port, postgres_artifact_sha256=excluded.postgres_artifact_sha256, pgbouncer_artifact_sha256=excluded.pgbouncer_artifact_sha256 WHERE excluded.revision = makosh_kernel_platform_storage_topology.revision + 1 AND excluded.storage_generation > makosh_kernel_platform_storage_topology.storage_generation",
                 params![as_sql(topology.revision())?, as_sql(topology.storage_generation())?, topology.storage_instance_id(), topology.database_id(), topology.deployment_profile().as_str(), topology.postgres_endpoint().host(), i64::from(topology.postgres_endpoint().port()), topology.pgbouncer_endpoint().host(), i64::from(topology.pgbouncer_endpoint().port()), topology.pgbouncer_backend_endpoint().host(), i64::from(topology.pgbouncer_backend_endpoint().port()), topology.postgres_artifact_sha256().as_slice(), topology.pgbouncer_artifact_sha256().as_slice()],
             )?;
             if changed == 1 {
@@ -34,7 +34,7 @@ impl SqliteControlStore {
         self.with_connection(move |connection| {
             connection
                 .query_row(
-                    "SELECT revision, storage_generation, storage_instance_id, database_id, deployment_profile, postgres_host, postgres_port, pgbouncer_host, pgbouncer_port, pgbouncer_backend_host, pgbouncer_backend_port, postgres_artifact_sha256, pgbouncer_artifact_sha256 FROM hermes_kernel_platform_storage_topology WHERE singleton = 1",
+                    "SELECT revision, storage_generation, storage_instance_id, database_id, deployment_profile, postgres_host, postgres_port, pgbouncer_host, pgbouncer_port, pgbouncer_backend_host, pgbouncer_backend_port, postgres_artifact_sha256, pgbouncer_artifact_sha256 FROM makosh_kernel_platform_storage_topology WHERE singleton = 1",
                     [],
                     decode_topology,
                 )

@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/integrations/telegram/client/messages.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/messages.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/messages.rs`
 - Size bytes / Размер в байтах: `306`
 - Included characters / Включено символов: `306`
 - Truncated / Обрезано: `no`
@@ -78,7 +78,7 @@ pub(crate) use attachments::TelegramAttachmentDownloadStateUpdate;
 
 ### `backend/src/integrations/telegram/client/messages/account_lookup.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/messages/account_lookup.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/messages/account_lookup.rs`
 - Size bytes / Размер в байтах: `1228`
 - Included characters / Включено символов: `1228`
 - Truncated / Обрезано: `no`
@@ -124,7 +124,7 @@ impl TelegramStore {
 
 ### `backend/src/integrations/telegram/client/messages/attachments.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/messages/attachments.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/messages/attachments.rs`
 - Size bytes / Размер в байтах: `2788`
 - Included characters / Включено символов: `2788`
 - Truncated / Обрезано: `no`
@@ -215,7 +215,7 @@ impl TelegramStore {
 
 ### `backend/src/integrations/telegram/client/messages/chat_lookup.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/messages/chat_lookup.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/messages/chat_lookup.rs`
 - Size bytes / Размер в байтах: `1038`
 - Included characters / Включено символов: `1038`
 - Truncated / Обрезано: `no`
@@ -262,7 +262,7 @@ impl TelegramStore {
 
 ### `backend/src/integrations/telegram/client/messages/ingestion.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/messages/ingestion.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/messages/ingestion.rs`
 - Size bytes / Размер в байтах: `6698`
 - Included characters / Включено символов: `6698`
 - Truncated / Обрезано: `no`
@@ -442,7 +442,7 @@ impl TelegramStore {
 
 ### `backend/src/integrations/telegram/client/messages/intelligence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/messages/intelligence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/messages/intelligence.rs`
 - Size bytes / Размер в байтах: `315`
 - Included characters / Включено символов: `315`
 - Truncated / Обрезано: `no`
@@ -463,7 +463,7 @@ impl TelegramStore {
 
 ### `backend/src/integrations/telegram/client/messages/manual_send.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/messages/manual_send.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/messages/manual_send.rs`
 - Size bytes / Размер в байтах: `2698`
 - Included characters / Включено символов: `2698`
 - Truncated / Обрезано: `no`
@@ -510,8 +510,8 @@ impl TelegramStore {
             provider_message_id,
             chat_kind: TelegramChatKind::try_from(chat.chat_kind.as_str())?,
             chat_title: chat.title,
-            sender_id: "hermes".to_owned(),
-            sender_display_name: "Hermes".to_owned(),
+            sender_id: "makosh".to_owned(),
+            sender_display_name: "Макошь".to_owned(),
             text: request.text.trim().to_owned(),
             import_batch_id: format!("telegram-manual-send:{}", request.command_id.trim()),
             occurred_at: Utc::now(),
@@ -536,7 +536,7 @@ impl TelegramStore {
 
 ### `backend/src/integrations/telegram/client/messages/message_metadata.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/messages/message_metadata.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/messages/message_metadata.rs`
 - Size bytes / Размер в байтах: `19092`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -893,7 +893,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/telegram/client/messages/queries.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/messages/queries.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/messages/queries.rs`
 - Size bytes / Размер в байтах: `2406`
 - Included characters / Включено символов: `2406`
 - Truncated / Обрезано: `no`
@@ -971,7 +971,7 @@ impl TelegramStore {
 
 ### `backend/src/integrations/telegram/client/messages/raw_signals.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/messages/raw_signals.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/messages/raw_signals.rs`
 - Size bytes / Размер в байтах: `1402`
 - Included characters / Включено символов: `1402`
 - Truncated / Обрезано: `no`
@@ -1019,7 +1019,7 @@ impl TelegramStore {
 
 ### `backend/src/integrations/telegram/client/messages/reaction_metadata.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/messages/reaction_metadata.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/messages/reaction_metadata.rs`
 - Size bytes / Размер в байтах: `13293`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1377,7 +1377,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/telegram/client/messages/tdlib_ingestion.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/messages/tdlib_ingestion.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/messages/tdlib_ingestion.rs`
 - Size bytes / Размер в байтах: `1925`
 - Included characters / Включено символов: `1925`
 - Truncated / Обрезано: `no`
@@ -1436,7 +1436,7 @@ impl TelegramStore {
 
 ### `backend/src/integrations/telegram/client/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/mod.rs`
 - Size bytes / Размер в байтах: `3018`
 - Included characters / Включено символов: `3018`
 - Truncated / Обрезано: `no`
@@ -1517,7 +1517,7 @@ pub(crate) use self::models::TelegramAttachmentAnchor;
 
 ### `backend/src/integrations/telegram/client/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/models.rs`
 - Size bytes / Размер в байтах: `1138`
 - Included characters / Включено символов: `1138`
 - Truncated / Обрезано: `no`
@@ -1557,7 +1557,7 @@ pub(crate) use messages::TelegramAttachmentAnchor;
 
 ### `backend/src/integrations/telegram/client/models/accounts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/models/accounts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/models/accounts.rs`
 - Size bytes / Размер в байтах: `5935`
 - Included characters / Включено символов: `5935`
 - Truncated / Обрезано: `no`
@@ -1742,7 +1742,7 @@ pub struct TelegramCredentialBinding {
 
 ### `backend/src/integrations/telegram/client/models/chats.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/models/chats.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/models/chats.rs`
 - Size bytes / Размер в байтах: `4109`
 - Included characters / Включено символов: `4109`
 - Truncated / Обрезано: `no`
@@ -1902,7 +1902,7 @@ impl TelegramSyncState {
 
 ### `backend/src/integrations/telegram/client/models/messages.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/models/messages.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/models/messages.rs`
 - Size bytes / Размер в байтах: `22548`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2297,7 +2297,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/telegram/client/models/qr_login.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/models/qr_login.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/models/qr_login.rs`
 - Size bytes / Размер в байтах: `3071`
 - Included characters / Включено символов: `3071`
 - Truncated / Обрезано: `no`
@@ -2409,7 +2409,7 @@ pub struct TelegramQrLoginStatusResponse {
 
 ### `backend/src/integrations/telegram/client/models/topics.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/models/topics.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/models/topics.rs`
 - Size bytes / Размер в байтах: `2610`
 - Included characters / Включено символов: `2610`
 - Truncated / Обрезано: `no`
@@ -2509,7 +2509,7 @@ pub struct TelegramTopicLifecycleResponse {
 
 ### `backend/src/integrations/telegram/client/observations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/observations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/observations.rs`
 - Size bytes / Размер в байтах: `4274`
 - Included characters / Включено символов: `4274`
 - Truncated / Обрезано: `no`
@@ -2639,7 +2639,7 @@ impl TelegramStore {
 
 ### `backend/src/integrations/telegram/client/participants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/participants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/participants.rs`
 - Size bytes / Размер в байтах: `22725`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2989,7 +2989,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/telegram/client/participants/tests.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/participants/tests.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/participants/tests.rs`
 - Size bytes / Размер в байтах: `6069`
 - Included characters / Включено символов: `6069`
 - Truncated / Обрезано: `no`
@@ -3193,7 +3193,7 @@ async fn marks_stale_tdlib_participants_as_absent_from_exhaustive_roster() {
 
 ### `backend/src/integrations/telegram/client/reactions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/reactions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/reactions.rs`
 - Size bytes / Размер в байтах: `22156`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3540,7 +3540,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/telegram/client/reactions/tests.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/reactions/tests.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/reactions/tests.rs`
 - Size bytes / Размер в байтах: `2803`
 - Included characters / Включено символов: `2788`
 - Truncated / Обрезано: `no`

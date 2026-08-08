@@ -1,7 +1,7 @@
 //! Opaque alias scoped to a runtime generation.
 
 use super::PoolConfigErrorV1;
-use hermes_storage_protocol::{StorageBindingV1, storage_runtime_pool_alias};
+use makosh_storage_protocol::{StorageBindingV1, storage_runtime_pool_alias};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct PoolAliasV1(String);

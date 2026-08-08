@@ -6,14 +6,14 @@ use base64::{
     engine::general_purpose::{URL_SAFE, URL_SAFE_NO_PAD},
 };
 use bytes::Bytes;
-use hermes_gateway_session::{
-    BrowserGatewaySessionService, BrowserWebauthnAuthenticationCeremonyV1,
-};
-use hermes_gateway_session_contract::BrowserAuthenticationAuthority;
 use http_body_util::{BodyExt, Limited};
 use hyper::body::Body;
 use hyper::header::{CACHE_CONTROL, CONTENT_TYPE, ORIGIN, SET_COOKIE};
 use hyper::{Method, Request, Response, StatusCode};
+use makosh_gateway_session::{
+    BrowserGatewaySessionService, BrowserWebauthnAuthenticationCeremonyV1,
+};
+use makosh_gateway_session_contract::BrowserAuthenticationAuthority;
 use serde::{Deserialize, Serialize};
 use webauthn_rs_core::proto::{PublicKeyCredential, PublicKeyCredentialRequestOptions};
 

@@ -1,17 +1,17 @@
 use chrono::Utc;
-use hermes_communications_api::commands::CommunicationProviderCommand;
-use hermes_events_api::{NewEventEnvelope, StoredEventEnvelope};
+use makosh_communications_api::commands::CommunicationProviderCommand;
+use makosh_events_api::{NewEventEnvelope, StoredEventEnvelope};
 use serde_json::{Value, json};
 use sqlx::postgres::PgPool;
 use uuid::Uuid;
 
 use crate::platform::events::bus::InMemoryEventBus;
 use crate::platform::events::bus::zulip_event_types;
-use hermes_communications_api::accounts::CommunicationProviderKind;
-use hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore;
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_events_postgres::store::EventStore;
+use makosh_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore;
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_events_postgres::store::EventStore;
 
 pub const ZULIP_PROVIDER_OBSERVATION_RECONCILIATION_CONSUMER: &str =
     "zulip_provider_observation_reconciliation";
@@ -21,7 +21,7 @@ pub async fn reconcile_zulip_provider_observation_event(
     event_bus: InMemoryEventBus,
     event: StoredEventEnvelope,
 ) -> Result<(), String> {
-    if !hermes_provider_zulip::reconciliation::supports_observation_event(&event.event.event_type) {
+    if !makosh_provider_zulip::reconciliation::supports_observation_event(&event.event.event_type) {
         return Ok(());
     }
 
@@ -44,7 +44,7 @@ pub async fn reconcile_zulip_provider_observation_event(
     }
 
     let provider_message_id = required_json_str(&raw_record.payload, "provider_message_id")?;
-    let command_kinds = hermes_provider_zulip::reconciliation::command_kinds_for_observation(
+    let command_kinds = makosh_provider_zulip::reconciliation::command_kinds_for_observation(
         &event.event.event_type,
         &raw_record.payload,
     );
@@ -52,7 +52,7 @@ pub async fn reconcile_zulip_provider_observation_event(
         return Ok(());
     }
     let observed_at = raw_record.occurred_at.unwrap_or(event.event.occurred_at);
-    let provider_state = hermes_provider_zulip::reconciliation::provider_state(
+    let provider_state = makosh_provider_zulip::reconciliation::provider_state(
         &event.event.event_id,
         &event.event.event_type,
         &raw_record.raw_record_id,
@@ -60,7 +60,7 @@ pub async fn reconcile_zulip_provider_observation_event(
         observed_at,
     );
     let command_store = CommunicationProviderCommandStore::new(pool.clone());
-    let commands = hermes_provider_orchestration::reconcile_provider_command_observation(
+    let commands = makosh_provider_orchestration::reconcile_provider_command_observation(
         &command_store,
         &raw_record.account_id,
         "zulip",
@@ -153,7 +153,7 @@ async fn publish_zulip_command_event(
         json!({
             "channel": "zulip",
             "account_id": command.account_id,
-            "actor_id": "hermes-frontend",
+            "actor_id": "makosh-frontend",
             "kind": "communication_provider_commands",
             "source_id": format!("{}:{}:{}", command.command_id, event_type, now.timestamp_micros()),
         }),
@@ -196,21 +196,21 @@ mod tests {
     #[test]
     fn command_kinds_for_zulip_reaction_uses_reaction_op() {
         assert_eq!(
-            hermes_provider_zulip::reconciliation::command_kinds_for_observation(
+            makosh_provider_zulip::reconciliation::command_kinds_for_observation(
                 "signal.accepted.zulip.reaction",
                 &json!({"reaction_op": "add"}),
             ),
             vec!["add_reaction"]
         );
         assert_eq!(
-            hermes_provider_zulip::reconciliation::command_kinds_for_observation(
+            makosh_provider_zulip::reconciliation::command_kinds_for_observation(
                 "signal.accepted.zulip.reaction",
                 &json!({"reaction_op": "remove"}),
             ),
             vec!["remove_reaction"]
         );
         assert_eq!(
-            hermes_provider_zulip::reconciliation::command_kinds_for_observation(
+            makosh_provider_zulip::reconciliation::command_kinds_for_observation(
                 "signal.accepted.zulip.reaction",
                 &json!({}),
             ),

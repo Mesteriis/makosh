@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package makosh.communication_delayed_delivery.v1;
+
+message ScheduleDelayedDeliveryRequestV1 {
+  uint32 protocol_major = 1;
+  bytes delayed_operation_id = 2;
+  bytes delivery_operation_id = 3;
+  bytes conversation_id = 4;
+  optional bytes reply_to_message_id = 5;
+  bytes body_utf8 = 6;
+  uint64 deliver_at_unix_millis = 7;
+}
+
+message ScheduleDelayedDeliveryResponseV1 {
+  bytes delayed_operation_id = 1;
+  DelayedDeliveryStateV1 state = 2;
+  uint64 state_revision = 3;
+  DelayedDeliveryReceiptKindV1 receipt = 4;
+  DelayedDeliveryErrorCodeV1 error = 15;
+}
+
+message CancelDelayedDeliveryRequestV1 {
+  uint32 protocol_major = 1;
+  bytes delayed_operation_id = 2;
+  uint64 expected_revision = 3;
+}
+
+message CancelDelayedDeliveryResponseV1 {
+  bytes delayed_operation_id = 1;
+  DelayedDeliveryStateV1 state = 2;
+  uint64 state_revision = 3;
+  DelayedDeliveryReceiptKindV1 receipt = 4;
+  DelayedDeliveryErrorCodeV1 error = 15;
+}
+
+message GetDelayedDeliveryStatusRequestV1 {
+  uint32 protocol_major = 1;
+  bytes delayed_operation_id = 2;
+}
+
+message GetDelayedDeliveryStatusResponseV1 {
+  bytes delayed_operation_id = 1;
+  DelayedDeliveryStateV1 state = 2;
+  uint64 state_revision = 3;
+  uint64 requested_due_at_unix_millis = 4;
+  optional bytes delivery_operation_id = 5;
+  uint64 created_at_unix_millis = 6;
+  uint64 updated_at_unix_millis = 7;
+  DelayedDeliveryErrorCodeV1 error = 15;
+}
+
+message DelayedDeliveryStatusChangedV1 {
+  bytes delayed_operation_id = 1;
+  DelayedDeliveryStateV1 state = 2;
+  uint64 state_revision = 3;
+  uint64 occurred_at_unix_millis = 4;
+}
+
+service CommunicationDelayedDeliveryCommandService {
+  rpc Schedule(ScheduleDelayedDeliveryRequestV1)
+      returns (ScheduleDelayedDeliveryResponseV1);
+  rpc Cancel(CancelDelayedDeliveryRequestV1)
+      returns (CancelDelayedDeliveryResponseV1);
+}
+
+service CommunicationDelayedDeliveryQueryService {
+  rpc GetStatus(GetDelayedDeliveryStatusRequestV1)
+      returns (GetDelayedDeliveryStatusResponseV1);
+}
+
+enum DelayedDeliveryStateV1 {
+  DELAYED_DELIVERY_STATE_UNSPECIFIED = 0;
+  DELAYED_DELIVERY_STATE_ACCEPTED = 1;
+  DELAYED_DELIVERY_STATE_SCHEDULE_PENDING = 2;
+  DELAYED_DELIVERY_STATE_SCHEDULED = 3;
+  DELAYED_DELIVERY_STATE_DUE = 4;
+  DELAYED_DELIVERY_STATE_DISPATCHING = 5;
+  DELAYED_DELIVERY_STATE_DELIVERY_ACCEPTED = 6;
+  DELAYED_DELIVERY_STATE_CANCEL_REQUESTED = 7;
+  DELAYED_DELIVERY_STATE_CANCELLED = 8;
+  DELAYED_DELIVERY_STATE_FAILED = 9;
+}
+
+enum DelayedDeliveryReceiptKindV1 {
+  DELAYED_DELIVERY_RECEIPT_KIND_UNSPECIFIED = 0;
+  DELAYED_DELIVERY_RECEIPT_KIND_ACCEPTED = 1;
+  DELAYED_DELIVERY_RECEIPT_KIND_EXISTING = 2;
+}
+
+enum DelayedDeliveryErrorCodeV1 {
+  DELAYED_DELIVERY_ERROR_CODE_UNSPECIFIED = 0;
+  DELAYED_DELIVERY_ERROR_CODE_INVALID_REQUEST = 1;
+  DELAYED_DELIVERY_ERROR_CODE_STALE_REVISION = 2;
+  DELAYED_DELIVERY_ERROR_CODE_NOT_FOUND = 3;
+  DELAYED_DELIVERY_ERROR_CODE_TOO_LATE = 4;
+  DELAYED_DELIVERY_ERROR_CODE_SCHEDULER_REJECTED = 5;
+  DELAYED_DELIVERY_ERROR_CODE_DELIVERY_INTENT_REJECTED = 6;
+  DELAYED_DELIVERY_ERROR_CODE_UNAVAILABLE = 7;
+}

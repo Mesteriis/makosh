@@ -1,5 +1,5 @@
 [package]
-name = "hermes-ollama-ai-runtime"
+name = "makosh-ollama-ai-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,23 +8,23 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-ollama-ai-runtime"
+name = "makosh-ollama-ai-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "ollama"
 surface = "runtime"
 
 [dependencies]
-hermes-ai-contracts = { path = "../ai-contracts" }
-hermes-ollama-ai-api = { path = "../ollama-ai-api" }
-hermes-ollama-ai-core = { path = "../ollama-ai-core" }
-hermes-ollama-ai-http = { path = "../ollama-ai-http" }
-hermes-ollama-ai-persistence = { path = "../ollama-ai-persistence" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
+makosh-ai-contracts = { path = "../ai-contracts" }
+makosh-ollama-ai-api = { path = "../ollama-ai-api" }
+makosh-ollama-ai-core = { path = "../ollama-ai-core" }
+makosh-ollama-ai-http = { path = "../ollama-ai-http" }
+makosh-ollama-ai-persistence = { path = "../ollama-ai-persistence" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }

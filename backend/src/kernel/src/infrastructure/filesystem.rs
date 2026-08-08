@@ -8,14 +8,14 @@ pub fn resolve_data_directory(override_path: Option<PathBuf>) -> Result<PathBuf,
     match override_path {
         Some(path) if path.is_absolute() => Ok(path),
         Some(_) => Err("data directory must be an absolute path".to_owned()),
-        None => directories::ProjectDirs::from("dev", "Hermes", "Hermes Hub")
+        None => directories::ProjectDirs::from("dev", "Макошь", "Макошь")
             .map(|directories| directories.data_local_dir().to_owned())
             .ok_or_else(|| "OS-standard local data directory is unavailable".to_owned()),
     }
 }
 
 pub fn resolve_runtime_directory(data_dir: &Path) -> Result<PathBuf, String> {
-    let directories = directories::ProjectDirs::from("dev", "Hermes", "Hermes Hub")
+    let directories = directories::ProjectDirs::from("dev", "Макошь", "Макошь")
         .ok_or_else(|| "OS-standard local runtime directory is unavailable".to_owned())?;
     let canonical_data_dir = data_dir.canonicalize().map_err(|error| error.to_string())?;
     let instance_key = Sha256::digest(canonical_data_dir.as_os_str().as_encoded_bytes())

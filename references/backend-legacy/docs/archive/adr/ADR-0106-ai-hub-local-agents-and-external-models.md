@@ -6,7 +6,7 @@ Date: 2026-07-08
 
 ## Context
 
-Hermes needs AI for translation, classification, summarization, reply drafting, extraction,
+Макошь needs AI for translation, classification, summarization, reply drafting, extraction,
 embeddings and intelligence workflows.
 
 The codebase had a provider-neutral runtime abstraction, but some AI consumers still called
@@ -14,7 +14,7 @@ runtime methods directly from AI services, domains and workflows. That made the 
 weak: provider routing, safety inspection and model capability selection were spread across
 call sites instead of flowing through one hub.
 
-Hermes also needs a split between:
+Макошь also needs a split between:
 
 - small local agents that run inside Rust and handle cheap deterministic inspection;
 - larger local or external models that handle expensive language tasks.

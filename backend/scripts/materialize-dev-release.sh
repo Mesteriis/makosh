@@ -7,13 +7,13 @@ backend_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 project_root="$(cd "$backend_root/.." && pwd)"
 frontend_root="$project_root/frontend"
 local_root="$project_root/.local"
-cargo_target_dir="${HERMES_DEV_CARGO_TARGET_DIR:-$backend_root/target}"
-release_root="${HERMES_DEV_RELEASE_ROOT:-$local_root/dev-release}"
-signing_key="${HERMES_DEV_RELEASE_SIGNING_KEY:-$local_root/dev-release-signing-key.pem}"
-tgcalls_root="${HERMES_DEV_TGCALLS_ROOT:-$local_root/dev-native/tgcalls}"
-attachment_text_extraction_ocr_root="${HERMES_DEV_ATTACHMENT_TEXT_EXTRACTION_OCR_ROOT:-$local_root/dev-native/attachment-text-extraction-ocr}"
-whisper_stt_root="${HERMES_DEV_WHISPER_STT_ROOT:-$local_root/dev-native/whisper-stt}"
-distribution_id="hermes-local-development"
+cargo_target_dir="${MAKOSH_DEV_CARGO_TARGET_DIR:-$backend_root/target}"
+release_root="${MAKOSH_DEV_RELEASE_ROOT:-$local_root/dev-release}"
+signing_key="${MAKOSH_DEV_RELEASE_SIGNING_KEY:-$local_root/dev-release-signing-key.pem}"
+tgcalls_root="${MAKOSH_DEV_TGCALLS_ROOT:-$local_root/dev-native/tgcalls}"
+attachment_text_extraction_ocr_root="${MAKOSH_DEV_ATTACHMENT_TEXT_EXTRACTION_OCR_ROOT:-$local_root/dev-native/attachment-text-extraction-ocr}"
+whisper_stt_root="${MAKOSH_DEV_WHISPER_STT_ROOT:-$local_root/dev-native/whisper-stt}"
+distribution_id="makosh-local-development"
 distribution_generation=""
 generation_metadata_name="development-distribution-generation"
 release_version="1"
@@ -22,7 +22,7 @@ target_triple="aarch64-apple-darwin"
 staging_root=""
 
 fail() {
-	printf 'Hermes development release failed: %s\n' "$1" >&2
+	printf 'Макошь development release failed: %s\n' "$1" >&2
 	exit 1
 }
 
@@ -101,14 +101,14 @@ trap 'exit 129' HUP
 for command_name in awk brew cargo git mktemp node pnpm rustc shasum uname; do
 	require_command "$command_name"
 done
-require_absolute_path "HERMES_DEV_CARGO_TARGET_DIR" "$cargo_target_dir"
-require_absolute_path "HERMES_DEV_RELEASE_ROOT" "$release_root"
-require_absolute_path "HERMES_DEV_RELEASE_SIGNING_KEY" "$signing_key"
-require_absolute_path "HERMES_DEV_TGCALLS_ROOT" "$tgcalls_root"
+require_absolute_path "MAKOSH_DEV_CARGO_TARGET_DIR" "$cargo_target_dir"
+require_absolute_path "MAKOSH_DEV_RELEASE_ROOT" "$release_root"
+require_absolute_path "MAKOSH_DEV_RELEASE_SIGNING_KEY" "$signing_key"
+require_absolute_path "MAKOSH_DEV_TGCALLS_ROOT" "$tgcalls_root"
 require_absolute_path \
-	"HERMES_DEV_ATTACHMENT_TEXT_EXTRACTION_OCR_ROOT" \
+	"MAKOSH_DEV_ATTACHMENT_TEXT_EXTRACTION_OCR_ROOT" \
 	"$attachment_text_extraction_ocr_root"
-require_absolute_path "HERMES_DEV_WHISPER_STT_ROOT" "$whisper_stt_root"
+require_absolute_path "MAKOSH_DEV_WHISPER_STT_ROOT" "$whisper_stt_root"
 test "$(uname -m)" = "arm64" || fail "the current development release supports macOS arm64 only"
 
 mkdir -p "$local_root"
@@ -124,7 +124,7 @@ test "${#tdjson_candidates[@]}" -eq 1 \
 tdjson_path="${tdjson_candidates[0]}"
 require_regular_file "$tdjson_path" "TDLib dylib"
 
-tgcalls_path="$tgcalls_root/libhermes_tgcalls_bridge.dylib"
+tgcalls_path="$tgcalls_root/libmakosh_tgcalls_bridge.dylib"
 if ! test -f "$tgcalls_path"; then
 	printf '%s\n' 'Building the pinned Telegram call bridge for local development...' >&2
 	"$backend_root/scripts/build-telegram-tgcalls-bridge-macos.sh" \
@@ -168,82 +168,82 @@ require_regular_file "$whisper_stt_model" "Whisper STT model"
 
 printf '%s\n' 'Building signed-development runtime and assembly units...' >&2
 CARGO_TARGET_DIR="$cargo_target_dir" cargo +1.97.0 build --locked \
-	--package hermes-kernel \
-	--package hermes-blob-service \
-	--package hermes-events-authority-runtime \
-	--package hermes-scheduler-runtime \
-	--package hermes-storage-runtime \
-	--package hermes-telemetry-collector \
-	--package hermes-vault-runtime \
-	--package hermes-communications-runtime \
-	--package hermes-communications-assembly \
-	--package hermes-communications-export-runtime \
-	--package hermes-communications-export-assembly \
-	--package hermes-communication-delivery-intent-runtime \
-	--package hermes-communication-delivery-intent-assembly \
-	--package hermes-communication-bulk-action-runtime \
-	--package hermes-communication-bulk-action-assembly \
-	--package hermes-communication-cross-channel-forward-runtime \
-	--package hermes-communication-cross-channel-forward-assembly \
-	--package hermes-communication-reply-suggestion-runtime \
-	--package hermes-communication-reply-suggestion-assembly \
-	--package hermes-communication-summary-runtime \
-	--package hermes-communication-summary-assembly \
-	--package hermes-communication-translation-runtime \
-	--package hermes-communication-translation-assembly \
-	--package hermes-communication-explanation-runtime \
-	--package hermes-communication-explanation-assembly \
-	--package hermes-communication-recipient-suggestion-runtime \
-	--package hermes-communication-recipient-suggestion-assembly \
-	--package hermes-communication-task-candidate-runtime \
-	--package hermes-communication-task-candidate-assembly \
-	--package hermes-communication-note-candidate-runtime \
-	--package hermes-communication-note-candidate-assembly \
-	--package hermes-review-task-candidate-runtime \
-	--package hermes-review-task-candidate-assembly \
-	--package hermes-tasks-runtime \
-	--package hermes-tasks-assembly \
-	--package hermes-contacts-runtime \
-	--package hermes-contacts-assembly \
-	--package hermes-mail-contacts-sync-runtime \
-	--package hermes-mail-contacts-sync-assembly \
-	--package hermes-knowledge-runtime \
-	--package hermes-knowledge-assembly \
-	--package hermes-review-note-candidate-runtime \
-	--package hermes-review-note-candidate-assembly \
-	--package hermes-reviewed-note-candidate-promotion-runtime \
-	--package hermes-reviewed-note-candidate-promotion-assembly \
-	--package hermes-reviewed-task-candidate-promotion-runtime \
-	--package hermes-reviewed-task-candidate-promotion-assembly \
-	--package hermes-communication-delayed-delivery-runtime \
-	--package hermes-communication-delayed-delivery-assembly \
-	--package hermes-attachment-security-runtime \
-	--package hermes-attachment-security-assembly \
-	--package hermes-attachment-text-extraction-runtime \
-	--package hermes-attachment-text-extraction-assembly \
-	--package hermes-attachment-preview-runtime \
-	--package hermes-attachment-preview-assembly \
-	--package hermes-attachment-preview-evidence-replay-runtime \
-	--package hermes-attachment-preview-evidence-replay-assembly \
-	--package hermes-attachment-translation-runtime \
-	--package hermes-attachment-translation-assembly \
-	--package hermes-ollama-ai-runtime \
-	--package hermes-ollama-ai-assembly \
-	--package hermes-speech-to-text-runtime \
-	--package hermes-speech-to-text-assembly \
-	--package hermes-whisper-stt-runtime \
-	--package hermes-whisper-stt-assembly \
-	--package hermes-desktop-call-recording-runtime \
-	--package hermes-desktop-call-recording-assembly \
-	--package hermes-mail-runtime \
-	--package hermes-mail-assembly \
-	--package hermes-telegram-runtime \
-	--package hermes-telegram-assembly \
-	--package hermes-whatsapp-runtime \
-	--package hermes-whatsapp-assembly \
-	--package hermes-zulip-runtime \
-	--package hermes-zulip-assembly \
-	--package hermes-development-assembly
+	--package makosh-kernel \
+	--package makosh-blob-service \
+	--package makosh-events-authority-runtime \
+	--package makosh-scheduler-runtime \
+	--package makosh-storage-runtime \
+	--package makosh-telemetry-collector \
+	--package makosh-vault-runtime \
+	--package makosh-communications-runtime \
+	--package makosh-communications-assembly \
+	--package makosh-communications-export-runtime \
+	--package makosh-communications-export-assembly \
+	--package makosh-communication-delivery-intent-runtime \
+	--package makosh-communication-delivery-intent-assembly \
+	--package makosh-communication-bulk-action-runtime \
+	--package makosh-communication-bulk-action-assembly \
+	--package makosh-communication-cross-channel-forward-runtime \
+	--package makosh-communication-cross-channel-forward-assembly \
+	--package makosh-communication-reply-suggestion-runtime \
+	--package makosh-communication-reply-suggestion-assembly \
+	--package makosh-communication-summary-runtime \
+	--package makosh-communication-summary-assembly \
+	--package makosh-communication-translation-runtime \
+	--package makosh-communication-translation-assembly \
+	--package makosh-communication-explanation-runtime \
+	--package makosh-communication-explanation-assembly \
+	--package makosh-communication-recipient-suggestion-runtime \
+	--package makosh-communication-recipient-suggestion-assembly \
+	--package makosh-communication-task-candidate-runtime \
+	--package makosh-communication-task-candidate-assembly \
+	--package makosh-communication-note-candidate-runtime \
+	--package makosh-communication-note-candidate-assembly \
+	--package makosh-review-task-candidate-runtime \
+	--package makosh-review-task-candidate-assembly \
+	--package makosh-tasks-runtime \
+	--package makosh-tasks-assembly \
+	--package makosh-contacts-runtime \
+	--package makosh-contacts-assembly \
+	--package makosh-mail-contacts-sync-runtime \
+	--package makosh-mail-contacts-sync-assembly \
+	--package makosh-knowledge-runtime \
+	--package makosh-knowledge-assembly \
+	--package makosh-review-note-candidate-runtime \
+	--package makosh-review-note-candidate-assembly \
+	--package makosh-reviewed-note-candidate-promotion-runtime \
+	--package makosh-reviewed-note-candidate-promotion-assembly \
+	--package makosh-reviewed-task-candidate-promotion-runtime \
+	--package makosh-reviewed-task-candidate-promotion-assembly \
+	--package makosh-communication-delayed-delivery-runtime \
+	--package makosh-communication-delayed-delivery-assembly \
+	--package makosh-attachment-security-runtime \
+	--package makosh-attachment-security-assembly \
+	--package makosh-attachment-text-extraction-runtime \
+	--package makosh-attachment-text-extraction-assembly \
+	--package makosh-attachment-preview-runtime \
+	--package makosh-attachment-preview-assembly \
+	--package makosh-attachment-preview-evidence-replay-runtime \
+	--package makosh-attachment-preview-evidence-replay-assembly \
+	--package makosh-attachment-translation-runtime \
+	--package makosh-attachment-translation-assembly \
+	--package makosh-ollama-ai-runtime \
+	--package makosh-ollama-ai-assembly \
+	--package makosh-speech-to-text-runtime \
+	--package makosh-speech-to-text-assembly \
+	--package makosh-whisper-stt-runtime \
+	--package makosh-whisper-stt-assembly \
+	--package makosh-desktop-call-recording-runtime \
+	--package makosh-desktop-call-recording-assembly \
+	--package makosh-mail-runtime \
+	--package makosh-mail-assembly \
+	--package makosh-telegram-runtime \
+	--package makosh-telegram-assembly \
+	--package makosh-whatsapp-runtime \
+	--package makosh-whatsapp-assembly \
+	--package makosh-zulip-runtime \
+	--package makosh-zulip-assembly \
+	--package makosh-development-assembly
 
 printf '%s\n' 'Building the Vue browser client for the signed development bundle...' >&2
 (
@@ -256,8 +256,8 @@ chmod 700 "$staging_root"
 scratch_root="$staging_root/scratch"
 assembly_root="$staging_root/assemblies"
 new_release_root="$staging_root/release"
-app_root="$new_release_root/HermesDev.app"
-resource_root="$app_root/Contents/Resources/hermes-kernel-release"
+app_root="$new_release_root/МакошьDev.app"
+resource_root="$app_root/Contents/Resources/makosh-kernel-release"
 mkdir -p \
 	"$scratch_root/descriptors" \
 	"$assembly_root" \
@@ -314,149 +314,149 @@ telegram_assembly="$assembly_root/telegram"
 whatsapp_assembly="$assembly_root/whatsapp"
 zulip_assembly="$assembly_root/zulip"
 
-"$cargo_target_dir/debug/hermes-communications-assembly" \
+"$cargo_target_dir/debug/makosh-communications-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$communications_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-communications-runtime"
-"$cargo_target_dir/debug/hermes-communications-export-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-communications-runtime"
+"$cargo_target_dir/debug/makosh-communications-export-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$communications_export_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-communications-export-runtime"
-"$cargo_target_dir/debug/hermes-communication-delivery-intent-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-communications-export-runtime"
+"$cargo_target_dir/debug/makosh-communication-delivery-intent-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$communication_delivery_intent_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-communication-delivery-intent-runtime"
-"$cargo_target_dir/debug/hermes-communication-bulk-action-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-communication-delivery-intent-runtime"
+"$cargo_target_dir/debug/makosh-communication-bulk-action-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$communication_bulk_action_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-communication-bulk-action-runtime"
-"$cargo_target_dir/debug/hermes-communication-cross-channel-forward-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-communication-bulk-action-runtime"
+"$cargo_target_dir/debug/makosh-communication-cross-channel-forward-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$communication_cross_channel_forward_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-communication-cross-channel-forward-runtime"
-"$cargo_target_dir/debug/hermes-communication-reply-suggestion-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-communication-cross-channel-forward-runtime"
+"$cargo_target_dir/debug/makosh-communication-reply-suggestion-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$communication_reply_suggestion_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-communication-reply-suggestion-runtime"
-"$cargo_target_dir/debug/hermes-communication-summary-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-communication-reply-suggestion-runtime"
+"$cargo_target_dir/debug/makosh-communication-summary-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$communication_summary_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-communication-summary-runtime"
-"$cargo_target_dir/debug/hermes-communication-translation-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-communication-summary-runtime"
+"$cargo_target_dir/debug/makosh-communication-translation-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$communication_translation_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-communication-translation-runtime"
-"$cargo_target_dir/debug/hermes-communication-explanation-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-communication-translation-runtime"
+"$cargo_target_dir/debug/makosh-communication-explanation-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$communication_explanation_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-communication-explanation-runtime"
-"$cargo_target_dir/debug/hermes-communication-recipient-suggestion-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-communication-explanation-runtime"
+"$cargo_target_dir/debug/makosh-communication-recipient-suggestion-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$communication_recipient_suggestion_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-communication-recipient-suggestion-runtime"
-"$cargo_target_dir/debug/hermes-communication-task-candidate-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-communication-recipient-suggestion-runtime"
+"$cargo_target_dir/debug/makosh-communication-task-candidate-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$communication_task_candidate_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-communication-task-candidate-runtime"
-"$cargo_target_dir/debug/hermes-communication-note-candidate-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-communication-task-candidate-runtime"
+"$cargo_target_dir/debug/makosh-communication-note-candidate-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$communication_note_candidate_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-communication-note-candidate-runtime"
-"$cargo_target_dir/debug/hermes-review-task-candidate-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-communication-note-candidate-runtime"
+"$cargo_target_dir/debug/makosh-review-task-candidate-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$review_task_candidate_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-review-task-candidate-runtime"
-"$cargo_target_dir/debug/hermes-tasks-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-review-task-candidate-runtime"
+"$cargo_target_dir/debug/makosh-tasks-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$tasks_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-tasks-runtime"
-"$cargo_target_dir/debug/hermes-contacts-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-tasks-runtime"
+"$cargo_target_dir/debug/makosh-contacts-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$contacts_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-contacts-runtime"
-"$cargo_target_dir/debug/hermes-mail-contacts-sync-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-contacts-runtime"
+"$cargo_target_dir/debug/makosh-mail-contacts-sync-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$mail_contacts_sync_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-mail-contacts-sync-runtime"
-"$cargo_target_dir/debug/hermes-knowledge-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-mail-contacts-sync-runtime"
+"$cargo_target_dir/debug/makosh-knowledge-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$knowledge_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-knowledge-runtime"
-"$cargo_target_dir/debug/hermes-review-note-candidate-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-knowledge-runtime"
+"$cargo_target_dir/debug/makosh-review-note-candidate-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$review_note_candidate_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-review-note-candidate-runtime"
-"$cargo_target_dir/debug/hermes-reviewed-note-candidate-promotion-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-review-note-candidate-runtime"
+"$cargo_target_dir/debug/makosh-reviewed-note-candidate-promotion-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$reviewed_note_candidate_promotion_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-reviewed-note-candidate-promotion-runtime"
-"$cargo_target_dir/debug/hermes-reviewed-task-candidate-promotion-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-reviewed-note-candidate-promotion-runtime"
+"$cargo_target_dir/debug/makosh-reviewed-task-candidate-promotion-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$reviewed_task_candidate_promotion_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-reviewed-task-candidate-promotion-runtime"
-"$cargo_target_dir/debug/hermes-communication-delayed-delivery-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-reviewed-task-candidate-promotion-runtime"
+"$cargo_target_dir/debug/makosh-communication-delayed-delivery-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$communication_delayed_delivery_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-communication-delayed-delivery-runtime"
-"$cargo_target_dir/debug/hermes-attachment-security-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-communication-delayed-delivery-runtime"
+"$cargo_target_dir/debug/makosh-attachment-security-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$attachment_security_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-attachment-security-runtime"
-"$cargo_target_dir/debug/hermes-attachment-text-extraction-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-attachment-security-runtime"
+"$cargo_target_dir/debug/makosh-attachment-text-extraction-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$attachment_text_extraction_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-attachment-text-extraction-runtime" \
+	--runtime "$cargo_target_dir/debug/makosh-attachment-text-extraction-runtime" \
 	--ocr-runner "$attachment_text_extraction_ocr_runner" \
 	--ocr-eng "$attachment_text_extraction_ocr_english" \
 	--ocr-rus "$attachment_text_extraction_ocr_russian"
-"$cargo_target_dir/debug/hermes-attachment-preview-assembly" \
+"$cargo_target_dir/debug/makosh-attachment-preview-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$attachment_preview_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-attachment-preview-runtime"
-"$cargo_target_dir/debug/hermes-attachment-preview-evidence-replay-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-attachment-preview-runtime"
+"$cargo_target_dir/debug/makosh-attachment-preview-evidence-replay-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$attachment_preview_evidence_replay_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-attachment-preview-evidence-replay-runtime"
-"$cargo_target_dir/debug/hermes-attachment-translation-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-attachment-preview-evidence-replay-runtime"
+"$cargo_target_dir/debug/makosh-attachment-translation-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$attachment_translation_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-attachment-translation-runtime"
-"$cargo_target_dir/debug/hermes-ollama-ai-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-attachment-translation-runtime"
+"$cargo_target_dir/debug/makosh-ollama-ai-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$ollama_ai_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-ollama-ai-runtime"
-"$cargo_target_dir/debug/hermes-speech-to-text-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-ollama-ai-runtime"
+"$cargo_target_dir/debug/makosh-speech-to-text-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$speech_to_text_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-speech-to-text-runtime"
-"$cargo_target_dir/debug/hermes-whisper-stt-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-speech-to-text-runtime"
+"$cargo_target_dir/debug/makosh-whisper-stt-assembly" \
 	--output "$whisper_stt_assembly" \
 	--build-id "$build_id" \
-	--runtime "$cargo_target_dir/debug/hermes-whisper-stt-runtime" \
+	--runtime "$cargo_target_dir/debug/makosh-whisper-stt-runtime" \
 	--runner "$whisper_stt_runner" \
 	--model "$whisper_stt_model"
-"$cargo_target_dir/debug/hermes-desktop-call-recording-assembly" \
+"$cargo_target_dir/debug/makosh-desktop-call-recording-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$desktop_call_recording_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-desktop-call-recording-runtime"
-"$cargo_target_dir/debug/hermes-mail-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-desktop-call-recording-runtime"
+"$cargo_target_dir/debug/makosh-mail-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$mail_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-mail-runtime"
-"$cargo_target_dir/debug/hermes-telegram-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-mail-runtime"
+"$cargo_target_dir/debug/makosh-telegram-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$telegram_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-telegram-runtime" \
+	--runtime "$cargo_target_dir/debug/makosh-telegram-runtime" \
 	--tdjson "$tdjson_path" \
 	--tgcalls "$tgcalls_path"
-"$cargo_target_dir/debug/hermes-whatsapp-assembly" \
+"$cargo_target_dir/debug/makosh-whatsapp-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$whatsapp_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-whatsapp-runtime"
-"$cargo_target_dir/debug/hermes-zulip-assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-whatsapp-runtime"
+"$cargo_target_dir/debug/makosh-zulip-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$zulip_assembly" \
-	--runtime "$cargo_target_dir/debug/hermes-zulip-runtime"
+	--runtime "$cargo_target_dir/debug/makosh-zulip-runtime"
 
 base_input="$scratch_root/release-input.json"
 node "$backend_root/scripts/build-local-platform-release-input.mjs" \
@@ -521,12 +521,12 @@ node "$backend_root/scripts/build-distribution-release.mjs" \
 	--artifact-fragment "$whatsapp_assembly/whatsapp.release-artifacts.json" \
 	--artifact-fragment "$zulip_assembly/zulip.release-artifacts.json" \
 	--signing-key "$signing_key" \
-	--trust-root "$resource_root/hermes-release-trust-root.pb" \
-	--signed-manifest "$resource_root/hermes-signed-distribution-manifest.pb" \
+	--trust-root "$resource_root/makosh-release-trust-root.pb" \
+	--signed-manifest "$resource_root/makosh-signed-distribution-manifest.pb" \
 	--distribution-root "$resource_root/distribution"
 
-cp "$cargo_target_dir/debug/hermes-kernel" "$app_root/Contents/MacOS/hermes-kernel"
-chmod 700 "$app_root/Contents/MacOS/hermes-kernel"
+cp "$cargo_target_dir/debug/makosh-kernel" "$app_root/Contents/MacOS/makosh-kernel"
+chmod 700 "$app_root/Contents/MacOS/makosh-kernel"
 printf '%s\n' "$distribution_generation" \
 	>"$new_release_root/$generation_metadata_name"
 chmod 600 "$new_release_root/$generation_metadata_name"
@@ -547,7 +547,7 @@ if test -e "$previous_release_root"; then
 	rm -rf -- "$previous_release_root"
 fi
 
-kernel_path="$release_root/HermesDev.app/Contents/MacOS/hermes-kernel"
+kernel_path="$release_root/МакошьDev.app/Contents/MacOS/makosh-kernel"
 require_regular_file "$kernel_path" "materialized development Kernel"
 require_regular_file \
 	"$release_root/$generation_metadata_name" \

@@ -4,7 +4,7 @@ import { storybookLocaleFromGlobals } from './storybook-i18n'
 import { generalStoryCopy } from './general-story-copy'
 
 const meta = {
-	title: 'Hermes UI/General/Drawer',
+	title: 'Макошь UI/General/Drawer',
 	component: Drawer,
 	render: (_args, context) => ({
 		components: { Button, Drawer },

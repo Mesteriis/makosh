@@ -4,7 +4,7 @@ mod cli;
 mod control;
 mod recovery;
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::SchedulerRuntimeConfigurationV1,
     validation::scheduler::validate_scheduler_runtime_configuration,
 };
@@ -37,7 +37,7 @@ where
     if arguments.next().is_some() {
         return Err("Scheduler runtime command is unavailable".to_owned());
     }
-    let bytes = hermes_scheduler_persistence::scheduler_storage_bundle_v1().encode_to_vec();
+    let bytes = makosh_scheduler_persistence::scheduler_storage_bundle_v1().encode_to_vec();
     std::io::Write::write_all(&mut std::io::stdout(), &bytes)
         .map_err(|_| "Scheduler storage bundle is unavailable".to_owned())
 }

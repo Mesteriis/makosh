@@ -21,10 +21,10 @@ const resources = config.bundle?.resources ?? {};
 if (Object.keys(resources).some((resource) => resource.includes('google-oauth'))) {
   failures.push('Tauri bundle must not package legacy Google OAuth resources');
 }
-if (!Array.isArray(config.bundle?.externalBin) || !config.bundle.externalBin.includes('binaries/hermes-kernel')) {
-  failures.push('Tauri bundle must declare the hermes-kernel sidecar');
+if (!Array.isArray(config.bundle?.externalBin) || !config.bundle.externalBin.includes('binaries/makosh-kernel')) {
+  failures.push('Tauri bundle must declare the makosh-kernel sidecar');
 }
-if (/HERMES_GOOGLE_OAUTH_CLIENT_CONFIG|HERMES_LOCAL_API_SECRET/.test(source)) {
+if (/MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG|MAKOSH_LOCAL_API_SECRET/.test(source)) {
   failures.push('Tauri sidecar source must not forward legacy OAuth or local API secrets');
 }
 const ownerVaultPermissions = new Set([

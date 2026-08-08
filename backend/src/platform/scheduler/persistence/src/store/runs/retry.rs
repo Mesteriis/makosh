@@ -1,5 +1,5 @@
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_scheduler_protocol::RetryPolicyV1;
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_scheduler_protocol::RetryPolicyV1;
 use sqlx::{Postgres, Transaction, query, query_as};
 
 use super::release::release_concurrency_slot;
@@ -9,7 +9,7 @@ pub(crate) async fn initialize_retry_state(
     transaction: &mut Transaction<'_, Postgres>,
     claim: &SchedulerRunClaimV1,
 ) -> Result<(), SchedulerRunClaimErrorV1> {
-    query("INSERT INTO hermes_platform.scheduler_run_retries (run_id, retry_max_attempts, retry_base_backoff_millis) VALUES ($1, $2, $3)")
+    query("INSERT INTO makosh_platform.scheduler_run_retries (run_id, retry_max_attempts, retry_base_backoff_millis) VALUES ($1, $2, $3)")
         .bind(claim.run_id().bytes().to_vec())
         .bind(i32::from(claim.policy().retry().max_attempts()))
         .bind(i64::try_from(claim.policy().retry().base_backoff_millis()).map_err(|_| SchedulerRunClaimErrorV1::Denied)?)
@@ -45,7 +45,7 @@ async fn locked_state(
     claim: &SchedulerRunClaimV1,
     failed_at: UtcMillisV1,
 ) -> Result<(i32, i32, i64), SchedulerRunClaimErrorV1> {
-    query_as::<_, (i32, i32, i64)>("SELECT runs.attempt_count, retries.retry_max_attempts, retries.retry_base_backoff_millis FROM hermes_platform.scheduler_runs AS runs JOIN hermes_platform.scheduler_run_retries AS retries ON retries.run_id = runs.run_id WHERE runs.run_id = $1 AND runs.lease_epoch = $2 AND runs.concurrency_key = $3 AND runs.lease_expires_at_unix_ms > $4 AND runs.state IN ('pending_dispatch', 'dispatched', 'running') FOR UPDATE OF runs, retries")
+    query_as::<_, (i32, i32, i64)>("SELECT runs.attempt_count, retries.retry_max_attempts, retries.retry_base_backoff_millis FROM makosh_platform.scheduler_runs AS runs JOIN makosh_platform.scheduler_run_retries AS retries ON retries.run_id = runs.run_id WHERE runs.run_id = $1 AND runs.lease_epoch = $2 AND runs.concurrency_key = $3 AND runs.lease_expires_at_unix_ms > $4 AND runs.state IN ('pending_dispatch', 'dispatched', 'running') FOR UPDATE OF runs, retries")
         .bind(claim.run_id().bytes().to_vec()).bind(i64::try_from(claim.lease_epoch()).map_err(|_| SchedulerRunClaimErrorV1::Denied)?).bind(claim.concurrency_key().value()).bind(failed_at.value())
         .fetch_optional(&mut **transaction).await.map_err(unavailable)?.ok_or(SchedulerRunClaimErrorV1::Denied)
 }
@@ -86,9 +86,9 @@ async fn mark_failure(
     } else {
         "failed"
     };
-    query("UPDATE hermes_platform.scheduler_runs SET state = $3, attempt_count = attempt_count + 1 WHERE run_id = $1 AND lease_epoch = $2")
+    query("UPDATE makosh_platform.scheduler_runs SET state = $3, attempt_count = attempt_count + 1 WHERE run_id = $1 AND lease_epoch = $2")
         .bind(claim.run_id().bytes().to_vec()).bind(i64::try_from(claim.lease_epoch()).map_err(|_| SchedulerRunClaimErrorV1::Denied)?).bind(state).execute(&mut **transaction).await.map_err(unavailable)?;
-    query("UPDATE hermes_platform.scheduler_run_retries SET next_attempt_at_unix_ms = $2 WHERE run_id = $1")
+    query("UPDATE makosh_platform.scheduler_run_retries SET next_attempt_at_unix_ms = $2 WHERE run_id = $1")
         .bind(claim.run_id().bytes().to_vec()).bind(retry_due.map(UtcMillisV1::value)).execute(&mut **transaction).await.map_err(unavailable)?;
     Ok(())
 }

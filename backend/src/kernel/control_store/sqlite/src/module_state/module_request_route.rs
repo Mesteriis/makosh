@@ -1,12 +1,12 @@
 use std::collections::BTreeSet;
 
-use hermes_kernel_control_store::ModuleRequestContractV1;
+use makosh_kernel_control_store::ModuleRequestContractV1;
 use rusqlite::{Connection, params};
 
 use crate::{SqliteControlStore, StoreError, valid_capability_ids, valid_identity_token};
 
 pub(crate) fn validate_module_request_contracts(
-    registration: &hermes_kernel_control_store::ModuleRegistration,
+    registration: &makosh_kernel_control_store::ModuleRegistration,
     capabilities: &[String],
     contracts: &[ModuleRequestContractV1],
 ) -> Result<(), StoreError> {
@@ -48,7 +48,7 @@ pub(crate) fn insert_module_request_rpc_routes(
 ) -> Result<(), StoreError> {
     for contract in routes {
         connection.execute(
-            "INSERT INTO hermes_kernel_module_request_rpc_route_request
+            "INSERT INTO makosh_kernel_module_request_rpc_route_request
              (registration_id, capability_id, contract_owner, contract_name, contract_major,
               contract_revision, contract_schema_sha256)
              VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
@@ -79,10 +79,10 @@ fn read_contracts(connection: &Connection) -> Result<Vec<ModuleRequestContractV1
         "SELECT route.registration_id, route.capability_id, route.contract_owner,
                 route.contract_name, route.contract_major, route.contract_revision,
                 route.contract_schema_sha256
-         FROM hermes_kernel_module_request_rpc_route_request AS route
-         JOIN hermes_kernel_module_registration AS registration
+         FROM makosh_kernel_module_request_rpc_route_request AS route
+         JOIN makosh_kernel_module_registration AS registration
            ON registration.registration_id = route.registration_id
-         JOIN hermes_kernel_module_registration_capability AS capability
+         JOIN makosh_kernel_module_registration_capability AS capability
            ON capability.registration_id = route.registration_id
           AND capability.capability_id = route.capability_id
          WHERE registration.state = 'approved' AND capability.approved = 1

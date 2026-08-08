@@ -1,37 +1,37 @@
 [package]
-name = "hermes-attachment-security-runtime"
+name = "makosh-attachment-security-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
 [[bin]]
-name = "hermes-attachment-security-runtime"
+name = "makosh-attachment-security-runtime"
 path = "src/main.rs"
 
 [lib]
-name = "hermes_attachment_security_runtime"
+name = "makosh_attachment_security_runtime"
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "engine"
 owner = "attachment_security"
 surface = "runtime"
 
 [dependencies]
-hermes-attachment-archive-inspection-ingress = { path = "../attachment-archive-inspection-ingress" }
-hermes-attachment-preview-ingress = { path = "../attachment-preview-ingress" }
-hermes-attachment-text-extraction-ingress = { path = "../attachment-text-extraction-ingress" }
-hermes-attachment-security-clamav = { path = "../attachment-security-clamav" }
-hermes-attachment-security-contract = { path = "../attachment-security-contract" }
-hermes-attachment-security-core = { path = "../attachment-security-core" }
-hermes-attachment-security-persistence = { path = "../attachment-security-persistence" }
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-communications-attachment-contract = { path = "../communications-attachment-contract" }
-hermes-events-jetstream = { path = "../platform/events/jetstream" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
+makosh-attachment-archive-inspection-ingress = { path = "../attachment-archive-inspection-ingress" }
+makosh-attachment-preview-ingress = { path = "../attachment-preview-ingress" }
+makosh-attachment-text-extraction-ingress = { path = "../attachment-text-extraction-ingress" }
+makosh-attachment-security-clamav = { path = "../attachment-security-clamav" }
+makosh-attachment-security-contract = { path = "../attachment-security-contract" }
+makosh-attachment-security-core = { path = "../attachment-security-core" }
+makosh-attachment-security-persistence = { path = "../attachment-security-persistence" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-communications-attachment-contract = { path = "../communications-attachment-contract" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 prost-types = "=0.14.4"

@@ -21,9 +21,9 @@
 - Group / Группа: `Cargo`
 - Role / Роль: `config`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `Cargo.lock`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/Cargo.lock`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/Cargo.lock`
 - Size bytes / Размер в байтах: `145431`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -599,7 +599,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `Cargo.toml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/Cargo.toml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/Cargo.toml`
 - Size bytes / Размер в байтах: `205`
 - Included characters / Включено символов: `205`
 - Truncated / Обрезано: `no`

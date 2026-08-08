@@ -18,7 +18,7 @@ const emit = defineEmits<{
 	select: [action: ComposerToolbarAction]
 }>()
 
-const classes = computed(() => ['hermes-composer-toolbar', props.class])
+const classes = computed(() => ['makosh-composer-toolbar', props.class])
 
 function selectAction(action: ComposerToolbarAction): void {
 	if (!props.disabled && !action.disabled) {
@@ -32,10 +32,10 @@ function selectAction(action: ComposerToolbarAction): void {
 		<button
 			v-for="action in actions"
 			:key="action.id"
-			class="hermes-composer-toolbar__action"
+			class="makosh-composer-toolbar__action"
 			:class="{
-				'hermes-composer-toolbar__action--active': action.active,
-				[`hermes-composer-toolbar__action--${action.tone}`]: action.tone
+				'makosh-composer-toolbar__action--active': action.active,
+				[`makosh-composer-toolbar__action--${action.tone}`]: action.tone
 			}"
 			type="button"
 			:aria-pressed="action.active"

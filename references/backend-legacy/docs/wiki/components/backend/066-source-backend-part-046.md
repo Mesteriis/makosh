@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-В русскую Obsidian wiki на страницу `components/backend.md` необходимо добавить описание компонентов бэкенда Hermes Hub, основанное на предоставленных исходных файлах. Добавляемые разделы охватывают интеграцию Telegram через tdjson (QR-логин, снимки, конструкторы запросов) и интеграцию WhatsApp Web (клиент, хранилище, модели, идентификаторы, обработка ошибок). Изменение полностью базируется на встроенном коде.
+В русскую Obsidian wiki на страницу `components/backend.md` необходимо добавить описание компонентов бэкенда Макошь, основанное на предоставленных исходных файлах. Добавляемые разделы охватывают интеграцию Telegram через tdjson (QR-логин, снимки, конструкторы запросов) и интеграцию WhatsApp Web (клиент, хранилище, модели, идентификаторы, обработка ошибок). Изменение полностью базируется на встроенном коде.
 
 ## Предложенные страницы
 
@@ -113,7 +113,7 @@ QR-логин реализован с использованием TDLib JSON-и
 
 Конструкторы JSON-запросов к TDLib (файл обрезан до 12000 символов; перечисленное ниже покрыто встроенным текстом):
 
-- `set_tdlib_parameters_request` — параметры: `api_id`, `api_hash`, ключ шифрования БД (как base64 от `session_encryption_key`), `device_model: "Hermes Hub"`, `system_version: std::env::consts::OS`, `application_version: CARGO_PKG_VERSION`, `enable_storage_optimizer: true`, `ignore_file_names: false` и другие.
+- `set_tdlib_parameters_request` — параметры: `api_id`, `api_hash`, ключ шифрования БД (как base64 от `session_encryption_key`), `device_model: "Макошь"`, `system_version: std::env::consts::OS`, `application_version: CARGO_PKG_VERSION`, `enable_storage_optimizer: true`, `ignore_file_names: false` и другие.
 - `tdlib_database_directory` — путь из запроса или `docker/data/telegram/{account_id}`.
 - `check_database_encryption_key_request` — проверка ключа шифрования.
 - Запросы чатов: `tdlib_load_chats_request`, `tdlib_get_chats_request`, `tdlib_get_chat_request`, `tdlib_get_basic_group_request`, `tdlib_get_basic_group_full_info_request`, `tdlib_get_chat_folder_request`, `tdlib_get_chat_history_request`.
@@ -201,7 +201,7 @@ QR-логин реализован с использованием TDLib JSON-и
 | `backend/src/integrations/telegram/tdjson/qr_login_support/qr.rs` | `render_qr_svg` (размеры 240×240, ошибка `TelegramError::QrGeneration`). |
 | `backend/src/integrations/telegram/tdjson/qr_login_support/responses.rs` | Фабрики ответов: `qr_waiting_response`, `qr_preparing_response`, `password_waiting_response`, `ready_response` — их статусы, интервалы опроса, поля. |
 | `backend/src/integrations/telegram/tdjson/qr_login_support/types.rs` | `PendingQrLoginMap`, `QrLoginWorkerCompletion`, `TelegramQrLoginSession`, `TelegramQrLoginCommand`, `DrainedQrLoginCommand`, `TelegramQrLoginIdentity` — поля и назначение. |
-| `backend/src/integrations/telegram/tdjson/requests.rs` (truncated) | Конструкторы запросов: `set_tdlib_parameters_request` (параметры, `device_model: "Hermes Hub"`), `tdlib_database_directory`, `check_database_encryption_key_request`, запросы чатов, отправки/редактирования/удаления сообщений, реакции, закрепление, ответы, forward (сигнатура). |
+| `backend/src/integrations/telegram/tdjson/requests.rs` (truncated) | Конструкторы запросов: `set_tdlib_parameters_request` (параметры, `device_model: "Макошь"`), `tdlib_database_directory`, `check_database_encryption_key_request`, запросы чатов, отправки/редактирования/удаления сообщений, реакции, закрепление, ответы, forward (сигнатура). |
 | `backend/src/integrations/telegram/tdjson/snapshots.rs` | Перечень и поля всех snapshot-структур (`TelegramTdlibTopicSnapshot`, `ChatSnapshot`, `ChatFolderSnapshot`, `ChatMemberSnapshot`, `MessageSnapshot`, `MessageDeleteSnapshot`, `MessageInteractionInfoSnapshot`, `MessageContentSnapshot`, `MessageEditedSnapshot`, `MessagePinnedSnapshot`, `FileSnapshot`). |
 | `backend/src/integrations/telegram/tdjson/tests.rs` | Тестовые модули (`environment`, `parsing_snapshots`, `qr_login_flows`, `request_builders`), вспомогательная функция `test_qr_login_response`. |
 | `backend/src/integrations/whatsapp/client.rs` | Публичный интерфейс клиента: реэкспорт модулей и типов. |

@@ -2,7 +2,7 @@ use axum::Json;
 use axum::extract::{Path, Query, State};
 use axum::http::StatusCode;
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 
 use crate::ai::core::agents::{AiAgentListResponse, v3_agents};
@@ -18,7 +18,7 @@ use crate::app::api_support::{review_lists::*, stores::ai_runtime::*};
 use crate::app::error::types::ApiError;
 use crate::app::state::AppState;
 use crate::application::ai_signal_dispatch::dispatch_ai_runtime_signal;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 pub(crate) async fn get_ai_status(
     State(state): State<AppState>,
 ) -> Result<Json<AiStatusResponse>, ApiError> {
@@ -105,7 +105,7 @@ pub(crate) async fn post_ai_answer(
     Json(request): Json<AiAnswerRequest>,
 ) -> Result<(StatusCode, Json<AiHubRequestAcceptedResponse>), ApiError> {
     ensure_ai_requests_allowed(&state).await?;
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let accepted = accepted_ai_request(
         "answer",
         &request.command_id,
@@ -151,7 +151,7 @@ pub(crate) async fn post_ai_task_candidates_refresh(
     Json(request): Json<AiTaskCandidateRefreshRequest>,
 ) -> Result<(StatusCode, Json<AiHubRequestAcceptedResponse>), ApiError> {
     ensure_ai_requests_allowed(&state).await?;
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let accepted = accepted_ai_request(
         "task-refresh",
         &request.command_id,
@@ -163,7 +163,7 @@ pub(crate) async fn post_ai_task_candidates_refresh(
         AiHubEventInput {
             event_type: "ai.hub.requested",
             actor_id: &actor_id,
-            agent_id: "HERMES",
+            agent_id: "MAKOSH",
             query: &request.query,
             details: json!({
                 "route_slot": "extraction",
@@ -198,7 +198,7 @@ pub(crate) async fn post_ai_meeting_prep(
     Json(request): Json<AiMeetingPrepRequest>,
 ) -> Result<(StatusCode, Json<AiHubRequestAcceptedResponse>), ApiError> {
     ensure_ai_requests_allowed(&state).await?;
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let accepted = accepted_ai_request(
         "meeting-prep",
         &request.command_id,
@@ -403,7 +403,7 @@ async fn process_task_candidate_request(
                 &accepted,
                 InitializationFailureInput {
                     actor_id: &actor_id,
-                    agent_id: "HERMES",
+                    agent_id: "MAKOSH",
                     query: &request.query,
                     route_slot: "extraction",
                     causation_id: request.causation_id.as_deref(),
@@ -427,7 +427,7 @@ async fn process_task_candidate_request(
                 AiHubEventInput {
                     event_type: "ai.hub.completed",
                     actor_id: &actor_id,
-                    agent_id: "HERMES",
+                    agent_id: "MAKOSH",
                     query: &request.query,
                     details: json!({
                         "route_slot": "extraction",
@@ -449,7 +449,7 @@ async fn process_task_candidate_request(
                 AiHubEventInput {
                     event_type: "ai.hub.failed",
                     actor_id: &actor_id,
-                    agent_id: "HERMES",
+                    agent_id: "MAKOSH",
                     query: &request.query,
                     details: json!({
                         "route_slot": "extraction",

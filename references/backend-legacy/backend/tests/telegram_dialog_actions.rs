@@ -5,9 +5,9 @@ use serde_json::json;
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::platform::storage::database::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_ok, delete_request_with_token, get_request_with_token, json_body,
     json_post_request_with_actor, unique_suffix,
@@ -26,7 +26,7 @@ async fn telegram_restore_and_reaction_actions_record_durable_command_rows() {
     let chat_id = format!("lifecycle-chat-{suffix}");
     let provider_message_id = format!("lifecycle-message-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )

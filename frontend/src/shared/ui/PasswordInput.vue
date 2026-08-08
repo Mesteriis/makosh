@@ -26,7 +26,7 @@ const emit = defineEmits<{
 }>()
 
 const visible = ref(false)
-const classes = computed(() => ['hermes-native-control', props.class])
+const classes = computed(() => ['makosh-native-control', props.class])
 const inputType = computed(() => visible.value ? 'text' : 'password')
 const toggleLabel = computed(() => visible.value ? props.hideLabel : props.showLabel)
 const toggleIcon = computed(() => visible.value ? 'tabler:eye-off' : 'tabler:eye')
@@ -38,7 +38,7 @@ function handleInput(event: Event): void {
 </script>
 
 <template>
-	<div class="hermes-affix-control hermes-affix-control--trailing">
+	<div class="makosh-affix-control makosh-affix-control--trailing">
 		<input
 			:aria-label="ariaLabel"
 			:class="classes"
@@ -50,9 +50,9 @@ function handleInput(event: Event): void {
 			:value="modelValue"
 			@input="handleInput"
 		/>
-		<span class="hermes-affix-control__trailing">
+		<span class="makosh-affix-control__trailing">
 			<button
-				class="hermes-password-toggle"
+				class="makosh-password-toggle"
 				type="button"
 				:aria-label="toggleLabel"
 				:disabled="disabled || readonly"

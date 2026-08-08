@@ -21,10 +21,10 @@ export CARGO_INCREMENTAL="${CARGO_INCREMENTAL:-0}"
 cd "${REPO_ROOT}"
 
 cargo llvm-cov clean --workspace
-cargo run --manifest-path crates/test-session/Cargo.toml --bin hermes-test-session -- \
+cargo run --manifest-path crates/test-session/Cargo.toml --bin makosh-test-session -- \
 	cargo llvm-cov nextest \
 		--manifest-path backend/Cargo.toml \
 		--profile "${PROFILE}" \
 		--show-progress "${NEXTEST_SHOW_PROGRESS}" \
-		--test-threads "${HERMES_NEXTEST_JOBS:-4}" \
+		--test-threads "${MAKOSH_NEXTEST_JOBS:-4}" \
 		"$@"

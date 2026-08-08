@@ -210,7 +210,7 @@ const VAULT_POLICY_KEYS = [
   'forbiddenOwnerDependencies',
 ];
 
-const VAULT_PLATFORM_KEY_ADAPTER_PACKAGES = ['hermes-vault-key-provider-file'];
+const VAULT_PLATFORM_KEY_ADAPTER_PACKAGES = ['makosh-vault-key-provider-file'];
 
 const VAULT_UNLOCK_MODES = [
   'file_adapter_auto',
@@ -327,9 +327,9 @@ const STORAGE_POLICY_KEYS = [
 ];
 
 const STORAGE_FIXED_SCHEMAS = [
-  'hermes_data',
-  'hermes_platform',
-  'hermes_extensions',
+  'makosh_data',
+  'makosh_platform',
+  'makosh_extensions',
 ];
 
 const STORAGE_DIRECT_CONNECTION_AUDIENCES = [
@@ -368,8 +368,8 @@ const STORAGE_REVOCATION_SEQUENCE = [
 ];
 
 const STORAGE_SHARED_TECHNICAL_FUNCTIONS = [
-  'hermes_platform.events_append_outbox_v1',
-  'hermes_platform.events_accept_inbox_v1',
+  'makosh_platform.events_append_outbox_v1',
+  'makosh_platform.events_accept_inbox_v1',
 ];
 
 const STORAGE_CLIENT_DEPENDENCIES = [
@@ -390,8 +390,8 @@ const STORAGE_POSTGRES_CLIENT_DEPENDENCIES = [
 ];
 
 const STORAGE_SQLITE_PACKAGES = [
-  'hermes-kernel-control-store-sqlite',
-  'hermes-vault-store-sqlcipher',
+  'makosh-kernel-control-store-sqlite',
+  'makosh-vault-store-sqlcipher',
 ];
 
 const STORAGE_FORBIDDEN_PROTOCOL_DEPENDENCIES = [
@@ -608,7 +608,7 @@ export function validatePolicy(policy) {
 
   const runtimeProtocol = policy?.runtimeProtocol;
   if (!hasExactKeys(runtimeProtocol, RUNTIME_PROTOCOL_POLICY_KEYS)
-    || runtimeProtocol?.protocolPackage !== 'hermes-runtime-protocol'
+    || runtimeProtocol?.protocolPackage !== 'makosh-runtime-protocol'
     || runtimeProtocol?.role !== 'platform'
     || runtimeProtocol?.owner !== 'runtime_protocol'
     || !list(policy?.owners?.platform).includes(runtimeProtocol?.owner)
@@ -646,7 +646,7 @@ export function validatePolicy(policy) {
     || settings?.registryOwner !== 'kernel'
     || settings?.registryOwner !== policy?.owners?.core
     || settings?.registryComponent !== 'settings_registry'
-    || settings?.schemaProtocolPackage !== 'hermes-runtime-protocol'
+    || settings?.schemaProtocolPackage !== 'makosh-runtime-protocol'
     || settings?.schemaProtocolPackage !== runtimeProtocol?.protocolPackage
     || settings?.schemaSerialization !== 'protobuf_binary'
     || settings?.sourceOfTruth !== 'kernel_control_store'
@@ -688,11 +688,11 @@ export function validatePolicy(policy) {
     || vault?.role !== 'platform'
     || vault?.owner !== 'vault'
     || !list(policy?.owners?.platform).includes(vault?.owner)
-    || vault?.protocolPackage !== 'hermes-vault-protocol'
-    || vault?.managedClientPackage !== 'hermes-managed-vault-client'
-    || vault?.keyProviderPackage !== 'hermes-vault-key-provider'
-    || vault?.runtimePackage !== 'hermes-vault-runtime'
-    || vault?.storePackage !== 'hermes-vault-store-sqlcipher'
+    || vault?.protocolPackage !== 'makosh-vault-protocol'
+    || vault?.managedClientPackage !== 'makosh-managed-vault-client'
+    || vault?.keyProviderPackage !== 'makosh-vault-key-provider'
+    || vault?.runtimePackage !== 'makosh-vault-runtime'
+    || vault?.storePackage !== 'makosh-vault-store-sqlcipher'
     || !isExactOrderedStringList(
       vault?.platformKeyAdapterPackages,
       VAULT_PLATFORM_KEY_ADAPTER_PACKAGES,
@@ -743,7 +743,7 @@ export function validatePolicy(policy) {
 
   const events = policy?.events;
   if (!hasExactKeys(events, EVENT_POLICY_KEYS)
-    || events?.protocolPackage !== 'hermes-events-protocol'
+    || events?.protocolPackage !== 'makosh-events-protocol'
     || events?.role !== 'platform'
     || events?.owner !== 'events'
     || events?.surface !== 'contract'
@@ -849,17 +849,17 @@ export function validatePolicy(policy) {
   if (!hasExactKeys(storage, STORAGE_POLICY_KEYS)
     || storage?.role !== 'platform'
     || storage?.owner !== 'storage'
-    || storage?.protocolPackage !== 'hermes-storage-protocol'
-    || storage?.controlPackage !== 'hermes-storage-control'
-    || storage?.vaultPackage !== 'hermes-storage-vault'
+    || storage?.protocolPackage !== 'makosh-storage-protocol'
+    || storage?.controlPackage !== 'makosh-storage-control'
+    || storage?.vaultPackage !== 'makosh-storage-vault'
     || !isExactOrderedStringList(
       storage?.sharedVaultRouteConsumers,
-      ['hermes-scheduler-runtime'],
+      ['makosh-scheduler-runtime'],
     )
-    || storage?.runtimePackage !== 'hermes-storage-runtime'
-    || storage?.postgresPackage !== 'hermes-storage-postgres'
-    || storage?.pgbouncerPackage !== 'hermes-storage-pgbouncer'
-    || storage?.migrationsPackage !== 'hermes-storage-migrations'
+    || storage?.runtimePackage !== 'makosh-storage-runtime'
+    || storage?.postgresPackage !== 'makosh-storage-postgres'
+    || storage?.pgbouncerPackage !== 'makosh-storage-pgbouncer'
+    || storage?.migrationsPackage !== 'makosh-storage-migrations'
     || storage?.runtimeComponent !== 'storage_control'
     || storage?.managementMode !== 'bundled_managed_only'
     || storage?.protocolSerialization !== 'protobuf_binary'
@@ -910,10 +910,10 @@ export function validatePolicy(policy) {
     || !isExactOrderedStringList(
       storage?.testSupportPostgresClientAllowlist,
       [
-        'hermes-communication-delayed-delivery-testkit:dev:sqlx',
-        'hermes-events-jetstream-testkit:dev:sqlx',
-        'hermes-kernel-recovery-testkit:dev:sqlx',
-        'hermes-scheduler-testkit:dev:sqlx',
+        'makosh-communication-delayed-delivery-testkit:dev:sqlx',
+        'makosh-events-jetstream-testkit:dev:sqlx',
+        'makosh-kernel-recovery-testkit:dev:sqlx',
+        'makosh-scheduler-testkit:dev:sqlx',
       ],
     )
     || !isExactOrderedStringList(storage?.sqliteClientDependencies, ['rusqlite'])

@@ -1,12 +1,12 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::Utc;
-use hermes_hub_backend::application::organization_persona_links::OrganizationPersonaLinkApplicationService;
-use hermes_hub_backend::application::relationship_graph::RelationshipGraphCoordinator;
-use hermes_hub_backend::domains::organizations::api::OrganizationStore;
-use hermes_hub_backend::domains::personas::api::store::PersonaProjectionStore;
-use hermes_hub_backend::domains::relationships::{
+use makosh_hub_backend::application::organization_persona_links::OrganizationPersonaLinkApplicationService;
+use makosh_hub_backend::application::relationship_graph::RelationshipGraphCoordinator;
+use makosh_hub_backend::domains::organizations::api::OrganizationStore;
+use makosh_hub_backend::domains::personas::api::store::PersonaProjectionStore;
+use makosh_hub_backend::domains::relationships::{
     errors::RelationshipStoreError,
     models::{
         NewRelationship, NewRelationshipEvidence, RelationshipEntityKind,
@@ -14,10 +14,10 @@ use hermes_hub_backend::domains::relationships::{
     },
     store::RelationshipStore,
 };
-use hermes_hub_backend::platform::graph::{GraphNodeKind, node_id};
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_hub_backend::platform::graph::{GraphNodeKind, node_id};
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 use serde_json::{Value, json};
 use sqlx::Row;
 use sqlx::postgres::PgPool;
@@ -54,7 +54,7 @@ async fn relationship_store_upserts_persona_relationship_with_evidence_against_p
         RelationshipEvidenceSourceKind::Communication,
         evidence_source_id.clone(),
     )
-    .excerpt("We agreed to collaborate on the Hermes relationship model.")
+    .excerpt("We agreed to collaborate on the Макошь relationship model.")
     .metadata(json!({"channel": "email", "revision": 1}));
     let second_evidence = NewRelationshipEvidence::new(
         RelationshipEvidenceSourceKind::Communication,
@@ -643,7 +643,7 @@ async fn relationship_store_materializes_support_link_for_observation_evidence_a
                 Utc::now(),
                 json!({
                     "subject": format!("Relationship support {suffix}"),
-                    "body": "These two people collaborate closely on Hermes."
+                    "body": "These two people collaborate closely on Макошь."
                 }),
                 format!("manual://relationship-support/{suffix}"),
             )
@@ -665,7 +665,7 @@ async fn relationship_store_materializes_support_link_for_observation_evidence_a
             ),
             &[
                 NewRelationshipEvidence::observation(observation.observation_id.clone())
-                    .excerpt("These two people collaborate closely on Hermes."),
+                    .excerpt("These two people collaborate closely on Макошь."),
             ],
         )
         .await
@@ -742,7 +742,7 @@ async fn live_organization_person_relationship_context(
 
 fn disconnected_relationship_store() -> RelationshipStore {
     let pool = sqlx::postgres::PgPoolOptions::new()
-        .connect_lazy("postgres://hermes:unused@127.0.0.1:1/hermes_hub")
+        .connect_lazy("postgres://makosh:unused@127.0.0.1:1/makosh_hub")
         .expect("create lazy test pool");
     RelationshipStore::new(pool)
 }

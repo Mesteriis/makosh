@@ -14,10 +14,10 @@ pub(super) fn ai_control_center_store(state: &AppState) -> Result<AiControlCente
 
 pub(super) fn request_actor_id(headers: &HeaderMap) -> String {
     headers
-        .get("x-hermes-actor-id")
+        .get("x-makosh-actor-id")
         .and_then(|value| value.to_str().ok())
         .map(str::trim)
         .filter(|value| !value.is_empty())
-        .unwrap_or("hermes-frontend")
+        .unwrap_or("makosh-frontend")
         .to_owned()
 }

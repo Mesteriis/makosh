@@ -4,7 +4,7 @@ use std::os::unix::fs::PermissionsExt;
 use std::sync::Arc;
 use std::sync::atomic::AtomicBool;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     GetVaultRuntimeStatusRequestV1, ManagedVaultRuntimeControlRequestV1,
     ManagedVaultRuntimeControlResponseV1, VaultRuntimeStateV1,
     managed_vault_runtime_control_request_v1::Operation,
@@ -17,7 +17,7 @@ use super::common::*;
 #[test]
 #[ignore = "builds and launches the real Vault runtime binary"]
 fn managed_vault_binary_serves_status_over_the_inherited_kernel_channel() {
-    let root = unique_target_root("hermes-managed-vault-binary");
+    let root = unique_target_root("makosh-managed-vault-binary");
     let data_dir = private_directory(root.join("vault"));
     initialize_vault_binary(&data_dir);
     let descriptor = descriptor();
@@ -94,10 +94,10 @@ fn stage_binary(root: &std::path::Path) -> staged_native_artifact::StagedNativeA
 }
 
 fn runtime_binary() -> std::path::PathBuf {
-    std::env::var_os("HERMES_VAULT_RUNTIME_BIN")
+    std::env::var_os("MAKOSH_VAULT_RUNTIME_BIN")
         .map(std::path::PathBuf::from)
         .filter(|path| path.is_file())
-        .expect("HERMES_VAULT_RUNTIME_BIN must name a regular Vault binary")
+        .expect("MAKOSH_VAULT_RUNTIME_BIN must name a regular Vault binary")
 }
 
 fn descriptor() -> ModuleDescriptorV1 {

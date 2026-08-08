@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communication_delivery_intent_ingress_cleanup (
+CREATE TABLE makosh_data.communication_delivery_intent_ingress_cleanup (
   logical_owner_id TEXT NOT NULL CHECK (
     char_length(logical_owner_id) BETWEEN 1 AND 128
   ),
@@ -27,14 +27,14 @@ CREATE TABLE hermes_data.communication_delivery_intent_ingress_cleanup (
   ),
   PRIMARY KEY (logical_owner_id, intent_id),
   FOREIGN KEY (logical_owner_id, intent_id) REFERENCES
-    hermes_data.communication_delivery_intent_ingress_inbox (
+    makosh_data.communication_delivery_intent_ingress_inbox (
       logical_owner_id,
       intent_id
     )
 );
 
 CREATE INDEX communication_delivery_intent_ingress_cleanup_pending_idx
-  ON hermes_data.communication_delivery_intent_ingress_cleanup (
+  ON makosh_data.communication_delivery_intent_ingress_cleanup (
     logical_owner_id,
     next_attempt_at_unix_seconds,
     intent_id

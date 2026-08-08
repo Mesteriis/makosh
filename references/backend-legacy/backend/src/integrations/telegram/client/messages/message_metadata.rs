@@ -592,7 +592,7 @@ mod tests {
             "content": {
                 "@type": "messageVenue",
                 "venue": {
-                    "title": "Cafe Hermes",
+                    "title": "Cafe Макошь",
                     "address": "Local street",
                     "provider": "foursquare",
                     "id": "venue-1",
@@ -632,7 +632,7 @@ mod tests {
         assert_eq!(location[0].1["kind"], json!("location"));
         assert_eq!(location[0].1["latitude"], json!(41.3874));
         assert_eq!(venue[0].1["kind"], json!("venue"));
-        assert_eq!(venue[0].1["title"], json!("Cafe Hermes"));
+        assert_eq!(venue[0].1["title"], json!("Cafe Макошь"));
         assert_eq!(contact[0].0, "telegram_contact_card");
         assert_eq!(contact[0].1["first_name"], json!("Ada"));
         assert_eq!(contact[0].1["phone_number"], json!("+34123456789"));

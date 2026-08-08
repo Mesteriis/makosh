@@ -1,13 +1,13 @@
 //! Route-specific public client port for WhatsApp commands and operation status.
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
-use hermes_whatsapp_api::client_contract::{
+use makosh_whatsapp_api::client_contract::{
     WHATSAPP_CLIENT_CONTRACT_MAJOR, WHATSAPP_CLIENT_CONTRACT_REVISION, WHATSAPP_MODULE_ID,
     WHATSAPP_OWNER_ID, WhatsAppClientContractV1,
 };
-use hermes_whatsapp_api::{
+use makosh_whatsapp_api::{
     WhatsAppPublicClientRequestV1, WhatsAppPublicClientResponseV1, client_wire, operational_wire,
     realtime_wire,
 };
@@ -254,8 +254,8 @@ pub fn decode_module_response(
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::v1::ModuleClientRequestV1;
-    use hermes_whatsapp_api::{
+    use makosh_runtime_protocol::v1::ModuleClientRequestV1;
+    use makosh_whatsapp_api::{
         WhatsAppProviderCommand, WhatsAppProviderCommandStateV1, WhatsAppProviderCommandStatusV1,
         operational::{
             WhatsAppOperationalQueryResponseV1, WhatsAppOperationalQueryV1,

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import IntegrationAccountSetupCard from '../../../shared/ui/settings/IntegrationAccountSetupCard.vue'
 import { useWhatsAppAccountSetup } from '../setup/useWhatsAppAccountSetup'
 

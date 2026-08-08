@@ -1,12 +1,12 @@
 use chrono::{Duration, Utc};
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 use serde_json::json;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::integrations::telegram::client::commands;
-use hermes_hub_backend::integrations::telegram::client::commands::queries;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::integrations::telegram::client::commands;
+use makosh_hub_backend::integrations::telegram::client::commands::queries;
 
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 
 #[tokio::test]
 async fn telegram_outbox_claims_due_command_and_unlocks_while_awaiting_provider() {
@@ -162,7 +162,7 @@ async fn insert_edit_command(pool: &sqlx::PgPool, account_id: &str, command_id: 
         "available",
         "provider_write",
         "not_required",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({"new_text": "edited text"}),
         json!({"provider_chat_id": "-100telegram-outbox", "provider_message_id": "-100telegram-outbox:42"}),
         json!({"source": "test"}),

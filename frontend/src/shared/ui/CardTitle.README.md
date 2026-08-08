@@ -1,6 +1,6 @@
 # CardTitle
 
-Title primitive for the Hermes `Card` surface.
+Title primitive for the Макошь `Card` surface.
 
 Use for the primary short label that names a card or repeated item.
 

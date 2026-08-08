@@ -1,12 +1,12 @@
 use chrono::{TimeZone, Utc};
-use hermes_backend_testkit::context::TestContext;
-use hermes_events_api::EventEnvelope;
-use hermes_hub_backend::domains::calendar::events::event_store::CalendarEventStore;
-use hermes_hub_backend::domains::calendar::events::models::NewCalendarEvent;
-use hermes_hub_backend::domains::calendar::ports::EventParticipantPort;
-use hermes_hub_backend::platform::events::bus::yandex_telemost_event_types;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::workflows::yandex_telemost_calendar_matching::project_yandex_telemost_calendar_matching;
+use makosh_backend_testkit::context::TestContext;
+use makosh_events_api::EventEnvelope;
+use makosh_hub_backend::domains::calendar::events::event_store::CalendarEventStore;
+use makosh_hub_backend::domains::calendar::events::models::NewCalendarEvent;
+use makosh_hub_backend::domains::calendar::ports::EventParticipantPort;
+use makosh_hub_backend::platform::events::bus::yandex_telemost_event_types;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::workflows::yandex_telemost_calendar_matching::project_yandex_telemost_calendar_matching;
 use serde_json::json;
 
 const TELEMOST_PARTICIPANT_SOURCE: &str = "yandex_telemost_cohost_observed";

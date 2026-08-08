@@ -7,7 +7,7 @@ mod observations;
 mod runs;
 mod schema;
 
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool,
     postgres::{PgConnectOptions, PgPoolOptions},
@@ -30,7 +30,7 @@ pub use schema::{
     attachment_archive_inspection_storage_bundle_v1,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-archive-inspection-persistence";
+pub const PACKAGE: &str = "makosh-attachment-archive-inspection-persistence";
 
 pub struct AttachmentArchiveInspectionPersistenceV1 {
     pub(crate) pool: PgPool,
@@ -81,7 +81,7 @@ impl AttachmentArchiveInspectionPersistenceV1 {
 
     pub async fn verify_storage_ready(&self) -> Result<(), ArchiveInspectionPersistenceErrorV1> {
         sqlx::query(
-            "SELECT 1 FROM hermes_data.attachment_archive_inspection_runs, hermes_data.attachment_archive_inspection_event_inbox, hermes_data.attachment_archive_inspection_scan_candidates, hermes_data.attachment_archive_inspection_safety_facts, hermes_data.attachment_archive_inspection_custody_delegation_requests, hermes_data.attachment_archive_inspection_custody_result_inbox, hermes_data.attachment_archive_inspection_jobs, hermes_data.attachment_archive_inspection_reports, hermes_data.attachment_archive_inspection_report_entries, hermes_data.attachment_archive_inspection_realtime LIMIT 0",
+            "SELECT 1 FROM makosh_data.attachment_archive_inspection_runs, makosh_data.attachment_archive_inspection_event_inbox, makosh_data.attachment_archive_inspection_scan_candidates, makosh_data.attachment_archive_inspection_safety_facts, makosh_data.attachment_archive_inspection_custody_delegation_requests, makosh_data.attachment_archive_inspection_custody_result_inbox, makosh_data.attachment_archive_inspection_jobs, makosh_data.attachment_archive_inspection_reports, makosh_data.attachment_archive_inspection_report_entries, makosh_data.attachment_archive_inspection_realtime LIMIT 0",
         )
         .execute(&self.pool)
         .await

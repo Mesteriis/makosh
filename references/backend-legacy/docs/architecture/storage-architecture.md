@@ -14,7 +14,7 @@
 | Component | Role |
 | --- | --- |
 | PostgreSQL | canonical relational data, event tables, graph tables, metadata |
-| Host vault | secrets-only encrypted payload storage under `~/.hermes/vault` |
+| Host vault | secrets-only encrypted payload storage under `~/.makosh/vault` |
 | Object storage | documents, attachments, OCR artifacts, extracted text |
 | Tantivy | full text search indexes |
 | Vector index | semantic retrieval indexes |
@@ -44,7 +44,7 @@ PostgreSQL must not receive new provider credential ciphertext payloads. `encryp
 - recovery export material
 - minimal non-secret manifest data needed to reconcile account secret bindings after PostgreSQL recreation
 
-The host vault uses a dedicated SQLite `vault.db` under `~/.hermes/vault`. Release runtime stores the master key in macOS Keychain. Docker development mounts the host vault into the container and uses debug-only dev key storage.
+The host vault uses a dedicated SQLite `vault.db` under `~/.makosh/vault`. Release runtime stores the master key in macOS Keychain. Docker development mounts the host vault into the container and uses debug-only dev key storage.
 
 ## Object Storage Responsibilities
 

@@ -1,4 +1,4 @@
-name: hermes-owner-delivery-conformance
+name: makosh-owner-delivery-conformance
 
 services:
   nats:

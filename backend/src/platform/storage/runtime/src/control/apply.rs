@@ -4,7 +4,7 @@ use std::os::unix::net::UnixStream;
 
 use sha2::Digest;
 
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     v1::{StorageBindingV1, StorageBundleV1, StorageRuntimeConfigurationV1},
     validation::{storage_binding_from_message, validate_storage_runtime_configuration},
 };
@@ -191,7 +191,7 @@ fn provision(
 #[cfg(test)]
 mod tests {
     use super::retain_applied_configuration;
-    use hermes_storage_protocol::v1::{
+    use makosh_storage_protocol::v1::{
         StorageBindingV1, StorageBundleV1, StorageRuntimeConfigurationV1,
     };
 

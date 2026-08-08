@@ -21,12 +21,12 @@ import { eventsProtocol, metadata } from './support.mjs';
 test('allows a phase-specific subset of constitutional Kernel components', () => {
   const packages = [
     kernel([
-      dependency('hermes-events-protocol'),
-      dependency('hermes-runtime-protocol'),
+      dependency('makosh-events-protocol'),
+      dependency('makosh-runtime-protocol'),
     ], {
       components: ['supervisor', 'core_gateway'],
     }),
-    workspacePackage('hermes-events-protocol', {
+    workspacePackage('makosh-events-protocol', {
       role: 'platform',
       owner: 'events',
       surface: 'contract',
@@ -43,7 +43,7 @@ for (const forbiddenDependency of ['async-nats', 'nats', 'sqlx', 'tokio-postgres
     const packages = [
       kernel(),
       workspacePackage(
-        'hermes-telemetry-collector',
+        'makosh-telemetry-collector',
         {
           role: 'platform',
           owner: 'telemetry',
@@ -64,7 +64,7 @@ test('prevents a telemetry implementation helper from bypassing collector depend
   const packages = [
     kernel(),
     workspacePackage(
-      'hermes-telemetry-exporter',
+      'makosh-telemetry-exporter',
       {
         role: 'platform',
         owner: 'telemetry',
@@ -80,13 +80,13 @@ test('prevents a telemetry implementation helper from bypassing collector depend
 
 
 test('prevents Kernel from linking Telemetry Collector implementation', () => {
-  const collector = workspacePackage('hermes-telemetry-collector', {
+  const collector = workspacePackage('makosh-telemetry-collector', {
     role: 'platform',
     owner: 'telemetry',
     surface: 'runtime',
     components: ['telemetry_collector'],
   });
-  const packages = [kernel([dependency('hermes-telemetry-collector')]), collector];
+  const packages = [kernel([dependency('makosh-telemetry-collector')]), collector];
 
   assert.ok(codes(validateCargoMetadata(canonicalPolicyForTests(), metadata(packages))).has('implementation_dependency'));
 });
@@ -94,7 +94,7 @@ test('prevents Kernel from linking Telemetry Collector implementation', () => {
 
 
 test('allows test support only through a dev dependency', () => {
-  const support = workspacePackage('hermes-test-support', {
+  const support = workspacePackage('makosh-test-support', {
     role: 'test',
     owner: 'test',
     surface: 'test_support',
@@ -104,9 +104,9 @@ test('allows test support only through a dev dependency', () => {
     kernel(),
     support,
     workspacePackage(
-      'hermes-contacts-runtime',
+      'makosh-contacts-runtime',
       { role: 'domain', owner: 'contacts', surface: 'runtime' },
-      [dependency('hermes-test-support', 'dev')],
+      [dependency('makosh-test-support', 'dev')],
     ),
   ];
   assert.deepEqual(validateCargoMetadata(canonicalPolicyForTests(), metadata(allowed)), []);
@@ -115,9 +115,9 @@ test('allows test support only through a dev dependency', () => {
     kernel(),
     support,
     workspacePackage(
-      'hermes-contacts-runtime',
+      'makosh-contacts-runtime',
       { role: 'domain', owner: 'contacts', surface: 'runtime' },
-      [dependency('hermes-test-support')],
+      [dependency('makosh-test-support')],
     ),
   ];
   assert.ok(codes(validateCargoMetadata(canonicalPolicyForTests(), metadata(forbidden))).has('production_test_dependency'));
@@ -126,7 +126,7 @@ test('allows test support only through a dev dependency', () => {
 
 
 test('rejects production use of test support from build dependencies', () => {
-  const support = workspacePackage('hermes-test-support', {
+  const support = workspacePackage('makosh-test-support', {
     role: 'test',
     owner: 'test',
     surface: 'test_support',
@@ -135,9 +135,9 @@ test('rejects production use of test support from build dependencies', () => {
     kernel(),
     support,
     workspacePackage(
-      'hermes-contacts-runtime',
+      'makosh-contacts-runtime',
       { role: 'domain', owner: 'contacts', surface: 'runtime' },
-      [dependency('hermes-test-support', 'build')],
+      [dependency('makosh-test-support', 'build')],
     ),
   ];
 

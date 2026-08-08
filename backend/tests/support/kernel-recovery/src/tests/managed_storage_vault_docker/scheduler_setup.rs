@@ -133,7 +133,7 @@ fn record_scheduler_runtime_fixture(
     grant_epoch: u64,
 ) {
     let canonical_bundle =
-        hermes_scheduler_persistence::scheduler_storage_bundle_v1().encode_to_vec();
+        makosh_scheduler_persistence::scheduler_storage_bundle_v1().encode_to_vec();
     let digest: [u8; 32] = Sha256::digest(&canonical_bundle).into();
     store
         .record_platform_storage_bundle(
@@ -145,7 +145,7 @@ fn record_scheduler_runtime_fixture(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             SCHEDULER_REGISTRATION,
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             "platform.scheduler",
             Sha256::digest(std::fs::read(scheduler_binary()).expect("Scheduler binary bytes"))
                 .into(),
@@ -201,7 +201,7 @@ fn event_route(
     contract_schema_sha256: [u8; 32],
 ) -> ModuleEventRouteRequestV1 {
     ModuleEventRouteRequestV1::new(
-        hermes_kernel_control_store::ModuleEventRouteRequestInputV1 {
+        makosh_kernel_control_store::ModuleEventRouteRequestInputV1 {
             registration_id: SCHEDULER_REGISTRATION.to_owned(),
             capability_id: capability.to_owned(),
             envelope_kind: kind,
@@ -240,7 +240,7 @@ fn event_hub_topology() -> PlatformEventHubTopologyV1 {
     .collect();
     PlatformEventHubTopologyV1::new(
         1,
-        required("HERMES_SCHEDULER_LIVE_NATS_ENDPOINT"),
+        required("MAKOSH_SCHEDULER_LIVE_NATS_ENDPOINT"),
         "scheduler",
         1,
         budgets,
@@ -305,5 +305,5 @@ pub(super) fn scheduler_release_artifact() -> SignedRuntimeArtifact {
 }
 
 pub(super) fn scheduler_binary() -> PathBuf {
-    binary("HERMES_SCHEDULER_RUNTIME_BIN")
+    binary("MAKOSH_SCHEDULER_RUNTIME_BIN")
 }

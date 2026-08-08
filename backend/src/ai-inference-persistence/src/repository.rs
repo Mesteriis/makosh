@@ -1,9 +1,9 @@
-use hermes_ai_contracts::wire::{
+use makosh_ai_contracts::wire::{
     AiContextReceiptV1, AiInferenceReceiptV1, AiPrivateSourceReceiptV1,
     CommunicationReplySuggestionInferenceRequestV1, CommunicationReplySuggestionInferenceResultV1,
 };
-use hermes_ai_inference_core::{AiInferenceRunStateV1, AiInferenceRunV1};
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_ai_inference_core::{AiInferenceRunStateV1, AiInferenceRunV1};
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool, Row,
     postgres::{PgConnectOptions, PgPoolOptions, PgRow},
@@ -80,7 +80,7 @@ impl AiInferencePersistenceV1 {
             .as_ref()
             .ok_or(AiInferencePersistenceErrorV1::InvalidInput)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.ai_inference_runs (
+            "INSERT INTO makosh_data.ai_inference_runs (
                logical_owner_id, run_id, request_digest, context_id,
                source_evidence_id, source_evidence_revision, contract_major,
                contract_revision, contract_schema_sha256, source_reference_id,
@@ -140,7 +140,7 @@ impl AiInferencePersistenceV1 {
                     .as_ref()
                     .ok_or(AiInferencePersistenceErrorV1::InvalidInput)?;
                 let updated = sqlx::query(
-                    "UPDATE hermes_data.ai_inference_runs
+                    "UPDATE makosh_data.ai_inference_runs
                      SET source_custody_proof = $1
                      WHERE logical_owner_id = $2 AND run_id = $3
                        AND request_digest = $4 AND run_state IN (1, 2)",
@@ -231,7 +231,7 @@ impl AiInferencePersistenceV1 {
         let result = transition.next_run.terminal_result.as_ref();
         let receipt = result.and_then(|value| value.inference_receipt.as_ref());
         let updated = sqlx::query(
-            "UPDATE hermes_data.ai_inference_runs SET
+            "UPDATE makosh_data.ai_inference_runs SET
                state_revision = $4,
                run_state = $5,
                selected_provider_settings_revision = $6,
@@ -309,7 +309,7 @@ const SELECT_RUN: &str = "
         result_resolved_tone, result_resolved_language, result_model_revision_sha256,
         result_prompt_policy_sha256, result_provider_policy_revision,
         result_completeness, result_confidence_basis_points, result_terminal_status
- FROM hermes_data.ai_inference_runs
+ FROM makosh_data.ai_inference_runs
  WHERE logical_owner_id = $1 AND run_id = $2";
 
 const SELECT_RUN_FOR_UPDATE: &str = "
@@ -323,7 +323,7 @@ const SELECT_RUN_FOR_UPDATE: &str = "
         result_resolved_tone, result_resolved_language, result_model_revision_sha256,
         result_prompt_policy_sha256, result_provider_policy_revision,
         result_completeness, result_confidence_basis_points, result_terminal_status
- FROM hermes_data.ai_inference_runs
+ FROM makosh_data.ai_inference_runs
  WHERE logical_owner_id = $1 AND run_id = $2
  FOR UPDATE";
 
@@ -338,7 +338,7 @@ const SELECT_RECOVERABLE_RUNS: &str = "
         result_resolved_tone, result_resolved_language, result_model_revision_sha256,
         result_prompt_policy_sha256, result_provider_policy_revision,
         result_completeness, result_confidence_basis_points, result_terminal_status
- FROM hermes_data.ai_inference_runs
+ FROM makosh_data.ai_inference_runs
  WHERE logical_owner_id = $1 AND run_state IN (1, 2)
  ORDER BY state_revision, run_id
  LIMIT $2";
@@ -547,7 +547,7 @@ fn storage_error(error: sqlx::Error) -> AiInferencePersistenceErrorV1 {
 }
 
 fn report_developer_database_error(stage: &str, error: &sqlx::Error) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_none() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_none() {
         return;
     }
     let code = error
@@ -559,7 +559,7 @@ fn report_developer_database_error(stage: &str, error: &sqlx::Error) {
 
 #[cfg(test)]
 mod tests {
-    use hermes_ai_contracts::wire::AiPrivateSourceReceiptV1;
+    use makosh_ai_contracts::wire::AiPrivateSourceReceiptV1;
 
     use super::*;
 

@@ -1,6 +1,6 @@
 //! In-memory lifecycle for one owner runtime's fenced storage binding.
 
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 
 use super::StorageLifecycleErrorV1;
 

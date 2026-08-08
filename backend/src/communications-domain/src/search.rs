@@ -1,6 +1,6 @@
 //! Pure owner-local lifecycle and normalization rules for derived Communications search.
 
-use hermes_communications_api::{
+use makosh_communications_api::{
     CanonicalCommunicationProjectionV1, CanonicalMessageMutationV1,
     CommunicationBodyBlobReferenceV1, CommunicationConversationIdV1, CommunicationMessageIdV1,
     CommunicationObservationIdV1,

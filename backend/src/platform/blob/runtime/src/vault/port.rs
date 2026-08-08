@@ -2,7 +2,7 @@
 
 use std::future::Future;
 
-use hermes_runtime_protocol::v1::{VaultCiphertextResponseV1, VaultCiphertextRouteV1};
+use makosh_runtime_protocol::v1::{VaultCiphertextResponseV1, VaultCiphertextRouteV1};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum BlobVaultRouteFailureV1 {

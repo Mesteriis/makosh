@@ -8,22 +8,22 @@ use std::io::Write;
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 
-use hermes_attachment_preview_persistence::attachment_preview_storage_bundle_v1;
-use hermes_attachment_preview_runtime::{
+use makosh_attachment_preview_persistence::attachment_preview_storage_bundle_v1;
+use makosh_attachment_preview_runtime::{
     admission::attachment_preview_module_descriptor_v1, attachment_preview_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
 pub const ATTACHMENT_PREVIEW_ASSEMBLY_FRAGMENT_VERSION_V1: u32 = 1;
 pub const ATTACHMENT_PREVIEW_ASSEMBLY_OWNER_ID: &str =
-    hermes_attachment_preview_api::ATTACHMENT_PREVIEW_OWNER_V1;
+    makosh_attachment_preview_api::ATTACHMENT_PREVIEW_OWNER_V1;
 pub const ATTACHMENT_PREVIEW_ASSEMBLY_MODULE_ID: &str =
-    hermes_attachment_preview_api::ATTACHMENT_PREVIEW_MODULE_ID_V1;
+    makosh_attachment_preview_api::ATTACHMENT_PREVIEW_MODULE_ID_V1;
 pub const ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT_ID: &str = "attachment_preview.runtime.v1";
 pub const ATTACHMENT_PREVIEW_STORAGE_ARTIFACT_ID: &str = "attachment_preview.storage.v1";
 pub const ATTACHMENT_PREVIEW_DESCRIPTOR_FILE: &str = "attachment-preview.runtime.descriptor.pb";
@@ -32,7 +32,7 @@ pub const ATTACHMENT_PREVIEW_STORAGE_BUNDLE_FILE: &str = "attachment-preview.sto
 pub const ATTACHMENT_PREVIEW_ARTIFACT_FRAGMENT_FILE: &str =
     "attachment-preview.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH: &str = "bin/hermes-attachment-preview-runtime";
+const RUNTIME_RELATIVE_PATH: &str = "bin/makosh-attachment-preview-runtime";
 const DESCRIPTOR_RELATIVE_PATH: &str = "contracts/attachment-preview.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH: &str = "contracts/attachment-preview.runtime.settings.pb";
 const STORAGE_RELATIVE_PATH: &str = "storage/attachment-preview.storage.bundle.pb";
@@ -247,10 +247,10 @@ fn write_new_private_file(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
 mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         decode_descriptor_v1, decode_settings_schema_v1,
     };
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -281,7 +281,7 @@ mod tests {
         assert_eq!(descriptor.module_id, ATTACHMENT_PREVIEW_ASSEMBLY_MODULE_ID);
         assert_eq!(
             descriptor.module_kind,
-            hermes_runtime_protocol::v1::ModuleKindV1::Workflow as i32
+            makosh_runtime_protocol::v1::ModuleKindV1::Workflow as i32
         );
         assert_eq!(settings.major, 1);
         assert_eq!(storage.owner_id, ATTACHMENT_PREVIEW_ASSEMBLY_OWNER_ID);
@@ -310,7 +310,7 @@ mod tests {
     fn temporary_directory() -> PathBuf {
         let id = NEXT_ID.fetch_add(1, Ordering::Relaxed);
         let path = std::env::temp_dir().join(format!(
-            "hermes-attachment-preview-assembly-{}-{id}",
+            "makosh-attachment-preview-assembly-{}-{id}",
             std::process::id()
         ));
         if path.exists() {

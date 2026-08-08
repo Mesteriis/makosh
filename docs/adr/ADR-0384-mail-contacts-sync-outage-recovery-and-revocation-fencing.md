@@ -144,7 +144,7 @@ ensemble доказывает:
 
 ### Автоматически повторять POST после timeout
 
-Idempotency Google People create не доказана Hermes command ID, поэтому такой
+Idempotency Google People create не доказана Макошь command ID, поэтому такой
 retry создаёт duplicate risk.
 
 ### Считать transport failure definite provider rejection

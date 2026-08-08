@@ -1,18 +1,18 @@
 [package]
-name = "hermes-storage-postgres"
+name = "makosh-storage-postgres"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 [lib]
 path = "src/lib.rs"
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "storage"
 surface = "persistence"
 [dependencies]
-hermes-storage-control = { path = "../control" }
-hermes-storage-migrations = { path = "../migrations" }
-hermes-storage-protocol = { path = "../protocol" }
+makosh-storage-control = { path = "../control" }
+makosh-storage-migrations = { path = "../migrations" }
+makosh-storage-protocol = { path = "../protocol" }
 getrandom = { version = "=0.4.3", default-features = false }
 libc = "=0.2.186"
 sha2 = { version = "=0.11.0", default-features = false }

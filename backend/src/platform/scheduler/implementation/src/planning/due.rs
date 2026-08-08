@@ -1,5 +1,5 @@
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_scheduler_protocol::{SchedulePolicyV1, ScheduleTriggerV1};
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_scheduler_protocol::{SchedulePolicyV1, ScheduleTriggerV1};
 
 use super::interval::plan_interval;
 

@@ -1,9 +1,9 @@
 use std::os::unix::fs::PermissionsExt;
 
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_protocol::{SecretClassV1, VaultActionV1, VaultPurposeRequestV1};
-use hermes_vault_store_sqlcipher::{SecretRecordScope, VaultStore};
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_protocol::{SecretClassV1, VaultActionV1, VaultPurposeRequestV1};
+use makosh_vault_store_sqlcipher::{SecretRecordScope, VaultStore};
 use tempfile::TempDir;
 
 #[test]

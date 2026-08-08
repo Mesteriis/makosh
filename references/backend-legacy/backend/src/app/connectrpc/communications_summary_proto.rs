@@ -1,5 +1,5 @@
 use crate::workflows::email_intelligence::models::{EmailKnowledgeCandidate, EmailSummaryContract};
-use hermes_connectrpc_contracts::hermes::communications::v1::{
+use makosh_connectrpc_contracts::makosh::communications::v1::{
     MessageKnowledgeCandidate as ProtoMessageKnowledgeCandidate,
     MessageSummaryContract as ProtoMessageSummaryContract,
 };

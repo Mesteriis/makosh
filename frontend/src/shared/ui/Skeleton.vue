@@ -13,14 +13,14 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-skeleton',
-  { 'hermes-skeleton--rounded': props.rounded },
+  'makosh-skeleton',
+  { 'makosh-skeleton--rounded': props.rounded },
   props.class
 ])
 
 const styles = computed(() => ({
-  '--hermes-skeleton-width': props.width,
-  '--hermes-skeleton-height': props.height
+  '--makosh-skeleton-width': props.width,
+  '--makosh-skeleton-height': props.height
 }))
 </script>
 

@@ -4,10 +4,10 @@ use std::time::Duration;
 
 use async_nats::connection::State;
 use async_nats::jetstream::consumer::{AckPolicy, PullConsumer};
-use hermes_events_protocol::delivery::{
+use makosh_events_protocol::delivery::{
     ExactOutboxPublisherPortV1, OutboxPublishReceiptV1, OutboxRecordV1, OutboxRelayErrorV1,
 };
-use hermes_events_protocol::validation::envelope::{decode_envelope_v1, validate_envelope_v1};
+use makosh_events_protocol::validation::envelope::{decode_envelope_v1, validate_envelope_v1};
 
 use crate::subjects::DurableSubjectV1;
 

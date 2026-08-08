@@ -7,7 +7,7 @@ use sqlx::Row;
 use super::errors::EventStoreError;
 use super::rows::row_to_stored_event;
 use super::store::EventStore;
-use hermes_events_api::{EventEnvelopeError, StoredEventEnvelope};
+use makosh_events_api::{EventEnvelopeError, StoredEventEnvelope};
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct EventTrace {

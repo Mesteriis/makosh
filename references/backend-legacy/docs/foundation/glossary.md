@@ -1,6 +1,6 @@
-# Hermes Glossary
+# Макошь Glossary
 
-This glossary is the canonical vocabulary for active Hermes documentation.
+This glossary is the canonical vocabulary for active Макошь documentation.
 Historical ADR and implementation plans may contain older terms; new documents
 should use the definitions below.
 
@@ -81,13 +81,13 @@ only when there is a commitment or expected duty.
 
 ## Knowledge
 
-Evidence-backed understanding stored by Hermes: facts, relationships,
+Evidence-backed understanding stored by Макошь: facts, relationships,
 decisions, observations and reviewed summaries. Knowledge is not a loose wiki.
 It is built from domain records and provenance.
 
 ## Memory
 
-Durable, source-backed information that Hermes keeps over time. Memory includes
+Durable, source-backed information that Макошь keeps over time. Memory includes
 events, relationships, facts, decisions, obligations, document evidence and
 curated knowledge. Memory is not an LLM weight, cache or unverified summary.
 
@@ -111,11 +111,11 @@ similar collective actor. Organizations are not fields on Personas or Projects.
 ## Owner Persona
 
 The single Persona with `is_self: true`. It represents the owner of the local
-Hermes instance. There is no separate Self domain or User Profile.
+Макошь instance. There is no separate Self domain or User Profile.
 
 ## Persona
 
-A durable digital representation of a subject in Hermes. A Persona is not a
+A durable digital representation of a subject in Макошь. A Persona is not a
 contact, address-book entry or CRM profile. A Persona owns identity,
 relationships and memory anchors; timeline and dossier are derived views built
 from source-backed records and shared engines.

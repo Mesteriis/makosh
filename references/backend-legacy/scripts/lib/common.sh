@@ -97,7 +97,7 @@ ensure_one_of() {
 }
 
 # Frees a dev port held by a stale process from a previous `make dev` session.
-# Only processes that look like Hermes dev tooling are terminated; anything
+# Only processes that look like Макошь dev tooling are terminated; anything
 # else still aborts so we never silently kill an unrelated application.
 reclaim_dev_port() {
 	local port="$1"
@@ -117,12 +117,12 @@ reclaim_dev_port() {
 		command_path="$(ps -p "$pid" -o comm= 2>/dev/null || true)"
 		command_name="$(basename "${command_path:-unknown}")"
 		case "$command_name" in
-			hermes-hub-backend | cargo | bacon | node | vite | esbuild | pnpm)
+			makosh-backend | cargo | bacon | node | vite | esbuild | pnpm)
 				warn "$label port $port is held by stale dev process '$command_name' (pid $pid); stopping it"
 				kill "$pid" 2>/dev/null || true
 				;;
 			*)
-				error "$label port $port is in use by '$command_name' (pid $pid), which does not look like a Hermes dev process. Stop it manually."
+				error "$label port $port is in use by '$command_name' (pid $pid), which does not look like a Макошь dev process. Stop it manually."
 				exit 1
 				;;
 		esac
@@ -275,16 +275,16 @@ verify_directory_integrity_manifest() {
 		return 1
 	fi
 	ensure_regular_file_tree "$source_directory" "Backup source $source_directory" || return 1
-	expected_paths="$(mktemp "${TMPDIR:-/tmp}/hermes-backup-expected.XXXXXX")" || return 1
-	actual_paths="$(mktemp "${TMPDIR:-/tmp}/hermes-backup-actual.XXXXXX")" || {
+	expected_paths="$(mktemp "${TMPDIR:-/tmp}/makosh-backup-expected.XXXXXX")" || return 1
+	actual_paths="$(mktemp "${TMPDIR:-/tmp}/makosh-backup-actual.XXXXXX")" || {
 		rm -f "$expected_paths"
 		return 1
 	}
-	expected_sorted="$(mktemp "${TMPDIR:-/tmp}/hermes-backup-expected-sorted.XXXXXX")" || {
+	expected_sorted="$(mktemp "${TMPDIR:-/tmp}/makosh-backup-expected-sorted.XXXXXX")" || {
 		rm -f "$expected_paths" "$actual_paths"
 		return 1
 	}
-	actual_sorted="$(mktemp "${TMPDIR:-/tmp}/hermes-backup-actual-sorted.XXXXXX")" || {
+	actual_sorted="$(mktemp "${TMPDIR:-/tmp}/makosh-backup-actual-sorted.XXXXXX")" || {
 		rm -f "$expected_paths" "$actual_paths" "$expected_sorted"
 		return 1
 	}

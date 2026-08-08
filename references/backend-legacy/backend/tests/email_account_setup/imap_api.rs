@@ -1,5 +1,5 @@
-use hermes_communications_api::accounts::CommunicationProviderKind;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
 use std::sync::Arc;
 
 use axum::http::StatusCode;
@@ -8,24 +8,24 @@ use sqlx::Row;
 use tempfile::tempdir;
 use tower::ServiceExt;
 
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::calendar::events::account_store::CalendarAccountStore;
-use hermes_hub_backend::integrations::mail::accounts::models::ImapAccountSetupRequest;
-use hermes_hub_backend::integrations::mail::accounts::service::EmailAccountSetupService;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::calendar::events::account_store::CalendarAccountStore;
+use makosh_hub_backend::integrations::mail::accounts::models::ImapAccountSetupRequest;
+use makosh_hub_backend::integrations::mail::accounts::service::EmailAccountSetupService;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::secrets::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::secrets::{
     database_vault::DatabaseEncryptedSecretVault,
     models::{ResolvedSecret, SecretKind, SecretStoreKind},
     resolver::SecretResolver,
     store::SecretReferenceStore,
 };
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::vault::{HostVault, models::HostVaultConfig};
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::vault::{HostVault, models::HostVaultConfig};
 
 use super::support::{
     LOCAL_API_TOKEN, json_body, json_request_with_token_and_actor, live_setup_context,
@@ -125,18 +125,18 @@ async fn icloud_account_setup_api_creates_calendar_account_against_postgres() {
         .await
         .expect("database connection");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
         .with_test_pairs([
-            ("HERMES_DEV_MODE", "true"),
+            ("MAKOSH_DEV_MODE", "true"),
             (
-                "HERMES_VAULT_HOME",
+                "MAKOSH_VAULT_HOME",
                 vault_home.to_str().expect("vault path"),
             ),
             (
-                "HERMES_DEV_KEY_PATH",
+                "MAKOSH_DEV_KEY_PATH",
                 dev_key_path.to_str().expect("dev key path"),
             ),
         ])
@@ -163,7 +163,7 @@ async fn icloud_account_setup_api_creates_calendar_account_against_postgres() {
                 "secret_kind": "app_password"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -411,7 +411,7 @@ async fn icloud_account_setup_api_creates_calendar_account_against_postgres() {
 #[tokio::test]
 async fn imap_account_setup_api_requires_configured_database() {
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
+        makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
         Database::disabled(),
     );
 
@@ -431,7 +431,7 @@ async fn imap_account_setup_api_requires_configured_database() {
                 "password": "secret"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -453,15 +453,15 @@ async fn imap_account_setup_api_requires_initialized_host_vault_against_postgres
         .await
         .expect("database connection");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+        makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_home.to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     dev_key_path.to_str().expect("dev key path"),
                 ),
             ])
@@ -485,7 +485,7 @@ async fn imap_account_setup_api_requires_initialized_host_vault_against_postgres
                 "password": "secret"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");

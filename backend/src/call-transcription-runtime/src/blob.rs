@@ -1,17 +1,17 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobClientError, BlobDataClient, ManagedBlobCustodyReleaseRequestV1,
     ManagedBlobCustodyTargetV1, ManagedBlobCustodyTransferRequestV1, ManagedBlobSessionRequestV1,
     request_managed_blob_custody_release_v2, request_managed_blob_custody_transfer_v2,
     request_managed_blob_session_v2,
 };
-use hermes_call_transcription_api::{MODULE_ID_V1, OWNER_ID_V1};
-use hermes_runtime_protocol::{
+use makosh_call_transcription_api::{MODULE_ID_V1, OWNER_ID_V1};
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{BlobCustodyReleaseReasonV1, BlobDataOperationV1},
 };
-use hermes_speech_to_text_api::{
+use makosh_speech_to_text_api::{
     SPEECH_TO_TEXT_BLOB_CAPABILITY_ID_V1, SPEECH_TO_TEXT_MODULE_ID_V1, SPEECH_TO_TEXT_OWNER_V1,
 };
 use sha2::{Digest, Sha256};
@@ -369,7 +369,7 @@ fn replayable_source_reference_id(
     receipt_sha256: [u8; 32],
 ) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.call-transcription.replayable-stt-source.v1\0");
+    digest.update(b"makosh.call-transcription.replayable-stt-source.v1\0");
     digest.update(accepted_reference_id);
     digest.update(event_id);
     digest.update(envelope_sha256);
@@ -381,7 +381,7 @@ fn replayable_source_reference_id(
 
 fn release_operation_id(run_id: [u8; 16], receipt_sha256: [u8; 32]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.call-transcription.release-recording.v1\0");
+    digest.update(b"makosh.call-transcription.release-recording.v1\0");
     digest.update(run_id);
     digest.update(receipt_sha256);
     digest.finalize()[..16]

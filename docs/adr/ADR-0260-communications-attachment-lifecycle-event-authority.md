@@ -53,7 +53,7 @@ retains its correlation ID; a lifecycle transition does not start a parallel
 durable process.
 
 The exact first-owner package inventory is expanded only by the domain-owned
-`hermes-communications-attachment-contract` extraction; no producer owner or
+`makosh-communications-attachment-contract` extraction; no producer owner or
 producer capability is admitted by that package move. The Communications
 descriptor retains its two consumer capabilities. Adding a producer requires a
 separate admission decision for that integration, workflow or engine, including

@@ -19,12 +19,12 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-message-bubble',
-	`hermes-message-bubble--${props.direction}`,
-	`hermes-message-bubble--${props.tone}`,
+	'makosh-message-bubble',
+	`makosh-message-bubble--${props.direction}`,
+	`makosh-message-bubble--${props.tone}`,
 	{
-		'hermes-message-bubble--selected': props.selected,
-		'hermes-message-bubble--pending': props.pending
+		'makosh-message-bubble--selected': props.selected,
+		'makosh-message-bubble--pending': props.pending
 	},
 	props.class
 ])
@@ -32,17 +32,17 @@ const classes = computed(() => [
 
 <template>
 	<article :class="classes">
-		<header v-if="author || timestamp || meta" class="hermes-message-bubble__header">
-			<strong v-if="author" class="hermes-message-bubble__author">{{ author }}</strong>
-			<span v-if="timestamp" class="hermes-message-bubble__time">{{ timestamp }}</span>
-			<span v-if="meta" class="hermes-message-bubble__meta">{{ meta }}</span>
+		<header v-if="author || timestamp || meta" class="makosh-message-bubble__header">
+			<strong v-if="author" class="makosh-message-bubble__author">{{ author }}</strong>
+			<span v-if="timestamp" class="makosh-message-bubble__time">{{ timestamp }}</span>
+			<span v-if="meta" class="makosh-message-bubble__meta">{{ meta }}</span>
 		</header>
-		<div class="hermes-message-bubble__body">
+		<div class="makosh-message-bubble__body">
 			<slot />
 		</div>
-		<footer v-if="$slots.footer || pending" class="hermes-message-bubble__footer">
+		<footer v-if="$slots.footer || pending" class="makosh-message-bubble__footer">
 			<slot name="footer" />
-			<span v-if="pending" class="hermes-message-bubble__pending">Pending</span>
+			<span v-if="pending" class="makosh-message-bubble__pending">Pending</span>
 		</footer>
 	</article>
 </template>

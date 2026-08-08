@@ -1,11 +1,11 @@
-# Hermes Hub — Persona Intelligence
+# Макошь — Persona Intelligence
 
 Status: documentation package aligned to the current repository structure.
 
-`personas` is the domain that lets Hermes understand people, remember relationships
+`personas` is the domain that lets Макошь understand people, remember relationships
 and build context.
 
-Hermes no longer treats people as legacy address-book rows. A Persona is not an
+Макошь no longer treats people as legacy address-book rows. A Persona is not an
 address-book entry, CRM lead or imported card. A Persona is a durable memory
 anchor for a subject in the local knowledge graph.
 
@@ -17,7 +17,7 @@ Build context.
 
 ## Domain Vision
 
-Hermes is a Personal Memory System. The Personas domain provides the Persona
+Макошь is a Personal Memory System. The Personas domain provides the Persona
 Intelligence layer for that system:
 
 - **Identity**: digital traces that can point to the same subject.
@@ -56,7 +56,7 @@ Persona:
   dossier_read_model:
 ```
 
-`Persona.id` is the logical identity of the subject inside Hermes. Active API
+`Persona.id` is the logical identity of the subject inside Макошь. Active API
 routes and read payloads use `/personas` and Persona-native identifier names.
 Physical storage uses `personas` / `persona_*` tables and Persona-native
 `persona_id` identifier columns. New domain language must use Persona.
@@ -86,7 +86,7 @@ Persona:
   is_self: true
 ```
 
-Hermes does not need a separate `UserProfile` or Self domain. Agents, UI actions,
+Макошь does not need a separate `UserProfile` or Self domain. Agents, UI actions,
 capability checks and generated observations must be attributable to the Owner
 Persona when they act for the system owner.
 

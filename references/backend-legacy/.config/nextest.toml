@@ -12,7 +12,7 @@ success-output = "never"
 
 [profile.default.junit]
 path = "junit.xml"
-report-name = "hermes-backend-default"
+report-name = "makosh-backend-default"
 store-success-output = false
 store-failure-output = true
 
@@ -25,7 +25,7 @@ final-status-level = "flaky"
 
 [profile.ci.junit]
 path = "junit.xml"
-report-name = "hermes-backend-ci"
+report-name = "makosh-backend-ci"
 
 [profile.integration]
 inherits = "default"
@@ -36,4 +36,4 @@ final-status-level = "slow"
 
 [profile.integration.junit]
 path = "junit.xml"
-report-name = "hermes-backend-integration"
+report-name = "makosh-backend-integration"

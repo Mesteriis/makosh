@@ -3,13 +3,13 @@
 use super::*;
 
 use crate::modules::capability::module_request::ModuleRequestRouteHandlerV1;
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_runtime_protocol::v1::{ManagedEngineRuntimeConfigurationV1, SettingsSnapshotV1};
-use hermes_speech_to_text_api::{SPEECH_TO_TEXT_MODULE_ID_V1, SPEECH_TO_TEXT_OWNER_V1};
-use hermes_speech_to_text_persistence::schema::{
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_runtime_protocol::v1::{ManagedEngineRuntimeConfigurationV1, SettingsSnapshotV1};
+use makosh_speech_to_text_api::{SPEECH_TO_TEXT_MODULE_ID_V1, SPEECH_TO_TEXT_OWNER_V1};
+use makosh_speech_to_text_persistence::schema::{
     SPEECH_TO_TEXT_STORAGE_BUNDLE_REVISION_V1, speech_to_text_storage_bundle_v1,
 };
-use hermes_speech_to_text_runtime::{
+use makosh_speech_to_text_runtime::{
     SPEECH_TO_TEXT_STORAGE_CAPABILITY_ID_V1, speech_to_text_module_descriptor_v1,
     speech_to_text_settings_schema_bytes_v1,
 };
@@ -76,7 +76,7 @@ pub(super) fn admit_speech_to_text_runtime_v1(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             SPEECH_TO_TEXT_RELEASE_ARTIFACT_ID_V1,
             Sha256::digest(
                 std::fs::read(speech_to_text_binary()).expect("Speech-to-Text runtime binary"),
@@ -254,7 +254,7 @@ fn start_reserved_speech_to_text_runtime_v1(
 fn speech_to_text_storage_binding_v1(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(registration_id, SPEECH_TO_TEXT_STORAGE_CAPABILITY_ID_V1)
         .expect("read Speech-to-Text Storage binding")
@@ -263,5 +263,5 @@ fn speech_to_text_storage_binding_v1(
 }
 
 fn speech_to_text_binary() -> PathBuf {
-    binary("HERMES_SPEECH_TO_TEXT_RUNTIME_BIN")
+    binary("MAKOSH_SPEECH_TO_TEXT_RUNTIME_BIN")
 }

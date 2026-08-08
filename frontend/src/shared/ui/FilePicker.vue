@@ -17,7 +17,7 @@ const emit = defineEmits<{
 	change: [files: File[]]
 }>()
 
-const classes = computed(() => ['hermes-file-picker', props.class])
+const classes = computed(() => ['makosh-file-picker', props.class])
 
 function handleChange(event: Event): void {
 	const target = event.target as HTMLInputElement

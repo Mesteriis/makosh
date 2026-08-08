@@ -3,8 +3,8 @@
 mod contracts;
 mod entries;
 
-use hermes_kernel_control_store::ModuleRegistryStore;
-use hermes_kernel_control_store_sqlite::StoreError;
+use makosh_kernel_control_store::ModuleRegistryStore;
+use makosh_kernel_control_store_sqlite::StoreError;
 
 pub use contracts::{EventCatalogContractV1, EventCatalogParticipantV1};
 pub use entries::EventCatalogEntryV1;

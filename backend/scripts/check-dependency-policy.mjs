@@ -29,8 +29,8 @@ for (const manifest of manifests) {
     const path = /\bpath\s*=\s*"[^"]+"/.test(spec);
     const workspace = /\bworkspace\s*=\s*true/.test(spec);
     const version = spec.match(/\bversion\s*=\s*"([^"]+)"/);
-    if (path && !name.startsWith("hermes-")) {
-      violations.push(`${location} path dependency must be a Hermes package`);
+    if (path && !name.startsWith("makosh-")) {
+      violations.push(`${location} path dependency must be a Макошь package`);
     }
     if (!path && !workspace && (!version || !version[1].startsWith("="))) {
       violations.push(`${location} registry dependency must use an exact version`);

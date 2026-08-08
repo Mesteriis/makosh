@@ -1,4 +1,4 @@
-use hermes_communication_task_candidate_api::{
+use makosh_communication_task_candidate_api::{
     COMMUNICATION_TASK_CANDIDATE_CONTRACT_MAJOR_V1,
     wire::{
         CommunicationTaskCandidateCompletenessV1 as WireCompleteness,
@@ -11,17 +11,17 @@ use hermes_communication_task_candidate_api::{
         StartCommunicationTaskCandidateResponseV1,
     },
 };
-use hermes_communication_task_candidate_core::{
+use makosh_communication_task_candidate_core::{
     CommunicationTaskCandidateCompletenessV1, CommunicationTaskCandidateDraftV1,
     CommunicationTaskCandidateRejectionCodeV1, CommunicationTaskCandidateStateV1,
     CommunicationTaskCandidateV1, CommunicationTaskSignalKindV1, CommunicationTaskSourceBasisV1,
 };
-use hermes_communication_task_candidate_persistence::{
+use makosh_communication_task_candidate_persistence::{
     CommunicationTaskCandidatePersistenceErrorV1, CommunicationTaskCandidatePersistenceV1,
     CreateCommunicationTaskCandidateOutcomeV1, CreateCommunicationTaskCandidateRunV1,
     PersistedCommunicationTaskCandidateRunV1,
 };
-use hermes_communications_task_source_api::{
+use makosh_communications_task_source_api::{
     CommunicationTaskSourceEnvelopeContextV1,
     build_communication_task_source_prepare_outbox_record_v1,
 };
@@ -169,7 +169,7 @@ fn source_prepare_record(
     runtime: &CommunicationTaskCandidateClientRuntimeContextV1<'_>,
     draft: &CommunicationTaskCandidateDraftV1,
     now_unix_millis: i64,
-) -> Option<hermes_events_protocol::delivery::OutboxRecordV1> {
+) -> Option<makosh_events_protocol::delivery::OutboxRecordV1> {
     if now_unix_millis <= 0
         || runtime.runtime_instance_id.is_empty()
         || runtime.runtime_generation == 0
@@ -187,7 +187,7 @@ fn source_prepare_record(
         deadline,
         &CommunicationTaskSourceEnvelopeContextV1 {
             module_id:
-                hermes_communication_task_candidate_api::COMMUNICATION_TASK_CANDIDATE_MODULE_ID_V1
+                makosh_communication_task_candidate_api::COMMUNICATION_TASK_CANDIDATE_MODULE_ID_V1
                     .to_owned(),
             runtime_instance_id: runtime.runtime_instance_id.to_owned(),
             runtime_generation: runtime.runtime_generation,
@@ -221,7 +221,7 @@ fn get_response(run: PersistedCommunicationTaskCandidateRunV1) -> Vec<u8> {
 
 fn run_id(logical_owner_id: &str, operation_id: &[u8; 16]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communication_task_candidate.run.v1\0");
+    digest.update(b"makosh.communication_task_candidate.run.v1\0");
     digest.update(logical_owner_id.as_bytes());
     digest.update([0]);
     digest.update(operation_id);

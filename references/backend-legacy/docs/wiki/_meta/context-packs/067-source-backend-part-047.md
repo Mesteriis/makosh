@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/integrations/whatsapp/client/store/queries.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/whatsapp/client/store/queries.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/whatsapp/client/store/queries.rs`
 - Size bytes / Размер в байтах: `1292`
 - Included characters / Включено символов: `1292`
 - Truncated / Обрезано: `no`
@@ -99,7 +99,7 @@ impl WhatsappWebStore {
 
 ### `backend/src/integrations/whatsapp/client/store/sessions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/whatsapp/client/store/sessions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/whatsapp/client/store/sessions.rs`
 - Size bytes / Размер в байтах: `7631`
 - Included characters / Включено символов: `7631`
 - Truncated / Обрезано: `no`
@@ -327,7 +327,7 @@ impl WhatsappWebStore {
 
 ### `backend/src/integrations/whatsapp/client/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/whatsapp/client/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/whatsapp/client/validation.rs`
 - Size bytes / Размер в байтах: `1245`
 - Included characters / Включено символов: `1245`
 - Truncated / Обрезано: `no`
@@ -383,7 +383,7 @@ pub(crate) fn validate_string_array(
 
 ### `backend/src/integrations/whatsapp/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/whatsapp/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/whatsapp/mod.rs`
 - Size bytes / Размер в байтах: `33`
 - Included characters / Включено символов: `33`
 - Truncated / Обрезано: `no`
@@ -395,7 +395,7 @@ pub mod runtime;
 
 ### `backend/src/integrations/whatsapp/runtime/business_cloud.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/whatsapp/runtime/business_cloud.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/whatsapp/runtime/business_cloud.rs`
 - Size bytes / Размер в байтах: `38249`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -716,13 +716,13 @@ impl BusinessCloudRuntimeManager {
 
     async fn upload_business_cloud_media(
         &self,
-  
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/integrations/whatsapp/runtime/contracts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/whatsapp/runtime/contracts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/whatsapp/runtime/contracts.rs`
 - Size bytes / Размер в байтах: `34490`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1112,13 +1112,13 @@ pub struct WhatsAppQrLinkSession {
 pub struct WhatsAppPairCodeSession {
     pub account_id: String,
     pub provider_shape: String,
-    
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/integrations/whatsapp/runtime/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/whatsapp/runtime/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/whatsapp/runtime/mod.rs`
 - Size bytes / Размер в байтах: `239589`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1462,7 +1462,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/whatsapp/runtime/native_md.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/whatsapp/runtime/native_md.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/whatsapp/runtime/native_md.rs`
 - Size bytes / Размер в байтах: `205501`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1867,7 +1867,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/whatsapp/runtime/web_companion.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/whatsapp/runtime/web_companion.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/whatsapp/runtime/web_companion.rs`
 - Size bytes / Размер в байтах: `8242`
 - Included characters / Включено символов: `8242`
 - Truncated / Обрезано: `no`
@@ -1945,7 +1945,7 @@ pub(super) fn web_companion_bridge_contract_health_check() -> Value {
                 "window_label_pattern": "whatsapp-companion-*",
                 "caller_window_label_must_match_account": true,
                 "metadata_sanitizer": "secret_and_private_content_key_drop",
-                "backend_auth": "X-Hermes-Secret_from_tauri_process_env_only",
+                "backend_auth": "X-Макошь-Secret_from_tauri_process_env_only",
                 "backend_target": "loopback_http_runtime_bridge_only",
                 "typed_projection": "not_attempted_until_richer_typed_payload",
                 "domain_mutation": "forbidden",
@@ -2061,7 +2061,7 @@ pub(super) fn web_companion_bridge_contract_health_check() -> Value {
 
 ### `backend/src/integrations/yandex_telemost/client/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/yandex_telemost/client/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/yandex_telemost/client/errors.rs`
 - Size bytes / Размер в байтах: `1556`
 - Included characters / Включено символов: `1556`
 - Truncated / Обрезано: `no`
@@ -2127,7 +2127,7 @@ pub enum YandexTelemostError {
 
 ### `backend/src/integrations/yandex_telemost/client/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/yandex_telemost/client/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/yandex_telemost/client/mod.rs`
 - Size bytes / Размер в байтах: `400`
 - Included characters / Включено символов: `400`
 - Truncated / Обрезано: `no`
@@ -2150,7 +2150,7 @@ pub(crate) use validation::{validate_api_base_url, validate_json_object, validat
 
 ### `backend/src/integrations/yandex_telemost/client/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/yandex_telemost/client/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/yandex_telemost/client/models.rs`
 - Size bytes / Размер в байтах: `18470`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2511,7 +2511,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/yandex_telemost/client/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/yandex_telemost/client/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/yandex_telemost/client/store.rs`
 - Size bytes / Размер в байтах: `42019`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2830,13 +2830,13 @@ impl YandexTelemostStore {
             };
             let speaker_txt_removed = if speaker_expired {
                 remove_local_file_if_exists(&candidate.speaker_txt_path)?
-            } 
+            }
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/integrations/yandex_telemost/client/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/yandex_telemost/client/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/yandex_telemost/client/validation.rs`
 - Size bytes / Размер в байтах: `4397`
 - Included characters / Включено символов: `4397`
 - Truncated / Обрезано: `no`
@@ -2992,7 +2992,7 @@ mod tests {
 
 ### `backend/src/integrations/yandex_telemost/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/yandex_telemost/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/yandex_telemost/mod.rs`
 - Size bytes / Размер в байтах: `57`
 - Included characters / Включено символов: `57`
 - Truncated / Обрезано: `no`
@@ -3005,7 +3005,7 @@ pub mod runtime_bridge;
 
 ### `backend/src/integrations/yandex_telemost/runtime.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/yandex_telemost/runtime.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/yandex_telemost/runtime.rs`
 - Size bytes / Размер в байтах: `288`
 - Included characters / Включено символов: `288`
 - Truncated / Обрезано: `no`
@@ -3020,7 +3020,7 @@ pub use super::client::{
 
 ### `backend/src/integrations/yandex_telemost/runtime_bridge.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/yandex_telemost/runtime_bridge.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/yandex_telemost/runtime_bridge.rs`
 - Size bytes / Размер в байтах: `14264`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3349,7 +3349,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/zoom/client.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/zoom/client.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/zoom/client.rs`
 - Size bytes / Размер в байтах: `124`
 - Included characters / Включено символов: `124`
 - Truncated / Обрезано: `no`
@@ -3367,7 +3367,7 @@ pub use store::ZoomStore;
 
 ### `backend/src/integrations/zoom/client/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/zoom/client/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/zoom/client/errors.rs`
 - Size bytes / Размер в байтах: `1531`
 - Included characters / Включено символов: `1531`
 - Truncated / Обрезано: `no`

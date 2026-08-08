@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communication_bulk_action_realtime (
+CREATE TABLE makosh_data.communication_bulk_action_realtime (
   logical_owner_id TEXT NOT NULL CHECK (
     char_length(logical_owner_id) BETWEEN 1 AND 128
   ),
@@ -11,14 +11,14 @@ CREATE TABLE hermes_data.communication_bulk_action_realtime (
   realtime_sequence BIGINT GENERATED ALWAYS AS IDENTITY,
   PRIMARY KEY (logical_owner_id, batch_id, state_revision),
   FOREIGN KEY (logical_owner_id, batch_id) REFERENCES
-    hermes_data.communication_bulk_action_batches (
+    makosh_data.communication_bulk_action_batches (
       logical_owner_id,
       batch_id
     )
 );
 
 CREATE UNIQUE INDEX communication_bulk_action_realtime_sequence_idx
-  ON hermes_data.communication_bulk_action_realtime (
+  ON makosh_data.communication_bulk_action_realtime (
     logical_owner_id,
     realtime_sequence
   );

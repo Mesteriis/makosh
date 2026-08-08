@@ -1,20 +1,20 @@
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::{TimeZone, Utc};
 use serde_json::json;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::domains::communications::import::{
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::domains::communications::import::{
     FixtureEmailImportRequest, import_fixture_email_messages,
     import_fixture_email_messages_with_records,
 };
-use hermes_hub_backend::domains::communications::sources::{
+use makosh_hub_backend::domains::communications::sources::{
     FixtureCommunicationSourceMessage, parse_fixture_email_messages,
 };
 
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::storage::database::Database;
 
 #[test]
 fn fixture_email_source_parses_account_scoped_messages() {

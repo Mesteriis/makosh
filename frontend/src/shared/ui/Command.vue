@@ -87,7 +87,7 @@ function selectItem(item: CommandItem): void {
 }
 
 const contentClasses = computed(() => [
-  'hermes-command-content',
+  'makosh-command-content',
   props.contentClass
 ])
 </script>
@@ -95,43 +95,43 @@ const contentClasses = computed(() => [
 <template>
   <DialogRoot :open="open" @update:open="(val) => emit('update:open', val)">
     <DialogPortal>
-      <DialogOverlay class="hermes-command-overlay" @pointerdown="emit('update:open', false)">
+      <DialogOverlay class="makosh-command-overlay" @pointerdown="emit('update:open', false)">
         <DialogContent :class="contentClasses" @keydown="handleKeyDown" @open-auto-focus="(e: Event) => e.preventDefault()">
-          <DialogTitle class="hermes-sr-only">Command palette</DialogTitle>
-          <DialogDescription class="hermes-sr-only">Search and run Hermes commands.</DialogDescription>
-          <div class="hermes-command-input-wrapper">
-            <Icon icon="tabler:search" size="1.125rem" class="hermes-command-search-icon" />
+          <DialogTitle class="makosh-sr-only">Command palette</DialogTitle>
+          <DialogDescription class="makosh-sr-only">Search and run Макошь commands.</DialogDescription>
+          <div class="makosh-command-input-wrapper">
+            <Icon icon="tabler:search" size="1.125rem" class="makosh-command-search-icon" />
             <input
               ref="inputRef"
               v-model="query"
-              class="hermes-command-input"
+              class="makosh-command-input"
               :placeholder="placeholder"
               @keydown.stop="handleKeyDown"
             />
-            <kbd class="hermes-command-kbd">ESC</kbd>
+            <kbd class="makosh-command-kbd">ESC</kbd>
           </div>
 
-          <div class="hermes-command-list">
+          <div class="makosh-command-list">
             <template v-if="filteredGroups.length > 0">
-              <div v-for="(group, gi) in filteredGroups" :key="gi" class="hermes-command-group">
-                <div class="hermes-command-group-label">{{ group.label }}</div>
+              <div v-for="(group, gi) in filteredGroups" :key="gi" class="makosh-command-group">
+                <div class="makosh-command-group-label">{{ group.label }}</div>
                 <button
                   v-for="(item, ii) in group.items"
                   :key="item.id"
-                  class="hermes-command-item"
-                  :class="{ 'hermes-command-item--selected': filteredFlatItems.indexOf(item) === selectedIndex }"
+                  class="makosh-command-item"
+                  :class="{ 'makosh-command-item--selected': filteredFlatItems.indexOf(item) === selectedIndex }"
                   @click="selectItem(item)"
                   @mouseenter="selectedIndex = filteredFlatItems.indexOf(item)"
                 >
-                  <Icon v-if="item.icon" :icon="item.icon" size="1.125rem" class="hermes-command-item-icon" />
-                  <div class="hermes-command-item-text">
-                    <span class="hermes-command-item-label">{{ item.label }}</span>
-                    <span v-if="item.description" class="hermes-command-item-desc">{{ item.description }}</span>
+                  <Icon v-if="item.icon" :icon="item.icon" size="1.125rem" class="makosh-command-item-icon" />
+                  <div class="makosh-command-item-text">
+                    <span class="makosh-command-item-label">{{ item.label }}</span>
+                    <span v-if="item.description" class="makosh-command-item-desc">{{ item.description }}</span>
                   </div>
                 </button>
               </div>
             </template>
-            <div v-else-if="query" class="hermes-command-empty">
+            <div v-else-if="query" class="makosh-command-empty">
               <Icon icon="tabler:search-off" size="1.5rem" />
               <span>{{ emptyMessage }}</span>
             </div>

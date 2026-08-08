@@ -5,8 +5,8 @@ use std::time::Instant;
 use crate::runtime::lifecycle::control::{
     ManagedRuntimeBlobSessionHandler, ManagedRuntimeExpectation,
 };
-use hermes_blob_client::BlobDataClient;
-use hermes_communications_ai_source_api::{
+use makosh_blob_client::BlobDataClient;
+use makosh_communications_ai_source_api::{
     communication_explanation_source_prepare_contract_reference_v1,
     communication_explanation_source_prepared_contract_reference_v1,
     communication_explanation_source_rejected_contract_reference_v1,
@@ -20,41 +20,41 @@ use hermes_communications_ai_source_api::{
     communication_translation_source_prepared_contract_reference_v1,
     communication_translation_source_rejected_contract_reference_v1,
 };
-use hermes_communications_api::query_wire::{
+use makosh_communications_api::query_wire::{
     CommunicationsQueryRequestV1, CommunicationsQueryResponseV1, GetEvidenceRequestV1,
     GetMessageRequestV1, ListAccountsRequestV1, ListMessageEvidenceRequestV1,
     SearchCommunicationsRequestV1, communications_query_request_v1::Operation,
     communications_query_response_v1::Result as QueryResult,
 };
-use hermes_communications_attachment_contract::admission::{
+use makosh_communications_attachment_contract::admission::{
     communication_attachment_anchor_recorded_contract_reference_v1,
     communication_attachment_blob_admission_observed_contract_reference_v1,
     communication_attachment_safety_state_changed_contract_reference_v1,
     communication_attachment_safety_verdict_observed_contract_reference_v1,
 };
-use hermes_communications_call_evidence_api::{
+use makosh_communications_call_evidence_api::{
     CALL_EVIDENCE_CLIENT_CAPABILITY_ID_V1, CALL_EVIDENCE_CLIENT_CONTRACT_MAJOR_V1,
     CALL_EVIDENCE_CLIENT_CONTRACT_REVISION_V1, CALL_EVIDENCE_CLIENT_SCHEMA_SHA256_V1,
     CALL_EVIDENCE_QUERY_CONNECT_PATH_V1, CALL_EVIDENCE_QUERY_CONTRACT_NAME_V1,
     CALL_EVIDENCE_REALTIME_CONTRACT_NAME_V1,
 };
-use hermes_communications_call_evidence_ingress::call_evidence_observed_contract_reference_v1;
-use hermes_communications_content_api::{
+use makosh_communications_call_evidence_ingress::call_evidence_observed_contract_reference_v1;
+use makosh_communications_content_api::{
     COMMUNICATIONS_CONTENT_READ_SCHEMA_SHA256, COMMUNICATIONS_CONTENT_TICKET_SCHEMA_SHA256,
     CONTENT_CONTRACT_MAJOR_V1, CONTENT_CONTRACT_REVISION_V1, CONTENT_READ_BLOB_PATH_V1,
     CONTENT_READ_CONTRACT_NAME_V1, CONTENT_TICKET_CONNECT_PATH_V1, CONTENT_TICKET_CONTRACT_NAME_V1,
     MAX_MESSAGE_BODY_BYTES_V1,
 };
-use hermes_communications_cross_channel_forward_source_api::{
+use makosh_communications_cross_channel_forward_source_api::{
     cross_channel_forward_source_prepare_contract_reference_v1,
     cross_channel_forward_source_prepared_contract_reference_v1,
     cross_channel_forward_source_rejected_contract_reference_v1,
 };
-use hermes_communications_evidence_export_source_api::{
+use makosh_communications_evidence_export_source_api::{
     evidence_export_prepare_contract_reference_v1, evidence_export_prepared_contract_reference_v1,
     evidence_export_rejected_contract_reference_v1,
 };
-use hermes_communications_export_api::{
+use makosh_communications_export_api::{
     COMMUNICATIONS_EXPORT_CAPABILITY_ID_V1, COMMUNICATIONS_EXPORT_COMMAND_CONNECT_PATH_V1,
     COMMUNICATIONS_EXPORT_COMMAND_CONTRACT_NAME_V1, COMMUNICATIONS_EXPORT_CONTRACT_MAJOR_V1,
     COMMUNICATIONS_EXPORT_CONTRACT_REVISION_V1, COMMUNICATIONS_EXPORT_MAX_ARTIFACT_BYTES_V1,
@@ -64,30 +64,30 @@ use hermes_communications_export_api::{
     COMMUNICATIONS_EXPORT_REALTIME_CONTRACT_NAME_V1, COMMUNICATIONS_EXPORT_SCHEMA_SHA256,
     COMMUNICATIONS_EXPORT_TICKET_CONNECT_PATH_V1, COMMUNICATIONS_EXPORT_TICKET_CONTRACT_NAME_V1,
 };
-use hermes_communications_export_persistence::schema::{
+use makosh_communications_export_persistence::schema::{
     COMMUNICATIONS_EXPORT_STORAGE_BUNDLE_REVISION_V3, communications_export_storage_bundle_v1,
 };
-use hermes_communications_export_runtime::admission::{
+use makosh_communications_export_runtime::admission::{
     COMMUNICATIONS_EXPORT_BLOB_CAPABILITY_ID_V1, COMMUNICATIONS_EXPORT_BLOB_CUSTODY_SCOPE_ID_V1,
     COMMUNICATIONS_EXPORT_BLOB_QUOTA_BYTES_V1, COMMUNICATIONS_EXPORT_EVENTS_CAPABILITY_ID_V1,
     COMMUNICATIONS_EXPORT_STORAGE_CAPABILITY_ID_V1, communications_export_module_descriptor_v1,
     communications_export_settings_schema_bytes_v1,
 };
-use hermes_communications_note_source_api::{
+use makosh_communications_note_source_api::{
     communication_note_source_prepare_contract_reference_v1,
     communication_note_source_prepared_contract_reference_v1,
     communication_note_source_rejected_contract_reference_v1,
 };
-use hermes_communications_recipient_source_api::{
+use makosh_communications_recipient_source_api::{
     communication_recipient_source_prepare_contract_reference_v1,
     communication_recipient_source_prepared_contract_reference_v1,
     communication_recipient_source_rejected_contract_reference_v1,
 };
-use hermes_communications_retained_evidence_replay_contract::{
+use makosh_communications_retained_evidence_replay_contract::{
     communications_replay_command_contract_reference_v1,
     communications_replay_result_contract_reference_v1,
 };
-use hermes_communications_runtime::admission::{
+use makosh_communications_runtime::admission::{
     COMMUNICATIONS_AI_SOURCE_BLOB_CAPABILITY_ID, COMMUNICATIONS_AI_SOURCE_CAPABILITY_ID,
     COMMUNICATIONS_ATTACHMENT_BLOB_ADMISSION_OBSERVE_CAPABILITY_ID,
     COMMUNICATIONS_ATTACHMENT_SAFETY_VERDICT_OBSERVE_CAPABILITY_ID,
@@ -115,31 +115,31 @@ use hermes_communications_runtime::admission::{
     communication_evidence_recorded_contract_reference_v1, communications_module_descriptor_v1,
     communications_query_contract_reference_v1, communications_settings_schema_bytes_v1,
 };
-use hermes_communications_runtime::query_client_port::encode_module_query_request_v1;
-use hermes_communications_runtime::storage_bundle::communications_runtime_storage_bundle_v1;
-use hermes_communications_saved_query_api::{
+use makosh_communications_runtime::query_client_port::encode_module_query_request_v1;
+use makosh_communications_runtime::storage_bundle::communications_runtime_storage_bundle_v1;
+use makosh_communications_saved_query_api::{
     COMMUNICATIONS_SAVED_SEARCH_SCHEMA_SHA256, SAVED_SEARCH_CONNECT_PATH_V1,
     SAVED_SEARCH_CONTRACT_MAJOR_V1, SAVED_SEARCH_CONTRACT_NAME_V1,
     SAVED_SEARCH_CONTRACT_REVISION_V1,
 };
-use hermes_communications_sender_insights_api::{
+use makosh_communications_sender_insights_api::{
     COMMUNICATIONS_SENDER_INSIGHTS_SCHEMA_SHA256, SENDER_INSIGHTS_CONNECT_PATH_V1,
     SENDER_INSIGHTS_CONTRACT_MAJOR_V1, SENDER_INSIGHTS_CONTRACT_NAME_V1,
     SENDER_INSIGHTS_CONTRACT_REVISION_V1,
 };
-use hermes_communications_task_source_api::{
+use makosh_communications_task_source_api::{
     communication_task_source_prepare_contract_reference_v1,
     communication_task_source_prepared_contract_reference_v1,
     communication_task_source_rejected_contract_reference_v1,
 };
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleBlobOperationV1, ModuleBlobQuotaRequestV1, ModuleClientBlobContractVersionV1,
     ModuleClientBlobRouteV1, ModuleClientBlobTransportV1, ModuleClientRealtimeContractVersionV1,
     ModuleClientRealtimeRouteV1, ModuleClientRpcContractVersionV1, ModuleClientRpcRouteV1,
     ModuleDescriptorRegistrationRequestsV1, ModuleRegistrationState, ModuleVaultPurposePolicyV1,
     ModuleVaultPurposeRequestV1, PlatformStorageBindingStateV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobDataOperationV1, ManagedRuntimeBlobSessionRequestV1, ModuleClientResponseV1, VaultActionV1,
     VaultSecretClassV1, VaultTargetScopeV1,
 };
@@ -214,7 +214,7 @@ pub(super) fn issue_initial_communications_export_storage_binding(store: &Sqlite
 
 pub(super) fn communications_export_storage_binding(
     store: &SqliteControlStore,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(
             COMMUNICATIONS_EXPORT_REGISTRATION,
@@ -227,7 +227,7 @@ pub(super) fn communications_export_storage_binding(
 
 pub(super) fn communications_storage_binding(
     store: &SqliteControlStore,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(
             COMMUNICATIONS_REGISTRATION,
@@ -421,7 +421,7 @@ fn start_reserved_communications_export_workflow(
     store: &SqliteControlStore,
     runtime_dir: &Path,
     reservation: managed_launch::ManagedLaunchReservation,
-    binding: hermes_kernel_control_store::PlatformStorageBindingV1,
+    binding: makosh_kernel_control_store::PlatformStorageBindingV1,
 ) -> u64 {
     let runtime_instance_id = reservation.runtime_instance_id().to_owned();
     let runtime_generation = reservation.runtime_generation();
@@ -446,7 +446,7 @@ fn start_reserved_communications_export_workflow(
         supervisor,
         runtime_dir,
         reservation,
-        hermes_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1 {
+        makosh_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1 {
             major: 1,
             logical_owner_id: "owner-1".to_owned(),
             registration_id: COMMUNICATIONS_EXPORT_REGISTRATION.to_owned(),
@@ -496,7 +496,7 @@ fn start_reserved_communications_domain(
     store: &SqliteControlStore,
     runtime_dir: &Path,
     reservation: managed_launch::ManagedLaunchReservation,
-    binding: hermes_kernel_control_store::PlatformStorageBindingV1,
+    binding: makosh_kernel_control_store::PlatformStorageBindingV1,
 ) -> u64 {
     let runtime_instance_id = reservation.runtime_instance_id().to_owned();
     let runtime_generation = reservation.runtime_generation();
@@ -597,10 +597,10 @@ pub(super) fn assert_communications_module_query_delivery(supervisor: &ManagedRu
     let bytes = supervisor
         .relay(
             COMMUNICATIONS_REGISTRATION,
-            hermes_runtime_protocol::v1::ManagedRuntimeControlRequestV1 {
+            makosh_runtime_protocol::v1::ManagedRuntimeControlRequestV1 {
                 operation: Some(
-                    hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::DeliverModuleQuery(
-                        hermes_runtime_protocol::v1::ManagedRuntimeModuleQueryDeliveryV1 {
+                    makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::DeliverModuleQuery(
+                        makosh_runtime_protocol::v1::ManagedRuntimeModuleQueryDeliveryV1 {
                             request_id: request_id.clone(),
                             logical_owner_id: "owner_local".to_owned(),
                             contract: Some(communications_query_contract_reference_v1()),
@@ -613,10 +613,10 @@ pub(super) fn assert_communications_module_query_delivery(supervisor: &ManagedRu
         )
         .expect("deliver live Communications module query");
     let response =
-        hermes_runtime_protocol::v1::ManagedRuntimeControlResponseV1::decode(bytes.as_slice())
+        makosh_runtime_protocol::v1::ManagedRuntimeControlResponseV1::decode(bytes.as_slice())
             .expect("decode module query delivery response");
     let Some(
-        hermes_runtime_protocol::v1::managed_runtime_control_response_v1::Result::ModuleQueryDelivery(
+        makosh_runtime_protocol::v1::managed_runtime_control_response_v1::Result::ModuleQueryDelivery(
             response,
         ),
     ) = response.result
@@ -927,22 +927,22 @@ pub(super) fn assert_communications_ingress_delivery(
     store: &SqliteControlStore,
     supervisor: &ManagedRuntimeSupervisor,
 ) {
-    let draft = hermes_mail_core::draft_ingress_observation_with_sender_subject_body(
+    let draft = makosh_mail_core::draft_ingress_observation_with_sender_subject_body(
         "managed-ingress-observation-1",
-        hermes_communications_ingress::ProviderProvenanceV1::MailImap,
+        makosh_communications_ingress::ProviderProvenanceV1::MailImap,
         "integration-private-account-1",
         "integration-private-record-1",
         Some("Fixture Sender <sender@example.test>".to_owned()),
         Some("Managed ingress subject".to_owned()),
-        hermes_communications_ingress::BodyAvailabilityV1::MetadataOnly,
+        makosh_communications_ingress::BodyAvailabilityV1::MetadataOnly,
     )
     .expect("build typed Mail ingress draft");
-    let record = hermes_communications_ingress::build_observation_outbox_record_v1(
+    let record = makosh_communications_ingress::build_observation_outbox_record_v1(
         &draft,
-        &hermes_communications_ingress::ObservationEnvelopeContextV1 {
+        &makosh_communications_ingress::ObservationEnvelopeContextV1 {
             runtime_instance_id: "mail-test-runtime-1".to_owned(),
             runtime_generation: 1,
-            module_id: "hermes-mail-runtime".to_owned(),
+            module_id: "makosh-mail-runtime".to_owned(),
             recorded_at_unix_seconds: 1_783_024_000,
             recorded_at_nanos: 0,
         },
@@ -963,13 +963,13 @@ pub(super) fn assert_communications_ingress_delivery(
                 .await
                 .expect("connect disposable JetStream");
             let mut canonical_events = client
-                .subscribe("hermes.event.v1.communications.communication_evidence_recorded.v1")
+                .subscribe("makosh.event.v1.communications.communication_evidence_recorded.v1")
                 .await
                 .expect("subscribe to exact canonical event subject");
             let context = async_nats::jetstream::new(client);
             context
                 .publish(
-                    "hermes.observation.v1.communications.communication_observed.v1",
+                    "makosh.observation.v1.communications.communication_observed.v1",
                     record.exact_bytes().to_vec().into(),
                 )
                 .await
@@ -987,11 +987,11 @@ pub(super) fn assert_communications_ingress_delivery(
                         )
                     })
                     .expect("canonical Communications event missing");
-            let envelope = hermes_events_protocol::validation::envelope::decode_envelope_v1(
+            let envelope = makosh_events_protocol::validation::envelope::decode_envelope_v1(
                 canonical.payload.as_ref(),
             )
             .expect("canonical Communications envelope");
-            let ingress = hermes_events_protocol::validation::envelope::decode_envelope_v1(
+            let ingress = makosh_events_protocol::validation::envelope::decode_envelope_v1(
                 record.exact_bytes(),
             )
             .expect("typed integration envelope");
@@ -1005,7 +1005,7 @@ pub(super) fn assert_communications_ingress_delivery(
             ));
             assert_eq!(envelope.causation_message_id, record.message_id().to_vec());
             assert_eq!(envelope.correlation_id, ingress.correlation_id);
-            let payload = hermes_communications_api::wire::CommunicationEvidenceRecordedV1::decode(
+            let payload = makosh_communications_api::wire::CommunicationEvidenceRecordedV1::decode(
                 envelope.payload.as_slice(),
             )
             .expect("canonical Communications payload");
@@ -1015,7 +1015,7 @@ pub(super) fn assert_communications_ingress_delivery(
             );
             context
                 .publish(
-                    "hermes.observation.v1.communications.communication_observed.v1",
+                    "makosh.observation.v1.communications.communication_observed.v1",
                     record.exact_bytes().to_vec().into(),
                 )
                 .await
@@ -1058,7 +1058,7 @@ pub(super) fn managed_mail_target_conversation(
     supervisor: &ManagedRuntimeSupervisor,
 ) -> Vec<u8> {
     let account_cursor = fixture_account_cursor(
-        hermes_communications_ingress::ProviderProvenanceV1::MailImap,
+        makosh_communications_ingress::ProviderProvenanceV1::MailImap,
         "integration-private-account-1",
     );
     let accounts = route_communications_query(
@@ -1089,7 +1089,7 @@ pub(super) fn managed_mail_target_conversation(
         &CommunicationsQueryRequestV1 {
             protocol_major: 1,
             operation: Some(Operation::ListConversations(
-                hermes_communications_api::query_wire::ListConversationsRequestV1 {
+                makosh_communications_api::query_wire::ListConversationsRequestV1 {
                     account_cursor_sha256: account.account_cursor_sha256,
                     limit: 16,
                     cursor: Vec::new(),
@@ -1166,7 +1166,7 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
     let external_conversation_id = format!("integration-private-body-conversation-{fixture_id}");
     let external_participant_id = format!("integration-private-body-participant-{fixture_id}");
     let body_account_cursor = fixture_account_cursor(
-        hermes_communications_ingress::ProviderProvenanceV1::Telegram,
+        makosh_communications_ingress::ProviderProvenanceV1::Telegram,
         &external_account_id,
     );
     let source_grant_epoch = record_fixture_source_integration(store);
@@ -1216,12 +1216,12 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
             plaintext.to_vec(),
         )
         .expect("write source integration Blob content");
-    let rejected_draft = hermes_communications_ingress::new_scoped_communication_observation_draft(
+    let rejected_draft = makosh_communications_ingress::new_scoped_communication_observation_draft(
         format!("managed-rejected-body-observation-{fixture_id}"),
-        hermes_communications_ingress::SourceEnvelope {
-            provider: hermes_communications_ingress::ProviderProvenanceV1::Telegram,
+        makosh_communications_ingress::SourceEnvelope {
+            provider: makosh_communications_ingress::ProviderProvenanceV1::Telegram,
             external_record_id: format!("integration-private-body-record-rejected-{fixture_id}"),
-            scope: Some(hermes_communications_ingress::SourceScopeEnvelope {
+            scope: Some(makosh_communications_ingress::SourceScopeEnvelope {
                 external_account_id: external_account_id.clone(),
                 external_conversation_id: Some(external_conversation_id.clone()),
                 external_participant_id: Some(external_participant_id.clone()),
@@ -1230,15 +1230,15 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
                 external_forward_origin_record_id: None,
             }),
         },
-        hermes_communications_ingress::CommunicationEvidenceKindV1::ChatMessage,
-        hermes_communications_ingress::BodyAvailabilityV1::AdmittedBlob,
-        hermes_communications_ingress::CommunicationDirectionV1::Incoming,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::ChatMessage,
+        makosh_communications_ingress::BodyAvailabilityV1::AdmittedBlob,
+        makosh_communications_ingress::CommunicationDirectionV1::Incoming,
         Some(1_783_024_000),
     )
     .expect("build rejected admitted-body ingress draft");
-    let rejected_draft = hermes_communications_ingress::with_admitted_body_blob(
+    let rejected_draft = makosh_communications_ingress::with_admitted_body_blob(
         rejected_draft,
-        hermes_communications_ingress::BodyBlobReceiptV1 {
+        makosh_communications_ingress::BodyBlobReceiptV1 {
             blob_ref: opaque_blob_reference.clone(),
             reference_id,
             declared_bytes: u64::try_from(plaintext.len()).expect("fixture body size"),
@@ -1248,9 +1248,9 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
         },
     )
     .expect("attach altered opaque Blob receipt");
-    let rejected_record = hermes_communications_ingress::build_observation_outbox_record_v1(
+    let rejected_record = makosh_communications_ingress::build_observation_outbox_record_v1(
         &rejected_draft,
-        &hermes_communications_ingress::ObservationEnvelopeContextV1 {
+        &makosh_communications_ingress::ObservationEnvelopeContextV1 {
             runtime_instance_id: "integration-test-runtime-1".to_owned(),
             runtime_generation: 1,
             module_id: "integration-test-runtime".to_owned(),
@@ -1259,12 +1259,12 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
         },
     )
     .expect("build altered admitted-body typed ingress envelope");
-    let draft = hermes_communications_ingress::new_scoped_communication_observation_draft(
+    let draft = makosh_communications_ingress::new_scoped_communication_observation_draft(
         format!("managed-admitted-body-observation-{fixture_id}"),
-        hermes_communications_ingress::SourceEnvelope {
-            provider: hermes_communications_ingress::ProviderProvenanceV1::Telegram,
+        makosh_communications_ingress::SourceEnvelope {
+            provider: makosh_communications_ingress::ProviderProvenanceV1::Telegram,
             external_record_id: format!("integration-private-body-record-{fixture_id}"),
-            scope: Some(hermes_communications_ingress::SourceScopeEnvelope {
+            scope: Some(makosh_communications_ingress::SourceScopeEnvelope {
                 external_account_id,
                 external_conversation_id: Some(external_conversation_id),
                 external_participant_id: Some(external_participant_id),
@@ -1273,25 +1273,25 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
                 external_forward_origin_record_id: None,
             }),
         },
-        hermes_communications_ingress::CommunicationEvidenceKindV1::ChatMessage,
-        hermes_communications_ingress::BodyAvailabilityV1::AdmittedBlob,
-        hermes_communications_ingress::CommunicationDirectionV1::Incoming,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::ChatMessage,
+        makosh_communications_ingress::BodyAvailabilityV1::AdmittedBlob,
+        makosh_communications_ingress::CommunicationDirectionV1::Incoming,
         Some(1_783_024_001),
     )
     .expect("build admitted-body ingress draft");
-    let draft = hermes_communications_ingress::with_participant_display_label(
+    let draft = makosh_communications_ingress::with_participant_display_label(
         draft,
         Some("Alice Example <alice@example.test>".to_owned()),
     )
     .expect("attach admitted-body sender label");
-    let draft = hermes_communications_ingress::with_message_subject(
+    let draft = makosh_communications_ingress::with_message_subject(
         draft,
         Some("Quarterly update".to_owned()),
     )
     .expect("attach admitted-body subject");
-    let draft = hermes_communications_ingress::with_admitted_body_blob(
+    let draft = makosh_communications_ingress::with_admitted_body_blob(
         draft,
-        hermes_communications_ingress::BodyBlobReceiptV1 {
+        makosh_communications_ingress::BodyBlobReceiptV1 {
             blob_ref: opaque_blob_reference.clone(),
             reference_id,
             declared_bytes: u64::try_from(plaintext.len()).expect("fixture body size"),
@@ -1301,9 +1301,9 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
         },
     )
     .expect("attach admitted opaque Blob receipt");
-    let record = hermes_communications_ingress::build_observation_outbox_record_v1(
+    let record = makosh_communications_ingress::build_observation_outbox_record_v1(
         &draft,
-        &hermes_communications_ingress::ObservationEnvelopeContextV1 {
+        &makosh_communications_ingress::ObservationEnvelopeContextV1 {
             runtime_instance_id: "integration-test-runtime-1".to_owned(),
             runtime_generation: 1,
             module_id: "integration-test-runtime".to_owned(),
@@ -1328,7 +1328,7 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
                         .expect("connect disposable JetStream"),
                 )
                 .publish(
-                    "hermes.observation.v1.communications.communication_observed.v1",
+                    "makosh.observation.v1.communications.communication_observed.v1",
                     record.exact_bytes().to_vec().into(),
                 )
                 .await
@@ -1351,7 +1351,7 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
             );
             context
                 .publish(
-                    "hermes.observation.v1.communications.communication_observed.v1",
+                    "makosh.observation.v1.communications.communication_observed.v1",
                     rejected_record.exact_bytes().to_vec().into(),
                 )
                 .await
@@ -1360,7 +1360,7 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
                 .expect("acknowledge altered admitted-body typed ingress envelope");
             context
                 .publish(
-                    "hermes.observation.v1.communications.communication_observed.v1",
+                    "makosh.observation.v1.communications.communication_observed.v1",
                     record.exact_bytes().to_vec().into(),
                 )
                 .await
@@ -1462,7 +1462,7 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
             &CommunicationsQueryRequestV1 {
                 protocol_major: 1,
                 operation: Some(Operation::ListConversations(
-                    hermes_communications_api::query_wire::ListConversationsRequestV1 {
+                    makosh_communications_api::query_wire::ListConversationsRequestV1 {
                         account_cursor_sha256: account.account_cursor_sha256.clone(),
                         limit: 16,
                         cursor: Vec::new(),
@@ -1489,7 +1489,7 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
             &CommunicationsQueryRequestV1 {
                 protocol_major: 1,
                 operation: Some(Operation::ListConversationMessages(
-                    hermes_communications_api::query_wire::ListConversationMessagesRequestV1 {
+                    makosh_communications_api::query_wire::ListConversationMessagesRequestV1 {
                         conversation_id: conversation.conversation_id.clone(),
                         limit: 16,
                         cursor: Vec::new(),
@@ -1522,12 +1522,12 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
                 ))
                 .expect("record fixture source integration successor launch");
             let stale_draft =
-                hermes_communications_ingress::new_scoped_communication_observation_draft(
+                makosh_communications_ingress::new_scoped_communication_observation_draft(
                     "managed-stale-body-observation-1",
-                    hermes_communications_ingress::SourceEnvelope {
-                        provider: hermes_communications_ingress::ProviderProvenanceV1::Telegram,
+                    makosh_communications_ingress::SourceEnvelope {
+                        provider: makosh_communications_ingress::ProviderProvenanceV1::Telegram,
                         external_record_id: "integration-private-body-record-stale-1".to_owned(),
-                        scope: Some(hermes_communications_ingress::SourceScopeEnvelope {
+                        scope: Some(makosh_communications_ingress::SourceScopeEnvelope {
                             external_account_id: "integration-private-body-account-1".to_owned(),
                             external_conversation_id: Some(
                                 "integration-private-body-conversation-1".to_owned(),
@@ -1538,15 +1538,15 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
                             external_forward_origin_record_id: None,
                         }),
                     },
-                    hermes_communications_ingress::CommunicationEvidenceKindV1::ChatMessage,
-                    hermes_communications_ingress::BodyAvailabilityV1::AdmittedBlob,
-                    hermes_communications_ingress::CommunicationDirectionV1::Incoming,
+                    makosh_communications_ingress::CommunicationEvidenceKindV1::ChatMessage,
+                    makosh_communications_ingress::BodyAvailabilityV1::AdmittedBlob,
+                    makosh_communications_ingress::CommunicationDirectionV1::Incoming,
                     Some(1_783_024_002),
                 )
                 .expect("build stale admitted-body ingress draft");
-            let stale_draft = hermes_communications_ingress::with_admitted_body_blob(
+            let stale_draft = makosh_communications_ingress::with_admitted_body_blob(
                 stale_draft,
-                hermes_communications_ingress::BodyBlobReceiptV1 {
+                makosh_communications_ingress::BodyBlobReceiptV1 {
                     blob_ref: opaque_blob_reference.clone(),
                     reference_id,
                     declared_bytes: u64::try_from(plaintext.len()).expect("fixture body size"),
@@ -1556,9 +1556,9 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
                 },
             )
             .expect("attach stale source opaque Blob receipt");
-            let stale_record = hermes_communications_ingress::build_observation_outbox_record_v1(
+            let stale_record = makosh_communications_ingress::build_observation_outbox_record_v1(
                 &stale_draft,
-                &hermes_communications_ingress::ObservationEnvelopeContextV1 {
+                &makosh_communications_ingress::ObservationEnvelopeContextV1 {
                     runtime_instance_id: "integration-test-runtime-1".to_owned(),
                     runtime_generation: 1,
                     module_id: "integration-test-runtime".to_owned(),
@@ -1582,7 +1582,7 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
                             .expect("connect disposable JetStream"),
                     )
                     .publish(
-                        "hermes.observation.v1.communications.communication_observed.v1",
+                        "makosh.observation.v1.communications.communication_observed.v1",
                         stale_record.exact_bytes().to_vec().into(),
                     )
                     .await
@@ -1648,12 +1648,12 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
                 )
                 .expect("revoke fixture source integration");
             let revoked_draft =
-                hermes_communications_ingress::new_scoped_communication_observation_draft(
+                makosh_communications_ingress::new_scoped_communication_observation_draft(
                     "managed-revoked-body-observation-1",
-                    hermes_communications_ingress::SourceEnvelope {
-                        provider: hermes_communications_ingress::ProviderProvenanceV1::Telegram,
+                    makosh_communications_ingress::SourceEnvelope {
+                        provider: makosh_communications_ingress::ProviderProvenanceV1::Telegram,
                         external_record_id: "integration-private-body-record-revoked-1".to_owned(),
-                        scope: Some(hermes_communications_ingress::SourceScopeEnvelope {
+                        scope: Some(makosh_communications_ingress::SourceScopeEnvelope {
                             external_account_id: "integration-private-body-account-1".to_owned(),
                             external_conversation_id: Some(
                                 "integration-private-body-conversation-1".to_owned(),
@@ -1664,15 +1664,15 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
                             external_forward_origin_record_id: None,
                         }),
                     },
-                    hermes_communications_ingress::CommunicationEvidenceKindV1::ChatMessage,
-                    hermes_communications_ingress::BodyAvailabilityV1::AdmittedBlob,
-                    hermes_communications_ingress::CommunicationDirectionV1::Incoming,
+                    makosh_communications_ingress::CommunicationEvidenceKindV1::ChatMessage,
+                    makosh_communications_ingress::BodyAvailabilityV1::AdmittedBlob,
+                    makosh_communications_ingress::CommunicationDirectionV1::Incoming,
                     Some(1_783_024_002),
                 )
                 .expect("build revoked admitted-body ingress draft");
-            let revoked_draft = hermes_communications_ingress::with_admitted_body_blob(
+            let revoked_draft = makosh_communications_ingress::with_admitted_body_blob(
                 revoked_draft,
-                hermes_communications_ingress::BodyBlobReceiptV1 {
+                makosh_communications_ingress::BodyBlobReceiptV1 {
                     blob_ref: opaque_blob_reference.clone(),
                     reference_id: current_reference_id,
                     declared_bytes: u64::try_from(plaintext.len()).expect("fixture body size"),
@@ -1682,9 +1682,9 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
                 },
             )
             .expect("attach revoked source opaque Blob receipt");
-            let revoked_record = hermes_communications_ingress::build_observation_outbox_record_v1(
+            let revoked_record = makosh_communications_ingress::build_observation_outbox_record_v1(
                 &revoked_draft,
-                &hermes_communications_ingress::ObservationEnvelopeContextV1 {
+                &makosh_communications_ingress::ObservationEnvelopeContextV1 {
                     runtime_instance_id: "integration-test-runtime-1".to_owned(),
                     runtime_generation: 1,
                     module_id: "integration-test-runtime".to_owned(),
@@ -1708,7 +1708,7 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
                             .expect("connect disposable JetStream"),
                     )
                     .publish(
-                        "hermes.observation.v1.communications.communication_observed.v1",
+                        "makosh.observation.v1.communications.communication_observed.v1",
                         revoked_record.exact_bytes().to_vec().into(),
                     )
                     .await
@@ -1753,12 +1753,12 @@ pub(super) fn publish_and_wait_for_communications_message_deletion(
     supervisor: &ManagedRuntimeSupervisor,
     message_id: &[u8],
 ) {
-    let draft = hermes_communications_ingress::new_scoped_communication_observation_draft(
+    let draft = makosh_communications_ingress::new_scoped_communication_observation_draft(
         "managed-deleted-body-observation-1",
-        hermes_communications_ingress::SourceEnvelope {
-            provider: hermes_communications_ingress::ProviderProvenanceV1::Telegram,
+        makosh_communications_ingress::SourceEnvelope {
+            provider: makosh_communications_ingress::ProviderProvenanceV1::Telegram,
             external_record_id: "integration-private-body-record-1".to_owned(),
-            scope: Some(hermes_communications_ingress::SourceScopeEnvelope {
+            scope: Some(makosh_communications_ingress::SourceScopeEnvelope {
                 external_account_id: "integration-private-body-account-1".to_owned(),
                 external_conversation_id: Some(
                     "integration-private-body-conversation-1".to_owned(),
@@ -1769,15 +1769,15 @@ pub(super) fn publish_and_wait_for_communications_message_deletion(
                 external_forward_origin_record_id: None,
             }),
         },
-        hermes_communications_ingress::CommunicationEvidenceKindV1::MessageDeleted,
-        hermes_communications_ingress::BodyAvailabilityV1::Unavailable,
-        hermes_communications_ingress::CommunicationDirectionV1::Incoming,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::MessageDeleted,
+        makosh_communications_ingress::BodyAvailabilityV1::Unavailable,
+        makosh_communications_ingress::CommunicationDirectionV1::Incoming,
         Some(1_783_024_010),
     )
     .expect("build deleted-message ingress draft");
-    let record = hermes_communications_ingress::build_observation_outbox_record_v1(
+    let record = makosh_communications_ingress::build_observation_outbox_record_v1(
         &draft,
-        &hermes_communications_ingress::ObservationEnvelopeContextV1 {
+        &makosh_communications_ingress::ObservationEnvelopeContextV1 {
             runtime_instance_id: "integration-test-runtime-1".to_owned(),
             runtime_generation: 1,
             module_id: "integration-test-runtime".to_owned(),
@@ -1801,7 +1801,7 @@ pub(super) fn publish_and_wait_for_communications_message_deletion(
                     .expect("connect disposable JetStream"),
             )
             .publish(
-                "hermes.observation.v1.communications.communication_observed.v1",
+                "makosh.observation.v1.communications.communication_observed.v1",
                 record.exact_bytes().to_vec().into(),
             )
             .await
@@ -1901,12 +1901,12 @@ pub(super) fn publish_and_wait_for_communications_message_edit(
         )
         .expect("write edited source integration Blob content");
 
-    let draft = hermes_communications_ingress::new_scoped_communication_observation_draft(
+    let draft = makosh_communications_ingress::new_scoped_communication_observation_draft(
         format!("managed-edited-body-observation-{fixture_marker}"),
-        hermes_communications_ingress::SourceEnvelope {
-            provider: hermes_communications_ingress::ProviderProvenanceV1::Telegram,
+        makosh_communications_ingress::SourceEnvelope {
+            provider: makosh_communications_ingress::ProviderProvenanceV1::Telegram,
             external_record_id: "integration-private-body-record-1".to_owned(),
-            scope: Some(hermes_communications_ingress::SourceScopeEnvelope {
+            scope: Some(makosh_communications_ingress::SourceScopeEnvelope {
                 external_account_id: "integration-private-body-account-1".to_owned(),
                 external_conversation_id: Some(
                     "integration-private-body-conversation-1".to_owned(),
@@ -1917,15 +1917,15 @@ pub(super) fn publish_and_wait_for_communications_message_edit(
                 external_forward_origin_record_id: None,
             }),
         },
-        hermes_communications_ingress::CommunicationEvidenceKindV1::MessageEdited,
-        hermes_communications_ingress::BodyAvailabilityV1::AdmittedBlob,
-        hermes_communications_ingress::CommunicationDirectionV1::Incoming,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::MessageEdited,
+        makosh_communications_ingress::BodyAvailabilityV1::AdmittedBlob,
+        makosh_communications_ingress::CommunicationDirectionV1::Incoming,
         Some(observed_at_unix_seconds),
     )
     .expect("build edited-message ingress draft");
-    let draft = hermes_communications_ingress::with_admitted_body_blob(
+    let draft = makosh_communications_ingress::with_admitted_body_blob(
         draft,
-        hermes_communications_ingress::BodyBlobReceiptV1 {
+        makosh_communications_ingress::BodyBlobReceiptV1 {
             blob_ref: format!("blob://fixture-source/admitted-body-edited-{fixture_marker}"),
             reference_id,
             declared_bytes: u64::try_from(plaintext.len()).expect("edited fixture body size"),
@@ -1935,9 +1935,9 @@ pub(super) fn publish_and_wait_for_communications_message_edit(
         },
     )
     .expect("attach edited-message admitted-body Blob receipt");
-    let record = hermes_communications_ingress::build_observation_outbox_record_v1(
+    let record = makosh_communications_ingress::build_observation_outbox_record_v1(
         &draft,
-        &hermes_communications_ingress::ObservationEnvelopeContextV1 {
+        &makosh_communications_ingress::ObservationEnvelopeContextV1 {
             runtime_instance_id: "integration-test-runtime-1".to_owned(),
             runtime_generation: 1,
             module_id: "integration-test-runtime".to_owned(),
@@ -1961,7 +1961,7 @@ pub(super) fn publish_and_wait_for_communications_message_edit(
                     .expect("connect disposable JetStream"),
             )
             .publish(
-                "hermes.observation.v1.communications.communication_observed.v1",
+                "makosh.observation.v1.communications.communication_observed.v1",
                 record.exact_bytes().to_vec().into(),
             )
             .await
@@ -2048,7 +2048,7 @@ fn wait_for_transferred_body_message(
             &CommunicationsQueryRequestV1 {
                 protocol_major: 1,
                 operation: Some(Operation::ListConversations(
-                    hermes_communications_api::query_wire::ListConversationsRequestV1 {
+                    makosh_communications_api::query_wire::ListConversationsRequestV1 {
                         account_cursor_sha256: account.account_cursor_sha256.clone(),
                         limit: 16,
                         cursor: Vec::new(),
@@ -2075,7 +2075,7 @@ fn wait_for_transferred_body_message(
             &CommunicationsQueryRequestV1 {
                 protocol_major: 1,
                 operation: Some(Operation::ListConversationMessages(
-                    hermes_communications_api::query_wire::ListConversationMessagesRequestV1 {
+                    makosh_communications_api::query_wire::ListConversationMessagesRequestV1 {
                         conversation_id: conversation.conversation_id.clone(),
                         limit: 16,
                         cursor: Vec::new(),
@@ -2103,11 +2103,11 @@ fn wait_for_transferred_body_message(
 }
 
 fn fixture_account_cursor(
-    provider: hermes_communications_ingress::ProviderProvenanceV1,
+    provider: makosh_communications_ingress::ProviderProvenanceV1,
     external_account_id: &str,
 ) -> Vec<u8> {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.communications.account-cursor.v1\0");
+    hasher.update(b"makosh.communications.account-cursor.v1\0");
     hasher.update(provider.as_str().as_bytes());
     hasher.update(b"\0");
     hasher.update(external_account_id.as_bytes());
@@ -2119,13 +2119,13 @@ pub(super) fn assert_communications_attachment_anchor_projection(
     supervisor: &ManagedRuntimeSupervisor,
 ) {
     const PROVIDER_MEDIA_LOCATOR: &str = "integration-private-media-1";
-    let draft = hermes_communications_ingress::new_scoped_communication_observation_draft(
+    let draft = makosh_communications_ingress::new_scoped_communication_observation_draft(
         "managed-attachment-observation-1",
-        hermes_communications_ingress::SourceEnvelope {
-            provider: hermes_communications_ingress::ProviderProvenanceV1::MailImap,
+        makosh_communications_ingress::SourceEnvelope {
+            provider: makosh_communications_ingress::ProviderProvenanceV1::MailImap,
             // A media mutation updates the message established by the earlier Mail observation.
             external_record_id: "integration-private-record-1".to_owned(),
-            scope: Some(hermes_communications_ingress::SourceScopeEnvelope {
+            scope: Some(makosh_communications_ingress::SourceScopeEnvelope {
                 external_account_id: "integration-private-account-1".to_owned(),
                 external_conversation_id: Some("integration-private-record-1".to_owned()),
                 external_participant_id: None,
@@ -2134,26 +2134,26 @@ pub(super) fn assert_communications_attachment_anchor_projection(
                 external_forward_origin_record_id: None,
             }),
         },
-        hermes_communications_ingress::CommunicationEvidenceKindV1::MediaChanged,
-        hermes_communications_ingress::BodyAvailabilityV1::MetadataOnly,
-        hermes_communications_ingress::CommunicationDirectionV1::Incoming,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::MediaChanged,
+        makosh_communications_ingress::BodyAvailabilityV1::MetadataOnly,
+        makosh_communications_ingress::CommunicationDirectionV1::Incoming,
         Some(1_783_024_002),
     )
     .expect("build attachment ingress draft");
-    let draft = hermes_communications_ingress::with_attachment_descriptor(
+    let draft = makosh_communications_ingress::with_attachment_descriptor(
         draft,
-        hermes_communications_ingress::AttachmentDescriptorV1 {
+        makosh_communications_ingress::AttachmentDescriptorV1 {
             filename: Some("evidence.txt".to_owned()),
             media_type: "text/plain".to_owned(),
             declared_bytes: 32,
             sha256: Some([10; 32]),
-            disposition: hermes_communications_ingress::AttachmentDispositionV1::Attachment,
+            disposition: makosh_communications_ingress::AttachmentDispositionV1::Attachment,
         },
     )
     .expect("attach typed attachment descriptor");
-    let record = hermes_communications_ingress::build_observation_outbox_record_v1(
+    let record = makosh_communications_ingress::build_observation_outbox_record_v1(
         &draft,
-        &hermes_communications_ingress::ObservationEnvelopeContextV1 {
+        &makosh_communications_ingress::ObservationEnvelopeContextV1 {
             runtime_instance_id: "integration-test-runtime-1".to_owned(),
             runtime_generation: 1,
             module_id: "integration-test-runtime".to_owned(),
@@ -2178,17 +2178,17 @@ pub(super) fn assert_communications_attachment_anchor_projection(
                 .await
                 .expect("connect disposable JetStream");
             let mut anchor_events = client
-                .subscribe("hermes.event.v1.communications.communication_attachment_anchor_recorded.v1")
+                .subscribe("makosh.event.v1.communications.communication_attachment_anchor_recorded.v1")
                 .await
                 .expect("subscribe to exact attachment-anchor handoff subject");
             let mut safety_events = client
-                .subscribe("hermes.event.v1.communications.communication_attachment_safety_state_changed.v1")
+                .subscribe("makosh.event.v1.communications.communication_attachment_safety_state_changed.v1")
                 .await
                 .expect("subscribe to exact attachment lifecycle subject");
             let context = async_nats::jetstream::new(client);
             context
                 .publish(
-                    "hermes.observation.v1.communications.communication_observed.v1",
+                    "makosh.observation.v1.communications.communication_observed.v1",
                     record.exact_bytes().to_vec().into(),
                 )
                 .await
@@ -2202,11 +2202,11 @@ pub(super) fn assert_communications_attachment_anchor_projection(
             .await
             .expect("attachment-anchor handoff timeout")
             .expect("attachment-anchor handoff missing");
-            let envelope = hermes_events_protocol::validation::envelope::decode_envelope_v1(
+            let envelope = makosh_events_protocol::validation::envelope::decode_envelope_v1(
                 anchor_event.payload.as_ref(),
             )
             .expect("attachment-anchor handoff envelope");
-            let ingress = hermes_events_protocol::validation::envelope::decode_envelope_v1(
+            let ingress = makosh_events_protocol::validation::envelope::decode_envelope_v1(
                 record.exact_bytes(),
             )
             .expect("attachment ingress envelope");
@@ -2220,7 +2220,7 @@ pub(super) fn assert_communications_attachment_anchor_projection(
             ));
             assert_eq!(envelope.causation_message_id, record.message_id().to_vec());
             assert_eq!(envelope.correlation_id, ingress.correlation_id);
-            let payload = hermes_communications_attachment_contract::anchor_recorded_v1::AttachmentAnchorRecordedV1::decode(
+            let payload = makosh_communications_attachment_contract::anchor_recorded_v1::AttachmentAnchorRecordedV1::decode(
                 envelope.payload.as_slice(),
             )
             .expect("attachment-anchor handoff payload");
@@ -2242,18 +2242,18 @@ pub(super) fn assert_communications_attachment_anchor_projection(
                 .as_slice()
                 .try_into()
                 .expect("attachment correlation identifier");
-            let requested = hermes_communications_attachment_contract::build_attachment_blob_admission_outbox_record_v1(
-                &hermes_communications_attachment_contract::AttachmentBlobAdmissionFactV1 {
+            let requested = makosh_communications_attachment_contract::build_attachment_blob_admission_outbox_record_v1(
+                &makosh_communications_attachment_contract::AttachmentBlobAdmissionFactV1 {
                     attachment_anchor_id,
                     source_observation_id: *record.message_id(),
                     correlation_id,
                     media_cursor_sha256,
-                    expected_state: hermes_communications_attachment_contract::AttachmentBlobExpectedStateV1::DescriptorOnly,
-                    transition: hermes_communications_attachment_contract::AttachmentBlobAdmissionTransitionV1::Requested,
+                    expected_state: makosh_communications_attachment_contract::AttachmentBlobExpectedStateV1::DescriptorOnly,
+                    transition: makosh_communications_attachment_contract::AttachmentBlobAdmissionTransitionV1::Requested,
                     observed_at_unix_seconds: 1_783_024_003,
                     blob_reference_binding_sha256: None,
                 },
-                &hermes_communications_attachment_contract::AttachmentObservationEnvelopeContextV1 {
+                &makosh_communications_attachment_contract::AttachmentObservationEnvelopeContextV1 {
                     runtime_instance_id: "attachment-integration-test-runtime-1".to_owned(),
                     runtime_generation: 1,
                     module_id: "attachment-integration-test-runtime".to_owned(),
@@ -2264,25 +2264,25 @@ pub(super) fn assert_communications_attachment_anchor_projection(
             .expect("build requested attachment admission envelope");
             context
                 .publish(
-                    "hermes.observation.v1.communications.communication_attachment_blob_admission_observed.v1",
+                    "makosh.observation.v1.communications.communication_attachment_blob_admission_observed.v1",
                     requested.exact_bytes().to_vec().into(),
                 )
                 .await
                 .expect("publish requested attachment admission envelope")
                 .await
                 .expect("acknowledge requested attachment admission envelope");
-            let admitted = hermes_communications_attachment_contract::build_attachment_blob_admission_outbox_record_v1(
-                &hermes_communications_attachment_contract::AttachmentBlobAdmissionFactV1 {
+            let admitted = makosh_communications_attachment_contract::build_attachment_blob_admission_outbox_record_v1(
+                &makosh_communications_attachment_contract::AttachmentBlobAdmissionFactV1 {
                     attachment_anchor_id,
                     source_observation_id: *record.message_id(),
                     correlation_id,
                     media_cursor_sha256,
-                    expected_state: hermes_communications_attachment_contract::AttachmentBlobExpectedStateV1::BlobPending,
-                    transition: hermes_communications_attachment_contract::AttachmentBlobAdmissionTransitionV1::Admitted,
+                    expected_state: makosh_communications_attachment_contract::AttachmentBlobExpectedStateV1::BlobPending,
+                    transition: makosh_communications_attachment_contract::AttachmentBlobAdmissionTransitionV1::Admitted,
                     observed_at_unix_seconds: 1_783_024_004,
                     blob_reference_binding_sha256: Some([11; 32]),
                 },
-                &hermes_communications_attachment_contract::AttachmentObservationEnvelopeContextV1 {
+                &makosh_communications_attachment_contract::AttachmentObservationEnvelopeContextV1 {
                     runtime_instance_id: "attachment-integration-test-runtime-1".to_owned(),
                     runtime_generation: 1,
                     module_id: "attachment-integration-test-runtime".to_owned(),
@@ -2293,7 +2293,7 @@ pub(super) fn assert_communications_attachment_anchor_projection(
             .expect("build admitted attachment admission envelope");
             context
                 .publish(
-                    "hermes.observation.v1.communications.communication_attachment_blob_admission_observed.v1",
+                    "makosh.observation.v1.communications.communication_attachment_blob_admission_observed.v1",
                     admitted.exact_bytes().to_vec().into(),
                 )
                 .await
@@ -2316,7 +2316,7 @@ pub(super) fn assert_communications_attachment_anchor_projection(
                     )
                 })
                 .expect("attachment lifecycle event missing");
-                let state_envelope = hermes_events_protocol::validation::envelope::decode_envelope_v1(
+                let state_envelope = makosh_events_protocol::validation::envelope::decode_envelope_v1(
                     state_event.payload.as_ref(),
                 )
                 .expect("attachment lifecycle envelope");
@@ -2369,7 +2369,7 @@ pub(super) fn assert_communications_attachment_anchor_projection(
             &CommunicationsQueryRequestV1 {
                 protocol_major: 1,
                 operation: Some(Operation::ListConversations(
-                    hermes_communications_api::query_wire::ListConversationsRequestV1 {
+                    makosh_communications_api::query_wire::ListConversationsRequestV1 {
                         account_cursor_sha256: account.account_cursor_sha256.clone(),
                         limit: 16,
                         cursor: Vec::new(),
@@ -2396,7 +2396,7 @@ pub(super) fn assert_communications_attachment_anchor_projection(
             &CommunicationsQueryRequestV1 {
                 protocol_major: 1,
                 operation: Some(Operation::ListConversationMessages(
-                    hermes_communications_api::query_wire::ListConversationMessagesRequestV1 {
+                    makosh_communications_api::query_wire::ListConversationMessagesRequestV1 {
                         conversation_id: conversation.conversation_id.clone(),
                         limit: 16,
                         cursor: Vec::new(),
@@ -2416,7 +2416,7 @@ pub(super) fn assert_communications_attachment_anchor_projection(
                 &CommunicationsQueryRequestV1 {
                     protocol_major: 1,
                     operation: Some(Operation::ListMessageAttachmentAnchors(
-                        hermes_communications_api::query_wire::ListMessageAttachmentAnchorsRequestV1 {
+                        makosh_communications_api::query_wire::ListMessageAttachmentAnchorsRequestV1 {
                             message_id: message.message_id,
                             limit: 16,
                             cursor: Vec::new(),
@@ -2439,7 +2439,7 @@ pub(super) fn assert_communications_attachment_anchor_projection(
             }) {
                 let public_payload = CommunicationsQueryResponseV1 {
                     result: Some(QueryResult::ListMessageAttachmentAnchors(
-                        hermes_communications_api::query_wire::ListMessageAttachmentAnchorsResponseV1 {
+                        makosh_communications_api::query_wire::ListMessageAttachmentAnchorsResponseV1 {
                             anchors: vec![anchor.clone()],
                             next_cursor: Vec::new(),
                         },
@@ -2472,7 +2472,7 @@ pub(super) fn assert_communications_relationship_projection(
     const PRIVATE_REPLY_RECORD_ID: &str = "integration-private-reply-1";
     const PRIVATE_FORWARD_RECORD_ID: &str = "integration-private-forward-1";
     let draft =
-        hermes_telegram_core::observation_draft(hermes_telegram_api::TelegramMessageObservation {
+        makosh_telegram_core::observation_draft(makosh_telegram_api::TelegramMessageObservation {
             account_id: "integration-private-relationship-account-1".to_owned(),
             provider_chat_id: "integration-private-relationship-conversation-1".to_owned(),
             provider_message_id: "managed-relationship-observation-1".to_owned(),
@@ -2482,12 +2482,12 @@ pub(super) fn assert_communications_relationship_projection(
             is_outgoing: false,
             text: None,
             media: None,
-            references: hermes_telegram_api::TelegramMessageReferences {
-                reply_to: Some(hermes_telegram_api::TelegramReplyReference {
+            references: makosh_telegram_api::TelegramMessageReferences {
+                reply_to: Some(makosh_telegram_api::TelegramReplyReference {
                     provider_chat_id: "integration-private-relationship-conversation-1".to_owned(),
                     provider_message_id: PRIVATE_REPLY_RECORD_ID.to_owned(),
                 }),
-                forward_origin: Some(hermes_telegram_api::TelegramForwardOrigin {
+                forward_origin: Some(makosh_telegram_api::TelegramForwardOrigin {
                     provider_chat_id: Some(
                         "integration-private-relationship-conversation-1".to_owned(),
                     ),
@@ -2500,12 +2500,12 @@ pub(super) fn assert_communications_relationship_projection(
             observed_at_unix_seconds: 1_783_024_003,
         })
         .expect("build typed Telegram relationship ingress draft");
-    let record = hermes_communications_ingress::build_observation_outbox_record_v1(
+    let record = makosh_communications_ingress::build_observation_outbox_record_v1(
         &draft,
-        &hermes_communications_ingress::ObservationEnvelopeContextV1 {
+        &makosh_communications_ingress::ObservationEnvelopeContextV1 {
             runtime_instance_id: "telegram-test-runtime-1".to_owned(),
             runtime_generation: 1,
-            module_id: "hermes-telegram-runtime".to_owned(),
+            module_id: "makosh-telegram-runtime".to_owned(),
             recorded_at_unix_seconds: 1_783_024_003,
             recorded_at_nanos: 0,
         },
@@ -2527,7 +2527,7 @@ pub(super) fn assert_communications_relationship_projection(
             );
             context
                 .publish(
-                    "hermes.observation.v1.communications.communication_observed.v1",
+                    "makosh.observation.v1.communications.communication_observed.v1",
                     record.exact_bytes().to_vec().into(),
                 )
                 .await
@@ -2573,7 +2573,7 @@ pub(super) fn assert_communications_relationship_projection(
             &CommunicationsQueryRequestV1 {
                 protocol_major: 1,
                 operation: Some(Operation::ListConversations(
-                    hermes_communications_api::query_wire::ListConversationsRequestV1 {
+                    makosh_communications_api::query_wire::ListConversationsRequestV1 {
                         account_cursor_sha256: account.account_cursor_sha256.clone(),
                         limit: 16,
                         cursor: Vec::new(),
@@ -2600,7 +2600,7 @@ pub(super) fn assert_communications_relationship_projection(
             &CommunicationsQueryRequestV1 {
                 protocol_major: 1,
                 operation: Some(Operation::ListConversationParticipants(
-                    hermes_communications_api::query_wire::ListConversationParticipantsRequestV1 {
+                    makosh_communications_api::query_wire::ListConversationParticipantsRequestV1 {
                         conversation_id: conversation.conversation_id.clone(),
                         limit: 16,
                         cursor: Vec::new(),
@@ -2620,7 +2620,7 @@ pub(super) fn assert_communications_relationship_projection(
             &CommunicationsQueryRequestV1 {
                 protocol_major: 1,
                 operation: Some(Operation::ListConversationMessages(
-                    hermes_communications_api::query_wire::ListConversationMessagesRequestV1 {
+                    makosh_communications_api::query_wire::ListConversationMessagesRequestV1 {
                         conversation_id: conversation.conversation_id.clone(),
                         limit: 16,
                         cursor: Vec::new(),
@@ -2647,7 +2647,7 @@ pub(super) fn assert_communications_relationship_projection(
             &CommunicationsQueryRequestV1 {
                 protocol_major: 1,
                 operation: Some(Operation::ListMessageReferences(
-                    hermes_communications_api::query_wire::ListMessageReferencesRequestV1 {
+                    makosh_communications_api::query_wire::ListMessageReferencesRequestV1 {
                         message_id: message.message_id.clone(),
                         limit: 16,
                         cursor: Vec::new(),
@@ -2809,7 +2809,7 @@ fn record_communications_registration(store: &SqliteControlStore, descriptor: &[
         8,
         5_000,
     );
-    let blob = hermes_kernel_control_store::ModuleBlobQuotaRequestV1::new(
+    let blob = makosh_kernel_control_store::ModuleBlobQuotaRequestV1::new(
         COMMUNICATIONS_REGISTRATION,
         COMMUNICATIONS_BLOB_CAPABILITY_ID,
         COMMUNICATIONS_OWNER_ID,
@@ -2919,7 +2919,7 @@ fn record_communications_registration(store: &SqliteControlStore, descriptor: &[
     let attachment_safety_state_changed =
         communication_attachment_safety_state_changed_contract_reference_v1();
     let observed =
-        hermes_communications_ingress::admission::communication_observed_contract_reference_v1();
+        makosh_communications_ingress::admission::communication_observed_contract_reference_v1();
     let call_evidence_observed = call_evidence_observed_contract_reference_v1();
     let attachment_blob_admission =
         communication_attachment_blob_admission_observed_contract_reference_v1();
@@ -3191,8 +3191,8 @@ fn record_communications_registration(store: &SqliteControlStore, descriptor: &[
                 major: 1,
                 revision: 1,
             },
-            hermes_communications_api::COMMUNICATIONS_QUERY_SCHEMA_SHA256,
-            "/hermes.communications.query.v1.CommunicationsQueryService/Query",
+            makosh_communications_api::COMMUNICATIONS_QUERY_SCHEMA_SHA256,
+            "/makosh.communications.query.v1.CommunicationsQueryService/Query",
         ),
         ModuleClientRpcRouteV1::new(
             COMMUNICATIONS_REGISTRATION,
@@ -3258,16 +3258,16 @@ fn record_communications_registration(store: &SqliteControlStore, descriptor: &[
             max_response_bytes: MAX_MESSAGE_BODY_BYTES_V1,
         },
     );
-    let query_rpc_route = hermes_kernel_control_store::ModuleQueryContractV1::new(
+    let query_rpc_route = makosh_kernel_control_store::ModuleQueryContractV1::new(
         COMMUNICATIONS_REGISTRATION,
         COMMUNICATIONS_QUERY_CAPABILITY_ID,
         COMMUNICATIONS_OWNER_ID,
         "communications.query",
         1,
         1,
-        hermes_communications_api::COMMUNICATIONS_QUERY_SCHEMA_SHA256,
+        makosh_communications_api::COMMUNICATIONS_QUERY_SCHEMA_SHA256,
     );
-    let call_evidence_query_rpc_route = hermes_kernel_control_store::ModuleQueryContractV1::new(
+    let call_evidence_query_rpc_route = makosh_kernel_control_store::ModuleQueryContractV1::new(
         COMMUNICATIONS_REGISTRATION,
         CALL_EVIDENCE_CLIENT_CAPABILITY_ID_V1,
         COMMUNICATIONS_OWNER_ID,
@@ -3412,7 +3412,7 @@ fn record_communications_runtime_fixture(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             COMMUNICATIONS_REGISTRATION,
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             "domain.communications",
             Sha256::digest(
                 std::fs::read(communications_binary()).expect("Communications binary bytes"),
@@ -3545,7 +3545,7 @@ fn record_communications_export_runtime_fixture(store: &SqliteControlStore) {
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             COMMUNICATIONS_EXPORT_REGISTRATION,
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             "workflow.communications_export",
             Sha256::digest(
                 std::fs::read(communications_export_binary())
@@ -3570,11 +3570,11 @@ fn record_communications_export_runtime_fixture(store: &SqliteControlStore) {
 
 fn communications_export_event_route(
     kind: ModuleEventEnvelopeKindV1,
-    contract: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    contract: &makosh_runtime_protocol::v1::ContractReferenceV1,
     direction: ModuleEventRouteDirectionV1,
 ) -> ModuleEventRouteRequestV1 {
     ModuleEventRouteRequestV1::new(
-        hermes_kernel_control_store::ModuleEventRouteRequestInputV1 {
+        makosh_kernel_control_store::ModuleEventRouteRequestInputV1 {
             registration_id: COMMUNICATIONS_EXPORT_REGISTRATION.to_owned(),
             capability_id: COMMUNICATIONS_EXPORT_EVENTS_CAPABILITY_ID_V1.to_owned(),
             envelope_kind: kind,
@@ -3670,11 +3670,11 @@ fn communications_export_client_realtime_route() -> ModuleClientRealtimeRouteV1 
 fn communications_event_route(
     capability: &str,
     kind: ModuleEventEnvelopeKindV1,
-    contract: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    contract: &makosh_runtime_protocol::v1::ContractReferenceV1,
     direction: ModuleEventRouteDirectionV1,
 ) -> ModuleEventRouteRequestV1 {
     ModuleEventRouteRequestV1::new(
-        hermes_kernel_control_store::ModuleEventRouteRequestInputV1 {
+        makosh_kernel_control_store::ModuleEventRouteRequestInputV1 {
             registration_id: COMMUNICATIONS_REGISTRATION.to_owned(),
             capability_id: capability.to_owned(),
             envelope_kind: kind,
@@ -3713,7 +3713,7 @@ fn communications_event_hub_topology() -> PlatformEventHubTopologyV1 {
     .collect();
     PlatformEventHubTopologyV1::new(
         1,
-        required("HERMES_COMMUNICATIONS_LIVE_NATS_ENDPOINT"),
+        required("MAKOSH_COMMUNICATIONS_LIVE_NATS_ENDPOINT"),
         COMMUNICATIONS_OWNER_ID,
         1,
         budgets,
@@ -3760,19 +3760,19 @@ pub(super) fn blob_release_artifact() -> SignedRuntimeArtifact {
 }
 
 fn communications_binary() -> PathBuf {
-    binary("HERMES_COMMUNICATIONS_RUNTIME_BIN")
+    binary("MAKOSH_COMMUNICATIONS_RUNTIME_BIN")
 }
 
 fn communications_export_binary() -> PathBuf {
-    binary("HERMES_COMMUNICATIONS_EXPORT_RUNTIME_BIN")
+    binary("MAKOSH_COMMUNICATIONS_EXPORT_RUNTIME_BIN")
 }
 
 fn blob_binary() -> PathBuf {
-    binary("HERMES_BLOB_SERVICE_BIN")
+    binary("MAKOSH_BLOB_SERVICE_BIN")
 }
 
 fn blob_settings_schema() -> Vec<u8> {
-    hermes_runtime_protocol::v1::SettingsSchemaV1 {
+    makosh_runtime_protocol::v1::SettingsSchemaV1 {
         major: 1,
         revision: 1,
         ..Default::default()
@@ -3782,15 +3782,15 @@ fn blob_settings_schema() -> Vec<u8> {
 
 fn blob_descriptor() -> Vec<u8> {
     let schema = blob_settings_schema();
-    hermes_runtime_protocol::v1::ModuleDescriptorV1 {
+    makosh_runtime_protocol::v1::ModuleDescriptorV1 {
         descriptor_major: 1,
         descriptor_revision: 1,
         module_id: "blob".to_owned(),
         owner_id: "blob".to_owned(),
-        module_kind: hermes_runtime_protocol::v1::ModuleKindV1::Platform as i32,
+        module_kind: makosh_runtime_protocol::v1::ModuleKindV1::Platform as i32,
         module_version: "1".to_owned(),
         build_id: "managed-communications-blob".to_owned(),
-        settings_schema_ref: Some(hermes_runtime_protocol::v1::SettingsSchemaRefV1 {
+        settings_schema_ref: Some(makosh_runtime_protocol::v1::SettingsSchemaRefV1 {
             major: 1,
             revision: 1,
             artifact_size_bytes: schema.len() as u64,
@@ -3806,31 +3806,31 @@ fn communications_stream_details(
 ) -> (&'static str, &'static str) {
     match kind {
         event_topology::subject::EventStreamKindV1::Command => {
-            ("HERMES_COMMAND_V1", "hermes.command.v1.>")
+            ("MAKOSH_COMMAND_V1", "makosh.command.v1.>")
         }
         event_topology::subject::EventStreamKindV1::Event => {
-            ("HERMES_EVENT_V1", "hermes.event.v1.>")
+            ("MAKOSH_EVENT_V1", "makosh.event.v1.>")
         }
         event_topology::subject::EventStreamKindV1::Observation => {
-            ("HERMES_OBSERVATION_V1", "hermes.observation.v1.>")
+            ("MAKOSH_OBSERVATION_V1", "makosh.observation.v1.>")
         }
         event_topology::subject::EventStreamKindV1::Result => {
-            ("HERMES_RESULT_V1", "hermes.result.v1.>")
+            ("MAKOSH_RESULT_V1", "makosh.result.v1.>")
         }
-        event_topology::subject::EventStreamKindV1::Ack => ("HERMES_ACK_V1", "hermes.ack.v1.>"),
+        event_topology::subject::EventStreamKindV1::Ack => ("MAKOSH_ACK_V1", "makosh.ack.v1.>"),
     }
 }
 
 fn communications_stream_for_subject(subject: &str) -> &'static str {
-    if subject.starts_with("hermes.command.") {
-        "HERMES_COMMAND_V1"
-    } else if subject.starts_with("hermes.event.") {
-        "HERMES_EVENT_V1"
-    } else if subject.starts_with("hermes.observation.") {
-        "HERMES_OBSERVATION_V1"
-    } else if subject.starts_with("hermes.result.") {
-        "HERMES_RESULT_V1"
+    if subject.starts_with("makosh.command.") {
+        "MAKOSH_COMMAND_V1"
+    } else if subject.starts_with("makosh.event.") {
+        "MAKOSH_EVENT_V1"
+    } else if subject.starts_with("makosh.observation.") {
+        "MAKOSH_OBSERVATION_V1"
+    } else if subject.starts_with("makosh.result.") {
+        "MAKOSH_RESULT_V1"
     } else {
-        "HERMES_ACK_V1"
+        "MAKOSH_ACK_V1"
     }
 }

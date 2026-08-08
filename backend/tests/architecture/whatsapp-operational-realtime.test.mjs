@@ -15,7 +15,7 @@ test('WhatsApp operational replay remains a distinct integration capability', as
   ] = await Promise.all([
     readFile(
       new URL(
-        'src/whatsapp-api/proto/hermes/whatsapp/operational/realtime/v1/client.proto',
+        'src/whatsapp-api/proto/makosh/whatsapp/operational/realtime/v1/client.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -58,7 +58,7 @@ test('WhatsApp operational replay remains a distinct integration capability', as
   assert.match(persistence, /event_from_row/);
   assert.doesNotMatch(
     persistence,
-    /hermes_data\.communications_|hermes_(?:kernel|gateway)/,
+    /makosh_data\.communications_|makosh_(?:kernel|gateway)/,
   );
 
   assert.match(runtimePort, /WhatsAppClientContractV1::OperationalRealtime/);

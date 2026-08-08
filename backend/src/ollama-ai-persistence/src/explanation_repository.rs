@@ -1,7 +1,7 @@
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     decode_provider_explanation_result_v1, encode_provider_explanation_result_v1,
 };
-use hermes_ollama_ai_core::{OllamaAiRunStateV1, OllamaExplanationRunV1};
+use makosh_ollama_ai_core::{OllamaAiRunStateV1, OllamaExplanationRunV1};
 use sqlx::{Row, postgres::PgRow};
 
 use crate::{
@@ -21,7 +21,7 @@ impl OllamaAiPersistenceV1 {
     ) -> Result<OllamaExplanationPersistenceOutcomeV1, OllamaAiPersistenceErrorV1> {
         validate_explanation_accepted(logical_owner_id, &run)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.ollama_ai_explanation_runs (
+            "INSERT INTO makosh_data.ollama_ai_explanation_runs (
                logical_owner_id, request_id, request_digest, settings_revision,
                state_revision, run_state
              ) VALUES ($1,$2,$3,$4,$5,$6)
@@ -96,7 +96,7 @@ impl OllamaAiPersistenceV1 {
             .transpose()
             .map_err(|_| OllamaAiPersistenceErrorV1::InvalidInput)?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.ollama_ai_explanation_runs SET
+            "UPDATE makosh_data.ollama_ai_explanation_runs SET
                state_revision=$4, run_state=$5, selected_model_revision_sha256=$6,
                result_exact_bytes=$7, result_terminal_status=$8
              WHERE logical_owner_id=$1 AND request_id=$2 AND state_revision=$3",
@@ -132,12 +132,12 @@ impl OllamaAiPersistenceV1 {
 const SELECT_RUN: &str = "SELECT logical_owner_id, request_id, request_digest, settings_revision,
  state_revision, run_state, selected_model_revision_sha256, result_exact_bytes,
  result_terminal_status
- FROM hermes_data.ollama_ai_explanation_runs WHERE logical_owner_id=$1 AND request_id=$2";
+ FROM makosh_data.ollama_ai_explanation_runs WHERE logical_owner_id=$1 AND request_id=$2";
 const SELECT_RUN_FOR_UPDATE: &str =
     "SELECT logical_owner_id, request_id, request_digest, settings_revision,
  state_revision, run_state, selected_model_revision_sha256, result_exact_bytes,
  result_terminal_status
- FROM hermes_data.ollama_ai_explanation_runs WHERE logical_owner_id=$1 AND request_id=$2 FOR UPDATE";
+ FROM makosh_data.ollama_ai_explanation_runs WHERE logical_owner_id=$1 AND request_id=$2 FOR UPDATE";
 
 fn persisted_from_row(
     row: &PgRow,

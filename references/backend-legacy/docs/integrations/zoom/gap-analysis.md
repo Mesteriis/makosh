@@ -12,7 +12,7 @@ end-to-end Zoom provider runtime.
 |---|---|---|
 | Account setup | Fixture setup, blocked live metadata, initial OAuth/S2S authorization, explicit token refresh/renewal, token maintenance scan, scheduled token maintenance daemon and token rotation policy are implemented. | Operational provider worker enablement. |
 | Runtime lifecycle | Metadata-level start/stop/remove implemented; authorized live accounts start as running and can participate in the recording-sync worker. | Broader live runtime state transitions beyond recording sync after auth. |
-| Meeting ingestion | Runtime bridge accepts meeting observations and signed meeting webhooks as provider call evidence; `hermes-zoom-edge-proxy` provides public/edge forwarding and authorized accounts can reconcile managed app event subscriptions. | Broader provider worker coverage beyond webhook/event delivery setup. |
+| Meeting ingestion | Runtime bridge accepts meeting observations and signed meeting webhooks as provider call evidence; `makosh-zoom-edge-proxy` provides public/edge forwarding and authorized accounts can reconcile managed app event subscriptions. | Broader provider worker coverage beyond webhook/event delivery setup. |
 | Recording ingestion | Recording observation event, signed recording webhook normalization, webhook/provider-sync media download/import, and explicit per-import local retention/removal are implemented, gated by explicit privacy opt-in and local blob persistence. | Broader downstream media/document workflows. |
 | Transcript ingestion | Runtime bridge stores explicit transcript text, imports already obtained VTT/SRT/plain transcript file text and auto-downloads transcript-like text files from signed `recording.completed` webhooks and authorized provider sync only after explicit privacy opt-in. | Full live provider worker coverage beyond current recording-driven transcript files. |
 | Calendar matching | `zoom.meeting.observed` is matched to Calendar events through a downstream workflow and relation projection. | Meeting preparation context packs and broader Calendar-side downstream consumers. |
@@ -36,7 +36,7 @@ separate domain pathway.
 ### Public webhook ingress
 
 The protected runtime bridge verifies account-scoped Zoom webhook signatures
-before meeting/recording bridge ingestion. `hermes-zoom-edge-proxy` provides
+before meeting/recording bridge ingestion. `makosh-zoom-edge-proxy` provides
 the public/edge ingress path and preserves the raw body,
 `x-zm-request-timestamp` and `x-zm-signature` when forwarding to the protected
 bridge. Managed provider subscription reconciliation through Zoom APIs is now
@@ -66,11 +66,11 @@ Authorized recording sync now also best-effort downloads non-transcript
 recording media files after
 `privacy.zoom_remote_recording_download_enabled` is explicitly enabled, stores
 them through the local communication blob store and records attachment-import
-metadata plus heuristic scan status. Hermes now exposes recording import audit
+metadata plus heuristic scan status. Макошь now exposes recording import audit
 plus explicit per-import remove controls for those blobs, the account event log
 now records authorization completion plus token refresh success/skip/failure
 activity, and owner-visible retention settings now stamp expiry intent into
-recording-import metadata and transcript provenance. Hermes now also exposes an
+recording-import metadata and transcript provenance. Макошь now also exposes an
 explicit owner-triggered cleanup surface for expired recording imports and
 expired transcript evidence, plus a local scheduled cleanup daemon that prunes
 the same expired evidence automatically. Remaining work is richer downstream

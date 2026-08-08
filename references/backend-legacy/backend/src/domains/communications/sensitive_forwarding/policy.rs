@@ -209,7 +209,7 @@ pub(super) fn render_notification_body(
         body.push_str("\n\n");
         body.push_str(&source_body);
         if source_message.body_text.chars().count() > MAX_FORWARDED_BODY_CHARS {
-            body.push_str("\n\n[Message body truncated by Hermes safety limit]");
+            body.push_str("\n\n[Message body truncated by Макошь safety limit]");
         }
     }
     body

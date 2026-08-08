@@ -27,21 +27,21 @@ test('Blob custody release has typed Blob-owned authority without a data-plane d
     ),
     readFile(
       new URL(
-        'src/platform/runtime_protocol/proto/hermes/runtime/v1/blob_runtime.proto',
+        'src/platform/runtime_protocol/proto/makosh/runtime/v1/blob_runtime.proto',
         BACKEND_ROOT,
       ),
       'utf8',
     ),
     readFile(
       new URL(
-        'src/platform/runtime_protocol/proto/hermes/runtime/v1/managed_runtime_control.proto',
+        'src/platform/runtime_protocol/proto/makosh/runtime/v1/managed_runtime_control.proto',
         BACKEND_ROOT,
       ),
       'utf8',
     ),
     readFile(
       new URL(
-        'src/platform/runtime_protocol/proto/hermes/runtime/v1/recovery.proto',
+        'src/platform/runtime_protocol/proto/makosh/runtime/v1/recovery.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -86,7 +86,7 @@ test('Blob custody release has typed Blob-owned authority without a data-plane d
   assert.match(validation, /fn valid_release_grant/);
   assert.match(validation, /custody_source_proof_sha256/);
   assert.match(session, /fn validate_signed_release/);
-  assert.match(session, /hermes\.blob-custody-release\.v1/);
+  assert.match(session, /makosh\.blob-custody-release\.v1/);
   assert.match(release, /struct BlobCustodyReleaseLedgerV1/);
   assert.match(release, /reserve_deletion_exact/);
   assert.match(kernelRelease, /impl ManagedRuntimeBlobCustodyReleaseHandler/);

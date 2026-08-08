@@ -1,27 +1,27 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_contacts_command_api::{
+use makosh_contacts_command_api::{
     CONTACTS_OWNER_ID_V1, bind_mail_address_book_provider_link_contract_reference_v1,
     upsert_contact_command_contract_reference_v1,
 };
-use hermes_contacts_mail_sync_source_api::contact_mail_sync_source_prepare_contract_reference_v1;
-use hermes_contacts_persistence::{ContactsPersistenceErrorV1, ContactsPersistenceV1};
-use hermes_events_jetstream::{
+use makosh_contacts_mail_sync_source_api::contact_mail_sync_source_prepare_contract_reference_v1;
+use makosh_contacts_persistence::{ContactsPersistenceErrorV1, ContactsPersistenceV1};
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::{
         ContractReferenceV1, ManagedRuntimeControlResponseV1, ManagedRuntimeReadyRequestV1,
         ManagedStorageRuntimeConfigurationV1,
     },
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 

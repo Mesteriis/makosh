@@ -1,5 +1,5 @@
-use hermes_scheduler_persistence::scheduler_storage_bundle_v1;
-use hermes_scheduler_protocol::{JobContractBindingV1, JobKindV1};
+use makosh_scheduler_persistence::scheduler_storage_bundle_v1;
+use makosh_scheduler_protocol::{JobContractBindingV1, JobKindV1};
 
 #[test]
 fn scheduler_persists_an_exact_nonzero_owner_job_contract_revision() {

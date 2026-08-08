@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { MailMessageFlagOperationOutcomeV1 } from '../../../gen/hermes/mail/message_flags/v1/client_pb'
+import { MailMessageFlagOperationOutcomeV1 } from '../../../gen/makosh/mail/message_flags/v1/client_pb'
 import {
 	getMailMessageFlagStatus,
 	mutateMailMessageFlag,

@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Создаётся страница `operations/configuration.md` в русской wiki репозитория `hermes-hub`. На основе трёх встроенных файлов `.github/workflows` документируются конфигурации CI/CD: основной пайплайн (`ci.yml`), ночные проверки (`nightly.yml`) и развёртывание документационного портала (`pages.yml`). Каждое утверждение подтверждается исходным кодом.
+Создаётся страница `operations/configuration.md` в русской wiki репозитория `makosh`. На основе трёх встроенных файлов `.github/workflows` документируются конфигурации CI/CD: основной пайплайн (`ci.yml`), ночные проверки (`nightly.yml`) и развёртывание документационного портала (`pages.yml`). Каждое утверждение подтверждается исходным кодом.
 
 ## Предложенные страницы
 
@@ -39,21 +39,21 @@ generated_by: code-wiki-ru
 #### `backend-fmt` — Форматирование backend-кода
 - Команда: `make backend-fmt-check`
 - Rust с компонентом `rustfmt`, версия 1.88
-- Переменная окружения: `CARGO_TARGET_ROOT=/tmp/hermes-cargo-target-backend-fmt`
+- Переменная окружения: `CARGO_TARGET_ROOT=/tmp/makosh-cargo-target-backend-fmt`
 - Таймаут: 15 минут
 
 #### `backend-clippy` — Статический анализ backend-кода
 - Команда: `make backend-clippy`
 - Rust с компонентом `clippy`, версия 1.88
 - Кэширование `~/.cargo/registry` и `~/.cargo/git`
-- Переменная окружения: `CARGO_TARGET_ROOT=/tmp/hermes-cargo-target-backend-clippy`
+- Переменная окружения: `CARGO_TARGET_ROOT=/tmp/makosh-cargo-target-backend-clippy`
 - Таймаут: 25 минут
 
 #### `backend-unit` — Модульные тесты backend
 - Команда: `make test-unit`
 - Node 24, `cargo-nextest`
 - Кэширование Cargo
-- Переменная окружения: `CARGO_TARGET_ROOT=/tmp/hermes-cargo-target-backend-unit`
+- Переменная окружения: `CARGO_TARGET_ROOT=/tmp/makosh-cargo-target-backend-unit`
 - Артефакты (выгружаются всегда):
   - `reports/test-performance/unit.json`
   - `reports/test-performance/unit.md`
@@ -63,7 +63,7 @@ generated_by: code-wiki-ru
 #### `backend-snapshot` — Snapshot-тесты backend
 - Команда: `make test-snapshot`
 - Node 24, `cargo-nextest`
-- Переменная окружения: `CARGO_TARGET_ROOT=/tmp/hermes-cargo-target-backend-snapshot`
+- Переменная окружения: `CARGO_TARGET_ROOT=/tmp/makosh-cargo-target-backend-snapshot`
 - Таймаут: 15 минут
 
 #### `backend-integration` — Интеграционные тесты backend

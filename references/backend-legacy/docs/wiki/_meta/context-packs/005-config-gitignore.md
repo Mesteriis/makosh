@@ -21,9 +21,9 @@
 - Group / Группа: `.gitignore`
 - Role / Роль: `config`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `.gitignore`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.gitignore`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.gitignore`
 - Size bytes / Размер в байтах: `775`
 - Included characters / Включено символов: `775`
 - Truncated / Обрезано: `no`
@@ -92,7 +92,7 @@ coverage/
 
 # Tauri
 src-tauri/target/
-frontend/src-tauri/binaries/hermes-hub-backend-*
+frontend/src-tauri/binaries/makosh-backend-*
 frontend/src-tauri/resources/tdlib/**/libtdjson.*
 frontend/src-tauri/resources/google-oauth/client_secret.json
 

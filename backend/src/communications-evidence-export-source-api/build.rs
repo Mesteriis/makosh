@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/communications/evidence_export_source/v1/evidence_export_source.proto"],
+            &["proto/makosh/communications/evidence_export_source/v1/evidence_export_source.proto"],
             &["proto"],
         )
         .expect("Communications evidence-export source protocol must compile");

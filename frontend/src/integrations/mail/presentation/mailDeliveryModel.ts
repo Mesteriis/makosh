@@ -1,7 +1,7 @@
 import {
 	MailDeliveryOutcomeV1,
 	type MailDeliveryOperationStatusV1,
-} from '../../../gen/hermes/mail/v1/client_pb'
+} from '../../../gen/makosh/mail/v1/client_pb'
 
 export type MailDeliveryModel = {
 	operationId: string

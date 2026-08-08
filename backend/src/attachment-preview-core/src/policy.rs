@@ -1,4 +1,4 @@
-use hermes_attachment_preview_api::{
+use makosh_attachment_preview_api::{
     ATTACHMENT_PREVIEW_MAX_AUDIO_BYTES_V1, ATTACHMENT_PREVIEW_MAX_IMAGE_BYTES_V1,
     ATTACHMENT_PREVIEW_MAX_TEXT_BYTES_V1, ATTACHMENT_PREVIEW_MAX_VIDEO_BYTES_V1,
     wire::AttachmentPreviewContentTypeV1,

@@ -1,8 +1,8 @@
-# Hermes Frontend UI System
+# Макошь Frontend UI System
 
 ## Goal
 
-Hermes UI должен быть чистым, предсказуемым и спокойным. Это рабочий инструмент для памяти, коммуникаций, контекста и решений, а не демонстрация того, как дизайнер нашёл blur и больше не смог остановиться.
+Макошь UI должен быть чистым, предсказуемым и спокойным. Это рабочий инструмент для памяти, коммуникаций, контекста и решений, а не демонстрация того, как дизайнер нашёл blur и больше не смог остановиться.
 
 Главная цель UI:
 
@@ -20,7 +20,7 @@ Vue 3
 Tailwind CSS
 Reka UI
 shadcn-vue style ownership
-Hermes UI Kit
+Макошь UI Kit
 Storybook
 ```
 
@@ -108,7 +108,7 @@ PersonaIdentityBlock
 - shared UI components;
 - Storybook stories.
 
-Новые screens должны появляться после утверждения layout-модели Hermes.
+Новые screens должны появляться после утверждения layout-модели Макошь.
 
 ## Themes
 
@@ -118,7 +118,7 @@ UI Kit поддерживает три темы:
 |---|---|
 | `light` | Основная чистая корпоративная тема |
 | `dark` | Нейтральная тёмная тема |
-| `hermes` | Фирменная emerald-тема Hermes |
+| `makosh` | Фирменная emerald-тема Макошь |
 
 Переключение:
 
@@ -158,7 +158,7 @@ frontend/stories/ui
 
 - docs/autodocs, controls и source через Storybook 10 docs surface;
 - `@storybook/addon-a11y` для WCAG-проверок в панели;
-- `@storybook/addon-themes` для переключения `light`, `dark`, `hermes`;
+- `@storybook/addon-themes` для переключения `light`, `dark`, `makosh`;
 - `@storybook/addon-vitest` и `@storybook/test-runner` для story-driven tests;
 - `@storybook/addon-coverage` с Vite 8-compatible `vite-plugin-istanbul` override;
 - `msw-storybook-addon` и `public/mockServiceWorker.js` для API-mocking в stories;
@@ -177,7 +177,7 @@ Storybook имеет toolbar locale с `ru`, `en`, `es`. Тексты stories ж
 frontend/stories/ui/storybook-i18n.ts
 ```
 
-Default locale - `ru`, потому что Hermes сейчас проектируется русскоязычным
+Default locale - `ru`, потому что Макошь сейчас проектируется русскоязычным
 owner-first интерфейсом. Все shared UI stories должны брать display text из
 этого файла, чтобы visual baselines ловили переполнения и layout regressions
 для трёх языков.
@@ -186,7 +186,7 @@ owner-first интерфейсом. Все shared UI stories должны бра
 
 Storybook является источником визуальных baseline для UI Kit. Playwright
 читает `index.json`, открывает каждую story в `iframe.html` и сравнивает
-скриншоты по локалям `ru`, `en`, `es`, темам `light`, `dark`, `hermes` и
+скриншоты по локалям `ru`, `en`, `es`, темам `light`, `dark`, `makosh` и
 ключевым ширинам интерфейса.
 
 Команды:

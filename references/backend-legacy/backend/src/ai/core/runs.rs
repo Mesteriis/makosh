@@ -9,8 +9,8 @@ use super::errors::AiError;
 use super::evidence::link_ai_entity_in_transaction;
 use super::helpers::{validate_limit, validate_non_empty};
 use super::types::AiCitation;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 
 #[derive(Clone)]
 pub struct AiRunStore {

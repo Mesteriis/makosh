@@ -1,9 +1,9 @@
 use sqlx::postgres::PgPool;
 
-use hermes_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::errors::EventStoreError;
 
 pub async fn run_migrations(pool: &PgPool) -> Result<(), EventStoreError> {
-    hermes_schema::apply(pool).await?;
+    makosh_schema::apply(pool).await?;
     Ok(())
 }
 
@@ -11,7 +11,7 @@ pub fn expected_migration_summary() -> MigrationSummary {
     let mut count = 0;
     let mut latest_version = 0;
 
-    for migration in hermes_schema::MIGRATOR.iter() {
+    for migration in makosh_schema::MIGRATOR.iter() {
         count += 1;
         latest_version = latest_version.max(migration.version);
     }

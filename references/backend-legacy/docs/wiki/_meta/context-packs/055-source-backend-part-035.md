@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/engines/automation/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/automation/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/automation/store.rs`
 - Size bytes / Размер в байтах: `8917`
 - Included characters / Включено символов: `8917`
 - Truncated / Обрезано: `no`
@@ -338,7 +338,7 @@ impl AutomationStore {
 
 ### `backend/src/engines/automation/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/automation/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/automation/validation.rs`
 - Size bytes / Размер в байтах: `2942`
 - Included characters / Включено символов: `2942`
 - Truncated / Обрезано: `no`
@@ -433,7 +433,7 @@ fn validate_object(field: &'static str, value: &Value) -> Result<(), AutomationE
 
 ### `backend/src/engines/call_intelligence/engine.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/call_intelligence/engine.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/call_intelligence/engine.rs`
 - Size bytes / Размер в байтах: `4915`
 - Included characters / Включено символов: `4915`
 - Truncated / Обрезано: `no`
@@ -571,7 +571,7 @@ fn step<const I: usize, const O: usize>(
 
 ### `backend/src/engines/call_intelligence/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/call_intelligence/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/call_intelligence/mod.rs`
 - Size bytes / Размер в байтах: `216`
 - Included characters / Включено символов: `216`
 - Truncated / Обрезано: `no`
@@ -589,7 +589,7 @@ pub use models::{
 
 ### `backend/src/engines/call_intelligence/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/call_intelligence/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/call_intelligence/models.rs`
 - Size bytes / Размер в байтах: `964`
 - Included characters / Включено символов: `964`
 - Truncated / Обрезано: `no`
@@ -632,7 +632,7 @@ pub struct CallIntelligenceOutputCandidate {
 
 ### `backend/src/engines/consistency.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/consistency.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/consistency.rs`
 - Size bytes / Размер в байтах: `605`
 - Included characters / Включено символов: `605`
 - Truncated / Обрезано: `no`
@@ -663,7 +663,7 @@ pub use store::ContradictionObservationStore as ContradictionObservationPort;
 
 ### `backend/src/engines/consistency/constants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/consistency/constants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/consistency/constants.rs`
 - Size bytes / Размер в байтах: `158`
 - Included characters / Включено символов: `158`
 - Truncated / Обрезано: `no`
@@ -676,7 +676,7 @@ pub(super) const STRUCTURED_EVIDENCE_CLAIM_CONFIDENCE: f64 = 0.8;
 
 ### `backend/src/engines/consistency/engine.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/consistency/engine.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/consistency/engine.rs`
 - Size bytes / Размер в байтах: `4120`
 - Included characters / Включено символов: `4120`
 - Truncated / Обрезано: `no`
@@ -802,7 +802,7 @@ impl ConsistencyEngine {
 
 ### `backend/src/engines/consistency/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/consistency/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/consistency/errors.rs`
 - Size bytes / Размер в байтах: `1013`
 - Included characters / Включено символов: `1013`
 - Truncated / Обрезано: `no`
@@ -848,7 +848,7 @@ pub enum ConsistencyError {
 
 ### `backend/src/engines/consistency/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/consistency/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/consistency/evidence.rs`
 - Size bytes / Размер в байтах: `4935`
 - Included characters / Включено символов: `4935`
 - Truncated / Обрезано: `no`
@@ -1023,7 +1023,7 @@ pub(crate) async fn link_consistency_entity_in_transaction(
 
 ### `backend/src/engines/consistency/helpers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/consistency/helpers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/consistency/helpers.rs`
 - Size bytes / Размер в байтах: `1934`
 - Included characters / Включено символов: `1934`
 - Truncated / Обрезано: `no`
@@ -1099,7 +1099,7 @@ pub(super) fn contradiction_metadata(
 
 ### `backend/src/engines/consistency/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/consistency/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/consistency/models.rs`
 - Size bytes / Размер в байтах: `5967`
 - Included characters / Включено символов: `5967`
 - Truncated / Обрезано: `no`
@@ -1304,7 +1304,7 @@ pub struct ContradictionObservation {
 
 ### `backend/src/engines/consistency/parsing.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/consistency/parsing.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/consistency/parsing.rs`
 - Size bytes / Размер в байтах: `2882`
 - Included characters / Включено символов: `2882`
 - Truncated / Обрезано: `no`
@@ -1411,7 +1411,7 @@ fn is_supported_deterministic_claim_type(claim_type: &str) -> bool {
 
 ### `backend/src/engines/consistency/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/consistency/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/consistency/rows.rs`
 - Size bytes / Размер в байтах: `2681`
 - Included characters / Включено символов: `2681`
 - Truncated / Обрезано: `no`
@@ -1485,7 +1485,7 @@ pub(super) fn parse_review_state(
 
 ### `backend/src/engines/consistency/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/consistency/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/consistency/store.rs`
 - Size bytes / Размер в байтах: `2110`
 - Included characters / Включено символов: `2110`
 - Truncated / Обрезано: `no`
@@ -1576,7 +1576,7 @@ impl ContradictionObservationStore {
 
 ### `backend/src/engines/consistency/store/observations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/consistency/store/observations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/consistency/store/observations.rs`
 - Size bytes / Размер в байтах: `6333`
 - Included characters / Включено символов: `6333`
 - Truncated / Обрезано: `no`
@@ -1782,7 +1782,7 @@ async fn capture_contradiction_observation_in_transaction(
 
 ### `backend/src/engines/consistency/store/refresh.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/consistency/store/refresh.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/consistency/store/refresh.rs`
 - Size bytes / Размер в байтах: `4927`
 - Included characters / Включено символов: `4927`
 - Truncated / Обрезано: `no`
@@ -1956,7 +1956,7 @@ async fn detect_and_upsert(
 
 ### `backend/src/engines/consistency/store/review.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/consistency/store/review.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/consistency/store/review.rs`
 - Size bytes / Размер в байтах: `2806`
 - Included characters / Включено символов: `2806`
 - Truncated / Обрезано: `no`
@@ -2056,7 +2056,7 @@ pub(super) async fn set_review_state(
 
 ### `backend/src/engines/consistency/store/sources.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/consistency/store/sources.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/consistency/store/sources.rs`
 - Size bytes / Размер в байтах: `5512`
 - Included characters / Включено символов: `5512`
 - Truncated / Обрезано: `no`
@@ -2255,7 +2255,7 @@ pub(super) async fn recent_call_transcript_evidence(
 
 ### `backend/src/engines/consistency/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/consistency/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/consistency/validation.rs`
 - Size bytes / Размер в байтах: `1205`
 - Included characters / Включено символов: `1205`
 - Truncated / Обрезано: `no`
@@ -2314,7 +2314,7 @@ pub(super) fn validate_refresh_limit(limit: i64) -> i64 {
 
 ### `backend/src/engines/context_packs/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/context_packs/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/context_packs/errors.rs`
 - Size bytes / Размер в байтах: `642`
 - Included characters / Включено символов: `642`
 - Truncated / Обрезано: `no`
@@ -2349,7 +2349,7 @@ pub enum ContextPackStoreError {
 
 ### `backend/src/engines/context_packs/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/context_packs/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/context_packs/mod.rs`
 - Size bytes / Размер в байтах: `247`
 - Included characters / Включено символов: `247`
 - Truncated / Обрезано: `no`
@@ -2369,7 +2369,7 @@ pub use store::ContextPackStore;
 
 ### `backend/src/engines/context_packs/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/context_packs/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/context_packs/models.rs`
 - Size bytes / Размер в байтах: `6117`
 - Included characters / Включено символов: `6117`
 - Truncated / Обрезано: `no`
@@ -2601,7 +2601,7 @@ pub(super) fn validate_json_object(
 
 ### `backend/src/engines/context_packs/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/context_packs/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/context_packs/store.rs`
 - Size bytes / Размер в байтах: `6785`
 - Included characters / Включено символов: `6785`
 - Truncated / Обрезано: `no`
@@ -2834,7 +2834,7 @@ fn context_pack_id(pack: &NewContextPack) -> Result<String, ContextPackStoreErro
 
 ### `backend/src/engines/enrichment/engine.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/enrichment/engine.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/enrichment/engine.rs`
 - Size bytes / Размер в байтах: `2355`
 - Included characters / Включено символов: `2355`
 - Truncated / Обрезано: `no`

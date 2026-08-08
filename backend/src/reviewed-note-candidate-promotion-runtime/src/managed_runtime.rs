@@ -1,30 +1,30 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
 };
-use hermes_knowledge_command_api::{
+use makosh_knowledge_command_api::{
     knowledge_note_created_from_reviewed_candidate_contract_reference_v1,
     knowledge_note_creation_from_reviewed_candidate_rejected_contract_reference_v1,
 };
-use hermes_review_note_candidate_api::review_note_candidate_approved_contract_reference_v1;
-use hermes_reviewed_note_candidate_promotion_core::REVIEWED_NOTE_CANDIDATE_PROMOTION_OWNER_V1;
-use hermes_reviewed_note_candidate_promotion_persistence::{
+use makosh_review_note_candidate_api::review_note_candidate_approved_contract_reference_v1;
+use makosh_reviewed_note_candidate_promotion_core::REVIEWED_NOTE_CANDIDATE_PROMOTION_OWNER_V1;
+use makosh_reviewed_note_candidate_promotion_persistence::{
     ReviewedNoteCandidatePromotionPersistenceErrorV1, ReviewedNoteCandidatePromotionPersistenceV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::{
         ContractReferenceV1, ManagedRuntimeControlResponseV1, ManagedRuntimeReadyRequestV1,
         ManagedStorageRuntimeConfigurationV1,
     },
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 

@@ -7,8 +7,8 @@ pub use model::{OllamaAiHttpErrorV1, OllamaModelRevisionV1};
 
 use std::time::Duration;
 
-use hermes_ollama_ai_api::{OLLAMA_AI_LOOPBACK_HOST_V1, OllamaAiRuntimeSettingsV1};
-use hermes_ollama_ai_core::{
+use makosh_ollama_ai_api::{OLLAMA_AI_LOOPBACK_HOST_V1, OllamaAiRuntimeSettingsV1};
+use makosh_ollama_ai_core::{
     OllamaExplanationPlanV1, OllamaGenerationPlanV1, OllamaHttpGenerationV1,
     OllamaSummaryGenerationPlanV1, OllamaTranslationPlanV1,
 };
@@ -23,7 +23,7 @@ use crate::{
     wire::execute_json_v1,
 };
 
-pub const PACKAGE: &str = "hermes-ollama-ai-http";
+pub const PACKAGE: &str = "makosh-ollama-ai-http";
 
 pub async fn discover_model_revision_v1(
     settings: &OllamaAiRuntimeSettingsV1,

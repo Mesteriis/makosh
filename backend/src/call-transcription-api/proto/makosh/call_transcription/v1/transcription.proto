@@ -1,0 +1,129 @@
+syntax = "proto3";
+
+package makosh.call_transcription.v1;
+
+message StartCallTranscriptionRequestV1 {
+  uint32 protocol_major = 1;
+  bytes operation_id = 2;
+  bytes call_evidence_id = 3;
+  uint64 expected_call_evidence_revision = 4;
+  bytes recording_evidence_id = 5;
+  uint64 expected_recording_revision = 6;
+  bytes consent_receipt_id = 7;
+  uint32 consent_policy_revision = 8;
+  CallTranscriptionLanguageV1 requested_language = 9;
+}
+
+message StartCallTranscriptionResponseV1 {
+  bytes run_id = 1;
+  CallTranscriptionStateV1 state = 2;
+  uint64 state_revision = 3;
+  CallTranscriptionErrorCodeV1 error = 15;
+}
+
+message GetCallTranscriptionRequestV1 {
+  uint32 protocol_major = 1;
+  bytes run_id = 2;
+}
+
+message GetCallTranscriptionResponseV1 {
+  bytes run_id = 1;
+  bytes call_evidence_id = 2;
+  uint64 call_evidence_revision = 3;
+  bytes recording_evidence_id = 4;
+  uint64 recording_revision = 5;
+  CallTranscriptionStateV1 state = 6;
+  uint64 state_revision = 7;
+  optional CallTranscriptionArtifactV1 artifact = 8;
+  CallTranscriptionErrorCodeV1 error = 15;
+}
+
+message IssueCallTranscriptReadRequestV1 {
+  uint32 protocol_major = 1;
+  bytes run_id = 2;
+}
+
+message IssueCallTranscriptReadResponseV1 {
+  bytes run_id = 1;
+  bytes opaque_read_ticket = 2;
+  uint64 expires_at_unix_seconds = 3;
+  uint64 transcript_size_bytes = 4;
+  CallTranscriptionErrorCodeV1 error = 15;
+}
+
+message ReadCallTranscriptRequestV1 {
+  uint32 protocol_major = 1;
+  bytes opaque_read_ticket = 2;
+}
+
+message CallTranscriptionArtifactV1 {
+  bytes transcript_sha256 = 1;
+  uint64 transcript_size_bytes = 2;
+  CallTranscriptionLanguageV1 detected_language = 3;
+  uint64 duration_millis = 4;
+  uint32 segment_count = 5;
+  CallTranscriptionCompletenessV1 completeness = 6;
+  uint32 confidence_basis_points = 7;
+}
+
+message CallTranscriptionStatusChangedV1 {
+  bytes run_id = 1;
+  CallTranscriptionStateV1 state = 2;
+  uint64 state_revision = 3;
+  optional CallTranscriptionArtifactV1 artifact = 4;
+  uint64 occurred_at_unix_millis = 5;
+  CallTranscriptionErrorCodeV1 error = 15;
+}
+
+service CallTranscriptionCommandService {
+  rpc Start(StartCallTranscriptionRequestV1)
+      returns (StartCallTranscriptionResponseV1);
+}
+
+service CallTranscriptionQueryService {
+  rpc Get(GetCallTranscriptionRequestV1)
+      returns (GetCallTranscriptionResponseV1);
+}
+
+service CallTranscriptTicketService {
+  rpc IssueRead(IssueCallTranscriptReadRequestV1)
+      returns (IssueCallTranscriptReadResponseV1);
+}
+
+enum CallTranscriptionLanguageV1 {
+  CALL_TRANSCRIPTION_LANGUAGE_UNSPECIFIED = 0;
+  CALL_TRANSCRIPTION_LANGUAGE_AUTO = 1;
+  CALL_TRANSCRIPTION_LANGUAGE_ENGLISH = 2;
+  CALL_TRANSCRIPTION_LANGUAGE_RUSSIAN = 3;
+  CALL_TRANSCRIPTION_LANGUAGE_SPANISH = 4;
+}
+
+enum CallTranscriptionStateV1 {
+  CALL_TRANSCRIPTION_STATE_UNSPECIFIED = 0;
+  CALL_TRANSCRIPTION_STATE_ACCEPTED = 1;
+  CALL_TRANSCRIPTION_STATE_AWAITING_RECORDING = 2;
+  CALL_TRANSCRIPTION_STATE_AWAITING_STT = 3;
+  CALL_TRANSCRIPTION_STATE_MATERIALIZING_TRANSCRIPT = 4;
+  CALL_TRANSCRIPTION_STATE_READY = 5;
+  CALL_TRANSCRIPTION_STATE_REJECTED = 6;
+}
+
+enum CallTranscriptionCompletenessV1 {
+  CALL_TRANSCRIPTION_COMPLETENESS_UNSPECIFIED = 0;
+  CALL_TRANSCRIPTION_COMPLETENESS_COMPLETE = 1;
+  CALL_TRANSCRIPTION_COMPLETENESS_PARTIAL = 2;
+}
+
+enum CallTranscriptionErrorCodeV1 {
+  CALL_TRANSCRIPTION_ERROR_CODE_UNSPECIFIED = 0;
+  CALL_TRANSCRIPTION_ERROR_CODE_INVALID_REQUEST = 1;
+  CALL_TRANSCRIPTION_ERROR_CODE_NOT_FOUND = 2;
+  CALL_TRANSCRIPTION_ERROR_CODE_RECORDING_REJECTED = 3;
+  CALL_TRANSCRIPTION_ERROR_CODE_STT_REJECTED = 4;
+  CALL_TRANSCRIPTION_ERROR_CODE_RESULT_REJECTED = 5;
+  CALL_TRANSCRIPTION_ERROR_CODE_STALE_AUTHORITY = 6;
+  CALL_TRANSCRIPTION_ERROR_CODE_POLICY = 7;
+  CALL_TRANSCRIPTION_ERROR_CODE_TICKET_EXPIRED = 8;
+  CALL_TRANSCRIPTION_ERROR_CODE_TICKET_USED = 9;
+  CALL_TRANSCRIPTION_ERROR_CODE_UNAVAILABLE = 10;
+}

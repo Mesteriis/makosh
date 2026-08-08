@@ -170,7 +170,7 @@ pub(crate) async fn rich_body_html_for_message(
     pool: sqlx::postgres::PgPool,
     message: &ProjectedMessage,
 ) -> Result<Option<String>, ApiError> {
-    let Some(raw) = hermes_communications_postgres::store::CommunicationIngestionStore::new(pool)
+    let Some(raw) = makosh_communications_postgres::store::CommunicationIngestionStore::new(pool)
         .raw_record(&message.raw_record_id)
         .await?
     else {

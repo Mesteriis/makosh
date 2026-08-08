@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/domains/communications/components/outboxStatus.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/outboxStatus.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/outboxStatus.ts`
 - Size bytes / Размер в байтах: `5955`
 - Included characters / Включено символов: `5955`
 - Truncated / Обрезано: `no`
@@ -274,7 +274,7 @@ function statusPriority(item: CommunicationOutboxItem): number {
 
 ### `frontend/src/domains/communications/components/richComposeExtensions.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/richComposeExtensions.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/richComposeExtensions.ts`
 - Size bytes / Размер в байтах: `4139`
 - Included characters / Включено символов: `4139`
 - Truncated / Обрезано: `no`
@@ -491,7 +491,7 @@ export const richComposeExtensions = [
 
 ### `frontend/src/domains/communications/components/richComposeHtml.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/richComposeHtml.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/richComposeHtml.test.ts`
 - Size bytes / Размер в байтах: `3872`
 - Included characters / Включено символов: `3872`
 - Truncated / Обрезано: `no`
@@ -596,7 +596,7 @@ describe('rich compose HTML helpers', () => {
 
 ### `frontend/src/domains/communications/components/richComposeHtml.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/richComposeHtml.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/richComposeHtml.ts`
 - Size bytes / Размер в байтах: `6571`
 - Included characters / Включено символов: `6571`
 - Truncated / Обрезано: `no`
@@ -831,7 +831,7 @@ function escapeHtml(value: string): string {
 
 ### `frontend/src/domains/communications/components/savedSearchRuleTreePresentation.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/savedSearchRuleTreePresentation.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/savedSearchRuleTreePresentation.test.ts`
 - Size bytes / Размер в байтах: `1159`
 - Included characters / Включено символов: `1156`
 - Truncated / Обрезано: `no`
@@ -868,7 +868,7 @@ describe('saved search rule tree presentation', () => {
 
 ### `frontend/src/domains/communications/components/savedSearchRuleTreePresentation.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/savedSearchRuleTreePresentation.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/savedSearchRuleTreePresentation.ts`
 - Size bytes / Размер в байтах: `837`
 - Included characters / Включено символов: `836`
 - Truncated / Обрезано: `no`
@@ -895,7 +895,7 @@ export function savedSearchRuleGroupSummary(group: SavedSearchRuleGroup): string
 
 ### `frontend/src/domains/communications/components/templateLibrary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/templateLibrary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/templateLibrary.test.ts`
 - Size bytes / Размер в байтах: `3536`
 - Included characters / Включено символов: `3534`
 - Truncated / Обрезано: `no`
@@ -955,13 +955,13 @@ describe('template library helpers', () => {
     })
 
     expect(applyTemplateRecipientMapping({
-      project: 'Hermes'
+      project: 'Макошь'
     }, mapping, {
       toText: 'alex@example.com, sam@example.com',
       ccText: 'ops@example.com',
       bccText: 'audit@example.com'
     })).toEqual({
-      project: 'Hermes',
+      project: 'Макошь',
       recipient: 'alex@example.com, sam@example.com',
       cc: 'ops@example.com',
       bcc: 'audit@example.com'
@@ -982,7 +982,7 @@ describe('template library helpers', () => {
         bccText: ''
       },
       {
-        project: 'Hermes rollout'
+        project: 'Макошь rollout'
       }
     )).toEqual([
       {
@@ -990,7 +990,7 @@ describe('template library helpers', () => {
         variables: {
           recipient: 'alex@example.com',
           cc: 'ops@example.com',
-          project: 'Hermes rollout'
+          project: 'Макошь rollout'
         }
       },
       {
@@ -998,7 +998,7 @@ describe('template library helpers', () => {
         variables: {
           recipient: 'sam@example.com',
           cc: 'ops@example.com',
-          project: 'Hermes rollout'
+          project: 'Макошь rollout'
         }
       }
     ])
@@ -1022,7 +1022,7 @@ describe('template library helpers', () => {
 
 ### `frontend/src/domains/communications/components/templateLibrary.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/templateLibrary.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/templateLibrary.ts`
 - Size bytes / Размер в байтах: `7217`
 - Included characters / Включено символов: `7215`
 - Truncated / Обрезано: `no`
@@ -1233,7 +1233,7 @@ function recipientVariableKind(
 
 ### `frontend/src/domains/communications/components/threadConversationPresentation.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/threadConversationPresentation.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/threadConversationPresentation.test.ts`
 - Size bytes / Размер в байтах: `1897`
 - Included characters / Включено символов: `1897`
 - Truncated / Обрезано: `no`
@@ -1308,7 +1308,7 @@ describe('threadConversationPresentation', () => {
 
 ### `frontend/src/domains/communications/components/threadConversationPresentation.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/threadConversationPresentation.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/threadConversationPresentation.ts`
 - Size bytes / Размер в байтах: `907`
 - Included characters / Включено символов: `907`
 - Truncated / Обрезано: `no`
@@ -1344,7 +1344,7 @@ export function summarizeThreadExpansion(
 
 ### `frontend/src/domains/communications/components/threadMessageBody.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/threadMessageBody.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/threadMessageBody.test.ts`
 - Size bytes / Размер в байтах: `1673`
 - Included characters / Включено символов: `1673`
 - Truncated / Обрезано: `no`
@@ -1404,7 +1404,7 @@ describe('threadMessageBody', () => {
 
 ### `frontend/src/domains/communications/components/threadMessageBody.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/threadMessageBody.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/threadMessageBody.ts`
 - Size bytes / Размер в байтах: `1253`
 - Included characters / Включено символов: `1253`
 - Truncated / Обрезано: `no`
@@ -1457,7 +1457,7 @@ export function previewThreadMessageBody(message: ThreadMessage, expanded: boole
 
 ### `frontend/src/domains/communications/components/useCommunicationFolderReorder.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/useCommunicationFolderReorder.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/useCommunicationFolderReorder.ts`
 - Size bytes / Размер в байтах: `2675`
 - Included characters / Включено символов: `2675`
 - Truncated / Обрезано: `no`
@@ -1548,7 +1548,7 @@ export function useCommunicationFolderReorder(
 
 ### `frontend/src/domains/communications/constants/sectionTabs.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/constants/sectionTabs.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/constants/sectionTabs.ts`
 - Size bytes / Размер в байтах: `555`
 - Included characters / Включено символов: `555`
 - Truncated / Обрезано: `no`
@@ -1572,7 +1572,7 @@ export const communicationSectionTabs: {
 
 ### `frontend/src/domains/communications/forms/attachmentSearchForm.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/forms/attachmentSearchForm.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/forms/attachmentSearchForm.test.ts`
 - Size bytes / Размер в байтах: `796`
 - Included characters / Включено символов: `796`
 - Truncated / Обрезано: `no`
@@ -1609,7 +1609,7 @@ describe('attachment search form', () => {
 
 ### `frontend/src/domains/communications/forms/attachmentSearchForm.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/forms/attachmentSearchForm.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/forms/attachmentSearchForm.ts`
 - Size bytes / Размер в байтах: `1438`
 - Included characters / Включено символов: `1438`
 - Truncated / Обрезано: `no`
@@ -1661,7 +1661,7 @@ export function attachmentSearchFormToRequest(
 
 ### `frontend/src/domains/communications/forms/bilingualReplyFlowForm.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/forms/bilingualReplyFlowForm.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/forms/bilingualReplyFlowForm.test.ts`
 - Size bytes / Размер в байтах: `1511`
 - Included characters / Включено символов: `1447`
 - Truncated / Обрезано: `no`
@@ -1688,7 +1688,7 @@ describe('bilingual reply flow form', () => {
     })
   })
 
-  it('supports the required Hermes bilingual reply tones', () => {
+  it('supports the required Макошь bilingual reply tones', () => {
     expect(bilingualReplyToneOptions).toEqual([
       'formal',
       'business',
@@ -1725,7 +1725,7 @@ describe('bilingual reply flow form', () => {
 
 ### `frontend/src/domains/communications/forms/bilingualReplyFlowForm.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/forms/bilingualReplyFlowForm.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/forms/bilingualReplyFlowForm.ts`
 - Size bytes / Размер в байтах: `1087`
 - Included characters / Включено символов: `1087`
 - Truncated / Обрезано: `no`
@@ -1774,7 +1774,7 @@ export function bilingualReplyFlowFormToRequest(
 
 ### `frontend/src/domains/communications/forms/certificateForm.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/forms/certificateForm.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/forms/certificateForm.ts`
 - Size bytes / Размер в байтах: `2791`
 - Included characters / Включено символов: `2791`
 - Truncated / Обрезано: `no`
@@ -1866,7 +1866,7 @@ function localDateTimeToIso(value: string | undefined): string | null {
 
 ### `frontend/src/domains/communications/forms/composeDraftAutosave.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/forms/composeDraftAutosave.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/forms/composeDraftAutosave.test.ts`
 - Size bytes / Размер в байтах: `3840`
 - Included characters / Включено символов: `3840`
 - Truncated / Обрезано: `no`
@@ -2017,7 +2017,7 @@ describe('compose draft autosave', () => {
 
 ### `frontend/src/domains/communications/forms/composeDraftAutosave.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/forms/composeDraftAutosave.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/forms/composeDraftAutosave.ts`
 - Size bytes / Размер в байтах: `2997`
 - Included characters / Включено символов: `2997`
 - Truncated / Обрезано: `no`
@@ -2152,7 +2152,7 @@ export function useComposeDraftAutosave(options: ComposeDraftAutosaveOptions) {
 
 ### `frontend/src/domains/communications/forms/composeValidation.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/forms/composeValidation.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/forms/composeValidation.test.ts`
 - Size bytes / Размер в байтах: `1971`
 - Included characters / Включено символов: `1971`
 - Truncated / Обрезано: `no`
@@ -2237,7 +2237,7 @@ describe('compose validation', () => {
 
 ### `frontend/src/domains/communications/forms/composeValidation.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/forms/composeValidation.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/forms/composeValidation.ts`
 - Size bytes / Размер в байтах: `2976`
 - Included characters / Включено символов: `2976`
 - Truncated / Обрезано: `no`
@@ -2349,7 +2349,7 @@ function normalizeRecipientAddress(value: string): string {
 
 ### `frontend/src/domains/communications/forms/mailFolderForm.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/forms/mailFolderForm.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/forms/mailFolderForm.test.ts`
 - Size bytes / Размер в байтах: `3669`
 - Included characters / Включено символов: `3669`
 - Truncated / Обрезано: `no`
@@ -2484,7 +2484,7 @@ function folder(): CommunicationFolder {
 
 ### `frontend/src/domains/communications/forms/mailFolderForm.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/forms/mailFolderForm.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/forms/mailFolderForm.ts`
 - Size bytes / Размер в байтах: `4515`
 - Included characters / Включено символов: `4515`
 - Truncated / Обрезано: `no`

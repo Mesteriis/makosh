@@ -1,4 +1,4 @@
-use hermes_telegram_calls_core::{
+use makosh_telegram_calls_core::{
     TelegramCallMediaProjection, TelegramCallMediaState, TelegramCallMediaUpdate,
     project_call_media_update,
 };
@@ -35,7 +35,7 @@ impl TelegramCallsPersistence {
             "SELECT account_id, call_session_id, runtime_generation, provider_revision, \
              media_state, revision, connected_at_unix_seconds, updated_at_unix_seconds, \
              failed_at_unix_seconds \
-             FROM hermes_data.telegram_call_media_projection \
+             FROM makosh_data.telegram_call_media_projection \
              WHERE account_id = $1 AND call_session_id = $2",
         )
         .bind(account_id)
@@ -52,7 +52,7 @@ async fn validate_call_fence(
     update: &TelegramCallMediaUpdate,
 ) -> Result<(), TelegramCallsPersistenceError> {
     let row = sqlx::query(
-        "SELECT runtime_generation, revision FROM hermes_data.telegram_call_sessions \
+        "SELECT runtime_generation, revision FROM makosh_data.telegram_call_sessions \
          WHERE account_id = $1 AND call_session_id = $2 FOR UPDATE",
     )
     .bind(&update.account_id)
@@ -79,7 +79,7 @@ async fn load_media_for_update(
         "SELECT account_id, call_session_id, runtime_generation, provider_revision, \
          media_state, revision, connected_at_unix_seconds, updated_at_unix_seconds, \
          failed_at_unix_seconds \
-         FROM hermes_data.telegram_call_media_projection \
+         FROM makosh_data.telegram_call_media_projection \
          WHERE call_session_id = $1 FOR UPDATE",
     )
     .bind(call_session_id)
@@ -94,7 +94,7 @@ async fn persist_media_projection(
     projection: &TelegramCallMediaProjection,
 ) -> Result<(), TelegramCallsPersistenceError> {
     sqlx::query(
-        "INSERT INTO hermes_data.telegram_call_media_projection ( \
+        "INSERT INTO makosh_data.telegram_call_media_projection ( \
          call_session_id, account_id, runtime_generation, provider_revision, media_state, \
          revision, connected_at_unix_seconds, updated_at_unix_seconds, failed_at_unix_seconds \
          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) \
@@ -126,7 +126,7 @@ async fn persist_media_history(
     projection: &TelegramCallMediaProjection,
 ) -> Result<(), TelegramCallsPersistenceError> {
     sqlx::query(
-        "INSERT INTO hermes_data.telegram_call_media_state_history ( \
+        "INSERT INTO makosh_data.telegram_call_media_state_history ( \
          call_session_id, revision, runtime_generation, provider_revision, media_state, \
          observed_at_unix_seconds \
          ) VALUES ($1, $2, $3, $4, $5, $6)",

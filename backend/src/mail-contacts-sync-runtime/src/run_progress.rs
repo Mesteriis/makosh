@@ -1,8 +1,8 @@
-use hermes_mail_address_book_contract::{
+use makosh_mail_address_book_contract::{
     MAIL_ADDRESS_BOOK_MAX_PAGE_SIZE_V1, MailAddressBookEnvelopeContextV1,
     build_fetch_mail_address_book_page_command_v1, wire::FetchMailAddressBookPageCommandV1,
 };
-use hermes_mail_contacts_sync_persistence::{
+use makosh_mail_contacts_sync_persistence::{
     AdvanceMailContactsSyncPageV1, MailContactsSyncAdvanceOutcomeV1,
     MailContactsSyncPersistenceErrorV1, MailContactsSyncPersistenceV1, OutboxEnvelopeV1,
 };
@@ -56,7 +56,7 @@ pub async fn advance_ready_page_v1(
             },
             runtime.now_unix_millis / 1_000 + MAIL_CONTACTS_SYNC_COMMAND_DEADLINE_SECONDS_V1,
             &MailAddressBookEnvelopeContextV1 {
-                module_id: hermes_mail_contacts_sync_api::MAIL_CONTACTS_SYNC_MODULE_ID_V1
+                module_id: makosh_mail_contacts_sync_api::MAIL_CONTACTS_SYNC_MODULE_ID_V1
                     .to_owned(),
                 runtime_instance_id: runtime.runtime_instance_id.clone(),
                 runtime_generation: runtime.runtime_generation,

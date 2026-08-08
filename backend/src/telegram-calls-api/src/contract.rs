@@ -1,8 +1,8 @@
 pub const TELEGRAM_CALLS_DESCRIPTOR_SET_V1: &[u8] =
-    include_bytes!(concat!(env!("OUT_DIR"), "/hermes.telegram.calls.v1.bin"));
+    include_bytes!(concat!(env!("OUT_DIR"), "/makosh.telegram.calls.v1.bin"));
 pub const TELEGRAM_CALLS_CONTRACT_MAJOR: u32 = 1;
 pub const TELEGRAM_CALLS_CONTRACT_REVISION: u32 = 1;
-pub const TELEGRAM_CALLS_MODULE_ID: &str = "hermes-telegram-runtime";
+pub const TELEGRAM_CALLS_MODULE_ID: &str = "makosh-telegram-runtime";
 pub const TELEGRAM_CALLS_OWNER_ID: &str = "telegram";
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -29,9 +29,9 @@ impl TelegramCallsContractV1 {
 
     pub const fn connect_path(self) -> &'static str {
         match self {
-            Self::Query => "/hermes.telegram.calls.v1.TelegramCallsQueryService/Query",
-            Self::Command => "/hermes.telegram.calls.v1.TelegramCallsCommandService/Execute",
-            Self::Realtime => "/hermes.telegram.calls.v1.TelegramCallsRealtimeService/Replay",
+            Self::Query => "/makosh.telegram.calls.v1.TelegramCallsQueryService/Query",
+            Self::Command => "/makosh.telegram.calls.v1.TelegramCallsCommandService/Execute",
+            Self::Realtime => "/makosh.telegram.calls.v1.TelegramCallsRealtimeService/Replay",
         }
     }
 

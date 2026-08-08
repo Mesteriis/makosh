@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/engines/enrichment/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/enrichment/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/enrichment/errors.rs`
 - Size bytes / Размер в байтах: `370`
 - Included characters / Включено символов: `370`
 - Truncated / Обрезано: `no`
@@ -78,7 +78,7 @@ pub enum EnrichmentEngineError {
 
 ### `backend/src/engines/enrichment/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/enrichment/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/enrichment/mod.rs`
 - Size bytes / Размер в байтах: `110`
 - Included characters / Включено символов: `110`
 - Truncated / Обрезано: `no`
@@ -94,7 +94,7 @@ pub use errors::EnrichmentEngineError;
 
 ### `backend/src/engines/enrichment/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/enrichment/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/enrichment/models.rs`
 - Size bytes / Размер в байтах: `1017`
 - Included characters / Включено символов: `1017`
 - Truncated / Обрезано: `no`
@@ -142,7 +142,7 @@ pub fn validate_confidence(confidence: f64) -> Result<(), EnrichmentEngineError>
 
 ### `backend/src/engines/identity_resolution/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/identity_resolution/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/identity_resolution/mod.rs`
 - Size bytes / Размер в байтах: `3649`
 - Included characters / Включено символов: `3649`
 - Truncated / Обрезано: `no`
@@ -275,7 +275,7 @@ mod tests {
 
 ### `backend/src/engines/memory.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/memory.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/memory.rs`
 - Size bytes / Размер в байтах: `2657`
 - Included characters / Включено символов: `2657`
 - Truncated / Обрезано: `no`
@@ -383,7 +383,7 @@ impl MemoryEngine {
 
 ### `backend/src/engines/memory/cards.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/memory/cards.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/memory/cards.rs`
 - Size bytes / Размер в байтах: `464`
 - Included characters / Включено символов: `464`
 - Truncated / Обрезано: `no`
@@ -409,7 +409,7 @@ pub(super) fn persona_notes_memory_card(person_id: &str, notes: &str) -> Option<
 
 ### `backend/src/engines/memory/context.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/memory/context.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/memory/context.rs`
 - Size bytes / Размер в байтах: `2851`
 - Included characters / Включено символов: `2851`
 - Truncated / Обрезано: `no`
@@ -506,7 +506,7 @@ fn aggregate_confidence(items: &[MemoryContextItem]) -> f64 {
 
 ### `backend/src/engines/memory/cross_domain.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/memory/cross_domain.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/memory/cross_domain.rs`
 - Size bytes / Размер в байтах: `5120`
 - Included characters / Включено символов: `5120`
 - Truncated / Обрезано: `no`
@@ -677,7 +677,7 @@ fn aggregate_confidence(items: &[RankedCrossDomainMemoryContextItem]) -> f64 {
 
 ### `backend/src/engines/memory/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/memory/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/memory/errors.rs`
 - Size bytes / Размер в байтах: `352`
 - Included characters / Включено символов: `352`
 - Truncated / Обрезано: `no`
@@ -698,7 +698,7 @@ pub enum MemoryEngineError {
 
 ### `backend/src/engines/memory/facts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/memory/facts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/memory/facts.rs`
 - Size bytes / Размер в байтах: `938`
 - Included characters / Включено символов: `938`
 - Truncated / Обрезано: `no`
@@ -736,7 +736,7 @@ pub(super) fn persona_fact_memory(
 
 ### `backend/src/engines/memory/gaps.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/memory/gaps.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/memory/gaps.rs`
 - Size bytes / Размер в байтах: `2467`
 - Included characters / Включено символов: `2467`
 - Truncated / Обрезано: `no`
@@ -816,7 +816,7 @@ fn accepted_fact_types_for_entity(
 
 ### `backend/src/engines/memory/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/memory/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/memory/models.rs`
 - Size bytes / Размер в байтах: `3019`
 - Included characters / Включено символов: `3019`
 - Truncated / Обрезано: `no`
@@ -946,7 +946,7 @@ pub struct MemoryCrossDomainContextItem {
 
 ### `backend/src/engines/memory/stale.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/memory/stale.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/memory/stale.rs`
 - Size bytes / Размер в байтах: `2267`
 - Included characters / Включено символов: `2267`
 - Truncated / Обрезано: `no`
@@ -1022,7 +1022,7 @@ fn compare_optional_time(left: Option<DateTime<Utc>>, right: Option<DateTime<Utc
 
 ### `backend/src/engines/memory/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/memory/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/memory/validation.rs`
 - Size bytes / Размер в байтах: `2860`
 - Included characters / Включено символов: `2860`
 - Truncated / Обрезано: `no`
@@ -1106,7 +1106,7 @@ pub(super) fn validate_confidence(confidence: f64) -> Result<(), MemoryEngineErr
 
 ### `backend/src/engines/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/mod.rs`
 - Size bytes / Размер в байтах: `288`
 - Included characters / Включено символов: `288`
 - Truncated / Обрезано: `no`
@@ -1130,7 +1130,7 @@ pub mod trust;
 
 ### `backend/src/engines/obligation/detection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/obligation/detection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/obligation/detection.rs`
 - Size bytes / Размер в байтах: `3459`
 - Included characters / Включено символов: `3459`
 - Truncated / Обрезано: `no`
@@ -1248,7 +1248,7 @@ fn ensure_sentence_terminator(value: &str) -> String {
 
 ### `backend/src/engines/obligation/engine.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/obligation/engine.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/obligation/engine.rs`
 - Size bytes / Размер в байтах: `1014`
 - Included characters / Включено символов: `1014`
 - Truncated / Обрезано: `no`
@@ -1289,7 +1289,7 @@ impl ObligationEngine {
 
 ### `backend/src/engines/obligation/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/obligation/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/obligation/errors.rs`
 - Size bytes / Размер в байтах: `248`
 - Included characters / Включено символов: `248`
 - Truncated / Обрезано: `no`
@@ -1309,7 +1309,7 @@ pub enum ObligationEngineError {
 
 ### `backend/src/engines/obligation/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/obligation/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/obligation/mod.rs`
 - Size bytes / Размер в байтах: `378`
 - Included characters / Включено символов: `378`
 - Truncated / Обрезано: `no`
@@ -1331,7 +1331,7 @@ pub use models::{
 
 ### `backend/src/engines/obligation/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/obligation/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/obligation/models.rs`
 - Size bytes / Размер в байтах: `7421`
 - Included characters / Включено символов: `7421`
 - Truncated / Обрезано: `no`
@@ -1582,7 +1582,7 @@ pub(crate) fn validate_non_empty(
 
 ### `backend/src/engines/relationships/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/relationships/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/relationships/mod.rs`
 - Size bytes / Размер в байтах: `3775`
 - Included characters / Включено символов: `3775`
 - Truncated / Обрезано: `no`
@@ -1719,7 +1719,7 @@ mod tests {
 
 ### `backend/src/engines/risk/engine.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/risk/engine.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/risk/engine.rs`
 - Size bytes / Размер в байтах: `1799`
 - Included characters / Включено символов: `1799`
 - Truncated / Обрезано: `no`
@@ -1781,7 +1781,7 @@ impl RiskEngine {
 
 ### `backend/src/engines/risk/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/risk/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/risk/errors.rs`
 - Size bytes / Размер в байтах: `235`
 - Included characters / Включено символов: `235`
 - Truncated / Обрезано: `no`
@@ -1801,7 +1801,7 @@ pub enum RiskEngineError {
 
 ### `backend/src/engines/risk/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/risk/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/risk/mod.rs`
 - Size bytes / Размер в байтах: `185`
 - Included characters / Включено символов: `185`
 - Truncated / Обрезано: `no`
@@ -1818,7 +1818,7 @@ pub use models::{RiskAttentionStatus, RiskObservationDraft, RiskSeverity, RiskSi
 
 ### `backend/src/engines/risk/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/risk/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/risk/models.rs`
 - Size bytes / Размер в байтах: `2365`
 - Included characters / Включено символов: `2365`
 - Truncated / Обрезано: `no`

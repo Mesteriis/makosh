@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS provider_status_mappings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     provider TEXT NOT NULL,
     external_status TEXT NOT NULL,
-    hermes_status TEXT NOT NULL,
+    makosh_status TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     UNIQUE(provider, external_status)
 );

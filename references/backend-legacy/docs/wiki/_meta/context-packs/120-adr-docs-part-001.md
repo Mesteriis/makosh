@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `adr`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docs/adr/ADR-0001-event-sourcing-as-system-spine.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0001-event-sourcing-as-system-spine.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0001-event-sourcing-as-system-spine.md`
 - Size bytes / Размер в байтах: `626`
 - Included characters / Включено символов: `626`
 - Truncated / Обрезано: `no`
@@ -67,7 +67,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub must preserve years of communication, document, task and relationship history. Current state alone cannot explain why a conclusion exists or when a commitment emerged.
+Макошь must preserve years of communication, document, task and relationship history. Current state alone cannot explain why a conclusion exists or when a commitment emerged.
 
 ## Decision
 
@@ -83,7 +83,7 @@ Represent meaningful changes as canonical events and use those events to build p
 
 ### `docs/adr/ADR-0002-rust-backend.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0002-rust-backend.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0002-rust-backend.md`
 - Size bytes / Размер в байтах: `607`
 - Included characters / Включено символов: `607`
 - Truncated / Обрезано: `no`
@@ -111,7 +111,7 @@ Use Rust for the backend.
 
 ### `docs/adr/ADR-0003-sveltekit-frontend.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0003-sveltekit-frontend.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0003-sveltekit-frontend.md`
 - Size bytes / Размер в байтах: `558`
 - Included characters / Включено символов: `558`
 - Truncated / Обрезано: `no`
@@ -139,7 +139,7 @@ Use SvelteKit for the frontend.
 
 ### `docs/adr/ADR-0004-tauri-desktop-shell.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0004-tauri-desktop-shell.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0004-tauri-desktop-shell.md`
 - Size bytes / Размер в байтах: `515`
 - Included characters / Включено символов: `515`
 - Truncated / Обрезано: `no`
@@ -151,7 +151,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub is local-first and needs desktop integration for files, local services, secret storage, notifications and possible provider bridge workflows.
+Макошь is local-first and needs desktop integration for files, local services, secret storage, notifications and possible provider bridge workflows.
 
 ## Decision
 
@@ -167,7 +167,7 @@ Use Tauri as the desktop shell.
 
 ### `docs/adr/ADR-0005-postgresql-primary-store.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0005-postgresql-primary-store.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0005-postgresql-primary-store.md`
 - Size bytes / Размер в байтах: `624`
 - Included characters / Включено символов: `624`
 - Truncated / Обрезано: `no`
@@ -179,7 +179,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub needs durable relational state, event storage, graph-like relationships, JSON payloads, migrations and local deployment.
+Макошь needs durable relational state, event storage, graph-like relationships, JSON payloads, migrations and local deployment.
 
 ## Decision
 
@@ -195,7 +195,7 @@ Use PostgreSQL as the primary local store.
 
 ### `docs/adr/ADR-0006-tantivy-full-text-search.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0006-tantivy-full-text-search.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0006-tantivy-full-text-search.md`
 - Size bytes / Размер в байтах: `492`
 - Included characters / Включено символов: `492`
 - Truncated / Обрезано: `no`
@@ -207,7 +207,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub requires fast local full text search over messages, documents, tasks, contacts and projects. The backend target language is Rust.
+Макошь requires fast local full text search over messages, documents, tasks, contacts and projects. The backend target language is Rust.
 
 ## Decision
 
@@ -223,7 +223,7 @@ Use Tantivy for full text search.
 
 ### `docs/adr/ADR-0007-replaceable-vector-search.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0007-replaceable-vector-search.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0007-replaceable-vector-search.md`
 - Size bytes / Размер в байтах: `585`
 - Included characters / Включено символов: `585`
 - Truncated / Обрезано: `no`
@@ -251,7 +251,7 @@ Define vector search behind a replaceable interface and treat embeddings/indexes
 
 ### `docs/adr/ADR-0008-knowledge-graph-first.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0008-knowledge-graph-first.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0008-knowledge-graph-first.md`
 - Size bytes / Размер в байтах: `619`
 - Included characters / Включено символов: `619`
 - Truncated / Обрезано: `no`
@@ -279,7 +279,7 @@ Make the knowledge graph a first-class architectural component, with relationshi
 
 ### `docs/adr/ADR-0009-local-ai-through-ollama.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0009-local-ai-through-ollama.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0009-local-ai-through-ollama.md`
 - Size bytes / Размер в байтах: `472`
 - Included characters / Включено символов: `472`
 - Truncated / Обрезано: `no`
@@ -307,7 +307,7 @@ Use Ollama as the initial local AI runtime boundary.
 
 ### `docs/adr/ADR-0010-specialized-agent-system.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0010-specialized-agent-system.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0010-specialized-agent-system.md`
 - Size bytes / Размер в байтах: `484`
 - Included characters / Включено символов: `484`
 - Truncated / Обрезано: `no`
@@ -323,7 +323,7 @@ A single generic assistant would blur responsibility and make permissions diffic
 
 ## Decision
 
-Use specialized agents: HESTIA, HERMES, MNEMOSYNE, ATHENA and HEPHAESTUS.
+Use specialized agents: HESTIA, MAKOSH, MNEMOSYNE, ATHENA and HEPHAESTUS.
 
 ## Consequences
 
@@ -335,7 +335,7 @@ Use specialized agents: HESTIA, HERMES, MNEMOSYNE, ATHENA and HEPHAESTUS.
 
 ### `docs/adr/ADR-0011-plugin-architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0011-plugin-architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0011-plugin-architecture.md`
 - Size bytes / Размер в байтах: `523`
 - Included characters / Включено символов: `523`
 - Truncated / Обрезано: `no`
@@ -347,7 +347,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub will need new providers, processors, tools and UI extensions over time. Hardcoding all integrations into core will not scale.
+Макошь will need new providers, processors, tools and UI extensions over time. Hardcoding all integrations into core will not scale.
 
 ## Decision
 
@@ -363,7 +363,7 @@ Introduce a plugin architecture with manifests, explicit capabilities and bounde
 
 ### `docs/adr/ADR-0012-opentelemetry-observability.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0012-opentelemetry-observability.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0012-opentelemetry-observability.md`
 - Size bytes / Размер в байтах: `541`
 - Included characters / Включено символов: `541`
 - Truncated / Обрезано: `no`
@@ -391,7 +391,7 @@ Use OpenTelemetry for traces, metrics and structured observability.
 
 ### `docs/adr/ADR-0013-local-first-data-ownership.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0013-local-first-data-ownership.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0013-local-first-data-ownership.md`
 - Size bytes / Размер в байтах: `541`
 - Included characters / Включено символов: `541`
 - Truncated / Обрезано: `no`
@@ -419,7 +419,7 @@ Design local storage and local operation as the default. Cloud services are opti
 
 ### `docs/adr/ADR-0014-canonical-event-envelope.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0014-canonical-event-envelope.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0014-canonical-event-envelope.md`
 - Size bytes / Размер в байтах: `567`
 - Included characters / Включено символов: `567`
 - Truncated / Обрезано: `no`
@@ -447,7 +447,7 @@ Define a canonical event envelope with event ID, type, schema version, timestamp
 
 ### `docs/adr/ADR-0015-command-query-separation.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0015-command-query-separation.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0015-command-query-separation.md`
 - Size bytes / Размер в байтах: `532`
 - Included characters / Включено символов: `532`
 - Truncated / Обрезано: `no`
@@ -459,7 +459,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub has durable state transitions and complex read models. Mixing writes, reads and AI side effects would make behavior hard to test.
+Макошь has durable state transitions and complex read models. Mixing writes, reads and AI side effects would make behavior hard to test.
 
 ## Decision
 
@@ -475,7 +475,7 @@ Separate commands from queries at the application boundary.
 
 ### `docs/adr/ADR-0016-secrets-and-encryption-boundary.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0016-secrets-and-encryption-boundary.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0016-secrets-and-encryption-boundary.md`
 - Size bytes / Размер в байтах: `550`
 - Included characters / Включено символов: `550`
 - Truncated / Обрезано: `no`
@@ -503,7 +503,7 @@ Keep secrets outside ordinary application tables and access them through an OS-b
 
 ### `docs/adr/ADR-0017-document-processing-pipeline.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0017-document-processing-pipeline.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0017-document-processing-pipeline.md`
 - Size bytes / Размер в байтах: `554`
 - Included characters / Включено символов: `554`
 - Truncated / Обрезано: `no`
@@ -531,7 +531,7 @@ Use an asynchronous document processing pipeline driven by events.
 
 ### `docs/adr/ADR-0018-provider-adapter-boundary.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0018-provider-adapter-boundary.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0018-provider-adapter-boundary.md`
 - Size bytes / Размер в байтах: `548`
 - Included characters / Включено символов: `548`
 - Truncated / Обрезано: `no`
@@ -559,7 +559,7 @@ Use provider adapters that preserve raw source records and emit normalized comma
 
 ### `docs/adr/ADR-0019-contact-identity-resolution.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0019-contact-identity-resolution.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0019-contact-identity-resolution.md`
 - Size bytes / Размер в байтах: `550`
 - Included characters / Включено символов: `550`
 - Truncated / Обрезано: `no`
@@ -587,7 +587,7 @@ Model identity resolution as confidence-scored candidates with explicit merge an
 
 ### `docs/adr/ADR-0020-task-candidate-lifecycle.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0020-task-candidate-lifecycle.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0020-task-candidate-lifecycle.md`
 - Size bytes / Размер в байтах: `493`
 - Included characters / Включено символов: `493`
 - Truncated / Обрезано: `no`
@@ -615,7 +615,7 @@ AI extraction creates task candidates. Activation requires user confirmation or 
 
 ### `docs/adr/ADR-0021-calendar-as-event-source.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0021-calendar-as-event-source.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0021-calendar-as-event-source.md`
 - Size bytes / Размер в байтах: `515`
 - Included characters / Включено символов: `515`
 - Truncated / Обрезано: `no`
@@ -643,7 +643,7 @@ Treat calendars as event sources that produce meeting, schedule and attendance e
 
 ### `docs/adr/ADR-0022-no-fine-tuning-on-private-data.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0022-no-fine-tuning-on-private-data.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0022-no-fine-tuning-on-private-data.md`
 - Size bytes / Размер в байтах: `539`
 - Included characters / Включено символов: `539`
 - Truncated / Обрезано: `no`
@@ -671,7 +671,7 @@ Do not fine-tune models on private user data. Use graph, RAG, vector search and 
 
 ### `docs/adr/ADR-0023-rebuildable-projections.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0023-rebuildable-projections.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0023-rebuildable-projections.md`
 - Size bytes / Размер в байтах: `469`
 - Included characters / Включено символов: `469`
 - Truncated / Обрезано: `no`
@@ -699,7 +699,7 @@ Treat projections and indexes as rebuildable from canonical events, raw records 
 
 ### `docs/adr/ADR-0024-idempotent-imports.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0024-idempotent-imports.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0024-idempotent-imports.md`
 - Size bytes / Размер в байтах: `521`
 - Included characters / Включено символов: `521`
 - Truncated / Обрезано: `no`
@@ -727,7 +727,7 @@ All imports must be idempotent using provider IDs, content fingerprints, import 
 
 ### `docs/adr/ADR-0025-keyboard-first-command-palette.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0025-keyboard-first-command-palette.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0025-keyboard-first-command-palette.md`
 - Size bytes / Размер в байтах: `512`
 - Included characters / Включено символов: `512`
 - Truncated / Обрезано: `no`

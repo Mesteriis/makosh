@@ -5,7 +5,7 @@ mod scheduler;
 
 use std::path::Path;
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     ApplyManagedIntegrationSettingsRequestV1, ApplyManagedIntegrationSettingsResponseV1,
     ApproveModuleRegistrationRequestV1, ApproveModuleRegistrationResponseV1,
     BeginBrowserPairingRequestV1, BeginBrowserPairingResponseV1,
@@ -25,9 +25,9 @@ use hermes_gateway_protocol::v1::{
     UpdateOperatorSettingsRequestV1, UpdateOperatorSettingsResponseV1,
     UpgradeBundledManagedRegistrationRequestV1, UpgradeBundledManagedRegistrationResponseV1,
 };
-use hermes_kernel_control_store::{ModuleRegistrationState, PlatformStorageBindingStateV1};
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store::{ModuleRegistrationState, PlatformStorageBindingStateV1};
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     v1::{ManagedDomainRuntimeConfigurationV1, ManagedEngineRuntimeConfigurationV1},
     validation::{
         managed_domain_runtime::validate_managed_domain_runtime_configuration,
@@ -46,7 +46,7 @@ use crate::runtime::lifecycle::integration_launch as managed_integration_launch;
 use crate::runtime::lifecycle::supervisor::ManagedRuntimeSupervisor;
 use crate::runtime::lifecycle::workflow_launch as managed_workflow_launch;
 
-pub(super) type OwnerResult = hermes_gateway_protocol::v1::owner_control_response_v1::Result;
+pub(super) type OwnerResult = makosh_gateway_protocol::v1::owner_control_response_v1::Result;
 
 pub(super) fn handle(
     store: &SqliteControlStore,
@@ -99,9 +99,9 @@ fn route_operation(
     supervisor: &ManagedRuntimeSupervisor,
     browser_pairing: Option<&BrowserPairingAdmissionV1>,
     sessions: &mut OwnerControlSessions,
-    operation: hermes_gateway_protocol::v1::owner_control_request_v1::Operation,
+    operation: makosh_gateway_protocol::v1::owner_control_request_v1::Operation,
 ) -> Result<OwnerResult, String> {
-    use hermes_gateway_protocol::v1::owner_control_request_v1::Operation;
+    use makosh_gateway_protocol::v1::owner_control_request_v1::Operation;
 
     match operation {
         Operation::GetModuleRegistrationStatus(request) => status(store, request),
@@ -847,7 +847,7 @@ fn response(result: Result<OwnerResult, String>) -> OwnerControlResponseV1 {
             error_code: String::new(),
         },
         Err(error) => {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_owner_control_denied error={error}");
             }
             OwnerControlResponseV1 {

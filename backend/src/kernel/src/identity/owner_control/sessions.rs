@@ -3,9 +3,9 @@
 use std::collections::{HashMap, VecDeque};
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
-use hermes_gateway_protocol::owner_control_proof::owner_control_proof_message_v1;
-use hermes_kernel_control_store::InitialOwnerIdentity;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_gateway_protocol::owner_control_proof::owner_control_proof_message_v1;
+use makosh_kernel_control_store::InitialOwnerIdentity;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use p256::ecdsa::signature::Verifier;
 use p256::ecdsa::{Signature, VerifyingKey};
 

@@ -4,7 +4,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub requires fast local full text search over messages, documents, tasks, contacts and projects. The backend target language is Rust.
+Макошь requires fast local full text search over messages, documents, tasks, contacts and projects. The backend target language is Rust.
 
 ## Decision
 

@@ -6,12 +6,12 @@ import {
 	AttachmentPreviewErrorCodeV1,
 	AttachmentPreviewStateV1,
 	AttachmentPreviewStatusChangedV1Schema,
-} from '../../../gen/hermes/attachment_preview/v1/preview_pb'
+} from '../../../gen/makosh/attachment_preview/v1/preview_pb'
 import {
 	ClientRealtimeEventV1Schema,
 	ClientRealtimeStreamStateKindV1,
 	ClientRealtimeStreamStateV1Schema,
-} from '../../../gen/hermes/gateway/v1/client_realtime_pb'
+} from '../../../gen/makosh/gateway/v1/client_realtime_pb'
 import type { BrowserGatewayRealtimeObserver } from '../../../platform/gateway/browserGatewayRealtime'
 import {
 	getAttachmentPreviewStatus,

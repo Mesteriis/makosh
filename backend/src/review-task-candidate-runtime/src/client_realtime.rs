@@ -1,11 +1,11 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_review_task_candidate_api::REVIEW_TASK_CANDIDATE_REALTIME_EVENT_KIND_V1;
-use hermes_review_task_candidate_persistence::{
+use makosh_review_task_candidate_api::REVIEW_TASK_CANDIDATE_REALTIME_EVENT_KIND_V1;
+use makosh_review_task_candidate_persistence::{
     ReviewTaskCandidatePersistenceErrorV1, ReviewTaskCandidatePersistenceV1,
     ReviewTaskCandidateRealtimeTransitionV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeClientRealtimePublishRequestV1, ManagedRuntimeControlRequestV1,
@@ -99,7 +99,7 @@ fn publish_request(
 
 fn event_id(review_id: [u8; 16], review_revision: u64) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.review.task-candidate.client-realtime.v1\0");
+    digest.update(b"makosh.review.task-candidate.client-realtime.v1\0");
     digest.update(review_id);
     digest.update(review_revision.to_be_bytes());
     digest.finalize()[..16].try_into().expect("digest prefix")
@@ -115,7 +115,7 @@ pub(crate) enum ReviewTaskCandidateClientRealtimeErrorV1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_review_task_candidate_core::{
+    use makosh_review_task_candidate_core::{
         ReviewTaskCandidatePromotionStatusV1, ReviewTaskCandidateStateV1,
     };
 

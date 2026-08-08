@@ -4,7 +4,7 @@ This workflow explains how a document becomes useful context.
 
 ## Trigger
 
-The workflow starts when Hermes imports, creates or updates:
+The workflow starts when Макошь imports, creates or updates:
 
 - PDF;
 - Office document;

@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_connectrpc_contracts::hermes::communications::v1::{
+use makosh_connectrpc_contracts::makosh::communications::v1::{
     RenderedRichTemplate as ProtoRenderedRichTemplate, RichTemplate as ProtoRichTemplate,
     RichTemplateMailMergePreviewItem as ProtoRichTemplateMailMergePreviewItem,
     RichTemplateMailMergePreviewResponse,

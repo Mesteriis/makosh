@@ -1,6 +1,6 @@
 ### Summary / Резюме
 
-На основе предоставленного (обрезанного) `Makefile` репозитория `hermes-hub` создаётся страница русской Obsidian‑wiki `operations/configuration.md`. Страница документирует:
+На основе предоставленного (обрезанного) `Makefile` репозитория `makosh` создаётся страница русской Obsidian‑wiki `operations/configuration.md`. Страница документирует:
 
 - назначение и общую структуру `Makefile` как точки входа для операций,
 - переменные конфигурации (`?=`‑переменные, автоматическое обнаружение `sccache`),
@@ -19,7 +19,7 @@
 ```markdown
 # Конфигурация операций
 
-Операции разработки, тестирования, проверок и очистки проекта `hermes-hub`
+Операции разработки, тестирования, проверок и очистки проекта `makosh`
 управляются через команды `make`. Основной файл — `Makefile` в корне
 репозитория.
 
@@ -45,7 +45,7 @@
 | `CARGO_VALIDATE_TEST_TARGET_DIR` | `$(CARGO_TARGET_ROOT)/validate-test` | Артефакты тестов валидации |
 | `CARGO_BUILD_TARGET_DIR` | `$(CARGO_TARGET_ROOT)/build` | Артефакты релизных сборок |
 | `CARGO_COVERAGE_TARGET_DIR` | `$(CARGO_TARGET_ROOT)/coverage` | Артефакты покрытия |
-| `HERMES_NEXTEST_JOBS` | `4` | Количество потоков для `cargo-nextest` |
+| `MAKOSH_NEXTEST_JOBS` | `4` | Количество потоков для `cargo-nextest` |
 | `CARGO_AUDIT_IGNORES` | `RUSTSEC-2023-0071` | Список игнорируемых advisory для `cargo-audit` |
 
 *Примечание:* Полный список переменных может быть шире; исходный файл обрезан
@@ -142,15 +142,15 @@ make clean-vault   Delete local vault data after confirmation
 
 ### Окружение, разработка и сборка
 
-- **`docker-env`**  
+- **`docker-env`**
   `@bash -lc 'source scripts/lib/env.sh; ensure_docker_env_file'`
-- **`dev`**  
+- **`dev`**
   `@./scripts/dev.sh`
-- **`logs`**  
+- **`logs`**
   `@./scripts/logs.sh`
-- **`build`**  
+- **`build`**
   `@./scripts/build.sh`
-- **`migrate`**  
+- **`migrate`**
   `@./scripts/migrate.sh`
 
 ### Проверки архитектуры и стиля
@@ -182,54 +182,54 @@ make clean-vault   Delete local vault data after confirmation
     --suite backend-full \
     --output reports/test-performance/backend-full
   ```
-- **`test-unit`**  
+- **`test-unit`**
   Загружает `scripts/lib/rust-tooling.sh`, проверяет наличие `cargo-nextest`,
   запускает `cargo nextest run --workspace --lib --profile default`
   с переменной `NEXTEST_SHOW_PROGRESS` (по умолчанию `bar`), затем анализирует
   JUnit‑отчёт.
-- **`test-integration`**  
+- **`test-integration`**
   Использует `./scripts/test/run-nextest.sh integration` с целями из
   `BACKEND_INTEGRATION_TARGETS`, после чего анализирует JUnit.
-- **`test-e2e`**  
+- **`test-e2e`**
   Аналогично, использует `BACKEND_E2E_TARGETS`.
 
 ### Архитектурные и snapshot‑тесты
 
-- **`test-architecture`**  
+- **`test-architecture`**
   Выполняет проверки `check-architecture-contract.test.mjs`,
   `check-architecture.mjs --self-test`, `check-architecture.mjs`, затем
   `cargo nextest` с целями из `BACKEND_ARCHITECTURE_TARGETS`.
-- **`test-snapshot` / `snapshot-test`**  
+- **`test-snapshot` / `snapshot-test`**
   `cargo nextest run` с целями из `BACKEND_SNAPSHOT_TARGETS`.
-- **`snapshot-accept`**  
+- **`snapshot-accept`**
   То же, что `snapshot-test`, но с `INSTA_UPDATE=always`.
 
 ### CI‑тесты
 
-- **`test-ci`**  
+- **`test-ci`**
   `./scripts/test/run-nextest.sh ci --all-targets`, затем анализ JUnit,
   затем `frontend-test`.
 
 ### Покрытие
 
-- **`coverage`**  
+- **`coverage`**
   `./scripts/test/run-llvm-cov.sh ci --summary-only`
-- **`coverage-html`**  
+- **`coverage-html`**
   Создаёт папку `target/coverage/html` и вызывает `run-llvm-cov.sh ci --html
   --output-dir target/coverage/html`
-- **`coverage-ci`**  
+- **`coverage-ci`**
   Создаёт папку `target/coverage` и вызывает `run-llvm-cov.sh ci --lcov
   --output-path target/coverage/lcov.info`
 
 ### Мутационное тестирование и аудит безопасности
 
-- **`mutants`**  
+- **`mutants`**
   Проверяет наличие `cargo-mutants` и `cargo-nextest`, затем выполняет
   `cd backend && cargo mutants --test-tool nextest`.
-- **`audit`** (правило обрезано)  
-  Начало: `@bash -lc 'source scripts/lib/rust-tooling.sh; require_cargo_subcommand audit …`;  
+- **`audit`** (правило обрезано)
+  Начало: `@bash -lc 'source scripts/lib/rust-tooling.sh; require_cargo_subcommand audit …`;
   Полное тело не видно. Описание из `help`: “Run cargo-audit”.
-- **`deny`, `security`, `udeps`**  
+- **`deny`, `security`, `udeps`**
   Правила отсутствуют в доступном фрагменте (обрезаны). Описания даны в `help`.
 
 ### Наблюдение, кэш, отчёты, WhatsApp, хранилище, очистка
@@ -264,7 +264,7 @@ make clean-vault   Delete local vault data after confirmation
 Факты, покрытые страницей:
 
 - Установка `SHELL`, `.DEFAULT_GOAL := help`
-- Переменные: `CARGO_TARGET_ROOT`, `CARGO_DEV_TARGET_DIR`, `CARGO_VALIDATE_TARGET_DIR`, `CARGO_VALIDATE_CLIPPY_TARGET_DIR`, `CARGO_VALIDATE_TEST_TARGET_DIR`, `CARGO_BUILD_TARGET_DIR`, `CARGO_COVERAGE_TARGET_DIR`, `HERMES_NEXTEST_JOBS`, `CARGO_AUDIT_IGNORES`, `SCCACHE_BIN`, `RUSTC_WRAPPER` (условно)
+- Переменные: `CARGO_TARGET_ROOT`, `CARGO_DEV_TARGET_DIR`, `CARGO_VALIDATE_TARGET_DIR`, `CARGO_VALIDATE_CLIPPY_TARGET_DIR`, `CARGO_VALIDATE_TEST_TARGET_DIR`, `CARGO_BUILD_TARGET_DIR`, `CARGO_COVERAGE_TARGET_DIR`, `MAKOSH_NEXTEST_JOBS`, `CARGO_AUDIT_IGNORES`, `SCCACHE_BIN`, `RUSTC_WRAPPER` (условно)
 - Формирование `CARGO_AUDIT_IGNORE_FLAGS` и списков целей (`BACKEND_ARCHITECTURE_TARGETS`, `BACKEND_E2E_TARGETS`, `BACKEND_INTEGRATION_TARGETS`, `BACKEND_SNAPSHOT_TARGETS`) через вызовы `node scripts/test/backend-test-targets.mjs`
 - Полный текст цели `help` (перечень команд с описаниями)
 - Правила для `docker-env`, `dev`, `logs`, `build`, `migrate`
@@ -283,7 +283,7 @@ make clean-vault   Delete local vault data after confirmation
 
 ### Drift candidates / Кандидаты на drift
 
-Из предоставленного контекста расхождений между кодом, документацией и ADR не видно.  
-Единственный доступный артефакт — обрезанный `Makefile`; сравнить его с другими источниками (существующей wiki, ADR, скриптами) невозможно, так как они не встроены в context pack.  
+Из предоставленного контекста расхождений между кодом, документацией и ADR не видно.
+Единственный доступный артефакт — обрезанный `Makefile`; сравнить его с другими источниками (существующей wiki, ADR, скриптами) невозможно, так как они не встроены в context pack.
 
 Если бы потребовалось полное покрытие, следовало бы предоставить полный `Makefile` и соответствующие wiki‑страницы.

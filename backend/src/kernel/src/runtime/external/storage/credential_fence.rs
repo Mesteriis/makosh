@@ -1,8 +1,8 @@
 //! Durable Storage credential fencing for opaque external Vault routes.
 
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::VaultCiphertextRouteV1;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::VaultCiphertextRouteV1;
 
 pub(crate) fn validate_vault_credential_fence(
     store: &SqliteControlStore,

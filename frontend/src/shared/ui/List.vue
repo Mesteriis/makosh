@@ -15,27 +15,27 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-list',
-  `hermes-list--${props.density}`,
+  'makosh-list',
+  `makosh-list--${props.density}`,
   props.class
 ])
 </script>
 
 <template>
   <ul :class="classes" :aria-label="label">
-    <li v-if="items.length === 0" class="hermes-list-empty">{{ emptyText }}</li>
+    <li v-if="items.length === 0" class="makosh-list-empty">{{ emptyText }}</li>
     <template v-else>
       <li
         v-for="item in items"
         :key="item.id"
-        :class="['hermes-list-item', `hermes-list-item--${item.tone ?? 'neutral'}`]"
+        :class="['makosh-list-item', `makosh-list-item--${item.tone ?? 'neutral'}`]"
       >
-        <Icon v-if="item.icon" :icon="item.icon" size="1rem" class="hermes-list-icon" />
-        <div class="hermes-list-copy">
-          <strong class="hermes-list-label">{{ item.label }}</strong>
-          <span v-if="item.description" class="hermes-list-description">{{ item.description }}</span>
+        <Icon v-if="item.icon" :icon="item.icon" size="1rem" class="makosh-list-icon" />
+        <div class="makosh-list-copy">
+          <strong class="makosh-list-label">{{ item.label }}</strong>
+          <span v-if="item.description" class="makosh-list-description">{{ item.description }}</span>
         </div>
-        <span v-if="item.meta" class="hermes-list-meta">{{ item.meta }}</span>
+        <span v-if="item.meta" class="makosh-list-meta">{{ item.meta }}</span>
       </li>
     </template>
   </ul>

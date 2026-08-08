@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/README.md`
 - Size bytes / Размер в байтах: `15975`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -63,7 +63,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 ````markdown
 # Backend
 
-Rust backend for Hermes Hub.
+Rust backend for Макошь.
 
 Current scope includes an executable backend foundation with configuration parsing, health/readiness endpoints, V1 status API, canonical event append/read API, event log storage, API access audit logging, host vault onboarding/unlock, legacy database-vault compatibility, Gmail/iCloud/IMAP account setup, secret reference metadata, communication ingestion storage, email sync preflight planning, email provider networking with explicit read/write capability boundaries, fixture email import/export, local mail blob/attachment metadata storage, message/Persona-compatible identity/document projection boundaries, Tantivy search boundary, projection cursors, projection runner batch semantics, graph core projection/read APIs, protected workflow APIs for projects, task candidates, Persona identity review and document processing, and local AI workflow APIs backed by Ollama plus pgvector semantic retrieval. Full MIME parsing, attachment extraction, graph editing, richer graph inference, first-class Polygraph observations and autonomous agent action runtime are not implemented yet.
 
@@ -113,7 +113,7 @@ Graph core smoke:
 make backend-graph-smoke-dev
 ```
 
-This starts the local PostgreSQL container, runs graph store, projection and read API tests with `HERMES_TEST_DATABASE_URL`, then stops the Compose PostgreSQL service on exit. Do not run this while relying on the same Compose PostgreSQL service for an active development database session.
+This starts the local PostgreSQL container, runs graph store, projection and read API tests with `MAKOSH_TEST_DATABASE_URL`, then stops the Compose PostgreSQL service on exit. Do not run this while relying on the same Compose PostgreSQL service for an active development database session.
 
 workflow smoke:
 
@@ -129,7 +129,7 @@ AI smoke:
 make backend-ai-smoke-dev
 ```
 
-This starts the local PostgreSQL container for pgvector/API integration tests and runs live Ollama validation against `http://192.168.1.2:11434` by default. Override the smoke endpoint with `HERMES_AI_SMOKE_OLLAMA_BASE_URL`.
+This starts the local PostgreSQL container for pgvector/API integration tests and runs live Ollama validation against `http://192.168.1.2:11434` by default. Override the smoke endpoint with `MAKOSH_AI_SMOKE_OLLAMA_BASE_URL`.
 
 Project current V1 data into the graph tables:
 
@@ -142,10 +142,10 @@ This starts the local PostgreSQL container if needed, applies migrations through
 Export a redacted iCloud IMAP fixture sample from the latest read-only messages:
 
 ```bash
-HERMES_IMAP_FIXTURE_USERNAME=<icloud-email> \
-HERMES_IMAP_FIXTURE_PASSWORD=<app-password> \
-HERMES_IMAP_FIXTURE_MAX_MESSAGES=10 \
-HERMES_IMAP_FIXTURE_OUTPUT=tmp/email-fixtures/icloud-inbox-redacted.json \
+MAKOSH_IMAP_FIXTURE_USERNAME=<icloud-email> \
+MAKOSH_IMAP_FIXTURE_PASSWORD=<app-password> \
+MAKOSH_IMAP_FIXTURE_MAX_MESSAGES=10 \
+MAKOSH_IMAP_FIXTURE_OUTPUT=tmp/email-fixtures/icloud-inbox-redacted.json \
 make backend-email-fixture-export-icloud-dev
 ```
 
@@ -164,15 +164,15 @@ records and graph projection:
 make backend-email-fixture-project-dev
 ```
 
-Both commands default to `tmp/email-fixtures/icloud-inbox-redacted.json`, create or update the local `dev-icloud-fixture` provider account, print JSON summaries and leave PostgreSQL running for the active development session. Override path and account metadata with `HERMES_EMAIL_FIXTURE_PATH`, `HERMES_EMAIL_FIXTURE_ACCOUNT_ID`, `HERMES_EMAIL_FIXTURE_DISPLAY_NAME`, `HERMES_EMAIL_FIXTURE_EXTERNAL_ACCOUNT_ID`, `HERMES_EMAIL_FIXTURE_IMPORT_BATCH_ID` and `HERMES_EMAIL_FIXTURE_PROVIDER`.
+Both commands default to `tmp/email-fixtures/icloud-inbox-redacted.json`, create or update the local `dev-icloud-fixture` provider account, print JSON summaries and leave PostgreSQL running for the active development session. Override path and account metadata with `MAKOSH_EMAIL_FIXTURE_PATH`, `MAKOSH_EMAIL_FIXTURE_ACCOUNT_ID`, `MAKOSH_EMAIL_FIXTURE_DISPLAY_NAME`, `MAKOSH_EMAIL_FIXTURE_EXTERNAL_ACCOUNT_ID`, `MAKOSH_EMAIL_FIXTURE_IMPORT_BATCH_ID` and `MAKOSH_EMAIL_FIXTURE_PROVIDER`.
 
 Fetch iCloud/raw IMAP mail into the persistent local development cache:
 
 ```bash
-HERMES_EMAIL_SYNC_USERNAME=<imap-login> \
-HERMES_EMAIL_SYNC_PASSWORD=<app-password> \
-HERMES_EMAIL_SYNC_PROVIDER=icloud \
-HERMES_EMAIL_SYNC_MAX_MESSAGES=25 \
+MAKOSH_EMAIL_SYNC_USERNAME=<imap-login> \
+MAKOSH_EMAIL_SYNC_PASSWORD=<app-password> \
+MAKOSH_EMAIL_SYNC_PROVIDER=icloud \
+MAKOSH_EMAIL_SYNC_MAX_MESSAGES=25 \
 make backend-email-sync-cache-dev
 ```
 
@@ -186,10 +186,10 @@ Direct Cargo commands:
 
 ```sh
 cargo run --manifest-path backend/Cargo.toml
-cargo run --manifest-path backend/Cargo.toml --bin hermes-graph-project
-cargo run --manifest-path backend/Cargo.toml --bin hermes-email-fixture-export
-cargo run --manifest-path backend/Cargo.toml --bin hermes-email-fixture-dev
-cargo run --manifest-path backend/Cargo.toml --bin hermes-email-sync-dev
+cargo run --manifest-path backend/Cargo.toml --bin makosh-graph-project
+cargo run --manifest-path backend/Cargo.toml --bin makosh-email-fixture-export
+cargo run --manifest-path backend/Cargo.toml --bin makosh-email-fixture-dev
+cargo run --manifest-path backend/Cargo.toml --bin makosh-email-sync-dev
 cargo test --manifest-path backend/Cargo.toml
 cargo clippy --manifest-path backend/Cargo.toml --all-targets --all-features -- -D warnings
 ```
@@ -200,56 +200,56 @@ For the normal full-stack development loop, use `make dev` from the repository r
 
 Supported environment variables:
 
-- `HERMES_HTTP_ADDR` - backend bind address, defaults to `127.0.0.1:8080`.
-- `HERMES_BACKEND_STARTUP_ATTEMPTS` / `HERMES_BACKEND_STARTUP_SLEEP_SECONDS`
+- `MAKOSH_HTTP_ADDR` - backend bind address, defaults to `127.0.0.1:8080`.
+- `MAKOSH_BACKEND_STARTUP_ATTEMPTS` / `MAKOSH_BACKEND_STARTUP_SLEEP_SECONDS`
   - `make dev` backend readiness polling controls, defaulting to 300 attempts
   with 1 second between attempts to allow cold Rust builds after cache cleanup.
-- `HERMES_FRONTEND_STARTUP_ATTEMPTS` / `HERMES_FRONTEND_STARTUP_SLEEP_SECONDS`
+- `MAKOSH_FRONTEND_STARTUP_ATTEMPTS` / `MAKOSH_FRONTEND_STARTUP_SLEEP_SECONDS`
   - `make dev` frontend readiness polling controls, defaulting to 120 attempts
   with 1 second between attempts.
 - `DATABASE_URL` - optional PostgreSQL URL. The current health endpoint does not require a database connection.
-- `HERMES_LOCAL_API_SECRET` - local shared secret required by the router-level
+- `MAKOSH_LOCAL_API_SECRET` - local shared secret required by the router-level
   guard for protected local API endpoints.
-- `HERMES_VAULT_HOME` - optional host vault directory; defaults to the local
-  Hermes vault home.
-- `HERMES_DEV_MODE` - enables debug-only host vault development key behavior
+- `MAKOSH_VAULT_HOME` - optional host vault directory; defaults to the local
+  Макошь vault home.
+- `MAKOSH_DEV_MODE` - enables debug-only host vault development key behavior
   when set to `true`.
-- `HERMES_DEV_KEY_PATH` - debug-only host vault development key path.
-- `HERMES_SECRET_VAULT_KEY` - legacy database encrypted vault master key kept
+- `MAKOSH_DEV_KEY_PATH` - debug-only host vault development key path.
+- `MAKOSH_SECRET_VAULT_KEY` - legacy database encrypted vault master key kept
   for migration compatibility only; do not commit, log or persist this value in
   PostgreSQL.
-- `HERMES_OLLAMA_BASE_URL` - Ollama runtime URL, defaults to `http://127.0.0.1:11434`.
-- `HERMES_OLLAMA_CHAT_MODEL` - Ollama chat model, defaults to `qwen3:4b`.
-- `HERMES_OLLAMA_EMBED_MODEL` - Ollama embedding model, defaults to `qwen3-embedding:4b`.
-- `HERMES_OLLAMA_TIMEOUT_SECONDS` - Ollama request timeout, defaults to `120`.
+- `MAKOSH_OLLAMA_BASE_URL` - Ollama runtime URL, defaults to `http://127.0.0.1:11434`.
+- `MAKOSH_OLLAMA_CHAT_MODEL` - Ollama chat model, defaults to `qwen3:4b`.
+- `MAKOSH_OLLAMA_EMBED_MODEL` - Ollama embedding model, defaults to `qwen3-embedding:4b`.
+- `MAKOSH_OLLAMA_TIMEOUT_SECONDS` - Ollama request timeout, defaults to `120`.
 
 ## Endpoints
 
 - `GET /healthz` - returns backend health status and service name.
 - `GET /readyz` - returns readiness status; it is `503` when PostgreSQL is not configured, unavailable or missing required SQLx migrations.
-- `GET /api/v1/status` - returns enabled V1 surfaces. Requires `X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>`.
-- `GET /api/v1/vault/status` - returns host vault initialization/unlock status. Requires `X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>`.
-- `POST /api/v1/vault/collect-entropy` - records onboarding entropy samples for host vault creation. Requires `X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>`.
-- `POST /api/v1/vault/create` - creates and unlocks the host vault. Requires `X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>`.
-- `POST /api/v1/vault/unlock` - unlocks an existing host vault. Requires `X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>`.
-- `POST /api/v1/vault/recovery/export` - exports recovery material for an unlocked host vault. Requires `X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>`.
-- `POST /api/v1/vault/recovery/import` - imports recovery material for an existing host vault. Requires `X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>`.
-- `GET /api/v1/graph/summary` - returns graph node, edge and evidence summary counts. Requires `X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>`.
-- `GET /api/v1/graph/search` - searches graph nodes by `q` with optional `limit`. Requires `X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>`.
-- `GET /api/v1/graph/neighborhood` - returns the depth-1 graph neighborhood for `node_id`, including neighboring nodes, edges and evidence. Requires `X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>`.
+- `GET /api/v1/status` - returns enabled V1 surfaces. Requires `X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>`.
+- `GET /api/v1/vault/status` - returns host vault initialization/unlock status. Requires `X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>`.
+- `POST /api/v1/vault/collect-entropy` - records onboarding entropy samples for host vault creation. Requires `X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>`.
+- `POST /api/v1/vault/create` - creates and unlocks the host vault. Requires `X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>`.
+- `POST /api/v1/vault/unlock` - unlocks an existing host vault. Requires `X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>`.
+- `POST /api/v1/vault/recovery/export` - exports recovery material for an unlocked host vault. Requires `X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>`.
+- `POST /api/v1/vault/recovery/import` - imports recovery material for an existing host vault. Requires `X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>`.
+- `GET /api/v1/graph/summary` - returns graph node, edge and evidence summary counts. Requires `X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>`.
+- `GET /api/v1/graph/search` - searches graph nodes by `q` with optional `limit`. Requires `X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>`.
+- `GET /api/v1/graph/neighborhood` - returns the depth-1 graph neighborhood for `node_id`, including neighboring nodes, edges and evidence. Requires `X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>`.
 - `POST /api/v1/integrations/mail/accounts/gmail/oauth/start` - starts Gmail OAuth account setup and returns a PKCE authorization URL. Requires local API headers, PostgreSQL and an initialized/unlocked host vault.
 - `GET /api/v1/integrations/mail/accounts/gmail/oauth/callback` - displays OAuth callback code/state for the desktop setup flow.
 - `POST /api/v1/integrations/mail/accounts/gmail/oauth/complete` - exchanges a Gmail authorization code, stores credential payloads in the host vault and creates provider account bindings. Requires local API headers, PostgreSQL and an initialized/unlocked host vault.
 - `POST /api/v1/integrations/mail/accounts/imap` - creates iCloud/raw IMAP account metadata and stores password/app-password payloads in the host vault. Requires local API headers, PostgreSQL and an initialized/unlocked host vault.
-- `POST /api/v1/events` - appends a canonical event through the application/API boundary. Requires `X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>`.
-- `GET /api/v1/events/{event_id}` - loads a canonical event by ID. Requires `X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>`.
-- `GET /api/v1/audit/events` - returns event API audit records. Supports `target_id`, `actor_id`, `after_audit_id` and `limit` query parameters. Requires `X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>`.
+- `POST /api/v1/events` - appends a canonical event through the application/API boundary. Requires `X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>`.
+- `GET /api/v1/events/{event_id}` - loads a canonical event by ID. Requires `X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>`.
+- `GET /api/v1/audit/events` - returns event API audit records. Supports `target_id`, `actor_id`, `after_audit_id` and `limit` query parameters. Requires `X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>`.
 
-Authorized event API calls are recorded in `api_audit_log` with the constant `hermes-frontend` actor. The API secret value is never stored.
+Authorized event API calls are recorded in `api_audit_log` with the constant `makosh-frontend` actor. The API secret value is never stored.
 
 ## Workflow APIs
 
-Available endpoints below require `X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>`.
+Available endpoints below require `X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>`.
 
 - `GET /api/v1/projects` - lists local project records with derived stats.
 - `GET /api/v1/projects/{project_id}` - returns project detail, timeline, messages, documents and people.

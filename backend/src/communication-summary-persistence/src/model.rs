@@ -1,4 +1,4 @@
-use hermes_communication_summary_core::{
+use makosh_communication_summary_core::{
     CommunicationSummaryDraftV1, CommunicationSummaryRejectionCodeV1, CommunicationSummaryStatusV1,
     CommunicationSummaryTransitionV1,
 };
@@ -87,7 +87,7 @@ pub enum CommunicationSummaryPersistenceErrorV1 {
 
 pub(crate) fn request_fingerprint(draft: &CommunicationSummaryDraftV1) -> [u8; 32] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.communication_summary.start.v1\0");
+    hash.update(b"makosh.communication_summary.start.v1\0");
     hash.update(draft.source_message_id);
     hash.update(draft.expected_source_revision.to_be_bytes());
     hash.update([length_code(draft.length)]);
@@ -96,9 +96,9 @@ pub(crate) fn request_fingerprint(draft: &CommunicationSummaryDraftV1) -> [u8; 3
 }
 
 pub(crate) const fn length_code(
-    value: hermes_communication_summary_core::CommunicationSummaryLengthV1,
+    value: makosh_communication_summary_core::CommunicationSummaryLengthV1,
 ) -> u8 {
-    use hermes_communication_summary_core::CommunicationSummaryLengthV1;
+    use makosh_communication_summary_core::CommunicationSummaryLengthV1;
     match value {
         CommunicationSummaryLengthV1::Short => 1,
         CommunicationSummaryLengthV1::Standard => 2,
@@ -107,9 +107,9 @@ pub(crate) const fn length_code(
 }
 
 pub(crate) const fn language_code(
-    value: hermes_communication_summary_core::CommunicationSummaryLanguageV1,
+    value: makosh_communication_summary_core::CommunicationSummaryLanguageV1,
 ) -> u8 {
-    use hermes_communication_summary_core::CommunicationSummaryLanguageV1;
+    use makosh_communication_summary_core::CommunicationSummaryLanguageV1;
     match value {
         CommunicationSummaryLanguageV1::Auto => 1,
         CommunicationSummaryLanguageV1::English => 2,
@@ -145,7 +145,7 @@ pub(crate) fn nonzero<const N: usize>(value: &[u8; N]) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use hermes_communication_summary_core::{
+    use makosh_communication_summary_core::{
         CommunicationSummaryLanguageV1, CommunicationSummaryLengthV1,
     };
 

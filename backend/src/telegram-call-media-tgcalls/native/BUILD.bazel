@@ -1,5 +1,5 @@
 cc_binary(
-    name = "libhermes_tgcalls_bridge.dylib",
+    name = "libmakosh_tgcalls_bridge.dylib",
     srcs = [
         "bridge.cpp",
         "bridge.h",
@@ -34,7 +34,7 @@ cc_binary(
     ],
     deps = [
         "//submodules/TgVoipWebrtc:tgcalls_core",
-        "//third-party/webrtc:hermes_macos_audio_device",
+        "//third-party/webrtc:makosh_macos_audio_device",
     ],
     visibility = ["//visibility:public"],
 )
@@ -42,7 +42,7 @@ cc_binary(
 # Explicit, test-only CoreAudio probe. It is built only by the development
 # conformance profile and is never part of the Telegram release assembly.
 cc_binary(
-    name = "hermes_tgcalls_audio_device_conformance",
+    name = "makosh_tgcalls_audio_device_conformance",
     srcs = [
         "audio_device_conformance.cpp",
     ],
@@ -71,6 +71,6 @@ cc_binary(
     ],
     testonly = True,
     deps = [
-        "//third-party/webrtc:hermes_macos_audio_device",
+        "//third-party/webrtc:makosh_macos_audio_device",
     ],
 )

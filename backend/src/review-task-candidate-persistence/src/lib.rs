@@ -21,4 +21,4 @@ pub use schema::{
     review_task_candidate_storage_bundle_v1,
 };
 
-pub const PACKAGE: &str = "hermes-review-task-candidate-persistence";
+pub const PACKAGE: &str = "makosh-review-task-candidate-persistence";

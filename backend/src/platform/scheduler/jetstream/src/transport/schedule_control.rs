@@ -4,7 +4,7 @@ use std::time::Duration;
 
 use async_nats::jetstream::consumer::{AckPolicy, PullConsumer};
 use futures_util::StreamExt;
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     RuntimeNatsJwtCredentialV1,
     delivery::{
         ExactOutboxPublisherPortV1, OutboxPublishReceiptV1, OutboxRecordV1, OutboxRelayErrorV1,
@@ -12,11 +12,11 @@ use hermes_events_protocol::{
     v1::durable_envelope_v1::Semantics,
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::SchedulerRuntimeScheduleControlBindingV1,
     validation::scheduler::validate_scheduler_runtime_schedule_control_binding,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     SchedulerScheduleControlDeliveryErrorV1, SchedulerScheduleControlDeliveryPortV1,
     SchedulerScheduleControlDeliveryV1,
 };
@@ -63,7 +63,7 @@ impl SchedulerJetStreamScheduleControlPortV1 {
             .as_ref()
             .ok_or(OutboxRelayErrorV1::PublisherUnavailable)?;
         let subject = format!(
-            "hermes.result.v1.{}.{}.v{}",
+            "makosh.result.v1.{}.{}.v{}",
             contract.owner, contract.name, contract.major
         );
         (matches!(envelope.semantics, Some(Semantics::Result(_)))

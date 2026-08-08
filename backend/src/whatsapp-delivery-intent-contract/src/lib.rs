@@ -1,15 +1,15 @@
 #![forbid(unsafe_code)]
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-whatsapp-delivery-intent-contract";
+pub const PACKAGE: &str = "makosh-whatsapp-delivery-intent-contract";
 pub const WHATSAPP_DELIVERY_INTENT_OWNER_ID_V1: &str = "whatsapp";
 pub const WHATSAPP_DELIVERY_INTENT_SOURCE_MODULE_ID_V1: &str =
-    "hermes-communication-delivery-intent-runtime";
-pub const WHATSAPP_DELIVERY_INTENT_TARGET_MODULE_ID_V1: &str = "hermes-whatsapp-runtime";
+    "makosh-communication-delivery-intent-runtime";
+pub const WHATSAPP_DELIVERY_INTENT_TARGET_MODULE_ID_V1: &str = "makosh-whatsapp-runtime";
 pub const WHATSAPP_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1: &str = "whatsapp.delivery-intent.v1";
 pub const WHATSAPP_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1: &str = "whatsapp.blob.v1";
 pub const WHATSAPP_DELIVERY_INTENT_CUSTODY_SCOPE_ID_V1: &str = "whatsapp.delivery-intent-body.v1";
@@ -29,7 +29,7 @@ pub const WHATSAPP_DELIVERY_INTENT_MAX_IN_FLIGHT_V1: u32 = 32;
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.whatsapp.delivery_intent.v1.rs"
+        "/makosh.whatsapp.delivery_intent.v1.rs"
     ));
 }
 
@@ -263,7 +263,7 @@ mod tests {
         assert_eq!(WHATSAPP_DELIVERY_INTENT_OWNER_ID_V1, "whatsapp");
         assert_eq!(
             WHATSAPP_DELIVERY_INTENT_TARGET_MODULE_ID_V1,
-            "hermes-whatsapp-runtime"
+            "makosh-whatsapp-runtime"
         );
         assert_eq!(
             WHATSAPP_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1,

@@ -20,14 +20,14 @@ pub(super) struct ManagedZulipContour {
 impl ManagedZulipContour {
     pub(super) fn start(grant_profile: ZulipGrantProfileV1) -> Self {
         assert_eq!(
-            std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+            std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
             Ok("1")
         );
-        let root = private_directory(unique_target_root("hermes-managed-zulip-runtime"));
+        let root = private_directory(unique_target_root("makosh-managed-zulip-runtime"));
         let fixture = ZulipHttpsFixture::start(&root);
         unsafe {
             std::env::set_var(
-                "HERMES_MANAGED_RUNTIME_CONFORMANCE_CA_CERT_FILE",
+                "MAKOSH_MANAGED_RUNTIME_CONFORMANCE_CA_CERT_FILE",
                 fixture.ca_certificate_path(),
             );
         }
@@ -37,13 +37,13 @@ impl ManagedZulipContour {
         let seeded_credential = seed_zulip_vault(&vault_dir);
         let release = installed_communications_zulip_release(&root);
         unsafe {
-            std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+            std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
         }
         let store = Arc::new(configured_communications_store(&root, release.kernel()));
         let (owner_signer, _) =
             FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
         store
-            .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+            .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
                 "owner-1",
                 "desktop-1",
                 owner_signer.public_key_sec1(),
@@ -129,8 +129,8 @@ impl ManagedZulipContour {
 
     pub(super) fn finish(self) {
         unsafe {
-            std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
-            std::env::remove_var("HERMES_MANAGED_RUNTIME_CONFORMANCE_CA_CERT_FILE");
+            std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
+            std::env::remove_var("MAKOSH_MANAGED_RUNTIME_CONFORMANCE_CA_CERT_FILE");
         }
         let Self {
             root,

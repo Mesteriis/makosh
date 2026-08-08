@@ -1,6 +1,6 @@
 //! Translation of a validated module descriptor into Control Store request records.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleBlobOperationV1, ModuleBlobQuotaRequestV1, ModuleClientBlobRouteV1,
     ModuleClientRealtimeRouteV1, ModuleClientRpcRouteV1, ModuleEventDeliveryPolicyV1,
     ModuleEventEnvelopeKindV1, ModuleEventRouteDirectionV1, ModuleEventRouteRequestInputV1,
@@ -8,7 +8,7 @@ use hermes_kernel_control_store::{
     ModuleRegistration, ModuleRequestContractV1, ModuleSchedulerJobRequestV1,
     ModuleStorageRequestV1, ModuleVaultPurposeRequestV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::{
         BlobQuotaOperationV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
         EventSubscriptionRequirementV1, ModuleKindV1, ProvidedSurfaceKindV1, VaultActionV1,
@@ -213,7 +213,7 @@ fn bind_vault_purpose_requests(
                 &request.capability_id,
                 &request.purpose_id,
                 request.requested_lease_ttl_seconds,
-                hermes_kernel_control_store::ModuleVaultPurposePolicyV1 {
+                makosh_kernel_control_store::ModuleVaultPurposePolicyV1 {
                     secret_class: request.secret_class,
                     action: request.action,
                     target_scope: request.target_scope,
@@ -236,7 +236,7 @@ fn bind_client_rpc_routes(
                 &request.capability_id,
                 registration.owner_id(),
                 &request.contract_name,
-                hermes_kernel_control_store::ModuleClientRpcContractVersionV1 {
+                makosh_kernel_control_store::ModuleClientRpcContractVersionV1 {
                     major: request.contract_major,
                     revision: request.contract_revision,
                 },
@@ -259,12 +259,12 @@ fn bind_client_blob_routes(
                 &request.capability_id,
                 registration.owner_id(),
                 &request.contract_name,
-                hermes_kernel_control_store::ModuleClientBlobContractVersionV1 {
+                makosh_kernel_control_store::ModuleClientBlobContractVersionV1 {
                     major: request.contract_major,
                     revision: request.contract_revision,
                 },
                 request.contract_schema_sha256,
-                hermes_kernel_control_store::ModuleClientBlobTransportV1 {
+                makosh_kernel_control_store::ModuleClientBlobTransportV1 {
                     path: request.path.clone(),
                     max_response_bytes: request.max_response_bytes,
                 },
@@ -285,7 +285,7 @@ fn bind_client_realtime_routes(
                 &request.capability_id,
                 registration.owner_id(),
                 &request.contract_name,
-                hermes_kernel_control_store::ModuleClientRealtimeContractVersionV1 {
+                makosh_kernel_control_store::ModuleClientRealtimeContractVersionV1 {
                     major: request.contract_major,
                     revision: request.contract_revision,
                 },
@@ -418,7 +418,7 @@ struct DescriptorModuleQueryContract {
 }
 
 fn query_rpc_routes(
-    descriptor: &hermes_runtime_protocol::v1::ModuleDescriptorV1,
+    descriptor: &makosh_runtime_protocol::v1::ModuleDescriptorV1,
 ) -> Result<Vec<DescriptorModuleQueryContract>, String> {
     let mut routes = Vec::new();
     for capability in &descriptor.capabilities {
@@ -445,7 +445,7 @@ fn query_rpc_routes(
 }
 
 fn request_rpc_routes(
-    descriptor: &hermes_runtime_protocol::v1::ModuleDescriptorV1,
+    descriptor: &makosh_runtime_protocol::v1::ModuleDescriptorV1,
 ) -> Result<Vec<DescriptorModuleQueryContract>, String> {
     let mut routes = Vec::new();
     for capability in &descriptor.capabilities {
@@ -475,7 +475,7 @@ fn request_rpc_routes(
 }
 
 fn contract_dependencies(
-    descriptor: &hermes_runtime_protocol::v1::ModuleDescriptorV1,
+    descriptor: &makosh_runtime_protocol::v1::ModuleDescriptorV1,
 ) -> Result<Vec<DescriptorModuleQueryContract>, String> {
     let mut dependencies = Vec::new();
     for capability in &descriptor.capabilities {
@@ -491,7 +491,7 @@ fn contract_dependencies(
 
 fn descriptor_query_contract(
     capability_id: &str,
-    contract: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    contract: &makosh_runtime_protocol::v1::ContractReferenceV1,
 ) -> Result<DescriptorModuleQueryContract, String> {
     Ok(DescriptorModuleQueryContract {
         capability_id: capability_id.to_owned(),
@@ -508,7 +508,7 @@ fn descriptor_query_contract(
 }
 
 fn client_rpc_routes(
-    descriptor: &hermes_runtime_protocol::v1::ModuleDescriptorV1,
+    descriptor: &makosh_runtime_protocol::v1::ModuleDescriptorV1,
 ) -> Result<Vec<DescriptorClientRpcRoute>, String> {
     let mut seen_paths = std::collections::BTreeSet::new();
     let mut routes = Vec::new();
@@ -549,7 +549,7 @@ fn client_rpc_routes(
 }
 
 fn client_blob_routes(
-    descriptor: &hermes_runtime_protocol::v1::ModuleDescriptorV1,
+    descriptor: &makosh_runtime_protocol::v1::ModuleDescriptorV1,
 ) -> Result<Vec<DescriptorClientBlobRoute>, String> {
     let mut seen_paths = std::collections::BTreeSet::new();
     let mut routes = Vec::new();
@@ -591,7 +591,7 @@ fn client_blob_routes(
 }
 
 fn client_realtime_routes(
-    descriptor: &hermes_runtime_protocol::v1::ModuleDescriptorV1,
+    descriptor: &makosh_runtime_protocol::v1::ModuleDescriptorV1,
 ) -> Result<Vec<DescriptorClientRealtimeRoute>, String> {
     let mut seen_contracts = std::collections::BTreeSet::new();
     let mut routes = Vec::new();
@@ -635,7 +635,7 @@ fn client_realtime_routes(
 }
 
 fn event_route_requests(
-    descriptor: &hermes_runtime_protocol::v1::ModuleDescriptorV1,
+    descriptor: &makosh_runtime_protocol::v1::ModuleDescriptorV1,
 ) -> Result<Vec<DescriptorEventRouteRequest>, String> {
     descriptor
         .capabilities
@@ -655,8 +655,8 @@ fn event_route_requests(
 }
 
 fn descriptor_event_route(
-    capability: &hermes_runtime_protocol::v1::CapabilityDescriptorV1,
-    route: &hermes_runtime_protocol::v1::EventRouteRequestV1,
+    capability: &makosh_runtime_protocol::v1::CapabilityDescriptorV1,
+    route: &makosh_runtime_protocol::v1::EventRouteRequestV1,
 ) -> Result<DescriptorEventRouteRequest, String> {
     let contract = route
         .contract
@@ -702,7 +702,7 @@ fn event_route_direction(value: i32) -> Result<ModuleEventRouteDirectionV1, Stri
 }
 
 fn event_delivery_policy(
-    route: &hermes_runtime_protocol::v1::EventRouteRequestV1,
+    route: &makosh_runtime_protocol::v1::EventRouteRequestV1,
 ) -> Result<Option<ModuleEventDeliveryPolicyV1>, String> {
     match EventRouteDirectionV1::try_from(route.direction).ok() {
         Some(EventRouteDirectionV1::Publish) => Ok(None),
@@ -731,7 +731,7 @@ fn event_subscription_requirement(
 }
 
 fn blob_quota_requests(
-    descriptor: &hermes_runtime_protocol::v1::ModuleDescriptorV1,
+    descriptor: &makosh_runtime_protocol::v1::ModuleDescriptorV1,
 ) -> Result<Vec<DescriptorBlobQuotaRequest>, String> {
     let requests = descriptor
         .capabilities
@@ -752,7 +752,7 @@ fn blob_quota_requests(
 }
 
 fn blob_quota_request_for_capability(
-    capability: &hermes_runtime_protocol::v1::CapabilityDescriptorV1,
+    capability: &makosh_runtime_protocol::v1::CapabilityDescriptorV1,
 ) -> Result<Option<DescriptorBlobQuotaRequest>, String> {
     let requests = capability
         .requests
@@ -794,7 +794,7 @@ fn blob_quota_request_for_capability(
 }
 
 fn storage_requests(
-    descriptor: &hermes_runtime_protocol::v1::ModuleDescriptorV1,
+    descriptor: &makosh_runtime_protocol::v1::ModuleDescriptorV1,
 ) -> Result<Vec<DescriptorStorageRequest>, String> {
     let mut requests = Vec::new();
     for capability in &descriptor.capabilities {
@@ -826,7 +826,7 @@ fn storage_requests(
 }
 
 fn scheduler_job_requests(
-    descriptor: &hermes_runtime_protocol::v1::ModuleDescriptorV1,
+    descriptor: &makosh_runtime_protocol::v1::ModuleDescriptorV1,
 ) -> Result<Vec<DescriptorSchedulerJobRequest>, String> {
     let mut requests = Vec::new();
     for capability in &descriptor.capabilities {
@@ -865,7 +865,7 @@ fn scheduler_job_requests(
 }
 
 fn vault_purpose_requests(
-    descriptor: &hermes_runtime_protocol::v1::ModuleDescriptorV1,
+    descriptor: &makosh_runtime_protocol::v1::ModuleDescriptorV1,
 ) -> Result<Vec<DescriptorVaultPurposeRequest>, String> {
     let mut result = Vec::new();
     for capability in &descriptor.capabilities {

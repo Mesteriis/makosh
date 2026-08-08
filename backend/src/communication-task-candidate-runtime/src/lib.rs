@@ -34,4 +34,4 @@ pub use source_results::{
     CommunicationTaskCandidateSourceResultErrorV1, consume_task_source_rejected_once_v1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-task-candidate-runtime";
+pub const PACKAGE: &str = "makosh-communication-task-candidate-runtime";

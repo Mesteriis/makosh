@@ -1,9 +1,9 @@
-# Hermes Tasks
+# Макошь Tasks
 
 Status: documentation package aligned to the current repository structure.
 
-Tasks are actionable units inside the Personal Memory System. Hermes is not a
-task tracker. External trackers can be providers, but Hermes keeps local
+Tasks are actionable units inside the Personal Memory System. Макошь is not a
+task tracker. External trackers can be providers, but Макошь keeps local
 context, evidence and relationships under owner control.
 
 ## Domain Boundary

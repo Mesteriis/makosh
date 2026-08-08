@@ -9,7 +9,7 @@ pub(crate) mod cli;
 pub(crate) mod recovery;
 
 #[cfg(test)]
-pub(crate) use hermes_storage_vault as storage_runtime_vault;
+pub(crate) use makosh_storage_vault as storage_runtime_vault;
 
 #[cfg(test)]
 pub(crate) use storage_runtime_vault as vault;

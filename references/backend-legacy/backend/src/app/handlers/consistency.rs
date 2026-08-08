@@ -12,7 +12,7 @@ use crate::engines::consistency::{
 use crate::platform::audit::models::NewApiAuditRecord;
 use crate::workflows::consistency_review::ContradictionReviewService;
 
-const CONTRADICTION_API_ACTOR_ID: &str = "hermes-frontend";
+const CONTRADICTION_API_ACTOR_ID: &str = "makosh-frontend";
 const DEFAULT_CONTRADICTION_LIMIT: i64 = 50;
 const MIN_CONTRADICTION_LIMIT: i64 = 1;
 const MAX_CONTRADICTION_LIMIT: i64 = 100;

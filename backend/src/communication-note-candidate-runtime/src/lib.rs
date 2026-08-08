@@ -34,4 +34,4 @@ pub use source_results::{
     CommunicationNoteCandidateSourceResultErrorV1, consume_note_source_rejected_once_v1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-note-candidate-runtime";
+pub const PACKAGE: &str = "makosh-communication-note-candidate-runtime";

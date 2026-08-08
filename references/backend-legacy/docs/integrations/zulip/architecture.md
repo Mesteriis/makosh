@@ -38,7 +38,7 @@ Communications accepted-signal consumer / workflows / projections
 
 ## Event mapping
 
-| Zulip event | Hermes event | Subject |
+| Zulip event | Макошь event | Subject |
 |---|---|---|
 | `message` | `signal.raw.zulip.message.observed` | provider message ID |
 | `reaction` | `signal.raw.zulip.reaction.observed` | provider message ID + emoji/user evidence |

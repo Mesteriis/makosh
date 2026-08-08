@@ -12,7 +12,7 @@ describe('canonical Communications presentation model', () => {
 	it('maps generated metadata without provider-specific behavior', () => {
 		const accountId = new Uint8Array([0xab, 0xcd])
 		const accounts = buildCanonicalAccountRows([{
-			$typeName: 'hermes.communications.query.v1.AccountSummaryV1',
+			$typeName: 'makosh.communications.query.v1.AccountSummaryV1',
 			accountId,
 			accountCursorSha256: new Uint8Array(32),
 			provider: 2,

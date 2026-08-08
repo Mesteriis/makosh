@@ -6,9 +6,9 @@ use thiserror::Error;
 use super::errors::ReviewInboxError;
 use super::models::{ReviewItem, ReviewItemStatus};
 use super::store::ReviewInboxStore;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::store::ObservationStore;
 
 #[derive(Clone)]
 pub struct ReviewInboxService {

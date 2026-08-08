@@ -6,7 +6,7 @@ use sqlx::{Postgres, Row, Transaction};
 use thiserror::Error;
 
 use crate::domains::personas::core::evidence::link_persona_entity_in_transaction;
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 #[derive(Clone, Debug, Serialize)]
 pub struct PersonaHealth {

@@ -1,4 +1,4 @@
-use hermes_communication_recipient_suggestion_api::{
+use makosh_communication_recipient_suggestion_api::{
     COMMUNICATION_RECIPIENT_SUGGESTION_COMMAND_CONTRACT_NAME_V1,
     COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_MAJOR_V1,
     COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_REVISION_V1,
@@ -7,7 +7,7 @@ use hermes_communication_recipient_suggestion_api::{
     COMMUNICATION_RECIPIENT_SUGGESTION_REALTIME_CONTRACT_NAME_V1,
     COMMUNICATION_RECIPIENT_SUGGESTION_SCHEMA_SHA256,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 
 pub(crate) fn communication_recipient_suggestion_command_contract_v1() -> ContractReferenceV1 {
     contract(COMMUNICATION_RECIPIENT_SUGGESTION_COMMAND_CONTRACT_NAME_V1)

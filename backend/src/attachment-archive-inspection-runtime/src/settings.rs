@@ -1,10 +1,10 @@
 //! Typed bounded ZIP inspection settings, applied only by supervised restart.
 
-use hermes_attachment_archive_inspection_core::{
+use makosh_attachment_archive_inspection_core::{
     ArchiveInspectionLimitsV1, DEFAULT_MAX_ARCHIVE_BYTES_V1, DEFAULT_MAX_DEPTH_V1,
     DEFAULT_MAX_ENTRY_UNCOMPRESSED_BYTES_V1, DEFAULT_MAX_TOTAL_UNCOMPRESSED_BYTES_V1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     SettingApplyModeV1, SettingClientVisibilityV1, SettingDefinitionV1, SettingMutationAuthorityV1,
     SettingTargetScopeV1, SettingValueTypeV1, SettingsSchemaV1, SettingsSnapshotV1,
     setting_value_v1::Value,
@@ -31,13 +31,13 @@ pub fn attachment_archive_inspection_settings_schema_v1() -> SettingsSchemaV1 {
             definition(MAX_DEPTH, DEFAULT_MAX_DEPTH_V1 as u64),
             definition(
                 MAX_ENTRIES,
-                hermes_attachment_archive_inspection_api::ATTACHMENT_ARCHIVE_INSPECTION_MAX_REPORT_ENTRIES_V1
+                makosh_attachment_archive_inspection_api::ATTACHMENT_ARCHIVE_INSPECTION_MAX_REPORT_ENTRIES_V1
                     as u64,
             ),
             definition(MAX_ENTRY_BYTES, DEFAULT_MAX_ENTRY_UNCOMPRESSED_BYTES_V1),
             definition(
                 MAX_PATH_BYTES,
-                hermes_attachment_archive_inspection_api::ATTACHMENT_ARCHIVE_INSPECTION_MAX_PATH_BYTES_V1
+                makosh_attachment_archive_inspection_api::ATTACHMENT_ARCHIVE_INSPECTION_MAX_PATH_BYTES_V1
                     as u64,
             ),
             definition(MAX_TOTAL_BYTES, DEFAULT_MAX_TOTAL_UNCOMPRESSED_BYTES_V1),
@@ -89,7 +89,7 @@ fn definition(setting_id: &str, default: u64) -> SettingDefinitionV1 {
         fresh_owner_proof_required: true,
         kernel_controller_id: String::new(),
         display_name: setting_id.to_owned(),
-        default_value: Some(hermes_runtime_protocol::v1::SettingValueV1 {
+        default_value: Some(makosh_runtime_protocol::v1::SettingValueV1 {
             value: Some(Value::UnsignedIntegerValue(default)),
         }),
         optional: false,
@@ -123,7 +123,7 @@ pub enum ArchiveInspectionSettingsErrorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::validate_settings_schema_v1;
+    use makosh_runtime_protocol::validation::descriptor::validate_settings_schema_v1;
 
     use super::*;
 

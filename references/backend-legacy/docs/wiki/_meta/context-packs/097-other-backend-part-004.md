@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/migrations/0076_create_email_outbox_tracking.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0076_create_email_outbox_tracking.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0076_create_email_outbox_tracking.sql`
 - Size bytes / Размер в байтах: `1732`
 - Included characters / Включено символов: `1732`
 - Truncated / Обрезано: `no`
@@ -101,7 +101,7 @@ CREATE INDEX IF NOT EXISTS email_outbox_tracking_due_idx
 
 ### `backend/migrations/0077_create_mail_saved_searches.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0077_create_mail_saved_searches.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0077_create_mail_saved_searches.sql`
 - Size bytes / Размер в байтах: `1848`
 - Included characters / Включено символов: `1848`
 - Truncated / Обрезано: `no`
@@ -152,7 +152,7 @@ CREATE INDEX IF NOT EXISTS mail_saved_searches_smart_idx
 
 ### `backend/migrations/0078_add_attachment_search_indexes.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0078_add_attachment_search_indexes.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0078_add_attachment_search_indexes.sql`
 - Size bytes / Размер в байтах: `413`
 - Included characters / Включено символов: `413`
 - Truncated / Обрезано: `no`
@@ -170,7 +170,7 @@ CREATE INDEX IF NOT EXISTS communication_attachments_content_type_idx
 
 ### `backend/migrations/0079_create_mail_custom_folders.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0079_create_mail_custom_folders.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0079_create_mail_custom_folders.sql`
 - Size bytes / Размер в байтах: `1738`
 - Included characters / Включено символов: `1738`
 - Truncated / Обрезано: `no`
@@ -221,7 +221,7 @@ CREATE INDEX IF NOT EXISTS mail_folder_messages_folder_order_idx
 
 ### `backend/migrations/0080_create_mail_ai_states.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0080_create_mail_ai_states.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0080_create_mail_ai_states.sql`
 - Size bytes / Размер в байтах: `1056`
 - Included characters / Включено символов: `1056`
 - Truncated / Обрезано: `no`
@@ -257,7 +257,7 @@ ON CONFLICT (message_id) DO NOTHING;
 
 ### `backend/migrations/0081_create_mail_read_receipts.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0081_create_mail_read_receipts.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0081_create_mail_read_receipts.sql`
 - Size bytes / Размер в байтах: `1856`
 - Included characters / Включено символов: `1856`
 - Truncated / Обрезано: `no`
@@ -303,7 +303,7 @@ CREATE INDEX IF NOT EXISTS mail_read_receipts_provider_message_idx
 
 ### `backend/migrations/0082_create_telegram_message_lifecycle_schema.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0082_create_telegram_message_lifecycle_schema.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0082_create_telegram_message_lifecycle_schema.sql`
 - Size bytes / Размер в байтах: `9016`
 - Included characters / Включено символов: `9010`
 - Truncated / Обрезано: `no`
@@ -502,7 +502,7 @@ CREATE INDEX IF NOT EXISTS telegram_provider_write_commands_idempotency_idx
 
 ### `backend/migrations/0083_create_telegram_reactions.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0083_create_telegram_reactions.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0083_create_telegram_reactions.sql`
 - Size bytes / Размер в байтах: `2236`
 - Included characters / Включено символов: `2236`
 - Truncated / Обрезано: `no`
@@ -557,7 +557,7 @@ CREATE INDEX IF NOT EXISTS telegram_message_reactions_account_idx
 
 ### `backend/migrations/0084_create_telegram_reply_forward_refs.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0084_create_telegram_reply_forward_refs.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0084_create_telegram_reply_forward_refs.sql`
 - Size bytes / Размер в байтах: `4007`
 - Included characters / Включено символов: `4003`
 - Truncated / Обрезано: `no`
@@ -649,7 +649,7 @@ CREATE INDEX IF NOT EXISTS telegram_message_forward_refs_chat_idx
 
 ### `backend/migrations/0085_allow_mark_unread_telegram_command.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0085_allow_mark_unread_telegram_command.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0085_allow_mark_unread_telegram_command.sql`
 - Size bytes / Размер в байтах: `807`
 - Included characters / Включено символов: `807`
 - Truncated / Обрезано: `no`
@@ -688,7 +688,7 @@ ALTER TABLE telegram_provider_write_commands
 
 ### `backend/migrations/0086_create_telegram_topics.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0086_create_telegram_topics.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0086_create_telegram_topics.sql`
 - Size bytes / Размер в байтах: `1516`
 - Included characters / Включено символов: `1516`
 - Truncated / Обрезано: `no`
@@ -731,7 +731,7 @@ CREATE INDEX IF NOT EXISTS idx_comm_messages_forum_topic_id
 
 ### `backend/migrations/0087_extend_telegram_provider_write_outbox.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0087_extend_telegram_provider_write_outbox.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0087_extend_telegram_provider_write_outbox.sql`
 - Size bytes / Размер в байтах: `2645`
 - Included characters / Включено символов: `2645`
 - Truncated / Обрезано: `no`
@@ -803,7 +803,7 @@ CREATE INDEX IF NOT EXISTS telegram_provider_write_commands_reconciliation_idx
 
 ### `backend/migrations/0088_create_communication_attachment_imports.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0088_create_communication_attachment_imports.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0088_create_communication_attachment_imports.sql`
 - Size bytes / Размер в байтах: `2813`
 - Included characters / Включено символов: `2813`
 - Truncated / Обрезано: `no`
@@ -869,7 +869,7 @@ CREATE INDEX IF NOT EXISTS communication_attachment_imports_sha256_idx
 
 ### `backend/migrations/0089_create_telegram_chat_participants.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0089_create_telegram_chat_participants.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0089_create_telegram_chat_participants.sql`
 - Size bytes / Размер в байтах: `2807`
 - Included characters / Включено символов: `2807`
 - Truncated / Обрезано: `no`
@@ -937,7 +937,7 @@ CREATE INDEX IF NOT EXISTS telegram_chat_participants_search_idx
 
 ### `backend/migrations/0090_restore_topic_telegram_command_kinds.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0090_restore_topic_telegram_command_kinds.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0090_restore_topic_telegram_command_kinds.sql`
 - Size bytes / Размер в байтах: `923`
 - Included characters / Включено символов: `923`
 - Truncated / Обрезано: `no`
@@ -979,7 +979,7 @@ ALTER TABLE telegram_provider_write_commands
 
 ### `backend/migrations/0091_add_telegram_folder_add_command_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0091_add_telegram_folder_add_command_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0091_add_telegram_folder_add_command_kind.sql`
 - Size bytes / Размер в байтах: `926`
 - Included characters / Включено символов: `926`
 - Truncated / Обрезано: `no`
@@ -1022,7 +1022,7 @@ ALTER TABLE telegram_provider_write_commands
 
 ### `backend/migrations/0092_add_telegram_folder_remove_command_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0092_add_telegram_folder_remove_command_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0092_add_telegram_folder_remove_command_kind.sql`
 - Size bytes / Размер в байтах: `958`
 - Included characters / Включено символов: `958`
 - Truncated / Обрезано: `no`
@@ -1066,7 +1066,7 @@ ALTER TABLE telegram_provider_write_commands
 
 ### `backend/migrations/0093_create_event_consumers_dlq.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0093_create_event_consumers_dlq.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0093_create_event_consumers_dlq.sql`
 - Size bytes / Размер в байтах: `4474`
 - Included characters / Включено символов: `4474`
 - Truncated / Обрезано: `no`
@@ -1170,7 +1170,7 @@ CREATE INDEX IF NOT EXISTS event_dead_letters_consumer_idx
 
 ### `backend/migrations/0094_create_canonical_evidence_review_context.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0094_create_canonical_evidence_review_context.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0094_create_canonical_evidence_review_context.sql`
 - Size bytes / Размер в байтах: `14026`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1509,7 +1509,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/migrations/0095_add_task_provenance.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0095_add_task_provenance.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0095_add_task_provenance.sql`
 - Size bytes / Размер в байтах: `1218`
 - Included characters / Включено символов: `1218`
 - Truncated / Обрезано: `no`
@@ -1554,7 +1554,7 @@ CREATE INDEX IF NOT EXISTS tasks_provenance_idx
 
 ### `backend/migrations/0096_expand_task_source_type_for_observation_spine.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0096_expand_task_source_type_for_observation_spine.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0096_expand_task_source_type_for_observation_spine.sql`
 - Size bytes / Размер в байтах: `651`
 - Included characters / Включено символов: `651`
 - Truncated / Обрезано: `no`
@@ -1592,7 +1592,7 @@ ALTER TABLE tasks
 
 ### `backend/migrations/0097_link_communication_raw_records_to_observations.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0097_link_communication_raw_records_to_observations.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0097_link_communication_raw_records_to_observations.sql`
 - Size bytes / Размер в байтах: `1938`
 - Included characters / Включено символов: `1938`
 - Truncated / Обрезано: `no`
@@ -1664,7 +1664,7 @@ CREATE INDEX IF NOT EXISTS communication_raw_records_observation_idx
 
 ### `backend/migrations/0098_link_communication_messages_to_observations.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0098_link_communication_messages_to_observations.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0098_link_communication_messages_to_observations.sql`
 - Size bytes / Размер в байтах: `758`
 - Included characters / Включено символов: `758`
 - Truncated / Обрезано: `no`
@@ -1696,7 +1696,7 @@ CREATE INDEX IF NOT EXISTS communication_messages_observation_idx
 
 ### `backend/migrations/0099_link_domain_evidence_to_observations.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0099_link_domain_evidence_to_observations.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0099_link_domain_evidence_to_observations.sql`
 - Size bytes / Размер в байтах: `5028`
 - Included characters / Включено символов: `5028`
 - Truncated / Обрезано: `no`
@@ -1874,7 +1874,7 @@ CREATE INDEX IF NOT EXISTS relationship_evidence_observation_idx
 
 ### `backend/migrations/0100_link_task_candidates_to_observations.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0100_link_task_candidates_to_observations.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0100_link_task_candidates_to_observations.sql`
 - Size bytes / Размер в байтах: `989`
 - Included characters / Включено символов: `989`
 - Truncated / Обрезано: `no`

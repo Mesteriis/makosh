@@ -1,6 +1,6 @@
 # Mutation Testing
 
-Hermes uses `cargo-mutants` for targeted mutation analysis.
+Макошь uses `cargo-mutants` for targeted mutation analysis.
 
 Command:
 

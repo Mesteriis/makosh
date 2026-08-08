@@ -25,4 +25,4 @@ pub use schema::{
     append_mail_retained_evidence_replay_storage_v1,
 };
 
-pub const PACKAGE: &str = "hermes-mail-retained-evidence-replay-persistence";
+pub const PACKAGE: &str = "makosh-mail-retained-evidence-replay-persistence";

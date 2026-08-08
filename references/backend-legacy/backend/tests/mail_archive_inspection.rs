@@ -1,6 +1,6 @@
 use std::io::{Cursor, Write};
 
-use hermes_hub_backend::domains::communications::archive_inspection::{
+use makosh_hub_backend::domains::communications::archive_inspection::{
     ArchiveInspectionError, ArchiveInspectionLimits, archive_inspection_cache_metadata,
     cached_archive_inspection_report, inspect_zip_bytes,
 };

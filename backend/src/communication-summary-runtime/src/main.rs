@@ -9,15 +9,15 @@ use std::{
     time::Duration,
 };
 
-use hermes_communication_summary_persistence::{
+use makosh_communication_summary_persistence::{
     CommunicationSummaryPersistenceErrorV1, communication_summary_storage_bundle_v1,
 };
-use hermes_communication_summary_runtime::{
+use makosh_communication_summary_runtime::{
     CommunicationSummaryManagedRuntimeErrorV1, CommunicationSummaryManagedRuntimeV1,
     CommunicationSummaryRuntimeAdmissionV1, communication_summary_module_descriptor_v1,
     communication_summary_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,

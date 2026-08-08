@@ -1,5 +1,5 @@
 [package]
-name = "hermes-communication-bulk-action-runtime"
+name = "makosh-communication-bulk-action-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,22 +8,22 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-communication-bulk-action-runtime"
+name = "makosh-communication-bulk-action-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "communication_bulk_action"
 surface = "runtime"
 
 [dependencies]
-hermes-communication-bulk-action-api = { path = "../communication-bulk-action-api" }
-hermes-communication-bulk-action-core = { path = "../communication-bulk-action-core" }
-hermes-communication-bulk-action-persistence = { path = "../communication-bulk-action-persistence" }
-hermes-communication-delivery-intent-api = { path = "../communication-delivery-intent-api" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
+makosh-communication-bulk-action-api = { path = "../communication-bulk-action-api" }
+makosh-communication-bulk-action-core = { path = "../communication-bulk-action-core" }
+makosh-communication-bulk-action-persistence = { path = "../communication-bulk-action-persistence" }
+makosh-communication-delivery-intent-api = { path = "../communication-delivery-intent-api" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }

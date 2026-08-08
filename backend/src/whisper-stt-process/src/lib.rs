@@ -9,13 +9,13 @@ use std::{
     time::{Duration, Instant},
 };
 
-use hermes_speech_to_text_api::wire::{SpeechLanguageV1, SpeechTranscriptCompletenessV1};
-use hermes_whisper_stt_core::{
+use makosh_speech_to_text_api::wire::{SpeechLanguageV1, SpeechTranscriptCompletenessV1};
+use makosh_whisper_stt_core::{
     WhisperSttExecutionOutcomeV1, WhisperSttExecutionPlanV1, WhisperSttTranscriptSegmentV1,
 };
 use serde::Deserialize;
 
-pub const PACKAGE: &str = "hermes-whisper-stt-process";
+pub const PACKAGE: &str = "makosh-whisper-stt-process";
 const WHISPER_JSON_OVERHEAD_BYTES_V1: usize = 256 * 1024;
 const PROCESS_POLL_INTERVAL_V1: Duration = Duration::from_millis(10);
 
@@ -296,11 +296,11 @@ mod tests {
         sync::atomic::{AtomicU64, Ordering},
     };
 
-    use hermes_speech_to_text_api::{
+    use makosh_speech_to_text_api::{
         seal_speech_to_text_request_v1,
         wire::{SpeechAudioFormatV1, SpeechAudioSourceReceiptV1, SpeechToTextRequestV1},
     };
-    use hermes_whisper_stt_core::plan_whisper_stt_execution_v1;
+    use makosh_whisper_stt_core::plan_whisper_stt_execution_v1;
 
     use super::*;
 
@@ -458,7 +458,7 @@ mod tests {
 
     fn process_fixture(body: &str) -> ProcessFixtureV1 {
         let root = std::env::temp_dir().join(format!(
-            "hermes-whisper-process-{}-{}",
+            "makosh-whisper-process-{}-{}",
             std::process::id(),
             NEXT_ID.fetch_add(1, Ordering::Relaxed)
         ));

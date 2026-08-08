@@ -1,5 +1,5 @@
 [package]
-name = "hermes-call-transcription-assembly"
+name = "makosh-call-transcription-assembly"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,19 +8,19 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-call-transcription-assembly"
+name = "makosh-call-transcription-assembly"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "call_transcription"
 surface = "assembly"
 
 [dependencies]
-hermes-call-transcription-persistence = { path = "../call-transcription-persistence" }
-hermes-call-transcription-runtime = { path = "../call-transcription-runtime" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-call-transcription-persistence = { path = "../call-transcription-persistence" }
+makosh-call-transcription-runtime = { path = "../call-transcription-runtime" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
 serde_json = "=1.0.150"

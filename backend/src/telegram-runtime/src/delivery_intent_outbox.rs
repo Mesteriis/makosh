@@ -1,7 +1,7 @@
 //! Telegram-owned exact-byte relay for delivery-intent terminal results.
 
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
-use hermes_telegram_persistence::{TelegramDeliveryIntentStoreV1, TelegramDurablePersistenceError};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_telegram_persistence::{TelegramDeliveryIntentStoreV1, TelegramDurablePersistenceError};
 
 #[derive(Debug)]
 pub enum TelegramDeliveryIntentOutboxRelayErrorV1 {

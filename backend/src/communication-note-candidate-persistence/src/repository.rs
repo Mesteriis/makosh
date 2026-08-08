@@ -1,4 +1,4 @@
-use hermes_communication_note_candidate_core::{
+use makosh_communication_note_candidate_core::{
     CommunicationNoteCandidateCompletenessV1, CommunicationNoteCandidateDraftV1,
     CommunicationNoteCandidateRejectionCodeV1, CommunicationNoteCandidateStateV1,
     CommunicationNoteCandidateStatusV1, CommunicationNoteCandidateTransitionV1,
@@ -6,7 +6,7 @@ use hermes_communication_note_candidate_core::{
     validate_communication_note_candidate_draft_v1,
     validate_communication_note_candidate_status_v1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool, Postgres, Row, Transaction,
     postgres::{PgConnectOptions, PgPoolOptions, PgRow},
@@ -87,7 +87,7 @@ impl CommunicationNoteCandidatePersistenceV1 {
         let fingerprint = request_fingerprint(&input.draft);
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.communication_note_candidate_extraction_runs (
+            "INSERT INTO makosh_data.communication_note_candidate_extraction_runs (
                logical_owner_id, run_id, operation_id, request_fingerprint,
                source_message_id, expected_source_revision,
                state, state_revision,
@@ -108,7 +108,7 @@ impl CommunicationNoteCandidatePersistenceV1 {
         .rows_affected();
         if inserted == 1 {
             sqlx::query(
-                "INSERT INTO hermes_data.communication_note_candidate_extraction_outbox (
+                "INSERT INTO makosh_data.communication_note_candidate_extraction_outbox (
                    logical_owner_id, message_id, envelope_sha256, envelope_bytes,
                    created_at_unix_millis
                  ) VALUES ($1, $2, $3, $4, $5)",
@@ -198,7 +198,7 @@ impl CommunicationNoteCandidatePersistenceV1 {
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         if let Some(row) = sqlx::query(
             "SELECT envelope_sha256, run_id
-             FROM hermes_data.communication_note_candidate_extraction_inbox
+             FROM makosh_data.communication_note_candidate_extraction_inbox
              WHERE logical_owner_id = $1 AND result_message_id = $2",
         )
         .bind(&input.logical_owner_id)
@@ -240,7 +240,7 @@ impl CommunicationNoteCandidatePersistenceV1 {
         )
         .await?;
         sqlx::query(
-            "INSERT INTO hermes_data.communication_note_candidate_extraction_inbox (
+            "INSERT INTO makosh_data.communication_note_candidate_extraction_inbox (
                logical_owner_id, result_message_id, envelope_sha256, run_id,
                processed_at_unix_millis
              ) VALUES ($1, $2, $3, $4, $5)",
@@ -305,7 +305,7 @@ impl CommunicationNoteCandidatePersistenceV1 {
         .await?;
         for event in review_submissions {
             sqlx::query(
-                "INSERT INTO hermes_data.communication_note_candidate_extraction_outbox (
+                "INSERT INTO makosh_data.communication_note_candidate_extraction_outbox (
                    logical_owner_id, message_id, envelope_sha256, envelope_bytes,
                    created_at_unix_millis
                  ) VALUES ($1, $2, $3, $4, $5)",
@@ -398,7 +398,7 @@ impl CommunicationNoteCandidatePersistenceV1 {
             return Err(CommunicationNoteCandidatePersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_note_candidate_extraction_runs
+            "UPDATE makosh_data.communication_note_candidate_extraction_runs
              SET source_read_receipt_bytes = $1, updated_at_unix_millis = $2
              WHERE logical_owner_id = $3 AND run_id = $4 AND state = 3
                AND source_sha256 = $5
@@ -445,7 +445,7 @@ impl CommunicationNoteCandidatePersistenceV1 {
             return Err(CommunicationNoteCandidatePersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_note_candidate_extraction_runs
+            "UPDATE makosh_data.communication_note_candidate_extraction_runs
              SET source_read_receipt_bytes = NULL,
                  source_cleanup_reference_id = NULL,
                  source_cleanup_declared_bytes = NULL,
@@ -498,7 +498,7 @@ impl CommunicationNoteCandidatePersistenceV1 {
 }
 
 fn valid_review_submissions(events: &[UnpublishedCommunicationNoteCandidateEventV1]) -> bool {
-    if events.len() > hermes_communication_note_candidate_core::COMMUNICATION_NOTE_MAX_CANDIDATES_V1
+    if events.len() > makosh_communication_note_candidate_core::COMMUNICATION_NOTE_MAX_CANDIDATES_V1
     {
         return false;
     }
@@ -522,7 +522,7 @@ SELECT logical_owner_id, run_id, operation_id, request_fingerprint,
        source_cleanup_custody_proof, cleanup_completed_at_unix_millis,
        candidate_bytes, rejection_code,
        created_at_unix_millis, updated_at_unix_millis
-FROM hermes_data.communication_note_candidate_extraction_runs
+FROM makosh_data.communication_note_candidate_extraction_runs
 WHERE logical_owner_id = $1 AND run_id = $2";
 
 const SELECT_RUN_FOR_UPDATE: &str = "
@@ -535,7 +535,7 @@ SELECT logical_owner_id, run_id, operation_id, request_fingerprint,
        source_cleanup_custody_proof, cleanup_completed_at_unix_millis,
        candidate_bytes, rejection_code,
        created_at_unix_millis, updated_at_unix_millis
-FROM hermes_data.communication_note_candidate_extraction_runs
+FROM makosh_data.communication_note_candidate_extraction_runs
 WHERE logical_owner_id = $1 AND run_id = $2
 FOR UPDATE";
 
@@ -549,7 +549,7 @@ SELECT logical_owner_id, run_id, operation_id, request_fingerprint,
        source_cleanup_custody_proof, cleanup_completed_at_unix_millis,
        candidate_bytes, rejection_code,
        created_at_unix_millis, updated_at_unix_millis
-FROM hermes_data.communication_note_candidate_extraction_runs
+FROM makosh_data.communication_note_candidate_extraction_runs
 WHERE logical_owner_id = $1 AND operation_id = $2";
 
 const SELECT_RECOVERABLE_RUNS: &str = "
@@ -562,7 +562,7 @@ SELECT logical_owner_id, run_id, operation_id, request_fingerprint,
        source_cleanup_custody_proof, cleanup_completed_at_unix_millis,
        candidate_bytes, rejection_code,
        created_at_unix_millis, updated_at_unix_millis
-FROM hermes_data.communication_note_candidate_extraction_runs
+FROM makosh_data.communication_note_candidate_extraction_runs
 WHERE logical_owner_id = $1 AND state IN (1, 2, 3)
 ORDER BY state_revision, run_id
 LIMIT $2";
@@ -600,7 +600,7 @@ async fn persist_status(
         .map(encode_candidates)
         .transpose()?;
     let updated = sqlx::query(
-        "UPDATE hermes_data.communication_note_candidate_extraction_runs
+        "UPDATE makosh_data.communication_note_candidate_extraction_runs
          SET state = $1, state_revision = $2,
              source_evidence_id = $3, source_evidence_revision = $4,
              source_sha256 = $5,

@@ -65,14 +65,14 @@ requires explicit owner-visible setup and audit. Silent capture is unsupported.
   expiring-token renewal.
 - Scheduled token maintenance daemon. Implemented through backend bootstrap
   with Signal Hub runtime gating, HostVault unlock gating and
-  `HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`.
+  `MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`.
 - Scheduled recording sync daemon. Implemented through backend bootstrap for
   started authorized runtimes, with Signal Hub runtime gating, HostVault unlock
-  gating, `HERMES_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED` and the existing
+  gating, `MAKOSH_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED` and the existing
   HostVault-backed provider sync boundary.
 - Scheduled retention cleanup daemon. Implemented through backend bootstrap for
   expired imported recording blobs and transcript evidence, with Signal Hub
-  runtime gating and `HERMES_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED`.
+  runtime gating and `MAKOSH_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED`.
 - Token rotation policy. Implemented through explicit refresh thresholds,
   proactive maintenance threshold metadata, expiry handling and
   `zoom_token_rotation_required` failure/expiry blocker exposure in runtime
@@ -85,7 +85,7 @@ requires explicit owner-visible setup and audit. Silent capture is unsupported.
   manual provider-sync downloads.
 - Webhook secret storage through secret references. Implemented for the
   protected account-scoped runtime bridge; public/edge ingress is implemented
-  as `hermes-zoom-edge-proxy`.
+  as `makosh-zoom-edge-proxy`.
 - Sanitization test coverage for nested payloads. Implemented for event payload
   and provider-call metadata in the Zoom foundation tests.
 - Audit events for authorization completion, token refresh success/skip/failure,

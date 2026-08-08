@@ -28,7 +28,7 @@ impl VaultStoreHandle {
     ) -> Result<Self, VaultStoreError> {
         let (sender, receiver) = sync_channel(ACTOR_QUEUE_CAPACITY);
         let worker = std::thread::Builder::new()
-            .name("hermes-vault-sqlite".to_owned())
+            .name("makosh-vault-sqlite".to_owned())
             .spawn(move || actor_loop(connection, record_key, receiver))
             .map_err(|_| VaultStoreError::ActorStopped)?;
         Ok(Self {

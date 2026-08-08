@@ -1,7 +1,7 @@
 use super::EventStore;
 use crate::errors::EventStoreError;
 use crate::rows::row_to_stored_event;
-use hermes_events_api::StoredEventEnvelope;
+use makosh_events_api::StoredEventEnvelope;
 
 impl EventStore {
     pub async fn latest_position(&self) -> Result<i64, EventStoreError> {

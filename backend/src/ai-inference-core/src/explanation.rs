@@ -1,4 +1,4 @@
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     decode_explanation_source_content_v1, validate_explanation_inference_request_v1,
     validate_explanation_inference_result_v1, validate_provider_explanation_result_v1,
     wire::{
@@ -15,7 +15,7 @@ use crate::{
 
 pub const AI_EXPLANATION_SOURCE_BODY_EXCERPT_BYTES_V1: usize = 8_000;
 const AI_EXPLANATION_PROMPT_POLICY_V1: &[u8] =
-    b"hermes-ai-communication-explanation-v1;sender-subject-body;utf8-prefix-bytes=8000;fixed-taxonomy";
+    b"makosh-ai-communication-explanation-v1;sender-subject-body;utf8-prefix-bytes=8000;fixed-taxonomy";
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct AiExplanationRunV1 {
@@ -271,7 +271,7 @@ fn utf8_prefix(value: &str, maximum_bytes: usize) -> &str {
 
 #[cfg(test)]
 mod tests {
-    use hermes_ai_contracts::{
+    use makosh_ai_contracts::{
         AI_CONTRACT_MAJOR_V1, AI_CONTRACT_REVISION_V1, AI_CONTRACTS_SCHEMA_SHA256,
         AI_LOCAL_EGRESS_POLICY_REVISION_V1, encode_explanation_source_content_v1,
         seal_explanation_inference_request_v1,

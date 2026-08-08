@@ -1,5 +1,5 @@
 [package]
-name = "hermes-attachment-archive-inspection-assembly"
+name = "makosh-attachment-archive-inspection-assembly"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,20 +8,20 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-attachment-archive-inspection-assembly"
+name = "makosh-attachment-archive-inspection-assembly"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "engine"
 owner = "attachment_archive_inspection"
 surface = "assembly"
 
 [dependencies]
-hermes-attachment-archive-inspection-api = { path = "../attachment-archive-inspection-api" }
-hermes-attachment-archive-inspection-persistence = { path = "../attachment-archive-inspection-persistence" }
-hermes-attachment-archive-inspection-runtime = { path = "../attachment-archive-inspection-runtime" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-attachment-archive-inspection-api = { path = "../attachment-archive-inspection-api" }
+makosh-attachment-archive-inspection-persistence = { path = "../attachment-archive-inspection-persistence" }
+makosh-attachment-archive-inspection-runtime = { path = "../attachment-archive-inspection-runtime" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
 serde_json = "=1.0.150"

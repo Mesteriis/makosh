@@ -2,11 +2,11 @@
 
 use std::sync::Mutex;
 
-use hermes_communications_export_api::{
+use makosh_communications_export_api::{
     COMMUNICATIONS_EXPORT_MAX_ARTIFACT_BYTES_V1, COMMUNICATIONS_EXPORT_READ_TICKET_BYTES_V1,
     COMMUNICATIONS_EXPORT_READ_TICKET_TTL_SECONDS_V1,
 };
-use hermes_communications_export_persistence::CommunicationsExportArtifactReceiptV1;
+use makosh_communications_export_persistence::CommunicationsExportArtifactReceiptV1;
 
 const TOKEN_GENERATION_ATTEMPTS: usize = 4;
 

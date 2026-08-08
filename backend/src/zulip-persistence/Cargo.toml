@@ -1,18 +1,18 @@
 [package]
-name = "hermes-zulip-persistence"
+name = "makosh-zulip-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 [lib]
 path = "src/lib.rs"
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "zulip"
 surface = "persistence"
 [dependencies]
-hermes-communications-ingress = { path = "../communications-ingress" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-zulip-api = { path = "../zulip-api" }
+makosh-communications-ingress = { path = "../communications-ingress" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-zulip-api = { path = "../zulip-api" }
 sha2 = { version = "=0.11.0", default-features = false }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

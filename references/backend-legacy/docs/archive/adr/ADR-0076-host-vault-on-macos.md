@@ -6,7 +6,7 @@ Supersedes: ADR-0044, ADR-0053
 
 ## Context
 
-Hermes Hub is a trusted single-user desktop application. The vault protects local secrets at rest, not against a compromised operating system or hostile local administrator.
+Макошь is a trusted single-user desktop application. The vault protects local secrets at rest, not against a compromised operating system or hostile local administrator.
 
 ADR-0053 moved encrypted credential payloads into PostgreSQL. That improved database backup completeness, but it made PostgreSQL backups carry high-value ciphertext and did not meet the newer requirement that database deletion or recreation must not destroy credentials, account keys or signing material.
 
@@ -14,7 +14,7 @@ The target runtime is now macOS-only. Docker remains a development environment, 
 
 ## Decision
 
-Use a dedicated host vault under `~/.hermes/vault` for secrets-only encrypted payload storage.
+Use a dedicated host vault under `~/.makosh/vault` for secrets-only encrypted payload storage.
 
 Rules:
 
@@ -22,7 +22,7 @@ Rules:
 - New secret payloads are written to `vault.db`, a dedicated SQLite database under the host vault directory.
 - New `secret_references.store_kind` values for host-vault secrets use `host_vault`.
 - `encrypted_secret_vault_entries` remains legacy/migration state only. New runtime writes must not add provider credential payloads to PostgreSQL.
-- The master key is stored outside application databases. Release runtime uses macOS Keychain. Docker/debug development may use `HERMES_DEV_KEY_PATH` only when `HERMES_DEV_MODE=true` and the build has debug assertions.
+- The master key is stored outside application databases. Release runtime uses macOS Keychain. Docker/debug development may use `MAKOSH_DEV_KEY_PATH` only when `MAKOSH_DEV_MODE=true` and the build has debug assertions.
 - Vault cryptography uses OS randomness, mouse/timing entropy from onboarding, SHA-512 mixing, HKDF-SHA256 domain keys and XChaCha20-Poly1305 record encryption.
 - Per-entry AAD includes vault version, entry kind, account id, purpose and secret kind.
 - The in-memory master key remains loaded after explicit unlock for the application lifetime and is zeroized on process shutdown or explicit lock.
@@ -47,7 +47,7 @@ Negative:
 
 Risk handling:
 
-- Keep `HERMES_SECRET_VAULT_KEY` only as a legacy migration compatibility variable.
+- Keep `MAKOSH_SECRET_VAULT_KEY` only as a legacy migration compatibility variable.
 - Enforce release guard against dev storage.
 - Keep all secret reads behind the `SecretResolver` boundary.
 - Add tests for wrong-key/AAD/nonce failure, host-vault CRUD, onboarding status and PostgreSQL payload regression.

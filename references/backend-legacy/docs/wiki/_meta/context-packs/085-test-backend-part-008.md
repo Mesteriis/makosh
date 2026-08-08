@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `test`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,13 +55,13 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/tests/messages/workflow.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/messages/workflow.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/messages/workflow.rs`
 - Size bytes / Размер в байтах: `10136`
 - Included characters / Включено символов: `10136`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     LocalMessageState, WorkflowState, WorkflowStateCount, project_raw_email_message,
 };
 
@@ -410,7 +410,7 @@ fn workflow_state_count_serialization() {
 
 ### `backend/tests/messages_architecture.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/messages_architecture.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/messages_architecture.rs`
 - Size bytes / Размер в байтах: `1702`
 - Included characters / Включено символов: `1702`
 - Truncated / Обрезано: `no`
@@ -474,13 +474,13 @@ fn is_message_test_file(path: &Path) -> bool {
 
 ### `backend/tests/obligation_engine.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/obligation_engine.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/obligation_engine.rs`
 - Size bytes / Размер в байтах: `4187`
 - Included characters / Включено символов: `4187`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::engines::obligation::{
+use makosh_hub_backend::engines::obligation::{
     ObligationCandidateKind, ObligationEngine, ObligationEntityKind, ObligationEvidenceSourceKind,
     ObligationExtractionInput, ObligationReviewState,
 };
@@ -598,7 +598,7 @@ fn obligation_engine_rejects_empty_source_evidence_before_detection() {
 
 ### `backend/tests/obligations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/obligations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/obligations.rs`
 - Size bytes / Размер в байтах: `15058`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -608,16 +608,16 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use testkit::context::TestContext;
 
 use chrono::Utc;
-use hermes_hub_backend::domains::obligations::{
+use makosh_hub_backend::domains::obligations::{
     NewObligation, NewObligationEvidence, ObligationEntityKind, ObligationEvidenceSourceKind,
     ObligationReviewState, ObligationRiskState, ObligationStatus, ObligationStore,
     ObligationStoreError,
 };
-use hermes_hub_backend::platform::observations::{
+use makosh_hub_backend::platform::observations::{
     NewObservation, ObservationOriginKind, ObservationStore,
 };
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::graph_projection::GraphProjectionService;
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::graph_projection::GraphProjectionService;
 use serde_json::{Value, json};
 use sqlx::Row;
 use sqlx::postgres::{PgPool, PgPoolOptions};
@@ -944,13 +944,13 @@ async fn obligation_store_rejects_missing_observation_evidence_against_postgres(
 
     let error = store
         .upsert_with_evidence(&obligation, &[evidence])
- 
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/tests/obligations_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/obligations_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/obligations_api.rs`
 - Size bytes / Размер в байтах: `9821`
 - Included characters / Включено символов: `9821`
 - Truncated / Обрезано: `no`
@@ -966,12 +966,12 @@ use sqlx::Row;
 use sqlx::postgres::PgPool;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::obligations::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::obligations::{
     NewObligation, NewObligationEvidence, Obligation, ObligationEntityKind,
     ObligationEvidenceSourceKind, ObligationReviewState, ObligationStore,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 
 const LOCAL_API_TOKEN: &str = "obligations-api-test-token";
 
@@ -1204,7 +1204,7 @@ async fn seed_obligation_with_review_state(
 fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -1214,7 +1214,7 @@ fn json_put_request(uri: &str, value: Value, token: &str) -> Request<Body> {
         .method("PUT")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(value.to_string()))
         .expect("request")
 }
@@ -1249,7 +1249,7 @@ fn path_segment(value: &str) -> String {
 
 ### `backend/tests/observations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/observations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/observations.rs`
 - Size bytes / Размер в байтах: `18461`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1260,11 +1260,11 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use testkit::context::TestContext;
 
 use chrono::{TimeZone, Utc};
-use hermes_hub_backend::platform::observations::{
+use makosh_hub_backend::platform::observations::{
     NewObservation, NewObservationIngestionRun, NewObservationLink, ObservationIngestionRunStatus,
     ObservationOriginKind, ObservationStore,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::{Value, json};
 use sqlx::Row;
 use sqlx::postgres::PgPool;
@@ -1284,7 +1284,7 @@ async fn manual_capture_creates_observation_without_vault_source_against_postgre
                 ObservationOriginKind::Manual,
                 observed_at,
                 json!({
-                    "transcript": "Record the Hermes evidence architecture decision.",
+                    "transcript": "Record the Макошь evidence architecture decision.",
                     "duration_seconds": 42
                 }),
                 format!("manual://voice-memo/{suffix}"),
@@ -1320,7 +1320,7 @@ async fn manual_capture_creates_observation_without_vault_source_against_postgre
 
     assert_eq!(
         payload["transcript"],
-        json!("Record the Hermes evidence architecture decision.")
+        json!("Record the Макошь evidence architecture decision.")
     );
     assert_eq!(provenance["captured_by"], json!("manual_voice_memo"));
 
@@ -1618,7 +1618,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/ollama.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/ollama.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/ollama.rs`
 - Size bytes / Размер в байтах: `5764`
 - Included characters / Включено символов: `5764`
 - Truncated / Обрезано: `no`
@@ -1632,7 +1632,7 @@ use axum::{Json, Router};
 use serde_json::{Value, json};
 use tokio::net::TcpListener;
 
-use hermes_hub_backend::integrations::ollama::client::{
+use makosh_hub_backend::integrations::ollama::client::{
     OllamaClient, OllamaClientConfig, OllamaError,
 };
 
@@ -1652,14 +1652,14 @@ async fn ollama_client_round_trips_chat_embed_tags_and_version() {
     assert!(tags.contains(&"qwen3-embedding:4b".to_owned()));
 
     let chat = client
-        .chat("Return exactly: hermes-ai-ok")
+        .chat("Return exactly: makosh-ai-ok")
         .await
         .expect("chat");
-    assert_eq!(chat.content, "hermes-ai-ok");
+    assert_eq!(chat.content, "makosh-ai-ok");
     assert_eq!(chat.model, "qwen3:4b");
 
     let embedding = client
-        .embed("Hermes Hub memory retrieval")
+        .embed("Макошь memory retrieval")
         .await
         .expect("embed");
     assert_eq!(embedding.model, "qwen3-embedding:4b");
@@ -1755,7 +1755,7 @@ async fn spawn_fake_ollama(mode: FakeOllamaMode) -> String {
                         StatusCode::OK,
                         Json(json!({
                             "model": "qwen3:4b",
-                            "message": { "role": "assistant", "content": "hermes-ai-ok" },
+                            "message": { "role": "assistant", "content": "makosh-ai-ok" },
                             "done": true,
                             "total_duration": 10_000_000u64,
                             "prompt_eval_count": 8u32,
@@ -1792,7 +1792,7 @@ async fn spawn_fake_ollama(mode: FakeOllamaMode) -> String {
 
 ### `backend/tests/omniroute.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/omniroute.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/omniroute.rs`
 - Size bytes / Размер в байтах: `7423`
 - Included characters / Включено символов: `7423`
 - Truncated / Обрезано: `no`
@@ -1803,10 +1803,10 @@ use std::net::SocketAddr;
 use axum::http::{HeaderMap, StatusCode};
 use axum::routing::{get, post};
 use axum::{Json, Router};
-use hermes_hub_backend::integrations::omniroute::client::{
+use makosh_hub_backend::integrations::omniroute::client::{
     OmniRouteClient, OmniRouteClientConfig, OmniRouteError,
 };
-use hermes_hub_backend::platform::secrets::ResolvedSecret;
+use makosh_hub_backend::platform::secrets::ResolvedSecret;
 use serde_json::{Value, json};
 use tokio::net::TcpListener;
 
@@ -1833,14 +1833,14 @@ async fn omniroute_client_round_trips_openai_compatible_models_chat_and_embeddin
         .expect("required models");
 
     let chat = client
-        .chat("Return exactly: hermes-omniroute-ok")
+        .chat("Return exactly: makosh-omniroute-ok")
         .await
         .expect("chat");
-    assert_eq!(chat.content, "hermes-omniroute-ok");
+    assert_eq!(chat.content, "makosh-omniroute-ok");
     assert_eq!(chat.model, "codex/gpt-5.5");
 
     let embedding = client
-        .embed("Hermes Hub source-backed retrieval")
+        .embed("Макошь source-backed retrieval")
         .await
         .expect("embedding");
     assert_eq!(
@@ -1947,7 +1947,7 @@ async fn spawn_fake_omniroute(mode: FakeOmniRouteMode) -> String {
                                         "index": 0,
                                         "message": {
                                             "role": "assistant",
-                                            "content": "<think>hidden</think>\nhermes-omniroute-ok"
+                                            "content": "<think>hidden</think>\nmakosh-omniroute-ok"
                                         }
                                     }
                                 ]
@@ -2004,7 +2004,7 @@ fn authorized(headers: &HeaderMap) -> bool {
 
 ### `backend/tests/organizations_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/organizations_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/organizations_api.rs`
 - Size bytes / Размер в байтах: `22340`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2020,10 +2020,10 @@ use sqlx::Row;
 use testkit::factories::contact::ContactFactory;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::{build_router, build_router_with_database};
-use hermes_hub_backend::domains::organizations::enrichment::OrgEnrichmentStore;
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::{build_router, build_router_with_database};
+use makosh_hub_backend::domains::organizations::enrichment::OrgEnrichmentStore;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 
 const T: &str = "orgs-test-token";
 
@@ -2034,7 +2034,7 @@ fn cfg() -> AppConfig {
 fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("req")
 }
@@ -2043,7 +2043,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::from(body.to_string()))
         .expect("req")
 }
@@ -2052,7 +2052,7 @@ fn put(uri: &str, body: Value) -> Request<Body> {
         .method(Method::PUT)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::from(body.to_string()))
         .expect("req")
 }
@@ -2398,7 +2398,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/person_identity.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/person_identity.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/person_identity.rs`
 - Size bytes / Размер в байтах: `232`
 - Included characters / Включено символов: `232`
 - Truncated / Обрезано: `no`
@@ -2416,13 +2416,13 @@ mod support;
 
 ### `backend/tests/person_identity/events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/person_identity/events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/person_identity/events.rs`
 - Size bytes / Размер в байтах: `5002`
 - Included characters / Включено символов: `5002`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::persons::identity::{
+use makosh_hub_backend::domains::persons::identity::{
     PersonIdentityReviewCommand, PersonIdentityReviewState,
 };
 
@@ -2593,13 +2593,13 @@ async fn person_identity_review_event_rebuilds_state_against_postgres() {
 
 ### `backend/tests/person_identity/merge_split.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/person_identity/merge_split.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/person_identity/merge_split.rs`
 - Size bytes / Размер в байтах: `8793`
 - Included characters / Включено символов: `8793`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::persons::identity::{
+use makosh_hub_backend::domains::persons::identity::{
     PersonIdentityReviewCommand, PersonIdentityReviewState,
 };
 
@@ -2872,7 +2872,7 @@ async fn person_identity_confirmed_split_removes_merge_from_detail_against_postg
 
 ### `backend/tests/person_identity/refresh_ordering.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/person_identity/refresh_ordering.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/person_identity/refresh_ordering.rs`
 - Size bytes / Размер в байтах: `4783`
 - Included characters / Включено символов: `4783`
 - Truncated / Обрезано: `no`
@@ -3020,7 +3020,7 @@ async fn person_identity_refresh_skips_existing_split_when_generating_next_split
 
 ### `backend/tests/person_identity/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/person_identity/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/person_identity/support.rs`
 - Size bytes / Размер в байтах: `6742`
 - Included characters / Включено символов: `6742`
 - Truncated / Обрезано: `no`
@@ -3030,13 +3030,13 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use testkit::context::TestContext;
 
 use chrono::Utc;
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::domains::persons::identity::{
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::domains::persons::identity::{
     PersonIdentityError, PersonIdentityReviewCommand, PersonIdentityReviewState,
     PersonIdentityStore,
 };
-use hermes_hub_backend::platform::events::{EventStore, NewEventEnvelope};
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::events::{EventStore, NewEventEnvelope};
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::json;
 use sqlx::postgres::PgPool;
 
@@ -3261,7 +3261,7 @@ pub(crate) fn unique_suffix() -> u128 {
 
 ### `backend/tests/person_identity_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/person_identity_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/person_identity_api.rs`
 - Size bytes / Размер в байтах: `21702`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3277,13 +3277,13 @@ use sqlx::Row;
 use sqlx::postgres::PgPool;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::{build_router, build_router_with_database};
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::domains::persons::identity::PersonIdentityStore;
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::events::{EventConsumerConfig, EventConsumerRunner};
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::review_inbox::{
+use makosh_hub_backend::app::{build_router, build_router_with_database};
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::domains::persons::identity::PersonIdentityStore;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::events::{EventConsumerConfig, EventConsumerRunner};
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::review_inbox::{
     PERSON_IDENTITY_REVIEW_INBOX_CONSUMER, project_person_identity_review_event,
 };
 
@@ -3305,7 +3305,7 @@ async fn identity_candidates_reject_missing_local_api_secret() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -3614,7 +3614,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/person_identity_architecture.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/person_identity_architecture.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/person_identity_architecture.rs`
 - Size bytes / Размер в байтах: `2002`
 - Included characters / Включено символов: `2002`
 - Truncated / Обрезано: `no`
@@ -3686,7 +3686,7 @@ fn is_person_identity_test_file(path: &Path) -> bool {
 
 ### `backend/tests/persons.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons.rs`
 - Size bytes / Размер в байтах: `324`
 - Included characters / Включено символов: `324`
 - Truncated / Обрезано: `no`

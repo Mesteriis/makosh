@@ -2,7 +2,7 @@
 
 use std::path::Path;
 
-use hermes_blob_protocol::{
+use makosh_blob_protocol::{
     BlobAccessFenceV1, BlobCustodyScopeV1, BlobQuotaGrantV1, BlobRangeV1, BlobRefV1,
 };
 use sha2::{Digest, Sha256};

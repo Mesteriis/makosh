@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/platform/config/app_config/env.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/config/app_config/env.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/config/app_config/env.rs`
 - Size bytes / Размер в байтах: `1078`
 - Included characters / Включено символов: `1078`
 - Truncated / Обрезано: `no`
@@ -109,7 +109,7 @@ pub(super) fn apply_config_pair(
 
 ### `backend/src/platform/config/app_config/provider_env.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/config/app_config/provider_env.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/config/app_config/provider_env.rs`
 - Size bytes / Размер в байтах: `4071`
 - Included characters / Включено символов: `4071`
 - Truncated / Обрезано: `no`
@@ -126,7 +126,7 @@ use super::super::parsing::parse_bool_env;
 use super::AppConfig;
 
 pub(super) fn apply_bundled_google_oauth_client(config: &mut AppConfig) -> Result<(), ConfigError> {
-    if let Some(raw_json) = option_env!("HERMES_BUNDLED_GOOGLE_OAUTH_CLIENT_JSON") {
+    if let Some(raw_json) = option_env!("MAKOSH_BUNDLED_GOOGLE_OAUTH_CLIENT_JSON") {
         config.google_oauth_client =
             Some(GoogleOAuthClientConfig::from_client_secret_json(raw_json)?);
     }
@@ -140,52 +140,52 @@ pub(super) fn apply_provider_env(
     value: &str,
 ) -> Result<bool, ConfigError> {
     match key {
-        "HERMES_TDJSON_PATH" => {
+        "MAKOSH_TDJSON_PATH" => {
             config.tdjson_path = Some(PathBuf::from(non_empty(
                 value,
                 ConfigError::EmptyTdjsonPath,
             )?));
         }
-        "HERMES_TELEGRAM_API_ID" => {
+        "MAKOSH_TELEGRAM_API_ID" => {
             config.telegram_api_id = Some(parse_telegram_api_id(value)?);
         }
-        "HERMES_TELEGRAM_API_HASH" => {
+        "MAKOSH_TELEGRAM_API_HASH" => {
             config.telegram_api_hash = Some(ResolvedSecret::new(non_empty(
                 value,
                 ConfigError::EmptyTelegramApiHash,
             )?)?);
         }
-        "HERMES_GOOGLE_OAUTH_CLIENT_ID" => {
+        "MAKOSH_GOOGLE_OAUTH_CLIENT_ID" => {
             config.google_oauth_client_id =
                 Some(non_empty(value, ConfigError::EmptyGoogleOAuthClientId)?.to_owned());
         }
-        "HERMES_GOOGLE_OAUTH_CLIENT_SECRET" => {
+        "MAKOSH_GOOGLE_OAUTH_CLIENT_SECRET" => {
             config.google_oauth_client_secret = Some(ResolvedSecret::new(non_empty(
                 value,
                 ConfigError::EmptyGoogleOAuthClientSecret,
             )?)?);
         }
-        "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_JSON" => {
+        "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_JSON" => {
             config.google_oauth_client = Some(GoogleOAuthClientConfig::from_client_secret_json(
                 non_empty(value, ConfigError::EmptyGoogleOAuthClientConfigJson)?,
             )?);
         }
-        "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH" => {
+        "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH" => {
             config.google_oauth_client = Some(google_oauth_client_from_path(value)?);
         }
-        "HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED" => {
+        "MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED" => {
             config.zoom_token_maintenance_scheduler_enabled = parse_bool_env(
-                "HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED",
+                "MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED",
                 value.trim(),
             )?;
         }
-        "HERMES_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED" => {
+        "MAKOSH_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED" => {
             config.zoom_recording_sync_scheduler_enabled =
-                parse_bool_env("HERMES_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED", value.trim())?;
+                parse_bool_env("MAKOSH_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED", value.trim())?;
         }
-        "HERMES_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED" => {
+        "MAKOSH_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED" => {
             config.zoom_retention_cleanup_scheduler_enabled = parse_bool_env(
-                "HERMES_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED",
+                "MAKOSH_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED",
                 value.trim(),
             )?;
         }
@@ -237,14 +237,14 @@ fn non_empty(value: &str, error: ConfigError) -> Result<&str, ConfigError> {
 
 ### `backend/src/platform/config/constants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/config/constants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/config/constants.rs`
 - Size bytes / Размер в байтах: `729`
 - Included characters / Включено символов: `729`
 - Truncated / Обрезано: `no`
 
 ```rust
 pub(crate) const DEFAULT_HTTP_ADDR: &str = "127.0.0.1:8080";
-pub(crate) const DEFAULT_SERVICE_NAME: &str = "hermes-hub-backend";
+pub(crate) const DEFAULT_SERVICE_NAME: &str = "makosh-backend";
 pub(crate) const DEFAULT_OLLAMA_BASE_URL: &str = "http://127.0.0.1:11434";
 pub(crate) const DEFAULT_OLLAMA_CHAT_MODEL: &str = "qwen3:4b";
 pub(crate) const DEFAULT_OLLAMA_EMBED_MODEL: &str = "qwen3-embedding:4b";
@@ -258,7 +258,7 @@ pub(crate) const DEFAULT_OMNIROUTE_TIMEOUT_SECONDS: u64 = 120;
 
 ### `backend/src/platform/config/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/config/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/config/errors.rs`
 - Size bytes / Размер в байтах: `3616`
 - Included characters / Включено символов: `3616`
 - Truncated / Обрезано: `no`
@@ -275,44 +275,44 @@ use crate::platform::secrets::SecretResolutionError;
 
 #[derive(Debug, Error)]
 pub enum ConfigError {
-    #[error("invalid HERMES_HTTP_ADDR `{value}`: {source}")]
+    #[error("invalid MAKOSH_HTTP_ADDR `{value}`: {source}")]
     InvalidHttpAddr {
         value: String,
         #[source]
         source: AddrParseError,
     },
 
-    #[error("invalid HERMES_AI_PROVIDER `{value}`: expected ollama or omniroute")]
+    #[error("invalid MAKOSH_AI_PROVIDER `{value}`: expected ollama or omniroute")]
     InvalidAiProvider { value: String },
 
     #[error("DATABASE_URL is set but empty")]
     EmptyDatabaseUrl,
 
-    #[error("HERMES_LOCAL_API_SECRET is set but empty")]
+    #[error("MAKOSH_LOCAL_API_SECRET is set but empty")]
     EmptyLocalApiSecret,
 
-    #[error("HERMES_NATS_SERVER_URL is set but empty")]
+    #[error("MAKOSH_NATS_SERVER_URL is set but empty")]
     EmptyNatsServerUrl,
 
-    #[error("HERMES_SECRET_VAULT_PATH is set but empty")]
+    #[error("MAKOSH_SECRET_VAULT_PATH is set but empty")]
     EmptySecretVaultPath,
 
-    #[error("HERMES_SECRET_VAULT_KEY is set but empty")]
+    #[error("MAKOSH_SECRET_VAULT_KEY is set but empty")]
     EmptySecretVaultKey,
 
-    #[error("HERMES_VAULT_HOME is set but empty")]
+    #[error("MAKOSH_VAULT_HOME is set but empty")]
     EmptyVaultHome,
 
-    #[error("HERMES_DEV_KEY_PATH is set but empty")]
+    #[error("MAKOSH_DEV_KEY_PATH is set but empty")]
     EmptyDevKeyPath,
 
     #[error("invalid {name} `{value}`: expected true or false")]
     InvalidBoolEnv { name: &'static str, value: String },
 
-    #[error("HERMES_TDJSON_PATH is set but empty")]
+    #[error("MAKOSH_TDJSON_PATH is set but empty")]
     EmptyTdjsonPath,
 
-    #[error("invalid HERMES_TELEGRAM_API_ID `{value}`: {reason}")]
+    #[error("invalid MAKOSH_TELEGRAM_API_ID `{value}`: {reason}")]
     InvalidTelegramApiId {
         value: String,
         reason: &'static str,
@@ -320,22 +320,22 @@ pub enum ConfigError {
         source: Option<ParseIntError>,
     },
 
-    #[error("HERMES_TELEGRAM_API_HASH is set but empty")]
+    #[error("MAKOSH_TELEGRAM_API_HASH is set but empty")]
     EmptyTelegramApiHash,
 
-    #[error("HERMES_GOOGLE_OAUTH_CLIENT_ID is set but empty")]
+    #[error("MAKOSH_GOOGLE_OAUTH_CLIENT_ID is set but empty")]
     EmptyGoogleOAuthClientId,
 
-    #[error("HERMES_GOOGLE_OAUTH_CLIENT_SECRET is set but empty")]
+    #[error("MAKOSH_GOOGLE_OAUTH_CLIENT_SECRET is set but empty")]
     EmptyGoogleOAuthClientSecret,
 
-    #[error("HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_JSON is set but empty")]
+    #[error("MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_JSON is set but empty")]
     EmptyGoogleOAuthClientConfigJson,
 
-    #[error("HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH is set but empty")]
+    #[error("MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH is set but empty")]
     EmptyGoogleOAuthClientConfigPath,
 
-    #[error("failed to read HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH `{}`: {source}", path.display())]
+    #[error("failed to read MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH `{}`: {source}", path.display())]
     GoogleOAuthClientConfigRead {
         path: PathBuf,
         #[source]
@@ -351,16 +351,16 @@ pub enum ConfigError {
         message: &'static str,
     },
 
-    #[error("HERMES_OLLAMA_BASE_URL is set but empty")]
+    #[error("MAKOSH_OLLAMA_BASE_URL is set but empty")]
     EmptyOllamaBaseUrl,
 
-    #[error("HERMES_OLLAMA_CHAT_MODEL is set but empty")]
+    #[error("MAKOSH_OLLAMA_CHAT_MODEL is set but empty")]
     EmptyOllamaChatModel,
 
-    #[error("HERMES_OLLAMA_EMBED_MODEL is set but empty")]
+    #[error("MAKOSH_OLLAMA_EMBED_MODEL is set but empty")]
     EmptyOllamaEmbedModel,
 
-    #[error("invalid HERMES_OLLAMA_TIMEOUT_SECONDS `{value}`: {reason}")]
+    #[error("invalid MAKOSH_OLLAMA_TIMEOUT_SECONDS `{value}`: {reason}")]
     InvalidOllamaTimeout {
         value: String,
         reason: &'static str,
@@ -368,19 +368,19 @@ pub enum ConfigError {
         source: Option<ParseIntError>,
     },
 
-    #[error("HERMES_OMNIROUTE_BASE_URL is set but empty")]
+    #[error("MAKOSH_OMNIROUTE_BASE_URL is set but empty")]
     EmptyOmniRouteBaseUrl,
 
-    #[error("HERMES_OMNIROUTE_CHAT_MODEL is set but empty")]
+    #[error("MAKOSH_OMNIROUTE_CHAT_MODEL is set but empty")]
     EmptyOmniRouteChatModel,
 
-    #[error("HERMES_OMNIROUTE_EMBED_MODEL is set but empty")]
+    #[error("MAKOSH_OMNIROUTE_EMBED_MODEL is set but empty")]
     EmptyOmniRouteEmbedModel,
 
-    #[error("HERMES_OMNIROUTE_API_KEY is set but empty")]
+    #[error("MAKOSH_OMNIROUTE_API_KEY is set but empty")]
     EmptyOmniRouteApiKey,
 
-    #[error("invalid HERMES_OMNIROUTE_TIMEOUT_SECONDS `{value}`: {reason}")]
+    #[error("invalid MAKOSH_OMNIROUTE_TIMEOUT_SECONDS `{value}`: {reason}")]
     InvalidOmniRouteTimeout {
         value: String,
         reason: &'static str,
@@ -395,7 +395,7 @@ pub enum ConfigError {
 
 ### `backend/src/platform/config/google.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/config/google.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/config/google.rs`
 - Size bytes / Размер в байтах: `3239`
 - Included characters / Включено символов: `3239`
 - Truncated / Обрезано: `no`
@@ -514,7 +514,7 @@ struct GoogleOAuthClientSecretsPayload {
 
 ### `backend/src/platform/config/parsing.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/config/parsing.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/config/parsing.rs`
 - Size bytes / Размер в байтах: `895`
 - Included characters / Включено символов: `895`
 - Truncated / Обрезано: `no`
@@ -556,7 +556,7 @@ pub(crate) fn parse_bool_env(name: &'static str, value: &str) -> Result<bool, Co
 
 ### `backend/src/platform/events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events.rs`
 - Size bytes / Размер в байтах: `1473`
 - Included characters / Включено символов: `1473`
 - Truncated / Обрезано: `no`
@@ -610,7 +610,7 @@ pub use self::trace_context::TraceContext;
 
 ### `backend/src/platform/events/builder.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/builder.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/builder.rs`
 - Size bytes / Размер в байтах: `2819`
 - Included characters / Включено символов: `2819`
 - Truncated / Обрезано: `no`
@@ -711,7 +711,7 @@ impl NewEventEnvelopeBuilder {
 
 ### `backend/src/platform/events/bus.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/bus.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/bus.rs`
 - Size bytes / Размер в байтах: `8632`
 - Included characters / Включено символов: `8632`
 - Truncated / Обрезано: `no`
@@ -903,7 +903,7 @@ pub fn sanitize_event_payload(mut payload: Value) -> Value {
 
 ### `backend/src/platform/events/consumers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/consumers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/consumers.rs`
 - Size bytes / Размер в байтах: `27620`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1280,13 +1280,13 @@ impl EventConsumerStore {
             ON CONFLICT (consumer_name, event_position)
             DO UPDATE SET
                 attempt_count = event_consumer_failures.attempt_count + 1,
-        
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/platform/events/cursors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/cursors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/cursors.rs`
 - Size bytes / Размер в байтах: `2918`
 - Included characters / Включено символов: `2918`
 - Truncated / Обрезано: `no`
@@ -1400,7 +1400,7 @@ impl ProjectionCursorStore {
 
 ### `backend/src/platform/events/dispatcher.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/dispatcher.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/dispatcher.rs`
 - Size bytes / Размер в байтах: `3779`
 - Included characters / Включено символов: `3779`
 - Truncated / Обрезано: `no`
@@ -1534,7 +1534,7 @@ fn next_attempt_at(attempts: i32) -> DateTime<Utc> {
 
 ### `backend/src/platform/events/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/errors.rs`
 - Size bytes / Размер в байтах: `1322`
 - Included characters / Включено символов: `1322`
 - Truncated / Обрезано: `no`
@@ -1596,7 +1596,7 @@ impl EventStoreError {
 
 ### `backend/src/platform/events/migrations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/migrations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/migrations.rs`
 - Size bytes / Размер в байтах: `823`
 - Included characters / Включено символов: `823`
 - Truncated / Обрезано: `no`
@@ -1639,7 +1639,7 @@ pub struct MigrationSummary {
 
 ### `backend/src/platform/events/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/models.rs`
 - Size bytes / Размер в байтах: `2178`
 - Included characters / Включено символов: `2178`
 - Truncated / Обрезано: `no`
@@ -1731,7 +1731,7 @@ impl NewEventEnvelope {
 
 ### `backend/src/platform/events/nats.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/nats.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/nats.rs`
 - Size bytes / Размер в байтах: `1971`
 - Included characters / Включено символов: `1971`
 - Truncated / Обрезано: `no`
@@ -1741,7 +1741,7 @@ use thiserror::Error;
 
 use super::models::EventEnvelope;
 
-const HERMES_EVENTS_STREAM: &str = "hermes_events";
+const MAKOSH_EVENTS_STREAM: &str = "makosh_events";
 
 #[derive(Clone)]
 pub struct NatsJetStreamEventBus {
@@ -1756,7 +1756,7 @@ impl NatsJetStreamEventBus {
         let context = async_nats::jetstream::new(client);
         context
             .get_or_create_stream(async_nats::jetstream::stream::Config {
-                name: HERMES_EVENTS_STREAM.to_owned(),
+                name: MAKOSH_EVENTS_STREAM.to_owned(),
                 subjects: vec!["signal.>".to_owned()],
                 ..Default::default()
             })
@@ -1804,7 +1804,7 @@ fn event_subject(event: &EventEnvelope) -> String {
 
 ### `backend/src/platform/events/query.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/query.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/query.rs`
 - Size bytes / Размер в байтах: `2366`
 - Included characters / Включено символов: `2366`
 - Truncated / Обрезано: `no`
@@ -1893,7 +1893,7 @@ fn some_non_empty(value: impl Into<String>) -> Option<String> {
 
 ### `backend/src/platform/events/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/rows.rs`
 - Size bytes / Размер в байтах: `1032`
 - Included characters / Включено символов: `1032`
 - Truncated / Обрезано: `no`
@@ -1932,7 +1932,7 @@ pub(super) fn row_to_stored_event(row: PgRow) -> Result<StoredEventEnvelope, Eve
 
 ### `backend/src/platform/events/runtime.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/runtime.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/runtime.rs`
 - Size bytes / Размер в байтах: `2885`
 - Included characters / Включено символов: `2885`
 - Truncated / Обрезано: `no`
@@ -2061,7 +2061,7 @@ pub async fn runtime_allows_processing(
 
 ### `backend/src/platform/events/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/store.rs`
 - Size bytes / Размер в байтах: `287`
 - Included characters / Включено символов: `287`
 - Truncated / Обрезано: `no`
@@ -2092,7 +2092,7 @@ impl EventStore {
 
 ### `backend/src/platform/events/store/append.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/store/append.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/store/append.rs`
 - Size bytes / Размер в байтах: `1979`
 - Included characters / Включено символов: `1979`
 - Truncated / Обрезано: `no`
@@ -2168,7 +2168,7 @@ impl EventStore {
 
 ### `backend/src/platform/events/store/outbox.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/store/outbox.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/store/outbox.rs`
 - Size bytes / Размер в байтах: `7068`
 - Included characters / Включено символов: `7068`
 - Truncated / Обрезано: `no`
@@ -2409,7 +2409,7 @@ fn truncate_redacted_error(error: &str) -> String {
 
 ### `backend/src/platform/events/store/read.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/store/read.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/store/read.rs`
 - Size bytes / Размер в байтах: `3573`
 - Included characters / Включено символов: `3573`
 - Truncated / Обрезано: `no`
@@ -2535,7 +2535,7 @@ impl EventStore {
 
 ### `backend/src/platform/events/store/replay.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/store/replay.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/store/replay.rs`
 - Size bytes / Размер в байтах: `1280`
 - Included characters / Включено символов: `1280`
 - Truncated / Обрезано: `no`
@@ -2591,7 +2591,7 @@ impl EventStore {
 
 ### `backend/src/platform/events/trace.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/trace.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/trace.rs`
 - Size bytes / Размер в байтах: `9804`
 - Included characters / Включено символов: `9804`
 - Truncated / Обрезано: `no`

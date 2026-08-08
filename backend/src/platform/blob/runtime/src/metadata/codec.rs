@@ -1,6 +1,6 @@
 //! Fixed-version binary codec for non-content Blob technical metadata.
 
-use hermes_blob_protocol::{BlobBackupClassV1, BlobCustodyScopeV1, BlobRefV1};
+use makosh_blob_protocol::{BlobBackupClassV1, BlobCustodyScopeV1, BlobRefV1};
 
 use super::record::{BlobMetadataRecordV1, BlobMetadataStateV1};
 

@@ -6,7 +6,7 @@ const props = withDefaults(defineProps<{
   class?: string
 }>(), {})
 
-const classes = computed(() => ['hermes-label', props.class])
+const classes = computed(() => ['makosh-label', props.class])
 </script>
 
 <template>

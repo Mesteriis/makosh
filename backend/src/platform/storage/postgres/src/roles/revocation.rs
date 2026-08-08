@@ -1,7 +1,7 @@
 //! PostgreSQL-only portion of the runtime revoke sequence.
 
-use hermes_storage_control::{StorageFenceOutcomeV1, StoragePostgresFencePortV1};
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_control::{StorageFenceOutcomeV1, StoragePostgresFencePortV1};
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{AssertSqlSafe, query, query_scalar};
 use std::future::Future;
 

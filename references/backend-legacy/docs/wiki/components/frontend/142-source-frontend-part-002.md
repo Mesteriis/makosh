@@ -34,7 +34,7 @@ generated_by: code-wiki-ru
 ## Архитектура
 
 - **Публичный слой**: `messageApi.ts`, `folderApi.ts`, `outboxApi.ts` и другие файлы верхнего уровня предлагают типизированные функции. Они делегируют вызовы либо в ConnectRPC-слой, либо напрямую в REST API.
-- **ConnectRPC-слой**: файлы в `connect/` (collections, insights, messageLifecycle) реализуют вызовы к `hermes.communications.v1.CommunicationsService` через сгенерированный ConnectRPC-клиент или универсальный POST-хелпер.
+- **ConnectRPC-слой**: файлы в `connect/` (collections, insights, messageLifecycle) реализуют вызовы к `makosh.communications.v1.CommunicationsService` через сгенерированный ConnectRPC-клиент или универсальный POST-хелпер.
 - **Маппинг**: `connect/mapping.ts` преобразует ответы сервера (camelCase) в доменные типы (snake_case) и нормализует перечисления.
 - **REST-эндпоинты**: некоторые операции взаимодействуют напрямую с REST API по путям `/api/v1/communications/...` или `/api/v1/calls/...`.
 
@@ -177,7 +177,7 @@ generated_by: code-wiki-ru
 
 ## Транспортный слой
 
-- `connect/shared.ts` содержит `postCommunicationsConnectJson` — универсальный POST-запрос к `hermes.communications.v1.CommunicationsService/{method}` с заголовком `X-Hermes-Secret`.
+- `connect/shared.ts` содержит `postCommunicationsConnectJson` — универсальный POST-запрос к `makosh.communications.v1.CommunicationsService/{method}` с заголовком `X-Макошь-Secret`.
 - ConnectRPC-клиент получается через `getCommunicationsConnectClient()` из `platform/connect/communicationsClient` (детали клиента не включены в этот чанк).
 - Прямые REST-запросы используют `ApiClient.instance.get/post/put`, базовый URL и секрет конфигурируются в `ApiClient`.
 
@@ -211,7 +211,7 @@ generated_by: code-wiki-ru
 | `frontend/src/domains/communications/api/connect/insights.ts` | ConnectRPC-реализации для `fetchMessageStateCountsConnect`, `fetchSubscriptionsConnect`, `fetchMailboxHealthConnect`, `fetchTopSendersConnect`, `fetchCommunicationBlockersConnect`, `fetchCommunicationPersonasConnect`, `fetchRichTemplatesConnect`, `saveRichTemplateConnect`, `deleteRichTemplateConnect`, `renderRichTemplateConnect`, `previewRichTemplateMailMergeConnect`, `searchMessagesConnect`, `detectMessageLanguageConnect`, `translateMessageConnect` |
 | `frontend/src/domains/communications/api/connect/mapping.ts` | Функции маппинга: `mapMessageSummary`, `mapAttachment`, `mapOutboxItem`, `mapDraftItem`, `mapSavedSearchItem`, `mapFolderItem`, `mapFolderMessageItem`, `mapFolderMessageActionResult`, `mapRichTemplate`, `mapMessageSummaryContract`, `mapKnowledgeCandidates`, `parseJsonObject`, нормализация статусов |
 | `frontend/src/domains/communications/api/connect/messageLifecycle.ts` | ConnectRPC-реализации для сообщений: `fetchCommunicationMessagesConnect`, `fetchCommunicationMessageConnect`, `transitionMessageWorkflowStateConnect`, `trashMessageConnect`, `restoreMessageConnect`, `markMessageReadConnect`, `deleteMessageFromProviderConnect`, `bulkMessageActionConnect`, `toggleMessagePinConnect`, `toggleMessageImportantConnect`, `toggleMessageMuteConnect`, `snoozeMessageConnect`, `addMessageLabelConnect`, `analyzeMessageConnect`, `runWorkflowActionConnect`, `fetchMessageExplainConnect`, `fetchMessageSmartCcConnect`, `exportMessageConnect`, `fetchMessageAuthConnect` (и другие) |
-| `frontend/src/domains/communications/api/connect/shared.ts` | `postCommunicationsConnectJson` – POST-хелпер к `CommunicationsService` с заголовком `X-Hermes-Secret` |
+| `frontend/src/domains/communications/api/connect/shared.ts` | `postCommunicationsConnectJson` – POST-хелпер к `CommunicationsService` с заголовком `X-Макошь-Secret` |
 | `frontend/src/domains/communications/api/connectCommunications.test.ts` | Обширные тесты всех ConnectRPC-функций, подтверждающие вызовы, запросы и ответы |
 | `frontend/src/domains/communications/api/connectCommunications.ts` | Баррель-реэкспорты ConnectRPC-функций из `connect/messageLifecycle`, `connect/insights`, `connect/collections` |
 | `frontend/src/domains/communications/api/folderApi.ts` | Публичное API папок, делегирующее в ConnectRPC-слой |

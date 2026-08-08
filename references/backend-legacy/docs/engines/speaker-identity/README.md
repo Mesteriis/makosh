@@ -70,7 +70,7 @@ Whether a DOM label belongs to the audio speaker?
 | `0.40 - 0.69` | weak candidate |
 | `< 0.40` | keep unknown speaker |
 
-Hermes should keep `Unknown Speaker #n` when confidence is low. Speaker labels
+Макошь should keep `Unknown Speaker #n` when confidence is low. Speaker labels
 must remain reviewable when evidence is weak or contradictory.
 
 ## Manual confirmation

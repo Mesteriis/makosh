@@ -97,10 +97,10 @@ test('reviewed note promotion is an event-only workflow with a fresh Knowledge c
   ]);
   const policy = JSON.parse(policySource);
   const units = [
-    'hermes-reviewed-note-candidate-promotion-core',
-    'hermes-reviewed-note-candidate-promotion-persistence',
-    'hermes-reviewed-note-candidate-promotion-runtime',
-    'hermes-reviewed-note-candidate-promotion-assembly',
+    'makosh-reviewed-note-candidate-promotion-core',
+    'makosh-reviewed-note-candidate-promotion-persistence',
+    'makosh-reviewed-note-candidate-promotion-runtime',
+    'makosh-reviewed-note-candidate-promotion-assembly',
   ];
 
   assert.equal(
@@ -114,7 +114,7 @@ test('reviewed note promotion is an event-only workflow with a fresh Knowledge c
     true,
   );
   for (const unit of units) {
-    assert.match(workspace, new RegExp(`"src/${unit.replace('hermes-', '')}"`));
+    assert.match(workspace, new RegExp(`"src/${unit.replace('makosh-', '')}"`));
     assert.match(adr, new RegExp(`\\b${unit}\\b`));
     assert.equal(
       policy.implementation.productionPackages.some(({ name }) => name === unit),
@@ -126,7 +126,7 @@ test('reviewed note promotion is an event-only workflow with a fresh Knowledge c
   assert.match(coreManifest, /owner = "reviewed_note_candidate_promotion"/);
   assert.match(core, /derive_reviewed_note_candidate_command_id_v1/);
   assert.match(core, /derive_reviewed_note_candidate_result_id_v1/);
-  assert.doesNotMatch(core, /hermes_review|hermes_knowledge|sqlx|reqwest|ollama/);
+  assert.doesNotMatch(core, /makosh_review|makosh_knowledge|sqlx|reqwest|ollama/);
 
   assert.match(persistenceManifest, /surface = "persistence"/);
   assert.match(persistenceManifest, /conformance-test-support = \[\]/);
@@ -150,11 +150,11 @@ test('reviewed note promotion is an event-only workflow with a fresh Knowledge c
   );
 
   assert.match(runtimeManifest, /surface = "runtime"/);
-  assert.match(runtimeManifest, /hermes-review-note-candidate-api/);
-  assert.match(runtimeManifest, /hermes-knowledge-command-api/);
+  assert.match(runtimeManifest, /makosh-review-note-candidate-api/);
+  assert.match(runtimeManifest, /makosh-knowledge-command-api/);
   assert.doesNotMatch(
     runtimeManifest,
-    /hermes-review-note-candidate-(core|persistence|runtime|assembly)|hermes-knowledge-(core|persistence|runtime|assembly)/,
+    /makosh-review-note-candidate-(core|persistence|runtime|assembly)|makosh-knowledge-(core|persistence|runtime|assembly)/,
   );
   assert.match(runtime, /ReviewedNoteCandidatePromotionManagedRuntimeV1/);
   assert.match(admission, /ModuleKindV1::Workflow/);
@@ -181,7 +181,7 @@ test('reviewed note promotion is an event-only workflow with a fresh Knowledge c
   assert.match(runtimeMain, /ManagedWorkflowRuntimeConfigurationV1/);
   assert.doesNotMatch(
     `${runtime}\n${approval}\n${blobHandoff}\n${noteResults}\n${managedRuntime}`,
-    /hermes_review_note_candidate_(core|persistence|runtime|assembly)|hermes_knowledge_(core|persistence|runtime|assembly)|ClientRpc|ClientRealtime|provider_id|account_id|ollama|reqwest/,
+    /makosh_review_note_candidate_(core|persistence|runtime|assembly)|makosh_knowledge_(core|persistence|runtime|assembly)|ClientRpc|ClientRealtime|provider_id|account_id|ollama|reqwest/,
   );
 
   assert.match(assemblyManifest, /surface = "assembly"/);
@@ -190,7 +190,7 @@ test('reviewed note promotion is an event-only workflow with a fresh Knowledge c
   assert.match(assembly, /reviewed_note_candidate_promotion\.storage\.v1/);
   assert.match(assemblyMain, /--runtime/);
   assert.doesNotMatch(assembly, /private_key|sign_distribution|launch_managed|serve-inherited/);
-  assert.match(release, /--package hermes-reviewed-note-candidate-promotion-runtime/);
-  assert.match(release, /--package hermes-reviewed-note-candidate-promotion-assembly/);
+  assert.match(release, /--package makosh-reviewed-note-candidate-promotion-runtime/);
+  assert.match(release, /--package makosh-reviewed-note-candidate-promotion-assembly/);
   assert.match(release, /reviewed_note_candidate_promotion\.release-artifacts\.json/);
 });

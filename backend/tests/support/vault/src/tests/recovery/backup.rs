@@ -1,9 +1,9 @@
 use std::os::unix::fs::PermissionsExt;
 
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_protocol::{SecretClassV1, VaultActionV1, VaultPurposeRequestV1};
-use hermes_vault_store_sqlcipher::{
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_protocol::{SecretClassV1, VaultActionV1, VaultPurposeRequestV1};
+use makosh_vault_store_sqlcipher::{
     SecretRecordScope, VaultBackupClassV1, VaultRecoveryKeyV1, VaultStore,
 };
 use tempfile::TempDir;
@@ -122,7 +122,7 @@ fn assert_wrong_recovery_key_preserves_empty_target(
     backup: &std::path::Path,
     database: &std::path::Path,
     anchor: &std::path::Path,
-    wrapping_key: &hermes_vault_key_provider::WrappingKey,
+    wrapping_key: &makosh_vault_key_provider::WrappingKey,
 ) {
     let wrong = VaultRecoveryKeyV1::generate().expect("wrong recovery key");
     assert!(
@@ -135,10 +135,10 @@ fn assert_wrong_recovery_key_preserves_empty_target(
 fn assert_rebound_vault(
     database: &std::path::Path,
     anchor: &std::path::Path,
-    target_key: &hermes_vault_key_provider::WrappingKey,
-    source_key: &hermes_vault_key_provider::WrappingKey,
+    target_key: &makosh_vault_key_provider::WrappingKey,
+    source_key: &makosh_vault_key_provider::WrappingKey,
     recovery_key: &VaultRecoveryKeyV1,
-    record_id: &hermes_vault_store_sqlcipher::SecretRecordId,
+    record_id: &makosh_vault_store_sqlcipher::SecretRecordId,
 ) {
     let restored = VaultStore::open(database, anchor, target_key).expect("new platform slot opens");
     assert_eq!(

@@ -56,7 +56,7 @@ function handleKeydown(event: KeyboardEvent): void {
 
 <template>
 	<li
-		class="hermes-tree-item"
+		class="makosh-tree-item"
 		role="treeitem"
 		:aria-disabled="item.disabled"
 		:aria-expanded="hasChildren ? isExpanded : undefined"
@@ -65,8 +65,8 @@ function handleKeydown(event: KeyboardEvent): void {
 	>
 		<component
 			:is="item.static ? 'div' : 'button'"
-			class="hermes-tree-item__button"
-			:class="{ 'hermes-tree-item__button--static': item.static }"
+			class="makosh-tree-item__button"
+			:class="{ 'makosh-tree-item__button--static': item.static }"
 			:type="item.static ? undefined : 'button'"
 			:disabled="item.static ? undefined : item.disabled"
 			:tabindex="item.static ? undefined : (isSelected ? 0 : -1)"
@@ -77,24 +77,24 @@ function handleKeydown(event: KeyboardEvent): void {
 				v-if="hasChildren"
 				:icon="isExpanded ? 'tabler:chevron-down' : 'tabler:chevron-right'"
 				size="0.875rem"
-				class="hermes-tree-item__chevron"
+				class="makosh-tree-item__chevron"
 				aria-hidden="true"
 			/>
-			<span v-else class="hermes-tree-item__spacer" aria-hidden="true"></span>
-			<Icon v-if="item.icon" :icon="item.icon" size="1rem" class="hermes-tree-item__icon" aria-hidden="true" />
-			<span class="hermes-tree-item__body">
+			<span v-else class="makosh-tree-item__spacer" aria-hidden="true"></span>
+			<Icon v-if="item.icon" :icon="item.icon" size="1rem" class="makosh-tree-item__icon" aria-hidden="true" />
+			<span class="makosh-tree-item__body">
 				<span>{{ item.label }}</span>
-				<span v-if="item.detail" class="hermes-tree-item__detail">{{ item.detail }}</span>
+				<span v-if="item.detail" class="makosh-tree-item__detail">{{ item.detail }}</span>
 			</span>
 			<span
 				v-if="item.status"
-				class="hermes-tree-item__status"
-				:class="`hermes-tree-item__status--${item.status}`"
+				class="makosh-tree-item__status"
+				:class="`makosh-tree-item__status--${item.status}`"
 			>
 				{{ item.status }}
 			</span>
 		</component>
-		<ul v-if="hasChildren && isExpanded" class="hermes-tree-item__children" role="group">
+		<ul v-if="hasChildren && isExpanded" class="makosh-tree-item__children" role="group">
 			<TreeItem
 				v-for="child in item.children"
 				:key="child.id"

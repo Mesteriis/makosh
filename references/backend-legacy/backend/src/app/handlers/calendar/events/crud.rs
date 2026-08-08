@@ -1,10 +1,10 @@
 use super::super::*;
-use hermes_calendar_api::{CalendarEventListQuery, CalendarEventReadPort};
-use hermes_calendar_postgres::CalendarPostgresReadQuery;
+use makosh_calendar_api::{CalendarEventListQuery, CalendarEventReadPort};
+use makosh_calendar_postgres::CalendarPostgresReadQuery;
 
 #[derive(Serialize)]
 pub(crate) struct CalendarEventsResponse {
-    items: Vec<hermes_calendar_api::CalendarEventRead>,
+    items: Vec<makosh_calendar_api::CalendarEventRead>,
 }
 
 #[derive(Deserialize)]

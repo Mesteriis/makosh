@@ -1,19 +1,19 @@
 use std::{os::unix::net::UnixStream, time::Duration};
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTargetV1, ManagedBlobCustodyTransferRequestV1,
     ManagedBlobSessionRequestV1, request_managed_blob_custody_transfer_v2,
     request_managed_blob_session_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::BlobDataOperationV1,
 };
-use hermes_whisper_stt_core::{
+use makosh_whisper_stt_core::{
     WhisperSttBlobReceiptV1, WhisperSttExecutionPlanV1, build_whisper_stt_artifact_v1,
     complete_whisper_stt_result_v1,
 };
-use hermes_whisper_stt_process::{
+use makosh_whisper_stt_process::{
     WhisperSttProcessConfigurationV1, WhisperSttProcessErrorV1, execute_whisper_stt_process_v1,
 };
 use sha2::{Digest, Sha256};
@@ -36,7 +36,7 @@ impl WhisperSttExecutionPortV1 for ManagedWhisperSttExecutionPortV1<'_> {
     fn transcribe(
         &mut self,
         plan: &WhisperSttExecutionPlanV1,
-    ) -> Result<hermes_speech_to_text_api::wire::SpeechToTextResultV1, WhisperSttPortErrorV1> {
+    ) -> Result<makosh_speech_to_text_api::wire::SpeechToTextResultV1, WhisperSttPortErrorV1> {
         let source = plan
             .request
             .source
@@ -202,7 +202,7 @@ fn read_owned_exact(
 
 fn transcript_reference_id(plan: &WhisperSttExecutionPlanV1) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes-whisper-transcript-v1\0");
+    digest.update(b"makosh-whisper-transcript-v1\0");
     digest.update(&plan.request.request_id);
     digest.update(&plan.request.request_digest);
     let full = digest.finalize();

@@ -1,6 +1,6 @@
 import { computed, ref, shallowRef } from 'vue'
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
-import type { TelegramAccountResponse } from '../../../gen/hermes/telegram/v1/client_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
+import type { TelegramAccountResponse } from '../../../gen/makosh/telegram/v1/client_pb'
 import {
 	listTelegramAccounts,
 	replayTelegramAccount,
@@ -8,7 +8,7 @@ import {
 	retireTelegramAccount,
 } from '../api/telegramLifecycleGateway'
 
-const TELEGRAM_MODULE_ID = 'hermes-telegram-runtime'
+const TELEGRAM_MODULE_ID = 'makosh-telegram-runtime'
 
 type TelegramAccountManagementPorts = {
 	list(): Promise<readonly TelegramAccountResponse[]>

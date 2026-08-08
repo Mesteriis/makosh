@@ -2,27 +2,27 @@
 
 use super::*;
 
-use hermes_telegram_api::{
+use makosh_telegram_api::{
     TelegramAccount, TelegramAccountState, TelegramCredentialBinding, TelegramCredentialPurpose,
     TelegramRuntimeState,
     client_contract::{TELEGRAM_MODULE_ID, TELEGRAM_OWNER_ID},
 };
-use hermes_telegram_assembly::{
+use makosh_telegram_assembly::{
     TELEGRAM_STORAGE_BUNDLE_REVISION_V9, telegram_storage_bundle_with_call_evidence_v9,
 };
-use hermes_telegram_core::credential_lease_purpose_for_purpose;
-use hermes_telegram_persistence::{TelegramDurablePersistence, TelegramPersistenceConformanceV1};
-use hermes_telegram_runtime::{
+use makosh_telegram_core::credential_lease_purpose_for_purpose;
+use makosh_telegram_persistence::{TelegramDurablePersistence, TelegramPersistenceConformanceV1};
+use makosh_telegram_runtime::{
     admission::{
         TELEGRAM_STORAGE_CAPABILITY_ID, TELEGRAM_TDJSON_ARTIFACT_ID, TELEGRAM_TGCALLS_ARTIFACT_ID,
         telegram_module_descriptor_v1,
     },
     settings::telegram_settings_schema_bytes_v1,
 };
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_protocol::SecretClassV1;
-use hermes_vault_store_sqlcipher::{SecretRecordScope, VaultStore};
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_protocol::SecretClassV1;
+use makosh_vault_store_sqlcipher::{SecretRecordScope, VaultStore};
 use zeroize::Zeroizing;
 
 const TELEGRAM_RELEASE_ARTIFACT_ID: &str = "integration.telegram";
@@ -135,7 +135,7 @@ pub(super) fn admit_telegram_runtime_without_capability(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             TELEGRAM_RELEASE_ARTIFACT_ID,
             Sha256::digest(
                 std::fs::read(telegram_binary()).expect("Telegram runtime binary bytes"),
@@ -233,7 +233,7 @@ pub(super) fn start_telegram_runtime(
         .expect("read Event Hub topology")
         .expect("Event Hub topology");
     let settings_snapshot = telegram_settings_snapshot().encode_to_vec();
-    let configuration = hermes_runtime_protocol::v1::ManagedIntegrationRuntimeConfigurationV1 {
+    let configuration = makosh_runtime_protocol::v1::ManagedIntegrationRuntimeConfigurationV1 {
         major: 1,
         logical_owner_id: TELEGRAM_OWNER_ID.to_owned(),
         registration_id: admitted.registration_id.clone(),
@@ -312,12 +312,12 @@ pub(super) fn restart_telegram_runtime(
     successor
 }
 
-fn telegram_settings_snapshot() -> hermes_runtime_protocol::v1::SettingsSnapshotV1 {
-    use hermes_runtime_protocol::v1::{
+fn telegram_settings_snapshot() -> makosh_runtime_protocol::v1::SettingsSnapshotV1 {
+    use makosh_runtime_protocol::v1::{
         SettingValueV1, SettingsValueEntryV1, setting_value_v1::Value,
     };
 
-    hermes_runtime_protocol::v1::SettingsSnapshotV1 {
+    makosh_runtime_protocol::v1::SettingsSnapshotV1 {
         target_id: TELEGRAM_ACCOUNT_ID.to_owned(),
         revision: 1,
         values: vec![
@@ -379,7 +379,7 @@ pub(super) fn seed_telegram_legacy_call_frame() {
             let pool = telegram_admin_pool().await;
             let mut transaction = pool.begin().await.expect("begin legacy call seed");
             sqlx::query(
-                "INSERT INTO hermes_data.telegram_call_sessions (\
+                "INSERT INTO makosh_data.telegram_call_sessions (\
                  call_session_id, account_id, runtime_generation, tdlib_call_id, \
                  provider_call_unique_id, provider_user_id, direction, provider_state, \
                  pending_created, pending_received, discard_reason, failure_category, revision, \
@@ -394,7 +394,7 @@ pub(super) fn seed_telegram_legacy_call_frame() {
             .await
             .expect("seed legacy call projection");
             sqlx::query(
-                "INSERT INTO hermes_data.telegram_call_state_history (\
+                "INSERT INTO makosh_data.telegram_call_state_history (\
                  call_session_id, revision, provider_state, pending_created, pending_received, \
                  discard_reason, failure_category, observed_at_unix_seconds\
                  ) VALUES (\
@@ -405,7 +405,7 @@ pub(super) fn seed_telegram_legacy_call_frame() {
             .await
             .expect("seed legacy call history");
             sqlx::query(
-                "INSERT INTO hermes_data.telegram_call_realtime_frames (\
+                "INSERT INTO makosh_data.telegram_call_realtime_frames (\
                  account_id, call_session_id, call_revision, provider_state, pending_created, \
                  pending_received, discard_reason, failure_category, observed_at_unix_seconds\
                  ) VALUES (\
@@ -426,7 +426,7 @@ pub(super) fn telegram_calls_backfill_state() -> (String, i64, i64) {
         .block_on(async {
             sqlx::query_as::<_, (String, i64, i64)>(
                 "SELECT execution_state, processed_frame_count, backfilled_frame_count \
-                 FROM hermes_data.telegram_call_realtime_backfill_jobs",
+                 FROM makosh_data.telegram_call_realtime_backfill_jobs",
             )
             .fetch_one(&telegram_admin_pool().await)
             .await
@@ -437,20 +437,20 @@ pub(super) fn telegram_calls_backfill_state() -> (String, i64, i64) {
 async fn telegram_admin_persistence() -> TelegramDurablePersistence {
     let password = Zeroizing::new(
         std::fs::read_to_string(required(
-            "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+            "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
         ))
         .expect("read disposable PostgreSQL credential")
         .trim()
         .to_owned(),
     );
     TelegramPersistenceConformanceV1::connect(
-        &required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST"),
-        required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+        &required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"),
+        required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
             .parse()
             .expect("valid PostgreSQL port"),
-        "hermes_postgres_admin",
+        "makosh_postgres_admin",
         password.as_str(),
-        "hermes_storage_authenticated",
+        "makosh_storage_authenticated",
     )
     .await
     .expect("connect Telegram conformance persistence")
@@ -459,22 +459,22 @@ async fn telegram_admin_persistence() -> TelegramDurablePersistence {
 pub(super) async fn telegram_admin_pool() -> sqlx::PgPool {
     let password = Zeroizing::new(
         std::fs::read_to_string(required(
-            "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+            "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
         ))
         .expect("read disposable PostgreSQL credential")
         .trim()
         .to_owned(),
     );
     let options = sqlx::postgres::PgConnectOptions::new()
-        .host(&required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
+        .host(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
         .port(
-            required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+            required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
                 .parse()
                 .expect("valid PostgreSQL port"),
         )
-        .username("hermes_postgres_admin")
+        .username("makosh_postgres_admin")
         .password(password.as_str())
-        .database("hermes_storage_authenticated")
+        .database("makosh_storage_authenticated")
         .ssl_mode(sqlx::postgres::PgSslMode::Disable);
     sqlx::postgres::PgPoolOptions::new()
         .max_connections(1)
@@ -486,7 +486,7 @@ pub(super) async fn telegram_admin_pool() -> sqlx::PgPool {
 pub(super) fn telegram_call_media_state() -> String {
     let password = Zeroizing::new(
         std::fs::read_to_string(required(
-            "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+            "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
         ))
         .expect("read disposable PostgreSQL credential")
         .trim()
@@ -496,15 +496,15 @@ pub(super) fn telegram_call_media_state() -> String {
         .expect("Telegram media projection runtime")
         .block_on(async {
             let options = sqlx::postgres::PgConnectOptions::new()
-                .host(&required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
+                .host(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
                 .port(
-                    required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+                    required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
                         .parse()
                         .expect("valid PostgreSQL port"),
                 )
-                .username("hermes_postgres_admin")
+                .username("makosh_postgres_admin")
                 .password(password.as_str())
-                .database("hermes_storage_authenticated")
+                .database("makosh_storage_authenticated")
                 .ssl_mode(sqlx::postgres::PgSslMode::Disable);
             let pool = sqlx::postgres::PgPoolOptions::new()
                 .max_connections(1)
@@ -512,7 +512,7 @@ pub(super) fn telegram_call_media_state() -> String {
                 .await
                 .expect("connect Telegram media projection database");
             sqlx::query_scalar::<_, String>(
-                "SELECT media_state FROM hermes_data.telegram_call_media_projection \
+                "SELECT media_state FROM makosh_data.telegram_call_media_projection \
                  WHERE account_id = $1",
             )
             .bind(TELEGRAM_ACCOUNT_ID)
@@ -528,7 +528,7 @@ pub(super) fn telegram_pending_call_evidence_count() -> i64 {
         .block_on(async {
             let pool = telegram_admin_pool().await;
             let count = sqlx::query_scalar::<_, i64>(
-                "SELECT COUNT(*) FROM hermes_data.telegram_call_evidence_outbox \
+                "SELECT COUNT(*) FROM makosh_data.telegram_call_evidence_outbox \
                  WHERE published_at_unix_seconds IS NULL",
             )
             .fetch_one(&pool)
@@ -540,13 +540,13 @@ pub(super) fn telegram_pending_call_evidence_count() -> i64 {
 }
 
 fn telegram_binary() -> PathBuf {
-    binary("HERMES_TELEGRAM_RUNTIME_BIN")
+    binary("MAKOSH_TELEGRAM_RUNTIME_BIN")
 }
 
 fn telegram_tdjson_fixture() -> PathBuf {
-    binary("HERMES_TELEGRAM_TDJSON_FIXTURE")
+    binary("MAKOSH_TELEGRAM_TDJSON_FIXTURE")
 }
 
 fn telegram_tgcalls_fixture() -> PathBuf {
-    binary("HERMES_TELEGRAM_TGCALLS_FIXTURE")
+    binary("MAKOSH_TELEGRAM_TGCALLS_FIXTURE")
 }

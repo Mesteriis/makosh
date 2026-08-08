@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     envelope::{EnvelopeValidationError, validate_envelope_v1},
     v1::{
         AckDispositionV1, AckMetadataV1, AckStageV1, ActorKindV1, ActorRefV1, CommandMetadataV1,
@@ -7,7 +7,7 @@ use hermes_events_protocol::{
         durable_envelope_v1::Semantics,
     },
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::{
         BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
         CapabilityRequestV1, ClockTimerRequestV1, ContractReferenceV1, DurableEnvelopeKindV1,

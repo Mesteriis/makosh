@@ -1,6 +1,6 @@
 use crate::platform::secrets::store::SecretReferenceStore;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::{
     CommunicationProviderKind, ProviderAccount, ProviderSecretBindingLookupPort,
 };
 use std::sync::Arc;
@@ -544,7 +544,7 @@ mod tests {
     };
     use crate::integrations::mail::gmail::client::errors::EmailProviderNetworkError;
     use crate::integrations::mail::imap_write::ImapWriteError;
-    use hermes_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
+    use makosh_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
 
     #[test]
     fn imap_write_uses_the_message_mailbox_and_uid() {

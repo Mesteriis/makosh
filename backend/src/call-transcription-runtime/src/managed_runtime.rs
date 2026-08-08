@@ -1,18 +1,18 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_call_transcription_api::OWNER_ID_V1;
-use hermes_call_transcription_ingress::{
+use makosh_call_transcription_api::OWNER_ID_V1;
+use makosh_call_transcription_ingress::{
     RECORDING_READY_CONTRACT_NAME_V1, RECORDING_REJECTED_CONTRACT_NAME_V1,
     contract_reference_v1 as ingress_contract_reference_v1,
 };
-use hermes_call_transcription_persistence::{
+use makosh_call_transcription_persistence::{
     CallTranscriptionPersistenceErrorV1, CallTranscriptionPersistenceV1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimeSubscribePermitV1,
     request_managed_runtime_event_access_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::{
         ContractReferenceV1, ManagedRuntimeClientDeliveryResponseV1,
@@ -25,11 +25,11 @@ use hermes_runtime_protocol::{
         validate_module_client_request_v1, validate_module_client_response_v1,
     },
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 

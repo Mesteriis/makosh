@@ -2,8 +2,8 @@
 
 use std::collections::BTreeSet;
 
-use hermes_kernel_control_store::{ModuleRegistration, ModuleRegistrationState};
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store::{ModuleRegistration, ModuleRegistrationState};
+use makosh_runtime_protocol::v1::{
     EventsRuntimeConsumerGrantV1, IssueEventsRuntimeCredentialRequestV1,
 };
 

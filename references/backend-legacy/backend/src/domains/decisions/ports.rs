@@ -1,7 +1,7 @@
-use hermes_decisions_api::{
+use makosh_decisions_api::{
     DecisionEvidence, DecisionImpactedEntity, DecisionUpsert, DecisionWritePort,
 };
-use hermes_decisions_postgres::DecisionPostgresReadQuery;
+use makosh_decisions_postgres::DecisionPostgresReadQuery;
 use sqlx::PgPool;
 
 use super::errors::DecisionStoreError;
@@ -168,7 +168,7 @@ impl DecisionReviewPort {
     }
 }
 
-fn from_api(value: hermes_decisions_api::DecisionRead) -> Result<Decision, DecisionStoreError> {
+fn from_api(value: makosh_decisions_api::DecisionRead) -> Result<Decision, DecisionStoreError> {
     Ok(Decision {
         decision_id: value.decision_id,
         title: value.title,

@@ -1,6 +1,6 @@
 //! Live inherited-control conformance for Account JWT resolver updates.
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ApplyEventsAccountJwtUpdateRequestV1, EventsAuthorityRuntimeControlRequestV1,
     EventsAuthorityRuntimeControlResponseV1,
     events_authority_runtime_control_request_v1::Operation as AuthorityOperation,
@@ -13,10 +13,10 @@ use super::{
     start_runtime_with_account, write_frame,
 };
 
-const ACCOUNT_PUBLIC_KEY_FILE: &str = "HERMES_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE";
-const ACCOUNT_SIGNING_SEED_FILE: &str = "HERMES_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE";
-const ACCOUNT_JWT_FILE: &str = "HERMES_NATS_JWT_ACCOUNT_JWT_FILE";
-const RESOLVER_CREDENTIALS_FILE: &str = "HERMES_NATS_JWT_RESOLVER_UPDATE_CREDS_FILE";
+const ACCOUNT_PUBLIC_KEY_FILE: &str = "MAKOSH_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE";
+const ACCOUNT_SIGNING_SEED_FILE: &str = "MAKOSH_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE";
+const ACCOUNT_JWT_FILE: &str = "MAKOSH_NATS_JWT_ACCOUNT_JWT_FILE";
+const RESOLVER_CREDENTIALS_FILE: &str = "MAKOSH_NATS_JWT_RESOLVER_UPDATE_CREDS_FILE";
 const LEASE_ID: &str = "0123456789abcdef0123456789abcdef";
 
 #[test]

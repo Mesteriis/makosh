@@ -4,9 +4,9 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_kernel_control_store::ModuleBlobOperationV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store::ModuleBlobOperationV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     v1::{
         BlobCustodyReleaseGrantV1, BlobCustodyReleaseReasonV1, BlobCustodyReleaseRequestV1,
         BlobRuntimeControlRequestV1, BlobRuntimeControlResponseV1,
@@ -139,7 +139,7 @@ impl ManagedRuntimeBlobCustodyReleaseHandler for BlobCustodyReleaseHandlerV1 {
             backup_class: proof.backup_class,
             reference_expires_at_unix_ms: proof.reference_expires_at_unix_ms,
         };
-        let mut message = b"hermes.blob-custody-release.v1\0".to_vec();
+        let mut message = b"makosh.blob-custody-release.v1\0".to_vec();
         message.extend_from_slice(&grant.encode_to_vec());
         grant.kernel_authorization_signature_raw = signer.sign(&message).to_vec();
 

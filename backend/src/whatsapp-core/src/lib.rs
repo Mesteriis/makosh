@@ -11,18 +11,18 @@ pub use operational::{
     project_operational_host_observation,
 };
 
-use hermes_communications_ingress::{
+use makosh_communications_ingress::{
     AttachmentDescriptorV1, AttachmentDispositionV1, BodyAvailabilityV1, CommunicationDirectionV1,
     CommunicationEvidenceKindV1, CommunicationObservationDraft, IngressDraftError,
     ProviderProvenanceV1, SourceEnvelope, SourceScopeEnvelope,
     new_scoped_communication_observation_draft, with_attachment_descriptor,
 };
-use hermes_whatsapp_api::host_bridge::{
+use makosh_whatsapp_api::host_bridge::{
     WhatsAppHostBridgeEnvelopeV1, WhatsAppHostBridgeError, WhatsAppHostObservationV1,
     validate_host_bridge_envelope,
 };
 
-pub const PACKAGE: &str = "hermes-whatsapp-core";
+pub const PACKAGE: &str = "makosh-whatsapp-core";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct WhatsAppHostObservationProjection {
@@ -253,7 +253,7 @@ pub fn communication_observation_draft(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_whatsapp_api::host_bridge::{
+    use makosh_whatsapp_api::host_bridge::{
         HOST_BRIDGE_PROTOCOL_MAJOR, HOST_BRIDGE_PROTOCOL_REVISION,
     };
 

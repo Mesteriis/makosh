@@ -1,6 +1,6 @@
 //! Generic managed-runtime pull-consumer bindings derived from approved topology.
 
-use hermes_runtime_protocol::v1::ManagedRuntimeEventConsumerBindingV1;
+use makosh_runtime_protocol::v1::ManagedRuntimeEventConsumerBindingV1;
 
 use super::{
     EventConsumerPlanV1, EventPublisherPermitPlanV1, EventTopologyPlanV1,
@@ -66,11 +66,11 @@ fn stream_name(
     kind: EventStreamKindV1,
 ) -> Result<&'static str, ManagedRuntimeConsumerBindingErrorV1> {
     match kind {
-        EventStreamKindV1::Command => Ok("HERMES_COMMAND_V1"),
-        EventStreamKindV1::Event => Ok("HERMES_EVENT_V1"),
-        EventStreamKindV1::Observation => Ok("HERMES_OBSERVATION_V1"),
-        EventStreamKindV1::Result => Ok("HERMES_RESULT_V1"),
-        EventStreamKindV1::Ack => Ok("HERMES_ACK_V1"),
+        EventStreamKindV1::Command => Ok("MAKOSH_COMMAND_V1"),
+        EventStreamKindV1::Event => Ok("MAKOSH_EVENT_V1"),
+        EventStreamKindV1::Observation => Ok("MAKOSH_OBSERVATION_V1"),
+        EventStreamKindV1::Result => Ok("MAKOSH_RESULT_V1"),
+        EventStreamKindV1::Ack => Ok("MAKOSH_ACK_V1"),
     }
 }
 

@@ -1,9 +1,9 @@
-use hermes_attachment_preview_evidence_replay_core::ReplayProducerV1;
-use hermes_attachment_preview_evidence_replay_persistence::{
+use makosh_attachment_preview_evidence_replay_core::ReplayProducerV1;
+use makosh_attachment_preview_evidence_replay_persistence::{
     AttachmentPreviewEvidenceReplayPersistenceV1, ReplayPersistenceErrorV1,
     ReplayResultInboxRecordV1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimeSubscribePermitV1, try_receive_runtime_pull_delivery,
 };
 

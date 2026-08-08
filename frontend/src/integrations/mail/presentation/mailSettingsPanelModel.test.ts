@@ -6,14 +6,14 @@ import {
 	ClientModuleSettingsBootstrapV1Schema,
 	ClientModuleSettingsTargetBootstrapV1Schema,
 	ClientSettingsApplyStateV1,
-} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import { mailSettingsPanelModel } from './mailSettingsPanelModel'
 
 describe('mailSettingsPanelModel', () => {
 	it('uses account-scoped targets instead of the legacy registration target', () => {
 		const module = create(ClientModuleBootstrapV1Schema, {
 			registrationId: 'mail-registration',
-			moduleId: 'hermes-mail-runtime',
+			moduleId: 'makosh-mail-runtime',
 			settings: create(ClientModuleSettingsBootstrapV1Schema, {
 				desiredRevision: 3n,
 				effectiveRevision: 0n,
@@ -51,7 +51,7 @@ describe('mailSettingsPanelModel', () => {
 	it('reports the strongest non-current account state', () => {
 		const module = create(ClientModuleBootstrapV1Schema, {
 			registrationId: 'mail-registration',
-			moduleId: 'hermes-mail-runtime',
+			moduleId: 'makosh-mail-runtime',
 			settingsTargets: [
 				create(ClientModuleSettingsTargetBootstrapV1Schema, {
 					configurationInstanceId: 'account-a',

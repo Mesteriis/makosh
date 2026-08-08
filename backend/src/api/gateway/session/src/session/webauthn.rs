@@ -73,7 +73,7 @@ impl BrowserWebauthnVerifier {
     ) -> Result<BrowserRegistrationCeremonyV1, String> {
         let builder = self
             .core
-            .new_challenge_register_builder(owner_id.as_bytes(), owner_id, "Hermes owner")
+            .new_challenge_register_builder(owner_id.as_bytes(), owner_id, "Макошь owner")
             .map_err(webauthn_error)?;
         let (options, state) = self
             .core

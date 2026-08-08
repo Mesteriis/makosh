@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Необходимо создать или обновить страницу русского индекса архитектурных решений (`decisions/adr-index.md`) в Obsidian-совместимой wiki проекта Hermes Hub. Чанк содержит документы ADR-0051–ADR-0076 (кроме отсутствующего ADR-0075). Индекс должен перечислить все решения из этого набора с их статусами и краткими описаниями, опираясь только на встроенный в чанк исходный текст. Страница должна быть написана на русском языке, использовать синтаксис Obsidian (внутренние ссылки) и не добавлять внешних фактов, не подтверждённых предоставленными файлами ADR.
+Необходимо создать или обновить страницу русского индекса архитектурных решений (`decisions/adr-index.md`) в Obsidian-совместимой wiki проекта Макошь. Чанк содержит документы ADR-0051–ADR-0076 (кроме отсутствующего ADR-0075). Индекс должен перечислить все решения из этого набора с их статусами и краткими описаниями, опираясь только на встроенный в чанк исходный текст. Страница должна быть написана на русском языке, использовать синтаксис Obsidian (внутренние ссылки) и не добавлять внешних фактов, не подтверждённых предоставленными файлами ADR.
 
 ## Предложенные страницы
 
@@ -25,7 +25,7 @@ generated_by: code-wiki-ru
 ````markdown
 # Индекс архитектурных решений (ADR‑Index)
 
-В этом документе перечислены архитектурные решения (ADR) проекта Hermes Hub, начиная с ADR-0051. Более ранние решения описаны в других частях индекса.
+В этом документе перечислены архитектурные решения (ADR) проекта Макошь, начиная с ADR-0051. Более ранние решения описаны в других частях индекса.
 
 ## ADR-0051 – ADR-0060
 
@@ -33,10 +33,10 @@ generated_by: code-wiki-ru
   - Явная граница провайдера `whatsapp_web` для личного WhatsApp. Первый путь – фикстуры/ручное состояние; живая сессия заблокирована до появления видимого десктоп-рантайма. Секреты не хранятся в PostgreSQL, учётные данные резолвятся по `account_id + secret_purpose`, raw-записи – append‑only. Отправка в реальном времени не входит в V5-основание.
 
 - **``ADR-0052` (`ADR-0052-capability-runtime-and-action-confirmation-policy`)`** – Capability Runtime and Action Confirmation Policy (`Proposed`)
-  - Централизованная проверка разрешений на уровне backend‑приложения. Классификация действий: `read`, `local_write`, `provider_write`, `destructive`, `export`, `secret_access`, `automation`. Автоматизация требует ограниченных политик с привязкой к аккаунту, шаблону, получателю, лимитам. Временные заголовки `Authorization: Bearer <HERMES_LOCAL_API_TOKEN>` и `X-Hermes-Actor-Id` остаются до замены на capability‑рантайм. Аудит высокорисковых действий обязателен, секреты в аудит не попадают. Плагины ненадёжны по умолчанию, активируются через декларативные манифесты и ограниченные представления данных.
+  - Централизованная проверка разрешений на уровне backend‑приложения. Классификация действий: `read`, `local_write`, `provider_write`, `destructive`, `export`, `secret_access`, `automation`. Автоматизация требует ограниченных политик с привязкой к аккаунту, шаблону, получателю, лимитам. Временные заголовки `Authorization: Bearer <MAKOSH_LOCAL_API_TOKEN>` и `X-Макошь-Actor-Id` остаются до замены на capability‑рантайм. Аудит высокорисковых действий обязателен, секреты в аудит не попадают. Плагины ненадёжны по умолчанию, активируются через декларативные манифесты и ограниченные представления данных.
 
 - **``ADR-0053` (`ADR-0053-database-backed-encrypted-secret-vault`)`** – Database-Backed Encrypted Secret Vault (`Superseded by ADR-0076`)
-  - Предлагал хранить зашифрованные секреты провайдеров в PostgreSQL в таблице `encrypted_secret_vault_entries` с использованием AES‑256‑GCM и Argon2id, оставляя ключ `HERMES_SECRET_VAULT_KEY` вне базы. Заменён решением ADR‑0076, которое выносит новые шифрованные полезные нагрузки из PostgreSQL в хост‑хранилище.
+  - Предлагал хранить зашифрованные секреты провайдеров в PostgreSQL в таблице `encrypted_secret_vault_entries` с использованием AES‑256‑GCM и Argon2id, оставляя ключ `MAKOSH_SECRET_VAULT_KEY` вне базы. Заменён решением ADR‑0076, которое выносит новые шифрованные полезные нагрузки из PostgreSQL в хост‑хранилище.
 
 - **``ADR-0054` (`ADR-0054-application-settings-store`)`** – Application Settings Store (`Proposed`)
   - Хранение пользовательских несекретных настроек в PostgreSQL в таблице `application_settings`. Значения – типизированный JSONB (`boolean`, `integer`, `string`, `json`). Ключи не должны содержать `secret`, `password`, `token`, `credential` или `private_key`. Провайдерские аккаунты остаются в собственных таблицах. Стартап‑проверка (repair) создаёт недостающие настройки и сбрасывает некорректные до дефолтов.
@@ -45,7 +45,7 @@ generated_by: code-wiki-ru
   - Снимает ограничение только на чтение для email‑провайдеров. Добавлены SMTP‑отправка, IMAP‑мутации флагов и ящиков, Gmail‑мутации и работа с черновиками. SMTP‑пароли хранятся как отдельные секреты с purpose `smtp_password`. Автоматические интеграционные тесты должны использовать только пути чтения.
 
 - **``ADR-0056` (`ADR-0056-local-api-simplified-auth`)`** – Local API – Simplified Auth (`Accepted`, заменяет ADR‑0037, 0038, 0040)
-  - Единая проверка разделяемого секрета через `tower::layer` на уровне роутера. Удалены `HERMES_LOCAL_API_TOKEN`, `x-hermes-actor-id`, `verify_local_api_capability()` и связанные структуры. Все аудит‑записи используют актора `"hermes-frontend"`.
+  - Единая проверка разделяемого секрета через `tower::layer` на уровне роутера. Удалены `MAKOSH_LOCAL_API_TOKEN`, `x-makosh-actor-id`, `verify_local_api_capability()` и связанные структуры. Все аудит‑записи используют актора `"makosh-frontend"`.
 
 - **``ADR-0057` (`ADR-0057-person-memory-and-provenance`)`** – Person Memory and Provenance System (`Proposed`)
   - Факты, карточки памяти, предпочтения и экспертиза хранятся в доменных таблицах с обязательными колонками `source`, `confidence`, `last_verified_at`. Движок обогащения пишет через эти таблицы, никогда не изменяя профиль напрямую. Предусмотрено устаревание памяти и обнаружение конфликтующих фактов.
@@ -108,7 +108,7 @@ generated_by: code-wiki-ru
 - **ADR-0075 отсутствует в данном контексте.**
 
 - **``ADR-0076` (`ADR-0076-host-vault-on-macos`)`** – Host Vault on macOS (`Accepted`, заменяет ADR‑0044, 0053)
-  - Выделенное хост‑хранилище `~/.hermes/vault` с SQLite‑базой `vault.db` для зашифрованных секретов. PostgreSQL содержит только несекретные метаданные и `secret_references` (`store_kind = host_vault`). Мастер‑ключ – на macOS Keychain, в development‑режиме – через `HERMES_DEV_KEY_PATH`. Криптография: XChaCha20‑Poly1305 с AAD, OS‑энтропия, mouse‑entropy при onboarding. Восстановление обязательно, биометрия/Keychain только для разблокировки.
+  - Выделенное хост‑хранилище `~/.makosh/vault` с SQLite‑базой `vault.db` для зашифрованных секретов. PostgreSQL содержит только несекретные метаданные и `secret_references` (`store_kind = host_vault`). Мастер‑ключ – на macOS Keychain, в development‑режиме – через `MAKOSH_DEV_KEY_PATH`. Криптография: XChaCha20‑Poly1305 с AAD, OS‑энтропия, mouse‑entropy при onboarding. Восстановление обязательно, биометрия/Keychain только для разблокировки.
 ````
 
 ## Покрытие источников
@@ -117,10 +117,10 @@ generated_by: code-wiki-ru
 |---|---|
 | `ADR-0051-v5-whatsapp-web-companion-boundary.md` | Граница `whatsapp_web`, состояние фикстуры/блокировки, вне PostgreSQL секретов, `account_id + secret_purpose`, raw‑записи append‑only, отсутствие live‑отправки в V5 |
 | `ADR-0052-capability-runtime-and-action-confirmation-policy.md` | Централизованная граница capability‑проверок, классификация действий (7 видов), scoped‑разрешения, временные заголовки, аудит высокорисковых действий, плагины по умолчанию не доверены |
-| `ADR-0053-database-backed-encrypted-secret-vault.md` | Статус Superseded, предложение хранить шифрованные секреты в PostgreSQL, AES‑256‑GCM+Argon2id, `HERMES_SECRET_VAULT_KEY` вне базы |
+| `ADR-0053-database-backed-encrypted-secret-vault.md` | Статус Superseded, предложение хранить шифрованные секреты в PostgreSQL, AES‑256‑GCM+Argon2id, `MAKOSH_SECRET_VAULT_KEY` вне базы |
 | `ADR-0054-application-settings-store.md` | Таблица `application_settings`, типизированный JSONB, запрет секретоподобных ключей, стартап‑repair, провайдерские аккаунты отдельно |
 | `ADR-0055-full-email-provider-networking.md` | Полный email‑доступ (read+write), SMTP, IMAP/Gmail мутации, работы с черновиками, секреты по `account_id + secret_purpose`, тесты только на чтение |
-| `ADR-0056-local-api-simplified-auth.md` | Единый `tower::layer` с разделяемым секретом, удаление `HERMES_LOCAL_API_TOKEN`, `x-hermes-actor-id`, актор `"hermes-frontend"` |
+| `ADR-0056-local-api-simplified-auth.md` | Единый `tower::layer` с разделяемым секретом, удаление `MAKOSH_LOCAL_API_TOKEN`, `x-makosh-actor-id`, актор `"makosh-frontend"` |
 | `ADR-0057-person-memory-and-provenance.md` | Доменные таблицы фактов/карточек памяти/предпочтений/экспертизы, обязательные `source`/`confidence`/`last_verified_at`, decay памяти, обнаружение конфликтов |
 | `ADR-0058-person-enrichment-engine.md` | `EnrichmentEngine`, подключаемые провайдеры, статусы результатов, пользовательское подтверждение для результатов с низким/средним confidence |
 | `ADR-0059-person-communication-dna.md` | Статус Superseded, атрибуты DNA в `persons`, `person_personas`; заменён ADR‑0084 |
@@ -139,7 +139,7 @@ generated_by: code-wiki-ru
 | `ADR-0072-task-intelligence-heuristic-fallbacks.md` | Приоритет/риск/готовность/детекция пропусков/следующее действие – эвристики; Ollama опционален |
 | `ADR-0073-backend-module-organization.md` | Семислойная структура `app`, `domains`, `engines`, `integrations`, `ai`, `workflows`, `platform`, domain‑isolation, порог 700 строк |
 | `ADR-0074-person-multi-channel-identity-model.md` | Текстовый `person_id`, `person_identities` для мультиканальности, запрет на переход к opaque ID без отдельного ADR |
-| `ADR-0076-host-vault-on-macos.md` | Хост‑хранилище `~/.hermes/vault`, SQLite `vault.db`, `store_kind = host_vault`, macOS Keychain для мастер‑ключа, XChaCha20‑Poly1305, обязательное восстановление |
+| `ADR-0076-host-vault-on-macos.md` | Хост‑хранилище `~/.makosh/vault`, SQLite `vault.db`, `store_kind = host_vault`, macOS Keychain для мастер‑ключа, XChaCha20‑Poly1305, обязательное восстановление |
 
 ## Исходные файлы
 
@@ -179,8 +179,8 @@ generated_by: code-wiki-ru
 
 3. **ADR-0055 (Full Email) заменяет ADR-0043.** Если где-либо сохраняется упоминание read‑only ограничения email‑адаптеров как актуального политики, это drift.
 
-4. **ADR-0056 (Local API Simplified Auth) заменяет ADR-0037, 0038, 0040.** Присутствие в коде `HERMES_LOCAL_API_TOKEN`, `x-hermes-actor-id`, `verify_local_api_capability()` и связанных структур, не удалённых в пользу единого router‑уровня `tower::layer`, является прямым drift.
+4. **ADR-0056 (Local API Simplified Auth) заменяет ADR-0037, 0038, 0040.** Присутствие в коде `MAKOSH_LOCAL_API_TOKEN`, `x-makosh-actor-id`, `verify_local_api_capability()` и связанных структур, не удалённых в пользу единого router‑уровня `tower::layer`, является прямым drift.
 
-5. **ADR-0076 (Host Vault) заменяет ADR-0044 и ADR-0053.** Если конфигурация всё ещё использует `HERMES_SECRET_VAULT_PATH` как первичный путь записи, или файловое хранилище `encrypted_vault` (из ADR‑0044) рассматривается как основной механизм, это расходится с решением о переносе в хост‑хранилище с `vault.db` и `store_kind = host_vault`.
+5. **ADR-0076 (Host Vault) заменяет ADR-0044 и ADR-0053.** Если конфигурация всё ещё использует `MAKOSH_SECRET_VAULT_PATH` как первичный путь записи, или файловое хранилище `encrypted_vault` (из ADR‑0044) рассматривается как основной механизм, это расходится с решением о переносе в хост‑хранилище с `vault.db` и `store_kind = host_vault`.
 
 Других расхождений в предоставленном наборе документов не обнаружено.

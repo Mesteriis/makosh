@@ -4,7 +4,7 @@ use std::collections::HashSet;
 use std::sync::{Arc, LazyLock, Mutex};
 use std::time::Duration;
 
-use hermes_desktop_runtime::{
+use makosh_desktop_runtime::{
     RuntimeExitPolicy, RuntimeTaskClass, RuntimeTaskFactory, RuntimeTaskFuture, RuntimeTaskSpec,
 };
 use serde_json::json;
@@ -117,9 +117,9 @@ fn yandex_telemost_calendar_matching_projection_task(
     let task: RuntimeTaskFactory = Arc::new(move |cancellation: CancellationToken| {
         let pool = pool.clone();
         Box::pin(async move {
-            let runner = hermes_events_postgres::consumers::EventConsumerRunner::new(
+            let runner = makosh_events_postgres::consumers::EventConsumerRunner::new(
                 pool.clone(),
-                hermes_events_postgres::consumers::EventConsumerConfig::new(
+                makosh_events_postgres::consumers::EventConsumerConfig::new(
                     crate::workflows::yandex_telemost_calendar_matching::YANDEX_TELEMOST_CALENDAR_MATCHING_CONSUMER,
                 ),
             );

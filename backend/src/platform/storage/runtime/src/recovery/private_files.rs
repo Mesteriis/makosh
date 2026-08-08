@@ -121,7 +121,7 @@ fn write_connection_files(
 ) -> Result<(), String> {
     let mut password = read_password(&connection.password_file)?;
     let service = format!(
-        "[hermes_recovery]\nhost={}\nport={}\ndbname={}\nuser={}\nsslmode={}\n",
+        "[makosh_recovery]\nhost={}\nport={}\ndbname={}\nuser={}\nsslmode={}\n",
         connection.host,
         connection.port,
         connection.database,
@@ -189,7 +189,7 @@ fn create_staging(parent: &Path, purpose: &str) -> Result<PathBuf, String> {
     for _ in 0..32 {
         let counter = STAGING_COUNTER.fetch_add(1, Ordering::Relaxed);
         let path = parent.join(format!(
-            ".hermes-postgres-{purpose}-{}-{timestamp}-{counter}",
+            ".makosh-postgres-{purpose}-{}-{timestamp}-{counter}",
             std::process::id()
         ));
         match fs::create_dir(&path) {

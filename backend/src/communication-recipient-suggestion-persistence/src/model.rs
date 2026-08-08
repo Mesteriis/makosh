@@ -1,4 +1,4 @@
-use hermes_communication_recipient_suggestion_core::{
+use makosh_communication_recipient_suggestion_core::{
     COMMUNICATION_RECIPIENT_MAX_CANDIDATES_V1,
     COMMUNICATION_RECIPIENT_MAX_CONFIDENCE_BASIS_POINTS_V1, CommunicationRecipientCandidateV1,
     CommunicationRecipientRationaleV1, CommunicationRecipientRoleV1,
@@ -91,7 +91,7 @@ pub enum CommunicationRecipientSuggestionPersistenceErrorV1 {
 
 pub(crate) fn request_fingerprint(draft: &CommunicationRecipientSuggestionDraftV1) -> [u8; 32] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.communication_recipient_suggestion.start.v1\0");
+    hash.update(b"makosh.communication_recipient_suggestion.start.v1\0");
     hash.update(draft.source_message_id);
     hash.update(draft.expected_source_revision.to_be_bytes());
     hash.finalize().into()

@@ -12,11 +12,11 @@ use super::attachment_text_extraction_gateway_fixture::{
     wait_for_ready_attachment_text_v1,
 };
 use crate::identity::device::signer::DeviceSigner;
-use hermes_attachment_text_extraction_api::{
+use makosh_attachment_text_extraction_api::{
     ATTACHMENT_TEXT_EXTRACTION_COMMAND_CONNECT_PATH_V1,
     wire::{StartAttachmentTextExtractionRequestV1, StartAttachmentTextExtractionResponseV1},
 };
-use hermes_attachment_translation_api::{
+use makosh_attachment_translation_api::{
     ATTACHMENT_TRANSLATION_CAPABILITY_ID_V1, ATTACHMENT_TRANSLATION_COMMAND_CONNECT_PATH_V1,
     ATTACHMENT_TRANSLATION_COMMAND_CONTRACT_NAME_V1, ATTACHMENT_TRANSLATION_CONTRACT_MAJOR_V1,
     ATTACHMENT_TRANSLATION_CONTRACT_REVISION_V1, ATTACHMENT_TRANSLATION_CONTROL_SCHEMA_SHA256,
@@ -30,9 +30,9 @@ use hermes_attachment_translation_api::{
         StartAttachmentTranslationResponseV1,
     },
 };
-use hermes_attachment_translation_runtime::ATTACHMENT_TRANSLATION_STORAGE_CAPABILITY_ID_V1;
-use hermes_kernel_control_store::{ModuleRegistrationState, PlatformStorageBindingStateV1};
-use hermes_runtime_protocol::v1::{
+use makosh_attachment_translation_runtime::ATTACHMENT_TRANSLATION_STORAGE_CAPABILITY_ID_V1;
+use makosh_kernel_control_store::{ModuleRegistrationState, PlatformStorageBindingStateV1};
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
 use sha2::{Digest, Sha256};
@@ -49,9 +49,9 @@ fn managed_attachment_translation_reaches_source_ai_and_gateway_sse() {
 }
 
 #[test]
-#[ignore = "requires disposable Docker plus a real loopback Ollama service with hermes-conformance:latest"]
+#[ignore = "requires disposable Docker plus a real loopback Ollama service with makosh-conformance:latest"]
 fn managed_attachment_translation_completes_and_reads_real_provider_result() {
-    let port = required("HERMES_OLLAMA_LIVE_PORT")
+    let port = required("MAKOSH_OLLAMA_LIVE_PORT")
         .parse::<u16>()
         .expect("valid live Ollama port");
     run_attachment_translation_managed_contour_v1(AttachmentTranslationProviderV1::Live(port));
@@ -59,12 +59,12 @@ fn managed_attachment_translation_completes_and_reads_real_provider_result() {
 
 fn run_attachment_translation_managed_contour_v1(provider: AttachmentTranslationProviderV1) {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let clamav = AttachmentSecurityClamAvFixture::start();
     let ollama_port = provider.port();
-    let root = unique_target_root("hermes-managed-attachment-translation");
+    let root = unique_target_root("makosh-managed-attachment-translation");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -72,13 +72,13 @@ fn run_attachment_translation_managed_contour_v1(provider: AttachmentTranslation
     );
     let release = installed_attachment_translation_ensemble_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             ATTACHMENT_TRANSLATION_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -102,7 +102,7 @@ fn run_attachment_translation_managed_contour_v1(provider: AttachmentTranslation
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     configure_ai_module_request_router_v1(&supervisor, &store);
     configure_attachment_translation_realtime_v1(&supervisor, &store, realtime.clone());
@@ -224,7 +224,7 @@ fn run_attachment_translation_managed_contour_v1(provider: AttachmentTranslation
     );
     assert_eq!(
         wait_for_attachment_state(&store, &supervisor, attachment.attachment_anchor_id),
-        hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
+        makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
             as u32
     );
 
@@ -571,7 +571,7 @@ fn run_attachment_translation_managed_contour_v1(provider: AttachmentTranslation
         .expect("join Attachment Translation owner control server")
         .expect("Attachment Translation owner control server");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Attachment Translation fixture");
     std::fs::remove_dir_all(data).expect("remove short Attachment Translation Kernel fixture");
@@ -682,7 +682,7 @@ fn read_ready_attachment_translation_v1(
     runtime: &tokio::runtime::Runtime,
     cookie: &str,
     run_id: &[u8],
-    terminal: &hermes_attachment_translation_api::wire::GetAttachmentTranslationResponseV1,
+    terminal: &makosh_attachment_translation_api::wire::GetAttachmentTranslationResponseV1,
 ) -> Vec<u8> {
     let artifact = terminal
         .artifact

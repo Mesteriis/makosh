@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/domains/projects/core/read_model/stats.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/core/read_model/stats.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/core/read_model/stats.rs`
 - Size bytes / Размер в байтах: `3640`
 - Included characters / Включено символов: `3640`
 - Truncated / Обрезано: `no`
@@ -176,7 +176,7 @@ impl ProjectStore {
 
 ### `backend/src/domains/projects/core/read_model/timeline.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/core/read_model/timeline.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/core/read_model/timeline.rs`
 - Size bytes / Размер в байтах: `2106`
 - Included characters / Включено символов: `2106`
 - Truncated / Обрезано: `no`
@@ -245,7 +245,7 @@ impl ProjectStore {
 
 ### `backend/src/domains/projects/core/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/core/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/core/rows.rs`
 - Size bytes / Размер в байтах: `4123`
 - Included characters / Включено символов: `4123`
 - Truncated / Обрезано: `no`
@@ -371,7 +371,7 @@ fn recipients_from_value(value: serde_json::Value) -> Result<Vec<String>, Projec
 
 ### `backend/src/domains/projects/core/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/core/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/core/store.rs`
 - Size bytes / Размер в байтах: `5363`
 - Included characters / Включено символов: `5363`
 - Truncated / Обрезано: `no`
@@ -550,7 +550,7 @@ impl ProjectStore {
 
 ### `backend/src/domains/projects/core/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/core/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/core/validation.rs`
 - Size bytes / Размер в байтах: `558`
 - Included characters / Включено символов: `558`
 - Truncated / Обрезано: `no`
@@ -582,7 +582,7 @@ pub(super) fn validate_limit(limit: i64) -> Result<i64, ProjectStoreError> {
 
 ### `backend/src/domains/projects/link_reviews.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/link_reviews.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/link_reviews.rs`
 - Size bytes / Размер в байтах: `530`
 - Included characters / Включено символов: `530`
 - Truncated / Обрезано: `no`
@@ -611,7 +611,7 @@ pub use store::ProjectLinkReviewStore as ProjectLinkReviewPort;
 
 ### `backend/src/domains/projects/link_reviews/adapters.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/link_reviews/adapters.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/link_reviews/adapters.rs`
 - Size bytes / Размер в байтах: `2445`
 - Included characters / Включено символов: `2445`
 - Truncated / Обрезано: `no`
@@ -686,7 +686,7 @@ impl ProjectLinkReviewStore {
 
 ### `backend/src/domains/projects/link_reviews/constants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/link_reviews/constants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/link_reviews/constants.rs`
 - Size bytes / Размер в байтах: `247`
 - Included characters / Включено символов: `247`
 - Truncated / Обрезано: `no`
@@ -699,7 +699,7 @@ pub(crate) const PROJECT_LINK_REVIEW_SOURCE_PROVIDER: &str = "local_api";
 
 ### `backend/src/domains/projects/link_reviews/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/link_reviews/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/link_reviews/errors.rs`
 - Size bytes / Размер в байтах: `1187`
 - Included characters / Включено символов: `1187`
 - Truncated / Обрезано: `no`
@@ -755,7 +755,7 @@ pub enum ProjectLinkReviewError {
 
 ### `backend/src/domains/projects/link_reviews/events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/link_reviews/events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/link_reviews/events.rs`
 - Size bytes / Размер в байтах: `2975`
 - Included characters / Включено символов: `2975`
 - Truncated / Обрезано: `no`
@@ -856,7 +856,7 @@ fn required_payload_string(
 
 ### `backend/src/domains/projects/link_reviews/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/link_reviews/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/link_reviews/models.rs`
 - Size bytes / Размер в байтах: `2941`
 - Included characters / Включено символов: `2941`
 - Truncated / Обрезано: `no`
@@ -970,7 +970,7 @@ pub(crate) struct ReviewEventApplication<'a> {
 
 ### `backend/src/domains/projects/link_reviews/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/link_reviews/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/link_reviews/rows.rs`
 - Size bytes / Размер в байтах: `1250`
 - Included characters / Включено символов: `1250`
 - Truncated / Обрезано: `no`
@@ -1016,7 +1016,7 @@ pub(crate) fn row_to_project_reviewed_target(
 
 ### `backend/src/domains/projects/link_reviews/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/link_reviews/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/link_reviews/service.rs`
 - Size bytes / Размер в байтах: `2523`
 - Included characters / Включено символов: `2523`
 - Truncated / Обрезано: `no`
@@ -1102,7 +1102,7 @@ pub enum ProjectLinkReviewServiceError {
 
 ### `backend/src/domains/projects/link_reviews/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/link_reviews/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/link_reviews/store.rs`
 - Size bytes / Размер в байтах: `10449`
 - Included characters / Включено символов: `10449`
 - Truncated / Обрезано: `no`
@@ -1415,7 +1415,7 @@ impl ProjectLinkReviewStore {
 
 ### `backend/src/domains/projects/link_reviews/target_checks.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/link_reviews/target_checks.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/link_reviews/target_checks.rs`
 - Size bytes / Размер в байтах: `1790`
 - Included characters / Включено символов: `1790`
 - Truncated / Обрезано: `no`
@@ -1482,7 +1482,7 @@ impl ProjectLinkReviewStore {
 
 ### `backend/src/domains/projects/link_reviews/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/link_reviews/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/link_reviews/validation.rs`
 - Size bytes / Размер в байтах: `337`
 - Included characters / Включено символов: `337`
 - Truncated / Обрезано: `no`
@@ -1505,7 +1505,7 @@ pub(crate) fn validate_non_empty(
 
 ### `backend/src/domains/projects/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/mod.rs`
 - Size bytes / Размер в байтах: `51`
 - Included characters / Включено символов: `51`
 - Truncated / Обрезано: `no`
@@ -1518,7 +1518,7 @@ pub mod ports;
 
 ### `backend/src/domains/projects/ports.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/projects/ports.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/projects/ports.rs`
 - Size bytes / Размер в байтах: `57`
 - Included characters / Включено символов: `57`
 - Truncated / Обрезано: `no`
@@ -1529,7 +1529,7 @@ pub use super::core::ProjectStore as ProjectCommandPort;
 
 ### `backend/src/domains/relationships/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/relationships/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/relationships/errors.rs`
 - Size bytes / Размер в байтах: `1524`
 - Included characters / Включено символов: `1524`
 - Truncated / Обрезано: `no`
@@ -1591,7 +1591,7 @@ pub enum RelationshipStoreError {
 
 ### `backend/src/domains/relationships/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/relationships/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/relationships/evidence.rs`
 - Size bytes / Размер в байтах: `742`
 - Included characters / Включено символов: `742`
 - Truncated / Обрезано: `no`
@@ -1628,7 +1628,7 @@ pub(crate) async fn link_relationship_entity_in_transaction(
 
 ### `backend/src/domains/relationships/ids.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/relationships/ids.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/relationships/ids.rs`
 - Size bytes / Размер в байтах: `1082`
 - Included characters / Включено символов: `1082`
 - Truncated / Обрезано: `no`
@@ -1677,7 +1677,7 @@ pub fn evidence_id(
 
 ### `backend/src/domains/relationships/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/relationships/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/relationships/mod.rs`
 - Size bytes / Размер в байтах: `616`
 - Included characters / Включено символов: `616`
 - Truncated / Обрезано: `no`
@@ -1707,7 +1707,7 @@ pub use store::RelationshipStore as RelationshipReviewPort;
 
 ### `backend/src/domains/relationships/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/relationships/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/relationships/models.rs`
 - Size bytes / Размер в байтах: `6946`
 - Included characters / Включено символов: `6946`
 - Truncated / Обрезано: `no`
@@ -1947,7 +1947,7 @@ pub struct Relationship {
 
 ### `backend/src/domains/relationships/ports.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/relationships/ports.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/relationships/ports.rs`
 - Size bytes / Размер в байтах: `67`
 - Included characters / Включено символов: `67`
 - Truncated / Обрезано: `no`
@@ -1958,7 +1958,7 @@ pub use super::store::RelationshipStore as RelationshipReviewPort;
 
 ### `backend/src/domains/relationships/row_mapping.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/relationships/row_mapping.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/relationships/row_mapping.rs`
 - Size bytes / Размер в байтах: `1448`
 - Included characters / Включено символов: `1448`
 - Truncated / Обрезано: `no`

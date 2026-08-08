@@ -1,7 +1,7 @@
 import { createClient } from '@connectrpc/connect'
 import type { Client } from '@connectrpc/connect'
 
-import { TelegramReconfigurationService } from '../../../gen/hermes/telegram/v1/client_pb'
+import { TelegramReconfigurationService } from '../../../gen/makosh/telegram/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 let telegramReconfigurationClient: Client<typeof TelegramReconfigurationService> | null = null

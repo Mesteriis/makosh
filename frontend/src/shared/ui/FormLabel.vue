@@ -13,13 +13,13 @@ const props = withDefaults(defineProps<{
 	optionalLabel: 'Optional'
 })
 
-const classes = computed(() => ['hermes-form-label', props.class])
+const classes = computed(() => ['makosh-form-label', props.class])
 </script>
 
 <template>
 	<label :for="props.for" :class="classes">
 		<span><slot /></span>
-		<span v-if="required" class="hermes-form-label__marker" aria-hidden="true">*</span>
-		<span v-else-if="optional" class="hermes-form-hint">{{ optionalLabel }}</span>
+		<span v-if="required" class="makosh-form-label__marker" aria-hidden="true">*</span>
+		<span v-else-if="optional" class="makosh-form-hint">{{ optionalLabel }}</span>
 	</label>
 </template>

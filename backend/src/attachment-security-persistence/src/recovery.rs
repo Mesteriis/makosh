@@ -16,14 +16,14 @@ impl AttachmentSecurityPersistenceV1 {
         &self,
     ) -> Result<u64, AttachmentSecurityPersistenceErrorV1> {
         let custody_outcome = query(
-            "UPDATE hermes_data.attachment_security_scan_jobs SET state = 1, attempt_count = 0, next_attempt_at_unix_seconds = 0, claimed_by = NULL, lease_expires_at_unix_seconds = NULL, completed_at_unix_seconds = NULL, retry_policy_revision = $1 WHERE state = 3 AND target_blob_reference_id IS NULL AND target_blob_receipt_sha256 IS NULL AND outbox_message_id IS NULL AND retry_policy_revision = 1",
+            "UPDATE makosh_data.attachment_security_scan_jobs SET state = 1, attempt_count = 0, next_attempt_at_unix_seconds = 0, claimed_by = NULL, lease_expires_at_unix_seconds = NULL, completed_at_unix_seconds = NULL, retry_policy_revision = $1 WHERE state = 3 AND target_blob_reference_id IS NULL AND target_blob_receipt_sha256 IS NULL AND outbox_message_id IS NULL AND retry_policy_revision = 1",
         )
         .bind(ATTACHMENT_SECURITY_RETRY_POLICY_REVISION_V2)
         .execute(&self.pool)
         .await
         .map_err(|_| AttachmentSecurityPersistenceErrorV1::StorageUnavailable)?;
         let scanner_outcome = query(
-            "UPDATE hermes_data.attachment_security_scan_jobs SET state = 1, attempt_count = 0, next_attempt_at_unix_seconds = 0, claimed_by = NULL, lease_expires_at_unix_seconds = NULL, completed_at_unix_seconds = NULL, retry_policy_revision = $1 WHERE state = 3 AND target_blob_reference_id IS NOT NULL AND target_blob_receipt_sha256 IS NOT NULL AND outbox_message_id IS NULL AND retry_policy_revision = 2",
+            "UPDATE makosh_data.attachment_security_scan_jobs SET state = 1, attempt_count = 0, next_attempt_at_unix_seconds = 0, claimed_by = NULL, lease_expires_at_unix_seconds = NULL, completed_at_unix_seconds = NULL, retry_policy_revision = $1 WHERE state = 3 AND target_blob_reference_id IS NOT NULL AND target_blob_receipt_sha256 IS NOT NULL AND outbox_message_id IS NULL AND retry_policy_revision = 2",
         )
         .bind(ATTACHMENT_SECURITY_RETRY_POLICY_REVISION_V3)
         .execute(&self.pool)

@@ -15,11 +15,11 @@ const paths = {
     BACKEND_ROOT,
   ),
   proto: new URL(
-    'src/mail-api/proto/hermes/mail/message_permanent_delete/v1/client.proto',
+    'src/mail-api/proto/makosh/mail/message_permanent_delete/v1/client.proto',
     BACKEND_ROOT,
   ),
   oauthProto: new URL(
-    'src/mail-api/proto/hermes/mail/v1/client.proto',
+    'src/mail-api/proto/makosh/mail/v1/client.proto',
     BACKEND_ROOT,
   ),
   contract: new URL('src/mail-api/src/client_contract.rs', BACKEND_ROOT),
@@ -53,7 +53,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   generated: new URL(
-    'frontend/src/gen/hermes/mail/message_permanent_delete/v1/client_pb.ts',
+    'frontend/src/gen/makosh/mail/message_permanent_delete/v1/client_pb.ts',
     PROJECT_ROOT,
   ),
   commandClient: new URL(
@@ -146,14 +146,14 @@ test('Mail permanent delete is explicit, provider-owned and live-conformant', as
 
   assert.match(
     persistence,
-    /CREATE TABLE IF NOT EXISTS hermes_data\.mail_message_permanent_delete_operations/,
+    /CREATE TABLE IF NOT EXISTS makosh_data\.mail_message_permanent_delete_operations/,
   );
   assert.match(persistence, /exact_command_bytes BYTEA NOT NULL/);
   assert.match(persistence, /request_sha256 BYTEA NOT NULL/);
   assert.match(persistence, /MAIL_FOLDER_KIND_TRASH_DB_VALUE/);
   assert.match(persistence, /complete_message_permanent_delete_success/);
-  assert.match(persistence, /DELETE FROM hermes_data\.mail_operational_messages/);
-  assert.doesNotMatch(persistence, /hermes_communications|communications_/);
+  assert.match(persistence, /DELETE FROM makosh_data\.mail_operational_messages/);
+  assert.doesNotMatch(persistence, /makosh_communications|communications_/);
   assert.match(schema, /MAIL_STORAGE_BUNDLE_REVISION_V17: u32 = 17/);
   assert.match(schema, /MAIL_SCHEMA_V17/);
 
@@ -172,7 +172,7 @@ test('Mail permanent delete is explicit, provider-owned and live-conformant', as
   assert.match(runtime, /permanent_delete_authorized/);
   assert.match(runtime, /ReauthorizationRequired/);
   assert.match(runtime, /MailMessagePermanentDeletePersistenceErrorV1::Database/);
-  assert.doesNotMatch(runtime, /hermes_communications_runtime|communications-runtime/);
+  assert.doesNotMatch(runtime, /makosh_communications_runtime|communications-runtime/);
   assert.match(managedSetup, /mail_runtime_storage_bundle_v1/);
   assert.match(managedSetup, /MailClientContractV1::MessagePermanentDeleteCommand/);
   assert.match(managedSetup, /MailClientContractV1::MessagePermanentDeleteQuery/);

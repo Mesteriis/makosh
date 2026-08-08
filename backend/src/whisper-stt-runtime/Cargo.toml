@@ -1,5 +1,5 @@
 [package]
-name = "hermes-whisper-stt-runtime"
+name = "makosh-whisper-stt-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,23 +8,23 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-whisper-stt-runtime"
+name = "makosh-whisper-stt-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "whisper_stt"
 surface = "runtime"
 
 [dependencies]
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-speech-to-text-api = { path = "../speech-to-text-api" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
-hermes-whisper-stt-core = { path = "../whisper-stt-core" }
-hermes-whisper-stt-persistence = { path = "../whisper-stt-persistence" }
-hermes-whisper-stt-process = { path = "../whisper-stt-process" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-speech-to-text-api = { path = "../speech-to-text-api" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
+makosh-whisper-stt-core = { path = "../whisper-stt-core" }
+makosh-whisper-stt-persistence = { path = "../whisper-stt-persistence" }
+makosh-whisper-stt-process = { path = "../whisper-stt-process" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }

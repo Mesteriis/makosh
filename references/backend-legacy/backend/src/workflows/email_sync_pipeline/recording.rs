@@ -1,5 +1,5 @@
 use crate::domains::communications::storage::port::{CommunicationAttachmentPort, LocalBlobPort};
-use hermes_communications_api::evidence::{
+use makosh_communications_api::evidence::{
     CommunicationEvidencePort, NewIngestionCheckpoint, NewRawCommunicationRecord,
 };
 use serde_json::json;
@@ -8,8 +8,8 @@ use super::errors::EmailSyncRecordError;
 use super::ids::{EMAIL_MESSAGE_RECORD_KIND, raw_record_id};
 use super::raw_payload::{payload_with_raw_blob_reference, raw_message_bytes};
 use crate::domains::communications::storage::models::NewCommunicationBlob;
-use hermes_communications_api::email_sync::EmailSyncBatch;
-use hermes_communications_api::email_sync::{EmailSyncBlobImportReport, EmailSyncImportReport};
+use makosh_communications_api::email_sync::EmailSyncBatch;
+use makosh_communications_api::email_sync::{EmailSyncBlobImportReport, EmailSyncImportReport};
 
 pub async fn record_email_sync_batch(
     store: &dyn CommunicationEvidencePort,

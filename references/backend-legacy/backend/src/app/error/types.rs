@@ -1,4 +1,4 @@
-use hermes_events_api::EventEnvelopeError;
+use makosh_events_api::EventEnvelopeError;
 use std::io;
 
 use crate::ai::control_center::errors::AiControlCenterError;
@@ -29,8 +29,8 @@ use crate::platform::settings::errors::SettingsError;
 use crate::platform::storage::errors::StorageError;
 use crate::vault::errors::HostVaultError;
 use crate::workflows::review_promotion::ReviewPromotionError;
-use hermes_communications_postgres::errors::CommunicationIngestionError;
-use hermes_events_postgres::errors::EventStoreError;
+use makosh_communications_postgres::errors::CommunicationIngestionError;
+use makosh_events_postgres::errors::EventStoreError;
 
 #[derive(Debug)]
 pub enum ApiError {

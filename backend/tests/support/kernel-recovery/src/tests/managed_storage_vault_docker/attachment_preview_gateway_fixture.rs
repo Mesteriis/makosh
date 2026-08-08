@@ -5,7 +5,9 @@ use std::time::{Duration, Instant};
 use super::*;
 
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
-use hermes_attachment_preview_api::{
+use http_body_util::BodyExt as _;
+use hyper::{Request, StatusCode, body::Bytes};
+use makosh_attachment_preview_api::{
     ATTACHMENT_PREVIEW_QUERY_CONNECT_PATH_V1, ATTACHMENT_PREVIEW_READ_BLOB_PATH_V1,
     ATTACHMENT_PREVIEW_REALTIME_CONTRACT_NAME_V1, ATTACHMENT_PREVIEW_REALTIME_EVENT_KIND_V1,
     read_wire::ReadAttachmentPreviewRequestV1,
@@ -14,15 +16,13 @@ use hermes_attachment_preview_api::{
         GetAttachmentPreviewResponseV1,
     },
 };
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     ClientRealtimeEventV1, ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
 };
-use http_body_util::BodyExt as _;
-use hyper::{Request, StatusCode, body::Bytes};
 
-pub(super) type AttachmentPreviewGateway = hermes_gateway_runtime::GatewayApplicationRouter<
+pub(super) type AttachmentPreviewGateway = makosh_gateway_runtime::GatewayApplicationRouter<
     crate::identity::browser_gateway::ControlStoreBrowserAuthority,
-    hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 >;
 
 pub(super) fn attachment_preview_gateway_v1(
@@ -30,7 +30,7 @@ pub(super) fn attachment_preview_gateway_v1(
     supervisor: &ManagedRuntimeSupervisor,
     root: &Path,
     data: &Path,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 ) -> AttachmentPreviewGateway {
     let configuration = crate::platform::gateway::BrowserGatewayConfigurationV1::new(
         "127.0.0.1:9443".parse().expect("loopback Gateway address"),

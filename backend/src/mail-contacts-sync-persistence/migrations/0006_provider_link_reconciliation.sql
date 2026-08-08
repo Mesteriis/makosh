@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.mail_contacts_sync_provider_link_reconciliation (
+CREATE TABLE makosh_data.mail_contacts_sync_provider_link_reconciliation (
     logical_owner_id TEXT NOT NULL,
     operation_id BYTEA NOT NULL,
     mail_result_message_id BYTEA NOT NULL,

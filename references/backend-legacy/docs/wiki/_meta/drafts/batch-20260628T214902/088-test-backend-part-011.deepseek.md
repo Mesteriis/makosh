@@ -68,7 +68,7 @@ PostgreSQL. Все тесты асинхронные (`#[tokio::test]`). Тес�
   профиля `quiet_hours`, а также отвержение обновления системного профиля (400).
 
 - `signal_hub_connect_api_requires_local_api_secret` — запрос к Connect-роуту
-  `/hermes.signal_hub.v1.SignalHubService/ListSources` без секрета возвращает
+  `/makosh.signal_hub.v1.SignalHubService/ListSources` без секрета возвращает
   403 (`invalid_api_secret`), с секретом (через `post_json`) — 200.
 
 - `signal_hub_api_runs_ai_health_check_against_runtime_status` — проверяет
@@ -147,7 +147,7 @@ PostgreSQL. Все тесты асинхронные (`#[tokio::test]`). Тес�
 
 Тесты HTTP API кандидатов.
 
-- `task_candidates_reject_missing_local_api_secret` — запрос без `x-hermes-secret`
+- `task_candidates_reject_missing_local_api_secret` — запрос без `x-makosh-secret`
   получает 403 с ошибкой `invalid_api_secret`.
 
 - `task_candidates_returns_safe_candidate_payload` — после генерации кандидатов
@@ -211,7 +211,7 @@ PostgreSQL. Все тесты асинхронные (`#[tokio::test]`). Тес�
 Набор тестов API задач, разнесённый по файлам.
 
 **`auth.rs`** — `tasks_rejects_missing_local_api_secret`: запрос без
-`x-hermes-secret` возвращает 403 `invalid_api_secret`.
+`x-makosh-secret` возвращает 403 `invalid_api_secret`.
 
 **`crud.rs`** — комплексные тесты:
 
@@ -330,7 +330,7 @@ PostgreSQL. Все тесты асинхронные (`#[tokio::test]`). Тес�
 
 API-тесты собирают роутер через `build_router(config)` или
 `build_router_with_database(config, database)`. Конфигурация включает тестовый
-секрет (`x-hermes-secret`), передаваемый в заголовке. HTTP-запросы выполняются
+секрет (`x-makosh-secret`), передаваемый в заголовке. HTTP-запросы выполняются
 через `tower::ServiceExt::oneshot`.
 
 Тестовые константы:

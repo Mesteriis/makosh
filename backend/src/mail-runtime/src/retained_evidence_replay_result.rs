@@ -1,7 +1,7 @@
 //! Mail replay terminal-result relay.
 
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
-use hermes_mail_retained_evidence_replay_persistence::{
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_mail_retained_evidence_replay_persistence::{
     MailRetainedEvidenceReplayPersistenceV1, RetainedMailReplayErrorV1,
 };
 

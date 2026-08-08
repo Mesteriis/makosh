@@ -2,27 +2,27 @@
 
 use std::sync::mpsc::Sender;
 
-use hermes_clock_protocol::{ClockDiscontinuityV1, ClockPolicyV1, UtcMillisV1};
-use hermes_events_protocol::delivery::OutboxRelayErrorV1;
-use hermes_events_protocol::delivery::{OutboxRecordV1, OutboxRelayOutcomeV1, relay_once};
-use hermes_runtime_protocol::v1::{
+use makosh_clock_protocol::{ClockDiscontinuityV1, ClockPolicyV1, UtcMillisV1};
+use makosh_events_protocol::delivery::OutboxRelayErrorV1;
+use makosh_events_protocol::delivery::{OutboxRecordV1, OutboxRelayOutcomeV1, relay_once};
+use makosh_runtime_protocol::v1::{
     SchedulerRuntimeScheduleControlBindingV1, SchedulerRuntimeScheduleControlGrantV1,
 };
-use hermes_scheduler::{
+use makosh_scheduler::{
     SchedulerApprovedJobV1, SchedulerDispatchIdentityV1, SchedulerScheduleControlAdmissionErrorV1,
     SchedulerScheduleControlContractV1, SchedulerScheduleControlGrantV1,
     SchedulerScheduleControlOperationV1, admit_schedule_control_command_v1,
     build_schedule_control_result_envelope_v1,
 };
-use hermes_scheduler_jetstream::SchedulerJetStreamScheduleControlPortV1;
-use hermes_scheduler_persistence::{
+use makosh_scheduler_jetstream::SchedulerJetStreamScheduleControlPortV1;
+use makosh_scheduler_persistence::{
     SchedulerPostgresStoreV1, SchedulerScheduleControlApplyErrorV1,
     SchedulerScheduleControlAuthorityV1, SchedulerScheduleControlDecisionV1,
     SchedulerScheduleControlMutationV1, SchedulerScheduleControlRejectionV1,
     SchedulerScheduleControlRequestV1, SchedulerScheduleControlResultOutboxV1,
     SchedulerScheduleUpsertV1,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     JobContractBindingV1, JobKindV1, SchedulerScheduleControlDeliveryPortV1,
     SchedulerScheduleControlDeliveryV1,
     v1::{SchedulerScheduleControlOutcomeV1, SchedulerScheduleControlResultV1},
@@ -203,7 +203,7 @@ async fn admit_or_discard<D>(
     command_contract: &SchedulerScheduleControlContractV1,
     grants: &[SchedulerScheduleControlGrantV1],
 ) -> Result<
-    Option<(D, hermes_scheduler::SchedulerAdmittedScheduleControlV1)>,
+    Option<(D, makosh_scheduler::SchedulerAdmittedScheduleControlV1)>,
     ScheduleControlWorkerFailureV1,
 >
 where
@@ -216,7 +216,7 @@ where
             // not a Scheduler process failure. It receives no result authority,
             // but must be acknowledged so one poison delivery cannot starve the
             // exact durable consumer forever.
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!(
                     "developer_scheduler_schedule_control_rejected={}",
                     admission_error_code(error)
@@ -272,7 +272,7 @@ const fn map_relay_error(error: OutboxRelayErrorV1) -> ScheduleControlWorkerFail
 }
 
 fn request_from_admitted(
-    admitted: hermes_scheduler::SchedulerAdmittedScheduleControlV1,
+    admitted: makosh_scheduler::SchedulerAdmittedScheduleControlV1,
     received_at: UtcMillisV1,
 ) -> Result<SchedulerScheduleControlRequestV1, SchedulerScheduleControlApplyErrorV1> {
     let binding = admitted.grant().approved_binding();
@@ -413,7 +413,7 @@ mod tests {
 
         async fn acknowledge(
             self,
-        ) -> Result<(), hermes_scheduler_protocol::SchedulerScheduleControlDeliveryErrorV1>
+        ) -> Result<(), makosh_scheduler_protocol::SchedulerScheduleControlDeliveryErrorV1>
         {
             self.acknowledged.store(true, Ordering::Release);
             Ok(())
@@ -423,13 +423,13 @@ mod tests {
     #[test]
     fn runtime_configuration_maps_exact_contract_and_grant_fences() {
         let binding = SchedulerRuntimeScheduleControlBindingV1 {
-            stream_name: "HERMES_COMMAND_V1".to_owned(),
+            stream_name: "MAKOSH_COMMAND_V1".to_owned(),
             durable_name: "scheduler-schedule-control-v1".to_owned(),
-            filter_subject: "hermes.command.v1.scheduler.schedule_control.v1".to_owned(),
+            filter_subject: "makosh.command.v1.scheduler.schedule_control.v1".to_owned(),
             ack_wait_millis: 30_000,
             max_deliver: 5,
             max_ack_pending: 1,
-            result_subject: "hermes.result.v1.scheduler.schedule_control.v1".to_owned(),
+            result_subject: "makosh.result.v1.scheduler.schedule_control.v1".to_owned(),
             command_contract_revision: 2,
             command_schema_sha256: vec![7; 32],
             result_contract_revision: 3,

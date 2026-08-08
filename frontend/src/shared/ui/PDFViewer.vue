@@ -12,23 +12,23 @@ const props = withDefaults(defineProps<{
 	fallbackLabel: 'PDF preview unavailable'
 })
 
-const classes = computed(() => ['hermes-pdf-viewer', props.class])
+const classes = computed(() => ['makosh-pdf-viewer', props.class])
 const viewerTitle = computed(() => props.title || props.fallbackLabel)
 </script>
 
 <template>
 	<section :class="classes" :aria-label="viewerTitle">
-		<header v-if="title || description" class="hermes-media-header">
-			<h3 v-if="title" class="hermes-media-title">{{ title }}</h3>
-			<p v-if="description" class="hermes-media-description">{{ description }}</p>
+		<header v-if="title || description" class="makosh-media-header">
+			<h3 v-if="title" class="makosh-media-title">{{ title }}</h3>
+			<p v-if="description" class="makosh-media-description">{{ description }}</p>
 		</header>
-		<object v-if="src" class="hermes-pdf-viewer__object" :data="src" type="application/pdf" :aria-label="viewerTitle">
-			<div class="hermes-media-empty" role="status">
+		<object v-if="src" class="makosh-pdf-viewer__object" :data="src" type="application/pdf" :aria-label="viewerTitle">
+			<div class="makosh-media-empty" role="status">
 				<Icon icon="tabler:file-type-pdf" size="1.25rem" aria-hidden="true" />
 				<span>{{ fallbackLabel }}</span>
 			</div>
 		</object>
-		<div v-else class="hermes-media-empty" role="status">
+		<div v-else class="makosh-media-empty" role="status">
 			<Icon icon="tabler:file-type-pdf" size="1.25rem" aria-hidden="true" />
 			<span>{{ fallbackLabel }}</span>
 		</div>

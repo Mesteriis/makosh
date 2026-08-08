@@ -1,0 +1,120 @@
+syntax = "proto3";
+
+package makosh.scheduler.v1;
+
+message JobKindV1 {
+  string owner = 1;
+  string name = 2;
+  uint32 major = 3;
+}
+
+message JobLeaseV1 {
+  bytes run_id = 1;
+  uint64 epoch = 2;
+  int64 expires_at_unix_millis = 3;
+}
+
+enum JobTriggerKindV1 {
+  JOB_TRIGGER_KIND_V1_UNSPECIFIED = 0;
+  JOB_TRIGGER_KIND_V1_TIME = 1;
+  JOB_TRIGGER_KIND_V1_RETRY = 2;
+}
+
+enum OwnerJobTriggerKindV1 {
+  OWNER_JOB_TRIGGER_KIND_V1_UNSPECIFIED = 0;
+  OWNER_JOB_TRIGGER_KIND_V1_UPGRADE_RECONCILIATION = 1;
+}
+
+// Typed DurableEnvelopeV1.command payload for a Scheduler time trigger.
+// It never contains owner-specific input, provider state or executable code.
+message ScheduledJobCommandV1 {
+  bytes job_run_id = 1;
+  JobKindV1 job_kind = 2;
+  bytes schedule_id = 3;
+  uint64 schedule_revision = 4;
+  string scope_id = 5;
+  JobTriggerKindV1 trigger_kind = 6;
+  int64 scheduled_for_unix_millis = 7;
+  JobLeaseV1 lease = 8;
+}
+
+// Typed DurableEnvelopeV1.command payload accepted by an owner-local Job
+// Executor. It is deliberately distinct from a Scheduler time trigger and
+// never carries a fake schedule identity.
+message OwnerJobCommandV1 {
+  bytes job_run_id = 1;
+  JobKindV1 job_kind = 2;
+  string scope_id = 3;
+  OwnerJobTriggerKindV1 trigger_kind = 4;
+  int64 accepted_at_unix_millis = 5;
+  JobLeaseV1 lease = 6;
+}
+
+enum JobRunOutcomeV1 {
+  JOB_RUN_OUTCOME_V1_UNSPECIFIED = 0;
+  JOB_RUN_OUTCOME_V1_ACCEPTED = 1;
+  JOB_RUN_OUTCOME_V1_SUCCEEDED = 2;
+  JOB_RUN_OUTCOME_V1_RETRYABLE_FAILED = 3;
+  JOB_RUN_OUTCOME_V1_FAILED = 4;
+  JOB_RUN_OUTCOME_V1_CANCELLED = 5;
+}
+
+// Owner-neutral receipt payload carried by a durable Ack or Result envelope.
+// A Scheduler accepts it only when all identifiers and lease fences match the
+// persisted dispatch; it carries neither owner state nor error content.
+message JobRunReceiptV1 {
+  bytes job_run_id = 1;
+  bytes command_message_id = 2;
+  JobLeaseV1 lease = 3;
+  JobRunOutcomeV1 outcome = 4;
+  int64 observed_at_unix_millis = 5;
+}
+
+// Durable module-originated request to create a one-shot schedule for the
+// caller's own approved JobKind.
+message EnsureOneShotScheduleV1 {
+  bytes schedule_id = 1;
+  uint64 schedule_revision = 2;
+  JobKindV1 job_kind = 3;
+  uint64 job_contract_revision = 4;
+  bytes job_schema_sha256 = 5;
+  string scope_id = 6;
+  string concurrency_key = 7;
+  int64 due_at_unix_millis = 8;
+  uint64 deadline_millis = 9;
+  uint32 max_attempts = 10;
+  uint64 retry_base_backoff_millis = 11;
+}
+
+// Durable module-originated cancellation request. Scheduler remains authority
+// for the race with an already accepted due run.
+message CancelOneShotScheduleV1 {
+  bytes schedule_id = 1;
+  uint64 expected_schedule_revision = 2;
+  JobKindV1 job_kind = 3;
+}
+
+message SchedulerScheduleControlCommandV1 {
+  bytes operation_id = 1;
+  oneof operation {
+    EnsureOneShotScheduleV1 ensure_one_shot = 2;
+    CancelOneShotScheduleV1 cancel_one_shot = 3;
+  }
+}
+
+enum SchedulerScheduleControlOutcomeV1 {
+  SCHEDULER_SCHEDULE_CONTROL_OUTCOME_V1_UNSPECIFIED = 0;
+  SCHEDULER_SCHEDULE_CONTROL_OUTCOME_V1_ENSURED = 1;
+  SCHEDULER_SCHEDULE_CONTROL_OUTCOME_V1_CANCELLED = 2;
+  SCHEDULER_SCHEDULE_CONTROL_OUTCOME_V1_TOO_LATE = 3;
+  SCHEDULER_SCHEDULE_CONTROL_OUTCOME_V1_REJECTED = 4;
+}
+
+// Sanitized durable result. Only REJECTED carries a bounded error code.
+message SchedulerScheduleControlResultV1 {
+  bytes operation_id = 1;
+  bytes schedule_id = 2;
+  uint64 schedule_revision = 3;
+  SchedulerScheduleControlOutcomeV1 outcome = 4;
+  string error_code = 5;
+}

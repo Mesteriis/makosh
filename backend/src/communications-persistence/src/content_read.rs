@@ -1,6 +1,6 @@
 //! Owner-local authorization read for canonical Communications body content.
 
-use hermes_communications_api::CommunicationMessageIdV1;
+use makosh_communications_api::CommunicationMessageIdV1;
 use sqlx::Row;
 
 use crate::{CommunicationsDurablePersistence, CommunicationsPersistenceError};
@@ -25,8 +25,8 @@ impl CommunicationsDurablePersistence {
         let row = sqlx::query(
             "SELECT evidence.body_blob_reference_id, evidence.body_blob_declared_bytes, \
              evidence.body_blob_sha256, evidence.body_media_type \
-             FROM hermes_data.communications_messages AS message \
-             JOIN hermes_data.communications_evidence_summaries AS evidence \
+             FROM makosh_data.communications_messages AS message \
+             JOIN makosh_data.communications_evidence_summaries AS evidence \
                ON evidence.observation_id = message.last_evidence_id \
              WHERE message.message_id = $1 \
                AND message.lifecycle_state = 1 \

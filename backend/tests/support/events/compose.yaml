@@ -1,4 +1,4 @@
-name: hermes-events-conformance
+name: makosh-events-conformance
 
 services:
   nats:

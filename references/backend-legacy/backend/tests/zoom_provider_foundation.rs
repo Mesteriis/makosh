@@ -1,12 +1,12 @@
-use hermes_communications_api::accounts::CommunicationProviderKind;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
 use axum::http::{Method, Request, StatusCode, header};
 use chrono::Utc;
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use hmac::{Hmac, Mac};
 use serde_json::{Value, json};
 use sha2::Sha256;
@@ -16,28 +16,28 @@ use tokio::net::TcpListener;
 use tokio::time::{Duration, timeout};
 use tower::ServiceExt;
 
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
-use hermes_events_postgres::store::EventStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::integrations::zoom::client::{
+use makosh_events_postgres::store::EventStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::integrations::zoom::client::{
     models::{ZoomAccountSetupRequest, ZoomMeetingObservationRequest},
     store::ZoomStore,
 };
-use hermes_hub_backend::platform::calls::store::CallIntelligenceStore;
+use makosh_hub_backend::platform::calls::store::CallIntelligenceStore;
 
-use hermes_hub_backend::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
-use hermes_hub_backend::platform::events::bus::InMemoryEventBus;
-use hermes_hub_backend::platform::events::bus::zoom_event_types;
-use hermes_hub_backend::platform::secrets::models::{
+use makosh_hub_backend::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
+use makosh_hub_backend::platform::events::bus::InMemoryEventBus;
+use makosh_hub_backend::platform::events::bus::zoom_event_types;
+use makosh_hub_backend::platform::secrets::models::{
     NewSecretReference, SecretKind, SecretStoreKind,
 };
-use hermes_hub_backend::platform::secrets::store::SecretReferenceStore;
-use hermes_hub_backend::platform::settings::store::ApplicationSettingsStore;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::vault::HostVault;
-use hermes_hub_backend::vault::models::{
+use makosh_hub_backend::platform::secrets::store::SecretReferenceStore;
+use makosh_hub_backend::platform::settings::store::ApplicationSettingsStore;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::vault::HostVault;
+use makosh_hub_backend::vault::models::{
     EntropyEvent, HostVaultConfig, SecretEntryContext, VaultMode,
 };
 
@@ -1173,8 +1173,8 @@ async fn zoom_oauth_webhook_subscription_management_uses_client_credentials() {
     .await;
     let managed_subscription = json!({
         "id": format!("zoom-managed-subscription-{suffix}"),
-        "subscription_name": "Hermes Zoom Runtime",
-        "event_webhook_url": "https://hermes.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks",
+        "subscription_name": "Макошь Zoom Runtime",
+        "event_webhook_url": "https://makosh.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks",
         "event_types": [
             "meeting.started",
             "meeting.ended",
@@ -1240,7 +1240,7 @@ async fn zoom_oauth_webhook_subscription_management_uses_client_credentials() {
             "/api/v1/integrations/zoom/webhook-subscriptions/reconcile",
             json!({
                 "account_id": account_id,
-                "endpoint_url": "https://hermes.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks",
+                "endpoint_url": "https://makosh.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks",
                 "api_base_url": api_base_url
             }),
         ))
@@ -1251,7 +1251,7 @@ async fn zoom_oauth_webhook_subscription_management_uses_client_credentials() {
     assert_eq!(reconcile_body["status"], json!("created"));
     assert_eq!(
         reconcile_body["subscription"]["subscription_name"],
-        json!("Hermes Zoom Runtime")
+        json!("Макошь Zoom Runtime")
     );
     let encoded_api_base_url =
         url::form_urlencoded::byte_serialize(api_base_url.as_bytes()).collect::<String>();
@@ -1303,8 +1303,8 @@ async fn zoom_oauth_webhook_subscription_management_uses_client_credentials() {
     assert_eq!(api_requests.len(), 4);
     assert!(api_requests[0].contains("GET /marketplace/app/event_subscription HTTP/1.1"));
     assert!(api_requests[1].contains("POST /marketplace/app/event_subscription HTTP/1.1"));
-    assert!(api_requests[1].contains("\"subscription_name\":\"Hermes Zoom Runtime\""));
-    assert!(api_requests[1].contains("\"event_webhook_url\":\"https://hermes.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks\""));
+    assert!(api_requests[1].contains("\"subscription_name\":\"Макошь Zoom Runtime\""));
+    assert!(api_requests[1].contains("\"event_webhook_url\":\"https://makosh.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks\""));
     assert!(api_requests[2].contains("GET /marketplace/app/event_subscription HTTP/1.1"));
     assert!(api_requests[3].contains(&format!(
         "DELETE /marketplace/app/event_subscription/zoom-managed-subscription-{suffix} HTTP/1.1"
@@ -1371,8 +1371,8 @@ async fn zoom_server_to_server_webhook_subscription_management_uses_account_cred
     .await;
     let created_subscription = json!({
         "id": format!("zoom-s2s-managed-subscription-{suffix}"),
-        "subscription_name": "Hermes Zoom Runtime",
-        "event_webhook_url": "https://hermes.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks",
+        "subscription_name": "Макошь Zoom Runtime",
+        "event_webhook_url": "https://makosh.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks",
         "event_types": [
             "meeting.started",
             "meeting.ended",
@@ -1429,7 +1429,7 @@ async fn zoom_server_to_server_webhook_subscription_management_uses_account_cred
             "/api/v1/integrations/zoom/webhook-subscriptions/reconcile",
             json!({
                 "account_id": account_id,
-                "endpoint_url": "https://hermes.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks",
+                "endpoint_url": "https://makosh.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks",
                 "api_base_url": api_base_url
             }),
         ))
@@ -3296,7 +3296,7 @@ async fn zoom_store_broadcasts_meeting_events_on_runtime_bus() {
         Arc::new(CommunicationProviderAccountStore::new(pool.clone())),
         Arc::new(CommunicationProviderSecretBindingStore::new(pool.clone())),
         Arc::new(
-            hermes_hub_backend::domains::communications::storage::store::CommunicationStorageStore::new(
+            makosh_hub_backend::domains::communications::storage::store::CommunicationStorageStore::new(
                 pool.clone(),
             ),
         ),
@@ -4020,7 +4020,7 @@ fn signed_zoom_request(uri: &str, body: String, timestamp: &str, signature: &str
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .header("x-zm-request-timestamp", timestamp)
         .header("x-zm-signature", signature)
         .body(Body::from(body))
@@ -4170,7 +4170,7 @@ async fn assert_bad_request(app: axum::Router, uri: &str, body: Value) {
 fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .body(Body::empty())
         .expect("request")
 }
@@ -4180,7 +4180,7 @@ fn json_post(uri: &str, body: Value) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .body(Body::from(body.to_string()))
         .expect("request")
 }

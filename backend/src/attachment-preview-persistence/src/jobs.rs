@@ -1,7 +1,7 @@
 //! Fenced durable render jobs and terminal derived-artifact metadata.
 
-use hermes_attachment_preview_api::wire::{AttachmentPreviewErrorCodeV1, AttachmentPreviewStateV1};
-use hermes_attachment_preview_core::{
+use makosh_attachment_preview_api::wire::{AttachmentPreviewErrorCodeV1, AttachmentPreviewStateV1};
+use makosh_attachment_preview_core::{
     AttachmentPreviewTransitionV1, transition_attachment_preview_status_v1,
     validate_preview_output_v1,
 };
@@ -73,7 +73,7 @@ pub(crate) async fn enqueue_preview_work(
     );
     let proof_sha256: [u8; 32] = Sha256::digest(&work.custody_transfer_source_proof).into();
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.attachment_preview_jobs (logical_owner_id,job_id,run_id,request_id,result_message_id,result_envelope_sha256,attachment_anchor_id,candidate_message_id,safety_message_id,source_reference_id,source_receipt_sha256,source_declared_size,custody_transfer_source_proof,custody_proof_sha256,target_reference_id,target_receipt_sha256,state,attempt_count,max_attempts,worker_id,runtime_generation,grant_epoch,lease_fence,lease_expires_at_unix_millis,created_at_unix_millis,updated_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,NULL,NULL,1,0,$15,NULL,NULL,NULL,0,NULL,$16,$16) ON CONFLICT (logical_owner_id,run_id) DO NOTHING",
+        "INSERT INTO makosh_data.attachment_preview_jobs (logical_owner_id,job_id,run_id,request_id,result_message_id,result_envelope_sha256,attachment_anchor_id,candidate_message_id,safety_message_id,source_reference_id,source_receipt_sha256,source_declared_size,custody_transfer_source_proof,custody_proof_sha256,target_reference_id,target_receipt_sha256,state,attempt_count,max_attempts,worker_id,runtime_generation,grant_epoch,lease_fence,lease_expires_at_unix_millis,created_at_unix_millis,updated_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,NULL,NULL,1,0,$15,NULL,NULL,NULL,0,NULL,$16,$16) ON CONFLICT (logical_owner_id,run_id) DO NOTHING",
     )
     .bind(logical_owner_id)
     .bind(job_id.as_slice())
@@ -98,7 +98,7 @@ pub(crate) async fn enqueue_preview_work(
         return Ok(());
     }
     let existing = sqlx::query(
-        "SELECT job_id,request_id,result_message_id,result_envelope_sha256,source_reference_id,source_receipt_sha256,source_declared_size,custody_proof_sha256 FROM hermes_data.attachment_preview_jobs WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE",
+        "SELECT job_id,request_id,result_message_id,result_envelope_sha256,source_reference_id,source_receipt_sha256,source_declared_size,custody_proof_sha256 FROM makosh_data.attachment_preview_jobs WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE",
     )
     .bind(logical_owner_id)
     .bind(work.run_id.as_slice())
@@ -153,7 +153,7 @@ impl AttachmentPreviewPersistenceV1 {
         }
         let mut transaction = self.pool.begin().await.map_err(storage_unavailable)?;
         let retry_count = sqlx::query(
-            "UPDATE hermes_data.attachment_preview_jobs SET state=1,worker_id=NULL,runtime_generation=NULL,grant_epoch=NULL,lease_expires_at_unix_millis=NULL,updated_at_unix_millis=$2 WHERE logical_owner_id=$1 AND state=2 AND lease_expires_at_unix_millis<=$2 AND attempt_count<max_attempts",
+            "UPDATE makosh_data.attachment_preview_jobs SET state=1,worker_id=NULL,runtime_generation=NULL,grant_epoch=NULL,lease_expires_at_unix_millis=NULL,updated_at_unix_millis=$2 WHERE logical_owner_id=$1 AND state=2 AND lease_expires_at_unix_millis<=$2 AND attempt_count<max_attempts",
         )
         .bind(logical_owner_id)
         .bind(now_unix_millis)
@@ -162,7 +162,7 @@ impl AttachmentPreviewPersistenceV1 {
         .map_err(storage_unavailable)?
         .rows_affected();
         let exhausted = sqlx::query(
-            "SELECT job_id,run_id FROM hermes_data.attachment_preview_jobs WHERE logical_owner_id=$1 AND state=2 AND lease_expires_at_unix_millis<=$2 AND attempt_count>=max_attempts ORDER BY job_id FOR UPDATE",
+            "SELECT job_id,run_id FROM makosh_data.attachment_preview_jobs WHERE logical_owner_id=$1 AND state=2 AND lease_expires_at_unix_millis<=$2 AND attempt_count>=max_attempts ORDER BY job_id FOR UPDATE",
         )
         .bind(logical_owner_id)
         .bind(now_unix_millis)
@@ -184,7 +184,7 @@ impl AttachmentPreviewPersistenceV1 {
             )
             .map_err(|_| AttachmentPreviewPersistenceErrorV1::EvidenceConflict)?;
             let changed = sqlx::query(
-                "UPDATE hermes_data.attachment_preview_jobs SET state=4,worker_id=NULL,runtime_generation=NULL,grant_epoch=NULL,lease_expires_at_unix_millis=NULL,updated_at_unix_millis=$3 WHERE logical_owner_id=$1 AND job_id=$2 AND state=2",
+                "UPDATE makosh_data.attachment_preview_jobs SET state=4,worker_id=NULL,runtime_generation=NULL,grant_epoch=NULL,lease_expires_at_unix_millis=NULL,updated_at_unix_millis=$3 WHERE logical_owner_id=$1 AND job_id=$2 AND state=2",
             )
             .bind(logical_owner_id)
             .bind(job_id.as_slice())
@@ -246,7 +246,7 @@ impl AttachmentPreviewPersistenceV1 {
             .ok_or(AttachmentPreviewPersistenceErrorV1::InvalidInput)?;
         let mut transaction = self.pool.begin().await.map_err(storage_unavailable)?;
         let row = sqlx::query(
-            "SELECT job_id FROM hermes_data.attachment_preview_jobs WHERE logical_owner_id=$1 AND attempt_count<max_attempts AND (state=1 OR (state=2 AND lease_expires_at_unix_millis<$2)) ORDER BY created_at_unix_millis,job_id FOR UPDATE SKIP LOCKED LIMIT 1",
+            "SELECT job_id FROM makosh_data.attachment_preview_jobs WHERE logical_owner_id=$1 AND attempt_count<max_attempts AND (state=1 OR (state=2 AND lease_expires_at_unix_millis<$2)) ORDER BY created_at_unix_millis,job_id FOR UPDATE SKIP LOCKED LIMIT 1",
         )
         .bind(logical_owner_id)
         .bind(now_unix_millis)
@@ -259,7 +259,7 @@ impl AttachmentPreviewPersistenceV1 {
         };
         let job_id = id16(row.try_get("job_id").map_err(invalid_row)?)?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.attachment_preview_jobs SET state=2,attempt_count=attempt_count+1,worker_id=$1,runtime_generation=$2,grant_epoch=$3,lease_fence=lease_fence+1,lease_expires_at_unix_millis=$4,updated_at_unix_millis=$5 WHERE logical_owner_id=$6 AND job_id=$7 RETURNING job_id,run_id,request_id,result_message_id,result_envelope_sha256,attachment_anchor_id,candidate_message_id,safety_message_id,source_reference_id,source_receipt_sha256,source_declared_size,custody_transfer_source_proof,target_reference_id,target_receipt_sha256,attempt_count,max_attempts,lease_fence,lease_expires_at_unix_millis",
+            "UPDATE makosh_data.attachment_preview_jobs SET state=2,attempt_count=attempt_count+1,worker_id=$1,runtime_generation=$2,grant_epoch=$3,lease_fence=lease_fence+1,lease_expires_at_unix_millis=$4,updated_at_unix_millis=$5 WHERE logical_owner_id=$6 AND job_id=$7 RETURNING job_id,run_id,request_id,result_message_id,result_envelope_sha256,attachment_anchor_id,candidate_message_id,safety_message_id,source_reference_id,source_receipt_sha256,source_declared_size,custody_transfer_source_proof,target_reference_id,target_receipt_sha256,attempt_count,max_attempts,lease_fence,lease_expires_at_unix_millis",
         )
         .bind(worker_id)
         .bind(i64::try_from(runtime_generation).map_err(invalid_input)?)
@@ -273,7 +273,7 @@ impl AttachmentPreviewPersistenceV1 {
         .map_err(storage_unavailable)?;
         let run_id = id16(updated.try_get("run_id").map_err(invalid_row)?)?;
         let run = sqlx::query(
-            "SELECT operation_id FROM hermes_data.attachment_preview_runs WHERE logical_owner_id=$1 AND run_id=$2 AND state=3 FOR UPDATE",
+            "SELECT operation_id FROM makosh_data.attachment_preview_runs WHERE logical_owner_id=$1 AND run_id=$2 AND state=3 FOR UPDATE",
         )
         .bind(logical_owner_id)
         .bind(run_id.as_slice())
@@ -306,7 +306,7 @@ impl AttachmentPreviewPersistenceV1 {
             return Err(AttachmentPreviewPersistenceErrorV1::InvalidInput);
         }
         let changed = sqlx::query(
-            "UPDATE hermes_data.attachment_preview_jobs SET target_reference_id=$1,target_receipt_sha256=$2,updated_at_unix_millis=$3 WHERE logical_owner_id=$4 AND job_id=$5 AND state=2 AND worker_id=$6 AND runtime_generation=$7 AND grant_epoch=$8 AND lease_fence=$9 AND lease_expires_at_unix_millis>=$3 AND target_reference_id IS NULL",
+            "UPDATE makosh_data.attachment_preview_jobs SET target_reference_id=$1,target_receipt_sha256=$2,updated_at_unix_millis=$3 WHERE logical_owner_id=$4 AND job_id=$5 AND state=2 AND worker_id=$6 AND runtime_generation=$7 AND grant_epoch=$8 AND lease_fence=$9 AND lease_expires_at_unix_millis>=$3 AND target_reference_id IS NULL",
         )
         .bind(receipt.reference_id.as_slice())
         .bind(receipt.receipt_sha256.as_slice())
@@ -325,7 +325,7 @@ impl AttachmentPreviewPersistenceV1 {
             return Ok(());
         }
         let existing = sqlx::query(
-            "SELECT target_reference_id,target_receipt_sha256 FROM hermes_data.attachment_preview_jobs WHERE logical_owner_id=$1 AND job_id=$2 AND state=2 AND worker_id=$3 AND runtime_generation=$4 AND grant_epoch=$5 AND lease_fence=$6 AND lease_expires_at_unix_millis>=$7",
+            "SELECT target_reference_id,target_receipt_sha256 FROM makosh_data.attachment_preview_jobs WHERE logical_owner_id=$1 AND job_id=$2 AND state=2 AND worker_id=$3 AND runtime_generation=$4 AND grant_epoch=$5 AND lease_fence=$6 AND lease_expires_at_unix_millis>=$7",
         )
         .bind(logical_owner_id)
         .bind(job_id.as_slice())
@@ -370,7 +370,7 @@ impl AttachmentPreviewPersistenceV1 {
             || !valid_sha256(&artifact.target_blob_receipt.receipt_sha256)
             || !valid_sha256(&artifact.renderer_identity_sha256)
             || artifact.preview_kind
-                == hermes_attachment_preview_api::wire::AttachmentPreviewKindV1::Unspecified
+                == makosh_attachment_preview_api::wire::AttachmentPreviewKindV1::Unspecified
             || validate_preview_output_v1(artifact.content_type, artifact.preview_size_bytes)
                 .is_err()
         {
@@ -395,7 +395,7 @@ impl AttachmentPreviewPersistenceV1 {
             return Err(AttachmentPreviewPersistenceErrorV1::EvidenceConflict);
         }
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.attachment_preview_artifacts (logical_owner_id,run_id,derived_reference_id,derived_receipt_sha256,source_receipt_sha256,renderer_identity_sha256,preview_kind,content_type,preview_size_bytes,truncated,runtime_generation,grant_epoch,committed_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) ON CONFLICT (logical_owner_id,run_id) DO NOTHING",
+            "INSERT INTO makosh_data.attachment_preview_artifacts (logical_owner_id,run_id,derived_reference_id,derived_receipt_sha256,source_receipt_sha256,renderer_identity_sha256,preview_kind,content_type,preview_size_bytes,truncated,runtime_generation,grant_epoch,committed_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) ON CONFLICT (logical_owner_id,run_id) DO NOTHING",
         )
         .bind(logical_owner_id)
         .bind(job.run_id.as_slice())
@@ -499,7 +499,7 @@ async fn lock_leased_job(
     now_unix_millis: i64,
 ) -> Result<LockedJobV1, AttachmentPreviewPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT run_id,source_receipt_sha256,target_reference_id,target_receipt_sha256 FROM hermes_data.attachment_preview_jobs WHERE logical_owner_id=$1 AND job_id=$2 AND state=2 AND worker_id=$3 AND runtime_generation=$4 AND grant_epoch=$5 AND lease_fence=$6 AND lease_expires_at_unix_millis>=$7 FOR UPDATE",
+        "SELECT run_id,source_receipt_sha256,target_reference_id,target_receipt_sha256 FROM makosh_data.attachment_preview_jobs WHERE logical_owner_id=$1 AND job_id=$2 AND state=2 AND worker_id=$3 AND runtime_generation=$4 AND grant_epoch=$5 AND lease_fence=$6 AND lease_expires_at_unix_millis>=$7 FOR UPDATE",
     )
     .bind(logical_owner_id)
     .bind(job_id.as_slice())
@@ -544,13 +544,13 @@ async fn finish_job_and_run(
     job_id: [u8; 16],
     lease: &PreviewJobLeaseV1,
     run_id: [u8; 16],
-    current: &hermes_attachment_preview_core::AttachmentPreviewStatusV1,
-    next: &hermes_attachment_preview_core::AttachmentPreviewStatusV1,
+    current: &makosh_attachment_preview_core::AttachmentPreviewStatusV1,
+    next: &makosh_attachment_preview_core::AttachmentPreviewStatusV1,
     job_state: i16,
     occurred_at_unix_millis: i64,
 ) -> Result<(), AttachmentPreviewPersistenceErrorV1> {
     let changed = sqlx::query(
-        "UPDATE hermes_data.attachment_preview_jobs SET state=$1,worker_id=NULL,runtime_generation=NULL,grant_epoch=NULL,lease_expires_at_unix_millis=NULL,updated_at_unix_millis=$2 WHERE logical_owner_id=$3 AND job_id=$4 AND state=2 AND worker_id=$5 AND runtime_generation=$6 AND grant_epoch=$7 AND lease_fence=$8",
+        "UPDATE makosh_data.attachment_preview_jobs SET state=$1,worker_id=NULL,runtime_generation=NULL,grant_epoch=NULL,lease_expires_at_unix_millis=NULL,updated_at_unix_millis=$2 WHERE logical_owner_id=$3 AND job_id=$4 AND state=2 AND worker_id=$5 AND runtime_generation=$6 AND grant_epoch=$7 AND lease_fence=$8",
     )
     .bind(job_state)
     .bind(occurred_at_unix_millis)

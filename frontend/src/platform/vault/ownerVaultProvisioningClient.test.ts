@@ -9,7 +9,7 @@ import {
 	OwnerVaultProvisioningService,
 	OwnerVaultSecretClassV1,
 	PrepareOwnerVaultProvisioningResponseV1Schema,
-} from '../../gen/hermes/gateway/v1/owner_vault_provisioning_pb'
+} from '../../gen/makosh/gateway/v1/owner_vault_provisioning_pb'
 import type { OwnerDeviceProofV1 } from '../gateway/ownerDeviceProof'
 import {
 	OwnerVaultProvisioningClientV1,

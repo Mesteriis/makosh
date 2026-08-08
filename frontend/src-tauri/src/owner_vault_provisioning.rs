@@ -1,6 +1,6 @@
 //! Thin Tauri commands for the provider-neutral provisioning host adapter.
 
-use hermes_owner_vault_provisioning_host::{
+use makosh_owner_vault_provisioning_host::{
     AuthorizedProvisioningV1, CommittedProvisioningReceiptV1, OwnerVaultProvisioningHostV1,
     SanitizedProvisioningReceiptV1, SealedProvisioningCommandV1, StartedProvisioningHostSessionV1,
 };

@@ -1,20 +1,20 @@
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{EventMetadataV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_review_note_candidate_core::{
+use makosh_review_note_candidate_core::{
     ReviewNoteCandidatePromotionResultV1 as DomainPromotionResultV1, ReviewNoteCandidateTimestampV1,
 };
-use hermes_review_note_candidate_persistence::{
+use makosh_review_note_candidate_persistence::{
     PersistReviewNoteCandidatePromotionResultV1, ReviewNoteCandidatePersistenceErrorV1,
     ReviewNoteCandidatePersistenceV1,
 };
-use hermes_review_note_candidate_promotion_api::{
+use makosh_review_note_candidate_promotion_api::{
     review_note_candidate_promotion_result_contract_reference_v1,
     wire::{
         ReviewNoteCandidatePromotionFailureCodeV1, ReviewNoteCandidatePromotionOutcomeV1,
@@ -171,7 +171,7 @@ fn event_error(_: RuntimePullDeliveryErrorV1) -> ReviewNoteCandidatePromotionRes
 
 #[cfg(test)]
 mod tests {
-    use hermes_review_note_candidate_promotion_api::{
+    use makosh_review_note_candidate_promotion_api::{
         ReviewNoteCandidatePromotionEnvelopeContextV1,
         build_review_note_candidate_promotion_result_outbox_record_v1,
     };
@@ -198,7 +198,7 @@ mod tests {
                 logical_owner_id: "owner-1".to_owned(),
             },
             &ReviewNoteCandidatePromotionEnvelopeContextV1 {
-                module_id: "hermes-reviewed-note-candidate-promotion-runtime".to_owned(),
+                module_id: "makosh-reviewed-note-candidate-promotion-runtime".to_owned(),
                 runtime_instance_id: "runtime-1".to_owned(),
                 runtime_generation: 1,
                 recorded_at_unix_seconds: 1_800_000_000,

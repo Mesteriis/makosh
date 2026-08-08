@@ -1,9 +1,9 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ActorKindV1, FenceKindV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     JobContractBindingV1, ScheduleIdV1, ScheduleRevisionV1,
     v1::{SchedulerScheduleControlCommandV1, scheduler_schedule_control_command_v1::Operation},
     validate_scheduler_schedule_control_command_v1,
@@ -160,7 +160,7 @@ pub fn admit_schedule_control_command_v1(
 }
 
 fn validate_contract(
-    envelope: &hermes_events_protocol::v1::DurableEnvelopeV1,
+    envelope: &makosh_events_protocol::v1::DurableEnvelopeV1,
     expected: &SchedulerScheduleControlContractV1,
 ) -> Result<(), SchedulerScheduleControlAdmissionErrorV1> {
     let contract = envelope
@@ -182,7 +182,7 @@ fn validate_contract(
 
 fn grant_matches_envelope(
     grant: &SchedulerScheduleControlGrantV1,
-    envelope: &hermes_events_protocol::v1::DurableEnvelopeV1,
+    envelope: &makosh_events_protocol::v1::DurableEnvelopeV1,
 ) -> bool {
     let Some(source) = envelope.source.as_ref() else {
         return false;
@@ -229,7 +229,7 @@ fn map_operation(
 }
 
 fn job_matches(
-    job: Option<&hermes_scheduler_protocol::v1::JobKindV1>,
+    job: Option<&makosh_scheduler_protocol::v1::JobKindV1>,
     grant: &SchedulerScheduleControlGrantV1,
 ) -> Result<(), SchedulerScheduleControlAdmissionErrorV1> {
     let job = job.ok_or(SchedulerScheduleControlAdmissionErrorV1::InvalidCommand)?;

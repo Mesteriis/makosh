@@ -17,11 +17,11 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-text',
-	`hermes-text--${props.size}`,
-	`hermes-text--${props.tone}`,
-	`hermes-text--${props.weight}`,
-	{ 'hermes-text--truncate': props.truncate },
+	'makosh-text',
+	`makosh-text--${props.size}`,
+	`makosh-text--${props.tone}`,
+	`makosh-text--${props.weight}`,
+	{ 'makosh-text--truncate': props.truncate },
 	props.class
 ])
 </script>

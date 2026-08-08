@@ -2,7 +2,7 @@ use std::sync::OnceLock;
 
 use serde::Deserialize;
 
-use hermes_signal_hub_api::policies::{SignalPolicyMode, SignalPolicyScope};
+use makosh_signal_hub_api::policies::{SignalPolicyMode, SignalPolicyScope};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct SystemSourceFixture {

@@ -5,7 +5,7 @@ Status: documentation package aligned to the current repository structure.
 Projects are bounded work contexts that connect communications, documents,
 tasks, decisions, obligations, Personas, Organizations and events.
 
-Hermes is not a project management tool. A Project is a context boundary inside
+Макошь is not a project management tool. A Project is a context boundary inside
 the Personal Memory System.
 
 ## Responsibilities

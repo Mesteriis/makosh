@@ -13,7 +13,7 @@ use crate::domains::personas::memory::errors::PersonaMemoryError;
 use crate::domains::signal_hub::store::SignalHubError;
 use crate::domains::tasks::candidates::errors::TaskCandidateError;
 use crate::workflows::review_inbox::ReviewInboxWorkflowError;
-use hermes_communications_api::evidence::CommunicationEvidencePortError;
+use makosh_communications_api::evidence::CommunicationEvidencePortError;
 
 #[derive(Debug, Error)]
 pub enum EmailSyncRecordError {

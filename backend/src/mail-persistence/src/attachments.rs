@@ -1,7 +1,7 @@
 //! Mail-owned attachment materialization, safety projection and delivery manifest schema.
 
 pub const MAIL_SCHEMA_V5: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.mail_attachment_safety_projections (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_attachment_safety_projections (
     attachment_anchor_id BYTEA PRIMARY KEY,
     state SMALLINT NOT NULL,
     evidence_id BYTEA,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_attachment_safety_projections (
     CHECK ((evidence_id IS NULL AND observed_at_unix_seconds IS NULL)
         OR (octet_length(evidence_id) = 16 AND observed_at_unix_seconds IS NOT NULL))
 );
-CREATE TABLE IF NOT EXISTS hermes_data.mail_attachment_materializations (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_attachment_materializations (
     attachment_anchor_id BYTEA PRIMARY KEY,
     source_observation_id BYTEA NOT NULL UNIQUE,
     blob_reference_id BYTEA NOT NULL UNIQUE,
@@ -31,13 +31,13 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_attachment_materializations (
     CHECK (disposition IN (1, 2)),
     CHECK (materialized_at_unix_seconds > 0)
 );
-ALTER TABLE hermes_data.mail_delivery_attempts
+ALTER TABLE makosh_data.mail_delivery_attempts
     ADD COLUMN IF NOT EXISTS request_sha256 BYTEA;
-ALTER TABLE hermes_data.mail_delivery_attempts
+ALTER TABLE makosh_data.mail_delivery_attempts
     ADD COLUMN IF NOT EXISTS rendered_rfc822_sha256 BYTEA;
-CREATE TABLE IF NOT EXISTS hermes_data.mail_delivery_attachment_manifest (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_delivery_attachment_manifest (
     operation_id TEXT NOT NULL
-        REFERENCES hermes_data.mail_delivery_attempts (operation_id) ON DELETE CASCADE,
+        REFERENCES makosh_data.mail_delivery_attempts (operation_id) ON DELETE CASCADE,
     ordinal SMALLINT NOT NULL,
     attachment_anchor_id BYTEA NOT NULL,
     blob_reference_id BYTEA NOT NULL,

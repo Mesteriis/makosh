@@ -2,7 +2,7 @@
 
 use axum::Json;
 use axum::extract::State;
-use hermes_communications_api::conversations::ConversationReadPort;
+use makosh_communications_api::conversations::ConversationReadPort;
 use serde_json::{Value, json};
 
 use crate::app::error::types::ApiError;
@@ -134,7 +134,7 @@ async fn list_whatsapp_sync_chats(
         .pool()
         .expect("database pool configured")
         .clone();
-    let rows = hermes_communications_postgres::conversations::ConversationReadStore::new(pool)
+    let rows = makosh_communications_postgres::conversations::ConversationReadStore::new(pool)
         .list_conversations(Some(account_id), &["whatsapp_web"], None, limit)
         .await
         .map_err(|error| WhatsappWebError::InvalidRequest(error.to_string()))?;

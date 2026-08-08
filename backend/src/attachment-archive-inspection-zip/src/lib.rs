@@ -2,13 +2,13 @@
 
 use std::io::Cursor;
 
-use hermes_attachment_archive_inspection_core::{
+use makosh_attachment_archive_inspection_core::{
     ArchiveInspectionLimitsV1, ArchiveInspectionPolicyErrorV1, ArchiveInspectionReportV1,
     RawArchiveEntryMetadataV1, inspect_zip_metadata_v1,
 };
 use zip::ZipArchive;
 
-pub const PACKAGE: &str = "hermes-attachment-archive-inspection-zip";
+pub const PACKAGE: &str = "makosh-attachment-archive-inspection-zip";
 
 pub fn inspect_zip_bytes_v1(
     bytes: &[u8],

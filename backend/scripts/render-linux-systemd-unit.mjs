@@ -12,7 +12,7 @@ function fail(message) {
 
 export function main(argv = process.argv.slice(2)) {
   if (argv.length !== 2) {
-    fail('usage: render-linux-systemd-unit.mjs <compose.yaml> <hermes-platform.service>');
+    fail('usage: render-linux-systemd-unit.mjs <compose.yaml> <makosh-platform.service>');
     return;
   }
   const [composePath, unitPath] = argv;

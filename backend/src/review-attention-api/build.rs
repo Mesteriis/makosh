@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/review/attention/client/v1/client.proto"],
+            &["proto/makosh/review/attention/client/v1/client.proto"],
             &["proto"],
         )
         .expect("Review attention client protocol must compile");

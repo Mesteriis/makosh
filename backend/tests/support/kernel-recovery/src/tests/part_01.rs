@@ -14,7 +14,7 @@ fn distribution_manifest_requires_exact_ordered_artifact_bindings() {
     let manifest = DistributionManifestV1 {
         major: 1,
         revision: 1,
-        distribution_id: "hermes-desktop".to_owned(),
+        distribution_id: "makosh-desktop".to_owned(),
         release_version: "1.0.0".to_owned(),
         build_id: "build-1".to_owned(),
         target_triple: "aarch64-apple-darwin".to_owned(),
@@ -71,7 +71,7 @@ fn release_trust_root_accepts_only_ordered_valid_p256_public_keys() {
     };
     assert!(ReleaseTrustRoot::decode(&root.encode_to_vec()).is_ok());
     let file_path = std::env::temp_dir().join(format!(
-        "hermes-release-trust-root-{}-{}.pb",
+        "makosh-release-trust-root-{}-{}.pb",
         std::process::id(),
         std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -145,7 +145,7 @@ fn distribution_manifest_verifier_requires_pinned_key_and_exact_signed_bytes() {
     let manifest = DistributionManifestV1 {
         major: 1,
         revision: 1,
-        distribution_id: "hermes-desktop".to_owned(),
+        distribution_id: "makosh-desktop".to_owned(),
         release_version: "1.0.0".to_owned(),
         build_id: "build-1".to_owned(),
         target_triple: "aarch64-apple-darwin".to_owned(),

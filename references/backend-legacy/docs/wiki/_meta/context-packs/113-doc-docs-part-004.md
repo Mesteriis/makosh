@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docs/domains/signal-hub/gap-analysis.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/signal-hub/gap-analysis.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/signal-hub/gap-analysis.md`
 - Size bytes / Размер в байтах: `16685`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -78,7 +78,7 @@ and frontend `pnpm lint` is now reduced to two oversized production files:
 `src/domains/settings/components/SignalHubSettings.vue` and
 `src/domains/communications/api/connectCommunications.ts`.
 
-The largest gap is not transport. The largest gap is ownership: Hermes needs a
+The largest gap is not transport. The largest gap is ownership: Макошь needs a
 domain that owns source registry, source runtime policy, health, profiles,
 fixtures, mute/pause/replay and source recovery without making Telegram, Mail or
 WhatsApp separate product domains.
@@ -126,7 +126,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/domains/signal-hub/modules.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/signal-hub/modules.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/signal-hub/modules.md`
 - Size bytes / Размер в байтах: `4626`
 - Included characters / Включено символов: `4172`
 - Truncated / Обрезано: `no`
@@ -206,7 +206,7 @@ bypassed. New code must not create a second event subsystem.
 ```text
 contracts/
 ├── proto/
-│   └── hermes/
+│   └── makosh/
 │       ├── signal_hub/v1/signal_hub.proto
 │       ├── events/v1/event_envelope.proto
 │       ├── communications/v1/communications.proto
@@ -285,7 +285,7 @@ Forbidden:
 
 ## Code Size Rule
 
-Signal Hub must follow existing Hermes anti-god-file rules:
+Signal Hub must follow existing Макошь anti-god-file rules:
 
 - files over 700 lines require written justification;
 - files over 1000 lines are architectural problems;
@@ -298,7 +298,7 @@ Preferred names are ownership-specific: `source_registry.rs`, `policy_store.rs`,
 
 ### `docs/domains/signal-hub/operations.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/signal-hub/operations.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/signal-hub/operations.md`
 - Size bytes / Размер в байтах: `3520`
 - Included characters / Включено символов: `3520`
 - Truncated / Обрезано: `no`
@@ -474,7 +474,7 @@ Audit payloads must be redacted.
 
 ### `docs/domains/signal-hub/spec.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/signal-hub/spec.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/signal-hub/spec.md`
 - Size bytes / Размер в байтах: `1784`
 - Included characters / Включено символов: `1784`
 - Truncated / Обрезано: `no`
@@ -483,9 +483,9 @@ Audit payloads must be redacted.
 # Signal Hub Domain
 
 Signal Hub is the domain that owns the durable registry and control state for
-all signal sources in Hermes.
+all signal sources in Макошь.
 
-It exists because Hermes is a memory system that receives evidence from many
+It exists because Макошь is a memory system that receives evidence from many
 places, not a collection of provider apps. Email, Telegram, WhatsApp, GitHub,
 Browser capture, RSS, Calendar, Filesystem, Home Assistant and fixtures are all
 sources of signals.
@@ -557,7 +557,7 @@ Detailed implementation docs live in [Signal Hub](README.md).
 
 ### `docs/domains/signal-hub/status.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/signal-hub/status.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/signal-hub/status.md`
 - Size bytes / Размер в байтах: `27112`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -589,7 +589,7 @@ and `src/domains/communications/api/connectCommunications.ts`.
 
 | Track | Readiness | Notes |
 |---|---:|---|
-| End-to-end uploaded plan | ~99% | foundation, policy engine, system and custom profiles, fixture restore, deterministic fixture emission, event outbox dispatcher and Settings UI are in place; Telegram provider-observation flow, fixture ingestion, TDLib runtime/history/search/background-command ingest paths and manual send/reply/forward response projection, central Mail sync/fixture flows, Mail delivery/read callbacks, WhatsApp fixture ingestion, and the current owner-facing AI run lifecycle/task-extraction path now use raw-to-accepted signal flow; runtime state control, connection control and the current generated ConnectRPC server/client slice now cover sources, source get/enable/disable with source-level runtime orchestration, generic scoped disable/enable, capability listing, scoped mute/unmute/pause/resume, profiles with create/update/remove/apply, connection CRUD, health list/check, runtime, policies, replay request create/list with event-log selectors, consumer-targeted replay, projection-targeted replay for `timeline_event_log`, `communication_messages`, `person_derived_evidence` and `project_link_review_effects`, fixture catalog listing, fixture emission and fixture restore; that ConnectRPC slice now also carries connection `settings`, health `evidence`, runtime timestamps/error diagnostics, profile policy definitions and durable capability rows instead of flattening those views into placeholders, and now also exposes the first provider-neutral `CommunicationsService` surface for message/thread/saved-search/folder/draft/outbox queries, workflow-state transition, workflow-state counts, workflow actions, local trash/restore, mark-read, provider-delete alias, bulk message action, pin/important/mute toggles, snooze, label add/remove, message search, message analysis/explain/smart-cc, message export, auth review, signature detection, AI reply drafting/variants, detect-language, single-message translation, task extraction, note extraction, attachment search, attachment preview, attachment archive inspection, attachment translation, thread translation, saved-search create/update/delete, folder create/update/delete/message actions, draft create/delete, outbox undo, confirmed send flow, redirect enqueue, communication personas, subscription/health/sender/blocker read models, and durable rich-template list/upsert/delete/render/mail-merge-preview behind the same `X-Hermes-Secret` guard, so the root `communications/v1` contract is no longer codegen-only on the backend; the frontend now also has a dedicated typed `communications/v1` ConnectRPC wrapper with targeted regression coverage for message/thread/saved-search/folder/draft/outbox, local-state/bulk-action, message-flag/label/snooze, multilingual/AI-helper, attachment query mapping, communication personas, rich templates, workflow-state transition, workflow-state counts, workflow actions, message search, mark-read/provider-delete alias, message analysis/explain/smart-cc, export/auth/signature, AI reply/variants, thread translation, saved-search CRUD, folder CRUD/message actions, draft create/delete, outbox undo, confirmed send flow and redirect enqueue, and the main Communications provider-neutral query entrypoints for messages, message detail, saved searches, folders, folder messages, drafts, outbox, threads, thread messages, local trash/restore, mark-read, provider-delete alias, bulk message action, pin/important/mute, snooze, label add/remove, analyze/explain/smart-cc, export/auth/signature, AI reply/variants, detect-language, single-message translation, task extraction, note extraction, attachment search, attachment preview, attachment archive inspection, attachment translation, workflow-state transition, workflow-state counts, workflow actions, message search, `translateThread`, `sendEmail`, `redirectMessage`, communication personas, draft save/delete, saved-search CRUD, folder CRUD/message actions, rich-template CRUD/render/preview and outbox undo now already call that ConnectRPC layer instead of compatibility REST; the Settings UI now renders those non-secret diagnostics directly in the sources/connections/runtime/health/profile lists instead of dropping them on the floor; the Settings Signal Hub UI now also exposes connection-scoped policy creation and connection-scoped replay requests on top of the existing backend support, connection status changes themselves reconcile connection-scoped operator policies for `paused`, `muted` and `disabled`, custom profile authoring/editing/removal now exists alongside system profile apply flow, provider bootstrap/lifecycle handlers for Mail, Telegram and WhatsApp now automatically create or update `signal_connections` so live operator controls for individual provider accounts no longer depend on manual Signal Hub setup, and the source inspector now shows first-class generic capability snapshots from durable `signal_capabilities` rows; the current frontend slice is now also covered by targeted tests for generated client wrappers, Signal Hub query keys, Settings-boundary placement/import rules, realtime invalidation for the declared `signal.raw.*`, `signal.accepted.*`, `signal.rejected.*`, `signal.muted.*`, `signal.paused.*`, `signal.resumed.*` and `signal.replayed.*` families, plus provider-neutral `communications/v1` query and command wrapper mapping, so the implemented control-plane and first communications contract layer have direct regression coverage instead of docs-only claims; the Communications accepted-signal owner now also consumes base `signal.accepted.telegram.message` events, direct projection primitives are no longer called from workflow/app paths, connection-scoped raw-signal policy and connection-scoped event-log replay now work through non-secret `settings.account_id` bindings, provider-observation raw signal facts now also use the durable outbox-dispatch path, synchronous raw-signal helpers now honor the durable `signal_hub_raw_signal_dispatcher` runtime state, synchronous accepted-signal projection helpers now honor the durable `communication_provider_observation_projection` runtime state, owner-facing AI command routes now honor the durable `ai_request_runtime` gate, owner-facing AI run events now also publish canonical `signal.raw.ai.*` plus accepted `signal.accepted.ai.*` facts through Signal Hub, communication-facing AI helpers now also honor the same durable `ai_request_runtime` gate and fall back to their existing no-LLM/heuristic behavior when `ai` is muted or disabled, and the current runtime-backed message translation, thread message translation, bilingual reply flow translations, LLM task-extraction, reply drafting/reply-variant generation, and attachment translation helper paths now also publish canonical `signal.raw.ai.*` plus accepted `signal.accepted.ai.*` facts through Signal Hub with targeted backend regression coverage on each named slice, Telegram TDLib realtime bridge events now honor their own durable runtime gate, and source-level runtime orchestration now consistently applies the priority `disabled > paused > muted > running` to both existing and lazy runtime rows; websocket realtime fan-out now follows the same persisted outbox-dispatch path for published `signal.*` events, and accepted-signal / domain-boundary rules are enforced in the architecture checker; the remaining repository-level gap is provider breadth plus richer provider-specific control semantics and any future projection rebuild targets that do not yet justify first-class replay coverage |
+| End-to-end uploaded plan | ~99% | foundation, policy engine, system and custom profiles, fixture restore, deterministic fixture emission, event outbox dispatcher and Settings UI are in place; Telegram provider-observation flow, fixture ingestion, TDLib runtime/history/search/background-command ingest paths and manual send/reply/forward response projection, central Mail sync/fixture flows, Mail delivery/read callbacks, WhatsApp fixture ingestion, and the current owner-facing AI run lifecycle/task-extraction path now use raw-to-accepted signal flow; runtime state control, connection control and the current generated ConnectRPC server/client slice now cover sources, source get/enable/disable with source-level runtime orchestration, generic scoped disable/enable, capability listing, scoped mute/unmute/pause/resume, profiles with create/update/remove/apply, connection CRUD, health list/check, runtime, policies, replay request create/list with event-log selectors, consumer-targeted replay, projection-targeted replay for `timeline_event_log`, `communication_messages`, `person_derived_evidence` and `project_link_review_effects`, fixture catalog listing, fixture emission and fixture restore; that ConnectRPC slice now also carries connection `settings`, health `evidence`, runtime timestamps/error diagnostics, profile policy definitions and durable capability rows instead of flattening those views into placeholders, and now also exposes the first provider-neutral `CommunicationsService` surface for message/thread/saved-search/folder/draft/outbox queries, workflow-state transition, workflow-state counts, workflow actions, local trash/restore, mark-read, provider-delete alias, bulk message action, pin/important/mute toggles, snooze, label add/remove, message search, message analysis/explain/smart-cc, message export, auth review, signature detection, AI reply drafting/variants, detect-language, single-message translation, task extraction, note extraction, attachment search, attachment preview, attachment archive inspection, attachment translation, thread translation, saved-search create/update/delete, folder create/update/delete/message actions, draft create/delete, outbox undo, confirmed send flow, redirect enqueue, communication personas, subscription/health/sender/blocker read models, and durable rich-template list/upsert/delete/render/mail-merge-preview behind the same `X-Макошь-Secret` guard, so the root `communications/v1` contract is no longer codegen-only on the backend; the frontend now also has a dedicated typed `communications/v1` ConnectRPC wrapper with targeted regression coverage for message/thread/saved-search/folder/draft/outbox, local-state/bulk-action, message-flag/label/snooze, multilingual/AI-helper, attachment query mapping, communication personas, rich templates, workflow-state transition, workflow-state counts, workflow actions, message search, mark-read/provider-delete alias, message analysis/explain/smart-cc, export/auth/signature, AI reply/variants, thread translation, saved-search CRUD, folder CRUD/message actions, draft create/delete, outbox undo, confirmed send flow and redirect enqueue, and the main Communications provider-neutral query entrypoints for messages, message detail, saved searches, folders, folder messages, drafts, outbox, threads, thread messages, local trash/restore, mark-read, provider-delete alias, bulk message action, pin/important/mute, snooze, label add/remove, analyze/explain/smart-cc, export/auth/signature, AI reply/variants, detect-language, single-message translation, task extraction, note extraction, attachment search, attachment preview, attachment archive inspection, attachment translation, workflow-state transition, workflow-state counts, workflow actions, message search, `translateThread`, `sendEmail`, `redirectMessage`, communication personas, draft save/delete, saved-search CRUD, folder CRUD/message actions, rich-template CRUD/render/preview and outbox undo now already call that ConnectRPC layer instead of compatibility REST; the Settings UI now renders those non-secret diagnostics directly in the sources/connections/runtime/health/profile lists instead of dropping them on the floor; the Settings Signal Hub UI now also exposes connection-scoped policy creation and connection-scoped replay requests on top of the existing backend support, connection status changes themselves reconcile connection-scoped operator policies for `paused`, `muted` and `disabled`, custom profile authoring/editing/removal now exists alongside system profile apply flow, provider bootstrap/lifecycle handlers for Mail, Telegram and WhatsApp now automatically create or update `signal_connections` so live operator controls for individual provider accounts no longer depend on manual Signal Hub setup, and the source inspector now shows first-class generic capability snapshots from durable `signal_capabilities` rows; the current frontend slice is now also covered by targeted tests for generated client wrappers, Signal Hub query keys, Settings-boundary placement/import rules, realtime invalidation for the declared `signal.raw.*`, `signal.accepted.*`, `signal.rejected.*`, `signal.muted.*`, `signal.paused.*`, `signal.resumed.*` and `signal.replayed.*` families, plus provider-neutral `communications/v1` query and command wrapper mapping, so the implemented control-plane and first communications contract layer have direct regression coverage instead of docs-only claims; the Communications accepted-signal owner now also consumes base `signal.accepted.telegram.message` events, direct projection primitives are no longer called from workflow/app paths, connection-scoped raw-signal policy and connection-scoped event-log replay now work through non-secret `settings.account_id` bindings, provider-observation raw signal facts now also use the durable outbox-dispatch path, synchronous raw-signal helpers now honor the durable `signal_hub_raw_signal_dispatcher` runtime state, synchronous accepted-signal projection helpers now honor the durable `communication_provider_observation_projection` runtime state, owner-facing AI command routes now honor the durable `ai_request_runtime` gate, owner-facing AI run events now also publish canonical `signal.raw.ai.*` plus accepted `signal.accepted.ai.*` facts through Signal Hub, communication-facing AI helpers now also honor the same durable `ai_request_runtime` gate and fall back to their existing no-LLM/heuristic behavior when `ai` is muted or disabled, and the current runtime-backed message translation, thread message translation, bilingual reply flow translations, LLM task-extraction, reply drafting/reply-variant generation, and attachment translation helper paths now also publish canonical `signal.raw.ai.*` plus accepted `signal.accepted.ai.*` facts through Signal Hub with targeted backend regression coverage on each named slice, Telegram TDLib realtime bridge events now honor their own durable runtime gate, and source-level runtime orchestration now consistently applies the priority `disabled > paused > muted > running` to both existing and lazy runtime rows; websocket realtime fan-out now follows the same persisted outbox-dispatch path for published `signal.*` events, and accepted-signal / domain-boundary rules are enforced in the architecture checker; the remaining repository-level gap is provider breadth plus richer provider-specific control semantics and any future projection rebuild targets that do not yet justify first-class replay coverage |
 | Signal Hub control-plane slice | ~99% | source registry, first-class durable capability snapshots, system and custom profiles with create/update/remove/apply flow, policies, source get/enable/disable commands with source-level runtime orchestration, generic scoped disable/enable plus scoped mute/unmute/pause/resume commands, fixture restore, deterministic fixture emission, connection create/update/remove with operator-policy reconciliation for `paused`/`muted`/`disabled`, runtime read/write path, health list/check path including source-specific AI runtime probing, replay request create/list path, paused-buffer replay runtime, event-log position/time selectors, consumer-targeted replay preparation through consumer cursor rewind, projection-targeted rebuild paths for `timeline_event_log` via projection cursor rewind + `timeline.projection.updated`, `communication_messages` via accepted-signal consumer marker reset + `communications.projection.updated`, `person_derived_evidence` via consumer marker reset + `persons.derived_evidence.updated`, and `project_link_review_effects` via consumer marker reset + `projects.link_review_effects.updated`, connection-scoped raw-signal policy/replay bindings, core subscriber/runtime gating including owner-facing AI command runtime gating plus owner-facing AI raw/accepted source-event publication plus communication-facing AI helper gating/fallback plus runtime-backed single-message/thread translation, bilingual-reply translation, task-extraction, reply and attachment helper signal publication, unified source runtime priority `disabled > paused > muted > running` for existing and lazy runtime rows, outbox-to-JetStream dispatcher with realtime in-memory fan-out for published events, raw-signal decision flow, accepted-signal Communications boundaries and current ConnectRPC control/query slice exist |
 | Provider migration to Signal Hub | ~82% | Telegram provider-observation events now publish `signal.raw.telegram.*.observed`, and those provider-observation raw facts now also enter the durable outbox-dispatch path instead of only appending to `event_log`; Telegram fixture ingestion now emits `signal.raw.telegram.message.observed` and projects only from `signal.accepted.telegram.message`, Telegram manual send/reply/forward response projection now also re-enters through the same raw-to-accepted path, and TDLib runtime/history/search/background-command ingest paths now persist provider raw records through a neutral platform port and publish the same canonical raw Telegram signal family without importing `domains::signal_hub` directly; the synchronous raw-signal dispatch helpers for Telegram/Mail/WhatsApp now also honor the durable runtime state of `signal_hub_raw_signal_dispatcher`, so pausing or stopping the system dispatcher prevents immediate accepted-signal emission even on direct helper paths and leaves the raw fact queued in the durable outbox flow; the synchronous accepted-signal projection helpers used by fixture ingest, mail sync, mail fixture projection and Telegram manual-send projection now also honor the durable runtime state of `communication_provider_observation_projection`, so pausing that consumer blocks immediate message projection even on sync app/workflow paths and leaves the accepted event for later durable consumption; the Communications accepted-signal cons
 ```
@@ -597,7 +597,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/domains/signal-hub/testing.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/signal-hub/testing.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/signal-hub/testing.md`
 - Size bytes / Размер в байтах: `4050`
 - Included characters / Включено символов: `4050`
 - Truncated / Обрезано: `no`
@@ -773,18 +773,18 @@ gap rather than weakening the architecture.
 
 ### `docs/domains/tasks/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/tasks/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/tasks/README.md`
 - Size bytes / Размер в байтах: `1294`
 - Included characters / Включено символов: `1294`
 - Truncated / Обрезано: `no`
 
 ```markdown
-# Hermes Tasks
+# Макошь Tasks
 
 Status: documentation package aligned to the current repository structure.
 
-Tasks are actionable units inside the Personal Memory System. Hermes is not a
-task tracker. External trackers can be providers, but Hermes keeps local
+Tasks are actionable units inside the Personal Memory System. Макошь is not a
+task tracker. External trackers can be providers, but Макошь keeps local
 context, evidence and relationships under owner control.
 
 ## Domain Boundary
@@ -832,7 +832,7 @@ Implementation details, route counts and status live in:
 
 ### `docs/domains/tasks/api.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/tasks/api.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/tasks/api.md`
 - Size bytes / Размер в байтах: `1696`
 - Included characters / Включено символов: `1562`
 - Truncated / Обрезано: `no`
@@ -913,7 +913,7 @@ Base: `/api/v1`
 
 ### `docs/domains/tasks/architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/tasks/architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/tasks/architecture.md`
 - Size bytes / Размер в байтах: `1297`
 - Included characters / Включено символов: `1297`
 - Truncated / Обрезано: `no`
@@ -962,7 +962,7 @@ API
 
 ### `docs/domains/tasks/data-model.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/tasks/data-model.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/tasks/data-model.md`
 - Size bytes / Размер в байтах: `1615`
 - Included characters / Включено символов: `1615`
 - Truncated / Обрезано: `no`
@@ -1018,7 +1018,7 @@ definitions.
 
 ### `docs/domains/tasks/spec.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/tasks/spec.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/tasks/spec.md`
 - Size bytes / Размер в байтах: `1663`
 - Included characters / Включено символов: `1663`
 - Truncated / Обрезано: `no`
@@ -1096,7 +1096,7 @@ events.
 
 ### `docs/domains/tasks/status.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/tasks/status.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/tasks/status.md`
 - Size bytes / Размер в байтах: `6386`
 - Included characters / Включено символов: `5616`
 - Truncated / Обрезано: `no`
@@ -1122,7 +1122,7 @@ Polygraph.
 | 6 | Task Identity | `task_id` + `external_task_identities` — provider, account_id, external_project_id, external_task_id, external_url |
 | 7 | Deduplication | `task_relations` с `relation_type = 'duplicates'` |
 | 8 | Lifecycle | 10 статусов: new → triaged → ready → in_progress → waiting/blocked → review → done → cancelled → archived |
-| 9 | Provider Status Mapping | `provider_status_mappings` — provider, external_status → hermes_status |
+| 9 | Provider Status Mapping | `provider_status_mappings` — provider, external_status → makosh_status |
 | 10 | Source Tracking | `source_type` CHECK — 18 источников (manual, email, telegram, whatsapp, calendar, meeting, jira, youtrack, github, ...) |
 | 11 | Task Evidence | `task_evidence` — source_type, source_id, quote, confidence |
 | 12 | Task Confidence | confidence REAL поле + Low → suggested inbox |
@@ -1133,8 +1133,8 @@ Polygraph.
 | 18 | Task context explanation | `POST /tasks/brain` compatibility route → what, why, status, source, context, evidence |
 | 19 | Task Why | `why` поле на `tasks` |
 | 20 | Next Action | `suggest_next_action()` — template per status: "Review and set priority", "Start working", "Follow up: {reason}", "Resolve blockers", "Archive" |
-| 21 | Blocking Intelligence | `hermes_status = 'blocked'` + `waiting_reason` |
-| 22 | Waiting Tasks | `hermes_status = 'waiting'` + waiting_reason + waiting_too_long detector |
+| 21 | Blocking Intelligence | `makosh_status = 'blocked'` + `waiting_reason` |
+| 22 | Waiting Tasks | `makosh_status = 'waiting'` + waiting_reason + waiting_too_long detector |
 | 23 | Priority Score | `calculate_priority()` — deadline proximity, legal/tax context, Persona/Organization/Project presence, blockers |
 | 24 | Risk Analysis | `calculate_risk()` — deadline close, missing docs, no owner, external dependency, legal, urgent keywords |
 | 25 | Readiness Score | `calculate_readiness()` — description, context, docs, deadline, no blockers, Personas resolved |
@@ -1195,13 +1195,13 @@ Polygraph.
 
 ### `docs/engines/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/README.md`
 - Size bytes / Размер в байтах: `3444`
 - Included characters / Включено символов: `3444`
 - Truncated / Обрезано: `no`
 
 ```markdown
-# Hermes Engine Catalog
+# Макошь Engine Catalog
 
 Status: documentation package aligned to the current repository structure.
 
@@ -1290,7 +1290,7 @@ change.
 
 ### `docs/engines/automation/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/automation/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/automation/README.md`
 - Size bytes / Размер в байтах: `1227`
 - Included characters / Включено символов: `1227`
 - Truncated / Обрезано: `no`
@@ -1338,7 +1338,7 @@ the target integration command boundary.
 
 ### `docs/engines/call-intelligence/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/call-intelligence/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/call-intelligence/README.md`
 - Size bytes / Размер в байтах: `2448`
 - Included characters / Включено символов: `2428`
 - Truncated / Обрезано: `no`
@@ -1486,7 +1486,7 @@ These outputs become knowledge candidates with screenshot/time evidence.
 
 ### `docs/engines/consistency/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/consistency/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/consistency/README.md`
 - Size bytes / Размер в байтах: `4394`
 - Included characters / Включено символов: `4394`
 - Truncated / Обрезано: `no`
@@ -1629,7 +1629,7 @@ claim extraction from Communications and Documents.
 
 ### `docs/engines/context-packs/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/context-packs/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/context-packs/README.md`
 - Size bytes / Размер в байтах: `1150`
 - Included characters / Включено символов: `1150`
 - Truncated / Обрезано: `no`
@@ -1677,7 +1677,7 @@ owner of memory, domain truth, provider records or accepted review outcomes.
 
 ### `docs/engines/enrichment/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/enrichment/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/enrichment/README.md`
 - Size bytes / Размер в байтах: `2548`
 - Included characters / Включено символов: `2548`
 - Truncated / Обрезано: `no`
@@ -1777,7 +1777,7 @@ existing JSON payload without changing the table shape.
 
 ### `docs/engines/identity-resolution/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/identity-resolution/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/identity-resolution/README.md`
 - Size bytes / Размер в байтах: `922`
 - Included characters / Включено символов: `922`
 - Truncated / Обрезано: `no`
@@ -1818,7 +1818,7 @@ domain must own accepted identity state after review.
 
 ### `docs/engines/memory/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/memory/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/memory/README.md`
 - Size bytes / Размер в байтах: `3692`
 - Included characters / Включено символов: `3692`
 - Truncated / Обрезано: `no`
@@ -1828,7 +1828,7 @@ domain must own accepted identity state after review.
 
 Status: documentation package aligned to the current repository structure.
 
-The Memory Engine assembles durable, source-backed context across Hermes.
+The Memory Engine assembles durable, source-backed context across Макошь.
 
 Memory is not a generic note store and not an AI summary. Memory is accepted,
 reviewable understanding derived from evidence.
@@ -1934,7 +1934,7 @@ fact directly.
 
 ### `docs/engines/obligation/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/obligation/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/obligation/README.md`
 - Size bytes / Размер в байтах: `2701`
 - Included characters / Включено символов: `2701`
 - Truncated / Обрезано: `no`
@@ -2029,7 +2029,7 @@ Decisions.
 
 ### `docs/engines/relationships/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/relationships/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/relationships/README.md`
 - Size bytes / Размер в байтах: `1009`
 - Included characters / Включено символов: `1009`
 - Truncated / Обрезано: `no`
@@ -2072,7 +2072,7 @@ to [Relationships Domain](../../domains/relationships/README.md).
 
 ### `docs/engines/risk/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/risk/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/risk/README.md`
 - Size bytes / Размер в байтах: `2539`
 - Included characters / Включено символов: `2539`
 - Truncated / Обрезано: `no`
@@ -2167,7 +2167,7 @@ unresolved observations.
 
 ### `docs/engines/search/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/search/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/search/README.md`
 - Size bytes / Размер в байтах: `1516`
 - Included characters / Включено символов: `1516`
 - Truncated / Обрезано: `no`
@@ -2177,7 +2177,7 @@ unresolved observations.
 
 Status: documentation package aligned to the current repository structure.
 
-The Search Engine retrieves source-backed information across Hermes.
+The Search Engine retrieves source-backed information across Макошь.
 
 Search is an engine, not a domain. It operates over domain records, source
 evidence, graph relationships and derived indexes.
@@ -2243,7 +2243,7 @@ the full text search foundation.
 
 ### `docs/engines/search/architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/search/architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/search/architecture.md`
 - Size bytes / Размер в байтах: `2097`
 - Included characters / Включено символов: `2097`
 - Truncated / Обрезано: `no`

@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
-use hermes_observations_postgres::review_links::materialize_review_transition_link_in_transaction;
-use hermes_relationships_api::{
+use makosh_observations_postgres::review_links::materialize_review_transition_link_in_transaction;
+use makosh_relationships_api::{
     RelationshipEvidence, RelationshipListFuture, RelationshipListQuery, RelationshipQueryError,
     RelationshipQueryPort, RelationshipRead, RelationshipUpsert, RelationshipWriteError,
     RelationshipWriteFuture, RelationshipWritePort,

@@ -51,15 +51,15 @@ Backend представляет собой серверное приложен�
 
 В модуле `provider_env` (`backend/src/platform/config/app_config/provider_env.rs`) определены следующие переменные:
 
-- `HERMES_TDJSON_PATH` — путь к библиотеке tdjson (Telegram).
-- `HERMES_TELEGRAM_API_ID` — API ID Telegram (парсится как `i64`, должен быть > 0).
-- `HERMES_TELEGRAM_API_HASH` — секрет Telegram (хранится как `ResolvedSecret`).
-- `HERMES_GOOGLE_OAUTH_CLIENT_ID` и `HERMES_GOOGLE_OAUTH_CLIENT_SECRET` — учётные данные Google OAuth.
-- `HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_JSON` — JSON-конфигурация клиента в виде строки.
-- `HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH` — путь к файлу с JSON-конфигурацией.
-- `HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`, `HERMES_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED`, `HERMES_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED` — булевы флаги для планировщиков Zoom.
+- `MAKOSH_TDJSON_PATH` — путь к библиотеке tdjson (Telegram).
+- `MAKOSH_TELEGRAM_API_ID` — API ID Telegram (парсится как `i64`, должен быть > 0).
+- `MAKOSH_TELEGRAM_API_HASH` — секрет Telegram (хранится как `ResolvedSecret`).
+- `MAKOSH_GOOGLE_OAUTH_CLIENT_ID` и `MAKOSH_GOOGLE_OAUTH_CLIENT_SECRET` — учётные данные Google OAuth.
+- `MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_JSON` — JSON-конфигурация клиента в виде строки.
+- `MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH` — путь к файлу с JSON-конфигурацией.
+- `MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`, `MAKOSH_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED`, `MAKOSH_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED` — булевы флаги для планировщиков Zoom.
 
-Существует встроенный JSON клиента Google OAuth, задаваемый через константу времени компиляции `HERMES_BUNDLED_GOOGLE_OAUTH_CLIENT_JSON` и применяемый функцией `apply_bundled_google_oauth_client`.
+Существует встроенный JSON клиента Google OAuth, задаваемый через константу времени компиляции `MAKOSH_BUNDLED_GOOGLE_OAUTH_CLIENT_JSON` и применяемый функцией `apply_bundled_google_oauth_client`.
 
 Булевы переменные парсятся с помощью `parse_bool_env` (`backend/src/platform/config/parsing.rs`), которая принимает `"true"`, `"1"`, `"yes"`, `"on"` как истину, и `"false"`, `"0"`, `"no"`, `"off"` как ложь.
 
@@ -68,7 +68,7 @@ Backend представляет собой серверное приложен�
 Файл `constants.rs` (`backend/src/platform/config/constants.rs`) задаёт:
 
 - HTTP-адрес: `127.0.0.1:8080`
-- Имя сервиса: `hermes-hub-backend`
+- Имя сервиса: `makosh-backend`
 - Ollama: базовый URL `http://127.0.0.1:11434`, чат-модель `qwen3:4b`, модель эмбеддингов `qwen3-embedding:4b`, таймаут 120 сек.
 - OmniRoute: базовый URL `https://ai.sh-inc.ru/v1`, чат-модель `codex/gpt-5.5`, модель эмбеддингов `openai-compatible-chat-ollama-pve/qwen3-embedding:4b`, таймаут 120 сек.
 
@@ -101,7 +101,7 @@ Backend представляет собой серверное приложен�
 ### Шина событий
 
 - `InMemoryEventBus` (`backend/src/platform/events/bus.rs`) — in-process шина на основе `tokio::sync::broadcast` с кольцевым буфером ёмкостью 4096 событий. Поддерживает подписку, подсчёт подписчиков и метод `broadcast_stored`, преобразующий `EventEnvelope` в `NewEventEnvelope`.
-- `NatsJetStreamEventBus` (`backend/src/platform/events/nats.rs`) — публикует события в NATS JetStream в стрим `hermes_events` с субъектами по шаблону `signal.>`. Конкретный субъект формируется из `event_type` события.
+- `NatsJetStreamEventBus` (`backend/src/platform/events/nats.rs`) — публикует события в NATS JetStream в стрим `makosh_events` с субъектами по шаблону `signal.>`. Конкретный субъект формируется из `event_type` события.
 
 ### Типы событий
 
@@ -191,7 +191,7 @@ Backend представляет собой серверное приложен�
 - `backend/src/platform/events/errors.rs` — `EventEnvelopeError`, `EventStoreError`, `is_unique_violation`.
 - `backend/src/platform/events/migrations.rs` — `run_migrations`, `expected_migration_summary`.
 - `backend/src/platform/events/models.rs` — модели `NewEventEnvelope`, `EventEnvelope`, `StoredEventEnvelope`, outbox-модели.
-- `backend/src/platform/events/nats.rs` — `NatsJetStreamEventBus`, стрим `hermes_events`, субъект `signal.>`.
+- `backend/src/platform/events/nats.rs` — `NatsJetStreamEventBus`, стрим `makosh_events`, субъект `signal.>`.
 - `backend/src/platform/events/query.rs` — `EventLogQuery` и поля фильтрации.
 - `backend/src/platform/events/rows.rs` — упомянуты как служебные (фактически покрыты через `EventStore`).
 - `backend/src/platform/events/runtime.rs` — состояния выполнения и политики.

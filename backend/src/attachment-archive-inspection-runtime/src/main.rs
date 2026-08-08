@@ -6,8 +6,8 @@ use std::{
     time::Duration,
 };
 
-use hermes_attachment_archive_inspection_persistence::attachment_archive_inspection_storage_bundle_v1;
-use hermes_attachment_archive_inspection_runtime::{
+use makosh_attachment_archive_inspection_persistence::attachment_archive_inspection_storage_bundle_v1;
+use makosh_attachment_archive_inspection_runtime::{
     admission::attachment_archive_inspection_module_descriptor_v1,
     runtime::{
         ArchiveInspectionRuntimeAdmissionV1, AttachmentArchiveInspectionRuntimeV1,
@@ -18,7 +18,7 @@ use hermes_attachment_archive_inspection_runtime::{
         decode_attachment_archive_inspection_settings_v1,
     },
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedEngineRuntimeConfigurationV1,
     validation::{
         descriptor::{
@@ -238,9 +238,9 @@ fn write_stdout(bytes: &[u8], artifact: &str) -> Result<(), String> {
 
 fn diagnostic(
     stage: &str,
-    error: hermes_attachment_archive_inspection_runtime::runtime::ArchiveInspectionRuntimeErrorV1,
+    error: makosh_attachment_archive_inspection_runtime::runtime::ArchiveInspectionRuntimeErrorV1,
 ) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_archive_inspection_runtime_error stage={stage} error={error:?}");
     }
 }

@@ -5,7 +5,7 @@ use std::io::Write;
 use std::os::unix::fs::{FileTypeExt, MetadataExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedIntegrationHostBridgeConfigurationV1,
     validation::integration_host_bridge::validate_managed_integration_host_bridge_configuration,
 };
@@ -142,7 +142,7 @@ mod tests {
             runtime_instance_id: "whatsapp_runtime_1".to_owned(),
             runtime_generation: 2,
             grant_epoch: 3,
-            socket_path: "/private/tmp/hermes/whatsapp.sock".to_owned(),
+            socket_path: "/private/tmp/makosh/whatsapp.sock".to_owned(),
             route_binding_sha256: vec![9; 32],
         };
 

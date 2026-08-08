@@ -20,7 +20,7 @@ initialize({
 const preview: Preview = {
 	globalTypes: {
 		theme: {
-			description: 'Hermes UI theme',
+			description: 'Макошь UI theme',
 			defaultValue: 'base-light',
 			toolbar: {
 				title: 'Theme',
@@ -28,14 +28,14 @@ const preview: Preview = {
 				items: [
 					{ value: 'base-light', title: 'Base Light' },
 					{ value: 'base-dark', title: 'Base Dark' },
-					{ value: 'hermes-light', title: 'Hermes Light' },
-					{ value: 'hermes-dark', title: 'Hermes Dark' }
+					{ value: 'makosh-light', title: 'Макошь Light' },
+					{ value: 'makosh-dark', title: 'Макошь Dark' }
 				],
 				dynamicTitle: true
 			}
 		},
 		locale: {
-			description: 'Hermes UI locale',
+			description: 'Макошь UI locale',
 			defaultValue: 'ru',
 			toolbar: {
 				title: 'Locale',
@@ -50,8 +50,8 @@ const preview: Preview = {
 			themes: {
 				'base-light': 'base-light',
 				'base-dark': 'base-dark',
-				'hermes-light': 'hermes-light',
-				'hermes-dark': 'hermes-dark'
+				'makosh-light': 'makosh-light',
+				'makosh-dark': 'makosh-dark'
 			},
 			defaultTheme: 'base-light',
 			attributeName: 'data-ui-theme'
@@ -70,7 +70,7 @@ const preview: Preview = {
 					themeMode: themeSelection.mode
 				}
 			},
-			template: '<main :data-ui-theme="theme" :data-ui-theme-family="themeFamily" :data-ui-theme-mode="themeMode" :data-ui-locale="locale" :lang="locale" class="storybook-shell"><h1 class="hermes-sr-only">{{ storyHeading }}</h1><story /></main>'
+			template: '<main :data-ui-theme="theme" :data-ui-theme-family="themeFamily" :data-ui-theme-mode="themeMode" :data-ui-locale="locale" :lang="locale" class="storybook-shell"><h1 class="makosh-sr-only">{{ storyHeading }}</h1><story /></main>'
 		})
 	],
 	loaders: [mswLoader],

@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/mail/address_book/v1/address_book.proto"],
+            &["proto/makosh/mail/address_book/v1/address_book.proto"],
             &["proto"],
         )
         .expect("Mail address-book protocol must compile");

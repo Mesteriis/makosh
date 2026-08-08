@@ -1,4 +1,4 @@
-use hermes_communication_bulk_action_persistence::{
+use makosh_communication_bulk_action_persistence::{
     BulkDeliveryPersistenceErrorV1, CommunicationBulkActionPersistenceV1, CompleteTargetOutcomeV1,
 };
 

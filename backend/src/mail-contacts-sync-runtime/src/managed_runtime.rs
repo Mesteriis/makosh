@@ -1,21 +1,21 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_contacts_command_api::{
+use makosh_contacts_command_api::{
     bind_mail_address_book_provider_link_rejected_contract_reference_v1,
     contact_upsert_rejected_contract_reference_v1, contact_upserted_contract_reference_v1,
     mail_address_book_provider_link_bound_contract_reference_v1,
 };
-use hermes_contacts_mail_sync_source_api::{
+use makosh_contacts_mail_sync_source_api::{
     contact_changed_for_mail_sync_contract_reference_v1,
     contact_mail_sync_source_prepared_contract_reference_v1,
     contact_mail_sync_source_rejected_contract_reference_v1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
 };
-use hermes_mail_address_book_contract::MailAddressBookContractV1;
-use hermes_mail_contacts_sync_api::{
+use makosh_mail_address_book_contract::MailAddressBookContractV1;
+use makosh_mail_contacts_sync_api::{
     MAIL_CONTACTS_SYNC_MODULE_ID_V1, MAIL_CONTACTS_SYNC_OWNER_ID_V1,
     mail_contacts_sync_query_contract_v1, mail_contacts_sync_start_contract_v1,
     wire::{
@@ -23,10 +23,10 @@ use hermes_mail_contacts_sync_api::{
         StartMailContactsSyncResponseV1,
     },
 };
-use hermes_mail_contacts_sync_persistence::{
+use makosh_mail_contacts_sync_persistence::{
     MailContactsSyncPersistenceErrorV1, MailContactsSyncPersistenceV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::{
         ContractReferenceV1, ManagedRuntimeClientDeliveryResponseV1,
@@ -39,12 +39,12 @@ use hermes_runtime_protocol::{
         validate_module_client_request_v1, validate_module_client_response_v1,
     },
 };
-use hermes_scheduler_protocol::SCHEDULER_JOB_DESCRIPTOR_SET_V1;
-use hermes_storage_protocol::{
+use makosh_scheduler_protocol::SCHEDULER_JOB_DESCRIPTOR_SET_V1;
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 use prost::Message;

@@ -439,7 +439,7 @@ fn create_staging(parent: &Path) -> Result<PathBuf, String> {
             .iter()
             .map(|byte| format!("{byte:02x}"))
             .collect::<String>();
-        let path = parent.join(format!(".hermes-recovery-decrypt-{name}"));
+        let path = parent.join(format!(".makosh-recovery-decrypt-{name}"));
         match std::fs::create_dir(&path) {
             Ok(()) => {
                 std::fs::set_permissions(&path, std::fs::Permissions::from_mode(0o700))

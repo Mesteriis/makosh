@@ -32,7 +32,7 @@ pub use translation::{
     translation_inference_execution_plan_v1, translation_prompt_policy_sha256_v1,
 };
 
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     AiContractValidationErrorV1, decode_reply_source_content_v1,
     validate_provider_reply_generation_result_v1, validate_reply_inference_request_v1,
     validate_reply_inference_result_v1,
@@ -45,11 +45,11 @@ use hermes_ai_contracts::{
 };
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-ai-inference-core";
+pub const PACKAGE: &str = "makosh-ai-inference-core";
 pub const AI_INFERENCE_PROVIDER_POLICY_REVISION_V1: u32 = 1;
 pub const AI_REPLY_SOURCE_BODY_EXCERPT_BYTES_V1: usize = 2_000;
 const AI_REPLY_PROMPT_POLICY_V1: &[u8] =
-    b"hermes-ai-reply-context-v1;sender-subject-body;utf8-prefix-bytes=2000";
+    b"makosh-ai-reply-context-v1;sender-subject-body;utf8-prefix-bytes=2000";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum AiInferenceRunStateV1 {
@@ -342,7 +342,7 @@ fn contract_request_error(_: AiContractValidationErrorV1) -> AiInferenceCoreErro
 
 #[cfg(test)]
 mod tests {
-    use hermes_ai_contracts::{
+    use makosh_ai_contracts::{
         AI_CONTRACT_MAJOR_V1, AI_CONTRACT_REVISION_V1, AI_CONTRACTS_SCHEMA_SHA256,
         AI_LOCAL_EGRESS_POLICY_REVISION_V1, encode_reply_source_content_v1,
         seal_reply_inference_request_v1,

@@ -100,7 +100,7 @@ fn email_analysis_accepts_model_output_without_runtime_metadata() {
         "extracted_deadline": null,
         "language": "en"
     }))
-    .expect("runtime metadata is owned by Hermes, not requested from the model");
+    .expect("runtime metadata is owned by Макошь, not requested from the model");
 
     assert!(analysis.model.is_empty());
     assert!(analysis.prompt_version.is_empty());

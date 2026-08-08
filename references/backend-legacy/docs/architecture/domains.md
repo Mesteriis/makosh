@@ -8,8 +8,8 @@ implementation refactoring plan.
 
 ## Purpose
 
-This document defines the current target bounded contexts for Hermes. A domain
-exists when Hermes needs durable source-of-truth ownership for an entity,
+This document defines the current target bounded contexts for Макошь. A domain
+exists when Макошь needs durable source-of-truth ownership for an entity,
 lifecycle or invariant.
 
 ## Domain Ownership Rule
@@ -26,17 +26,17 @@ Agents propose and act through capabilities.
 
 | Domain | Owns | Does not own | Reason for existence |
 |---|---|---|---|
-| Personas | Persona identity, Owner Persona, identity traces, Persona memory anchors, Persona dossiers. | Provider messages, Organization lifecycle, Project lifecycle, generic graph traversal. | Hermes needs durable subjects for people, AI agents, system actors and organization proxies. |
+| Personas | Persona identity, Owner Persona, identity traces, Persona memory anchors, Persona dossiers. | Provider messages, Organization lifecycle, Project lifecycle, generic graph traversal. | Макошь needs durable subjects for people, AI agents, system actors and organization proxies. |
 | Organizations | Organization identity, domains, aliases, relationships, portals, procedures, playbooks, organization memory. | Persona identity, Project ownership, provider accounts. | Collective actors need memory and procedures independent from individual Personas. |
 | Communications | Conversations, messages, participants as observed, channel accounts, source communication metadata, delivery/draft state, communication attachments. | Persona truth, Task lifecycle, Decision truth, Obligation truth, global Memory. | Communications are the primary evidence intake spine. |
 | Documents | Document artifacts, versions, extracted content, document metadata, document evidence, promoted attachment artifacts. | General Knowledge truth, Task status, provider message lifecycle. | Documents are durable evidence artifacts and local knowledge sources. |
 | Projects | Bounded work contexts, project state, project links, project decisions as references, project memory views. | Organization identity, Task lifecycle, Decision truth, document versions. | Projects gather context around long-running work. |
 | Tasks | Actionable work items, status lifecycle, local overlays, task evidence, provider overlays. | Obligations as commitments, every follow-up, provider message delivery. | Some memory becomes executable work with lifecycle. |
 | Calendar/Events | Scheduled events, meetings, attendees, calendar source identity, event evidence. | Global Timeline Engine, Decision/Obligation truth. | Time-bound facts and meetings provide context and source evidence. |
-| Relationships | Durable semantic links, relation type, trust score, strength score, confidence, evidence, review state. | Graph indexes, Trust Engine computation, Timeline rendering. | Hermes is relationship-first; links need a source-of-truth owner. |
-| Decisions | Durable choices, rationale, alternatives, evidence and impacted entities. | Generic notes, Project state, AI summaries. | Hermes must remember why a direction was chosen. |
+| Relationships | Durable semantic links, relation type, trust score, strength score, confidence, evidence, review state. | Graph indexes, Trust Engine computation, Timeline rendering. | Макошь is relationship-first; links need a source-of-truth owner. |
+| Decisions | Durable choices, rationale, alternatives, evidence and impacted entities. | Generic notes, Project state, AI summaries. | Макошь must remember why a direction was chosen. |
 | Obligations | Commitments, duties, beneficiaries, status, evidence, review state and links to fulfillment. | Task lifecycle, every reminder, provider delivery state. | A commitment is not the same as a task that may fulfill it. |
-| Review | Review inbox items, approval, dismissal, promotion state and evidence links for candidates. | Domain truth, Radar philosophy, provider state. | Hermes needs one concrete owner-facing inbox for promotion and triage. |
+| Review | Review inbox items, approval, dismissal, promotion state and evidence links for candidates. | Domain truth, Radar philosophy, provider state. | Макошь needs one concrete owner-facing inbox for promotion and triage. |
 | Knowledge Graph | Graph nodes, graph edges, graph evidence as projection/traversal substrate. | Relationship semantics when first-class Relationship records exist, raw provider sync, binary storage. | Relationship-aware memory and traversal need a queryable graph substrate. |
 | Agents | Agent identity, run records, capability policy integration, proposed actions, approvals, denials, audit trail. | Domain truth, private data truth, credentials. | Agents need an auditable actor and tool boundary. |
 

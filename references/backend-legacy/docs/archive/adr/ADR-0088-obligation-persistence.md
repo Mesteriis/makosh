@@ -13,7 +13,7 @@ Clarifies:
 
 ## Context
 
-Hermes is a Personal Memory System. Communications, meetings, calls and
+Макошь is a Personal Memory System. Communications, meetings, calls and
 documents often contain commitments, duties and promises. The documentation
 distinguishes three concepts:
 
@@ -99,7 +99,7 @@ policy or candidate review flow.
 
 Positive:
 
-- Hermes can remember commitments without forcing them into task lifecycle.
+- Макошь can remember commitments without forcing them into task lifecycle.
 - Tasks can cite Obligations as reasons instead of becoming the source of truth
   for commitments.
 - Consistency / Contradiction Engine can point at obligation status conflicts.

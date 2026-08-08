@@ -2,9 +2,9 @@ use chrono::{DateTime, Utc};
 use serde_json::json;
 use sqlx::{Postgres, Transaction};
 
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::review_links::link_domain_entity_in_transaction;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::review_links::link_domain_entity_in_transaction;
+use makosh_observations_postgres::store::ObservationStore;
 
 use super::errors::AutomationError;
 use super::models::{

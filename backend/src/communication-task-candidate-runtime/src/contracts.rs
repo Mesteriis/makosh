@@ -1,4 +1,4 @@
-use hermes_communication_task_candidate_api::{
+use makosh_communication_task_candidate_api::{
     COMMUNICATION_TASK_CANDIDATE_COMMAND_CONTRACT_NAME_V1,
     COMMUNICATION_TASK_CANDIDATE_CONTRACT_MAJOR_V1,
     COMMUNICATION_TASK_CANDIDATE_CONTRACT_REVISION_V1, COMMUNICATION_TASK_CANDIDATE_OWNER_V1,
@@ -6,7 +6,7 @@ use hermes_communication_task_candidate_api::{
     COMMUNICATION_TASK_CANDIDATE_REALTIME_CONTRACT_NAME_V1,
     COMMUNICATION_TASK_CANDIDATE_SCHEMA_SHA256,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 
 pub(crate) fn communication_task_candidate_command_contract_v1() -> ContractReferenceV1 {
     contract(COMMUNICATION_TASK_CANDIDATE_COMMAND_CONTRACT_NAME_V1)

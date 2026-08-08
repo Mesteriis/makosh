@@ -8,7 +8,7 @@ use crate::app::signal_hub_support::{
 };
 
 const DEFAULT_GMAIL_OAUTH_APP_RETURN_URL: &str =
-    "http://127.0.0.1:5174/?hermes_route=settings&hermes_oauth=gmail_connected";
+    "http://127.0.0.1:5174/?makosh_route=settings&makosh_oauth=gmail_connected";
 
 pub(crate) async fn get_gmail_oauth_callback(
     State(state): State<AppState>,
@@ -148,7 +148,7 @@ fn gmail_oauth_callback_success_page(
     let return_url_json =
         serde_json::to_string(app_return_url).expect("serialize OAuth return URL");
     let return_link = format!(
-        r#"<p><a href="{}">Return to Hermes Hub settings</a></p>"#,
+        r#"<p><a href="{}">Return to Макошь settings</a></p>"#,
         html_escape(app_return_url)
     );
     (
@@ -158,7 +158,7 @@ fn gmail_oauth_callback_success_page(
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Hermes Hub OAuth</title>
+  <title>Макошь OAuth</title>
   <style>
     body {{ margin: 0; font-family: system-ui, sans-serif; color: #182033; background: #f5f6f8; }}
     main {{ max-width: 720px; margin: 48px auto; background: #fff; border: 1px solid #d9dee7; border-radius: 8px; padding: 24px; }}
@@ -170,7 +170,7 @@ fn gmail_oauth_callback_success_page(
     window.setTimeout(function () {{
       try {{
         if (window.opener && !window.opener.closed) {{
-          window.opener.postMessage({{ type: 'hermes:gmail-oauth-connected' }}, '*');
+          window.opener.postMessage({{ type: 'makosh:gmail-oauth-connected' }}, '*');
         }}
       }} catch (_error) {{}}
       try {{
@@ -186,10 +186,10 @@ fn gmail_oauth_callback_success_page(
 <body>
   <main>
     <h1>Google mail connected</h1>
-    <p>Hermes Hub saved the Google mail account and encrypted OAuth credential locally.</p>
+    <p>Макошь saved the Google mail account and encrypted OAuth credential locally.</p>
     <p>Account</p>
     <code>{account_id}</code>
-    <p>This tab will close automatically. If it stays open, return to Hermes Hub settings.</p>
+    <p>This tab will close automatically. If it stays open, return to Макошь settings.</p>
     {return_link}
   </main>
 </body>
@@ -210,7 +210,7 @@ fn gmail_oauth_callback_error_page(
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Hermes Hub OAuth</title>
+  <title>Макошь OAuth</title>
   <style>
     body {{ margin: 0; font-family: system-ui, sans-serif; color: #182033; background: #f5f6f8; }}
     main {{ max-width: 720px; margin: 48px auto; background: #fff; border: 1px solid #d9dee7; border-radius: 8px; padding: 24px; }}
@@ -221,7 +221,7 @@ fn gmail_oauth_callback_error_page(
   <main>
     <h1>Google mail connection failed</h1>
     <p>{message}</p>
-    <p>Return to Hermes Hub and start Google mail connection again.</p>
+    <p>Return to Макошь and start Google mail connection again.</p>
   </main>
 </body>
 </html>"#
@@ -232,10 +232,10 @@ fn gmail_oauth_callback_error_page(
 fn gmail_oauth_callback_error_message(error: &EmailAccountSetupError) -> &'static str {
     match error {
         EmailAccountSetupError::HostVault(HostVaultError::Locked) => {
-            "Hermes Secure Vault is locked. Unlock the vault in Hermes Hub, then start Google mail connection again."
+            "Макошь Secure Vault is locked. Unlock the vault in Макошь, then start Google mail connection again."
         }
         EmailAccountSetupError::HostVault(HostVaultError::Uninitialized) => {
-            "Hermes Secure Vault is not initialized. Create the vault in Hermes Hub, then start Google mail connection again."
+            "Макошь Secure Vault is not initialized. Create the vault in Макошь, then start Google mail connection again."
         }
         EmailAccountSetupError::InvalidRequest { field, .. } if *field == "authorization_code" => {
             "Missing authorization code. Start the mail connection again."

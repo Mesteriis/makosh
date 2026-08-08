@@ -13,7 +13,7 @@ import { codes } from './support.mjs';
 
 test('requires the exact canonical durable envelope policy', () => {
   const mutations = [
-    (events) => { events.protocolPackage = 'hermes-events-contracts'; },
+    (events) => { events.protocolPackage = 'makosh-events-contracts'; },
     (events) => { events.role = 'core'; },
     (events) => { events.owner = 'kernel'; },
     (events) => { events.surface = 'implementation'; },
@@ -108,17 +108,17 @@ test('requires an explicit host-only provider execution registry', () => {
 test('requires the exact Storage Control topology and fail-closed lifecycle policy', () => {
   const canonical = policy().storage;
   assert.deepEqual(canonical.fixedSchemas, [
-    'hermes_data',
-    'hermes_platform',
-    'hermes_extensions',
+    'makosh_data',
+    'makosh_platform',
+    'makosh_extensions',
   ]);
   assert.ok(canonical.bindingFields.includes('role_epoch'));
   assert.ok(canonical.bindingFields.includes('storage_bundle_digest'));
   assert.deepEqual(canonical.testSupportPostgresClientAllowlist, [
-    'hermes-communication-delayed-delivery-testkit:dev:sqlx',
-    'hermes-events-jetstream-testkit:dev:sqlx',
-    'hermes-kernel-recovery-testkit:dev:sqlx',
-    'hermes-scheduler-testkit:dev:sqlx',
+    'makosh-communication-delayed-delivery-testkit:dev:sqlx',
+    'makosh-events-jetstream-testkit:dev:sqlx',
+    'makosh-kernel-recovery-testkit:dev:sqlx',
+    'makosh-scheduler-testkit:dev:sqlx',
   ]);
 
   const mutations = [
@@ -208,7 +208,7 @@ test('rejects singular aliases of blocked owners in production paths', () => {
 for (const owner of ['graph', 'timeline', 'search', 'context']) {
   test(`rejects a production path for blocked projection ${owner}`, () => {
     const violations = validateSourceEntries(policy(), [
-      { path: `crates/hermes-${owner}-runtime/src/lib.rs`, content: '' },
+      { path: `crates/makosh-${owner}-runtime/src/lib.rs`, content: '' },
     ]);
 
     assert.ok(codes(violations).has('blocked_projection'));
@@ -274,7 +274,7 @@ test('does not reject a cohesive production source file by line count', () => {
 test('does not infer ownership from ordinary filenames below an allowed owner', () => {
   const violations = validateSourceEntries(policy(), [
     { path: 'modules/tasks/src/request_context.rs', content: '' },
-    { path: 'crates/hermes-documents-runtime/src/search_adapter.rs', content: '' },
+    { path: 'crates/makosh-documents-runtime/src/search_adapter.rs', content: '' },
   ]);
 
   assert.deepEqual(violations, []);
@@ -352,7 +352,7 @@ test('does not treat cfg(test) text inside a Rust comment as an inline test', ()
 
 
 test('filesystem scan reads Rust content and exposes nested test paths to policy', async (context) => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-architecture-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-architecture-'));
   context.after(() => rm(root, { recursive: true, force: true }));
   const packageSource = join(root, 'src', 'domains', 'tasks', 'implementation', 'src');
   await mkdir(join(packageSource, 'tests'), { recursive: true });

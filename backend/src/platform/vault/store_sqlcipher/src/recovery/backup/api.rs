@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use hermes_vault_key_provider::WrappingKey;
+use makosh_vault_key_provider::WrappingKey;
 
 use crate::VaultRecoveryKeyV1;
 use crate::database::connection::{configure, open_keyed_connection};

@@ -1,4 +1,4 @@
-use hermes_events_protocol::delivery::{OutboxRecordError, OutboxRecordV1};
+use makosh_events_protocol::delivery::{OutboxRecordError, OutboxRecordV1};
 use sqlx::{Postgres, Row, Transaction};
 
 use crate::{
@@ -64,7 +64,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
         }
         let existing: Option<ExistingIngressRowV1> = sqlx::query_as(
             "SELECT envelope_sha256, correlation_id, logical_owner_id, intent_id
-             FROM hermes_data.communication_delivery_intent_ingress_inbox
+             FROM makosh_data.communication_delivery_intent_ingress_inbox
              WHERE command_message_id = $1
                 OR (logical_owner_id = $2 AND intent_id = $3)
              ORDER BY CASE WHEN command_message_id = $1 THEN 0 ELSE 1 END
@@ -150,7 +150,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
         }
         let rows = sqlx::query(
             "SELECT exact_envelope_bytes
-             FROM hermes_data.communication_delivery_intent_ingress_result_outbox
+             FROM makosh_data.communication_delivery_intent_ingress_result_outbox
              WHERE published_at_unix_seconds IS NULL
              ORDER BY created_at_unix_seconds, message_id
              LIMIT $1",
@@ -179,7 +179,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
             return Err(DeliveryIntentPersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "UPDATE hermes_data.communication_delivery_intent_ingress_result_outbox
+            "UPDATE makosh_data.communication_delivery_intent_ingress_result_outbox
              SET published_at_unix_seconds = $2
              WHERE message_id = $1 AND published_at_unix_seconds IS NULL",
         )
@@ -200,7 +200,7 @@ async fn insert_cleanup(
     let declared_bytes = i64::try_from(event.body_receipt.declared_bytes)
         .map_err(|_| DeliveryIntentPersistenceErrorV1::InvalidInput)?;
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.communication_delivery_intent_ingress_cleanup (
+        "INSERT INTO makosh_data.communication_delivery_intent_ingress_cleanup (
            logical_owner_id, intent_id, reference_id, declared_bytes,
            sha256, custody_source_proof, reason, attempt_count,
            next_attempt_at_unix_seconds, created_at_unix_seconds,
@@ -234,7 +234,7 @@ async fn insert_or_fence_inbox(
         return Err(DeliveryIntentPersistenceErrorV1::InvalidInput);
     }
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.communication_delivery_intent_ingress_inbox (
+        "INSERT INTO makosh_data.communication_delivery_intent_ingress_inbox (
             command_message_id, envelope_sha256, correlation_id,
             logical_owner_id, intent_id, consumed_at_unix_seconds
          ) VALUES ($1, $2, $3, $4, $5, $6)
@@ -254,7 +254,7 @@ async fn insert_or_fence_inbox(
     }
     let existing: Option<ExistingIngressRowV1> = sqlx::query_as(
         "SELECT envelope_sha256, correlation_id, logical_owner_id, intent_id
-         FROM hermes_data.communication_delivery_intent_ingress_inbox
+         FROM makosh_data.communication_delivery_intent_ingress_inbox
          WHERE command_message_id = $1
             OR (logical_owner_id = $2 AND intent_id = $3)
          ORDER BY CASE WHEN command_message_id = $1 THEN 0 ELSE 1 END
@@ -291,7 +291,7 @@ async fn insert_exact_result(
         return Err(DeliveryIntentPersistenceErrorV1::InvalidInput);
     }
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.communication_delivery_intent_ingress_result_outbox (
+        "INSERT INTO makosh_data.communication_delivery_intent_ingress_result_outbox (
             message_id, envelope_sha256, exact_envelope_bytes, result_kind,
             logical_owner_id, intent_id, command_message_id,
             created_at_unix_seconds, published_at_unix_seconds
@@ -324,7 +324,7 @@ async fn validate_existing_result(
     let existing: Option<ExistingIngressResultRowV1> = sqlx::query_as(
         "SELECT envelope_sha256, exact_envelope_bytes, result_kind,
                 logical_owner_id, intent_id
-         FROM hermes_data.communication_delivery_intent_ingress_result_outbox
+         FROM makosh_data.communication_delivery_intent_ingress_result_outbox
          WHERE command_message_id = $1",
     )
     .bind(event.command_message_id.as_slice())

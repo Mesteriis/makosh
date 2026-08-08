@@ -4,11 +4,11 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use bytes::Bytes;
-use hermes_gateway_session_contract::BrowserAuthenticationAuthority;
 use http_body_util::{BodyExt, Limited};
 use hyper::body::Body;
 use hyper::header::{CONTENT_LENGTH, CONTENT_TYPE, COOKIE};
 use hyper::{Method, Request, Response, StatusCode};
+use makosh_gateway_session_contract::BrowserAuthenticationAuthority;
 use tokio::task;
 use tokio::time::{Instant, timeout_at};
 
@@ -265,7 +265,7 @@ fn error_response(status: StatusCode, code: &'static str) -> GatewayHttpResponse
         .status(status)
         .header("cache-control", "no-store")
         .header("x-content-type-options", "nosniff")
-        .header("x-hermes-error-code", code)
+        .header("x-makosh-error-code", code)
         .body(full_gateway_body(Bytes::new()))
         .expect("client Blob error response is valid")
 }

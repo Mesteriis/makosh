@@ -1,5 +1,5 @@
 import { computed, ref, shallowRef, watch } from 'vue'
-import type { SenderInsightV1 } from '../../../gen/hermes/communications/sender_insights/v1/sender_insights_pb'
+import type { SenderInsightV1 } from '../../../gen/makosh/communications/sender_insights/v1/sender_insights_pb'
 import {
 	buildCanonicalSenderInsightRows,
 	type CanonicalSenderInsightsPanelModel,

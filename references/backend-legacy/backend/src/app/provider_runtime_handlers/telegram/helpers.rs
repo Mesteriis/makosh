@@ -6,9 +6,9 @@ use crate::app::error::types::ApiError;
 use crate::app::state::AppState;
 use crate::integrations::telegram::client::errors::TelegramError;
 use crate::platform::config::app_config::AppConfig;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 
-pub(super) const AUDIT_ACTOR_ID: &str = "hermes-frontend";
+pub(super) const AUDIT_ACTOR_ID: &str = "makosh-frontend";
 
 pub(super) fn telegram_api_hash_from_config(config: &AppConfig) -> Option<String> {
     config

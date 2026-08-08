@@ -1,6 +1,6 @@
-# Rust-ландшафт вокруг Hermes
+# Rust-ландшафт вокруг Макошь
 
-Собрал **50 публичных проектов**, которые пересекаются с Hermes на уровне продукта, доменов, движков или интеграций. Срез актуален на **16 июля 2026 года**.
+Собрал **50 публичных проектов**, которые пересекаются с Макошь на уровне продукта, доменов, движков или интеграций. Срез актуален на **16 июля 2026 года**.
 
 Это не буквальный дамп всех репозиториев GitHub. По запросам вроде `Rust contact manager` выдача быстро превращается в учебные проекты размером от нуля до нескольких десятков килобайт. То есть адресная книга с надеждами, а не `RelaSystem`.
 
@@ -14,11 +14,11 @@
 
 ## Главный вывод
 
-**Полного Rust-аналога Hermes я не нашёл.**
+**Полного Rust-аналога Макошь я не нашёл.**
 
 Ближайшее распределение выглядит так:
 
-| Часть Hermes                | Самые близкие проекты                                   |
+| Часть Макошь                | Самые близкие проекты                                   |
 | --------------------------- | ------------------------------------------------------- |
 | Продукт целиком             | `Macro`                                                 |
 | Персональный AI runtime     | `IronClaw`, `Moltis`                                    |
@@ -35,13 +35,13 @@
 
 ---
 
-# 1. Самые близкие к Hermes продукты
+# 1. Самые близкие к Макошь продукты
 
 ## 1. `macro-inc/macro`
 
 **Самый близкий продуктовый конкурент.**
 
-Macro объединяет email, сообщения, документы, файлы, задачи, звонки, агентов, GitHub и CRM в одном workspace. Объекты связаны между собой, участвуют в едином поиске и используют общую память. Это почти буквальное отражение верхнего слоя Hermes, только Macro ориентирован прежде всего на команды, а Hermes у тебя personal-first.
+Macro объединяет email, сообщения, документы, файлы, задачи, звонки, агентов, GitHub и CRM в одном workspace. Объекты связаны между собой, участвуют в едином поиске и используют общую память. Это почти буквальное отражение верхнего слоя Макошь, только Macro ориентирован прежде всего на команды, а Макошь у тебя personal-first.
 
 Особенно полезно изучить:
 
@@ -54,7 +54,7 @@ Macro объединяет email, сообщения, документы, фай
 
 Проект очень активен: 15 июля 2026 года в него одновременно входили изменения email, поиска, звонков и CRM.
 
-**Вердикт:** главный конкурентный и UX-референс. Не стоит использовать как основу Hermes: командная модель и AGPL потянут продукт в другую сторону.
+**Вердикт:** главный конкурентный и UX-референс. Не стоит использовать как основу Макошь: командная модель и AGPL потянут продукт в другую сторону.
 
 ---
 
@@ -64,7 +64,7 @@ Macro объединяет email, сообщения, документы, фай
 
 IronClaw предлагает локальную память, несколько каналов, web gateway, фоновые routines, cron и event triggers, heartbeat, MCP, динамические инструменты, параллельные задания и sandbox. Особое внимание уделяется WASM-изоляции, защите секретов, prompt injection и сетевым allowlist.
 
-Совпадает с Hermes по направлениям:
+Совпадает с Макошь по направлениям:
 
 ```text
 AI Agents
@@ -98,13 +98,13 @@ Moltis поддерживает несколько LLM-провайдеров, T
 - разделение gateway, agent runner, tools и providers;
 - локальная поставка одним бинарником.
 
-**Вердикт:** хороший донор архитектурных решений для `ai/runtime`, `integrations`, `skills`, `hooks` и локальной поставки Hermes.
+**Вердикт:** хороший донор архитектурных решений для `ai/runtime`, `integrations`, `skills`, `hooks` и локальной поставки Макошь.
 
 ---
 
 ## 4. `tinyhumansai/tinycortex`
 
-**Самый близкий кандидат к Hermes Memory Engine.**
+**Самый близкий кандидат к Макошь Memory Engine.**
 
 TinyCortex фильтрует шум при ingestion, хранит источник истины локально, строит производные SQLite, vector, graph и summary-tree индексы, учитывает provenance, recency и влияние взаимодействий пользователя. Поиск объединяет ключевые слова, векторы и граф.
 
@@ -122,7 +122,7 @@ Contextual retrieval
 Agent context
 ```
 
-Это заметно ближе к Hermes, чем типичная схема «запихнуть весь текст в vector DB и надеяться, что cosine similarity разберётся с жизнью человека».
+Это заметно ближе к Макошь, чем типичная схема «запихнуть весь текст в vector DB и надеяться, что cosine similarity разберётся с жизнью человека».
 
 **Вердикт:** первый проект для глубокого архитектурного teardown `engines/memory`.
 
@@ -156,7 +156,7 @@ Contradiction Detection
 
 QCue ведёт append-only поток текста и голоса, поддерживает raw sources как отдельный источник истины, а LLM использует для поддержания производной Markdown-wiki. Есть agentic recall, ночная консолидация и подтверждение изменений пользователем.
 
-Особенно ценно совпадение с правилами Hermes AI:
+Особенно ценно совпадение с правилами Макошь AI:
 
 ```text
 Source
@@ -210,7 +210,7 @@ Exomind объединял письма, заметки, задачи и зак�
 
 Screenpipe локально фиксирует accessibility tree, OCR, аудио, распознанную речь, говорящих, переключения приложений, клавиатурный ввод и браузерный контекст. Поверх этого строятся поиск, timeline и scheduled agents: meeting summary, day recap, standup, blockers и time breakdown.
 
-Для Hermes это потенциальный источник событий:
+Для Макошь это потенциальный источник событий:
 
 ```text
 screen.activity.observed
@@ -236,7 +236,7 @@ AppFlowy является open-source альтернативой Notion: док�
 
 # 2. Memory, Knowledge, Documents и Timeline
 
-| Проект                           | Что полезно для Hermes                                                                                                                                                                                 |
+| Проект                           | Что полезно для Макошь                                                                                                                                                                                 |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `iwe-org/iwe`                    | Markdown как источник истины, knowledge graph, backlinks, LSP, CLI и MCP. Особенно подходит для `Notes`, `Knowledge` и agent context без отдельного облачного хранилища.                               |
 | `kuku-mom/kuku`                  | Локальный Markdown workspace, AI diffs с подтверждением, шифрованная синхронизация, decision documents и история изменений. Rust используется в AI/indexing-ядре.                                      |
@@ -271,7 +271,7 @@ AppFlowy является open-source альтернативой Notion: док�
 
 `whatsapp-rust` активно обновляется, включая изменения от 15 июля 2026 года, но README прямо предупреждает о неофициальности клиента и возможном конфликте с условиями Meta.
 
-Правильная роль всех этих проектов в Hermes:
+Правильная роль всех этих проектов в Макошь:
 
 ```text
 Provider SDK
@@ -314,7 +314,7 @@ Obligations
 Focus Planning
 ```
 
-я не нашёл. Здесь Hermes заметно выходит за границы обычных task managers.
+я не нашёл. Здесь Макошь заметно выходит за границы обычных task managers.
 
 ---
 
@@ -329,7 +329,7 @@ Focus Planning
 | `HelixDB/helix-db`      | Молодая graph-vector database на Rust для knowledge graphs и AI memory; объединяет graph, vector, KV, documents и relational data. Перспективный watchlist.                                                |
 | `surrealdb/surrealdb`   | Multi-model Rust database: document, graph, relational, vector, time-series и realtime events. Очень широкая платформа, но может стать вторым продуктом внутри первого.                                    |
 | `terminusdb/terminusdb` | Version-controlled document and knowledge graph, commits для каждого изменения, diff, clone, push/pull и time-travel. Особенно интересен для Memory First и истории сущностей. Смешанный Rust/Prolog стек. |
-| `oxigraph/oxigraph`     | RDF/SPARQL graph database и toolkit на Rust. Лучший вариант, если Hermes потребуется JSON-LD/RDF, онтологии и внешняя semantic-web совместимость.                                                          |
+| `oxigraph/oxigraph`     | RDF/SPARQL graph database и toolkit на Rust. Лучший вариант, если Макошь потребуется JSON-LD/RDF, онтологии и внешняя semantic-web совместимость.                                                          |
 
 ### Моя архитектурная оценка
 
@@ -350,7 +350,7 @@ Focus Planning
 | `meilisearch/meilisearch` | Search-as-you-type, typo tolerance, facets, hybrid search, multilingual support, personalization, conversational search и document relations. Хорош для пользовательского global search.        |
 | `devflowinc/trieve`       | Готовая платформа search, recommendations и RAG: dense+sparse hybrid, reranking, recency bias, grouping, highlighting и self-hosting. Полезна как reference implementation поискового продукта. |
 
-Для personal-first Hermes разумная стартовая конфигурация выглядит так:
+Для personal-first Макошь разумная стартовая конфигурация выглядит так:
 
 ```text
 Tantivy
@@ -368,13 +368,13 @@ domain-owned PostgreSQL/SQLite data
 
 | Проект                   | Совпадение                                                                                                                                                                                                      |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `restatedev/restate`     | Durable execution, workflows-as-code, event processing, stateful actors, exactly-once communication, retries, durable timers и observability. Самый близкий инфраструктурный аналог для Hermes workflows/sagas. |
-| `windmill-labs/windmill` | Rust backend + Svelte 5; APIs, jobs, workflows, schedules, webhooks, Kafka, WebSockets, email triggers и workflow UI. Полезен для пользовательских автоматизаций, но слишком platform-oriented для ядра Hermes. |
+| `restatedev/restate`     | Durable execution, workflows-as-code, event processing, stateful actors, exactly-once communication, retries, durable timers и observability. Самый близкий инфраструктурный аналог для Макошь workflows/sagas. |
+| `windmill-labs/windmill` | Rust backend + Svelte 5; APIs, jobs, workflows, schedules, webhooks, Kafka, WebSockets, email triggers и workflow UI. Полезен для пользовательских автоматизаций, но слишком platform-oriented для ядра Макошь. |
 | `automerge/automerge`    | Rust CRDT и sync protocol для local-first приложений. Подходит для синхронизации документов и заметок между устройствами.                                                                                       |
 | `loro-dev/loro`          | CRDT для текста, rich text, деревьев, списков и maps; P2P sync, version control и быстрый time travel. Вероятно, лучше Automerge для сложных редактируемых документов.                                          |
 | `n0-computer/iroh`       | Public-key addressed P2P networking через QUIC, hole punching, relay fallback, blobs, gossip и eventually consistent docs. Полезен для encrypted device sync и вложений.                                        |
 
-Для Hermes я бы не ставил Restate в центр сразу. Сначала:
+Для Макошь я бы не ставил Restate в центр сразу. Сначала:
 
 ```text
 Event Store
@@ -390,10 +390,10 @@ DLQ
 
 # 7. AI Agents, inference и доказательность
 
-| Проект                    | Роль в Hermes                                                                                                                                                                          |
+| Проект                    | Роль в Макошь                                                                                                                                                                          |
 | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `0xPlaygrounds/rig`       | Rust abstraction для LLM providers, agents, tools, streaming, embeddings, vector stores и memory policies. Подходит как лёгкий provider/agent layer.                                   |
-| `bosun-ai/swiftide`       | Agent harness, typed task graphs, pause/resume, human approval, MCP, lifecycle hooks, RAG pipelines и tracing. Очень близко к контролируемым AI workflows Hermes.                      |
+| `bosun-ai/swiftide`       | Agent harness, typed task graphs, pause/resume, human approval, MCP, lifecycle hooks, RAG pipelines и tracing. Очень близко к контролируемым AI workflows Макошь.                      |
 | `tensorzero/tensorzero`   | LLM gateway, observability, feedback, datasets, replay, evaluation, optimization, routing, retries и A/B testing. Лучший вариант для проверки и аудита AI-результатов.                 |
 | `Anush008/fastembed-rs`   | Локальные text, sparse и image embeddings, multilingual models и rerankers через Rust/ONNX. Хорошо подходит для local-first Search и Memory.                                           |
 | `EricLBuehler/mistral.rs` | Локальный Rust inference server: OpenAI/Anthropic-compatible API, multimodal models, embeddings, quantization и agentic runtime. Альтернатива Ollama для более тесной Rust-интеграции. |
@@ -403,7 +403,7 @@ DLQ
 ```text
 Rig или Swiftide
     ↓
-Hermes AI contracts
+Макошь AI contracts
     ↓
 TensorZero observability/evals
     ↓
@@ -416,7 +416,7 @@ FastEmbed local embeddings
 
 ---
 
-# Где Hermes действительно уникален
+# Где Макошь действительно уникален
 
 ## 1. Contact Brain и Relationship Intelligence
 
@@ -436,7 +436,7 @@ Contact Enrichment
 
 Macro имеет CRM и contact views, Bichon извлекает адреса из почты, Rustical поддерживает CardDAV, но это всё ещё не Relationship Intelligence.
 
-Это один из главных незанятых участков Hermes.
+Это один из главных незанятых участков Макошь.
 
 ## 2. Organization Intelligence
 
@@ -472,7 +472,7 @@ Promotion
 Task / Contact / Organization / Project / Document / Note
 ```
 
-Это сильная продуктовая дифференциация Hermes.
+Это сильная продуктовая дифференциация Макошь.
 
 ## 4. Междоменный Context Pack
 
@@ -496,7 +496,7 @@ Next actions
 
 ## 5. Obligations, Waiting и Readiness
 
-Task managers хранят статус. Hermes пытается понять:
+Task managers хранят статус. Макошь пытается понять:
 
 ```text
 Кто кому что обещал?
@@ -565,18 +565,18 @@ Windmill
 
 # Лицензионные и архитектурные ловушки
 
-- **Macro, AppFlowy, Windmill и Bichon** используют AGPL. Изучать можно, переносить код в закрытый или иначе лицензированный Hermes нужно крайне осторожно.
+- **Macro, AppFlowy, Windmill и Bichon** используют AGPL. Изучать можно, переносить код в закрытый или иначе лицензированный Макошь нужно крайне осторожно.
 - **screenpipe** теперь source-available: личное некоммерческое использование разрешено, коммерческое требует лицензии.
 - **SurrealDB** использует BSL для части распространения. Его лицензию надо проверять под конкретную модель поставки.
 - **whatsapp-rust** является неофициальным клиентом и несёт риск блокировки аккаунта или нарушения условий Meta.
 - **Exomind v2** годится как исторический референс, а не как живая основа.
-- **Rig** прямо предупреждает о будущих breaking changes. Интерфейс вокруг него надо закрывать собственным Hermes port.
+- **Rig** прямо предупреждает о будущих breaking changes. Интерфейс вокруг него надо закрывать собственным Макошь port.
 
 ---
 
-# Практический вывод для архитектуры Hermes
+# Практический вывод для архитектуры Макошь
 
-Hermes не стоит строить как fork одного из этих проектов. Ближайший разумный синтез выглядит так:
+Макошь не стоит строить как fork одного из этих проектов. Ближайший разумный синтез выглядит так:
 
 ```text
 Product composition
@@ -618,7 +618,7 @@ AI
     mistral.rs/Ollama
 
 Workflows
-    Hermes Event Store + Outbox
+    Макошь Event Store + Outbox
     optional Restate
 
 Local-first sync
@@ -626,4 +626,4 @@ Local-first sync
     optional Iroh transport
 ```
 
-При этом **доменные источники истины должны остаться собственностью Hermes**. Ни vector database, ни graph database, ни AI framework, ни workflow engine не должны внезапно стать местом, где живёт бизнес-модель. Движки считают, интеграции наблюдают, workflows координируют, AI предлагает, а домены решают и сохраняют историю. Иначе Personal Operating System быстро превратится в Personal Integration Accident.
+При этом **доменные источники истины должны остаться собственностью Макошь**. Ни vector database, ни graph database, ни AI framework, ни workflow engine не должны внезапно стать местом, где живёт бизнес-модель. Движки считают, интеграции наблюдают, workflows координируют, AI предлагает, а домены решают и сохраняют историю. Иначе Personal Operating System быстро превратится в Personal Integration Accident.

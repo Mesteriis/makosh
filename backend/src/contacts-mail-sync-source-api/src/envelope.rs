@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1,
@@ -339,7 +339,7 @@ fn outbox_error(_: OutboxRecordError) -> ContactsMailSyncSourceEnvelopeBuildErro
 mod tests {
     use super::*;
     use crate::wire::{ContactMailSyncSourceContentReceiptV1, ContactMailSyncSourceRejectCodeV1};
-    use hermes_events_protocol::{
+    use makosh_events_protocol::{
         v1::durable_envelope_v1::Semantics, validation::envelope::decode_envelope_v1,
     };
 
@@ -351,7 +351,7 @@ mod tests {
                 contact_revision: 7,
                 logical_owner_id: "owner-1".to_owned(),
             },
-            &context("hermes-contacts-runtime"),
+            &context("makosh-contacts-runtime"),
         )
         .expect("event");
         let envelope = decode_envelope_v1(record.exact_bytes()).expect("envelope");
@@ -372,7 +372,7 @@ mod tests {
                 logical_owner_id: "owner-1".to_owned(),
             },
             1_800_000_100,
-            &context("hermes-mail-contacts-sync-runtime"),
+            &context("makosh-mail-contacts-sync-runtime"),
         )
         .expect("prepare");
         let prepared = build_contact_mail_sync_source_prepared_outbox_record_v1(
@@ -389,7 +389,7 @@ mod tests {
                 }),
                 logical_owner_id: "owner-1".to_owned(),
             },
-            &context("hermes-contacts-runtime"),
+            &context("makosh-contacts-runtime"),
         )
         .expect("prepared");
         let envelope = decode_envelope_v1(prepared.exact_bytes()).expect("envelope");
@@ -404,7 +404,7 @@ mod tests {
                     as i32,
                 logical_owner_id: "owner-1".to_owned(),
             },
-            &context("hermes-contacts-runtime"),
+            &context("makosh-contacts-runtime"),
         );
         assert!(rejected.is_ok());
     }

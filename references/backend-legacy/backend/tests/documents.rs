@@ -1,10 +1,10 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_hub_backend::domains::documents::core::errors::DocumentImportError;
-use hermes_hub_backend::domains::documents::core::models::NewDocumentImport;
-use hermes_hub_backend::domains::documents::core::store::DocumentImportStore;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::domains::documents::core::errors::DocumentImportError;
+use makosh_hub_backend::domains::documents::core::models::NewDocumentImport;
+use makosh_hub_backend::domains::documents::core::store::DocumentImportStore;
+use makosh_hub_backend::platform::storage::database::Database;
 
 #[tokio::test]
 async fn document_import_stores_markdown_text_against_postgres() {
@@ -346,7 +346,7 @@ async fn live_document_store(test_name: &str) -> Option<DocumentImportStore> {
 
 fn disconnected_document_store() -> DocumentImportStore {
     let pool = sqlx::postgres::PgPoolOptions::new()
-        .connect_lazy("postgres://hermes:unused@127.0.0.1:1/hermes_hub")
+        .connect_lazy("postgres://makosh:unused@127.0.0.1:1/makosh_hub")
         .expect("create lazy test pool");
     DocumentImportStore::new(pool)
 }

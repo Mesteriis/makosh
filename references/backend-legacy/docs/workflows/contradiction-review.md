@@ -1,6 +1,6 @@
 # Contradiction Review
 
-This workflow explains how Hermes handles conflicts between new evidence and
+This workflow explains how Макошь handles conflicts between new evidence and
 accepted memory.
 
 User-facing alias: Polygraph review.

@@ -1,6 +1,6 @@
 #![forbid(unsafe_code)]
 
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 
 mod validation;
 
@@ -10,9 +10,9 @@ pub use validation::{
     validate_speech_to_text_result_v1,
 };
 
-pub const PACKAGE: &str = "hermes-speech-to-text-api";
+pub const PACKAGE: &str = "makosh-speech-to-text-api";
 pub const SPEECH_TO_TEXT_OWNER_V1: &str = "speech_to_text";
-pub const SPEECH_TO_TEXT_MODULE_ID_V1: &str = "hermes-speech-to-text-runtime";
+pub const SPEECH_TO_TEXT_MODULE_ID_V1: &str = "makosh-speech-to-text-runtime";
 pub const SPEECH_TO_TEXT_CAPABILITY_ID_V1: &str = "speech_to_text.transcribe.v1";
 pub const SPEECH_TO_TEXT_BLOB_CAPABILITY_ID_V1: &str = "speech_to_text.blob.v1";
 pub const SPEECH_TO_TEXT_CONTRACT_NAME_V1: &str = "speech_to_text.transcribe";
@@ -26,7 +26,7 @@ pub const SPEECH_TO_TEXT_MAX_SEGMENTS_V1: u32 = 100_000;
 pub const SPEECH_TO_TEXT_MAX_CUSTODY_PROOF_BYTES_V1: usize = 2_048;
 
 pub mod wire {
-    include!(concat!(env!("OUT_DIR"), "/hermes.speech_to_text.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.speech_to_text.v1.rs"));
 }
 
 include!(concat!(env!("OUT_DIR"), "/speech_to_text_schema.rs"));
@@ -62,7 +62,7 @@ mod tests {
 
     #[test]
     fn contract_is_audio_receipt_based_and_private_content_negative() {
-        let source = include_str!("../proto/hermes/speech_to_text/v1/speech_to_text.proto");
+        let source = include_str!("../proto/makosh/speech_to_text/v1/speech_to_text.proto");
         for required in [
             "SpeechAudioSourceReceiptV1",
             "SpeechTranscriptArtifactReceiptV1",

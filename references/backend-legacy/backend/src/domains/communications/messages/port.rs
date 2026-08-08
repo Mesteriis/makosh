@@ -8,15 +8,15 @@ use super::provider_channel_store::ProviderChannelMessageStore;
 use super::states::WorkflowState;
 use super::store::MessageProjectionStore;
 use crate::platform::communications::errors::ProviderCommunicationMessagePortError;
-use hermes_communications_api::projection_state::{
+use makosh_communications_api::projection_state::{
     MessageProjectionState, MessageProjectionStateQueryPort,
 };
-use hermes_communications_api::projections::{
+use makosh_communications_api::projections::{
     MessageProjectionInput, MessageProjectionRead, MessageProjectionWritePort,
 };
-use hermes_communications_api::provider_messages::ProviderChannelMessage;
-use hermes_communications_postgres::projection_state::CommunicationMessageProjectionStateQuery;
-use hermes_communications_postgres::projections::CommunicationMessageProjectionStore;
+use makosh_communications_api::provider_messages::ProviderChannelMessage;
+use makosh_communications_postgres::projection_state::CommunicationMessageProjectionStateQuery;
+use makosh_communications_postgres::projections::CommunicationMessageProjectionStore;
 
 /// Application-facing command/query boundary for message projections.
 ///

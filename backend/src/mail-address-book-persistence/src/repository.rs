@@ -26,10 +26,10 @@ impl MailAddressBookPersistenceV1 {
         sqlx::query(
             "SELECT inbox.command_id, result.message_id,
                     fetch_inbox.command_id, page_outbox.message_id
-             FROM hermes_data.mail_address_book_upsert_inbox inbox,
-                  hermes_data.mail_address_book_upsert_result_outbox result,
-                  hermes_data.mail_address_book_fetch_inbox fetch_inbox,
-                  hermes_data.mail_address_book_fetch_outbox page_outbox
+             FROM makosh_data.mail_address_book_upsert_inbox inbox,
+                  makosh_data.mail_address_book_upsert_result_outbox result,
+                  makosh_data.mail_address_book_fetch_inbox fetch_inbox,
+                  makosh_data.mail_address_book_fetch_outbox page_outbox
              WHERE FALSE",
         )
         .execute(&self.pool)

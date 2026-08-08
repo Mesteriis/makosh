@@ -1,5 +1,5 @@
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
@@ -8,12 +8,12 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
 
-use hermes_hub_backend::platform::settings::models::SettingValueKind;
-use hermes_hub_backend::platform::settings::store::ApplicationSettingsStore;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::settings::models::SettingValueKind;
+use makosh_hub_backend::platform::settings::store::ApplicationSettingsStore;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const LOCAL_API_TOKEN: &str = "settings-api-test-token";
 
@@ -409,7 +409,7 @@ async fn application_settings_api_updates_existing_setting_against_postgres() {
         .await
         .expect("database connection");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -429,7 +429,7 @@ async fn application_settings_api_updates_existing_setting_against_postgres() {
     let body = json_body(response).await;
     assert_eq!(body["setting_key"], json!("ui.theme"));
     assert_eq!(body["value"], json!("dark"));
-    assert_eq!(body["updated_by_actor_id"], json!("hermes-frontend"));
+    assert_eq!(body["updated_by_actor_id"], json!("makosh-frontend"));
 
     let list_response = app
         .clone()
@@ -470,7 +470,7 @@ async fn application_settings_api_rejects_secret_like_setting_keys_against_postg
         .await
         .expect("database connection");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -501,7 +501,7 @@ async fn application_settings_api_rejects_private_ui_state_payload_against_postg
         .await
         .expect("database connection");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -557,7 +557,7 @@ async fn settings_accounts_api_lists_provider_accounts_against_postgres() {
         .expect("seed provider account");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -603,7 +603,7 @@ async fn settings_accounts_api_updates_provider_account_label_against_postgres()
         .expect("seed provider account");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -691,7 +691,7 @@ async fn settings_accounts_api_updates_address_book_sync_against_postgres() {
         .expect("seed provider account");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -776,7 +776,7 @@ async fn settings_accounts_api_rejects_address_book_sync_without_contacts_capabi
         .expect("seed provider account");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -829,7 +829,7 @@ async fn settings_accounts_api_rejects_address_book_remote_write_without_scope()
         .expect("seed provider account");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -857,7 +857,7 @@ fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .method("GET")
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -867,7 +867,7 @@ fn json_put_request_with_actor(uri: &str, body: Value, token: &str) -> Request<B
         .method("PUT")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -877,7 +877,7 @@ fn json_patch_request_with_actor(uri: &str, body: Value, token: &str) -> Request
         .method("PATCH")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("request")
 }

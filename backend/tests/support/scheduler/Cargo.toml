@@ -1,10 +1,10 @@
 [package]
-name = "hermes-scheduler-testkit"
+name = "makosh-scheduler-testkit"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "test"
 owner = "test"
 surface = "test_support"
@@ -12,17 +12,17 @@ surface = "test_support"
 [dev-dependencies]
 async-nats = "=0.49.1"
 futures-util = "=0.3.32"
-hermes-clock-protocol = { path = "../../../src/platform/clock/protocol" }
-hermes-events-jetstream = { path = "../../../src/platform/events/jetstream" }
-hermes-events-protocol = { path = "../../../src/platform/events" }
-hermes-clock-runtime = { path = "../../../src/platform/clock/runtime" }
-hermes-scheduler = { path = "../../../src/platform/scheduler/implementation" }
-hermes-scheduler-jetstream = { path = "../../../src/platform/scheduler/jetstream" }
-hermes-scheduler-persistence = { path = "../../../src/platform/scheduler/persistence" }
-hermes-scheduler-protocol = { path = "../../../src/platform/scheduler/protocol" }
-hermes-runtime-protocol = { path = "../../../src/platform/runtime_protocol" }
-hermes-storage-migrations = { path = "../../../src/platform/storage/migrations" }
-hermes-storage-protocol = { path = "../../../src/platform/storage/protocol" }
+makosh-clock-protocol = { path = "../../../src/platform/clock/protocol" }
+makosh-events-jetstream = { path = "../../../src/platform/events/jetstream" }
+makosh-events-protocol = { path = "../../../src/platform/events" }
+makosh-clock-runtime = { path = "../../../src/platform/clock/runtime" }
+makosh-scheduler = { path = "../../../src/platform/scheduler/implementation" }
+makosh-scheduler-jetstream = { path = "../../../src/platform/scheduler/jetstream" }
+makosh-scheduler-persistence = { path = "../../../src/platform/scheduler/persistence" }
+makosh-scheduler-protocol = { path = "../../../src/platform/scheduler/protocol" }
+makosh-runtime-protocol = { path = "../../../src/platform/runtime_protocol" }
+makosh-storage-migrations = { path = "../../../src/platform/storage/migrations" }
+makosh-storage-protocol = { path = "../../../src/platform/storage/protocol" }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }
 prost = "=0.14.4"
 prost-types = "=0.14.4"

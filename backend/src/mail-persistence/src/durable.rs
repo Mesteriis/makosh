@@ -1,7 +1,7 @@
 //! Mail-owned durable storage. It never reads or mutates Communications state.
 
-use hermes_events_protocol::delivery::OutboxRecordV1;
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sha2::{Digest, Sha256};
 use sqlx::{
     PgPool, Row,
@@ -16,7 +16,7 @@ use crate::{
 };
 
 pub const MAIL_SCHEMA_V1: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.mail_communications_outbox (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_communications_outbox (
     message_id BYTEA PRIMARY KEY,
     envelope_sha256 BYTEA NOT NULL,
     exact_envelope_bytes BYTEA NOT NULL,
@@ -27,16 +27,16 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_communications_outbox (
     CHECK (octet_length(exact_envelope_bytes) > 0)
 );
 CREATE INDEX IF NOT EXISTS mail_communications_outbox_pending_idx
-    ON hermes_data.mail_communications_outbox (created_at_unix_seconds, message_id)
+    ON makosh_data.mail_communications_outbox (created_at_unix_seconds, message_id)
     WHERE published_at_unix_seconds IS NULL;
-CREATE TABLE IF NOT EXISTS hermes_data.mail_communications_event_inbox (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_communications_event_inbox (
     message_id BYTEA PRIMARY KEY,
     envelope_sha256 BYTEA NOT NULL,
     consumed_at_unix_seconds BIGINT NOT NULL,
     CHECK (octet_length(message_id) = 16),
     CHECK (octet_length(envelope_sha256) = 32)
 );
-CREATE TABLE IF NOT EXISTS hermes_data.mail_attachment_anchor_mappings (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_attachment_anchor_mappings (
     source_observation_id BYTEA PRIMARY KEY,
     attachment_anchor_id BYTEA NOT NULL UNIQUE,
     correlation_id BYTEA NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_attachment_anchor_mappings (
     CHECK (octet_length(correlation_id) = 16),
     CHECK (octet_length(media_cursor_sha256) = 32)
 );
-CREATE TABLE IF NOT EXISTS hermes_data.mail_attachment_blob_admissions (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_attachment_blob_admissions (
     source_observation_id BYTEA PRIMARY KEY,
     attachment_anchor_id BYTEA NOT NULL,
     state SMALLINT NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_attachment_blob_admissions (
     CHECK ((state = 1 AND completed_at_unix_seconds IS NULL)
         OR (state IN (2, 3) AND completed_at_unix_seconds IS NOT NULL))
 );
-CREATE TABLE IF NOT EXISTS hermes_data.mail_delivery_attempts (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_delivery_attempts (
     operation_id TEXT PRIMARY KEY,
     connection_id TEXT NOT NULL,
     rfc822_sha256 BYTEA NOT NULL,
@@ -76,9 +76,9 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_delivery_attempts (
         OR (state = 3 AND completed_at_unix_seconds IS NOT NULL AND response_code IS NULL))
 );
 CREATE INDEX IF NOT EXISTS mail_delivery_attempts_unresolved_idx
-    ON hermes_data.mail_delivery_attempts (attempted_at_unix_seconds, operation_id)
+    ON makosh_data.mail_delivery_attempts (attempted_at_unix_seconds, operation_id)
     WHERE state = 1;
-CREATE TABLE IF NOT EXISTS hermes_data.mail_gmail_sync_cursors (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_gmail_sync_cursors (
     connection_id TEXT PRIMARY KEY,
     next_page_token TEXT NOT NULL,
     observed_history_id TEXT,
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_gmail_sync_cursors (
     CHECK (observed_history_id IS NULL OR observed_history_id <> ''),
     CHECK (updated_at_unix_seconds > 0)
 );
-CREATE TABLE IF NOT EXISTS hermes_data.mail_gmail_history_checkpoints (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_gmail_history_checkpoints (
     connection_id TEXT PRIMARY KEY,
     start_history_id TEXT NOT NULL,
     next_page_token TEXT,
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_gmail_history_checkpoints (
     CHECK (next_page_token IS NULL OR next_page_token <> ''),
     CHECK (updated_at_unix_seconds > 0)
 );
-CREATE TABLE IF NOT EXISTS hermes_data.mail_gmail_oauth_credential_bindings (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_gmail_oauth_credential_bindings (
     connection_id TEXT PRIMARY KEY,
     access_token_record_id BYTEA NOT NULL,
     access_token_revision BIGINT NOT NULL,
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_gmail_oauth_credential_bindings (
 "#;
 
 pub const MAIL_SCHEMA_V2: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.mail_attachment_security_outbox (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_attachment_security_outbox (
     message_id BYTEA PRIMARY KEY,
     envelope_sha256 BYTEA NOT NULL,
     exact_envelope_bytes BYTEA NOT NULL,
@@ -126,29 +126,29 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_attachment_security_outbox (
     CHECK (octet_length(exact_envelope_bytes) > 0)
 );
 CREATE INDEX IF NOT EXISTS mail_attachment_security_outbox_pending_idx
-    ON hermes_data.mail_attachment_security_outbox (created_at_unix_seconds, message_id)
+    ON makosh_data.mail_attachment_security_outbox (created_at_unix_seconds, message_id)
     WHERE published_at_unix_seconds IS NULL;
 "#;
 
 pub const MAIL_SCHEMA_V3: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.mail_delivery_queue (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_delivery_queue (
     operation_id TEXT PRIMARY KEY
-        REFERENCES hermes_data.mail_delivery_attempts (operation_id) ON DELETE CASCADE,
+        REFERENCES makosh_data.mail_delivery_attempts (operation_id) ON DELETE CASCADE,
     exact_command_bytes BYTEA NOT NULL,
     dispatched_at_unix_seconds BIGINT,
     CHECK (octet_length(exact_command_bytes) > 0),
     CHECK (dispatched_at_unix_seconds IS NULL OR dispatched_at_unix_seconds > 0)
 );
 CREATE INDEX IF NOT EXISTS mail_delivery_queue_pending_idx
-    ON hermes_data.mail_delivery_queue (operation_id)
+    ON makosh_data.mail_delivery_queue (operation_id)
     WHERE dispatched_at_unix_seconds IS NULL;
 "#;
 
 pub const MAIL_SCHEMA_V6: &str = r#"
-ALTER TABLE hermes_data.mail_communications_outbox
+ALTER TABLE makosh_data.mail_communications_outbox
     ADD COLUMN IF NOT EXISTS causal_sequence BIGINT GENERATED BY DEFAULT AS IDENTITY;
 CREATE INDEX IF NOT EXISTS mail_communications_outbox_causal_pending_idx
-    ON hermes_data.mail_communications_outbox (causal_sequence)
+    ON makosh_data.mail_communications_outbox (causal_sequence)
     WHERE published_at_unix_seconds IS NULL;
 "#;
 
@@ -368,7 +368,7 @@ impl MailDurablePersistence {
         record: &OutboxRecordV1,
         created_at_unix_seconds: i64,
     ) -> Result<(), MailDurablePersistenceError> {
-        sqlx::query("INSERT INTO hermes_data.mail_communications_outbox (message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING")
+        sqlx::query("INSERT INTO makosh_data.mail_communications_outbox (message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING")
             .bind(record.message_id().as_slice())
             .bind(record.envelope_sha256().as_slice())
             .bind(record.exact_bytes())
@@ -384,7 +384,7 @@ impl MailDurablePersistence {
         message_id: [u8; 16],
     ) -> Result<Option<OutboxRecordV1>, MailDurablePersistenceError> {
         sqlx::query(
-            "SELECT exact_envelope_bytes FROM hermes_data.mail_communications_outbox WHERE message_id = $1",
+            "SELECT exact_envelope_bytes FROM makosh_data.mail_communications_outbox WHERE message_id = $1",
         )
         .bind(message_id.as_slice())
         .fetch_optional(&self.pool)
@@ -411,7 +411,7 @@ impl MailDurablePersistence {
             .await
             .map_err(|_| MailDurablePersistenceError::Database)?;
         let existing = sqlx::query(
-            "SELECT envelope_sha256 FROM hermes_data.mail_communications_event_inbox WHERE message_id = $1",
+            "SELECT envelope_sha256 FROM makosh_data.mail_communications_event_inbox WHERE message_id = $1",
         )
         .bind(handoff_record.message_id().as_slice())
         .fetch_optional(&mut *transaction)
@@ -431,7 +431,7 @@ impl MailDurablePersistence {
             return Ok(MailAttachmentAnchorMappingOutcomeV1::AlreadyApplied);
         }
         let source_exists = sqlx::query(
-            "SELECT 1 FROM hermes_data.mail_communications_outbox WHERE message_id = $1",
+            "SELECT 1 FROM makosh_data.mail_communications_outbox WHERE message_id = $1",
         )
         .bind(mapping.source_observation_id.as_slice())
         .fetch_optional(&mut *transaction)
@@ -440,7 +440,7 @@ impl MailDurablePersistence {
         if source_exists.is_none() {
             return Err(MailDurablePersistenceError::MissingSourceObservation);
         }
-        let existing_mapping = sqlx::query("SELECT attachment_anchor_id, correlation_id, media_cursor_sha256 FROM hermes_data.mail_attachment_anchor_mappings WHERE source_observation_id = $1")
+        let existing_mapping = sqlx::query("SELECT attachment_anchor_id, correlation_id, media_cursor_sha256 FROM makosh_data.mail_attachment_anchor_mappings WHERE source_observation_id = $1")
             .bind(mapping.source_observation_id.as_slice())
             .fetch_optional(&mut *transaction)
             .await
@@ -462,7 +462,7 @@ impl MailDurablePersistence {
                 return Err(MailDurablePersistenceError::ConflictingAnchorMapping);
             }
         } else {
-            sqlx::query("INSERT INTO hermes_data.mail_attachment_anchor_mappings (source_observation_id, attachment_anchor_id, correlation_id, media_cursor_sha256, observed_at_unix_seconds) VALUES ($1, $2, $3, $4, $5)")
+            sqlx::query("INSERT INTO makosh_data.mail_attachment_anchor_mappings (source_observation_id, attachment_anchor_id, correlation_id, media_cursor_sha256, observed_at_unix_seconds) VALUES ($1, $2, $3, $4, $5)")
                 .bind(mapping.source_observation_id.as_slice())
                 .bind(mapping.attachment_anchor_id.as_slice())
                 .bind(mapping.correlation_id.as_slice())
@@ -473,7 +473,7 @@ impl MailDurablePersistence {
                 .map_err(|_| MailDurablePersistenceError::Database)?;
         }
         sqlx::query(
-            "INSERT INTO hermes_data.mail_attachment_safety_projections \
+            "INSERT INTO makosh_data.mail_attachment_safety_projections \
              (attachment_anchor_id, state) VALUES ($1, $2) \
              ON CONFLICT (attachment_anchor_id) DO NOTHING",
         )
@@ -482,7 +482,7 @@ impl MailDurablePersistence {
         .execute(&mut *transaction)
         .await
         .map_err(|_| MailDurablePersistenceError::Database)?;
-        sqlx::query("INSERT INTO hermes_data.mail_communications_event_inbox (message_id, envelope_sha256, consumed_at_unix_seconds) VALUES ($1, $2, $3)")
+        sqlx::query("INSERT INTO makosh_data.mail_communications_event_inbox (message_id, envelope_sha256, consumed_at_unix_seconds) VALUES ($1, $2, $3)")
             .bind(handoff_record.message_id().as_slice())
             .bind(handoff_record.envelope_sha256().as_slice())
             .bind(consumed_at_unix_seconds)
@@ -500,7 +500,7 @@ impl MailDurablePersistence {
         &self,
         source_observation_id: [u8; 16],
     ) -> Result<Option<MailAttachmentAnchorMappingV1>, MailDurablePersistenceError> {
-        sqlx::query("SELECT attachment_anchor_id, correlation_id, media_cursor_sha256, observed_at_unix_seconds FROM hermes_data.mail_attachment_anchor_mappings WHERE source_observation_id = $1")
+        sqlx::query("SELECT attachment_anchor_id, correlation_id, media_cursor_sha256, observed_at_unix_seconds FROM makosh_data.mail_attachment_anchor_mappings WHERE source_observation_id = $1")
             .bind(source_observation_id.as_slice())
             .fetch_optional(&self.pool)
             .await
@@ -542,7 +542,7 @@ impl MailDurablePersistence {
             .begin()
             .await
             .map_err(|_| MailDurablePersistenceError::Database)?;
-        let mapping = sqlx::query("SELECT attachment_anchor_id FROM hermes_data.mail_attachment_anchor_mappings WHERE source_observation_id = $1")
+        let mapping = sqlx::query("SELECT attachment_anchor_id FROM makosh_data.mail_attachment_anchor_mappings WHERE source_observation_id = $1")
             .bind(source_observation_id.as_slice())
             .fetch_optional(&mut *transaction)
             .await
@@ -554,7 +554,7 @@ impl MailDurablePersistence {
         if mapped_anchor.as_slice() != attachment_anchor_id.as_slice() {
             return Err(MailDurablePersistenceError::ConflictingAnchorMapping);
         }
-        let existing = sqlx::query("SELECT attachment_anchor_id, state FROM hermes_data.mail_attachment_blob_admissions WHERE source_observation_id = $1")
+        let existing = sqlx::query("SELECT attachment_anchor_id, state FROM makosh_data.mail_attachment_blob_admissions WHERE source_observation_id = $1")
             .bind(source_observation_id.as_slice())
             .fetch_optional(&mut *transaction)
             .await
@@ -580,7 +580,7 @@ impl MailDurablePersistence {
                 .map_err(|_| MailDurablePersistenceError::Database)?;
             return Ok(outcome);
         }
-        sqlx::query("INSERT INTO hermes_data.mail_attachment_blob_admissions (source_observation_id, attachment_anchor_id, state, started_at_unix_seconds) VALUES ($1, $2, 1, $3)")
+        sqlx::query("INSERT INTO makosh_data.mail_attachment_blob_admissions (source_observation_id, attachment_anchor_id, state, started_at_unix_seconds) VALUES ($1, $2, 1, $3)")
             .bind(source_observation_id.as_slice())
             .bind(attachment_anchor_id.as_slice())
             .bind(started_at_unix_seconds)
@@ -627,7 +627,7 @@ impl MailDurablePersistence {
             .begin()
             .await
             .map_err(|_| MailDurablePersistenceError::Database)?;
-        let outcome = sqlx::query("UPDATE hermes_data.mail_attachment_blob_admissions SET state = $3, completed_at_unix_seconds = $4 WHERE source_observation_id = $1 AND attachment_anchor_id = $2 AND state = 1")
+        let outcome = sqlx::query("UPDATE makosh_data.mail_attachment_blob_admissions SET state = $3, completed_at_unix_seconds = $4 WHERE source_observation_id = $1 AND attachment_anchor_id = $2 AND state = 1")
             .bind(source_observation_id.as_slice())
             .bind(attachment_anchor_id.as_slice())
             .bind(terminal_state)
@@ -636,7 +636,7 @@ impl MailDurablePersistence {
             .await
             .map_err(|_| MailDurablePersistenceError::Database)?;
         if outcome.rows_affected() == 0 {
-            let existing = sqlx::query("SELECT attachment_anchor_id, state FROM hermes_data.mail_attachment_blob_admissions WHERE source_observation_id = $1")
+            let existing = sqlx::query("SELECT attachment_anchor_id, state FROM makosh_data.mail_attachment_blob_admissions WHERE source_observation_id = $1")
                 .bind(source_observation_id.as_slice())
                 .fetch_optional(&mut *transaction)
                 .await
@@ -699,7 +699,7 @@ impl MailDurablePersistence {
             .await
             .map_err(|_| MailDurablePersistenceError::Database)?;
         let existing = sqlx::query(
-            "SELECT envelope_sha256 FROM hermes_data.mail_communications_event_inbox \
+            "SELECT envelope_sha256 FROM makosh_data.mail_communications_event_inbox \
              WHERE message_id = $1",
         )
         .bind(event_record.message_id().as_slice())
@@ -720,7 +720,7 @@ impl MailDurablePersistence {
             return Ok(false);
         }
         let mapping_exists = sqlx::query(
-            "SELECT 1 FROM hermes_data.mail_attachment_anchor_mappings \
+            "SELECT 1 FROM makosh_data.mail_attachment_anchor_mappings \
              WHERE attachment_anchor_id = $1",
         )
         .bind(transition.attachment_anchor_id.as_slice())
@@ -731,7 +731,7 @@ impl MailDurablePersistence {
             return Err(MailDurablePersistenceError::MissingSourceObservation);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_attachment_safety_projections \
+            "UPDATE makosh_data.mail_attachment_safety_projections \
              SET state = $2, evidence_id = $3, observed_at_unix_seconds = $4 \
              WHERE attachment_anchor_id = $1 AND state = $5",
         )
@@ -747,7 +747,7 @@ impl MailDurablePersistence {
             return Err(MailDurablePersistenceError::ConflictingAttachmentSafetyProjection);
         }
         sqlx::query(
-            "INSERT INTO hermes_data.mail_communications_event_inbox \
+            "INSERT INTO makosh_data.mail_communications_event_inbox \
              (message_id, envelope_sha256, consumed_at_unix_seconds) VALUES ($1, $2, $3)",
         )
         .bind(event_record.message_id().as_slice())
@@ -771,7 +771,7 @@ impl MailDurablePersistence {
             return Err(MailDurablePersistenceError::InvalidRow);
         }
         let row = sqlx::query(
-            "SELECT state FROM hermes_data.mail_attachment_safety_projections \
+            "SELECT state FROM makosh_data.mail_attachment_safety_projections \
              WHERE attachment_anchor_id = $1",
         )
         .bind(attachment_anchor_id.as_slice())
@@ -802,7 +802,7 @@ impl MailDurablePersistence {
         if connection_id.trim().is_empty() {
             return Err(MailDurablePersistenceError::InvalidRow);
         }
-        sqlx::query("SELECT next_page_token, observed_history_id FROM hermes_data.mail_gmail_sync_cursors WHERE connection_id = $1")
+        sqlx::query("SELECT next_page_token, observed_history_id FROM makosh_data.mail_gmail_sync_cursors WHERE connection_id = $1")
             .bind(connection_id)
             .fetch_optional(&self.pool)
             .await
@@ -821,7 +821,7 @@ impl MailDurablePersistence {
         if connection_id.trim().is_empty() {
             return Err(MailDurablePersistenceError::InvalidRow);
         }
-        sqlx::query("SELECT start_history_id, next_page_token FROM hermes_data.mail_gmail_history_checkpoints WHERE connection_id = $1")
+        sqlx::query("SELECT start_history_id, next_page_token FROM makosh_data.mail_gmail_history_checkpoints WHERE connection_id = $1")
             .bind(connection_id)
             .fetch_optional(&self.pool)
             .await
@@ -862,7 +862,7 @@ impl MailDurablePersistence {
             .await?;
         }
         if let Some(next_page_token) = next_page_token {
-            sqlx::query("INSERT INTO hermes_data.mail_gmail_sync_cursors (connection_id, next_page_token, observed_history_id, updated_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (connection_id) DO UPDATE SET next_page_token = EXCLUDED.next_page_token, observed_history_id = EXCLUDED.observed_history_id, updated_at_unix_seconds = EXCLUDED.updated_at_unix_seconds")
+            sqlx::query("INSERT INTO makosh_data.mail_gmail_sync_cursors (connection_id, next_page_token, observed_history_id, updated_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (connection_id) DO UPDATE SET next_page_token = EXCLUDED.next_page_token, observed_history_id = EXCLUDED.observed_history_id, updated_at_unix_seconds = EXCLUDED.updated_at_unix_seconds")
                 .bind(connection_id)
                 .bind(next_page_token)
                 .bind(observed_history_id)
@@ -871,12 +871,12 @@ impl MailDurablePersistence {
                 .await
                 .map_err(|_| MailDurablePersistenceError::Database)?;
         } else if let Some(observed_history_id) = observed_history_id {
-            sqlx::query("DELETE FROM hermes_data.mail_gmail_sync_cursors WHERE connection_id = $1")
+            sqlx::query("DELETE FROM makosh_data.mail_gmail_sync_cursors WHERE connection_id = $1")
                 .bind(connection_id)
                 .execute(&mut *transaction)
                 .await
                 .map_err(|_| MailDurablePersistenceError::Database)?;
-            sqlx::query("INSERT INTO hermes_data.mail_gmail_history_checkpoints (connection_id, start_history_id, next_page_token, updated_at_unix_seconds) VALUES ($1, $2, NULL, $3) ON CONFLICT (connection_id) DO UPDATE SET start_history_id = EXCLUDED.start_history_id, next_page_token = NULL, updated_at_unix_seconds = EXCLUDED.updated_at_unix_seconds")
+            sqlx::query("INSERT INTO makosh_data.mail_gmail_history_checkpoints (connection_id, start_history_id, next_page_token, updated_at_unix_seconds) VALUES ($1, $2, NULL, $3) ON CONFLICT (connection_id) DO UPDATE SET start_history_id = EXCLUDED.start_history_id, next_page_token = NULL, updated_at_unix_seconds = EXCLUDED.updated_at_unix_seconds")
                 .bind(connection_id)
                 .bind(observed_history_id)
                 .bind(updated_at_unix_seconds)
@@ -884,7 +884,7 @@ impl MailDurablePersistence {
                 .await
                 .map_err(|_| MailDurablePersistenceError::Database)?;
         } else {
-            sqlx::query("DELETE FROM hermes_data.mail_gmail_sync_cursors WHERE connection_id = $1")
+            sqlx::query("DELETE FROM makosh_data.mail_gmail_sync_cursors WHERE connection_id = $1")
                 .bind(connection_id)
                 .execute(&mut *transaction)
                 .await
@@ -924,7 +924,7 @@ impl MailDurablePersistence {
             )
             .await?;
         }
-        sqlx::query("INSERT INTO hermes_data.mail_gmail_history_checkpoints (connection_id, start_history_id, next_page_token, updated_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (connection_id) DO UPDATE SET start_history_id = EXCLUDED.start_history_id, next_page_token = EXCLUDED.next_page_token, updated_at_unix_seconds = EXCLUDED.updated_at_unix_seconds")
+        sqlx::query("INSERT INTO makosh_data.mail_gmail_history_checkpoints (connection_id, start_history_id, next_page_token, updated_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (connection_id) DO UPDATE SET start_history_id = EXCLUDED.start_history_id, next_page_token = EXCLUDED.next_page_token, updated_at_unix_seconds = EXCLUDED.updated_at_unix_seconds")
             .bind(connection_id)
             .bind(start_history_id)
             .bind(next_page_token)
@@ -946,7 +946,7 @@ impl MailDurablePersistence {
             return Err(MailDurablePersistenceError::InvalidRow);
         }
         sqlx::query(
-            "DELETE FROM hermes_data.mail_gmail_history_checkpoints WHERE connection_id = $1",
+            "DELETE FROM makosh_data.mail_gmail_history_checkpoints WHERE connection_id = $1",
         )
         .bind(connection_id)
         .execute(&self.pool)
@@ -990,7 +990,7 @@ impl MailDurablePersistence {
             .begin()
             .await
             .map_err(|_| MailDurablePersistenceError::Database)?;
-        let inserted = sqlx::query("INSERT INTO hermes_data.mail_delivery_attempts \
+        let inserted = sqlx::query("INSERT INTO makosh_data.mail_delivery_attempts \
             (operation_id, connection_id, rfc822_sha256, request_sha256, state, attempted_at_unix_seconds) \
             VALUES ($1, $2, $3, $3, $4, $5) ON CONFLICT (operation_id) DO NOTHING")
             .bind(operation_id)
@@ -1002,7 +1002,7 @@ impl MailDurablePersistence {
             .await
             .map_err(|_| MailDurablePersistenceError::Database)?;
         if inserted.rows_affected() == 1 {
-            sqlx::query("INSERT INTO hermes_data.mail_delivery_queue (operation_id, exact_command_bytes) VALUES ($1, $2)")
+            sqlx::query("INSERT INTO makosh_data.mail_delivery_queue (operation_id, exact_command_bytes) VALUES ($1, $2)")
                 .bind(operation_id)
                 .bind(exact_command_bytes)
                 .execute(&mut *transaction)
@@ -1015,8 +1015,8 @@ impl MailDurablePersistence {
                             materialization.declared_size, materialization.filename, \
                             materialization.media_type, materialization.disposition, \
                             projection.evidence_id \
-                     FROM hermes_data.mail_attachment_materializations materialization \
-                     JOIN hermes_data.mail_attachment_safety_projections projection \
+                     FROM makosh_data.mail_attachment_materializations materialization \
+                     JOIN makosh_data.mail_attachment_safety_projections projection \
                        ON projection.attachment_anchor_id = materialization.attachment_anchor_id \
                      WHERE materialization.attachment_anchor_id = $1 \
                        AND projection.state = $2 AND projection.evidence_id IS NOT NULL",
@@ -1048,7 +1048,7 @@ impl MailDurablePersistence {
                     .try_get("evidence_id")
                     .map_err(|_| MailDurablePersistenceError::InvalidRow)?;
                 sqlx::query(
-                    "INSERT INTO hermes_data.mail_delivery_attachment_manifest \
+                    "INSERT INTO makosh_data.mail_delivery_attachment_manifest \
                      (operation_id, ordinal, attachment_anchor_id, blob_reference_id, \
                       receipt_sha256, declared_size, filename, media_type, disposition, \
                       safety_evidence_id) \
@@ -1087,8 +1087,8 @@ impl MailDurablePersistence {
             return Ok(MailDeliveryEnqueueOutcomeV1::Enqueued);
         }
         let matching = sqlx::query(
-            "SELECT 1 FROM hermes_data.mail_delivery_attempts attempt \
-             JOIN hermes_data.mail_delivery_queue queue ON queue.operation_id = attempt.operation_id \
+            "SELECT 1 FROM makosh_data.mail_delivery_attempts attempt \
+             JOIN makosh_data.mail_delivery_queue queue ON queue.operation_id = attempt.operation_id \
              WHERE attempt.operation_id = $1 AND attempt.connection_id = $2 \
                AND (attempt.request_sha256 = $3 OR attempt.request_sha256 IS NULL) \
                AND queue.exact_command_bytes = $4",
@@ -1123,13 +1123,13 @@ impl MailDurablePersistence {
             .await
             .map_err(|_| MailDurablePersistenceError::Database)?;
         let row = sqlx::query(
-            "WITH next AS (SELECT queue.operation_id FROM hermes_data.mail_delivery_queue queue \
-             JOIN hermes_data.mail_delivery_attempts attempt ON attempt.operation_id = queue.operation_id \
+            "WITH next AS (SELECT queue.operation_id FROM makosh_data.mail_delivery_queue queue \
+             JOIN makosh_data.mail_delivery_attempts attempt ON attempt.operation_id = queue.operation_id \
              WHERE queue.dispatched_at_unix_seconds IS NULL AND attempt.state = $1 \
                AND attempt.connection_id = $2 \
              ORDER BY attempt.attempted_at_unix_seconds, queue.operation_id FOR UPDATE SKIP LOCKED LIMIT 1) \
-             UPDATE hermes_data.mail_delivery_queue queue SET dispatched_at_unix_seconds = $3 FROM next \
-             JOIN hermes_data.mail_delivery_attempts attempt ON attempt.operation_id = next.operation_id \
+             UPDATE makosh_data.mail_delivery_queue queue SET dispatched_at_unix_seconds = $3 FROM next \
+             JOIN makosh_data.mail_delivery_attempts attempt ON attempt.operation_id = next.operation_id \
              WHERE queue.operation_id = next.operation_id \
              RETURNING queue.operation_id, attempt.connection_id, attempt.rfc822_sha256, \
                        attempt.request_sha256, attempt.rendered_rfc822_sha256, \
@@ -1166,7 +1166,7 @@ impl MailDurablePersistence {
         let manifest_rows = sqlx::query(
             "SELECT ordinal, attachment_anchor_id, blob_reference_id, receipt_sha256, \
                     declared_size, filename, media_type, disposition, safety_evidence_id \
-             FROM hermes_data.mail_delivery_attachment_manifest \
+             FROM makosh_data.mail_delivery_attachment_manifest \
              WHERE operation_id = $1 ORDER BY ordinal",
         )
         .bind(&operation_id)
@@ -1241,11 +1241,11 @@ impl MailDurablePersistence {
             return Err(MailDurablePersistenceError::InvalidRow);
         }
         sqlx::query(
-            "UPDATE hermes_data.mail_delivery_attempts attempt \
+            "UPDATE makosh_data.mail_delivery_attempts attempt \
              SET rendered_rfc822_sha256 = $3 \
              WHERE operation_id = $1 AND request_sha256 = $2 AND state = $4 \
                AND (rendered_rfc822_sha256 IS NULL OR rendered_rfc822_sha256 = $3) \
-               AND EXISTS (SELECT 1 FROM hermes_data.mail_delivery_queue queue \
+               AND EXISTS (SELECT 1 FROM makosh_data.mail_delivery_queue queue \
                            WHERE queue.operation_id = attempt.operation_id \
                              AND queue.dispatched_at_unix_seconds IS NOT NULL)",
         )
@@ -1283,12 +1283,12 @@ impl MailDurablePersistence {
             .await
             .map_err(|_| MailDurablePersistenceError::Database)?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_delivery_attempts attempt \
+            "UPDATE makosh_data.mail_delivery_attempts attempt \
              SET state = $3, completed_at_unix_seconds = $4, response_code = $5 \
              WHERE operation_id = $1 AND state = $6 \
                AND (rendered_rfc822_sha256 = $2 \
                     OR (request_sha256 IS NULL AND rfc822_sha256 = $2)) \
-               AND EXISTS (SELECT 1 FROM hermes_data.mail_delivery_queue queue \
+               AND EXISTS (SELECT 1 FROM makosh_data.mail_delivery_queue queue \
                            WHERE queue.operation_id = attempt.operation_id \
                              AND queue.dispatched_at_unix_seconds IS NOT NULL)",
         )
@@ -1304,7 +1304,7 @@ impl MailDurablePersistence {
         if updated.rows_affected() != 1 {
             return Err(MailDurablePersistenceError::InvalidRow);
         }
-        sqlx::query("INSERT INTO hermes_data.mail_communications_outbox (message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING")
+        sqlx::query("INSERT INTO makosh_data.mail_communications_outbox (message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING")
             .bind(record.message_id().as_slice())
             .bind(record.envelope_sha256().as_slice())
             .bind(record.exact_bytes())
@@ -1327,10 +1327,10 @@ impl MailDurablePersistence {
             return Err(MailDurablePersistenceError::InvalidRow);
         }
         sqlx::query(
-            "UPDATE hermes_data.mail_delivery_attempts attempt \
+            "UPDATE makosh_data.mail_delivery_attempts attempt \
              SET state = $2, completed_at_unix_seconds = $3 \
              WHERE operation_id = $1 AND state = $4 \
-               AND EXISTS (SELECT 1 FROM hermes_data.mail_delivery_queue queue \
+               AND EXISTS (SELECT 1 FROM makosh_data.mail_delivery_queue queue \
                            WHERE queue.operation_id = attempt.operation_id \
                              AND queue.dispatched_at_unix_seconds IS NOT NULL)",
         )
@@ -1359,8 +1359,8 @@ impl MailDurablePersistence {
             "SELECT attempt.operation_id, attempt.connection_id, attempt.state, \
                     attempt.attempted_at_unix_seconds, attempt.completed_at_unix_seconds, \
                     attempt.response_code, queue.dispatched_at_unix_seconds \
-             FROM hermes_data.mail_delivery_attempts attempt \
-             JOIN hermes_data.mail_delivery_queue queue ON queue.operation_id = attempt.operation_id \
+             FROM makosh_data.mail_delivery_attempts attempt \
+             JOIN makosh_data.mail_delivery_queue queue ON queue.operation_id = attempt.operation_id \
              WHERE attempt.operation_id = $1",
         )
         .bind(operation_id)
@@ -1418,7 +1418,7 @@ impl MailDurablePersistence {
         &self,
         limit: i64,
     ) -> Result<Vec<OutboxRecordV1>, MailDurablePersistenceError> {
-        let rows = sqlx::query("SELECT exact_envelope_bytes FROM hermes_data.mail_communications_outbox WHERE published_at_unix_seconds IS NULL ORDER BY causal_sequence ASC LIMIT $1")
+        let rows = sqlx::query("SELECT exact_envelope_bytes FROM makosh_data.mail_communications_outbox WHERE published_at_unix_seconds IS NULL ORDER BY causal_sequence ASC LIMIT $1")
             .bind(limit.clamp(1, 256))
             .fetch_all(&self.pool)
             .await
@@ -1438,7 +1438,7 @@ impl MailDurablePersistence {
         message_id: &[u8; 16],
         published_at_unix_seconds: i64,
     ) -> Result<bool, MailDurablePersistenceError> {
-        sqlx::query("UPDATE hermes_data.mail_communications_outbox SET published_at_unix_seconds = $2 WHERE message_id = $1 AND published_at_unix_seconds IS NULL")
+        sqlx::query("UPDATE makosh_data.mail_communications_outbox SET published_at_unix_seconds = $2 WHERE message_id = $1 AND published_at_unix_seconds IS NULL")
             .bind(message_id.as_slice())
             .bind(published_at_unix_seconds)
             .execute(&self.pool)
@@ -1451,7 +1451,7 @@ impl MailDurablePersistence {
         &self,
         limit: i64,
     ) -> Result<Vec<OutboxRecordV1>, MailDurablePersistenceError> {
-        let rows = sqlx::query("SELECT exact_envelope_bytes FROM hermes_data.mail_attachment_security_outbox WHERE published_at_unix_seconds IS NULL ORDER BY created_at_unix_seconds ASC, message_id ASC LIMIT $1")
+        let rows = sqlx::query("SELECT exact_envelope_bytes FROM makosh_data.mail_attachment_security_outbox WHERE published_at_unix_seconds IS NULL ORDER BY created_at_unix_seconds ASC, message_id ASC LIMIT $1")
             .bind(limit.clamp(1, 256))
             .fetch_all(&self.pool)
             .await
@@ -1471,7 +1471,7 @@ impl MailDurablePersistence {
         message_id: &[u8; 16],
         published_at_unix_seconds: i64,
     ) -> Result<bool, MailDurablePersistenceError> {
-        sqlx::query("UPDATE hermes_data.mail_attachment_security_outbox SET published_at_unix_seconds = $2 WHERE message_id = $1 AND published_at_unix_seconds IS NULL")
+        sqlx::query("UPDATE makosh_data.mail_attachment_security_outbox SET published_at_unix_seconds = $2 WHERE message_id = $1 AND published_at_unix_seconds IS NULL")
             .bind(message_id.as_slice())
             .bind(published_at_unix_seconds)
             .execute(&self.pool)
@@ -1486,7 +1486,7 @@ pub(crate) async fn insert_communications_outbox(
     record: &OutboxRecordV1,
     created_at_unix_seconds: i64,
 ) -> Result<(), MailDurablePersistenceError> {
-    sqlx::query("INSERT INTO hermes_data.mail_communications_outbox (message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING")
+    sqlx::query("INSERT INTO makosh_data.mail_communications_outbox (message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING")
         .bind(record.message_id().as_slice())
         .bind(record.envelope_sha256().as_slice())
         .bind(record.exact_bytes())
@@ -1502,7 +1502,7 @@ async fn insert_attachment_security_outbox(
     record: &OutboxRecordV1,
     created_at_unix_seconds: i64,
 ) -> Result<(), MailDurablePersistenceError> {
-    sqlx::query("INSERT INTO hermes_data.mail_attachment_security_outbox (message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING")
+    sqlx::query("INSERT INTO makosh_data.mail_attachment_security_outbox (message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING")
         .bind(record.message_id().as_slice())
         .bind(record.envelope_sha256().as_slice())
         .bind(record.exact_bytes())
@@ -1522,7 +1522,7 @@ async fn insert_attachment_materialization(
         return Err(MailDurablePersistenceError::InvalidAttachmentAdmissionState);
     }
     sqlx::query(
-        "INSERT INTO hermes_data.mail_attachment_materializations \
+        "INSERT INTO makosh_data.mail_attachment_materializations \
          (attachment_anchor_id, source_observation_id, blob_reference_id, receipt_sha256, \
           declared_size, filename, media_type, disposition, materialized_at_unix_seconds) \
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",

@@ -1,4 +1,4 @@
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::{
         BlobRuntimeConfigurationV1, BlobRuntimeControlResponseV1, BlobRuntimeStateV1,
         BlobRuntimeStatusV1, blob_runtime_control_response_v1::Result as ResponseResult,
@@ -11,12 +11,12 @@ use hermes_runtime_protocol::{
 #[test]
 fn blob_managed_runtime_contract_excludes_content_and_requires_current_vault_fence() {
     let configuration = BlobRuntimeConfigurationV1 {
-        data_dir: "/private/hermes/blob".to_owned(),
+        data_dir: "/private/makosh/blob".to_owned(),
         maximum_blob_bytes: 64 * 1024 * 1024,
         vault_instance_id: "instance_blob".to_owned(),
         vault_runtime_generation: 9,
         vault_hpke_public_key_x25519: vec![3; 32],
-        data_socket_path: "/private/hermes/runtime/blob/data.sock".to_owned(),
+        data_socket_path: "/private/makosh/runtime/blob/data.sock".to_owned(),
         kernel_instance_id: "instance_blob".to_owned(),
         kernel_authorization_public_key_sec1: vec![4; 65],
         custody_release_grace_period_ms: 24 * 60 * 60 * 1_000,

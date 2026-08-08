@@ -3,11 +3,11 @@
 use std::os::unix::net::UnixStream;
 use std::time::Duration;
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     ConsumerBudgetV1, ConsumerSpecV1, EventHubCredentialFenceV1, EventHubCredentialLeaseAdapterV1,
     EventHubTopologyPlanV1, JetStreamClient, StreamBudgetV1, StreamKindV1, StreamSpecV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     DurableEnvelopeKindV1, EventHubConsumerTopologyV1, EventHubStreamTopologyV1,
     EventsAuthorityRuntimeConfigurationV1, ReconcileEventsTopologyRequestV1,
 };

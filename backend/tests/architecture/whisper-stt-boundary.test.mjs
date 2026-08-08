@@ -9,7 +9,7 @@ const read = (path) => readFile(resolve(PROJECT_ROOT, path), 'utf8');
 test('Whisper transcript artifact is a private bounded engine contract', async () => {
   const [manifest, proto, validation, policy] = await Promise.all([
     read('backend/src/speech-transcript-artifact/Cargo.toml'),
-    read('backend/src/speech-transcript-artifact/proto/hermes/speech_transcript/v1/transcript.proto'),
+    read('backend/src/speech-transcript-artifact/proto/makosh/speech_transcript/v1/transcript.proto'),
     read('backend/src/speech-transcript-artifact/src/lib.rs'),
     read('backend/architecture/policy.json').then(JSON.parse),
   ]);
@@ -34,7 +34,7 @@ test('Whisper transcript artifact is a private bounded engine contract', async (
   assert.match(validation, /std::str::from_utf8/);
   assert.ok(
     policy.dependencies.integrationEngineContractPackages.includes(
-      'hermes-speech-transcript-artifact',
+      'makosh-speech-transcript-artifact',
     ),
   );
 });
@@ -127,7 +127,7 @@ test('Whisper managed runtime binds exact native resources and provider request 
   assert.match(processRoot, /prepare_whisper_stt_resources_v1/);
   assert.doesNotMatch(
     `${admission}\n${resources}\n${runtime}\n${worker}\n${blob}\n${processRoot}`,
-    /hermes_communications|communications_|automatic.*download|Command::new\("(?:sh|bash|zsh)"\)/i,
+    /makosh_communications|communications_|automatic.*download|Command::new\("(?:sh|bash|zsh)"\)/i,
   );
 });
 
@@ -139,7 +139,7 @@ test('Whisper assembly emits unsigned runtime storage runner and model inputs on
   ]);
 
   assert.match(manifest, /surface = "assembly"/);
-  assert.match(manifest, /hermes-whisper-stt-runtime/);
+  assert.match(manifest, /makosh-whisper-stt-runtime/);
   assert.match(assembly, /whisper_stt_module_descriptor_v1/);
   assert.match(assembly, /whisper_stt_settings_schema_v1/);
   assert.match(assembly, /whisper_stt_storage_bundle_v1/);
@@ -183,18 +183,18 @@ test('Whisper native release build pins source model toolchain and reproducibili
 test('development release composes the exact Speech-to-Text and Whisper assembly fragments', async () => {
   const release = await read('backend/scripts/materialize-dev-release.sh');
 
-  assert.match(release, /--package hermes-speech-to-text-runtime/);
-  assert.match(release, /--package hermes-speech-to-text-assembly/);
-  assert.match(release, /debug\/hermes-speech-to-text-assembly/);
+  assert.match(release, /--package makosh-speech-to-text-runtime/);
+  assert.match(release, /--package makosh-speech-to-text-assembly/);
+  assert.match(release, /debug\/makosh-speech-to-text-assembly/);
   assert.match(
     release,
     /--artifact-fragment "\$speech_to_text_assembly\/speech-to-text\.release-artifacts\.json"/,
   );
-  assert.match(release, /HERMES_DEV_WHISPER_STT_ROOT/);
+  assert.match(release, /MAKOSH_DEV_WHISPER_STT_ROOT/);
   assert.match(release, /build-whisper-stt-macos\.sh/);
-  assert.match(release, /--package hermes-whisper-stt-runtime/);
-  assert.match(release, /--package hermes-whisper-stt-assembly/);
-  assert.match(release, /debug\/hermes-whisper-stt-assembly/);
+  assert.match(release, /--package makosh-whisper-stt-runtime/);
+  assert.match(release, /--package makosh-whisper-stt-assembly/);
+  assert.match(release, /debug\/makosh-whisper-stt-assembly/);
   assert.match(release, /--runner "\$whisper_stt_runner"/);
   assert.match(release, /--model "\$whisper_stt_model"/);
   assert.match(
@@ -235,10 +235,10 @@ test('Speech-to-Text routes managed Whisper through authenticated custody bounda
   assert.match(blob, /custody_target_owner_id: target\.owner_id/);
   assert.match(blob, /custody_source_proof: blob\.custody_transfer_source_proof/);
   assert.match(runner, /managed_speech_to_text_routes_whisper_private_blob_and_replays_after_restart/);
-  assert.match(runner, /HERMES_SPEECH_TO_TEXT_RUNTIME_BIN/);
-  assert.match(runner, /HERMES_WHISPER_STT_RUNNER/);
-  assert.match(runner, /HERMES_WHISPER_STT_MODEL/);
-  assert.match(runner, /HERMES_WHISPER_STT_TEST_WAV/);
+  assert.match(runner, /MAKOSH_SPEECH_TO_TEXT_RUNTIME_BIN/);
+  assert.match(runner, /MAKOSH_WHISPER_STT_RUNNER/);
+  assert.match(runner, /MAKOSH_WHISPER_STT_MODEL/);
+  assert.match(runner, /MAKOSH_WHISPER_STT_TEST_WAV/);
 });
 
 test('Whisper provider and Speech-to-Text engine gates require completed managed conformance', async () => {

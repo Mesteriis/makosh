@@ -15,7 +15,7 @@ export function useDocumentsPageSurface() {
   const documents = computed<DocDisplayItem[]>(() =>
     documentProcessingJobs.value.map((job) => ({
       name: `${job.document_id} (${job.step})`,
-      source: 'Hermes Hub',
+      source: 'Макошь',
       project: job.status,
       type: job.step,
       date: job.queued_at,

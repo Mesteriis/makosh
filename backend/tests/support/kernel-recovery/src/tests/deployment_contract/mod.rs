@@ -1,13 +1,13 @@
 //! Deployment profile and initial-enrollment contract validation.
 
 use super::common::*;
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     DeploymentProfileV1, DeviceProofV1, DistributionArtifactV1, FileDeviceProofV1,
     InitialOwnerEnrollmentTransportV1, NativeExecutableDigestV1, OciImageDigestV1,
     RemotePairingEnrollmentV1, RuntimeLifecycleV1, device_proof_v1, distribution_artifact_v1,
     initial_owner_enrollment_transport_v1,
 };
-use hermes_runtime_protocol::validation::deployment::{
+use makosh_runtime_protocol::validation::deployment::{
     DeploymentValidationError, MACOS_TAURI_TARGET, validate_deployment_binding,
     validate_initial_owner_enrollment_transport,
 };
@@ -72,7 +72,7 @@ fn deployment_contracts_bind_profile_lifecycle_artifact_and_file_proof() {
     let oci_artifact = DistributionArtifactV1 {
         artifact: Some(distribution_artifact_v1::Artifact::OciImage(
             OciImageDigestV1 {
-                repository: "registry.example/hermes/kernel".to_owned(),
+                repository: "registry.example/makosh/kernel".to_owned(),
                 sha256: vec![12; 32],
             },
         )),

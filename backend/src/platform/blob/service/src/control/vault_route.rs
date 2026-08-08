@@ -4,8 +4,8 @@ use std::future::Future;
 use std::os::unix::net::UnixStream;
 use std::time::Duration;
 
-use hermes_blob_runtime::vault::{BlobVaultRouteFailureV1, BlobVaultRoutePortV1};
-use hermes_runtime_protocol::v1::{
+use makosh_blob_runtime::vault::{BlobVaultRouteFailureV1, BlobVaultRoutePortV1};
+use makosh_runtime_protocol::v1::{
     BlobRuntimeControlRequestV1, BlobRuntimeControlResponseV1, ManagedRuntimeControlRequestV1,
     ManagedRuntimeControlResponseV1, ManagedRuntimeVaultRouteRequestV1, VaultCiphertextResponseV1,
     VaultCiphertextRouteV1, managed_runtime_control_request_v1::Operation,
@@ -93,7 +93,7 @@ mod tests {
     use std::os::unix::net::UnixStream;
     use std::thread;
 
-    use hermes_runtime_protocol::v1::{
+    use makosh_runtime_protocol::v1::{
         BlobRuntimeControlRequestV1, BlobRuntimeControlResponseV1, GetBlobRuntimeStatusRequestV1,
         ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
         ManagedRuntimeVaultRouteResponseV1, VaultCiphertextResponseV1, VaultCiphertextRouteV1,

@@ -1,7 +1,7 @@
-use hermes_communications_api::accounts::CommunicationProviderKind;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
 
-use hermes_hub_backend::platform::secrets::models::SecretKind;
+use makosh_hub_backend::platform::secrets::models::SecretKind;
 
 #[test]
 fn telegram_provider_and_secret_kinds_are_account_scoped() {

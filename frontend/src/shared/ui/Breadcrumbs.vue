@@ -16,7 +16,7 @@ const emit = defineEmits<{
 	navigate: [item: NavigationItem]
 }>()
 
-const classes = computed(() => ['hermes-breadcrumbs', props.class])
+const classes = computed(() => ['makosh-breadcrumbs', props.class])
 
 function isCurrent(item: NavigationItem, index: number): boolean {
 	return item.current === true || index === props.items.length - 1
@@ -25,21 +25,21 @@ function isCurrent(item: NavigationItem, index: number): boolean {
 
 <template>
 	<nav :class="classes" :aria-label="label">
-		<ol class="hermes-breadcrumbs__list">
-			<li v-for="(item, index) in items" :key="item.id" class="hermes-breadcrumbs__item">
-				<Icon v-if="index > 0" icon="tabler:chevron-right" size="0.875rem" class="hermes-breadcrumbs__separator" aria-hidden="true" />
-				<span v-if="isCurrent(item, index)" class="hermes-breadcrumbs__current" aria-current="page">
+		<ol class="makosh-breadcrumbs__list">
+			<li v-for="(item, index) in items" :key="item.id" class="makosh-breadcrumbs__item">
+				<Icon v-if="index > 0" icon="tabler:chevron-right" size="0.875rem" class="makosh-breadcrumbs__separator" aria-hidden="true" />
+				<span v-if="isCurrent(item, index)" class="makosh-breadcrumbs__current" aria-current="page">
 					{{ item.label }}
 				</span>
 				<a
 					v-else-if="item.href"
-					class="hermes-breadcrumbs__link"
+					class="makosh-breadcrumbs__link"
 					:href="item.href"
 					@click.prevent="emit('navigate', item)"
 				>
 					{{ item.label }}
 				</a>
-				<button v-else class="hermes-breadcrumbs__link" type="button" @click="emit('navigate', item)">
+				<button v-else class="makosh-breadcrumbs__link" type="button" @click="emit('navigate', item)">
 					{{ item.label }}
 				</button>
 			</li>

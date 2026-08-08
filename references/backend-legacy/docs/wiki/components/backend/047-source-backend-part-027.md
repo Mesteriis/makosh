@@ -264,7 +264,7 @@ pub struct OrgTimelineEvent {
 
 #### Review‑проекция (`review_projection.rs`)
 
-`upsert_review_person(person_id, display_name)` – создаёт/обновляет запись в `persons` с синтетическим email (`{person_id}@hermes.invalid`) и типом `human`, а также запись в `person_personas`.
+`upsert_review_person(person_id, display_name)` – создаёт/обновляет запись в `persons` с синтетическим email (`{person_id}@makosh.invalid`) и типом `human`, а также запись в `person_personas`.
 
 Таблица `person_personas`: поля persona_id, person_id, name.
 

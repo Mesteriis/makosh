@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `adr`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docs/adr/ADR-0077-i18n-russian-english.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0077-i18n-russian-english.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0077-i18n-russian-english.md`
 - Size bytes / Размер в байтах: `2146`
 - Included characters / Включено символов: `2130`
 - Truncated / Обрезано: `no`
@@ -65,15 +65,15 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 Status: Accepted
 Date: 2026-06-08
-Deciders: Alex (hermes-hub maintainer)
+Deciders: Alex (makosh maintainer)
 
 ## Context
 
-Hermes Hub is a personal knowledge system. The primary user is Russian-speaking, but technical collaborators and future extensibility benefit from English as a secondary language. Hardcoding strings in one language creates maintenance debt and makes switching impractical.
+Макошь is a personal knowledge system. The primary user is Russian-speaking, but technical collaborators and future extensibility benefit from English as a secondary language. Hardcoding strings in one language creates maintenance debt and makes switching impractical.
 
 ## Decision
 
-The Hermes Hub desktop interface supports **two languages: Russian (ru) and English (en)** via a lightweight i18n system.
+The Макошь desktop interface supports **two languages: Russian (ru) and English (en)** via a lightweight i18n system.
 
 **Mechanism:**
 - JSON translation dictionaries under `frontend/src/lib/i18n/` (`en.json`, `ru.json`)
@@ -112,7 +112,7 @@ The Hermes Hub desktop interface supports **two languages: Russian (ru) and Engl
 
 ### `docs/adr/ADR-0078-frontend-component-decomposition.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0078-frontend-component-decomposition.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0078-frontend-component-decomposition.md`
 - Size bytes / Размер в байтах: `6639`
 - Included characters / Включено символов: `6597`
 - Truncated / Обрезано: `no`
@@ -122,7 +122,7 @@ The Hermes Hub desktop interface supports **two languages: Russian (ru) and Engl
 
 Status: Superseded by ADR-0093
 Date: 2026-06-09
-Deciders: Alex (hermes-hub maintainer)
+Deciders: Alex (makosh maintainer)
 
 ## Superseded
 
@@ -279,7 +279,7 @@ each step and keeps the app functional throughout.
 
 ### `docs/adr/ADR-0079-script-logic-decomposition.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0079-script-logic-decomposition.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0079-script-logic-decomposition.md`
 - Size bytes / Размер в байтах: `7209`
 - Included characters / Включено символов: `7147`
 - Truncated / Обрезано: `no`
@@ -289,7 +289,7 @@ each step and keeps the app functional throughout.
 
 Status: Superseded by ADR-0093
 Date: 2026-06-09
-Deciders: Alex (hermes-hub maintainer)
+Deciders: Alex (makosh maintainer)
 
 ## Superseded
 
@@ -319,8 +319,8 @@ Move `apiBaseUrl` and `apiSecret` from `+page.svelte` to a shared config module:
 
 ```ts
 // lib/config.ts
-export const apiBaseUrl = import.meta.env.VITE_HERMES_API_BASE_URL ?? 'http://127.0.0.1:8080';
-export const apiSecret = import.meta.env.VITE_HERMES_LOCAL_API_SECRET ?? 'change-me-local-api-secret';
+export const apiBaseUrl = import.meta.env.VITE_MAKOSH_API_BASE_URL ?? 'http://127.0.0.1:8080';
+export const apiSecret = import.meta.env.VITE_MAKOSH_LOCAL_API_SECRET ?? 'change-me-local-api-secret';
 ```
 
 All service modules and components import from here instead of receiving these
@@ -460,7 +460,7 @@ desktop application. Svelte 5 runes provide sufficient reactivity.
 
 ### `docs/adr/ADR-0080-mail-background-sync-progress-local-trash.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0080-mail-background-sync-progress-local-trash.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0080-mail-background-sync-progress-local-trash.md`
 - Size bytes / Размер в байтах: `5250`
 - Included characters / Включено символов: `5220`
 - Truncated / Обрезано: `no`
@@ -470,17 +470,17 @@ desktop application. Svelte 5 runes provide sufficient reactivity.
 
 Status: Accepted
 Date: 2026-06-10
-Deciders: Alex (hermes-hub maintainer)
+Deciders: Alex (makosh maintainer)
 
 ## Context
 
-Hermes Hub mail already has provider account setup, raw/blob preservation,
+Макошь mail already has provider account setup, raw/blob preservation,
 message projection and provider SMTP send for iCloud/generic IMAP. The mail
 workbench now needs continuous account-scoped ingestion instead of only manual or
 fixture-driven imports.
 
-The owner also clarified deletion semantics: deleting mail in the Hermes UI must
-not delete, move, trash or expunge the original provider message. Hermes Hub
+The owner also clarified deletion semantics: deleting mail in the Макошь UI must
+not delete, move, trash or expunge the original provider message. Макошь
 should hide the item from active workbench views while preserving local raw/blob
 content and metadata for replay, AI analysis and analytics.
 
@@ -585,7 +585,7 @@ Frontend behavior:
 
 ### `docs/adr/ADR-0081-opt-in-omniroute-ai-runtime.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0081-opt-in-omniroute-ai-runtime.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0081-opt-in-omniroute-ai-runtime.md`
 - Size bytes / Размер в байтах: `2096`
 - Included characters / Включено символов: `2096`
 - Truncated / Обрезано: `no`
@@ -600,7 +600,7 @@ Status: Proposed
 ADR-0009 selected Ollama as the initial local AI runtime boundary and requires remote models to be opt-in and policy controlled if added later.
 ADR-0049 implemented V3 AI with Ollama as the only provider, but the local infrastructure now exposes a dedicated OpenAI-compatible OmniRoute gateway for this workstation.
 
-Hermes Hub still handles private communications and documents. Remote or routed model calls must not become implicit defaults.
+Макошь still handles private communications and documents. Remote or routed model calls must not become implicit defaults.
 
 ## Decision
 
@@ -612,7 +612,7 @@ Rules:
 - `omniroute` is enabled only by explicit runtime setting or environment override.
 - OmniRoute uses an OpenAI-compatible API boundary.
 - Non-secret provider settings may live in `application_settings`.
-- OmniRoute API keys remain outside `application_settings`; the initial implementation reads `HERMES_OMNIROUTE_API_KEY` from process environment.
+- OmniRoute API keys remain outside `application_settings`; the initial implementation reads `MAKOSH_OMNIROUTE_API_KEY` from process environment.
 - The AI run event payload records provider name and model IDs, not API keys or private prompt/document bodies.
 - Existing semantic embedding dimension validation remains enforced; changing embedding models still requires compatibility with `halfvec(2560)` unless a future ADR changes the derived index shape.
 
@@ -620,7 +620,7 @@ Rules:
 
 Positive:
 
-- Hermes Hub can use the owner-managed OmniRoute gateway without hardcoding a cloud provider.
+- Макошь can use the owner-managed OmniRoute gateway without hardcoding a cloud provider.
 - Local Ollama remains the safe default for private data.
 - Provider replacement is isolated behind a runtime client boundary.
 
@@ -640,7 +640,7 @@ Negative:
 
 ### `docs/adr/ADR-0082-ai-settings-control-center.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0082-ai-settings-control-center.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0082-ai-settings-control-center.md`
 - Size bytes / Размер в байтах: `3018`
 - Included characters / Включено символов: `3018`
 - Truncated / Обрезано: `no`
@@ -654,7 +654,7 @@ Status: Proposed
 
 ADR-0049 introduced the V3 local AI runtime with Ollama defaults. ADR-0081 added explicit OmniRoute support, but the current settings surface still exposes AI as generic `application_settings` rows. That does not scale to built-in runtime management, CLI-backed local agents, remote API providers, per-capability model routing, or editable prompt templates.
 
-Hermes Hub handles private communications and documents. AI provider configuration must preserve the local-first posture, keep secrets in the host vault from ADR-0076, and make remote-context consent explicit.
+Макошь handles private communications and documents. AI provider configuration must preserve the local-first posture, keep secrets in the host vault from ADR-0076, and make remote-context consent explicit.
 
 ## Decision
 
@@ -667,7 +667,7 @@ Rules:
 - API provider secrets are stored only through host-vault secret references. Environment-backed OmniRoute remains a legacy/bootstrap fallback.
 - Remote/API providers require explicit provider-level consent before they can be used for private-context workflows.
 - CLI agents are provider bridges only. They may execute only allowlisted fixed command/argument presets and must not become autonomous workflow actors in this slice.
-- Built-in Ollama runtime management is desktop/macOS-first. Hermes may install/start/update the runtime automatically, but model downloads require explicit user confirmation.
+- Built-in Ollama runtime management is desktop/macOS-first. Макошь may install/start/update the runtime automatically, but model downloads require explicit user confirmation.
 - Model routing uses stable capability slots instead of one global chat model. Embedding routes must keep the current 2560-dimension constraint until a future ADR changes the semantic index shape.
 - Prompt templates are versioned. System prompts are seeded/read-only, while user prompts and active versions are stored as domain records.
 - Prompt evaluation runs may persist model output and metadata, but audit/event payloads must not store raw private source text, API keys or provider secret values.
@@ -697,7 +697,7 @@ Risk handling:
 
 ### `docs/adr/ADR-0083-telegram-live-user-client-runtime.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0083-telegram-live-user-client-runtime.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0083-telegram-live-user-client-runtime.md`
 - Size bytes / Размер в байтах: `3758`
 - Included characters / Включено символов: `3758`
 - Truncated / Обрезано: `no`
@@ -715,7 +715,7 @@ policy dry-runs, call metadata and transcript storage. A usable Telegram client
 needs a live `telegram_user` runtime that can keep TDLib state warm, sync chats,
 sync selected history, send user-confirmed messages and fetch media on demand.
 
-This must not turn Telegram into the source of truth. Hermes Hub remains
+This must not turn Telegram into the source of truth. Макошь remains
 local-first and event-backed: Telegram provider data is preserved as source
 evidence, while canonical messages, graph links and task candidates remain local
 projections.
@@ -790,7 +790,7 @@ Risk handling:
 
 ### `docs/adr/ADR-0084-persona-intelligence-system.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0084-persona-intelligence-system.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0084-persona-intelligence-system.md`
 - Size bytes / Размер в байтах: `4892`
 - Included characters / Включено символов: `4892`
 - Truncated / Обрезано: `no`
@@ -814,14 +814,14 @@ Clarifies:
 
 ## Context
 
-Hermes Hub is a local-first Personal Memory System. The persons domain was
+Макошь is a local-first Personal Memory System. The persons domain was
 previously documented as a partially renamed contact system: contacts became
 persons, but the model still used CRM-shaped concepts such as contact merge,
 roles, nested personas, favorites, watchlists, health status, fingerprints,
 analytics and investigator flows.
 
-The domain direction has changed. Hermes does not treat people as contacts.
-Hermes treats subjects as Personas.
+The domain direction has changed. Макошь does not treat people as contacts.
+Макошь treats subjects as Personas.
 
 A Persona is a durable digital representation of a subject that can accumulate
 identity, relationships, communication context, memory, timeline, knowledge and
@@ -927,7 +927,7 @@ silently require a database migration.
 
 Positive:
 
-- The domain aligns with Hermes as a Personal Memory System.
+- The domain aligns with Макошь as a Personal Memory System.
 - People, agents, organization proxies and system actors can exist in one graph.
 - Relationships become queryable, provenance-backed records.
 - The Owner Persona gives agents a clear subject boundary.
@@ -971,7 +971,7 @@ Negative:
 
 ### `docs/adr/ADR-0085-communication-spine-and-contradiction-engine.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0085-communication-spine-and-contradiction-engine.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0085-communication-spine-and-contradiction-engine.md`
 - Size bytes / Размер в байтах: `3503`
 - Included characters / Включено символов: `3503`
 - Truncated / Обрезано: `no`
@@ -991,9 +991,9 @@ Clarifies:
 
 ## Context
 
-Hermes Hub is a local-first Personal Memory System. The product model treats
+Макошь is a local-first Personal Memory System. The product model treats
 Communications as the primary ingestion spine: messages, meetings, calls and
-provider events enter Hermes as source evidence and become knowledge, memory,
+provider events enter Макошь as source evidence and become knowledge, memory,
 relationships, obligations, tasks, decisions and project context.
 
 The repository still contains email-heavy implementation boundaries because
@@ -1002,7 +1002,7 @@ exist as adjacent surfaces. Documentation needs one canonical model that
 explains how all interaction evidence enters the system.
 
 The user also approved a Polygraph concept: when a new message, document or
-event contradicts remembered knowledge, Hermes should detect the conflict and
+event contradicts remembered knowledge, Макошь should detect the conflict and
 surface it for review.
 
 ## Decision
@@ -1092,7 +1092,7 @@ Negative:
 
 ### `docs/adr/ADR-0086-first-class-relationship-persistence.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0086-first-class-relationship-persistence.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0086-first-class-relationship-persistence.md`
 - Size bytes / Размер в байтах: `5208`
 - Included characters / Включено символов: `5208`
 - Truncated / Обрезано: `no`
@@ -1112,7 +1112,7 @@ Clarifies:
 
 ## Context
 
-Hermes is relationship-first. Current implementation stores relationship-shaped
+Макошь is relationship-first. Current implementation stores relationship-shaped
 data in several places:
 
 - `graph_edges` as graph projection records;
@@ -1254,7 +1254,7 @@ Relationship records behind their compatibility surfaces.
 
 ### `docs/adr/ADR-0087-contradiction-observation-persistence.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0087-contradiction-observation-persistence.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0087-contradiction-observation-persistence.md`
 - Size bytes / Размер в байтах: `5212`
 - Included characters / Включено символов: `5212`
 - Truncated / Обрезано: `no`
@@ -1274,7 +1274,7 @@ Clarifies:
 
 ## Context
 
-Hermes is a Personal Memory System. New Communications, Documents, Events,
+Макошь is a Personal Memory System. New Communications, Documents, Events,
 Decisions and Obligations can contradict accepted Memory and Knowledge.
 
 ADR-0085 introduced the Consistency / Contradiction Engine, user-facing alias
@@ -1429,7 +1429,7 @@ and submits explicit owner review state through
 
 ### `docs/adr/ADR-0088-obligation-persistence.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0088-obligation-persistence.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0088-obligation-persistence.md`
 - Size bytes / Размер в байтах: `5636`
 - Included characters / Включено символов: `5636`
 - Truncated / Обрезано: `no`
@@ -1450,7 +1450,7 @@ Clarifies:
 
 ## Context
 
-Hermes is a Personal Memory System. Communications, meetings, calls and
+Макошь is a Personal Memory System. Communications, meetings, calls and
 documents often contain commitments, duties and promises. The documentation
 distinguishes three concepts:
 
@@ -1536,7 +1536,7 @@ policy or candidate review flow.
 
 Positive:
 
-- Hermes can remember commitments without forcing them into task lifecycle.
+- Макошь can remember commitments without forcing them into task lifecycle.
 - Tasks can cite Obligations as reasons instead of becoming the source of truth
   for commitments.
 - Consistency / Contradiction Engine can point at obligation status conflicts.
@@ -1615,7 +1615,7 @@ Tasks.
 
 ### `docs/adr/ADR-0089-decision-persistence.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0089-decision-persistence.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0089-decision-persistence.md`
 - Size bytes / Размер в байтах: `6118`
 - Included characters / Включено символов: `6118`
 - Truncated / Обрезано: `no`
@@ -1636,7 +1636,7 @@ Clarifies:
 
 ## Context
 
-Hermes is a Personal Memory System. It must remember not only what happened,
+Макошь is a Personal Memory System. It must remember not only what happened,
 but why a direction was chosen.
 
 Current implementation has decision-shaped data in several places:
@@ -1721,7 +1721,7 @@ Obligations.
 
 Positive:
 
-- Hermes can answer why a project, communication thread or workflow moved in a
+- Макошь can answer why a project, communication thread or workflow moved in a
   particular direction.
 - Decisions become evidence-backed and reviewable instead of being hidden in
   meeting text, task notes or project state.
@@ -1809,7 +1809,7 @@ Obligation state.
 
 ### `docs/adr/ADR-0090-persona-native-compatibility-api-bridge.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0090-persona-native-compatibility-api-bridge.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0090-persona-native-compatibility-api-bridge.md`
 - Size bytes / Размер в байтах: `2707`
 - Included characters / Включено символов: `2707`
 - Truncated / Обрезано: `no`
@@ -1829,7 +1829,7 @@ ADR-0084 defines Persona as the target domain entity, while current durable
 storage and much of the compatibility API still use `persons`, `person_id` and
 `/api/v1/persons/*`.
 
-Hermes needs Persona-native read and write surfaces so new UI and agent flows
+Макошь needs Persona-native read and write surfaces so new UI and agent flows
 can speak the target language. A physical schema rename from `persons` to
 `personas` is still a separate migration decision because existing routes,
 tables, projections and tests depend on compatibility names.
@@ -1898,7 +1898,7 @@ Negative:
 
 ### `docs/adr/ADR-0091-telegram-production-client-capability-model.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0091-telegram-production-client-capability-model.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0091-telegram-production-client-capability-model.md`
 - Size bytes / Размер в байтах: `15599`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1927,7 +1927,7 @@ Clarified by:
 
 ## Context
 
-Hermes Hub already has a Telegram foundation: provider account records,
+Макошь already has a Telegram foundation: provider account records,
 fixture accounts, QR/live-blocked account setup, a TDLib-oriented runtime
 manager, chat/history sync endpoints, manual send routing, media download
 facade, policy dry-runs, call metadata, transcript storage and a desktop
@@ -1939,11 +1939,11 @@ message history, media, voice/video messages, calls, channels, groups, forums,
 search, drafts, notifications, address book data, media gallery, offline mode,
 exports and desktop UX.
 
-This must not turn Hermes into a generic Telegram clone. Telegram remains a
+This must not turn Макошь into a generic Telegram clone. Telegram remains a
 Communication channel feeding source evidence into a local-first Personal Memory
 System. Provider behavior is preserved at adapter and source-record boundaries;
 canonical Communication, Memory, Relationship, Obligation, Decision, Task,
-Document and Context behavior remains Hermes-owned.
+Document and Context behavior remains Макошь-owned.
 
 External protocol references used by this ADR:
 
@@ -1978,7 +1978,7 @@ Capability states:
 - `planned`: the feature is intentionally deferred to a named initiative and is
   not part of base Telegram channel capability completion.
 - `unsupported`: the feature is intentionally out of current scope or conflicts
-  with Hermes policy.
+  with Макошь policy.
 
 Capability action classes follow ADR-0052:
 
@@ -2039,7 +2039,7 @@ Rules:
 
 ### Source Evidence And Local Truth
 
-Telegram source data must enter Hermes through append-only raw source records and
+Telegram source data must enter Макошь through append-only raw source records and
 canonical events.
 
 Rules:
@@ -2098,7 +2098,7 @@ Rules:
 
 ### Soft Delete And Message History
 
-Hermes never physically deletes local Telegram message evidence as the default
+Макошь never physically deletes local Telegram message evidence as the default
 delete behavior.
 
 Rules:
@@ -2112,7 +2112,7 @@ Rules:
 - UI must show deletion reason, deletion time and deletion history where known.
 - Provider-side delete requests are destructive commands and must still leave
   the local tombstone and historical source evidence.
-- Message edit history is versioned from observed updates. Hermes must not claim
+- Message edit history is versioned from observed updates. Макошь must not claim
   to reconstruct provider edit versions that were never observed locally.
 - Version diff views compare local observed versions and must cite source
   records or events.
@@ -2191,7 +2191,7 @@ Rules:
 
 ### Search, Drafts, Notifications And Offline
 
-Global Telegram search participates in the Hermes Search Engine. Search results
+Global Telegram search participates in the Макошь Search Engine. Search results
 must distinguish local cache hits from provider search results.
 
 Rules:
@@ -2205,7 +2205,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/adr/ADR-0092-mail-provider-capability-tiers.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0092-mail-provider-capability-tiers.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0092-mail-provider-capability-tiers.md`
 - Size bytes / Размер в байтах: `4008`
 - Included characters / Включено символов: `4008`
 - Truncated / Обрезано: `no`
@@ -2225,7 +2225,7 @@ Clarifies:
 
 ## Context
 
-Hermes mail has a provider-neutral storage boundary, Gmail OAuth setup,
+Макошь mail has a provider-neutral storage boundary, Gmail OAuth setup,
 iCloud/generic IMAP account setup, SMTP sending for IMAP-backed accounts,
 background sync status, local trash and message projections.
 
@@ -2238,7 +2238,7 @@ accounts would hide real capability differences:
 - Microsoft 365 and Exchange Online should prefer Microsoft Graph OAuth over
   IMAP basic credentials.
 - Legacy/on-prem Exchange may require EWS or a local bridge.
-- Proton support should normally use Proton Mail Bridge locally; Hermes must not
+- Proton support should normally use Proton Mail Bridge locally; Макошь must not
   attempt to handle Proton account passwords directly.
 - Fastmail, Mail.ru and Yandex can work as IMAP/SMTP presets before they need
   first-class provider kinds.
@@ -2303,7 +2303,7 @@ Negative:
 
 ### `docs/adr/ADR-0093-frontend-platform-migration-to-vue-3.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0093-frontend-platform-migration-to-vue-3.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0093-frontend-platform-migration-to-vue-3.md`
 - Size bytes / Размер в байтах: `10212`
 - Included characters / Включено символов: `10080`
 - Truncated / Обрезано: `no`
@@ -2319,7 +2319,7 @@ Status: Accepted
 
 ## Deciders
 
-Alex (hermes-hub maintainer)
+Alex (makosh maintainer)
 
 ## Supersedes
 
@@ -2331,7 +2331,7 @@ Alex (hermes-hub maintainer)
 
 ## Context
 
-Hermes Hub evolves from a small desktop application into a long-term Personal
+Макошь evolves from a small desktop application into a long-term Personal
 Memory System that integrates:
 
 - Mail
@@ -2350,7 +2350,7 @@ The project is built as a desktop-first application using:
 - Rust
 - Tauri
 
-Hermes is not a traditional website and does not require:
+Макошь is not a traditional website and does not require:
 
 - SEO
 - Public SSR pages
@@ -2506,7 +2506,7 @@ inside components (except in query definitions).
 | Tailwind CSS | Utility-first CSS framework |
 | shadcn-vue | Accessible component primitives (become project-owned code) |
 
-Hermes UI is not tied to any third-party design system. shadcn-vue components
+Макошь UI is not tied to any third-party design system. shadcn-vue components
 are copied into the project and customized as needed.
 
 ### Animations
@@ -2723,7 +2723,7 @@ Polling is discouraged. Preferred:
 
 ### `docs/adr/ADR-0094-telegram-base-domain-completion-boundary.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0094-telegram-base-domain-completion-boundary.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0094-telegram-base-domain-completion-boundary.md`
 - Size bytes / Размер в байтах: `4417`
 - Included characters / Включено символов: `4417`
 - Truncated / Обрезано: `no`
@@ -2747,14 +2747,14 @@ Clarifies:
 
 ## Context
 
-Telegram has reached the base Communication Channel scope for Hermes
+Telegram has reached the base Communication Channel scope for Макошь
 Communications. It provides source evidence, provider commands, communication
 projections, realtime events, identity traces, timeline evidence and media
-evidence for other Hermes systems.
+evidence for other Макошь systems.
 
 Telegram must not become a Memory Engine, Knowledge Engine, Persona Engine,
 Organization Engine, Project Engine, Obligation Engine or Decision Engine.
-Those systems consume Telegram evidence through existing Hermes boundaries.
+Those systems consume Telegram evidence through existing Макошь boundaries.
 
 Several requested Telegram-adjacent features remain valuable, but they require
 separate runtime, permissions, security, media-device or AI review work. Keeping
@@ -2777,7 +2777,7 @@ Capability states now include:
   confidence.
 - `planned`: intentionally deferred to a named initiative and not part of base
   Telegram completion.
-- `unsupported`: intentionally outside Hermes policy or incompatible with the
+- `unsupported`: intentionally outside Макошь policy or incompatible with the
   current Telegram account/runtime.
 
 The following capabilities are `planned`, not base-domain gaps:
@@ -2848,7 +2848,7 @@ Completion requires:
 
 ### `docs/adr/ADR-0095-event-driven-domain-communication-and-dlq.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0095-event-driven-domain-communication-and-dlq.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0095-event-driven-domain-communication-and-dlq.md`
 - Size bytes / Размер в байтах: `3521`
 - Included characters / Включено символов: `3521`
 - Truncated / Обрезано: `no`
@@ -2860,7 +2860,7 @@ Status: Accepted
 
 ## Context
 
-Hermes is moving to a layered architecture where integrations, domains, engines
+Макошь is moving to a layered architecture where integrations, domains, engines
 and UI modules do not call each other's handlers or domain services directly.
 Communication channels such as Email, Telegram and WhatsApp should publish
 source evidence and provider state. Domain owners should react through durable
@@ -2962,7 +2962,7 @@ exist.
 
 ### `docs/adr/ADR-0096-canonical-evidence-review-and-context-packs.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0096-canonical-evidence-review-and-context-packs.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0096-canonical-evidence-review-and-context-packs.md`
 - Size bytes / Размер в байтах: `4966`
 - Included characters / Включено символов: `4966`
 - Truncated / Обрезано: `no`
@@ -2974,7 +2974,7 @@ Status: Accepted
 
 ## Context
 
-Hermes already has events, source-backed communications, decisions,
+Макошь already has events, source-backed communications, decisions,
 obligations, relationships and reviewable candidates. The missing boundary was
 the layer between provider/runtime captures and domain truth.
 
@@ -2990,7 +2990,7 @@ ownership model that sits between integrations and domains.
 
 ## Decision
 
-Hermes uses this target flow:
+Макошь uses this target flow:
 
 ```text
 External Systems
@@ -3018,7 +3018,7 @@ Core invariants:
   or delete the previous observation.
 - Vault owns provider accounts, capabilities, sources and sessions. Vault does
   not own observations.
-- Review is a domain and the main Hermes inbox for reviewable material.
+- Review is a domain and the main Макошь inbox for reviewable material.
 - Radar remains attention vocabulary and read-model language. It is not a
   durable domain.
 - Context Packs are engine output under `engines/context_packs/`. They are
@@ -3140,7 +3140,7 @@ legacy source/evidence fields.
 
 ### `docs/adr/ADR-0097-communications-channel-domains-to-integrations.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0097-communications-channel-domains-to-integrations.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0097-communications-channel-domains-to-integrations.md`
 - Size bytes / Размер в байтах: `5940`
 - Included characters / Включено символов: `5940`
 - Truncated / Обрезано: `no`
@@ -3174,7 +3174,7 @@ provider setup/runtime APIs live under `/api/v1/integrations/*`.
 
 ## Context
 
-Hermes accumulated channel-shaped implementation surfaces while building email,
+Макошь accumulated channel-shaped implementation surfaces while building email,
 Telegram and WhatsApp support. Email started as the first communication
 implementation. Telegram later gained a large account/runtime/message UI and was
 documented as a completed "base domain". WhatsApp documentation also described a
@@ -3196,7 +3196,7 @@ AI/workflow state or provider command envelopes.
 
 ## Decision
 
-Hermes has one Communications domain.
+Макошь has one Communications domain.
 
 Rules:
 
@@ -3322,7 +3322,7 @@ The repository must enforce:
 
 ### `docs/adr/ADR-0098-provider-neutral-communications-api-and-strict-boundaries.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0098-provider-neutral-communications-api-and-strict-boundaries.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0098-provider-neutral-communications-api-and-strict-boundaries.md`
 - Size bytes / Размер в байтах: `4366`
 - Included characters / Включено символов: `4366`
 - Truncated / Обрезано: `no`
@@ -3366,7 +3366,7 @@ execution.
 
 ## Decision
 
-Hermes business Communications APIs are provider-neutral.
+Макошь business Communications APIs are provider-neutral.
 
 Provider-neutral product routes use:
 
@@ -3455,7 +3455,7 @@ The repository must enforce:
 
 ### `docs/adr/ADR-0099-signal-hub-event-platform.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0099-signal-hub-event-platform.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0099-signal-hub-event-platform.md`
 - Size bytes / Размер в байтах: `5448`
 - Included characters / Включено символов: `5448`
 - Truncated / Обрезано: `no`
@@ -3478,7 +3478,7 @@ Clarifies:
 
 ## Context
 
-Hermes is growing from a Communications-centered local system into a Personal
+Макошь is growing from a Communications-centered local system into a Personal
 Operating System for memory, context and decisions. Email, Telegram and WhatsApp
 are only the first external sources. Future sources include GitHub, Browser
 capture, RSS, Calendar providers, Filesystem, Home Assistant, voice input and
@@ -3503,7 +3503,7 @@ Communications would incorrectly make all signals communication-shaped.
 
 ## Decision
 
-Hermes introduces Signal Hub as a first-class system domain.
+Макошь introduces Signal Hub as a first-class system domain.
 
 Signal Hub owns:
 
@@ -3527,12 +3527,12 @@ Signal Hub does not own:
 - Radar state;
 - Tasks, Personas, Documents, Calendar, Knowledge or Graph state.
 
-All new external and synthetic signal sources enter Hermes through Signal Hub
+All new external and synthetic signal sources enter Макошь through Signal Hub
 control state and the Event Backbone.
 
 ## Event Platform Decision
 
-Hermes designs the event platform from the start for:
+Макошь designs the event platform from the start for:
 
 - PostgreSQL append-only `event_log` as audit/recovery source of truth;
 - NATS JetStream as durable production delivery and fan-out transport;

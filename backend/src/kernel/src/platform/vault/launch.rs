@@ -3,8 +3,8 @@
 use std::path::Path;
 use std::time::Duration;
 
-use hermes_kernel_control_store::PlatformManagedProcessLaunch;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store::PlatformManagedProcessLaunch;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use crate::distribution::staged_contracts::StagedRuntimeContracts;
 use crate::identity::device::signer::{DeviceSigner, FileDeviceSigner};
@@ -107,7 +107,7 @@ pub(crate) fn start_from_kernel(
 
 fn vault_binding(
     store: &SqliteControlStore,
-) -> Result<hermes_kernel_control_store::PlatformManagedProcessBinding, String> {
+) -> Result<makosh_kernel_control_store::PlatformManagedProcessBinding, String> {
     store
         .platform_managed_process_binding(VAULT_PROCESS_ID)
         .map_err(|error| format!("{error:?}"))?
@@ -116,7 +116,7 @@ fn vault_binding(
 
 fn prepare_launch(
     kernel_executable: &Path,
-    binding: &hermes_kernel_control_store::PlatformManagedProcessBinding,
+    binding: &makosh_kernel_control_store::PlatformManagedProcessBinding,
     runtime_dir: &Path,
     runtime_generation: u64,
 ) -> Result<

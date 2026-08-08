@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_provider_zulip::{
+use makosh_provider_zulip::{
     event_mapper::{
         ZulipEventMappingContext, map_zulip_event_to_raw_record, zulip_raw_signal_event_type,
         zulip_raw_signal_event_types,
@@ -20,8 +20,8 @@ fn maps_message_event_to_raw_signal_ready_record() {
     let event: ZulipEvent = serde_json::from_value(json!({
         "id": 42, "type": "message", "message": {
             "id": 7001, "content": "Надо проверить backup retention до пятницы.",
-            "sender_email": "bot@example.test", "sender_full_name": "Hermes Bot",
-            "stream_id": 10, "display_recipient": "Hermes Lab", "subject": "Tasks"
+            "sender_email": "bot@example.test", "sender_full_name": "Макошь Bot",
+            "stream_id": 10, "display_recipient": "Макошь Lab", "subject": "Tasks"
         }
     }))
     .expect("valid Zulip event fixture");
@@ -38,7 +38,7 @@ fn maps_message_event_to_raw_signal_ready_record() {
     assert_eq!(raw_record.provider_record_id, "7001");
     assert_eq!(raw_record.import_batch_id, "zulip-lab-batch");
     assert_eq!(raw_record.payload["provider_message_id"], json!("7001"));
-    assert_eq!(raw_record.payload["stream_name"], json!("Hermes Lab"));
+    assert_eq!(raw_record.payload["stream_name"], json!("Макошь Lab"));
     assert_eq!(raw_record.payload["topic"], json!("Tasks"));
     assert_eq!(
         raw_record.payload["content"],
@@ -58,7 +58,7 @@ fn maps_message_attachment_metadata_without_materializing_bytes() {
     let event: ZulipEvent = serde_json::from_value(json!({
         "id": 46, "type": "message", "message": {
             "id": 7002, "content": "См. вложение.", "sender_email": "bot@example.test",
-            "sender_full_name": "Hermes Bot", "stream_id": 10, "display_recipient": "Hermes Lab",
+            "sender_full_name": "Макошь Bot", "stream_id": 10, "display_recipient": "Макошь Lab",
             "topic": "Evidence", "attachments": [{
                 "id": "zulip-file-1", "name": "evidence.pdf", "content_type": "application/pdf",
                 "size": 2048, "url": "/user_uploads/1/evidence.pdf", "path_id": "1/evidence.pdf"
@@ -103,9 +103,9 @@ fn maps_message_attachment_metadata_without_materializing_bytes() {
 fn maps_user_upload_links_from_message_content_as_attachment_evidence() {
     let event: ZulipEvent = serde_json::from_value(json!({
         "id": 47, "type": "message", "message": {
-            "id": 7003, "content": "<p><a href=\"/user_uploads/2/ab/hermes-fact.txt\">hermes-fact.txt</a></p>",
-            "sender_email": "bot@example.test", "sender_full_name": "Hermes Bot", "stream_id": 10,
-            "display_recipient": "Hermes Lab", "topic": "Evidence"
+            "id": 7003, "content": "<p><a href=\"/user_uploads/2/ab/makosh-fact.txt\">makosh-fact.txt</a></p>",
+            "sender_email": "bot@example.test", "sender_full_name": "Макошь Bot", "stream_id": 10,
+            "display_recipient": "Макошь Lab", "topic": "Evidence"
         }
     }))
     .expect("valid Zulip event fixture");
@@ -114,15 +114,15 @@ fn maps_user_upload_links_from_message_content_as_attachment_evidence() {
 
     assert_eq!(
         raw_record.payload["attachments"][0]["provider_attachment_id"],
-        json!("2/ab/hermes-fact.txt")
+        json!("2/ab/makosh-fact.txt")
     );
     assert_eq!(
         raw_record.payload["attachments"][0]["filename"],
-        json!("hermes-fact.txt")
+        json!("makosh-fact.txt")
     );
     assert_eq!(
         raw_record.payload["attachments"][0]["url"],
-        json!("/user_uploads/2/ab/hermes-fact.txt")
+        json!("/user_uploads/2/ab/makosh-fact.txt")
     );
     assert_eq!(
         raw_record.payload["attachment_state"]["bytes_state"],

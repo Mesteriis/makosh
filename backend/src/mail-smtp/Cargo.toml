@@ -1,5 +1,5 @@
 [package]
-name = "hermes-mail-smtp"
+name = "makosh-mail-smtp"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,7 +7,7 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "mail"
 surface = "implementation"
@@ -15,4 +15,4 @@ surface = "implementation"
 [dependencies]
 async-native-tls = "=0.6.0"
 async-std = "=1.13.2"
-hermes-mail-api = { path = "../mail-api" }
+makosh-mail-api = { path = "../mail-api" }

@@ -81,7 +81,7 @@ identity и remote workload federation. Managed distribution/update/rollback
 
 ## Контекст
 
-Hermes работает в контролируемой локальной среде: владелец устанавливает и
+Макошь работает в контролируемой локальной среде: владелец устанавливает и
 запускает Kernel и module runtimes на своём устройстве. Закрытый список
 скомпилированных вместе executables сделал бы добавление нового модуля дорогим
 и снова связал бы независимые owners с release cycle Kernel.
@@ -112,7 +112,7 @@ business RPC или job delivery.
 - module runtime является локальным OS-процессом на том же host;
 - registration listener доступен только через private local IPC endpoint;
 - remote TCP/QUIC registration и network-discovered modules запрещены;
-- Kernel data/runtime directories доступны только владельцу Hermes;
+- Kernel data/runtime directories доступны только владельцу Макошь;
 - полностью скомпрометированный user account, Kernel process или host root
   находится вне threat model первой версии;
 - approval означает доверие конкретной локальной регистрации и набору прав,
@@ -356,7 +356,7 @@ external side effect.
 
 ### Горячее изменение и отзыв
 
-Изменение grant approval не требует restart всего Hermes и не смешивается с
+Изменение grant approval не требует restart всего Макошь и не смешивается с
 settings apply lifecycle ADR-0222:
 
 1. Registry сохраняет новую revision и повышает `grant_epoch`;
@@ -448,7 +448,7 @@ multi-workload identity infrastructure с server/agent и datastore, избыт�
 ### Считать `module_id`, PID или UID identity
 
 Отклонено: `module_id` self-declared, PID переиспользуется, а UID/GID обычно
-общие для всех processes Hermes.
+общие для всех processes Макошь.
 
 ### Требовать signed bundled executable для любой registration
 

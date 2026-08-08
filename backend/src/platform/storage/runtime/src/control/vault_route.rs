@@ -2,7 +2,7 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
     ManagedRuntimeVaultRouteRequestV1, VaultCiphertextResponseV1, VaultCiphertextRouteV1,
     managed_runtime_control_request_v1::Operation,

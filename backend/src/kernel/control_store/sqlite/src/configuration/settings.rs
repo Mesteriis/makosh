@@ -1,6 +1,6 @@
 //! Kernel-owned Settings Registry records.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleRegistrationState, SettingsApplyState, SettingsConfigurationTarget,
     SettingsConfigurationTargetInputV1, SettingsDesiredSnapshot, SettingsInitialSnapshot,
     SettingsSchemaBinding, SettingsSchemaBindingInputV1, SettingsSchemaTargetSuccessor,
@@ -48,7 +48,7 @@ impl SqliteControlStore {
             write_schema_binding(&transaction, &binding)?;
             ensure_legacy_configuration_target(&transaction, &binding)?;
             transaction.execute(
-                "INSERT INTO hermes_kernel_settings_schema_artifact (registration_id, schema_bytes)
+                "INSERT INTO makosh_kernel_settings_schema_artifact (registration_id, schema_bytes)
                  VALUES (?1, ?2) ON CONFLICT(registration_id)
                  DO UPDATE SET schema_bytes=excluded.schema_bytes",
                 params![binding.registration_id(), schema_bytes],
@@ -145,7 +145,7 @@ impl SqliteControlStore {
             }
             let target_count: i64 = transaction.query_row(
                 "SELECT COUNT(*)
-                 FROM hermes_kernel_settings_configuration_target
+                 FROM makosh_kernel_settings_configuration_target
                  WHERE registration_id=?1",
                 [successor.registration_id()],
                 |row| row.get(0),
@@ -155,7 +155,7 @@ impl SqliteControlStore {
             }
             write_schema_binding(&transaction, &successor)?;
             transaction.execute(
-                "INSERT INTO hermes_kernel_settings_schema_artifact
+                "INSERT INTO makosh_kernel_settings_schema_artifact
                  (registration_id, schema_bytes) VALUES (?1, ?2)
                  ON CONFLICT(registration_id) DO UPDATE SET schema_bytes=excluded.schema_bytes",
                 params![successor.registration_id(), schema_bytes],
@@ -179,7 +179,7 @@ impl SqliteControlStore {
                     return Err(StoreError::SettingsRevisionConflict);
                 }
                 let changed = transaction.execute(
-                    "UPDATE hermes_kernel_settings_configuration_target
+                    "UPDATE makosh_kernel_settings_configuration_target
                      SET desired_revision=?3, apply_state=?4, sanitized_reason_code=?5
                      WHERE registration_id=?1 AND configuration_instance_id=?2
                        AND desired_revision=?6 AND effective_revision=?7",
@@ -197,7 +197,7 @@ impl SqliteControlStore {
                     return Err(StoreError::SettingsRevisionConflict);
                 }
                 transaction.execute(
-                    "INSERT INTO hermes_kernel_settings_desired_snapshot
+                    "INSERT INTO makosh_kernel_settings_desired_snapshot
                      (registration_id, configuration_instance_id, revision, snapshot_bytes)
                      VALUES (?1, ?2, ?3, ?4)
                      ON CONFLICT(registration_id, configuration_instance_id) DO UPDATE SET
@@ -223,7 +223,7 @@ impl SqliteControlStore {
         self.with_connection(move |connection| {
             connection
                 .query_row(
-                    "SELECT schema_bytes FROM hermes_kernel_settings_schema_artifact
+                    "SELECT schema_bytes FROM makosh_kernel_settings_schema_artifact
                      WHERE registration_id=?1",
                     [&registration_id],
                     |row| row.get(0),
@@ -266,7 +266,7 @@ impl SqliteControlStore {
                         apply_state,
                         sanitized_reason_code,
                         created_operation_id
-                 FROM hermes_kernel_settings_configuration_target
+                 FROM makosh_kernel_settings_configuration_target
                  WHERE registration_id=?1
                  ORDER BY configuration_instance_id",
             )?;
@@ -295,7 +295,7 @@ impl SqliteControlStore {
                 .ok_or(StoreError::RecoveryFenceOverflow)?;
             let transaction = connection.transaction()?;
             let changed = transaction.execute(
-                "UPDATE hermes_kernel_settings_configuration_target
+                "UPDATE makosh_kernel_settings_configuration_target
                  SET desired_revision=?1, apply_state='pending_validation', sanitized_reason_code=NULL
                  WHERE registration_id=?2 AND configuration_instance_id=?3
                    AND desired_revision=?4",
@@ -310,7 +310,7 @@ impl SqliteControlStore {
                 return Err(StoreError::SettingsRevisionConflict);
             }
             transaction.execute(
-                "INSERT INTO hermes_kernel_settings_desired_snapshot
+                "INSERT INTO makosh_kernel_settings_desired_snapshot
                  (registration_id, configuration_instance_id, revision, snapshot_bytes)
                  VALUES (?1, ?2, ?3, ?4)
                  ON CONFLICT(registration_id, configuration_instance_id) DO UPDATE SET
@@ -395,7 +395,7 @@ impl SqliteControlStore {
                 let existing = transaction
                     .query_row(
                         "SELECT snapshot_bytes
-                         FROM hermes_kernel_settings_desired_snapshot
+                         FROM makosh_kernel_settings_desired_snapshot
                          WHERE registration_id=?1 AND configuration_instance_id=?2
                            AND revision=1",
                         params![update.registration_id, update.configuration_instance_id],
@@ -419,7 +419,7 @@ impl SqliteControlStore {
                 None => {
                     let count: i64 = transaction.query_row(
                         "SELECT COUNT(*)
-                         FROM hermes_kernel_settings_configuration_target
+                         FROM makosh_kernel_settings_configuration_target
                          WHERE registration_id=?1",
                         [&update.registration_id],
                         |row| row.get(0),
@@ -428,7 +428,7 @@ impl SqliteControlStore {
                         return Err(StoreError::SettingsRevisionConflict);
                     }
                     transaction.execute(
-                        "INSERT INTO hermes_kernel_settings_configuration_target (
+                        "INSERT INTO makosh_kernel_settings_configuration_target (
                             registration_id,
                             configuration_instance_id,
                             desired_revision,
@@ -446,7 +446,7 @@ impl SqliteControlStore {
                 }
             }
             let inserted = transaction.execute(
-                "INSERT INTO hermes_kernel_settings_desired_snapshot
+                "INSERT INTO makosh_kernel_settings_desired_snapshot
                  (registration_id, configuration_instance_id, revision, snapshot_bytes)
                  VALUES (?1, ?2, 1, ?3)",
                 params![
@@ -456,7 +456,7 @@ impl SqliteControlStore {
                 ],
             )?;
             let changed = transaction.execute(
-                "UPDATE hermes_kernel_settings_configuration_target
+                "UPDATE makosh_kernel_settings_configuration_target
                  SET desired_revision=1, effective_revision=?2,
                      apply_state=?3, sanitized_reason_code=?4
                  WHERE registration_id=?1 AND configuration_instance_id=?5
@@ -500,7 +500,7 @@ impl SqliteControlStore {
         self.with_connection(move |connection| {
             connection
                 .query_row(
-                    "SELECT revision, snapshot_bytes FROM hermes_kernel_settings_desired_snapshot
+                    "SELECT revision, snapshot_bytes FROM makosh_kernel_settings_desired_snapshot
                  WHERE registration_id=?1 AND configuration_instance_id=?2",
                     params![registration_id, configuration_instance_id],
                     |row| Ok((as_u64(row.get(0)?, 0)?, row.get(1)?)),
@@ -578,7 +578,7 @@ impl SqliteControlStore {
         self.with_connection(move |connection| {
             let transaction = connection.transaction()?;
             let changed = transaction.execute(
-                "UPDATE hermes_kernel_settings_configuration_target
+                "UPDATE makosh_kernel_settings_configuration_target
                  SET effective_revision=?1, apply_state='current', sanitized_reason_code=NULL
                  WHERE registration_id=?2 AND configuration_instance_id=?3
                    AND desired_revision=?1 AND effective_revision < ?1
@@ -637,7 +637,7 @@ fn write_schema_binding(
     binding: &SettingsSchemaBinding,
 ) -> Result<(), StoreError> {
     let changed = connection.execute(
-        "INSERT INTO hermes_kernel_settings_schema_binding
+        "INSERT INTO makosh_kernel_settings_schema_binding
          (registration_id, schema_major, schema_revision, schema_sha256,
           desired_revision, effective_revision, apply_state, sanitized_reason_code)
          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
@@ -645,9 +645,9 @@ fn write_schema_binding(
          schema_revision=excluded.schema_revision, schema_sha256=excluded.schema_sha256,
          desired_revision=excluded.desired_revision, effective_revision=excluded.effective_revision,
          apply_state=excluded.apply_state, sanitized_reason_code=excluded.sanitized_reason_code
-         WHERE excluded.schema_major > hermes_kernel_settings_schema_binding.schema_major
-         OR (excluded.schema_major = hermes_kernel_settings_schema_binding.schema_major
-             AND excluded.schema_revision > hermes_kernel_settings_schema_binding.schema_revision)",
+         WHERE excluded.schema_major > makosh_kernel_settings_schema_binding.schema_major
+         OR (excluded.schema_major = makosh_kernel_settings_schema_binding.schema_major
+             AND excluded.schema_revision > makosh_kernel_settings_schema_binding.schema_revision)",
         params![
             binding.registration_id(),
             binding.schema_major(),
@@ -671,7 +671,7 @@ fn ensure_legacy_configuration_target(
     binding: &SettingsSchemaBinding,
 ) -> Result<(), StoreError> {
     connection.execute(
-        "INSERT INTO hermes_kernel_settings_configuration_target (
+        "INSERT INTO makosh_kernel_settings_configuration_target (
             registration_id,
             configuration_instance_id,
             desired_revision,
@@ -700,7 +700,7 @@ fn read_settings_binding(
         .query_row(
             "SELECT schema_major, schema_revision, schema_sha256, desired_revision,
          effective_revision, apply_state, sanitized_reason_code
-         FROM hermes_kernel_settings_schema_binding WHERE registration_id=?1",
+         FROM makosh_kernel_settings_schema_binding WHERE registration_id=?1",
             [registration_id],
             |row| {
                 let digest: Vec<u8> = row.get(2)?;
@@ -755,7 +755,7 @@ fn transition_apply_state(
         return Err(StoreError::SettingsRevisionConflict);
     }
     let changed = transaction.execute(
-        "UPDATE hermes_kernel_settings_configuration_target
+        "UPDATE makosh_kernel_settings_configuration_target
          SET apply_state=?1, sanitized_reason_code=?2
          WHERE registration_id=?3 AND configuration_instance_id=?4
            AND desired_revision=?5 AND apply_state=?6",
@@ -784,7 +784,7 @@ fn read_apply_state(
     connection
         .query_row(
             "SELECT desired_revision, effective_revision, apply_state
-         FROM hermes_kernel_settings_configuration_target
+         FROM makosh_kernel_settings_configuration_target
          WHERE registration_id=?1 AND configuration_instance_id=?2",
             params![registration_id, configuration_instance_id],
             |row| {
@@ -810,7 +810,7 @@ fn read_configuration_target(
                     apply_state,
                     sanitized_reason_code,
                     created_operation_id
-             FROM hermes_kernel_settings_configuration_target
+             FROM makosh_kernel_settings_configuration_target
              WHERE registration_id=?1 AND configuration_instance_id=?2",
             params![registration_id, configuration_instance_id],
             |row| decode_configuration_target(row, registration_id),
@@ -832,7 +832,7 @@ fn read_configuration_target_by_operation(
                     apply_state,
                     sanitized_reason_code,
                     created_operation_id
-             FROM hermes_kernel_settings_configuration_target
+             FROM makosh_kernel_settings_configuration_target
              WHERE registration_id=?1 AND created_operation_id=?2",
             params![registration_id, operation_id.as_slice()],
             |row| decode_configuration_target(row, registration_id),
@@ -886,7 +886,7 @@ fn require_settings_schema(
 ) -> Result<(), StoreError> {
     let exists: bool = connection.query_row(
         "SELECT EXISTS(
-            SELECT 1 FROM hermes_kernel_settings_schema_binding
+            SELECT 1 FROM makosh_kernel_settings_schema_binding
             WHERE registration_id=?1
          )",
         [registration_id],
@@ -906,13 +906,13 @@ fn mirror_legacy_target_state(
         return Ok(());
     }
     let changed = connection.execute(
-        "UPDATE hermes_kernel_settings_schema_binding
+        "UPDATE makosh_kernel_settings_schema_binding
          SET desired_revision=target.desired_revision,
              effective_revision=target.effective_revision,
              apply_state=target.apply_state,
              sanitized_reason_code=target.sanitized_reason_code
-         FROM hermes_kernel_settings_configuration_target AS target
-         WHERE hermes_kernel_settings_schema_binding.registration_id=?1
+         FROM makosh_kernel_settings_configuration_target AS target
+         WHERE makosh_kernel_settings_schema_binding.registration_id=?1
            AND target.registration_id=?1
            AND target.configuration_instance_id=?1",
         [registration_id],

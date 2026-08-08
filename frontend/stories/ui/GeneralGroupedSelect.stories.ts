@@ -3,7 +3,7 @@ import { FormField, FormLabel, GroupedSelect } from '@/shared/ui'
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Grouped Select',
+	title: 'Макошь UI/General/Grouped Select',
 	render: (_args, context) => ({
 		components: { FormField, FormLabel, GroupedSelect },
 		data() {

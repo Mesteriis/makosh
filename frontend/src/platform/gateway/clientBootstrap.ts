@@ -10,7 +10,7 @@ import {
 	type ClientBootstrapResponseV1,
 	type ClientModuleBootstrapV1,
 	type ClientSystemComponentStatusV1,
-} from '../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	CLIENT_SURFACE_CONTRACT_MAJOR,
 	clientSurfaceCatalog,

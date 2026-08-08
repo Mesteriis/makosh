@@ -2,7 +2,7 @@ import {
 	SavedSearchErrorCodeV1,
 	type SavedSearchHitV1,
 	type SavedSearchSummaryV1,
-} from '../../../gen/hermes/communications/saved_search/v1/saved_search_pb'
+} from '../../../gen/makosh/communications/saved_search/v1/saved_search_pb'
 import { getCommunicationsSavedSearchConnectClient } from '../../../platform/connect/communicationsSavedSearchClient'
 import type { CanonicalCommunicationsPage } from './canonicalCommunicationsRead'
 

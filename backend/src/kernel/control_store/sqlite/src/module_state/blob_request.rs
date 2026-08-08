@@ -2,7 +2,7 @@
 
 use std::collections::BTreeSet;
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleBlobOperationV1, ModuleBlobQuotaRequestV1, ModuleRegistration,
 };
 use rusqlite::{Connection, OptionalExtension, params};
@@ -69,7 +69,7 @@ pub(crate) fn insert_blob_quota_requests(
         let quota = i64::try_from(request.max_bytes())
             .map_err(|_| StoreError::InvalidModuleBlobQuotaRequest)?;
         connection.execute(
-            "INSERT INTO hermes_kernel_module_blob_quota_request
+            "INSERT INTO makosh_kernel_module_blob_quota_request
              (registration_id, capability_id, owner_id, max_bytes, custody_scope_id, allowed_operations)
              VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
             params![
@@ -93,7 +93,7 @@ fn read_blob_quota_request(
     connection
         .query_row(
             "SELECT owner_id, max_bytes, custody_scope_id, allowed_operations
-             FROM hermes_kernel_module_blob_quota_request
+             FROM makosh_kernel_module_blob_quota_request
              WHERE registration_id = ?1 AND capability_id = ?2",
             params![registration_id, capability_id],
             |row| {

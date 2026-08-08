@@ -9,9 +9,9 @@ use crate::blob_service_cli::{
 fn offline_blob_recovery_commands_preserve_the_exact_paths() {
     let mut export = [
         "--data-dir",
-        "/private/hermes/blob",
+        "/private/makosh/blob",
         "--destination",
-        "/private/hermes/recovery/blob",
+        "/private/makosh/recovery/blob",
     ]
     .into_iter()
     .map(OsString::from)
@@ -21,15 +21,15 @@ fn offline_blob_recovery_commands_preserve_the_exact_paths() {
     assert!(matches!(
         export,
         OfflineRecoveryCommand::Export { data_dir, destination }
-            if data_dir == Path::new("/private/hermes/blob")
-                && destination == Path::new("/private/hermes/recovery/blob")
+            if data_dir == Path::new("/private/makosh/blob")
+                && destination == Path::new("/private/makosh/recovery/blob")
     ));
 
     let mut restore = [
         "--source",
-        "/private/hermes/recovery/blob",
+        "/private/makosh/recovery/blob",
         "--data-dir",
-        "/private/hermes/blob-restored",
+        "/private/makosh/blob-restored",
     ]
     .into_iter()
     .map(OsString::from)
@@ -39,11 +39,11 @@ fn offline_blob_recovery_commands_preserve_the_exact_paths() {
     assert!(matches!(
         restore,
         OfflineRecoveryCommand::Restore { source, data_dir }
-            if source == Path::new("/private/hermes/recovery/blob")
-                && data_dir == Path::new("/private/hermes/blob-restored")
+            if source == Path::new("/private/makosh/recovery/blob")
+                && data_dir == Path::new("/private/makosh/blob-restored")
     ));
 
-    let mut verify = ["--source", "/private/hermes/recovery/blob"]
+    let mut verify = ["--source", "/private/makosh/recovery/blob"]
         .into_iter()
         .map(OsString::from)
         .peekable();
@@ -52,7 +52,7 @@ fn offline_blob_recovery_commands_preserve_the_exact_paths() {
     assert!(matches!(
         verify,
         OfflineRecoveryCommand::Verify { source }
-            if source == Path::new("/private/hermes/recovery/blob")
+            if source == Path::new("/private/makosh/recovery/blob")
     ));
 }
 
@@ -60,9 +60,9 @@ fn offline_blob_recovery_commands_preserve_the_exact_paths() {
 fn blob_recovery_arguments_reject_relative_paths_without_changing_the_runtime_contract() {
     let mut inherited = [
         "--descriptor-path",
-        "/private/hermes/descriptor",
+        "/private/makosh/descriptor",
         "--configuration-path",
-        "/private/hermes/configuration",
+        "/private/makosh/configuration",
     ]
     .into_iter()
     .map(OsString::from)
@@ -71,12 +71,12 @@ fn blob_recovery_arguments_reject_relative_paths_without_changing_the_runtime_co
         parse_serve_inherited_arguments(&mut inherited).expect("parse inherited command");
     assert_eq!(
         inherited.descriptor_path,
-        PathBuf::from("/private/hermes/descriptor")
+        PathBuf::from("/private/makosh/descriptor")
     );
     assert_eq!(inherited.settings_schema_path, None);
     assert_eq!(
         inherited.configuration_path,
-        PathBuf::from("/private/hermes/configuration")
+        PathBuf::from("/private/makosh/configuration")
     );
 
     let mut relative = ["--source", "relative"]

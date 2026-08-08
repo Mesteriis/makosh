@@ -1,11 +1,11 @@
-use hermes_storage_postgres::{
+use makosh_storage_postgres::{
     PostgresAdapterErrorV1, PostgresAdminConnectorV1, PostgresRuntimeSessionProbeV1,
     StorageRoleSpecV1, apply_storage_bundle, ensure_platform_schemas, ensure_storage_roles,
     fence_postgres_runtime_role, read_readiness, read_storage_data_privilege_audit,
     read_storage_role_audit,
 };
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
-use hermes_storage_protocol::{
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
@@ -13,13 +13,13 @@ use sha2::{Digest, Sha256};
 
 use super::fixtures::storage_role_binding;
 
-const DATABASE_URL_ENV: &str = "HERMES_STORAGE_TEST_DATABASE_URL";
+const DATABASE_URL_ENV: &str = "MAKOSH_STORAGE_TEST_DATABASE_URL";
 
 #[test]
 #[ignore = "requires the disposable development PostgreSQL contour"]
 fn reconciles_bootstrap_and_runtime_role_against_postgres() {
     let database_url = std::env::var(DATABASE_URL_ENV)
-        .expect("storage integration test requires HERMES_STORAGE_TEST_DATABASE_URL");
+        .expect("storage integration test requires MAKOSH_STORAGE_TEST_DATABASE_URL");
     let runtime = tokio::runtime::Runtime::new().expect("tokio runtime");
     runtime.block_on(async move {
         let connector = PostgresAdminConnectorV1::connect(&database_url)
@@ -40,7 +40,7 @@ fn reconciles_bootstrap_and_runtime_role_against_postgres() {
         assert_postgres_runtime_fence(&database_url, &connector).await;
 
         let readiness = read_readiness(&connector).await.expect("readiness");
-        assert_eq!(readiness.database_id(), "hermes_development");
+        assert_eq!(readiness.database_id(), "makosh_development");
 
         let audit = read_storage_role_audit(&connector, &spec)
             .await
@@ -65,7 +65,7 @@ fn reconciles_bootstrap_and_runtime_role_against_postgres() {
 #[ignore = "requires the disposable authenticated PostgreSQL contour"]
 fn successor_bundle_inherits_exact_steps_without_ddl_replay() {
     let database_url = std::env::var(DATABASE_URL_ENV)
-        .expect("storage integration test requires HERMES_STORAGE_TEST_DATABASE_URL");
+        .expect("storage integration test requires MAKOSH_STORAGE_TEST_DATABASE_URL");
     let runtime = tokio::runtime::Runtime::new().expect("tokio runtime");
     runtime.block_on(async move {
         let connector = PostgresAdminConnectorV1::connect(&database_url)
@@ -172,7 +172,7 @@ async fn assert_ledger_reconciliation(
         .expect("reapply exact ledgered bundle");
     let mut conflicting = bundle.clone();
     conflicting.steps[0].forward_sql_utf8 =
-        b"CREATE TABLE hermes_data.storage_privilege_probe_conflict (probe_id uuid);".to_vec();
+        b"CREATE TABLE makosh_data.storage_privilege_probe_conflict (probe_id uuid);".to_vec();
     conflicting.steps[0].sha256 = Sha256::digest(&conflicting.steps[0].forward_sql_utf8).to_vec();
     assert!(
         apply_storage_bundle(connector, spec, &conflicting)
@@ -215,7 +215,7 @@ async fn assert_successor_bundle_inherits_exact_steps(connector: &PostgresAdminC
     let mut drifted = successor;
     drifted.revision = 3;
     drifted.steps[0].forward_sql_utf8 =
-        format!("CREATE TABLE hermes_data.{owner}_drifted (probe_id uuid);").into_bytes();
+        format!("CREATE TABLE makosh_data.{owner}_drifted (probe_id uuid);").into_bytes();
     drifted.steps[0].sha256 = Sha256::digest(&drifted.steps[0].forward_sql_utf8).to_vec();
     assert_eq!(
         apply_storage_bundle(connector, &spec, &drifted).await,
@@ -229,7 +229,7 @@ fn lineage_bundle(
     include_successor_step: bool,
 ) -> StorageBundleV1 {
     let initial_sql =
-        format!("CREATE TABLE hermes_data.{owner}_initial (probe_id uuid);").into_bytes();
+        format!("CREATE TABLE makosh_data.{owner}_initial (probe_id uuid);").into_bytes();
     let mut steps = vec![StorageMigrationStepV1 {
         revision: 1,
         migration_id: "create_initial".into(),
@@ -238,7 +238,7 @@ fn lineage_bundle(
     }];
     if include_successor_step {
         let successor_sql =
-            format!("CREATE TABLE hermes_data.{owner}_successor (probe_id uuid);").into_bytes();
+            format!("CREATE TABLE makosh_data.{owner}_successor (probe_id uuid);").into_bytes();
         steps.push(StorageMigrationStepV1 {
             revision: 2,
             migration_id: "create_successor".into(),
@@ -326,7 +326,7 @@ async fn assert_owner_data_privileges(
 }
 
 fn ledger_bundle() -> StorageBundleV1 {
-    let sql = b"CREATE TABLE hermes_data.storage_privilege_probe_ledger (probe_id uuid);".to_vec();
+    let sql = b"CREATE TABLE makosh_data.storage_privilege_probe_ledger (probe_id uuid);".to_vec();
     StorageBundleV1 {
         major: 1,
         revision: 1,

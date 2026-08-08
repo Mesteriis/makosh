@@ -1,17 +1,17 @@
 use bytes::Bytes;
-use hermes_gateway_protocol::v1::{
-    BrowserGatewayAccessModeV1, BrowserSessionStatusRequestV1, BrowserSessionStatusResponseV1,
-};
-use hermes_gateway_session_contract::BrowserAuthenticationAuthority;
 use http_body_util::{BodyExt, Limited};
 use hyper::body::Body;
 use hyper::header::{CACHE_CONTROL, CONTENT_TYPE, COOKIE, HeaderName};
 use hyper::{Method, Request, Response, StatusCode};
+use makosh_gateway_protocol::v1::{
+    BrowserGatewayAccessModeV1, BrowserSessionStatusRequestV1, BrowserSessionStatusResponseV1,
+};
+use makosh_gateway_session_contract::BrowserAuthenticationAuthority;
 use prost::Message;
 
 use crate::{GatewayHttpResponse, SharedBrowserGatewaySessionService, full_gateway_body};
 
-const STATUS_PATH: &str = "/hermes.gateway.v1.BrowserSessionService/GetStatus";
+const STATUS_PATH: &str = "/makosh.gateway.v1.BrowserSessionService/GetStatus";
 const MAX_REQUEST_BYTES: usize = 1_024;
 const CONNECT_PROTOCOL_VERSION: HeaderName = HeaderName::from_static("connect-protocol-version");
 const CONNECT_ERROR_CODE: HeaderName = HeaderName::from_static("connect-error-code");

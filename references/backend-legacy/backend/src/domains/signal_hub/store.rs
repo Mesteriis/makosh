@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::{EventEnvelope, EventEnvelopeError};
+use makosh_events_api::{EventEnvelope, EventEnvelopeError};
 use serde::Serialize;
 use serde_json::Value;
 use sqlx::Row;
@@ -11,9 +11,9 @@ use super::fixtures::{
     SystemProfileFixture, SystemSourceFixture, system_profile_fixtures, system_source_fixtures,
 };
 use crate::platform::settings::errors::SettingsError;
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_signal_hub_api::policies::{SignalPolicyMode, SignalPolicyScope};
-use hermes_signal_hub_api::raw_signals::{
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_signal_hub_api::policies::{SignalPolicyMode, SignalPolicyScope};
+use makosh_signal_hub_api::raw_signals::{
     RawSignalPersistenceError, RawSignalPersistenceErrorKind,
 };
 

@@ -14,4 +14,4 @@ pub use realtime::*;
 pub use repository::*;
 pub use schema::*;
 
-pub const PACKAGE: &str = "hermes-telegram-calls-persistence";
+pub const PACKAGE: &str = "makosh-telegram-calls-persistence";

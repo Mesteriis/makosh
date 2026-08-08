@@ -50,11 +50,11 @@ JavaScript создаёт второй источник истины. Runtime-ф
 Вводится отдельная Cargo assembly unit:
 
 ```text
-package = hermes-telegram-assembly
+package = makosh-telegram-assembly
 role    = integration
 owner   = telegram
 surface = assembly
-binary  = hermes-telegram-assembly
+binary  = makosh-telegram-assembly
 ```
 
 Это build-time tool, а не managed runtime. Он находится вне
@@ -91,9 +91,9 @@ JSON является только release compiler artifact fragment и сод�
 telegram.runtime.v1  -> module_runtime
 telegram.storage.v1  -> storage_bundle
 telegram.tdjson.v1   -> module_runtime_native_dependency
-                        bound_module_id = hermes-telegram-runtime
+                        bound_module_id = makosh-telegram-runtime
 telegram.tgcalls.v1  -> module_runtime_native_dependency
-                        bound_module_id = hermes-telegram-runtime
+                        bound_module_id = makosh-telegram-runtime
 ```
 
 Fragment не содержит digest, signature, grant, runtime generation, credential,

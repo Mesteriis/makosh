@@ -10,7 +10,8 @@ use std::time::{Duration, Instant};
 
 use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD;
-use hermes_telegram_api::{
+use libloading::Library;
+use makosh_telegram_api::{
     TelegramChat, TelegramChatAvatar, TelegramChatFolder, TelegramChatPosition,
     TelegramDownloadFile, TelegramFileSnapshot, TelegramForwardOrigin, TelegramMediaKind,
     TelegramMessageMedia, TelegramMessageObservation, TelegramMessageReferences,
@@ -18,21 +19,20 @@ use hermes_telegram_api::{
     TelegramProviderCommand, TelegramProviderEvent, TelegramReplyReference, TelegramSendMessage,
     TelegramTopic, TelegramTypingState, provider_command_operation_id, validate_provider_command,
 };
-use hermes_telegram_api::{TelegramChatKind, validate_page_size, validate_text};
-use hermes_telegram_call_media_contract::{
+use makosh_telegram_api::{TelegramChatKind, validate_page_size, validate_text};
+use makosh_telegram_call_media_contract::{
     CALL_ENCRYPTION_KEY_BYTES, MAX_READY_TEXT_BYTES, MAX_SERVER_CREDENTIAL_BYTES,
     MAX_SIGNALING_DATA_BYTES, TelegramCallPeerProtocolV1, TelegramCallReadyMaterialV1,
     TelegramCallSecretBytesV1, TelegramCallSecretTextV1, TelegramCallServerKindV1,
     TelegramCallServerV1,
 };
-use libloading::Library;
 use serde_json::{Value, json};
 use zeroize::Zeroizing;
 
 pub mod authorization;
 pub use authorization::{TdlibAuthorizationDriver, TdlibAuthorizationEvent};
 
-pub const PACKAGE: &str = "hermes-telegram-tdlib";
+pub const PACKAGE: &str = "makosh-telegram-tdlib";
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum TdlibCallDirection {
@@ -221,13 +221,13 @@ pub fn set_tdlib_parameters_request(
             "api_id": parameters.api_id,
             "api_hash": parameters.api_hash.as_str(),
             "system_language_code": "en",
-            "device_model": "Hermes Hub",
+            "device_model": "Макошь",
             "system_version": std::env::consts::OS,
             "application_version": env!("CARGO_PKG_VERSION"),
             "enable_storage_optimizer": true,
             "ignore_file_names": false
         },
-        "@extra": "hermes-set-tdlib-parameters"
+        "@extra": "makosh-set-tdlib-parameters"
     }))
 }
 
@@ -235,7 +235,7 @@ pub fn check_database_encryption_key_request(key: Option<&[u8]>) -> Value {
     json!({
         "@type": "checkDatabaseEncryptionKey",
         "encryption_key": key.map(|value| STANDARD.encode(value)).unwrap_or_default(),
-        "@extra": "hermes-check-database-encryption-key"
+        "@extra": "makosh-check-database-encryption-key"
     })
 }
 
@@ -243,7 +243,7 @@ pub fn request_qr_code_authentication() -> Value {
     json!({
         "@type": "requestQrCodeAuthentication",
         "other_user_ids": [],
-        "@extra": "hermes-request-qr-code-authentication"
+        "@extra": "makosh-request-qr-code-authentication"
     })
 }
 
@@ -256,12 +256,12 @@ pub fn check_authentication_password(password: &str) -> Result<Value, TdlibError
     Ok(json!({
         "@type": "checkAuthenticationPassword",
         "password": password,
-        "@extra": "hermes-check-authentication-password"
+        "@extra": "makosh-check-authentication-password"
     }))
 }
 
 pub fn close_session_request() -> Value {
-    json!({"@type": "close", "@extra": "hermes-close-tdlib-session"})
+    json!({"@type": "close", "@extra": "makosh-close-tdlib-session"})
 }
 
 fn disable_tdlib_logging_request() -> Value {
@@ -324,12 +324,12 @@ pub enum TdlibRequest {
     CreateCall {
         operation_id: String,
         provider_user_id: String,
-        protocol: hermes_telegram_call_media_contract::TelegramCallProtocolV1,
+        protocol: makosh_telegram_call_media_contract::TelegramCallProtocolV1,
     },
     AcceptCall {
         operation_id: String,
         tdlib_call_id: i32,
-        protocol: hermes_telegram_call_media_contract::TelegramCallProtocolV1,
+        protocol: makosh_telegram_call_media_contract::TelegramCallProtocolV1,
     },
     DiscardCall {
         operation_id: String,
@@ -351,13 +351,13 @@ pub enum TdlibRequest {
         account_id: String,
         provider_chat_id: String,
         from_message_id: Option<i64>,
-        mode: hermes_telegram_api::TelegramHistorySyncMode,
+        mode: makosh_telegram_api::TelegramHistorySyncMode,
         limit: u32,
     },
     SendMessage(TelegramSendMessage),
-    SendMedia(hermes_telegram_api::TelegramSendMedia),
+    SendMedia(makosh_telegram_api::TelegramSendMedia),
     SendMediaMaterialized {
-        command: hermes_telegram_api::TelegramSendMedia,
+        command: makosh_telegram_api::TelegramSendMedia,
         materialized_path: String,
     },
     DownloadFile(TelegramDownloadFile),
@@ -433,7 +433,7 @@ pub fn get_history_request(
         account_id,
         provider_chat_id,
         None,
-        hermes_telegram_api::TelegramHistorySyncMode::Latest,
+        makosh_telegram_api::TelegramHistorySyncMode::Latest,
         limit,
     )
 }
@@ -442,7 +442,7 @@ pub fn get_history_request_with_options(
     account_id: &str,
     provider_chat_id: &str,
     from_message_id: Option<i64>,
-    mode: hermes_telegram_api::TelegramHistorySyncMode,
+    mode: makosh_telegram_api::TelegramHistorySyncMode,
     limit: u32,
 ) -> Result<TdlibRequest, TdlibError> {
     validate_page_size(limit)
@@ -454,7 +454,7 @@ pub fn get_history_request_with_options(
         return Err(TdlibError::Protocol("account id is empty".to_owned()));
     }
     if from_message_id.is_some_and(|message_id| message_id <= 0)
-        || (matches!(mode, hermes_telegram_api::TelegramHistorySyncMode::Older)
+        || (matches!(mode, makosh_telegram_api::TelegramHistorySyncMode::Older)
             && from_message_id.is_none())
     {
         return Err(TdlibError::Protocol("history cursor is invalid".to_owned()));
@@ -655,7 +655,7 @@ pub fn encode_request(request: &TdlibRequest) -> Result<Value, TdlibError> {
 }
 
 fn call_protocol_value(
-    protocol: &hermes_telegram_call_media_contract::TelegramCallProtocolV1,
+    protocol: &makosh_telegram_call_media_contract::TelegramCallProtocolV1,
 ) -> Result<Value, TdlibError> {
     protocol
         .validate()
@@ -953,7 +953,7 @@ pub fn encode_provider_command(command: &TelegramProviderCommand) -> Result<Valu
 }
 
 pub fn encode_send_media_materialized(
-    command: &hermes_telegram_api::TelegramSendMedia,
+    command: &makosh_telegram_api::TelegramSendMedia,
     materialized_path: &str,
 ) -> Result<Value, TdlibError> {
     let input_type = match command.media_kind {
@@ -2169,7 +2169,7 @@ fn integer_field(payload: &Value, field: &str) -> Option<u64> {
 
 fn parse_reaction_observations(
     payload: &Value,
-) -> Result<Vec<hermes_telegram_api::TelegramReactionObservation>, TdlibError> {
+) -> Result<Vec<makosh_telegram_api::TelegramReactionObservation>, TdlibError> {
     let values = payload
         .get("interaction_info")
         .and_then(|value| value.get("reactions"))
@@ -2193,7 +2193,7 @@ fn parse_reaction_observations(
                 .ok_or_else(|| {
                     TdlibError::Protocol("TDLib reaction emoji is missing".to_owned())
                 })?;
-            Ok(hermes_telegram_api::TelegramReactionObservation {
+            Ok(makosh_telegram_api::TelegramReactionObservation {
                 sender_id: value_id(sender)?,
                 emoji: emoji.to_owned(),
                 is_outgoing: reaction
@@ -2409,12 +2409,12 @@ mod tests {
 
     #[test]
     fn encodes_media_download_and_participant_requests_at_provider_boundary() {
-        let media = TelegramProviderCommand::SendMedia(hermes_telegram_api::TelegramSendMedia {
+        let media = TelegramProviderCommand::SendMedia(makosh_telegram_api::TelegramSendMedia {
             operation_id: "op-media".to_owned(),
             account_id: "account".to_owned(),
             provider_chat_id: "100".to_owned(),
             media_kind: TelegramMediaKind::Document,
-            blob: hermes_telegram_api::TelegramBlobIntentV1 {
+            blob: makosh_telegram_api::TelegramBlobIntentV1 {
                 blob_ref: "blob:report".to_owned(),
                 reference_id: vec![7; 32],
                 declared_size: 42,
@@ -3720,7 +3720,7 @@ mod folder_command_tests {
 
 #[cfg(test)]
 mod call_command_tests {
-    use hermes_telegram_call_media_contract::TelegramCallProtocolV1;
+    use makosh_telegram_call_media_contract::TelegramCallProtocolV1;
 
     use super::*;
 

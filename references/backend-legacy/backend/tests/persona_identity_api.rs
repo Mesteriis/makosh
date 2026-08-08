@@ -1,4 +1,4 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
@@ -8,14 +8,14 @@ use sqlx::Row;
 use sqlx::postgres::PgPool;
 use tower::ServiceExt;
 
-use hermes_events_postgres::consumers::EventConsumerConfig;
-use hermes_events_postgres::consumers::EventConsumerRunner;
-use hermes_hub_backend::app::router::{build_router, build_router_with_database};
-use hermes_hub_backend::domains::personas::api::store::PersonaProjectionStore;
-use hermes_hub_backend::domains::personas::identity::store::PersonaIdentityReviewStore;
-use hermes_hub_backend::platform::config::app_config::AppConfig;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::workflows::review_inbox::{
+use makosh_events_postgres::consumers::EventConsumerConfig;
+use makosh_events_postgres::consumers::EventConsumerRunner;
+use makosh_hub_backend::app::router::{build_router, build_router_with_database};
+use makosh_hub_backend::domains::personas::api::store::PersonaProjectionStore;
+use makosh_hub_backend::domains::personas::identity::store::PersonaIdentityReviewStore;
+use makosh_hub_backend::platform::config::app_config::AppConfig;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::workflows::review_inbox::{
     PERSONA_IDENTITY_REVIEW_INBOX_CONSUMER, project_persona_identity_review_event,
 };
 
@@ -37,7 +37,7 @@ async fn identity_candidates_reject_missing_local_api_secret() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -83,7 +83,7 @@ async fn identity_candidates_returns_safe_candidate_payload() {
     run_persona_identity_review_inbox_consumer(pool.clone()).await;
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -193,7 +193,7 @@ async fn identity_candidates_returns_split_candidate_for_confirmed_merge() {
     let command_id = format!("identity-api-split-confirm-{suffix}");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -282,7 +282,7 @@ async fn put_identity_candidate_review_confirms_candidate() {
     let command_id = format!("identity-api-confirm-{suffix}");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -385,7 +385,7 @@ async fn persona_identity_returns_confirmed_links_for_person() {
         identity_candidate_id_from_personas(&left.persona_id, &right.persona_id);
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -447,7 +447,7 @@ async fn persona_identity_manual_create_paths_capture_observations_against_postg
     let encoded_person_id = urlencoding_percent_encode(&person.persona_id);
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -548,7 +548,7 @@ struct PersonaIdentityApiContext {
 }
 
 fn config_with_api_token() -> AppConfig {
-    hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+    makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
 }
 
 fn get_request(uri: &str) -> Request<Body> {
@@ -561,7 +561,7 @@ fn get_request(uri: &str) -> Request<Body> {
 fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -571,7 +571,7 @@ fn json_put_request_with_actor(uri: &str, value: Value, token: &str) -> Request<
         .method("PUT")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(value.to_string()))
         .expect("request")
 }
@@ -581,7 +581,7 @@ fn json_post_request_with_token(uri: &str, value: Value, token: &str) -> Request
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(value.to_string()))
         .expect("request")
 }

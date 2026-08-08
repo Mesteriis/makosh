@@ -1,6 +1,6 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::accounts::{ProviderAccountCommandPort, ProviderAccountPortError};
-use hermes_communications_api::evidence::{
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{ProviderAccountCommandPort, ProviderAccountPortError};
+use makosh_communications_api::evidence::{
     CommunicationEvidencePortError, CommunicationRawEvidenceCommandPort,
 };
 use serde::Serialize;
@@ -21,7 +21,7 @@ use crate::domains::personas::api::participants::upsert_personas_from_message_pa
 use crate::domains::personas::ports::PersonaProjectionPort;
 use crate::domains::signal_hub::mail::dispatch_mail_raw_signal;
 use crate::domains::signal_hub::store::SignalHubError;
-use hermes_graph_api::GraphSummary;
+use makosh_graph_api::GraphSummary;
 
 use crate::workflows::graph_projection::errors::GraphProjectionError;
 use crate::workflows::graph_projection::models::GraphProjectionReport;

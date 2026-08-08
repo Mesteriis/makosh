@@ -1,4 +1,4 @@
-use hermes_mail_contacts_sync_core::MailContactsSyncRejectCodeV1;
+use makosh_mail_contacts_sync_core::MailContactsSyncRejectCodeV1;
 
 use crate::{MailContactsSyncPersistenceErrorV1, OutboxEnvelopeV1};
 

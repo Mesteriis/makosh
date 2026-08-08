@@ -17,12 +17,12 @@ const providerSteps: StepsItem[] = [
 	{
 		title: 'Синхронизация',
 		description: 'Папки, письма и фоновые задачи',
-		requirement: 'Последний шаг выбирает, что будет включено в Hermes для этого аккаунта.'
+		requirement: 'Последний шаг выбирает, что будет включено в Макошь для этого аккаунта.'
 	}
 ]
 
 const meta = {
-	title: 'Hermes UI/General/Steps',
+	title: 'Макошь UI/General/Steps',
 	component: Steps,
 	render: (_args, context) => ({
 		components: { Button, Input, Steps, Switch },

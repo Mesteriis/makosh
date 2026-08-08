@@ -2,7 +2,7 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 use crate::platform::secrets::models::{SecretKind, SecretStoreKind};
-use hermes_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::CommunicationProviderKind;
 
 use super::super::errors::TelegramError;
 use super::super::validation::{required_optional_value, validate_non_empty};

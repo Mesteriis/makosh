@@ -1,16 +1,16 @@
 //! Generated client port for provider-neutral Communications sender insights.
 
-use hermes_communications_persistence::{
+use makosh_communications_persistence::{
     CommunicationsDurablePersistence, CommunicationsSenderInsightAfterV1,
     CommunicationsSenderInsightV1, CommunicationsSenderInsightsErrorV1,
 };
-use hermes_communications_sender_insights_api::{
+use makosh_communications_sender_insights_api::{
     COMMUNICATIONS_SENDER_INSIGHTS_SCHEMA_SHA256, ListSenderInsightsRequestV1,
     ListSenderInsightsResponseV1, SENDER_INSIGHTS_CONTRACT_MAJOR_V1,
     SENDER_INSIGHTS_CONTRACT_NAME_V1, SENDER_INSIGHTS_CONTRACT_REVISION_V1, SenderInsightV1,
     SenderInsightsErrorCodeV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
 use prost::Message;
@@ -172,7 +172,7 @@ fn decode_cursor(
 
 fn cursor_scope(account_id: Option<[u8; 16]>) -> [u8; CURSOR_SCOPE_BYTES] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communications.sender-insights.cursor-scope.v1");
+    digest.update(b"makosh.communications.sender-insights.cursor-scope.v1");
     digest.update(COMMUNICATIONS_SENDER_INSIGHTS_SCHEMA_SHA256);
     match account_id {
         Some(account_id) => {
@@ -188,7 +188,7 @@ fn cursor_scope(account_id: Option<[u8; 16]>) -> [u8; CURSOR_SCOPE_BYTES] {
 
 fn cursor_checksum(cursor: &[u8]) -> [u8; CURSOR_CHECKSUM_BYTES] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communications.sender-insights.cursor-checksum.v1");
+    digest.update(b"makosh.communications.sender-insights.cursor-checksum.v1");
     digest.update(COMMUNICATIONS_SENDER_INSIGHTS_SCHEMA_SHA256);
     digest.update(cursor);
     digest.finalize()[..CURSOR_CHECKSUM_BYTES]

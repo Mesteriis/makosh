@@ -1,7 +1,7 @@
 //! Vault-private encryption of command results for the requesting runtime.
 
-use hermes_runtime_protocol::v1::{VaultCiphertextResponseV1, VaultCiphertextRouteDirectionV1};
-use hermes_vault_protocol::{
+use makosh_runtime_protocol::v1::{VaultCiphertextResponseV1, VaultCiphertextRouteDirectionV1};
+use makosh_vault_protocol::{
     VaultTransportBindingV1, VaultTransportDirectionV1, VaultTransportPublicKey, seal,
 };
 

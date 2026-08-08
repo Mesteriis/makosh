@@ -5,10 +5,10 @@ use std::sync::{
     atomic::{AtomicBool, Ordering},
 };
 
-use hermes_scheduler_persistence::{
+use makosh_scheduler_persistence::{
     SchedulerPostgresStoreV1, SchedulerReceiptConsumeErrorV1, SchedulerReceiptConsumerV1,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     SchedulerReceiptDeliveryErrorV1, SchedulerReceiptDeliveryPortV1, SchedulerReceiptDeliveryV1,
 };
 use sqlx::postgres::PgPoolOptions;

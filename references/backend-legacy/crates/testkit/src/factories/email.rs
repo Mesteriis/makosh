@@ -1,7 +1,7 @@
 use chrono::Utc;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
-use hermes_communications_postgres::store::CommunicationIngestionStore;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
 use sqlx::postgres::PgPool;
 use uuid::Uuid;
 
@@ -50,7 +50,7 @@ impl<'a> EmailFactory<'a> {
         self,
     ) -> Result<
         (NewProviderAccount, NewRawCommunicationRecord),
-        hermes_communications_postgres::errors::CommunicationIngestionError,
+        makosh_communications_postgres::errors::CommunicationIngestionError,
     > {
         let store = CommunicationIngestionStore::new(self.pool.clone());
 

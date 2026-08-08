@@ -1,6 +1,6 @@
 //! Exact Attachment Security scan-candidate contract reference.
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
@@ -16,7 +16,7 @@ pub const ATTACHMENT_SECURITY_MAX_IN_FLIGHT: u32 = 32;
 pub const ATTACHMENT_SECURITY_BLOB_CUSTODY_TARGET_OWNER_ID: &str =
     ATTACHMENT_SECURITY_CONTRACT_OWNER;
 pub const ATTACHMENT_SECURITY_BLOB_CUSTODY_TARGET_MODULE_ID: &str =
-    "hermes-attachment-security-runtime";
+    "makosh-attachment-security-runtime";
 pub const ATTACHMENT_SECURITY_BLOB_CUSTODY_TARGET_CAPABILITY_ID: &str =
     "attachment_security.blob.v1";
 

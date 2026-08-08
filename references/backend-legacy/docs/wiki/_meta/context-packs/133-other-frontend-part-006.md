@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/domains/communications/components/CommunicationsContextRail.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationsContextRail.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationsContextRail.vue`
 - Size bytes / Размер в байтах: `4181`
 - Included characters / Включено символов: `4181`
 - Truncated / Обрезано: `no`
@@ -246,7 +246,7 @@ const email = message ? senderEmail(message.sender) : ''
 
 ### `frontend/src/domains/communications/components/CommunicationsConversationList.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationsConversationList.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationsConversationList.vue`
 - Size bytes / Размер в байтах: `8498`
 - Included characters / Включено символов: `8497`
 - Truncated / Обрезано: `no`
@@ -580,7 +580,7 @@ function handleThreadPrefetch(thread: CommunicationThreadSummary): void {
 
 ### `frontend/src/domains/communications/components/CommunicationsDetailPane.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationsDetailPane.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationsDetailPane.vue`
 - Size bytes / Размер в байтах: `4035`
 - Included characters / Включено символов: `4035`
 - Truncated / Обрезано: `no`
@@ -705,7 +705,7 @@ const emit = defineEmits<{
 
 ### `frontend/src/domains/communications/components/CommunicationsListPane.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationsListPane.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationsListPane.vue`
 - Size bytes / Размер в байтах: `3542`
 - Included characters / Включено символов: `3542`
 - Truncated / Обрезано: `no`
@@ -838,7 +838,7 @@ function forwardToggleSelection(messageId: string, extendRange: boolean) {
 
 ### `frontend/src/domains/communications/components/CommunicationsRailPane.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationsRailPane.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationsRailPane.vue`
 - Size bytes / Размер в байтах: `1118`
 - Included characters / Включено символов: `1118`
 - Truncated / Обрезано: `no`
@@ -886,7 +886,7 @@ const emit = defineEmits<{
 
 ### `frontend/src/domains/communications/components/CommunicationsTopbarSlot.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationsTopbarSlot.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationsTopbarSlot.vue`
 - Size bytes / Размер в байтах: `4269`
 - Included characters / Включено символов: `4269`
 - Truncated / Обрезано: `no`
@@ -1080,7 +1080,7 @@ function updateSearchQuery(event: Event) {
 
 ### `frontend/src/domains/communications/components/CommunicationsWorkbench.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationsWorkbench.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationsWorkbench.vue`
 - Size bytes / Размер в байтах: `590`
 - Included characters / Включено символов: `590`
 - Truncated / Обрезано: `no`
@@ -1118,13 +1118,13 @@ defineProps<{
 
 ### `frontend/src/domains/communications/components/ComposeDrawer.css`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/ComposeDrawer.css`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/ComposeDrawer.css`
 - Size bytes / Размер в байтах: `7441`
 - Included characters / Включено символов: `7441`
 - Truncated / Обрезано: `no`
 
 ```text
-.compose-drawer.hermes-sheet-content {
+.compose-drawer.makosh-sheet-content {
   width: min(560px, 92vw);
   max-width: min(560px, 92vw);
   max-height: 100vh;
@@ -1133,12 +1133,12 @@ defineProps<{
   overflow: hidden;
 }
 
-.compose-drawer.hermes-sheet-content .hermes-sheet-header {
+.compose-drawer.makosh-sheet-content .makosh-sheet-header {
   padding: 0.875rem 1rem 0.75rem;
   border-bottom: 1px solid var(--hh-border, #e5e7eb);
 }
 
-.compose-drawer.hermes-sheet-content .hermes-sheet-body {
+.compose-drawer.makosh-sheet-content .makosh-sheet-body {
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -1464,7 +1464,7 @@ defineProps<{
 
 ### `frontend/src/domains/communications/components/ComposeDrawer.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/ComposeDrawer.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/ComposeDrawer.vue`
 - Size bytes / Размер в байтах: `18653`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1828,13 +1828,13 @@ const undoSendReviewLabel = computed(() => {
             type="text"
             placeholder="bcc@example.com"
             :value="store.composeForm.bccText"
-            @input="updateField('bccText', ($event.target 
+            @input="updateField('bccText', ($event.target
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `frontend/src/domains/communications/components/ComposeSignaturePicker.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/ComposeSignaturePicker.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/ComposeSignaturePicker.vue`
 - Size bytes / Размер в байтах: `2893`
 - Included characters / Включено символов: `2893`
 - Truncated / Обрезано: `no`
@@ -1947,7 +1947,7 @@ function applySignature(): void {
 
 ### `frontend/src/domains/communications/components/ComposeTemplatePicker.css`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/ComposeTemplatePicker.css`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/ComposeTemplatePicker.css`
 - Size bytes / Размер в байтах: `7280`
 - Included characters / Включено символов: `7280`
 - Truncated / Обрезано: `no`
@@ -2263,7 +2263,7 @@ function applySignature(): void {
 
 ### `frontend/src/domains/communications/components/ComposeTemplatePicker.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/ComposeTemplatePicker.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/ComposeTemplatePicker.vue`
 - Size bytes / Размер в байтах: `23395`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2638,7 +2638,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/components/DraftStrip.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/DraftStrip.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/DraftStrip.vue`
 - Size bytes / Размер в байтах: `4317`
 - Included characters / Включено символов: `4317`
 - Truncated / Обрезано: `no`
@@ -2820,7 +2820,7 @@ const draftVirtualTotalSize = computed(() => draftVirtualizer.value.getTotalSize
 
 ### `frontend/src/domains/communications/components/HealthStrip.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/HealthStrip.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/HealthStrip.vue`
 - Size bytes / Размер в байтах: `2522`
 - Included characters / Включено символов: `2522`
 - Truncated / Обрезано: `no`
@@ -2920,7 +2920,7 @@ function healthToneClass(value: number, max: number): string {
 
 ### `frontend/src/domains/communications/components/MailCertificateStrip.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MailCertificateStrip.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MailCertificateStrip.vue`
 - Size bytes / Размер в байтах: `10649`
 - Included characters / Включено символов: `10646`
 - Truncated / Обрезано: `no`
@@ -3256,7 +3256,7 @@ function certificateLabel(certificate: MailCertificate): string {
 
 ### `frontend/src/domains/communications/components/MailResourceOverviewStrip.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MailResourceOverviewStrip.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MailResourceOverviewStrip.vue`
 - Size bytes / Размер в байтах: `7228`
 - Included characters / Включено символов: `7226`
 - Truncated / Обрезано: `no`
@@ -3513,7 +3513,7 @@ const topSenderTotalSize = computed(() => topSenderVirtualizer.value.getTotalSiz
 
 ### `frontend/src/domains/communications/components/MessageAiReplyPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MessageAiReplyPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MessageAiReplyPanel.vue`
 - Size bytes / Размер в байтах: `6694`
 - Included characters / Включено символов: `6694`
 - Truncated / Обрезано: `no`
@@ -3757,7 +3757,7 @@ async function generateVariants() {
 
 ### `frontend/src/domains/communications/components/MessageAttachmentsTab.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MessageAttachmentsTab.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MessageAttachmentsTab.vue`
 - Size bytes / Размер в байтах: `19968`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`

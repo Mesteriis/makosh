@@ -17,7 +17,7 @@ Clarifies:
 
 ## Context
 
-Hermes already uses an event-driven architecture with an append-only
+Макошь already uses an event-driven architecture with an append-only
 `event_log`, `EventEnvelope`, outbox, event consumers, DLQ, Signal Hub and
 provider integrations. However, events are not yet consistently usable as one
 causal trace graph:
@@ -29,12 +29,12 @@ causal trace graph:
 - API and realtime surfaces do not consistently expose full trace context;
 - Timeline projection and causal trace reconstruction can be confused.
 
-Hermes needs to explain why a domain object exists without requiring Jaeger,
+Макошь needs to explain why a domain object exists without requiring Jaeger,
 Tempo, Loki, Grafana or another telemetry server.
 
 ## Decision
 
-Hermes treats canonical events as spans.
+Макошь treats canonical events as spans.
 
 `event_id` is the span identifier.
 `correlation_id` is the trace identifier.
@@ -60,7 +60,7 @@ not the canonical trace store. The canonical trace store is `event_log`.
 
 ## Trace Semantics
 
-| Concept | Hermes field |
+| Concept | Макошь field |
 |---|---|
 | Trace | `correlation_id` |
 | Span | `event_id` |

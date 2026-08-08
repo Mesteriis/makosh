@@ -1,6 +1,6 @@
 use serde_json::{Map, Value, json};
 
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 
 use super::WhatsappWebStore;
 use crate::integrations::whatsapp::client::constants::{
@@ -24,7 +24,7 @@ use crate::integrations::whatsapp::client::models::{
     WhatsappWebObservedReaction, WhatsappWebObservedReceipt, WhatsappWebObservedRuntimeEvent,
     WhatsappWebObservedStatus, WhatsappWebObservedStatusDelete, WhatsappWebObservedStatusView,
 };
-use hermes_provider_whatsapp::ids::whatsapp_web_raw_record_id;
+use makosh_provider_whatsapp::ids::whatsapp_web_raw_record_id;
 
 impl WhatsappWebStore {
     pub async fn ingest_fixture_message(

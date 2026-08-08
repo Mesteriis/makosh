@@ -1,7 +1,7 @@
-use hermes_communications_api::accounts::ProviderAccountPortError;
-use hermes_communications_api::accounts::ProviderSecretBindingPortError;
-use hermes_events_api::EventEnvelopeError;
-use hermes_provider_telemost::protocol::YandexTelemostProtocolError;
+use makosh_communications_api::accounts::ProviderAccountPortError;
+use makosh_communications_api::accounts::ProviderSecretBindingPortError;
+use makosh_events_api::EventEnvelopeError;
+use makosh_provider_telemost::protocol::YandexTelemostProtocolError;
 use thiserror::Error;
 
 use std::io;
@@ -9,8 +9,8 @@ use std::io;
 use crate::platform::secrets::errors::{SecretReferenceError, SecretResolutionError};
 use crate::platform::settings::errors::SettingsError;
 use crate::vault::errors::HostVaultError;
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 #[derive(Debug, Error)]
 pub enum YandexTelemostError {

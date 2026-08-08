@@ -1,7 +1,7 @@
 //! Mail-owned exact-byte relay for Attachment Security scan candidates.
 
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
-use hermes_mail_persistence::{MailDurablePersistence, MailDurablePersistenceError};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_mail_persistence::{MailDurablePersistence, MailDurablePersistenceError};
 
 pub async fn relay_attachment_security_outbox_once(
     durable: &MailDurablePersistence,

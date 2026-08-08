@@ -2,9 +2,9 @@
 
 use super::*;
 
-use hermes_events_jetstream::DurableSubjectV1;
-use hermes_events_protocol::v1::DurableEnvelopeV1;
-use hermes_knowledge_command_api::{
+use makosh_events_jetstream::DurableSubjectV1;
+use makosh_events_protocol::v1::DurableEnvelopeV1;
+use makosh_knowledge_command_api::{
     KnowledgeCommandEnvelopeContextV1,
     build_create_knowledge_note_from_reviewed_candidate_outbox_record_v1,
     wire::{
@@ -13,7 +13,7 @@ use hermes_knowledge_command_api::{
         KnowledgeTargetBoundCandidateReceiptV1,
     },
 };
-use hermes_reviewed_note_candidate_promotion_core::REVIEWED_NOTE_CANDIDATE_PROMOTION_MODULE_ID_V1;
+use makosh_reviewed_note_candidate_promotion_core::REVIEWED_NOTE_CANDIDATE_PROMOTION_MODULE_ID_V1;
 
 const STALE_BLOB_CANDIDATE_ID_V1: [u8; 16] = [0xc2; 16];
 
@@ -64,7 +64,7 @@ pub(super) fn assert_knowledge_reject_stale_blob_receipt_v1(
             .await
             .expect("connect stale Blob observer");
         let mut results = client
-            .subscribe("hermes.result.v1.knowledge.>")
+            .subscribe("makosh.result.v1.knowledge.>")
             .await
             .expect("subscribe stale Blob Knowledge results");
         let context = async_nats::jetstream::new(client);
@@ -103,7 +103,7 @@ pub(super) fn assert_knowledge_reject_stale_blob_receipt_v1(
         );
         let pool = note_candidate_admin_pool_v1().await;
         let knowledge: i64 = sqlx::query_scalar(
-            "SELECT count(*) FROM hermes_data.knowledge_state
+            "SELECT count(*) FROM makosh_data.knowledge_state
              WHERE logical_owner_id=$1 AND approved_candidate_id=$2",
         )
         .bind(NOTE_CANDIDATE_LOGICAL_HUMAN_OWNER_ID_V1)

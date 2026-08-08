@@ -15,7 +15,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   proto: new URL(
-    'src/mail-api/proto/hermes/mail/account_lifecycle/v1/client.proto',
+    'src/mail-api/proto/makosh/mail/account_lifecycle/v1/client.proto',
     BACKEND_ROOT,
   ),
   api: new URL('src/mail-api/src/account_lifecycle.rs', BACKEND_ROOT),
@@ -192,6 +192,6 @@ test('Mail retire and delete are exact owner-local lifecycle operations', async 
   const ownerBoundary = `${proto}\n${api}\n${wire}\n${persistence}\n${coordinator}`;
   assert.doesNotMatch(
     ownerBoundary,
-    /hermes_(?:communications|telegram|whatsapp|zulip)/,
+    /makosh_(?:communications|telegram|whatsapp|zulip)/,
   );
 });

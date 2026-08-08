@@ -1,11 +1,11 @@
 //! Exact managed-module transport adapter for the Communications query contract.
 
-use hermes_communications_api::COMMUNICATIONS_QUERY_SCHEMA_SHA256;
-use hermes_communications_persistence::CommunicationsDurablePersistence;
-use hermes_runtime_protocol::managed_control::{
+use makosh_communications_api::COMMUNICATIONS_QUERY_SCHEMA_SHA256;
+use makosh_communications_persistence::CommunicationsDurablePersistence;
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
 use prost::Message;
@@ -13,7 +13,7 @@ use std::os::unix::net::UnixStream;
 
 use crate::query_port::{CommunicationsQueryPortErrorV1, handle_query_request_v1};
 use crate::search_access::CommunicationsSearchAccessV1;
-use hermes_communications_ingress::COMMUNICATIONS_BLOB_CUSTODY_TARGET_MODULE_ID;
+use makosh_communications_ingress::COMMUNICATIONS_BLOB_CUSTODY_TARGET_MODULE_ID;
 
 const MODULE_CLIENT_PROTOCOL_MAJOR: u32 = 1;
 pub const COMMUNICATIONS_MODULE_ID: &str = COMMUNICATIONS_BLOB_CUSTODY_TARGET_MODULE_ID;

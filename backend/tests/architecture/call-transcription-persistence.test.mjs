@@ -26,8 +26,8 @@ test('call transcription persistence is owner-local, restart-safe, and content-p
   );
 
   assert.equal(policy.implementation.currentSlice, 'call_transcription_managed_conformance_v1');
-  assert.deepEqual(packages.get('hermes-call-transcription-persistence'), {
-    name: 'hermes-call-transcription-persistence',
+  assert.deepEqual(packages.get('makosh-call-transcription-persistence'), {
+    name: 'makosh-call-transcription-persistence',
     role: 'workflow',
     owner: 'call_transcription',
     surface: 'persistence',
@@ -35,12 +35,12 @@ test('call transcription persistence is owner-local, restart-safe, and content-p
   assert.match(workspace, /"src\/call-transcription-persistence"/);
   assert.match(manifest, /owner = "call_transcription"/);
   assert.match(manifest, /surface = "persistence"/);
-  assert.match(manifest, /hermes-call-transcription-api/);
-  assert.match(manifest, /hermes-call-transcription-core/);
-  assert.match(manifest, /hermes-storage-protocol/);
+  assert.match(manifest, /makosh-call-transcription-api/);
+  assert.match(manifest, /makosh-call-transcription-core/);
+  assert.match(manifest, /makosh-storage-protocol/);
   assert.doesNotMatch(
     manifest,
-    /hermes-communications|hermes-desktop-call-recording|hermes-speech-to-text|hermes-whisper/,
+    /makosh-communications|makosh-desktop-call-recording|makosh-speech-to-text|makosh-whisper/,
   );
 
   for (const table of [
@@ -51,7 +51,7 @@ test('call transcription persistence is owner-local, restart-safe, and content-p
     'call_transcription_realtime',
     'call_transcription_read_tickets',
   ]) {
-    assert.match(schema, new RegExp(`hermes_data\\.${table}`));
+    assert.match(schema, new RegExp(`makosh_data\\.${table}`));
   }
   for (const required of [
     'request_fingerprint',
@@ -97,7 +97,7 @@ test('call transcription persistence is owner-local, restart-safe, and content-p
   assert.match(tickets, /client_session_sha256/);
   assert.match(tickets, /used_at_unix_seconds IS NULL/);
   assert.match(tickets, /TicketUsed/);
-  assert.match(adr, /hermes-call-transcription-persistence/);
+  assert.match(adr, /makosh-call-transcription-persistence/);
   assert(policy.implementation.ownerInventory.businessCapabilities.includes(
     'call_transcription.storage.v1',
   ));

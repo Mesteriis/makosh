@@ -1,4 +1,4 @@
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use std::collections::HashSet;
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -9,13 +9,13 @@ use sqlx::{PgPool, Postgres, Row, Transaction};
 use thiserror::Error;
 use uuid::Uuid;
 
-use hermes_communications_api::commands::NewCommunicationProviderCommand;
-use hermes_events_postgres::store::EventStore;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_communications_api::commands::NewCommunicationProviderCommand;
+use makosh_events_postgres::store::EventStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 
 use super::evidence::link_mail_entity_in_transaction;
-use hermes_communications_postgres::provider_commands::{
+use makosh_communications_postgres::provider_commands::{
     CommunicationProviderCommandError, CommunicationProviderCommandStore,
 };
 
@@ -248,7 +248,7 @@ impl BulkMessageActionStore {
                 "mail",
                 command_kind,
                 &command_id,
-                "hermes-local-user",
+                "makosh-local-user",
             )
             .provider_message_id(&provider_record_id)
             .target_ref(json!({ "message_id": message_id }))
@@ -652,7 +652,7 @@ fn bulk_message_action_event(
             "message_ids": updated_ids,
         }),
     )
-    .actor(json!({ "actor_id": "hermes-frontend" }))
+    .actor(json!({ "actor_id": "makosh-frontend" }))
     .payload(json!({
         "action": outcome.action,
         "action_parameters": action_parameters(action),
@@ -742,11 +742,11 @@ pub enum BulkMessageActionError {
     #[error(transparent)]
     Sqlx(#[from] sqlx::Error),
     #[error(transparent)]
-    ObservationStore(#[from] hermes_observations_postgres::errors::ObservationStoreError),
+    ObservationStore(#[from] makosh_observations_postgres::errors::ObservationStoreError),
     #[error(transparent)]
-    EventStore(#[from] hermes_events_postgres::errors::EventStoreError),
+    EventStore(#[from] makosh_events_postgres::errors::EventStoreError),
     #[error(transparent)]
-    EventEnvelope(#[from] hermes_events_api::EventEnvelopeError),
+    EventEnvelope(#[from] makosh_events_api::EventEnvelopeError),
     #[error(transparent)]
     ProviderCommand(#[from] CommunicationProviderCommandError),
     #[error("invalid bulk message action request: {0}")]

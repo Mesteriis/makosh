@@ -5,7 +5,7 @@ use std::{
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
-use hermes_events_protocol::RuntimeNatsJwtCredentialV1;
+use makosh_events_protocol::RuntimeNatsJwtCredentialV1;
 use nats_jwt::KeyPair;
 
 use super::{

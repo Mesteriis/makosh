@@ -1,4 +1,4 @@
-use hermes_provider_zulip::client::ZulipClientConfig;
+use makosh_provider_zulip::client::ZulipClientConfig;
 
 #[test]
 fn client_configuration_never_exposes_its_api_key_in_debug_output() {

@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet};
 use std::sync::{Arc, LazyLock, Mutex};
 use std::time::Duration;
 
-use hermes_desktop_runtime::{
+use makosh_desktop_runtime::{
     RuntimeExitPolicy, RuntimeTaskClass, RuntimeTaskFactory, RuntimeTaskFuture, RuntimeTaskSpec,
 };
 use serde_json::json;
@@ -20,8 +20,8 @@ use crate::workflows::mail_background_sync::{
     DEFAULT_GMAIL_API_BASE_URL, idle::MailImapIdleOutcome, models::progress::MailSyncTrigger,
     service::MailBackgroundSyncService, store::MailSyncStore,
 };
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
-use hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore;
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore;
 
 static MAIL_IMAP_IDLE_DATABASES: LazyLock<Mutex<HashSet<String>>> =
     LazyLock::new(|| Mutex::new(HashSet::new()));
@@ -61,7 +61,7 @@ pub(crate) fn runtime_task_spec(context: ApplicationBootstrapContext) -> Option<
             ),
             Arc::new(CommunicationProviderAccountStore::new(pool.clone())),
             Arc::new(
-                hermes_communications_postgres::store::CommunicationIngestionStore::new(
+                makosh_communications_postgres::store::CommunicationIngestionStore::new(
                     pool.clone(),
                 ),
             ),

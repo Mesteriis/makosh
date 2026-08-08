@@ -12,7 +12,7 @@ pub(super) fn apply_core_env(
     value: &str,
 ) -> Result<bool, ConfigError> {
     match key {
-        "HERMES_HTTP_ADDR" => {
+        "MAKOSH_HTTP_ADDR" => {
             let raw_addr = value.trim();
             config.http_addr = raw_addr
                 .parse()
@@ -24,33 +24,33 @@ pub(super) fn apply_core_env(
         "DATABASE_URL" => {
             config.database_url = Some(non_empty(value, ConfigError::EmptyDatabaseUrl)?.to_owned());
         }
-        "HERMES_LOCAL_API_SECRET" => {
+        "MAKOSH_LOCAL_API_SECRET" => {
             config.local_api_secret =
                 Some(non_empty(value, ConfigError::EmptyLocalApiSecret)?.to_owned());
         }
-        "HERMES_NATS_SERVER_URL" => {
+        "MAKOSH_NATS_SERVER_URL" => {
             config.nats_server_url =
                 Some(non_empty(value, ConfigError::EmptyNatsServerUrl)?.to_owned());
         }
-        "HERMES_SECRET_VAULT_PATH" => {
+        "MAKOSH_SECRET_VAULT_PATH" => {
             config.secret_vault_path = Some(PathBuf::from(non_empty(
                 value,
                 ConfigError::EmptySecretVaultPath,
             )?));
         }
-        "HERMES_SECRET_VAULT_KEY" => {
+        "MAKOSH_SECRET_VAULT_KEY" => {
             config.secret_vault_key = Some(ResolvedSecret::new(non_empty(
                 value,
                 ConfigError::EmptySecretVaultKey,
             )?)?);
         }
-        "HERMES_VAULT_HOME" => {
+        "MAKOSH_VAULT_HOME" => {
             config.vault_home = PathBuf::from(non_empty(value, ConfigError::EmptyVaultHome)?);
         }
-        "HERMES_DEV_MODE" => {
-            config.dev_mode = parse_bool_env("HERMES_DEV_MODE", value.trim())?;
+        "MAKOSH_DEV_MODE" => {
+            config.dev_mode = parse_bool_env("MAKOSH_DEV_MODE", value.trim())?;
         }
-        "HERMES_DEV_KEY_PATH" => {
+        "MAKOSH_DEV_KEY_PATH" => {
             config.dev_key_path = PathBuf::from(non_empty(value, ConfigError::EmptyDevKeyPath)?);
         }
         _ => return Ok(false),

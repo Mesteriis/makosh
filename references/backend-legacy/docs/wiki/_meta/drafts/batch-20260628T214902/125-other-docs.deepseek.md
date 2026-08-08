@@ -1,22 +1,22 @@
 ### Summary / Резюме
 
-Обновить страницу `components/docs.md` в русской Obsidian‑wiki на основе последних исходников статического документационного сайта Hermes Hub (`docs/site/index.html` и `docs/site/hermes-docs.css`). Страница должна описать структуру страницы, доступные UI‑компоненты, систему стилей и зафиксированные в HTML‑файле тематические разделы (модель, точки входа, домены, движки, рабочие процессы, поверхность совместимости, планы рефакторинга), а также ссылки на внешние артефакты (спецификации, ADR и т. д.). Предыдущее содержимое страницы не встроено в контекстный пакет, поэтому предлагается полная замена.
+Обновить страницу `components/docs.md` в русской Obsidian‑wiki на основе последних исходников статического документационного сайта Макошь (`docs/site/index.html` и `docs/site/makosh-docs.css`). Страница должна описать структуру страницы, доступные UI‑компоненты, систему стилей и зафиксированные в HTML‑файле тематические разделы (модель, точки входа, домены, движки, рабочие процессы, поверхность совместимости, планы рефакторинга), а также ссылки на внешние артефакты (спецификации, ADR и т. д.). Предыдущее содержимое страницы не встроено в контекстный пакет, поэтому предлагается полная замена.
 
 ### Proposed pages / Предлагаемые страницы
 
 `components/docs.md`
 
 ```markdown
-# Документационный сайт Hermes Hub (docs)
+# Документационный сайт Макошь (docs)
 
 ## Обзор
 
-Компонент `docs` — статический HTML‑сайт документации проекта Hermes Hub, размещаемый в каталоге `docs/site/`.  
+Компонент `docs` — статический HTML‑сайт документации проекта Макошь, размещаемый в каталоге `docs/site/`.
 Он служит единой точкой входа в спецификации продукта, модель памяти, глоссарий, доменные спецификации, движки, рабочие процессы, текущую реализацию и планы архитектурных изменений.
 
-Исходный файл: `docs/site/index.html`.  
-Стили: `docs/site/hermes-docs.css`.  
-Логотип: `docs/site/assets/hermes-logo-mark.png` (бинарный файл размером 106 906 байт).
+Исходный файл: `docs/site/index.html`.
+Стили: `docs/site/makosh-docs.css`.
+Логотип: `docs/site/assets/makosh-logo-mark.png` (бинарный файл размером 106 906 байт).
 
 ## Структура страницы
 
@@ -32,9 +32,9 @@ HTML‑документ построен как двухколоночная с�
 
 1. **Бренд** (`brand`):
    - ссылка‑якорь на `#top`;
-   - изображение `assets/hermes-logo-mark.png` с классом `brand-mark` (32×32 px, содержит фильтр‑тень);
+   - изображение `assets/makosh-logo-mark.png` с классом `brand-mark` (32×32 px, содержит фильтр‑тень);
    - текстовая подпись `brand-copy`:
-     - строка `Hermes Hub` (жирный, размер 15 px, в верхнем регистре);
+     - строка `Макошь` (жирный, размер 15 px, в верхнем регистре);
      - строка `Documentation` (размер 10 px, приглушённый цвет).
 
 2. **Навигация** (`nav-group`):
@@ -63,7 +63,7 @@ HTML‑документ построен как двухколоночная с�
 
 - **Лейбл‑раздела** (`eyebrow`): *Canonical model*
 - **Заголовок** (`h1`): *Personal Memory System*
-- **Основной текст** (`lead`): *Hermes stores context about communications, knowledge, memory, relationships, projects, documents, decisions, obligations and the owner's operating context.*
+- **Основной текст** (`lead`): *Макошь stores context about communications, knowledge, memory, relationships, projects, documents, decisions, obligations and the owner's operating context.*
 - **Полоса потока** (`flow-strip`) с пятью метками в том же стиле:
   - `Communication`
   - `Source Evidence`
@@ -71,19 +71,19 @@ HTML‑документ построен как двухколоночная с�
   - `Memory`
   - `Context`
 
-### Сетка «Точки входа и Что НЕ является Hermes» (`grid two`, id `entrypoints`)
+### Сетка «Точки входа и Что НЕ является Макошь» (`grid two`, id `entrypoints`)
 
 Две панели (`panel`):
 
 1. **Canonical Entrypoints** (лейбл *Start here*):
-   - Список ссылок (`link-list`) на файлы репозитория `https://github.com/Mesteriis/hermes-os/blob/main/`:
+   - Список ссылок (`link-list`) на файлы репозитория `https://github.com/Mesteriis/makosh-os/blob/main/`:
      - `docs/product/master-spec.md` — *Product Master Spec*
      - `docs/foundation/vision.md` — *Foundation Vision*
      - `docs/foundation/glossary.md` — *Glossary*
      - `docs/foundation/world-model.md` — *World Model*
      - `docs/README.md` — *Documentation Index*
 
-2. **What Hermes Is Not** (лейбл *Current rule*):
+2. **What Макошь Is Not** (лейбл *Current rule*):
    - Маркированный список (`plain-list`) из утверждений:
      - Email client
      - CRM or contact manager
@@ -139,7 +139,7 @@ HTML‑документ построен как двухколоночная с�
    - Маркированный список (`plain-list`) из пяти утверждений:
      - `Active identity route: /api/v1/persons/{person_id}/identity`
      - `Historical contacts projection was renamed to persons.`
-     - `Protected local APIs use X-Hermes-Secret.`
+     - `Protected local APIs use X-Макошь-Secret.`
      - `New credentials use host vault storage.`
      - `Email channel code remains under current mail modules.`
 
@@ -151,7 +151,7 @@ HTML‑документ построен как двухколоночная с�
      - `docs/product/development-roadmap.md` — *Development Roadmap*
      - `docs/adr/README.md` — *ADR Index*
 
-## Система стилей (`hermes-docs.css`)
+## Система стилей (`makosh-docs.css`)
 
 Стилевой файл определяет тёмную тему через CSS‑переменные на уровне `:root`:
 
@@ -197,7 +197,7 @@ HTML‑документ построен как двухколоночная с�
 ## Зависимости и ресурсы
 
 - Внешних JavaScript‑зависимостей нет.
-- Все внешние ссылки ведут на файлы в GitHub‑репозитории `Mesteriis/hermes-os` (ветка `main`).
+- Все внешние ссылки ведут на файлы в GitHub‑репозитории `Mesteriis/makosh-os` (ветка `main`).
 - Иконки или веб‑шрифты не подключаются.
 ```
 
@@ -209,21 +209,21 @@ HTML‑документ построен как двухколоночная с�
   - Навигационные ссылки и их идентификаторы.
   - Содержимое топ‑панели (четыре метки).
   - Вводная панель: заголовок, основной текст, полоса потока.
-  - Панели с точками входа (канонические точки входа и список «Что НЕ является Hermes»).
+  - Панели с точками входа (канонические точки входа и список «Что НЕ является Макошь»).
   - Панель доменов со всеми десятью ссылками.
   - Панели движков и рабочих процессов со ссылками.
   - Панели совместимости и планов рефакторинга со списками и ссылками.
   - Все текстовые строки и атрибуты `href` сохранены буквально.
 
-- **`docs/site/hermes-docs.css`** (7653 символов):
+- **`docs/site/makosh-docs.css`** (7653 символов):
   - Полный набор CSS‑переменных (цвета, радиусы, тени, шрифты).
   - Стили для каждого HTML‑элемента и класса: `.docs-shell`, `.docs-sidebar`, `.brand`, `.brand-mark`, `.brand-copy`, `.nav-group`, `.nav-group a`, `.nav-group a.active`, `.docs-main`, `.topbar`, `.topbar span`, `.flow-strip span`, `.intro-panel`, `.panel`, `.eyebrow`, `h1`, `h2`, `.lead`, `.flow-strip`, `.grid`, `.grid.two`, `.link-list`, `.compact-links`, `.tile-grid`, `.plain-list`, `code`.
   - Правила адаптивности при ширине `1100px`, `840px`, `620px` и соответствующие изменения сеток, отступов и размеров шрифта.
   - Анимации и переходы (`transition`), используемые для интерактивных элементов.
 
-- **`docs/site/assets/hermes-logo-mark.png`** (106906 байт):
+- **`docs/site/assets/makosh-logo-mark.png`** (106906 байт):
   - Факт наличия файла логотипа, его размер и относительный путь.
-  - Использование в HTML как `src="assets/hermes-logo-mark.png"` и в CSS через класс `.brand-mark`.
+  - Использование в HTML как `src="assets/makosh-logo-mark.png"` и в CSS через класс `.brand-mark`.
 
 ### Drift candidates / Кандидаты на drift
 

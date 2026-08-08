@@ -8,12 +8,12 @@ pub use envelope::{
     build_evidence_export_prepared_outbox_record_v1,
     build_evidence_export_rejected_outbox_record_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-communications-evidence-export-source-api";
+pub const PACKAGE: &str = "makosh-communications-evidence-export-source-api";
 pub const EVIDENCE_EXPORT_SOURCE_OWNER_V1: &str = "communications";
 pub const EVIDENCE_EXPORT_PREPARE_CONTRACT_NAME_V1: &str = "evidence_export_prepare";
 pub const EVIDENCE_EXPORT_PREPARED_CONTRACT_NAME_V1: &str = "evidence_export_prepared";
@@ -26,14 +26,14 @@ pub const EVIDENCE_EXPORT_MAX_SOURCE_PROOF_BYTES_V1: usize = 2_048;
 pub const EVIDENCE_EXPORT_MAX_IN_FLIGHT_V1: u32 = 32;
 pub const COMMUNICATIONS_EXPORT_SOURCE_BLOB_TARGET_OWNER_ID_V1: &str = "communications_export";
 pub const COMMUNICATIONS_EXPORT_SOURCE_BLOB_TARGET_MODULE_ID_V1: &str =
-    "hermes-communications-export-runtime";
+    "makosh-communications-export-runtime";
 pub const COMMUNICATIONS_EXPORT_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "communications_export.blob.v1";
 
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communications.evidence_export_source.v1.rs"
+        "/makosh.communications.evidence_export_source.v1.rs"
     ));
 }
 
@@ -205,7 +205,7 @@ mod tests {
         );
         assert_eq!(
             COMMUNICATIONS_EXPORT_SOURCE_BLOB_TARGET_MODULE_ID_V1,
-            "hermes-communications-export-runtime"
+            "makosh-communications-export-runtime"
         );
         assert_eq!(
             COMMUNICATIONS_EXPORT_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1,

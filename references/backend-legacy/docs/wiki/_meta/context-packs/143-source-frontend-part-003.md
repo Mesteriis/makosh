@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/domains/communications/api/readReceipts.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/readReceipts.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/readReceipts.ts`
 - Size bytes / Размер в байтах: `442`
 - Included characters / Включено символов: `442`
 - Truncated / Обрезано: `no`
@@ -80,7 +80,7 @@ export async function recordReadReceipt(
 
 ### `frontend/src/domains/communications/api/savedSearchApi.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/savedSearchApi.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/savedSearchApi.ts`
 - Size bytes / Размер в байтах: `1183`
 - Included characters / Включено символов: `1183`
 - Truncated / Обрезано: `no`
@@ -127,7 +127,7 @@ export async function deleteSavedSearch(savedSearchId: string): Promise<SavedSea
 
 ### `frontend/src/domains/communications/api/sendApi.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/sendApi.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/sendApi.ts`
 - Size bytes / Размер в байтах: `554`
 - Included characters / Включено символов: `554`
 - Truncated / Обрезано: `no`
@@ -150,7 +150,7 @@ export async function redirectMessage(
 
 ### `frontend/src/domains/communications/api/telegramBusinessApi.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/telegramBusinessApi.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/telegramBusinessApi.test.ts`
 - Size bytes / Размер в байтах: `6656`
 - Included characters / Включено символов: `6656`
 - Truncated / Обрезано: `no`
@@ -345,7 +345,7 @@ describe('telegram business API', () => {
 
 ### `frontend/src/domains/communications/api/telegramBusinessApi.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/telegramBusinessApi.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/telegramBusinessApi.ts`
 - Size bytes / Размер в байтах: `15152`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -659,7 +659,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/api/threadApi.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/threadApi.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/threadApi.ts`
 - Size bytes / Размер в байтах: `995`
 - Included characters / Включено символов: `995`
 - Truncated / Обрезано: `no`
@@ -701,7 +701,7 @@ export async function translateThread(
 
 ### `frontend/src/domains/communications/api/whatsappBusinessApi.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/whatsappBusinessApi.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/whatsappBusinessApi.test.ts`
 - Size bytes / Размер в байтах: `17189`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1058,7 +1058,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/api/whatsappBusinessApi.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/whatsappBusinessApi.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/whatsappBusinessApi.ts`
 - Size bytes / Размер в байтах: `13751`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1410,7 +1410,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/components/AttachmentSearchPanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/AttachmentSearchPanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/AttachmentSearchPanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `1294`
 - Included characters / Включено символов: `1294`
 - Truncated / Обрезано: `no`
@@ -1448,7 +1448,7 @@ describe('AttachmentSearchPanel boundary', () => {
 
 ### `frontend/src/domains/communications/components/BilingualReplyPanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/BilingualReplyPanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/BilingualReplyPanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `964`
 - Included characters / Включено символов: `964`
 - Truncated / Обрезано: `no`
@@ -1482,7 +1482,7 @@ describe('BilingualReplyPanel boundary', () => {
 
 ### `frontend/src/domains/communications/components/BulkActionsBar.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/BulkActionsBar.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/BulkActionsBar.boundary.test.ts`
 - Size bytes / Размер в байтах: `1154`
 - Included characters / Включено символов: `1154`
 - Truncated / Обрезано: `no`
@@ -1518,7 +1518,7 @@ describe('BulkActionsBar mail workflow boundary', () => {
 
 ### `frontend/src/domains/communications/components/CommunicationFolderStrip.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationFolderStrip.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationFolderStrip.boundary.test.ts`
 - Size bytes / Размер в байтах: `3995`
 - Included characters / Включено символов: `3995`
 - Truncated / Обрезано: `no`
@@ -1593,7 +1593,7 @@ describe('CommunicationFolderStrip folder management boundary', () => {
 
 ### `frontend/src/domains/communications/components/CommunicationList.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationList.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationList.boundary.test.ts`
 - Size bytes / Размер в байтах: `1331`
 - Included characters / Включено символов: `1331`
 - Truncated / Обрезано: `no`
@@ -1629,7 +1629,7 @@ describe('CommunicationList keyboard multi-select boundary', () => {
 
 ### `frontend/src/domains/communications/components/CommunicationListItem.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationListItem.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationListItem.boundary.test.ts`
 - Size bytes / Размер в байтах: `644`
 - Included characters / Включено символов: `644`
 - Truncated / Обрезано: `no`
@@ -1652,7 +1652,7 @@ describe('CommunicationListItem drag payload boundary', () => {
 
 ### `frontend/src/domains/communications/components/CommunicationViewer.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationViewer.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationViewer.boundary.test.ts`
 - Size bytes / Размер в байтах: `2148`
 - Included characters / Включено символов: `2148`
 - Truncated / Обрезано: `no`
@@ -1707,7 +1707,7 @@ describe('CommunicationViewer boundary', () => {
 
 ### `frontend/src/domains/communications/components/CommunicationsActionBar.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationsActionBar.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationsActionBar.boundary.test.ts`
 - Size bytes / Размер в байтах: `1601`
 - Included characters / Включено символов: `1601`
 - Truncated / Обрезано: `no`
@@ -1751,7 +1751,7 @@ describe('CommunicationsActionBar export boundary', () => {
 
 ### `frontend/src/domains/communications/components/CommunicationsCallsPanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationsCallsPanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationsCallsPanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `1023`
 - Included characters / Включено символов: `1023`
 - Truncated / Обрезано: `no`
@@ -1781,7 +1781,7 @@ describe('CommunicationsCallsPanel boundary', () => {
 
 ### `frontend/src/domains/communications/components/CommunicationsConversationList.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationsConversationList.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationsConversationList.boundary.test.ts`
 - Size bytes / Размер в байтах: `1150`
 - Included characters / Включено символов: `1150`
 - Truncated / Обрезано: `no`
@@ -1817,7 +1817,7 @@ describe('CommunicationsConversationList boundary', () => {
 
 ### `frontend/src/domains/communications/components/CommunicationsDetailPane.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationsDetailPane.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationsDetailPane.boundary.test.ts`
 - Size bytes / Размер в байтах: `2147`
 - Included characters / Включено символов: `2147`
 - Truncated / Обрезано: `no`
@@ -1879,7 +1879,7 @@ describe('CommunicationsDetailPane boundary', () => {
 
 ### `frontend/src/domains/communications/components/CommunicationsListPane.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationsListPane.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationsListPane.boundary.test.ts`
 - Size bytes / Размер в байтах: `1508`
 - Included characters / Включено символов: `1508`
 - Truncated / Обрезано: `no`
@@ -1924,7 +1924,7 @@ describe('CommunicationsListPane folder browsing boundary', () => {
 
 ### `frontend/src/domains/communications/components/ComposeDrawer.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/ComposeDrawer.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/ComposeDrawer.boundary.test.ts`
 - Size bytes / Размер в байтах: `2950`
 - Included characters / Включено символов: `2950`
 - Truncated / Обрезано: `no`
@@ -2006,7 +2006,7 @@ describe('ComposeDrawer boundaries', () => {
 
 ### `frontend/src/domains/communications/components/ComposeSignaturePicker.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/ComposeSignaturePicker.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/ComposeSignaturePicker.boundary.test.ts`
 - Size bytes / Размер в байтах: `657`
 - Included characters / Включено символов: `657`
 - Truncated / Обрезано: `no`
@@ -2033,7 +2033,7 @@ describe('ComposeSignaturePicker boundaries', () => {
 
 ### `frontend/src/domains/communications/components/ComposeTemplatePicker.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/ComposeTemplatePicker.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/ComposeTemplatePicker.boundary.test.ts`
 - Size bytes / Размер в байтах: `3208`
 - Included characters / Включено символов: `3208`
 - Truncated / Обрезано: `no`
@@ -2103,7 +2103,7 @@ describe('ComposeTemplatePicker boundaries', () => {
 
 ### `frontend/src/domains/communications/components/DraftStrip.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/DraftStrip.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/DraftStrip.boundary.test.ts`
 - Size bytes / Размер в байтах: `866`
 - Included characters / Включено символов: `866`
 - Truncated / Обрезано: `no`
@@ -2133,7 +2133,7 @@ describe('DraftStrip virtualization boundary', () => {
 
 ### `frontend/src/domains/communications/components/MailCertificateStrip.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MailCertificateStrip.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MailCertificateStrip.boundary.test.ts`
 - Size bytes / Размер в байтах: `876`
 - Included characters / Включено символов: `876`
 - Truncated / Обрезано: `no`

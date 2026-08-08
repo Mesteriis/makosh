@@ -12,21 +12,21 @@ function validManifest() {
     runtime_lifecycle: 'managed_child',
     signing: { team_id: 'AB12CD34EF' },
     artifacts: {
-      tauri_bundle: { path: '/Applications/Hermes Hub.app' },
+      tauri_bundle: { path: '/Applications/Макошь.app' },
       kernel_sidecar: {
-        path: '/Applications/Hermes Hub.app/Contents/MacOS/hermes-kernel',
+        path: '/Applications/Макошь.app/Contents/MacOS/makosh-kernel',
         sha256: digest,
       },
       release_trust_root: {
-        path: '/Applications/Hermes Hub.app/Contents/Resources/hermes-kernel-release/hermes-release-trust-root.pb',
+        path: '/Applications/Макошь.app/Contents/Resources/makosh-kernel-release/makosh-release-trust-root.pb',
         sha256: digest,
       },
       signed_distribution_manifest: {
-        path: '/Applications/Hermes Hub.app/Contents/Resources/hermes-kernel-release/hermes-signed-distribution-manifest.pb',
+        path: '/Applications/Макошь.app/Contents/Resources/makosh-kernel-release/makosh-signed-distribution-manifest.pb',
         sha256: digest,
       },
       distribution_root: {
-        path: '/Applications/Hermes Hub.app/Contents/Resources/hermes-kernel-release/distribution',
+        path: '/Applications/Макошь.app/Contents/Resources/makosh-kernel-release/distribution',
       },
     },
   };
@@ -46,7 +46,7 @@ test('rejects non-macOS profiles, malformed Team IDs and missing Kernel digest',
   assert.ok(validateManifest(weakIdentity).some((error) => error.includes('team_id')));
 
   const notAnAppBundle = validManifest();
-  notAnAppBundle.artifacts.tauri_bundle.path = '/Applications/Hermes Hub';
+  notAnAppBundle.artifacts.tauri_bundle.path = '/Applications/Макошь';
   assert.ok(validateManifest(notAnAppBundle).some((error) => error.includes('tauri_bundle')));
 
   const noDigest = validManifest();
@@ -64,10 +64,10 @@ test('rejects non-macOS profiles, malformed Team IDs and missing Kernel digest',
 
 test('rejects a release manifest that points a signed artifact outside its Tauri bundle', () => {
   const detachedSidecar = validManifest();
-  detachedSidecar.artifacts.kernel_sidecar.path = '/opt/hermes/hermes-kernel';
+  detachedSidecar.artifacts.kernel_sidecar.path = '/opt/makosh/makosh-kernel';
   assert.ok(validateManifest(detachedSidecar).some((error) => error.includes('kernel_sidecar')));
 
   const wrongResourceRoot = validManifest();
-  wrongResourceRoot.artifacts.distribution_root.path = '/Applications/Hermes Hub.app/Contents/Resources/distribution';
+  wrongResourceRoot.artifacts.distribution_root.path = '/Applications/Макошь.app/Contents/Resources/distribution';
   assert.ok(validateManifest(wrongResourceRoot).some((error) => error.includes('distribution_root')));
 });

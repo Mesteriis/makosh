@@ -1,11 +1,11 @@
 //! Creates one opaque Kernel Settings configuration target.
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     CommitOwnerModuleSettingsResponseV1, CreateOwnerModuleSettingsTargetReceiptV1,
     CreateOwnerModuleSettingsTargetV1, commit_owner_module_settings_response_v1,
 };
-use hermes_gateway_runtime::OwnerModuleSettingsRouteErrorV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_gateway_runtime::OwnerModuleSettingsRouteErrorV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use sha2::{Digest, Sha256};
 
 use crate::modules::settings::schema;
@@ -48,7 +48,7 @@ fn configuration_instance_id(
     operation_id: &[u8; 16],
 ) -> String {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.settings.configuration-target.v1");
+    digest.update(b"makosh.settings.configuration-target.v1");
     digest.update(store.snapshot().instance_id());
     digest.update(registration_id.as_bytes());
     digest.update(operation_id);

@@ -1,6 +1,6 @@
 use serde_json::Value;
 
-use hermes_communications_api::mail_resources::GmailMessageListFetchRequest;
+use makosh_communications_api::mail_resources::GmailMessageListFetchRequest;
 
 use super::super::super::errors::ProviderSyncError;
 use super::super::super::models::progress::{MailSyncPhase, ProgressMode, ProgressUpdate};

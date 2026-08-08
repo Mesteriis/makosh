@@ -1,6 +1,6 @@
 //! Ciphertext-only relay from Kernel Event Hub to the managed authority child.
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::{
         EventsAuthorityRuntimeControlRequestV1, EventsAuthorityRuntimeControlResponseV1,
         EventsRuntimeCredentialDeliveryV1, IssueEventsRuntimeCredentialRequestV1,

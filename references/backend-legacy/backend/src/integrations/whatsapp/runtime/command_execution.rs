@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
-use hermes_communications_api::accounts::ProviderAccountLookupPort;
-use hermes_communications_api::commands::ProviderCommandProjectionPort;
+use makosh_communications_api::accounts::ProviderAccountLookupPort;
+use makosh_communications_api::commands::ProviderCommandProjectionPort;
 use serde_json::json;
 use sqlx::PgPool;
 
@@ -17,7 +17,7 @@ pub(super) async fn mirror_canonical_provider_command_for_pool(
     command: &WhatsAppProviderWriteCommand,
 ) -> Result<(), WhatsappWebError> {
     let mirror =
-        hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore::new(
+        makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore::new(
             pool.clone(),
         );
     mirror

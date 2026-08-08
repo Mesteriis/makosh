@@ -20,29 +20,29 @@ pub(super) use crate::runtime::managed::execution::{
     self as bounded_managed_child_execution, ManagedChildExecutionPolicy,
 };
 pub(super) use crate::runtime::managed::supervisor as managed_child_supervisor;
-pub(super) use hermes_events_protocol::{
+pub(super) use makosh_events_protocol::{
     envelope::decode_envelope_v1,
     v1::{ActorKindV1, ActorRefV1, ContractRefV1, DurableEnvelopeV1, EventMetadataV1, SourceRefV1},
 };
-pub(super) use hermes_gateway_protocol::v1::{
+pub(super) use makosh_gateway_protocol::v1::{
     GetRecoveryStatusRequestV1, RecoveryControlRequestV1,
 };
-pub(super) use hermes_kernel_control_store::{
+pub(super) use makosh_kernel_control_store::{
     BundledManagedLaunchBinding, ControlStore, ExternalRuntimeAttestation, ExternalRuntimeIdentity,
     InitialOwnerIdentity, ManagedLaunchRecord, ModuleRegistration, ModuleRegistrationState,
     PlatformManagedProcessBinding, PlatformManagedProcessLaunch, RecoveryFences,
     ServerBootstrapPairing, SettingsApplyState, SettingsDesiredSnapshot, SettingsInitialSnapshot,
     SettingsSchemaBinding, StoreHealth,
 };
-pub(super) use hermes_kernel_control_store_sqlite::{
+pub(super) use makosh_kernel_control_store_sqlite::{
     SqliteControlStore, StagedControlStoreRestore, StoreError,
 };
-pub(super) use hermes_runtime_protocol::v1::KernelStateV1;
-pub(super) use hermes_runtime_protocol::v1::{
+pub(super) use makosh_runtime_protocol::v1::KernelStateV1;
+pub(super) use makosh_runtime_protocol::v1::{
     DescribeManagedRuntimeRequestV1, ManagedRuntimeControlRequestV1,
     ManagedRuntimeControlResponseV1,
 };
-pub(super) use hermes_runtime_protocol::{
+pub(super) use makosh_runtime_protocol::{
     v1::{
         CapabilityCriticalityV1, CapabilityDescriptorV1, DistributionArtifactKindV1,
         DistributionManifestArtifactV1, DistributionManifestV1, InitialOwnerEnrollmentChallengeV1,

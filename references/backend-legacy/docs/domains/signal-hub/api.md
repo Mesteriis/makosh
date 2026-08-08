@@ -59,7 +59,7 @@ definitions so custom profile authoring/editing can stay inside Settings
 without dropping back to ad hoc JSON or REST-only shims.
 
 The same root contract set now also has a live provider-neutral
-`hermes.communications.v1.CommunicationsService` backend slice for:
+`makosh.communications.v1.CommunicationsService` backend slice for:
 
 - `ListMessages`
 - `GetMessage`
@@ -127,7 +127,7 @@ The same root contract set now also has a live provider-neutral
 - `RedirectMessage`
 
 That communications slice currently reuses existing Communications stores and
-confirmed send path under the same router-level `X-Hermes-Secret` boundary; it
+confirmed send path under the same router-level `X-Макошь-Secret` boundary; it
 does not replace all legacy REST endpoints yet. The frontend now also exposes a
 dedicated typed wrapper around this `communications/v1` service for targeted
 query/command usage and regression coverage, and the current provider-neutral

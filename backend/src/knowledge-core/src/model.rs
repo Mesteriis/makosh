@@ -100,7 +100,7 @@ pub fn derive_verified_knowledge_note_id_v1(
         return Err(KnowledgeValidationErrorV1::InvalidCandidateId);
     }
     Ok(digest(
-        b"hermes.knowledge.reviewed-candidate.note-id.v1",
+        b"makosh.knowledge.reviewed-candidate.note-id.v1",
         logical_owner_id.as_bytes(),
         approved_candidate_id,
     ))
@@ -111,7 +111,7 @@ pub fn knowledge_note_creation_fingerprint_v1(
 ) -> Result<[u8; DIGEST_BYTES_V1], KnowledgeValidationErrorV1> {
     validate_draft(draft)?;
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.knowledge.reviewed-candidate.creation.v1");
+    hasher.update(b"makosh.knowledge.reviewed-candidate.creation.v1");
     update_part(&mut hasher, draft.logical_owner_id.as_bytes());
     update_part(&mut hasher, &draft.provenance.approved_candidate_id);
     update_part(&mut hasher, &draft.provenance.candidate_digest);

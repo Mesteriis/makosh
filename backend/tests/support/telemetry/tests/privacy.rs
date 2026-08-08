@@ -1,4 +1,4 @@
-use hermes_telemetry_protocol::{
+use makosh_telemetry_protocol::{
     TelemetryIdentityErrorV1, TelemetryPriorityV1, TelemetrySignalErrorV1, TelemetrySignalInputV1,
     TelemetrySignalKindV1, TelemetrySignalV1, TelemetrySourceV1,
 };

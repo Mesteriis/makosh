@@ -2,9 +2,9 @@
 
 use std::path::{Path, PathBuf};
 
-const RESOURCE_DIRECTORY: &str = "hermes-kernel-release";
-const TRUST_ROOT_FILE: &str = "hermes-release-trust-root.pb";
-const SIGNED_MANIFEST_FILE: &str = "hermes-signed-distribution-manifest.pb";
+const RESOURCE_DIRECTORY: &str = "makosh-kernel-release";
+const TRUST_ROOT_FILE: &str = "makosh-release-trust-root.pb";
+const SIGNED_MANIFEST_FILE: &str = "makosh-signed-distribution-manifest.pb";
 const DISTRIBUTION_DIRECTORY: &str = "distribution";
 
 pub struct MacosReleaseResources {

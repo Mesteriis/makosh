@@ -1,4 +1,4 @@
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     validate_attachment_translation_inference_request_v1,
     validate_attachment_translation_inference_result_v1,
     validate_attachment_translation_source_text_v1, validate_provider_translation_result_v1,
@@ -16,7 +16,7 @@ use crate::{
 };
 
 const AI_ATTACHMENT_TRANSLATION_PROMPT_POLICY_V1: &[u8] =
-    b"hermes-ai-attachment-translation-v1;raw-extracted-text;exact-target-language";
+    b"makosh-ai-attachment-translation-v1;raw-extracted-text;exact-target-language";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AiAttachmentTranslationRunV1 {
@@ -265,7 +265,7 @@ fn id32(value: &[u8]) -> Result<[u8; 32], AiInferenceCoreErrorV1> {
 
 #[cfg(test)]
 mod tests {
-    use hermes_ai_contracts::{
+    use makosh_ai_contracts::{
         AI_CONTRACT_MAJOR_V1, AI_CONTRACT_REVISION_V1, AI_CONTRACTS_SCHEMA_SHA256,
         AI_LOCAL_EGRESS_POLICY_REVISION_V1, seal_attachment_translation_inference_request_v1,
         wire::{

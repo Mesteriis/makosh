@@ -1,7 +1,7 @@
 //! Test-only direct PostgreSQL diagnostics for the disposable Attachment Security contour.
 
-use hermes_attachment_security_persistence::AttachmentSecurityPersistenceErrorV1;
-use hermes_events_protocol::delivery::OutboxRecordV1;
+use makosh_attachment_security_persistence::AttachmentSecurityPersistenceErrorV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
 use sqlx::{
     PgPool, Row,
     postgres::{PgConnectOptions, PgPoolOptions},
@@ -66,12 +66,12 @@ impl AttachmentSecurityPersistenceConformanceV1 {
     {
         let row = sqlx::query(
             "SELECT \
-             (SELECT count(*) FROM hermes_data.attachment_security_scan_candidates) AS candidates, \
-             (SELECT count(*) FROM hermes_data.attachment_security_canonical_states) AS canonical_states, \
-             (SELECT count(*) FROM hermes_data.attachment_security_scan_jobs) AS jobs, \
-             (SELECT coalesce(sum(attempt_count), 0) FROM hermes_data.attachment_security_scan_jobs) AS attempts, \
-             (SELECT count(*) FROM hermes_data.attachment_security_scan_jobs WHERE target_blob_reference_id IS NOT NULL) AS target_blob_receipts, \
-             (SELECT count(*) FROM hermes_data.attachment_security_verdict_outbox) AS outbox",
+             (SELECT count(*) FROM makosh_data.attachment_security_scan_candidates) AS candidates, \
+             (SELECT count(*) FROM makosh_data.attachment_security_canonical_states) AS canonical_states, \
+             (SELECT count(*) FROM makosh_data.attachment_security_scan_jobs) AS jobs, \
+             (SELECT coalesce(sum(attempt_count), 0) FROM makosh_data.attachment_security_scan_jobs) AS attempts, \
+             (SELECT count(*) FROM makosh_data.attachment_security_scan_jobs WHERE target_blob_reference_id IS NOT NULL) AS target_blob_receipts, \
+             (SELECT count(*) FROM makosh_data.attachment_security_verdict_outbox) AS outbox",
         )
         .fetch_one(&self.pool)
         .await
@@ -108,7 +108,7 @@ impl AttachmentSecurityPersistenceConformanceV1 {
              target_blob_reference_id IS NOT NULL AS target_blob_receipt_present, \
              outbox_message_id IS NOT NULL AS outbox_message_id_present, \
              claimed_by IS NOT NULL AS claimed \
-             FROM hermes_data.attachment_security_scan_jobs \
+             FROM makosh_data.attachment_security_scan_jobs \
              WHERE attachment_anchor_id = $1",
         )
         .bind(attachment_anchor_id.to_vec())
@@ -153,7 +153,7 @@ impl AttachmentSecurityPersistenceConformanceV1 {
         }
         let rows = sqlx::query(
             "SELECT exact_envelope_bytes \
-             FROM hermes_data.attachment_security_verdict_outbox \
+             FROM makosh_data.attachment_security_verdict_outbox \
              WHERE published_at_unix_seconds IS NULL \
              ORDER BY created_at_unix_seconds ASC, message_id ASC LIMIT $1",
         )

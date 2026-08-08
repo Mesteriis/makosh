@@ -10,7 +10,7 @@ describe('canonical saved-search presentation model', () => {
 		const savedSearchId = new Uint8Array(16).fill(1)
 		const accountId = new Uint8Array(16).fill(2)
 		const rows = buildCanonicalSavedSearchRows([{
-			$typeName: 'hermes.communications.saved_search.v1.SavedSearchSummaryV1',
+			$typeName: 'makosh.communications.saved_search.v1.SavedSearchSummaryV1',
 			savedSearchId,
 			name: 'Unread obligations',
 			description: 'Private exact-token definition',

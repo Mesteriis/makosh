@@ -9,7 +9,7 @@ Backup-eligible credential допускается только вместе с �
 browser-local proof по ADR-0234. Authentication ceremony остаётся server-held,
 bounded и short-lived; caller-selected credential ID сначала резолвится как
 active record через Kernel authority, затем снова fenced при assertion
-persistence. Exact `hermes-gateway-session-contract` отделяет
+persistence. Exact `makosh-gateway-session-contract` отделяет
 browser authority от Gateway implementation; Kernel реализует его через
 private Control Store adapter. Pairing state уже хранит server-side WebAuthn
 ceremony и удаляется только после успешного verifier + persistence callback.
@@ -21,7 +21,7 @@ current identity-epoch fence; a non-zero counter cannot repeat or regress,
 while a zero-counter authenticator remains valid only while it reports zero.
 Это решение включает browser client в scope `client_gateway_v1`, но не
 открывает первый business owner. Частичный Gateway transport foundation
-существует отдельным `hermes-gateway-runtime`: он fail-closed валидирует
+существует отдельным `makosh-gateway-runtime`: он fail-closed валидирует
 local/paired-remote profiles, запрещает remote plaintext и HTTP/3 early data,
 обслуживает paired TCP/TLS peer по HTTP/2 и HTTP/3 peer через same Gateway
 router. Kernel-managed listener lifecycle имеет explicit opt-in local profile
@@ -95,7 +95,7 @@ paired-remote listener остаётся TLS + HTTP/2. Это не меняет l
 
 Frontend foundation теперь имеет отдельный `BrowserGatewayFetch`: он принимает
 только relative same-origin path, использует только `credentials: same-origin`
-и отклоняет `X-Hermes-Secret`/`Authorization` до network call.
+и отклоняет `X-Макошь-Secret`/`Authorization` до network call.
 `createBrowserGatewayConnectTransport` собирает поверх него только typed
 Connect transport с relative base URL и отключённым GET; он не принимает
 interceptors, headers или business methods. `BrowserGatewayAuthenticator`
@@ -120,7 +120,7 @@ malformed frame; он не интерпретирует owner payload.
 
 Browser является first-party client поверх единственного Core Gateway, но не
 является Tauri WebView, module runtime или доверенным host bridge. Старый
-frontend хранит base URL и `X-Hermes-Secret`; этот surface является legacy
+frontend хранит base URL и `X-Макошь-Secret`; этот surface является legacy
 evidence и не может быть адаптирован для browser client. При этом ADR-0218
 задаёт отдельные ES256 identities для desktop/Android, но не определяет
 origin-bound browser credential и его pairing lifecycle.
@@ -135,7 +135,7 @@ Browser получает отдельный revocable `DeviceIdentity`, а не 
 Store сохраняет только credential ID, COSE ES256 public key, browser-local
 public point, RP ID, device/owner relation, identity epoch, active/revoked
 state и минимальный counter/provenance для проверки assertion. Биометрия,
-attestation certificate и private keys нигде Hermes не сохраняются.
+attestation certificate и private keys нигде Макошь не сохраняются.
 
 Первичная регистрация browser credential доступна только из уже
 owner-authorized desktop/Android pairing ceremony с single-use, short-lived,
@@ -148,7 +148,7 @@ Credential обязан быть WebAuthn ES256 и user-verifying. Backup-eligib
 credential допустим только вместе с browser-local proof ADR-0234. Registration и
 assertion сверяют exact RP ID, exact HTTPS origin, challenge, type,
 authenticator-data RP ID hash, user-presence/user-verification flags, ES256
-signature и monotonic counter policy. `attestation = none`; Hermes не делает
+signature и monotonic counter policy. `attestation = none`; Макошь не делает
 trust decision по model/biometric data authenticator. Это следует standard
 WebAuthn assertion model, где authenticator signs assertion data and the
 client-data hash for the relying party origin.
@@ -232,7 +232,7 @@ owner query/command contracts, durable receipts, Android HTTP/3 conformance
 
 ## Последствия
 
-- Browser получает phishing-resistant, origin-bound device proof без Hermes
+- Browser получает phishing-resistant, origin-bound device proof без Макошь
   secret в JavaScript memory/storage.
 - Backup-eligible passkeys use the separate browser-local key binding of
   ADR-0234; the WebAuthn credential alone never proves the browser device.

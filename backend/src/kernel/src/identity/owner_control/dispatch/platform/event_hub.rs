@@ -1,14 +1,14 @@
 //! Owner-authorized desired Event Hub topology changes.
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     ConfigurePlatformEventHubTopologyRequestV1, ConfigurePlatformEventHubTopologyResponseV1,
     EventHubStreamBudgetV1, ReconcilePlatformEventHubTopologyRequestV1,
     ReconcilePlatformEventHubTopologyResponseV1,
 };
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleEventEnvelopeKindV1, PlatformEventHubTopologyV1, PlatformEventStreamBudgetV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use super::super::{OwnerControlSessions, OwnerResult};
 use crate::platform::events::reconciliation;

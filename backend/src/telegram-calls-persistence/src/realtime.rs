@@ -1,4 +1,4 @@
-use hermes_telegram_calls_core::{TelegramCallOperation, TelegramCallSession};
+use makosh_telegram_calls_core::{TelegramCallOperation, TelegramCallSession};
 use sqlx::{PgPool, Postgres, Row, Transaction};
 
 use crate::{
@@ -26,7 +26,7 @@ pub(crate) async fn persist_call_event(
     session: &TelegramCallSession,
 ) -> Result<u64, TelegramCallsPersistenceError> {
     let local_muted = sqlx::query_scalar::<_, bool>(
-        "SELECT muted FROM hermes_data.telegram_call_local_mute \
+        "SELECT muted FROM makosh_data.telegram_call_local_mute \
          WHERE account_id = $1 AND call_session_id = $2",
     )
     .bind(&session.account_id)
@@ -36,7 +36,7 @@ pub(crate) async fn persist_call_event(
     .map_err(database_error)?
     .unwrap_or(false);
     let row = sqlx::query(
-        "INSERT INTO hermes_data.telegram_call_realtime_events ( \
+        "INSERT INTO makosh_data.telegram_call_realtime_events ( \
          account_id, event_kind, call_session_id, call_revision, local_muted, \
          observed_at_unix_seconds \
          ) VALUES ($1, 'call', $2, $3, $4, $5) RETURNING event_sequence",
@@ -58,7 +58,7 @@ pub(crate) async fn persist_operation_event(
     operation: &TelegramCallOperation,
 ) -> Result<u64, TelegramCallsPersistenceError> {
     let row = sqlx::query(
-        "INSERT INTO hermes_data.telegram_call_realtime_events ( \
+        "INSERT INTO makosh_data.telegram_call_realtime_events ( \
          account_id, event_kind, operation_id, operation_revision, local_muted, \
          observed_at_unix_seconds \
          ) VALUES ($1, 'operation', $2, $3, $4, $5) RETURNING event_sequence",
@@ -80,7 +80,7 @@ async fn persist_replay_order(
     event_sequence: i64,
 ) -> Result<u64, TelegramCallsPersistenceError> {
     let replay_sequence: i64 = sqlx::query_scalar(
-        "UPDATE hermes_data.telegram_call_realtime_replay_cursor \
+        "UPDATE makosh_data.telegram_call_realtime_replay_cursor \
          SET next_sequence = next_sequence + 1 \
          WHERE cursor_scope = 'owner' \
          RETURNING next_sequence - 1",
@@ -90,7 +90,7 @@ async fn persist_replay_order(
     .map_err(database_error)?
     .ok_or(TelegramCallsPersistenceError::InvalidRow)?;
     sqlx::query(
-        "INSERT INTO hermes_data.telegram_call_realtime_replay_order (\
+        "INSERT INTO makosh_data.telegram_call_realtime_replay_order (\
              replay_sequence, event_sequence\
          ) \
          VALUES ($1, $2)",
@@ -129,16 +129,16 @@ pub(crate) async fn load_events(
          oh.revision AS operation_revision, o.accepted_at_unix_seconds, \
          oh.updated_at_unix_seconds AS operation_updated_at_unix_seconds, \
          oh.completed_at_unix_seconds, oh.failure_category AS operation_failure_category \
-         FROM hermes_data.telegram_call_realtime_replay_order replay \
-         JOIN hermes_data.telegram_call_realtime_events e \
+         FROM makosh_data.telegram_call_realtime_replay_order replay \
+         JOIN makosh_data.telegram_call_realtime_events e \
            ON e.event_sequence = replay.event_sequence \
-         LEFT JOIN hermes_data.telegram_call_sessions s \
+         LEFT JOIN makosh_data.telegram_call_sessions s \
            ON e.event_kind = 'call' AND s.call_session_id = e.call_session_id \
-         LEFT JOIN hermes_data.telegram_call_state_history ch \
+         LEFT JOIN makosh_data.telegram_call_state_history ch \
            ON ch.call_session_id = e.call_session_id AND ch.revision = e.call_revision \
-         LEFT JOIN hermes_data.telegram_call_operations o \
+         LEFT JOIN makosh_data.telegram_call_operations o \
            ON e.event_kind = 'operation' AND o.operation_id = e.operation_id \
-         LEFT JOIN hermes_data.telegram_call_operation_history oh \
+         LEFT JOIN makosh_data.telegram_call_operation_history oh \
            ON oh.operation_id = e.operation_id AND oh.revision = e.operation_revision \
          WHERE e.account_id = $1 AND replay.replay_sequence > $2 \
          ORDER BY replay.replay_sequence ASC LIMIT $3",

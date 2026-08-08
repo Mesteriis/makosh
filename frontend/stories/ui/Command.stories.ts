@@ -4,7 +4,7 @@ import type { CommandGroup, CommandItem } from '@/shared/ui'
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Command',
+	title: 'Макошь UI/General/Command',
 	component: Command,
 	render: (_args, context) => ({
 		components: { Button, Command },

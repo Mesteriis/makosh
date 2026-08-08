@@ -9,7 +9,7 @@ languages: [rust, javascript]
 policies:
   - path: .architecture/policies/rust.yaml
     status: approved
-    policy_version: hermes-rust-srp-v1
+    policy_version: makosh-rust-srp-v1
 artifacts:
   - {path: .architecture/analysis.md, kind: analysis, sha256: "sha256:db0316c93c41103ba3e8a78f14b66adb344eb9115fb20c2b10aa7dbb4d675738"}
   - {path: .architecture/compatibility-plan.yaml, kind: compatibility-plan, sha256: "sha256:c90e832e8340ba2eeb5251703e46b0e696505da2534596bdefa3cdf832021fbd"}

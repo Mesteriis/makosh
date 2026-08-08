@@ -1,6 +1,6 @@
 //! Workflow-owned reconciliation of terminal Mail address-book write results.
 
-use hermes_contacts_command_api::{
+use makosh_contacts_command_api::{
     ContactsCommandEnvelopeContextV1,
     build_bind_mail_address_book_provider_link_command_outbox_record_v1,
     wire::{
@@ -8,16 +8,16 @@ use hermes_contacts_command_api::{
         MailAddressBookProviderKindV1 as ContactsMailAddressBookProviderKindV1,
     },
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ResultMetadataV1, ResultOutcomeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_mail_address_book_contract::{
+use makosh_mail_address_book_contract::{
     MAIL_RUNTIME_MODULE_ID_V1, MailAddressBookContractV1,
     validate_mail_address_book_entry_upsert_rejected_v1,
     validate_mail_address_book_entry_upserted_v1,
@@ -26,8 +26,8 @@ use hermes_mail_address_book_contract::{
         MailAddressBookProviderKindV1, MailAddressBookRejectCodeV1,
     },
 };
-use hermes_mail_contacts_sync_core::MailContactsSyncRejectCodeV1;
-use hermes_mail_contacts_sync_persistence::{
+use makosh_mail_contacts_sync_core::MailContactsSyncRejectCodeV1;
+use makosh_mail_contacts_sync_persistence::{
     CompleteMailAddressBookUpsertV1, MailContactsSyncPersistenceErrorV1,
     MailContactsSyncPersistenceV1, MailContactsSyncProviderWriteOutcomeV1,
 };
@@ -150,7 +150,7 @@ async fn complete(
     record: &OutboxRecordV1,
     identity: ProviderWriteResultIdentityV1,
     outcome: MailContactsSyncProviderWriteOutcomeV1,
-    contacts_link_command: Option<hermes_mail_contacts_sync_persistence::OutboxEnvelopeV1>,
+    contacts_link_command: Option<makosh_mail_contacts_sync_persistence::OutboxEnvelopeV1>,
     context: &MailContactsSyncProviderWriteResultContextV1<'_>,
 ) -> Result<(), MailContactsSyncProviderWriteResultErrorV1> {
     persistence
@@ -171,11 +171,11 @@ async fn complete(
 
 fn build_contacts_link_command(
     record: &OutboxRecordV1,
-    operation: &hermes_mail_contacts_sync_persistence::MailContactsSyncReverseOperationV1,
+    operation: &makosh_mail_contacts_sync_persistence::MailContactsSyncReverseOperationV1,
     payload: &MailAddressBookEntryUpsertedV1,
     context: &MailContactsSyncProviderWriteResultContextV1<'_>,
 ) -> Result<
-    hermes_mail_contacts_sync_persistence::OutboxEnvelopeV1,
+    makosh_mail_contacts_sync_persistence::OutboxEnvelopeV1,
     MailContactsSyncProviderWriteResultErrorV1,
 > {
     let provider_kind = match MailAddressBookProviderKindV1::try_from(payload.provider_kind) {
@@ -202,7 +202,7 @@ fn build_contacts_link_command(
         },
         context.now_unix_millis / 1_000 + crate::MAIL_CONTACTS_SYNC_COMMAND_DEADLINE_SECONDS_V1,
         &ContactsCommandEnvelopeContextV1 {
-            module_id: "hermes-mail-contacts-sync-runtime".to_owned(),
+            module_id: "makosh-mail-contacts-sync-runtime".to_owned(),
             runtime_instance_id: context.runtime_instance_id.to_owned(),
             runtime_generation: context.runtime_generation,
             recorded_at_unix_seconds: context.now_unix_millis / 1_000,
@@ -211,7 +211,7 @@ fn build_contacts_link_command(
         },
     )
     .map_err(|_| MailContactsSyncProviderWriteResultErrorV1::InvalidPayload)?;
-    Ok(hermes_mail_contacts_sync_persistence::OutboxEnvelopeV1 {
+    Ok(makosh_mail_contacts_sync_persistence::OutboxEnvelopeV1 {
         message_id: *command.message_id(),
         envelope_sha256: *command.envelope_sha256(),
         envelope_bytes: command.exact_bytes().to_vec(),
@@ -263,7 +263,7 @@ fn decode_result(
     record: &OutboxRecordV1,
     contract: MailAddressBookContractV1,
     context: &MailContactsSyncProviderWriteResultContextV1<'_>,
-) -> Result<hermes_events_protocol::v1::DurableEnvelopeV1, MailContactsSyncProviderWriteResultErrorV1>
+) -> Result<makosh_events_protocol::v1::DurableEnvelopeV1, MailContactsSyncProviderWriteResultErrorV1>
 {
     if context.now_unix_millis <= 0 {
         return Err(MailContactsSyncProviderWriteResultErrorV1::InvalidPayload);
@@ -288,7 +288,7 @@ fn decode_result(
 
 fn result_identity(
     record: &OutboxRecordV1,
-    envelope: &hermes_events_protocol::v1::DurableEnvelopeV1,
+    envelope: &makosh_events_protocol::v1::DurableEnvelopeV1,
     payload_command_id: &[u8],
     payload_run_id: &[u8],
 ) -> Result<ProviderWriteResultIdentityV1, MailContactsSyncProviderWriteResultErrorV1> {
@@ -313,7 +313,7 @@ fn result_identity(
 }
 
 fn result_outcome(
-    envelope: &hermes_events_protocol::v1::DurableEnvelopeV1,
+    envelope: &makosh_events_protocol::v1::DurableEnvelopeV1,
 ) -> Option<ResultOutcomeV1> {
     let Some(Semantics::Result(ResultMetadataV1 { outcome, .. })) = envelope.semantics.as_ref()
     else {

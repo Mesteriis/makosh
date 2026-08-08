@@ -1,6 +1,6 @@
 //! Signed-release managed launch authority and runtime fencing.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BundledManagedLaunchBinding, ManagedLaunchRecord, ModuleRegistrationState,
 };
 use rusqlite::{OptionalExtension, params};
@@ -26,7 +26,7 @@ impl SqliteControlStore {
                 return Err(StoreError::InvalidBundledManagedLaunchBinding);
             }
             let changed = transaction.execute(
-                "INSERT INTO hermes_kernel_bundled_managed_launch_binding
+                "INSERT INTO makosh_kernel_bundled_managed_launch_binding
                  (registration_id, binding_revision, distribution_id, artifact_id,
                   executable_sha256, descriptor_sha256, settings_schema_sha256)
                  VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
@@ -35,7 +35,7 @@ impl SqliteControlStore {
                  artifact_id=excluded.artifact_id, executable_sha256=excluded.executable_sha256,
                  descriptor_sha256=excluded.descriptor_sha256,
                  settings_schema_sha256=excluded.settings_schema_sha256
-                 WHERE excluded.binding_revision = hermes_kernel_bundled_managed_launch_binding.binding_revision + 1",
+                 WHERE excluded.binding_revision = makosh_kernel_bundled_managed_launch_binding.binding_revision + 1",
                 params![binding.registration_id(), as_sql(binding.binding_revision())?, binding.distribution_id(), binding.artifact_id(), binding.executable_sha256().as_slice(), binding.descriptor_sha256().as_slice(), binding.settings_schema_sha256().map(|digest| digest.as_slice())],
             )?;
             if changed != 1 {
@@ -61,7 +61,7 @@ impl SqliteControlStore {
                 .query_row(
                     "SELECT binding_revision, distribution_id, artifact_id, executable_sha256,
                  descriptor_sha256, settings_schema_sha256
-                 FROM hermes_kernel_bundled_managed_launch_binding WHERE registration_id = ?1",
+                 FROM makosh_kernel_bundled_managed_launch_binding WHERE registration_id = ?1",
                     [&registration_id],
                     |row| decode_binding(row, &registration_id),
                 )
@@ -78,11 +78,11 @@ impl SqliteControlStore {
         let record = record.clone();
         self.with_connection(move |connection| {
             let changed = connection.execute(
-                "INSERT INTO hermes_kernel_managed_launch_record
+                "INSERT INTO makosh_kernel_managed_launch_record
                  (registration_id, runtime_instance_id, binding_revision, kernel_generation, runtime_generation, grant_epoch)
                  SELECT ?1, ?2, ?3, ?4, ?5, ?6 WHERE EXISTS (
-                   SELECT 1 FROM hermes_kernel_module_registration AS registration
-                   JOIN hermes_kernel_bundled_managed_launch_binding AS binding
+                   SELECT 1 FROM makosh_kernel_module_registration AS registration
+                   JOIN makosh_kernel_bundled_managed_launch_binding AS binding
                      ON binding.registration_id = registration.registration_id
                    WHERE registration.registration_id = ?1 AND registration.state = 'approved'
                      AND registration.grant_epoch = ?6 AND binding.binding_revision = ?3)
@@ -90,7 +90,7 @@ impl SqliteControlStore {
                  binding_revision=excluded.binding_revision,
                  kernel_generation=excluded.kernel_generation,
                  runtime_generation=excluded.runtime_generation, grant_epoch=excluded.grant_epoch
-                 WHERE excluded.runtime_generation > hermes_kernel_managed_launch_record.runtime_generation",
+                 WHERE excluded.runtime_generation > makosh_kernel_managed_launch_record.runtime_generation",
                 params![record.registration_id(), record.runtime_instance_id(), as_sql(record.binding_revision())?, as_sql(record.kernel_generation())?, as_sql(record.runtime_generation())?, as_sql(record.grant_epoch())?],
             )?;
             if changed == 1 { Ok(()) } else { Err(StoreError::StaleManagedLaunchRecord) }
@@ -111,7 +111,7 @@ impl SqliteControlStore {
             let record = transaction
                 .query_row(
                     "SELECT runtime_instance_id, binding_revision, kernel_generation, runtime_generation, grant_epoch
-                 FROM hermes_kernel_managed_launch_record
+                 FROM makosh_kernel_managed_launch_record
                  WHERE registration_id = ?1 AND grant_epoch = ?2",
                     params![&registration_id, as_sql(registration.grant_epoch())?],
                     |row| {
@@ -139,7 +139,7 @@ impl SqliteControlStore {
         self.with_connection(move |connection| {
             connection
                 .query_row(
-                    "SELECT runtime_generation FROM hermes_kernel_managed_launch_record
+                    "SELECT runtime_generation FROM makosh_kernel_managed_launch_record
                      WHERE registration_id = ?1",
                     [&registration_id],
                     |row| as_u64(row.get(0)?, 0),

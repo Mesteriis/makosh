@@ -1,7 +1,7 @@
 # Resizable
 
 ## Description
-Native CSS resize container with Hermes surface styling.
+Native CSS resize container with Макошь surface styling.
 
 ## When to use
 Use for local preview panes, inspectors and test surfaces that can be manually resized.

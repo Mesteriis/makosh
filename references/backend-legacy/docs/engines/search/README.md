@@ -2,7 +2,7 @@
 
 Status: documentation package aligned to the current repository structure.
 
-The Search Engine retrieves source-backed information across Hermes.
+The Search Engine retrieves source-backed information across Макошь.
 
 Search is an engine, not a domain. It operates over domain records, source
 evidence, graph relationships and derived indexes.

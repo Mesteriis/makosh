@@ -2,11 +2,11 @@ use std::net::{IpAddr, Ipv4Addr};
 use std::sync::Arc;
 use std::time::Duration;
 
-use hermes_gateway_runtime::{
+use hyper::{Method, Request, StatusCode};
+use makosh_gateway_runtime::{
     BrowserBootstrapRouter, GatewayLoopbackListenerV1, GatewayLoopbackTlsListenerV1,
     GatewayTechnicalRouter, GatewayTlsListenerV1, GatewayTransportProfileV1, PairedRemoteProfileV1,
 };
-use hyper::{Method, Request, StatusCode};
 use rcgen::generate_simple_self_signed;
 use rustls::pki_types::{CertificateDer, PrivateKeyDer, PrivatePkcs8KeyDer, ServerName};
 use rustls::{ClientConfig, RootCertStore, ServerConfig};
@@ -162,7 +162,7 @@ fn gateway_technical_router_exposes_only_health_and_readiness() {
 
 #[test]
 fn signed_browser_bootstrap_router_serves_only_the_root_document() {
-    let router = BrowserBootstrapRouter::new(b"<!doctype html><title>Hermes</title>".to_vec())
+    let router = BrowserBootstrapRouter::new(b"<!doctype html><title>makosh</title>".to_vec())
         .expect("bounded UTF-8 bootstrap");
     let root = router.route(&Method::GET, "/");
     assert_eq!(root.status(), StatusCode::OK);
@@ -189,11 +189,11 @@ fn signed_browser_bootstrap_router_serves_only_the_root_document() {
 
 #[test]
 fn signed_browser_bootstrap_router_serves_only_exact_declared_assets() {
-    let router = BrowserBootstrapRouter::new(b"<!doctype html><title>Hermes</title>".to_vec())
+    let router = BrowserBootstrapRouter::new(b"<!doctype html><title>makosh</title>".to_vec())
         .expect("bounded UTF-8 bootstrap")
         .with_assets([(
             "/assets/app.js".to_owned(),
-            b"console.log('Hermes')".to_vec(),
+            b"console.log('makosh')".to_vec(),
         )])
         .expect("exact signed browser asset");
     let asset = router.route(&Method::GET, "/assets/app.js");

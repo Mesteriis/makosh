@@ -8,7 +8,7 @@ source "$SCRIPT_DIR/lib/common.sh"
 # shellcheck source=./lib/env.sh
 source "$SCRIPT_DIR/lib/env.sh"
 
-load_hermes_env
-confirm_or_exit "This will delete local vault data under $HERMES_HOST_VAULT_HOME." "DELETE"
-rm -rf "$HERMES_HOST_VAULT_HOME"
-success "Deleted local vault data at $HERMES_HOST_VAULT_HOME"
+load_makosh_env
+confirm_or_exit "This will delete local vault data under $MAKOSH_HOST_VAULT_HOME." "DELETE"
+rm -rf "$MAKOSH_HOST_VAULT_HOME"
+success "Deleted local vault data at $MAKOSH_HOST_VAULT_HOME"

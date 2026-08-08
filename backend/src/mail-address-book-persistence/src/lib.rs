@@ -29,4 +29,4 @@ pub use schema::{
     MailAddressBookSchemaErrorV1, append_mail_address_book_storage_v1,
 };
 
-pub const PACKAGE: &str = "hermes-mail-address-book-persistence";
+pub const PACKAGE: &str = "makosh-mail-address-book-persistence";

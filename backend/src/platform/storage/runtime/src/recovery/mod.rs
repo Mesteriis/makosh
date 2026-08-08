@@ -14,7 +14,7 @@ use crate::cli::{
 use private_files::{PrivateConnectionFiles, validate_executable, validate_private_file};
 
 const EMPTY_TARGET_QUERY: &str = "SELECT count(*) = 0 FROM pg_catalog.pg_tables WHERE schemaname NOT IN ('pg_catalog', 'information_schema')";
-const MIGRATION_LEDGER_QUERY: &str = "SELECT count(*) = 1 FROM information_schema.tables WHERE table_schema = 'hermes_platform' AND table_name = 'storage_migration_ledger'";
+const MIGRATION_LEDGER_QUERY: &str = "SELECT count(*) = 1 FROM information_schema.tables WHERE table_schema = 'makosh_platform' AND table_name = 'storage_migration_ledger'";
 
 pub(crate) fn execute(command: OfflineRecoveryCommand) -> Result<(), String> {
     match command {
@@ -72,7 +72,7 @@ fn run_pg_dump(
         OsStr::new("--no-privileges"),
         OsStr::new("--file"),
         staged_dump.as_os_str(),
-        OsStr::new("--dbname=service=hermes_recovery"),
+        OsStr::new("--dbname=service=makosh_recovery"),
     ]);
     command.output().map_err(|_| recovery_unavailable())
 }
@@ -87,7 +87,7 @@ fn run_pg_restore(
         OsStr::new("--no-privileges"),
         OsStr::new("--exit-on-error"),
         OsStr::new("--single-transaction"),
-        OsStr::new("--dbname=service=hermes_recovery"),
+        OsStr::new("--dbname=service=makosh_recovery"),
         arguments.input.as_os_str(),
     ]);
     command.output().map_err(|_| recovery_unavailable())
@@ -103,7 +103,7 @@ fn require_true_query(
     command.args([
         "--tuples-only",
         "--no-align",
-        "--dbname=service=hermes_recovery",
+        "--dbname=service=makosh_recovery",
         "--command",
         query,
     ]);

@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/integrations/telegram/runtime/manager/message_events/projection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/message_events/projection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/message_events/projection.rs`
 - Size bytes / Размер в байтах: `3718`
 - Included characters / Включено символов: `3718`
 - Truncated / Обрезано: `no`
@@ -175,7 +175,7 @@ pub(super) fn observed_edit_timestamp(
 
 ### `backend/src/integrations/telegram/runtime/manager/message_events/tests.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/message_events/tests.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/message_events/tests.rs`
 - Size bytes / Размер в байтах: `9921`
 - Included characters / Включено символов: `9915`
 - Truncated / Обрезано: `no`
@@ -465,7 +465,7 @@ async fn publish_reaction_changed_event_skips_without_projected_message() {
 
 ### `backend/src/integrations/telegram/runtime/manager/participant_events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/participant_events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/participant_events.rs`
 - Size bytes / Размер в байтах: `6115`
 - Included characters / Включено символов: `6115`
 - Truncated / Обрезано: `no`
@@ -667,7 +667,7 @@ mod tests {
 
 ### `backend/src/integrations/telegram/runtime/manager/participants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/participants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/participants.rs`
 - Size bytes / Размер в байтах: `21653`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1027,7 +1027,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/telegram/runtime/manager/participants_runtime_tests.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/participants_runtime_tests.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/participants_runtime_tests.rs`
 - Size bytes / Размер в байтах: `12251`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1100,7 +1100,7 @@ async fn sync_provider_roster_snapshots_appends_join_reconciliation_after_partic
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({}),
         json!({"telegram_chat_id": chat.telegram_chat_id, "provider_chat_id": provider_chat_id}),
         json!({"source": "test"}),
@@ -1262,7 +1262,7 @@ async fn sync_provider_roster_snapshots_appends_leave_reconciliation_after_absen
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({}),
         json!({"telegram_chat_id": chat.telegram_chat_id, "provider_chat_id": provider_chat_id}),
         json!({"source": "test"}),
@@ -1379,7 +1379,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/telegram/runtime/manager/realtime_events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/realtime_events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/realtime_events.rs`
 - Size bytes / Размер в байтах: `21324`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1715,14 +1715,14 @@ mod typing_tests {
             last_error: Some("temporary failure".to_owned()),
             result_payload: json!({"projection_message_id": "msg-1"}),
             audit_metadata: json!({"source": "test"}),
-            actor_id: "hermes-frontend".to_owned(),
+            actor_id: "makosh-frontend".to_owned(),
             happened_at: Utc::now(),
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/integrations/telegram/runtime/manager/registry.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/registry.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/registry.rs`
 - Size bytes / Размер в байтах: `2414`
 - Included characters / Включено символов: `2414`
 - Truncated / Обрезано: `no`
@@ -1796,7 +1796,7 @@ impl TelegramRuntimeManager {
 
 ### `backend/src/integrations/telegram/runtime/manager/search.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/search.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/search.rs`
 - Size bytes / Размер в байтах: `4200`
 - Included characters / Включено символов: `4200`
 - Truncated / Обрезано: `no`
@@ -1925,7 +1925,7 @@ impl TelegramRuntimeManager {
 
 ### `backend/src/integrations/telegram/runtime/manager/send.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/send.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/send.rs`
 - Size bytes / Размер в байтах: `8755`
 - Included characters / Включено символов: `8755`
 - Truncated / Обрезано: `no`
@@ -2132,7 +2132,7 @@ impl TelegramRuntimeManager {
 
 ### `backend/src/integrations/telegram/runtime/manager/sync_chats.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/sync_chats.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/sync_chats.rs`
 - Size bytes / Размер в байтах: `4469`
 - Included characters / Включено символов: `4469`
 - Truncated / Обрезано: `no`
@@ -2254,7 +2254,7 @@ fn tdlib_folder_ids_from_chat_snapshots(
 
 ### `backend/src/integrations/telegram/runtime/manager/sync_history.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/sync_history.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/sync_history.rs`
 - Size bytes / Размер в байтах: `3004`
 - Included characters / Включено символов: `3004`
 - Truncated / Обрезано: `no`
@@ -2340,7 +2340,7 @@ async fn sync_fixture_history(
 
 ### `backend/src/integrations/telegram/runtime/manager/sync_history_tdlib.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/sync_history_tdlib.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/sync_history_tdlib.rs`
 - Size bytes / Размер в байтах: `7413`
 - Included characters / Включено символов: `7413`
 - Truncated / Обрезано: `no`
@@ -2535,7 +2535,7 @@ async fn ensure_private_chat_for_full_sync(
 
 ### `backend/src/integrations/telegram/runtime/manager/tdlib_actor.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/tdlib_actor.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/tdlib_actor.rs`
 - Size bytes / Размер в байтах: `2437`
 - Included characters / Включено символов: `2437`
 - Truncated / Обрезано: `no`
@@ -2609,7 +2609,7 @@ impl TelegramRuntimeManager {
 
 ### `backend/src/integrations/telegram/runtime/manager/topic_events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/topic_events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/topic_events.rs`
 - Size bytes / Размер в байтах: `14716`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2927,7 +2927,7 @@ mod tests {
             "available",
             "provider_write",
             "confirmed",
-            "hermes-frontend",
+            "makosh-frontend",
             json!({
                 "provider_topic_id": 42,
                 "is_closed": true
@@ -2988,7 +2988,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/telegram/runtime/manager/topics.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/topics.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/topics.rs`
 - Size bytes / Размер в байтах: `3749`
 - Included characters / Включено символов: `3749`
 - Truncated / Обрезано: `no`
@@ -3097,7 +3097,7 @@ fn topic_unread_count(unread_count: i64) -> i32 {
 
 ### `backend/src/integrations/telegram/runtime/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/models.rs`
 - Size bytes / Размер в байтах: `9189`
 - Included characters / Включено символов: `9189`
 - Truncated / Обрезано: `no`
@@ -3405,7 +3405,7 @@ pub struct TelegramRuntimeStatus {
 
 ### `backend/src/integrations/telegram/runtime/participant_commands.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/participant_commands.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/participant_commands.rs`
 - Size bytes / Размер в байтах: `3266`
 - Included characters / Включено символов: `3266`
 - Truncated / Обрезано: `no`

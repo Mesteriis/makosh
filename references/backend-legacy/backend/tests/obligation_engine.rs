@@ -1,4 +1,4 @@
-use hermes_hub_backend::engines::obligation::{
+use makosh_hub_backend::engines::obligation::{
     engine::ObligationEngine,
     models::{
         ObligationCandidateKind, ObligationEntityKind, ObligationEvidenceSourceKind,

@@ -12,15 +12,15 @@ from zerver.actions.streams import bulk_add_subscriptions
 from zerver.lib.streams import create_stream_if_needed
 from zerver.models import Realm, UserProfile
 
-realm_name = os.environ["HERMES_REALM_NAME"]
-stream_name = os.environ["HERMES_STREAM_NAME"]
-owner_email = os.environ["HERMES_OWNER_EMAIL"]
-owner_name = os.environ["HERMES_OWNER_NAME"]
-owner_password = os.environ["HERMES_OWNER_PASSWORD"]
-human_email = os.environ["HERMES_HUMAN_EMAIL"]
-human_name = os.environ["HERMES_HUMAN_NAME"]
-bot_email = os.environ["HERMES_BOT_EMAIL"]
-bot_name = os.environ["HERMES_BOT_NAME"]
+realm_name = os.environ["MAKOSH_REALM_NAME"]
+stream_name = os.environ["MAKOSH_STREAM_NAME"]
+owner_email = os.environ["MAKOSH_OWNER_EMAIL"]
+owner_name = os.environ["MAKOSH_OWNER_NAME"]
+owner_password = os.environ["MAKOSH_OWNER_PASSWORD"]
+human_email = os.environ["MAKOSH_HUMAN_EMAIL"]
+human_name = os.environ["MAKOSH_HUMAN_NAME"]
+bot_email = os.environ["MAKOSH_BOT_EMAIL"]
+bot_name = os.environ["MAKOSH_BOT_NAME"]
 
 realm = Realm.objects.filter(string_id="").first()
 if realm is None:
@@ -63,7 +63,7 @@ if bot is None:
 stream, _ = create_stream_if_needed(realm, stream_name, acting_user=owner)
 bulk_add_subscriptions(realm, [stream], [owner, human, bot], acting_user=owner)
 
-print("HERMES_ZULIP_PROVISION " + json.dumps({
+print("MAKOSH_ZULIP_PROVISION " + json.dumps({
     "owner_email": owner.delivery_email,
     "owner_user_id": owner.id,
     "owner_api_key": owner.api_key,

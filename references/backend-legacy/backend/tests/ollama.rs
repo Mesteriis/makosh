@@ -6,7 +6,7 @@ use axum::{Json, Router};
 use serde_json::{Value, json};
 use tokio::net::TcpListener;
 
-use hermes_hub_backend::integrations::ollama::client::{
+use makosh_hub_backend::integrations::ollama::client::{
     OllamaClient, config::OllamaClientConfig, error::OllamaError,
 };
 
@@ -26,14 +26,14 @@ async fn ollama_client_round_trips_chat_embed_tags_and_version() {
     assert!(tags.contains(&"qwen3-embedding:4b".to_owned()));
 
     let chat = client
-        .chat("Return exactly: hermes-ai-ok")
+        .chat("Return exactly: makosh-ai-ok")
         .await
         .expect("chat");
-    assert_eq!(chat.content, "hermes-ai-ok");
+    assert_eq!(chat.content, "makosh-ai-ok");
     assert_eq!(chat.model, "qwen3:4b");
 
     let embedding = client
-        .embed("Hermes Hub memory retrieval")
+        .embed("Макошь memory retrieval")
         .await
         .expect("embed");
     assert_eq!(embedding.model, "qwen3-embedding:4b");
@@ -65,7 +65,7 @@ async fn ollama_client_uses_json_mode_only_for_structured_chat() {
         .await
         .expect("structured chat");
 
-    assert_eq!(chat.content, "hermes-ai-ok");
+    assert_eq!(chat.content, "makosh-ai-ok");
 }
 
 #[tokio::test]
@@ -150,7 +150,7 @@ async fn spawn_fake_ollama(mode: FakeOllamaMode) -> String {
                         StatusCode::OK,
                         Json(json!({
                             "model": "qwen3:4b",
-                            "message": { "role": "assistant", "content": "hermes-ai-ok" },
+                            "message": { "role": "assistant", "content": "makosh-ai-ok" },
                             "done": true,
                             "total_duration": 10_000_000u64,
                             "prompt_eval_count": 8u32,

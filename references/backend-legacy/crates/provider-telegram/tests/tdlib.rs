@@ -1,4 +1,4 @@
-use hermes_provider_telegram::tdlib::{chats, messages, topics, types::TdlibMediaKind};
+use makosh_provider_telegram::tdlib::{chats, messages, topics, types::TdlibMediaKind};
 use serde_json::json;
 
 #[test]
@@ -20,7 +20,7 @@ fn media_contract_rejects_empty_paths_and_keeps_document_metadata() {
     let media = messages::send_media(
         10,
         TdlibMediaKind::Document,
-        "/tmp/hermes/upload.pdf",
+        "/tmp/makosh/upload.pdf",
         Some("Document caption"),
         Some("upload.pdf"),
         "media-1",
@@ -32,7 +32,7 @@ fn media_contract_rejects_empty_paths_and_keeps_document_metadata() {
     );
     assert_eq!(
         media["input_message_content"]["document"]["path"],
-        "/tmp/hermes/upload.pdf"
+        "/tmp/makosh/upload.pdf"
     );
     assert_eq!(
         media["input_message_content"]["caption"]["text"],

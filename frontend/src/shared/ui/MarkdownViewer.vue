@@ -12,14 +12,14 @@ const props = withDefaults(defineProps<{
 	emptyLabel: 'No markdown content'
 })
 
-const classes = computed(() => ['hermes-markdown-viewer', props.class])
+const classes = computed(() => ['makosh-markdown-viewer', props.class])
 const renderedHtml = computed(() => renderMarkdownToSafeHtml(props.source))
 </script>
 
 <template>
 	<article :class="classes">
-		<h3 v-if="title" class="hermes-media-title">{{ title }}</h3>
-		<div v-if="renderedHtml" class="hermes-markdown-viewer__content" v-html="renderedHtml" />
-		<p v-else class="hermes-media-empty">{{ emptyLabel }}</p>
+		<h3 v-if="title" class="makosh-media-title">{{ title }}</h3>
+		<div v-if="renderedHtml" class="makosh-markdown-viewer__content" v-html="renderedHtml" />
+		<p v-else class="makosh-media-empty">{{ emptyLabel }}</p>
 	</article>
 </template>

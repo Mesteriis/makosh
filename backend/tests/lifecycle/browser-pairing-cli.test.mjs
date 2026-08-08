@@ -10,7 +10,7 @@ import { kernelCommand, startKernel, stopKernel } from './support/production-ker
 const backendRoot = new URL('../../', import.meta.url);
 
 test('browser pairing CLI requires local confirmation and creates an owner-approved ceremony', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-browser-pairing-cli-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-browser-pairing-cli-'));
   const dataDir = join(root, 'data');
   let kernel;
   try {
@@ -38,7 +38,7 @@ test('browser pairing CLI requires local confirmation and creates an owner-appro
 function browserPairCommand(dataDir, input) {
   return spawnSync(
     'cargo',
-    ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'browser-pairing', 'create'],
+    ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'browser-pairing', 'create'],
     { cwd: backendRoot, encoding: 'utf8', input, env: { ...process.env, RUSTC_WRAPPER: '' } },
   );
 }

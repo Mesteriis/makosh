@@ -8,7 +8,7 @@ use crate::app::error::types::ApiError;
 use crate::app::state::AppState;
 use crate::domains::communications::messages::provider_channel_store::ProviderChannelMessageStore;
 use crate::integrations::telegram::client::errors::TelegramError;
-use hermes_communications_api::evidence::StoredRawCommunicationRecord;
+use makosh_communications_api::evidence::StoredRawCommunicationRecord;
 
 const COMMUNICATION_RAW_EVIDENCE_CHANNEL_KINDS: &[&str] =
     &["telegram_user", "telegram_bot", "whatsapp_web"];

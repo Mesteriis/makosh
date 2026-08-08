@@ -34,17 +34,17 @@ Telegram остаётся одним integration owner:
 
 ```text
 owner_id  = telegram
-module_id = hermes-telegram-runtime
+module_id = makosh-telegram-runtime
 ```
 
 Realtime является отдельной функциональной unit внутри существующих
 integration-owned packages, а не новым domain/runtime:
 
 ```text
-hermes-telegram-api          generated replay request/page and validation
-hermes-telegram-persistence  owner-local journal bounds and ordered replay
-hermes-telegram-runtime      exact route handler
-hermes-telegram-assembly     immutable descriptor and release admission
+makosh-telegram-api          generated replay request/page and validation
+makosh-telegram-persistence  owner-local journal bounds and ordered replay
+makosh-telegram-runtime      exact route handler
+makosh-telegram-assembly     immutable descriptor and release admission
 ```
 
 Новая capability:
@@ -52,7 +52,7 @@ hermes-telegram-assembly     immutable descriptor and release admission
 ```text
 capability = telegram.realtime.v1
 contract   = telegram.realtime.v1
-route      = /hermes.telegram.v1.TelegramRealtimeService/Replay
+route      = /makosh.telegram.v1.TelegramRealtimeService/Replay
 gate       = telegram_core_operational_v1
 ```
 

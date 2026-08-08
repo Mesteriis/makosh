@@ -1,7 +1,7 @@
-ALTER TABLE hermes_data.mail_gmail_oauth_credential_bindings
+ALTER TABLE makosh_data.mail_gmail_oauth_credential_bindings
     ADD COLUMN IF NOT EXISTS contacts_write_authorized BOOLEAN NOT NULL DEFAULT FALSE;
 
-CREATE TABLE hermes_data.mail_address_book_upsert_inbox (
+CREATE TABLE makosh_data.mail_address_book_upsert_inbox (
     command_message_id BYTEA PRIMARY KEY CHECK (octet_length(command_message_id) = 16),
     command_envelope_sha256 BYTEA NOT NULL CHECK (octet_length(command_envelope_sha256) = 32),
     command_id BYTEA NOT NULL UNIQUE CHECK (octet_length(command_id) = 16),
@@ -29,13 +29,13 @@ CREATE TABLE hermes_data.mail_address_book_upsert_inbox (
 );
 
 CREATE INDEX mail_address_book_upsert_pending_idx
-ON hermes_data.mail_address_book_upsert_inbox (
+ON makosh_data.mail_address_book_upsert_inbox (
     state,
     accepted_at_unix_seconds,
     command_message_id
 );
 
-CREATE TABLE hermes_data.mail_address_book_upsert_result_outbox (
+CREATE TABLE makosh_data.mail_address_book_upsert_result_outbox (
     message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
     envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
     exact_envelope_bytes BYTEA NOT NULL CHECK (octet_length(exact_envelope_bytes) > 0),
@@ -46,14 +46,14 @@ CREATE TABLE hermes_data.mail_address_book_upsert_result_outbox (
         published_at_unix_seconds IS NULL OR published_at_unix_seconds > 0
     ),
     FOREIGN KEY (command_message_id, command_id) REFERENCES
-        hermes_data.mail_address_book_upsert_inbox (
+        makosh_data.mail_address_book_upsert_inbox (
             command_message_id,
             command_id
         )
 );
 
 CREATE INDEX mail_address_book_upsert_result_pending_idx
-ON hermes_data.mail_address_book_upsert_result_outbox (
+ON makosh_data.mail_address_book_upsert_result_outbox (
     created_at_unix_seconds,
     message_id
 )

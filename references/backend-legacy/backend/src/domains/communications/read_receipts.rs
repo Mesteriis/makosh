@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use sqlx::postgres::{PgPool, PgRow};
@@ -7,10 +7,10 @@ use sqlx::{Postgres, Row, Transaction};
 use thiserror::Error;
 
 use crate::domains::communications::evidence::link_mail_entity_in_transaction;
-use hermes_events_postgres::store::EventStore;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_events_postgres::store::EventStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::store::ObservationStore;
 
 const EVENT_TYPE_RECORDED: &str = "mail.read_receipt.recorded";
 
@@ -369,7 +369,7 @@ fn read_receipt_event(
             "outbox_id": receipt.outbox_id,
         }),
     )
-    .actor(json!({ "actor_id": "hermes-frontend" }))
+    .actor(json!({ "actor_id": "makosh-frontend" }))
     .payload(json!({
         "receipt_id": receipt.receipt_id,
         "account_id": receipt.account_id,
@@ -434,9 +434,9 @@ pub enum CommunicationReadReceiptError {
     #[error(transparent)]
     Sqlx(#[from] sqlx::Error),
     #[error(transparent)]
-    EventStore(#[from] hermes_events_postgres::errors::EventStoreError),
+    EventStore(#[from] makosh_events_postgres::errors::EventStoreError),
     #[error(transparent)]
-    EventEnvelope(#[from] hermes_events_api::EventEnvelopeError),
+    EventEnvelope(#[from] makosh_events_api::EventEnvelopeError),
     #[error(transparent)]
     ObservationStore(#[from] ObservationStoreError),
     #[error("invalid mail read receipt field: {0}")]

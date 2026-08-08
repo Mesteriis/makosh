@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { createWizardStory, wizardStoryModels } from './wizardStory'
 
 const meta = {
-	title: 'Hermes App/Wizard/Telegram'
+	title: 'Макошь App/Wizard/Telegram'
 } satisfies Meta
 
 export default meta

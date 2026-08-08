@@ -1,11 +1,11 @@
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	MailAccountReadinessV1,
 	MailProviderPathReadinessV1,
 	type MailAccountStatusV1,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
 
-const MAIL_MODULE_ID = 'hermes-mail-runtime'
+const MAIL_MODULE_ID = 'makosh-mail-runtime'
 const MAIL_ACCOUNT_CATALOG_CAPABILITY = 'mail.account.catalog.query.v1'
 const MAX_CONNECTION_ID_BYTES = 512
 const textEncoder = new TextEncoder()

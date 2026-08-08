@@ -1,15 +1,15 @@
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     validate_provider_translation_request_v1,
     wire::{AiInferenceTerminalStatusV1, AiProviderTranslationRequestV1},
 };
-use hermes_ollama_ai_api::OllamaAiRuntimeSettingsV1;
-use hermes_ollama_ai_core::{
+use makosh_ollama_ai_api::OllamaAiRuntimeSettingsV1;
+use makosh_ollama_ai_core::{
     OllamaAiRunStateV1, OllamaTranslationRunV1, accept_ollama_translation_request_v1,
     begin_ollama_translation_request_v1, complete_ollama_translation_request_v1,
     mark_ollama_translation_uncertain_v1, reject_ollama_translation_request_v1,
 };
-use hermes_ollama_ai_http::OllamaAiHttpErrorV1;
-use hermes_ollama_ai_persistence::{
+use makosh_ollama_ai_http::OllamaAiHttpErrorV1;
+use makosh_ollama_ai_persistence::{
     OllamaAiPersistenceErrorV1, OllamaAiPersistenceV1, OllamaTranslationTransitionV1,
     PersistedOllamaTranslationRunV1,
 };

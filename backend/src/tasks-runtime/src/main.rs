@@ -9,15 +9,15 @@ use std::{
     time::Duration,
 };
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedDomainRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
         managed_domain_runtime::validate_managed_domain_runtime_configuration,
     },
 };
-use hermes_tasks_persistence::{TasksPersistenceErrorV1, tasks_storage_bundle_v1};
-use hermes_tasks_runtime::{
+use makosh_tasks_persistence::{TasksPersistenceErrorV1, tasks_storage_bundle_v1};
+use makosh_tasks_runtime::{
     TasksManagedRuntimeErrorV1, TasksManagedRuntimeV1, TasksRuntimeAdmissionV1,
     tasks_module_descriptor_v1, tasks_settings_schema_bytes_v1,
 };

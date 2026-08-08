@@ -2,7 +2,7 @@
 
 use std::collections::BTreeSet;
 
-pub const PACKAGE: &str = "hermes-communication-explanation-core";
+pub const PACKAGE: &str = "makosh-communication-explanation-core";
 pub const COMMUNICATION_EXPLANATION_MAX_REASONS_V1: usize = 8;
 pub const COMMUNICATION_EXPLANATION_MAX_REASON_TEXT_BYTES_V1: usize = 512;
 pub const COMMUNICATION_EXPLANATION_MAX_CONFIDENCE_BASIS_POINTS_V1: u32 = 10_000;

@@ -1,15 +1,15 @@
-use hermes_mail_api::GmailOAuthAuthorityV1;
+use makosh_mail_api::GmailOAuthAuthorityV1;
 use sqlx::Row;
 use zeroize::Zeroizing;
 
 use crate::{MailDurablePersistence, MailDurablePersistenceError};
 
 pub const MAIL_SCHEMA_V4: &str = r#"
-ALTER TABLE hermes_data.mail_gmail_oauth_credential_bindings
+ALTER TABLE makosh_data.mail_gmail_oauth_credential_bindings
     ADD COLUMN IF NOT EXISTS access_token_expires_at_unix_seconds BIGINT;
-ALTER TABLE hermes_data.mail_gmail_oauth_credential_bindings
+ALTER TABLE makosh_data.mail_gmail_oauth_credential_bindings
     ADD COLUMN IF NOT EXISTS scope_sha256 BYTEA;
-CREATE TABLE IF NOT EXISTS hermes_data.mail_gmail_oauth_attempts (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_gmail_oauth_attempts (
     setup_id TEXT PRIMARY KEY,
     operation_id TEXT NOT NULL UNIQUE,
     connection_id TEXT NOT NULL,
@@ -31,9 +31,9 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_gmail_oauth_attempts (
     CHECK (expires_at_unix_seconds > created_at_unix_seconds)
 );
 CREATE INDEX IF NOT EXISTS mail_gmail_oauth_attempts_expiry_idx
-    ON hermes_data.mail_gmail_oauth_attempts (expires_at_unix_seconds, setup_id)
+    ON makosh_data.mail_gmail_oauth_attempts (expires_at_unix_seconds, setup_id)
     WHERE consumed_by_operation_id IS NULL;
-CREATE TABLE IF NOT EXISTS hermes_data.mail_gmail_oauth_operations (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_gmail_oauth_operations (
     operation_id TEXT PRIMARY KEY,
     connection_id TEXT NOT NULL,
     kind SMALLINT NOT NULL,
@@ -64,15 +64,15 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_gmail_oauth_operations (
         OR (state IN (2, 3) AND completed_at_unix_seconds IS NOT NULL))
 );
 CREATE INDEX IF NOT EXISTS mail_gmail_oauth_operations_pending_idx
-    ON hermes_data.mail_gmail_oauth_operations (requested_at_unix_seconds, operation_id)
+    ON makosh_data.mail_gmail_oauth_operations (requested_at_unix_seconds, operation_id)
     WHERE state = 1 AND dispatched_at_unix_seconds IS NULL;
 "#;
 
 pub const MAIL_SCHEMA_V16: &str = r#"
-ALTER TABLE hermes_data.mail_gmail_oauth_attempts
+ALTER TABLE makosh_data.mail_gmail_oauth_attempts
     ADD COLUMN IF NOT EXISTS authority SMALLINT NOT NULL DEFAULT 1
         CHECK (authority IN (1, 2));
-ALTER TABLE hermes_data.mail_gmail_oauth_credential_bindings
+ALTER TABLE makosh_data.mail_gmail_oauth_credential_bindings
     ADD COLUMN IF NOT EXISTS permanent_delete_authorized BOOLEAN NOT NULL DEFAULT FALSE;
 "#;
 
@@ -155,7 +155,7 @@ impl MailDurablePersistence {
     ) -> Result<GmailOAuthStoredAttemptV1, MailDurablePersistenceError> {
         validate_attempt(attempt)?;
         sqlx::query(
-            "INSERT INTO hermes_data.mail_gmail_oauth_attempts \
+            "INSERT INTO makosh_data.mail_gmail_oauth_attempts \
              (setup_id, operation_id, connection_id, state_sha256, authorization_url, \
               code_verifier, settings_revision, created_at_unix_seconds, expires_at_unix_seconds, \
               authority) \
@@ -213,7 +213,7 @@ impl MailDurablePersistence {
             .map_err(|_| MailDurablePersistenceError::Database)?;
         let existing = sqlx::query(
             "SELECT kind, setup_id, authorization_code_sha256 \
-             FROM hermes_data.mail_gmail_oauth_operations WHERE operation_id = $1",
+             FROM makosh_data.mail_gmail_oauth_operations WHERE operation_id = $1",
         )
         .bind(operation_id)
         .fetch_optional(&mut *transaction)
@@ -244,7 +244,7 @@ impl MailDurablePersistence {
         let attempt = sqlx::query(
             "SELECT connection_id, state_sha256, expires_at_unix_seconds, \
                     consumed_by_operation_id \
-             FROM hermes_data.mail_gmail_oauth_attempts \
+             FROM makosh_data.mail_gmail_oauth_attempts \
              WHERE setup_id = $1 FOR UPDATE",
         )
         .bind(setup_id)
@@ -271,7 +271,7 @@ impl MailDurablePersistence {
             .try_get("connection_id")
             .map_err(|_| MailDurablePersistenceError::InvalidRow)?;
         sqlx::query(
-            "INSERT INTO hermes_data.mail_gmail_oauth_operations \
+            "INSERT INTO makosh_data.mail_gmail_oauth_operations \
              (operation_id, connection_id, kind, setup_id, authorization_code, \
               authorization_code_sha256, state, requested_at_unix_seconds) \
              VALUES ($1, $2, 1, $3, $4, $5, 1, $6)",
@@ -286,7 +286,7 @@ impl MailDurablePersistence {
         .await
         .map_err(|_| MailDurablePersistenceError::Database)?;
         sqlx::query(
-            "UPDATE hermes_data.mail_gmail_oauth_attempts \
+            "UPDATE makosh_data.mail_gmail_oauth_attempts \
              SET consumed_by_operation_id = $2 \
              WHERE setup_id = $1 AND consumed_by_operation_id IS NULL",
         )
@@ -322,7 +322,7 @@ impl MailDurablePersistence {
             return Err(MailDurablePersistenceError::InvalidRow);
         }
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.mail_gmail_oauth_operations \
+            "INSERT INTO makosh_data.mail_gmail_oauth_operations \
              (operation_id, connection_id, kind, state, requested_at_unix_seconds) \
              VALUES ($1, $2, 2, 1, $3) ON CONFLICT (operation_id) DO NOTHING",
         )
@@ -336,7 +336,7 @@ impl MailDurablePersistence {
             return Ok(GmailOAuthEnqueueOutcomeV1::Enqueued);
         }
         let row = sqlx::query(
-            "SELECT kind, connection_id FROM hermes_data.mail_gmail_oauth_operations \
+            "SELECT kind, connection_id FROM makosh_data.mail_gmail_oauth_operations \
              WHERE operation_id = $1",
         )
         .bind(operation_id)
@@ -371,8 +371,8 @@ impl MailDurablePersistence {
         let row = sqlx::query(
             "SELECT operation.operation_id, operation.connection_id, operation.kind, \
                     operation.authorization_code, attempt.code_verifier, attempt.authority \
-             FROM hermes_data.mail_gmail_oauth_operations operation \
-             LEFT JOIN hermes_data.mail_gmail_oauth_attempts attempt \
+             FROM makosh_data.mail_gmail_oauth_operations operation \
+             LEFT JOIN makosh_data.mail_gmail_oauth_attempts attempt \
                 ON attempt.setup_id = operation.setup_id \
              WHERE operation.state = 1 AND operation.dispatched_at_unix_seconds IS NULL \
                AND operation.connection_id = $1 \
@@ -413,7 +413,7 @@ impl MailDurablePersistence {
             _ => return Err(MailDurablePersistenceError::InvalidRow),
         };
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_gmail_oauth_operations \
+            "UPDATE makosh_data.mail_gmail_oauth_operations \
              SET dispatched_at_unix_seconds = $2, authorization_code = NULL \
              WHERE operation_id = $1 AND dispatched_at_unix_seconds IS NULL AND state = 1",
         )
@@ -489,7 +489,7 @@ impl MailDurablePersistence {
             .await
             .map_err(|_| MailDurablePersistenceError::Database)?;
         let connection_id: String = sqlx::query(
-            "SELECT connection_id FROM hermes_data.mail_gmail_oauth_operations \
+            "SELECT connection_id FROM makosh_data.mail_gmail_oauth_operations \
              WHERE operation_id = $1 AND state = 1 AND dispatched_at_unix_seconds IS NOT NULL \
              FOR UPDATE",
         )
@@ -508,7 +508,7 @@ impl MailDurablePersistence {
         )
         .await?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_gmail_oauth_operations \
+            "UPDATE makosh_data.mail_gmail_oauth_operations \
              SET state = 2, completed_at_unix_seconds = $2 \
              WHERE operation_id = $1 AND state = 1 AND dispatched_at_unix_seconds IS NOT NULL",
         )
@@ -535,7 +535,7 @@ impl MailDurablePersistence {
             return Err(MailDurablePersistenceError::InvalidRow);
         }
         sqlx::query(
-            "UPDATE hermes_data.mail_gmail_oauth_operations \
+            "UPDATE makosh_data.mail_gmail_oauth_operations \
              SET state = 3, completed_at_unix_seconds = $2 \
              WHERE operation_id = $1 AND state = 1 AND dispatched_at_unix_seconds IS NOT NULL",
         )
@@ -561,7 +561,7 @@ impl MailDurablePersistence {
         sqlx::query(
             "SELECT operation_id, kind, state, requested_at_unix_seconds, \
                     dispatched_at_unix_seconds, completed_at_unix_seconds \
-             FROM hermes_data.mail_gmail_oauth_operations WHERE operation_id = $1",
+             FROM makosh_data.mail_gmail_oauth_operations WHERE operation_id = $1",
         )
         .bind(operation_id)
         .fetch_optional(&self.pool)
@@ -583,7 +583,7 @@ impl MailDurablePersistence {
                     refresh_credential_record_id, refresh_credential_revision, \
                     access_token_expires_at_unix_seconds, scope_sha256 \
                     , permanent_delete_authorized, contacts_write_authorized \
-             FROM hermes_data.mail_gmail_oauth_credential_bindings WHERE connection_id = $1",
+             FROM makosh_data.mail_gmail_oauth_credential_bindings WHERE connection_id = $1",
         )
         .bind(connection_id)
         .fetch_optional(&self.pool)
@@ -632,7 +632,7 @@ impl MailDurablePersistence {
             .map_err(|_| MailDurablePersistenceError::InvalidRow)?;
         sqlx::query(
             "SELECT operation_id, setup_id, authorization_url, expires_at_unix_seconds, authority \
-             FROM hermes_data.mail_gmail_oauth_attempts \
+             FROM makosh_data.mail_gmail_oauth_attempts \
              WHERE operation_id = $1 AND connection_id = $2 AND settings_revision = $3 \
                AND authority = $4",
         )
@@ -734,7 +734,7 @@ async fn checkpoint_record(
     let result = match kind {
         CredentialRecordKind::AccessToken => {
             sqlx::query(
-                "UPDATE hermes_data.mail_gmail_oauth_operations \
+                "UPDATE makosh_data.mail_gmail_oauth_operations \
                  SET access_token_record_id = $2, access_token_revision = $3 \
                  WHERE operation_id = $1 AND state = 1 \
                     AND dispatched_at_unix_seconds IS NOT NULL",
@@ -747,7 +747,7 @@ async fn checkpoint_record(
         }
         CredentialRecordKind::RefreshCredential => {
             sqlx::query(
-                "UPDATE hermes_data.mail_gmail_oauth_operations \
+                "UPDATE makosh_data.mail_gmail_oauth_operations \
                  SET refresh_credential_record_id = $2, refresh_credential_revision = $3 \
                  WHERE operation_id = $1 AND state = 1 \
                     AND dispatched_at_unix_seconds IS NOT NULL",
@@ -772,7 +772,7 @@ async fn upsert_binding(
     updated_at_unix_seconds: i64,
 ) -> Result<(), MailDurablePersistenceError> {
     sqlx::query(
-        "INSERT INTO hermes_data.mail_gmail_oauth_credential_bindings \
+        "INSERT INTO makosh_data.mail_gmail_oauth_credential_bindings \
          (connection_id, access_token_record_id, access_token_revision, \
           refresh_credential_record_id, refresh_credential_revision, \
           access_token_expires_at_unix_seconds, scope_sha256, \

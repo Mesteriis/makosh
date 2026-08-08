@@ -8,9 +8,9 @@ code refactoring, API changes, database migrations or provider adapter work.
 
 ## Purpose
 
-This document states what Hermes Hub is today at the architecture level.
+This document states what Макошь is today at the architecture level.
 
-Hermes is a local-first Personal Operating System built on durable personal
+Макошь is a local-first Personal Operating System built on durable personal
 memory and context. Its product surface may include communication workbenches,
 project views, tasks, documents, timelines, review queues and agents, but those
 surfaces exist to serve one goal:
@@ -27,7 +27,7 @@ Context + Memory
 
 ## Non-Identity
 
-Hermes is not merely a disconnected collection of:
+Макошь is not merely a disconnected collection of:
 
 - email and messenger clients without shared evidence and context;
 - a CRM;
@@ -58,7 +58,7 @@ The architecture is responsible for:
 
 ## Boundaries
 
-Hermes must separate these state categories:
+Макошь must separate these state categories:
 
 | Category | Role | Source of truth |
 |---|---|---|
@@ -70,8 +70,8 @@ Hermes must separate these state categories:
 | Derived views | Search, timeline, dossiers, context packs, scores. | Rebuildable projections and engines. |
 | Agent outputs | Proposals, summaries, tool actions. | Agent run records until accepted by a domain. |
 
-Provider state is not Hermes truth. AI output is not Hermes truth. UI state is
-not Hermes truth. A durable mutation belongs to the owning domain and must cite
+Provider state is not Макошь truth. AI output is not Макошь truth. UI state is
+not Макошь truth. A durable mutation belongs to the owning domain and must cite
 source evidence or an explicit owner action.
 
 ## System Shape
@@ -101,9 +101,9 @@ over those boundaries.
 
 ## Reasons For Existence
 
-Hermes exists because personal context is fragmented across providers, files,
+Макошь exists because personal context is fragmented across providers, files,
 projects, relationships and time. A provider client can show messages. A task
-tracker can show actions. A notes app can show text. Hermes should explain:
+tracker can show actions. A notes app can show text. Макошь should explain:
 
 - what happened;
 - who and what is involved;

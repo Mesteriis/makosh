@@ -1,12 +1,12 @@
 //! One fully fenced binding used to derive PostgreSQL role specifications.
 
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
 
 pub fn storage_role_binding(owner: &str, runtime_principal: &str) -> StorageBindingV1 {
-    storage_role_binding_in_database("hermes", owner, runtime_principal)
+    storage_role_binding_in_database("makosh", owner, runtime_principal)
 }
 
 pub fn storage_role_binding_in_database(

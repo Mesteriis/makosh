@@ -3,24 +3,24 @@
 use std::time::Duration;
 
 use futures_util::StreamExt;
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_events_jetstream::{
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_events_jetstream::{
     ConsumerBudgetV1, ConsumerSpecV1, DurableSubjectV1, EventHubTopologyPlanV1, JetStreamClient,
     NatsPasswordCredentialV1, RuntimeNatsIdentity, RuntimeOutboxPublisherV1,
     RuntimePublishPermitV1, StreamBudgetV1, StreamKindV1, StreamSpecV1,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordV1, relay_once},
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
         SourceFenceV1, SourceRefV1, durable_envelope_v1::Semantics,
     },
 };
-use hermes_scheduler_persistence::{
+use makosh_scheduler_persistence::{
     SchedulerDispatchClaimV1, SchedulerPostgresStoreV1, SchedulerRunClaimV1,
     scheduler_storage_bundle_v1,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     ConcurrencyKeyV1, JobRunIdV1, MisfirePolicyV1, OverlapPolicyV1, RetryPolicyV1, ScheduleIdV1,
     SchedulePolicyV1, ScheduleRevisionV1, ScheduleRunLeaseV1, ScheduleTriggerV1,
 };
@@ -29,8 +29,8 @@ use prost_types::Timestamp;
 use sqlx::{PgPool, Row, postgres::PgPoolOptions};
 
 const CLAIMED_AT: i64 = 1_000;
-const ENDPOINT: &str = "HERMES_SCHEDULER_NATS_ENDPOINT";
-const POSTGRES_URL: &str = "HERMES_SCHEDULER_POSTGRES_URL";
+const ENDPOINT: &str = "MAKOSH_SCHEDULER_NATS_ENDPOINT";
+const POSTGRES_URL: &str = "MAKOSH_SCHEDULER_POSTGRES_URL";
 
 #[tokio::test(flavor = "multi_thread")]
 #[ignore = "requires the disposable Scheduler PostgreSQL and JetStream contour"]
@@ -85,7 +85,7 @@ async fn configure_event_hub(endpoint: &str) {
     let consumer = ConsumerSpecV1::new(
         StreamKindV1::Command,
         "scheduler_delivery",
-        "hermes.command.v1.platform.maintenance.v1",
+        "makosh.command.v1.platform.maintenance.v1",
         ConsumerBudgetV1::new(16, 3, Duration::from_secs(2)).expect("budget"),
     )
     .expect("consumer");
@@ -95,7 +95,7 @@ async fn configure_event_hub(endpoint: &str) {
 }
 
 async fn install_schema(pool: &PgPool) {
-    sqlx::raw_sql("DROP SCHEMA IF EXISTS hermes_platform CASCADE; CREATE SCHEMA hermes_platform;")
+    sqlx::raw_sql("DROP SCHEMA IF EXISTS makosh_platform CASCADE; CREATE SCHEMA makosh_platform;")
         .execute(pool)
         .await
         .expect("fresh scheduler schema");
@@ -133,7 +133,7 @@ async fn install_pending_dispatch(pool: &PgPool) -> (SchedulerPostgresStoreV1, V
 }
 
 async fn install_schedule(pool: &PgPool, key: &ConcurrencyKeyV1, policy: &SchedulePolicyV1) {
-    sqlx::query("INSERT INTO hermes_platform.scheduler_schedules (schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms, updated_at_unix_ms) VALUES ($1, 1, 'platform', 'maintenance', 1, 'platform.maintenance', 1, $2, 'scope:technical', $3, 1, TRUE, $4, $5, $5)")
+    sqlx::query("INSERT INTO makosh_platform.scheduler_schedules (schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms, updated_at_unix_ms) VALUES ($1, 1, 'platform', 'maintenance', 1, 'platform.maintenance', 1, $2, 'scope:technical', $3, 1, TRUE, $4, $5, $5)")
         .bind(vec![11_u8; 16]).bind(vec![7_u8; 32]).bind(key.value()).bind(policy.canonical_bytes()).bind(CLAIMED_AT)
         .execute(pool).await.expect("schedule");
 }
@@ -223,7 +223,7 @@ fn envelope(message_id: [u8; 16]) -> DurableEnvelopeV1 {
 }
 
 async fn dispatch_state(pool: &PgPool) -> String {
-    sqlx::query("SELECT state FROM hermes_platform.scheduler_dispatches WHERE message_id = $1")
+    sqlx::query("SELECT state FROM makosh_platform.scheduler_dispatches WHERE message_id = $1")
         .bind(vec![51_u8; 16])
         .fetch_one(pool)
         .await
@@ -239,7 +239,7 @@ async fn assert_exact_delivery(endpoint: &str, expected: &[u8]) {
         .expect("consumer connection");
     let context = async_nats::jetstream::new(client);
     let stream = context
-        .get_stream("HERMES_COMMAND_V1")
+        .get_stream("MAKOSH_COMMAND_V1")
         .await
         .expect("command stream");
     let consumer: async_nats::jetstream::consumer::PullConsumer = stream

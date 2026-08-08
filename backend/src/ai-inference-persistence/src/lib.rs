@@ -31,4 +31,4 @@ pub use translation_model::{
     AiTranslationPersistenceOutcomeV1, AiTranslationTransitionV1, PersistedAiTranslationRunV1,
 };
 
-pub const PACKAGE: &str = "hermes-ai-inference-persistence";
+pub const PACKAGE: &str = "makosh-ai-inference-persistence";

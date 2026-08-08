@@ -318,7 +318,7 @@ appear as active.
 Two similarly named actions are kept separate:
 
 - provider read/archive/mute/pin/label action belongs to the integration;
-- Hermes review/pin/snooze/important/promotion state belongs to `review`.
+- Макошь review/pin/snooze/important/promotion state belongs to `review`.
 
 The `review` domain is currently blocked and is not silently opened by this
 ADR. Its Communications use cases require a separate owner admission ADR,
@@ -463,7 +463,7 @@ runtime не является domain, а app composition не становитс
 | Attachment archive inspection | Dedicated bounded engine | `attachment_archive_inspection_v1` |
 | Attachment translation | `attachment_translation` workflow | `attachment_translation_v1` |
 | Provider actions | Exact integration | integration command gate |
-| Hermes pin/snooze/important/review | Review | `review_communications_attention_v1` after Review admission |
+| Макошь pin/snooze/important/review | Review | `review_communications_attention_v1` after Review admission |
 | Contacts identity command for Mail address-book entries | Contacts | `contacts_mail_identity_command_v1` |
 | Mail address-book synchronization | `mail_contacts_sync` workflow plus Contacts command | `mail_contacts_sync_v1` after `contacts_mail_identity_command_v1` |
 | Calls aggregation | app plus Communications call evidence | `communications_call_evidence_v1` |

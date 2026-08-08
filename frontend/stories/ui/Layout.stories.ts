@@ -28,7 +28,7 @@ import {
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Layout'
+	title: 'Макошь UI/General/Layout'
 } satisfies Meta
 
 export default meta

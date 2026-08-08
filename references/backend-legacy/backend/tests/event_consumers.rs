@@ -1,4 +1,4 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -6,32 +6,32 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use chrono::Utc;
 use serde_json::json;
 
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_events_api::{NewEventEnvelope, StoredEventEnvelope};
-use hermes_events_postgres::consumers::EventConsumerConfig;
-use hermes_events_postgres::consumers::EventConsumerRunner;
-use hermes_events_postgres::consumers::EventDeadLetterReviewState;
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_events_postgres::store::EventStore;
-use hermes_hub_backend::domains::communications::messages::provider_channel_store::ProviderChannelMessageStore;
-use hermes_hub_backend::domains::communications::messages::provider_observation_projection::{
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_events_api::{NewEventEnvelope, StoredEventEnvelope};
+use makosh_events_postgres::consumers::EventConsumerConfig;
+use makosh_events_postgres::consumers::EventConsumerRunner;
+use makosh_events_postgres::consumers::EventDeadLetterReviewState;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::store::EventStore;
+use makosh_hub_backend::domains::communications::messages::provider_channel_store::ProviderChannelMessageStore;
+use makosh_hub_backend::domains::communications::messages::provider_observation_projection::{
     COMMUNICATION_PROVIDER_OBSERVATION_CONSUMER, consume_accepted_signal_event,
     project_provider_observation_event,
 };
-use hermes_hub_backend::domains::signal_hub::service::{
+use makosh_hub_backend::domains::signal_hub::service::{
     SIGNAL_HUB_RAW_SIGNAL_CONSUMER, process_signal_hub_raw_event,
 };
-use hermes_hub_backend::domains::signal_hub::telegram::dispatch_telegram_raw_signal;
-use hermes_hub_backend::integrations::telegram::client::models::chats::TelegramChatKind;
-use hermes_hub_backend::integrations::telegram::client::models::messages::{
+use makosh_hub_backend::domains::signal_hub::telegram::dispatch_telegram_raw_signal;
+use makosh_hub_backend::integrations::telegram::client::models::chats::TelegramChatKind;
+use makosh_hub_backend::integrations::telegram::client::models::messages::{
     NewTelegramMessage, TelegramDeliveryState, TelegramMessage,
 };
-use hermes_hub_backend::integrations::telegram::client::store::TelegramStore;
+use makosh_hub_backend::integrations::telegram::client::store::TelegramStore;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_api::provider_messages::ProviderMessageObservationEvent;
-use hermes_hub_backend::platform::communications::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_api::provider_messages::ProviderMessageObservationEvent;
+use makosh_hub_backend::platform::communications::{
     EventStoreProviderMessageObservationEventPort, ProviderMessageObservationEventPort,
 };
 
@@ -653,13 +653,13 @@ async fn communication_provider_observation_projection_consumes_accepted_telegra
         pool.clone(),
         Arc::new(CommunicationProviderAccountStore::new(pool.clone())),
         Arc::new(
-            hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
+            makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
                 pool.clone(),
             ),
         ),
         Arc::new(ProviderChannelMessageStore::new(pool.clone())),
         Arc::new(
-            hermes_communications_postgres::store::CommunicationIngestionStore::new(
+            makosh_communications_postgres::store::CommunicationIngestionStore::new(
                 pool.clone(),
             ),
         ),
@@ -857,13 +857,13 @@ async fn create_projected_telegram_message(pool: &sqlx::PgPool, suffix: &str) ->
         pool.clone(),
         Arc::new(CommunicationProviderAccountStore::new(pool.clone())),
         Arc::new(
-            hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
+            makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
                 pool.clone(),
             ),
         ),
         Arc::new(ProviderChannelMessageStore::new(pool.clone())),
         Arc::new(
-            hermes_communications_postgres::store::CommunicationIngestionStore::new(
+            makosh_communications_postgres::store::CommunicationIngestionStore::new(
                 pool.clone(),
             ),
         ),
@@ -915,7 +915,7 @@ async fn append_provider_observation(
     payload: &serde_json::Value,
 ) -> Result<
     Option<i64>,
-    hermes_hub_backend::platform::communications::errors::ProviderCommunicationMessagePortError,
+    makosh_hub_backend::platform::communications::errors::ProviderCommunicationMessagePortError,
 > {
     event_port
         .append_provider_message_observation(ProviderMessageObservationEvent {

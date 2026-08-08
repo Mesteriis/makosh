@@ -1,6 +1,6 @@
 # CardContent
 
-Main content region for the Hermes `Card` surface.
+Main content region for the Макошь `Card` surface.
 
 Use for the card's primary local content after the header.
 

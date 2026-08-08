@@ -2,7 +2,7 @@
 
 use std::collections::BTreeSet;
 
-pub const PACKAGE: &str = "hermes-communication-bulk-action-core";
+pub const PACKAGE: &str = "makosh-communication-bulk-action-core";
 pub const MAX_BULK_TARGETS_V1: usize = 100;
 pub const MAX_TARGET_BODY_BYTES_V1: usize = 64 * 1024;
 

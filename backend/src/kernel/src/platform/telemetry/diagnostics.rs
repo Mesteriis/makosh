@@ -1,12 +1,12 @@
 //! Owner-authorized, aggregate-only diagnostics relay for Telemetry Collector.
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     GetTelemetryDiagnosticsRequestV1, TelemetryRuntimeControlRequestV1,
     TelemetryRuntimeControlResponseV1,
     telemetry_runtime_control_request_v1::Operation as RequestOperation,
     telemetry_runtime_control_response_v1::Result as ResponseResult,
 };
-use hermes_runtime_protocol::validation::telemetry::validate_telemetry_runtime_control_response;
+use makosh_runtime_protocol::validation::telemetry::validate_telemetry_runtime_control_response;
 use prost::Message;
 
 use crate::platform::telemetry::binding::TELEMETRY_PROCESS_ID;
@@ -38,7 +38,7 @@ pub fn read(supervisor: &ManagedRuntimeSupervisor) -> Result<TelemetryDiagnostic
 }
 
 fn developer_diagnostics_error(stage: &str, error: &str) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         println!("developer_telemetry_diagnostics stage={stage} error={error}");
     }
 }

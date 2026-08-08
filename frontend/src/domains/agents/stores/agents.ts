@@ -30,7 +30,7 @@ export const useAgentsStore = defineStore('agents-ui', () => {
 	const isAiMeetingPrepSubmitting = ref(false)
 	const isAiTaskRefreshSubmitting = ref(false)
 	const selectedAgentIndex = ref(0)
-	const aiQuestion = ref('What does the local memory say about Hermes Hub V3?')
+	const aiQuestion = ref('What does the local memory say about Макошь V3?')
 	const aiMeetingTopic = ref('Prepare a V3 implementation review brief')
 	const aiTaskQuery = ref('Find open task candidates from local messages and documents')
 	const aiAnswerResult = ref<AiAnswerResponse | null>(null)
@@ -216,7 +216,7 @@ function agentVisual(agentId: string): { icon: string; tone: string } {
 	switch (agentId) {
 		case 'HESTIA':
 			return { icon: 'tabler:calendar-stats', tone: 'mint' }
-		case 'HERMES':
+		case 'MAKOSH':
 			return { icon: 'tabler:route', tone: 'blue' }
 		case 'MNEMOSYNE':
 			return { icon: 'tabler:database-search', tone: 'purple' }

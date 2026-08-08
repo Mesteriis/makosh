@@ -48,7 +48,7 @@ test('Tasks reviewed-candidate command and core are distinct target-owned units'
     readFile(new URL('src/tasks-command-api/src/lib.rs', BACKEND_ROOT), 'utf8'),
     readFile(new URL('src/tasks-command-api/src/envelope.rs', BACKEND_ROOT), 'utf8'),
     readFile(
-      new URL('src/tasks-command-api/proto/hermes/tasks/command/v1/tasks_command.proto', BACKEND_ROOT),
+      new URL('src/tasks-command-api/proto/makosh/tasks/command/v1/tasks_command.proto', BACKEND_ROOT),
       'utf8',
     ),
     readFile(new URL('src/tasks-core/Cargo.toml', BACKEND_ROOT), 'utf8'),
@@ -76,13 +76,13 @@ test('Tasks reviewed-candidate command and core are distinct target-owned units'
 
   assert.equal(policy.implementation.currentSlice, 'call_transcription_managed_conformance_v1');
   for (const unit of [
-    'hermes-tasks-command-api',
-    'hermes-tasks-core',
-    'hermes-tasks-persistence',
-    'hermes-tasks-runtime',
-    'hermes-tasks-assembly',
+    'makosh-tasks-command-api',
+    'makosh-tasks-core',
+    'makosh-tasks-persistence',
+    'makosh-tasks-runtime',
+    'makosh-tasks-assembly',
   ]) {
-    assert.match(workspace, new RegExp(`"src/${unit.replace('hermes-', '')}"`));
+    assert.match(workspace, new RegExp(`"src/${unit.replace('makosh-', '')}"`));
     assert.match(adr, new RegExp(`\\b${unit}\\b`));
     assert.equal(policy.implementation.productionPackages.some(({ name }) => name === unit), true);
   }
@@ -110,7 +110,7 @@ test('Tasks reviewed-candidate command and core are distinct target-owned units'
   assert.match(creation, /hints_do_not_materialize_foreign_domain_identity/);
   assert.doesNotMatch(
     `${core}\n${model}\n${creation}`,
-    /hermes_review|hermes_communications|hermes_calendar|hermes_contacts|hermes_projects|sqlx|reqwest/,
+    /makosh_review|makosh_communications|makosh_calendar|makosh_contacts|makosh_projects|sqlx|reqwest/,
   );
   assert.match(persistenceManifest, /owner = "tasks"/);
   assert.match(persistenceManifest, /surface = "persistence"/);
@@ -155,7 +155,7 @@ test('Tasks reviewed-candidate command and core are distinct target-owned units'
   assert.match(eventOutbox, /publish_exact/);
   assert.doesNotMatch(
     `${runtimeManifest}\n${runtime}\n${admission}\n${command}\n${blob}\n${eventOutbox}\n${runtimeMain}`,
-    /hermes-review|hermes-communications|hermes-calendar|hermes-contacts|hermes-projects|hermes-ollama|reqwest/,
+    /makosh-review|makosh-communications|makosh-calendar|makosh-contacts|makosh-projects|makosh-ollama|reqwest/,
   );
   assert.match(assemblyManifest, /role = "domain"/);
   assert.match(assemblyManifest, /owner = "tasks"/);
@@ -167,17 +167,17 @@ test('Tasks reviewed-candidate command and core are distinct target-owned units'
   assert.match(assemblyMain, /--runtime/);
   assert.doesNotMatch(
     `${assemblyManifest}\n${assembly}\n${assemblyMain}`,
-    /hermes-review|hermes-communications|hermes-calendar|hermes-ollama|sign_distribution|SigningKey|launch_runtime/,
+    /makosh-review|makosh-communications|makosh-calendar|makosh-ollama|sign_distribution|SigningKey|launch_runtime/,
   );
   for (const unit of [
-    'hermes-communication-task-candidate-runtime',
-    'hermes-communication-task-candidate-assembly',
-    'hermes-review-task-candidate-runtime',
-    'hermes-review-task-candidate-assembly',
-    'hermes-reviewed-task-candidate-promotion-runtime',
-    'hermes-reviewed-task-candidate-promotion-assembly',
-    'hermes-tasks-runtime',
-    'hermes-tasks-assembly',
+    'makosh-communication-task-candidate-runtime',
+    'makosh-communication-task-candidate-assembly',
+    'makosh-review-task-candidate-runtime',
+    'makosh-review-task-candidate-assembly',
+    'makosh-reviewed-task-candidate-promotion-runtime',
+    'makosh-reviewed-task-candidate-promotion-assembly',
+    'makosh-tasks-runtime',
+    'makosh-tasks-assembly',
   ]) {
     assert.match(release, new RegExp(`--package ${unit}\\b`));
   }

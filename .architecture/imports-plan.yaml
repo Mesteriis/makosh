@@ -20,7 +20,7 @@ actions:
   - id: IMPORT-0001
     status: done
     path: backend/src/kernel/src/main.rs
-    old_import: development modules compiled by hermes-kernel
+    old_import: development modules compiled by makosh-kernel
     new_import: no development imports
     depends_on: [MOVE-0001, MOVE-0002]
     evidence: [{type: import, path: backend/src/kernel/src/main.rs, detail: production binary has no development operator module}]

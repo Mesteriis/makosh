@@ -3,12 +3,12 @@
 use std::sync::mpsc::{Receiver, Sender, channel};
 use std::time::Duration;
 
-use hermes_clock_protocol::{ClockDiscontinuityV1, ClockPolicyV1};
-use hermes_scheduler_jetstream::{
+use makosh_clock_protocol::{ClockDiscontinuityV1, ClockPolicyV1};
+use makosh_scheduler_jetstream::{
     SchedulerDispatchRelayErrorV1, SchedulerJetStreamDispatchPortV1,
     SchedulerJetStreamReceiptPortV1, SchedulerJetStreamScheduleControlPortV1,
 };
-use hermes_scheduler_persistence::{
+use makosh_scheduler_persistence::{
     SchedulerDispatchAdmissionV1, SchedulerMaterializationSourceV1, SchedulerPostgresStoreV1,
     SchedulerReceiptConsumeErrorV1, SchedulerReceiptConsumerV1,
 };
@@ -218,7 +218,7 @@ pub(super) async fn wait_for_transient_retry(
 }
 
 pub(super) fn report_failure(failure: &Sender<()>, code: &'static str) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_scheduler_worker_failure={code}");
     }
     let _ = failure.send(());

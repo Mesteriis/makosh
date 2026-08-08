@@ -209,7 +209,7 @@ re-registration. Stable module ID выбирает logical recipient; Kernel о�
 
 ## Последствия
 
-Hermes получает явную source-authorized, target-bound cross-owner Blob
+Макошь получает явную source-authorized, target-bound cross-owner Blob
 delegation без generic read-all и без business логики в Kernel. Реальные
 integration -> Communications и integration -> Attachment Security flows
 сохраняют event-only boundary, а owner-local legacy proof остаётся совместимым

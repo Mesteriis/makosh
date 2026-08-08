@@ -1,8 +1,8 @@
-# Hermes Communications - Telegram Channel
+# Макошь Communications - Telegram Channel
 
 Status: `COMPLETED` base channel capability set, 2026-06-18.
 
-Telegram in Hermes is a Communication Channel inside Hermes Communications. It
+Telegram in Макошь is a Communication Channel inside Макошь Communications. It
 does not own Memory, Knowledge, Persona, Organization, Project, Obligation or
 Decision lifecycle. Telegram supplies source evidence, provider commands,
 communication projections, realtime events, identity traces, timeline evidence

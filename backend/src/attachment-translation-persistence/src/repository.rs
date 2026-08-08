@@ -1,4 +1,4 @@
-use hermes_attachment_translation_core::{
+use makosh_attachment_translation_core::{
     AttachmentTranslationArtifactV1, AttachmentTranslationCompletenessV1,
     AttachmentTranslationDetectedLanguageV1, AttachmentTranslationDraftV1,
     AttachmentTranslationLanguageV1, AttachmentTranslationPendingResultV1,
@@ -7,7 +7,7 @@ use hermes_attachment_translation_core::{
     accepted_attachment_translation_status_v1, transition_attachment_translation_v1,
     validate_attachment_translation_draft_v1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool, Postgres, Row, Transaction,
     postgres::{PgConnectOptions, PgPoolOptions, PgRow},
@@ -91,7 +91,7 @@ impl AttachmentTranslationPersistenceV1 {
         .map_err(|_| AttachmentTranslationPersistenceErrorV1::InvalidTransition)?;
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.attachment_translation_runs (
+            "INSERT INTO makosh_data.attachment_translation_runs (
                logical_owner_id, run_id, operation_id, request_fingerprint,
                source_extraction_run_id, expected_source_revision, target_language,
                state, state_revision, created_at_unix_millis, updated_at_unix_millis
@@ -114,7 +114,7 @@ impl AttachmentTranslationPersistenceV1 {
         .rows_affected();
         if inserted == 1 {
             sqlx::query(
-                "INSERT INTO hermes_data.attachment_translation_outbox (
+                "INSERT INTO makosh_data.attachment_translation_outbox (
                    logical_owner_id, message_id, envelope_sha256, envelope_bytes,
                    created_at_unix_millis
                  ) VALUES ($1, $2, $3, $4, $5)",
@@ -299,7 +299,7 @@ impl AttachmentTranslationPersistenceV1 {
             return Err(AttachmentTranslationPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.attachment_translation_runs
+            "UPDATE makosh_data.attachment_translation_runs
              SET inference_request_bytes = NULL, source_reference_id = NULL,
                  source_declared_bytes = NULL, source_receipt_sha256 = NULL,
                  source_custody_proof = NULL, cleanup_completed_at_unix_millis = $1,
@@ -365,7 +365,7 @@ impl AttachmentTranslationPersistenceV1 {
         )
         .await?;
         sqlx::query(
-            "INSERT INTO hermes_data.attachment_translation_inbox (
+            "INSERT INTO makosh_data.attachment_translation_inbox (
                logical_owner_id, message_id, envelope_sha256, run_id,
                processed_at_unix_millis
              ) VALUES ($1, $2, $3, $4, $5)",
@@ -448,7 +448,7 @@ macro_rules! select_run {
             "artifact_translated_size_bytes, artifact_detected_source_language, ",
             "artifact_target_language, artifact_completeness, ",
             "artifact_confidence_basis_points, rejection_code, created_at_unix_millis, ",
-            "updated_at_unix_millis FROM hermes_data.attachment_translation_runs ",
+            "updated_at_unix_millis FROM makosh_data.attachment_translation_runs ",
             $tail
         )
     };
@@ -472,7 +472,7 @@ async fn inbox_duplicate(
     run_id: &[u8; 16],
 ) -> Result<bool, AttachmentTranslationPersistenceErrorV1> {
     let Some(row) = sqlx::query(
-        "SELECT envelope_sha256, run_id FROM hermes_data.attachment_translation_inbox
+        "SELECT envelope_sha256, run_id FROM makosh_data.attachment_translation_inbox
          WHERE logical_owner_id = $1 AND message_id = $2",
     )
     .bind(logical_owner_id)
@@ -516,7 +516,7 @@ async fn persist_status(
     let pending = input.next.pending_result.as_ref();
     let artifact = input.next.artifact.as_ref();
     let updated = sqlx::query(
-        "UPDATE hermes_data.attachment_translation_runs SET
+        "UPDATE makosh_data.attachment_translation_runs SET
            state=$1, state_revision=$2, source_sha256=$3, inference_request_digest=$4,
            inference_request_bytes=COALESCE($5,inference_request_bytes),
            source_reference_id=COALESCE($6,source_reference_id),

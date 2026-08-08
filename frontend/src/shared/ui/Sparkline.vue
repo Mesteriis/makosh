@@ -45,16 +45,16 @@ const areaPoints = computed(() => {
 })
 
 const classes = computed(() => [
-  'hermes-sparkline',
-  `hermes-sparkline--${props.size}`,
-  `hermes-sparkline--${props.tone}`,
+  'makosh-sparkline',
+  `makosh-sparkline--${props.size}`,
+  `makosh-sparkline--${props.tone}`,
   props.class
 ])
 </script>
 
 <template>
   <svg :class="classes" viewBox="0 0 120 44" role="img" :aria-label="label">
-    <polygon v-if="showArea" class="hermes-sparkline__area" :points="areaPoints" aria-hidden="true" />
-    <polyline class="hermes-sparkline__line" :points="linePoints" aria-hidden="true" />
+    <polygon v-if="showArea" class="makosh-sparkline__area" :points="areaPoints" aria-hidden="true" />
+    <polyline class="makosh-sparkline__line" :points="linePoints" aria-hidden="true" />
   </svg>
 </template>

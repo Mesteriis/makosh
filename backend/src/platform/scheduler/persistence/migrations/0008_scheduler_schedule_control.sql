@@ -1,4 +1,4 @@
-CREATE TABLE hermes_platform.scheduler_schedule_control_inbox (
+CREATE TABLE makosh_platform.scheduler_schedule_control_inbox (
   command_message_id BYTEA PRIMARY KEY,
   command_envelope_sha256 BYTEA NOT NULL,
   operation_id BYTEA NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE hermes_platform.scheduler_schedule_control_inbox (
   received_at_unix_ms BIGINT NOT NULL
 );
 
-CREATE TABLE hermes_platform.scheduler_schedule_control_results (
+CREATE TABLE makosh_platform.scheduler_schedule_control_results (
   message_id BYTEA PRIMARY KEY,
   command_message_id BYTEA NOT NULL UNIQUE,
   envelope_sha256 BYTEA NOT NULL,

@@ -26,24 +26,24 @@ const rangeLabel = computed(() => {
 </script>
 
 <template>
-  <section :class="['hermes-virtual-list', props.class]" :aria-label="label">
-    <div class="hermes-virtual-meta">{{ rangeLabel }}</div>
-    <ul class="hermes-list hermes-list--compact" role="list" :aria-label="label">
-      <li v-if="visibleItems.length === 0" class="hermes-list-empty">{{ emptyText }}</li>
+  <section :class="['makosh-virtual-list', props.class]" :aria-label="label">
+    <div class="makosh-virtual-meta">{{ rangeLabel }}</div>
+    <ul class="makosh-list makosh-list--compact" role="list" :aria-label="label">
+      <li v-if="visibleItems.length === 0" class="makosh-list-empty">{{ emptyText }}</li>
       <template v-else>
         <li
           v-for="(item, index) in visibleItems"
           :key="item.id"
           :aria-posinset="safeStart + index + 1"
           :aria-setsize="items.length"
-          :class="['hermes-list-item', `hermes-list-item--${item.tone ?? 'neutral'}`]"
+          :class="['makosh-list-item', `makosh-list-item--${item.tone ?? 'neutral'}`]"
         >
-          <Icon v-if="item.icon" :icon="item.icon" size="1rem" class="hermes-list-icon" />
-          <div class="hermes-list-copy">
-            <strong class="hermes-list-label">{{ item.label }}</strong>
-            <span v-if="item.description" class="hermes-list-description">{{ item.description }}</span>
+          <Icon v-if="item.icon" :icon="item.icon" size="1rem" class="makosh-list-icon" />
+          <div class="makosh-list-copy">
+            <strong class="makosh-list-label">{{ item.label }}</strong>
+            <span v-if="item.description" class="makosh-list-description">{{ item.description }}</span>
           </div>
-          <span v-if="item.meta" class="hermes-list-meta">{{ item.meta }}</span>
+          <span v-if="item.meta" class="makosh-list-meta">{{ item.meta }}</span>
         </li>
       </template>
     </ul>

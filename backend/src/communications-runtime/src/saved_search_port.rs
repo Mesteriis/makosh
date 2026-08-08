@@ -3,14 +3,14 @@
 use std::os::unix::net::UnixStream;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_communications_api::CommunicationSearchHitV1;
-use hermes_communications_domain::validate_saved_search_draft_v1;
-use hermes_communications_persistence::{
+use makosh_communications_api::CommunicationSearchHitV1;
+use makosh_communications_domain::validate_saved_search_draft_v1;
+use makosh_communications_persistence::{
     CommunicationsDurablePersistence, CommunicationsSavedSearchListAfterV1,
     CommunicationsSavedSearchMutationErrorV1, CommunicationsSavedSearchSummaryV1,
     CommunicationsSavedSearchWriteV1,
 };
-use hermes_communications_saved_query_api::{
+use makosh_communications_saved_query_api::{
     CommunicationsSavedSearchRequestV1, CommunicationsSavedSearchResponseV1,
     CreateSavedSearchRequestV1, DeleteSavedSearchResponseV1, ExecuteSavedSearchResponseV1,
     ListSavedSearchesResponseV1, SAVED_SEARCH_CONTRACT_MAJOR_V1, SAVED_SEARCH_CONTRACT_NAME_V1,
@@ -18,10 +18,10 @@ use hermes_communications_saved_query_api::{
     SavedSearchMutationResponseV1, SavedSearchSummaryV1, communications_saved_search_request_v1,
     communications_saved_search_response_v1,
 };
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
 use prost::Message;
@@ -234,7 +234,7 @@ async fn replace_saved_search(
     search_access: &mut CommunicationsSearchAccessV1,
     control_channel: &mut ManagedControlChannelV2<UnixStream>,
     dispatcher: &mut dyn ManagedControlRequestDispatcherV2<UnixStream>,
-    request: hermes_communications_saved_query_api::ReplaceSavedSearchRequestV1,
+    request: makosh_communications_saved_query_api::ReplaceSavedSearchRequestV1,
 ) -> Result<communications_saved_search_response_v1::Result, SavedSearchErrorCodeV1> {
     let write = prepare_write(
         search_access,
@@ -473,14 +473,14 @@ fn saved_search_contract() -> ContractReferenceV1 {
         major: SAVED_SEARCH_CONTRACT_MAJOR_V1,
         revision: SAVED_SEARCH_CONTRACT_REVISION_V1,
         schema_sha256:
-            hermes_communications_saved_query_api::COMMUNICATIONS_SAVED_SEARCH_SCHEMA_SHA256
+            makosh_communications_saved_query_api::COMMUNICATIONS_SAVED_SEARCH_SCHEMA_SHA256
                 .to_vec(),
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use hermes_communications_persistence::CommunicationsSavedSearchDefinitionV1;
+    use makosh_communications_persistence::CommunicationsSavedSearchDefinitionV1;
 
     use super::*;
 

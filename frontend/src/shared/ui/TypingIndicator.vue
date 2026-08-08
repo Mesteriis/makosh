@@ -11,17 +11,17 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-typing-indicator',
-	{ 'hermes-typing-indicator--active': props.active },
+	'makosh-typing-indicator',
+	{ 'makosh-typing-indicator--active': props.active },
 	props.class
 ])
 </script>
 
 <template>
 	<span :class="classes" role="status" :aria-label="label">
-		<span class="hermes-typing-indicator__dot" aria-hidden="true" />
-		<span class="hermes-typing-indicator__dot" aria-hidden="true" />
-		<span class="hermes-typing-indicator__dot" aria-hidden="true" />
-		<span class="hermes-sr-only">{{ label }}</span>
+		<span class="makosh-typing-indicator__dot" aria-hidden="true" />
+		<span class="makosh-typing-indicator__dot" aria-hidden="true" />
+		<span class="makosh-typing-indicator__dot" aria-hidden="true" />
+		<span class="makosh-sr-only">{{ label }}</span>
 	</span>
 </template>

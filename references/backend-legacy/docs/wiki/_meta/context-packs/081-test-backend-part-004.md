@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `test`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/tests/contradictions_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/contradictions_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/contradictions_api.rs`
 - Size bytes / Размер в байтах: `10241`
 - Included characters / Включено символов: `10241`
 - Truncated / Обрезано: `no`
@@ -71,13 +71,13 @@ use sqlx::Row;
 use sqlx::postgres::PgPool;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::engines::consistency::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::engines::consistency::{
     ContradictionObservation, ContradictionObservationStore, ContradictionReviewState,
     ContradictionSeverity, ContradictionSourceKind, NewContradictionObservation,
 };
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::consistency_review::sync_contradiction_review_item;
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::consistency_review::sync_contradiction_review_item;
 
 const LOCAL_API_TOKEN: &str = "contradictions-api-test-token";
 
@@ -185,7 +185,7 @@ async fn put_contradiction_review_updates_review_state_with_observation_trail() 
     let body = json_body(response).await;
     assert_eq!(body["observation_id"], stored.observation_id);
     assert_eq!(body["review_state"], "user_confirmed");
-    assert_eq!(body["reviewed_by"], "hermes-frontend");
+    assert_eq!(body["reviewed_by"], "makosh-frontend");
     assert_eq!(body["resolution"], "confirmed from source review");
 
     let link_row = sqlx::query(
@@ -308,7 +308,7 @@ async fn seed_contradiction_observation(pool: &PgPool, suffix: u128) -> Contradi
 fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -318,7 +318,7 @@ fn json_put_request(uri: &str, value: Value, token: &str) -> Request<Body> {
         .method("PUT")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(value.to_string()))
         .expect("request")
 }
@@ -353,16 +353,16 @@ fn path_segment(value: &str) -> String {
 
 ### `backend/tests/decision_engine.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/decision_engine.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/decision_engine.rs`
 - Size bytes / Размер в байтах: `3874`
 - Included characters / Включено символов: `3874`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::decisions::{
+use makosh_hub_backend::domains::decisions::{
     DecisionCandidateKind, DecisionEngine, DecisionEngineError, DecisionExtractionInput,
 };
-use hermes_hub_backend::domains::decisions::{
+use makosh_hub_backend::domains::decisions::{
     DecisionEntityKind, DecisionEvidenceSourceKind, DecisionReviewState,
 };
 use serde_json::json;
@@ -373,7 +373,7 @@ fn decision_engine_detects_explicit_communication_decision_candidate() {
         "message:decision-engine",
         "Decision: Use local-first storage because private context must work offline.",
         DecisionEntityKind::Project,
-        "project:v1:hermes",
+        "project:v1:makosh",
     )
     .decided_by(
         DecisionEntityKind::Persona,
@@ -413,7 +413,7 @@ fn decision_engine_detects_explicit_communication_decision_candidate() {
     );
     assert_eq!(
         candidate.impacted_entities[0].entity_id,
-        "project:v1:hermes"
+        "project:v1:makosh"
     );
 
     let (decision, evidence, impacted_entities) = candidate.to_decision_draft();
@@ -449,7 +449,7 @@ fn decision_engine_ignores_non_decision_evidence() {
         "document:status-note",
         "The team discussed storage options but no decision was made.",
         DecisionEntityKind::Project,
-        "project:v1:hermes",
+        "project:v1:makosh",
     );
 
     let result = DecisionEngine::detect_candidates(&input).expect("detect decisions");
@@ -463,7 +463,7 @@ fn decision_engine_rejects_empty_source_evidence_before_detection() {
         "message:empty-decision",
         " ",
         DecisionEntityKind::Project,
-        "project:v1:hermes",
+        "project:v1:makosh",
     );
 
     let error = DecisionEngine::detect_candidates(&input)
@@ -475,7 +475,7 @@ fn decision_engine_rejects_empty_source_evidence_before_detection() {
 
 ### `backend/tests/decisions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/decisions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/decisions.rs`
 - Size bytes / Размер в байтах: `24046`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -485,19 +485,19 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use testkit::context::TestContext;
 
 use chrono::{TimeZone, Utc};
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, project_raw_email_message,
 };
-use hermes_hub_backend::domains::decisions::{
+use makosh_hub_backend::domains::decisions::{
     DecisionEntityKind, DecisionEvidenceSourceKind, DecisionReviewState, DecisionStatus,
     DecisionStore, DecisionStoreError, NewDecision, NewDecisionEvidence, NewDecisionImpactedEntity,
 };
-use hermes_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::graph_projection::GraphProjectionService;
+use makosh_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::graph_projection::GraphProjectionService;
 use serde_json::{Value, json};
 use sqlx::Row;
 use sqlx::postgres::{PgPool, PgPoolOptions};
@@ -817,7 +817,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/decisions_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/decisions_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/decisions_api.rs`
 - Size bytes / Размер в байтах: `10284`
 - Included characters / Включено символов: `10284`
 - Truncated / Обрезано: `no`
@@ -834,12 +834,12 @@ use sqlx::Row;
 use sqlx::postgres::PgPool;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::decisions::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::decisions::{
     Decision, DecisionEntityKind, DecisionEvidenceSourceKind, DecisionReviewState, DecisionStore,
     NewDecision, NewDecisionEvidence, NewDecisionImpactedEntity,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 
 const LOCAL_API_TOKEN: &str = "decisions-api-test-token";
 
@@ -1080,7 +1080,7 @@ async fn seed_decision_with_review_state(
 fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -1090,7 +1090,7 @@ fn json_put_request(uri: &str, value: Value, token: &str) -> Request<Body> {
         .method("PUT")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(value.to_string()))
         .expect("request")
 }
@@ -1125,7 +1125,7 @@ fn path_segment(value: &str) -> String {
 
 ### `backend/tests/document_processing.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/document_processing.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/document_processing.rs`
 - Size bytes / Размер в байтах: `172`
 - Included characters / Включено символов: `172`
 - Truncated / Обрезано: `no`
@@ -1141,7 +1141,7 @@ mod support;
 
 ### `backend/tests/document_processing/enqueue_run.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/document_processing/enqueue_run.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/document_processing/enqueue_run.rs`
 - Size bytes / Размер в байтах: `6836`
 - Included characters / Включено символов: `6836`
 - Truncated / Обрезано: `no`
@@ -1356,7 +1356,7 @@ async fn run_queued_jobs_skips_non_markdown_text_extraction_with_summary() {
 
 ### `backend/tests/document_processing/retry.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/document_processing/retry.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/document_processing/retry.rs`
 - Size bytes / Размер в байтах: `11131`
 - Included characters / Включено символов: `11131`
 - Truncated / Обрезано: `no`
@@ -1680,7 +1680,7 @@ async fn document_processing_retry_missing_job_returns_job_not_found() {
 
 ### `backend/tests/document_processing/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/document_processing/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/document_processing/support.rs`
 - Size bytes / Размер в байтах: `7092`
 - Included characters / Включено символов: `7092`
 - Truncated / Обрезано: `no`
@@ -1690,15 +1690,15 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use testkit::context::TestContext;
 
 pub(crate) use chrono::Utc;
-pub(crate) use hermes_hub_backend::domains::documents::core::{
+pub(crate) use makosh_hub_backend::domains::documents::core::{
     DocumentImportStore, NewDocumentImport,
 };
-pub(crate) use hermes_hub_backend::domains::documents::processing::{
+pub(crate) use makosh_hub_backend::domains::documents::processing::{
     DocumentProcessingError, DocumentProcessingRetryCommand, DocumentProcessingStatus,
     DocumentProcessingStore,
 };
-pub(crate) use hermes_hub_backend::platform::events::{EventStore, NewEventEnvelope};
-pub(crate) use hermes_hub_backend::platform::storage::Database;
+pub(crate) use makosh_hub_backend::platform::events::{EventStore, NewEventEnvelope};
+pub(crate) use makosh_hub_backend::platform::storage::Database;
 pub(crate) use serde_json::json;
 pub(crate) use sqlx::postgres::PgPool;
 pub(crate) use sqlx::query_scalar;
@@ -1728,13 +1728,13 @@ pub(crate) fn unique_suffix() -> u128 {
 }
 
 pub(crate) fn step_name(
-    step: &hermes_hub_backend::domains::documents::processing::DocumentProcessingStep,
+    step: &makosh_hub_backend::domains::documents::processing::DocumentProcessingStep,
 ) -> &'static str {
     match step {
-        hermes_hub_backend::domains::documents::processing::DocumentProcessingStep::ExtractText => {
+        makosh_hub_backend::domains::documents::processing::DocumentProcessingStep::ExtractText => {
             "extract_text"
         }
-        hermes_hub_backend::domains::documents::processing::DocumentProcessingStep::Ocr => "ocr",
+        makosh_hub_backend::domains::documents::processing::DocumentProcessingStep::Ocr => "ocr",
     }
 }
 
@@ -1928,7 +1928,7 @@ pub(crate) async fn quiesce_processing_jobs_for_document(
 
 ### `backend/tests/document_processing_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/document_processing_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/document_processing_api.rs`
 - Size bytes / Размер в байтах: `18927`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1940,11 +1940,11 @@ use testkit::context::TestContext;
 use axum::body::{Body, to_bytes};
 use axum::http::{Request, StatusCode, header};
 use chrono::Utc;
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
-use hermes_hub_backend::domains::documents::processing::DocumentProcessingStore;
-use hermes_hub_backend::platform::events::{EventStore, NewEventEnvelope};
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
+use makosh_hub_backend::domains::documents::processing::DocumentProcessingStore;
+use makosh_hub_backend::platform::events::{EventStore, NewEventEnvelope};
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::Value;
 use sqlx::query_scalar;
 use tower::ServiceExt;
@@ -1954,7 +1954,7 @@ const LOCAL_API_TOKEN: &str = "document-processing-api-test-token";
 #[tokio::test]
 async fn get_document_processing_jobs_rejects_missing_local_api_secret() {
     let app =
-        hermes_hub_backend::app::build_router(testkit::app::config_with_secret(LOCAL_API_TOKEN));
+        makosh_hub_backend::app::build_router(testkit::app::config_with_secret(LOCAL_API_TOKEN));
 
     let response = app
         .oneshot(get_request("/api/v1/document-processing/jobs"))
@@ -1967,7 +1967,7 @@ async fn get_document_processing_jobs_rejects_missing_local_api_secret() {
         body,
         serde_json::json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -2111,7 +2111,7 @@ async fn post_document_processing_job_retry_requeues_failed_job() {
     let extract_job = jobs
         .iter()
         .find(|job| {
-            job.step == hermes_hub_backend::domains::documents::processing::DocumentProcessingStep::ExtractText
+            job.step == makosh_hub_backend::domains::documents::processing::DocumentProcessingStep::ExtractText
         })
         .expect("extract text job");
 
@@ -2176,7 +2176,7 @@ async fn post_document_processing_job_retry_requeues_failed_job() {
         .await
         .expect("document processing retry audit record");
     assert_eq!(audit_record.0, "document_processing.job.retry");
-    assert_eq!(audit_record.1, "hermes-frontend");
+    assert_eq!(audit_record.1, "makosh-frontend");
     assert_eq!(audit_record.2, "POST");
     assert_eq!(
         audit_record.3,
@@ -2251,7 +2251,7 @@ async fn post_document_processing_job_retry_rejects_non_failed_job_with_stable_b
     let extract_job = jobs
         .iter()
         .find(|job| {
-            job.step == hermes_hub_backend::domains::documents::processing::DocumentProcessingStep::ExtractText
+            job.step == makosh_hub_backend::domains::documents::processing::DocumentProcessingStep::ExtractText
         })
         .expect("extract text job");
 
@@ -2281,13 +2281,13 @@ async fn post_document_processing_job_retry_rejects_non_failed_job_with_stable_b
         body,
         serde_json::json!({
             "error": "document_processing_store_error",
-      
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/tests/document_processing_architecture.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/document_processing_architecture.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/document_processing_architecture.rs`
 - Size bytes / Размер в байтах: `2042`
 - Included characters / Включено символов: `2042`
 - Truncated / Обрезано: `no`
@@ -2359,7 +2359,7 @@ fn is_document_processing_test_file(path: &Path) -> bool {
 
 ### `backend/tests/documents.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/documents.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/documents.rs`
 - Size bytes / Размер в байтах: `11773`
 - Included characters / Включено символов: `11773`
 - Truncated / Обрезано: `no`
@@ -2368,10 +2368,10 @@ fn is_document_processing_test_file(path: &Path) -> bool {
 use std::time::{SystemTime, UNIX_EPOCH};
 use testkit::context::TestContext;
 
-use hermes_hub_backend::domains::documents::core::{
+use makosh_hub_backend::domains::documents::core::{
     DocumentImportError, DocumentImportStore, NewDocumentImport,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 
 #[tokio::test]
 async fn document_import_stores_markdown_text_against_postgres() {
@@ -2713,7 +2713,7 @@ async fn live_document_store(test_name: &str) -> Option<DocumentImportStore> {
 
 fn disconnected_document_store() -> DocumentImportStore {
     let pool = sqlx::postgres::PgPoolOptions::new()
-        .connect_lazy("postgres://hermes:unused@127.0.0.1:1/hermes_hub")
+        .connect_lazy("postgres://makosh:unused@127.0.0.1:1/makosh_hub")
         .expect("create lazy test pool");
     DocumentImportStore::new(pool)
 }
@@ -2728,7 +2728,7 @@ fn unique_suffix() -> u128 {
 
 ### `backend/tests/email_account_management_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_account_management_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_account_management_api.rs`
 - Size bytes / Размер в байтах: `14379`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2739,16 +2739,16 @@ use axum::http::{Method, Request, StatusCode, header};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount,
     NewProviderAccountSecretBinding, NewRawCommunicationRecord, ProviderAccountSecretPurpose,
 };
-use hermes_hub_backend::domains::signal_hub::SignalHubStore;
-use hermes_hub_backend::platform::secrets::{
+use makosh_hub_backend::domains::signal_hub::SignalHubStore;
+use makosh_hub_backend::platform::secrets::{
     NewSecretReference, SecretKind, SecretReferenceStore, SecretStoreKind,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use sqlx::Row;
 use testkit::context::TestContext;
 
@@ -2768,7 +2768,7 @@ fn request(method: Method, uri: &str, body: Option<Value>) -> Request<Body> {
     let mut builder = Request::builder()
         .method(method)
         .uri(uri)
-        .header("x-hermes-secret", TOKEN);
+        .header("x-makosh-secret", TOKEN);
     if body.is_some() {
         builder = builder.header(header::CONTENT_TYPE, "application/json");
     }
@@ -3094,7 +3094,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/email_account_setup.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_account_setup.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_account_setup.rs`
 - Size bytes / Размер в байтах: `436`
 - Included characters / Включено символов: `436`
 - Truncated / Обрезано: `no`
@@ -3118,14 +3118,14 @@ mod vault_reconciliation;
 
 ### `backend/tests/email_account_setup/config.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_account_setup/config.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_account_setup/config.rs`
 - Size bytes / Размер в байтах: `2884`
 - Included characters / Включено символов: `2884`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::integrations::mail::accounts::GmailOAuthSetupRequest;
-use hermes_hub_backend::platform::config::{AppConfig, GoogleOAuthClientType};
+use makosh_hub_backend::integrations::mail::accounts::GmailOAuthSetupRequest;
+use makosh_hub_backend::platform::config::{AppConfig, GoogleOAuthClientType};
 
 #[test]
 fn gmail_oauth_setup_defaults_to_mail_send_calendar_and_contacts_scopes() {
@@ -3151,8 +3151,8 @@ fn gmail_oauth_setup_defaults_to_mail_send_calendar_and_contacts_scopes() {
 #[test]
 fn app_config_accepts_google_oauth_client_credentials() {
     let config = AppConfig::from_pairs([
-        ("HERMES_GOOGLE_OAUTH_CLIENT_ID", "google-client-id"),
-        ("HERMES_GOOGLE_OAUTH_CLIENT_SECRET", "google-client-secret"),
+        ("MAKOSH_GOOGLE_OAUTH_CLIENT_ID", "google-client-id"),
+        ("MAKOSH_GOOGLE_OAUTH_CLIENT_SECRET", "google-client-secret"),
     ])
     .expect("config");
 
@@ -3169,11 +3169,11 @@ fn app_config_accepts_google_oauth_client_credentials() {
 #[test]
 fn app_config_accepts_google_oauth_installed_client_json() {
     let config = AppConfig::from_pairs([(
-        "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
+        "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
         r#"{
             "installed": {
                 "client_id": "desktop-client-id.apps.googleusercontent.com",
-                "project_id": "hermes-hub-local",
+                "project_id": "makosh-local",
                 "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                 "token_uri": "https://oauth2.googleapis.com/token",
                 "client_secret": "desktop-client-secret",
@@ -3219,7 +3219,7 @@ fn app_config_accepts_google_oauth_installed_client_json() {
 
 ### `backend/tests/email_account_setup/gmail_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_account_setup/gmail_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_account_setup/gmail_api.rs`
 - Size bytes / Размер в байтах: `23325`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3232,16 +3232,16 @@ use sqlx::Row;
 use tempfile::tempdir;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::calendar::events::CalendarAccountStore;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::calendar::events::CalendarAccountStore;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, ProviderAccountSecretPurpose,
 };
-use hermes_hub_backend::platform::secrets::{
+use makosh_hub_backend::platform::secrets::{
     SecretReferenceStore, SecretResolver, SecretStoreKind,
 };
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::vault::{HostVault, HostVaultConfig};
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::vault::{HostVault, HostVaultConfig};
 use testkit::context::TestContext;
 
 use super::support::{
@@ -3263,17 +3263,17 @@ async fn gmail_oauth_start_api_uses_configured_google_desktop_client_against_pos
     let app = build_router_with_database(
         testkit::app::config_with_secret(LOCAL_API_TOKEN)
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_home.to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     dev_key_path.to_str().expect("dev key path"),
                 ),
                 (
-                    "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
+                    "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
                     r#"{
                     "installed": {
                         "client_id": "desktop-client-id.apps.googleusercontent.com",
@@ -3299,7 +3299,7 @@ async fn gmail_oauth_start_api_uses_configured_google_desktop_client_against_pos
                 "redirect_uri": "http://127.0.0.1:8080/api/v1/integrations/mail/accounts/gmail/oauth/callback"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -3330,17 +3330,17 @@ async fn gmail_oauth_start_api_requires_initialized_host_vault_against_postgres(
     let app = build_router_with_database(
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_home.to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     dev_key_path.to_str().expect("dev key path"),
                 ),
                 (
-                    "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
+                    "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
                     r#"{
                     "installed": {
                         "client_id": "desktop-client-id.apps.googleusercontent.com",
@@ -3367,7 +3367,7 @@ async fn gmail_oauth_start_api_requires_initialized_host_vault_against_postgres(
                 "redirect_uri": "http://127.0.0.1:8080/api/v1/integrations/mail/accounts/gmail/oauth/callback"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -3389,13 +3389,13 @@ async fn gmail_oauth_start_api_reopens_initialized_host_vault_after_restart_agai
     let initialized_app = build_router_with_database(
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_home.to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     dev_key_path.to_str().expect("dev key path"),
                 ),
             ])
@@ -3409,17 +3409,17 @@ async fn gmail_oauth_start_api_reopens_initialized_host_vault_after_restart_agai
     let restarted_app = build_router_with_database(
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_home.to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     dev_key_path.to_str().expect("dev key path"),
                 ),
                 (
-                    "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
+                    "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
                     r#"{
                     "installed": {
                         "client_id": "desktop-client-id.apps.googleusercontent.com",
@@ -3446,7 +3446,7 @@ async fn gmail_oauth_start_api_reopens_initialized_host_vault_after_restart_agai
                 "redirect_uri": "http://127.0.0.1:8080/api/v1/integrations/mail/accounts/gmail/oauth/callback"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -3474,13 +3474,13 @@ async fn gmail_oauth_callback_completes_pending_grant_without_api_secret() {
     let app = build_router_with_database(
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_home.to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     dev_key_path.to_str().expect("dev key path"),
                 ),
             ])
@@ -3501,12 +3501,12 @@ async fn gmail_oauth_callback_completes_pending_grant_without_api_secret() {
                 "display_name": "Google Workspace",
                 "client_id": "desktop-client-id",
                 "redirect_uri": "http://127.0.0.1:8080/api/v1/integrations/mail/accounts/gmail/oauth/callback",
-                "app_return_url": "http://127.0.0.1:5174/?hermes_oauth=gmail_connected",
+                "app_return_url": "http://127.0.0.1:5174/?makosh_oauth=gmail_connected",
                 "authorization_endpoint": format!("{}/authorize", token_server.base_url()),
                 "token_endpoint": format!("{}/token", token_server.base_url())
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("start response");

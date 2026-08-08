@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Hermes Hub creates a personal operational memory layer around communications,
+Макошь creates a personal operational memory layer around communications,
 documents, projects, relationships, decisions and obligations. The product helps
 the owner understand what happened, what matters, what requires action and how
 entities connect.
@@ -17,7 +17,7 @@ See the canonical foundation documents:
 
 The primary user is one technically strong owner who manages personal and
 professional communications, documents, projects, relationships, obligations and
-knowledge. Hermes is a personal system first; architecture should not block
+knowledge. Макошь is a personal system first; architecture should not block
 future family/team modes, but those modes are not the current product identity.
 
 The owner is represented inside the world model by the Owner Persona.
@@ -33,7 +33,7 @@ The owner is represented inside the world model by the Owner Persona.
 - AI-assisted triage with user control;
 - analysis of changes over time;
 - context preparation before meetings or actions;
-- explanation of why Hermes produced a conclusion.
+- explanation of why Макошь produced a conclusion.
 
 ## Product Constraints
 
@@ -47,7 +47,7 @@ The owner is represented inside the world model by the Owner Persona.
 
 ## Product Quality
 
-Hermes should feel like a serious personal operating environment, not a
+Макошь should feel like a serious personal operating environment, not a
 dashboard collection. The UI should be fast, dense, keyboard-first and
 contextual.
 

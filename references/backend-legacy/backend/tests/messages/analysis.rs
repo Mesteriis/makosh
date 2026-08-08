@@ -1,8 +1,8 @@
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::domains::communications::analytics::EmailAnalyticsStore;
-use hermes_hub_backend::domains::communications::messages::projection::project_raw_email_message;
-use hermes_hub_backend::domains::communications::messages::store::MessageProjectionStore;
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::domains::communications::analytics::EmailAnalyticsStore;
+use makosh_hub_backend::domains::communications::messages::projection::project_raw_email_message;
+use makosh_hub_backend::domains::communications::messages::store::MessageProjectionStore;
 
 use super::support::{
     live_projection_context, record_raw_email_message, store_provider_account, unique_suffix,

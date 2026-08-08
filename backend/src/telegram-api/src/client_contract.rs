@@ -1,10 +1,10 @@
 //! Stable Telegram client capability, contract and Connect route identities.
 
 pub const TELEGRAM_CLIENT_DESCRIPTOR_SET_V1: &[u8] =
-    include_bytes!(concat!(env!("OUT_DIR"), "/hermes.telegram.v1.bin"));
+    include_bytes!(concat!(env!("OUT_DIR"), "/makosh.telegram.v1.bin"));
 pub const TELEGRAM_CLIENT_CONTRACT_MAJOR: u32 = 1;
 pub const TELEGRAM_CLIENT_CONTRACT_REVISION: u32 = 6;
-pub const TELEGRAM_MODULE_ID: &str = "hermes-telegram-runtime";
+pub const TELEGRAM_MODULE_ID: &str = "makosh-telegram-runtime";
 pub const TELEGRAM_OWNER_ID: &str = "telegram";
 pub const TELEGRAM_AUTHORIZATION_REALTIME_CAPABILITY_ID_V1: &str =
     "telegram.authorization.realtime.v1";
@@ -48,12 +48,12 @@ impl TelegramClientContractV1 {
 
     pub const fn connect_path(self) -> &'static str {
         match self {
-            Self::Authorization => "/hermes.telegram.v1.TelegramAuthorizationService/Authorize",
-            Self::Lifecycle => "/hermes.telegram.v1.TelegramLifecycleService/Execute",
-            Self::Command => "/hermes.telegram.v1.TelegramOperationalService/ExecuteCommand",
-            Self::Query => "/hermes.telegram.v1.TelegramOperationalService/ExecuteQuery",
-            Self::Realtime => "/hermes.telegram.v1.TelegramRealtimeService/Replay",
-            Self::Reconfiguration => "/hermes.telegram.v1.TelegramReconfigurationService/Execute",
+            Self::Authorization => "/makosh.telegram.v1.TelegramAuthorizationService/Authorize",
+            Self::Lifecycle => "/makosh.telegram.v1.TelegramLifecycleService/Execute",
+            Self::Command => "/makosh.telegram.v1.TelegramOperationalService/ExecuteCommand",
+            Self::Query => "/makosh.telegram.v1.TelegramOperationalService/ExecuteQuery",
+            Self::Realtime => "/makosh.telegram.v1.TelegramRealtimeService/Replay",
+            Self::Reconfiguration => "/makosh.telegram.v1.TelegramReconfigurationService/Execute",
         }
     }
 

@@ -22,7 +22,7 @@ pub use event_io::{
     CrossChannelForwardBlobReceiptV1, CrossChannelForwardPreparedEventV1,
     CrossChannelForwardRejectedEventV1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 pub use operations::{
     CreateCrossChannelForwardOutcomeV1, CreateCrossChannelForwardV1,
     CrossChannelForwardStatusRecordV1,
@@ -38,7 +38,7 @@ pub use work_queue::{
     CrossChannelForwardWorkStageV1, FORWARD_WORK_LEASE_MILLIS_V1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-cross-channel-forward-persistence";
+pub const PACKAGE: &str = "makosh-communication-cross-channel-forward-persistence";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum CrossChannelForwardPersistenceErrorV1 {

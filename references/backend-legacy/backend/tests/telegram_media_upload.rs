@@ -1,4 +1,4 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
@@ -7,11 +7,11 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const LOCAL_API_TOKEN: &str = "telegram-media-upload-test-secret";
 
@@ -353,7 +353,7 @@ async fn create_tdlib_account(pool: &sqlx::PgPool, account_id: &str, suffix: &st
 
 fn router(database: Database, database_url: &str) -> axum::Router {
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url,
         ),
@@ -365,7 +365,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
     Request::builder()
         .method("POST")
         .uri(uri)
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .header(header::CONTENT_TYPE, "application/json")
         .body(Body::from(body.to_string()))
         .expect("request")

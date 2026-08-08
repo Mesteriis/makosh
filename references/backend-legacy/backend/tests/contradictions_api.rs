@@ -1,4 +1,4 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
@@ -8,16 +8,16 @@ use sqlx::Row;
 use sqlx::postgres::PgPool;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::engines::consistency::{
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::engines::consistency::{
     models::{
         ContradictionObservation, ContradictionReviewState, ContradictionSeverity,
         ContradictionSourceKind, NewContradictionObservation,
     },
     store::ContradictionObservationStore,
 };
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::workflows::consistency_review::sync_contradiction_review_item;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::workflows::consistency_review::sync_contradiction_review_item;
 
 const LOCAL_API_TOKEN: &str = "contradictions-api-test-token";
 
@@ -125,7 +125,7 @@ async fn put_contradiction_review_updates_review_state_with_observation_trail() 
     let body = json_body(response).await;
     assert_eq!(body["observation_id"], stored.observation_id);
     assert_eq!(body["review_state"], "user_confirmed");
-    assert_eq!(body["reviewed_by"], "hermes-frontend");
+    assert_eq!(body["reviewed_by"], "makosh-frontend");
     assert_eq!(body["resolution"], "confirmed from source review");
 
     let link_row = sqlx::query(
@@ -210,7 +210,7 @@ async fn app_and_pool(database_url: &str) -> (axum::Router, PgPool) {
         .expect("database connection");
     let pool = database.pool().expect("configured pool").clone();
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url,
         ),
@@ -251,7 +251,7 @@ async fn seed_contradiction_observation(pool: &PgPool, suffix: u128) -> Contradi
 fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -261,7 +261,7 @@ fn json_put_request(uri: &str, value: Value, token: &str) -> Request<Body> {
         .method("PUT")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(value.to_string()))
         .expect("request")
 }

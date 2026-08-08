@@ -2,7 +2,7 @@ use super::rows::row_to_checkpoint;
 use super::store::CommunicationIngestionStore;
 use super::validation::validate_non_empty;
 use crate::errors::CommunicationIngestionError;
-use hermes_communications_api::evidence::{
+use makosh_communications_api::evidence::{
     CommunicationEvidencePortError, CommunicationEvidencePortFuture, IngestionCheckpoint,
     IngestionCheckpointCommandPort, IngestionCheckpointQueryPort, NewIngestionCheckpoint,
 };

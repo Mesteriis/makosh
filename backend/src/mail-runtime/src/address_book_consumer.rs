@@ -1,18 +1,18 @@
 //! Durable Mail address-book command intake.
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimeSubscribePermitV1, receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1, v1::durable_envelope_v1::Semantics,
     validation::envelope::decode_envelope_v1,
 };
-use hermes_mail_address_book_contract::{
+use makosh_mail_address_book_contract::{
     MAIL_ADDRESS_BOOK_CAPABILITY_ID_V1, MAIL_ADDRESS_BOOK_COMMAND_SOURCE_MODULE_ID_V1,
     MAIL_ADDRESS_BOOK_MAX_SNAPSHOT_TICKET_BYTES_V1, MailAddressBookContractV1,
     wire::{FetchMailAddressBookPageCommandV1, UpsertMailAddressBookEntryCommandV1},
 };
-use hermes_mail_address_book_persistence::{
+use makosh_mail_address_book_persistence::{
     MailAddressBookCommandInboxOutcomeV1, MailAddressBookFetchAdmissionV1,
     MailAddressBookFetchInboxOutcomeV1, MailAddressBookPersistenceV1,
     MailAddressBookUpsertAdmissionV1,
@@ -181,7 +181,7 @@ pub fn decode_upsert(
 }
 
 fn validate_command_envelope(
-    envelope: &hermes_events_protocol::v1::DurableEnvelopeV1,
+    envelope: &makosh_events_protocol::v1::DurableEnvelopeV1,
     expected_contract: MailAddressBookContractV1,
     expected_logical_owner_id: &str,
 ) -> Result<(), MailAddressBookConsumeErrorV1> {
@@ -248,10 +248,10 @@ fn id32(value: &[u8]) -> Result<[u8; 32], MailAddressBookConsumeErrorV1> {
 
 #[cfg(test)]
 mod tests {
-    use hermes_events_protocol::{
+    use makosh_events_protocol::{
         delivery::OutboxRecordV1, validation::envelope::decode_envelope_v1,
     };
-    use hermes_mail_address_book_contract::{
+    use makosh_mail_address_book_contract::{
         MailAddressBookEnvelopeContextV1, build_fetch_mail_address_book_page_command_v1,
         build_upsert_mail_address_book_entry_command_v1,
     };

@@ -2,18 +2,18 @@
 
 use super::*;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedIntegrationHostBridgeConfigurationV1, ManagedIntegrationRuntimeConfigurationV1,
     SettingValueV1, SettingsSnapshotV1, SettingsValueEntryV1, setting_value_v1::Value,
 };
-use hermes_whatsapp_api::{
+use makosh_whatsapp_api::{
     client_contract::{WHATSAPP_OWNER_ID, WhatsAppClientContractV1},
     host_bridge::HOST_BRIDGE_CONTRACT_NAME,
 };
-use hermes_whatsapp_persistence::{
+use makosh_whatsapp_persistence::{
     WHATSAPP_STORAGE_BUNDLE_REVISION_V2, whatsapp_storage_bundle_v1,
 };
-use hermes_whatsapp_runtime::{
+use makosh_whatsapp_runtime::{
     admission::{
         WHATSAPP_BLOB_CAPABILITY_ID, WHATSAPP_EVENTS_CAPABILITY_ID, WHATSAPP_STORAGE_CAPABILITY_ID,
         whatsapp_module_descriptor_v1,
@@ -80,7 +80,7 @@ pub(super) fn admit_whatsapp_runtime(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             WHATSAPP_RELEASE_ARTIFACT_ID,
             Sha256::digest(
                 std::fs::read(whatsapp_binary()).expect("WhatsApp runtime binary bytes"),
@@ -355,5 +355,5 @@ fn whatsapp_settings_snapshot() -> SettingsSnapshotV1 {
 }
 
 fn whatsapp_binary() -> PathBuf {
-    binary("HERMES_WHATSAPP_RUNTIME_BIN")
+    binary("MAKOSH_WHATSAPP_RUNTIME_BIN")
 }

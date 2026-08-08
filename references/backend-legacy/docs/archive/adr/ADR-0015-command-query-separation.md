@@ -4,7 +4,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub has durable state transitions and complex read models. Mixing writes, reads and AI side effects would make behavior hard to test.
+Макошь has durable state transitions and complex read models. Mixing writes, reads and AI side effects would make behavior hard to test.
 
 ## Decision
 

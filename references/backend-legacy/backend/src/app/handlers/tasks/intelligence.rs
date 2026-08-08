@@ -46,12 +46,12 @@ pub(crate) async fn get_task_export(
         .ok_or(ApiError::NotFound)?;
     match q.format.as_deref().unwrap_or("json") {
         "md" => Ok(Json(
-            json!({"format":"markdown","content": export_task_md(&task.title, task.description.as_deref(), &task.hermes_status, task.why.as_deref(), task.outcome.as_deref())}),
+            json!({"format":"markdown","content": export_task_md(&task.title, task.description.as_deref(), &task.makosh_status, task.why.as_deref(), task.outcome.as_deref())}),
         )),
         _ => Ok(Json(export_task_json(
             &task.title,
             task.description.as_deref(),
-            &task.hermes_status,
+            &task.makosh_status,
             task.priority_score,
             task.due_at.map(|d| d.to_rfc3339()).as_deref(),
         ))),

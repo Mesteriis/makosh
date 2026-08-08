@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communications_derived_index_failures (
+CREATE TABLE makosh_data.communications_derived_index_failures (
   evidence_id BYTEA PRIMARY KEY CHECK (octet_length(evidence_id) = 16),
   message_id BYTEA NOT NULL CHECK (octet_length(message_id) = 16),
   projection_revision INTEGER NOT NULL CHECK (projection_revision > 0),

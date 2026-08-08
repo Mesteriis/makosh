@@ -1,7 +1,7 @@
-use hermes_communication_summary_persistence::{
+use makosh_communication_summary_persistence::{
     CommunicationSummaryPersistenceErrorV1, CommunicationSummaryPersistenceV1,
 };
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum CommunicationSummaryEventRelayErrorV1 {

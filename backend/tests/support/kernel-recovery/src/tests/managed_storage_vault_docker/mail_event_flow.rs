@@ -3,14 +3,14 @@
 use std::time::{Duration, Instant};
 
 use futures_util::StreamExt;
-use hermes_communications_ingress::{
+use makosh_communications_ingress::{
     BodyAvailabilityV1, CommunicationDirectionV1, CommunicationEvidenceKindV1,
     ObservationEnvelopeContextV1, ProviderProvenanceV1, SourceEnvelope, SourceScopeEnvelope,
     build_observation_outbox_record_v1, new_scoped_communication_observation_draft,
 };
-use hermes_events_protocol::{delivery::OutboxRecordV1, validation::envelope::decode_envelope_v1};
-use hermes_mail_persistence::{MailDurablePersistence, MailPersistenceConformanceV1};
-use hermes_mail_runtime::admission::MAIL_MODULE_ID;
+use makosh_events_protocol::{delivery::OutboxRecordV1, validation::envelope::decode_envelope_v1};
+use makosh_mail_persistence::{MailDurablePersistence, MailPersistenceConformanceV1};
+use makosh_mail_runtime::admission::MAIL_MODULE_ID;
 use zeroize::Zeroizing;
 
 use super::*;
@@ -37,11 +37,11 @@ pub(super) fn assert_mail_event_only_communications_handoff(
             .await
             .expect("connect Mail event observer");
         let observations = client
-            .subscribe("hermes.observation.v1.communications.communication_observed.v1")
+            .subscribe("makosh.observation.v1.communications.communication_observed.v1")
             .await
             .expect("subscribe Mail observations");
         let canonical_events = client
-            .subscribe("hermes.event.v1.communications.communication_evidence_recorded.v1")
+            .subscribe("makosh.event.v1.communications.communication_evidence_recorded.v1")
             .await
             .expect("subscribe canonical Communications events");
         client.flush().await.expect("activate Mail event observers");
@@ -108,7 +108,7 @@ pub(super) fn assert_mail_event_only_communications_handoff(
     runtime.block_on(async {
         client
             .publish(
-                "hermes.observation.v1.communications.communication_observed.v1",
+                "makosh.observation.v1.communications.communication_observed.v1",
                 observation_bytes.into(),
             )
             .await
@@ -237,21 +237,21 @@ fn mail_observation(
 pub(super) async fn connect_postgres() -> MailDurablePersistence {
     let password = Zeroizing::new(
         std::fs::read_to_string(required(
-            "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+            "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
         ))
         .expect("read disposable PostgreSQL credential")
         .trim()
         .to_owned(),
     );
-    let port = required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+    let port = required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
         .parse::<u16>()
         .expect("valid PostgreSQL port");
     MailPersistenceConformanceV1::connect(
-        &required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST"),
+        &required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"),
         port,
-        "hermes_postgres_admin",
+        "makosh_postgres_admin",
         password.as_str(),
-        "hermes_storage_authenticated",
+        "makosh_storage_authenticated",
     )
     .await
     .expect("connect disposable PostgreSQL")

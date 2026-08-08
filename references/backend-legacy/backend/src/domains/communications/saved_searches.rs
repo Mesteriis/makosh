@@ -1,4 +1,4 @@
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use base64::Engine as _;
@@ -15,8 +15,8 @@ use crate::domains::communications::messages::states::{LocalMessageState, Workfl
 use crate::domains::communications::saved_search_counts::{
     count_messages_for_saved_search, load_message_counts_for_saved_searches,
 };
-use hermes_events_postgres::store::EventStore;
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_events_postgres::store::EventStore;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 const EVENT_TYPE_CREATED: &str = "mail.saved_search.created";
 const EVENT_TYPE_UPDATED: &str = "mail.saved_search.updated";
@@ -617,7 +617,7 @@ fn saved_search_event(
             "id": saved_search.saved_search_id,
         }),
     )
-    .actor(json!({ "actor_id": "hermes-frontend" }))
+    .actor(json!({ "actor_id": "makosh-frontend" }))
     .payload(serde_json::to_value(saved_search)?)
     .provenance(json!({
         "source_kind": "local_api",
@@ -787,9 +787,9 @@ pub enum CommunicationSavedSearchError {
     #[error(transparent)]
     Serde(#[from] serde_json::Error),
     #[error(transparent)]
-    EventStore(#[from] hermes_events_postgres::errors::EventStoreError),
+    EventStore(#[from] makosh_events_postgres::errors::EventStoreError),
     #[error(transparent)]
-    EventEnvelope(#[from] hermes_events_api::EventEnvelopeError),
+    EventEnvelope(#[from] makosh_events_api::EventEnvelopeError),
     #[error("invalid mail saved search cursor")]
     InvalidCursor,
     #[error("invalid mail saved search field: {0}")]

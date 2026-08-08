@@ -16,7 +16,7 @@
 - **Интеграционные** с реальной PostgreSQL (через `testkit::TestContext`), использующие `tokio::test`.
 - **Модульные** тесты для движков, работающих без БД (поиск, риск-движок).
 
-Каждый файл фокусируется на конкретной подсистеме Hermes Hub: проекты, отношения, ревью, секреты, настройки, поиск и др.
+Каждый файл фокусируется на конкретной подсистеме Макошь: проекты, отношения, ревью, секреты, настройки, поиск и др.
 
 Тесты используют уникальный суффикс (`unique_suffix()`) для предотвращения конфликтов между запусками.
 
@@ -48,7 +48,7 @@
 
 ### projects_api
 
-- `projects_rejects_missing_local_api_secret` — запрос без `x-hermes-secret` возвращает 403 с телом `{"error":"invalid_api_secret","message":"missing or invalid x-hermes-secret header"}`.
+- `projects_rejects_missing_local_api_secret` — запрос без `x-makosh-secret` возвращает 403 с телом `{"error":"invalid_api_secret","message":"missing or invalid x-makosh-secret header"}`.
 - `project_detail_returns_live_project_payload` — `GET /api/v1/projects/{id}` с валидным токеном возвращает 200 с полями проекта.
 - `project_link_candidates_rejects_missing_local_api_secret` — аналогичная проверка для `link-candidates`.
 - `project_link_candidates_return_safe_message_and_document_candidates` — `GET .../link-candidates` возвращает список кандидатов (`review_state: "suggested"`) и создаёт записи в `review_items` с `item_kind = "project_link_candidate"` и `mirrored_from = "project_link_candidates"`.

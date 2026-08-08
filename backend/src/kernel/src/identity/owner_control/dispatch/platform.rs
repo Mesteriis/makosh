@@ -2,7 +2,7 @@
 
 use std::path::Path;
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     BeginManagedStorageBindingRevocationRequestV1, BeginManagedStorageBindingRevocationResponseV1,
     BindPlatformStorageReleaseRequestV1, BindPlatformStorageReleaseResponseV1,
     BindPlatformTelemetryReleaseRequestV1, BindPlatformTelemetryReleaseResponseV1,
@@ -17,12 +17,12 @@ use hermes_gateway_protocol::v1::{
     StartPlatformVaultRuntimeRequestV1, StartPlatformVaultRuntimeResponseV1,
     owner_control_request_v1::Operation,
 };
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     PlatformStorageBindingStateV1, PlatformStorageEndpointV1, PlatformStorageTopology,
     PlatformStorageTopologyInputV1, StorageDeploymentProfileV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::DeploymentProfileV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::DeploymentProfileV1;
 
 use super::{OwnerControlSessions, OwnerResult};
 use crate::platform::storage::binding as storage_binding;

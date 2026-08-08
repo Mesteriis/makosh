@@ -1,7 +1,7 @@
 //! Verifies a detached signed distribution manifest against release-pinned keys.
 
-use hermes_runtime_protocol::v1::DistributionManifestV1;
-use hermes_runtime_protocol::validation::distribution::decode_signed_distribution_manifest_v1;
+use makosh_runtime_protocol::v1::DistributionManifestV1;
+use makosh_runtime_protocol::validation::distribution::decode_signed_distribution_manifest_v1;
 use p256::ecdsa::signature::Verifier;
 use p256::ecdsa::{Signature, VerifyingKey};
 use prost::Message;

@@ -1,17 +1,17 @@
 [package]
-name = "hermes-communication-delayed-delivery-testkit"
+name = "makosh-communication-delayed-delivery-testkit"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "test"
 owner = "test"
 surface = "test_support"
 
 [dev-dependencies]
-hermes-communication-delayed-delivery-core = { path = "../../../src/communication-delayed-delivery-core" }
-hermes-communication-delayed-delivery-persistence = { path = "../../../src/communication-delayed-delivery-persistence", features = ["conformance-test-support"] }
+makosh-communication-delayed-delivery-core = { path = "../../../src/communication-delayed-delivery-core" }
+makosh-communication-delayed-delivery-persistence = { path = "../../../src/communication-delayed-delivery-persistence", features = ["conformance-test-support"] }
 prost = "=0.14.4"
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }
 tokio = { version = "=1.52.4", default-features = false, features = ["macros", "rt-multi-thread"] }

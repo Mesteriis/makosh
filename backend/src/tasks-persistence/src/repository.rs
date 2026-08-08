@@ -1,5 +1,5 @@
-use hermes_storage_protocol::StorageBindingV1;
-use hermes_tasks_core::{TaskStatusV1, TaskV1, create_task_from_reviewed_candidate_v1};
+use makosh_storage_protocol::StorageBindingV1;
+use makosh_tasks_core::{TaskStatusV1, TaskV1, create_task_from_reviewed_candidate_v1};
 use sqlx::{
     PgPool, Postgres, Transaction,
     postgres::{PgConnectOptions, PgPoolOptions},
@@ -86,7 +86,7 @@ impl TasksPersistenceV1 {
         }
         let fingerprint = input.command_fingerprint();
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.tasks_reviewed_candidate_inbox (\
+            "INSERT INTO makosh_data.tasks_reviewed_candidate_inbox (\
              logical_owner_id, command_message_id, command_envelope_sha256, command_id, \
              command_fingerprint, approved_candidate_id, candidate_digest, source_evidence_id, \
              source_evidence_revision, review_id, decision_revision, decided_by_owner_device_id, \
@@ -144,7 +144,7 @@ impl TasksPersistenceV1 {
             return Err(TasksPersistenceErrorV1::InvalidInput);
         }
         let result = sqlx::query(
-            "UPDATE hermes_data.tasks_reviewed_candidate_inbox \
+            "UPDATE makosh_data.tasks_reviewed_candidate_inbox \
              SET materialized_blob_reference_id = $3 \
              WHERE logical_owner_id = $1 AND command_message_id = $2 \
              AND (materialized_blob_reference_id IS NULL OR materialized_blob_reference_id = $3)",
@@ -202,7 +202,7 @@ impl TasksPersistenceV1 {
         }
         insert_task(&mut transaction, &task).await?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.tasks_reviewed_candidate_inbox SET completed = TRUE, \
+            "UPDATE makosh_data.tasks_reviewed_candidate_inbox SET completed = TRUE, \
              task_id = $3, completed_at_unix_millis = $4 \
              WHERE logical_owner_id = $1 AND command_message_id = $2 AND NOT completed",
         )
@@ -252,7 +252,7 @@ impl TasksPersistenceV1 {
             };
         }
         sqlx::query(
-            "UPDATE hermes_data.tasks_reviewed_candidate_inbox SET completed = TRUE, \
+            "UPDATE makosh_data.tasks_reviewed_candidate_inbox SET completed = TRUE, \
              rejected = TRUE, completed_at_unix_millis = $3 \
              WHERE logical_owner_id = $1 AND command_message_id = $2 AND NOT completed",
         )
@@ -282,7 +282,7 @@ impl TasksPersistenceV1 {
             return Err(TasksPersistenceErrorV1::InvalidInput);
         }
         let result = sqlx::query(
-            "UPDATE hermes_data.tasks_reviewed_candidate_inbox \
+            "UPDATE makosh_data.tasks_reviewed_candidate_inbox \
              SET cleanup_completed_at_unix_millis = $3 \
              WHERE logical_owner_id = $1 AND command_message_id = $2 \
              AND materialized_blob_reference_id IS NOT NULL \
@@ -308,7 +308,7 @@ impl TasksPersistenceV1 {
             return Err(TasksPersistenceErrorV1::InvalidInput);
         }
         let query = format!(
-            "SELECT {COMMAND_COLUMNS} FROM hermes_data.tasks_reviewed_candidate_inbox \
+            "SELECT {COMMAND_COLUMNS} FROM makosh_data.tasks_reviewed_candidate_inbox \
              WHERE logical_owner_id = $1 AND (NOT completed OR \
              (materialized_blob_reference_id IS NOT NULL AND cleanup_completed_at_unix_millis IS NULL)) \
              ORDER BY received_at_unix_millis, command_message_id LIMIT $2"
@@ -332,7 +332,7 @@ impl TasksPersistenceV1 {
             return Err(TasksPersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "SELECT message_id, envelope_sha256, envelope_bytes FROM hermes_data.tasks_outbox \
+            "SELECT message_id, envelope_sha256, envelope_bytes FROM makosh_data.tasks_outbox \
              WHERE logical_owner_id = $1 AND published_at_unix_millis IS NULL \
              ORDER BY created_at_unix_millis, message_id LIMIT $2",
         )
@@ -359,7 +359,7 @@ impl TasksPersistenceV1 {
             return Err(TasksPersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "UPDATE hermes_data.tasks_outbox SET published_at_unix_millis = $3 \
+            "UPDATE makosh_data.tasks_outbox SET published_at_unix_millis = $3 \
              WHERE logical_owner_id = $1 AND message_id = $2 \
              AND (published_at_unix_millis IS NULL OR published_at_unix_millis = $3)",
         )
@@ -378,7 +378,7 @@ impl TasksPersistenceV1 {
         command_message_id: [u8; 16],
     ) -> Result<Option<PersistedReviewedCandidateCommandV1>, TasksPersistenceErrorV1> {
         let query = format!(
-            "SELECT {COMMAND_COLUMNS} FROM hermes_data.tasks_reviewed_candidate_inbox \
+            "SELECT {COMMAND_COLUMNS} FROM makosh_data.tasks_reviewed_candidate_inbox \
              WHERE logical_owner_id = $1 AND command_message_id = $2"
         );
         sqlx::query(sqlx::AssertSqlSafe(query))
@@ -399,7 +399,7 @@ async fn lock_command(
     command_message_id: [u8; 16],
 ) -> Result<PersistedReviewedCandidateCommandV1, TasksPersistenceErrorV1> {
     let query = format!(
-        "SELECT {COMMAND_COLUMNS} FROM hermes_data.tasks_reviewed_candidate_inbox \
+        "SELECT {COMMAND_COLUMNS} FROM makosh_data.tasks_reviewed_candidate_inbox \
          WHERE logical_owner_id = $1 AND command_message_id = $2 FOR UPDATE"
     );
     let row = sqlx::query(sqlx::AssertSqlSafe(query))
@@ -420,7 +420,7 @@ async fn insert_task(
         TaskStatusV1::Open => 1_i16,
     };
     let result = sqlx::query(
-        "INSERT INTO hermes_data.tasks_state (logical_owner_id, task_id, title, due_text_hint, \
+        "INSERT INTO makosh_data.tasks_state (logical_owner_id, task_id, title, due_text_hint, \
          assignee_label_hint, status, task_revision, approved_candidate_id, candidate_digest, \
          source_evidence_id, source_evidence_revision, review_id, decision_revision, \
          decided_by_owner_device_id, created_at_unix_seconds, created_at_nanos, \
@@ -462,7 +462,7 @@ async fn insert_outbox(
     created_at_unix_millis: i64,
 ) -> Result<(), TasksPersistenceErrorV1> {
     let result = sqlx::query(
-        "INSERT INTO hermes_data.tasks_outbox (logical_owner_id, message_id, envelope_sha256, \
+        "INSERT INTO makosh_data.tasks_outbox (logical_owner_id, message_id, envelope_sha256, \
          envelope_bytes, created_at_unix_millis) VALUES ($1,$2,$3,$4,$5) ON CONFLICT DO NOTHING",
     )
     .bind(logical_owner_id)

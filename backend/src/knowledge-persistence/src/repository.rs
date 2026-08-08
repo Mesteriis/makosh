@@ -1,8 +1,8 @@
-use hermes_knowledge_core::{
+use makosh_knowledge_core::{
     KnowledgeNoteSourceBasisV1, KnowledgeNoteTopicHintV1, VerifiedKnowledgeNoteStatusV1,
     VerifiedKnowledgeNoteV1, create_verified_knowledge_note_from_reviewed_candidate_v1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool, Postgres, Transaction,
     postgres::{PgConnectOptions, PgPoolOptions},
@@ -91,7 +91,7 @@ impl KnowledgePersistenceV1 {
         }
         let fingerprint = input.command_fingerprint();
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.knowledge_reviewed_candidate_inbox (\
+            "INSERT INTO makosh_data.knowledge_reviewed_candidate_inbox (\
              logical_owner_id, command_message_id, command_envelope_sha256, command_id, \
              command_fingerprint, approved_candidate_id, candidate_digest, source_evidence_id, \
              source_evidence_revision, review_id, decision_revision, decided_by_owner_device_id, \
@@ -149,7 +149,7 @@ impl KnowledgePersistenceV1 {
             return Err(KnowledgePersistenceErrorV1::InvalidInput);
         }
         let result = sqlx::query(
-            "UPDATE hermes_data.knowledge_reviewed_candidate_inbox \
+            "UPDATE makosh_data.knowledge_reviewed_candidate_inbox \
              SET materialized_blob_reference_id = $3, materialized_blob_declared_bytes = $4, \
              materialized_blob_sha256 = $5, materialized_blob_custody_proof = $6 \
              WHERE logical_owner_id = $1 AND command_message_id = $2 \
@@ -223,7 +223,7 @@ impl KnowledgePersistenceV1 {
         }
         insert_note(&mut transaction, &note).await?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.knowledge_reviewed_candidate_inbox SET completed = TRUE, \
+            "UPDATE makosh_data.knowledge_reviewed_candidate_inbox SET completed = TRUE, \
              note_id = $3, note_creation_fingerprint = $4, completed_at_unix_millis = $5 \
              WHERE logical_owner_id = $1 AND command_message_id = $2 AND NOT completed",
         )
@@ -281,7 +281,7 @@ impl KnowledgePersistenceV1 {
             };
         }
         sqlx::query(
-            "UPDATE hermes_data.knowledge_reviewed_candidate_inbox SET completed = TRUE, \
+            "UPDATE makosh_data.knowledge_reviewed_candidate_inbox SET completed = TRUE, \
              rejected = TRUE, completed_at_unix_millis = $3 \
              WHERE logical_owner_id = $1 AND command_message_id = $2 AND NOT completed",
         )
@@ -311,7 +311,7 @@ impl KnowledgePersistenceV1 {
             return Err(KnowledgePersistenceErrorV1::InvalidInput);
         }
         let result = sqlx::query(
-            "UPDATE hermes_data.knowledge_reviewed_candidate_inbox \
+            "UPDATE makosh_data.knowledge_reviewed_candidate_inbox \
              SET cleanup_completed_at_unix_millis = $3 \
              WHERE logical_owner_id = $1 AND command_message_id = $2 \
              AND materialized_blob_reference_id IS NOT NULL \
@@ -337,7 +337,7 @@ impl KnowledgePersistenceV1 {
             return Err(KnowledgePersistenceErrorV1::InvalidInput);
         }
         let query = format!(
-            "SELECT {COMMAND_COLUMNS} FROM hermes_data.knowledge_reviewed_candidate_inbox \
+            "SELECT {COMMAND_COLUMNS} FROM makosh_data.knowledge_reviewed_candidate_inbox \
              WHERE logical_owner_id = $1 AND (NOT completed OR \
              (materialized_blob_reference_id IS NOT NULL AND cleanup_completed_at_unix_millis IS NULL)) \
              ORDER BY received_at_unix_millis, command_message_id LIMIT $2"
@@ -361,7 +361,7 @@ impl KnowledgePersistenceV1 {
             return Err(KnowledgePersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "SELECT message_id, envelope_sha256, envelope_bytes FROM hermes_data.knowledge_outbox \
+            "SELECT message_id, envelope_sha256, envelope_bytes FROM makosh_data.knowledge_outbox \
              WHERE logical_owner_id = $1 AND published_at_unix_millis IS NULL \
              ORDER BY created_at_unix_millis, message_id LIMIT $2",
         )
@@ -388,7 +388,7 @@ impl KnowledgePersistenceV1 {
             return Err(KnowledgePersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "UPDATE hermes_data.knowledge_outbox SET published_at_unix_millis = $3 \
+            "UPDATE makosh_data.knowledge_outbox SET published_at_unix_millis = $3 \
              WHERE logical_owner_id = $1 AND message_id = $2 \
              AND (published_at_unix_millis IS NULL OR published_at_unix_millis = $3)",
         )
@@ -407,7 +407,7 @@ impl KnowledgePersistenceV1 {
         command_message_id: [u8; 16],
     ) -> Result<Option<PersistedReviewedCandidateCommandV1>, KnowledgePersistenceErrorV1> {
         let query = format!(
-            "SELECT {COMMAND_COLUMNS} FROM hermes_data.knowledge_reviewed_candidate_inbox \
+            "SELECT {COMMAND_COLUMNS} FROM makosh_data.knowledge_reviewed_candidate_inbox \
              WHERE logical_owner_id = $1 AND command_message_id = $2"
         );
         sqlx::query(sqlx::AssertSqlSafe(query))
@@ -428,7 +428,7 @@ async fn lock_command(
     command_message_id: [u8; 16],
 ) -> Result<PersistedReviewedCandidateCommandV1, KnowledgePersistenceErrorV1> {
     let query = format!(
-        "SELECT {COMMAND_COLUMNS} FROM hermes_data.knowledge_reviewed_candidate_inbox \
+        "SELECT {COMMAND_COLUMNS} FROM makosh_data.knowledge_reviewed_candidate_inbox \
          WHERE logical_owner_id = $1 AND command_message_id = $2 FOR UPDATE"
     );
     let row = sqlx::query(sqlx::AssertSqlSafe(query))
@@ -456,7 +456,7 @@ async fn insert_note(
         .collect::<Vec<_>>();
     let source_basis = source_basis_code(note.source_basis);
     let result = sqlx::query(
-        "INSERT INTO hermes_data.knowledge_state (logical_owner_id, note_id, title, excerpt, \
+        "INSERT INTO makosh_data.knowledge_state (logical_owner_id, note_id, title, excerpt, \
          topic_hints, source_basis, confidence_basis_points, status, note_revision, \
          approved_candidate_id, candidate_digest, source_evidence_id, source_evidence_revision, \
          review_id, decision_revision, decided_by_owner_device_id, created_at_unix_seconds, \
@@ -503,7 +503,7 @@ async fn insert_outbox(
     created_at_unix_millis: i64,
 ) -> Result<(), KnowledgePersistenceErrorV1> {
     let result = sqlx::query(
-        "INSERT INTO hermes_data.knowledge_outbox (logical_owner_id, message_id, envelope_sha256, \
+        "INSERT INTO makosh_data.knowledge_outbox (logical_owner_id, message_id, envelope_sha256, \
          envelope_bytes, created_at_unix_millis) VALUES ($1,$2,$3,$4,$5) ON CONFLICT DO NOTHING",
     )
     .bind(logical_owner_id)
@@ -526,7 +526,7 @@ async fn outbox_matches(
     record: &KnowledgeOutboxRecordV1,
 ) -> Result<bool, KnowledgePersistenceErrorV1> {
     let existing = sqlx::query(
-        "SELECT envelope_sha256, envelope_bytes FROM hermes_data.knowledge_outbox \
+        "SELECT envelope_sha256, envelope_bytes FROM makosh_data.knowledge_outbox \
          WHERE logical_owner_id = $1 AND message_id = $2",
     )
     .bind(logical_owner_id)

@@ -3,37 +3,37 @@
 //! This artifact describes the smallest Mail-owned capability set. It does
 //! not register Mail in the production inventory or grant any capability.
 
-use hermes_attachment_security_contract::admission::attachment_security_scan_candidate_observed_publish_request_v1;
-use hermes_communications_attachment_contract::admission::{
+use makosh_attachment_security_contract::admission::attachment_security_scan_candidate_observed_publish_request_v1;
+use makosh_communications_attachment_contract::admission::{
     communication_attachment_anchor_recorded_contract_reference_v1,
     communication_attachment_blob_admission_observed_publish_request_v1,
     communication_attachment_safety_state_changed_contract_reference_v1,
 };
-use hermes_communications_ingress::admission::{
+use makosh_communications_ingress::admission::{
     COMMUNICATION_OBSERVED_MAX_IN_FLIGHT, communication_observed_publish_request_v1,
 };
-use hermes_contacts_mail_sync_source_api::{
+use makosh_contacts_mail_sync_source_api::{
     CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1, CONTACT_MAIL_SYNC_SOURCE_MAX_BYTES_V1,
     CONTACTS_MAIL_SYNC_SOURCE_CAPABILITY_ID_V1,
 };
-use hermes_mail_address_book_contract::{
+use makosh_mail_address_book_contract::{
     MAIL_ADDRESS_BOOK_CAPABILITY_ID_V1, MailAddressBookContractV1,
 };
-use hermes_mail_api::client_contract::{
+use makosh_mail_api::client_contract::{
     MAIL_CLIENT_CONTRACT_MAJOR, MAIL_CLIENT_CONTRACT_REVISION, MAIL_CLIENT_DESCRIPTOR_SET_V1,
     MailClientContractV1,
 };
-pub use hermes_mail_api::client_contract::{MAIL_MODULE_ID, MAIL_OWNER_ID};
-pub use hermes_mail_delivery_intent_contract::MAIL_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1;
-use hermes_mail_delivery_intent_contract::{
+pub use makosh_mail_api::client_contract::{MAIL_MODULE_ID, MAIL_OWNER_ID};
+pub use makosh_mail_delivery_intent_contract::MAIL_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1;
+use makosh_mail_delivery_intent_contract::{
     mail_delivery_intent_execute_consume_request_v1,
     mail_delivery_intent_rejected_publish_request_v1,
     mail_delivery_intent_succeeded_publish_request_v1,
 };
-use hermes_mail_retained_evidence_replay_contract::{
+use makosh_mail_retained_evidence_replay_contract::{
     mail_replay_command_consume_request_v1, mail_replay_result_publish_request_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ClientRpcRouteV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, ModuleDescriptorV1, ModuleKindV1,
@@ -46,7 +46,7 @@ use sha2::{Digest, Sha256};
 use crate::settings::{
     MAIL_SETTINGS_SCHEMA_MAJOR_V2, MAIL_SETTINGS_SCHEMA_REVISION_V2, mail_settings_schema_bytes_v2,
 };
-use hermes_runtime_protocol::SETTINGS_CONFIGURATION_CATALOG_CAPABILITY_ID;
+use makosh_runtime_protocol::SETTINGS_CONFIGURATION_CATALOG_CAPABILITY_ID;
 
 pub const MAIL_ATTACHMENT_SCAN_CANDIDATE_PUBLISH_CAPABILITY_ID: &str =
     "mail.attachment.scan-candidate.publish.v1";
@@ -280,8 +280,8 @@ fn mail_client_capability_v1(contract: MailClientContractV1) -> CapabilityDescri
 
 fn mail_client_contract_reference_v1(
     contract: MailClientContractV1,
-) -> hermes_runtime_protocol::v1::ContractReferenceV1 {
-    hermes_runtime_protocol::v1::ContractReferenceV1 {
+) -> makosh_runtime_protocol::v1::ContractReferenceV1 {
+    makosh_runtime_protocol::v1::ContractReferenceV1 {
         owner: MAIL_OWNER_ID.to_owned(),
         name: contract.contract_name().to_owned(),
         major: MAIL_CLIENT_CONTRACT_MAJOR,
@@ -553,7 +553,7 @@ pub fn mail_module_descriptor_v1(build_id: &str) -> ModuleDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::validate_descriptor_v1;
+    use makosh_runtime_protocol::validation::descriptor::validate_descriptor_v1;
 
     use super::*;
 

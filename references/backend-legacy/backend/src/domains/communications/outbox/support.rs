@@ -267,7 +267,7 @@ pub(crate) fn outbox_delivery_event(
             "status": item.status.as_str(),
         }),
     )
-    .actor(json!({ "actor_id": "hermes-outbox-worker" }))
+    .actor(json!({ "actor_id": "makosh-outbox-worker" }))
     .payload(json!({
         "outbox_id": item.outbox_id,
         "account_id": item.account_id,

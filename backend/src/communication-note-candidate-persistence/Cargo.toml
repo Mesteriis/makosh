@@ -1,5 +1,5 @@
 [package]
-name = "hermes-communication-note-candidate-persistence"
+name = "makosh-communication-note-candidate-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,13 +7,13 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "communication_note_candidate_extraction"
 surface = "persistence"
 
 [dependencies]
-hermes-communication-note-candidate-core = { path = "../communication-note-candidate-core" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-communication-note-candidate-core = { path = "../communication-note-candidate-core" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 sha2 = { version = "=0.11.0", default-features = false }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

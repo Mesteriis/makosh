@@ -2,15 +2,15 @@
 
 Status: documentation package aligned to the current repository structure.
 
-Hermes uses a split test stack:
+Макошь uses a split test stack:
 
 - Rust backend execution runs through `cargo-nextest`.
-- Backend integration and coverage runs go through the `crates/test-session` session harness so PostgreSQL and NATS testcontainers are reused and cleaned correctly. Backend-specific fixtures and explicit test composition remain in `crates/testkit` (`hermes-backend-testkit`).
+- Backend integration and coverage runs go through the `crates/test-session` session harness so PostgreSQL and NATS testcontainers are reused and cleaned correctly. Backend-specific fixtures and explicit test composition remain in `crates/testkit` (`makosh-backend-testkit`).
 - Local wrapper scripts and Makefile nextest targets force a visible progress mode via `--show-progress`.
 - Post-run JUnit analysis prints a compact completed/passed/failed/flaky summary with an ASCII progress bar, so non-interactive Codex/CI output is not silent after a test set finishes.
 - Frontend unit tests stay on Vitest.
 - Architecture checks remain first-class and are part of the test taxonomy.
-- Hermes Lab is the proposed system-level harness for tracing real provider signals through Communications, Review, Timeline, Search and UI/debug surfaces.
+- Макошь Lab is the proposed system-level harness for tracing real provider signals through Communications, Review, Timeline, Search and UI/debug surfaces.
 
 ## Command map
 
@@ -41,21 +41,21 @@ Hermes uses a split test stack:
 ## Testcontainers cleanup
 
 `make backend-test`, `make test-integration` and related backend Make targets
-run through `crates/test-session`'s `hermes-test-session` wrapper. The wrapper starts
+run through `crates/test-session`'s `makosh-test-session` wrapper. The wrapper starts
 session-scoped PostgreSQL/NATS containers, prints progress while long runs are
-active, labels Hermes-owned containers and removes the session containers on
+active, labels Макошь-owned containers and removes the session containers on
 exit or shutdown signals.
 
-For manual cleanup of leaked Hermes testcontainers:
+For manual cleanup of leaked Макошь testcontainers:
 
 ```sh
 make testcontainers-clean
 ```
 
-The cleanup command is restricted to Hermes testkit labels and legacy
+The cleanup command is restricted to Макошь testkit labels and legacy
 pgvector/NATS containers created by the repository testkit.
 
-Targeted `cargo test` runs outside `hermes_test_session` now use containers
+Targeted `cargo test` runs outside `makosh_test_session` now use containers
 owned by the individual `TestContext`, so those containers are dropped when the
 test context exits.
 
@@ -70,14 +70,14 @@ then exercises:
 - stream and direct messages;
 - file upload/download;
 - reactions, edits and deletes;
-- Hermes raw signal dispatch, Communications projection and Review task
+- Макошь raw signal dispatch, Communications projection and Review task
   candidate creation from a real Zulip message event.
 
 Run it explicitly:
 
 ```sh
-HERMES_ZULIP_TESTCONTAINERS=1 \
-HERMES_ZULIP_START_TIMEOUT_SECS=900 \
+MAKOSH_ZULIP_TESTCONTAINERS=1 \
+MAKOSH_ZULIP_START_TIMEOUT_SECS=900 \
 cargo test --manifest-path backend/Cargo.toml --test zulip_live -- --ignored --nocapture
 ```
 
@@ -88,9 +88,9 @@ elapsed time.
 
 ## Classification model
 
-Hermes does not yet physically relocate every backend test into `tests/unit`, `tests/integration`, `tests/e2e`, `tests/architecture`, `tests/snapshots`. The repository now uses a stable logical classification generated from the current target naming and a dedicated snapshot target:
+Макошь does not yet physically relocate every backend test into `tests/unit`, `tests/integration`, `tests/e2e`, `tests/architecture`, `tests/snapshots`. The repository now uses a stable logical classification generated from the current target naming and a dedicated snapshot target:
 
-- `unit` - Rust library tests under `backend/src`, `crates/test-session/src` and `crates/testkit/src` (`hermes-backend-testkit`)
+- `unit` - Rust library tests under `backend/src`, `crates/test-session/src` and `crates/testkit/src` (`makosh-backend-testkit`)
 - `integration` - backend integration targets that are not architecture/e2e/snapshot targets
 - `e2e` - high-surface API/runtime targets such as `*_api`, stream/websocket API targets, `communications_connectrpc`, `omniroute`, `hard_v1_routes`
 - `architecture` - `*_architecture.rs` targets plus JS architecture guards
@@ -120,5 +120,5 @@ Current baseline and optimization notes live in:
 - [Nextest](./nextest.md)
 - [Security](./security.md)
 - [Snapshots](./snapshots.md)
-- [Hermes Lab](./hermes-lab.md)
+- [Макошь Lab](./makosh-lab.md)
 - [Communication Compliance Suite](./communication-compliance-suite.md)

@@ -34,7 +34,7 @@ integration boundary. Production inventory integrations остаётся пус�
 - wire protocol, например IMAP или POP3;
 - внешним provider или сервисом, например Gmail;
 - настроенным аккаунтом пользователя;
-- запущенным OS-процессом Hermes.
+- запущенным OS-процессом Макошь.
 
 Такое смешение даёт две противоположные ошибки. Если объявлять integration
 каждый protocol client, Mail распадается на независимые IMAP, POP3 и SMTP
@@ -58,17 +58,17 @@ evidence и не переносится в clean-room contracts как норм�
 
 ### Канонические термины
 
-Hermes различает следующие сущности:
+Макошь различает следующие сущности:
 
 | Термин | Значение | Не является |
 |---|---|---|
 | **Integration module / integration owner** | Самостоятельный architectural owner одной целостной внешней operational-модели, её contracts, state, lifecycle и neutral evidence mapping; при наличии backend runtime использует `module_kind = integration` | business domain, protocol client или configured account |
 | **Protocol adapter** | Owner-local implementation port для конкретного protocol/SDK, например IMAP, POP3, SMTP, Gmail API, TDLib или Zulip HTTP | Kernel registration, отдельная integration или public generic provider API |
-| **External protocol client** | Конкретный объект/library client внутри adapter, включая connection pool или SDK handle | архитектурная identity Hermes |
+| **External protocol client** | Конкретный объект/library client внутри adapter, включая connection pool или SDK handle | архитектурная identity Макошь |
 | **External provider/service** | Внешняя система или deployment, например Gmail, iCloud, generic mail server, Telegram или Zulip workspace | автоматический owner boundary или business discriminator |
 | **Connector profile** | Closed typed owner setting, выбирающая совместимый adapter behavior в пределах effective GrantSet connection | новый module, capability authority, GrantSet или generic extension mechanism |
 | **Configuration instance** | Stable opaque `configuration_instance_id` ADR-0222 для одного независимо настроенного подключения/account slot | `ModuleRegistrationId`, process или внешний account identifier |
-| **External principal/account** | Mailbox, user, bot, workspace или другой remote principal за configuration instance | Kernel identity или canonical Hermes business entity |
+| **External principal/account** | Mailbox, user, bot, workspace или другой remote principal за configuration instance | Kernel identity или canonical Макошь business entity |
 | **Module registration** | Kernel-owned admission, grants и lifecycle record ADR-0215 | provider account или connection settings |
 | **Runtime instance/generation** | Ephemeral identity конкретного module process launch | stable integration или configuration instance |
 | **Frontend experience** | Bundled first-party operational surface integration owner | remote plugin code или business domain |
@@ -107,7 +107,7 @@ Integration выделяется вокруг **одной cohesive operational-
 - согласованный account/session/cursor lifecycle;
 - одну owner-local persistence и outbox/replay boundary;
 - одну explicit runtime/host responsibility;
-- общую причину изменения с точки зрения пользователя Hermes.
+- общую причину изменения с точки зрения пользователя Макошь.
 
 Новая integration требуется, когда необходимы одновременно существенные
 независимые границы:
@@ -147,7 +147,7 @@ Adapter:
 - не получает grants или credentials в обход owner runtime;
 - не публикует provider payload напрямую в business/context domain;
 - не импортируется другим integration owner;
-- не загружается динамически во время работы Hermes.
+- не загружается динамически во время работы Макошь.
 
 Runtime может включать несколько bundled adapters одного owner. Supported
 connector profiles и связь profile requirements с capability IDs принадлежат
@@ -339,7 +339,7 @@ owner persistence через свой port. Когда provider state/cursor и 
 observation должны commit-иться вместе, owner persistence adapter атомарно
 пишет их с outbox. Canonical evidence owner сохраняет observation отдельной
 idempotent inbox transaction. Текущая executable policy разрешает integrations
-только `hermes-communications-ingress`; Calendar и другие non-communications
+только `makosh-communications-ingress`; Calendar и другие non-communications
 integrations требуют отдельного ingress ADR и изменения policy, а не exception.
 Provider/protocol identity может сохраняться как provenance, но
 business/context domain не branch-ится по adapter или provider.
@@ -421,7 +421,7 @@ mapping и routing, а SMTP ошибочно выглядит самостоят
 ### Один integration owner на коммерческого vendor
 
 Отклонено: vendor может объединять несвязанные Mail, Calendar, Contacts и file
-products. Corporate boundary не является bounded context Hermes.
+products. Corporate boundary не является bounded context Макошь.
 
 ### Один process на каждый configured account
 
@@ -432,7 +432,7 @@ identity, умножает registrations/grants/updates и не имеет до�
 
 ### Protocol adapters как dynamic plugins
 
-Отклонено: Hermes не имеет plugin store/sandbox/update model для remote code.
+Отклонено: Макошь не имеет plugin store/sandbox/update model для remote code.
 Adapters поставляются внутри exact verified owner runtime executable текущей
 release.
 

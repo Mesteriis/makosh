@@ -11,14 +11,14 @@ pub use envelope::{
     build_upsert_contact_command_outbox_record_v1,
 };
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-contacts-command-api";
+pub const PACKAGE: &str = "makosh-contacts-command-api";
 pub const CONTACTS_OWNER_ID_V1: &str = "contacts";
-pub const CONTACTS_MODULE_ID_V1: &str = "hermes-contacts-runtime";
+pub const CONTACTS_MODULE_ID_V1: &str = "makosh-contacts-runtime";
 pub const CONTACTS_MAIL_IDENTITY_COMMAND_CAPABILITY_ID_V1: &str =
     "contacts.mail-identity.command.v1";
 pub const CONTACTS_MAIL_PROVIDER_LINK_COMMAND_CAPABILITY_ID_V1: &str =
@@ -40,7 +40,7 @@ pub const CONTACTS_COMMAND_CONTRACT_REVISION_V1: u32 = 1;
 pub const CONTACTS_MAIL_IDENTITY_MAX_IN_FLIGHT_V1: u32 = 32;
 
 pub mod wire {
-    include!(concat!(env!("OUT_DIR"), "/hermes.contacts.command.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.contacts.command.v1.rs"));
 }
 
 include!(concat!(env!("OUT_DIR"), "/contacts_command_schema.rs"));
@@ -231,7 +231,7 @@ mod tests {
 
     #[test]
     fn contract_has_no_provider_secret_or_generic_payload_fields() {
-        let source = include_str!("../proto/hermes/contacts/command/v1/contacts_command.proto");
+        let source = include_str!("../proto/makosh/contacts/command/v1/contacts_command.proto");
         for forbidden in [
             "token",
             "credential",

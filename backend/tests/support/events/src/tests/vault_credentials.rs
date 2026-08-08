@@ -1,5 +1,5 @@
-use hermes_events_jetstream::vault::NatsVaultRouteFailureV1;
-use hermes_events_jetstream::{
+use makosh_events_jetstream::vault::NatsVaultRouteFailureV1;
+use makosh_events_jetstream::{
     EventHubCredentialFenceV1, EventHubCredentialLeaseAdapterV1, NatsCredentialLeaseAdapterV1,
     NatsRuntimeCredentialFenceV1, NatsVaultRouteContextV1,
 };
@@ -44,7 +44,7 @@ async fn unavailable_vault_route_does_not_fall_back_to_a_local_broker_secret() {
     );
     assert_eq!(
         adapter.ensure_runtime_credential(&fence()).await,
-        Err(hermes_events_jetstream::vault::NatsCredentialLeaseErrorV1::Unavailable),
+        Err(makosh_events_jetstream::vault::NatsCredentialLeaseErrorV1::Unavailable),
     );
 }
 
@@ -133,7 +133,7 @@ fn event_hub_fence() -> EventHubCredentialFenceV1 {
 }
 
 fn vault_public_key() -> [u8; 32] {
-    hermes_vault_protocol::VaultResponseRecipientV1::generate()
+    makosh_vault_protocol::VaultResponseRecipientV1::generate()
         .public_key()
         .as_bytes()
         .to_owned()

@@ -5,7 +5,7 @@
 Дата: 2026-07-30
 
 Состояние реализации: architecture agreement, Communications-owned source
-contract/runtime handoff и public AI contract unit `hermes-ai-contracts`
+contract/runtime handoff и public AI contract unit `makosh-ai-contracts`
 реализованы. Communications имеет durable command/results, inbox/hash fencing,
 current-revision validation, target-bound Blob custody и commit-before-Ack.
 AI contract unit имеет concrete reply request/result, common context receipt,
@@ -17,15 +17,15 @@ Vault/Storage/Blob/NATS, передаёт bounded sender/subject/body тольк
 target-bound Blob receipt, не публикует private content в envelope, подавляет
 duplicate result и fail-closed отклоняет stale и inactive source revision.
 Gate `communications_ai_context_source_v1` реализован.
-`hermes-ai-inference-core` также реализован как отдельная engine unit с
+`makosh-ai-inference-core` также реализован как отдельная engine unit с
 revision-fenced lifecycle, fixed prompt/policy receipt и sanitized terminal
-results. `hermes-ai-inference-persistence` реализован отдельной owner-local
+results. `makosh-ai-inference-persistence` реализован отдельной owner-local
 PostgreSQL unit: typed lifecycle, request/source receipts, provider-reported
 effective settings revision, recoverable runs и terminal candidate сохраняются без
-source message body или cross-owner SQL. `hermes-ai-inference-runtime`
+source message body или cross-owner SQL. `makosh-ai-inference-runtime`
 реализует exact managed `request_rpc`, target-bound Blob custody/read,
 provider-neutral outbound route и restart recovery; отдельный
-`hermes-ai-inference-assembly` материализует только unsigned descriptor,
+`makosh-ai-inference-assembly` материализует только unsigned descriptor,
 settings schema и Storage bundle inputs. Все пять AI engine build units
 реализованы. Signed managed conformance запускает eventless AI Engine с
 настоящими Vault/Storage/Blob, через Kernel module-request router маршрутизирует
@@ -43,10 +43,10 @@ request и recovery с authenticated human owner; wrong-owner delivery
 Gate `ai_inference_v1` реализован независимо от Communications, reply workflow
 и Ollama implementation. Для Ollama реализованы все шесть отдельных staged
 units —
-`hermes-ollama-ai-api`,
-`hermes-ollama-ai-core`, `hermes-ollama-ai-http`,
-`hermes-ollama-ai-persistence`, `hermes-ollama-ai-runtime` и
-`hermes-ollama-ai-assembly`: exact non-secret settings, fixed
+`makosh-ollama-ai-api`,
+`makosh-ollama-ai-core`, `makosh-ollama-ai-http`,
+`makosh-ollama-ai-persistence`, `makosh-ollama-ai-runtime` и
+`makosh-ollama-ai-assembly`: exact non-secret settings, fixed
 loopback/model policy, request digest, structured result, owner-local
 revision-fenced PostgreSQL lifecycle и terminal `uncertain` transition без
 automatic retry. Persistence не хранит source content, prompt или HTTP request
@@ -73,17 +73,17 @@ owner из managed launch и отклоняет wrong-owner delivery до persis
 provider HTTP. Gate `ollama_ai_provider_v1` реализован независимо от
 Communications, AI Engine и reply workflow. Для reply workflow реализованы все
 пять отдельных units:
-`hermes-communication-reply-suggestion-api` с concrete generated
+`makosh-communication-reply-suggestion-api` с concrete generated
 Start/Get/realtime contract и
-`hermes-communication-reply-suggestion-core` с revision/digest-fenced
-state machine, а также `hermes-communication-reply-suggestion-persistence` с
+`makosh-communication-reply-suggestion-core` с revision/digest-fenced
+state machine, а также `makosh-communication-reply-suggestion-persistence` с
 owner-local idempotent run state, source-result inbox/hash fence, exact
 source-prepare outbox, recoverable state и client-safe realtime replay.
-`hermes-communication-reply-suggestion-runtime` реализует managed Workflow
+`makosh-communication-reply-suggestion-runtime` реализует managed Workflow
 admission, event-only source consumption, отдельную target-bound Blob
 materialization для AI, exact inference `request_rpc`, terminal cleanup до Ack
 и client-safe invalidation через общий replayable SSE. Отдельная
-`hermes-communication-reply-suggestion-assembly` materializes только unsigned
+`makosh-communication-reply-suggestion-assembly` materializes только unsigned
 descriptor, settings schema, owner-local Storage bundle и release fragment;
 dev release compiler включает exact runtime и Storage artifacts в подписанный
 distribution manifest. Persistence не хранит source body, prompt или provider
@@ -200,7 +200,7 @@ Domain, workflow, engine и integration являются разными owners �
 ### Communications-owned source handoff
 
 `communications_ai_context_source_v1` добавляет public contract unit
-`hermes-communications-ai-source-api`. Communications runtime реализует exact
+`makosh-communications-ai-source-api`. Communications runtime реализует exact
 durable prepare command/result:
 
 ```text
@@ -235,7 +235,7 @@ cross-owner SQL, direct socket и body bytes в NATS запрещены.
 
 ### AI public contracts
 
-Public unit `hermes-ai-contracts` принадлежит engine owner `ai` и содержит:
+Public unit `makosh-ai-contracts` принадлежит engine owner `ai` и содержит:
 
 - общий `AiContextReceiptV1`;
 - exact `CommunicationReplySuggestionInferenceRequestV1`;
@@ -275,11 +275,11 @@ Candidate не является Communication, draft или provider command.
 `ai_inference_v1` принадлежит engine owner `ai`:
 
 ```text
-hermes-ai-contracts
-hermes-ai-inference-core
-hermes-ai-inference-persistence
-hermes-ai-inference-runtime
-hermes-ai-inference-assembly
+makosh-ai-contracts
+makosh-ai-inference-core
+makosh-ai-inference-persistence
+makosh-ai-inference-runtime
+makosh-ai-inference-assembly
 ```
 
 Core валидирует concrete request, budgets, policy and result. Persistence
@@ -314,12 +314,12 @@ lease evidence.
 `ollama_ai_provider_v1` принадлежит integration owner `ollama`:
 
 ```text
-hermes-ollama-ai-api
-hermes-ollama-ai-core
-hermes-ollama-ai-http
-hermes-ollama-ai-persistence
-hermes-ollama-ai-runtime
-hermes-ollama-ai-assembly
+makosh-ollama-ai-api
+makosh-ollama-ai-core
+makosh-ollama-ai-http
+makosh-ollama-ai-persistence
+makosh-ollama-ai-runtime
+makosh-ollama-ai-assembly
 ```
 
 Integration владеет Ollama HTTP dialect, endpoint validation, model discovery,
@@ -349,11 +349,11 @@ Private content передаётся integration runtime только через
 Owner `communication_reply_suggestion` имеет отдельные units:
 
 ```text
-hermes-communication-reply-suggestion-api
-hermes-communication-reply-suggestion-core
-hermes-communication-reply-suggestion-persistence
-hermes-communication-reply-suggestion-runtime
-hermes-communication-reply-suggestion-assembly
+makosh-communication-reply-suggestion-api
+makosh-communication-reply-suggestion-core
+makosh-communication-reply-suggestion-persistence
+makosh-communication-reply-suggestion-runtime
+makosh-communication-reply-suggestion-assembly
 ```
 
 Client contract предоставляет:

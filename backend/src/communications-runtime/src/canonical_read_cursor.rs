@@ -1,6 +1,6 @@
 //! Opaque, scope-bound continuation cursors for canonical Communications reads.
 
-use hermes_communications_persistence::{CanonicalReadAfterV1, CanonicalReferenceReadAfterV1};
+use makosh_communications_persistence::{CanonicalReadAfterV1, CanonicalReferenceReadAfterV1};
 use sha2::{Digest, Sha256};
 
 const PREFIX: &[u8; 4] = b"HCR2";
@@ -151,7 +151,7 @@ fn encode_cursor_v1(
 
 fn scope_hash_v1(kind: CanonicalReadCursorKindV1, scope_parts: &[&[u8]]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communications.canonical-read.v2");
+    digest.update(b"makosh.communications.canonical-read.v2");
     digest.update([kind as u8]);
     for part in scope_parts {
         let part_len = u32::try_from(part.len()).expect("canonical read scope part is bounded");

@@ -95,7 +95,7 @@ test('task candidate agreement keeps extraction review and Tasks in separate own
     readFile(new URL('src/communication-task-candidate-api/src/lib.rs', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/communication-task-candidate-api/proto/hermes/communication_task_candidate/v1/task_candidate.proto',
+        'src/communication-task-candidate-api/proto/makosh/communication_task_candidate/v1/task_candidate.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -123,7 +123,7 @@ test('task candidate agreement keeps extraction review and Tasks in separate own
     readFile(new URL('src/communications-task-source-api/src/lib.rs', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/communications-task-source-api/proto/hermes/communications/task_source/v1/task_source.proto',
+        'src/communications-task-source-api/proto/makosh/communications/task_source/v1/task_source.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -168,7 +168,7 @@ test('task candidate agreement keeps extraction review and Tasks in separate own
     readFile(new URL('src/review-task-candidate-promotion-api/src/lib.rs', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/review-task-candidate-promotion-api/proto/hermes/review/task_candidate/promotion/v1/promotion.proto',
+        'src/review-task-candidate-promotion-api/proto/makosh/review/task_candidate/promotion/v1/promotion.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -262,14 +262,14 @@ test('task candidate agreement keeps extraction review and Tasks in separate own
   assert.doesNotMatch(adr, /Communications владеет Task|Tasks читает Communications storage/);
 
   for (const unit of [
-    'hermes-communication-task-candidate-api',
-    'hermes-communication-task-candidate-core',
-    'hermes-communication-task-candidate-persistence',
-    'hermes-communication-task-candidate-runtime',
-    'hermes-communication-task-candidate-assembly',
-    'hermes-communications-task-source-api',
+    'makosh-communication-task-candidate-api',
+    'makosh-communication-task-candidate-core',
+    'makosh-communication-task-candidate-persistence',
+    'makosh-communication-task-candidate-runtime',
+    'makosh-communication-task-candidate-assembly',
+    'makosh-communications-task-source-api',
   ]) {
-    assert.match(workspace, new RegExp(`"src/${unit.replace('hermes-', '')}"`));
+    assert.match(workspace, new RegExp(`"src/${unit.replace('makosh-', '')}"`));
     assert.match(adr, new RegExp(`\\b${unit}\\b`));
   }
   assert.match(apiManifest, /owner = "communication_task_candidate_extraction"/);
@@ -286,7 +286,7 @@ test('task candidate agreement keeps extraction review and Tasks in separate own
   assert.match(extraction, /empty_source_does_not_fabricate_a_task_candidate/);
   assert.match(extraction, /duplicate_title_across_subject_and_body_becomes_one_combined_candidate/);
   assert.match(lifecycle, /SourceIdentityMismatch/);
-  assert.doesNotMatch(`${core}\n${extraction}\n${lifecycle}`, /hermes_communications|hermes_review|hermes_tasks|ollama|reqwest|sqlx/);
+  assert.doesNotMatch(`${core}\n${extraction}\n${lifecycle}`, /makosh_communications|makosh_review|makosh_tasks|ollama|reqwest|sqlx/);
   assert.match(persistenceManifest, /owner = "communication_task_candidate_extraction"/);
   assert.match(persistenceManifest, /surface = "persistence"/);
   assert.match(persistence, /CommunicationTaskCandidatePersistenceV1/);
@@ -304,7 +304,7 @@ test('task candidate agreement keeps extraction review and Tasks in separate own
   );
   assert.match(persistenceOutbox, /unpublished_events/);
   assert.match(persistenceOutbox, /mark_event_published/);
-  assert.doesNotMatch(`${persistence}\n${persistenceModel}\n${persistenceRepository}\n${migration}`, /communication_recipient_suggestion|hermes_communications|hermes_review|hermes_tasks|ollama|prompt|provider_id/);
+  assert.doesNotMatch(`${persistence}\n${persistenceModel}\n${persistenceRepository}\n${migration}`, /communication_recipient_suggestion|makosh_communications|makosh_review|makosh_tasks|ollama|prompt|provider_id/);
   assert.match(runtimeManifest, /owner = "communication_task_candidate_extraction"/);
   assert.match(runtimeManifest, /surface = "runtime"/);
   assert.match(runtime, /CommunicationTaskCandidateManagedRuntimeV1/);
@@ -323,18 +323,18 @@ test('task candidate agreement keeps extraction review and Tasks in separate own
   assert.match(runtimeReviewSubmission, /SubmitTaskCandidateForReviewCommandV1/);
   assert.match(runtimeSourceResults, /source_read_receipt_bytes/);
   assert.match(runtimeSourceResults, /materialize_task_source_v1/);
-  assert.match(runtimeManifest, /hermes-review-task-candidate-api/);
-  assert.doesNotMatch(runtimeManifest, /hermes-review-task-candidate-(core|persistence|runtime|assembly)/);
+  assert.match(runtimeManifest, /makosh-review-task-candidate-api/);
+  assert.doesNotMatch(runtimeManifest, /makosh-review-task-candidate-(core|persistence|runtime|assembly)/);
   assert.doesNotMatch(
     `${runtime}\n${runtimeAdmission}\n${runtimeExtraction}\n${runtimeReviewSubmission}\n${runtimeSourceResults}`,
-    /recipient_suggestion|hermes_review_task_candidate_(core|persistence|runtime|assembly)|hermes_tasks|ollama|reqwest|prompt|provider_id/,
+    /recipient_suggestion|makosh_review_task_candidate_(core|persistence|runtime|assembly)|makosh_tasks|ollama|reqwest|prompt|provider_id/,
   );
   assert.match(assemblyManifest, /owner = "communication_task_candidate_extraction"/);
   assert.match(assemblyManifest, /surface = "assembly"/);
   assert.match(assembly, /communication_task_candidate_extraction_storage_bundle_v1/);
   assert.match(assembly, /communication_task_candidate_extraction\.runtime\.v1/);
   assert.match(assembly, /communication_task_candidate_extraction\.storage\.v1/);
-  assert.doesNotMatch(assembly, /recipient_suggestion|hermes_communications|hermes_review|hermes_tasks|ollama|provider_id/);
+  assert.doesNotMatch(assembly, /recipient_suggestion|makosh_communications|makosh_review|makosh_tasks|ollama|provider_id/);
   assert.match(sourceManifest, /owner = "communications"/);
   assert.match(sourceManifest, /surface = "contract"/);
   assert.match(sourceApi, /communications\.task-source\.v1/);
@@ -345,7 +345,7 @@ test('task candidate agreement keeps extraction review and Tasks in separate own
   assert.match(sourceProtocol, /CommunicationTaskSourceRejectedV1/);
   assert.doesNotMatch(sourceProtocol, /provider_id|account_id|model_id|prompt|map</);
   assert.match(sourceEnvelope, /target_capability: COMMUNICATIONS_TASK_SOURCE_CAPABILITY_ID_V1/);
-  assert.match(communicationsRuntimeManifest, /hermes-communications-task-source-api/);
+  assert.match(communicationsRuntimeManifest, /makosh-communications-task-source-api/);
   assert.match(communicationsAdmission, /communications_task_source_capability_v1/);
   assert.match(communicationsAdmission, /communications\.task-source\.blob\.v1/);
   assert.match(communicationsEventRuntime, /consume_next_task_source_prepare_v1/);
@@ -409,11 +409,11 @@ test('task candidate agreement keeps extraction review and Tasks in separate own
   assert.match(managedPersistenceFlow, /OutboxConflict/);
   assert.match(
     authenticatedStorage,
-    /HERMES_STORAGE_MANAGED_TEST_FILTER[\s\S]*managed_task_candidate_approve_reject_reaches_gateway_sse_and_replays_after_restart/,
+    /MAKOSH_STORAGE_MANAGED_TEST_FILTER[\s\S]*managed_task_candidate_approve_reject_reaches_gateway_sse_and_replays_after_restart/,
   );
   assert.match(
     authenticatedStorage,
-    /HERMES_REVIEWED_TASK_CANDIDATE_PROMOTION_RUNTIME_BIN/,
+    /MAKOSH_REVIEWED_TASK_CANDIDATE_PROMOTION_RUNTIME_BIN/,
   );
   assert.match(promotionApiManifest, /role = "domain"/);
   assert.match(promotionApiManifest, /owner = "review"/);
@@ -434,10 +434,10 @@ test('task candidate agreement keeps extraction review and Tasks in separate own
   assert.match(promotionCore, /derive_reviewed_task_candidate_result_id_v1/);
   assert.doesNotMatch(
     `${promotionCoreManifest}\n${promotionCore}`,
-    /hermes-review-task-candidate-(core|persistence|runtime)|hermes-tasks-(core|persistence|runtime)|sqlx|async-nats|reqwest|ollama/,
+    /makosh-review-task-candidate-(core|persistence|runtime)|makosh-tasks-(core|persistence|runtime)|sqlx|async-nats|reqwest|ollama/,
   );
   assert.match(workspace, /"src\/reviewed-task-candidate-promotion-persistence"/);
-  assert.match(promotionAdr, /hermes-reviewed-task-candidate-promotion-persistence/);
+  assert.match(promotionAdr, /makosh-reviewed-task-candidate-promotion-persistence/);
   assert.match(promotionPersistenceManifest, /role = "workflow"/);
   assert.match(promotionPersistenceManifest, /owner = "reviewed_task_candidate_promotion"/);
   assert.match(promotionPersistenceManifest, /surface = "persistence"/);
@@ -459,7 +459,7 @@ test('task candidate agreement keeps extraction review and Tasks in separate own
   assert.match(promotionPersistenceMigration, /reviewed_task_candidate_promotion_outbox/);
   assert.doesNotMatch(
     `${promotionPersistence}\n${promotionPersistenceModel}\n${promotionPersistenceRepository}\n${promotionPersistenceOutbox}\n${promotionPersistenceMigration}`,
-    /candidate_content|source_body|custody_proof|provider_id|account_id|title|due_text|assignee_label|hermes_review_task_candidate_(core|persistence|runtime)|hermes_tasks_(core|persistence|runtime)/,
+    /candidate_content|source_body|custody_proof|provider_id|account_id|title|due_text|assignee_label|makosh_review_task_candidate_(core|persistence|runtime)|makosh_tasks_(core|persistence|runtime)/,
   );
   assert.match(workspace, /"src\/reviewed-task-candidate-promotion-runtime"/);
   assert.match(promotionRuntimeManifest, /role = "workflow"/);
@@ -483,7 +483,7 @@ test('task candidate agreement keeps extraction review and Tasks in separate own
   assert.match(promotionRuntimeMain, /ManagedWorkflowRuntimeConfigurationV1/);
   assert.doesNotMatch(
     `${promotionRuntimeManifest}\n${promotionRuntime}\n${promotionRuntimeAdmission}\n${promotionRuntimeApproval}\n${promotionRuntimeResults}\n${promotionRuntimeOutbox}\n${promotionManagedRuntime}`,
-    /hermes-review-task-candidate-(core|persistence|runtime|assembly)|hermes-tasks-(core|persistence|runtime|assembly)|hermes-blob|ClientRpc|ClientRealtime|provider_id|account_id|ollama|reqwest/,
+    /makosh-review-task-candidate-(core|persistence|runtime|assembly)|makosh-tasks-(core|persistence|runtime|assembly)|makosh-blob|ClientRpc|ClientRealtime|provider_id|account_id|ollama|reqwest/,
   );
   assert.match(workspace, /"src\/reviewed-task-candidate-promotion-assembly"/);
   assert.match(promotionAssemblyManifest, /role = "workflow"/);

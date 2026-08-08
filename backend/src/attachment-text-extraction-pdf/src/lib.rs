@@ -1,11 +1,11 @@
 #![forbid(unsafe_code)]
 
-use hermes_attachment_text_extraction_parser_contract::{
+use makosh_attachment_text_extraction_parser_contract::{
     AttachmentTextParserErrorV1, AttachmentTextParserKindV1, AttachmentTextParserOutputV1,
     bounded_parser_output_v1, validate_source_bound,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-text-extraction-pdf";
+pub const PACKAGE: &str = "makosh-attachment-text-extraction-pdf";
 
 pub fn extract_pdf_text_v1(
     source: &[u8],
@@ -26,13 +26,13 @@ mod tests {
 
     #[test]
     fn extracts_embedded_pdf_text_from_memory_only() {
-        let source = simple_pdf("Hello Hermes");
+        let source = simple_pdf("Hello makosh");
         let output = extract_pdf_text_v1(&source).expect("PDF text");
         assert_eq!(output.parser, AttachmentTextParserKindV1::Pdf);
         assert!(
             std::str::from_utf8(&output.text_utf8)
                 .expect("UTF-8")
-                .contains("Hello Hermes")
+                .contains("Hello makosh")
         );
     }
 

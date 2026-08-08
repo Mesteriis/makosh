@@ -1,6 +1,6 @@
 # Snapshot Testing
 
-Hermes uses `insta` for stable output snapshots.
+Макошь uses `insta` for stable output snapshots.
 
 Current baseline target:
 

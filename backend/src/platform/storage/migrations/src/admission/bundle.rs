@@ -1,6 +1,6 @@
 //! Connects canonical bundle validation to per-step PostgreSQL AST admission.
 
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     v1::StorageBundleV1,
     validation::{StorageBundleValidationErrorV1, validate_storage_bundle},
 };

@@ -1,12 +1,12 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::{TimeZone, Utc};
-use hermes_events_api::{EventEnvelope, NewEventEnvelope, StoredEventEnvelope};
-use hermes_events_postgres::cursors::ProjectionCursorStore;
-use hermes_events_postgres::store::EventStore;
-use hermes_hub_backend::engines::timeline::{TimelineEngine, models::TimelineEventDraft};
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_events_api::{EventEnvelope, NewEventEnvelope, StoredEventEnvelope};
+use makosh_events_postgres::cursors::ProjectionCursorStore;
+use makosh_events_postgres::store::EventStore;
+use makosh_hub_backend::engines::timeline::{TimelineEngine, models::TimelineEventDraft};
+use makosh_hub_backend::platform::storage::database::Database;
 use serde_json::json;
 
 #[test]
@@ -61,7 +61,7 @@ fn timeline_engine_builds_period_summary_for_source_backed_events() {
         },
         TimelineEventDraft {
             entity_kind: "project",
-            entity_id: "project:hermes",
+            entity_id: "project:makosh",
             event_type: "decision",
             title: "Decision accepted",
             occurred_at: Utc.with_ymd_and_hms(2026, 6, 5, 9, 0, 0).unwrap(),
@@ -126,7 +126,7 @@ fn timeline_engine_builds_recency_signal_for_source_backed_entity_events() {
         },
         TimelineEventDraft {
             entity_kind: "project",
-            entity_id: "project:hermes",
+            entity_id: "project:makosh",
             event_type: "status_change",
             title: "Project update",
             occurred_at: Utc.with_ymd_and_hms(2026, 6, 9, 12, 0, 0).unwrap(),
@@ -174,7 +174,7 @@ fn timeline_engine_detects_source_backed_entity_timeline_gaps() {
         },
         TimelineEventDraft {
             entity_kind: "project",
-            entity_id: "project:hermes",
+            entity_id: "project:makosh",
             event_type: "status_change",
             title: "Project update",
             occurred_at: Utc.with_ymd_and_hms(2026, 6, 6, 12, 0, 0).unwrap(),
@@ -280,7 +280,7 @@ fn timeline_engine_builds_source_backed_change_diff_for_entity_snapshots() {
         },
         TimelineEventDraft {
             entity_kind: "project",
-            entity_id: "project:hermes",
+            entity_id: "project:makosh",
             event_type: "status_change",
             title: "Project update",
             occurred_at: Utc.with_ymd_and_hms(2026, 6, 7, 12, 0, 0).unwrap(),
@@ -325,7 +325,7 @@ fn timeline_engine_builds_cross_domain_timeline_for_source_backed_events() {
     let events = vec![
         TimelineEventDraft {
             entity_kind: "project",
-            entity_id: "project:hermes",
+            entity_id: "project:makosh",
             event_type: "decision",
             title: "Decision accepted",
             occurred_at: decision_at,
@@ -360,7 +360,7 @@ fn timeline_engine_builds_cross_domain_timeline_for_source_backed_events() {
     assert_eq!(timeline[0].occurred_at, message_at);
     assert_eq!(timeline[0].source, "communication_messages:message-1");
     assert_eq!(timeline[1].entity_kind, "project");
-    assert_eq!(timeline[1].entity_id, "project:hermes");
+    assert_eq!(timeline[1].entity_id, "project:makosh");
     assert_eq!(timeline[1].event_type, "decision");
     assert_eq!(timeline[1].title, "Decision accepted");
     assert_eq!(timeline[1].occurred_at, decision_at);
@@ -385,7 +385,7 @@ fn timeline_engine_replays_canonical_event_log_batch_into_cross_domain_timeline(
                 recorded_at,
                 source: json!({"kind": "decisions", "source_id": "decision-1"}),
                 actor: None,
-                subject: json!({"kind": "project", "entity_id": "project:hermes"}),
+                subject: json!({"kind": "project", "entity_id": "project:makosh"}),
                 payload: json!({"title": "Decision accepted"}),
                 provenance: json!({"confidence": 1.0}),
                 causation_id: None,
@@ -440,7 +440,7 @@ fn timeline_engine_replays_canonical_event_log_batch_into_cross_domain_timeline(
     assert_eq!(replay.entries[0].occurred_at, message_at);
     assert_eq!(replay.entries[0].source, "communication_messages:message-1");
     assert_eq!(replay.entries[1].entity_kind, "project");
-    assert_eq!(replay.entries[1].entity_id, "project:hermes");
+    assert_eq!(replay.entries[1].entity_id, "project:makosh");
     assert_eq!(replay.entries[1].event_type, "decision_recorded");
     assert_eq!(replay.entries[1].title, "Decision accepted");
     assert_eq!(replay.entries[1].occurred_at, decision_at);

@@ -125,7 +125,7 @@ export function rewriteRemoteImageSources(
 		if (!replacement) {
 			return tag.replace(
 				/\bsrc="[^"]*"/i,
-				`src="${BLOCKED_REMOTE_IMAGE_SRC}" data-hermes-remote-src="${escapeAttribute(decoded)}" aria-label="Remote image blocked"`
+				`src="${BLOCKED_REMOTE_IMAGE_SRC}" data-makosh-remote-src="${escapeAttribute(decoded)}" aria-label="Remote image blocked"`
 			)
 		}
 

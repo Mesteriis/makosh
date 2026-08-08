@@ -11,8 +11,8 @@ use crate::platform::events::bus::{InMemoryEventBus, telegram_event_types};
 use crate::workflows::review_inbox::{
     refresh_message_decisions_into_review, refresh_message_task_candidates_into_review,
 };
-use hermes_events_api::NewEventEnvelope;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_api::NewEventEnvelope;
+use makosh_events_postgres::store::EventStore;
 use serde_json::json;
 use sqlx::postgres::PgPool;
 

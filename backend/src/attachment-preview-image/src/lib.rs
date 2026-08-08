@@ -2,18 +2,18 @@
 
 use std::io::Cursor;
 
-use hermes_attachment_preview_api::{
+use image::{GenericImageView, ImageFormat, ImageReader};
+use makosh_attachment_preview_api::{
     ATTACHMENT_PREVIEW_MAX_IMAGE_BYTES_V1,
     wire::{AttachmentPreviewContentTypeV1, AttachmentPreviewKindV1},
 };
-use hermes_attachment_preview_renderer_contract::{
+use makosh_attachment_preview_renderer_contract::{
     ATTACHMENT_PREVIEW_MAX_IMAGE_PIXELS_V1, AttachmentPreviewRenderRequestV1,
     AttachmentPreviewRenderResultV1, AttachmentPreviewRendererErrorV1, AttachmentPreviewRendererV1,
     AttachmentPreviewSourceFormatV1,
 };
-use image::{GenericImageView, ImageFormat, ImageReader};
 
-pub const PACKAGE: &str = "hermes-attachment-preview-image";
+pub const PACKAGE: &str = "makosh-attachment-preview-image";
 const MAX_IMAGE_DIMENSION_V1: u32 = 16_384;
 
 #[derive(Clone, Copy, Debug, Default)]

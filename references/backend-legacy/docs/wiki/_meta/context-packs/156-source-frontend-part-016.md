@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/platform/i18n/index.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/i18n/index.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/i18n/index.ts`
 - Size bytes / Размер в байтах: `1634`
 - Included characters / Включено символов: `1634`
 - Truncated / Обрезано: `no`
@@ -127,7 +127,7 @@ export function useI18n(): {
 
 ### `frontend/src/platform/i18n/types.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/i18n/types.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/i18n/types.ts`
 - Size bytes / Размер в байтах: `183`
 - Included characters / Включено символов: `183`
 - Truncated / Обрезано: `no`
@@ -142,7 +142,7 @@ export type Dictionary = Record<string, string>
 
 ### `frontend/src/platform/settings/applicationSettingsClient.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/settings/applicationSettingsClient.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/settings/applicationSettingsClient.ts`
 - Size bytes / Размер в байтах: `1417`
 - Included characters / Включено символов: `1417`
 - Truncated / Обрезано: `no`
@@ -199,7 +199,7 @@ export async function saveApplicationSetting(
 
 ### `frontend/src/platform/sse/SseClient.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/sse/SseClient.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/sse/SseClient.test.ts`
 - Size bytes / Размер в байтах: `6026`
 - Included characters / Включено символов: `6026`
 - Truncated / Обрезано: `no`
@@ -290,7 +290,7 @@ describe('SseClient', () => {
     expect(url).toBe('http://127.0.0.1:8080/api/events/stream?after_position=41')
     expect(init.headers).toMatchObject({
       Accept: 'text/event-stream',
-      'X-Hermes-Secret': 'test-secret',
+      'X-Макошь-Secret': 'test-secret',
       'Last-Event-ID': '41'
     })
   })
@@ -392,7 +392,7 @@ describe('SseClient', () => {
     )
     expect(fetchMock.mock.calls[1][1].headers).toMatchObject({
       Accept: 'application/json',
-      'X-Hermes-Secret': 'test-secret',
+      'X-Макошь-Secret': 'test-secret',
       'Last-Event-ID': '41'
     })
     expect(statuses).toContain('long_poll:fallback')
@@ -403,7 +403,7 @@ describe('SseClient', () => {
 
 ### `frontend/src/platform/sse/SseClient.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/sse/SseClient.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/sse/SseClient.ts`
 - Size bytes / Размер в байтах: `10345`
 - Included characters / Включено символов: `10345`
 - Truncated / Обрезано: `no`
@@ -461,7 +461,7 @@ type LongPollResponse = {
 }
 
 /**
- * Fetch-based SSE client. Browser EventSource cannot send X-Hermes-Secret,
+ * Fetch-based SSE client. Browser EventSource cannot send X-Макошь-Secret,
  * so protected local streams must be consumed through a readable fetch body.
  */
 export class SseClient {
@@ -491,7 +491,7 @@ export class SseClient {
 		this.longPollUrl = options.longPollUrl
 		this.secret = options.secret.trim()
 		if (!this.secret) {
-			throw new Error('X-Hermes-Secret cannot be empty')
+			throw new Error('X-Макошь-Secret cannot be empty')
 		}
 		this.lastEventId = options.lastEventId?.trim() ?? ''
 		this.onMessage = options.onMessage
@@ -631,7 +631,7 @@ export class SseClient {
 	private sseHeaders(): Record<string, string> {
 		const headers: Record<string, string> = {
 			Accept: 'text/event-stream',
-			'X-Hermes-Secret': this.secret
+			'X-Макошь-Secret': this.secret
 		}
 		if (this.lastEventId) {
 			headers['Last-Event-ID'] = this.lastEventId
@@ -757,7 +757,7 @@ export class SseClient {
 	private longPollHeaders(): Record<string, string> {
 		const headers: Record<string, string> = {
 			Accept: 'application/json',
-			'X-Hermes-Secret': this.secret
+			'X-Макошь-Secret': this.secret
 		}
 		if (this.lastEventId) {
 			headers['Last-Event-ID'] = this.lastEventId
@@ -796,7 +796,7 @@ function statusErrorMessage(error: unknown): string {
 
 ### `frontend/src/platform/sse/WebSocketClient.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/sse/WebSocketClient.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/sse/WebSocketClient.test.ts`
 - Size bytes / Размер в байтах: `1735`
 - Included characters / Включено символов: `1735`
 - Truncated / Обрезано: `no`
@@ -872,7 +872,7 @@ describe('WebSocketClient', () => {
 
 ### `frontend/src/platform/sse/WebSocketClient.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/sse/WebSocketClient.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/sse/WebSocketClient.ts`
 - Size bytes / Размер в байтах: `7148`
 - Included characters / Включено символов: `7148`
 - Truncated / Обрезано: `no`
@@ -948,7 +948,7 @@ export class WebSocketClient {
 		this.url = options.url
 		this.secret = options.secret.trim()
 		if (!this.secret) {
-			throw new Error('X-Hermes-Secret cannot be empty')
+			throw new Error('X-Макошь-Secret cannot be empty')
 		}
 		this.lastEventId = options.lastEventId?.trim() ?? ''
 		this.onMessage = options.onMessage
@@ -1116,7 +1116,7 @@ export class WebSocketClient {
 		if (this.lastEventId) {
 			parsed.searchParams.set('after_position', this.lastEventId)
 		}
-		parsed.searchParams.set('hermes_secret', this.secret)
+		parsed.searchParams.set('makosh_secret', this.secret)
 		return parsed.toString()
 	}
 
@@ -1164,7 +1164,7 @@ function statusErrorMessage(error: unknown): string {
 
 ### `frontend/src/platform/sse/index.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/sse/index.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/sse/index.ts`
 - Size bytes / Размер в байтах: `432`
 - Included characters / Включено символов: `432`
 - Truncated / Обрезано: `no`
@@ -1193,7 +1193,7 @@ export type {
 
 ### `frontend/src/platform/theme/persistence.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/theme/persistence.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/theme/persistence.test.ts`
 - Size bytes / Размер в байтах: `1925`
 - Included characters / Включено символов: `1925`
 - Truncated / Обрезано: `no`
@@ -1243,14 +1243,14 @@ describe('theme persistence', () => {
 
 		expect(result.source).toBe('local_storage')
 		expect(result.errorMessage).toContain('saved locally only')
-		expect(JSON.parse(storage.get('hermes-theme-settings') ?? '{}')).toMatchObject({
+		expect(JSON.parse(storage.get('makosh-theme-settings') ?? '{}')).toMatchObject({
 			accentColor: 'violet'
 		})
 	})
 
 	it('reports backend load fallback while keeping locally stored settings usable', async () => {
 		storage.set(
-			'hermes-theme-settings',
+			'makosh-theme-settings',
 			JSON.stringify({
 				...defaultThemeSettings(),
 				accentColor: 'cyan'
@@ -1269,7 +1269,7 @@ describe('theme persistence', () => {
 
 ### `frontend/src/platform/theme/persistence.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/theme/persistence.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/theme/persistence.ts`
 - Size bytes / Размер в байтах: `2360`
 - Included characters / Включено символов: `2360`
 - Truncated / Обрезано: `no`
@@ -1282,7 +1282,7 @@ import {
 } from '../settings/applicationSettingsClient'
 import { defaultThemeSettings, parseThemeSettings, type ThemeSettings } from './settings'
 
-const LOCAL_STORAGE_KEY = 'hermes-theme-settings'
+const LOCAL_STORAGE_KEY = 'makosh-theme-settings'
 
 export type ThemePersistenceSource = 'application_settings' | 'local_storage'
 
@@ -1363,7 +1363,7 @@ function saveLocalThemeSettings(settings: ThemeSettings): void {
 
 ### `frontend/src/platform/theme/settings.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/theme/settings.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/theme/settings.test.ts`
 - Size bytes / Размер в байтах: `1664`
 - Included characters / Включено символов: `1664`
 - Truncated / Обрезано: `no`
@@ -1432,7 +1432,7 @@ describe('theme settings', () => {
 
 ### `frontend/src/platform/theme/settings.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/theme/settings.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/theme/settings.ts`
 - Size bytes / Размер в байтах: `3509`
 - Included characters / Включено символов: `3509`
 - Truncated / Обрезано: `no`
@@ -1549,13 +1549,13 @@ function pick<const T extends readonly (string | number)[]>(
 
 ### `frontend/src/platform/theme/tokens.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/theme/tokens.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/theme/tokens.ts`
 - Size bytes / Размер в байтах: `998`
 - Included characters / Включено символов: `998`
 - Truncated / Обрезано: `no`
 
 ```typescript
-/** Typed Hermes design token constants for use outside Tailwind classes */
+/** Typed Макошь design token constants for use outside Tailwind classes */
 export const theme = {
 	font: {
 		sans: [
@@ -1616,7 +1616,7 @@ export const theme = {
 
 ### `frontend/src/shared/communications/queries/realtimePatchShared.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/communications/queries/realtimePatchShared.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/communications/queries/realtimePatchShared.ts`
 - Size bytes / Размер в байтах: `9578`
 - Included characters / Включено символов: `9578`
 - Truncated / Обрезано: `no`
@@ -1993,7 +1993,7 @@ export function savedSearchValue(value: unknown): CommunicationSavedSearch | nul
 
 ### `frontend/src/shared/communications/types/telegram.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/communications/types/telegram.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/communications/types/telegram.ts`
 - Size bytes / Размер в байтах: `17333`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2477,7 +2477,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/shared/communications/types/telegramChatActions.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/communications/types/telegramChatActions.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/communications/types/telegramChatActions.ts`
 - Size bytes / Размер в байтах: `838`
 - Included characters / Включено символов: `838`
 - Truncated / Обрезано: `no`
@@ -2523,7 +2523,7 @@ export type TelegramChatFolderReassignResponse = {
 
 ### `frontend/src/shared/communications/types/telegramLifecycleRequests.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/communications/types/telegramLifecycleRequests.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/communications/types/telegramLifecycleRequests.ts`
 - Size bytes / Размер в байтах: `1462`
 - Included characters / Включено символов: `1462`
 - Truncated / Обрезано: `no`
@@ -2596,7 +2596,7 @@ export type TelegramPinRequest = {
 
 ### `frontend/src/shared/communications/types/telegramMembers.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/communications/types/telegramMembers.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/communications/types/telegramMembers.ts`
 - Size bytes / Размер в байтах: `652`
 - Included characters / Включено символов: `652`
 - Truncated / Обрезано: `no`
@@ -2632,7 +2632,7 @@ export type TelegramChatMembersSyncResponse = {
 
 ### `frontend/src/shared/communications/types/telegramRawEvidence.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/communications/types/telegramRawEvidence.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/communications/types/telegramRawEvidence.ts`
 - Size bytes / Размер в байтах: `415`
 - Included characters / Включено символов: `415`
 - Truncated / Обрезано: `no`
@@ -2658,7 +2658,7 @@ export type TelegramRawMessageResponse = {
 
 ### `frontend/src/shared/communications/types/telegramTopics.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/communications/types/telegramTopics.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/communications/types/telegramTopics.ts`
 - Size bytes / Размер в байтах: `1061`
 - Included characters / Включено символов: `1059`
 - Truncated / Обрезано: `no`
@@ -2716,7 +2716,7 @@ export type TelegramTopicLifecycleResponse = {
 
 ### `frontend/src/shared/communications/types/whatsapp.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/communications/types/whatsapp.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/communications/types/whatsapp.ts`
 - Size bytes / Размер в байтах: `13768`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3210,7 +3210,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/shared/composables/index.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/composables/index.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/composables/index.ts`
 - Size bytes / Размер в байтах: `166`
 - Included characters / Включено символов: `166`
 - Truncated / Обрезано: `no`
@@ -3223,7 +3223,7 @@ export { useResizeObserver } from './useResizeObserver'
 
 ### `frontend/src/shared/composables/useClickOutside.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/composables/useClickOutside.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/composables/useClickOutside.ts`
 - Size bytes / Размер в байтах: `664`
 - Included characters / Включено символов: `664`
 - Truncated / Обрезано: `no`
@@ -3259,7 +3259,7 @@ export function useClickOutside(
 
 ### `frontend/src/shared/composables/useKeyboard.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/composables/useKeyboard.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/composables/useKeyboard.ts`
 - Size bytes / Размер в байтах: `936`
 - Included characters / Включено символов: `936`
 - Truncated / Обрезано: `no`
@@ -3311,7 +3311,7 @@ export function useEscapeKey(callback: () => void): void {
 
 ### `frontend/src/shared/composables/useResizeObserver.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/composables/useResizeObserver.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/composables/useResizeObserver.ts`
 - Size bytes / Размер в байтах: `724`
 - Included characters / Включено символов: `724`
 - Truncated / Обрезано: `no`

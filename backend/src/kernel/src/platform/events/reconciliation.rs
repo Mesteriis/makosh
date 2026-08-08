@@ -1,7 +1,7 @@
 //! Kernel relay for one owner-authorized Event Hub reconciliation.
 
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     v1::{
         DurableEnvelopeKindV1, EventHubConsumerTopologyV1, EventHubStreamTopologyV1,
         EventsAuthorityRuntimeControlRequestV1, EventsAuthorityRuntimeControlResponseV1,
@@ -33,7 +33,7 @@ pub(crate) fn apply_recovery_snapshot(
     bytes: &[u8],
     relay: &dyn ManagedRuntimeRelay,
 ) -> Result<(u64, u32, u32), String> {
-    use hermes_runtime_protocol::validation::events_authority::validate_events_authority_runtime_control_request;
+    use makosh_runtime_protocol::validation::events_authority::validate_events_authority_runtime_control_request;
 
     let request = EventsAuthorityRuntimeControlRequestV1::decode(bytes)
         .map_err(|_| "Event Hub recovery topology is invalid".to_owned())?;
@@ -60,7 +60,7 @@ pub(crate) fn validate_recovery_snapshot(
     store: &SqliteControlStore,
     bytes: &[u8],
 ) -> Result<(), String> {
-    use hermes_runtime_protocol::validation::events_authority::validate_events_authority_runtime_control_request;
+    use makosh_runtime_protocol::validation::events_authority::validate_events_authority_runtime_control_request;
 
     let snapshot = EventsAuthorityRuntimeControlRequestV1::decode(bytes)
         .map_err(|_| "Event Hub recovery topology is invalid".to_owned())?;

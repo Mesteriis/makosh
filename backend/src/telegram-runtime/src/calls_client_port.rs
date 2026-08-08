@@ -1,5 +1,5 @@
-use hermes_runtime_protocol::v1::{ContractReferenceV1, ModuleClientRequestV1};
-use hermes_telegram_calls_api::{
+use makosh_runtime_protocol::v1::{ContractReferenceV1, ModuleClientRequestV1};
+use makosh_telegram_calls_api::{
     TELEGRAM_CALLS_CONTRACT_MAJOR, TELEGRAM_CALLS_CONTRACT_REVISION,
     TELEGRAM_CALLS_DESCRIPTOR_SET_V1, TELEGRAM_CALLS_MODULE_ID, TELEGRAM_CALLS_OWNER_ID,
     TelegramCallsContractV1,
@@ -13,13 +13,13 @@ use hermes_telegram_calls_api::{
         calls_query_request_v1, calls_query_response_v1,
     },
 };
-use hermes_telegram_calls_core::{
+use makosh_telegram_calls_core::{
     TelegramCallCommand, TelegramCallDirection, TelegramCallDiscardReason,
     TelegramCallFailureCategory, TelegramCallMediaState, TelegramCallOperation,
     TelegramCallOperationKind, TelegramCallOperationState, TelegramCallSession,
     TelegramProviderCallState,
 };
-use hermes_telegram_calls_persistence::{
+use makosh_telegram_calls_persistence::{
     TelegramCallRealtimeEvent, TelegramCallRealtimePayload, TelegramCallsPersistence,
     TelegramCallsPersistenceError,
 };
@@ -627,7 +627,7 @@ fn generated_call_session_id() -> Result<String, ()> {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::v1::{ContractReferenceV1, ModuleClientRequestV1};
+    use makosh_runtime_protocol::v1::{ContractReferenceV1, ModuleClientRequestV1};
 
     use super::*;
 
@@ -658,7 +658,7 @@ mod tests {
             TelegramCallsContractV1::Query,
             CallsQueryRequestV1 {
                 request: Some(calls_query_request_v1::Request::ListCalls(
-                    hermes_telegram_calls_api::wire::ListCallsRequestV1 {
+                    makosh_telegram_calls_api::wire::ListCallsRequestV1 {
                         account_id: "account-1".to_owned(),
                         after_call_session_id: String::new(),
                         limit: 10,

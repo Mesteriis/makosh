@@ -1,0 +1,404 @@
+syntax = "proto3";
+
+package makosh.telegram.v1;
+
+message TelegramAuthorizationRequestV1 {
+  oneof request {
+    AuthorizationStatusRequest authorization_status = 1;
+    SubmitAuthorizationPasswordRequest submit_password = 2;
+  }
+}
+
+message AuthorizationStatusRequest {}
+message SubmitAuthorizationPasswordRequest { string password = 1; }
+
+message TelegramAuthorizationResponseV1 {
+  oneof response {
+    AuthorizationStatusResponse authorization_status = 1;
+    AuthorizationPasswordAcceptedResponse password_accepted = 2;
+  }
+}
+
+message AuthorizationStatusResponse {
+  string state = 1;
+  optional string qr_link = 2;
+  optional string password_hint = 3;
+}
+
+message AuthorizationPasswordAcceptedResponse {}
+
+message TelegramLifecycleRequestV1 {
+  oneof request {
+    ProvisionAccountRequest provision = 1;
+    RetryCommandRequest retry = 2;
+    ListAccountsRequest list_accounts = 3;
+    AccountIdRequest get_account = 4;
+    AccountIdRequest retire_account = 5;
+    ReplayRequest replay = 8;
+  }
+  reserved 6, 7, 9;
+  reserved "start_account", "stop_account", "restart_account";
+}
+
+message ProvisionAccountRequest {
+  string account_id = 1;
+  reserved 2;
+  reserved "provider_kind";
+  string display_name = 3;
+  string external_account_id = 4;
+  repeated CredentialBinding credential = 5;
+  bool qr_authorized = 6;
+}
+message CredentialBinding {
+  string purpose = 1;
+  reserved 2;
+  uint64 revision = 3;
+}
+message RetryCommandRequest {
+  string operation_id = 1;
+  uint64 now_unix_seconds = 2;
+  uint64 next_attempt_at_unix_seconds = 3;
+}
+message ListAccountsRequest {}
+message AccountIdRequest { string account_id = 1; }
+message ReplayRequest {
+  string account_id = 1;
+  uint64 after_sequence = 2;
+  uint32 limit = 3;
+}
+
+message TelegramRealtimeReplayRequestV1 {
+  string account_id = 1;
+  uint64 after_sequence = 2;
+  uint32 limit = 3;
+}
+
+message TelegramRealtimeReplayResponseV1 {
+  repeated TelegramRealtimeFrameProjection frame = 1;
+  uint64 earliest_available_sequence = 2;
+  uint64 latest_sequence = 3;
+  uint64 next_after_sequence = 4;
+  bool reset_required = 5;
+  uint32 contract_major = 6;
+}
+
+message TelegramReconfigurationRequestV1 {
+  oneof request {
+    BeginTelegramReconfigurationRequest begin = 1;
+    TelegramReconfigurationStatusRequest status = 2;
+  }
+}
+
+message BeginTelegramReconfigurationRequest {
+  string reconfiguration_id = 1;
+  string account_id = 2;
+  uint64 expected_runtime_epoch = 3;
+}
+
+message TelegramReconfigurationStatusRequest {
+  string reconfiguration_id = 1;
+}
+
+message TelegramReconfigurationResponseV1 {
+  string reconfiguration_id = 1;
+  string account_id = 2;
+  uint64 expected_runtime_epoch = 3;
+  uint64 target_runtime_epoch = 4;
+  string state = 5;
+  optional string sanitized_reason_code = 6;
+  uint32 contract_major = 7;
+}
+
+message TelegramLifecycleResponseV1 {
+  oneof response {
+    TelegramAccountResponse account = 1;
+    TelegramAccountList accounts = 2;
+    AcceptedResponse accepted = 3;
+    TelegramOperationResponse operation = 4;
+  }
+}
+message TelegramAccountResponse {
+  string account_id = 1;
+  reserved 2;
+  reserved "provider_kind";
+  string display_name = 3;
+  string external_account_id = 4;
+  string state = 5;
+  string runtime_state = 6;
+  uint64 runtime_epoch = 7;
+}
+message TelegramAccountList { repeated TelegramAccountResponse account = 1; }
+message AcceptedResponse { string operation_id = 1; }
+message TelegramOperationResponse {
+  string operation_id = 1;
+  string account_id = 2;
+  string command_kind = 3;
+  string idempotency_key = 4;
+  string state = 5;
+  uint32 retry_count = 6;
+  uint32 max_retries = 7;
+  uint64 lease_epoch = 8;
+  string reconciliation = 9;
+  optional string last_error = 10;
+  optional uint64 next_attempt_at_unix_seconds = 11;
+  optional uint64 locked_at_unix_seconds = 12;
+  optional string locked_by = 13;
+  optional uint64 provider_observed_at_unix_seconds = 14;
+  optional uint64 reconciled_at_unix_seconds = 15;
+}
+
+message TelegramProviderCommandV1 {
+  oneof command {
+    SendTextCommand send_text = 1;
+    SendMediaCommand send_media = 2;
+    DownloadFileCommand download_file = 3;
+    ReplyCommand reply = 4;
+    ForwardCommand forward = 5;
+    EditCommand edit = 6;
+    DeleteCommand delete = 7;
+    RestoreVisibilityCommand restore_visibility = 8;
+    ReactionCommand reaction = 9;
+    PinCommand pin = 10;
+    MarkUnreadCommand mark_unread = 11;
+    ArchiveCommand archive = 12;
+    MuteCommand mute = 13;
+    JoinCommand join = 14;
+    LeaveCommand leave = 15;
+    FolderCommand add_chat_to_folder = 16;
+    FolderCommand remove_chat_from_folder = 17;
+    SearchMessagesCommand search_messages = 18;
+    ListParticipantsCommand list_participants = 19;
+    ListTopicsCommand list_topics = 20;
+    CreateTopicCommand create_topic = 21;
+    SetTopicClosedCommand set_topic_closed = 22;
+    ReassignChatFoldersCommand reassign_chat_folders = 23;
+  }
+}
+message SendTextCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; string text = 4; }
+message TelegramBlobIntentV1 { string blob_ref = 1; bytes reference_id = 2; uint64 declared_size = 3; uint32 backup_class = 4; }
+message SendMediaCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; string media_kind = 4; TelegramBlobIntentV1 blob = 5; optional string caption = 6; optional string filename = 7; }
+message DownloadFileCommand { string operation_id = 1; string account_id = 2; string provider_file_id = 3; int32 priority = 4; }
+message ReplyCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; string reply_to_provider_message_id = 4; string text = 5; }
+message ForwardCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; string from_provider_chat_id = 4; string from_provider_message_id = 5; }
+message EditCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; string provider_message_id = 4; string text = 5; }
+message DeleteCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; string provider_message_id = 4; bool revoke = 5; }
+message RestoreVisibilityCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; string provider_message_id = 4; string reason = 5; }
+message ReactionCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; string provider_message_id = 4; string emoji = 5; bool active = 6; }
+message PinCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; string provider_message_id = 4; bool active = 5; }
+message MarkUnreadCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; bool unread = 4; optional string read_through_provider_message_id = 5; }
+message ArchiveCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; bool archived = 4; }
+message MuteCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; bool muted = 4; }
+message JoinCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; }
+message LeaveCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; }
+message FolderCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; int64 provider_folder_id = 4; }
+message ReassignChatFoldersCommand {
+  string operation_id = 1;
+  string account_id = 2;
+  string provider_chat_id = 3;
+  repeated int64 target_provider_folder_ids = 4;
+}
+message SearchMessagesCommand { string operation_id = 1; string account_id = 2; optional string provider_chat_id = 3; string query = 4; uint32 limit = 5; }
+message ListParticipantsCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; string filter = 4; uint32 offset = 5; uint32 limit = 6; }
+message ListTopicsCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; uint32 limit = 4; }
+message CreateTopicCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; string title = 4; }
+message SetTopicClosedCommand { string operation_id = 1; string account_id = 2; string provider_chat_id = 3; string provider_topic_id = 4; bool is_closed = 5; }
+
+message TelegramProviderQueryV1 {
+  oneof query {
+    AccountLimitQuery load_chats = 1;
+    ChatIdQuery chat = 2;
+    ChatIdQuery chat_avatar = 3;
+    HistoryQuery load_history = 4;
+    AccountLimitQuery cached_chats = 5;
+    SearchChatsQuery search_chats = 6;
+    ChatLimitQuery cached_messages = 7;
+    MessageIdQuery message_by_id = 8;
+    RecentMessagesQuery recent_messages = 9;
+    MessageIdsQuery messages_by_ids = 10;
+    MessageIdQuery message_versions = 11;
+    MessageIdQuery message_tombstones = 12;
+    MessageIdQuery message_mutations = 13;
+    MessageIdQuery message_references = 14;
+    MessageChainQuery reply_chain = 15;
+    MessageChainQuery forward_chain = 16;
+    AttachmentIdQuery attachment = 17;
+    MessageTargetQuery attachment_for_message = 18;
+    FileIdQuery file = 19;
+    ChatIdQuery chat_state = 20;
+    ChatIdQuery chat_positions = 21;
+    ChatIdQuery chat_operational_state = 22;
+    ChatLimitQuery pinned_messages = 23;
+    SearchMessagesQuery search_messages = 24;
+    ListParticipantsQuery list_participants = 25;
+    BasicGroupParticipantsQuery basic_group_participants = 26;
+    ChatLimitQuery list_topics = 27;
+    TopicQuery topic = 28;
+    TopicMessageIdsQuery topic_message_ids = 29;
+    SearchTopicsQuery search_topics = 30;
+    MessageTargetQuery reactions = 31;
+    MessageTargetQuery reaction_summary = 32;
+    FolderIdQuery chat_folder = 33;
+    FolderIdsQuery chat_folders = 34;
+    AccountLimitQuery operations = 35;
+    CommandsQuery commands = 36;
+  }
+}
+message AccountLimitQuery { string account_id = 1; uint32 limit = 2; }
+message ChatIdQuery { string account_id = 1; string provider_chat_id = 2; }
+message HistoryQuery { string account_id = 1; string provider_chat_id = 2; optional int64 from_message_id = 3; string mode = 4; uint32 limit = 5; }
+message SearchChatsQuery { string account_id = 1; string query = 2; uint32 limit = 3; }
+message ChatLimitQuery { string account_id = 1; string provider_chat_id = 2; uint32 limit = 3; }
+message MessageIdQuery { string account_id = 1; string message_id = 2; }
+message RecentMessagesQuery { string account_id = 1; optional string provider_chat_id = 2; uint32 limit = 3; }
+message MessageIdsQuery { string account_id = 1; repeated string message_id = 2; }
+message MessageChainQuery { string account_id = 1; string provider_chat_id = 2; string provider_message_id = 3; uint32 limit = 4; }
+message AttachmentIdQuery { string account_id = 1; string attachment_id = 2; }
+message MessageTargetQuery { string account_id = 1; string provider_chat_id = 2; string provider_message_id = 3; }
+message FileIdQuery { string account_id = 1; string provider_file_id = 2; }
+message SearchMessagesQuery { string account_id = 1; optional string provider_chat_id = 2; string query = 3; uint32 limit = 4; }
+message ListParticipantsQuery { string account_id = 1; string provider_chat_id = 2; string filter = 3; uint32 offset = 4; uint32 limit = 5; }
+message BasicGroupParticipantsQuery { string account_id = 1; string provider_chat_id = 2; int64 basic_group_id = 3; }
+message TopicQuery { string account_id = 1; string provider_chat_id = 2; string provider_topic_id = 3; }
+message TopicMessageIdsQuery { string account_id = 1; string provider_chat_id = 2; string provider_topic_id = 3; uint32 limit = 4; }
+message SearchTopicsQuery { string account_id = 1; string provider_chat_id = 2; string query = 3; uint32 limit = 4; }
+message FolderIdQuery { string account_id = 1; int64 provider_folder_id = 2; }
+message FolderIdsQuery { string account_id = 1; repeated int64 provider_folder_id = 2; }
+message CommandsQuery { string account_id = 1; optional string provider_chat_id = 2; optional string provider_message_id = 3; repeated string command_kind = 4; uint32 limit = 5; }
+
+message TelegramProviderQueryResponseV1 {
+  oneof response {
+    ChatListResponse chats = 1;
+    ChatResponse chat = 2;
+    ChatAvatarResponse chat_avatar = 3;
+    MessageObservationListResponse history = 4;
+    HistoryPageResponse history_page = 5;
+    ChatStateResponse chat_state = 6;
+    ChatPositionsResponse chat_positions = 7;
+    ChatOperationalStateResponse chat_operational_state = 8;
+    TopicMessageIdsResponse topic_message_ids = 9;
+    ReactionListResponse reactions = 10;
+    ReactionSummaryResponse reaction_summary = 11;
+    ChatFolderListResponse chat_folders = 12;
+    MessageProjectionListResponse cached_messages = 13;
+    MessageVersionListResponse message_versions = 14;
+    MessageTombstoneListResponse message_tombstones = 15;
+    MessageMutationListResponse message_mutations = 16;
+    MessageReferencesResponse message_references = 17;
+    AttachmentResponse attachment = 18;
+    FileResponse file = 19;
+    MessageProjectionListResponse reply_chain = 20;
+    MessageProjectionListResponse forward_chain = 21;
+    ParticipantPageResponse participants = 22;
+    TopicListResponse topics = 23;
+    TopicResponse topic = 24;
+    OperationListResponse operations = 25;
+    CommandRecordListResponse commands = 26;
+    RealtimeResponse realtime = 27;
+  }
+}
+message TelegramChatProjection { string account_id = 1; string provider_chat_id = 2; string kind = 3; string title = 4; optional string username = 5; }
+message ChatListResponse { repeated TelegramChatProjection chat = 1; }
+message ChatResponse { optional TelegramChatProjection chat = 1; }
+message TelegramChatAvatarProjection { string account_id = 1; string provider_chat_id = 2; optional string provider_file_id = 3; optional string provider_unique_id = 4; }
+message ChatAvatarResponse { optional TelegramChatAvatarProjection avatar = 1; }
+message TelegramMessageMediaProjection { string kind = 1; optional string provider_file_id = 2; optional string caption = 3; optional string filename = 4; optional string content_type = 5; }
+message TelegramReplyReferenceProjection { string provider_chat_id = 1; string provider_message_id = 2; }
+message TelegramForwardOriginProjection { optional string provider_chat_id = 1; optional string provider_message_id = 2; optional string provider_sender_id = 3; optional string sender_name = 4; optional int64 observed_at_unix_seconds = 5; }
+message TelegramMessageReferencesProjection { optional TelegramReplyReferenceProjection reply_to = 1; optional TelegramForwardOriginProjection forward_origin = 2; }
+message TelegramMessageObservationProjection { string account_id = 1; string provider_chat_id = 2; string provider_message_id = 3; optional string provider_topic_id = 4; string sender_id = 5; optional string sender_display_name = 6; optional string text = 7; optional TelegramMessageMediaProjection media = 8; TelegramMessageReferencesProjection references = 9; int64 observed_at_unix_seconds = 10; bool is_outgoing = 11; }
+message MessageObservationListResponse { repeated TelegramMessageObservationProjection item = 1; }
+message TelegramHistoryPageProjection { repeated TelegramMessageObservationProjection item = 1; optional int64 next_from_message_id = 2; bool has_more = 3; }
+message HistoryPageResponse { TelegramHistoryPageProjection page = 1; }
+message TelegramMessageProjection { string message_id = 1; string account_id = 2; string provider_chat_id = 3; string provider_message_id = 4; optional string provider_topic_id = 5; string sender_id = 6; optional string sender_display_name = 7; optional string text = 8; optional TelegramMessageMediaProjection media = 9; TelegramMessageReferencesProjection references = 10; int64 observed_at_unix_seconds = 11; string delivery_state = 12; }
+message MessageProjectionListResponse { repeated TelegramMessageProjection item = 1; }
+message TelegramMessageVersionProjection { string version_id = 1; string message_id = 2; string account_id = 3; string provider_chat_id = 4; string provider_message_id = 5; uint32 version_number = 6; optional string body_text = 7; int64 observed_at_unix_seconds = 8; string source = 9; }
+message MessageVersionListResponse { repeated TelegramMessageVersionProjection item = 1; }
+message TelegramMessageTombstoneProjection { string tombstone_id = 1; string message_id = 2; string account_id = 3; string provider_chat_id = 4; string provider_message_id = 5; string reason = 6; int64 observed_at_unix_seconds = 7; bool is_provider_delete = 8; bool is_locally_visible = 9; }
+message MessageTombstoneListResponse { repeated TelegramMessageTombstoneProjection item = 1; }
+message TelegramMessageMutationProjection { oneof mutation { EditMutation edit = 1; DeleteMutation delete = 2; PinMutation pin = 3; ReactionMutation reaction = 4; } }
+message EditMutation { optional string text = 1; int64 observed_at_unix_seconds = 2; }
+message DeleteMutation { bool is_permanent = 1; }
+message PinMutation { bool is_pinned = 1; }
+message ReactionMutation { optional string emoji = 1; bool is_active = 2; }
+message MessageMutationListResponse { repeated TelegramMessageMutationProjection item = 1; }
+message MessageReferencesResponse { optional TelegramMessageReferencesProjection references = 1; }
+message TelegramAttachmentProjection { string attachment_id = 1; string account_id = 2; string provider_chat_id = 3; string provider_message_id = 4; string provider_file_id = 5; string state = 6; optional uint64 size_bytes = 7; optional string filename = 8; optional string content_type = 9; optional string blob_ref = 10; }
+message AttachmentResponse { optional TelegramAttachmentProjection attachment = 1; }
+message TelegramFileSnapshotProjection { string account_id = 1; string provider_file_id = 2; optional string provider_unique_id = 3; optional string media_kind = 4; optional uint64 size_bytes = 5; optional uint64 expected_size_bytes = 6; optional uint64 downloaded_size_bytes = 7; bool is_downloading = 8; bool is_downloaded = 9; }
+message FileResponse { optional TelegramFileSnapshotProjection file = 1; }
+message TelegramParticipantProjection { string account_id = 1; string provider_chat_id = 2; string provider_member_id = 3; optional string display_name = 4; optional string username = 5; string role = 6; string status = 7; bool is_admin = 8; bool is_owner = 9; repeated string permission = 10; }
+message ParticipantPageResponse { string account_id = 1; string provider_chat_id = 2; string filter = 3; repeated TelegramParticipantProjection item = 4; optional uint32 next_offset = 5; }
+message TelegramTopicProjection { string account_id = 1; string provider_chat_id = 2; string provider_topic_id = 3; string title = 4; optional string icon_emoji = 5; bool is_pinned = 6; bool is_closed = 7; uint32 unread_count = 8; optional int64 last_message_at_unix_seconds = 9; }
+message TopicListResponse { repeated TelegramTopicProjection topic = 1; }
+message TopicResponse { optional TelegramTopicProjection topic = 1; }
+message OperationListResponse { repeated TelegramOperationResponse operation = 1; }
+message TelegramCommandRecordProjection { TelegramOperationResponse operation = 1; TelegramProviderCommandV1 command = 2; }
+message CommandRecordListResponse { repeated TelegramCommandRecordProjection record = 1; }
+message RealtimeResponse { repeated TelegramRealtimeFrameProjection frame = 1; }
+message TelegramRealtimeFrameProjection { string account_id = 1; uint64 sequence = 2; optional string provider_cursor = 3; TelegramProviderEventProjection event = 4; }
+message TelegramProviderEventProjection {
+  oneof event {
+    TelegramMessageObservationProjection message_created = 1;
+    MessageEditedEvent message_edited = 2;
+    MessageDeletedEvent message_deleted = 3;
+    MessageSendFailedEvent message_send_failed = 4;
+    MessageSendSucceededEvent message_send_succeeded = 5;
+    MessagePinnedEvent message_pinned = 6;
+    ReactionChangedEvent reaction_changed = 7;
+    ReactionsObservedEvent reactions_observed = 8;
+    ChatUnreadChangedEvent chat_unread_changed = 9;
+    ChatMarkedUnreadChangedEvent chat_marked_unread_changed = 10;
+    TelegramTypingStateProjection typing_changed = 11;
+    TelegramTopicProjection topic_changed = 12;
+    TelegramChatPositionProjection chat_position_changed = 13;
+    ChatFoldersChangedEvent chat_folders_changed = 14;
+    ChatNotificationChangedEvent chat_notification_changed = 15;
+    TelegramChatAvatarProjection chat_avatar_changed = 16;
+    TelegramParticipantProjection participant_changed = 17;
+    TelegramFileSnapshotProjection file_changed = 18;
+  }
+}
+message MessageEditedEvent { string account_id = 1; string provider_chat_id = 2; string provider_message_id = 3; optional string text = 4; int64 observed_at_unix_seconds = 5; }
+message MessageDeletedEvent { string account_id = 1; string provider_chat_id = 2; string provider_message_id = 3; bool is_permanent = 4; }
+message MessageSendFailedEvent { string account_id = 1; string provider_chat_id = 2; string old_provider_message_id = 3; optional int64 error_code = 4; }
+message MessageSendSucceededEvent { string account_id = 1; string provider_chat_id = 2; string old_provider_message_id = 3; string provider_message_id = 4; }
+message MessagePinnedEvent { string account_id = 1; string provider_chat_id = 2; string provider_message_id = 3; bool is_pinned = 4; }
+message ReactionChangedEvent { string account_id = 1; string provider_chat_id = 2; string provider_message_id = 3; optional string emoji = 4; bool is_active = 5; }
+message ReactionsObservedEvent { string account_id = 1; string provider_chat_id = 2; string provider_message_id = 3; repeated TelegramReactionObservationProjection reaction = 4; }
+message ChatUnreadChangedEvent { string account_id = 1; string provider_chat_id = 2; optional int64 unread_count = 3; optional int64 unread_mention_count = 4; optional string last_read_inbox_message_id = 5; }
+message ChatMarkedUnreadChangedEvent { string account_id = 1; string provider_chat_id = 2; bool is_marked_as_unread = 3; }
+message TelegramTypingStateProjection { string account_id = 1; string provider_chat_id = 2; optional string provider_thread_id = 3; string sender_id = 4; string action = 5; bool is_active = 6; }
+message ChatFoldersChangedEvent { string account_id = 1; repeated TelegramChatFolderProjection folder = 2; }
+message ChatNotificationChangedEvent { string account_id = 1; string provider_chat_id = 2; bool use_default_mute_for = 3; int64 mute_for_seconds = 4; }
+message ChatStateResponse { optional TelegramChatStateProjection state = 1; }
+message TelegramChatStateProjection { optional int64 unread_count = 1; optional int64 unread_mention_count = 2; optional string last_read_inbox_message_id = 3; bool is_marked_as_unread = 4; }
+message ChatPositionsResponse { repeated TelegramChatPositionProjection position = 1; }
+message TelegramChatPositionProjection { string account_id = 1; string provider_chat_id = 2; string list_kind = 3; optional int64 provider_folder_id = 4; int64 order = 5; bool is_pinned = 6; }
+message ChatOperationalStateResponse { optional TelegramChatOperationalStateProjection state = 1; }
+message TelegramChatOperationalStateProjection { bool is_archived = 1; bool is_pinned = 2; bool is_muted = 3; int64 mute_for_seconds = 4; bool is_marked_as_unread = 5; }
+message TopicMessageIdsResponse { repeated string provider_message_id = 1; }
+message ReactionListResponse { repeated TelegramReactionObservationProjection reaction = 1; }
+message TelegramReactionObservationProjection { string sender_id = 1; string emoji = 2; bool is_outgoing = 3; bool is_active = 4; }
+message ReactionSummaryResponse { repeated TelegramReactionSummaryProjection summary = 1; }
+message TelegramReactionSummaryProjection { string emoji = 1; uint32 count = 2; bool is_active = 3; }
+message ChatFolderListResponse { repeated TelegramChatFolderProjection folder = 1; }
+message TelegramChatFolderProjection { string account_id = 1; int64 provider_folder_id = 2; string title = 3; optional string icon_name = 4; optional int64 color_id = 5; repeated string pinned_chat_id = 6; repeated string included_chat_id = 7; repeated string excluded_chat_id = 8; }
+
+// Telegram retains separate operational services because authorization,
+// lifecycle, commands and projection queries have different semantics.
+service TelegramAuthorizationService {
+  rpc Authorize(TelegramAuthorizationRequestV1) returns (TelegramAuthorizationResponseV1);
+}
+service TelegramLifecycleService {
+  rpc Execute(TelegramLifecycleRequestV1) returns (TelegramLifecycleResponseV1);
+}
+service TelegramOperationalService {
+  rpc ExecuteCommand(TelegramProviderCommandV1) returns (TelegramOperationResponse);
+  rpc ExecuteQuery(TelegramProviderQueryV1) returns (TelegramProviderQueryResponseV1);
+}
+service TelegramRealtimeService {
+  rpc Replay(TelegramRealtimeReplayRequestV1) returns (TelegramRealtimeReplayResponseV1);
+}
+service TelegramReconfigurationService {
+  rpc Execute(TelegramReconfigurationRequestV1) returns (TelegramReconfigurationResponseV1);
+}

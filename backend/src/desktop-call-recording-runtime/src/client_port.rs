@@ -1,4 +1,4 @@
-use hermes_desktop_call_recording_api::{
+use makosh_desktop_call_recording_api::{
     GET_CONTRACT_NAME_V1, MODULE_ID_V1, OWNER_ID_V1, START_CONTRACT_NAME_V1, STOP_CONTRACT_NAME_V1,
     contract_reference_v1,
     wire::{
@@ -9,13 +9,13 @@ use hermes_desktop_call_recording_api::{
         StopDesktopCallRecordingResponseV1,
     },
 };
-use hermes_desktop_call_recording_core::{
+use makosh_desktop_call_recording_core::{
     RecordingStateV1, StartRecordingV1, device_actor_sha256_v1, validate_start_v1,
 };
-use hermes_desktop_call_recording_persistence::{
+use makosh_desktop_call_recording_persistence::{
     DesktopCallRecordingRepositoryV1, NewRecordingRunV1, RealtimeTransitionV1,
 };
-use hermes_runtime_protocol::v1::{ModuleClientRequestV1, ModuleClientResponseV1};
+use makosh_runtime_protocol::v1::{ModuleClientRequestV1, ModuleClientResponseV1};
 use prost::Message;
 use sha2::{Digest, Sha256};
 
@@ -176,7 +176,7 @@ async fn get(
 }
 
 fn transcription_authority(
-    run: &hermes_desktop_call_recording_persistence::PersistedRecordingRunV1,
+    run: &makosh_desktop_call_recording_persistence::PersistedRecordingRunV1,
 ) -> Option<RecordingTranscriptionAuthorityV1> {
     if run.state != RecordingStateV1::Ready {
         return None;
@@ -234,7 +234,7 @@ fn validate_request(
 
 fn request_digest(request: &ModuleClientRequestV1) -> [u8; 32] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.desktop-call-recording.start-request.v1\0");
+    hash.update(b"makosh.desktop-call-recording.start-request.v1\0");
     hash.update(request.logical_owner_id.as_bytes());
     hash.update([0]);
     hash.update(request.authenticated_device_id.as_bytes());
@@ -245,7 +245,7 @@ fn request_digest(request: &ModuleClientRequestV1) -> [u8; 32] {
 
 fn derived_id(label: &[u8], owner: &str, seed: [u8; 16]) -> [u8; 16] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.desktop-call-recording.v1\0");
+    hash.update(b"makosh.desktop-call-recording.v1\0");
     hash.update(label);
     hash.update([0]);
     hash.update(owner.as_bytes());
@@ -297,17 +297,17 @@ fn wire_state(value: RecordingStateV1) -> DesktopRecordingStateV1 {
 }
 
 fn persistence_error(
-    error: hermes_desktop_call_recording_persistence::PersistenceErrorV1,
+    error: makosh_desktop_call_recording_persistence::PersistenceErrorV1,
 ) -> DesktopRecordingClientPortErrorV1 {
     match error {
-        hermes_desktop_call_recording_persistence::PersistenceErrorV1::InvalidInput => {
+        makosh_desktop_call_recording_persistence::PersistenceErrorV1::InvalidInput => {
             DesktopRecordingClientPortErrorV1::Protocol
         }
-        hermes_desktop_call_recording_persistence::PersistenceErrorV1::Conflict => {
+        makosh_desktop_call_recording_persistence::PersistenceErrorV1::Conflict => {
             DesktopRecordingClientPortErrorV1::Conflict
         }
-        hermes_desktop_call_recording_persistence::PersistenceErrorV1::StorageUnavailable
-        | hermes_desktop_call_recording_persistence::PersistenceErrorV1::InvalidRow => {
+        makosh_desktop_call_recording_persistence::PersistenceErrorV1::StorageUnavailable
+        | makosh_desktop_call_recording_persistence::PersistenceErrorV1::InvalidRow => {
             DesktopRecordingClientPortErrorV1::Unavailable
         }
     }
@@ -324,7 +324,7 @@ fn response(request_id: u64, payload: Vec<u8>, error_code: &str) -> ModuleClient
 
 #[cfg(test)]
 mod tests {
-    use hermes_desktop_call_recording_persistence::PersistedRecordingRunV1;
+    use makosh_desktop_call_recording_persistence::PersistedRecordingRunV1;
 
     use super::*;
 

@@ -3,8 +3,8 @@
 Статус: Принято
 Дата: 2026-07-15
 Состояние реализации: Executable architecture policy, negative self-tests и
-`hermes-events-protocol` canonical V1 schema с bounded outer-envelope decoder
-реализованы. `hermes-events-jetstream` foundation проверяет outer envelope,
+`makosh-events-protocol` canonical V1 schema с bounded outer-envelope decoder
+реализованы. `makosh-events-jetstream` foundation проверяет outer envelope,
 вычисляет exact subject и публикует original bytes with `Nats-Msg-Id`; Docker
 test доказывает broker deduplication и exact-byte delivery. Его NATS credential
 lease adapter использует только HPKE-protected Vault route и не имеет local
@@ -25,7 +25,7 @@ credential rotation/revoke and full runtime conformance are now present, so
 adapter remains owner-owned work under `first_owner_v1`.
 
 Their only direct SQL client is the explicitly named development dependency
-`hermes-events-jetstream-testkit:dev:sqlx`. The executable Cargo policy rejects
+`makosh-events-jetstream-testkit:dev:sqlx`. The executable Cargo policy rejects
 the same client in every production package, every other test package and every
 other dependency kind; this exception does not grant a PostgreSQL capability to
 the Event protocol or a future owner runtime.
@@ -47,7 +47,7 @@ the Event protocol or a future owner runtime.
 - [ADR-0221: ModuleDescriptorV1 и capability-level lifecycle](ADR-0221-module-descriptor-and-capability-lifecycle-contract.md);
 - [ADR-0222: Kernel Settings Registry и supervised reconfiguration](ADR-0222-kernel-settings-registry-and-supervised-reconfiguration.md).
 
-Этот ADR определяет только внутренний durable data plane Hermes. `OutboxRecordV1`
+Этот ADR определяет только внутренний durable data plane Макошь. `OutboxRecordV1`
 retains validated exact envelope bytes and `InboxRecordV1` classifies retries by
 message ID plus SHA-256, so equal IDs with different bytes fail as a conflict.
 These are owner-local persistence contracts, not a shared event database.
@@ -85,13 +85,13 @@ Communications, AI, Tasks и Scheduler получат несовместимые
 используют `DurableEnvelopeV1` из единственного package:
 
 ```text
-backend/src/platform/events/protocol/  hermes-events-protocol
+backend/src/platform/events/protocol/  makosh-events-protocol
 ```
 
 Cargo metadata package:
 
 ```toml
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "events"
 surface = "contract"
@@ -123,7 +123,7 @@ generated code:
 ```proto
 syntax = "proto3";
 
-package hermes.events.v1;
+package makosh.events.v1;
 
 import "google/protobuf/timestamp.proto";
 
@@ -330,7 +330,7 @@ DUPLICATE
 REJECTED
 ```
 
-Durable `AckMetadataV1` является отдельным Hermes message, подтверждающим
+Durable `AckMetadataV1` является отдельным Макошь message, подтверждающим
 зафиксированную стадию обработки исходного message. JetStream ACK — broker
 protocol после local commit; он не является `AckMetadataV1` и не создаёт
 durable Ack-envelope автоматически.
@@ -374,7 +374,7 @@ durable payload contract и не даёт publish/subscribe rights.
 
 `schema_sha256` — SHA-256 canonical binary `FileDescriptorSet` root payload и
 его transitive imports. Это schema descriptor artifact, а не
-`ModuleDescriptorV1`. Hermes canonicalizer:
+`ModuleDescriptorV1`. Макошь canonicalizer:
 
 1. строит descriptor closure pinned Protobuf toolchain;
 2. удаляет `source_code_info`;
@@ -415,14 +415,14 @@ readiness. Optional subscriber может быть отключён со scoped 
   owner mutation;
 - удалённые numbers/names резервируются навсегда.
 
-Protobuf binary сохраняет unknown fields при поддерживающем runtime, но Hermes
+Protobuf binary сохраняет unknown fields при поддерживающем runtime, но Макошь
 не полагается на parse/re-encode в relay. JSON/TextProto conversion и
 field-by-field copy для durable transport запрещены. Compatibility проверяется
 golden wire vectors и automated schema breaking checks. Начальным кандидатом
 для Rust code generation является [`prost`](https://github.com/tokio-rs/prost),
 а для mechanical contract checks —
 [`buf breaking`](https://buf.build/docs/breaking/) с conservative `FILE`
-category и дополнительными Hermes semantic tests.
+category и дополнительными Макошь semantic tests.
 
 ### Canonical bytes: outbox → JetStream
 
@@ -490,11 +490,11 @@ catalog и PostgreSQL role boundary. Header provenance и schema hash не до�
 Durable subjects:
 
 ```text
-hermes.command.v1.<owner>.<contract>.v<contract-major>
-hermes.event.v1.<owner>.<contract>.v<contract-major>
-hermes.observation.v1.<owner>.<contract>.v<contract-major>
-hermes.result.v1.<owner>.<contract>.v<contract-major>
-hermes.ack.v1.<owner>.<contract>.v<contract-major>
+makosh.command.v1.<owner>.<contract>.v<contract-major>
+makosh.event.v1.<owner>.<contract>.v<contract-major>
+makosh.observation.v1.<owner>.<contract>.v<contract-major>
+makosh.result.v1.<owner>.<contract>.v<contract-major>
+makosh.ack.v1.<owner>.<contract>.v<contract-major>
 ```
 
 Первый `v1` — версия subject/envelope transport grammar. Последний token —
@@ -507,7 +507,7 @@ identifiers в subject запрещены. Точный subject создаётс
 
 ### Dead-letter и quarantine
 
-Dead letter не является шестым business message kind. `hermes-events-protocol`
+Dead letter не является шестым business message kind. `makosh-events-protocol`
 определяет отдельный technical `DeadLetterRecordV1`:
 
 ```text
@@ -527,7 +527,7 @@ opaque quarantine reference
 1. сохраняет exact original envelope bytes в bounded owner-scoped quarantine;
 2. сохраняет sanitized technical failure record;
 3. публикует только `DeadLetterRecordV1` в subject
-   `hermes.dead.v1.<owner>.<contract>.v<contract-major>`;
+   `makosh.dead.v1.<owner>.<contract>.v<contract-major>`;
 4. завершает broker delivery согласно contract policy.
 
 Dead stream не содержит original payload bytes. Event Hub видит counters и
@@ -547,7 +547,7 @@ policy; он не пытается угадать формат или перек
 ### Внутренний envelope не является client SSE contract
 
 `DurableEnvelopeV1` запрещено сериализовать клиенту напрямую. Core Gateway
-использует отдельный `ClientRealtimeFrameV1` из `hermes-gateway-protocol`:
+использует отдельный `ClientRealtimeFrameV1` из `makosh-gateway-protocol`:
 
 ```text
 ClientRealtimeFrameV1
@@ -631,7 +631,7 @@ mobile client compatibility с внутренним data plane.
 ### Exactly-once claim
 
 Отклонено: broker deduplication не устраняет crash boundaries между PostgreSQL,
-publish acknowledgement, consumer transaction и broker ACK. Hermes остаётся
+publish acknowledgement, consumer transaction и broker ACK. Макошь остаётся
 at-least-once с durable inbox/idempotency.
 
 ## Проверка решения
@@ -647,7 +647,7 @@ at-least-once с durable inbox/idempotency.
   artifact;
 - publisher/subscriber reference в `ModuleDescriptorV1` совпадает с exact
   catalog contract revision/schema hash;
-- mechanical Protobuf breaking check и Hermes semantic compatibility tests;
+- mechanical Protobuf breaking check и Макошь semantic compatibility tests;
 - outbox сохраняет один canonical byte buffer;
 - relay публикует byte-for-byte тот же buffer;
 - `Nats-Msg-Id` точно соответствует binary `message_id`;
@@ -685,7 +685,7 @@ at-least-once с durable inbox/idempotency.
 
 Цена:
 
-- high-fanout `hermes-events-protocol` требует особенно строгого contract review;
+- high-fanout `makosh-events-protocol` требует особенно строгого contract review;
 - schema descriptors, hashes и compatibility matrix становятся обязательными
   build artifacts;
 - producer cutover требует reconciliation consumers;

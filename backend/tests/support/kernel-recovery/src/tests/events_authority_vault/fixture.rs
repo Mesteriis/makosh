@@ -2,12 +2,12 @@
 
 use std::path::{Path, PathBuf};
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleEventDeliveryPolicyV1, ModuleEventEnvelopeKindV1, ModuleEventRouteDirectionV1,
     ModuleEventRouteRequestV1, ModuleEventSubscriptionRequirementV1, PlatformEventHubTopologyV1,
     PlatformEventStreamBudgetV1, PlatformEventsAuthorityConfigurationV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ModuleDescriptorV1, ModuleKindV1, SettingsSchemaRefV1, SettingsSchemaV1,
 };
 
@@ -33,7 +33,7 @@ impl LiveAuthorityFixture {
         nats_username: &str,
         event_hub_password: Option<&str>,
     ) -> Self {
-        let root = unique_target_root("hermes-managed-events-authority-vault");
+        let root = unique_target_root("makosh-managed-events-authority-vault");
         let data = vault_fixture::private_directory(root.join("kernel"));
         initialize_vault(
             &data.join("vault"),
@@ -198,7 +198,7 @@ fn register_route(
         1,
     );
     let route = ModuleEventRouteRequestV1::new(
-        hermes_kernel_control_store::ModuleEventRouteRequestInputV1 {
+        makosh_kernel_control_store::ModuleEventRouteRequestInputV1 {
             registration_id: registration_id.to_owned(),
             capability_id: capability.to_owned(),
             envelope_kind: ModuleEventEnvelopeKindV1::Event,
@@ -288,7 +288,7 @@ fn authority_descriptor(schema: &[u8]) -> Vec<u8> {
 }
 
 fn authority_binary() -> PathBuf {
-    binary("HERMES_EVENTS_AUTHORITY_RUNTIME_BIN")
+    binary("MAKOSH_EVENTS_AUTHORITY_RUNTIME_BIN")
 }
 
 fn binary(name: &str) -> PathBuf {

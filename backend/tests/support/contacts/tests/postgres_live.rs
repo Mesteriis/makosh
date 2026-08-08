@@ -1,8 +1,8 @@
-use hermes_contacts_core::{
+use makosh_contacts_core::{
     ContactProviderKindV1, ContactProviderProvenanceV1, ContactTimestampV1, ContactUpsertDraftV1,
     ContactUpsertOutcomeV1,
 };
-use hermes_contacts_persistence::{
+use makosh_contacts_persistence::{
     ApplyMailEntryCommandV1, BindMailProviderLinkCommandV1, ContactMailEntryRejectCodeV1,
     ContactMutationOutboxV1, ContactProviderLinkBindOutcomeV1, ContactProviderLinkBindRejectCodeV1,
     ContactsOutboxRecordV1, ContactsPersistenceConformanceV1, ContactsPersistenceErrorV1,
@@ -14,7 +14,7 @@ use sha2::{Digest, Sha256};
 #[ignore = "requires the disposable authenticated PostgreSQL contour"]
 async fn postgres_replays_exact_result_and_fences_conflicts() {
     let database_url =
-        std::env::var("HERMES_CONTACTS_POSTGRES_URL").expect("HERMES_CONTACTS_POSTGRES_URL");
+        std::env::var("MAKOSH_CONTACTS_POSTGRES_URL").expect("MAKOSH_CONTACTS_POSTGRES_URL");
     let persistence = ContactsPersistenceConformanceV1::connect_url(&database_url)
         .await
         .expect("connect Contacts persistence");

@@ -1,8 +1,8 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-communications-export-api";
+pub const PACKAGE: &str = "makosh-communications-export-api";
 pub const COMMUNICATIONS_EXPORT_OWNER_V1: &str = "communications_export";
-pub const COMMUNICATIONS_EXPORT_MODULE_ID_V1: &str = "hermes-communications-export-runtime";
+pub const COMMUNICATIONS_EXPORT_MODULE_ID_V1: &str = "makosh-communications-export-runtime";
 pub const COMMUNICATIONS_EXPORT_CAPABILITY_ID_V1: &str = "communications.export.v1";
 pub const COMMUNICATIONS_EXPORT_COMMAND_CONTRACT_NAME_V1: &str = "communications.export.command";
 pub const COMMUNICATIONS_EXPORT_QUERY_CONTRACT_NAME_V1: &str = "communications.export.query";
@@ -15,11 +15,11 @@ pub const COMMUNICATIONS_EXPORT_REALTIME_EVENT_KIND_V1: &str =
 pub const COMMUNICATIONS_EXPORT_CONTRACT_MAJOR_V1: u32 = 1;
 pub const COMMUNICATIONS_EXPORT_CONTRACT_REVISION_V1: u32 = 1;
 pub const COMMUNICATIONS_EXPORT_COMMAND_CONNECT_PATH_V1: &str =
-    "/hermes.communications_export.v1.CommunicationsExportCommandService/Start";
+    "/makosh.communications_export.v1.CommunicationsExportCommandService/Start";
 pub const COMMUNICATIONS_EXPORT_QUERY_CONNECT_PATH_V1: &str =
-    "/hermes.communications_export.v1.CommunicationsExportQueryService/GetStatus";
+    "/makosh.communications_export.v1.CommunicationsExportQueryService/GetStatus";
 pub const COMMUNICATIONS_EXPORT_TICKET_CONNECT_PATH_V1: &str =
-    "/hermes.communications_export.v1.CommunicationsExportTicketService/IssueRead";
+    "/makosh.communications_export.v1.CommunicationsExportTicketService/IssueRead";
 pub const COMMUNICATIONS_EXPORT_READ_BLOB_PATH_V1: &str =
     "/api/blobs/communications-export/v1/artifact";
 pub const COMMUNICATIONS_EXPORT_MAX_MESSAGES_V1: usize = 64;
@@ -34,7 +34,7 @@ const _: () = assert!(
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communications_export.v1.rs"
+        "/makosh.communications_export.v1.rs"
     ));
 }
 

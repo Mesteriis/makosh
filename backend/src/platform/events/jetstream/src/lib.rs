@@ -1,4 +1,4 @@
-//! JetStream transport adapter for opaque Hermes durable-envelope bytes.
+//! JetStream transport adapter for opaque Макошь durable-envelope bytes.
 //!
 //! The adapter owns NATS protocol details only. Kernel Event Hub owns catalog
 //! authority and modules retain their PostgreSQL outbox/inbox state.

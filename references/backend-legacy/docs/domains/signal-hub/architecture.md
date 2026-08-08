@@ -8,10 +8,10 @@ Signal Hub is the control plane for source activation, source runtime state,
 source capabilities, source health, mute/pause policies, replay and deterministic
 fixtures.
 
-It exists because Hermes must handle many signal sources without turning every
+It exists because Макошь must handle many signal sources without turning every
 provider into a separate product domain. Mail, Telegram, WhatsApp, GitHub,
 Browser capture, RSS, Calendar, Filesystem and Home Assistant should all enter
-Hermes through one governed source boundary.
+Макошь through one governed source boundary.
 
 ## High-Level Flow
 
@@ -97,7 +97,7 @@ SignalSource
 
 ## Event Store And Transport Split
 
-Hermes keeps source-of-truth event history in PostgreSQL and uses NATS JetStream
+Макошь keeps source-of-truth event history in PostgreSQL and uses NATS JetStream
 as the delivery transport.
 
 ```text

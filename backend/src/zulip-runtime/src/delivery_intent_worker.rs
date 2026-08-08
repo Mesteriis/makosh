@@ -2,10 +2,10 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::managed_control::ManagedControlChannelV2;
-use hermes_zulip_api::{ZulipCommandOperationOutcomeV1, ZulipCommandOperationStatusV1};
-use hermes_zulip_delivery_intent_contract::wire::ZulipDeliveryIntentRejectCodeV1;
-use hermes_zulip_persistence::{
+use makosh_runtime_protocol::managed_control::ManagedControlChannelV2;
+use makosh_zulip_api::{ZulipCommandOperationOutcomeV1, ZulipCommandOperationStatusV1};
+use makosh_zulip_delivery_intent_contract::wire::ZulipDeliveryIntentRejectCodeV1;
+use makosh_zulip_persistence::{
     ClaimedZulipDeliveryIntentJobV1, ZULIP_DELIVERY_INTENT_MAX_ATTEMPTS_V1,
     ZulipDeliveryIntentJobStateV1, ZulipDeliveryIntentStoreV1, ZulipDurablePersistence,
 };
@@ -349,7 +349,7 @@ fn operation_completed_at(
 
 fn worker_id(runtime_instance_id: &str, runtime_generation: u64) -> String {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.zulip.delivery-intent.worker.v1");
+    hasher.update(b"makosh.zulip.delivery-intent.worker.v1");
     hasher.update(runtime_instance_id.as_bytes());
     hasher.update(runtime_generation.to_be_bytes());
     let digest: [u8; 32] = hasher.finalize().into();

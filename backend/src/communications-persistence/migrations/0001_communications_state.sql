@@ -1,9 +1,9 @@
-CREATE TABLE hermes_data.communications_event_inbox (
+CREATE TABLE makosh_data.communications_event_inbox (
   message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
   envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32)
 );
 
-CREATE TABLE hermes_data.communications_evidence_summaries (
+CREATE TABLE makosh_data.communications_evidence_summaries (
   observation_id BYTEA PRIMARY KEY CHECK (octet_length(observation_id) = 16),
   source_cursor_sha256 BYTEA NOT NULL CHECK (octet_length(source_cursor_sha256) = 32),
   account_cursor_sha256 BYTEA CHECK (
@@ -61,7 +61,7 @@ CREATE TABLE hermes_data.communications_evidence_summaries (
   observed_at_unix_seconds BIGINT NOT NULL
 );
 
-CREATE TABLE hermes_data.communications_domain_outbox (
+CREATE TABLE makosh_data.communications_domain_outbox (
   message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
   envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
   exact_envelope_bytes BYTEA NOT NULL CHECK (octet_length(exact_envelope_bytes) > 0),
@@ -69,7 +69,7 @@ CREATE TABLE hermes_data.communications_domain_outbox (
   published_at_unix_seconds BIGINT
 );
 
-CREATE TABLE hermes_data.communications_conversations (
+CREATE TABLE makosh_data.communications_conversations (
   conversation_id BYTEA PRIMARY KEY CHECK (octet_length(conversation_id) = 16),
   account_cursor_sha256 BYTEA NOT NULL CHECK (octet_length(account_cursor_sha256) = 32),
   conversation_cursor_sha256 BYTEA NOT NULL CHECK (
@@ -81,7 +81,7 @@ CREATE TABLE hermes_data.communications_conversations (
   last_evidence_id BYTEA NOT NULL CHECK (octet_length(last_evidence_id) = 16)
 );
 
-CREATE TABLE hermes_data.communications_accounts (
+CREATE TABLE makosh_data.communications_accounts (
   account_id BYTEA PRIMARY KEY CHECK (octet_length(account_id) = 16),
   account_cursor_sha256 BYTEA NOT NULL UNIQUE CHECK (
     octet_length(account_cursor_sha256) = 32
@@ -92,9 +92,9 @@ CREATE TABLE hermes_data.communications_accounts (
   last_evidence_id BYTEA NOT NULL CHECK (octet_length(last_evidence_id) = 16)
 );
 
-CREATE TABLE hermes_data.communications_messages (
+CREATE TABLE makosh_data.communications_messages (
   message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
-  conversation_id BYTEA NOT NULL REFERENCES hermes_data.communications_conversations (
+  conversation_id BYTEA NOT NULL REFERENCES makosh_data.communications_conversations (
     conversation_id
   ) CHECK (octet_length(conversation_id) = 16),
   source_cursor_sha256 BYTEA NOT NULL UNIQUE CHECK (
@@ -108,9 +108,9 @@ CREATE TABLE hermes_data.communications_messages (
   last_evidence_id BYTEA NOT NULL CHECK (octet_length(last_evidence_id) = 16)
 );
 
-CREATE TABLE hermes_data.communications_observed_participants (
+CREATE TABLE makosh_data.communications_observed_participants (
   participant_id BYTEA PRIMARY KEY CHECK (octet_length(participant_id) = 16),
-  conversation_id BYTEA NOT NULL REFERENCES hermes_data.communications_conversations (
+  conversation_id BYTEA NOT NULL REFERENCES makosh_data.communications_conversations (
     conversation_id
   ) CHECK (octet_length(conversation_id) = 16),
   participant_cursor_sha256 BYTEA NOT NULL CHECK (
@@ -121,11 +121,11 @@ CREATE TABLE hermes_data.communications_observed_participants (
   last_evidence_id BYTEA NOT NULL CHECK (octet_length(last_evidence_id) = 16)
 );
 
-CREATE TABLE hermes_data.communications_attachment_anchors (
+CREATE TABLE makosh_data.communications_attachment_anchors (
   attachment_anchor_id BYTEA PRIMARY KEY CHECK (
     octet_length(attachment_anchor_id) = 16
   ),
-  message_id BYTEA NOT NULL REFERENCES hermes_data.communications_messages (
+  message_id BYTEA NOT NULL REFERENCES makosh_data.communications_messages (
     message_id
   ) CHECK (octet_length(message_id) = 16),
   media_cursor_sha256 BYTEA NOT NULL CHECK (octet_length(media_cursor_sha256) = 32),
@@ -157,9 +157,9 @@ CREATE TABLE hermes_data.communications_attachment_anchors (
   last_evidence_id BYTEA NOT NULL CHECK (octet_length(last_evidence_id) = 16)
 );
 
-CREATE TABLE hermes_data.communications_message_references (
+CREATE TABLE makosh_data.communications_message_references (
   reference_id BYTEA PRIMARY KEY CHECK (octet_length(reference_id) = 32),
-  source_message_id BYTEA NOT NULL REFERENCES hermes_data.communications_messages (
+  source_message_id BYTEA NOT NULL REFERENCES makosh_data.communications_messages (
     message_id
   ) CHECK (octet_length(source_message_id) = 16),
   reference_kind SMALLINT NOT NULL CHECK (reference_kind IN (1, 2)),

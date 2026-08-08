@@ -1,13 +1,13 @@
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     OperationAdmissionV1, OperationIdV1, OperationStatusV1, OperationTerminalOutcomeV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use super::common::unique_target_root;
 
 #[test]
 fn operation_journal_is_idempotent_and_retains_the_terminal_outcome() {
-    let root = unique_target_root("hermes-operation-journal");
+    let root = unique_target_root("makosh-operation-journal");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");

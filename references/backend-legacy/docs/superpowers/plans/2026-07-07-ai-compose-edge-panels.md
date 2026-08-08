@@ -6,7 +6,7 @@
 
 **Architecture:** Keep compose as a Communications surface. `MailWorkspace.vue` owns open/closed UI state, tiny presentation helpers live beside mail components, and CSS renders side panels behind the foreground compose card without changing send/draft APIs.
 
-**Tech Stack:** Vue 3 `<script setup>`, existing Hermes `Dialog`, `Icon`, `RichTextEditor`, CSS in `communicationDomainElements.css`, Vitest boundary tests.
+**Tech Stack:** Vue 3 `<script setup>`, existing Макошь `Dialog`, `Icon`, `RichTextEditor`, CSS in `communicationDomainElements.css`, Vitest boundary tests.
 
 ## Global Constraints
 

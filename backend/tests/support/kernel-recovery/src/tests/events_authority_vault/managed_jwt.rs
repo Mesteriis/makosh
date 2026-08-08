@@ -2,19 +2,19 @@
 
 use std::{sync::Arc, time::Duration};
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     DurableSubjectV1, JetStreamClient, NatsRuntimeCredentialFenceV1, RuntimeNatsIdentity,
     RuntimePublishPermitV1, StreamKindV1,
 };
-use hermes_events_protocol::v1::{
+use makosh_events_protocol::v1::{
     ActorKindV1, ActorRefV1, ContractRefV1, DurableEnvelopeV1, EventMetadataV1, FenceKindV1,
     SourceFenceV1, SourceRefV1, durable_envelope_v1::Semantics,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     NatsRuntimeCredentialDeliveryBindingV1, NatsRuntimeCredentialDeliveryV1,
     NatsRuntimeCredentialRecipientV1,
 };
-use hermes_runtime_protocol::v1::ManagedRuntimeEventCredentialRequestV1;
+use makosh_runtime_protocol::v1::ManagedRuntimeEventCredentialRequestV1;
 use prost::Message;
 use prost_types::Timestamp;
 
@@ -24,10 +24,10 @@ use crate::runtime::lifecycle::control::{
     ManagedRuntimeEventCredentialHandler, ManagedRuntimeExpectation,
 };
 
-const ENDPOINT: &str = "HERMES_NATS_JWT_TEST_ENDPOINT";
-const ACCOUNT_PUBLIC_KEY: &str = "HERMES_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE";
-const ACCOUNT_SIGNER_SEED: &str = "HERMES_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE";
-const EVENT_HUB_CREDS: &str = "HERMES_NATS_JWT_EVENT_HUB_CREDS_FILE";
+const ENDPOINT: &str = "MAKOSH_NATS_JWT_TEST_ENDPOINT";
+const ACCOUNT_PUBLIC_KEY: &str = "MAKOSH_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE";
+const ACCOUNT_SIGNER_SEED: &str = "MAKOSH_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE";
+const EVENT_HUB_CREDS: &str = "MAKOSH_NATS_JWT_EVENT_HUB_CREDS_FILE";
 const REQUEST_ID: [u8; 16] = [1; 16];
 
 #[tokio::test(flavor = "multi_thread")]
@@ -120,7 +120,7 @@ fn delivery_binding(
         1,
     )
     .expect("runtime credential fence");
-    hermes_events_jetstream::bind_runtime_credential_delivery(
+    makosh_events_jetstream::bind_runtime_credential_delivery(
         &fence,
         REQUEST_ID,
         recipient.public_key().clone(),
@@ -129,7 +129,7 @@ fn delivery_binding(
 }
 
 async fn assert_runtime_permissions(
-    runtime: &hermes_events_jetstream::RuntimeJetStreamConnection,
+    runtime: &makosh_events_jetstream::RuntimeJetStreamConnection,
     grant_epoch: u64,
 ) {
     let allowed = subject("changed");
@@ -172,8 +172,8 @@ async fn create_event_stream(endpoint: &str) {
     let client = options.connect(endpoint).await.expect("connect Event Hub");
     async_nats::jetstream::new(client)
         .get_or_create_stream(async_nats::jetstream::stream::Config {
-            name: "HERMES_EVENT_V1".to_owned(),
-            subjects: vec!["hermes.event.v1.>".to_owned()],
+            name: "MAKOSH_EVENT_V1".to_owned(),
+            subjects: vec!["makosh.event.v1.>".to_owned()],
             max_bytes: 1_048_576,
             max_age: Duration::from_secs(3600),
             num_replicas: 1,
@@ -231,7 +231,7 @@ fn event_envelope(contract: &str) -> DurableEnvelopeV1 {
 
 fn require_live_environment() {
     assert_eq!(
-        std::env::var("HERMES_EVENTS_MANAGED_JWT_TEST").as_deref(),
+        std::env::var("MAKOSH_EVENTS_MANAGED_JWT_TEST").as_deref(),
         Ok("1")
     );
 }

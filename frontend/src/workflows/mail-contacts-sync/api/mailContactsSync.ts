@@ -7,11 +7,11 @@ import {
 	MailContactsSyncStateV1,
 	MailContactsSyncStatusChangedV1Schema,
 	type MailContactsSyncStatusChangedV1,
-} from '../../../gen/hermes/mail_contacts_sync/v1/sync_pb'
+} from '../../../gen/makosh/mail_contacts_sync/v1/sync_pb'
 import {
 	ClientRealtimeStreamStateKindV1,
 	type ClientRealtimeEventV1,
-} from '../../../gen/hermes/gateway/v1/client_realtime_pb'
+} from '../../../gen/makosh/gateway/v1/client_realtime_pb'
 import { getMailContactsSyncCommandClient } from '../../../platform/connect/mailContactsSyncCommandClient'
 import { getMailContactsSyncQueryClient } from '../../../platform/connect/mailContactsSyncQueryClient'
 import { getBrowserGatewayRealtimeHub } from '../../../platform/gateway/browserGatewayRealtimeHub'

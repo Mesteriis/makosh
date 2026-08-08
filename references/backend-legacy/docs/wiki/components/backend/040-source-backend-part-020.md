@@ -23,7 +23,7 @@ generated_by: code-wiki-ru
 ### `components/backend.md`
 
 ```markdown
-# Бэкенд Hermes Hub
+# Бэкенд Макошь
 
 Бэкенд реализован на Rust и построен по модульной архитектуре. Данная страница описывает подсистемы, видимые в предоставленных исходных файлах домена `communications`.
 
@@ -226,7 +226,7 @@ generated_by: code-wiki-ru
 - Идентификатор события формируется как `mail_folder_event:{event_type}:{subject_id}:{timestamp_nanos_hex}`.
 - Конверт события (`NewEventEnvelope`) включает:
   - `kind`: `"mail_folder_api"` или `"mail_folder_message"`
-  - `actor`: `"hermes-frontend"`
+  - `actor`: `"makosh-frontend"`
   - `payload`: сериализованная структура папки или ответа операции
   - `provenance`: `source_kind = "local_api"`
   - `correlation_id`: идентификатор папки или сообщения.
@@ -255,7 +255,7 @@ generated_by: code-wiki-ru
 - Типы событий папок: `mail.folder.created`, `mail.folder.updated`, `mail.folder.deleted`
 - Типы событий сообщений в папках: `mail.folder_message.copied`, `mail.folder_message.moved`
 - Формат идентификатора события: `mail_folder_event:{event_type}:{subject_id}:{timestamp_nanos_hex}`
-- Структура `NewEventEnvelope`: kind, actor (`hermes-frontend`), payload, provenance (`local_api`), correlation_id
+- Структура `NewEventEnvelope`: kind, actor (`makosh-frontend`), payload, provenance (`local_api`), correlation_id
 
 ### `backend/src/domains/communications/import.rs`
 - Функция `import_fixture_email_messages` и `import_fixture_email_messages_with_records`

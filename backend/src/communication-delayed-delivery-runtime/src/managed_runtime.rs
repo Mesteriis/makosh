@@ -24,19 +24,19 @@ use crate::{
     },
     scheduler_results::{DelayedDeliverySchedulerResultErrorV1, consume_scheduler_result_v1},
 };
-use hermes_communication_delayed_delivery_api::{
+use makosh_communication_delayed_delivery_api::{
     COMMUNICATION_DELAYED_DELIVERY_MODULE_ID_V1, COMMUNICATION_DELAYED_DELIVERY_OWNER_V1,
 };
-use hermes_communication_delayed_delivery_execution::DelayedDeliveryCleanupErrorV1;
-use hermes_communication_delayed_delivery_persistence::{
+use makosh_communication_delayed_delivery_execution::DelayedDeliveryCleanupErrorV1;
+use makosh_communication_delayed_delivery_persistence::{
     CommunicationDelayedDeliveryPersistenceV1, DelayedDeliveryPersistenceErrorV1,
 };
-use hermes_communication_delayed_delivery_runtime_adapters::ManagedDelayedDeliveryRuntimePortV1;
-use hermes_events_jetstream::{
+use makosh_communication_delayed_delivery_runtime_adapters::ManagedDelayedDeliveryRuntimePortV1;
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::{
         ManagedRuntimeClientDeliveryResponseV1, ManagedRuntimeControlResponseV1,
@@ -48,11 +48,11 @@ use hermes_runtime_protocol::{
         validate_module_client_request_v1, validate_module_client_response_v1,
     },
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 
@@ -407,7 +407,7 @@ impl DelayedDeliveryManagedRuntimeV1 {
             .map(|outcome| {
                 !matches!(
                     outcome,
-                    hermes_communication_delayed_delivery_execution::DelayedDeliveryCleanupOutcomeV1::Idle
+                    makosh_communication_delayed_delivery_execution::DelayedDeliveryCleanupOutcomeV1::Idle
                 )
             })
             .map_err(body_cleanup_error)
@@ -692,13 +692,13 @@ fn body_cleanup_error(
             DelayedDeliveryManagedRuntimeErrorV1::InvalidTransition
         }
         DelayedDeliveryCleanupErrorV1::Store(error) => match error {
-            hermes_communication_delayed_delivery_execution::ExecutionStoreErrorV1::InvalidInput
-            | hermes_communication_delayed_delivery_execution::ExecutionStoreErrorV1::Conflict
-            | hermes_communication_delayed_delivery_execution::ExecutionStoreErrorV1::ClaimLost
-            | hermes_communication_delayed_delivery_execution::ExecutionStoreErrorV1::NotFound => {
+            makosh_communication_delayed_delivery_execution::ExecutionStoreErrorV1::InvalidInput
+            | makosh_communication_delayed_delivery_execution::ExecutionStoreErrorV1::Conflict
+            | makosh_communication_delayed_delivery_execution::ExecutionStoreErrorV1::ClaimLost
+            | makosh_communication_delayed_delivery_execution::ExecutionStoreErrorV1::NotFound => {
                 DelayedDeliveryManagedRuntimeErrorV1::InvalidTransition
             }
-            hermes_communication_delayed_delivery_execution::ExecutionStoreErrorV1::Unavailable => {
+            makosh_communication_delayed_delivery_execution::ExecutionStoreErrorV1::Unavailable => {
                 DelayedDeliveryManagedRuntimeErrorV1::Unavailable
             }
         },

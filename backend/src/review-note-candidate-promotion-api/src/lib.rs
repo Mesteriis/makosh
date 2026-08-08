@@ -8,12 +8,12 @@ pub use envelope::{
     build_review_note_candidate_promotion_result_outbox_record_v1,
 };
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-review-note-candidate-promotion-api";
+pub const PACKAGE: &str = "makosh-review-note-candidate-promotion-api";
 pub const REVIEW_NOTE_CANDIDATE_PROMOTION_OWNER_V1: &str = "review";
 pub const REVIEW_NOTE_CANDIDATE_PROMOTION_RESULT_CAPABILITY_ID_V1: &str =
     "review.note-candidate.promotion-result.v1";
@@ -26,7 +26,7 @@ pub const REVIEW_NOTE_CANDIDATE_PROMOTION_MAX_IN_FLIGHT_V1: u32 = 32;
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.review.note_candidate.promotion.v1.rs"
+        "/makosh.review.note_candidate.promotion.v1.rs"
     ));
 }
 
@@ -106,7 +106,7 @@ mod tests {
     #[test]
     fn wire_contract_excludes_private_candidate_and_provider_data() {
         let source =
-            include_str!("../proto/hermes/review/note_candidate/promotion/v1/promotion.proto");
+            include_str!("../proto/makosh/review/note_candidate/promotion/v1/promotion.proto");
         for forbidden in [
             "title",
             "excerpt",

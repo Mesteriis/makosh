@@ -484,7 +484,7 @@ pub(super) async fn list_whatsapp_sync_members(
         .pool()
         .expect("database pool configured")
         .clone();
-    let rows = hermes_communications_postgres::conversations::ConversationReadStore::new(pool)
+    let rows = makosh_communications_postgres::conversations::ConversationReadStore::new(pool)
         .list_members_for_provider_conversation(account_id, provider_chat_id, limit)
         .await
         .map_err(|error| WhatsappWebError::InvalidRequest(error.to_string()))?;
@@ -536,7 +536,7 @@ pub(super) async fn list_whatsapp_sync_presence(
         .pool()
         .expect("database pool configured")
         .clone();
-    let rows = hermes_communications_postgres::conversations::ConversationReadStore::new(pool)
+    let rows = makosh_communications_postgres::conversations::ConversationReadStore::new(pool)
         .list_presence(account_id, provider_chat_id, limit)
         .await
         .map_err(|error| WhatsappWebError::InvalidRequest(error.to_string()))?;
@@ -587,7 +587,7 @@ pub(super) async fn list_whatsapp_sync_calls(
         .pool()
         .expect("database pool configured")
         .clone();
-    let rows = hermes_communications_postgres::calls::CanonicalCallReadStore::new(pool)
+    let rows = makosh_communications_postgres::calls::CanonicalCallReadStore::new(pool)
         .list_whatsapp_calls(account_id, provider_chat_id, limit)
         .await
         .map_err(|error| WhatsappWebError::InvalidRequest(error.to_string()))?;
@@ -626,7 +626,7 @@ pub(super) async fn list_whatsapp_sync_contacts_via_ports(
         .expect("database pool configured")
         .clone();
     let identities =
-        hermes_communications_postgres::conversations::ConversationReadStore::new(pool.clone())
+        makosh_communications_postgres::conversations::ConversationReadStore::new(pool.clone())
             .list_whatsapp_identities(account_id, limit)
             .await
             .map_err(|error| WhatsappWebError::InvalidRequest(error.to_string()))?;
@@ -638,7 +638,7 @@ pub(super) async fn list_whatsapp_sync_contacts_via_ports(
         .iter()
         .filter_map(|item| item.address.clone())
         .collect::<Vec<_>>();
-    let persona_query = hermes_personas_postgres::PersonaPostgresReadQuery::new(pool);
+    let persona_query = makosh_personas_postgres::PersonaPostgresReadQuery::new(pool);
     let whatsapp_traces = persona_query
         .list_for_values("whatsapp", &whatsapp_values)
         .await
@@ -721,7 +721,7 @@ pub(super) async fn list_whatsapp_sync_media(
         .expect("database pool configured")
         .clone();
     let rows =
-        hermes_communications_postgres::attachments::CanonicalMessageAttachmentReadStore::new(pool)
+        makosh_communications_postgres::attachments::CanonicalMessageAttachmentReadStore::new(pool)
             .list_whatsapp_media(account_id, provider_chat_id, content_type, limit)
             .await
             .map_err(|error| WhatsappWebError::InvalidRequest(error.to_string()))?;

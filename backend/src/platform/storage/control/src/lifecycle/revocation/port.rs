@@ -1,6 +1,6 @@
 //! Credential-free ports for infrastructure-specific revoke adapters.
 
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use std::future::Future;
 
 use super::StoragePoolFenceCommandV1;

@@ -15,7 +15,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   proto: new URL(
-    'src/mail-api/proto/hermes/mail/account/v1/client.proto',
+    'src/mail-api/proto/makosh/mail/account/v1/client.proto',
     BACKEND_ROOT,
   ),
   account: new URL('src/mail-api/src/account.rs', BACKEND_ROOT),
@@ -119,7 +119,7 @@ test('Mail credential binding is owner-local, configuration-only and successor-a
   assert.match(portability, /MAIL_SETTINGS_SCHEMA_MAJOR_V2: u32 = 2/);
   assert.match(
     settings,
-    /pub use hermes_mail_api::\{MAIL_SETTINGS_SCHEMA_MAJOR_V2, MAIL_SETTINGS_SCHEMA_REVISION_V2\}/,
+    /pub use makosh_mail_api::\{MAIL_SETTINGS_SCHEMA_MAJOR_V2, MAIL_SETTINGS_SCHEMA_REVISION_V2\}/,
   );
   assert.match(
     settings,
@@ -167,6 +167,6 @@ test('Mail credential binding is owner-local, configuration-only and successor-a
 
   assert.doesNotMatch(
     `${proto}\n${account}\n${persistence}\n${settings}`,
-    /hermes_(?:communications|telegram|whatsapp|zulip)/,
+    /makosh_(?:communications|telegram|whatsapp|zulip)/,
   );
 });

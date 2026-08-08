@@ -1,5 +1,5 @@
 [package]
-name = "hermes-attachment-preview-runtime"
+name = "makosh-attachment-preview-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,33 +8,33 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-attachment-preview-runtime"
+name = "makosh-attachment-preview-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "attachment_preview"
 surface = "runtime"
 
 [dependencies]
-hermes-attachment-preview-api = { path = "../attachment-preview-api" }
-hermes-attachment-preview-core = { path = "../attachment-preview-core" }
-hermes-attachment-preview-docx = { path = "../attachment-preview-docx" }
-hermes-attachment-preview-image = { path = "../attachment-preview-image" }
-hermes-attachment-preview-ingress = { path = "../attachment-preview-ingress" }
-hermes-attachment-preview-media = { path = "../attachment-preview-media" }
-hermes-attachment-preview-pdf = { path = "../attachment-preview-pdf" }
-hermes-attachment-preview-persistence = { path = "../attachment-preview-persistence" }
-hermes-attachment-preview-renderer-contract = { path = "../attachment-preview-renderer-contract" }
-hermes-attachment-preview-text = { path = "../attachment-preview-text" }
-hermes-attachment-security-contract = { path = "../attachment-security-contract" }
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-communications-attachment-contract = { path = "../communications-attachment-contract" }
-hermes-events-jetstream = { path = "../platform/events/jetstream" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
+makosh-attachment-preview-api = { path = "../attachment-preview-api" }
+makosh-attachment-preview-core = { path = "../attachment-preview-core" }
+makosh-attachment-preview-docx = { path = "../attachment-preview-docx" }
+makosh-attachment-preview-image = { path = "../attachment-preview-image" }
+makosh-attachment-preview-ingress = { path = "../attachment-preview-ingress" }
+makosh-attachment-preview-media = { path = "../attachment-preview-media" }
+makosh-attachment-preview-pdf = { path = "../attachment-preview-pdf" }
+makosh-attachment-preview-persistence = { path = "../attachment-preview-persistence" }
+makosh-attachment-preview-renderer-contract = { path = "../attachment-preview-renderer-contract" }
+makosh-attachment-preview-text = { path = "../attachment-preview-text" }
+makosh-attachment-security-contract = { path = "../attachment-security-contract" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-communications-attachment-contract = { path = "../communications-attachment-contract" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
 getrandom = { version = "=0.4.3", default-features = false }
 libc = "=0.2.186"
 prost = "=0.14.4"

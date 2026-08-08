@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package makosh.mail.message_permanent_delete.v1;
+
+enum MailMessagePermanentDeleteConfirmationV1 {
+  MAIL_MESSAGE_PERMANENT_DELETE_CONFIRMATION_UNSPECIFIED = 0;
+  MAIL_MESSAGE_PERMANENT_DELETE_CONFIRMATION_CONFIRMED = 1;
+}
+
+message MailMessagePermanentDeleteCommandV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+  string message_id = 3;
+  uint64 expected_projection_revision = 4;
+  MailMessagePermanentDeleteConfirmationV1 confirmation = 5;
+}
+
+message MailMessagePermanentDeleteAcceptedV1 {
+  string operation_id = 1;
+}
+
+message MailMessagePermanentDeleteStatusRequestV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+}
+
+enum MailMessagePermanentDeleteOperationOutcomeV1 {
+  MAIL_MESSAGE_PERMANENT_DELETE_OPERATION_OUTCOME_UNSPECIFIED = 0;
+  MAIL_MESSAGE_PERMANENT_DELETE_OPERATION_OUTCOME_PENDING = 1;
+  MAIL_MESSAGE_PERMANENT_DELETE_OPERATION_OUTCOME_SUCCEEDED = 2;
+  MAIL_MESSAGE_PERMANENT_DELETE_OPERATION_OUTCOME_REJECTED = 3;
+  MAIL_MESSAGE_PERMANENT_DELETE_OPERATION_OUTCOME_UNSUPPORTED = 4;
+  MAIL_MESSAGE_PERMANENT_DELETE_OPERATION_OUTCOME_REAUTHORIZATION_REQUIRED = 5;
+  MAIL_MESSAGE_PERMANENT_DELETE_OPERATION_OUTCOME_UNKNOWN = 6;
+}
+
+message MailMessagePermanentDeleteOperationStatusV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+  string message_id = 3;
+  uint64 expected_projection_revision = 4;
+  MailMessagePermanentDeleteConfirmationV1 confirmation = 5;
+  MailMessagePermanentDeleteOperationOutcomeV1 outcome = 6;
+  int64 requested_at_unix_seconds = 7;
+  optional int64 completed_at_unix_seconds = 8;
+  optional uint64 deletion_projection_revision = 9;
+}
+
+message MailMessagePermanentDeleteStatusResponseV1 {
+  optional MailMessagePermanentDeleteOperationStatusV1 status = 1;
+}
+
+service MailMessagePermanentDeleteCommandService {
+  rpc Mutate(MailMessagePermanentDeleteCommandV1)
+      returns (MailMessagePermanentDeleteAcceptedV1);
+}
+
+service MailMessagePermanentDeleteQueryService {
+  rpc GetOperationStatus(MailMessagePermanentDeleteStatusRequestV1)
+      returns (MailMessagePermanentDeleteStatusResponseV1);
+}

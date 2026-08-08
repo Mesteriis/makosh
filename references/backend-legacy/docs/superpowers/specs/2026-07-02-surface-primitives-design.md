@@ -1,4 +1,4 @@
-# Hermes UI Surface Primitives Design
+# Макошь UI Surface Primitives Design
 
 Date: 2026-07-02
 Status: Draft for user review
@@ -6,28 +6,28 @@ Scope: frontend shared UI design spec only. No implementation is included in thi
 
 ## Context
 
-The current Hermes UI catalog already contains several surface-like primitives,
+The current Макошь UI catalog already contains several surface-like primitives,
 including `Surface`, `Paper`, `Panel`, `Card`, `Sheet`, `SidePanel`,
 `FloatingPanel`, `InspectorPanel` and `HoverCard`. The gap is not only missing
 components. The larger issue is that the surface layer is not presented as a
 clear Storybook group with explicit usage rules, overlay safety rules and a
 coherent component contract.
 
-The selected direction is a generic `Hermes UI/General/Surface` pack. It must
-stay domain-neutral and must not introduce Hermes domain concepts such as
+The selected direction is a generic `Макошь UI/General/Surface` pack. It must
+stay domain-neutral and must not introduce Макошь domain concepts such as
 evidence, persona, confidence, project or review state into shared primitive
 APIs.
 
 ## Goals
 
-- Define a first-class generic surface layer for Hermes UI.
+- Define a first-class generic surface layer for Макошь UI.
 - Normalize existing `Surface`, `Paper`, `Panel`, `Card` and `Divider` usage.
 - Add missing generic primitives: `Section`, `Accordion`, `Callout`, `Well`,
   `Fieldset`, `ToolbarSection`, `StatCard` and `ActionCard`.
-- Add a Storybook group named `Hermes UI/General/Surface`.
+- Add a Storybook group named `Макошь UI/General/Surface`.
 - Include explicit overlay safety coverage so dropdowns, selects, menus and
   popovers are not clipped by cards, sections or panels.
-- Keep the scope generic and reusable across Hermes workspaces.
+- Keep the scope generic and reusable across Макошь workspaces.
 
 ## Non-Goals
 
@@ -257,18 +257,18 @@ Slots:
 
 The surface pack uses stable classes and token-driven CSS:
 
-- `hermes-surface`
-- `hermes-paper`
-- `hermes-panel`
-- `hermes-card`
-- `hermes-section`
-- `hermes-accordion`
-- `hermes-callout`
-- `hermes-well`
-- `hermes-fieldset`
-- `hermes-toolbar-section`
-- `hermes-stat-card`
-- `hermes-action-card`
+- `makosh-surface`
+- `makosh-paper`
+- `makosh-panel`
+- `makosh-card`
+- `makosh-section`
+- `makosh-accordion`
+- `makosh-callout`
+- `makosh-well`
+- `makosh-fieldset`
+- `makosh-toolbar-section`
+- `makosh-stat-card`
+- `makosh-action-card`
 
 Templates should not become Tailwind-heavy. Tailwind may be used in Storybook
 outer layout where existing stories already do that, but UI kit component
@@ -308,7 +308,7 @@ inside `Card`, `Section` and `Panel` without clipping.
 Add one Storybook group:
 
 ```text
-Hermes UI/General/Surface
+Макошь UI/General/Surface
 ```
 
 Stories:
@@ -325,14 +325,14 @@ Stories:
 
 All stories must support Storybook locales `ru`, `en` and `es`.
 
-The Storybook coverage guard must require `Hermes UI/General/Surface`.
+The Storybook coverage guard must require `Макошь UI/General/Surface`.
 
 ## Validation Plan
 
 Targeted validation:
 
 - Public exports include all surface components.
-- Storybook coverage requires `Hermes UI/General/Surface`.
+- Storybook coverage requires `Макошь UI/General/Surface`.
 - Surface components default to the non-clipping contract where practical.
 - Storybook includes an `Overlay Safety` story.
 
@@ -357,10 +357,10 @@ cd frontend && pnpm lint:ox \
   stories/ui/Surface.stories.ts
 cd frontend && pnpm typecheck
 cd frontend && pnpm storybook:build
-cd frontend && HERMES_STORYBOOK_HOST=127.0.0.1 HERMES_STORYBOOK_PORT=6008 pnpm storybook:serve
+cd frontend && MAKOSH_STORYBOOK_HOST=127.0.0.1 MAKOSH_STORYBOOK_PORT=6008 pnpm storybook:serve
 cd frontend && pnpm exec test-storybook --url http://127.0.0.1:6008
-cd frontend && HERMES_STORYBOOK_PORT=6007 pnpm test:visual:update
-cd frontend && HERMES_STORYBOOK_PORT=6007 pnpm test:visual
+cd frontend && MAKOSH_STORYBOOK_PORT=6007 pnpm test:visual:update
+cd frontend && MAKOSH_STORYBOOK_PORT=6007 pnpm test:visual
 ```
 
 The full visual matrix will grow by the number of new surface story entries
@@ -387,5 +387,5 @@ multiplied by 3 locales, 3 themes and 7 viewport widths.
 - `Section` is not `Card`.
 - `Accordion` belongs in the surface pack.
 - `StatCard` and `ActionCard` are generic.
-- Storybook uses one group: `Hermes UI/General/Surface`.
+- Storybook uses one group: `Макошь UI/General/Surface`.
 - Surface clipping is opt-in via `clip`; default is non-clipping.

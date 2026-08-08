@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import {
 	MailMessageFlagOperationOutcomeV1,
 	type MailMessageFlagOperationStatusV1,
-} from '../../../gen/hermes/mail/message_flags/v1/client_pb'
+} from '../../../gen/makosh/mail/message_flags/v1/client_pb'
 import {
 	getMailMessageFlagStatus,
 	mutateMailMessageFlag,

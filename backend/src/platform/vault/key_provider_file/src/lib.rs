@@ -5,8 +5,8 @@ use std::io::Write;
 use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 
-use hermes_secure_file::{SecureReadPolicy, read as read_secure_file};
-use hermes_vault_key_provider::{WrappingKey, WrappingKeyProvider};
+use makosh_secure_file::{SecureReadPolicy, read as read_secure_file};
+use makosh_vault_key_provider::{WrappingKey, WrappingKeyProvider};
 
 const KEY_BYTES: usize = 32;
 
@@ -65,9 +65,9 @@ fn load_existing(
     }
     let bytes = read_secure_file(path, SecureReadPolicy::owner_private(KEY_BYTES as u64)).map_err(
         |error| match error {
-            hermes_secure_file::SecureFileError::Io(error) => FileWrappingKeyError::Io(error),
-            hermes_secure_file::SecureFileError::InvalidFile
-            | hermes_secure_file::SecureFileError::TooLarge => {
+            makosh_secure_file::SecureFileError::Io(error) => FileWrappingKeyError::Io(error),
+            makosh_secure_file::SecureFileError::InvalidFile
+            | makosh_secure_file::SecureFileError::TooLarge => {
                 FileWrappingKeyError::InsecureKeyFile
             }
         },

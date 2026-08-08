@@ -3,8 +3,8 @@
 use std::path::Path;
 use std::time::Duration;
 
-use hermes_kernel_control_store::PlatformManagedProcessLaunch;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store::PlatformManagedProcessLaunch;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use crate::distribution::staged_artifact::StagedNativeArtifact;
 use crate::distribution::staged_contracts::StagedRuntimeContracts;
@@ -102,7 +102,7 @@ fn prepare_service_directories(data_dir: &Path) -> Result<std::path::PathBuf, St
 
 fn prepare(
     kernel: &Path,
-    binding: &hermes_kernel_control_store::PlatformManagedProcessBinding,
+    binding: &makosh_kernel_control_store::PlatformManagedProcessBinding,
     runtime_dir: &Path,
     runtime_generation: u64,
 ) -> Result<(StagedNativeArtifact, StagedRuntimeContracts), String> {

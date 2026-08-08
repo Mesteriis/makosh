@@ -1,12 +1,12 @@
-use hermes_backend_testkit::{app, context::TestContext};
+use makosh_backend_testkit::{app, context::TestContext};
 
 use axum::body::{Body, to_bytes};
 use axum::http::{Request, StatusCode};
 use serde_json::json;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::router::{build_router, build_router_with_database};
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::app::router::{build_router, build_router_with_database};
+use makosh_hub_backend::platform::storage::database::Database;
 
 #[tokio::test]
 async fn healthz_returns_ok_status_and_service_name() {
@@ -33,7 +33,7 @@ async fn healthz_returns_ok_status_and_service_name() {
         value,
         json!({
             "status": "ok",
-            "service": "hermes-hub-backend"
+            "service": "makosh-backend"
         })
     );
 }
@@ -60,7 +60,7 @@ async fn readyz_returns_service_unavailable_when_database_is_not_configured() {
     let value: serde_json::Value = serde_json::from_slice(&body).expect("json body");
 
     assert_eq!(value["status"], json!("degraded"));
-    assert_eq!(value["service"], json!("hermes-hub-backend"));
+    assert_eq!(value["service"], json!("makosh-backend"));
     assert_eq!(
         value["checks"]["database"]["status"],
         json!("not_configured")

@@ -1,6 +1,6 @@
 //! Immutable owner-local Storage bundle for Attachment Security.
 
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use sha2::{Digest, Sha256};
 
 pub const ATTACHMENT_SECURITY_STORAGE_BUNDLE_REVISION_V1: u32 = 1;
@@ -91,7 +91,7 @@ pub fn attachment_security_storage_bundle_v1() -> StorageBundleV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_storage_protocol::validation::validate_storage_bundle;
+    use makosh_storage_protocol::validation::validate_storage_bundle;
 
     use super::*;
 
@@ -107,8 +107,8 @@ mod tests {
         );
         assert_eq!(validate_storage_bundle(&bundle), Ok(()));
         assert_eq!(bundle.steps.len(), 8);
-        assert_eq!(sql.matches("CREATE TABLE hermes_data.").count(), 7);
-        assert!(!sql.contains("hermes_data.communications_"));
-        assert!(!sql.contains("hermes_data.mail_"));
+        assert_eq!(sql.matches("CREATE TABLE makosh_data.").count(), 7);
+        assert!(!sql.contains("makosh_data.communications_"));
+        assert!(!sql.contains("makosh_data.mail_"));
     }
 }

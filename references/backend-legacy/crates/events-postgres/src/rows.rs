@@ -2,7 +2,7 @@ use sqlx::Row;
 use sqlx::postgres::PgRow;
 
 use super::errors::EventStoreError;
-use hermes_events_api::{EventEnvelope, StoredEventEnvelope};
+use makosh_events_api::{EventEnvelope, StoredEventEnvelope};
 
 pub(super) fn row_to_event(row: PgRow) -> Result<EventEnvelope, EventStoreError> {
     Ok(EventEnvelope {

@@ -6,7 +6,7 @@ pub enum PersonaProjectionError {
     Sqlx(#[from] sqlx::Error),
 
     #[error(transparent)]
-    Observation(#[from] hermes_observations_postgres::errors::ObservationStoreError),
+    Observation(#[from] makosh_observations_postgres::errors::ObservationStoreError),
 
     #[error("email address must not be empty")]
     EmptyEmailAddress,

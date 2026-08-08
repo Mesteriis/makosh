@@ -1,8 +1,8 @@
 use chrono::{DateTime, Utc};
-use hermes_communications_api::accounts::ProviderAccount;
-use hermes_communications_api::accounts::ProviderAccountMutationOrigin;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
-use hermes_events_api::StoredEventEnvelope;
+use makosh_communications_api::accounts::ProviderAccount;
+use makosh_communications_api::accounts::ProviderAccountMutationOrigin;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_events_api::StoredEventEnvelope;
 use serde_json::{Map, Value, json};
 use sqlx::postgres::PgPool;
 
@@ -10,12 +10,12 @@ use crate::domains::signal_hub::connections::SignalHubConnectionService;
 use crate::domains::signal_hub::store::{SignalHubError, SignalHubStore};
 use crate::integrations::whatsapp::client::store::WhatsappWebStore;
 use crate::integrations::whatsapp::runtime::contracts::WhatsAppRuntimeStatus;
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
-use hermes_communications_postgres::store::CommunicationIngestionStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
 
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use crate::platform::secrets::store::SecretReferenceStore;
 use crate::vault::HostVault;
@@ -226,7 +226,7 @@ fn reconcile_decision_from_effective_state(
 
 async fn update_whatsapp_account_lifecycle_state(
     account_store: &CommunicationProviderAccountStore,
-    account: &hermes_communications_api::accounts::ProviderAccount,
+    account: &makosh_communications_api::accounts::ProviderAccount,
     lifecycle_state: &str,
     observed_at: DateTime<Utc>,
 ) -> Result<(), String> {
@@ -317,7 +317,7 @@ async fn remove_whatsapp_signal_connection(pool: &PgPool, account_id: &str) -> R
     let connection_service =
         crate::domains::signal_hub::connections::SignalHubConnectionService::new(
             signal_store,
-            hermes_events_postgres::store::EventStore::new(pool.clone()),
+            makosh_events_postgres::store::EventStore::new(pool.clone()),
         );
     connection_service
         .remove_account_connection("whatsapp", account_id)

@@ -7,7 +7,7 @@ use crate::integrations::mail::accounts::service::EmailAccountSetupService;
 use crate::integrations::mail::gmail::client::gmail_api::GmailApiClient;
 use crate::platform::secrets::store::SecretReferenceStore;
 use crate::vault::HostVault;
-use hermes_communications_api::email::{
+use makosh_communications_api::email::{
     EmailSendError, GmailOutboxSendRequest, GmailOutboxTransport, SendResult,
 };
 

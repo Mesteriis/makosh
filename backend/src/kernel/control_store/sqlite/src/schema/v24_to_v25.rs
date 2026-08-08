@@ -6,7 +6,7 @@ use crate::StoreError;
 
 pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
     transaction.execute_batch(
-        "CREATE TABLE hermes_kernel_module_event_delivery_policy (
+        "CREATE TABLE makosh_kernel_module_event_delivery_policy (
              registration_id TEXT NOT NULL,
              capability_id TEXT NOT NULL,
              envelope_kind INTEGER NOT NULL CHECK (envelope_kind BETWEEN 1 AND 5),
@@ -21,11 +21,11 @@ pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
                           contract_name, contract_major, direction),
              FOREIGN KEY (registration_id, capability_id, envelope_kind, contract_owner,
                           contract_name, contract_major, direction)
-                 REFERENCES hermes_kernel_module_event_route_request(registration_id, capability_id,
+                 REFERENCES makosh_kernel_module_event_route_request(registration_id, capability_id,
                      envelope_kind, contract_owner, contract_name, contract_major, direction)
                  ON DELETE CASCADE
          );
-         UPDATE hermes_kernel_control_store_metadata SET schema_version = 25 WHERE singleton = 1;",
+         UPDATE makosh_kernel_control_store_metadata SET schema_version = 25 WHERE singleton = 1;",
     )?;
     Ok(())
 }

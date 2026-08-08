@@ -15,7 +15,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   ownerControl: new URL(
-    'src/api/gateway/contracts/proto/hermes/gateway/v1/owner_control.proto',
+    'src/api/gateway/contracts/proto/makosh/gateway/v1/owner_control.proto',
     BACKEND_ROOT,
   ),
   kernelApply: new URL(
@@ -27,7 +27,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   accountProto: new URL(
-    'src/zulip-api/proto/hermes/zulip/account/v1/client.proto',
+    'src/zulip-api/proto/makosh/zulip/account/v1/client.proto',
     BACKEND_ROOT,
   ),
   clientContract: new URL('src/zulip-api/src/client_contract.rs', BACKEND_ROOT),
@@ -84,7 +84,7 @@ test('managed integration Settings apply remains provider-neutral and fail-close
   assert.match(kernelDispatch, /managed_settings_application::wait_for_ready_and_confirm/);
   assert.doesNotMatch(
     `${kernelApply}\n${kernelDispatch}`,
-    /hermes_(?:mail|telegram|whatsapp|zulip)|Mail|Telegram|WhatsApp|Zulip/,
+    /makosh_(?:mail|telegram|whatsapp|zulip)|Mail|Telegram|WhatsApp|Zulip/,
   );
   assert.match(adr, /Kernel\/Core согласуют только/);
   assert.match(adr, /импортируют integration packages/);
@@ -131,7 +131,7 @@ test('Zulip account lifecycle keeps credentials out of Settings and applies by s
   assert.match(clientContract, /zulip\.account\.lifecycle\.v1/);
   assert.match(
     clientContract,
-    /\/hermes\.zulip\.account\.v1\.ZulipAccountLifecycleService\/Apply/,
+    /\/makosh\.zulip\.account\.v1\.ZulipAccountLifecycleService\/Apply/,
   );
   assert.doesNotMatch(settings, /api_key|credential_revision|secret_ref|record_id/i);
   assert.match(settings, /SettingClientVisibilityV1::Editable/);

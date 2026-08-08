@@ -1,0 +1,125 @@
+syntax = "proto3";
+package makosh.mail.v1;
+
+message SyncInboxRequestV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+}
+message SendMailRequestV1 {
+  string operation_id = 1;
+  string provider_conversation_id = 2;
+  repeated string recipient = 3;
+  string subject = 4;
+  string text_body = 5;
+  repeated bytes attachment_anchor_id = 6;
+  repeated string cc_recipient = 7;
+  repeated string bcc_recipient = 8;
+  string connection_id = 9;
+}
+message GetMailDeliveryStatusRequestV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+}
+message SyncInboxAcceptedV1 { string operation_id = 1; }
+message MailAcceptedV1 { string operation_id = 1; }
+enum MailDeliveryOutcomeV1 {
+  MAIL_DELIVERY_OUTCOME_UNSPECIFIED = 0;
+  MAIL_DELIVERY_OUTCOME_PENDING = 1;
+  MAIL_DELIVERY_OUTCOME_ACCEPTED = 2;
+  MAIL_DELIVERY_OUTCOME_REJECTED = 3;
+  MAIL_DELIVERY_OUTCOME_UNKNOWN = 4;
+}
+message MailDeliveryOperationStatusV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+  MailDeliveryOutcomeV1 outcome = 3;
+  int64 requested_at_unix_seconds = 4;
+  optional int64 completed_at_unix_seconds = 5;
+  optional uint32 response_code = 6;
+}
+message GetMailDeliveryStatusResponseV1 {
+  optional MailDeliveryOperationStatusV1 status = 1;
+}
+enum GmailOAuthAuthorityV1 {
+  GMAIL_OAUTH_AUTHORITY_UNSPECIFIED = 0;
+  GMAIL_OAUTH_AUTHORITY_OPERATIONAL = 1;
+  GMAIL_OAUTH_AUTHORITY_PERMANENT_DELETE = 2;
+}
+message StartGmailOAuthRequestV1 {
+  string operation_id = 1;
+  GmailOAuthAuthorityV1 authority = 2;
+  string connection_id = 3;
+}
+message GmailOAuthStartedV1 {
+  string operation_id = 1;
+  string setup_id = 2;
+  string authorization_url = 3;
+  int64 expires_at_unix_seconds = 4;
+}
+message CompleteGmailOAuthRequestV1 {
+  string operation_id = 1;
+  string setup_id = 2;
+  string state = 3;
+  string authorization_code = 4;
+  string connection_id = 5;
+}
+message RefreshGmailOAuthRequestV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+}
+message GetGmailOAuthStatusRequestV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+}
+enum GmailOAuthOperationKindV1 {
+  GMAIL_OAUTH_OPERATION_KIND_UNSPECIFIED = 0;
+  GMAIL_OAUTH_OPERATION_KIND_COMPLETE = 1;
+  GMAIL_OAUTH_OPERATION_KIND_REFRESH = 2;
+}
+enum GmailOAuthOutcomeV1 {
+  GMAIL_OAUTH_OUTCOME_UNSPECIFIED = 0;
+  GMAIL_OAUTH_OUTCOME_PENDING = 1;
+  GMAIL_OAUTH_OUTCOME_COMPLETED = 2;
+  GMAIL_OAUTH_OUTCOME_REJECTED = 3;
+  GMAIL_OAUTH_OUTCOME_UNKNOWN = 4;
+}
+message GmailOAuthOperationStatusV1 {
+  string operation_id = 1;
+  GmailOAuthOperationKindV1 kind = 2;
+  GmailOAuthOutcomeV1 outcome = 3;
+  int64 requested_at_unix_seconds = 4;
+  optional int64 completed_at_unix_seconds = 5;
+}
+message GetGmailOAuthStatusResponseV1 {
+  optional GmailOAuthOperationStatusV1 status = 1;
+}
+
+// Provider-specific operational contracts. Core Gateway authenticates and
+// routes each exact contract but does not translate its payload.
+service MailSyncService {
+  rpc Sync(SyncInboxRequestV1) returns (SyncInboxAcceptedV1);
+}
+
+service MailDeliveryCommandService {
+  rpc Send(SendMailRequestV1) returns (MailAcceptedV1);
+}
+
+service MailDeliveryQueryService {
+  rpc GetOperationStatus(GetMailDeliveryStatusRequestV1) returns (GetMailDeliveryStatusResponseV1);
+}
+
+service GmailOAuthStartService {
+  rpc Start(StartGmailOAuthRequestV1) returns (GmailOAuthStartedV1);
+}
+
+service GmailOAuthCompleteService {
+  rpc Complete(CompleteGmailOAuthRequestV1) returns (MailAcceptedV1);
+}
+
+service GmailOAuthRefreshService {
+  rpc Refresh(RefreshGmailOAuthRequestV1) returns (MailAcceptedV1);
+}
+
+service GmailOAuthQueryService {
+  rpc GetOperationStatus(GetGmailOAuthStatusRequestV1) returns (GetGmailOAuthStatusResponseV1);
+}

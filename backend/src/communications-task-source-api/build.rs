@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/communications/task_source/v1/task_source.proto"],
+            &["proto/makosh/communications/task_source/v1/task_source.proto"],
             &["proto"],
         )
         .expect("Communications task source protocol must compile");

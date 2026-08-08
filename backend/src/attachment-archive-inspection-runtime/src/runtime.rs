@@ -5,30 +5,30 @@ use std::{
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
-use hermes_attachment_archive_inspection_api::{
+use makosh_attachment_archive_inspection_api::{
     ATTACHMENT_ARCHIVE_INSPECTION_MODULE_ID_V1, ATTACHMENT_ARCHIVE_INSPECTION_OWNER_V1,
 };
-use hermes_attachment_archive_inspection_core::{
+use makosh_attachment_archive_inspection_core::{
     ArchiveInspectionErrorV1, ArchiveInspectionLimitsV1, ArchiveInspectionPolicyErrorV1,
 };
-use hermes_attachment_archive_inspection_ingress::{
+use makosh_attachment_archive_inspection_ingress::{
     ArchiveInspectionCustodyEnvelopeContextV1,
     archive_inspection_custody_delegated_contract_reference_v1,
     archive_inspection_custody_delegation_rejected_contract_reference_v1,
     build_request_archive_inspection_custody_delegation_outbox_record_v1,
 };
-use hermes_attachment_archive_inspection_persistence::{
+use makosh_attachment_archive_inspection_persistence::{
     ArchiveInspectionPersistenceErrorV1, AttachmentArchiveInspectionPersistenceV1,
 };
-use hermes_attachment_archive_inspection_zip::inspect_zip_bytes_v1;
-use hermes_attachment_security_contract::admission::attachment_security_scan_candidate_observed_contract_reference_v1;
-use hermes_communications_attachment_contract::admission::communication_attachment_safety_state_changed_contract_reference_v1;
-use hermes_events_jetstream::{
+use makosh_attachment_archive_inspection_zip::inspect_zip_bytes_v1;
+use makosh_attachment_security_contract::admission::attachment_security_scan_candidate_observed_contract_reference_v1;
+use makosh_communications_attachment_contract::admission::communication_attachment_safety_state_changed_contract_reference_v1;
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
     try_receive_runtime_pull_delivery,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::{
         ContractReferenceV1, ManagedRuntimeClientDeliveryResponseV1,
@@ -40,11 +40,11 @@ use hermes_runtime_protocol::{
         validate_module_client_request_v1, validate_module_client_response_v1,
     },
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 

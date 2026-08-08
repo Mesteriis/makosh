@@ -1,6 +1,6 @@
 //! Communications runtime composition for provider-neutral evidence reads.
 
-use hermes_communications_api::{
+use makosh_communications_api::{
     CommunicationAccountSummaryV1, CommunicationAttachmentAnchorSummaryV1,
     CommunicationConversationSummaryV1, CommunicationMessageReferenceKindV1,
     CommunicationMessageReferenceSummaryV1, CommunicationMessageSummaryV1,
@@ -10,7 +10,7 @@ use hermes_communications_api::{
     ListConversationParticipantsV1, ListMessageAttachmentAnchorsV1, ListMessageEvidenceV1,
     ListMessageReferencesV1,
 };
-use hermes_communications_persistence::{CanonicalReadPageV1, CommunicationsDurablePersistence};
+use makosh_communications_persistence::{CanonicalReadPageV1, CommunicationsDurablePersistence};
 
 use crate::canonical_read_cursor::{
     CanonicalReadCursorKindV1, decode_descending_cursor_v1, decode_reference_cursor_v1,

@@ -9,15 +9,15 @@ use std::{
     time::Duration,
 };
 
-use hermes_mail_contacts_sync_persistence::{
+use makosh_mail_contacts_sync_persistence::{
     MailContactsSyncPersistenceErrorV1, mail_contacts_sync_storage_bundle_v1,
 };
-use hermes_mail_contacts_sync_runtime::{
+use makosh_mail_contacts_sync_runtime::{
     MailContactsSyncManagedRuntimeErrorV1, MailContactsSyncManagedRuntimeV1,
     MailContactsSyncRuntimeAdmissionV1, decode_mail_contacts_sync_settings_v1,
     mail_contacts_sync_module_descriptor_v1, mail_contacts_sync_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::{

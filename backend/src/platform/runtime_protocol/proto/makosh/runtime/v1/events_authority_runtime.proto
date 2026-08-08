@@ -1,0 +1,133 @@
+syntax = "proto3";
+
+package makosh.runtime.v1;
+
+import "makosh/runtime/v1/recovery.proto";
+
+// Short-lived configuration for the verified Events authority child. It carries
+// public account identity and Vault transport context, never the account signer.
+message EventsAuthorityRuntimeConfigurationV1 {
+  string account_public_key = 1;
+  string vault_instance_id = 2;
+  uint64 vault_runtime_generation = 3;
+  bytes vault_hpke_public_key_x25519 = 4;
+  uint64 signer_credential_revision = 5;
+  // Trusted non-secret Event Hub connection identity. Password material is
+  // resolved by the authority through its fenced Vault route.
+  string nats_endpoint = 6;
+  string nats_username = 7;
+  uint64 event_hub_credential_revision = 8;
+}
+
+enum EventsAuthorityRuntimeStateV1 {
+  EVENTS_AUTHORITY_RUNTIME_STATE_V1_UNSPECIFIED = 0;
+  EVENTS_AUTHORITY_RUNTIME_STATE_V1_READY = 1;
+  EVENTS_AUTHORITY_RUNTIME_STATE_V1_BLOCKED = 2;
+  EVENTS_AUTHORITY_RUNTIME_STATE_V1_STOPPED = 3;
+}
+
+message GetEventsAuthorityRuntimeStatusRequestV1 {}
+
+// Kernel derives subjects from its approved Event Hub topology. The request
+// carries only public fences and the module's ephemeral recipient key; the
+// authority returns the JWT/NKey material exclusively as opaque ciphertext.
+message EventsRuntimeConsumerGrantV1 {
+  string durable_name = 1;
+  string filter_subject = 2;
+}
+
+message IssueEventsRuntimeCredentialRequestV1 {
+  string logical_owner_id = 1;
+  string registration_id = 2;
+  string runtime_instance_id = 3;
+  uint64 runtime_generation = 4;
+  uint64 grant_epoch = 5;
+  uint64 credential_revision = 6;
+  repeated string publish_subjects = 7;
+  // Legacy direct-subscribe input is intentionally denied. Pull consumers are
+  // granted below with an exact durable name and filter subject.
+  repeated string subscribe_subjects = 8;
+  uint32 ttl_seconds = 9;
+  bytes request_id = 10;
+  bytes recipient_public_key_x25519 = 11;
+  repeated EventsRuntimeConsumerGrantV1 consumer_grants = 12;
+}
+
+message EventsRuntimeCredentialDeliveryV1 {
+  bytes encapped_key = 1;
+  bytes ciphertext = 2;
+  bytes tag = 3;
+}
+
+// Kernel-derived, non-secret desired JetStream topology. The authority validates
+// every entry before it resolves its fenced Event Hub credential from Vault.
+message EventHubStreamTopologyV1 {
+  DurableEnvelopeKindV1 envelope_kind = 1;
+  uint64 max_bytes = 2;
+  uint64 max_age_millis = 3;
+  uint32 replicas = 4;
+}
+
+message EventHubConsumerTopologyV1 {
+  DurableEnvelopeKindV1 envelope_kind = 1;
+  string durable_name = 2;
+  string filter_subject = 3;
+  uint32 max_ack_pending = 4;
+  uint32 max_deliver = 5;
+  uint64 ack_wait_millis = 6;
+}
+
+message ReconcileEventsTopologyRequestV1 {
+  uint64 topology_revision = 1;
+  repeated EventHubStreamTopologyV1 streams = 2;
+  repeated EventHubConsumerTopologyV1 consumers = 3;
+}
+
+message ReconcileEventsTopologyResponseV1 {
+  uint64 topology_revision = 1;
+  uint32 stream_count = 2;
+  uint32 consumer_count = 3;
+}
+
+// The Account JWT has already been signed by the separately managed NATS
+// operator. The authority verifies its account binding and publishes it only
+// through a Vault-resolved System Account credential; no operator seed reaches
+// Kernel or this protocol.
+message ApplyEventsAccountJwtUpdateRequestV1 {
+  uint64 resolver_credential_revision = 1;
+  string signed_account_jwt = 2;
+}
+
+message ApplyEventsAccountJwtUpdateResponseV1 {
+  uint64 resolver_credential_revision = 1;
+}
+
+// Sanitized attestation only; it deliberately cannot contain a JWT, NKey seed,
+// Vault ciphertext, account signing key or broker endpoint.
+message EventsAuthorityRuntimeStatusV1 {
+  EventsAuthorityRuntimeStateV1 state = 1;
+  uint64 runtime_generation = 2;
+  uint64 grant_epoch = 3;
+  uint64 vault_runtime_generation = 4;
+  uint64 signer_credential_revision = 5;
+  string blocker_code = 6;
+}
+
+message EventsAuthorityRuntimeControlRequestV1 {
+  oneof operation {
+    GetEventsAuthorityRuntimeStatusRequestV1 get_status = 1;
+    IssueEventsRuntimeCredentialRequestV1 issue_runtime_credential = 2;
+    ReconcileEventsTopologyRequestV1 reconcile_topology = 3;
+    ApplyEventsAccountJwtUpdateRequestV1 apply_account_jwt_update = 4;
+  }
+}
+
+message EventsAuthorityRuntimeControlResponseV1 {
+  oneof result {
+    EventsAuthorityRuntimeStatusV1 status = 1;
+    EventsRuntimeCredentialDeliveryV1 credential_delivery = 2;
+    ReconcileEventsTopologyResponseV1 topology_reconciled = 3;
+    ApplyEventsAccountJwtUpdateResponseV1 account_jwt_updated = 4;
+  }
+  string error_code = 15;
+}

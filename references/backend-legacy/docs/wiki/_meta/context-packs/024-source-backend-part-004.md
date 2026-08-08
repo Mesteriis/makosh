@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/app/api_support/query_parsing.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/query_parsing.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/query_parsing.rs`
 - Size bytes / Размер в байтах: `251`
 - Included characters / Включено символов: `251`
 - Truncated / Обрезано: `no`
@@ -78,7 +78,7 @@ pub(crate) use tasks::*;
 
 ### `backend/src/app/api_support/query_parsing/communication.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/query_parsing/communication.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/query_parsing/communication.rs`
 - Size bytes / Размер в байтах: `2654`
 - Included characters / Включено символов: `2654`
 - Truncated / Обрезано: `no`
@@ -162,7 +162,7 @@ fn non_empty_query_value(value: &str) -> Option<String> {
 
 ### `backend/src/app/api_support/query_parsing/documents.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/query_parsing/documents.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/query_parsing/documents.rs`
 - Size bytes / Размер в байтах: `1664`
 - Included characters / Включено символов: `1664`
 - Truncated / Обрезано: `no`
@@ -229,7 +229,7 @@ pub(crate) fn validate_non_empty_document_processing_field(
 
 ### `backend/src/app/api_support/query_parsing/graph.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/query_parsing/graph.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/query_parsing/graph.rs`
 - Size bytes / Размер в байтах: `2468`
 - Included characters / Включено символов: `2468`
 - Truncated / Обрезано: `no`
@@ -329,7 +329,7 @@ pub(crate) fn parse_graph_search_query(
 
 ### `backend/src/app/api_support/query_parsing/persons.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/query_parsing/persons.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/query_parsing/persons.rs`
 - Size bytes / Размер в байтах: `2015`
 - Included characters / Включено символов: `2015`
 - Truncated / Обрезано: `no`
@@ -400,7 +400,7 @@ pub(crate) fn validate_non_empty_person_identity_field(
 
 ### `backend/src/app/api_support/query_parsing/projects.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/query_parsing/projects.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/query_parsing/projects.rs`
 - Size bytes / Размер в байтах: `2817`
 - Included characters / Включено символов: `2817`
 - Truncated / Обрезано: `no`
@@ -502,7 +502,7 @@ pub(crate) fn validate_non_empty_project_link_field(
 
 ### `backend/src/app/api_support/query_parsing/tasks.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/query_parsing/tasks.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/query_parsing/tasks.rs`
 - Size bytes / Размер в байтах: `1961`
 - Included characters / Включено символов: `1961`
 - Truncated / Обрезано: `no`
@@ -573,7 +573,7 @@ pub(crate) fn validate_non_empty_task_candidate_field(
 
 ### `backend/src/app/api_support/review_commands.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/review_commands.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/review_commands.rs`
 - Size bytes / Размер в байтах: `6148`
 - Included characters / Включено символов: `6148`
 - Truncated / Обрезано: `no`
@@ -782,7 +782,7 @@ impl From<crate::domains::projects::link_reviews::ProjectLinkReviewCommandResult
 
 ### `backend/src/app/api_support/review_lists.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/review_lists.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/review_lists.rs`
 - Size bytes / Размер в байтах: `883`
 - Included characters / Включено символов: `883`
 - Truncated / Обрезано: `no`
@@ -827,7 +827,7 @@ pub(crate) struct AiRunListResponse {
 
 ### `backend/src/app/api_support/stores.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/stores.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/stores.rs`
 - Size bytes / Размер в байтах: `245`
 - Included characters / Включено символов: `245`
 - Truncated / Обрезано: `no`
@@ -848,7 +848,7 @@ pub(crate) use settings_vault::*;
 
 ### `backend/src/app/api_support/stores/ai_routing.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/stores/ai_routing.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/stores/ai_routing.rs`
 - Size bytes / Размер в байтах: `3209`
 - Included characters / Включено символов: `3209`
 - Truncated / Обрезано: `no`
@@ -953,7 +953,7 @@ fn ai_provider_matches_runtime(
 
 ### `backend/src/app/api_support/stores/ai_runtime.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/stores/ai_runtime.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/stores/ai_runtime.rs`
 - Size bytes / Размер в байтах: `6878`
 - Included characters / Включено символов: `6878`
 - Truncated / Обрезано: `no`
@@ -1175,7 +1175,7 @@ pub(crate) async fn email_ai_reply_service(
 
 ### `backend/src/app/api_support/stores/database.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/stores/database.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/stores/database.rs`
 - Size bytes / Размер в байтах: `284`
 - Included characters / Включено символов: `284`
 - Truncated / Обрезано: `no`
@@ -1196,7 +1196,7 @@ pub(in crate::app::api_support::stores) fn database_pool(
 
 ### `backend/src/app/api_support/stores/domain_stores.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/stores/domain_stores.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/stores/domain_stores.rs`
 - Size bytes / Размер в байтах: `9125`
 - Included characters / Включено символов: `9125`
 - Truncated / Обрезано: `no`
@@ -1414,7 +1414,7 @@ pub(crate) fn api_audit_log(state: &AppState) -> Result<ApiAuditLog, ApiError> {
 
 ### `backend/src/app/api_support/stores/integration_stores.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/stores/integration_stores.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/stores/integration_stores.rs`
 - Size bytes / Размер в байтах: `6761`
 - Included characters / Включено символов: `6761`
 - Truncated / Обрезано: `no`
@@ -1630,7 +1630,7 @@ pub(crate) fn account_setup_service(
 
 ### `backend/src/app/api_support/stores/settings_vault.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/stores/settings_vault.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/stores/settings_vault.rs`
 - Size bytes / Размер в байтах: `470`
 - Included characters / Включено символов: `470`
 - Truncated / Обрезано: `no`
@@ -1656,7 +1656,7 @@ pub(crate) fn database_encrypted_vault(
 
 ### `backend/src/app/api_support/telegram_capabilities.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/telegram_capabilities.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/telegram_capabilities.rs`
 - Size bytes / Размер в байтах: `16037`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1939,13 +1939,13 @@ impl TelegramCapabilitiesResponse {
                     capability.status = TelegramCapabilityState::Available.as_str().to_owned();
                     capability.reason = "Adding a chat to a Telegram folder uses the durable provider-write outbox and TDLib chat-position reconciliation for the target folder.".to_owned();
                 }
-   
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/app/api_support/telegram_capability_catalog.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/telegram_capability_catalog.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/telegram_capability_catalog.rs`
 - Size bytes / Размер в байтах: `707`
 - Included characters / Включено символов: `707`
 - Truncated / Обрезано: `no`
@@ -1977,7 +1977,7 @@ pub(super) fn telegram_capability_rows(qr_ready: bool) -> Vec<TelegramOperationC
 
 ### `backend/src/app/api_support/telegram_capability_catalog_extended.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/telegram_capability_catalog_extended.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/telegram_capability_catalog_extended.rs`
 - Size bytes / Размер в байтах: `11154`
 - Included characters / Включено символов: `11090`
 - Truncated / Обрезано: `no`
@@ -2313,7 +2313,7 @@ pub(super) fn push_extended_capabilities(
 
 ### `backend/src/app/api_support/telegram_capability_catalog_foundation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/telegram_capability_catalog_foundation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/telegram_capability_catalog_foundation.rs`
 - Size bytes / Размер в байтах: `13317`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2691,13 +2691,13 @@ fn push_dialog_capabilities(capabilities: &mut Vec<TelegramOperationCapability>,
     ));
     capabilities.push(TelegramOperationCapability::new(
         "dialogs.folder_remove",
-  
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/app/api_support/telegram_capability_catalog_messages.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/telegram_capability_catalog_messages.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/telegram_capability_catalog_messages.rs`
 - Size bytes / Размер в байтах: `11978`
 - Included characters / Включено символов: `11978`
 - Truncated / Обрезано: `no`
@@ -3052,7 +3052,7 @@ fn provider_or_unsupported(qr_ready: bool) -> TelegramCapabilityState {
 
 ### `backend/src/app/api_support/telegram_capability_catalog_tests.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/telegram_capability_catalog_tests.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/telegram_capability_catalog_tests.rs`
 - Size bytes / Размер в байтах: `2964`
 - Included characters / Включено символов: `2964`
 - Truncated / Обрезано: `no`
@@ -3149,7 +3149,7 @@ fn qr_ready_search_and_media_capabilities_reflect_projection_backed_provider_ref
 
 ### `backend/src/app/api_support/whatsapp_capabilities.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/whatsapp_capabilities.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/whatsapp_capabilities.rs`
 - Size bytes / Размер в байтах: `16711`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3409,7 +3409,7 @@ impl WhatsappCapabilitiesResponse {
                 capability_name if is_whatsapp_business_platform_capability(capability_name) => {
                     if provider_shape == "whatsapp_business_cloud" {
                         capability.status = WhatsAppCapabilityState::Blocked.as_str().to_owned();
-                        capability.reason = "Business Cloud account shape is configured, but Hermes does not execute official Business Platform operations yet."
+                        capability.reason = "Business Cloud account shape is configured, but Макошь does not execute official Business Platform operations yet."
                             .to_owned();
                     } else {
                         capability.status =

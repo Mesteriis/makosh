@@ -2,27 +2,27 @@
 
 use std::future::{Future, ready};
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     DurableSubjectV1, JetStreamClient, NatsPasswordCredentialV1, RuntimeNatsIdentity,
     RuntimeOutboxPublisherV1, RuntimePublishPermitV1,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{
         ExactOutboxPublisherPortV1, OutboxPublishReceiptV1, OutboxRecordV1, OutboxRelayErrorV1,
         OutboxRelayOutcomeV1, relay_once,
     },
     validation::envelope::decode_envelope_v1,
 };
-use hermes_telegram_api::{
+use makosh_telegram_api::{
     TelegramMessageObservation, TelegramMessageReferences, TelegramProviderEvent,
     TelegramRealtimeFrame,
 };
-use hermes_telegram_persistence::{
+use makosh_telegram_persistence::{
     TelegramCommunicationsOutboxStoreV1, TelegramDurablePersistence,
     TelegramPersistenceConformanceV1,
 };
-use hermes_telegram_runtime::{PACKAGE as TELEGRAM_MODULE_ID, TelegramRuntime};
-use hermes_telegram_tdlib::{
+use makosh_telegram_runtime::{PACKAGE as TELEGRAM_MODULE_ID, TelegramRuntime};
+use makosh_telegram_tdlib::{
     TdlibError, TdlibProviderUpdate, TdlibRequest, TdlibResponse, TdlibTransport,
 };
 use zeroize::Zeroizing;
@@ -84,7 +84,7 @@ async fn assert_live_flow(endpoint: String, supervisor: &ManagedRuntimeSuperviso
         .await
         .expect("connect canonical event observer");
     let mut canonical_events = client
-        .subscribe("hermes.event.v1.communications.communication_evidence_recorded.v1")
+        .subscribe("makosh.event.v1.communications.communication_evidence_recorded.v1")
         .await
         .expect("subscribe to canonical Communications events");
     let identity =
@@ -168,7 +168,7 @@ async fn assert_live_flow(endpoint: String, supervisor: &ManagedRuntimeSuperviso
 
 async fn persist_provider_observation(durable: &TelegramDurablePersistence) {
     let mut runtime = TelegramRuntime::new(UnusedProvider);
-    runtime.set_admission(Some(hermes_telegram_runtime::TelegramRuntimeAdmission {
+    runtime.set_admission(Some(makosh_telegram_runtime::TelegramRuntimeAdmission {
         logical_owner_id: "telegram".to_owned(),
         logical_human_owner_id: "owner-1".to_owned(),
         configuration_instance_id: "telegram-account-1".to_owned(),
@@ -200,7 +200,7 @@ async fn persist_provider_observation(durable: &TelegramDurablePersistence) {
     };
     runtime
         .persist_provider_frame_durable(durable, &frame, &mut |_| {
-            Err(hermes_communications_ingress::BodyAdmissionFailureV1::PolicyRejected)
+            Err(makosh_communications_ingress::BodyAdmissionFailureV1::PolicyRejected)
         })
         .await
         .expect("persist Telegram provider observation and outbox");
@@ -209,21 +209,21 @@ async fn persist_provider_observation(durable: &TelegramDurablePersistence) {
 async fn connect_postgres() -> TelegramDurablePersistence {
     let password = Zeroizing::new(
         std::fs::read_to_string(required(
-            "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+            "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
         ))
         .expect("read disposable PostgreSQL credential")
         .trim()
         .to_owned(),
     );
-    let port = required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+    let port = required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
         .parse::<u16>()
         .expect("valid PostgreSQL port");
     TelegramPersistenceConformanceV1::connect(
-        &required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST"),
+        &required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"),
         port,
-        "hermes_postgres_admin",
+        "makosh_postgres_admin",
         password.as_str(),
-        "hermes_storage_authenticated",
+        "makosh_storage_authenticated",
     )
     .await
     .expect("connect disposable PostgreSQL")

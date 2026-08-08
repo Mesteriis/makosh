@@ -1,15 +1,15 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::{DateTime, Utc};
 use serde_json::json;
 
-use hermes_events_api::{EventEnvelope, NewEventEnvelope, StoredEventEnvelope};
-use hermes_events_postgres::consumers::EventConsumerStore;
-use hermes_events_postgres::cursors::ProjectionCursorStore;
-use hermes_events_postgres::store::EventStore;
-use hermes_hub_backend::platform::events::trace_context::TraceContext;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_events_api::{EventEnvelope, NewEventEnvelope, StoredEventEnvelope};
+use makosh_events_postgres::consumers::EventConsumerStore;
+use makosh_events_postgres::cursors::ProjectionCursorStore;
+use makosh_events_postgres::store::EventStore;
+use makosh_hub_backend::platform::events::trace_context::TraceContext;
+use makosh_hub_backend::platform::storage::database::Database;
 
 #[test]
 fn new_event_envelope_rejects_empty_event_type() {
@@ -327,11 +327,11 @@ async fn event_store_reconstructs_trace_edges_against_postgres() {
     assert_eq!(
         trace.edges,
         vec![
-            hermes_events_postgres::trace::EventTraceEdge {
+            makosh_events_postgres::trace::EventTraceEdge {
                 parent_event_id: root_id.clone(),
                 child_event_id: child_id.clone(),
             },
-            hermes_events_postgres::trace::EventTraceEdge {
+            makosh_events_postgres::trace::EventTraceEdge {
                 parent_event_id: child_id.clone(),
                 child_event_id: grandchild_id,
             },

@@ -1,6 +1,6 @@
 # CommandPalette
 
-Trigger plus Hermes command dialog.
+Trigger plus Макошь command dialog.
 
 Use for local command discovery and keyboard-first navigation.
 

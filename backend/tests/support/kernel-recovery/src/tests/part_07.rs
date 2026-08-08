@@ -2,7 +2,7 @@ use super::common::*;
 
 #[test]
 fn revoked_external_runtime_session_cannot_route_ciphertext_to_vault() {
-    let root = unique_target_root("hermes-vault-route-session");
+    let root = unique_target_root("makosh-vault-route-session");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create control store");
@@ -93,7 +93,7 @@ fn runtime_proof(
     challenge: &crate::runtime::external::sessions::RuntimeChallenge,
     digest: [u8; 32],
 ) -> Vec<u8> {
-    let mut proof = b"hermes.external-runtime-session.v1\0".to_vec();
+    let mut proof = b"makosh.external-runtime-session.v1\0".to_vec();
     for value in [
         challenge.kernel_instance_id(),
         "registration-1",

@@ -1,5 +1,5 @@
 [package]
-name = "hermes-attachment-text-extraction-core"
+name = "makosh-attachment-text-extraction-core"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,11 +7,11 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "attachment_text_extraction"
 surface = "implementation"
 
 [dependencies]
-hermes-attachment-text-extraction-api = { path = "../attachment-text-extraction-api" }
+makosh-attachment-text-extraction-api = { path = "../attachment-text-extraction-api" }
 sha2 = { version = "=0.11.0", default-features = false }

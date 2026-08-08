@@ -1,7 +1,7 @@
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 
-use hermes_kernel_control_store::InitialOwnerIdentity;
+use makosh_kernel_control_store::InitialOwnerIdentity;
 use p256::ecdsa::signature::Verifier;
 use p256::ecdsa::{Signature, VerifyingKey};
 use sha2::{Digest, Sha256};
@@ -9,7 +9,7 @@ use sha2::{Digest, Sha256};
 const STATE_FILE: &str = "development-remote-pairing-v1.state";
 const RECEIPT_FILE: &str = "development-remote-pairing-v1.receipt";
 const RECEIPT_HEADER: &str = "development_remote_pairing_receipt_v1";
-const PROOF_DOMAIN: &[u8] = b"hermes.development.remote-pairing.v1\0";
+const PROOF_DOMAIN: &[u8] = b"makosh.development.remote-pairing.v1\0";
 const MAX_RECEIPT_BYTES: u64 = 1024;
 
 pub fn load_verified_identity(state_dir: &Path) -> Result<InitialOwnerIdentity, String> {

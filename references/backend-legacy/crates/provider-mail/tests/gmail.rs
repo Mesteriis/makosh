@@ -1,4 +1,4 @@
-use hermes_provider_mail::gmail::{GmailHistoryResponse, GooglePeopleConnectionsResponse};
+use makosh_provider_mail::gmail::{GmailHistoryResponse, GooglePeopleConnectionsResponse};
 use serde_json::json;
 
 #[test]
@@ -36,7 +36,7 @@ fn parses_google_people_provider_payload() {
         "nextPageToken": "next",
         "connections": [{
             "resourceName": "people/1", "etag": "etag-1",
-            "names": [{"displayName": "Hermes Person"}],
+            "names": [{"displayName": "Макошь Person"}],
             "emailAddresses": [{"value": "person@example.test"}],
             "phoneNumbers": [{"value": "+1 555 0100"}]
         }]
@@ -50,7 +50,7 @@ fn parses_google_people_provider_payload() {
         person.names.as_ref().expect("names")[0]
             .display_name
             .as_deref(),
-        Some("Hermes Person")
+        Some("Макошь Person")
     );
     assert_eq!(
         person.email_addresses.as_ref().expect("emails")[0]

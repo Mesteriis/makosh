@@ -78,6 +78,6 @@ test('Vault retirement is an exact platform lifecycle with durable tombstones', 
   assert.match(adr, /Kernel не декодирует provider lifecycle command/);
   assert.doesNotMatch(
     `${protocol}\n${client}\n${service}\n${store}\n${lifecycle}\n${schema}`,
-    /hermes_(?:mail|telegram|whatsapp|zulip|communications)|Mail|Telegram|WhatsApp|Zulip/,
+    /makosh_(?:mail|telegram|whatsapp|zulip|communications)|Mail|Telegram|WhatsApp|Zulip/,
   );
 });

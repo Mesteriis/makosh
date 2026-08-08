@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "Hermes Hub",
+  "productName": "Макошь",
   "version": "0.1.0",
-  "identifier": "dev.hermes-hub.desktop",
+  "identifier": "dev.makosh.desktop",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://127.0.0.1:5173"
@@ -10,7 +10,7 @@
   "app": {
     "windows": [
       {
-        "title": "Hermes Hub",
+        "title": "Макошь",
         "width": 1280,
         "height": 800,
         "resizable": true,
@@ -25,13 +25,13 @@
     "active": true,
     "targets": "all",
     "externalBin": [
-      "binaries/hermes-kernel"
+      "binaries/makosh-kernel"
     ],
     "resources": {
       "resources/tdlib/": "tdlib",
-      "binaries/hermes-release-trust-root.pb": "hermes-kernel-release/hermes-release-trust-root.pb",
-      "binaries/hermes-signed-distribution-manifest.pb": "hermes-kernel-release/hermes-signed-distribution-manifest.pb",
-      "binaries/hermes-distribution/": "hermes-kernel-release/distribution/"
+      "binaries/makosh-release-trust-root.pb": "makosh-kernel-release/makosh-release-trust-root.pb",
+      "binaries/makosh-signed-distribution-manifest.pb": "makosh-kernel-release/makosh-signed-distribution-manifest.pb",
+      "binaries/makosh-distribution/": "makosh-kernel-release/distribution/"
     },
     "icon": [
       "icons/32x32.png",

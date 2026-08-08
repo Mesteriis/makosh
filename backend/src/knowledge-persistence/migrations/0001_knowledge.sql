@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.knowledge_reviewed_candidate_inbox (
+CREATE TABLE makosh_data.knowledge_reviewed_candidate_inbox (
     logical_owner_id TEXT NOT NULL,
     command_message_id BYTEA NOT NULL,
     command_envelope_sha256 BYTEA NOT NULL,
@@ -73,13 +73,13 @@ CREATE TABLE hermes_data.knowledge_reviewed_candidate_inbox (
 );
 
 CREATE INDEX knowledge_reviewed_candidate_recovery_idx
-ON hermes_data.knowledge_reviewed_candidate_inbox (
+ON makosh_data.knowledge_reviewed_candidate_inbox (
     logical_owner_id,
     completed,
     received_at_unix_millis
 );
 
-CREATE TABLE hermes_data.knowledge_state (
+CREATE TABLE makosh_data.knowledge_state (
     logical_owner_id TEXT NOT NULL,
     note_id BYTEA NOT NULL,
     title TEXT NOT NULL,
@@ -128,7 +128,7 @@ CREATE TABLE hermes_data.knowledge_state (
     CHECK (updated_at_nanos BETWEEN 0 AND 999999999)
 );
 
-CREATE TABLE hermes_data.knowledge_outbox (
+CREATE TABLE makosh_data.knowledge_outbox (
     logical_owner_id TEXT NOT NULL,
     message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -145,5 +145,5 @@ CREATE TABLE hermes_data.knowledge_outbox (
 );
 
 CREATE INDEX knowledge_outbox_pending_idx
-ON hermes_data.knowledge_outbox (logical_owner_id, created_at_unix_millis, message_id)
+ON makosh_data.knowledge_outbox (logical_owner_id, created_at_unix_millis, message_id)
 WHERE published_at_unix_millis IS NULL;

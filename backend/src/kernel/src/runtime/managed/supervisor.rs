@@ -16,14 +16,14 @@ use std::sync::atomic::AtomicBool;
 use std::sync::mpsc::{Receiver, RecvTimeoutError, SyncSender};
 use std::time::{Duration, Instant};
 
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlTransportMajorV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeControlAckV1, ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
     managed_runtime_control_response_v1::Result as ControlResult,
 };
-use hermes_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
+use makosh_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
 use prost::Message;
 
 pub fn run(
@@ -257,7 +257,7 @@ fn dispatch_correlated_relay(
             .map_err(|error| error.to_string())?;
         let response = channel.request_next(request, |channel, correlation_id, request| {
             dispatch_v2_typed_request(channel, correlation_id, request, input).map_err(|_| {
-                hermes_runtime_protocol::managed_control::ManagedControlTransportErrorV2::InvalidFrame
+                makosh_runtime_protocol::managed_control::ManagedControlTransportErrorV2::InvalidFrame
             })
         });
         let restore = channel
@@ -284,7 +284,7 @@ enum CorrelatedRelayResponseKindV1 {
 
 impl CorrelatedRelayResponseKindV1 {
     fn from_request(request: &ManagedRuntimeControlRequestV1) -> Result<Self, String> {
-        use hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation;
+        use makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation;
 
         match request.operation.as_ref() {
             Some(Operation::ClientDelivery(_)) => Ok(Self::Client),
@@ -410,7 +410,7 @@ fn dispatch_blob_custody_delegation(
     channel: &mut std::os::unix::net::UnixStream,
     expectation: &ManagedRuntimeExpectation,
     handler: Option<&dyn ManagedRuntimeBlobSessionHandler>,
-    request: hermes_runtime_protocol::v1::ManagedRuntimeBlobCustodyDelegationRequestV1,
+    request: makosh_runtime_protocol::v1::ManagedRuntimeBlobCustodyDelegationRequestV1,
 ) -> Result<(), String> {
     let result = handler
         .ok_or_else(|| "managed runtime Blob custody delegation route is not available".to_owned())?
@@ -422,7 +422,7 @@ fn dispatch_blob_custody_release(
     channel: &mut std::os::unix::net::UnixStream,
     expectation: &ManagedRuntimeExpectation,
     handler: Option<&dyn ManagedRuntimeBlobCustodyReleaseHandler>,
-    request: hermes_runtime_protocol::v1::ManagedRuntimeBlobCustodyReleaseRequestV1,
+    request: makosh_runtime_protocol::v1::ManagedRuntimeBlobCustodyReleaseRequestV1,
 ) -> Result<(), String> {
     let result = handler
         .ok_or_else(|| "managed runtime Blob custody release route is not available".to_owned())?
@@ -434,7 +434,7 @@ fn dispatch_blob_session(
     channel: &mut std::os::unix::net::UnixStream,
     expectation: &ManagedRuntimeExpectation,
     handler: Option<&dyn ManagedRuntimeBlobSessionHandler>,
-    request: hermes_runtime_protocol::v1::ManagedRuntimeBlobSessionRequestV1,
+    request: makosh_runtime_protocol::v1::ManagedRuntimeBlobSessionRequestV1,
 ) -> Result<(), String> {
     let result = handler
         .ok_or_else(|| "managed runtime Blob session route is not available".to_owned())?
@@ -446,7 +446,7 @@ fn dispatch_provider_credential(
     channel: &mut std::os::unix::net::UnixStream,
     expectation: &ManagedRuntimeExpectation,
     handler: Option<&dyn ManagedRuntimeProviderCredentialHandler>,
-    request: hermes_runtime_protocol::v1::ManagedRuntimeProviderCredentialRequestV1,
+    request: makosh_runtime_protocol::v1::ManagedRuntimeProviderCredentialRequestV1,
 ) -> Result<(), String> {
     let result = handler
         .ok_or_else(|| "managed runtime provider credential route is not available".to_owned())?
@@ -458,7 +458,7 @@ fn dispatch_owner_derived_key(
     channel: &mut std::os::unix::net::UnixStream,
     expectation: &ManagedRuntimeExpectation,
     handler: Option<&dyn ManagedRuntimeOwnerDerivedKeyHandler>,
-    request: hermes_runtime_protocol::v1::ManagedRuntimeOwnerDerivedKeyRequestV1,
+    request: makosh_runtime_protocol::v1::ManagedRuntimeOwnerDerivedKeyRequestV1,
 ) -> Result<(), String> {
     let result = handler
         .ok_or_else(|| "managed runtime owner-derived key route is not available".to_owned())?
@@ -470,7 +470,7 @@ fn dispatch_event_credential(
     channel: &mut std::os::unix::net::UnixStream,
     expectation: &ManagedRuntimeExpectation,
     handler: Option<&dyn ManagedRuntimeEventCredentialHandler>,
-    request: hermes_runtime_protocol::v1::ManagedRuntimeEventCredentialRequestV1,
+    request: makosh_runtime_protocol::v1::ManagedRuntimeEventCredentialRequestV1,
 ) -> Result<(), String> {
     let result = handler
         .ok_or_else(|| "managed runtime Event credential route is not available".to_owned())?

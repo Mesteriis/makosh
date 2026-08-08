@@ -1,17 +1,17 @@
 use std::env;
 
-use hermes_hub_backend::integrations::ollama::client::{OllamaClient, config::OllamaClientConfig};
+use makosh_hub_backend::integrations::ollama::client::{OllamaClient, config::OllamaClientConfig};
 
 #[tokio::test]
 async fn live_ollama_qwen3_runtime_smoke() {
-    let Some(base_url) = env::var("HERMES_OLLAMA_BASE_URL").ok() else {
-        eprintln!("skipping live Ollama smoke test: HERMES_OLLAMA_BASE_URL is not set");
+    let Some(base_url) = env::var("MAKOSH_OLLAMA_BASE_URL").ok() else {
+        eprintln!("skipping live Ollama smoke test: MAKOSH_OLLAMA_BASE_URL is not set");
         return;
     };
-    let chat_model = env::var("HERMES_OLLAMA_CHAT_MODEL").unwrap_or_else(|_| "qwen3:4b".to_owned());
+    let chat_model = env::var("MAKOSH_OLLAMA_CHAT_MODEL").unwrap_or_else(|_| "qwen3:4b".to_owned());
     let embed_model =
-        env::var("HERMES_OLLAMA_EMBED_MODEL").unwrap_or_else(|_| "qwen3-embedding:4b".to_owned());
-    let timeout_seconds = env::var("HERMES_OLLAMA_TIMEOUT_SECONDS")
+        env::var("MAKOSH_OLLAMA_EMBED_MODEL").unwrap_or_else(|_| "qwen3-embedding:4b".to_owned());
+    let timeout_seconds = env::var("MAKOSH_OLLAMA_TIMEOUT_SECONDS")
         .ok()
         .and_then(|value| value.parse::<u64>().ok())
         .unwrap_or(120);
@@ -36,17 +36,17 @@ async fn live_ollama_qwen3_runtime_smoke() {
     );
 
     let chat = client
-        .chat("Return exactly this token and nothing else: hermes-ai-smoke-ok")
+        .chat("Return exactly this token and nothing else: makosh-ai-smoke-ok")
         .await
         .expect("Ollama chat");
     assert!(
-        chat.content.contains("hermes-ai-smoke-ok"),
+        chat.content.contains("makosh-ai-smoke-ok"),
         "unexpected chat response: {}",
         chat.content
     );
 
     let embedding = client
-        .embed("Hermes Hub V3 AI semantic retrieval smoke")
+        .embed("Макошь V3 AI semantic retrieval smoke")
         .await
         .expect("Ollama embed");
     assert_eq!(embedding.embedding.len(), 2560);

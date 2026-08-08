@@ -7,7 +7,7 @@ fn main() {
     let descriptor = output.join("ai-contracts-v1.bin");
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
-        .compile_protos(&["proto/hermes/ai/contracts/v1/ai.proto"], &["proto"])
+        .compile_protos(&["proto/makosh/ai/contracts/v1/ai.proto"], &["proto"])
         .expect("AI contracts protocol must compile");
     let digest: [u8; 32] =
         Sha256::digest(std::fs::read(&descriptor).expect("AI contracts descriptor must exist"))

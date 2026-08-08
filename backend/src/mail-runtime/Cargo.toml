@@ -1,58 +1,58 @@
 [package]
-name = "hermes-mail-runtime"
+name = "makosh-mail-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
 [[bin]]
-name = "hermes-mail-runtime"
+name = "makosh-mail-runtime"
 path = "src/main.rs"
 
 [lib]
-name = "hermes_mail_runtime"
+name = "makosh_mail_runtime"
 path = "src/lib.rs"
 
 [features]
 default = []
 conformance-test-support = [
-    "hermes-mail-api/conformance-test-support",
-    "hermes-mail-carddav/conformance-test-support",
-    "hermes-mail-gmail/conformance-test-support",
-    "hermes-mail-google-people/conformance-test-support",
-    "hermes-mail-imap/conformance-test-support",
+    "makosh-mail-api/conformance-test-support",
+    "makosh-mail-carddav/conformance-test-support",
+    "makosh-mail-gmail/conformance-test-support",
+    "makosh-mail-google-people/conformance-test-support",
+    "makosh-mail-imap/conformance-test-support",
 ]
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "mail"
 surface = "runtime"
 
 [dependencies]
-hermes-mail-api = { path = "../mail-api" }
-hermes-mail-core = { path = "../mail-core" }
-hermes-mail-imap = { path = "../mail-imap" }
-hermes-mail-gmail = { path = "../mail-gmail" }
-hermes-mail-smtp = { path = "../mail-smtp" }
-hermes-mail-persistence = { path = "../mail-persistence" }
-hermes-mail-address-book-contract = { path = "../mail-address-book-contract" }
-hermes-mail-address-book-persistence = { path = "../mail-address-book-persistence" }
-hermes-mail-google-people = { path = "../mail-google-people" }
-hermes-mail-carddav = { path = "../mail-carddav" }
-hermes-contacts-mail-sync-source-api = { path = "../contacts-mail-sync-source-api" }
-hermes-mail-delivery-intent-contract = { path = "../mail-delivery-intent-contract" }
-hermes-attachment-security-contract = { path = "../attachment-security-contract" }
-hermes-communications-attachment-contract = { path = "../communications-attachment-contract" }
-hermes-communications-ingress = { path = "../communications-ingress" }
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-events-jetstream = { path = "../platform/events/jetstream" }
-hermes-managed-vault-client = { path = "../platform/vault/managed_client" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
-hermes-vault-protocol = { path = "../platform/vault/protocol" }
-hermes-mail-retained-evidence-replay-persistence = { path = "../mail-retained-evidence-replay-persistence" }
-hermes-mail-retained-evidence-replay-contract = { path = "../mail-retained-evidence-replay-contract" }
+makosh-mail-api = { path = "../mail-api" }
+makosh-mail-core = { path = "../mail-core" }
+makosh-mail-imap = { path = "../mail-imap" }
+makosh-mail-gmail = { path = "../mail-gmail" }
+makosh-mail-smtp = { path = "../mail-smtp" }
+makosh-mail-persistence = { path = "../mail-persistence" }
+makosh-mail-address-book-contract = { path = "../mail-address-book-contract" }
+makosh-mail-address-book-persistence = { path = "../mail-address-book-persistence" }
+makosh-mail-google-people = { path = "../mail-google-people" }
+makosh-mail-carddav = { path = "../mail-carddav" }
+makosh-contacts-mail-sync-source-api = { path = "../contacts-mail-sync-source-api" }
+makosh-mail-delivery-intent-contract = { path = "../mail-delivery-intent-contract" }
+makosh-attachment-security-contract = { path = "../attachment-security-contract" }
+makosh-communications-attachment-contract = { path = "../communications-attachment-contract" }
+makosh-communications-ingress = { path = "../communications-ingress" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-managed-vault-client = { path = "../platform/vault/managed_client" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
+makosh-vault-protocol = { path = "../platform/vault/protocol" }
+makosh-mail-retained-evidence-replay-persistence = { path = "../mail-retained-evidence-replay-persistence" }
+makosh-mail-retained-evidence-replay-contract = { path = "../mail-retained-evidence-replay-contract" }
 libc = "=0.2.186"
 getrandom = { version = "=0.4.3", default-features = false }
 prost = "=0.14.4"

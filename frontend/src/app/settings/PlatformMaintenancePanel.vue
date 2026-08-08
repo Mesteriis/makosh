@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import type { ClientModuleBootstrapV1 } from '../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import type { ClientModuleBootstrapV1 } from '../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import Icon from '../../shared/ui/Icon.vue'
 import './platformMaintenancePanel.css'
 

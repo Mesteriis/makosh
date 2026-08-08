@@ -8,7 +8,7 @@ use thiserror::Error;
 use super::command_service::{TaskCommandService, TaskCommandServiceError};
 use super::core::errors::TaskCoreError;
 use super::core::observation_links::materialize_task_observation_link_in_transaction;
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Task {
@@ -23,7 +23,7 @@ pub struct Task {
     pub source_type: String,
     pub project_id: Option<String>,
     pub status: String,
-    pub hermes_status: String,
+    pub makosh_status: String,
     pub priority_score: Option<f64>,
     pub risk_score: Option<f64>,
     pub readiness_score: Option<f64>,
@@ -86,15 +86,15 @@ impl TaskStore {
         let task_id = format!("task:v1:{ts:x}");
         let tags = req.tags.clone().unwrap_or_else(|| json!([]));
         let row = sqlx::query(
-            "INSERT INTO tasks (task_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, hermes_status, priority_score, area, why, due_at, energy_type, confidentiality, tags, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id)
+            "INSERT INTO tasks (task_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, makosh_status, priority_score, area, why, due_at, energy_type, confidentiality, tags, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id)
              VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)
-             RETURNING task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, hermes_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at"
+             RETURNING task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, makosh_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at"
         ).bind(&task_id).bind(&req.title).bind(req.description.as_deref())
          .bind(req.provenance_kind.as_deref().ok_or(TaskError::MissingProvenance)?)
          .bind(req.provenance_id.as_deref().ok_or(TaskError::MissingProvenance)?)
          .bind(req.source_kind.as_deref().unwrap_or("manual")).bind(req.source_id.as_deref().unwrap_or("manual"))
          .bind(req.source_type.as_deref().unwrap_or("manual")).bind(req.project_id.as_deref())
-         .bind(req.hermes_status.as_deref().unwrap_or("new")).bind(req.priority_score)
+         .bind(req.makosh_status.as_deref().unwrap_or("new")).bind(req.priority_score)
          .bind(req.area.as_deref()).bind(req.why.as_deref()).bind(req.due_at)
          .bind(req.energy_type.as_deref()).bind(req.confidentiality.as_deref().unwrap_or("private_local"))
          .bind(&tags).bind(req.linked_person_id.as_deref()).bind(req.linked_organization_id.as_deref())
@@ -126,7 +126,7 @@ impl TaskStore {
     }
 
     pub async fn get(&self, task_id: &str) -> Result<Option<Task>, TaskError> {
-        let row = sqlx::query("SELECT task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, hermes_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at FROM tasks WHERE task_id=$1")
+        let row = sqlx::query("SELECT task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, makosh_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at FROM tasks WHERE task_id=$1")
             .bind(task_id).fetch_optional(&self.pool).await?;
         row.map(|r| row_to_task(r).map_err(TaskError::from))
             .transpose()
@@ -135,7 +135,7 @@ impl TaskStore {
     pub async fn list(&self, query: &TaskListQuery) -> Result<Vec<Task>, TaskError> {
         let limit = query.limit.unwrap_or(100).clamp(1, 500);
         let rows = sqlx::query(
-            "SELECT task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, hermes_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at FROM tasks WHERE ($1::text IS NULL OR hermes_status=$1) AND ($2::text IS NULL OR project_id=$2) AND ($3::text IS NULL OR source_type=$3) ORDER BY COALESCE(priority_score,0) DESC, due_at ASC NULLS LAST, created_at DESC LIMIT $4"
+            "SELECT task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, makosh_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at FROM tasks WHERE ($1::text IS NULL OR makosh_status=$1) AND ($2::text IS NULL OR project_id=$2) AND ($3::text IS NULL OR source_type=$3) ORDER BY COALESCE(priority_score,0) DESC, due_at ASC NULLS LAST, created_at DESC LIMIT $4"
         ).bind(query.status.as_deref()).bind(query.project_id.as_deref()).bind(query.source_type.as_deref()).bind(limit)
          .fetch_all(&self.pool).await?;
         rows.into_iter()
@@ -177,9 +177,9 @@ impl TaskStore {
     ) -> Result<Task, TaskError> {
         let mut transaction = self.pool.begin().await?;
         let row = sqlx::query(
-            "UPDATE tasks SET title=COALESCE($2,title), description=COALESCE($3,description), hermes_status=COALESCE($4,hermes_status), priority_score=COALESCE($5,priority_score), risk_score=COALESCE($6,risk_score), readiness_score=COALESCE($7,readiness_score), area=COALESCE($8,area), why=COALESCE($9,why), outcome=COALESCE($10,outcome), due_at=COALESCE($11,due_at), waiting_reason=COALESCE($12,waiting_reason), energy_type=COALESCE($13,energy_type), confidentiality=COALESCE($14,confidentiality), tags=COALESCE($15,tags), task_metadata=COALESCE($16,task_metadata), linked_person_id=COALESCE($17,linked_person_id), linked_organization_id=COALESCE($18,linked_organization_id), completed_at=COALESCE($19,completed_at), updated_at=now() WHERE task_id=$1 RETURNING task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, hermes_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at"
+            "UPDATE tasks SET title=COALESCE($2,title), description=COALESCE($3,description), makosh_status=COALESCE($4,makosh_status), priority_score=COALESCE($5,priority_score), risk_score=COALESCE($6,risk_score), readiness_score=COALESCE($7,readiness_score), area=COALESCE($8,area), why=COALESCE($9,why), outcome=COALESCE($10,outcome), due_at=COALESCE($11,due_at), waiting_reason=COALESCE($12,waiting_reason), energy_type=COALESCE($13,energy_type), confidentiality=COALESCE($14,confidentiality), tags=COALESCE($15,tags), task_metadata=COALESCE($16,task_metadata), linked_person_id=COALESCE($17,linked_person_id), linked_organization_id=COALESCE($18,linked_organization_id), completed_at=COALESCE($19,completed_at), updated_at=now() WHERE task_id=$1 RETURNING task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, makosh_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at"
         ).bind(task_id).bind(update.title.as_deref()).bind(update.description.as_deref())
-         .bind(update.hermes_status.as_deref()).bind(update.priority_score).bind(update.risk_score).bind(update.readiness_score)
+         .bind(update.makosh_status.as_deref()).bind(update.priority_score).bind(update.risk_score).bind(update.readiness_score)
          .bind(update.area.as_deref()).bind(update.why.as_deref()).bind(update.outcome.as_deref())
          .bind(update.due_at).bind(update.waiting_reason.as_deref()).bind(update.energy_type.as_deref())
          .bind(update.confidentiality.as_deref()).bind(update.tags.as_ref()).bind(update.task_metadata.as_ref())
@@ -239,19 +239,19 @@ impl TaskStore {
         };
         let sql = if stored_status == "done" {
             "UPDATE tasks
-             SET hermes_status=$2, completed_at=now(), updated_at=now()
+             SET makosh_status=$2, completed_at=now(), updated_at=now()
              WHERE task_id=$1
-             RETURNING task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, hermes_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at"
+             RETURNING task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, makosh_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at"
         } else if stored_status == "archived" {
             "UPDATE tasks
-             SET hermes_status=$2, archived_at=now(), updated_at=now()
+             SET makosh_status=$2, archived_at=now(), updated_at=now()
              WHERE task_id=$1
-             RETURNING task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, hermes_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at"
+             RETURNING task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, makosh_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at"
         } else {
             "UPDATE tasks
-             SET hermes_status=$2, updated_at=now()
+             SET makosh_status=$2, updated_at=now()
              WHERE task_id=$1
-             RETURNING task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, hermes_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at"
+             RETURNING task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, makosh_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at"
         };
         let mut transaction = self.pool.begin().await?;
         let row = sqlx::query(sql)
@@ -307,7 +307,7 @@ pub struct NewTask {
     pub source_id: Option<String>,
     pub source_type: Option<String>,
     pub project_id: Option<String>,
-    pub hermes_status: Option<String>,
+    pub makosh_status: Option<String>,
     pub priority_score: Option<f64>,
     pub area: Option<String>,
     pub why: Option<String>,
@@ -362,7 +362,7 @@ impl NewTask {
 pub struct TaskUpdate {
     pub title: Option<String>,
     pub description: Option<String>,
-    pub hermes_status: Option<String>,
+    pub makosh_status: Option<String>,
     pub priority_score: Option<f64>,
     pub risk_score: Option<f64>,
     pub readiness_score: Option<f64>,
@@ -401,7 +401,7 @@ fn row_to_task(row: PgRow) -> Result<Task, sqlx::Error> {
         source_type: row.try_get("source_type")?,
         project_id: row.try_get("project_id")?,
         status: row.try_get("status")?,
-        hermes_status: row.try_get("hermes_status")?,
+        makosh_status: row.try_get("makosh_status")?,
         priority_score: row.try_get("priority_score")?,
         risk_score: row.try_get("risk_score")?,
         readiness_score: row.try_get("readiness_score")?,

@@ -14,7 +14,7 @@ pub(in crate::integrations::telegram::tdjson) fn fetch_authorized_user_identity(
 ) -> Result<Option<TelegramQrLoginIdentity>, TelegramError> {
     client.send_json(&json!({
         "@type": "getMe",
-        "@extra": "hermes-get-me"
+        "@extra": "makosh-get-me"
     }))?;
 
     let started_at = Instant::now();
@@ -27,7 +27,7 @@ pub(in crate::integrations::telegram::tdjson) fn fetch_authorized_user_identity(
             return Ok(parse_tdlib_user_identity(&event));
         }
 
-        if event.get("@extra").and_then(Value::as_str) == Some("hermes-get-me") {
+        if event.get("@extra").and_then(Value::as_str) == Some("makosh-get-me") {
             if let Some(message) = tdlib_error_message(&event) {
                 return Err(TelegramError::TdlibRuntime(message));
             }

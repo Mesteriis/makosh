@@ -75,15 +75,15 @@ helper, facade или расширением одного из domains.
 Ввести owner `reviewed_task_candidate_promotion` с role `workflow` и пять
 отдельных build units:
 
-1. `hermes-review-task-candidate-promotion-api` — Review-owned exact terminal
+1. `makosh-review-task-candidate-promotion-api` — Review-owned exact terminal
    promotion result contract, доступный producer workflow и consumer Review;
-2. `hermes-reviewed-task-candidate-promotion-core` — pure deterministic mapping
+2. `makosh-reviewed-task-candidate-promotion-core` — pure deterministic mapping
    и correlation rules без transport, SQL, Blob и domain implementations;
-3. `hermes-reviewed-task-candidate-promotion-persistence` — owner-local
+3. `makosh-reviewed-task-candidate-promotion-persistence` — owner-local
    PostgreSQL inbox/outbox и durable correlation между approval, Tasks command
    и terminal result;
-4. `hermes-reviewed-task-candidate-promotion-runtime` — managed event adapter;
-5. `hermes-reviewed-task-candidate-promotion-assembly` — descriptor, empty
+4. `makosh-reviewed-task-candidate-promotion-runtime` — managed event adapter;
+5. `makosh-reviewed-task-candidate-promotion-assembly` — descriptor, empty
    typed Settings schema, Storage bundle и unsigned release fragment.
 
 Review promotion contract unit принадлежит Review contract surface, но не

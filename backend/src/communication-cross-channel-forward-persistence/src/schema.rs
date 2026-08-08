@@ -1,4 +1,4 @@
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use sha2::{Digest, Sha256};
 
 pub const COMMUNICATION_CROSS_CHANNEL_FORWARD_STORAGE_BUNDLE_REVISION_V1: u32 = 1;
@@ -49,7 +49,7 @@ pub fn communication_cross_channel_forward_storage_bundle_v1() -> StorageBundleV
 
 #[cfg(test)]
 mod tests {
-    use hermes_storage_protocol::validation::validate_storage_bundle;
+    use makosh_storage_protocol::validation::validate_storage_bundle;
 
     use super::*;
 

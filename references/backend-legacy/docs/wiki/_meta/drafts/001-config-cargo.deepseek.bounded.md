@@ -1,6 +1,6 @@
 ### Summary / Резюме
 
-Добавить в русскую wiki страницу `operations/configuration.md` документацию по конфигурационному файлу `.cargo/config.toml` — описать его назначение и все четыре псевдонима (`hermes-nextest`, `hermes-nextest-ci`, `hermes-nextest-integration`, `hermes-llvm-cov`), упрощающих запуск тестов и анализ покрытия в проекте `hermes-hub`.
+Добавить в русскую wiki страницу `operations/configuration.md` документацию по конфигурационному файлу `.cargo/config.toml` — описать его назначение и все четыре псевдонима (`makosh-nextest`, `makosh-nextest-ci`, `makosh-nextest-integration`, `makosh-llvm-cov`), упрощающих запуск тестов и анализ покрытия в проекте `makosh`.
 
 ### Proposed pages / Предлагаемые страницы
 
@@ -8,7 +8,7 @@
 
 ```markdown
 ---
-tags: [configuration, cargo, hermes]
+tags: [configuration, cargo, makosh]
 ---
 
 # Конфигурация Cargo
@@ -17,12 +17,12 @@ tags: [configuration, cargo, hermes]
 
 ## Псевдонимы
 
-### `hermes-nextest`
+### `makosh-nextest`
 
 Запускает все тесты проекта с помощью `cargo-nextest`.
 
 ```sh
-cargo hermes-nextest
+cargo makosh-nextest
 ```
 
 Раскрывается в команду:
@@ -31,12 +31,12 @@ cargo hermes-nextest
 nextest run --manifest-path backend/Cargo.toml
 ```
 
-### `hermes-nextest-ci`
+### `makosh-nextest-ci`
 
 Запускает тесты в профиле `ci`, оптимизированном для конвейеров непрерывной интеграции (меньше лишнего вывода, повторяемые результаты).
 
 ```sh
-cargo hermes-nextest-ci
+cargo makosh-nextest-ci
 ```
 
 Раскрывается в команду:
@@ -45,12 +45,12 @@ cargo hermes-nextest-ci
 nextest run --manifest-path backend/Cargo.toml --profile ci
 ```
 
-### `hermes-nextest-integration`
+### `makosh-nextest-integration`
 
 Запускает только интеграционные тесты (помеченные `#[cfg(test)]` в интеграционных файлах) с профилем `integration`.
 
 ```sh
-cargo hermes-nextest-integration
+cargo makosh-nextest-integration
 ```
 
 Раскрывается в команду:
@@ -61,12 +61,12 @@ nextest run --manifest-path backend/Cargo.toml --profile integration --tests
 
 Флаг `--tests` ограничивает запуск только тестовыми целями, исключая бенчмарки и примеры.
 
-### `hermes-llvm-cov`
+### `makosh-llvm-cov`
 
 Генерирует отчёт о покрытии кода с помощью `cargo-llvm-cov` (инструмент на базе LLVM source-based code coverage).
 
 ```sh
-cargo hermes-llvm-cov
+cargo makosh-llvm-cov
 ```
 
 Раскрывается в команду:
@@ -84,7 +84,7 @@ llvm-cov --manifest-path backend/Cargo.toml
 
 | Исходный файл | Покрытые факты |
 |---|---|
-| `.cargo/config.toml` | Определение четырёх cargo-алиасов: `hermes-nextest`, `hermes-nextest-ci`, `hermes-nextest-integration`, `hermes-llvm-cov`; их точные раскрытия; путь к манифесту `backend/Cargo.toml`; используемые профили (`ci`, `integration`) и флаг `--tests`. |
+| `.cargo/config.toml` | Определение четырёх cargo-алиасов: `makosh-nextest`, `makosh-nextest-ci`, `makosh-nextest-integration`, `makosh-llvm-cov`; их точные раскрытия; путь к манифесту `backend/Cargo.toml`; используемые профили (`ci`, `integration`) и флаг `--tests`. |
 
 ### Drift candidates / Кандидаты на drift
 

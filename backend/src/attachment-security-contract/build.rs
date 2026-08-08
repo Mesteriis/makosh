@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/attachment_security/v1/scan_candidate.proto"],
+            &["proto/makosh/attachment_security/v1/scan_candidate.proto"],
             &["proto"],
         )
         .expect("Attachment Security scan-candidate protocol must compile");

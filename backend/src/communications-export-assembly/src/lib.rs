@@ -10,20 +10,20 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use hermes_communications_export_persistence::schema::communications_export_storage_bundle_v1;
-use hermes_communications_export_runtime::admission::{
+use makosh_communications_export_persistence::schema::communications_export_storage_bundle_v1;
+use makosh_communications_export_runtime::admission::{
     communications_export_module_descriptor_v1, communications_export_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
 pub const COMMUNICATIONS_EXPORT_ASSEMBLY_FRAGMENT_VERSION_V1: u32 = 1;
 pub const COMMUNICATIONS_EXPORT_ASSEMBLY_OWNER_ID: &str = "communications_export";
-pub const COMMUNICATIONS_EXPORT_ASSEMBLY_MODULE_ID: &str = "hermes-communications-export-runtime";
+pub const COMMUNICATIONS_EXPORT_ASSEMBLY_MODULE_ID: &str = "makosh-communications-export-runtime";
 pub const COMMUNICATIONS_EXPORT_RUNTIME_ARTIFACT_ID: &str = "communications_export.runtime.v1";
 pub const COMMUNICATIONS_EXPORT_STORAGE_ARTIFACT_ID: &str = "communications_export.storage.v1";
 pub const COMMUNICATIONS_EXPORT_DESCRIPTOR_FILE: &str =
@@ -34,7 +34,7 @@ pub const COMMUNICATIONS_EXPORT_STORAGE_BUNDLE_FILE: &str =
 pub const COMMUNICATIONS_EXPORT_ARTIFACT_FRAGMENT_FILE: &str =
     "communications_export.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH: &str = "bin/hermes-communications-export-runtime";
+const RUNTIME_RELATIVE_PATH: &str = "bin/makosh-communications-export-runtime";
 const DESCRIPTOR_RELATIVE_PATH: &str = "contracts/communications_export.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH: &str = "contracts/communications_export.runtime.settings.pb";
 const STORAGE_RELATIVE_PATH: &str = "storage/communications_export.storage.bundle.pb";
@@ -265,7 +265,7 @@ mod tests {
     #[test]
     fn materializes_exact_unsigned_workflow_runtime_and_storage_fragment() {
         let root = temporary_directory();
-        let runtime = root.join("hermes-communications-export-runtime");
+        let runtime = root.join("makosh-communications-export-runtime");
         fs::write(&runtime, b"runtime").expect("write runtime");
         let output = root.join("assembly");
         let paths =

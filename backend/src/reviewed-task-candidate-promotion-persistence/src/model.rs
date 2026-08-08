@@ -1,4 +1,4 @@
-use hermes_events_protocol::delivery::OutboxRecordV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
 
 pub(crate) const MAX_EVENT_BYTES_V1: usize = 65_536;
 pub(crate) const MAX_OUTBOX_BATCH_V1: u16 = 128;

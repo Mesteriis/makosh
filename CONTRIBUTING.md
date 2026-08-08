@@ -1,6 +1,6 @@
-# Участие в разработке Hermes Hub
+# Участие в разработке Макошь
 
-Hermes Hub находится в clean-room phase. Новый backend имеет пустой virtual
+Макошь находится в clean-room phase. Новый backend имеет пустой virtual
 Cargo workspace и architecture validation, но ещё не имеет production package,
 runtime, schema или поддерживаемой full-stack команды запуска.
 

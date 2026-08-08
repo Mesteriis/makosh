@@ -40,4 +40,4 @@ pub use source_results::{
     consume_explanation_source_rejected_once_v1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-explanation-runtime";
+pub const PACKAGE: &str = "makosh-communication-explanation-runtime";

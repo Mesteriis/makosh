@@ -16,4 +16,4 @@ pub use delivery_port::{
 };
 pub use worker::{BulkDeliveryWorkerErrorV1, process_next_target_v1};
 
-pub const PACKAGE: &str = "hermes-communication-bulk-action-runtime";
+pub const PACKAGE: &str = "makosh-communication-bulk-action-runtime";

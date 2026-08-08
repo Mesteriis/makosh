@@ -5,7 +5,7 @@ use rusqlite::Transaction;
 
 pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
     transaction.execute_batch(
-        "CREATE TABLE hermes_kernel_module_blob_quota_request_v48 (
+        "CREATE TABLE makosh_kernel_module_blob_quota_request_v48 (
              registration_id TEXT NOT NULL,
              capability_id TEXT NOT NULL,
              owner_id TEXT NOT NULL,
@@ -15,11 +15,11 @@ pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
                  CHECK (allowed_operations BETWEEN 0 AND 15),
              PRIMARY KEY (registration_id, capability_id),
              FOREIGN KEY (registration_id, capability_id)
-                 REFERENCES hermes_kernel_module_registration_capability(registration_id, capability_id)
+                 REFERENCES makosh_kernel_module_registration_capability(registration_id, capability_id)
                  ON DELETE CASCADE
          );
 
-         INSERT INTO hermes_kernel_module_blob_quota_request_v48 (
+         INSERT INTO makosh_kernel_module_blob_quota_request_v48 (
              registration_id,
              capability_id,
              owner_id,
@@ -34,13 +34,13 @@ pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
              max_bytes,
              custody_scope_id,
              allowed_operations
-         FROM hermes_kernel_module_blob_quota_request;
+         FROM makosh_kernel_module_blob_quota_request;
 
-         DROP TABLE hermes_kernel_module_blob_quota_request;
-         ALTER TABLE hermes_kernel_module_blob_quota_request_v48
-             RENAME TO hermes_kernel_module_blob_quota_request;
+         DROP TABLE makosh_kernel_module_blob_quota_request;
+         ALTER TABLE makosh_kernel_module_blob_quota_request_v48
+             RENAME TO makosh_kernel_module_blob_quota_request;
 
-         UPDATE hermes_kernel_control_store_metadata
+         UPDATE makosh_kernel_control_store_metadata
          SET schema_version = 48 WHERE singleton = 1;",
     )?;
     Ok(())
@@ -57,19 +57,19 @@ mod tests {
         connection
             .execute_batch(
                 "PRAGMA foreign_keys = ON;
-                 CREATE TABLE hermes_kernel_control_store_metadata (
+                 CREATE TABLE makosh_kernel_control_store_metadata (
                     singleton INTEGER PRIMARY KEY,
                     schema_version INTEGER NOT NULL
                  );
-                 INSERT INTO hermes_kernel_control_store_metadata VALUES (1, 47);
-                 CREATE TABLE hermes_kernel_module_registration_capability (
+                 INSERT INTO makosh_kernel_control_store_metadata VALUES (1, 47);
+                 CREATE TABLE makosh_kernel_module_registration_capability (
                     registration_id TEXT NOT NULL,
                     capability_id TEXT NOT NULL,
                     PRIMARY KEY (registration_id, capability_id)
                  );
-                 INSERT INTO hermes_kernel_module_registration_capability
+                 INSERT INTO makosh_kernel_module_registration_capability
                  VALUES ('delayed', 'blob');
-                 CREATE TABLE hermes_kernel_module_blob_quota_request (
+                 CREATE TABLE makosh_kernel_module_blob_quota_request (
                     registration_id TEXT NOT NULL,
                     capability_id TEXT NOT NULL,
                     owner_id TEXT NOT NULL,
@@ -79,12 +79,12 @@ mod tests {
                         CHECK (allowed_operations BETWEEN 0 AND 7),
                     PRIMARY KEY (registration_id, capability_id),
                     FOREIGN KEY (registration_id, capability_id)
-                        REFERENCES hermes_kernel_module_registration_capability(
+                        REFERENCES makosh_kernel_module_registration_capability(
                             registration_id, capability_id
                         )
                         ON DELETE CASCADE
                  );
-                 INSERT INTO hermes_kernel_module_blob_quota_request
+                 INSERT INTO makosh_kernel_module_blob_quota_request
                  VALUES ('delayed', 'blob', 'communication_delayed_delivery', 4096, 'delayed', 7);",
             )
             .expect("v47 fixture");
@@ -95,7 +95,7 @@ mod tests {
 
         connection
             .execute(
-                "UPDATE hermes_kernel_module_blob_quota_request
+                "UPDATE makosh_kernel_module_blob_quota_request
                  SET allowed_operations = 15
                  WHERE registration_id = 'delayed' AND capability_id = 'blob'",
                 [],
@@ -104,7 +104,7 @@ mod tests {
         assert!(
             connection
                 .execute(
-                    "UPDATE hermes_kernel_module_blob_quota_request
+                    "UPDATE makosh_kernel_module_blob_quota_request
                      SET allowed_operations = 16
                      WHERE registration_id = 'delayed' AND capability_id = 'blob'",
                     [],
@@ -114,9 +114,9 @@ mod tests {
         let (version, operations): (i64, i64) = connection
             .query_row(
                 "SELECT
-                    (SELECT schema_version FROM hermes_kernel_control_store_metadata),
+                    (SELECT schema_version FROM makosh_kernel_control_store_metadata),
                     allowed_operations
-                 FROM hermes_kernel_module_blob_quota_request
+                 FROM makosh_kernel_module_blob_quota_request
                  WHERE registration_id = 'delayed' AND capability_id = 'blob'",
                 [],
                 |row| Ok((row.get(0)?, row.get(1)?)),

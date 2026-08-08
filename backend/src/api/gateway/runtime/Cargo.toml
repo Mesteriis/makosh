@@ -1,5 +1,5 @@
 [package]
-name = "hermes-gateway-runtime"
+name = "makosh-gateway-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,7 +7,7 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "api"
 owner = "gateway"
 surface = "implementation"
@@ -18,9 +18,9 @@ bytes = "=1.12.1"
 futures-util = "=0.3.32"
 h3 = "=0.0.8"
 h3-quinn = "=0.0.10"
-hermes-gateway-protocol = { path = "../contracts" }
-hermes-gateway-session = { path = "../session" }
-hermes-gateway-session-contract = { path = "../session_contract" }
+makosh-gateway-protocol = { path = "../contracts" }
+makosh-gateway-session = { path = "../session" }
+makosh-gateway-session-contract = { path = "../session_contract" }
 http-body-util = "=0.1.3"
 hyper = { version = "=1.10.1", default-features = false, features = ["http1", "http2", "server"] }
 hyper-util = { version = "=0.1.20", default-features = false, features = ["tokio"] }

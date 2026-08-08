@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/integrations/zoom/components/ZoomBridgeLab.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/components/ZoomBridgeLab.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/components/ZoomBridgeLab.vue`
 - Size bytes / Размер в байтах: `17904`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -318,19 +318,19 @@ async function handleImportTranscriptFile() {
     <div class="bridge-grid">
       <form class="bridge-card" @submit.prevent="handleBridgeMeeting">
         <h5>{{ t('Meeting observation') }}</h5>
-        <input v-model="meetingForm.meeting_id" class="hermes-input-control" type="text" :placeholder="t('Meeting id')" required />
-        <input v-model="meetingForm.meeting_uuid" class="hermes-input-control" type="text" :placeholder="t('Meeting UUID')" />
-        <input v-model="meetingForm.topic" class="hermes-input-control" type="text" :placeholder="t('Topic')" />
-        <input v-model="meetingForm.host_email" class="hermes-input-control" type="email" :placeholder="t('host@example.test')" />
-        <input v-model="meetingForm.join_url" class="hermes-input-control" type="text" :placeholder="t('https://example.zoom.us/j/...')" />
-        <input v-model="meetingForm.started_at" class="hermes-input-control" type="text" :placeholder="t('2026-06-28T12:00:00Z')" />
-        <input v-model="meetingForm.ended_at" class="hermes-input-control" type="text" :placeholder="t('2026-06-28T12:30:00Z')" />
-        <input v-model="meetingForm.duration_seconds" class="hermes-input-control" type="number" min="0" :placeholder="t('1800')" />
-        <input v-model="meetingForm.transcript_ref" class="hermes-input-control" type="text" :placeholder="t('provider transcript ref')" />
+        <input v-model="meetingForm.meeting_id" class="makosh-input-control" type="text" :placeholder="t('Meeting id')" required />
+        <input v-model="meetingForm.meeting_uuid" class="makosh-input-control" type="text" :placeholder="t('Meeting UUID')" />
+        <input v-model="meetingForm.topic" class="makosh-input-control" type="text" :placeholder="t('Topic')" />
+        <input v-model="meetingForm.host_email" class="makosh-input-control" type="email" :placeholder="t('host@example.test')" />
+        <input v-model="meetingForm.join_url" class="makosh-input-control" type="text" :placeholder="t('https://example.zoom.us/j/...')" />
+        <input v-model="meetingForm.started_at" class="makosh-input-control" type="text" :placeholder="t('2026-06-28T12:00:00Z')" />
+        <input v-model="meetingForm.ended_at" class="makosh-input-control" type="text" :placeholder="t('2026-06-28T12:30:00Z')" />
+        <input v-model="meetingForm.duration_seconds" class="makosh-input-control" type="number" min="0" :placeholder="t('1800')" />
+        <input v-model="meetingForm.transcript_ref" class="makosh-input-control" type="text" :placeholder="t('provider transcript ref')" />
         <textarea v-model="meetingForm.participants_json" class="bridge-textarea" rows="4" :placeholder="exampleMeetingParticipants" />
         <textarea v-model="meetingForm.recording_refs_json" class="bridge-textarea" rows="4" :placeholder="exampleMeetingRecordingRefs" />
         <textarea v-model="meetingForm.metadata_json" class="bridge-textarea" rows="4" :placeholder="exampleFixtureMetadata" />
-        <button type="submit" class="hermes-btn hermes-btn--outline"
+        <button type="submit" class="makosh-btn makosh-btn--outline"
           :disabled="activeBridgeAction === 'meeting' || bridgeMeeting.isPending.value">
           {{ bridgeMeeting.isPending.value ? t('Ingesting...') : t('Ingest meeting') }}
         </button>
@@ -338,16 +338,16 @@ async function handleImportTranscriptFile() {
 
       <form class="bridge-card" @submit.prevent="handleBridgeRecording">
         <h5>{{ t('Recording observation') }}</h5>
-        <input v-model="recordingForm.meeting_id" class="hermes-input-control" type="text" :placeholder="t('Meeting id')" required />
-        <input v-model="recordingForm.recording_id" class="hermes-input-control" type="text" :placeholder="t('Recording id')" required />
-        <input v-model="recordingForm.recording_type" class="hermes-input-control" type="text" :placeholder="t('shared_screen_with_speaker_view')" />
+        <input v-model="recordingForm.meeting_id" class="makosh-input-control" type="text" :placeholder="t('Meeting id')" required />
+        <input v-model="recordingForm.recording_id" class="makosh-input-control" type="text" :placeholder="t('Recording id')" required />
+        <input v-model="recordingForm.recording_type" class="makosh-input-control" type="text" :placeholder="t('shared_screen_with_speaker_view')" />
         <input v-model="recordingForm.download_re
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `frontend/src/integrations/zoom/components/ZoomObservedCallsPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/components/ZoomObservedCallsPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/components/ZoomObservedCallsPanel.vue`
 - Size bytes / Размер в байтах: `10629`
 - Included characters / Включено символов: `10608`
 - Truncated / Обрезано: `no`
@@ -651,7 +651,7 @@ function formatBytes(value: number | null | undefined): string {
 
 ### `frontend/src/integrations/zoom/components/ZoomRecordingImportsPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/components/ZoomRecordingImportsPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/components/ZoomRecordingImportsPanel.vue`
 - Size bytes / Размер в байтах: `7789`
 - Included characters / Включено символов: `7775`
 - Truncated / Обрезано: `no`
@@ -898,7 +898,7 @@ async function handleRemoveImport(attachmentId: string, recordingId?: string | n
 
 ### `frontend/src/integrations/zoom/components/ZoomRecordingMaintenancePanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/components/ZoomRecordingMaintenancePanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/components/ZoomRecordingMaintenancePanel.vue`
 - Size bytes / Размер в байтах: `7669`
 - Included characters / Включено символов: `7669`
 - Truncated / Обрезано: `no`
@@ -1037,18 +1037,18 @@ async function handleCleanupZoomRetention() {
     <form class="integration-form" @submit.prevent="handleSyncZoomRecordings">
       <input
         v-model="recordingSyncForm.user_id"
-        class="hermes-input-control"
+        class="makosh-input-control"
         type="text"
         :placeholder="t('Zoom user id override (optional)')"
       />
       <div class="maintenance-grid">
-        <input v-model="recordingSyncForm.from" class="hermes-input-control" type="date" required />
-        <input v-model="recordingSyncForm.to" class="hermes-input-control" type="date" required />
+        <input v-model="recordingSyncForm.from" class="makosh-input-control" type="date" required />
+        <input v-model="recordingSyncForm.to" class="makosh-input-control" type="date" required />
       </div>
       <div class="maintenance-grid">
         <input
           v-model="recordingSyncForm.page_size"
-          class="hermes-input-control"
+          class="makosh-input-control"
           type="number"
           min="1"
           max="100"
@@ -1056,7 +1056,7 @@ async function handleCleanupZoomRetention() {
         />
         <input
           v-model="recordingSyncForm.max_meetings"
-          class="hermes-input-control"
+          class="makosh-input-control"
           type="number"
           min="1"
           max="500"
@@ -1065,13 +1065,13 @@ async function handleCleanupZoomRetention() {
       </div>
       <input
         v-model="recordingSyncForm.api_base_url"
-        class="hermes-input-control"
+        class="makosh-input-control"
         type="text"
         :placeholder="t('https://api.zoom.us/v2')"
       />
       <button
         type="submit"
-        class="hermes-btn hermes-btn--outline"
+        class="makosh-btn makosh-btn--outline"
         :disabled="activeAction === `recording-sync:${selectedAccount.account_id}` || syncZoomRecordings.isPending.value"
       >
         {{ syncZoomRecordings.isPending.value ? t('Syncing...') : t('Sync cloud recordings') }}
@@ -1080,7 +1080,7 @@ async function handleCleanupZoomRetention() {
     <div class="inspector-actions">
       <button
         type="button"
-        class="hermes-btn hermes-btn--outline"
+        class="makosh-btn makosh-btn--outline"
         :disabled="activeAction === `retention-cleanup:${selectedAccount.account_id}` || cleanupZoomRetention.isPending.value"
         @click="handleCleanupZoomRetention"
       >
@@ -1107,7 +1107,7 @@ async function handleCleanupZoomRetention() {
 
 ### `frontend/src/integrations/zoom/components/ZoomSettingsPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/components/ZoomSettingsPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/components/ZoomSettingsPanel.vue`
 - Size bytes / Размер в байтах: `30693`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1450,7 +1450,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/platform/event-tracing/EventTracePanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/event-tracing/EventTracePanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/event-tracing/EventTracePanel.vue`
 - Size bytes / Размер в байтах: `9335`
 - Included characters / Включено символов: `9335`
 - Truncated / Обрезано: `no`
@@ -1808,7 +1808,7 @@ function jsonPreview(value: unknown): string {
 
 ### `frontend/src/platform/event-tracing/EventTraceWorkspace.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/event-tracing/EventTraceWorkspace.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/event-tracing/EventTraceWorkspace.vue`
 - Size bytes / Размер в байтах: `4352`
 - Included characters / Включено символов: `4352`
 - Truncated / Обрезано: `no`
@@ -2001,7 +2001,7 @@ function submitLookup(): void {
 
 ### `frontend/src/shared/mailSetup/AccountSetupModal.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/mailSetup/AccountSetupModal.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/mailSetup/AccountSetupModal.vue`
 - Size bytes / Размер в байтах: `13384`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2422,7 +2422,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/shared/mailSync/MailSyncSettingsStrip.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/mailSync/MailSyncSettingsStrip.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/mailSync/MailSyncSettingsStrip.vue`
 - Size bytes / Размер в байтах: `5257`
 - Included characters / Включено символов: `5257`
 - Truncated / Обрезано: `no`
@@ -2644,7 +2644,7 @@ function updateNumberField(field: 'batch_size' | 'poll_interval_seconds', event:
 
 ### `frontend/src/shared/transitions/FadeTransition.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/transitions/FadeTransition.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/transitions/FadeTransition.vue`
 - Size bytes / Размер в байтах: `628`
 - Included characters / Включено символов: `628`
 - Truncated / Обрезано: `no`
@@ -2668,7 +2668,7 @@ const cssDuration = computed(() => `${props.duration}ms`)
 
 <template>
   <Transition
-    :name="'hermes-fade'"
+    :name="'makosh-fade'"
     :mode="mode"
     :appear="appear"
   >
@@ -2677,13 +2677,13 @@ const cssDuration = computed(() => `${props.duration}ms`)
 </template>
 
 <style scoped>
-.hermes-fade-enter-active,
-.hermes-fade-leave-active {
+.makosh-fade-enter-active,
+.makosh-fade-leave-active {
   transition: opacity v-bind(cssDuration) ease;
 }
 
-.hermes-fade-enter-from,
-.hermes-fade-leave-to {
+.makosh-fade-enter-from,
+.makosh-fade-leave-to {
   opacity: 0;
 }
 </style>
@@ -2691,7 +2691,7 @@ const cssDuration = computed(() => `${props.duration}ms`)
 
 ### `frontend/src/shared/transitions/SlideTransition.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/transitions/SlideTransition.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/transitions/SlideTransition.vue`
 - Size bytes / Размер в байтах: `2061`
 - Included characters / Включено символов: `2061`
 - Truncated / Обрезано: `no`
@@ -2717,7 +2717,7 @@ const props = withDefaults(defineProps<{
 const cssDuration = computed(() => `${props.duration}ms`)
 const cssDistance = computed(() => props.distance)
 
-const nameClass = computed(() => `hermes-slide-${props.direction}`)
+const nameClass = computed(() => `makosh-slide-${props.direction}`)
 </script>
 
 <template>
@@ -2732,57 +2732,57 @@ const nameClass = computed(() => `hermes-slide-${props.direction}`)
 
 <style scoped>
 /* Up */
-.hermes-slide-up-enter-active,
-.hermes-slide-up-leave-active {
+.makosh-slide-up-enter-active,
+.makosh-slide-up-leave-active {
   transition: all v-bind(cssDuration) cubic-bezier(0.16, 1, 0.3, 1);
 }
-.hermes-slide-up-enter-from {
+.makosh-slide-up-enter-from {
   opacity: 0;
   transform: translateY(v-bind(cssDistance));
 }
-.hermes-slide-up-leave-to {
+.makosh-slide-up-leave-to {
   opacity: 0;
   transform: translateY(calc(-1 * v-bind(cssDistance)));
 }
 
 /* Down */
-.hermes-slide-down-enter-active,
-.hermes-slide-down-leave-active {
+.makosh-slide-down-enter-active,
+.makosh-slide-down-leave-active {
   transition: all v-bind(cssDuration) cubic-bezier(0.16, 1, 0.3, 1);
 }
-.hermes-slide-down-enter-from {
+.makosh-slide-down-enter-from {
   opacity: 0;
   transform: translateY(calc(-1 * v-bind(cssDistance)));
 }
-.hermes-slide-down-leave-to {
+.makosh-slide-down-leave-to {
   opacity: 0;
   transform: translateY(v-bind(cssDistance));
 }
 
 /* Left */
-.hermes-slide-left-enter-active,
-.hermes-slide-left-leave-active {
+.makosh-slide-left-enter-active,
+.makosh-slide-left-leave-active {
   transition: all v-bind(cssDuration) cubic-bezier(0.16, 1, 0.3, 1);
 }
-.hermes-slide-left-enter-from {
+.makosh-slide-left-enter-from {
   opacity: 0;
   transform: translateX(v-bind(cssDistance));
 }
-.hermes-slide-left-leave-to {
+.makosh-slide-left-leave-to {
   opacity: 0;
   transform: translateX(calc(-1 * v-bind(cssDistance)));
 }
 
 /* Right */
-.hermes-slide-right-enter-active,
-.hermes-slide-right-leave-active {
+.makosh-slide-right-enter-active,
+.makosh-slide-right-leave-active {
   transition: all v-bind(cssDuration) cubic-bezier(0.16, 1, 0.3, 1);
 }
-.hermes-slide-right-enter-from {
+.makosh-slide-right-enter-from {
   opacity: 0;
   transform: translateX(calc(-1 * v-bind(cssDistance)));
 }
-.hermes-slide-right-leave-to {
+.makosh-slide-right-leave-to {
   opacity: 0;
   transform: translateX(v-bind(cssDistance));
 }
@@ -2791,7 +2791,7 @@ const nameClass = computed(() => `hermes-slide-${props.direction}`)
 
 ### `frontend/src/shared/ui/Avatar.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Avatar.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Avatar.vue`
 - Size bytes / Размер в байтах: `2039`
 - Included characters / Включено символов: `2039`
 - Truncated / Обрезано: `no`
@@ -2813,8 +2813,8 @@ const props = withDefaults(defineProps<{
 })
 
 const rootClasses = computed(() => [
-  'hermes-avatar-root',
-  `hermes-avatar--${props.size}`,
+  'makosh-avatar-root',
+  `makosh-avatar--${props.size}`,
   props.class
 ])
 
@@ -2827,15 +2827,15 @@ const fallbackText = computed(() => {
 
 <template>
   <AvatarRoot :class="rootClasses">
-    <AvatarImage v-if="src" :src="src" :alt="alt" class="hermes-avatar-image" />
-    <AvatarFallback class="hermes-avatar-fallback" :delay-ms="src ? 300 : 0">
+    <AvatarImage v-if="src" :src="src" :alt="alt" class="makosh-avatar-image" />
+    <AvatarFallback class="makosh-avatar-fallback" :delay-ms="src ? 300 : 0">
       {{ fallbackText }}
     </AvatarFallback>
   </AvatarRoot>
 </template>
 
 <style scoped>
-.hermes-avatar-root {
+.makosh-avatar-root {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2848,14 +2848,14 @@ const fallbackText = computed(() => {
   user-select: none;
 }
 
-.hermes-avatar-image {
+.makosh-avatar-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: inherit;
 }
 
-.hermes-avatar-fallback {
+.makosh-avatar-fallback {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2866,38 +2866,38 @@ const fallbackText = computed(() => {
   line-height: 1;
 }
 
-.hermes-avatar--sm .hermes-avatar-fallback {
+.makosh-avatar--sm .makosh-avatar-fallback {
   font-size: 0.625rem;
 }
 
-.hermes-avatar--sm {
+.makosh-avatar--sm {
   width: 1.5rem;
   height: 1.5rem;
 }
 
-.hermes-avatar--md .hermes-avatar-fallback {
+.makosh-avatar--md .makosh-avatar-fallback {
   font-size: 0.75rem;
 }
 
-.hermes-avatar--md {
+.makosh-avatar--md {
   width: 2rem;
   height: 2rem;
 }
 
-.hermes-avatar--lg .hermes-avatar-fallback {
+.makosh-avatar--lg .makosh-avatar-fallback {
   font-size: 0.875rem;
 }
 
-.hermes-avatar--lg {
+.makosh-avatar--lg {
   width: 2.5rem;
   height: 2.5rem;
 }
 
-.hermes-avatar--xl .hermes-avatar-fallback {
+.makosh-avatar--xl .makosh-avatar-fallback {
   font-size: 1rem;
 }
 
-.hermes-avatar--xl {
+.makosh-avatar--xl {
   width: 3rem;
   height: 3rem;
 }
@@ -2906,7 +2906,7 @@ const fallbackText = computed(() => {
 
 ### `frontend/src/shared/ui/Badge.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Badge.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Badge.vue`
 - Size bytes / Размер в байтах: `1663`
 - Included characters / Включено символов: `1663`
 - Truncated / Обрезано: `no`
@@ -2925,9 +2925,9 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-badge',
-  `hermes-badge--${props.variant}`,
-  `hermes-badge--${props.size}`,
+  'makosh-badge',
+  `makosh-badge--${props.variant}`,
+  `makosh-badge--${props.size}`,
   props.class
 ])
 </script>
@@ -2939,7 +2939,7 @@ const classes = computed(() => [
 </template>
 
 <style scoped>
-.hermes-badge {
+.makosh-badge {
   display: inline-flex;
   align-items: center;
   font-family: var(--hh-font-sans);
@@ -2949,50 +2949,50 @@ const classes = computed(() => [
   line-height: 1;
 }
 
-.hermes-badge--sm {
+.makosh-badge--sm {
   height: 1.25rem;
   padding: 0 0.5rem;
   font-size: 0.6875rem;
 }
 
-.hermes-badge--md {
+.makosh-badge--md {
   height: 1.5rem;
   padding: 0 0.625rem;
   font-size: 0.75rem;
 }
 
 /* Variants */
-.hermes-badge--default {
+.makosh-badge--default {
   background: var(--hh-hover-bg);
   color: var(--hh-text-secondary);
 }
 
-.hermes-badge--accent {
+.makosh-badge--accent {
   background: var(--hh-accent-tint);
   color: var(--hh-accent);
 }
 
-.hermes-badge--success {
+.makosh-badge--success {
   background: var(--hh-status-success-surface);
   color: var(--hh-status-success-text);
 }
 
-.hermes-badge--warning {
+.makosh-badge--warning {
   background: var(--hh-status-warning-surface);
   color: var(--hh-status-warning-text);
 }
 
-.hermes-badge--danger {
+.makosh-badge--danger {
   background: var(--hh-status-danger-surface);
   color: var(--hh-status-danger-text);
 }
 
-.hermes-badge--info {
+.makosh-badge--info {
   background: var(--hh-status-info-surface);
   color: var(--hh-status-info-text);
 }
 
-.hermes-badge--neutral {
+.makosh-badge--neutral {
   background: var(--hh-status-neutral-surface);
   color: var(--hh-status-neutral-text);
 }
@@ -3001,7 +3001,7 @@ const classes = computed(() => [
 
 ### `frontend/src/shared/ui/Button.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Button.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Button.vue`
 - Size bytes / Размер в байтах: `3848`
 - Included characters / Включено символов: `3848`
 - Truncated / Обрезано: `no`
@@ -3033,10 +3033,10 @@ const emit = defineEmits<{
 
 const classes = computed(() => {
   return [
-    'hermes-btn',
-    `hermes-btn--${props.variant}`,
-    `hermes-btn--${props.size}`,
-    { 'hermes-btn--disabled': props.disabled || props.loading },
+    'makosh-btn',
+    `makosh-btn--${props.variant}`,
+    `makosh-btn--${props.size}`,
+    { 'makosh-btn--disabled': props.disabled || props.loading },
     props.class
   ]
 })
@@ -3055,16 +3055,16 @@ function handleClick(event: MouseEvent): void {
     :type="type"
     @click="handleClick"
   >
-    <Icon v-if="loading" icon="tabler:loader-2" size="1em" class="hermes-btn-spinner" />
+    <Icon v-if="loading" icon="tabler:loader-2" size="1em" class="makosh-btn-spinner" />
     <Icon v-else-if="icon" :icon="icon" size="1em" />
-    <span v-if="$slots.default" class="hermes-btn-text">
+    <span v-if="$slots.default" class="makosh-btn-text">
       <slot />
     </span>
   </button>
 </template>
 
 <style scoped>
-.hermes-btn {
+.makosh-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -3080,107 +3080,107 @@ function handleClick(event: MouseEvent): void {
   line-height: 1;
 }
 
-.hermes-btn:focus-visible {
+.makosh-btn:focus-visible {
   outline: 2px solid var(--hh-focus-ring);
   outline-offset: 2px;
 }
 
-.hermes-btn--disabled {
+.makosh-btn--disabled {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
 }
 
 /* Variants */
-.hermes-btn--default {
+.makosh-btn--default {
   background: var(--hh-accent);
   color: var(--hh-accent-contrast);
   border-color: var(--hh-accent);
 }
-.hermes-btn--default:hover:not(:disabled) {
+.makosh-btn--default:hover:not(:disabled) {
   filter: brightness(1.1);
 }
-.hermes-btn--default:active:not(:disabled) {
+.makosh-btn--default:active:not(:disabled) {
   filter: brightness(0.9);
 }
 
-.hermes-btn--secondary {
+.makosh-btn--secondary {
   background: var(--hh-hover-bg);
   color: var(--hh-text-primary);
   border-color: var(--hh-border);
 }
-.hermes-btn--secondary:hover:not(:disabled) {
+.makosh-btn--secondary:hover:not(:disabled) {
   background: var(--hh-active-bg);
   border-color: var(--hh-border-accent);
 }
-.hermes-btn--secondary:active:not(:disabled) {
+.makosh-btn--secondary:active:not(:disabled) {
   background: var(--hh-accent-tint);
 }
 
-.hermes-btn--outline {
+.makosh-btn--outline {
   background: transparent;
   color: var(--hh-text-primary);
   border-color: var(--hh-border);
 }
-.hermes-btn--outline:hover:not(:disabled) {
+.makosh-btn--outline:hover:not(:disabled) {
   background: var(--hh-hover-bg);
   border-color: var(--hh-border-accent);
 }
-.hermes-btn--outline:active:not(:disabled) {
+.makosh-btn--outline:active:not(:disabled) {
   background: var(--hh-accent-tint);
 }
 
-.hermes-btn--ghost {
+.makosh-btn--ghost {
   background: transparent;
   color: var(--hh-text-secondary);
   border-color: transparent;
 }
-.hermes-btn--ghost:hover:not(:disabled) {
+.makosh-btn--ghost:hover:not(:disabled) {
   background: var(--hh-hover-bg);
   color: var(--hh-text-primary);
 }
-.hermes-btn--ghost:active:not(:disabled) {
+.makosh-btn--ghost:active:not(:disabled) {
   background: var(--hh-active-bg);
 }
 
-.hermes-btn--destructive {
+.makosh-btn--destructive {
   background: var(--hh-danger-tint);
   color: var(--hh-color-danger);
   border-color: transparent;
 }
-.hermes-btn--destructive:hover:not(:disabled) {
+.makosh-btn--destructive:hover:not(:disabled) {
   background: var(--hh-color-danger-strong);
   color: white;
 }
-.hermes-btn--destructive:active:not(:disabled) {
+.makosh-btn--destructive:active:not(:disabled) {
   filter: brightness(0.9);
 }
 
 /* Sizes */
-.hermes-btn--sm {
+.makosh-btn--sm {
   height: 1.75rem;
   padding: 0 0.625rem;
   font-size: 0.75rem;
   border-radius: var(--hh-radius-xs);
 }
 
-.hermes-btn--md {
+.makosh-btn--md {
   height: 2.125rem;
   padding: 0 0.875rem;
   font-size: 0.8125rem;
 }
 
-.hermes-btn--lg {
+.makosh-btn--lg {
   height: 2.5rem;
   padding: 0 1.125rem;
   font-size: 0.875rem;
 }
 
-.hermes-btn-spinner {
-  animation: hermes-spin 1s linear infinite;
+.makosh-btn-spinner {
+  animation: makosh-spin 1s linear infinite;
 }
 
-@keyframes hermes-spin {
+@keyframes makosh-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
@@ -3189,7 +3189,7 @@ function handleClick(event: MouseEvent): void {
 
 ### `frontend/src/shared/ui/Card.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Card.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Card.vue`
 - Size bytes / Размер в байтах: `445`
 - Included characters / Включено символов: `445`
 - Truncated / Обрезано: `no`
@@ -3202,7 +3202,7 @@ const props = withDefaults(defineProps<{
   class?: string
 }>(), {})
 
-const classes = computed(() => ['hermes-card', props.class])
+const classes = computed(() => ['makosh-card', props.class])
 </script>
 
 <template>
@@ -3212,7 +3212,7 @@ const classes = computed(() => ['hermes-card', props.class])
 </template>
 
 <style scoped>
-.hermes-card {
+.makosh-card {
   background: var(--hh-surface-panel);
   border: 1px solid var(--hh-border);
   border-radius: var(--hh-radius-md);
@@ -3223,7 +3223,7 @@ const classes = computed(() => ['hermes-card', props.class])
 
 ### `frontend/src/shared/ui/CardContent.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/CardContent.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/CardContent.vue`
 - Size bytes / Размер в байтах: `346`
 - Included characters / Включено символов: `346`
 - Truncated / Обрезано: `no`
@@ -3236,7 +3236,7 @@ const props = withDefaults(defineProps<{
   class?: string
 }>(), {})
 
-const classes = computed(() => ['hermes-card-content', props.class])
+const classes = computed(() => ['makosh-card-content', props.class])
 </script>
 
 <template>
@@ -3246,7 +3246,7 @@ const classes = computed(() => ['hermes-card-content', props.class])
 </template>
 
 <style scoped>
-.hermes-card-content {
+.makosh-card-content {
   padding: 1.25rem;
 }
 </style>
@@ -3254,7 +3254,7 @@ const classes = computed(() => ['hermes-card-content', props.class])
 
 ### `frontend/src/shared/ui/CardDescription.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/CardDescription.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/CardDescription.vue`
 - Size bytes / Размер в байтах: `418`
 - Included characters / Включено символов: `418`
 - Truncated / Обрезано: `no`
@@ -3267,7 +3267,7 @@ const props = withDefaults(defineProps<{
   class?: string
 }>(), {})
 
-const classes = computed(() => ['hermes-card-description', props.class])
+const classes = computed(() => ['makosh-card-description', props.class])
 </script>
 
 <template>
@@ -3277,7 +3277,7 @@ const classes = computed(() => ['hermes-card-description', props.class])
 </template>
 
 <style scoped>
-.hermes-card-description {
+.makosh-card-description {
   font-size: 0.8125rem;
   color: var(--hh-text-muted);
   margin: 0;
@@ -3288,7 +3288,7 @@ const classes = computed(() => ['hermes-card-description', props.class])
 
 ### `frontend/src/shared/ui/CardFooter.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/CardFooter.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/CardFooter.vue`
 - Size bytes / Размер в байтах: `449`
 - Included characters / Включено символов: `449`
 - Truncated / Обрезано: `no`
@@ -3301,7 +3301,7 @@ const props = withDefaults(defineProps<{
   class?: string
 }>(), {})
 
-const classes = computed(() => ['hermes-card-footer', props.class])
+const classes = computed(() => ['makosh-card-footer', props.class])
 </script>
 
 <template>
@@ -3311,7 +3311,7 @@ const classes = computed(() => ['hermes-card-footer', props.class])
 </template>
 
 <style scoped>
-.hermes-card-footer {
+.makosh-card-footer {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -3323,7 +3323,7 @@ const classes = computed(() => ['hermes-card-footer', props.class])
 
 ### `frontend/src/shared/ui/CardHeader.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/CardHeader.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/CardHeader.vue`
 - Size bytes / Размер в байтах: `453`
 - Included characters / Включено символов: `453`
 - Truncated / Обрезано: `no`
@@ -3336,7 +3336,7 @@ const props = withDefaults(defineProps<{
   class?: string
 }>(), {})
 
-const classes = computed(() => ['hermes-card-header', props.class])
+const classes = computed(() => ['makosh-card-header', props.class])
 </script>
 
 <template>
@@ -3346,7 +3346,7 @@ const classes = computed(() => ['hermes-card-header', props.class])
 </template>
 
 <style scoped>
-.hermes-card-header {
+.makosh-card-header {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -3358,7 +3358,7 @@ const classes = computed(() => ['hermes-card-header', props.class])
 
 ### `frontend/src/shared/ui/CardTitle.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/CardTitle.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/CardTitle.vue`
 - Size bytes / Размер в байтах: `430`
 - Included characters / Включено символов: `430`
 - Truncated / Обрезано: `no`
@@ -3371,7 +3371,7 @@ const props = withDefaults(defineProps<{
   class?: string
 }>(), {})
 
-const classes = computed(() => ['hermes-card-title', props.class])
+const classes = computed(() => ['makosh-card-title', props.class])
 </script>
 
 <template>
@@ -3381,7 +3381,7 @@ const classes = computed(() => ['hermes-card-title', props.class])
 </template>
 
 <style scoped>
-.hermes-card-title {
+.makosh-card-title {
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--hh-text-primary);
@@ -3393,7 +3393,7 @@ const classes = computed(() => ['hermes-card-title', props.class])
 
 ### `frontend/src/shared/ui/Command.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Command.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Command.vue`
 - Size bytes / Размер в байтах: `8123`
 - Included characters / Включено символов: `8103`
 - Truncated / Обрезано: `no`
@@ -3504,7 +3504,7 @@ function selectItem(item: CommandItem): void {
 }
 
 const contentClasses = computed(() => [
-  'hermes-command-content',
+  'makosh-command-content',
   props.contentClass
 ])
 </script>
@@ -3512,41 +3512,41 @@ const contentClasses = computed(() => [
 <template>
   <DialogRoot :open="open" @update:open="(val) => emit('update:open', val)">
     <DialogPortal>
-      <DialogOverlay class="hermes-command-overlay" @pointerdown="emit('update:open', false)">
+      <DialogOverlay class="makosh-command-overlay" @pointerdown="emit('update:open', false)">
         <DialogContent :class="contentClasses" @keydown="handleKeyDown" @open-auto-focus="(e: Event) => e.preventDefault()">
-          <div class="hermes-command-input-wrapper">
-            <Icon icon="tabler:search" size="1.125rem" class="hermes-command-search-icon" />
+          <div class="makosh-command-input-wrapper">
+            <Icon icon="tabler:search" size="1.125rem" class="makosh-command-search-icon" />
             <input
               ref="inputRef"
               v-model="query"
-              class="hermes-command-input"
+              class="makosh-command-input"
               :placeholder="placeholder"
               @keydown.stop="handleKeyDown"
             />
-            <kbd class="hermes-command-kbd">ESC</kbd>
+            <kbd class="makosh-command-kbd">ESC</kbd>
           </div>
 
-          <div class="hermes-command-list">
+          <div class="makosh-command-list">
             <template v-if="filteredGroups.length > 0">
-              <div v-for="(group, gi) in filteredGroups" :key="gi" class="hermes-command-group">
-                <div class="hermes-command-group-label">{{ group.label }}</div>
+              <div v-for="(group, gi) in filteredGroups" :key="gi" class="makosh-command-group">
+                <div class="makosh-command-group-label">{{ group.label }}</div>
                 <button
                   v-for="(item, ii) in group.items"
                   :key="item.id"
-                  class="hermes-command-item"
-                  :class="{ 'hermes-command-item--selected': flatItems.indexOf(item) === selectedIndex }"
+                  class="makosh-command-item"
+                  :class="{ 'makosh-command-item--selected': flatItems.indexOf(item) === selectedIndex }"
                   @click="selectItem(item)"
                   @mouseenter="selectedIndex = flatItems.indexOf(item)"
                 >
-                  <Icon v-if="item.icon" :icon="item.icon" size="1.125rem" class="hermes-command-item-icon" />
-                  <div class="hermes-command-item-text">
-                    <span class="hermes-command-item-label">{{ item.label }}</span>
-                    <span v-if="item.description" class="hermes-command-item-desc">{{ item.description }}</span>
+                  <Icon v-if="item.icon" :icon="item.icon" size="1.125rem" class="makosh-command-item-icon" />
+                  <div class="makosh-command-item-text">
+                    <span class="makosh-command-item-label">{{ item.label }}</span>
+                    <span v-if="item.description" class="makosh-command-item-desc">{{ item.description }}</span>
                   </div>
                 </button>
               </div>
             </template>
-            <div v-else-if="query" class="hermes-command-empty">
+            <div v-else-if="query" class="makosh-command-empty">
               <Icon icon="tabler:search-off" size="1.5rem" />
               <span>{{ emptyMessage }}</span>
             </div>
@@ -3558,7 +3558,7 @@ const contentClasses = computed(() => [
 </template>
 
 <style scoped>
-.hermes-command-overlay {
+.makosh-command-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
@@ -3570,7 +3570,7 @@ const contentClasses = computed(() => [
   animation: command-overlay-in 150ms ease;
 }
 
-.hermes-command-content {
+.makosh-command-content {
   width: 90vw;
   max-width: 560px;
   max-height: 60vh;
@@ -3584,7 +3584,7 @@ const contentClasses = computed(() => [
   animation: command-content-in 150ms ease;
 }
 
-.hermes-command-input-wrapper {
+.makosh-command-input-wrapper {
   display: flex;
   align-items: center;
   gap: 0.625rem;
@@ -3593,12 +3593,12 @@ const contentClasses = computed(() => [
   flex-shrink: 0;
 }
 
-.hermes-command-search-icon {
+.makosh-command-search-icon {
   flex-shrink: 0;
   color: var(--hh-text-muted);
 }
 
-.hermes-command-input {
+.makosh-command-input {
   flex: 1;
   background: transparent;
   border: none;
@@ -3609,11 +3609,11 @@ const contentClasses = computed(() => [
   line-height: 1.5;
 }
 
-.hermes-command-input::placeholder {
+.makosh-command-input::placeholder {
   color: var(--hh-text-muted);
 }
 
-.hermes-command-kbd {
+.makosh-command-kbd {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -3629,17 +3629,17 @@ const contentClasses = computed(() => [
   line-height: 1.4;
 }
 
-.hermes-command-list {
+.makosh-command-list {
   flex: 1;
   overflow-y: auto;
   padding: 0.5rem;
 }
 
-.hermes-command-group {
+.makosh-command-group {
   margin-bottom: 0.25rem;
 }
 
-.hermes-command-group-label {
+.makosh-command-group-label {
   padding: 0.375rem 0.5rem;
   font-size: 0.6875rem;
   font-weight: 600;
@@ -3648,7 +3648,7 @@ const contentClasses = computed(() => [
   letter-spacing: 0.05em;
 }
 
-.hermes-command-item {
+.makosh-command-item {
   display: flex;
   align-items: center;
   gap: 0.625rem;
@@ -3663,27 +3663,27 @@ const contentClasses = computed(() => [
   transition: background 100ms ease;
 }
 
-.hermes-command-item:hover,
-.hermes-command-item--selected {
+.makosh-command-item:hover,
+.makosh-command-item--selected {
   background: var(--hh-hover-bg);
 }
 
-.hermes-command-item:focus-visible {
+.makosh-command-item:focus-visible {
   outline: 2px solid var(--hh-focus-ring);
   outline-offset: -2px;
 }
 
-.hermes-command-item-icon {
+.makosh-command-item-icon {
   flex-shrink: 0;
   color: var(--hh-text-secondary);
 }
 
-.hermes-command-item-text {
+.makosh-command-item-text {
   flex: 1;
   min-width: 0;
 }
 
-.hermes-command-item-label {
+.makosh-command-item-label {
   display: block;
   font-size: 0.8125rem;
   font-weight: 500;
@@ -3691,7 +3691,7 @@ const contentClasses = computed(() => [
   line-height: 1.4;
 }
 
-.hermes-command-item-desc {
+.makosh-command-item-desc {
   display: block;
   font-size: 0.6875rem;
   color: var(--hh-text-muted);
@@ -3699,7 +3699,7 @@ const contentClasses = computed(() => [
   margin-top: 0.0625rem;
 }
 
-.hermes-command-empty {
+.makosh-command-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3729,7 +3729,7 @@ const contentClasses = computed(() => [
 
 ### `frontend/src/shared/ui/Dialog.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Dialog.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Dialog.vue`
 - Size bytes / Размер в байтах: `3432`
 - Included characters / Включено символов: `3432`
 - Truncated / Обрезано: `no`
@@ -3754,7 +3754,7 @@ const emit = defineEmits<{
   'update:open': [value: boolean]
 }>()
 
-const contentClasses = computed(() => ['hermes-dialog-content', props.contentClass])
+const contentClasses = computed(() => ['makosh-dialog-content', props.contentClass])
 </script>
 
 <template>
@@ -3763,21 +3763,21 @@ const contentClasses = computed(() => ['hermes-dialog-content', props.contentCla
       <slot name="trigger" />
     </DialogTrigger>
     <DialogPortal>
-      <DialogOverlay class="hermes-dialog-overlay">
+      <DialogOverlay class="makosh-dialog-overlay">
         <DialogContent :class="contentClasses">
-          <div class="hermes-dialog-header">
-            <DialogTitle v-if="title" class="hermes-dialog-title">{{ title }}</DialogTitle>
-            <DialogDescription v-if="description" class="hermes-dialog-description">{{ description }}</DialogDescription>
+          <div class="makosh-dialog-header">
+            <DialogTitle v-if="title" class="makosh-dialog-title">{{ title }}</DialogTitle>
+            <DialogDescription v-if="description" class="makosh-dialog-description">{{ description }}</DialogDescription>
             <slot name="header" />
           </div>
-          <div class="hermes-dialog-body">
+          <div class="makosh-dialog-body">
             <slot />
           </div>
-          <div v-if="$slots.footer" class="hermes-dialog-footer">
+          <div v-if="$slots.footer" class="makosh-dialog-footer">
             <slot name="footer" />
           </div>
-          <DialogClose class="hermes-dialog-close" as-child>
-            <button class="hermes-dialog-close-btn">
+          <DialogClose class="makosh-dialog-close" as-child>
+            <button class="makosh-dialog-close-btn">
               <Icon icon="tabler:x" size="1.125rem" />
             </button>
           </DialogClose>
@@ -3788,7 +3788,7 @@ const contentClasses = computed(() => ['hermes-dialog-content', props.contentCla
 </template>
 
 <style scoped>
-.hermes-dialog-overlay {
+.makosh-dialog-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
@@ -3799,7 +3799,7 @@ const contentClasses = computed(() => ['hermes-dialog-content', props.contentCla
   animation: dialog-overlay-in 200ms ease;
 }
 
-.hermes-dialog-content {
+.makosh-dialog-content {
   position: relative;
   width: 90vw;
   max-width: 500px;
@@ -3812,11 +3812,11 @@ const contentClasses = computed(() => ['hermes-dialog-content', props.contentCla
   animation: dialog-content-in 200ms ease;
 }
 
-.hermes-dialog-header {
+.makosh-dialog-header {
   padding: 1.5rem 1.5rem 0;
 }
 
-.hermes-dialog-title {
+.makosh-dialog-title {
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--hh-text-primary);
@@ -3824,18 +3824,18 @@ const contentClasses = computed(() => ['hermes-dialog-content', props.contentCla
   line-height: 1.3;
 }
 
-.hermes-dialog-description {
+.makosh-dialog-description {
   font-size: 0.8125rem;
   color: var(--hh-text-muted);
   margin: 0.25rem 0 0;
   line-height: 1.4;
 }
 
-.hermes-dialog-body {
+.makosh-dialog-body {
   padding: 1.25rem 1.5rem;
 }
 
-.hermes-dialog-footer {
+.makosh-dialog-footer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -3843,13 +3843,13 @@ const contentClasses = computed(() => ['hermes-dialog-content', props.contentCla
   padding: 0 1.5rem 1.25rem;
 }
 
-.hermes-dialog-close {
+.makosh-dialog-close {
   position: absolute;
   top: 1rem;
   right: 1rem;
 }
 
-.hermes-dialog-close-btn {
+.makosh-dialog-close-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3863,7 +3863,7 @@ const contentClasses = computed(() => ['hermes-dialog-content', props.contentCla
   transition: all 150ms ease;
 }
 
-.hermes-dialog-close-btn:hover {
+.makosh-dialog-close-btn:hover {
   background: var(--hh-hover-bg);
   color: var(--hh-text-primary);
 }
@@ -3882,7 +3882,7 @@ const contentClasses = computed(() => ['hermes-dialog-content', props.contentCla
 
 ### `frontend/src/shared/ui/DropdownMenu.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/DropdownMenu.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/DropdownMenu.vue`
 - Size bytes / Размер в байтах: `1354`
 - Included characters / Включено символов: `1354`
 - Truncated / Обрезано: `no`
@@ -3903,7 +3903,7 @@ const props = withDefaults(defineProps<{
   sideOffset: 4
 })
 
-const contentClasses = computed(() => ['hermes-dropdown-content', props.class])
+const contentClasses = computed(() => ['makosh-dropdown-content', props.class])
 </script>
 
 <template>
@@ -3925,7 +3925,7 @@ const contentClasses = computed(() => ['hermes-dropdown-content', props.class])
 </template>
 
 <style scoped>
-.hermes-dropdown-content {
+.makosh-dropdown-content {
   min-width: 180px;
   background: var(--hh-surface-panel);
   border: 1px solid var(--hh-border);
@@ -3945,7 +3945,7 @@ const contentClasses = computed(() => ['hermes-dropdown-content', props.class])
 
 ### `frontend/src/shared/ui/DropdownMenuItem.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/DropdownMenuItem.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/DropdownMenuItem.vue`
 - Size bytes / Размер в байтах: `1472`
 - Included characters / Включено символов: `1472`
 - Truncated / Обрезано: `no`
@@ -3967,21 +3967,21 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-dropdown-item',
-  { 'hermes-dropdown-item--inset': props.inset, 'hermes-dropdown-item--disabled': props.disabled },
+  'makosh-dropdown-item',
+  { 'makosh-dropdown-item--inset': props.inset, 'makosh-dropdown-item--disabled': props.disabled },
   props.class
 ])
 </script>
 
 <template>
   <DropdownMenuItem :class="classes" :disabled="disabled">
-    <Icon v-if="icon" :icon="icon" size="1rem" class="hermes-dropdown-item-icon" />
+    <Icon v-if="icon" :icon="icon" size="1rem" class="makosh-dropdown-item-icon" />
     <slot />
   </DropdownMenuItem>
 </template>
 
 <style scoped>
-.hermes-dropdown-item {
+.makosh-dropdown-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -4000,22 +4000,22 @@ const classes = computed(() => [
   font-family: var(--hh-font-sans);
 }
 
-.hermes-dropdown-item:hover,
-.hermes-dropdown-item[data-highlighted] {
+.makosh-dropdown-item:hover,
+.makosh-dropdown-item[data-highlighted] {
   background: var(--hh-hover-bg);
   color: var(--hh-text-primary);
 }
 
-.hermes-dropdown-item--inset {
+.makosh-dropdown-item--inset {
   padding-left: 2.25rem;
 }
 
-.hermes-dropdown-item--disabled {
+.makosh-dropdown-item--disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.hermes-dropdown-item-icon {
+.makosh-dropdown-item-icon {
   flex-shrink: 0;
   color: var(--hh-text-muted);
 }
@@ -4024,7 +4024,7 @@ const classes = computed(() => [
 
 ### `frontend/src/shared/ui/DropdownMenuLabel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/DropdownMenuLabel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/DropdownMenuLabel.vue`
 - Size bytes / Размер в байтах: `567`
 - Included characters / Включено символов: `567`
 - Truncated / Обрезано: `no`
@@ -4038,7 +4038,7 @@ const props = withDefaults(defineProps<{
   class?: string
 }>(), {})
 
-const classes = computed(() => ['hermes-dropdown-label', props.class])
+const classes = computed(() => ['makosh-dropdown-label', props.class])
 </script>
 
 <template>
@@ -4048,7 +4048,7 @@ const classes = computed(() => ['hermes-dropdown-label', props.class])
 </template>
 
 <style scoped>
-.hermes-dropdown-label {
+.makosh-dropdown-label {
   padding: 0.5rem 0.75rem 0.25rem;
   font-size: 0.6875rem;
   font-weight: 600;

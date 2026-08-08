@@ -1,4 +1,4 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::io::{BufRead, BufReader, Read, Write};
 use std::net::{SocketAddr, TcpListener, TcpStream};
 use std::sync::{Arc, Mutex};
@@ -9,24 +9,24 @@ use chrono::{TimeZone, Utc};
 use serde_json::json;
 use sqlx::Row;
 
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::{
     CommunicationProviderKind, CommunicationProviderKind as PlatformEmailProviderKind,
     NewProviderAccount,
 };
-use hermes_communications_api::address_book::AddressBookProviderUpsertRequest;
-use hermes_communications_api::email_sync::{EmailSyncBatch, FetchedCommunicationSourceMessage};
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::domains::communications::storage::port::{
+use makosh_communications_api::address_book::AddressBookProviderUpsertRequest;
+use makosh_communications_api::email_sync::{EmailSyncBatch, FetchedCommunicationSourceMessage};
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::domains::communications::storage::port::{
     CommunicationAttachmentPort, LocalBlobPort,
 };
-use hermes_hub_backend::integrations::mail::gmail::client::{
+use makosh_hub_backend::integrations::mail::gmail::client::{
     gmail_api::GmailApiClient,
     imap::ImapNetworkClient,
     options::{GmailContactFetchOptions, GmailFetchOptions, ImapFetchOptions},
 };
-use hermes_hub_backend::platform::secrets::models::ResolvedSecret;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::workflows::email_sync_pipeline::recording::{
+use makosh_hub_backend::platform::secrets::models::ResolvedSecret;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::workflows::email_sync_pipeline::recording::{
     record_email_sync_batch, record_email_sync_batch_with_mail_blobs,
 };
 
@@ -794,7 +794,7 @@ impl MockImapServer {
                 .set_read_timeout(Some(std::time::Duration::from_secs(5)))
                 .expect("set IMAP timeout");
             stream
-                .write_all(b"* OK hermes test imap ready\r\n")
+                .write_all(b"* OK makosh test imap ready\r\n")
                 .expect("write IMAP greeting");
 
             let mut reader = BufReader::new(stream.try_clone().expect("clone IMAP stream"));

@@ -57,7 +57,7 @@ test('Kernel rejects a symlink planted at the recovery socket path', async () =>
 
     const restarted = spawn(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', fixture.dataDir, 'serve'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', fixture.dataDir, 'serve'],
       { cwd: backend, stdio: 'pipe' },
     );
     const stderr = [];
@@ -78,10 +78,10 @@ class RecoveryKernelFixture {
   }
 
   static async start(name) {
-    const dataDir = await mkdtemp(join(tmpdir(), `hermes-recovery-${name}-`));
+    const dataDir = await mkdtemp(join(tmpdir(), `makosh-recovery-${name}-`));
     const child = spawn(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'serve'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'serve'],
       { cwd: backend, stdio: 'pipe' },
     );
     const socketPath = await waitForRecoverySocket(child);

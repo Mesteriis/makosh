@@ -1,17 +1,17 @@
-name: hermes-scheduler-conformance
+name: makosh-scheduler-conformance
 
 services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: hermes_scheduler_test
-      POSTGRES_USER: hermes_scheduler_test
+      POSTGRES_DB: makosh_scheduler_test
+      POSTGRES_USER: makosh_scheduler_test
       POSTGRES_HOST_AUTH_METHOD: trust
     command: ["postgres", "-c", "listen_addresses=*"]
     ports:
       - 127.0.0.1:35433:5432
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U hermes_scheduler_test -d hermes_scheduler_test"]
+      test: ["CMD-SHELL", "pg_isready -U makosh_scheduler_test -d makosh_scheduler_test"]
       interval: 2s
       timeout: 2s
       retries: 20

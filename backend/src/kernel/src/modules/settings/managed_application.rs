@@ -2,12 +2,12 @@
 
 use std::time::{Duration, Instant};
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleRegistrationState, PlatformStorageBindingStateV1, SettingsApplyState,
 };
-use hermes_kernel_control_store_sqlite::{SqliteControlStore, StoreError};
-use hermes_runtime_protocol::v1::SettingApplyModeV1;
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_kernel_control_store_sqlite::{SqliteControlStore, StoreError};
+use makosh_runtime_protocol::v1::SettingApplyModeV1;
+use makosh_runtime_protocol::validation::descriptor::{
     decode_settings_schema_v1, decode_settings_snapshot_v1,
     validate_settings_snapshot_against_schema_v1,
 };

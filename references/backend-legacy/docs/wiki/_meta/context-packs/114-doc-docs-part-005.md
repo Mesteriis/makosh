@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docs/engines/speaker-identity/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/speaker-identity/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/speaker-identity/README.md`
 - Size bytes / Размер в байтах: `1925`
 - Included characters / Включено символов: `1925`
 - Truncated / Обрезано: `no`
@@ -133,7 +133,7 @@ Whether a DOM label belongs to the audio speaker?
 | `0.40 - 0.69` | weak candidate |
 | `< 0.40` | keep unknown speaker |
 
-Hermes should keep `Unknown Speaker #n` when confidence is low. Speaker labels
+Макошь should keep `Unknown Speaker #n` when confidence is low. Speaker labels
 must remain reviewable when evidence is weak or contradictory.
 
 ## Manual confirmation
@@ -145,7 +145,7 @@ and explicit local storage policy.
 
 ### `docs/engines/timeline/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/timeline/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/timeline/README.md`
 - Size bytes / Размер в байтах: `3172`
 - Included characters / Включено символов: `3172`
 - Truncated / Обрезано: `no`
@@ -240,7 +240,7 @@ the first projection rebuild target through `target_projection =
 
 ### `docs/engines/trust/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/engines/trust/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/engines/trust/README.md`
 - Size bytes / Размер в байтах: `2666`
 - Included characters / Включено символов: `2666`
 - Truncated / Обрезано: `no`
@@ -337,7 +337,7 @@ metadata when adapting compatibility `persons.trust_score` input, preserving:
 
 ### `docs/foundation/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/foundation/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/foundation/README.md`
 - Size bytes / Размер в байтах: `517`
 - Included characters / Включено символов: `517`
 - Truncated / Обрезано: `no`
@@ -363,13 +363,13 @@ prefer foundation unless a newer ADR supersedes it.
 
 ### `docs/foundation/architecture-principles.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/foundation/architecture-principles.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/foundation/architecture-principles.md`
 - Size bytes / Размер в байтах: `2175`
 - Included characters / Включено символов: `2175`
 - Truncated / Обрезано: `no`
 
 ```markdown
-# Hermes Architecture Principles
+# Макошь Architecture Principles
 
 ## 1. Context Over CRUD
 
@@ -436,13 +436,13 @@ the glossary and the affected domain documents together.
 
 ### `docs/foundation/domain-map.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/foundation/domain-map.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/foundation/domain-map.md`
 - Size bytes / Размер в байтах: `4182`
 - Included characters / Включено символов: `4182`
 - Truncated / Обрезано: `no`
 
 ````markdown
-# Hermes Domain Map
+# Макошь Domain Map
 
 This document is the canonical active domain map. Historical ADR and plans may
 use older names.
@@ -548,13 +548,13 @@ flowchart LR
 
 ### `docs/foundation/engines.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/foundation/engines.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/foundation/engines.md`
 - Size bytes / Размер в байтах: `5264`
 - Included characters / Включено символов: `5264`
 - Truncated / Обрезано: `no`
 
 ````markdown
-# Hermes Engines
+# Макошь Engines
 
 Engines are reusable mechanisms used by domains. They are not domains and do not
 own primary entities.
@@ -730,15 +730,15 @@ Timeline Engine
 
 ### `docs/foundation/glossary.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/foundation/glossary.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/foundation/glossary.md`
 - Size bytes / Размер в байтах: `6087`
 - Included characters / Включено символов: `6087`
 - Truncated / Обрезано: `no`
 
 ```markdown
-# Hermes Glossary
+# Макошь Glossary
 
-This glossary is the canonical vocabulary for active Hermes documentation.
+This glossary is the canonical vocabulary for active Макошь documentation.
 Historical ADR and implementation plans may contain older terms; new documents
 should use the definitions below.
 
@@ -819,13 +819,13 @@ only when there is a commitment or expected duty.
 
 ## Knowledge
 
-Evidence-backed understanding stored by Hermes: facts, relationships,
+Evidence-backed understanding stored by Макошь: facts, relationships,
 decisions, observations and reviewed summaries. Knowledge is not a loose wiki.
 It is built from domain records and provenance.
 
 ## Memory
 
-Durable, source-backed information that Hermes keeps over time. Memory includes
+Durable, source-backed information that Макошь keeps over time. Memory includes
 events, relationships, facts, decisions, obligations, document evidence and
 curated knowledge. Memory is not an LLM weight, cache or unverified summary.
 
@@ -849,11 +849,11 @@ similar collective actor. Organizations are not fields on Personas or Projects.
 ## Owner Persona
 
 The single Persona with `is_self: true`. It represents the owner of the local
-Hermes instance. There is no separate Self domain or User Profile.
+Макошь instance. There is no separate Self domain or User Profile.
 
 ## Persona
 
-A durable digital representation of a subject in Hermes. A Persona is not a
+A durable digital representation of a subject in Макошь. A Persona is not a
 contact, address-book entry or CRM profile. A Persona owns identity,
 relationships and memory anchors; timeline and dossier are derived views built
 from source-backed records and shared engines.
@@ -907,17 +907,17 @@ reliability. Trust is not a generic field on every entity.
 
 ### `docs/foundation/vision.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/foundation/vision.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/foundation/vision.md`
 - Size bytes / Размер в байтах: `2184`
 - Included characters / Включено символов: `2184`
 - Truncated / Обрезано: `no`
 
 ````markdown
-# Hermes Foundation Vision
+# Макошь Foundation Vision
 
 ## Canonical Definition
 
-Hermes Hub is a local-first Personal Memory System.
+Макошь is a local-first Personal Memory System.
 
 Its product experience should feel like a Personal Operating System for:
 
@@ -931,14 +931,14 @@ Its product experience should feel like a Personal Operating System for:
 - obligations;
 - context.
 
-Hermes is not an email client, CRM, task tracker, calendar app or note-taking
+Макошь is not an email client, CRM, task tracker, calendar app or note-taking
 app. Those surfaces may exist, but they are interfaces into one memory system.
 
 ## Primary Value
 
-The primary value of Hermes is context.
+The primary value of Макошь is context.
 
-CRUD is necessary plumbing. It is not the product thesis. Hermes exists to answer
+CRUD is necessary plumbing. It is not the product thesis. Макошь exists to answer
 questions such as:
 
 - what happened;
@@ -950,7 +950,7 @@ questions such as:
 
 ## System Shape
 
-Hermes stores knowledge about:
+Макошь stores knowledge about:
 
 - Personas;
 - Organizations;
@@ -968,7 +968,7 @@ lets agents operate over that context with explicit permissions.
 
 ## Non-Identity
 
-Hermes must not be described as:
+Макошь must not be described as:
 
 - an email client;
 - a CRM;
@@ -990,7 +990,7 @@ Personal Memory System
 
 ## North Star
 
-After years of use, Hermes should be able to explain:
+After years of use, Макошь should be able to explain:
 
 - the history of a Persona, Organization, Project or Document;
 - the evidence behind a Decision;
@@ -1015,17 +1015,17 @@ All active documentation must use the foundation vocabulary:
 
 ### `docs/foundation/world-model.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/foundation/world-model.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/foundation/world-model.md`
 - Size bytes / Размер в байтах: `4482`
 - Included characters / Включено символов: `4482`
 - Truncated / Обрезано: `no`
 
 ````markdown
-# Hermes World Model
+# Макошь World Model
 
-## What Exists In Hermes
+## What Exists In Макошь
 
-Hermes models a personal world of evidence, entities, relationships and context.
+Макошь models a personal world of evidence, entities, relationships and context.
 
 The core entity types are:
 
@@ -1047,7 +1047,7 @@ Provider-specific objects such as Gmail messages, Telegram chats, WhatsApp
 threads and calendar provider records are captured as Observations or
 channel-specific representations. They are not separate product domains.
 
-Observation is evidence, not truth. If a provider message is deleted, Hermes
+Observation is evidence, not truth. If a provider message is deleted, Макошь
 captures a deletion observation and keeps the original observation.
 
 ## Primary Entities
@@ -1091,7 +1091,7 @@ decisions or user-facing explanations.
 
 ## Relationship Model
 
-Hermes is relationship-first.
+Макошь is relationship-first.
 
 Relationships connect entities:
 
@@ -1153,7 +1153,7 @@ Engine used by Personas, Projects, Documents, Organizations and other domains.
 
 ## Owner Model
 
-The owner of the local Hermes instance is represented by the Owner Persona:
+The owner of the local Макошь instance is represented by the Owner Persona:
 
 ```yaml
 Persona:
@@ -1178,13 +1178,13 @@ Knowledge without provenance is incomplete.
 
 ### `docs/integrations/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/README.md`
 - Size bytes / Размер в байтах: `2402`
 - Included characters / Включено символов: `2402`
 - Truncated / Обрезано: `no`
 
 ```markdown
-# Hermes Integration Catalog
+# Макошь Integration Catalog
 
 Status: documentation package aligned to the current repository structure.
 
@@ -1192,7 +1192,7 @@ Integrations are provider and protocol adapters. They observe external systems,
 manage provider runtime/setup state, preserve source provenance and emit events
 or evidence into owner domains, workflows and engines.
 
-An integration is not a Hermes product domain. Provider-specific runtime state
+An integration is not a Макошь product domain. Provider-specific runtime state
 must not own durable product truth such as Personas, Tasks, Documents,
 Decisions, Obligations or Communication business state.
 
@@ -1239,18 +1239,18 @@ Do not create empty placeholder files just to fill the shape.
 
 ### `docs/integrations/mail/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/mail/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/mail/README.md`
 - Size bytes / Размер в байтах: `1686`
 - Included characters / Включено символов: `1686`
 - Truncated / Обрезано: `no`
 
 ````markdown
-# Hermes Communications - Email Channel
+# Макошь Communications - Email Channel
 
 Status: documentation package aligned to the current repository structure.
 
-Email is a communication channel inside Hermes, not the product identity.
-Hermes is not an email client. The email surface preserves source evidence and
+Email is a communication channel inside Макошь, not the product identity.
+Макошь is not an email client. The email surface preserves source evidence and
 projects provider records into the Communications domain.
 
 Invariant: A channel is never a domain. A channel is an integration. A
@@ -1305,7 +1305,7 @@ Email provider record
 
 ### `docs/integrations/mail/api.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/mail/api.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/mail/api.md`
 - Size bytes / Размер в байтах: `15905`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1314,7 +1314,7 @@ Email provider record
 # Email Channel — API Reference
 
 This file documents current email-channel compatibility routes under the
-Communications domain. Hermes is not an email client; email messages are source
+Communications domain. Макошь is not an email client; email messages are source
 communications and evidence for Personas, Organizations, Projects, Documents,
 Tasks, Decisions and Obligations.
 
@@ -1351,7 +1351,7 @@ secret resolver; account config stores only non-secret SMTP metadata.
 
 | Метод | Путь | Описание |
 |---|---|---|
-| GET | `/api/events/ws?after_position=&hermes_secret=` | Protected WebSocket event stream with replay and heartbeat foundation; browser clients pass the local API secret as `hermes_secret` because native WebSocket requests cannot set `X-Hermes-Secret` |
+| GET | `/api/events/ws?after_position=&makosh_secret=` | Protected WebSocket event stream with replay and heartbeat foundation; browser clients pass the local API secret as `makosh_secret` because native WebSocket requests cannot set `X-Макошь-Secret` |
 | GET | `/api/events/stream?after_position=` | Protected SSE stream with replay and heartbeat |
 | GET | `/api/v1/events?after_position=&limit=&wait_seconds=` | Protected JSON replay / long-poll fallback; records `event.list` audit entry |
 
@@ -1510,7 +1510,7 @@ Canonical local draft event types emitted by draft mutations:
 | POST | `/folders/{folder_id}/messages/{message_id}/copy` | Copy a message into a local custom folder; returns the projected folder-message row and appends a canonical event |
 | POST | `/folders/{folder_id}/messages/{message_id}/move` | Move a message into a local custom folder, removing it from other custom folders; returns the projected folder-message row and appends a canonical event |
 
-Custom folders are local-first Hermes organization state. These routes do not
+Custom folders are local-first Макошь organization state. These routes do not
 perform provider-side Gmail/IMAP folder mutations.
 
 The current Mail UI presents slash-deli
@@ -1519,7 +1519,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/integrations/mail/architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/mail/architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/mail/architecture.md`
 - Size bytes / Размер в байтах: `1749`
 - Included characters / Включено символов: `1749`
 - Truncated / Обрезано: `no`
@@ -1599,7 +1599,7 @@ are derived state.
 
 ### `docs/integrations/mail/blockers.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/mail/blockers.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/mail/blockers.md`
 - Size bytes / Размер в байтах: `5676`
 - Included characters / Включено символов: `4632`
 - Truncated / Обрезано: `no`
@@ -1620,7 +1620,7 @@ Communications, Obligations, Decisions and Polygraph work is tracked in
 attachment safety scanner. It can mark obvious executable payload magic bytes,
 active-content extensions, macro-enabled Office extensions and known
 MIME/filename mismatches as `malicious` or `suspicious` with structured
-metadata. Unmatched attachments intentionally remain `not_scanned`; Hermes does
+metadata. Unmatched attachments intentionally remain `not_scanned`; Макошь does
 not mark attachments `clean` without a real scanner backend.
 
 **Причина**: Full verdicts still require external tools — ClamAV,
@@ -1694,7 +1694,7 @@ it.
 
 ### `docs/integrations/mail/gap-analysis.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/mail/gap-analysis.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/mail/gap-analysis.md`
 - Size bytes / Размер в байтах: `35269`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1767,7 +1767,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/integrations/mail/modules.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/mail/modules.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/mail/modules.md`
 - Size bytes / Размер в байтах: `5149`
 - Included characters / Включено символов: `4096`
 - Truncated / Обрезано: `no`
@@ -1787,7 +1787,7 @@ Paths below refer to the current Rust implementation under
 
 | Модуль | Файл | Назначение |
 |---|---|---|
-| Email Ingestion | `ingestion.rs` | Точка входа авто-анализа. Каждое входящее письмо проходит через Hermes. |
+| Email Ingestion | `ingestion.rs` | Точка входа авто-анализа. Каждое входящее письмо проходит через Макошь. |
 | Email Sync | `sync.rs`, `background_sync.rs` | Планирование синхронизации (Gmail/IMAP/iCloud) |
 | Email Sync Pipeline | `backend/src/workflows/email_sync_pipeline.rs` | Полный пайплайн: парсинг → проекция → анализ → вложения |
 | Email RFC822 | `rfc822.rs` | Парсинг RFC 2822 / MIME |
@@ -1875,7 +1875,7 @@ Paths below refer to the current Rust implementation under
 
 ### `docs/integrations/mail/status.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/mail/status.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/mail/status.md`
 - Size bytes / Размер в байтах: `27834`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2059,7 +2059,7 @@ Outlook/Gmail-style thread controls.
 `mail.ai_state.changed` canonical events for SSE replay/invalidation. Automatic
 AI runtime orchestration and review UI remain future slices. Realtime transport
 now has a protected backend WebSocket event stream at
-`GET /api/events/ws?after_position=&hermes_secret=`, uses WebSocket-first
+`GET /api/events/ws?after_position=&makosh_secret=`, uses WebSocket-first
 browser transport selection with SSE fallback, and adds protected JSON long-poll fallback through
 `GET /api/v1/events?after_position=&limit=&wait_seconds=` with `event.list`
 audit records. The frontend now monotonically persists the last replay cursor for
@@ -2085,13 +2085,13 @@ Saved-search and smart-folder create/update/delete events now patch cached
 definition lists before invalidation, preserving smart-folder/account query
 filters.
 Sync progress events now patch cached account sync-status rows before
-invalidation, so progress 
+invalidation, so progress
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `docs/integrations/ollama/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/ollama/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/ollama/README.md`
 - Size bytes / Размер в байтах: `1167`
 - Included characters / Включено символов: `1167`
 - Truncated / Обрезано: `no`
@@ -2102,7 +2102,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 Status: code-aligned documentation package created from ADR-0009 and current
 backend modules.
 
-Ollama is the initial local AI runtime boundary for Hermes. It is an
+Ollama is the initial local AI runtime boundary for Макошь. It is an
 integration adapter, not a source of truth.
 
 ADR source of truth:
@@ -2133,7 +2133,7 @@ and review rules from the owning domain or workflow.
 
 ### `docs/integrations/omniroute/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/omniroute/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/omniroute/README.md`
 - Size bytes / Размер в байтах: `1247`
 - Included characters / Включено символов: `1247`
 - Truncated / Обрезано: `no`
@@ -2164,7 +2164,7 @@ Current backend files:
 
 The current client configuration carries a base URL, chat model, embedding
 model, timeout and `ResolvedSecret` API key. Current settings definitions
-explicitly say the OmniRoute API key is read from `HERMES_OMNIROUTE_API_KEY`
+explicitly say the OmniRoute API key is read from `MAKOSH_OMNIROUTE_API_KEY`
 and is not stored in `application_settings`.
 
 ## Boundary Rule
@@ -2176,17 +2176,17 @@ PostgreSQL settings and event payloads.
 
 ### `docs/integrations/telegram/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/README.md`
 - Size bytes / Размер в байтах: `2585`
 - Included characters / Включено символов: `2585`
 - Truncated / Обрезано: `no`
 
 ````markdown
-# Hermes Communications - Telegram Channel
+# Макошь Communications - Telegram Channel
 
 Status: `COMPLETED` base channel capability set, 2026-06-18.
 
-Telegram in Hermes is a Communication Channel inside Hermes Communications. It
+Telegram in Макошь is a Communication Channel inside Макошь Communications. It
 does not own Memory, Knowledge, Persona, Organization, Project, Obligation or
 Decision lifecycle. Telegram supplies source evidence, provider commands,
 communication projections, realtime events, identity traces, timeline evidence
@@ -2262,7 +2262,7 @@ execution remain unsupported.
 
 ### `docs/integrations/telegram/api.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/api.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/api.md`
 - Size bytes / Размер в байтах: `1282`
 - Included characters / Включено символов: `1068`
 - Truncated / Обрезано: `no`
@@ -2274,8 +2274,8 @@ execution remain unsupported.
 
 Все текущие маршруты защищены локальным API guard из ADR-0056, если явно не
 указано иначе. Browser WebSocket clients передают local secret через
-`hermes_secret`, потому что native WebSocket requests не могут выставить
-`X-Hermes-Secret`.
+`makosh_secret`, потому что native WebSocket requests не могут выставить
+`X-Макошь-Secret`.
 
 ## Base
 
@@ -2292,17 +2292,17 @@ execution remain unsupported.
 
 ## Scope Notes
 
-- Telegram в Hermes остаётся Communication Channel, а не отдельным memory или
+- Telegram в Макошь остаётся Communication Channel, а не отдельным memory или
   intelligence доменом.
 - Все provider writes должны проходить через capability gates, audit boundary и
   durable outbox/provider command model.
-- Realtime контракты описаны отдельно, но используют общий Hermes event bus и
+- Realtime контракты описаны отдельно, но используют общий Макошь event bus и
   общие transport routes.
 ````
 
 ### `docs/integrations/telegram/api/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/api/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/api/README.md`
 - Size bytes / Размер в байтах: `421`
 - Included characters / Включено символов: `421`
 - Truncated / Обрезано: `no`
@@ -2325,7 +2325,7 @@ documents. The parent package remains the integration owner.
 
 ### `docs/integrations/telegram/api/conversations.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/api/conversations.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/api/conversations.md`
 - Size bytes / Размер в байтах: `5623`
 - Included characters / Включено символов: `5621`
 - Truncated / Обрезано: `no`
@@ -2418,7 +2418,7 @@ Communications business state remains provider-neutral and lives under:
 
 ### `docs/integrations/telegram/api/foundation.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/api/foundation.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/api/foundation.md`
 - Size bytes / Размер в байтах: `6250`
 - Included characters / Включено символов: `5919`
 - Truncated / Обрезано: `no`
@@ -2432,8 +2432,8 @@ Communications business state remains provider-neutral and lives under:
 
 Все текущие маршруты защищены локальным API guard из ADR-0056, если явно не
 указано иначе. Browser WebSocket clients передают local secret через
-`hermes_secret`, потому что native WebSocket requests не могут выставить
-`X-Hermes-Secret`.
+`makosh_secret`, потому что native WebSocket requests не могут выставить
+`X-Макошь-Secret`.
 
 ## Base
 

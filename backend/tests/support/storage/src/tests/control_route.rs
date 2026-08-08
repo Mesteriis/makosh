@@ -1,13 +1,13 @@
 use std::io::{Read, Write};
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     DescribeManagedRuntimeResponseV1, ManagedRuntimeControlRequestV1,
     ManagedRuntimeControlResponseV1, ManagedRuntimeVaultRouteResponseV1, VaultCiphertextResponseV1,
     VaultCiphertextRouteV1, managed_runtime_control_request_v1::Operation as ControlOperation,
     managed_runtime_control_response_v1::Result as ControlResult,
 };
-use hermes_storage_protocol::v1::{
+use makosh_storage_protocol::v1::{
     GetStorageRuntimeStatusRequestV1, StorageBindingV1, StorageEffectiveBudgetsV1,
     StorageRuntimeConfigurationV1, StorageRuntimeControlRequestV1, StorageRuntimeControlResponseV1,
     StorageRuntimeStateV1, StorageRuntimeTopologyV1,
@@ -226,9 +226,9 @@ fn topology(postgres_port: u16, pgbouncer_port: u16) -> StorageRuntimeTopologyV1
         topology_revision: 1,
         storage_generation: 1,
         storage_instance_id: "storage_main".into(),
-        database_id: "hermes".into(),
+        database_id: "makosh".into(),
         deployment_profile:
-            hermes_storage_protocol::v1::StorageDeploymentProfileV1::MacosTauriEmbedded as i32,
+            makosh_storage_protocol::v1::StorageDeploymentProfileV1::MacosTauriEmbedded as i32,
         postgres_artifact_sha256: vec![1; 32],
         pgbouncer_artifact_sha256: vec![2; 32],
         postgres_host: "127.0.0.1".to_owned(),
@@ -258,7 +258,7 @@ fn bound_configuration(postgres_port: u16, pgbouncer_port: u16) -> StorageRuntim
     configuration.desired_bindings = vec![StorageBindingV1 {
         storage_instance_id: "storage_main".to_owned(),
         storage_generation: 1,
-        database_id: "hermes".to_owned(),
+        database_id: "makosh".to_owned(),
         owner: "notes".to_owned(),
         registration_id: "registration_notes".to_owned(),
         runtime_instance_id: "runtime_notes".to_owned(),

@@ -1,5 +1,5 @@
 [package]
-name = "hermes-contacts-persistence"
+name = "makosh-contacts-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,7 +7,7 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "domain"
 owner = "contacts"
 surface = "persistence"
@@ -17,7 +17,7 @@ default = []
 conformance-test-support = []
 
 [dependencies]
-hermes-contacts-core = { path = "../contacts-core" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-contacts-core = { path = "../contacts-core" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 sha2 = { version = "=0.11.0", default-features = false }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

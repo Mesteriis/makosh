@@ -1,9 +1,9 @@
-//! Container lifecycle primitives for Hermes integration-test sessions.
+//! Container lifecycle primitives for Макошь integration-test sessions.
 //!
 //! This crate deliberately has no dependency on application or domain crates.
 //! It can start PostgreSQL, PgBouncer and NATS and expose their session-scoped endpoints;
 //! This crate also owns the shared schema migration step; domain-specific
-//! fixtures remain in `hermes-backend-testkit`.
+//! fixtures remain in `makosh-backend-testkit`.
 //!
 //! PostgreSQL remains the administrative endpoint for creating isolated test
 //! databases. Runtime pools use the session PgBouncer endpoint when available,
@@ -110,7 +110,7 @@ impl TestDatabase {
 
 /// Apply the repository schema to an isolated test database.
 pub async fn run_migrations(pool: &sqlx::PgPool) -> Result<(), sqlx::migrate::MigrateError> {
-    hermes_schema::apply(pool).await
+    makosh_schema::apply(pool).await
 }
 
 async fn create_database(

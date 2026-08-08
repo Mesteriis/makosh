@@ -1,4 +1,4 @@
-use hermes_communications_api::evidence::{
+use makosh_communications_api::evidence::{
     CommunicationEvidencePortError, CommunicationRawEvidenceCommandPort, NewRawCommunicationRecord,
     StoredRawCommunicationRecord,
 };

@@ -17,7 +17,7 @@ const KERNEL_CLIENT_BLOB_GATEWAY = new URL(
 const KERNEL_BROWSER_GATEWAY = new URL('src/kernel/src/identity/browser_gateway.rs', BACKEND_ROOT);
 const GATEWAY_CONTRACT_BUILD = new URL('src/api/gateway/contracts/build.rs', BACKEND_ROOT);
 const COMMUNICATIONS_QUERY_CONTRACT = new URL(
-  'src/communications-api/proto/hermes/communications/query/v1/query.proto',
+  'src/communications-api/proto/makosh/communications/query/v1/query.proto',
   BACKEND_ROOT,
 );
 const FORBIDDEN_PROVIDER_HTTP_SURFACES = [
@@ -28,9 +28,9 @@ const FORBIDDEN_PROVIDER_ROUTER_MARKERS = [
   'MailGatewayIntegrationRouter',
   'TelegramGatewayIntegrationRouter',
   'WhatsAppGatewayIntegrationRouter',
-  'hermes_mail_',
-  'hermes_telegram_',
-  'hermes_whatsapp_',
+  'makosh_mail_',
+  'makosh_telegram_',
+  'makosh_whatsapp_',
 ];
 const FORBIDDEN_PROVIDER_COMMAND_CONTRACTS = [
   'ExecuteMailRuntimeOwnerCommand',
@@ -78,7 +78,7 @@ test('Kernel and Gateway contracts do not compile Communications owner packages'
   ]);
 
   for (const manifest of [gatewayManifest, kernelManifest]) {
-    assert.doesNotMatch(manifest, /hermes-communications-(api|domain|ingress|persistence|runtime)/);
+    assert.doesNotMatch(manifest, /makosh-communications-(api|domain|ingress|persistence|runtime)/);
   }
 });
 
@@ -132,14 +132,14 @@ test('Core Gateway client Blob delivery stays descriptor and capability bound', 
   assert.match(adapter, /channel_binding_sha256:\s*Sha256::digest\(channel_binding\)\.to_vec\(\)/);
   assert.match(adapter, /client\.read_range\(\s*grant,\s*channel_binding\.to_vec\(\)/);
   assert.match(adapter, /expected_plaintext_sha256/);
-  assert.doesNotMatch(adapter, /hermes_(communications|mail|telegram|whatsapp|zulip)/);
+  assert.doesNotMatch(adapter, /makosh_(communications|mail|telegram|whatsapp|zulip)/);
 });
 
 test('Core client bootstrap admits Communications and provider surfaces independently', async () => {
   const [sessionContract, kernelBootstrap, gatewayProto] = await Promise.all([
     readFile(GATEWAY_SESSION_CONTRACT, 'utf8'),
     readFile(KERNEL_BROWSER_GATEWAY, 'utf8'),
-    readFile(new URL('hermes/gateway/v1/client_bootstrap.proto', GATEWAY_CONTRACT_ROOT), 'utf8'),
+    readFile(new URL('makosh/gateway/v1/client_bootstrap.proto', GATEWAY_CONTRACT_ROOT), 'utf8'),
   ]);
 
   for (const source of [sessionContract, kernelBootstrap, gatewayProto]) {

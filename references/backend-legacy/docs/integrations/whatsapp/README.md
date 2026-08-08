@@ -1,4 +1,4 @@
-# Hermes Communications — WhatsApp Channel
+# Макошь Communications — WhatsApp Channel
 
 Historical policy: [ADR-0182](../../archive/adr/ADR-0182-whatsapp-hidden-webview-runtime-only.md).
 

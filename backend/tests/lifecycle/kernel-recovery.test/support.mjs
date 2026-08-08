@@ -17,7 +17,7 @@ export function runWithFileSizeLimit(binary, dataDir, maxBytes, arguments_, inpu
   `;
   return spawnSync(
     '/bin/zsh',
-    ['-c', script, 'hermes-file-limit', blockLimit, binary, dataDir, ...arguments_],
+    ['-c', script, 'makosh-file-limit', blockLimit, binary, dataDir, ...arguments_],
     { encoding: 'utf8', input },
   );
 }

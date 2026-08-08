@@ -2,7 +2,7 @@
 
 use std::collections::BTreeSet;
 
-use hermes_kernel_control_store::ModuleClientRpcRouteV1;
+use makosh_kernel_control_store::ModuleClientRpcRouteV1;
 use rusqlite::{Connection, params};
 
 use crate::{SqliteControlStore, StoreError, valid_capability_ids, valid_identity_token};
@@ -16,7 +16,7 @@ impl SqliteControlStore {
 }
 
 pub(crate) fn validate_client_rpc_routes(
-    registration: &hermes_kernel_control_store::ModuleRegistration,
+    registration: &makosh_kernel_control_store::ModuleRegistration,
     capabilities: &[String],
     routes: &[ModuleClientRpcRouteV1],
 ) -> Result<(), StoreError> {
@@ -49,7 +49,7 @@ pub(crate) fn insert_client_rpc_routes(
 ) -> Result<(), StoreError> {
     for route in routes {
         connection.execute(
-            "INSERT INTO hermes_kernel_module_client_rpc_route_request
+            "INSERT INTO makosh_kernel_module_client_rpc_route_request
              (registration_id, capability_id, contract_owner, contract_name, contract_major,
               contract_revision, contract_schema_sha256, path)
              VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
@@ -74,9 +74,9 @@ fn read_approved_client_rpc_routes(
     let mut statement = connection.prepare(
         "SELECT route.registration_id, route.capability_id, route.contract_owner, route.contract_name,
                 route.contract_major, route.contract_revision, route.contract_schema_sha256, route.path
-         FROM hermes_kernel_module_client_rpc_route_request route
-         JOIN hermes_kernel_module_registration registration ON registration.registration_id = route.registration_id
-         JOIN hermes_kernel_module_registration_capability capability
+         FROM makosh_kernel_module_client_rpc_route_request route
+         JOIN makosh_kernel_module_registration registration ON registration.registration_id = route.registration_id
+         JOIN makosh_kernel_module_registration_capability capability
            ON capability.registration_id = route.registration_id AND capability.capability_id = route.capability_id
          WHERE registration.state = 'approved'
          ORDER BY route.path, route.registration_id",
@@ -101,7 +101,7 @@ fn read_approved_client_rpc_routes(
                 capability_id,
                 owner,
                 name,
-                hermes_kernel_control_store::ModuleClientRpcContractVersionV1 {
+                makosh_kernel_control_store::ModuleClientRpcContractVersionV1 {
                     major: u32::try_from(major)
                         .map_err(|_| StoreError::InvalidModuleClientRpcRoute)?,
                     revision: u32::try_from(revision)

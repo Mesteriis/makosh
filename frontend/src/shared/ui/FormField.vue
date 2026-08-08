@@ -8,7 +8,7 @@ const props = withDefaults(defineProps<{
 	as: 'div'
 })
 
-const classes = computed(() => ['hermes-field', props.class])
+const classes = computed(() => ['makosh-field', props.class])
 </script>
 
 <template>

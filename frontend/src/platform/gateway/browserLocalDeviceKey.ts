@@ -1,4 +1,4 @@
-const DATABASE = 'hermes-browser-identity-v1'
+const DATABASE = 'makosh-browser-identity-v1'
 const STORE = 'local-keys'
 
 type BrowserLocalKeyPair = {

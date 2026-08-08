@@ -7,10 +7,10 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::platform::config::app_config::AppConfig;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::platform::config::app_config::AppConfig;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const LOCAL_API_TOKEN: &str = "events-long-poll-test-token";
 
@@ -92,7 +92,7 @@ async fn app_and_pool_with_database(database_url: &str) -> (axum::Router, sqlx::
 }
 
 fn config_with_api_token() -> AppConfig {
-    hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+    makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
 }
 
 fn json_request_with_token(uri: &str, value: Value, token: &str) -> Request<Body> {
@@ -100,7 +100,7 @@ fn json_request_with_token(uri: &str, value: Value, token: &str) -> Request<Body
         .method("POST")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(value.to_string()))
         .expect("request")
 }
@@ -108,7 +108,7 @@ fn json_request_with_token(uri: &str, value: Value, token: &str) -> Request<Body
 fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }

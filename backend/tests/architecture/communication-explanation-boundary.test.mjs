@@ -70,7 +70,7 @@ test('communication explanation agreement separates workflow domain engine and p
     readFile(new URL('src/communication-explanation-api/src/lib.rs', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/communication-explanation-api/proto/hermes/communication_explanation/v1/explanation.proto',
+        'src/communication-explanation-api/proto/makosh/communication_explanation/v1/explanation.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -79,13 +79,13 @@ test('communication explanation agreement separates workflow domain engine and p
     readFile(new URL('src/communication-explanation-core/src/lib.rs', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/communications-ai-source-api/proto/hermes/communications/ai_source/v1/ai_source.proto',
+        'src/communications-ai-source-api/proto/makosh/communications/ai_source/v1/ai_source.proto',
         BACKEND_ROOT,
       ),
       'utf8',
     ),
     readFile(new URL('src/communications-ai-source-api/src/lib.rs', BACKEND_ROOT), 'utf8'),
-    readFile(new URL('src/ai-contracts/proto/hermes/ai/contracts/v1/ai.proto', BACKEND_ROOT), 'utf8'),
+    readFile(new URL('src/ai-contracts/proto/makosh/ai/contracts/v1/ai.proto', BACKEND_ROOT), 'utf8'),
     readFile(new URL('src/ai-contracts/src/lib.rs', BACKEND_ROOT), 'utf8'),
     readFile(new URL('src/ai-contracts/src/explanation.rs', BACKEND_ROOT), 'utf8'),
     readFile(new URL('src/ai-inference-core/src/explanation.rs', BACKEND_ROOT), 'utf8'),
@@ -177,11 +177,11 @@ test('communication explanation agreement separates workflow domain engine and p
     ],
   });
   for (const unit of [
-    'hermes-communication-explanation-api',
-    'hermes-communication-explanation-core',
-    'hermes-communication-explanation-persistence',
-    'hermes-communication-explanation-runtime',
-    'hermes-communication-explanation-assembly',
+    'makosh-communication-explanation-api',
+    'makosh-communication-explanation-core',
+    'makosh-communication-explanation-persistence',
+    'makosh-communication-explanation-runtime',
+    'makosh-communication-explanation-assembly',
   ]) {
     assert.match(adr, new RegExp(`\\b${unit}\\b`));
   }
@@ -219,7 +219,7 @@ test('communication explanation agreement separates workflow domain engine and p
   assert.match(core, /allows_empty_reason_list_without_fabricating_a_reason/);
   assert.doesNotMatch(
     core,
-    /communication_summary|communication_translation|hermes_ai|ollama|communications_domain/,
+    /communication_summary|communication_translation|makosh_ai|ollama|communications_domain/,
   );
   assert.ok(
     policy.implementation.ownerInventory.businessCapabilities.includes(
@@ -283,7 +283,7 @@ test('communication explanation agreement separates workflow domain engine and p
   assert.match(ollamaManagedRuntime, /is_explanation/);
   assert.doesNotMatch(
     `${ollamaExplanationCore}\n${ollamaExplanationSchema}\n${ollamaExplanationRepository}\n${ollamaExplanationWorker}`,
-    /hermes_communications_domain|communication_summary|CommunicationSummary|communication_translation|CommunicationTranslation|result_translated_text|source_body|prompt_text/,
+    /makosh_communications_domain|communication_summary|CommunicationSummary|communication_translation|CommunicationTranslation|result_translated_text|source_body|prompt_text/,
   );
   for (const capability of [
     'ai.explanation.request.v1',
@@ -316,7 +316,7 @@ test('communication explanation agreement separates workflow domain engine and p
   assert.match(persistenceRepository, /request_fingerprint/);
   assert.doesNotMatch(
     `${persistenceManifest}\n${persistenceModel}\n${persistenceRepository}`,
-    /hermes-(?:communications-domain|ai-inference|ollama|mail|telegram|whatsapp|zulip)/,
+    /makosh-(?:communications-domain|ai-inference|ollama|mail|telegram|whatsapp|zulip)/,
   );
   assert.match(runtimeManifest, /owner = "communication_explanation"/);
   assert.match(runtimeManifest, /surface = "runtime"/);
@@ -342,8 +342,8 @@ test('communication explanation agreement separates workflow domain engine and p
   assert.match(assembly, /communication_explanation_storage_bundle_v1/);
   assert.match(assembly, /communication_explanation\.runtime\.v1/);
   assert.match(assembly, /communication_explanation\.storage\.v1/);
-  assert.match(release, /--package hermes-communication-explanation-runtime/);
-  assert.match(release, /--package hermes-communication-explanation-assembly/);
+  assert.match(release, /--package makosh-communication-explanation-runtime/);
+  assert.match(release, /--package makosh-communication-explanation-assembly/);
   assert.match(release, /communication_explanation\.release-artifacts\.json/);
   assert.doesNotMatch(
     assembly,
@@ -354,7 +354,7 @@ test('communication explanation agreement separates workflow domain engine and p
   assert.match(communicationsExplanationSource, /communication_explanation_source_prepared/);
   assert.doesNotMatch(
     communicationsExplanationSource,
-    /hermes_communication_explanation_runtime|hermes_ai_inference|hermes_ollama|provider_id|model_id|prompt/,
+    /makosh_communication_explanation_runtime|makosh_ai_inference|makosh_ollama|provider_id|model_id|prompt/,
   );
   assert.match(communicationsAdmission, /communications_explanation_source_capability_v1/);
   assert.match(
@@ -376,7 +376,7 @@ test('communication explanation agreement separates workflow domain engine and p
     managedFlow,
     /managed_communication_explanation_completes_real_provider_through_gateway_sse/,
   );
-  assert.match(managedFlow, /required\("HERMES_OLLAMA_LIVE_PORT"\)/);
+  assert.match(managedFlow, /required\("MAKOSH_OLLAMA_LIVE_PORT"\)/);
   assert.match(managedFlow, /read_terminal_explanation_sse_event/);
   assert.match(managedFlow, /restart_communication_explanation_runtime_v1/);
   assert.match(managedFlow, /assert_communication_explanation_runtime_fences/);

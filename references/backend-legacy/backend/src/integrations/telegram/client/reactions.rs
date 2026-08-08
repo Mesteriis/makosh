@@ -13,8 +13,8 @@ use super::models::messages::{
     TelegramReactionRequest, TelegramReactionResponse, TelegramReactionSummary,
 };
 use super::rows::{row_to_telegram_provider_write_command, row_to_telegram_reaction};
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 
 const REACTION_PROVIDER_MISMATCH_ERROR: &str =
     "Provider observed a different reaction state than requested";

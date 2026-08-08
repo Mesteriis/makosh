@@ -1,6 +1,6 @@
 //! SQLite persistence for Kernel-owned platform process trust and fencing.
 
-use hermes_kernel_control_store::{PlatformManagedProcessBinding, PlatformManagedProcessLaunch};
+use makosh_kernel_control_store::{PlatformManagedProcessBinding, PlatformManagedProcessLaunch};
 use rusqlite::{OptionalExtension, params};
 
 use crate::{SqliteControlStore, StoreError, valid_identity_token};
@@ -16,7 +16,7 @@ impl SqliteControlStore {
         let binding = binding.clone();
         self.with_connection(move |connection| {
             let changed = connection.execute(
-                "INSERT INTO hermes_kernel_platform_managed_process_binding (process_id, binding_revision, distribution_id, artifact_id, executable_sha256, descriptor_sha256, settings_schema_sha256) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7) ON CONFLICT(process_id) DO UPDATE SET binding_revision=excluded.binding_revision, distribution_id=excluded.distribution_id, artifact_id=excluded.artifact_id, executable_sha256=excluded.executable_sha256, descriptor_sha256=excluded.descriptor_sha256, settings_schema_sha256=excluded.settings_schema_sha256 WHERE excluded.binding_revision = hermes_kernel_platform_managed_process_binding.binding_revision + 1",
+                "INSERT INTO makosh_kernel_platform_managed_process_binding (process_id, binding_revision, distribution_id, artifact_id, executable_sha256, descriptor_sha256, settings_schema_sha256) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7) ON CONFLICT(process_id) DO UPDATE SET binding_revision=excluded.binding_revision, distribution_id=excluded.distribution_id, artifact_id=excluded.artifact_id, executable_sha256=excluded.executable_sha256, descriptor_sha256=excluded.descriptor_sha256, settings_schema_sha256=excluded.settings_schema_sha256 WHERE excluded.binding_revision = makosh_kernel_platform_managed_process_binding.binding_revision + 1",
                 params![binding.process_id(), as_sql(binding.binding_revision())?, binding.distribution_id(), binding.artifact_id(), binding.executable_sha256().as_slice(), binding.descriptor_sha256().as_slice(), binding.settings_schema_sha256().map(|digest| digest.as_slice())],
             )?;
             if changed == 1 { Ok(()) } else { Err(StoreError::PlatformManagedProcessBindingRevisionConflict) }
@@ -29,7 +29,7 @@ impl SqliteControlStore {
     ) -> Result<Option<PlatformManagedProcessBinding>, StoreError> {
         let process_id = process_id.to_owned();
         self.with_connection(move |connection| connection.query_row(
-            "SELECT binding_revision, distribution_id, artifact_id, executable_sha256, descriptor_sha256, settings_schema_sha256 FROM hermes_kernel_platform_managed_process_binding WHERE process_id = ?1", [&process_id],
+            "SELECT binding_revision, distribution_id, artifact_id, executable_sha256, descriptor_sha256, settings_schema_sha256 FROM makosh_kernel_platform_managed_process_binding WHERE process_id = ?1", [&process_id],
             |row| decode_binding(row, &process_id),
         ).optional().map_err(StoreError::from))
     }
@@ -44,7 +44,7 @@ impl SqliteControlStore {
         let launch = launch.clone();
         self.with_connection(move |connection| {
             let changed = connection.execute(
-                "INSERT INTO hermes_kernel_platform_managed_process_launch (process_id, binding_revision, kernel_generation, runtime_generation, grant_epoch) SELECT ?1, ?2, ?3, ?4, ?5 WHERE EXISTS (SELECT 1 FROM hermes_kernel_platform_managed_process_binding WHERE process_id = ?1 AND binding_revision = ?2) ON CONFLICT(process_id) DO UPDATE SET binding_revision=excluded.binding_revision, kernel_generation=excluded.kernel_generation, runtime_generation=excluded.runtime_generation, grant_epoch=excluded.grant_epoch WHERE excluded.runtime_generation > hermes_kernel_platform_managed_process_launch.runtime_generation",
+                "INSERT INTO makosh_kernel_platform_managed_process_launch (process_id, binding_revision, kernel_generation, runtime_generation, grant_epoch) SELECT ?1, ?2, ?3, ?4, ?5 WHERE EXISTS (SELECT 1 FROM makosh_kernel_platform_managed_process_binding WHERE process_id = ?1 AND binding_revision = ?2) ON CONFLICT(process_id) DO UPDATE SET binding_revision=excluded.binding_revision, kernel_generation=excluded.kernel_generation, runtime_generation=excluded.runtime_generation, grant_epoch=excluded.grant_epoch WHERE excluded.runtime_generation > makosh_kernel_platform_managed_process_launch.runtime_generation",
                 params![launch.process_id(), as_sql(launch.binding_revision())?, as_sql(launch.kernel_generation())?, as_sql(launch.runtime_generation())?, as_sql(launch.grant_epoch())?],
             )?;
             if changed == 1 { Ok(()) } else { Err(StoreError::StalePlatformManagedProcessLaunch) }
@@ -57,7 +57,7 @@ impl SqliteControlStore {
     ) -> Result<Option<PlatformManagedProcessLaunch>, StoreError> {
         let process_id = process_id.to_owned();
         self.with_connection(move |connection| connection.query_row(
-            "SELECT binding_revision, kernel_generation, runtime_generation, grant_epoch FROM hermes_kernel_platform_managed_process_launch WHERE process_id = ?1", [&process_id],
+            "SELECT binding_revision, kernel_generation, runtime_generation, grant_epoch FROM makosh_kernel_platform_managed_process_launch WHERE process_id = ?1", [&process_id],
             |row| Ok(PlatformManagedProcessLaunch::new(&process_id, as_u64(row.get(0)?, 0)?, as_u64(row.get(1)?, 1)?, as_u64(row.get(2)?, 2)?, as_u64(row.get(3)?, 3)?)),
         ).optional().map_err(StoreError::from))
     }

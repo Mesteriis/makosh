@@ -4,12 +4,12 @@ use std::time::Duration;
 
 use async_nats::jetstream::consumer::PullConsumer;
 use futures_util::StreamExt;
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     ConsumerBudgetV1, ConsumerSpecV1, DurableSubjectV1, JetStreamClient, NatsPasswordCredentialV1,
     RuntimeNatsIdentity, RuntimeOutboxPublisherV1, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, StreamKindV1,
 };
-use hermes_events_protocol::delivery::{
+use makosh_events_protocol::delivery::{
     ExactOutboxPublisherPortV1, InboxDecisionV1, OutboxPublishReceiptV1, OutboxRecordV1,
     OutboxRelayErrorV1, OutboxRelayOutcomeV1, OwnerOutboxStorePortV1, relay_once,
 };
@@ -20,10 +20,10 @@ use super::super::OwnerDeliveryScaffoldV1;
 use super::store::PostgresOwnerDeliveryStore;
 use crate::tests::jetstream_live::event_envelope;
 
-const POSTGRES_URL: &str = "HERMES_EVENTS_POSTGRES_URL";
-const NATS_ENDPOINT: &str = "HERMES_NATS_TEST_ENDPOINT";
-const RUNTIME_USER: &str = "HERMES_NATS_RUNTIME_USERNAME";
-const RUNTIME_PASSWORD: &str = "HERMES_NATS_RUNTIME_PASSWORD";
+const POSTGRES_URL: &str = "MAKOSH_EVENTS_POSTGRES_URL";
+const NATS_ENDPOINT: &str = "MAKOSH_NATS_TEST_ENDPOINT";
+const RUNTIME_USER: &str = "MAKOSH_NATS_RUNTIME_USERNAME";
+const RUNTIME_PASSWORD: &str = "MAKOSH_NATS_RUNTIME_PASSWORD";
 const UNAVAILABLE_NATS_ENDPOINT: &str = "nats://127.0.0.1:43224";
 
 #[tokio::test]
@@ -202,14 +202,14 @@ async fn verify_owner(pool: &sqlx::PgPool, scaffold: OwnerDeliveryScaffoldV1) {
     store
         .mark_published(
             &entry,
-            &OutboxPublishReceiptV1::new("HERMES_EVENT_V1", 1, false).expect("receipt"),
+            &OutboxPublishReceiptV1::new("MAKOSH_EVENT_V1", 1, false).expect("receipt"),
         )
         .await
         .expect("mark broker acknowledgement");
     store
         .mark_published(
             &entry,
-            &OutboxPublishReceiptV1::new("HERMES_EVENT_V1", 1, false).expect("same receipt"),
+            &OutboxPublishReceiptV1::new("MAKOSH_EVENT_V1", 1, false).expect("same receipt"),
         )
         .await
         .expect("accept the same broker acknowledgement again");
@@ -264,7 +264,7 @@ async fn relay_from_postgres(pool: &sqlx::PgPool, endpoint: &str) -> Vec<u8> {
 async fn connect_runtime(
     endpoint: &str,
 ) -> (
-    hermes_events_jetstream::RuntimeJetStreamConnection,
+    makosh_events_jetstream::RuntimeJetStreamConnection,
     RuntimePublishPermitV1,
 ) {
     let connection = JetStreamClient::connect_runtime(
@@ -298,7 +298,7 @@ fn consumer_permit() -> RuntimeSubscribePermitV1 {
         ConsumerSpecV1::new(
             StreamKindV1::Event,
             "notes_projection",
-            "hermes.event.v1.notes.changed.v1",
+            "makosh.event.v1.notes.changed.v1",
             ConsumerBudgetV1::new(16, 3, Duration::from_secs(2)).expect("consumer budget"),
         )
         .expect("consumer spec"),

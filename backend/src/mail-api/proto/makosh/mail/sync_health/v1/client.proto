@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+package makosh.mail.sync_health.v1;
+
+message MailSyncHealthQueryV1 {
+  oneof query {
+    GetMailSyncStatusQueryV1 get_status = 1;
+    ListMailSyncRunsQueryV1 list_runs = 2;
+    GetMailSyncRunQueryV1 get_run = 3;
+  }
+}
+
+message GetMailSyncStatusQueryV1 {
+  string connection_id = 1;
+}
+
+message ListMailSyncRunsQueryV1 {
+  string connection_id = 1;
+  optional string cursor = 2;
+  uint32 limit = 3;
+}
+
+message GetMailSyncRunQueryV1 {
+  string connection_id = 1;
+  string operation_id = 2;
+}
+
+enum MailSyncTriggerV1 {
+  MAIL_SYNC_TRIGGER_UNSPECIFIED = 0;
+  MAIL_SYNC_TRIGGER_MANUAL = 1;
+  MAIL_SYNC_TRIGGER_SCHEDULED = 2;
+}
+
+enum MailSyncOutcomeV1 {
+  MAIL_SYNC_OUTCOME_UNSPECIFIED = 0;
+  MAIL_SYNC_OUTCOME_RUNNING = 1;
+  MAIL_SYNC_OUTCOME_SUCCEEDED = 2;
+  MAIL_SYNC_OUTCOME_FAILED = 3;
+  MAIL_SYNC_OUTCOME_INTERRUPTED = 4;
+}
+
+enum MailSyncFailureCodeV1 {
+  MAIL_SYNC_FAILURE_CODE_UNSPECIFIED = 0;
+  MAIL_SYNC_FAILURE_CODE_ADMISSION_REJECTED = 1;
+  MAIL_SYNC_FAILURE_CODE_CONTROL_UNAVAILABLE = 2;
+  MAIL_SYNC_FAILURE_CODE_STORAGE_UNAVAILABLE = 3;
+  MAIL_SYNC_FAILURE_CODE_CREDENTIAL_UNAVAILABLE = 4;
+  MAIL_SYNC_FAILURE_CODE_PERSISTENCE_UNAVAILABLE = 5;
+  MAIL_SYNC_FAILURE_CODE_PROVIDER_UNAVAILABLE = 6;
+  MAIL_SYNC_FAILURE_CODE_EVENT_HUB_UNAVAILABLE = 7;
+  MAIL_SYNC_FAILURE_CODE_ATTACHMENT_ANCHOR_UNAVAILABLE = 8;
+  MAIL_SYNC_FAILURE_CODE_RUNTIME_RESTARTED = 9;
+  MAIL_SYNC_FAILURE_CODE_DEADLINE_EXCEEDED = 10;
+}
+
+enum MailSyncProviderPathReadinessV1 {
+  MAIL_SYNC_PROVIDER_PATH_READINESS_UNSPECIFIED = 0;
+  MAIL_SYNC_PROVIDER_PATH_READINESS_READY = 1;
+  MAIL_SYNC_PROVIDER_PATH_READINESS_UNAVAILABLE = 2;
+}
+
+message MailSyncRunV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+  MailSyncTriggerV1 trigger = 3;
+  MailSyncOutcomeV1 outcome = 4;
+  uint64 observed_messages = 5;
+  int64 started_at_unix_seconds = 6;
+  optional int64 completed_at_unix_seconds = 7;
+  optional MailSyncFailureCodeV1 failure_code = 8;
+  uint64 runtime_generation = 9;
+  uint64 projection_revision = 10;
+}
+
+message MailSyncStatusV1 {
+  string connection_id = 1;
+  MailSyncProviderPathReadinessV1 provider_path_readiness = 2;
+  optional MailSyncRunV1 latest_run = 3;
+  uint32 consecutive_failures = 4;
+  optional int64 last_success_at_unix_seconds = 5;
+  uint64 projection_revision = 6;
+}
+
+message MailSyncRunPageV1 {
+  repeated MailSyncRunV1 item = 1;
+  optional string next_cursor = 2;
+}
+
+message OptionalMailSyncRunV1 {
+  optional MailSyncRunV1 run = 1;
+}
+
+message MailSyncHealthQueryResponseV1 {
+  oneof response {
+    MailSyncStatusV1 status = 1;
+    MailSyncRunPageV1 runs = 2;
+    OptionalMailSyncRunV1 run = 3;
+  }
+}
+
+service MailSyncHealthQueryService {
+  rpc Query(MailSyncHealthQueryV1) returns (MailSyncHealthQueryResponseV1);
+}

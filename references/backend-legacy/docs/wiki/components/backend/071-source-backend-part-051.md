@@ -27,7 +27,7 @@ generated_by: code-wiki-ru
 
 ## Обзор
 
-Бэкенд-платформа `hermes-hub` (`backend/src/platform`) содержит модули, реализующие сквозную функциональность приложения:
+Бэкенд-платформа `makosh` (`backend/src/platform`) содержит модули, реализующие сквозную функциональность приложения:
 
 - **События (`events`)** – конверты событий, контекст трассировки, валидация.
 - **Форматирование (`formatting`)** – утилиты для текстовых превью.
@@ -339,7 +339,7 @@ pub async fn run_projection_batch<F, Fut>(
 
 #### Файловое хранилище (`EncryptedSecretVault`)
 
-Путь к файлу по умолчанию: `~/.config/hermes-hub/secrets.vault.json`.
+Путь к файлу по умолчанию: `~/.config/makosh/secrets.vault.json`.
 
 Формат файла (JSON):
 
@@ -494,7 +494,7 @@ fn resolve<'a>(&'a self, reference: &'a SecretReference) -> SecretResolutionFutu
   - `ResolvedSecret` (конструктор с проверкой, `expose_for_runtime`, Debug с redacted)
   - `NewSecretReference` (конструктор, `metadata`)
 - `backend/src/platform/secrets/paths.rs`
-  - `default_vault_path(home_dir)` – путь `~/.config/hermes-hub/secrets.vault.json`
+  - `default_vault_path(home_dir)` – путь `~/.config/makosh/secrets.vault.json`
 - `backend/src/platform/secrets/resolver.rs`
   - Типаж `SecretResolver`, `SecretResolutionFuture`
   - `InMemorySecretResolver` (`HashMap`, `insert`, `resolve_reference` с проверкой `TestDouble`)

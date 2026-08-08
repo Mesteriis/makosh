@@ -3,14 +3,14 @@
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 use futures_util::StreamExt;
-use hermes_attachment_security_contract::v1::AttachmentSecurityScanCandidateObservedV1;
-use hermes_communications_api::query_wire::{
+use makosh_attachment_security_contract::v1::AttachmentSecurityScanCandidateObservedV1;
+use makosh_communications_api::query_wire::{
     CommunicationsQueryRequestV1, ListAccountsRequestV1, ListConversationMessagesRequestV1,
     ListConversationsRequestV1, ListMessageAttachmentAnchorsRequestV1,
     communications_query_request_v1::Operation,
     communications_query_response_v1::Result as QueryResult,
 };
-use hermes_communications_attachment_contract::{
+use makosh_communications_attachment_contract::{
     AttachmentBlobAdmissionFactV1, AttachmentBlobAdmissionTransitionV1,
     AttachmentBlobExpectedStateV1, AttachmentObservationEnvelopeContextV1,
     anchor_recorded_v1::AttachmentAnchorRecordedV1,
@@ -23,13 +23,13 @@ use hermes_communications_attachment_contract::{
         AttachmentSafetyStateChangedV1, AttachmentSafetyStateV1 as AttachmentSafetyStateWireV1,
     },
 };
-use hermes_communications_ingress::v1::CommunicationObservationV1;
-use hermes_events_protocol::validation::envelope::decode_envelope_v1;
-use hermes_mail_api::{
+use makosh_communications_ingress::v1::CommunicationObservationV1;
+use makosh_events_protocol::validation::envelope::decode_envelope_v1;
+use makosh_mail_api::{
     MailClientRequestV1, MailClientResponseV1, MailSyncInboxRequestV1,
     client_contract::MailClientContractV1,
 };
-use hermes_mail_runtime::{
+use makosh_mail_runtime::{
     admission::MAIL_MODULE_ID,
     client_port::{decode_module_response, encode_module_request},
 };
@@ -60,32 +60,32 @@ pub(super) fn assert_mail_attachment_lifecycle(
                 .await
                 .expect("connect Mail attachment observer");
             let observations = client
-                .subscribe("hermes.observation.v1.communications.communication_observed.v1")
+                .subscribe("makosh.observation.v1.communications.communication_observed.v1")
                 .await
                 .expect("subscribe Mail attachment observations");
             let anchors = client
                 .subscribe(
-                    "hermes.event.v1.communications.communication_attachment_anchor_recorded.v1",
+                    "makosh.event.v1.communications.communication_attachment_anchor_recorded.v1",
                 )
                 .await
                 .expect("subscribe attachment anchors");
             let admissions = client
                 .subscribe(
-                    "hermes.observation.v1.communications.\
+                    "makosh.observation.v1.communications.\
                  communication_attachment_blob_admission_observed.v1",
                 )
                 .await
                 .expect("subscribe Mail Blob admissions");
             let candidates = client
                 .subscribe(
-                    "hermes.observation.v1.attachment_security.\
+                    "makosh.observation.v1.attachment_security.\
                  attachment_security_scan_candidate_observed.v1",
                 )
                 .await
                 .expect("subscribe Attachment Security candidates");
             let state_changes = client
                 .subscribe(
-                    "hermes.event.v1.communications.\
+                    "makosh.event.v1.communications.\
                  communication_attachment_safety_state_changed.v1",
                 )
                 .await
@@ -312,7 +312,7 @@ pub(super) fn assert_mail_attachment_lifecycle(
     publish_exact(
         &runtime,
         &client,
-        "hermes.observation.v1.communications.\
+        "makosh.observation.v1.communications.\
          communication_attachment_blob_admission_observed.v1",
         &admission_records[1].1,
     );
@@ -348,7 +348,7 @@ pub(super) fn assert_mail_attachment_lifecycle(
     publish_exact(
         &runtime,
         &client,
-        "hermes.observation.v1.communications.\
+        "makosh.observation.v1.communications.\
          communication_attachment_blob_admission_observed.v1",
         conflict.exact_bytes(),
     );
@@ -406,9 +406,9 @@ fn assert_mail_sync(
 
 fn wait_for_mail_mapping(
     runtime: &tokio::runtime::Runtime,
-    durable: &hermes_mail_persistence::MailDurablePersistence,
+    durable: &makosh_mail_persistence::MailDurablePersistence,
     source_observation_id: [u8; 16],
-) -> hermes_mail_persistence::MailAttachmentAnchorMappingV1 {
+) -> makosh_mail_persistence::MailAttachmentAnchorMappingV1 {
     let deadline = Instant::now() + Duration::from_secs(10);
     loop {
         if let Some(mapping) = runtime

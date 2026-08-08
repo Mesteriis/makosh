@@ -12,7 +12,7 @@ pub use model::{
 };
 pub use upsert::{ContactUpsertDecisionErrorV1, decide_contact_upsert_v1};
 
-pub const PACKAGE: &str = "hermes-contacts-core";
+pub const PACKAGE: &str = "makosh-contacts-core";
 pub const STABLE_ID_BYTES_V1: usize = 16;
 pub const DIGEST_BYTES_V1: usize = 32;
 pub const MAX_LOGICAL_OWNER_ID_BYTES_V1: usize = 128;

@@ -1,4 +1,4 @@
-use hermes_zulip_api::ZulipHistoryPageV1;
+use makosh_zulip_api::ZulipHistoryPageV1;
 use serde_json::Value;
 
 use crate::{
@@ -48,7 +48,7 @@ pub async fn fetch_page(
 
 #[cfg(test)]
 mod tests {
-    use hermes_zulip_api::ZulipAccountV1;
+    use makosh_zulip_api::ZulipAccountV1;
     use serde_json::json;
 
     use super::*;

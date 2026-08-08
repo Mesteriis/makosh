@@ -1,4 +1,4 @@
-# Документация Hermes clean-room
+# Документация Макошь clean-room
 
 Статус: clean-room foundation реализован; business/data plane ещё закрыты
 Дата: 2026-07-16
@@ -18,7 +18,7 @@
 - [ADR-0204: Встроенные integration-плагины и нейтральная граница контекста](adr/ADR-0204-bundled-integration-plugins-and-provider-neutral-context-boundary.md)
 - [ADR-0205: Core Gateway и транспорт клиентских приложений](adr/ADR-0205-core-gateway-and-client-transport.md)
 - [ADR-0206: Конституция Kernel и автомат запуска и восстановления](adr/ADR-0206-kernel-constitution-boot-and-recovery-state-machine.md)
-- [ADR-0207: Канонический реестр бизнес-доменов Hermes](adr/ADR-0207-canonical-business-domain-registry.md)
+- [ADR-0207: Канонический реестр бизнес-доменов Макошь](adr/ADR-0207-canonical-business-domain-registry.md)
 - [ADR-0208: Allowlist разработки доменов и запрет проекций](adr/ADR-0208-domain-development-allowlist-and-projection-freeze.md)
 - [ADR-0209: Kernel Event Hub и контроль подписок](adr/ADR-0209-kernel-event-hub-and-subscription-control-plane.md)
 - [ADR-0210: Telemetry Hub и локальная диагностика](adr/ADR-0210-telemetry-hub-and-local-diagnostics.md)

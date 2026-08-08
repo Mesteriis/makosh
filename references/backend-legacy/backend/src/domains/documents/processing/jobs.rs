@@ -9,8 +9,8 @@ use super::ids::job_id;
 use super::models::{DocumentProcessingJob, DocumentProcessingStatus, DocumentProcessingStep};
 use super::rows::try_row_to_job;
 use super::store::DocumentProcessingStore;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 
 async fn capture_job_observation(
     tx: &mut Transaction<'_, Postgres>,

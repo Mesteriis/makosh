@@ -5,7 +5,7 @@ use std::os::unix::net::UnixStream;
 use std::time::Duration;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_attachment_security_contract::{
+use makosh_attachment_security_contract::{
     AttachmentSecurityObservationContextV1, AttachmentSecurityScanCandidateFactV1,
     admission::{
         ATTACHMENT_SECURITY_BLOB_CUSTODY_TARGET_CAPABILITY_ID,
@@ -14,55 +14,55 @@ use hermes_attachment_security_contract::{
     },
     build_attachment_security_scan_candidate_outbox_record_v1,
 };
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTargetV1, ManagedBlobSessionRequestV1,
     request_managed_blob_session_v2,
 };
-use hermes_communications_attachment_contract::{
+use makosh_communications_attachment_contract::{
     AttachmentBlobAdmissionFactV1, AttachmentBlobAdmissionTransitionV1,
     AttachmentBlobExpectedStateV1, AttachmentObservationEnvelopeContextV1,
     build_attachment_blob_admission_outbox_record_v1,
 };
-use hermes_communications_ingress::{
+use makosh_communications_ingress::{
     COMMUNICATIONS_BLOB_CUSTODY_TARGET_CAPABILITY_ID, COMMUNICATIONS_BLOB_CUSTODY_TARGET_MODULE_ID,
     COMMUNICATIONS_BLOB_CUSTODY_TARGET_OWNER_ID, ObservationEnvelopeContextV1,
     account_source_cursor_v1, build_observation_outbox_record_v1, conversation_source_cursor_v1,
     scoped_record_source_cursor_v1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     DurableSubjectV1, JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity,
     RuntimePublishPermitV1, RuntimeSubscribePermitV1, StreamKindV1,
     request_managed_runtime_event_access_v2,
 };
-use hermes_managed_vault_client::{
+use makosh_managed_vault_client::{
     ManagedProviderCredentialClientV2, ManagedProviderCredentialContextV1,
     ManagedProviderCredentialErrorV1, ManagedProviderCredentialRequestV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobDataOperationV1, ManagedRuntimeClientDeliveryResponseV1, ManagedRuntimeControlRequestV1,
     ManagedRuntimeControlResponseV1, ManagedRuntimeReadyRequestV1,
     ManagedStorageRuntimeConfigurationV1, ModuleClientResponseV1,
     managed_runtime_control_request_v1::Operation,
     managed_runtime_control_response_v1::Result as ControlResult,
 };
-use hermes_runtime_protocol::validation::module_client::{
+use makosh_runtime_protocol::validation::module_client::{
     validate_module_client_request_v1, validate_module_client_response_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{
         ManagedControlChannelV2, ManagedControlRequestDispatcherV2, ManagedControlTransportErrorV2,
         RejectManagedControlRequestsV2,
     },
     validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES,
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
-use hermes_vault_protocol::SecretClassV1;
+use makosh_vault_protocol::SecretClassV1;
 use prost::Message;
 use sha2::{Digest, Sha256};
 use zeroize::Zeroizing;
@@ -100,12 +100,12 @@ use crate::delivery_intent_consumer::{
 use crate::delivery_intent_outbox::{
     MailDeliveryIntentOutboxRelayErrorV1, relay_mail_delivery_intent_outbox_once_v1,
 };
-use hermes_communications_ingress::{
+use makosh_communications_ingress::{
     AttachmentDispositionV1, BodyAdmissionFailureV1, BodyAvailabilityV1, BodyBlobReceiptV1,
     CommunicationObservationDraft, ProviderProvenanceV1, with_admitted_body_blob,
     with_body_admission_failure,
 };
-use hermes_mail_api::{
+use makosh_mail_api::{
     MailCredentialPurpose, MailDeliveryOperationStatusV1, MailDeliveryOutcomeV1,
     MailGmailConfigurationV1, MailInboundTransportV1, MailSendMailRequestV1, OutgoingMailV1,
     account::{
@@ -156,25 +156,25 @@ use hermes_mail_api::{
     },
     valid_account_configuration,
 };
-use hermes_mail_core::rfc822::{
+use makosh_mail_core::rfc822::{
     AttachmentDispositionV1 as Rfc822AttachmentDispositionV1, Rfc822BodyContentV1,
     attachment_metadata, extract_attachment_part, operational_preview, readable_body_content,
 };
-use hermes_mail_core::{
+use makosh_mail_core::{
     MAX_OUTBOUND_ATTACHMENT_BYTES, OutboundAttachmentDispositionV1, OutboundAttachmentV1,
     bounded_window, compose_rfc822, compose_rfc822_with_attachments,
     draft_attachment_ingress_observation, draft_delivery_observation,
     draft_ingress_observation_with_sender_subject_body, validate_sync_request,
 };
-use hermes_mail_gmail::{
+use makosh_mail_gmail::{
     GmailAdapterErrorV1, GmailApiClientV1, GmailMutableMessageFlagV1, GmailRawMessageV1,
     decode_raw_rfc822,
 };
-use hermes_mail_imap::{
+use makosh_mail_imap::{
     ImapMailboxKindV1, ImapMessageFlagAccessV1, ImapMessageLocationAccessV1, ImapMessageLocatorV1,
     ImapMutableMessageFlagV1,
 };
-use hermes_mail_persistence::{
+use makosh_mail_persistence::{
     MailAttachmentBlobAdmissionCompletionV1,
     MailAttachmentDispositionV1 as PersistedAttachmentDispositionV1,
     MailAttachmentMaterializationV1, MailCredentialBindingV1, MailDeliveryAttemptOutcomeV1,
@@ -185,11 +185,11 @@ use hermes_mail_persistence::{
     MailQueuedMessageFlagCommandV1, MailQueuedMessageLocationCommandV1,
     MailQueuedMessagePermanentDeleteCommandV1, MailSyncRunStartOutcomeV1, initial_imap_message_id,
 };
-use hermes_mail_retained_evidence_replay_contract::mail_replay_command_contract_reference_v1;
-use hermes_mail_retained_evidence_replay_persistence::{
+use makosh_mail_retained_evidence_replay_contract::mail_replay_command_contract_reference_v1;
+use makosh_mail_retained_evidence_replay_persistence::{
     MailRetainedEvidenceReplayPersistenceV1, RetainedMailReplayErrorV1,
 };
-use hermes_mail_smtp::SmtpAdapterErrorV1;
+use makosh_mail_smtp::SmtpAdapterErrorV1;
 
 use crate::gmail_sync_worker::{
     CompletedGmailSyncProviderOperationV1, GmailSyncProviderCursorV1, GmailSyncProviderFailureV1,
@@ -233,15 +233,15 @@ pub struct MailAdmittedRuntime {
     address_book_fetch_subscribe_permit: RuntimeSubscribePermitV1,
     address_book_upsert_subscribe_permit: RuntimeSubscribePermitV1,
     pub(crate) address_book_persistence:
-        hermes_mail_address_book_persistence::MailAddressBookPersistenceV1,
+        makosh_mail_address_book_persistence::MailAddressBookPersistenceV1,
     replay_command_subscribe_permit: RuntimeSubscribePermitV1,
     replay_persistence: MailRetainedEvidenceReplayPersistenceV1,
     attachment_blob_admission_publish_permitted: bool,
     attachment_security_scan_candidate_publish_permitted: bool,
-    pub(crate) account: hermes_mail_api::MailAccountConfigurationV1,
-    pub(crate) address_book: hermes_mail_api::MailAddressBookConfigurationV1,
+    pub(crate) account: makosh_mail_api::MailAccountConfigurationV1,
+    pub(crate) address_book: makosh_mail_api::MailAddressBookConfigurationV1,
     pub(crate) configuration_instance_id: String,
-    pub(crate) gmail_oauth: Option<hermes_mail_api::GmailOAuthConfigurationV1>,
+    pub(crate) gmail_oauth: Option<makosh_mail_api::GmailOAuthConfigurationV1>,
     pub(crate) gmail_oauth_operation_in_flight: Option<String>,
     pending_sync_operation: Option<PendingMailSyncOperationV1>,
     pub(crate) provider_credential_context: ManagedProviderCredentialContextV1,
@@ -260,10 +260,10 @@ struct MailRuntimeAccountSlotV1 {
     smtp_password: Option<Zeroizing<Vec<u8>>>,
     carddav_password: Option<Zeroizing<Vec<u8>>>,
     account_lifecycle: MailAccountLifecycleCoordinatorV1,
-    account: hermes_mail_api::MailAccountConfigurationV1,
-    address_book: hermes_mail_api::MailAddressBookConfigurationV1,
+    account: makosh_mail_api::MailAccountConfigurationV1,
+    address_book: makosh_mail_api::MailAddressBookConfigurationV1,
     configuration_instance_id: String,
-    gmail_oauth: Option<hermes_mail_api::GmailOAuthConfigurationV1>,
+    gmail_oauth: Option<makosh_mail_api::GmailOAuthConfigurationV1>,
     gmail_oauth_operation_in_flight: Option<String>,
     pending_sync_operation: Option<PendingMailSyncOperationV1>,
     provider_credential_context: ManagedProviderCredentialContextV1,
@@ -280,7 +280,7 @@ struct MailAttachmentBlobWriteV1 {
 
 struct ImapInboxSyncRequestV1<'a> {
     connection_id: &'a str,
-    sync: &'a hermes_mail_imap::ImapSyncResult,
+    sync: &'a makosh_mail_imap::ImapSyncResult,
 }
 
 pub struct PreparedImapSyncProviderOperationV1 {
@@ -329,7 +329,7 @@ impl PreparedImapSyncProviderOperationV1 {
 pub struct ImapSyncProviderPageDeliveryV1 {
     connection_id: String,
     operation_id: String,
-    sync: hermes_mail_imap::ImapSyncResult,
+    sync: makosh_mail_imap::ImapSyncResult,
     acknowledgment: std::sync::mpsc::Sender<bool>,
 }
 
@@ -468,7 +468,7 @@ pub async fn open_admitted_runtime_catalog(
     let admission = admissions.first().ok_or(MailBootstrapError::Admission)?;
     if descriptor_bytes.is_empty()
         || settings_schema_bytes.is_empty()
-        || admissions.len() > hermes_mail_api::account::MAX_MAIL_ACCOUNT_CATALOG_ENTRIES
+        || admissions.len() > makosh_mail_api::account::MAX_MAIL_ACCOUNT_CATALOG_ENTRIES
         || admission.runtime_instance_id.trim().is_empty()
         || admission.logical_human_owner_id.trim().is_empty()
         || event_hub_endpoint.trim().is_empty()
@@ -532,7 +532,7 @@ pub async fn open_admitted_runtime_catalog(
         .issue_runtime_credential(&binding)
         .await
         .map_err(|error| {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_mail_storage_credential_issue_error={error:?}");
             }
             MailBootstrapError::Credential
@@ -541,7 +541,7 @@ pub async fn open_admitted_runtime_catalog(
         .resolve_runtime_credential(&binding, lease_id)
         .await
         .map_err(|error| {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_mail_storage_credential_resolve_error={error:?}");
             }
             MailBootstrapError::Credential
@@ -597,7 +597,7 @@ pub async fn open_admitted_runtime_catalog(
         };
         let carddav_password = if matches!(
             admission.address_book.provider,
-            hermes_mail_api::MailAddressBookProviderV1::IcloudCardDav
+            makosh_mail_api::MailAddressBookProviderV1::IcloudCardDav
         ) && !lifecycle_quiesced
         {
             activate_bound_account_credential(
@@ -676,7 +676,7 @@ pub async fn open_admitted_runtime_catalog(
     )
     .await
     .map_err(|error| {
-        if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+        if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
             eprintln!("developer_mail_event_hub_connect_error={error:?}");
         }
         mail_event_hub_error("connect")
@@ -689,7 +689,7 @@ pub async fn open_admitted_runtime_catalog(
         .await
         .map_err(|_| MailBootstrapError::Persistence)?;
     let address_book_persistence =
-        hermes_mail_address_book_persistence::MailAddressBookPersistenceV1::from_owner_local_pool(
+        makosh_mail_address_book_persistence::MailAddressBookPersistenceV1::from_owner_local_pool(
             durable.owner_local_pool_handle(),
         );
     address_book_persistence
@@ -883,7 +883,7 @@ impl MailAdmittedRuntime {
             MailCredentialPurposeV1::IcloudCardDavPassword
                 if matches!(
                     self.address_book.provider,
-                    hermes_mail_api::MailAddressBookProviderV1::IcloudCardDav
+                    makosh_mail_api::MailAddressBookProviderV1::IcloudCardDav
                 ) => {}
             MailCredentialPurposeV1::ImapPassword
             | MailCredentialPurposeV1::SmtpPassword
@@ -1010,7 +1010,7 @@ impl MailAdmittedRuntime {
                     let mut bindings = vec![imap_binding];
                     if matches!(
                         self.address_book.provider,
-                        hermes_mail_api::MailAddressBookProviderV1::IcloudCardDav
+                        makosh_mail_api::MailAddressBookProviderV1::IcloudCardDav
                     ) {
                         bindings.push(basic_binding_status(
                             persisted.iter().find(|binding| {
@@ -1259,7 +1259,7 @@ impl MailAdmittedRuntime {
                     let password = Zeroizing::new(password.to_vec());
                     let password = std::str::from_utf8(&password)
                         .map_err(|_| MailMessageFlagDispatchErrorV1::InvalidStoredCommand)?;
-                    hermes_mail_imap::set_message_flag(
+                    makosh_mail_imap::set_message_flag(
                         ImapMessageFlagAccessV1 {
                             host: &configuration.host,
                             port: configuration.port,
@@ -1445,7 +1445,7 @@ impl MailAdmittedRuntime {
                     let password = Zeroizing::new(password.to_vec());
                     let password = std::str::from_utf8(&password)
                         .map_err(|_| MailMessageLocationDispatchErrorV1::InvalidStoredCommand)?;
-                    let moved = hermes_mail_imap::move_message(
+                    let moved = makosh_mail_imap::move_message(
                         ImapMessageLocationAccessV1 {
                             host: &configuration.host,
                             port: configuration.port,
@@ -1498,16 +1498,16 @@ impl MailAdmittedRuntime {
                     let client = gmail_api_client(&configuration)
                         .map_err(|_| MailMessageLocationDispatchErrorV1::ProviderRejected)?;
                     let location = match command.kind {
-                        hermes_mail_api::message_location::MailMessageLocationKindV1::Archive => {
+                        makosh_mail_api::message_location::MailMessageLocationKindV1::Archive => {
                             client.archive_message(token, &command.message_id).await
                         }
-                        hermes_mail_api::message_location::MailMessageLocationKindV1::Trash => {
+                        makosh_mail_api::message_location::MailMessageLocationKindV1::Trash => {
                             client.trash_message(token, &command.message_id).await
                         }
-                        hermes_mail_api::message_location::MailMessageLocationKindV1::Restore => {
+                        makosh_mail_api::message_location::MailMessageLocationKindV1::Restore => {
                             client.restore_message(token, &command.message_id).await
                         }
-                        hermes_mail_api::message_location::MailMessageLocationKindV1::Move => {
+                        makosh_mail_api::message_location::MailMessageLocationKindV1::Move => {
                             let target = self
                                 .durable
                                 .message_location_target_folder(&command)
@@ -1675,7 +1675,7 @@ impl MailAdmittedRuntime {
                 let password = Zeroizing::new(password.to_vec());
                 let password = std::str::from_utf8(&password)
                     .map_err(|_| MailMessagePermanentDeleteDispatchErrorV1::InvalidStoredCommand)?;
-                hermes_mail_imap::permanently_delete_message(
+                makosh_mail_imap::permanently_delete_message(
                     ImapMessageLocationAccessV1 {
                         host: &configuration.host,
                         port: configuration.port,
@@ -1901,7 +1901,7 @@ impl MailAdmittedRuntime {
             Ok(payload) => ModuleClientResponseV1::decode(payload.as_slice())
                 .map_err(|_| MailBootstrapError::Provider)?,
             Err(error) => {
-                if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                     eprintln!(
                         "developer_mail_client_request_error contract={} kind={error:?}",
                         request
@@ -1967,7 +1967,7 @@ impl MailAdmittedRuntime {
         let rfc822_message =
             compose_rfc822(from_address, &message).map_err(|_| MailBootstrapError::Admission)?;
         let _ = rfc822_message;
-        let exact_command_bytes = hermes_mail_api::client_wire::encode_delivery_request(request);
+        let exact_command_bytes = makosh_mail_api::client_wire::encode_delivery_request(request);
         let request_sha256: [u8; 32] = Sha256::digest(&exact_command_bytes).into();
         self.durable
             .enqueue_delivery_command(MailDeliveryEnqueueRequestV1 {
@@ -2050,7 +2050,7 @@ impl MailAdmittedRuntime {
             return Ok(false);
         };
         let request =
-            hermes_mail_api::client_wire::decode_delivery_request(&queued.exact_command_bytes)
+            makosh_mail_api::client_wire::decode_delivery_request(&queued.exact_command_bytes)
                 .map_err(|_| MailDeliveryDispatchErrorV1::InvalidStoredCommand)?;
         let message = self.outgoing_message(&request);
         let request_sha256: [u8; 32] = Sha256::digest(&queued.exact_command_bytes).into();
@@ -2189,7 +2189,7 @@ impl MailAdmittedRuntime {
 
     async fn send_mail_via_smtp(
         &mut self,
-        endpoint: &hermes_mail_api::SmtpEndpointV1,
+        endpoint: &makosh_mail_api::SmtpEndpointV1,
         message: &OutgoingMailV1,
         attachments: &[OutboundAttachmentV1],
         queued: &MailQueuedDeliveryV1,
@@ -2211,7 +2211,7 @@ impl MailAdmittedRuntime {
                 completed_at_unix_seconds,
             },
             |rfc822_message| async move {
-                hermes_mail_smtp::send_implicit_tls(endpoint, message, password, &rfc822_message)
+                makosh_mail_smtp::send_implicit_tls(endpoint, message, password, &rfc822_message)
                     .await
                     .map(|receipt| receipt.response_code)
                     .map_err(|error| match error {
@@ -2398,8 +2398,8 @@ impl MailAdmittedRuntime {
         .await?;
         Ok(matches!(
             outcome,
-            hermes_mail_persistence::MailDeliveryIntentInboxOutcomeV1::Pending
-                | hermes_mail_persistence::MailDeliveryIntentInboxOutcomeV1::RouteNotFound
+            makosh_mail_persistence::MailDeliveryIntentInboxOutcomeV1::Pending
+                | makosh_mail_persistence::MailDeliveryIntentInboxOutcomeV1::RouteNotFound
         ))
     }
 
@@ -2435,7 +2435,7 @@ impl MailAdmittedRuntime {
         .map(|outcome| {
             matches!(
                 outcome,
-                hermes_mail_address_book_persistence::MailAddressBookCommandInboxOutcomeV1::Accepted
+                makosh_mail_address_book_persistence::MailAddressBookCommandInboxOutcomeV1::Accepted
             )
         })
     }
@@ -2455,7 +2455,7 @@ impl MailAdmittedRuntime {
         .map(|outcome| {
             matches!(
                 outcome,
-                hermes_mail_address_book_persistence::MailAddressBookFetchInboxOutcomeV1::Accepted
+                makosh_mail_address_book_persistence::MailAddressBookFetchInboxOutcomeV1::Accepted
             )
         })
     }
@@ -3021,10 +3021,10 @@ impl MailAdmittedRuntime {
                 let source_id = message_id.clone();
                 let media_id = format!("{message_id}:{}", attachment.part_id);
                 let disposition = match attachment.disposition {
-                    hermes_mail_imap::ImapAttachmentDisposition::Attachment => {
+                    makosh_mail_imap::ImapAttachmentDisposition::Attachment => {
                         AttachmentDispositionV1::Attachment
                     }
-                    hermes_mail_imap::ImapAttachmentDisposition::Inline => {
+                    makosh_mail_imap::ImapAttachmentDisposition::Inline => {
                         AttachmentDispositionV1::Inline
                     }
                 };
@@ -3035,7 +3035,7 @@ impl MailAdmittedRuntime {
                         &message_id,
                         Some(attachment.part_id),
                     ),
-                    hermes_mail_core::MailAttachmentIngressRequestV1 {
+                    makosh_mail_core::MailAttachmentIngressRequestV1 {
                         provider: ProviderProvenanceV1::MailImap,
                         account_id: connection_id.to_owned(),
                         message_source_id: source_id,
@@ -3064,10 +3064,10 @@ impl MailAdmittedRuntime {
                     filename: attachment.filename.clone(),
                     media_type: attachment.media_type.clone(),
                     disposition: match attachment.disposition {
-                        hermes_mail_imap::ImapAttachmentDisposition::Attachment => {
+                        makosh_mail_imap::ImapAttachmentDisposition::Attachment => {
                             PersistedAttachmentDispositionV1::Attachment
                         }
-                        hermes_mail_imap::ImapAttachmentDisposition::Inline => {
+                        makosh_mail_imap::ImapAttachmentDisposition::Inline => {
                             PersistedAttachmentDispositionV1::Inline
                         }
                     },
@@ -3090,12 +3090,12 @@ impl MailAdmittedRuntime {
                         .flags
                         .iter()
                         .map(|flag| match flag {
-                            hermes_mail_imap::ImapMessageFlag::Read => MailMessageFlagV1::Read,
-                            hermes_mail_imap::ImapMessageFlag::Starred => {
+                            makosh_mail_imap::ImapMessageFlag::Read => MailMessageFlagV1::Read,
+                            makosh_mail_imap::ImapMessageFlag::Starred => {
                                 MailMessageFlagV1::Starred
                             }
-                            hermes_mail_imap::ImapMessageFlag::Draft => MailMessageFlagV1::Draft,
-                            hermes_mail_imap::ImapMessageFlag::Trashed => {
+                            makosh_mail_imap::ImapMessageFlag::Draft => MailMessageFlagV1::Draft,
+                            makosh_mail_imap::ImapMessageFlag::Trashed => {
                                 MailMessageFlagV1::Trashed
                             }
                         })
@@ -3212,7 +3212,7 @@ impl MailAdmittedRuntime {
                         &provider_record_id,
                         Some(attachment.part_id),
                     ),
-                    hermes_mail_core::MailAttachmentIngressRequestV1 {
+                    makosh_mail_core::MailAttachmentIngressRequestV1 {
                         provider: ProviderProvenanceV1::MailGmail,
                         account_id: connection_id.to_owned(),
                         message_source_id: source_id,
@@ -3385,7 +3385,7 @@ impl MailAdmittedRuntime {
         body: &Rfc822BodyContentV1,
     ) -> Result<BodyBlobReceiptV1, BodyAdmissionFailureV1> {
         let plaintext = body.bytes.as_slice();
-        if plaintext.is_empty() || plaintext.len() > hermes_mail_api::MAX_PLAIN_TEXT_BYTES {
+        if plaintext.is_empty() || plaintext.len() > makosh_mail_api::MAX_PLAIN_TEXT_BYTES {
             return Err(BodyAdmissionFailureV1::SizeLimitExceeded);
         }
         let mut reference_id = [0_u8; 16];
@@ -3494,7 +3494,7 @@ impl MailAdmittedRuntime {
             .map_err(|_| MailBootstrapError::Persistence)?;
         if !matches!(
             outcome,
-            hermes_mail_persistence::MailAttachmentBlobAdmissionStartOutcomeV1::Started
+            makosh_mail_persistence::MailAttachmentBlobAdmissionStartOutcomeV1::Started
         ) {
             return Ok(());
         }
@@ -3653,14 +3653,14 @@ pub fn execute_imap_sync_provider_operation(
         Err(_) => Err(MailBootstrapError::Credential),
         Ok(password) => {
             let mut finalization_rejected = false;
-            let provider_result = hermes_mail_imap::sync_inbox(
-                hermes_mail_imap::ImapSyncAccessV1 {
+            let provider_result = makosh_mail_imap::sync_inbox(
+                makosh_mail_imap::ImapSyncAccessV1 {
                     host: &host,
                     port,
                     username: &username,
                     password: Some(password),
                 },
-                hermes_mail_imap::ImapSyncRequestV1 {
+                makosh_mail_imap::ImapSyncRequestV1 {
                     window,
                     windows,
                     priority_uids: &priority_uids,
@@ -3708,7 +3708,7 @@ fn gmail_internal_date_unix_seconds(value: &str) -> Option<i64> {
 }
 
 fn imap_operational_folder(
-    mailbox: &hermes_mail_imap::ImapMailboxV1,
+    mailbox: &makosh_mail_imap::ImapMailboxV1,
 ) -> MailOperationalFolderSnapshotV1 {
     let kind = match mailbox.kind {
         ImapMailboxKindV1::Inbox => MailFolderKindV1::Inbox,
@@ -3951,7 +3951,7 @@ fn write_client_delivery_response(
             },
         )
         .map_err(|error| {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_mail_client_response_write_error={error:?}");
             }
             MailBootstrapError::Control
@@ -3977,7 +3977,7 @@ fn write_control_error(
 fn attachment_blob_admission_publish_permitted(
     permit: &RuntimePublishPermitV1,
 ) -> Result<bool, MailBootstrapError> {
-    let contract = hermes_communications_attachment_contract::admission::communication_attachment_blob_admission_observed_contract_reference_v1();
+    let contract = makosh_communications_attachment_contract::admission::communication_attachment_blob_admission_observed_contract_reference_v1();
     let subject = DurableSubjectV1::new(
         StreamKindV1::Observation,
         contract.owner,
@@ -3991,7 +3991,7 @@ fn attachment_blob_admission_publish_permitted(
 fn attachment_security_scan_candidate_publish_permitted(
     permit: &RuntimePublishPermitV1,
 ) -> Result<bool, MailBootstrapError> {
-    let contract = hermes_attachment_security_contract::admission::
+    let contract = makosh_attachment_security_contract::admission::
         attachment_security_scan_candidate_observed_contract_reference_v1();
     let subject = DurableSubjectV1::new(
         StreamKindV1::Observation,
@@ -4015,18 +4015,18 @@ struct MailEventSubscribePermitsV1 {
 fn bind_event_subscribe_permits(
     permits: Vec<RuntimeSubscribePermitV1>,
 ) -> Result<MailEventSubscribePermitsV1, MailBootstrapError> {
-    let expected_anchor = hermes_communications_attachment_contract::admission::
+    let expected_anchor = makosh_communications_attachment_contract::admission::
         communication_attachment_anchor_recorded_contract_reference_v1();
-    let expected_safety = hermes_communications_attachment_contract::admission::
+    let expected_safety = makosh_communications_attachment_contract::admission::
         communication_attachment_safety_state_changed_contract_reference_v1();
     let expected_delivery_intent =
-        hermes_mail_delivery_intent_contract::mail_delivery_intent_execute_contract_reference_v1();
+        makosh_mail_delivery_intent_contract::mail_delivery_intent_execute_contract_reference_v1();
     let expected_replay_command = mail_replay_command_contract_reference_v1();
     let expected_address_book_upsert =
-        hermes_mail_address_book_contract::MailAddressBookContractV1::UpsertEntryCommand
+        makosh_mail_address_book_contract::MailAddressBookContractV1::UpsertEntryCommand
             .reference();
     let expected_address_book_fetch =
-        hermes_mail_address_book_contract::MailAddressBookContractV1::FetchPageCommand.reference();
+        makosh_mail_address_book_contract::MailAddressBookContractV1::FetchPageCommand.reference();
     let mut anchor = None;
     let mut safety = None;
     let mut delivery_intent = None;
@@ -4076,8 +4076,8 @@ fn bind_event_subscribe_permits(
 }
 
 fn exact_runtime_contract(
-    actual: &hermes_runtime_protocol::v1::ContractReferenceV1,
-    expected: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    actual: &makosh_runtime_protocol::v1::ContractReferenceV1,
+    expected: &makosh_runtime_protocol::v1::ContractReferenceV1,
 ) -> bool {
     actual.owner == expected.owner
         && actual.name == expected.name
@@ -4108,7 +4108,7 @@ fn map_account_lifecycle_error(error: MailAccountLifecycleRuntimeErrorV1) -> Mai
 }
 
 fn developer_admission_diagnostic(stage: &str) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_mail_admission_stage={stage}");
     }
 }
@@ -4210,7 +4210,7 @@ fn inbound_observation_id(
     attachment_part_id: Option<u16>,
 ) -> String {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.mail.inbound-observation.v1\0");
+    hasher.update(b"makosh.mail.inbound-observation.v1\0");
     hasher.update(provider.as_str().as_bytes());
     hasher.update(b"\0");
     hasher.update(connection_id.as_bytes());
@@ -4240,7 +4240,7 @@ fn inbound_body_observation_id(
     revision: BodyObservationRevisionV1<'_>,
 ) -> String {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.mail.inbound-body-observation.v6\0");
+    hasher.update(b"makosh.mail.inbound-body-observation.v6\0");
     hasher.update(provider.as_str().as_bytes());
     hasher.update(b"\0");
     hasher.update(connection_id.as_bytes());
@@ -4359,11 +4359,11 @@ fn attachment_observation_context(
 mod tests {
     use std::thread;
 
-    use hermes_runtime_protocol::v1::{
+    use makosh_runtime_protocol::v1::{
         ContractReferenceV1, ManagedRuntimeClientDeliveryRequestV1, ManagedRuntimeControlAckV1,
         ModuleClientRequestV1, managed_runtime_control_frame_v2::Frame,
     };
-    use hermes_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
+    use makosh_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
 
     use super::*;
 
@@ -4619,8 +4619,8 @@ fn gmail_api_client(
     }
     #[cfg(not(feature = "conformance-test-support"))]
     {
-        if configuration.api_endpoint.host != hermes_mail_api::GMAIL_API_HOST
-            || configuration.api_endpoint.port != hermes_mail_api::GMAIL_API_HTTPS_PORT
+        if configuration.api_endpoint.host != makosh_mail_api::GMAIL_API_HOST
+            || configuration.api_endpoint.port != makosh_mail_api::GMAIL_API_HTTPS_PORT
             || configuration.api_endpoint.ca_certificate_pem.is_some()
         {
             return Err(GmailAdapterErrorV1::InvalidRequest);
@@ -4981,7 +4981,7 @@ fn current_unix_seconds() -> Result<i64, MailBootstrapError> {
 }
 
 fn mail_event_hub_error(stage: &str) -> MailBootstrapError {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_mail_event_hub_error={stage}");
     }
     MailBootstrapError::EventHub

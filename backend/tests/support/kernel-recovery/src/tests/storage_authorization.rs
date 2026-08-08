@@ -1,9 +1,9 @@
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BundledManagedLaunchBinding, ExternalRuntimeAttestation, ManagedLaunchRecord,
     ModuleRegistration, ModuleRegistrationState, ModuleStorageRequestV1, PlatformStorageBundleV1,
     PlatformStorageEndpointV1, PlatformStorageTopology, StorageDeploymentProfileV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use sha2::{Digest, Sha256};
 use std::sync::{Arc, atomic::AtomicBool};
 
@@ -204,7 +204,7 @@ fn scheduler_restart_reserves_successor_and_issues_its_exact_storage_binding() {
 
 fn assert_exact_scheduler_binding(
     reservation: &managed_launch::ManagedLaunchReservation,
-    binding: &hermes_kernel_control_store::PlatformStorageBindingV1,
+    binding: &makosh_kernel_control_store::PlatformStorageBindingV1,
     generation: u64,
 ) {
     assert_eq!(reservation.runtime_generation(), generation);
@@ -246,14 +246,14 @@ fn assert_successor_scheduler_binding(
 
 fn assert_advanced_topology_rejects_binding(
     reservation: &managed_launch::ManagedLaunchReservation,
-    binding: &hermes_kernel_control_store::PlatformStorageBindingV1,
+    binding: &makosh_kernel_control_store::PlatformStorageBindingV1,
 ) {
     let topology = PlatformStorageTopology::new(
-        hermes_kernel_control_store::PlatformStorageTopologyInputV1 {
+        makosh_kernel_control_store::PlatformStorageTopologyInputV1 {
             revision: 2,
             storage_generation: 2,
             storage_instance_id: "storage_successor".to_owned(),
-            database_id: "hermes".to_owned(),
+            database_id: "makosh".to_owned(),
             deployment_profile: StorageDeploymentProfileV1::MacosTauriEmbedded,
             postgres_endpoint: PlatformStorageEndpointV1::new("127.0.0.1", 5_433),
             pgbouncer_endpoint: PlatformStorageEndpointV1::new("127.0.0.1", 6_433),
@@ -301,7 +301,7 @@ fn managed_storage_binding_issues_only_successive_durable_fences() {
         .expect("reserve first binding for revoke");
     assert!(matches!(
         revoking.state(),
-        hermes_kernel_control_store::PlatformStorageBindingStateV1::Revoking
+        makosh_kernel_control_store::PlatformStorageBindingStateV1::Revoking
     ));
 
     let second = issue_managed(
@@ -430,9 +430,9 @@ fn approved_store(
 ) -> (
     std::path::PathBuf,
     SqliteControlStore,
-    hermes_kernel_control_store::GrantSet,
+    makosh_kernel_control_store::GrantSet,
 ) {
-    let root = unique_target_root("hermes-storage-authorization");
+    let root = unique_target_root("makosh-storage-authorization");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -494,11 +494,11 @@ fn issue(role_epoch: u64, credential_lease_revision: u64) -> StorageBindingIssue
 
 fn topology() -> PlatformStorageTopology {
     PlatformStorageTopology::new(
-        hermes_kernel_control_store::PlatformStorageTopologyInputV1 {
+        makosh_kernel_control_store::PlatformStorageTopologyInputV1 {
             revision: 1,
             storage_generation: 1,
             storage_instance_id: "storage_main".to_owned(),
-            database_id: "hermes".to_owned(),
+            database_id: "makosh".to_owned(),
             deployment_profile: StorageDeploymentProfileV1::MacosTauriEmbedded,
             postgres_endpoint: PlatformStorageEndpointV1::new("127.0.0.1", 5_432),
             pgbouncer_endpoint: PlatformStorageEndpointV1::new("127.0.0.1", 6_432),

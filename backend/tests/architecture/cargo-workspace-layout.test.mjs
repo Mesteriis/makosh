@@ -20,26 +20,26 @@ import { canonicalPolicyForTests } from './support/canonical-policy.mjs';
 test('accepts a minimal clean-room workspace', () => {
   const packages = [
     kernel([
-      dependency('hermes-events-protocol'),
-      dependency('hermes-runtime-protocol'),
+      dependency('makosh-events-protocol'),
+      dependency('makosh-runtime-protocol'),
     ]),
-    workspacePackage('hermes-events-protocol', {
+    workspacePackage('makosh-events-protocol', {
       role: 'platform',
       owner: 'events',
       surface: 'contract',
     }),
     runtimeProtocol(),
-    workspacePackage('hermes-contacts-contracts', {
+    workspacePackage('makosh-contacts-contracts', {
       role: 'domain',
       owner: 'contacts',
       surface: 'contract',
     }),
-    workspacePackage('hermes-ai-runtime', {
+    workspacePackage('makosh-ai-runtime', {
       role: 'domain',
       owner: 'ai',
       surface: 'runtime',
     }),
-    workspacePackage('hermes-telemetry-collector', {
+    workspacePackage('makosh-telemetry-collector', {
       role: 'platform',
       owner: 'telemetry',
       surface: 'runtime',
@@ -92,9 +92,9 @@ test('accepts test-support manifests in the dedicated test-only workspace root',
   assert.deepEqual(
     validateWorkspaceManifestCoverage(
       ['src/kernel/Cargo.toml'],
-      ['tests/support/hermes-test-support/Cargo.toml'],
+      ['tests/support/makosh-test-support/Cargo.toml'],
       [],
-      ['src/kernel/Cargo.toml', 'tests/support/hermes-test-support/Cargo.toml'],
+      ['src/kernel/Cargo.toml', 'tests/support/makosh-test-support/Cargo.toml'],
     ),
     [],
   );
@@ -129,11 +129,11 @@ test('rejects production roles in the test-only workspace root', () => {
   const violations = validateWorkspacePackageRoots(
     canonicalPolicyForTests(),
     [{
-      manifest: 'tests/support/hermes-tasks/Cargo.toml',
+      manifest: 'tests/support/makosh-tasks/Cargo.toml',
       role: 'domain',
     }],
     new Set(),
-    new Set(['tests/support/hermes-tasks/Cargo.toml']),
+    new Set(['tests/support/makosh-tasks/Cargo.toml']),
     new Set(),
   );
 
@@ -156,7 +156,7 @@ test('rejects test roles in the production workspace root', () => {
 });
 
 test('associates SQL with the owning workspace package metadata', () => {
-  const tasks = workspacePackage('hermes-tasks-persistence', {
+  const tasks = workspacePackage('makosh-tasks-persistence', {
     role: 'domain',
     owner: 'tasks',
     surface: 'persistence',
@@ -168,12 +168,12 @@ test('associates SQL with the owning workspace package metadata', () => {
       [{ path: 'modules/tasks/migrations/0001.sql', content: 'CREATE TABLE tasks_items ();' }],
       metadata([tasks]),
       '/workspace',
-      'hermes',
+      'makosh',
     ),
     [{
       path: 'modules/tasks/migrations/0001.sql',
       content: 'CREATE TABLE tasks_items ();',
-      packageName: 'hermes-tasks-persistence',
+      packageName: 'makosh-tasks-persistence',
       role: 'domain',
       owner: 'tasks',
       surface: 'persistence',

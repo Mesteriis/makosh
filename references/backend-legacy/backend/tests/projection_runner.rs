@@ -1,17 +1,17 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::Utc;
 use serde_json::json;
 
-use hermes_events_api::NewEventEnvelope;
-use hermes_events_postgres::cursors::ProjectionCursorStore;
-use hermes_events_postgres::store::EventStore;
-use hermes_hub_backend::platform::projections::{
+use makosh_events_api::NewEventEnvelope;
+use makosh_events_postgres::cursors::ProjectionCursorStore;
+use makosh_events_postgres::store::EventStore;
+use makosh_hub_backend::platform::projections::{
     ProjectionBatchOutcome, ProjectionHandlerError, run_projection_batch,
 };
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::storage::database::Database;
 
 #[tokio::test]
 async fn projection_runner_processes_batch_and_advances_cursor_against_postgres() {

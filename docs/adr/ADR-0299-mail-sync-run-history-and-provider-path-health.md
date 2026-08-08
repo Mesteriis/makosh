@@ -61,7 +61,7 @@ evidence и восстанавливается через
 
 ### Exact client contracts
 
-`hermes-mail-api` добавляет Protobuf package `hermes.mail.sync_health.v1` с
+`makosh-mail-api` добавляет Protobuf package `makosh.mail.sync_health.v1` с
 двумя отдельными client routes:
 
 ```text
@@ -182,7 +182,7 @@ First-party frontend cutover выполнен поверх exact admitted query 
 
 Backend и first-party frontend slice реализованы:
 
-- `hermes.mail.sync_health.v1` имеет exact canonical Protobuf mapping;
+- `makosh.mail.sync_health.v1` имеет exact canonical Protobuf mapping;
 - Mail descriptor revision 5 предоставляет отдельную capability
   `mail.sync.health.query.v1`;
 - Storage bundle revision 10 добавляет `mail_sync_runs` и
@@ -197,7 +197,7 @@ Backend и first-party frontend slice реализованы:
   покрыты static/managed conformance;
 - live authenticated managed contours подтверждены отдельно для IMAP и Gmail.
 - `frontend/scripts/generate-proto.mjs` включает exact
-  `hermes.mail.sync_health.v1` contract в generated client bundle;
+  `makosh.mail.sync_health.v1` contract в generated client bundle;
 - отдельные Mail-local Connect client и Gateway adapter реализуют `GetStatus`,
   `ListRuns` и `GetRun` без handwritten REST;
 - controller выбирает только admitted Mail connection с exact capability

@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_graph_api::{
+use makosh_graph_api::{
     GraphCount, GraphEdgeRead, GraphEvidenceRead, GraphNeighborhoodFuture,
     GraphNeighborhoodQueryPort, GraphNodeListFuture, GraphNodeRead, GraphNodeReadPort,
     GraphNodeSearchPort, GraphQueryError, GraphSummary, GraphSummaryFuture, GraphSummaryQueryPort,
@@ -27,13 +27,13 @@ impl GraphSummaryQueryPort for GraphPostgresSummaryQuery {
                 sqlx::query_scalar::<_, i64>("SELECT count(*) FROM graph_evidence")
                     .fetch_one(&self.pool)
                     .await
-                    .map_err(|error| hermes_graph_api::GraphQueryError(error.to_string()))?;
+                    .map_err(|error| makosh_graph_api::GraphQueryError(error.to_string()))?;
             let latest_projection_at = sqlx::query_scalar::<_, Option<DateTime<Utc>>>(
                 "SELECT max(updated_at) FROM (SELECT updated_at FROM graph_nodes UNION ALL SELECT updated_at FROM graph_edges) graph_updates",
             )
             .fetch_one(&self.pool)
             .await
-            .map_err(|error| hermes_graph_api::GraphQueryError(error.to_string()))?;
+            .map_err(|error| makosh_graph_api::GraphQueryError(error.to_string()))?;
             Ok(GraphSummary {
                 is_empty: node_counts.iter().map(|item| item.count).sum::<i64>() == 0,
                 node_counts,
@@ -151,7 +151,7 @@ impl GraphNeighborhoodQueryPort for GraphPostgresSummaryQuery {
                 values.truncate(EVIDENCE_LIMIT as usize);
                 (values, truncated)
             };
-            let result = hermes_graph_api::GraphNeighborhoodRead {
+            let result = makosh_graph_api::GraphNeighborhoodRead {
                 selected_node,
                 nodes,
                 edges,
@@ -221,22 +221,22 @@ async fn counts(
     pool: &PgPool,
     key_column: &str,
     table: &str,
-) -> Result<Vec<GraphCount>, hermes_graph_api::GraphQueryError> {
+) -> Result<Vec<GraphCount>, makosh_graph_api::GraphQueryError> {
     let sql = format!(
         "SELECT {key_column} AS key, count(*) AS count FROM {table} GROUP BY {key_column} ORDER BY {key_column}"
     );
     sqlx::query(&sql)
         .fetch_all(pool)
         .await
-        .map_err(|error| hermes_graph_api::GraphQueryError(error.to_string()))?
+        .map_err(|error| makosh_graph_api::GraphQueryError(error.to_string()))?
         .into_iter()
         .map(|row| {
             Ok(GraphCount {
                 key: row.try_get("key").map_err(|error: sqlx::Error| {
-                    hermes_graph_api::GraphQueryError(error.to_string())
+                    makosh_graph_api::GraphQueryError(error.to_string())
                 })?,
                 count: row.try_get("count").map_err(|error: sqlx::Error| {
-                    hermes_graph_api::GraphQueryError(error.to_string())
+                    makosh_graph_api::GraphQueryError(error.to_string())
                 })?,
             })
         })

@@ -1,11 +1,11 @@
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ExternalRuntimeAttestation, ModuleRegistrationState, OwnerPinnedArtifactBinding,
     OwnerPinnedArtifactBindingInputV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use crate::control_store::lifecycle::{bootstrap_control_store, open_validated_control_store};
 use crate::identity::device::signer::{DeviceSigner, FileDeviceSigner};

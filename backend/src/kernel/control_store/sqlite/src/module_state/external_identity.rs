@@ -1,6 +1,6 @@
 //! Owner-pinned external runtime public identities.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ExternalRuntimeIdentity, ModuleRegistration, ModuleRegistrationState,
 };
 use rusqlite::{OptionalExtension, params};
@@ -23,7 +23,7 @@ impl SqliteControlStore {
             }
             let existing = transaction
                 .query_row(
-                    "SELECT public_key_sec1 FROM hermes_kernel_external_runtime_identity
+                    "SELECT public_key_sec1 FROM makosh_kernel_external_runtime_identity
                      WHERE registration_id = ?1",
                     [identity.registration_id()],
                     |row| row.get::<_, Vec<u8>>(0),
@@ -61,7 +61,7 @@ impl SqliteControlStore {
         self.with_connection(move |connection| {
             connection
                 .query_row(
-                    "SELECT public_key_sec1 FROM hermes_kernel_external_runtime_identity
+                    "SELECT public_key_sec1 FROM makosh_kernel_external_runtime_identity
                      WHERE registration_id = ?1",
                     [&registration_id],
                     |row| {
@@ -94,7 +94,7 @@ fn bind_identity(
     identity: &ExternalRuntimeIdentity,
 ) -> Result<usize, rusqlite::Error> {
     connection.execute(
-        "INSERT INTO hermes_kernel_external_runtime_identity (registration_id, public_key_sec1)
+        "INSERT INTO makosh_kernel_external_runtime_identity (registration_id, public_key_sec1)
          VALUES (?1, ?2) ON CONFLICT(registration_id)
          DO UPDATE SET public_key_sec1 = excluded.public_key_sec1",
         params![
@@ -118,7 +118,7 @@ fn update_registration_epoch(
     next_epoch: u64,
 ) -> Result<(), StoreError> {
     let changed = connection.execute(
-        "UPDATE hermes_kernel_module_registration SET grant_epoch = ?1
+        "UPDATE makosh_kernel_module_registration SET grant_epoch = ?1
          WHERE registration_id = ?2 AND grant_epoch = ?3",
         params![
             i64::try_from(next_epoch).map_err(|_| StoreError::RecoveryFenceOverflow)?,

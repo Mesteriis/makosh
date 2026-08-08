@@ -1,6 +1,6 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::{
         ManagedRuntimeControlResponseV1, ManagedRuntimeModuleRequestResponseV1,
@@ -12,15 +12,15 @@ use hermes_runtime_protocol::{
         validate_module_request_delivery_v1, validate_module_request_response_v1,
     },
 };
-use hermes_speech_to_text_api::{SPEECH_TO_TEXT_OWNER_V1, speech_to_text_contract_reference_v1};
-use hermes_speech_to_text_persistence::{
+use makosh_speech_to_text_api::{SPEECH_TO_TEXT_OWNER_V1, speech_to_text_contract_reference_v1};
+use makosh_speech_to_text_persistence::{
     SpeechToTextPersistenceErrorV1, SpeechToTextPersistenceV1,
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 
@@ -342,7 +342,7 @@ fn storage_binding(
 
 #[cfg(test)]
 mod tests {
-    use hermes_speech_to_text_api::SPEECH_TO_TEXT_MODULE_ID_V1;
+    use makosh_speech_to_text_api::SPEECH_TO_TEXT_MODULE_ID_V1;
 
     use super::*;
 

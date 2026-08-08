@@ -3,7 +3,7 @@ import { Badge, Icon, ScrollArea, Separator, Surface, Toast } from '@/shared/ui'
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/Foundation/Tokens',
+	title: 'Макошь UI/Foundation/Tokens',
 	render: (_args, context) => ({
 		components: {
 			Badge,

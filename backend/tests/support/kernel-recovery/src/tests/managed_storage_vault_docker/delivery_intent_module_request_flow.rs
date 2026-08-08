@@ -2,7 +2,7 @@
 
 use super::*;
 
-use hermes_communication_delivery_intent_api::{
+use makosh_communication_delivery_intent_api::{
     COMMUNICATION_DELIVERY_INTENT_COMMAND_CONTRACT_NAME_V1,
     COMMUNICATION_DELIVERY_INTENT_CONTRACT_MAJOR_V1,
     COMMUNICATION_DELIVERY_INTENT_CONTRACT_REVISION_V1, COMMUNICATION_DELIVERY_INTENT_OWNER_V1,
@@ -12,8 +12,8 @@ use hermes_communication_delivery_intent_api::{
         SubmitDeliveryIntentResponseV1,
     },
 };
-use hermes_kernel_control_store::{BundledManagedLaunchBinding, ManagedLaunchRecord};
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store::{BundledManagedLaunchBinding, ManagedLaunchRecord};
+use makosh_runtime_protocol::v1::{
     CapabilityCriticalityV1, CapabilityDescriptorV1, ContractReferenceV1,
     ManagedRuntimeModuleRequestRequestV1, ModuleDescriptorV1, ModuleKindV1,
 };
@@ -34,7 +34,7 @@ pub(super) fn assert_live_delivery_intent_module_request(
     let descriptor = ModuleDescriptorV1 {
         descriptor_major: 1,
         descriptor_revision: 1,
-        module_id: "hermes-communication-bulk-action-conformance".to_owned(),
+        module_id: "makosh-communication-bulk-action-conformance".to_owned(),
         owner_id: "communication_bulk_action".to_owned(),
         module_kind: ModuleKindV1::Workflow as i32,
         module_version: "1".to_owned(),
@@ -61,7 +61,7 @@ pub(super) fn assert_live_delivery_intent_module_request(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-request-conformance",
+            "makosh-managed-request-conformance",
             "workflow.communication_bulk_action.conformance",
             [8; 32],
             *registration.descriptor_sha256(),

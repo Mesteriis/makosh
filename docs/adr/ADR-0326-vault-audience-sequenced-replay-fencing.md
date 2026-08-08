@@ -38,7 +38,7 @@ bytes 0..8   = cryptographically random process stream ID, stream ID > 0
 bytes 8..16  = unsigned big-endian sequence, sequence > 0
 ```
 
-Owner-neutral `hermes-runtime-protocol`, который уже владеет opaque
+Owner-neutral `makosh-runtime-protocol`, который уже владеет opaque
 `VaultCiphertextRouteV1`, владеет transport request ID:
 
 - один random stream ID на process lifetime;
@@ -101,13 +101,13 @@ Module restart меняет runtime instance/generation; новый audience н�
 
 ### Ownership и единицы сборки
 
-- `hermes-runtime-protocol` владеет opaque request ID
+- `makosh-runtime-protocol` владеет opaque request ID
   encoding/allocation contract рядом с ciphertext route framing;
-- `hermes-vault-protocol` сохраняет authority над HPKE binding, command и
+- `makosh-vault-protocol` сохраняет authority над HPKE binding, command и
   lease semantics, но не вводит обратную зависимость transport callers;
-- `hermes-managed-vault-client` и `hermes-storage-vault` только используют
+- `makosh-managed-vault-client` и `makosh-storage-vault` только используют
   canonical allocator;
-- `hermes-vault-runtime` владеет private audience high-watermark map;
+- `makosh-vault-runtime` владеет private audience high-watermark map;
 - Kernel остаётся blind ciphertext router и не интерпретирует sequence;
 - Blob, Communications, Mail и Attachment Security не импортируют Vault
   implementation и не получают replay-cache APIs;

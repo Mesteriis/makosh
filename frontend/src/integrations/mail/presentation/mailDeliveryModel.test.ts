@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { MailDeliveryOutcomeV1 } from '../../../gen/hermes/mail/v1/client_pb'
+import { MailDeliveryOutcomeV1 } from '../../../gen/makosh/mail/v1/client_pb'
 import { buildMailDeliveryStatusCard } from './mailDeliveryModel'
 
 describe('Mail delivery presentation model', () => {

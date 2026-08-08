@@ -6,8 +6,8 @@ use crate::integrations::telegram::client::participants::{
 use crate::integrations::telegram::client::reactions::reconcile_reaction_commands_from_provider_reactions;
 use crate::integrations::telegram::client::store::TelegramStore;
 use crate::platform::secrets::store::SecretReferenceStore;
-use hermes_communications_api::accounts::ProviderAccountLookupPort;
-use hermes_communications_api::accounts::{ProviderAccount, ProviderSecretBindingLookupPort};
+use makosh_communications_api::accounts::ProviderAccountLookupPort;
+use makosh_communications_api::accounts::{ProviderAccount, ProviderSecretBindingLookupPort};
 
 use crate::platform::config::app_config::AppConfig;
 use crate::platform::secrets::resolver::SecretResolver;

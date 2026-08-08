@@ -3,8 +3,8 @@ use axum::http::{HeaderValue, Request, StatusCode};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::router::build_router;
-use hermes_hub_backend::platform::config::app_config::AppConfig;
+use makosh_hub_backend::app::router::build_router;
+use makosh_hub_backend::platform::config::app_config::AppConfig;
 
 const LOCAL_API_SECRET: &str = "hard-v1-routes-test-secret";
 
@@ -62,14 +62,14 @@ async fn telegram_and_whatsapp_capabilities_are_split_under_v1() {
 }
 
 fn config_with_api_secret() -> AppConfig {
-    hermes_backend_testkit::app::config_with_secret(LOCAL_API_SECRET)
+    makosh_backend_testkit::app::config_with_secret(LOCAL_API_SECRET)
 }
 
 fn get_request_with_secret(path: &str) -> Request<Body> {
     Request::builder()
         .uri(path)
         .header(
-            "x-hermes-secret",
+            "x-makosh-secret",
             HeaderValue::from_static(LOCAL_API_SECRET),
         )
         .body(Body::empty())

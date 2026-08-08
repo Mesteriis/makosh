@@ -1,17 +1,17 @@
 //! Live PgBouncer reload conformance for the Storage-owned database include.
 
-use hermes_storage_pgbouncer::{
+use makosh_storage_pgbouncer::{
     PLATFORM_ADMIN_USERNAME, PgBouncerAdminCredentialV1, PgBouncerAdminEndpointV1,
     PgBouncerDatabaseConfigFileV1, PgBouncerRuntimeConfigV1, PoolAliasV1,
     TokioPostgresPgBouncerAdminPortV1, database_is_configured, reload_configuration,
 };
 use zeroize::Zeroizing;
 
-const AUTHENTICATED_TEST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_TEST";
-const DATABASES_FILE_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_DATABASES_FILE";
-const PASSWORD_FILE_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE";
-const PGBOUNCER_HOST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_HOST";
-const PGBOUNCER_PORT_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PORT";
+const AUTHENTICATED_TEST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_TEST";
+const DATABASES_FILE_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_DATABASES_FILE";
+const PASSWORD_FILE_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE";
+const PGBOUNCER_HOST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_HOST";
+const PGBOUNCER_PORT_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PORT";
 
 #[test]
 #[ignore = "requires the disposable authenticated Storage Compose contour"]
@@ -53,7 +53,7 @@ fn config(alias: PoolAliasV1) -> PgBouncerRuntimeConfigV1 {
         alias,
         "postgres".to_owned(),
         5432,
-        "hermes_storage_authenticated".to_owned(),
+        "makosh_storage_authenticated".to_owned(),
         "runtime_reload".to_owned(),
         8,
     )

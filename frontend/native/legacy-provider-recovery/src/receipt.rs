@@ -16,7 +16,7 @@ use crate::private_files::{is_generation, is_sha256};
 
 const RECEIPT_SCHEMA_REVISION: u16 = 1;
 const MAX_RECEIPT_BYTES: u64 = 512 * 1024;
-const OPERATION_DOMAIN: &[u8] = b"hermes-legacy-provider-recovery-v1\0";
+const OPERATION_DOMAIN: &[u8] = b"makosh-legacy-provider-recovery-v1\0";
 
 pub(crate) struct LegacyProviderRecoveryReceiptStoreV1 {
     path: PathBuf,

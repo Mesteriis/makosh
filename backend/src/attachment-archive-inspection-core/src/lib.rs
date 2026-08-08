@@ -2,7 +2,7 @@
 
 use std::collections::BTreeSet;
 
-use hermes_attachment_archive_inspection_api::{
+use makosh_attachment_archive_inspection_api::{
     ATTACHMENT_ARCHIVE_INSPECTION_MAX_PATH_BYTES_V1,
     ATTACHMENT_ARCHIVE_INSPECTION_MAX_REPORT_ENTRIES_V1,
 };
@@ -25,7 +25,7 @@ pub use lifecycle::{
     validate_archive_inspection_status_v1,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-archive-inspection-core";
+pub const PACKAGE: &str = "makosh-attachment-archive-inspection-core";
 pub const DEFAULT_MAX_ARCHIVE_BYTES_V1: u64 = 100 * 1024 * 1024;
 pub const DEFAULT_MAX_TOTAL_UNCOMPRESSED_BYTES_V1: u64 = 1024 * 1024 * 1024;
 pub const DEFAULT_MAX_ENTRY_UNCOMPRESSED_BYTES_V1: u64 = 256 * 1024 * 1024;

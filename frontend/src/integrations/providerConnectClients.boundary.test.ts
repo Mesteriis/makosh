@@ -5,49 +5,49 @@ import { describe, expect, it } from 'vitest'
 const clientUnits = [
 	{
 		file: './mail/api/mailSyncClient.ts',
-		generatedContract: '../../../gen/hermes/mail/v1/client_pb',
+		generatedContract: '../../../gen/makosh/mail/v1/client_pb',
 		service: 'MailSyncService',
 		foreignOwners: ['telegram', 'zulip']
 	},
 	{
 		file: './mail/api/mailDeliveryCommandClient.ts',
-		generatedContract: '../../../gen/hermes/mail/v1/client_pb',
+		generatedContract: '../../../gen/makosh/mail/v1/client_pb',
 		service: 'MailDeliveryCommandService',
 		foreignOwners: ['telegram', 'zulip']
 	},
 	{
 		file: './mail/api/mailDeliveryQueryClient.ts',
-		generatedContract: '../../../gen/hermes/mail/v1/client_pb',
+		generatedContract: '../../../gen/makosh/mail/v1/client_pb',
 		service: 'MailDeliveryQueryService',
 		foreignOwners: ['telegram', 'zulip']
 	},
 	{
 		file: './telegram/api/telegramOperationalClient.ts',
-		generatedContract: '../../../gen/hermes/telegram/v1/client_pb',
+		generatedContract: '../../../gen/makosh/telegram/v1/client_pb',
 		service: 'TelegramOperationalService',
 		foreignOwners: ['mail', 'zulip']
 	},
 	{
 		file: './zulip/api/zulipCommandClient.ts',
-		generatedContract: '../../../gen/hermes/zulip/v1/client_pb',
+		generatedContract: '../../../gen/makosh/zulip/v1/client_pb',
 		service: 'ZulipCommandService',
 		foreignOwners: ['mail', 'telegram']
 	},
 	{
 		file: './zulip/api/zulipQueryClient.ts',
-		generatedContract: '../../../gen/hermes/zulip/v1/client_pb',
+		generatedContract: '../../../gen/makosh/zulip/v1/client_pb',
 		service: 'ZulipQueryService',
 		foreignOwners: ['mail', 'telegram']
 	},
 	{
 		file: './whatsapp/api/whatsappCommandClient.ts',
-		generatedContract: '../../../gen/hermes/whatsapp/v1/client_pb',
+		generatedContract: '../../../gen/makosh/whatsapp/v1/client_pb',
 		service: 'WhatsAppCommandService',
 		foreignOwners: ['mail', 'telegram', 'zulip']
 	},
 	{
 		file: './whatsapp/api/whatsappQueryClient.ts',
-		generatedContract: '../../../gen/hermes/whatsapp/v1/client_pb',
+		generatedContract: '../../../gen/makosh/whatsapp/v1/client_pb',
 		service: 'WhatsAppQueryService',
 		foreignOwners: ['mail', 'telegram', 'zulip']
 	}
@@ -68,7 +68,7 @@ describe('provider operational Connect client boundaries', () => {
 		expect(source).not.toContain('fetch(')
 
 		for (const foreignOwner of unit.foreignOwners) {
-			expect(source).not.toContain(`/hermes/${foreignOwner}/`)
+			expect(source).not.toContain(`/makosh/${foreignOwner}/`)
 		}
 	})
 
@@ -82,7 +82,7 @@ describe('provider operational Connect client boundaries', () => {
 		expect(generator).toContain("backend', 'src', 'telegram-api', 'proto")
 		expect(generator).toContain("backend', 'src', 'whatsapp-api', 'proto")
 		expect(generator).toContain("backend', 'src', 'zulip-api', 'proto")
-		expect(generator.match(/'hermes', '(mail|telegram|whatsapp|zulip)', 'v1', 'client\.proto'/g)).toHaveLength(
+		expect(generator.match(/'makosh', '(mail|telegram|whatsapp|zulip)', 'v1', 'client\.proto'/g)).toHaveLength(
 			4
 		)
 	})

@@ -4,7 +4,7 @@ import { storybookLocaleFromGlobals } from './storybook-i18n'
 import { generalStoryCopy } from './general-story-copy'
 
 const meta = {
-	title: 'Hermes UI/General/Date Range Picker',
+	title: 'Макошь UI/General/Date Range Picker',
 	component: DateRangePicker,
 	render: (_args, context) => ({
 		components: { DateRangePicker, FormField, FormLabel },

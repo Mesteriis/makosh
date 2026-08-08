@@ -93,7 +93,7 @@ fn assert_schema_for_version(connection: &Connection, version: i64) -> Result<()
 
 fn base_schema_exists(connection: &Connection) -> Result<bool, StoreError> {
     for column in ["singleton", "schema_version", "instance_id", "generation"] {
-        if !column_exists(connection, "hermes_kernel_control_store_metadata", column)? {
+        if !column_exists(connection, "makosh_kernel_control_store_metadata", column)? {
             return Ok(false);
         }
     }
@@ -104,92 +104,92 @@ fn version_feature_exists(connection: &Connection, version: i64) -> Result<bool,
     match version {
         2 => Ok(column_exists(
             connection,
-            "hermes_kernel_control_store_metadata",
+            "makosh_kernel_control_store_metadata",
             "identity_epoch",
         )? && column_exists(
             connection,
-            "hermes_kernel_control_store_metadata",
+            "makosh_kernel_control_store_metadata",
             "grant_epoch",
         )?),
-        3 => table_exists(connection, "hermes_kernel_initial_owner_identity"),
-        4 => table_exists(connection, "hermes_kernel_module_registration"),
-        5 => table_exists(connection, "hermes_kernel_module_registration_capability"),
-        6 => table_exists(connection, "hermes_kernel_external_runtime_attestation"),
-        7 => table_exists(connection, "hermes_kernel_settings_schema_binding"),
-        8 => table_exists(connection, "hermes_kernel_settings_desired_snapshot"),
+        3 => table_exists(connection, "makosh_kernel_initial_owner_identity"),
+        4 => table_exists(connection, "makosh_kernel_module_registration"),
+        5 => table_exists(connection, "makosh_kernel_module_registration_capability"),
+        6 => table_exists(connection, "makosh_kernel_external_runtime_attestation"),
+        7 => table_exists(connection, "makosh_kernel_settings_schema_binding"),
+        8 => table_exists(connection, "makosh_kernel_settings_desired_snapshot"),
         9 => Ok(column_exists(
             connection,
-            "hermes_kernel_settings_schema_binding",
+            "makosh_kernel_settings_schema_binding",
             "apply_state",
         )? && column_exists(
             connection,
-            "hermes_kernel_settings_schema_binding",
+            "makosh_kernel_settings_schema_binding",
             "sanitized_reason_code",
         )?),
-        10 => table_exists(connection, "hermes_kernel_owner_pinned_artifact_binding"),
-        11 => table_exists(connection, "hermes_kernel_settings_schema_artifact"),
-        12 => table_exists(connection, "hermes_kernel_external_runtime_identity"),
-        13 => table_exists(connection, "hermes_kernel_server_bootstrap_pairing"),
+        10 => table_exists(connection, "makosh_kernel_owner_pinned_artifact_binding"),
+        11 => table_exists(connection, "makosh_kernel_settings_schema_artifact"),
+        12 => table_exists(connection, "makosh_kernel_external_runtime_identity"),
+        13 => table_exists(connection, "makosh_kernel_server_bootstrap_pairing"),
         14 => Ok(
-            table_exists(connection, "hermes_kernel_bundled_managed_launch_binding")?
-                && table_exists(connection, "hermes_kernel_managed_launch_record")?,
+            table_exists(connection, "makosh_kernel_bundled_managed_launch_binding")?
+                && table_exists(connection, "makosh_kernel_managed_launch_record")?,
         ),
         15 => Ok(
-            table_exists(connection, "hermes_kernel_platform_managed_process_binding")?
-                && table_exists(connection, "hermes_kernel_platform_managed_process_launch")?,
+            table_exists(connection, "makosh_kernel_platform_managed_process_binding")?
+                && table_exists(connection, "makosh_kernel_platform_managed_process_launch")?,
         ),
         version @ 16..=33 => platform_storage_feature_exists(connection, version),
-        34 => table_exists(connection, "hermes_kernel_operator_settings"),
-        35 => table_exists(connection, "hermes_kernel_operation_journal"),
-        36 => table_exists(connection, "hermes_kernel_operator_settings").map(|exists| !exists),
-        37 => table_exists(connection, "hermes_kernel_module_vault_purpose_request"),
+        34 => table_exists(connection, "makosh_kernel_operator_settings"),
+        35 => table_exists(connection, "makosh_kernel_operation_journal"),
+        36 => table_exists(connection, "makosh_kernel_operator_settings").map(|exists| !exists),
+        37 => table_exists(connection, "makosh_kernel_module_vault_purpose_request"),
         38 => column_exists(
             connection,
-            "hermes_kernel_module_vault_purpose_request",
+            "makosh_kernel_module_vault_purpose_request",
             "key_schema_revision",
         ),
-        39 => table_exists(connection, "hermes_kernel_module_client_rpc_route_request"),
+        39 => table_exists(connection, "makosh_kernel_module_client_rpc_route_request"),
         40 => Ok(columns_exist(
             connection,
-            "hermes_kernel_module_blob_quota_request",
+            "makosh_kernel_module_blob_quota_request",
             &["custody_scope_id", "allowed_operations"],
         )?),
-        41 => table_exists(connection, "hermes_kernel_bundled_artifact_proposal"),
-        42 => table_exists(connection, "hermes_kernel_module_client_blob_route_request"),
+        41 => table_exists(connection, "makosh_kernel_bundled_artifact_proposal"),
+        42 => table_exists(connection, "makosh_kernel_module_client_blob_route_request"),
         43 => Ok(table_definition_contains(
             connection,
-            "hermes_kernel_module_client_blob_route_request",
+            "makosh_kernel_module_client_blob_route_request",
             "max_response_bytes BETWEEN 1 AND 25165824",
         )? || table_definition_contains(
             connection,
-            "hermes_kernel_module_client_blob_route_request",
+            "makosh_kernel_module_client_blob_route_request",
             "max_response_bytes BETWEEN 1 AND 33554432",
         )?),
         44 => Ok(
-            table_exists(connection, "hermes_kernel_settings_configuration_target")?
+            table_exists(connection, "makosh_kernel_settings_configuration_target")?
                 && columns_exist(
                     connection,
-                    "hermes_kernel_settings_desired_snapshot",
+                    "makosh_kernel_settings_desired_snapshot",
                     &["registration_id", "configuration_instance_id"],
                 )?,
         ),
         45 => Ok(
-            table_exists(connection, "hermes_kernel_module_query_rpc_route_request")?
-                && table_exists(connection, "hermes_kernel_module_contract_dependency")?,
+            table_exists(connection, "makosh_kernel_module_query_rpc_route_request")?
+                && table_exists(connection, "makosh_kernel_module_contract_dependency")?,
         ),
         46 => table_exists(
             connection,
-            "hermes_kernel_module_client_realtime_route_request",
+            "makosh_kernel_module_client_realtime_route_request",
         ),
-        47 => table_exists(connection, "hermes_kernel_module_request_rpc_route_request"),
+        47 => table_exists(connection, "makosh_kernel_module_request_rpc_route_request"),
         48 => table_definition_contains(
             connection,
-            "hermes_kernel_module_blob_quota_request",
+            "makosh_kernel_module_blob_quota_request",
             "allowed_operations BETWEEN 0 AND 15",
         ),
         49 => table_definition_contains(
             connection,
-            "hermes_kernel_module_client_blob_route_request",
+            "makosh_kernel_module_client_blob_route_request",
             "max_response_bytes BETWEEN 1 AND 33554432",
         ),
         _ => Ok(false),
@@ -201,44 +201,44 @@ fn platform_storage_feature_exists(
     version: i64,
 ) -> Result<bool, StoreError> {
     match version {
-        16 => table_exists(connection, "hermes_kernel_platform_storage_topology"),
+        16 => table_exists(connection, "makosh_kernel_platform_storage_topology"),
         17 => storage_endpoint_columns_exist(connection),
-        18 => table_exists(connection, "hermes_kernel_module_storage_request"),
+        18 => table_exists(connection, "makosh_kernel_module_storage_request"),
         19 => column_exists(
             connection,
-            "hermes_kernel_managed_launch_record",
+            "makosh_kernel_managed_launch_record",
             "runtime_instance_id",
         ),
-        20 => table_exists(connection, "hermes_kernel_platform_storage_binding"),
-        21 => table_exists(connection, "hermes_kernel_platform_storage_bundle"),
+        20 => table_exists(connection, "makosh_kernel_platform_storage_binding"),
+        21 => table_exists(connection, "makosh_kernel_platform_storage_bundle"),
         22 => column_exists(
             connection,
-            "hermes_kernel_platform_storage_binding",
+            "makosh_kernel_platform_storage_binding",
             "state",
         ),
-        23 => table_exists(connection, "hermes_kernel_module_event_route_request"),
-        24 => table_exists(connection, "hermes_kernel_module_blob_quota_request"),
-        25 => table_exists(connection, "hermes_kernel_module_event_delivery_policy"),
+        23 => table_exists(connection, "makosh_kernel_module_event_route_request"),
+        24 => table_exists(connection, "makosh_kernel_module_blob_quota_request"),
+        25 => table_exists(connection, "makosh_kernel_module_event_delivery_policy"),
         26 => table_exists(
             connection,
-            "hermes_kernel_platform_events_authority_configuration",
+            "makosh_kernel_platform_events_authority_configuration",
         ),
         27 => Ok(
-            table_exists(connection, "hermes_kernel_platform_event_hub_topology")?
-                && table_exists(connection, "hermes_kernel_platform_event_stream_budget")?,
+            table_exists(connection, "makosh_kernel_platform_event_hub_topology")?
+                && table_exists(connection, "makosh_kernel_platform_event_stream_budget")?,
         ),
         28 => event_hub_connection_columns_exist(connection),
-        29 => table_exists(connection, "hermes_kernel_browser_device_identity"),
-        30 => table_exists(connection, "hermes_kernel_module_scheduler_job_request"),
+        29 => table_exists(connection, "makosh_kernel_browser_device_identity"),
+        30 => table_exists(connection, "makosh_kernel_module_scheduler_job_request"),
         31 => pgbouncer_backend_endpoint_columns_exist(connection),
         32 => column_exists(
             connection,
-            "hermes_kernel_browser_device_identity",
+            "makosh_kernel_browser_device_identity",
             "browser_key_public_key",
         ),
         33 => Ok(columns_exist(
             connection,
-            "hermes_kernel_browser_device_identity",
+            "makosh_kernel_browser_device_identity",
             &["backup_eligible", "backup_state"],
         )?),
         _ => Ok(false),
@@ -248,7 +248,7 @@ fn platform_storage_feature_exists(
 fn storage_endpoint_columns_exist(connection: &Connection) -> Result<bool, StoreError> {
     columns_exist(
         connection,
-        "hermes_kernel_platform_storage_topology",
+        "makosh_kernel_platform_storage_topology",
         &[
             "postgres_host",
             "postgres_port",
@@ -261,7 +261,7 @@ fn storage_endpoint_columns_exist(connection: &Connection) -> Result<bool, Store
 fn pgbouncer_backend_endpoint_columns_exist(connection: &Connection) -> Result<bool, StoreError> {
     columns_exist(
         connection,
-        "hermes_kernel_platform_storage_topology",
+        "makosh_kernel_platform_storage_topology",
         &["pgbouncer_backend_host", "pgbouncer_backend_port"],
     )
 }
@@ -269,7 +269,7 @@ fn pgbouncer_backend_endpoint_columns_exist(connection: &Connection) -> Result<b
 fn event_hub_connection_columns_exist(connection: &Connection) -> Result<bool, StoreError> {
     columns_exist(
         connection,
-        "hermes_kernel_platform_event_hub_topology",
+        "makosh_kernel_platform_event_hub_topology",
         &["nats_endpoint", "nats_username", "credential_revision"],
     )
 }
@@ -325,7 +325,7 @@ fn column_exists(connection: &Connection, table: &str, column: &str) -> Result<b
 fn schema_version(connection: &Connection) -> Result<i64, StoreError> {
     connection
         .query_row(
-            "SELECT schema_version FROM hermes_kernel_control_store_metadata WHERE singleton = 1",
+            "SELECT schema_version FROM makosh_kernel_control_store_metadata WHERE singleton = 1",
             [],
             |row| row.get::<_, i64>(0),
         )

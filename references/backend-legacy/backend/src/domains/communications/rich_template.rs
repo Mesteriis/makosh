@@ -139,7 +139,7 @@ mod tests {
     fn vars() -> HashMap<String, String> {
         [
             ("name".into(), "Alice".into()),
-            ("project".into(), "Hermes".into()),
+            ("project".into(), "Макошь".into()),
         ]
         .into()
     }
@@ -155,7 +155,7 @@ mod tests {
         };
         let (s, b) = RichTemplateEngine::render(&tpl, &vars()).unwrap();
         assert_eq!(s, "Hello Alice");
-        assert_eq!(b, "Hi Alice, project Hermes");
+        assert_eq!(b, "Hi Alice, project Макошь");
     }
 
     #[test]

@@ -122,7 +122,7 @@ Goals:
 Key functions:
 
 - HESTIA coordinator
-- HERMES communication agent
+- MAKOSH communication agent
 - MNEMOSYNE memory agent
 - ATHENA analytics agent
 - source-backed AI search answers
@@ -201,7 +201,7 @@ Closure tracking:
 
 Goals:
 
-- mature Hermes Hub into a durable personal knowledge operating system
+- mature Макошь into a durable personal knowledge operating system
 - support deep memory analytics and explainable recall across years
 - make replacement of models and indexes routine
 

@@ -4,25 +4,25 @@
 #include <string.h>
 #include <unistd.h>
 
-#define HERMES_QUEUE_CAPACITY 32
-#define HERMES_PAYLOAD_CAPACITY 4096
-#define HERMES_STARTUP_RECEIVE_DELAYS 80
+#define MAKOSH_QUEUE_CAPACITY 32
+#define MAKOSH_PAYLOAD_CAPACITY 4096
+#define MAKOSH_STARTUP_RECEIVE_DELAYS 80
 
 typedef struct {
-    char queue[HERMES_QUEUE_CAPACITY][HERMES_PAYLOAD_CAPACITY];
+    char queue[MAKOSH_QUEUE_CAPACITY][MAKOSH_PAYLOAD_CAPACITY];
     size_t head;
     size_t tail;
     size_t startup_receive_delays_remaining;
-    char current[HERMES_PAYLOAD_CAPACITY];
+    char current[MAKOSH_PAYLOAD_CAPACITY];
     int folder_7;
     int folder_9;
     int folder_11;
     int folder_reassignment_failure_emitted;
-} HermesTdJsonClient;
+} МакошьTdJsonClient;
 
-static int enqueue(HermesTdJsonClient *client, const char *payload) {
-    size_t next = (client->tail + 1) % HERMES_QUEUE_CAPACITY;
-    if (next == client->head || strlen(payload) >= HERMES_PAYLOAD_CAPACITY) {
+static int enqueue(МакошьTdJsonClient *client, const char *payload) {
+    size_t next = (client->tail + 1) % MAKOSH_QUEUE_CAPACITY;
+    if (next == client->head || strlen(payload) >= MAKOSH_PAYLOAD_CAPACITY) {
         return 0;
     }
     strcpy(client->queue[client->tail], payload);
@@ -58,11 +58,11 @@ static int extract_extra(const char *request, char *extra, size_t capacity) {
 }
 
 void *td_json_client_create(void) {
-    HermesTdJsonClient *client = calloc(1, sizeof(HermesTdJsonClient));
+    МакошьTdJsonClient *client = calloc(1, sizeof(МакошьTdJsonClient));
     if (client == NULL) {
         return NULL;
     }
-    client->startup_receive_delays_remaining = HERMES_STARTUP_RECEIVE_DELAYS;
+    client->startup_receive_delays_remaining = MAKOSH_STARTUP_RECEIVE_DELAYS;
     client->folder_7 = 1;
     client->folder_9 = 1;
     enqueue(
@@ -99,9 +99,9 @@ void *td_json_client_create(void) {
 }
 
 void td_json_client_send(void *raw_client, const char *request) {
-    HermesTdJsonClient *client = raw_client;
+    МакошьTdJsonClient *client = raw_client;
     char extra[512];
-    char response[HERMES_PAYLOAD_CAPACITY];
+    char response[MAKOSH_PAYLOAD_CAPACITY];
     if (client == NULL || request == NULL ||
         !extract_extra(request, extra, sizeof(extra))) {
         return;
@@ -241,7 +241,7 @@ void td_json_client_send(void *raw_client, const char *request) {
 }
 
 const char *td_json_client_receive(void *raw_client, double timeout) {
-    HermesTdJsonClient *client = raw_client;
+    МакошьTdJsonClient *client = raw_client;
     if (client == NULL) {
         return NULL;
     }
@@ -261,7 +261,7 @@ const char *td_json_client_receive(void *raw_client, double timeout) {
         return NULL;
     }
     strcpy(client->current, client->queue[client->head]);
-    client->head = (client->head + 1) % HERMES_QUEUE_CAPACITY;
+    client->head = (client->head + 1) % MAKOSH_QUEUE_CAPACITY;
     return client->current;
 }
 

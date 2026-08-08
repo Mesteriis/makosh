@@ -1,5 +1,5 @@
-CREATE TABLE hermes_data.communications_evidence_audit_lineage (
-  evidence_id BYTEA PRIMARY KEY REFERENCES hermes_data.communications_evidence_summaries (
+CREATE TABLE makosh_data.communications_evidence_audit_lineage (
+  evidence_id BYTEA PRIMARY KEY REFERENCES makosh_data.communications_evidence_summaries (
     observation_id
   ) CHECK (octet_length(evidence_id) = 16),
   causation_message_id BYTEA CHECK (

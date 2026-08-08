@@ -5,7 +5,7 @@ use std::net::TcpListener;
 
 use super::*;
 
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     AI_LOCAL_EGRESS_POLICY_REVISION_V1, ai_provider_reply_generation_contract_reference_v1,
     wire::{
         AiEgressPolicyV1, AiInferenceCompletenessV1, AiInferenceTerminalStatusV1,
@@ -13,7 +13,7 @@ use hermes_ai_contracts::{
         AiReplySubjectPolicyV1, AiReplyToneV1,
     },
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
     ManagedRuntimeModuleRequestDeliveryV1, ManagedRuntimeModuleRequestResponseV1,
     managed_runtime_control_request_v1::Operation,
@@ -24,7 +24,7 @@ use hermes_runtime_protocol::v1::{
 #[ignore = "requires disposable Docker plus real managed Vault, Storage and Ollama AI binaries"]
 fn managed_ollama_ai_runtime_replays_provider_unavailable_without_second_http_attempt() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let port_reservation =
@@ -35,7 +35,7 @@ fn managed_ollama_ai_runtime_replays_provider_unavailable_without_second_http_at
         .port();
     drop(port_reservation);
 
-    let root = unique_target_root("hermes-managed-ollama-ai-negative");
+    let root = unique_target_root("makosh-managed-ollama-ai-negative");
     let data = private_directory(root.join("kernel"));
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -43,11 +43,11 @@ fn managed_ollama_ai_runtime_replays_provider_unavailable_without_second_http_at
     );
     let release = installed_ollama_ai_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_store(&root, release.kernel()));
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             OLLAMA_AI_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             [4; 65],
@@ -116,22 +116,22 @@ fn managed_ollama_ai_runtime_replays_provider_unavailable_without_second_http_at
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Ollama AI fixture");
 }
 
 #[test]
-#[ignore = "requires disposable Docker plus a real loopback Ollama service with hermes-conformance:latest"]
+#[ignore = "requires disposable Docker plus a real loopback Ollama service with makosh-conformance:latest"]
 fn managed_ollama_ai_runtime_completes_real_provider_generation() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let ollama_port = required("HERMES_OLLAMA_LIVE_PORT")
+    let ollama_port = required("MAKOSH_OLLAMA_LIVE_PORT")
         .parse::<u16>()
         .expect("valid live Ollama port");
-    let root = unique_target_root("hermes-managed-ollama-ai-live");
+    let root = unique_target_root("makosh-managed-ollama-ai-live");
     let data = private_directory(root.join("kernel"));
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -139,11 +139,11 @@ fn managed_ollama_ai_runtime_completes_real_provider_generation() {
     );
     let release = installed_ollama_ai_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_store(&root, release.kernel()));
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             OLLAMA_AI_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             [4; 65],
@@ -208,7 +208,7 @@ fn managed_ollama_ai_runtime_completes_real_provider_generation() {
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove live Ollama AI fixture");
 }

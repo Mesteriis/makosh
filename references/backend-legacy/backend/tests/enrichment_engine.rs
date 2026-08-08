@@ -1,4 +1,4 @@
-use hermes_hub_backend::engines::enrichment::engine::EnrichmentEngine;
+use makosh_hub_backend::engines::enrichment::engine::EnrichmentEngine;
 use serde_json::json;
 
 #[test]

@@ -6,59 +6,59 @@ use std::{
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
-use hermes_communications_ai_source_api::{
+use makosh_communications_ai_source_api::{
     communication_explanation_source_prepare_contract_reference_v1,
     communication_reply_source_prepare_contract_reference_v1,
     communication_summary_source_prepare_contract_reference_v1,
     communication_translation_source_prepare_contract_reference_v1,
 };
-use hermes_communications_attachment_contract::admission::{
+use makosh_communications_attachment_contract::admission::{
     communication_attachment_blob_admission_observed_contract_reference_v1,
     communication_attachment_safety_verdict_observed_contract_reference_v1,
 };
-use hermes_communications_call_evidence_ingress::call_evidence_observed_contract_reference_v1;
-use hermes_communications_call_evidence_persistence::{
+use makosh_communications_call_evidence_ingress::call_evidence_observed_contract_reference_v1;
+use makosh_communications_call_evidence_persistence::{
     CallEvidenceConsumeOutcomeV1, CallEvidencePersistenceErrorV1,
     CommunicationsCallEvidencePersistenceV1,
 };
-use hermes_communications_cross_channel_forward_source_api::cross_channel_forward_source_prepare_contract_reference_v1;
-use hermes_communications_domain::COMMUNICATIONS_SEARCH_PROJECTION_REVISION_V1;
-use hermes_communications_evidence_export_source_api::evidence_export_prepare_contract_reference_v1;
-use hermes_communications_ingress::admission::communication_observed_contract_reference_v1;
-use hermes_communications_note_source_api::communication_note_source_prepare_contract_reference_v1;
-use hermes_communications_persistence::CommunicationsDurablePersistence;
-use hermes_communications_recipient_source_api::communication_recipient_source_prepare_contract_reference_v1;
-use hermes_communications_retained_evidence_replay_contract::communications_replay_command_contract_reference_v1;
-use hermes_communications_retained_evidence_replay_persistence::{
+use makosh_communications_cross_channel_forward_source_api::cross_channel_forward_source_prepare_contract_reference_v1;
+use makosh_communications_domain::COMMUNICATIONS_SEARCH_PROJECTION_REVISION_V1;
+use makosh_communications_evidence_export_source_api::evidence_export_prepare_contract_reference_v1;
+use makosh_communications_ingress::admission::communication_observed_contract_reference_v1;
+use makosh_communications_note_source_api::communication_note_source_prepare_contract_reference_v1;
+use makosh_communications_persistence::CommunicationsDurablePersistence;
+use makosh_communications_recipient_source_api::communication_recipient_source_prepare_contract_reference_v1;
+use makosh_communications_retained_evidence_replay_contract::communications_replay_command_contract_reference_v1;
+use makosh_communications_retained_evidence_replay_persistence::{
     CommunicationsRetainedEvidenceReplayPersistenceV1, RetainedCommunicationsReplayErrorV1,
 };
-use hermes_communications_task_source_api::communication_task_source_prepare_contract_reference_v1;
-use hermes_events_jetstream::{
+use makosh_communications_task_source_api::communication_task_source_prepare_contract_reference_v1;
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
 };
-use hermes_runtime_protocol::managed_control::ManagedControlChannelV2;
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::ManagedControlChannelV2;
+use makosh_runtime_protocol::managed_control::{
     ManagedControlRequestDispatcherV2, ManagedControlTransportErrorV2,
     RejectManagedControlRequestsV2,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeClientDeliveryResponseV1, ManagedRuntimeControlResponseV1,
     ManagedRuntimeReadyRequestV1, ManagedStorageRuntimeConfigurationV1, ModuleClientResponseV1,
     managed_runtime_control_request_v1::Operation,
     managed_runtime_control_response_v1::Result as ControlResult,
 };
-use hermes_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
-use hermes_runtime_protocol::validation::module_client::{
+use makosh_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
+use makosh_runtime_protocol::validation::module_client::{
     validate_module_client_request_v1, validate_module_client_response_v1,
 };
-use hermes_runtime_protocol::validation::module_query::validate_module_query_response_v1;
-use hermes_storage_protocol::{
+use makosh_runtime_protocol::validation::module_query::validate_module_query_response_v1;
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 
@@ -423,7 +423,7 @@ impl ManagedControlRequestDispatcherV2<UnixStream> for CommunicationsNestedReque
         &mut self,
         channel: &mut ManagedControlChannelV2<UnixStream>,
         correlation_id: [u8; MANAGED_CONTROL_CORRELATION_ID_BYTES],
-        request: hermes_runtime_protocol::v1::ManagedRuntimeControlRequestV1,
+        request: makosh_runtime_protocol::v1::ManagedRuntimeControlRequestV1,
     ) -> Result<(), ManagedControlTransportErrorV2> {
         let response = match request.operation {
             Some(Operation::ClientDelivery(delivery)) => match delivery.request {
@@ -1396,7 +1396,7 @@ fn custody_worker_outcome(
             error @ (CommunicationsCustodyWorkerErrorV1::RetryPending
             | CommunicationsCustodyWorkerErrorV1::StorageUnavailable),
         ) => {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_communications_custody_retry={error:?}");
             }
             Ok(false)
@@ -1631,14 +1631,14 @@ const fn call_evidence_realtime_error(
 }
 
 fn unavailable_at(stage: &str) -> CommunicationsEventRuntimeErrorV1 {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_communications_runtime_startup_unavailable stage={stage}");
     }
     CommunicationsEventRuntimeErrorV1::Unavailable
 }
 
 fn admission_at(stage: &str) -> CommunicationsEventRuntimeErrorV1 {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_communications_runtime_admission stage={stage}");
     }
     CommunicationsEventRuntimeErrorV1::Admission

@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import type { MailDeliveryOperationStatusV1 } from '../../../gen/hermes/mail/v1/client_pb'
+import type { MailDeliveryOperationStatusV1 } from '../../../gen/makosh/mail/v1/client_pb'
 import {
 	getMailDeliveryStatus,
 	sendMailMessage,

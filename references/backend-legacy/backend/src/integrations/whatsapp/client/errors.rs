@@ -3,7 +3,7 @@ use thiserror::Error;
 use crate::platform::communications::errors::ProviderCommunicationMessagePortError;
 use crate::platform::secrets::errors::{SecretReferenceError, SecretResolutionError};
 use crate::vault::errors::HostVaultError;
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 #[derive(Debug, Error)]
 pub enum WhatsappWebError {

@@ -1,9 +1,9 @@
 //! Fences opaque Vault ciphertext before a managed-runtime relay accepts it.
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     VaultCiphertextResponseV1, VaultCiphertextRouteDirectionV1, VaultCiphertextRouteV1,
 };
-use hermes_runtime_protocol::validation::vault::validate_vault_ciphertext_route_v1;
+use makosh_runtime_protocol::validation::vault::validate_vault_ciphertext_route_v1;
 use prost::Message;
 
 use crate::identity::device::signer::{DeviceSigner, FileDeviceSigner};
@@ -55,7 +55,7 @@ pub fn sign_for_kernel(
     let signer = FileDeviceSigner::open_for_instance(data_dir)?;
     route.kernel_instance_id = instance_id.to_owned();
     route.kernel_authorization_signature_raw.clear();
-    let mut message = b"hermes.vault-route-authorization.v1\0".to_vec();
+    let mut message = b"makosh.vault-route-authorization.v1\0".to_vec();
     message.extend_from_slice(&route.encode_to_vec());
     route.kernel_authorization_signature_raw = signer.sign(&message).to_vec();
     Ok(())

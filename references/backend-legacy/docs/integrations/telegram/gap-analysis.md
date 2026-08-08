@@ -12,7 +12,7 @@ to separate future work.
 
 | Area | Status | Evidence |
 |---|---|---|
-| Provider reconciliation | CLOSED | Edit, delete, pin, archive, mute, read, unread, reactions, topics, folder add, folder remove and folder reassign use durable provider-write commands and reconcile from provider-observed state or returned provider snapshots. Outgoing `sendMessage` responses preserve TDLib `pending` and `failed` sending states; late `updateMessageSendFailed` is persisted as a durable delivery-state observation. `updateMessageSendSucceeded` transactionally rebinds the temporary provider locator to TDLib's final locator while retaining the canonical Hermes message id; the durable raw-to-accepted-to-projection path is regression-tested including replay. |
+| Provider reconciliation | CLOSED | Edit, delete, pin, archive, mute, read, unread, reactions, topics, folder add, folder remove and folder reassign use durable provider-write commands and reconcile from provider-observed state or returned provider snapshots. Outgoing `sendMessage` responses preserve TDLib `pending` and `failed` sending states; late `updateMessageSendFailed` is persisted as a durable delivery-state observation. `updateMessageSendSucceeded` transactionally rebinds the temporary provider locator to TDLib's final locator while retaining the canonical Макошь message id; the durable raw-to-accepted-to-projection path is regression-tested including replay. |
 | Message lifecycle | CLOSED | Edit versions, tombstones, provider edit/delete evidence and diff metadata are persisted and surfaced through projection APIs. |
 | Reply/forward parity | CLOSED | Reply refs are idempotent, reply graph traversal is bounded with cycle guard, forward attribution is idempotent, and forward chains traverse projected local evidence without raw TDLib UI dependency. |
 | Topic parity | CLOSED | Topic unread state, realtime topic patching and topic command reconciliation are implemented through `telegram_topics`, runtime topic events and command reconciliation. |
@@ -59,9 +59,9 @@ Fixture/projection/outbox/realtime tests are the deterministic closure gate.
 
 TDLib can first return an outgoing message with a temporary provider message ID
 and later publish `updateMessageSendSucceeded` or `updateMessageSendFailed`.
-Hermes persists both initial states and late failure updates. A success update
+Макошь persists both initial states and late failure updates. A success update
 now rebinds the canonical projection's provider locator in one transaction,
-retains the Hermes `message_id`, marks delivery as `sent`, and records an
+retains the Макошь `message_id`, marks delivery as `sent`, and records an
 observation linking the old and final provider ids. A locator collision fails
 visibly instead of merging two canonical messages. The accepted event is replay
 safe: a repeated projection keeps the original temporary locator evidence and

@@ -22,10 +22,10 @@ pub(super) fn merge_object(
 }
 
 pub(super) fn annotate_observed_source(
-    raw: &hermes_communications_api::evidence::NewRawCommunicationRecord,
+    raw: &makosh_communications_api::evidence::NewRawCommunicationRecord,
     observed_source: &str,
 ) -> Result<
-    hermes_communications_api::evidence::NewRawCommunicationRecord,
+    makosh_communications_api::evidence::NewRawCommunicationRecord,
     CommunicationFixtureIngestError,
 > {
     let mut observed_raw = raw.clone();

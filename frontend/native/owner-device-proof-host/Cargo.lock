@@ -168,7 +168,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-owner-device-proof-host"
+name = "makosh-owner-device-proof-host"
 version = "0.1.0"
 dependencies = [
  "p256",

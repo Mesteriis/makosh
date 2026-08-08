@@ -2,13 +2,13 @@ use axum::Json;
 use axum::extract::State;
 use axum::http::HeaderMap;
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 
 use crate::app::error::types::ApiError;
 use crate::app::state::AppState;
 use crate::domains::communications::messages::store::MessageProjectionStore;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use super::actions::archive::archive_response;
 use super::actions::calendar::create_event_response;

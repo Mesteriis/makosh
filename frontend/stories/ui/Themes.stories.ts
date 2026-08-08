@@ -14,7 +14,7 @@ const swatches = [
 ]
 
 const meta = {
-	title: 'Hermes UI/Foundation/Themes',
+	title: 'Макошь UI/Foundation/Themes',
 	render: (_args, context) => ({
 		components: { Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Input, ThemeProvider },
 		setup() {
@@ -22,7 +22,7 @@ const meta = {
 			const themeByValue = Object.fromEntries(text.themes.options.map((theme) => [theme.value, theme])) as Record<string, (typeof text.themes.options)[number]>
 			const themePairs = [
 				{ id: 'base', themes: [themeByValue['base-light'], themeByValue['base-dark']] },
-				{ id: 'hermes', themes: [themeByValue['hermes-light'], themeByValue['hermes-dark']] }
+				{ id: 'makosh', themes: [themeByValue['makosh-light'], themeByValue['makosh-dark']] }
 			]
 
 			return { swatches, text, themePairs }

@@ -1,29 +1,29 @@
 use chrono::Utc;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
-use hermes_communications_api::mail_resources::{
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_api::mail_resources::{
     MailProviderResourceKind, MailProviderSemanticRole,
 };
 use serde_json::json;
 
-use hermes_hub_backend::domains::communications::bulk_actions::{
+use makosh_hub_backend::domains::communications::bulk_actions::{
     BulkMessageAction, BulkMessageActionStore,
 };
-use hermes_hub_backend::domains::communications::folders::{
+use makosh_hub_backend::domains::communications::folders::{
     CommunicationFolderStore, NewCommunicationFolder,
 };
-use hermes_hub_backend::domains::communications::messages::models::NewProjectedMessage;
-use hermes_hub_backend::domains::communications::messages::projection::{
+use makosh_hub_backend::domains::communications::messages::models::NewProjectedMessage;
+use makosh_hub_backend::domains::communications::messages::projection::{
     project_raw_email_message, project_raw_email_message_from_blob,
 };
-use hermes_hub_backend::domains::communications::outbox::delivery::OutboxSendReceipt;
-use hermes_hub_backend::domains::communications::outbox::{
+use makosh_hub_backend::domains::communications::outbox::delivery::OutboxSendReceipt;
+use makosh_hub_backend::domains::communications::outbox::{
     CommunicationOutboxStatus, CommunicationOutboxStore, NewCommunicationOutboxItem,
 };
-use hermes_hub_backend::domains::communications::provider_resources::{
+use makosh_hub_backend::domains::communications::provider_resources::{
     MailProviderResourceMappingUpdate, MailProviderResourceStore, NewMailProviderResource,
 };
-use hermes_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
+use makosh_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
 
 use super::support::{
     live_projection_context, record_raw_email_message, store_provider_account, unique_suffix,

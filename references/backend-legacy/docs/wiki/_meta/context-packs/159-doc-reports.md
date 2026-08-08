@@ -21,9 +21,9 @@
 - Group / Группа: `reports`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,13 +55,13 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `reports/test-performance/2026-06-23-baseline.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/reports/test-performance/2026-06-23-baseline.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/reports/test-performance/2026-06-23-baseline.md`
 - Size bytes / Размер в байтах: `2398`
 - Included characters / Включено символов: `2398`
 - Truncated / Обрезано: `no`
 
 ```markdown
-# Hermes test baseline - 2026-06-23
+# Макошь test baseline - 2026-06-23
 
 ## Observed current state
 
@@ -105,7 +105,7 @@ Observed repeatedly during backend test runs:
 ## Main bottlenecks
 
 1. Full backend runs depend on a heavy integration surface and many top-level test targets.
-2. Container-backed tests are expensive when the `hermes_test_session` harness is bypassed.
+2. Container-backed tests are expensive when the `makosh_test_session` harness is bypassed.
 3. CI had no dedicated split for snapshots, integration, coverage, security, and nightly mutation runs.
 4. Reports for slow tests and flaky tests were not generated automatically.
 5. Local tool installation was undocumented and inconsistent.
@@ -115,12 +115,12 @@ Observed repeatedly during backend test runs:
 - Keep PostgreSQL as the main persistent store.
 - Keep Docker development infra under `docker/` per `ADR-0032`.
 - Keep backend full-suite execution behind the `crates/testkit` harness.
-- Do not introduce Redis artificially into the test stack unless a real Hermes subsystem requires it and the architecture decision is explicit.
+- Do not introduce Redis artificially into the test stack unless a real Макошь subsystem requires it and the architecture decision is explicit.
 ```
 
 ### `reports/test-performance/2026-06-23-testcontainers-audit.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/reports/test-performance/2026-06-23-testcontainers-audit.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/reports/test-performance/2026-06-23-testcontainers-audit.md`
 - Size bytes / Размер в байтах: `1715`
 - Included characters / Включено символов: `1715`
 - Truncated / Обрезано: `no`
@@ -131,13 +131,13 @@ Observed repeatedly during backend test runs:
 ## Verified current behavior
 
 - `crates/testkit/src/context.rs` keeps PostgreSQL and NATS containers in `tokio::sync::OnceCell`.
-- `crates/testkit/src/bin/hermes_test_session.rs` creates a single owned PostgreSQL session container for the full backend run and tears it down when the command exits.
+- `crates/testkit/src/bin/makosh_test_session.rs` creates a single owned PostgreSQL session container for the full backend run and tears it down when the command exits.
 - Individual tests create isolated databases inside the shared PostgreSQL container instead of starting a new PostgreSQL container per test.
 - NATS is started lazily only for tests that request it through `TestContext::nats_server_url()` / `app_config_with_nats()`.
 
 ## Main risk found
 
-Direct full-suite `cargo test` bypasses `hermes_test_session`. That removes the shared-session contract and is the main path that can leave extra Docker garbage behind after interrupts or failures.
+Direct full-suite `cargo test` bypasses `makosh_test_session`. That removes the shared-session contract and is the main path that can leave extra Docker garbage behind after interrupts or failures.
 
 ## Changes in this modernization pass
 
@@ -150,12 +150,12 @@ Direct full-suite `cargo test` bypasses `hermes_test_session`. That removes the 
 1. Move more backend logic from integration targets into lib/unit tests where Docker is not needed.
 2. Identify the slowest container-backed suites and merge repeated bootstraps inside the same target where practical.
 3. Add per-target nextest grouping once there is enough measured data to justify serializing specific resource-heavy targets.
-4. Keep Redis out of the test stack unless a real Hermes subsystem needs it and the architecture decision is explicit.
+4. Keep Redis out of the test stack unless a real Макошь subsystem needs it and the architecture decision is explicit.
 ```
 
 ### `reports/test-performance/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/reports/test-performance/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/reports/test-performance/README.md`
 - Size bytes / Размер в байтах: `552`
 - Included characters / Включено символов: `552`
 - Truncated / Обрезано: `no`
@@ -163,7 +163,7 @@ Direct full-suite `cargo test` bypasses `hermes_test_session`. That removes the 
 ```markdown
 # Test Performance Reports
 
-This directory stores committed baseline measurements and human-readable optimization notes for Hermes test infrastructure.
+This directory stores committed baseline measurements and human-readable optimization notes for Макошь test infrastructure.
 
 Generated summaries from `scripts/test/analyze-nextest-junit.mjs` may also be written here during explicit test runs.
 
@@ -181,7 +181,7 @@ Current status matrix:
 
 ### `reports/test-performance/backend-full.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/reports/test-performance/backend-full.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/reports/test-performance/backend-full.md`
 - Size bytes / Размер в байтах: `1334`
 - Included characters / Включено символов: `1334`
 - Truncated / Обрезано: `no`
@@ -201,21 +201,21 @@ Current status matrix:
 
 ## Slowest tests
 
-1. `hermes-hub-backend::graph_api::search::graph_summary_returns_empty_state_for_empty_database` - 34.693s
-2. `hermes-hub-backend::tasks::task_checklist_against_postgres` - 31.357s
-3. `hermes-hub-backend::graph_api::neighborhood::graph_neighborhood_caps_depth_one_edges_nodes_and_evidence` - 29.265s
-4. `hermes-hub-backend::tasks_api::mutations::task_post_subtask` - 27.194s
-5. `hermes-hub-backend::graph_api::neighborhood::graph_neighborhood_caps_evidence_for_returned_edges` - 26.858s
-6. `hermes-hub-backend::tasks_api::mutations::task_post_relation` - 26.622s
-7. `hermes-hub-backend::whatsapp::whatsapp_runtime_bridge_participant_reconciles_join_group_command_with_live_provenance` - 26.523s
-8. `hermes-hub-backend::whatsapp::whatsapp_runtime_bridge_presence_and_call_record_live_observed_source_in_raw_provenance` - 26.095s
-9. `hermes-hub-backend::graph_api::neighborhood::graph_neighborhood_returns_selected_node_neighbors_edges_and_evidence` - 25.841s
-10. `hermes-hub-backend::graph_api::search::graph_nodes_returns_connected_picker_nodes_first` - 24.99s
+1. `makosh-backend::graph_api::search::graph_summary_returns_empty_state_for_empty_database` - 34.693s
+2. `makosh-backend::tasks::task_checklist_against_postgres` - 31.357s
+3. `makosh-backend::graph_api::neighborhood::graph_neighborhood_caps_depth_one_edges_nodes_and_evidence` - 29.265s
+4. `makosh-backend::tasks_api::mutations::task_post_subtask` - 27.194s
+5. `makosh-backend::graph_api::neighborhood::graph_neighborhood_caps_evidence_for_returned_edges` - 26.858s
+6. `makosh-backend::tasks_api::mutations::task_post_relation` - 26.622s
+7. `makosh-backend::whatsapp::whatsapp_runtime_bridge_participant_reconciles_join_group_command_with_live_provenance` - 26.523s
+8. `makosh-backend::whatsapp::whatsapp_runtime_bridge_presence_and_call_record_live_observed_source_in_raw_provenance` - 26.095s
+9. `makosh-backend::graph_api::neighborhood::graph_neighborhood_returns_selected_node_neighbors_edges_and_evidence` - 25.841s
+10. `makosh-backend::graph_api::search::graph_nodes_returns_connected_picker_nodes_first` - 24.99s
 ```
 
 ### `reports/test-performance/unit.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/reports/test-performance/unit.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/reports/test-performance/unit.md`
 - Size bytes / Размер в байтах: `1996`
 - Included characters / Включено символов: `1996`
 - Truncated / Обрезано: `no`
@@ -235,14 +235,14 @@ Current status matrix:
 
 ## Slowest tests
 
-1. `hermes-hub-backend::integrations::telegram::runtime::manager::participants::participants_runtime_tests::sync_provider_roster_snapshots_appends_leave_reconciliation_after_absence_update` - 10.343s
-2. `hermes-hub-backend::integrations::telegram::runtime::manager::chat_events::tests::publish_chat_unread_event_reconciles_mark_read_command_and_emits_events` - 9.797s
-3. `hermes-hub-backend::integrations::telegram::runtime::manager::message_events::tests::publish_message_edited_event_skips_without_projected_message` - 9.608s
-4. `hermes-hub-backend::integrations::telegram::runtime::manager::message_events::tests::publish_message_created_event_publishes_signal_hub_raw_signal_instead_of_legacy_event` - 9.447s
-5. `hermes-hub-backend::integrations::telegram::runtime::manager::message_events::tests::publish_reaction_changed_event_skips_without_projected_message` - 9.127s
-6. `hermes-hub-backend::integrations::telegram::runtime::manager::chat_events::tests::publish_chat_position_event_reconciles_folder_add_and_remove_commands` - 9.061s
-7. `hermes-hub-backend::integrations::telegram::runtime::manager::realtime_events::tests::telegram_runtime_event_bridge_skips_broadcast_when_runtime_paused` - 9.033s
-8. `hermes-hub-backend::integrations::telegram::runtime::manager::realtime_events::typing_tests::publish_command_reconciled_events_appends_status_and_reconciled_records` - 8.961s
-9. `hermes-hub-backend::integrations::telegram::runtime::manager::topic_events::tests::publish_topic_event_reconciles_topic_close_and_appends_runtime_events` - 8.746s
-10. `hermes-hub-backend::integrations::telegram::runtime::manager::message_events::tests::publish_message_content_updated_event_skips_without_projected_message` - 8.677s
+1. `makosh-backend::integrations::telegram::runtime::manager::participants::participants_runtime_tests::sync_provider_roster_snapshots_appends_leave_reconciliation_after_absence_update` - 10.343s
+2. `makosh-backend::integrations::telegram::runtime::manager::chat_events::tests::publish_chat_unread_event_reconciles_mark_read_command_and_emits_events` - 9.797s
+3. `makosh-backend::integrations::telegram::runtime::manager::message_events::tests::publish_message_edited_event_skips_without_projected_message` - 9.608s
+4. `makosh-backend::integrations::telegram::runtime::manager::message_events::tests::publish_message_created_event_publishes_signal_hub_raw_signal_instead_of_legacy_event` - 9.447s
+5. `makosh-backend::integrations::telegram::runtime::manager::message_events::tests::publish_reaction_changed_event_skips_without_projected_message` - 9.127s
+6. `makosh-backend::integrations::telegram::runtime::manager::chat_events::tests::publish_chat_position_event_reconciles_folder_add_and_remove_commands` - 9.061s
+7. `makosh-backend::integrations::telegram::runtime::manager::realtime_events::tests::telegram_runtime_event_bridge_skips_broadcast_when_runtime_paused` - 9.033s
+8. `makosh-backend::integrations::telegram::runtime::manager::realtime_events::typing_tests::publish_command_reconciled_events_appends_status_and_reconciled_records` - 8.961s
+9. `makosh-backend::integrations::telegram::runtime::manager::topic_events::tests::publish_topic_event_reconciles_topic_close_and_appends_runtime_events` - 8.746s
+10. `makosh-backend::integrations::telegram::runtime::manager::message_events::tests::publish_message_content_updated_event_skips_without_projected_message` - 8.677s
 ```

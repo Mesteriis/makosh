@@ -2,7 +2,7 @@
 
 Status: Superseded by ADR-0076
 
-This decision was superseded by ADR-0053 and then ADR-0076. ADR-0076 keeps encrypted local account setup but moves new secret payloads to a dedicated macOS host vault under `~/.hermes/vault`.
+This decision was superseded by ADR-0053 and then ADR-0076. ADR-0076 keeps encrypted local account setup but moves new secret payloads to a dedicated macOS host vault under `~/.makosh/vault`.
 
 ## Context
 
@@ -14,8 +14,8 @@ Add a local account setup boundary backed by an encrypted secret vault.
 
 Rules:
 
-- `HERMES_SECRET_VAULT_PATH` points to the local encrypted vault file.
-- `HERMES_SECRET_VAULT_KEY` is the local vault master key and must not be logged, persisted in PostgreSQL or committed.
+- `MAKOSH_SECRET_VAULT_PATH` points to the local encrypted vault file.
+- `MAKOSH_SECRET_VAULT_KEY` is the local vault master key and must not be logged, persisted in PostgreSQL or committed.
 - The encrypted vault uses per-entry AES-256-GCM encryption with an Argon2id-derived key and authenticated `secret_ref` associated data.
 - Gmail account setup uses OAuth authorization code with PKCE and `gmail.readonly` scope.
 - Gmail token bundles are stored only in the encrypted vault and include access token, refresh token, token endpoint and OAuth client material required for refresh.

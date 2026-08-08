@@ -7,7 +7,7 @@ const composePath = new URL('../../development/compose.yaml', import.meta.url);
 test('clean-room development Compose stays loopback-only and excludes Docker control', async () => {
   const compose = await readFile(composePath, 'utf8');
 
-  assert.match(compose, /^name: hermes-platform-development$/m);
+  assert.match(compose, /^name: makosh-platform-development$/m);
   assert.match(compose, /^  postgres:$/m);
   assert.match(compose, /^  nats:$/m);
   assert.match(compose, /127\.0\.0\.1:35432:5432/);

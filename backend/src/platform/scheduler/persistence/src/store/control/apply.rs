@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1, v1::durable_envelope_v1::Semantics,
     validation::envelope::decode_envelope_v1,
 };
@@ -81,7 +81,7 @@ async fn duplicate(
     request: &SchedulerScheduleControlRequestV1,
 ) -> Result<Option<SchedulerScheduleControlApplyOutcomeV1>, SchedulerScheduleControlApplyErrorV1> {
     let row = query(
-        "SELECT inbox.command_envelope_sha256, inbox.decision, results.message_id, results.envelope_sha256, results.exact_envelope_bytes FROM hermes_platform.scheduler_schedule_control_inbox AS inbox JOIN hermes_platform.scheduler_schedule_control_results AS results ON results.command_message_id = inbox.command_message_id AND results.message_id = inbox.result_message_id WHERE inbox.command_message_id = $1 FOR UPDATE OF inbox, results",
+        "SELECT inbox.command_envelope_sha256, inbox.decision, results.message_id, results.envelope_sha256, results.exact_envelope_bytes FROM makosh_platform.scheduler_schedule_control_inbox AS inbox JOIN makosh_platform.scheduler_schedule_control_results AS results ON results.command_message_id = inbox.command_message_id AND results.message_id = inbox.result_message_id WHERE inbox.command_message_id = $1 FOR UPDATE OF inbox, results",
     )
     .bind(request.command().message_id().to_vec())
     .fetch_optional(&mut **transaction)
@@ -209,7 +209,7 @@ async fn claim_authority(
     created_at: i64,
 ) -> Result<AuthorityClaimV1, SchedulerScheduleControlApplyErrorV1> {
     let inserted = query(
-        "INSERT INTO hermes_platform.scheduler_schedule_control_authorities (schedule_id, source_module_id, source_owner, job_owner, job_name, job_major, created_at_unix_ms) VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (schedule_id) DO NOTHING",
+        "INSERT INTO makosh_platform.scheduler_schedule_control_authorities (schedule_id, source_module_id, source_owner, job_owner, job_name, job_major, created_at_unix_ms) VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (schedule_id) DO NOTHING",
     )
     .bind(schedule_id.to_vec())
     .bind(authority.source_module_id())
@@ -233,7 +233,7 @@ async fn load_authority(
     authority: &SchedulerScheduleControlAuthorityV1,
 ) -> Result<bool, SchedulerScheduleControlApplyErrorV1> {
     let row = query(
-        "SELECT source_module_id, source_owner, job_owner, job_name, job_major FROM hermes_platform.scheduler_schedule_control_authorities WHERE schedule_id = $1 FOR UPDATE",
+        "SELECT source_module_id, source_owner, job_owner, job_name, job_major FROM makosh_platform.scheduler_schedule_control_authorities WHERE schedule_id = $1 FOR UPDATE",
     )
     .bind(schedule_id.to_vec())
     .fetch_optional(&mut **transaction)
@@ -257,7 +257,7 @@ async fn rollback_new_authority(
 ) -> Result<(), SchedulerScheduleControlApplyErrorV1> {
     if inserted {
         query(
-            "DELETE FROM hermes_platform.scheduler_schedule_control_authorities WHERE schedule_id = $1",
+            "DELETE FROM makosh_platform.scheduler_schedule_control_authorities WHERE schedule_id = $1",
         )
         .bind(schedule_id.to_vec())
         .execute(&mut **transaction)
@@ -274,7 +274,7 @@ async fn cancel(
     cancelled_at: i64,
 ) -> Result<SchedulerScheduleControlDecisionV1, SchedulerScheduleControlApplyErrorV1> {
     let persisted_revision: Option<i64> = query_scalar(
-        "SELECT schedule_revision FROM hermes_platform.scheduler_schedules WHERE schedule_id = $1 FOR UPDATE",
+        "SELECT schedule_revision FROM makosh_platform.scheduler_schedules WHERE schedule_id = $1 FOR UPDATE",
     )
     .bind(schedule_id.to_vec())
     .fetch_optional(&mut **transaction)
@@ -291,7 +291,7 @@ async fn cancel(
         ));
     }
     let accepted: bool = query_scalar(
-        "SELECT EXISTS (SELECT 1 FROM hermes_platform.scheduler_runs WHERE schedule_id = $1 AND schedule_revision = $2)",
+        "SELECT EXISTS (SELECT 1 FROM makosh_platform.scheduler_runs WHERE schedule_id = $1 AND schedule_revision = $2)",
     )
     .bind(schedule_id.to_vec())
     .bind(persisted_revision)
@@ -302,7 +302,7 @@ async fn cancel(
         return Ok(SchedulerScheduleControlDecisionV1::TooLate);
     }
     query(
-        "UPDATE hermes_platform.scheduler_schedules SET enabled = FALSE, updated_at_unix_ms = $2 WHERE schedule_id = $1",
+        "UPDATE makosh_platform.scheduler_schedules SET enabled = FALSE, updated_at_unix_ms = $2 WHERE schedule_id = $1",
     )
     .bind(schedule_id.to_vec())
     .bind(cancelled_at)
@@ -348,7 +348,7 @@ async fn persist_acceptance(
     result: &OutboxRecordV1,
 ) -> Result<(), SchedulerScheduleControlApplyErrorV1> {
     query(
-        "INSERT INTO hermes_platform.scheduler_schedule_control_results (message_id, command_message_id, envelope_sha256, exact_envelope_bytes, state, created_at_unix_ms) VALUES ($1, $2, $3, $4, 'pending', $5)",
+        "INSERT INTO makosh_platform.scheduler_schedule_control_results (message_id, command_message_id, envelope_sha256, exact_envelope_bytes, state, created_at_unix_ms) VALUES ($1, $2, $3, $4, 'pending', $5)",
     )
     .bind(result.message_id().to_vec())
     .bind(request.command().message_id().to_vec())
@@ -359,7 +359,7 @@ async fn persist_acceptance(
     .await
     .map_err(|_| SchedulerScheduleControlApplyErrorV1::Unavailable)?;
     query(
-        "INSERT INTO hermes_platform.scheduler_schedule_control_inbox (command_message_id, command_envelope_sha256, operation_id, schedule_id, schedule_revision, decision, result_message_id, received_at_unix_ms) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+        "INSERT INTO makosh_platform.scheduler_schedule_control_inbox (command_message_id, command_envelope_sha256, operation_id, schedule_id, schedule_revision, decision, result_message_id, received_at_unix_ms) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
     )
     .bind(request.command().message_id().to_vec())
     .bind(request.command().envelope_sha256().to_vec())

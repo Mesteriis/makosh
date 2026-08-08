@@ -6,7 +6,7 @@ mod migrations;
 mod readiness;
 mod roles;
 
-pub const PLATFORM_ADMIN_USERNAME: &str = "hermes_postgres_admin";
+pub const PLATFORM_ADMIN_USERNAME: &str = "makosh_postgres_admin";
 
 pub use bootstrap::{InitdbPasswordFileV1, ensure_platform_schemas};
 pub use connection::{

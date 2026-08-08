@@ -1,29 +1,29 @@
 //! Mail-owned Gmail OAuth workflow and credential rotation.
 
-use hermes_mail_api::{
+use makosh_mail_api::{
     GMAIL_OAUTH_ATTEMPT_TTL_SECONDS, GmailOAuthAuthorityV1, GmailOAuthCompleteRequestV1,
     GmailOAuthOperationKindV1 as ApiOperationKindV1, GmailOAuthOperationStatusV1,
     GmailOAuthOutcomeV1, GmailOAuthStartedV1, MailCredentialPurpose, MailInboundTransportV1,
 };
-use hermes_mail_core::oauth::{
+use makosh_mail_core::oauth::{
     derive_gmail_oauth_attempt, gmail_oauth_authorization_code_sha256,
     gmail_oauth_scope_authorizes_contacts_write, gmail_oauth_scope_sha256,
     gmail_oauth_state_sha256,
 };
-use hermes_mail_gmail::{
+use makosh_mail_gmail::{
     GmailAdapterErrorV1, GmailAuthorizationCodeExchangeV1, GmailOAuthTokenResponseV1,
     GmailRefreshTokenRequestV1, exchange_authorization_code, gmail_authorization_url,
     gmail_scope_authorizes, refresh_access_token,
 };
-use hermes_mail_persistence::{
+use makosh_mail_persistence::{
     GmailOAuthAttemptStartV1, GmailOAuthCredentialBindingV1, GmailOAuthOperationKindV1,
     GmailOAuthOperationOutcomeV1, GmailOAuthQueuedOperationV1, MailDurablePersistenceError,
 };
-use hermes_managed_vault_client::{
+use makosh_managed_vault_client::{
     ManagedProviderCredentialClientV2, ManagedProviderCredentialErrorV1,
     ManagedProviderCredentialRequestV1,
 };
-use hermes_vault_protocol::SecretClassV1;
+use makosh_vault_protocol::SecretClassV1;
 use zeroize::Zeroizing;
 
 use crate::admission::MAIL_CREDENTIAL_LEASE_TTL_SECONDS;
@@ -788,7 +788,7 @@ fn map_persistence_error(_error: MailDurablePersistenceError) -> MailBootstrapEr
 fn map_dispatch_persistence_error(
     error: MailDurablePersistenceError,
 ) -> MailGmailOAuthDispatchErrorV1 {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_mail_gmail_oauth_persistence_error={error:?}");
     }
     MailGmailOAuthDispatchErrorV1::Persistence
@@ -805,7 +805,7 @@ fn map_credential_error(error: ManagedProviderCredentialErrorV1) -> MailBootstra
 fn classify_credential_resolution_error(
     error: ManagedProviderCredentialErrorV1,
 ) -> MailGmailOAuthDispatchErrorV1 {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_mail_gmail_oauth_credential_resolution_error={error:?}");
     }
     match error {
@@ -822,14 +822,14 @@ fn classify_credential_resolution_error(
 fn classify_post_provider_credential_mutation_error(
     error: ManagedProviderCredentialErrorV1,
 ) -> MailGmailOAuthDispatchErrorV1 {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_mail_gmail_oauth_post_provider_mutation_error={error:?}");
     }
     MailGmailOAuthDispatchErrorV1::OutcomeUnknown
 }
 
 fn classify_provider_error(error: GmailAdapterErrorV1) -> MailGmailOAuthDispatchErrorV1 {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_mail_gmail_oauth_provider_error={error:?}");
     }
     match error {

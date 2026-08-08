@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/app/handlers/tasks/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/tasks/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/tasks/support.rs`
 - Size bytes / Размер в байтах: `256`
 - Included characters / Включено символов: `256`
 - Truncated / Обрезано: `no`
@@ -76,7 +76,7 @@ pub(super) fn database_pool(state: &AppState) -> Result<PgPool, ApiError> {
 
 ### `backend/src/app/handlers/telegram.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/telegram.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/telegram.rs`
 - Size bytes / Размер в байтах: `67`
 - Included characters / Включено символов: `67`
 - Truncated / Обрезано: `no`
@@ -87,7 +87,7 @@ pub(crate) use crate::app::provider_runtime_handlers::telegram::*;
 
 ### `backend/src/app/handlers/whatsapp.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/whatsapp.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/whatsapp.rs`
 - Size bytes / Размер в байтах: `67`
 - Included characters / Включено символов: `67`
 - Truncated / Обрезано: `no`
@@ -98,7 +98,7 @@ pub(crate) use crate::app::provider_runtime_handlers::whatsapp::*;
 
 ### `backend/src/app/handlers/yandex_telemost.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/yandex_telemost.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/yandex_telemost.rs`
 - Size bytes / Размер в байтах: `74`
 - Included characters / Включено символов: `74`
 - Truncated / Обрезано: `no`
@@ -109,7 +109,7 @@ pub(crate) use crate::app::provider_runtime_handlers::yandex_telemost::*;
 
 ### `backend/src/app/handlers/zoom.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/zoom.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/zoom.rs`
 - Size bytes / Размер в байтах: `63`
 - Included characters / Включено символов: `63`
 - Truncated / Обрезано: `no`
@@ -120,7 +120,7 @@ pub(crate) use crate::app::provider_runtime_handlers::zoom::*;
 
 ### `backend/src/app/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/mod.rs`
 - Size bytes / Размер в байтах: `460`
 - Included characters / Включено символов: `460`
 - Truncated / Обрезано: `no`
@@ -144,7 +144,7 @@ pub(crate) use state::{AccountSetupState, AppState};
 
 ### `backend/src/app/provider_runtime_handlers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers.rs`
 - Size bytes / Размер в байтах: `103`
 - Included characters / Включено символов: `103`
 - Truncated / Обрезано: `no`
@@ -158,7 +158,7 @@ pub(crate) mod zoom;
 
 ### `backend/src/app/provider_runtime_handlers/telegram.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram.rs`
 - Size bytes / Размер в байтах: `2972`
 - Included characters / Включено символов: `2972`
 - Truncated / Обрезано: `no`
@@ -235,7 +235,7 @@ pub(crate) use topics::{
 
 ### `backend/src/app/provider_runtime_handlers/telegram/accounts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/accounts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/accounts.rs`
 - Size bytes / Размер в байтах: `4649`
 - Included characters / Включено символов: `4649`
 - Truncated / Обрезано: `no`
@@ -372,7 +372,7 @@ pub(crate) async fn delete_telegram_account(
 
 ### `backend/src/app/provider_runtime_handlers/telegram/capabilities.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/capabilities.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/capabilities.rs`
 - Size bytes / Размер в байтах: `822`
 - Included characters / Включено символов: `822`
 - Truncated / Обрезано: `no`
@@ -406,7 +406,7 @@ pub(crate) async fn get_telegram_account_capabilities(
 
 ### `backend/src/app/provider_runtime_handlers/telegram/chat_actions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/chat_actions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/chat_actions.rs`
 - Size bytes / Размер в байтах: `17948`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -823,7 +823,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/app/provider_runtime_handlers/telegram/chat_folder_actions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/chat_folder_actions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/chat_folder_actions.rs`
 - Size bytes / Размер в байтах: `8969`
 - Included characters / Включено символов: `8969`
 - Truncated / Обрезано: `no`
@@ -1098,7 +1098,7 @@ pub(crate) async fn post_telegram_chat_reassign_folders(
 
 ### `backend/src/app/provider_runtime_handlers/telegram/chats.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/chats.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/chats.rs`
 - Size bytes / Размер в байтах: `23985`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1498,7 +1498,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/app/provider_runtime_handlers/telegram/commands.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/commands.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/commands.rs`
 - Size bytes / Размер в байтах: `1660`
 - Included characters / Включено символов: `1660`
 - Truncated / Обрезано: `no`
@@ -1558,7 +1558,7 @@ pub(crate) async fn get_telegram_commands(
 
 ### `backend/src/app/provider_runtime_handlers/telegram/helpers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/helpers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/helpers.rs`
 - Size bytes / Размер в байтах: `2053`
 - Included characters / Включено символов: `2053`
 - Truncated / Обрезано: `no`
@@ -1573,7 +1573,7 @@ use crate::application::provider_runtime_contracts::TelegramError;
 use crate::platform::config::AppConfig;
 use crate::platform::events::NewEventEnvelope;
 
-pub(super) const AUDIT_ACTOR_ID: &str = "hermes-frontend";
+pub(super) const AUDIT_ACTOR_ID: &str = "makosh-frontend";
 
 pub(super) fn telegram_api_hash_from_config(config: &AppConfig) -> Option<String> {
     config
@@ -1632,7 +1632,7 @@ pub(super) async fn ensure_telegram_account_operation_allowed(
 
 ### `backend/src/app/provider_runtime_handlers/telegram/media.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/media.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/media.rs`
 - Size bytes / Размер в байтах: `22045`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1975,7 +1975,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/app/provider_runtime_handlers/telegram/messages.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/messages.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/messages.rs`
 - Size bytes / Размер в байтах: `30637`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2291,7 +2291,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/app/provider_runtime_handlers/telegram/messages/mark_read.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/messages/mark_read.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/messages/mark_read.rs`
 - Size bytes / Размер в байтах: `842`
 - Included characters / Включено символов: `842`
 - Truncated / Обрезано: `no`
@@ -2324,7 +2324,7 @@ pub(crate) async fn post_telegram_message_mark_read(
 
 ### `backend/src/app/provider_runtime_handlers/telegram/messages/reactions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/messages/reactions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/messages/reactions.rs`
 - Size bytes / Размер в байтах: `6137`
 - Included characters / Включено символов: `6137`
 - Truncated / Обрезано: `no`
@@ -2502,7 +2502,7 @@ fn whatsapp_command_response_to_reaction_response(
 
 ### `backend/src/app/provider_runtime_handlers/telegram/outbox.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/outbox.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/outbox.rs`
 - Size bytes / Размер в байтах: `2297`
 - Included characters / Включено символов: `2297`
 - Truncated / Обрезано: `no`
@@ -2571,7 +2571,7 @@ pub(crate) async fn post_telegram_command_retry(
 
 ### `backend/src/app/provider_runtime_handlers/telegram/qr_login.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/qr_login.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/qr_login.rs`
 - Size bytes / Размер в байтах: `2247`
 - Included characters / Включено символов: `2247`
 - Truncated / Обрезано: `no`
@@ -2655,7 +2655,7 @@ pub(crate) async fn post_telegram_qr_login_password(
 
 ### `backend/src/app/provider_runtime_handlers/telegram/raw.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/raw.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/raw.rs`
 - Size bytes / Размер в байтах: `4325`
 - Included characters / Включено символов: `4325`
 - Truncated / Обрезано: `no`
@@ -2799,7 +2799,7 @@ fn is_secret_key(key: &str) -> bool {
 
 ### `backend/src/app/provider_runtime_handlers/telegram/runtime.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/runtime.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/runtime.rs`
 - Size bytes / Размер в байтах: `2625`
 - Included characters / Включено символов: `2625`
 - Truncated / Обрезано: `no`
@@ -2887,7 +2887,7 @@ pub(crate) async fn post_telegram_runtime_restart(
 
 ### `backend/src/app/provider_runtime_handlers/telegram/search.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/search.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/search.rs`
 - Size bytes / Размер в байтах: `21280`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3256,7 +3256,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/app/provider_runtime_handlers/telegram/topics.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/telegram/topics.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/telegram/topics.rs`
 - Size bytes / Размер в байтах: `11824`
 - Included characters / Включено символов: `11824`
 - Truncated / Обрезано: `no`

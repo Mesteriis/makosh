@@ -1,6 +1,6 @@
 import { createClient, type Client } from '@connectrpc/connect'
 
-import { MailOperationalQueryService } from '../../../gen/hermes/mail/operational/v1/client_pb'
+import { MailOperationalQueryService } from '../../../gen/makosh/mail/operational/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 let mailOperationalQueryClient: Client<typeof MailOperationalQueryService> | null = null

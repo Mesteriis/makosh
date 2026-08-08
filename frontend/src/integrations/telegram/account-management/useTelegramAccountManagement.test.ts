@@ -5,8 +5,8 @@ import {
 	ClientModuleSettingsBootstrapV1Schema,
 	ClientSettingValueEntryV1Schema,
 	ClientSettingValueV1Schema,
-} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
-import { TelegramAccountResponseSchema } from '../../../gen/hermes/telegram/v1/client_pb'
+} from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
+import { TelegramAccountResponseSchema } from '../../../gen/makosh/telegram/v1/client_pb'
 import { useTelegramAccountManagement } from './useTelegramAccountManagement'
 
 describe('useTelegramAccountManagement', () => {
@@ -55,7 +55,7 @@ describe('useTelegramAccountManagement', () => {
 		const controller = useTelegramAccountManagement(
 			() => create(ClientModuleBootstrapV1Schema, {
 				registrationId: 'telegram.local',
-				moduleId: 'hermes-telegram-runtime',
+				moduleId: 'makosh-telegram-runtime',
 				capabilityIds: ['telegram.lifecycle.v1'],
 			}),
 			ports,
@@ -70,7 +70,7 @@ describe('useTelegramAccountManagement', () => {
 function telegramModule() {
 	return create(ClientModuleBootstrapV1Schema, {
 		registrationId: 'telegram.local',
-		moduleId: 'hermes-telegram-runtime',
+		moduleId: 'makosh-telegram-runtime',
 		capabilityIds: [
 			'telegram.lifecycle.v1',
 			'telegram.reconfiguration.v1',

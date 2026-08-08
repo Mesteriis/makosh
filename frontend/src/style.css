@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Hermes Design Tokens — CSS custom properties for runtime access */
+/* Макошь Design Tokens — CSS custom properties for runtime access */
 :root {
 	/* Font family */
 	--hh-font-sans: 'Inter', 'SF Pro Display', ui-sans-serif, system-ui, -apple-system,

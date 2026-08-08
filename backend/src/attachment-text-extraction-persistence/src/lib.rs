@@ -9,7 +9,7 @@ mod repository;
 mod schema;
 mod translation_source;
 
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool,
     postgres::{PgConnectOptions, PgPoolOptions},
@@ -34,7 +34,7 @@ pub use schema::{
     attachment_text_extraction_storage_bundle_v1,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-text-extraction-persistence";
+pub const PACKAGE: &str = "makosh-attachment-text-extraction-persistence";
 
 pub struct AttachmentTextExtractionPersistenceV1 {
     pub(crate) pool: PgPool,
@@ -86,7 +86,7 @@ impl AttachmentTextExtractionPersistenceV1 {
         &self,
     ) -> Result<(), AttachmentTextExtractionPersistenceErrorV1> {
         sqlx::query(
-            "SELECT 1 FROM hermes_data.attachment_text_extraction_runs, hermes_data.attachment_text_extraction_event_inbox, hermes_data.attachment_text_extraction_scan_candidates, hermes_data.attachment_text_extraction_safety_facts, hermes_data.attachment_text_extraction_custody_outbox, hermes_data.attachment_text_extraction_custody_result_inbox, hermes_data.attachment_text_extraction_jobs, hermes_data.attachment_text_extraction_artifacts, hermes_data.attachment_text_extraction_realtime, hermes_data.attachment_text_extraction_translation_source_inbox, hermes_data.attachment_text_extraction_translation_source_outbox LIMIT 0",
+            "SELECT 1 FROM makosh_data.attachment_text_extraction_runs, makosh_data.attachment_text_extraction_event_inbox, makosh_data.attachment_text_extraction_scan_candidates, makosh_data.attachment_text_extraction_safety_facts, makosh_data.attachment_text_extraction_custody_outbox, makosh_data.attachment_text_extraction_custody_result_inbox, makosh_data.attachment_text_extraction_jobs, makosh_data.attachment_text_extraction_artifacts, makosh_data.attachment_text_extraction_realtime, makosh_data.attachment_text_extraction_translation_source_inbox, makosh_data.attachment_text_extraction_translation_source_outbox LIMIT 0",
         )
         .execute(&self.pool)
         .await

@@ -1,6 +1,6 @@
 ### Summary
 
-Страница `operations/documentation-map.md` должна предоставлять навигационную карту документации проекта Hermes Hub на основе правил из `AGENTS.md`. В текущем контексте доступен только файл `AGENTS.md`, поэтому предлагаемая страница извлекает из него все упомянутые документационные пути, списки ADR, архитектурные ограничения и инструменты валидации. Страница пишется на русском и сохраняет Obsidian-совместимый Markdown.
+Страница `operations/documentation-map.md` должна предоставлять навигационную карту документации проекта Макошь на основе правил из `AGENTS.md`. В текущем контексте доступен только файл `AGENTS.md`, поэтому предлагаемая страница извлекает из него все упомянутые документационные пути, списки ADR, архитектурные ограничения и инструменты валидации. Страница пишется на русском и сохраняет Obsidian-совместимый Markdown.
 
 ### Proposed pages
 
@@ -9,7 +9,7 @@
 ```markdown
 # Карта документации
 
-Карта документации проекта Hermes Hub, основанная на правилах из [`AGENTS.md`](../AGENTS.md).  
+Карта документации проекта Макошь, основанная на правилах из [`AGENTS.md`](../AGENTS.md).
 Используется как справочник для агентов и разработчиков при навигации по документации.
 
 ## Источники истины
@@ -60,7 +60,7 @@
 | `ADR-0046` | persistent dev mail cache and blob storage |
 | `ADR-0054` | application settings store; user settings separate from provider accounts |
 | `ADR-0055` | full email provider networking (read+write), supersedes ADR-0043 |
-| `ADR-0056` | local API simplified auth with router-level `X-Hermes-Secret` |
+| `ADR-0056` | local API simplified auth with router-level `X-Макошь-Secret` |
 | `ADR-0076` | host vault on macOS, supersedes ADR-0044 и ADR-0053 |
 | `ADR-0077` | i18n с русским и английским интерфейсом (JSON словари, Svelte stores) |
 | `ADR-0084` | Persona Intelligence System (supersedes Contact/Person CRM framing) |
@@ -77,7 +77,7 @@
 
 ### Продуктовая спецификация
 
-- `docs/product/master-spec.md` — каноническая продуктовая спецификация Hermes как Personal Memory System.
+- `docs/product/master-spec.md` — каноническая продуктовая спецификация Макошь как Personal Memory System.
 
 ### Foundation и домены
 
@@ -123,7 +123,7 @@
 - Агенты и плагины используют **capability-based permissions**.
 - **Мобильный UI вне скоупа** до замены ADR-0031.
 - Docker-инфраструктура разработки размещается строго в `docker/` (ADR-0032).
-- Защищённые локальные API-эндпоинты используют **router-level shared secret guard** из ADR-0056: `HERMES_LOCAL_API_SECRET` + заголовок `X-Hermes-Secret`.
+- Защищённые локальные API-эндпоинты используют **router-level shared secret guard** из ADR-0056: `MAKOSH_LOCAL_API_SECRET` + заголовок `X-Макошь-Secret`.
 - События локального API записываются в append-only `api_audit_log` (ADR-0039); токены и секреты **не сохраняются** в аудит.
 - Учётные записи email-провайдеров: `gmail`, `icloud`, `imap` (ADR-0041). Конфигурация **не хранит** OAuth-токены, пароли приложений или пароли почтовых ящиков напрямую.
 
@@ -134,7 +134,7 @@
 - `docker/` — Docker Compose окружение разработки (ADR-0032).
 - `Makefile` — цели валидации (`make validate`, `make backend-validate`, `make backend-test`).
 - `package.json` — скрипты фронтенд-валидации (линтер, проверка типов, тесты, сборка).
-- `crates/testkit/` — тестовый харнесс `hermes_test_session`, переиспользующий сессию PostgreSQL.
+- `crates/testkit/` — тестовый харнесс `makosh_test_session`, переиспользующий сессию PostgreSQL.
 
 *Данная карта основана исключительно на содержимом `AGENTS.md` (по состоянию на момент генерации) и не включает файлы, которые могут существовать в репозитории, но не упомянуты в этом документе.*
 ```

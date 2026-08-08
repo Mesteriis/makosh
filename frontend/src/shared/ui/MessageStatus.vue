@@ -23,7 +23,7 @@ const statusMeta: Record<MessageDeliveryState, { icon: string; label: string }> 
 
 const current = computed(() => statusMeta[props.status])
 const resolvedLabel = computed(() => props.label ?? current.value.label)
-const classes = computed(() => ['hermes-message-status', `hermes-message-status--${props.status}`, props.class])
+const classes = computed(() => ['makosh-message-status', `makosh-message-status--${props.status}`, props.class])
 </script>
 
 <template>

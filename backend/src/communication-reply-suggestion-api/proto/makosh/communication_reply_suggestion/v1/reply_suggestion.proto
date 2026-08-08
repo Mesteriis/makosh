@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package makosh.communication_reply_suggestion.v1;
+
+message StartReplySuggestionRequestV1 {
+  uint32 protocol_major = 1;
+  bytes operation_id = 2;
+  bytes source_message_id = 3;
+  uint64 expected_source_revision = 4;
+  ReplySuggestionToneV1 tone = 5;
+  ReplySuggestionLanguageV1 language = 6;
+}
+
+message StartReplySuggestionResponseV1 {
+  bytes run_id = 1;
+  ReplySuggestionStateV1 state = 2;
+  ReplySuggestionErrorCodeV1 error = 15;
+}
+
+message GetReplySuggestionRequestV1 {
+  uint32 protocol_major = 1;
+  bytes run_id = 2;
+}
+
+message GetReplySuggestionResponseV1 {
+  bytes run_id = 1;
+  bytes source_message_id = 2;
+  uint64 expected_source_revision = 3;
+  ReplySuggestionStateV1 state = 4;
+  uint64 state_revision = 5;
+  optional ReplySuggestionCandidateV1 candidate = 6;
+  ReplySuggestionErrorCodeV1 error = 15;
+}
+
+message ReplySuggestionCandidateV1 {
+  bytes subject_utf8 = 1;
+  bytes body_utf8 = 2;
+  ReplySuggestionToneV1 resolved_tone = 3;
+  ReplySuggestionLanguageV1 resolved_language = 4;
+  ReplySuggestionCompletenessV1 completeness = 5;
+  uint32 confidence_basis_points = 6;
+}
+
+message ReplySuggestionStatusChangedV1 {
+  bytes run_id = 1;
+  ReplySuggestionStateV1 state = 2;
+  uint64 state_revision = 3;
+  uint64 occurred_at_unix_millis = 4;
+  ReplySuggestionErrorCodeV1 error = 15;
+}
+
+service CommunicationReplySuggestionCommandService {
+  rpc Start(StartReplySuggestionRequestV1)
+      returns (StartReplySuggestionResponseV1);
+}
+
+service CommunicationReplySuggestionQueryService {
+  rpc Get(GetReplySuggestionRequestV1)
+      returns (GetReplySuggestionResponseV1);
+}
+
+enum ReplySuggestionToneV1 {
+  REPLY_SUGGESTION_TONE_UNSPECIFIED = 0;
+  REPLY_SUGGESTION_TONE_PROFESSIONAL = 1;
+  REPLY_SUGGESTION_TONE_FRIENDLY = 2;
+  REPLY_SUGGESTION_TONE_CONCISE = 3;
+  REPLY_SUGGESTION_TONE_FORMAL = 4;
+}
+
+enum ReplySuggestionLanguageV1 {
+  REPLY_SUGGESTION_LANGUAGE_UNSPECIFIED = 0;
+  REPLY_SUGGESTION_LANGUAGE_SOURCE = 1;
+  REPLY_SUGGESTION_LANGUAGE_ENGLISH = 2;
+  REPLY_SUGGESTION_LANGUAGE_RUSSIAN = 3;
+  REPLY_SUGGESTION_LANGUAGE_SPANISH = 4;
+}
+
+enum ReplySuggestionStateV1 {
+  REPLY_SUGGESTION_STATE_UNSPECIFIED = 0;
+  REPLY_SUGGESTION_STATE_ACCEPTED = 1;
+  REPLY_SUGGESTION_STATE_PREPARING_SOURCE = 2;
+  REPLY_SUGGESTION_STATE_AWAITING_INFERENCE = 3;
+  REPLY_SUGGESTION_STATE_READY = 4;
+  REPLY_SUGGESTION_STATE_REJECTED = 5;
+}
+
+enum ReplySuggestionCompletenessV1 {
+  REPLY_SUGGESTION_COMPLETENESS_UNSPECIFIED = 0;
+  REPLY_SUGGESTION_COMPLETENESS_COMPLETE = 1;
+  REPLY_SUGGESTION_COMPLETENESS_PARTIAL = 2;
+}
+
+enum ReplySuggestionErrorCodeV1 {
+  REPLY_SUGGESTION_ERROR_CODE_UNSPECIFIED = 0;
+  REPLY_SUGGESTION_ERROR_CODE_INVALID_REQUEST = 1;
+  REPLY_SUGGESTION_ERROR_CODE_NOT_FOUND = 2;
+  REPLY_SUGGESTION_ERROR_CODE_SOURCE_REJECTED = 3;
+  REPLY_SUGGESTION_ERROR_CODE_INFERENCE_REJECTED = 4;
+  REPLY_SUGGESTION_ERROR_CODE_POLICY = 5;
+  REPLY_SUGGESTION_ERROR_CODE_UNAVAILABLE = 6;
+}

@@ -3,9 +3,9 @@ use serde_json::json;
 use sqlx::postgres::PgPool;
 use thiserror::Error;
 
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::store::ObservationStore;
 
 use super::errors::ObligationStoreError;
 use super::models::read_model::Obligation;
@@ -37,7 +37,7 @@ impl ObligationCommandService {
                         "obligation_id": obligation_id,
                         "review_state": review_state.as_str(),
                         "operation": "obligation_review",
-                        "actor_id": "hermes-frontend",
+                        "actor_id": "makosh-frontend",
                     }),
                     format!("obligation://{obligation_id}/review"),
                 )

@@ -1,10 +1,10 @@
 //! Bounded PgBouncer admin readiness using a Vault-resolved platform credential.
 
-use hermes_storage_pgbouncer::{
+use makosh_storage_pgbouncer::{
     PLATFORM_ADMIN_USERNAME, PgBouncerAdminCredentialV1, PgBouncerAdminEndpointV1,
     verify_admin_connection,
 };
-use hermes_storage_protocol::v1::StorageRuntimeTopologyV1;
+use makosh_storage_protocol::v1::StorageRuntimeTopologyV1;
 use zeroize::Zeroizing;
 
 pub(crate) fn verify_platform_admin(

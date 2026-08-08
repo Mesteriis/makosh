@@ -2,24 +2,24 @@
 
 use super::*;
 
-use hermes_communication_bulk_action_api::{
+use makosh_communication_bulk_action_api::{
     COMMUNICATION_BULK_ACTION_MODULE_ID_V1, COMMUNICATION_BULK_ACTION_OWNER_V1,
 };
-use hermes_communication_bulk_action_persistence::schema::{
+use makosh_communication_bulk_action_persistence::schema::{
     COMMUNICATION_BULK_ACTION_STORAGE_BUNDLE_REVISION_V2,
     communication_bulk_action_storage_bundle_v1,
 };
-use hermes_communication_bulk_action_runtime::admission::{
+use makosh_communication_bulk_action_runtime::admission::{
     COMMUNICATION_BULK_ACTION_STORAGE_CAPABILITY_ID_V1,
     communication_bulk_action_module_descriptor_v1,
     communication_bulk_action_settings_schema_bytes_v1,
 };
-use hermes_communication_delivery_intent_runtime::admission::{
+use makosh_communication_delivery_intent_runtime::admission::{
     communication_delivery_intent_module_descriptor_v1,
     communication_delivery_intent_settings_schema_bytes_v1,
 };
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
 
 const BULK_ACTION_RELEASE_ARTIFACT_ID: &str = "workflow.communication_bulk_action";
 const BULK_ACTION_RUNTIME_INSTANCE_ID: &str = "bulk-action-runtime-1";
@@ -41,7 +41,7 @@ pub(super) fn installed_communications_bulk_action_release(root: &Path) -> Insta
     artifacts.push(
         SignedRuntimeArtifact::new(
             "workflow.communication_delivery_intent",
-            binary("HERMES_COMMUNICATION_DELIVERY_INTENT_RUNTIME_BIN"),
+            binary("MAKOSH_COMMUNICATION_DELIVERY_INTENT_RUNTIME_BIN"),
             communication_delivery_intent_module_descriptor_v1("managed-delivery-intent-live")
                 .encode_to_vec(),
         )
@@ -81,7 +81,7 @@ pub(super) fn admit_bulk_action_runtime(store: &SqliteControlStore) -> AdmittedB
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             BULK_ACTION_RELEASE_ARTIFACT_ID,
             Sha256::digest(
                 std::fs::read(bulk_action_binary()).expect("bulk-action runtime binary bytes"),
@@ -246,7 +246,7 @@ pub(super) fn restart_bulk_action_runtime(
 fn bulk_action_storage_binding(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(
             registration_id,
@@ -258,5 +258,5 @@ fn bulk_action_storage_binding(
 }
 
 fn bulk_action_binary() -> PathBuf {
-    binary("HERMES_COMMUNICATION_BULK_ACTION_RUNTIME_BIN")
+    binary("MAKOSH_COMMUNICATION_BULK_ACTION_RUNTIME_BIN")
 }

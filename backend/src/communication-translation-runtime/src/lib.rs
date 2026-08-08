@@ -40,4 +40,4 @@ pub use source_results::{
     consume_translation_source_rejected_once_v1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-translation-runtime";
+pub const PACKAGE: &str = "makosh-communication-translation-runtime";

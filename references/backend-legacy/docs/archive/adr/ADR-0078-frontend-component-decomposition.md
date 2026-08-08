@@ -2,7 +2,7 @@
 
 Status: Superseded by ADR-0093
 Date: 2026-06-09
-Deciders: Alex (hermes-hub maintainer)
+Deciders: Alex (makosh maintainer)
 
 ## Superseded
 

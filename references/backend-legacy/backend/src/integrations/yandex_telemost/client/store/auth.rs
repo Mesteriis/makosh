@@ -3,8 +3,8 @@ use crate::platform::secrets::models::{NewSecretReference, SecretKind, SecretSto
 use crate::platform::secrets::store::SecretReferenceStore;
 use crate::vault::HostVault;
 use crate::vault::models::SecretEntryContext;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
-use hermes_provider_telemost::protocol::{
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_provider_telemost::protocol::{
     YANDEX_TELEMOST_PROVIDER_KIND_STR, sanitize_yandex_telemost_payload, validate_json_object,
     validate_required,
 };

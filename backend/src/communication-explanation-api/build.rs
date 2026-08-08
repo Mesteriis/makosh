@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/communication_explanation/v1/explanation.proto"],
+            &["proto/makosh/communication_explanation/v1/explanation.proto"],
             &["proto"],
         )
         .expect("Communication explanation protocol must compile");

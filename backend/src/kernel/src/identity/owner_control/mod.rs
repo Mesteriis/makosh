@@ -12,8 +12,8 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 
-use hermes_gateway_protocol::v1::{OwnerControlRequestV1, OwnerControlResponseV1};
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_gateway_protocol::v1::{OwnerControlRequestV1, OwnerControlResponseV1};
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use prost::Message;
 
 use crate::identity::owner_control::sessions::OwnerControlSessions;

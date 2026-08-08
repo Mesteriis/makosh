@@ -18,7 +18,7 @@ decode probing; Tauri host проверяет exact contract name, descriptor di
 route binding. Umbrella `whatsapp.client` удалён из production path.
 Canonical descriptor, hidden configuration-scoped `whatsapp.account_id`
 settings, immutable owner-local Storage bundle и отдельная unsigned
-`hermes-whatsapp-assembly` теперь материализуются детерминированно. Один
+`makosh-whatsapp-assembly` теперь материализуются детерминированно. Один
 admitted runtime обслуживает только свой configured account. Signed
 distribution compiler подписывает exact runtime/descriptor/settings/storage
 entries assembly unit. Disposable live contour доказывает pending
@@ -84,19 +84,19 @@ Production identity:
 
 ```text
 owner_id  = whatsapp
-module_id = hermes-whatsapp-runtime
+module_id = makosh-whatsapp-runtime
 ```
 
 Runtime source units:
 
 ```text
-hermes-whatsapp-api          generated public and host contracts
-hermes-whatsapp-core         provider anti-corruption and evidence mapping
-hermes-whatsapp-persistence  owner-local queue, projection and outbox
-hermes-whatsapp-runtime      managed runtime composition
+makosh-whatsapp-api          generated public and host contracts
+makosh-whatsapp-core         provider anti-corruption and evidence mapping
+makosh-whatsapp-persistence  owner-local queue, projection and outbox
+makosh-whatsapp-runtime      managed runtime composition
 ```
 
-`hermes-whatsapp-assembly` является отдельной integration-owned
+`makosh-whatsapp-assembly` является отдельной integration-owned
 build-time unit. Она материализует canonical artifacts, но не запускается
 Kernel, не входит в runtime inventory и не имеет signing authority.
 
@@ -105,10 +105,10 @@ Settings schema содержит ровно один hidden operator-managed
 `RestartModule` apply mode. Runtime декодирует snapshot до admission и
 отклоняет public command, private host observation или command lease другого
 account. Owner-local Storage bundle создаёт только
-`hermes_data.whatsapp_*` tables и не содержит Communications tables, foreign
+`makosh_data.whatsapp_*` tables и не содержит Communications tables, foreign
 keys или provider session state.
 
-`hermes-communications-ingress` остаётся единственной разрешённой
+`makosh-communications-ingress` остаётся единственной разрешённой
 WhatsApp → Communications compile dependency. Она предоставляет typed neutral
 ingress contract, но не Communications domain/runtime/persistence/API.
 Communications, Kernel и Gateway не импортируют WhatsApp implementation.

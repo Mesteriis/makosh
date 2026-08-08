@@ -8,20 +8,20 @@ use std::io::Write;
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
-use hermes_whatsapp_persistence::whatsapp_storage_bundle_v1;
-use hermes_whatsapp_runtime::admission::whatsapp_module_descriptor_v1;
-use hermes_whatsapp_runtime::settings::whatsapp_settings_schema_v1;
+use makosh_storage_protocol::validation::validate_storage_bundle;
+use makosh_whatsapp_persistence::whatsapp_storage_bundle_v1;
+use makosh_whatsapp_runtime::admission::whatsapp_module_descriptor_v1;
+use makosh_whatsapp_runtime::settings::whatsapp_settings_schema_v1;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
 pub const WHATSAPP_ASSEMBLY_FRAGMENT_VERSION_V1: u32 = 1;
-pub const WHATSAPP_ASSEMBLY_OWNER_ID: &str = hermes_whatsapp_runtime::admission::WHATSAPP_OWNER_ID;
+pub const WHATSAPP_ASSEMBLY_OWNER_ID: &str = makosh_whatsapp_runtime::admission::WHATSAPP_OWNER_ID;
 pub const WHATSAPP_ASSEMBLY_MODULE_ID: &str =
-    hermes_whatsapp_runtime::admission::WHATSAPP_MODULE_ID;
+    makosh_whatsapp_runtime::admission::WHATSAPP_MODULE_ID;
 pub const WHATSAPP_RUNTIME_ARTIFACT_ID: &str = "whatsapp.runtime.v1";
 pub const WHATSAPP_STORAGE_ARTIFACT_ID: &str = "whatsapp.storage.v1";
 pub const WHATSAPP_DESCRIPTOR_FILE: &str = "whatsapp.runtime.descriptor.pb";
@@ -29,7 +29,7 @@ pub const WHATSAPP_SETTINGS_FILE: &str = "whatsapp.runtime.settings.pb";
 pub const WHATSAPP_STORAGE_BUNDLE_FILE: &str = "whatsapp.storage.bundle.pb";
 pub const WHATSAPP_ARTIFACT_FRAGMENT_FILE: &str = "whatsapp.release-artifacts.json";
 
-const WHATSAPP_RUNTIME_RELATIVE_PATH: &str = "bin/hermes-whatsapp-runtime";
+const WHATSAPP_RUNTIME_RELATIVE_PATH: &str = "bin/makosh-whatsapp-runtime";
 const WHATSAPP_DESCRIPTOR_RELATIVE_PATH: &str = "contracts/whatsapp.runtime.descriptor.pb";
 const WHATSAPP_SETTINGS_RELATIVE_PATH: &str = "contracts/whatsapp.runtime.settings.pb";
 const WHATSAPP_STORAGE_RELATIVE_PATH: &str = "storage/whatsapp.storage.bundle.pb";
@@ -256,10 +256,10 @@ mod tests {
     use std::fs;
     use std::sync::atomic::{AtomicU64, Ordering};
 
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         decode_descriptor_v1, decode_settings_schema_v1,
     };
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -389,7 +389,7 @@ mod tests {
     fn temporary_directory() -> PathBuf {
         let id = NEXT_TEMPORARY_ID.fetch_add(1, Ordering::Relaxed);
         let path = std::env::temp_dir().join(format!(
-            "hermes-whatsapp-assembly-{}-{id}",
+            "makosh-whatsapp-assembly-{}-{id}",
             std::process::id()
         ));
         fs::create_dir(&path).expect("create fixture root");

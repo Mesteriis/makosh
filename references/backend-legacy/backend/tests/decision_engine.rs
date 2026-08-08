@@ -1,6 +1,6 @@
-use hermes_hub_backend::domains::decisions::extraction::engine::DecisionEngine;
-use hermes_hub_backend::domains::decisions::extraction::errors::DecisionEngineError;
-use hermes_hub_backend::domains::decisions::extraction::models::{
+use makosh_hub_backend::domains::decisions::extraction::engine::DecisionEngine;
+use makosh_hub_backend::domains::decisions::extraction::errors::DecisionEngineError;
+use makosh_hub_backend::domains::decisions::extraction::models::{
     DecisionCandidateKind, DecisionExtractionInput,
 };
 use serde_json::json;
@@ -11,7 +11,7 @@ fn decision_engine_detects_explicit_communication_decision_candidate() {
         "message:decision-engine",
         "Decision: Use local-first storage because private context must work offline.",
         DecisionEntityKind::Project,
-        "project:v1:hermes",
+        "project:v1:makosh",
     )
     .decided_by(
         DecisionEntityKind::Persona,
@@ -51,7 +51,7 @@ fn decision_engine_detects_explicit_communication_decision_candidate() {
     );
     assert_eq!(
         candidate.impacted_entities[0].entity_id,
-        "project:v1:hermes"
+        "project:v1:makosh"
     );
 
     let (decision, evidence, impacted_entities) = candidate.to_decision_draft();
@@ -87,7 +87,7 @@ fn decision_engine_ignores_non_decision_evidence() {
         "document:status-note",
         "The team discussed storage options but no decision was made.",
         DecisionEntityKind::Project,
-        "project:v1:hermes",
+        "project:v1:makosh",
     );
 
     let result = DecisionEngine::detect_candidates(&input).expect("detect decisions");
@@ -101,7 +101,7 @@ fn decision_engine_rejects_empty_source_evidence_before_detection() {
         "message:empty-decision",
         " ",
         DecisionEntityKind::Project,
-        "project:v1:hermes",
+        "project:v1:makosh",
     );
 
     let error = DecisionEngine::detect_candidates(&input)
@@ -109,6 +109,6 @@ fn decision_engine_rejects_empty_source_evidence_before_detection() {
 
     assert!(matches!(error, DecisionEngineError::EmptyField("text")));
 }
-use hermes_hub_backend::domains::decisions::models::entity_kind::DecisionEntityKind;
-use hermes_hub_backend::domains::decisions::models::source_kind::DecisionEvidenceSourceKind;
-use hermes_hub_backend::domains::decisions::models::states::DecisionReviewState;
+use makosh_hub_backend::domains::decisions::models::entity_kind::DecisionEntityKind;
+use makosh_hub_backend::domains::decisions::models::source_kind::DecisionEvidenceSourceKind;
+use makosh_hub_backend::domains::decisions::models::states::DecisionReviewState;

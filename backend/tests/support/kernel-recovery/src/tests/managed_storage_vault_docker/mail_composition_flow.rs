@@ -1,6 +1,6 @@
 //! Managed Gateway conformance for Mail-owned composition state.
 
-use hermes_mail_api::{
+use makosh_mail_api::{
     MailClientRequestV1, MailClientResponseV1,
     client_contract::MailClientContractV1,
     composition::{
@@ -9,10 +9,10 @@ use hermes_mail_api::{
         MailTemplateVariableValueV1,
     },
 };
-use hermes_mail_runtime::client_port::{
+use makosh_mail_runtime::client_port::{
     MailClientPortErrorV1, decode_module_response, encode_module_request,
 };
-use hermes_runtime_protocol::v1::ModuleClientResponseV1;
+use makosh_runtime_protocol::v1::ModuleClientResponseV1;
 use prost::Message;
 
 use super::*;
@@ -234,7 +234,7 @@ fn mutate(
     mail: &StartedMailRuntime,
     request_id: u64,
     command: MailCompositionCommandV1,
-) -> hermes_mail_api::composition::MailCompositionMutationReceiptV1 {
+) -> makosh_mail_api::composition::MailCompositionMutationReceiptV1 {
     let request = encode_module_request(
         request_id,
         &MailClientRequestV1::CompositionCommand(command),

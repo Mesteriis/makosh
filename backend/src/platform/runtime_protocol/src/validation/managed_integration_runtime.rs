@@ -181,7 +181,7 @@ mod tests {
             .integration_state_root
             .as_mut()
             .expect("state root")
-            .root_path = "/private/hermes/state/../other".to_owned();
+            .root_path = "/private/makosh/state/../other".to_owned();
         assert!(validate_managed_integration_runtime_configuration(&configuration).is_err());
     }
 
@@ -189,8 +189,8 @@ mod tests {
     fn configuration_catalog_is_sorted_target_exact_and_root_isolated() {
         let mut configuration = valid_configuration();
         configuration.configuration_instances = vec![
-            configuration_instance("account-1", "/private/hermes/state/telegram/account-1"),
-            configuration_instance("account-2", "/private/hermes/state/telegram/account-2"),
+            configuration_instance("account-1", "/private/makosh/state/telegram/account-1"),
+            configuration_instance("account-2", "/private/makosh/state/telegram/account-2"),
         ];
         assert_eq!(
             validate_managed_integration_runtime_configuration(&configuration),
@@ -203,7 +203,7 @@ mod tests {
         let mut configuration = valid_configuration();
         configuration.configuration_instances = vec![configuration_instance(
             "account-2",
-            "/private/hermes/state/telegram/account-1",
+            "/private/makosh/state/telegram/account-1",
         )];
         assert!(validate_managed_integration_runtime_configuration(&configuration).is_err());
     }
@@ -281,12 +281,12 @@ mod tests {
             runtime_artifacts: vec![ManagedRuntimeArtifactBindingV1 {
                 artifact_id: "telegram.tdjson.v1".to_owned(),
                 r#use: RuntimeArtifactUseV1::NativeDynamicLibrary as i32,
-                staged_path: "/private/hermes/runtime/libtdjson.dylib".to_owned(),
+                staged_path: "/private/makosh/runtime/libtdjson.dylib".to_owned(),
                 size_bytes: 1,
                 sha256: vec![9; 32],
             }],
             integration_state_root: Some(IntegrationStateRootV1 {
-                root_path: "/private/hermes/state/telegram/account-1".to_owned(),
+                root_path: "/private/makosh/state/telegram/account-1".to_owned(),
                 state_generation: 1,
                 state_layout_revision: 1,
             }),

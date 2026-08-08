@@ -3,25 +3,25 @@
 use std::io::{Read, Write};
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     DescribeManagedRuntimeResponseV1, ManagedRuntimeControlRequestV1,
     ManagedRuntimeControlResponseV1, ManagedRuntimeVaultRouteResponseV1, VaultCiphertextResponseV1,
     VaultCiphertextRouteDirectionV1,
     managed_runtime_control_request_v1::Operation as ControlOperation,
     managed_runtime_control_response_v1::Result as ControlResult,
 };
-use hermes_storage_postgres::{
+use makosh_storage_postgres::{
     PLATFORM_ADMIN_USERNAME, PostgresAdminConnectorV1, PostgresRuntimeSessionProbeV1,
     StorageRoleSpecV1, read_storage_role_audit,
 };
-use hermes_storage_protocol::v1::{
+use makosh_storage_protocol::v1::{
     RevokeStorageBindingRequestV1, StorageBindingV1, StorageBundleV1, StorageDeploymentProfileV1,
     StorageEffectiveBudgetsV1, StorageMigrationStepV1, StorageRuntimeConfigurationV1,
     StorageRuntimeControlRequestV1, StorageRuntimeControlResponseV1, StorageRuntimeStateV1,
     StorageRuntimeTopologyV1, storage_runtime_control_request_v1::Operation as StorageOperation,
     storage_runtime_control_response_v1::Result as StorageResult,
 };
-use hermes_vault_protocol::{
+use makosh_vault_protocol::{
     LeaseAudienceV1, VaultCiphertextFrameV1, VaultResponseRecipientV1, VaultTransportBindingV1,
     VaultTransportCommandV1, VaultTransportDirectionV1, VaultTransportPublicKey, seal,
 };
@@ -32,15 +32,15 @@ use zeroize::Zeroizing;
 use crate::storage_runtime_control::serve_inherited_on_channel;
 use crate::tests::fixtures::storage_role_binding_in_database;
 
-const AUTHENTICATED_TEST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_TEST";
-const DATABASES_FILE_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_DATABASES_FILE";
-const AUTH_FILE_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_AUTH_FILE";
-const PGBOUNCER_PASSWORD_FILE_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE";
-const PGBOUNCER_HOST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_HOST";
-const PGBOUNCER_PORT_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PORT";
-const POSTGRES_PASSWORD_FILE_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE";
-const POSTGRES_HOST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST";
-const POSTGRES_PORT_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT";
+const AUTHENTICATED_TEST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_TEST";
+const DATABASES_FILE_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_DATABASES_FILE";
+const AUTH_FILE_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_AUTH_FILE";
+const PGBOUNCER_PASSWORD_FILE_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE";
+const PGBOUNCER_HOST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_HOST";
+const PGBOUNCER_PORT_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PORT";
+const POSTGRES_PASSWORD_FILE_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE";
+const POSTGRES_HOST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST";
+const POSTGRES_PORT_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT";
 const RUNTIME_PASSWORD: &[u8] = b"0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
 
 #[test]
@@ -108,7 +108,7 @@ fn assert_runtime_role_reaches_pgbouncer(binding: &StorageBindingV1) {
 }
 
 fn assert_postgres_role_is_fenced(binding: &StorageBindingV1, password: &[u8]) {
-    let binding = hermes_storage_protocol::validation::storage_binding_from_message(binding)
+    let binding = makosh_storage_protocol::validation::storage_binding_from_message(binding)
         .expect("Storage binding model");
     let roles = StorageRoleSpecV1::platform_binding(binding).expect("Storage role specification");
     let password = Zeroizing::new(password.to_vec());
@@ -117,7 +117,7 @@ fn assert_postgres_role_is_fenced(binding: &StorageBindingV1, password: &[u8]) {
         let connector = PostgresAdminConnectorV1::connect_with_password(
             &required(POSTGRES_HOST_ENV),
             port(POSTGRES_PORT_ENV),
-            "hermes_storage_authenticated",
+            "makosh_storage_authenticated",
             PLATFORM_ADMIN_USERNAME,
             &password,
         )
@@ -137,11 +137,11 @@ fn configuration(
     let owner = format!("storage_runtime_revoke_{suffix}");
     let bundle_revision = 1;
     let model = storage_role_binding_in_database(
-        "hermes_storage_authenticated",
+        "makosh_storage_authenticated",
         &owner,
         &format!("storage_runtime_principal_{suffix}"),
     );
-    let sql = format!("CREATE TABLE hermes_data.{owner}_{suffix} (id BIGINT PRIMARY KEY);");
+    let sql = format!("CREATE TABLE makosh_data.{owner}_{suffix} (id BIGINT PRIMARY KEY);");
     let bundle = StorageBundleV1 {
         major: 1,
         revision: bundle_revision,
@@ -162,7 +162,7 @@ fn configuration(
             topology_revision: 1,
             storage_generation: 1,
             storage_instance_id: "storage_main".to_owned(),
-            database_id: "hermes_storage_authenticated".to_owned(),
+            database_id: "makosh_storage_authenticated".to_owned(),
             deployment_profile: StorageDeploymentProfileV1::MacosTauriEmbedded as i32,
             postgres_artifact_sha256: vec![1; 32],
             pgbouncer_artifact_sha256: vec![2; 32],
@@ -188,7 +188,7 @@ fn auth_file_path() -> String {
     required(AUTH_FILE_ENV)
 }
 
-fn binding_message(binding: &hermes_storage_protocol::StorageBindingV1) -> StorageBindingV1 {
+fn binding_message(binding: &makosh_storage_protocol::StorageBindingV1) -> StorageBindingV1 {
     let identity = binding.identity();
     let fences = binding.fences();
     let access = binding.access();
@@ -284,7 +284,7 @@ fn assert_ready(kernel: &mut UnixStream) {
         .expect("Storage ready request");
     assert!(matches!(
         request.operation,
-        Some(hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Ready(
+        Some(makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Ready(
             ready
         )) if ready.registration_id == "storage-control"
             && ready.runtime_generation == 4
@@ -305,7 +305,7 @@ fn assert_reconciling(kernel: &mut UnixStream) {
 
 fn command(
     vault: &VaultResponseRecipientV1,
-    route: &hermes_runtime_protocol::v1::VaultCiphertextRouteV1,
+    route: &makosh_runtime_protocol::v1::VaultCiphertextRouteV1,
 ) -> VaultTransportCommandV1 {
     let frame = VaultCiphertextFrameV1::from_parts(
         route.hpke_encapped_key.clone(),
@@ -324,7 +324,7 @@ fn command(
 
 fn write_response(
     kernel: &mut UnixStream,
-    route: &hermes_runtime_protocol::v1::VaultCiphertextRouteV1,
+    route: &makosh_runtime_protocol::v1::VaultCiphertextRouteV1,
     plaintext: &[u8],
 ) {
     let key: [u8; 32] = route
@@ -362,7 +362,7 @@ fn write_response(
     );
 }
 
-fn read_route(kernel: &mut UnixStream) -> hermes_runtime_protocol::v1::VaultCiphertextRouteV1 {
+fn read_route(kernel: &mut UnixStream) -> makosh_runtime_protocol::v1::VaultCiphertextRouteV1 {
     let request = ManagedRuntimeControlRequestV1::decode(read_frame(kernel).as_slice())
         .expect("managed control request");
     let Some(ControlOperation::RouteVaultCiphertext(request)) = request.operation else {
@@ -372,7 +372,7 @@ fn read_route(kernel: &mut UnixStream) -> hermes_runtime_protocol::v1::VaultCiph
 }
 
 fn transport_binding(
-    route: &hermes_runtime_protocol::v1::VaultCiphertextRouteV1,
+    route: &makosh_runtime_protocol::v1::VaultCiphertextRouteV1,
     direction: VaultTransportDirectionV1,
 ) -> VaultTransportBindingV1 {
     VaultTransportBindingV1::new(

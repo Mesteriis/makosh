@@ -9,14 +9,14 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&control_descriptor)
         .compile_protos(
-            &["proto/hermes/attachment_preview/v1/preview.proto"],
+            &["proto/makosh/attachment_preview/v1/preview.proto"],
             &["proto"],
         )
         .expect("Attachment Preview control protocol must compile");
     prost_build::Config::new()
         .file_descriptor_set_path(&read_descriptor)
         .compile_protos(
-            &["proto/hermes/attachment_preview/read/v1/read.proto"],
+            &["proto/makosh/attachment_preview/read/v1/read.proto"],
             &["proto"],
         )
         .expect("Attachment Preview read protocol must compile");

@@ -1,7 +1,7 @@
 ### Summary / Резюме
 
-Необходимо создать страницу `operations/documentation-map.md` в русской Obsidian‑вики.  
-Она даст обзор доступной документации по интеграционным провайдерам Hermes (WhatsApp, Yandex Telemost, Zoom), поможет ориентироваться в наборе документов и понимать текущий статус каждого провайдера.  
+Необходимо создать страницу `operations/documentation-map.md` в русской Obsidian‑вики.
+Она даст обзор доступной документации по интеграционным провайдерам Макошь (WhatsApp, Yandex Telemost, Zoom), поможет ориентироваться в наборе документов и понимать текущий статус каждого провайдера.
 Страница строится исключительно на основе встроенных исходных файлов секции `docs/integrations/*`.
 
 ---
@@ -13,7 +13,7 @@
 ```markdown
 # Карта документации операций
 
-Эта страница содержит обзор документации по интеграционным провайдерам Hermes.  
+Эта страница содержит обзор документации по интеграционным провайдерам Макошь.
 Исходные документы расположены в `docs/integrations/`.
 
 ---
@@ -25,35 +25,35 @@ WhatsApp – integration‑провайдер, поставляющий source e
 
 ### Основные документы
 
-- **[WhatsApp Full Functionality Target](/docs/integrations/whatsapp/full-functionality-target.md)**  
-  Целевая спецификация полной функциональности WhatsApp в Hermes (от 2026‑06‑24).  
+- **[WhatsApp Full Functionality Target](/docs/integrations/whatsapp/full-functionality-target.md)**
+  Целевая спецификация полной функциональности WhatsApp в Макошь (от 2026‑06‑24).
   Описывает модель провайдера, инварианты, формы провайдера (`whatsapp_web_companion`, `whatsapp_native_md`, `whatsapp_business_cloud`) и функциональную матрицу (аккаунты, диалоги, сообщения, реакции, медиа и т.д.).
 
-- **[WhatsApp Gap Analysis](/docs/integrations/whatsapp/gap-analysis.md)**  
-  Анализ пробелов (от 2026‑06‑17).  
-  Оценивает уровень реализации каждой возможности по меткам `IMPLEMENTED`, `PARTIAL`, `MISSING`, `UNSUPPORTED` и т.п.  
+- **[WhatsApp Gap Analysis](/docs/integrations/whatsapp/gap-analysis.md)**
+  Анализ пробелов (от 2026‑06‑17).
+  Оценивает уровень реализации каждой возможности по меткам `IMPLEMENTED`, `PARTIAL`, `MISSING`, `UNSUPPORTED` и т.п.
   Содержит приоритетные рекомендации (P0 – документация, P1 – read‑only evidence, P2 – provider‑write parity).
 
-- **[WhatsApp Implementation Plan](/docs/integrations/whatsapp/implementation-plan.md)**  
-  План реализации (от 2026‑06‑24).  
+- **[WhatsApp Implementation Plan](/docs/integrations/whatsapp/implementation-plan.md)**
+  План реализации (от 2026‑06‑24).
   Фазы: P0 – закрытие документационных вопросов, P1 – контракт provider runtime (включая трейт `WhatsAppProviderRuntime`), P2 – спайк сторонней Rust‑библиотеки.
 
-- **[WhatsApp Live Smoke Checklist](/docs/integrations/whatsapp/live-smoke-checklist.md)**  
-  Чеклист ручного smoke‑тестирования локального runtime (от 2026‑06‑26).  
+- **[WhatsApp Live Smoke Checklist](/docs/integrations/whatsapp/live-smoke-checklist.md)**
+  Чеклист ручного smoke‑тестирования локального runtime (от 2026‑06‑26).
   Используется только для owner‑visible локальной валидации. Включает проверки границ runtime, WebView companion, авторизации, read/write‑путей, редкации секретов и сценариев восстановления.
 
-- **[WhatsApp Modules](/docs/integrations/whatsapp/modules.md)**  
-  Карта целевых модулей backend и frontend (target module map, от 2026‑06‑17).  
+- **[WhatsApp Modules](/docs/integrations/whatsapp/modules.md)**
+  Карта целевых модулей backend и frontend (target module map, от 2026‑06‑17).
   Задаёт структуру модулей, их назначение и статус (`MISSING` / `PARTIAL`). Содержит правила именования и границы модулей.
 
-- **[WhatsApp Rust Provider Research](/docs/integrations/whatsapp/rust-provider-research.md)**  
-  Исследование Rust‑библиотек для нативного WhatsApp‑провайдера (от 2026‑06‑26).  
+- **[WhatsApp Rust Provider Research](/docs/integrations/whatsapp/rust-provider-research.md)**
+  Исследование Rust‑библиотек для нативного WhatsApp‑провайдера (от 2026‑06‑26).
   После неудачного compile‑спайка `whatsapp-rust 0.6.0` выбран `wa-rs 0.2.0` с отключённым SDK SQLite‑хранилищем. Рекомендована строгая граница адаптера.
 
-- **[WhatsApp Implementation Status](/docs/integrations/whatsapp/status.md)**  
-  Сводный статус реализации (от 2026‑06‑27).  
-  На момент документа: 67 имплементированных чекпоинтов, domain closure не достигнут.  
-  Перечислены live‑блокеры: ручные smoke‑артефакты, недостающие safe write API, WebView live smoke, Business Cloud smoke.  
+- **[WhatsApp Implementation Status](/docs/integrations/whatsapp/status.md)**
+  Сводный статус реализации (от 2026‑06‑27).
+  На момент документа: 67 имплементированных чекпоинтов, domain closure не достигнут.
+  Перечислены live‑блокеры: ручные smoke‑артефакты, недостающие safe write API, WebView live smoke, Business Cloud smoke.
   Детально описано, что уже работает (provider/account model, host‑vault boundary, runtime health, capability contract, fixture runtime, command outbox, message ingestion/projection, realtime, frontend workbench, native‑md compile boundary и др.).
 
 ### Текущий статус (кратко)
@@ -70,28 +70,28 @@ Yandex Telemost – integration‑провайдер для конференци
 
 ### Основные документы
 
-- **[Yandex Telemost README](/docs/integrations/yandex-telemost/README.md)**  
+- **[Yandex Telemost README](/docs/integrations/yandex-telemost/README.md)**
   Обзор провайдера, foundation scope, provider kind (`yandex_telemost_user`), secret purpose (`yandex_telemost_oauth_token`), структура локальных записей и навигация (статус `FOUNDATION_PATCH_APPLIED`, от 2026‑06‑28).
 
-- **[Yandex Telemost API](/docs/integrations/yandex-telemost/api.md)**  
+- **[Yandex Telemost API](/docs/integrations/yandex-telemost/api.md)**
   Backend routes, Tauri‑команды, схемы запросов для аккаунтов, конференций, WebView‑манифеста, локальной записи и транскрипции. Описаны политики retention и автоматический вызов транскрайбера.
 
-- **[Yandex Telemost Architecture](/docs/integrations/yandex-telemost/architecture.md)**  
+- **[Yandex Telemost Architecture](/docs/integrations/yandex-telemost/architecture.md)**
   Архитектурные границы, inbound/outbound потоки, модель видимого WebView (подсказки динамика помечены как `hint_not_truth`), модель локального рекордера на `ffmpeg`, список событий и secret policy.
 
-- **[Yandex Telemost Implementation Plan](/docs/integrations/yandex-telemost/implementation-plan.md)**  
+- **[Yandex Telemost Implementation Plan](/docs/integrations/yandex-telemost/implementation-plan.md)**
   План по стадиям: Foundation, Conference API, Desktop companion, Provider-neutral projection, Transcription workflow. Явно перечислены non‑goals.
 
-- **[Yandex Telemost Live Smoke Checklist](/docs/integrations/yandex-telemost/live-smoke-checklist.md)**  
+- **[Yandex Telemost Live Smoke Checklist](/docs/integrations/yandex-telemost/live-smoke-checklist.md)**
   Чеклист ручного smoke‑тестирования backend и desktop компонентов при наличии HostVault, ffmpeg и OAuth‑токена.
 
-- **[Yandex Telemost Local Recording Contract](/docs/integrations/yandex-telemost/local-recording.md)**  
+- **[Yandex Telemost Local Recording Contract](/docs/integrations/yandex-telemost/local-recording.md)**
   Спецификация локального рекордера: consent gate, раскладка файлов (`audio.mp3`, `speaker-timeline.jsonl`, `speaker-timeline.txt`), формат speaker‑timeline‑подсказок, платформенная стратегия (Linux/macOS/Windows), переменные окружения, retention‑политика и политика проекции.
 
-- **[Yandex Telemost Modules](/docs/integrations/yandex-telemost/modules.md)**  
+- **[Yandex Telemost Modules](/docs/integrations/yandex-telemost/modules.md)**
   Структура модулей backend (`integrations/yandex_telemost/`), desktop runtime (`yandex_telemost_companion.rs`) и frontend.
 
-- **[Yandex Telemost Status](/docs/integrations/yandex-telemost/status.md)**  
+- **[Yandex Telemost Status](/docs/integrations/yandex-telemost/status.md)**
   Статус `FOUNDATION_PATCH_APPLIED` (от 2026‑06‑28). Известных follow‑up gaps нет. Приведены конкретные тесты для валидации.
 
 ### Текущий статус (кратко)
@@ -107,7 +107,7 @@ Zoom – integration‑провайдер для встреч, записей и
 
 ### Основные документы
 
-- **[Zoom README](/docs/integrations/zoom/README.md)**  
+- **[Zoom README](/docs/integrations/zoom/README.md)**
   Обзор провайдера, foundation scope, provider kinds (`zoom_user`, `zoom_server_to_server`), secret purposes, текущий scope доступных/неподдерживаемых возможностей и навигация (статус `FOUNDATION_IMPLEMENTED`, от 2026‑06‑28).
 
 Дополнительные документы (полный текст не включён в данный контекстный пакет, но они перечислены в `README`):
@@ -134,7 +134,7 @@ Zoom – integration‑провайдер для встреч, записей и
 
 ## Примечание
 
-Данная карта отражает состояние документации на даты, указанные в каждом документе.  
+Данная карта отражает состояние документации на даты, указанные в каждом документе.
 Для актуальной информации обращайтесь непосредственно к исходным файлам.
 ```
 
@@ -165,13 +165,13 @@ Zoom – integration‑провайдер для встреч, записей и
 
 ### Drift candidates / Кандидаты на drift
 
-1. **WhatsApp Gap Analysis vs. Implementation Status**  
-   `gap-analysis.md` (от 2026‑06‑17) помечает почти все возможности как `MISSING`, в то время как `status.md` (от 2026‑06‑27) фиксирует 67 имплементированных чекпоинтов.  
-   Это расхождение во времени: gap‑анализ не обновлён после прогресса, отражённого в `status.md`.  
+1. **WhatsApp Gap Analysis vs. Implementation Status**
+   `gap-analysis.md` (от 2026‑06‑17) помечает почти все возможности как `MISSING`, в то время как `status.md` (от 2026‑06‑27) фиксирует 67 имплементированных чекпоинтов.
+   Это расхождение во времени: gap‑анализ не обновлён после прогресса, отражённого в `status.md`.
    Рекомендуется актуализировать `gap-analysis.md` в соответствии с текущим состоянием.
 
-2. **WhatsApp Modules vs. Implementation Status**  
-   `modules.md` (target module map) всё ещё показывает большинство модулей как `MISSING`, хотя `status.md` подтверждает частичную реализацию многих из них (например, provider/account model, runtime health, capability contract, fixture runtime, command outbox, message projection и др.).  
+2. **WhatsApp Modules vs. Implementation Status**
+   `modules.md` (target module map) всё ещё показывает большинство модулей как `MISSING`, хотя `status.md` подтверждает частичную реализацию многих из них (например, provider/account model, runtime health, capability contract, fixture runtime, command outbox, message projection и др.).
    Возможно, `modules.md` намеренно является целевой картой, а не отчётом о состоянии, но это может вводить в заблуждение. Стоит либо обновить статусы модулей, либо явно указать, что документ отражает целевое состояние.
 
 3. Иных расхождений в предоставленном контексте не обнаружено.

@@ -1,10 +1,10 @@
 //! Exact workflow descriptor and capability admission.
 
-use hermes_communications_evidence_export_source_api::{
+use makosh_communications_evidence_export_source_api::{
     evidence_export_prepare_contract_reference_v1, evidence_export_prepare_publish_request_v1,
     evidence_export_prepared_consume_request_v1, evidence_export_rejected_consume_request_v1,
 };
-use hermes_communications_export_api::{
+use makosh_communications_export_api::{
     COMMUNICATIONS_EXPORT_CAPABILITY_ID_V1, COMMUNICATIONS_EXPORT_COMMAND_CONNECT_PATH_V1,
     COMMUNICATIONS_EXPORT_COMMAND_CONTRACT_NAME_V1, COMMUNICATIONS_EXPORT_CONTRACT_MAJOR_V1,
     COMMUNICATIONS_EXPORT_CONTRACT_REVISION_V1, COMMUNICATIONS_EXPORT_MAX_ARTIFACT_BYTES_V1,
@@ -14,7 +14,7 @@ use hermes_communications_export_api::{
     COMMUNICATIONS_EXPORT_REALTIME_CONTRACT_NAME_V1, COMMUNICATIONS_EXPORT_SCHEMA_SHA256,
     COMMUNICATIONS_EXPORT_TICKET_CONNECT_PATH_V1, COMMUNICATIONS_EXPORT_TICKET_CONTRACT_NAME_V1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ClientBlobRouteV1, ClientRpcRouteV1, ContractReferenceV1,
     ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1,
@@ -243,7 +243,7 @@ fn client_rpc_surface(contract: ContractReferenceV1, path: &str) -> ProvidedSurf
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         validate_descriptor_v1, validate_settings_schema_v1,
     };
 

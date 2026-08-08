@@ -1,7 +1,7 @@
 use std::io::{ErrorKind, Read, Write};
 use std::os::unix::net::UnixStream;
 
-use hermes_desktop_call_recording_api::host_bridge::{
+use makosh_desktop_call_recording_api::host_bridge::{
     decode_handshake_v1, encode_handshake_accepted_v1,
 };
 
@@ -39,7 +39,7 @@ pub fn serve_one_operation_v1(
     let response = handle
         .block_on(handle_host_operation_v1(runtime, &operation, now_unix_ms))
         .map_err(|error| {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_desktop_recording_host_port_error={error:?}");
             }
             DesktopRecordingHostTransportErrorV1::Port

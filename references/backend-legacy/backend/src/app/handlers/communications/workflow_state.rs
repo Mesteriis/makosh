@@ -38,7 +38,7 @@ pub(crate) async fn put_v1_message_workflow_state(
     Path(message_id): Path<String>,
     Json(request): Json<WorkflowStateTransitionApiRequest>,
 ) -> Result<Json<WorkflowStateTransitionApiResponse>, ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
 
     let new_state = request
         .workflow_state

@@ -4,7 +4,7 @@ import {
 	type MailFolderV1,
 	type MailMessageSummaryV1,
 	type MailThreadV1,
-} from '../../../gen/hermes/mail/operational/v1/client_pb'
+} from '../../../gen/makosh/mail/operational/v1/client_pb'
 import type {
 	MailAccountConnection as MailOperationalConnection,
 } from '../queries/mailAccountConnections'

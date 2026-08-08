@@ -5,7 +5,7 @@ use std::time::Instant;
 use super::*;
 
 pub(super) fn set_authenticated_nats_container_running(running: bool) {
-    let container = std::env::var("HERMES_STORAGE_AUTHENTICATED_NATS_CONTAINER")
+    let container = std::env::var("MAKOSH_STORAGE_AUTHENTICATED_NATS_CONTAINER")
         .expect("authenticated NATS container");
     assert!(
         (12..=64).contains(&container.len())

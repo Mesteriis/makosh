@@ -5,8 +5,8 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use hermes_attachment_text_extraction_ocr::TesseractOcrConfigurationV1;
-use hermes_runtime_protocol::v1::{ManagedRuntimeArtifactBindingV1, RuntimeArtifactUseV1};
+use makosh_attachment_text_extraction_ocr::TesseractOcrConfigurationV1;
+use makosh_runtime_protocol::v1::{ManagedRuntimeArtifactBindingV1, RuntimeArtifactUseV1};
 use sha2::{Digest, Sha256};
 
 pub const ATTACHMENT_TEXT_EXTRACTION_OCR_CAPABILITY_ID_V1: &str =
@@ -320,7 +320,7 @@ mod tests {
     #[test]
     fn materializes_exact_private_models_from_three_verified_bindings() {
         let root = std::env::temp_dir().join(format!(
-            "hermes-ocr-bindings-{}-{}",
+            "makosh-ocr-bindings-{}-{}",
             std::process::id(),
             NEXT_ID.fetch_add(1, Ordering::Relaxed)
         ));
@@ -397,7 +397,7 @@ mod tests {
     #[test]
     fn rejects_digest_drift_and_symlinked_artifact_parents() {
         let root = std::env::temp_dir().join(format!(
-            "hermes-ocr-binding-negatives-{}-{}",
+            "makosh-ocr-binding-negatives-{}-{}",
             std::process::id(),
             NEXT_ID.fetch_add(1, Ordering::Relaxed)
         ));

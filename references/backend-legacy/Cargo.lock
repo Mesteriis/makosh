@@ -1698,7 +1698,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 
 [[package]]
-name = "hermes-api"
+name = "makosh-api"
 version = "0.1.0"
 dependencies = [
  "axum",
@@ -1707,16 +1707,16 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-backend-testkit"
+name = "makosh-backend-testkit"
 version = "0.1.0"
 dependencies = [
  "async-nats",
  "axum",
  "chrono",
- "hermes-communications-api",
- "hermes-communications-postgres",
- "hermes-hub-backend",
- "hermes-test-session",
+ "makosh-communications-api",
+ "makosh-communications-postgres",
+ "makosh-backend",
+ "makosh-test-session",
  "reqwest",
  "serde",
  "serde_json",
@@ -1730,7 +1730,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-blob-api"
+name = "makosh-blob-api"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -1739,7 +1739,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-calendar-api"
+name = "makosh-calendar-api"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -1748,16 +1748,16 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-calendar-postgres"
+name = "makosh-calendar-postgres"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "hermes-calendar-api",
+ "makosh-calendar-api",
  "sqlx",
 ]
 
 [[package]]
-name = "hermes-communications-api"
+name = "makosh-communications-api"
 version = "0.1.0"
 dependencies = [
  "async-trait",
@@ -1768,23 +1768,23 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-communications-postgres"
+name = "makosh-communications-postgres"
 version = "0.1.0"
 dependencies = [
  "async-trait",
  "chrono",
- "hermes-communications-api",
- "hermes-events-api",
- "hermes-events-postgres",
- "hermes-observations-api",
- "hermes-observations-postgres",
+ "makosh-communications-api",
+ "makosh-events-api",
+ "makosh-events-postgres",
+ "makosh-observations-api",
+ "makosh-observations-postgres",
  "serde_json",
  "sqlx",
  "thiserror 2.0.18",
 ]
 
 [[package]]
-name = "hermes-connectrpc-contracts"
+name = "makosh-connectrpc-contracts"
 version = "0.1.0"
 dependencies = [
  "buffa",
@@ -1795,7 +1795,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-decisions-api"
+name = "makosh-decisions-api"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -1805,18 +1805,18 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-decisions-postgres"
+name = "makosh-decisions-postgres"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "hermes-decisions-api",
- "hermes-observations-postgres",
+ "makosh-decisions-api",
+ "makosh-observations-postgres",
  "serde_json",
  "sqlx",
 ]
 
 [[package]]
-name = "hermes-desktop-runtime"
+name = "makosh-desktop-runtime"
 version = "0.1.0"
 dependencies = [
  "thiserror 2.0.18",
@@ -1825,7 +1825,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-events-api"
+name = "makosh-events-api"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -1835,21 +1835,21 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-events-nats"
+name = "makosh-events-nats"
 version = "0.1.0"
 dependencies = [
  "async-nats",
- "hermes-events-api",
+ "makosh-events-api",
  "serde_json",
  "thiserror 2.0.18",
 ]
 
 [[package]]
-name = "hermes-events-postgres"
+name = "makosh-events-postgres"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "hermes-events-api",
+ "makosh-events-api",
  "serde",
  "serde_json",
  "sqlx",
@@ -1857,7 +1857,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-graph-api"
+name = "makosh-graph-api"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -1867,16 +1867,16 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-graph-postgres"
+name = "makosh-graph-postgres"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "hermes-graph-api",
+ "makosh-graph-api",
  "sqlx",
 ]
 
 [[package]]
-name = "hermes-hub-backend"
+name = "makosh-backend"
 version = "0.1.0"
 dependencies = [
  "aes-gcm",
@@ -1895,46 +1895,46 @@ dependencies = [
  "encoding_rs",
  "futures",
  "getrandom 0.2.17",
- "hermes-api",
- "hermes-backend-testkit",
- "hermes-blob-api",
- "hermes-calendar-api",
- "hermes-calendar-postgres",
- "hermes-communications-api",
- "hermes-communications-postgres",
- "hermes-connectrpc-contracts",
- "hermes-decisions-api",
- "hermes-decisions-postgres",
- "hermes-desktop-runtime",
- "hermes-events-api",
- "hermes-events-nats",
- "hermes-events-postgres",
- "hermes-graph-api",
- "hermes-graph-postgres",
- "hermes-obligations-api",
- "hermes-obligations-postgres",
- "hermes-observations-api",
- "hermes-observations-postgres",
- "hermes-personas-api",
- "hermes-personas-postgres",
- "hermes-projects-api",
- "hermes-projects-postgres",
- "hermes-provider-api",
- "hermes-provider-mail",
- "hermes-provider-orchestration",
- "hermes-provider-telegram",
- "hermes-provider-telemost",
- "hermes-provider-whatsapp",
- "hermes-provider-zoom",
- "hermes-provider-zulip",
- "hermes-relationships-api",
- "hermes-relationships-postgres",
- "hermes-schema",
- "hermes-signal-hub-api",
- "hermes-signal-hub-postgres",
- "hermes-tasks-api",
- "hermes-tasks-postgres",
- "hermes-worker-runtime",
+ "makosh-api",
+ "makosh-backend-testkit",
+ "makosh-blob-api",
+ "makosh-calendar-api",
+ "makosh-calendar-postgres",
+ "makosh-communications-api",
+ "makosh-communications-postgres",
+ "makosh-connectrpc-contracts",
+ "makosh-decisions-api",
+ "makosh-decisions-postgres",
+ "makosh-desktop-runtime",
+ "makosh-events-api",
+ "makosh-events-nats",
+ "makosh-events-postgres",
+ "makosh-graph-api",
+ "makosh-graph-postgres",
+ "makosh-obligations-api",
+ "makosh-obligations-postgres",
+ "makosh-observations-api",
+ "makosh-observations-postgres",
+ "makosh-personas-api",
+ "makosh-personas-postgres",
+ "makosh-projects-api",
+ "makosh-projects-postgres",
+ "makosh-provider-api",
+ "makosh-provider-mail",
+ "makosh-provider-orchestration",
+ "makosh-provider-telegram",
+ "makosh-provider-telemost",
+ "makosh-provider-whatsapp",
+ "makosh-provider-zoom",
+ "makosh-provider-zulip",
+ "makosh-relationships-api",
+ "makosh-relationships-postgres",
+ "makosh-schema",
+ "makosh-signal-hub-api",
+ "makosh-signal-hub-postgres",
+ "makosh-tasks-api",
+ "makosh-tasks-postgres",
+ "makosh-worker-runtime",
  "hkdf",
  "hmac",
  "http-body",
@@ -1966,7 +1966,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-kernel"
+name = "makosh-kernel"
 version = "0.1.0"
 dependencies = [
  "serde",
@@ -1974,7 +1974,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-obligations-api"
+name = "makosh-obligations-api"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -1984,18 +1984,18 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-obligations-postgres"
+name = "makosh-obligations-postgres"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "hermes-obligations-api",
- "hermes-observations-postgres",
+ "makosh-obligations-api",
+ "makosh-observations-postgres",
  "serde_json",
  "sqlx",
 ]
 
 [[package]]
-name = "hermes-observations-api"
+name = "makosh-observations-api"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -2005,13 +2005,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-observations-postgres"
+name = "makosh-observations-postgres"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "hermes-events-api",
- "hermes-events-postgres",
- "hermes-observations-api",
+ "makosh-events-api",
+ "makosh-events-postgres",
+ "makosh-observations-api",
  "serde_json",
  "sha2",
  "sqlx",
@@ -2019,7 +2019,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-personas-api"
+name = "makosh-personas-api"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -2029,16 +2029,16 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-personas-postgres"
+name = "makosh-personas-postgres"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "hermes-personas-api",
+ "makosh-personas-api",
  "sqlx",
 ]
 
 [[package]]
-name = "hermes-projects-api"
+name = "makosh-projects-api"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -2048,22 +2048,22 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-projects-postgres"
+name = "makosh-projects-postgres"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "hermes-projects-api",
+ "makosh-projects-api",
  "serde_json",
  "sqlx",
 ]
 
 [[package]]
-name = "hermes-provider-api"
+name = "makosh-provider-api"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "hermes-blob-api",
- "hermes-kernel",
+ "makosh-blob-api",
+ "makosh-kernel",
  "serde",
  "serde_json",
  "thiserror 2.0.18",
@@ -2071,61 +2071,61 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-provider-mail"
+name = "makosh-provider-mail"
 version = "0.1.0"
 dependencies = [
- "hermes-provider-api",
+ "makosh-provider-api",
  "serde",
  "serde_json",
 ]
 
 [[package]]
-name = "hermes-provider-orchestration"
+name = "makosh-provider-orchestration"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "hermes-communications-api",
- "hermes-provider-api",
- "hermes-signal-hub-api",
+ "makosh-communications-api",
+ "makosh-provider-api",
+ "makosh-signal-hub-api",
  "serde_json",
  "thiserror 2.0.18",
 ]
 
 [[package]]
-name = "hermes-provider-telegram"
+name = "makosh-provider-telegram"
 version = "0.1.0"
 dependencies = [
- "hermes-provider-api",
+ "makosh-provider-api",
  "serde_json",
  "thiserror 2.0.18",
 ]
 
 [[package]]
-name = "hermes-provider-telemost"
+name = "makosh-provider-telemost"
 version = "0.1.0"
 dependencies = [
- "hermes-provider-api",
+ "makosh-provider-api",
  "serde",
  "serde_json",
  "thiserror 2.0.18",
 ]
 
 [[package]]
-name = "hermes-provider-whatsapp"
+name = "makosh-provider-whatsapp"
 version = "0.1.0"
 dependencies = [
- "hermes-provider-api",
+ "makosh-provider-api",
  "sha2",
 ]
 
 [[package]]
-name = "hermes-provider-zoom"
+name = "makosh-provider-zoom"
 version = "0.1.0"
 dependencies = [
  "base64",
  "chrono",
  "getrandom 0.2.17",
- "hermes-provider-api",
+ "makosh-provider-api",
  "serde",
  "serde_json",
  "thiserror 2.0.18",
@@ -2133,12 +2133,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-provider-zulip"
+name = "makosh-provider-zulip"
 version = "0.1.0"
 dependencies = [
  "async-trait",
  "chrono",
- "hermes-provider-api",
+ "makosh-provider-api",
  "reqwest",
  "serde",
  "serde_json",
@@ -2149,7 +2149,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-relationships-api"
+name = "makosh-relationships-api"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -2159,48 +2159,48 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-relationships-postgres"
+name = "makosh-relationships-postgres"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "hermes-observations-postgres",
- "hermes-relationships-api",
+ "makosh-observations-postgres",
+ "makosh-relationships-api",
  "serde_json",
  "sqlx",
  "thiserror 2.0.18",
 ]
 
 [[package]]
-name = "hermes-schema"
+name = "makosh-schema"
 version = "0.1.0"
 dependencies = [
  "sqlx",
 ]
 
 [[package]]
-name = "hermes-signal-hub-api"
+name = "makosh-signal-hub-api"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "hermes-events-api",
+ "makosh-events-api",
  "serde",
  "serde_json",
  "thiserror 2.0.18",
 ]
 
 [[package]]
-name = "hermes-signal-hub-postgres"
+name = "makosh-signal-hub-postgres"
 version = "0.1.0"
 dependencies = [
- "hermes-events-api",
- "hermes-signal-hub-api",
+ "makosh-events-api",
+ "makosh-signal-hub-api",
  "serde_json",
  "sqlx",
  "uuid",
 ]
 
 [[package]]
-name = "hermes-tasks-api"
+name = "makosh-tasks-api"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -2210,21 +2210,21 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-tasks-postgres"
+name = "makosh-tasks-postgres"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "hermes-tasks-api",
+ "makosh-tasks-api",
  "serde_json",
  "sqlx",
 ]
 
 [[package]]
-name = "hermes-test-session"
+name = "makosh-test-session"
 version = "0.1.0"
 dependencies = [
  "async-nats",
- "hermes-schema",
+ "makosh-schema",
  "sqlx",
  "testcontainers",
  "tokio",
@@ -2232,31 +2232,31 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-vault-api"
+name = "makosh-vault-api"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "hermes-provider-api",
+ "makosh-provider-api",
  "serde",
  "thiserror 2.0.18",
 ]
 
 [[package]]
-name = "hermes-worker-runtime"
+name = "makosh-worker-runtime"
 version = "0.1.0"
 dependencies = [
- "hermes-desktop-runtime",
+ "makosh-desktop-runtime",
  "thiserror 2.0.18",
  "tokio",
  "tokio-util",
 ]
 
 [[package]]
-name = "hermes-zulip-connector"
+name = "makosh-zulip-connector"
 version = "0.1.0"
 dependencies = [
- "hermes-provider-api",
- "hermes-provider-zulip",
+ "makosh-provider-api",
+ "makosh-provider-zulip",
  "rusqlite",
  "serde",
  "serde_json",

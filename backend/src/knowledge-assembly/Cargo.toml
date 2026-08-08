@@ -1,5 +1,5 @@
 [package]
-name = "hermes-knowledge-assembly"
+name = "makosh-knowledge-assembly"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,19 +8,19 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-knowledge-assembly"
+name = "makosh-knowledge-assembly"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "domain"
 owner = "knowledge"
 surface = "assembly"
 
 [dependencies]
-hermes-knowledge-persistence = { path = "../knowledge-persistence" }
-hermes-knowledge-runtime = { path = "../knowledge-runtime" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-knowledge-persistence = { path = "../knowledge-persistence" }
+makosh-knowledge-runtime = { path = "../knowledge-runtime" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
 serde_json = "=1.0.150"

@@ -26,8 +26,8 @@ const emit = defineEmits<{
 
 const draft = ref('')
 const classes = computed(() => [
-	'hermes-token-input',
-	{ 'hermes-token-input--disabled': props.disabled },
+	'makosh-token-input',
+	{ 'makosh-token-input--disabled': props.disabled },
 	props.class
 ])
 const canAddMore = computed(() => props.maxTokens === undefined || props.modelValue.length < props.maxTokens)
@@ -68,11 +68,11 @@ function removeToken(token: string): void {
 
 <template>
 	<div :class="classes">
-		<div class="hermes-token-input__control">
-			<span v-for="token in modelValue" :key="token" class="hermes-selection-chip">
-				<span class="hermes-selection-chip__label">{{ token }}</span>
+		<div class="makosh-token-input__control">
+			<span v-for="token in modelValue" :key="token" class="makosh-selection-chip">
+				<span class="makosh-selection-chip__label">{{ token }}</span>
 				<button
-					class="hermes-selection-chip__remove"
+					class="makosh-selection-chip__remove"
 					type="button"
 					:aria-label="`${removeLabel} ${token}`"
 					:disabled="disabled"
@@ -83,7 +83,7 @@ function removeToken(token: string): void {
 			</span>
 			<input
 				v-model="draft"
-				class="hermes-token-input__field"
+				class="makosh-token-input__field"
 				:aria-label="ariaLabel"
 				:disabled="disabled || !canAddMore"
 				:placeholder="placeholder"

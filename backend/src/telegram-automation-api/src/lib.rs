@@ -4,8 +4,8 @@ pub mod contract;
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.telegram.automation.v1.rs"
+        "/makosh.telegram.automation.v1.rs"
     ));
 }
 
-pub const PACKAGE: &str = "hermes-telegram-automation-api";
+pub const PACKAGE: &str = "makosh-telegram-automation-api";

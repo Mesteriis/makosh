@@ -1,4 +1,4 @@
-import type { ZulipAccountLifecycleReceiptV1 } from '../../../gen/hermes/zulip/account/v1/client_pb'
+import type { ZulipAccountLifecycleReceiptV1 } from '../../../gen/makosh/zulip/account/v1/client_pb'
 import {
 	ManagedIntegrationSetupV1,
 	OwnerModuleSettingsClientV1,

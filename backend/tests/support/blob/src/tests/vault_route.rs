@@ -1,15 +1,15 @@
 use std::collections::VecDeque;
 use std::future::{Future, ready};
 
-use hermes_blob_protocol::{BlobAccessFenceV1, BlobBackupClassV1, BlobCustodyScopeV1, BlobRefV1};
-use hermes_blob_runtime::vault::{
+use makosh_blob_protocol::{BlobAccessFenceV1, BlobBackupClassV1, BlobCustodyScopeV1, BlobRefV1};
+use makosh_blob_runtime::vault::{
     BlobContentKeyFenceV1, BlobVaultKeyLeaseAdapterV1, BlobVaultRouteContextV1,
     BlobVaultRouteFailureV1, BlobVaultRoutePortV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     VaultCiphertextResponseV1, VaultCiphertextRouteDirectionV1, VaultCiphertextRouteV1,
 };
-use hermes_vault_protocol::{
+use makosh_vault_protocol::{
     LeaseAudienceV1, VaultResponseRecipientV1, VaultTransportBindingV1, VaultTransportDirectionV1,
     VaultTransportPublicKey, seal,
 };
@@ -49,7 +49,7 @@ async fn unavailable_blob_vault_route_has_no_local_key_fallback() {
     );
     assert!(matches!(
         adapter.ensure_content_key(&reference(), &fence(), 1).await,
-        Err(hermes_blob_runtime::vault::BlobContentKeyLeaseErrorV1::Unavailable)
+        Err(makosh_blob_runtime::vault::BlobContentKeyLeaseErrorV1::Unavailable)
     ));
 }
 

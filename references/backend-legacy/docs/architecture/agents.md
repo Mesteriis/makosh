@@ -8,7 +8,7 @@ autonomous writes, provider side effects or plugin execution.
 
 ## Purpose
 
-Agents help the Owner Persona operate Hermes. They retrieve context, explain
+Agents help the Owner Persona operate Макошь. They retrieve context, explain
 evidence, propose actions and execute approved tool workflows. They do not own
 truth.
 
@@ -109,6 +109,6 @@ Agents write through:
 
 ## Reasons For Existence
 
-Hermes can contain more context than the owner can manually inspect. Agents are
+Макошь can contain more context than the owner can manually inspect. Agents are
 useful when they can assemble cited context and propose next actions without
 becoming an uncited source of truth or an unsafe automation layer.

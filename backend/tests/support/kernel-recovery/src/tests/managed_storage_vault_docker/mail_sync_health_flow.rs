@@ -1,6 +1,6 @@
 //! Managed Gateway conformance for Mail sync replay and health history.
 
-use hermes_mail_api::{
+use makosh_mail_api::{
     MailClientRequestV1, MailClientResponseV1, MailSyncInboxRequestV1,
     client_contract::MailClientContractV1,
     sync_health::{
@@ -8,7 +8,7 @@ use hermes_mail_api::{
         MailSyncOutcomeV1, MailSyncProviderPathReadinessV1, MailSyncTriggerV1,
     },
 };
-use hermes_mail_runtime::client_port::{
+use makosh_mail_runtime::client_port::{
     MailClientPortErrorV1, decode_module_response, encode_module_request,
 };
 
@@ -276,7 +276,7 @@ fn route_request(
 }
 
 fn assert_successful_run(
-    run: &hermes_mail_api::sync_health::MailSyncRunV1,
+    run: &makosh_mail_api::sync_health::MailSyncRunV1,
     mail: &StartedMailRuntime,
     operation_id: &str,
     expected_observed_messages: u64,
@@ -310,7 +310,7 @@ fn assert_stale_generation_is_interrupted(mail: &StartedMailRuntime) {
         .expect("seed stale Mail sync run");
     assert!(matches!(
         begin,
-        hermes_mail_persistence::MailSyncRunStartOutcomeV1::Started(_)
+        makosh_mail_persistence::MailSyncRunStartOutcomeV1::Started(_)
     ));
     assert_eq!(
         runtime

@@ -13,7 +13,7 @@ root-level compatibility paths отсутствуют и запрещены layo
 фиксирует owner-local Cargo graph. Guard запрещает aggregate packages,
 module-to-Kernel и Kernel/Gateway-to-module dependencies, runtime aggregation,
 cross-owner persistence edges и любой integration-to-domain contract, кроме
-точного `hermes-communications-ingress`.
+точного `makosh-communications-ingress`.
 Правило одинаково для Mail, Telegram, Zulip и будущих integrations; WhatsApp
 помечен host-only и не может иметь backend implementation, persistence или
 runtime package.
@@ -65,7 +65,7 @@ rollback/fallback запрещены.
 [ADR-0220](../../docs/adr/ADR-0220-canonical-durable-envelope-and-contract-evolution.md)
 фиксирует exact internal durable wire contract и его эволюцию.
 Блок `events` резервирует единственный canonical durable-envelope package
-`hermes-events-protocol` с metadata `platform:events:contract`. Контракт
+`makosh-events-protocol` с metadata `platform:events:contract`. Контракт
 использует binary Protobuf envelope major version 1 и ровно пять `oneof` kinds:
 `command`, `event`, `observation`, `result`, `ack`. Owner payload остаётся
 непрозрачным для Kernel/Event Hub и связывается с catalog contract, version и
@@ -78,7 +78,7 @@ clients и `serde_json` через normal, build и dev dependencies.
 [ADR-0221](../../docs/adr/ADR-0221-module-descriptor-and-capability-lifecycle-contract.md)
 отделяет self-declared runtime descriptor от executable trust, effective
 GrantSet и observed runtime state. Блок `runtimeProtocol` резервирует
-единственный `hermes-runtime-protocol` с metadata
+единственный `makosh-runtime-protocol` с metadata
 `platform:runtime_protocol:contract`: descriptor передаётся как exact binary
 Protobuf artifact, хешируется по полученным bytes и не содержит собственного
 digest. Approval, readiness и revoke определены на уровне capability;
@@ -105,7 +105,7 @@ packages. Как только workspace содержит любое имя, owne
 этого boundary, Cargo guard требует точные protocol, key-provider, runtime,
 SQLCipher-store и macOS Keychain adapter; `vault_service` может объявлять
 только canonical runtime. Production packages вне Vault зависят только от
-`hermes-vault-protocol`, а Vault не зависит от Kernel, Gateway, modules, NATS
+`makosh-vault-protocol`, а Vault не зависит от Kernel, Gateway, modules, NATS
 или PostgreSQL clients. Блоки `vault`, `controlStore` и `events` fail-closed
 фиксируют storage/key/recovery profile, unlock modes, payload limits,
 memory-only single-use leases, TTL, binding к exact revision/runtime/grant
@@ -119,7 +119,7 @@ conformance/integration tests.
 фиксирует отдельный managed Storage Control process и закрытый набор из шести
 packages. Блок `storage` резервирует protocol, SQL-free control, runtime,
 PostgreSQL, PgBouncer и migration-admission surfaces; production packages вне
-Storage могут зависеть только от `hermes-storage-protocol`. SQL client разрешён
+Storage могут зависеть только от `makosh-storage-protocol`. SQL client разрешён
 только persistence surfaces, а migration AST parser — только canonical
 migrations package. Static policy также запрещает Kernel/Storage Control SQL
 proxy, module self-migrations, cross-owner business SQL и PgBouncer как
@@ -192,7 +192,7 @@ dependency check.
 тип поверхности:
 
 ```toml
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "domain"
 owner = "contacts"
 surface = "contract"
@@ -205,7 +205,7 @@ surface = "contract"
 компоненты:
 
 ```toml
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "core"
 owner = "kernel"
 surface = "runtime"
@@ -226,7 +226,7 @@ phase-specific subset.
 
 ```toml
 # backend/src/kernel/control_store/contract/Cargo.toml
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "core"
 owner = "kernel"
 surface = "contract"
@@ -234,7 +234,7 @@ surface = "contract"
 
 ```toml
 # backend/src/kernel/control_store/sqlite/Cargo.toml
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "core"
 owner = "kernel"
 surface = "persistence"
@@ -246,7 +246,7 @@ surface = "persistence"
 Telemetry Collector является отдельным platform runtime:
 
 ```toml
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "telemetry"
 surface = "runtime"
@@ -259,8 +259,8 @@ components = ["telemetry_collector"]
 - AI как domain также не зависит от contracts других owners; cross-owner AI
   context собирает только explicit use-case workflow;
 - integration зависит из business domains только от exact neutral contract
-  units `hermes-communications-ingress` и
-  `hermes-communications-attachment-contract`; остальные domain contracts
+  units `makosh-communications-ingress` и
+  `makosh-communications-attachment-contract`; остальные domain contracts
   запрещены;
 - workflow и API используют чужие packages только через `contract`;
 - contract не зависит от runtime, implementation или persistence своего
@@ -278,9 +278,9 @@ components = ["telemetry_collector"]
   discovery использует protocols, descriptors и bundled manifests;
 - runtime не зависит от другого runtime, включая runtime того же owner;
 - persistence package не зависит от persistence package другого owner;
-- aggregate packages `hermes-hub-backend`, `hermes-api`,
-  `hermes-worker-runtime`, `hermes-desktop-runtime`, `hermes-schema`,
-  `hermes-common` и `hermes-provider-api` запрещены;
+- aggregate packages `makosh-backend`, `makosh-api`,
+  `makosh-worker-runtime`, `makosh-desktop-runtime`, `makosh-schema`,
+  `makosh-common` и `makosh-provider-api` запрещены;
 - cross-owner dependency на implementation запрещена для normal, build и dev
   edges;
 - test support разрешён production package только как dev dependency;
@@ -288,9 +288,9 @@ components = ["telemetry_collector"]
 - SQL identifiers используют owner prefix; cross-owner reads, writes и foreign
   keys запрещены;
 - Telemetry Collector не зависит от NATS или PostgreSQL clients;
-- canonical `hermes-events-protocol` не зависит от broker, persistence или JSON
+- canonical `makosh-events-protocol` не зависит от broker, persistence или JSON
   implementations и является единственным `platform:events:contract` owner;
-- canonical `hermes-runtime-protocol` не зависит от broker, persistence или
+- canonical `makosh-runtime-protocol` не зависит от broker, persistence или
   JSON implementations и является единственным
   `platform:runtime_protocol:contract` owner;
 - Event Hub, telemetry control и Settings Registry могут быть компонентами

@@ -2,9 +2,9 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::managed_control::ManagedControlChannelV2;
-use hermes_storage_protocol::StorageBindingV1;
-use hermes_storage_vault::{
+use makosh_runtime_protocol::managed_control::ManagedControlChannelV2;
+use makosh_storage_protocol::StorageBindingV1;
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageCredentialLeaseErrorV1, StorageVaultLeaseAdapterV1,
     StorageVaultRouteContextV1,
 };

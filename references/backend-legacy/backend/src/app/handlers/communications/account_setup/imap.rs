@@ -5,7 +5,7 @@ use crate::app::handlers::communications::account_support::*;
 use crate::app::signal_hub_support::{
     provider_account_or_not_found, sync_provider_account_signal_connection,
 };
-use hermes_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::CommunicationProviderKind;
 
 pub(crate) async fn post_imap_account_setup(
     State(state): State<AppState>,

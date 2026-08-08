@@ -1,4 +1,4 @@
-name: hermes-events-jwt-conformance
+name: makosh-events-jwt-conformance
 
 services:
   fixture:
@@ -8,7 +8,7 @@ services:
       - -ec
       - |
         mkdir -p /fixture/nsc
-        nsc --all-dirs /fixture/nsc add operator --name hermes-jetstream-test --sys
+        nsc --all-dirs /fixture/nsc add operator --name makosh-jetstream-test --sys
         nsc --all-dirs /fixture/nsc add account --name events
         nsc --all-dirs /fixture/nsc edit account --name events --sk generate
         nsc --all-dirs /fixture/nsc edit account --name events --js-enable 1
@@ -57,7 +57,7 @@ services:
         chmod 0600 /fixture/event-hub.creds
         chmod 0600 /fixture/resolver-update.creds
     volumes:
-      - ${HERMES_NATS_JWT_FIXTURE_DIR:?HERMES_NATS_JWT_FIXTURE_DIR is required}:/fixture
+      - ${MAKOSH_NATS_JWT_FIXTURE_DIR:?MAKOSH_NATS_JWT_FIXTURE_DIR is required}:/fixture
 
   nats:
     image: nats@sha256:b83efabe3e7def1e0a4a31ec6e078999bb17c80363f881df35edc70fcb6bb927
@@ -65,7 +65,7 @@ services:
     ports:
       - 127.0.0.1:43223:4222
     volumes:
-      - ${HERMES_NATS_JWT_FIXTURE_DIR:?HERMES_NATS_JWT_FIXTURE_DIR is required}:/fixture:ro
+      - ${MAKOSH_NATS_JWT_FIXTURE_DIR:?MAKOSH_NATS_JWT_FIXTURE_DIR is required}:/fixture:ro
       - resolver:/resolver
     depends_on:
       fixture:
@@ -80,7 +80,7 @@ services:
     image: natsio/nats-box@sha256:ffce8bd103383f179f8c7f11cf645726acf5d17280706c530c3b342dbe16334c
     entrypoint: ["sh", "-ec", "exec sleep infinity"]
     volumes:
-      - ${HERMES_NATS_JWT_FIXTURE_DIR:?HERMES_NATS_JWT_FIXTURE_DIR is required}:/fixture
+      - ${MAKOSH_NATS_JWT_FIXTURE_DIR:?MAKOSH_NATS_JWT_FIXTURE_DIR is required}:/fixture
     depends_on:
       fixture:
         condition: service_completed_successfully

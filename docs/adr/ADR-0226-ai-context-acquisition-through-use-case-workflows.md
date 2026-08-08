@@ -258,11 +258,11 @@ Target domain может отклонить результат независи�
 use-case workflow
   -> owner domain contract A
   -> owner domain contract B
-  -> hermes-ai-contracts
+  -> makosh-ai-contracts
   -> platform contracts
 
-hermes-ai-domain/runtime
-  -> hermes-ai-contracts
+makosh-ai-domain/runtime
+  -> makosh-ai-contracts
   -> platform contracts
   -/> other domain contracts
   -/> workflow contracts
@@ -270,7 +270,7 @@ hermes-ai-domain/runtime
 ```
 
 AI persistence использует SQLx только в own persistence package и обращается
-только к AI-owned tables в `hermes_data`. Read-only cross-owner SQL остаётся
+только к AI-owned tables в `makosh_data`. Read-only cross-owner SQL остаётся
 cross-owner SQL и запрещён так же, как write.
 
 ## Отклонённые варианты
@@ -318,7 +318,7 @@ private content.
 - remote egress denial fail closed до provider call;
 - private content отсутствует в NATS, logs, telemetry, errors и health;
 - AI result не мутирует target domain без workflow/domain command;
-- `hermes-context-*` production package остаётся заблокированным;
+- `makosh-context-*` production package остаётся заблокированным;
 - fixture tests используют synthetic content и не вызывают live private
   accounts или remote model без explicit manual smoke.
 

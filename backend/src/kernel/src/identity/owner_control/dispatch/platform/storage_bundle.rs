@@ -1,12 +1,12 @@
 //! Owner-authorized admission of canonical Storage bundles.
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     AdmitBundledStorageArtifactRequestV1, AdmitBundledStorageArtifactResponseV1,
     AdmitStorageBundleRequestV1, AdmitStorageBundleResponseV1,
 };
-use hermes_kernel_control_store::PlatformStorageBundleV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_storage_protocol::{v1::StorageBundleV1, validation::validate_storage_bundle};
+use makosh_kernel_control_store::PlatformStorageBundleV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_storage_protocol::{v1::StorageBundleV1, validation::validate_storage_bundle};
 use prost::Message;
 use sha2::{Digest, Sha256};
 

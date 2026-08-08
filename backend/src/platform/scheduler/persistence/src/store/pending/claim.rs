@@ -31,7 +31,7 @@ async fn verify_current_schedule(
     claim: &SchedulerRunClaimV1,
 ) -> Result<(), SchedulerRunClaimErrorV1> {
     let found = query_scalar::<_, i32>(
-        "SELECT 1 FROM hermes_platform.scheduler_schedules WHERE schedule_id = $1 AND schedule_revision = $2 AND enabled = TRUE AND concurrency_key = $3 AND max_parallelism = $4 AND policy_bytes = $5 FOR UPDATE",
+        "SELECT 1 FROM makosh_platform.scheduler_schedules WHERE schedule_id = $1 AND schedule_revision = $2 AND enabled = TRUE AND concurrency_key = $3 AND max_parallelism = $4 AND policy_bytes = $5 FOR UPDATE",
     )
     .bind(claim.schedule_id().bytes().to_vec())
     .bind(i64::try_from(claim.schedule_revision().value()).map_err(|_| SchedulerRunClaimErrorV1::Denied)?)
@@ -52,7 +52,7 @@ async fn delete_pending(
     claim: &SchedulerRunClaimV1,
 ) -> Result<(), SchedulerRunClaimErrorV1> {
     let deleted = query(
-        "DELETE FROM hermes_platform.scheduler_pending_fires WHERE fire_key = $1 AND schedule_id = $2 AND schedule_revision = $3 AND scheduled_for_unix_ms = $4 AND concurrency_key = $5",
+        "DELETE FROM makosh_platform.scheduler_pending_fires WHERE fire_key = $1 AND schedule_id = $2 AND schedule_revision = $3 AND scheduled_for_unix_ms = $4 AND concurrency_key = $5",
     )
     .bind(claim.fire_key().to_vec())
     .bind(claim.schedule_id().bytes().to_vec())

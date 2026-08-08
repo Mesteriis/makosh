@@ -2,13 +2,13 @@
 
 Status date: 2026-06-27.
 
-This document records Hermes-side runtime shape decisions. It is not a vendor
+This document records Макошь-side runtime shape decisions. It is not a vendor
 API reference. Before implementing live provider calls, verify the current Zoom
 documentation and update this file with source links and exact constraints.
 
-## Runtime shapes represented in Hermes
+## Runtime shapes represented in Макошь
 
-Hermes should model three account/auth shapes:
+Макошь should model three account/auth shapes:
 
 ```text
 fixture
@@ -49,7 +49,7 @@ OAuth Runtime
   -> expose health and blockers through runtime status
 ```
 
-## Non-negotiable Hermes rules
+## Non-negotiable Макошь rules
 
 - The adapter must never import business domains.
 - The adapter must never create tasks, Personas, organizations, documents or

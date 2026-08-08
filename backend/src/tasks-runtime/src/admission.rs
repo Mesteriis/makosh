@@ -1,10 +1,10 @@
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ContractReferenceV1, ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1,
     ProvidedSurfaceKindV1, ProvidedSurfaceV1, RuntimeBudgetRequestV1, SettingsSchemaRefV1,
     SettingsSchemaV1, StorageNamespaceRequestV1, capability_request_v1::Request,
 };
-use hermes_tasks_command_api::{
+use makosh_tasks_command_api::{
     TASKS_MODULE_ID_V1, TASKS_OWNER_ID_V1, TASKS_REVIEWED_CANDIDATE_BLOB_CAPABILITY_ID_V1,
     TASKS_REVIEWED_CANDIDATE_COMMAND_CAPABILITY_ID_V1,
     create_task_from_reviewed_candidate_consume_request_v1,
@@ -95,7 +95,7 @@ fn blob_capability() -> CapabilityDescriptorV1 {
         criticality: CapabilityCriticalityV1::Required as i32,
         requests: vec![CapabilityRequestV1 {
             request: Some(Request::BlobQuota(BlobQuotaRequestV1 {
-                max_bytes: hermes_tasks_command_api::TASKS_REVIEWED_CANDIDATE_MAX_BLOB_BYTES_V1,
+                max_bytes: makosh_tasks_command_api::TASKS_REVIEWED_CANDIDATE_MAX_BLOB_BYTES_V1,
                 custody_scope_id: TASKS_OWNER_ID_V1.to_owned(),
                 allowed_operations: vec![
                     BlobQuotaOperationV1::ReadRange as i32,
@@ -147,7 +147,7 @@ fn storage_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         validate_descriptor_v1, validate_settings_schema_v1,
     };
 

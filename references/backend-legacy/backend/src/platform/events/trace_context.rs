@@ -1,4 +1,4 @@
-use hermes_events_api::{EventEnvelope, NewEventEnvelopeBuilder, StoredEventEnvelope};
+use makosh_events_api::{EventEnvelope, NewEventEnvelopeBuilder, StoredEventEnvelope};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct TraceContext {

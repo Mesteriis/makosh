@@ -27,7 +27,7 @@ generated_by: code-wiki-ru
 
 ## Обзор
 
-Фронтенд-часть проекта Hermes Hub. На основании доступного контекста подтверждены только входной HTML-файл и набор статических ресурсов. Язык интерфейса — русский (`lang="ru"`). Сборка, фреймворк и структура каталогов за пределами `frontend/` не подтверждены данным чанком.
+Фронтенд-часть проекта Макошь. На основании доступного контекста подтверждены только входной HTML-файл и набор статических ресурсов. Язык интерфейса — русский (`lang="ru"`). Сборка, фреймворк и структура каталогов за пределами `frontend/` не подтверждены данным чанком.
 
 ## Входная точка (index.html)
 
@@ -38,7 +38,7 @@ generated_by: code-wiki-ru
 - Кодировка: UTF-8.
 - Иконка сайта: `/favicon.svg` (SVG).
 - Viewport: `width=device-width, initial-scale=1.0`.
-- Заголовок (`<title>`): `Hermes Hub`.
+- Заголовок (`<title>`): `Макошь`.
 - Корневой элемент приложения: `<div id="app"></div>`.
 - JavaScript-модуль, точка входа логики: `/src/main.ts`.
 
@@ -46,30 +46,30 @@ generated_by: code-wiki-ru
 
 Ресурсы расположены в `frontend/public/assets/`. Все перечисленные файлы существуют в указанных путях; их содержимое (бинарные данные) не включено в контекст.
 
-### Иконки (hermes-icon-*.png)
+### Иконки (makosh-icon-*.png)
 
 | Файл | Размер (байт) |
 |------|---------------|
-| `hermes-icon-16.png` | 722 |
-| `hermes-icon-32.png` | 1823 |
-| `hermes-icon-48.png` | 3221 |
-| `hermes-icon-64.png` | 4650 |
-| `hermes-icon-128.png` | 11624 |
-| `hermes-icon-180.png` | 18860 |
-| `hermes-icon-192.png` | 20556 |
-| `hermes-icon-256.png` | 32527 |
-| `hermes-icon-512.png` | 106906 |
+| `makosh-icon-16.png` | 722 |
+| `makosh-icon-32.png` | 1823 |
+| `makosh-icon-48.png` | 3221 |
+| `makosh-icon-64.png` | 4650 |
+| `makosh-icon-128.png` | 11624 |
+| `makosh-icon-180.png` | 18860 |
+| `makosh-icon-192.png` | 20556 |
+| `makosh-icon-256.png` | 32527 |
+| `makosh-icon-512.png` | 106906 |
 
 Назначение набора иконок (PWA-манифест, фавиконки и т.п.) контекстом не подтверждено.
 
 ### Логотипы
 
-- `hermes-logo.png` — 1 560 669 байт.
-- `hermes-logo-mark.png` — 106 906 байт.
+- `makosh-logo.png` — 1 560 669 байт.
+- `makosh-logo-mark.png` — 106 906 байт.
 
 ### Аватар
 
-- `hermes-reference-avatar.png` — 5 808 байт.
+- `makosh-reference-avatar.png` — 5 808 байт.
 
 ### Фоны
 
@@ -85,18 +85,18 @@ generated_by: code-wiki-ru
 ## Покрытие источников
 
 - **`frontend/index.html`**
-  - Входная точка приложения, язык `ru`, кодировка, favicon `/favicon.svg`, viewport, заголовок «Hermes Hub», контейнер `<div id="app">`, подключение модуля `/src/main.ts`.
+  - Входная точка приложения, язык `ru`, кодировка, favicon `/favicon.svg`, viewport, заголовок «Макошь», контейнер `<div id="app">`, подключение модуля `/src/main.ts`.
 
-- **`frontend/public/assets/hermes-icon-16.png`**, **`hermes-icon-32.png`**, **`hermes-icon-48.png`**, **`hermes-icon-64.png`**, **`hermes-icon-128.png`**, **`hermes-icon-180.png`**, **`hermes-icon-192.png`**, **`hermes-icon-256.png`**, **`hermes-icon-512.png`**
+- **`frontend/public/assets/makosh-icon-16.png`**, **`makosh-icon-32.png`**, **`makosh-icon-48.png`**, **`makosh-icon-64.png`**, **`makosh-icon-128.png`**, **`makosh-icon-180.png`**, **`makosh-icon-192.png`**, **`makosh-icon-256.png`**, **`makosh-icon-512.png`**
   - Факт наличия файла по указанному пути, размер в байтах. Включены в таблицу иконок страницы.
 
-- **`frontend/public/assets/hermes-logo-mark.png`**
+- **`frontend/public/assets/makosh-logo-mark.png`**
   - Факт наличия, размер 106 906 байт.
 
-- **`frontend/public/assets/hermes-logo.png`**
+- **`frontend/public/assets/makosh-logo.png`**
   - Факт наличия, размер 1 560 669 байт.
 
-- **`frontend/public/assets/hermes-reference-avatar.png`**
+- **`frontend/public/assets/makosh-reference-avatar.png`**
   - Факт наличия, размер 5 808 байт.
 
 - **`frontend/public/assets/shell-backgrounds/data-stream.png`**
@@ -107,18 +107,18 @@ generated_by: code-wiki-ru
 ## Исходные файлы
 
 - [`frontend/index.html`](../../../../frontend/index.html)
-- [`frontend/public/assets/hermes-icon-128.png`](../../../../frontend/public/assets/hermes-icon-128.png)
-- [`frontend/public/assets/hermes-icon-16.png`](../../../../frontend/public/assets/hermes-icon-16.png)
-- [`frontend/public/assets/hermes-icon-180.png`](../../../../frontend/public/assets/hermes-icon-180.png)
-- [`frontend/public/assets/hermes-icon-192.png`](../../../../frontend/public/assets/hermes-icon-192.png)
-- [`frontend/public/assets/hermes-icon-256.png`](../../../../frontend/public/assets/hermes-icon-256.png)
-- [`frontend/public/assets/hermes-icon-32.png`](../../../../frontend/public/assets/hermes-icon-32.png)
-- [`frontend/public/assets/hermes-icon-48.png`](../../../../frontend/public/assets/hermes-icon-48.png)
-- [`frontend/public/assets/hermes-icon-512.png`](../../../../frontend/public/assets/hermes-icon-512.png)
-- [`frontend/public/assets/hermes-icon-64.png`](../../../../frontend/public/assets/hermes-icon-64.png)
-- [`frontend/public/assets/hermes-logo-mark.png`](../../../../frontend/public/assets/hermes-logo-mark.png)
-- [`frontend/public/assets/hermes-logo.png`](../../../../frontend/public/assets/hermes-logo.png)
-- [`frontend/public/assets/hermes-reference-avatar.png`](../../../../frontend/public/assets/hermes-reference-avatar.png)
+- [`frontend/public/assets/makosh-icon-128.png`](../../../../frontend/public/assets/makosh-icon-128.png)
+- [`frontend/public/assets/makosh-icon-16.png`](../../../../frontend/public/assets/makosh-icon-16.png)
+- [`frontend/public/assets/makosh-icon-180.png`](../../../../frontend/public/assets/makosh-icon-180.png)
+- [`frontend/public/assets/makosh-icon-192.png`](../../../../frontend/public/assets/makosh-icon-192.png)
+- [`frontend/public/assets/makosh-icon-256.png`](../../../../frontend/public/assets/makosh-icon-256.png)
+- [`frontend/public/assets/makosh-icon-32.png`](../../../../frontend/public/assets/makosh-icon-32.png)
+- [`frontend/public/assets/makosh-icon-48.png`](../../../../frontend/public/assets/makosh-icon-48.png)
+- [`frontend/public/assets/makosh-icon-512.png`](../../../../frontend/public/assets/makosh-icon-512.png)
+- [`frontend/public/assets/makosh-icon-64.png`](../../../../frontend/public/assets/makosh-icon-64.png)
+- [`frontend/public/assets/makosh-logo-mark.png`](../../../../frontend/public/assets/makosh-logo-mark.png)
+- [`frontend/public/assets/makosh-logo.png`](../../../../frontend/public/assets/makosh-logo.png)
+- [`frontend/public/assets/makosh-reference-avatar.png`](../../../../frontend/public/assets/makosh-reference-avatar.png)
 - [`frontend/public/assets/shell-backgrounds/data-stream.png`](../../../../frontend/public/assets/shell-backgrounds/data-stream.png)
 
 ## Кандидаты на drift

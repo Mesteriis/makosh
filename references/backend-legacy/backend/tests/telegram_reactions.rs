@@ -1,13 +1,13 @@
 use chrono::Utc;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 use serde_json::json;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::integrations::telegram::client::commands;
-use hermes_hub_backend::integrations::telegram::client::commands::queries;
-use hermes_hub_backend::integrations::telegram::client::reactions::reconcile_reaction_commands_from_provider_reactions;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::integrations::telegram::client::commands;
+use makosh_hub_backend::integrations::telegram::client::commands::queries;
+use makosh_hub_backend::integrations::telegram::client::reactions::reconcile_reaction_commands_from_provider_reactions;
 
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 
 #[tokio::test]
 async fn telegram_provider_reactions_reconcile_react_and_unreact_commands() {
@@ -142,7 +142,7 @@ async fn insert_reaction_command(
         "available",
         "provider_write",
         "not_required",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({"reaction_emoji": reaction_emoji}),
         json!({
             "provider_chat_id": provider_chat_id,

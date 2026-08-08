@@ -1,15 +1,15 @@
 #![forbid(unsafe_code)]
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-mail-delivery-intent-contract";
+pub const PACKAGE: &str = "makosh-mail-delivery-intent-contract";
 pub const MAIL_DELIVERY_INTENT_OWNER_ID_V1: &str = "mail";
 pub const MAIL_DELIVERY_INTENT_SOURCE_MODULE_ID_V1: &str =
-    "hermes-communication-delivery-intent-runtime";
-pub const MAIL_DELIVERY_INTENT_TARGET_MODULE_ID_V1: &str = "hermes-mail-runtime";
+    "makosh-communication-delivery-intent-runtime";
+pub const MAIL_DELIVERY_INTENT_TARGET_MODULE_ID_V1: &str = "makosh-mail-runtime";
 pub const MAIL_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1: &str = "mail.delivery-intent.v1";
 pub const MAIL_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1: &str = "mail.blob.v1";
 pub const MAIL_DELIVERY_INTENT_CUSTODY_SCOPE_ID_V1: &str = "mail.delivery-intent-body.v1";
@@ -26,7 +26,7 @@ pub const MAIL_DELIVERY_INTENT_MAX_IN_FLIGHT_V1: u32 = 32;
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.mail.delivery_intent.v1.rs"
+        "/makosh.mail.delivery_intent.v1.rs"
     ));
 }
 
@@ -256,7 +256,7 @@ mod tests {
         assert_eq!(MAIL_DELIVERY_INTENT_OWNER_ID_V1, "mail");
         assert_eq!(
             MAIL_DELIVERY_INTENT_TARGET_MODULE_ID_V1,
-            "hermes-mail-runtime"
+            "makosh-mail-runtime"
         );
         assert_eq!(
             MAIL_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1,

@@ -2,12 +2,12 @@
 
 use std::path::Path;
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     PlatformStorageBindingV1, PlatformStorageBundleV1, PlatformStorageTopology,
     StorageDeploymentProfileV1 as ControlStoreDeploymentProfile,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_storage_protocol::v1::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_storage_protocol::v1::{
     StorageBindingV1, StorageBundleV1, StorageDeploymentProfileV1 as RuntimeDeploymentProfile,
     StorageEffectiveBudgetsV1, StorageRuntimeConfigurationV1, StorageRuntimeTopologyV1,
 };
@@ -62,7 +62,7 @@ pub fn encoded_managed_macos(
         desired_bundles,
         pgbouncer_auth_file_path,
     };
-    hermes_storage_protocol::validation::validate_storage_runtime_configuration(&configuration)
+    makosh_storage_protocol::validation::validate_storage_runtime_configuration(&configuration)
         .map_err(|_| "Storage runtime configuration is invalid".to_owned())?;
     Ok(configuration.encode_to_vec())
 }
@@ -107,7 +107,7 @@ pub(crate) fn to_runtime_binding(
     {
         return Err("Storage binding is stale for the current topology".to_owned());
     }
-    let pool_alias = hermes_storage_protocol::storage_runtime_pool_alias(
+    let pool_alias = makosh_storage_protocol::storage_runtime_pool_alias(
         binding.registration_id(),
         binding.runtime_generation(),
     );
@@ -131,7 +131,7 @@ pub(crate) fn to_runtime_binding(
         storage_bundle_revision: binding.storage_bundle_revision(),
         storage_bundle_digest: binding.storage_bundle_digest().to_vec(),
     };
-    hermes_storage_protocol::validation::validate_storage_binding_message(&message)
+    makosh_storage_protocol::validation::validate_storage_binding_message(&message)
         .map_err(|_| "Storage binding is invalid".to_owned())?;
     Ok(message)
 }
@@ -166,7 +166,7 @@ pub fn to_runtime(topology: &PlatformStorageTopology) -> Result<StorageRuntimeTo
         pgbouncer_postgres_host: topology.pgbouncer_backend_endpoint().host().to_owned(),
         pgbouncer_postgres_port: u32::from(topology.pgbouncer_backend_endpoint().port()),
     };
-    hermes_storage_protocol::validation::validate_storage_runtime_topology(&runtime)
+    makosh_storage_protocol::validation::validate_storage_runtime_topology(&runtime)
         .map_err(|_| "Storage topology is invalid".to_owned())?;
     Ok(runtime)
 }
@@ -177,14 +177,14 @@ pub fn to_managed_runtime_configuration(
     vault_instance_id: &str,
     vault_runtime_generation: u64,
     vault_hpke_public_key_x25519: &[u8; 32],
-) -> Result<hermes_runtime_protocol::v1::ManagedStorageRuntimeConfigurationV1, String> {
+) -> Result<makosh_runtime_protocol::v1::ManagedStorageRuntimeConfigurationV1, String> {
     let topology_runtime = to_runtime(topology)?;
     let binding_message = to_runtime_binding(&topology_runtime, binding)?;
     let binding_runtime =
-        hermes_storage_protocol::validation::storage_binding_from_message(&binding_message)
+        makosh_storage_protocol::validation::storage_binding_from_message(&binding_message)
             .map_err(|_| "Storage binding is invalid".to_owned())?;
     let budgets = binding_runtime.access().effective_budgets();
-    let configuration = hermes_runtime_protocol::v1::ManagedStorageRuntimeConfigurationV1 {
+    let configuration = makosh_runtime_protocol::v1::ManagedStorageRuntimeConfigurationV1 {
         database_id: binding_runtime.identity().database_id().to_owned(),
         pgbouncer_host: topology_runtime.pgbouncer_host,
         pgbouncer_port: topology_runtime.pgbouncer_port,

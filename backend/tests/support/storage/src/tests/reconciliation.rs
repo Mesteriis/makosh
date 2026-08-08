@@ -1,7 +1,7 @@
-use hermes_storage_control::{
+use makosh_storage_control::{
     StorageLifecycleErrorV1, StorageLifecycleStateV1, StorageLifecycleV1,
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
@@ -15,7 +15,7 @@ fn binding(
 ) -> StorageBindingV1 {
     let identity = StorageBindingIdentityV1::new(
         "storage_main".into(),
-        "hermes".into(),
+        "makosh".into(),
         "notes".into(),
         "registration_notes".into(),
         "runtime_notes".into(),

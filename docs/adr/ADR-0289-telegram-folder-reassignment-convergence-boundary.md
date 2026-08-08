@@ -42,8 +42,8 @@ Folder reassignment остаётся Telegram integration behavior:
 
 ```text
 owner_id  = telegram
-module_id = hermes-telegram-runtime
-route     = /hermes.telegram.v1.TelegramOperationalService/ExecuteCommand
+module_id = makosh-telegram-runtime
+route     = /makosh.telegram.v1.TelegramOperationalService/ExecuteCommand
 contract  = telegram.command.v1
 command   = ReassignChatFolders
 gate      = telegram_folder_reassignment_v1
@@ -53,11 +53,11 @@ gate      = telegram_folder_reassignment_v1
 существующих integration-owned packages:
 
 ```text
-hermes-telegram-api          bounded target-set command
-hermes-telegram-core         operation/idempotency/retry policy
-hermes-telegram-tdlib        provider delta and verification adapter
-hermes-telegram-persistence  durable command and terminal state
-hermes-telegram-runtime      execution/reconciliation orchestration
+makosh-telegram-api          bounded target-set command
+makosh-telegram-core         operation/idempotency/retry policy
+makosh-telegram-tdlib        provider delta and verification adapter
+makosh-telegram-persistence  durable command and terminal state
+makosh-telegram-runtime      execution/reconciliation orchestration
 ```
 
 Release assembly остаётся downstream unit и не получает provider semantics.
@@ -156,7 +156,7 @@ Telegram в production inventory.
 
 ### Обещать provider atomicity
 
-Отклонено: TDLib выполняет несколько provider mutations; Hermes не может
+Отклонено: TDLib выполняет несколько provider mutations; Макошь не может
 сделать их одной Telegram transaction.
 
 ### Сохранить один раз вычисленный delta

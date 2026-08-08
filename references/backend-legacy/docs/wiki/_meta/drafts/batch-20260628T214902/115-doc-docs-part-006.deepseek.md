@@ -1,6 +1,6 @@
 ### Summary / Резюме
 
-Добавляется страница `operations/documentation-map.md` — навигационная карта всей документации по интеграционным каналам (Telegram, WhatsApp) в проекте Hermes. Она собирает ссылки на существующие страницы архитектуры, API, статуса, анализа блокеров и исследовательские документы, делая wiki самодостаточной для поиска нужного артефакта. Страница пишется на русском, использует Obsidian-совместимые wikilinks относительно корня репозитория.
+Добавляется страница `operations/documentation-map.md` — навигационная карта всей документации по интеграционным каналам (Telegram, WhatsApp) в проекте Макошь. Она собирает ссылки на существующие страницы архитектуры, API, статуса, анализа блокеров и исследовательские документы, делая wiki самодостаточной для поиска нужного артефакта. Страница пишется на русском, использует Obsidian-совместимые wikilinks относительно корня репозитория.
 
 ### Proposed pages / Предлагаемые страницы
 
@@ -9,7 +9,7 @@
 ```markdown
 # Карта документации
 
-Навигационная карта документации по интеграционным каналам связи Hermes.
+Навигационная карта документации по интеграционным каналам связи Макошь.
 Здесь перечислены все страницы, покрывающие архитектуру, API, статус реализации,
 анализ блокеров, продуктовые исследования и плановые документы для Telegram и WhatsApp.
 
@@ -76,7 +76,7 @@
 - **ADR-0050** — V4 Telegram policy automation и call intelligence
 - **ADR-0051** — WhatsApp Web companion boundary
 - **ADR-0052** — Capability/action confirmation policy
-- **ADR-0056** — Router-level `X-Hermes-Secret` local API auth
+- **ADR-0056** — Router-level `X-Макошь-Secret` local API auth
 - **ADR-0074** — Multi-channel identity traces (WhatsApp/phone)
 - **ADR-0076** — Host vault для новых secret payloads
 - **ADR-0083** — Account-scoped TDLib runtime slice (Telegram)
@@ -114,12 +114,12 @@
 
 ### Drift candidates / Кандидаты на drift
 
-1. **Provider reconciliation для folder labels/mutations**  
-   `telegram/gap-analysis.md` (2026-06-18) объявляет «Provider reconciliation CLOSED» и включает «folder add, folder remove and folder reassign» как закрытые.  
-   `telegram/architecture.md` (статус на 2026-06-17, блок «Provider Command Outbox») явно перечисляет «Folder labels/mutations» среди элементов, которым всё ещё нужно «stronger provider-observed reconciliation before they can be marked completed».  
+1. **Provider reconciliation для folder labels/mutations**
+   `telegram/gap-analysis.md` (2026-06-18) объявляет «Provider reconciliation CLOSED» и включает «folder add, folder remove and folder reassign» как закрытые.
+   `telegram/architecture.md` (статус на 2026-06-17, блок «Provider Command Outbox») явно перечисляет «Folder labels/mutations» среди элементов, которым всё ещё нужно «stronger provider-observed reconciliation before they can be marked completed».
    Расхождение: либо архитектурный документ устарел и не отражает последние изменения, либо gap analysis излишне оптимистичен.
 
-2. **Событие `telegram.sync.failed`**  
+2. **Событие `telegram.sync.failed`**
    В `operations-realtime.md` перечень событий realtime включает `telegram.sync.started`, `telegram.sync.progress`, `telegram.sync.completed`, но не `telegram.sync.failed`. Однако ниже, в списке «Current emission scope», указано: «chat/history sync -> telegram.sync.started/progress/completed/failed». Это мелкое расхождение в документации (список событий неполон относительно прозы).
 
 Других расхождений между документами, включёнными в контекст, не обнаружено.

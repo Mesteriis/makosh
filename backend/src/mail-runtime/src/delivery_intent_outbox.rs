@@ -1,7 +1,7 @@
 //! Mail-owned exact-byte relay for delivery-intent terminal results.
 
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
-use hermes_mail_persistence::{MailDeliveryIntentStoreV1, MailDurablePersistenceError};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_mail_persistence::{MailDeliveryIntentStoreV1, MailDurablePersistenceError};
 
 #[derive(Debug)]
 pub enum MailDeliveryIntentOutboxRelayErrorV1 {

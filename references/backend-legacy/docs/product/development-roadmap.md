@@ -1,4 +1,4 @@
-# Hermes Product Development Roadmap
+# Макошь Product Development Roadmap
 
 ## Status
 
@@ -22,7 +22,7 @@ Communication
   -> Timeline / Dossier / Recall
 ```
 
-Each slice should improve Hermes as one Personal Memory System, not as a set of
+Each slice should improve Макошь as one Personal Memory System, not as a set of
 separate apps.
 
 ## Current Implementation Baseline
@@ -103,7 +103,7 @@ Refactoring plan topics:
 
 ## Slice 3: Knowledge And Polygraph
 
-Goal: make Hermes able to detect conflicts between new evidence and accepted
+Goal: make Макошь able to detect conflicts between new evidence and accepted
 memory.
 
 Documentation outcomes:
@@ -177,7 +177,7 @@ Refactoring plan topics:
 
 ## Slice 7: Operating Surface
 
-Goal: present Hermes as a dense desktop personal operating environment.
+Goal: present Макошь as a dense desktop personal operating environment.
 
 Documentation outcomes:
 

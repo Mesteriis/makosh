@@ -4,7 +4,7 @@ import Drawer from '../Drawer.vue'
 import Icon from '../Icon.vue'
 import Tree from '../Tree.vue'
 import ToggleGroup from '../ToggleGroup.vue'
-import { hermesBrandAssets } from '../assets/brand'
+import { makoshBrandAssets } from '../assets/brand'
 import type { UiThemeFamily, UiThemeMode } from '../foundation/theme'
 import { useMouseLeaveDismiss } from '../useMouseLeaveDismiss'
 import {
@@ -377,12 +377,12 @@ onBeforeUnmount(() => {
 		>
 			<span class="app-navbar__brand-mark" aria-hidden="true">
 				<img
-					:src="hermesBrandAssets.logoMarkLight"
+					:src="makoshBrandAssets.logoMarkLight"
 					alt=""
 					class="app-navbar__brand-logo app-navbar__brand-logo--light"
 				/>
 				<img
-					:src="hermesBrandAssets.logoMarkDark"
+					:src="makoshBrandAssets.logoMarkDark"
 					alt=""
 					class="app-navbar__brand-logo app-navbar__brand-logo--dark"
 				/>
@@ -555,7 +555,7 @@ onBeforeUnmount(() => {
 				>
 					<div v-if="languageOptions.length > 0" class="app-navbar__toggle-row" role="none">
 						<ToggleGroup
-							class="app-navbar__language-toggle hermes-toggle-group--tabs"
+							class="app-navbar__language-toggle makosh-toggle-group--tabs"
 							:model-value="selectedLanguage"
 							:items="languageOptions"
 							aria-label="Смена языка"
@@ -618,7 +618,7 @@ onBeforeUnmount(() => {
 						</div>
 
 						<ToggleGroup
-							class="app-navbar__theme-mode-toggle hermes-toggle-group--tabs"
+							class="app-navbar__theme-mode-toggle makosh-toggle-group--tabs"
 							:model-value="selectedThemeMode"
 							:items="themeModeOptions"
 							aria-label="Вариант темы"

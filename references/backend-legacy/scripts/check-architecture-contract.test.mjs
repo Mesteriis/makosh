@@ -97,16 +97,16 @@ assert.doesNotMatch(
 	'Task candidate errors must not expose cross-domain Obligations failures'
 );
 
-assert.deepEqual(contract.workspace.roles.kernel.packages, ['hermes-kernel']);
+assert.deepEqual(contract.workspace.roles.kernel.packages, ['makosh-kernel']);
 assert.ok(contract.workspace.roles.provider_api.forbidden_dependencies.includes('sqlx'));
 assert.deepEqual(contract.workspace.roles.contract_api, {
-	packages: ['hermes-connectrpc-contracts'],
-	forbidden_dependencies: ['hermes-hub-backend', 'reqwest', 'sqlx']
+	packages: ['makosh-connectrpc-contracts'],
+	forbidden_dependencies: ['makosh-backend', 'reqwest', 'sqlx']
 });
-assert.ok(contract.workspace.roles.provider_impl.forbidden_dependencies.includes('hermes-hub-backend'));
+assert.ok(contract.workspace.roles.provider_impl.forbidden_dependencies.includes('makosh-backend'));
 assert.deepEqual(contract.workspace.roles.test_session, {
-	packages: ['hermes-test-session'],
-	forbidden_dependencies: ['hermes-hub-backend', 'hermes-backend-testkit']
+	packages: ['makosh-test-session'],
+	forbidden_dependencies: ['makosh-backend', 'makosh-backend-testkit']
 });
 
 assert.ok(contract.frontend?.layers?.domains?.deny.includes('other_frontend_domains'));

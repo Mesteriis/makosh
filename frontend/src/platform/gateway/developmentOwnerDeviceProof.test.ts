@@ -19,7 +19,7 @@ describe('DevelopmentOwnerDeviceProofV1', () => {
 			new Uint8Array(64).fill(7),
 		)
 		expect(fetchImpl).toHaveBeenCalledWith(
-			'/__hermes/owner-device-proof/v1/sign',
+			'/__makosh/owner-device-proof/v1/sign',
 			expect.objectContaining({
 				method: 'POST',
 				credentials: 'same-origin',

@@ -1,10 +1,10 @@
-use hermes_communication_translation_api::{
+use makosh_communication_translation_api::{
     COMMUNICATION_TRANSLATION_COMMAND_CONTRACT_NAME_V1,
     COMMUNICATION_TRANSLATION_CONTRACT_MAJOR_V1, COMMUNICATION_TRANSLATION_CONTRACT_REVISION_V1,
     COMMUNICATION_TRANSLATION_OWNER_V1, COMMUNICATION_TRANSLATION_QUERY_CONTRACT_NAME_V1,
     COMMUNICATION_TRANSLATION_REALTIME_CONTRACT_NAME_V1, COMMUNICATION_TRANSLATION_SCHEMA_SHA256,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 
 pub(crate) fn communication_translation_command_contract_v1() -> ContractReferenceV1 {
     contract(COMMUNICATION_TRANSLATION_COMMAND_CONTRACT_NAME_V1)

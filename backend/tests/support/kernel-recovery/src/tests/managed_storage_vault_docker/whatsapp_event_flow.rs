@@ -4,8 +4,8 @@ use std::time::Instant;
 
 use super::*;
 
-use hermes_runtime_protocol::v1::ModuleClientResponseV1;
-use hermes_whatsapp_api::{
+use makosh_runtime_protocol::v1::ModuleClientResponseV1;
+use makosh_whatsapp_api::{
     WhatsAppDialog, WhatsAppMessage, WhatsAppParticipant, WhatsAppProviderCommand,
     WhatsAppProviderCommandStateV1, WhatsAppProviderEvent, WhatsAppProviderEventKind,
     WhatsAppPublicClientRequestV1, WhatsAppPublicClientResponseV1,
@@ -20,16 +20,16 @@ use hermes_whatsapp_api::{
         WhatsAppOperationalReplayResponseV1,
     },
 };
-use hermes_whatsapp_runtime::client_port::{decode_module_response, encode_module_request};
+use makosh_whatsapp_runtime::client_port::{decode_module_response, encode_module_request};
 use prost::Message as _;
 
 use crate::modules::capability::router::{
     ManagedCapabilityRouteRequest, route_managed_client_request,
 };
 
-const OBSERVATION_SUBJECT: &str = "hermes.observation.v1.communications.communication_observed.v1";
+const OBSERVATION_SUBJECT: &str = "makosh.observation.v1.communications.communication_observed.v1";
 const CANONICAL_EVENT_SUBJECT: &str =
-    "hermes.event.v1.communications.communication_evidence_recorded.v1";
+    "makosh.event.v1.communications.communication_evidence_recorded.v1";
 const PRIVATE_COMMAND_TEXT: &str = "private WhatsApp body must stay integration-owned";
 
 #[test]
@@ -888,7 +888,7 @@ fn submit_message_observation(
         },
     };
     let private_host_payload =
-        hermes_whatsapp_api::host_bridge::encode_host_bridge_payload(&envelope)
+        makosh_whatsapp_api::host_bridge::encode_host_bridge_payload(&envelope)
             .expect("encode private WhatsApp host operation");
     let mut host = WhatsAppHostBridgeTestClient::connect(&contour.whatsapp);
     assert_eq!(host.submit_observation(&envelope), provider_event_id);
@@ -969,7 +969,7 @@ fn receive_whatsapp_observation(
         .source
         .as_ref()
         .expect("WhatsApp observation source");
-    assert_eq!(source.module_id, hermes_whatsapp_runtime::PACKAGE);
+    assert_eq!(source.module_id, makosh_whatsapp_runtime::PACKAGE);
     assert_eq!(
         source.runtime_generation,
         contour.whatsapp.runtime_generation,

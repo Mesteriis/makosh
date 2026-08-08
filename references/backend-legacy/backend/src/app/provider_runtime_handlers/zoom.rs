@@ -43,8 +43,8 @@ use crate::vault::models::VaultMode;
 
 #[path = "zoom_support.rs"]
 mod zoom_support;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
-use hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore;
 use zoom_support::*;
 
 const ZOOM_SIGNATURE_HEADER: &str = "x-zm-signature";
@@ -297,7 +297,7 @@ pub(crate) async fn get_zoom_capabilities() -> Result<Json<ZoomCapabilitiesRespo
                 status: "available",
                 action_class: "external_ingress",
                 confirmation_required: true,
-                reason: "The hermes-zoom-edge-proxy binary forwards raw public Zoom webhooks into the protected verified runtime bridge.",
+                reason: "The makosh-zoom-edge-proxy binary forwards raw public Zoom webhooks into the protected verified runtime bridge.",
             },
             ZoomCapabilityStatus {
                 capability: "calendar_event_matching",

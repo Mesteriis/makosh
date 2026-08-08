@@ -1,19 +1,19 @@
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::email_sync::EmailSyncAdapterConfig;
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::email_sync::EmailSyncAdapterConfig;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde_json::json;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::platform::communications::email_sync::{
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::platform::communications::email_sync::{
     EmailSyncPlanError, plan_email_sync,
 };
-use hermes_hub_backend::platform::communications::email_sync::{
+use makosh_hub_backend::platform::communications::email_sync::{
     IMAP_ALL_MAILBOXES, email_sync_plan_selects_all_imap_mailboxes, email_sync_plan_stream_ids,
 };
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::storage::database::Database;
 
 #[tokio::test]
 async fn email_sync_plan_selects_provider_specific_credentials_and_streams_against_postgres() {
@@ -365,14 +365,14 @@ async fn live_sync_context(_test_name: &str) -> Option<(CommunicationIngestionSt
 }
 
 trait IntoTestProviderAccount {
-    fn into_test_provider_account(self) -> hermes_communications_api::accounts::ProviderAccount;
+    fn into_test_provider_account(self) -> makosh_communications_api::accounts::ProviderAccount;
 }
 
 impl IntoTestProviderAccount for NewProviderAccount {
-    fn into_test_provider_account(self) -> hermes_communications_api::accounts::ProviderAccount {
+    fn into_test_provider_account(self) -> makosh_communications_api::accounts::ProviderAccount {
         let now = chrono::Utc::now();
 
-        hermes_communications_api::accounts::ProviderAccount {
+        makosh_communications_api::accounts::ProviderAccount {
             account_id: self.account_id,
             provider_kind: self.provider_kind,
             display_name: self.display_name,

@@ -46,7 +46,7 @@ definition of message receipt and bypassing canonical trace requirements.
     {
       "name": "receive.message.observed",
       "status": "lab_pass",
-      "evidence": [".local/hermes-lab/reports/zulip/...json"]
+      "evidence": [".local/makosh-lab/reports/zulip/...json"]
     }
   ]
 }
@@ -59,23 +59,23 @@ source, confidence/evidence, trace identifiers and replay/idempotency notes.
 
 ## Zulip command
 
-Zulip publishes a local compliance report through the single Hermes Lab
+Zulip publishes a local compliance report through the single Макошь Lab
 entrypoint:
 
 ```sh
-make hermes-lab ACTION=compliance PROVIDER=zulip
+make makosh-lab ACTION=compliance PROVIDER=zulip
 ```
 
-The report is written under `.local/hermes-lab/reports/zulip/compliance` and is
+The report is written under `.local/makosh-lab/reports/zulip/compliance` and is
 derived from scenario contracts, local Lab reports and backend evidence reports.
 It is an audit by default. To turn it into a closure gate:
 
 ```sh
-make hermes-lab ACTION=compliance PROVIDER=zulip REQUIRE_CLOSED=1
+make makosh-lab ACTION=compliance PROVIDER=zulip REQUIRE_CLOSED=1
 ```
 
 To refresh backend contract evidence before writing the report:
 
 ```sh
-make hermes-lab ACTION=compliance PROVIDER=zulip BACKEND=1
+make makosh-lab ACTION=compliance PROVIDER=zulip BACKEND=1
 ```

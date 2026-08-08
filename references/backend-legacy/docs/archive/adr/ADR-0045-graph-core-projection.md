@@ -4,7 +4,7 @@ Status: Proposed
 
 ## Context
 
-Version 2 starts by turning the Knowledge Graph into a real backend projection. Hermes Hub already has local PostgreSQL storage for Personas, communication messages and documents. ADR-0008 requires relationships to be durable records with provenance and confidence. ADR-0023 requires derived state to be rebuildable. ADR-0019 forbids ambiguous automatic identity merges. ADR-0031 keeps the UI desktop/laptop only.
+Version 2 starts by turning the Knowledge Graph into a real backend projection. Макошь already has local PostgreSQL storage for Personas, communication messages and documents. ADR-0008 requires relationships to be durable records with provenance and confidence. ADR-0023 requires derived state to be rebuildable. ADR-0019 forbids ambiguous automatic identity merges. ADR-0031 keeps the UI desktop/laptop only.
 
 ## Decision
 
@@ -33,7 +33,7 @@ Initial relationship types:
 
 System-created edges require evidence. The first projection only uses exact email matching to connect messages to Personas. When no exact Persona exists, the graph uses an `email_address` node instead of inventing a Persona.
 
-Read APIs are local-only, read-only and protected by the existing bearer token plus `X-Hermes-Actor-Id`.
+Read APIs are local-only, read-only and protected by the existing bearer token plus `X-Макошь-Actor-Id`.
 
 ## Non-Goals
 

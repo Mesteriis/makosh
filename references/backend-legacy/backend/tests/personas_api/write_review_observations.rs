@@ -2,10 +2,10 @@ use serde_json::json;
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::domains::personas::api::store::PersonaProjectionStore;
-use hermes_hub_backend::domains::personas::enrichment_engine::EnrichmentResultStore;
-use hermes_hub_backend::domains::personas::identity::store::PersonaIdentityReviewStore;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::domains::personas::api::store::PersonaProjectionStore;
+use makosh_hub_backend::domains::personas::enrichment_engine::EnrichmentResultStore;
+use makosh_hub_backend::domains::personas::identity::store::PersonaIdentityReviewStore;
+use makosh_hub_backend::platform::storage::database::Database;
 
 use super::support::{
     LOCAL_API_TOKEN, build_personas_app_with_database, delete_request_with_token, json_body,

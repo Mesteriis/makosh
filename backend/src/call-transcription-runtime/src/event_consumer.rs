@@ -1,12 +1,12 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_call_transcription_persistence::CallTranscriptionPersistenceV1;
-use hermes_events_jetstream::{
+use makosh_call_transcription_persistence::CallTranscriptionPersistenceV1;
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::delivery::OutboxRecordV1;
-use hermes_runtime_protocol::managed_control::{
+use makosh_events_protocol::delivery::OutboxRecordV1;
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
 

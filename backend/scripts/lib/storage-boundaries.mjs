@@ -43,8 +43,8 @@ function identifierParts(identifier) {
 }
 
 function expectedPostgresSchema(role) {
-  if (MODULE_ROLES.has(role)) return 'hermes_data';
-  if (role === 'platform') return 'hermes_platform';
+  if (MODULE_ROLES.has(role)) return 'makosh_data';
+  if (role === 'platform') return 'makosh_platform';
   return null;
 }
 
@@ -130,12 +130,12 @@ export function validateStorageEntries(policy, entries) {
             `${identifier} index name must be unqualified; PostgreSQL derives its schema from the target table`,
           );
         }
-      } else if (!sqlitePackage && reference.kind === 'function' && parts[0] === 'hermes_platform') {
+      } else if (!sqlitePackage && reference.kind === 'function' && parts[0] === 'makosh_platform') {
         if (isVersionedPlatformFunction(policy, reference)) continue;
         emit(
           'invalid_platform_function',
           entry.path,
-          `${identifier} is not an exact allowlisted hermes_platform technical function`,
+          `${identifier} is not an exact allowlisted makosh_platform technical function`,
         );
         continue;
       } else if (!sqlitePackage && parts.length < 2) {

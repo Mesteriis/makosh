@@ -2,8 +2,8 @@
 
 use std::collections::BTreeMap;
 
-use hermes_telegram_api::TelegramMessageProjection;
-use hermes_telegram_persistence::{TelegramDurablePersistence, TelegramDurablePersistenceError};
+use makosh_telegram_api::TelegramMessageProjection;
+use makosh_telegram_persistence::{TelegramDurablePersistence, TelegramDurablePersistenceError};
 
 use crate::projection_cache::TelegramRuntimeProjectionCache;
 

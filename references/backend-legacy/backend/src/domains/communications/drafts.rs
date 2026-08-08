@@ -1,4 +1,4 @@
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use base64::Engine as _;
@@ -11,8 +11,8 @@ use sqlx::{Postgres, Row, Transaction};
 use thiserror::Error;
 
 use crate::domains::communications::evidence::{link_mail_entity_in_transaction, merge_metadata};
-use hermes_events_postgres::store::EventStore;
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_events_postgres::store::EventStore;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 const EVENT_TYPE_DRAFT_CREATED: &str = "mail.draft.created";
 const EVENT_TYPE_DRAFT_UPDATED: &str = "mail.draft.updated";
@@ -598,7 +598,7 @@ fn draft_event(
             "account_id": draft.account_id,
         }),
     )
-    .actor(json!({ "actor_id": "hermes-frontend" }))
+    .actor(json!({ "actor_id": "makosh-frontend" }))
     .payload(json!({
         "draft_id": draft.draft_id,
         "account_id": draft.account_id,
@@ -769,9 +769,9 @@ pub enum CommunicationDraftError {
     #[error(transparent)]
     Observation(#[from] ObservationStoreError),
     #[error(transparent)]
-    EventStore(#[from] hermes_events_postgres::errors::EventStoreError),
+    EventStore(#[from] makosh_events_postgres::errors::EventStoreError),
     #[error(transparent)]
-    EventEnvelope(#[from] hermes_events_api::EventEnvelopeError),
+    EventEnvelope(#[from] makosh_events_api::EventEnvelopeError),
     #[error(transparent)]
     Serde(#[from] serde_json::Error),
     #[error("invalid draft: {0}")]

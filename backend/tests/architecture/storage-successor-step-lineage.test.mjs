@@ -64,7 +64,7 @@ test('Storage successor bundles inherit exact steps without replaying DDL', asyn
   assert.match(liveTest, /reapply exact successor bundle/);
   assert.match(
     authenticatedRunner,
-    /HERMES_STORAGE_TEST_DATABASE_URL: await postgres_test_database_url\(secrets\)/,
+    /MAKOSH_STORAGE_TEST_DATABASE_URL: await postgres_test_database_url\(secrets\)/,
   );
   assert.doesNotMatch(authenticatedRunner, /console\.log\(.*databaseUrl/);
 });

@@ -1,5 +1,5 @@
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
-use hermes_whatsapp_persistence::{WhatsAppDurablePersistence, WhatsAppDurablePersistenceError};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_whatsapp_persistence::{WhatsAppDurablePersistence, WhatsAppDurablePersistenceError};
 
 pub async fn relay_communications_outbox_once(
     durable: &WhatsAppDurablePersistence,

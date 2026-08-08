@@ -17,7 +17,7 @@ fn module_registration_has_explicit_state_transitions_and_grant_epoch_fencing() 
 fn initial_settings_materialization_is_atomic_exact_and_idempotent() {
     let fixture = RegistrationFixture::new();
     let schema =
-        SettingsSchemaBinding::new(hermes_kernel_control_store::SettingsSchemaBindingInputV1 {
+        SettingsSchemaBinding::new(makosh_kernel_control_store::SettingsSchemaBindingInputV1 {
             registration_id: "registration-1".to_owned(),
             schema_major: 1,
             schema_revision: 1,
@@ -103,7 +103,7 @@ fn initial_settings_materialization_is_atomic_exact_and_idempotent() {
 #[test]
 fn incomplete_initial_settings_are_atomically_blocked_without_effective_revision() {
     let path = std::env::temp_dir().join(format!(
-        "hermes-control-store-incomplete-settings-{}.sqlite",
+        "makosh-control-store-incomplete-settings-{}.sqlite",
         std::process::id()
     ));
     let _ = std::fs::remove_file(&path);
@@ -128,7 +128,7 @@ fn incomplete_initial_settings_are_atomically_blocked_without_effective_revision
         .expect("approve incomplete registration");
     store
         .register_settings_schema(&SettingsSchemaBinding::new(
-            hermes_kernel_control_store::SettingsSchemaBindingInputV1 {
+            makosh_kernel_control_store::SettingsSchemaBindingInputV1 {
                 registration_id: "registration-incomplete".to_owned(),
                 schema_major: 1,
                 schema_revision: 1,
@@ -182,7 +182,7 @@ struct RegistrationFixture {
 impl RegistrationFixture {
     fn new() -> Self {
         let path = std::env::temp_dir().join(format!(
-            "hermes-control-store-registration-{}-{}.sqlite",
+            "makosh-control-store-registration-{}-{}.sqlite",
             std::process::id(),
             REGISTRATION_FIXTURE_SEQUENCE.fetch_add(1, Ordering::Relaxed)
         ));
@@ -221,7 +221,7 @@ impl RegistrationFixture {
         let binding = BundledManagedLaunchBinding::new(
             "registration-1",
             1,
-            "hermes-desktop",
+            "makosh-desktop",
             "runtime.mail",
             [10; 32],
             [7; 32],
@@ -265,7 +265,7 @@ impl RegistrationFixture {
         let binding = PlatformManagedProcessBinding::new(
             "vault",
             1,
-            "hermes-desktop",
+            "makosh-desktop",
             "runtime.vault",
             [12; 32],
             [13; 32],
@@ -330,7 +330,7 @@ impl RegistrationFixture {
 
     fn assert_settings_applied(&self) {
         let schema =
-            SettingsSchemaBinding::new(hermes_kernel_control_store::SettingsSchemaBindingInputV1 {
+            SettingsSchemaBinding::new(makosh_kernel_control_store::SettingsSchemaBindingInputV1 {
                 registration_id: "registration-1".to_owned(),
                 schema_major: 1,
                 schema_revision: 1,
@@ -504,7 +504,7 @@ impl Drop for RegistrationFixture {
 #[test]
 fn exports_a_consistent_control_store_with_a_checksum() {
     let directory = std::env::temp_dir().join(format!(
-        "hermes-control-store-export-{}",
+        "makosh-control-store-export-{}",
         std::process::id()
     ));
     let _ = std::fs::remove_dir_all(&directory);
@@ -562,7 +562,7 @@ fn envelope_validation_requires_a_complete_typed_header_and_kind() {
             nanos: 0,
         }),
         semantics: Some(
-            hermes_events_protocol::v1::durable_envelope_v1::Semantics::Event(EventMetadataV1 {
+            makosh_events_protocol::v1::durable_envelope_v1::Semantics::Event(EventMetadataV1 {
                 occurred_at: Some(prost_types::Timestamp {
                     seconds: 1,
                     nanos: 0,
@@ -595,7 +595,7 @@ fn recovery_status_request_is_an_empty_typed_message() {
 fn recovery_control_envelope_preserves_the_status_operation_variant() {
     let request = RecoveryControlRequestV1 {
         operation: Some(
-            hermes_gateway_protocol::v1::recovery_control_request_v1::Operation::GetRecoveryStatus(
+            makosh_gateway_protocol::v1::recovery_control_request_v1::Operation::GetRecoveryStatus(
                 GetRecoveryStatusRequestV1 {},
             ),
         ),
@@ -606,7 +606,7 @@ fn recovery_control_envelope_preserves_the_status_operation_variant() {
     assert!(matches!(
         decoded.operation,
         Some(
-            hermes_gateway_protocol::v1::recovery_control_request_v1::Operation::GetRecoveryStatus(
+            makosh_gateway_protocol::v1::recovery_control_request_v1::Operation::GetRecoveryStatus(
                 _
             )
         )

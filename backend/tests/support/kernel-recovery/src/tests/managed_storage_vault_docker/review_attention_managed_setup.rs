@@ -2,12 +2,12 @@
 
 use super::*;
 
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_review_attention_api::{REVIEW_ATTENTION_MODULE_ID_V1, REVIEW_ATTENTION_OWNER_V1};
-use hermes_review_attention_persistence::schema::{
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_review_attention_api::{REVIEW_ATTENTION_MODULE_ID_V1, REVIEW_ATTENTION_OWNER_V1};
+use makosh_review_attention_persistence::schema::{
     REVIEW_ATTENTION_STORAGE_BUNDLE_REVISION_V2, review_attention_storage_bundle_v1,
 };
-use hermes_review_attention_runtime::{
+use makosh_review_attention_runtime::{
     REVIEW_ATTENTION_STORAGE_CAPABILITY_ID_V1, review_attention_module_descriptor_v1,
     review_attention_settings_schema_bytes_v1,
 };
@@ -80,7 +80,7 @@ pub(super) fn admit_review_attention_runtime_v1(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             REVIEW_ATTENTION_RELEASE_ARTIFACT_ID_V1,
             Sha256::digest(
                 std::fs::read(review_attention_binary()).expect("Review attention runtime binary"),
@@ -145,7 +145,7 @@ pub(super) fn prepare_review_attention_runtime_v1(
 pub(super) fn configure_review_attention_realtime_v1(
     supervisor: &ManagedRuntimeSupervisor,
     store: &Arc<SqliteControlStore>,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 ) {
     supervisor
         .configure_client_realtime_handler(Arc::new(ClientRealtimePublishHandlerV1::new(
@@ -268,7 +268,7 @@ fn start_reserved_review_attention_runtime_v1(
 fn review_attention_storage_binding_v1(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(registration_id, REVIEW_ATTENTION_STORAGE_CAPABILITY_ID_V1)
         .expect("read Review attention Storage binding")
@@ -277,5 +277,5 @@ fn review_attention_storage_binding_v1(
 }
 
 fn review_attention_binary() -> PathBuf {
-    binary("HERMES_REVIEW_ATTENTION_RUNTIME_BIN")
+    binary("MAKOSH_REVIEW_ATTENTION_RUNTIME_BIN")
 }

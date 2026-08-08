@@ -37,7 +37,7 @@ const JUNK_WORDS: &[&str] = &[
     "if you no longer wish",
 ];
 
-/// Result of Hermes auto-analysis on an ingested message.
+/// Result of Макошь auto-analysis on an ingested message.
 #[derive(Debug)]
 pub struct IngestionAnalysis {
     pub category: Option<String>,

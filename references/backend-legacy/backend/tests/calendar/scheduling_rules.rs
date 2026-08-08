@@ -1,6 +1,6 @@
 use chrono::{Duration, Utc};
-use hermes_hub_backend::domains::calendar::rules::CalendarRuleStore;
-use hermes_hub_backend::domains::calendar::scheduling::{DeadlineStore, FocusBlockStore};
+use makosh_hub_backend::domains::calendar::rules::CalendarRuleStore;
+use makosh_hub_backend::domains::calendar::scheduling::{DeadlineStore, FocusBlockStore};
 use serde_json::json;
 
 use super::support::{live_pool, unique_suffix};

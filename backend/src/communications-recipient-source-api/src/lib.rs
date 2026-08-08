@@ -9,12 +9,12 @@ pub use envelope::{
     build_communication_recipient_source_prepared_outbox_record_v1,
     build_communication_recipient_source_rejected_outbox_record_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-communications-recipient-source-api";
+pub const PACKAGE: &str = "makosh-communications-recipient-source-api";
 pub const COMMUNICATIONS_RECIPIENT_SOURCE_OWNER_V1: &str = "communications";
 pub const COMMUNICATION_RECIPIENT_SOURCE_PREPARE_CONTRACT_NAME_V1: &str =
     "communication_recipient_source_prepare";
@@ -32,14 +32,14 @@ pub const COMMUNICATIONS_RECIPIENT_SOURCE_CAPABILITY_ID_V1: &str =
 pub const COMMUNICATION_RECIPIENT_SOURCE_BLOB_TARGET_OWNER_ID_V1: &str =
     "communication_recipient_suggestion";
 pub const COMMUNICATION_RECIPIENT_SOURCE_BLOB_TARGET_MODULE_ID_V1: &str =
-    "hermes-communication-recipient-suggestion-runtime";
+    "makosh-communication-recipient-suggestion-runtime";
 pub const COMMUNICATION_RECIPIENT_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "communication_recipient_suggestion.source.blob.v1";
 
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communications.recipient_source.v1.rs"
+        "/makosh.communications.recipient_source.v1.rs"
     ));
 }
 

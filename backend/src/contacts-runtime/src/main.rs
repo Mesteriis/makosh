@@ -9,12 +9,12 @@ use std::{
     time::Duration,
 };
 
-use hermes_contacts_persistence::{ContactsPersistenceErrorV1, contacts_storage_bundle_v1};
-use hermes_contacts_runtime::{
+use makosh_contacts_persistence::{ContactsPersistenceErrorV1, contacts_storage_bundle_v1};
+use makosh_contacts_runtime::{
     ContactsManagedRuntimeErrorV1, ContactsManagedRuntimeV1, ContactsRuntimeAdmissionV1,
     contacts_module_descriptor_v1, contacts_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedDomainRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,

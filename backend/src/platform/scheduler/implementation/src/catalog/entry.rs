@@ -1,5 +1,5 @@
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_scheduler_protocol::{ScheduleRunLeaseV1, ScheduleSpecV1};
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_scheduler_protocol::{ScheduleRunLeaseV1, ScheduleSpecV1};
 
 /// Persistable control state for one schedule; it contains no job payload or owner data.
 #[derive(Clone, Debug, Eq, PartialEq)]

@@ -16,7 +16,7 @@ const mouseLeaveDismissComponents = [
 	'SplitButton'
 ]
 
-describe('Hermes UI mouse-leave overlay dismissal contract', () => {
+describe('Макошь UI mouse-leave overlay dismissal contract', () => {
 	it('keeps mouse-leave dismissal centralized in shared UI', () => {
 		const uiRoot = fileURLToPath(new URL('.', import.meta.url))
 		const source = readFileSync(join(uiRoot, 'useMouseLeaveDismiss.ts'), 'utf8')
@@ -63,7 +63,7 @@ describe('Hermes UI mouse-leave overlay dismissal contract', () => {
 		expect(source).toContain('<Teleport to="body">')
 		expect(source).toContain('updatePopoverGeometry')
 		expect(source).toContain("window.addEventListener('scroll', updatePopoverGeometry, true)")
-		expect(styles).toContain('.hermes-tree-select__popover {\n\tposition: fixed;')
+		expect(styles).toContain('.makosh-tree-select__popover {\n\tposition: fixed;')
 	})
 })
 

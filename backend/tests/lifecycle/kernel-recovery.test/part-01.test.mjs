@@ -9,11 +9,11 @@ import test from 'node:test';
 import { waitForChildExit } from './support.mjs';
 
 test('Kernel reaches module_control_plane with an explicit private data directory', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-recovery-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-recovery-'));
   try {
     const result = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'status'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
 
@@ -25,11 +25,11 @@ test('Kernel reaches module_control_plane with an explicit private data director
 });
 
 test('incomplete browser Gateway admission fails before creating a control store', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-browser-gateway-config-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-browser-gateway-config-'));
   try {
     const result = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'serve', '--browser-gateway-listen-address', '127.0.0.1:0'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'serve', '--browser-gateway-listen-address', '127.0.0.1:0'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
 
@@ -43,10 +43,10 @@ test('incomplete browser Gateway admission fails before creating a control store
 
 
 test('one production Kernel serve owns every private control-plane socket', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-control-plane-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-control-plane-'));
   const kernel = spawn(
     'cargo',
-    ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'serve'],
+    ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'serve'],
     { cwd: new URL('../../', import.meta.url), stdio: 'pipe' },
   );
   const expectedSockets = new Set([
@@ -93,19 +93,19 @@ test('one production Kernel serve owns every private control-plane socket', asyn
 
 
 test('an untrusted Control Store exposes only the recovery socket', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-recovery-sockets-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-recovery-sockets-'));
   let kernel;
   try {
     const initialized = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'status'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.equal(initialized.status, 0, initialized.stderr);
     await writeFile(join(dataDir, 'kernel-control-store.sqlite'), 'corrupt control store', { mode: 0o600 });
     kernel = spawn(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'serve'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'serve'],
       { cwd: new URL('../../', import.meta.url), stdio: 'pipe' },
     );
     const recoverySocket = await new Promise((resolve, reject) => {
@@ -134,18 +134,18 @@ test('an untrusted Control Store exposes only the recovery socket', async () => 
 
 
 test('file-backed adapter generates a key and enrolls exactly one local owner without development mode', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-development-enrollment-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-development-enrollment-'));
   try {
     const generated = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'device-key-generate'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'device-key-generate'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.equal(generated.status, 0, generated.stderr);
     assert.match(generated.stdout, new RegExp(`^file_device_key=created\\nfile_device_key_path=${dataDir}/device-es256\\.key\\n$`));
     const generatedAgain = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'device-key-generate'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'device-key-generate'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.equal(generatedAgain.status, 0, generatedAgain.stderr);
@@ -153,7 +153,7 @@ test('file-backed adapter generates a key and enrolls exactly one local owner wi
 
     const enrolled = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'initial-owner-enroll', '--owner-id', 'dev-owner', '--device-id', 'dev-device'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'initial-owner-enroll', '--owner-id', 'dev-owner', '--device-id', 'dev-device'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.equal(enrolled.status, 0, enrolled.stderr);
@@ -164,7 +164,7 @@ test('file-backed adapter generates a key and enrolls exactly one local owner wi
 
     const second = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'initial-owner-enroll', '--owner-id', 'other-owner', '--device-id', 'other-device'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'initial-owner-enroll', '--owner-id', 'other-owner', '--device-id', 'other-device'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.notEqual(second.status, 0);
@@ -176,11 +176,11 @@ test('file-backed adapter generates a key and enrolls exactly one local owner wi
 
 
 test('file-backed enrollment rejects malformed IDs before creating a key', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-development-invalid-owner-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-development-invalid-owner-'));
   try {
     const result = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'initial-owner-enroll', '--owner-id', 'invalid owner', '--device-id', 'dev-device'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'initial-owner-enroll', '--owner-id', 'invalid owner', '--device-id', 'dev-device'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.notEqual(result.status, 0);
@@ -194,11 +194,11 @@ test('file-backed enrollment rejects malformed IDs before creating a key', async
 
 
 test('Kernel uses the OS-standard local data directory when no override is supplied', async () => {
-  const home = await mkdtemp(join(tmpdir(), 'hermes-kernel-home-'));
+  const home = await mkdtemp(join(tmpdir(), 'makosh-kernel-home-'));
   try {
     const result = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', 'status'],
       {
         cwd: new URL('../../', import.meta.url),
         encoding: 'utf8',
@@ -222,7 +222,7 @@ test('Kernel uses the OS-standard local data directory when no override is suppl
 test('Kernel rejects a relative data directory without fallback', () => {
   const result = spawnSync(
     'cargo',
-    ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', 'relative-store', 'status'],
+    ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', 'relative-store', 'status'],
     { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
   );
 
@@ -232,10 +232,10 @@ test('Kernel rejects a relative data directory without fallback', () => {
 
 
 test('Kernel rejects a second process for the same data directory', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-lock-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-lock-'));
   const first = spawn(
     'cargo',
-    ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'serve'],
+    ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'serve'],
     { cwd: new URL('../../', import.meta.url), stdio: 'pipe' },
   );
   try {
@@ -254,7 +254,7 @@ test('Kernel rejects a second process for the same data directory', async () => 
     });
     const second = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'status'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.notEqual(second.status, 0);
@@ -268,7 +268,7 @@ test('Kernel rejects a second process for the same data directory', async () => 
 
 
 test('canonical data-directory aliases share one exclusive instance lock', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-kernel-alias-lock-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-kernel-alias-lock-'));
   const realRoot = join(root, 'real');
   const dataDir = join(realRoot, 'data');
   const aliasRoot = join(root, 'alias');
@@ -276,7 +276,7 @@ test('canonical data-directory aliases share one exclusive instance lock', async
   await symlink(realRoot, aliasRoot);
   const first = spawn(
     'cargo',
-    ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'serve'],
+    ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'serve'],
     { cwd: new URL('../../', import.meta.url), stdio: 'pipe' },
   );
   try {
@@ -292,7 +292,7 @@ test('canonical data-directory aliases share one exclusive instance lock', async
     });
     const second = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', join(aliasRoot, 'data'), 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', join(aliasRoot, 'data'), 'status'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.notEqual(second.status, 0);

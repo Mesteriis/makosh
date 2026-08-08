@@ -1,9 +1,9 @@
-use hermes_review_attention_core::{
+use makosh_review_attention_core::{
     ApplyReviewAttentionV1, ReviewAttentionCommandV1, ReviewAttentionErrorV1,
     ReviewAttentionOutcomeV1, ReviewAttentionV1, ReviewDispositionV1, ReviewImportanceV1,
     ReviewTimestampV1, STABLE_ID_BYTES_V1, apply_review_attention_v1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sha2::{Digest, Sha256};
 use sqlx::{
     PgPool, Postgres, Row, Transaction,
@@ -104,7 +104,7 @@ impl ReviewAttentionPersistenceV1 {
         let request_sha256 = request_sha256(&operation);
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         let reserved = sqlx::query(
-            "INSERT INTO hermes_data.review_attention_operations (
+            "INSERT INTO makosh_data.review_attention_operations (
                logical_owner_id, operation_id, request_sha256, expected_revision,
                completed, requested_at_unix_seconds
              ) VALUES ($1, $2, $3, $4, FALSE, $5)
@@ -176,7 +176,7 @@ impl ReviewAttentionPersistenceV1 {
 }
 
 fn report_developer_database_error(stage: &str, error: &sqlx::Error) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_none() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_none() {
         return;
     }
     let code = error
@@ -195,7 +195,7 @@ async fn load_attention_for_update(
         "SELECT attention_id, source_evidence_id, state_revision, disposition,
                 pinned, importance, snoozed_until_unix_seconds,
                 snoozed_until_nanos, updated_at_unix_seconds, updated_at_nanos
-         FROM hermes_data.review_attention_state
+         FROM makosh_data.review_attention_state
          WHERE logical_owner_id = $1 AND source_evidence_id = $2
          FOR UPDATE",
     )
@@ -214,7 +214,7 @@ async fn persist_attention(
 ) -> Result<(), ReviewAttentionPersistenceErrorV1> {
     let attention = &outcome.attention;
     sqlx::query(
-        "INSERT INTO hermes_data.review_attention_state (
+        "INSERT INTO makosh_data.review_attention_state (
            logical_owner_id, attention_id, source_evidence_id, state_revision,
            disposition, pinned, importance, snoozed_until_unix_seconds,
            snoozed_until_nanos, updated_at_unix_seconds, updated_at_nanos
@@ -228,7 +228,7 @@ async fn persist_attention(
            snoozed_until_nanos = EXCLUDED.snoozed_until_nanos,
            updated_at_unix_seconds = EXCLUDED.updated_at_unix_seconds,
            updated_at_nanos = EXCLUDED.updated_at_nanos
-         WHERE hermes_data.review_attention_state.state_revision = $12",
+         WHERE makosh_data.review_attention_state.state_revision = $12",
     )
     .bind(logical_owner_id)
     .bind(attention.attention_id.as_slice())
@@ -259,7 +259,7 @@ async fn complete_operation(
     attention: &ReviewAttentionV1,
 ) -> Result<(), ReviewAttentionPersistenceErrorV1> {
     let result = sqlx::query(
-        "UPDATE hermes_data.review_attention_operations SET
+        "UPDATE makosh_data.review_attention_operations SET
            attention_id = $3,
            result_revision = $4,
            result_disposition = $5,
@@ -305,7 +305,7 @@ async fn load_operation_replay(
                 result_pinned, result_importance,
                 result_snoozed_until_unix_seconds, result_snoozed_until_nanos,
                 result_updated_at_unix_seconds, result_updated_at_nanos, completed
-         FROM hermes_data.review_attention_operations
+         FROM makosh_data.review_attention_operations
          WHERE logical_owner_id = $1 AND operation_id = $2
          FOR UPDATE",
     )
@@ -387,7 +387,7 @@ fn validate_operation(
 
 fn request_sha256(operation: &ApplyReviewAttentionOperationV1) -> [u8; 32] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.review.attention.operation.v1");
+    hash.update(b"makosh.review.attention.operation.v1");
     hash.update([0]);
     hash.update((operation.logical_owner_id.len() as u64).to_be_bytes());
     hash.update(operation.logical_owner_id.as_bytes());

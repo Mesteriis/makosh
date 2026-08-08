@@ -1,4 +1,4 @@
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     EventsAuthorityRuntimeControlRequestV1, EventsAuthorityRuntimeControlResponseV1,
     EventsRuntimeCredentialDeliveryV1,
     events_authority_runtime_control_request_v1::Operation as AuthorityOperation,
@@ -21,7 +21,7 @@ impl ManagedRuntimeRelay for CapturingAuthorityRelay {
                 && value.runtime_instance_id == "runtime_1"
                 && value.runtime_generation == 3
                 && value.grant_epoch == 2
-                && value.publish_subjects == ["hermes.event.v1.owner_notes.changed.v1"])
+                && value.publish_subjects == ["makosh.event.v1.owner_notes.changed.v1"])
         );
         Ok(EventsAuthorityRuntimeControlResponseV1 {
             result: Some(AuthorityResult::CredentialDelivery(

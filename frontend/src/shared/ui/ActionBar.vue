@@ -15,9 +15,9 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-action-bar',
-	`hermes-action-bar--${props.position}`,
-	`hermes-action-bar--justify-${props.justify}`,
+	'makosh-action-bar',
+	`makosh-action-bar--${props.position}`,
+	`makosh-action-bar--justify-${props.justify}`,
 	props.class
 ])
 </script>

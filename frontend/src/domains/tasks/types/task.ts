@@ -32,7 +32,7 @@ export interface Task {
   source_type: string
   project_id: string | null
   status: string
-  hermes_status: string
+  makosh_status: string
   priority_score: number | null
   risk_score: number | null
   readiness_score: number | null

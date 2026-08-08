@@ -1,13 +1,13 @@
 pub mod gmail;
 
-pub fn manifest() -> hermes_provider_api::ProviderManifest {
-    hermes_provider_api::ProviderManifest::new(
-        hermes_provider_api::ProviderId::parse("mail").expect("static provider id"),
+pub fn manifest() -> makosh_provider_api::ProviderManifest {
+    makosh_provider_api::ProviderManifest::new(
+        makosh_provider_api::ProviderId::parse("mail").expect("static provider id"),
         1,
         ["mail.read", "mail.write", "attachments.read"],
         [
-            hermes_provider_api::RuntimeTopology::InProcess,
-            hermes_provider_api::RuntimeTopology::SharedConnector,
+            makosh_provider_api::RuntimeTopology::InProcess,
+            makosh_provider_api::RuntimeTopology::SharedConnector,
         ],
     )
     .expect("static Mail manifest")

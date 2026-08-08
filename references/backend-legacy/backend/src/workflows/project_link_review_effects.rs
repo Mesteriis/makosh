@@ -1,4 +1,4 @@
-use hermes_events_api::{EventEnvelope, StoredEventEnvelope};
+use makosh_events_api::{EventEnvelope, StoredEventEnvelope};
 use serde_json::{Value, json};
 use sqlx::postgres::PgPool;
 use thiserror::Error;
@@ -19,10 +19,10 @@ use crate::workflows::review_mirror::{
     ReviewMirrorError, relationship::ensure_relationship_review_item,
     relationship::sync_relationship_review_state_in_transaction,
 };
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::store::ObservationStore;
 
 pub const PROJECT_LINK_REVIEW_EFFECTS_CONSUMER: &str = "project_link_review_effects";
 pub const PROJECT_LINK_REVIEW_EVENT_TYPE: &str = "project.link_review_state_changed";
@@ -98,7 +98,7 @@ async fn capture_review_observation(
     pool: &PgPool,
     event: &EventEnvelope,
     review: &ProjectLinkReviewEffect,
-) -> Result<hermes_observations_api::models::Observation, ProjectLinkReviewEffectsWorkflowError> {
+) -> Result<makosh_observations_api::models::Observation, ProjectLinkReviewEffectsWorkflowError> {
     Ok(ObservationStore::new(pool.clone())
         .capture(
             &NewObservation::new(

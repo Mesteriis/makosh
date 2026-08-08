@@ -1,6 +1,6 @@
 use super::common::*;
 use crate::platform::macos::managed_launch;
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, VaultPurposeRequestV1, capability_request_v1,
 };
 
@@ -121,7 +121,7 @@ fn inherited_managed_runtime_control_accepts_only_the_bound_descriptor() {
     });
     let request = ManagedRuntimeControlRequestV1 {
         operation: Some(
-            hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
+            makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
                 DescribeManagedRuntimeRequestV1 {
                     descriptor_bytes,
                     settings_schema_bytes: Vec::new(),
@@ -136,7 +136,7 @@ fn inherited_managed_runtime_control_accepts_only_the_bound_descriptor() {
     assert!(response.error_code.is_empty());
     assert!(matches!(
         response.result,
-        Some(hermes_runtime_protocol::v1::managed_runtime_control_response_v1::Result::Describe(ref describe))
+        Some(makosh_runtime_protocol::v1::managed_runtime_control_response_v1::Result::Describe(ref describe))
             if describe.registration_id == "registration-1" && describe.runtime_generation == 3 && describe.grant_epoch == 7
     ));
     server
@@ -176,7 +176,7 @@ fn inherited_managed_runtime_control_rejects_a_replaced_descriptor() {
     };
     let request = ManagedRuntimeControlRequestV1 {
         operation: Some(
-            hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
+            makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
                 DescribeManagedRuntimeRequestV1 {
                     descriptor_bytes: replaced.encode_to_vec(),
                     settings_schema_bytes: Vec::new(),
@@ -227,7 +227,7 @@ fn inherited_managed_runtime_control_relays_only_bounded_opaque_frames_after_des
     });
     let describe = ManagedRuntimeControlRequestV1 {
         operation: Some(
-            hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
+            makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
                 DescribeManagedRuntimeRequestV1 {
                     descriptor_bytes,
                     settings_schema_bytes: Vec::new(),
@@ -258,7 +258,7 @@ fn managed_runtime_expectation_rejects_a_stale_persisted_launch_fence() {
     let binding = BundledManagedLaunchBinding::new(
         "registration-1",
         1,
-        "hermes-desktop",
+        "makosh-desktop",
         "runtime.mail",
         [8; 32],
         [7; 32],
@@ -283,7 +283,7 @@ fn managed_runtime_expectation_rejects_a_stale_persisted_launch_fence() {
 
 #[test]
 fn managed_launch_generation_advances_across_grant_epoch_changes() {
-    let root = unique_target_root("hermes-managed-generation-fence");
+    let root = unique_target_root("makosh-managed-generation-fence");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -342,7 +342,7 @@ fn managed_launch_generation_advances_across_grant_epoch_changes() {
 #[test]
 fn macos_release_resource_locator_requires_the_signed_bundle_resource_layout() {
     let fixture_name = format!(
-        "hermes-macos-release-resources-{}-{}",
+        "makosh-macos-release-resources-{}-{}",
         std::process::id(),
         std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -353,20 +353,20 @@ fn macos_release_resource_locator_requires_the_signed_bundle_resource_layout() {
         .expect("current directory")
         .join("target")
         .join(fixture_name);
-    let executable = root.join("Hermes.app/Contents/MacOS/hermes-kernel");
-    let resource_root = root.join("Hermes.app/Contents/Resources/hermes-kernel-release");
+    let executable = root.join("Макошь.app/Contents/MacOS/makosh-kernel");
+    let resource_root = root.join("Макошь.app/Contents/Resources/makosh-kernel-release");
     std::fs::create_dir_all(resource_root.join("distribution/bin"))
         .expect("create resource layout");
     std::fs::create_dir_all(executable.parent().expect("executable parent"))
         .expect("create executable directory");
     std::fs::write(&executable, b"kernel").expect("write executable");
     std::fs::write(
-        resource_root.join("hermes-release-trust-root.pb"),
+        resource_root.join("makosh-release-trust-root.pb"),
         b"trust-root",
     )
     .expect("write trust root");
     std::fs::write(
-        resource_root.join("hermes-signed-distribution-manifest.pb"),
+        resource_root.join("makosh-signed-distribution-manifest.pb"),
         b"manifest",
     )
     .expect("write signed manifest");
@@ -379,11 +379,11 @@ fn macos_release_resource_locator_requires_the_signed_bundle_resource_layout() {
     );
     assert_eq!(
         resources.signed_manifest_path(),
-        resource_root.join("hermes-signed-distribution-manifest.pb")
+        resource_root.join("makosh-signed-distribution-manifest.pb")
     );
     assert_eq!(
         resources.trust_root_path(),
-        resource_root.join("hermes-release-trust-root.pb")
+        resource_root.join("makosh-release-trust-root.pb")
     );
     std::fs::remove_dir_all(root).expect("remove release resource fixture");
 }
@@ -391,7 +391,7 @@ fn macos_release_resource_locator_requires_the_signed_bundle_resource_layout() {
 #[test]
 fn macos_release_resource_locator_rejects_a_symlinked_app_bundle() {
     let fixture_name = format!(
-        "hermes-macos-release-symlink-{}-{}",
+        "makosh-macos-release-symlink-{}-{}",
         std::process::id(),
         std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -402,15 +402,15 @@ fn macos_release_resource_locator_rejects_a_symlinked_app_bundle() {
         .expect("current directory")
         .join("target")
         .join(fixture_name);
-    let real_bundle = root.join("real/Hermes.app");
-    let executable = real_bundle.join("Contents/MacOS/hermes-kernel");
+    let real_bundle = root.join("real/Макошь.app");
+    let executable = real_bundle.join("Contents/MacOS/makosh-kernel");
     std::fs::create_dir_all(executable.parent().expect("executable parent"))
         .expect("create executable directory");
     std::fs::write(&executable, b"kernel").expect("write executable");
     let linked_bundle = root.join("linked.app");
     std::os::unix::fs::symlink(&real_bundle, &linked_bundle).expect("link app bundle");
 
-    let linked_executable = linked_bundle.join("Contents/MacOS/hermes-kernel");
+    let linked_executable = linked_bundle.join("Contents/MacOS/makosh-kernel");
     assert!(macos_release_resources::discover_from_executable(&linked_executable).is_err());
     std::fs::remove_dir_all(root).expect("remove symlink fixture");
 }
@@ -418,7 +418,7 @@ fn macos_release_resource_locator_rejects_a_symlinked_app_bundle() {
 #[test]
 fn macos_release_resource_locator_rejects_a_symlinked_resources_directory() {
     let fixture_name = format!(
-        "hermes-macos-release-resource-directory-symlink-{}-{}",
+        "makosh-macos-release-resource-directory-symlink-{}-{}",
         std::process::id(),
         std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -429,27 +429,27 @@ fn macos_release_resource_locator_rejects_a_symlinked_resources_directory() {
         .expect("current directory")
         .join("target")
         .join(fixture_name);
-    let executable = root.join("Hermes.app/Contents/MacOS/hermes-kernel");
+    let executable = root.join("Макошь.app/Contents/MacOS/makosh-kernel");
     let external_resources = root.join("external-resources");
-    let external_resource_root = external_resources.join("hermes-kernel-release");
+    let external_resource_root = external_resources.join("makosh-kernel-release");
     std::fs::create_dir_all(executable.parent().expect("executable parent"))
         .expect("create executable directory");
     std::fs::write(&executable, b"kernel").expect("write executable");
     std::fs::create_dir_all(external_resource_root.join("distribution"))
         .expect("create external resource layout");
     std::fs::write(
-        external_resource_root.join("hermes-release-trust-root.pb"),
+        external_resource_root.join("makosh-release-trust-root.pb"),
         b"trust-root",
     )
     .expect("write external trust root");
     std::fs::write(
-        external_resource_root.join("hermes-signed-distribution-manifest.pb"),
+        external_resource_root.join("makosh-signed-distribution-manifest.pb"),
         b"manifest",
     )
     .expect("write external signed manifest");
     std::os::unix::fs::symlink(
         &external_resources,
-        root.join("Hermes.app/Contents/Resources"),
+        root.join("Макошь.app/Contents/Resources"),
     )
     .expect("link resources directory");
 
@@ -459,7 +459,7 @@ fn macos_release_resource_locator_rejects_a_symlinked_resources_directory() {
 
 #[test]
 fn managed_child_supervisor_requires_describe_on_the_inherited_fd() {
-    let root = unique_target_root("hermes-managed-child-supervisor");
+    let root = unique_target_root("makosh-managed-child-supervisor");
     let descriptor = ModuleDescriptorV1 {
         descriptor_major: 1,
         descriptor_revision: 1,
@@ -473,7 +473,7 @@ fn managed_child_supervisor_requires_describe_on_the_inherited_fd() {
     let descriptor_bytes = descriptor.encode_to_vec();
     let request = ManagedRuntimeControlRequestV1 {
         operation: Some(
-            hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
+            makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
                 DescribeManagedRuntimeRequestV1 {
                     descriptor_bytes: descriptor_bytes.clone(),
                     settings_schema_bytes: Vec::new(),

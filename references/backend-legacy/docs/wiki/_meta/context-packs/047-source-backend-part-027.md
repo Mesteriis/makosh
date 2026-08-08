@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/domains/organizations/memory.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/memory.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/memory.rs`
 - Size bytes / Размер в байтах: `11477`
 - Included characters / Включено символов: `10997`
 - Truncated / Обрезано: `no`
@@ -329,7 +329,7 @@ pub enum OrgMemoryError {
 
 ### `backend/src/domains/organizations/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/mod.rs`
 - Size bytes / Размер в байтах: `169`
 - Included characters / Включено символов: `169`
 - Truncated / Обрезано: `no`
@@ -349,7 +349,7 @@ pub mod workflows;
 
 ### `backend/src/domains/organizations/ports.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/ports.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/ports.rs`
 - Size bytes / Размер в байтах: `139`
 - Included characters / Включено символов: `139`
 - Truncated / Обрезано: `no`
@@ -361,7 +361,7 @@ pub use super::core::OrgContactLinkStore as OrganizationContactLinkPort;
 
 ### `backend/src/domains/organizations/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/service.rs`
 - Size bytes / Размер в байтах: `11665`
 - Included characters / Включено символов: `11665`
 - Truncated / Обрезано: `no`
@@ -715,7 +715,7 @@ pub enum OrganizationCommandServiceError {
 
 ### `backend/src/domains/organizations/workflows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/workflows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/workflows.rs`
 - Size bytes / Размер в байтах: `381`
 - Included characters / Включено символов: `381`
 - Truncated / Обрезано: `no`
@@ -738,7 +738,7 @@ pub use timeline::{OrgTimelineEvent, OrgTimelineStore};
 
 ### `backend/src/domains/organizations/workflows/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/workflows/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/workflows/errors.rs`
 - Size bytes / Размер в байтах: `229`
 - Included characters / Включено символов: `229`
 - Truncated / Обрезано: `no`
@@ -757,7 +757,7 @@ pub enum OrgWorkflowError {
 
 ### `backend/src/domains/organizations/workflows/playbooks.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/workflows/playbooks.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/workflows/playbooks.rs`
 - Size bytes / Размер в байтах: `1947`
 - Included characters / Включено символов: `1947`
 - Truncated / Обрезано: `no`
@@ -831,7 +831,7 @@ impl OrgPlaybookStore {
 
 ### `backend/src/domains/organizations/workflows/portals.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/workflows/portals.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/workflows/portals.rs`
 - Size bytes / Размер в байтах: `2523`
 - Included characters / Включено символов: `2523`
 - Truncated / Обрезано: `no`
@@ -929,7 +929,7 @@ fn portal_from_row(row: sqlx::postgres::PgRow) -> Result<OrgPortal, OrgWorkflowE
 
 ### `backend/src/domains/organizations/workflows/procedures.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/workflows/procedures.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/workflows/procedures.rs`
 - Size bytes / Размер в байтах: `1957`
 - Included characters / Включено символов: `1957`
 - Truncated / Обрезано: `no`
@@ -1004,7 +1004,7 @@ impl OrgProcedureStore {
 
 ### `backend/src/domains/organizations/workflows/templates.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/workflows/templates.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/workflows/templates.rs`
 - Size bytes / Размер в байтах: `1982`
 - Included characters / Включено символов: `1982`
 - Truncated / Обрезано: `no`
@@ -1080,7 +1080,7 @@ impl OrgTemplateStore {
 
 ### `backend/src/domains/organizations/workflows/timeline.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/workflows/timeline.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/workflows/timeline.rs`
 - Size bytes / Размер в байтах: `3526`
 - Included characters / Включено символов: `3526`
 - Truncated / Обрезано: `no`
@@ -1207,7 +1207,7 @@ fn timeline_event_from_row(
 
 ### `backend/src/domains/persons/analytics.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/analytics.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/analytics.rs`
 - Size bytes / Размер в байтах: `6970`
 - Included characters / Включено символов: `6970`
 - Truncated / Обрезано: `no`
@@ -1414,7 +1414,7 @@ pub enum AnalyticsError {
 
 ### `backend/src/domains/persons/api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/api.rs`
 - Size bytes / Размер в байтах: `331`
 - Included characters / Включено символов: `331`
 - Truncated / Обрезано: `no`
@@ -1436,7 +1436,7 @@ pub use store::PersonProjectionStore as PersonProjectionPort;
 
 ### `backend/src/domains/persons/api/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/api/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/api/errors.rs`
 - Size bytes / Размер в байтах: `749`
 - Included characters / Включено символов: `749`
 - Truncated / Обрезано: `no`
@@ -1477,7 +1477,7 @@ pub enum PersonProjectionError {
 
 ### `backend/src/domains/persons/api/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/api/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/api/models.rs`
 - Size bytes / Размер в байтах: `1504`
 - Included characters / Включено символов: `1502`
 - Truncated / Обрезано: `no`
@@ -1541,7 +1541,7 @@ pub type Persona = Person;
 
 ### `backend/src/domains/persons/api/participants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/api/participants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/api/participants.rs`
 - Size bytes / Размер в байтах: `1116`
 - Included characters / Включено символов: `1116`
 - Truncated / Обрезано: `no`
@@ -1587,7 +1587,7 @@ fn normalize_email_addresses(
 
 ### `backend/src/domains/persons/api/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/api/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/api/rows.rs`
 - Size bytes / Размер в байтах: `623`
 - Included characters / Включено символов: `623`
 - Truncated / Обрезано: `no`
@@ -1614,7 +1614,7 @@ pub(super) fn row_to_person(row: PgRow) -> Result<Person, PersonProjectionError>
 
 ### `backend/src/domains/persons/api/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/api/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/api/store.rs`
 - Size bytes / Размер в байтах: `398`
 - Included characters / Включено символов: `398`
 - Truncated / Обрезано: `no`
@@ -1648,7 +1648,7 @@ impl PersonProjectionStore {
 
 ### `backend/src/domains/persons/api/store/ai_agents.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/api/store/ai_agents.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/api/store/ai_agents.rs`
 - Size bytes / Размер в байтах: `4109`
 - Included characters / Включено символов: `4109`
 - Truncated / Обрезано: `no`
@@ -1788,7 +1788,7 @@ impl PersonProjectionStore {
 
 ### `backend/src/domains/persons/api/store/email_projection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/api/store/email_projection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/api/store/email_projection.rs`
 - Size bytes / Размер в байтах: `4916`
 - Included characters / Включено символов: `4916`
 - Truncated / Обрезано: `no`
@@ -1946,7 +1946,7 @@ impl PersonProjectionStore {
 
 ### `backend/src/domains/persons/api/store/owner.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/api/store/owner.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/api/store/owner.rs`
 - Size bytes / Размер в байтах: `2791`
 - Included characters / Включено символов: `2791`
 - Truncated / Обрезано: `no`
@@ -2055,7 +2055,7 @@ pub(super) async fn assign_owner_persona_in_transaction(
 
 ### `backend/src/domains/persons/api/store/persona_reads.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/api/store/persona_reads.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/api/store/persona_reads.rs`
 - Size bytes / Размер в байтах: `1486`
 - Included characters / Включено символов: `1486`
 - Truncated / Обрезано: `no`
@@ -2119,7 +2119,7 @@ impl PersonProjectionStore {
 
 ### `backend/src/domains/persons/api/store/persona_type.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/api/store/persona_type.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/api/store/persona_type.rs`
 - Size bytes / Размер в байтах: `1050`
 - Included characters / Включено символов: `1050`
 - Truncated / Обрезано: `no`
@@ -2164,7 +2164,7 @@ impl PersonProjectionStore {
 
 ### `backend/src/domains/persons/api/store/persona_writes.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/api/store/persona_writes.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/api/store/persona_writes.rs`
 - Size bytes / Размер в байтах: `4673`
 - Included characters / Включено символов: `4673`
 - Truncated / Обрезано: `no`
@@ -2327,7 +2327,7 @@ impl PersonProjectionStore {
 
 ### `backend/src/domains/persons/api/store/review_projection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/api/store/review_projection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/api/store/review_projection.rs`
 - Size bytes / Размер в байтах: `2779`
 - Included characters / Включено символов: `2779`
 - Truncated / Обрезано: `no`
@@ -2371,7 +2371,7 @@ impl PersonProjectionStore {
             return Err(PersonProjectionError::EmptyDisplayName);
         }
 
-        let synthetic_email = format!("{person_id}@hermes.invalid");
+        let synthetic_email = format!("{person_id}@makosh.invalid");
         let row = sqlx::query(
             r#"
             INSERT INTO persons (

@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 use std::path::PathBuf;
 use std::process::ExitCode;
 
-use hermes_zulip_assembly::materialize_zulip_release_assembly_v1;
+use makosh_zulip_assembly::materialize_zulip_release_assembly_v1;
 
 const OPTIONS: [&str; 3] = ["--build-id", "--output-dir", "--runtime"];
 
@@ -22,7 +22,7 @@ fn main() -> ExitCode {
             ExitCode::SUCCESS
         }
         None => fail(
-            "usage: hermes-zulip-assembly --build-id <id> --output-dir <absolute-path> \
+            "usage: makosh-zulip-assembly --build-id <id> --output-dir <absolute-path> \
              --runtime <absolute-path>",
         ),
     }
@@ -67,7 +67,7 @@ mod tests {
     fn parses_each_exact_option_once_in_any_order() {
         let parsed = arguments(vec![
             "--runtime".to_owned(),
-            "/tmp/hermes-zulip-runtime".to_owned(),
+            "/tmp/makosh-zulip-runtime".to_owned(),
             "--build-id".to_owned(),
             "build-1".to_owned(),
             "--output-dir".to_owned(),
@@ -80,7 +80,7 @@ mod tests {
             parsed.output_directory,
             PathBuf::from("/tmp/zulip-assembly")
         );
-        assert_eq!(parsed.runtime, PathBuf::from("/tmp/hermes-zulip-runtime"));
+        assert_eq!(parsed.runtime, PathBuf::from("/tmp/makosh-zulip-runtime"));
     }
 
     #[test]

@@ -1,4 +1,4 @@
-import type { ZulipOperationalReplayFrameV1 } from '../../../gen/hermes/zulip/operational/realtime/v1/client_pb'
+import type { ZulipOperationalReplayFrameV1 } from '../../../gen/makosh/zulip/operational/realtime/v1/client_pb'
 import type { ZulipOperationalAccount } from '../queries/zulipOperationalAccounts'
 import {
 	eventKindLabel,

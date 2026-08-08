@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { hermesBrandAssets, hermesShellBackgroundAssetPaths } from './brand'
+import { makoshBrandAssets, makoshShellBackgroundAssetPaths } from './brand'
 
-describe('Hermes UI local asset inventory', () => {
+describe('Макошь UI local asset inventory', () => {
 	it('keeps shell assets compiled and fixed to local public paths', () => {
-		expect(hermesBrandAssets.logoMarkDark).toBe('/assets/hermes-logo-mark-dark.png')
-		expect(hermesBrandAssets.logoMarkLight).toBe('/assets/hermes-logo-mark-light.png')
-		expect(hermesShellBackgroundAssetPaths).toHaveLength(10)
-		for (const assetPath of hermesShellBackgroundAssetPaths) {
+		expect(makoshBrandAssets.logoMarkDark).toBe('/assets/makosh-logo-mark-dark.png')
+		expect(makoshBrandAssets.logoMarkLight).toBe('/assets/makosh-logo-mark-light.png')
+		expect(makoshShellBackgroundAssetPaths).toHaveLength(10)
+		for (const assetPath of makoshShellBackgroundAssetPaths) {
 			expect(assetPath).toMatch(/^\/assets\/shell-backgrounds\/[a-z-]+\.webp$/)
 		}
 	})

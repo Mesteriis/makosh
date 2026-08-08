@@ -2,7 +2,7 @@
 
 pub mod admission;
 
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
@@ -17,7 +17,7 @@ use sha2::{Digest, Sha256};
 pub mod v1 {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communications.ingress.v1.rs"
+        "/makosh.communications.ingress.v1.rs"
     ));
 }
 
@@ -26,9 +26,9 @@ include!(concat!(
     "/communications_observation_schema.rs"
 ));
 
-pub const PACKAGE: &str = "hermes-communications-ingress";
+pub const PACKAGE: &str = "makosh-communications-ingress";
 pub const COMMUNICATIONS_BLOB_CUSTODY_TARGET_OWNER_ID: &str = "communications";
-pub const COMMUNICATIONS_BLOB_CUSTODY_TARGET_MODULE_ID: &str = "hermes-communications-runtime";
+pub const COMMUNICATIONS_BLOB_CUSTODY_TARGET_MODULE_ID: &str = "makosh-communications-runtime";
 pub const COMMUNICATIONS_BLOB_CUSTODY_TARGET_CAPABILITY_ID: &str = "communications.blob.v1";
 pub const MAX_OBSERVATION_ID_LEN: usize = 256;
 pub const MAX_EXTERNAL_RECORD_ID_LEN: usize = 512;
@@ -451,7 +451,7 @@ fn validate_context(
 
 fn runtime_source_reference(runtime_instance_id: &str) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.runtime.source-reference.v1\0");
+    hasher.update(b"makosh.runtime.source-reference.v1\0");
     hasher.update(runtime_instance_id.as_bytes());
     let digest: [u8; 32] = hasher.finalize().into();
     digest[..16]
@@ -460,11 +460,11 @@ fn runtime_source_reference(runtime_instance_id: &str) -> [u8; 16] {
 }
 
 fn observation_message_id(draft: &CommunicationObservationDraft) -> [u8; 16] {
-    observation_identifier(b"hermes.communications.observation-message.v1\0", draft)
+    observation_identifier(b"makosh.communications.observation-message.v1\0", draft)
 }
 
 fn observation_correlation_id(draft: &CommunicationObservationDraft) -> [u8; 16] {
-    observation_identifier(b"hermes.communications.observation-correlation.v1\0", draft)
+    observation_identifier(b"makosh.communications.observation-correlation.v1\0", draft)
 }
 
 fn observation_identifier(domain: &[u8], draft: &CommunicationObservationDraft) -> [u8; 16] {
@@ -481,7 +481,7 @@ fn observation_identifier(domain: &[u8], draft: &CommunicationObservationDraft) 
 
 fn source_cursor_sha256(draft: &CommunicationObservationDraft) -> [u8; 32] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.communications.source-cursor.v1\0");
+    hasher.update(b"makosh.communications.source-cursor.v1\0");
     hasher.update(draft.source.provider.as_str().as_bytes());
     hasher.update(b"\0");
     if let Some(scope) = &draft.source.scope {
@@ -513,7 +513,7 @@ fn source_scope_cursors(draft: &CommunicationObservationDraft) -> SourceScopeCur
         };
     };
     let account = scope_identifier(
-        b"hermes.communications.account-cursor.v1\0",
+        b"makosh.communications.account-cursor.v1\0",
         draft.source.provider,
         &scope.external_account_id,
     );
@@ -523,14 +523,14 @@ fn source_scope_cursors(draft: &CommunicationObservationDraft) -> SourceScopeCur
         .map(|value| conversation_source_cursor_from_account(account, value));
     let participant = scope.external_participant_id.as_ref().map(|value| {
         let mut hasher = Sha256::new();
-        hasher.update(b"hermes.communications.participant-cursor.v1\0");
+        hasher.update(b"makosh.communications.participant-cursor.v1\0");
         hasher.update(account);
         hasher.update(value.as_bytes());
         hasher.finalize().into()
     });
     let media = scope.external_media_id.as_ref().map(|value| {
         let mut hasher = Sha256::new();
-        hasher.update(b"hermes.communications.media-cursor.v1\0");
+        hasher.update(b"makosh.communications.media-cursor.v1\0");
         hasher.update(account);
         hasher.update(value.as_bytes());
         hasher.finalize().into()
@@ -574,7 +574,7 @@ pub fn account_source_cursor_v1(
         IngressDraftError::ExternalAccountIdTooLong,
     )?;
     Ok(scope_identifier(
-        b"hermes.communications.account-cursor.v1\0",
+        b"makosh.communications.account-cursor.v1\0",
         provider,
         external_account_id,
     ))
@@ -632,7 +632,7 @@ fn source_cursor_for_scoped_record(
     record_id: &str,
 ) -> [u8; 32] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.communications.source-cursor.v1\0");
+    hasher.update(b"makosh.communications.source-cursor.v1\0");
     hasher.update(provider.as_str().as_bytes());
     hasher.update(b"\0");
     hasher.update(account_id.as_bytes());
@@ -655,7 +655,7 @@ fn conversation_source_cursor_from_account(
     external_conversation_id: &str,
 ) -> [u8; 32] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.communications.conversation-cursor.v1\0");
+    hasher.update(b"makosh.communications.conversation-cursor.v1\0");
     hasher.update(account_cursor);
     hasher.update(external_conversation_id.as_bytes());
     hasher.finalize().into()
@@ -938,7 +938,7 @@ const fn attachment_disposition_value(value: AttachmentDispositionV1) -> i32 {
 #[cfg(test)]
 mod body_admission_tests {
     use super::*;
-    use hermes_events_protocol::validation::envelope::decode_envelope_v1;
+    use makosh_events_protocol::validation::envelope::decode_envelope_v1;
     use prost::Message;
 
     #[test]

@@ -34,9 +34,9 @@ use crate::workflows::review_mirror::{
     relationship::sync_relationship_review_state_with_observation,
     task::sync_task_candidate_review_state_in_transaction,
 };
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::store::ObservationStore;
 
 use super::relationship_graph::{RelationshipGraphCoordinator, RelationshipGraphCoordinatorError};
 
@@ -65,7 +65,7 @@ impl DecisionReviewApplicationService {
                         "decision_id": decision_id,
                         "review_state": review_state.as_str(),
                         "operation": "decision_review",
-                        "actor_id": "hermes-frontend",
+                        "actor_id": "makosh-frontend",
                     }),
                     format!("decision://{decision_id}/review"),
                 )
@@ -136,7 +136,7 @@ impl ObligationReviewApplicationService {
                         "obligation_id": obligation_id,
                         "review_state": review_state.as_str(),
                         "operation": "obligation_review",
-                        "actor_id": "hermes-frontend",
+                        "actor_id": "makosh-frontend",
                     }),
                     format!("obligation://{obligation_id}/review"),
                 )
@@ -204,7 +204,7 @@ impl RelationshipReviewApplicationService {
                         "relationship_id": relationship_id,
                         "review_state": review_state.as_str(),
                         "operation": "relationship_review",
-                        "actor_id": "hermes-frontend",
+                        "actor_id": "makosh-frontend",
                     }),
                     format!("relationship://{relationship_id}/review"),
                 )
@@ -342,7 +342,7 @@ impl TaskCandidateReviewApplicationService {
 
     pub async fn apply_review_event(
         &self,
-        event: &hermes_events_api::EventEnvelope,
+        event: &makosh_events_api::EventEnvelope,
     ) -> Result<(), TaskCandidateReviewApplicationError> {
         let mut transaction = self.pool.begin().await?;
         let (task_candidate_id, review_state, candidate) =

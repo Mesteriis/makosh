@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/index.html`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/index.html`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/index.html`
 - Size bytes / Размер в байтах: `360`
 - Included characters / Включено символов: `360`
 - Truncated / Обрезано: `no`
@@ -67,7 +67,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hermes Hub</title>
+    <title>Макошь</title>
   </head>
   <body>
     <div id="app"></div>
@@ -76,108 +76,108 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 </html>
 ```
 
-### `frontend/public/assets/hermes-icon-128.png`
+### `frontend/public/assets/makosh-icon-128.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/hermes-icon-128.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/makosh-icon-128.png`
 - Size bytes / Размер в байтах: `11624`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
 
 _Binary file content omitted; use the path and metadata only. / Содержимое бинарного файла не включено; используй только путь и metadata._
 
-### `frontend/public/assets/hermes-icon-16.png`
+### `frontend/public/assets/makosh-icon-16.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/hermes-icon-16.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/makosh-icon-16.png`
 - Size bytes / Размер в байтах: `722`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
 
 _Binary file content omitted; use the path and metadata only. / Содержимое бинарного файла не включено; используй только путь и metadata._
 
-### `frontend/public/assets/hermes-icon-180.png`
+### `frontend/public/assets/makosh-icon-180.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/hermes-icon-180.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/makosh-icon-180.png`
 - Size bytes / Размер в байтах: `18860`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
 
 _Binary file content omitted; use the path and metadata only. / Содержимое бинарного файла не включено; используй только путь и metadata._
 
-### `frontend/public/assets/hermes-icon-192.png`
+### `frontend/public/assets/makosh-icon-192.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/hermes-icon-192.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/makosh-icon-192.png`
 - Size bytes / Размер в байтах: `20556`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
 
 _Binary file content omitted; use the path and metadata only. / Содержимое бинарного файла не включено; используй только путь и metadata._
 
-### `frontend/public/assets/hermes-icon-256.png`
+### `frontend/public/assets/makosh-icon-256.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/hermes-icon-256.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/makosh-icon-256.png`
 - Size bytes / Размер в байтах: `32527`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
 
 _Binary file content omitted; use the path and metadata only. / Содержимое бинарного файла не включено; используй только путь и metadata._
 
-### `frontend/public/assets/hermes-icon-32.png`
+### `frontend/public/assets/makosh-icon-32.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/hermes-icon-32.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/makosh-icon-32.png`
 - Size bytes / Размер в байтах: `1823`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
 
 _Binary file content omitted; use the path and metadata only. / Содержимое бинарного файла не включено; используй только путь и metadata._
 
-### `frontend/public/assets/hermes-icon-48.png`
+### `frontend/public/assets/makosh-icon-48.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/hermes-icon-48.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/makosh-icon-48.png`
 - Size bytes / Размер в байтах: `3221`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
 
 _Binary file content omitted; use the path and metadata only. / Содержимое бинарного файла не включено; используй только путь и metadata._
 
-### `frontend/public/assets/hermes-icon-512.png`
+### `frontend/public/assets/makosh-icon-512.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/hermes-icon-512.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/makosh-icon-512.png`
 - Size bytes / Размер в байтах: `106906`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
 
 _Binary file content omitted; use the path and metadata only. / Содержимое бинарного файла не включено; используй только путь и metadata._
 
-### `frontend/public/assets/hermes-icon-64.png`
+### `frontend/public/assets/makosh-icon-64.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/hermes-icon-64.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/makosh-icon-64.png`
 - Size bytes / Размер в байтах: `4650`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
 
 _Binary file content omitted; use the path and metadata only. / Содержимое бинарного файла не включено; используй только путь и metadata._
 
-### `frontend/public/assets/hermes-logo-mark.png`
+### `frontend/public/assets/makosh-logo-mark.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/hermes-logo-mark.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/makosh-logo-mark.png`
 - Size bytes / Размер в байтах: `106906`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
 
 _Binary file content omitted; use the path and metadata only. / Содержимое бинарного файла не включено; используй только путь и metadata._
 
-### `frontend/public/assets/hermes-logo.png`
+### `frontend/public/assets/makosh-logo.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/hermes-logo.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/makosh-logo.png`
 - Size bytes / Размер в байтах: `1560669`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
 
 _Binary file content omitted; use the path and metadata only. / Содержимое бинарного файла не включено; используй только путь и metadata._
 
-### `frontend/public/assets/hermes-reference-avatar.png`
+### `frontend/public/assets/makosh-reference-avatar.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/hermes-reference-avatar.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/makosh-reference-avatar.png`
 - Size bytes / Размер в байтах: `5808`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -186,7 +186,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/public/assets/shell-backgrounds/data-stream.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/shell-backgrounds/data-stream.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/shell-backgrounds/data-stream.png`
 - Size bytes / Размер в байтах: `1747967`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`

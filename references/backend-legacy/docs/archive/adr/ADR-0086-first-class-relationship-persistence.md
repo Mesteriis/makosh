@@ -12,7 +12,7 @@ Clarifies:
 
 ## Context
 
-Hermes is relationship-first. Current implementation stores relationship-shaped
+Макошь is relationship-first. Current implementation stores relationship-shaped
 data in several places:
 
 - `graph_edges` as graph projection records;

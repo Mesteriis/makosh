@@ -1,29 +1,29 @@
-use hermes_contacts_command_api::{
+use makosh_contacts_command_api::{
     contact_upsert_rejected_contract_reference_v1, contact_upserted_contract_reference_v1,
     wire::{
         ContactUpsertFromMailAddressBookEntryRejectedV1, ContactUpsertOutcomeV1,
         ContactUpsertedFromMailAddressBookEntryV1,
     },
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, ResultOutcomeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_mail_contacts_sync_persistence::{
+use makosh_mail_contacts_sync_persistence::{
     MailContactsSyncContactOutcomeV1, MailContactsSyncEntryOutcomeInputV1,
     MailContactsSyncPersistenceErrorV1, MailContactsSyncPersistenceV1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 
 use crate::MailContactsSyncProviderRuntimeContextV1;
 
-const CONTACTS_RUNTIME_MODULE_ID_V1: &str = "hermes-contacts-runtime";
+const CONTACTS_RUNTIME_MODULE_ID_V1: &str = "makosh-contacts-runtime";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MailContactsSyncContactsResultErrorV1 {
@@ -107,7 +107,7 @@ pub async fn consume_contact_upsert_rejected_once_v1(
 
 async fn persist_and_ack(
     persistence: &MailContactsSyncPersistenceV1,
-    delivery: hermes_events_jetstream::RuntimePullDeliveryV1,
+    delivery: makosh_events_jetstream::RuntimePullDeliveryV1,
     record: &OutboxRecordV1,
     runtime: &MailContactsSyncProviderRuntimeContextV1,
     command_id: [u8; 16],
@@ -157,7 +157,7 @@ fn exact_result(
     record: &OutboxRecordV1,
     expected: &ContractReferenceV1,
     expected_outcome: ResultOutcomeV1,
-) -> Result<hermes_events_protocol::v1::DurableEnvelopeV1, MailContactsSyncContactsResultErrorV1> {
+) -> Result<makosh_events_protocol::v1::DurableEnvelopeV1, MailContactsSyncContactsResultErrorV1> {
     let envelope = decode_envelope_v1(record.exact_bytes())
         .map_err(|_| MailContactsSyncContactsResultErrorV1::InvalidEnvelope)?;
     let Some(Semantics::Result(result)) = envelope.semantics.as_ref() else {
@@ -176,7 +176,7 @@ fn exact_result(
 }
 
 fn result_command_id(
-    envelope: &hermes_events_protocol::v1::DurableEnvelopeV1,
+    envelope: &makosh_events_protocol::v1::DurableEnvelopeV1,
     payload_command_id: &[u8],
 ) -> Result<[u8; 16], MailContactsSyncContactsResultErrorV1> {
     let command_id = id16(payload_command_id)?;

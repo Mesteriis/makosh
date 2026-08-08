@@ -2,17 +2,17 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
     ManagedRuntimeOwnerDerivedKeyDeliveryV1, ManagedRuntimeOwnerDerivedKeyRequestV1,
     ManagedRuntimeVaultRouteRequestV1, VaultCiphertextRouteDirectionV1, VaultCiphertextRouteV1,
     managed_runtime_control_request_v1::Operation,
     managed_runtime_control_response_v1::Result as ControlResult,
 };
-use hermes_vault_protocol::{
+use makosh_vault_protocol::{
     LeaseAudienceV1, LeaseIdV1, SecretClassV1, VaultActionV1, VaultCiphertextFrameV1,
     VaultLeaseIssueRequestV1, VaultPurposeRequestV1, VaultResponseRecipientV1,
     VaultTransportCommandV1, VaultTransportDirectionV1, VaultTransportPublicKey, seal,

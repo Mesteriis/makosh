@@ -1,4 +1,4 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
@@ -8,15 +8,15 @@ use serde_json::{Value, json};
 use sqlx::{PgPool, Row};
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::integrations::telegram::client::participants::{
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::integrations::telegram::client::participants::{
     reconcile_join_commands_from_provider_roster, reconcile_leave_commands_from_provider_roster,
     telegram_self_provider_member_id,
 };
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const LOCAL_API_TOKEN: &str = "telegram-participants-test-secret";
 
@@ -32,7 +32,7 @@ async fn telegram_members_route_prefers_provider_roster_over_message_heuristic()
     let account_id = format!("telegram-participants-{suffix}");
     let provider_chat_id = format!("participants-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -141,7 +141,7 @@ async fn telegram_join_leave_routes_enqueue_provider_write_commands() {
     let account_id = format!("telegram-join-leave-{suffix}");
     let provider_chat_id = format!("join-leave-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -234,7 +234,7 @@ async fn telegram_roster_sync_reconciles_join_only_after_self_member_is_observed
     let account_id = format!("telegram-join-reconcile-{suffix}");
     let provider_chat_id = format!("join-reconcile-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -360,7 +360,7 @@ async fn telegram_roster_sync_reconciles_leave_when_self_member_is_inactive() {
     let account_id = format!("telegram-leave-reconcile-{suffix}");
     let provider_chat_id = format!("leave-reconcile-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -635,7 +635,7 @@ fn get(path: &str) -> Request<Body> {
     Request::builder()
         .method("GET")
         .uri(path)
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .body(Body::empty())
         .expect("request")
 }
@@ -644,7 +644,7 @@ fn json_post(path: &str, body: Value) -> Request<Body> {
     Request::builder()
         .method("POST")
         .uri(path)
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .header(header::CONTENT_TYPE, "application/json")
         .body(Body::from(body.to_string()))
         .expect("request")

@@ -96,7 +96,7 @@
     },
     {
       "headings": [
-        "Roadmap: Hermes Docs Alignment",
+        "Roadmap: Макошь Docs Alignment",
         "Context summary",
         "12 выявленных Gaps",
         "Assumptions",
@@ -115,7 +115,7 @@
         "Phase 10 — Polish & Harden"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-docs-alignment-Q2wXmK/ROADMAP.md",
+      "path": ".supergoal/makosh-docs-alignment-Q2wXmK/ROADMAP.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "f5d512f0a5963ddbd80b443d094d0962c59a16cc581885c033f3bbcdcd0670a8",
@@ -130,7 +130,7 @@
         "Notable Events"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-docs-alignment-Q2wXmK/STATE.md",
+      "path": ".supergoal/makosh-docs-alignment-Q2wXmK/STATE.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "592fd04aaf9b2e45e9c2177e673362dce05c79a307a831f12cb3110d18073240",
@@ -139,7 +139,7 @@
     },
     {
       "headings": [
-        "THINKING — Hermes Docs Alignment",
+        "THINKING — Макошь Docs Alignment",
         "Goals",
         "Constraints",
         "Архитектурные (из AGENTS.md и ADR)",
@@ -178,7 +178,7 @@
         "Резюме"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-docs-alignment-Q2wXmK/THINKING.md",
+      "path": ".supergoal/makosh-docs-alignment-Q2wXmK/THINKING.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "4bcb186f2fc2b8aaa8f55d197d6f7ad583a1da5f100d43463a9fceaedb23e244",
@@ -195,7 +195,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-1.md",
+      "path": ".supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-1.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "8dae583aea75fbd8ec6c3f7cbcea1b9349c2338df9cfc94f159b2af58d0fb1e2",
@@ -220,7 +220,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-10.md",
+      "path": ".supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-10.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "b558267d95a48761d945133f94abc73bfc99e6466917f2e98b1d5054e21d62e9",
@@ -237,7 +237,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-2.md",
+      "path": ".supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-2.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "880c009d17968328242c5b8b57131141ab758e00d7a37eeb219fed4b252be6fd",
@@ -254,7 +254,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-3.md",
+      "path": ".supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-3.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "5db6d9d4495eef43b1ef78eb7a3d308a1f275379dfbe8b4368ad051da8207690",
@@ -271,7 +271,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-4.md",
+      "path": ".supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-4.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "90712c7c428bcd7155a6a39a38cd12508ecd9cd3e8d5bedc27329ac4ea63f1e5",
@@ -290,7 +290,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-5.md",
+      "path": ".supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-5.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "5622e55d09295770754ea53fd0d4da2c09cd2d5ff0068cfe2992b65113b923c0",
@@ -309,7 +309,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-6.md",
+      "path": ".supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-6.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "46fac898d324c5d32c123c825f22da0b0aa63a66383eb84f03e11118508316fd",
@@ -326,7 +326,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-7.md",
+      "path": ".supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-7.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "fbe01dd97ee386ccdf57d92fa63409497f773f27044ed11c58f8a9ff5e594ef6",
@@ -345,7 +345,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-8.md",
+      "path": ".supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-8.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "57e83ad784a3ad49376e00168cb7c1174d133a75cc3fc7271cabdbc45c978923",
@@ -364,7 +364,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-9.md",
+      "path": ".supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-9.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "987e865f49c3b37498e778630da8962f6d415609059b4f38b0687ee2ac88d19d",
@@ -388,7 +388,7 @@
         "Required transcript blocks"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/PROTOCOL.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/PROTOCOL.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "d475f8fb6759a334aa614f3ab1ccc810382471bd8dd1a33f3403c29c38e6ca40",
@@ -397,7 +397,7 @@
     },
     {
       "headings": [
-        "Roadmap: Hermes Frontend Migration to Vue 3",
+        "Roadmap: Макошь Frontend Migration to Vue 3",
         "Context summary",
         "Assumptions",
         "Risk top 3",
@@ -419,7 +419,7 @@
         "Phase 15 — Cutover"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/ROADMAP.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/ROADMAP.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "610203d94b546d384d5fe778a49eac5d9eebe2fd6524c1370ca1270e9b2818a5",
@@ -428,14 +428,14 @@
     },
     {
       "headings": [
-        "State: Hermes Frontend Migration to Vue 3",
+        "State: Макошь Frontend Migration to Vue 3",
         "Phase progress",
         "Engineering check status",
         "Notable events",
         "Failure log"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/STATE.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/STATE.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "24e6251d5db7479d4d8fd46c3cef3ee0f0791bf082d1906bcce9d75f8fced897",
@@ -444,7 +444,7 @@
     },
     {
       "headings": [
-        "THINKING.md — Hermes Frontend Vue 3 Migration",
+        "THINKING.md — Макошь Frontend Vue 3 Migration",
         "Goals",
         "Constraints",
         "Risks",
@@ -460,7 +460,7 @@
         "Best Practices Applied"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/THINKING.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/THINKING.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "8c10bb04c62febc832a10a59386cedfa660572110fb0f17b3806449fcf0f9e4b",
@@ -477,7 +477,7 @@
         "Test / lint heuristics"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/context.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/context.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "a99abcea8043c7738c1ee602dff731f5f136204fb4378623601835b542047d50",
@@ -494,7 +494,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-1.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-1.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "ae5f399e895ca9d5afffc6a0ff8746d636d1d241f0ba9ef80c3f06e7ce519580",
@@ -511,7 +511,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-10.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-10.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "4394747c523668602619378360fbd97c3560c9599dcebdb91071bfbaef39ff91",
@@ -528,7 +528,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-11.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-11.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "e9f660e1183496e6829aa5633abd05e341a7fc22f387a257c0a491ef78b5d859",
@@ -545,7 +545,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-12.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-12.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "b9b1ecd5aa6b7299fdca314ab0a2f1266d8aa0dba437b0d5d35c2f6a0349ded5",
@@ -562,7 +562,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-13.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-13.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "a3a42c4f34bfe1dfee4a37fad6b952679354291feac262944f2d0b9fc2284cdb",
@@ -588,7 +588,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-14.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-14.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "8a6f3eafa37f5f1f0a9b69f3d0bd56589c6f4f8e69b46dc2721fb9360a4aa095",
@@ -613,7 +613,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-15.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-15.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "725f2b7ffdda52e9b8a9d315c148a1399ec9cba6057dc5bdce9c9a417da74346",
@@ -630,7 +630,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-2.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-2.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "e03c61919dcf061d33d7d308b5c494a800f365a4e9ba9c17c006317fd2fb7170",
@@ -647,7 +647,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-3.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-3.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "a243a30cd75a8b454549f3ca6288312ef881f388d75ab12c832e65c241ca8da4",
@@ -664,7 +664,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-4.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-4.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "2be5453e1e563dcb019365bd28d618f0d4b253dd73c72a42e76714f99d169290",
@@ -681,7 +681,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-5.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-5.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "191f90acab29572b3d64aa2c84aa8a0b48110d02d4f28d53e22a1401f53631e9",
@@ -698,7 +698,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-6.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-6.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "0c10ff7b49b1a6d3e559e8e092c68a79f19c94f5305d99ba5223bdd587a1be39",
@@ -715,7 +715,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-7.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-7.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "e6f4d13e66be1e1511d56951dca995346ff2377366bd0837f57e8952a40402a9",
@@ -732,7 +732,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-8.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-8.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "f815a756f9174190de23da110415393fd72d574f91ed1042480d0b77afc18dec",
@@ -749,7 +749,7 @@
         "Notes"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-9.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-9.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "5fa7d9240ac3dee9a454d96c28fdbaee6ed543c77c1daaf1d4293290a0a9e8a9",
@@ -769,7 +769,7 @@
         "Files churned in last 20 commits (top 10)"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-map.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-map.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "7f0348a72482f5a144d2beb3bbe2c80db424647ccad9e33760efe71851af0ae8",
@@ -779,7 +779,7 @@
     {
       "headings": [],
       "language": "shell",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-state.sh",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-state.sh",
       "role": "source",
       "secret_redacted": false,
       "sha256": "6c126f802d82a226fd75b1a997ae157ec41e0c3e728237d992a3ccb7080ee5f1",
@@ -794,7 +794,7 @@
         "Implications"
       ],
       "language": "markdown",
-      "path": ".supergoal/hermes-frontend-migration-vue-3-WzENWm/tools.md",
+      "path": ".supergoal/makosh-frontend-migration-vue-3-WzENWm/tools.md",
       "role": "doc",
       "secret_redacted": false,
       "sha256": "d88edd1e900187ae86f305aa07b393cb27981f3a3060c99eb4758e99a23c6e12",
@@ -847,7 +847,7 @@
     },
     {
       "headings": [
-        "Contributing to Hermes Hub",
+        "Contributing to Макошь",
         "Before Contributing",
         "Development Setup",
         "Pull Requests",
@@ -903,7 +903,7 @@
     },
     {
       "headings": [
-        "Hermes Hub",
+        "Макошь",
         "Статус",
         "Working Today",
         "Known Limitations",
@@ -6391,7 +6391,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_document_process.rs",
+      "path": "backend/src/bin/makosh_document_process.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "c983536e61a7859b068a71bf1890e1f176bc6e8f6f416918c651493da5955e9d",
@@ -6401,7 +6401,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_email_fixture_dev.rs",
+      "path": "backend/src/bin/makosh_email_fixture_dev.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "affb7ff53afc4cad1fda852cd5848fd0ccd9798c6a3c2570b8ba99516b58589d",
@@ -6411,7 +6411,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_email_fixture_export.rs",
+      "path": "backend/src/bin/makosh_email_fixture_export.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "0e9422ef1f8e0a33517cbaf865e3e3724e9fa3ef2ad3eff25f74e34fcad2c033",
@@ -6421,7 +6421,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_email_reproject_dev.rs",
+      "path": "backend/src/bin/makosh_email_reproject_dev.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "3ed898bfdb28b4bea3ffa030db059e68a4bf2dcec27767c42e263a8c73d094cd",
@@ -6431,7 +6431,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_email_sync_dev.rs",
+      "path": "backend/src/bin/makosh_email_sync_dev.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "db047fb42ecdfec7fc6e658450047a8d5e1b2d1bcc6629d8ae51f0f295e48375",
@@ -6441,7 +6441,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_email_sync_dev/account.rs",
+      "path": "backend/src/bin/makosh_email_sync_dev/account.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "7bcd0f473235e367d107bd4885002e72eb82a95f2219650132844b325ffcc48f",
@@ -6451,7 +6451,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_email_sync_dev/checkpoint.rs",
+      "path": "backend/src/bin/makosh_email_sync_dev/checkpoint.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "d8a3f51f04607b808088bc6d1cd128483eeeae4e3e225ea3d100cb6f4c1e6868",
@@ -6461,7 +6461,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_email_sync_dev/config.rs",
+      "path": "backend/src/bin/makosh_email_sync_dev/config.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "fa2cb8820a253fccc5f41c7e09a72453347d5332d02c55e7797c57695e03bff5",
@@ -6471,7 +6471,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_email_sync_dev/env.rs",
+      "path": "backend/src/bin/makosh_email_sync_dev/env.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "0f2688b1b1301c75633c5deb50fefde717eadb2a8b88a32d8b656a3993811103",
@@ -6481,7 +6481,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_email_sync_dev/errors.rs",
+      "path": "backend/src/bin/makosh_email_sync_dev/errors.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "7debfe6394770f143ee99dce893229a719020e14496f6c2214f5f1974e7cf1c2",
@@ -6491,7 +6491,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_email_sync_dev/fetch.rs",
+      "path": "backend/src/bin/makosh_email_sync_dev/fetch.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "650832996a44663b63d2755e73d35ebca14747e30f15f1bc9bd7a087164c1dab",
@@ -6501,7 +6501,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_email_sync_dev/provider.rs",
+      "path": "backend/src/bin/makosh_email_sync_dev/provider.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "00734797348869f6cc0e977fcfe2c85c0a50a5ba048a1790c93c3614a7497e7e",
@@ -6511,7 +6511,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_email_sync_dev/report.rs",
+      "path": "backend/src/bin/makosh_email_sync_dev/report.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "59e5e212aa5f2a4d7980f5c1989ddec849244827cf409ca2db6c56006957bf62",
@@ -6521,7 +6521,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_email_sync_dev/runner.rs",
+      "path": "backend/src/bin/makosh_email_sync_dev/runner.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "4b988973bfe0c2105cfba751b6d7fd5f906b9b6bb88ceb905908d55e00628306",
@@ -6531,7 +6531,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_graph_project.rs",
+      "path": "backend/src/bin/makosh_graph_project.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "490a50d99eb9b52104d77d7a1451a9884983cb295ed94641ee1a3724b1c6814e",
@@ -6541,7 +6541,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_migrate.rs",
+      "path": "backend/src/bin/makosh_migrate.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "154f234d18b6a76e8a0d5fbc64900b6105439d83d50c741710f391e1c7164326",
@@ -6551,7 +6551,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_whatsapp_business_cloud_edge_proxy.rs",
+      "path": "backend/src/bin/makosh_whatsapp_business_cloud_edge_proxy.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "992b7de7282ca4a55dfd46d6a1a6ae81799c71399ae9d5645f8d1e7cb883dbb2",
@@ -6561,7 +6561,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "backend/src/bin/hermes_zoom_edge_proxy.rs",
+      "path": "backend/src/bin/makosh_zoom_edge_proxy.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "6b9af55660e4a440bf090b4457c4cc4bca5403ce6ff3facf0183488f9c9d867f",
@@ -19034,7 +19034,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "contracts/proto/hermes/common/v1/common.proto",
+      "path": "contracts/proto/makosh/common/v1/common.proto",
       "role": "other",
       "secret_redacted": false,
       "sha256": "93077cb9a58522c96976045354a0b073260c711d9cff157408ef8e8013a0d4d6",
@@ -19044,7 +19044,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "contracts/proto/hermes/communications/v1/communications.proto",
+      "path": "contracts/proto/makosh/communications/v1/communications.proto",
       "role": "other",
       "secret_redacted": false,
       "sha256": "d082b81fce56e64899479c9351af33a8c09113c0cfc7a2ae2a46147368cda87c",
@@ -19054,7 +19054,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "contracts/proto/hermes/events/v1/event_envelope.proto",
+      "path": "contracts/proto/makosh/events/v1/event_envelope.proto",
       "role": "other",
       "secret_redacted": false,
       "sha256": "87515878b596585cbb36f8b77cf3ea9236a0783a7702f845863875f86ba39e44",
@@ -19064,7 +19064,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "contracts/proto/hermes/signal_hub/v1/signal_hub.proto",
+      "path": "contracts/proto/makosh/signal_hub/v1/signal_hub.proto",
       "role": "other",
       "secret_redacted": false,
       "sha256": "5b38780afbf9f13c391ce26d2526a3eb217bcd2f45001e7385f21d0cf54045a8",
@@ -19094,7 +19094,7 @@
     {
       "headings": [],
       "language": "rust",
-      "path": "crates/testkit/src/bin/hermes_test_session.rs",
+      "path": "crates/testkit/src/bin/makosh_test_session.rs",
       "role": "source",
       "secret_redacted": false,
       "sha256": "3181a305448f338a8cdad003cd0b28861af83f9cc50a8ee2c18a019a773ea41e",
@@ -19303,7 +19303,7 @@
     },
     {
       "headings": [
-        "Hermes Documentation",
+        "Макошь Documentation",
         "Reading Order",
         "Canonical Sources",
         "Product Documents",
@@ -21029,7 +21029,7 @@
     },
     {
       "headings": [
-        "Hermes AI Layer",
+        "Макошь AI Layer",
         "Packages",
         "Documentation Rule"
       ],
@@ -21091,7 +21091,7 @@
     },
     {
       "headings": [
-        "Hermes App Layer",
+        "Макошь App Layer",
         "Current Code Areas",
         "Documentation Rule"
       ],
@@ -21105,7 +21105,7 @@
     },
     {
       "headings": [
-        "Hermes Application Services",
+        "Макошь Application Services",
         "Current Code Areas",
         "Documentation Rule"
       ],
@@ -21666,7 +21666,7 @@
     },
     {
       "headings": [
-        "Hermes Domain Catalog",
+        "Макошь Domain Catalog",
         "Domain Rule",
         "Package Shape",
         "Canonical Domains",
@@ -21701,7 +21701,7 @@
     },
     {
       "headings": [
-        "Hermes Calendar And Events",
+        "Макошь Calendar And Events",
         "Key Capabilities",
         "Engine Use",
         "Navigation"
@@ -21935,7 +21935,7 @@
     },
     {
       "headings": [
-        "Hermes Organizations",
+        "Макошь Organizations",
         "Domain Boundary",
         "Engine Use",
         "Navigation"
@@ -22022,7 +22022,7 @@
     },
     {
       "headings": [
-        "Hermes Hub — Persona Intelligence",
+        "Макошь — Persona Intelligence",
         "Domain Vision",
         "Core Model",
         "Persona Types",
@@ -22211,7 +22211,7 @@
     },
     {
       "headings": [
-        "Hermes Signal Hub",
+        "Макошь Signal Hub",
         "Position",
         "Core Invariants",
         "Current Repository Context",
@@ -22458,7 +22458,7 @@
     },
     {
       "headings": [
-        "Hermes Tasks",
+        "Макошь Tasks",
         "Domain Boundary",
         "Engine Use",
         "Current Implementation Surface",
@@ -22561,7 +22561,7 @@
     },
     {
       "headings": [
-        "Hermes Engine Catalog",
+        "Макошь Engine Catalog",
         "Engine Boundary",
         "Engine Specs",
         "Package Shape",
@@ -22841,7 +22841,7 @@
     },
     {
       "headings": [
-        "Hermes Architecture Principles",
+        "Макошь Architecture Principles",
         "1. Context Over CRUD",
         "2. Local-First Memory",
         "3. Evidence Before Inference",
@@ -22865,7 +22865,7 @@
     },
     {
       "headings": [
-        "Hermes Domain Map",
+        "Макошь Domain Map",
         "Domains",
         "Engines",
         "Cross-Domain Rules",
@@ -22882,7 +22882,7 @@
     },
     {
       "headings": [
-        "Hermes Engines",
+        "Макошь Engines",
         "Engine Map",
         "Memory Engine",
         "Timeline Engine",
@@ -22904,7 +22904,7 @@
     },
     {
       "headings": [
-        "Hermes Glossary",
+        "Макошь Glossary",
         "Agent",
         "Communication",
         "Context",
@@ -22943,7 +22943,7 @@
     },
     {
       "headings": [
-        "Hermes Foundation Vision",
+        "Макошь Foundation Vision",
         "Canonical Definition",
         "Primary Value",
         "System Shape",
@@ -22961,8 +22961,8 @@
     },
     {
       "headings": [
-        "Hermes World Model",
-        "What Exists In Hermes",
+        "Макошь World Model",
+        "What Exists In Макошь",
         "Primary Entities",
         "Derived Objects",
         "Relationship Model",
@@ -22981,7 +22981,7 @@
     },
     {
       "headings": [
-        "Hermes Integration Catalog",
+        "Макошь Integration Catalog",
         "Package Shape",
         "Providers",
         "Boundary Rules"
@@ -22996,7 +22996,7 @@
     },
     {
       "headings": [
-        "Hermes Communications - Email Channel",
+        "Макошь Communications - Email Channel",
         "Principles",
         "Current Implementation Surface",
         "Lifecycle",
@@ -23084,7 +23084,7 @@
       "headings": [
         "Mail Domain Gap Analysis",
         "Mail Functionality",
-        "Hermes AI",
+        "Макошь AI",
         "Realtime",
         "Performance / Frontend Standards",
         "Current Next Implementation Candidates"
@@ -23163,7 +23163,7 @@
     },
     {
       "headings": [
-        "Hermes Communications - Telegram Channel",
+        "Макошь Communications - Telegram Channel",
         "Completed Boundary",
         "Deferred Initiatives",
         "Navigation"
@@ -23476,7 +23476,7 @@
     },
     {
       "headings": [
-        "Hermes Communications — WhatsApp Channel",
+        "Макошь Communications — WhatsApp Channel",
         "2026-06-24 planning documents",
         "Роль в Communications Domain",
         "Ключевые принципы WhatsApp Channel",
@@ -23637,7 +23637,7 @@
     },
     {
       "headings": [
-        "WhatsApp Full Functionality Target for Hermes",
+        "WhatsApp Full Functionality Target for Макошь",
         "Core invariant",
         "Provider shapes",
         "Functional target matrix",
@@ -23656,7 +23656,7 @@
         "12. Search",
         "13. Timeline",
         "14. Calls",
-        "15. Hermes intelligence layer",
+        "15. Макошь intelligence layer",
         "AI Summary",
         "AI Reply",
         "Task extraction",
@@ -23723,7 +23723,7 @@
         "Phase P5 — Media and attachments",
         "Phase P6 — Provider command outbox",
         "Phase P7 — Realtime and cache patching",
-        "Phase P8 — Hermes intelligence",
+        "Phase P8 — Макошь intelligence",
         "Phase P9 — Business Cloud provider",
         "Test strategy",
         "Unit tests",
@@ -23831,7 +23831,7 @@
     },
     {
       "headings": [
-        "Hermes Communications - Yandex Telemost Provider Stage",
+        "Макошь Communications - Yandex Telemost Provider Stage",
         "Foundation scope",
         "Current scope",
         "Provider kind",
@@ -23979,7 +23979,7 @@
     },
     {
       "headings": [
-        "Hermes Communications - Zoom Provider Stage",
+        "Макошь Communications - Zoom Provider Stage",
         "Foundation scope",
         "Current scope",
         "Provider kinds",
@@ -24259,9 +24259,9 @@
     {
       "headings": [
         "Zoom Provider Runtime Research Notes",
-        "Runtime shapes represented in Hermes",
+        "Runtime shapes represented in Макошь",
         "Target adapters",
-        "Non-negotiable Hermes rules",
+        "Non-negotiable Макошь rules",
         "Open research questions",
         "Documentation update requirement"
       ],
@@ -24320,7 +24320,7 @@
     },
     {
       "headings": [
-        "Hermes Platform Layer",
+        "Макошь Platform Layer",
         "Current Documentation Packages",
         "Current Code Areas",
         "Documentation Rule"
@@ -24479,7 +24479,7 @@
     },
     {
       "headings": [
-        "Hermes Realtime Conversation Platform",
+        "Макошь Realtime Conversation Platform",
         "Provider-neutral invariants",
         "Documents"
       ],
@@ -24588,7 +24588,7 @@
     },
     {
       "headings": [
-        "Hermes Product Development Roadmap",
+        "Макошь Product Development Roadmap",
         "Status",
         "Roadmap Principle",
         "Current Implementation Baseline",
@@ -24613,11 +24613,11 @@
     },
     {
       "headings": [
-        "Hermes Product Master Spec",
+        "Макошь Product Master Spec",
         "Status",
         "Canonical Product Definition",
         "Product Thesis",
-        "What Hermes Is Not",
+        "What Макошь Is Not",
         "Communication As Primary Ingestion Spine",
         "Source Evidence To Memory Flow",
         "Domain Model",
@@ -25058,7 +25058,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "docs/site/assets/hermes-logo-mark.png",
+      "path": "docs/site/assets/makosh-logo-mark.png",
       "role": "other",
       "secret_redacted": false,
       "sha256": "a178878927d117e18b207498b90a4dee5d5e96eb46ccdee7311e82135b9c2ef2",
@@ -25068,7 +25068,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "docs/site/hermes-docs.css",
+      "path": "docs/site/makosh-docs.css",
       "role": "other",
       "secret_redacted": false,
       "sha256": "923b1809c49922c8bd92d5f7182fdf9f0e253e00ae16fe4cf07b51c7658646fe",
@@ -25118,7 +25118,7 @@
     },
     {
       "headings": [
-        "Hermes Vault",
+        "Макошь Vault",
         "Current Code Areas",
         "Documentation Rule"
       ],
@@ -25163,7 +25163,7 @@
     },
     {
       "headings": [
-        "Hermes Workflow Catalog",
+        "Макошь Workflow Catalog",
         "Core Principle",
         "Workflow Specs",
         "Boundary Rule"
@@ -25344,7 +25344,7 @@
     },
     {
       "headings": [
-        "Полное ревью фронтенда Hermes Hub",
+        "Полное ревью фронтенда Макошь",
         "Дополнение: code review текущей Vue 3 миграции",
         "Critical: `ApiClient` не инициализируется перед использованием",
         "Critical: backend URL и secret env names расходятся с Makefile/backend contract",
@@ -25366,7 +25366,7 @@
         "Review note",
         "Дополнение: ревью текущего Mail/Persons SRP split diff",
         "Major: новые Mail/Persons split modules сейчас untracked",
-        "Warning: Persona enrichment live SQL ветки не исполняются без `HERMES_TEST_DATABASE_URL`",
+        "Warning: Persona enrichment live SQL ветки не исполняются без `MAKOSH_TEST_DATABASE_URL`",
         "Review note",
         "Дополнение: ревью текущего API Support Stores SRP split diff",
         "Major: новый API support split directory сейчас untracked",
@@ -25379,7 +25379,7 @@
         "Review note",
         "Дополнение: ревью текущего WhatsApp Web Store SRP split diff",
         "Major: новый WhatsApp store split directory сейчас untracked",
-        "Warning: WhatsApp live DB ветки не исполняются без `HERMES_TEST_DATABASE_URL`",
+        "Warning: WhatsApp live DB ветки не исполняются без `MAKOSH_TEST_DATABASE_URL`",
         "Review note",
         "Дополнение: ревью текущего Telegram Accounts / Decision Models / Obligation Models SRP split diff",
         "Major: новые Telegram/Decision/Obligation split directories сейчас untracked",
@@ -25388,7 +25388,7 @@
         "Review note",
         "Дополнение: ревью текущего Persons Trust SRP split diff",
         "Major: новый Persons trust split directory сейчас untracked",
-        "Warning: live PostgreSQL ветки для promise/risk projection не исполняются без `HERMES_TEST_DATABASE_URL`",
+        "Warning: live PostgreSQL ветки для promise/risk projection не исполняются без `MAKOSH_TEST_DATABASE_URL`",
         "Review note",
         "Дополнение: ревью текущего Dev Email Sync SRP split diff",
         "Major: новый Dev Email Sync split directory сейчас untracked",
@@ -25486,7 +25486,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "frontend/public/assets/hermes-icon-128.png",
+      "path": "frontend/public/assets/makosh-icon-128.png",
       "role": "other",
       "secret_redacted": false,
       "sha256": "d67f4a237590586e716b7ecb9f954738e1d75593a9afb297c4f734a47da3a2e8",
@@ -25496,7 +25496,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "frontend/public/assets/hermes-icon-16.png",
+      "path": "frontend/public/assets/makosh-icon-16.png",
       "role": "other",
       "secret_redacted": false,
       "sha256": "d61784d57666067d6f4fc743de3ed1b56e60cf0b920318ca8c371cb96a8d9e4b",
@@ -25506,7 +25506,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "frontend/public/assets/hermes-icon-180.png",
+      "path": "frontend/public/assets/makosh-icon-180.png",
       "role": "other",
       "secret_redacted": false,
       "sha256": "2670bd3a379aafa28dd37c452960a5d9f8dc7d457c5ec3befac41f3af4194b11",
@@ -25516,7 +25516,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "frontend/public/assets/hermes-icon-192.png",
+      "path": "frontend/public/assets/makosh-icon-192.png",
       "role": "other",
       "secret_redacted": false,
       "sha256": "f82487c6fd1b3f2d0ddaa7554fd3bd6c3a8b7cf1fd45033871df54fe2bd17cf1",
@@ -25526,7 +25526,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "frontend/public/assets/hermes-icon-256.png",
+      "path": "frontend/public/assets/makosh-icon-256.png",
       "role": "other",
       "secret_redacted": false,
       "sha256": "c450029c431e4ee7a123ef279282186e116e41f1d68d0b1f9a38758c983676ea",
@@ -25536,7 +25536,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "frontend/public/assets/hermes-icon-32.png",
+      "path": "frontend/public/assets/makosh-icon-32.png",
       "role": "other",
       "secret_redacted": false,
       "sha256": "9eb1d8d450b4ea2a16b759558ff0f09815159a9b1082fccccffc354a50305bba",
@@ -25546,7 +25546,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "frontend/public/assets/hermes-icon-48.png",
+      "path": "frontend/public/assets/makosh-icon-48.png",
       "role": "other",
       "secret_redacted": false,
       "sha256": "78b47a9a0b3348ded7c910e46bfbfcab1a3c769c6d445553118d5bbb20e33ed0",
@@ -25556,7 +25556,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "frontend/public/assets/hermes-icon-512.png",
+      "path": "frontend/public/assets/makosh-icon-512.png",
       "role": "other",
       "secret_redacted": false,
       "sha256": "a178878927d117e18b207498b90a4dee5d5e96eb46ccdee7311e82135b9c2ef2",
@@ -25566,7 +25566,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "frontend/public/assets/hermes-icon-64.png",
+      "path": "frontend/public/assets/makosh-icon-64.png",
       "role": "other",
       "secret_redacted": false,
       "sha256": "d71aa59c689b8eda059cddb78775ecfcbf71bba95aaa84e6be632c5c1975e160",
@@ -25576,7 +25576,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "frontend/public/assets/hermes-logo-mark.png",
+      "path": "frontend/public/assets/makosh-logo-mark.png",
       "role": "other",
       "secret_redacted": false,
       "sha256": "a178878927d117e18b207498b90a4dee5d5e96eb46ccdee7311e82135b9c2ef2",
@@ -25586,7 +25586,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "frontend/public/assets/hermes-logo.png",
+      "path": "frontend/public/assets/makosh-logo.png",
       "role": "other",
       "secret_redacted": false,
       "sha256": "11d7a8210c47609c0d9d798451e7f06053047776d13e4e5c03c0c5dffd2f45ae",
@@ -25596,7 +25596,7 @@
     {
       "headings": [],
       "language": "unknown",
-      "path": "frontend/public/assets/hermes-reference-avatar.png",
+      "path": "frontend/public/assets/makosh-reference-avatar.png",
       "role": "other",
       "secret_redacted": false,
       "sha256": "73334e1fb73ad5d0a4d1e74bbd8f0a14d5a140d3755313e992a0eac07fa1f93a",
@@ -32887,7 +32887,7 @@
     {
       "headings": [],
       "language": "typescript",
-      "path": "frontend/src/gen/hermes/common/v1/common_pb.ts",
+      "path": "frontend/src/gen/makosh/common/v1/common_pb.ts",
       "role": "source",
       "secret_redacted": false,
       "sha256": "26db778ac98740e01348bfe02b3617b5a1c78bab10963f308018d7137c35beb9",
@@ -32897,7 +32897,7 @@
     {
       "headings": [],
       "language": "typescript",
-      "path": "frontend/src/gen/hermes/communications/v1/communications_pb.ts",
+      "path": "frontend/src/gen/makosh/communications/v1/communications_pb.ts",
       "role": "source",
       "secret_redacted": false,
       "sha256": "8ea772f9e5d7a62fe71e1e547e21ed804c7cbe612bfe409abc59d604d01f4450",
@@ -32907,7 +32907,7 @@
     {
       "headings": [],
       "language": "typescript",
-      "path": "frontend/src/gen/hermes/events/v1/event_envelope_pb.ts",
+      "path": "frontend/src/gen/makosh/events/v1/event_envelope_pb.ts",
       "role": "source",
       "secret_redacted": false,
       "sha256": "723a0ba8e9c4b53640ef1b5300734194ce50853c53721ecf63827ae54f666ffa",
@@ -32917,7 +32917,7 @@
     {
       "headings": [],
       "language": "typescript",
-      "path": "frontend/src/gen/hermes/signal_hub/v1/signal_hub_pb.ts",
+      "path": "frontend/src/gen/makosh/signal_hub/v1/signal_hub_pb.ts",
       "role": "source",
       "secret_redacted": false,
       "sha256": "186116043eddecce4dfc49b9b63e1f62bad3ba6068b240bb62c1cef6aa0bda3a",
@@ -36717,7 +36717,7 @@
     },
     {
       "headings": [
-        "Hermes test baseline - 2026-06-23",
+        "Макошь test baseline - 2026-06-23",
         "Observed current state",
         "Slowest backend suites observed before modernization",
         "Heaviest compile/runtime hotspots",
@@ -37690,7 +37690,7 @@
         "function readText",
         "function requireContains",
         "function verifyForwardTextReemitContract",
-        "function verifyHermesGapManifest",
+        "function verifyМакошьGapManifest",
         "function verifyLocalWaRsApi",
         "function verifyLowLevelGapEvidence",
         "function verifyOptionalPublishedCrateProbe",

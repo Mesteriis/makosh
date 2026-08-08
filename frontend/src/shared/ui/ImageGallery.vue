@@ -33,7 +33,7 @@ const safeIndex = computed(() => {
 	return Math.min(Math.max(activeIndex.value, 0), props.items.length - 1)
 })
 const selectedItem = computed(() => props.items[safeIndex.value])
-const classes = computed(() => ['hermes-image-gallery', props.class])
+const classes = computed(() => ['makosh-image-gallery', props.class])
 
 function selectImage(index: number): void {
 	const item = props.items[index]
@@ -48,7 +48,7 @@ function selectImage(index: number): void {
 
 <template>
 	<section :class="classes" :aria-label="label">
-		<div v-if="selectedItem" class="hermes-image-gallery__stage">
+		<div v-if="selectedItem" class="makosh-image-gallery__stage">
 			<Image
 				:src="selectedItem.src"
 				:alt="selectedItem.alt"
@@ -56,21 +56,21 @@ function selectImage(index: number): void {
 				ratio="wide"
 				fit="contain"
 			/>
-			<p v-if="selectedItem.description" class="hermes-image-gallery__description">
+			<p v-if="selectedItem.description" class="makosh-image-gallery__description">
 				{{ selectedItem.description }}
 			</p>
 		</div>
-		<div v-else class="hermes-image-gallery__empty">{{ emptyLabel }}</div>
+		<div v-else class="makosh-image-gallery__empty">{{ emptyLabel }}</div>
 
-		<div v-if="items.length > 1" class="hermes-image-gallery__thumbs" role="list">
+		<div v-if="items.length > 1" class="makosh-image-gallery__thumbs" role="list">
 			<div
 				v-for="(item, index) in items"
 				:key="item.id"
 				role="listitem"
 			>
 				<button
-					class="hermes-image-gallery__thumb"
-					:class="{ 'hermes-image-gallery__thumb--active': index === safeIndex }"
+					class="makosh-image-gallery__thumb"
+					:class="{ 'makosh-image-gallery__thumb--active': index === safeIndex }"
 					type="button"
 					:aria-label="item.title || item.alt"
 					:aria-pressed="index === safeIndex"

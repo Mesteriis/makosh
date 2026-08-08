@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package makosh.runtime.v1;
+
+// These are deployment declarations, not authority by themselves.
+enum DeploymentProfileV1 {
+  DEPLOYMENT_PROFILE_V1_UNSPECIFIED = 0;
+  DEPLOYMENT_PROFILE_V1_MACOS_TAURI_EMBEDDED = 1;
+  DEPLOYMENT_PROFILE_V1_LINUX_DOCKER_SERVER = 2;
+}
+
+enum RuntimeLifecycleV1 {
+  RUNTIME_LIFECYCLE_V1_UNSPECIFIED = 0;
+  RUNTIME_LIFECYCLE_V1_MANAGED_CHILD = 1;
+  RUNTIME_LIFECYCLE_V1_EXTERNAL_COMPOSE = 2;
+}
+
+message NativeExecutableDigestV1 {
+  string target_triple = 1;
+  bytes sha256 = 2;
+}
+
+message OciImageDigestV1 {
+  string repository = 1;
+  bytes sha256 = 2;
+}
+
+message DistributionArtifactV1 {
+  oneof artifact {
+    NativeExecutableDigestV1 native_executable = 1;
+    OciImageDigestV1 oci_image = 2;
+  }
+}
+
+// The file-backed signer is the only baseline proof adapter. This oneof keeps
+// future non-file adapters from changing enrollment transport fields.
+message FileDeviceProofV1 {
+  bytes public_key_sec1 = 1;
+  bytes signature_raw = 2;
+}
+
+message DeviceProofV1 {
+  oneof proof {
+    FileDeviceProofV1 file_es256 = 1;
+  }
+}
+
+message InheritedFdInitialOwnerEnrollmentV1 {
+  uint32 inherited_fd = 1;
+  DeviceProofV1 device_proof = 2;
+}
+
+message RemotePairingEnrollmentV1 {
+  string endpoint = 1;
+  bytes tls_certificate_sha256 = 2;
+  bytes one_time_token = 3;
+  DeviceProofV1 device_proof = 4;
+}
+
+message InitialOwnerEnrollmentTransportV1 {
+  oneof transport {
+    InheritedFdInitialOwnerEnrollmentV1 inherited_fd = 1;
+    RemotePairingEnrollmentV1 remote_pairing = 2;
+  }
+}

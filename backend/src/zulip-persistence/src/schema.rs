@@ -1,6 +1,6 @@
 //! Immutable Zulip-owned schema bundle for independent Storage admission.
 
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use sha2::{Digest, Sha256};
 
 use crate::ZULIP_SCHEMA_V1;
@@ -13,7 +13,7 @@ pub const ZULIP_STORAGE_BUNDLE_REVISION_V5: u32 = 5;
 pub const ZULIP_STORAGE_BUNDLE_REVISION_V6: u32 = 6;
 
 pub const ZULIP_SCHEMA_V2: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.zulip_operational_account_state (
+CREATE TABLE IF NOT EXISTS makosh_data.zulip_operational_account_state (
     account_id TEXT PRIMARY KEY,
     history_state SMALLINT NOT NULL DEFAULT 1,
     oldest_provider_message_id TEXT,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.zulip_operational_account_state (
     CHECK (last_provider_event_id IS NULL OR last_provider_event_id > 0),
     CHECK (updated_at_unix_seconds > 0)
 );
-CREATE TABLE IF NOT EXISTS hermes_data.zulip_operational_events (
+CREATE TABLE IF NOT EXISTS makosh_data.zulip_operational_events (
     sequence BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     account_id TEXT NOT NULL,
     provider_event_id BIGINT NOT NULL,
@@ -46,10 +46,10 @@ CREATE TABLE IF NOT EXISTS hermes_data.zulip_operational_events (
     CHECK (observed_at_unix_seconds > 0)
 );
 CREATE INDEX IF NOT EXISTS zulip_operational_events_account_sequence_idx
-    ON hermes_data.zulip_operational_events (account_id, sequence DESC);
+    ON makosh_data.zulip_operational_events (account_id, sequence DESC);
 CREATE INDEX IF NOT EXISTS zulip_operational_events_account_kind_sequence_idx
-    ON hermes_data.zulip_operational_events (account_id, event_kind, sequence DESC);
-CREATE TABLE IF NOT EXISTS hermes_data.zulip_operational_messages (
+    ON makosh_data.zulip_operational_events (account_id, event_kind, sequence DESC);
+CREATE TABLE IF NOT EXISTS makosh_data.zulip_operational_messages (
     account_id TEXT NOT NULL,
     provider_message_id TEXT NOT NULL,
     provider_conversation_id TEXT NOT NULL,
@@ -75,12 +75,12 @@ CREATE TABLE IF NOT EXISTS hermes_data.zulip_operational_messages (
     CHECK (last_event_sequence >= 0)
 );
 CREATE INDEX IF NOT EXISTS zulip_operational_messages_account_order_idx
-    ON hermes_data.zulip_operational_messages
+    ON makosh_data.zulip_operational_messages
     (account_id, last_event_sequence DESC, ((provider_message_id)::BIGINT) DESC);
 CREATE INDEX IF NOT EXISTS zulip_operational_messages_conversation_order_idx
-    ON hermes_data.zulip_operational_messages
+    ON makosh_data.zulip_operational_messages
     (account_id, provider_conversation_id, last_event_sequence DESC, ((provider_message_id)::BIGINT) DESC);
-CREATE TABLE IF NOT EXISTS hermes_data.zulip_operational_message_mutations (
+CREATE TABLE IF NOT EXISTS makosh_data.zulip_operational_message_mutations (
     account_id TEXT NOT NULL,
     provider_message_id TEXT NOT NULL,
     content TEXT,
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.zulip_operational_message_mutations (
     CHECK (octet_length(content) <= 1048576),
     CHECK (last_event_sequence > 0)
 );
-CREATE TABLE IF NOT EXISTS hermes_data.zulip_operational_conversations (
+CREATE TABLE IF NOT EXISTS makosh_data.zulip_operational_conversations (
     account_id TEXT NOT NULL,
     provider_conversation_id TEXT NOT NULL,
     conversation_kind SMALLINT NOT NULL,
@@ -111,20 +111,20 @@ CREATE TABLE IF NOT EXISTS hermes_data.zulip_operational_conversations (
     CHECK (latest_event_sequence >= 0)
 );
 CREATE INDEX IF NOT EXISTS zulip_operational_conversations_account_order_idx
-    ON hermes_data.zulip_operational_conversations
+    ON makosh_data.zulip_operational_conversations
     (account_id, latest_event_sequence DESC, ((COALESCE(latest_provider_message_id, '0'))::BIGINT) DESC);
-CREATE TABLE IF NOT EXISTS hermes_data.zulip_operational_attachments (
+CREATE TABLE IF NOT EXISTS makosh_data.zulip_operational_attachments (
     account_id TEXT NOT NULL,
     provider_message_id TEXT NOT NULL,
     provider_attachment_id TEXT NOT NULL,
     filename TEXT,
     PRIMARY KEY (account_id, provider_message_id, provider_attachment_id),
     FOREIGN KEY (account_id, provider_message_id)
-      REFERENCES hermes_data.zulip_operational_messages(account_id, provider_message_id)
+      REFERENCES makosh_data.zulip_operational_messages(account_id, provider_message_id)
       ON DELETE CASCADE,
     CHECK (length(trim(provider_attachment_id)) > 0)
 );
-CREATE TABLE IF NOT EXISTS hermes_data.zulip_operational_reactions (
+CREATE TABLE IF NOT EXISTS makosh_data.zulip_operational_reactions (
     account_id TEXT NOT NULL,
     provider_message_id TEXT NOT NULL,
     actor_id TEXT NOT NULL,
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.zulip_operational_reactions (
 "#;
 
 pub const ZULIP_SCHEMA_V3: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.zulip_account_credential_bindings (
+CREATE TABLE IF NOT EXISTS makosh_data.zulip_account_credential_bindings (
     account_id TEXT PRIMARY KEY,
     configuration_instance_id TEXT NOT NULL,
     credential_revision BIGINT NOT NULL,
@@ -221,7 +221,7 @@ pub fn zulip_storage_bundle_v1() -> StorageBundleV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_storage_protocol::validation::validate_storage_bundle;
+    use makosh_storage_protocol::validation::validate_storage_bundle;
 
     use super::*;
 
@@ -253,12 +253,12 @@ mod tests {
             .expect("Zulip Storage SQL is UTF-8");
         assert_eq!(sql.matches("CREATE TABLE IF NOT EXISTS ").count(), 7);
         assert_eq!(
-            sql.matches("CREATE TABLE IF NOT EXISTS hermes_data.")
+            sql.matches("CREATE TABLE IF NOT EXISTS makosh_data.")
                 .count(),
             7,
-            "every Zulip table belongs to the owner-scoped hermes_data schema"
+            "every Zulip table belongs to the owner-scoped makosh_data schema"
         );
-        assert!(!sql.contains("hermes_communications"));
+        assert!(!sql.contains("makosh_communications"));
         assert!(!sql.contains("REFERENCES communications_"));
         let account_sql = std::str::from_utf8(&bundle.steps[2].forward_sql_utf8)
             .expect("Zulip account binding SQL is UTF-8");

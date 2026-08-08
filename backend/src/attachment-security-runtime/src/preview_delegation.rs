@@ -2,7 +2,7 @@
 
 use std::{os::unix::net::UnixStream, time::Duration};
 
-use hermes_attachment_preview_ingress::{
+use makosh_attachment_preview_ingress::{
     ATTACHMENT_PREVIEW_BLOB_TARGET_CAPABILITY_ID_V1, ATTACHMENT_PREVIEW_BLOB_TARGET_MODULE_ID_V1,
     ATTACHMENT_PREVIEW_BLOB_TARGET_OWNER_ID_V1, AttachmentPreviewCustodyEnvelopeContextV1,
     build_attachment_preview_custody_delegated_outbox_record_v1,
@@ -12,15 +12,15 @@ use hermes_attachment_preview_ingress::{
         AttachmentPreviewCustodyDelegationRejectedV1, RequestAttachmentPreviewCustodyDelegationV1,
     },
 };
-use hermes_attachment_security_persistence::{
+use makosh_attachment_security_persistence::{
     AttachmentSecurityPreviewDelegationWorkV1, ClaimedAttachmentSecurityPreviewDelegationV1,
 };
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobClientError, ManagedBlobCustodyDelegationRequestV1, ManagedBlobCustodyTargetV1,
     request_managed_blob_custody_delegation_v2,
 };
-use hermes_events_protocol::delivery::OutboxRecordV1;
-use hermes_runtime_protocol::managed_control::{
+use makosh_events_protocol::delivery::OutboxRecordV1;
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, RejectManagedControlRequestsV2,
 };
 

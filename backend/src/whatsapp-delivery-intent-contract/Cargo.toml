@@ -1,5 +1,5 @@
 [package]
-name = "hermes-whatsapp-delivery-intent-contract"
+name = "makosh-whatsapp-delivery-intent-contract"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,13 +7,13 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "whatsapp"
 surface = "contract"
 
 [dependencies]
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
 prost = "=0.14.4"
 
 [build-dependencies]

@@ -1,17 +1,17 @@
 //! Disposable PostgreSQL proof for fenced, durable Scheduler retry state.
 
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_scheduler_persistence::{
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_scheduler_persistence::{
     RetryFailureOutcomeV1, SchedulerPostgresStoreV1, SchedulerRunClaimErrorV1, SchedulerRunClaimV1,
     scheduler_storage_bundle_v1,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     ConcurrencyKeyV1, JobRunIdV1, MisfirePolicyV1, OverlapPolicyV1, RetryPolicyV1, ScheduleIdV1,
     SchedulePolicyV1, ScheduleRevisionV1, ScheduleRunLeaseV1, ScheduleTriggerV1,
 };
 use sqlx::{PgPool, Row, postgres::PgPoolOptions};
 
-const URL: &str = "HERMES_SCHEDULER_POSTGRES_URL";
+const URL: &str = "MAKOSH_SCHEDULER_POSTGRES_URL";
 const CLAIMED_AT: i64 = 1_000;
 
 #[tokio::test]
@@ -68,7 +68,7 @@ async fn failed_run_keeps_identity_and_persists_its_next_retry() {
 }
 
 async fn install_schema(pool: &PgPool) {
-    sqlx::raw_sql("DROP SCHEMA IF EXISTS hermes_platform CASCADE; CREATE SCHEMA hermes_platform;")
+    sqlx::raw_sql("DROP SCHEMA IF EXISTS makosh_platform CASCADE; CREATE SCHEMA makosh_platform;")
         .execute(pool)
         .await
         .expect("fresh retry schema");
@@ -85,7 +85,7 @@ async fn install_schema(pool: &PgPool) {
 }
 
 async fn install_schedule(pool: &PgPool, key: &ConcurrencyKeyV1, policy: &SchedulePolicyV1) {
-    sqlx::query("INSERT INTO hermes_platform.scheduler_schedules (schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms, updated_at_unix_ms) VALUES ($1, 1, 'platform', 'maintenance', 1, 'platform.maintenance', 1, $2, 'scope:technical', $3, 1, TRUE, $4, $5, $5)")
+    sqlx::query("INSERT INTO makosh_platform.scheduler_schedules (schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms, updated_at_unix_ms) VALUES ($1, 1, 'platform', 'maintenance', 1, 'platform.maintenance', 1, $2, 'scope:technical', $3, 1, TRUE, $4, $5, $5)")
         .bind(vec![11_u8; 16]).bind(vec![7_u8; 32]).bind(key.value()).bind(policy.canonical_bytes()).bind(CLAIMED_AT)
         .execute(pool).await.expect("schedule");
 }
@@ -132,13 +132,13 @@ fn retry_policy() -> SchedulePolicyV1 {
 }
 
 async fn retry_due_at(pool: &PgPool) -> i64 {
-    sqlx::query("SELECT next_attempt_at_unix_ms FROM hermes_platform.scheduler_run_retries WHERE run_id = $1")
+    sqlx::query("SELECT next_attempt_at_unix_ms FROM makosh_platform.scheduler_run_retries WHERE run_id = $1")
         .bind(vec![51_u8; 16]).fetch_one(pool).await.expect("retry state").get("next_attempt_at_unix_ms")
 }
 
 async fn run_epoch_and_state(pool: &PgPool) -> (i64, String) {
     let row = sqlx::query(
-        "SELECT lease_epoch, state FROM hermes_platform.scheduler_runs WHERE run_id = $1",
+        "SELECT lease_epoch, state FROM makosh_platform.scheduler_runs WHERE run_id = $1",
     )
     .bind(vec![51_u8; 16])
     .fetch_one(pool)
@@ -149,7 +149,7 @@ async fn run_epoch_and_state(pool: &PgPool) -> (i64, String) {
 
 async fn active_runs(pool: &PgPool) -> i32 {
     sqlx::query(
-        "SELECT active_runs FROM hermes_platform.scheduler_concurrency WHERE concurrency_key = $1",
+        "SELECT active_runs FROM makosh_platform.scheduler_concurrency WHERE concurrency_key = $1",
     )
     .bind("mailbox:opaque_retry")
     .fetch_one(pool)

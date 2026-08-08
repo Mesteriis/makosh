@@ -1,5 +1,5 @@
 import { computed, onBeforeUnmount, ref, shallowRef } from 'vue'
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import { MailLegacyRecoveryWorkflowV1 } from '../../../integrations/mail/recovery/mailLegacyRecoveryWorkflow'
 import type { MailLegacyRecoveryResultV1 } from '../../../integrations/mail/recovery/mailLegacyRecoveryWorkflow'
 import {

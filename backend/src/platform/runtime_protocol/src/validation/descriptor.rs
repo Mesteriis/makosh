@@ -714,7 +714,7 @@ mod tests {
 
         let mut descriptor = client_rpc_descriptor();
         descriptor.capabilities[0].provides[0].client_rpc_route = Some(ClientRpcRouteV1 {
-            path: "/hermes.notes.v1.NotesQueryService/../Query".to_owned(),
+            path: "/makosh.notes.v1.NotesQueryService/../Query".to_owned(),
         });
         assert!(validate_descriptor_v1(&descriptor).is_err());
 
@@ -766,7 +766,7 @@ mod tests {
             max_response_bytes: 1,
         });
         surface.client_rpc_route = Some(ClientRpcRouteV1 {
-            path: "/hermes.notes.v1.NotesQueryService/Query".to_owned(),
+            path: "/makosh.notes.v1.NotesQueryService/Query".to_owned(),
         });
         assert!(validate_descriptor_v1(&descriptor).is_err());
     }
@@ -868,7 +868,7 @@ mod tests {
                         schema_sha256: vec![7; 32],
                     }),
                     client_rpc_route: Some(ClientRpcRouteV1 {
-                        path: "/hermes.notes.v1.NotesQueryService/Query".to_owned(),
+                        path: "/makosh.notes.v1.NotesQueryService/Query".to_owned(),
                     }),
                     client_blob_route: None,
                 }],

@@ -21,8 +21,8 @@ const emit = defineEmits<{
 const accordionId = useId()
 
 const classes = computed(() => [
-	'hermes-accordion',
-	props.multiple ? 'hermes-accordion--multiple' : 'hermes-accordion--single',
+	'makosh-accordion',
+	props.multiple ? 'makosh-accordion--multiple' : 'makosh-accordion--single',
 	props.class
 ])
 
@@ -41,11 +41,11 @@ const normalizedOpenIds = computed(() => {
 const openIdSet = computed(() => new Set(normalizedOpenIds.value))
 
 function itemPanelId(item: AccordionItem): string {
-	return `hermes-accordion-${accordionId}-panel-${item.id}`
+	return `makosh-accordion-${accordionId}-panel-${item.id}`
 }
 
 function itemTriggerId(item: AccordionItem): string {
-	return `hermes-accordion-${accordionId}-trigger-${item.id}`
+	return `makosh-accordion-${accordionId}-trigger-${item.id}`
 }
 
 function isOpen(item: AccordionItem): boolean {
@@ -93,14 +93,14 @@ function toggleItem(item: AccordionItem): void {
 			v-for="item in items"
 			:key="item.id"
 			:class="[
-				'hermes-accordion-item',
-				isOpen(item) && 'hermes-accordion-item--open',
-				item.disabled && 'hermes-accordion-item--disabled'
+				'makosh-accordion-item',
+				isOpen(item) && 'makosh-accordion-item--open',
+				item.disabled && 'makosh-accordion-item--disabled'
 			]"
 		>
-			<h3 class="hermes-accordion-heading">
+			<h3 class="makosh-accordion-heading">
 				<button
-					class="hermes-accordion-trigger"
+					class="makosh-accordion-trigger"
 					type="button"
 					:aria-controls="itemPanelId(item)"
 					:aria-expanded="isOpen(item)"
@@ -108,17 +108,17 @@ function toggleItem(item: AccordionItem): void {
 					:id="itemTriggerId(item)"
 					@click="toggleItem(item)"
 				>
-					<span class="hermes-accordion-title">{{ item.title }}</span>
-					<span v-if="item.description" class="hermes-accordion-description">
+					<span class="makosh-accordion-title">{{ item.title }}</span>
+					<span v-if="item.description" class="makosh-accordion-description">
 						{{ item.description }}
 					</span>
-					<span class="hermes-accordion-indicator" aria-hidden="true">+</span>
+					<span class="makosh-accordion-indicator" aria-hidden="true">+</span>
 				</button>
 			</h3>
 			<div
 				v-if="isOpen(item)"
 				:id="itemPanelId(item)"
-				class="hermes-accordion-panel"
+				class="makosh-accordion-panel"
 				role="region"
 				:aria-labelledby="itemTriggerId(item)"
 			>

@@ -4,7 +4,7 @@ use std::time::{Duration, Instant};
 use super::webauthn::{
     BrowserRegistrationCeremonyV1, BrowserWebauthnVerifier, VerifiedBrowserCredentialV1,
 };
-use hermes_gateway_session_contract::{
+use makosh_gateway_session_contract::{
     BrowserDevicePrincipalV1, BrowserEnrollmentAuthority, BrowserEnrollmentInputV1,
     BrowserEnrollmentV1, BrowserPairingAuthority, GatewayIdentityFenceV1,
 };

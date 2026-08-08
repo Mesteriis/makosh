@@ -1,24 +1,24 @@
-use hermes_contacts_mail_sync_source_api::{
+use makosh_contacts_mail_sync_source_api::{
     CONTACT_MAIL_SYNC_SOURCE_REQUESTER_MODULE_ID_V1, ContactsMailSyncSourceEnvelopeContextV1,
     build_contact_mail_sync_source_prepare_outbox_record_v1,
     contact_changed_for_mail_sync_contract_reference_v1,
     wire::{ContactChangedForMailSyncV1, PrepareContactMailSyncSourceCommandV1},
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_mail_contacts_sync_core::MailContactsSyncDirectionV1;
-use hermes_mail_contacts_sync_persistence::{
+use makosh_mail_contacts_sync_core::MailContactsSyncDirectionV1;
+use makosh_mail_contacts_sync_persistence::{
     AcceptContactChangedForMailSyncV1, MailContactsSyncPersistenceErrorV1,
     MailContactsSyncPersistenceV1, MailContactsSyncReverseOperationSeedV1, OutboxEnvelopeV1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 use sha2::{Digest, Sha256};
 
@@ -160,7 +160,7 @@ fn decode_changed(
     )?;
     if !matches!(envelope.semantics, Some(Semantics::Event(_)))
         || envelope.source.as_ref().is_none_or(|source| {
-            source.module_id != "hermes-contacts-runtime" || source.runtime_generation == 0
+            source.module_id != "makosh-contacts-runtime" || source.runtime_generation == 0
         })
     {
         return Err(MailContactsSyncReverseChangeErrorV1::InvalidEnvelope);

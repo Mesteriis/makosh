@@ -1,4 +1,4 @@
-use hermes_speech_to_text_core::{
+use makosh_speech_to_text_core::{
     SpeechAudioFormatV1, SpeechLanguageV1, SpeechToTextRejectionV1, SpeechToTextRequestV1,
     SpeechToTextRunStateV1, SpeechToTextRunV1, SpeechToTextTerminalV1,
     SpeechTranscriptCompletenessV1, validate_speech_to_text_run_v1,
@@ -171,7 +171,7 @@ pub(crate) fn valid_owner(value: &str) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use hermes_speech_to_text_core::{
+    use makosh_speech_to_text_core::{
         SpeechBlobReceiptV1, accept_speech_to_text_v1, begin_speech_to_text_v1,
     };
 

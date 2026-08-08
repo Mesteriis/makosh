@@ -25,7 +25,7 @@ async fn read_owner_binding(
         "SELECT owner_id, ddl_owner, runtime_principal, registration_id, runtime_instance_id, \
                 storage_generation, runtime_generation, grant_epoch, role_epoch, \
                 credential_lease_revision, storage_bundle_revision \
-         FROM hermes_platform.storage_role_ledger WHERE owner_id = $1",
+         FROM makosh_platform.storage_role_ledger WHERE owner_id = $1",
     )
     .bind(spec.owner_id())
     .fetch_optional(connector.pool())
@@ -54,7 +54,7 @@ async fn insert_new_binding(
     requested: &RoleLedgerBindingV1,
 ) -> Result<(), PostgresAdapterErrorV1> {
     let result = query(
-        "INSERT INTO hermes_platform.storage_role_ledger ( \
+        "INSERT INTO makosh_platform.storage_role_ledger ( \
              owner_id, ddl_owner, runtime_principal, registration_id, runtime_instance_id, \
              storage_generation, runtime_generation, grant_epoch, role_epoch, \
              credential_lease_revision, storage_bundle_revision \
@@ -85,7 +85,7 @@ async fn update_binding(
     requested: &RoleLedgerBindingV1,
 ) -> Result<(), PostgresAdapterErrorV1> {
     query(
-        "UPDATE hermes_platform.storage_role_ledger SET \
+        "UPDATE makosh_platform.storage_role_ledger SET \
              runtime_principal = $2, registration_id = $3, runtime_instance_id = $4, \
              storage_generation = $5, runtime_generation = $6, grant_epoch = $7, \
              role_epoch = $8, credential_lease_revision = $9, storage_bundle_revision = $10, \

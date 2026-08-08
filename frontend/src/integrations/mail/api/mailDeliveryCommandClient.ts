@@ -1,7 +1,7 @@
 import { createClient } from '@connectrpc/connect'
 import type { Client } from '@connectrpc/connect'
 
-import { MailDeliveryCommandService } from '../../../gen/hermes/mail/v1/client_pb'
+import { MailDeliveryCommandService } from '../../../gen/makosh/mail/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 let mailDeliveryCommandClient: Client<typeof MailDeliveryCommandService> | null = null

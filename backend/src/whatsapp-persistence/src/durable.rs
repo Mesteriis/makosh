@@ -1,5 +1,5 @@
-use hermes_events_protocol::delivery::OutboxRecordV1;
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool, Row,
     postgres::{PgConnectOptions, PgPoolOptions},
@@ -133,7 +133,7 @@ impl WhatsAppDurablePersistence {
         record: &OutboxRecordV1,
         created_at_unix_seconds: i64,
     ) -> Result<(), WhatsAppDurablePersistenceError> {
-        sqlx::query("INSERT INTO hermes_data.whatsapp_communications_outbox (message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING")
+        sqlx::query("INSERT INTO makosh_data.whatsapp_communications_outbox (message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING")
             .bind(record.message_id().as_slice())
             .bind(record.envelope_sha256().as_slice())
             .bind(record.exact_bytes())
@@ -159,7 +159,7 @@ impl WhatsAppDurablePersistence {
         {
             return Err(WhatsAppDurablePersistenceError::InvalidRow);
         }
-        let inserted = sqlx::query("INSERT INTO hermes_data.whatsapp_provider_commands (operation_id, account_id, exact_command_bytes, state, requested_at_unix_seconds) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (operation_id) DO NOTHING")
+        let inserted = sqlx::query("INSERT INTO makosh_data.whatsapp_provider_commands (operation_id, account_id, exact_command_bytes, state, requested_at_unix_seconds) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (operation_id) DO NOTHING")
             .bind(operation_id)
             .bind(account_id)
             .bind(exact_command_bytes)
@@ -172,7 +172,7 @@ impl WhatsAppDurablePersistence {
             return Ok(WhatsAppProviderCommandEnqueueV1::Inserted);
         }
         let existing = sqlx::query(
-            "SELECT account_id, exact_command_bytes FROM hermes_data.whatsapp_provider_commands WHERE operation_id = $1",
+            "SELECT account_id, exact_command_bytes FROM makosh_data.whatsapp_provider_commands WHERE operation_id = $1",
         )
         .bind(operation_id)
         .fetch_optional(&self.pool)
@@ -199,7 +199,7 @@ impl WhatsAppDurablePersistence {
             return Err(WhatsAppDurablePersistenceError::InvalidRow);
         }
         let row = sqlx::query(
-            "SELECT operation_id, account_id, state, requested_at_unix_seconds, completed_at_unix_seconds FROM hermes_data.whatsapp_provider_commands WHERE operation_id = $1",
+            "SELECT operation_id, account_id, state, requested_at_unix_seconds, completed_at_unix_seconds FROM makosh_data.whatsapp_provider_commands WHERE operation_id = $1",
         )
         .bind(operation_id)
         .fetch_optional(&self.pool)
@@ -247,7 +247,7 @@ impl WhatsAppDurablePersistence {
             .checked_add(lease_seconds)
             .ok_or(WhatsAppDurablePersistenceError::InvalidRow)?;
         let rows = sqlx::query(
-            "WITH candidates AS (SELECT operation_id FROM hermes_data.whatsapp_provider_commands WHERE account_id = $1 AND (state = $2 OR (state = $3 AND lease_expires_at_unix_seconds < $4)) ORDER BY requested_at_unix_seconds ASC, operation_id ASC LIMIT $5 FOR UPDATE SKIP LOCKED) UPDATE hermes_data.whatsapp_provider_commands AS command SET state = $3, host_claim_id = $6, lease_expires_at_unix_seconds = $7 FROM candidates WHERE command.operation_id = candidates.operation_id RETURNING command.operation_id, command.account_id, command.exact_command_bytes",
+            "WITH candidates AS (SELECT operation_id FROM makosh_data.whatsapp_provider_commands WHERE account_id = $1 AND (state = $2 OR (state = $3 AND lease_expires_at_unix_seconds < $4)) ORDER BY requested_at_unix_seconds ASC, operation_id ASC LIMIT $5 FOR UPDATE SKIP LOCKED) UPDATE makosh_data.whatsapp_provider_commands AS command SET state = $3, host_claim_id = $6, lease_expires_at_unix_seconds = $7 FROM candidates WHERE command.operation_id = candidates.operation_id RETURNING command.operation_id, command.account_id, command.exact_command_bytes",
         )
         .bind(account_id)
         .bind(WhatsAppProviderCommandStateV1::Pending as i16)
@@ -291,7 +291,7 @@ impl WhatsAppDurablePersistence {
         {
             return Err(WhatsAppDurablePersistenceError::InvalidRow);
         }
-        sqlx::query("UPDATE hermes_data.whatsapp_provider_commands SET state = $4, completed_at_unix_seconds = $5 WHERE operation_id = $1 AND account_id = $2 AND host_claim_id = $3 AND state = $6 AND lease_expires_at_unix_seconds >= $5")
+        sqlx::query("UPDATE makosh_data.whatsapp_provider_commands SET state = $4, completed_at_unix_seconds = $5 WHERE operation_id = $1 AND account_id = $2 AND host_claim_id = $3 AND state = $6 AND lease_expires_at_unix_seconds >= $5")
             .bind(operation_id)
             .bind(account_id)
             .bind(host_claim_id)
@@ -324,7 +324,7 @@ impl WhatsAppDurablePersistence {
         &self,
         limit: i64,
     ) -> Result<Vec<OutboxRecordV1>, WhatsAppDurablePersistenceError> {
-        let rows = sqlx::query("SELECT exact_envelope_bytes FROM hermes_data.whatsapp_communications_outbox WHERE published_at_unix_seconds IS NULL ORDER BY created_at_unix_seconds ASC, message_id ASC LIMIT $1")
+        let rows = sqlx::query("SELECT exact_envelope_bytes FROM makosh_data.whatsapp_communications_outbox WHERE published_at_unix_seconds IS NULL ORDER BY created_at_unix_seconds ASC, message_id ASC LIMIT $1")
             .bind(limit.clamp(1, 256))
             .fetch_all(&self.pool)
             .await
@@ -345,7 +345,7 @@ impl WhatsAppDurablePersistence {
         message_id: &[u8; 16],
         published_at_unix_seconds: i64,
     ) -> Result<bool, WhatsAppDurablePersistenceError> {
-        sqlx::query("UPDATE hermes_data.whatsapp_communications_outbox SET published_at_unix_seconds = $2 WHERE message_id = $1 AND published_at_unix_seconds IS NULL")
+        sqlx::query("UPDATE makosh_data.whatsapp_communications_outbox SET published_at_unix_seconds = $2 WHERE message_id = $1 AND published_at_unix_seconds IS NULL")
             .bind(message_id.as_slice())
             .bind(published_at_unix_seconds)
             .execute(&self.pool)

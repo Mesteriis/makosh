@@ -1,5 +1,5 @@
 [package]
-name = "hermes-retained-evidence-replay-protocol"
+name = "makosh-retained-evidence-replay-protocol"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,7 +7,7 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "attachment_preview_evidence_replay"
 surface = "contract"

@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use crate::app::state::AppState;
 use crate::vault::models::VaultMode;
-use hermes_desktop_runtime::{
+use makosh_desktop_runtime::{
     RuntimeExitPolicy, RuntimeTaskClass, RuntimeTaskFactory, RuntimeTaskFuture, RuntimeTaskSpec,
 };
 use tokio_util::sync::CancellationToken;

@@ -15,23 +15,23 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-timeline-item',
-  `hermes-timeline-item--${props.tone}`,
+  'makosh-timeline-item',
+  `makosh-timeline-item--${props.tone}`,
   props.class
 ])
 </script>
 
 <template>
   <article :class="classes">
-    <div class="hermes-timeline-marker" aria-hidden="true">
+    <div class="makosh-timeline-marker" aria-hidden="true">
       <Icon v-if="icon" :icon="icon" size="0.875rem" />
     </div>
-    <div class="hermes-timeline-copy">
-      <div class="hermes-timeline-heading">
-        <strong class="hermes-timeline-title">{{ title }}</strong>
-        <time v-if="time" class="hermes-timeline-time">{{ time }}</time>
+    <div class="makosh-timeline-copy">
+      <div class="makosh-timeline-heading">
+        <strong class="makosh-timeline-title">{{ title }}</strong>
+        <time v-if="time" class="makosh-timeline-time">{{ time }}</time>
       </div>
-      <p v-if="description" class="hermes-timeline-description">{{ description }}</p>
+      <p v-if="description" class="makosh-timeline-description">{{ description }}</p>
       <slot />
     </div>
   </article>

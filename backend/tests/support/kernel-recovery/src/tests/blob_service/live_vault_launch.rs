@@ -2,7 +2,7 @@
 
 use std::path::{Path, PathBuf};
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ModuleDescriptorV1, ModuleKindV1, SettingsSchemaRefV1, SettingsSchemaV1,
 };
 use prost::Message;
@@ -18,7 +18,7 @@ const VAULT_ARTIFACT_ID: &str = "platform.vault";
 #[test]
 #[ignore = "builds and launches the real Blob and Vault runtime binaries"]
 fn kernel_starts_signed_blob_service_with_live_file_backed_vault() {
-    let root = unique_target_root("hermes-blob-live-vault");
+    let root = unique_target_root("makosh-blob-live-vault");
     let data = vault_fixture::private_directory(root.join("kernel"));
     let runtime = short_runtime_directory();
     vault_fixture::initialize_vault(&data);
@@ -53,7 +53,7 @@ pub(super) fn short_runtime_directory() -> PathBuf {
         .duration_since(std::time::UNIX_EPOCH)
         .expect("clock")
         .as_nanos();
-    PathBuf::from("/tmp").join(format!("hermes-blob-live-{}-{suffix}", std::process::id()))
+    PathBuf::from("/tmp").join(format!("makosh-blob-live-{}-{suffix}", std::process::id()))
 }
 
 pub(super) fn installed_release(root: &Path) -> InstalledSignedBundle {
@@ -74,10 +74,10 @@ pub(super) fn installed_release(root: &Path) -> InstalledSignedBundle {
 }
 
 fn blob_binary() -> PathBuf {
-    std::env::var_os("HERMES_BLOB_SERVICE_BIN")
+    std::env::var_os("MAKOSH_BLOB_SERVICE_BIN")
         .map(PathBuf::from)
         .filter(|path| path.is_file())
-        .expect("HERMES_BLOB_SERVICE_BIN must name a regular Blob service binary")
+        .expect("MAKOSH_BLOB_SERVICE_BIN must name a regular Blob service binary")
 }
 
 fn blob_schema() -> Vec<u8> {

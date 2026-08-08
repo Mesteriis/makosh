@@ -2,9 +2,9 @@
 
 use std::collections::BTreeSet;
 
-use hermes_kernel_control_store::ModuleEventEnvelopeKindV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store::ModuleEventEnvelopeKindV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     SchedulerRuntimeScheduleControlBindingV1, SchedulerRuntimeScheduleControlGrantV1,
 };
 
@@ -100,7 +100,7 @@ fn binding(
         .ok_or_else(|| "Scheduler schedule-control result contract is unavailable".to_owned())?;
     let delivery = command.delivery_policy();
     Ok(Some(SchedulerRuntimeScheduleControlBindingV1 {
-        stream_name: "HERMES_COMMAND_V1".to_owned(),
+        stream_name: "MAKOSH_COMMAND_V1".to_owned(),
         durable_name: command.durable_name().to_owned(),
         filter_subject: command.subject().as_str(),
         ack_wait_millis: delivery.ack_wait_millis(),
@@ -241,7 +241,7 @@ fn runtime_instance_id(value: &str) -> Result<[u8; 16], String> {
 
 #[cfg(test)]
 mod tests {
-    use hermes_kernel_control_store::{
+    use makosh_kernel_control_store::{
         BundledManagedLaunchBinding, ManagedLaunchRecord, ModuleDescriptorRegistrationRequestsV1,
         ModuleEventDeliveryPolicyV1, ModuleEventEnvelopeKindV1, ModuleEventRouteDirectionV1,
         ModuleEventRouteRequestInputV1, ModuleEventRouteRequestV1,
@@ -271,11 +271,11 @@ mod tests {
         let binding = configuration.binding.expect("binding");
         assert_eq!(
             binding.filter_subject,
-            "hermes.command.v1.scheduler.schedule_control.v1"
+            "makosh.command.v1.scheduler.schedule_control.v1"
         );
         assert_eq!(
             binding.result_subject,
-            "hermes.result.v1.scheduler.schedule_control.v1"
+            "makosh.result.v1.scheduler.schedule_control.v1"
         );
         assert_eq!(configuration.grants.len(), 1);
         assert_eq!(configuration.grants[0].source_module_id, "delayed_delivery");
@@ -306,7 +306,7 @@ mod tests {
 
     fn fixture_root(label: &str) -> std::path::PathBuf {
         std::env::temp_dir().join(format!(
-            "hermes-scheduler-control-topology-{}-{label}",
+            "makosh-scheduler-control-topology-{}-{label}",
             std::process::id()
         ))
     }

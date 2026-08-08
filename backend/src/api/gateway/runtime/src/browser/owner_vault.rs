@@ -4,16 +4,16 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use bytes::Bytes;
-use hermes_gateway_protocol::v1::{
-    AuthorizeOwnerVaultProvisioningRequestV1, AuthorizeOwnerVaultProvisioningResponseV1,
-    CommitOwnerVaultProvisioningRequestV1, CommitOwnerVaultProvisioningResponseV1,
-    PrepareOwnerVaultProvisioningRequestV1, PrepareOwnerVaultProvisioningResponseV1,
-};
-use hermes_gateway_session_contract::BrowserAuthenticationAuthority;
 use http_body_util::{BodyExt, Limited};
 use hyper::body::Body;
 use hyper::header::{CACHE_CONTROL, CONTENT_TYPE, COOKIE, HeaderName, ORIGIN};
 use hyper::{Method, Request, Response, StatusCode};
+use makosh_gateway_protocol::v1::{
+    AuthorizeOwnerVaultProvisioningRequestV1, AuthorizeOwnerVaultProvisioningResponseV1,
+    CommitOwnerVaultProvisioningRequestV1, CommitOwnerVaultProvisioningResponseV1,
+    PrepareOwnerVaultProvisioningRequestV1, PrepareOwnerVaultProvisioningResponseV1,
+};
+use makosh_gateway_session_contract::BrowserAuthenticationAuthority;
 use prost::Message;
 use tokio::task;
 use tokio::time::{Instant, timeout_at};
@@ -22,10 +22,10 @@ use super::owner_principal::OwnerBrowserPrincipalV1;
 use crate::{GatewayHttpResponse, SharedBrowserGatewaySessionService, full_gateway_body};
 
 pub const OWNER_VAULT_PREPARE_PATH: &str =
-    "/hermes.gateway.v1.OwnerVaultProvisioningService/Prepare";
+    "/makosh.gateway.v1.OwnerVaultProvisioningService/Prepare";
 pub const OWNER_VAULT_AUTHORIZE_PATH: &str =
-    "/hermes.gateway.v1.OwnerVaultProvisioningService/Authorize";
-pub const OWNER_VAULT_COMMIT_PATH: &str = "/hermes.gateway.v1.OwnerVaultProvisioningService/Commit";
+    "/makosh.gateway.v1.OwnerVaultProvisioningService/Authorize";
+pub const OWNER_VAULT_COMMIT_PATH: &str = "/makosh.gateway.v1.OwnerVaultProvisioningService/Commit";
 
 const MAX_REQUEST_BYTES: usize = 128 * 1024;
 const MAX_REQUEST_DEADLINE: Duration = Duration::from_secs(10);

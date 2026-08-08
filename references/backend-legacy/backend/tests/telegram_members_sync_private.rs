@@ -1,14 +1,14 @@
 use axum::body::{Body, to_bytes};
 use axum::http::{Request, StatusCode, header};
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const LOCAL_API_TOKEN: &str = "telegram-members-private-sync-secret";
 
@@ -24,7 +24,7 @@ async fn telegram_private_members_sync_uses_tdlib_chat_metadata_and_records_audi
     let account_id = format!("telegram-private-members-{suffix}");
     let provider_chat_id = format!("private-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -128,7 +128,7 @@ async fn telegram_private_members_sync_uses_tdlib_chat_metadata_and_records_audi
         SELECT metadata
         FROM api_audit_log
         WHERE operation = 'telegram.participants.sync'
-          AND actor_id = 'hermes-frontend'
+          AND actor_id = 'makosh-frontend'
           AND target_id = $1
         ORDER BY audit_id DESC
         LIMIT 1
@@ -258,7 +258,7 @@ fn get(path: &str) -> Request<Body> {
     Request::builder()
         .method("GET")
         .uri(path)
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .body(Body::empty())
         .expect("request")
 }
@@ -267,7 +267,7 @@ fn json_post(path: &str, body: Value) -> Request<Body> {
     Request::builder()
         .method("POST")
         .uri(path)
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .header(header::CONTENT_TYPE, "application/json")
         .body(Body::from(body.to_string()))
         .expect("request")

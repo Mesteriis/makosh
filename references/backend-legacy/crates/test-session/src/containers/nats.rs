@@ -7,7 +7,7 @@ use super::labels::{session_id_label_value, testkit_labels};
 
 const NATS_CONNECT_TIMEOUT: Duration = Duration::from_secs(20);
 const NATS_CONNECT_RETRY_DELAY: Duration = Duration::from_millis(250);
-pub const SESSION_NATS_HOST_PORT_ENV: &str = "HERMES_TEST_NATS_HOST_PORT";
+pub const SESSION_NATS_HOST_PORT_ENV: &str = "MAKOSH_TEST_NATS_HOST_PORT";
 
 pub struct NatsContainer {
     _container: Option<ContainerAsync<GenericImage>>,

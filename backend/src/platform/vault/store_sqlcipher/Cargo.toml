@@ -1,5 +1,5 @@
 [package]
-name = "hermes-vault-store-sqlcipher"
+name = "makosh-vault-store-sqlcipher"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,7 +7,7 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "vault"
 surface = "persistence"
@@ -16,8 +16,8 @@ surface = "persistence"
 bip39 = { version = "=2.2.2", default-features = false, features = ["std"] }
 chacha20poly1305 = { version = "=0.11.0", default-features = false, features = ["alloc", "zeroize"] }
 getrandom = { version = "=0.4.3", default-features = false }
-hermes-vault-key-provider = { path = "../key_provider" }
-hermes-vault-protocol = { path = "../protocol" }
+makosh-vault-key-provider = { path = "../key_provider" }
+makosh-vault-protocol = { path = "../protocol" }
 hkdf = "=0.13.0"
 libc = "=0.2.186"
 rusqlite = { version = "=0.32.0", default-features = false, features = ["backup", "bundled-sqlcipher"] }

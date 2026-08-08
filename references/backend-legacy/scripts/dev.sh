@@ -23,7 +23,7 @@ for arg in "$@"; do
 	esac
 done
 
-load_hermes_env
+load_makosh_env
 ensure_frontend_dependencies
 ensure_bacon_available
 ensure_command cargo
@@ -32,8 +32,8 @@ postgres_up
 nats_up
 clamav_up
 
-reclaim_dev_port "$HERMES_BACKEND_PORT" "Backend"
-reclaim_dev_port "$HERMES_FRONTEND_PORT" "Frontend"
+reclaim_dev_port "$MAKOSH_BACKEND_PORT" "Backend"
+reclaim_dev_port "$MAKOSH_FRONTEND_PORT" "Frontend"
 
 ensure_dir "$LOG_ROOT"
 flow_id="dev-$(timestamp_compact_utc)-$$"
@@ -96,37 +96,37 @@ run_service() {
 }
 
 export DATABASE_URL
-export HERMES_LOCAL_API_SECRET
-export HERMES_DEV_MODE
-export HERMES_VAULT_HOME
-export HERMES_DEV_KEY_PATH
-export HERMES_SECRET_VAULT_KEY
-export HERMES_HTTP_ADDR="$HERMES_BACKEND_BIND:$HERMES_BACKEND_PORT"
-export HERMES_FLOW_ID="$flow_id"
-export HERMES_LOG_FORMAT="json"
+export MAKOSH_LOCAL_API_SECRET
+export MAKOSH_DEV_MODE
+export MAKOSH_VAULT_HOME
+export MAKOSH_DEV_KEY_PATH
+export MAKOSH_SECRET_VAULT_KEY
+export MAKOSH_HTTP_ADDR="$MAKOSH_BACKEND_BIND:$MAKOSH_BACKEND_PORT"
+export MAKOSH_FLOW_ID="$flow_id"
+export MAKOSH_LOG_FORMAT="json"
 export RUST_LOG="${RUST_LOG:-info}"
 export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$CARGO_DEV_TARGET_DIR}"
-export VITE_HERMES_API_BASE_URL="http://$HERMES_BACKEND_BIND:$HERMES_BACKEND_PORT"
-export VITE_HERMES_LOCAL_API_SECRET="$HERMES_LOCAL_API_SECRET"
+export VITE_MAKOSH_API_BASE_URL="http://$MAKOSH_BACKEND_BIND:$MAKOSH_BACKEND_PORT"
+export VITE_MAKOSH_LOCAL_API_SECRET="$MAKOSH_LOCAL_API_SECRET"
 
 run_service backend "$color_cyan" bash -lc "cd '$REPO_ROOT' && exec bacon --headless backend-dev"
 backend_pid="$RUN_SERVICE_PID"
 info "Waiting for backend health check"
-wait_for_service_http "$backend_pid" "http://$HERMES_BACKEND_BIND:$HERMES_BACKEND_PORT/healthz" "Backend healthz" "$HERMES_BACKEND_STARTUP_ATTEMPTS" "$HERMES_BACKEND_STARTUP_SLEEP_SECONDS"
+wait_for_service_http "$backend_pid" "http://$MAKOSH_BACKEND_BIND:$MAKOSH_BACKEND_PORT/healthz" "Backend healthz" "$MAKOSH_BACKEND_STARTUP_ATTEMPTS" "$MAKOSH_BACKEND_STARTUP_SLEEP_SECONDS"
 info "Waiting for backend readiness check"
-wait_for_service_http "$backend_pid" "http://$HERMES_BACKEND_BIND:$HERMES_BACKEND_PORT/readyz" "Backend readyz" "$HERMES_BACKEND_STARTUP_ATTEMPTS" "$HERMES_BACKEND_STARTUP_SLEEP_SECONDS"
+wait_for_service_http "$backend_pid" "http://$MAKOSH_BACKEND_BIND:$MAKOSH_BACKEND_PORT/readyz" "Backend readyz" "$MAKOSH_BACKEND_STARTUP_ATTEMPTS" "$MAKOSH_BACKEND_STARTUP_SLEEP_SECONDS"
 
-run_service frontend "$color_green" bash -lc "cd '$REPO_ROOT/frontend' && exec pnpm dev --host '$HERMES_FRONTEND_BIND' --port '$HERMES_FRONTEND_PORT' --strictPort"
+run_service frontend "$color_green" bash -lc "cd '$REPO_ROOT/frontend' && exec pnpm dev --host '$MAKOSH_FRONTEND_BIND' --port '$MAKOSH_FRONTEND_PORT' --strictPort"
 frontend_pid="$RUN_SERVICE_PID"
 info "Waiting for frontend dev server"
-wait_for_service_http "$frontend_pid" "http://$HERMES_FRONTEND_BIND:$HERMES_FRONTEND_PORT" "Frontend Vite" "$HERMES_FRONTEND_STARTUP_ATTEMPTS" "$HERMES_FRONTEND_STARTUP_SLEEP_SECONDS"
+wait_for_service_http "$frontend_pid" "http://$MAKOSH_FRONTEND_BIND:$MAKOSH_FRONTEND_PORT" "Frontend Vite" "$MAKOSH_FRONTEND_STARTUP_ATTEMPTS" "$MAKOSH_FRONTEND_STARTUP_SLEEP_SECONDS"
 
 tauri_pid=""
 if [ "$DESKTOP_MODE" = "1" ]; then
 	# Point the Tauri dev window at the Vite server this script started and
 	# keep the sidecar disabled; the backend already runs via bacon above.
-	tauri_dev_config="{\"build\":{\"devUrl\":\"http://$HERMES_FRONTEND_BIND:$HERMES_FRONTEND_PORT\"}}"
-	export HERMES_DISABLE_BACKEND_SIDECAR=1
+	tauri_dev_config="{\"build\":{\"devUrl\":\"http://$MAKOSH_FRONTEND_BIND:$MAKOSH_FRONTEND_PORT\"}}"
+	export MAKOSH_DISABLE_BACKEND_SIDECAR=1
 	run_service tauri "$color_yellow" bash -lc "cd '$REPO_ROOT/frontend' && exec pnpm tauri dev --config '$tauri_dev_config'"
 	tauri_pid="$RUN_SERVICE_PID"
 	info "Tauri desktop shell is compiling; the app window opens when the build finishes"
@@ -141,8 +141,8 @@ printf '%s\n' "NATS:"
 nats_status
 printf '%s\n' "ClamAV:"
 clamav_status
-printf '%s\n' "Backend:  http://$HERMES_BACKEND_BIND:$HERMES_BACKEND_PORT (pid $backend_pid)"
-printf '%s\n' "Frontend: http://$HERMES_FRONTEND_BIND:$HERMES_FRONTEND_PORT (pid $frontend_pid)"
+printf '%s\n' "Backend:  http://$MAKOSH_BACKEND_BIND:$MAKOSH_BACKEND_PORT (pid $backend_pid)"
+printf '%s\n' "Frontend: http://$MAKOSH_FRONTEND_BIND:$MAKOSH_FRONTEND_PORT (pid $frontend_pid)"
 if [ -n "$tauri_pid" ]; then
 	printf '%s\n' "Tauri:    desktop shell (pid $tauri_pid)"
 fi

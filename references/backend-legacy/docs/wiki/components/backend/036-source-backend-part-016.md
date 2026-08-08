@@ -16,27 +16,27 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Предлагается обновить страницу `components/backend.md` русской Obsidian‑wiki, отразив в ней новые компоненты бэкенда из группы `backend`, попавшие в чанк `036-source-backend-part-016`. В источники вошли исполняемые бинарники (`hermes_email_sync_dev`, `hermes_graph_project`, `hermes_migrate`, `hermes_whatsapp_business_cloud_edge_proxy`, `hermes_zoom_edge_proxy`), файл контрактов и ключевые модули домена «Календарь». Существующее содержимое wiki‑страницы недоступно в контексте, поэтому страница формируется заново.
+Предлагается обновить страницу `components/backend.md` русской Obsidian‑wiki, отразив в ней новые компоненты бэкенда из группы `backend`, попавшие в чанк `036-source-backend-part-016`. В источники вошли исполняемые бинарники (`makosh_email_sync_dev`, `makosh_graph_project`, `makosh_migrate`, `makosh_whatsapp_business_cloud_edge_proxy`, `makosh_zoom_edge_proxy`), файл контрактов и ключевые модули домена «Календарь». Существующее содержимое wiki‑страницы недоступно в контексте, поэтому страница формируется заново.
 
 ## Предложенные страницы
 
 ### `components/backend.md`
 
 ```markdown
-# Компоненты бэкенда Hermes Hub
+# Компоненты бэкенда Макошь
 
 > **Чанк обновления:** `036-source-backend-part-016`
 > **Дата контекста:** 2026-06-28
 
 ## Обзор
 
-Бэкенд Hermes Hub состоит из набора бинарных приложений (сервисов и утилит), генерируемых контрактов и модулей предметной логики. Основные слои: platform (конфигурация, БД), domains (календарь, коммуникации, граф), integrations (почта, мессенджеры), workflows (пайплайны синхронизации, проекции).
+Бэкенд Макошь состоит из набора бинарных приложений (сервисов и утилит), генерируемых контрактов и модулей предметной логики. Основные слои: platform (конфигурация, БД), domains (календарь, коммуникации, граф), integrations (почта, мессенджеры), workflows (пайплайны синхронизации, проекции).
 
 ---
 
 ## Бинарные приложения (crate‑бинарники)
 
-### `hermes_email_sync_dev`
+### `makosh_email_sync_dev`
 
 Утилита разработческой синхронизации электронной почты через IMAP.
 
@@ -48,7 +48,7 @@ generated_by: code-wiki-ru
 - **Пайплайн обработки:**
   Сначала в БД upsert‑ится аккаунт провайдера. Затем вызывается `project_email_sync_batch_with_mail_blobs` с `LocalCommunicationBlobStore` (файловая система по пути `blob_root`). Результат пайплайна фиксируется в `DevEmailSyncReport` (идентификатор аккаунта, провайдер, количество сообщений, чекпоинт и метрики пайплайна).
 
-### `hermes_graph_project`
+### `makosh_graph_project`
 
 CLI‑утилита для выполнения проекции `v1` графа из БД и выдачи отчёта.
 
@@ -59,7 +59,7 @@ CLI‑утилита для выполнения проекции `v1` граф�
   - `summary` — детальные счётчики узлов и рёбер по типам.
   - `total_nodes`, `total_edges` — агрегированные суммы по всем `GraphCount`.
 
-### `hermes_migrate`
+### `makosh_migrate`
 
 Утилита миграций и стартовых восстановлений.
 
@@ -67,41 +67,41 @@ CLI‑утилита для выполнения проекции `v1` граф�
 - Подключается к БД через `Database::connect` (обязательно наличие `DATABASE_URL`).
 - При успешном подключении выводит сообщение об окончании миграций и стартовых восстановлений.
 
-### `hermes_whatsapp_business_cloud_edge_proxy`
+### `makosh_whatsapp_business_cloud_edge_proxy`
 
 Edge‑прокси (Axum‑сервер) для приёма вебхуков WhatsApp Business Cloud.
 
-- **Назначение:** принимает публичные запросы из вне и пересылает их в защищённый контур Hermes.
+- **Назначение:** принимает публичные запросы из вне и пересылает их в защищённый контур Макошь.
 - **Адрес по умолчанию:** `127.0.0.1:8787`.
 - **Маршруты:**
   - `GET /healthz` — статус `ok`.
-  - `GET /readyz` — проверяет доступность Hermes через `/api/v1/integrations/whatsapp/runtime-bridge/business-cloud/proxy-manifest`.
+  - `GET /readyz` — проверяет доступность Макошь через `/api/v1/integrations/whatsapp/runtime-bridge/business-cloud/proxy-manifest`.
   - `GET /manifest` — возвращает конфигурацию прокси (пути, политики пересылки, наличие account_id).
   - `GET /webhooks/whatsapp/business-cloud` — пересылает GET‑запрос (query‑параметры) на защищённый путь `/api/v1/integrations/whatsapp/runtime-bridge/business-cloud/webhooks`.
   - `POST /webhooks/whatsapp/business-cloud` — пересылает тело запроса и заголовок `X-Hub-Signature-256` на тот же защищённый путь.
-- **Политики:** тело POST не парсится и не модифицируется; локальный API‑секрет передаётся только как заголовок `X-Hermes-Secret` и никогда не возвращается клиенту.
+- **Политики:** тело POST не парсится и не модифицируется; локальный API‑секрет передаётся только как заголовок `X-Макошь-Secret` и никогда не возвращается клиенту.
 - **Конфигурация (переменные окружения):**
-  - `HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_BIND_ADDR` (по умолчанию `127.0.0.1:8787`)
-  - `HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_HERMES_BASE_URL` (по умолчанию `http://127.0.0.1:8080`)
-  - `HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_HERMES_SECRET` или `HERMES_LOCAL_API_SECRET` (обязательно)
-  - `HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_ACCOUNT_ID` (опционально, добавляется как query‑параметр `account_id` при пересылке)
+  - `MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_BIND_ADDR` (по умолчанию `127.0.0.1:8787`)
+  - `MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_MAKOSH_BASE_URL` (по умолчанию `http://127.0.0.1:8080`)
+  - `MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_MAKOSH_SECRET` или `MAKOSH_LOCAL_API_SECRET` (обязательно)
+  - `MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_ACCOUNT_ID` (опционально, добавляется как query‑параметр `account_id` при пересылке)
 
-### `hermes_zoom_edge_proxy`
+### `makosh_zoom_edge_proxy`
 
 Edge‑прокси для приёма вебхуков Zoom.
 
 - **Адрес по умолчанию:** `127.0.0.1:8788`.
 - **Маршруты:**
   - `GET /healthz` — статус `ok`.
-  - `GET /readyz` — проверяет доступность Hermes через `/api/v1/integrations/zoom/capabilities`.
+  - `GET /readyz` — проверяет доступность Макошь через `/api/v1/integrations/zoom/capabilities`.
   - `GET /manifest` — возвращает конфигурацию прокси.
   - `POST /webhooks/zoom` — пересылает тело и заголовки `x-zm-signature`, `x-zm-request-timestamp` на `/api/v1/integrations/zoom/runtime-bridge/webhooks`.
 - **Политики:** аналогичны WhatsApp‑прокси (тело не парсится, секрет не возвращается).
 - **Конфигурация (переменные окружения):**
-  - `HERMES_ZOOM_EDGE_BIND_ADDR` (по умолчанию `127.0.0.1:8788`)
-  - `HERMES_ZOOM_EDGE_HERMES_BASE_URL` (по умолчанию `http://127.0.0.1:8080`)
-  - `HERMES_ZOOM_EDGE_HERMES_SECRET` или `HERMES_LOCAL_API_SECRET` (обязательно)
-  - `HERMES_ZOOM_EDGE_ACCOUNT_ID` (опционально)
+  - `MAKOSH_ZOOM_EDGE_BIND_ADDR` (по умолчанию `127.0.0.1:8788`)
+  - `MAKOSH_ZOOM_EDGE_MAKOSH_BASE_URL` (по умолчанию `http://127.0.0.1:8080`)
+  - `MAKOSH_ZOOM_EDGE_MAKOSH_SECRET` или `MAKOSH_LOCAL_API_SECRET` (обязательно)
+  - `MAKOSH_ZOOM_EDGE_ACCOUNT_ID` (опционально)
 
 ---
 
@@ -240,14 +240,14 @@ Edge‑прокси для приёма вебхуков Zoom.
 
 | Source file (относительно `backend/src/`) | Факты, покрытые в `components/backend.md` |
 | --- | --- |
-| `bin/hermes_email_sync_dev/fetch.rs` | Использование `ImapFetchOptions`, `ImapNetworkClient::fetch_raw_messages` с паролем, поддержка `last_seen_uid` для инкрементальной синхронизации. |
-| `bin/hermes_email_sync_dev/provider.rs` | Разбор `EmailProviderKind`: поддерживаемые (`Icloud`, `Imap`), неподдерживаемые; хосты по умолчанию. |
-| `bin/hermes_email_sync_dev/report.rs` | Структура `DevEmailSyncReport`, включающая `account_id`, `provider`, `mailbox`, `fetched_messages`, `blob_root`, `checkpoint`, `pipeline`. |
-| `bin/hermes_email_sync_dev/runner.rs` | Жизненный цикл запуска: подключение к БД, upsert аккаунта, получение чекпоинта, вызов `project_email_sync_batch_with_mail_blobs` с `LocalCommunicationBlobStore`, формирование отчёта. |
-| `bin/hermes_graph_project.rs` | Запуск `project_from_v1`, получение `GraphSummary`, поля отчёта и подсчёт `total_nodes`/`total_edges`. |
-| `bin/hermes_migrate.rs` | Подключение к БД и вывод сообщения о завершении миграций. |
-| `bin/hermes_whatsapp_business_cloud_edge_proxy.rs` (обрезан) | Маршруты (`/healthz`, `/readyz`, `/manifest`, GET/POST `/webhooks/...`), конфигурация окружения, политики пересылки, передача `X-Hermes-Secret` и `X-Hub-Signature-256`, порт по умолчанию `8787`. |
-| `bin/hermes_zoom_edge_proxy.rs` (обрезан) | Маршруты, переменные окружения, пересылка `x-zm-signature` и `x-zm-request-timestamp`, порт по умолчанию `8788`. |
+| `bin/makosh_email_sync_dev/fetch.rs` | Использование `ImapFetchOptions`, `ImapNetworkClient::fetch_raw_messages` с паролем, поддержка `last_seen_uid` для инкрементальной синхронизации. |
+| `bin/makosh_email_sync_dev/provider.rs` | Разбор `EmailProviderKind`: поддерживаемые (`Icloud`, `Imap`), неподдерживаемые; хосты по умолчанию. |
+| `bin/makosh_email_sync_dev/report.rs` | Структура `DevEmailSyncReport`, включающая `account_id`, `provider`, `mailbox`, `fetched_messages`, `blob_root`, `checkpoint`, `pipeline`. |
+| `bin/makosh_email_sync_dev/runner.rs` | Жизненный цикл запуска: подключение к БД, upsert аккаунта, получение чекпоинта, вызов `project_email_sync_batch_with_mail_blobs` с `LocalCommunicationBlobStore`, формирование отчёта. |
+| `bin/makosh_graph_project.rs` | Запуск `project_from_v1`, получение `GraphSummary`, поля отчёта и подсчёт `total_nodes`/`total_edges`. |
+| `bin/makosh_migrate.rs` | Подключение к БД и вывод сообщения о завершении миграций. |
+| `bin/makosh_whatsapp_business_cloud_edge_proxy.rs` (обрезан) | Маршруты (`/healthz`, `/readyz`, `/manifest`, GET/POST `/webhooks/...`), конфигурация окружения, политики пересылки, передача `X-Макошь-Secret` и `X-Hub-Signature-256`, порт по умолчанию `8787`. |
+| `bin/makosh_zoom_edge_proxy.rs` (обрезан) | Маршруты, переменные окружения, пересылка `x-zm-signature` и `x-zm-request-timestamp`, порт по умолчанию `8788`. |
 | `contracts.rs` | Макрос `connectrpc::include_generated!();` для генерируемых контрактов. |
 | `domains/calendar/brain.rs` | `CalendarBrainService::answer`, `weekly_overview`, `search_events`, `meeting_brief`, `generate_agenda`; логика обработки вопросов. |
 | `domains/calendar/command_service.rs` (обрезан) | Наличие `CalendarCommandService`, фиксация observation, методы для аккаунтов, источников, повесток, чеклистов, участников, связей, заметок. |
@@ -268,14 +268,14 @@ Edge‑прокси для приёма вебхуков Zoom.
 
 ## Исходные файлы
 
-- [`backend/src/bin/hermes_email_sync_dev/fetch.rs`](../../../../backend/src/bin/hermes_email_sync_dev/fetch.rs)
-- [`backend/src/bin/hermes_email_sync_dev/provider.rs`](../../../../backend/src/bin/hermes_email_sync_dev/provider.rs)
-- [`backend/src/bin/hermes_email_sync_dev/report.rs`](../../../../backend/src/bin/hermes_email_sync_dev/report.rs)
-- [`backend/src/bin/hermes_email_sync_dev/runner.rs`](../../../../backend/src/bin/hermes_email_sync_dev/runner.rs)
-- [`backend/src/bin/hermes_graph_project.rs`](../../../../backend/src/bin/hermes_graph_project.rs)
-- [`backend/src/bin/hermes_migrate.rs`](../../../../backend/src/bin/hermes_migrate.rs)
-- [`backend/src/bin/hermes_whatsapp_business_cloud_edge_proxy.rs`](../../../../backend/src/bin/hermes_whatsapp_business_cloud_edge_proxy.rs)
-- [`backend/src/bin/hermes_zoom_edge_proxy.rs`](../../../../backend/src/bin/hermes_zoom_edge_proxy.rs)
+- [`backend/src/bin/makosh_email_sync_dev/fetch.rs`](../../../../backend/src/bin/makosh_email_sync_dev/fetch.rs)
+- [`backend/src/bin/makosh_email_sync_dev/provider.rs`](../../../../backend/src/bin/makosh_email_sync_dev/provider.rs)
+- [`backend/src/bin/makosh_email_sync_dev/report.rs`](../../../../backend/src/bin/makosh_email_sync_dev/report.rs)
+- [`backend/src/bin/makosh_email_sync_dev/runner.rs`](../../../../backend/src/bin/makosh_email_sync_dev/runner.rs)
+- [`backend/src/bin/makosh_graph_project.rs`](../../../../backend/src/bin/makosh_graph_project.rs)
+- [`backend/src/bin/makosh_migrate.rs`](../../../../backend/src/bin/makosh_migrate.rs)
+- [`backend/src/bin/makosh_whatsapp_business_cloud_edge_proxy.rs`](../../../../backend/src/bin/makosh_whatsapp_business_cloud_edge_proxy.rs)
+- [`backend/src/bin/makosh_zoom_edge_proxy.rs`](../../../../backend/src/bin/makosh_zoom_edge_proxy.rs)
 - [`backend/src/contracts.rs`](../../../../backend/src/contracts.rs)
 - [`backend/src/domains/calendar/brain.rs`](../../../../backend/src/domains/calendar/brain.rs)
 - [`backend/src/domains/calendar/command_service.rs`](../../../../backend/src/domains/calendar/command_service.rs)

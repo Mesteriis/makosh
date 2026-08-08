@@ -5,7 +5,7 @@ use std::io::{Read, Write};
 use std::os::unix::fs::OpenOptionsExt;
 use std::path::{Path, PathBuf};
 
-use hermes_blob_protocol::{BlobAccessFenceV1, BlobCustodyScopeV1, BlobRangeV1, BlobRefV1};
+use makosh_blob_protocol::{BlobAccessFenceV1, BlobCustodyScopeV1, BlobRangeV1, BlobRefV1};
 
 use crate::lease::{BlobKeyLeaseV1, BlobLeaseError};
 
@@ -195,7 +195,7 @@ impl EncryptedBlobStore {
 }
 
 fn developer_storage_stage(stage: &str) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_blob_storage_read_denied stage={stage}");
     }
 }

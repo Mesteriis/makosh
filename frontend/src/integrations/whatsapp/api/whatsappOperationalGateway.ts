@@ -1,7 +1,7 @@
 import type {
 	WhatsAppCommandOperationStatusV1,
 	WhatsAppOperationAcceptedV1,
-} from '../../../gen/hermes/whatsapp/v1/client_pb'
+} from '../../../gen/makosh/whatsapp/v1/client_pb'
 import { getWhatsAppCommandConnectClient } from './whatsappCommandClient'
 import { getWhatsAppQueryConnectClient } from './whatsappQueryClient'
 

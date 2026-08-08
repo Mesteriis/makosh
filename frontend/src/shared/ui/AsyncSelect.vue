@@ -38,7 +38,7 @@ const emit = defineEmits<{
 	retry: []
 }>()
 
-const classes = computed(() => ['hermes-async-select', props.class])
+const classes = computed(() => ['makosh-async-select', props.class])
 const visibleLoadingLabel = computed(() => props.loadingLabel.trim())
 const loadingAnnouncement = computed(() => visibleLoadingLabel.value || 'Loading options')
 const errorMessage = computed(() => props.error.trim())
@@ -83,19 +83,19 @@ function emitRetry(): void {
 		/>
 		<div
 			v-if="loading"
-			class="hermes-async-select__state"
+			class="makosh-async-select__state"
 			role="status"
 			aria-live="polite"
 			:aria-label="loadingAnnouncement"
 		>
-			<span class="hermes-async-select__loading-mark" aria-hidden="true">
-				<span class="hermes-async-select__loading-dot" />
-				<span class="hermes-async-select__loading-dot" />
-				<span class="hermes-async-select__loading-dot" />
+			<span class="makosh-async-select__loading-mark" aria-hidden="true">
+				<span class="makosh-async-select__loading-dot" />
+				<span class="makosh-async-select__loading-dot" />
+				<span class="makosh-async-select__loading-dot" />
 			</span>
 			<span v-if="visibleLoadingLabel">{{ visibleLoadingLabel }}</span>
 		</div>
-		<div v-else-if="hasError" class="hermes-async-select__state hermes-async-select__state--error" role="alert">
+		<div v-else-if="hasError" class="makosh-async-select__state makosh-async-select__state--error" role="alert">
 			<span>{{ errorMessage }}</span>
 			<Button variant="outline" size="sm" @click="emitRetry">{{ retryLabel }}</Button>
 		</div>

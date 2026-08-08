@@ -5,8 +5,8 @@ use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 use std::process::{Child, Command, Stdio};
 
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{ModuleDescriptorV1, ModuleKindV1};
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{ModuleDescriptorV1, ModuleKindV1};
 use prost::Message;
 
 use super::super::common::unique_target_root;
@@ -23,10 +23,10 @@ pub(super) struct RunningKernel {
 
 impl RunningKernel {
     pub(super) fn start() -> Result<Self, String> {
-        let root = unique_target_root("hermes-external-storage-process");
+        let root = unique_target_root("makosh-external-storage-process");
         let data_dir = private_directory(root.join("data"))?;
-        let kernel_binary = binary("HERMES_KERNEL_RUNTIME_BIN")?;
-        let vault_binary = binary("HERMES_VAULT_RUNTIME_BIN")?;
+        let kernel_binary = binary("MAKOSH_KERNEL_RUNTIME_BIN")?;
+        let vault_binary = binary("MAKOSH_VAULT_RUNTIME_BIN")?;
         let release = InstalledSignedBundle::install(
             &root,
             &[SignedRuntimeArtifact::new(

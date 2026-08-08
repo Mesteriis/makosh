@@ -6,10 +6,10 @@ pub mod client_contract;
 pub mod client_wire;
 #[allow(clippy::large_enum_variant)]
 pub mod wire {
-    include!(concat!(env!("OUT_DIR"), "/hermes.telegram.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.telegram.v1.rs"));
 }
 
-pub const PACKAGE: &str = "hermes-telegram-api";
+pub const PACKAGE: &str = "makosh-telegram-api";
 pub const MAX_ID_LEN: usize = 256;
 pub const MAX_TEXT_BYTES: usize = 256 * 1024;
 pub const DEFAULT_PAGE_SIZE: u32 = 100;

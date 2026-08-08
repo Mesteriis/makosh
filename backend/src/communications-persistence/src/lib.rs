@@ -1,8 +1,8 @@
 //! Owner-local idempotency seam for canonical Communications evidence.
 
-pub const PACKAGE: &str = "hermes-communications-persistence";
+pub const PACKAGE: &str = "makosh-communications-persistence";
 
-use hermes_communications_api::CommunicationObservationIdV1;
+use makosh_communications_api::CommunicationObservationIdV1;
 
 mod canonical_read;
 mod content_read;

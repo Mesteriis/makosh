@@ -38,7 +38,7 @@ pub(super) async fn upsert_task_in_transaction(
             source_type,
             project_id,
             status,
-            hermes_status,
+            makosh_status,
             created_from_event_id,
             created_by_actor_id
         )
@@ -53,7 +53,7 @@ pub(super) async fn upsert_task_in_transaction(
             source_type = EXCLUDED.source_type,
             project_id = EXCLUDED.project_id,
             status = EXCLUDED.status,
-            hermes_status = EXCLUDED.hermes_status,
+            makosh_status = EXCLUDED.makosh_status,
             created_from_event_id = EXCLUDED.created_from_event_id,
             created_by_actor_id = EXCLUDED.created_by_actor_id,
             updated_at = now()

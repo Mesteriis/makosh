@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/knowledge/command/v1/knowledge_command.proto"],
+            &["proto/makosh/knowledge/command/v1/knowledge_command.proto"],
             &["proto"],
         )
         .expect("Knowledge command protocol must compile");

@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/integrations/telegram/api/telegramMediaUpload.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/api/telegramMediaUpload.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/api/telegramMediaUpload.test.ts`
 - Size bytes / Размер в байтах: `1464`
 - Included characters / Включено символов: `1464`
 - Truncated / Обрезано: `no`
@@ -111,7 +111,7 @@ describe('telegramMediaUpload api', () => {
 
 ### `frontend/src/integrations/telegram/api/telegramMediaUpload.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/api/telegramMediaUpload.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/api/telegramMediaUpload.ts`
 - Size bytes / Размер в байтах: `982`
 - Included characters / Включено символов: `982`
 - Truncated / Обрезано: `no`
@@ -163,7 +163,7 @@ export async function uploadTelegramMedia(
 
 ### `frontend/src/integrations/telegram/api/telegramQr.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/api/telegramQr.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/api/telegramQr.test.ts`
 - Size bytes / Размер в байтах: `3343`
 - Included characters / Включено символов: `3343`
 - Truncated / Обрезано: `no`
@@ -244,7 +244,7 @@ describe('telegram QR login API', () => {
 
 ### `frontend/src/integrations/telegram/api/telegramSearch.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/api/telegramSearch.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/api/telegramSearch.test.ts`
 - Size bytes / Размер в байтах: `1529`
 - Included characters / Включено символов: `1529`
 - Truncated / Обрезано: `no`
@@ -307,7 +307,7 @@ describe('telegram search API', () => {
 
 ### `frontend/src/integrations/telegram/api/telegramSearch.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/api/telegramSearch.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/api/telegramSearch.ts`
 - Size bytes / Размер в байтах: `796`
 - Included characters / Включено символов: `796`
 - Truncated / Обрезано: `no`
@@ -346,7 +346,7 @@ export async function searchTelegramProviderMessages(params: {
 
 ### `frontend/src/integrations/telegram/components/TelegramAccountManager.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/components/TelegramAccountManager.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/components/TelegramAccountManager.boundary.test.ts`
 - Size bytes / Размер в байтах: `912`
 - Included characters / Включено символов: `912`
 - Truncated / Обрезано: `no`
@@ -375,7 +375,7 @@ describe('TelegramAccountManager boundary', () => {
 
 ### `frontend/src/integrations/telegram/components/TelegramCallTranscriptPanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/components/TelegramCallTranscriptPanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/components/TelegramCallTranscriptPanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `651`
 - Included characters / Включено символов: `651`
 - Truncated / Обрезано: `no`
@@ -402,7 +402,7 @@ describe('TelegramCallTranscriptPanel boundary', () => {
 
 ### `frontend/src/integrations/telegram/components/TelegramCallsPanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/components/TelegramCallsPanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/components/TelegramCallsPanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `740`
 - Included characters / Включено символов: `740`
 - Truncated / Обрезано: `no`
@@ -431,7 +431,7 @@ describe('TelegramCallsPanel boundary', () => {
 
 ### `frontend/src/integrations/telegram/components/TelegramCapabilityMatrix.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/components/TelegramCapabilityMatrix.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/components/TelegramCapabilityMatrix.boundary.test.ts`
 - Size bytes / Размер в байтах: `788`
 - Included characters / Включено символов: `788`
 - Truncated / Обрезано: `no`
@@ -459,7 +459,7 @@ describe('TelegramCapabilityMatrix boundary', () => {
 
 ### `frontend/src/integrations/telegram/components/TelegramCommandAuditPanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/components/TelegramCommandAuditPanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/components/TelegramCommandAuditPanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `1039`
 - Included characters / Включено символов: `1039`
 - Truncated / Обрезано: `no`
@@ -493,7 +493,7 @@ describe('TelegramCommandAuditPanel boundary', () => {
 
 ### `frontend/src/integrations/telegram/components/TelegramQrLoginPanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/components/TelegramQrLoginPanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/components/TelegramQrLoginPanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `812`
 - Included characters / Включено символов: `812`
 - Truncated / Обрезано: `no`
@@ -523,7 +523,7 @@ describe('TelegramQrLoginPanel boundary', () => {
 
 ### `frontend/src/integrations/telegram/components/TelegramStatusMessages.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/components/TelegramStatusMessages.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/components/TelegramStatusMessages.boundary.test.ts`
 - Size bytes / Размер в байтах: `1176`
 - Included characters / Включено символов: `1176`
 - Truncated / Обрезано: `no`
@@ -555,7 +555,7 @@ describe('TelegramStatusMessages realtime recovery status', () => {
 
 ### `frontend/src/integrations/telegram/forms/telegramAccountSetupForm.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/forms/telegramAccountSetupForm.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/forms/telegramAccountSetupForm.ts`
 - Size bytes / Размер в байтах: `2680`
 - Included characters / Включено символов: `2680`
 - Truncated / Обрезано: `no`
@@ -651,7 +651,7 @@ export function defaultTelegramAccountSetupValues(): TelegramAccountSetupFormVal
 
 ### `frontend/src/integrations/telegram/queries/realtimeTelegramCommandPatches.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/queries/realtimeTelegramCommandPatches.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/queries/realtimeTelegramCommandPatches.ts`
 - Size bytes / Размер в байтах: `10709`
 - Included characters / Включено символов: `10709`
 - Truncated / Обрезано: `no`
@@ -845,7 +845,7 @@ function insertCommand(
     last_error: normalizeNullableString(payload.last_error, null),
     result_payload: recordValue(payload.result_payload) ?? {},
     audit_metadata: recordValue(payload.audit_metadata) ?? {},
-    actor_id: stringValue(payload.actor_id) ?? 'hermes-frontend',
+    actor_id: stringValue(payload.actor_id) ?? 'makosh-frontend',
     happened_at: stringValue(payload.happened_at) ?? now,
     next_attempt_at: normalizeNullableString(payload.next_attempt_at, null),
     last_attempt_at: normalizeNullableString(payload.last_attempt_at, null),
@@ -934,7 +934,7 @@ function confirmationDecisionValue(
 
 ### `frontend/src/integrations/telegram/queries/telegramQueryKeys.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/queries/telegramQueryKeys.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/queries/telegramQueryKeys.ts`
 - Size bytes / Размер в байтах: `785`
 - Included characters / Включено символов: `785`
 - Truncated / Обрезано: `no`
@@ -956,7 +956,7 @@ export const telegramQueryKeys = {
 
 ### `frontend/src/integrations/telegram/queries/useTelegramAutomationQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/queries/useTelegramAutomationQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/queries/useTelegramAutomationQuery.ts`
 - Size bytes / Размер в байтах: `1713`
 - Included characters / Включено символов: `1713`
 - Truncated / Обрезано: `no`
@@ -1018,7 +1018,7 @@ export function useTelegramSendDryRunMutation() {
 
 ### `frontend/src/integrations/telegram/queries/useTelegramLifecycleQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/queries/useTelegramLifecycleQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/queries/useTelegramLifecycleQuery.ts`
 - Size bytes / Размер в байтах: `2114`
 - Included characters / Включено символов: `2114`
 - Truncated / Обрезано: `no`
@@ -1086,7 +1086,7 @@ export function useTelegramCommandRetryMutation() {
 
 ### `frontend/src/integrations/telegram/queries/useTelegramMembersQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/queries/useTelegramMembersQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/queries/useTelegramMembersQuery.ts`
 - Size bytes / Размер в байтах: `784`
 - Included characters / Включено символов: `784`
 - Truncated / Обрезано: `no`
@@ -1112,7 +1112,7 @@ export function useSyncTelegramChatMembersMutation() {
 
 ### `frontend/src/integrations/telegram/queries/useTelegramMutations.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/queries/useTelegramMutations.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/queries/useTelegramMutations.ts`
 - Size bytes / Размер в байтах: `9492`
 - Included characters / Включено символов: `9492`
 - Truncated / Обрезано: `no`
@@ -1387,7 +1387,7 @@ export function useMarkUnreadTelegramChatMutation() {
 
 ### `frontend/src/integrations/telegram/queries/useTelegramParticipantLifecycleQuery.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/queries/useTelegramParticipantLifecycleQuery.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/queries/useTelegramParticipantLifecycleQuery.test.ts`
 - Size bytes / Размер в байтах: `2529`
 - Included characters / Включено символов: `2529`
 - Truncated / Обрезано: `no`
@@ -1469,7 +1469,7 @@ describe('telegram participant lifecycle command cache priming', () => {
 
 ### `frontend/src/integrations/telegram/queries/useTelegramParticipantLifecycleQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/queries/useTelegramParticipantLifecycleQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/queries/useTelegramParticipantLifecycleQuery.ts`
 - Size bytes / Размер в байтах: `3587`
 - Included characters / Включено символов: `3587`
 - Truncated / Обрезано: `no`
@@ -1578,7 +1578,7 @@ export function useLeaveTelegramChatMutation() {
 
 ### `frontend/src/integrations/telegram/queries/useTelegramQrLoginQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/queries/useTelegramQrLoginQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/queries/useTelegramQrLoginQuery.ts`
 - Size bytes / Размер в байтах: `2170`
 - Included characters / Включено символов: `2170`
 - Truncated / Обрезано: `no`
@@ -1664,7 +1664,7 @@ export function useSubmitTelegramQrPasswordMutation(
 
 ### `frontend/src/integrations/telegram/queries/useTelegramQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/queries/useTelegramQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/queries/useTelegramQuery.ts`
 - Size bytes / Размер в байтах: `3336`
 - Included characters / Включено символов: `3336`
 - Truncated / Обрезано: `no`
@@ -1795,7 +1795,7 @@ function computedTelegramCallsQueryKey(
 
 ### `frontend/src/integrations/telegram/queries/useTelegramRuntimeQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/queries/useTelegramRuntimeQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/queries/useTelegramRuntimeQuery.ts`
 - Size bytes / Размер в байтах: `1798`
 - Included characters / Включено символов: `1798`
 - Truncated / Обрезано: `no`
@@ -1852,7 +1852,7 @@ export function useRestartTelegramRuntimeMutation() {
 
 ### `frontend/src/integrations/telegram/stores/telegramCommandAudit.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/stores/telegramCommandAudit.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/stores/telegramCommandAudit.test.ts`
 - Size bytes / Размер в байтах: `13449`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1886,7 +1886,7 @@ function command(overrides: Partial<TelegramProviderWriteCommand>): TelegramProv
     last_error: null,
     result_payload: {},
     audit_metadata: {},
-    actor_id: 'hermes-frontend',
+    actor_id: 'makosh-frontend',
     happened_at: '2026-06-17T10:00:00Z',
     next_attempt_at: null,
     last_attempt_at: null,
@@ -2237,6 +2237,6 @@ describe('telegram command audit projection', () => {
     expect(telegramCommandSubject(mismatch)).toBe('Unarchive chat')
     expect(telegramCommandAuditState(mismatch)).toMatchObject({
       label: 'Failed',
-      detail: 'Provider mismatch · chat is 
+      detail: 'Provider mismatch · chat is
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._

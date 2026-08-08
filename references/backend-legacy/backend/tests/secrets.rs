@@ -1,17 +1,17 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde_json::json;
 
 use chrono::Utc;
 
-use hermes_hub_backend::platform::secrets::errors::SecretResolutionError;
-use hermes_hub_backend::platform::secrets::models::{
+use makosh_hub_backend::platform::secrets::errors::SecretResolutionError;
+use makosh_hub_backend::platform::secrets::models::{
     NewSecretReference, SecretKind, SecretReference, SecretStoreKind,
 };
-use hermes_hub_backend::platform::secrets::resolver::{InMemorySecretResolver, SecretResolver};
-use hermes_hub_backend::platform::secrets::store::SecretReferenceStore;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::secrets::resolver::{InMemorySecretResolver, SecretResolver};
+use makosh_hub_backend::platform::secrets::store::SecretReferenceStore;
+use makosh_hub_backend::platform::storage::database::Database;
 
 #[test]
 fn secret_reference_enums_reject_unsupported_values() {
@@ -132,7 +132,7 @@ async fn secret_references_store_only_metadata_against_postgres() {
                 "Gmail OAuth credential",
             )
             .metadata(json!({
-                "service": "hermes-hub",
+                "service": "makosh",
                 "account": format!("gmail-user-{suffix}@example.com")
             })),
         )
@@ -142,7 +142,7 @@ async fn secret_references_store_only_metadata_against_postgres() {
     assert_eq!(stored.secret_ref, secret_ref);
     assert_eq!(stored.secret_kind, SecretKind::OauthToken);
     assert_eq!(stored.store_kind, SecretStoreKind::OsKeychain);
-    assert_eq!(stored.metadata["service"], "hermes-hub");
+    assert_eq!(stored.metadata["service"], "makosh");
 
     let loaded = store
         .secret_reference(&stored.secret_ref)

@@ -1,6 +1,6 @@
 //! Durable Mail message-flag command journal and projection reconciliation.
 
-use hermes_mail_api::{
+use makosh_mail_api::{
     message_flags::{
         MailMessageFlagAcceptedV1, MailMessageFlagCommandV1, MailMessageFlagKindV1,
         MailMessageFlagOperationOutcomeV1, MailMessageFlagOperationStatusV1,
@@ -15,7 +15,7 @@ use sqlx::{Row, postgres::PgRow};
 use crate::MailDurablePersistence;
 
 pub const MAIL_SCHEMA_V12: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.mail_message_flag_operations (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_message_flag_operations (
     operation_id TEXT PRIMARY KEY,
     connection_id TEXT NOT NULL,
     provider_message_id TEXT NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_message_flag_operations (
 );
 
 CREATE INDEX IF NOT EXISTS mail_message_flag_operations_pending_idx
-ON hermes_data.mail_message_flag_operations (
+ON makosh_data.mail_message_flag_operations (
     connection_id,
     outcome,
     requested_at_unix_seconds,
@@ -83,7 +83,7 @@ impl MailDurablePersistence {
             .await
             .map_err(|_| MailMessageFlagPersistenceErrorV1::Database)?;
         let existing = sqlx::query(
-            "SELECT request_sha256 FROM hermes_data.mail_message_flag_operations \
+            "SELECT request_sha256 FROM makosh_data.mail_message_flag_operations \
              WHERE operation_id = $1",
         )
         .bind(&command.operation_id)
@@ -106,7 +106,7 @@ impl MailDurablePersistence {
             });
         }
         let message_exists = sqlx::query(
-            "SELECT 1 FROM hermes_data.mail_operational_messages \
+            "SELECT 1 FROM makosh_data.mail_operational_messages \
              WHERE connection_id = $1 AND message_id = $2",
         )
         .bind(&command.connection_id)
@@ -119,7 +119,7 @@ impl MailDurablePersistence {
             return Err(MailMessageFlagPersistenceErrorV1::MissingMessage);
         }
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.mail_message_flag_operations \
+            "INSERT INTO makosh_data.mail_message_flag_operations \
              (operation_id, connection_id, provider_message_id, flag_kind, target_value, \
               request_sha256, exact_command_bytes, requested_at_unix_seconds) \
              VALUES ($1, $2, $3, $4, $5, $6, $7, $8) \
@@ -139,7 +139,7 @@ impl MailDurablePersistence {
         .rows_affected();
         if inserted == 0 {
             let row = sqlx::query(
-                "SELECT request_sha256 FROM hermes_data.mail_message_flag_operations \
+                "SELECT request_sha256 FROM makosh_data.mail_message_flag_operations \
                  WHERE operation_id = $1",
             )
             .bind(&command.operation_id)
@@ -171,7 +171,7 @@ impl MailDurablePersistence {
         let row = sqlx::query(
             "SELECT operation_id, connection_id, message_id, flag_kind, target_value, \
              outcome, requested_at_unix_seconds, completed_at_unix_seconds, projection_revision \
-             FROM hermes_data.mail_message_flag_operations \
+             FROM makosh_data.mail_message_flag_operations \
              WHERE operation_id = $1 AND connection_id = $2",
         )
         .bind(&request.operation_id)
@@ -192,7 +192,7 @@ impl MailDurablePersistence {
         let row = sqlx::query(
             "SELECT operation_id, connection_id, message_id, flag_kind, target_value, \
              request_sha256, exact_command_bytes \
-             FROM hermes_data.mail_message_flag_operations \
+             FROM makosh_data.mail_message_flag_operations \
              WHERE connection_id = $1 AND outcome = 1 \
              ORDER BY requested_at_unix_seconds, operation_id LIMIT 1",
         )
@@ -219,7 +219,7 @@ impl MailDurablePersistence {
             .map_err(|_| MailMessageFlagPersistenceErrorV1::Database)?;
         let row = sqlx::query(
             "SELECT provider_thread_id, flags, projection_revision \
-             FROM hermes_data.mail_operational_messages \
+             FROM makosh_data.mail_operational_messages \
              WHERE connection_id = $1 AND message_id = $2 FOR UPDATE",
         )
         .bind(&queued.connection_id)
@@ -258,7 +258,7 @@ impl MailDurablePersistence {
         };
         if changed {
             sqlx::query(
-                "UPDATE hermes_data.mail_operational_messages \
+                "UPDATE makosh_data.mail_operational_messages \
                  SET flags = $3, projection_revision = $4, updated_at_unix_seconds = $5 \
                  WHERE connection_id = $1 AND message_id = $2",
             )
@@ -271,7 +271,7 @@ impl MailDurablePersistence {
             .await
             .map_err(|_| MailMessageFlagPersistenceErrorV1::Database)?;
             let folder_rows = sqlx::query(
-                "SELECT folder_id FROM hermes_data.mail_operational_message_folders \
+                "SELECT folder_id FROM makosh_data.mail_operational_message_folders \
                  WHERE connection_id = $1 AND message_id = $2",
             )
             .bind(&queued.connection_id)
@@ -302,7 +302,7 @@ impl MailDurablePersistence {
             }
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_message_flag_operations \
+            "UPDATE makosh_data.mail_message_flag_operations \
              SET outcome = 2, completed_at_unix_seconds = $3, projection_revision = $4 \
              WHERE operation_id = $1 AND connection_id = $2 AND outcome = 1",
         )
@@ -343,7 +343,7 @@ impl MailDurablePersistence {
             return Err(MailMessageFlagPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_message_flag_operations \
+            "UPDATE makosh_data.mail_message_flag_operations \
              SET outcome = $3, completed_at_unix_seconds = $4 \
              WHERE operation_id = $1 AND connection_id = $2 AND outcome = 1",
         )
@@ -494,7 +494,7 @@ mod tests {
 
     #[test]
     fn schema_is_owner_local_and_keeps_exact_command_bytes() {
-        assert!(MAIL_SCHEMA_V12.contains("hermes_data.mail_message_flag_operations"));
+        assert!(MAIL_SCHEMA_V12.contains("makosh_data.mail_message_flag_operations"));
         assert!(MAIL_SCHEMA_V12.contains("exact_command_bytes BYTEA"));
         assert!(MAIL_SCHEMA_V12.contains("request_sha256 BYTEA"));
         assert!(!MAIL_SCHEMA_V12.contains("communications"));

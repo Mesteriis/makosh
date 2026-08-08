@@ -1,6 +1,6 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-attachment-text-extraction-parser-contract";
+pub const PACKAGE: &str = "makosh-attachment-text-extraction-parser-contract";
 pub const ATTACHMENT_TEXT_PARSER_MAX_SOURCE_BYTES_V1: usize = 100 * 1024 * 1024;
 pub const ATTACHMENT_TEXT_PARSER_MAX_OUTPUT_BYTES_V1: usize = 1024 * 1024;
 

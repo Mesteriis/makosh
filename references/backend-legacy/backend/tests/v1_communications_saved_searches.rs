@@ -1,19 +1,19 @@
 use axum::body::{Body, to_bytes};
 use axum::http::{Method, Request, StatusCode, header};
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::communications::messages::projection::project_raw_email_message;
-use hermes_hub_backend::domains::communications::messages::states::WorkflowState;
-use hermes_hub_backend::domains::communications::messages::store::MessageProjectionStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::communications::messages::projection::project_raw_email_message;
+use makosh_hub_backend::domains::communications::messages::states::WorkflowState;
+use makosh_hub_backend::domains::communications::messages::store::MessageProjectionStore;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const T: &str = "v1comms-saved-search-test-token";
 
@@ -22,7 +22,7 @@ async fn router(database_url: &str) -> axum::Router {
         .await
         .expect("database connection");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(T, database_url),
+        makosh_backend_testkit::app::config_with_secret_and_database_url(T, database_url),
         database,
     )
 }
@@ -31,7 +31,7 @@ fn request(method: Method, uri: &str, body: Option<Value>) -> Request<Body> {
     let mut builder = Request::builder()
         .method(method)
         .uri(uri)
-        .header("x-hermes-secret", T);
+        .header("x-makosh-secret", T);
     if body.is_some() {
         builder = builder.header(header::CONTENT_TYPE, "application/json");
     }

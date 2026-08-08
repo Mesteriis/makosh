@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Страница `components/backend.md` должна быть обновлена описанием ключевых backend-компонентов Hermes Hub на русском языке. В данном чанке представлены исходники доменов `signal_hub` и `tasks` (частично). Необходимо отразить актуальную структуру: обработку сырых сигналов, диспатчинг для Telegram/WhatsApp, логику политик сигналов, управление задачами (создание, обновление, статусы, анализ), автоматическое извлечение кандидатов задач из сообщений и документов, процесс ревью кандидатов, а также вспомогательные core-модули (чек-листы, контекстные пакеты, evidence, связи). Всё описание должно опираться только на встроенные исходные тексты, без домыслов.
+Страница `components/backend.md` должна быть обновлена описанием ключевых backend-компонентов Макошь на русском языке. В данном чанке представлены исходники доменов `signal_hub` и `tasks` (частично). Необходимо отразить актуальную структуру: обработку сырых сигналов, диспатчинг для Telegram/WhatsApp, логику политик сигналов, управление задачами (создание, обновление, статусы, анализ), автоматическое извлечение кандидатов задач из сообщений и документов, процесс ревью кандидатов, а также вспомогательные core-модули (чек-листы, контекстные пакеты, evidence, связи). Всё описание должно опираться только на встроенные исходные тексты, без домыслов.
 
 ## Предложенные страницы
 
@@ -27,7 +27,7 @@ generated_by: code-wiki-ru
 
 ## Обзор
 
-Hermes Hub backend реализован на Rust (async, tokio, sqlx) и разделён на домены.
+Макошь backend реализован на Rust (async, tokio, sqlx) и разделён на домены.
 В данном контексте рассмотрены домены `signal_hub` и `tasks`.
 
 Используемые паттерны: CQRS/Event Sourcing (через `EventStore`), наблюдения (`ObservationStore`),
@@ -97,7 +97,7 @@ provenance включает поле `signal_hub` с решением, `causatio
 
 - `task_id` (строка, префикс `task:v1:`), `task_candidate_id`
 - `title`, `description`, `provenance_*`, `source_*`
-- `hermes_status` — строка статуса по модели Hermes (new, triaged, ready, in_progress, waiting, blocked, review, done, cancelled, archived)
+- `makosh_status` — строка статуса по модели Макошь (new, triaged, ready, in_progress, waiting, blocked, review, done, cancelled, archived)
 - `priority_score`, `risk_score`, `readiness_score`, `area`, `why`, `outcome`
 - `due_at`, `completed_at`, `archived_at`, `waiting_reason`, `energy_type`
 - `confidentiality`, `tags`, `task_metadata`
@@ -185,7 +185,7 @@ provenance включает поле `signal_hub` с решением, `causatio
 
 - `apply_review_state_in_transaction`:
   - **UserConfirmed**:
-    - Создаёт/обновляет задачу через `upsert_task_in_transaction` (статус `active`, hermes_status `ready`).
+    - Создаёт/обновляет задачу через `upsert_task_in_transaction` (статус `active`, makosh_status `ready`).
     - Обновляет `task_candidates`: review_state, event_id, actor_id, reviewed_at.
     - Синхронизирует обязательства, если `candidate_kind == obligation_task`.
   - **Suggested / UserRejected**:

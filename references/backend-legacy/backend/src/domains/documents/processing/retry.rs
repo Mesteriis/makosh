@@ -1,9 +1,9 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::{Value, json};
 
 use crate::domains::documents::processing::evidence::link_document_processing_entity_in_transaction;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use super::constants::{
     RETRY_EVENT_ID_PREFIX, RETRY_EVENT_TYPE, RETRY_SOURCE_KIND, RETRY_SOURCE_PROVIDER,

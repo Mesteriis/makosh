@@ -5,7 +5,7 @@ import type {
 	TelegramHistoryPageProjection,
 	TelegramMessageProjection,
 	TelegramOperationResponse,
-} from '../../../gen/hermes/telegram/v1/client_pb'
+} from '../../../gen/makosh/telegram/v1/client_pb'
 import {
 	listTelegramOperations,
 	loadTelegramChatContext,

@@ -17,7 +17,7 @@
 
 ## Контекст
 
-Hermes использует одну физическую relational database для canonical state.
+Макошь использует одну физическую relational database для canonical state.
 Отдельная database или schema на каждый домен создаёт ненужную локальную
 эксплуатационную сложность. Одновременно отдельные module runtimes не должны
 получать неограниченный доступ ко всем таблицам или исчерпывать PostgreSQL
@@ -37,7 +37,7 @@ PostgreSQL является первым и обязательным storage dri
 Domain и application contracts не содержат `PgPool`, SQLx types, PostgreSQL
 error codes или dialect-specific DTO.
 
-PostgreSQL-специфичный код разрешён только в `hermes-storage-postgres` и
+PostgreSQL-специфичный код разрешён только в `makosh-storage-postgres` и
 module-owned persistence adapters. Kernel, public storage protocol и SQL-free
 Storage Control orchestration не содержат SQL client или schema introspection.
 
@@ -94,7 +94,7 @@ Shared outbox/inbox/event tables принадлежат exact owner `events`. Mo
 runtime не получает raw `SELECT`/`INSERT`/`UPDATE`/`DELETE` grants на них.
 Вместо этого он получает `EXECUTE` только на admitted versioned
 transaction-local functions, например
-`hermes_platform.events_append_outbox_v1`. Function выводит caller из
+`makosh_platform.events_append_outbox_v1`. Function выводит caller из
 аутентифицированного generation-scoped runtime principal, сверяет current
 registration/runtime/storage/grant/role generations, проверяет owner, bounded
 metadata, payload size и hash и не декодирует business payload.
@@ -119,7 +119,7 @@ Event relay имеет отдельную явно ограниченную role
 - Connection возвращается в pool сразу после commit/rollback.
 
 Supervisor subsystem Kernel управляет только OS lifecycle PostgreSQL,
-PgBouncer и `hermes-storage-runtime`. Storage Control проверяет cluster,
+PgBouncer и `makosh-storage-runtime`. Storage Control проверяет cluster,
 выдаёт typed attestation/readiness и управляет role provisioning, migration
 ordering, connection budgets и observability. Kernel не выполняет SQL
 introspection; ни Kernel, ни Storage Control не являются универсальным SQL

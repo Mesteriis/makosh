@@ -105,11 +105,11 @@ short-lived и runtime-local; restart/revoke/expiry делает её недей
 
 ## SRP и единицы сборки
 
-- `hermes-runtime-protocol` владеет descriptor surface и technical
+- `makosh-runtime-protocol` владеет descriptor surface и technical
   authorization response;
 - Kernel descriptor/control-store packages владеют admission и current route
   authority;
-- `hermes-gateway-runtime` владеет authenticated HTTP semantics;
+- `makosh-gateway-runtime` владеет authenticated HTTP semantics;
 - Blob client/platform packages владеют private byte session;
 - owner module владеет meaning opaque request и решением, какой canonical
   object разрешён;

@@ -1,5 +1,5 @@
 [package]
-name = "hermes-communication-delayed-delivery-event-adapters"
+name = "makosh-communication-delayed-delivery-event-adapters"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,15 +7,15 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "communication_delayed_delivery"
 surface = "implementation"
 
 [dependencies]
-hermes-communication-delayed-delivery-api = { path = "../communication-delayed-delivery-api" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-scheduler-protocol = { path = "../platform/scheduler/protocol" }
+makosh-communication-delayed-delivery-api = { path = "../communication-delayed-delivery-api" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-scheduler-protocol = { path = "../platform/scheduler/protocol" }
 prost = "=0.14.4"
 prost-types = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }

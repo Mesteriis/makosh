@@ -1,6 +1,6 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     AI_INFERENCE_BLOB_CAPABILITY_ID_V1, ai_provider_explanation_contract_reference_v1,
     ai_provider_reply_generation_contract_reference_v1,
     ai_provider_summary_generation_contract_reference_v1,
@@ -16,15 +16,15 @@ use hermes_ai_contracts::{
         AiProviderTranslationRequestV1, AiProviderTranslationResultV1,
     },
 };
-use hermes_ai_inference_core::{
+use makosh_ai_inference_core::{
     AiAttachmentTranslationExecutionPlanV1, AiExplanationExecutionPlanV1,
     AiInferenceExecutionPlanV1, AiSummaryExecutionPlanV1, AiTranslationExecutionPlanV1,
 };
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTransferRequestV1, ManagedBlobSessionRequestV1,
     request_managed_blob_custody_transfer_v2, request_managed_blob_session_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         BlobDataOperationV1, ManagedRuntimeControlRequestV1, ManagedRuntimeModuleRequestRequestV1,
@@ -375,7 +375,7 @@ impl AiInferenceExecutionPortsV1 for ManagedAiInferenceExecutionPortsV1<'_> {
 fn materialize_source(
     control_channel: &mut ManagedControlChannelV2<UnixStream>,
     dispatcher: &mut dyn ManagedControlRequestDispatcherV2<UnixStream>,
-    source: &hermes_ai_contracts::wire::AiPrivateSourceReceiptV1,
+    source: &makosh_ai_contracts::wire::AiPrivateSourceReceiptV1,
     run_id: &[u8; 16],
     request_digest: &[u8; 32],
 ) -> Result<Zeroizing<Vec<u8>>, AiInferenceSourcePortErrorV1> {

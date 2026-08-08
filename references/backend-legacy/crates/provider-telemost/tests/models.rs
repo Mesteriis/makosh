@@ -1,4 +1,4 @@
-use hermes_provider_telemost::models::{
+use makosh_provider_telemost::models::{
     TelemostCohost, TelemostLiveStreamRequest, YandexTelemostConferenceRequest,
 };
 use serde_json::json;
@@ -33,7 +33,7 @@ fn conference_request_serializes_only_provider_wire_fields() {
 #[test]
 fn conference_response_deserializes_optional_provider_fields() {
     let conference = serde_json::from_value::<
-        hermes_provider_telemost::models::YandexTelemostConference,
+        makosh_provider_telemost::models::YandexTelemostConference,
     >(json!({
         "id": "conference-1",
         "join_url": "https://telemost.yandex.ru/j/fixture",

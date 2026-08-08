@@ -25,7 +25,7 @@ generated_by: code-wiki-ru
 ```markdown
 # Backend
 
-Бэкенд‑часть проекта `hermes-hub` написана на Rust с использованием веб‑фреймворка **axum**.
+Бэкенд‑часть проекта `makosh` написана на Rust с использованием веб‑фреймворка **axum**.
 Основной код приложения сосредоточен в `backend/src/app/`.
 
 ## Обработка ошибок
@@ -71,8 +71,8 @@ generated_by: code-wiki-ru
 
 Файл `backend/src/app/guard.rs` реализует middleware `require_secret`:
 
-- Проверяет наличие и совпадение секрета в HTTP‑заголовке `x-hermes-secret`.
-- Для WebSocket‑эндпоинтов `/api/events/ws` и `/api/events/realtime/ws` дополнительно разрешена передача секрета через query‑параметр `hermes_secret`.
+- Проверяет наличие и совпадение секрета в HTTP‑заголовке `x-makosh-secret`.
+- Для WebSocket‑эндпоинтов `/api/events/ws` и `/api/events/realtime/ws` дополнительно разрешена передача секрета через query‑параметр `makosh_secret`.
 - Если ожидаемый секрет пуст (не задан в конфигурации), любой запрос отклоняется с `403`.
 - При несовпадении возвращается JSON‑ответ с ошибкой `"invalid_api_secret"` и HTTP‑статусом `403`.
 

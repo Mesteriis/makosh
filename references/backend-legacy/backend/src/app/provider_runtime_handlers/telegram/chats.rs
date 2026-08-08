@@ -1,8 +1,8 @@
 use axum::Json;
 use axum::extract::{Path, Query, State};
 use chrono::Utc;
-use hermes_communications_api::conversations::ConversationReadPort;
-use hermes_events_api::NewEventEnvelope;
+use makosh_communications_api::conversations::ConversationReadPort;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 
 use super::helpers::{
@@ -292,7 +292,7 @@ pub(crate) async fn list_canonical_communication_conversations(
         .filter(|value| !value.is_empty())
         .map(|value| format!("%{value}%"));
     let canonical_channel_kinds = canonical_conversation_channel_kinds(channel_kind);
-    let rows = hermes_communications_postgres::conversations::ConversationReadStore::new(pool)
+    let rows = makosh_communications_postgres::conversations::ConversationReadStore::new(pool)
         .list_conversations(
             account_id,
             canonical_channel_kinds,
@@ -317,7 +317,7 @@ pub(crate) async fn canonical_communication_conversation(
         .pool()
         .expect("database pool configured")
         .clone();
-    let row = hermes_communications_postgres::conversations::ConversationReadStore::new(pool)
+    let row = makosh_communications_postgres::conversations::ConversationReadStore::new(pool)
         .get_conversation(conversation_id, COMMUNICATION_CONVERSATION_CHANNEL_KINDS)
         .await
         .map_err(|error| TelegramError::InvalidRequest(error.to_string()))?;
@@ -339,7 +339,7 @@ async fn canonical_message_row_to_chat(
         .pool()
         .expect("database pool configured")
         .clone();
-    let row = hermes_communications_postgres::conversations::ConversationReadStore::new(pool)
+    let row = makosh_communications_postgres::conversations::ConversationReadStore::new(pool)
         .get_conversation_from_message_projection(
             conversation_id,
             COMMUNICATION_CONVERSATION_CHANNEL_KINDS,
@@ -387,7 +387,7 @@ async fn list_canonical_conversation_members(
         .map(str::trim)
         .filter(|value| !value.is_empty())
         .map(|value| format!("%{value}%"));
-    let rows = hermes_communications_postgres::conversations::ConversationReadStore::new(pool)
+    let rows = makosh_communications_postgres::conversations::ConversationReadStore::new(pool)
         .list_conversation_members(
             conversation_id,
             COMMUNICATION_CONVERSATION_CHANNEL_KINDS,
@@ -406,7 +406,7 @@ async fn list_canonical_conversation_members(
 }
 
 fn canonical_conversation_to_chat(
-    row: hermes_communications_api::conversations::CanonicalConversationRecord,
+    row: makosh_communications_api::conversations::CanonicalConversationRecord,
 ) -> Result<Option<TelegramChat>, TelegramError> {
     if !matches!(row.channel_kind.as_str(), "whatsapp_web") {
         return Ok(None);
@@ -460,7 +460,7 @@ fn canonical_conversation_channel_kinds(channel_kind: Option<&str>) -> &'static 
 }
 
 fn canonical_member_to_chat_member(
-    row: hermes_communications_api::conversations::CanonicalConversationMemberRecord,
+    row: makosh_communications_api::conversations::CanonicalConversationMemberRecord,
 ) -> Result<TelegramChatMember, TelegramError> {
     let participant_metadata = row.participant_metadata;
     let identity_metadata = row.identity_metadata;

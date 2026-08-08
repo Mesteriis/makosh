@@ -81,7 +81,7 @@ fn tdlib_edit_chat_folder_remove_chat_request_preserves_shape_and_excludes_chat(
             "include_groups": true,
             "include_channels": true
         }),
-        "hermes-folder-remove-1",
+        "makosh-folder-remove-1",
     )
     .expect("folder remove request");
 

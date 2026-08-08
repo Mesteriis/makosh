@@ -1,8 +1,8 @@
 use crate::domains::communications::storage::port::{CommunicationAttachmentPort, LocalBlobPort};
 use sqlx::postgres::PgPool;
 
-use hermes_communications_api::email_sync::EmailSyncBatch;
-use hermes_communications_api::evidence::CommunicationEvidencePort;
+use makosh_communications_api::email_sync::EmailSyncBatch;
+use makosh_communications_api::evidence::CommunicationEvidencePort;
 
 use super::errors::EmailSyncPipelineError;
 use super::knowledge::project_message_knowledge;

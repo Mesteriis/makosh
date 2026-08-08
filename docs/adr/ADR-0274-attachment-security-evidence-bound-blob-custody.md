@@ -133,7 +133,7 @@ reference без exact source proof и evidence binding.
 
 - integration runtime: provider download, source Blob write, source proof и
   typed candidate outbox;
-- `hermes-attachment-security-contract`: revisioned provider-neutral candidate
+- `makosh-attachment-security-contract`: revisioned provider-neutral candidate
   schema и builder;
 - Attachment Security core: pure join/verdict policy без Blob protocol;
 - Attachment Security persistence: inbox, proof/evidence binding, target

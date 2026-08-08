@@ -1,25 +1,25 @@
-use hermes_attachment_security_contract::{
+use makosh_attachment_security_contract::{
     admission::attachment_security_scan_candidate_observed_contract_reference_v1,
     v1::AttachmentSecurityScanCandidateObservedV1,
 };
-use hermes_attachment_text_extraction_core::{
+use makosh_attachment_text_extraction_core::{
     AttachmentTextCanonicalSafetyFactV1, AttachmentTextSafetyStateV1, AttachmentTextScanCandidateV1,
 };
-use hermes_attachment_text_extraction_ingress::{
+use makosh_attachment_text_extraction_ingress::{
     attachment_text_custody_delegated_contract_reference_v1,
     attachment_text_custody_delegation_rejected_contract_reference_v1,
     wire::{AttachmentTextCustodyDelegatedV1, AttachmentTextCustodyDelegationRejectedV1},
 };
-use hermes_communications_attachment_contract::{
+use makosh_communications_attachment_contract::{
     admission::communication_attachment_safety_state_changed_contract_reference_v1,
     lifecycle_v1::{AttachmentSafetyStateChangedV1, AttachmentSafetyStateV1},
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, DurableEnvelopeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 use sha2::{Digest, Sha256};
 

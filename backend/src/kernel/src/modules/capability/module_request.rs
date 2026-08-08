@@ -3,9 +3,9 @@
 use std::sync::Arc;
 use std::time::Duration;
 
-use hermes_kernel_control_store::ModuleRequestContractV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store::ModuleRequestContractV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     v1::{
         ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
         ManagedRuntimeModuleRequestDeliveryV1, ManagedRuntimeModuleRequestRequestV1,
@@ -32,8 +32,8 @@ pub(crate) struct ModuleRequestRouteHandlerV1<R> {
 
 pub(crate) struct ResolvedModuleRequestProviderV1 {
     pub(crate) route: ModuleRequestContractV1,
-    pub(crate) registration: hermes_kernel_control_store::ModuleRegistration,
-    pub(crate) launch: hermes_kernel_control_store::ManagedLaunchRecord,
+    pub(crate) registration: makosh_kernel_control_store::ModuleRegistration,
+    pub(crate) launch: makosh_kernel_control_store::ManagedLaunchRecord,
 }
 
 impl<R> ModuleRequestRouteHandlerV1<R>
@@ -157,7 +157,7 @@ fn resolve_response_blob_target(
 pub(crate) fn resolve_provider_for_caller(
     store: &SqliteControlStore,
     expectation: &ManagedRuntimeExpectation,
-    contract: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    contract: &makosh_runtime_protocol::v1::ContractReferenceV1,
 ) -> Result<ResolvedModuleRequestProviderV1, String> {
     ensure_caller_fence(store, expectation)?;
     let caller = store
@@ -211,7 +211,7 @@ fn resolve_caller_capability(
     store: &SqliteControlStore,
     registration_id: &str,
     granted_capabilities: &[String],
-    contract: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    contract: &makosh_runtime_protocol::v1::ContractReferenceV1,
 ) -> Result<(), String> {
     for capability_id in granted_capabilities {
         let dependencies = store
@@ -229,7 +229,7 @@ fn resolve_caller_capability(
 
 fn resolve_provider(
     store: &SqliteControlStore,
-    contract: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    contract: &makosh_runtime_protocol::v1::ContractReferenceV1,
 ) -> Result<ModuleRequestContractV1, String> {
     let routes = store
         .approved_module_request_rpc_routes()
@@ -247,8 +247,8 @@ fn resolve_provider(
 }
 
 fn exact_dependency_matches(
-    expected: &hermes_kernel_control_store::ModuleQueryContractV1,
-    actual: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    expected: &makosh_kernel_control_store::ModuleQueryContractV1,
+    actual: &makosh_runtime_protocol::v1::ContractReferenceV1,
 ) -> bool {
     expected.owner() == actual.owner
         && expected.name() == actual.name
@@ -259,7 +259,7 @@ fn exact_dependency_matches(
 
 fn exact_provider_matches(
     expected: &ModuleRequestContractV1,
-    actual: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    actual: &makosh_runtime_protocol::v1::ContractReferenceV1,
 ) -> bool {
     expected.owner() == actual.owner
         && expected.name() == actual.name
@@ -287,7 +287,7 @@ fn ensure_caller_fence(
 fn current_provider_launch(
     store: &SqliteControlStore,
     provider: &ModuleRequestContractV1,
-) -> Result<hermes_kernel_control_store::ManagedLaunchRecord, String> {
+) -> Result<makosh_kernel_control_store::ManagedLaunchRecord, String> {
     let launch = store
         .effective_managed_launch_record(provider.registration_id())
         .map_err(|_| "managed module request provider is unavailable".to_owned())?
@@ -299,7 +299,7 @@ fn current_provider_launch(
 fn ensure_provider_fence(
     store: &SqliteControlStore,
     provider: &ModuleRequestContractV1,
-    launch: &hermes_kernel_control_store::ManagedLaunchRecord,
+    launch: &makosh_kernel_control_store::ManagedLaunchRecord,
 ) -> Result<(), String> {
     current_managed_runtime_matches(
         store,

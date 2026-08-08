@@ -37,4 +37,4 @@ pub use source_results::{
     consume_summary_source_rejected_once_v1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-summary-runtime";
+pub const PACKAGE: &str = "makosh-communication-summary-runtime";

@@ -1,12 +1,12 @@
 //! Immutable Telegram automation storage migration owned by the integration.
 
-use hermes_storage_protocol::v1::StorageMigrationStepV1;
+use makosh_storage_protocol::v1::StorageMigrationStepV1;
 use sha2::{Digest, Sha256};
 
 pub const TELEGRAM_AUTOMATION_STORAGE_REVISION_V1: u32 = 2;
 
 pub const TELEGRAM_AUTOMATION_SCHEMA_V1: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_automation_templates (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_automation_templates (
     template_id TEXT PRIMARY KEY,
     revision BIGINT NOT NULL CHECK (revision > 0),
     name TEXT NOT NULL,
@@ -15,33 +15,33 @@ CREATE TABLE IF NOT EXISTS hermes_data.telegram_automation_templates (
     updated_at_unix_seconds BIGINT NOT NULL CHECK (updated_at_unix_seconds > 0)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_automation_template_variables (
-    template_id TEXT NOT NULL REFERENCES hermes_data.telegram_automation_templates(template_id) ON DELETE CASCADE,
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_automation_template_variables (
+    template_id TEXT NOT NULL REFERENCES makosh_data.telegram_automation_templates(template_id) ON DELETE CASCADE,
     ordinal INTEGER NOT NULL CHECK (ordinal >= 0),
     variable_name TEXT NOT NULL,
     PRIMARY KEY (template_id, ordinal),
     UNIQUE (template_id, variable_name)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_automation_policies (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_automation_policies (
     policy_id TEXT PRIMARY KEY,
-    template_id TEXT NOT NULL REFERENCES hermes_data.telegram_automation_templates(template_id),
+    template_id TEXT NOT NULL REFERENCES makosh_data.telegram_automation_templates(template_id),
     revision BIGINT NOT NULL CHECK (revision > 0),
     name TEXT NOT NULL,
     enabled BOOLEAN NOT NULL,
-    account_id TEXT NOT NULL REFERENCES hermes_data.telegram_accounts(account_id),
+    account_id TEXT NOT NULL REFERENCES makosh_data.telegram_accounts(account_id),
     expires_at_unix_seconds BIGINT NULL CHECK (expires_at_unix_seconds IS NULL OR expires_at_unix_seconds > 0),
     created_at_unix_seconds BIGINT NOT NULL CHECK (created_at_unix_seconds > 0),
     updated_at_unix_seconds BIGINT NOT NULL CHECK (updated_at_unix_seconds > 0)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_automation_policy_chat_scopes (
-    policy_id TEXT NOT NULL REFERENCES hermes_data.telegram_automation_policies(policy_id) ON DELETE CASCADE,
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_automation_policy_chat_scopes (
+    policy_id TEXT NOT NULL REFERENCES makosh_data.telegram_automation_policies(policy_id) ON DELETE CASCADE,
     provider_chat_id TEXT NOT NULL,
     PRIMARY KEY (policy_id, provider_chat_id)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_automation_mutation_receipts (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_automation_mutation_receipts (
     mutation_id TEXT PRIMARY KEY,
     mutation_kind TEXT NOT NULL,
     request_sha256 BYTEA NOT NULL CHECK (octet_length(request_sha256) = 32),
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.telegram_automation_mutation_receipts (
     created_at_unix_seconds BIGINT NOT NULL CHECK (created_at_unix_seconds > 0)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_automation_preview_receipts (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_automation_preview_receipts (
     preview_id TEXT PRIMARY KEY,
     request_sha256 BYTEA NOT NULL CHECK (octet_length(request_sha256) = 32),
     policy_id TEXT NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.telegram_automation_preview_receipts (
 );
 
 CREATE INDEX IF NOT EXISTS telegram_automation_policies_account_idx
-    ON hermes_data.telegram_automation_policies (account_id, policy_id);
+    ON makosh_data.telegram_automation_policies (account_id, policy_id);
 "#;
 
 #[must_use]
@@ -95,7 +95,7 @@ mod tests {
             TELEGRAM_AUTOMATION_SCHEMA_V1
                 .lines()
                 .filter(|line| line.trim_start().starts_with("CREATE TABLE"))
-                .all(|line| line.contains("hermes_data.telegram_automation_"))
+                .all(|line| line.contains("makosh_data.telegram_automation_"))
         );
         assert!(!TELEGRAM_AUTOMATION_SCHEMA_V1.contains("communications_"));
         assert_eq!(

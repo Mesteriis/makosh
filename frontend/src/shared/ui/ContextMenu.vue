@@ -24,7 +24,7 @@ const emit = defineEmits<{
 const isOpen = ref(props.defaultOpen)
 const rootRef = ref<HTMLElement | null>(null)
 const contentRef = ref<HTMLElement | null>(null)
-const classes = computed(() => ['hermes-context-menu', props.class])
+const classes = computed(() => ['makosh-context-menu', props.class])
 const { cancelMouseLeaveDismiss, scheduleMouseLeaveDismiss } = useMouseLeaveDismiss(closeMenu, undefined, {
 	isOpen,
 	getBoundaryElements: () => [rootRef.value, contentRef.value]
@@ -58,24 +58,24 @@ function selectItem(item: NavigationItem): void {
 		@mouseenter="cancelMouseLeaveDismiss"
 		@mouseleave="scheduleMouseLeaveDismiss"
 	>
-		<div class="hermes-context-menu__trigger" @contextmenu="openMenu">
+		<div class="makosh-context-menu__trigger" @contextmenu="openMenu">
 			<slot name="trigger">
-				<button class="hermes-context-menu__button" type="button" @click="openMenu">
+				<button class="makosh-context-menu__button" type="button" @click="openMenu">
 					{{ openLabel }}
 				</button>
 			</slot>
 		</div>
-		<div v-if="isOpen" ref="contentRef" class="hermes-context-menu__content" role="menu" :aria-label="label">
+		<div v-if="isOpen" ref="contentRef" class="makosh-context-menu__content" role="menu" :aria-label="label">
 			<button
 				v-for="item in items"
 				:key="item.id"
-				class="hermes-context-menu__item"
+				class="makosh-context-menu__item"
 				role="menuitem"
 				type="button"
 				:disabled="item.disabled"
 				@click="selectItem(item)"
 			>
-				<Icon v-if="item.icon" :icon="item.icon" size="1rem" class="hermes-context-menu__icon" aria-hidden="true" />
+				<Icon v-if="item.icon" :icon="item.icon" size="1rem" class="makosh-context-menu__icon" aria-hidden="true" />
 				<span>{{ item.label }}</span>
 			</button>
 		</div>

@@ -1,8 +1,8 @@
 [alias]
-hermes-nextest = "nextest run --manifest-path backend/Cargo.toml"
-hermes-nextest-ci = "nextest run --manifest-path backend/Cargo.toml --profile ci"
-hermes-nextest-integration = "nextest run --manifest-path backend/Cargo.toml --profile integration --tests"
-hermes-llvm-cov = "llvm-cov --manifest-path backend/Cargo.toml"
+makosh-nextest = "nextest run --manifest-path backend/Cargo.toml"
+makosh-nextest-ci = "nextest run --manifest-path backend/Cargo.toml --profile ci"
+makosh-nextest-integration = "nextest run --manifest-path backend/Cargo.toml --profile integration --tests"
+makosh-llvm-cov = "llvm-cov --manifest-path backend/Cargo.toml"
 
 [rust-analyzer]
 checkOnSave = true

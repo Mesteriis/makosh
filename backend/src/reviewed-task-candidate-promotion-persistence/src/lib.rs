@@ -16,7 +16,7 @@ pub use model::{
 };
 pub use repository::ReviewedTaskCandidatePromotionPersistenceV1;
 
-pub const PACKAGE: &str = "hermes-reviewed-task-candidate-promotion-persistence";
+pub const PACKAGE: &str = "makosh-reviewed-task-candidate-promotion-persistence";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ReviewedTaskCandidatePromotionPersistenceErrorV1 {

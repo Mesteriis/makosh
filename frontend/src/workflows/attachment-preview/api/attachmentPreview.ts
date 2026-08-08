@@ -7,12 +7,12 @@ import {
 	AttachmentPreviewStatusChangedV1Schema,
 	type AttachmentPreviewStatusChangedV1,
 	type GetAttachmentPreviewResponseV1,
-} from '../../../gen/hermes/attachment_preview/v1/preview_pb'
-import { ReadAttachmentPreviewRequestV1Schema } from '../../../gen/hermes/attachment_preview/read/v1/read_pb'
+} from '../../../gen/makosh/attachment_preview/v1/preview_pb'
+import { ReadAttachmentPreviewRequestV1Schema } from '../../../gen/makosh/attachment_preview/read/v1/read_pb'
 import {
 	ClientRealtimeStreamStateKindV1,
 	type ClientRealtimeEventV1,
-} from '../../../gen/hermes/gateway/v1/client_realtime_pb'
+} from '../../../gen/makosh/gateway/v1/client_realtime_pb'
 import { getAttachmentPreviewCommandClient } from '../../../platform/connect/attachmentPreviewCommandClient'
 import { getAttachmentPreviewQueryClient } from '../../../platform/connect/attachmentPreviewQueryClient'
 import { getAttachmentPreviewTicketClient } from '../../../platform/connect/attachmentPreviewTicketClient'

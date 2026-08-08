@@ -1,37 +1,37 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::{Duration, Utc};
-use hermes_hub_backend::application::task_relationship::TaskRelationshipApplicationService;
-use hermes_hub_backend::domains::decisions::models::{
+use makosh_hub_backend::application::task_relationship::TaskRelationshipApplicationService;
+use makosh_hub_backend::domains::decisions::models::{
     decision::NewDecision, evidence::NewDecisionEvidence, source_kind::DecisionEvidenceSourceKind,
     states::DecisionReviewState,
 };
-use hermes_hub_backend::domains::obligations::models::{
+use makosh_hub_backend::domains::obligations::models::{
     entity_kind::ObligationEntityKind, evidence::NewObligationEvidence, obligation::NewObligation,
     source_kind::ObligationEvidenceSourceKind, states::ObligationReviewState,
 };
-use hermes_hub_backend::domains::relationships::{
+use makosh_hub_backend::domains::relationships::{
     models::{RelationshipEntityKind, RelationshipEvidenceSourceKind, RelationshipReviewState},
     store::RelationshipStore,
 };
-use hermes_hub_backend::domains::review::{
+use makosh_hub_backend::domains::review::{
     models::{NewReviewItem, NewReviewItemEvidence, ReviewItemKind},
     store::ReviewInboxStore,
 };
-use hermes_hub_backend::domains::tasks::api::{NewTask, TaskListQuery, TaskStore, TaskUpdate};
-use hermes_hub_backend::domains::tasks::brain::TaskBrainService;
-use hermes_hub_backend::domains::tasks::core::{
+use makosh_hub_backend::domains::tasks::api::{NewTask, TaskListQuery, TaskStore, TaskUpdate};
+use makosh_hub_backend::domains::tasks::brain::TaskBrainService;
+use makosh_hub_backend::domains::tasks::core::{
     checklists::TaskChecklistStore, context_packs::TaskContextPackStore,
     evidence::TaskEvidenceStore, provider_store::TaskProviderStore, relations::TaskRelationStore,
     subtasks::TaskSubtaskStore,
 };
-use hermes_hub_backend::domains::tasks::health::TaskWatchtowerService;
-use hermes_hub_backend::domains::tasks::intelligence::TaskIntelligenceService;
-use hermes_hub_backend::domains::tasks::rules::{TaskRuleStore, TaskTemplateStore};
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_hub_backend::domains::tasks::health::TaskWatchtowerService;
+use makosh_hub_backend::domains::tasks::intelligence::TaskIntelligenceService;
+use makosh_hub_backend::domains::tasks::rules::{TaskRuleStore, TaskTemplateStore};
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 use serde_json::json;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::{PgPool, Row};
@@ -78,14 +78,14 @@ async fn task_crud_against_postgres() {
             title: format!("Test {suffix}"),
             description: Some("desc".into()),
             source_type: Some("manual".into()),
-            hermes_status: Some("new".into()),
+            makosh_status: Some("new".into()),
             priority_score: Some(0.8),
             ..Default::default()
         })
         .await
         .expect("create");
     assert!(task.task_id.starts_with("task:v1:"));
-    assert_eq!(task.hermes_status, "new");
+    assert_eq!(task.makosh_status, "new");
     assert_eq!(task.provenance_kind, "observation");
     assert!(task.provenance_id.starts_with("observation:v1:"));
     assert_eq!(task.source_kind, "observation");
@@ -103,14 +103,14 @@ async fn task_crud_against_postgres() {
         .update(
             &task.task_id,
             &TaskUpdate {
-                hermes_status: Some("in_progress".into()),
+                makosh_status: Some("in_progress".into()),
                 priority_score: Some(0.9),
                 ..Default::default()
             },
         )
         .await
         .expect("update");
-    assert_eq!(updated.hermes_status, "in_progress");
+    assert_eq!(updated.makosh_status, "in_progress");
     assert_float_eq(updated.priority_score.expect("updated priority score"), 0.9);
 
     store
@@ -122,7 +122,7 @@ async fn task_crud_against_postgres() {
         .await
         .expect("get")
         .expect("exists");
-    assert_eq!(done.hermes_status, "done");
+    assert_eq!(done.makosh_status, "done");
     assert!(done.completed_at.is_some());
 
     store.archive(&task.task_id).await.expect("archive");
@@ -131,7 +131,7 @@ async fn task_crud_against_postgres() {
         .await
         .expect("get")
         .expect("exists");
-    assert_eq!(archived.hermes_status, "archived");
+    assert_eq!(archived.makosh_status, "archived");
 }
 
 #[tokio::test]
@@ -527,7 +527,7 @@ async fn task_creation_bypass_via_direct_insert_violates_provenance_guard_agains
     };
     let task_id = format!("task:v1:direct-guard-check-{}", unique_suffix());
     let result = sqlx::query(
-        "INSERT INTO tasks (task_id, title, provenance_kind, provenance_id, source_kind, source_id, source_type, hermes_status, created_from_event_id, created_by_actor_id)
+        "INSERT INTO tasks (task_id, title, provenance_kind, provenance_id, source_kind, source_id, source_type, makosh_status, created_from_event_id, created_by_actor_id)
          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
     )
     .bind(&task_id)
@@ -570,7 +570,7 @@ async fn task_list_filtering_against_postgres() {
         .create(&NewTask {
             title: format!("Done {suffix}"),
             source_type: Some("manual".into()),
-            hermes_status: Some("done".into()),
+            makosh_status: Some("done".into()),
             ..Default::default()
         })
         .await
@@ -1307,7 +1307,7 @@ async fn task_brain_against_postgres() {
 
 #[test]
 fn task_export_markdown() {
-    let md = hermes_hub_backend::domains::tasks::sync::export_task_md(
+    let md = makosh_hub_backend::domains::tasks::sync::export_task_md(
         "Test",
         Some("desc"),
         "in_progress",
@@ -1321,7 +1321,7 @@ fn task_export_markdown() {
 
 #[test]
 fn task_export_json() {
-    let json = hermes_hub_backend::domains::tasks::sync::export_task_json(
+    let json = makosh_hub_backend::domains::tasks::sync::export_task_json(
         "Test",
         Some("desc"),
         "done",
@@ -1344,5 +1344,5 @@ async fn disconnected_task_stores() {
     let _ = TaskChecklistStore::new(pool.clone());
     let _ = TaskSubtaskStore::new(pool);
 }
-use hermes_hub_backend::domains::decisions::store::DecisionStore;
-use hermes_hub_backend::domains::obligations::store::ObligationStore;
+use makosh_hub_backend::domains::decisions::store::DecisionStore;
+use makosh_hub_backend::domains::obligations::store::ObligationStore;

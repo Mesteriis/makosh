@@ -4,12 +4,12 @@ import { describe, expect, it } from 'vitest'
 import {
 	ClientModuleBootstrapV1Schema,
 	ClientModuleSettingsBootstrapV1Schema,
-} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	MailAccountReadinessV1,
 	MailAccountStatusV1Schema,
 	MailProviderPathReadinessV1,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
 import {
 	mailAccountConnectionFingerprint,
 	mailAccountConnections,
@@ -19,7 +19,7 @@ describe('Mail provider account connection discovery', () => {
 	it('uses the Mail-owned catalog while compatibility settings remain blocked', () => {
 		const modules = [create(ClientModuleBootstrapV1Schema, {
 			registrationId: 'mail-registration',
-			moduleId: 'hermes-mail-runtime',
+			moduleId: 'makosh-mail-runtime',
 			sectionsEnabled: true,
 			capabilityIds: ['mail.account.catalog.query.v1'],
 			settings: create(ClientModuleSettingsBootstrapV1Schema, {

@@ -2,7 +2,7 @@
 
 Status: `FOUNDATION_IMPLEMENTED`, 2026-06-27.
 
-Zoom is modeled as an external communication provider adapter, not as a Hermes
+Zoom is modeled as an external communication provider adapter, not as a Макошь
 domain. Business memory remains in canonical domains and engines:
 Communications, Calls, Calendar, Radar, Timeline, Documents and AI extraction.
 
@@ -126,5 +126,5 @@ zoom_client_secret
 zoom_webhook_secret
 ```
 
-These are references only. Hermes domains store references and lifecycle state,
+These are references only. Макошь domains store references and lifecycle state,
 never raw Zoom credentials.

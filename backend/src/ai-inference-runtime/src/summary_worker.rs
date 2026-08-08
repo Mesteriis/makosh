@@ -1,17 +1,17 @@
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     validate_summary_inference_request_v1,
     wire::{
         AiInferenceTerminalStatusV1, AiProviderSummaryGenerationRequestV1,
         CommunicationSummaryInferenceRequestV1,
     },
 };
-use hermes_ai_inference_core::{
+use makosh_ai_inference_core::{
     AiInferenceCoreErrorV1, AiInferenceRunStateV1, AiSummaryExecutionPlanV1,
     accept_summary_inference_v1, begin_summary_inference_v1, build_summary_provider_input_v1,
     complete_summary_inference_v1, reject_summary_inference_v1,
     summary_inference_execution_plan_v1,
 };
-use hermes_ai_inference_persistence::{
+use makosh_ai_inference_persistence::{
     AiInferencePersistenceErrorV1, AiInferencePersistenceV1, AiSummaryTransitionV1,
     PersistedAiSummaryRunV1,
 };

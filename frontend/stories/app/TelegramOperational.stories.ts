@@ -6,7 +6,7 @@ import type { TelegramDiscoveryModel } from '../../src/integrations/telegram/pre
 import type { TelegramOperationalPageModel } from '../../src/integrations/telegram/presentation/telegramOperationalPageModel'
 
 const meta = {
-	title: 'Hermes App/Communications/Telegram Operational',
+	title: 'Макошь App/Communications/Telegram Operational',
 	component: TelegramOperationalPage,
 	parameters: { layout: 'fullscreen' },
 } satisfies Meta
@@ -19,7 +19,7 @@ const model: TelegramOperationalPageModel = {
 	status: 'ready',
 	statusMessage: '',
 	chats: [
-		{ id: 'chat-architecture', title: 'Hermes Architecture', detail: '@hermes_arch · supergroup', selected: true },
+		{ id: 'chat-architecture', title: 'Макошь Architecture', detail: '@makosh_arch · supergroup', selected: true },
 		{ id: 'chat-operations', title: 'Operations', detail: 'private group', selected: false },
 	],
 	messages: [
@@ -27,7 +27,7 @@ const model: TelegramOperationalPageModel = {
 		{ id: 'message-2', sender: 'You', body: 'Great. The domain only sees neutral evidence.', meta: 'Jul 26, 2026, 10:44 · delivered', outgoing: true },
 	],
 	selectedChatId: 'chat-architecture',
-	selectedChatTitle: 'Hermes Architecture',
+	selectedChatTitle: 'Макошь Architecture',
 	draft: 'Ship the clean-room provider surface.',
 	sendPending: false,
 	sendMessage: 'Accepted means queued; provider completion remains asynchronous.',
@@ -37,7 +37,7 @@ const model: TelegramOperationalPageModel = {
 const accountAccess: TelegramAccountAccessModel = {
 	accounts: [{
 		id: 'telegram-owner-primary',
-		title: 'Hermes owner',
+		title: 'Макошь owner',
 		detail: 'Authorized user account',
 		selected: true,
 	}],

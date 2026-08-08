@@ -5,18 +5,18 @@ use chrono::Utc;
 use serde_json::json;
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::integrations::telegram::client::chat_state::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::integrations::telegram::client::chat_state::{
     reconcile_archive_commands_from_provider_state,
     reconcile_mark_read_commands_from_provider_state,
     reconcile_marked_as_unread_commands_from_provider_state,
     reconcile_mute_commands_from_provider_state, reconcile_pin_commands_from_provider_state,
 };
-use hermes_hub_backend::integrations::telegram::client::commands::{
+use makosh_hub_backend::integrations::telegram::client::commands::{
     insert_command, new_command_id,
 };
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::storage::database::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_ok, get_request_with_token, json_body, unique_suffix,
 };
@@ -33,7 +33,7 @@ async fn mark_read_reconciliation_completes_targeted_read_commands_from_chat_rea
     let account_id = format!("telegram-dialog-reconcile-{suffix}");
     let provider_chat_id = format!("dialog-reconcile-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -101,7 +101,7 @@ async fn mark_read_reconciliation_completes_targeted_read_commands_from_chat_rea
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_dialog_read_reconciliation",
             "last_read_inbox_provider_message_id": target_message_id,
@@ -152,7 +152,7 @@ async fn dialog_pin_reconciliation_marks_mismatched_unpin_command_failed() {
     let account_id = format!("telegram-dialog-pin-reconcile-{suffix}");
     let provider_chat_id = format!("dialog-pin-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -186,7 +186,7 @@ async fn dialog_pin_reconciliation_marks_mismatched_unpin_command_failed() {
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_dialog_read_reconciliation",
             "is_pinned": false,
@@ -242,7 +242,7 @@ async fn dialog_archive_reconciliation_marks_mismatched_unarchive_command_failed
     let account_id = format!("telegram-dialog-archive-reconcile-{suffix}");
     let provider_chat_id = format!("dialog-archive-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -275,7 +275,7 @@ async fn dialog_archive_reconciliation_marks_mismatched_unarchive_command_failed
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_dialog_read_reconciliation",
             "is_archived": false,
@@ -331,7 +331,7 @@ async fn dialog_mute_reconciliation_marks_mismatched_unmute_command_failed() {
     let account_id = format!("telegram-dialog-mute-reconcile-{suffix}");
     let provider_chat_id = format!("dialog-mute-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -364,7 +364,7 @@ async fn dialog_mute_reconciliation_marks_mismatched_unmute_command_failed() {
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_dialog_read_reconciliation",
             "use_default_mute_for": true,
@@ -422,7 +422,7 @@ async fn dialog_mark_unread_reconciliation_completes_matching_command() {
     let account_id = format!("telegram-dialog-unread-reconcile-{suffix}");
     let provider_chat_id = format!("dialog-unread-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -455,7 +455,7 @@ async fn dialog_mark_unread_reconciliation_completes_matching_command() {
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_dialog_read_reconciliation",
             "is_marked_as_unread": true,
@@ -499,7 +499,7 @@ async fn dialog_mark_unread_reconciliation_marks_provider_read_state_as_mismatch
     let account_id = format!("telegram-dialog-unread-mismatch-{suffix}");
     let provider_chat_id = format!("dialog-unread-mismatch-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -532,7 +532,7 @@ async fn dialog_mark_unread_reconciliation_marks_provider_read_state_as_mismatch
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_dialog_read_reconciliation",
             "is_marked_as_unread": true,

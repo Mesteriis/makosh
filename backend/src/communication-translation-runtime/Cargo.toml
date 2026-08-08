@@ -1,5 +1,5 @@
 [package]
-name = "hermes-communication-translation-runtime"
+name = "makosh-communication-translation-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,26 +8,26 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-communication-translation-runtime"
+name = "makosh-communication-translation-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "communication_translation"
 surface = "runtime"
 
 [dependencies]
-hermes-ai-contracts = { path = "../ai-contracts" }
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-communication-translation-api = { path = "../communication-translation-api" }
-hermes-communication-translation-core = { path = "../communication-translation-core" }
-hermes-communication-translation-persistence = { path = "../communication-translation-persistence" }
-hermes-communications-ai-source-api = { path = "../communications-ai-source-api" }
-hermes-events-jetstream = { path = "../platform/events/jetstream" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
+makosh-ai-contracts = { path = "../ai-contracts" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-communication-translation-api = { path = "../communication-translation-api" }
+makosh-communication-translation-core = { path = "../communication-translation-core" }
+makosh-communication-translation-persistence = { path = "../communication-translation-persistence" }
+makosh-communications-ai-source-api = { path = "../communications-ai-source-api" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }

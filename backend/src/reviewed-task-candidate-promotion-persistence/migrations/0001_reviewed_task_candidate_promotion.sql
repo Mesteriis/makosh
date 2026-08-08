@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.reviewed_task_candidate_promotion_requests (
+CREATE TABLE makosh_data.reviewed_task_candidate_promotion_requests (
     logical_owner_id TEXT NOT NULL,
     approval_message_id BYTEA NOT NULL,
     approval_envelope_sha256 BYTEA NOT NULL,
@@ -50,14 +50,14 @@ CREATE TABLE hermes_data.reviewed_task_candidate_promotion_requests (
 );
 
 CREATE INDEX reviewed_task_candidate_promotion_pending_idx
-ON hermes_data.reviewed_task_candidate_promotion_requests (
+ON makosh_data.reviewed_task_candidate_promotion_requests (
     logical_owner_id,
     created_at_unix_millis,
     tasks_command_id
 )
 WHERE tasks_result_message_id IS NULL;
 
-CREATE TABLE hermes_data.reviewed_task_candidate_promotion_result_inbox (
+CREATE TABLE makosh_data.reviewed_task_candidate_promotion_result_inbox (
     logical_owner_id TEXT NOT NULL,
     result_message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE hermes_data.reviewed_task_candidate_promotion_result_inbox (
     CHECK (processed_at_unix_millis > 0)
 );
 
-CREATE TABLE hermes_data.reviewed_task_candidate_promotion_outbox (
+CREATE TABLE makosh_data.reviewed_task_candidate_promotion_outbox (
     logical_owner_id TEXT NOT NULL,
     message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE hermes_data.reviewed_task_candidate_promotion_outbox (
 );
 
 CREATE INDEX reviewed_task_candidate_promotion_outbox_pending_idx
-ON hermes_data.reviewed_task_candidate_promotion_outbox (
+ON makosh_data.reviewed_task_candidate_promotion_outbox (
     logical_owner_id,
     created_at_unix_millis,
     message_id

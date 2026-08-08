@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package makosh.gateway.v1;
+
+// Private local registration protocol, distinct from owner control and the public Gateway.
+message HelloModuleRegistrationRequestV1 {}
+message HelloModuleRegistrationResponseV1 {
+  uint32 protocol_major = 1;
+  uint32 protocol_minor = 2;
+}
+message BeginModuleRegistrationRequestV1 {}
+message BeginModuleRegistrationResponseV1 { string session_id = 1; uint64 expires_at_unix_millis = 2; }
+message DescribeModuleRegistrationRequestV1 { string session_id = 1; bytes descriptor_bytes = 2; }
+message DescribeModuleRegistrationResponseV1 { string registration_id = 1; string registration_state = 2; }
+message GetOwnModuleRegistrationStatusRequestV1 { string session_id = 1; }
+message GetOwnModuleRegistrationStatusResponseV1 { string registration_id = 1; string registration_state = 2; }
+message ModuleRegistrationRequestV1 { oneof operation { HelloModuleRegistrationRequestV1 hello = 1; BeginModuleRegistrationRequestV1 begin = 2; DescribeModuleRegistrationRequestV1 describe = 3; GetOwnModuleRegistrationStatusRequestV1 get_own_status = 4; } }
+message ModuleRegistrationResponseV1 { oneof result { HelloModuleRegistrationResponseV1 hello = 1; BeginModuleRegistrationResponseV1 begin = 2; DescribeModuleRegistrationResponseV1 describe = 3; GetOwnModuleRegistrationStatusResponseV1 get_own_status = 4; } string error_code = 15; }

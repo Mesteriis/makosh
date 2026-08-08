@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/domains/projects/queries/useProjectsQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/projects/queries/useProjectsQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/projects/queries/useProjectsQuery.ts`
 - Size bytes / Размер в байтах: `722`
 - Included characters / Включено символов: `722`
 - Truncated / Обрезано: `no`
@@ -90,7 +90,7 @@ export function useProjectQuery(projectId: string | null) {
 
 ### `frontend/src/domains/projects/stores/projects.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/projects/stores/projects.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/projects/stores/projects.ts`
 - Size bytes / Размер в байтах: `1998`
 - Included characters / Включено символов: `1998`
 - Truncated / Обрезано: `no`
@@ -177,7 +177,7 @@ export function formatProjectDateTime(value: string | null): string {
 
 ### `frontend/src/domains/projects/types/project.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/projects/types/project.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/projects/types/project.ts`
 - Size bytes / Размер в байтах: `1531`
 - Included characters / Включено символов: `1531`
 - Truncated / Обрезано: `no`
@@ -259,7 +259,7 @@ export interface ProjectListResponse {
 
 ### `frontend/src/domains/review/api/items.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/review/api/items.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/review/api/items.ts`
 - Size bytes / Размер в байтах: `1894`
 - Included characters / Включено символов: `1894`
 - Truncated / Обрезано: `no`
@@ -332,7 +332,7 @@ export async function promoteReviewItem(
 
 ### `frontend/src/domains/review/api/workspace.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/review/api/workspace.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/review/api/workspace.ts`
 - Size bytes / Размер в байтах: `2997`
 - Included characters / Включено символов: `2997`
 - Truncated / Обрезано: `no`
@@ -439,7 +439,7 @@ export async function reviewContradiction(
 
 ### `frontend/src/domains/review/stores/review.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/review/stores/review.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/review/stores/review.ts`
 - Size bytes / Размер в байтах: `7047`
 - Included characters / Включено символов: `7046`
 - Truncated / Обрезано: `no`
@@ -680,7 +680,7 @@ function reviewItemKey(action: ReviewWorkspaceItemAction): string {
 
 ### `frontend/src/domains/review/types/review.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/review/types/review.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/review/types/review.ts`
 - Size bytes / Размер в байтах: `3509`
 - Included characters / Включено символов: `3509`
 - Truncated / Обрезано: `no`
@@ -845,7 +845,7 @@ export interface ReviewWorkspaceItemActionResult {
 
 ### `frontend/src/domains/settings/api/settings.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/api/settings.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/api/settings.ts`
 - Size bytes / Размер в байтах: `2196`
 - Included characters / Включено символов: `2196`
 - Truncated / Обрезано: `no`
@@ -918,7 +918,7 @@ export async function importMailAccountSettings(
 
 ### `frontend/src/domains/settings/api/signalHub.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/api/signalHub.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/api/signalHub.test.ts`
 - Size bytes / Размер в байтах: `32628`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -986,9 +986,9 @@ describe('Signal Hub settings API', () => {
 
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, options] = fetchMock.mock.calls[0]
-    expect(url).toBe('http://127.0.0.1:8080/hermes.signal_hub.v1.SignalHubService/ListSources')
+    expect(url).toBe('http://127.0.0.1:8080/makosh.signal_hub.v1.SignalHubService/ListSources')
     expect(options.method).toBe('POST')
-    expect(new Headers(options.headers).get('X-Hermes-Secret')).toBe('test-secret')
+    expect(new Headers(options.headers).get('X-Макошь-Secret')).toBe('test-secret')
   })
 
   it('lists Signal Hub capabilities through ConnectRPC', async () => {
@@ -1025,7 +1025,7 @@ describe('Signal Hub settings API', () => {
       updated_at: '2026-06-23T00:00:00Z'
     }])
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.signal_hub.v1.SignalHubService/ListCapabilities'
+      'http://127.0.0.1:8080/makosh.signal_hub.v1.SignalHubService/ListCapabilities'
     )
   })
 
@@ -1092,28 +1092,28 @@ describe('Signal Hub settings API', () => {
     await resumeSignalHubSignals({ scope: 'global' })
 
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.signal_hub.v1.SignalHubService/EnableSource'
+      'http://127.0.0.1:8080/makosh.signal_hub.v1.SignalHubService/EnableSource'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.signal_hub.v1.SignalHubService/DisableSource'
+      'http://127.0.0.1:8080/makosh.signal_hub.v1.SignalHubService/DisableSource'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.signal_hub.v1.SignalHubService/DisableSignals'
+      'http://127.0.0.1:8080/makosh.signal_hub.v1.SignalHubService/DisableSignals'
     )
     expect(fetchMock.mock.calls[3][0]).toBe(
-      'http://127.0.0.1:8080/hermes.signal_hub.v1.SignalHubService/EnableSignals'
+      'http://127.0.0.1:8080/makosh.signal_hub.v1.SignalHubService/EnableSignals'
     )
     expect(fetchMock.mock.calls[4][0]).toBe(
-      'http://127.0.0.1:8080/hermes.signal_hub.v1.SignalHubService/MuteSignals'
+      'http://127.0.0.1:8080/makosh.signal_hub.v1.SignalHubService/MuteSignals'
     )
     expect(fetchMock.mock.calls[5][0]).toBe(
-      'http://127.0.0.1:8080/hermes.signal_hub.v1.SignalHubService/UnmuteSignals'
+      'http://127.0.0.1:8080/makosh.signal_hub.v1.SignalHubService/UnmuteSignals'
     )
     expect(fetchMock.mock.calls[6][0]).toBe(
-      'http://127.0.0.1:8080/hermes.signal_hub.v1.SignalHubService/PauseSignals'
+      'http://127.0.0.1:8080/makosh.signal_hub.v1.SignalHubService/PauseSignals'
     )
     expect(fetchMock.mock.calls[7][0]).toBe(
-      'http://127.0.0.1:8080/hermes.signal_hub.v1.SignalHubService/ResumeSignals'
+      'http://127.0.0.1:8080/makosh.signal_hub.v1.SignalHubService/ResumeSignals'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[2][1].body))).toMatchObject({
       scope: 'event_pattern',
@@ -1140,7 +1140,7 @@ describe('Signal Hub settings API', () => {
     expect(report.profiles_created).toBe(4)
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, options] = fetchMock.mock.calls[0]
-    expect(url).toBe('http://127.0.0.1:8080/hermes.signal_hub.v1.SignalHubService/RestoreSystemFixture')
+    expect(url).toBe('http://127.0.0.1:8080/makosh.signal_hub.v1.SignalHubService/RestoreSystemFixture')
     expect(options.method).toBe('POST')
   })
 
@@ -1173,7 +1173,7 @@ describe('Signal Hub settings API', () => {
       summary: 'Fixture message'
     }])
     expect(fetchMock).toHaveBeenCalledOnce()
-    expect(fetchMock.mock.calls[0][0]).toBe('http://127.0.0.1:8080/hermes.signal_hub.v1.SignalHubService/ListFixtureSources')
+    expect(fetchMock.mock.calls[0][0]).toBe('http://127.0.0.1:8080/makosh.signal_hub.v1.SignalHubService/ListFixtureSources')
   })
 
   it('creates, updates, applies and removes Signal Hub custom profiles through ConnectRPC', async () => {
@@ -1260,7 +1260,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/settings/api/signalHub.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/api/signalHub.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/api/signalHub.ts`
 - Size bytes / Размер в байтах: `23520`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1591,13 +1591,13 @@ export async function fetchSignalHubRuntimeStates(): Promise<SignalHubRuntimeSta
       id: item.id,
       source_code: item.sourceCode,
       connection_id: item.connectionId ?? null,
-    
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `frontend/src/domains/settings/components/SignalHubSettings.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/SignalHubSettings.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/SignalHubSettings.boundary.test.ts`
 - Size bytes / Размер в байтах: `1883`
 - Included characters / Включено символов: `1883`
 - Truncated / Обрезано: `no`
@@ -1645,7 +1645,7 @@ describe('SignalHubSettings boundary', () => {
 
 ### `frontend/src/domains/settings/components/signalHubSettingsPresentation.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/signalHubSettingsPresentation.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/signalHubSettingsPresentation.ts`
 - Size bytes / Размер в байтах: `8586`
 - Included characters / Включено символов: `8574`
 - Truncated / Обрезано: `no`
@@ -1870,7 +1870,7 @@ export function capabilityLabel(capability: SignalHubCapability): string {
 
 ### `frontend/src/domains/settings/components/useSignalHubSettingsController.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/useSignalHubSettingsController.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/useSignalHubSettingsController.ts`
 - Size bytes / Размер в байтах: `19801`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2156,7 +2156,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/settings/lib/signalHubReplay.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/lib/signalHubReplay.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/lib/signalHubReplay.test.ts`
 - Size bytes / Размер в байтах: `4381`
 - Included characters / Включено символов: `4381`
 - Truncated / Обрезано: `no`
@@ -2235,7 +2235,7 @@ describe('signalHubReplay helpers', () => {
       target_consumer: 'signal_hub_raw_signal_dispatcher',
       target_projection: 'timeline_event_log',
       status: 'queued',
-      requested_by: 'hermes-frontend',
+      requested_by: 'makosh-frontend',
       requested_at: '2026-06-23T00:00:00Z',
       started_at: null,
       completed_at: null,
@@ -2288,7 +2288,7 @@ describe('signalHubReplay helpers', () => {
       target_consumer: null,
       target_projection: null,
       status: 'queued',
-      requested_by: 'hermes-frontend',
+      requested_by: 'makosh-frontend',
       requested_at: '2026-06-23T00:00:00Z',
       started_at: null,
       completed_at: null,
@@ -2304,7 +2304,7 @@ describe('signalHubReplay helpers', () => {
 
 ### `frontend/src/domains/settings/lib/signalHubReplay.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/lib/signalHubReplay.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/lib/signalHubReplay.ts`
 - Size bytes / Размер в байтах: `2759`
 - Included characters / Включено символов: `2759`
 - Truncated / Обрезано: `no`
@@ -2405,7 +2405,7 @@ function normalizeOptionalText(value: string | undefined): string | null {
 
 ### `frontend/src/domains/settings/queries/useSettingsQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/queries/useSettingsQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/queries/useSettingsQuery.ts`
 - Size bytes / Размер в байтах: `2124`
 - Included characters / Включено символов: `2124`
 - Truncated / Обрезано: `no`
@@ -2488,7 +2488,7 @@ export function groupSettingsByCategory(
 
 ### `frontend/src/domains/settings/queries/useSignalHubQuery.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/queries/useSignalHubQuery.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/queries/useSignalHubQuery.test.ts`
 - Size bytes / Размер в байтах: `853`
 - Included characters / Включено символов: `853`
 - Truncated / Обрезано: `no`
@@ -2514,7 +2514,7 @@ describe('Signal Hub query keys', () => {
 
 ### `frontend/src/domains/settings/queries/useSignalHubQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/queries/useSignalHubQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/queries/useSignalHubQuery.ts`
 - Size bytes / Размер в байтах: `8925`
 - Included characters / Включено символов: `8925`
 - Truncated / Обрезано: `no`
@@ -2876,7 +2876,7 @@ export function useUpdateSignalHubRuntimeStateMutation() {
 
 ### `frontend/src/domains/settings/stores/settings.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/stores/settings.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/stores/settings.ts`
 - Size bytes / Размер в байтах: `3233`
 - Included characters / Включено символов: `3231`
 - Truncated / Обрезано: `no`
@@ -3008,7 +3008,7 @@ function coerceValue(
 
 ### `frontend/src/domains/settings/types/settings.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/types/settings.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/types/settings.ts`
 - Size bytes / Размер в байтах: `1005`
 - Included characters / Включено символов: `1005`
 - Truncated / Обрезано: `no`
@@ -3060,7 +3060,7 @@ export interface CalendarAccount {
 
 ### `frontend/src/domains/settings/types/signalHub.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/types/signalHub.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/types/signalHub.ts`
 - Size bytes / Размер в байтах: `6608`
 - Included characters / Включено символов: `6608`
 - Truncated / Обрезано: `no`
@@ -3362,7 +3362,7 @@ export interface SignalHubRuntimeStateRequest {
 
 ### `frontend/src/domains/settings/views/SettingsPage.signalHub.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/views/SettingsPage.signalHub.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/views/SettingsPage.signalHub.boundary.test.ts`
 - Size bytes / Размер в байтах: `691`
 - Included characters / Включено символов: `691`
 - Truncated / Обрезано: `no`
@@ -3386,7 +3386,7 @@ describe('SettingsPage Signal Hub boundary', () => {
 
 ### `frontend/src/domains/tasks/api/tasks.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/tasks/api/tasks.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/tasks/api/tasks.ts`
 - Size bytes / Размер в байтах: `4515`
 - Included characters / Включено символов: `4515`
 - Truncated / Обрезано: `no`
@@ -3548,7 +3548,7 @@ export async function reviewObligation(
 
 ### `frontend/src/domains/tasks/queries/useTasksQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/tasks/queries/useTasksQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/tasks/queries/useTasksQuery.ts`
 - Size bytes / Размер в байтах: `627`
 - Included characters / Включено символов: `627`
 - Truncated / Обрезано: `no`
@@ -3581,7 +3581,7 @@ export function useTasksQuery() {
 
 ### `frontend/src/domains/tasks/stores/tasks.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/tasks/stores/tasks.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/tasks/stores/tasks.ts`
 - Size bytes / Размер в байтах: `3690`
 - Included characters / Включено символов: `3687`
 - Truncated / Обрезано: `no`

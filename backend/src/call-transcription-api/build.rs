@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/call_transcription/v1/transcription.proto"],
+            &["proto/makosh/call_transcription/v1/transcription.proto"],
             &["proto"],
         )
         .expect("Call Transcription client protocol must compile");

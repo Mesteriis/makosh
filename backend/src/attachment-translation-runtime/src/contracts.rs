@@ -1,4 +1,4 @@
-use hermes_attachment_translation_api::{
+use makosh_attachment_translation_api::{
     ATTACHMENT_TRANSLATION_COMMAND_CONTRACT_NAME_V1, ATTACHMENT_TRANSLATION_CONTRACT_MAJOR_V1,
     ATTACHMENT_TRANSLATION_CONTRACT_REVISION_V1, ATTACHMENT_TRANSLATION_CONTROL_SCHEMA_SHA256,
     ATTACHMENT_TRANSLATION_OWNER_V1, ATTACHMENT_TRANSLATION_QUERY_CONTRACT_NAME_V1,
@@ -6,7 +6,7 @@ use hermes_attachment_translation_api::{
     ATTACHMENT_TRANSLATION_REALTIME_CONTRACT_NAME_V1,
     ATTACHMENT_TRANSLATION_TICKET_CONTRACT_NAME_V1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 
 pub(crate) fn attachment_translation_command_contract_v1() -> ContractReferenceV1 {
     contract(ATTACHMENT_TRANSLATION_COMMAND_CONTRACT_NAME_V1)

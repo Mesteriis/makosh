@@ -1,14 +1,14 @@
 //! Disposable PostgreSQL proof for Scheduler concurrency slot fencing.
 
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_events_protocol::{
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_events_protocol::{
     delivery::{OutboxPublishReceiptV1, OutboxRecordV1, OwnerOutboxStorePortV1},
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1,
         ResultMetadataV1, ResultOutcomeV1, SourceRefV1, durable_envelope_v1::Semantics,
     },
 };
-use hermes_scheduler_persistence::{
+use makosh_scheduler_persistence::{
     FixedDelayCompletionOutcomeV1, SchedulerPendingFireOutcomeV1, SchedulerPendingFireV1,
     SchedulerPostgresStoreV1, SchedulerRunClaimErrorV1, SchedulerRunClaimV1,
     SchedulerScheduleControlApplyErrorV1, SchedulerScheduleControlApplyOutcomeV1,
@@ -18,7 +18,7 @@ use hermes_scheduler_persistence::{
     SchedulerScheduleStoreErrorV1, SchedulerScheduleUpsertOutcomeV1, SchedulerScheduleUpsertV1,
     scheduler_storage_bundle_v1,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     ConcurrencyKeyV1, JobContractBindingV1, JobKindV1, JobRunIdV1, MisfirePolicyV1,
     OpaqueScheduleScopeV1, OverlapPolicyV1, RetryPolicyV1, ScheduleIdV1, SchedulePolicyV1,
     ScheduleRevisionV1, ScheduleRunLeaseV1, ScheduleSpecV1, ScheduleTriggerV1,
@@ -27,7 +27,7 @@ use prost::Message;
 use prost_types::Timestamp;
 use sqlx::{PgPool, Row, postgres::PgPoolOptions};
 
-const POSTGRES_URL: &str = "HERMES_SCHEDULER_POSTGRES_URL";
+const POSTGRES_URL: &str = "MAKOSH_SCHEDULER_POSTGRES_URL";
 const CLAIMED_AT: i64 = 1_000;
 
 #[tokio::test]
@@ -90,7 +90,7 @@ async fn assert_schedule_control_is_atomic_and_cancel_is_race_safe(
         Err(SchedulerScheduleControlApplyErrorV1::InvalidResult)
     );
     let rolled_back: i64 = sqlx::query_scalar(
-        "SELECT COUNT(*) FROM hermes_platform.scheduler_schedules WHERE schedule_id = $1",
+        "SELECT COUNT(*) FROM makosh_platform.scheduler_schedules WHERE schedule_id = $1",
     )
     .bind(vec![59_u8; 16])
     .fetch_one(pool)
@@ -419,7 +419,7 @@ async fn assert_expired_lease_releases_slot(
     same: ConcurrencyKeyV1,
 ) {
     sqlx::query(
-        "UPDATE hermes_platform.scheduler_runs SET lease_expires_at_unix_ms = $1 WHERE concurrency_key = $2 AND state = 'pending_dispatch'",
+        "UPDATE makosh_platform.scheduler_runs SET lease_expires_at_unix_ms = $1 WHERE concurrency_key = $2 AND state = 'pending_dispatch'",
     )
     .bind(CLAIMED_AT + 2)
     .bind(same.value())
@@ -476,7 +476,7 @@ async fn assert_revisioned_schedule_configuration(pool: &PgPool, store: &Schedul
         Ok(SchedulerScheduleUpsertOutcomeV1::Updated)
     );
     let contract_revision: i32 = sqlx::query_scalar(
-        "SELECT contract_revision FROM hermes_platform.scheduler_schedules WHERE schedule_id = $1",
+        "SELECT contract_revision FROM makosh_platform.scheduler_schedules WHERE schedule_id = $1",
     )
     .bind(vec![7_u8; 16])
     .fetch_one(pool)
@@ -632,7 +632,7 @@ async fn install_configured_schedule(
 
 async fn install_schema(pool: &PgPool) {
     let bundle = scheduler_storage_bundle_v1();
-    sqlx::raw_sql("CREATE SCHEMA IF NOT EXISTS hermes_platform;")
+    sqlx::raw_sql("CREATE SCHEMA IF NOT EXISTS makosh_platform;")
         .execute(pool)
         .await
         .expect("create Scheduler schema");
@@ -647,7 +647,7 @@ async fn install_schema(pool: &PgPool) {
 
 async fn install_schedule(pool: &PgPool, id: u8, key: &ConcurrencyKeyV1, max: i32) {
     sqlx::query(
-        "INSERT INTO hermes_platform.scheduler_schedules (schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms, updated_at_unix_ms) VALUES ($1, 1, 'platform', 'maintenance', 1, 'platform.maintenance', 1, $2, 'scope:technical', $3, $4, TRUE, $5, $6, $6)",
+        "INSERT INTO makosh_platform.scheduler_schedules (schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms, updated_at_unix_ms) VALUES ($1, 1, 'platform', 'maintenance', 1, 'platform.maintenance', 1, $2, 'scope:technical', $3, $4, TRUE, $5, $6, $6)",
     )
     .bind(vec![id; 16])
     .bind(vec![7_u8; 32])
@@ -790,7 +790,7 @@ fn assert_one_claim_won(
 }
 
 async fn due_at(pool: &PgPool, id: u8) -> i64 {
-    sqlx::query("SELECT next_due_at_unix_ms FROM hermes_platform.scheduler_schedules WHERE schedule_id = $1")
+    sqlx::query("SELECT next_due_at_unix_ms FROM makosh_platform.scheduler_schedules WHERE schedule_id = $1")
         .bind(vec![id; 16])
         .fetch_one(pool)
         .await
@@ -799,7 +799,7 @@ async fn due_at(pool: &PgPool, id: u8) -> i64 {
 }
 
 async fn pending_count(pool: &PgPool, id: u8) -> i64 {
-    sqlx::query("SELECT COUNT(*) AS count FROM hermes_platform.scheduler_pending_fires WHERE schedule_id = $1")
+    sqlx::query("SELECT COUNT(*) AS count FROM makosh_platform.scheduler_pending_fires WHERE schedule_id = $1")
         .bind(vec![id; 16])
         .fetch_one(pool)
         .await
@@ -808,7 +808,7 @@ async fn pending_count(pool: &PgPool, id: u8) -> i64 {
 }
 
 async fn pending_due_at(pool: &PgPool, id: u8) -> i64 {
-    sqlx::query("SELECT scheduled_for_unix_ms FROM hermes_platform.scheduler_pending_fires WHERE schedule_id = $1")
+    sqlx::query("SELECT scheduled_for_unix_ms FROM makosh_platform.scheduler_pending_fires WHERE schedule_id = $1")
         .bind(vec![id; 16])
         .fetch_one(pool)
         .await

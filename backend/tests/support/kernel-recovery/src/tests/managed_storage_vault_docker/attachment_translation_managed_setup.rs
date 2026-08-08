@@ -3,19 +3,19 @@
 use super::*;
 
 use crate::platform::client_realtime::ClientRealtimePublishHandlerV1;
-use hermes_attachment_translation_api::{
+use makosh_attachment_translation_api::{
     ATTACHMENT_TRANSLATION_MODULE_ID_V1, ATTACHMENT_TRANSLATION_OWNER_V1,
 };
-use hermes_attachment_translation_persistence::{
+use makosh_attachment_translation_persistence::{
     ATTACHMENT_TRANSLATION_STORAGE_BUNDLE_REVISION_V1, attachment_translation_storage_bundle_v1,
 };
-use hermes_attachment_translation_runtime::{
+use makosh_attachment_translation_runtime::{
     ATTACHMENT_TRANSLATION_STORAGE_CAPABILITY_ID_V1, attachment_translation_module_descriptor_v1,
     attachment_translation_settings_schema_bytes_v1,
 };
-use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
+use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
 
 const ATTACHMENT_TRANSLATION_RELEASE_ARTIFACT_ID_V1: &str = "attachment_translation.runtime.v1";
 const ATTACHMENT_TRANSLATION_BUILD_ID_V1: &str = "managed-attachment-translation-live";
@@ -89,7 +89,7 @@ pub(super) fn admit_attachment_translation_runtime_v1(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             ATTACHMENT_TRANSLATION_RELEASE_ARTIFACT_ID_V1,
             Sha256::digest(
                 std::fs::read(attachment_translation_binary())
@@ -289,7 +289,7 @@ fn start_reserved_attachment_translation_runtime_v1(
 fn attachment_translation_storage_binding_v1(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(
             registration_id,
@@ -301,5 +301,5 @@ fn attachment_translation_storage_binding_v1(
 }
 
 fn attachment_translation_binary() -> PathBuf {
-    binary("HERMES_ATTACHMENT_TRANSLATION_RUNTIME_BIN")
+    binary("MAKOSH_ATTACHMENT_TRANSLATION_RUNTIME_BIN")
 }

@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package makosh.runtime.v1;
+
+enum VaultRuntimeStateV1 {
+  VAULT_RUNTIME_STATE_V1_UNSPECIFIED = 0;
+  VAULT_RUNTIME_STATE_V1_READY = 1;
+  VAULT_RUNTIME_STATE_V1_SEALED = 2;
+  VAULT_RUNTIME_STATE_V1_RECOVERY_REQUIRED = 3;
+  VAULT_RUNTIME_STATE_V1_QUIESCING = 4;
+  VAULT_RUNTIME_STATE_V1_STOPPED = 5;
+}
+
+message GetVaultRuntimeStatusRequestV1 {}
+message VaultRuntimeStatusV1 {
+  VaultRuntimeStateV1 state = 1;
+  uint64 vault_runtime_generation = 2;
+  bytes hpke_public_key_x25519 = 3;
+  string blocker_code = 4;
+}
+
+// Opaque HPKE request data that the Kernel may fence and relay without
+// decrypting or interpreting credential material. The response path is
+// deliberately not exposed on this protocol until the inherited managed
+// runtime channel owns it end-to-end.
+enum VaultCiphertextRouteDirectionV1 {
+  VAULT_CIPHERTEXT_ROUTE_DIRECTION_V1_UNSPECIFIED = 0;
+  VAULT_CIPHERTEXT_ROUTE_DIRECTION_V1_TO_VAULT = 1;
+  VAULT_CIPHERTEXT_ROUTE_DIRECTION_V1_FROM_VAULT = 2;
+}
+
+message VaultCiphertextResponseV1 {
+  uint32 major = 1;
+  uint64 vault_runtime_generation = 2;
+  bytes request_id = 3;
+  bytes operation_digest_sha256 = 4;
+  VaultCiphertextRouteDirectionV1 direction = 5;
+  bytes hpke_encapped_key = 6;
+  bytes ciphertext = 7;
+  bytes hpke_authentication_tag = 8;
+  uint64 caller_runtime_generation = 9;
+}
+
+message VaultCiphertextRouteV1 {
+  uint32 major = 1;
+  string registration_id = 2;
+  string runtime_instance_id = 3;
+  uint64 vault_runtime_generation = 4;
+  uint64 grant_epoch = 5;
+  bytes request_id = 6;
+  bytes operation_digest_sha256 = 7;
+  VaultCiphertextRouteDirectionV1 direction = 8;
+  bytes hpke_encapped_key = 9;
+  bytes ciphertext = 10;
+  bytes hpke_authentication_tag = 11;
+  bytes response_recipient_hpke_public_key_x25519 = 12;
+  // Set only by the Kernel after it authorizes this exact route. The signature
+  // covers every route field except itself and is verified by Vault before HPKE
+  // decrypt.
+  string kernel_instance_id = 13;
+  bytes kernel_authorization_signature_raw = 14;
+  uint64 caller_runtime_generation = 15;
+  // Present only for a Storage runtime credential route. Kernel compares these
+  // non-secret fences with its active durable Storage binding before relay.
+  uint64 storage_role_epoch = 16;
+  uint64 storage_credential_lease_revision = 17;
+  string storage_runtime_principal = 18;
+  string storage_owner_id = 19;
+}
+
+message VaultRuntimeControlRequestV1 {
+  oneof operation { GetVaultRuntimeStatusRequestV1 get_status = 1; }
+}
+message VaultRuntimeControlResponseV1 {
+  oneof result { VaultRuntimeStatusV1 status = 1; }
+  string error_code = 15;
+}
+
+// Authenticated operations performed on the inherited FD of a Kernel-managed
+// Vault child. The Kernel establishes that channel from the signed launch
+// record; no Unix path, PID, or environment value authenticates this surface.
+message ManagedVaultRuntimeControlRequestV1 {
+  oneof operation {
+    GetVaultRuntimeStatusRequestV1 get_status = 1;
+    VaultCiphertextRouteV1 ciphertext_route = 2;
+  }
+}
+message ManagedVaultRuntimeControlResponseV1 {
+  oneof result {
+    VaultRuntimeStatusV1 status = 1;
+    VaultCiphertextResponseV1 ciphertext_response = 2;
+  }
+  string error_code = 15;
+}

@@ -46,11 +46,11 @@ facade либо cross-provider owner.
 независимыми единицами сборки:
 
 ```text
-hermes-communication-delivery-intent-api
-hermes-communication-delivery-intent-core
-hermes-communication-delivery-intent-persistence
-hermes-communication-delivery-intent-runtime
-hermes-communication-delivery-intent-assembly
+makosh-communication-delivery-intent-api
+makosh-communication-delivery-intent-core
+makosh-communication-delivery-intent-persistence
+makosh-communication-delivery-intent-runtime
+makosh-communication-delivery-intent-assembly
 ```
 
 Публичный V1 request принимает только:

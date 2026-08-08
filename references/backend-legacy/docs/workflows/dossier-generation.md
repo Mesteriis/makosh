@@ -1,6 +1,6 @@
 # Dossier Generation
 
-This workflow explains how Hermes assembles a dossier for a Persona,
+This workflow explains how Макошь assembles a dossier for a Persona,
 Organization, Project or other entity.
 
 ## Trigger

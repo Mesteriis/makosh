@@ -8,12 +8,12 @@ import {
 	GetEvidenceExportStatusResponseV1Schema,
 	IssueEvidenceExportReadResponseV1Schema,
 	StartEvidenceExportResponseV1Schema,
-} from '../../../gen/hermes/communications_export/v1/export_pb'
+} from '../../../gen/makosh/communications_export/v1/export_pb'
 import {
 	ClientRealtimeEventV1Schema,
 	ClientRealtimeStreamStateKindV1,
 	ClientRealtimeStreamStateV1Schema,
-} from '../../../gen/hermes/gateway/v1/client_realtime_pb'
+} from '../../../gen/makosh/gateway/v1/client_realtime_pb'
 import type { BrowserGatewayRealtimeObserver } from '../../../platform/gateway/browserGatewayRealtime'
 import {
 	getCommunicationsEvidenceExportStatus,

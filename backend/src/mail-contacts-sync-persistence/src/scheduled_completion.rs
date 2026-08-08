@@ -1,4 +1,4 @@
-use hermes_mail_contacts_sync_core::MailContactsSyncStateV1;
+use makosh_mail_contacts_sync_core::MailContactsSyncStateV1;
 use sqlx::Row;
 
 use crate::{
@@ -23,8 +23,8 @@ impl MailContactsSyncPersistenceV1 {
         let row = sqlx::query(
             "SELECT scheduled.run_id, scheduled.command_message_id, scheduled.lease_epoch,
                     scheduled.lease_expires_at_unix_millis, runs.state
-             FROM hermes_data.mail_contacts_sync_scheduler_runs scheduled
-             JOIN hermes_data.mail_contacts_sync_runs runs
+             FROM makosh_data.mail_contacts_sync_scheduler_runs scheduled
+             JOIN makosh_data.mail_contacts_sync_runs runs
                ON runs.logical_owner_id = scheduled.logical_owner_id
               AND runs.run_id = scheduled.run_id
              WHERE scheduled.logical_owner_id = $1
@@ -83,7 +83,7 @@ impl MailContactsSyncPersistenceV1 {
         let mut transaction = self.pool.begin().await.map_err(storage)?;
         let row = sqlx::query(
             "SELECT terminal_receipt_queued
-             FROM hermes_data.mail_contacts_sync_scheduler_runs
+             FROM makosh_data.mail_contacts_sync_scheduler_runs
              WHERE logical_owner_id = $1 AND run_id = $2 FOR UPDATE",
         )
         .bind(&input.logical_owner_id)
@@ -107,7 +107,7 @@ impl MailContactsSyncPersistenceV1 {
         )
         .await?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_contacts_sync_scheduler_runs
+            "UPDATE makosh_data.mail_contacts_sync_scheduler_runs
              SET terminal_receipt_queued = TRUE
              WHERE logical_owner_id = $1 AND run_id = $2
                AND NOT terminal_receipt_queued",

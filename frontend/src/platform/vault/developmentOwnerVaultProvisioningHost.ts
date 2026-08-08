@@ -7,7 +7,7 @@ import type {
 	StartedProvisioningHostSessionV1,
 } from './ownerVaultProvisioningHost'
 
-const DEVELOPMENT_HOST_BASE_PATH = '/__hermes/owner-vault-host/v1'
+const DEVELOPMENT_HOST_BASE_PATH = '/__makosh/owner-vault-host/v1'
 
 type HostFetch = typeof fetch
 

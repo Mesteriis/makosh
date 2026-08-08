@@ -184,7 +184,7 @@
 		grid-template-columns: auto minmax(0, 1fr);
 	}
 
-	.wizard-story-launcher .hermes-btn {
+	.wizard-story-launcher .makosh-btn {
 		grid-column: 1 / -1;
 	}
 

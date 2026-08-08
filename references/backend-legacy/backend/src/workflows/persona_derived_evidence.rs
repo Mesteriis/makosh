@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::StoredEventEnvelope;
+use makosh_events_api::StoredEventEnvelope;
 use serde_json::{Value, json};
 use sqlx::postgres::PgPool;
 use thiserror::Error;
@@ -28,10 +28,10 @@ use crate::engines::trust::{engine::TrustEngine, errors::TrustEngineError};
 use crate::workflows::review_mirror::{
     ReviewMirrorError, relationship::ensure_relationship_review_item,
 };
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::store::ObservationStore;
 
 pub const PERSONA_DERIVED_EVIDENCE_CONSUMER: &str = "persona_derived_evidence";
 const LEGACY_PERSON_ROLE_ASSIGNED_EVENT_TYPE: &str = "person.role.assigned";

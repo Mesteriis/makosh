@@ -1,7 +1,7 @@
 //! Canonical Communications Storage bundle construction.
 
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use sha2::{Digest, Sha256};
 
 const INITIAL_SCHEMA: &[u8] = include_bytes!("../../migrations/0001_communications_state.sql");
@@ -174,7 +174,7 @@ pub fn append_communications_body_media_type_storage_v1(
 
 #[cfg(test)]
 mod tests {
-    use hermes_storage_protocol::validation::validate_storage_bundle;
+    use makosh_storage_protocol::validation::validate_storage_bundle;
 
     use super::*;
 

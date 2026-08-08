@@ -1,4 +1,4 @@
-use hermes_call_transcription_core::CallTranscriptionStatusV1;
+use makosh_call_transcription_core::CallTranscriptionStatusV1;
 use sqlx::{Postgres, Row, Transaction};
 
 use crate::{
@@ -19,7 +19,7 @@ pub(crate) async fn append_realtime(
     occurred_at_unix_millis: i64,
 ) -> Result<(), CallTranscriptionPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.call_transcription_realtime
+        "INSERT INTO makosh_data.call_transcription_realtime
          (logical_owner_id,run_id,state,state_revision,rejection_code,occurred_at_unix_millis)
          VALUES ($1,$2,$3,$4,$5,$6)",
     )
@@ -50,7 +50,7 @@ impl CallTranscriptionPersistenceV1 {
         }
         sqlx::query(
             "SELECT realtime_sequence,run_id,state,state_revision,rejection_code,
-             occurred_at_unix_millis FROM hermes_data.call_transcription_realtime
+             occurred_at_unix_millis FROM makosh_data.call_transcription_realtime
              WHERE logical_owner_id=$1 AND realtime_sequence>$2
              ORDER BY realtime_sequence LIMIT $3",
         )

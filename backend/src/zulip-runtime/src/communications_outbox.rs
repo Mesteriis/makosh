@@ -1,5 +1,5 @@
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
-use hermes_zulip_persistence::{ZulipDurablePersistence, ZulipDurablePersistenceError};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_zulip_persistence::{ZulipDurablePersistence, ZulipDurablePersistenceError};
 
 pub async fn relay_communications_outbox_once(
     durable: &ZulipDurablePersistence,

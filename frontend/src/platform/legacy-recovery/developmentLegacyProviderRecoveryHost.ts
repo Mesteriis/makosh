@@ -10,7 +10,7 @@ import type {
 	SealLegacyProviderRecoverySourceInputV1,
 } from './legacyProviderRecoveryHost'
 
-const DEVELOPMENT_RECOVERY_BASE_PATH = '/__hermes/legacy-provider-recovery/v1'
+const DEVELOPMENT_RECOVERY_BASE_PATH = '/__makosh/legacy-provider-recovery/v1'
 
 type HostFetch = typeof fetch
 

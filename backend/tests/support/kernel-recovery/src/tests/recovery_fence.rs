@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
-use hermes_kernel_control_store::RecoveryFences;
-use hermes_kernel_control_store_sqlite::{SqliteControlStore, StagedControlStoreRestore};
+use makosh_kernel_control_store::RecoveryFences;
+use makosh_kernel_control_store_sqlite::{SqliteControlStore, StagedControlStoreRestore};
 
 use crate::recovery::fence as recovery_fence;
 
@@ -168,7 +168,7 @@ fn fixture_root(name: &str) -> PathBuf {
         .expect("clock")
         .as_nanos();
     std::env::temp_dir().join(format!(
-        "hermes-recovery-fence-{name}-{}-{suffix}",
+        "makosh-recovery-fence-{name}-{}-{suffix}",
         std::process::id()
     ))
 }

@@ -2,13 +2,13 @@
 
 use std::collections::HashMap;
 
-use hermes_communications_ingress::{
+use makosh_communications_ingress::{
     AttachmentDescriptorV1, AttachmentDispositionV1, BodyAvailabilityV1, CommunicationDirectionV1,
     CommunicationEvidenceKindV1, CommunicationObservationDraft, ProviderProvenanceV1,
     SourceEnvelope, SourceScopeEnvelope, new_scoped_communication_observation_draft,
     with_attachment_descriptor, with_message_subject, with_participant_display_label,
 };
-use hermes_mail_api::{
+use makosh_mail_api::{
     DEFAULT_WINDOW, MAX_PLAIN_TEXT_BYTES, MAX_WINDOWS, MailContractError::WindowLimitExceeded,
     OutgoingMailV1, SYNC_DEADLINE_SECONDS, WINDOW_DEADLINE_SECONDS, valid_host,
     valid_message_bytes, valid_port, valid_window,
@@ -23,12 +23,12 @@ pub use outbound_mime::{
     OutboundAttachmentV1, compose_rfc822_with_attachments,
 };
 
-pub use hermes_mail_api::{
+pub use makosh_mail_api::{
     MailConnection, MailConnectionId, MailConnectionState, MailContractError, MailOperation,
     MailOperationId,
 };
 
-pub const PACKAGE: &str = "hermes-mail-core";
+pub const PACKAGE: &str = "makosh-mail-core";
 
 #[derive(Clone, Debug)]
 pub struct SyncPlan {
@@ -378,13 +378,13 @@ pub fn bounded_window(window: u32, windows: u32) -> Result<SyncPlan, MailContrac
 }
 
 pub mod constants {
-    pub use hermes_mail_api::MAX_WINDOWS;
+    pub use makosh_mail_api::MAX_WINDOWS;
 }
 
 #[cfg(test)]
 mod rfc822_composition_tests {
     use super::*;
-    use hermes_mail_api::OutgoingMailV1;
+    use makosh_mail_api::OutgoingMailV1;
 
     fn message() -> OutgoingMailV1 {
         OutgoingMailV1 {

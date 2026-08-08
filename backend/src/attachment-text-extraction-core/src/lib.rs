@@ -25,5 +25,5 @@ pub use lifecycle::{
     validate_attachment_text_status_v1,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-text-extraction-core";
+pub const PACKAGE: &str = "makosh-attachment-text-extraction-core";
 pub const ATTACHMENT_TEXT_EXTRACTION_MAX_SOURCE_BYTES_V1: u64 = 100 * 1024 * 1024;

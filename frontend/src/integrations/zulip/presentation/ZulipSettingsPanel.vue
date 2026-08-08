@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	publicModuleSettingRows,
 	publicModuleSettingsReasonCode,
@@ -11,7 +11,7 @@ import type { ModuleSettingsPanelModel } from '../../../shared/ui/settings/Modul
 import ZulipAccountManagementPanel from './ZulipAccountManagementPanel.vue'
 import ZulipAccountSetupPanel from './ZulipAccountSetupPanel.vue'
 
-const ZULIP_MODULE_ID = 'hermes-zulip-runtime'
+const ZULIP_MODULE_ID = 'makosh-zulip-runtime'
 const props = defineProps<{ module: ClientModuleBootstrapV1 | null }>()
 const model = computed<ModuleSettingsPanelModel>(() => {
 	const owned = props.module?.moduleId === ZULIP_MODULE_ID ? props.module : null

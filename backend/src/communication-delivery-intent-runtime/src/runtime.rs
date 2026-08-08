@@ -2,20 +2,20 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_delivery_intent_core::{
+use makosh_communication_delivery_intent_core::{
     DeliveryIntentDraftV1, DeliveryIntentPlanErrorV1, PlannedDeliveryIntentV1,
     plan_delivery_intent_v1,
 };
-use hermes_communication_delivery_intent_persistence::{
+use makosh_communication_delivery_intent_persistence::{
     CommunicationDeliveryIntentPersistenceV1, CreateDeliveryIntentOutcomeV1,
     DeliveryIntentPersistenceErrorV1, DeliveryIntentStatusRecordV1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     JetStreamClient, ManagedRuntimeEventAccessErrorV1, RuntimeJetStreamConnection,
     RuntimeNatsIdentity, RuntimePublishPermitV1, RuntimeSubscribePermitV1,
     request_managed_runtime_event_access_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{
         ManagedControlChannelV2, ManagedControlRequestDispatcherV2, RejectManagedControlRequestsV2,
     },
@@ -30,11 +30,11 @@ use hermes_runtime_protocol::{
     },
     validation::module_request::validate_module_request_response_v1,
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 

@@ -11,7 +11,7 @@ canonical event rows and consumer metadata.
 
 ## Canonical Mapping
 
-| Trace concept | Hermes field |
+| Trace concept | Макошь field |
 |---|---|
 | Trace | `correlation_id` |
 | Span | `event_id` |

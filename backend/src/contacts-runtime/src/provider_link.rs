@@ -1,6 +1,6 @@
 //! Contacts-owned reconciliation of provider links returned by Mail writes.
 
-use hermes_contacts_command_api::{
+use makosh_contacts_command_api::{
     CONTACTS_MAIL_PROVIDER_LINK_COMMAND_CAPABILITY_ID_V1, ContactsCommandEnvelopeContextV1,
     bind_mail_address_book_provider_link_contract_reference_v1,
     build_bind_mail_address_book_provider_link_rejected_outbox_record_v1,
@@ -11,22 +11,22 @@ use hermes_contacts_command_api::{
         MailAddressBookProviderLinkBoundV1,
     },
 };
-use hermes_contacts_core::ContactProviderKindV1;
-use hermes_contacts_persistence::{
+use makosh_contacts_core::ContactProviderKindV1;
+use makosh_contacts_persistence::{
     BindMailProviderLinkCommandV1, ContactProviderLinkBindOutcomeV1,
     ContactProviderLinkBindRejectCodeV1, ContactsOutboxRecordV1, ContactsPersistenceErrorV1,
     ContactsPersistenceV1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{CommandMetadataV1, ContractRefV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -129,7 +129,7 @@ fn decode_command(
         &bind_mail_address_book_provider_link_contract_reference_v1(),
     )?;
     if envelope.source.as_ref().is_none_or(|source| {
-        source.module_id != "hermes-mail-contacts-sync-runtime" || source.runtime_generation == 0
+        source.module_id != "makosh-mail-contacts-sync-runtime" || source.runtime_generation == 0
     }) {
         return Err(ContactsProviderLinkErrorV1::InvalidEnvelope);
     }
@@ -183,7 +183,7 @@ fn envelope_context(
     runtime: &ContactsProviderLinkRuntimeContextV1<'_>,
 ) -> ContactsCommandEnvelopeContextV1 {
     ContactsCommandEnvelopeContextV1 {
-        module_id: "hermes-contacts-runtime".to_owned(),
+        module_id: "makosh-contacts-runtime".to_owned(),
         runtime_instance_id: runtime.runtime_instance_id.to_owned(),
         runtime_generation: runtime.runtime_generation,
         recorded_at_unix_seconds: runtime.now_unix_millis / 1_000,

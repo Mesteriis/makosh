@@ -4,7 +4,7 @@ use sqlx::postgres::PgRow;
 
 use super::EventStore;
 use crate::errors::EventStoreError;
-use hermes_events_api::{
+use makosh_events_api::{
     DispatchableEventOutboxItem, EventEnvelope, EventOutboxItem, NewEventEnvelope,
 };
 

@@ -2,7 +2,7 @@
 
 Статус: Принято
 Дата: 2026-07-15
-Состояние реализации: Частично реализовано: `hermes-runtime-protocol` содержит
+Состояние реализации: Частично реализовано: `makosh-runtime-protocol` содержит
 V1 descriptor/lifecycle/health wire types, bounded descriptor decoder и
 bounded `SettingsSchemaV1` structural validator. Development Control Store
 сохраняет exact descriptor digest только как registry binding. Registration
@@ -58,7 +58,7 @@ engine и independently supervised platform service, но не связываю�
 
 ### Четыре разных объекта
 
-Hermes различает четыре объекта и не использует их как взаимозаменяемые:
+Макошь различает четыре объекта и не использует их как взаимозаменяемые:
 
 1. `DistributionManifestV1` ADR-0219 доказывает состав установленной release,
    exact executable bytes и digest descriptor artifact.
@@ -78,7 +78,7 @@ Hermes различает четыре объекта и не используе
 
 ```text
 backend/src/platform/runtime_protocol/
-    hermes-runtime-protocol
+    makosh-runtime-protocol
     metadata: platform:runtime_protocol:contract
 ```
 
@@ -94,7 +94,7 @@ version semantics для:
 Он не содержит Kernel implementation, process spawning, NATS client, SQL,
 SQLite, Vault implementation, provider SDK, owner-specific contract payloads,
 JSON negotiation или filesystem operations. Kernel и все module runtimes могут
-зависеть от protocol package; module runtime не зависит от `hermes-kernel`.
+зависеть от protocol package; module runtime не зависит от `makosh-kernel`.
 
 ### Wire artifact и digest
 
@@ -248,7 +248,7 @@ credential и generic filesystem/network grant запрещены. Descriptor re
 задаёт только верхнюю границу; effective rights вычисляются ADR-0215.
 
 Logical storage namespace означает owner identity/object prefix внутри fixed
-Hermes schemas, а не отдельную PostgreSQL schema. Descriptor не содержит SQL,
+Макошь schemas, а не отдельную PostgreSQL schema. Descriptor не содержит SQL,
 schema/table/role names, endpoint, credential, migration bytes, extension names
 или vendor options. Exact `StorageBundleV1` является отдельно admitted artifact,
 pinned distribution/managed binding ADR-0219/ADR-0224, и не расширяет grants.
@@ -411,15 +411,15 @@ capabilities.
 
 ### Security boundary
 
-GrantSet ограничивает Hermes capabilities, но не превращает arbitrary external
+GrantSet ограничивает Макошь capabilities, но не превращает arbitrary external
 process в OS sandbox. Одобренный external process того же desktop user всё ещё
-может иметь собственный filesystem/network access вне Hermes.
+может иметь собственный filesystem/network access вне Макошь.
 
 Полный host permission control требует отдельного managed sandbox/entitlement
 ADR. Descriptor не должен обещать enforcement, которого текущий OS process
 boundary не предоставляет. Kernel distinguishes:
 
-- enforceable Hermes capabilities;
+- enforceable Макошь capabilities;
 - declared resource requests;
 - отдельно проверяемые host sandbox permissions, если они появятся позже.
 

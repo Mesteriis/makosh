@@ -30,15 +30,15 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-card',
-	`hermes-card--${props.variant}`,
-	`hermes-card--density-${props.density}`,
-	props.selected && 'hermes-card--selected',
-	props.disabled && 'hermes-card--disabled',
-	props.clip && 'hermes-card--clip',
-	props.signal && 'hermes-card--signal',
-	props.signal && `hermes-card--signal-${props.signalTone}`,
-	props.signal && props.signalPulse && 'hermes-card--signal-pulse',
+	'makosh-card',
+	`makosh-card--${props.variant}`,
+	`makosh-card--density-${props.density}`,
+	props.selected && 'makosh-card--selected',
+	props.disabled && 'makosh-card--disabled',
+	props.clip && 'makosh-card--clip',
+	props.signal && 'makosh-card--signal',
+	props.signal && `makosh-card--signal-${props.signalTone}`,
+	props.signal && props.signalPulse && 'makosh-card--signal-pulse',
 	props.class
 ])
 

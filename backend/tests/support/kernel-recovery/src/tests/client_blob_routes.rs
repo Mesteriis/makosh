@@ -1,15 +1,15 @@
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleBlobOperationV1, ModuleBlobQuotaRequestV1, ModuleClientBlobContractVersionV1,
     ModuleClientBlobRouteV1, ModuleClientBlobTransportV1, ModuleDescriptorRegistrationRequestsV1,
     ModuleRegistration, ModuleRegistrationState,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use super::common::unique_target_root;
 
 #[test]
 fn control_store_exposes_only_approved_client_blob_routes() {
-    let root = unique_target_root("hermes-client-blob-route");
+    let root = unique_target_root("makosh-client-blob-route");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -72,7 +72,7 @@ fn control_store_rejects_client_blob_route_without_matching_read_quota_atomicall
             client_blob_route(256 * 1024 + 1),
         ),
     ] {
-        let root = unique_target_root(&format!("hermes-client-blob-route-{name}"));
+        let root = unique_target_root(&format!("makosh-client-blob-route-{name}"));
         std::fs::create_dir_all(&root).expect("create fixture directory");
         let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
             .expect("create Control Store");

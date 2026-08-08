@@ -1,4 +1,4 @@
-use hermes_contacts_command_api::{
+use makosh_contacts_command_api::{
     CONTACTS_MAIL_IDENTITY_COMMAND_CAPABILITY_ID_V1,
     CONTACTS_MAIL_PROVIDER_LINK_COMMAND_CAPABILITY_ID_V1, CONTACTS_MODULE_ID_V1,
     CONTACTS_OWNER_ID_V1, bind_mail_address_book_provider_link_consume_request_v1,
@@ -11,7 +11,7 @@ use hermes_contacts_command_api::{
     mail_address_book_provider_link_bound_publish_request_v1,
     upsert_contact_command_consume_request_v1, upsert_contact_command_contract_reference_v1,
 };
-use hermes_contacts_mail_sync_source_api::{
+use makosh_contacts_mail_sync_source_api::{
     CONTACTS_MAIL_SYNC_SOURCE_CAPABILITY_ID_V1,
     contact_changed_for_mail_sync_contract_reference_v1,
     contact_changed_for_mail_sync_publish_request_v1,
@@ -21,7 +21,7 @@ use hermes_contacts_mail_sync_source_api::{
     contact_mail_sync_source_rejected_contract_reference_v1,
     contact_mail_sync_source_rejected_publish_request_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ContractReferenceV1, ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1,
     ProvidedSurfaceKindV1, ProvidedSurfaceV1, RuntimeBudgetRequestV1, SettingsSchemaRefV1,
@@ -221,7 +221,7 @@ fn storage_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         validate_descriptor_v1, validate_settings_schema_v1,
     };
 

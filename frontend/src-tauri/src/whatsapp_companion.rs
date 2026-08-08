@@ -13,17 +13,17 @@ use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::{
         ContractReferenceV1, ManagedIntegrationHostBridgeConfigurationV1, ModuleClientRequestV1,
         ModuleClientResponseV1,
     },
     validation::integration_host_bridge::validate_managed_integration_host_bridge_configuration,
 };
-use hermes_whatsapp_api::client_contract::{
+use makosh_whatsapp_api::client_contract::{
     WHATSAPP_DESCRIPTOR_SET_V1, WHATSAPP_MODULE_ID, WHATSAPP_OWNER_ID,
 };
-use hermes_whatsapp_api::host_bridge::{
+use makosh_whatsapp_api::host_bridge::{
     HOST_BRIDGE_CONTRACT_MAJOR, HOST_BRIDGE_CONTRACT_NAME, HOST_BRIDGE_CONTRACT_REVISION,
     HOST_BRIDGE_PROTOCOL_MAJOR, HOST_BRIDGE_PROTOCOL_REVISION, WhatsAppHostBridgeEnvelopeV1,
     WhatsAppHostBridgeHandshakeV1, WhatsAppHostObservationV1,
@@ -537,7 +537,7 @@ fn kernel_runtime_directory(data_dir: &Path) -> Result<PathBuf, String> {
     let data_dir = data_dir
         .canonicalize()
         .map_err(|_| "Kernel data directory is unavailable".to_owned())?;
-    let project = directories::ProjectDirs::from("dev", "Hermes", "Hermes Hub")
+    let project = directories::ProjectDirs::from("dev", "Макошь", "Макошь")
         .ok_or_else(|| "Kernel runtime directory is unavailable".to_owned())?;
     let digest = Sha256::digest(data_dir.as_os_str().as_encoded_bytes());
     let instance_key = digest[..16]

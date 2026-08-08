@@ -1,4 +1,4 @@
-use hermes_events_protocol::delivery::OutboxRecordV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
 use sqlx::Row;
 
 use crate::{CommunicationsConsumeOutcomeV1, CommunicationsDurablePersistence};
@@ -53,15 +53,15 @@ impl CommunicationsDurablePersistence {
                message.canonical_revision, source_conversation.provider AS source_provider,
                (
                  SELECT target_conversation.provider
-                 FROM hermes_data.communications_conversations target_conversation
+                 FROM makosh_data.communications_conversations target_conversation
                  WHERE target_conversation.conversation_id = $2
                ) AS target_provider,
                evidence.body_state, evidence.body_blob_reference_id,
                evidence.body_blob_declared_bytes, evidence.body_blob_sha256
-             FROM hermes_data.communications_messages message
-             JOIN hermes_data.communications_conversations source_conversation
+             FROM makosh_data.communications_messages message
+             JOIN makosh_data.communications_conversations source_conversation
                ON source_conversation.conversation_id = message.conversation_id
-             JOIN hermes_data.communications_evidence_summaries evidence
+             JOIN makosh_data.communications_evidence_summaries evidence
                ON evidence.observation_id = message.last_evidence_id
              WHERE message.message_id = $1
                AND message.lifecycle_state = 1",
@@ -155,10 +155,10 @@ impl CommunicationsDurablePersistence {
                 "SELECT message.canonical_revision,
                    source_conversation.provider AS source_provider,
                    target_conversation.provider AS target_provider
-                 FROM hermes_data.communications_messages message
-                 JOIN hermes_data.communications_conversations source_conversation
+                 FROM makosh_data.communications_messages message
+                 JOIN makosh_data.communications_conversations source_conversation
                    ON source_conversation.conversation_id = message.conversation_id
-                 JOIN hermes_data.communications_conversations target_conversation
+                 JOIN makosh_data.communications_conversations target_conversation
                    ON target_conversation.conversation_id = $2
                  WHERE message.message_id = $1
                    AND message.lifecycle_state = 1",
@@ -190,7 +190,7 @@ impl CommunicationsDurablePersistence {
             }
         }
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.communications_event_inbox
+            "INSERT INTO makosh_data.communications_event_inbox
                (message_id, envelope_sha256)
              VALUES ($1, $2)
              ON CONFLICT (message_id) DO NOTHING",
@@ -203,7 +203,7 @@ impl CommunicationsDurablePersistence {
         if inserted.rows_affected() == 0 {
             let existing: Option<Vec<u8>> = sqlx::query_scalar(
                 "SELECT envelope_sha256
-                 FROM hermes_data.communications_event_inbox
+                 FROM makosh_data.communications_event_inbox
                  WHERE message_id = $1",
             )
             .bind(command_message_id.as_slice())
@@ -217,7 +217,7 @@ impl CommunicationsDurablePersistence {
             };
         }
         let result = sqlx::query(
-            "INSERT INTO hermes_data.communications_domain_outbox (
+            "INSERT INTO makosh_data.communications_domain_outbox (
                message_id, envelope_sha256, exact_envelope_bytes,
                created_at_unix_seconds, published_at_unix_seconds
              ) VALUES ($1, $2, $3, $4, NULL)

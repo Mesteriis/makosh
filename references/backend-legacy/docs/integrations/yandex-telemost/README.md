@@ -1,9 +1,9 @@
-# Hermes Communications - Yandex Telemost Provider Stage
+# Макошь Communications - Yandex Telemost Provider Stage
 
 Status: `FOUNDATION_PATCH_APPLIED`, 2026-06-28.
 
 Yandex Telemost is an external communication provider adapter. It is not a
-Hermes domain, not a calendar source of truth and not a meeting CRM. Telemost
+Макошь domain, not a calendar source of truth and not a meeting CRM. Telemost
 can provide conference metadata, join links, cohost metadata, local desktop
 recording artifacts, WebView speaker-timeline hints and provider runtime
 signals.
@@ -36,7 +36,7 @@ The Yandex Telemost foundation provides:
 - runtime status and capability surface;
 - backend routes under `/api/v1/integrations/yandex-telemost/*`;
 - frontend integration API, query keys and settings panel;
-- desktop Tauri command for opening a conference in a visible Hermes WebView;
+- desktop Tauri command for opening a conference in a visible Макошь WebView;
 - local desktop recorder command that writes `audio.mp3` through `ffmpeg`;
 - local speaker timeline hint files: `speaker-timeline.jsonl` and
   `speaker-timeline.txt`;

@@ -2,7 +2,7 @@ use crate::app::handlers::communications::workflow_actions::models::{
     WorkflowActionInput, WorkflowActionKind, WorkflowActionRequest, WorkflowActionSource,
 };
 use connectrpc::{ConnectError, ErrorCode};
-use hermes_connectrpc_contracts::hermes::communications::v1::WorkflowActionRequest as ProtoWorkflowActionRequest;
+use makosh_connectrpc_contracts::makosh::communications::v1::WorkflowActionRequest as ProtoWorkflowActionRequest;
 fn invalid(message: impl Into<String>) -> ConnectError {
     ConnectError::new(ErrorCode::InvalidArgument, message.into())
 }

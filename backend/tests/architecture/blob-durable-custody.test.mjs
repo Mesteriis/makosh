@@ -9,14 +9,14 @@ test('Blob authority separates ephemeral operations from durable custody', async
     await Promise.all([
       readFile(
         new URL(
-          'src/platform/runtime_protocol/proto/hermes/runtime/v1/recovery.proto',
+          'src/platform/runtime_protocol/proto/makosh/runtime/v1/recovery.proto',
           BACKEND_ROOT,
         ),
         'utf8',
       ),
       readFile(
         new URL(
-          'src/platform/runtime_protocol/proto/hermes/runtime/v1/blob_runtime.proto',
+          'src/platform/runtime_protocol/proto/makosh/runtime/v1/blob_runtime.proto',
           BACKEND_ROOT,
         ),
         'utf8',

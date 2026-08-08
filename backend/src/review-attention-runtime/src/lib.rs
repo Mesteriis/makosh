@@ -15,4 +15,4 @@ pub use managed_runtime::{
     ReviewAttentionRuntimeAdmissionV1,
 };
 
-pub const PACKAGE: &str = "hermes-review-attention-runtime";
+pub const PACKAGE: &str = "makosh-review-attention-runtime";

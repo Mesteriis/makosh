@@ -1,9 +1,9 @@
 use chrono::Utc;
-use hermes_events_api::EventEnvelope;
+use makosh_events_api::EventEnvelope;
 use serde_json::Value;
 
-use hermes_events_postgres::store::EventStore;
-use hermes_observations_postgres::review_links::materialize_review_transition_link_in_transaction;
+use makosh_events_postgres::store::EventStore;
+use makosh_observations_postgres::review_links::materialize_review_transition_link_in_transaction;
 
 use super::super::constants::{
     PERSONA_IDENTITY_REVIEW_PREFIX, is_persona_identity_review_event_type,

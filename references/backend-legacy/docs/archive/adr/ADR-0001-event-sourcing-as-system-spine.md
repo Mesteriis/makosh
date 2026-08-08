@@ -4,7 +4,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub must preserve years of communication, document, task and relationship history. Current state alone cannot explain why a conclusion exists or when a commitment emerged.
+Макошь must preserve years of communication, document, task and relationship history. Current state alone cannot explain why a conclusion exists or when a commitment emerged.
 
 ## Decision
 

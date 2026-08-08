@@ -10,16 +10,16 @@ import {
 	type CallTranscriptionArtifactV1,
 	type CallTranscriptionStatusChangedV1,
 	type GetCallTranscriptionResponseV1,
-} from '../../../gen/hermes/call_transcription/v1/transcription_pb'
+} from '../../../gen/makosh/call_transcription/v1/transcription_pb'
 import {
 	SpeechTranscriptCompletenessV1,
 	SpeechTranscriptDocumentV1Schema,
 	SpeechTranscriptLanguageV1,
-} from '../../../gen/hermes/speech_transcript/v1/transcript_pb'
+} from '../../../gen/makosh/speech_transcript/v1/transcript_pb'
 import {
 	ClientRealtimeStreamStateKindV1,
 	type ClientRealtimeEventV1,
-} from '../../../gen/hermes/gateway/v1/client_realtime_pb'
+} from '../../../gen/makosh/gateway/v1/client_realtime_pb'
 import { getCallTranscriptionCommandClient } from '../../../platform/connect/callTranscriptionCommandClient'
 import { getCallTranscriptionQueryClient } from '../../../platform/connect/callTranscriptionQueryClient'
 import { getCallTranscriptTicketClient } from '../../../platform/connect/callTranscriptTicketClient'

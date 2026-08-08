@@ -1,13 +1,13 @@
 //! Typed local client port for Zulip operational commands and operation status.
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
-use hermes_zulip_api::client_contract::{
+use makosh_zulip_api::client_contract::{
     ZULIP_CLIENT_CONTRACT_MAJOR, ZULIP_CLIENT_CONTRACT_REVISION, ZULIP_MODULE_ID, ZULIP_OWNER_ID,
     ZulipClientContractV1,
 };
-use hermes_zulip_api::{
+use makosh_zulip_api::{
     ZulipClientRequestV1, ZulipClientResponseV1, account_wire, client_wire, operational_wire,
     realtime_wire,
 };
@@ -271,8 +271,8 @@ pub fn decode_module_response(
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::v1::ModuleClientRequestV1;
-    use hermes_zulip_api::{
+    use makosh_runtime_protocol::v1::ModuleClientRequestV1;
+    use makosh_zulip_api::{
         ZulipCommandReceiptV1, ZulipCommandV1, account::ZulipAccountLifecycleCommandV1,
         client_contract::ZulipClientContractV1, operational::ZulipOperationalQueryV1,
         realtime::ZulipOperationalReplayRequestV1,

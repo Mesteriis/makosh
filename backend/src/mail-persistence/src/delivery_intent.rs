@@ -8,7 +8,7 @@ use sqlx::{Postgres, Transaction};
 use crate::MailDurablePersistenceError;
 
 pub const MAIL_SCHEMA_V18: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.mail_delivery_route_accounts (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_delivery_route_accounts (
     account_cursor BYTEA PRIMARY KEY,
     connection_id TEXT NOT NULL,
     active BOOLEAN NOT NULL DEFAULT TRUE,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_delivery_route_accounts (
     CHECK (length(connection_id) BETWEEN 1 AND 256)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.mail_delivery_route_conversations (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_delivery_route_conversations (
     conversation_cursor BYTEA PRIMARY KEY,
     account_cursor BYTEA NOT NULL,
     connection_id TEXT NOT NULL,
@@ -36,10 +36,10 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_delivery_route_conversations (
 );
 
 CREATE INDEX IF NOT EXISTS mail_delivery_route_conversations_account_idx
-    ON hermes_data.mail_delivery_route_conversations
+    ON makosh_data.mail_delivery_route_conversations
         (account_cursor, updated_at_unix_seconds DESC);
 
-CREATE TABLE IF NOT EXISTS hermes_data.mail_delivery_route_messages (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_delivery_route_messages (
     source_cursor BYTEA PRIMARY KEY,
     account_cursor BYTEA NOT NULL,
     conversation_cursor BYTEA NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_delivery_route_messages (
 );
 
 CREATE INDEX IF NOT EXISTS mail_delivery_route_messages_conversation_idx
-    ON hermes_data.mail_delivery_route_messages
+    ON makosh_data.mail_delivery_route_messages
         (conversation_cursor, updated_at_unix_seconds DESC);
 "#;
 
@@ -89,16 +89,16 @@ pub(crate) async fn upsert_delivery_route_locator(
     }
 
     let account = sqlx::query(
-        "INSERT INTO hermes_data.mail_delivery_route_accounts
+        "INSERT INTO makosh_data.mail_delivery_route_accounts
             (account_cursor, connection_id, active, updated_at_unix_seconds)
          VALUES ($1, $2, TRUE, $3)
          ON CONFLICT (account_cursor) DO UPDATE SET
             active = TRUE,
             updated_at_unix_seconds = GREATEST(
-                hermes_data.mail_delivery_route_accounts.updated_at_unix_seconds,
+                makosh_data.mail_delivery_route_accounts.updated_at_unix_seconds,
                 EXCLUDED.updated_at_unix_seconds
             )
-         WHERE hermes_data.mail_delivery_route_accounts.connection_id = EXCLUDED.connection_id",
+         WHERE makosh_data.mail_delivery_route_accounts.connection_id = EXCLUDED.connection_id",
     )
     .bind(locator.account_cursor.as_slice())
     .bind(&locator.connection_id)
@@ -111,7 +111,7 @@ pub(crate) async fn upsert_delivery_route_locator(
     }
 
     let conversation = sqlx::query(
-        "INSERT INTO hermes_data.mail_delivery_route_conversations
+        "INSERT INTO makosh_data.mail_delivery_route_conversations
             (conversation_cursor, account_cursor, connection_id, provider_thread_id,
              subject, last_sender, recipients, updated_at_unix_seconds)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
@@ -120,12 +120,12 @@ pub(crate) async fn upsert_delivery_route_locator(
             last_sender = EXCLUDED.last_sender,
             recipients = EXCLUDED.recipients,
             updated_at_unix_seconds = GREATEST(
-                hermes_data.mail_delivery_route_conversations.updated_at_unix_seconds,
+                makosh_data.mail_delivery_route_conversations.updated_at_unix_seconds,
                 EXCLUDED.updated_at_unix_seconds
             )
-         WHERE hermes_data.mail_delivery_route_conversations.account_cursor = EXCLUDED.account_cursor
-           AND hermes_data.mail_delivery_route_conversations.connection_id = EXCLUDED.connection_id
-           AND hermes_data.mail_delivery_route_conversations.provider_thread_id =
+         WHERE makosh_data.mail_delivery_route_conversations.account_cursor = EXCLUDED.account_cursor
+           AND makosh_data.mail_delivery_route_conversations.connection_id = EXCLUDED.connection_id
+           AND makosh_data.mail_delivery_route_conversations.provider_thread_id =
                EXCLUDED.provider_thread_id",
     )
     .bind(locator.conversation_cursor.as_slice())
@@ -144,7 +144,7 @@ pub(crate) async fn upsert_delivery_route_locator(
     }
 
     let message = sqlx::query(
-        "INSERT INTO hermes_data.mail_delivery_route_messages
+        "INSERT INTO makosh_data.mail_delivery_route_messages
             (source_cursor, account_cursor, conversation_cursor, connection_id,
              provider_thread_id, provider_message_id, sender, recipients, subject,
              updated_at_unix_seconds)
@@ -154,16 +154,16 @@ pub(crate) async fn upsert_delivery_route_locator(
             recipients = EXCLUDED.recipients,
             subject = EXCLUDED.subject,
             updated_at_unix_seconds = GREATEST(
-                hermes_data.mail_delivery_route_messages.updated_at_unix_seconds,
+                makosh_data.mail_delivery_route_messages.updated_at_unix_seconds,
                 EXCLUDED.updated_at_unix_seconds
             )
-         WHERE hermes_data.mail_delivery_route_messages.account_cursor = EXCLUDED.account_cursor
-           AND hermes_data.mail_delivery_route_messages.conversation_cursor =
+         WHERE makosh_data.mail_delivery_route_messages.account_cursor = EXCLUDED.account_cursor
+           AND makosh_data.mail_delivery_route_messages.conversation_cursor =
                EXCLUDED.conversation_cursor
-           AND hermes_data.mail_delivery_route_messages.connection_id = EXCLUDED.connection_id
-           AND hermes_data.mail_delivery_route_messages.provider_thread_id =
+           AND makosh_data.mail_delivery_route_messages.connection_id = EXCLUDED.connection_id
+           AND makosh_data.mail_delivery_route_messages.provider_thread_id =
                EXCLUDED.provider_thread_id
-           AND hermes_data.mail_delivery_route_messages.provider_message_id =
+           AND makosh_data.mail_delivery_route_messages.provider_message_id =
                EXCLUDED.provider_message_id",
     )
     .bind(locator.source_cursor.as_slice())
@@ -232,9 +232,9 @@ mod tests {
 
     #[test]
     fn schema_is_mail_owned_and_contains_no_cross_owner_foreign_keys() {
-        assert!(MAIL_SCHEMA_V18.contains("hermes_data.mail_delivery_route_accounts"));
-        assert!(MAIL_SCHEMA_V18.contains("hermes_data.mail_delivery_route_conversations"));
-        assert!(MAIL_SCHEMA_V18.contains("hermes_data.mail_delivery_route_messages"));
+        assert!(MAIL_SCHEMA_V18.contains("makosh_data.mail_delivery_route_accounts"));
+        assert!(MAIL_SCHEMA_V18.contains("makosh_data.mail_delivery_route_conversations"));
+        assert!(MAIL_SCHEMA_V18.contains("makosh_data.mail_delivery_route_messages"));
         assert!(!MAIL_SCHEMA_V18.contains("communications_"));
         assert!(!MAIL_SCHEMA_V18.contains("FOREIGN KEY"));
     }

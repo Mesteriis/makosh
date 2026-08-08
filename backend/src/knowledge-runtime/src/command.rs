@@ -1,15 +1,15 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{CommandMetadataV1, ContractRefV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_knowledge_command_api::{
+use makosh_knowledge_command_api::{
     KNOWLEDGE_MODULE_ID_V1, KNOWLEDGE_REVIEWED_CANDIDATE_COMMAND_CAPABILITY_ID_V1,
     KnowledgeCommandEnvelopeContextV1,
     build_knowledge_note_created_from_reviewed_candidate_outbox_record_v1,
@@ -21,18 +21,18 @@ use hermes_knowledge_command_api::{
         KnowledgeNoteCreationFromReviewedCandidateRejectedV1, KnowledgeNoteCreationRejectCodeV1,
     },
 };
-use hermes_knowledge_core::{
+use makosh_knowledge_core::{
     KnowledgeNoteProvenanceV1, KnowledgeNoteSourceBasisV1, KnowledgeNoteTimestampV1,
     KnowledgeNoteTopicHintV1, ReviewedCandidateKnowledgeNoteDraftV1,
     create_verified_knowledge_note_from_reviewed_candidate_v1,
 };
-use hermes_knowledge_persistence::{
+use makosh_knowledge_persistence::{
     CompleteReviewedCandidateKnowledgeNoteV1, KnowledgeBlobReceiptV1, KnowledgeOutboxRecordV1,
     KnowledgePersistenceErrorV1, KnowledgePersistenceV1, PersistReviewedCandidateMaterializationV1,
     PersistedReviewedCandidateCommandV1, RejectReviewedCandidateKnowledgeNoteV1,
     ReserveReviewedCandidateCommandOutcomeV1, ReserveReviewedCandidateCommandV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::ContractReferenceV1,
 };
@@ -269,7 +269,7 @@ async fn materialize_candidate(
     channel: &mut ManagedControlChannelV2<UnixStream>,
     dispatcher: &mut dyn ManagedControlRequestDispatcherV2<UnixStream>,
     command: &PersistedReviewedCandidateCommandV1,
-) -> Result<hermes_knowledge_persistence::KnowledgeBlobCleanupV1, KnowledgeCommandErrorV1> {
+) -> Result<makosh_knowledge_persistence::KnowledgeBlobCleanupV1, KnowledgeCommandErrorV1> {
     if let Some(materialization) = command.materialization.clone() {
         return Ok(materialization);
     }
@@ -325,7 +325,7 @@ async fn cleanup_command(
     channel: &mut ManagedControlChannelV2<UnixStream>,
     dispatcher: &mut dyn ManagedControlRequestDispatcherV2<UnixStream>,
     command: &PersistedReviewedCandidateCommandV1,
-    cleanup: &hermes_knowledge_persistence::KnowledgeBlobCleanupV1,
+    cleanup: &makosh_knowledge_persistence::KnowledgeBlobCleanupV1,
     runtime: &KnowledgeCommandRuntimeContextV1<'_>,
 ) -> Result<(), KnowledgeCommandErrorV1> {
     if command.cleanup_completed_at_unix_millis.is_some() {
@@ -349,7 +349,7 @@ async fn cleanup_command_with_outcome(
     channel: &mut ManagedControlChannelV2<UnixStream>,
     dispatcher: &mut dyn ManagedControlRequestDispatcherV2<UnixStream>,
     command: &PersistedReviewedCandidateCommandV1,
-    cleanup: &hermes_knowledge_persistence::KnowledgeBlobCleanupV1,
+    cleanup: &makosh_knowledge_persistence::KnowledgeBlobCleanupV1,
     accepted: bool,
     now_unix_millis: i64,
 ) -> Result<(), KnowledgeCommandErrorV1> {
@@ -555,7 +555,7 @@ fn event_error(_: RuntimePullDeliveryErrorV1) -> KnowledgeCommandErrorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_knowledge_command_api::{
+    use makosh_knowledge_command_api::{
         KnowledgeCommandEnvelopeContextV1,
         build_create_knowledge_note_from_reviewed_candidate_outbox_record_v1,
         wire::KnowledgeTargetBoundCandidateReceiptV1,

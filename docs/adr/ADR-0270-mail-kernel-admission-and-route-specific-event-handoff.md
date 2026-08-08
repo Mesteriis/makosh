@@ -6,7 +6,7 @@
 gates реализованы. Generated Mail API и descriptor теперь имеют независимые
 `mail.sync.v1`, `mail.delivery.v1` и `mail.delivery.query.v1` routes,
 три provider-purpose credential capabilities, три route-specific event
-capabilities и один canonical module ID `hermes-mail-runtime` во всех
+capabilities и один canonical module ID `makosh-mail-runtime` во всех
 Mail-produced envelopes. Umbrella `mail.client` и `mail.events.v1` удалены из
 production code; assembly повторно доказала signed exact descriptor revision 2
 и settings schema revision 3.
@@ -74,7 +74,7 @@ password, хотя configuration instance использует только не
 подмножество.
 
 Attachment Blob-admission producer также обязан использовать exact admitted
-module identity `hermes-mail-runtime`; сокращённый `mail-runtime` создаёт
+module identity `makosh-mail-runtime`; сокращённый `mail-runtime` создаёт
 вторую identity и нарушает runtime/grant fencing.
 
 ## Решение
@@ -85,28 +85,28 @@ Production runtime owner:
 
 ```text
 owner_id  = mail
-module_id = hermes-mail-runtime
+module_id = makosh-mail-runtime
 ```
 
 Mail source unit:
 
 ```text
-hermes-mail-api
-hermes-mail-core
-hermes-mail-imap
-hermes-mail-gmail
-hermes-mail-smtp
-hermes-mail-persistence
-hermes-mail-runtime
+makosh-mail-api
+makosh-mail-core
+makosh-mail-imap
+makosh-mail-gmail
+makosh-mail-smtp
+makosh-mail-persistence
+makosh-mail-runtime
 ```
 
-`hermes-mail-assembly` является отдельной integration-owned build-time unit.
+`makosh-mail-assembly` является отдельной integration-owned build-time unit.
 Она создаёт unsigned release input, не запускается Kernel и не входит в
 runtime inventory или GrantSet.
 
 Communications остаётся отдельным domain owner. Единственная разрешённая
 integration → domain compile dependency — typed neutral contract
-`hermes-communications-ingress`. Ни один Mail package не импортирует
+`makosh-communications-ingress`. Ни один Mail package не импортирует
 Communications domain/persistence/runtime/API, а Communications не импортирует
 Mail packages.
 
@@ -137,9 +137,9 @@ Generated Mail Protobuf descriptor set предоставляет три нез�
 
 | Capability | Contract | Connect path | Responsibility |
 |---|---|---|---|
-| `mail.sync.v1` | `mail.sync.v1` | `/hermes.mail.v1.MailSyncService/Sync` | bounded inbound sync |
-| `mail.delivery.v1` | `mail.delivery.v1` | `/hermes.mail.v1.MailDeliveryCommandService/Send` | durable outbound acceptance |
-| `mail.delivery.query.v1` | `mail.delivery.query.v1` | `/hermes.mail.v1.MailDeliveryQueryService/GetOperationStatus` | Mail-owned terminal status |
+| `mail.sync.v1` | `mail.sync.v1` | `/makosh.mail.v1.MailSyncService/Sync` | bounded inbound sync |
+| `mail.delivery.v1` | `mail.delivery.v1` | `/makosh.mail.v1.MailDeliveryCommandService/Send` | durable outbound acceptance |
+| `mail.delivery.query.v1` | `mail.delivery.query.v1` | `/makosh.mail.v1.MailDeliveryQueryService/GetOperationStatus` | Mail-owned terminal status |
 
 Все contracts имеют `major = 1`, `revision = 2` и exact SHA-256 одного
 generated descriptor set. Общий digest не объединяет capabilities: route,
@@ -223,7 +223,7 @@ Communications CAS projection
 ```
 
 Во всех Mail-produced envelopes `source.module_id` равен
-`hermes-mail-runtime`. Causation, non-zero correlation, exact contract,
+`makosh-mail-runtime`. Causation, non-zero correlation, exact contract,
 runtime generation и grant epoch сохраняются. Kernel маршрутизирует и
 ограничивает transport, но не является business producer/consumer.
 
@@ -284,7 +284,7 @@ Clippy, architecture/SRP/Cargo boundaries и relevant live conformance.
 - explicit approved subset содержит только Blob, Events, Storage, IMAP
   credential и sync; delivery/Gmail/SMTP остаются без grant;
 - Mail Storage bundle и все runtime SQL используют owner-scoped
-  `hermes_data.mail_*`;
+  `makosh_data.mail_*`;
 - Mail получает IMAP credential только через exact Vault purpose
   `mail_imap_password` для своей configuration instance;
 - focused live test поднимает disposable PostgreSQL, PgBouncer, NATS и реальные
@@ -329,11 +329,11 @@ Clippy, architecture/SRP/Cargo boundaries и relevant live conformance.
 Проверки:
 
 ```text
-HERMES_STORAGE_MANAGED_TEST_FILTER=managed_mail_runtime_uses_kernel_leases_and_route_specific_admission node scripts/test-authenticated-storage.mjs 1.97.0
-cargo +1.97.0 test -p hermes-mail-api -p hermes-mail-imap -p hermes-mail-runtime -p hermes-mail-persistence
-cargo +1.97.0 test -p hermes-mail-api -p hermes-mail-imap --features conformance-test-support
-cargo +1.97.0 test -p hermes-kernel-recovery-testkit --no-run
-cargo +1.97.0 clippy -p hermes-mail-runtime -p hermes-mail-persistence -p hermes-kernel-recovery-testkit --all-targets -- -D warnings
+MAKOSH_STORAGE_MANAGED_TEST_FILTER=managed_mail_runtime_uses_kernel_leases_and_route_specific_admission node scripts/test-authenticated-storage.mjs 1.97.0
+cargo +1.97.0 test -p makosh-mail-api -p makosh-mail-imap -p makosh-mail-runtime -p makosh-mail-persistence
+cargo +1.97.0 test -p makosh-mail-api -p makosh-mail-imap --features conformance-test-support
+cargo +1.97.0 test -p makosh-kernel-recovery-testkit --no-run
+cargo +1.97.0 clippy -p makosh-mail-runtime -p makosh-mail-persistence -p makosh-kernel-recovery-testkit --all-targets -- -D warnings
 make -C backend architecture-policy-check srp-policy-check cargo-boundaries-check test-architecture
 ```
 
@@ -372,7 +372,7 @@ scanner verdict producer или frontend.
   `outcome_unknown` и не выполняет автоматический retry, исключая скрытую
   повторную отправку;
 - SMTP runtime получает только exact `mail_smtp_password` lease и выполняет
-  bounded implicit-TLS exchange через отдельный `hermes-mail-smtp` package;
+  bounded implicit-TLS exchange через отдельный `makosh-mail-smtp` package;
 - successful provider mutation и neutral Communications observation
   фиксируются атомарно в Mail state/outbox;
 - focused managed test останавливает NATS до command, получает durable
@@ -387,7 +387,7 @@ scanner verdict producer или frontend.
 Проверка:
 
 ```text
-HERMES_STORAGE_MANAGED_TEST_FILTER=managed_mail_runtime_accepts_then_completes_smtp_delivery_and_replays_event node scripts/test-authenticated-storage.mjs 1.97.0
+MAKOSH_STORAGE_MANAGED_TEST_FILTER=managed_mail_runtime_accepts_then_completes_smtp_delivery_and_replays_event node scripts/test-authenticated-storage.mjs 1.97.0
 ```
 
 Этот gate открывает только bounded plain-text SMTP delivery. Gmail delivery
@@ -401,7 +401,7 @@ HERMES_STORAGE_MANAGED_TEST_FILTER=managed_mail_runtime_accepts_then_completes_s
 - signed settings schema revision 3 содержит production-fixed
   `gmail.googleapis.com:443`; custom CA/loopback endpoint доступны только в
   conformance build;
-- `hermes-mail-gmail` выполняет bounded TLS/HTTP mutation и не зависит от Mail
+- `makosh-mail-gmail` выполняет bounded TLS/HTTP mutation и не зависит от Mail
   persistence/runtime, Communications, Kernel или Vault implementation;
 - command receipt возвращается после Mail-owned persistence, terminal provider
   result читается отдельно, а ambiguous HTTP outcome не retry-ится;
@@ -416,7 +416,7 @@ HERMES_STORAGE_MANAGED_TEST_FILTER=managed_mail_runtime_accepts_then_completes_s
 Проверка:
 
 ```text
-HERMES_STORAGE_MANAGED_TEST_FILTER=managed_mail_gmail_runtime_mutates_once_and_replays_event_without_private_payload node scripts/test-authenticated-storage.mjs 1.97.0
+MAKOSH_STORAGE_MANAGED_TEST_FILTER=managed_mail_gmail_runtime_mutates_once_and_replays_event_without_private_payload node scripts/test-authenticated-storage.mjs 1.97.0
 ```
 
 Gmail gate не открывает sync, IMAP, SMTP, Blob или attachment capabilities.

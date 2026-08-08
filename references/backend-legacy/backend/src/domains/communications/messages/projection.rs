@@ -4,7 +4,7 @@ use crate::domains::communications::storage::blob_store::LocalCommunicationBlobS
 use crate::platform::communications::email_sync::imap_mailbox_stream_id;
 use crate::platform::communications::rfc822::models::ParsedCommunicationSourceMessage;
 use crate::platform::communications::rfc822::parser::parse_rfc822_message;
-use hermes_communications_api::evidence::StoredRawCommunicationRecord;
+use makosh_communications_api::evidence::StoredRawCommunicationRecord;
 
 use super::errors::MessageProjectionError;
 use super::ids::message_id;

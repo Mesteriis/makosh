@@ -3,12 +3,12 @@ mod telegram_support;
 use std::env;
 
 use axum::http::StatusCode;
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use serde_json::json;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::platform::storage::database::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, delete_request_with_token, get_request_with_token, json_body,
     json_post_request_with_actor,
@@ -17,8 +17,8 @@ use telegram_support::{
 #[tokio::test]
 async fn telegram_qr_login_start_reports_tdlib_runtime_unavailable() {
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
-            .with_test_tdjson_path("/tmp/hermes-hub-test-missing-libtdjson.dylib"),
+        makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+            .with_test_tdjson_path("/tmp/makosh-test-missing-libtdjson.dylib"),
         Database::disabled(),
     );
 
@@ -48,8 +48,8 @@ async fn telegram_qr_login_start_reports_tdlib_runtime_unavailable() {
 #[tokio::test]
 async fn telegram_qr_login_start_uses_configured_app_credentials_when_payload_omits_them() {
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
-            .with_test_tdjson_path("/tmp/hermes-hub-test-missing-libtdjson.dylib")
+        makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+            .with_test_tdjson_path("/tmp/makosh-test-missing-libtdjson.dylib")
             .with_test_telegram_app_credentials(12345, "telegram-api-hash"),
         Database::disabled(),
     );
@@ -77,27 +77,27 @@ async fn telegram_qr_login_start_uses_configured_app_credentials_when_payload_om
 
 #[tokio::test]
 async fn telegram_live_smoke_syncs_configured_account_when_explicitly_enabled() {
-    if env::var("HERMES_TELEGRAM_LIVE_SMOKE").ok().as_deref() != Some("1") {
-        eprintln!("skipping live Telegram TDLib smoke test: HERMES_TELEGRAM_LIVE_SMOKE is not 1");
+    if env::var("MAKOSH_TELEGRAM_LIVE_SMOKE").ok().as_deref() != Some("1") {
+        eprintln!("skipping live Telegram TDLib smoke test: MAKOSH_TELEGRAM_LIVE_SMOKE is not 1");
         return;
     }
 
-    let account_id = env::var("HERMES_TELEGRAM_LIVE_ACCOUNT_ID")
-        .expect("HERMES_TELEGRAM_LIVE_ACCOUNT_ID must be set");
+    let account_id = env::var("MAKOSH_TELEGRAM_LIVE_ACCOUNT_ID")
+        .expect("MAKOSH_TELEGRAM_LIVE_ACCOUNT_ID must be set");
     let provider_chat_id =
-        env::var("HERMES_TELEGRAM_LIVE_CHAT_ID").expect("HERMES_TELEGRAM_LIVE_CHAT_ID must be set");
-    let tdjson_path = env::var("HERMES_TDJSON_PATH").expect("HERMES_TDJSON_PATH must be set");
-    let telegram_api_id = env::var("HERMES_TELEGRAM_API_ID")
-        .expect("HERMES_TELEGRAM_API_ID must be set")
+        env::var("MAKOSH_TELEGRAM_LIVE_CHAT_ID").expect("MAKOSH_TELEGRAM_LIVE_CHAT_ID must be set");
+    let tdjson_path = env::var("MAKOSH_TDJSON_PATH").expect("MAKOSH_TDJSON_PATH must be set");
+    let telegram_api_id = env::var("MAKOSH_TELEGRAM_API_ID")
+        .expect("MAKOSH_TELEGRAM_API_ID must be set")
         .parse::<i64>()
-        .expect("HERMES_TELEGRAM_API_ID must be a positive integer");
+        .expect("MAKOSH_TELEGRAM_API_ID must be a positive integer");
     let telegram_api_hash =
-        env::var("HERMES_TELEGRAM_API_HASH").expect("HERMES_TELEGRAM_API_HASH must be set");
+        env::var("MAKOSH_TELEGRAM_API_HASH").expect("MAKOSH_TELEGRAM_API_HASH must be set");
     let test_context = TestContext::new().await;
     let database_url = test_context.connection_string();
     let database = test_context.database();
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url,
         )
@@ -145,7 +145,7 @@ async fn telegram_live_smoke_syncs_configured_account_when_explicitly_enabled() 
 #[tokio::test]
 async fn telegram_qr_login_status_unknown_setup_returns_json_not_found() {
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
+        makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
         Database::disabled(),
     );
 
@@ -165,7 +165,7 @@ async fn telegram_qr_login_status_unknown_setup_returns_json_not_found() {
 #[tokio::test]
 async fn telegram_qr_login_password_unknown_setup_returns_json_not_found() {
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
+        makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
         Database::disabled(),
     );
 
@@ -186,7 +186,7 @@ async fn telegram_qr_login_password_unknown_setup_returns_json_not_found() {
 #[tokio::test]
 async fn telegram_qr_login_cancel_unknown_setup_returns_json_not_found() {
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
+        makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
         Database::disabled(),
     );
 

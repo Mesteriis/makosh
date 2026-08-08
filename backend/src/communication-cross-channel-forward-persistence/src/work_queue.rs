@@ -1,4 +1,4 @@
-use hermes_communication_cross_channel_forward_core::CrossChannelForwardStateV1;
+use makosh_communication_cross_channel_forward_core::CrossChannelForwardStateV1;
 use sqlx::Row;
 
 use crate::{
@@ -70,7 +70,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
         let row = sqlx::query(
             "WITH candidate AS (
                SELECT logical_owner_id, forward_id, state AS previous_state
-               FROM hermes_data.communication_cross_channel_forward_operations
+               FROM makosh_data.communication_cross_channel_forward_operations
                WHERE logical_owner_id = $1
                  AND state BETWEEN 1 AND 3
                  AND next_attempt_at_unix_millis <= $2
@@ -83,7 +83,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
                FOR UPDATE SKIP LOCKED
                LIMIT 1
              )
-             UPDATE hermes_data.communication_cross_channel_forward_operations AS operation
+             UPDATE makosh_data.communication_cross_channel_forward_operations AS operation
              SET state = CASE
                    WHEN operation.state = 1 THEN 2
                    ELSE operation.state
@@ -155,7 +155,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
         let body_length = i32::try_from(prepared_source.body_length)
             .map_err(|_| CrossChannelForwardPersistenceErrorV1::InvalidInput)?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_cross_channel_forward_operations
+            "UPDATE makosh_data.communication_cross_channel_forward_operations
              SET source_revision = $1, source_body_sha256 = $2,
                  source_body_length = $3, source_blob_reference = $4,
                  source_custody_proof = $5, attempt_count = 0,
@@ -207,7 +207,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
             .await
             .map_err(|_| CrossChannelForwardPersistenceErrorV1::StorageUnavailable)?;
         let row = sqlx::query(
-            "UPDATE hermes_data.communication_cross_channel_forward_operations
+            "UPDATE makosh_data.communication_cross_channel_forward_operations
              SET state = $1, state_revision = state_revision + 1,
                  updated_at_unix_millis = $2
              WHERE logical_owner_id = $3 AND forward_id = $4
@@ -308,7 +308,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
             return Err(CrossChannelForwardPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_cross_channel_forward_operations
+            "UPDATE makosh_data.communication_cross_channel_forward_operations
              SET attempt_count = LEAST(attempt_count + 1, 32),
                  next_attempt_at_unix_millis = $1,
                  claimed_by = NULL, lease_expires_at_unix_millis = NULL,
@@ -350,7 +350,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
             .map_err(|_| CrossChannelForwardPersistenceErrorV1::StorageUnavailable)?;
         if let Some(prepared_source) = &claim.prepared_source {
             sqlx::query(
-                "INSERT INTO hermes_data.communication_cross_channel_forward_cleanup (
+                "INSERT INTO makosh_data.communication_cross_channel_forward_cleanup (
                    logical_owner_id, forward_id, source_blob_reference,
                    source_custody_proof, reason, attempt_count,
                    next_attempt_at_unix_millis, created_at_unix_millis,
@@ -369,7 +369,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
             .map_err(|_| CrossChannelForwardPersistenceErrorV1::StorageUnavailable)?;
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_cross_channel_forward_operations
+            "UPDATE makosh_data.communication_cross_channel_forward_operations
              SET state = $1, state_revision = state_revision + 1,
                  delivery_intent_id = $2, error_code = $3,
                  source_blob_reference = NULL, source_custody_proof = NULL,

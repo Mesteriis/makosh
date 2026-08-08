@@ -53,7 +53,7 @@ receipt. Descriptor revision 2 отдельно материализует exact
 `communication_delivery_intent.command` dependency в Kernel Control Store,
 чтобы `request_rpc` не зависел от устаревшей нормализованной записи предыдущей
 descriptor revision. Scheduler materializes due commands с canonical module
-source `hermes-scheduler-runtime`, а не с private registration id: consumer
+source `makosh-scheduler-runtime`, а не с private registration id: consumer
 проверяет source как public runtime identity и не принимает Kernel-private
 registration identity за producer contract. Отдельная assembly unit
 материализует runtime binary, exact descriptor, settings schema и Storage
@@ -70,7 +70,7 @@ provider-neutral Delivery Intent request; provider execution остаётся
 ответственностью выбранной integration и не входит в этот workflow.
 
 Отдельная test-only assembly unit
-`hermes-communication-delayed-delivery-testkit` теперь запускается через
+`makosh-communication-delayed-delivery-testkit` теперь запускается через
 authenticated-storage runner на disposable PostgreSQL. Live conformance
 доказывает exact create idempotency и hash conflict, Scheduler result
 inbox duplicate/conflict, stale cancel revision, Scheduler-authoritative
@@ -176,15 +176,15 @@ module-to-Scheduler contract через event spine.
 сборки:
 
 ```text
-hermes-communication-delayed-delivery-api
-hermes-communication-delayed-delivery-core
-hermes-communication-delayed-delivery-persistence
-hermes-communication-delayed-delivery-execution
-hermes-communication-delayed-delivery-event-adapters
-hermes-communication-delayed-delivery-runtime-adapters
-hermes-communication-delayed-delivery-store-adapters
-hermes-communication-delayed-delivery-runtime
-hermes-communication-delayed-delivery-assembly
+makosh-communication-delayed-delivery-api
+makosh-communication-delayed-delivery-core
+makosh-communication-delayed-delivery-persistence
+makosh-communication-delayed-delivery-execution
+makosh-communication-delayed-delivery-event-adapters
+makosh-communication-delayed-delivery-runtime-adapters
+makosh-communication-delayed-delivery-store-adapters
+makosh-communication-delayed-delivery-runtime
+makosh-communication-delayed-delivery-assembly
 ```
 
 API содержит generated Schedule/Cancel/Status/realtime contracts. Core

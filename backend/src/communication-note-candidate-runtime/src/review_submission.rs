@@ -1,12 +1,12 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_note_candidate_core::CommunicationNoteCandidateV1;
-use hermes_communication_note_candidate_persistence::UnpublishedCommunicationNoteCandidateEventV1;
-use hermes_review_note_candidate_api::{
+use makosh_communication_note_candidate_core::CommunicationNoteCandidateV1;
+use makosh_communication_note_candidate_persistence::UnpublishedCommunicationNoteCandidateEventV1;
+use makosh_review_note_candidate_api::{
     ReviewNoteCandidateEnvelopeContextV1, build_submit_review_note_candidate_outbox_record_v1,
     wire::SubmitNoteCandidateForReviewCommandV1,
 };
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
 use sha2::{Digest, Sha256};
@@ -90,7 +90,7 @@ pub(crate) fn prepare_review_submissions_v1(
 
 fn submission_id(logical_owner_id: &str, candidate: &CommunicationNoteCandidateV1) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communication_note_candidate.review-submission.v1\0");
+    digest.update(b"makosh.communication_note_candidate.review-submission.v1\0");
     digest.update(logical_owner_id.as_bytes());
     digest.update([0]);
     digest.update(candidate.candidate_id);
@@ -103,7 +103,7 @@ fn submission_id(logical_owner_id: &str, candidate: &CommunicationNoteCandidateV
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_communication_note_candidate_core::{
+    use makosh_communication_note_candidate_core::{
         CommunicationNoteSourceBasisV1, CommunicationNoteTopicHintV1,
     };
 

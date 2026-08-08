@@ -2,14 +2,14 @@
 
 use std::path::Path;
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     RestartSchedulerRuntimeRequestV1, RestartSchedulerRuntimeResponseV1,
     StartReservedSchedulerRuntimeRequestV1, StartReservedSchedulerRuntimeResponseV1,
     UpsertSchedulerScheduleRequestV1, UpsertSchedulerScheduleResponseV1,
 };
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     v1::{SchedulerRuntimeControlRequestV1, SchedulerRuntimeControlResponseV1},
     validation::scheduler::{
         validate_scheduler_runtime_control_request, validate_scheduler_runtime_control_response,
@@ -107,7 +107,7 @@ pub(super) fn upsert(
         let expected_schedule_revision = schedule.schedule_revision;
         let control = SchedulerRuntimeControlRequestV1 {
             operation: Some(
-                hermes_runtime_protocol::v1::scheduler_runtime_control_request_v1::Operation::UpsertSchedule(schedule.clone()),
+                makosh_runtime_protocol::v1::scheduler_runtime_control_request_v1::Operation::UpsertSchedule(schedule.clone()),
             ),
         };
         validate_scheduler_runtime_control_request(&control)
@@ -147,7 +147,7 @@ fn active_storage_binding(
     store: &SqliteControlStore,
     registration_id: &str,
     storage_capability_id: &str,
-) -> Result<hermes_kernel_control_store::PlatformStorageBindingV1, String> {
+) -> Result<makosh_kernel_control_store::PlatformStorageBindingV1, String> {
     store
         .platform_storage_binding(registration_id, storage_capability_id)
         .map_err(|_| "Scheduler Storage binding is unavailable".to_owned())?
@@ -160,7 +160,7 @@ fn start_from_reservation(
     store: &SqliteControlStore,
     runtime_dir: &Path,
     reservation: managed_launch::ManagedLaunchReservation,
-    binding: &hermes_kernel_control_store::PlatformStorageBindingV1,
+    binding: &makosh_kernel_control_store::PlatformStorageBindingV1,
 ) -> Result<u64, String> {
     let kernel =
         std::env::current_exe().map_err(|_| "Kernel executable path is unavailable".to_owned())?;
@@ -177,11 +177,11 @@ fn start_from_reservation(
 fn scheduler_upsert_response(
     scheduler_registration_id: String,
     expected_schedule_revision: u64,
-    result: Option<hermes_runtime_protocol::v1::scheduler_runtime_control_response_v1::Result>,
+    result: Option<makosh_runtime_protocol::v1::scheduler_runtime_control_response_v1::Result>,
 ) -> Result<UpsertSchedulerScheduleResponseV1, String> {
     match result {
         Some(
-            hermes_runtime_protocol::v1::scheduler_runtime_control_response_v1::Result::UpsertSchedule(schedule),
+            makosh_runtime_protocol::v1::scheduler_runtime_control_response_v1::Result::UpsertSchedule(schedule),
         ) if schedule.schedule_revision == expected_schedule_revision => Ok(
             UpsertSchedulerScheduleResponseV1 {
                 scheduler_registration_id,
@@ -189,7 +189,7 @@ fn scheduler_upsert_response(
             },
         ),
         Some(
-            hermes_runtime_protocol::v1::scheduler_runtime_control_response_v1::Result::UpsertSchedule(_),
+            makosh_runtime_protocol::v1::scheduler_runtime_control_response_v1::Result::UpsertSchedule(_),
         ) => Err("Scheduler control response is unavailable".to_owned()),
         _ => Err("Scheduler schedule was not accepted".to_owned()),
     }

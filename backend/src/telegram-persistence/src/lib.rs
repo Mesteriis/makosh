@@ -27,4 +27,4 @@ pub use schema::{
     telegram_delivery_route_storage_migration_v1, telegram_storage_bundle_v1,
 };
 
-pub const PACKAGE: &str = "hermes-telegram-persistence";
+pub const PACKAGE: &str = "makosh-telegram-persistence";

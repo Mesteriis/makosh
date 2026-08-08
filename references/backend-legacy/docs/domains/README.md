@@ -1,8 +1,8 @@
-# Hermes Domain Catalog
+# Макошь Domain Catalog
 
 Status: documentation package aligned to the current repository structure.
 
-This catalog is the canonical entry point for active Hermes domains. It should
+This catalog is the canonical entry point for active Макошь domains. It should
 be read together with:
 
 - [Product Master Spec](../product/master-spec.md)
@@ -10,13 +10,13 @@ be read together with:
 - [Glossary](../foundation/glossary.md)
 - [Domain Map](../foundation/domain-map.md)
 
-Hermes is a local-first Personal Memory System. Domains own source-of-truth
+Макошь is a local-first Personal Memory System. Domains own source-of-truth
 entities. Engines build derived memory, context, scores, timelines and
 recommendations from those entities.
 
 ## Domain Rule
 
-A domain exists when Hermes needs a durable source of truth for an entity type.
+A domain exists when Макошь needs a durable source of truth for an entity type.
 A domain does not exist merely because the UI has a page or because an engine
 needs a projection.
 
@@ -59,14 +59,14 @@ Do not create empty placeholder files just to fill the shape.
 ## Channel And Provider Capability Specs
 
 Channel and provider capability specs document provider-specific behavior
-without promoting a provider into a standalone Hermes domain.
+without promoting a provider into a standalone Макошь domain.
 
 | Provider | Spec | Status |
 |---|---|---|
 | Telegram | [Telegram Channel Capability Spec](../integrations/telegram/README.md) | target production capability matrix with current implementation baseline |
 | Mail | [Email Channel Capability Spec](../integrations/mail/README.md) | implemented email channel framing and current API/status docs |
-| WhatsApp | [WhatsApp Provider Stage](../integrations/whatsapp/README.md) | provider/runtime capability docs; not a Hermes domain |
-| Zoom | [Zoom Provider Stage](../integrations/zoom/README.md) | provider foundation implemented; not a Hermes domain |
+| WhatsApp | [WhatsApp Provider Stage](../integrations/whatsapp/README.md) | provider/runtime capability docs; not a Макошь domain |
+| Zoom | [Zoom Provider Stage](../integrations/zoom/README.md) | provider foundation implemented; not a Макошь domain |
 
 ## Engine Documents
 

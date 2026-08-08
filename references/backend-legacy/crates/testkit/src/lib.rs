@@ -1,4 +1,4 @@
-//! Backend-specific test infrastructure for Hermes Hub.
+//! Backend-specific test infrastructure for Макошь.
 //!
 //! Provides programmatic container management, isolated test databases,
 //! and entity factories for integration testing.
@@ -6,8 +6,8 @@
 //! # Usage
 //!
 //! ```ignore
-//! use hermes_backend_testkit::context::TestContext;
-//! use hermes_backend_testkit::factories::task::TaskFactory;
+//! use makosh_backend_testkit::context::TestContext;
+//! use makosh_backend_testkit::factories::task::TaskFactory;
 //!
 //! #[tokio::test]
 //! async fn my_integration_test() {

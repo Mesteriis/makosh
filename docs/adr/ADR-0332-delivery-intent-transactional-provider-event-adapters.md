@@ -33,7 +33,7 @@ integration-envelope inbox record, иначе crash между mutation и Ack �
 Вводится отдельная workflow build unit:
 
 ```text
-hermes-communication-delivery-intent-event-adapters
+makosh-communication-delivery-intent-event-adapters
 ```
 
 Она имеет `role = "workflow"`, owner

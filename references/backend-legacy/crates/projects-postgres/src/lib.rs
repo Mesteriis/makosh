@@ -1,5 +1,5 @@
 use chrono::{DateTime, NaiveDate, Utc};
-use hermes_projects_api::{
+use makosh_projects_api::{
     Project, ProjectCandidateReadPort, ProjectCandidatesFuture, ProjectDetail, ProjectDetailFuture,
     ProjectDocumentSummary, ProjectDocumentsFuture, ProjectGraphReadPort, ProjectLinkCandidate,
     ProjectLinkReviewState, ProjectListFuture, ProjectListResponse, ProjectMatchedDocument,

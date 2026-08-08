@@ -9,7 +9,7 @@ use super::super::models::settings::MailSyncSettings;
 use super::super::rows::row_to_run;
 use super::super::validation::{mail_sync_run_id, validate_account_id};
 use super::MailSyncStore;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 impl MailSyncStore {
     pub(in crate::workflows::mail_background_sync) async fn start_run(

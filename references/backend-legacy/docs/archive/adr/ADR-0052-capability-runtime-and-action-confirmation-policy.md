@@ -16,7 +16,7 @@ Rules:
 
 - Capability checks are centralized in the backend application boundary before privileged reads, local writes, provider writes, destructive actions, exports, secret resolution, automation execution or plugin tool calls.
 - UI, agent and plugin clients may present intent, but they do not authorize their own actions.
-- The temporary `Authorization: Bearer <HERMES_LOCAL_API_TOKEN>` and `X-Hermes-Actor-Id` headers remain valid only as local-development and desktop bootstrap guards until the capability runtime replaces them with authenticated actor and capability identifiers.
+- The temporary `Authorization: Bearer <MAKOSH_LOCAL_API_TOKEN>` and `X-Макошь-Actor-Id` headers remain valid only as local-development and desktop bootstrap guards until the capability runtime replaces them with authenticated actor and capability identifiers.
 - Capability decisions classify requested actions as `read`, `local_write`, `provider_write`, `destructive`, `export`, `secret_access` or `automation`.
 - Capability grants are scoped. Scopes may include actor, provider account, channel/chat/thread, project, document, data class, command, template, automation policy, time window, rate limit and expiry.
 - Message sends, provider mutations, deletes, destructive local changes, sensitive exports and direct secret access require explicit confirmation unless an enabled scoped automation policy authorizes the action.

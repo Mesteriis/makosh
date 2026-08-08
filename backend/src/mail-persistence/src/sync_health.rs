@@ -1,6 +1,6 @@
 //! Mail-owned restart-safe sync run journal and bounded health queries.
 
-use hermes_mail_api::sync_health::{
+use makosh_mail_api::sync_health::{
     MailSyncFailureCodeV1, MailSyncHealthQueryResponseV1, MailSyncHealthQueryV1, MailSyncOutcomeV1,
     MailSyncProviderPathReadinessV1, MailSyncRunPageV1, MailSyncRunV1, MailSyncStatusV1,
     MailSyncTriggerV1, validate_sync_health_query, validate_sync_run,
@@ -11,7 +11,7 @@ use sqlx::{Postgres, Row, Transaction, postgres::PgRow};
 use crate::{MailDurablePersistence, MailDurablePersistenceError};
 
 pub const MAIL_SCHEMA_V10: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.mail_sync_runs (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_sync_runs (
     operation_id TEXT PRIMARY KEY,
     connection_id TEXT NOT NULL,
     trigger SMALLINT NOT NULL,
@@ -41,12 +41,12 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_sync_runs (
     )
 );
 CREATE UNIQUE INDEX IF NOT EXISTS mail_sync_runs_one_current_per_connection_idx
-    ON hermes_data.mail_sync_runs (connection_id)
+    ON makosh_data.mail_sync_runs (connection_id)
     WHERE outcome = 1;
 CREATE INDEX IF NOT EXISTS mail_sync_runs_cursor_idx
-    ON hermes_data.mail_sync_runs
+    ON makosh_data.mail_sync_runs
     (connection_id, started_at_unix_seconds DESC, cursor_sequence DESC);
-CREATE TABLE IF NOT EXISTS hermes_data.mail_sync_status (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_sync_status (
     connection_id TEXT PRIMARY KEY,
     latest_operation_id TEXT NOT NULL,
     consecutive_failures BIGINT NOT NULL DEFAULT 0,
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_sync_status (
     projection_revision BIGINT NOT NULL DEFAULT 1,
     updated_at_unix_seconds BIGINT NOT NULL,
     FOREIGN KEY (connection_id, latest_operation_id)
-        REFERENCES hermes_data.mail_sync_runs (connection_id, operation_id)
+        REFERENCES makosh_data.mail_sync_runs (connection_id, operation_id)
         ON DELETE RESTRICT,
     CHECK (connection_id <> ''),
     CHECK (latest_operation_id <> ''),
@@ -110,7 +110,7 @@ impl MailDurablePersistence {
             };
         }
         let current = sqlx::query(
-            "SELECT operation_id FROM hermes_data.mail_sync_runs
+            "SELECT operation_id FROM makosh_data.mail_sync_runs
              WHERE connection_id = $1 AND outcome = 1 FOR UPDATE",
         )
         .bind(connection_id)
@@ -121,7 +121,7 @@ impl MailDurablePersistence {
             return Err(MailDurablePersistenceError::SyncRunInProgress);
         }
         sqlx::query(
-            "INSERT INTO hermes_data.mail_sync_runs
+            "INSERT INTO makosh_data.mail_sync_runs
              (operation_id, connection_id, trigger, outcome, observed_messages,
               started_at_unix_seconds, runtime_generation, projection_revision)
              VALUES ($1, $2, $3, 1, 0, $4, $5, 1)",
@@ -138,12 +138,12 @@ impl MailDurablePersistence {
         .await
         .map_err(map_begin_error)?;
         sqlx::query(
-            "INSERT INTO hermes_data.mail_sync_status
+            "INSERT INTO makosh_data.mail_sync_status
              (connection_id, latest_operation_id, updated_at_unix_seconds)
              VALUES ($1, $2, $3)
              ON CONFLICT (connection_id) DO UPDATE
              SET latest_operation_id = EXCLUDED.latest_operation_id,
-                 projection_revision = hermes_data.mail_sync_status.projection_revision + 1,
+                 projection_revision = makosh_data.mail_sync_status.projection_revision + 1,
                  updated_at_unix_seconds = EXCLUDED.updated_at_unix_seconds",
         )
         .bind(connection_id)
@@ -202,7 +202,7 @@ impl MailDurablePersistence {
         };
         validate_sync_run(&completed).map_err(|_| MailDurablePersistenceError::InvalidRow)?;
         sqlx::query(
-            "UPDATE hermes_data.mail_sync_runs
+            "UPDATE makosh_data.mail_sync_runs
              SET outcome = $2, observed_messages = $3, completed_at_unix_seconds = $4,
                  failure_code = $5, deadline_exceeded = $6,
                  projection_revision = projection_revision + 1
@@ -247,7 +247,7 @@ impl MailDurablePersistence {
             .await
             .map_err(|_| MailDurablePersistenceError::Database)?;
         let rows = sqlx::query(
-            "UPDATE hermes_data.mail_sync_runs
+            "UPDATE makosh_data.mail_sync_runs
              SET outcome = 4,
                  completed_at_unix_seconds = GREATEST(started_at_unix_seconds, $2),
                  failure_code = 9,
@@ -265,7 +265,7 @@ impl MailDurablePersistence {
                 .try_get("connection_id")
                 .map_err(|_| MailDurablePersistenceError::InvalidRow)?;
             sqlx::query(
-                "UPDATE hermes_data.mail_sync_status
+                "UPDATE makosh_data.mail_sync_status
                  SET consecutive_failures = consecutive_failures + 1,
                      projection_revision = projection_revision + 1,
                      updated_at_unix_seconds = GREATEST(updated_at_unix_seconds, $2)
@@ -322,7 +322,7 @@ impl MailDurablePersistence {
             "SELECT operation_id, connection_id, trigger, outcome, observed_messages,
                     started_at_unix_seconds, completed_at_unix_seconds, failure_code,
                     deadline_exceeded, runtime_generation, projection_revision
-             FROM hermes_data.mail_sync_runs
+             FROM makosh_data.mail_sync_runs
              WHERE connection_id = $1 AND operation_id = $2",
         )
         .bind(connection_id)
@@ -350,7 +350,7 @@ impl MailDurablePersistence {
                 "SELECT operation_id, connection_id, trigger, outcome, observed_messages,
                         started_at_unix_seconds, completed_at_unix_seconds, failure_code,
                         deadline_exceeded, runtime_generation, projection_revision, cursor_sequence
-                 FROM hermes_data.mail_sync_runs
+                 FROM makosh_data.mail_sync_runs
                  WHERE connection_id = $1
                    AND (started_at_unix_seconds, cursor_sequence) < ($2, $3)
                  ORDER BY started_at_unix_seconds DESC, cursor_sequence DESC
@@ -367,7 +367,7 @@ impl MailDurablePersistence {
                 "SELECT operation_id, connection_id, trigger, outcome, observed_messages,
                         started_at_unix_seconds, completed_at_unix_seconds, failure_code,
                         deadline_exceeded, runtime_generation, projection_revision, cursor_sequence
-                 FROM hermes_data.mail_sync_runs
+                 FROM makosh_data.mail_sync_runs
                  WHERE connection_id = $1
                  ORDER BY started_at_unix_seconds DESC, cursor_sequence DESC
                  LIMIT $2",
@@ -411,7 +411,7 @@ impl MailDurablePersistence {
         let row = sqlx::query(
             "SELECT latest_operation_id, consecutive_failures,
                     last_success_at_unix_seconds, projection_revision
-             FROM hermes_data.mail_sync_status WHERE connection_id = $1",
+             FROM makosh_data.mail_sync_status WHERE connection_id = $1",
         )
         .bind(connection_id)
         .fetch_optional(&self.pool)
@@ -462,7 +462,7 @@ async fn update_status_after_completion(
 ) -> Result<(), MailDurablePersistenceError> {
     let result = if run.outcome == MailSyncOutcomeV1::Succeeded {
         sqlx::query(
-            "UPDATE hermes_data.mail_sync_status
+            "UPDATE makosh_data.mail_sync_status
              SET consecutive_failures = 0,
                  last_success_at_unix_seconds = $2,
                  projection_revision = projection_revision + 1,
@@ -475,7 +475,7 @@ async fn update_status_after_completion(
         .await
     } else {
         sqlx::query(
-            "UPDATE hermes_data.mail_sync_status
+            "UPDATE makosh_data.mail_sync_status
              SET consecutive_failures = consecutive_failures + 1,
                  projection_revision = projection_revision + 1,
                  updated_at_unix_seconds = $2
@@ -499,7 +499,7 @@ async fn sync_run_for_update(
         "SELECT operation_id, connection_id, trigger, outcome, observed_messages,
                 started_at_unix_seconds, completed_at_unix_seconds, failure_code,
                 deadline_exceeded, runtime_generation, projection_revision
-         FROM hermes_data.mail_sync_runs WHERE operation_id = $1 FOR UPDATE",
+         FROM makosh_data.mail_sync_runs WHERE operation_id = $1 FOR UPDATE",
     )
     .bind(operation_id)
     .fetch_optional(&mut **transaction)
@@ -716,8 +716,8 @@ mod tests {
 
     #[test]
     fn schema_is_mail_owned_and_has_exact_current_run_guard() {
-        assert!(MAIL_SCHEMA_V10.contains("hermes_data.mail_sync_runs"));
-        assert!(MAIL_SCHEMA_V10.contains("hermes_data.mail_sync_status"));
+        assert!(MAIL_SCHEMA_V10.contains("makosh_data.mail_sync_runs"));
+        assert!(MAIL_SCHEMA_V10.contains("makosh_data.mail_sync_status"));
         assert!(MAIL_SCHEMA_V10.contains("WHERE outcome = 1"));
         assert!(!MAIL_SCHEMA_V10.contains("communications"));
         assert!(!MAIL_SCHEMA_V10.contains("scheduler"));

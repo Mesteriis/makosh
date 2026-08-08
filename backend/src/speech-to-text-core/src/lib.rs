@@ -8,7 +8,7 @@ pub use lifecycle::{
     validate_speech_to_text_run_v1,
 };
 
-pub const PACKAGE: &str = "hermes-speech-to-text-core";
+pub const PACKAGE: &str = "makosh-speech-to-text-core";
 pub const SPEECH_TO_TEXT_MAX_AUDIO_BYTES_V1: u64 = 512 * 1024 * 1024;
 pub const SPEECH_TO_TEXT_MAX_DURATION_MILLIS_V1: u64 = 4 * 60 * 60 * 1_000;
 pub const SPEECH_TO_TEXT_MAX_TRANSCRIPT_BYTES_V1: u32 = 4 * 1024 * 1024;

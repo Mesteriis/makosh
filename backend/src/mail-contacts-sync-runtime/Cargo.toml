@@ -1,5 +1,5 @@
 [package]
-name = "hermes-mail-contacts-sync-runtime"
+name = "makosh-mail-contacts-sync-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,27 +8,27 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-mail-contacts-sync-runtime"
+name = "makosh-mail-contacts-sync-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "mail_contacts_sync"
 surface = "runtime"
 
 [dependencies]
-hermes-contacts-command-api = { path = "../contacts-command-api" }
-hermes-contacts-mail-sync-source-api = { path = "../contacts-mail-sync-source-api" }
-hermes-events-jetstream = { path = "../platform/events/jetstream" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-mail-address-book-contract = { path = "../mail-address-book-contract" }
-hermes-mail-contacts-sync-api = { path = "../mail-contacts-sync-api" }
-hermes-mail-contacts-sync-core = { path = "../mail-contacts-sync-core" }
-hermes-mail-contacts-sync-persistence = { path = "../mail-contacts-sync-persistence" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-scheduler-protocol = { path = "../platform/scheduler/protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
+makosh-contacts-command-api = { path = "../contacts-command-api" }
+makosh-contacts-mail-sync-source-api = { path = "../contacts-mail-sync-source-api" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-mail-address-book-contract = { path = "../mail-address-book-contract" }
+makosh-mail-contacts-sync-api = { path = "../mail-contacts-sync-api" }
+makosh-mail-contacts-sync-core = { path = "../mail-contacts-sync-core" }
+makosh-mail-contacts-sync-persistence = { path = "../mail-contacts-sync-persistence" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-scheduler-protocol = { path = "../platform/scheduler/protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 prost-types = "=0.14.4"

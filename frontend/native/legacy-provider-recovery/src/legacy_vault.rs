@@ -143,7 +143,7 @@ fn derive_domain_key(
 ) -> LegacyProviderRecoveryResultV1<Zeroizing<[u8; MASTER_KEY_BYTES]>> {
     let hkdf = Hkdf::<Sha256>::new(None, master_key);
     let mut key = Zeroizing::new([0_u8; MASTER_KEY_BYTES]);
-    let mut info = b"hermes-host-vault:v1:".to_vec();
+    let mut info = b"makosh-host-vault:v1:".to_vec();
     info.extend_from_slice(label);
     hkdf.expand(&info, key.as_mut())
         .map_err(|_| LegacyProviderRecoveryErrorV1::CryptographyUnavailable)?;

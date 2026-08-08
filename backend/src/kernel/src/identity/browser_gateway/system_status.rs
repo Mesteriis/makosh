@@ -1,8 +1,8 @@
-use hermes_gateway_session_contract::{
+use makosh_gateway_session_contract::{
     ClientSystemComponentIdV1, ClientSystemComponentStateV1,
     ClientSystemComponentStatusProjectionV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use crate::platform::{
     blob::status as blob_status, events::authority::status as events_status,
@@ -139,7 +139,7 @@ fn derived_platform_status(
 
 #[cfg(test)]
 mod tests {
-    use hermes_gateway_session_contract::{
+    use makosh_gateway_session_contract::{
         ClientSystemComponentIdV1, ClientSystemComponentStateV1,
     };
 

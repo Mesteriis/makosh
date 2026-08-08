@@ -1,9 +1,9 @@
-use hermes_communications_api::{
+use makosh_communications_api::{
     CanonicalCommunicationEvidenceKindV1, CommunicationBodyStateV1, CommunicationDirectionV1,
     CommunicationObservationIdV1, CommunicationProviderProvenanceV1, CommunicationSourceCursorV1,
     CommunicationsClientError, RecordCommunicationEvidenceV1,
 };
-use hermes_communications_domain::{
+use makosh_communications_domain::{
     CommunicationsDomainError, accept_command, canonicalize_communication,
     convert_client_query_error,
 };

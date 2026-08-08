@@ -1,9 +1,9 @@
 //! Typed private host-bridge port for WhatsApp observations and command leases.
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
-use hermes_whatsapp_api::{
+use makosh_whatsapp_api::{
     client_contract::{WHATSAPP_DESCRIPTOR_SET_V1, WHATSAPP_MODULE_ID, WHATSAPP_OWNER_ID},
     host_bridge::{
         HOST_BRIDGE_CONTRACT_MAJOR, HOST_BRIDGE_CONTRACT_NAME, HOST_BRIDGE_CONTRACT_REVISION,
@@ -96,7 +96,7 @@ fn client_contract() -> ContractReferenceV1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_whatsapp_api::host_bridge::{
+    use makosh_whatsapp_api::host_bridge::{
         HOST_BRIDGE_PROTOCOL_MAJOR, HOST_BRIDGE_PROTOCOL_REVISION, WhatsAppHostBridgeEnvelopeV1,
         WhatsAppHostCommandClaimV1, WhatsAppHostObservationV1, encode_host_bridge_payload,
         encode_host_command_claim,

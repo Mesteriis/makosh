@@ -1,4 +1,4 @@
-use hermes_mail_address_book_contract::{
+use makosh_mail_address_book_contract::{
     MAIL_RUNTIME_MODULE_ID_V1, MailAddressBookEnvelopeContextV1,
     MailAddressBookResultEnvelopeContextV1, build_mail_address_book_entry_observed_v1,
     build_mail_address_book_page_completed_result_v1,
@@ -7,18 +7,18 @@ use hermes_mail_address_book_contract::{
         MailAddressBookProviderKindV1,
     },
 };
-use hermes_mail_address_book_persistence::{
+use makosh_mail_address_book_persistence::{
     MailAddressBookCommandInboxOutcomeV1, MailAddressBookDispatchOutcomeV1,
     MailAddressBookFetchAdmissionV1, MailAddressBookFetchInboxOutcomeV1,
     MailAddressBookFetchStoreOutcomeV1, MailAddressBookPersistenceConformanceV1,
     MailAddressBookPersistenceErrorV1, MailAddressBookSnapshotCustodyOutcomeV1,
     MailAddressBookTargetSnapshotReceiptV1, MailAddressBookUpsertAdmissionV1,
 };
-use hermes_mail_contacts_sync_core::{
+use makosh_mail_contacts_sync_core::{
     MailContactsSyncDirectionV1, MailContactsSyncDraftV1, MailContactsSyncStateV1,
     MailContactsSyncTriggerV1,
 };
-use hermes_mail_contacts_sync_persistence::{
+use makosh_mail_contacts_sync_persistence::{
     AcceptContactChangedForMailSyncOutcomeV1, AcceptContactChangedForMailSyncV1,
     AcceptScheduledMailContactsSyncDueOutcomeV1, AcceptScheduledMailContactsSyncDueV1,
     AdvanceMailContactsSyncPageV1, CompleteContactMailSyncSourceOutcomeV1,
@@ -38,8 +38,8 @@ use sha2::{Digest, Sha256};
 #[tokio::test]
 #[ignore = "requires the disposable authenticated PostgreSQL contour"]
 async fn address_book_provider_page_is_atomic_replayable_and_conflict_checked() {
-    let database_url = std::env::var("HERMES_MAIL_CONTACTS_SYNC_POSTGRES_URL")
-        .expect("HERMES_MAIL_CONTACTS_SYNC_POSTGRES_URL");
+    let database_url = std::env::var("MAKOSH_MAIL_CONTACTS_SYNC_POSTGRES_URL")
+        .expect("MAKOSH_MAIL_CONTACTS_SYNC_POSTGRES_URL");
     let persistence = MailAddressBookPersistenceConformanceV1::connect_url(&database_url)
         .await
         .expect("connect Mail address-book persistence");
@@ -165,8 +165,8 @@ async fn address_book_provider_page_is_atomic_replayable_and_conflict_checked() 
 #[tokio::test]
 #[ignore = "requires the disposable authenticated PostgreSQL contour"]
 async fn postgres_is_atomic_replayable_and_sse_replayable() {
-    let database_url = std::env::var("HERMES_MAIL_CONTACTS_SYNC_POSTGRES_URL")
-        .expect("HERMES_MAIL_CONTACTS_SYNC_POSTGRES_URL");
+    let database_url = std::env::var("MAKOSH_MAIL_CONTACTS_SYNC_POSTGRES_URL")
+        .expect("MAKOSH_MAIL_CONTACTS_SYNC_POSTGRES_URL");
     let persistence = MailContactsSyncPersistenceConformanceV1::connect_url(&database_url)
         .await
         .expect("connect workflow persistence");
@@ -540,8 +540,8 @@ async fn postgres_is_atomic_replayable_and_sse_replayable() {
 #[tokio::test]
 #[ignore = "requires the disposable authenticated PostgreSQL contour"]
 async fn address_book_target_custody_is_restart_safe_and_conflict_checked() {
-    let database_url = std::env::var("HERMES_MAIL_CONTACTS_SYNC_POSTGRES_URL")
-        .expect("HERMES_MAIL_CONTACTS_SYNC_POSTGRES_URL");
+    let database_url = std::env::var("MAKOSH_MAIL_CONTACTS_SYNC_POSTGRES_URL")
+        .expect("MAKOSH_MAIL_CONTACTS_SYNC_POSTGRES_URL");
     let persistence = MailAddressBookPersistenceConformanceV1::connect_url(&database_url)
         .await
         .expect("connect Mail address-book persistence");
@@ -633,8 +633,8 @@ async fn address_book_target_custody_is_restart_safe_and_conflict_checked() {
 #[tokio::test]
 #[ignore = "requires the disposable authenticated PostgreSQL contour"]
 async fn reverse_provider_result_is_atomic_restart_safe_and_replayable() {
-    let database_url = std::env::var("HERMES_MAIL_CONTACTS_SYNC_POSTGRES_URL")
-        .expect("HERMES_MAIL_CONTACTS_SYNC_POSTGRES_URL");
+    let database_url = std::env::var("MAKOSH_MAIL_CONTACTS_SYNC_POSTGRES_URL")
+        .expect("MAKOSH_MAIL_CONTACTS_SYNC_POSTGRES_URL");
     let persistence = MailContactsSyncPersistenceConformanceV1::connect_url(&database_url)
         .await
         .expect("connect workflow persistence");

@@ -1,5 +1,5 @@
 use chrono::Utc;
-use hermes_communications_api::accounts::ProviderAccountMutationOrigin;
+use makosh_communications_api::accounts::ProviderAccountMutationOrigin;
 use serde_json::json;
 
 use super::super::errors::TelegramError;

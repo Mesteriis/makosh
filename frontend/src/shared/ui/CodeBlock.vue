@@ -15,10 +15,10 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-code-block',
+	'makosh-code-block',
 	{
-		'hermes-code-block--wrap': props.wrap,
-		'hermes-code-block--line-numbers': props.showLineNumbers
+		'makosh-code-block--wrap': props.wrap,
+		'makosh-code-block--line-numbers': props.showLineNumbers
 	},
 	props.class
 ])
@@ -27,15 +27,15 @@ const lines = computed(() => props.code.split('\n'))
 
 <template>
 	<figure :class="classes">
-		<figcaption v-if="label || language" class="hermes-code-block__caption">
+		<figcaption v-if="label || language" class="makosh-code-block__caption">
 			<span v-if="label">{{ label }}</span>
-			<span class="hermes-code-block__language">{{ language }}</span>
+			<span class="makosh-code-block__language">{{ language }}</span>
 		</figcaption>
-		<pre class="hermes-code-block__pre" tabindex="0" :aria-label="label || language"><code><template v-if="showLineNumbers"><span
+		<pre class="makosh-code-block__pre" tabindex="0" :aria-label="label || language"><code><template v-if="showLineNumbers"><span
 			v-for="(line, index) in lines"
 			:key="`${index}-${line}`"
-			class="hermes-code-block__line"
-		><span class="hermes-code-block__line-number">{{ index + 1 }}</span><span class="hermes-code-block__line-code">{{ line }}</span>
+			class="makosh-code-block__line"
+		><span class="makosh-code-block__line-number">{{ index + 1 }}</span><span class="makosh-code-block__line-code">{{ line }}</span>
 </span></template><template v-else>{{ code }}</template></code></pre>
 	</figure>
 </template>

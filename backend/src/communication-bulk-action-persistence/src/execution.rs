@@ -61,7 +61,7 @@ impl CommunicationBulkActionPersistenceV1 {
 
         let exhausted_batches = sqlx::query(
             "WITH exhausted AS (
-               UPDATE hermes_data.communication_bulk_action_targets
+               UPDATE makosh_data.communication_bulk_action_targets
                SET state = $1, error_code = $2, claimed_by = NULL,
                    lease_expires_at_unix_seconds = NULL,
                    updated_at_unix_seconds = $3
@@ -72,7 +72,7 @@ impl CommunicationBulkActionPersistenceV1 {
              ), changed_batches AS (
                SELECT DISTINCT logical_owner_id, batch_id FROM exhausted
              )
-             UPDATE hermes_data.communication_bulk_action_batches AS batches
+             UPDATE makosh_data.communication_bulk_action_batches AS batches
              SET state_revision = state_revision + 1,
                  updated_at_unix_seconds = $3
              FROM changed_batches
@@ -103,7 +103,7 @@ impl CommunicationBulkActionPersistenceV1 {
         let row = sqlx::query(
             "WITH candidate AS (
                SELECT logical_owner_id, batch_id, target_operation_id
-               FROM hermes_data.communication_bulk_action_targets
+               FROM makosh_data.communication_bulk_action_targets
                WHERE logical_owner_id = $1 AND attempt_count < $2
                  AND (
                    state = $3
@@ -115,7 +115,7 @@ impl CommunicationBulkActionPersistenceV1 {
                FOR UPDATE SKIP LOCKED
                LIMIT 1
              )
-             UPDATE hermes_data.communication_bulk_action_targets AS targets
+             UPDATE makosh_data.communication_bulk_action_targets AS targets
              SET state = $6, attempt_count = targets.attempt_count + 1,
                  claimed_by = $7, claim_epoch = targets.claim_epoch + 1,
                  lease_expires_at_unix_seconds = $8,
@@ -280,7 +280,7 @@ impl CommunicationBulkActionPersistenceV1 {
             .await
             .map_err(|_| BulkDeliveryPersistenceErrorV1::StorageUnavailable)?;
         let changed = sqlx::query(
-            "UPDATE hermes_data.communication_bulk_action_targets
+            "UPDATE makosh_data.communication_bulk_action_targets
              SET state = $1, delivery_intent_id = $2, error_code = $3,
                  next_attempt_at_unix_seconds = $4, claimed_by = NULL,
                  lease_expires_at_unix_seconds = NULL,
@@ -339,7 +339,7 @@ async fn increment_batch_revision(
     now_unix_seconds: i64,
 ) -> Result<(), BulkDeliveryPersistenceErrorV1> {
     let changed = sqlx::query(
-        "UPDATE hermes_data.communication_bulk_action_batches
+        "UPDATE makosh_data.communication_bulk_action_batches
          SET state_revision = state_revision + 1, updated_at_unix_seconds = $1
          WHERE logical_owner_id = $2 AND batch_id = $3",
     )

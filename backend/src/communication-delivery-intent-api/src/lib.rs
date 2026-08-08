@@ -1,9 +1,9 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-communication-delivery-intent-api";
+pub const PACKAGE: &str = "makosh-communication-delivery-intent-api";
 pub const COMMUNICATION_DELIVERY_INTENT_OWNER_V1: &str = "communication_delivery_intent";
 pub const COMMUNICATION_DELIVERY_INTENT_MODULE_ID_V1: &str =
-    "hermes-communication-delivery-intent-runtime";
+    "makosh-communication-delivery-intent-runtime";
 pub const COMMUNICATION_DELIVERY_INTENT_CAPABILITY_ID_V1: &str = "communication.delivery_intent.v1";
 pub const COMMUNICATION_DELIVERY_INTENT_COMMAND_CONTRACT_NAME_V1: &str =
     "communication.delivery_intent.command";
@@ -16,15 +16,15 @@ pub const COMMUNICATION_DELIVERY_INTENT_REALTIME_EVENT_KIND_V1: &str =
 pub const COMMUNICATION_DELIVERY_INTENT_CONTRACT_MAJOR_V1: u32 = 1;
 pub const COMMUNICATION_DELIVERY_INTENT_CONTRACT_REVISION_V1: u32 = 1;
 pub const COMMUNICATION_DELIVERY_INTENT_COMMAND_CONNECT_PATH_V1: &str =
-    "/hermes.communication_delivery_intent.v1.CommunicationDeliveryIntentCommandService/Submit";
+    "/makosh.communication_delivery_intent.v1.CommunicationDeliveryIntentCommandService/Submit";
 pub const COMMUNICATION_DELIVERY_INTENT_QUERY_CONNECT_PATH_V1: &str =
-    "/hermes.communication_delivery_intent.v1.CommunicationDeliveryIntentQueryService/GetStatus";
+    "/makosh.communication_delivery_intent.v1.CommunicationDeliveryIntentQueryService/GetStatus";
 pub const COMMUNICATION_DELIVERY_INTENT_MAX_BODY_BYTES_V1: usize = 64 * 1024;
 
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communication_delivery_intent.v1.rs"
+        "/makosh.communication_delivery_intent.v1.rs"
     ));
 }
 

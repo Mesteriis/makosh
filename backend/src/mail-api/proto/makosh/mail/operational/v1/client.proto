@@ -1,0 +1,129 @@
+syntax = "proto3";
+
+package makosh.mail.operational.v1;
+
+message MailOperationalQueryV1 {
+  oneof query {
+    ListMailFoldersQueryV1 list_folders = 1;
+    ListMailThreadsQueryV1 list_threads = 2;
+    ListMailMessagesQueryV1 list_messages = 3;
+    GetMailMessageQueryV1 get_message = 4;
+  }
+}
+
+message ListMailFoldersQueryV1 {
+  string connection_id = 1;
+  optional string cursor = 2;
+  uint32 limit = 3;
+}
+
+message ListMailThreadsQueryV1 {
+  string connection_id = 1;
+  optional string folder_id = 2;
+  optional string cursor = 3;
+  uint32 limit = 4;
+}
+
+message ListMailMessagesQueryV1 {
+  string connection_id = 1;
+  optional string folder_id = 2;
+  optional string provider_thread_id = 3;
+  optional string cursor = 4;
+  uint32 limit = 5;
+}
+
+message GetMailMessageQueryV1 {
+  string connection_id = 1;
+  string message_id = 2;
+}
+
+message MailOperationalQueryResponseV1 {
+  oneof response {
+    MailFolderPageV1 folders = 1;
+    MailThreadPageV1 threads = 2;
+    MailMessagePageV1 messages = 3;
+    MailMessageDetailV1 message = 4;
+  }
+}
+
+message MailFolderPageV1 {
+  repeated MailFolderV1 item = 1;
+  optional string next_cursor = 2;
+}
+
+message MailThreadPageV1 {
+  repeated MailThreadV1 item = 1;
+  optional string next_cursor = 2;
+}
+
+message MailMessagePageV1 {
+  repeated MailMessageSummaryV1 item = 1;
+  optional string next_cursor = 2;
+}
+
+enum MailFolderKindV1 {
+  MAIL_FOLDER_KIND_UNSPECIFIED = 0;
+  MAIL_FOLDER_KIND_INBOX = 1;
+  MAIL_FOLDER_KIND_SENT = 2;
+  MAIL_FOLDER_KIND_DRAFTS = 3;
+  MAIL_FOLDER_KIND_TRASH = 4;
+  MAIL_FOLDER_KIND_SPAM = 5;
+  MAIL_FOLDER_KIND_ARCHIVE = 6;
+  MAIL_FOLDER_KIND_PROVIDER_LABEL = 7;
+}
+
+message MailFolderV1 {
+  string connection_id = 1;
+  string folder_id = 2;
+  string display_name = 3;
+  MailFolderKindV1 kind = 4;
+  uint64 total_messages = 5;
+  uint64 unread_messages = 6;
+  uint64 projection_revision = 7;
+}
+
+message MailThreadV1 {
+  string connection_id = 1;
+  string provider_thread_id = 2;
+  optional string subject = 3;
+  optional string latest_snippet = 4;
+  optional int64 latest_at_unix_seconds = 5;
+  uint64 message_count = 6;
+  uint64 unread_count = 7;
+  uint64 projection_revision = 8;
+}
+
+enum MailMessageFlagV1 {
+  MAIL_MESSAGE_FLAG_UNSPECIFIED = 0;
+  MAIL_MESSAGE_FLAG_READ = 1;
+  MAIL_MESSAGE_FLAG_STARRED = 2;
+  MAIL_MESSAGE_FLAG_DRAFT = 3;
+  MAIL_MESSAGE_FLAG_SENT = 4;
+  MAIL_MESSAGE_FLAG_TRASHED = 5;
+  MAIL_MESSAGE_FLAG_SPAM = 6;
+}
+
+message MailMessageSummaryV1 {
+  string connection_id = 1;
+  string message_id = 2;
+  string provider_thread_id = 3;
+  repeated string folder_id = 4;
+  optional string subject = 5;
+  optional string sender = 6;
+  repeated string recipient = 7;
+  optional string snippet = 8;
+  optional int64 sent_at_unix_seconds = 9;
+  repeated MailMessageFlagV1 flag = 10;
+  bool has_plain_text = 11;
+  bool has_attachments = 12;
+  bytes observation_anchor_id = 13;
+  uint64 projection_revision = 14;
+}
+
+message MailMessageDetailV1 {
+  MailMessageSummaryV1 summary = 1;
+}
+
+service MailOperationalQueryService {
+  rpc Query(MailOperationalQueryV1) returns (MailOperationalQueryResponseV1);
+}

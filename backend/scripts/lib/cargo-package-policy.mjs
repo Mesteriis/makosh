@@ -6,7 +6,7 @@ import {
   violation,
 } from './validation-diagnostics.mjs';
 
-const HERMES_METADATA_KEYS = new Set(['role', 'owner', 'surface', 'components']);
+const MAKOSH_METADATA_KEYS = new Set(['role', 'owner', 'surface', 'components']);
 const HOST_EXECUTION_DEPENDENCIES = new Set([
   'tauri',
   'wry',
@@ -110,8 +110,8 @@ function metadataDescriptor(policy, pkg, violations) {
   }
 
   for (const key of Object.keys(metadata)) {
-    if (!HERMES_METADATA_KEYS.has(key)) {
-      violations.push(violation('unknown_metadata_key', location, `unknown Hermes metadata key: ${key}`));
+    if (!MAKOSH_METADATA_KEYS.has(key)) {
+      violations.push(violation('unknown_metadata_key', location, `unknown Макошь metadata key: ${key}`));
     }
   }
 

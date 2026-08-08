@@ -23,7 +23,7 @@ Current backend files:
 
 The current client configuration carries a base URL, chat model, embedding
 model, timeout and `ResolvedSecret` API key. Current settings definitions
-explicitly say the OmniRoute API key is read from `HERMES_OMNIROUTE_API_KEY`
+explicitly say the OmniRoute API key is read from `MAKOSH_OMNIROUTE_API_KEY`
 and is not stored in `application_settings`.
 
 ## Boundary Rule

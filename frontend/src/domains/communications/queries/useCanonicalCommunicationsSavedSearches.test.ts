@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import type { SavedSearchSummaryV1 } from '../../../gen/hermes/communications/saved_search/v1/saved_search_pb'
+import type { SavedSearchSummaryV1 } from '../../../gen/makosh/communications/saved_search/v1/saved_search_pb'
 import { useCanonicalCommunicationsSavedSearches } from './useCanonicalCommunicationsSavedSearches'
 
 describe('canonical saved-search lifecycle', () => {
@@ -71,7 +71,7 @@ function operationsFixture() {
 
 function summary(seed: number, name: string): SavedSearchSummaryV1 {
 	return {
-		$typeName: 'hermes.communications.saved_search.v1.SavedSearchSummaryV1',
+		$typeName: 'makosh.communications.saved_search.v1.SavedSearchSummaryV1',
 		savedSearchId: new Uint8Array(16).fill(seed),
 		name,
 		tokenCount: 1,

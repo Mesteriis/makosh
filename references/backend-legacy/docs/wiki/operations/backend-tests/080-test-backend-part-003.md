@@ -105,14 +105,14 @@ generated_by: code-wiki-ru
 
 Набор тестов покрывает `AppConfig`:
 
-- **Значения по умолчанию**: HTTP-адрес `127.0.0.1:8080`, имя сервиса `hermes-hub-backend`, отсутствие `database_url`, `local_api_secret`, `secret_vault_path`, `secret_vault_key`, `tdjson_path`; AI-провайдер `Ollama` с моделями `qwen3:4b` (чат) и `qwen3-embedding:4b` (эмбеддинги), таймаутом 120 секунд; планировщики Zoom включены по умолчанию.
-- **Переопределение через `HERMES_HTTP_ADDR`, `DATABASE_URL`, `HERMES_LOCAL_API_SECRET`**.
-- **Секретный vault**: флаги `HERMES_SECRET_VAULT_PATH` и `HERMES_SECRET_VAULT_KEY`; значение ключа не раскрывается в Debug.
-- **Ollama-параметры**: `HERMES_OLLAMA_BASE_URL`, `_CHAT_MODEL`, `_EMBED_MODEL`, `_TIMEOUT_SECONDS`.
-- **OmniRoute**: `HERMES_AI_PROVIDER=omniroute`, `HERMES_OMNIROUTE_BASE_URL`, `_CHAT_MODEL`, `_EMBED_MODEL`, `_TIMEOUT_SECONDS`, `_API_KEY`; ключ не раскрывается в Debug.
-- **TDLib**: `HERMES_TDJSON_PATH`.
-- **Telegram-учётка**: `HERMES_TELEGRAM_API_ID` и `_API_HASH`; хэш не раскрывается в Debug.
-- **Тогглы Zoom-планировщиков**: `HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`, `_RECORDING_SYNC_`, `_RETENTION_CLEANUP_` через `false` отключают соответствующие планировщики.
+- **Значения по умолчанию**: HTTP-адрес `127.0.0.1:8080`, имя сервиса `makosh-backend`, отсутствие `database_url`, `local_api_secret`, `secret_vault_path`, `secret_vault_key`, `tdjson_path`; AI-провайдер `Ollama` с моделями `qwen3:4b` (чат) и `qwen3-embedding:4b` (эмбеддинги), таймаутом 120 секунд; планировщики Zoom включены по умолчанию.
+- **Переопределение через `MAKOSH_HTTP_ADDR`, `DATABASE_URL`, `MAKOSH_LOCAL_API_SECRET`**.
+- **Секретный vault**: флаги `MAKOSH_SECRET_VAULT_PATH` и `MAKOSH_SECRET_VAULT_KEY`; значение ключа не раскрывается в Debug.
+- **Ollama-параметры**: `MAKOSH_OLLAMA_BASE_URL`, `_CHAT_MODEL`, `_EMBED_MODEL`, `_TIMEOUT_SECONDS`.
+- **OmniRoute**: `MAKOSH_AI_PROVIDER=omniroute`, `MAKOSH_OMNIROUTE_BASE_URL`, `_CHAT_MODEL`, `_EMBED_MODEL`, `_TIMEOUT_SECONDS`, `_API_KEY`; ключ не раскрывается в Debug.
+- **TDLib**: `MAKOSH_TDJSON_PATH`.
+- **Telegram-учётка**: `MAKOSH_TELEGRAM_API_ID` и `_API_HASH`; хэш не раскрывается в Debug.
+- **Тогглы Zoom-планировщиков**: `MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`, `_RECORDING_SYNC_`, `_RETENTION_CLEANUP_` через `false` отключают соответствующие планировщики.
 - **Валидация**: пустые или некорректные значения вызывают ошибки `ConfigError::InvalidHttpAddr`, `EmptyDatabaseUrl`, `EmptyLocalApiSecret`, `EmptySecretVaultPath`, `EmptySecretVaultKey`, `EmptyTdjsonPath`, `InvalidTelegramApiId`, `EmptyTelegramApiHash`, `InvalidAiProvider`, `EmptyOllama*`, `InvalidOllamaTimeout`, `EmptyOmniRoute*`, `InvalidOmniRouteTimeout`, `EmptyOmniRouteApiKey`.
 
 ## ConnectRPC-тесты (`communications_connectrpc.rs`)
@@ -227,7 +227,7 @@ generated_by: code-wiki-ru
   - `app_messaging_handlers_are_thin` проверяет структуру хендлеров и запрещает прямые вызовы store/клиентских модулей.
 
 - `backend/tests/communications_connectrpc.rs` (частично обрезан)
-  - Аутентификация через `HERMES_LOCAL_API_SECRET`.
+  - Аутентификация через `MAKOSH_LOCAL_API_SECRET`.
   - End-to-end тест операций ConnectRPC: `ListMessages`, `GetMessage`, `TransitionMessageWorkflowState`, `TrashMessage`, `RestoreMessage`, `MarkMessageRead`, `DeleteMessageFromProvider`, `BulkMessageAction`, с проверкой возвращаемых состояний и полей.
 
 - `backend/tests/config.rs`

@@ -1,4 +1,4 @@
-name: hermes-storage-authenticated-development
+name: makosh-storage-authenticated-development
 
 # Authenticated development infrastructure contour. The make dev lifecycle
 # leaves these services running across frontend/Kernel restarts so owner data is
@@ -8,12 +8,12 @@ name: hermes-storage-authenticated-development
 services:
   nats:
     image: nats:2.10-alpine
-    command: ["-c", "/etc/nats/hermes-development.conf"]
+    command: ["-c", "/etc/nats/makosh-development.conf"]
     volumes:
-      - ./nats-server.conf:/etc/nats/hermes-development.conf:ro
-      - hermes-authenticated-development-nats:/var/lib/hermes
+      - ./nats-server.conf:/etc/nats/makosh-development.conf:ro
+      - makosh-authenticated-development-nats:/var/lib/makosh
     ports:
-      - 127.0.0.1:${HERMES_STORAGE_AUTHENTICATED_NATS_PORT:-43225}:4222
+      - 127.0.0.1:${MAKOSH_STORAGE_AUTHENTICATED_NATS_PORT:-43225}:4222
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1:8222/healthz >/dev/null"]
       interval: 5s
@@ -29,19 +29,19 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: hermes_storage_authenticated
-      POSTGRES_USER: hermes_postgres_admin
+      POSTGRES_DB: makosh_storage_authenticated
+      POSTGRES_USER: makosh_postgres_admin
       POSTGRES_PASSWORD_FILE: /run/secrets/storage_postgres_admin_password
     ports:
-      - 127.0.0.1:${HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT:-35532}:5432
+      - 127.0.0.1:${MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT:-35532}:5432
     secrets:
       - storage_postgres_admin_password
     volumes:
-      - hermes-authenticated-development-postgres:/var/lib/postgresql/data
+      - makosh-authenticated-development-postgres:/var/lib/postgresql/data
     networks:
       - platform
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U hermes_storage_admin -d hermes_storage_authenticated"]
+      test: ["CMD-SHELL", "pg_isready -U makosh_storage_admin -d makosh_storage_authenticated"]
       interval: 5s
       timeout: 3s
       retries: 20
@@ -54,21 +54,21 @@ services:
 
   pgbouncer:
     image: edoburu/pgbouncer:v1.25.2-p0
-    user: "${HERMES_STORAGE_PGBOUNCER_RUNTIME_UID:?PgBouncer runtime UID is required}"
+    user: "${MAKOSH_STORAGE_PGBOUNCER_RUNTIME_UID:?PgBouncer runtime UID is required}"
     depends_on:
       postgres:
         condition: service_healthy
-    entrypoint: ["/bin/sh", "/etc/hermes/boot.sh"]
+    entrypoint: ["/bin/sh", "/etc/makosh/boot.sh"]
     command: ["/usr/bin/pgbouncer", "/etc/pgbouncer/pgbouncer.ini"]
     ports:
-      - 127.0.0.1:${HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PORT:-36532}:6432
+      - 127.0.0.1:${MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PORT:-36532}:6432
     secrets:
       - storage_pgbouncer_admin_password
     volumes:
       - ./pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini:ro
-      - ./boot.sh:/etc/hermes/boot.sh:ro
-      - ${HERMES_STORAGE_PGBOUNCER_DATABASES_DIRECTORY:?PgBouncer databases directory is required}:/etc/hermes/runtime:ro
-      - ${HERMES_STORAGE_PGBOUNCER_AUTH_DIRECTORY:?PgBouncer auth directory is required}:/etc/hermes/auth
+      - ./boot.sh:/etc/makosh/boot.sh:ro
+      - ${MAKOSH_STORAGE_PGBOUNCER_DATABASES_DIRECTORY:?PgBouncer databases directory is required}:/etc/makosh/runtime:ro
+      - ${MAKOSH_STORAGE_PGBOUNCER_AUTH_DIRECTORY:?PgBouncer auth directory is required}:/etc/makosh/auth
     networks:
       - platform
     healthcheck:
@@ -86,7 +86,7 @@ services:
   clamav:
     image: clamav/clamav:1.5.3-debian13-slim
     ports:
-      - 127.0.0.1:${HERMES_ATTACHMENT_SECURITY_CLAMAV_PORT:-3310}:3310
+      - 127.0.0.1:${MAKOSH_ATTACHMENT_SECURITY_CLAMAV_PORT:-3310}:3310
     healthcheck:
       test: ["CMD", "clamdscan", "--ping", "1"]
       interval: 15s
@@ -103,11 +103,11 @@ networks:
   platform: {}
 
 volumes:
-  hermes-authenticated-development-nats:
-  hermes-authenticated-development-postgres:
+  makosh-authenticated-development-nats:
+  makosh-authenticated-development-postgres:
 
 secrets:
   storage_postgres_admin_password:
-    file: ${HERMES_STORAGE_POSTGRES_SECRET_FILE:?PostgreSQL authenticated secret file is required}
+    file: ${MAKOSH_STORAGE_POSTGRES_SECRET_FILE:?PostgreSQL authenticated secret file is required}
   storage_pgbouncer_admin_password:
-    file: ${HERMES_STORAGE_PGBOUNCER_SECRET_FILE:?PgBouncer authenticated secret file is required}
+    file: ${MAKOSH_STORAGE_PGBOUNCER_SECRET_FILE:?PgBouncer authenticated secret file is required}

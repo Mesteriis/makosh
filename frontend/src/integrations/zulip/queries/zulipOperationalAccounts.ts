@@ -1,6 +1,6 @@
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 
-const ZULIP_MODULE_ID = 'hermes-zulip-runtime'
+const ZULIP_MODULE_ID = 'makosh-zulip-runtime'
 const ZULIP_ACCOUNT_ID_SETTING = 'zulip.account_id'
 const MAX_ACCOUNT_ID_BYTES = 512
 const textEncoder = new TextEncoder()

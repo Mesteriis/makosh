@@ -133,7 +133,7 @@ mod tests {
             contract: request.contract.clone(),
             request_payload: request.request_payload,
             response_blob_target_owner_id: "communication_delivery_intent".to_owned(),
-            response_blob_target_module_id: "hermes-communication-delivery-intent-runtime"
+            response_blob_target_module_id: "makosh-communication-delivery-intent-runtime"
                 .to_owned(),
             response_blob_target_capability_id: request.response_blob_capability_id,
         };

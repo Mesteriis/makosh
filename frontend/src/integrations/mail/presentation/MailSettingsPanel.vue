@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import ModuleSettingsPanel from '../../../shared/ui/settings/ModuleSettingsPanel.vue'
 import MailAccountManagementPanel from './MailAccountManagementPanel.vue'
 import MailAccountSetupPanel from './MailAccountSetupPanel.vue'
@@ -9,7 +9,7 @@ import MailGmailPermanentDeleteAuthorizationPanel from './MailGmailPermanentDele
 import { mailSettingsPanelModel } from './mailSettingsPanelModel'
 import { publicModuleSettingRows } from '../../../platform/gateway/publicModuleSettings'
 
-const moduleId = 'hermes-mail-runtime'
+const moduleId = 'makosh-mail-runtime'
 
 const props = defineProps<{ module: ClientModuleBootstrapV1 | null }>()
 const emit = defineEmits<{ changed: [] }>()

@@ -1,7 +1,7 @@
 use chrono::{Duration, Utc};
-use hermes_hub_backend::domains::calendar::events::errors::CalendarError;
-use hermes_hub_backend::domains::calendar::events::event_store::CalendarEventStore;
-use hermes_hub_backend::domains::calendar::events::models::{CalendarEvent, NewCalendarEvent};
+use makosh_hub_backend::domains::calendar::events::errors::CalendarError;
+use makosh_hub_backend::domains::calendar::events::event_store::CalendarEventStore;
+use makosh_hub_backend::domains::calendar::events::models::{CalendarEvent, NewCalendarEvent};
 use sqlx::postgres::PgPool;
 use uuid::Uuid;
 

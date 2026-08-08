@@ -1,4 +1,4 @@
-use hermes_attachment_translation_api::{
+use makosh_attachment_translation_api::{
     ATTACHMENT_TRANSLATION_CONTRACT_MAJOR_V1, ATTACHMENT_TRANSLATION_MODULE_ID_V1,
     ATTACHMENT_TRANSLATION_OWNER_V1, ATTACHMENT_TRANSLATION_READ_TICKET_BYTES_V1,
     read_wire::ReadAttachmentTranslationRequestV1,
@@ -13,23 +13,23 @@ use hermes_attachment_translation_api::{
         StartAttachmentTranslationRequestV1, StartAttachmentTranslationResponseV1,
     },
 };
-use hermes_attachment_translation_core::{
+use makosh_attachment_translation_core::{
     AttachmentTranslationArtifactV1, AttachmentTranslationCompletenessV1,
     AttachmentTranslationDetectedLanguageV1, AttachmentTranslationDraftV1,
     AttachmentTranslationLanguageV1, AttachmentTranslationRejectionCodeV1,
     AttachmentTranslationStateV1,
 };
-use hermes_attachment_translation_ingress::{
+use makosh_attachment_translation_ingress::{
     AttachmentTranslationSourceEnvelopeContextV1, attachment_translation_source_request_id_v1,
     build_request_attachment_translation_source_outbox_record_v1,
     wire::RequestAttachmentTranslationSourceV1,
 };
-use hermes_attachment_translation_persistence::{
+use makosh_attachment_translation_persistence::{
     AttachmentTranslationPersistenceErrorV1, AttachmentTranslationPersistenceV1,
     CreateAttachmentTranslationOutcomeV1, CreateAttachmentTranslationRunV1,
     IssueAttachmentTranslationTicketV1, PersistedAttachmentTranslationRunV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ModuleClientBlobAuthorizationV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
 use prost::Message;
@@ -282,7 +282,7 @@ fn source_request_record(
     runtime: &AttachmentTranslationClientRuntimeContextV1<'_>,
     draft: &AttachmentTranslationDraftV1,
     now_unix_millis: i64,
-) -> Result<hermes_events_protocol::delivery::OutboxRecordV1, AttachmentTranslationClientPortErrorV1>
+) -> Result<makosh_events_protocol::delivery::OutboxRecordV1, AttachmentTranslationClientPortErrorV1>
 {
     let seconds = now_unix_millis / 1_000;
     let nanos = i32::try_from((now_unix_millis % 1_000) * 1_000_000)
@@ -363,7 +363,7 @@ fn validate_request(
 
 fn run_id(logical_owner_id: &str, operation_id: &[u8; 16]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.attachment_translation.run.v1\0");
+    digest.update(b"makosh.attachment_translation.run.v1\0");
     digest.update(logical_owner_id.as_bytes());
     digest.update([0]);
     digest.update(operation_id);
@@ -372,7 +372,7 @@ fn run_id(logical_owner_id: &str, operation_id: &[u8; 16]) -> [u8; 16] {
 
 fn device_actor_sha256(logical_owner_id: &str, authenticated_device_id: &str) -> [u8; 32] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.attachment-translation.device-actor.v1\0");
+    digest.update(b"makosh.attachment-translation.device-actor.v1\0");
     digest.update(logical_owner_id.as_bytes());
     digest.update([0]);
     digest.update(authenticated_device_id.as_bytes());

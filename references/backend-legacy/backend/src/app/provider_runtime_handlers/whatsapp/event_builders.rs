@@ -3,11 +3,11 @@ use crate::integrations::whatsapp::runtime::contracts::{
 };
 use crate::platform::events::bus::whatsapp_event_types;
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 use std::sync::atomic::{AtomicU64, Ordering};
 
-const AUDIT_ACTOR_ID: &str = "hermes-frontend";
+const AUDIT_ACTOR_ID: &str = "makosh-frontend";
 static EVENT_SEQUENCE: AtomicU64 = AtomicU64::new(1);
 
 pub(super) fn command_event(response: &WhatsAppProviderCommandResponse) -> NewEventEnvelope {

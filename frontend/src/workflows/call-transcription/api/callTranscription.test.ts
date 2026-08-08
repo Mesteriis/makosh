@@ -11,17 +11,17 @@ import {
 	GetCallTranscriptionResponseV1Schema,
 	IssueCallTranscriptReadResponseV1Schema,
 	StartCallTranscriptionResponseV1Schema,
-} from '../../../gen/hermes/call_transcription/v1/transcription_pb'
+} from '../../../gen/makosh/call_transcription/v1/transcription_pb'
 import {
 	SpeechTranscriptCompletenessV1,
 	SpeechTranscriptDocumentV1Schema,
 	SpeechTranscriptLanguageV1,
-} from '../../../gen/hermes/speech_transcript/v1/transcript_pb'
+} from '../../../gen/makosh/speech_transcript/v1/transcript_pb'
 import {
 	ClientRealtimeEventV1Schema,
 	ClientRealtimeStreamStateKindV1,
 	ClientRealtimeStreamStateV1Schema,
-} from '../../../gen/hermes/gateway/v1/client_realtime_pb'
+} from '../../../gen/makosh/gateway/v1/client_realtime_pb'
 import type { BrowserGatewayRealtimeObserver } from '../../../platform/gateway/browserGatewayRealtime'
 import {
 	getCallTranscriptionStatus,

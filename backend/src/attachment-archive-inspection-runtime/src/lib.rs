@@ -10,4 +10,4 @@ mod outbox;
 pub mod runtime;
 pub mod settings;
 
-pub const PACKAGE: &str = "hermes-attachment-archive-inspection-runtime";
+pub const PACKAGE: &str = "makosh-attachment-archive-inspection-runtime";

@@ -1,4 +1,4 @@
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use std::collections::HashSet;
 
 use serde_json::{Value, json};
@@ -6,14 +6,14 @@ use sha2::{Digest, Sha256};
 use sqlx::postgres::{PgPool, PgRow};
 use sqlx::{Postgres, Row, Transaction};
 
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use super::errors::ReviewInboxError;
 use super::models::{
     NewReviewItem, NewReviewItemEvidence, ReviewItem, ReviewItemKind, ReviewItemStatus,
     ReviewPromotionTarget, validate_non_empty, validate_review_item_with_evidence,
 };
-use hermes_observations_postgres::review_links::materialize_review_transition_link_in_transaction;
+use makosh_observations_postgres::review_links::materialize_review_transition_link_in_transaction;
 
 #[derive(Clone)]
 pub struct ReviewInboxStore {

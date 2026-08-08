@@ -17,7 +17,7 @@ pub use execution::{
     ClaimDueExecutionOutcomeV1, ClaimDueExecutionV1, DelayedDeliveryExecutionClaimV1,
     MarkDeliveryAcceptedV1, MarkDeliveryFailedV1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 pub use operations::{
     ApplySchedulerResultOutcomeV1, ApplySchedulerResultV1, CreateDelayedDeliveryOperationOutcomeV1,
     CreateDelayedDeliveryOperationV1, DelayedDeliveryOperationStatusV1,
@@ -30,7 +30,7 @@ use sqlx::{
     postgres::{PgConnectOptions, PgPoolOptions},
 };
 
-pub const PACKAGE: &str = "hermes-communication-delayed-delivery-persistence";
+pub const PACKAGE: &str = "makosh-communication-delayed-delivery-persistence";
 pub const MAX_CUSTODY_PROOF_BYTES_V1: usize = 2_048;
 pub const MAX_DURABLE_ENVELOPE_BYTES_V1: usize = 128 * 1024;
 

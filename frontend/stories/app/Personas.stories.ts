@@ -15,7 +15,7 @@ import type {
 import { storybookLocaleFromGlobals } from '../ui/storybook-i18n'
 
 const meta = {
-	title: 'Hermes App/Personas/Workspace',
+	title: 'Макошь App/Personas/Workspace',
 	component: PersonasWorkspaceComponent
 } satisfies Meta<typeof PersonasWorkspaceComponent>
 
@@ -28,7 +28,7 @@ const personaFixtures: readonly EnrichedPersona[] = [
 	persona({
 		id: 'persona:owner',
 		name: 'Александр Мещеряков',
-		email: 'avm@hermes.local',
+		email: 'avm@makosh.local',
 		language: 'ru',
 		tone: 'direct',
 		trust: 96,
@@ -260,7 +260,7 @@ export const Workspace: Story = {
 					@update:active-section="activeSection = $event"
 					@update:search-query="searchQuery = $event"
 				/>
-				<p v-if="actionLog.length" class="hermes-sr-only" aria-live="polite">{{ actionLog.join(', ') }}</p>
+				<p v-if="actionLog.length" class="makosh-sr-only" aria-live="polite">{{ actionLog.join(', ') }}</p>
 			</section>
 		`
 	}),

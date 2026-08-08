@@ -3,7 +3,7 @@
 use super::*;
 
 use futures_util::StreamExt;
-use hermes_communications_ai_source_api::{
+use makosh_communications_ai_source_api::{
     CommunicationReplySourceEnvelopeContextV1,
     build_communication_reply_source_prepare_outbox_record_v1,
     communication_reply_source_prepared_contract_reference_v1,
@@ -13,8 +13,8 @@ use hermes_communications_ai_source_api::{
         CommunicationReplySourceRejectedV1,
     },
 };
-use hermes_events_jetstream::DurableSubjectV1;
-use hermes_events_protocol::v1::DurableEnvelopeV1;
+use makosh_events_jetstream::DurableSubjectV1;
+use makosh_events_protocol::v1::DurableEnvelopeV1;
 use prost::Message;
 use sqlx::postgres::{PgConnectOptions, PgPoolOptions, PgSslMode};
 use std::sync::{
@@ -23,7 +23,7 @@ use std::sync::{
 };
 use zeroize::Zeroizing;
 
-const RESULT_SUBJECT: &str = "hermes.result.v1.communications.>";
+const RESULT_SUBJECT: &str = "makosh.result.v1.communications.>";
 const SOURCE_BODY: &[u8] = b"fixture source body for custody transfer";
 const SOURCE_SENDER: &[u8] = b"Alice Example <alice@example.test>";
 const SOURCE_SUBJECT: &[u8] = b"Quarterly update";
@@ -32,10 +32,10 @@ const SOURCE_SUBJECT: &[u8] = b"Quarterly update";
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Blob, NATS and Communications binaries"]
 fn managed_communications_ai_source_is_event_only_and_revision_fenced() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-communications-ai-source");
+    let root = unique_target_root("makosh-managed-communications-ai-source");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -43,11 +43,11 @@ fn managed_communications_ai_source_is_event_only_and_revision_fenced() {
     );
     let release = installed_communications_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             "owner-1",
             "desktop-1",
             [4; 65],
@@ -184,7 +184,7 @@ fn managed_communications_ai_source_is_event_only_and_revision_fenced() {
     supervisor.shutdown().expect("stop managed processes");
     shutdown.store(true, Ordering::SeqCst);
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove AI source fixture");
     std::fs::remove_dir_all(data).expect("remove short AI source Kernel fixture");
@@ -194,7 +194,7 @@ fn prepare_command(
     run_id: [u8; 16],
     source_message_id: [u8; 16],
     expected_source_revision: u64,
-) -> hermes_events_protocol::delivery::OutboxRecordV1 {
+) -> makosh_events_protocol::delivery::OutboxRecordV1 {
     build_communication_reply_source_prepare_outbox_record_v1(
         run_id,
         source_message_id,
@@ -202,7 +202,7 @@ fn prepare_command(
         "owner-1",
         1_800_000_030,
         &CommunicationReplySourceEnvelopeContextV1 {
-            module_id: "hermes-communication-reply-suggestion-runtime".to_owned(),
+            module_id: "makosh-communication-reply-suggestion-runtime".to_owned(),
             runtime_instance_id: "reply-suggestion-runtime-1".to_owned(),
             runtime_generation: 1,
             recorded_at_unix_seconds: 1_800_000_000,
@@ -214,7 +214,7 @@ fn prepare_command(
 
 async fn publish(
     context: &async_nats::jetstream::Context,
-    record: &hermes_events_protocol::delivery::OutboxRecordV1,
+    record: &makosh_events_protocol::delivery::OutboxRecordV1,
 ) {
     let envelope =
         DurableEnvelopeV1::decode(record.exact_bytes()).expect("decode AI source command");
@@ -278,20 +278,20 @@ enum SourceMutationV1 {
 async fn mutate_source(database_id: &str, message_id: [u8; 16], mutation: SourceMutationV1) {
     let password = Zeroizing::new(
         std::fs::read_to_string(required(
-            "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+            "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
         ))
         .expect("read disposable PostgreSQL credential")
         .trim()
         .to_owned(),
     );
     let options = PgConnectOptions::new()
-        .host(&required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
+        .host(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
         .port(
-            required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+            required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
                 .parse()
                 .expect("valid PostgreSQL port"),
         )
-        .username("hermes_postgres_admin")
+        .username("makosh_postgres_admin")
         .password(password.as_str())
         .database(database_id)
         .ssl_mode(PgSslMode::Disable);
@@ -303,7 +303,7 @@ async fn mutate_source(database_id: &str, message_id: [u8; 16], mutation: Source
     match mutation {
         SourceMutationV1::Edit => {
             sqlx::query(
-                "UPDATE hermes_data.communications_messages
+                "UPDATE makosh_data.communications_messages
                  SET canonical_revision = canonical_revision + 1
                  WHERE message_id = $1",
             )
@@ -314,7 +314,7 @@ async fn mutate_source(database_id: &str, message_id: [u8; 16], mutation: Source
         }
         SourceMutationV1::Deactivate => {
             sqlx::query(
-                "UPDATE hermes_data.communications_messages
+                "UPDATE makosh_data.communications_messages
                  SET lifecycle_state = 2
                  WHERE message_id = $1",
             )

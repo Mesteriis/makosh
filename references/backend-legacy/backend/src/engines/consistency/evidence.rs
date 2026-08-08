@@ -4,8 +4,8 @@ use sqlx::postgres::PgRow;
 use sqlx::postgres::Postgres;
 
 use super::errors::ConsistencyError;
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::review_links::link_domain_entity_in_transaction;
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::review_links::link_domain_entity_in_transaction;
 
 pub(super) struct ActivePersonaFactClaim {
     pub(super) fact_id: String,

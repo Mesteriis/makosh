@@ -6,7 +6,9 @@ use super::*;
 
 use crate::identity::device::signer::DeviceSigner;
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
-use hermes_communication_recipient_suggestion_api::{
+use http_body_util::BodyExt as _;
+use hyper::{Request, StatusCode, body::Bytes};
+use makosh_communication_recipient_suggestion_api::{
     COMMUNICATION_RECIPIENT_SUGGESTION_CAPABILITY_ID_V1,
     COMMUNICATION_RECIPIENT_SUGGESTION_COMMAND_CONNECT_PATH_V1,
     COMMUNICATION_RECIPIENT_SUGGESTION_COMMAND_CONTRACT_NAME_V1,
@@ -26,33 +28,31 @@ use hermes_communication_recipient_suggestion_api::{
         StartCommunicationRecipientSuggestionResponseV1,
     },
 };
-use hermes_communication_recipient_suggestion_runtime::COMMUNICATION_RECIPIENT_SUGGESTION_STORAGE_CAPABILITY_ID_V1;
-use hermes_gateway_protocol::v1::{
+use makosh_communication_recipient_suggestion_runtime::COMMUNICATION_RECIPIENT_SUGGESTION_STORAGE_CAPABILITY_ID_V1;
+use makosh_gateway_protocol::v1::{
     ClientRealtimeEventV1, ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
 };
-use hermes_kernel_control_store::{ModuleRegistrationState, PlatformStorageBindingStateV1};
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store::{ModuleRegistrationState, PlatformStorageBindingStateV1};
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
-use http_body_util::BodyExt as _;
-use hyper::{Request, StatusCode, body::Bytes};
 
 const COMBINED_SOURCE_BODY: &[u8] =
     b"Invoice payment and contract review for the project status update";
 
-type RecipientSuggestionGateway = hermes_gateway_runtime::GatewayApplicationRouter<
+type RecipientSuggestionGateway = makosh_gateway_runtime::GatewayApplicationRouter<
     crate::identity::browser_gateway::ControlStoreBrowserAuthority,
-    hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 >;
 
 #[test]
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Blob, NATS, Communications and Recipient Suggestion binaries"]
 fn managed_recipient_suggestion_reaches_gateway_sse_and_replays_after_restart() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-recipient-suggestion");
+    let root = unique_target_root("makosh-managed-recipient-suggestion");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -60,13 +60,13 @@ fn managed_recipient_suggestion_reaches_gateway_sse_and_replays_after_restart() 
     );
     let release = installed_communication_recipient_suggestion_ensemble_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             COMMUNICATION_RECIPIENT_SUGGESTION_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -80,7 +80,7 @@ fn managed_recipient_suggestion_reaches_gateway_sse_and_replays_after_restart() 
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     configure_communication_recipient_suggestion_realtime_v1(&supervisor, &store, realtime.clone());
     supervisor
@@ -318,7 +318,7 @@ fn managed_recipient_suggestion_reaches_gateway_sse_and_replays_after_restart() 
         .expect("join owner control server")
         .expect("owner control server");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Recipient Suggestion fixture");
     std::fs::remove_dir_all(data).expect("remove short Kernel fixture");
@@ -499,7 +499,7 @@ fn recipient_gateway(
     supervisor: &ManagedRuntimeSupervisor,
     root: &Path,
     data: &Path,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 ) -> RecipientSuggestionGateway {
     super::delivery_intent_realtime_flow::delivery_intent_gateway(
         store, supervisor, root, data, realtime,

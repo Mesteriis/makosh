@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AttachmentPreviewContentTypeV1 } from '../../../gen/hermes/attachment_preview/v1/preview_pb'
+import { AttachmentPreviewContentTypeV1 } from '../../../gen/makosh/attachment_preview/v1/preview_pb'
 import type { AttachmentPreviewPanelModel } from './attachmentPreviewPanelModel'
 import './attachmentPreviewPanel.css'
 

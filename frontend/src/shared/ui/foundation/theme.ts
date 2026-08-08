@@ -1,11 +1,11 @@
 // Theme tokens are a shared UI foundation, independent of application composition.
-export const uiThemeFamilies = ['base', 'hermes'] as const
+export const uiThemeFamilies = ['base', 'makosh'] as const
 export type UiThemeFamily = (typeof uiThemeFamilies)[number]
 
 export const uiThemeModes = ['light', 'dark'] as const
 export type UiThemeMode = (typeof uiThemeModes)[number]
 
-export const uiThemeNames = ['base-light', 'base-dark', 'hermes-light', 'hermes-dark'] as const
+export const uiThemeNames = ['base-light', 'base-dark', 'makosh-light', 'makosh-dark'] as const
 export type UiThemeName = (typeof uiThemeNames)[number]
 
 export interface UiThemeSelection {
@@ -37,12 +37,12 @@ export const uiThemeFamilyOptions: UiThemeFamilyOption[] = [
 	{
 		value: 'base',
 		label: 'Base',
-		description: 'Neutral Hermes UI foundation.'
+		description: 'Neutral Макошь UI foundation.'
 	},
 	{
-		value: 'hermes',
-		label: 'Hermes',
-		description: 'Signature emerald Hermes UI foundation.'
+		value: 'makosh',
+		label: 'Макошь',
+		description: 'Signature emerald Макошь UI foundation.'
 	}
 ]
 
@@ -75,17 +75,17 @@ export const uiThemeOptions: UiThemeOption[] = [
 		description: 'Low-glare neutral dark surface without neon noise.'
 	},
 	{
-		value: 'hermes-light',
-		family: 'hermes',
+		value: 'makosh-light',
+		family: 'makosh',
 		mode: 'light',
-		label: 'Hermes Light',
-		description: 'Bright Hermes surface with emerald system accents.'
+		label: 'Макошь Light',
+		description: 'Bright Макошь surface with emerald system accents.'
 	},
 	{
-		value: 'hermes-dark',
-		family: 'hermes',
+		value: 'makosh-dark',
+		family: 'makosh',
 		mode: 'dark',
-		label: 'Hermes Dark',
+		label: 'Макошь Dark',
 		description: 'Signature emerald intelligence theme for focused context work.'
 	}
 ]

@@ -23,7 +23,7 @@ use crate::domains::communications::drafts::DraftStatus;
 use crate::domains::communications::messages::models::MessageSearchMatchMode;
 use crate::domains::communications::messages::states::{LocalMessageState, WorkflowState};
 use crate::domains::communications::outbox::CommunicationOutboxStatus;
-use hermes_connectrpc_contracts::hermes::communications::v1::BulkMessageActionRequest as ProtoBulkMessageActionRequest;
+use makosh_connectrpc_contracts::makosh::communications::v1::BulkMessageActionRequest as ProtoBulkMessageActionRequest;
 pub(super) fn parse_workflow_state(value: &str) -> Result<WorkflowState, ConnectError> {
     value
         .parse()

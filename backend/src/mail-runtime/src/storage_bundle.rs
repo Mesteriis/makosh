@@ -1,21 +1,21 @@
 //! Exact Mail storage successor composed by the managed runtime.
 
-use hermes_mail_address_book_persistence::{
+use makosh_mail_address_book_persistence::{
     MailAddressBookSchemaErrorV1, append_mail_address_book_storage_v1,
 };
-use hermes_mail_persistence::{
+use makosh_mail_persistence::{
     MailIcloudCardDavCredentialSchemaErrorV1, MailSyncDeadlineFailureSchemaErrorV1,
     append_mail_icloud_carddav_credential_storage_v1, append_mail_sync_deadline_failure_storage_v1,
     mail_storage_bundle_v1,
 };
-use hermes_mail_retained_evidence_replay_persistence::{
+use makosh_mail_retained_evidence_replay_persistence::{
     MailRetainedEvidenceReplayDeliverySchemaErrorV1, MailRetainedEvidenceReplayScanSchemaErrorV1,
     MailRetainedEvidenceReplaySchemaErrorV1,
     append_mail_retained_evidence_replay_delivery_storage_v1,
     append_mail_retained_evidence_replay_scan_storage_v1,
     append_mail_retained_evidence_replay_storage_v1,
 };
-use hermes_storage_protocol::v1::StorageBundleV1;
+use makosh_storage_protocol::v1::StorageBundleV1;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MailRuntimeStorageBundleErrorV1 {

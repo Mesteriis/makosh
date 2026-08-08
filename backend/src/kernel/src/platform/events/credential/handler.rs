@@ -3,9 +3,9 @@
 use std::convert::TryInto;
 use std::sync::Arc;
 
-use hermes_kernel_control_store::ModuleRegistrationState;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store::ModuleRegistrationState;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeEventCredentialDeliveryV1, ManagedRuntimeEventCredentialRequestV1,
 };
 
@@ -111,7 +111,7 @@ where
 fn current_registration(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> Result<hermes_kernel_control_store::ModuleRegistration, String> {
+) -> Result<makosh_kernel_control_store::ModuleRegistration, String> {
     let registration = store
         .module_registration(registration_id)
         .map_err(|_| "managed runtime Events credential registration is unavailable".to_owned())?

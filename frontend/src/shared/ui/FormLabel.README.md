@@ -1,6 +1,6 @@
 # FormLabel
 
-Label primitive for Hermes form fields.
+Label primitive for Макошь form fields.
 
 Use with `for` to connect text to a control.
 

@@ -2,7 +2,7 @@ use self::delivery::OutboxSendReceipt;
 use base64::Engine as _;
 use base64::engine::general_purpose::URL_SAFE_NO_PAD;
 use chrono::{DateTime, Utc};
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
@@ -12,10 +12,10 @@ use sqlx::postgres::{PgPool, PgRow, Postgres};
 use thiserror::Error;
 
 use crate::domains::communications::evidence::{link_mail_entity_in_transaction, merge_metadata};
-use hermes_events_postgres::store::EventStore;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_events_postgres::store::EventStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::store::ObservationStore;
 
 pub mod attachments;
 pub mod delivery;
@@ -26,7 +26,7 @@ pub mod smtp_sender;
 
 pub fn rfc822_message_id_for_outbox(outbox_id: &str) -> String {
     let digest = Sha256::digest(outbox_id.trim().as_bytes());
-    format!("<hermes-outbox-{digest:x}@local.invalid>")
+    format!("<makosh-outbox-{digest:x}@local.invalid>")
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -706,10 +706,10 @@ pub enum CommunicationOutboxError {
     Serde(#[from] serde_json::Error),
 
     #[error(transparent)]
-    EventStore(#[from] hermes_events_postgres::errors::EventStoreError),
+    EventStore(#[from] makosh_events_postgres::errors::EventStoreError),
 
     #[error(transparent)]
-    EventEnvelope(#[from] hermes_events_api::EventEnvelopeError),
+    EventEnvelope(#[from] makosh_events_api::EventEnvelopeError),
     #[error(transparent)]
     ObservationStore(#[from] ObservationStoreError),
 

@@ -1,4 +1,4 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
@@ -8,15 +8,15 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::communications::outbox::delivery::OutboxSendReceipt;
-use hermes_hub_backend::domains::communications::outbox::{
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::communications::outbox::delivery::OutboxSendReceipt;
+use makosh_hub_backend::domains::communications::outbox::{
     CommunicationOutboxStatus, CommunicationOutboxStore, NewCommunicationOutboxItem,
 };
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const T: &str = "v1comms-read-receipt-test-token";
 
@@ -25,7 +25,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -33,7 +33,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
 fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("request")
 }
@@ -50,7 +50,7 @@ async fn router(database_url: &str) -> axum::Router {
         .await
         .expect("database connection");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(T, database_url),
+        makosh_backend_testkit::app::config_with_secret_and_database_url(T, database_url),
         database,
     )
 }

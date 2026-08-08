@@ -2,10 +2,10 @@
 
 use std::collections::HashMap;
 
-use hermes_blob_protocol::{
+use makosh_blob_protocol::{
     BlobAccessFenceV1, BlobBackupClassV1, BlobCustodyScopeV1, BlobQuotaGrantV1, BlobRefV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobBackupClassV1 as WireBackupClass, BlobCustodyReleaseGrantV1, BlobCustodyReleaseReasonV1,
     BlobCustodySourceProofKindV1, BlobCustodySourceProofV1, BlobCustodyTransferGrantV1,
     BlobDataOperationV1, BlobDataSessionGrantV1,
@@ -265,7 +265,7 @@ fn validate_signed_release(
         Signature::from_slice(&grant.kernel_authorization_signature_raw).map_err(|_| ())?;
     let mut unsigned = grant.clone();
     unsigned.kernel_authorization_signature_raw.clear();
-    let mut message = b"hermes.blob-custody-release.v1\0".to_vec();
+    let mut message = b"makosh.blob-custody-release.v1\0".to_vec();
     message.extend_from_slice(&unsigned.encode_to_vec());
     key.verify(&message, &signature).map_err(|_| ())
 }
@@ -301,7 +301,7 @@ fn validate_signed_transfer(
         Signature::from_slice(&grant.kernel_authorization_signature_raw).map_err(|_| ())?;
     let mut unsigned = grant.clone();
     unsigned.kernel_authorization_signature_raw.clear();
-    let mut message = b"hermes.blob-custody-transfer.v1\0".to_vec();
+    let mut message = b"makosh.blob-custody-transfer.v1\0".to_vec();
     message.extend_from_slice(&unsigned.encode_to_vec());
     key.verify(&message, &signature).map_err(|_| ())
 }
@@ -349,14 +349,14 @@ fn validate_signed_grant(
         .map_err(|_| denied("signature_encoding"))?;
     let mut unsigned = grant.clone();
     unsigned.kernel_authorization_signature_raw.clear();
-    let mut message = b"hermes.blob-data-session.v1\0".to_vec();
+    let mut message = b"makosh.blob-data-session.v1\0".to_vec();
     message.extend_from_slice(&unsigned.encode_to_vec());
     key.verify(&message, &signature)
         .map_err(|_| denied("signature"))
 }
 
 fn denied(stage: &str) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_blob_session_denied stage={stage}");
     }
 }
@@ -587,7 +587,7 @@ fn backup_class(value: i32) -> Result<BlobBackupClassV1, ()> {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::v1::{
+    use makosh_runtime_protocol::v1::{
         BlobBackupClassV1 as WireBackupClass, BlobCustodyReleaseGrantV1,
         BlobCustodyReleaseReasonV1, BlobCustodySourceProofKindV1, BlobCustodySourceProofV1,
         BlobCustodyTransferGrantV1,
@@ -624,7 +624,7 @@ mod tests {
             reference_expires_at_unix_ms: 120,
             ..Default::default()
         };
-        let mut message = b"hermes.blob-custody-release.v1\0".to_vec();
+        let mut message = b"makosh.blob-custody-release.v1\0".to_vec();
         message.extend_from_slice(&grant.encode_to_vec());
         let signature: Signature = signer.sign(&message);
         grant.kernel_authorization_signature_raw = signature.to_bytes().to_vec();

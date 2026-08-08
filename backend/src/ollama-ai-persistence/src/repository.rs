@@ -1,6 +1,6 @@
-use hermes_ai_contracts::wire::AiProviderReplyGenerationResultV1;
-use hermes_ollama_ai_core::{OllamaAiRunStateV1, OllamaAiRunV1};
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_ai_contracts::wire::AiProviderReplyGenerationResultV1;
+use makosh_ollama_ai_core::{OllamaAiRunStateV1, OllamaAiRunV1};
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool, Row,
     postgres::{PgConnectOptions, PgPoolOptions, PgRow},
@@ -65,7 +65,7 @@ impl OllamaAiPersistenceV1 {
     ) -> Result<OllamaAiPersistenceOutcomeV1, OllamaAiPersistenceErrorV1> {
         validate_accepted(logical_owner_id, &run)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.ollama_ai_runs (
+            "INSERT INTO makosh_data.ollama_ai_runs (
                logical_owner_id, request_id, request_digest, settings_revision,
                state_revision, run_state
              ) VALUES ($1, $2, $3, $4, $5, $6)
@@ -136,7 +136,7 @@ impl OllamaAiPersistenceV1 {
         validate_transition(&current, &transition)?;
         let result = transition.next_run.terminal_result.as_ref();
         let updated = sqlx::query(
-            "UPDATE hermes_data.ollama_ai_runs SET
+            "UPDATE makosh_data.ollama_ai_runs SET
                state_revision = $4,
                run_state = $5,
                selected_model_revision_sha256 = $6,
@@ -204,7 +204,7 @@ const SELECT_RUN: &str = "
         result_input_tokens, result_output_tokens, result_terminal_status,
         result_completeness, result_confidence_basis_points,
         result_provider_settings_revision
- FROM hermes_data.ollama_ai_runs
+ FROM makosh_data.ollama_ai_runs
  WHERE logical_owner_id = $1 AND request_id = $2";
 
 const SELECT_RUN_FOR_UPDATE: &str = "
@@ -214,7 +214,7 @@ const SELECT_RUN_FOR_UPDATE: &str = "
         result_input_tokens, result_output_tokens, result_terminal_status,
         result_completeness, result_confidence_basis_points,
         result_provider_settings_revision
- FROM hermes_data.ollama_ai_runs
+ FROM makosh_data.ollama_ai_runs
  WHERE logical_owner_id = $1 AND request_id = $2
  FOR UPDATE";
 

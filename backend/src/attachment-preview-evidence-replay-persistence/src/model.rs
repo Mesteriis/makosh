@@ -1,11 +1,11 @@
-use hermes_attachment_preview_evidence_replay_api::wire::{
+use makosh_attachment_preview_evidence_replay_api::wire::{
     AttachmentPreviewEvidenceReplayErrorV1, AttachmentPreviewEvidenceReplayStateV1,
 };
-use hermes_attachment_preview_evidence_replay_core::{
+use makosh_attachment_preview_evidence_replay_core::{
     AuthenticatedReplayOperationRequestV1, ReplayFailureV1, ReplayProducerOutcomeV1,
     ReplayProducerResultV1, ReplayProducerV1,
 };
-use hermes_communications_retained_evidence_replay_contract::{
+use makosh_communications_retained_evidence_replay_contract::{
     COMMUNICATIONS_REPLAY_CAPABILITY_ID_V1, COMMUNICATIONS_REPLAY_SOURCE_MODULE_ID_V1,
     COMMUNICATIONS_REPLAY_TARGET_MODULE_ID_V1, communications_replay_command_contract_reference_v1,
     communications_replay_result_contract_reference_v1, validate_communications_replay_command_v1,
@@ -15,11 +15,11 @@ use hermes_communications_retained_evidence_replay_contract::{
         ReplayCommunicationsEvidenceOutcomeV1, ReplayCommunicationsEvidenceResultV1,
     },
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     v1::{ActorKindV1, ContractRefV1, DurableEnvelopeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_mail_retained_evidence_replay_contract::{
+use makosh_mail_retained_evidence_replay_contract::{
     MAIL_REPLAY_CAPABILITY_ID_V1, MAIL_REPLAY_SOURCE_MODULE_ID_V1, MAIL_REPLAY_TARGET_MODULE_ID_V1,
     mail_replay_command_contract_reference_v1, mail_replay_result_contract_reference_v1,
     validate_mail_replay_command_v1, validate_mail_replay_result_v1,
@@ -28,7 +28,7 @@ use hermes_mail_retained_evidence_replay_contract::{
         ReplayMailEvidenceResultV1,
     },
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 use sha2::{Digest, Sha256};
 
@@ -46,7 +46,7 @@ pub struct PersistedReplayOperationV1 {
 
 pub(crate) fn request_fingerprint_v1(request: &AuthenticatedReplayOperationRequestV1) -> [u8; 32] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.attachment-preview-evidence-replay.request.v1\0");
+    hash.update(b"makosh.attachment-preview-evidence-replay.request.v1\0");
     hash.update(request.attachment_anchor_id);
     update_text(&mut hash, &request.logical_owner_id);
     hash.update(request.owner_device_actor_sha256);

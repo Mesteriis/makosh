@@ -2,7 +2,7 @@
 
 use std::path::{Path, PathBuf};
 
-use hermes_runtime_protocol::v1::IntegrationStateRootV1;
+use makosh_runtime_protocol::v1::IntegrationStateRootV1;
 
 use crate::infrastructure::filesystem::{
     ensure_owner_private_directory, prepare_owner_private_directory,
@@ -50,7 +50,7 @@ fn canonical_private_child(data_dir: &Path, child: &Path) -> Result<PathBuf, Str
     ensure_owner_private_directory(child)?;
     let canonical = std::fs::canonicalize(child).map_err(|error| error.to_string())?;
     if !canonical.starts_with(data_dir) || canonical == data_dir {
-        return Err("integration state root escapes the Hermes data directory".to_owned());
+        return Err("integration state root escapes the Макошь data directory".to_owned());
     }
     Ok(canonical)
 }
@@ -124,7 +124,7 @@ mod tests {
             .expect("clock")
             .as_nanos();
         std::env::temp_dir().join(format!(
-            "hermes-integration-state-{label}-{}-{nonce}",
+            "makosh-integration-state-{label}-{}-{nonce}",
             std::process::id()
         ))
     }

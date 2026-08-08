@@ -1,7 +1,7 @@
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use hermes_hub_backend::platform::events::bus::{sanitize_event_payload, whatsapp_event_types};
+use makosh_hub_backend::platform::events::bus::{sanitize_event_payload, whatsapp_event_types};
 use serde_json::json;
 
 fn repo_root() -> PathBuf {

@@ -21,7 +21,7 @@ use super::catalog::EventCatalogContractV1;
 
 pub fn plan(
     contracts: &[EventCatalogContractV1],
-    configuration: &hermes_kernel_control_store::PlatformEventHubTopologyV1,
+    configuration: &makosh_kernel_control_store::PlatformEventHubTopologyV1,
 ) -> Result<EventTopologyPlanV1, String> {
     EventTopologyPlanV1::from_contracts(contracts, configuration)
 }

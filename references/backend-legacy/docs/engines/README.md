@@ -1,4 +1,4 @@
-# Hermes Engine Catalog
+# Макошь Engine Catalog
 
 Status: documentation package aligned to the current repository structure.
 

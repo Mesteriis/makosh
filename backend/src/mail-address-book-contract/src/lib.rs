@@ -13,15 +13,15 @@ pub use envelope::{
     build_upsert_mail_address_book_entry_command_v1,
 };
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-mail-address-book-contract";
+pub const PACKAGE: &str = "makosh-mail-address-book-contract";
 pub const MAIL_OWNER_ID_V1: &str = "mail";
-pub const MAIL_RUNTIME_MODULE_ID_V1: &str = "hermes-mail-runtime";
-pub const MAIL_ADDRESS_BOOK_COMMAND_SOURCE_MODULE_ID_V1: &str = "hermes-mail-contacts-sync-runtime";
+pub const MAIL_RUNTIME_MODULE_ID_V1: &str = "makosh-mail-runtime";
+pub const MAIL_ADDRESS_BOOK_COMMAND_SOURCE_MODULE_ID_V1: &str = "makosh-mail-contacts-sync-runtime";
 pub const MAIL_ADDRESS_BOOK_CAPABILITY_ID_V1: &str = "mail.address-book.provider.v1";
 pub const MAIL_ADDRESS_BOOK_CONTRACT_MAJOR_V1: u32 = 1;
 pub const MAIL_ADDRESS_BOOK_CONTRACT_REVISION_V1: u32 = 3;
@@ -112,7 +112,7 @@ fn event_request(
 }
 
 pub mod wire {
-    include!(concat!(env!("OUT_DIR"), "/hermes.mail.address_book.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.mail.address_book.v1.rs"));
 }
 
 include!(concat!(env!("OUT_DIR"), "/mail_address_book_schema.rs"));
@@ -282,7 +282,7 @@ mod tests {
 
     #[test]
     fn contract_keeps_provider_protocol_in_mail_and_payloads_bounded() {
-        let source = include_str!("../proto/hermes/mail/address_book/v1/address_book.proto");
+        let source = include_str!("../proto/makosh/mail/address_book/v1/address_book.proto");
         let fetch_command = message_source(source, "FetchMailAddressBookPageCommandV1");
         let observed_entry = message_source(source, "MailAddressBookEntryObservedV1");
         let upsert_command = message_source(source, "UpsertMailAddressBookEntryCommandV1");
@@ -325,7 +325,7 @@ mod tests {
 
     #[test]
     fn event_contracts_have_exact_mail_owner_kind_and_complementary_routes() {
-        use hermes_runtime_protocol::v1::{
+        use makosh_runtime_protocol::v1::{
             DurableEnvelopeKindV1, EventRouteDirectionV1, capability_request_v1::Request,
         };
 

@@ -1,4 +1,4 @@
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use sha2::{Digest, Sha256};
 
 const INITIAL_SCHEMA: &[u8] = include_bytes!("../../migrations/0001_scheduler_state.sql");

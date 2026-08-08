@@ -1,11 +1,11 @@
 use axum::Json;
 use axum::extract::{Path, State};
 use chrono::Utc;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{
     NewProviderAccountSecretBinding, ProviderAccountSecretPurpose,
 };
-use hermes_communications_api::commands::{
+use makosh_communications_api::commands::{
     CommunicationProviderCommand, NewCommunicationProviderCommand,
 };
 use serde::{Deserialize, Serialize};
@@ -19,7 +19,7 @@ use crate::app::signal_hub_support::{
     provider_account_or_not_found, sync_provider_account_signal_connection,
 };
 use crate::app::state::AppState;
-use hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore;
+use makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore;
 
 use crate::platform::secrets::models::{NewSecretReference, SecretKind, SecretStoreKind};
 use crate::vault::errors::HostVaultError;
@@ -365,7 +365,7 @@ fn command_id_or_new(command_id: Option<&str>) -> String {
 }
 
 fn actor_id_or_default(actor_id: Option<&str>) -> String {
-    optional_trimmed(actor_id).unwrap_or_else(|| "hermes-frontend".to_owned())
+    optional_trimmed(actor_id).unwrap_or_else(|| "makosh-frontend".to_owned())
 }
 
 fn normalized_base_url(value: &str) -> Result<String, ApiError> {

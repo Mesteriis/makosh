@@ -15,11 +15,11 @@ const paths = {
     BACKEND_ROOT,
   ),
   operationalProto: new URL(
-    'src/mail-api/proto/hermes/mail/operational/v1/client.proto',
+    'src/mail-api/proto/makosh/mail/operational/v1/client.proto',
     BACKEND_ROOT,
   ),
   flagsProto: new URL(
-    'src/mail-api/proto/hermes/mail/message_flags/v1/client.proto',
+    'src/mail-api/proto/makosh/mail/message_flags/v1/client.proto',
     BACKEND_ROOT,
   ),
   operationalApi: new URL('src/mail-api/src/operational.rs', BACKEND_ROOT),
@@ -45,11 +45,11 @@ const paths = {
     BACKEND_ROOT,
   ),
   operationalGenerated: new URL(
-    'frontend/src/gen/hermes/mail/operational/v1/client_pb.ts',
+    'frontend/src/gen/makosh/mail/operational/v1/client_pb.ts',
     PROJECT_ROOT,
   ),
   flagsGenerated: new URL(
-    'frontend/src/gen/hermes/mail/message_flags/v1/client_pb.ts',
+    'frontend/src/gen/makosh/mail/message_flags/v1/client_pb.ts',
     PROJECT_ROOT,
   ),
   operationalGateway: new URL(
@@ -121,7 +121,7 @@ test('Mail provider location identity is stable, private and live-conformant', a
   assert.match(operationalProto, /string message_id = 2/);
   assert.match(flagsProto, /string message_id = 3/);
 
-  assert.match(locator, /CREATE TABLE IF NOT EXISTS hermes_data\.mail_imap_message_locators/);
+  assert.match(locator, /CREATE TABLE IF NOT EXISTS makosh_data\.mail_imap_message_locators/);
   assert.match(locator, /UNIQUE \(connection_id, mailbox_id, uid_validity, uid\)/);
   assert.match(locator, /pub fn initial_imap_message_id/);
   assert.match(locator, /format!\("imap:v1:\{\}"/);

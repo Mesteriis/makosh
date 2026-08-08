@@ -9,7 +9,7 @@
 ```markdown
 # Бэкенд
 
-Ниже описаны компоненты схемы базы данных Hermes Hub, добавленные или изменённые миграциями `0051`–`0075`. Для каждой миграции указаны создаваемые таблицы, ограничения, индексы и начальные данные (если есть). Разделы сгруппированы по функциональным областям.
+Ниже описаны компоненты схемы базы данных Макошь, добавленные или изменённые миграциями `0051`–`0075`. Для каждой миграции указаны создаваемые таблицы, ограничения, индексы и начальные данные (если есть). Разделы сгруппированы по функциональным областям.
 
 ---
 
@@ -202,7 +202,7 @@
 
 Начальные промпты (оба системные, `is_system = true`, `seeded = true`):
 
-- `prompt:system:global:default_chat` — scope `global`, slot `default_chat`, версия `v1`, body: `Answer using only cited Hermes context. Query: {{query}}`, переменная `query`
+- `prompt:system:global:default_chat` — scope `global`, slot `default_chat`, версия `v1`, body: `Answer using only cited Макошь context. Query: {{query}}`, переменная `query`
 - `prompt:system:communication:mail_intelligence` — scope `communication`, slot `mail_intelligence`, версия `v1`, body: `Analyze this communication and return concise operational context. Subject: {{subject}}`, переменная `subject`
 
 ### `ai_prompt_eval_runs` (0057)

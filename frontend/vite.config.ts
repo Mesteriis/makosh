@@ -6,8 +6,8 @@ import { isAbsolute, resolve } from 'node:path'
 const DEVELOPMENT_GATEWAY_TARGET = 'http://127.0.0.1:9444'
 const DEVELOPMENT_OWNER_VAULT_HOST_TARGET = 'http://127.0.0.1:9445'
 const DEVELOPMENT_BROWSER_ORIGIN = 'http://127.0.0.1:5173'
-const DEVELOPMENT_PROXY_PROOF_HEADER = 'x-hermes-development-proxy-proof'
-const DEVELOPMENT_HOST_PROOF_HEADER = 'x-hermes-development-host-proof'
+const DEVELOPMENT_PROXY_PROOF_HEADER = 'x-makosh-development-proxy-proof'
+const DEVELOPMENT_HOST_PROOF_HEADER = 'x-makosh-development-host-proof'
 const FORWARDED_HEADERS = [
 	'forwarded',
 	'x-forwarded-for',
@@ -19,25 +19,25 @@ const FORWARDED_HEADERS = [
 ]
 
 function loadDevelopmentGatewayProxy() {
-	const target = process.env.HERMES_DEV_GATEWAY_TARGET
-	const proofFile = process.env.HERMES_DEV_GATEWAY_PROOF_FILE
+	const target = process.env.MAKOSH_DEV_GATEWAY_TARGET
+	const proofFile = process.env.MAKOSH_DEV_GATEWAY_PROOF_FILE
 	if (target === undefined && proofFile === undefined) {
 		return undefined
 	}
 	if (target !== DEVELOPMENT_GATEWAY_TARGET || proofFile === undefined || !isAbsolute(proofFile)) {
-		throw new Error('Hermes development Gateway proxy configuration is invalid')
+		throw new Error('Макошь development Gateway proxy configuration is invalid')
 	}
 	return { proof: loadPrivateDevelopmentProof(proofFile), target }
 }
 
 function loadDevelopmentOwnerVaultHostProxy() {
-	const target = process.env.HERMES_DEV_OWNER_VAULT_HOST_TARGET
-	const proofFile = process.env.HERMES_DEV_GATEWAY_PROOF_FILE
+	const target = process.env.MAKOSH_DEV_OWNER_VAULT_HOST_TARGET
+	const proofFile = process.env.MAKOSH_DEV_GATEWAY_PROOF_FILE
 	if (target === undefined) return undefined
 	if (target !== DEVELOPMENT_OWNER_VAULT_HOST_TARGET
 		|| proofFile === undefined
 		|| !isAbsolute(proofFile)) {
-		throw new Error('Hermes development owner Vault host proxy configuration is invalid')
+		throw new Error('Макошь development owner Vault host proxy configuration is invalid')
 	}
 	return { proof: loadPrivateDevelopmentProof(proofFile), target }
 }
@@ -45,11 +45,11 @@ function loadDevelopmentOwnerVaultHostProxy() {
 function loadPrivateDevelopmentProof(proofFile: string): string {
 	const metadata = lstatSync(proofFile)
 	if (!metadata.isFile() || metadata.isSymbolicLink() || (metadata.mode & 0o077) !== 0) {
-		throw new Error('Hermes development proxy proof file is invalid')
+		throw new Error('Макошь development proxy proof file is invalid')
 	}
 	const proof = readFileSync(proofFile, 'utf8')
 	if (!/^[0-9a-fA-F]{64}$/.test(proof)) {
-		throw new Error('Hermes development proxy proof is invalid')
+		throw new Error('Макошь development proxy proof is invalid')
 	}
 	return proof
 }
@@ -109,7 +109,7 @@ function developmentOwnerVaultHostProxy(host: { proof: string; target: string })
 const developmentProxies = developmentGateway === undefined
 	? undefined
 	: {
-		'^/hermes\\.': developmentGatewayProxy(developmentGateway),
+		'^/makosh\\.': developmentGatewayProxy(developmentGateway),
 		'/api/blobs/': developmentGatewayProxy(developmentGateway),
 		'/api/realtime/v1/events': developmentGatewayProxy(developmentGateway),
 		'/healthz': developmentGatewayProxy(developmentGateway),
@@ -117,11 +117,11 @@ const developmentProxies = developmentGateway === undefined
 		...(developmentOwnerVaultHost === undefined
 			? {}
 			: {
-				'/__hermes/owner-vault-host/v1':
+				'/__makosh/owner-vault-host/v1':
 					developmentOwnerVaultHostProxy(developmentOwnerVaultHost),
-				'/__hermes/owner-device-proof/v1':
+				'/__makosh/owner-device-proof/v1':
 					developmentOwnerVaultHostProxy(developmentOwnerVaultHost),
-				'/__hermes/legacy-provider-recovery/v1':
+				'/__makosh/legacy-provider-recovery/v1':
 					developmentOwnerVaultHostProxy(developmentOwnerVaultHost),
 			}),
 	}

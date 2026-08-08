@@ -1,10 +1,10 @@
-use hermes_communication_summary_api::{
+use makosh_communication_summary_api::{
     COMMUNICATION_SUMMARY_COMMAND_CONTRACT_NAME_V1, COMMUNICATION_SUMMARY_CONTRACT_MAJOR_V1,
     COMMUNICATION_SUMMARY_CONTRACT_REVISION_V1, COMMUNICATION_SUMMARY_OWNER_V1,
     COMMUNICATION_SUMMARY_QUERY_CONTRACT_NAME_V1, COMMUNICATION_SUMMARY_REALTIME_CONTRACT_NAME_V1,
     COMMUNICATION_SUMMARY_SCHEMA_SHA256,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 
 pub(crate) fn communication_summary_command_contract_v1() -> ContractReferenceV1 {
     contract(COMMUNICATION_SUMMARY_COMMAND_CONTRACT_NAME_V1)

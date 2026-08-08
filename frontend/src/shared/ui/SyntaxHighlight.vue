@@ -11,16 +11,16 @@ const props = withDefaults(defineProps<{
 	language: 'plaintext'
 })
 
-const classes = computed(() => ['hermes-syntax-highlight', props.class])
+const classes = computed(() => ['makosh-syntax-highlight', props.class])
 const highlightedHtml = computed(() => highlightCodeToSafeHtml(props.code, props.language))
 </script>
 
 <template>
 	<figure :class="classes">
-		<figcaption v-if="label || language" class="hermes-code-block__caption">
+		<figcaption v-if="label || language" class="makosh-code-block__caption">
 			<span v-if="label">{{ label }}</span>
-			<span class="hermes-code-block__language">{{ language }}</span>
+			<span class="makosh-code-block__language">{{ language }}</span>
 		</figcaption>
-		<pre class="hermes-code-block__pre" tabindex="0" :aria-label="label || language"><code class="hljs" v-html="highlightedHtml" /></pre>
+		<pre class="makosh-code-block__pre" tabindex="0" :aria-label="label || language"><code class="hljs" v-html="highlightedHtml" /></pre>
 	</figure>
 </template>

@@ -1,9 +1,9 @@
 #![forbid(unsafe_code)]
 
-use hermes_desktop_call_recording_api::{MAX_AUDIO_BYTES_V1, MAX_DURATION_MILLIS_V1};
+use makosh_desktop_call_recording_api::{MAX_AUDIO_BYTES_V1, MAX_DURATION_MILLIS_V1};
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-desktop-call-recording-core";
+pub const PACKAGE: &str = "makosh-desktop-call-recording-core";
 pub const WAV_HEADER_BYTES_V1: usize = 44;
 pub const WAV_BYTES_PER_SECOND_V1: u64 = 32_000;
 
@@ -67,7 +67,7 @@ pub fn device_actor_sha256_v1(owner: &str, device: &str) -> Result<[u8; 32], Rec
         return Err(RecordingCoreErrorV1::InvalidIdentity);
     }
     let mut digest = Sha256::new();
-    digest.update(b"hermes.desktop-call-recording.device-actor.v1\0");
+    digest.update(b"makosh.desktop-call-recording.device-actor.v1\0");
     digest.update(owner.as_bytes());
     digest.update([0]);
     digest.update(device.as_bytes());

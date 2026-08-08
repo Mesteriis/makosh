@@ -14,8 +14,8 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-inspector-panel',
-	`hermes-inspector-panel--${props.density}`,
+	'makosh-inspector-panel',
+	`makosh-inspector-panel--${props.density}`,
 	props.class
 ])
 
@@ -24,15 +24,15 @@ const accessibleLabel = computed(() => props.label ?? props.title)
 
 <template>
 	<component :is="as" :class="classes" :aria-label="accessibleLabel">
-		<header v-if="title || description || $slots.header" class="hermes-inspector-panel__header">
-			<strong v-if="title" class="hermes-inspector-panel__title">{{ title }}</strong>
-			<span v-if="description" class="hermes-inspector-panel__description">{{ description }}</span>
+		<header v-if="title || description || $slots.header" class="makosh-inspector-panel__header">
+			<strong v-if="title" class="makosh-inspector-panel__title">{{ title }}</strong>
+			<span v-if="description" class="makosh-inspector-panel__description">{{ description }}</span>
 			<slot name="header" />
 		</header>
-		<div class="hermes-inspector-panel__body">
+		<div class="makosh-inspector-panel__body">
 			<slot />
 		</div>
-		<footer v-if="$slots.footer" class="hermes-inspector-panel__footer">
+		<footer v-if="$slots.footer" class="makosh-inspector-panel__footer">
 			<slot name="footer" />
 		</footer>
 	</component>

@@ -1,14 +1,14 @@
 //! Durable Mail replay command consumer.
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePublishPermitV1, RuntimeSubscribePermitV1,
     try_receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1, v1::durable_envelope_v1::Semantics,
     validation::envelope::decode_envelope_v1,
 };
-use hermes_mail_retained_evidence_replay_contract::{
+use makosh_mail_retained_evidence_replay_contract::{
     MAIL_REPLAY_CAPABILITY_ID_V1, MAIL_REPLAY_SOURCE_MODULE_ID_V1,
     MailReplayResultEnvelopeContextV1, build_mail_replay_result_outbox_v1,
     mail_replay_command_contract_reference_v1, validate_mail_replay_command_v1,
@@ -17,11 +17,11 @@ use hermes_mail_retained_evidence_replay_contract::{
         ReplayMailEvidenceResultV1,
     },
 };
-use hermes_mail_retained_evidence_replay_persistence::{
+use makosh_mail_retained_evidence_replay_persistence::{
     MailReplayCommandAdmissionV1, MailReplayCommandInboxOutcomeV1,
     MailRetainedEvidenceReplayPersistenceV1, RetainedMailReplayErrorV1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 
 use crate::retained_evidence_replay::{
@@ -281,7 +281,7 @@ fn terminal_result(
 }
 
 fn exact_contract(
-    value: Option<&hermes_events_protocol::v1::ContractRefV1>,
+    value: Option<&makosh_events_protocol::v1::ContractRefV1>,
     expected: &ContractReferenceV1,
 ) -> bool {
     value.is_some_and(|value| {
@@ -303,11 +303,11 @@ fn id16(value: &[u8]) -> Result<[u8; 16], MailReplayCommandDecodeErrorV1> {
 
 #[cfg(test)]
 mod tests {
-    use hermes_events_protocol::{
+    use makosh_events_protocol::{
         delivery::OutboxRecordV1, v1::durable_envelope_v1::Semantics,
         validation::envelope::decode_envelope_v1,
     };
-    use hermes_mail_retained_evidence_replay_contract::{
+    use makosh_mail_retained_evidence_replay_contract::{
         MailReplayCommandEnvelopeContextV1, build_mail_replay_command_outbox_v1,
     };
 

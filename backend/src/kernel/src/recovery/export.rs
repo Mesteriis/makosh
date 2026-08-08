@@ -1,7 +1,7 @@
 use std::path::Path;
 
-use hermes_gateway_protocol::v1::{ExportControlStoreResponseV1, RecoveryControlResponseV1};
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_gateway_protocol::v1::{ExportControlStoreResponseV1, RecoveryControlResponseV1};
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use crate::control_store::lifecycle::open_validated_control_store;
 use crate::infrastructure::filesystem::prepare_owner_private_directory;
@@ -38,7 +38,7 @@ pub(super) fn export_recovery_control_store(
         return unavailable_export_action();
     };
 
-    use hermes_gateway_protocol::v1::recovery_control_response_v1::Result;
+    use makosh_gateway_protocol::v1::recovery_control_response_v1::Result;
     RecoveryAction {
         response: RecoveryControlResponseV1 {
             result: Some(Result::ExportControlStore(ExportControlStoreResponseV1 {

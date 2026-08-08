@@ -158,7 +158,7 @@ describe('PersonasPage boundary', () => {
     expect(storySource).not.toContain('right_person_id')
     expect(storySource).not.toContain('person_id: null')
     expect(storySource).toContain('PersonasWorkspaceComponent')
-    expect(storySource).toContain("title: 'Hermes App/Personas/Workspace'")
+    expect(storySource).toContain("title: 'Макошь App/Personas/Workspace'")
     expect(storySource).not.toContain('createDomainScaffoldStory')
   })
 

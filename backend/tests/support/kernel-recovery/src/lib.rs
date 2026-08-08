@@ -223,7 +223,7 @@ mod tests {
     mod vault_status;
 }
 #[cfg(test)]
-pub(crate) use hermes_kernel_control_store_sqlite::StoreError;
+pub(crate) use makosh_kernel_control_store_sqlite::StoreError;
 
 #[cfg(test)]
 #[path = "../../../../src/kernel/control_store/sqlite/src/actor/handle.rs"]

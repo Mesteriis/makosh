@@ -45,12 +45,12 @@ durable business truth и ничего не продвигает в другие
 
 Summary реализуется отдельным owner `communication_summary` в пяти units:
 
-- `hermes-communication-summary-api` — generated Start/Get/realtime contract;
-- `hermes-communication-summary-core` — pure lifecycle и validation;
-- `hermes-communication-summary-persistence` — owner-local PostgreSQL state,
+- `makosh-communication-summary-api` — generated Start/Get/realtime contract;
+- `makosh-communication-summary-core` — pure lifecycle и validation;
+- `makosh-communication-summary-persistence` — owner-local PostgreSQL state,
   inbox/outbox и realtime replay;
-- `hermes-communication-summary-runtime` — managed workflow orchestration;
-- `hermes-communication-summary-assembly` — unsigned descriptor, settings
+- `makosh-communication-summary-runtime` — managed workflow orchestration;
+- `makosh-communication-summary-assembly` — unsigned descriptor, settings
   schema, Storage bundle и release fragment.
 
 Ни одна из этих units не принадлежит Communications, AI или Ollama. Workflow
@@ -61,7 +61,7 @@ summary command/result/content messages. Общая внутренняя materia
 может быть переиспользована внутри Communications, но reply и summary durable
 event names, schema hashes, target capability и Blob audience различны.
 
-AI Engine расширяет public `hermes-ai-contracts` отдельными summary
+AI Engine расширяет public `makosh-ai-contracts` отдельными summary
 request/result messages и предоставляет отдельную capability
 `ai.summary.request.v1`. Ollama Integration предоставляет отдельную capability
 `ai.provider.summarize.v1`. Общие engine/provider runtimes могут обслуживать

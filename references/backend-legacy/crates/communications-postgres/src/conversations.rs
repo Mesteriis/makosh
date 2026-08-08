@@ -1,4 +1,4 @@
-use hermes_communications_api::conversations::{
+use makosh_communications_api::conversations::{
     CanonicalConversationMemberRecord, CanonicalConversationRecord, CanonicalIdentityRecord,
     ConversationReadError, ConversationReadPort,
 };
@@ -205,7 +205,7 @@ impl ConversationReadPort for ConversationReadStore {
         provider_chat_id: Option<&str>,
         limit: i64,
     ) -> Result<
-        Vec<hermes_communications_api::conversations::CanonicalPresenceRecord>,
+        Vec<makosh_communications_api::conversations::CanonicalPresenceRecord>,
         ConversationReadError,
     > {
         let rows = sqlx::query(
@@ -229,7 +229,7 @@ impl ConversationReadPort for ConversationReadStore {
         rows.into_iter()
             .map(|row| {
                 Ok(
-                    hermes_communications_api::conversations::CanonicalPresenceRecord {
+                    makosh_communications_api::conversations::CanonicalPresenceRecord {
                         identity_id: row.try_get("identity_id").map_err(storage_error)?,
                         account_id: row.try_get("account_id").map_err(storage_error)?,
                         channel_kind: row.try_get("channel_kind").map_err(storage_error)?,

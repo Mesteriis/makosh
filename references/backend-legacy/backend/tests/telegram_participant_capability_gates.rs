@@ -3,9 +3,9 @@ use axum::http::{Request, StatusCode, header};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const LOCAL_API_TOKEN: &str = "telegram-participant-capability-gates-secret";
 
@@ -18,7 +18,7 @@ async fn fixture_account_blocks_members_sync_before_audit_or_events() {
         .expect("database connection");
     let pool = database.pool().expect("configured pool").clone();
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -100,7 +100,7 @@ async fn fixture_account_blocks_join_and_leave_before_command_enqueue() {
         .expect("database connection");
     let pool = database.pool().expect("configured pool").clone();
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -212,7 +212,7 @@ fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .method("GET")
         .uri(uri)
-        .header("X-Hermes-Secret", LOCAL_API_TOKEN)
+        .header("X-Макошь-Secret", LOCAL_API_TOKEN)
         .body(Body::empty())
         .expect("request")
 }
@@ -222,7 +222,7 @@ fn json_post(uri: &str, body: Value) -> Request<Body> {
         .method("POST")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("X-Hermes-Secret", LOCAL_API_TOKEN)
+        .header("X-Макошь-Secret", LOCAL_API_TOKEN)
         .body(Body::from(body.to_string()))
         .expect("request")
 }

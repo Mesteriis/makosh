@@ -5,7 +5,7 @@ import {
 	MailMessageLocationKindV1,
 	type MailMessageLocationOperationStatusV1,
 	MailMessageLocationStatusRequestV1Schema,
-} from '../../../gen/hermes/mail/message_location/v1/client_pb'
+} from '../../../gen/makosh/mail/message_location/v1/client_pb'
 import { getMailMessageLocationCommandConnectClient } from './mailMessageLocationCommandClient'
 import { getMailMessageLocationQueryConnectClient } from './mailMessageLocationQueryClient'
 

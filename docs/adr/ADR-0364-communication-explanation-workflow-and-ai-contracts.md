@@ -55,13 +55,13 @@ verdict и не изменение canonical Communications truth.
 Explanation реализуется отдельным owner `communication_explanation` в пяти
 units:
 
-- `hermes-communication-explanation-api` — generated Start/Get/realtime
+- `makosh-communication-explanation-api` — generated Start/Get/realtime
   contract;
-- `hermes-communication-explanation-core` — pure lifecycle и validation;
-- `hermes-communication-explanation-persistence` — owner-local PostgreSQL
+- `makosh-communication-explanation-core` — pure lifecycle и validation;
+- `makosh-communication-explanation-persistence` — owner-local PostgreSQL
   state, inbox/outbox и realtime replay;
-- `hermes-communication-explanation-runtime` — managed workflow orchestration;
-- `hermes-communication-explanation-assembly` — unsigned descriptor, settings
+- `makosh-communication-explanation-runtime` — managed workflow orchestration;
+- `makosh-communication-explanation-assembly` — unsigned descriptor, settings
   schema, Storage bundle и release fragment.
 
 Workflow не принадлежит Communications, AI Engine или Ollama и не импортирует

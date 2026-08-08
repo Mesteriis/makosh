@@ -200,7 +200,7 @@ impl WhatsappCapabilitiesResponse {
                 "sessions.restore" if lifecycle_state == "removed" => {
                     capability.status = WhatsAppCapabilityState::Blocked.as_str().to_owned();
                     capability.reason =
-                        "This account was removed from Hermes runtime control.".to_owned();
+                        "This account was removed from Макошь runtime control.".to_owned();
                 }
                 "auth.qr_link_start" if lifecycle_state == "pair_code_pending" => {
                     capability.status = WhatsAppCapabilityState::Blocked.as_str().to_owned();

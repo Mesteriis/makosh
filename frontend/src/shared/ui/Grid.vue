@@ -18,11 +18,11 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-grid',
-	`hermes-grid--${props.columns}`,
-	`hermes-grid--gap-${props.gap}`,
-	`hermes-grid--align-${props.align}`,
-	{ 'hermes-grid--dense': props.dense },
+	'makosh-grid',
+	`makosh-grid--${props.columns}`,
+	`makosh-grid--gap-${props.gap}`,
+	`makosh-grid--align-${props.align}`,
+	{ 'makosh-grid--dense': props.dense },
 	props.class
 ])
 </script>

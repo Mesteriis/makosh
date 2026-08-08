@@ -12,7 +12,7 @@ withDefaults(defineProps<{
 
 <template>
   <Transition
-    :name="'hermes-fade'"
+    :name="'makosh-fade'"
     :mode="mode"
     :appear="appear"
   >

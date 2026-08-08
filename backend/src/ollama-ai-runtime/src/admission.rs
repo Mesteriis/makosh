@@ -1,16 +1,16 @@
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     ai_provider_explanation_contract_reference_v1,
     ai_provider_reply_generation_contract_reference_v1,
     ai_provider_summary_generation_contract_reference_v1,
     ai_provider_translation_contract_reference_v1,
 };
-use hermes_ollama_ai_api::{
+use makosh_ollama_ai_api::{
     OLLAMA_AI_EXPLANATION_CAPABILITY_ID_V1, OLLAMA_AI_MODULE_ID_V1,
     OLLAMA_AI_PROVIDER_CAPABILITY_ID_V1, OLLAMA_AI_STORAGE_CAPABILITY_ID_V1,
     OLLAMA_AI_SUMMARY_CAPABILITY_ID_V1, OLLAMA_AI_TRANSLATION_CAPABILITY_ID_V1, OLLAMA_OWNER_ID_V1,
     ollama_ai_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityCriticalityV1, CapabilityDescriptorV1, CapabilityRequestV1, ModuleDescriptorV1,
     ModuleKindV1, ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1,
     RuntimeBudgetRequestV1, SettingsSchemaRefV1, StorageNamespaceRequestV1,
@@ -138,7 +138,7 @@ fn translation_capability_v1() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::validate_descriptor_v1;
+    use makosh_runtime_protocol::validation::descriptor::validate_descriptor_v1;
 
     use super::*;
 

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS hermes_data.mail_icloud_carddav_credential_bindings (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_icloud_carddav_credential_bindings (
     connection_id TEXT PRIMARY KEY,
     configuration_instance_id TEXT NOT NULL,
     purpose SMALLINT NOT NULL CHECK (purpose = 5),
@@ -9,9 +9,9 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_icloud_carddav_credential_bindings (
     updated_at_unix_seconds BIGINT NOT NULL CHECK (updated_at_unix_seconds > 0)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.mail_icloud_carddav_lifecycle_credentials (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_icloud_carddav_lifecycle_credentials (
     operation_id TEXT PRIMARY KEY
-        REFERENCES hermes_data.mail_account_lifecycle_operations (operation_id),
+        REFERENCES makosh_data.mail_account_lifecycle_operations (operation_id),
     purpose SMALLINT NOT NULL CHECK (purpose = 5),
     binding_revision BIGINT,
     credential_revision BIGINT NOT NULL CHECK (credential_revision > 0),

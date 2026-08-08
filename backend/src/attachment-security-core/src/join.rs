@@ -1,4 +1,4 @@
-use hermes_attachment_security_contract::ATTACHMENT_SECURITY_MAX_SCAN_CANDIDATE_BYTES_V1;
+use makosh_attachment_security_contract::ATTACHMENT_SECURITY_MAX_SCAN_CANDIDATE_BYTES_V1;
 use sha2::{Digest, Sha256};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -253,7 +253,7 @@ pub fn attachment_security_quarantine_evidence_v1(
     reason: AttachmentSecurityQuarantineReasonV1,
 ) -> AttachmentSecurityQuarantineEvidenceV1 {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-security.join-quarantine.v1\0");
+    hasher.update(b"makosh.attachment-security.join-quarantine.v1\0");
     hasher.update(attachment_anchor_id);
     hasher.update(correlation_id);
     hasher.update([quarantine_reason_value(reason)]);

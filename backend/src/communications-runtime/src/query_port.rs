@@ -1,6 +1,6 @@
 //! Generated Communications metadata-query port.
 
-use hermes_communications_api::{
+use makosh_communications_api::{
     CommunicationConversationIdV1, CommunicationMessageIdV1, CommunicationObservationIdV1,
     CommunicationSourceCursorV1, CommunicationsClientError, GetCommunicationConversationV1,
     GetCommunicationEvidenceV1, GetCommunicationMessageV1, ListCommunicationAccountsV1,
@@ -12,8 +12,8 @@ use hermes_communications_api::{
         communications_query_response_v1::Result as QueryResult,
     },
 };
-use hermes_communications_persistence::CommunicationsDurablePersistence;
-use hermes_runtime_protocol::managed_control::{
+use makosh_communications_persistence::CommunicationsDurablePersistence;
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
 use prost::Message;
@@ -65,7 +65,7 @@ pub async fn handle_query_request_v1(
             .await
             .map_err(map_client_error)?;
             QueryResult::ListAccounts(
-                hermes_communications_api::query_wire::ListAccountsResponseV1 {
+                makosh_communications_api::query_wire::ListAccountsResponseV1 {
                     accounts: page.items.iter().map(Into::into).collect(),
                     next_cursor: page.next_cursor,
                 },
@@ -83,14 +83,14 @@ pub async fn handle_query_request_v1(
             .await
             .map_err(map_client_error)?;
             QueryResult::ListConversations(
-                hermes_communications_api::query_wire::ListConversationsResponseV1 {
+                makosh_communications_api::query_wire::ListConversationsResponseV1 {
                     conversations: page.items.iter().map(Into::into).collect(),
                     next_cursor: page.next_cursor,
                 },
             )
         }
         Operation::GetConversation(request) => QueryResult::GetConversation(
-            hermes_communications_api::query_wire::GetConversationResponseV1 {
+            makosh_communications_api::query_wire::GetConversationResponseV1 {
                 conversation: Some(
                     (&get_communication_conversation(
                         persistence,
@@ -107,7 +107,7 @@ pub async fn handle_query_request_v1(
             },
         ),
         Operation::GetMessage(request) => QueryResult::GetMessage(
-            hermes_communications_api::query_wire::GetMessageResponseV1 {
+            makosh_communications_api::query_wire::GetMessageResponseV1 {
                 message: Some(
                     (&get_communication_message(
                         persistence,
@@ -135,7 +135,7 @@ pub async fn handle_query_request_v1(
             .await
             .map_err(map_client_error)?;
             QueryResult::ListConversationMessages(
-                hermes_communications_api::query_wire::ListConversationMessagesResponseV1 {
+                makosh_communications_api::query_wire::ListConversationMessagesResponseV1 {
                     messages: page.items.iter().map(Into::into).collect(),
                     next_cursor: page.next_cursor,
                 },
@@ -155,7 +155,7 @@ pub async fn handle_query_request_v1(
             .await
             .map_err(map_client_error)?;
             QueryResult::ListConversationParticipants(
-                hermes_communications_api::query_wire::ListConversationParticipantsResponseV1 {
+                makosh_communications_api::query_wire::ListConversationParticipantsResponseV1 {
                     participants: page.items.iter().map(Into::into).collect(),
                     next_cursor: page.next_cursor,
                 },
@@ -173,7 +173,7 @@ pub async fn handle_query_request_v1(
             .await
             .map_err(map_client_error)?;
             QueryResult::ListMessageAttachmentAnchors(
-                hermes_communications_api::query_wire::ListMessageAttachmentAnchorsResponseV1 {
+                makosh_communications_api::query_wire::ListMessageAttachmentAnchorsResponseV1 {
                     anchors: page.items.iter().map(Into::into).collect(),
                     next_cursor: page.next_cursor,
                 },
@@ -191,7 +191,7 @@ pub async fn handle_query_request_v1(
             .await
             .map_err(map_client_error)?;
             QueryResult::ListMessageReferences(
-                hermes_communications_api::query_wire::ListMessageReferencesResponseV1 {
+                makosh_communications_api::query_wire::ListMessageReferencesResponseV1 {
                     references: page.items.iter().map(Into::into).collect(),
                     next_cursor: page.next_cursor,
                 },
@@ -209,7 +209,7 @@ pub async fn handle_query_request_v1(
             .await
             .map_err(map_client_error)?;
             QueryResult::ListMessageEvidence(
-                hermes_communications_api::query_wire::ListMessageEvidenceResponseV1 {
+                makosh_communications_api::query_wire::ListMessageEvidenceResponseV1 {
                     evidence: page.items.iter().map(Into::into).collect(),
                     next_cursor: page.next_cursor,
                 },
@@ -228,12 +228,12 @@ pub async fn handle_query_request_v1(
             .await
             .map_err(map_search_error)?;
             QueryResult::SearchCommunications(
-                hermes_communications_api::query_wire::SearchCommunicationsResponseV1 {
+                makosh_communications_api::query_wire::SearchCommunicationsResponseV1 {
                     hits: page
                         .items
                         .into_iter()
                         .map(|hit| {
-                            hermes_communications_api::query_wire::CommunicationSearchHitV1 {
+                            makosh_communications_api::query_wire::CommunicationSearchHitV1 {
                                 evidence_id: hit.evidence_id.bytes().to_vec(),
                                 message_id: hit.message_id.bytes().to_vec(),
                                 conversation_id: hit.conversation_id.bytes().to_vec(),
@@ -258,7 +258,7 @@ pub async fn handle_query_request_v1(
                 .map_err(|_| CommunicationsQueryPortErrorV1::Unavailable)?
                 .map_or_else(Vec::new, |message_id| message_id.bytes().to_vec());
             QueryResult::GetEvidence(
-                hermes_communications_api::query_wire::GetEvidenceResponseV1 {
+                makosh_communications_api::query_wire::GetEvidenceResponseV1 {
                     evidence: Some((&evidence).into()),
                     message_id,
                 },

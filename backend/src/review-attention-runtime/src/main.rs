@@ -3,13 +3,13 @@ use std::os::fd::{AsRawFd, FromRawFd};
 use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 
-use hermes_review_attention_persistence::schema::review_attention_storage_bundle_v1;
-use hermes_review_attention_runtime::{
+use makosh_review_attention_persistence::schema::review_attention_storage_bundle_v1;
+use makosh_review_attention_runtime::{
     ReviewAttentionManagedRuntimeErrorV1, ReviewAttentionManagedRuntimeV1,
     ReviewAttentionRuntimeAdmissionV1, review_attention_module_descriptor_v1,
     review_attention_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedDomainRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,

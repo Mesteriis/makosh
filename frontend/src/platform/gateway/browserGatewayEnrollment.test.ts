@@ -22,7 +22,7 @@ describe('BrowserGatewayEnrollment', () => {
 			.mockResolvedValueOnce(new Response(JSON.stringify({
 				public_key: { publicKey: {
 					rp: { name: 'localhost', id: 'localhost' },
-					user: { id: 'b3duZXI', name: 'owner', displayName: 'Hermes owner' },
+					user: { id: 'b3duZXI', name: 'owner', displayName: 'Макошь owner' },
 					challenge: 'AQ', pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
 				} },
 			}), { status: 200 }))

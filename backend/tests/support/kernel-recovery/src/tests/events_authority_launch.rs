@@ -1,5 +1,5 @@
-use hermes_kernel_control_store::PlatformEventsAuthorityConfigurationV1;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store::PlatformEventsAuthorityConfigurationV1;
+use makosh_runtime_protocol::v1::{
     EventsAuthorityRuntimeControlResponseV1, EventsAuthorityRuntimeStateV1,
     EventsAuthorityRuntimeStatusV1,
     events_authority_runtime_control_response_v1::Result as ResponseResult,
@@ -13,7 +13,7 @@ const ACCOUNT_KEY: &str = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 #[test]
 fn events_authority_launch_arguments_contain_only_staged_contract_paths() {
-    let root = super::common::unique_target_root("hermes-events-authority-arguments");
+    let root = super::common::unique_target_root("makosh-events-authority-arguments");
     let contracts = StagedRuntimeContracts::stage_with_runtime_configuration(
         &root.join("contracts"),
         b"descriptor",

@@ -4,7 +4,7 @@ use super::communications::message_connect_error;
 use super::communications::storage_connect_error;
 
 pub(super) fn raw_evidence(
-    error: hermes_communications_postgres::errors::CommunicationIngestionError,
+    error: makosh_communications_postgres::errors::CommunicationIngestionError,
 ) -> ConnectError {
     tracing::error!(error = %error, "communication raw evidence query failed");
     ConnectError::new(

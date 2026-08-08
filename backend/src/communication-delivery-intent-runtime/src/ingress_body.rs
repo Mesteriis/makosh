@@ -1,12 +1,12 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTransferRequestV1, ManagedBlobSessionRequestV1,
     request_managed_blob_custody_transfer_v2, request_managed_blob_session_v2,
 };
-use hermes_communication_delivery_intent_ingress_api::COMMUNICATION_DELIVERY_INTENT_INGRESS_MAX_PROOF_BYTES_V1;
-use hermes_communication_delivery_intent_persistence::DeliveryIntentIngressBlobReceiptV1;
-use hermes_runtime_protocol::{
+use makosh_communication_delivery_intent_ingress_api::COMMUNICATION_DELIVERY_INTENT_INGRESS_MAX_PROOF_BYTES_V1;
+use makosh_communication_delivery_intent_persistence::DeliveryIntentIngressBlobReceiptV1;
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::BlobDataOperationV1,
 };

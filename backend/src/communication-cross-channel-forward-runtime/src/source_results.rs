@@ -1,24 +1,24 @@
-use hermes_communication_cross_channel_forward_api::COMMUNICATION_CROSS_CHANNEL_FORWARD_MODULE_ID_V1;
-use hermes_communication_cross_channel_forward_persistence::{
+use makosh_communication_cross_channel_forward_api::COMMUNICATION_CROSS_CHANNEL_FORWARD_MODULE_ID_V1;
+use makosh_communication_cross_channel_forward_persistence::{
     CommunicationCrossChannelForwardPersistenceV1, CrossChannelForwardBlobReceiptV1,
     CrossChannelForwardPersistenceErrorV1, CrossChannelForwardPreparedEventV1,
     CrossChannelForwardRejectedEventV1,
 };
-use hermes_communication_delivery_intent_ingress_api::{
+use makosh_communication_delivery_intent_ingress_api::{
     CommunicationDeliveryIntentIngressEnvelopeContextV1,
     build_communication_delivery_intent_submit_outbox_record_v1,
     wire::DeliveryIntentBodySourceReceiptV1,
 };
-use hermes_communications_cross_channel_forward_source_api::{
+use makosh_communications_cross_channel_forward_source_api::{
     cross_channel_forward_source_prepared_contract_reference_v1,
     cross_channel_forward_source_rejected_contract_reference_v1,
     wire::{CrossChannelForwardSourcePreparedV1, CrossChannelForwardSourceRejectedV1},
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, ResultOutcomeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
@@ -27,7 +27,7 @@ use prost::Message;
 
 use crate::{CrossChannelForwardBlobPortV1, CrossChannelForwardBlobTransferErrorV1};
 
-const COMMUNICATIONS_RUNTIME_MODULE_ID_V1: &str = "hermes-communications-runtime";
+const COMMUNICATIONS_RUNTIME_MODULE_ID_V1: &str = "makosh-communications-runtime";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum CrossChannelForwardSourceResultErrorV1 {
@@ -222,7 +222,7 @@ fn decode_rejected(
 
 fn validate_result_envelope(
     actual_contract: &Option<ContractRefV1>,
-    expected_contract: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    expected_contract: &makosh_runtime_protocol::v1::ContractReferenceV1,
     source_module_id: Option<&str>,
     source_runtime_generation: u64,
     semantics: Option<&Semantics>,
@@ -270,7 +270,7 @@ fn delivery_context(
 
 fn exact_contract(
     actual: Option<&ContractRefV1>,
-    expected: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    expected: &makosh_runtime_protocol::v1::ContractReferenceV1,
 ) -> bool {
     actual.is_some_and(|actual| {
         actual.owner == expected.owner
@@ -299,7 +299,7 @@ fn event_error(_: RuntimePullDeliveryErrorV1) -> CrossChannelForwardSourceResult
 #[cfg(test)]
 mod tests {
     use super::{decode_prepared, decode_rejected};
-    use hermes_communications_cross_channel_forward_source_api::{
+    use makosh_communications_cross_channel_forward_source_api::{
         CrossChannelForwardSourceEnvelopeContextV1,
         build_cross_channel_forward_source_prepared_outbox_record_v1,
         build_cross_channel_forward_source_rejected_outbox_record_v1,
@@ -337,7 +337,7 @@ mod tests {
                 }),
                 logical_owner_id: "owner-1".to_owned(),
             },
-            &context("hermes-communications-runtime"),
+            &context("makosh-communications-runtime"),
         )
         .expect("prepared");
         assert!(decode_prepared(&prepared, "owner-1").is_ok());
@@ -351,7 +351,7 @@ mod tests {
                         as i32,
                 logical_owner_id: "owner-1".to_owned(),
             },
-            &context("hermes-not-communications-runtime"),
+            &context("makosh-not-communications-runtime"),
         )
         .expect("rejected");
         assert!(decode_rejected(&wrong_source, "owner-1").is_err());

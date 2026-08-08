@@ -10,12 +10,12 @@ use std::io::Write;
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 
-use hermes_knowledge_persistence::knowledge_storage_bundle_v1;
-use hermes_knowledge_runtime::{knowledge_module_descriptor_v1, knowledge_settings_schema_v1};
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_knowledge_persistence::knowledge_storage_bundle_v1;
+use makosh_knowledge_runtime::{knowledge_module_descriptor_v1, knowledge_settings_schema_v1};
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
@@ -27,7 +27,7 @@ pub const KNOWLEDGE_SETTINGS_FILE_V1: &str = "knowledge.runtime.settings.pb";
 pub const KNOWLEDGE_STORAGE_BUNDLE_FILE_V1: &str = "knowledge.storage.bundle.pb";
 pub const KNOWLEDGE_ARTIFACT_FRAGMENT_FILE_V1: &str = "knowledge.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH_V1: &str = "bin/hermes-knowledge-runtime";
+const RUNTIME_RELATIVE_PATH_V1: &str = "bin/makosh-knowledge-runtime";
 const DESCRIPTOR_RELATIVE_PATH_V1: &str = "contracts/knowledge.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH_V1: &str = "contracts/knowledge.runtime.settings.pb";
 const STORAGE_RELATIVE_PATH_V1: &str = "storage/knowledge.storage.bundle.pb";
@@ -241,10 +241,10 @@ fn write_new_private_file(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
 mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         decode_descriptor_v1, decode_settings_schema_v1,
     };
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -268,11 +268,11 @@ mod tests {
 
         let descriptor = decode_descriptor_v1(&descriptor_bytes).expect("descriptor");
         assert_eq!(descriptor.owner_id, "knowledge");
-        assert_eq!(descriptor.module_id, "hermes-knowledge-runtime");
+        assert_eq!(descriptor.module_id, "makosh-knowledge-runtime");
         decode_settings_schema_v1(&settings_bytes).expect("settings");
         StorageBundleV1::decode(storage_bytes.as_slice()).expect("storage");
         assert_eq!(fragment.owner_id, "knowledge");
-        assert_eq!(fragment.module_id, "hermes-knowledge-runtime");
+        assert_eq!(fragment.module_id, "makosh-knowledge-runtime");
         assert_eq!(fragment.artifacts.len(), 2);
         assert!(
             fragment
@@ -306,7 +306,7 @@ mod tests {
     fn temporary_directory() -> PathBuf {
         let id = NEXT_TEMPORARY_ID.fetch_add(1, Ordering::Relaxed);
         let path = std::env::temp_dir().join(format!(
-            "hermes-knowledge-assembly-{}-{id}",
+            "makosh-knowledge-assembly-{}-{id}",
             std::process::id()
         ));
         fs::create_dir(&path).expect("temporary root");

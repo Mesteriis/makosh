@@ -3,7 +3,7 @@
 Status: code-aligned documentation package created from ADR-0009 and current
 backend modules.
 
-Ollama is the initial local AI runtime boundary for Hermes. It is an
+Ollama is the initial local AI runtime boundary for Макошь. It is an
 integration adapter, not a source of truth.
 
 ADR source of truth:

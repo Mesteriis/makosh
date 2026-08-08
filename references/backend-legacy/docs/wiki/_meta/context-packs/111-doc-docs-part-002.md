@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docs/architecture/storage-architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/storage-architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/storage-architecture.md`
 - Size bytes / Размер в байтах: `2699`
 - Included characters / Включено символов: `2699`
 - Truncated / Обрезано: `no`
@@ -77,7 +77,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 | Component | Role |
 | --- | --- |
 | PostgreSQL | canonical relational data, event tables, graph tables, metadata |
-| Host vault | secrets-only encrypted payload storage under `~/.hermes/vault` |
+| Host vault | secrets-only encrypted payload storage under `~/.makosh/vault` |
 | Object storage | documents, attachments, OCR artifacts, extracted text |
 | Tantivy | full text search indexes |
 | Vector index | semantic retrieval indexes |
@@ -107,7 +107,7 @@ PostgreSQL must not receive new provider credential ciphertext payloads. `encryp
 - recovery export material
 - minimal non-secret manifest data needed to reconcile account secret bindings after PostgreSQL recreation
 
-The host vault uses a dedicated SQLite `vault.db` under `~/.hermes/vault`. Release runtime stores the master key in macOS Keychain. Docker development mounts the host vault into the container and uses debug-only dev key storage.
+The host vault uses a dedicated SQLite `vault.db` under `~/.makosh/vault`. Release runtime stores the master key in macOS Keychain. Docker development mounts the host vault into the container and uses debug-only dev key storage.
 
 ## Object Storage Responsibilities
 
@@ -138,7 +138,7 @@ Restore must verify schema versions, projection offsets, index consistency and h
 
 ### `docs/architecture/ui-architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/ui-architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/ui-architecture.md`
 - Size bytes / Размер в байтах: `1479`
 - Included characters / Включено символов: `1479`
 - Truncated / Обрезано: `no`
@@ -215,7 +215,7 @@ content.
 
 ### `docs/architecture/ui.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/ui.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/ui.md`
 - Size bytes / Размер в байтах: `3347`
 - Included characters / Включено символов: `3347`
 - Truncated / Обрезано: `no`
@@ -231,7 +231,7 @@ authorize frontend refactoring by itself.
 
 ## Purpose
 
-The UI is the Personal Operating System surface over Hermes memory and context.
+The UI is the Personal Operating System surface over Макошь memory and context.
 It is not a collection of provider clones.
 
 ## Responsibility
@@ -271,7 +271,7 @@ Current accepted frontend baseline:
 - Tauri 2;
 - Pinia for transient UI state;
 - TanStack Query for server state;
-- centralized API client using `X-Hermes-Secret`;
+- centralized API client using `X-Макошь-Secret`;
 - shared realtime bootstrap for cache patching;
 - desktop/laptop scope while the mobile ADR remains active.
 
@@ -317,7 +317,7 @@ the Vue architecture direction.
 
 - Desktop-first dense layouts are expected.
 - Keyboard-first workflows and command palette remain target UI patterns.
-- Provider channel workbenches may look familiar, but they must show Hermes
+- Provider channel workbenches may look familiar, but they must show Макошь
   evidence, review, context and capability semantics.
 - Message bodies, document contents and private data must not leak into audit,
   telemetry or unsafe logs.
@@ -327,14 +327,14 @@ the Vue architecture direction.
 
 ## Reasons For Existence
 
-Hermes needs an operating surface because memory without action is passive, and
+Макошь needs an operating surface because memory without action is passive, and
 action without evidence is unsafe. The UI ties context, review and owner
 decisions together without letting provider surfaces redefine the product.
 ```
 
 ### `docs/architecture/vision.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/vision.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/vision.md`
 - Size bytes / Размер в байтах: `3984`
 - Included characters / Включено символов: `3984`
 - Truncated / Обрезано: `no`
@@ -350,9 +350,9 @@ code refactoring, API changes, database migrations or provider adapter work.
 
 ## Purpose
 
-This document states what Hermes Hub is today at the architecture level.
+This document states what Макошь is today at the architecture level.
 
-Hermes is a local-first Personal Operating System built on durable personal
+Макошь is a local-first Personal Operating System built on durable personal
 memory and context. Its product surface may include communication workbenches,
 project views, tasks, documents, timelines, review queues and agents, but those
 surfaces exist to serve one goal:
@@ -369,7 +369,7 @@ Context + Memory
 
 ## Non-Identity
 
-Hermes is not:
+Макошь is not:
 
 - an email client;
 - a messenger;
@@ -399,7 +399,7 @@ The architecture is responsible for:
 
 ## Boundaries
 
-Hermes must separate these state categories:
+Макошь must separate these state categories:
 
 | Category | Role | Source of truth |
 |---|---|---|
@@ -411,8 +411,8 @@ Hermes must separate these state categories:
 | Derived views | Search, timeline, dossiers, context packs, scores. | Rebuildable projections and engines. |
 | Agent outputs | Proposals, summaries, tool actions. | Agent run records until accepted by a domain. |
 
-Provider state is not Hermes truth. AI output is not Hermes truth. UI state is
-not Hermes truth. A durable mutation belongs to the owning domain and must cite
+Provider state is not Макошь truth. AI output is not Макошь truth. UI state is
+not Макошь truth. A durable mutation belongs to the owning domain and must cite
 source evidence or an explicit owner action.
 
 ## System Shape
@@ -442,9 +442,9 @@ over those boundaries.
 
 ## Reasons For Existence
 
-Hermes exists because personal context is fragmented across providers, files,
+Макошь exists because personal context is fragmented across providers, files,
 projects, relationships and time. A provider client can show messages. A task
-tracker can show actions. A notes app can show text. Hermes should explain:
+tracker can show actions. A notes app can show text. Макошь should explain:
 
 - what happened;
 - who and what is involved;
@@ -460,7 +460,7 @@ does not belong in the core architecture.
 
 ### `docs/development/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/development/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/development/README.md`
 - Size bytes / Размер в байтах: `257`
 - Included characters / Включено символов: `257`
 - Truncated / Обрезано: `no`
@@ -480,7 +480,7 @@ integration, engine or platform architecture.
 
 ### `docs/development/testing/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/development/testing/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/development/testing/README.md`
 - Size bytes / Размер в байтах: `2859`
 - Included characters / Включено символов: `2859`
 - Truncated / Обрезано: `no`
@@ -490,7 +490,7 @@ integration, engine or platform architecture.
 
 Status: documentation package aligned to the current repository structure.
 
-Hermes uses a split test stack:
+Макошь uses a split test stack:
 
 - Rust backend execution runs through `cargo-nextest`.
 - Backend integration and coverage runs go through the `crates/testkit` session harness so PostgreSQL and NATS testcontainers are reused and cleaned correctly.
@@ -526,7 +526,7 @@ Hermes uses a split test stack:
 
 ## Classification model
 
-Hermes does not yet physically relocate every backend test into `tests/unit`, `tests/integration`, `tests/e2e`, `tests/architecture`, `tests/snapshots`. The repository now uses a stable logical classification generated from the current target naming and a dedicated snapshot target:
+Макошь does not yet physically relocate every backend test into `tests/unit`, `tests/integration`, `tests/e2e`, `tests/architecture`, `tests/snapshots`. The repository now uses a stable logical classification generated from the current target naming and a dedicated snapshot target:
 
 - `unit` - Rust library tests under `backend/src` and `crates/testkit/src`
 - `integration` - backend integration targets that are not architecture/e2e/snapshot targets
@@ -562,7 +562,7 @@ Current baseline and optimization notes live in:
 
 ### `docs/development/testing/ci.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/development/testing/ci.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/development/testing/ci.md`
 - Size bytes / Размер в байтах: `454`
 - Included characters / Включено символов: `454`
 - Truncated / Обрезано: `no`
@@ -599,7 +599,7 @@ This keeps the default PR gate fast enough for iteration while leaving heavy con
 
 ### `docs/development/testing/coverage.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/development/testing/coverage.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/development/testing/coverage.md`
 - Size bytes / Размер в байтах: `456`
 - Included characters / Включено символов: `456`
 - Truncated / Обрезано: `no`
@@ -617,12 +617,12 @@ Commands:
 
 Important constraint:
 
-Coverage commands also run through the `hermes_test_session` harness so integration tests keep the same testcontainer lifecycle guarantees as normal backend runs.
+Coverage commands also run through the `makosh_test_session` harness so integration tests keep the same testcontainer lifecycle guarantees as normal backend runs.
 ```
 
 ### `docs/development/testing/mutation-testing.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/development/testing/mutation-testing.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/development/testing/mutation-testing.md`
 - Size bytes / Размер в байтах: `409`
 - Included characters / Включено символов: `409`
 - Truncated / Обрезано: `no`
@@ -630,7 +630,7 @@ Coverage commands also run through the `hermes_test_session` harness so integrat
 ```markdown
 # Mutation Testing
 
-Hermes uses `cargo-mutants` for targeted mutation analysis.
+Макошь uses `cargo-mutants` for targeted mutation analysis.
 
 Command:
 
@@ -647,7 +647,7 @@ Because mutation testing is expensive, treat it as a scheduled or pre-merge qual
 
 ### `docs/development/testing/nextest.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/development/testing/nextest.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/development/testing/nextest.md`
 - Size bytes / Размер в байтах: `742`
 - Included characters / Включено символов: `742`
 - Truncated / Обрезано: `no`
@@ -655,7 +655,7 @@ Because mutation testing is expensive, treat it as a scheduled or pre-merge qual
 ```markdown
 # cargo-nextest
 
-`cargo-nextest` is the default Rust test runner in Hermes.
+`cargo-nextest` is the default Rust test runner in Макошь.
 
 Why:
 
@@ -677,12 +677,12 @@ Important constraint:
 
 For full backend runs, prefer `make backend-test`, `make backend-validate`, `make test`, `make test-ci`, `make test-integration`, or `make test-e2e`.
 
-These routes keep the `hermes_test_session` harness in front of nextest so shared testcontainers are reused and cleaned up.
+These routes keep the `makosh_test_session` harness in front of nextest so shared testcontainers are reused and cleaned up.
 ```
 
 ### `docs/development/testing/security.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/development/testing/security.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/development/testing/security.md`
 - Size bytes / Размер в байтах: `1382`
 - Included characters / Включено символов: `1382`
 - Truncated / Обрезано: `no`
@@ -719,7 +719,7 @@ Current repository state as of `2026-06-23`:
 
 ### `docs/development/testing/snapshots.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/development/testing/snapshots.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/development/testing/snapshots.md`
 - Size bytes / Размер в байтах: `480`
 - Included characters / Включено символов: `480`
 - Truncated / Обрезано: `no`
@@ -727,7 +727,7 @@ Current repository state as of `2026-06-23`:
 ```markdown
 # Snapshot Testing
 
-Hermes uses `insta` for stable output snapshots.
+Макошь uses `insta` for stable output snapshots.
 
 Current baseline target:
 
@@ -755,7 +755,7 @@ Snapshot tests are intended for:
 
 ### `docs/development/testing/status.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/development/testing/status.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/development/testing/status.md`
 - Size bytes / Размер в байтах: `9996`
 - Included characters / Включено символов: `9996`
 - Truncated / Обрезано: `no`
@@ -765,7 +765,7 @@ Snapshot tests are intended for:
 
 Status date: `2026-06-23`
 
-This file tracks what is actually completed for the Hermes test modernization plan, what is only partially implemented, and what is still unverified.
+This file tracks what is actually completed for the Макошь test modernization plan, what is only partially implemented, and what is still unverified.
 
 ## Overall readiness
 
@@ -777,75 +777,75 @@ This is not a marketing summary. It is the current evidence-based state from the
 
 ## Acceptance criteria matrix
 
-1. `cargo-nextest` is used by default  
-   Status: `complete`  
+1. `cargo-nextest` is used by default
+   Status: `complete`
    Evidence: `.config/nextest.toml`, `.cargo/config.toml`, `Makefile`, `scripts/test/run-nextest.sh`
 
-2. All tests are split into categories  
-   Status: `partial`  
-   Evidence: `scripts/test/backend-test-targets.mjs`, `Makefile` category targets, snapshot target.  
+2. All tests are split into categories
+   Status: `partial`
+   Evidence: `scripts/test/backend-test-targets.mjs`, `Makefile` category targets, snapshot target.
    Gap: classification is logical and automated, but backend tests were not physically relocated into `tests/unit`, `tests/integration`, `tests/e2e`, `tests/architecture`, `tests/snapshots`.
 
-3. Coverage works through `cargo-llvm-cov`  
-   Status: `complete`  
+3. Coverage works through `cargo-llvm-cov`
+   Status: `complete`
    Evidence: `scripts/test/run-llvm-cov.sh`, `Makefile` coverage targets, CI coverage job, real local run that produced `target/coverage/lcov.info`.
 
-4. Snapshot testing works through `insta`  
-   Status: `complete`  
+4. Snapshot testing works through `insta`
+   Status: `complete`
    Evidence: `backend/tests/snapshot_smoke.rs`, committed snapshot file, targeted test pass.
 
-5. Mutation testing works through `cargo-mutants`  
-   Status: `partial`  
-   Evidence: `Makefile`, nightly CI workflow, docs, real local mutant enumeration observed `38` mutants, interrupted local execution attempt against `backend/src/app/handlers/communications/remote_images/url_policy.rs`.  
+5. Mutation testing works through `cargo-mutants`
+   Status: `partial`
+   Evidence: `Makefile`, nightly CI workflow, docs, real local mutant enumeration observed `38` mutants, interrupted local execution attempt against `backend/src/app/handlers/communications/remote_images/url_policy.rs`.
    Gap: a full local mutation test pass is still too expensive for the current crate shape; the local run spent almost five minutes in baseline build inside a 2.6 GB scratch copy before being interrupted.
 
-6. `sccache` is integrated  
-   Status: `complete`  
-   Evidence: `Makefile` exports `RUSTC_WRAPPER` when `sccache` is present, cache commands exist, and a measured local cold/warm experiment was executed.  
+6. `sccache` is integrated
+   Status: `complete`
+   Evidence: `Makefile` exports `RUSTC_WRAPPER` when `sccache` is present, cache commands exist, and a measured local cold/warm experiment was executed.
    Result: `sccache --show-stats` reported 1300 compile requests, 124 hits, 996 Rust misses, 11.07% overall hit rate, 0.00% Rust hit rate in the cross-target-dir experiment. Integration is proven; optimization remains open.
 
-7. `cargo-watch` is integrated  
-   Status: `complete`  
+7. `cargo-watch` is integrated
+   Status: `complete`
    Evidence: `Makefile` watch targets, docs.
 
-8. `cargo-audit` is integrated  
-   Status: `complete`  
-   Evidence: `Makefile`, CI security lane, docs, real `make security` / `cargo audit` execution.  
+8. `cargo-audit` is integrated
+   Status: `complete`
+   Evidence: `Makefile`, CI security lane, docs, real `make security` / `cargo audit` execution.
    Note: `make audit` is green with a documented `RUSTSEC-2023-0071` ignore for the inactive optional `sqlx-mysql -> rsa` lockfile path. `cargo tree -i sqlx-mysql` prints no active backend/testkit path; SQLx is configured for PostgreSQL only.
 
-9. `cargo-deny` is integrated  
-   Status: `complete`  
-   Evidence: `Makefile`, `deny.toml`, CI security lane, docs, real `make deny` execution.  
+9. `cargo-deny` is integrated
+   Status: `complete`
+   Evidence: `Makefile`, `deny.toml`, CI security lane, docs, real `make deny` execution.
    Note: `make deny` is green after updating the testcontainers dependency chain. Duplicate-version warnings remain non-fatal.
 
-10. `cargo-udeps` is integrated  
-   Status: `complete`  
-   Evidence: `Makefile`, docs, installed nightly toolchain, real `make udeps` execution.  
+10. `cargo-udeps` is integrated
+   Status: `complete`
+   Evidence: `Makefile`, docs, installed nightly toolchain, real `make udeps` execution.
    Result: current graph is green after removing unused `mockall` and `testcontainers-modules` dependencies.
 
-11. Documentation exists  
-    Status: `complete`  
+11. Documentation exists
+    Status: `complete`
     Evidence: `docs/development/testing/`
 
-12. Updated `Makefile` exists  
-    Status: `complete`  
+12. Updated `Makefile` exists
+    Status: `complete`
     Evidence: root `Makefile`
 
-13. CI integration exists  
-    Status: `complete`  
+13. CI integration exists
+    Status: `complete`
     Evidence: `.github/workflows/ci.yml`, `.github/workflows/nightly.yml`
 
-14. Acceleration report exists  
-   Status: `partial`  
-   Evidence: `reports/test-performance/2026-06-23-baseline.md`, `2026-06-23-testcontainers-audit.md`, `reports/test-performance/backend-full.md`, `reports/test-performance/unit.md`  
+14. Acceleration report exists
+   Status: `partial`
+   Evidence: `reports/test-performance/2026-06-23-baseline.md`, `2026-06-23-testcontainers-audit.md`, `reports/test-performance/backend-full.md`, `reports/test-performance/unit.md`
    Gap: the repository now has measured after-state timings, but it still lacks a normalized before/after comparison from equivalent full-suite runs.
 
-15. Slowest-tests report exists  
-    Status: `complete`  
+15. Slowest-tests report exists
+    Status: `complete`
     Evidence: baseline report, JUnit analyzer, `make test-unit`, `reports/test-performance/unit.md`, `reports/test-performance/unit.json`
 
-16. No degradation of existing functionality  
-   Status: `complete`  
+16. No degradation of existing functionality
+   Status: `complete`
    Evidence: `make validate` passed with architecture/code-boundary/backend/frontend gates green. After the NATS cleanup fix, `make backend-validate` passed again with `1223` backend tests green.
 
 ## What was done in this pass
@@ -914,8 +914,8 @@ This is not a marketing summary. It is the current evidence-based state from the
 ## Container cleanup note
 
 - Earlier full runs left stale anonymous NATS testcontainers because `NATS_CONTAINER` was stored in a static `OnceCell`; Rust statics are not dropped at test-binary exit, so `ContainerAsync` did not reliably clean up.
-- `hermes_test_session` now owns one NATS container and one PostgreSQL container per backend session and passes their ports to test binaries through environment variables.
-- Verified with targeted `event_platform` and final `make backend-validate`: temporary testcontainers were removed after the harness exited; only the named development Compose service `hermes-hub-dev-postgres-1` remained.
+- `makosh_test_session` now owns one NATS container and one PostgreSQL container per backend session and passes their ports to test binaries through environment variables.
+- Verified with targeted `event_platform` and final `make backend-validate`: temporary testcontainers were removed after the harness exited; only the named development Compose service `makosh-dev-postgres-1` remained.
 
 ## Current security posture
 
@@ -943,17 +943,17 @@ The previous `tokio-tar`, `rustls-pemfile`, and `quinn-proto` blockers were remo
 
 ### `docs/domains/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/README.md`
 - Size bytes / Размер в байтах: `7254`
 - Included characters / Включено символов: `7254`
 - Truncated / Обрезано: `no`
 
 ```markdown
-# Hermes Domain Catalog
+# Макошь Domain Catalog
 
 Status: documentation package aligned to the current repository structure.
 
-This catalog is the canonical entry point for active Hermes domains. It should
+This catalog is the canonical entry point for active Макошь domains. It should
 be read together with:
 
 - [Product Master Spec](../product/master-spec.md)
@@ -961,13 +961,13 @@ be read together with:
 - [Glossary](../foundation/glossary.md)
 - [Domain Map](../foundation/domain-map.md)
 
-Hermes is a local-first Personal Memory System. Domains own source-of-truth
+Макошь is a local-first Personal Memory System. Domains own source-of-truth
 entities. Engines build derived memory, context, scores, timelines and
 recommendations from those entities.
 
 ## Domain Rule
 
-A domain exists when Hermes needs a durable source of truth for an entity type.
+A domain exists when Макошь needs a durable source of truth for an entity type.
 A domain does not exist merely because the UI has a page or because an engine
 needs a projection.
 
@@ -1010,14 +1010,14 @@ Do not create empty placeholder files just to fill the shape.
 ## Channel And Provider Capability Specs
 
 Channel and provider capability specs document provider-specific behavior
-without promoting a provider into a standalone Hermes domain.
+without promoting a provider into a standalone Макошь domain.
 
 | Provider | Spec | Status |
 |---|---|---|
 | Telegram | [Telegram Channel Capability Spec](../integrations/telegram/README.md) | target production capability matrix with current implementation baseline |
 | Mail | [Email Channel Capability Spec](../integrations/mail/README.md) | implemented email channel framing and current API/status docs |
-| WhatsApp | [WhatsApp Provider Stage](../integrations/whatsapp/README.md) | provider/runtime capability docs; not a Hermes domain |
-| Zoom | [Zoom Provider Stage](../integrations/zoom/README.md) | provider foundation implemented; not a Hermes domain |
+| WhatsApp | [WhatsApp Provider Stage](../integrations/whatsapp/README.md) | provider/runtime capability docs; not a Макошь domain |
+| Zoom | [Zoom Provider Stage](../integrations/zoom/README.md) | provider foundation implemented; not a Макошь domain |
 
 ## Engine Documents
 
@@ -1064,7 +1064,7 @@ changes.
 
 ### `docs/domains/agents/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/agents/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/agents/README.md`
 - Size bytes / Размер в байтах: `2081`
 - Included characters / Включено символов: `2081`
 - Truncated / Обрезано: `no`
@@ -1074,7 +1074,7 @@ changes.
 
 Status: documentation package aligned to the current repository structure.
 
-Agents are tool-mediated actors that help the Owner Persona operate Hermes.
+Agents are tool-mediated actors that help the Owner Persona operate Макошь.
 
 Agents are not source-of-truth owners. They work through permissions, audit
 records, source evidence and reviewable actions.
@@ -1108,7 +1108,7 @@ AI agents can exist in the Persona graph as:
 PersonaType: ai_agent
 ```
 
-This allows Hermes to represent HESTIA and future agents as actors with
+This allows Макошь to represent HESTIA and future agents as actors with
 relationships, permissions and provenance. The Owner Persona remains the only
 `is_self: true` Persona.
 
@@ -1152,17 +1152,17 @@ documentation before broader automation.
 
 ### `docs/domains/calendar/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/calendar/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/calendar/README.md`
 - Size bytes / Размер в байтах: `1219`
 - Included characters / Включено символов: `1219`
 - Truncated / Обрезано: `no`
 
 ```markdown
-# Hermes Calendar And Events
+# Макошь Calendar And Events
 
 Status: documentation package aligned to the current repository structure.
 
-Calendar is the scheduled-event channel inside Hermes. Hermes is not a calendar
+Calendar is the scheduled-event channel inside Макошь. Макошь is not a calendar
 app. Calendar data becomes Events, Communications, Decisions, Obligations,
 Tasks, Documents and Relationships in the Personal Memory System.
 
@@ -1198,7 +1198,7 @@ Calendar uses shared engines:
 
 ### `docs/domains/calendar/api.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/calendar/api.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/calendar/api.md`
 - Size bytes / Размер в байтах: `2823`
 - Included characters / Включено символов: `2566`
 - Truncated / Обрезано: `no`
@@ -1315,7 +1315,7 @@ Base: `/api/v1/calendar`
 
 ### `docs/domains/calendar/architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/calendar/architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/calendar/architecture.md`
 - Size bytes / Размер в байтах: `1256`
 - Included characters / Включено символов: `1256`
 - Truncated / Обрезано: `no`
@@ -1365,7 +1365,7 @@ API
 
 ### `docs/domains/calendar/data-model.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/calendar/data-model.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/calendar/data-model.md`
 - Size bytes / Размер в байтах: `2623`
 - Included characters / Включено символов: `2249`
 - Truncated / Обрезано: `no`
@@ -1439,7 +1439,7 @@ shared engines that consume calendar event records together with other sources.
 
 ### `docs/domains/calendar/spec.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/calendar/spec.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/calendar/spec.md`
 - Size bytes / Размер в байтах: `1919`
 - Included characters / Включено символов: `1919`
 - Truncated / Обрезано: `no`
@@ -1522,7 +1522,7 @@ Current backend implementation includes:
 
 ### `docs/domains/calendar/status.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/calendar/status.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/calendar/status.md`
 - Size bytes / Размер в байтах: `6145`
 - Included characters / Включено символов: `5552`
 - Truncated / Обрезано: `no`
@@ -1610,7 +1610,7 @@ or Decisions.
 
 ### `docs/domains/communications/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/communications/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/communications/README.md`
 - Size bytes / Размер в байтах: `5071`
 - Included characters / Включено символов: `5071`
 - Truncated / Обрезано: `no`
@@ -1620,9 +1620,9 @@ or Decisions.
 
 Status: documentation package aligned to the current repository structure.
 
-Communications are the primary ingestion spine of Hermes.
+Communications are the primary ingestion spine of Макошь.
 
-Hermes receives messages, meetings, calls and provider events as evidence. From
+Макошь receives messages, meetings, calls and provider events as evidence. From
 that evidence it extracts knowledge, memory, relationships, obligations, tasks,
 decisions and project context.
 
@@ -1636,7 +1636,7 @@ Communication
   -> Obligations / Tasks / Decisions / Projects
 ```
 
-Hermes is not an email client or messenger. Provider surfaces are capture and
+Макошь is not an email client or messenger. Provider surfaces are capture and
 interaction boundaries for the Personal Memory System.
 
 Invariant: A channel is never a domain. A channel is an integration. A
@@ -1669,7 +1669,7 @@ The Communications domain does not own:
 
 ## Communication Types
 
-Hermes treats the following as one family of interactions:
+Макошь treats the following as one family of interactions:
 
 - email;
 - Telegram messages;
@@ -1792,7 +1792,7 @@ compatibility names because email was implemented first.
 
 ### `docs/domains/communications/architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/communications/architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/communications/architecture.md`
 - Size bytes / Размер в байтах: `2626`
 - Included characters / Включено символов: `2626`
 - Truncated / Обрезано: `no`
@@ -1811,7 +1811,7 @@ canonical interaction model. Provider-specific behavior is preserved at adapter
 and source-record boundaries, but user workflows operate over Communications,
 Participants, Conversations, Events, Personas and Context.
 
-Hermes is not an email client or messenger. Communication surfaces are entry
+Макошь is not an email client or messenger. Communication surfaces are entry
 points into the Personal Memory System.
 
 ## Channel Adapters
@@ -1882,7 +1882,7 @@ grouping. Cross-provider grouping is graph-backed and confidence-scored.
 
 ### `docs/domains/decisions/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/decisions/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/decisions/README.md`
 - Size bytes / Размер в байтах: `4963`
 - Included characters / Включено символов: `4963`
 - Truncated / Обрезано: `no`
@@ -1894,7 +1894,7 @@ Status: documentation package aligned to the current repository structure.
 
 Decisions are durable choices with rationale, evidence and consequences.
 
-Hermes needs Decisions because the Personal Memory System must remember not only
+Макошь needs Decisions because the Personal Memory System must remember not only
 what happened, but why a direction was chosen.
 
 ## Responsibilities
@@ -2026,7 +2026,7 @@ candidate routing is complete.
 
 ### `docs/domains/documents/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/documents/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/documents/README.md`
 - Size bytes / Размер в байтах: `1628`
 - Included characters / Включено символов: `1628`
 - Truncated / Обрезано: `no`

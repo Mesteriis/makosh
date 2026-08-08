@@ -4,22 +4,22 @@
 //! separate capability units. This descriptor does not register WhatsApp,
 //! approve grants or authorize a managed launch.
 
-use hermes_communications_ingress::admission::communication_observed_publish_request_v1;
-use hermes_runtime_protocol::v1::{
+use makosh_communications_ingress::admission::communication_observed_publish_request_v1;
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ClientRpcRouteV1, ContractReferenceV1, HostCapabilityRequestV1,
     ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1,
     RuntimeBudgetRequestV1, SettingsSchemaRefV1, StorageNamespaceRequestV1,
     capability_request_v1::Request,
 };
-pub use hermes_whatsapp_api::client_contract::{WHATSAPP_MODULE_ID, WHATSAPP_OWNER_ID};
-use hermes_whatsapp_api::{
+pub use makosh_whatsapp_api::client_contract::{WHATSAPP_MODULE_ID, WHATSAPP_OWNER_ID};
+use makosh_whatsapp_api::{
     client_contract::{
         WHATSAPP_CLIENT_CONTRACT_MAJOR, WHATSAPP_CLIENT_CONTRACT_REVISION, WhatsAppClientContractV1,
     },
     host_bridge::HOST_BRIDGE_CONTRACT_NAME,
 };
-use hermes_whatsapp_delivery_intent_contract::{
+use makosh_whatsapp_delivery_intent_contract::{
     WHATSAPP_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1,
     whatsapp_delivery_intent_execute_consume_request_v1,
     whatsapp_delivery_intent_rejected_publish_request_v1,
@@ -192,7 +192,7 @@ pub fn whatsapp_module_descriptor_v1(build_id: &str) -> ModuleDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::{
+    use makosh_runtime_protocol::{
         v1::{CapabilityCriticalityV1, ModuleKindV1, ProvidedSurfaceKindV1},
         validation::descriptor::validate_descriptor_v1,
     };

@@ -8,28 +8,28 @@ use std::os::unix::{
 };
 use std::time::Duration;
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
 };
-use hermes_runtime_protocol::managed_control::ManagedControlChannelV2;
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::managed_control::ManagedControlChannelV2;
+use makosh_runtime_protocol::v1::{
     ManagedIntegrationHostBridgeConfigurationV1, ManagedRuntimeClientDeliveryResponseV1,
     ManagedRuntimeControlResponseV1, ManagedRuntimeReadyRequestV1,
     ManagedStorageRuntimeConfigurationV1, ModuleClientResponseV1,
     managed_runtime_control_request_v1::Operation,
     managed_runtime_control_response_v1::Result as ControlResult,
 };
-use hermes_runtime_protocol::validation::integration_host_bridge::validate_managed_integration_host_bridge_configuration;
-use hermes_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
-use hermes_runtime_protocol::validation::module_client::{
+use makosh_runtime_protocol::validation::integration_host_bridge::validate_managed_integration_host_bridge_configuration;
+use makosh_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
+use makosh_runtime_protocol::validation::module_client::{
     validate_module_client_request_v1, validate_module_client_response_v1,
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 
@@ -51,7 +51,7 @@ use crate::{
     enqueue_provider_command, provider_command_status, relay_communications_outbox_once,
     settings::WhatsAppRuntimeSettingsV1,
 };
-use hermes_whatsapp_api::{
+use makosh_whatsapp_api::{
     WhatsAppProviderCommand, WhatsAppProviderCommandStatusV1,
     host_bridge::{WhatsAppHostBridgeEnvelopeV1, WhatsAppHostBridgeHandshakeV1},
     operational::{
@@ -61,8 +61,8 @@ use hermes_whatsapp_api::{
     provider_command_account_id, provider_command_operation_id,
     realtime::{WhatsAppOperationalReplayRequestV1, WhatsAppOperationalReplayResponseV1},
 };
-use hermes_whatsapp_delivery_intent_contract::whatsapp_delivery_intent_execute_contract_reference_v1;
-use hermes_whatsapp_persistence::WhatsAppDurablePersistence;
+use makosh_whatsapp_delivery_intent_contract::whatsapp_delivery_intent_execute_contract_reference_v1;
+use makosh_whatsapp_persistence::WhatsAppDurablePersistence;
 use prost::Message;
 
 const CONTROL_TIMEOUT: Duration = Duration::from_secs(5);
@@ -282,8 +282,8 @@ impl WhatsAppAdmittedRuntime {
         .await?;
         Ok(matches!(
             outcome,
-            hermes_whatsapp_persistence::WhatsAppDeliveryIntentInboxOutcomeV1::Pending
-                | hermes_whatsapp_persistence::WhatsAppDeliveryIntentInboxOutcomeV1::RouteNotFound
+            makosh_whatsapp_persistence::WhatsAppDeliveryIntentInboxOutcomeV1::Pending
+                | makosh_whatsapp_persistence::WhatsAppDeliveryIntentInboxOutcomeV1::RouteNotFound
         ))
     }
 
@@ -661,7 +661,7 @@ mod tests {
             runtime_instance_id: "whatsapp_runtime_1".to_owned(),
             runtime_generation: 2,
             grant_epoch: 3,
-            socket_path: "/private/tmp/hermes/whatsapp.sock".to_owned(),
+            socket_path: "/private/tmp/makosh/whatsapp.sock".to_owned(),
             route_binding_sha256: vec![1; 32],
         };
 
@@ -681,7 +681,7 @@ mod tests {
             runtime_instance_id: "whatsapp_runtime_1".to_owned(),
             runtime_generation: 1,
             grant_epoch: 3,
-            socket_path: "/private/tmp/hermes/whatsapp.sock".to_owned(),
+            socket_path: "/private/tmp/makosh/whatsapp.sock".to_owned(),
             route_binding_sha256: vec![1; 32],
         };
 

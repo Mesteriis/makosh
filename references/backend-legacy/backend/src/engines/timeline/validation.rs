@@ -41,7 +41,7 @@ pub(super) fn optional_json_string(value: &Value, field_name: &str) -> Option<St
         .map(ToOwned::to_owned)
 }
 
-pub(super) fn event_log_source_ref(event: &hermes_events_api::EventEnvelope) -> String {
+pub(super) fn event_log_source_ref(event: &makosh_events_api::EventEnvelope) -> String {
     let Some(kind) = optional_json_string(&event.source, "kind") else {
         return event.event_id.clone();
     };

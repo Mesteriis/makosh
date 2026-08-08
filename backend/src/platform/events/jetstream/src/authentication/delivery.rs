@@ -1,6 +1,6 @@
 //! Event Hub-specific construction of the public runtime credential fence.
 
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     NatsRuntimeCredentialDeliveryBindingInputV1, NatsRuntimeCredentialDeliveryBindingV1,
     NatsRuntimeCredentialDeliveryErrorV1, NatsRuntimeCredentialRecipientPublicKeyV1,
 };

@@ -10,7 +10,7 @@ source "$SCRIPT_DIR/lib/env.sh"
 # shellcheck source=./lib/postgres.sh
 source "$SCRIPT_DIR/lib/postgres.sh"
 
-load_hermes_env
+load_makosh_env
 ensure_postgres_client_dependencies
 ensure_command dropdb
 ensure_command createdb
@@ -55,41 +55,41 @@ fi
 
 verify_directory_integrity_manifest "$mail_blobs_source" "$mail_blobs_integrity_path"
 
-confirm_or_exit "Restore will replace database $HERMES_POSTGRES_DB, vault path $HERMES_HOST_VAULT_HOME, and mail blob path $MAIL_BLOB_ROOT." "RESTORE"
+confirm_or_exit "Restore will replace database $MAKOSH_POSTGRES_DB, vault path $MAKOSH_HOST_VAULT_HOME, and mail blob path $MAIL_BLOB_ROOT." "RESTORE"
 
-info "Recreating PostgreSQL database $HERMES_POSTGRES_DB"
-PGPASSWORD="$HERMES_POSTGRES_PASSWORD" psql \
+info "Recreating PostgreSQL database $MAKOSH_POSTGRES_DB"
+PGPASSWORD="$MAKOSH_POSTGRES_PASSWORD" psql \
 	-h 127.0.0.1 \
-	-p "$HERMES_POSTGRES_PORT" \
-	-U "$HERMES_POSTGRES_USER" \
+	-p "$MAKOSH_POSTGRES_PORT" \
+	-U "$MAKOSH_POSTGRES_USER" \
 	-d postgres \
 	-v ON_ERROR_STOP=1 \
-	-c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$HERMES_POSTGRES_DB' AND pid <> pg_backend_pid();" >/dev/null
-PGPASSWORD="$HERMES_POSTGRES_PASSWORD" dropdb \
+	-c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$MAKOSH_POSTGRES_DB' AND pid <> pg_backend_pid();" >/dev/null
+PGPASSWORD="$MAKOSH_POSTGRES_PASSWORD" dropdb \
 	--if-exists \
 	-h 127.0.0.1 \
-	-p "$HERMES_POSTGRES_PORT" \
-	-U "$HERMES_POSTGRES_USER" \
-	"$HERMES_POSTGRES_DB"
-PGPASSWORD="$HERMES_POSTGRES_PASSWORD" createdb \
+	-p "$MAKOSH_POSTGRES_PORT" \
+	-U "$MAKOSH_POSTGRES_USER" \
+	"$MAKOSH_POSTGRES_DB"
+PGPASSWORD="$MAKOSH_POSTGRES_PASSWORD" createdb \
 	-h 127.0.0.1 \
-	-p "$HERMES_POSTGRES_PORT" \
-	-U "$HERMES_POSTGRES_USER" \
-	"$HERMES_POSTGRES_DB"
+	-p "$MAKOSH_POSTGRES_PORT" \
+	-U "$MAKOSH_POSTGRES_USER" \
+	"$MAKOSH_POSTGRES_DB"
 
 info "Restoring PostgreSQL dump"
-PGPASSWORD="$HERMES_POSTGRES_PASSWORD" psql \
+PGPASSWORD="$MAKOSH_POSTGRES_PASSWORD" psql \
 	-h 127.0.0.1 \
-	-p "$HERMES_POSTGRES_PORT" \
-	-U "$HERMES_POSTGRES_USER" \
-	-d "$HERMES_POSTGRES_DB" \
+	-p "$MAKOSH_POSTGRES_PORT" \
+	-U "$MAKOSH_POSTGRES_USER" \
+	-d "$MAKOSH_POSTGRES_DB" \
 	-v ON_ERROR_STOP=1 \
 	-f "$postgres_dump" >/dev/null
 
 info "Restoring vault data"
-rm -rf "$HERMES_HOST_VAULT_HOME"
-mkdir -p "$HERMES_HOST_VAULT_HOME"
-cp -R "$vault_source"/. "$HERMES_HOST_VAULT_HOME"/
+rm -rf "$MAKOSH_HOST_VAULT_HOME"
+mkdir -p "$MAKOSH_HOST_VAULT_HOME"
+cp -R "$vault_source"/. "$MAKOSH_HOST_VAULT_HOME"/
 
 # Materialize and verify the replacement before moving it into the live root.
 # The previous root remains available until the staging tree is complete.

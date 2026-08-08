@@ -25,7 +25,7 @@ const emit = defineEmits<{
 	'update:open': [value: boolean]
 }>()
 
-const contentClasses = computed(() => ['hermes-hover-card-content', props.class])
+const contentClasses = computed(() => ['makosh-hover-card-content', props.class])
 </script>
 
 <template>
@@ -48,7 +48,7 @@ const contentClasses = computed(() => ['hermes-hover-card-content', props.class]
 				:aria-label="ariaLabel"
 			>
 				<slot />
-				<HoverCardArrow class="hermes-hover-card-arrow" />
+				<HoverCardArrow class="makosh-hover-card-arrow" />
 			</HoverCardContent>
 		</HoverCardPortal>
 	</HoverCardRoot>

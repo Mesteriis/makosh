@@ -48,7 +48,7 @@ mod tests {
     #[test]
     fn telegram_participants_sync_audit_preserves_capability_metadata() {
         let record = NewApiAuditRecord::telegram_participants_sync(
-            "hermes-frontend",
+            "makosh-frontend",
             "telegram-chat-1",
             "account-1",
             "provider-chat-1",

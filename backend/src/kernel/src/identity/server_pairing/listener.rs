@@ -7,7 +7,7 @@ use std::sync::Arc;
 use std::thread;
 use std::time::{Duration, Instant};
 
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use rcgen::generate_simple_self_signed;
 use rustls::pki_types::{PrivateKeyDer, PrivatePkcs8KeyDer};
 use rustls::{ServerConfig, ServerConnection, StreamOwned};
@@ -166,10 +166,10 @@ fn process_request(
     )?;
     let identity = server_pairing_proof::verify(
         challenge,
-        required_header(request, "x-hermes-owner-id")?,
-        required_header(request, "x-hermes-device-id")?,
-        required_header(request, "x-hermes-device-public-key-sec1")?,
-        required_header(request, "x-hermes-device-signature-raw")?,
+        required_header(request, "x-makosh-owner-id")?,
+        required_header(request, "x-makosh-device-id")?,
+        required_header(request, "x-makosh-device-public-key-sec1")?,
+        required_header(request, "x-makosh-device-signature-raw")?,
     )?;
     let token_sha256: [u8; 32] = Sha256::digest(token).into();
     store

@@ -2,7 +2,7 @@ import {
 	ClientSettingsApplyStateV1,
 	type ClientModuleBootstrapV1,
 	type ClientModuleSettingsTargetBootstrapV1,
-} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	publicModuleSettingRows,
 	publicModuleSettingsReasonCode,
@@ -11,7 +11,7 @@ import {
 } from '../../../platform/gateway/publicModuleSettings'
 import type { ModuleSettingsPanelModel } from '../../../shared/ui/settings/ModuleSettingsPanelModel'
 
-const MAIL_MODULE_ID = 'hermes-mail-runtime'
+const MAIL_MODULE_ID = 'makosh-mail-runtime'
 
 export function mailSettingsPanelModel(
 	module: ClientModuleBootstrapV1 | null,

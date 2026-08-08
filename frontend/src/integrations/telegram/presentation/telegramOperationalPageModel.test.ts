@@ -10,12 +10,12 @@ describe('Telegram operational presentation model', () => {
 		expect(buildTelegramChatRows([{
 			providerChatId: 'chat-1',
 			title: 'Architecture',
-			username: 'hermes_arch',
+			username: 'makosh_arch',
 			kind: 'supergroup',
 		} as never], 'chat-1')).toEqual([{
 			id: 'chat-1',
 			title: 'Architecture',
-			detail: '@hermes_arch · supergroup',
+			detail: '@makosh_arch · supergroup',
 			selected: true,
 		}])
 

@@ -13,12 +13,12 @@ mod vault_credentials;
 
 use std::time::Duration;
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     ConsumerBudgetV1, ConsumerSpecV1, DurableSubjectV1, NatsPasswordCredentialV1,
     RuntimeNatsIdentity, RuntimePublishPermitV1, RuntimeSubscribePermitV1, StreamBudgetV1,
     StreamKindV1, canonical_message_id,
 };
-use hermes_events_protocol::delivery::{
+use makosh_events_protocol::delivery::{
     ExactOutboxPublisherPortV1, InboxDecisionV1, InboxRecordV1, OutboxEntryV1,
     OutboxPublishReceiptV1, OutboxRecordV1, OutboxRelayErrorV1, OutboxRelayOutcomeV1,
     OwnerOutboxStorePortV1, relay_once,
@@ -30,7 +30,7 @@ fn renders_the_exact_versioned_subject_grammar() {
     let subject =
         DurableSubjectV1::new(StreamKindV1::Observation, "mail", "received", 2).expect("subject");
 
-    assert_eq!(subject.as_str(), "hermes.observation.v1.mail.received.v2");
+    assert_eq!(subject.as_str(), "makosh.observation.v1.mail.received.v2");
 }
 
 #[test]
@@ -55,7 +55,7 @@ fn forbids_wildcard_module_consumers() {
         ConsumerSpecV1::new(
             StreamKindV1::Event,
             "notes_projection",
-            "hermes.event.v1.notes.changed.v1",
+            "makosh.event.v1.notes.changed.v1",
             budget,
         )
         .is_ok()
@@ -64,7 +64,7 @@ fn forbids_wildcard_module_consumers() {
         ConsumerSpecV1::new(
             StreamKindV1::Event,
             "notes_projection",
-            "hermes.event.v1.>",
+            "makosh.event.v1.>",
             budget,
         )
         .is_err()
@@ -92,7 +92,7 @@ fn fences_subscribe_permits_to_the_exact_runtime_generation_and_grant_epoch() {
     let consumer = ConsumerSpecV1::new(
         StreamKindV1::Event,
         "notes_projection",
-        "hermes.event.v1.notes.changed.v1",
+        "makosh.event.v1.notes.changed.v1",
         ConsumerBudgetV1::new(16, 3, Duration::from_secs(30)).expect("budget"),
     )
     .expect("consumer");
@@ -100,7 +100,7 @@ fn fences_subscribe_permits_to_the_exact_runtime_generation_and_grant_epoch() {
     let invalid = ConsumerSpecV1::new(
         StreamKindV1::Event,
         "notes_projection",
-        "hermes.event.v1.notes.changed.v1",
+        "makosh.event.v1.notes.changed.v1",
         ConsumerBudgetV1::new(16, 3, Duration::from_secs(30)).expect("budget"),
     )
     .expect("consumer");
@@ -201,7 +201,7 @@ impl ExactOutboxPublisherPortV1 for ScriptedPublisher {
         let result = if self.fail {
             Err(OutboxRelayErrorV1::PublisherUnavailable)
         } else {
-            OutboxPublishReceiptV1::new("HERMES_EVENT_V1", 1, false)
+            OutboxPublishReceiptV1::new("MAKOSH_EVENT_V1", 1, false)
         };
         std::future::ready(result)
     }

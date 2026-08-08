@@ -618,7 +618,7 @@ impl SignalHubService for SignalHubConnectService {
                     .map_err(invalid_argument_error)?,
                 target_consumer: req.target_consumer.map(ToOwned::to_owned),
                 target_projection: req.target_projection.map(ToOwned::to_owned),
-                requested_by: "hermes-frontend".to_owned(),
+                requested_by: "makosh-frontend".to_owned(),
                 metadata,
             })
             .await

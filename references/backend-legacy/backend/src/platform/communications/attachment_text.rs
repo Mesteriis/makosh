@@ -171,7 +171,7 @@ pub fn rich_attachment_extraction_kind(
 }
 
 pub fn rich_attachment_extractor_address() -> Option<String> {
-    let enabled = std::env::var("HERMES_ATTACHMENT_EXTRACTOR_ENABLED")
+    let enabled = std::env::var("MAKOSH_ATTACHMENT_EXTRACTOR_ENABLED")
         .ok()
         .is_some_and(|value| {
             matches!(
@@ -182,7 +182,7 @@ pub fn rich_attachment_extractor_address() -> Option<String> {
     if !enabled {
         return None;
     }
-    std::env::var("HERMES_ATTACHMENT_EXTRACTOR_ADDR")
+    std::env::var("MAKOSH_ATTACHMENT_EXTRACTOR_ADDR")
         .ok()
         .filter(|address| !address.trim().is_empty())
 }

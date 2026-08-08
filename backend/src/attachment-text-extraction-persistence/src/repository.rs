@@ -1,4 +1,4 @@
-use hermes_attachment_text_extraction_core::{
+use makosh_attachment_text_extraction_core::{
     AttachmentTextExtractionRequestV1, AttachmentTextExtractionStatusV1,
     validate_attachment_text_status_v1,
 };
@@ -30,7 +30,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             attachment_text_extraction_run_id_v1(&create.logical_owner_id, create.operation_id);
         let fingerprint =
             attachment_text_extraction_request_fingerprint_v1(create.attachment_anchor_id);
-        let status = hermes_attachment_text_extraction_core::accepted_attachment_text_status_v1();
+        let status = makosh_attachment_text_extraction_core::accepted_attachment_text_status_v1();
         let mut transaction = self.pool.begin().await.map_err(storage_unavailable)?;
         lock_anchor(
             &mut transaction,
@@ -39,7 +39,7 @@ impl AttachmentTextExtractionPersistenceV1 {
         )
         .await?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.attachment_text_extraction_runs (logical_owner_id, run_id, operation_id, request_fingerprint, attachment_anchor_id, state, state_revision, format_code, extracted_size_bytes, extraction_truncated, error_code, created_at_unix_millis, updated_at_unix_millis) VALUES ($1, $2, $3, $4, $5, $6, $7, NULL, 0, FALSE, NULL, $8, $8) ON CONFLICT (logical_owner_id, operation_id) DO NOTHING",
+            "INSERT INTO makosh_data.attachment_text_extraction_runs (logical_owner_id, run_id, operation_id, request_fingerprint, attachment_anchor_id, state, state_revision, format_code, extracted_size_bytes, extraction_truncated, error_code, created_at_unix_millis, updated_at_unix_millis) VALUES ($1, $2, $3, $4, $5, $6, $7, NULL, 0, FALSE, NULL, $8, $8) ON CONFLICT (logical_owner_id, operation_id) DO NOTHING",
         )
         .bind(&create.logical_owner_id)
         .bind(run_id.as_slice())
@@ -102,7 +102,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             return Err(AttachmentTextExtractionPersistenceErrorV1::InvalidInput);
         }
         let row = sqlx::query(
-            "SELECT logical_owner_id, run_id, operation_id, request_fingerprint, attachment_anchor_id, state, state_revision, format_code, extracted_size_bytes, extraction_truncated, error_code, created_at_unix_millis, updated_at_unix_millis FROM hermes_data.attachment_text_extraction_runs WHERE logical_owner_id = $1 AND run_id = $2",
+            "SELECT logical_owner_id, run_id, operation_id, request_fingerprint, attachment_anchor_id, state, state_revision, format_code, extracted_size_bytes, extraction_truncated, error_code, created_at_unix_millis, updated_at_unix_millis FROM makosh_data.attachment_text_extraction_runs WHERE logical_owner_id = $1 AND run_id = $2",
         )
         .bind(logical_owner_id)
         .bind(run_id.as_slice())
@@ -122,7 +122,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             return Err(AttachmentTextExtractionPersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "SELECT run_id,derived_reference_id,derived_receipt_sha256,source_receipt_sha256,parser_identity_sha256,format_code,extracted_size_bytes,extraction_truncated FROM hermes_data.attachment_text_extraction_artifacts WHERE logical_owner_id=$1 AND run_id=$2",
+            "SELECT run_id,derived_reference_id,derived_receipt_sha256,source_receipt_sha256,parser_identity_sha256,format_code,extracted_size_bytes,extraction_truncated FROM makosh_data.attachment_text_extraction_artifacts WHERE logical_owner_id=$1 AND run_id=$2",
         )
         .bind(logical_owner_id)
         .bind(run_id.as_slice())
@@ -147,7 +147,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             return Err(AttachmentTextExtractionPersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "SELECT realtime_sequence,run_id,state,state_revision,format_code,extracted_size_bytes,extraction_truncated,error_code,occurred_at_unix_millis FROM hermes_data.attachment_text_extraction_realtime WHERE logical_owner_id=$1 AND realtime_sequence>$2 ORDER BY realtime_sequence LIMIT $3",
+            "SELECT realtime_sequence,run_id,state,state_revision,format_code,extracted_size_bytes,extraction_truncated,error_code,occurred_at_unix_millis FROM makosh_data.attachment_text_extraction_realtime WHERE logical_owner_id=$1 AND realtime_sequence>$2 ORDER BY realtime_sequence LIMIT $3",
         )
         .bind(logical_owner_id)
         .bind(i64::try_from(after_sequence).map_err(invalid_input)?)
@@ -170,7 +170,7 @@ async fn find_by_operation(
     AttachmentTextExtractionPersistenceErrorV1,
 > {
     let row = sqlx::query(
-        "SELECT logical_owner_id, run_id, operation_id, request_fingerprint, attachment_anchor_id, state, state_revision, format_code, extracted_size_bytes, extraction_truncated, error_code, created_at_unix_millis, updated_at_unix_millis FROM hermes_data.attachment_text_extraction_runs WHERE logical_owner_id = $1 AND operation_id = $2",
+        "SELECT logical_owner_id, run_id, operation_id, request_fingerprint, attachment_anchor_id, state, state_revision, format_code, extracted_size_bytes, extraction_truncated, error_code, created_at_unix_millis, updated_at_unix_millis FROM makosh_data.attachment_text_extraction_runs WHERE logical_owner_id = $1 AND operation_id = $2",
     )
     .bind(logical_owner_id)
     .bind(operation_id.as_slice())
@@ -189,7 +189,7 @@ pub(crate) async fn update_run_status(
     occurred_at_unix_millis: i64,
 ) -> Result<bool, AttachmentTextExtractionPersistenceErrorV1> {
     let result = sqlx::query(
-        "UPDATE hermes_data.attachment_text_extraction_runs SET state = $1, state_revision = $2, format_code = $3, extracted_size_bytes = $4, extraction_truncated = $5, error_code = $6, updated_at_unix_millis = $7 WHERE logical_owner_id = $8 AND run_id = $9 AND state_revision = $10",
+        "UPDATE makosh_data.attachment_text_extraction_runs SET state = $1, state_revision = $2, format_code = $3, extracted_size_bytes = $4, extraction_truncated = $5, error_code = $6, updated_at_unix_millis = $7 WHERE logical_owner_id = $8 AND run_id = $9 AND state_revision = $10",
     )
     .bind(state_code(next.state))
     .bind(i64::try_from(next.state_revision).map_err(invalid_input)?)
@@ -215,7 +215,7 @@ pub(crate) async fn append_realtime(
     occurred_at_unix_millis: i64,
 ) -> Result<(), AttachmentTextExtractionPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.attachment_text_extraction_realtime (logical_owner_id, run_id, state, state_revision, format_code, extracted_size_bytes, extraction_truncated, error_code, occurred_at_unix_millis) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+        "INSERT INTO makosh_data.attachment_text_extraction_realtime (logical_owner_id, run_id, state, state_revision, format_code, extracted_size_bytes, extraction_truncated, error_code, occurred_at_unix_millis) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
     )
     .bind(logical_owner_id)
     .bind(run_id.as_slice())
@@ -297,7 +297,7 @@ pub(crate) async fn load_run_for_update(
     AttachmentTextExtractionPersistenceErrorV1,
 > {
     sqlx::query(
-        "SELECT logical_owner_id,run_id,operation_id,request_fingerprint,attachment_anchor_id,state,state_revision,format_code,extracted_size_bytes,extraction_truncated,error_code,created_at_unix_millis,updated_at_unix_millis FROM hermes_data.attachment_text_extraction_runs WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE",
+        "SELECT logical_owner_id,run_id,operation_id,request_fingerprint,attachment_anchor_id,state,state_revision,format_code,extracted_size_bytes,extraction_truncated,error_code,created_at_unix_millis,updated_at_unix_millis FROM makosh_data.attachment_text_extraction_runs WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE",
     )
     .bind(logical_owner_id)
     .bind(run_id.as_slice())

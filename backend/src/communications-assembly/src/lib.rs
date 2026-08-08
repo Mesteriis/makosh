@@ -8,20 +8,20 @@ use std::io::Write;
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 
-use hermes_communications_runtime::admission::{
+use makosh_communications_runtime::admission::{
     communications_module_descriptor_v1, communications_settings_schema_v1,
 };
-use hermes_communications_runtime::storage_bundle::communications_runtime_storage_bundle_v1;
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_communications_runtime::storage_bundle::communications_runtime_storage_bundle_v1;
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
 pub const COMMUNICATIONS_ASSEMBLY_FRAGMENT_VERSION_V1: u32 = 1;
 pub const COMMUNICATIONS_ASSEMBLY_OWNER_ID: &str = "communications";
-pub const COMMUNICATIONS_ASSEMBLY_MODULE_ID: &str = "hermes-communications-runtime";
+pub const COMMUNICATIONS_ASSEMBLY_MODULE_ID: &str = "makosh-communications-runtime";
 pub const COMMUNICATIONS_RUNTIME_ARTIFACT_ID: &str = "communications.runtime.v1";
 pub const COMMUNICATIONS_STORAGE_ARTIFACT_ID: &str = "communications.storage.v1";
 pub const COMMUNICATIONS_DESCRIPTOR_FILE: &str = "communications.runtime.descriptor.pb";
@@ -29,7 +29,7 @@ pub const COMMUNICATIONS_SETTINGS_FILE: &str = "communications.runtime.settings.
 pub const COMMUNICATIONS_STORAGE_BUNDLE_FILE: &str = "communications.storage.bundle.pb";
 pub const COMMUNICATIONS_ARTIFACT_FRAGMENT_FILE: &str = "communications.release-artifacts.json";
 
-const COMMUNICATIONS_RUNTIME_RELATIVE_PATH: &str = "bin/hermes-communications-runtime";
+const COMMUNICATIONS_RUNTIME_RELATIVE_PATH: &str = "bin/makosh-communications-runtime";
 const COMMUNICATIONS_DESCRIPTOR_RELATIVE_PATH: &str =
     "contracts/communications.runtime.descriptor.pb";
 const COMMUNICATIONS_SETTINGS_RELATIVE_PATH: &str = "contracts/communications.runtime.settings.pb";
@@ -259,7 +259,7 @@ mod tests {
     #[test]
     fn materializes_exact_unsigned_runtime_and_storage_fragment() {
         let root = temporary_directory();
-        let runtime = root.join("hermes-communications-runtime");
+        let runtime = root.join("makosh-communications-runtime");
         fs::write(&runtime, b"runtime").expect("write runtime");
         let output = root.join("assembly");
         let paths = materialize_communications_release_assembly_v1(&output, "build-1", &runtime)
@@ -268,7 +268,7 @@ mod tests {
             serde_json::from_slice(&fs::read(paths.artifact_fragment).expect("read fragment"))
                 .expect("decode fragment");
         assert_eq!(fragment.owner_id, "communications");
-        assert_eq!(fragment.module_id, "hermes-communications-runtime");
+        assert_eq!(fragment.module_id, "makosh-communications-runtime");
         assert_eq!(
             fragment
                 .artifacts

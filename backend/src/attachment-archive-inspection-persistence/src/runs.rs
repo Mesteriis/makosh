@@ -1,4 +1,4 @@
-use hermes_attachment_archive_inspection_core::{
+use makosh_attachment_archive_inspection_core::{
     ArchiveEntryInspectionV1, ArchiveInspectionErrorV1, ArchiveInspectionJoinDecisionV1,
     ArchiveInspectionRejectionV1, ArchiveInspectionReportV1, ArchiveInspectionRequestV1,
     ArchiveInspectionStateV1, ArchiveInspectionStatusV1, ArchiveInspectionTransitionV1,
@@ -24,9 +24,9 @@ use crate::{
     unsigned,
 };
 
-const SELECT_RUN: &str = "SELECT logical_owner_id, run_id, operation_id, request_fingerprint, attachment_anchor_id, state, state_revision, error_code, rejection_evidence_id, created_at_unix_millis, updated_at_unix_millis FROM hermes_data.attachment_archive_inspection_runs WHERE logical_owner_id = $1 AND run_id = $2";
-const SELECT_RUN_FOR_UPDATE: &str = "SELECT logical_owner_id, run_id, operation_id, request_fingerprint, attachment_anchor_id, state, state_revision, error_code, rejection_evidence_id, created_at_unix_millis, updated_at_unix_millis FROM hermes_data.attachment_archive_inspection_runs WHERE logical_owner_id = $1 AND run_id = $2 FOR UPDATE";
-const SELECT_RUN_BY_OPERATION: &str = "SELECT logical_owner_id, run_id, operation_id, request_fingerprint, attachment_anchor_id, state, state_revision, error_code, rejection_evidence_id, created_at_unix_millis, updated_at_unix_millis FROM hermes_data.attachment_archive_inspection_runs WHERE logical_owner_id = $1 AND operation_id = $2";
+const SELECT_RUN: &str = "SELECT logical_owner_id, run_id, operation_id, request_fingerprint, attachment_anchor_id, state, state_revision, error_code, rejection_evidence_id, created_at_unix_millis, updated_at_unix_millis FROM makosh_data.attachment_archive_inspection_runs WHERE logical_owner_id = $1 AND run_id = $2";
+const SELECT_RUN_FOR_UPDATE: &str = "SELECT logical_owner_id, run_id, operation_id, request_fingerprint, attachment_anchor_id, state, state_revision, error_code, rejection_evidence_id, created_at_unix_millis, updated_at_unix_millis FROM makosh_data.attachment_archive_inspection_runs WHERE logical_owner_id = $1 AND run_id = $2 FOR UPDATE";
+const SELECT_RUN_BY_OPERATION: &str = "SELECT logical_owner_id, run_id, operation_id, request_fingerprint, attachment_anchor_id, state, state_revision, error_code, rejection_evidence_id, created_at_unix_millis, updated_at_unix_millis FROM makosh_data.attachment_archive_inspection_runs WHERE logical_owner_id = $1 AND operation_id = $2";
 
 impl AttachmentArchiveInspectionPersistenceV1 {
     pub async fn create_run(
@@ -48,7 +48,7 @@ impl AttachmentArchiveInspectionPersistenceV1 {
         )
         .await?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.attachment_archive_inspection_runs (logical_owner_id, run_id, operation_id, request_fingerprint, attachment_anchor_id, state, state_revision, error_code, rejection_evidence_id, created_at_unix_millis, updated_at_unix_millis) VALUES ($1, $2, $3, $4, $5, 1, 1, NULL, NULL, $6, $6) ON CONFLICT (logical_owner_id, operation_id) DO NOTHING",
+            "INSERT INTO makosh_data.attachment_archive_inspection_runs (logical_owner_id, run_id, operation_id, request_fingerprint, attachment_anchor_id, state, state_revision, error_code, rejection_evidence_id, created_at_unix_millis, updated_at_unix_millis) VALUES ($1, $2, $3, $4, $5, 1, 1, NULL, NULL, $6, $6) ON CONFLICT (logical_owner_id, operation_id) DO NOTHING",
         )
         .bind(&create.logical_owner_id)
         .bind(run_id.as_slice())
@@ -155,7 +155,7 @@ impl AttachmentArchiveInspectionPersistenceV1 {
             return Err(ArchiveInspectionPersistenceErrorV1::InvalidInput);
         }
         let rows = sqlx::query(
-            "SELECT realtime_sequence, run_id, state, state_revision, error_code, occurred_at_unix_millis FROM hermes_data.attachment_archive_inspection_realtime WHERE logical_owner_id = $1 AND realtime_sequence > $2 ORDER BY realtime_sequence ASC LIMIT $3",
+            "SELECT realtime_sequence, run_id, state, state_revision, error_code, occurred_at_unix_millis FROM makosh_data.attachment_archive_inspection_realtime WHERE logical_owner_id = $1 AND realtime_sequence > $2 ORDER BY realtime_sequence ASC LIMIT $3",
         )
         .bind(logical_owner_id)
         .bind(i64::try_from(after_sequence).map_err(|_| ArchiveInspectionPersistenceErrorV1::InvalidInput)?)
@@ -174,7 +174,7 @@ pub(crate) async fn settle_anchor_runs(
     occurred_at_unix_millis: i64,
 ) -> Result<u32, ArchiveInspectionPersistenceErrorV1> {
     let rows = sqlx::query(
-        "SELECT run_id FROM hermes_data.attachment_archive_inspection_runs WHERE logical_owner_id = $1 AND attachment_anchor_id = $2 AND state IN (1, 2) ORDER BY run_id FOR UPDATE",
+        "SELECT run_id FROM makosh_data.attachment_archive_inspection_runs WHERE logical_owner_id = $1 AND attachment_anchor_id = $2 AND state IN (1, 2) ORDER BY run_id FOR UPDATE",
     )
     .bind(logical_owner_id)
     .bind(attachment_anchor_id.as_slice())
@@ -308,7 +308,7 @@ pub(crate) async fn persist_status(
         return Err(ArchiveInspectionPersistenceErrorV1::InvalidInput);
     }
     let rows = sqlx::query(
-        "UPDATE hermes_data.attachment_archive_inspection_runs SET state = $3, state_revision = $4, error_code = $5, rejection_evidence_id = $6, updated_at_unix_millis = $7 WHERE logical_owner_id = $1 AND run_id = $2 AND state_revision = $8",
+        "UPDATE makosh_data.attachment_archive_inspection_runs SET state = $3, state_revision = $4, error_code = $5, rejection_evidence_id = $6, updated_at_unix_millis = $7 WHERE logical_owner_id = $1 AND run_id = $2 AND state_revision = $8",
     )
     .bind(logical_owner_id)
     .bind(run_id.as_slice())
@@ -343,7 +343,7 @@ pub(crate) async fn insert_realtime_transition(
     occurred_at_unix_millis: i64,
 ) -> Result<(), ArchiveInspectionPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.attachment_archive_inspection_realtime (logical_owner_id, run_id, state, state_revision, error_code, occurred_at_unix_millis) VALUES ($1, $2, $3, $4, $5, $6)",
+        "INSERT INTO makosh_data.attachment_archive_inspection_realtime (logical_owner_id, run_id, state, state_revision, error_code, occurred_at_unix_millis) VALUES ($1, $2, $3, $4, $5, $6)",
     )
     .bind(logical_owner_id)
     .bind(run_id.as_slice())
@@ -493,7 +493,7 @@ async fn load_report(
     run_id: [u8; 16],
 ) -> Result<ArchiveInspectionReportV1, ArchiveInspectionPersistenceErrorV1> {
     let report = sqlx::query(
-        "SELECT entry_count, total_uncompressed_bytes FROM hermes_data.attachment_archive_inspection_reports WHERE logical_owner_id = $1 AND run_id = $2",
+        "SELECT entry_count, total_uncompressed_bytes FROM makosh_data.attachment_archive_inspection_reports WHERE logical_owner_id = $1 AND run_id = $2",
     )
     .bind(logical_owner_id)
     .bind(run_id.as_slice())
@@ -512,7 +512,7 @@ async fn load_report(
             .map_err(|_| ArchiveInspectionPersistenceErrorV1::InvalidRow)?,
     )?;
     let rows = sqlx::query(
-        "SELECT normalized_path_utf8, compressed_size, uncompressed_size, entry_kind FROM hermes_data.attachment_archive_inspection_report_entries WHERE logical_owner_id = $1 AND run_id = $2 ORDER BY entry_ordinal",
+        "SELECT normalized_path_utf8, compressed_size, uncompressed_size, entry_kind FROM makosh_data.attachment_archive_inspection_report_entries WHERE logical_owner_id = $1 AND run_id = $2 ORDER BY entry_ordinal",
     )
     .bind(logical_owner_id)
     .bind(run_id.as_slice())

@@ -80,7 +80,7 @@ fn handle_authorization_state(
             context.client.send_json(&json!({
                 "@type": "requestQrCodeAuthentication",
                 "other_user_ids": [],
-                "@extra": "hermes-request-qr-code-authentication"
+                "@extra": "makosh-request-qr-code-authentication"
             }))?;
             state.qr_requested = true;
         }

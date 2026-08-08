@@ -8,10 +8,10 @@ use std::{
 
 use super::*;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
-use hermes_whatsapp_api::{
+use makosh_whatsapp_api::{
     WhatsAppProviderCommand,
     client_contract::{WHATSAPP_DESCRIPTOR_SET_V1, WHATSAPP_MODULE_ID, WHATSAPP_OWNER_ID},
     host_bridge::{

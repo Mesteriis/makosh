@@ -1,6 +1,6 @@
 //! Bounded Gmail network execution outside the Mail control loop.
 
-use hermes_mail_gmail::{
+use makosh_mail_gmail::{
     GmailAdapterErrorV1, GmailApiClientV1, GmailListMessagesRequestV1, GmailRawMessageV1,
     history_message_ids,
 };

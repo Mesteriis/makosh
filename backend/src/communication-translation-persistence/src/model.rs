@@ -1,4 +1,4 @@
-use hermes_communication_translation_core::{
+use makosh_communication_translation_core::{
     CommunicationTranslationDraftV1, CommunicationTranslationLanguageV1,
     CommunicationTranslationRejectionCodeV1, CommunicationTranslationStatusV1,
     CommunicationTranslationTransitionV1,
@@ -88,7 +88,7 @@ pub enum CommunicationTranslationPersistenceErrorV1 {
 
 pub(crate) fn request_fingerprint(draft: &CommunicationTranslationDraftV1) -> [u8; 32] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.communication_translation.start.v1\0");
+    hash.update(b"makosh.communication_translation.start.v1\0");
     hash.update(draft.source_message_id);
     hash.update(draft.expected_source_revision.to_be_bytes());
     hash.update([target_language_code(draft.target_language)]);

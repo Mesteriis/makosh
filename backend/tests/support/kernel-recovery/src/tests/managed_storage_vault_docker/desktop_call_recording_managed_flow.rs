@@ -5,11 +5,13 @@ use std::time::{Duration, Instant};
 use super::*;
 
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
-use hermes_call_transcription_ingress::{
+use http_body_util::BodyExt as _;
+use hyper::{Request, StatusCode, body::Bytes};
+use makosh_call_transcription_ingress::{
     CONTRACT_MAJOR_V1 as TARGET_CONTRACT_MAJOR_V1, OWNER_ID_V1 as TARGET_OWNER_ID_V1,
     RECORDING_READY_CONTRACT_NAME_V1, wire::RecordingReadyV1,
 };
-use hermes_desktop_call_recording_api::{
+use makosh_desktop_call_recording_api::{
     GET_CONTRACT_NAME_V1, REALTIME_CONTRACT_NAME_V1, START_CONTRACT_NAME_V1, STOP_CONTRACT_NAME_V1,
     contract_reference_v1,
     wire::{
@@ -22,29 +24,27 @@ use hermes_desktop_call_recording_api::{
         desktop_recording_host_observation_v1::Observation,
     },
 };
-use hermes_events_jetstream::{DurableSubjectV1, StreamKindV1};
-use hermes_events_protocol::v1::DurableEnvelopeV1;
-use hermes_gateway_protocol::v1::{
+use makosh_events_jetstream::{DurableSubjectV1, StreamKindV1};
+use makosh_events_protocol::v1::DurableEnvelopeV1;
+use makosh_gateway_protocol::v1::{
     ClientRealtimeEventV1, ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
 };
-use http_body_util::BodyExt as _;
-use hyper::{Request, StatusCode, body::Bytes};
 
 use crate::identity::device::signer::DeviceSigner;
 
-type DesktopRecordingGateway = hermes_gateway_runtime::GatewayApplicationRouter<
+type DesktopRecordingGateway = makosh_gateway_runtime::GatewayApplicationRouter<
     crate::identity::browser_gateway::ControlStoreBrowserAuthority,
-    hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 >;
 
 #[test]
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Blob, NATS and desktop recording binaries"]
 fn managed_desktop_recording_reaches_blob_event_gateway_sse_and_restart() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-desktop-recording");
+    let root = unique_target_root("makosh-managed-desktop-recording");
     let data = private_directory(short_communications_kernel_data_directory());
     let recording_runtime_dir = private_directory(data.join("r"));
     initialize_vault(
@@ -53,7 +53,7 @@ fn managed_desktop_recording_reaches_blob_event_gateway_sse_and_restart() {
     );
     let release = installed_desktop_recording_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     blob_binding::bind_installed_release(&store, release.kernel())
@@ -61,7 +61,7 @@ fn managed_desktop_recording_reaches_blob_event_gateway_sse_and_restart() {
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             DESKTOP_RECORDING_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -77,7 +77,7 @@ fn managed_desktop_recording_reaches_blob_event_gateway_sse_and_restart() {
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(32).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(32).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     configure_desktop_recording_realtime_v1(&supervisor, &store, realtime.clone());
     supervisor
@@ -148,8 +148,8 @@ fn managed_desktop_recording_reaches_blob_event_gateway_sse_and_restart() {
         post_proto_status(
             &router,
             &gateway_runtime,
-            "hermes_session=wrong-actor-session",
-            hermes_desktop_call_recording_runtime::admission::START_PATH_V1,
+            "makosh_session=wrong-actor-session",
+            makosh_desktop_call_recording_runtime::admission::START_PATH_V1,
             &StartDesktopCallRecordingRequestV1 {
                 operation_id: vec![0x40; 16],
                 call_evidence_id: vec![0x42; 16],
@@ -164,7 +164,7 @@ fn managed_desktop_recording_reaches_blob_event_gateway_sse_and_restart() {
         open_recording_sse_status(
             &router,
             &gateway_runtime,
-            "hermes_session=wrong-actor-session",
+            "makosh_session=wrong-actor-session",
             None,
         ),
         StatusCode::UNAUTHORIZED,
@@ -181,7 +181,7 @@ fn managed_desktop_recording_reaches_blob_event_gateway_sse_and_restart() {
         &router,
         &gateway_runtime,
         &cookie,
-        hermes_desktop_call_recording_runtime::admission::START_PATH_V1,
+        makosh_desktop_call_recording_runtime::admission::START_PATH_V1,
         start_request.clone(),
     );
     assert_eq!(
@@ -225,7 +225,7 @@ fn managed_desktop_recording_reaches_blob_event_gateway_sse_and_restart() {
         &router,
         &gateway_runtime,
         &cookie,
-        hermes_desktop_call_recording_runtime::admission::STOP_PATH_V1,
+        makosh_desktop_call_recording_runtime::admission::STOP_PATH_V1,
         StopDesktopCallRecordingRequestV1 {
             recording_evidence_id: started.recording_evidence_id.clone(),
         },
@@ -397,7 +397,7 @@ fn managed_desktop_recording_reaches_blob_event_gateway_sse_and_restart() {
 
     shutdown.store(true, Ordering::SeqCst);
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove desktop recording fixture");
     std::fs::remove_dir_all(data).expect("remove desktop recording Kernel fixture");
@@ -410,7 +410,7 @@ async fn wait_for_recording_ready_event_v1(
 ) -> DurableEnvelopeV1 {
     let context = async_nats::jetstream::new(client.clone());
     let stream = context
-        .get_stream("HERMES_EVENT_V1")
+        .get_stream("MAKOSH_EVENT_V1")
         .await
         .expect("read recording event stream");
     let deadline = Instant::now() + Duration::from_secs(10);
@@ -444,7 +444,7 @@ fn assert_blob_outage_rejects_recording_v1(
         router,
         gateway_runtime,
         cookie,
-        hermes_desktop_call_recording_runtime::admission::START_PATH_V1,
+        makosh_desktop_call_recording_runtime::admission::START_PATH_V1,
         StartDesktopCallRecordingRequestV1 {
             operation_id: vec![0x51; 16],
             call_evidence_id: vec![0x52; 16],
@@ -482,7 +482,7 @@ fn assert_blob_outage_rejects_recording_v1(
         router,
         gateway_runtime,
         cookie,
-        hermes_desktop_call_recording_runtime::admission::STOP_PATH_V1,
+        makosh_desktop_call_recording_runtime::admission::STOP_PATH_V1,
         StopDesktopCallRecordingRequestV1 {
             recording_evidence_id: start.recording_evidence_id.clone(),
         },
@@ -544,7 +544,7 @@ fn desktop_recording_gateway(
     supervisor: &ManagedRuntimeSupervisor,
     root: &Path,
     data: &Path,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 ) -> DesktopRecordingGateway {
     let configuration = crate::platform::gateway::BrowserGatewayConfigurationV1::new(
         "127.0.0.1:9443".parse().expect("loopback Gateway address"),
@@ -637,7 +637,7 @@ fn get_recording(
         router,
         runtime,
         cookie,
-        hermes_desktop_call_recording_runtime::admission::GET_PATH_V1,
+        makosh_desktop_call_recording_runtime::admission::GET_PATH_V1,
         GetDesktopCallRecordingRequestV1 {
             recording_evidence_id: recording_id.to_vec(),
         },
@@ -649,7 +649,7 @@ fn open_recording_sse(
     runtime: &tokio::runtime::Runtime,
     cookie: &str,
     last_event_id: Option<&str>,
-) -> hermes_gateway_runtime::GatewayHttpResponse {
+) -> makosh_gateway_runtime::GatewayHttpResponse {
     let mut request = Request::builder()
         .method("GET")
         .uri("/api/realtime/v1/events")

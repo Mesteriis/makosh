@@ -1,0 +1,477 @@
+syntax = "proto3";
+
+package makosh.signal_hub.v1;
+
+message SignalSource {
+  string id = 1;
+  string code = 2;
+  string display_name = 3;
+  string category = 4;
+  string source_kind = 5;
+  bool default_enabled = 6;
+  bool supports_connections = 7;
+  bool supports_runtime = 8;
+  bool supports_replay = 9;
+  bool supports_pause = 10;
+  bool supports_mute = 11;
+  int32 capability_schema_version = 12;
+  string created_at = 13;
+  string updated_at = 14;
+}
+
+message ListSourcesRequest {}
+
+message ListSourcesResponse {
+  repeated SignalSource items = 1;
+}
+
+message GetSourceRequest {
+  string code = 1;
+}
+
+message GetSourceResponse {
+  SignalSource item = 1;
+}
+
+message SignalCapability {
+  string id = 1;
+  string source_code = 2;
+  optional string connection_id = 3;
+  string capability = 4;
+  string state = 5;
+  optional string reason = 6;
+  bool requires_confirmation = 7;
+  string action_class = 8;
+  string updated_at = 9;
+}
+
+message ListCapabilitiesRequest {
+  optional string source_code = 1;
+  optional string connection_id = 2;
+}
+
+message ListCapabilitiesResponse {
+  repeated SignalCapability items = 1;
+}
+
+message SignalFixtureSource {
+  string fixture_id = 1;
+  string source_code = 2;
+  string event_type = 3;
+  optional string correlation_id = 4;
+  string occurred_at = 5;
+  string summary = 6;
+}
+
+message ListFixtureSourcesRequest {}
+
+message ListFixtureSourcesResponse {
+  repeated SignalFixtureSource items = 1;
+}
+
+message SignalConnection {
+  string id = 1;
+  string source_code = 2;
+  string display_name = 3;
+  string status = 4;
+  optional string profile = 5;
+  optional string secret_ref = 6;
+  optional string connected_at = 7;
+  optional string last_seen_at = 8;
+  optional string last_signal_at = 9;
+  optional string last_sync_at = 10;
+  string created_at = 11;
+  string updated_at = 12;
+  string settings_json = 13;
+}
+
+message ListConnectionsRequest {}
+
+message ListConnectionsResponse {
+  repeated SignalConnection items = 1;
+}
+
+message CreateConnectionRequest {
+  string source_code = 1;
+  string display_name = 2;
+  string status = 3;
+  optional string profile = 4;
+  optional string secret_ref = 5;
+  string settings_json = 6;
+}
+
+message CreateConnectionResponse {
+  SignalConnection item = 1;
+}
+
+message UpdateConnectionRequest {
+  string id = 1;
+  optional string display_name = 2;
+  optional string status = 3;
+  optional string profile = 4;
+  optional string secret_ref = 5;
+  optional string settings_json = 6;
+}
+
+message UpdateConnectionResponse {
+  SignalConnection item = 1;
+}
+
+message RemoveConnectionRequest {
+  string id = 1;
+}
+
+message RemoveConnectionResponse {
+  SignalConnection item = 1;
+}
+
+message SignalHealth {
+  string id = 1;
+  string source_code = 2;
+  optional string connection_id = 3;
+  string level = 4;
+  string summary = 5;
+  optional string last_ok_at = 6;
+  optional string last_failure_at = 7;
+  int32 failure_count = 8;
+  int32 consecutive_failure_count = 9;
+  optional string next_retry_at = 10;
+  string updated_at = 11;
+  string evidence_json = 12;
+}
+
+message ListHealthRequest {}
+
+message ListHealthResponse {
+  repeated SignalHealth items = 1;
+}
+
+message RunHealthCheckRequest {
+  string source_code = 1;
+  optional string connection_id = 2;
+}
+
+message RunHealthCheckResponse {
+  SignalHealth item = 1;
+}
+
+message SignalRuntimeState {
+  string id = 1;
+  string source_code = 2;
+  optional string connection_id = 3;
+  string runtime_kind = 4;
+  string state = 5;
+  string metadata_json = 6;
+  string updated_at = 7;
+  optional string last_started_at = 8;
+  optional string last_stopped_at = 9;
+  optional string last_heartbeat_at = 10;
+  optional string last_error_at = 11;
+  optional string last_error_code = 12;
+  optional string last_error_message_redacted = 13;
+}
+
+message ListRuntimeStatesRequest {}
+
+message ListRuntimeStatesResponse {
+  repeated SignalRuntimeState items = 1;
+}
+
+message UpdateRuntimeStateRequest {
+  string source_code = 1;
+  string runtime_kind = 2;
+  string state = 3;
+  string metadata_json = 4;
+}
+
+message UpdateRuntimeStateResponse {
+  SignalRuntimeState item = 1;
+}
+
+message SignalPolicy {
+  string scope = 1;
+  optional string source_code = 2;
+  optional string connection_id = 3;
+  optional string event_pattern = 4;
+  string mode = 5;
+  string reason = 6;
+  optional string expires_at = 7;
+}
+
+message ListPoliciesRequest {}
+
+message ListPoliciesResponse {
+  repeated SignalPolicy items = 1;
+}
+
+message CreatePolicyRequest {
+  string scope = 1;
+  optional string source_code = 2;
+  optional string connection_id = 3;
+  optional string event_pattern = 4;
+  string mode = 5;
+  string reason = 6;
+  optional string expires_at = 7;
+}
+
+message CreatePolicyResponse {
+  string id = 1;
+}
+
+message EnableSourceRequest {
+  string source_code = 1;
+  optional string reason = 2;
+}
+
+message EnableSourceResponse {
+  string source_code = 1;
+  uint32 cleared_count = 2;
+}
+
+message DisableSourceRequest {
+  string source_code = 1;
+  optional string reason = 2;
+}
+
+message DisableSourceResponse {
+  string source_code = 1;
+  string policy_id = 2;
+}
+
+message DisableSignalsRequest {
+  string scope = 1;
+  optional string source_code = 2;
+  optional string connection_id = 3;
+  optional string event_pattern = 4;
+  optional string reason = 5;
+}
+
+message DisableSignalsResponse {
+  optional string policy_id = 1;
+}
+
+message EnableSignalsRequest {
+  string scope = 1;
+  optional string source_code = 2;
+  optional string connection_id = 3;
+  optional string event_pattern = 4;
+  optional string reason = 5;
+}
+
+message EnableSignalsResponse {
+  uint32 cleared_count = 1;
+}
+
+message MuteSignalsRequest {
+  string scope = 1;
+  optional string source_code = 2;
+  optional string connection_id = 3;
+  optional string event_pattern = 4;
+  optional string reason = 5;
+}
+
+message MuteSignalsResponse {
+  optional string policy_id = 1;
+}
+
+message UnmuteSignalsRequest {
+  string scope = 1;
+  optional string source_code = 2;
+  optional string connection_id = 3;
+  optional string event_pattern = 4;
+  optional string reason = 5;
+}
+
+message UnmuteSignalsResponse {
+  uint32 cleared_count = 1;
+}
+
+message PauseSignalsRequest {
+  string scope = 1;
+  optional string source_code = 2;
+  optional string connection_id = 3;
+  optional string event_pattern = 4;
+  optional string reason = 5;
+}
+
+message PauseSignalsResponse {
+  optional string policy_id = 1;
+}
+
+message ResumeSignalsRequest {
+  string scope = 1;
+  optional string source_code = 2;
+  optional string connection_id = 3;
+  optional string event_pattern = 4;
+  optional string reason = 5;
+}
+
+message ResumeSignalsResponse {
+  uint32 cleared_count = 1;
+}
+
+message SignalProfile {
+  string id = 1;
+  string code = 2;
+  string display_name = 3;
+  string description = 4;
+  uint32 policy_count = 5;
+  bool is_system = 6;
+  bool is_active = 7;
+  string created_at = 8;
+  string updated_at = 9;
+  repeated SignalProfilePolicy source_policies = 10;
+}
+
+message SignalProfilePolicy {
+  string scope = 1;
+  optional string source_code = 2;
+  optional string connection_id = 3;
+  optional string event_pattern = 4;
+  string mode = 5;
+  string reason = 6;
+}
+
+message ListProfilesRequest {}
+
+message ListProfilesResponse {
+  repeated SignalProfile items = 1;
+}
+
+message CreateProfileRequest {
+  string code = 1;
+  string display_name = 2;
+  string description = 3;
+  repeated SignalProfilePolicy source_policies = 4;
+}
+
+message CreateProfileResponse {
+  SignalProfile item = 1;
+}
+
+message UpdateProfileRequest {
+  string code = 1;
+  optional string display_name = 2;
+  optional string description = 3;
+  repeated SignalProfilePolicy source_policies = 4;
+  bool update_source_policies = 5;
+}
+
+message UpdateProfileResponse {
+  SignalProfile item = 1;
+}
+
+message RemoveProfileRequest {
+  string code = 1;
+}
+
+message RemoveProfileResponse {
+  SignalProfile item = 1;
+}
+
+message ApplyProfileRequest {
+  string code = 1;
+}
+
+message ApplyProfileResponse {
+  SignalProfile item = 1;
+}
+
+message SignalReplayRequest {
+  string id = 1;
+  optional string source_code = 2;
+  optional string connection_id = 3;
+  optional string event_pattern = 4;
+  optional int64 from_position = 5;
+  optional int64 to_position = 6;
+  optional string from_time = 7;
+  optional string to_time = 8;
+  optional string target_consumer = 9;
+  optional string target_projection = 10;
+  string status = 11;
+  string requested_by = 12;
+  string requested_at = 13;
+  optional string started_at = 14;
+  optional string completed_at = 15;
+  optional string last_error_redacted = 16;
+  int32 replayed_count = 17;
+  string metadata_json = 18;
+}
+
+message ListReplayRequestsRequest {}
+
+message ListReplayRequestsResponse {
+  repeated SignalReplayRequest items = 1;
+}
+
+message RequestReplayRequest {
+  optional string source_code = 1;
+  optional string connection_id = 2;
+  optional string event_pattern = 3;
+  optional int64 from_position = 4;
+  optional int64 to_position = 5;
+  optional string from_time = 6;
+  optional string to_time = 7;
+  optional string target_consumer = 8;
+  optional string target_projection = 9;
+  string metadata_json = 10;
+}
+
+message RequestReplayResponse {
+  SignalReplayRequest item = 1;
+}
+
+message EmitFixtureSignalRequest {
+  string fixture_id = 1;
+}
+
+message EmitFixtureSignalResponse {
+  string fixture_id = 1;
+  string raw_event_id = 2;
+  string event_type = 3;
+  string source_code = 4;
+  optional string correlation_id = 5;
+}
+
+message RestoreSystemFixtureRequest {}
+
+message RestoreSystemFixtureResponse {
+  uint32 sources_created = 1;
+  uint32 sources_repaired = 2;
+  uint32 profiles_created = 3;
+  uint32 profiles_repaired = 4;
+}
+
+service SignalHubService {
+  rpc ListSources(ListSourcesRequest) returns (ListSourcesResponse);
+  rpc GetSource(GetSourceRequest) returns (GetSourceResponse);
+  rpc ListCapabilities(ListCapabilitiesRequest) returns (ListCapabilitiesResponse);
+  rpc ListFixtureSources(ListFixtureSourcesRequest) returns (ListFixtureSourcesResponse);
+  rpc ListConnections(ListConnectionsRequest) returns (ListConnectionsResponse);
+  rpc CreateConnection(CreateConnectionRequest) returns (CreateConnectionResponse);
+  rpc UpdateConnection(UpdateConnectionRequest) returns (UpdateConnectionResponse);
+  rpc RemoveConnection(RemoveConnectionRequest) returns (RemoveConnectionResponse);
+  rpc EnableSource(EnableSourceRequest) returns (EnableSourceResponse);
+  rpc DisableSource(DisableSourceRequest) returns (DisableSourceResponse);
+  rpc DisableSignals(DisableSignalsRequest) returns (DisableSignalsResponse);
+  rpc EnableSignals(EnableSignalsRequest) returns (EnableSignalsResponse);
+  rpc MuteSignals(MuteSignalsRequest) returns (MuteSignalsResponse);
+  rpc UnmuteSignals(UnmuteSignalsRequest) returns (UnmuteSignalsResponse);
+  rpc PauseSignals(PauseSignalsRequest) returns (PauseSignalsResponse);
+  rpc ResumeSignals(ResumeSignalsRequest) returns (ResumeSignalsResponse);
+  rpc ListHealth(ListHealthRequest) returns (ListHealthResponse);
+  rpc RunHealthCheck(RunHealthCheckRequest) returns (RunHealthCheckResponse);
+  rpc ListRuntimeStates(ListRuntimeStatesRequest) returns (ListRuntimeStatesResponse);
+  rpc UpdateRuntimeState(UpdateRuntimeStateRequest) returns (UpdateRuntimeStateResponse);
+  rpc ListPolicies(ListPoliciesRequest) returns (ListPoliciesResponse);
+  rpc CreatePolicy(CreatePolicyRequest) returns (CreatePolicyResponse);
+  rpc ListProfiles(ListProfilesRequest) returns (ListProfilesResponse);
+  rpc CreateProfile(CreateProfileRequest) returns (CreateProfileResponse);
+  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse);
+  rpc RemoveProfile(RemoveProfileRequest) returns (RemoveProfileResponse);
+  rpc ApplyProfile(ApplyProfileRequest) returns (ApplyProfileResponse);
+  rpc ListReplayRequests(ListReplayRequestsRequest) returns (ListReplayRequestsResponse);
+  rpc RequestReplay(RequestReplayRequest) returns (RequestReplayResponse);
+  rpc EmitFixtureSignal(EmitFixtureSignalRequest) returns (EmitFixtureSignalResponse);
+  rpc RestoreSystemFixture(RestoreSystemFixtureRequest) returns (RestoreSystemFixtureResponse);
+}

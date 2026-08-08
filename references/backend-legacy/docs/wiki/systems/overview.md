@@ -11,7 +11,7 @@ Wiki построена из `163` bounded chunks, покрывающих `2949`
 
 ```mermaid
 graph TD
-  repo["hermes-hub"] --> backend["backend"]
+  repo["makosh"] --> backend["backend"]
   repo --> frontend["frontend"]
   repo --> docs["docs и ADR"]
   repo --> ops["config, scripts, tests"]

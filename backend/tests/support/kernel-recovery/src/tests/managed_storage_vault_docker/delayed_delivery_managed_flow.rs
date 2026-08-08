@@ -6,7 +6,9 @@ use std::sync::Mutex;
 use std::time::Instant;
 
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
-use hermes_communication_delayed_delivery_api::{
+use http_body_util::BodyExt as _;
+use hyper::{Request, StatusCode, body::Bytes};
+use makosh_communication_delayed_delivery_api::{
     COMMUNICATION_DELAYED_DELIVERY_CANCEL_CONNECT_PATH_V1,
     COMMUNICATION_DELAYED_DELIVERY_CAPABILITY_ID_V1, COMMUNICATION_DELAYED_DELIVERY_MODULE_ID_V1,
     COMMUNICATION_DELAYED_DELIVERY_OWNER_V1,
@@ -21,19 +23,17 @@ use hermes_communication_delayed_delivery_api::{
         ScheduleDelayedDeliveryResponseV1,
     },
 };
-use hermes_communication_delayed_delivery_runtime::COMMUNICATION_DELAYED_DELIVERY_STORAGE_CAPABILITY_ID_V1;
-use hermes_communication_delayed_delivery_runtime::delayed_delivery_query_contract_v1;
-use hermes_communication_delivery_intent_api::wire::SubmitDeliveryIntentRequestV1;
-use hermes_gateway_protocol::v1::{
+use makosh_communication_delayed_delivery_runtime::COMMUNICATION_DELAYED_DELIVERY_STORAGE_CAPABILITY_ID_V1;
+use makosh_communication_delayed_delivery_runtime::delayed_delivery_query_contract_v1;
+use makosh_communication_delivery_intent_api::wire::SubmitDeliveryIntentRequestV1;
+use makosh_gateway_protocol::v1::{
     ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
 };
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeModuleRequestRequestV1, ManagedRuntimeModuleRequestResponseV1,
     ModuleClientRequestV1,
 };
-use http_body_util::BodyExt as _;
-use hyper::{Request, StatusCode, body::Bytes};
 use sha2::{Digest, Sha256};
 
 use crate::identity::device::signer::DeviceSigner;
@@ -45,10 +45,10 @@ use crate::runtime::lifecycle::control::{
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Blob, NATS, Scheduler, Communications, delayed-delivery and delivery-intent binaries"]
 fn managed_delayed_delivery_starts_with_scheduler_and_delivery_intent() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-delayed-delivery");
+    let root = unique_target_root("makosh-managed-delayed-delivery");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -56,13 +56,13 @@ fn managed_delayed_delivery_starts_with_scheduler_and_delivery_intent() {
     );
     let release = installed_delayed_delivery_conformance_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             DELAYED_DELIVERY_LOGICAL_OWNER_ID,
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -78,7 +78,7 @@ fn managed_delayed_delivery_starts_with_scheduler_and_delivery_intent() {
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(32).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(32).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     let ambiguous_request_probe = Arc::new(AmbiguousDeliveryIntentRequestProbe::new([0xc2; 16]));
     configure_delivery_intent_runtime_routes_with_request_handler(
@@ -292,7 +292,7 @@ fn managed_delayed_delivery_starts_with_scheduler_and_delivery_intent() {
         .expect("join owner control")
         .expect("owner control exits");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove fixture");
     std::fs::remove_dir_all(data).expect("remove kernel fixture");
@@ -365,7 +365,7 @@ impl ManagedRuntimeModuleRequestHandler for AmbiguousDeliveryIntentRequestHandle
 fn assert_delayed_delivery_round_trip(
     contour: &DelayedDeliveryManagedContour<'_>,
     delayed_delivery_registration_id: &str,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
     conversation_id: Vec<u8>,
     operation_byte: u8,
     authentication_sign_count: u32,
@@ -450,7 +450,7 @@ fn assert_delayed_delivery_round_trip(
 fn assert_delayed_delivery_cancellation_round_trip(
     contour: &DelayedDeliveryManagedContour<'_>,
     delayed_delivery_registration_id: &str,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
     conversation_id: Vec<u8>,
     operation_byte: u8,
     authentication_sign_count: u32,
@@ -630,7 +630,7 @@ fn assert_blob_release_committed(
     let delayed_operation_id = [operation_byte; 16];
     let body_sha256: [u8; 32] = Sha256::digest(private_body).into();
     let reference_digest = Sha256::new()
-        .chain_update(b"hermes.communication-delayed-delivery.body.v1\0")
+        .chain_update(b"makosh.communication-delayed-delivery.body.v1\0")
         .chain_update((logical_owner_id.len() as u64).to_be_bytes())
         .chain_update(logical_owner_id.as_bytes())
         .chain_update(delayed_operation_id)
@@ -677,7 +677,7 @@ fn assert_blob_release_committed(
 fn assert_delayed_delivery_survives_ambiguous_delivery_response(
     contour: &DelayedDeliveryManagedContour<'_>,
     delayed_delivery_registration_id: &str,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
     conversation_id: Vec<u8>,
     operation_byte: u8,
     authentication_sign_count: u32,
@@ -772,7 +772,7 @@ fn assert_delayed_delivery_survives_ambiguous_delivery_response(
 fn assert_delayed_delivery_survives_nats_outage(
     contour: &DelayedDeliveryManagedContour<'_>,
     delayed_delivery: StartedDelayedDeliveryRuntime,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
     conversation_id: Vec<u8>,
     operation_byte: u8,
     authentication_sign_count: u32,
@@ -896,7 +896,7 @@ fn assert_delayed_delivery_survives_nats_outage(
 fn assert_delayed_delivery_survives_scheduler_outage(
     contour: &DelayedDeliveryManagedContour<'_>,
     delayed_delivery_registration_id: &str,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
     conversation_id: Vec<u8>,
     operation_byte: u8,
     authentication_sign_count: u32,
@@ -1000,7 +1000,7 @@ fn assert_delayed_delivery_survives_scheduler_outage(
 fn assert_delayed_delivery_fails_closed_during_blob_outage(
     contour: &DelayedDeliveryManagedContour<'_>,
     delayed_delivery_registration_id: &str,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
     conversation_id: Vec<u8>,
     operation_byte: u8,
     authentication_sign_count: u32,
@@ -1439,7 +1439,7 @@ fn read_delayed_delivery_terminal_sse(
     runtime: &tokio::runtime::Runtime,
     cookie: &str,
     delayed_operation_id: &[u8],
-) -> hermes_gateway_protocol::v1::ClientRealtimeEventV1 {
+) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1 {
     read_delayed_delivery_state_sse(
         router,
         runtime,
@@ -1455,7 +1455,7 @@ fn read_delayed_delivery_state_sse(
     cookie: &str,
     delayed_operation_id: &[u8],
     expected_state: DelayedDeliveryStateV1,
-) -> hermes_gateway_protocol::v1::ClientRealtimeEventV1 {
+) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1 {
     let response = runtime.block_on(
         router.route(
             Request::builder()
@@ -1485,7 +1485,7 @@ async fn find_delayed_delivery_state_event<B>(
     mut body: B,
     delayed_operation_id: &[u8],
     expected_state: DelayedDeliveryStateV1,
-) -> hermes_gateway_protocol::v1::ClientRealtimeEventV1
+) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1
 where
     B: hyper::body::Body<Data = Bytes> + Unpin,
     B::Error: std::fmt::Debug,

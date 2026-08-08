@@ -6,7 +6,7 @@ import {
 	ClientModuleSettingsBootstrapV1Schema,
 	ClientSettingValueEntryV1Schema,
 	ClientSettingValueV1Schema,
-} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	getZulipOperationalAccountStatus,
 	listZulipOperationalConversations,
@@ -136,7 +136,7 @@ describe('Zulip operational read controller', () => {
 function zulipModule(capabilityId: string) {
 	return create(ClientModuleBootstrapV1Schema, {
 		registrationId: 'zulip-primary',
-		moduleId: 'hermes-zulip-runtime',
+		moduleId: 'makosh-zulip-runtime',
 		sectionsEnabled: true,
 		capabilityIds: [capabilityId],
 		settings: create(ClientModuleSettingsBootstrapV1Schema, {

@@ -1,0 +1,28 @@
+syntax = "proto3";
+package makosh.zulip.v1;
+
+message ZulipProviderCommandV1 { oneof command { SendStreamCommandV1 send_stream = 1; SendDirectCommandV1 send_direct = 2; UpdateMessageCommandV1 update_message = 3; DeleteMessageCommandV1 delete_message = 4; ReactionCommandV1 reaction = 5; SendStreamWithUploadCommandV1 send_stream_with_upload = 6; SendDirectWithUploadCommandV1 send_direct_with_upload = 7; DownloadAttachmentCommandV1 download_attachment = 8; } }
+message SendStreamCommandV1 { string operation_id = 1; string account_id = 2; string stream = 3; string topic = 4; string content = 5; }
+message SendDirectCommandV1 { string operation_id = 1; string account_id = 2; repeated string recipient = 3; string content = 4; }
+message UpdateMessageCommandV1 { string operation_id = 1; string account_id = 2; string provider_message_id = 3; optional string content = 4; optional string topic = 5; }
+message DeleteMessageCommandV1 { string operation_id = 1; string account_id = 2; string provider_message_id = 3; }
+message ReactionCommandV1 { string operation_id = 1; string account_id = 2; string provider_message_id = 3; string emoji_name = 4; optional string emoji_code = 5; optional string reaction_type = 6; bool add = 7; }
+message ZulipBlobIntentV1 { string blob_ref = 1; bytes reference_id = 2; uint64 declared_size = 3; uint32 backup_class = 4; }
+message SendStreamWithUploadCommandV1 { string operation_id = 1; string account_id = 2; string stream = 3; string topic = 4; string content = 5; ZulipBlobIntentV1 blob = 6; string filename = 7; }
+message SendDirectWithUploadCommandV1 { string operation_id = 1; string account_id = 2; repeated string recipient = 3; string content = 4; ZulipBlobIntentV1 blob = 5; string filename = 6; }
+message DownloadAttachmentCommandV1 { string operation_id = 1; string account_id = 2; string upload_path = 3; ZulipBlobIntentV1 blob = 4; }
+
+message ZulipOperationStatusQueryV1 { string operation_id = 1; }
+message ZulipCommandReceiptV1 { string operation_id = 1; string account_id = 2; }
+message ZulipOperationStatusResponseV1 { optional ZulipCommandOperationStatusV1 status = 1; }
+message ZulipCommandOperationStatusV1 { string operation_id = 1; string account_id = 2; string outcome = 3; optional int64 provider_message_id = 4; int64 requested_at_unix_seconds = 5; optional int64 completed_at_unix_seconds = 6; optional string blob_ref = 7; }
+
+// Provider-specific operational contracts. Core Gateway authenticates and
+// routes each exact contract but does not translate its Zulip payload.
+service ZulipCommandService {
+  rpc ExecuteCommand(ZulipProviderCommandV1) returns (ZulipCommandReceiptV1);
+}
+
+service ZulipQueryService {
+  rpc GetOperationStatus(ZulipOperationStatusQueryV1) returns (ZulipOperationStatusResponseV1);
+}

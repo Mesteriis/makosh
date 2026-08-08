@@ -1,6 +1,6 @@
 //! WhatsApp-owned terminal delivery-result outbox.
 
-use hermes_events_protocol::delivery::OutboxRecordV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
 use sqlx::Row;
 
 use crate::{WhatsAppDeliveryIntentStoreV1, WhatsAppDurablePersistenceError};
@@ -15,7 +15,7 @@ impl WhatsAppDeliveryIntentStoreV1 {
         }
         let rows = sqlx::query(
             "SELECT message_id, envelope_sha256, exact_envelope_bytes
-             FROM hermes_data.whatsapp_delivery_intent_result_outbox
+             FROM makosh_data.whatsapp_delivery_intent_result_outbox
              WHERE published_at_unix_seconds IS NULL
              ORDER BY created_at_unix_seconds, message_id
              LIMIT $1",
@@ -52,7 +52,7 @@ impl WhatsAppDeliveryIntentStoreV1 {
             return Err(WhatsAppDurablePersistenceError::InvalidRow);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.whatsapp_delivery_intent_result_outbox
+            "UPDATE makosh_data.whatsapp_delivery_intent_result_outbox
              SET published_at_unix_seconds = $1
              WHERE message_id = $2
                AND published_at_unix_seconds IS NULL",
@@ -76,7 +76,7 @@ pub(crate) async fn insert_result_outbox(
     created_at_unix_seconds: i64,
 ) -> Result<(), WhatsAppDurablePersistenceError> {
     sqlx::query(
-        "INSERT INTO hermes_data.whatsapp_delivery_intent_result_outbox
+        "INSERT INTO makosh_data.whatsapp_delivery_intent_result_outbox
             (message_id, envelope_sha256, exact_envelope_bytes, intent_id,
              created_at_unix_seconds)
          VALUES ($1, $2, $3, $4, $5)",

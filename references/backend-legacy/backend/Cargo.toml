@@ -1,51 +1,51 @@
 [package]
-name = "hermes-hub-backend"
+name = "makosh-backend"
 publish = false
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.89"
 license = "MIT"
-default-run = "hermes-hub-backend"
+default-run = "makosh-backend"
 
 [features]
 default = []
 test-support = []
 
 [lib]
-name = "hermes_hub_backend"
+name = "makosh_hub_backend"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-hub-backend"
+name = "makosh-backend"
 path = "src/main.rs"
 
 [[bin]]
-name = "hermes-graph-project"
-path = "src/bin/hermes_graph_project.rs"
+name = "makosh-graph-project"
+path = "src/bin/makosh_graph_project.rs"
 
 [[bin]]
-name = "hermes-email-fixture-export"
-path = "src/bin/hermes_email_fixture_export.rs"
+name = "makosh-email-fixture-export"
+path = "src/bin/makosh_email_fixture_export.rs"
 
 [[bin]]
-name = "hermes-email-fixture-dev"
-path = "src/bin/hermes_email_fixture_dev.rs"
+name = "makosh-email-fixture-dev"
+path = "src/bin/makosh_email_fixture_dev.rs"
 
 [[bin]]
-name = "hermes-email-sync-dev"
-path = "src/bin/hermes_email_sync_dev.rs"
+name = "makosh-email-sync-dev"
+path = "src/bin/makosh_email_sync_dev.rs"
 
 [[bin]]
-name = "hermes-email-reproject-dev"
-path = "src/bin/hermes_email_reproject_dev.rs"
+name = "makosh-email-reproject-dev"
+path = "src/bin/makosh_email_reproject_dev.rs"
 
 [[bin]]
-name = "hermes-document-process"
-path = "src/bin/hermes_document_process.rs"
+name = "makosh-document-process"
+path = "src/bin/makosh_document_process.rs"
 
 [[bin]]
-name = "hermes-zoom-edge-proxy"
-path = "src/bin/hermes_zoom_edge_proxy.rs"
+name = "makosh-zoom-edge-proxy"
+path = "src/bin/makosh_zoom_edge_proxy.rs"
 
 [dependencies]
 aes-gcm = "0.10"
@@ -65,45 +65,45 @@ futures = "0.3"
 getrandom = "0.2"
 hkdf = "0.12"
 hmac = "0.12"
-hermes-provider-zulip = { path = "../crates/provider-zulip" }
-hermes-provider-zoom = { path = "../crates/provider-zoom" }
-hermes-provider-telemost = { path = "../crates/provider-telemost" }
-hermes-provider-mail = { path = "../crates/provider-mail" }
-hermes-provider-telegram = { path = "../crates/provider-telegram" }
-hermes-provider-whatsapp = { path = "../crates/provider-whatsapp" }
-hermes-provider-api = { path = "../crates/provider-api" }
-hermes-blob-api = { path = "../crates/blob-api" }
-hermes-provider-orchestration = { path = "../crates/provider-orchestration" }
-hermes-events-api = { path = "../crates/events-api" }
-hermes-decisions-api = { path = "../crates/decisions-api" }
-hermes-decisions-postgres = { path = "../crates/decisions-postgres" }
-hermes-obligations-api = { path = "../crates/obligations-api" }
-hermes-obligations-postgres = { path = "../crates/obligations-postgres" }
-hermes-calendar-api = { path = "../crates/calendar-api" }
-hermes-calendar-postgres = { path = "../crates/calendar-postgres" }
-hermes-tasks-api = { path = "../crates/tasks-api" }
-hermes-tasks-postgres = { path = "../crates/tasks-postgres" }
-hermes-projects-api = { path = "../crates/projects-api" }
-hermes-projects-postgres = { path = "../crates/projects-postgres" }
-hermes-events-postgres = { path = "../crates/events-postgres" }
-hermes-events-nats = { path = "../crates/events-nats" }
-hermes-communications-api = { path = "../crates/communications-api" }
-hermes-communications-postgres = { path = "../crates/communications-postgres" }
-hermes-personas-api = { path = "../crates/personas-api" }
-hermes-personas-postgres = { path = "../crates/personas-postgres" }
-hermes-graph-api = { path = "../crates/graph-api" }
-hermes-graph-postgres = { path = "../crates/graph-postgres" }
-hermes-relationships-api = { path = "../crates/relationships-api" }
-hermes-relationships-postgres = { path = "../crates/relationships-postgres" }
-hermes-signal-hub-api = { path = "../crates/signal-hub-api" }
-hermes-signal-hub-postgres = { path = "../crates/signal-hub-postgres" }
-hermes-observations-api = { path = "../crates/observations-api" }
-hermes-observations-postgres = { path = "../crates/observations-postgres" }
-hermes-connectrpc-contracts = { path = "../crates/connectrpc-contracts" }
-hermes-desktop-runtime = { path = "../crates/desktop-runtime" }
-hermes-api = { path = "../crates/api" }
-hermes-worker-runtime = { path = "../crates/worker-runtime" }
-hermes-schema = { path = "../crates/schema" }
+makosh-provider-zulip = { path = "../crates/provider-zulip" }
+makosh-provider-zoom = { path = "../crates/provider-zoom" }
+makosh-provider-telemost = { path = "../crates/provider-telemost" }
+makosh-provider-mail = { path = "../crates/provider-mail" }
+makosh-provider-telegram = { path = "../crates/provider-telegram" }
+makosh-provider-whatsapp = { path = "../crates/provider-whatsapp" }
+makosh-provider-api = { path = "../crates/provider-api" }
+makosh-blob-api = { path = "../crates/blob-api" }
+makosh-provider-orchestration = { path = "../crates/provider-orchestration" }
+makosh-events-api = { path = "../crates/events-api" }
+makosh-decisions-api = { path = "../crates/decisions-api" }
+makosh-decisions-postgres = { path = "../crates/decisions-postgres" }
+makosh-obligations-api = { path = "../crates/obligations-api" }
+makosh-obligations-postgres = { path = "../crates/obligations-postgres" }
+makosh-calendar-api = { path = "../crates/calendar-api" }
+makosh-calendar-postgres = { path = "../crates/calendar-postgres" }
+makosh-tasks-api = { path = "../crates/tasks-api" }
+makosh-tasks-postgres = { path = "../crates/tasks-postgres" }
+makosh-projects-api = { path = "../crates/projects-api" }
+makosh-projects-postgres = { path = "../crates/projects-postgres" }
+makosh-events-postgres = { path = "../crates/events-postgres" }
+makosh-events-nats = { path = "../crates/events-nats" }
+makosh-communications-api = { path = "../crates/communications-api" }
+makosh-communications-postgres = { path = "../crates/communications-postgres" }
+makosh-personas-api = { path = "../crates/personas-api" }
+makosh-personas-postgres = { path = "../crates/personas-postgres" }
+makosh-graph-api = { path = "../crates/graph-api" }
+makosh-graph-postgres = { path = "../crates/graph-postgres" }
+makosh-relationships-api = { path = "../crates/relationships-api" }
+makosh-relationships-postgres = { path = "../crates/relationships-postgres" }
+makosh-signal-hub-api = { path = "../crates/signal-hub-api" }
+makosh-signal-hub-postgres = { path = "../crates/signal-hub-postgres" }
+makosh-observations-api = { path = "../crates/observations-api" }
+makosh-observations-postgres = { path = "../crates/observations-postgres" }
+makosh-connectrpc-contracts = { path = "../crates/connectrpc-contracts" }
+makosh-desktop-runtime = { path = "../crates/desktop-runtime" }
+makosh-api = { path = "../crates/api" }
+makosh-worker-runtime = { path = "../crates/worker-runtime" }
+makosh-schema = { path = "../crates/schema" }
 http-body = "1"
 keyring = "3.6"
 libloading = "0.8"
@@ -132,5 +132,5 @@ zip = { version = "6.0.0", default-features = false, features = ["deflate"] }
 async-nats = "0.49.1"
 insta = "1.42"
 tempfile = "3.27.0"
-hermes-backend-testkit = { path = "../crates/testkit" }
+makosh-backend-testkit = { path = "../crates/testkit" }
 tower = { version = "0.5", features = ["util"] }

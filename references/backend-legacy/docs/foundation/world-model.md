@@ -1,8 +1,8 @@
-# Hermes World Model
+# Макошь World Model
 
-## What Exists In Hermes
+## What Exists In Макошь
 
-Hermes models a personal world of evidence, entities, relationships and context.
+Макошь models a personal world of evidence, entities, relationships and context.
 
 The core entity types are:
 
@@ -24,7 +24,7 @@ Provider-specific objects such as Gmail messages, Telegram chats, WhatsApp
 threads and calendar provider records are captured as Observations or
 channel-specific representations. They are not separate product domains.
 
-Observation is evidence, not truth. If a provider message is deleted, Hermes
+Observation is evidence, not truth. If a provider message is deleted, Макошь
 captures a deletion observation and keeps the original observation.
 
 ## Primary Entities
@@ -68,7 +68,7 @@ decisions or user-facing explanations.
 
 ## Relationship Model
 
-Hermes is relationship-first.
+Макошь is relationship-first.
 
 Relationships connect entities:
 
@@ -130,7 +130,7 @@ Engine used by Personas, Projects, Documents, Organizations and other domains.
 
 ## Owner Model
 
-The owner of the local Hermes instance is represented by the Owner Persona:
+The owner of the local Макошь instance is represented by the Owner Persona:
 
 ```yaml
 Persona:

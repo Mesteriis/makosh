@@ -75,7 +75,7 @@ polling всего bootstrap запрещён [ADR-0338](ADR-0338-client-system-
 
 ## Контекст
 
-Hermes имеет desktop-клиент в Tauri WebView и планирует Android-клиент. Ни один
+Макошь имеет desktop-клиент в Tauri WebView и планирует Android-клиент. Ни один
 клиент не является доверенным участником внутреннего module data plane. Если
 клиент знает адреса module processes, NATS subjects, PostgreSQL schema или
 внутренние Unix sockets, он обходит capability router, lifecycle state и
@@ -211,7 +211,7 @@ QUIC connection migration не считается authentication. Authorization 
 привязывается к исходному IP address и продолжает проверять device/session
 identity после изменения network path.
 
-HTTP/3 0-RTT/early data для Hermes выключены. Никакие query, command, OAuth,
+HTTP/3 0-RTT/early data для Макошь выключены. Никакие query, command, OAuth,
 pairing или blob operations не выполняются в early data до отдельного security
 ADR и anti-replay proof.
 
@@ -228,7 +228,7 @@ WebTransport. HTTP/3 является только transport для тех же 
   поддерживает HTTP/1.1, HTTP/2 и HTTP/3 over QUIC;
 - [Connect protocol](https://github.com/connectrpc/connect-go) использует
   обычные HTTP handlers и документирует HTTP/1.1/HTTP/2; HTTP/3 поэтому требует
-  отдельной Hermes conformance проверки выбранного server/client stack.
+  отдельной Макошь conformance проверки выбранного server/client stack.
 
 ### Command/query transport
 
@@ -342,7 +342,7 @@ Client platform layer декодирует `ClientRealtimeFrameV1` один ра
 client-safe event owner-specific cache handler. Cursor принадлежит конкретному
 client/device и не изменяет replay position других устройств.
 
-`ClientRealtimeFrameV1` принадлежит `hermes-gateway-protocol` и физически
+`ClientRealtimeFrameV1` принадлежит `makosh-gateway-protocol` и физически
 отделён от внутреннего `DurableEnvelopeV1` ADR-0220. Gateway никогда не
 сериализует internal envelope клиенту напрямую. Frame имеет `oneof` для
 client event, replay gap и stream state.
@@ -546,7 +546,7 @@ permanent facade. Compatibility aliases без отдельного versioned co
   transport;
 - HTTP/3-only remote API без защищённого HTTP/2 fallback;
 - raw QUIC/WebTransport protocol, дублирующий ConnectRPC/SSE contracts;
-- 0-RTT/early data для Hermes requests;
+- 0-RTT/early data для Макошь requests;
 - business composition внутри Core Gateway;
 - cross-owner settings mutation или client write к `kernel_managed` field;
 - raw settings value/diff в SSE, logs, health или transport error.
@@ -584,7 +584,7 @@ typed ConnectRPC, realtime — replayable SSE.
 
 ### Собственный RPC поверх raw QUIC
 
-Отклонено: заставляет Hermes заново проектировать framing, errors, flow control,
+Отклонено: заставляет Макошь заново проектировать framing, errors, flow control,
 interoperability и security вместо использования стандартных HTTP semantics.
 
 ### NATS в клиенте

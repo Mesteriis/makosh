@@ -1,5 +1,5 @@
 [package]
-name = "hermes-communication-reply-suggestion-api"
+name = "makosh-communication-reply-suggestion-api"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,7 +7,7 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "communication_reply_suggestion"
 surface = "contract"

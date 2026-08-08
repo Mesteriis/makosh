@@ -1,21 +1,21 @@
-use hermes_communications_api::accounts::CommunicationProviderKind;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
 use serde_json::json;
 use sqlx::Row;
 use tempfile::tempdir;
 use tokio::time::{Duration, sleep};
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::calendar::events::account_store::CalendarAccountStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::calendar::events::account_store::CalendarAccountStore;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::secrets::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::secrets::{
     models::SecretKind, resolver::SecretResolver, store::SecretReferenceStore,
 };
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::vault::{
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::vault::{
     HostVault,
     models::{EntropyEvent, HostVaultConfig, SecretEntryContext},
 };
@@ -36,18 +36,18 @@ async fn startup_reconciles_icloud_account_from_host_vault_manifest_after_postgr
     let database = Database::connect(Some(&database_url))
         .await
         .expect("database connection");
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
     .with_test_pairs([
-        ("HERMES_DEV_MODE", "true"),
+        ("MAKOSH_DEV_MODE", "true"),
         (
-            "HERMES_VAULT_HOME",
+            "MAKOSH_VAULT_HOME",
             vault_home.to_str().expect("vault path"),
         ),
         (
-            "HERMES_DEV_KEY_PATH",
+            "MAKOSH_DEV_KEY_PATH",
             dev_key_path.to_str().expect("dev key path"),
         ),
     ])
@@ -74,7 +74,7 @@ async fn startup_reconciles_icloud_account_from_host_vault_manifest_after_postgr
                 "secret_kind": "app_password"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -336,18 +336,18 @@ async fn startup_reconciles_non_mail_provider_account_from_host_vault_manifest()
     let database = Database::connect(Some(&database_url))
         .await
         .expect("database connection");
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
     .with_test_pairs([
-        ("HERMES_DEV_MODE", "true"),
+        ("MAKOSH_DEV_MODE", "true"),
         (
-            "HERMES_VAULT_HOME",
+            "MAKOSH_VAULT_HOME",
             vault_home.to_str().expect("vault path"),
         ),
         (
-            "HERMES_DEV_KEY_PATH",
+            "MAKOSH_DEV_KEY_PATH",
             dev_key_path.to_str().expect("dev key path"),
         ),
     ])
@@ -432,18 +432,18 @@ async fn startup_reconciles_legacy_gmail_manifest_without_provider_metadata() {
     let database_url = ctx.connection_string();
     let vault_home = vault_dir.path().join("vault");
     let dev_key_path = vault_dir.path().join("dev").join("master.key");
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
     .with_test_pairs([
-        ("HERMES_DEV_MODE", "true"),
+        ("MAKOSH_DEV_MODE", "true"),
         (
-            "HERMES_VAULT_HOME",
+            "MAKOSH_VAULT_HOME",
             vault_home.to_str().expect("vault path"),
         ),
         (
-            "HERMES_DEV_KEY_PATH",
+            "MAKOSH_DEV_KEY_PATH",
             dev_key_path.to_str().expect("dev key path"),
         ),
     ])
@@ -522,18 +522,18 @@ async fn startup_reconciles_one_account_for_duplicate_provider_external_identity
     let database_url = ctx.connection_string();
     let vault_home = vault_dir.path().join("vault");
     let dev_key_path = vault_dir.path().join("dev").join("master.key");
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
     .with_test_pairs([
-        ("HERMES_DEV_MODE", "true"),
+        ("MAKOSH_DEV_MODE", "true"),
         (
-            "HERMES_VAULT_HOME",
+            "MAKOSH_VAULT_HOME",
             vault_home.to_str().expect("vault path"),
         ),
         (
-            "HERMES_DEV_KEY_PATH",
+            "MAKOSH_DEV_KEY_PATH",
             dev_key_path.to_str().expect("dev key path"),
         ),
     ])

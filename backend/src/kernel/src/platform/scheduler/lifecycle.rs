@@ -10,8 +10,8 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 
-use hermes_kernel_control_store::{PlatformStorageBindingStateV1, PlatformStorageBindingV1};
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store::{PlatformStorageBindingStateV1, PlatformStorageBindingV1};
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use super::launch;
 use crate::platform::storage::successor;
@@ -65,7 +65,7 @@ pub(crate) fn serve(
             &mut pending_topology_observations,
         ) {
             Ok(ReconcileOutcome::Refreshed) => {
-                if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                     eprintln!("developer_scheduler_topology_refreshed");
                 }
             }

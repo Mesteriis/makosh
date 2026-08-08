@@ -27,7 +27,7 @@ impl CommunicationRecipientSuggestionPersistenceV1 {
         }
         sqlx::query(
             "SELECT message_id, envelope_sha256, envelope_bytes
-             FROM hermes_data.communication_recipient_suggestion_outbox
+             FROM makosh_data.communication_recipient_suggestion_outbox
              WHERE logical_owner_id = $1 AND published_at_unix_millis IS NULL
              ORDER BY created_at_unix_millis, message_id
              LIMIT $2",
@@ -85,7 +85,7 @@ impl CommunicationRecipientSuggestionPersistenceV1 {
             return Err(CommunicationRecipientSuggestionPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_recipient_suggestion_outbox
+            "UPDATE makosh_data.communication_recipient_suggestion_outbox
              SET published_at_unix_millis = $1
              WHERE logical_owner_id = $2 AND message_id = $3
                AND envelope_sha256 = $4

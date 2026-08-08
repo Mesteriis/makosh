@@ -1,10 +1,10 @@
-use hermes_communication_cross_channel_forward_api::{
+use makosh_communication_cross_channel_forward_api::{
     COMMUNICATION_CROSS_CHANNEL_FORWARD_CAPABILITY_ID_V1,
     COMMUNICATION_CROSS_CHANNEL_FORWARD_COMMAND_CONNECT_PATH_V1,
     COMMUNICATION_CROSS_CHANNEL_FORWARD_MODULE_ID_V1, COMMUNICATION_CROSS_CHANNEL_FORWARD_OWNER_V1,
     COMMUNICATION_CROSS_CHANNEL_FORWARD_QUERY_CONNECT_PATH_V1,
 };
-use hermes_communication_delivery_intent_ingress_api::{
+use makosh_communication_delivery_intent_ingress_api::{
     communication_delivery_intent_rejected_consume_request_v1,
     communication_delivery_intent_rejected_contract_reference_v1,
     communication_delivery_intent_submit_contract_reference_v1,
@@ -12,7 +12,7 @@ use hermes_communication_delivery_intent_ingress_api::{
     communication_delivery_intent_submitted_consume_request_v1,
     communication_delivery_intent_submitted_contract_reference_v1,
 };
-use hermes_communications_cross_channel_forward_source_api::{
+use makosh_communications_cross_channel_forward_source_api::{
     cross_channel_forward_source_prepare_contract_reference_v1,
     cross_channel_forward_source_prepare_publish_request_v1,
     cross_channel_forward_source_prepared_consume_request_v1,
@@ -20,7 +20,7 @@ use hermes_communications_cross_channel_forward_source_api::{
     cross_channel_forward_source_rejected_consume_request_v1,
     cross_channel_forward_source_rejected_contract_reference_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ClientRpcRouteV1, ContractReferenceV1, ModuleDescriptorV1, ModuleKindV1,
     ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1, RuntimeBudgetRequestV1,
@@ -253,7 +253,7 @@ fn blob_capability() -> CapabilityDescriptorV1 {
 #[cfg(test)]
 mod tests {
     use super::communication_cross_channel_forward_module_descriptor_v1;
-    use hermes_runtime_protocol::v1::capability_request_v1::Request;
+    use makosh_runtime_protocol::v1::capability_request_v1::Request;
 
     #[test]
     fn descriptor_requests_only_exact_event_storage_and_blob_capabilities() {

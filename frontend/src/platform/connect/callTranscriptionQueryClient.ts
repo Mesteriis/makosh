@@ -1,6 +1,6 @@
 import { createClient, type Client } from '@connectrpc/connect'
 
-import { CallTranscriptionQueryService } from '../../gen/hermes/call_transcription/v1/transcription_pb'
+import { CallTranscriptionQueryService } from '../../gen/makosh/call_transcription/v1/transcription_pb'
 import { createBrowserGatewayConnectTransport } from '../gateway/browserGatewayConnect'
 
 let client: Client<typeof CallTranscriptionQueryService> | null = null

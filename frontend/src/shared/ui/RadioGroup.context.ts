@@ -1,10 +1,10 @@
 import type { ComputedRef, InjectionKey } from 'vue'
 
-export interface HermesRadioGroupContext {
+export interface МакошьRadioGroupContext {
 	name: string
 	modelValue: ComputedRef<string | number | null>
 	disabled: ComputedRef<boolean>
 	select(value: string | number): void
 }
 
-export const hermesRadioGroupKey: InjectionKey<HermesRadioGroupContext> = Symbol('hermes-radio-group')
+export const makoshRadioGroupKey: InjectionKey<МакошьRadioGroupContext> = Symbol('makosh-radio-group')

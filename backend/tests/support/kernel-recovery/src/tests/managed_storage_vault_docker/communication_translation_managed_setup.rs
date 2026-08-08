@@ -3,21 +3,21 @@
 use super::*;
 
 use crate::platform::client_realtime::ClientRealtimePublishHandlerV1;
-use hermes_communication_translation_api::{
+use makosh_communication_translation_api::{
     COMMUNICATION_TRANSLATION_MODULE_ID_V1, COMMUNICATION_TRANSLATION_OWNER_V1,
 };
-use hermes_communication_translation_persistence::{
+use makosh_communication_translation_persistence::{
     COMMUNICATION_TRANSLATION_STORAGE_BUNDLE_REVISION_V1,
     communication_translation_storage_bundle_v1,
 };
-use hermes_communication_translation_runtime::{
+use makosh_communication_translation_runtime::{
     COMMUNICATION_TRANSLATION_STORAGE_CAPABILITY_ID_V1,
     communication_translation_module_descriptor_v1,
     communication_translation_settings_schema_bytes_v1,
 };
-use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
+use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
 
 const COMMUNICATION_TRANSLATION_RELEASE_ARTIFACT_ID_V1: &str =
     "communication_translation.runtime.v1";
@@ -85,7 +85,7 @@ pub(super) fn admit_communication_translation_runtime_v1(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             COMMUNICATION_TRANSLATION_RELEASE_ARTIFACT_ID_V1,
             Sha256::digest(
                 std::fs::read(communication_translation_binary())
@@ -285,7 +285,7 @@ fn start_reserved_communication_translation_runtime_v1(
 fn communication_translation_storage_binding_v1(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(
             registration_id,
@@ -297,5 +297,5 @@ fn communication_translation_storage_binding_v1(
 }
 
 fn communication_translation_binary() -> PathBuf {
-    binary("HERMES_COMMUNICATION_TRANSLATION_RUNTIME_BIN")
+    binary("MAKOSH_COMMUNICATION_TRANSLATION_RUNTIME_BIN")
 }

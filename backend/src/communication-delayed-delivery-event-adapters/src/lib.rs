@@ -1,12 +1,12 @@
-use hermes_communication_delayed_delivery_api::COMMUNICATION_DELAYED_DELIVERY_MODULE_ID_V1;
-use hermes_events_protocol::{
+use makosh_communication_delayed_delivery_api::COMMUNICATION_DELAYED_DELIVERY_MODULE_ID_V1;
+use makosh_events_protocol::{
     envelope::validate_envelope_v1,
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
         ResultOutcomeV1, SourceFenceV1, SourceRefV1, durable_envelope_v1::Semantics,
     },
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     SCHEDULER_RUNTIME_MODULE_ID_V1,
     v1::{
         SchedulerScheduleControlCommandV1, SchedulerScheduleControlOutcomeV1,
@@ -29,9 +29,9 @@ const SCHEDULER_CONTRACT_OWNER: &str = "scheduler";
 const SCHEDULER_CONTRACT_NAME: &str = "schedule_control";
 const SCHEDULER_TARGET_CAPABILITY: &str = "scheduler_schedule_control";
 const SCHEDULER_COMMAND_KIND: &str = "scheduler.schedule.command.v1";
-const MESSAGE_DOMAIN: &[u8] = b"hermes.communication-delayed-delivery.scheduler-command.v1\0";
+const MESSAGE_DOMAIN: &[u8] = b"makosh.communication-delayed-delivery.scheduler-command.v1\0";
 const IDEMPOTENCY_DOMAIN: &[u8] =
-    b"hermes.communication-delayed-delivery.scheduler-idempotency.v1\0";
+    b"makosh.communication-delayed-delivery.scheduler-idempotency.v1\0";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DelayedDeliverySchedulerCommandContextV1 {
@@ -349,8 +349,8 @@ fn rejection_code(value: &str) -> Result<u16, DelayedDeliverySchedulerAdapterErr
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_events_protocol::v1::{ResultMetadataV1, durable_envelope_v1::Semantics};
-    use hermes_scheduler_protocol::v1::{
+    use makosh_events_protocol::v1::{ResultMetadataV1, durable_envelope_v1::Semantics};
+    use makosh_scheduler_protocol::v1::{
         EnsureOneShotScheduleV1, JobKindV1, SchedulerScheduleControlCommandV1,
         SchedulerScheduleControlResultV1, scheduler_schedule_control_command_v1::Operation,
     };
@@ -426,7 +426,7 @@ mod tests {
             message_id: vec![8; 16],
             contract: Some(contract(1, [5; 32])),
             source: Some(SourceRefV1 {
-                module_id: "hermes-scheduler-runtime".to_owned(),
+                module_id: "makosh-scheduler-runtime".to_owned(),
                 runtime_instance_id: vec![6; 16],
                 runtime_generation: 2,
             }),
@@ -439,12 +439,12 @@ mod tests {
             correlation_id: vec![7; 16],
             actor: Some(ActorRefV1 {
                 kind: ActorKindV1::System as i32,
-                actor_id: b"hermes-scheduler-runtime".to_vec(),
+                actor_id: b"makosh-scheduler-runtime".to_vec(),
             }),
             trace: None,
             source_fence: Some(SourceFenceV1 {
                 kind: FenceKindV1::RuntimeLease as i32,
-                scope_id: b"hermes-scheduler-runtime".to_vec(),
+                scope_id: b"makosh-scheduler-runtime".to_vec(),
                 epoch: 2,
             }),
             semantics: Some(Semantics::Result(ResultMetadataV1 {

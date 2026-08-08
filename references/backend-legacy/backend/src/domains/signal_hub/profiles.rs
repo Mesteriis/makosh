@@ -1,5 +1,5 @@
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 
 use super::store::{
@@ -7,7 +7,7 @@ use super::store::{
     SignalProfileUpdate,
 };
 use crate::platform::settings::store::ApplicationSettingsStore;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 const ACTIVE_PROFILE_SETTING_KEY: &str = "signal_hub.active_profile";
 
@@ -89,7 +89,7 @@ impl SignalHubProfileService {
                 .update_setting_value(
                     ACTIVE_PROFILE_SETTING_KEY,
                     &json!("production"),
-                    "hermes-frontend",
+                    "makosh-frontend",
                 )
                 .await?;
         }
@@ -137,7 +137,7 @@ impl SignalHubProfileService {
             .update_setting_value(
                 ACTIVE_PROFILE_SETTING_KEY,
                 &json!(profile.code),
-                "hermes-frontend",
+                "makosh-frontend",
             )
             .await?;
         self.append_profile_event("signal.profile.applied", &profile)

@@ -9,13 +9,13 @@ before code changes.
 
 ## Purpose
 
-This document defines the active principles that guide Hermes architecture.
+This document defines the active principles that guide Макошь architecture.
 
 ## Principles
 
 ### 1. Personal First
 
-Hermes serves the local owner first. Provider integrations, agents, plugins and
+Макошь serves the local owner first. Provider integrations, agents, plugins and
 automation exist only inside owner-controlled boundaries.
 
 Responsibilities:
@@ -33,7 +33,7 @@ Boundaries:
 
 ### 2. Memory First
 
-Hermes preserves evidence and memory before optimizing workflow surfaces.
+Макошь preserves evidence and memory before optimizing workflow surfaces.
 
 Responsibilities:
 
@@ -85,7 +85,7 @@ Boundaries:
 
 ### 5. No MVP
 
-Hermes is a long-term local-first Personal Operating System. Thin slices are
+Макошь is a long-term local-first Personal Operating System. Thin slices are
 allowed; fake product semantics are not.
 
 Responsibilities:

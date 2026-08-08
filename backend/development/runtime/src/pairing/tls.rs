@@ -18,7 +18,7 @@ use crate::pairing::state as pairing_state;
 const MAX_FAILED_REQUESTS: u8 = 8;
 const MAX_REQUEST_HEADER_BYTES: usize = 16 * 1024;
 const REQUEST_TIMEOUT: Duration = Duration::from_secs(5);
-const PROOF_DOMAIN: &[u8] = b"hermes.development.remote-pairing.v1\0";
+const PROOF_DOMAIN: &[u8] = b"makosh.development.remote-pairing.v1\0";
 
 pub struct ListenerConfig<'a> {
     pub state_dir: &'a Path,
@@ -204,14 +204,14 @@ fn process_request(
     if request.method != "POST" || request.path != "/v1/initial-owner-enrollment" {
         return Err("unsupported pairing endpoint".to_owned());
     }
-    let owner_id = required_header(request, "x-hermes-owner-id")?;
-    let device_id = required_header(request, "x-hermes-device-id")?;
+    let owner_id = required_header(request, "x-makosh-owner-id")?;
+    let device_id = required_header(request, "x-makosh-device-id")?;
     let public_key = decode_hex::<65>(
-        required_header(request, "x-hermes-device-public-key-sec1")?,
+        required_header(request, "x-makosh-device-public-key-sec1")?,
         "device public key",
     )?;
     let signature = Signature::from_slice(&decode_hex::<64>(
-        required_header(request, "x-hermes-device-signature-raw")?,
+        required_header(request, "x-makosh-device-signature-raw")?,
         "device signature",
     )?)
     .map_err(|_| "device signature is invalid".to_owned())?;

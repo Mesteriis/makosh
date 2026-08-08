@@ -72,10 +72,10 @@ describe('DevelopmentOwnerVaultProvisioningHostV1', () => {
 
 		expect(receipt.secretRevision).toBe(9_007_199_254_740_993n)
 		expect(requests.map(({ path }) => path)).toEqual([
-			'/__hermes/owner-vault-host/v1/start',
-			'/__hermes/owner-vault-host/v1/seal',
-			'/__hermes/owner-vault-host/v1/open-receipt',
-			'/__hermes/owner-vault-host/v1/cancel',
+			'/__makosh/owner-vault-host/v1/start',
+			'/__makosh/owner-vault-host/v1/seal',
+			'/__makosh/owner-vault-host/v1/open-receipt',
+			'/__makosh/owner-vault-host/v1/cancel',
 		])
 		expect(requests[1]?.body).toMatchObject({
 			secretClass: 4,

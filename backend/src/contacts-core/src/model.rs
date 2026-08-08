@@ -101,7 +101,7 @@ pub fn derive_contact_id_v1(
     validate_owner(logical_owner_id)?;
     validate_provenance(provenance)?;
     let mut hasher = Sha256::new();
-    update_part(&mut hasher, b"hermes.contacts.mail-provider-entry.id.v1");
+    update_part(&mut hasher, b"makosh.contacts.mail-provider-entry.id.v1");
     update_part(&mut hasher, logical_owner_id.as_bytes());
     update_part(&mut hasher, provenance.provider_kind.label());
     update_part(&mut hasher, provenance.source_account_id.as_bytes());
@@ -118,7 +118,7 @@ pub fn upsert_fingerprint_v1(
     let mut hasher = Sha256::new();
     update_part(
         &mut hasher,
-        b"hermes.contacts.mail-provider-entry.upsert.v1",
+        b"makosh.contacts.mail-provider-entry.upsert.v1",
     );
     update_part(&mut hasher, normalized.logical_owner_id.as_bytes());
     update_part(&mut hasher, normalized.display_name.as_bytes());

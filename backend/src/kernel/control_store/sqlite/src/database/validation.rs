@@ -1,6 +1,6 @@
 //! Pure validation and enum-decoding helpers for persisted records.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleRegistrationState, OwnerPinnedArtifactBinding, SettingsApplyState,
     SettingsConfigurationTarget, SettingsSchemaBinding,
 };

@@ -16,11 +16,11 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-stack',
-	'hermes-stack--column',
-	`hermes-stack--gap-${props.gap}`,
-	`hermes-stack--align-${props.align}`,
-	`hermes-stack--justify-${props.justify}`,
+	'makosh-stack',
+	'makosh-stack--column',
+	`makosh-stack--gap-${props.gap}`,
+	`makosh-stack--align-${props.align}`,
+	`makosh-stack--justify-${props.justify}`,
 	props.class
 ])
 </script>

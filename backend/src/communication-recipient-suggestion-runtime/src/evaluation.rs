@@ -1,14 +1,14 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_recipient_suggestion_core::{
+use makosh_communication_recipient_suggestion_core::{
     CommunicationRecipientSuggestionRejectionCodeV1, CommunicationRecipientSuggestionStateV1,
     CommunicationRecipientSuggestionTransitionV1, evaluate_communication_recipient_candidates_v1,
 };
-use hermes_communication_recipient_suggestion_persistence::{
+use makosh_communication_recipient_suggestion_persistence::{
     CommunicationRecipientSuggestionPersistenceErrorV1,
     CommunicationRecipientSuggestionPersistenceV1, PersistedCommunicationRecipientSuggestionRunV1,
 };
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
 

@@ -1,4 +1,4 @@
-use hermes_hub_backend::engines::consistency::{
+use makosh_hub_backend::engines::consistency::{
     models::{
         ContradictionReviewState, ContradictionSeverity, ContradictionSourceKind,
         NewContradictionObservation,

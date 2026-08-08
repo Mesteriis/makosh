@@ -1,7 +1,7 @@
 import { computed, shallowRef } from 'vue'
 
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
-import type { MailAccountStatusV1 } from '../../../gen/hermes/mail/account/v1/client_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
+import type { MailAccountStatusV1 } from '../../../gen/makosh/mail/account/v1/client_pb'
 import { listMailAccounts } from '../api/mailAccountQueryClient'
 import {
 	mailAccountConnections,

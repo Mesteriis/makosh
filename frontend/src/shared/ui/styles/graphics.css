@@ -1,44 +1,44 @@
-.hermes-score-gauge {
+.makosh-score-gauge {
 	position: relative;
 	display: inline-grid;
 	place-items: center;
 	color: var(--h-graphic-color);
 }
 
-.hermes-score-gauge--sm { width: 48px; height: 48px; }
-.hermes-score-gauge--md { width: 64px; height: 64px; }
-.hermes-score-gauge--lg { width: 76px; height: 76px; }
+.makosh-score-gauge--sm { width: 48px; height: 48px; }
+.makosh-score-gauge--md { width: 64px; height: 64px; }
+.makosh-score-gauge--lg { width: 76px; height: 76px; }
 
-.hermes-score-gauge--neutral { --h-graphic-color: var(--h-color-text-muted); }
-.hermes-score-gauge--accent { --h-graphic-color: var(--h-color-accent); }
-.hermes-score-gauge--success { --h-graphic-color: var(--h-color-success); }
-.hermes-score-gauge--warning { --h-graphic-color: var(--h-color-warning); }
-.hermes-score-gauge--danger { --h-graphic-color: var(--h-color-danger); }
-.hermes-score-gauge--info { --h-graphic-color: var(--h-color-info); }
+.makosh-score-gauge--neutral { --h-graphic-color: var(--h-color-text-muted); }
+.makosh-score-gauge--accent { --h-graphic-color: var(--h-color-accent); }
+.makosh-score-gauge--success { --h-graphic-color: var(--h-color-success); }
+.makosh-score-gauge--warning { --h-graphic-color: var(--h-color-warning); }
+.makosh-score-gauge--danger { --h-graphic-color: var(--h-color-danger); }
+.makosh-score-gauge--info { --h-graphic-color: var(--h-color-info); }
 
-.hermes-score-gauge__svg {
+.makosh-score-gauge__svg {
 	width: 100%;
 	height: 100%;
 	transform: rotate(-90deg);
 }
 
-.hermes-score-gauge__track,
-.hermes-score-gauge__value {
+.makosh-score-gauge__track,
+.makosh-score-gauge__value {
 	fill: none;
 	stroke-width: 6;
 }
 
-.hermes-score-gauge__track {
+.makosh-score-gauge__track {
 	stroke: var(--h-color-surface-hover);
 }
 
-.hermes-score-gauge__value {
+.makosh-score-gauge__value {
 	stroke: currentColor;
 	stroke-linecap: round;
 	transition: stroke-dashoffset var(--h-motion-default);
 }
 
-.hermes-score-gauge__label {
+.makosh-score-gauge__label {
 	position: absolute;
 	inset: 0;
 	display: grid;
@@ -50,85 +50,85 @@
 	pointer-events: none;
 }
 
-.hermes-score-gauge__label strong {
+.makosh-score-gauge__label strong {
 	color: currentColor;
 	font-size: 1.32rem;
 	font-weight: 850;
 }
 
-.hermes-score-gauge__label small {
+.makosh-score-gauge__label small {
 	margin-top: 1px;
 	color: var(--h-color-text-muted);
 	font-size: 10px;
 	font-weight: 760;
 }
 
-.hermes-donut-chart,
-.hermes-radar-chart {
+.makosh-donut-chart,
+.makosh-radar-chart {
 	display: grid;
 	gap: var(--h-spacing-2);
 	margin: 0;
 	color: var(--h-graphic-color, var(--h-color-accent));
 }
 
-.hermes-donut-chart--sm,
-.hermes-radar-chart--sm { width: 112px; }
+.makosh-donut-chart--sm,
+.makosh-radar-chart--sm { width: 112px; }
 
-.hermes-donut-chart--md,
-.hermes-radar-chart--md { width: 164px; }
+.makosh-donut-chart--md,
+.makosh-radar-chart--md { width: 164px; }
 
-.hermes-donut-chart--lg,
-.hermes-radar-chart--lg { width: 220px; }
+.makosh-donut-chart--lg,
+.makosh-radar-chart--lg { width: 220px; }
 
-.hermes-donut-chart__svg,
-.hermes-radar-chart__svg {
+.makosh-donut-chart__svg,
+.makosh-radar-chart__svg {
 	width: 100%;
 	height: auto;
 }
 
-.hermes-donut-chart__svg {
+.makosh-donut-chart__svg {
 	transform: rotate(-90deg);
 }
 
-.hermes-donut-chart__track,
-.hermes-donut-chart__segment {
+.makosh-donut-chart__track,
+.makosh-donut-chart__segment {
 	fill: none;
 	stroke-width: 8;
 }
 
-.hermes-donut-chart__track {
+.makosh-donut-chart__track {
 	stroke: var(--h-color-surface-hover);
 }
 
-.hermes-donut-chart__segment {
+.makosh-donut-chart__segment {
 	stroke-linecap: round;
 	transition: stroke-dashoffset var(--h-motion-default);
 }
 
-.hermes-donut-chart__segment--neutral,
-.hermes-donut-chart__legend-item--neutral { --h-graphic-color: var(--h-color-text-muted); }
-.hermes-donut-chart__segment--accent,
-.hermes-donut-chart__legend-item--accent { --h-graphic-color: var(--h-color-accent); }
-.hermes-donut-chart__segment--success,
-.hermes-donut-chart__legend-item--success { --h-graphic-color: var(--h-color-success); }
-.hermes-donut-chart__segment--warning,
-.hermes-donut-chart__legend-item--warning { --h-graphic-color: var(--h-color-warning); }
-.hermes-donut-chart__segment--danger,
-.hermes-donut-chart__legend-item--danger { --h-graphic-color: var(--h-color-danger); }
-.hermes-donut-chart__segment--info,
-.hermes-donut-chart__legend-item--info { --h-graphic-color: var(--h-color-info); }
+.makosh-donut-chart__segment--neutral,
+.makosh-donut-chart__legend-item--neutral { --h-graphic-color: var(--h-color-text-muted); }
+.makosh-donut-chart__segment--accent,
+.makosh-donut-chart__legend-item--accent { --h-graphic-color: var(--h-color-accent); }
+.makosh-donut-chart__segment--success,
+.makosh-donut-chart__legend-item--success { --h-graphic-color: var(--h-color-success); }
+.makosh-donut-chart__segment--warning,
+.makosh-donut-chart__legend-item--warning { --h-graphic-color: var(--h-color-warning); }
+.makosh-donut-chart__segment--danger,
+.makosh-donut-chart__legend-item--danger { --h-graphic-color: var(--h-color-danger); }
+.makosh-donut-chart__segment--info,
+.makosh-donut-chart__legend-item--info { --h-graphic-color: var(--h-color-info); }
 
-.hermes-donut-chart__segment {
+.makosh-donut-chart__segment {
 	stroke: var(--h-graphic-color);
 }
 
-.hermes-donut-chart__caption {
+.makosh-donut-chart__caption {
 	color: var(--h-color-text-muted);
 	font-size: var(--h-font-size-xs);
 	font-weight: 650;
 }
 
-.hermes-donut-chart__legend {
+.makosh-donut-chart__legend {
 	display: grid;
 	gap: 6px;
 	margin: 0;
@@ -136,7 +136,7 @@
 	list-style: none;
 }
 
-.hermes-donut-chart__legend-item {
+.makosh-donut-chart__legend-item {
 	display: grid;
 	grid-template-columns: auto minmax(0, 1fr) auto;
 	align-items: center;
@@ -145,66 +145,66 @@
 	font-size: var(--h-font-size-xs);
 }
 
-.hermes-donut-chart__legend-dot {
+.makosh-donut-chart__legend-dot {
 	width: 8px;
 	height: 8px;
 	border-radius: 999px;
 	background: var(--h-graphic-color);
 }
 
-.hermes-donut-chart__legend-item strong {
+.makosh-donut-chart__legend-item strong {
 	color: var(--h-color-text-strong);
 	font-weight: 760;
 }
 
-.hermes-radar-chart--neutral { --h-graphic-color: var(--h-color-text-muted); }
-.hermes-radar-chart--accent { --h-graphic-color: var(--h-color-accent); }
-.hermes-radar-chart--success { --h-graphic-color: var(--h-color-success); }
-.hermes-radar-chart--warning { --h-graphic-color: var(--h-color-warning); }
-.hermes-radar-chart--danger { --h-graphic-color: var(--h-color-danger); }
-.hermes-radar-chart--info { --h-graphic-color: var(--h-color-info); }
+.makosh-radar-chart--neutral { --h-graphic-color: var(--h-color-text-muted); }
+.makosh-radar-chart--accent { --h-graphic-color: var(--h-color-accent); }
+.makosh-radar-chart--success { --h-graphic-color: var(--h-color-success); }
+.makosh-radar-chart--warning { --h-graphic-color: var(--h-color-warning); }
+.makosh-radar-chart--danger { --h-graphic-color: var(--h-color-danger); }
+.makosh-radar-chart--info { --h-graphic-color: var(--h-color-info); }
 
-.hermes-radar-chart__ring,
-.hermes-radar-chart__axis {
+.makosh-radar-chart__ring,
+.makosh-radar-chart__axis {
 	fill: none;
 	stroke: var(--h-color-border);
 	stroke-width: 0.8;
 }
 
-.hermes-radar-chart__area {
+.makosh-radar-chart__area {
 	fill: color-mix(in srgb, var(--h-graphic-color) 20%, transparent);
 	stroke: var(--h-graphic-color);
 	stroke-width: 2;
 }
 
-.hermes-radar-chart__label {
+.makosh-radar-chart__label {
 	fill: var(--h-color-text-muted);
 	font-size: 6px;
 	font-weight: 720;
 }
 
-.hermes-sparkline,
-.hermes-candlestick-chart {
+.makosh-sparkline,
+.makosh-candlestick-chart {
 	display: block;
 	color: var(--h-graphic-color, var(--h-color-accent));
 }
 
-.hermes-sparkline--sm { width: 96px; height: 35px; }
-.hermes-sparkline--md { width: 132px; height: 48px; }
-.hermes-sparkline--lg { width: 180px; height: 66px; }
+.makosh-sparkline--sm { width: 96px; height: 35px; }
+.makosh-sparkline--md { width: 132px; height: 48px; }
+.makosh-sparkline--lg { width: 180px; height: 66px; }
 
-.hermes-sparkline--neutral { --h-graphic-color: var(--h-color-text-muted); }
-.hermes-sparkline--accent { --h-graphic-color: var(--h-color-accent); }
-.hermes-sparkline--success { --h-graphic-color: var(--h-color-success); }
-.hermes-sparkline--warning { --h-graphic-color: var(--h-color-warning); }
-.hermes-sparkline--danger { --h-graphic-color: var(--h-color-danger); }
-.hermes-sparkline--info { --h-graphic-color: var(--h-color-info); }
+.makosh-sparkline--neutral { --h-graphic-color: var(--h-color-text-muted); }
+.makosh-sparkline--accent { --h-graphic-color: var(--h-color-accent); }
+.makosh-sparkline--success { --h-graphic-color: var(--h-color-success); }
+.makosh-sparkline--warning { --h-graphic-color: var(--h-color-warning); }
+.makosh-sparkline--danger { --h-graphic-color: var(--h-color-danger); }
+.makosh-sparkline--info { --h-graphic-color: var(--h-color-info); }
 
-.hermes-sparkline__area {
+.makosh-sparkline__area {
 	fill: color-mix(in srgb, currentColor 14%, transparent);
 }
 
-.hermes-sparkline__line {
+.makosh-sparkline__line {
 	fill: none;
 	stroke: currentColor;
 	stroke-linecap: round;
@@ -212,29 +212,29 @@
 	stroke-width: 2.5;
 }
 
-.hermes-candlestick-chart--sm { width: 112px; height: 46px; }
-.hermes-candlestick-chart--md { width: 150px; height: 62px; }
-.hermes-candlestick-chart--lg { width: 210px; height: 86px; }
+.makosh-candlestick-chart--sm { width: 112px; height: 46px; }
+.makosh-candlestick-chart--md { width: 150px; height: 62px; }
+.makosh-candlestick-chart--lg { width: 210px; height: 86px; }
 
-.hermes-candlestick-chart__baseline {
+.makosh-candlestick-chart__baseline {
 	stroke: var(--h-color-border);
 	stroke-width: 1;
 }
 
-.hermes-candlestick-chart__wick {
+.makosh-candlestick-chart__wick {
 	stroke: currentColor;
 	stroke-linecap: round;
 	stroke-width: 1.4;
 }
 
-.hermes-candlestick-chart__body {
+.makosh-candlestick-chart__body {
 	fill: currentColor;
 }
 
-.hermes-candlestick-chart__candle--up {
+.makosh-candlestick-chart__candle--up {
 	color: var(--h-color-success);
 }
 
-.hermes-candlestick-chart__candle--down {
+.makosh-candlestick-chart__candle--down {
 	color: var(--h-color-danger);
 }

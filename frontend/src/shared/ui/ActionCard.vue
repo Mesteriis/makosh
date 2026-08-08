@@ -23,9 +23,9 @@ const emit = defineEmits<{
 const nativeInteractiveTags = new Set(['a', 'input', 'select', 'textarea', 'summary'])
 
 const classes = computed(() => [
-	'hermes-action-card',
-	props.selected && 'hermes-action-card--selected',
-	props.disabled && 'hermes-action-card--disabled',
+	'makosh-action-card',
+	props.selected && 'makosh-action-card--selected',
+	props.disabled && 'makosh-action-card--disabled',
 	props.class
 ])
 
@@ -86,11 +86,11 @@ function handleKeydown(event: KeyboardEvent): void {
 			v-if="icon"
 			:icon="icon"
 			size="1.25rem"
-			class="hermes-action-card-icon"
+			class="makosh-action-card-icon"
 		/>
-		<span class="hermes-action-card-body">
-			<span class="hermes-action-card-title">{{ title }}</span>
-			<span v-if="description" class="hermes-action-card-description">{{ description }}</span>
+		<span class="makosh-action-card-body">
+			<span class="makosh-action-card-title">{{ title }}</span>
+			<span v-if="description" class="makosh-action-card-description">{{ description }}</span>
 		</span>
 	</component>
 </template>

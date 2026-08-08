@@ -101,7 +101,7 @@ Radar would consume outputs from:
 
 ## Reasons For Existence
 
-Radar may be valuable because Hermes needs a single owner-facing review surface
+Radar may be valuable because Макошь needs a single owner-facing review surface
 for "things worth attention" without collapsing them into Tasks. Many important
 signals are not tasks:
 

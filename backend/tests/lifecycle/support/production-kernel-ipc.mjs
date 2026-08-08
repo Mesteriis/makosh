@@ -19,14 +19,14 @@ import {
 } from './protobuf-ipc.mjs';
 
 const backendRoot = new URL('../../../', import.meta.url);
-const ownerProofDomain = Buffer.from('hermes.owner-control-session.v1\0', 'ascii');
-const runtimeProofDomain = Buffer.from('hermes.external-runtime-session.v1\0', 'ascii');
+const ownerProofDomain = Buffer.from('makosh.owner-control-session.v1\0', 'ascii');
+const runtimeProofDomain = Buffer.from('makosh.external-runtime-session.v1\0', 'ascii');
 const cargoEnvironment = { ...process.env, RUSTC_WRAPPER: '' };
 
 export function kernelCommand(dataDir, ...args) {
   return spawnSync(
     'cargo',
-    ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, ...args],
+    ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, ...args],
     { cwd: backendRoot, encoding: 'utf8', env: cargoEnvironment },
   );
 }
@@ -34,7 +34,7 @@ export function kernelCommand(dataDir, ...args) {
 export async function startKernel(dataDir) {
   const server = spawn(
     'cargo',
-    ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'serve'],
+    ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'serve'],
     { cwd: backendRoot, stdio: ['ignore', 'pipe', 'pipe'], env: cargoEnvironment },
   );
   return { server, socketPaths: await collectSocketPaths(server) };

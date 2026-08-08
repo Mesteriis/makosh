@@ -41,15 +41,15 @@ test('Mail provider transport seams are compile-time conformance-only', async ()
   }
   assert.match(
     runtimeManifest,
-    /"hermes-mail-api\/conformance-test-support"/,
+    /"makosh-mail-api\/conformance-test-support"/,
   );
   assert.match(
     runtimeManifest,
-    /"hermes-mail-imap\/conformance-test-support"/,
+    /"makosh-mail-imap\/conformance-test-support"/,
   );
   assert.match(
     runtimeManifest,
-    /"hermes-mail-gmail\/conformance-test-support"/,
+    /"makosh-mail-gmail\/conformance-test-support"/,
   );
 
   assert.match(
@@ -85,7 +85,7 @@ test('Mail provider transport seams are compile-time conformance-only', async ()
   assert.doesNotMatch(`${gmail}\n${settings}`, /std::env|var_os|GMAIL_API_URL/);
   assert.match(
     harness,
-    /--features',\s+'[^']*hermes-mail-runtime\/conformance-test-support[^']*'/,
+    /--features',\s+'[^']*makosh-mail-runtime\/conformance-test-support[^']*'/,
   );
 });
 
@@ -147,7 +147,7 @@ test('Gmail OAuth is a Mail-owned durable workflow with exact Vault actions', as
     settings,
   ] = await Promise.all([
     readFile(
-      new URL('src/mail-api/proto/hermes/mail/v1/client.proto', BACKEND_ROOT),
+      new URL('src/mail-api/proto/makosh/mail/v1/client.proto', BACKEND_ROOT),
       'utf8',
     ),
     readFile(new URL('src/mail-api/src/oauth.rs', BACKEND_ROOT), 'utf8'),
@@ -198,7 +198,7 @@ test('Gmail OAuth is a Mail-owned durable workflow with exact Vault actions', as
   assert.match(adapter, /"https:\/\/mail\.google\.com\/"/);
   assert.doesNotMatch(
     adapter,
-    /hermes_communications|hermes_mail_persistence|hermes_managed_vault_client/,
+    /makosh_communications|makosh_mail_persistence|makosh_managed_vault_client/,
   );
 
   assert.match(persistence, /mail_gmail_oauth_attempts/);
@@ -207,7 +207,7 @@ test('Gmail OAuth is a Mail-owned durable workflow with exact Vault actions', as
   assert.match(persistence, /authorization_code = NULL/);
   assert.match(runtime, /gmail_oauth_credential_binding/);
   assert.match(runtime, /ManagedProviderCredentialClientV2/);
-  assert.doesNotMatch(runtime, /hermes_communications/);
+  assert.doesNotMatch(runtime, /makosh_communications/);
   assert.doesNotMatch(settings, /gmail_access_token_revision/);
 
   assert.match(

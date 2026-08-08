@@ -11,7 +11,7 @@ const paths = {
     PROJECT_ROOT,
   ),
   protocol: new URL(
-    'src/platform/runtime_protocol/proto/hermes/runtime/v1/recovery.proto',
+    'src/platform/runtime_protocol/proto/makosh/runtime/v1/recovery.proto',
     BACKEND_ROOT,
   ),
   validation: new URL(

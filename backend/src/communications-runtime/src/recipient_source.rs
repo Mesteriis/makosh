@@ -4,15 +4,15 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTargetV1, ManagedBlobSessionRequestV1,
     request_managed_blob_session_v2,
 };
-use hermes_communications_persistence::{
+use makosh_communications_persistence::{
     CommunicationsBodyReceiptV1, CommunicationsConsumeOutcomeV1, CommunicationsDurablePersistence,
     CommunicationsSourceErrorV1, CommunicationsSourceSnapshotV1,
 };
-use hermes_communications_recipient_source_api::{
+use makosh_communications_recipient_source_api::{
     COMMUNICATION_RECIPIENT_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1,
     COMMUNICATION_RECIPIENT_SOURCE_BLOB_TARGET_MODULE_ID_V1,
     COMMUNICATION_RECIPIENT_SOURCE_BLOB_TARGET_OWNER_ID_V1,
@@ -28,16 +28,16 @@ use hermes_communications_recipient_source_api::{
         PrepareCommunicationRecipientSourceCommandV1,
     },
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::BlobDataOperationV1,
 };
@@ -418,7 +418,7 @@ fn valid_logical_owner_id(value: &str) -> bool {
 
 fn exact_contract(
     value: Option<&ContractRefV1>,
-    expected: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    expected: &makosh_runtime_protocol::v1::ContractReferenceV1,
 ) -> bool {
     value.is_some_and(|value| {
         value.owner == expected.owner

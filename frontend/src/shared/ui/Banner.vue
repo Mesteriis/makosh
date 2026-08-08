@@ -23,9 +23,9 @@ const toneIcons: Record<FeedbackTone, string> = {
 }
 
 const classes = computed(() => [
-  'hermes-feedback',
-  'hermes-banner',
-  `hermes-feedback--${props.tone}`,
+  'makosh-feedback',
+  'makosh-banner',
+  `makosh-feedback--${props.tone}`,
   props.class
 ])
 
@@ -35,13 +35,13 @@ const resolvedIcon = computed(() => props.icon ?? toneIcons[props.tone])
 
 <template>
   <section :class="classes" :role="role">
-    <Icon :icon="resolvedIcon" size="1.125rem" class="hermes-feedback-icon" />
-    <div class="hermes-feedback-body">
-      <strong v-if="title" class="hermes-feedback-title">{{ title }}</strong>
-      <p v-if="description" class="hermes-feedback-description">{{ description }}</p>
+    <Icon :icon="resolvedIcon" size="1.125rem" class="makosh-feedback-icon" />
+    <div class="makosh-feedback-body">
+      <strong v-if="title" class="makosh-feedback-title">{{ title }}</strong>
+      <p v-if="description" class="makosh-feedback-description">{{ description }}</p>
       <slot />
     </div>
-    <div v-if="$slots.action" class="hermes-feedback-action">
+    <div v-if="$slots.action" class="makosh-feedback-action">
       <slot name="action" />
     </div>
   </section>

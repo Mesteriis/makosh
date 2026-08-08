@@ -1,13 +1,13 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_call_transcription_core::CallTranscriptionStateV1;
-use hermes_call_transcription_persistence::{
+use makosh_call_transcription_core::CallTranscriptionStateV1;
+use makosh_call_transcription_persistence::{
     CALL_TRANSCRIPTION_RECOVERY_LIMIT_V1, CallTranscriptionPersistenceErrorV1,
     CallTranscriptionPersistenceV1, CompleteSourceCleanupV1, MaterializeTranscriptV1,
     PersistedCallTranscriptionRunV1, RebindTranscriptMaterializationV1,
     call_transcription_job_id_v1,
 };
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
 
@@ -22,7 +22,7 @@ use crate::{
 const JOB_LEASE_MILLIS_V1: u64 = 30_000;
 const _: () = assert!(
     JOB_LEASE_MILLIS_V1
-        <= hermes_call_transcription_persistence::CALL_TRANSCRIPTION_MAX_LEASE_MILLIS_V1
+        <= makosh_call_transcription_persistence::CALL_TRANSCRIPTION_MAX_LEASE_MILLIS_V1
 );
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

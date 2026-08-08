@@ -1,22 +1,22 @@
 //! Event-only projection of canonical Communications attachment safety state.
 
-use hermes_communications_attachment_contract::{
+use makosh_communications_attachment_contract::{
     admission::communication_attachment_safety_state_changed_contract_reference_v1,
     lifecycle_v1::{AttachmentSafetyStateChangedV1, AttachmentSafetyStateV1},
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimeSubscribePermitV1, receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, DurableEnvelopeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_mail_persistence::{
+use makosh_mail_persistence::{
     MailAttachmentSafetyStateV1 as PersistedSafetyStateV1, MailAttachmentSafetyTransitionV1,
     MailDurablePersistence, MailDurablePersistenceError,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 
 const COMMUNICATIONS_RUNTIME_MODULE_ID: &str = "communications-runtime";
@@ -159,7 +159,7 @@ fn id16(value: &[u8]) -> Result<[u8; 16], MailAttachmentSafetyProjectionErrorV1>
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_events_protocol::v1::{EventMetadataV1, SourceRefV1};
+    use makosh_events_protocol::v1::{EventMetadataV1, SourceRefV1};
 
     #[test]
     fn canonical_event_requires_exact_source_partition_and_nonzero_lineage() {

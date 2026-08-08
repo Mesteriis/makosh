@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { MailMessagePermanentDeleteOperationOutcomeV1 } from '../../../gen/hermes/mail/message_permanent_delete/v1/client_pb'
+import { MailMessagePermanentDeleteOperationOutcomeV1 } from '../../../gen/makosh/mail/message_permanent_delete/v1/client_pb'
 import {
 	getMailMessagePermanentDeleteStatus,
 	permanentlyDeleteMailMessage,

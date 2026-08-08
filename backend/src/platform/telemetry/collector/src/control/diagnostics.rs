@@ -2,12 +2,12 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     TelemetryDiagnosticsV1, TelemetryRuntimeControlRequestV1, TelemetryRuntimeControlResponseV1,
     telemetry_runtime_control_request_v1::Operation as RequestOperation,
     telemetry_runtime_control_response_v1::Result as ResponseResult,
 };
-use hermes_runtime_protocol::validation::telemetry::validate_telemetry_runtime_control_request;
+use makosh_runtime_protocol::validation::telemetry::validate_telemetry_runtime_control_request;
 use prost::Message;
 
 use crate::storage::TelemetrySegmentStore;
@@ -27,7 +27,7 @@ pub fn serve(mut stream: UnixStream, store: TelemetrySegmentStore) -> Result<(),
 }
 
 fn developer_log(event: &str) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_telemetry_diagnostics event={event}");
     }
 }

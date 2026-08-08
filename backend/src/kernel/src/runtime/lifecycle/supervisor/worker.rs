@@ -17,7 +17,7 @@ use crate::runtime::lifecycle::control::{
 };
 use crate::runtime::managed::execution::ManagedChildExecutionPolicy;
 use crate::runtime::managed::supervisor as managed_child_supervisor;
-use hermes_runtime_protocol::managed_control::ManagedControlTransportMajorV1;
+use makosh_runtime_protocol::managed_control::ManagedControlTransportMajorV1;
 
 use super::Inner;
 
@@ -139,7 +139,7 @@ pub(super) fn remove_staged_launch(
 
 fn record_worker_result(inner: &Inner, registration_id: &str, result: Result<(), String>) {
     if let Err(error) = result {
-        if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+        if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
             eprintln!("developer_managed_runtime_failed process={registration_id} error={error}");
         }
         let _ = inner

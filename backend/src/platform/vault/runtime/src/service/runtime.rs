@@ -1,11 +1,11 @@
 //! Vault lease and secret-resolution core, independent from IPC transport.
 
 use getrandom::fill;
-use hermes_vault_protocol::{
+use makosh_vault_protocol::{
     CredentialLeaseV1, LeaseAudienceV1, LeaseIdV1, VaultActionV1, VaultLeaseIssueRequestV1,
     VaultTransportCommandV1,
 };
-use hermes_vault_store_sqlcipher::{
+use makosh_vault_store_sqlcipher::{
     SecretRecordId, SecretRecordScope, VaultProvisioningMutationV1, VaultStore,
 };
 use zeroize::Zeroizing;
@@ -31,7 +31,7 @@ struct VaultProvisioningRequestV1<'a> {
     lease_id: &'a LeaseIdV1,
     operation_id: [u8; 16],
     action: VaultActionV1,
-    secret_class: hermes_vault_protocol::SecretClassV1,
+    secret_class: makosh_vault_protocol::SecretClassV1,
     payload: &'a [u8],
 }
 
@@ -233,7 +233,7 @@ impl VaultService {
         &mut self,
         lease_id: &LeaseIdV1,
         audience: &LeaseAudienceV1,
-        secret_class: hermes_vault_protocol::SecretClassV1,
+        secret_class: makosh_vault_protocol::SecretClassV1,
         now_unix_seconds: u64,
     ) -> Result<Zeroizing<Vec<u8>>, VaultServiceError> {
         let lease =
@@ -249,16 +249,16 @@ impl VaultService {
             Ok(credential) => Ok(credential),
             Err(error) => {
                 if error.is_malformed_record() {
-                    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                         eprintln!("developer_vault_recover_malformed_record");
                     }
                     let _ = self.store.delete_secret(&scope, now_unix_seconds);
                 } else if error.is_record_not_found()
-                    && std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some()
+                    && std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some()
                 {
                     eprintln!("developer_vault_missing_record");
                 }
-                if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                     eprintln!("developer_vault_resolve_runtime_credential_error={error:?}");
                 }
                 Err(VaultServiceError::SecretUnavailable)
@@ -270,7 +270,7 @@ impl VaultService {
         &mut self,
         lease_id: &LeaseIdV1,
         audience: &LeaseAudienceV1,
-        secret_class: hermes_vault_protocol::SecretClassV1,
+        secret_class: makosh_vault_protocol::SecretClassV1,
         payload: &[u8],
         now_unix_seconds: u64,
     ) -> Result<Zeroizing<Vec<u8>>, VaultServiceError> {
@@ -294,7 +294,7 @@ impl VaultService {
         &mut self,
         lease_id: &LeaseIdV1,
         audience: &LeaseAudienceV1,
-        secret_class: hermes_vault_protocol::SecretClassV1,
+        secret_class: makosh_vault_protocol::SecretClassV1,
         now_unix_seconds: u64,
     ) -> Result<Zeroizing<Vec<u8>>, VaultServiceError> {
         let lease =
@@ -310,7 +310,7 @@ impl VaultService {
         &mut self,
         lease_id: &LeaseIdV1,
         audience: &LeaseAudienceV1,
-        secret_class: hermes_vault_protocol::SecretClassV1,
+        secret_class: makosh_vault_protocol::SecretClassV1,
         now_unix_seconds: u64,
     ) -> Result<Zeroizing<Vec<u8>>, VaultServiceError> {
         let lease =
@@ -326,7 +326,7 @@ impl VaultService {
         &mut self,
         lease_id: &LeaseIdV1,
         audience: &LeaseAudienceV1,
-        secret_class: hermes_vault_protocol::SecretClassV1,
+        secret_class: makosh_vault_protocol::SecretClassV1,
         now_unix_seconds: u64,
     ) -> Result<Zeroizing<Vec<u8>>, VaultServiceError> {
         let lease = self.consume_action(
@@ -341,7 +341,7 @@ impl VaultService {
             .store
             .store_secret(&scope, token.as_slice())
             .map_err(|error| {
-                if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                     eprintln!("developer_vault_store_runtime_credential_error={error:?}");
                 }
                 VaultServiceError::SecretUnavailable
@@ -353,7 +353,7 @@ impl VaultService {
         &mut self,
         lease_id: &LeaseIdV1,
         audience: &LeaseAudienceV1,
-        secret_class: hermes_vault_protocol::SecretClassV1,
+        secret_class: makosh_vault_protocol::SecretClassV1,
         prior_record_id: &[u8; 16],
         payload: &[u8],
         now_unix_seconds: u64,
@@ -425,13 +425,13 @@ impl VaultService {
         )?;
         let scope = scope_for_lease(
             &lease,
-            hermes_vault_protocol::SecretClassV1::OwnerDerivedKey,
+            makosh_vault_protocol::SecretClassV1::OwnerDerivedKey,
             lease.request().secret_revision(),
         )?;
         if let Ok(existing) = self.store.resolve_current_secret(&scope) {
             return Ok(existing);
         }
-        let key = generate_secret_material(hermes_vault_protocol::SecretClassV1::OwnerDerivedKey)?;
+        let key = generate_secret_material(makosh_vault_protocol::SecretClassV1::OwnerDerivedKey)?;
         match self.store.store_secret(&scope, key.as_slice()) {
             Ok(_) => Ok(key),
             Err(_) => self
@@ -443,7 +443,7 @@ impl VaultService {
 }
 
 fn log_developer_command(command: &VaultTransportCommandV1) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_none() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_none() {
         return;
     }
     let name = match command {
@@ -463,7 +463,7 @@ fn log_developer_command(command: &VaultTransportCommandV1) {
 
 fn scope_for_lease(
     lease: &CredentialLeaseV1,
-    secret_class: hermes_vault_protocol::SecretClassV1,
+    secret_class: makosh_vault_protocol::SecretClassV1,
     revision: u64,
 ) -> Result<SecretRecordScope, VaultServiceError> {
     SecretRecordScope::new(
@@ -488,11 +488,11 @@ fn supported_action(action: VaultActionV1) -> bool {
 }
 
 fn generate_action(
-    secret_class: hermes_vault_protocol::SecretClassV1,
+    secret_class: makosh_vault_protocol::SecretClassV1,
 ) -> Result<VaultActionV1, VaultServiceError> {
     match secret_class {
-        hermes_vault_protocol::SecretClassV1::PlatformCredential => Ok(VaultActionV1::Create),
-        hermes_vault_protocol::SecretClassV1::OwnerDerivedKey => {
+        makosh_vault_protocol::SecretClassV1::PlatformCredential => Ok(VaultActionV1::Create),
+        makosh_vault_protocol::SecretClassV1::OwnerDerivedKey => {
             Ok(VaultActionV1::IssueOwnerDerivedKey)
         }
         _ => Err(VaultServiceError::LeaseScopeMismatch),
@@ -500,11 +500,11 @@ fn generate_action(
 }
 
 fn generate_secret_material(
-    secret_class: hermes_vault_protocol::SecretClassV1,
+    secret_class: makosh_vault_protocol::SecretClassV1,
 ) -> Result<Zeroizing<Vec<u8>>, VaultServiceError> {
     match secret_class {
-        hermes_vault_protocol::SecretClassV1::PlatformCredential => generate_opaque_token(),
-        hermes_vault_protocol::SecretClassV1::OwnerDerivedKey => {
+        makosh_vault_protocol::SecretClassV1::PlatformCredential => generate_opaque_token(),
+        makosh_vault_protocol::SecretClassV1::OwnerDerivedKey => {
             let mut key = Zeroizing::new(vec![0_u8; 32]);
             fill(key.as_mut_slice()).map_err(|_| VaultServiceError::EntropyUnavailable)?;
             Ok(key)

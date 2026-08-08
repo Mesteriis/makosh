@@ -3,7 +3,7 @@ import CanonicalCommunicationsPage from '../../src/domains/communications/presen
 import type { CanonicalCommunicationsPageModel } from '../../src/domains/communications/presentation/canonicalCommunicationsPageModel'
 
 const meta = {
-  title: 'Hermes App/Communications/Canonical',
+  title: 'Макошь App/Communications/Canonical',
   component: CanonicalCommunicationsPage,
   parameters: { layout: 'fullscreen' }
 } satisfies Meta

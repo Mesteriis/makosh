@@ -2,8 +2,8 @@
 
 use std::collections::BTreeMap;
 
-use hermes_events_protocol::delivery::OutboxRecordV1;
-use hermes_zulip_api::{
+use makosh_events_protocol::delivery::OutboxRecordV1;
+use makosh_zulip_api::{
     ZulipAttachmentV1, ZulipEventV1, ZulipHistoryPageV1, ZulipMessageSnapshotV1,
     ZulipReactionOperationV1,
     account::ZulipCredentialBindingStateV1,
@@ -45,12 +45,12 @@ impl ZulipDurablePersistence {
             return Err(ZulipDurablePersistenceError::InvalidRow);
         }
         sqlx::query(
-            "INSERT INTO hermes_data.zulip_operational_account_state \
+            "INSERT INTO makosh_data.zulip_operational_account_state \
              (account_id, history_state, projection_ready, updated_at_unix_seconds) \
              VALUES ($1, 4, FALSE, $2) ON CONFLICT (account_id) DO UPDATE SET \
-             history_state = CASE WHEN hermes_data.zulip_operational_account_state.history_state = 3 \
+             history_state = CASE WHEN makosh_data.zulip_operational_account_state.history_state = 3 \
                                   THEN 3 ELSE 4 END, \
-             projection_ready = hermes_data.zulip_operational_account_state.projection_ready, \
+             projection_ready = makosh_data.zulip_operational_account_state.projection_ready, \
              updated_at_unix_seconds = EXCLUDED.updated_at_unix_seconds",
         )
         .bind(account_id)
@@ -92,7 +92,7 @@ impl ZulipDurablePersistence {
         }
         for record in ingest.communications_outbox {
             sqlx::query(
-                "INSERT INTO hermes_data.zulip_communications_outbox \
+                "INSERT INTO makosh_data.zulip_communications_outbox \
                  (message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds) \
                  VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING",
             )
@@ -113,11 +113,11 @@ impl ZulipDurablePersistence {
             .await?;
         }
         sqlx::query(
-            "INSERT INTO hermes_data.zulip_operational_account_state \
+            "INSERT INTO makosh_data.zulip_operational_account_state \
              (account_id, history_state, last_provider_event_id, projection_ready, updated_at_unix_seconds) \
              VALUES ($1, 1, $2, FALSE, $3) \
              ON CONFLICT (account_id) DO UPDATE SET \
-               last_provider_event_id = GREATEST(hermes_data.zulip_operational_account_state.last_provider_event_id, EXCLUDED.last_provider_event_id), \
+               last_provider_event_id = GREATEST(makosh_data.zulip_operational_account_state.last_provider_event_id, EXCLUDED.last_provider_event_id), \
                updated_at_unix_seconds = EXCLUDED.updated_at_unix_seconds",
         )
         .bind(&ingest.cursor.account_id)
@@ -158,12 +158,12 @@ impl ZulipDurablePersistence {
         }
         let history_state = if page.found_oldest { 3_i16 } else { 2_i16 };
         sqlx::query(
-            "INSERT INTO hermes_data.zulip_operational_account_state \
+            "INSERT INTO makosh_data.zulip_operational_account_state \
              (account_id, history_state, oldest_provider_message_id, projection_ready, updated_at_unix_seconds) \
              VALUES ($1, $2, $3, $4, $5) \
              ON CONFLICT (account_id) DO UPDATE SET \
                history_state = EXCLUDED.history_state, \
-               oldest_provider_message_id = COALESCE(EXCLUDED.oldest_provider_message_id, hermes_data.zulip_operational_account_state.oldest_provider_message_id), \
+               oldest_provider_message_id = COALESCE(EXCLUDED.oldest_provider_message_id, makosh_data.zulip_operational_account_state.oldest_provider_message_id), \
                projection_ready = EXCLUDED.projection_ready, \
                updated_at_unix_seconds = EXCLUDED.updated_at_unix_seconds",
         )
@@ -256,7 +256,7 @@ impl ZulipDurablePersistence {
             .map_err(|_| ZulipDurablePersistenceError::InvalidRow)?;
         let bounds = sqlx::query(
             "SELECT MIN(sequence) AS earliest_sequence, MAX(sequence) AS latest_sequence \
-             FROM hermes_data.zulip_operational_events WHERE account_id = $1",
+             FROM makosh_data.zulip_operational_events WHERE account_id = $1",
         )
         .bind(&request.account_id)
         .fetch_one(&self.pool)
@@ -270,7 +270,7 @@ impl ZulipDurablePersistence {
             true
         } else {
             sqlx::query_scalar::<_, bool>(
-                "SELECT EXISTS(SELECT 1 FROM hermes_data.zulip_operational_events \
+                "SELECT EXISTS(SELECT 1 FROM makosh_data.zulip_operational_events \
                  WHERE account_id = $1 AND sequence = $2)",
             )
             .bind(&request.account_id)
@@ -284,7 +284,7 @@ impl ZulipDurablePersistence {
         }
         let rows = sqlx::query(
             "SELECT sequence, exact_event_bytes, event_sha256 \
-             FROM hermes_data.zulip_operational_events \
+             FROM makosh_data.zulip_operational_events \
              WHERE account_id = $1 AND sequence > $2 ORDER BY sequence ASC LIMIT $3",
         )
         .bind(&request.account_id)
@@ -336,7 +336,7 @@ impl ZulipDurablePersistence {
         let mut builder = QueryBuilder::<Postgres>::new(
             "SELECT account_id, provider_message_id, provider_conversation_id, sender_id, \
              is_outgoing, content, sent_at_unix_seconds, edited_at_unix_seconds, deleted, \
-             last_event_sequence FROM hermes_data.zulip_operational_messages WHERE account_id = ",
+             last_event_sequence FROM makosh_data.zulip_operational_messages WHERE account_id = ",
         );
         builder.push_bind(account_id);
         if let Some(conversation_id) = provider_conversation_id {
@@ -427,7 +427,7 @@ impl ZulipDurablePersistence {
         let rows = sqlx::query(
             "SELECT account_id, provider_conversation_id, conversation_kind, stream_id, \
              stream_name, topic, direct_recipient_id, latest_provider_message_id, latest_event_sequence \
-             FROM hermes_data.zulip_operational_conversations WHERE account_id = $1 \
+             FROM makosh_data.zulip_operational_conversations WHERE account_id = $1 \
              AND (latest_event_sequence, (COALESCE(latest_provider_message_id, '0'))::BIGINT) < ($2, $3) \
              ORDER BY latest_event_sequence DESC, (COALESCE(latest_provider_message_id, '0'))::BIGINT DESC \
              LIMIT $4",
@@ -483,7 +483,7 @@ impl ZulipDurablePersistence {
         let cursor_sequence = decode_sequence_cursor("z1e", &scope, cursor)?;
         let mut builder = QueryBuilder::<Postgres>::new(
             "SELECT sequence, exact_event_bytes, event_sha256 FROM \
-             hermes_data.zulip_operational_events WHERE account_id = ",
+             makosh_data.zulip_operational_events WHERE account_id = ",
         );
         builder.push_bind(account_id);
         if let Some(kind) = kind {
@@ -538,10 +538,10 @@ impl ZulipDurablePersistence {
              binding.credential_revision, COALESCE(binding.binding_revision, 0) AS binding_revision, \
              binding.state AS credential_state, binding.applied_runtime_generation, \
              COALESCE(MAX(events.sequence), 0) AS latest_event_sequence \
-             FROM hermes_data.zulip_operational_account_state state \
-             FULL OUTER JOIN hermes_data.zulip_account_credential_bindings binding \
+             FROM makosh_data.zulip_operational_account_state state \
+             FULL OUTER JOIN makosh_data.zulip_account_credential_bindings binding \
                ON binding.account_id = state.account_id \
-             LEFT JOIN hermes_data.zulip_operational_events events \
+             LEFT JOIN makosh_data.zulip_operational_events events \
                ON events.account_id = COALESCE(state.account_id, binding.account_id) \
              WHERE COALESCE(state.account_id, binding.account_id) = $1 \
              GROUP BY state.account_id, state.history_state, state.oldest_provider_message_id, \
@@ -603,7 +603,7 @@ impl ZulipDurablePersistence {
         }
         let rows = sqlx::query(
             "SELECT provider_message_id, provider_attachment_id, filename \
-             FROM hermes_data.zulip_operational_attachments \
+             FROM makosh_data.zulip_operational_attachments \
              WHERE account_id = $1 AND provider_message_id = ANY($2) \
              ORDER BY provider_message_id, provider_attachment_id",
         )
@@ -635,7 +635,7 @@ impl ZulipDurablePersistence {
         }
         let rows = sqlx::query(
             "SELECT provider_message_id, actor_id, emoji_name, emoji_code, reaction_type \
-             FROM hermes_data.zulip_operational_reactions \
+             FROM makosh_data.zulip_operational_reactions \
              WHERE account_id = $1 AND provider_message_id = ANY($2) AND present \
              ORDER BY provider_message_id, actor_id, emoji_name, emoji_code, reaction_type",
         )
@@ -689,7 +689,7 @@ async fn advance_cursor_in_transaction(
     cursor: &ZulipQueueCursorV1,
 ) -> Result<bool, ZulipDurablePersistenceError> {
     sqlx::query(
-        "INSERT INTO hermes_data.zulip_provider_cursor (account_id, queue_id, last_event_id) \
+        "INSERT INTO makosh_data.zulip_provider_cursor (account_id, queue_id, last_event_id) \
          VALUES ($1, $2, $3) ON CONFLICT (account_id) DO UPDATE \
          SET queue_id = EXCLUDED.queue_id, last_event_id = EXCLUDED.last_event_id \
          WHERE zulip_provider_cursor.queue_id <> EXCLUDED.queue_id \
@@ -714,7 +714,7 @@ async fn persist_operational_event(
     let exact_event_bytes = encode_operational_event(&event);
     let event_sha256: [u8; 32] = Sha256::digest(&exact_event_bytes).into();
     let sequence = sqlx::query(
-        "INSERT INTO hermes_data.zulip_operational_events \
+        "INSERT INTO makosh_data.zulip_operational_events \
          (account_id, provider_event_id, provider_message_id, provider_conversation_id, \
           event_kind, exact_event_bytes, event_sha256, observed_at_unix_seconds) \
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8) \
@@ -764,7 +764,7 @@ async fn apply_provider_event(
             ..
         } => {
             let result = sqlx::query(
-                "INSERT INTO hermes_data.zulip_operational_messages \
+                "INSERT INTO makosh_data.zulip_operational_messages \
                  (account_id, provider_message_id, provider_conversation_id, conversation_kind, \
                   stream_id, stream_name, topic, direct_recipient_id, sender_id, is_outgoing, \
                   content, sent_at_unix_seconds, deleted, last_event_sequence) \
@@ -777,7 +777,7 @@ async fn apply_provider_event(
                    is_outgoing = EXCLUDED.is_outgoing, content = EXCLUDED.content, \
                    sent_at_unix_seconds = EXCLUDED.sent_at_unix_seconds, deleted = FALSE, \
                    last_event_sequence = EXCLUDED.last_event_sequence \
-                 WHERE hermes_data.zulip_operational_messages.last_event_sequence < EXCLUDED.last_event_sequence",
+                 WHERE makosh_data.zulip_operational_messages.last_event_sequence < EXCLUDED.last_event_sequence",
             )
             .bind(account_id)
             .bind(provider_message_id)
@@ -858,12 +858,12 @@ async fn apply_provider_event(
             ..
         } => {
             sqlx::query(
-                "INSERT INTO hermes_data.zulip_operational_reactions \
+                "INSERT INTO makosh_data.zulip_operational_reactions \
                  (account_id, provider_message_id, actor_id, emoji_name, emoji_code, reaction_type, \
                   present, last_event_sequence) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) \
                  ON CONFLICT (account_id, provider_message_id, actor_id, emoji_name, emoji_code, reaction_type) \
                  DO UPDATE SET present = EXCLUDED.present, last_event_sequence = EXCLUDED.last_event_sequence \
-                 WHERE hermes_data.zulip_operational_reactions.last_event_sequence < EXCLUDED.last_event_sequence",
+                 WHERE makosh_data.zulip_operational_reactions.last_event_sequence < EXCLUDED.last_event_sequence",
             )
             .bind(account_id)
             .bind(provider_message_id)
@@ -886,7 +886,7 @@ async fn persist_history_message(
     message: &ZulipMessageSnapshotV1,
 ) -> Result<(), ZulipDurablePersistenceError> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.zulip_operational_messages \
+        "INSERT INTO makosh_data.zulip_operational_messages \
          (account_id, provider_message_id, provider_conversation_id, conversation_kind, \
           stream_id, stream_name, topic, direct_recipient_id, sender_id, is_outgoing, content, \
           sent_at_unix_seconds, edited_at_unix_seconds, deleted, last_event_sequence) \
@@ -948,7 +948,7 @@ async fn replace_attachments(
     attachments: &[ZulipAttachmentV1],
 ) -> Result<(), ZulipDurablePersistenceError> {
     sqlx::query(
-        "DELETE FROM hermes_data.zulip_operational_attachments \
+        "DELETE FROM makosh_data.zulip_operational_attachments \
          WHERE account_id = $1 AND provider_message_id = $2",
     )
     .bind(account_id)
@@ -961,7 +961,7 @@ async fn replace_attachments(
             return Err(ZulipDurablePersistenceError::InvalidRow);
         }
         sqlx::query(
-            "INSERT INTO hermes_data.zulip_operational_attachments \
+            "INSERT INTO makosh_data.zulip_operational_attachments \
              (account_id, provider_message_id, provider_attachment_id, filename) \
              VALUES ($1, $2, $3, $4)",
         )
@@ -985,12 +985,12 @@ async fn merge_reactions(
 ) -> Result<(), ZulipDurablePersistenceError> {
     for reaction in reactions {
         sqlx::query(
-            "INSERT INTO hermes_data.zulip_operational_reactions \
+            "INSERT INTO makosh_data.zulip_operational_reactions \
              (account_id, provider_message_id, actor_id, emoji_name, emoji_code, reaction_type, \
               present, last_event_sequence) VALUES ($1, $2, $3, $4, $5, $6, TRUE, $7) \
              ON CONFLICT (account_id, provider_message_id, actor_id, emoji_name, emoji_code, reaction_type) \
              DO UPDATE SET present = TRUE, last_event_sequence = EXCLUDED.last_event_sequence \
-             WHERE hermes_data.zulip_operational_reactions.last_event_sequence < EXCLUDED.last_event_sequence",
+             WHERE makosh_data.zulip_operational_reactions.last_event_sequence < EXCLUDED.last_event_sequence",
         )
         .bind(account_id)
         .bind(provider_message_id)
@@ -1018,16 +1018,16 @@ async fn persist_message_mutation(
     sequence: i64,
 ) -> Result<(), ZulipDurablePersistenceError> {
     sqlx::query(
-        "INSERT INTO hermes_data.zulip_operational_message_mutations \
+        "INSERT INTO makosh_data.zulip_operational_message_mutations \
          (account_id, provider_message_id, content, topic, edited_at_unix_seconds, deleted, last_event_sequence) \
          VALUES ($1, $2, $3, $4, $5, $6, $7) \
          ON CONFLICT (account_id, provider_message_id) DO UPDATE SET \
-           content = COALESCE(EXCLUDED.content, hermes_data.zulip_operational_message_mutations.content), \
-           topic = COALESCE(EXCLUDED.topic, hermes_data.zulip_operational_message_mutations.topic), \
-           edited_at_unix_seconds = COALESCE(EXCLUDED.edited_at_unix_seconds, hermes_data.zulip_operational_message_mutations.edited_at_unix_seconds), \
-           deleted = hermes_data.zulip_operational_message_mutations.deleted OR EXCLUDED.deleted, \
+           content = COALESCE(EXCLUDED.content, makosh_data.zulip_operational_message_mutations.content), \
+           topic = COALESCE(EXCLUDED.topic, makosh_data.zulip_operational_message_mutations.topic), \
+           edited_at_unix_seconds = COALESCE(EXCLUDED.edited_at_unix_seconds, makosh_data.zulip_operational_message_mutations.edited_at_unix_seconds), \
+           deleted = makosh_data.zulip_operational_message_mutations.deleted OR EXCLUDED.deleted, \
            last_event_sequence = EXCLUDED.last_event_sequence \
-         WHERE hermes_data.zulip_operational_message_mutations.last_event_sequence < EXCLUDED.last_event_sequence",
+         WHERE makosh_data.zulip_operational_message_mutations.last_event_sequence < EXCLUDED.last_event_sequence",
     )
     .bind(account_id)
     .bind(provider_message_id)
@@ -1048,7 +1048,7 @@ async fn apply_message_mutation(
     provider_message_id: &str,
 ) -> Result<(), ZulipDurablePersistenceError> {
     sqlx::query(
-        "UPDATE hermes_data.zulip_operational_messages message SET \
+        "UPDATE makosh_data.zulip_operational_messages message SET \
            content = CASE WHEN mutation.deleted THEN NULL ELSE COALESCE(mutation.content, message.content) END, \
            topic = COALESCE(mutation.topic, message.topic), \
            provider_conversation_id = CASE \
@@ -1057,7 +1057,7 @@ async fn apply_message_mutation(
              ELSE message.provider_conversation_id END, \
            edited_at_unix_seconds = COALESCE(mutation.edited_at_unix_seconds, message.edited_at_unix_seconds), \
            deleted = mutation.deleted, last_event_sequence = mutation.last_event_sequence \
-         FROM hermes_data.zulip_operational_message_mutations mutation \
+         FROM makosh_data.zulip_operational_message_mutations mutation \
          WHERE message.account_id = mutation.account_id \
            AND message.provider_message_id = mutation.provider_message_id \
            AND message.account_id = $1 AND message.provider_message_id = $2 \
@@ -1077,21 +1077,21 @@ async fn upsert_conversation_from_message(
     provider_message_id: &str,
 ) -> Result<(), ZulipDurablePersistenceError> {
     sqlx::query(
-        "INSERT INTO hermes_data.zulip_operational_conversations \
+        "INSERT INTO makosh_data.zulip_operational_conversations \
          (account_id, provider_conversation_id, conversation_kind, stream_id, stream_name, topic, \
           direct_recipient_id, latest_provider_message_id, latest_event_sequence) \
          SELECT account_id, provider_conversation_id, conversation_kind, stream_id, stream_name, topic, \
                 direct_recipient_id, provider_message_id, last_event_sequence \
-         FROM hermes_data.zulip_operational_messages \
+         FROM makosh_data.zulip_operational_messages \
          WHERE account_id = $1 AND provider_message_id = $2 \
          ON CONFLICT (account_id, provider_conversation_id) DO UPDATE SET \
            conversation_kind = EXCLUDED.conversation_kind, stream_id = EXCLUDED.stream_id, \
-           stream_name = COALESCE(EXCLUDED.stream_name, hermes_data.zulip_operational_conversations.stream_name), \
+           stream_name = COALESCE(EXCLUDED.stream_name, makosh_data.zulip_operational_conversations.stream_name), \
            topic = EXCLUDED.topic, direct_recipient_id = EXCLUDED.direct_recipient_id, \
            latest_provider_message_id = EXCLUDED.latest_provider_message_id, \
            latest_event_sequence = EXCLUDED.latest_event_sequence \
-         WHERE (hermes_data.zulip_operational_conversations.latest_event_sequence, \
-                (COALESCE(hermes_data.zulip_operational_conversations.latest_provider_message_id, '0'))::BIGINT) \
+         WHERE (makosh_data.zulip_operational_conversations.latest_event_sequence, \
+                (COALESCE(makosh_data.zulip_operational_conversations.latest_provider_message_id, '0'))::BIGINT) \
              < (EXCLUDED.latest_event_sequence, (COALESCE(EXCLUDED.latest_provider_message_id, '0'))::BIGINT)",
     )
     .bind(account_id)

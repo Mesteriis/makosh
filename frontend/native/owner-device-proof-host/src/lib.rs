@@ -105,7 +105,7 @@ mod tests {
 
     fn fixture_path(label: &str) -> std::path::PathBuf {
         std::env::temp_dir().join(format!(
-            "hermes-owner-device-proof-{label}-{}-{}",
+            "makosh-owner-device-proof-{label}-{}-{}",
             std::process::id(),
             FIXTURE_ID.fetch_add(1, Ordering::Relaxed),
         ))

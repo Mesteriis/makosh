@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import Icon from '../../../shared/ui/Icon.vue'
 import { useWhatsAppPairing } from '../linking/useWhatsAppPairing'
 import './whatsAppPairingPanel.css'
@@ -18,7 +18,7 @@ const pairing = useWhatsAppPairing(() => props.module)
 			<h3>WhatsApp QR pairing</h3>
 			<p>
 				The QR code is rendered by WhatsApp Web inside an owner-visible desktop window.
-				Hermes does not copy it into Settings or persist session material.
+				Макошь does not copy it into Settings or persist session material.
 			</p>
 			<p
 				v-if="pairing.message.value || !pairing.nativeHostAvailable"

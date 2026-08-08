@@ -41,7 +41,7 @@ const pass = readFileSync(process.env.PGPASSFILE, 'utf8');
 if (process.env.PGPASSWORD
   || !existsSync(process.env.PGSERVICEFILE)
   || !existsSync(process.env.PGPASSFILE)
-  || !service.includes('dbname=hermes_test')
+  || !service.includes('dbname=makosh_test')
   || !service.includes('user=backup_role')
   || !pass.includes('backup_role')
   || !output) {
@@ -53,7 +53,7 @@ writeFileSync(output, 'fixture PostgreSQL custom dump');
 }
 
 test('exports a PostgreSQL custom dump without putting credentials in arguments', () => {
-  const root = temporaryDirectory('hermes-postgres-backup-');
+  const root = temporaryDirectory('makosh-postgres-backup-');
   try {
     const pgDump = join(root, 'pg_dump');
     const connectionUrl = join(root, 'postgres-url');
@@ -61,7 +61,7 @@ test('exports a PostgreSQL custom dump without putting credentials in arguments'
     writeFakePgDump(pgDump);
     writeFileSync(
       connectionUrl,
-      'postgresql://backup_role:pass%3Aword@127.0.0.1:5432/hermes_test?sslmode=require\n',
+      'postgresql://backup_role:pass%3Aword@127.0.0.1:5432/makosh_test?sslmode=require\n',
       { mode: 0o600 },
     );
     chmodSync(connectionUrl, 0o600);
@@ -78,7 +78,7 @@ test('exports a PostgreSQL custom dump without putting credentials in arguments'
     assert.match(result.stdout, /^postgres_backup_path=/m);
     assert.match(result.stdout, /^postgres_backup_sha256=[a-f0-9]{64}$/m);
     assert.deepEqual(
-      readdirSync(root).filter((entry) => entry.startsWith('.hermes-postgres-backup-')),
+      readdirSync(root).filter((entry) => entry.startsWith('.makosh-postgres-backup-')),
       [],
     );
   } finally {
@@ -87,13 +87,13 @@ test('exports a PostgreSQL custom dump without putting credentials in arguments'
 });
 
 test('refuses an exposed PostgreSQL connection URL before launching pg_dump', () => {
-  const root = temporaryDirectory('hermes-postgres-backup-exposed-');
+  const root = temporaryDirectory('makosh-postgres-backup-exposed-');
   try {
     const pgDump = join(root, 'pg_dump');
     const connectionUrl = join(root, 'postgres-url');
     const output = join(root, 'owner-data.dump');
     writeFakePgDump(pgDump);
-    writeFileSync(connectionUrl, 'postgresql://backup_role:password@127.0.0.1/hermes_test\n', {
+    writeFileSync(connectionUrl, 'postgresql://backup_role:password@127.0.0.1/makosh_test\n', {
       mode: 0o644,
     });
     chmodSync(connectionUrl, 0o644);

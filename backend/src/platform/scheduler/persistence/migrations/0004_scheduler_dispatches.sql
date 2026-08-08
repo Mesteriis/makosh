@@ -1,4 +1,4 @@
-CREATE TABLE hermes_platform.scheduler_dispatches (
+CREATE TABLE makosh_platform.scheduler_dispatches (
   run_id BYTEA NOT NULL,
   lease_epoch BIGINT NOT NULL,
   message_id BYTEA PRIMARY KEY,

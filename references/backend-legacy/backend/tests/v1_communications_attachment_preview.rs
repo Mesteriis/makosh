@@ -1,5 +1,5 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
@@ -7,22 +7,22 @@ use axum::http::{Request, StatusCode};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::communications::messages::projection::project_raw_email_message;
-use hermes_hub_backend::domains::communications::messages::store::MessageProjectionStore;
-use hermes_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
-use hermes_hub_backend::domains::communications::storage::models::{
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::communications::messages::projection::project_raw_email_message;
+use makosh_hub_backend::domains::communications::messages::store::MessageProjectionStore;
+use makosh_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
+use makosh_hub_backend::domains::communications::storage::models::{
     CommunicationAttachmentDisposition, NewCommunicationAttachment, NewCommunicationBlob,
 };
-use hermes_hub_backend::domains::communications::storage::scanner::{
+use makosh_hub_backend::domains::communications::storage::scanner::{
     AttachmentSafetyScanReport, AttachmentSafetyScanStatus,
 };
-use hermes_hub_backend::domains::communications::storage::store::CommunicationStorageStore;
+use makosh_hub_backend::domains::communications::storage::store::CommunicationStorageStore;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const T: &str = "v1comms-attachment-preview-test-token";
 
@@ -177,7 +177,7 @@ async fn v1_attachment_text_extraction_persists_a_derived_blob_reference() {
         vec!["executing", "completed"]
     );
     assert!(extraction_events.iter().all(|event| {
-        event["extractor"] == "hermes.local_utf8.v1"
+        event["extractor"] == "makosh.local_utf8.v1"
             && event.get("text").is_none()
             && event.get("storage_path").is_none()
     }));
@@ -541,7 +541,7 @@ async fn store_completed_derived_text(pool: &sqlx::PgPool, attachment_id: &str, 
         INSERT INTO communication_attachment_extractions (
             attachment_id, status, extractor, source_sha256, extracted_blob_id,
             extracted_size_bytes, extracted_at
-        ) VALUES ($1, 'completed', 'hermes.attachment-extractor.v1', $2, $3, $4, now())
+        ) VALUES ($1, 'completed', 'makosh.attachment-extractor.v1', $2, $3, $4, now())
         ON CONFLICT (attachment_id) DO UPDATE SET
             status = EXCLUDED.status,
             extractor = EXCLUDED.extractor,
@@ -586,7 +586,7 @@ async fn store_completed_safe_preview(pool: &sqlx::PgPool, attachment_id: &str, 
         INSERT INTO communication_attachment_safe_previews (
             attachment_id, status, renderer, source_sha256, preview_blob_id,
             preview_content_type, preview_size_bytes, rendered_at
-        ) VALUES ($1, 'completed', 'hermes.attachment-extractor.pdf_preview.v1', $2, $3, 'image/png', $4, now())
+        ) VALUES ($1, 'completed', 'makosh.attachment-extractor.pdf_preview.v1', $2, $3, 'image/png', $4, now())
         "#,
     )
     .bind(attachment_id)
@@ -614,7 +614,7 @@ async fn store_completed_content_disarm(pool: &sqlx::PgPool, attachment_id: &str
         .await
         .expect("store CDR blob metadata");
     sqlx::query(
-        "INSERT INTO communication_attachment_cdr_artifacts (attachment_id, status, renderer, source_sha256, artifact_blob_id, artifact_content_type, artifact_size_bytes, disarmed_at) VALUES ($1, 'completed', 'hermes.attachment-extractor.pdf_cdr.v1', $2, $3, 'application/pdf', $4, now())",
+        "INSERT INTO communication_attachment_cdr_artifacts (attachment_id, status, renderer, source_sha256, artifact_blob_id, artifact_content_type, artifact_size_bytes, disarmed_at) VALUES ($1, 'completed', 'makosh.attachment-extractor.pdf_cdr.v1', $2, $3, 'application/pdf', $4, now())",
     )
     .bind(attachment_id)
     .bind(source_sha256)
@@ -630,7 +630,7 @@ async fn router(database_url: &str) -> axum::Router {
         .await
         .expect("database connection");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(T, database_url),
+        makosh_backend_testkit::app::config_with_secret_and_database_url(T, database_url),
         database,
     )
 }
@@ -638,7 +638,7 @@ async fn router(database_url: &str) -> axum::Router {
 fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("request")
 }
@@ -647,7 +647,7 @@ fn post(uri: &str) -> Request<Body> {
     Request::builder()
         .method("POST")
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("request")
 }

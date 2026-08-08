@@ -1,7 +1,7 @@
 //! Resolves one external runtime's current Storage configuration without secrets.
 
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use prost::Message;
 
 use crate::platform::storage::topology;
@@ -72,7 +72,7 @@ pub(crate) fn current_binding(
 }
 
 fn validate_binding(
-    binding: &hermes_kernel_control_store::PlatformStorageBindingV1,
+    binding: &makosh_kernel_control_store::PlatformStorageBindingV1,
     runtime: &crate::runtime::external::sessions::AuthorizedExternalRuntimeV1,
 ) -> Result<(), String> {
     (binding.state() == PlatformStorageBindingStateV1::Active

@@ -1,4 +1,4 @@
-use hermes_events_protocol::delivery::{OutboxRecordError, OutboxRecordV1};
+use makosh_events_protocol::delivery::{OutboxRecordError, OutboxRecordV1};
 use sqlx::{Postgres, Row, Transaction};
 
 use crate::{
@@ -20,7 +20,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
         }
         let rows = sqlx::query(
             "SELECT exact_envelope_bytes
-             FROM hermes_data.communication_cross_channel_forward_event_outbox
+             FROM makosh_data.communication_cross_channel_forward_event_outbox
              WHERE published_at_unix_millis IS NULL
              ORDER BY created_at_unix_millis, message_id
              LIMIT $1",
@@ -49,7 +49,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
             return Err(CrossChannelForwardPersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "UPDATE hermes_data.communication_cross_channel_forward_event_outbox
+            "UPDATE makosh_data.communication_cross_channel_forward_event_outbox
              SET published_at_unix_millis = $2
              WHERE message_id = $1 AND published_at_unix_millis IS NULL",
         )
@@ -71,7 +71,7 @@ pub(crate) async fn insert_exact_outbox(
     created_at_unix_millis: i64,
 ) -> Result<bool, CrossChannelForwardPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.communication_cross_channel_forward_event_outbox (
+        "INSERT INTO makosh_data.communication_cross_channel_forward_event_outbox (
             message_id, envelope_sha256, exact_envelope_bytes, event_kind,
             logical_owner_id, forward_id, created_at_unix_millis,
             published_at_unix_millis
@@ -94,7 +94,7 @@ pub(crate) async fn insert_exact_outbox(
     let existing: Option<ExistingOutboxRowV1> = sqlx::query_as(
         "SELECT envelope_sha256, exact_envelope_bytes, event_kind,
                 logical_owner_id, forward_id
-         FROM hermes_data.communication_cross_channel_forward_event_outbox
+         FROM makosh_data.communication_cross_channel_forward_event_outbox
          WHERE message_id = $1
             OR (
               logical_owner_id = $2

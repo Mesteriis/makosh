@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `adr`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docs/adr/ADR-0051-v5-whatsapp-web-companion-boundary.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0051-v5-whatsapp-web-companion-boundary.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0051-v5-whatsapp-web-companion-boundary.md`
 - Size bytes / Размер в байтах: `4689`
 - Included characters / Включено символов: `4689`
 - Truncated / Обрезано: `no`
@@ -72,7 +72,7 @@ Version 5 adds WhatsApp as a long-term communication memory source. The reliable
 - WhatsApp Web and desktop are linked-device companion experiences, not documented personal-account APIs.
 - The official WhatsApp Business Platform Cloud API is for business messaging and requires Meta business assets such as a business portfolio, WhatsApp Business Account and business phone number.
 - WhatsApp's consumer terms restrict unauthorized automated access, impermissible collection and unauthorized software or APIs that function like the service.
-- Hermes Hub is local-first and personal. It must preserve user-controlled local memory without turning WhatsApp Web into a hidden scraping or automation channel.
+- Макошь is local-first and personal. It must preserve user-controlled local memory without turning WhatsApp Web into a hidden scraping or automation channel.
 
 References checked during this decision:
 
@@ -101,7 +101,7 @@ Rules:
 
 Positive:
 
-- Hermes Hub can model WhatsApp Web without pretending that an unofficial stable personal API exists.
+- Макошь can model WhatsApp Web without pretending that an unofficial stable personal API exists.
 - The provider boundary keeps WhatsApp Web runtime fragility away from canonical messages, graph projections and AI workflows.
 - Fixture/manual state allows backend and UI work to start without live WhatsApp credentials or hidden browser automation.
 - Session state and secrets stay outside PostgreSQL, preserving backup and debugging safety.
@@ -130,7 +130,7 @@ Risk handling:
 
 ### `docs/adr/ADR-0052-capability-runtime-and-action-confirmation-policy.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0052-capability-runtime-and-action-confirmation-policy.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0052-capability-runtime-and-action-confirmation-policy.md`
 - Size bytes / Размер в байтах: `4386`
 - Included characters / Включено символов: `4386`
 - Truncated / Обрезано: `no`
@@ -154,7 +154,7 @@ Rules:
 
 - Capability checks are centralized in the backend application boundary before privileged reads, local writes, provider writes, destructive actions, exports, secret resolution, automation execution or plugin tool calls.
 - UI, agent and plugin clients may present intent, but they do not authorize their own actions.
-- The temporary `Authorization: Bearer <HERMES_LOCAL_API_TOKEN>` and `X-Hermes-Actor-Id` headers remain valid only as local-development and desktop bootstrap guards until the capability runtime replaces them with authenticated actor and capability identifiers.
+- The temporary `Authorization: Bearer <MAKOSH_LOCAL_API_TOKEN>` and `X-Макошь-Actor-Id` headers remain valid only as local-development and desktop bootstrap guards until the capability runtime replaces them with authenticated actor and capability identifiers.
 - Capability decisions classify requested actions as `read`, `local_write`, `provider_write`, `destructive`, `export`, `secret_access` or `automation`.
 - Capability grants are scoped. Scopes may include actor, provider account, channel/chat/thread, project, document, data class, command, template, automation policy, time window, rate limit and expiry.
 - Message sends, provider mutations, deletes, destructive local changes, sensitive exports and direct secret access require explicit confirmation unless an enabled scoped automation policy authorizes the action.
@@ -196,7 +196,7 @@ Risk handling:
 
 ### `docs/adr/ADR-0053-database-backed-encrypted-secret-vault.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0053-database-backed-encrypted-secret-vault.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0053-database-backed-encrypted-secret-vault.md`
 - Size bytes / Размер в байтах: `4319`
 - Included characters / Включено символов: `4319`
 - Truncated / Обрезано: `no`
@@ -206,13 +206,13 @@ Risk handling:
 
 Status: Superseded by ADR-0076
 
-This decision was superseded by ADR-0076, which moves new encrypted secret payloads out of PostgreSQL into a dedicated host vault under `~/.hermes/vault` while leaving PostgreSQL with non-secret metadata and account bindings.
+This decision was superseded by ADR-0076, which moves new encrypted secret payloads out of PostgreSQL into a dedicated host vault under `~/.makosh/vault` while leaving PostgreSQL with non-secret metadata and account bindings.
 
 Supersedes: ADR-0016, ADR-0042, ADR-0044
 
 ## Context
 
-The previous secret model kept provider credential values outside PostgreSQL. `secret_references` stored metadata and account bindings, while ADR-0044 placed encrypted secret values in a local JSON vault file selected by `HERMES_SECRET_VAULT_PATH`.
+The previous secret model kept provider credential values outside PostgreSQL. `secret_references` stored metadata and account bindings, while ADR-0044 placed encrypted secret values in a local JSON vault file selected by `MAKOSH_SECRET_VAULT_PATH`.
 
 That split makes backup, restore and local operational state harder than the rest of the local-first system: provider account metadata lives in PostgreSQL, but the encrypted credential payloads live in a separate file that must be moved and restored independently.
 
@@ -229,11 +229,11 @@ Rules:
 - New account setup writes provider credential values to `encrypted_secret_vault_entries` and marks the corresponding `secret_references.store_kind` as `database_encrypted_vault`.
 - `encrypted_secret_vault_entries` stores only encrypted payload material: `secret_ref`, KDF identifier, salt, nonce, ciphertext and timestamps.
 - Plaintext provider credentials, OAuth token bundles, app passwords, mailbox passwords, API tokens and private keys must never be stored in provider account config, secret reference metadata, event payloads, audit records, logs, tests or docs.
-- `HERMES_SECRET_VAULT_KEY` remains outside PostgreSQL and is required to decrypt database vault entries. It must not be logged, committed or persisted in PostgreSQL.
+- `MAKOSH_SECRET_VAULT_KEY` remains outside PostgreSQL and is required to decrypt database vault entries. It must not be logged, committed or persisted in PostgreSQL.
 - Hardware identifiers such as CPU, board or disk serial numbers are not valid vault keys. They are non-secret, may be unavailable or unstable, and may only be used as non-secret binding context if an OS-backed key resolver later needs it.
-- `HERMES_SECRET_VAULT_PATH` is no longer required for account setup. File-backed encrypted vault code may exist only as a legacy compatibility or explicit local migration utility, not as the primary write path.
+- `MAKOSH_SECRET_VAULT_PATH` is no longer required for account setup. File-backed encrypted vault code may exist only as a legacy compatibility or explicit local migration utility, not as the primary write path.
 - Database vault entries use per-entry AES-256-GCM encryption with an Argon2id-derived key, random per-entry salt, random nonce and authenticated `secret_ref` associated data.
-- Database backups now include encrypted credential payloads. Restores require the matching external `HERMES_SECRET_VAULT_KEY`.
+- Database backups now include encrypted credential payloads. Restores require the matching external `MAKOSH_SECRET_VAULT_KEY`.
 - SQL migrations must not attempt to decrypt or import existing file-vault secrets, because migrations do not have a safe credential/key interaction boundary. Any file-vault import must be an explicit trusted local operation.
 
 ## Consequences
@@ -248,7 +248,7 @@ Positive:
 Negative:
 
 - PostgreSQL backups now contain high-value ciphertext and require stricter handling.
-- Losing `HERMES_SECRET_VAULT_KEY` makes encrypted database vault entries unrecoverable.
+- Losing `MAKOSH_SECRET_VAULT_KEY` makes encrypted database vault entries unrecoverable.
 - The database vault becomes security-critical persistence code.
 - Existing file-vault installations need an explicit migration/import workflow before old `encrypted_vault` references are fully moved.
 
@@ -262,7 +262,7 @@ Risk handling:
 
 ### `docs/adr/ADR-0054-application-settings-store.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0054-application-settings-store.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0054-application-settings-store.md`
 - Size bytes / Размер в байтах: `3551`
 - Included characters / Включено символов: `3551`
 - Truncated / Обрезано: `no`
@@ -274,7 +274,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub has a growing number of local runtime and UI preferences. Environment variables are acceptable for bootstrap values, but they are not a good product surface for settings that a desktop user should inspect or change from the app.
+Макошь has a growing number of local runtime and UI preferences. Environment variables are acceptable for bootstrap values, but they are not a good product surface for settings that a desktop user should inspect or change from the app.
 
 The application also has provider accounts for email, Telegram, WhatsApp and future communication channels. Those accounts are durable domain records, not generic key-value settings, because they have provider kinds, account-scoped secret bindings and adapter-specific metadata.
 
@@ -288,7 +288,7 @@ Rules:
 - Setting values are typed JSONB values with `value_kind` of `boolean`, `integer`, `string` or `json`.
 - Setting keys must not be secret-like. Keys containing `secret`, `password`, `token`, `credential` or `private_key` are rejected.
 - Secret material remains under ADR-0053 and must not be placed in `application_settings`.
-- Bootstrap values that are required before PostgreSQL is reachable remain outside this table. This includes `DATABASE_URL`, the temporary local API token and `HERMES_SECRET_VAULT_KEY`.
+- Bootstrap values that are required before PostgreSQL is reachable remain outside this table. This includes `DATABASE_URL`, the temporary local API token and `MAKOSH_SECRET_VAULT_KEY`.
 - The Settings UI should expose all declared non-secret runtime and UI settings except database connectivity. Bootstrap or restart-only settings may be stored as declared settings, but the UI must make that operational status visible.
 - Provider accounts remain in provider/account tables such as `communication_provider_accounts` and are surfaced in the Settings UI as account records, not duplicated into `application_settings`.
 - Settings writes go through protected backend endpoints and write audit metadata without storing setting values in audit records.
@@ -322,7 +322,7 @@ Risk handling:
 
 ### `docs/adr/ADR-0055-full-email-provider-networking.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0055-full-email-provider-networking.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0055-full-email-provider-networking.md`
 - Size bytes / Размер в байтах: `3243`
 - Included characters / Включено символов: `3241`
 - Truncated / Обрезано: `no`
@@ -336,9 +336,9 @@ Supersedes: ADR-0043
 
 ## Context
 
-ADR-0043 mandated read-only email provider networking as a temporary safety measure during the initial implementation phase. Hermes Hub has now matured to a point where full email functionality is required: the system must send emails, reply to threads, forward messages, and mutate server-side state (flags, labels, mailbox moves, deletions).
+ADR-0043 mandated read-only email provider networking as a temporary safety measure during the initial implementation phase. Макошь has now matured to a point where full email functionality is required: the system must send emails, reply to threads, forward messages, and mutate server-side state (flags, labels, mailbox moves, deletions).
 
-The read-only restriction was always intended to be temporary for a personal local-first system. The owner controls their own data and provider credentials. Hermes Hub is not a multi-tenant SaaS — there is no risk of one user mutating another user's mailbox.
+The read-only restriction was always intended to be temporary for a personal local-first system. The owner controls their own data and provider credentials. Макошь is not a multi-tenant SaaS — there is no risk of one user mutating another user's mailbox.
 
 ## Decision
 
@@ -373,7 +373,7 @@ Email provider networking supports both read and write operations.
 
 ## Consequences
 
-- Hermes Hub gains full email client functionality: compose, reply, forward, flag management, mailbox organization.
+- Макошь gains full email client functionality: compose, reply, forward, flag management, mailbox organization.
 - IMAP provider adapters must handle both `EXAMINE` (read) and `SELECT` (read-write) modes.
 - SMTP networking introduces a new transport layer alongside existing IMAP/Gmail API clients.
 - Test infrastructure must clearly separate read-only fixture tests from optional write-path integration tests.
@@ -384,7 +384,7 @@ Email provider networking supports both read and write operations.
 
 ### `docs/adr/ADR-0056-local-api-simplified-auth.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0056-local-api-simplified-auth.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0056-local-api-simplified-auth.md`
 - Size bytes / Размер в байтах: `2267`
 - Included characters / Включено символов: `2263`
 - Truncated / Обрезано: `no`
@@ -402,8 +402,8 @@ The backend serves a **single local user** via a desktop app (Tauri shell).
 There is no multi-tenancy, no external network exposure (binds `127.0.0.1`),
 and no user-facing authentication.
 
-Previous ADRs mandated per-request `HERMES_LOCAL_API_TOKEN` verification
-and `x-hermes-actor-id` extraction in every handler. This added boilerplate
+Previous ADRs mandated per-request `MAKOSH_LOCAL_API_TOKEN` verification
+and `x-makosh-actor-id` extraction in every handler. This added boilerplate
 to 200+ handlers with zero security benefit for a single-user local app.
 
 ## Decision
@@ -415,17 +415,17 @@ If the header is missing or wrong → 403. No per-handler auth code.
 
 ```rust
 Router::new()
-    .layer(require_secret_layer("X-Hermes-Secret", &secret))
+    .layer(require_secret_layer("X-Макошь-Secret", &secret))
     .route(...)
 ```
 
 ### 2. Actor identity is a constant
 
-All audit records use `"hermes-frontend"` as the actor.
-No `x-hermes-actor-id` header extraction.
+All audit records use `"makosh-frontend"` as the actor.
+No `x-makosh-actor-id` header extraction.
 
 ```rust
-NewApiAuditRecord::setting_set("hermes-frontend", "theme")
+NewApiAuditRecord::setting_set("makosh-frontend", "theme")
 ```
 
 ### 3. Handlers are plain
@@ -442,8 +442,8 @@ No `verify_local_api_capability`, no `AuthActor`, no `require_auth`.
 ## Consequences
 
 ### Removed
-- `HERMES_LOCAL_API_TOKEN` configuration
-- `x-hermes-actor-id` header requirement
+- `MAKOSH_LOCAL_API_TOKEN` configuration
+- `x-makosh-actor-id` header requirement
 - `verify_local_api_capability()` function
 - `local_api_actor()` function
 - `LocalApiActor` struct
@@ -456,7 +456,7 @@ No `verify_local_api_capability`, no `AuthActor`, no `require_auth`.
 ### Migration
 1. Remove token config from `AppConfig`, `docker/.env`
 2. Remove token/actor verification from all handlers
-3. Replace `actor.actor_id` with `"hermes-frontend"` in audit calls
+3. Replace `actor.actor_id` with `"makosh-frontend"` in audit calls
 4. Add router-level secret layer
 5. Delete `verify_local_api_capability`, `local_api_actor`, `is_valid_actor_id_byte`, `LocalApiActor`
 
@@ -468,7 +468,7 @@ No `verify_local_api_capability`, no `AuthActor`, no `require_auth`.
 
 ### `docs/adr/ADR-0057-person-memory-and-provenance.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0057-person-memory-and-provenance.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0057-person-memory-and-provenance.md`
 - Size bytes / Размер в байтах: `1168`
 - Included characters / Включено символов: `1168`
 - Truncated / Обрезано: `no`
@@ -497,7 +497,7 @@ Store all facts, memory cards, preferences, and expertise in dedicated domain ta
 
 ### `docs/adr/ADR-0058-person-enrichment-engine.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0058-person-enrichment-engine.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0058-person-enrichment-engine.md`
 - Size bytes / Размер в байтах: `1023`
 - Included characters / Включено символов: `1023`
 - Truncated / Обрезано: `no`
@@ -525,7 +525,7 @@ A dedicated `EnrichmentEngine` service orchestrates data acquisition with plugga
 
 ### `docs/adr/ADR-0059-person-communication-dna.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0059-person-communication-dna.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0059-person-communication-dna.md`
 - Size bytes / Размер в байтах: `1323`
 - Included characters / Включено символов: `1323`
 - Truncated / Обрезано: `no`
@@ -556,7 +556,7 @@ Store Communication DNA as typed columns on the `persons` table (`communication_
 
 ### `docs/adr/ADR-0060-person-timeline-and-graph-integration.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0060-person-timeline-and-graph-integration.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0060-person-timeline-and-graph-integration.md`
 - Size bytes / Размер в байтах: `1242`
 - Included characters / Включено символов: `1242`
 - Truncated / Обрезано: `no`
@@ -584,7 +584,7 @@ Store timeline events in `relationship_events` with optional links to source ent
 
 ### `docs/adr/ADR-0061-organization-as-first-class-entity.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0061-organization-as-first-class-entity.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0061-organization-as-first-class-entity.md`
 - Size bytes / Размер в байтах: `1022`
 - Included characters / Включено символов: `1022`
 - Truncated / Обрезано: `no`
@@ -612,7 +612,7 @@ Organizations are first-class domain entities with `organization_id = org:v1:{na
 
 ### `docs/adr/ADR-0062-organization-identity-and-resolution.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0062-organization-identity-and-resolution.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0062-organization-identity-and-resolution.md`
 - Size bytes / Размер в байтах: `1071`
 - Included characters / Включено символов: `1069`
 - Truncated / Обрезано: `no`
@@ -640,7 +640,7 @@ Organizations have multiple identifiers: domains, VAT/CIF/NIF numbers, GitHub or
 
 ### `docs/adr/ADR-0063-organization-passive-osint-boundary.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0063-organization-passive-osint-boundary.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0063-organization-passive-osint-boundary.md`
 - Size bytes / Размер в байтах: `1135`
 - Included characters / Включено символов: `1135`
 - Truncated / Обрезано: `no`
@@ -668,7 +668,7 @@ Enrichment uses only public APIs and passive observation. Providers include: web
 
 ### `docs/adr/ADR-0064-organization-memory-and-provenance.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0064-organization-memory-and-provenance.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0064-organization-memory-and-provenance.md`
 - Size bytes / Размер в байтах: `1056`
 - Included characters / Включено символов: `1056`
 - Truncated / Обрезано: `no`
@@ -696,7 +696,7 @@ Store facts in `organization_facts`, memory cards in `organization_memory_cards`
 
 ### `docs/adr/ADR-0065-organization-portals-procedures-playbooks.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0065-organization-portals-procedures-playbooks.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0065-organization-portals-procedures-playbooks.md`
 - Size bytes / Размер в байтах: `1298`
 - Included characters / Включено символов: `1292`
 - Truncated / Обрезано: `no`
@@ -724,7 +724,7 @@ Portals (`organization_portals`) store URLs, portal types, login hints, and secr
 
 ### `docs/adr/ADR-0066-organization-graph-integration.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0066-organization-graph-integration.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0066-organization-graph-integration.md`
 - Size bytes / Размер в байтах: `1076`
 - Included characters / Включено символов: `1076`
 - Truncated / Обрезано: `no`
@@ -751,7 +751,7 @@ Organizations participate in the existing `graph_nodes`/`graph_edges` tables. Ne
 
 ### `docs/adr/ADR-0067-calendar-multi-provider-architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0067-calendar-multi-provider-architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0067-calendar-multi-provider-architecture.md`
 - Size bytes / Размер в байтах: `1500`
 - Included characters / Включено символов: `1500`
 - Truncated / Обрезано: `no`
@@ -763,7 +763,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub needs a calendar module that treats events as first-class knowledge graph nodes, not as isolated time blocks. Events must connect to persons, organizations, projects, documents, tasks, and emails. The system must support multiple calendar providers (Google, Microsoft, Apple, CalDAV, ICS, local) with multiple accounts per provider and multiple calendars per account.
+Макошь needs a calendar module that treats events as first-class knowledge graph nodes, not as isolated time blocks. Events must connect to persons, organizations, projects, documents, tasks, and emails. The system must support multiple calendar providers (Google, Microsoft, Apple, CalDAV, ICS, local) with multiple accounts per provider and multiple calendars per account.
 
 ## Decision
 
@@ -781,7 +781,7 @@ Provider sync is deferred to a future phase (requires OAuth integration similar 
 
 ### `docs/adr/ADR-0068-calendar-event-as-graph-node.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0068-calendar-event-as-graph-node.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0068-calendar-event-as-graph-node.md`
 - Size bytes / Размер в байтах: `1320`
 - Included characters / Включено символов: `1320`
 - Truncated / Обрезано: `no`
@@ -793,7 +793,7 @@ Status: Proposed
 
 ## Context
 
-Calendar events in Hermes must not be isolated time-block rectangles. Each event is a system node connected to persons, organizations, projects, documents, tasks, emails, and notes. ADR-0045 established the graph core projection. Events need explicit, queryable relationships.
+Calendar events in Макошь must not be isolated time-block rectangles. Each event is a system node connected to persons, organizations, projects, documents, tasks, emails, and notes. ADR-0045 established the graph core projection. Events need explicit, queryable relationships.
 
 ## Decision
 
@@ -811,7 +811,7 @@ Event context packs aggregate related data (documents, tasks, open questions, ri
 
 ### `docs/adr/ADR-0069-calendar-intelligence-heuristic-fallbacks.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0069-calendar-intelligence-heuristic-fallbacks.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0069-calendar-intelligence-heuristic-fallbacks.md`
 - Size bytes / Размер в байтах: `1696`
 - Included characters / Включено символов: `1682`
 - Truncated / Обрезано: `no`
@@ -848,7 +848,7 @@ The `CalendarIntelligenceService` is a pure function service (no state). The `Ca
 
 ### `docs/adr/ADR-0070-tasks-first-class-domain.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0070-tasks-first-class-domain.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0070-tasks-first-class-domain.md`
 - Size bytes / Размер в байтах: `1164`
 - Included characters / Включено символов: `1164`
 - Truncated / Обрезано: `no`
@@ -860,7 +860,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub needs a task management module that unifies local tasks and external trackers (Jira, YouTrack, GitHub Issues, etc.) with a personal context layer. Tasks must be linked to contacts, organizations, projects, emails, meetings, and documents.
+Макошь needs a task management module that unifies local tasks and external trackers (Jira, YouTrack, GitHub Issues, etc.) with a personal context layer. Tasks must be linked to contacts, organizations, projects, emails, meetings, and documents.
 
 ## Decision
 
@@ -878,7 +878,7 @@ The existing `task_candidates` pipeline (AI extraction from messages/documents) 
 
 ### `docs/adr/ADR-0071-task-context-evidence-provenance.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0071-task-context-evidence-provenance.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0071-task-context-evidence-provenance.md`
 - Size bytes / Размер в байтах: `914`
 - Included characters / Включено символов: `914`
 - Truncated / Обрезано: `no`
@@ -890,7 +890,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Tasks must track where each task came from, why it exists, and what context surrounds it. AI-extracted tasks from emails, meetings, and documents need evidence provenance. Tasks need a materialized context pack for instant retrieval.
+Макошь Tasks must track where each task came from, why it exists, and what context surrounds it. AI-extracted tasks from emails, meetings, and documents need evidence provenance. Tasks need a materialized context pack for instant retrieval.
 
 ## Decision
 
@@ -905,7 +905,7 @@ Task Context Pack is a materialized JSONB snapshot containing summary, open ques
 
 ### `docs/adr/ADR-0072-task-intelligence-heuristic-fallbacks.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0072-task-intelligence-heuristic-fallbacks.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0072-task-intelligence-heuristic-fallbacks.md`
 - Size bytes / Размер в байтах: `1000`
 - Included characters / Включено символов: `1000`
 - Truncated / Обрезано: `no`
@@ -939,7 +939,7 @@ Ollama refinement is optional and can be added without API changes.
 
 ### `docs/adr/ADR-0073-backend-module-organization.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0073-backend-module-organization.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0073-backend-module-organization.md`
 - Size bytes / Размер в байтах: `5725`
 - Included characters / Включено символов: `3877`
 - Truncated / Обрезано: `no`
@@ -1033,7 +1033,7 @@ use crate::platform::events::EventStore;
 
 ### `docs/adr/ADR-0074-person-multi-channel-identity-model.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0074-person-multi-channel-identity-model.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0074-person-multi-channel-identity-model.md`
 - Size bytes / Размер в байтах: `1871`
 - Included characters / Включено символов: `1871`
 - Truncated / Обрезано: `no`
@@ -1045,7 +1045,7 @@ Status: Accepted
 
 ## Context
 
-ADR-0019 established identity resolution as confidence-scored merge/split candidates. The current contact projection was originally derived from a single email address and is already referenced by graph projections, project links and task context. The functional spec for Hermes Persons requires multi-channel identities (email, Telegram, WhatsApp, phone, GitHub, LinkedIn, and others) linked to a single person entity.
+ADR-0019 established identity resolution as confidence-scored merge/split candidates. The current contact projection was originally derived from a single email address and is already referenced by graph projections, project links and task context. The functional spec for Макошь Persons requires multi-channel identities (email, Telegram, WhatsApp, phone, GitHub, LinkedIn, and others) linked to a single person entity.
 
 ## Decision
 
@@ -1066,7 +1066,7 @@ Opaque UUID person IDs are not part of this implementation slice. Moving from te
 
 ### `docs/adr/ADR-0076-host-vault-on-macos.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0076-host-vault-on-macos.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0076-host-vault-on-macos.md`
 - Size bytes / Размер в байтах: `3312`
 - Included characters / Включено символов: `3312`
 - Truncated / Обрезано: `no`
@@ -1080,7 +1080,7 @@ Supersedes: ADR-0044, ADR-0053
 
 ## Context
 
-Hermes Hub is a trusted single-user desktop application. The vault protects local secrets at rest, not against a compromised operating system or hostile local administrator.
+Макошь is a trusted single-user desktop application. The vault protects local secrets at rest, not against a compromised operating system or hostile local administrator.
 
 ADR-0053 moved encrypted credential payloads into PostgreSQL. That improved database backup completeness, but it made PostgreSQL backups carry high-value ciphertext and did not meet the newer requirement that database deletion or recreation must not destroy credentials, account keys or signing material.
 
@@ -1088,7 +1088,7 @@ The target runtime is now macOS-only. Docker remains a development environment, 
 
 ## Decision
 
-Use a dedicated host vault under `~/.hermes/vault` for secrets-only encrypted payload storage.
+Use a dedicated host vault under `~/.makosh/vault` for secrets-only encrypted payload storage.
 
 Rules:
 
@@ -1096,7 +1096,7 @@ Rules:
 - New secret payloads are written to `vault.db`, a dedicated SQLite database under the host vault directory.
 - New `secret_references.store_kind` values for host-vault secrets use `host_vault`.
 - `encrypted_secret_vault_entries` remains legacy/migration state only. New runtime writes must not add provider credential payloads to PostgreSQL.
-- The master key is stored outside application databases. Release runtime uses macOS Keychain. Docker/debug development may use `HERMES_DEV_KEY_PATH` only when `HERMES_DEV_MODE=true` and the build has debug assertions.
+- The master key is stored outside application databases. Release runtime uses macOS Keychain. Docker/debug development may use `MAKOSH_DEV_KEY_PATH` only when `MAKOSH_DEV_MODE=true` and the build has debug assertions.
 - Vault cryptography uses OS randomness, mouse/timing entropy from onboarding, SHA-512 mixing, HKDF-SHA256 domain keys and XChaCha20-Poly1305 record encryption.
 - Per-entry AAD includes vault version, entry kind, account id, purpose and secret kind.
 - The in-memory master key remains loaded after explicit unlock for the application lifetime and is zeroized on process shutdown or explicit lock.
@@ -1121,7 +1121,7 @@ Negative:
 
 Risk handling:
 
-- Keep `HERMES_SECRET_VAULT_KEY` only as a legacy migration compatibility variable.
+- Keep `MAKOSH_SECRET_VAULT_KEY` only as a legacy migration compatibility variable.
 - Enforce release guard against dev storage.
 - Keep all secret reads behind the `SecretResolver` boundary.
 - Add tests for wrong-key/AAD/nonce failure, host-vault CRUD, onboarding status and PostgreSQL payload regression.

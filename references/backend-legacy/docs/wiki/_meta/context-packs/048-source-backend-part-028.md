@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/domains/persons/api/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/api/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/api/validation.rs`
 - Size bytes / Размер в байтах: `2002`
 - Included characters / Включено символов: `2002`
 - Truncated / Обрезано: `no`
@@ -128,7 +128,7 @@ pub(super) fn ai_agent_email_address(agent_id: &str) -> String {
 
 ### `backend/src/domains/persons/command_service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/command_service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/command_service.rs`
 - Size bytes / Размер в байтах: `29261`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -476,13 +476,13 @@ impl PersonCommandService {
             .capture_manual_at(
                 "PERSON_MEMORY_CARD",
                 Utc::now(),
-  
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/domains/persons/core.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/core.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/core.rs`
 - Size bytes / Размер в байтах: `525`
 - Included characters / Включено символов: `525`
 - Truncated / Обрезано: `no`
@@ -507,7 +507,7 @@ pub use roles::{
 
 ### `backend/src/domains/persons/core/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/core/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/core/errors.rs`
 - Size bytes / Размер в байтах: `504`
 - Included characters / Включено символов: `504`
 - Truncated / Обрезано: `no`
@@ -539,7 +539,7 @@ pub enum PersonCoreError {
 
 ### `backend/src/domains/persons/core/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/core/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/core/evidence.rs`
 - Size bytes / Размер в байтах: `1216`
 - Included characters / Включено символов: `1216`
 - Truncated / Обрезано: `no`
@@ -600,7 +600,7 @@ pub(crate) async fn link_persons_entity_in_transaction(
 
 ### `backend/src/domains/persons/core/identities.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/core/identities.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/core/identities.rs`
 - Size bytes / Размер в байтах: `9968`
 - Included characters / Включено символов: `9968`
 - Truncated / Обрезано: `no`
@@ -926,7 +926,7 @@ fn row_to_identity(row: PgRow) -> Result<PersonIdentity, PersonCoreError> {
 
 ### `backend/src/domains/persons/core/interaction_contexts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/core/interaction_contexts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/core/interaction_contexts.rs`
 - Size bytes / Размер в байтах: `7953`
 - Included characters / Включено символов: `7953`
 - Truncated / Обрезано: `no`
@@ -1175,7 +1175,7 @@ fn row_to_persona(row: PgRow) -> Result<PersonPersona, PersonCoreError> {
 
 ### `backend/src/domains/persons/core/preferences.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/core/preferences.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/core/preferences.rs`
 - Size bytes / Размер в байтах: `3424`
 - Included characters / Включено символов: `3424`
 - Truncated / Обрезано: `no`
@@ -1312,7 +1312,7 @@ fn interaction_context_source(persona_id: &str) -> String {
 
 ### `backend/src/domains/persons/core/roles.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/core/roles.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/core/roles.rs`
 - Size bytes / Размер в байтах: `7930`
 - Included characters / Включено символов: `7930`
 - Truncated / Обрезано: `no`
@@ -1530,7 +1530,7 @@ async fn append_role_assigned_event(
         role.assigned_at,
         json!({
             "kind": "persons",
-            "provider": "hermes",
+            "provider": "makosh",
             "source_id": &role.person_id,
         }),
         json!({
@@ -1565,7 +1565,7 @@ async fn append_role_removed_event(
         Utc::now(),
         json!({
             "kind": "persons",
-            "provider": "hermes",
+            "provider": "makosh",
             "source_id": &role.person_id,
         }),
         json!({
@@ -1589,7 +1589,7 @@ async fn append_role_removed_event(
 
 ### `backend/src/domains/persons/enrichment.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/enrichment.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/enrichment.rs`
 - Size bytes / Размер в байтах: `301`
 - Included characters / Включено символов: `301`
 - Truncated / Обрезано: `no`
@@ -1612,7 +1612,7 @@ pub const PERSON_TRUST_SCORE_CHANGED_EVENT_TYPE: &str = "person.enrichment.trust
 
 ### `backend/src/domains/persons/enrichment/commands.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/enrichment/commands.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/enrichment/commands.rs`
 - Size bytes / Размер в байтах: `9163`
 - Included characters / Включено символов: `9163`
 - Truncated / Обрезано: `no`
@@ -1873,7 +1873,7 @@ async fn append_trust_score_changed_event(
         Utc::now(),
         json!({
             "kind": "person_enrichment",
-            "provider": "hermes",
+            "provider": "makosh",
             "source_id": person_id,
         }),
         json!({
@@ -1896,7 +1896,7 @@ async fn append_trust_score_changed_event(
 
 ### `backend/src/domains/persons/enrichment/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/enrichment/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/enrichment/errors.rs`
 - Size bytes / Размер в байтах: `539`
 - Included characters / Включено символов: `539`
 - Truncated / Обрезано: `no`
@@ -1929,7 +1929,7 @@ pub enum PersonEnrichmentError {
 
 ### `backend/src/domains/persons/enrichment/materialization.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/enrichment/materialization.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/enrichment/materialization.rs`
 - Size bytes / Размер в байтах: `2239`
 - Included characters / Включено символов: `2239`
 - Truncated / Обрезано: `no`
@@ -2010,7 +2010,7 @@ pub(in crate::domains::persons::enrichment) async fn sync_favorite_preference_in
 
 ### `backend/src/domains/persons/enrichment/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/enrichment/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/enrichment/models.rs`
 - Size bytes / Размер в байтах: `836`
 - Included characters / Включено символов: `836`
 - Truncated / Обрезано: `no`
@@ -2046,7 +2046,7 @@ pub struct EnrichedPerson {
 
 ### `backend/src/domains/persons/enrichment/queries.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/enrichment/queries.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/enrichment/queries.rs`
 - Size bytes / Размер в байтах: `2107`
 - Included characters / Включено символов: `2107`
 - Truncated / Обрезано: `no`
@@ -2114,7 +2114,7 @@ impl PersonEnrichmentStore {
 
 ### `backend/src/domains/persons/enrichment/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/enrichment/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/enrichment/rows.rs`
 - Size bytes / Размер в байтах: `1641`
 - Included characters / Включено символов: `1641`
 - Truncated / Обрезано: `no`
@@ -2160,7 +2160,7 @@ pub(in crate::domains::persons::enrichment) fn row_to_enriched(
 
 ### `backend/src/domains/persons/enrichment/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/enrichment/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/enrichment/store.rs`
 - Size bytes / Размер в байтах: `244`
 - Included characters / Включено символов: `244`
 - Truncated / Обрезано: `no`
@@ -2182,7 +2182,7 @@ impl PersonEnrichmentStore {
 
 ### `backend/src/domains/persons/enrichment_engine.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/enrichment_engine.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/enrichment_engine.rs`
 - Size bytes / Размер в байтах: `5238`
 - Included characters / Включено символов: `5238`
 - Truncated / Обрезано: `no`
@@ -2358,7 +2358,7 @@ pub enum EnrichmentEngineError {
 
 ### `backend/src/domains/persons/expertise.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/expertise.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/expertise.rs`
 - Size bytes / Размер в байтах: `3605`
 - Included characters / Включено символов: `3605`
 - Truncated / Обрезано: `no`
@@ -2479,7 +2479,7 @@ pub enum PersonExpertiseError {
 
 ### `backend/src/domains/persons/export.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/export.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/export.rs`
 - Size bytes / Размер в байтах: `4341`
 - Included characters / Включено символов: `4341`
 - Truncated / Обрезано: `no`
@@ -2647,7 +2647,7 @@ pub enum ExportError {
 
 ### `backend/src/domains/persons/health.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/health.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/health.rs`
 - Size bytes / Размер в байтах: `8475`
 - Included characters / Включено символов: `8475`
 - Truncated / Обрезано: `no`
@@ -2871,7 +2871,7 @@ pub enum PersonHealthError {
 
 ### `backend/src/domains/persons/identity.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/identity.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/identity.rs`
 - Size bytes / Размер в байтах: `673`
 - Included characters / Включено символов: `673`
 - Truncated / Обрезано: `no`
@@ -2902,7 +2902,7 @@ pub(crate) use upsert::{
 
 ### `backend/src/domains/persons/identity/constants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/identity/constants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/identity/constants.rs`
 - Size bytes / Размер в байтах: `539`
 - Included characters / Включено символов: `539`
 - Truncated / Обрезано: `no`
@@ -2920,7 +2920,7 @@ pub(super) const MIN_LIMIT: i64 = 1;
 
 ### `backend/src/domains/persons/identity/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/identity/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/identity/errors.rs`
 - Size bytes / Размер в байтах: `1177`
 - Included characters / Включено символов: `1177`
 - Truncated / Обрезано: `no`
@@ -2976,7 +2976,7 @@ pub enum PersonIdentityError {
 
 ### `backend/src/domains/persons/identity/events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/persons/identity/events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/persons/identity/events.rs`
 - Size bytes / Размер в байтах: `2184`
 - Included characters / Включено символов: `2184`
 - Truncated / Обрезано: `no`

@@ -2,10 +2,10 @@
 
 use std::{os::unix::net::UnixStream, time::Duration};
 
-use hermes_attachment_security_persistence::{
+use makosh_attachment_security_persistence::{
     AttachmentSecurityTextDelegationWorkV1, ClaimedAttachmentSecurityTextDelegationV1,
 };
-use hermes_attachment_text_extraction_ingress::{
+use makosh_attachment_text_extraction_ingress::{
     ATTACHMENT_TEXT_EXTRACTION_BLOB_TARGET_CAPABILITY_ID_V1,
     ATTACHMENT_TEXT_EXTRACTION_BLOB_TARGET_MODULE_ID_V1,
     ATTACHMENT_TEXT_EXTRACTION_BLOB_TARGET_OWNER_ID_V1, AttachmentTextCustodyEnvelopeContextV1,
@@ -16,12 +16,12 @@ use hermes_attachment_text_extraction_ingress::{
         AttachmentTextCustodyDelegationRejectedV1, RequestAttachmentTextCustodyDelegationV1,
     },
 };
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobClientError, ManagedBlobCustodyDelegationRequestV1, ManagedBlobCustodyTargetV1,
     request_managed_blob_custody_delegation_v2,
 };
-use hermes_events_protocol::delivery::OutboxRecordV1;
-use hermes_runtime_protocol::managed_control::{
+use makosh_events_protocol::delivery::OutboxRecordV1;
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, RejectManagedControlRequestsV2,
 };
 

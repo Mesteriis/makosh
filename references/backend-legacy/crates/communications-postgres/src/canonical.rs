@@ -1,4 +1,4 @@
-use hermes_communications_api::canonical::{
+use makosh_communications_api::canonical::{
     CanonicalForwardReferenceRecord, CanonicalMessageReactionRecord, CanonicalMessageReadPort,
     CanonicalMessageReferenceSummaryRecord, CanonicalMessageTombstoneRecord,
     CanonicalMessageVersionRecord, CanonicalReadPortError, CanonicalReplyReferenceRecord,

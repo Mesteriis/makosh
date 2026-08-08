@@ -1,5 +1,5 @@
-import type { MailAccountConfigurationV1 } from '../../../gen/hermes/mail/portability/v1/portability_pb'
-import { MailAddressBookProviderV1 } from '../../../gen/hermes/mail/portability/v1/portability_pb'
+import type { MailAccountConfigurationV1 } from '../../../gen/makosh/mail/portability/v1/portability_pb'
+import { MailAddressBookProviderV1 } from '../../../gen/makosh/mail/portability/v1/portability_pb'
 import type { OwnerSettingInputV1 } from '../../../platform/settings'
 
 interface MailSettingsValueReaderPortV1 {

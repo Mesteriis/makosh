@@ -6,19 +6,19 @@ pub use envelope::{
     CallTranscriptionIngressEnvelopeBuildErrorV1, CallTranscriptionIngressEnvelopeContextV1,
     build_recording_ready_outbox_record_v1, build_recording_rejected_outbox_record_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-call-transcription-ingress";
+pub const PACKAGE: &str = "makosh-call-transcription-ingress";
 pub const OWNER_ID_V1: &str = "call_transcription";
 pub const RECORDING_READY_CONTRACT_NAME_V1: &str = "call_transcription_recording_ready";
 pub const RECORDING_REJECTED_CONTRACT_NAME_V1: &str = "call_transcription_recording_rejected";
 pub const CONTRACT_MAJOR_V1: u32 = 1;
 pub const CONTRACT_REVISION_V1: u32 = 1;
 pub const MAX_IN_FLIGHT_V1: u32 = 32;
-pub const TARGET_MODULE_ID_V1: &str = "hermes-call-transcription-runtime";
+pub const TARGET_MODULE_ID_V1: &str = "makosh-call-transcription-runtime";
 pub const TARGET_BLOB_CAPABILITY_ID_V1: &str = "call_transcription.recording_source.blob.v1";
 
 #[must_use]
@@ -34,7 +34,7 @@ pub fn recording_rejected_event_id_v1(recording_evidence_id: [u8; 16], revision:
 fn derived_id_v1(label: &[u8], recording_evidence_id: [u8; 16], revision: u64) -> [u8; 16] {
     use sha2::{Digest, Sha256};
     let mut hash = Sha256::new();
-    hash.update(b"hermes.call-transcription-ingress.v1\0");
+    hash.update(b"makosh.call-transcription-ingress.v1\0");
     hash.update(label);
     hash.update(recording_evidence_id);
     hash.update(revision.to_be_bytes());
@@ -46,7 +46,7 @@ fn derived_id_v1(label: &[u8], recording_evidence_id: [u8; 16], revision: u64) -
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.call_transcription.ingress.v1.rs"
+        "/makosh.call_transcription.ingress.v1.rs"
     ));
 }
 include!(concat!(
@@ -131,7 +131,7 @@ fn event_route(name: &str, direction: EventRouteDirectionV1) -> CapabilityReques
 mod tests {
     #[test]
     fn event_is_target_owned_and_has_no_audio_or_path() {
-        let source = include_str!("../proto/hermes/call_transcription/ingress/v1/recording.proto");
+        let source = include_str!("../proto/makosh/call_transcription/ingress/v1/recording.proto");
         for required in [
             "consent_receipt_id",
             "target_blob_reference_id",

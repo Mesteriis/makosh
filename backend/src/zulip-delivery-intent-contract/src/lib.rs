@@ -1,15 +1,15 @@
 #![forbid(unsafe_code)]
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-zulip-delivery-intent-contract";
+pub const PACKAGE: &str = "makosh-zulip-delivery-intent-contract";
 pub const ZULIP_DELIVERY_INTENT_OWNER_ID_V1: &str = "zulip";
 pub const ZULIP_DELIVERY_INTENT_SOURCE_MODULE_ID_V1: &str =
-    "hermes-communication-delivery-intent-runtime";
-pub const ZULIP_DELIVERY_INTENT_TARGET_MODULE_ID_V1: &str = "hermes-zulip-runtime";
+    "makosh-communication-delivery-intent-runtime";
+pub const ZULIP_DELIVERY_INTENT_TARGET_MODULE_ID_V1: &str = "makosh-zulip-runtime";
 pub const ZULIP_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1: &str = "zulip.delivery-intent.v1";
 pub const ZULIP_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1: &str = "zulip.blob.v1";
 pub const ZULIP_DELIVERY_INTENT_CUSTODY_SCOPE_ID_V1: &str = "zulip.delivery-intent-body.v1";
@@ -27,7 +27,7 @@ pub const ZULIP_DELIVERY_INTENT_MAX_IN_FLIGHT_V1: u32 = 32;
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.zulip.delivery_intent.v1.rs"
+        "/makosh.zulip.delivery_intent.v1.rs"
     ));
 }
 
@@ -258,7 +258,7 @@ mod tests {
         assert_eq!(ZULIP_DELIVERY_INTENT_OWNER_ID_V1, "zulip");
         assert_eq!(
             ZULIP_DELIVERY_INTENT_TARGET_MODULE_ID_V1,
-            "hermes-zulip-runtime"
+            "makosh-zulip-runtime"
         );
         assert_eq!(
             ZULIP_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1,

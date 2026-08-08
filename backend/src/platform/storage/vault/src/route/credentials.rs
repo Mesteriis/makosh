@@ -1,7 +1,7 @@
 //! One-time issue and resolution of a Storage runtime credential lease.
 
-use hermes_storage_protocol::StorageBindingV1;
-use hermes_vault_protocol::{
+use makosh_storage_protocol::StorageBindingV1;
+use makosh_vault_protocol::{
     DEFAULT_LEASE_TTL_SECONDS, LeaseAudienceV1, LeaseIdV1, SecretClassV1, VaultActionV1,
     VaultLeaseIssueRequestV1, VaultPurposeRequestV1, VaultTransportCommandV1,
 };

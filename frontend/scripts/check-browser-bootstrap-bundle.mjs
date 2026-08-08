@@ -14,7 +14,7 @@ const required = [
   'navigator.credentials.get',
   '/browser/v1/pairing/${pairingId}/registration',
   '/browser/v1/authentication/begin',
-  '/hermes.gateway.v1.BrowserSessionService/GetStatus',
+  '/makosh.gateway.v1.BrowserSessionService/GetStatus',
   "credentials: 'same-origin'",
   'credentialStorageKey',
 ];
@@ -35,7 +35,7 @@ try {
 if (/<(?:img|link|iframe|audio|video|source)\b[^>]*(?:src|href)=/i.test(document)) {
   throw new Error('browser bootstrap must not load an external asset');
 }
-if (/authorization|x-hermes-secret|bearer\s+/i.test(document)) {
+if (/authorization|x-makosh-secret|bearer\s+/i.test(document)) {
   throw new Error('browser bootstrap must not contain a bearer or legacy credential path');
 }
 if (!/localStorage\.setItem\(credentialStorageKey/.test(document)

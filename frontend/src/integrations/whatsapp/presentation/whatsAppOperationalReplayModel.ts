@@ -1,4 +1,4 @@
-import type { WhatsAppOperationalReplayFrameV1 } from '../../../gen/hermes/whatsapp/operational/realtime/v1/client_pb'
+import type { WhatsAppOperationalReplayFrameV1 } from '../../../gen/makosh/whatsapp/operational/realtime/v1/client_pb'
 import type { WhatsAppOperationalAccount } from '../queries/whatsAppOperationalAccounts'
 import {
 	providerEventLabel,

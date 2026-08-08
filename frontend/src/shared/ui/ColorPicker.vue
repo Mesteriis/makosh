@@ -17,7 +17,7 @@ const emit = defineEmits<{
 	'update:modelValue': [value: string]
 }>()
 
-const classes = computed(() => ['hermes-color-picker', props.class])
+const classes = computed(() => ['makosh-color-picker', props.class])
 
 function updateValue(event: Event): void {
 	const target = event.target as HTMLInputElement
@@ -28,7 +28,7 @@ function updateValue(event: Event): void {
 <template>
 	<div :class="classes">
 		<input
-			class="hermes-color-picker__input"
+			class="makosh-color-picker__input"
 			:aria-label="label"
 			:disabled="disabled"
 			:id="id"
@@ -37,7 +37,7 @@ function updateValue(event: Event): void {
 			@input="updateValue"
 		/>
 		<input
-			class="hermes-native-control hermes-color-picker__value"
+			class="makosh-native-control makosh-color-picker__value"
 			:aria-label="`${label} value`"
 			:disabled="disabled"
 			:value="modelValue"

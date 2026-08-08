@@ -21,9 +21,9 @@
 - Group / Группа: `CONTRIBUTING`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,15 +55,15 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `CONTRIBUTING.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/CONTRIBUTING.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/CONTRIBUTING.md`
 - Size bytes / Размер в байтах: `1361`
 - Included characters / Включено символов: `1361`
 - Truncated / Обрезано: `no`
 
 ````markdown
-# Contributing to Hermes Hub
+# Contributing to Макошь
 
-Hermes Hub is a local-first Personal Memory System for communications,
+Макошь is a local-first Personal Memory System for communications,
 knowledge, memory, relationships, projects, documents, decisions, obligations
 and context. The project is architecture-heavy and intentionally conservative
 about privacy, provenance and safety.

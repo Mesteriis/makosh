@@ -18,20 +18,20 @@ test('Speech-to-Text contract and core are separate engine build units', async (
     policy.implementation.productionPackages.map((descriptor) => [descriptor.name, descriptor]),
   );
 
-  assert.deepEqual(packages.get('hermes-speech-to-text-api'), {
-    name: 'hermes-speech-to-text-api',
+  assert.deepEqual(packages.get('makosh-speech-to-text-api'), {
+    name: 'makosh-speech-to-text-api',
     role: 'engine',
     owner: 'speech_to_text',
     surface: 'contract',
   });
-  assert.deepEqual(packages.get('hermes-speech-to-text-core'), {
-    name: 'hermes-speech-to-text-core',
+  assert.deepEqual(packages.get('makosh-speech-to-text-core'), {
+    name: 'makosh-speech-to-text-core',
     role: 'engine',
     owner: 'speech_to_text',
     surface: 'implementation',
   });
   assert.match(apiManifest, /owner = "speech_to_text"/);
-  assert.match(apiManifest, /hermes-runtime-protocol/);
+  assert.match(apiManifest, /makosh-runtime-protocol/);
   assert.doesNotMatch(apiManifest, /communications|call-transcription|whisper|sqlx/);
   assert.match(coreManifest, /owner = "speech_to_text"/);
   assert.match(coreManifest, /\[dependencies\]\s*$/);
@@ -39,7 +39,7 @@ test('Speech-to-Text contract and core are separate engine build units', async (
 
 test('Speech-to-Text wire contract carries receipts and never private text or provider choice', async () => {
   const [proto, apiSource, validationSource, coreSource, policySource] = await Promise.all([
-    read('backend/src/speech-to-text-api/proto/hermes/speech_to_text/v1/speech_to_text.proto'),
+    read('backend/src/speech-to-text-api/proto/makosh/speech_to_text/v1/speech_to_text.proto'),
     read('backend/src/speech-to-text-api/src/lib.rs'),
     read('backend/src/speech-to-text-api/src/validation.rs'),
     read('backend/src/speech-to-text-core/src/lib.rs'),
@@ -73,13 +73,13 @@ test('Speech-to-Text wire contract carries receipts and never private text or pr
   assert.match(apiSource, /speech_to_text\.transcribe\.v1/);
   assert.match(apiSource, /speech_to_text\.provider_transcribe/);
   assert.match(validationSource, /custody_transfer_source_proof\.clear\(\)/);
-  assert.match(validationSource, /hermes\.speech-to-text\.request\.v1/);
+  assert.match(validationSource, /makosh\.speech-to-text\.request\.v1/);
   assert.match(coreSource, /RequestResultMismatch/);
   assert.match(coreSource, /InvalidConsent/);
-  assert.doesNotMatch(coreSource, /hermes_communications|hermes_call_transcription|whisper/);
+  assert.doesNotMatch(coreSource, /makosh_communications|makosh_call_transcription|whisper/);
   const policy = JSON.parse(policySource);
   assert.ok(
-    policy.dependencies.integrationEngineContractPackages.includes('hermes-speech-to-text-api'),
+    policy.dependencies.integrationEngineContractPackages.includes('makosh-speech-to-text-api'),
   );
 });
 
@@ -92,17 +92,17 @@ test('Speech-to-Text persistence is an owner-local engine unit without content o
   ]);
   const policy = JSON.parse(policySource);
   const descriptor = policy.implementation.productionPackages.find(
-    (candidate) => candidate.name === 'hermes-speech-to-text-persistence',
+    (candidate) => candidate.name === 'makosh-speech-to-text-persistence',
   );
 
   assert.deepEqual(descriptor, {
-    name: 'hermes-speech-to-text-persistence',
+    name: 'makosh-speech-to-text-persistence',
     role: 'engine',
     owner: 'speech_to_text',
     surface: 'persistence',
   });
-  assert.match(manifest, /hermes-speech-to-text-core/);
-  assert.match(manifest, /hermes-storage-protocol/);
+  assert.match(manifest, /makosh-speech-to-text-core/);
+  assert.match(manifest, /makosh-storage-protocol/);
   assert.doesNotMatch(manifest, /communications|call-transcription|whisper/);
   for (const source of [migration, repository.split('#[cfg(test)]')[0]]) {
     for (const forbidden of [
@@ -141,7 +141,7 @@ test('Speech-to-Text runtime and assembly are isolated provider-neutral engine b
   for (const manifest of [runtimeManifest, assemblyManifest]) {
     assert.match(manifest, /role = "engine"/);
     assert.match(manifest, /owner = "speech_to_text"/);
-    assert.doesNotMatch(manifest, /hermes-communications|call-transcription|whisper/);
+    assert.doesNotMatch(manifest, /makosh-communications|call-transcription|whisper/);
   }
   assert.match(runtimeAdmission, /ModuleKindV1::Engine/);
   assert.match(runtimeAdmission, /speech_to_text_provider_contract_reference_v1/);

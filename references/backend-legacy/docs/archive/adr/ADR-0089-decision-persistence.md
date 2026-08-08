@@ -13,7 +13,7 @@ Clarifies:
 
 ## Context
 
-Hermes is a Personal Memory System. It must remember not only what happened,
+Макошь is a Personal Memory System. It must remember not only what happened,
 but why a direction was chosen.
 
 Current implementation has decision-shaped data in several places:
@@ -98,7 +98,7 @@ Obligations.
 
 Positive:
 
-- Hermes can answer why a project, communication thread or workflow moved in a
+- Макошь can answer why a project, communication thread or workflow moved in a
   particular direction.
 - Decisions become evidence-backed and reviewable instead of being hidden in
   meeting text, task notes or project state.

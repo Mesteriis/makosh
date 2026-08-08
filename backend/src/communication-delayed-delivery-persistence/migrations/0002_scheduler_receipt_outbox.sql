@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communication_delayed_delivery_scheduler_receipt_outbox (
+CREATE TABLE makosh_data.communication_delayed_delivery_scheduler_receipt_outbox (
   logical_owner_id TEXT NOT NULL CHECK (
     char_length(logical_owner_id) BETWEEN 1 AND 128
   ),
@@ -24,14 +24,14 @@ CREATE TABLE hermes_data.communication_delayed_delivery_scheduler_receipt_outbox
   ),
   PRIMARY KEY (logical_owner_id, message_id),
   FOREIGN KEY (logical_owner_id, delayed_operation_id) REFERENCES
-    hermes_data.communication_delayed_delivery_operations (
+    makosh_data.communication_delayed_delivery_operations (
       logical_owner_id,
       delayed_operation_id
     )
 );
 
 CREATE INDEX communication_delayed_delivery_scheduler_receipt_pending_idx
-  ON hermes_data.communication_delayed_delivery_scheduler_receipt_outbox (
+  ON makosh_data.communication_delayed_delivery_scheduler_receipt_outbox (
     logical_owner_id,
     created_at_unix_millis,
     message_id

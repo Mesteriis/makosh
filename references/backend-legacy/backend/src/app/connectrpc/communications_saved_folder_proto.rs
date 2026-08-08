@@ -1,7 +1,7 @@
 use crate::domains::communications::folders::CommunicationFolder;
 use crate::domains::communications::saved_searches::CommunicationSavedSearch;
 use chrono::{DateTime, Utc};
-use hermes_connectrpc_contracts::hermes::communications::v1::{
+use makosh_connectrpc_contracts::makosh::communications::v1::{
     CommunicationFolder as ProtoCommunicationFolder,
     CommunicationSavedSearch as ProtoCommunicationSavedSearch,
 };

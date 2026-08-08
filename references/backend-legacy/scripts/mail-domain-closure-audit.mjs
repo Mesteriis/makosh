@@ -8,7 +8,7 @@ import process from 'node:process'
 const repoRoot = process.cwd()
 const args = new Set(process.argv.slice(2))
 const requireClosed =
-  args.has('--require-closed') || process.env.HERMES_MAIL_REQUIRE_DOMAIN_CLOSED === '1'
+  args.has('--require-closed') || process.env.MAKOSH_MAIL_REQUIRE_DOMAIN_CLOSED === '1'
 const gapAnalysisPath = 'docs/integrations/mail/gap-analysis.md'
 const supportedStatuses = new Set([
   'IMPLEMENTED',

@@ -1,6 +1,6 @@
-use hermes_hub_backend::domains::communications::messages::models::WorkflowStateCount;
-use hermes_hub_backend::domains::communications::messages::projection::project_raw_email_message;
-use hermes_hub_backend::domains::communications::messages::states::{
+use makosh_hub_backend::domains::communications::messages::models::WorkflowStateCount;
+use makosh_hub_backend::domains::communications::messages::projection::project_raw_email_message;
+use makosh_hub_backend::domains::communications::messages::states::{
     LocalMessageState, WorkflowState,
 };
 

@@ -1,10 +1,10 @@
-use hermes_communication_delivery_intent_core::CommunicationProviderProvenanceV1;
-use hermes_communication_delivery_intent_event_adapters::{
+use makosh_communication_delivery_intent_core::CommunicationProviderProvenanceV1;
+use makosh_communication_delivery_intent_event_adapters::{
     DecodedDeliveryIntentTerminalV1, DeliveryIntentBodySourceV1, DeliveryIntentCommandContextV1,
     DeliveryIntentEventAdapterErrorV1, DeliveryIntentTerminalOutcomeV1, mail, telegram, whatsapp,
     zulip,
 };
-use hermes_communication_delivery_intent_persistence::{
+use makosh_communication_delivery_intent_persistence::{
     ApplyTerminalDeliveryResultOutcomeV1, DeliveryIntentClaimV1, DeliveryIntentPersistenceErrorV1,
     DeliveryIntentStatusRecordV1, EnqueueProviderCommandOutcomeV1, TerminalDeliveryResultV1,
     TerminalDeliveryResultValueV1,

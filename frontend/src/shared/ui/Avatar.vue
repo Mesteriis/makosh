@@ -14,8 +14,8 @@ const props = withDefaults(defineProps<{
 })
 
 const rootClasses = computed(() => [
-  'hermes-avatar-root',
-  `hermes-avatar--${props.size}`,
+  'makosh-avatar-root',
+  `makosh-avatar--${props.size}`,
   props.class
 ])
 
@@ -28,8 +28,8 @@ const fallbackText = computed(() => {
 
 <template>
   <AvatarRoot :class="rootClasses">
-    <AvatarImage v-if="src" :src="src" :alt="alt" class="hermes-avatar-image" />
-    <AvatarFallback class="hermes-avatar-fallback" :delay-ms="src ? 300 : 0">
+    <AvatarImage v-if="src" :src="src" :alt="alt" class="makosh-avatar-image" />
+    <AvatarFallback class="makosh-avatar-fallback" :delay-ms="src ? 300 : 0">
       {{ fallbackText }}
     </AvatarFallback>
   </AvatarRoot>

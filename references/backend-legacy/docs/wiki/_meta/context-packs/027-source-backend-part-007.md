@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/app/handlers/calendar/health.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/health.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/health.rs`
 - Size bytes / Размер в байтах: `1183`
 - Included characters / Включено символов: `1075`
 - Truncated / Обрезано: `no`
@@ -101,7 +101,7 @@ pub(crate) async fn get_calendar_health(
 
 ### `backend/src/app/handlers/calendar/intelligence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/intelligence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/intelligence.rs`
 - Size bytes / Размер в байтах: `4882`
 - Included characters / Включено символов: `4772`
 - Truncated / Обрезано: `no`
@@ -262,7 +262,7 @@ pub(crate) async fn get_event_risks(
 
 ### `backend/src/app/handlers/calendar/meetings.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/meetings.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/meetings.rs`
 - Size bytes / Размер в байтах: `6629`
 - Included characters / Включено символов: `6281`
 - Truncated / Обрезано: `no`
@@ -486,7 +486,7 @@ pub(crate) async fn get_event_transcript(
 
 ### `backend/src/app/handlers/calendar/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/mod.rs`
 - Size bytes / Размер в байтах: `7308`
 - Included characters / Включено символов: `7308`
 - Truncated / Обрезано: `no`
@@ -658,7 +658,7 @@ use crate::application::CalendarMeetingOutcomeApplicationService;
 
 ### `backend/src/app/handlers/calendar/reminders.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/reminders.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/reminders.rs`
 - Size bytes / Размер в байтах: `2265`
 - Included characters / Включено символов: `2149`
 - Truncated / Обрезано: `no`
@@ -742,7 +742,7 @@ pub(crate) async fn post_event_reminder_toggle(
 
 ### `backend/src/app/handlers/calendar/rules.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/rules.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/rules.rs`
 - Size bytes / Размер в байтах: `2485`
 - Included characters / Включено символов: `2367`
 - Truncated / Обрезано: `no`
@@ -836,7 +836,7 @@ pub(crate) async fn delete_calendar_rule(
 
 ### `backend/src/app/handlers/calendar/scheduling.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/scheduling.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/scheduling.rs`
 - Size bytes / Размер в байтах: `4931`
 - Included characters / Включено символов: `4563`
 - Truncated / Обрезано: `no`
@@ -1003,7 +1003,7 @@ pub(crate) async fn post_smart_schedule(
 
 ### `backend/src/app/handlers/calendar/search.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/search.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/search.rs`
 - Size bytes / Размер в байтах: `718`
 - Included characters / Включено символов: `602`
 - Truncated / Обрезано: `no`
@@ -1036,7 +1036,7 @@ pub(crate) async fn get_calendar_search(
 
 ### `backend/src/app/handlers/calendar/sync.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/sync.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/sync.rs`
 - Size bytes / Размер в байтах: `4272`
 - Included characters / Включено символов: `4170`
 - Truncated / Обрезано: `no`
@@ -1175,7 +1175,7 @@ pub(crate) async fn get_event_export(
 
 ### `backend/src/app/handlers/calls/handlers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calls/handlers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calls/handlers.rs`
 - Size bytes / Размер в байтах: `2663`
 - Included characters / Включено символов: `2663`
 - Truncated / Обрезано: `no`
@@ -1268,7 +1268,7 @@ pub(crate) async fn get_call_transcript(
 
 ### `backend/src/app/handlers/calls/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calls/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calls/mod.rs`
 - Size bytes / Размер в байтах: `43`
 - Included characters / Включено символов: `43`
 - Truncated / Обрезано: `no`
@@ -1281,7 +1281,7 @@ pub(crate) use handlers::*;
 
 ### `backend/src/app/handlers/communications/account_management.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/account_management.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/account_management.rs`
 - Size bytes / Размер в байтах: `9438`
 - Included characters / Включено символов: `9438`
 - Truncated / Обрезано: `no`
@@ -1567,7 +1567,7 @@ pub(crate) async fn post_v1_email_account_sync_full_resync(
 
 ### `backend/src/app/handlers/communications/account_setup.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/account_setup.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/account_setup.rs`
 - Size bytes / Размер в байтах: `271`
 - Included characters / Включено символов: `271`
 - Truncated / Обрезано: `no`
@@ -1587,7 +1587,7 @@ pub(crate) use imap::post_imap_account_setup;
 
 ### `backend/src/app/handlers/communications/account_setup/calendar.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/account_setup/calendar.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/account_setup/calendar.rs`
 - Size bytes / Размер в байтах: `1271`
 - Included characters / Включено символов: `1271`
 - Truncated / Обрезано: `no`
@@ -1648,7 +1648,7 @@ pub(super) async fn upsert_apple_icloud_calendar_account(
 
 ### `backend/src/app/handlers/communications/account_setup/gmail_callback.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/account_setup/gmail_callback.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/account_setup/gmail_callback.rs`
 - Size bytes / Размер в байтах: `10118`
 - Included characters / Включено символов: `10118`
 - Truncated / Обрезано: `no`
@@ -1803,7 +1803,7 @@ fn gmail_oauth_callback_success_page(
     let return_link = app_return_url
         .map(|url| {
             format!(
-                r#"<p><a href="{}">Return to Hermes Hub settings</a></p>"#,
+                r#"<p><a href="{}">Return to Макошь settings</a></p>"#,
                 html_escape(url)
             )
         })
@@ -1815,7 +1815,7 @@ fn gmail_oauth_callback_success_page(
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Hermes Hub OAuth</title>
+  <title>Макошь OAuth</title>
   <style>
     body {{ margin: 0; font-family: system-ui, sans-serif; color: #182033; background: #f5f6f8; }}
     main {{ max-width: 720px; margin: 48px auto; background: #fff; border: 1px solid #d9dee7; border-radius: 8px; padding: 24px; }}
@@ -1827,7 +1827,7 @@ fn gmail_oauth_callback_success_page(
     window.setTimeout(function () {{
       try {{
         if (window.opener && !window.opener.closed) {{
-          window.opener.postMessage({{ type: 'hermes:gmail-oauth-connected' }}, '*');
+          window.opener.postMessage({{ type: 'makosh:gmail-oauth-connected' }}, '*');
         }}
       }} catch (_error) {{}}
       try {{
@@ -1845,10 +1845,10 @@ fn gmail_oauth_callback_success_page(
 <body>
   <main>
     <h1>Google mail connected</h1>
-    <p>Hermes Hub saved the Google mail account and encrypted OAuth credential locally.</p>
+    <p>Макошь saved the Google mail account and encrypted OAuth credential locally.</p>
     <p>Account</p>
     <code>{account_id}</code>
-    <p>This tab will close automatically. If it stays open, return to Hermes Hub settings.</p>
+    <p>This tab will close automatically. If it stays open, return to Макошь settings.</p>
     {return_link}
   </main>
 </body>
@@ -1869,7 +1869,7 @@ fn gmail_oauth_callback_error_page(
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Hermes Hub OAuth</title>
+  <title>Макошь OAuth</title>
   <style>
     body {{ margin: 0; font-family: system-ui, sans-serif; color: #182033; background: #f5f6f8; }}
     main {{ max-width: 720px; margin: 48px auto; background: #fff; border: 1px solid #d9dee7; border-radius: 8px; padding: 24px; }}
@@ -1880,7 +1880,7 @@ fn gmail_oauth_callback_error_page(
   <main>
     <h1>Google mail connection failed</h1>
     <p>{message}</p>
-    <p>Return to Hermes Hub and start Google mail connection again.</p>
+    <p>Return to Макошь and start Google mail connection again.</p>
   </main>
 </body>
 </html>"#
@@ -1891,10 +1891,10 @@ fn gmail_oauth_callback_error_page(
 fn gmail_oauth_callback_error_message(error: &EmailAccountSetupError) -> &'static str {
     match error {
         EmailAccountSetupError::HostVault(HostVaultError::Locked) => {
-            "Hermes Secure Vault is locked. Unlock the vault in Hermes Hub, then start Google mail connection again."
+            "Макошь Secure Vault is locked. Unlock the vault in Макошь, then start Google mail connection again."
         }
         EmailAccountSetupError::HostVault(HostVaultError::Uninitialized) => {
-            "Hermes Secure Vault is not initialized. Create the vault in Hermes Hub, then start Google mail connection again."
+            "Макошь Secure Vault is not initialized. Create the vault in Макошь, then start Google mail connection again."
         }
         EmailAccountSetupError::InvalidRequest { field, .. } if *field == "authorization_code" => {
             "Missing authorization code. Start the mail connection again."
@@ -1924,7 +1924,7 @@ fn gmail_oauth_callback_api_error_message(error: &ApiError) -> &'static str {
 
 ### `backend/src/app/handlers/communications/account_setup/gmail_oauth.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/account_setup/gmail_oauth.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/account_setup/gmail_oauth.rs`
 - Size bytes / Размер в байтах: `2845`
 - Included characters / Включено символов: `2845`
 - Truncated / Обрезано: `no`
@@ -2009,7 +2009,7 @@ pub(crate) async fn post_gmail_oauth_complete(
 
 ### `backend/src/app/handlers/communications/account_setup/helpers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/account_setup/helpers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/account_setup/helpers.rs`
 - Size bytes / Размер в байтах: `421`
 - Included characters / Включено символов: `421`
 - Truncated / Обрезано: `no`
@@ -2031,7 +2031,7 @@ pub(super) fn trimmed_optional(value: Option<String>) -> Option<String> {
 
 ### `backend/src/app/handlers/communications/account_setup/imap.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/account_setup/imap.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/account_setup/imap.rs`
 - Size bytes / Размер в байтах: `1527`
 - Included characters / Включено символов: `1527`
 - Truncated / Обрезано: `no`
@@ -2079,7 +2079,7 @@ pub(crate) async fn post_imap_account_setup(
 
 ### `backend/src/app/handlers/communications/account_setup/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/account_setup/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/account_setup/models.rs`
 - Size bytes / Размер в байтах: `6875`
 - Included characters / Включено символов: `6875`
 - Truncated / Обрезано: `no`
@@ -2111,7 +2111,7 @@ impl GmailOAuthStartApiRequest {
             .or_else(|| config.google_oauth_client_id().map(str::to_owned))
             .ok_or(EmailAccountSetupError::InvalidRequest {
                 field: "client_id",
-                message: "must be configured as request client_id or HERMES_GOOGLE_OAUTH_CLIENT_ID",
+                message: "must be configured as request client_id or MAKOSH_GOOGLE_OAUTH_CLIENT_ID",
             })?;
         let mut request = GmailOAuthSetupRequest::new(
             self.account_id,
@@ -2293,7 +2293,7 @@ impl From<crate::integrations::mail::accounts::EmailAccountSetupResult>
 
 ### `backend/src/app/handlers/communications/account_support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/account_support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/account_support.rs`
 - Size bytes / Размер в байтах: `8838`
 - Included characters / Включено символов: `8838`
 - Truncated / Обрезано: `no`
@@ -2580,7 +2580,7 @@ pub(super) fn mail_sync_api_error(error: MailSyncError) -> ApiError {
 
 ### `backend/src/app/handlers/communications/communication_messages.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/communication_messages.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/communication_messages.rs`
 - Size bytes / Размер в байтах: `5268`
 - Included characters / Включено символов: `5268`
 - Truncated / Обрезано: `no`
@@ -2748,7 +2748,7 @@ fn message_metadata_with_raw_headers(
 
 ### `backend/src/app/handlers/communications/communication_queries.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/communication_queries.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/communication_queries.rs`
 - Size bytes / Размер в байтах: `431`
 - Included characters / Включено символов: `431`
 - Truncated / Обрезано: `no`
@@ -2779,7 +2779,7 @@ pub(crate) use threads::*;
 
 ### `backend/src/app/handlers/communications/communication_queries/attachments.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/communication_queries/attachments.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/communication_queries/attachments.rs`
 - Size bytes / Размер в байтах: `18539`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3125,7 +3125,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/app/handlers/communications/communication_queries/drafts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/communication_queries/drafts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/communication_queries/drafts.rs`
 - Size bytes / Размер в байтах: `4184`
 - Included characters / Включено символов: `4184`
 - Truncated / Обрезано: `no`
@@ -3267,7 +3267,7 @@ pub(crate) async fn delete_v1_draft(
 
 ### `backend/src/app/handlers/communications/communication_queries/folders.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/communication_queries/folders.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/communication_queries/folders.rs`
 - Size bytes / Размер в байтах: `4513`
 - Included characters / Включено символов: `4513`
 - Truncated / Обрезано: `no`

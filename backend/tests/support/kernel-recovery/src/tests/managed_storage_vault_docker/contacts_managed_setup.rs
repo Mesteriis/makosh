@@ -2,15 +2,15 @@
 
 use super::*;
 
-use hermes_contacts_command_api::{CONTACTS_MODULE_ID_V1, CONTACTS_OWNER_ID_V1};
-use hermes_contacts_persistence::{
+use makosh_contacts_command_api::{CONTACTS_MODULE_ID_V1, CONTACTS_OWNER_ID_V1};
+use makosh_contacts_persistence::{
     CONTACTS_STORAGE_BUNDLE_REVISION_V1, contacts_storage_bundle_v1,
 };
-use hermes_contacts_runtime::{
+use makosh_contacts_runtime::{
     CONTACTS_STORAGE_CAPABILITY_ID_V1, contacts_module_descriptor_v1,
     contacts_settings_schema_bytes_v1,
 };
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
 
 const CONTACTS_RELEASE_ARTIFACT_ID_V1: &str = "contacts.runtime.v1";
 pub(super) const CONTACTS_LOGICAL_HUMAN_OWNER_ID_V1: &str = "owner-1";
@@ -66,7 +66,7 @@ pub(super) fn admit_contacts_runtime_v1(store: &SqliteControlStore) -> AdmittedC
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             CONTACTS_RELEASE_ARTIFACT_ID_V1,
             Sha256::digest(std::fs::read(contacts_binary()).expect("Contacts runtime binary"))
                 .into(),
@@ -237,7 +237,7 @@ fn start_reserved_contacts_runtime_v1(
 fn contacts_storage_binding_v1(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(registration_id, CONTACTS_STORAGE_CAPABILITY_ID_V1)
         .expect("read Contacts Storage binding")
@@ -246,5 +246,5 @@ fn contacts_storage_binding_v1(
 }
 
 fn contacts_binary() -> PathBuf {
-    binary("HERMES_CONTACTS_RUNTIME_BIN")
+    binary("MAKOSH_CONTACTS_RUNTIME_BIN")
 }

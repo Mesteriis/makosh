@@ -3,9 +3,9 @@ use serde_json::{Value, json};
 use sqlx::postgres::PgPool;
 use thiserror::Error;
 
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::store::ObservationStore;
 
 use super::api::{Organization, OrganizationError, OrganizationStore, OrganizationUpdate};
 use super::core::aliases::{OrgAliasStore, OrganizationAlias};
@@ -310,7 +310,7 @@ impl OrganizationCommandService {
         payload: Value,
         source_ref: String,
         provenance: Value,
-    ) -> Result<hermes_observations_api::models::Observation, OrganizationCommandServiceError> {
+    ) -> Result<makosh_observations_api::models::Observation, OrganizationCommandServiceError> {
         Ok(ObservationStore::new(self.pool.clone())
             .capture(
                 &NewObservation::new(

@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/attachment_text_extraction/v1/text_extraction.proto"],
+            &["proto/makosh/attachment_text_extraction/v1/text_extraction.proto"],
             &["proto"],
         )
         .expect("Attachment text extraction protocol must compile");

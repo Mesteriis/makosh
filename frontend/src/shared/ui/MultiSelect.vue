@@ -28,7 +28,7 @@ const emit = defineEmits<{
 	'update:modelValue': [value: string[]]
 }>()
 
-const classes = computed(() => ['hermes-multi-select', props.class])
+const classes = computed(() => ['makosh-multi-select', props.class])
 const selectedLabels = computed(() => props.options
 	.filter((option) => props.modelValue.includes(option.value))
 	.map((option) => option.label))
@@ -42,7 +42,7 @@ function handleChange(event: Event): void {
 <template>
 	<div :class="classes">
 		<select
-			class="hermes-native-control hermes-multi-select__control"
+			class="makosh-native-control makosh-multi-select__control"
 			:aria-label="ariaLabel ?? label"
 			:disabled="disabled"
 			:id="id"
@@ -60,8 +60,8 @@ function handleChange(event: Event): void {
 				{{ option.label }}
 			</option>
 		</select>
-		<div v-if="selectedLabels.length" class="hermes-multi-select__chips" aria-live="polite">
-			<span v-for="labelText in selectedLabels" :key="labelText" class="hermes-multi-select__chip">
+		<div v-if="selectedLabels.length" class="makosh-multi-select__chips" aria-live="polite">
+			<span v-for="labelText in selectedLabels" :key="labelText" class="makosh-multi-select__chip">
 				{{ labelText }}
 			</span>
 		</div>

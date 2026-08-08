@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.attachment_preview_evidence_replay_operations (
+CREATE TABLE makosh_data.attachment_preview_evidence_replay_operations (
     operation_id BYTEA PRIMARY KEY CHECK (octet_length(operation_id) = 16),
     attachment_anchor_id BYTEA NOT NULL CHECK (octet_length(attachment_anchor_id) = 16),
     logical_owner_id TEXT NOT NULL CHECK (length(logical_owner_id) BETWEEN 1 AND 128),
@@ -15,9 +15,9 @@ CREATE TABLE hermes_data.attachment_preview_evidence_replay_operations (
     )
 );
 
-CREATE TABLE hermes_data.attachment_preview_evidence_replay_producers (
+CREATE TABLE makosh_data.attachment_preview_evidence_replay_producers (
     operation_id BYTEA NOT NULL REFERENCES
-        hermes_data.attachment_preview_evidence_replay_operations (operation_id),
+        makosh_data.attachment_preview_evidence_replay_operations (operation_id),
     producer SMALLINT NOT NULL CHECK (producer BETWEEN 1 AND 2),
     producer_registration_id TEXT NOT NULL CHECK (
         length(producer_registration_id) BETWEEN 1 AND 128
@@ -29,7 +29,7 @@ CREATE TABLE hermes_data.attachment_preview_evidence_replay_producers (
     PRIMARY KEY (operation_id, producer)
 );
 
-CREATE TABLE hermes_data.attachment_preview_evidence_replay_message_selection (
+CREATE TABLE makosh_data.attachment_preview_evidence_replay_message_selection (
     operation_id BYTEA NOT NULL,
     producer SMALLINT NOT NULL,
     ordinal SMALLINT NOT NULL CHECK (ordinal BETWEEN 0 AND 15),
@@ -37,10 +37,10 @@ CREATE TABLE hermes_data.attachment_preview_evidence_replay_message_selection (
     PRIMARY KEY (operation_id, producer, ordinal),
     UNIQUE (operation_id, producer, original_message_id),
     FOREIGN KEY (operation_id, producer) REFERENCES
-        hermes_data.attachment_preview_evidence_replay_producers (operation_id, producer)
+        makosh_data.attachment_preview_evidence_replay_producers (operation_id, producer)
 );
 
-CREATE TABLE hermes_data.attachment_preview_evidence_replay_command_outbox (
+CREATE TABLE makosh_data.attachment_preview_evidence_replay_command_outbox (
     message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
     envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
     exact_envelope_bytes BYTEA NOT NULL CHECK (octet_length(exact_envelope_bytes) > 0),
@@ -52,17 +52,17 @@ CREATE TABLE hermes_data.attachment_preview_evidence_replay_command_outbox (
     ),
     UNIQUE (operation_id, producer),
     FOREIGN KEY (operation_id, producer) REFERENCES
-        hermes_data.attachment_preview_evidence_replay_producers (operation_id, producer)
+        makosh_data.attachment_preview_evidence_replay_producers (operation_id, producer)
 );
 
 CREATE INDEX attachment_preview_evidence_replay_command_pending_idx
-ON hermes_data.attachment_preview_evidence_replay_command_outbox (
+ON makosh_data.attachment_preview_evidence_replay_command_outbox (
     created_at_unix_seconds,
     message_id
 )
 WHERE published_at_unix_seconds IS NULL;
 
-CREATE TABLE hermes_data.attachment_preview_evidence_replay_result_inbox (
+CREATE TABLE makosh_data.attachment_preview_evidence_replay_result_inbox (
     message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
     envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
     operation_id BYTEA NOT NULL,
@@ -70,5 +70,5 @@ CREATE TABLE hermes_data.attachment_preview_evidence_replay_result_inbox (
     accepted_at_unix_seconds BIGINT NOT NULL CHECK (accepted_at_unix_seconds > 0),
     UNIQUE (operation_id, producer),
     FOREIGN KEY (operation_id, producer) REFERENCES
-        hermes_data.attachment_preview_evidence_replay_producers (operation_id, producer)
+        makosh_data.attachment_preview_evidence_replay_producers (operation_id, producer)
 );

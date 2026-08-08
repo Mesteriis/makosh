@@ -5,8 +5,8 @@ use std::io::Read;
 use std::os::unix::fs::MetadataExt;
 use std::path::Path;
 
-use hermes_kernel_control_store::{BundledManagedLaunchBinding, PlatformManagedProcessBinding};
-use hermes_runtime_protocol::v1::{ManagedRuntimeArtifactBindingV1, RuntimeArtifactUseV1};
+use makosh_kernel_control_store::{BundledManagedLaunchBinding, PlatformManagedProcessBinding};
+use makosh_runtime_protocol::v1::{ManagedRuntimeArtifactBindingV1, RuntimeArtifactUseV1};
 
 use crate::distribution::bundle_verifier::{self, VerifiedDistributionBundle};
 use crate::distribution::runtime_dependencies;
@@ -249,7 +249,7 @@ pub fn verify_selected_installed_bundle(
 pub fn verify_selected_installed_bundle_artifact_kinds(
     kernel_executable: &Path,
     target_triple: &str,
-    artifact_kinds: &[hermes_runtime_protocol::v1::DistributionArtifactKindV1],
+    artifact_kinds: &[makosh_runtime_protocol::v1::DistributionArtifactKindV1],
 ) -> Result<VerifiedDistributionBundle, String> {
     let resources = release_resources::discover_from_executable(kernel_executable)?;
     let signed_manifest_bytes = read_stable_manifest(resources.signed_manifest_path())?;
@@ -534,7 +534,7 @@ mod tests {
     #[test]
     fn runtime_artifact_cleanup_removes_runtime_created_work_tree() {
         let root = std::env::temp_dir().join(format!(
-            "hermes-native-runtime-cleanup-{}-{}",
+            "makosh-native-runtime-cleanup-{}-{}",
             std::process::id(),
             NEXT_ID.fetch_add(1, Ordering::Relaxed)
         ));

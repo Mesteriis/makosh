@@ -1,13 +1,13 @@
 //! Process-local owner authorization using the baseline file signer.
 
-use hermes_kernel_control_store::{HealthRecoveryStore, InitialOwnerIdentity, OwnerIdentityStore};
-use hermes_kernel_control_store_sqlite::StoreError;
+use makosh_kernel_control_store::{HealthRecoveryStore, InitialOwnerIdentity, OwnerIdentityStore};
+use makosh_kernel_control_store_sqlite::StoreError;
 use p256::ecdsa::signature::Verifier;
 use p256::ecdsa::{Signature, VerifyingKey};
 
 use crate::identity::device::signer::{DeviceSigner, FileDeviceSigner};
 
-const AUTHORIZATION_DOMAIN: &[u8] = b"hermes.file-owner-authorization.v1\0";
+const AUTHORIZATION_DOMAIN: &[u8] = b"makosh.file-owner-authorization.v1\0";
 
 pub fn authorize<S>(
     data_dir: &std::path::Path,

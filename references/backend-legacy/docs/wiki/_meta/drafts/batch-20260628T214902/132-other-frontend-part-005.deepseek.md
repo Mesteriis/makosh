@@ -1,6 +1,6 @@
 ### Summary / Резюме
 
-Создаётся новая страница русской Obsidian-вики `components/frontend.md`, которая описывает компонентную архитектуру фронтенда Hermes Hub. На основе предоставленных исходных файлов документируются компоненты трёх доменов — `agents`, `calendar` и `communications` — включая их основные страницы, панели, сетки, списки и формы. Для каждого компонента фиксируется назначение, ключевые props/emits, используемые хранилища и запросы, а также видимые в коде элементы интерфейса. Описание строго опирается на встроенный исходный код без внешних предположений.
+Создаётся новая страница русской Obsidian-вики `components/frontend.md`, которая описывает компонентную архитектуру фронтенда Макошь. На основе предоставленных исходных файлов документируются компоненты трёх доменов — `agents`, `calendar` и `communications` — включая их основные страницы, панели, сетки, списки и формы. Для каждого компонента фиксируется назначение, ключевые props/emits, используемые хранилища и запросы, а также видимые в коде элементы интерфейса. Описание строго опирается на встроенный исходный код без внешних предположений.
 
 ---
 
@@ -13,7 +13,7 @@
 
 ## Общая архитектура
 
-Фронтенд Hermes Hub построен на **Vue 3** с **TypeScript** и использует:
+Фронтенд Макошь построен на **Vue 3** с **TypeScript** и использует:
 - `@tanstack/vue-query` — серверные запросы и кэширование
 - `@tanstack/vue-virtual` — виртуализация списков и ленты папок
 - `vee-validate` — валидация форм
@@ -188,7 +188,7 @@ Props: `calendarSources: CalendarSource[]`, `calendarAccounts: CalendarAccount[]
 **Файл:** `frontend/src/domains/communications/components/CommunicationsActionBar.vue`
 
 Верхняя панель действий. Содержит:
-- `<Teleport to="#hermes-topbar-slot">` для встраивания `CommunicationsTopbarSlot`.
+- `<Teleport to="#makosh-topbar-slot">` для встраивания `CommunicationsTopbarSlot`.
 - Строку статуса синхронизации (syncStatusMessage, syncError) с кнопкой закрытия.
 - `MailSyncSettingsStrip` — настройки синхронизации.
 - `HealthStrip` — здоровье ящика.
@@ -408,7 +408,7 @@ Props: `detail: CommunicationMessageDetailResponse | null`, `inspectorMode: Insp
 | `frontend/src/domains/communications/components/CommunicationList.vue` | Виртуализированный список, клавиатурная навигация (Ctrl+A, Esc, Space, Shift+arrows), автоподгрузка, скролл к выделенному. |
 | `frontend/src/domains/communications/components/CommunicationListItem.vue` | Элемент списка: чекбокс, иконка канала, отправитель, тема, важность, превью, вложения; drag‑drop payload. |
 | `frontend/src/domains/communications/components/CommunicationViewer.vue` | Заглушка пустого состояния, хедер с действиями, AI State панель с кнопками перехода, вкладки (Message, Attachments, Headers, Related, Timeline). |
-| `frontend/src/domains/communications/components/CommunicationsActionBar.vue` | Teleport в #hermes-topbar-slot, строка синхронизации, стрипы настроек/здоровья/ресурсов/черновиков, тосты (статус, экспорт, ошибка, глобальная ошибка). |
+| `frontend/src/domains/communications/components/CommunicationsActionBar.vue` | Teleport в #makosh-topbar-slot, строка синхронизации, стрипы настроек/здоровья/ресурсов/черновиков, тосты (статус, экспорт, ошибка, глобальная ошибка). |
 | `frontend/src/domains/communications/components/CommunicationsCallsPanel.vue` (обрезан) | Режимы calls/meetings, список звонков, детали метаданных, участники, записи, транскрипт. |
 | `frontend/src/domains/communications/components/CommunicationsContextInspector.vue` | Профиль отправителя, селектор режимов (Context/Contact/Organization), Summary, Metadata, Attachments count. |
 

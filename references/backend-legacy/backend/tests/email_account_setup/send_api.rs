@@ -1,15 +1,15 @@
 use axum::http::StatusCode;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 use serde_json::json;
 use sqlx::Row;
 use tempfile::tempdir;
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::storage::database::Database;
 
 use super::support::{
     LOCAL_API_TOKEN, MockSmtpServer, json_body, json_request_with_token_and_actor,
@@ -27,18 +27,18 @@ async fn imap_send_api_queues_outbox_without_direct_smtp_against_postgres() {
     let database = Database::connect(Some(&database_url))
         .await
         .expect("database connection");
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
     .with_test_pairs([
-        ("HERMES_DEV_MODE", "true"),
+        ("MAKOSH_DEV_MODE", "true"),
         (
-            "HERMES_VAULT_HOME",
+            "MAKOSH_VAULT_HOME",
             vault_home.to_str().expect("vault path"),
         ),
         (
-            "HERMES_DEV_KEY_PATH",
+            "MAKOSH_DEV_KEY_PATH",
             dev_key_path.to_str().expect("dev key path"),
         ),
     ])
@@ -71,7 +71,7 @@ async fn imap_send_api_queues_outbox_without_direct_smtp_against_postgres() {
                 "smtp_username": "sender@example.com"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("setup response");
@@ -93,12 +93,12 @@ async fn imap_send_api_queues_outbox_without_direct_smtp_against_postgres() {
                 "to": ["recipient@example.com"],
                 "cc": ["copy@example.com"],
                 "subject": "SMTP send test",
-                "body_text": "Message body from Hermes test.",
+                "body_text": "Message body from Макошь test.",
                 "draft_id": "draft-local-only",
                 "confirmed_provider_write": true
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("send response");
@@ -174,18 +174,18 @@ async fn gmail_send_api_queues_outbox_without_direct_gmail_client_against_postgr
         .await
         .expect("database connection");
     let pool = database.pool().expect("configured pool").clone();
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
     .with_test_pairs([
-        ("HERMES_DEV_MODE", "true"),
+        ("MAKOSH_DEV_MODE", "true"),
         (
-            "HERMES_VAULT_HOME",
+            "MAKOSH_VAULT_HOME",
             vault_home.to_str().expect("vault path"),
         ),
         (
-            "HERMES_DEV_KEY_PATH",
+            "MAKOSH_DEV_KEY_PATH",
             dev_key_path.to_str().expect("dev key path"),
         ),
     ])
@@ -221,7 +221,7 @@ async fn gmail_send_api_queues_outbox_without_direct_gmail_client_against_postgr
                 "confirmed_provider_write": true
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("send response");
@@ -243,18 +243,18 @@ async fn imap_send_api_queues_without_smtp_password_binding_against_postgres() {
         .await
         .expect("database connection");
     let pool = database.pool().expect("configured pool").clone();
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
     .with_test_pairs([
-        ("HERMES_DEV_MODE", "true"),
+        ("MAKOSH_DEV_MODE", "true"),
         (
-            "HERMES_VAULT_HOME",
+            "MAKOSH_VAULT_HOME",
             vault_home.to_str().expect("vault path"),
         ),
         (
-            "HERMES_DEV_KEY_PATH",
+            "MAKOSH_DEV_KEY_PATH",
             dev_key_path.to_str().expect("dev key path"),
         ),
     ])
@@ -287,7 +287,7 @@ async fn imap_send_api_queues_without_smtp_password_binding_against_postgres() {
                 "smtp_username": "sender@example.com"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("setup response");
@@ -312,7 +312,7 @@ async fn imap_send_api_queues_without_smtp_password_binding_against_postgres() {
                 "confirmed_provider_write": true
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("send response");
@@ -340,18 +340,18 @@ async fn imap_send_api_does_not_send_when_audit_record_fails_against_postgres() 
         .await
         .expect("database connection");
     let pool = database.pool().expect("configured pool").clone();
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
     .with_test_pairs([
-        ("HERMES_DEV_MODE", "true"),
+        ("MAKOSH_DEV_MODE", "true"),
         (
-            "HERMES_VAULT_HOME",
+            "MAKOSH_VAULT_HOME",
             vault_home.to_str().expect("vault path"),
         ),
         (
-            "HERMES_DEV_KEY_PATH",
+            "MAKOSH_DEV_KEY_PATH",
             dev_key_path.to_str().expect("dev key path"),
         ),
     ])
@@ -384,7 +384,7 @@ async fn imap_send_api_does_not_send_when_audit_record_fails_against_postgres() 
                 "smtp_username": "sender@example.com"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("setup response");
@@ -406,7 +406,7 @@ async fn imap_send_api_does_not_send_when_audit_record_fails_against_postgres() 
                 "confirmed_provider_write": true
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("send response");

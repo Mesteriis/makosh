@@ -25,7 +25,7 @@ generated_by: code-wiki-ru
 ```markdown
 # Конфигурация
 
-Страница формируется на основе анализа исходных файлов workspace `hermes-hub`.
+Страница формируется на основе анализа исходных файлов workspace `makosh`.
 Описанные ниже параметры относятся только к тем крейтам, чьи источники были встроены в контекст.
 Отсутствие сведений о других крейтах означает, что они не были предоставлены в данном чанке.
 
@@ -53,7 +53,7 @@ generated_by: code-wiki-ru
 | `async-nats` | `0.49.1` | — |
 | `axum` | `0.8` | — |
 | `chrono` | `0.4` | `clock`, `serde` |
-| `hermes-hub-backend` | путь `../../backend` | `test-support` |
+| `makosh-backend` | путь `../../backend` | `test-support` |
 | `serde` | `1` | `derive` |
 | `serde_json` | `1` | — |
 | `sha2` | `0.10` | — |
@@ -69,7 +69,7 @@ generated_by: code-wiki-ru
 
 ### Примечания
 
-- Зависимость `hermes-hub-backend` указывает локальный путь `../../backend` и активирует фичу `test-support`.
+- Зависимость `makosh-backend` указывает локальный путь `../../backend` и активирует фичу `test-support`.
 - Крейт содержит зависимость `testcontainers` (0.27). Требования к инфраструктуре (наличие Docker или иного контейнерного рантайма) из `Cargo.toml` не следуют; они не подтверждены данным контекстом.
 ```
 
@@ -77,7 +77,7 @@ generated_by: code-wiki-ru
 
 | Файл | Покрытые факты |
 |------|----------------|
-| `crates/testkit/Cargo.toml` | Имя крейта `testkit`, версия `0.1.0`, редакция `2024`, минимальный Rust `1.85`, `publish = false`, лицензия `MIT`; все объявленные зависимости с версиями, путями и фичами (async-nats 0.49.1, axum 0.8, chrono 0.4 с clock+serde, hermes-hub-backend с test-support, serde 1 с derive, serde_json 1, sha2 0.10, sqlx 0.8 с chrono+json+postgres+runtime-tokio-rustls, testcontainers 0.27, tokio 1 с fs+macros+net+rt-multi-thread+sync, tower 0.5 с util, uuid 1 с v4, tempfile 3.27) |
+| `crates/testkit/Cargo.toml` | Имя крейта `testkit`, версия `0.1.0`, редакция `2024`, минимальный Rust `1.85`, `publish = false`, лицензия `MIT`; все объявленные зависимости с версиями, путями и фичами (async-nats 0.49.1, axum 0.8, chrono 0.4 с clock+serde, makosh-backend с test-support, serde 1 с derive, serde_json 1, sha2 0.10, sqlx 0.8 с chrono+json+postgres+runtime-tokio-rustls, testcontainers 0.27, tokio 1 с fs+macros+net+rt-multi-thread+sync, tower 0.5 с util, uuid 1 с v4, tempfile 3.27) |
 
 ## Исходные файлы
 

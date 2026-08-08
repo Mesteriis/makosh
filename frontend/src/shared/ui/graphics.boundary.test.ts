@@ -11,7 +11,7 @@ const graphicComponents = [
 	'CandlestickChart'
 ]
 
-describe('Hermes UI graphics component contracts', () => {
+describe('Макошь UI graphics component contracts', () => {
 	it('keeps graphics components documented and exported through the UI kit', () => {
 		const uiRoot = fileURLToPath(new URL('.', import.meta.url))
 		const barrel = readFileSync(join(uiRoot, 'index.ts'), 'utf8')

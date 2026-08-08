@@ -2,8 +2,8 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use crate::identity::browser_gateway::system_status::client_system_status;
 use crate::runtime::lifecycle::supervisor::ManagedRuntimeSupervisor;
@@ -56,8 +56,8 @@ mod tests {
     use std::sync::atomic::AtomicBool;
     use std::time::{SystemTime, UNIX_EPOCH};
 
-    use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-    use hermes_kernel_control_store_sqlite::SqliteControlStore;
+    use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+    use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
     use crate::runtime::lifecycle::supervisor::ManagedRuntimeSupervisor;
 
@@ -66,7 +66,7 @@ mod tests {
     #[test]
     fn admitted_owner_receives_one_initial_snapshot_and_no_unchanged_duplicate() {
         let root = std::env::temp_dir().join(format!(
-            "hermes-system-status-realtime-{}-{}",
+            "makosh-system-status-realtime-{}-{}",
             std::process::id(),
             SystemTime::now()
                 .duration_since(UNIX_EPOCH)

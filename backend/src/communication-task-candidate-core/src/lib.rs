@@ -21,7 +21,7 @@ pub use model::{
     validate_communication_task_candidate_draft_v1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-task-candidate-core";
+pub const PACKAGE: &str = "makosh-communication-task-candidate-core";
 pub const COMMUNICATION_TASK_SOURCE_MAX_BYTES_V1: usize = 256 * 1024;
 pub const COMMUNICATION_TASK_MAX_CANDIDATES_V1: usize = 16;
 pub const COMMUNICATION_TASK_MAX_TITLE_CHARS_V1: usize = 240;

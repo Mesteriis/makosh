@@ -100,7 +100,7 @@ test('delayed delivery admits exact due commands and durable Blob cleanup as an 
     ),
     readFile(
       new URL(
-        'src/communication-delayed-delivery-api/proto/hermes/communication_delayed_delivery/v1/delivery.proto',
+        'src/communication-delayed-delivery-api/proto/makosh/communication_delayed_delivery/v1/delivery.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -586,7 +586,7 @@ test('delayed delivery admits exact due commands and durable Blob cleanup as an 
   assert.match(assemblyMain, /--runtime/);
   assert.match(
     developmentReleaseScript,
-    /--package hermes-communication-delayed-delivery-assembly/,
+    /--package makosh-communication-delayed-delivery-assembly/,
   );
   assert.match(
     developmentReleaseScript,
@@ -594,11 +594,11 @@ test('delayed delivery admits exact due commands and durable Blob cleanup as an 
   );
   assert.match(
     conformanceManifest,
-    /name = "hermes-communication-delayed-delivery-testkit"/,
+    /name = "makosh-communication-delayed-delivery-testkit"/,
   );
   assert.match(
     conformanceManifest,
-    /hermes-communication-delayed-delivery-persistence[\s\S]*features = \["conformance-test-support"\]/,
+    /makosh-communication-delayed-delivery-persistence[\s\S]*features = \["conformance-test-support"\]/,
   );
   assert.match(conformanceTest, /durable_lifecycle_survives_restart/);
   assert.match(conformanceTest, /ClaimDueExecutionOutcomeV1::Duplicate/);
@@ -608,15 +608,15 @@ test('delayed delivery admits exact due commands and durable Blob cleanup as an 
   assert.match(conformanceTest, /DeliveryCancelled/);
   assert.match(
     authenticatedStorageRunner,
-    /HERMES_COMMUNICATION_DELAYED_DELIVERY_POSTGRES_TEST_FILTER/,
+    /MAKOSH_COMMUNICATION_DELAYED_DELIVERY_POSTGRES_TEST_FILTER/,
   );
   assert.match(
     authenticatedStorageRunner,
-    /hermes-communication-delayed-delivery-testkit/,
+    /makosh-communication-delayed-delivery-testkit/,
   );
   assert.match(
     authenticatedStorageRunner,
-    /HERMES_COMMUNICATION_DELAYED_DELIVERY_RUNTIME_BIN/,
+    /MAKOSH_COMMUNICATION_DELAYED_DELIVERY_RUNTIME_BIN/,
   );
   assert.match(
     authenticatedStorageRunner,

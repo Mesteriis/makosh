@@ -13,7 +13,7 @@ pub use model::{
     knowledge_note_creation_fingerprint_v1, validate_verified_knowledge_note_v1,
 };
 
-pub const PACKAGE: &str = "hermes-knowledge-core";
+pub const PACKAGE: &str = "makosh-knowledge-core";
 pub const STABLE_ID_BYTES_V1: usize = 16;
 pub const DIGEST_BYTES_V1: usize = 32;
 pub const MAX_LOGICAL_OWNER_ID_BYTES_V1: usize = 128;

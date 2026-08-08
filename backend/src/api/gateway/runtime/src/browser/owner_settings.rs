@@ -4,15 +4,15 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use bytes::Bytes;
-use hermes_gateway_protocol::v1::{
-    CommitOwnerModuleSettingsRequestV1, CommitOwnerModuleSettingsResponseV1,
-    PrepareOwnerModuleSettingsRequestV1, PrepareOwnerModuleSettingsResponseV1,
-};
-use hermes_gateway_session_contract::BrowserAuthenticationAuthority;
 use http_body_util::{BodyExt, Limited};
 use hyper::body::Body;
 use hyper::header::{CACHE_CONTROL, CONTENT_TYPE, COOKIE, HeaderName, ORIGIN};
 use hyper::{Method, Request, Response, StatusCode};
+use makosh_gateway_protocol::v1::{
+    CommitOwnerModuleSettingsRequestV1, CommitOwnerModuleSettingsResponseV1,
+    PrepareOwnerModuleSettingsRequestV1, PrepareOwnerModuleSettingsResponseV1,
+};
+use makosh_gateway_session_contract::BrowserAuthenticationAuthority;
 use prost::Message;
 use tokio::task;
 use tokio::time::{Instant, timeout_at};
@@ -21,9 +21,9 @@ use super::owner_principal::OwnerBrowserPrincipalV1;
 use crate::{GatewayHttpResponse, SharedBrowserGatewaySessionService, full_gateway_body};
 
 pub const OWNER_MODULE_SETTINGS_PREPARE_PATH: &str =
-    "/hermes.gateway.v1.OwnerModuleSettingsService/Prepare";
+    "/makosh.gateway.v1.OwnerModuleSettingsService/Prepare";
 pub const OWNER_MODULE_SETTINGS_COMMIT_PATH: &str =
-    "/hermes.gateway.v1.OwnerModuleSettingsService/Commit";
+    "/makosh.gateway.v1.OwnerModuleSettingsService/Commit";
 
 const MAX_REQUEST_BYTES: usize = 128 * 1024;
 const MAX_REQUEST_DEADLINE: Duration = Duration::from_secs(60);

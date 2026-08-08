@@ -17,7 +17,7 @@
 
 `repo-state.sh` — Bash-скрипт, оценивающий **полное состояние рабочего дерева** относительно заданного коммита-базиса. Он применяется в финальном аудите и пофазовых проверках чистоты, чтобы гарантировать, что ни одно изменение не осталось незамеченным, даже если автономный запуск `supergoal` не делал коммитов.
 
-**Путь в репозитории**: `.supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-state.sh`
+**Путь в репозитории**: `.supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-state.sh`
 
 ### Проблема, которую решает скрипт
 
@@ -89,7 +89,7 @@ repo-state.sh added-lines   <baseline>          # все новые строки
 
 ### Source coverage / Покрытие источников
 
-**Файл:** `.supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-state.sh` (6011 символов, полностью включён).
+**Файл:** `.supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-state.sh` (6011 символов, полностью включён).
 
 Факты, перенесённые на wiki-страницу:
 

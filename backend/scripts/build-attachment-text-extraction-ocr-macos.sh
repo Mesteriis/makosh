@@ -90,7 +90,7 @@ if [[ "$installed_xcode_version" != "$XCODE_VERSION" \
   exit 1
 fi
 
-scratch_directory="$(mktemp -d "${TMPDIR:-/tmp}/hermes-ocr-build.XXXXXXXX")"
+scratch_directory="$(mktemp -d "${TMPDIR:-/tmp}/makosh-ocr-build.XXXXXXXX")"
 trap 'rm -rf -- "$scratch_directory"' EXIT
 source_directory="${scratch_directory}/sources"
 mkdir "$source_directory"
@@ -159,7 +159,7 @@ configure() {
   local mapped_c_flags
   shift 2
   isolated_build_root="$(dirname "$build")"
-  mapped_c_flags="${common_c_flags} -ffile-prefix-map=${source_directory}=/usr/src/hermes-ocr/sources -fdebug-prefix-map=${source_directory}=/usr/src/hermes-ocr/sources -ffile-prefix-map=${isolated_build_root}=/usr/src/hermes-ocr/build -fdebug-prefix-map=${isolated_build_root}=/usr/src/hermes-ocr/build"
+  mapped_c_flags="${common_c_flags} -ffile-prefix-map=${source_directory}=/usr/src/makosh-ocr/sources -fdebug-prefix-map=${source_directory}=/usr/src/makosh-ocr/sources -ffile-prefix-map=${isolated_build_root}=/usr/src/makosh-ocr/build -fdebug-prefix-map=${isolated_build_root}=/usr/src/makosh-ocr/build"
   "$cmake_path" -S "$source" -B "$build" \
     -G "Unix Makefiles" \
     -DCMAKE_MAKE_PROGRAM=/usr/bin/make \

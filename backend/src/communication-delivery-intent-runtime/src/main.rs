@@ -4,10 +4,10 @@ use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
-use hermes_communication_delivery_intent_persistence::{
+use makosh_communication_delivery_intent_persistence::{
     DeliveryIntentPersistenceErrorV1, schema::communication_delivery_intent_storage_bundle_v1,
 };
-use hermes_communication_delivery_intent_runtime::{
+use makosh_communication_delivery_intent_runtime::{
     admission::{
         communication_delivery_intent_module_descriptor_v1,
         communication_delivery_intent_settings_schema_bytes_v1,
@@ -17,7 +17,7 @@ use hermes_communication_delivery_intent_runtime::{
         DeliveryIntentRuntimeErrorV1,
     },
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
@@ -228,10 +228,10 @@ fn runtime_error(error: DeliveryIntentRuntimeErrorV1) -> String {
         DeliveryIntentRuntimeErrorV1::InvalidRequest => "client_request_rejected",
         DeliveryIntentRuntimeErrorV1::RouteUnavailable => "communications_route_unavailable",
         DeliveryIntentRuntimeErrorV1::Coordinator(
-            hermes_communication_delivery_intent_runtime::coordinator::DeliveryIntentCoordinatorErrorV1::InvalidInput,
+            makosh_communication_delivery_intent_runtime::coordinator::DeliveryIntentCoordinatorErrorV1::InvalidInput,
         ) => "coordinator_input_rejected",
         DeliveryIntentRuntimeErrorV1::Coordinator(
-            hermes_communication_delivery_intent_runtime::coordinator::DeliveryIntentCoordinatorErrorV1::BlobUnavailable,
+            makosh_communication_delivery_intent_runtime::coordinator::DeliveryIntentCoordinatorErrorV1::BlobUnavailable,
         ) => "blob_unavailable",
         DeliveryIntentRuntimeErrorV1::Persistence(
             DeliveryIntentPersistenceErrorV1::InvalidInput,

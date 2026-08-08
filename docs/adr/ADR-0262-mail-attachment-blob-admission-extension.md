@@ -56,7 +56,7 @@ implementation dependency. Communications receives no MIME bytes, provider
 locator, provider session, Blob path, Blob URL or download operation. The
 result event carries only the canonical anchor, expected lifecycle state,
 transition, evidence ID, observed time and opaque integrity binding defined by
-the exact `hermes-communications-attachment-contract` schema.
+the exact `makosh-communications-attachment-contract` schema.
 
 MIME extraction is bounded by the existing RFC822 byte, depth and part limits.
 Malformed, unsupported, oversized, missing or integrity-mismatched parts yield
@@ -88,8 +88,8 @@ The capability needs a separate atomic production gate before it is active:
    malformed and oversized MIME parts, Blob write/hash failure, relay restart,
    duplicate event and Communications CAS conflict;
 5. compile-isolation proof that Mail sees Communications only through the exact
-   public units `hermes-communications-ingress` and
-   `hermes-communications-attachment-contract`.
+   public units `makosh-communications-ingress` and
+   `makosh-communications-attachment-contract`.
 
 The scanner verdict producer remains outside this decision. No producer may
 emit `safe_for_delivery`.

@@ -35,7 +35,7 @@ describe('business communication hooks ownership boundary', () => {
 		expect(source).not.toMatch(/\[\s*['"]communications['"]/)
 		expect(source).not.toMatch(/\/api\/v1\/communications\/(conversations|messages|search|topics)/)
 		expect(source).not.toMatch(/domains\/communications/)
-		expect(source).not.toMatch(/gen\/hermes\/communications/)
+		expect(source).not.toMatch(/gen\/makosh\/communications/)
 		expect(source).not.toMatch(/CommunicationsService|communicationsClient/)
 	})
 

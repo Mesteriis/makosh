@@ -9,7 +9,7 @@
 //! modifying it. Any change to the infrastructure will cause these tests to
 //! fail, alerting the developer to review compatibility.
 
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 
 /// AC1: Testcontainers PostgreSQL container starts and passes health check.
 #[tokio::test]
@@ -138,7 +138,7 @@ async fn test_context_databases_are_isolated() {
 #[tokio::test]
 async fn testkit_persona_factory_creates_persona() {
     let ctx = TestContext::new().await;
-    let factory = hermes_backend_testkit::factories::persona::PersonaFactory::new(ctx.pool());
+    let factory = makosh_backend_testkit::factories::persona::PersonaFactory::new(ctx.pool());
 
     let persona_id = factory
         .with_name("Characterization Test Persona")
@@ -166,7 +166,7 @@ async fn testkit_persona_factory_creates_persona() {
 #[tokio::test]
 async fn testkit_email_factory_creates_email() {
     let ctx = TestContext::new().await;
-    let factory = hermes_backend_testkit::factories::email::EmailFactory::new(ctx.pool());
+    let factory = makosh_backend_testkit::factories::email::EmailFactory::new(ctx.pool());
 
     let (_account, raw) = factory
         .with_subject("Characterization Test Email")

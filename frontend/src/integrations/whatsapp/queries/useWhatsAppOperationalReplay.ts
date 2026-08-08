@@ -1,7 +1,7 @@
 import { computed, ref, shallowRef } from 'vue'
 
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
-import type { WhatsAppOperationalReplayFrameV1 } from '../../../gen/hermes/whatsapp/operational/realtime/v1/client_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
+import type { WhatsAppOperationalReplayFrameV1 } from '../../../gen/makosh/whatsapp/operational/realtime/v1/client_pb'
 import { replayWhatsAppOperationalEvents } from '../api/whatsAppOperationalReplayGateway'
 import {
 	buildWhatsAppOperationalReplayModel,

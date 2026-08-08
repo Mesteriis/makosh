@@ -1,11 +1,11 @@
 use std::future::Future;
 use std::sync::{Arc, Mutex};
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     VaultCiphertextResponseV1, VaultCiphertextRouteDirectionV1, VaultCiphertextRouteV1,
 };
-use hermes_storage_control::{StorageFenceOutcomeV1, StorageVaultLeasePortV1};
-use hermes_vault_protocol::{
+use makosh_storage_control::{StorageFenceOutcomeV1, StorageVaultLeasePortV1};
+use makosh_vault_protocol::{
     LeaseAudienceV1, SecretClassV1, VaultCiphertextFrameV1, VaultResponseRecipientV1,
     VaultTransportBindingV1, VaultTransportCommandV1, VaultTransportDirectionV1,
     VaultTransportPublicKey, seal,
@@ -279,7 +279,7 @@ impl MissingThenGeneratedVaultRoute {
         let response = match (self.step, command) {
             (0, VaultTransportCommandV1::IssueLease { request })
                 if request.purpose().actions()
-                    == [hermes_vault_protocol::VaultActionV1::Resolve]
+                    == [makosh_vault_protocol::VaultActionV1::Resolve]
                     && request.purpose().purpose_id() == self.expected_purpose
                     && request.purpose().configuration_instance_id()
                         == self.expected_configuration_instance =>
@@ -291,7 +291,7 @@ impl MissingThenGeneratedVaultRoute {
             }
             (2, VaultTransportCommandV1::IssueLease { request })
                 if request.purpose().actions()
-                    == [hermes_vault_protocol::VaultActionV1::Create]
+                    == [makosh_vault_protocol::VaultActionV1::Create]
                     && request.purpose().purpose_id() == self.expected_purpose
                     && request.purpose().configuration_instance_id()
                         == self.expected_configuration_instance =>
@@ -303,7 +303,7 @@ impl MissingThenGeneratedVaultRoute {
             }
             (4, VaultTransportCommandV1::IssueLease { request })
                 if request.purpose().actions()
-                    == [hermes_vault_protocol::VaultActionV1::Resolve]
+                    == [makosh_vault_protocol::VaultActionV1::Resolve]
                     && request.purpose().purpose_id() == self.expected_purpose
                     && request.purpose().configuration_instance_id()
                         == self.expected_configuration_instance =>
@@ -368,7 +368,7 @@ fn confirm_credential(
                 && request.purpose().allowed_secret_classes()
                     == [SecretClassV1::PlatformCredential]
                 && request.purpose().actions()
-                    == [hermes_vault_protocol::VaultActionV1::Resolve] =>
+                    == [makosh_vault_protocol::VaultActionV1::Resolve] =>
         {
             response_for(route, audience, b"0123456789abcdef0123456789abcdef")
         }
@@ -378,7 +378,7 @@ fn confirm_credential(
                 && request.purpose().allowed_secret_classes()
                     == [SecretClassV1::PlatformCredential]
                 && request.purpose().actions()
-                    == [hermes_vault_protocol::VaultActionV1::Create] =>
+                    == [makosh_vault_protocol::VaultActionV1::Create] =>
         {
             response_for(route, audience, b"fedcba9876543210fedcba9876543210")
         }

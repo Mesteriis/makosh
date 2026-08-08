@@ -6,17 +6,17 @@ mod document_text;
 
 use std::panic::AssertUnwindSafe;
 
-use hermes_attachment_preview_api::wire::{
+use makosh_attachment_preview_api::wire::{
     AttachmentPreviewContentTypeV1, AttachmentPreviewKindV1,
 };
-use hermes_attachment_preview_renderer_contract::{
+use makosh_attachment_preview_renderer_contract::{
     AttachmentPreviewRenderRequestV1, AttachmentPreviewRenderResultV1,
     AttachmentPreviewRendererErrorV1, AttachmentPreviewRendererV1, AttachmentPreviewSourceFormatV1,
 };
 
 pub use card::FIXED_FONT_SHA256_V1;
 
-pub const PACKAGE: &str = "hermes-attachment-preview-docx";
+pub const PACKAGE: &str = "makosh-attachment-preview-docx";
 const MAX_DOCX_SOURCE_BYTES_V1: usize = 32 * 1024 * 1024;
 
 #[derive(Clone, Copy, Debug, Default)]
@@ -63,8 +63,8 @@ fn validate_source_bound_v1(source: &[u8]) -> Result<(), AttachmentPreviewRender
 mod tests {
     use std::io::{Cursor, Write};
 
-    use hermes_attachment_preview_api::ATTACHMENT_PREVIEW_MAX_IMAGE_BYTES_V1;
     use image::ImageFormat;
+    use makosh_attachment_preview_api::ATTACHMENT_PREVIEW_MAX_IMAGE_BYTES_V1;
     use zip::{CompressionMethod, ZipWriter, write::SimpleFileOptions};
 
     use super::*;
@@ -74,7 +74,7 @@ mod tests {
         let source = docx_bytes_v1(
             r#"<?xml version="1.0" encoding="UTF-8"?>
             <w:document xmlns:w="urn:w"><w:body>
-              <w:p><w:r><w:t>Hello &amp; Hermes</w:t></w:r></w:p>
+              <w:p><w:r><w:t>Hello &amp; Макошь</w:t></w:r></w:p>
               <w:p><w:r><w:t>Безопасный просмотр</w:t></w:r></w:p>
             </w:body></w:document>"#
                 .as_bytes(),

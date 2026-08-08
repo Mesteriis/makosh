@@ -4,13 +4,13 @@ use std::os::unix::net::UnixStream;
 use crate::collector::control;
 use crate::collector::storage::{TelemetryRetentionV1, TelemetrySegmentStore};
 use crate::fixtures::directory::unique_directory;
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     GetTelemetryDiagnosticsRequestV1, TelemetryRuntimeControlRequestV1,
     TelemetryRuntimeControlResponseV1,
     telemetry_runtime_control_request_v1::Operation as RequestOperation,
     telemetry_runtime_control_response_v1::Result as ResponseResult,
 };
-use hermes_telemetry_protocol::{
+use makosh_telemetry_protocol::{
     TelemetryPriorityV1, TelemetrySignalInputV1, TelemetrySignalKindV1, TelemetrySignalV1,
     TelemetrySourceV1,
 };

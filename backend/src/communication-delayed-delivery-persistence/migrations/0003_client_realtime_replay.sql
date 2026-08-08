@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communication_delayed_delivery_realtime (
+CREATE TABLE makosh_data.communication_delayed_delivery_realtime (
   logical_owner_id TEXT NOT NULL CHECK (
     char_length(logical_owner_id) BETWEEN 1 AND 128
   ),
@@ -17,14 +17,14 @@ CREATE TABLE hermes_data.communication_delayed_delivery_realtime (
     state_revision
   ),
   FOREIGN KEY (logical_owner_id, delayed_operation_id) REFERENCES
-    hermes_data.communication_delayed_delivery_operations (
+    makosh_data.communication_delayed_delivery_operations (
       logical_owner_id,
       delayed_operation_id
     )
 );
 
 CREATE UNIQUE INDEX communication_delayed_delivery_realtime_sequence_idx
-  ON hermes_data.communication_delayed_delivery_realtime (
+  ON makosh_data.communication_delayed_delivery_realtime (
     logical_owner_id,
     realtime_sequence
   );

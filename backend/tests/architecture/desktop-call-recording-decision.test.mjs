@@ -12,12 +12,12 @@ test('desktop recording decision keeps host integration workflow and domain sepa
   );
 
   for (const unit of [
-    'hermes-desktop-call-recording-api',
-    'hermes-desktop-call-recording-core',
-    'hermes-desktop-call-recording-persistence',
-    'hermes-desktop-call-recording-runtime',
-    'hermes-desktop-call-recording-assembly',
-    'hermes-call-transcription-ingress',
+    'makosh-desktop-call-recording-api',
+    'makosh-desktop-call-recording-core',
+    'makosh-desktop-call-recording-persistence',
+    'makosh-desktop-call-recording-runtime',
+    'makosh-desktop-call-recording-assembly',
+    'makosh-call-transcription-ingress',
   ]) {
     assert.match(adr, new RegExp(`\\b${unit}\\b`));
   }

@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+package makosh.review.attention.client.v1;
+
+message ReviewAttentionCommandRequestV1 {
+  uint32 protocol_major = 1;
+  bytes operation_id = 2;
+  bytes source_evidence_id = 3;
+  uint64 expected_revision = 4;
+  oneof operation {
+    MarkPendingV1 mark_pending = 5;
+    MarkReviewedV1 mark_reviewed = 6;
+    DismissV1 dismiss = 7;
+    SetPinnedV1 set_pinned = 8;
+    SetImportanceV1 set_importance = 9;
+    SnoozeV1 snooze = 10;
+    ClearSnoozeV1 clear_snooze = 11;
+  }
+}
+
+message ReviewAttentionCommandResponseV1 {
+  ReviewAttentionSummaryV1 attention = 1;
+  bool replayed = 2;
+  string error_code = 15;
+}
+
+service ReviewAttentionCommandService {
+  rpc Execute(ReviewAttentionCommandRequestV1)
+      returns (ReviewAttentionCommandResponseV1);
+}
+
+message MarkPendingV1 {}
+message MarkReviewedV1 {}
+message DismissV1 {}
+
+message SetPinnedV1 {
+  bool pinned = 1;
+}
+
+message SetImportanceV1 {
+  ReviewImportanceV1 importance = 1;
+}
+
+message SnoozeV1 {
+  int64 until_unix_seconds = 1;
+  int32 until_nanos = 2;
+}
+
+message ClearSnoozeV1 {}
+
+message ReviewAttentionQueryRequestV1 {
+  uint32 protocol_major = 1;
+  oneof operation {
+    GetReviewAttentionV1 get = 2;
+    ListReviewAttentionV1 list = 3;
+  }
+}
+
+message ReviewAttentionQueryResponseV1 {
+  oneof result {
+    ReviewAttentionSummaryV1 attention = 1;
+    ReviewAttentionPageV1 page = 2;
+  }
+  string error_code = 15;
+}
+
+service ReviewAttentionQueryService {
+  rpc Query(ReviewAttentionQueryRequestV1)
+      returns (ReviewAttentionQueryResponseV1);
+}
+
+message GetReviewAttentionV1 {
+  bytes attention_id = 1;
+}
+
+message ListReviewAttentionV1 {
+  uint32 limit = 1;
+  bytes cursor = 2;
+  optional ReviewDispositionV1 disposition = 3;
+  optional bool pinned = 4;
+  optional ReviewImportanceV1 importance = 5;
+  optional bool snoozed = 6;
+}
+
+message ReviewAttentionPageV1 {
+  repeated ReviewAttentionSummaryV1 attention = 1;
+  bytes next_cursor = 2;
+}
+
+message ReviewAttentionSummaryV1 {
+  bytes attention_id = 1;
+  bytes source_evidence_id = 2;
+  uint64 revision = 3;
+  ReviewDispositionV1 disposition = 4;
+  bool pinned = 5;
+  ReviewImportanceV1 importance = 6;
+  optional int64 snoozed_until_unix_seconds = 7;
+  optional int32 snoozed_until_nanos = 8;
+  int64 updated_at_unix_seconds = 9;
+  int32 updated_at_nanos = 10;
+}
+
+message ReviewAttentionChangedV1 {
+  bytes attention_id = 1;
+  uint64 revision = 2;
+  ReviewDispositionV1 disposition = 3;
+  bool pinned = 4;
+  ReviewImportanceV1 importance = 5;
+  optional int64 snoozed_until_unix_seconds = 6;
+  optional int32 snoozed_until_nanos = 7;
+}
+
+enum ReviewDispositionV1 {
+  REVIEW_DISPOSITION_UNSPECIFIED = 0;
+  REVIEW_DISPOSITION_PENDING = 1;
+  REVIEW_DISPOSITION_REVIEWED = 2;
+  REVIEW_DISPOSITION_DISMISSED = 3;
+}
+
+enum ReviewImportanceV1 {
+  REVIEW_IMPORTANCE_UNSPECIFIED = 0;
+  REVIEW_IMPORTANCE_NORMAL = 1;
+  REVIEW_IMPORTANCE_IMPORTANT = 2;
+}

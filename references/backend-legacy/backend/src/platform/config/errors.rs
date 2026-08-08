@@ -9,44 +9,44 @@ use crate::platform::secrets::errors::SecretResolutionError;
 
 #[derive(Debug, Error)]
 pub enum ConfigError {
-    #[error("invalid HERMES_HTTP_ADDR `{value}`: {source}")]
+    #[error("invalid MAKOSH_HTTP_ADDR `{value}`: {source}")]
     InvalidHttpAddr {
         value: String,
         #[source]
         source: AddrParseError,
     },
 
-    #[error("invalid HERMES_AI_PROVIDER `{value}`: expected ollama or omniroute")]
+    #[error("invalid MAKOSH_AI_PROVIDER `{value}`: expected ollama or omniroute")]
     InvalidAiProvider { value: String },
 
     #[error("DATABASE_URL is set but empty")]
     EmptyDatabaseUrl,
 
-    #[error("HERMES_LOCAL_API_SECRET is set but empty")]
+    #[error("MAKOSH_LOCAL_API_SECRET is set but empty")]
     EmptyLocalApiSecret,
 
-    #[error("HERMES_NATS_SERVER_URL is set but empty")]
+    #[error("MAKOSH_NATS_SERVER_URL is set but empty")]
     EmptyNatsServerUrl,
 
-    #[error("HERMES_SECRET_VAULT_PATH is set but empty")]
+    #[error("MAKOSH_SECRET_VAULT_PATH is set but empty")]
     EmptySecretVaultPath,
 
-    #[error("HERMES_SECRET_VAULT_KEY is set but empty")]
+    #[error("MAKOSH_SECRET_VAULT_KEY is set but empty")]
     EmptySecretVaultKey,
 
-    #[error("HERMES_VAULT_HOME is set but empty")]
+    #[error("MAKOSH_VAULT_HOME is set but empty")]
     EmptyVaultHome,
 
-    #[error("HERMES_DEV_KEY_PATH is set but empty")]
+    #[error("MAKOSH_DEV_KEY_PATH is set but empty")]
     EmptyDevKeyPath,
 
     #[error("invalid {name} `{value}`: expected true or false")]
     InvalidBoolEnv { name: &'static str, value: String },
 
-    #[error("HERMES_TDJSON_PATH is set but empty")]
+    #[error("MAKOSH_TDJSON_PATH is set but empty")]
     EmptyTdjsonPath,
 
-    #[error("invalid HERMES_TELEGRAM_API_ID `{value}`: {reason}")]
+    #[error("invalid MAKOSH_TELEGRAM_API_ID `{value}`: {reason}")]
     InvalidTelegramApiId {
         value: String,
         reason: &'static str,
@@ -54,22 +54,22 @@ pub enum ConfigError {
         source: Option<ParseIntError>,
     },
 
-    #[error("HERMES_TELEGRAM_API_HASH is set but empty")]
+    #[error("MAKOSH_TELEGRAM_API_HASH is set but empty")]
     EmptyTelegramApiHash,
 
-    #[error("HERMES_GOOGLE_OAUTH_CLIENT_ID is set but empty")]
+    #[error("MAKOSH_GOOGLE_OAUTH_CLIENT_ID is set but empty")]
     EmptyGoogleOAuthClientId,
 
-    #[error("HERMES_GOOGLE_OAUTH_CLIENT_SECRET is set but empty")]
+    #[error("MAKOSH_GOOGLE_OAUTH_CLIENT_SECRET is set but empty")]
     EmptyGoogleOAuthClientSecret,
 
-    #[error("HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_JSON is set but empty")]
+    #[error("MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_JSON is set but empty")]
     EmptyGoogleOAuthClientConfigJson,
 
-    #[error("HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH is set but empty")]
+    #[error("MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH is set but empty")]
     EmptyGoogleOAuthClientConfigPath,
 
-    #[error("failed to read HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH `{}`: {source}", path.display())]
+    #[error("failed to read MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH `{}`: {source}", path.display())]
     GoogleOAuthClientConfigRead {
         path: PathBuf,
         #[source]
@@ -85,16 +85,16 @@ pub enum ConfigError {
         message: &'static str,
     },
 
-    #[error("HERMES_OLLAMA_BASE_URL is set but empty")]
+    #[error("MAKOSH_OLLAMA_BASE_URL is set but empty")]
     EmptyOllamaBaseUrl,
 
-    #[error("HERMES_OLLAMA_CHAT_MODEL is set but empty")]
+    #[error("MAKOSH_OLLAMA_CHAT_MODEL is set but empty")]
     EmptyOllamaChatModel,
 
-    #[error("HERMES_OLLAMA_EMBED_MODEL is set but empty")]
+    #[error("MAKOSH_OLLAMA_EMBED_MODEL is set but empty")]
     EmptyOllamaEmbedModel,
 
-    #[error("invalid HERMES_OLLAMA_TIMEOUT_SECONDS `{value}`: {reason}")]
+    #[error("invalid MAKOSH_OLLAMA_TIMEOUT_SECONDS `{value}`: {reason}")]
     InvalidOllamaTimeout {
         value: String,
         reason: &'static str,
@@ -102,19 +102,19 @@ pub enum ConfigError {
         source: Option<ParseIntError>,
     },
 
-    #[error("HERMES_OMNIROUTE_BASE_URL is set but empty")]
+    #[error("MAKOSH_OMNIROUTE_BASE_URL is set but empty")]
     EmptyOmniRouteBaseUrl,
 
-    #[error("HERMES_OMNIROUTE_CHAT_MODEL is set but empty")]
+    #[error("MAKOSH_OMNIROUTE_CHAT_MODEL is set but empty")]
     EmptyOmniRouteChatModel,
 
-    #[error("HERMES_OMNIROUTE_EMBED_MODEL is set but empty")]
+    #[error("MAKOSH_OMNIROUTE_EMBED_MODEL is set but empty")]
     EmptyOmniRouteEmbedModel,
 
-    #[error("HERMES_OMNIROUTE_API_KEY is set but empty")]
+    #[error("MAKOSH_OMNIROUTE_API_KEY is set but empty")]
     EmptyOmniRouteApiKey,
 
-    #[error("invalid HERMES_OMNIROUTE_TIMEOUT_SECONDS `{value}`: {reason}")]
+    #[error("invalid MAKOSH_OMNIROUTE_TIMEOUT_SECONDS `{value}`: {reason}")]
     InvalidOmniRouteTimeout {
         value: String,
         reason: &'static str,

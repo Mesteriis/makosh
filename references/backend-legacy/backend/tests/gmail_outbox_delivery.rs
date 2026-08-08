@@ -1,5 +1,5 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{
     NewProviderAccountSecretBinding, ProviderAccountSecretPurpose,
 };
 use std::io::{BufRead, BufReader, ErrorKind, Write};
@@ -14,24 +14,24 @@ use serde_json::{Value, json};
 use tempfile::tempdir;
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::communications::outbox::delivery::EmailOutboxDeliveryWorker;
-use hermes_hub_backend::domains::communications::outbox::provider_sender::CommunicationOutboxEmailSender;
-use hermes_hub_backend::domains::communications::outbox::{
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::communications::outbox::delivery::EmailOutboxDeliveryWorker;
+use makosh_hub_backend::domains::communications::outbox::provider_sender::CommunicationOutboxEmailSender;
+use makosh_hub_backend::domains::communications::outbox::{
     CommunicationOutboxStatus, CommunicationOutboxStore, NewCommunicationOutboxItem,
 };
-use hermes_hub_backend::integrations::mail::outbox::LiveGmailOutboxTransport;
-use hermes_hub_backend::integrations::mail::send::LiveSmtpTransport;
+use makosh_hub_backend::integrations::mail::outbox::LiveGmailOutboxTransport;
+use makosh_hub_backend::integrations::mail::send::LiveSmtpTransport;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::secrets::models::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::secrets::models::{
     NewSecretReference, SecretKind, SecretStoreKind,
 };
-use hermes_hub_backend::platform::secrets::store::SecretReferenceStore;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::vault::HostVault;
-use hermes_hub_backend::vault::models::{HostVaultConfig, SecretEntryContext};
+use makosh_hub_backend::platform::secrets::store::SecretReferenceStore;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::vault::HostVault;
+use makosh_hub_backend::vault::models::{HostVaultConfig, SecretEntryContext};
 
 const LOCAL_API_TOKEN: &str = "gmail-outbox-delivery-test-token";
 
@@ -46,18 +46,18 @@ async fn outbox_delivery_worker_sends_gmail_items_through_gmail_api_against_post
         .await
         .expect("database connection");
     let pool = database.pool().expect("configured pool").clone();
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
     .with_test_pairs([
-        ("HERMES_DEV_MODE", "true"),
+        ("MAKOSH_DEV_MODE", "true"),
         (
-            "HERMES_VAULT_HOME",
+            "MAKOSH_VAULT_HOME",
             vault_home.to_str().expect("vault path"),
         ),
         (
-            "HERMES_DEV_KEY_PATH",
+            "MAKOSH_DEV_KEY_PATH",
             dev_key_path.to_str().expect("dev key path"),
         ),
     ])
@@ -201,7 +201,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
         .method("POST")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .body(Body::from(body.to_string()))
         .expect("request")
 }

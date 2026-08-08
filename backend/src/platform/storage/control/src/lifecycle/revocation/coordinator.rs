@@ -34,7 +34,7 @@ impl StorageRevokerV1 {
 }
 
 async fn attempt_all_fences(
-    binding: &hermes_storage_protocol::StorageBindingV1,
+    binding: &makosh_storage_protocol::StorageBindingV1,
     vault: &mut impl StorageVaultLeasePortV1,
     pool: &mut impl StoragePoolFencePortV1,
     postgres: &mut impl StoragePostgresFencePortV1,

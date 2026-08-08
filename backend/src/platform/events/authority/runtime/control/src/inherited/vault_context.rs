@@ -1,7 +1,7 @@
 //! Builds the verified Vault route context from authority runtime configuration.
 
-use hermes_events_jetstream::NatsVaultRouteContextV1;
-use hermes_runtime_protocol::v1::EventsAuthorityRuntimeConfigurationV1;
+use makosh_events_jetstream::NatsVaultRouteContextV1;
+use makosh_runtime_protocol::v1::EventsAuthorityRuntimeConfigurationV1;
 
 pub(crate) fn from_configuration(
     configuration: &EventsAuthorityRuntimeConfigurationV1,

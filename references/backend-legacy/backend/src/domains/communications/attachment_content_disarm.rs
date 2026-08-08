@@ -1,5 +1,5 @@
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 use sqlx::Row;
 use sqlx::postgres::PgPool;
@@ -13,10 +13,10 @@ use crate::platform::communications::attachment_text::{
     AttachmentTextExtractionError, RichAttachmentExtractionKind, disarm_rich_attachment,
     rich_attachment_extraction_kind, rich_attachment_extractor_address,
 };
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
-const PDF_CDR_RENDERER: &str = "hermes.attachment_extractor.pdf_cdr.v1";
-const DOCX_CDR_RENDERER: &str = "hermes.attachment_extractor.docx_cdr.v1";
+const PDF_CDR_RENDERER: &str = "makosh.attachment_extractor.pdf_cdr.v1";
+const DOCX_CDR_RENDERER: &str = "makosh.attachment_extractor.docx_cdr.v1";
 const MAX_CDR_ARTIFACT_BYTES: usize = 2 * 1024 * 1024;
 
 #[derive(Clone)]
@@ -240,7 +240,7 @@ impl AttachmentContentDisarmService {
             .bind(attachment_id).bind(status).bind(renderer).bind(source_sha256).bind(blob_id).bind(size).bind(failure).execute(&mut *transaction).await?;
         let now = Utc::now();
         let event = NewEventEnvelope::builder(format!("communication_attachment_cdr:{attachment_id}:{status}:{}", now.timestamp_micros()), "communication.attachment.processing_changed.v1", now, json!({"kind":"communication_attachment"}), json!({"kind":"communication_attachment","id":attachment_id,"message_id":message_id}))
-            .actor(json!({"actor_id":"hermes-attachment-cdr"}))
+            .actor(json!({"actor_id":"makosh-attachment-cdr"}))
             .payload(json!({"attachment_id":attachment_id,"message_id":message_id,"processing_kind":"content_disarm","status":status,"renderer":renderer,"source_sha256":source_sha256}))
             .provenance(json!({"source_kind":"communication_attachment_cdr","source_id":attachment_id})).build()?;
         EventStore::append_in_transaction(&mut transaction, &event).await?;
@@ -276,7 +276,7 @@ pub enum AttachmentContentDisarmError {
     #[error(transparent)]
     Sqlx(#[from] sqlx::Error),
     #[error(transparent)]
-    Event(#[from] hermes_events_postgres::errors::EventStoreError),
+    Event(#[from] makosh_events_postgres::errors::EventStoreError),
     #[error(transparent)]
-    EventEnvelope(#[from] hermes_events_api::EventEnvelopeError),
+    EventEnvelope(#[from] makosh_events_api::EventEnvelopeError),
 }

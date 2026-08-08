@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.speech_to_text_runs (
+CREATE TABLE makosh_data.speech_to_text_runs (
     logical_owner_id TEXT NOT NULL,
     request_id BYTEA NOT NULL,
     request_digest BYTEA NOT NULL,
@@ -88,7 +88,7 @@ CREATE TABLE hermes_data.speech_to_text_runs (
 );
 
 CREATE INDEX speech_to_text_runs_recovery_idx
-ON hermes_data.speech_to_text_runs (
+ON makosh_data.speech_to_text_runs (
     logical_owner_id,
     run_state,
     state_revision

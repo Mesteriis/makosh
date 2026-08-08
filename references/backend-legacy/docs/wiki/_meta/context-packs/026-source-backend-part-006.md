@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/app/error/response/integrations/call.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/integrations/call.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/integrations/call.rs`
 - Size bytes / Размер в байтах: `704`
 - Included characters / Включено символов: `704`
 - Truncated / Обрезано: `no`
@@ -90,7 +90,7 @@ pub(super) fn call_error_parts(error: CallError) -> ErrorParts {
 
 ### `backend/src/app/error/response/integrations/telegram.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/integrations/telegram.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/integrations/telegram.rs`
 - Size bytes / Размер в байтах: `4104`
 - Included characters / Включено символов: `4104`
 - Truncated / Обрезано: `no`
@@ -215,7 +215,7 @@ fn internal(
 
 ### `backend/src/app/error/response/integrations/whatsapp.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/integrations/whatsapp.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/integrations/whatsapp.rs`
 - Size bytes / Размер в байтах: `2562`
 - Included characters / Включено символов: `2562`
 - Truncated / Обрезано: `no`
@@ -298,7 +298,7 @@ fn internal(
 
 ### `backend/src/app/error/response/integrations/yandex_telemost.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/integrations/yandex_telemost.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/integrations/yandex_telemost.rs`
 - Size bytes / Размер в байтах: `4459`
 - Included characters / Включено символов: `4459`
 - Truncated / Обрезано: `no`
@@ -423,7 +423,7 @@ fn internal(
 
 ### `backend/src/app/error/response/integrations/zoom.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/integrations/zoom.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/integrations/zoom.rs`
 - Size bytes / Размер в байтах: `3868`
 - Included characters / Включено символов: `3868`
 - Truncated / Обрезано: `no`
@@ -548,7 +548,7 @@ fn internal(
 
 ### `backend/src/app/error/response/knowledge.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/knowledge.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/knowledge.rs`
 - Size bytes / Размер в байтах: `2515`
 - Included characters / Включено символов: `2515`
 - Truncated / Обрезано: `no`
@@ -628,7 +628,7 @@ fn bad_request(error: &'static str, message: &'static str) -> ErrorParts {
 
 ### `backend/src/app/error/response/persons.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/persons.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/persons.rs`
 - Size bytes / Размер в байтах: `2895`
 - Included characters / Включено символов: `2895`
 - Truncated / Обрезано: `no`
@@ -721,7 +721,7 @@ pub(super) fn projection_error_parts(error: PersonProjectionError) -> ErrorParts
 
 ### `backend/src/app/error/response/platform.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/platform.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/platform.rs`
 - Size bytes / Размер в байтах: `3867`
 - Included characters / Включено символов: `3867`
 - Truncated / Обрезано: `no`
@@ -843,7 +843,7 @@ pub(super) fn parts(error: ApiError) -> ErrorParts {
 
 ### `backend/src/app/error/response/review.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/review.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/review.rs`
 - Size bytes / Размер в байтах: `4412`
 - Included characters / Включено символов: `4412`
 - Truncated / Обрезано: `no`
@@ -967,7 +967,7 @@ fn internal_store(
 
 ### `backend/src/app/error/response/tasks.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/tasks.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/tasks.rs`
 - Size bytes / Размер в байтах: `479`
 - Included characters / Включено символов: `479`
 - Truncated / Обрезано: `no`
@@ -992,7 +992,7 @@ fn bad_request(error: &'static str, message: &'static str) -> ErrorParts {
 
 ### `backend/src/app/error/types.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/types.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/types.rs`
 - Size bytes / Размер в байтах: `4476`
 - Included characters / Включено символов: `4476`
 - Truncated / Обрезано: `no`
@@ -1120,7 +1120,7 @@ pub enum AppError {
 
 ### `backend/src/app/guard.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/guard.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/guard.rs`
 - Size bytes / Размер в байтах: `1853`
 - Included characters / Включено символов: `1853`
 - Truncated / Обрезано: `no`
@@ -1165,7 +1165,7 @@ fn has_valid_secret(headers: &axum::http::HeaderMap, uri: &Uri, expected_secret:
 
 fn has_valid_secret_header(headers: &axum::http::HeaderMap, expected_secret: &str) -> bool {
     headers
-        .get("x-hermes-secret")
+        .get("x-makosh-secret")
         .and_then(|value| value.to_str().ok())
         .is_some_and(|secret| secret == expected_secret)
 }
@@ -1180,7 +1180,7 @@ fn has_valid_websocket_secret_query(uri: &Uri, expected_secret: &str) -> bool {
     };
 
     form_urlencoded::parse(query.as_bytes())
-        .any(|(name, value)| name == "hermes_secret" && value == expected_secret)
+        .any(|(name, value)| name == "makosh_secret" && value == expected_secret)
 }
 
 fn secret_error_response() -> Response {
@@ -1188,7 +1188,7 @@ fn secret_error_response() -> Response {
         StatusCode::FORBIDDEN,
         Json(SecretErrorResponse {
             error: "invalid_api_secret",
-            message: "missing or invalid x-hermes-secret header",
+            message: "missing or invalid x-makosh-secret header",
         }),
     )
         .into_response()
@@ -1197,7 +1197,7 @@ fn secret_error_response() -> Response {
 
 ### `backend/src/app/handlers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers.rs`
 - Size bytes / Размер в байтах: `567`
 - Included characters / Включено символов: `567`
 - Truncated / Обрезано: `no`
@@ -1229,7 +1229,7 @@ pub(crate) mod zoom;
 
 ### `backend/src/app/handlers/automation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/automation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/automation.rs`
 - Size bytes / Размер в байтах: `10412`
 - Included characters / Включено символов: `10412`
 - Truncated / Обрезано: `no`
@@ -1373,7 +1373,7 @@ pub(crate) async fn post_policy_template(
     State(state): State<AppState>,
     Json(request): Json<PolicyTemplateApiRequest>,
 ) -> Result<Json<AutomationTemplate>, ApiError> {
-    let actor_id = "hermes-frontend";
+    let actor_id = "makosh-frontend";
     Ok(Json(
         automation_store(&state)?
             .upsert_template(&request.into_template(), actor_id)
@@ -1393,7 +1393,7 @@ pub(crate) async fn post_policy(
     State(state): State<AppState>,
     Json(request): Json<PolicyApiRequest>,
 ) -> Result<Json<AutomationPolicy>, ApiError> {
-    let actor_id = "hermes-frontend";
+    let actor_id = "makosh-frontend";
     Ok(Json(
         automation_store(&state)?
             .upsert_policy(&request.into_policy(), actor_id)
@@ -1413,7 +1413,7 @@ pub(crate) async fn post_telegram_send_dry_run(
     State(state): State<AppState>,
     Json(request): Json<TelegramSendDryRunRequest>,
 ) -> Result<Json<TelegramSendDryRunResponse>, ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let response = match automation_store(&state)?
         .dry_run_send(&request, &actor_id)
         .await
@@ -1488,7 +1488,7 @@ pub(crate) fn non_empty_optional_string(value: &str) -> Option<String> {
 
 ### `backend/src/app/handlers/calendar/accounts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/accounts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/accounts.rs`
 - Size bytes / Размер в байтах: `4596`
 - Included characters / Включено символов: `4482`
 - Truncated / Обрезано: `no`
@@ -1651,7 +1651,7 @@ pub(crate) async fn post_calendar_source(
 
 ### `backend/src/app/handlers/calendar/analytics.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/analytics.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/analytics.rs`
 - Size bytes / Размер в байтах: `2539`
 - Included characters / Включено символов: `2449`
 - Truncated / Обрезано: `no`
@@ -1748,7 +1748,7 @@ pub(crate) async fn get_back_to_back(
 
 ### `backend/src/app/handlers/calendar/brain.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/brain.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/brain.rs`
 - Size bytes / Размер в байтах: `2879`
 - Included characters / Включено символов: `2411`
 - Truncated / Обрезано: `no`
@@ -1845,7 +1845,7 @@ pub(crate) async fn post_calendar_brain(
 
 ### `backend/src/app/handlers/calendar/events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/events.rs`
 - Size bytes / Размер в байтах: `299`
 - Included characters / Включено символов: `299`
 - Truncated / Обрезано: `no`
@@ -1870,7 +1870,7 @@ pub(crate) use status::*;
 
 ### `backend/src/app/handlers/calendar/events/agenda.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/events/agenda.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/events/agenda.rs`
 - Size bytes / Размер в байтах: `1250`
 - Included characters / Включено символов: `1250`
 - Truncated / Обрезано: `no`
@@ -1922,7 +1922,7 @@ pub(crate) async fn post_event_agenda(
 
 ### `backend/src/app/handlers/calendar/events/checklist.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/events/checklist.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/events/checklist.rs`
 - Size bytes / Размер в байтах: `1283`
 - Included characters / Включено символов: `1283`
 - Truncated / Обрезано: `no`
@@ -1974,7 +1974,7 @@ pub(crate) async fn post_event_checklist(
 
 ### `backend/src/app/handlers/calendar/events/context_pack.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/events/context_pack.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/events/context_pack.rs`
 - Size bytes / Размер в байтах: `1054`
 - Included characters / Включено символов: `1054`
 - Truncated / Обрезано: `no`
@@ -2018,7 +2018,7 @@ pub(crate) async fn post_event_context_pack(
 
 ### `backend/src/app/handlers/calendar/events/crud.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/events/crud.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/events/crud.rs`
 - Size bytes / Размер в байтах: `3056`
 - Included characters / Включено символов: `3056`
 - Truncated / Обрезано: `no`
@@ -2131,7 +2131,7 @@ pub(crate) async fn delete_calendar_event(
 
 ### `backend/src/app/handlers/calendar/events/participants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/events/participants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/events/participants.rs`
 - Size bytes / Размер в байтах: `1620`
 - Included characters / Включено символов: `1620`
 - Truncated / Обрезано: `no`
@@ -2196,7 +2196,7 @@ pub(crate) async fn post_event_participant(
 
 ### `backend/src/app/handlers/calendar/events/relations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/events/relations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/events/relations.rs`
 - Size bytes / Размер в байтах: `1420`
 - Included characters / Включено символов: `1420`
 - Truncated / Обрезано: `no`
@@ -2257,7 +2257,7 @@ pub(crate) async fn post_event_relation(
 
 ### `backend/src/app/handlers/calendar/events/status.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/calendar/events/status.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/calendar/events/status.rs`
 - Size bytes / Размер в байтах: `1231`
 - Included characters / Включено символов: `1231`
 - Truncated / Обрезано: `no`

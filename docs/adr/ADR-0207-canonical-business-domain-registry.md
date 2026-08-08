@@ -1,4 +1,4 @@
-# ADR-0207: Канонический реестр бизнес-доменов Hermes
+# ADR-0207: Канонический реестр бизнес-доменов Макошь
 
 Статус: Принято
 Дата: 2026-07-15
@@ -97,7 +97,7 @@ capabilities. Они могут иметь отдельные runtime и storage
 но не владеют каноническими Contacts, Organizations, Relationships, Projects
 или другими domain entities.
 
-`Memory` является продуктовой способностью Hermes, формируемой из evidence,
+`Memory` является продуктовой способностью Макошь, формируемой из evidence,
 knowledge и domain state, а не отдельным универсальным владельцем всех данных.
 
 ### Ownership правила

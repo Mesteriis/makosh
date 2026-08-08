@@ -4,7 +4,7 @@ Status: Accepted
 
 ## Context
 
-Hermes already has events, source-backed communications, decisions,
+Макошь already has events, source-backed communications, decisions,
 obligations, relationships and reviewable candidates. The missing boundary was
 the layer between provider/runtime captures and domain truth.
 
@@ -20,7 +20,7 @@ ownership model that sits between integrations and domains.
 
 ## Decision
 
-Hermes uses this target flow:
+Макошь uses this target flow:
 
 ```text
 External Systems
@@ -48,7 +48,7 @@ Core invariants:
   or delete the previous observation.
 - Vault owns provider accounts, capabilities, sources and sessions. Vault does
   not own observations.
-- Review is a domain and the main Hermes inbox for reviewable material.
+- Review is a domain and the main Макошь inbox for reviewable material.
 - Radar remains attention vocabulary and read-model language. It is not a
   durable domain.
 - Context Packs are engine output under `engines/context_packs/`. They are

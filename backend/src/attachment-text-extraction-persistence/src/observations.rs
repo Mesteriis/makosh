@@ -1,6 +1,6 @@
 //! Exact event inbox and order-independent evidence join persistence.
 
-use hermes_attachment_text_extraction_core::{
+use makosh_attachment_text_extraction_core::{
     AttachmentTextCanonicalSafetyFactV1, AttachmentTextExtractionErrorV1,
     AttachmentTextExtractionJoinDecisionV1, AttachmentTextExtractionRecordDecisionV1,
     AttachmentTextExtractionRejectionV1, AttachmentTextExtractionStateV1,
@@ -112,7 +112,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             }
         }
         sqlx::query(
-            "INSERT INTO hermes_data.attachment_text_extraction_scan_candidates (logical_owner_id, attachment_anchor_id, message_id, envelope_sha256, exact_payload_sha256, blob_reference_id, declared_size, blob_receipt_sha256, custody_transfer_source_proof, observed_at_unix_seconds) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
+            "INSERT INTO makosh_data.attachment_text_extraction_scan_candidates (logical_owner_id, attachment_anchor_id, message_id, envelope_sha256, exact_payload_sha256, blob_reference_id, declared_size, blob_receipt_sha256, custody_transfer_source_proof, observed_at_unix_seconds) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
         )
         .bind(logical_owner_id)
         .bind(candidate.attachment_anchor_id.as_slice())
@@ -229,7 +229,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             }
         }
         sqlx::query(
-            "INSERT INTO hermes_data.attachment_text_extraction_safety_facts (logical_owner_id, attachment_anchor_id, message_id, envelope_sha256, exact_payload_sha256, expected_state, next_state, evidence_id, observed_at_unix_seconds) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)",
+            "INSERT INTO makosh_data.attachment_text_extraction_safety_facts (logical_owner_id, attachment_anchor_id, message_id, envelope_sha256, exact_payload_sha256, expected_state, next_state, evidence_id, observed_at_unix_seconds) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)",
         )
         .bind(logical_owner_id)
         .bind(safety.attachment_anchor_id.as_slice())
@@ -268,7 +268,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             return Err(AttachmentTextExtractionPersistenceErrorV1::InvalidInput);
         }
         let rows = sqlx::query(
-            "SELECT r.run_id, r.operation_id, r.attachment_anchor_id, r.created_at_unix_millis, c.message_id AS candidate_message_id, c.envelope_sha256 AS candidate_envelope_sha256, c.blob_reference_id, c.declared_size, c.blob_receipt_sha256, c.custody_transfer_source_proof, c.observed_at_unix_seconds AS candidate_observed_at, s.message_id AS safety_message_id, s.expected_state, s.next_state, s.evidence_id, s.observed_at_unix_seconds AS safety_observed_at FROM hermes_data.attachment_text_extraction_runs r JOIN hermes_data.attachment_text_extraction_scan_candidates c ON c.logical_owner_id = r.logical_owner_id AND c.attachment_anchor_id = r.attachment_anchor_id JOIN hermes_data.attachment_text_extraction_safety_facts s ON s.logical_owner_id = r.logical_owner_id AND s.attachment_anchor_id = r.attachment_anchor_id LEFT JOIN hermes_data.attachment_text_extraction_custody_outbox o ON o.logical_owner_id = r.logical_owner_id AND o.run_id = r.run_id WHERE r.logical_owner_id = $1 AND r.state IN (1,2) AND s.next_state=5 AND o.run_id IS NULL ORDER BY r.created_at_unix_millis, r.run_id LIMIT $2",
+            "SELECT r.run_id, r.operation_id, r.attachment_anchor_id, r.created_at_unix_millis, c.message_id AS candidate_message_id, c.envelope_sha256 AS candidate_envelope_sha256, c.blob_reference_id, c.declared_size, c.blob_receipt_sha256, c.custody_transfer_source_proof, c.observed_at_unix_seconds AS candidate_observed_at, s.message_id AS safety_message_id, s.expected_state, s.next_state, s.evidence_id, s.observed_at_unix_seconds AS safety_observed_at FROM makosh_data.attachment_text_extraction_runs r JOIN makosh_data.attachment_text_extraction_scan_candidates c ON c.logical_owner_id = r.logical_owner_id AND c.attachment_anchor_id = r.attachment_anchor_id JOIN makosh_data.attachment_text_extraction_safety_facts s ON s.logical_owner_id = r.logical_owner_id AND s.attachment_anchor_id = r.attachment_anchor_id LEFT JOIN makosh_data.attachment_text_extraction_custody_outbox o ON o.logical_owner_id = r.logical_owner_id AND o.run_id = r.run_id WHERE r.logical_owner_id = $1 AND r.state IN (1,2) AND s.next_state=5 AND o.run_id IS NULL ORDER BY r.created_at_unix_millis, r.run_id LIMIT $2",
         )
         .bind(logical_owner_id)
         .bind(i64::from(limit))
@@ -306,7 +306,7 @@ async fn settle_anchor_runs(
     occurred_at_unix_millis: i64,
 ) -> Result<u32, AttachmentTextExtractionPersistenceErrorV1> {
     let rows = sqlx::query(
-        "SELECT run_id FROM hermes_data.attachment_text_extraction_runs WHERE logical_owner_id=$1 AND attachment_anchor_id=$2 AND state IN (1,2) ORDER BY run_id FOR UPDATE",
+        "SELECT run_id FROM makosh_data.attachment_text_extraction_runs WHERE logical_owner_id=$1 AND attachment_anchor_id=$2 AND state IN (1,2) ORDER BY run_id FOR UPDATE",
     )
     .bind(logical_owner_id)
     .bind(attachment_anchor_id.as_slice())
@@ -412,7 +412,7 @@ async fn reject_anchor_runs(
     occurred_at_unix_millis: i64,
 ) -> Result<u32, AttachmentTextExtractionPersistenceErrorV1> {
     let rows = sqlx::query(
-        "SELECT run_id FROM hermes_data.attachment_text_extraction_runs WHERE logical_owner_id=$1 AND attachment_anchor_id=$2 AND state IN (1,2,3) ORDER BY run_id FOR UPDATE",
+        "SELECT run_id FROM makosh_data.attachment_text_extraction_runs WHERE logical_owner_id=$1 AND attachment_anchor_id=$2 AND state IN (1,2,3) ORDER BY run_id FOR UPDATE",
     )
     .bind(logical_owner_id)
     .bind(attachment_anchor_id.as_slice())
@@ -426,7 +426,7 @@ async fn reject_anchor_runs(
             .await?
             .ok_or(AttachmentTextExtractionPersistenceErrorV1::InvalidRow)?;
         sqlx::query(
-            "UPDATE hermes_data.attachment_text_extraction_jobs SET state=4,worker_id=NULL,runtime_generation=NULL,grant_epoch=NULL,lease_expires_at_unix_millis=NULL,updated_at_unix_millis=$3 WHERE logical_owner_id=$1 AND run_id=$2 AND state IN (1,2)",
+            "UPDATE makosh_data.attachment_text_extraction_jobs SET state=4,worker_id=NULL,runtime_generation=NULL,grant_epoch=NULL,lease_expires_at_unix_millis=NULL,updated_at_unix_millis=$3 WHERE logical_owner_id=$1 AND run_id=$2 AND state IN (1,2)",
         )
         .bind(logical_owner_id)
         .bind(run_id.as_slice())
@@ -489,7 +489,7 @@ async fn reconcile_inbox(
     fact: InboxFactV1<'_>,
 ) -> Result<InboxOutcomeV1, AttachmentTextExtractionPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.attachment_text_extraction_event_inbox (logical_owner_id,message_id,envelope_sha256,event_kind,attachment_anchor_id,exact_payload_sha256,processed_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (logical_owner_id,message_id) DO NOTHING",
+        "INSERT INTO makosh_data.attachment_text_extraction_event_inbox (logical_owner_id,message_id,envelope_sha256,event_kind,attachment_anchor_id,exact_payload_sha256,processed_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (logical_owner_id,message_id) DO NOTHING",
     )
     .bind(fact.logical_owner_id)
     .bind(fact.message_id.as_slice())
@@ -505,7 +505,7 @@ async fn reconcile_inbox(
         return Ok(InboxOutcomeV1::Inserted);
     }
     let row = sqlx::query(
-        "SELECT envelope_sha256,event_kind,attachment_anchor_id,exact_payload_sha256 FROM hermes_data.attachment_text_extraction_event_inbox WHERE logical_owner_id=$1 AND message_id=$2",
+        "SELECT envelope_sha256,event_kind,attachment_anchor_id,exact_payload_sha256 FROM makosh_data.attachment_text_extraction_event_inbox WHERE logical_owner_id=$1 AND message_id=$2",
     )
     .bind(fact.logical_owner_id)
     .bind(fact.message_id.as_slice())
@@ -530,7 +530,7 @@ async fn load_candidate(
     owner: &str,
     anchor: [u8; 16],
 ) -> Result<Option<AttachmentTextScanCandidateV1>, AttachmentTextExtractionPersistenceErrorV1> {
-    sqlx::query("SELECT message_id,attachment_anchor_id,blob_reference_id,declared_size,blob_receipt_sha256,custody_transfer_source_proof,observed_at_unix_seconds FROM hermes_data.attachment_text_extraction_scan_candidates WHERE logical_owner_id=$1 AND attachment_anchor_id=$2")
+    sqlx::query("SELECT message_id,attachment_anchor_id,blob_reference_id,declared_size,blob_receipt_sha256,custody_transfer_source_proof,observed_at_unix_seconds FROM makosh_data.attachment_text_extraction_scan_candidates WHERE logical_owner_id=$1 AND attachment_anchor_id=$2")
         .bind(owner).bind(anchor.as_slice()).fetch_optional(&mut **transaction).await
         .map_err(storage_unavailable)?.map(|row| candidate_from_row(&row)).transpose()
 }
@@ -541,7 +541,7 @@ async fn load_safety(
     anchor: [u8; 16],
 ) -> Result<Option<AttachmentTextCanonicalSafetyFactV1>, AttachmentTextExtractionPersistenceErrorV1>
 {
-    sqlx::query("SELECT message_id,attachment_anchor_id,expected_state,next_state,evidence_id,observed_at_unix_seconds FROM hermes_data.attachment_text_extraction_safety_facts WHERE logical_owner_id=$1 AND attachment_anchor_id=$2")
+    sqlx::query("SELECT message_id,attachment_anchor_id,expected_state,next_state,evidence_id,observed_at_unix_seconds FROM makosh_data.attachment_text_extraction_safety_facts WHERE logical_owner_id=$1 AND attachment_anchor_id=$2")
         .bind(owner).bind(anchor.as_slice()).fetch_optional(&mut **transaction).await
         .map_err(storage_unavailable)?.map(|row| safety_from_row(&row)).transpose()
 }
@@ -549,7 +549,7 @@ async fn load_safety(
 fn pending_join_from_row(
     row: sqlx::postgres::PgRow,
 ) -> Result<PendingAttachmentTextCustodyDelegationV1, AttachmentTextExtractionPersistenceErrorV1> {
-    let request = hermes_attachment_text_extraction_core::AttachmentTextExtractionRequestV1 {
+    let request = makosh_attachment_text_extraction_core::AttachmentTextExtractionRequestV1 {
         run_id: id16(row.try_get("run_id").map_err(invalid_row)?)?,
         operation_id: id16(row.try_get("operation_id").map_err(invalid_row)?)?,
         attachment_anchor_id: id16(row.try_get("attachment_anchor_id").map_err(invalid_row)?)?,

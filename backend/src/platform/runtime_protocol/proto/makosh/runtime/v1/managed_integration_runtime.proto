@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package makosh.runtime.v1;
+
+import "makosh/runtime/v1/managed_storage_runtime.proto";
+import "makosh/runtime/v1/managed_runtime_artifact.proto";
+
+// Short-lived private configuration staged by Kernel for an admitted provider
+// integration. It carries only bounded runtime identity, event topology and
+// owner-local storage fences. Provider credentials are issued and resolved on
+// the inherited Vault route and are not representable in this message.
+message IntegrationStateRootV1 {
+  string root_path = 1;
+  uint64 state_generation = 2;
+  uint32 state_layout_revision = 3;
+}
+
+message ManagedIntegrationConfigurationInstanceV1 {
+  string configuration_instance_id = 1;
+  bytes settings_snapshot_bytes = 2;
+  IntegrationStateRootV1 integration_state_root = 3;
+}
+
+message ManagedIntegrationRuntimeConfigurationV1 {
+  uint32 major = 1;
+  // Stable integration-owner identity used for storage and Event Hub admission.
+  string logical_owner_id = 2;
+  string registration_id = 3;
+  string runtime_instance_id = 4;
+  uint64 runtime_generation = 5;
+  uint64 grant_epoch = 6;
+  ManagedStorageRuntimeConfigurationV1 storage = 7;
+  string event_hub_endpoint = 8;
+  uint64 event_credential_revision = 9;
+  string configuration_instance_id = 10;
+  repeated ManagedRuntimeArtifactBindingV1 runtime_artifacts = 11;
+  IntegrationStateRootV1 integration_state_root = 12;
+  repeated ManagedIntegrationConfigurationInstanceV1 configuration_instances = 13;
+  // Human owner whose provider accounts and private data are processed.
+  string logical_human_owner_id = 14;
+}

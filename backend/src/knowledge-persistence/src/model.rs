@@ -1,4 +1,4 @@
-use hermes_knowledge_core::{
+use makosh_knowledge_core::{
     ReviewedCandidateKnowledgeNoteDraftV1, VerifiedKnowledgeNoteV1,
     knowledge_note_creation_fingerprint_v1,
 };
@@ -53,7 +53,7 @@ pub struct ReserveReviewedCandidateCommandV1 {
 impl ReserveReviewedCandidateCommandV1 {
     pub fn command_fingerprint(&self) -> [u8; 32] {
         let mut hash = Sha256::new();
-        hash.update(b"hermes.knowledge.reviewed-candidate.command.v1\0");
+        hash.update(b"makosh.knowledge.reviewed-candidate.command.v1\0");
         hash.update(self.command_id);
         hash.update(self.approved_candidate_id);
         hash.update(self.candidate_digest);
@@ -194,7 +194,7 @@ pub(crate) fn valid_cleanup(value: &KnowledgeBlobCleanupV1) -> bool {
 }
 
 pub(crate) fn valid_note(value: &VerifiedKnowledgeNoteV1) -> bool {
-    hermes_knowledge_core::validate_verified_knowledge_note_v1(value).is_ok()
+    makosh_knowledge_core::validate_verified_knowledge_note_v1(value).is_ok()
 }
 
 #[cfg(test)]

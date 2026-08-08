@@ -1,4 +1,4 @@
-use hermes_knowledge_command_api::{
+use makosh_knowledge_command_api::{
     create_knowledge_note_from_reviewed_candidate_contract_reference_v1,
     create_knowledge_note_from_reviewed_candidate_publish_request_v1,
     knowledge_note_created_from_reviewed_candidate_consume_request_v1,
@@ -6,18 +6,18 @@ use hermes_knowledge_command_api::{
     knowledge_note_creation_from_reviewed_candidate_rejected_consume_request_v1,
     knowledge_note_creation_from_reviewed_candidate_rejected_contract_reference_v1,
 };
-use hermes_review_note_candidate_api::{
+use makosh_review_note_candidate_api::{
     review_note_candidate_approved_consume_request_v1,
     review_note_candidate_approved_contract_reference_v1,
 };
-use hermes_review_note_candidate_promotion_api::{
+use makosh_review_note_candidate_promotion_api::{
     review_note_candidate_promotion_result_contract_reference_v1,
     review_note_candidate_promotion_result_publish_request_v1,
 };
-use hermes_reviewed_note_candidate_promotion_core::{
+use makosh_reviewed_note_candidate_promotion_core::{
     REVIEWED_NOTE_CANDIDATE_PROMOTION_MODULE_ID_V1, REVIEWED_NOTE_CANDIDATE_PROMOTION_OWNER_V1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ContractReferenceV1, ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1,
     ProvidedSurfaceKindV1, ProvidedSurfaceV1, RuntimeBudgetRequestV1, SettingsSchemaRefV1,
@@ -174,7 +174,7 @@ fn storage_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::{
+    use makosh_runtime_protocol::{
         v1::ProvidedSurfaceKindV1,
         validation::descriptor::{validate_descriptor_v1, validate_settings_schema_v1},
     };

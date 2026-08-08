@@ -1,5 +1,5 @@
 [package]
-name = "hermes-scheduler-persistence"
+name = "makosh-scheduler-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,18 +7,18 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "scheduler"
 surface = "persistence"
 
 [dependencies]
-hermes-clock-protocol = { path = "../../clock/protocol" }
-hermes-events-protocol = { path = "../../events" }
-hermes-runtime-protocol = { path = "../../runtime_protocol" }
-hermes-scheduler = { path = "../implementation" }
-hermes-scheduler-protocol = { path = "../protocol" }
-hermes-storage-protocol = { path = "../../storage/protocol" }
+makosh-clock-protocol = { path = "../../clock/protocol" }
+makosh-events-protocol = { path = "../../events" }
+makosh-runtime-protocol = { path = "../../runtime_protocol" }
+makosh-scheduler = { path = "../implementation" }
+makosh-scheduler-protocol = { path = "../protocol" }
+makosh-storage-protocol = { path = "../../storage/protocol" }
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

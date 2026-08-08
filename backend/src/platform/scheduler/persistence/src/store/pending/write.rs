@@ -1,4 +1,4 @@
-use hermes_scheduler_protocol::OverlapPolicyV1;
+use makosh_scheduler_protocol::OverlapPolicyV1;
 use sqlx::{Postgres, Transaction, query, query_scalar};
 
 use super::request::{
@@ -49,7 +49,7 @@ async fn verify_schedule(
     fire: &SchedulerPendingFireV1,
 ) -> Result<(), SchedulerPendingFireErrorV1> {
     let found = query_scalar::<_, i32>(
-        "SELECT 1 FROM hermes_platform.scheduler_schedules WHERE schedule_id = $1 AND schedule_revision = $2 AND enabled = TRUE AND concurrency_key = $3 AND max_parallelism = $4 AND policy_bytes = $5 FOR UPDATE",
+        "SELECT 1 FROM makosh_platform.scheduler_schedules WHERE schedule_id = $1 AND schedule_revision = $2 AND enabled = TRUE AND concurrency_key = $3 AND max_parallelism = $4 AND policy_bytes = $5 FOR UPDATE",
     )
     .bind(fire.claim().schedule_id().bytes().to_vec())
     .bind(i64::try_from(fire.schedule_revision().value()).map_err(|_| SchedulerPendingFireErrorV1::Stale)?)
@@ -71,7 +71,7 @@ async fn record_queued(
     max_pending_runs: u16,
 ) -> Result<SchedulerPendingFireOutcomeV1, SchedulerPendingFireErrorV1> {
     let count = query_scalar::<_, i64>(
-        "SELECT COUNT(*) FROM hermes_platform.scheduler_pending_fires WHERE schedule_id = $1",
+        "SELECT COUNT(*) FROM makosh_platform.scheduler_pending_fires WHERE schedule_id = $1",
     )
     .bind(fire.claim().schedule_id().bytes().to_vec())
     .fetch_one(&mut **transaction)
@@ -87,7 +87,7 @@ async fn record_coalesced(
     transaction: &mut Transaction<'_, Postgres>,
     fire: &SchedulerPendingFireV1,
 ) -> Result<SchedulerPendingFireOutcomeV1, SchedulerPendingFireErrorV1> {
-    query("DELETE FROM hermes_platform.scheduler_pending_fires WHERE schedule_id = $1")
+    query("DELETE FROM makosh_platform.scheduler_pending_fires WHERE schedule_id = $1")
         .bind(fire.claim().schedule_id().bytes().to_vec())
         .execute(&mut **transaction)
         .await
@@ -102,7 +102,7 @@ async fn insert_pending(
     fire: &SchedulerPendingFireV1,
 ) -> Result<SchedulerPendingFireOutcomeV1, SchedulerPendingFireErrorV1> {
     let inserted = query(
-        "INSERT INTO hermes_platform.scheduler_pending_fires (fire_key, schedule_id, schedule_revision, scheduled_for_unix_ms, concurrency_key, recorded_at_unix_ms) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (fire_key) DO NOTHING",
+        "INSERT INTO makosh_platform.scheduler_pending_fires (fire_key, schedule_id, schedule_revision, scheduled_for_unix_ms, concurrency_key, recorded_at_unix_ms) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (fire_key) DO NOTHING",
     )
     .bind(fire.claim().fire_key().to_vec())
     .bind(fire.claim().schedule_id().bytes().to_vec())

@@ -8,13 +8,13 @@ pub use envelope::{
     build_attachment_preview_custody_delegation_rejected_outbox_record_v1,
     build_request_attachment_preview_custody_delegation_outbox_record_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-attachment-preview-ingress";
+pub const PACKAGE: &str = "makosh-attachment-preview-ingress";
 pub const ATTACHMENT_PREVIEW_INGRESS_OWNER_V1: &str = "attachment_preview";
 pub const ATTACHMENT_PREVIEW_CUSTODY_DELEGATION_REQUESTED_CONTRACT_NAME_V1: &str =
     "attachment_preview_custody_delegation_requested";
@@ -30,13 +30,13 @@ pub const ATTACHMENT_PREVIEW_MAX_PROOF_BYTES_V1: usize = 2_048;
 pub const ATTACHMENT_SECURITY_PREVIEW_DELEGATION_CAPABILITY_ID_V1: &str =
     "attachment_security.preview-delegation.v1";
 pub const ATTACHMENT_PREVIEW_BLOB_TARGET_OWNER_ID_V1: &str = "attachment_preview";
-pub const ATTACHMENT_PREVIEW_BLOB_TARGET_MODULE_ID_V1: &str = "hermes-attachment-preview-runtime";
+pub const ATTACHMENT_PREVIEW_BLOB_TARGET_MODULE_ID_V1: &str = "makosh-attachment-preview-runtime";
 pub const ATTACHMENT_PREVIEW_BLOB_TARGET_CAPABILITY_ID_V1: &str = "attachment_preview.blob.v1";
 
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.attachment_preview.ingress.v1.rs"
+        "/makosh.attachment_preview.ingress.v1.rs"
     ));
 }
 
@@ -57,7 +57,7 @@ pub fn attachment_preview_custody_delegation_request_id_v1(
     safety_message_id: [u8; 16],
 ) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-preview.custody-delegation-request.v1\0");
+    hasher.update(b"makosh.attachment-preview.custody-delegation-request.v1\0");
     hasher.update(preview_run_id);
     hasher.update(candidate_message_id);
     hasher.update(safety_message_id);
@@ -193,7 +193,7 @@ fn event_route(
 
 fn custody_result_message_id_v1(label: &[u8], request_id: [u8; 16]) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-preview.custody-result.v1\0");
+    hasher.update(b"makosh.attachment-preview.custody-result.v1\0");
     hasher.update(label);
     hasher.update(request_id);
     hasher.finalize()[..16].try_into().expect("digest prefix")
@@ -211,7 +211,7 @@ mod tests {
         );
         assert_eq!(
             ATTACHMENT_PREVIEW_BLOB_TARGET_MODULE_ID_V1,
-            "hermes-attachment-preview-runtime"
+            "makosh-attachment-preview-runtime"
         );
         let Some(Request::EventRoute(route)) =
             attachment_preview_custody_delegation_requested_consume_request_v1().request

@@ -4,11 +4,11 @@ use thiserror::Error;
 use crate::platform::secrets::errors::{SecretReferenceError, SecretResolutionError};
 use crate::platform::secrets::models::{ProviderCredential, SecretKind};
 use crate::platform::secrets::resolver::SecretResolver;
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::{
     ProviderAccountSecretPurpose, ProviderSecretBindingLookupPort, ProviderSecretBindingPortError,
 };
-use hermes_communications_postgres::errors::CommunicationIngestionError;
-use hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore;
+use makosh_communications_postgres::errors::CommunicationIngestionError;
+use makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore;
 
 #[derive(Debug, Error)]
 pub enum ProviderCredentialError {

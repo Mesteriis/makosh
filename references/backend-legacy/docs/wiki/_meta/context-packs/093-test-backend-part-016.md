@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `test`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/tests/v1_communications_templates.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v1_communications_templates.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v1_communications_templates.rs`
 - Size bytes / Размер в байтах: `7625`
 - Included characters / Включено символов: `7625`
 - Truncated / Обрезано: `no`
@@ -68,8 +68,8 @@ use axum::http::{Method, Request, StatusCode, header};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const T: &str = "v1comms-template-test-token";
@@ -85,7 +85,7 @@ async fn router(db: &str) -> axum::Router {
 fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("req")
 }
@@ -95,7 +95,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::from(body.to_string()))
         .expect("req")
 }
@@ -104,7 +104,7 @@ fn delete_req(uri: &str) -> Request<Body> {
     Request::builder()
         .method(Method::DELETE)
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("req")
 }
@@ -187,7 +187,7 @@ async fn rich_template_save_list_render_and_delete_uses_durable_template_store()
                 "template_id": template_id,
                 "variables": {
                     "name": "Alex",
-                    "project": "Hermes",
+                    "project": "Макошь",
                     "status": "green"
                 }
             }),
@@ -202,7 +202,7 @@ async fn rich_template_save_list_render_and_delete_uses_durable_template_store()
     )
     .unwrap();
     assert_eq!(render_body["rendered"]["subject"], "Hello Alex");
-    assert_eq!(render_body["rendered"]["body"], "Project Hermes is green.");
+    assert_eq!(render_body["rendered"]["body"], "Project Макошь is green.");
     assert_eq!(render_body["rendered"]["missing_variables"], json!([]));
     assert_eq!(render_body["rendered"]["unresolved_variables"], json!([]));
     assert_eq!(render_body["rendered"]["malformed_placeholders"], json!([]));
@@ -218,7 +218,7 @@ async fn rich_template_save_list_render_and_delete_uses_durable_template_store()
                         "row_id": "r1",
                         "variables": {
                             "name": "Alex",
-                            "project": "Hermes",
+                            "project": "Макошь",
                             "status": "green"
                         }
                     },
@@ -226,7 +226,7 @@ async fn rich_template_save_list_render_and_delete_uses_durable_template_store()
                         "row_id": "r2",
                         "variables": {
                             "name": "Sam",
-                            "project": "Hermes"
+                            "project": "Макошь"
                         }
                     }
                 ]
@@ -253,7 +253,7 @@ async fn rich_template_save_list_render_and_delete_uses_durable_template_store()
     );
     assert_eq!(
         preview_body["items"][0]["rendered"]["body"],
-        "Project Hermes is green."
+        "Project Макошь is green."
     );
     assert_eq!(preview_body["items"][1]["row_id"], "r2");
     assert_eq!(preview_body["items"][1]["ready"], false);
@@ -298,7 +298,7 @@ async fn rich_template_save_list_render_and_delete_uses_durable_template_store()
 
 ### `backend/tests/v1_workflow_actions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v1_workflow_actions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v1_workflow_actions.rs`
 - Size bytes / Размер в байтах: `22104`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -313,15 +313,15 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::{build_router, build_router_with_database};
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::{build_router, build_router_with_database};
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, project_raw_email_message,
 };
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 
 const T: &str = "v1-workflow-action-test-token";
 
@@ -334,8 +334,8 @@ fn post_with_actor(uri: &str, body: Value) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
-        .header("x-hermes-actor-id", "hermes-frontend")
+        .header("x-makosh-secret", T)
+        .header("x-makosh-actor-id", "makosh-frontend")
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -345,7 +345,7 @@ fn put(uri: &str, body: Value) -> Request<Body> {
         .method(Method::PUT)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -667,7 +667,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/v2_domain_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v2_domain_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v2_domain_api.rs`
 - Size bytes / Размер в байтах: `6170`
 - Included characters / Включено символов: `6170`
 - Truncated / Обрезано: `no`
@@ -678,11 +678,11 @@ use testkit::context::TestContext;
 
 use axum::body::{Body, to_bytes};
 use axum::http::{Request, StatusCode};
-use hermes_hub_backend::app::{build_router, build_router_with_database};
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::domains::tasks::api::{NewTask, TaskStore};
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::{build_router, build_router_with_database};
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::domains::tasks::api::{NewTask, TaskStore};
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::{Value, json};
 use sqlx::PgPool;
 use tower::ServiceExt;
@@ -703,7 +703,7 @@ async fn domain_routes_build_and_require_local_api_secret() {
         json_body(response).await,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 
@@ -736,7 +736,7 @@ async fn tasks_endpoint_returns_first_class_task_payload_against_postgres() {
             title: format!("V1 first-class task {suffix}"),
             description: Some("contract test task".to_owned()),
             source_type: Some("manual".to_owned()),
-            hermes_status: Some("ready".to_owned()),
+            makosh_status: Some("ready".to_owned()),
             priority_score: Some(0.7),
             tags: Some(json!(["api-test"])),
             ..Default::default()
@@ -753,7 +753,7 @@ async fn tasks_endpoint_returns_first_class_task_payload_against_postgres() {
         .oneshot(get_request_with_token_and_actor(
             "/api/v1/tasks?limit=100",
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -769,7 +769,7 @@ async fn tasks_endpoint_returns_first_class_task_payload_against_postgres() {
 
     assert_eq!(item["title"], json!(task.title));
     assert_eq!(item["source_type"], json!("observation"));
-    assert_eq!(item["hermes_status"], json!("ready"));
+    assert_eq!(item["makosh_status"], json!("ready"));
     assert_eq!(item["confidentiality"], json!("private_local"));
     assert_eq!(item["task_metadata"], json!({}));
 }
@@ -799,7 +799,7 @@ async fn person_health_endpoint_returns_single_person_health_against_postgres() 
         .oneshot(get_request_with_token_and_actor(
             &format!("/api/v1/persons/{}/health", person.person_id),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -826,7 +826,7 @@ fn get_request(uri: &str) -> Request<Body> {
 fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -834,7 +834,7 @@ fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
 fn get_request_with_token_and_actor(uri: &str, token: &str, _actor_id: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -866,7 +866,7 @@ fn unique_suffix() -> u128 {
 
 ### `backend/tests/whatsapp.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/whatsapp.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/whatsapp.rs`
 - Size bytes / Размер в байтах: `608209`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -884,16 +884,16 @@ use sqlx::Row;
 use tempfile::tempdir;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, CommunicationProviderKind, NewProviderAccount,
     NewProviderAccountSecretBinding, ProviderAccountSecretPurpose,
 };
-use hermes_hub_backend::engines::timeline::TimelineEngine;
-use hermes_hub_backend::platform::events::{EventLogQuery, EventStore};
-use hermes_hub_backend::platform::secrets::{SecretKind, SecretReferenceStore};
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::vault::{EntropyEvent, HostVault, HostVaultConfig, SecretEntryContext};
+use makosh_hub_backend::engines::timeline::TimelineEngine;
+use makosh_hub_backend::platform::events::{EventLogQuery, EventStore};
+use makosh_hub_backend::platform::secrets::{SecretKind, SecretReferenceStore};
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::vault::{EntropyEvent, HostVault, HostVaultConfig, SecretEntryContext};
 
 const LOCAL_API_TOKEN: &str = "whatsapp-api-test-secret";
 
@@ -1014,7 +1014,7 @@ async fn whatsapp_native_md_fixture_account_preserves_provider_shape_and_appears
                 "provider_shape": "whatsapp_native_md",
                 "display_name": "WhatsApp Native MD Fixture",
                 "external_account_id": format!("wa-native-fixture-{suffix}"),
-                "device_name": "Hermes Native MD Fixture",
+                "device_name": "Макошь Native MD Fixture",
                 "local_state_path": format!("docker/data/whatsapp/native-fixture-{suffix}")
             }),
             LOCAL_API_TOKEN,
@@ -1136,7 +1136,7 @@ async fn whatsapp_provider_neutral_communications_routes_dispatch_to_whatsapp_co
                 "provider_kind": "whatsapp_web",
                 "display_name": "WhatsApp Communications Routes",
                 "external_account_id": format!("wa-communications-routes-{suffix}"),
-                "device_name": "Hermes Communications Routes",
+                "device_name": "Макошь Communications Routes",
                 "local_state_path": format!("docker/data/whatsapp/communications-routes-{suffix}")
             }),
             LOCAL_API_TOKEN,
@@ -1173,7 +1173,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/whatsapp_signal_hub.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/whatsapp_signal_hub.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/whatsapp_signal_hub.rs`
 - Size bytes / Размер в байтах: `56104`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1182,7 +1182,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use hermes_hub_backend::platform::events::bus::{sanitize_event_payload, whatsapp_event_types};
+use makosh_hub_backend::platform::events::bus::{sanitize_event_payload, whatsapp_event_types};
 use serde_json::json;
 
 fn repo_root() -> PathBuf {
@@ -1399,7 +1399,7 @@ fn whatsapp_live_smoke_evidence_collector_is_not_a_bypass() {
             .contains("defaultObservationsPath = '.local/whatsapp/live-smoke-observations.json'")
             && collector.contains("whatsapp-live-smoke-evidence.mjs")
             && collector.contains("--observations-template")
-            && collector.contains("HERMES_WHATSAPP_SMOKE_ACCOUNT_ID")
+            && collector.contains("MAKOSH_WHATSAPP_SMOKE_ACCOUNT_ID")
             && collector.contains("sha256Fingerprint")
             && collector.contains("assertNoSecretLikeContent")
             && collector.contains("Gates without operator-provided sanitized refs remain pending")
@@ -1435,7 +1435,7 @@ fn whatsapp_native_md_upgrade_path_is_executable_evidence_not_assumption() {
             && gap_readiness.contains("native_md_wa_rs_dependency_context")
             && gap_readiness.contains("native_md_crates_io_probe")
             && gap_readiness.contains("native_md_upgrade_requires_provider_api_not_toolchain_only")
-            && gap_readiness.contains("HERMES_WA_RS_CRATES_IO_PROBE=1")
+            && gap_readiness.contains("MAKOSH_WA_RS_CRATES_IO_PROBE=1")
             && gap_readiness.contains("cargo info"),
         "Native MD gap readiness must make the Rust/wa-rs upgrade path executable evidence, not an assumption"
     );
@@ -1451,19 +1451,19 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/yandex_telemost_calendar_matching.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/yandex_telemost_calendar_matching.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/yandex_telemost_calendar_matching.rs`
 - Size bytes / Размер в байтах: `3055`
 - Included characters / Включено символов: `3055`
 - Truncated / Обрезано: `no`
 
 ```rust
 use chrono::{TimeZone, Utc};
-use hermes_hub_backend::domains::calendar::core::EventParticipantPort;
-use hermes_hub_backend::domains::calendar::events::{CalendarEventStore, NewCalendarEvent};
-use hermes_hub_backend::platform::events::EventEnvelope;
-use hermes_hub_backend::platform::events::bus::yandex_telemost_event_types;
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::yandex_telemost_calendar_matching::project_yandex_telemost_calendar_matching;
+use makosh_hub_backend::domains::calendar::core::EventParticipantPort;
+use makosh_hub_backend::domains::calendar::events::{CalendarEventStore, NewCalendarEvent};
+use makosh_hub_backend::platform::events::EventEnvelope;
+use makosh_hub_backend::platform::events::bus::yandex_telemost_event_types;
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::yandex_telemost_calendar_matching::project_yandex_telemost_calendar_matching;
 use serde_json::json;
 use testkit::context::TestContext;
 
@@ -1542,7 +1542,7 @@ async fn telemost_cohosts_are_projected_into_matched_calendar_event_participants
 
 ### `backend/tests/zoom_calendar_matching.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/zoom_calendar_matching.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/zoom_calendar_matching.rs`
 - Size bytes / Размер в байтах: `6153`
 - Included characters / Включено символов: `6153`
 - Truncated / Обрезано: `no`
@@ -1551,16 +1551,16 @@ async fn telemost_cohosts_are_projected_into_matched_calendar_event_participants
 use std::sync::Arc;
 
 use chrono::{Duration, Utc};
-use hermes_hub_backend::domains::calendar::core::EventRelationStore;
-use hermes_hub_backend::domains::calendar::events::{CalendarEventStore, NewCalendarEvent};
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::calendar::core::EventRelationStore;
+use makosh_hub_backend::domains::calendar::events::{CalendarEventStore, NewCalendarEvent};
+use makosh_hub_backend::domains::communications::core::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
-use hermes_hub_backend::integrations::zoom::client::{ZoomMeetingObservationRequest, ZoomStore};
-use hermes_hub_backend::platform::calls::CallIntelligenceStore;
-use hermes_hub_backend::platform::events::{EventBus, EventLogQuery, EventStore};
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::zoom_calendar_matching::{
+use makosh_hub_backend::integrations::zoom::client::{ZoomMeetingObservationRequest, ZoomStore};
+use makosh_hub_backend::platform::calls::CallIntelligenceStore;
+use makosh_hub_backend::platform::events::{EventBus, EventLogQuery, EventStore};
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::zoom_calendar_matching::{
     ZOOM_CALENDAR_RELATION_TYPE, project_zoom_calendar_matching,
 };
 use serde_json::json;
@@ -1597,7 +1597,7 @@ async fn zoom_meeting_events_match_calendar_events_into_call_relations() {
         Arc::new(CommunicationProviderAccountStore::new(pool.clone())),
         Arc::new(CommunicationProviderSecretBindingStore::new(pool.clone())),
         Arc::new(
-            hermes_hub_backend::domains::communications::storage::CommunicationStorageStore::new(
+            makosh_hub_backend::domains::communications::storage::CommunicationStorageStore::new(
                 pool.clone(),
             ),
         ),
@@ -1608,7 +1608,7 @@ async fn zoom_meeting_events_match_calendar_events_into_call_relations() {
     let account_id = format!("zoom-calendar-match-{suffix}");
     zoom_store
         .setup_fixture_account(
-            &hermes_hub_backend::integrations::zoom::client::ZoomAccountSetupRequest {
+            &makosh_hub_backend::integrations::zoom::client::ZoomAccountSetupRequest {
                 account_id: account_id.clone(),
                 display_name: "Zoom Calendar Match Fixture".to_owned(),
                 external_account_id: format!("zoom-calendar-match-external-{suffix}"),
@@ -1701,7 +1701,7 @@ async fn zoom_meeting_events_match_calendar_events_into_call_relations() {
 
 ### `backend/tests/zoom_participant_identity.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/zoom_participant_identity.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/zoom_participant_identity.rs`
 - Size bytes / Размер в байтах: `8088`
 - Included characters / Включено символов: `8088`
 - Truncated / Обрезано: `no`
@@ -1710,18 +1710,18 @@ async fn zoom_meeting_events_match_calendar_events_into_call_relations() {
 use std::sync::Arc;
 
 use chrono::Utc;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::integrations::zoom::client::{
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::integrations::zoom::client::{
     ZoomAccountSetupRequest, ZoomMeetingObservationRequest, ZoomParticipantSnapshot, ZoomStore,
 };
-use hermes_hub_backend::platform::calls::CallIntelligenceStore;
-use hermes_hub_backend::platform::events::{EventBus, EventLogQuery, EventStore};
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::review_inbox::project_person_identity_review_event;
-use hermes_hub_backend::workflows::zoom_participant_identity::project_zoom_participant_identity;
+use makosh_hub_backend::platform::calls::CallIntelligenceStore;
+use makosh_hub_backend::platform::events::{EventBus, EventLogQuery, EventStore};
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::review_inbox::project_person_identity_review_event;
+use makosh_hub_backend::workflows::zoom_participant_identity::project_zoom_participant_identity;
 use serde_json::json;
 use sqlx::Row;
 use testkit::context::TestContext;
@@ -1754,7 +1754,7 @@ async fn zoom_participant_identity_candidates_flow_into_review_inbox() {
         Arc::new(CommunicationProviderAccountStore::new(pool.clone())),
         Arc::new(CommunicationProviderSecretBindingStore::new(pool.clone())),
         Arc::new(
-            hermes_hub_backend::domains::communications::storage::CommunicationStorageStore::new(
+            makosh_hub_backend::domains::communications::storage::CommunicationStorageStore::new(
                 pool.clone(),
             ),
         ),
@@ -1928,7 +1928,7 @@ async fn zoom_participant_identity_candidates_flow_into_review_inbox() {
 
 ### `backend/tests/zoom_provider_foundation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/zoom_provider_foundation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/zoom_provider_foundation.rs`
 - Size bytes / Размер в байтах: `153137`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1950,26 +1950,26 @@ use tokio::net::TcpListener;
 use tokio::time::{Duration, timeout};
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationProviderAccountStore, CommunicationProviderKind,
     CommunicationProviderSecretBindingStore, ProviderAccountSecretPurpose,
 };
-use hermes_hub_backend::integrations::zoom::client::{
+use makosh_hub_backend::integrations::zoom::client::{
     ZoomAccountSetupRequest, ZoomMeetingObservationRequest, ZoomStore,
 };
-use hermes_hub_backend::platform::calls::CallIntelligenceStore;
-use hermes_hub_backend::platform::events::bus::zoom_event_types;
-use hermes_hub_backend::platform::events::{EventBus, EventStore};
-use hermes_hub_backend::platform::secrets::{
+use makosh_hub_backend::platform::calls::CallIntelligenceStore;
+use makosh_hub_backend::platform::events::bus::zoom_event_types;
+use makosh_hub_backend::platform::events::{EventBus, EventStore};
+use makosh_hub_backend::platform::secrets::{
     NewSecretReference, SecretKind, SecretReferenceStore, SecretStoreKind,
 };
-use hermes_hub_backend::platform::settings::ApplicationSettingsStore;
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::vault::{
+use makosh_hub_backend::platform::settings::ApplicationSettingsStore;
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::vault::{
     EntropyEvent, HostVault, HostVaultConfig, SecretEntryContext, VaultMode,
 };
-use hermes_hub_backend::workflows::mail_background_sync::DEFAULT_MAIL_SYNC_BLOB_ROOT;
+use makosh_hub_backend::workflows::mail_background_sync::DEFAULT_MAIL_SYNC_BLOB_ROOT;
 
 const LOCAL_API_TOKEN: &str = "zoom-provider-test-secret";
 const ZOOM_REMOTE_TRANSCRIPT_DOWNLOAD_ENABLED_SETTING_KEY: &str =
@@ -2253,7 +2253,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/zoom_signal_detection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/zoom_signal_detection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/zoom_signal_detection.rs`
 - Size bytes / Размер в байтах: `10440`
 - Included characters / Включено символов: `10440`
 - Truncated / Обрезано: `no`
@@ -2262,18 +2262,18 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 use std::sync::Arc;
 
 use chrono::Utc;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
-use hermes_hub_backend::domains::signal_hub::{SignalHubProfileService, SignalHubStore};
-use hermes_hub_backend::integrations::zoom::client::{
+use makosh_hub_backend::domains::signal_hub::{SignalHubProfileService, SignalHubStore};
+use makosh_hub_backend::integrations::zoom::client::{
     ZoomAccountSetupRequest, ZoomMeetingObservationRequest, ZoomStore,
 };
-use hermes_hub_backend::platform::calls::CallIntelligenceStore;
-use hermes_hub_backend::platform::events::{EventBus, EventLogQuery, EventStore};
-use hermes_hub_backend::platform::settings::ApplicationSettingsStore;
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::zoom_signal_detection::project_zoom_signal_detection;
+use makosh_hub_backend::platform::calls::CallIntelligenceStore;
+use makosh_hub_backend::platform::events::{EventBus, EventLogQuery, EventStore};
+use makosh_hub_backend::platform::settings::ApplicationSettingsStore;
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::zoom_signal_detection::project_zoom_signal_detection;
 use serde_json::json;
 use testkit::context::TestContext;
 
@@ -2295,7 +2295,7 @@ async fn zoom_meeting_events_flow_into_signal_hub_detection_events() {
         Arc::new(CommunicationProviderAccountStore::new(pool.clone())),
         Arc::new(CommunicationProviderSecretBindingStore::new(pool.clone())),
         Arc::new(
-            hermes_hub_backend::domains::communications::storage::CommunicationStorageStore::new(
+            makosh_hub_backend::domains::communications::storage::CommunicationStorageStore::new(
                 pool.clone(),
             ),
         ),
@@ -2443,7 +2443,7 @@ async fn zoom_meeting_signal_detection_respects_testing_profile_muting() {
         Arc::new(CommunicationProviderAccountStore::new(pool.clone())),
         Arc::new(CommunicationProviderSecretBindingStore::new(pool.clone())),
         Arc::new(
-            hermes_hub_backend::domains::communications::storage::CommunicationStorageStore::new(
+            makosh_hub_backend::domains::communications::storage::CommunicationStorageStore::new(
                 pool.clone(),
             ),
         ),

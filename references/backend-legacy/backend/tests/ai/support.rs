@@ -1,5 +1,5 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 use std::net::SocketAddr;
 use std::sync::LazyLock;
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -8,28 +8,28 @@ pub(crate) use axum::body::{Body, to_bytes};
 pub(crate) use axum::http::{Request, StatusCode, header};
 pub(crate) use axum::routing::{get, post};
 pub(crate) use axum::{Json, Router};
-pub(crate) use hermes_communications_postgres::store::CommunicationIngestionStore;
-pub(crate) use hermes_hub_backend::ai::control_center::models::{
+pub(crate) use makosh_communications_postgres::store::CommunicationIngestionStore;
+pub(crate) use makosh_hub_backend::ai::control_center::models::{
     AiModelAvailabilityUpdateRequest, AiModelRouteUpdateRequest,
 };
-pub(crate) use hermes_hub_backend::ai::control_center::store::AiControlCenterStore;
-pub(crate) use hermes_hub_backend::ai::core::runs::{AiAgentRun, AiRunStore};
-pub(crate) use hermes_hub_backend::ai::core::semantic::models::{
+pub(crate) use makosh_hub_backend::ai::control_center::store::AiControlCenterStore;
+pub(crate) use makosh_hub_backend::ai::core::runs::{AiAgentRun, AiRunStore};
+pub(crate) use makosh_hub_backend::ai::core::semantic::models::{
     NewSemanticEmbedding, SemanticSourceKind,
 };
-pub(crate) use hermes_hub_backend::ai::core::semantic::store::SemanticEmbeddingStore;
-pub(crate) use hermes_hub_backend::app::router::{build_router, build_router_with_database};
-use hermes_hub_backend::domains::communications::messages::projection::project_raw_email_message;
-pub(crate) use hermes_hub_backend::domains::communications::messages::store::MessageProjectionStore;
-pub(crate) use hermes_hub_backend::domains::documents::core::models::NewDocumentImport;
-pub(crate) use hermes_hub_backend::domains::documents::core::store::DocumentImportStore;
-pub(crate) use hermes_hub_backend::domains::personas::api::store::PersonaProjectionStore;
-pub(crate) use hermes_hub_backend::domains::projects::core::models::NewProject;
-pub(crate) use hermes_hub_backend::domains::projects::core::store::ProjectStore;
+pub(crate) use makosh_hub_backend::ai::core::semantic::store::SemanticEmbeddingStore;
+pub(crate) use makosh_hub_backend::app::router::{build_router, build_router_with_database};
+use makosh_hub_backend::domains::communications::messages::projection::project_raw_email_message;
+pub(crate) use makosh_hub_backend::domains::communications::messages::store::MessageProjectionStore;
+pub(crate) use makosh_hub_backend::domains::documents::core::models::NewDocumentImport;
+pub(crate) use makosh_hub_backend::domains::documents::core::store::DocumentImportStore;
+pub(crate) use makosh_hub_backend::domains::personas::api::store::PersonaProjectionStore;
+pub(crate) use makosh_hub_backend::domains::projects::core::models::NewProject;
+pub(crate) use makosh_hub_backend::domains::projects::core::store::ProjectStore;
 
-pub(crate) use hermes_hub_backend::platform::config::app_config::AppConfig;
-pub(crate) use hermes_hub_backend::platform::settings::store::ApplicationSettingsStore;
-pub(crate) use hermes_hub_backend::platform::storage::database::Database;
+pub(crate) use makosh_hub_backend::platform::config::app_config::AppConfig;
+pub(crate) use makosh_hub_backend::platform::settings::store::ApplicationSettingsStore;
+pub(crate) use makosh_hub_backend::platform::storage::database::Database;
 pub(crate) use serde_json::{Value, json};
 pub(crate) use sqlx::Row;
 pub(crate) use sqlx::postgres::PgPool;
@@ -81,7 +81,7 @@ pub(crate) async fn spawn_fake_ollama() -> String {
                 } else if text.contains("meeting briefing") {
                     "Discuss V3 risks and validation evidence."
                 } else {
-                    "Hermes Hub V3 is source-backed."
+                    "Макошь V3 is source-backed."
                 };
 
                 Json(json!({
@@ -111,7 +111,7 @@ pub(crate) async fn configure_fake_ollama_setting(pool: &PgPool, ollama_base_url
         .update_setting_value(
             "ai.ollama_base_url",
             &json!(ollama_base_url),
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("fake Ollama setting");
@@ -128,7 +128,7 @@ pub(crate) async fn configure_fake_ollama_setting(pool: &PgPool, ollama_base_url
                 model_key: chat_model.to_owned(),
                 is_available: true,
             },
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("fake Ollama chat model availability");
@@ -140,7 +140,7 @@ pub(crate) async fn configure_fake_ollama_setting(pool: &PgPool, ollama_base_url
                 model_key: embedding_model.to_owned(),
                 is_available: true,
             },
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("fake Ollama embedding model availability");
@@ -258,7 +258,7 @@ pub(crate) async fn seed_document(
 }
 
 pub(crate) fn config_with_api_token() -> AppConfig {
-    hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+    makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
 }
 
 pub(crate) async fn wait_for_run_status(
@@ -332,7 +332,7 @@ pub(crate) fn get_request_with_token(path: &str, token: &str) -> Request<Body> {
     Request::builder()
         .method("GET")
         .uri(path)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -341,7 +341,7 @@ pub(crate) fn json_post_request_with_actor(path: &str, body: Value, token: &str)
     Request::builder()
         .method("POST")
         .uri(path)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .header(header::CONTENT_TYPE, "application/json")
         .body(Body::from(body.to_string()))
         .expect("request")

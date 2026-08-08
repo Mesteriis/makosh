@@ -1,6 +1,6 @@
 //! Generated client query adapter for canonical Communications call evidence.
 
-use hermes_communications_call_evidence_api::{
+use makosh_communications_call_evidence_api::{
     CALL_EVIDENCE_CLIENT_CONTRACT_MAJOR_V1, CALL_EVIDENCE_QUERY_MAX_PAGE_SIZE_V1,
     wire::{
         CallEvidenceQueryRequestV1, CallEvidenceQueryResponseV1, CallEvidenceSummaryV1,
@@ -9,11 +9,11 @@ use hermes_communications_call_evidence_api::{
         call_evidence_query_response_v1::Result as QueryResult,
     },
 };
-use hermes_communications_call_evidence_core::{
+use makosh_communications_call_evidence_core::{
     CallDirectionV1, CallEvidenceProjectionV1, CallLifecycleStateV1, CallMediaKindV1,
     CallProviderProvenanceV1, CallTerminalDispositionV1,
 };
-use hermes_communications_call_evidence_persistence::{
+use makosh_communications_call_evidence_persistence::{
     CallEvidenceListFilterV1, CallEvidencePersistenceErrorV1,
     CommunicationsCallEvidencePersistenceV1,
 };

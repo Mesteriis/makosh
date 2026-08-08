@@ -185,7 +185,7 @@ generated_by: code-wiki-ru
 - **Файл:** `frontend/src/domains/tasks/components/TaskList.vue`
 - **Props:** `activeTasks: Task[]`, `suggestedTaskCandidates: TaskCandidate[]`, `isTasksLoading`, `setTaskCandidateReview`.
 - **Строка-разделитель:** `task_candidate_id === '__separator__'`.
-- **Активная задача:** чекбокс (disabled checked), название, источник (`taskSourceLabel`), проект (или «Unassigned»), время создания (`taskCreatedTime`), статус (`hermes_status`).
+- **Активная задача:** чекбокс (disabled checked), название, источник (`taskSourceLabel`), проект (или «Unassigned»), время создания (`taskCreatedTime`), статус (`makosh_status`).
 - **Кандидат:** название, источник, проект, уверенность (`taskConfidence`), кнопки «Confirm» и «Reject» (вызывают `setTaskCandidateReview` с `'user_confirmed'` или `'user_rejected'`).
 - **Состояния:** при загрузке «Loading task state…», при отсутствии данных «No active tasks yet.».
 

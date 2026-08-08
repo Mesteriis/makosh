@@ -7,7 +7,7 @@ use crate::domains::graph::core::models::{NewGraphEdge, NewGraphNode, Relationsh
 use crate::domains::graph::ports::GraphProjectionPort;
 use crate::platform::graph::GraphNodeKind;
 use crate::platform::graph::node_id;
-use hermes_projects_api::{ProjectMatchedDocument, ProjectMatchedMessage, ProjectProjectionSource};
+use makosh_projects_api::{ProjectMatchedDocument, ProjectMatchedMessage, ProjectProjectionSource};
 
 use super::errors::GraphProjectionError;
 use super::evidence::{project_document_evidence, project_message_evidence};

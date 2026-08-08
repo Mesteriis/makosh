@@ -8,19 +8,19 @@ pub(super) fn configured_store(root: &Path, kernel: &Path) -> SqliteControlStore
     store
         .record_platform_storage_topology(
             &PlatformStorageTopology::new(
-                hermes_kernel_control_store::PlatformStorageTopologyInputV1 {
+                makosh_kernel_control_store::PlatformStorageTopologyInputV1 {
                     revision: 1,
                     storage_generation: 1,
                     storage_instance_id: "storage_main".to_owned(),
-                    database_id: "hermes_storage_authenticated".to_owned(),
+                    database_id: "makosh_storage_authenticated".to_owned(),
                     deployment_profile: StorageDeploymentProfileV1::MacosTauriEmbedded,
                     postgres_endpoint: endpoint(
-                        "HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST",
-                        "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT",
+                        "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST",
+                        "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT",
                     ),
                     pgbouncer_endpoint: endpoint(
-                        "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_HOST",
-                        "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PORT",
+                        "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_HOST",
+                        "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PORT",
                     ),
                     postgres_artifact_sha256: [1; 32],
                     pgbouncer_artifact_sha256: [2; 32],
@@ -54,7 +54,7 @@ pub(super) fn start_storage(
 
 pub(super) fn storage_runtime_directory() -> PathBuf {
     let databases = PathBuf::from(required(
-        "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_DATABASES_FILE",
+        "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_DATABASES_FILE",
     ));
     let pgbouncer = databases.parent().expect("PgBouncer config parent");
     pgbouncer
@@ -102,10 +102,10 @@ pub(super) fn initialize_vault(data: &Path, source: &Path) {
 
 pub(super) fn credential_directory() -> PathBuf {
     let pgbouncer = PathBuf::from(required(
-        "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE",
+        "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE",
     ));
     let postgres = PathBuf::from(required(
-        "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+        "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
     ));
     assert_eq!(pgbouncer.parent(), postgres.parent());
     pgbouncer.parent().expect("credential parent").to_owned()
@@ -144,10 +144,10 @@ pub(super) fn installed_release(root: &Path) -> InstalledSignedBundle {
 }
 
 pub(super) fn vault_binary() -> PathBuf {
-    binary("HERMES_VAULT_RUNTIME_BIN")
+    binary("MAKOSH_VAULT_RUNTIME_BIN")
 }
 pub(super) fn storage_binary() -> PathBuf {
-    binary("HERMES_STORAGE_RUNTIME_BIN")
+    binary("MAKOSH_STORAGE_RUNTIME_BIN")
 }
 pub(super) fn binary(name: &str) -> PathBuf {
     std::env::var_os(name)

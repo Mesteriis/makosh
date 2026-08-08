@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,

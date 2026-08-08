@@ -37,8 +37,8 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
                     operation.source_body_length, operation.source_body_sha256,
                     cleanup.source_custody_proof, cleanup.reason,
                     cleanup.attempt_count
-             FROM hermes_data.communication_cross_channel_forward_cleanup AS cleanup
-             JOIN hermes_data.communication_cross_channel_forward_operations AS operation
+             FROM makosh_data.communication_cross_channel_forward_cleanup AS cleanup
+             JOIN makosh_data.communication_cross_channel_forward_operations AS operation
                ON operation.logical_owner_id = cleanup.logical_owner_id
               AND operation.forward_id = cleanup.forward_id
              WHERE cleanup.logical_owner_id = $1
@@ -68,7 +68,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
             return Err(CrossChannelForwardPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_cross_channel_forward_cleanup
+            "UPDATE makosh_data.communication_cross_channel_forward_cleanup
              SET completed_at_unix_millis = $1,
                  updated_at_unix_millis = $1
              WHERE logical_owner_id = $2 AND forward_id = $3
@@ -103,7 +103,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
         let expected_attempt_count = i16::try_from(expected_attempt_count)
             .map_err(|_| CrossChannelForwardPersistenceErrorV1::InvalidInput)?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_cross_channel_forward_cleanup
+            "UPDATE makosh_data.communication_cross_channel_forward_cleanup
              SET attempt_count = LEAST(attempt_count + 1, 32),
                  next_attempt_at_unix_millis = $1,
                  updated_at_unix_millis = $2

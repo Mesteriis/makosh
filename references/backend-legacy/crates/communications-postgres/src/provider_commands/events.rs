@@ -1,11 +1,11 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 use sqlx::{Postgres, Transaction};
 
 use super::CommunicationProviderCommand;
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::store::EventStore;
 
 pub(super) const EVENT_REQUESTED: &str = "communication.provider_command.requested.v1";
 pub(super) const EVENT_EXECUTING: &str = "communication.provider_command.executing.v1";

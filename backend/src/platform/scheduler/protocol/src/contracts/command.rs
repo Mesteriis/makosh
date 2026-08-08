@@ -1,4 +1,4 @@
-use hermes_clock_protocol::UtcMillisV1;
+use makosh_clock_protocol::UtcMillisV1;
 
 use super::{run::ScheduleRunLeaseV1, schedule::ScheduleSpecV1};
 use crate::v1::{JobKindV1 as WireJobKindV1, JobLeaseV1, JobTriggerKindV1, ScheduledJobCommandV1};

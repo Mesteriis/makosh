@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 const backendRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const repositoryRoot = dirname(backendRoot);
 const frontendRoot = resolve(repositoryRoot, 'frontend');
-const base = process.env.HERMES_TEST_BASE || 'HEAD';
+const base = process.env.MAKOSH_TEST_BASE || 'HEAD';
 const dryRun = process.argv.includes('--dry-run');
 
 const changed = changedPaths();

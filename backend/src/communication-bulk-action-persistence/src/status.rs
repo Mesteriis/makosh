@@ -61,8 +61,8 @@ impl CommunicationBulkActionPersistenceV1 {
                     COUNT(*) FILTER (WHERE targets.state = 3) AS accepted_count,
                     COUNT(*) FILTER (WHERE targets.state = 5) AS rejected_count,
                     COUNT(*) AS target_count
-             FROM hermes_data.communication_bulk_action_batches AS batches
-             JOIN hermes_data.communication_bulk_action_targets AS targets
+             FROM makosh_data.communication_bulk_action_batches AS batches
+             JOIN makosh_data.communication_bulk_action_targets AS targets
                ON targets.logical_owner_id = batches.logical_owner_id
               AND targets.batch_id = batches.batch_id
              WHERE batches.logical_owner_id = $1 AND batches.batch_id = $2
@@ -93,7 +93,7 @@ impl CommunicationBulkActionPersistenceV1 {
         let rows = sqlx::query(
             "SELECT target_operation_id, ordinal, state,
                     delivery_intent_id, error_code
-             FROM hermes_data.communication_bulk_action_targets
+             FROM makosh_data.communication_bulk_action_targets
              WHERE logical_owner_id = $1 AND batch_id = $2 AND ordinal >= $3
              ORDER BY ordinal
              LIMIT $4",

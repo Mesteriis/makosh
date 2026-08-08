@@ -1,5 +1,5 @@
 [package]
-name = "hermes-owner-vault-provisioning-host"
+name = "makosh-owner-vault-provisioning-host"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,11 +8,11 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-owner-vault-development-host"
+name = "makosh-owner-vault-development-host"
 path = "src/bin/development_host.rs"
 required-features = ["development-server"]
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "app"
 owner = "first_party_client"
 surface = "host_adapter"
@@ -20,17 +20,17 @@ surface = "host_adapter"
 [features]
 default = []
 development-server = [
-    "dep:hermes-legacy-provider-recovery",
-    "dep:hermes-owner-device-proof-host",
+    "dep:makosh-legacy-provider-recovery",
+    "dep:makosh-owner-device-proof-host",
     "dep:serde",
     "dep:serde_json",
     "dep:tiny_http",
 ]
 
 [dependencies]
-hermes-legacy-provider-recovery = { path = "../legacy-provider-recovery", optional = true }
-hermes-owner-device-proof-host = { path = "../owner-device-proof-host", optional = true }
-hermes-vault-protocol = { path = "../../../backend/src/platform/vault/protocol" }
+makosh-legacy-provider-recovery = { path = "../legacy-provider-recovery", optional = true }
+makosh-owner-device-proof-host = { path = "../owner-device-proof-host", optional = true }
+makosh-vault-protocol = { path = "../../../backend/src/platform/vault/protocol" }
 serde = { version = "=1.0.228", features = ["derive"], optional = true }
 serde_json = { version = "=1.0.150", optional = true }
 sha2 = { version = "=0.11.0", default-features = false }

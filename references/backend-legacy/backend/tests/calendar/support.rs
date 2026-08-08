@@ -1,7 +1,7 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::storage::database::Database;
 use sqlx::PgPool;
 use sqlx::postgres::PgPoolOptions;
 
@@ -23,6 +23,6 @@ pub async fn live_pool() -> Option<PgPool> {
 
 pub fn disconnected_pool() -> PgPool {
     PgPoolOptions::new()
-        .connect_lazy("postgres://hermes:unused@127.0.0.1:1/hermes_hub")
+        .connect_lazy("postgres://makosh:unused@127.0.0.1:1/makosh_hub")
         .expect("create lazy test pool")
 }

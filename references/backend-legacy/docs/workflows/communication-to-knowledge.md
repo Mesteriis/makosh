@@ -4,7 +4,7 @@ This workflow explains how a communication becomes evidence-backed knowledge.
 
 ## Trigger
 
-The workflow starts when Hermes imports or receives:
+The workflow starts when Макошь imports or receives:
 
 - email;
 - Telegram message;

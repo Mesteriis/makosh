@@ -10,12 +10,12 @@ const props = withDefaults(defineProps<{
 	tone: 'neutral'
 })
 
-const classes = computed(() => ['hermes-chip', `hermes-chip--${props.tone}`, props.class])
+const classes = computed(() => ['makosh-chip', `makosh-chip--${props.tone}`, props.class])
 </script>
 
 <template>
 	<span :class="classes">
 		<Icon v-if="icon" :icon="icon" size="1em" />
-		<span class="hermes-chip__label"><slot /></span>
+		<span class="makosh-chip__label"><slot /></span>
 	</span>
 </template>

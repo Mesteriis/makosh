@@ -1,5 +1,5 @@
 import { computed, ref, shallowRef } from 'vue'
-import type { MailSignatureV1 } from '../../../gen/hermes/mail/composition/v1/client_pb'
+import type { MailSignatureV1 } from '../../../gen/makosh/mail/composition/v1/client_pb'
 import {
 	deleteMailSignature,
 	listMailSignatures,

@@ -21,9 +21,9 @@
 - Group / Группа: `.supergoal`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -53,9 +53,9 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ## Source Files / Исходные файлы
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-10.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-10.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-10.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-10.md`
 - Size bytes / Размер в байтах: `2196`
 - Included characters / Включено символов: `2184`
 - Truncated / Обрезано: `no`
@@ -123,9 +123,9 @@ Knowledge graph (using Vue Flow) and Review (polygraph/contradictions) are intel
 - Keep graph canvas component under 500 lines
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-11.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-11.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-11.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-11.md`
 - Size bytes / Размер в байтах: `1676`
 - Included characters / Включено символов: `1674`
 - Truncated / Обрезано: `no`
@@ -186,9 +186,9 @@ Agents and Timeline are the remaining smaller domain views. Agents shows AI runt
 - Use TanStack Virtual for timeline stream
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-12.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-12.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-12.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-12.md`
 - Size bytes / Размер в байтах: `4693`
 - Included characters / Включено символов: `4631`
 - Truncated / Обрезано: `no`
@@ -204,7 +204,7 @@ Depends on phases: 1, 2, 3
 
 ## Why
 
-Communications (mail) is the most complex domain with mail list, message viewer with tabs, compose drawer, draft strip, health strip, account wizard, context inspector, and conversation list. It's the core ingestion spine of Hermes.
+Communications (mail) is the most complex domain with mail list, message viewer with tabs, compose drawer, draft strip, health strip, account wizard, context inspector, and conversation list. It's the core ingestion spine of Макошь.
 
 ## Work
 
@@ -297,9 +297,9 @@ Communications (mail) is the most complex domain with mail list, message viewer 
 - Compose form state is UI state (Pinia), email send is server mutation (TanStack Query)
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-13.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-13.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-13.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-13.md`
 - Size bytes / Размер в байтах: `2837`
 - Included characters / Включено символов: `2813`
 - Truncated / Обрезано: `no`
@@ -379,9 +379,9 @@ Telegram and WhatsApp are messaging sub-sections of the Communications view. The
 - WhatsApp is simpler (session list + thread + rail)
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-14.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-14.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-14.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-14.md`
 - Size bytes / Размер в байтах: `7831`
 - Included characters / Включено символов: `7787`
 - Truncated / Обрезано: `no`
@@ -397,7 +397,7 @@ Depends on phases: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 
 ## Why
 
-Earlier phases were focused on shipping behavior — getting each domain ported and rendering. This phase enforces that every aspect is production-quality: UX copy, empty/loading/error/unauthorized states, edge cases, security, accessibility, performance, animations, and a full regression sweep against the existing Hermes SvelteKit app.
+Earlier phases were focused on shipping behavior — getting each domain ported and rendering. This phase enforces that every aspect is production-quality: UX copy, empty/loading/error/unauthorized states, edge cases, security, accessibility, performance, animations, and a full regression sweep against the existing Макошь SvelteKit app.
 
 ## Work
 
@@ -433,7 +433,7 @@ Earlier phases were focused on shipping behavior — getting each domain ported 
 
 ### Sub-pass 4: Security
 
-- Verify `X-Hermes-Secret` header is present in ALL API calls (not just get/post — every method)
+- Verify `X-Макошь-Secret` header is present in ALL API calls (not just get/post — every method)
 - Check that no secrets, tokens, or private data appear in:
   - Compiled bundle (`grep -r "password\|secret\|token\|api_key" frontend/dist/ --include="*.js"` after build)
   - Console.log statements in production
@@ -513,7 +513,7 @@ Earlier phases were focused on shipping behavior — getting each domain ported 
 - [ ] AC1: UX audit complete — no debug placeholders, all strings through i18n
 - [ ] AC2: All 14 domains verified for loading/empty/error/unauthorized states
 - [ ] AC3: Edge case testing completed — empty inputs, long inputs, special chars, slow network
-- [ ] AC4: Security audit passed — X-Hermes-Secret in all calls, no secrets in bundle
+- [ ] AC4: Security audit passed — X-Макошь-Secret in all calls, no secrets in bundle
 - [ ] AC5: A11y audit passed — keyboard nav, focus management, headings, contrast ≥ AA
 - [ ] AC6: Performance verified — virtual scrolling on all large collections, bundle size acceptable
 - [ ] AC7: Diff review clean — no console.log, no TODOs, no unused imports
@@ -542,9 +542,9 @@ Earlier phases were focused on shipping behavior — getting each domain ported 
 - Proceed to Phase 15 (Cutover) only when all 9 acceptance criteria are satisfied.
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-15.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-15.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-15.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-15.md`
 - Size bytes / Размер в байтах: `6442`
 - Included characters / Включено символов: `6394`
 - Truncated / Обрезано: `no`
@@ -692,9 +692,9 @@ Run the following in sequence and confirm each exits 0:
 - After this phase, the repository is fully migrated to Vue 3 + TypeScript + Vite + Tauri 2.
 ````
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-2.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-2.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-2.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-2.md`
 - Size bytes / Размер в байтах: `5524`
 - Included characters / Включено символов: `5508`
 - Truncated / Обрезано: `no`
@@ -797,7 +797,7 @@ The app shell (sidebar, topbar, workspace layout) is the container for all domai
 - [ ] AC5: User menu opens/closes
 - [ ] AC6: Layout editing mode toggle works
 - [ ] AC7: Sidebar rail mode (compact/expanded) toggle works
-- [ ] AC8: All CSS/styling matches existing Hermes visual identity (compare with screenshots)
+- [ ] AC8: All CSS/styling matches existing Макошь visual identity (compare with screenshots)
 - [ ] AC9: `cd frontend && pnpm build` exits 0
 - [ ] AC10: Vue Router config defines all 16 route paths
 
@@ -822,9 +822,9 @@ The app shell (sidebar, topbar, workspace layout) is the container for all domai
 - The layout editor widget settings and add-widget drawers can be simplified stubs in this phase
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-3.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-3.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-3.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-3.md`
 - Size bytes / Размер в байтах: `3161`
 - Included characters / Включено символов: `3155`
 - Truncated / Обрезано: `no`
@@ -840,24 +840,24 @@ Depends on phases: 1
 
 ## Why
 
-UI primitives (Button, Input, Dialog, Dropdown, etc.) are used by every domain. Porting them early ensures consistency, avoids duplication, and establishes the Hermes-styled component library.
+UI primitives (Button, Input, Dialog, Dropdown, etc.) are used by every domain. Porting them early ensures consistency, avoids duplication, and establishes the Макошь-styled component library.
 
 ## Work
 
 1. **Initialize shadcn-vue:**
    - Run `npx shadcn-vue init` to set up the components system
-   - Configure to use the Hermes Tailwind theme
+   - Configure to use the Макошь Tailwind theme
    - Components go to `frontend/src/shared/ui/`
 
 2. **Add shadcn-vue components:**
    - Add each component via `npx shadcn-vue add <component>` or by manually creating them
    - Required components: Button, Input, Dialog, DropdownMenu, Select, Switch, Tabs, Card, Badge, Avatar, Tooltip, Popover, Command (for palette), Sheet (for drawers), Separator, ScrollArea, Skeleton, Progress, Toast, Label, Textarea, Form
 
-3. **Customize components for Hermes visual identity:**
-   - Modify each component's styling to use Hermes theme tokens (colors, spacing, typography, border radius)
-   - Ensure components match the existing Hermes visual style, NOT default shadcn look
+3. **Customize components for Макошь visual identity:**
+   - Modify each component's styling to use Макошь theme tokens (colors, spacing, typography, border radius)
+   - Ensure components match the existing Макошь visual style, NOT default shadcn look
    - Key customizations:
-     - Button: match existing Hermes button states (default, hover, active, disabled)
+     - Button: match existing Макошь button states (default, hover, active, disabled)
      - Input: match existing input styling (background, border, focus ring)
      - Dialog: match existing modal/drawer styling
      - Tabs: match existing tab styling
@@ -876,7 +876,7 @@ UI primitives (Button, Input, Dialog, Dropdown, etc.) are used by every domain. 
 ## Acceptance criteria (all must pass)
 
 - [ ] AC1: All required shadcn-vue components exist in `frontend/src/shared/ui/`
-- [ ] AC2: Components use Hermes theme tokens (colors, spacing, typography)
+- [ ] AC2: Components use Макошь theme tokens (colors, spacing, typography)
 - [ ] AC3: Button supports all variants (default, secondary, outline, ghost, destructive)
 - [ ] AC4: Dialog opens/closes with smooth animation
 - [ ] AC5: DropdownMenu opens on click with correct positioning
@@ -897,14 +897,14 @@ UI primitives (Button, Input, Dialog, Dropdown, etc.) are used by every domain. 
 ## Notes
 
 - shadcn-vue components become project-owned code — modify them freely
-- Do NOT depend on shadcn-vue's default styling; always customize to Hermes theme
+- Do NOT depend on shadcn-vue's default styling; always customize to Макошь theme
 - Icon wrapper should accept icon name string (e.g., "tabler:mail") and render the correct Iconify icon
 - If `npx shadcn-vue add` has issues, create the component files manually based on shadcn-vue source
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-4.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-4.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-4.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-4.md`
 - Size bytes / Размер в байтах: `2665`
 - Included characters / Включено символов: `2637`
 - Truncated / Обрезано: `no`
@@ -974,9 +974,9 @@ Settings is the simplest domain and serves as the first real domain port to vali
 - Keep each Vue component under 500 lines
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-5.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-5.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-5.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-5.md`
 - Size bytes / Размер в байтах: `1620`
 - Included characters / Включено символов: `1604`
 - Truncated / Обрезано: `no`
@@ -1037,9 +1037,9 @@ Home dashboard is the default landing view. It validates the widget-based worksp
 - Keep each component under 500 lines
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-6.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-6.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-6.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-6.md`
 - Size bytes / Размер в байтах: `2519`
 - Included characters / Включено символов: `2505`
 - Truncated / Обрезано: `no`
@@ -1107,9 +1107,9 @@ Personas and Organizations are related entity domains that share UI patterns (li
 - Persona types: PersonaType = 'human' | 'ai_agent' | 'organization_proxy' | 'system'
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-7.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-7.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-7.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-7.md`
 - Size bytes / Размер в байтах: `1755`
 - Included characters / Включено символов: `1753`
 - Truncated / Обрезано: `no`
@@ -1166,9 +1166,9 @@ Projects and Tasks are related domains sharing UI patterns for obligation and de
 - Use TanStack Virtual for task list virtualization
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-8.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-8.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-8.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-8.md`
 - Size bytes / Размер в байтах: `1229`
 - Included characters / Включено символов: `1227`
 - Truncated / Обрезано: `no`
@@ -1219,9 +1219,9 @@ Calendar is a self-contained domain with events from multiple providers. Porting
 - Use date-fns for all date formatting
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-9.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-9.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-9.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-9.md`
 - Size bytes / Размер в байтах: `1814`
 - Included characters / Включено символов: `1808`
 - Truncated / Обрезано: `no`
@@ -1281,9 +1281,9 @@ Documents and Notes are content-focused domains with similar UI patterns (lists 
 - Both domains use TanStack Virtual for list virtualization
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-map.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-map.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-map.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-map.md`
 - Size bytes / Размер в байтах: `2989`
 - Included characters / Включено символов: `2979`
 - Truncated / Обрезано: `no`
@@ -1358,7 +1358,7 @@ _Generated 2026-06-14 13:26:32_
 
 ## Recent activity (last 10 commits)
 - `662de2dd` 2026-06-14 Remove obsolete documentation and cleanup repository
-- `c284c9d0` 2026-06-14 Rework Hermes Hub foundation docs and backend alignment
+- `c284c9d0` 2026-06-14 Rework Макошь foundation docs and backend alignment
 - `9e8a631c` 2026-06-14 refactor: split document processing boundary
 - `4c82f71f` 2026-06-14 refactor: split decisions boundary
 - `219ebe8f` 2026-06-14 refactor: split mail messages boundary
@@ -1383,9 +1383,9 @@ _Generated 2026-06-14 13:26:32_
 _End repo map._
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/tools.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/tools.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/tools.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/tools.md`
 - Size bytes / Размер в байтах: `827`
 - Included characters / Включено символов: `825`
 - Truncated / Обрезано: `no`
@@ -1408,7 +1408,7 @@ _End repo map._
 
 ## Not available
 - **WebSearch**: NOT available
-- **WebFetch**: NOT available  
+- **WebFetch**: NOT available
 - **Context7**: NOT available
 - **MCP clients**: NOT detected
 

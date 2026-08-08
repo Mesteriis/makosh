@@ -2,7 +2,7 @@
 
 use std::collections::BTreeSet;
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleBlobOperationV1, ModuleBlobQuotaRequestV1, ModuleClientBlobRouteV1,
 };
 use rusqlite::{Connection, params};
@@ -20,7 +20,7 @@ impl SqliteControlStore {
 }
 
 pub(crate) fn validate_client_blob_routes(
-    registration: &hermes_kernel_control_store::ModuleRegistration,
+    registration: &makosh_kernel_control_store::ModuleRegistration,
     capabilities: &[String],
     blob_requests: &[ModuleBlobQuotaRequestV1],
     routes: &[ModuleClientBlobRouteV1],
@@ -63,7 +63,7 @@ pub(crate) fn insert_client_blob_routes(
 ) -> Result<(), StoreError> {
     for route in routes {
         connection.execute(
-            "INSERT INTO hermes_kernel_module_client_blob_route_request
+            "INSERT INTO makosh_kernel_module_client_blob_route_request
              (registration_id, capability_id, contract_owner, contract_name, contract_major,
               contract_revision, contract_schema_sha256, path, max_response_bytes)
              VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
@@ -91,9 +91,9 @@ fn read_approved_client_blob_routes(
         "SELECT route.registration_id, route.capability_id, route.contract_owner, route.contract_name,
                 route.contract_major, route.contract_revision, route.contract_schema_sha256,
                 route.path, route.max_response_bytes
-         FROM hermes_kernel_module_client_blob_route_request route
-         JOIN hermes_kernel_module_registration registration ON registration.registration_id = route.registration_id
-         JOIN hermes_kernel_module_registration_capability capability
+         FROM makosh_kernel_module_client_blob_route_request route
+         JOIN makosh_kernel_module_registration registration ON registration.registration_id = route.registration_id
+         JOIN makosh_kernel_module_registration_capability capability
            ON capability.registration_id = route.registration_id AND capability.capability_id = route.capability_id
          WHERE registration.state = 'approved'
          ORDER BY route.path, route.registration_id",
@@ -120,7 +120,7 @@ fn read_approved_client_blob_routes(
                 capability_id,
                 owner,
                 name,
-                hermes_kernel_control_store::ModuleClientBlobContractVersionV1 {
+                makosh_kernel_control_store::ModuleClientBlobContractVersionV1 {
                     major: u32::try_from(major)
                         .map_err(|_| StoreError::InvalidModuleClientBlobRoute)?,
                     revision: u32::try_from(revision)
@@ -129,7 +129,7 @@ fn read_approved_client_blob_routes(
                 digest
                     .try_into()
                     .map_err(|_| StoreError::InvalidModuleClientBlobRoute)?,
-                hermes_kernel_control_store::ModuleClientBlobTransportV1 {
+                makosh_kernel_control_store::ModuleClientBlobTransportV1 {
                     path,
                     max_response_bytes: u64::try_from(max)
                         .map_err(|_| StoreError::InvalidModuleClientBlobRoute)?,
@@ -151,7 +151,7 @@ fn valid_client_blob_path(path: &str) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use hermes_kernel_control_store::{
+    use makosh_kernel_control_store::{
         ModuleBlobOperationV1, ModuleBlobQuotaRequestV1, ModuleClientBlobContractVersionV1,
         ModuleClientBlobRouteV1, ModuleRegistration, ModuleRegistrationState,
     };
@@ -180,7 +180,7 @@ mod tests {
                 revision: 1,
             },
             [2; 32],
-            hermes_kernel_control_store::ModuleClientBlobTransportV1 {
+            makosh_kernel_control_store::ModuleClientBlobTransportV1 {
                 path: "/api/blobs/notes/v1/content".to_owned(),
                 max_response_bytes,
             },

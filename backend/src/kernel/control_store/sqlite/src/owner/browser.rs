@@ -1,6 +1,6 @@
 //! Browser device identity persistence through the single-writer actor.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BrowserDeviceEnrollmentInputV1, BrowserDeviceEnrollmentV1, BrowserDeviceIdentityV1,
     BrowserDeviceStateV1, ControlStore,
 };
@@ -90,7 +90,7 @@ impl SqliteControlStore {
 fn read_connection_identity_epoch(connection: &mut Connection) -> Result<u64, StoreError> {
     connection
         .query_row(
-            "SELECT identity_epoch FROM hermes_kernel_control_store_metadata WHERE singleton = 1",
+            "SELECT identity_epoch FROM makosh_kernel_control_store_metadata WHERE singleton = 1",
             [],
             |row| row.get::<_, i64>(0),
         )
@@ -132,7 +132,7 @@ fn revoke_browser_device(
         .ok_or(StoreError::RecoveryFenceOverflow)?;
     mark_browser_device_revoked(&transaction, device_id, next_epoch)?;
     transaction.execute(
-        "UPDATE hermes_kernel_control_store_metadata SET identity_epoch = ?1 WHERE singleton = 1",
+        "UPDATE makosh_kernel_control_store_metadata SET identity_epoch = ?1 WHERE singleton = 1",
         [as_sqlite_integer(next_epoch)?],
     )?;
     transaction.commit()?;
@@ -171,7 +171,7 @@ fn record_verified_browser_assertion(
         .then_some(())
         .ok_or(StoreError::BrowserDeviceCounterConflict)?;
     let changed = transaction.execute(
-        "UPDATE hermes_kernel_browser_device_identity
+        "UPDATE makosh_kernel_browser_device_identity
          SET sign_count = ?1, backup_eligible = ?2, backup_state = ?3
          WHERE credential_id = ?4 AND state = 'active' AND sign_count = ?5",
         params![
@@ -198,7 +198,7 @@ fn ensure_admission_owner(
 ) -> Result<(), StoreError> {
     let owner_id = transaction
         .query_row(
-            "SELECT owner_id FROM hermes_kernel_initial_owner_identity WHERE singleton = 1",
+            "SELECT owner_id FROM makosh_kernel_initial_owner_identity WHERE singleton = 1",
             [],
             |row| row.get::<_, String>(0),
         )
@@ -221,7 +221,7 @@ fn ensure_browser_device_absent(
 ) -> Result<(), StoreError> {
     let exists = transaction.query_row(
         "SELECT EXISTS(
-            SELECT 1 FROM hermes_kernel_browser_device_identity
+            SELECT 1 FROM makosh_kernel_browser_device_identity
             WHERE device_id = ?1 OR credential_id = ?2
         )",
         params![enrollment.device_id(), enrollment.credential_id()],
@@ -238,7 +238,7 @@ fn insert_browser_device(
     identity_epoch: u64,
 ) -> Result<(), StoreError> {
     transaction.execute(
-        "INSERT INTO hermes_kernel_browser_device_identity (
+        "INSERT INTO makosh_kernel_browser_device_identity (
             device_id, owner_id, credential_id, cose_public_key, browser_key_public_key, rp_id, sign_count, backup_eligible, backup_state, state, identity_epoch
          ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, 'active', ?10)",
         params![
@@ -263,7 +263,7 @@ fn mark_browser_device_revoked(
     identity_epoch: u64,
 ) -> Result<(), StoreError> {
     let changed = transaction.execute(
-        "UPDATE hermes_kernel_browser_device_identity
+        "UPDATE makosh_kernel_browser_device_identity
          SET state = 'revoked', identity_epoch = ?1
          WHERE device_id = ?2 AND state = 'active'",
         params![as_sqlite_integer(identity_epoch)?, device_id],
@@ -283,7 +283,7 @@ fn browser_device_exists(
 ) -> Result<bool, StoreError> {
     transaction
         .query_row(
-            "SELECT EXISTS(SELECT 1 FROM hermes_kernel_browser_device_identity WHERE device_id = ?1)",
+            "SELECT EXISTS(SELECT 1 FROM makosh_kernel_browser_device_identity WHERE device_id = ?1)",
             [device_id],
             |row| row.get(0),
         )
@@ -301,7 +301,7 @@ fn load_browser_device(
     let record = connection
         .query_row(
             "SELECT owner_id, device_id, credential_id, cose_public_key, browser_key_public_key, rp_id, sign_count, backup_eligible, backup_state, state, identity_epoch
-             FROM hermes_kernel_browser_device_identity WHERE device_id = ?1",
+             FROM makosh_kernel_browser_device_identity WHERE device_id = ?1",
             [device_id],
             |row| {
                 Ok(BrowserDeviceRecord {
@@ -330,7 +330,7 @@ fn load_browser_device_by_credential_id(
     let record = connection
         .query_row(
             "SELECT owner_id, device_id, credential_id, cose_public_key, browser_key_public_key, rp_id, sign_count, backup_eligible, backup_state, state, identity_epoch
-             FROM hermes_kernel_browser_device_identity WHERE credential_id = ?1",
+             FROM makosh_kernel_browser_device_identity WHERE credential_id = ?1",
             [credential_id],
             |row| {
                 Ok(BrowserDeviceRecord {
@@ -359,7 +359,7 @@ fn load_browser_device_by_credential_id_in_transaction(
     transaction
         .query_row(
             "SELECT owner_id, device_id, credential_id, cose_public_key, browser_key_public_key, rp_id, sign_count, backup_eligible, backup_state, state, identity_epoch
-             FROM hermes_kernel_browser_device_identity WHERE credential_id = ?1",
+             FROM makosh_kernel_browser_device_identity WHERE credential_id = ?1",
             [credential_id],
             browser_device_record_from_row,
         )
@@ -433,7 +433,7 @@ fn read_metadata(transaction: &Transaction<'_>) -> Result<Metadata, StoreError> 
     transaction
         .query_row(
             "SELECT instance_id, generation, identity_epoch, grant_epoch
-         FROM hermes_kernel_control_store_metadata WHERE singleton = 1",
+         FROM makosh_kernel_control_store_metadata WHERE singleton = 1",
             [],
             |row| {
                 Ok((

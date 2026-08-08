@@ -3,17 +3,17 @@
 use super::*;
 
 use crate::platform::client_realtime::ClientRealtimePublishHandlerV1;
-use hermes_desktop_call_recording_api::{MODULE_ID_V1, OWNER_ID_V1};
-use hermes_desktop_call_recording_persistence::{
+use makosh_desktop_call_recording_api::{MODULE_ID_V1, OWNER_ID_V1};
+use makosh_desktop_call_recording_persistence::{
     STORAGE_BUNDLE_REVISION_V1, desktop_call_recording_storage_bundle_v1,
 };
-use hermes_desktop_call_recording_runtime::{
+use makosh_desktop_call_recording_runtime::{
     admission::{STORAGE_CAPABILITY_ID_V1, module_descriptor_v1},
     settings::settings_schema_bytes_v1,
 };
-use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_runtime_protocol::v1::{
+use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_runtime_protocol::v1::{
     ManagedIntegrationHostBridgeConfigurationV1, ManagedIntegrationRuntimeConfigurationV1,
     SettingsSnapshotV1,
 };
@@ -93,7 +93,7 @@ pub(super) fn admit_desktop_recording_runtime_v1(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             RELEASE_ARTIFACT_ID_V1,
             Sha256::digest(
                 std::fs::read(desktop_recording_binary())
@@ -362,7 +362,7 @@ fn desktop_recording_host_bridge_configuration_v1(
 fn desktop_recording_storage_binding_v1(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(registration_id, STORAGE_CAPABILITY_ID_V1)
         .expect("read desktop recording Storage binding")
@@ -371,5 +371,5 @@ fn desktop_recording_storage_binding_v1(
 }
 
 fn desktop_recording_binary() -> PathBuf {
-    binary("HERMES_DESKTOP_CALL_RECORDING_RUNTIME_BIN")
+    binary("MAKOSH_DESKTOP_CALL_RECORDING_RUNTIME_BIN")
 }

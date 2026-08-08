@@ -1,4 +1,4 @@
-use hermes_communication_delivery_intent_core::{
+use makosh_communication_delivery_intent_core::{
     CommunicationConversationIdV1, CommunicationDeliveryRouteV1, CommunicationMessageIdV1,
     CommunicationProviderProvenanceV1, CommunicationSourceCursorV1,
 };
@@ -123,7 +123,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
         let row = sqlx::query(
             "WITH candidate AS (
                SELECT logical_owner_id, intent_id
-               FROM hermes_data.communication_delivery_intent_jobs
+               FROM makosh_data.communication_delivery_intent_jobs
                WHERE logical_owner_id = $1
                  AND (
                    state = $2
@@ -133,7 +133,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
                FOR UPDATE SKIP LOCKED
                LIMIT 1
              )
-             UPDATE hermes_data.communication_delivery_intent_jobs AS jobs
+             UPDATE makosh_data.communication_delivery_intent_jobs AS jobs
              SET state = $3,
                  state_revision = jobs.state_revision + 1,
                  claimed_by = $5,
@@ -275,7 +275,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
         sqlx::query(
             "SELECT intent_id, state, state_revision,
                     provider_operation_id, rejection_code
-             FROM hermes_data.communication_delivery_intent_jobs
+             FROM makosh_data.communication_delivery_intent_jobs
              WHERE logical_owner_id = $1 AND intent_id = $2",
         )
         .bind(logical_owner_id)
@@ -305,7 +305,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
             .await
             .map_err(|_| DeliveryIntentPersistenceErrorV1::StorageUnavailable)?;
         let row = sqlx::query(
-            "UPDATE hermes_data.communication_delivery_intent_jobs
+            "UPDATE makosh_data.communication_delivery_intent_jobs
              SET state = $1,
                  state_revision = state_revision + 1,
                  provider_operation_id = $2,
@@ -375,7 +375,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
             .await
             .map_err(|_| DeliveryIntentPersistenceErrorV1::StorageUnavailable)?;
         let row = sqlx::query(
-            "UPDATE hermes_data.communication_delivery_intent_jobs
+            "UPDATE makosh_data.communication_delivery_intent_jobs
              SET state = $1,
                  state_revision = state_revision + 1,
                  rejection_code = $2,
@@ -435,7 +435,7 @@ pub(crate) async fn create_intent_in_transaction(
     let declared_bytes = i64::try_from(command.body_receipt.declared_bytes)
         .map_err(|_| DeliveryIntentPersistenceErrorV1::InvalidInput)?;
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.communication_delivery_intent_jobs (
+        "INSERT INTO makosh_data.communication_delivery_intent_jobs (
            intent_id, logical_owner_id, request_fingerprint,
            canonical_conversation_id, canonical_reply_message_id,
            provider_kind, account_cursor, conversation_cursor,
@@ -484,7 +484,7 @@ pub(crate) async fn create_intent_in_transaction(
     let row = sqlx::query(
         "SELECT intent_id, logical_owner_id, request_fingerprint, state,
                 state_revision, provider_operation_id, rejection_code
-         FROM hermes_data.communication_delivery_intent_jobs
+         FROM makosh_data.communication_delivery_intent_jobs
          WHERE logical_owner_id = $1 AND intent_id = $2",
     )
     .bind(&command.logical_owner_id)
@@ -523,7 +523,7 @@ pub(crate) async fn insert_transition(
     let revision = i64::try_from(state_revision)
         .map_err(|_| DeliveryIntentPersistenceErrorV1::InvalidInput)?;
     sqlx::query(
-        "INSERT INTO hermes_data.communication_delivery_intent_transitions (
+        "INSERT INTO makosh_data.communication_delivery_intent_transitions (
            logical_owner_id, intent_id, state_revision, state,
            occurred_at_unix_seconds, rejection_code
          ) VALUES ($1, $2, $3, $4, $5, $6)",

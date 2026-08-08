@@ -16,27 +16,27 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-section',
-	`hermes-section--${props.tone}`,
-	`hermes-section--padding-${props.padding}`,
+	'makosh-section',
+	`makosh-section--${props.tone}`,
+	`makosh-section--padding-${props.padding}`,
 	props.class
 ])
 </script>
 
 <template>
 	<component :is="as" :class="classes">
-		<header v-if="$slots.header || $slots.actions" class="hermes-section-header">
-			<div v-if="$slots.header" class="hermes-section-heading">
+		<header v-if="$slots.header || $slots.actions" class="makosh-section-header">
+			<div v-if="$slots.header" class="makosh-section-heading">
 				<slot name="header" />
 			</div>
-			<div v-if="$slots.actions" class="hermes-section-actions">
+			<div v-if="$slots.actions" class="makosh-section-actions">
 				<slot name="actions" />
 			</div>
 		</header>
-		<div class="hermes-section-body">
+		<div class="makosh-section-body">
 			<slot />
 		</div>
-		<footer v-if="$slots.footer" class="hermes-section-footer">
+		<footer v-if="$slots.footer" class="makosh-section-footer">
 			<slot name="footer" />
 		</footer>
 	</component>

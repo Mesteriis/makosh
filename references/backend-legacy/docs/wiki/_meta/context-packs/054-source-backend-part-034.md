@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/domains/tasks/core/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/core/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/core/errors.rs`
 - Size bytes / Размер в байтах: `571`
 - Included characters / Включено символов: `571`
 - Truncated / Обрезано: `no`
@@ -84,7 +84,7 @@ pub enum TaskCoreError {
 
 ### `backend/src/domains/tasks/core/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/core/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/core/evidence.rs`
 - Size bytes / Размер в байтах: `4247`
 - Included characters / Включено символов: `4247`
 - Truncated / Обрезано: `no`
@@ -238,7 +238,7 @@ impl TaskEvidenceStore {
 
 ### `backend/src/domains/tasks/core/external_identities.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/core/external_identities.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/core/external_identities.rs`
 - Size bytes / Размер в байтах: `2269`
 - Included characters / Включено символов: `2269`
 - Truncated / Обрезано: `no`
@@ -315,7 +315,7 @@ impl ExternalTaskIdentityStore {
 
 ### `backend/src/domains/tasks/core/obligation_links.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/core/obligation_links.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/core/obligation_links.rs`
 - Size bytes / Размер в байтах: `1298`
 - Included characters / Включено символов: `1298`
 - Truncated / Обрезано: `no`
@@ -375,7 +375,7 @@ impl ObligationTaskLinkStore {
 
 ### `backend/src/domains/tasks/core/observation_links.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/core/observation_links.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/core/observation_links.rs`
 - Size bytes / Размер в байтах: `1556`
 - Included characters / Включено символов: `1556`
 - Truncated / Обрезано: `no`
@@ -444,7 +444,7 @@ pub(crate) async fn materialize_task_entity_link_in_transaction(
 
 ### `backend/src/domains/tasks/core/provider_store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/core/provider_store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/core/provider_store.rs`
 - Size bytes / Размер в байтах: `5216`
 - Included characters / Включено символов: `5216`
 - Truncated / Обрезано: `no`
@@ -622,7 +622,7 @@ fn next_id(prefix: &str) -> String {
 
 ### `backend/src/domains/tasks/core/providers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/core/providers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/core/providers.rs`
 - Size bytes / Размер в байтах: `430`
 - Included characters / Включено символов: `430`
 - Truncated / Обрезано: `no`
@@ -647,7 +647,7 @@ pub struct TaskProviderAccount {
 
 ### `backend/src/domains/tasks/core/relations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/core/relations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/core/relations.rs`
 - Size bytes / Размер в байтах: `7841`
 - Included characters / Включено символов: `7841`
 - Truncated / Обрезано: `no`
@@ -886,7 +886,7 @@ impl TaskRelationStore {
 
 ### `backend/src/domains/tasks/core/subtasks.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/core/subtasks.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/core/subtasks.rs`
 - Size bytes / Размер в байтах: `3958`
 - Included characters / Включено символов: `3958`
 - Truncated / Обрезано: `no`
@@ -1030,7 +1030,7 @@ impl TaskSubtaskStore {
 
 ### `backend/src/domains/tasks/health.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/health.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/health.rs`
 - Size bytes / Размер в байтах: `5839`
 - Included characters / Включено символов: `5839`
 - Truncated / Обрезано: `no`
@@ -1049,7 +1049,7 @@ pub struct TaskWatchtowerService;
 impl TaskWatchtowerService {
     pub async fn overdue(pool: &PgPool) -> Result<Value, TaskHealthError> {
         let now = Utc::now();
-        let rows = sqlx::query("SELECT task_id, title, hermes_status, priority_score, due_at FROM tasks WHERE due_at < $1 AND hermes_status NOT IN ('done','cancelled','archived') ORDER BY priority_score DESC NULLS LAST LIMIT 30")
+        let rows = sqlx::query("SELECT task_id, title, makosh_status, priority_score, due_at FROM tasks WHERE due_at < $1 AND makosh_status NOT IN ('done','cancelled','archived') ORDER BY priority_score DESC NULLS LAST LIMIT 30")
             .bind(now).fetch_all(pool).await?;
         let items: Vec<Value> = rows
             .iter()
@@ -1057,7 +1057,7 @@ impl TaskWatchtowerService {
                 json!({
                     "task_id": r.try_get::<String,_>("task_id").unwrap_or_default(),
                     "title": r.try_get::<String,_>("title").unwrap_or_default(),
-                    "status": r.try_get::<String,_>("hermes_status").unwrap_or_default(),
+                    "status": r.try_get::<String,_>("makosh_status").unwrap_or_default(),
                     "priority": r.try_get::<Option<f64>,_>("priority_score").unwrap_or(None),
                     "due_at": r.try_get::<Option<DateTime<Utc>>,_>("due_at").unwrap_or(None),
                 })
@@ -1068,7 +1068,7 @@ impl TaskWatchtowerService {
 
     pub async fn waiting_too_long(pool: &PgPool, days: i64) -> Result<Value, TaskHealthError> {
         let threshold = Utc::now() - Duration::days(days);
-        let rows = sqlx::query("SELECT task_id, title, waiting_reason, updated_at FROM tasks WHERE hermes_status='waiting' AND updated_at < $1 ORDER BY updated_at ASC LIMIT 20")
+        let rows = sqlx::query("SELECT task_id, title, waiting_reason, updated_at FROM tasks WHERE makosh_status='waiting' AND updated_at < $1 ORDER BY updated_at ASC LIMIT 20")
             .bind(threshold).fetch_all(pool).await?;
         let items: Vec<Value> = rows.iter().map(|r| json!({
             "task_id": r.try_get::<String,_>("task_id").unwrap_or_default(),
@@ -1080,7 +1080,7 @@ impl TaskWatchtowerService {
     }
 
     pub async fn without_context(pool: &PgPool) -> Result<Value, TaskHealthError> {
-        let rows = sqlx::query("SELECT task_id, title, hermes_status FROM tasks WHERE hermes_status NOT IN ('done','cancelled','archived') ORDER BY priority_score DESC NULLS LAST LIMIT 50")
+        let rows = sqlx::query("SELECT task_id, title, makosh_status FROM tasks WHERE makosh_status NOT IN ('done','cancelled','archived') ORDER BY priority_score DESC NULLS LAST LIMIT 50")
             .fetch_all(pool)
             .await?;
         let context_store = ContextPackStore::new(pool.clone());
@@ -1096,7 +1096,7 @@ impl TaskWatchtowerService {
             items.push(json!({
                 "task_id": task_id,
                 "title": row.try_get::<String,_>("title").unwrap_or_default(),
-                "status": row.try_get::<String,_>("hermes_status").unwrap_or_default(),
+                "status": row.try_get::<String,_>("makosh_status").unwrap_or_default(),
             }));
             if items.len() >= 20 {
                 break;
@@ -1107,7 +1107,7 @@ impl TaskWatchtowerService {
 
     pub async fn stale_tasks(pool: &PgPool, days: i64) -> Result<Value, TaskHealthError> {
         let threshold = Utc::now() - Duration::days(days);
-        let rows = sqlx::query("SELECT task_id, title, hermes_status, updated_at FROM tasks WHERE hermes_status NOT IN ('done','cancelled','archived') AND updated_at < $1 ORDER BY updated_at ASC LIMIT 20")
+        let rows = sqlx::query("SELECT task_id, title, makosh_status, updated_at FROM tasks WHERE makosh_status NOT IN ('done','cancelled','archived') AND updated_at < $1 ORDER BY updated_at ASC LIMIT 20")
             .bind(threshold).fetch_all(pool).await?;
         let items: Vec<Value> = rows
             .iter()
@@ -1115,7 +1115,7 @@ impl TaskWatchtowerService {
                 json!({
                     "task_id": r.try_get::<String,_>("task_id").unwrap_or_default(),
                     "title": r.try_get::<String,_>("title").unwrap_or_default(),
-                    "status": r.try_get::<String,_>("hermes_status").unwrap_or_default(),
+                    "status": r.try_get::<String,_>("makosh_status").unwrap_or_default(),
                     "since": r.try_get::<DateTime<Utc>,_>("updated_at").ok(),
                 })
             })
@@ -1124,7 +1124,7 @@ impl TaskWatchtowerService {
     }
 
     pub async fn cycle_time(pool: &PgPool) -> Result<Value, TaskHealthError> {
-        let rows = sqlx::query("SELECT EXTRACT(EPOCH FROM (COALESCE(completed_at, now()) - created_at))/3600 as hours, hermes_status FROM tasks WHERE completed_at IS NOT NULL ORDER BY completed_at DESC LIMIT 50")
+        let rows = sqlx::query("SELECT EXTRACT(EPOCH FROM (COALESCE(completed_at, now()) - created_at))/3600 as hours, makosh_status FROM tasks WHERE completed_at IS NOT NULL ORDER BY completed_at DESC LIMIT 50")
             .fetch_all(pool).await?;
         let hours: Vec<f64> = rows
             .iter()
@@ -1139,9 +1139,9 @@ impl TaskWatchtowerService {
     }
 
     pub async fn workload(pool: &PgPool) -> Result<Value, TaskHealthError> {
-        let active = sqlx::query("SELECT COUNT(*) as cnt FROM tasks WHERE hermes_status IN ('new','triaged','ready','in_progress','waiting','blocked','review')")
+        let active = sqlx::query("SELECT COUNT(*) as cnt FROM tasks WHERE makosh_status IN ('new','triaged','ready','in_progress','waiting','blocked','review')")
             .fetch_one(pool).await?;
-        let overdue = sqlx::query("SELECT COUNT(*) as cnt FROM tasks WHERE due_at < $1 AND hermes_status NOT IN ('done','cancelled','archived')")
+        let overdue = sqlx::query("SELECT COUNT(*) as cnt FROM tasks WHERE due_at < $1 AND makosh_status NOT IN ('done','cancelled','archived')")
             .bind(Utc::now()).fetch_one(pool).await?;
         Ok(json!({
             "active_count": active.try_get::<Option<i64>,_>("cnt").unwrap_or(Some(0)),
@@ -1161,7 +1161,7 @@ pub enum TaskHealthError {
 
 ### `backend/src/domains/tasks/intelligence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/intelligence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/intelligence.rs`
 - Size bytes / Размер в байтах: `4221`
 - Included characters / Включено символов: `4215`
 - Truncated / Обрезано: `no`
@@ -1334,7 +1334,7 @@ pub enum TaskIntelligenceError {
 
 ### `backend/src/domains/tasks/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/mod.rs`
 - Size bytes / Размер в байтах: `182`
 - Included characters / Включено символов: `182`
 - Truncated / Обрезано: `no`
@@ -1355,7 +1355,7 @@ pub mod sync;
 
 ### `backend/src/domains/tasks/ports.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/ports.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/ports.rs`
 - Size bytes / Размер в байтах: `190`
 - Included characters / Включено символов: `190`
 - Truncated / Обрезано: `no`
@@ -1368,7 +1368,7 @@ pub use super::core::ObligationTaskLinkStore as ObligationTaskLinkPort;
 
 ### `backend/src/domains/tasks/rules.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/rules.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/rules.rs`
 - Size bytes / Размер в байтах: `5104`
 - Included characters / Включено символов: `5104`
 - Truncated / Обрезано: `no`
@@ -1511,7 +1511,7 @@ pub enum TaskRuleError {
 
 ### `backend/src/domains/tasks/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/service.rs`
 - Size bytes / Размер в байтах: `35`
 - Included characters / Включено символов: `35`
 - Truncated / Обрезано: `no`
@@ -1522,7 +1522,7 @@ pub use super::command_service::*;
 
 ### `backend/src/domains/tasks/sync.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/sync.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/sync.rs`
 - Size bytes / Размер в байтах: `1035`
 - Included characters / Включено символов: `1035`
 - Truncated / Обрезано: `no`
@@ -1576,7 +1576,7 @@ pub enum TaskSyncError {
 
 ### `backend/src/engines/automation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/automation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/automation.rs`
 - Size bytes / Размер в байтах: `375`
 - Included characters / Включено символов: `375`
 - Truncated / Обрезано: `no`
@@ -1603,7 +1603,7 @@ pub use store::AutomationStore;
 
 ### `backend/src/engines/automation/constants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/automation/constants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/automation/constants.rs`
 - Size bytes / Размер в байтах: `240`
 - Included characters / Включено символов: `240`
 - Truncated / Обрезано: `no`
@@ -1616,7 +1616,7 @@ pub(super) const AUTOMATION_SOURCE_PROVIDER: &str = "local_policy_engine";
 
 ### `backend/src/engines/automation/dry_run.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/automation/dry_run.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/automation/dry_run.rs`
 - Size bytes / Размер в байтах: `3961`
 - Included characters / Включено символов: `3961`
 - Truncated / Обрезано: `no`
@@ -1749,7 +1749,7 @@ pub(super) async fn dry_run_send(
 
 ### `backend/src/engines/automation/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/automation/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/automation/errors.rs`
 - Size bytes / Размер в байтах: `981`
 - Included characters / Включено символов: `981`
 - Truncated / Обрезано: `no`
@@ -1796,7 +1796,7 @@ pub enum AutomationError {
 
 ### `backend/src/engines/automation/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/automation/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/automation/evidence.rs`
 - Size bytes / Размер в байтах: `5582`
 - Included characters / Включено символов: `5582`
 - Truncated / Обрезано: `no`
@@ -1976,7 +1976,7 @@ pub(super) async fn capture_dry_run_observation(
 
 ### `backend/src/engines/automation/ids.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/automation/ids.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/automation/ids.rs`
 - Size bytes / Размер в байтах: `190`
 - Included characters / Включено символов: `190`
 - Truncated / Обрезано: `no`
@@ -1993,7 +1993,7 @@ pub(super) fn sha256_hex(bytes: &[u8]) -> String {
 
 ### `backend/src/engines/automation/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/automation/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/automation/models.rs`
 - Size bytes / Размер в байтах: `2234`
 - Included characters / Включено символов: `2234`
 - Truncated / Обрезано: `no`
@@ -2084,7 +2084,7 @@ pub fn object_from_pairs(pairs: impl IntoIterator<Item = (String, Value)>) -> Va
 
 ### `backend/src/engines/automation/policy.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/automation/policy.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/automation/policy.rs`
 - Size bytes / Размер в байтах: `1704`
 - Included characters / Включено символов: `1704`
 - Truncated / Обрезано: `no`
@@ -2149,7 +2149,7 @@ pub(super) fn evaluate_policy(
 
 ### `backend/src/engines/automation/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/automation/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/automation/rows.rs`
 - Size bytes / Размер в байтах: `1890`
 - Included characters / Включено символов: `1890`
 - Truncated / Обрезано: `no`

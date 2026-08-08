@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/app/provider_runtime_handlers/whatsapp.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/whatsapp.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/whatsapp.rs`
 - Size bytes / Размер в байтах: `230014`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -124,7 +124,7 @@ use crate::platform::observations::ObservationOriginKind;
 use crate::platform::secrets::{NewSecretReference, SecretKind, SecretStoreKind};
 use crate::vault::SecretEntryContext;
 
-const AUDIT_ACTOR_ID: &str = "hermes-frontend";
+const AUDIT_ACTOR_ID: &str = "makosh-frontend";
 const BUSINESS_CLOUD_SIGNATURE_HEADER: &str = "x-hub-signature-256";
 static WHATSAPP_EVENT_SEQUENCE: AtomicU64 = AtomicU64::new(1);
 type HmacSha256 = Hmac<Sha256>;
@@ -370,7 +370,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/app/provider_runtime_handlers/yandex_telemost.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/yandex_telemost.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/yandex_telemost.rs`
 - Size bytes / Размер в байтах: `56512`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -688,7 +688,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/app/provider_runtime_handlers/zoom.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/provider_runtime_handlers/zoom.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/provider_runtime_handlers/zoom.rs`
 - Size bytes / Размер в байтах: `52907`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -964,7 +964,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/app/router.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router.rs`
 - Size bytes / Размер в байтах: `6494`
 - Included characters / Включено символов: `6494`
 - Truncated / Обрезано: `no`
@@ -1075,7 +1075,7 @@ pub async fn run(config: AppConfig) -> Result<(), AppError> {
     let database = Database::connect(config.database_url()).await?;
     let listener = TcpListener::bind(http_addr).await?;
 
-    tracing::info!(%http_addr, "starting Hermes Hub backend");
+    tracing::info!(%http_addr, "starting Макошь backend");
 
     axum::serve(listener, build_router_with_database(config, database)).await?;
 
@@ -1084,7 +1084,7 @@ pub async fn run(config: AppConfig) -> Result<(), AppError> {
 
 pub fn init_tracing() {
     let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
-    let log_format = std::env::var("HERMES_LOG_FORMAT").unwrap_or_else(|_| "plain".to_owned());
+    let log_format = std::env::var("MAKOSH_LOG_FORMAT").unwrap_or_else(|_| "plain".to_owned());
 
     if log_format.eq_ignore_ascii_case("json") {
         let _ = tracing_subscriber::fmt()
@@ -1118,7 +1118,7 @@ pub(crate) fn local_frontend_cors_layer() -> CorsLayer {
         ])
         .allow_headers([
             header::CONTENT_TYPE,
-            HeaderName::from_static("x-hermes-secret"),
+            HeaderName::from_static("x-makosh-secret"),
         ])
 }
 
@@ -1172,7 +1172,7 @@ pub(crate) async fn readyz(State(state): State<AppState>) -> (StatusCode, Json<R
 
 ### `backend/src/app/router/routes/ai.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/ai.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/ai.rs`
 - Size bytes / Размер в байтах: `1930`
 - Included characters / Включено символов: `1930`
 - Truncated / Обрезано: `no`
@@ -1239,7 +1239,7 @@ pub(super) fn add_routes(router: Router<AppState>) -> Router<AppState> {
 
 ### `backend/src/app/router/routes/audit_events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/audit_events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/audit_events.rs`
 - Size bytes / Размер в байтах: `804`
 - Included characters / Включено символов: `804`
 - Truncated / Обрезано: `no`
@@ -1269,7 +1269,7 @@ pub(super) fn add_routes(router: Router<AppState>) -> Router<AppState> {
 
 ### `backend/src/app/router/routes/calendar.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/calendar.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/calendar.rs`
 - Size bytes / Размер в байтах: `5398`
 - Included characters / Включено символов: `5398`
 - Truncated / Обрезано: `no`
@@ -1432,7 +1432,7 @@ pub(super) fn add_routes(router: Router<AppState>) -> Router<AppState> {
 
 ### `backend/src/app/router/routes/communications.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/communications.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/communications.rs`
 - Size bytes / Размер в байтах: `9711`
 - Included characters / Включено символов: `9711`
 - Truncated / Обрезано: `no`
@@ -1719,7 +1719,7 @@ pub(super) fn add_routes(router: Router<AppState>) -> Router<AppState> {
 
 ### `backend/src/app/router/routes/email_accounts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/email_accounts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/email_accounts.rs`
 - Size bytes / Размер в байтах: `1852`
 - Included characters / Включено символов: `1852`
 - Truncated / Обрезано: `no`
@@ -1782,7 +1782,7 @@ pub(super) fn add_routes(router: Router<AppState>) -> Router<AppState> {
 
 ### `backend/src/app/router/routes/knowledge.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/knowledge.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/knowledge.rs`
 - Size bytes / Размер в байтах: `1146`
 - Included characters / Включено символов: `1146`
 - Truncated / Обрезано: `no`
@@ -1823,7 +1823,7 @@ pub(super) fn add_routes(router: Router<AppState>) -> Router<AppState> {
 
 ### `backend/src/app/router/routes/messaging.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/messaging.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/messaging.rs`
 - Size bytes / Размер в байтах: `30169`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2157,7 +2157,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/app/router/routes/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/mod.rs`
 - Size bytes / Размер в байтах: `1240`
 - Included characters / Включено символов: `1240`
 - Truncated / Обрезано: `no`
@@ -2212,7 +2212,7 @@ pub(super) fn public_routes() -> Router<AppState> {
 
 ### `backend/src/app/router/routes/organizations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/organizations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/organizations.rs`
 - Size bytes / Размер в байтах: `3385`
 - Included characters / Включено символов: `3385`
 - Truncated / Обрезано: `no`
@@ -2327,7 +2327,7 @@ pub(super) fn add_routes(router: Router<AppState>) -> Router<AppState> {
 
 ### `backend/src/app/router/routes/persons.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/persons.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/persons.rs`
 - Size bytes / Размер в байтах: `6175`
 - Included characters / Включено символов: `6073`
 - Truncated / Обрезано: `no`
@@ -2508,7 +2508,7 @@ pub(super) fn add_routes(router: Router<AppState>) -> Router<AppState> {
 
 ### `backend/src/app/router/routes/public.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/public.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/public.rs`
 - Size bytes / Размер в байтах: `505`
 - Included characters / Включено символов: `505`
 - Truncated / Обрезано: `no`
@@ -2534,7 +2534,7 @@ pub(super) fn routes() -> Router<AppState> {
 
 ### `backend/src/app/router/routes/review.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/review.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/review.rs`
 - Size bytes / Размер в байтах: `1679`
 - Included characters / Включено символов: `1679`
 - Truncated / Обрезано: `no`
@@ -2591,7 +2591,7 @@ pub(super) fn add_routes(router: Router<AppState>) -> Router<AppState> {
 
 ### `backend/src/app/router/routes/settings.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/settings.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/settings.rs`
 - Size bytes / Размер в байтах: `409`
 - Included characters / Включено символов: `409`
 - Truncated / Обрезано: `no`
@@ -2615,7 +2615,7 @@ pub(super) fn add_routes(router: Router<AppState>) -> Router<AppState> {
 
 ### `backend/src/app/router/routes/signal_hub.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/signal_hub.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/signal_hub.rs`
 - Size bytes / Размер в байтах: `2953`
 - Included characters / Включено символов: `2953`
 - Truncated / Обрезано: `no`
@@ -2711,7 +2711,7 @@ pub(super) fn add_routes(router: Router<AppState>) -> Router<AppState> {
 
 ### `backend/src/app/router/routes/status_vault.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/status_vault.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/status_vault.rs`
 - Size bytes / Размер в байтах: `722`
 - Included characters / Включено символов: `722`
 - Truncated / Обрезано: `no`
@@ -2742,7 +2742,7 @@ pub(super) fn add_routes(router: Router<AppState>) -> Router<AppState> {
 
 ### `backend/src/app/router/routes/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/support.rs`
 - Size bytes / Размер в байтах: `1372`
 - Included characters / Включено символов: `1372`
 - Truncated / Обрезано: `no`
@@ -2781,7 +2781,7 @@ pub(super) use crate::app::handlers::zoom::*;
 
 ### `backend/src/app/router/routes/tasks.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/router/routes/tasks.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/router/routes/tasks.rs`
 - Size bytes / Размер в байтах: `2282`
 - Included characters / Включено символов: `2282`
 - Truncated / Обрезано: `no`
@@ -2844,7 +2844,7 @@ pub(super) fn add_routes(router: Router<AppState>) -> Router<AppState> {
 
 ### `backend/src/app/signal_hub_support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/signal_hub_support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/signal_hub_support.rs`
 - Size bytes / Размер в байтах: `16449`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3182,13 +3182,13 @@ fn provider_account_signal_status(account: &ProviderAccount) -> &'static str {
                 "disconnected"
             } else {
                 "connected"
-    
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/app/state.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/state.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/state.rs`
 - Size bytes / Размер в байтах: `1063`
 - Included characters / Включено символов: `1063`
 - Truncated / Обрезано: `no`
@@ -3226,7 +3226,7 @@ pub(crate) struct AccountSetupState {
 
 ### `backend/src/app/vault_reconciliation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/vault_reconciliation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/vault_reconciliation.rs`
 - Size bytes / Размер в байтах: `206`
 - Included characters / Включено символов: `206`
 - Truncated / Обрезано: `no`
@@ -3246,7 +3246,7 @@ pub(crate) use lifecycle::spawn_host_vault_manifest_reconciliation;
 
 ### `backend/src/app/vault_reconciliation/calendar_restore.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/vault_reconciliation/calendar_restore.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/vault_reconciliation/calendar_restore.rs`
 - Size bytes / Размер в байтах: `1798`
 - Included characters / Включено символов: `1798`
 - Truncated / Обрезано: `no`

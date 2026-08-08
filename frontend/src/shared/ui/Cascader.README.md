@@ -48,7 +48,7 @@ const options: TreeSelectOption[] = [
 - `readonly` keeps the current value visible while preventing the popover from
   opening or emitting selection changes.
 - Labels, descriptions, and placeholders are owned by the caller. Pass already
-  translated text from the active Hermes i18n context.
+  translated text from the active Макошь i18n context.
 - `emptyLabel` is also caller-owned text for empty option columns.
 
 ## Events

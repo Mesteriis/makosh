@@ -17,7 +17,7 @@ struct PairingHttpFixture {
 }
 
 fn pairing_http_fixture() -> PairingHttpFixture {
-    let root = unique_target_root("hermes-browser-pairing-http");
+    let root = unique_target_root("makosh-browser-pairing-http");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let path = root.join("control.sqlite");
     let store =

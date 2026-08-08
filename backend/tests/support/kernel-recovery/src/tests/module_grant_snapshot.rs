@@ -1,9 +1,9 @@
 use std::sync::{Arc, Barrier};
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleGrantSnapshot, ModuleRegistration, ModuleRegistrationState,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 #[test]
 fn concurrent_registration_and_grant_reads_are_one_atomic_snapshot() {
@@ -89,7 +89,7 @@ fn assert_consistent(snapshot: &ModuleGrantSnapshot) {
 
 fn fixture_path() -> std::path::PathBuf {
     std::env::temp_dir().join(format!(
-        "hermes-module-grant-snapshot-{}-{}.sqlite",
+        "makosh-module-grant-snapshot-{}-{}.sqlite",
         std::process::id(),
         std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)

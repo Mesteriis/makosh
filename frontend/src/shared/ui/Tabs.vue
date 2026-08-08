@@ -2,12 +2,12 @@
 import { TabsRoot, TabsList, TabsTrigger } from 'reka-ui'
 import { computed } from 'vue'
 
-type HermesTab = {
+type МакошьTab = {
   id: string
   label: string
 }
 
-// Re-export with Hermes styling
+// Re-export with Макошь styling
 const props = withDefaults(defineProps<{
   modelValue?: string
   active?: string
@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<{
   class?: string
   listClass?: string
   contentClass?: string
-  tabs?: HermesTab[]
+  tabs?: МакошьTab[]
 }>(), {
   orientation: 'horizontal'
 })
@@ -28,8 +28,8 @@ const emit = defineEmits<{
 
 const tabs = computed(() => props.tabs ?? [])
 const selectedValue = computed(() => props.modelValue ?? props.active)
-const rootClasses = computed(() => ['hermes-tabs', props.class])
-const listClasses = computed(() => ['hermes-tabs-list', `hermes-tabs-list--${props.orientation}`, props.listClass])
+const rootClasses = computed(() => ['makosh-tabs', props.class])
+const listClasses = computed(() => ['makosh-tabs-list', `makosh-tabs-list--${props.orientation}`, props.listClass])
 
 function handleUpdateModelValue(value: string | number) {
   const nextValue = String(value)
@@ -52,7 +52,7 @@ function handleUpdateModelValue(value: string | number) {
           v-for="tab in tabs"
           :key="tab.id"
           :value="tab.id"
-          class="hermes-tabs-trigger"
+          class="makosh-tabs-trigger"
         >
           {{ tab.label }}
         </TabsTrigger>

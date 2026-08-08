@@ -2,7 +2,7 @@ import type {
 	AccountSummaryV1,
 	ConversationSummaryV1,
 	MessageSummaryV1,
-} from '../../../gen/hermes/communications/query/v1/query_pb'
+} from '../../../gen/makosh/communications/query/v1/query_pb'
 
 export type CanonicalSearchHitLike = {
 	evidenceId: Uint8Array

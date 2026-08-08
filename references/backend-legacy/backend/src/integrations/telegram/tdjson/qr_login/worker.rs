@@ -48,7 +48,7 @@ pub(super) fn drive_qr_login(
     }));
     client.send_json(&json!({
         "@type": "getAuthorizationState",
-        "@extra": "hermes-initial-authorization-state"
+        "@extra": "makosh-initial-authorization-state"
     }))?;
 
     let started_at = Instant::now();

@@ -3,8 +3,8 @@ use sqlx::{Postgres, Transaction};
 use crate::domains::communications::messages::models::ProjectedMessage;
 use crate::domains::personas::api::errors::PersonaProjectionError;
 use crate::domains::personas::ports::PersonaProjectionPort;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 
 pub(crate) async fn create_persona_projection_in_transaction(
     transaction: &mut Transaction<'_, Postgres>,

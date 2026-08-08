@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/domains/communications/components/MessageBodyTab.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MessageBodyTab.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MessageBodyTab.vue`
 - Size bytes / Размер в байтах: `16443`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -399,13 +399,13 @@ function remoteImageProxyUrl(currentMessageId: string, imageUrl: string): string
 .mail-html-body {
   padding: 1rem;
   min-height: 300px;
-  color: 
+  color:
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `frontend/src/domains/communications/components/MessageHeadersTab.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MessageHeadersTab.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MessageHeadersTab.vue`
 - Size bytes / Размер в байтах: `2483`
 - Included characters / Включено символов: `2483`
 - Truncated / Обрезано: `no`
@@ -512,7 +512,7 @@ const message = props.detail?.message ?? null
 
 ### `frontend/src/domains/communications/components/MessageLocalIntelligencePanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MessageLocalIntelligencePanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MessageLocalIntelligencePanel.vue`
 - Size bytes / Размер в байтах: `4424`
 - Included characters / Включено символов: `4423`
 - Truncated / Обрезано: `no`
@@ -675,7 +675,7 @@ async function detectLanguage(): Promise<void> {
 
 ### `frontend/src/domains/communications/components/MessageRelatedTab.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MessageRelatedTab.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MessageRelatedTab.vue`
 - Size bytes / Размер в байтах: `7338`
 - Included characters / Включено символов: `7338`
 - Truncated / Обрезано: `no`
@@ -943,7 +943,7 @@ function snoozePreset(days: number): string {
 
 ### `frontend/src/domains/communications/components/MessageTimelineTab.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MessageTimelineTab.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MessageTimelineTab.vue`
 - Size bytes / Размер в байтах: `1988`
 - Included characters / Включено символов: `1988`
 - Truncated / Обрезано: `no`
@@ -1041,7 +1041,7 @@ const entries = props.detail?.message
 
 ### `frontend/src/domains/communications/components/MessageTrustReviewPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MessageTrustReviewPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MessageTrustReviewPanel.vue`
 - Size bytes / Размер в байтах: `4574`
 - Included characters / Включено символов: `4574`
 - Truncated / Обрезано: `no`
@@ -1210,7 +1210,7 @@ const authChecks = computed(() => {
 
 ### `frontend/src/domains/communications/components/OutboxStatusStrip.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/OutboxStatusStrip.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/OutboxStatusStrip.vue`
 - Size bytes / Размер в байтах: `6083`
 - Included characters / Включено символов: `6083`
 - Truncated / Обрезано: `no`
@@ -1465,7 +1465,7 @@ const statusItems = computed(() =>
 
 ### `frontend/src/domains/communications/components/RichComposeEditor.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/RichComposeEditor.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/RichComposeEditor.vue`
 - Size bytes / Размер в байтах: `12863`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1860,7 +1860,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/components/SavedSearchRuleGroupEditor.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/SavedSearchRuleGroupEditor.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/SavedSearchRuleGroupEditor.vue`
 - Size bytes / Размер в байтах: `3335`
 - Included characters / Включено символов: `3335`
 - Truncated / Обрезано: `no`
@@ -1971,7 +1971,7 @@ function nextDepth(): number {
 
 ### `frontend/src/domains/communications/components/SavedSearchStrip.css`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/SavedSearchStrip.css`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/SavedSearchStrip.css`
 - Size bytes / Размер в байтах: `8519`
 - Included characters / Включено символов: `8519`
 - Truncated / Обрезано: `no`
@@ -2374,7 +2374,7 @@ function nextDepth(): number {
 
 ### `frontend/src/domains/communications/components/SavedSearchStrip.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/SavedSearchStrip.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/SavedSearchStrip.vue`
 - Size bytes / Размер в байтах: `19515`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2703,7 +2703,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/components/TemplateRecipientMappingPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/TemplateRecipientMappingPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/TemplateRecipientMappingPanel.vue`
 - Size bytes / Размер в байтах: `2584`
 - Included characters / Включено символов: `2584`
 - Truncated / Обрезано: `no`
@@ -2788,7 +2788,7 @@ function updateMappingField(
 
 ### `frontend/src/domains/communications/components/TemplateSaveForm.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/TemplateSaveForm.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/TemplateSaveForm.vue`
 - Size bytes / Размер в байтах: `1524`
 - Included characters / Включено символов: `1524`
 - Truncated / Обрезано: `no`
@@ -2855,7 +2855,7 @@ const emit = defineEmits<{
 
 ### `frontend/src/domains/communications/components/ThreadAttachmentInsightPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/ThreadAttachmentInsightPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/ThreadAttachmentInsightPanel.vue`
 - Size bytes / Размер в байтах: `14065`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3215,7 +3215,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/components/ThreadConversationView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/ThreadConversationView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/ThreadConversationView.vue`
 - Size bytes / Размер в байтах: `20234`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3548,13 +3548,13 @@ function primaryBody(message: ThreadMessage): string {
             </li>
           </ul>
           <div
-  
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `frontend/src/domains/communications/components/ThreadInlineReplyComposer.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/ThreadInlineReplyComposer.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/ThreadInlineReplyComposer.vue`
 - Size bytes / Размер в байтах: `4923`
 - Included characters / Включено символов: `4923`
 - Truncated / Обрезано: `no`
@@ -3764,7 +3764,7 @@ function replyReviewSubject(message: ThreadMessage): string {
 
 ### `frontend/src/domains/communications/providers/telegram/views/TelegramCommunicationsPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/providers/telegram/views/TelegramCommunicationsPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/providers/telegram/views/TelegramCommunicationsPanel.vue`
 - Size bytes / Размер в байтах: `12337`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -4135,6 +4135,6 @@ async function togglePin(message: TelegramMessage) {
   gap: 0.25rem;
   border: 1px solid var(--hh-border, #d9e2ec);
   border-radius: 6px;
-  
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._

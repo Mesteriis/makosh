@@ -20,7 +20,7 @@ pub(crate) async fn put_v1_message_read_state(
         .set_message_read_local_with_provider_command(
             &message_id,
             request.is_read,
-            "hermes-local-user",
+            "makosh-local-user",
         )
         .await?;
     Ok(Json(serde_json::json!({

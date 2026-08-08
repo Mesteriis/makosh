@@ -3,8 +3,8 @@ use crate::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
 use crate::store::CommunicationIngestionStore;
-use hermes_communications_api::accounts::ProviderAccountUsage;
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::ProviderAccountUsage;
+use makosh_communications_api::accounts::{
     DeletedProviderAccount, NewProviderAccount, NewProviderAccountSecretBinding, ProviderAccount,
     ProviderAccountSecretBinding, ProviderAccountSecretPurpose,
 };

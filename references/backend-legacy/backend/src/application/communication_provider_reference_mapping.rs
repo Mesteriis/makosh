@@ -2,7 +2,7 @@ use crate::integrations::telegram::client::errors::TelegramError;
 use crate::integrations::telegram::client::models::message_references::{
     TelegramForwardRef, TelegramReplyRef,
 };
-use hermes_communications_api::canonical::{
+use makosh_communications_api::canonical::{
     CanonicalForwardReferenceRecord, CanonicalReplyReferenceRecord,
 };
 

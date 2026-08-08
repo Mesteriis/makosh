@@ -27,9 +27,9 @@ watch(() => props.src, () => {
 
 const canRenderImage = computed(() => Boolean(props.src) && !failed.value)
 const classes = computed(() => [
-	'hermes-image',
-	`hermes-image--fit-${props.fit}`,
-	`hermes-image--ratio-${props.ratio}`,
+	'makosh-image',
+	`makosh-image--fit-${props.fit}`,
+	`makosh-image--ratio-${props.ratio}`,
 	props.class
 ])
 const fallbackLabel = computed(() => props.alt || props.fallbackLabel)
@@ -39,16 +39,16 @@ const fallbackLabel = computed(() => props.alt || props.fallbackLabel)
 	<figure :class="classes">
 		<img
 			v-if="canRenderImage"
-			class="hermes-image__asset"
+			class="makosh-image__asset"
 			:src="src"
 			:alt="alt"
 			:loading="loading"
 			@error="failed = true"
 		/>
-		<div v-else class="hermes-image__fallback" role="img" :aria-label="fallbackLabel">
+		<div v-else class="makosh-image__fallback" role="img" :aria-label="fallbackLabel">
 			<Icon icon="tabler:photo-off" size="1.5rem" aria-hidden="true" />
 			<span>{{ fallbackLabel }}</span>
 		</div>
-		<figcaption v-if="caption" class="hermes-image__caption">{{ caption }}</figcaption>
+		<figcaption v-if="caption" class="makosh-image__caption">{{ caption }}</figcaption>
 	</figure>
 </template>

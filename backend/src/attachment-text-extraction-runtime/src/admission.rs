@@ -1,15 +1,15 @@
-use hermes_attachment_security_contract::admission::{
+use makosh_attachment_security_contract::admission::{
     ATTACHMENT_SECURITY_MAX_IN_FLIGHT,
     attachment_security_scan_candidate_observed_contract_reference_v1,
 };
-use hermes_attachment_text_extraction_api::{
+use makosh_attachment_text_extraction_api::{
     ATTACHMENT_TEXT_EXTRACTION_CAPABILITY_ID_V1,
     ATTACHMENT_TEXT_EXTRACTION_COMMAND_CONNECT_PATH_V1,
     ATTACHMENT_TEXT_EXTRACTION_CONTENT_CONNECT_PATH_V1,
     ATTACHMENT_TEXT_EXTRACTION_MAX_DERIVED_BYTES_V1, ATTACHMENT_TEXT_EXTRACTION_MODULE_ID_V1,
     ATTACHMENT_TEXT_EXTRACTION_OWNER_V1, ATTACHMENT_TEXT_EXTRACTION_QUERY_CONNECT_PATH_V1,
 };
-use hermes_attachment_text_extraction_ingress::{
+use makosh_attachment_text_extraction_ingress::{
     ATTACHMENT_TEXT_EXTRACTION_BLOB_TARGET_CAPABILITY_ID_V1,
     attachment_text_custody_delegated_consume_request_v1,
     attachment_text_custody_delegated_contract_reference_v1,
@@ -18,7 +18,7 @@ use hermes_attachment_text_extraction_ingress::{
     attachment_text_custody_delegation_requested_contract_reference_v1,
     attachment_text_custody_delegation_requested_publish_request_v1,
 };
-use hermes_attachment_translation_ingress::{
+use makosh_attachment_translation_ingress::{
     ATTACHMENT_TEXT_EXTRACTION_TRANSLATION_SOURCE_CAPABILITY_ID_V1,
     attachment_translation_source_prepared_contract_reference_v1,
     attachment_translation_source_prepared_publish_request_v1,
@@ -27,11 +27,11 @@ use hermes_attachment_translation_ingress::{
     attachment_translation_source_requested_consume_request_v1,
     attachment_translation_source_requested_contract_reference_v1,
 };
-use hermes_communications_attachment_contract::admission::{
+use makosh_communications_attachment_contract::admission::{
     COMMUNICATION_ATTACHMENT_MAX_IN_FLIGHT,
     communication_attachment_safety_state_changed_contract_reference_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ClientRpcRouteV1, ContractReferenceV1, DurableEnvelopeKindV1,
     EventRouteDirectionV1, EventRouteRequestV1, EventSubscriptionRequirementV1, ModuleDescriptorV1,
@@ -215,7 +215,7 @@ fn blob_capability() -> CapabilityDescriptorV1 {
         criticality: CapabilityCriticalityV1::Required as i32,
         requests: vec![CapabilityRequestV1 {
             request: Some(Request::BlobQuota(BlobQuotaRequestV1 {
-                max_bytes: hermes_attachment_text_extraction_core::ATTACHMENT_TEXT_EXTRACTION_MAX_SOURCE_BYTES_V1
+                max_bytes: makosh_attachment_text_extraction_core::ATTACHMENT_TEXT_EXTRACTION_MAX_SOURCE_BYTES_V1
                     + (ATTACHMENT_TEXT_EXTRACTION_MAX_DERIVED_BYTES_V1 as u64 * 2),
                 custody_scope_id: "attachment_text_extraction.content.v1".to_owned(),
                 allowed_operations: vec![
@@ -372,7 +372,7 @@ fn translation_source_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         validate_descriptor_v1, validate_settings_schema_v1,
     };
 

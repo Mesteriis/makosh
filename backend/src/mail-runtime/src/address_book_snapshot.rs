@@ -2,18 +2,18 @@
 
 use std::{os::unix::net::UnixStream, time::Duration};
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTransferRequestV1, ManagedBlobSessionRequestV1,
     request_managed_blob_custody_transfer_v2, request_managed_blob_session_v2,
 };
-use hermes_contacts_mail_sync_source_api::{
+use makosh_contacts_mail_sync_source_api::{
     CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1, CONTACT_MAIL_SYNC_SOURCE_MAX_BYTES_V1,
     wire::ContactMailSyncSourceContentV1,
 };
-use hermes_mail_address_book_persistence::{
+use makosh_mail_address_book_persistence::{
     MailAddressBookTargetSnapshotReceiptV1, PendingMailAddressBookUpsertV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::BlobDataOperationV1,
 };
@@ -203,7 +203,7 @@ fn blocking<T>(
 
 #[cfg(test)]
 mod tests {
-    use hermes_contacts_mail_sync_source_api::wire::MailAddressBookLinkV1;
+    use makosh_contacts_mail_sync_source_api::wire::MailAddressBookLinkV1;
 
     use super::*;
 

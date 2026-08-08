@@ -4,9 +4,9 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_kernel_control_store::ModuleBlobOperationV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store::ModuleBlobOperationV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     BlobCustodySourceProofKindV1, BlobCustodySourceProofV1, BlobCustodyTransferGrantV1,
     BlobDataOperationV1, BlobDataSessionGrantV1, ManagedRuntimeBlobCustodyDelegationDeliveryV1,
     ManagedRuntimeBlobCustodyDelegationRequestV1, ManagedRuntimeBlobSessionDeliveryV1,
@@ -170,7 +170,7 @@ impl ManagedRuntimeBlobSessionHandler for BlobSessionHandlerV1 {
             custody_scope_id: entry.request().custody_scope_id().to_owned(),
         };
         let signer = FileDeviceSigner::open_for_instance(&self.data_dir)?;
-        let mut message = b"hermes.blob-data-session.v1\0".to_vec();
+        let mut message = b"makosh.blob-data-session.v1\0".to_vec();
         message.extend_from_slice(&grant.encode_to_vec());
         grant.kernel_authorization_signature_raw = signer.sign(&message).to_vec();
         let custody_transfer_source_proof = if request.receipt_sha256.is_empty()
@@ -334,7 +334,7 @@ impl BlobSessionHandlerV1 {
             CustodySourceProofUseV1::Transfer,
         )
         .inspect_err(|_| {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_blob_custody_denied_stage=source_proof");
             }
         })?;
@@ -357,7 +357,7 @@ impl BlobSessionHandlerV1 {
                     .is_some_and(|operation| entry.request().allows(operation))
         });
         if !source_matches || !target_authorized || !source_grant_current {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!(
                     "developer_blob_custody_denied_stage=binding source_matches={source_matches} target_authorized={target_authorized} source_grant_current={source_grant_current}"
                 );
@@ -398,7 +398,7 @@ impl BlobSessionHandlerV1 {
             kernel_authorization_signature_raw: Vec::new(),
             target_custody_scope_id: target.request().custody_scope_id().to_owned(),
         };
-        let mut message = b"hermes.blob-custody-transfer.v1\0".to_vec();
+        let mut message = b"makosh.blob-custody-transfer.v1\0".to_vec();
         message.extend_from_slice(&grant.encode_to_vec());
         grant.kernel_authorization_signature_raw = signer.sign(&message).to_vec();
         Ok(ManagedRuntimeBlobSessionDeliveryV1 {
@@ -472,7 +472,7 @@ fn valid_delegation_target(request: &ManagedRuntimeBlobCustodyDelegationRequestV
     (has_explicit && request.target_request_contract.is_none()) || (explicit_empty && has_contract)
 }
 
-fn valid_request_contract(contract: &hermes_runtime_protocol::v1::ContractReferenceV1) -> bool {
+fn valid_request_contract(contract: &makosh_runtime_protocol::v1::ContractReferenceV1) -> bool {
     valid_target_token(&contract.owner)
         && valid_target_token(&contract.name)
         && contract.major > 0
@@ -482,7 +482,7 @@ fn valid_request_contract(contract: &hermes_runtime_protocol::v1::ContractRefere
 }
 
 fn resolve_delegation_target(
-    store: &hermes_kernel_control_store_sqlite::SqliteControlStore,
+    store: &makosh_kernel_control_store_sqlite::SqliteControlStore,
     expectation: &ManagedRuntimeExpectation,
     request: &ManagedRuntimeBlobCustodyDelegationRequestV1,
 ) -> Result<ResolvedCustodyTargetV1, String> {
@@ -558,7 +558,7 @@ pub(super) fn verify_custody_source_proof(
         .map_err(|_| "managed runtime Blob custody transfer is denied".to_owned())?;
     let mut unsigned = proof.clone();
     unsigned.kernel_authorization_signature_raw.clear();
-    let mut message = b"hermes.blob-custody-source-proof.v1\0".to_vec();
+    let mut message = b"makosh.blob-custody-source-proof.v1\0".to_vec();
     message.extend_from_slice(&unsigned.encode_to_vec());
     key.verify(&message, &signature)
         .map_err(|_| "managed runtime Blob custody transfer is denied".to_owned())?;
@@ -575,7 +575,7 @@ fn transfer_target_reference(
         == BlobCustodySourceProofKindV1::BlobCustodySourceProofKindCurrentCustodianRedelegationV1
             as i32
     {
-        digest.update(b"hermes.blob-custody-target-reference.v2\0");
+        digest.update(b"makosh.blob-custody-target-reference.v2\0");
         digest.update(&source.delegation_id);
         digest.update(&source.reference_id);
         digest.update(source.target_owner_id.as_bytes());
@@ -585,7 +585,7 @@ fn transfer_target_reference(
         digest.update(source.target_capability_id.as_bytes());
         digest.update([0]);
     } else {
-        digest.update(b"hermes.blob-custody-target-reference.v3\0");
+        digest.update(b"makosh.blob-custody-target-reference.v3\0");
         update_semantic_reference_field(&mut digest, &source.proof_kind.to_be_bytes());
         update_semantic_reference_field(&mut digest, source.kernel_instance_id.as_bytes());
         update_semantic_reference_field(&mut digest, source.owner_id.as_bytes());
@@ -654,7 +654,7 @@ fn issue_custody_source_proof(
         delegation_id: lineage.delegation_id.to_vec(),
         predecessor_proof_sha256: lineage.predecessor_proof_sha256.to_vec(),
     };
-    let mut message = b"hermes.blob-custody-source-proof.v1\0".to_vec();
+    let mut message = b"makosh.blob-custody-source-proof.v1\0".to_vec();
     message.extend_from_slice(&proof.encode_to_vec());
     proof.kernel_authorization_signature_raw = signer.sign(&message).to_vec();
     Ok(proof.encode_to_vec())
@@ -785,7 +785,7 @@ mod tests {
                 .iter()
                 .map(|byte| format!("{byte:02x}"))
                 .collect::<String>();
-            let path = std::env::temp_dir().join(format!("hermes-blob-delegation-{name}"));
+            let path = std::env::temp_dir().join(format!("makosh-blob-delegation-{name}"));
             std::fs::create_dir(&path).expect("temporary data directory");
             Self(path)
         }
@@ -827,7 +827,7 @@ mod tests {
         let proof = BlobCustodySourceProofV1 {
             owner_id: "mail".to_owned(),
             target_owner_id: "attachment_security".to_owned(),
-            target_module_id: "hermes-attachment-security-runtime".to_owned(),
+            target_module_id: "makosh-attachment-security-runtime".to_owned(),
             target_capability_id: "attachment_security.blob.v1".to_owned(),
             ..Default::default()
         };
@@ -836,7 +836,7 @@ mod tests {
         assert!(proof_authorizes_target(
             &proof,
             "attachment_security",
-            "hermes-attachment-security-runtime",
+            "makosh-attachment-security-runtime",
             "attachment_security.blob.v1",
         ));
         assert!(!proof_authorizes_target(
@@ -863,7 +863,7 @@ mod tests {
             predecessor_evidence_id: vec![4; 16],
             predecessor_evidence_envelope_sha256: vec![5; 32],
             target_owner_id: "attachment_archive_inspection".to_owned(),
-            target_module_id: "hermes-attachment-archive-inspection-runtime".to_owned(),
+            target_module_id: "makosh-attachment-archive-inspection-runtime".to_owned(),
             target_capability_id: "attachment_archive_inspection.blob.v1".to_owned(),
             target_request_contract: None,
         };
@@ -871,14 +871,14 @@ mod tests {
 
         request.target_module_id.clear();
         assert!(!valid_delegation_request(&request));
-        request.target_module_id = "hermes-attachment-archive-inspection-runtime".to_owned();
+        request.target_module_id = "makosh-attachment-archive-inspection-runtime".to_owned();
         request.predecessor_evidence_envelope_sha256 = vec![0; 32];
         assert!(!valid_delegation_request(&request));
     }
 
     #[test]
     fn custody_delegation_accepts_exactly_one_explicit_or_resolved_provider_target() {
-        let contract = hermes_runtime_protocol::v1::ContractReferenceV1 {
+        let contract = makosh_runtime_protocol::v1::ContractReferenceV1 {
             owner: "speech_to_text".to_owned(),
             name: "speech_to_text_provider_transcribe".to_owned(),
             major: 1,
@@ -900,7 +900,7 @@ mod tests {
         assert!(valid_delegation_request(&request));
 
         request.target_owner_id = "whisper_stt".to_owned();
-        request.target_module_id = "hermes-whisper-stt-runtime".to_owned();
+        request.target_module_id = "makosh-whisper-stt-runtime".to_owned();
         request.target_capability_id = "speech_to_text.provider.v1".to_owned();
         assert!(!valid_delegation_request(&request));
     }
@@ -946,7 +946,7 @@ mod tests {
             predecessor_proof_sha256: vec![10; 32],
             reference_id: vec![11; 16],
             target_owner_id: "attachment_archive_inspection".to_owned(),
-            target_module_id: "hermes-attachment-archive-inspection-runtime".to_owned(),
+            target_module_id: "makosh-attachment-archive-inspection-runtime".to_owned(),
             target_capability_id: "attachment_archive_inspection.blob.v1".to_owned(),
             issued_at_unix_ms: 100,
             kernel_authorization_signature_raw: vec![12; 64],
@@ -988,7 +988,7 @@ mod tests {
             kernel_authorization_signature_raw: vec![3; 64],
             backup_class: 1,
             target_owner_id: "speech_to_text".to_owned(),
-            target_module_id: "hermes-speech-to-text-runtime".to_owned(),
+            target_module_id: "makosh-speech-to-text-runtime".to_owned(),
             target_capability_id: "speech_to_text.blob.v1".to_owned(),
             custody_scope_id: "mail.private_content.v1".to_owned(),
             ..Default::default()
@@ -1042,7 +1042,7 @@ mod tests {
             &[2; 32],
             CustodyProofTargetV1 {
                 owner_id: "attachment_security",
-                module_id: "hermes-attachment-security-runtime",
+                module_id: "makosh-attachment-security-runtime",
                 capability_id: "attachment_security.blob.v1",
             },
             100,
@@ -1084,7 +1084,7 @@ mod tests {
             &predecessor.receipt_sha256,
             CustodyProofTargetV1 {
                 owner_id: "attachment_archive_inspection",
-                module_id: "hermes-attachment-archive-inspection-runtime",
+                module_id: "makosh-attachment-archive-inspection-runtime",
                 capability_id: "attachment_archive_inspection.blob.v1",
             },
             200,
@@ -1111,7 +1111,7 @@ mod tests {
         assert!(proof_authorizes_target(
             &redelegated,
             "attachment_archive_inspection",
-            "hermes-attachment-archive-inspection-runtime",
+            "makosh-attachment-archive-inspection-runtime",
             "attachment_archive_inspection.blob.v1",
         ));
 

@@ -1,5 +1,5 @@
 [package]
-name = "hermes-managed-vault-client"
+name = "makosh-managed-vault-client"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,14 +7,14 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "vault"
 surface = "contract"
 
 [dependencies]
 getrandom = { version = "=0.4.3", default-features = false }
-hermes-runtime-protocol = { path = "../../runtime_protocol" }
-hermes-vault-protocol = { path = "../protocol" }
+makosh-runtime-protocol = { path = "../../runtime_protocol" }
+makosh-vault-protocol = { path = "../protocol" }
 prost = "=0.14.4"
 zeroize = "=1.9.0"

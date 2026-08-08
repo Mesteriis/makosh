@@ -6,7 +6,7 @@ import {
 	MailBindCredentialRequestV1Schema,
 	type MailCredentialBindingReceiptV1,
 	MailCredentialPurposeV1,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 let client: Client<typeof MailAccountCredentialBindingService> | null = null

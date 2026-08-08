@@ -203,16 +203,16 @@ export function main(argv = process.argv.slice(2)) {
     requireAbsentOutput(output);
     const connection = parseConnection(readConnectionUrl(connectionUrlFile));
     const parent = dirname(output);
-    staging = mkdtempSync(join(parent, '.hermes-postgres-backup-'));
+    staging = mkdtempSync(join(parent, '.makosh-postgres-backup-'));
     chmodSync(staging, 0o700);
     const serviceFile = join(staging, 'pg_service.conf');
     const passFile = join(staging, 'pgpass');
     const stagedDump = join(staging, `${basename(output)}.dump`);
-    writePrivateFile(serviceFile, `[hermes_backup]\nhost=${connection.host}\nport=${connection.port}\ndbname=${connection.database}\nuser=${connection.username}\nsslmode=${connection.sslmode}\n`);
+    writePrivateFile(serviceFile, `[makosh_backup]\nhost=${connection.host}\nport=${connection.port}\ndbname=${connection.database}\nuser=${connection.username}\nsslmode=${connection.sslmode}\n`);
     writePrivateFile(passFile, `${pgpassEscape(connection.host)}:${connection.port}:${pgpassEscape(connection.database)}:${pgpassEscape(connection.username)}:${pgpassEscape(connection.password)}\n`);
     const result = spawnSync(pgDump, [
       '--format=custom', '--no-owner', '--no-privileges', '--file', stagedDump,
-      '--dbname=service=hermes_backup',
+      '--dbname=service=makosh_backup',
     ], {
       env: { HOME: staging, LC_ALL: 'C', PGPASSFILE: passFile, PGSERVICEFILE: serviceFile },
       encoding: 'utf8',

@@ -1,15 +1,15 @@
 use std::os::unix::net::{UnixListener, UnixStream};
 use std::os::unix::prelude::{FileTypeExt, PermissionsExt};
 
-use hermes_desktop_call_recording_api::OWNER_ID_V1;
-use hermes_desktop_call_recording_persistence::{
+use makosh_desktop_call_recording_api::OWNER_ID_V1;
+use makosh_desktop_call_recording_persistence::{
     DesktopCallRecordingRepositoryV1, PersistenceErrorV1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     request_managed_runtime_event_access_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{
         ManagedControlChannelV2, ManagedControlRequestDispatcherV2, ManagedControlTransportErrorV2,
     },
@@ -26,11 +26,11 @@ use hermes_runtime_protocol::{
         module_client::{validate_module_client_request_v1, validate_module_client_response_v1},
     },
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 
@@ -312,7 +312,7 @@ impl DesktopRecordingManagedRuntimeV1 {
         )
         .await;
         if let Err(error) = result
-            && std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some()
+            && std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some()
         {
             eprintln!("developer_desktop_recording_realtime_error={error:?}");
         }
@@ -338,7 +338,7 @@ impl DesktopRecordingManagedRuntimeV1 {
         // remains available for the next explicitly authenticated host
         // operation; untrusted input must not restart the managed runtime.
         match crate::host_transport::serve_one_operation_v1(stream, self, handle, now_unix_ms()?) {
-            Err(error) if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() => {
+            Err(error) if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() => {
                 eprintln!("developer_desktop_recording_host_transport_error={error:?}");
             }
             _ => {}
@@ -373,7 +373,7 @@ impl DesktopRecordingManagedRuntimeV1 {
     pub(crate) fn claim_sha256(&self, host_claim_id: [u8; 16]) -> [u8; 32] {
         use sha2::{Digest, Sha256};
         let mut hash = Sha256::new();
-        hash.update(b"hermes.desktop-call-recording.host-claim.v1\0");
+        hash.update(b"makosh.desktop-call-recording.host-claim.v1\0");
         hash.update(self.host_bridge_route_binding);
         hash.update(host_claim_id);
         hash.finalize().into()

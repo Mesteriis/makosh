@@ -1,4 +1,4 @@
-use hermes_communication_bulk_action_core::{BulkDeliveryDraftV1, validate_bulk_delivery_v1};
+use makosh_communication_bulk_action_core::{BulkDeliveryDraftV1, validate_bulk_delivery_v1};
 use sha2::{Digest, Sha256};
 use sqlx::Row;
 
@@ -43,7 +43,7 @@ impl CommunicationBulkActionPersistenceV1 {
             .await
             .map_err(|_| BulkDeliveryPersistenceErrorV1::StorageUnavailable)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.communication_bulk_action_batches (
+            "INSERT INTO makosh_data.communication_bulk_action_batches (
                logical_owner_id, batch_id, request_fingerprint, target_count,
                state_revision, created_at_unix_seconds, updated_at_unix_seconds
              ) VALUES ($1, $2, $3, $4, 1, $5, $5)
@@ -65,7 +65,7 @@ impl CommunicationBulkActionPersistenceV1 {
                 let ordinal = i16::try_from(ordinal)
                     .map_err(|_| BulkDeliveryPersistenceErrorV1::InvalidInput)?;
                 sqlx::query(
-                    "INSERT INTO hermes_data.communication_bulk_action_targets (
+                    "INSERT INTO makosh_data.communication_bulk_action_targets (
                        logical_owner_id, batch_id, target_operation_id, ordinal,
                        canonical_conversation_id, canonical_reply_message_id,
                        body_utf8, state, attempt_count, claim_epoch,
@@ -96,7 +96,7 @@ impl CommunicationBulkActionPersistenceV1 {
 
         let row = sqlx::query(
             "SELECT request_fingerprint, target_count, state_revision
-             FROM hermes_data.communication_bulk_action_batches
+             FROM makosh_data.communication_bulk_action_batches
              WHERE logical_owner_id = $1 AND batch_id = $2",
         )
         .bind(&command.logical_owner_id)
@@ -158,7 +158,7 @@ fn positive_u64(value: i64) -> Result<u64, BulkDeliveryPersistenceErrorV1> {
 
 #[cfg(test)]
 mod tests {
-    use hermes_communication_bulk_action_core::BulkDeliveryTargetDraftV1;
+    use makosh_communication_bulk_action_core::BulkDeliveryTargetDraftV1;
 
     use super::*;
 

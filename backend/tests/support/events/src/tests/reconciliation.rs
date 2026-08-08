@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     ConsumerBudgetV1, ConsumerSpecV1, EventHubTopologyPlanV1, StreamBudgetV1, StreamKindV1,
     StreamSpecV1,
 };
@@ -14,7 +14,7 @@ fn topology_plan_rejects_duplicate_or_undeclared_consumers() {
     let consumer = ConsumerSpecV1::new(
         StreamKindV1::Event,
         "notes_projection",
-        "hermes.event.v1.notes.changed.v1",
+        "makosh.event.v1.notes.changed.v1",
         ConsumerBudgetV1::new(1, 1, Duration::from_secs(1)).expect("consumer budget"),
     )
     .expect("consumer spec");

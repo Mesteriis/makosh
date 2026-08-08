@@ -1,7 +1,7 @@
 # EntityIcon
 
 ## Description
-Icon primitive for durable Hermes entity categories.
+Icon primitive for durable Макошь entity categories.
 
 ## When to use
 Use in lists, cards and metadata rows that need entity type markers.

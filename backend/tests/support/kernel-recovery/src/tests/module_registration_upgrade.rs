@@ -1,7 +1,7 @@
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleDescriptorRegistrationRequestsV1, ModuleRegistration, ModuleRegistrationState,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 #[test]
 fn approved_registration_descriptor_upgrade_preserves_identity_and_replaces_grants() {
@@ -154,7 +154,7 @@ fn empty_descriptor_requests() -> ModuleDescriptorRegistrationRequestsV1<'static
 
 fn fixture_path(label: &str) -> std::path::PathBuf {
     std::env::temp_dir().join(format!(
-        "hermes-module-registration-upgrade-{label}-{}-{}.sqlite",
+        "makosh-module-registration-upgrade-{label}-{}-{}.sqlite",
         std::process::id(),
         std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)

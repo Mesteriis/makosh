@@ -6,20 +6,20 @@ use std::{
     time::Duration,
 };
 
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     NatsRuntimeCredentialDeliveryBindingInputV1, NatsRuntimeCredentialDeliveryBindingV1,
     NatsRuntimeCredentialDeliveryV1, NatsRuntimeCredentialRecipientV1, RuntimeNatsJwtCredentialV1,
 };
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, RejectManagedControlRequestsV2,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
     ManagedRuntimeEventConsumerBindingV1, ManagedRuntimeEventCredentialRequestV1,
     managed_runtime_control_request_v1::Operation,
     managed_runtime_control_response_v1::Result as ResponseResult,
 };
-use hermes_runtime_protocol::vault_request_id::next_vault_transport_request_id_v1;
+use makosh_runtime_protocol::vault_request_id::next_vault_transport_request_id_v1;
 use prost::Message;
 
 use super::{RuntimePublishPermitV1, RuntimeSubscribePermitV1};
@@ -235,11 +235,11 @@ fn consumer_spec(
     binding: ManagedRuntimeEventConsumerBindingV1,
 ) -> Result<ConsumerSpecV1, ManagedRuntimeEventAccessErrorV1> {
     let kind = match binding.stream_name.as_str() {
-        "HERMES_COMMAND_V1" => StreamKindV1::Command,
-        "HERMES_EVENT_V1" => StreamKindV1::Event,
-        "HERMES_OBSERVATION_V1" => StreamKindV1::Observation,
-        "HERMES_RESULT_V1" => StreamKindV1::Result,
-        "HERMES_ACK_V1" => StreamKindV1::Ack,
+        "MAKOSH_COMMAND_V1" => StreamKindV1::Command,
+        "MAKOSH_EVENT_V1" => StreamKindV1::Event,
+        "MAKOSH_OBSERVATION_V1" => StreamKindV1::Observation,
+        "MAKOSH_RESULT_V1" => StreamKindV1::Result,
+        "MAKOSH_ACK_V1" => StreamKindV1::Ack,
         _ => return Err(ManagedRuntimeEventAccessErrorV1::Rejected),
     };
     let budget = ConsumerBudgetV1::new(

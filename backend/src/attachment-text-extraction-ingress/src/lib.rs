@@ -8,13 +8,13 @@ pub use envelope::{
     build_attachment_text_custody_delegation_rejected_outbox_record_v1,
     build_request_attachment_text_custody_delegation_outbox_record_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-attachment-text-extraction-ingress";
+pub const PACKAGE: &str = "makosh-attachment-text-extraction-ingress";
 pub const ATTACHMENT_TEXT_EXTRACTION_INGRESS_OWNER_V1: &str = "attachment_text_extraction";
 pub const ATTACHMENT_TEXT_EXTRACTION_CUSTODY_DELEGATION_REQUESTED_CONTRACT_NAME_V1: &str =
     "attachment_text_custody_delegation_requested";
@@ -31,14 +31,14 @@ pub const ATTACHMENT_SECURITY_TEXT_EXTRACTION_DELEGATION_CAPABILITY_ID_V1: &str 
     "attachment_security.text-extraction-delegation.v1";
 pub const ATTACHMENT_TEXT_EXTRACTION_BLOB_TARGET_OWNER_ID_V1: &str = "attachment_text_extraction";
 pub const ATTACHMENT_TEXT_EXTRACTION_BLOB_TARGET_MODULE_ID_V1: &str =
-    "hermes-attachment-text-extraction-runtime";
+    "makosh-attachment-text-extraction-runtime";
 pub const ATTACHMENT_TEXT_EXTRACTION_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "attachment_text_extraction.blob.v1";
 
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.attachment_text_extraction.ingress.v1.rs"
+        "/makosh.attachment_text_extraction.ingress.v1.rs"
     ));
 }
 
@@ -59,7 +59,7 @@ pub fn attachment_text_custody_delegation_request_id_v1(
     safety_message_id: [u8; 16],
 ) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-text-extraction.custody-delegation-request.v1\0");
+    hasher.update(b"makosh.attachment-text-extraction.custody-delegation-request.v1\0");
     hasher.update(extraction_run_id);
     hasher.update(candidate_message_id);
     hasher.update(safety_message_id);
@@ -191,7 +191,7 @@ fn event_route(
 
 fn custody_result_message_id_v1(label: &[u8], request_id: [u8; 16]) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-text-extraction.custody-result.v1\0");
+    hasher.update(b"makosh.attachment-text-extraction.custody-result.v1\0");
     hasher.update(label);
     hasher.update(request_id);
     hasher.finalize()[..16].try_into().expect("digest prefix")
@@ -209,7 +209,7 @@ mod tests {
         );
         assert_eq!(
             ATTACHMENT_TEXT_EXTRACTION_BLOB_TARGET_MODULE_ID_V1,
-            "hermes-attachment-text-extraction-runtime"
+            "makosh-attachment-text-extraction-runtime"
         );
         assert_eq!(
             ATTACHMENT_TEXT_EXTRACTION_BLOB_TARGET_CAPABILITY_ID_V1,

@@ -1,4 +1,4 @@
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     v1::{StorageBundleV1, StorageMigrationStepV1},
     validation::validate_storage_bundle,
 };
@@ -40,7 +40,7 @@ pub fn append_communications_call_evidence_storage_v1(
 
 #[cfg(test)]
 mod tests {
-    use hermes_storage_protocol::v1::StorageMigrationStepV1;
+    use makosh_storage_protocol::v1::StorageMigrationStepV1;
 
     use super::*;
 
@@ -54,7 +54,7 @@ mod tests {
             steps: (1..=15)
                 .map(|revision| {
                     let sql = format!(
-                        "CREATE TABLE hermes_data.communications_test_{revision} (id BIGINT);"
+                        "CREATE TABLE makosh_data.communications_test_{revision} (id BIGINT);"
                     )
                     .into_bytes();
                     StorageMigrationStepV1 {

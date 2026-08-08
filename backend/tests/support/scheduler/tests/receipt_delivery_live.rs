@@ -6,27 +6,27 @@ mod fixture;
 
 use std::time::Duration;
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     ConsumerBudgetV1, ConsumerSpecV1, DurableSubjectV1, EventHubTopologyPlanV1, JetStreamClient,
     NatsPasswordCredentialV1, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSchedulerReceiptPortV1, RuntimeSubscribePermitV1, StreamBudgetV1, StreamKindV1,
     StreamSpecV1,
 };
-use hermes_events_protocol::v1::{
+use makosh_events_protocol::v1::{
     AckDispositionV1, AckMetadataV1, AckStageV1, ActorKindV1, ActorRefV1, ContractRefV1,
     DurableEnvelopeV1, FenceKindV1, ResultMetadataV1, ResultOutcomeV1, SourceFenceV1, SourceRefV1,
     durable_envelope_v1::Semantics,
 };
-use hermes_scheduler_persistence::{
+use makosh_scheduler_persistence::{
     SchedulerReceiptConsumeOutcomeV1, SchedulerReceiptConsumerV1, SchedulerRunClaimV1,
 };
-use hermes_scheduler_protocol::v1::{JobRunOutcomeV1, JobRunReceiptV1};
+use makosh_scheduler_protocol::v1::{JobRunOutcomeV1, JobRunReceiptV1};
 use prost::Message;
 use prost_types::Timestamp;
 
 use fixture::{active_runs, pending_published_dispatch, receipt, required, run_state};
 
-const NATS_ENDPOINT: &str = "HERMES_SCHEDULER_NATS_ENDPOINT";
+const NATS_ENDPOINT: &str = "MAKOSH_SCHEDULER_NATS_ENDPOINT";
 
 #[tokio::test(flavor = "multi_thread")]
 #[ignore = "requires the disposable Scheduler PostgreSQL and JetStream contour"]
@@ -54,10 +54,10 @@ async fn commit_acceptance<P>(
     consumer: &mut SchedulerReceiptConsumerV1<'_, P>,
     pool: &sqlx::PgPool,
     claim: &SchedulerRunClaimV1,
-    owner: &hermes_events_jetstream::RuntimeJetStreamConnection,
+    owner: &makosh_events_jetstream::RuntimeJetStreamConnection,
     permit: &RuntimePublishPermitV1,
 ) where
-    P: hermes_scheduler_protocol::SchedulerReceiptDeliveryPortV1,
+    P: makosh_scheduler_protocol::SchedulerReceiptDeliveryPortV1,
 {
     let accepted = receipt(claim);
     publish_owner_receipt(owner, permit, acceptance_envelope(&accepted)).await;
@@ -72,10 +72,10 @@ async fn commit_success<P>(
     consumer: &mut SchedulerReceiptConsumerV1<'_, P>,
     pool: &sqlx::PgPool,
     claim: &SchedulerRunClaimV1,
-    owner: &hermes_events_jetstream::RuntimeJetStreamConnection,
+    owner: &makosh_events_jetstream::RuntimeJetStreamConnection,
     permit: &RuntimePublishPermitV1,
 ) where
-    P: hermes_scheduler_protocol::SchedulerReceiptDeliveryPortV1,
+    P: makosh_scheduler_protocol::SchedulerReceiptDeliveryPortV1,
 {
     let mut terminal = receipt(claim);
     terminal.outcome = JobRunOutcomeV1::Succeeded as i32;
@@ -91,7 +91,7 @@ async fn commit_success<P>(
 async fn connect_scheduler_runtime(
     endpoint: &str,
 ) -> (
-    hermes_events_jetstream::RuntimeJetStreamConnection,
+    makosh_events_jetstream::RuntimeJetStreamConnection,
     RuntimeSubscribePermitV1,
     RuntimeSubscribePermitV1,
 ) {
@@ -126,7 +126,7 @@ async fn connect_scheduler_runtime(
 async fn connect_owner_runtime(
     endpoint: &str,
 ) -> (
-    hermes_events_jetstream::RuntimeJetStreamConnection,
+    makosh_events_jetstream::RuntimeJetStreamConnection,
     RuntimePublishPermitV1,
 ) {
     let owner = JetStreamClient::connect_runtime(
@@ -154,7 +154,7 @@ async fn connect_owner_runtime(
 }
 
 async fn publish_owner_receipt(
-    owner: &hermes_events_jetstream::RuntimeJetStreamConnection,
+    owner: &makosh_events_jetstream::RuntimeJetStreamConnection,
     permit: &RuntimePublishPermitV1,
     envelope: DurableEnvelopeV1,
 ) {
@@ -198,7 +198,7 @@ async fn configure_receipt_topology(endpoint: &str) {
 }
 
 fn receipt_consumer(kind: StreamKindV1, name: &str, budget: ConsumerBudgetV1) -> ConsumerSpecV1 {
-    let subject = format!("hermes.{}.v1.mail.job_receipt.v1", kind.subject_token());
+    let subject = format!("makosh.{}.v1.mail.job_receipt.v1", kind.subject_token());
     ConsumerSpecV1::new(kind, name, subject, budget).expect("receipt consumer")
 }
 

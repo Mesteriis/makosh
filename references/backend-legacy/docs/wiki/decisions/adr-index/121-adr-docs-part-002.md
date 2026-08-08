@@ -40,14 +40,14 @@ generated_by: code-wiki-ru
 | ADR-0034 | Proposed | Event Replay and Projection Cursors | Использовать `event_log.position` как порядок воспроизведения и `projection_cursors` для сохранения прогресса проекций. |
 | ADR-0035 | Proposed | Local Event API Command Boundary | Предоставить локальный API для добавления и чтения канонических событий: `POST /api/events`, `GET /api/events/{event_id}`. |
 | ADR-0036 | Proposed | Projection Runner Checkpoint Semantics | Проекционные воркеры сохраняют курсор только после успешной обработки события; сбойные события не пропускаются. |
-| ADR-0037 | Superseded by ADR-0038 | Local Write Capability Token | Был введён временный токен `HERMES_LOCAL_WRITE_TOKEN` для защиты мутирующих endpoint'ов; заменён на ADR-0038. |
-| ADR-0038 | Temporary | Local Event API Capability Token | Временный локальный API-токен `HERMES_LOCAL_API_TOKEN` защищает и чтение, и запись событий; `HERMES_LOCAL_WRITE_TOKEN` сохранён как fallback. |
+| ADR-0037 | Superseded by ADR-0038 | Local Write Capability Token | Был введён временный токен `MAKOSH_LOCAL_WRITE_TOKEN` для защиты мутирующих endpoint'ов; заменён на ADR-0038. |
+| ADR-0038 | Temporary | Local Event API Capability Token | Временный локальный API-токен `MAKOSH_LOCAL_API_TOKEN` защищает и чтение, и запись событий; `MAKOSH_LOCAL_WRITE_TOKEN` сохранён как fallback. |
 | ADR-0039 | Proposed | Local Event API Access Audit Log | Создана таблица `api_audit_log` для журналирования обращений к локальному API событий; аудит не влияет на поток доменных событий. |
-| ADR-0040 | Superseded by ADR-0056 | Local API Actor Identity | Требовал заголовок `X-Hermes-Actor-Id` для идентификации клиента; заменён на более полную модель в ADR-0056. |
+| ADR-0040 | Superseded by ADR-0056 | Local API Actor Identity | Требовал заголовок `X-Макошь-Actor-Id` для идентификации клиента; заменён на более полную модель в ADR-0056. |
 | ADR-0041 | Proposed | Email Provider Ingestion Foundation | Определён провайдер-нейтральный контракт хранения для Gmail, iCloud и IMAP: `communication_raw_records`, чекпоинты, отделение секретов. |
 | ADR-0042 | Superseded by ADR-0053 | Secret References for Provider Credentials | Секреты представлены ссылками (`secret_references`) без хранения значений в PostgreSQL; заменён на vault-модель с зашифрованными пейлоадами. |
 | ADR-0043 | Superseded by ADR-0055 | Read-Only Email Provider Networking | Ограничивал сетевое взаимодействие с почтовыми провайдерами только чтением; отменено для production, оставлено только для автотестов. |
-| ADR-0044 | Superseded by ADR-0076 | Account Setup and Encrypted Secret Vault | Добавлял локальный зашифрованный vault для OAuth-токенов и паролей; заменён хранилищем `~/.hermes/vault` в ADR-0076. |
+| ADR-0044 | Superseded by ADR-0076 | Account Setup and Encrypted Secret Vault | Добавлял локальный зашифрованный vault для OAuth-токенов и паролей; заменён хранилищем `~/.makosh/vault` в ADR-0076. |
 | ADR-0045 | Proposed | Graph Core Projection | Вводит реляционные таблицы графа (`graph_nodes`, `graph_edges`, `graph_evidence`) как перестраиваемую проекцию поверх контактов, сообщений и документов. |
 | ADR-0046 | Proposed | Persistent Dev Mail Cache and Blob Storage | Разделяет хранение метаданных в PostgreSQL и «тяжёлых» почтовых blob'ов (`.eml`, вложения) в локальном blob-хранилище `docker/data/mail/`. |
 | ADR-0047 | Proposed | Project Memory Spine | Добавляет модель проектов (`projects`) и проекционные связи с сообщениями, документами, персонами; связи выводятся по ключевым словам. |
@@ -73,10 +73,10 @@ generated_by: code-wiki-ru
 | `docs/adr/ADR-0034-event-replay-and-projection-cursors.md` | Название, статус Proposed, решение об использовании `event_log.position` и `projection_cursors`. |
 | `docs/adr/ADR-0035-local-event-api-command-boundary.md` | Название, статус Proposed, решение о локальном API событий (`POST /api/events`, `GET /api/events/{event_id}`). |
 | `docs/adr/ADR-0036-projection-runner-checkpoint-semantics.md` | Название, статус Proposed, решение о семантике чекпоинтов проекционных воркеров. |
-| `docs/adr/ADR-0037-local-write-capability-token.md` | Название, статус Superseded by ADR-0038, исходное решение о `HERMES_LOCAL_WRITE_TOKEN`. |
-| `docs/adr/ADR-0038-local-event-api-capability-token.md` | Название, статус Temporary, решение о `HERMES_LOCAL_API_TOKEN` с fallback на write-токен. |
+| `docs/adr/ADR-0037-local-write-capability-token.md` | Название, статус Superseded by ADR-0038, исходное решение о `MAKOSH_LOCAL_WRITE_TOKEN`. |
+| `docs/adr/ADR-0038-local-event-api-capability-token.md` | Название, статус Temporary, решение о `MAKOSH_LOCAL_API_TOKEN` с fallback на write-токен. |
 | `docs/adr/ADR-0039-local-event-api-access-audit-log.md` | Название, статус Proposed, решение о `api_audit_log` и правилах аудита. |
-| `docs/adr/ADR-0040-local-api-actor-identity.md` | Название, статус Superseded by ADR-0056, требование `X-Hermes-Actor-Id`. |
+| `docs/adr/ADR-0040-local-api-actor-identity.md` | Название, статус Superseded by ADR-0056, требование `X-Макошь-Actor-Id`. |
 | `docs/adr/ADR-0041-email-provider-ingestion-foundation.md` | Название, статус Proposed, контракт хранения для Gmail/iCloud/IMAP, `communication_raw_records`, чекпоинты. |
 | `docs/adr/ADR-0042-secret-references-for-provider-credentials.md` | Название, статус Superseded by ADR-0053, решение о `secret_references`. |
 | `docs/adr/ADR-0043-read-only-email-provider-networking.md` | Название, статус Superseded by ADR-0055, исходное ограничение read-only. |

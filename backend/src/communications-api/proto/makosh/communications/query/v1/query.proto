@@ -1,0 +1,228 @@
+syntax = "proto3";
+
+package makosh.communications.query.v1;
+
+// Public metadata-only owner query contract. No provider locator, message
+// content, Blob reference, credential or generic metadata map is exposed.
+message CommunicationsQueryRequestV1 {
+  uint32 protocol_major = 1;
+  oneof operation {
+    ListAccountsRequestV1 list_accounts = 2;
+    ListConversationsRequestV1 list_conversations = 3;
+    GetConversationRequestV1 get_conversation = 4;
+    ListConversationMessagesRequestV1 list_conversation_messages = 5;
+    ListConversationParticipantsRequestV1 list_conversation_participants = 6;
+    ListMessageAttachmentAnchorsRequestV1 list_message_attachment_anchors = 7;
+    ListMessageReferencesRequestV1 list_message_references = 8;
+    SearchCommunicationsRequestV1 search_communications = 9;
+    GetEvidenceRequestV1 get_evidence = 10;
+    ListMessageEvidenceRequestV1 list_message_evidence = 11;
+    GetMessageRequestV1 get_message = 12;
+  }
+}
+
+message CommunicationsQueryResponseV1 {
+  oneof result {
+    ListAccountsResponseV1 list_accounts = 1;
+    ListConversationsResponseV1 list_conversations = 2;
+    GetConversationResponseV1 get_conversation = 3;
+    ListConversationMessagesResponseV1 list_conversation_messages = 4;
+    ListConversationParticipantsResponseV1 list_conversation_participants = 5;
+    ListMessageAttachmentAnchorsResponseV1 list_message_attachment_anchors = 6;
+    ListMessageReferencesResponseV1 list_message_references = 7;
+    SearchCommunicationsResponseV1 search_communications = 8;
+    GetEvidenceResponseV1 get_evidence = 9;
+    ListMessageEvidenceResponseV1 list_message_evidence = 10;
+    GetMessageResponseV1 get_message = 11;
+  }
+  string error_code = 15;
+}
+
+service CommunicationsQueryService {
+  rpc Query(CommunicationsQueryRequestV1) returns (CommunicationsQueryResponseV1);
+}
+
+message ListAccountsRequestV1 {
+  uint32 limit = 1;
+  bytes cursor = 2;
+}
+message ListAccountsResponseV1 {
+  repeated AccountSummaryV1 accounts = 1;
+  bytes next_cursor = 2;
+}
+
+message ListConversationsRequestV1 {
+  bytes account_cursor_sha256 = 1;
+  uint32 limit = 2;
+  bytes cursor = 3;
+}
+message ListConversationsResponseV1 {
+  repeated ConversationSummaryV1 conversations = 1;
+  bytes next_cursor = 2;
+}
+
+message GetConversationRequestV1 { bytes conversation_id = 1; }
+message GetConversationResponseV1 { ConversationSummaryV1 conversation = 1; }
+
+message GetMessageRequestV1 { bytes message_id = 1; }
+message GetMessageResponseV1 { MessageSummaryV1 message = 1; }
+
+message ListConversationMessagesRequestV1 {
+  bytes conversation_id = 1;
+  uint32 limit = 2;
+  bytes cursor = 3;
+}
+message ListConversationMessagesResponseV1 {
+  repeated MessageSummaryV1 messages = 1;
+  bytes next_cursor = 2;
+}
+
+message ListConversationParticipantsRequestV1 {
+  bytes conversation_id = 1;
+  uint32 limit = 2;
+  bytes cursor = 3;
+}
+message ListConversationParticipantsResponseV1 {
+  repeated ObservedParticipantSummaryV1 participants = 1;
+  bytes next_cursor = 2;
+}
+
+message ListMessageAttachmentAnchorsRequestV1 {
+  bytes message_id = 1;
+  uint32 limit = 2;
+  bytes cursor = 3;
+}
+message ListMessageAttachmentAnchorsResponseV1 {
+  repeated AttachmentAnchorSummaryV1 anchors = 1;
+  bytes next_cursor = 2;
+}
+
+message ListMessageReferencesRequestV1 {
+  bytes message_id = 1;
+  uint32 limit = 2;
+  bytes cursor = 3;
+}
+message ListMessageReferencesResponseV1 {
+  repeated MessageReferenceSummaryV1 references = 1;
+  bytes next_cursor = 2;
+}
+
+// Canonical evidence metadata only. Provider-local source cursors, message
+// content, Blob references and admission proofs remain owner-private.
+message GetEvidenceRequestV1 { bytes evidence_id = 1; }
+message GetEvidenceResponseV1 {
+  EvidenceSummaryV1 evidence = 1;
+  // Canonical message owning this evidence, when the evidence projects a
+  // message. This remains provider-neutral and carries no source locator.
+  bytes message_id = 2;
+}
+
+message ListMessageEvidenceRequestV1 {
+  bytes message_id = 1;
+  uint32 limit = 2;
+  bytes cursor = 3;
+}
+message ListMessageEvidenceResponseV1 {
+  repeated EvidenceSummaryV1 evidence = 1;
+  bytes next_cursor = 2;
+}
+
+// Exact-token owner-local derived search. Query text is transient at the
+// owner boundary and never appears in results, events or persistence rows.
+message SearchCommunicationsRequestV1 {
+  string query = 1;
+  uint32 limit = 2;
+  bytes cursor = 3;
+}
+message SearchCommunicationsResponseV1 {
+  repeated CommunicationSearchHitV1 hits = 1;
+  bytes next_cursor = 2;
+}
+message CommunicationSearchHitV1 {
+  bytes evidence_id = 1;
+  bytes message_id = 2;
+  bytes conversation_id = 3;
+  int64 observed_at_unix_seconds = 4;
+  uint32 matched_token_count = 5;
+}
+
+message EvidenceSummaryV1 {
+  bytes evidence_id = 1;
+  uint32 provider = 2;
+  uint32 direction = 3;
+  uint32 kind = 4;
+  uint32 body_state = 5;
+  uint32 body_admission_failure = 6;
+  int64 observed_at_unix_seconds = 7;
+  bytes causation_message_id = 8;
+  bytes correlation_id = 9;
+  int64 recorded_at_unix_seconds = 10;
+  int32 recorded_at_nanos = 11;
+}
+
+message AccountSummaryV1 {
+  bytes account_id = 1;
+  bytes account_cursor_sha256 = 2;
+  uint32 provider = 3;
+  int64 first_observed_at_unix_seconds = 4;
+  int64 last_observed_at_unix_seconds = 5;
+  bytes last_evidence_id = 6;
+}
+
+message ConversationSummaryV1 {
+  bytes conversation_id = 1;
+  bytes account_cursor_sha256 = 2;
+  bytes conversation_cursor_sha256 = 3;
+  uint32 provider = 4;
+  int64 first_observed_at_unix_seconds = 5;
+  int64 last_observed_at_unix_seconds = 6;
+  bytes last_evidence_id = 7;
+}
+
+message MessageSummaryV1 {
+  bytes message_id = 1;
+  bytes conversation_id = 2;
+  bytes source_cursor_sha256 = 3;
+  uint32 body_state = 4;
+  uint32 lifecycle_state = 5;
+  int64 first_observed_at_unix_seconds = 6;
+  int64 last_observed_at_unix_seconds = 7;
+  bytes last_evidence_id = 8;
+  uint32 direction = 9;
+}
+
+message ObservedParticipantSummaryV1 {
+  bytes participant_id = 1;
+  bytes conversation_id = 2;
+  bytes participant_cursor_sha256 = 3;
+  int64 first_observed_at_unix_seconds = 4;
+  int64 last_observed_at_unix_seconds = 5;
+  bytes last_evidence_id = 6;
+  optional string display_label = 7;
+}
+
+message AttachmentAnchorSummaryV1 {
+  bytes attachment_anchor_id = 1;
+  bytes message_id = 2;
+  bytes media_cursor_sha256 = 3;
+  uint32 state = 4;
+  int64 first_observed_at_unix_seconds = 5;
+  int64 last_observed_at_unix_seconds = 6;
+  bytes last_evidence_id = 7;
+  bool has_descriptor = 8;
+  string filename = 9;
+  bool has_filename = 10;
+  string media_type = 11;
+  uint64 declared_bytes = 12;
+  bytes sha256 = 13;
+  uint32 disposition = 14;
+}
+
+message MessageReferenceSummaryV1 {
+  bytes source_message_id = 1;
+  uint32 kind = 2;
+  bytes target_source_cursor_sha256 = 3;
+  bytes target_message_id = 4;
+  int64 observed_at_unix_seconds = 5;
+  bytes evidence_id = 6;
+}

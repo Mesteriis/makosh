@@ -3,17 +3,17 @@ import assert from 'node:assert/strict';
 import { evaluateWorkspacePolicy } from './check-cargo-architecture.mjs';
 
 const roles = {
-	kernel: { packages: ['hermes-kernel'], forbidden_dependencies: ['sqlx'] },
-	provider_api: { packages: ['hermes-provider-api'], forbidden_dependencies: ['sqlx'] },
+	kernel: { packages: ['makosh-kernel'], forbidden_dependencies: ['sqlx'] },
+	provider_api: { packages: ['makosh-provider-api'], forbidden_dependencies: ['sqlx'] },
 	provider_impl: {
-		packages: ['hermes-provider-zulip'],
-		forbidden_dependencies: ['hermes-hub-backend', 'sqlx', 'hermes-backend-testkit']
+		packages: ['makosh-provider-zulip'],
+		forbidden_dependencies: ['makosh-backend', 'sqlx', 'makosh-backend-testkit']
 	},
-	composition: { packages: ['hermes-hub-backend'], forbidden_dependencies: [] },
-	test_support: { packages: ['hermes-backend-testkit'], forbidden_dependencies: [] },
+	composition: { packages: ['makosh-backend'], forbidden_dependencies: [] },
+	test_support: { packages: ['makosh-backend-testkit'], forbidden_dependencies: [] },
 	test_session: {
-		packages: ['hermes-test-session'],
-		forbidden_dependencies: ['hermes-hub-backend', 'hermes-backend-testkit']
+		packages: ['makosh-test-session'],
+		forbidden_dependencies: ['makosh-backend', 'makosh-backend-testkit']
 	},
 	domain_api: { packages: [], forbidden_dependencies: [] },
 	persistence_adapter: { packages: [], forbidden_dependencies: [] },
@@ -35,12 +35,12 @@ const roleEdges = {
 };
 
 const packages = new Map([
-	['kernel-id', { id: 'kernel-id', name: 'hermes-kernel', workspace: true }],
-	['provider-api-id', { id: 'provider-api-id', name: 'hermes-provider-api', workspace: true }],
-	['provider-id', { id: 'provider-id', name: 'hermes-provider-zulip', workspace: true }],
-	['backend-id', { id: 'backend-id', name: 'hermes-hub-backend', workspace: true }],
-	['testkit-id', { id: 'testkit-id', name: 'hermes-backend-testkit', workspace: true }],
-	['session-id', { id: 'session-id', name: 'hermes-test-session', workspace: true }],
+	['kernel-id', { id: 'kernel-id', name: 'makosh-kernel', workspace: true }],
+	['provider-api-id', { id: 'provider-api-id', name: 'makosh-provider-api', workspace: true }],
+	['provider-id', { id: 'provider-id', name: 'makosh-provider-zulip', workspace: true }],
+	['backend-id', { id: 'backend-id', name: 'makosh-backend', workspace: true }],
+	['testkit-id', { id: 'testkit-id', name: 'makosh-backend-testkit', workspace: true }],
+	['session-id', { id: 'session-id', name: 'makosh-test-session', workspace: true }],
 	['sqlx-id', { id: 'sqlx-id', name: 'sqlx', workspace: false }]
 ]);
 
@@ -63,24 +63,24 @@ assert.deepEqual(
 );
 
 const unclassifiedPackages = new Map(packages);
-unclassifiedPackages.set('mail-id', { id: 'mail-id', name: 'hermes-provider-mail', workspace: true });
+unclassifiedPackages.set('mail-id', { id: 'mail-id', name: 'makosh-provider-mail', workspace: true });
 assert.deepEqual(
 	evaluateWorkspacePolicy({ packages: unclassifiedPackages, dependencies, roles, roleEdges }),
-	['workspace package "hermes-provider-mail" has no role']
+	['workspace package "makosh-provider-mail" has no role']
 );
 
 const duplicateRoles = structuredClone(roles);
-duplicateRoles.kernel.packages.push('hermes-provider-zulip');
+duplicateRoles.kernel.packages.push('makosh-provider-zulip');
 assert.deepEqual(
 	evaluateWorkspacePolicy({ packages, dependencies, roles: duplicateRoles, roleEdges }),
-	['workspace package "hermes-provider-zulip" has multiple roles: kernel, provider_impl']
+	['workspace package "makosh-provider-zulip" has multiple roles: kernel, provider_impl']
 );
 
 const missingRoles = structuredClone(roles);
-missingRoles.runtime.packages.push('hermes-worker-runtime');
+missingRoles.runtime.packages.push('makosh-worker-runtime');
 assert.deepEqual(
 	evaluateWorkspacePolicy({ packages, dependencies, roles: missingRoles, roleEdges }),
-	['role runtime references missing workspace package "hermes-worker-runtime"']
+	['role runtime references missing workspace package "makosh-worker-runtime"']
 );
 
 const forbiddenDependencies = new Map(dependencies);
@@ -90,7 +90,7 @@ forbiddenDependencies.set('provider-id', [
 ]);
 assert.deepEqual(
 	evaluateWorkspacePolicy({ packages, dependencies: forbiddenDependencies, roles, roleEdges }),
-	['hermes-provider-zulip: forbidden dependency "sqlx" for role provider_impl']
+	['makosh-provider-zulip: forbidden dependency "sqlx" for role provider_impl']
 );
 
 const illegalDevEdge = new Map(dependencies);
@@ -101,9 +101,9 @@ illegalDevEdge.set('provider-id', [
 assert.deepEqual(
 	evaluateWorkspacePolicy({ packages, dependencies: illegalDevEdge, roles, roleEdges }),
 	[
-		'hermes-provider-zulip: role provider_impl cannot depend on role test_support via dev dependency',
-		'hermes-provider-zulip: forbidden dependency "hermes-hub-backend" for role provider_impl',
-		'hermes-provider-zulip: forbidden dependency "hermes-backend-testkit" for role provider_impl'
+		'makosh-provider-zulip: role provider_impl cannot depend on role test_support via dev dependency',
+		'makosh-provider-zulip: forbidden dependency "makosh-backend" for role provider_impl',
+		'makosh-provider-zulip: forbidden dependency "makosh-backend-testkit" for role provider_impl'
 	]
 );
 

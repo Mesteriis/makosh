@@ -1,6 +1,6 @@
 # CardHeader
 
-Header region for the Hermes `Card` surface.
+Header region for the Макошь `Card` surface.
 
 Use for compact card titles, descriptions, and local actions that identify the
 card content.

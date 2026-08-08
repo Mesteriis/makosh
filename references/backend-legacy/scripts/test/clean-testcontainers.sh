@@ -4,16 +4,16 @@ set -euo pipefail
 
 MODE="old"
 SESSION_ID=""
-OLDER_THAN_SECONDS="${HERMES_TESTCONTAINERS_CLEANUP_MAX_AGE_SECS:-7200}"
+OLDER_THAN_SECONDS="${MAKOSH_TESTCONTAINERS_CLEANUP_MAX_AGE_SECS:-7200}"
 
 usage() {
 	cat <<'USAGE'
 usage: clean-testcontainers.sh [--all | --session-id <id> | --older-than-seconds <seconds>]
 
-Removes Hermes-owned testcontainers. By default, removes stopped Hermes test
-containers and running Hermes test containers older than the age threshold.
+Removes Макошь-owned testcontainers. By default, removes stopped Макошь test
+containers and running Макошь test containers older than the age threshold.
 
-Modern containers are matched by com.hermes.testkit=true. Legacy Hermes test
+Modern containers are matched by com.makosh.testkit=true. Legacy Макошь test
 containers are matched by testcontainers' label plus the known pgvector/NATS
 images used by the repository testkit.
 USAGE
@@ -72,13 +72,13 @@ fi
 collect_ids() {
 	if [[ "${MODE}" == "session" ]]; then
 		docker ps -aq \
-			--filter "label=com.hermes.testkit=true" \
-			--filter "label=com.hermes.testkit.session=${SESSION_ID}"
+			--filter "label=com.makosh.testkit=true" \
+			--filter "label=com.makosh.testkit.session=${SESSION_ID}"
 		return
 	fi
 
 	{
-		docker ps -aq --filter "label=com.hermes.testkit=true"
+		docker ps -aq --filter "label=com.makosh.testkit=true"
 		docker ps -aq \
 			--filter "label=org.testcontainers.managed-by=testcontainers" \
 			--filter "ancestor=pgvector/pgvector:0.8.2-pg16"
@@ -106,7 +106,7 @@ process.exit(Date.now() - created >= maxAgeMs ? 0 : 1);
 
 ids="$(collect_ids || true)"
 if [[ -z "${ids}" ]]; then
-	echo "no Hermes testcontainers found"
+	echo "no Макошь testcontainers found"
 	exit 0
 fi
 
@@ -125,9 +125,9 @@ while IFS= read -r container_id; do
 done <<< "${ids}"
 
 if [[ "${#to_remove[@]}" -eq 0 ]]; then
-	echo "no eligible Hermes testcontainers found"
+	echo "no eligible Макошь testcontainers found"
 	exit 0
 fi
 
 docker rm -f "${to_remove[@]}" >/dev/null
-printf 'removed %s Hermes testcontainer(s)\n' "${#to_remove[@]}"
+printf 'removed %s Макошь testcontainer(s)\n' "${#to_remove[@]}"

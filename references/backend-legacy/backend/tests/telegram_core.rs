@@ -1,14 +1,14 @@
 mod telegram_support;
 
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 
 use axum::http::StatusCode;
 use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::platform::storage::database::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_capability_status, assert_ok, get_request_with_token, json_body,
     json_post_request_with_actor, unique_suffix,
@@ -29,7 +29,7 @@ async fn telegram_fixture_message_ingestion_refreshes_decision_and_obligation_ca
     let decision_rationale = "channel context must feed the same domain model";
     let obligation_statement = format!("send the Telegram alignment note {suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -239,7 +239,7 @@ async fn telegram_api_exercises_policy_and_call_foundation() {
     let template_id = format!("template-telegram-{suffix}");
     let call_id = format!("call-telegram-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -452,7 +452,7 @@ async fn telegram_api_exercises_policy_and_call_foundation() {
         LIMIT 1
         "#,
     )
-    .bind("hermes-frontend")
+    .bind("makosh-frontend")
     .bind(&blocked_chat_id)
     .fetch_one(&pool)
     .await
@@ -594,7 +594,7 @@ async fn telegram_api_exercises_policy_and_call_foundation() {
     let audit_count: i64 = sqlx::query_scalar(
         "SELECT COUNT(*) FROM api_audit_log WHERE operation = 'automation.telegram_send.dry_run' AND actor_id = $1",
     )
-    .bind("hermes-frontend")
+    .bind("makosh-frontend")
     .fetch_one(&pool)
     .await
     .expect("audit count");
@@ -612,7 +612,7 @@ async fn telegram_api_exercises_policy_and_call_foundation() {
         LIMIT 1
         "#,
     )
-    .bind("hermes-frontend")
+    .bind("makosh-frontend")
     .bind(outbound_message_id)
     .fetch_one(&pool)
     .await

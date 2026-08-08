@@ -2,7 +2,7 @@
 
 use std::path::Path;
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     AdmitStorageBundleRequestV1, ApproveModuleRegistrationRequestV1,
     BeginExternalStorageBindingRevocationRequestV1, BeginModuleRegistrationRequestV1,
     BeginOwnerControlSessionRequestV1, BindExternalRuntimeIdentityRequestV1,
@@ -16,12 +16,12 @@ use hermes_gateway_protocol::v1::{
     owner_control_request_v1::Operation as OwnerOperation,
     owner_control_response_v1::Result as OwnerResult,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityCriticalityV1, CapabilityDescriptorV1, CapabilityRequestV1, ModuleDescriptorV1,
     ModuleKindV1, StorageNamespaceRequestV1, VaultActionV1, VaultPurposeRequestV1,
     VaultSecretClassV1, VaultTargetScopeV1, capability_request_v1::Request,
 };
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use p256::ecdsa::SigningKey;
 use prost::Message;
 use sha2::{Digest, Sha256};
@@ -167,7 +167,7 @@ fn configure_topology(kernel: &RunningKernel, session_id: &str) -> Result<(), St
                 owner_session_id: session_id.to_owned(),
                 storage_generation: 1,
                 storage_instance_id: "storage_main".to_owned(),
-                database_id: "hermes".to_owned(),
+                database_id: "makosh".to_owned(),
                 deployment_profile: 1,
                 postgres_artifact_sha256: vec![3; 32],
                 pgbouncer_artifact_sha256: vec![4; 32],
@@ -218,9 +218,9 @@ fn owner_session(socket: &Path, data_dir: &Path) -> Result<String, String> {
 }
 
 fn owner_proof(
-    challenge: &hermes_gateway_protocol::v1::BeginOwnerControlSessionResponseV1,
+    challenge: &makosh_gateway_protocol::v1::BeginOwnerControlSessionResponseV1,
 ) -> Result<Vec<u8>, String> {
-    let mut proof = b"hermes.owner-control-session.v1\0".to_vec();
+    let mut proof = b"makosh.owner-control-session.v1\0".to_vec();
     for value in [
         &challenge.kernel_instance_id,
         &challenge.owner_id,
@@ -315,7 +315,7 @@ fn vault_capability() -> CapabilityDescriptorV1 {
 }
 
 fn storage_bundle() -> StorageBundleV1 {
-    let sql = b"CREATE TABLE hermes_data.owner_storage_probe (probe_id uuid);".to_vec();
+    let sql = b"CREATE TABLE makosh_data.owner_storage_probe (probe_id uuid);".to_vec();
     StorageBundleV1 {
         major: 1,
         revision: 1,

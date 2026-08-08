@@ -1,4 +1,4 @@
-use hermes_attachment_text_extraction_core::{
+use makosh_attachment_text_extraction_core::{
     AttachmentTextCustodyDelegationIntentV1, AttachmentTextExtractionErrorV1,
     AttachmentTextExtractionRequestV1, AttachmentTextExtractionStateV1,
     AttachmentTextExtractionStatusV1, AttachmentTextFormatV1,
@@ -179,7 +179,7 @@ pub fn attachment_text_extraction_run_id_v1(
     operation_id: [u8; 16],
 ) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-text-extraction.run.v1\0");
+    hasher.update(b"makosh.attachment-text-extraction.run.v1\0");
     hasher.update(logical_owner_id.as_bytes());
     hasher.update(operation_id);
     hasher.finalize()[..16].try_into().expect("digest prefix")
@@ -190,7 +190,7 @@ pub fn attachment_text_extraction_request_fingerprint_v1(
     attachment_anchor_id: [u8; 16],
 ) -> [u8; 32] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-text-extraction.request.v1\0");
+    hasher.update(b"makosh.attachment-text-extraction.request.v1\0");
     hasher.update(attachment_anchor_id);
     hasher.finalize().into()
 }
@@ -202,7 +202,7 @@ pub fn attachment_text_extraction_job_id_v1(
     delegation_result_message_id: [u8; 16],
 ) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-text-extraction.job.v1\0");
+    hasher.update(b"makosh.attachment-text-extraction.job.v1\0");
     hasher.update(request.run_id);
     hasher.update(request.operation_id);
     hasher.update(request.attachment_anchor_id);
@@ -320,9 +320,9 @@ pub(crate) fn valid_sha256(value: &[u8; 32]) -> bool {
 }
 
 pub(crate) const fn safety_state_code(
-    value: hermes_attachment_text_extraction_core::AttachmentTextSafetyStateV1,
+    value: makosh_attachment_text_extraction_core::AttachmentTextSafetyStateV1,
 ) -> i16 {
-    use hermes_attachment_text_extraction_core::AttachmentTextSafetyStateV1;
+    use makosh_attachment_text_extraction_core::AttachmentTextSafetyStateV1;
     match value {
         AttachmentTextSafetyStateV1::DescriptorOnly => 1,
         AttachmentTextSafetyStateV1::BlobPending => 2,
@@ -336,10 +336,10 @@ pub(crate) const fn safety_state_code(
 pub(crate) fn safety_state_from_code(
     value: i16,
 ) -> Result<
-    hermes_attachment_text_extraction_core::AttachmentTextSafetyStateV1,
+    makosh_attachment_text_extraction_core::AttachmentTextSafetyStateV1,
     AttachmentTextExtractionPersistenceErrorV1,
 > {
-    use hermes_attachment_text_extraction_core::AttachmentTextSafetyStateV1;
+    use makosh_attachment_text_extraction_core::AttachmentTextSafetyStateV1;
     match value {
         1 => Ok(AttachmentTextSafetyStateV1::DescriptorOnly),
         2 => Ok(AttachmentTextSafetyStateV1::BlobPending),

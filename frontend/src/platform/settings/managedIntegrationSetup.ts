@@ -2,7 +2,7 @@ import type {
 	ApplyOwnerManagedIntegrationSettingsReceiptV1,
 	CreateOwnerModuleSettingsTargetReceiptV1,
 	UpdateOwnerModuleSettingsReceiptV1,
-} from '../../gen/hermes/gateway/v1/owner_module_settings_pb'
+} from '../../gen/makosh/gateway/v1/owner_module_settings_pb'
 import {
 	OwnerModuleSettingsClientV1,
 	type OwnerSettingInputV1,

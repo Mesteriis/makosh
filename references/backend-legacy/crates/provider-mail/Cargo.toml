@@ -1,5 +1,5 @@
 [package]
-name = "hermes-provider-mail"
+name = "makosh-provider-mail"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.89"
@@ -7,7 +7,7 @@ publish = false
 license = "MIT"
 
 [dependencies]
-hermes-provider-api = { path = "../provider-api" }
+makosh-provider-api = { path = "../provider-api" }
 serde = { version = "1", features = ["derive"] }
 
 [dev-dependencies]

@@ -67,7 +67,7 @@ type AndroidCommittedProvisioningHostInputV1 = {
 
 declare global {
 	interface Window {
-		__HERMES_ANDROID_OWNER_VAULT_HOST__?: {
+		__MAKOSH_ANDROID_OWNER_VAULT_HOST__?: {
 			vaultProvisioningHost?: AndroidOwnerVaultProvisioningHostBridgeV1
 		}
 	}
@@ -79,8 +79,8 @@ export class AndroidOwnerVaultProvisioningHostV1 implements OwnerVaultProvisioni
 	private readonly bridgeImpl: AndroidOwnerVaultProvisioningHostBridgeV1
 
 	constructor(
-		private readonly bridge: Window['__HERMES_ANDROID_OWNER_VAULT_HOST__'] =
-			typeof window === 'undefined' ? undefined : window.__HERMES_ANDROID_OWNER_VAULT_HOST__,
+		private readonly bridge: Window['__MAKOSH_ANDROID_OWNER_VAULT_HOST__'] =
+			typeof window === 'undefined' ? undefined : window.__MAKOSH_ANDROID_OWNER_VAULT_HOST__,
 	) {
 		this.bridgeImpl = resolveBridge(bridge)
 	}
@@ -158,7 +158,7 @@ export class AndroidOwnerVaultProvisioningHostV1 implements OwnerVaultProvisioni
 }
 
 function resolveBridge(
-	bridge: Window['__HERMES_ANDROID_OWNER_VAULT_HOST__'],
+	bridge: Window['__MAKOSH_ANDROID_OWNER_VAULT_HOST__'],
 ): AndroidOwnerVaultProvisioningHostBridgeV1 {
 	if (!bridge?.[BRIDGE]) throw new Error('android host provisioning bridge is unavailable')
 	return bridge[BRIDGE]

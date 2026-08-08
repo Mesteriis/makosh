@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Создать страницу `operations/backend-tests.md`, описывающую организацию, архитектурные ограничения и ключевые интеграционные тесты backend-части проекта `hermes-hub`. Документация основывается исключительно на встроенных в контекст файлах тестов (Rust, `tokio::test` и синхронные тесты). Страница фиксирует покрытые области, архитектурные правила (максимальное количество строк в тестовых файлах), а также поведение, подтверждённое в конкретных тестовых функциях.
+Создать страницу `operations/backend-tests.md`, описывающую организацию, архитектурные ограничения и ключевые интеграционные тесты backend-части проекта `makosh`. Документация основывается исключительно на встроенных в контекст файлах тестов (Rust, `tokio::test` и синхронные тесты). Страница фиксирует покрытые области, архитектурные правила (максимальное количество строк в тестовых файлах), а также поведение, подтверждённое в конкретных тестовых функциях.
 
 ## Предложенные страницы
 
@@ -27,7 +27,7 @@ generated_by: code-wiki-ru
 
 ## Обзор
 
-Тесты backend-части `hermes-hub` написаны на Rust с использованием фреймворка `tokio::test` для асинхронных тестов и `#[test]` для синхронных. Интеграционные тесты поднимают изолированный экземпляр PostgreSQL через `testkit::context::TestContext`, а для внешних интеграций (Ollama, OmniRoute) используются подставные HTTP-сервера (`axum`).
+Тесты backend-части `makosh` написаны на Rust с использованием фреймворка `tokio::test` для асинхронных тестов и `#[test]` для синхронных. Интеграционные тесты поднимают изолированный экземпляр PostgreSQL через `testkit::context::TestContext`, а для внешних интеграций (Ollama, OmniRoute) используются подставные HTTP-сервера (`axum`).
 
 Архитектурные тесты проверяют соблюдение ограничения: **ни один файл с тестами для определённого домена не должен превышать 700 строк**. Это правило реализовано для групп `messages` и `person_identity`.
 
@@ -134,8 +134,8 @@ generated_by: code-wiki-ru
 - **`ollama_client_round_trips_chat_embed_tags_and_version`**
   - `version()` возвращает `"0.17.4"`.
   - `tags()` содержит обе модели.
-  - `chat("Return exactly: hermes-ai-ok")` возвращает `content = "hermes-ai-ok"`.
-  - `embed("Hermes Hub memory retrieval")` возвращает вектор размером 2560.
+  - `chat("Return exactly: makosh-ai-ok")` возвращает `content = "makosh-ai-ok"`.
+  - `embed("Макошь memory retrieval")` возвращает вектор размером 2560.
 - **`ollama_client_strips_qwen_thinking_blocks_from_chat_content`** – контент ответа, содержащий `<think>...</think>`, очищается до `"Final cited answer."`.
 - **`ollama_client_reports_missing_models_and_malformed_json`**
   - При отсутствии моделей в `tags` – ошибка `OllamaError::MissingModel`.
@@ -148,8 +148,8 @@ generated_by: code-wiki-ru
 - **`omniroute_client_round_trips_openai_compatible_models_chat_and_embeddings`**
   - `models()` содержит `codex/gpt-5.5` и `openai-compatible-chat-ollama-pve/qwen3-embedding:4b`.
   - `validate_required_models()` успешен.
-  - `chat("Return exactly: hermes-omniroute-ok")` возвращает `content = "hermes-omniroute-ok"` (после удаления `<think>` блоков).
-  - `embed("Hermes Hub source-backed retrieval")` возвращает вектор размером 2560.
+  - `chat("Return exactly: makosh-omniroute-ok")` возвращает `content = "makosh-omniroute-ok"` (после удаления `<think>` блоков).
+  - `embed("Макошь source-backed retrieval")` возвращает вектор размером 2560.
 - **`omniroute_client_reports_auth_missing_models_and_malformed_json`**
   - Неавторизованный запрос (401) – `OmniRouteError::Endpoint { status: 401 }`.
   - Отсутствие моделей – `OmniRouteError::MissingModel`.
@@ -159,7 +159,7 @@ generated_by: code-wiki-ru
 
 Файл обрезан после 12000 символов; тесты используют общий токен `"orgs-test-token"`.
 
-- **`orgs_auth_reject`** – запрос без заголовка `x-hermes-secret` возвращает `403 FORBIDDEN`.
+- **`orgs_auth_reject`** – запрос без заголовка `x-makosh-secret` возвращает `403 FORBIDDEN`.
 - **`orgs_crud`** – создание, получение, обновление и архивирование организации. Проверяются статусы ответов.
 - **`orgs_list`** – `GET /api/v1/organizations` возвращает успешный ответ.
 - **`orgs_search`** – `GET /api/v1/organizations/search?q=test` возвращает успешный ответ.

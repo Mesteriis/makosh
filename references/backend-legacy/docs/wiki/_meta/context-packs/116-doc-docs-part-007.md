@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,20 +55,20 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docs/integrations/whatsapp/full-functionality-target.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/whatsapp/full-functionality-target.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/whatsapp/full-functionality-target.md`
 - Size bytes / Размер в байтах: `33404`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
 
 ````markdown
-# WhatsApp Full Functionality Target for Hermes
+# WhatsApp Full Functionality Target for Макошь
 
 Status: target product/architecture specification.
 Date: 2026-06-24.
 
-Goal: implement full WhatsApp functionality inside Hermes without violating the Hermes ownership model.
+Goal: implement full WhatsApp functionality inside Макошь without violating the Макошь ownership model.
 
-WhatsApp in Hermes is not a standalone messenger clone. It is a provider/runtime integration that supplies source evidence into the Communications domain and the Hermes memory/intelligence system.
+WhatsApp in Макошь is not a standalone messenger clone. It is a provider/runtime integration that supplies source evidence into the Communications domain and the Макошь memory/intelligence system.
 
 ## Core invariant
 
@@ -91,7 +91,7 @@ WhatsApp Runtime
 
 ## Provider shapes
 
-Hermes should model WhatsApp as a provider family, not as one implementation.
+Макошь should model WhatsApp as a provider family, not as one implementation.
 
 | Provider kind | Purpose | Status | Notes |
 |---|---|---|---|
@@ -169,7 +169,7 @@ Dialog state:
 - last message;
 - pinned/archive/mute/starred overlays;
 - provider labels/folders where available;
-- local Hermes folders/saved searches separately from provider state;
+- local Макошь folders/saved searches separately from provider state;
 - source-backed participant count and role metadata.
 
 Current fixture foundation:
@@ -225,7 +225,7 @@ Required message metadata:
 - provenance;
 - confidence.
 
-Message lifecycle must store only observed provider facts. Hermes must not invent edit history, missing deletes, missing receipts or unobserved provider metadata. Apparently facts need evidence now. Humanity had a long run without it.
+Message lifecycle must store only observed provider facts. Макошь must not invent edit history, missing deletes, missing receipts or unobserved provider metadata. Apparently facts need evidence now. Humanity had a long run without it.
 
 Current fixture foundation:
 
@@ -390,7 +390,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/integrations/whatsapp/gap-analysis.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/whatsapp/gap-analysis.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/whatsapp/gap-analysis.md`
 - Size bytes / Размер в байтах: `12409`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -565,7 +565,7 @@ WhatsApp Status is not a separate domain.
 
 | Capability | Status | Evidence / Gap |
 |---|---|---|
-| Generic event transport | MISSING | Shared transport exists in Hermes, but WhatsApp contracts are not counted. |
+| Generic event transport | MISSING | Shared transport exists in Макошь, but WhatsApp contracts are not counted. |
 | New message event | MISSING | Need `whatsapp.message.created`. |
 | Updated message event | MISSING | Need `whatsapp.message.updated`. |
 | Deleted message event | MISSING | Need `whatsapp.message.deleted`. |
@@ -638,7 +638,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/integrations/whatsapp/implementation-plan.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/whatsapp/implementation-plan.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/whatsapp/implementation-plan.md`
 - Size bytes / Размер в байтах: `40582`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -649,7 +649,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 Status: target implementation plan.
 Date: 2026-06-24.
 
-This plan starts from the current fixture/runtime foundation and moves toward full WhatsApp functionality plus Hermes intelligence.
+This plan starts from the current fixture/runtime foundation and moves toward full WhatsApp functionality plus Макошь intelligence.
 
 ## Principle
 
@@ -887,7 +887,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/integrations/whatsapp/live-smoke-checklist.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/whatsapp/live-smoke-checklist.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/whatsapp/live-smoke-checklist.md`
 - Size bytes / Размер в байтах: `10922`
 - Included characters / Включено символов: `10922`
 - Truncated / Обрезано: `no`
@@ -904,7 +904,7 @@ owner-visible local runtime validation. It is not a CI workflow.
 ## Preconditions
 
 - local development machine under owner control;
-- `HERMES_LOCAL_API_SECRET` configured;
+- `MAKOSH_LOCAL_API_SECRET` configured;
 - host vault available;
 - no screen-hidden or headless WhatsApp runtime mode;
 - explicit owner opt-in for unofficial personal-account runtime risk;
@@ -921,25 +921,25 @@ make whatsapp-native-md-sdk-gap-readiness # required for whatsapp_native_md acco
 For the strict manual-smoke preflight, set:
 
 ```sh
-HERMES_LIVE_SMOKE_STRICT_ENV=1
-HERMES_LOCAL_API_SECRET=...
-HERMES_WHATSAPP_SMOKE_ACCOUNT_ID=...
+MAKOSH_LIVE_SMOKE_STRICT_ENV=1
+MAKOSH_LOCAL_API_SECRET=...
+MAKOSH_WHATSAPP_SMOKE_ACCOUNT_ID=...
 make whatsapp-live-smoke-readiness
 ```
 
-When Hermes is already running locally, the same readiness target can also
+When Макошь is already running locally, the same readiness target can also
 probe the protected runtime API without performing provider actions:
 
 ```sh
-HERMES_WHATSAPP_RUNTIME_API_PROBE=1
-HERMES_LOCAL_API_SECRET=...
-HERMES_WHATSAPP_SMOKE_ACCOUNT_ID=...
-HERMES_WHATSAPP_SMOKE_PROVIDER_SHAPE=whatsapp_web_companion # optional
+MAKOSH_WHATSAPP_RUNTIME_API_PROBE=1
+MAKOSH_LOCAL_API_SECRET=...
+MAKOSH_WHATSAPP_SMOKE_ACCOUNT_ID=...
+MAKOSH_WHATSAPP_SMOKE_PROVIDER_SHAPE=whatsapp_web_companion # optional
 make whatsapp-live-smoke-readiness
 ```
 
 The runtime API probe calls only capabilities, account-capabilities,
-runtime-status and runtime-health endpoints through `X-Hermes-Secret`. It
+runtime-status and runtime-health endpoints through `X-Макошь-Secret`. It
 checks account scoping, provider-shape contract when requested and the absence
 of raw session/token/cookie/media-ref payload markers.
 
@@ -999,7 +999,7 @@ Placeholder refs such as `replace-with-*`, `pending`, `todo`, `example` or
 
 ## Runtime boundary checks
 
-1. Start Hermes with the intended WhatsApp runtime shape enabled.
+1. Start Макошь with the intended WhatsApp runtime shape enabled.
 2. Verify the runtime is surfaced through:
    - `GET /api/v1/integrations/whatsapp/capabilities`
    - `GET /api/v1/integrations/whatsapp/accounts/{account_id}/capabilities`
@@ -1052,8 +1052,8 @@ Run these only for `whatsapp_web_companion` accounts.
 4. Verify authorized session material is stored through host vault binding:
    - secret purpose `whatsapp_web_session_key`;
    - account-scoped binding only.
-5. Stop Hermes.
-6. Start Hermes again.
+5. Stop Макошь.
+6. Start Макошь again.
 7. Verify session restore works without re-pairing.
 8. Start pair-code flow if the runtime shape supports it.
 9. Verify pair-code lifecycle surfaces sanitized state only.
@@ -1124,32 +1124,32 @@ Inspect:
 
 Run these only for `whatsapp_business_cloud` accounts.
 
-1. Start Hermes locally with ADR-0056 `HERMES_LOCAL_API_SECRET` configured.
+1. Start Макошь locally with ADR-0056 `MAKOSH_LOCAL_API_SECRET` configured.
 2. Run the static edge proxy readiness preflight:
    `make whatsapp-business-cloud-edge-readiness`.
    If the proxy is already running locally, the same target can also probe the
    public proxy surface without touching Meta:
-   `HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_PROBE=1 make whatsapp-business-cloud-edge-readiness`.
-   Add `HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_READYZ_PROBE=1` only when Hermes is
+   `MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_PROBE=1 make whatsapp-business-cloud-edge-readiness`.
+   Add `MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_READYZ_PROBE=1` only when Макошь is
    running and `/readyz` should reach the protected local proxy manifest.
 3. Validate the edge profile:
    `make whatsapp-business-cloud-edge-config`.
-4. Start `hermes-whatsapp-business-cloud-edge-proxy` with:
+4. Start `makosh-whatsapp-business-cloud-edge-proxy` with:
    `make whatsapp-business-cloud-edge-up`.
    The Compose profile reads:
-   - `HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_HERMES_BASE_URL`;
-   - `HERMES_LOCAL_API_SECRET`;
-   - optional `HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_ACCOUNT_ID`.
-   `HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_HERMES_SECRET` may be used instead of
+   - `MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_MAKOSH_BASE_URL`;
+   - `MAKOSH_LOCAL_API_SECRET`;
+   - optional `MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_ACCOUNT_ID`.
+   `MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_MAKOSH_SECRET` may be used instead of
    the shared local API secret when running the binary outside Compose.
-5. Verify `GET /readyz` succeeds only when the protected Hermes proxy manifest
+5. Verify `GET /readyz` succeeds only when the protected Макошь proxy manifest
    is reachable with local auth.
 6. Expose only the proxy path `/webhooks/whatsapp/business-cloud` through the
-   chosen public ingress; do not expose Hermes `/api/v1` directly.
+   chosen public ingress; do not expose Макошь `/api/v1` directly.
 7. Verify Meta challenge `GET` succeeds through the proxy and reaches the
-   protected Hermes runtime-bridge route.
+   protected Макошь runtime-bridge route.
 8. Verify signed webhook `POST` forwards the exact raw body and
-   `X-Hub-Signature-256`; Hermes performs app-secret verification and Signal Hub
+   `X-Hub-Signature-256`; Макошь performs app-secret verification and Signal Hub
    ingestion.
 9. Verify proxy failures are sanitized and do not return upstream bodies,
    access tokens, app secrets, verify tokens or raw provider payloads.
@@ -1175,7 +1175,7 @@ The smoke run passes only if:
 
 ### `docs/integrations/whatsapp/modules.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/whatsapp/modules.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/whatsapp/modules.md`
 - Size bytes / Размер в байтах: `10961`
 - Included characters / Включено символов: `10867`
 - Truncated / Обрезано: `no`
@@ -1339,7 +1339,7 @@ WhatsApp may produce evidence and candidates for those systems only.
 
 Use provider/product names precisely:
 
-- `WhatsApp Channel` for the Hermes communication channel.
+- `WhatsApp Channel` for the Макошь communication channel.
 - `WhatsApp Web` for the primary provider source.
 - `whatsapp_web` for the provider kind.
 - `whatsapp_personal` and `whatsapp_business` for account kinds.
@@ -1351,7 +1351,7 @@ or standalone WhatsApp client.
 
 ### `docs/integrations/whatsapp/rust-provider-research.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/whatsapp/rust-provider-research.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/whatsapp/rust-provider-research.md`
 - Size bytes / Размер в байтах: `21943`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1362,7 +1362,7 @@ or standalone WhatsApp client.
 Status: research note.
 Date: 2026-06-26.
 
-Goal: identify existing Rust projects that can reduce custom WhatsApp protocol work for Hermes.
+Goal: identify existing Rust projects that can reduce custom WhatsApp protocol work for Макошь.
 
 This is not a final dependency decision. WhatsApp personal-account automation has policy and account-risk implications. Any unofficial provider must stay behind explicit owner-controlled capability gates and must not become invisible infrastructure.
 
@@ -1388,7 +1388,7 @@ Reason:
 
 ## Spike result, 2026-06-26
 
-Local toolchain: `rustc 1.93.1`; Hermes backend now declares
+Local toolchain: `rustc 1.93.1`; Макошь backend now declares
 `rust-version = "1.89"` for the native WhatsApp runtime boundary.
 
 Compile-only results:
@@ -1398,7 +1398,7 @@ Compile-only results:
 | `whatsapp-rust 0.6.0` | default | Failed | `wacore-binary` enables `portable_simd`, which is not available on stable. |
 | `whatsapp-rust 0.6.0` | `default-features = false`, `sqlite-storage`, `tokio-transport`, `tokio-runtime`, `tokio-native`, `ureq-client`, `signal` | Failed | `wacore 0.6.0` uses experimental `if let` guards on stable Rust. |
 | `wa-rs 0.2.0` | default | Passed | Useful proof of crate health, but default pulls SDK SQLite storage. |
-| `wa-rs 0.2.0` | `default-features = false`, `tokio-native`, `tokio-transport`, `ureq-client` | Passed | Selected Hermes compile boundary; avoids SDK SQLite storage so session material can remain behind Hermes host-vault/runtime storage design. |
+| `wa-rs 0.2.0` | `default-features = false`, `tokio-native`, `tokio-transport`, `ureq-client` | Passed | Selected Макошь compile boundary; avoids SDK SQLite storage so session material can remain behind Макошь host-vault/runtime storage design. |
 | `wa-rs 0.2.0` | `default-features = false`, `tokio-native`, `tokio-transport`, `ureq-client` on Rust 1.88 | Failed | Transitive `tokio-websockets 0.13.3` requires Rust 1.89. |
 | `wa-rs 0.2.0` | `default-features = false`, `tokio-native`, `tokio-transport`, `ureq-client` on Rust 1.89 | Passed | Validated with `cargo +1.89.0 check --manifest-path backend/Cargo.toml --features whatsapp-native-md-runtime --lib`. |
 
@@ -1422,7 +1422,7 @@ Current implementation implication:
   to real `wa-rs` API types (`Bot`, `BotBuilder`, provider `Event`, storage
   `Backend`, `TransportFactory`, `HttpClient`, `Device`, `MessageInfo`,
   `PairCodeOptions`) while keeping public capability gated by smoke evidence.
-  Commands are constrained to Hermes durable provider outbox claims, events to
+  Commands are constrained to Макошь durable provider outbox claims, events to
   Signal Hub raw evidence, and provider session material to host-vault metadata
   bindings.
 - `wa-rs` requires a full backend implementation before live startup: the
@@ -1469,7 +1469,7 @@ Current implementation implication:
   and manager restart attempts emit sanitized lifecycle events through the same
   `WhatsAppRuntimeEventSink`.
 - `native_md` also has a feature-gated `wa-rs` event classifier. It maps real
-  `wa-rs::types::events::Event` variants to Hermes raw record kinds and
+  `wa-rs::types::events::Event` variants to Макошь raw record kinds and
   accepted Signal Hub event families, including protobuf inspection for message
   reactions, media, calls, edits and deletes. Unknown/raw provider notifications
   stay as unsupported runtime evidence rather than being discarded.
@@ -1502,7 +1502,7 @@ Current implementation implication:
 
 ## Candidate comparison
 
-| Project | Language | Provider type | Strengths | Risks | Hermes recommendation |
+| Project | Language | Provider type | Strengths | Risks | Макошь recommendation |
 |---|---|---|---|---|---|
 | `oxidezap/whatsapp-rust` / `whatsapp-rust` crate | Rust | Unofficial WhatsApp Web/native multi-device protocol | Broad feature set: auth, E2E messaging, media, groups, communities, status, contacts, presence, chat actions, privacy; modular storage/transport/runtime | Unofficial; ToS/account risk; protocol drift; needs adapter isolation | Use as first experimental native provider behind feature flag and ADR. |
 | `homun-app/wa-rs` / `wa-rs` crate | Rust | Fork of `whatsapp-rust` | Stable Rust support claim, QR/pair-code, persistent sessions, messaging/media/groups/presence; MIT | Very small history compared with upstream; fork divergence | Evaluate if upstream requires nightly or breaks current toolchain. |
@@ -1510,7 +1510,7 @@ Current implementation implication:
 | `veecore/whatsapp-business-rs` | Rust | Official Meta WhatsApp Business Platform SDK | Type-safe Business Platform SDK: messages, webhooks, WABA, catalogs, onboarding flows | Business-only; does not support personal account history; policy/template semantics differ | Use only for future `whatsapp_business_cloud`. |
 | `wacloudapi` | Rust | Official Meta WhatsApp Cloud API SDK | Type-safe async SDK; messages, media, templates, phone numbers, products, flows, analytics, QR, webhooks | v0.1.0; business-only; not a personal local-first provider | Evaluate for future official cloud provider. |
 | `tulir/whatsmeow` | Go | Unofficial WhatsApp Web multi-device library | Mature reference implementation with many core features | Go dependency/sidecar or rewrite needed; MPL-2.0 license | Reference architecture/protocol behavior only. Avoid Go sidecar unless Rust path fails. |
-| `WhiskeySockets/Baileys` | TypeScript | Unofficial socket-based WhatsApp Web library | Very mature ecosystem reference | Node sidecar; JS runtime; protocol drift; license/ops overhead | Reference only, not target for Hermes Rust backend. |
+| `WhiskeySockets/Baileys` | TypeScript | Unofficial socket-based WhatsApp Web library | Very mature ecosystem reference | Node sidecar; JS runtime; protocol drift; license/ops overhead | Reference only, not target for Макошь Rust backend. |
 
 ## Recommended provider architecture
 
@@ -1531,7 +1531,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/integrations/whatsapp/status.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/whatsapp/status.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/whatsapp/status.md`
 - Size bytes / Размер в байтах: `49608`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1607,7 +1607,7 @@ Blocked closure mark on 2026-06-27:
 12. `telemetry/event evidence` — наблюдательные события и projection-пути сведены в event-sourcing spine.
 13. `native runtime compile boundary` — `whatsapp-rust 0.6.0` провален на stable compile spike, fallback `wa-rs 0.2.0` выбран как optional dependency за `whatsapp-native-md-runtime` без SDK SQLite storage. Rust 1.88 провален из-за `tokio-websockets`, поэтому MSRV поднят до Rust 1.89 и проверен через `cargo +1.89.0 check`. Compile feature не является public capability flag: `native_md` и `business_cloud` live availability остаются blocked до smoke/live evidence. При feature-сборке `native_md` отдает `wa-rs` smoke-gated descriptor с readiness `smoke_gated_unverified_public_blocked` и blocker `whatsapp_native_md_public_availability_blocked`; без feature остается `whatsapp_native_md_runtime_feature_disabled`. Session restore привязан к account-scoped `whatsapp_web_session_key` в host vault.
 14. `native runtime actor contract` — `native_md` now has an explicit account-scoped actor contract over the selected `wa-rs` API surface. The contract fixes the command channel to the durable provider outbox, the event sink to Signal Hub raw evidence, the storage boundary to host-vault metadata bindings only, and the event-family matrix for auth/runtime/sync/messages/updates/deletes/receipts/reactions/dialogs/participants/presence/calls/status/media/command reconciliation/unsupported evidence. Public live capability remains blocked until manual live smoke and provider-observed evidence exist.
-15. `native wa-rs event classifier contract` — `native_md` now has a feature-gated classifier for real `wa-rs::types::events::Event` variants. It maps auth, connection, sync, message, receipt, presence, dialog/group, participant/contact and unknown/provider-only events to Hermes raw record kinds and accepted Signal Hub event families. `Event::Message` also inspects protobuf reaction/media/call/edit/delete markers plus `MessageInfo.edit`, so reactions, edits, deletes and media metadata are not collapsed into generic messages. Raw `Notification` and `BusinessStatusUpdate` become unsupported runtime evidence, not dropped.
+15. `native wa-rs event classifier contract` — `native_md` now has a feature-gated classifier for real `wa-rs::types::events::Event` variants. It maps auth, connection, sync, message, receipt, presence, dialog/group, participant/contact and unknown/provider-only events to Макошь raw record kinds and accepted Signal Hub event families. `Event::Message` also inspects protobuf reaction/media/call/edit/delete markers plus `MessageInfo.edit`, so reactions, edits, deletes and media metadata are not collapsed into generic messages. Raw `Notification` and `BusinessStatusUpdate` become unsupported runtime evidence, not dropped.
 16. `native raw evidence envelope contract` — classified `wa-rs` events now flow through a compile-only `NativeMdRawEvidenceEnvelope` contract before any future writer can append them. The envelope fixes `provider_shape = whatsapp_native_md`, `runtime_driver = wa-rs`, raw record kind, `signal.raw.whatsapp.*.observed` event kind, accepted Signal Hub kind, stable `source_fingerprint:v5` seed, and sanitized payload policy. It explicitly forbids session/token/cookie/raw secrets, message bodies and media bytes in runtime metadata/events/log-like payloads.
 17. `native sanitized inbound DTO contract` — feature-gated `native_md` now builds a compile-checked `NativeMdSanitizedProviderEventDto` for real `wa-rs::types::events::Event` values. The DTO pairs the raw-evidence envelope with metadata-only provider details: message ids, JIDs, timestamps, receipt/presence states, sync counters and safe payload-shape flags. It also fixes the dispatch target to the existing `/api/v1/integrations/whatsapp/runtime-bridge/*` family for messages, updates, deletes, receipts, reactions, media, media lifecycle, statuses, status views/deletes, presence, calls, dialogs, participants, runtime events and sync lifecycle. It deliberately excludes QR codes, pair codes, raw `Node`, protobuf action payloads, history-sync payloads, about text, push names, session material, message bodies and media bytes before any future live producer can append Hub evidence.
 18. `native runtime health surface` — `runtime/health` for `whatsapp_native_md` now includes the native driver descriptor in `checks.native_md_driver` and `checks.runtime.native_driver`: driver id/readiness, live-runtime blocker, account-scoped actor scope, durable outbox command channel, Signal Hub raw-evidence sink, host-vault session purpose and metadata-only database policy. QR/pair-code and provider-command blockers also include the provider-shape blocker, so native auth/write surfaces cannot look publicly available while the live driver is smoke-gated or feature-disabled.
@@ -1617,24 +1617,24 @@ Blocked closure mark on 2026-06-27:
 22. `native runtime Signal Hub sink` — `WhatsappRuntimeSignalIngestService` now implements the shared sink contract for sanitized native runtime DTOs. It records append-only `communication_raw_records`, redacts secret-like metadata recursively, dispatches `signal.raw.whatsapp.*.observed`, verifies the resulting `signal.accepted.whatsapp.*` kind and stays idempotent for duplicate provider-observed events. This is an application-level event-spine writer; it still does not enable public live runtime by itself.
 23. `native runtime smoke manager` — `native_md` now has an account-scoped runtime manager wired through `WhatsAppProviderRuntime` lifecycle hooks. It can start the feature-gated live driver only when the account config explicitly opts into `native_md_live_smoke_enabled` and a `whatsapp_web_session_key` host-vault binding exists. Health exposes `checks.native_md_manager` / `checks.runtime.native_manager` with manager wiring, opt-in, feature, running, link-start vault binding, reconnect policy and public-availability gate metadata. This is a controlled smoke path, not a capability flag; public availability remains blocked until manual live smoke and the remaining live capability matrix pass.
 24. `native vault-aware link startup` — `WhatsAppProviderRuntime::start_qr_link` and `start_pair_code_link` now receive `SecretReferenceStore` and `HostVault` context. For `whatsapp_native_md`, the smoke manager can create a metadata-only secret reference plus `whatsapp_web_session_key` host-vault bootstrap snapshot before starting the feature-gated driver; pair-code startup passes the phone number into `wa_rs::bot::BotBuilder::with_pair_code`. Without explicit smoke opt-in the API stays blocked and returns no QR/pair-code artifact.
-25. `native transient auth artifact channel` — feature-gated `native_md` now captures `wa-rs` `PairingQrCode` / `PairingCode` events in an in-process, account-scoped, one-time transient channel. The runtime start response can expose QR SVG or pair code with expiry after the live driver 
+25. `native transient auth artifact channel` — feature-gated `native_md` now captures `wa-rs` `PairingQrCode` / `PairingCode` events in an in-process, account-scoped, one-time transient channel. The runtime start response can expose QR SVG or pair code with expiry after the live driver
 ````
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `docs/integrations/yandex-telemost/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/yandex-telemost/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/yandex-telemost/README.md`
 - Size bytes / Размер в байтах: `3663`
 - Included characters / Включено символов: `3645`
 - Truncated / Обрезано: `no`
 
 ````markdown
-# Hermes Communications - Yandex Telemost Provider Stage
+# Макошь Communications - Yandex Telemost Provider Stage
 
 Status: `FOUNDATION_PATCH_APPLIED`, 2026-06-28.
 
 Yandex Telemost is an external communication provider adapter. It is not a
-Hermes domain, not a calendar source of truth and not a meeting CRM. Telemost
+Макошь domain, not a calendar source of truth and not a meeting CRM. Telemost
 can provide conference metadata, join links, cohost metadata, local desktop
 recording artifacts, WebView speaker-timeline hints and provider runtime
 signals.
@@ -1667,7 +1667,7 @@ The Yandex Telemost foundation provides:
 - runtime status and capability surface;
 - backend routes under `/api/v1/integrations/yandex-telemost/*`;
 - frontend integration API, query keys and settings panel;
-- desktop Tauri command for opening a conference in a visible Hermes WebView;
+- desktop Tauri command for opening a conference in a visible Макошь WebView;
 - local desktop recorder command that writes `audio.mp3` through `ffmpeg`;
 - local speaker timeline hint files: `speaker-timeline.jsonl` and
   `speaker-timeline.txt`;
@@ -1744,7 +1744,7 @@ truth.
 
 ### `docs/integrations/yandex-telemost/api.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/yandex-telemost/api.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/yandex-telemost/api.md`
 - Size bytes / Размер в байтах: `7681`
 - Included characters / Включено символов: `7681`
 - Truncated / Обрезано: `no`
@@ -1812,7 +1812,7 @@ local provenance.
   "account_id": "telemost-main",
   "conference_id": "abcdef",
   "join_url": "https://telemost.yandex.ru/j/abcdef",
-  "display_name": "Hermes Owner"
+  "display_name": "Макошь Owner"
 }
 ```
 
@@ -1844,7 +1844,7 @@ yandex_telemost_speaker_timeline_append
 ## Recording completion bridge
 
 After local `ffmpeg` capture stops, the desktop client posts the completed
-recording manifest back to Hermes:
+recording manifest back to Макошь:
 
 ```json
 {
@@ -1862,7 +1862,7 @@ recording manifest back to Hermes:
 }
 ```
 
-Hermes validates that all paths stay under `output_dir`, materializes the
+Макошь validates that all paths stay under `output_dir`, materializes the
 provider-neutral Call Bundle files (`manifest.json`, `meeting.json`,
 `provider.json`, `participants.json`, `event-track.jsonl`,
 `speaker-hints.jsonl`), publishes
@@ -1883,7 +1883,7 @@ policy for local Telemost artifacts under `provenance.retention_policy`.
 ## Transcript completion bridge
 
 After local STT finishes, the desktop/runtime side posts the transcript result
-back to Hermes:
+back to Макошь:
 
 ```json
 {
@@ -1908,7 +1908,7 @@ back to Hermes:
 }
 ```
 
-Hermes validates the bundle root and manifest, writes `transcript.json`,
+Макошь validates the bundle root and manifest, writes `transcript.json`,
 `transcript.md` and optional `summary.md`, updates `manifest.json`, publishes
 `realtime_conversation.transcript.completed`, and projects the transcript into
 the `documents` domain through the provider-neutral transcript workflow.
@@ -1935,25 +1935,25 @@ runtime paths required for STT execution:
 }
 ```
 
-If `HERMES_REALTIME_CONVERSATION_TRANSCRIBER` is present, Hermes runs that
+If `MAKOSH_REALTIME_CONVERSATION_TRANSCRIBER` is present, Макошь runs that
 local executable and passes bundle metadata through environment variables:
 
 ```text
-HERMES_TRANSCRIPT_BUNDLE_ID
-HERMES_TRANSCRIPT_ACCOUNT_ID
-HERMES_TRANSCRIPT_CONFERENCE_ID
-HERMES_TRANSCRIPT_PROVIDER_KIND
-HERMES_TRANSCRIPT_BUNDLE_ROOT
-HERMES_TRANSCRIPT_MANIFEST_PATH
-HERMES_TRANSCRIPT_AUDIO_PATH
-HERMES_TRANSCRIPT_MANIFEST_JSON
+MAKOSH_TRANSCRIPT_BUNDLE_ID
+MAKOSH_TRANSCRIPT_ACCOUNT_ID
+MAKOSH_TRANSCRIPT_CONFERENCE_ID
+MAKOSH_TRANSCRIPT_PROVIDER_KIND
+MAKOSH_TRANSCRIPT_BUNDLE_ROOT
+MAKOSH_TRANSCRIPT_MANIFEST_PATH
+MAKOSH_TRANSCRIPT_AUDIO_PATH
+MAKOSH_TRANSCRIPT_MANIFEST_JSON
 ```
 
 Optional settings:
 
 ```text
-HERMES_REALTIME_CONVERSATION_TRANSCRIBER_ARGS_JSON='["--flag","value"]'
-HERMES_REALTIME_CONVERSATION_TRANSCRIBER_TIMEOUT_SECONDS=900
+MAKOSH_REALTIME_CONVERSATION_TRANSCRIBER_ARGS_JSON='["--flag","value"]'
+MAKOSH_REALTIME_CONVERSATION_TRANSCRIBER_TIMEOUT_SECONDS=900
 ```
 
 The executable must emit JSON on stdout with:
@@ -1962,7 +1962,7 @@ The executable must emit JSON on stdout with:
 
 ## Local artifact retention cleanup
 
-Hermes now supports owner-visible retention cleanup for local Telemost files:
+Макошь now supports owner-visible retention cleanup for local Telemost files:
 
 ```json
 {
@@ -1982,7 +1982,7 @@ privacy.yandex_telemost_speaker_timeline_retention_days
 
 `0` disables automatic cleanup for that artifact class.
 
-When a bundle is cleaned, Hermes removes:
+When a bundle is cleaned, Макошь removes:
 
 - `audio.mp3` when the recording retention policy has expired;
 - `speaker-timeline.jsonl`, `speaker-timeline.txt`, and
@@ -2004,7 +2004,7 @@ GET   /v1/telemost-api/conferences/{id}/cohosts?offset={offset}&limit={limit}
 
 ### `docs/integrations/yandex-telemost/architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/yandex-telemost/architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/yandex-telemost/architecture.md`
 - Size bytes / Размер в байтах: `3633`
 - Included characters / Включено символов: `3603`
 - Truncated / Обрезано: `no`
@@ -2092,12 +2092,12 @@ Platform strategy:
 
 ```text
 Linux:
-  try to create PulseAudio/PipeWire null sink `hermes_telemost`
-  record `hermes_telemost.monitor`
+  try to create PulseAudio/PipeWire null sink `makosh_telemost`
+  record `makosh_telemost.monitor`
 
 macOS:
   require explicit external loopback device such as BlackHole 2ch
-  Hermes does not silently install system audio drivers
+  Макошь does not silently install system audio drivers
 
 Windows:
   use WASAPI loopback or an explicit virtual audio cable/input
@@ -2141,7 +2141,7 @@ transcription, diarization, Call Intelligence, Radar and Timeline workflows.
 ```text
 Yandex Telemost conference
 ↓
-visible Hermes WebView + local capture
+visible Макошь WebView + local capture
 ↓
 Call Bundle
 ↓
@@ -2153,7 +2153,7 @@ Radar / Timeline / Knowledge Graph / Tasks candidates
 
 ### `docs/integrations/yandex-telemost/implementation-plan.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/yandex-telemost/implementation-plan.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/yandex-telemost/implementation-plan.md`
 - Size bytes / Размер в байтах: `2018`
 - Included characters / Включено символов: `2018`
 - Truncated / Обрезано: `no`
@@ -2218,7 +2218,7 @@ Radar / Timeline / Knowledge Graph / Tasks candidates
 
 ### `docs/integrations/yandex-telemost/live-smoke-checklist.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/yandex-telemost/live-smoke-checklist.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/yandex-telemost/live-smoke-checklist.md`
 - Size bytes / Размер в байтах: `1620`
 - Included characters / Включено символов: `1620`
 - Truncated / Обрезано: `no`
@@ -2229,9 +2229,9 @@ Radar / Timeline / Knowledge Graph / Tasks candidates
 ## Preconditions
 
 ```text
-HERMES_SECRET_VAULT_KEY configured
+MAKOSH_SECRET_VAULT_KEY configured
 HostVault unlocked
-ffmpeg installed and available on PATH or HERMES_TELEMOST_FFMPEG_PATH set
+ffmpeg installed and available on PATH or MAKOSH_TELEMOST_FFMPEG_PATH set
 Yandex OAuth token has Telemost scopes
 ```
 
@@ -2269,28 +2269,28 @@ Linux:
 
 ```text
 yandex_telemost_prepare_audio_device
-route WebView output to hermes_telemost
-record hermes_telemost.monitor
+route WebView output to makosh_telemost
+record makosh_telemost.monitor
 ```
 
 macOS:
 
 ```text
 install/configure BlackHole 2ch or equivalent manually
-set HERMES_TELEMOST_FFMPEG_INPUT if ffmpeg needs a device index
+set MAKOSH_TELEMOST_FFMPEG_INPUT if ffmpeg needs a device index
 ```
 
 Windows:
 
 ```text
 configure WASAPI loopback or virtual audio cable
-set HERMES_TELEMOST_FFMPEG_INPUT when needed
+set MAKOSH_TELEMOST_FFMPEG_INPUT when needed
 ```
 ````
 
 ### `docs/integrations/yandex-telemost/local-recording.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/yandex-telemost/local-recording.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/yandex-telemost/local-recording.md`
 - Size bytes / Размер в байтах: `4668`
 - Included characters / Включено символов: `4634`
 - Truncated / Обрезано: `no`
@@ -2326,7 +2326,7 @@ transcription + diarization workflow
 }
 ```
 
-Hermes does not start hidden captures, does not join a conference in the
+Макошь does not start hidden captures, does not join a conference in the
 background and does not silently install system audio drivers.
 
 ## Output layout
@@ -2378,7 +2378,7 @@ match. It prefers:
 - nearby participant-name fields such as `data-participant-name`,
   `data-display-name`, `aria-label` and `title`.
 
-This remains a heuristic path. Hermes still records the result as
+This remains a heuristic path. Макошь still records the result as
 `truth_status=hint_not_truth`.
 The current companion source label is
 `webview_dom_multi_selector_heuristic`.
@@ -2391,13 +2391,13 @@ The current companion source label is
 null sink:
 
 ```text
-hermes_telemost
+makosh_telemost
 ```
 
 The recorder defaults to:
 
 ```text
-hermes_telemost.monitor
+makosh_telemost.monitor
 ```
 
 The user still needs to route the Telemost WebView audio output to that sink.
@@ -2405,19 +2405,19 @@ The user still needs to route the Telemost WebView audio output to that sink.
 ### macOS
 
 macOS requires an explicitly configured loopback device, for example BlackHole
-2ch. Hermes reports the requirement and records from the device selected through
-`HERMES_TELEMOST_FFMPEG_INPUT` or the command argument.
+2ch. Макошь reports the requirement and records from the device selected through
+`MAKOSH_TELEMOST_FFMPEG_INPUT` or the command argument.
 
 ### Windows
 
 Windows uses an explicit WASAPI/virtual-device path selected through
-`HERMES_TELEMOST_FFMPEG_INPUT` or the command argument.
+`MAKOSH_TELEMOST_FFMPEG_INPUT` or the command argument.
 
 ## Environment variables
 
 ```text
-HERMES_TELEMOST_FFMPEG_PATH   optional ffmpeg binary path
-HERMES_TELEMOST_FFMPEG_INPUT  optional platform-specific ffmpeg input selector
+MAKOSH_TELEMOST_FFMPEG_PATH   optional ffmpeg binary path
+MAKOSH_TELEMOST_FFMPEG_INPUT  optional platform-specific ffmpeg input selector
 ```
 
 ## Retention policy
@@ -2436,7 +2436,7 @@ These settings control automatic cleanup for:
 - `speaker-timeline.txt`;
 - and the provider-neutral copied hint file `speaker-hints.jsonl`.
 
-Hermes snapshots the active retention policy into the Call Bundle manifest and
+Макошь snapshots the active retention policy into the Call Bundle manifest and
 an hourly backend cleanup pass removes expired files. A manual cleanup route is
 also available through
 `POST /api/v1/integrations/yandex-telemost/accounts/{account_id}/retention/prune`.
@@ -2462,7 +2462,7 @@ The recorder itself does not mutate Calendar, Calls or Radar directly. It owns
 only the local runtime process and local artifact manifest.
 
 The current backend contract exposes a transcript completion bridge. The local
-runtime can hand the finished STT result back to Hermes, which writes
+runtime can hand the finished STT result back to Макошь, which writes
 `transcript.json` and `transcript.md`, emits
 `realtime_conversation.transcript.completed`, and lets the provider-neutral
 workflow project the transcript into durable meeting memory.
@@ -2470,7 +2470,7 @@ workflow project the transcript into durable meeting memory.
 
 ### `docs/integrations/yandex-telemost/modules.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/yandex-telemost/modules.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/yandex-telemost/modules.md`
 - Size bytes / Размер в байтах: `1604`
 - Included characters / Включено символов: `1526`
 - Truncated / Обрезано: `no`
@@ -2546,7 +2546,7 @@ WebView. Product-level meeting views must remain provider-neutral.
 
 ### `docs/integrations/yandex-telemost/status.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/yandex-telemost/status.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/yandex-telemost/status.md`
 - Size bytes / Размер в байтах: `1960`
 - Included characters / Включено символов: `1960`
 - Truncated / Обрезано: `no`
@@ -2598,13 +2598,13 @@ modules and unrelated failing boundary tests outside the Telemost scope.
 
 ### `docs/integrations/zoom/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/README.md`
 - Size bytes / Размер в байтах: `7341`
 - Included characters / Включено символов: `7341`
 - Truncated / Обрезано: `no`
 
 ````markdown
-# Hermes Communications - Zoom Provider Stage
+# Макошь Communications - Zoom Provider Stage
 
 Status: `FOUNDATION_IMPLEMENTED`, 2026-06-28.
 
@@ -2613,8 +2613,8 @@ Implementation evidence in this checkout: foundation code is present under
 Zoom migration, backend routes, targeted backend tests and targeted frontend
 tests. ADR-0102 is `Accepted` after target backend and frontend zoom validation.
 
-Zoom in Hermes is an external communication provider adapter. It is not a
-Hermes domain, not a meeting CRM and not a calendar source of truth. Zoom can
+Zoom in Макошь is an external communication provider adapter. It is not a
+Макошь domain, not a meeting CRM and not a calendar source of truth. Zoom can
 provide meeting evidence, recording evidence, transcript evidence, provider
 account metadata and runtime lifecycle signals.
 
@@ -2645,7 +2645,7 @@ The Zoom foundation provides:
 - token maintenance route for scanning authorized accounts and refreshing
   expiring HostVault token bundles;
 - scheduled token maintenance daemon with Signal Hub runtime gating,
-  HostVault unlock gating and `HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`
+  HostVault unlock gating and `MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`
   operational toggle;
 - managed webhook subscription status/reconcile/remove routes for authorized
   accounts, using app-owned access tokens and HostVault-backed webhook secret
@@ -2655,10 +2655,10 @@ The Zoom foundation provides:
   recording media and transcript-like text file import;
 - owner-visible privacy policy setting
   `privacy.zoom_remote_recording_download_enabled`, which must be enabled
-  before Hermes fetches recording media files directly from Zoom;
+  before Макошь fetches recording media files directly from Zoom;
 - owner-visible privacy policy setting
   `privacy.zoom_remote_transcript_download_enabled`, which must be enabled
-  before Hermes fetches transcript-like text files directly from Zoom;
+  before Макошь fetches transcript-like text files directly from Zoom;
 - owner-visible retention policy settings
   `privacy.zoom_recording_import_retention_days` and
   `privacy.zoom_transcript_retention_days`, which stamp retention metadata and
@@ -2677,7 +2677,7 @@ The Zoom foundation provides:
   `download_url`;
 - protected account-scoped webhook URL validation and signed
   meeting/recording webhook normalization;
-- `hermes-zoom-edge-proxy` public/edge ingress that preserves raw Zoom webhook
+- `makosh-zoom-edge-proxy` public/edge ingress that preserves raw Zoom webhook
   bodies and `x-zm-*` headers before forwarding to the protected bridge;
 - canonical Zoom events with causation and correlation support;
 - provider account listing with optional removed-account visibility;
@@ -2690,7 +2690,7 @@ The Zoom foundation provides:
   blobs and expired transcript evidence using stamped retention expiry intent;
 - scheduled retention cleanup daemon that periodically prunes expired imported
   recording blobs and transcript evidence through the same local retention
-  boundary, gated by `HERMES_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED`;
+  boundary, gated by `MAKOSH_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED`;
 - read-only account-scoped Zoom event audit route and settings-panel inspection
   for recent authorization, refresh/maintenance, runtime and bridge events;
 - provider-neutral Communications `calls` and `meetings` sections that read the

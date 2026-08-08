@@ -8,24 +8,24 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use hermes_attachment_text_extraction_api::{
+use makosh_attachment_text_extraction_api::{
     ATTACHMENT_TEXT_EXTRACTION_MODULE_ID_V1, ATTACHMENT_TEXT_EXTRACTION_OWNER_V1,
 };
-use hermes_attachment_text_extraction_persistence::attachment_text_extraction_storage_bundle_v1;
-use hermes_attachment_text_extraction_runtime::{
+use makosh_attachment_text_extraction_persistence::attachment_text_extraction_storage_bundle_v1;
+use makosh_attachment_text_extraction_runtime::{
     ATTACHMENT_TEXT_EXTRACTION_OCR_ENGLISH_ARTIFACT_ID_V1,
     ATTACHMENT_TEXT_EXTRACTION_OCR_RUNNER_ARTIFACT_ID_V1,
     ATTACHMENT_TEXT_EXTRACTION_OCR_RUSSIAN_ARTIFACT_ID_V1,
     attachment_text_extraction_module_descriptor_v1, attachment_text_extraction_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
-pub const PACKAGE: &str = "hermes-attachment-text-extraction-assembly";
+pub const PACKAGE: &str = "makosh-attachment-text-extraction-assembly";
 pub const ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ARTIFACT_ID_V1: &str =
     "attachment_text_extraction.runtime.v1";
 pub const ATTACHMENT_TEXT_EXTRACTION_STORAGE_ARTIFACT_ID_V1: &str =
@@ -271,7 +271,7 @@ fn artifact_fragment(
             ModuleRuntimeArtifactInputV1 {
                 artifact_kind: "module_runtime".to_owned(),
                 artifact_id: ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ARTIFACT_ID_V1.to_owned(),
-                relative_path: "bin/hermes-attachment-text-extraction-runtime".to_owned(),
+                relative_path: "bin/makosh-attachment-text-extraction-runtime".to_owned(),
                 source_path: utf8_path(runtime_source)?,
                 required: true,
                 descriptor: ReleaseContractInputV1 {
@@ -336,7 +336,7 @@ mod tests {
     #[test]
     fn emits_valid_unsigned_runtime_and_storage_inputs_without_overwrite() {
         let root = std::env::temp_dir().join(format!(
-            "hermes-text-extraction-assembly-{}-{}",
+            "makosh-text-extraction-assembly-{}-{}",
             std::process::id(),
             NEXT_ID.fetch_add(1, Ordering::Relaxed)
         ));

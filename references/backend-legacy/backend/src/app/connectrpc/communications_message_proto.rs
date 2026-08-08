@@ -1,6 +1,6 @@
 use crate::domains::communications::messages::models::{ProjectedMessage, ProjectedMessageSummary};
 use chrono::{DateTime, Utc};
-use hermes_connectrpc_contracts::hermes::communications::v1::CommunicationMessage as ProtoCommunicationMessage;
+use makosh_connectrpc_contracts::makosh::communications::v1::CommunicationMessage as ProtoCommunicationMessage;
 fn timestamp_string(value: DateTime<Utc>) -> String {
     value.to_rfc3339()
 }

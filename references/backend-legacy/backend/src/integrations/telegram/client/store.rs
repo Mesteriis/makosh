@@ -1,8 +1,8 @@
-use hermes_communications_api::accounts::ProviderAccountCommandPort;
-use hermes_communications_api::accounts::ProviderSecretBindingCommandPort;
+use makosh_communications_api::accounts::ProviderAccountCommandPort;
+use makosh_communications_api::accounts::ProviderSecretBindingCommandPort;
 use std::sync::Arc;
 
-use hermes_communications_api::evidence::CommunicationRawEvidenceCommandPort;
+use makosh_communications_api::evidence::CommunicationRawEvidenceCommandPort;
 use sqlx::postgres::PgPool;
 
 use crate::platform::communications::{

@@ -2,7 +2,7 @@
 
 use std::collections::BTreeSet;
 
-use hermes_kernel_control_store::ModuleClientRealtimeRouteV1;
+use makosh_kernel_control_store::ModuleClientRealtimeRouteV1;
 use rusqlite::{Connection, params};
 
 use crate::{SqliteControlStore, StoreError, valid_capability_ids, valid_identity_token};
@@ -16,7 +16,7 @@ impl SqliteControlStore {
 }
 
 pub(crate) fn validate_client_realtime_routes(
-    registration: &hermes_kernel_control_store::ModuleRegistration,
+    registration: &makosh_kernel_control_store::ModuleRegistration,
     capabilities: &[String],
     routes: &[ModuleClientRealtimeRouteV1],
 ) -> Result<(), StoreError> {
@@ -55,7 +55,7 @@ pub(crate) fn insert_client_realtime_routes(
 ) -> Result<(), StoreError> {
     for route in routes {
         connection.execute(
-            "INSERT INTO hermes_kernel_module_client_realtime_route_request
+            "INSERT INTO makosh_kernel_module_client_realtime_route_request
              (registration_id, capability_id, contract_owner, contract_name, contract_major,
               contract_revision, contract_schema_sha256)
              VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
@@ -80,10 +80,10 @@ fn read_approved_client_realtime_routes(
         "SELECT route.registration_id, route.capability_id, route.contract_owner,
                 route.contract_name, route.contract_major, route.contract_revision,
                 route.contract_schema_sha256
-         FROM hermes_kernel_module_client_realtime_route_request route
-         JOIN hermes_kernel_module_registration registration
+         FROM makosh_kernel_module_client_realtime_route_request route
+         JOIN makosh_kernel_module_registration registration
            ON registration.registration_id = route.registration_id
-         JOIN hermes_kernel_module_registration_capability capability
+         JOIN makosh_kernel_module_registration_capability capability
            ON capability.registration_id = route.registration_id
           AND capability.capability_id = route.capability_id
          WHERE registration.state = 'approved'
@@ -109,7 +109,7 @@ fn read_approved_client_realtime_routes(
                 capability_id,
                 owner,
                 name,
-                hermes_kernel_control_store::ModuleClientRealtimeContractVersionV1 {
+                makosh_kernel_control_store::ModuleClientRealtimeContractVersionV1 {
                     major: u32::try_from(major)
                         .map_err(|_| StoreError::InvalidModuleClientRealtimeRoute)?,
                     revision: u32::try_from(revision)

@@ -1,4 +1,4 @@
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     SettingApplyModeV1, SettingClientVisibilityV1, SettingDefinitionV1, SettingMutationAuthorityV1,
     SettingTargetScopeV1, SettingValueTypeV1, SettingsSchemaV1, SettingsSnapshotV1,
     setting_value_v1::Value,
@@ -103,7 +103,7 @@ fn definition(setting_id: &str, default: u64, display_name: &str) -> SettingDefi
         fresh_owner_proof_required: true,
         kernel_controller_id: String::new(),
         display_name: display_name.to_owned(),
-        default_value: Some(hermes_runtime_protocol::v1::SettingValueV1 {
+        default_value: Some(makosh_runtime_protocol::v1::SettingValueV1 {
             value: Some(Value::UnsignedIntegerValue(default)),
         }),
         optional: false,
@@ -132,7 +132,7 @@ fn required(
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::validate_settings_schema_v1;
+    use makosh_runtime_protocol::validation::descriptor::validate_settings_schema_v1;
 
     use super::*;
 

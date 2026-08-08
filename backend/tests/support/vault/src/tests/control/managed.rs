@@ -1,13 +1,13 @@
 use std::os::unix::fs::PermissionsExt;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     GetVaultRuntimeStatusRequestV1, ManagedVaultRuntimeControlRequestV1, VaultRuntimeStateV1,
     managed_vault_runtime_control_request_v1::Operation,
     managed_vault_runtime_control_response_v1::Result as ResponseResult,
 };
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_store_sqlcipher::VaultStore;
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_store_sqlcipher::VaultStore;
 use tempfile::TempDir;
 
 use crate::control::runtime::response_for;

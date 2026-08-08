@@ -23,8 +23,8 @@ const emit = defineEmits<{
 }>()
 
 const triggerClasses = computed(() => [
-  'hermes-select-trigger',
-  { 'hermes-select--error': props.error },
+  'makosh-select-trigger',
+  { 'makosh-select--error': props.error },
   props.class
 ])
 
@@ -49,7 +49,7 @@ function setOpen(value: boolean): void {
 </script>
 
 <template>
-  <div class="hermes-select-wrapper">
+  <div class="makosh-select-wrapper">
     <SelectRoot
       :open="isOpen"
       :model-value="modelValue || undefined"
@@ -58,26 +58,26 @@ function setOpen(value: boolean): void {
       @update:open="setOpen"
     >
       <SelectTrigger :class="triggerClasses" :aria-label="accessibleLabel">
-        <SelectValue :placeholder="placeholder" class="hermes-select-value" />
-        <Icon icon="tabler:chevron-down" size="1rem" class="hermes-select-chevron" />
+        <SelectValue :placeholder="placeholder" class="makosh-select-value" />
+        <Icon icon="tabler:chevron-down" size="1rem" class="makosh-select-chevron" />
       </SelectTrigger>
       <SelectPortal>
         <SelectContent
           ref="contentRef"
-          class="hermes-select-content"
+          class="makosh-select-content"
           :side-offset="4"
           @mouseenter="cancelMouseLeaveDismiss"
           @mouseleave="scheduleMouseLeaveDismiss"
         >
-          <SelectViewport class="hermes-select-viewport">
+          <SelectViewport class="makosh-select-viewport">
             <SelectItem
               v-for="opt in options"
               :key="opt.value"
               :value="opt.value"
-              class="hermes-select-item"
+              class="makosh-select-item"
             >
               <SelectItemIndicator>
-                <Icon icon="tabler:check" size="0.875rem" class="hermes-select-check" />
+                <Icon icon="tabler:check" size="0.875rem" class="makosh-select-check" />
               </SelectItemIndicator>
               <span>{{ opt.label }}</span>
             </SelectItem>
@@ -85,6 +85,6 @@ function setOpen(value: boolean): void {
         </SelectContent>
       </SelectPortal>
     </SelectRoot>
-    <span v-if="error" class="hermes-select-error">{{ error }}</span>
+    <span v-if="error" class="makosh-select-error">{{ error }}</span>
   </div>
 </template>

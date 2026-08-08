@@ -4,7 +4,7 @@ use crate::domains::personas::command_service::PersonaCommandServiceError;
 use crate::domains::personas::core::errors::PersonaCoreError;
 use crate::domains::personas::identity::errors::PersonaIdentityError;
 use crate::domains::personas::memory::errors::PersonaMemoryError;
-use hermes_personas_api::{PersonaQueryError, PersonaWriteError};
+use makosh_personas_api::{PersonaQueryError, PersonaWriteError};
 
 impl From<PersonaQueryError> for ApiError {
     fn from(error: PersonaQueryError) -> Self {

@@ -1,4 +1,4 @@
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use std::collections::HashMap;
 use std::time::Instant;
 
@@ -6,7 +6,7 @@ use serde_json::Value;
 use sha2::{Digest, Sha256};
 use sqlx::{Postgres, Transaction};
 
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use super::constants::AI_EMBEDDING_DIMENSION;
 use super::errors::AiError;

@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package makosh.runtime.v1;
+
+import "makosh/runtime/v1/managed_storage_runtime.proto";
+import "makosh/runtime/v1/managed_runtime_artifact.proto";
+
+// Short-lived private configuration staged by Kernel for an admitted engine.
+// It carries only runtime identity, Event Hub topology, owner-local Storage
+// fences and the applied settings identity. Provider configuration, runtime
+// artifacts, integration state roots, host bridges and business payloads are
+// intentionally not representable.
+message ManagedEngineRuntimeConfigurationV1 {
+  uint32 major = 1;
+  string logical_owner_id = 2;
+  string registration_id = 3;
+  string runtime_instance_id = 4;
+  uint64 runtime_generation = 5;
+  uint64 grant_epoch = 6;
+  ManagedStorageRuntimeConfigurationV1 storage = 7;
+  string event_hub_endpoint = 8;
+  uint64 event_credential_revision = 9;
+  uint64 settings_revision = 10;
+  // Authenticated human tenancy. This never replaces the Engine build-unit
+  // owner used by registration, grants, Storage and Event Hub authority.
+  string logical_human_owner_id = 11;
+  repeated ManagedRuntimeArtifactBindingV1 runtime_artifacts = 12;
+}

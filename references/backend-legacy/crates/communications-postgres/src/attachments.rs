@@ -1,4 +1,4 @@
-use hermes_communications_api::attachments::{
+use makosh_communications_api::attachments::{
     CanonicalMediaReadError, CanonicalMediaReadPort, CanonicalMediaRecord,
     CanonicalMessageAttachmentReadError, CanonicalMessageAttachmentReadPort,
     CanonicalMessageAttachmentRecord,

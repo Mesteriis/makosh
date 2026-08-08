@@ -1,4 +1,4 @@
-use hermes_mail_contacts_sync_core::{
+use makosh_mail_contacts_sync_core::{
     MailContactsSyncRejectCodeV1, MailContactsSyncStateV1, MailContactsSyncTransitionV1,
     transition_mail_contacts_sync_v1,
 };
@@ -31,7 +31,7 @@ impl MailContactsSyncPersistenceV1 {
         }
         let operation_id = sqlx::query_scalar::<_, Vec<u8>>(
             "SELECT operation_id FROM \
-             hermes_data.mail_contacts_sync_provider_link_reconciliation WHERE \
+             makosh_data.mail_contacts_sync_provider_link_reconciliation WHERE \
              logical_owner_id=$1 AND contacts_command_message_id=$2",
         )
         .bind(logical_owner_id)
@@ -58,7 +58,7 @@ impl MailContactsSyncPersistenceV1 {
         let row = sqlx::query(
             "SELECT configuration_instance_id, account_id, contact_id, contact_revision, state, \
                     origin_run_id, mail_command_message_id \
-             FROM hermes_data.mail_contacts_sync_reverse_operations \
+             FROM makosh_data.mail_contacts_sync_reverse_operations \
              WHERE logical_owner_id = $1 AND operation_id = $2",
         )
         .bind(logical_owner_id)
@@ -77,7 +77,7 @@ impl MailContactsSyncPersistenceV1 {
         validate_changed_input(input)?;
         let mut transaction = self.pool.begin().await.map_err(storage)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.mail_contacts_sync_reverse_inbox (logical_owner_id, \
+            "INSERT INTO makosh_data.mail_contacts_sync_reverse_inbox (logical_owner_id, \
              event_message_id, event_envelope_sha256, completed_at_unix_millis) \
              VALUES ($1,$2,$3,$4) ON CONFLICT DO NOTHING",
         )
@@ -95,7 +95,7 @@ impl MailContactsSyncPersistenceV1 {
         }
         for operation in &input.operations {
             sqlx::query(
-                "INSERT INTO hermes_data.mail_contacts_sync_reverse_operations \
+                "INSERT INTO makosh_data.mail_contacts_sync_reverse_operations \
                  (logical_owner_id, operation_id, source_event_message_id, \
                   configuration_instance_id, account_id, contact_id, contact_revision, state, \
                   origin_run_id, source_command_message_id, created_at_unix_millis, \
@@ -146,7 +146,7 @@ impl MailContactsSyncPersistenceV1 {
             return Ok(CompleteContactMailSyncSourceOutcomeV1::Duplicate);
         }
         let current = sqlx::query(
-            "SELECT state FROM hermes_data.mail_contacts_sync_reverse_operations \
+            "SELECT state FROM makosh_data.mail_contacts_sync_reverse_operations \
              WHERE logical_owner_id = $1 AND operation_id = $2 FOR UPDATE",
         )
         .bind(&input.logical_owner_id)
@@ -168,7 +168,7 @@ impl MailContactsSyncPersistenceV1 {
             .await?;
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_contacts_sync_reverse_operations SET state = $3, \
+            "UPDATE makosh_data.mail_contacts_sync_reverse_operations SET state = $3, \
              mail_command_message_id = $4, terminal_message_id = $5, \
              updated_at_unix_millis = $6 WHERE logical_owner_id = $1 AND operation_id = $2 \
              AND state = 1",
@@ -221,7 +221,7 @@ impl MailContactsSyncPersistenceV1 {
         }
         let row = sqlx::query(
             "SELECT state, mail_command_message_id \
-             FROM hermes_data.mail_contacts_sync_reverse_operations \
+             FROM makosh_data.mail_contacts_sync_reverse_operations \
              WHERE logical_owner_id=$1 AND operation_id=$2 FOR UPDATE",
         )
         .bind(&input.logical_owner_id)
@@ -238,7 +238,7 @@ impl MailContactsSyncPersistenceV1 {
         }
         if let Some(command) = &input.contacts_link_command {
             sqlx::query(
-                "INSERT INTO hermes_data.mail_contacts_sync_provider_link_reconciliation \
+                "INSERT INTO makosh_data.mail_contacts_sync_provider_link_reconciliation \
                  (logical_owner_id, operation_id, mail_result_message_id, \
                   mail_result_envelope_sha256, contacts_command_message_id, state, \
                   created_at_unix_millis, updated_at_unix_millis) \
@@ -264,7 +264,7 @@ impl MailContactsSyncPersistenceV1 {
             update_reverse_terminal(&mut transaction, input, 5, input.result_message_id).await?;
         }
         let origin_run_id = sqlx::query_scalar::<_, Option<Vec<u8>>>(
-            "SELECT origin_run_id FROM hermes_data.mail_contacts_sync_reverse_operations \
+            "SELECT origin_run_id FROM makosh_data.mail_contacts_sync_reverse_operations \
              WHERE logical_owner_id=$1 AND operation_id=$2",
         )
         .bind(&input.logical_owner_id)
@@ -321,7 +321,7 @@ impl MailContactsSyncPersistenceV1 {
         }
         let row = sqlx::query(
             "SELECT contacts_command_message_id, state FROM \
-             hermes_data.mail_contacts_sync_provider_link_reconciliation WHERE \
+             makosh_data.mail_contacts_sync_provider_link_reconciliation WHERE \
              logical_owner_id=$1 AND operation_id=$2 FOR UPDATE",
         )
         .bind(&input.logical_owner_id)
@@ -344,7 +344,7 @@ impl MailContactsSyncPersistenceV1 {
             3_i16
         };
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_contacts_sync_provider_link_reconciliation SET state=$3, \
+            "UPDATE makosh_data.mail_contacts_sync_provider_link_reconciliation SET state=$3, \
              terminal_message_id=$4, reject_code=$5, updated_at_unix_millis=$6 WHERE \
              logical_owner_id=$1 AND operation_id=$2 AND state=1",
         )
@@ -366,7 +366,7 @@ impl MailContactsSyncPersistenceV1 {
             5_i16
         };
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_contacts_sync_reverse_operations SET state=$3, \
+            "UPDATE makosh_data.mail_contacts_sync_reverse_operations SET state=$3, \
              terminal_message_id=$4, updated_at_unix_millis=$5 WHERE logical_owner_id=$1 AND \
              operation_id=$2 AND state=2",
         )
@@ -382,7 +382,7 @@ impl MailContactsSyncPersistenceV1 {
             return Err(MailContactsSyncPersistenceErrorV1::RevisionConflict);
         }
         let origin_run_id = sqlx::query_scalar::<_, Option<Vec<u8>>>(
-            "SELECT origin_run_id FROM hermes_data.mail_contacts_sync_reverse_operations WHERE \
+            "SELECT origin_run_id FROM makosh_data.mail_contacts_sync_reverse_operations WHERE \
              logical_owner_id=$1 AND operation_id=$2",
         )
         .bind(&input.logical_owner_id)
@@ -422,7 +422,7 @@ async fn update_reverse_terminal(
     terminal_message_id: [u8; 16],
 ) -> Result<(), MailContactsSyncPersistenceErrorV1> {
     let updated = sqlx::query(
-        "UPDATE hermes_data.mail_contacts_sync_reverse_operations SET state=$3, \
+        "UPDATE makosh_data.mail_contacts_sync_reverse_operations SET state=$3, \
          terminal_message_id=$4, updated_at_unix_millis=$5 WHERE logical_owner_id=$1 AND \
          operation_id=$2 AND state=2",
     )
@@ -445,7 +445,7 @@ async fn reserve_result_inbox(
     input: &CompleteContactMailSyncSourceV1,
 ) -> Result<bool, MailContactsSyncPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.mail_contacts_sync_reverse_inbox (logical_owner_id, \
+        "INSERT INTO makosh_data.mail_contacts_sync_reverse_inbox (logical_owner_id, \
          event_message_id, event_envelope_sha256, completed_at_unix_millis) VALUES ($1,$2,$3,$4) \
          ON CONFLICT DO NOTHING",
     )
@@ -467,7 +467,7 @@ async fn reserve_event_inbox(
     occurred_at_unix_millis: i64,
 ) -> Result<bool, MailContactsSyncPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.mail_contacts_sync_reverse_inbox (logical_owner_id, \
+        "INSERT INTO makosh_data.mail_contacts_sync_reverse_inbox (logical_owner_id, \
          event_message_id, event_envelope_sha256, completed_at_unix_millis) VALUES ($1,$2,$3,$4) \
          ON CONFLICT DO NOTHING",
     )
@@ -488,7 +488,7 @@ async fn validate_event_replay(
     envelope_sha256: [u8; 32],
 ) -> Result<(), MailContactsSyncPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT event_envelope_sha256 FROM hermes_data.mail_contacts_sync_reverse_inbox \
+        "SELECT event_envelope_sha256 FROM makosh_data.mail_contacts_sync_reverse_inbox \
          WHERE logical_owner_id=$1 AND event_message_id=$2 FOR UPDATE",
     )
     .bind(logical_owner_id)
@@ -509,7 +509,7 @@ async fn validate_result_replay(
     input: &CompleteContactMailSyncSourceV1,
 ) -> Result<(), MailContactsSyncPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT event_envelope_sha256 FROM hermes_data.mail_contacts_sync_reverse_inbox \
+        "SELECT event_envelope_sha256 FROM makosh_data.mail_contacts_sync_reverse_inbox \
          WHERE logical_owner_id = $1 AND event_message_id = $2 FOR UPDATE",
     )
     .bind(&input.logical_owner_id)
@@ -661,7 +661,7 @@ async fn validate_replay(
     input: &AcceptContactChangedForMailSyncV1,
 ) -> Result<(), MailContactsSyncPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT event_envelope_sha256 FROM hermes_data.mail_contacts_sync_reverse_inbox \
+        "SELECT event_envelope_sha256 FROM makosh_data.mail_contacts_sync_reverse_inbox \
          WHERE logical_owner_id = $1 AND event_message_id = $2 FOR UPDATE",
     )
     .bind(&input.logical_owner_id)

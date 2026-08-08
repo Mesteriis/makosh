@@ -1,7 +1,7 @@
-use hermes_desktop_call_recording_persistence::{
+use makosh_desktop_call_recording_persistence::{
     DesktopCallRecordingRepositoryV1, PersistenceErrorV1,
 };
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum DesktopRecordingOutboxErrorV1 {

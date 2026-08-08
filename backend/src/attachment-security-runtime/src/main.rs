@@ -8,8 +8,8 @@ use std::{
     time::Duration,
 };
 
-use hermes_attachment_security_persistence::attachment_security_storage_bundle_v1;
-use hermes_attachment_security_runtime::{
+use makosh_attachment_security_persistence::attachment_security_storage_bundle_v1;
+use makosh_attachment_security_runtime::{
     admission::attachment_security_module_descriptor_v1,
     runtime::{
         AttachmentSecurityRuntimeAdmissionV1, AttachmentSecurityRuntimeV1, current_runtime_time_v1,
@@ -18,7 +18,7 @@ use hermes_attachment_security_runtime::{
         attachment_security_settings_schema_bytes_v1, decode_attachment_security_settings_v1,
     },
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedEngineRuntimeConfigurationV1,
     validation::{
         descriptor::{
@@ -166,12 +166,12 @@ where
         }
         match executor.block_on(runtime.process_next_scan_job(seconds, nanos)) {
             Ok(
-                hermes_attachment_security_runtime::runtime::AttachmentSecurityScanTickV1::RetryScheduled(
+                makosh_attachment_security_runtime::runtime::AttachmentSecurityScanTickV1::RetryScheduled(
                     error,
                 ),
             ) => developer_scan_diagnostic("retry", error),
             Ok(
-                hermes_attachment_security_runtime::runtime::AttachmentSecurityScanTickV1::Exhausted(
+                makosh_attachment_security_runtime::runtime::AttachmentSecurityScanTickV1::Exhausted(
                     error,
                 ),
             ) => developer_scan_diagnostic("exhausted", error),
@@ -180,30 +180,30 @@ where
         }
         match executor.block_on(runtime.process_next_archive_delegation(seconds, nanos)) {
             Ok(
-                hermes_attachment_security_runtime::runtime::AttachmentSecurityArchiveDelegationTickV1::RetryScheduled,
+                makosh_attachment_security_runtime::runtime::AttachmentSecurityArchiveDelegationTickV1::RetryScheduled,
             ) => developer_diagnostic(
                 "archive-delegation-retry",
-                hermes_attachment_security_runtime::runtime::AttachmentSecurityRuntimeErrorV1::Unavailable,
+                makosh_attachment_security_runtime::runtime::AttachmentSecurityRuntimeErrorV1::Unavailable,
             ),
             Ok(_) => {}
             Err(error) => developer_diagnostic("archive-delegation", error),
         }
         match executor.block_on(runtime.process_next_text_delegation(seconds, nanos)) {
             Ok(
-                hermes_attachment_security_runtime::runtime::AttachmentSecurityTextDelegationTickV1::RetryScheduled,
+                makosh_attachment_security_runtime::runtime::AttachmentSecurityTextDelegationTickV1::RetryScheduled,
             ) => developer_diagnostic(
                 "text-delegation-retry",
-                hermes_attachment_security_runtime::runtime::AttachmentSecurityRuntimeErrorV1::Unavailable,
+                makosh_attachment_security_runtime::runtime::AttachmentSecurityRuntimeErrorV1::Unavailable,
             ),
             Ok(_) => {}
             Err(error) => developer_diagnostic("text-delegation", error),
         }
         match executor.block_on(runtime.process_next_preview_delegation(seconds, nanos)) {
             Ok(
-                hermes_attachment_security_runtime::runtime::AttachmentSecurityPreviewDelegationTickV1::RetryScheduled,
+                makosh_attachment_security_runtime::runtime::AttachmentSecurityPreviewDelegationTickV1::RetryScheduled,
             ) => developer_diagnostic(
                 "preview-delegation-retry",
-                hermes_attachment_security_runtime::runtime::AttachmentSecurityRuntimeErrorV1::Unavailable,
+                makosh_attachment_security_runtime::runtime::AttachmentSecurityRuntimeErrorV1::Unavailable,
             ),
             Ok(_) => {}
             Err(error) => developer_diagnostic("preview-delegation", error),
@@ -298,28 +298,28 @@ fn read_contract(path: &Path) -> Result<Vec<u8>, String> {
 
 fn developer_diagnostic(
     stage: &str,
-    error: hermes_attachment_security_runtime::runtime::AttachmentSecurityRuntimeErrorV1,
+    error: makosh_attachment_security_runtime::runtime::AttachmentSecurityRuntimeErrorV1,
 ) {
     use std::sync::atomic::{AtomicBool, Ordering};
 
     static EMPTY_CONSUME_REPORTED: AtomicBool = AtomicBool::new(false);
     if stage == "consume"
         && error
-            == hermes_attachment_security_runtime::runtime::AttachmentSecurityRuntimeErrorV1::Unavailable
+            == makosh_attachment_security_runtime::runtime::AttachmentSecurityRuntimeErrorV1::Unavailable
         && EMPTY_CONSUME_REPORTED.swap(true, Ordering::Relaxed)
     {
         return;
     }
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_attachment_security_runtime_error stage={stage} error={error:?}");
     }
 }
 
 fn developer_scan_diagnostic(
     stage: &str,
-    error: hermes_attachment_security_runtime::AttachmentSecurityScanAdapterErrorV1,
+    error: makosh_attachment_security_runtime::AttachmentSecurityScanAdapterErrorV1,
 ) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_attachment_security_scan_error stage={stage} error={error:?}");
     }
 }

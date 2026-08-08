@@ -76,7 +76,7 @@ if [[ "$installed_xcode_version" != "$XCODE_VERSION" \
   exit 1
 fi
 
-scratch_directory="$(mktemp -d "${TMPDIR:-/tmp}/hermes-whisper-build.XXXXXXXX")"
+scratch_directory="$(mktemp -d "${TMPDIR:-/tmp}/makosh-whisper-build.XXXXXXXX")"
 trap 'rm -rf -- "$scratch_directory"' EXIT
 source_directory="${scratch_directory}/whisper.cpp"
 git init -q "$source_directory"
@@ -129,7 +129,7 @@ readonly source_date_epoch
 build_once() {
   local build_root="$1"
   local release_root="$2"
-  local mapped_flags="-O2 -DNDEBUG -isysroot ${sdk_path} -ffile-prefix-map=${source_directory}=/usr/src/hermes-whisper/source -fdebug-prefix-map=${source_directory}=/usr/src/hermes-whisper/source -ffile-prefix-map=${build_root}=/usr/src/hermes-whisper/build -fdebug-prefix-map=${build_root}=/usr/src/hermes-whisper/build"
+  local mapped_flags="-O2 -DNDEBUG -isysroot ${sdk_path} -ffile-prefix-map=${source_directory}=/usr/src/makosh-whisper/source -fdebug-prefix-map=${source_directory}=/usr/src/makosh-whisper/source -ffile-prefix-map=${build_root}=/usr/src/makosh-whisper/build -fdebug-prefix-map=${build_root}=/usr/src/makosh-whisper/build"
   export SOURCE_DATE_EPOCH="$source_date_epoch"
   export ZERO_AR_DATE=1
   export LC_ALL=C

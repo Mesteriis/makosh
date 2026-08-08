@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
@@ -992,11 +992,11 @@ fn outbox_error(_: OutboxRecordError) -> CommunicationReplySourceEnvelopeBuildEr
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_events_protocol::v1::DurableEnvelopeV1;
+    use makosh_events_protocol::v1::DurableEnvelopeV1;
 
     fn context() -> CommunicationReplySourceEnvelopeContextV1 {
         CommunicationReplySourceEnvelopeContextV1 {
-            module_id: "hermes-communication-reply-suggestion-runtime".to_owned(),
+            module_id: "makosh-communication-reply-suggestion-runtime".to_owned(),
             runtime_instance_id: "reply-source-runtime-1".to_owned(),
             runtime_generation: 7,
             recorded_at_unix_seconds: 1_800_000_000,

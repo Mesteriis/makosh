@@ -6,7 +6,7 @@ import {
 	ClientModuleSettingsBootstrapV1Schema,
 	ClientSettingValueEntryV1Schema,
 	ClientSettingValueV1Schema,
-} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import { replayZulipOperationalEvents } from '../api/zulipOperationalReplayGateway'
 import { useZulipOperationalReplay } from './useZulipOperationalReplay'
 
@@ -89,7 +89,7 @@ describe('Zulip operational replay controller', () => {
 function zulipModule() {
 	return create(ClientModuleBootstrapV1Schema, {
 		registrationId: 'zulip-primary',
-		moduleId: 'hermes-zulip-runtime',
+		moduleId: 'makosh-zulip-runtime',
 		sectionsEnabled: true,
 		capabilityIds: ['zulip.operational.realtime.v1'],
 		settings: create(ClientModuleSettingsBootstrapV1Schema, {

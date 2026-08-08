@@ -2,13 +2,13 @@ use std::fs;
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleEventEnvelopeKindV1, ModuleEventRouteDirectionV1, ModuleEventRouteRequestInputV1,
     ModuleEventRouteRequestV1, ModuleRegistration, ModuleRegistrationState,
     PlatformEventHubTopologyV1, PlatformEventStreamBudgetV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     EventsAuthorityRuntimeControlRequestV1, EventsAuthorityRuntimeControlResponseV1,
     ReconcileEventsTopologyResponseV1,
     events_authority_runtime_control_request_v1::Operation as EventsOperation,
@@ -101,8 +101,8 @@ fn assert_media_inventory(
     .expect("open captured media");
     for path in [
         "control-store/control-store.sqlite",
-        "control-store/.hermes-installation-anchor-v1",
-        "control-store/.hermes-recovery-fence-v1",
+        "control-store/.makosh-installation-anchor-v1",
+        "control-store/.makosh-recovery-fence-v1",
         "vault/snapshot/data.bin",
         "storage/postgres.dump",
         "blob/snapshot/data.bin",
@@ -170,7 +170,7 @@ fn postgres(password_file: PathBuf) -> PostgresRecoveryCommandV1 {
         psql: PathBuf::from("/usr/bin/true"),
         host: "127.0.0.1".to_owned(),
         port: 5432,
-        database: "hermes".to_owned(),
+        database: "makosh".to_owned(),
         username: "recovery".to_owned(),
         ssl_mode: "disable".to_owned(),
         password_file,
@@ -289,7 +289,7 @@ struct Fixture {
 
 impl Fixture {
     fn new() -> Self {
-        let root = unique_target_root("hermes-process-capture-port");
+        let root = unique_target_root("makosh-process-capture-port");
         let data = root.join("data");
         let restore = root.join("restore");
         fs::create_dir_all(&data).expect("create data directory");

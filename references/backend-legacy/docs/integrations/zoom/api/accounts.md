@@ -246,7 +246,7 @@ Scans authorized Zoom live accounts and refreshes only bundles that expire
 within the requested threshold. This is the integration-safe worker boundary
 used by explicit API calls and by the local scheduled token maintenance daemon.
 The scheduler is gated by Signal Hub runtime state, HostVault unlock status and
-`HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`.
+`MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`.
 The maintenance default threshold is 300 seconds. Runtime status exposes the
 same policy under `metadata.token_rotation_policy`, including refresh due
 state, expiry state and the `zoom_token_rotation_required` failure/expiry
@@ -289,7 +289,7 @@ Response:
 Imported recording/blob retention cleanup is a separate local automation path.
 The owner-visible prune route is `POST /api/v1/integrations/zoom/accounts/{account_id}/retention/prune`,
 and the background cleanup daemon is toggled by
-`HERMES_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED`.
+`MAKOSH_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED`.
 
 ## Account list
 

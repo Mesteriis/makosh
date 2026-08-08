@@ -1,39 +1,39 @@
-use hermes_contacts_command_api::{
+use makosh_contacts_command_api::{
     ContactsCommandEnvelopeContextV1, build_upsert_contact_command_outbox_record_v1,
     wire::{
         MailAddressBookProviderKindV1 as ContactsProviderKindV1,
         UpsertContactFromMailAddressBookEntryCommandV1,
     },
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, ResultOutcomeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_mail_address_book_contract::{
+use makosh_mail_address_book_contract::{
     MailAddressBookContractV1,
     wire::{
         MailAddressBookEntryObservedV1, MailAddressBookPageCompletedV1,
         MailAddressBookPageRejectedV1, MailAddressBookProviderKindV1, MailAddressBookRejectCodeV1,
     },
 };
-use hermes_mail_contacts_sync_core::{MailContactsSyncRejectCodeV1, MailContactsSyncTransitionV1};
-use hermes_mail_contacts_sync_persistence::{
+use makosh_mail_contacts_sync_core::{MailContactsSyncRejectCodeV1, MailContactsSyncTransitionV1};
+use makosh_mail_contacts_sync_persistence::{
     MailContactsSyncEntryInputV1, MailContactsSyncPageResultInputV1,
     MailContactsSyncPersistenceErrorV1, MailContactsSyncPersistenceV1,
     MailContactsSyncTransitionInputV1, OutboxEnvelopeV1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 use sha2::{Digest, Sha256};
 
 use crate::MAIL_CONTACTS_SYNC_COMMAND_DEADLINE_SECONDS_V1;
 
-const MAIL_RUNTIME_MODULE_ID_V1: &str = "hermes-mail-runtime";
+const MAIL_RUNTIME_MODULE_ID_V1: &str = "makosh-mail-runtime";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct MailContactsSyncProviderRuntimeContextV1 {
@@ -127,7 +127,7 @@ pub async fn consume_mail_address_book_entry_once_v1(
         },
         runtime.now_unix_millis / 1_000 + MAIL_CONTACTS_SYNC_COMMAND_DEADLINE_SECONDS_V1,
         &ContactsCommandEnvelopeContextV1 {
-            module_id: hermes_mail_contacts_sync_api::MAIL_CONTACTS_SYNC_MODULE_ID_V1.to_owned(),
+            module_id: makosh_mail_contacts_sync_api::MAIL_CONTACTS_SYNC_MODULE_ID_V1.to_owned(),
             runtime_instance_id: runtime.runtime_instance_id.clone(),
             runtime_generation: runtime.runtime_generation,
             recorded_at_unix_seconds: runtime.now_unix_millis / 1_000,
@@ -186,7 +186,7 @@ pub async fn consume_mail_address_book_page_completed_once_v1(
         })
         .await
         .map_err(MailContactsSyncProviderEventErrorV1::Persistence)?;
-    if outcome == hermes_mail_contacts_sync_persistence::MailContactsSyncPersistenceOutcomeV1::PendingPrerequisites {
+    if outcome == makosh_mail_contacts_sync_persistence::MailContactsSyncPersistenceOutcomeV1::PendingPrerequisites {
         return Ok(false);
     }
     crate::advance_ready_page_v1(persistence, runtime, run_id)
@@ -248,7 +248,7 @@ fn exact_result(
     record: &OutboxRecordV1,
     contract: MailAddressBookContractV1,
     outcome: ResultOutcomeV1,
-) -> Result<hermes_events_protocol::v1::DurableEnvelopeV1, MailContactsSyncProviderEventErrorV1> {
+) -> Result<makosh_events_protocol::v1::DurableEnvelopeV1, MailContactsSyncProviderEventErrorV1> {
     let envelope = decode_envelope_v1(record.exact_bytes())
         .map_err(|_| MailContactsSyncProviderEventErrorV1::InvalidEnvelope)?;
     validate_source_and_contract(
@@ -273,7 +273,7 @@ fn exact_result(
 }
 
 fn validate_result_identity(
-    envelope: &hermes_events_protocol::v1::DurableEnvelopeV1,
+    envelope: &makosh_events_protocol::v1::DurableEnvelopeV1,
     payload_command_id: &[u8],
     run_id: &[u8; 16],
 ) -> Result<(), MailContactsSyncProviderEventErrorV1> {

@@ -11,5 +11,5 @@ pub const SETTINGS_CONFIGURATION_CATALOG_CAPABILITY_ID: &str = "settings.configu
 
 #[allow(clippy::large_enum_variant)]
 pub mod v1 {
-    include!(concat!(env!("OUT_DIR"), "/hermes.runtime.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.runtime.v1.rs"));
 }

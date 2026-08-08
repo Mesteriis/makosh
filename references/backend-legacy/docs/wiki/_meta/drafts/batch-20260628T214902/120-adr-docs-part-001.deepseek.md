@@ -9,82 +9,82 @@
 ```markdown
 # Индекс архитектурных решений (ADR)
 
-В этом разделе собраны архитектурные решения проекта Hermes Hub.  
+В этом разделе собраны архитектурные решения проекта Макошь.
 Все решения на данный момент имеют статус **Proposed**.
 
-- [[adr-0001-event-sourcing-as-system-spine|ADR-0001 Event Sourcing as System Spine]]  
+- [[adr-0001-event-sourcing-as-system-spine|ADR-0001 Event Sourcing as System Spine]]
   Значимые изменения фиксируются как канонические события, на основе которых строятся проекции, графовые связи, индексы и временные шкалы.
 
-- [[adr-0002-rust-backend|ADR-0002 Rust Backend]]  
+- [[adr-0002-rust-backend|ADR-0002 Rust Backend]]
   Бэкенд реализуется на Rust для координации ингеста, индексации, локального хранения, адаптеров провайдеров, инструментов агентов и десктопной интеграции.
 
-- [[adr-0003-sveltekit-frontend|ADR-0003 SvelteKit Frontend]]  
+- [[adr-0003-sveltekit-frontend|ADR-0003 SvelteKit Frontend]]
   Фронтенд на SvelteKit обеспечивает плотные десктопные рабочие процессы, реактивное состояние, палитру команд и будущую веб-переносимость.
 
-- [[adr-0004-tauri-desktop-shell|ADR-0004 Tauri Desktop Shell]]  
+- [[adr-0004-tauri-desktop-shell|ADR-0004 Tauri Desktop Shell]]
   Tauri используется как десктопная оболочка для локальной интеграции с файлами, сервисами, хранилищем секретов, уведомлениями и возможными мостами к провайдерам.
 
-- [[adr-0005-postgresql-primary-store|ADR-0005 PostgreSQL Primary Store]]  
+- [[adr-0005-postgresql-primary-store|ADR-0005 PostgreSQL Primary Store]]
   PostgreSQL — основное локальное хранилище, объединяющее события, сущности, графоподобные связи, JSONB-полезную нагрузку, миграции и смещения проекций.
 
-- [[adr-0006-tantivy-full-text-search|ADR-0006 Tantivy Full Text Search]]  
+- [[adr-0006-tantivy-full-text-search|ADR-0006 Tantivy Full Text Search]]
   Tantivy обеспечивает локальный полнотекстовый поиск по сообщениям, документам, задачам, контактам и проектам без облачных зависимостей.
 
-- [[adr-0007-replaceable-vector-search|ADR-0007 Replaceable Vector Search]]  
+- [[adr-0007-replaceable-vector-search|ADR-0007 Replaceable Vector Search]]
   Векторный поиск определён за сменяемым интерфейсом; эмбеддинги и индексы рассматриваются как производные артефакты, допускающие перестроение.
 
-- [[adr-0008-knowledge-graph-first|ADR-0008 Knowledge Graph First]]  
+- [[adr-0008-knowledge-graph-first|ADR-0008 Knowledge Graph First]]
   Граф знаний — первоклассный архитектурный компонент, хранящий долгосрочные связи между людьми, организациями, проектами, документами, сообщениями, задачами и решениями с указанием происхождения и уверенности.
 
-- [[adr-0009-local-ai-through-ollama|ADR-0009 Local AI Through Ollama]]  
+- [[adr-0009-local-ai-through-ollama|ADR-0009 Local AI Through Ollama]]
   Ollama используется как начальная граница локального ИИ, чтобы инференс работал по умолчанию без обязательных обращений к облачным моделям.
 
-- [[adr-0010-specialized-agent-system|ADR-0010 Specialized Agent System]]  
-  Вместо одного универсального ассистента вводятся специализированные агенты: HESTIA, HERMES, MNEMOSYNE, ATHENA и HEPHAESTUS, с разделёнными обязанностями и разрешениями.
+- [[adr-0010-specialized-agent-system|ADR-0010 Specialized Agent System]]
+  Вместо одного универсального ассистента вводятся специализированные агенты: HESTIA, MAKOSH, MNEMOSYNE, ATHENA и HEPHAESTUS, с разделёнными обязанностями и разрешениями.
 
-- [[adr-0011-plugin-architecture|ADR-0011 Plugin Architecture]]  
+- [[adr-0011-plugin-architecture|ADR-0011 Plugin Architecture]]
   Архитектура плагинов с манифестами, явными возможностями и ограниченным доступом во время выполнения позволяет развивать интеграции вне ядра.
 
-- [[adr-0012-opentelemetry-observability|ADR-0012 OpenTelemetry Observability]]  
+- [[adr-0012-opentelemetry-observability|ADR-0012 OpenTelemetry Observability]]
   OpenTelemetry обеспечивает трассы, метрики и структурированную наблюдаемость, исключая утечку тел сообщений, секретов и приватного содержимого документов.
 
-- [[adr-0013-local-first-data-ownership|ADR-0013 Local First Data Ownership]]  
+- [[adr-0013-local-first-data-ownership|ADR-0013 Local First Data Ownership]]
   Локальное хранение и работа — режим по умолчанию; облачные сервисы являются опциональными интеграциями, а не обязательной инфраструктурой.
 
-- [[adr-0014-canonical-event-envelope|ADR-0014 Canonical Event Envelope]]  
+- [[adr-0014-canonical-event-envelope|ADR-0014 Canonical Event Envelope]]
   Определена каноническая оболочка события с полями: event ID, тип, версия схемы, таймстемпы, источник, актор, субъект, полезная нагрузка, происхождение, causation и correlation ID.
 
-- [[adr-0015-command-query-separation|ADR-0015 Command Query Separation]]  
+- [[adr-0015-command-query-separation|ADR-0015 Command Query Separation]]
   Команды (изменяющие состояние) и запросы (читающие модели) разделены на границе приложения; это упрощает валидацию, тестирование и ограничение прав агентов.
 
-- [[adr-0016-secrets-and-encryption-boundary|ADR-0016 Secrets and Encryption Boundary]]  
+- [[adr-0016-secrets-and-encryption-boundary|ADR-0016 Secrets and Encryption Boundary]]
   Секреты (токены провайдеров, пароли, приватные ключи) хранятся вне обычных таблиц приложения и доступны через OS‑backed secret store или зашифрованное хранилище.
 
-- [[adr-0017-document-processing-pipeline|ADR-0017 Document Processing Pipeline]]  
+- [[adr-0017-document-processing-pipeline|ADR-0017 Document Processing Pipeline]]
   Асинхронный конвейер обработки документов, запускаемый событиями, отделяет приём файла от дорогостоящих шагов (OCR, извлечение, индексация) и позволяет повторять сбойные операции.
 
-- [[adr-0018-provider-adapter-boundary|ADR-0018 Provider Adapter Boundary]]  
+- [[adr-0018-provider-adapter-boundary|ADR-0018 Provider Adapter Boundary]]
   Адаптеры провайдеров сохраняют сырые исходные записи и порождают нормализованные команды или события, изолируя особенности внешних API.
 
-- [[adr-0019-contact-identity-resolution|ADR-0019 Contact Identity Resolution]]  
+- [[adr-0019-contact-identity-resolution|ADR-0019 Contact Identity Resolution]]
   Идентификация контактов моделируется как набор кандидатов с оценкой уверенности, с явными операциями слияния и разделения; автоматическое объединение для неоднозначных случаев запрещено.
 
-- [[adr-0020-task-candidate-lifecycle|ADR-0020 Task Candidate Lifecycle]]  
+- [[adr-0020-task-candidate-lifecycle|ADR-0020 Task Candidate Lifecycle]]
   ИИ извлекает задачи-кандидаты из сообщений и документов, но активация задачи требует подтверждения пользователя или узко определённой политики.
 
-- [[adr-0021-calendar-as-event-source|ADR-0021 Calendar as Event Source]]  
+- [[adr-0021-calendar-as-event-source|ADR-0021 Calendar as Event Source]]
   Календари рассматриваются как источники событий (встречи, изменения расписания, участие), а не просто UI-виджеты; события встреч обогащают граф и поиск.
 
-- [[adr-0022-no-fine-tuning-on-private-data|ADR-0022 No Fine Tuning on Private Data]]  
+- [[adr-0022-no-fine-tuning-on-private-data|ADR-0022 No Fine Tuning on Private Data]]
   Запрещён файн-тюнинг моделей на приватных данных; вместо этого используются граф, RAG, векторный поиск и структурированная память с возможностью ссылаться на источники.
 
-- [[adr-0023-rebuildable-projections|ADR-0023 Rebuildable Projections]]  
+- [[adr-0023-rebuildable-projections|ADR-0023 Rebuildable Projections]]
   Проекции и индексы рассматриваются как перестраиваемые из канонических событий, сырых записей и артефактов документов; фиксируются версии источников для перестроения.
 
-- [[adr-0024-idempotent-imports|ADR-0024 Idempotent Imports]]  
+- [[adr-0024-idempotent-imports|ADR-0024 Idempotent Imports]]
   Весь импорт идемпотентен: используются идентификаторы провайдера, отпечатки контента, идентификаторы партий импорта и специфичные для источника чекпоинты.
 
-- [[adr-0025-keyboard-first-command-palette|ADR-0025 Keyboard First Command Palette]]  
+- [[adr-0025-keyboard-first-command-palette|ADR-0025 Keyboard First Command Palette]]
   Навигация с клавиатуры и палитра команд — основной UI-паттерн для обеспечения скорости повседневных рабочих процессов технического пользователя.
 ```
 

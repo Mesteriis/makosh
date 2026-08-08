@@ -2,8 +2,8 @@
 
 use std::sync::Arc;
 
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{VaultCiphertextResponseV1, VaultCiphertextRouteV1};
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{VaultCiphertextResponseV1, VaultCiphertextRouteV1};
 
 use crate::runtime::external::sessions::ExternalRuntimeSessions;
 use crate::service::runtime::VaultService;

@@ -257,7 +257,7 @@ mod tests {
 
     fn worker(blob_root: &std::path::Path) -> MailAttachmentScanWorker {
         let pool = PgPoolOptions::new()
-            .connect_lazy("postgres://hermes:hermes@127.0.0.1:30432/hermes")
+            .connect_lazy("postgres://makosh:makosh@127.0.0.1:30432/makosh")
             .expect("lazy test pool");
         MailAttachmentScanWorker::with_blob_root(pool, blob_root)
     }

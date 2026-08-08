@@ -47,8 +47,8 @@ impl_app_store_factory!(
     crate::domains::communications::attachment_dedup::AttachmentDedupStore,
     crate::domains::communications::attachment_search::AttachmentSearchStore,
     crate::domains::communications::bulk_actions::BulkMessageActionStore,
-    hermes_communications_postgres::provider_store::CommunicationProviderAccountStore,
-    hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore,
+    makosh_communications_postgres::provider_store::CommunicationProviderAccountStore,
+    makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore,
     crate::domains::communications::delivery_notifications::CommunicationDeliveryNotificationStore,
     crate::domains::communications::drafts::CommunicationDraftStore,
     crate::domains::communications::finance::CommunicationFinanceStore,
@@ -112,8 +112,8 @@ impl_app_store_factory!(
     crate::domains::tasks::rules::TaskRuleStore,
     crate::domains::tasks::rules::TaskTemplateStore,
     crate::engines::consistency::store::ContradictionObservationStore,
-    hermes_events_postgres::store::EventStore,
-    hermes_observations_postgres::store::ObservationStore,
+    makosh_events_postgres::store::EventStore,
+    makosh_observations_postgres::store::ObservationStore,
     crate::workflows::mail_background_sync::store::MailSyncStore,
 );
 
@@ -144,11 +144,11 @@ pub(crate) fn communication_ingestion_store(
 pub(crate) fn communication_provider_account_store(
     state: &AppState,
 ) -> Result<
-    hermes_communications_postgres::provider_store::CommunicationProviderAccountStore,
+    makosh_communications_postgres::provider_store::CommunicationProviderAccountStore,
     ApiError,
 > {
     Ok(
-        hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
+        makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
             database_pool(state)?,
         ),
     )
@@ -157,11 +157,11 @@ pub(crate) fn communication_provider_account_store(
 pub(crate) fn communication_provider_secret_binding_store(
     state: &AppState,
 ) -> Result<
-    hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore,
+    makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore,
     ApiError,
 > {
     Ok(
-        hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
+        makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
             database_pool(state)?,
         ),
     )

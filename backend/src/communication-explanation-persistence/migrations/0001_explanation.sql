@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communication_explanation_runs (
+CREATE TABLE makosh_data.communication_explanation_runs (
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
     operation_id BYTEA NOT NULL,
@@ -94,13 +94,13 @@ CREATE TABLE hermes_data.communication_explanation_runs (
 );
 
 CREATE INDEX communication_explanation_recoverable_idx
-ON hermes_data.communication_explanation_runs (
+ON makosh_data.communication_explanation_runs (
     logical_owner_id,
     state,
     state_revision
 );
 
-CREATE TABLE hermes_data.communication_explanation_inbox (
+CREATE TABLE makosh_data.communication_explanation_inbox (
     logical_owner_id TEXT NOT NULL,
     result_message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -114,7 +114,7 @@ CREATE TABLE hermes_data.communication_explanation_inbox (
     CHECK (processed_at_unix_millis > 0)
 );
 
-CREATE TABLE hermes_data.communication_explanation_outbox (
+CREATE TABLE makosh_data.communication_explanation_outbox (
     logical_owner_id TEXT NOT NULL,
     message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -134,14 +134,14 @@ CREATE TABLE hermes_data.communication_explanation_outbox (
 );
 
 CREATE INDEX communication_explanation_outbox_pending_idx
-ON hermes_data.communication_explanation_outbox (
+ON makosh_data.communication_explanation_outbox (
     logical_owner_id,
     created_at_unix_millis,
     message_id
 )
 WHERE published_at_unix_millis IS NULL;
 
-CREATE TABLE hermes_data.communication_explanation_realtime (
+CREATE TABLE makosh_data.communication_explanation_realtime (
     realtime_sequence BIGSERIAL PRIMARY KEY,
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
@@ -158,7 +158,7 @@ CREATE TABLE hermes_data.communication_explanation_realtime (
 );
 
 CREATE INDEX communication_explanation_realtime_owner_idx
-ON hermes_data.communication_explanation_realtime (
+ON makosh_data.communication_explanation_realtime (
     logical_owner_id,
     realtime_sequence
 );

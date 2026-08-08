@@ -23,12 +23,12 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-surface',
-	`hermes-surface--${props.tone}`,
-	`hermes-surface--padding-${props.padding}`,
-	`hermes-surface--radius-${props.radius}`,
-	props.bordered && 'hermes-surface--bordered',
-	props.clip && 'hermes-surface--clip',
+	'makosh-surface',
+	`makosh-surface--${props.tone}`,
+	`makosh-surface--padding-${props.padding}`,
+	`makosh-surface--radius-${props.radius}`,
+	props.bordered && 'makosh-surface--bordered',
+	props.clip && 'makosh-surface--clip',
 	props.class
 ])
 </script>

@@ -5,7 +5,7 @@ use testcontainers::{ContainerAsync, GenericImage, ImageExt};
 use super::labels::{session_id_label_value, testkit_labels};
 
 const TEST_POSTGRES_MAX_CONNECTIONS: &str = "300";
-pub const SESSION_POSTGRES_HOST_PORT_ENV: &str = "HERMES_TEST_POSTGRES_HOST_PORT";
+pub const SESSION_POSTGRES_HOST_PORT_ENV: &str = "MAKOSH_TEST_POSTGRES_HOST_PORT";
 
 pub struct PostgresContainer {
     _container: Option<ContainerAsync<GenericImage>>,

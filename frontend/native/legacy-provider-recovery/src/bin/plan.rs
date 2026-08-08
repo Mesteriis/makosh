@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use hermes_legacy_provider_recovery::{
+use makosh_legacy_provider_recovery::{
     LegacyProviderRecoveryBundleV1, LegacyProviderRecoveryErrorV1, LegacyProviderRecoverySessionsV1,
 };
 
@@ -15,7 +15,7 @@ fn main() {
 }
 
 fn run() -> Result<
-    hermes_legacy_provider_recovery::LegacyProviderRecoveryPlanV1,
+    makosh_legacy_provider_recovery::LegacyProviderRecoveryPlanV1,
     LegacyProviderRecoveryErrorV1,
 > {
     let root = parse_args(std::env::args().skip(1))?;

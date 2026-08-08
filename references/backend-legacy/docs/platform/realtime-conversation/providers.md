@@ -73,6 +73,6 @@ Call Intelligence
 Radar/Timeline/Knowledge/Tasks candidates
 ```
 
-The goal is not to make Hermes dependent on any vendor's meeting product. The
+The goal is not to make Макошь dependent on any vendor's meeting product. The
 goal is to use providers as temporary doors into conversations, then store the
-useful evidence in Hermes-owned form.
+useful evidence in Макошь-owned form.

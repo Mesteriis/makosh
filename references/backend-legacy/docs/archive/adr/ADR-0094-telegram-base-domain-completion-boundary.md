@@ -16,14 +16,14 @@ Clarifies:
 
 ## Context
 
-Telegram has reached the base Communication Channel scope for Hermes
+Telegram has reached the base Communication Channel scope for Макошь
 Communications. It provides source evidence, provider commands, communication
 projections, realtime events, identity traces, timeline evidence and media
-evidence for other Hermes systems.
+evidence for other Макошь systems.
 
 Telegram must not become a Memory Engine, Knowledge Engine, Persona Engine,
 Organization Engine, Project Engine, Obligation Engine or Decision Engine.
-Those systems consume Telegram evidence through existing Hermes boundaries.
+Those systems consume Telegram evidence through existing Макошь boundaries.
 
 Several requested Telegram-adjacent features remain valuable, but they require
 separate runtime, permissions, security, media-device or AI review work. Keeping
@@ -46,7 +46,7 @@ Capability states now include:
   confidence.
 - `planned`: intentionally deferred to a named initiative and not part of base
   Telegram completion.
-- `unsupported`: intentionally outside Hermes policy or incompatible with the
+- `unsupported`: intentionally outside Макошь policy or incompatible with the
   current Telegram account/runtime.
 
 The following capabilities are `planned`, not base-domain gaps:

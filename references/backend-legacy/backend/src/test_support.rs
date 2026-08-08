@@ -1,4 +1,4 @@
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::{
     CommunicationProviderKind, NewProviderAccount, ProviderAccount,
 };
 use std::sync::Arc;
@@ -10,11 +10,11 @@ use crate::domains::communications::messages::provider_channel_store::ProviderCh
 use crate::domains::signal_hub::store::{SignalHubStore, SignalRuntimeStateUpdate};
 use crate::integrations::telegram::client::store::TelegramStore;
 use crate::integrations::whatsapp::client::store::WhatsappWebStore;
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
 
-use hermes_communications_api::evidence::StoredRawCommunicationRecord;
+use makosh_communications_api::evidence::StoredRawCommunicationRecord;
 
 pub fn communication_provider_account_store(pool: &PgPool) -> CommunicationProviderAccountStore {
     CommunicationProviderAccountStore::new(pool.clone())
@@ -33,7 +33,7 @@ pub fn telegram_store(pool: &PgPool) -> TelegramStore {
         Arc::new(communication_provider_secret_binding_store(pool)),
         Arc::new(ProviderChannelMessageStore::new(pool.clone())),
         Arc::new(
-            hermes_communications_postgres::store::CommunicationIngestionStore::new(pool.clone()),
+            makosh_communications_postgres::store::CommunicationIngestionStore::new(pool.clone()),
         ),
         Arc::new(
             crate::platform::communications::EventStoreProviderMessageObservationEventPort::new(
@@ -50,7 +50,7 @@ pub fn whatsapp_web_store(pool: &PgPool) -> WhatsappWebStore {
         Arc::new(communication_provider_secret_binding_store(pool)),
         Arc::new(ProviderChannelMessageStore::new(pool.clone())),
         Arc::new(
-            hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore::new(
+            makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore::new(
                 pool.clone(),
             ),
         ),
@@ -103,7 +103,7 @@ pub async fn load_communication_raw_record(
     pool: &PgPool,
     raw_record_id: &str,
 ) -> StoredRawCommunicationRecord {
-    hermes_communications_postgres::store::CommunicationIngestionStore::new(pool.clone())
+    makosh_communications_postgres::store::CommunicationIngestionStore::new(pool.clone())
         .raw_record(raw_record_id)
         .await
         .expect("load communication raw record")

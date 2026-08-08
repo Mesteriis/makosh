@@ -389,7 +389,7 @@ generated_by: code-wiki-ru
 
 Утилиты для drag‑and‑drop сообщений.
 
-- Кастомный MIME‑тип: `MAIL_MESSAGE_DRAG_TYPE = 'application/x-hermes-mail-message-selection'`
+- Кастомный MIME‑тип: `MAIL_MESSAGE_DRAG_TYPE = 'application/x-makosh-mail-message-selection'`
 - Тип `CommunicationMessageDragPayload` с полями `kind: 'mail-message-selection'`, `message_id`, `message_ids`
 - `createCommunicationMessageDragPayload`: нормализует и уникализирует ID, возвращает JSON
 - `parseCommunicationMessageDragPayload`: парсит и валидирует, возвращает `null` при ошибке
@@ -400,7 +400,7 @@ generated_by: code-wiki-ru
 
 Утилиты для перетаскивания и переупорядочивания папок.
 
-- Кастомный MIME‑тип: `MAIL_FOLDER_REORDER_DRAG_TYPE = 'application/x-hermes-mail-folder-reorder'`
+- Кастомный MIME‑тип: `MAIL_FOLDER_REORDER_DRAG_TYPE = 'application/x-makosh-mail-folder-reorder'`
 - Типы: `CommunicationFolderReorderPayload`, `CommunicationFolderOrderUpdate`
 - `createCommunicationFolderReorderPayload` / `parseCommunicationFolderReorderPayload`
 - `hasCommunicationFolderReorderDragType`

@@ -1,12 +1,12 @@
 //! Telegram-owned delivery-intent inbox and resolved jobs.
 
-use hermes_events_protocol::delivery::OutboxRecordV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
 use sqlx::{PgPool, Row};
 
 use crate::TelegramDurablePersistenceError;
 
 pub const TELEGRAM_SCHEMA_V3: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_delivery_intent_inbox (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_delivery_intent_inbox (
     message_id BYTEA PRIMARY KEY,
     envelope_sha256 BYTEA NOT NULL,
     intent_id BYTEA NOT NULL UNIQUE,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.telegram_delivery_intent_inbox (
     CHECK (length(logical_owner_id) BETWEEN 1 AND 256)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_delivery_intent_jobs (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_delivery_intent_jobs (
     intent_id BYTEA PRIMARY KEY,
     command_message_id BYTEA NOT NULL UNIQUE,
     account_id TEXT NOT NULL,
@@ -62,10 +62,10 @@ CREATE TABLE IF NOT EXISTS hermes_data.telegram_delivery_intent_jobs (
 );
 
 CREATE INDEX IF NOT EXISTS telegram_delivery_intent_jobs_claim_idx
-    ON hermes_data.telegram_delivery_intent_jobs
+    ON makosh_data.telegram_delivery_intent_jobs
         (state, next_attempt_at_unix_seconds, intent_id);
 
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_delivery_intent_result_outbox (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_delivery_intent_result_outbox (
     message_id BYTEA PRIMARY KEY,
     envelope_sha256 BYTEA NOT NULL,
     exact_envelope_bytes BYTEA NOT NULL,
@@ -180,7 +180,7 @@ impl TelegramDeliveryIntentStoreV1 {
             .await
             .map_err(|_| TelegramDurablePersistenceError::Database)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.telegram_delivery_intent_inbox
+            "INSERT INTO makosh_data.telegram_delivery_intent_inbox
                 (message_id, envelope_sha256, intent_id, logical_owner_id, state,
                  consumed_at_unix_seconds)
              VALUES ($1, $2, $3, $4, 0, $5)
@@ -197,7 +197,7 @@ impl TelegramDeliveryIntentStoreV1 {
         if inserted.rows_affected() == 0 {
             let row = sqlx::query(
                 "SELECT envelope_sha256, intent_id, logical_owner_id, state
-                 FROM hermes_data.telegram_delivery_intent_inbox
+                 FROM makosh_data.telegram_delivery_intent_inbox
                  WHERE message_id = $1",
             )
             .bind(admission.command_message_id.as_slice())
@@ -236,7 +236,7 @@ impl TelegramDeliveryIntentStoreV1 {
         let route = resolve_route(&mut transaction, admission).await?;
         let outcome = if let Some(route) = route {
             sqlx::query(
-                "INSERT INTO hermes_data.telegram_delivery_intent_jobs
+                "INSERT INTO makosh_data.telegram_delivery_intent_jobs
                     (intent_id, command_message_id, account_id, provider_chat_id,
                      reply_to_provider_message_id, body_reference_id, body_declared_bytes,
                      body_sha256, custody_transfer_source_proof, provider_operation_id,
@@ -261,7 +261,7 @@ impl TelegramDeliveryIntentStoreV1 {
             .await
             .map_err(|_| TelegramDurablePersistenceError::Database)?;
             sqlx::query(
-                "UPDATE hermes_data.telegram_delivery_intent_inbox SET state = 1
+                "UPDATE makosh_data.telegram_delivery_intent_inbox SET state = 1
                  WHERE message_id = $1 AND state = 0",
             )
             .bind(admission.command_message_id.as_slice())
@@ -278,7 +278,7 @@ impl TelegramDeliveryIntentStoreV1 {
             )
             .await?;
             sqlx::query(
-                "UPDATE hermes_data.telegram_delivery_intent_inbox SET state = 2
+                "UPDATE makosh_data.telegram_delivery_intent_inbox SET state = 2
                  WHERE message_id = $1 AND state = 0",
             )
             .bind(admission.command_message_id.as_slice())
@@ -310,7 +310,7 @@ impl TelegramDeliveryIntentStoreV1 {
         let row = sqlx::query(
             "WITH next AS (
                 SELECT intent_id
-                FROM hermes_data.telegram_delivery_intent_jobs
+                FROM makosh_data.telegram_delivery_intent_jobs
                 WHERE state BETWEEN 1 AND 3
                   AND next_attempt_at_unix_seconds <= $1
                   AND (state = 3 OR attempt_count < $2)
@@ -323,14 +323,14 @@ impl TelegramDeliveryIntentStoreV1 {
                 FOR UPDATE SKIP LOCKED
                 LIMIT 1
              )
-             UPDATE hermes_data.telegram_delivery_intent_jobs job
+             UPDATE makosh_data.telegram_delivery_intent_jobs job
              SET claimed_by = $3,
                  lease_expires_at_unix_seconds = $4,
                  attempt_count = CASE
                     WHEN job.state = 3 THEN attempt_count
                     ELSE attempt_count + 1
                  END
-             FROM next, hermes_data.telegram_delivery_intent_inbox inbox
+             FROM next, makosh_data.telegram_delivery_intent_inbox inbox
              WHERE job.intent_id = next.intent_id
                AND inbox.message_id = job.command_message_id
              RETURNING job.*,
@@ -365,7 +365,7 @@ impl TelegramDeliveryIntentStoreV1 {
             return Err(TelegramDurablePersistenceError::InvalidRow);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.telegram_delivery_intent_jobs
+            "UPDATE makosh_data.telegram_delivery_intent_jobs
              SET state = $1,
                  target_body_reference_id = $2,
                  target_body_receipt_sha256 = $3,
@@ -406,7 +406,7 @@ impl TelegramDeliveryIntentStoreV1 {
             return Err(TelegramDurablePersistenceError::InvalidRow);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.telegram_delivery_intent_jobs
+            "UPDATE makosh_data.telegram_delivery_intent_jobs
              SET state = $1,
                  next_attempt_at_unix_seconds = $2,
                  claimed_by = NULL,
@@ -452,7 +452,7 @@ impl TelegramDeliveryIntentStoreV1 {
             return Err(TelegramDurablePersistenceError::InvalidRow);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.telegram_delivery_intent_jobs
+            "UPDATE makosh_data.telegram_delivery_intent_jobs
              SET next_attempt_at_unix_seconds = $1,
                  claimed_by = NULL,
                  lease_expires_at_unix_seconds = NULL
@@ -499,7 +499,7 @@ impl TelegramDeliveryIntentStoreV1 {
             .await
             .map_err(|_| TelegramDurablePersistenceError::Database)?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.telegram_delivery_intent_jobs
+            "UPDATE makosh_data.telegram_delivery_intent_jobs
              SET state = $1,
                  completed_at_unix_seconds = $2,
                  claimed_by = NULL,
@@ -619,10 +619,10 @@ async fn resolve_route(
         sqlx::query(
             "SELECT account.account_id, conversation.provider_chat_id,
                     message.provider_message_id AS reply_to_provider_message_id
-             FROM hermes_data.telegram_delivery_route_accounts account
-             JOIN hermes_data.telegram_delivery_route_conversations conversation
+             FROM makosh_data.telegram_delivery_route_accounts account
+             JOIN makosh_data.telegram_delivery_route_conversations conversation
                ON conversation.account_cursor = account.account_cursor
-             JOIN hermes_data.telegram_delivery_route_messages message
+             JOIN makosh_data.telegram_delivery_route_messages message
                ON message.account_cursor = account.account_cursor
               AND message.conversation_cursor = conversation.conversation_cursor
              WHERE account.account_cursor = $1
@@ -639,8 +639,8 @@ async fn resolve_route(
         sqlx::query(
             "SELECT account.account_id, conversation.provider_chat_id,
                     NULL::TEXT AS reply_to_provider_message_id
-             FROM hermes_data.telegram_delivery_route_accounts account
-             JOIN hermes_data.telegram_delivery_route_conversations conversation
+             FROM makosh_data.telegram_delivery_route_accounts account
+             JOIN makosh_data.telegram_delivery_route_conversations conversation
                ON conversation.account_cursor = account.account_cursor
              WHERE account.account_cursor = $1
                AND conversation.conversation_cursor = $2

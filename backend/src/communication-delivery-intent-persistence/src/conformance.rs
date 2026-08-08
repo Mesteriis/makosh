@@ -36,7 +36,7 @@ impl DeliveryIntentPersistenceConformanceV1 {
     ) -> Result<(), DeliveryIntentPersistenceErrorV1> {
         persistence
             .pool
-            .execute("CREATE SCHEMA IF NOT EXISTS hermes_data;")
+            .execute("CREATE SCHEMA IF NOT EXISTS makosh_data;")
             .await
             .map_err(|_| DeliveryIntentPersistenceErrorV1::StorageUnavailable)?;
         for step in communication_delivery_intent_storage_bundle_v1().steps {

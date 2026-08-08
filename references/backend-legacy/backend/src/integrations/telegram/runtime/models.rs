@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_provider_telegram::tdlib::types::TdlibMediaKind;
+use makosh_provider_telegram::tdlib::types::TdlibMediaKind;
 use serde::{Deserialize, Serialize};
 
 use crate::integrations::telegram::client::errors::TelegramError;

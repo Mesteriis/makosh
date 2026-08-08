@@ -1,20 +1,20 @@
 [package]
-name = "hermes-telegram-calls-testkit"
+name = "makosh-telegram-calls-testkit"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "test"
 owner = "test"
 surface = "test_support"
 
 [dev-dependencies]
-hermes-clock-protocol = { path = "../../../src/platform/clock/protocol" }
-hermes-events-protocol = { path = "../../../src/platform/events" }
-hermes-scheduler-protocol = { path = "../../../src/platform/scheduler/protocol" }
-hermes-telegram-calls-core = { path = "../../../src/telegram-calls-core" }
-hermes-telegram-calls-persistence = { path = "../../../src/telegram-calls-persistence", features = ["conformance-test-support"] }
+makosh-clock-protocol = { path = "../../../src/platform/clock/protocol" }
+makosh-events-protocol = { path = "../../../src/platform/events" }
+makosh-scheduler-protocol = { path = "../../../src/platform/scheduler/protocol" }
+makosh-telegram-calls-core = { path = "../../../src/telegram-calls-core" }
+makosh-telegram-calls-persistence = { path = "../../../src/telegram-calls-persistence", features = ["conformance-test-support"] }
 prost = "=0.14.4"
 prost-types = "=0.14.4"
 sha2 = { version = "=0.10.9", default-features = false }

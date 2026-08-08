@@ -6,16 +6,16 @@ use std::{
     thread,
 };
 
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     NatsRuntimeCredentialDeliveryBindingInputV1, NatsRuntimeCredentialDeliveryBindingV1,
     NatsRuntimeCredentialRecipientPublicKeyV1, RuntimeNatsJwtCredentialV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
     ManagedRuntimeEventCredentialDeliveryV1, managed_runtime_control_request_v1::Operation,
     managed_runtime_control_response_v1::Result as ResponseResult,
 };
-use hermes_scheduler_jetstream::{SchedulerNatsCredentialErrorV1, request_runtime_credential};
+use makosh_scheduler_jetstream::{SchedulerNatsCredentialErrorV1, request_runtime_credential};
 use nats_jwt::KeyPair;
 use prost::Message;
 

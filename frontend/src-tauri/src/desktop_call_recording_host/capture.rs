@@ -4,7 +4,7 @@ use std::time::Duration;
 
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use cpal::{SampleFormat, Stream, StreamConfig};
-use hermes_desktop_call_recording_api::MAX_AUDIO_BYTES_V1;
+use makosh_desktop_call_recording_api::MAX_AUDIO_BYTES_V1;
 
 const OUTPUT_SAMPLE_RATE: u32 = 16_000;
 const WAV_HEADER_BYTES: usize = 44;

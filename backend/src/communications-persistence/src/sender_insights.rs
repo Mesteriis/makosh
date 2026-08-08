@@ -41,7 +41,7 @@ impl CommunicationsDurablePersistence {
         validate_request(account_id, after, limit)?;
         if let Some(account_id) = account_id {
             let exists: bool = sqlx::query_scalar(
-                "SELECT EXISTS(SELECT 1 FROM hermes_data.communications_accounts \
+                "SELECT EXISTS(SELECT 1 FROM makosh_data.communications_accounts \
                  WHERE account_id = $1)",
             )
             .bind(account_id.as_slice())
@@ -66,10 +66,10 @@ impl CommunicationsDurablePersistence {
                    AS first_observed_at_unix_seconds, \
                  MAX(facts.last_observed_at_unix_seconds)::BIGINT \
                    AS last_observed_at_unix_seconds \
-               FROM hermes_data.communications_message_sender_facts facts \
-               JOIN hermes_data.communications_sender_profiles profiles \
+               FROM makosh_data.communications_message_sender_facts facts \
+               JOIN makosh_data.communications_sender_profiles profiles \
                  ON profiles.sender_id = facts.sender_id \
-               JOIN hermes_data.communications_messages messages \
+               JOIN makosh_data.communications_messages messages \
                  ON messages.message_id = facts.message_id \
                WHERE messages.lifecycle_state = 1 \
                  AND messages.direction = 1 \

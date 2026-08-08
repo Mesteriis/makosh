@@ -1,16 +1,16 @@
-# ADR-0172: Hermes UI Kit на базе shadcn-vue / Reka UI
+# ADR-0172: Макошь UI Kit на базе shadcn-vue / Reka UI
 
 Status: Accepted
 
 ## Context
 
-Hermes frontend должен быть переписан как самостоятельный UI-слой без бизнес-логики во Vue-компонентах. Доменный UI не должен напрямую зависеть от конкретной внешней компонентной библиотеки.
+Макошь frontend должен быть переписан как самостоятельный UI-слой без бизнес-логики во Vue-компонентах. Доменный UI не должен напрямую зависеть от конкретной внешней компонентной библиотеки.
 
 Нужна база, которая даёт:
 
 - предсказуемый чистый корпоративный интерфейс;
 - полноценные overlay primitives: dialog, dropdown, popover, tooltip, sheet, command;
-- поддержку light, dark и Hermes signature темы;
+- поддержку light, dark и Макошь signature темы;
 - возможность дорабатывать компоненты в Storybook без запуска backend/Tauri runtime;
 - локальное владение компонентами, а не vendor lock.
 
@@ -21,14 +21,14 @@ Hermes frontend должен быть переписан как самостоя
 ```text
 Reka UI behavior primitives
 ↓
-Hermes UI Kit local components
+Макошь UI Kit local components
 ↓
 shared/ui public API
 ↓
 domain components
 ```
 
-shadcn-vue не подключается как runtime component dependency. Компоненты живут в репозитории и считаются кодом Hermes.
+shadcn-vue не подключается как runtime component dependency. Компоненты живут в репозитории и считаются кодом Макошь.
 
 ## Rules
 
@@ -57,21 +57,21 @@ UI Kit использует CSS custom properties с префиксом `--h-*`.
 
 - `light` — основная рабочая тема;
 - `dark` — нейтральная тёмная тема;
-- `hermes` — фирменный тёмный emerald-интерфейс.
+- `makosh` — фирменный тёмный emerald-интерфейс.
 
 Тема назначается через:
 
 ```html
 <div data-ui-theme="light"></div>
 <div data-ui-theme="dark"></div>
-<div data-ui-theme="hermes"></div>
+<div data-ui-theme="makosh"></div>
 ```
 
 ## Consequences
 
 Плюсы:
 
-- Hermes владеет компонентами;
+- Макошь владеет компонентами;
 - домены не зависят от конкретного vendor API;
 - Storybook становится рабочей средой для UI Kit;
 - можно менять визуальный язык без переписывания доменных компонентов.

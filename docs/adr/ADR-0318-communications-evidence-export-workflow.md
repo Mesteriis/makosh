@@ -40,22 +40,22 @@ content и создание отдельного downloadable artifact, поэт
 Минимальная package topology:
 
 ```text
-hermes-communications-evidence-export-source-api
+makosh-communications-evidence-export-source-api
   Communications-owned durable source command/result contract
 
-hermes-communications-export-api
+makosh-communications-export-api
   workflow client command/status/ticket and artifact-read contracts
 
-hermes-communications-export-core
+makosh-communications-export-core
   one export job state machine and deterministic artifact encoder
 
-hermes-communications-export-persistence
+makosh-communications-export-persistence
   workflow-owned jobs, inbox, outbox and artifact receipt
 
-hermes-communications-export-runtime
+makosh-communications-export-runtime
   client/event/Blob orchestration and runtime fencing
 
-hermes-communications-export-assembly
+makosh-communications-export-assembly
   unsigned release inputs for the independently supervised workflow runtime
 ```
 
@@ -66,7 +66,7 @@ Communications query/content contracts и platform Blob contracts.
 
 Как и domain, integration и engine runtimes, independently supervised workflow
 runtime может зависеть только от общей platform implementation
-`hermes-events-jetstream` для transport adapter Event Hub. Это узкое исключение
+`makosh-events-jetstream` для transport adapter Event Hub. Это узкое исключение
 не разрешает workflow импортировать Event Hub authority, storage или
 owner-specific implementation; business payload остаётся в typed public
 contracts.
@@ -111,7 +111,7 @@ Communications consumer:
 4. создаёт отдельную bounded source copy через exact
    `communications.export-source.blob.v1` write capability;
 5. target-bind-ит source proof только к
-   `communications_export` / `hermes-communications-export-runtime` /
+   `communications_export` / `makosh-communications-export-runtime` /
    `communications_export.source.blob.v1`;
 6. атомарно сохраняет preparation result и exact outbox bytes;
 7. публикует только typed metadata и opaque target-bound receipt/proof.

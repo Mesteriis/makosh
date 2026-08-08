@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { ClientSurfaceIdV1 } from '../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import { ClientSurfaceIdV1 } from '../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import { clientSurfaceCatalog } from './clientSurfaces'
 
 describe('compiled client surface catalog', () => {

@@ -57,7 +57,7 @@ device public keys или revocation state. Поэтому online и offline rec
 
 ### Owner является authority, device является cryptographic principal
 
-Первая версия Hermes имеет одного logical `OwnerAuthority` и любое число
+Первая версия Макошь имеет одного logical `OwnerAuthority` и любое число
 отдельно отзываемых `DeviceIdentity`.
 
 Owner не представлен одним общим private root key или shared secret. Owner
@@ -92,7 +92,7 @@ Trustworthy Control Store хранит только public/control state:
 Initial owner/device enrollment и последующий device revoke + epoch increment
 являются атомарными SQLite transactions.
 
-В Control Store, PostgreSQL, Hermes Vault, backups, logs, events и diagnostics
+В Control Store, PostgreSQL, Макошь Vault, backups, logs, events и diagnostics
 запрещены:
 
 - owner/device private keys;
@@ -194,7 +194,7 @@ Authentication отвечает, какое device доказало владен
 ### Initial desktop enrollment
 
 Первый owner и первый desktop device создаются только для действительно
-pristine Hermes instance.
+pristine Макошь instance.
 
 Tauri host:
 
@@ -232,7 +232,7 @@ Anchor содержит только versioned installation identity и initiali
 - новый отсутствующий data directory может стать pristine instance;
 - существующий anchor + missing/untrusted Control Store означает recovery, а
   не automatic re-enrollment;
-- unexpected Hermes artifacts без valid anchor также означают recovery;
+- unexpected Макошь artifacts без valid anchor также означают recovery;
 - crash между anchor и SQLite commit не открывает повторную enrollment;
 - полное явное удаление data directory создаёт другой instance;
 - restore обязан проверить installation identity либо потребовать explicit

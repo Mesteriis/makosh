@@ -1,7 +1,7 @@
 # FocusTrap
 
 ## Description
-Hermes wrapper around Reka FocusScope.
+Макошь wrapper around Reka FocusScope.
 
 ## When to use
 Use for custom overlay primitives that need contained keyboard focus.

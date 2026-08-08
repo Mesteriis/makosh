@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package makosh.mail.message_location.v1;
+
+enum MailMessageLocationKindV1 {
+  MAIL_MESSAGE_LOCATION_KIND_UNSPECIFIED = 0;
+  MAIL_MESSAGE_LOCATION_KIND_ARCHIVE = 1;
+  MAIL_MESSAGE_LOCATION_KIND_TRASH = 2;
+  MAIL_MESSAGE_LOCATION_KIND_RESTORE = 3;
+  MAIL_MESSAGE_LOCATION_KIND_MOVE = 4;
+}
+
+message MailMessageLocationCommandV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+  string message_id = 3;
+  MailMessageLocationKindV1 kind = 4;
+  optional string target_folder_id = 5;
+}
+
+message MailMessageLocationAcceptedV1 {
+  string operation_id = 1;
+}
+
+message MailMessageLocationStatusRequestV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+}
+
+enum MailMessageLocationOperationOutcomeV1 {
+  MAIL_MESSAGE_LOCATION_OPERATION_OUTCOME_UNSPECIFIED = 0;
+  MAIL_MESSAGE_LOCATION_OPERATION_OUTCOME_PENDING = 1;
+  MAIL_MESSAGE_LOCATION_OPERATION_OUTCOME_SUCCEEDED = 2;
+  MAIL_MESSAGE_LOCATION_OPERATION_OUTCOME_REJECTED = 3;
+  MAIL_MESSAGE_LOCATION_OPERATION_OUTCOME_UNSUPPORTED = 4;
+  MAIL_MESSAGE_LOCATION_OPERATION_OUTCOME_UNKNOWN = 5;
+}
+
+message MailMessageLocationOperationStatusV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+  string message_id = 3;
+  MailMessageLocationKindV1 kind = 4;
+  optional string target_folder_id = 5;
+  MailMessageLocationOperationOutcomeV1 outcome = 6;
+  int64 requested_at_unix_seconds = 7;
+  optional int64 completed_at_unix_seconds = 8;
+  optional uint64 projection_revision = 9;
+}
+
+message MailMessageLocationStatusResponseV1 {
+  optional MailMessageLocationOperationStatusV1 status = 1;
+}
+
+service MailMessageLocationCommandService {
+  rpc Mutate(MailMessageLocationCommandV1) returns (MailMessageLocationAcceptedV1);
+}
+
+service MailMessageLocationQueryService {
+  rpc GetOperationStatus(MailMessageLocationStatusRequestV1)
+      returns (MailMessageLocationStatusResponseV1);
+}

@@ -9,7 +9,7 @@ provider-neutral Communications work.
 
 ## Local Context
 
-Telegram in Hermes is an integration channel, not a product domain. ADR-0097
+Telegram in Макошь is an integration channel, not a product domain. ADR-0097
 keeps durable communication state inside the Communications domain. ADR-0099
 keeps source control, pause/resume/replay and source health inside Signal Hub.
 
@@ -53,7 +53,7 @@ Useful patterns:
 - Topics organize high-volume groups, while privacy and deletion controls make
   provider history mutable.
 
-Hermes interpretation:
+Макошь interpretation:
 
 - folders and topics are useful as local view and workflow inputs, not as a
   reason to build a Telegram clone;
@@ -76,9 +76,9 @@ Useful patterns:
 - cross-device sync and a strong "one app for chats" posture;
 - emphasis on trust, encryption and local/on-device connection where possible.
 
-Hermes interpretation:
+Макошь interpretation:
 
-- unified inbox is useful, but Hermes should differentiate on local-first
+- unified inbox is useful, but Макошь should differentiate on local-first
   evidence, auditability and provider-neutral context rather than chat-client
   aggregation alone.
 
@@ -94,11 +94,11 @@ Useful patterns:
 - assignment, transfer, close and reopen workflows;
 - conversation ownership and status as first-class working state.
 
-Hermes interpretation:
+Макошь interpretation:
 
 - the team-inbox model can be adapted to solo/operator workflows: assign to
   self, defer, close, reopen, track owner state and surface unresolved
-  obligations without turning Hermes into a help desk.
+  obligations without turning Макошь into a help desk.
 
 ### Superhuman
 
@@ -113,7 +113,7 @@ Useful patterns:
 - keyboard-first triage;
 - AI drafting and live sharing/commenting.
 
-Hermes interpretation:
+Макошь interpretation:
 
 - priority lanes and follow-up obligations are higher-value than more raw
   Telegram UI parity;
@@ -133,7 +133,7 @@ Useful patterns:
 - AI-powered search over messages and attachments;
 - automated tasklets for drafts, labels, comments and todo extraction.
 
-Hermes interpretation:
+Макошь interpretation:
 
 - start with local suggestions, drafts, classifications and candidate
   obligations;
@@ -145,9 +145,9 @@ Hermes interpretation:
 1. Unified Telegram inbox work should not imitate Telegram. It should expose
    workable conversations across accounts with local overlays: priority, owner
    state, obligation, trust, source evidence and runtime posture.
-2. Folders, topics and saved messages are not only UI categories. In Hermes
+2. Folders, topics and saved messages are not only UI categories. In Макошь
    they can become local saved/search/task/memory surfaces with provenance.
-3. Follow-up and reminder workflows fit Hermes better than generic chat parity.
+3. Follow-up and reminder workflows fit Макошь better than generic chat parity.
 4. AI should draft, summarize, classify and suggest actions locally first.
    Provider writes stay manually confirmed.
 5. Team-inbox ideas can be reduced to solo/operator workflows: assign to self,
@@ -187,7 +187,7 @@ Generate evidence-backed candidates from Telegram messages:
 - "follow up";
 - "decision pending".
 
-The owner reviews and promotes candidates. Hermes must not automatically create
+The owner reviews and promotes candidates. Макошь must not automatically create
 tasks, obligations or decisions from private messages without review.
 
 Validation ideas:
@@ -224,7 +224,7 @@ Surface local evidence that normal chat clients hide:
 - source citations;
 - scoped export.
 
-This is a Hermes-native differentiator, but it needs careful privacy language
+This is a Макошь-native differentiator, but it needs careful privacy language
 and UI framing.
 
 Validation ideas:

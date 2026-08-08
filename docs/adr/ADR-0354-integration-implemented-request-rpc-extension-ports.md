@@ -77,7 +77,7 @@ command → target event.
 
 ### Первый consumer
 
-`hermes-ollama-ai-runtime` остаётся integration owner `ollama` и реализует exact
+`makosh-ollama-ai-runtime` остаётся integration owner `ollama` и реализует exact
 AI provider generation port. AI inference engine объявляет exact dependency,
 но не импортирует Ollama implementation, persistence или HTTP adapter. Ollama
 integration не импортирует Communications domain и не записывает AI candidate

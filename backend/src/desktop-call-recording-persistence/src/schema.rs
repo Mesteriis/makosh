@@ -1,4 +1,4 @@
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use sha2::{Digest, Sha256};
 
 pub const STORAGE_BUNDLE_REVISION_V1: u32 = 2;
@@ -32,7 +32,7 @@ pub fn desktop_call_recording_storage_bundle_v1() -> StorageBundleV1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_storage_protocol::validation::validate_storage_bundle;
+    use makosh_storage_protocol::validation::validate_storage_bundle;
 
     #[test]
     fn storage_is_integration_owned_and_content_negative() {

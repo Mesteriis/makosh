@@ -31,7 +31,7 @@ test('client system status uses the shared typed Gateway realtime boundary', asy
     ),
     readFile(
       new URL(
-        'src/api/gateway/contracts/proto/hermes/gateway/v1/client_system_status_realtime.proto',
+        'src/api/gateway/contracts/proto/makosh/gateway/v1/client_system_status_realtime.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -83,12 +83,12 @@ test('client system status uses the shared typed Gateway realtime boundary', asy
   assert.match(gatewayRealtime, /system_status_canonical/);
   assert.match(gatewayRealtime, /system_status_is_typed_change_only_and_replayable/);
   assert.match(kernelReconciler, /client_system_status\(store, supervisor, true\)/);
-  assert.match(frontendDecoder, /hermes\.gateway\.system-status/);
+  assert.match(frontendDecoder, /makosh\.gateway\.system-status/);
   assert.match(frontendDecoder, /platform\.system_status\.changed/);
   assert.match(navigationQuery, /getBrowserGatewayRealtimeHub\(\)\.subscribe/);
   assert.doesNotMatch(navigationQuery, /BOOTSTRAP_REFRESH_MS|setInterval/);
   assert.doesNotMatch(
     `${gatewayRealtime}\n${kernelReconciler}`,
-    /hermes-(mail|telegram|whatsapp|zulip)|communications-domain/,
+    /makosh-(mail|telegram|whatsapp|zulip)|communications-domain/,
   );
 });

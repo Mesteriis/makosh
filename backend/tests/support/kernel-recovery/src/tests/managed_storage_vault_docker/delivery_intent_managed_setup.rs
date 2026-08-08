@@ -3,21 +3,21 @@
 use super::*;
 
 use crate::modules::capability::module_request::ModuleRequestRouteHandlerV1;
-use hermes_communication_delivery_intent_api::{
+use makosh_communication_delivery_intent_api::{
     COMMUNICATION_DELIVERY_INTENT_MODULE_ID_V1, COMMUNICATION_DELIVERY_INTENT_OWNER_V1,
 };
-use hermes_communication_delivery_intent_persistence::schema::{
+use makosh_communication_delivery_intent_persistence::schema::{
     COMMUNICATION_DELIVERY_INTENT_STORAGE_BUNDLE_REVISION_V5,
     communication_delivery_intent_storage_bundle_v1,
 };
-use hermes_communication_delivery_intent_runtime::admission::{
+use makosh_communication_delivery_intent_runtime::admission::{
     COMMUNICATION_DELIVERY_INTENT_STORAGE_CAPABILITY_ID_V1,
     communication_delivery_intent_module_descriptor_v1,
     communication_delivery_intent_settings_schema_bytes_v1,
 };
-use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
+use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
 
 use crate::modules::capability::module_query::ModuleQueryRouteHandlerV1;
 use crate::platform::client_realtime::ClientRealtimePublishHandlerV1;
@@ -81,7 +81,7 @@ pub(super) fn admit_delivery_intent_runtime(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             DELIVERY_INTENT_RELEASE_ARTIFACT_ID,
             Sha256::digest(
                 std::fs::read(delivery_intent_binary())
@@ -293,7 +293,7 @@ pub(super) fn restart_delivery_intent_runtime(
 fn delivery_intent_storage_binding(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(
             registration_id,
@@ -305,5 +305,5 @@ fn delivery_intent_storage_binding(
 }
 
 pub(super) fn delivery_intent_binary() -> PathBuf {
-    binary("HERMES_COMMUNICATION_DELIVERY_INTENT_RUNTIME_BIN")
+    binary("MAKOSH_COMMUNICATION_DELIVERY_INTENT_RUNTIME_BIN")
 }

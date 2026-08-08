@@ -1,20 +1,20 @@
 //! Disposable PostgreSQL evidence for exact Scheduler replay preparation.
 
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
         SourceFenceV1, SourceRefV1, durable_envelope_v1::Semantics,
     },
 };
-use hermes_scheduler_persistence::{
+use makosh_scheduler_persistence::{
     SchedulerPostgresStoreV1, SchedulerRecoveryErrorV1, scheduler_storage_bundle_v1,
 };
 use prost::Message;
 use prost_types::Timestamp;
 use sqlx::{PgPool, Postgres, Row, pool::PoolConnection, postgres::PgPoolOptions};
 
-const URL: &str = "HERMES_SCHEDULER_POSTGRES_URL";
+const URL: &str = "MAKOSH_SCHEDULER_POSTGRES_URL";
 const TEST_SCHEMA_LOCK: i64 = 0x4845_524d_4553_5302;
 
 #[tokio::test(flavor = "current_thread")]
@@ -38,7 +38,7 @@ async fn recovery_requeues_only_unaccepted_exact_dispatches_and_preserves_inbox(
         &pool,
         &accepted,
         "published",
-        Some("HERMES_COMMANDS"),
+        Some("MAKOSH_COMMANDS"),
         &accepted,
     )
     .await;
@@ -62,7 +62,7 @@ async fn recovery_rejects_corrupt_exact_dispatch_state_without_mutation() {
     let replay = record([41; 16]);
     insert_run_dispatch(&pool, &replay, "dispatched", 1).await;
     sqlx::query(
-        "UPDATE hermes_platform.scheduler_dispatches SET envelope_sha256 = $2 WHERE message_id = $1",
+        "UPDATE makosh_platform.scheduler_dispatches SET envelope_sha256 = $2 WHERE message_id = $1",
     )
     .bind(replay.message_id().to_vec())
     .bind(vec![0_u8; 32])
@@ -95,7 +95,7 @@ async fn connect_and_install() -> (PgPool, PoolConnection<Postgres>) {
         .execute(&mut *schema_guard)
         .await
         .expect("lock Scheduler recovery schema");
-    sqlx::raw_sql("DROP SCHEMA IF EXISTS hermes_platform CASCADE; CREATE SCHEMA hermes_platform;")
+    sqlx::raw_sql("DROP SCHEMA IF EXISTS makosh_platform CASCADE; CREATE SCHEMA makosh_platform;")
         .execute(&mut *schema_guard)
         .await
         .expect("fresh Scheduler schema");
@@ -119,7 +119,7 @@ async fn insert_run_dispatch(
     created_at: i64,
 ) {
     let id = record.message_id().to_vec();
-    sqlx::query("INSERT INTO hermes_platform.scheduler_runs (run_id, schedule_id, schedule_revision, scheduled_for_unix_ms, lease_epoch, lease_expires_at_unix_ms, state, attempt_count, dispatch_message_id, fire_key, concurrency_key, created_at_unix_ms) VALUES ($1, $2, 1, 1, 1, 60000, $3, 0, $1, $4, $5, $6)")
+    sqlx::query("INSERT INTO makosh_platform.scheduler_runs (run_id, schedule_id, schedule_revision, scheduled_for_unix_ms, lease_epoch, lease_expires_at_unix_ms, state, attempt_count, dispatch_message_id, fire_key, concurrency_key, created_at_unix_ms) VALUES ($1, $2, 1, 1, 1, 60000, $3, 0, $1, $4, $5, $6)")
         .bind(&id)
         .bind(vec![created_at as u8; 16])
         .bind(run_state)
@@ -129,7 +129,7 @@ async fn insert_run_dispatch(
         .execute(pool)
         .await
         .expect("insert recovery run");
-    sqlx::query("INSERT INTO hermes_platform.scheduler_dispatches (run_id, lease_epoch, message_id, envelope_sha256, exact_envelope_bytes, state, published_stream, published_sequence, created_at_unix_ms) VALUES ($1, 1, $1, $2, $3, 'published', 'HERMES_COMMANDS', $4, $4)")
+    sqlx::query("INSERT INTO makosh_platform.scheduler_dispatches (run_id, lease_epoch, message_id, envelope_sha256, exact_envelope_bytes, state, published_stream, published_sequence, created_at_unix_ms) VALUES ($1, 1, $1, $2, $3, 'published', 'MAKOSH_COMMANDS', $4, $4)")
         .bind(id)
         .bind(record.envelope_sha256().to_vec())
         .bind(record.exact_bytes())
@@ -141,12 +141,12 @@ async fn insert_run_dispatch(
 
 async fn insert_inbox(pool: &PgPool, record: &OutboxRecordV1) {
     let id = record.message_id().to_vec();
-    sqlx::query("INSERT INTO hermes_platform.scheduler_run_acceptances (command_message_id, run_id, lease_epoch, observed_at_unix_ms) VALUES ($1, $1, 1, 2)")
+    sqlx::query("INSERT INTO makosh_platform.scheduler_run_acceptances (command_message_id, run_id, lease_epoch, observed_at_unix_ms) VALUES ($1, $1, 1, 2)")
         .bind(&id)
         .execute(pool)
         .await
         .expect("insert acceptance inbox");
-    sqlx::query("INSERT INTO hermes_platform.scheduler_run_results (command_message_id, run_id, lease_epoch, outcome, observed_at_unix_ms) VALUES ($1, $1, 1, 'succeeded', 3)")
+    sqlx::query("INSERT INTO makosh_platform.scheduler_run_results (command_message_id, run_id, lease_epoch, outcome, observed_at_unix_ms) VALUES ($1, $1, 1, 'succeeded', 3)")
         .bind(id)
         .execute(pool)
         .await
@@ -160,7 +160,7 @@ async fn assert_dispatch(
     stream: Option<&str>,
     exact: &OutboxRecordV1,
 ) {
-    let row = sqlx::query("SELECT state, published_stream, published_sequence, envelope_sha256, exact_envelope_bytes FROM hermes_platform.scheduler_dispatches WHERE message_id = $1")
+    let row = sqlx::query("SELECT state, published_stream, published_sequence, envelope_sha256, exact_envelope_bytes FROM makosh_platform.scheduler_dispatches WHERE message_id = $1")
         .bind(key.message_id().to_vec())
         .fetch_one(pool)
         .await
@@ -186,7 +186,7 @@ async fn assert_dispatch(
 
 async fn dispatch_state(pool: &PgPool, message_id: &[u8; 16]) -> String {
     sqlx::query_scalar(
-        "SELECT state FROM hermes_platform.scheduler_dispatches WHERE message_id = $1",
+        "SELECT state FROM makosh_platform.scheduler_dispatches WHERE message_id = $1",
     )
     .bind(message_id.to_vec())
     .fetch_one(pool)
@@ -195,7 +195,7 @@ async fn dispatch_state(pool: &PgPool, message_id: &[u8; 16]) -> String {
 }
 
 async fn run_state(pool: &PgPool, run_id: &[u8; 16]) -> String {
-    sqlx::query_scalar("SELECT state FROM hermes_platform.scheduler_runs WHERE run_id = $1")
+    sqlx::query_scalar("SELECT state FROM makosh_platform.scheduler_runs WHERE run_id = $1")
         .bind(run_id.to_vec())
         .fetch_one(pool)
         .await

@@ -10,7 +10,7 @@ import {
 	ClientSettingValueEntryV1Schema,
 	ClientSettingValueV1Schema,
 	ClientSystemComponentStatusV1Schema,
-} from '../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	eventComponents,
 	publicModuleSettingRows,

@@ -1,6 +1,6 @@
-use hermes_communications_api::accounts::ProviderAccount;
-use hermes_communications_api::errors::CommunicationContractError;
-use hermes_communications_api::provider_messages::{
+use makosh_communications_api::accounts::ProviderAccount;
+use makosh_communications_api::errors::CommunicationContractError;
+use makosh_communications_api::provider_messages::{
     ProviderAttachmentDownloadStateUpdate, ProviderChannelMessage, ProviderHeuristicMember,
     ProviderMessageAttachmentAnchor, ProviderMessageObservationEvent,
     ProviderMessageProjectionObservationContext, ProviderMessageReferenceSummary,
@@ -42,13 +42,13 @@ pub trait ProviderMessageObservationEventPort: Send + Sync {
 
 #[derive(Clone)]
 pub struct EventStoreProviderMessageObservationEventPort {
-    event_store: hermes_events_postgres::store::EventStore,
+    event_store: makosh_events_postgres::store::EventStore,
 }
 
 impl EventStoreProviderMessageObservationEventPort {
     pub fn new(pool: sqlx::postgres::PgPool) -> Self {
         Self {
-            event_store: hermes_events_postgres::store::EventStore::new(pool),
+            event_store: makosh_events_postgres::store::EventStore::new(pool),
         }
     }
 }
@@ -73,7 +73,7 @@ impl ProviderMessageObservationEventPort for EventStoreProviderMessageObservatio
             );
             let event_type =
                 provider_observation_event_type(observation.provider, observation.event_kind);
-            let builder = hermes_events_api::NewEventEnvelope::builder(
+            let builder = makosh_events_api::NewEventEnvelope::builder(
                 format!(
                     "evt_provider_observation_{}",
                     stable_event_id_fragment(&idempotency_key)
@@ -127,7 +127,7 @@ impl ProviderMessageObservationEventPort for EventStoreProviderMessageObservatio
     }
 }
 
-use hermes_communications_api::email::{EmailSendError, OutgoingEmail, SendResult, SmtpConfig};
+use makosh_communications_api::email::{EmailSendError, OutgoingEmail, SendResult, SmtpConfig};
 
 pub trait SmtpTransport: Clone + Send + Sync {
     fn send<'a>(

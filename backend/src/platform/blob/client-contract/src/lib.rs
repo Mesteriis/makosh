@@ -1,8 +1,8 @@
 //! Typed Blob data port. Implementations own transport; callers own grants.
 
-use hermes_runtime_protocol::v1::BlobDataSessionGrantV1;
+use makosh_runtime_protocol::v1::BlobDataSessionGrantV1;
 
-pub const PACKAGE: &str = "hermes-blob-client-contract";
+pub const PACKAGE: &str = "makosh-blob-client-contract";
 
 pub trait BlobReadPort {
     fn read_range(

@@ -1,4 +1,4 @@
-use hermes_attachment_archive_inspection_api::{
+use makosh_attachment_archive_inspection_api::{
     ATTACHMENT_ARCHIVE_INSPECTION_COMMAND_CONTRACT_NAME_V1,
     ATTACHMENT_ARCHIVE_INSPECTION_CONTRACT_MAJOR_V1,
     ATTACHMENT_ARCHIVE_INSPECTION_CONTRACT_REVISION_V1, ATTACHMENT_ARCHIVE_INSPECTION_OWNER_V1,
@@ -6,7 +6,7 @@ use hermes_attachment_archive_inspection_api::{
     ATTACHMENT_ARCHIVE_INSPECTION_REALTIME_CONTRACT_NAME_V1,
     ATTACHMENT_ARCHIVE_INSPECTION_SCHEMA_SHA256,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 
 pub(crate) fn archive_inspection_command_contract_v1() -> ContractReferenceV1 {
     contract(ATTACHMENT_ARCHIVE_INSPECTION_COMMAND_CONTRACT_NAME_V1)

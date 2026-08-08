@@ -5,7 +5,7 @@ use crate::platform::communications::raw_signals::{
     CommunicationRawSignalSource, build_communication_raw_signal_event,
 };
 use crate::platform::events::bus::InMemoryEventBus;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use super::super::errors::TelegramError;
 

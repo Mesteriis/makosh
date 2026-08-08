@@ -2,15 +2,15 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobClientError, BlobDataClient, ManagedBlobCustodyTransferRequestV1,
     request_managed_blob_custody_transfer_v2,
 };
-use hermes_communications_api::CommunicationBodyBlobReferenceV1;
-use hermes_communications_persistence::{
+use makosh_communications_api::CommunicationBodyBlobReferenceV1;
+use makosh_communications_persistence::{
     CommunicationsBodyCustodyTransferErrorV1, CommunicationsDurablePersistence,
 };
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
 
@@ -95,7 +95,7 @@ pub async fn process_next_body_custody_transfer_v1(
     let target_reference_id = match transfer {
         Ok(reference_id) => reference_id,
         Err(error) => {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_communications_custody_blob_error={error:?}");
             }
             match blob_transfer_failure(error) {
@@ -149,14 +149,14 @@ fn storage_error_at(
     stage: &str,
     error: CommunicationsBodyCustodyTransferErrorV1,
 ) -> CommunicationsCustodyWorkerErrorV1 {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_communications_custody_storage_error stage={stage} error={error:?}");
     }
     storage_error(error)
 }
 
 fn unavailable_at(stage: &str) -> CommunicationsCustodyWorkerErrorV1 {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_communications_custody_storage_error stage={stage}");
     }
     CommunicationsCustodyWorkerErrorV1::StorageUnavailable
@@ -184,7 +184,7 @@ fn blob_transfer_failure(error: BlobClientError) -> BlobCustodyTransferFailureV1
 #[cfg(test)]
 mod tests {
     use super::{BlobCustodyTransferFailureV1, blob_transfer_failure};
-    use hermes_blob_client::BlobClientError;
+    use makosh_blob_client::BlobClientError;
 
     #[test]
     fn blob_unavailability_keeps_custody_transfer_pending() {

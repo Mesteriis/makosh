@@ -34,7 +34,7 @@ const TELEGRAM_RECONFIGURATION_ADR_PATH = new URL(
   PROJECT_ROOT,
 );
 const TELEGRAM_CLIENT_PROTO_PATH = new URL(
-  'src/telegram-api/proto/hermes/telegram/v1/client.proto',
+  'src/telegram-api/proto/makosh/telegram/v1/client.proto',
   BACKEND_ROOT,
 );
 const TELEGRAM_CLIENT_CONTRACT_PATH = new URL(
@@ -72,11 +72,11 @@ const WHATSAPP_OPERATIONAL_ADR_PATH = new URL(
   PROJECT_ROOT,
 );
 const WHATSAPP_FRONTEND_GENERATED_READ_PATH = new URL(
-  'frontend/src/gen/hermes/whatsapp/operational/v1/client_pb.ts',
+  'frontend/src/gen/makosh/whatsapp/operational/v1/client_pb.ts',
   PROJECT_ROOT,
 );
 const WHATSAPP_FRONTEND_GENERATED_REPLAY_PATH = new URL(
-  'frontend/src/gen/hermes/whatsapp/operational/realtime/v1/client_pb.ts',
+  'frontend/src/gen/makosh/whatsapp/operational/realtime/v1/client_pb.ts',
   PROJECT_ROOT,
 );
 const WHATSAPP_FRONTEND_READ_CLIENT_PATH = new URL(
@@ -128,11 +128,11 @@ const ZULIP_OPERATIONAL_ADR_PATH = new URL(
   PROJECT_ROOT,
 );
 const ZULIP_OPERATIONAL_PROTO_PATH = new URL(
-  'src/zulip-api/proto/hermes/zulip/operational/v1/client.proto',
+  'src/zulip-api/proto/makosh/zulip/operational/v1/client.proto',
   BACKEND_ROOT,
 );
 const ZULIP_REALTIME_PROTO_PATH = new URL(
-  'src/zulip-api/proto/hermes/zulip/operational/realtime/v1/client.proto',
+  'src/zulip-api/proto/makosh/zulip/operational/realtime/v1/client.proto',
   BACKEND_ROOT,
 );
 const ZULIP_CLIENT_CONTRACT_PATH = new URL(
@@ -151,11 +151,11 @@ const ZULIP_MANAGED_FLOW_PATH = new URL(
   BACKEND_ROOT,
 );
 const ZULIP_FRONTEND_GENERATED_READ_PATH = new URL(
-  'frontend/src/gen/hermes/zulip/operational/v1/client_pb.ts',
+  'frontend/src/gen/makosh/zulip/operational/v1/client_pb.ts',
   PROJECT_ROOT,
 );
 const ZULIP_FRONTEND_GENERATED_REPLAY_PATH = new URL(
-  'frontend/src/gen/hermes/zulip/operational/realtime/v1/client_pb.ts',
+  'frontend/src/gen/makosh/zulip/operational/realtime/v1/client_pb.ts',
   PROJECT_ROOT,
 );
 const ZULIP_FRONTEND_READ_CLIENT_PATH = new URL(
@@ -365,9 +365,9 @@ test('Telegram completion remains closed behind its independent capability slice
   assert.equal(telegramSlices.get('telegram_calls_operational_v1').state, 'implemented');
   assert.equal(telegramSlices.get('telegram_call_signaling_v1').state, 'implemented');
   assert.deepEqual(automationGate.dependsOn, ['telegram_core_operational_v1']);
-  assert.match(automationAdrSource, /hermes-telegram-automation-api/);
-  assert.match(automationAdrSource, /hermes-telegram-automation-core/);
-  assert.match(automationAdrSource, /hermes-telegram-automation-persistence/);
+  assert.match(automationAdrSource, /makosh-telegram-automation-api/);
+  assert.match(automationAdrSource, /makosh-telegram-automation-core/);
+  assert.match(automationAdrSource, /makosh-telegram-automation-persistence/);
   assert.match(automationAdrSource, /telegram\.automation\.query\.v1/);
   assert.match(automationAdrSource, /telegram\.automation\.command\.v1/);
   assert.match(automationAdrSource, /telegram_automation_execution_v1/);
@@ -387,11 +387,11 @@ test('Telegram completion remains closed behind its independent capability slice
   assert.deepEqual(telegramSlices.get('telegram_call_media_v1').dependsOn, [
     'telegram_call_signaling_v1',
   ]);
-  assert.match(callsAdrSource, /hermes-telegram-calls-api/);
-  assert.match(callsAdrSource, /hermes-telegram-calls-core/);
-  assert.match(callsAdrSource, /hermes-telegram-calls-persistence/);
-  assert.match(callsAdrSource, /hermes-telegram-call-media-contract/);
-  assert.match(callsAdrSource, /hermes-telegram-call-media-tgcalls/);
+  assert.match(callsAdrSource, /makosh-telegram-calls-api/);
+  assert.match(callsAdrSource, /makosh-telegram-calls-core/);
+  assert.match(callsAdrSource, /makosh-telegram-calls-persistence/);
+  assert.match(callsAdrSource, /makosh-telegram-call-media-contract/);
+  assert.match(callsAdrSource, /makosh-telegram-call-media-tgcalls/);
   assert.match(callsAdrSource, /telegram\.calls\.query\.v1/);
   assert.match(callsAdrSource, /telegram\.calls\.command\.v1/);
   assert.match(callsAdrSource, /telegram\.calls\.realtime\.v1/);
@@ -421,7 +421,7 @@ test('Telegram completion remains closed behind its independent capability slice
   );
   assert.match(
     telegramPersistenceSource,
-    /position\.order <= 0[\s\S]*DELETE FROM hermes_data\.telegram_chat_position_projections/,
+    /position\.order <= 0[\s\S]*DELETE FROM makosh_data\.telegram_chat_position_projections/,
   );
   assert.match(
     telegramProjectionCacheSource,
@@ -452,7 +452,7 @@ test('Telegram completion remains closed behind its independent capability slice
   assert.match(clientContractSource, /telegram\.reconfiguration\.v1/);
   assert.match(
     clientContractSource,
-    /hermes\.telegram\.v1\.TelegramReconfigurationService\/Execute/,
+    /makosh\.telegram\.v1\.TelegramReconfigurationService\/Execute/,
   );
   assert.match(runtimeAdmissionSource, /TelegramClientContractV1::Reconfiguration/);
   assert.match(
@@ -480,7 +480,7 @@ test('Telegram completion remains closed behind its independent capability slice
     tdlibSource,
     /impl Drop for TdJsonClient[\s\S]*self\.library\.inner\.destroy/,
   );
-  assert.match(tdjsonFixtureSource, /HERMES_STARTUP_RECEIVE_DELAYS/);
+  assert.match(tdjsonFixtureSource, /MAKOSH_STARTUP_RECEIVE_DELAYS/);
   assert.match(
     managedFlowSource,
     /managed_telegram_reconfiguration_route_requires_exact_grant/,
@@ -565,9 +565,9 @@ test('WhatsApp completion admits independent read, realtime and frontend cutover
 
   assert.match(whatsappAdrSource, /whatsapp\.operational\.query\.v1/);
   assert.match(whatsappAdrSource, /whatsapp\.operational\.realtime\.v1/);
-  assert.match(whatsappAdrSource, /hermes-whatsapp-api/);
-  assert.match(whatsappAdrSource, /hermes-whatsapp-core/);
-  assert.match(whatsappAdrSource, /hermes-whatsapp-persistence/);
+  assert.match(whatsappAdrSource, /makosh-whatsapp-api/);
+  assert.match(whatsappAdrSource, /makosh-whatsapp-core/);
+  assert.match(whatsappAdrSource, /makosh-whatsapp-persistence/);
   assert.match(whatsappAdrSource, /DDL-only/);
   assert.match(whatsappAdrSource, /Fake backfill запрещён/);
   assert.match(whatsappAdrSource, /Gate открыт как `implemented`/);

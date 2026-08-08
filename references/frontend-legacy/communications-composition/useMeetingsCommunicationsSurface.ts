@@ -41,7 +41,7 @@ export function useMeetingsCommunicationsSurface() {
           {
             id: 'meetings-context',
             labelKey: 'Meeting context',
-            descriptionKey: 'Agenda, participants, source evidence and pre-meeting Hermes context.',
+            descriptionKey: 'Agenda, participants, source evidence and pre-meeting Макошь context.',
             icon: 'tabler:notes',
             status: 'facade',
             kind: 'projection',

@@ -1,6 +1,6 @@
-use hermes_communications_api::accounts::ProviderAccountCommandPort;
-use hermes_communications_api::accounts::ProviderSecretBindingCommandPort;
-use hermes_communications_api::commands::ProviderCommandMirrorPort;
+use makosh_communications_api::accounts::ProviderAccountCommandPort;
+use makosh_communications_api::accounts::ProviderSecretBindingCommandPort;
+use makosh_communications_api::commands::ProviderCommandMirrorPort;
 mod accounts;
 mod evidence;
 mod ingestion;

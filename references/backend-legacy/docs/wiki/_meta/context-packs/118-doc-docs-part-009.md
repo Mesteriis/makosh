@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docs/platform/event-tracing/testing.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/platform/event-tracing/testing.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/platform/event-tracing/testing.md`
 - Size bytes / Размер в байтах: `1653`
 - Included characters / Включено символов: `1653`
 - Truncated / Обрезано: `no`
@@ -65,7 +65,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ## Purpose
 
-Trace tests prove that Hermes can reconstruct causal event graphs without
+Trace tests prove that Макошь can reconstruct causal event graphs without
 external telemetry infrastructure.
 
 ## Unit Tests
@@ -131,23 +131,23 @@ observation.captured.v1
 
 ### `docs/platform/realtime-conversation/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/platform/realtime-conversation/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/platform/realtime-conversation/README.md`
 - Size bytes / Размер в байтах: `1584`
 - Included characters / Включено символов: `1576`
 - Truncated / Обрезано: `no`
 
 ````markdown
-# Hermes Realtime Conversation Platform
+# Макошь Realtime Conversation Platform
 
 Status: `TARGET_ARCHITECTURE`, 2026-06-28.
 
 The Realtime Conversation Platform is the provider-neutral layer for live
-conversations in Hermes. Zoom, Yandex Telemost, Google Meet, Jitsi, Discord and
-future call providers are external systems. They do not own Hermes memory. They
+conversations in Макошь. Zoom, Yandex Telemost, Google Meet, Jitsi, Discord and
+future call providers are external systems. They do not own Макошь memory. They
 only provide runtime access, links, local capture opportunities and provider
 evidence.
 
-Hermes owns the durable memory object:
+Макошь owns the durable memory object:
 
 ```text
 Live conversation
@@ -187,7 +187,7 @@ was promised and which context it belongs to.
 
 ### `docs/platform/realtime-conversation/architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/platform/realtime-conversation/architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/platform/realtime-conversation/architecture.md`
 - Size bytes / Размер в байтах: `2850`
 - Included characters / Включено символов: `2838`
 - Truncated / Обрезано: `no`
@@ -291,14 +291,14 @@ source = screenshots/screen-00042.png
 ## Reprocessing
 
 The bundle is intentionally artifact-first. When diarization, Whisper, OCR or
-entity extraction improves, Hermes can rerun the pipeline without asking the
+entity extraction improves, Макошь can rerun the pipeline without asking the
 provider for the meeting again. Providers are unreliable memory. Local evidence
 is less glamorous, but it survives product redesigns.
 ````
 
 ### `docs/platform/realtime-conversation/providers.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/platform/realtime-conversation/providers.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/platform/realtime-conversation/providers.md`
 - Size bytes / Размер в байтах: `1817`
 - Included characters / Включено символов: `1799`
 - Truncated / Обрезано: `no`
@@ -379,14 +379,14 @@ Call Intelligence
 Radar/Timeline/Knowledge/Tasks candidates
 ```
 
-The goal is not to make Hermes dependent on any vendor's meeting product. The
+The goal is not to make Макошь dependent on any vendor's meeting product. The
 goal is to use providers as temporary doors into conversations, then store the
-useful evidence in Hermes-owned form.
+useful evidence in Макошь-owned form.
 ````
 
 ### `docs/platform/realtime-conversation/recording-bundle.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/platform/realtime-conversation/recording-bundle.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/platform/realtime-conversation/recording-bundle.md`
 - Size bytes / Размер в байтах: `2746`
 - Included characters / Включено символов: `2614`
 - Truncated / Обрезано: `no`
@@ -499,7 +499,7 @@ new version, but they should not overwrite the evidence they came from.
 
 ### `docs/platform/realtime-conversation/replay-and-live-notes.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/platform/realtime-conversation/replay-and-live-notes.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/platform/realtime-conversation/replay-and-live-notes.md`
 - Size bytes / Размер в байтах: `1556`
 - Included characters / Включено символов: `1514`
 - Truncated / Обрезано: `no`
@@ -511,7 +511,7 @@ Meeting memory should be useful during the meeting and after it.
 
 ## Live notes panel
 
-A meeting WebView can be paired with a Hermes side panel:
+A meeting WebView can be paired with a Макошь side panel:
 
 ```text
 Meeting
@@ -587,7 +587,7 @@ This turns meetings from disposable conversation into searchable evidence.
 
 ### `docs/platform/settings/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/platform/settings/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/platform/settings/README.md`
 - Size bytes / Размер в байтах: `1587`
 - Included characters / Включено символов: `1587`
 - Truncated / Обрезано: `no`
@@ -642,7 +642,7 @@ secret boundary. Secret-like setting keys are rejected.
 
 ### `docs/product/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/product/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/product/README.md`
 - Size bytes / Размер в байтах: `421`
 - Included characters / Включено символов: `421`
 - Truncated / Обрезано: `no`
@@ -665,13 +665,13 @@ They are product-level sources of truth, not implementation status reports.
 
 ### `docs/product/development-roadmap.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/product/development-roadmap.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/product/development-roadmap.md`
 - Size bytes / Размер в байтах: `13769`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
 
 ````markdown
-# Hermes Product Development Roadmap
+# Макошь Product Development Roadmap
 
 ## Status
 
@@ -695,7 +695,7 @@ Communication
   -> Timeline / Dossier / Recall
 ```
 
-Each slice should improve Hermes as one Personal Memory System, not as a set of
+Each slice should improve Макошь as one Personal Memory System, not as a set of
 separate apps.
 
 ## Current Implementation Baseline
@@ -774,7 +774,7 @@ Refactoring plan topics:
 
 ## Slice 3: Knowledge And Polygraph
 
-Goal: make Hermes able to detect conflicts between new evidence and accepted
+Goal: make Макошь able to detect conflicts between new evidence and accepted
 memory.
 
 Documentation outcomes:
@@ -845,7 +845,7 @@ Refactoring plan topics:
 
 ## Slice 7: Operating Surface
 
-Goal: present Hermes as a dense desktop personal operating environment.
+Goal: present Макошь as a dense desktop personal operating environment.
 
 Documentation outcomes:
 
@@ -864,23 +864,23 @@ Refactoring plan topics:
 Recommended order:
 
 1. Product spine: master spec, development roadmap, docs index.
-2. Core domain specs: Communications, 
+2. Core domain specs: Communications,
 ````
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `docs/product/master-spec.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/product/master-spec.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/product/master-spec.md`
 - Size bytes / Размер в байтах: `20811`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
 
 ````markdown
-# Hermes Product Master Spec
+# Макошь Product Master Spec
 
 ## Status
 
-This is the product-level source of truth for active Hermes documentation.
+This is the product-level source of truth for active Макошь documentation.
 
 It describes the target product model and the current implementation baseline at
 the same time. When these differ, the target model governs future product
@@ -892,7 +892,7 @@ implementation details.
 
 ## Canonical Product Definition
 
-Hermes Hub is a local-first Personal Memory System.
+Макошь is a local-first Personal Memory System.
 
 Its product experience is a personal operating surface for:
 
@@ -911,7 +911,7 @@ document viewers are product surfaces, not the product thesis.
 
 ## Product Thesis
 
-Hermes turns communications into durable personal memory and actionable context.
+Макошь turns communications into durable personal memory and actionable context.
 
 The core product cycle is:
 
@@ -926,7 +926,7 @@ Communication
   -> Timeline / Dossier / Recall
 ```
 
-Hermes should help the owner answer:
+Макошь should help the owner answer:
 
 - what happened;
 - who and what is involved;
@@ -936,9 +936,9 @@ Hermes should help the owner answer:
 - what obligations, decisions or tasks emerged;
 - what context is needed before acting.
 
-## What Hermes Is Not
+## What Макошь Is Not
 
-Hermes is not:
+Макошь is not:
 
 - an email client;
 - a messenger;
@@ -950,12 +950,12 @@ Hermes is not:
 - a generic knowledge base;
 - an AI chatbot.
 
-These surfaces may exist inside Hermes, but only as views and workflows over one
+These surfaces may exist inside Макошь, but only as views and workflows over one
 source-backed memory system.
 
 ## Communication As Primary Ingestion Spine
 
-Communication is the primary way real-world signals enter Hermes.
+Communication is the primary way real-world signals enter Макошь.
 
 Communication includes:
 
@@ -983,7 +983,7 @@ records can also create durable memory.
 
 ## Source Evidence To Memory Flow
 
-Hermes must preserve evidence before extracting meaning.
+Макошь must preserve evidence before extracting meaning.
 
 ```text
 Provider or local source
@@ -1007,7 +1007,7 @@ Rules:
 
 ## Domain Model
 
-Hermes domains are not separate applications. They are ownership boundaries
+Макошь domains are not separate applications. They are ownership boundaries
 inside one memory system.
 
 | Domain | Product role | Source-of-truth responsibility |
@@ -1210,7 +1210,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/product/product-charter.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/product/product-charter.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/product/product-charter.md`
 - Size bytes / Размер в байтах: `2282`
 - Included characters / Включено символов: `2282`
 - Truncated / Обрезано: `no`
@@ -1220,7 +1220,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ## Purpose
 
-Hermes Hub creates a personal operational memory layer around communications,
+Макошь creates a personal operational memory layer around communications,
 documents, projects, relationships, decisions and obligations. The product helps
 the owner understand what happened, what matters, what requires action and how
 entities connect.
@@ -1235,7 +1235,7 @@ See the canonical foundation documents:
 
 The primary user is one technically strong owner who manages personal and
 professional communications, documents, projects, relationships, obligations and
-knowledge. Hermes is a personal system first; architecture should not block
+knowledge. Макошь is a personal system first; architecture should not block
 future family/team modes, but those modes are not the current product identity.
 
 The owner is represented inside the world model by the Owner Persona.
@@ -1251,7 +1251,7 @@ The owner is represented inside the world model by the Owner Persona.
 - AI-assisted triage with user control;
 - analysis of changes over time;
 - context preparation before meetings or actions;
-- explanation of why Hermes produced a conclusion.
+- explanation of why Макошь produced a conclusion.
 
 ## Product Constraints
 
@@ -1265,7 +1265,7 @@ The owner is represented inside the world model by the Owner Persona.
 
 ## Product Quality
 
-Hermes should feel like a serious personal operating environment, not a
+Макошь should feel like a serious personal operating environment, not a
 dashboard collection. The UI should be fast, dense, keyboard-first and
 contextual.
 
@@ -1282,7 +1282,7 @@ contextual.
 
 ### `docs/product/product-scope.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/product/product-scope.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/product/product-scope.md`
 - Size bytes / Размер в байтах: `3511`
 - Included characters / Включено символов: `3511`
 - Truncated / Обрезано: `no`
@@ -1399,7 +1399,7 @@ should not unnecessarily block future work.
 
 ### `docs/refactoring/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/refactoring/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/refactoring/README.md`
 - Size bytes / Размер в байтах: `582`
 - Included characters / Включено символов: `582`
 - Truncated / Обрезано: `no`
@@ -1423,7 +1423,7 @@ It is not a replacement for ADRs when an architectural decision changes.
 
 ### `docs/refactoring/documentation-code-alignment-report.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/refactoring/documentation-code-alignment-report.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/refactoring/documentation-code-alignment-report.md`
 - Size bytes / Размер в байтах: `5416`
 - Included characters / Включено символов: `5416`
 - Truncated / Обрезано: `no`
@@ -1590,7 +1590,7 @@ Checks run for this report:
 
 ### `docs/refactoring/implementation-alignment-plan.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/refactoring/implementation-alignment-plan.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/refactoring/implementation-alignment-plan.md`
 - Size bytes / Размер в байтах: `32911`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1599,7 +1599,7 @@ Checks run for this report:
 # Implementation Alignment Plan
 
 This document maps the current repository implementation to the canonical
-Hermes product model.
+Макошь product model.
 
 It is a planning document only. It does not authorize code changes, route
 renames, schema migrations or API redesign without a follow-up implementation
@@ -1619,7 +1619,7 @@ Canonical references:
 - [ADR-0087 Contradiction Observation Persistence](../adr/ADR-0087-contradiction-observation-persistence.md)
 - [ADR-0088 Obligation Persistence](../adr/ADR-0088-obligation-persistence.md)
 
-Hermes is a local-first Personal Memory System. Communications are the primary
+Макошь is a local-first Personal Memory System. Communications are the primary
 ingestion spine. Domains own source-of-truth entities. Engines produce derived
 views, candidates, scores and review items.
 
@@ -1655,10 +1655,10 @@ implementation evidence:
   local surface coverage, not product-wide completion of Memory, Knowledge,
   Obligations, Decisions or Polygraph.
 - `docs/architecture/security-model.md` now follows ADR-0056 and current code:
-  `HERMES_LOCAL_API_SECRET` plus `X-Hermes-Secret` are current; token/actor-id
+  `MAKOSH_LOCAL_API_SECRET` plus `X-Макошь-Secret` are current; token/actor-id
   headers are historical terms from superseded ADRs.
 - `docs/architecture/context-diagram.md` and
-  `docs/architecture/container-diagram.md` now show Hermes as the Personal
+  `docs/architecture/container-diagram.md` now show Макошь as the Personal
   Memory System with Communications, Events, Documents, shared Engines and the
   Owner Persona.
 - `docs/reviews/backend-architecture-review-2026-06-06.md` is explicitly marked
@@ -1691,7 +1691,7 @@ implementation evidence:
   expose GET/PUT `/api/v1/persons/owner` as the compatibility route for reading
   and assigning the current Owner Persona.
 - `/api/v1/ai/agents` now materializes registry-backed AI agents (`HESTIA`,
-  `HERMES`, `MNEMOSYNE`, `ATHENA`, `HEPHAESTUS`) as `persona_type = ai_agent`
+  `MAKOSH`, `MNEMOSYNE`, `ATHENA`, `HEPHAESTUS`) as `persona_type = ai_agent`
   Personas and graph nodes. Compatibility email identities use lowercase agent
   IDs at `sh-inc.ru`, such as `hestia@sh-inc.ru`.
 - `ai_agent_runs` now stores `agent_persona_id` and `owner_persona_id`
@@ -1800,7 +1800,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/refactoring/naming-conflicts-inventory.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/refactoring/naming-conflicts-inventory.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/refactoring/naming-conflicts-inventory.md`
 - Size bytes / Размер в байтах: `6589`
 - Included characters / Включено символов: `5724`
 - Truncated / Обрезано: `no`
@@ -1946,7 +1946,7 @@ pub enum SemanticSourceKind {
 
 ### `docs/refactoring/product-alignment-plan.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/refactoring/product-alignment-plan.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/refactoring/product-alignment-plan.md`
 - Size bytes / Размер в байтах: `10728`
 - Included characters / Включено символов: `10728`
 - Truncated / Обрезано: `no`
@@ -2154,7 +2154,7 @@ Every future refactoring plan must include:
 
 ### `docs/refactoring/ui-states-inventory.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/refactoring/ui-states-inventory.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/refactoring/ui-states-inventory.md`
 - Size bytes / Размер в байтах: `8899`
 - Included characters / Включено символов: `7531`
 - Truncated / Обрезано: `no`
@@ -2316,7 +2316,7 @@ Every future refactoring plan must include:
 
 ### `docs/research/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/research/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/research/README.md`
 - Size bytes / Размер в байтах: `292`
 - Included characters / Включено символов: `292`
 - Truncated / Обрезано: `no`
@@ -2336,7 +2336,7 @@ research must graduate into product docs, architecture docs or ADRs.
 
 ### `docs/research/open-questions.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/research/open-questions.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/research/open-questions.md`
 - Size bytes / Размер в байтах: `2640`
 - Included characters / Включено символов: `2640`
 - Truncated / Обрезано: `no`
@@ -2385,7 +2385,7 @@ docs, follow the canonical docs and update this backlog.
 
 ### `docs/reviews/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/reviews/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/reviews/README.md`
 - Size bytes / Размер в байтах: `330`
 - Included characters / Включено символов: `330`
 - Truncated / Обрезано: `no`
@@ -2405,7 +2405,7 @@ architecture document or product spec explicitly promotes them.
 
 ### `docs/reviews/backend-architecture-review-2026-06-06.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/reviews/backend-architecture-review-2026-06-06.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/reviews/backend-architecture-review-2026-06-06.md`
 - Size bytes / Размер в байтах: `18203`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2461,12 +2461,12 @@ Important corrections:
 - Migrations currently run through **0024**, not 0023.
 - `backend/src/lib.rs` is **3,784 lines**.
 - Binary targets are **small** at present:
-  - `hermes_email_sync_dev.rs` - 302 lines
-  - `hermes_email_fixture_export.rs` - 224 lines
-  - `hermes_email_fixture_dev.rs` - 148 lines
-  - `hermes_graph_project.rs` - 79 lines
-  - `hermes_document_process.rs` - 65 lines
-- The original concern that `hermes_email_sync_dev` is a 10k-line production-sized binary is not true in the current tree.
+  - `makosh_email_sync_dev.rs` - 302 lines
+  - `makosh_email_fixture_export.rs` - 224 lines
+  - `makosh_email_fixture_dev.rs` - 148 lines
+  - `makosh_graph_project.rs` - 79 lines
+  - `makosh_document_process.rs` - 65 lines
+- The original concern that `makosh_email_sync_dev` is a 10k-line production-sized binary is not true in the current tree.
 
 ## Current State
 
@@ -2820,7 +2820,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/roadmap/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/roadmap/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/roadmap/README.md`
 - Size bytes / Размер в байтах: `577`
 - Included characters / Включено символов: `577`
 - Truncated / Обрезано: `no`
@@ -2846,7 +2846,7 @@ direction lives in `docs/product/`.
 
 ### `docs/roadmap/product-roadmap.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/roadmap/product-roadmap.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/roadmap/product-roadmap.md`
 - Size bytes / Размер в байтах: `5004`
 - Included characters / Включено символов: `5004`
 - Truncated / Обрезано: `no`
@@ -2976,7 +2976,7 @@ Goals:
 Key functions:
 
 - HESTIA coordinator
-- HERMES communication agent
+- MAKOSH communication agent
 - MNEMOSYNE memory agent
 - ATHENA analytics agent
 - source-backed AI search answers
@@ -3050,7 +3050,7 @@ Closure tracking:
 
 Goals:
 
-- mature Hermes Hub into a durable personal knowledge operating system
+- mature Макошь into a durable personal knowledge operating system
 - support deep memory analytics and explainable recall across years
 - make replacement of models and indexes routine
 
@@ -3094,7 +3094,7 @@ Closure tracking:
 
 ### `docs/roadmap/v1-closure-checklist.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/roadmap/v1-closure-checklist.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/roadmap/v1-closure-checklist.md`
 - Size bytes / Размер в байтах: `2377`
 - Included characters / Включено символов: `2377`
 - Truncated / Обрезано: `no`
@@ -3104,7 +3104,7 @@ Closure tracking:
 
 ## Release Goal
 
-Version 1.0 is complete when a user can run Hermes Hub locally, add
+Version 1.0 is complete when a user can run Макошь locally, add
 Gmail/iCloud/IMAP accounts, import email fixture data or read-only provider
 email batches, inspect canonical messages and Persona-compatible identity
 records, search local memory, import Markdown/PDF files into the document

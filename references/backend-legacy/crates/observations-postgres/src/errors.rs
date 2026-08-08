@@ -1,8 +1,8 @@
-use hermes_events_api::EventEnvelopeError;
-use hermes_observations_api::errors::ObservationValidationError;
+use makosh_events_api::EventEnvelopeError;
+use makosh_observations_api::errors::ObservationValidationError;
 use thiserror::Error;
 
-use hermes_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::errors::EventStoreError;
 
 #[derive(Debug, Error)]
 pub enum ObservationStoreError {

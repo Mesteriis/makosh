@@ -1,10 +1,10 @@
 use super::common::*;
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     PlatformStorageBindingInputV1, PlatformStorageBindingV1, PlatformStorageBundleV1,
     PlatformStorageEndpointV1, PlatformStorageTopology, PlatformStorageTopologyInputV1,
     StorageDeploymentProfileV1,
 };
-use hermes_storage_protocol::v1::{
+use makosh_storage_protocol::v1::{
     StorageBundleV1, StorageMigrationStepV1, StorageRuntimeConfigurationV1,
 };
 use prost::Message;
@@ -16,7 +16,7 @@ use crate::platform::storage::topology::{
 
 #[test]
 fn control_store_persists_only_monotonic_fenced_storage_topology() {
-    let root = unique_target_root("hermes-storage-topology");
+    let root = unique_target_root("makosh-storage-topology");
     std::fs::create_dir_all(&root).expect("create fixture root");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -54,7 +54,7 @@ fn control_store_persists_only_monotonic_fenced_storage_topology() {
 
 #[test]
 fn control_store_rejects_an_untrusted_storage_topology_shape() {
-    let root = unique_target_root("hermes-storage-topology-invalid");
+    let root = unique_target_root("makosh-storage-topology-invalid");
     std::fs::create_dir_all(&root).expect("create fixture root");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -62,7 +62,7 @@ fn control_store_rejects_an_untrusted_storage_topology_shape() {
         revision: 1,
         storage_generation: 1,
         storage_instance_id: "storage_main".to_owned(),
-        database_id: "hermes".to_owned(),
+        database_id: "makosh".to_owned(),
         deployment_profile: StorageDeploymentProfileV1::MacosTauriEmbedded,
         postgres_endpoint: endpoint(5_432),
         pgbouncer_endpoint: endpoint(6_432),
@@ -75,7 +75,7 @@ fn control_store_rejects_an_untrusted_storage_topology_shape() {
         revision: 1,
         storage_generation: 1,
         storage_instance_id: "storage_main".to_owned(),
-        database_id: "hermes".to_owned(),
+        database_id: "makosh".to_owned(),
         deployment_profile: StorageDeploymentProfileV1::MacosTauriEmbedded,
         postgres_endpoint: PlatformStorageEndpointV1::new("not/a-host", 5_432),
         pgbouncer_endpoint: endpoint(6_432),
@@ -98,9 +98,9 @@ fn runtime_configuration_stages_only_durable_bindings_for_the_current_topology()
         topology: &current,
         bindings: &[binding(1, 1, *bundle.digest())],
         bundles: &[bundle],
-        pgbouncer_database_config_path: &unique_target_root("hermes-storage-pgbouncer")
+        pgbouncer_database_config_path: &unique_target_root("makosh-storage-pgbouncer")
             .join("databases.ini"),
-        pgbouncer_auth_file_path: &unique_target_root("hermes-storage-pgbouncer").join("users.txt"),
+        pgbouncer_auth_file_path: &unique_target_root("makosh-storage-pgbouncer").join("users.txt"),
         vault_instance_id: "vault_main",
         vault_runtime_generation: 3,
         vault_hpke_public_key_x25519: &[7; 32],
@@ -124,9 +124,9 @@ fn runtime_configuration_stages_only_durable_bindings_for_the_current_topology()
         topology: &current,
         bindings: &[binding(1, 2, [7; 32])],
         bundles: &[],
-        pgbouncer_database_config_path: &unique_target_root("hermes-storage-pgbouncer-stale")
+        pgbouncer_database_config_path: &unique_target_root("makosh-storage-pgbouncer-stale")
             .join("databases.ini"),
-        pgbouncer_auth_file_path: &unique_target_root("hermes-storage-pgbouncer-stale")
+        pgbouncer_auth_file_path: &unique_target_root("makosh-storage-pgbouncer-stale")
             .join("users.txt"),
         vault_instance_id: "vault_main",
         vault_runtime_generation: 3,
@@ -143,7 +143,7 @@ fn topology(revision: u64, generation: u64) -> PlatformStorageTopology {
         revision,
         storage_generation: generation,
         storage_instance_id: "storage_main".to_owned(),
-        database_id: "hermes".to_owned(),
+        database_id: "makosh".to_owned(),
         deployment_profile: StorageDeploymentProfileV1::MacosTauriEmbedded,
         postgres_endpoint: endpoint(5_432),
         pgbouncer_endpoint: endpoint(6_432),
@@ -183,7 +183,7 @@ fn binding(
 }
 
 fn storage_bundle() -> PlatformStorageBundleV1 {
-    let sql = b"CREATE TABLE hermes_data.owner_notes_probe (probe_id uuid);".to_vec();
+    let sql = b"CREATE TABLE makosh_data.owner_notes_probe (probe_id uuid);".to_vec();
     let bundle = StorageBundleV1 {
         major: 1,
         revision: 1,

@@ -8,8 +8,8 @@ use thiserror::Error;
 use crate::engines::enrichment::{
     engine::EnrichmentEngine, errors::EnrichmentEngineError as SharedEnrichmentEngineError,
 };
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::review_links::materialize_review_transition_link as materialize_review_link;
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::review_links::materialize_review_transition_link as materialize_review_link;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct EnrichmentResult {

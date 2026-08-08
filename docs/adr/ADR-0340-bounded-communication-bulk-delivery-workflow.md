@@ -43,11 +43,11 @@ integration/domain command capabilities. Текущий gate восстанав�
 сборки:
 
 ```text
-hermes-communication-bulk-action-api
-hermes-communication-bulk-action-core
-hermes-communication-bulk-action-persistence
-hermes-communication-bulk-action-runtime
-hermes-communication-bulk-action-assembly
+makosh-communication-bulk-action-api
+makosh-communication-bulk-action-core
+makosh-communication-bulk-action-persistence
+makosh-communication-bulk-action-runtime
+makosh-communication-bulk-action-assembly
 ```
 
 API содержит только generated Protobuf request/result contracts. Core

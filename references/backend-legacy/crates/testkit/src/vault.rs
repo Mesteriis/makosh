@@ -1,7 +1,7 @@
 use std::path::{Path, PathBuf};
 use std::sync::{Mutex, OnceLock};
 
-use hermes_hub_backend::platform::config::app_config::AppConfig;
+use makosh_hub_backend::platform::config::app_config::AppConfig;
 use tempfile::TempDir;
 
 static RETAINED_VAULTS: OnceLock<Mutex<Vec<TestVault>>> = OnceLock::new();
@@ -20,7 +20,7 @@ pub struct TestVault {
 impl TestVault {
     pub fn new() -> Self {
         let dir = tempfile::Builder::new()
-            .prefix("hermes-test-vault-")
+            .prefix("makosh-test-vault-")
             .tempdir()
             .expect("create temporary test vault directory");
 

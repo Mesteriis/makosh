@@ -3,8 +3,8 @@ use std::sync::{
     atomic::{AtomicU64, Ordering},
 };
 
-use hermes_communications_runtime::admission::COMMUNICATIONS_EXPORT_SOURCE_BLOB_CAPABILITY_ID;
-use hermes_runtime_protocol::v1::{
+use makosh_communications_runtime::admission::COMMUNICATIONS_EXPORT_SOURCE_BLOB_CAPABILITY_ID;
+use makosh_runtime_protocol::v1::{
     BlobDataOperationV1, ManagedRuntimeBlobCustodyDelegationDeliveryV1,
     ManagedRuntimeBlobCustodyDelegationRequestV1, ManagedRuntimeBlobSessionDeliveryV1,
     ManagedRuntimeBlobSessionRequestV1,
@@ -116,7 +116,7 @@ pub(super) fn communications_export_rejection_code(database_id: &str, export_id:
             .expect("connect export race conformance database");
         let code = sqlx::query_scalar::<_, i16>(
             "SELECT rejection_code
-             FROM hermes_data.communications_export_jobs
+             FROM makosh_data.communications_export_jobs
              WHERE export_id = $1",
         )
         .bind(export_id.as_slice())
@@ -135,7 +135,7 @@ fn force_canonical_revision_change(mutation: ArmedRevisionMutationV1) -> Result<
         runtime.block_on(async move {
             let pool = admin_pool(&mutation.database_id).await?;
             let revision = sqlx::query_scalar::<_, i64>(
-                "UPDATE hermes_data.communications_messages
+                "UPDATE makosh_data.communications_messages
                  SET canonical_revision = canonical_revision + 1
                  WHERE message_id = $1 AND lifecycle_state = 1
                  RETURNING canonical_revision",
@@ -158,19 +158,19 @@ fn force_canonical_revision_change(mutation: ArmedRevisionMutationV1) -> Result<
 async fn admin_pool(database_id: &str) -> Result<sqlx::PgPool, String> {
     let password = Zeroizing::new(
         std::fs::read_to_string(required(
-            "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+            "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
         ))
         .map_err(|_| "disposable PostgreSQL credential is unavailable".to_owned())?
         .trim()
         .to_owned(),
     );
-    let port = required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+    let port = required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
         .parse()
         .map_err(|_| "disposable PostgreSQL port is invalid".to_owned())?;
     let options = PgConnectOptions::new()
-        .host(&required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
+        .host(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
         .port(port)
-        .username("hermes_postgres_admin")
+        .username("makosh_postgres_admin")
         .password(password.as_str())
         .database(database_id)
         .ssl_mode(PgSslMode::Disable);

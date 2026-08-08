@@ -1,4 +1,4 @@
-import type { AttachmentPreviewContentTypeV1 } from '../../../gen/hermes/attachment_preview/v1/preview_pb'
+import type { AttachmentPreviewContentTypeV1 } from '../../../gen/makosh/attachment_preview/v1/preview_pb'
 
 export type AttachmentPreviewPanelStatus =
 	| 'idle'

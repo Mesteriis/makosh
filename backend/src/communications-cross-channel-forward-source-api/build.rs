@@ -9,7 +9,7 @@ fn main() {
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
             &[
-                "proto/hermes/communications/cross_channel_forward_source/v1/cross_channel_forward_source.proto",
+                "proto/makosh/communications/cross_channel_forward_source/v1/cross_channel_forward_source.proto",
             ],
             &["proto"],
         )

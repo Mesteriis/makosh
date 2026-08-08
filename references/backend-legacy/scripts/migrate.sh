@@ -10,12 +10,12 @@ source "$SCRIPT_DIR/lib/env.sh"
 # shellcheck source=./lib/postgres.sh
 source "$SCRIPT_DIR/lib/postgres.sh"
 
-load_hermes_env
+load_makosh_env
 ensure_command cargo
 postgres_up
 
 info "Running backend-managed SQLx migrations"
 CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$CARGO_DEV_TARGET_DIR}" \
-	HERMES_LOG_FORMAT=plain \
-	cargo run --manifest-path "$REPO_ROOT/backend/Cargo.toml" --bin hermes_migrate
+	MAKOSH_LOG_FORMAT=plain \
+	cargo run --manifest-path "$REPO_ROOT/backend/Cargo.toml" --bin makosh_migrate
 success "Migrations applied successfully"

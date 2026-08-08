@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use hermes_obligations_api::ObligationRead;
+use makosh_obligations_api::ObligationRead;
 
 #[derive(Debug, Deserialize)]
 pub(crate) struct ObligationReviewApiRequest {

@@ -1,6 +1,6 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     AI_CONTRACT_MAJOR_V1, AI_CONTRACT_REVISION_V1, AI_CONTRACTS_SCHEMA_SHA256,
     AI_LOCAL_EGRESS_POLICY_REVISION_V1, AI_MAX_OUTPUT_BYTES_V1, AI_MAX_OUTPUT_TOKENS_V1,
     seal_attachment_translation_inference_request_v1,
@@ -9,11 +9,11 @@ use hermes_ai_contracts::{
         AttachmentTranslationInferenceRequestV1,
     },
 };
-use hermes_attachment_translation_core::{
+use makosh_attachment_translation_core::{
     AttachmentTranslationLanguageV1, AttachmentTranslationRejectionCodeV1,
     AttachmentTranslationStateV1, AttachmentTranslationTransitionV1,
 };
-use hermes_attachment_translation_ingress::{
+use makosh_attachment_translation_ingress::{
     attachment_translation_source_prepared_contract_reference_v1,
     attachment_translation_source_rejected_contract_reference_v1,
     attachment_translation_source_request_id_v1,
@@ -22,20 +22,20 @@ use hermes_attachment_translation_ingress::{
         AttachmentTranslationSourceRejectedV1,
     },
 };
-use hermes_attachment_translation_persistence::{
+use makosh_attachment_translation_persistence::{
     AttachmentTranslationPersistenceErrorV1, AttachmentTranslationPersistenceV1,
     AttachmentTranslationSourceResultV1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ResultOutcomeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::ContractReferenceV1,
 };
@@ -53,7 +53,7 @@ use crate::{
 };
 
 const ATTACHMENT_TEXT_EXTRACTION_RUNTIME_MODULE_ID_V1: &str =
-    "hermes-attachment-text-extraction-runtime";
+    "makosh-attachment-text-extraction-runtime";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum AttachmentTranslationSourceResultErrorV1 {
@@ -143,8 +143,8 @@ pub async fn consume_translation_source_prepared_once_v1(
         .await
         .map_err(AttachmentTranslationSourceResultErrorV1::Persistence)?;
     let persisted = match persisted {
-        hermes_attachment_translation_persistence::AttachmentTranslationInboxResultV1::Applied(value)
-        | hermes_attachment_translation_persistence::AttachmentTranslationInboxResultV1::Duplicate(value) => value,
+        makosh_attachment_translation_persistence::AttachmentTranslationInboxResultV1::Applied(value)
+        | makosh_attachment_translation_persistence::AttachmentTranslationInboxResultV1::Duplicate(value) => value,
     };
     let accepted = match persisted.status.state {
         AttachmentTranslationStateV1::AwaitingInference
@@ -316,7 +316,7 @@ fn decode_rejected(
 
 fn validate_prepared_for_run(
     prepared: &PreparedSourceV1,
-    run: &hermes_attachment_translation_persistence::PersistedAttachmentTranslationRunV1,
+    run: &makosh_attachment_translation_persistence::PersistedAttachmentTranslationRunV1,
 ) -> Result<(), AttachmentTranslationSourceResultErrorV1> {
     if prepared.translation_run_id != run.draft.run_id
         || prepared.source_extraction_run_id != run.draft.source_extraction_run_id
@@ -334,9 +334,9 @@ fn validate_prepared_for_run(
 }
 
 fn seal_request(
-    run: &hermes_attachment_translation_persistence::PersistedAttachmentTranslationRunV1,
+    run: &makosh_attachment_translation_persistence::PersistedAttachmentTranslationRunV1,
     prepared: &PreparedSourceV1,
-    source: hermes_ai_contracts::wire::AiPrivateSourceReceiptV1,
+    source: makosh_ai_contracts::wire::AiPrivateSourceReceiptV1,
 ) -> Result<AttachmentTranslationInferenceRequestV1, AttachmentTranslationSourceResultErrorV1> {
     seal_attachment_translation_inference_request_v1(AttachmentTranslationInferenceRequestV1 {
         run_id: run.draft.run_id.to_vec(),
@@ -362,7 +362,7 @@ fn seal_request(
 }
 
 fn validate_result_envelope(
-    actual_contract: Option<&hermes_events_protocol::v1::ContractRefV1>,
+    actual_contract: Option<&makosh_events_protocol::v1::ContractRefV1>,
     expected_contract: &ContractReferenceV1,
     source_module_id: Option<&str>,
     semantics: Option<&Semantics>,
@@ -400,7 +400,7 @@ const fn ai_target_language(value: AttachmentTranslationLanguageV1) -> AiTransla
 
 fn context_id(run_id: [u8; 16], source_id: [u8; 16]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.attachment-translation.ai-context.v1\0");
+    digest.update(b"makosh.attachment-translation.ai-context.v1\0");
     digest.update(run_id);
     digest.update(source_id);
     digest.finalize()[..16].try_into().expect("digest prefix")

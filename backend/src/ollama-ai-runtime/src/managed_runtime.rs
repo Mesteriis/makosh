@@ -1,14 +1,14 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     ai_provider_explanation_contract_reference_v1,
     ai_provider_reply_generation_contract_reference_v1,
     ai_provider_summary_generation_contract_reference_v1,
     ai_provider_translation_contract_reference_v1,
 };
-use hermes_ollama_ai_api::{OLLAMA_OWNER_ID_V1, OllamaAiRuntimeSettingsV1};
-use hermes_ollama_ai_persistence::{OllamaAiPersistenceErrorV1, OllamaAiPersistenceV1};
-use hermes_runtime_protocol::{
+use makosh_ollama_ai_api::{OLLAMA_OWNER_ID_V1, OllamaAiRuntimeSettingsV1};
+use makosh_ollama_ai_persistence::{OllamaAiPersistenceErrorV1, OllamaAiPersistenceV1};
+use makosh_runtime_protocol::{
     managed_control::ManagedControlChannelV2,
     v1::{
         ManagedRuntimeControlResponseV1, ManagedRuntimeModuleRequestResponseV1,
@@ -20,11 +20,11 @@ use hermes_runtime_protocol::{
         validate_module_request_delivery_v1, validate_module_request_response_v1,
     },
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 
@@ -379,7 +379,7 @@ fn storage_binding_v1(
 
 #[cfg(test)]
 mod tests {
-    use hermes_ollama_ai_api::OLLAMA_AI_MODULE_ID_V1;
+    use makosh_ollama_ai_api::OLLAMA_AI_MODULE_ID_V1;
 
     use super::*;
 

@@ -1,4 +1,4 @@
-import { ZulipCredentialBindingStateV1 } from '../../../gen/hermes/zulip/account/v1/client_pb'
+import { ZulipCredentialBindingStateV1 } from '../../../gen/makosh/zulip/account/v1/client_pb'
 import {
 	ZulipConversationKindV1,
 	ZulipHistoryStateV1,
@@ -7,7 +7,7 @@ import {
 	type ZulipConversationV1,
 	type ZulipMessageV1,
 	type ZulipOperationalEventV1,
-} from '../../../gen/hermes/zulip/operational/v1/client_pb'
+} from '../../../gen/makosh/zulip/operational/v1/client_pb'
 import type { ZulipOperationalAccount } from '../queries/zulipOperationalAccounts'
 
 export type ZulipOperationalReadState = 'blocked' | 'empty' | 'error' | 'loading' | 'ready'

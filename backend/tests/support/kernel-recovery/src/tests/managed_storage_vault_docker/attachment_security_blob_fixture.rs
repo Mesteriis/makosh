@@ -2,14 +2,14 @@
 
 use super::*;
 
-use hermes_attachment_security_contract::admission::{
+use makosh_attachment_security_contract::admission::{
     ATTACHMENT_SECURITY_BLOB_CUSTODY_TARGET_CAPABILITY_ID,
     ATTACHMENT_SECURITY_BLOB_CUSTODY_TARGET_MODULE_ID,
     ATTACHMENT_SECURITY_BLOB_CUSTODY_TARGET_OWNER_ID,
 };
-use hermes_blob_client::{BlobClientError, BlobDataClient};
-use hermes_kernel_control_store::{ModuleBlobOperationV1, ModuleBlobQuotaRequestV1};
-use hermes_runtime_protocol::v1::{BlobDataOperationV1, ManagedRuntimeBlobSessionRequestV1};
+use makosh_blob_client::{BlobClientError, BlobDataClient};
+use makosh_kernel_control_store::{ModuleBlobOperationV1, ModuleBlobQuotaRequestV1};
+use makosh_runtime_protocol::v1::{BlobDataOperationV1, ManagedRuntimeBlobSessionRequestV1};
 
 use crate::runtime::lifecycle::control::{
     ManagedRuntimeBlobSessionHandler, ManagedRuntimeExpectation,

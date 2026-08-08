@@ -1,11 +1,11 @@
-use hermes_ai_contracts::communication_reply_inference_contract_reference_v1;
-use hermes_communication_reply_suggestion_api::{
+use makosh_ai_contracts::communication_reply_inference_contract_reference_v1;
+use makosh_communication_reply_suggestion_api::{
     COMMUNICATION_REPLY_SUGGESTION_CAPABILITY_ID_V1,
     COMMUNICATION_REPLY_SUGGESTION_COMMAND_CONNECT_PATH_V1,
     COMMUNICATION_REPLY_SUGGESTION_MODULE_ID_V1, COMMUNICATION_REPLY_SUGGESTION_OWNER_V1,
     COMMUNICATION_REPLY_SUGGESTION_QUERY_CONNECT_PATH_V1,
 };
-use hermes_communications_ai_source_api::{
+use makosh_communications_ai_source_api::{
     communication_reply_source_prepare_contract_reference_v1,
     communication_reply_source_prepare_publish_request_v1,
     communication_reply_source_prepared_consume_request_v1,
@@ -13,7 +13,7 @@ use hermes_communications_ai_source_api::{
     communication_reply_source_rejected_consume_request_v1,
     communication_reply_source_rejected_contract_reference_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ClientRpcRouteV1, ContractReferenceV1, ModuleDescriptorV1, ModuleKindV1,
     ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1, RuntimeBudgetRequestV1,
@@ -224,7 +224,7 @@ fn storage_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::{
+    use makosh_runtime_protocol::{
         v1::ModuleKindV1,
         validation::descriptor::{validate_descriptor_v1, validate_settings_schema_v1},
     };

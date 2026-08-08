@@ -1,6 +1,6 @@
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::accounts::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{
     NewProviderAccountSecretBinding, ProviderAccountSecretPurpose,
 };
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -14,17 +14,17 @@ use sqlx::Row;
 use tempfile::tempdir;
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_events_api::EventLogQuery;
-use hermes_events_postgres::store::EventStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::engines::timeline::TimelineEngine;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_events_api::EventLogQuery;
+use makosh_events_postgres::store::EventStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::engines::timeline::TimelineEngine;
 
-use hermes_hub_backend::platform::secrets::models::SecretKind;
-use hermes_hub_backend::platform::secrets::store::SecretReferenceStore;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::vault::HostVault;
-use hermes_hub_backend::vault::models::{EntropyEvent, HostVaultConfig, SecretEntryContext};
+use makosh_hub_backend::platform::secrets::models::SecretKind;
+use makosh_hub_backend::platform::secrets::store::SecretReferenceStore;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::vault::HostVault;
+use makosh_hub_backend::vault::models::{EntropyEvent, HostVaultConfig, SecretEntryContext};
 
 const LOCAL_API_TOKEN: &str = "whatsapp-api-test-secret";
 
@@ -63,7 +63,7 @@ async fn whatsapp_provider_neutral_communications_routes_dispatch_to_whatsapp_co
         .await
         .expect("database connection");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -84,7 +84,7 @@ async fn whatsapp_provider_neutral_communications_routes_dispatch_to_whatsapp_co
                 "provider_kind": "whatsapp_web",
                 "display_name": "WhatsApp Communications Routes",
                 "external_account_id": format!("wa-communications-routes-{suffix}"),
-                "device_name": "Hermes Communications Routes",
+                "device_name": "Макошь Communications Routes",
                 "local_state_path": format!("docker/data/whatsapp/communications-routes-{suffix}")
             }),
             LOCAL_API_TOKEN,
@@ -255,7 +255,7 @@ async fn whatsapp_fixture_message_ingestion_refreshes_decision_and_obligation_ca
     let decision_rationale = "chat context must feed the same domain model";
     let obligation_statement = format!("send the WhatsApp alignment note {suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -272,7 +272,7 @@ async fn whatsapp_fixture_message_ingestion_refreshes_decision_and_obligation_ca
                 "provider_kind": "whatsapp_web",
                 "display_name": "WhatsApp Candidate Source",
                 "external_account_id": format!("wa-candidate-{suffix}"),
-                "device_name": "Hermes Desktop Fixture",
+                "device_name": "Макошь Desktop Fixture",
                 "local_state_path": format!("docker/data/whatsapp/candidate-{suffix}")
             }),
             LOCAL_API_TOKEN,
@@ -552,7 +552,7 @@ async fn whatsapp_web_session_metadata_is_account_scoped_against_postgres() {
             local_state_path,
             metadata
         )
-        VALUES ($1, $2, 'Hermes Desktop', 'fixture', 'fixture', $3, $4)
+        VALUES ($1, $2, 'Макошь Desktop', 'fixture', 'fixture', $3, $4)
         "#,
     )
     .bind(&session_id)
@@ -583,18 +583,18 @@ async fn whatsapp_authorized_session_material_is_stored_in_host_vault_against_po
         .await
         .expect("database connection");
     let pool = database.pool().expect("configured pool").clone();
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
     .with_test_dev_mode()
     .with_test_pairs([
         (
-            "HERMES_VAULT_HOME",
+            "MAKOSH_VAULT_HOME",
             vault_home.to_str().expect("vault path"),
         ),
         (
-            "HERMES_DEV_KEY_PATH",
+            "MAKOSH_DEV_KEY_PATH",
             dev_key_path.to_str().expect("dev key path"),
         ),
     ])
@@ -614,7 +614,7 @@ async fn whatsapp_authorized_session_material_is_stored_in_host_vault_against_po
                 "provider_kind": "whatsapp_web",
                 "display_name": "WhatsApp Vault Source",
                 "external_account_id": format!("wa-vault-{suffix}"),
-                "device_name": "Hermes Desktop Fixture",
+                "device_name": "Макошь Desktop Fixture",
                 "local_state_path": format!("docker/data/whatsapp/vault-{suffix}")
             }),
             LOCAL_API_TOKEN,
@@ -952,18 +952,18 @@ async fn whatsapp_runtime_bridge_authorized_session_material_is_stored_in_host_v
         .await
         .expect("database connection");
     let pool = database.pool().expect("configured pool").clone();
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
     .with_test_dev_mode()
     .with_test_pairs([
         (
-            "HERMES_VAULT_HOME",
+            "MAKOSH_VAULT_HOME",
             vault_home.to_str().expect("vault path"),
         ),
         (
-            "HERMES_DEV_KEY_PATH",
+            "MAKOSH_DEV_KEY_PATH",
             dev_key_path.to_str().expect("dev key path"),
         ),
     ])
@@ -982,7 +982,7 @@ async fn whatsapp_runtime_bridge_authorized_session_material_is_stored_in_host_v
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Runtime Bridge Vault Source",
             "external_account_id": format!("wa-runtime-bridge-vault-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/runtime-bridge-vault-{suffix}")
         }),
     )
@@ -1043,18 +1043,18 @@ async fn whatsapp_reauthorizing_session_rotates_vault_material_and_emits_rotated
         .await
         .expect("database connection");
     let pool = database.pool().expect("configured pool").clone();
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
     .with_test_dev_mode()
     .with_test_pairs([
         (
-            "HERMES_VAULT_HOME",
+            "MAKOSH_VAULT_HOME",
             vault_home.to_str().expect("vault path"),
         ),
         (
-            "HERMES_DEV_KEY_PATH",
+            "MAKOSH_DEV_KEY_PATH",
             dev_key_path.to_str().expect("dev key path"),
         ),
     ])
@@ -1074,7 +1074,7 @@ async fn whatsapp_reauthorizing_session_rotates_vault_material_and_emits_rotated
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Session Rotation",
             "external_account_id": format!("wa-session-rotation-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/session-rotation-{suffix}")
         }),
     )
@@ -1202,18 +1202,18 @@ async fn whatsapp_runtime_bridge_live_webview_status_exposes_live_capabilities()
         .await
         .expect("database connection");
     let pool = database.pool().expect("configured pool").clone();
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
     .with_test_dev_mode()
     .with_test_pairs([
         (
-            "HERMES_VAULT_HOME",
+            "MAKOSH_VAULT_HOME",
             vault_home.to_str().expect("vault path"),
         ),
         (
-            "HERMES_DEV_KEY_PATH",
+            "MAKOSH_DEV_KEY_PATH",
             dev_key_path.to_str().expect("dev key path"),
         ),
     ])
@@ -1232,7 +1232,7 @@ async fn whatsapp_runtime_bridge_live_webview_status_exposes_live_capabilities()
             "provider_shape": "whatsapp_web_companion",
             "display_name": "WhatsApp Live Runtime Bridge",
             "external_account_id": format!("wa-runtime-bridge-live-{suffix}"),
-            "device_name": "Hermes Desktop Live Bridge",
+            "device_name": "Макошь Desktop Live Bridge",
             "local_state_path": format!("docker/data/whatsapp/runtime-bridge-live-{suffix}")
         }),
     )
@@ -1434,7 +1434,7 @@ async fn whatsapp_router_build_does_not_restore_vault_session_without_operator_a
             local_state_path,
             metadata
         )
-        VALUES ($1, $2, 'Hermes Desktop', 'fixture', 'linked', $3, $4)
+        VALUES ($1, $2, 'Макошь Desktop', 'fixture', 'linked', $3, $4)
         "#,
     )
     .bind(format!("whatsapp-startup-session-{suffix}"))
@@ -1504,18 +1504,18 @@ async fn whatsapp_router_build_does_not_restore_vault_session_without_operator_a
         )
         .expect("store WhatsApp session material");
 
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
     .with_test_dev_mode()
     .with_test_pairs([
         (
-            "HERMES_VAULT_HOME",
+            "MAKOSH_VAULT_HOME",
             vault_home.to_str().expect("vault path"),
         ),
         (
-            "HERMES_DEV_KEY_PATH",
+            "MAKOSH_DEV_KEY_PATH",
             dev_key_path.to_str().expect("dev key path"),
         ),
     ])
@@ -1558,7 +1558,7 @@ async fn whatsapp_runtime_bridge_message_ingests_into_signal_spine() {
     let account_id = format!("whatsapp-runtime-bridge-message-{suffix}");
     let provider_message_id = format!("wa-runtime-bridge-message-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -1574,7 +1574,7 @@ async fn whatsapp_runtime_bridge_message_ingests_into_signal_spine() {
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Runtime Bridge Message Source",
             "external_account_id": format!("wa-runtime-bridge-message-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/runtime-bridge-message-{suffix}")
         }),
     )
@@ -1647,7 +1647,7 @@ async fn whatsapp_runtime_bridge_media_lifecycle_emits_media_and_runtime_events(
     let account_id = format!("whatsapp-runtime-bridge-media-{suffix}");
     let command_id = format!("wa-runtime-bridge-media-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -1663,7 +1663,7 @@ async fn whatsapp_runtime_bridge_media_lifecycle_emits_media_and_runtime_events(
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Runtime Bridge Media Source",
             "external_account_id": format!("wa-runtime-bridge-media-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/runtime-bridge-media-{suffix}")
         }),
     )
@@ -1743,7 +1743,7 @@ async fn whatsapp_runtime_bridge_receipt_records_live_observed_source_in_raw_pro
     let provider_chat_id = format!("wa-runtime-bridge-receipt-chat-{suffix}");
     let provider_message_id = format!("wa-runtime-bridge-receipt-message-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -1838,7 +1838,7 @@ async fn whatsapp_runtime_bridge_status_view_and_delete_record_live_observed_sou
     let account_id = format!("whatsapp-runtime-bridge-status-source-{suffix}");
     let provider_status_id = format!("wa-runtime-bridge-status-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -1967,7 +1967,7 @@ async fn whatsapp_runtime_bridge_presence_and_call_record_live_observed_source_i
     let provider_call_id = format!("wa-runtime-bridge-call-{suffix}");
     let provider_chat_id = format!("wa-runtime-bridge-presence-call-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -2087,7 +2087,7 @@ async fn whatsapp_runtime_bridge_message_family_records_live_observed_source_in_
     let provider_message_id = format!("wa-runtime-bridge-message-family-message-{suffix}");
     let provider_status_id = format!("wa-runtime-bridge-message-family-status-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -2348,7 +2348,7 @@ async fn whatsapp_runtime_bridge_runtime_event_records_live_observed_source_in_r
     let account_id = format!("whatsapp-runtime-bridge-runtime-event-source-{suffix}");
     let provider_event_id = format!("wa-runtime-bridge-runtime-event-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -2364,7 +2364,7 @@ async fn whatsapp_runtime_bridge_runtime_event_records_live_observed_source_in_r
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Runtime Bridge Runtime Event Source",
             "external_account_id": format!("wa-runtime-bridge-runtime-event-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/runtime-bridge-runtime-event-{suffix}")
         }),
     )
@@ -2423,7 +2423,7 @@ async fn whatsapp_runtime_bridge_sync_lifecycle_emits_sync_and_runtime_events() 
     let account_id = format!("whatsapp-runtime-bridge-sync-{suffix}");
     let subject_id = format!("wa-runtime-bridge-sync-subject-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -2439,7 +2439,7 @@ async fn whatsapp_runtime_bridge_sync_lifecycle_emits_sync_and_runtime_events() 
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Runtime Bridge Sync Source",
             "external_account_id": format!("wa-runtime-bridge-sync-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/runtime-bridge-sync-{suffix}")
         }),
     )
@@ -2518,7 +2518,7 @@ async fn whatsapp_runtime_bridge_members_sync_lifecycle_emits_sync_and_runtime_e
     let subject_id = format!("wa-runtime-bridge-members-subject-{suffix}");
     let provider_chat_id = format!("wa-runtime-bridge-members-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -2534,7 +2534,7 @@ async fn whatsapp_runtime_bridge_members_sync_lifecycle_emits_sync_and_runtime_e
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Runtime Bridge Members Sync Source",
             "external_account_id": format!("wa-runtime-bridge-members-sync-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/runtime-bridge-members-sync-{suffix}")
         }),
     )
@@ -2614,7 +2614,7 @@ async fn whatsapp_runtime_bridge_statuses_sync_lifecycle_emits_sync_and_runtime_
     let subject_id = format!("wa-runtime-bridge-statuses-subject-{suffix}");
     let provider_chat_id = "status-feed";
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -2630,7 +2630,7 @@ async fn whatsapp_runtime_bridge_statuses_sync_lifecycle_emits_sync_and_runtime_
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Runtime Bridge Statuses Sync Source",
             "external_account_id": format!("wa-runtime-bridge-statuses-sync-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/runtime-bridge-statuses-sync-{suffix}")
         }),
     )
@@ -2706,7 +2706,7 @@ async fn whatsapp_runtime_bridge_presence_sync_lifecycle_emits_sync_and_runtime_
     let subject_id = format!("wa-runtime-bridge-presence-subject-{suffix}");
     let provider_chat_id = format!("wa-runtime-bridge-presence-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -2722,7 +2722,7 @@ async fn whatsapp_runtime_bridge_presence_sync_lifecycle_emits_sync_and_runtime_
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Runtime Bridge Presence Sync Source",
             "external_account_id": format!("wa-runtime-bridge-presence-sync-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/runtime-bridge-presence-sync-{suffix}")
         }),
     )
@@ -2798,7 +2798,7 @@ async fn whatsapp_runtime_bridge_calls_sync_lifecycle_emits_sync_and_runtime_eve
     let subject_id = format!("wa-runtime-bridge-calls-subject-{suffix}");
     let provider_chat_id = format!("wa-runtime-bridge-calls-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -2814,7 +2814,7 @@ async fn whatsapp_runtime_bridge_calls_sync_lifecycle_emits_sync_and_runtime_eve
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Runtime Bridge Calls Sync Source",
             "external_account_id": format!("wa-runtime-bridge-calls-sync-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/runtime-bridge-calls-sync-{suffix}")
         }),
     )
@@ -2889,7 +2889,7 @@ async fn whatsapp_runtime_bridge_contacts_sync_lifecycle_emits_sync_and_runtime_
     let account_id = format!("whatsapp-runtime-bridge-contacts-sync-{suffix}");
     let subject_id = format!("wa-runtime-bridge-contacts-subject-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -2905,7 +2905,7 @@ async fn whatsapp_runtime_bridge_contacts_sync_lifecycle_emits_sync_and_runtime_
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Runtime Bridge Contacts Sync Source",
             "external_account_id": format!("wa-runtime-bridge-contacts-sync-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/runtime-bridge-contacts-sync-{suffix}")
         }),
     )
@@ -2979,7 +2979,7 @@ async fn whatsapp_runtime_bridge_media_sync_lifecycle_emits_sync_and_runtime_eve
     let subject_id = format!("wa-runtime-bridge-media-subject-{suffix}");
     let provider_chat_id = format!("wa-runtime-bridge-media-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -2995,7 +2995,7 @@ async fn whatsapp_runtime_bridge_media_sync_lifecycle_emits_sync_and_runtime_eve
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Runtime Bridge Media Sync Source",
             "external_account_id": format!("wa-runtime-bridge-media-sync-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/runtime-bridge-media-sync-{suffix}")
         }),
     )
@@ -3076,7 +3076,7 @@ async fn whatsapp_runtime_bridge_lifecycle_events_record_live_observed_source_in
     let media_command_id = format!("wa-runtime-bridge-media-source-{suffix}");
     let sync_subject_id = format!("wa-runtime-bridge-sync-subject-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -3092,7 +3092,7 @@ async fn whatsapp_runtime_bridge_lifecycle_events_record_live_observed_source_in
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Runtime Bridge Media Lifecycle Source",
             "external_account_id": format!("wa-runtime-bridge-media-lifecycle-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/runtime-bridge-media-lifecycle-{suffix}")
         }),
     )
@@ -3105,7 +3105,7 @@ async fn whatsapp_runtime_bridge_lifecycle_events_record_live_observed_source_in
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Runtime Bridge Sync Lifecycle Source",
             "external_account_id": format!("wa-runtime-bridge-sync-lifecycle-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/runtime-bridge-sync-lifecycle-{suffix}")
         }),
     )
@@ -3206,7 +3206,7 @@ async fn whatsapp_runtime_bridge_claim_commands_claims_live_due_command() {
     let session_secret_ref =
         format!("secret:provider-account:{account_id}:whatsapp_web_session_key");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -3559,7 +3559,7 @@ async fn whatsapp_runtime_bridge_command_failed_reschedules_live_command() {
             $1, $2, 'send_text', $3,
             $4, 'available', 'provider_write', 'confirmed',
             'executing', 1, 3, '{}'::jsonb, '{}'::jsonb, '{}'::jsonb,
-            '{}'::jsonb, 'hermes-frontend', '{}'::jsonb, 'awaiting_provider', NOW(), NOW(),
+            '{}'::jsonb, 'makosh-frontend', '{}'::jsonb, 'awaiting_provider', NOW(), NOW(),
             NOW(), NOW(), 'whatsapp-runtime-bridge-worker'
         )
         "#,
@@ -3573,7 +3573,7 @@ async fn whatsapp_runtime_bridge_command_failed_reschedules_live_command() {
     .expect("insert executing command");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -3726,7 +3726,7 @@ async fn whatsapp_runtime_bridge_claim_recovers_only_live_stale_commands_for_req
                 $1, $2, 'send_text', $3,
                 $4, 'available', 'provider_write', 'confirmed',
                 'executing', 1, 3, '{}'::jsonb, '{}'::jsonb, '{}'::jsonb,
-                '{}'::jsonb, 'hermes-frontend', '{}'::jsonb, 'awaiting_provider', NOW(), NOW(),
+                '{}'::jsonb, 'makosh-frontend', '{}'::jsonb, 'awaiting_provider', NOW(), NOW(),
                 NOW() - INTERVAL '5 minutes', NOW() - INTERVAL '5 minutes', 'whatsapp-worker-test'
             )
             "#,
@@ -3741,7 +3741,7 @@ async fn whatsapp_runtime_bridge_claim_recovers_only_live_stale_commands_for_req
     }
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -3820,7 +3820,7 @@ async fn whatsapp_runtime_bridge_status_reconciles_live_publish_status_and_proje
     let command_id = format!("wa-runtime-bridge-status-command-{suffix}");
     let published_text = format!("Runtime bridge status publish {suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -3866,7 +3866,7 @@ async fn whatsapp_runtime_bridge_status_reconciles_live_publish_status_and_proje
                 "account_id": account_id,
                 "provider_status_id": format!("provider-status:{command_id}"),
                 "sender_id": account_id,
-                "sender_display_name": "Hermes Owner",
+                "sender_display_name": "Макошь Owner",
                 "text": published_text,
                 "import_batch_id": format!("wa-runtime-bridge-status-{suffix}"),
                 "occurred_at": "2026-06-06T12:10:00Z"
@@ -4082,7 +4082,7 @@ async fn whatsapp_manual_retry_reactivates_join_group_for_live_runtime_claim() {
     let account_id = format!("whatsapp-retry-join-live-{suffix}");
     let provider_chat_id = format!("wa-retry-join-live-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -4184,7 +4184,7 @@ async fn whatsapp_account_list_hides_removed_accounts_unless_requested() {
     let active_account_id = format!("whatsapp-active-{suffix}");
     let removed_account_id = format!("whatsapp-removed-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -4301,7 +4301,7 @@ async fn whatsapp_runtime_lifecycle_and_login_surfaces_are_blocked_safe() {
     let suffix = unique_suffix();
     let account_id = format!("whatsapp-runtime-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -4318,7 +4318,7 @@ async fn whatsapp_runtime_lifecycle_and_login_surfaces_are_blocked_safe() {
                 "provider_kind": "whatsapp_web",
                 "display_name": "WhatsApp Runtime Source",
                 "external_account_id": format!("wa-runtime-{suffix}"),
-                "device_name": "Hermes Desktop Fixture",
+                "device_name": "Макошь Desktop Fixture",
                 "local_state_path": format!("docker/data/whatsapp/runtime-{suffix}")
             }),
             LOCAL_API_TOKEN,
@@ -5362,7 +5362,7 @@ async fn whatsapp_api_exercises_web_fixture_foundation() {
     let account_id = format!("whatsapp-web-api-{suffix}");
     let chat_id = format!("wa-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -5430,7 +5430,7 @@ async fn whatsapp_api_exercises_web_fixture_foundation() {
                 "provider_kind": "whatsapp_web",
                 "display_name": "WhatsApp Web",
                 "external_account_id": format!("wa-device-{suffix}"),
-                "device_name": "Hermes Desktop Fixture",
+                "device_name": "Макошь Desktop Fixture",
                 "local_state_path": format!("docker/data/whatsapp/{suffix}")
             }),
             LOCAL_API_TOKEN,
@@ -5489,8 +5489,8 @@ async fn whatsapp_api_exercises_web_fixture_foundation() {
         ],
         "links": [
             {
-                "url": "https://example.com/hermes-whatsapp",
-                "title": "Hermes WhatsApp",
+                "url": "https://example.com/makosh-whatsapp",
+                "title": "Макошь WhatsApp",
                 "description": "Link preview text"
             }
         ],
@@ -5558,7 +5558,7 @@ async fn whatsapp_api_exercises_web_fixture_foundation() {
                 "unread_count": 7,
                 "participant_count": 3,
                 "community_parent_chat_id": format!("community-root-{suffix}"),
-                "community_parent_title": "Hermes Community",
+                "community_parent_title": "Макошь Community",
                 "invite_link": format!("https://chat.whatsapp.com/community-{suffix}"),
                 "is_community_root": false,
                 "is_broadcast": false,
@@ -5612,7 +5612,7 @@ async fn whatsapp_api_exercises_web_fixture_foundation() {
                 "address": format!("+3412345{suffix}"),
                 "business_profile": {
                     "category": "consulting",
-                    "description": "Hermes project coordination"
+                    "description": "Макошь project coordination"
                 },
                 "profile_photo_ref": {
                     "provider_file_id": format!("avatar-{suffix}"),
@@ -5671,7 +5671,7 @@ async fn whatsapp_api_exercises_web_fixture_foundation() {
                 "address": format!("+3412345{suffix}"),
                 "business_profile": {
                     "category": "consulting",
-                    "description": "Hermes project coordination"
+                    "description": "Макошь project coordination"
                 },
                 "profile_photo_ref": {
                     "provider_file_id": format!("avatar-{suffix}"),
@@ -7817,7 +7817,7 @@ async fn whatsapp_api_exercises_web_fixture_foundation() {
     );
     assert_eq!(
         dialog_updated_payload["community_parent_title"],
-        json!("Hermes Community")
+        json!("Макошь Community")
     );
     assert_eq!(
         dialog_updated_payload["invite_link"],
@@ -7874,7 +7874,7 @@ async fn whatsapp_api_exercises_web_fixture_foundation() {
     );
     assert_eq!(
         dialog_metadata["community_parent_title"],
-        json!("Hermes Community")
+        json!("Макошь Community")
     );
     assert_eq!(
         dialog_metadata["invite_link"],
@@ -7933,7 +7933,7 @@ async fn whatsapp_api_exercises_web_fixture_foundation() {
     );
     assert_eq!(
         identity_metadata_row["business_profile"]["description"],
-        json!("Hermes project coordination")
+        json!("Макошь project coordination")
     );
     assert_eq!(
         identity_metadata_row["profile_photo_ref"]["sha256"],
@@ -8088,7 +8088,7 @@ async fn whatsapp_fixture_sync_surfaces_return_projected_chats_and_history() {
     let selected_chat_id = format!("wa-sync-chat-{suffix}");
     let other_chat_id = format!("wa-sync-other-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -8104,7 +8104,7 @@ async fn whatsapp_fixture_sync_surfaces_return_projected_chats_and_history() {
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Sync",
             "external_account_id": format!("wa-sync-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/sync-{suffix}")
         }),
     )
@@ -8538,7 +8538,7 @@ async fn whatsapp_fixture_reaction_reconciles_provider_command_via_observed_even
     let provider_message_id = format!("wa-react-message-{suffix}");
     let command_id = format!("wa-react-command-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -8554,7 +8554,7 @@ async fn whatsapp_fixture_reaction_reconciles_provider_command_via_observed_even
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Reconcile",
             "external_account_id": format!("wa-react-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/react-{suffix}")
         }),
     )
@@ -8674,7 +8674,7 @@ async fn whatsapp_fixture_unreact_reconciles_provider_command_via_observed_event
     let provider_message_id = format!("wa-unreact-message-{suffix}");
     let command_id = format!("wa-unreact-command-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -8690,7 +8690,7 @@ async fn whatsapp_fixture_unreact_reconciles_provider_command_via_observed_event
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Unreact Reconcile",
             "external_account_id": format!("wa-unreact-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/unreact-{suffix}")
         }),
     )
@@ -8811,7 +8811,7 @@ async fn whatsapp_fixture_message_delete_reconciles_provider_command_via_observe
     let provider_message_id = format!("wa-delete-message-{suffix}");
     let command_id = format!("wa-delete-command-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -8827,7 +8827,7 @@ async fn whatsapp_fixture_message_delete_reconciles_provider_command_via_observe
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Delete Reconcile",
             "external_account_id": format!("wa-delete-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/delete-{suffix}")
         }),
     )
@@ -8947,7 +8947,7 @@ async fn whatsapp_fixture_message_update_reconciles_provider_command_via_observe
     let command_id = format!("wa-edit-command-{suffix}");
     let edited_text = "Edited by observed WhatsApp update";
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -8963,7 +8963,7 @@ async fn whatsapp_fixture_message_update_reconciles_provider_command_via_observe
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Edit Reconcile",
             "external_account_id": format!("wa-edit-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/edit-{suffix}")
         }),
     )
@@ -9082,7 +9082,7 @@ async fn whatsapp_canonical_confirmed_command_is_normalized_to_queued_on_import(
     let command_id = format!("wa-canonical-confirmed-command-{suffix}");
     let idempotency_key = format!("wa-canonical-confirmed-send:{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -9099,7 +9099,7 @@ async fn whatsapp_canonical_confirmed_command_is_normalized_to_queued_on_import(
                 "provider_kind": "whatsapp_web",
                 "display_name": "WhatsApp Canonical Confirmed Flow",
                 "external_account_id": format!("wa-canonical-confirmed-device-{suffix}"),
-                "device_name": "Hermes Canonical Confirmed Fixture",
+                "device_name": "Макошь Canonical Confirmed Fixture",
                 "local_state_path": format!("docker/data/whatsapp/canonical-confirmed-{suffix}")
             }),
             LOCAL_API_TOKEN,
@@ -9148,7 +9148,7 @@ async fn whatsapp_canonical_confirmed_command_is_normalized_to_queued_on_import(
             $4, NULL, $5, $6,
             'available', 'provider_write', 'confirmed', 'confirmed',
             0, 3, NULL, '{}'::jsonb, '{}'::jsonb,
-            'hermes-frontend', $7, NULL, $7, $7
+            'makosh-frontend', $7, NULL, $7, $7
         )
         "#,
     )
@@ -9199,7 +9199,7 @@ async fn whatsapp_importer_syncs_confirmed_canonical_update_into_existing_pendin
     let idempotency_key = format!("wa-canonical-sync-send:{suffix}");
     let message_text = format!("Canonical sync WhatsApp send {suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -9216,7 +9216,7 @@ async fn whatsapp_importer_syncs_confirmed_canonical_update_into_existing_pendin
                 "provider_kind": "whatsapp_web",
                 "display_name": "WhatsApp Canonical Sync Flow",
                 "external_account_id": format!("wa-canonical-sync-device-{suffix}"),
-                "device_name": "Hermes Canonical Sync Fixture",
+                "device_name": "Макошь Canonical Sync Fixture",
                 "local_state_path": format!("docker/data/whatsapp/canonical-sync-{suffix}")
             }),
             LOCAL_API_TOKEN,
@@ -9265,7 +9265,7 @@ async fn whatsapp_importer_syncs_confirmed_canonical_update_into_existing_pendin
             $4, NULL, $5, $6,
             'available', 'provider_write', 'pending', 'queued',
             0, 3, NULL, '{}'::jsonb, '{}'::jsonb,
-            'hermes-frontend', $7, NULL, $7, $7
+            'makosh-frontend', $7, NULL, $7, $7
         )
         "#,
     )
@@ -9375,7 +9375,7 @@ async fn whatsapp_importer_syncs_canonical_target_ids_into_existing_pending_outb
     let replacement_text = format!("Replacement WhatsApp text {suffix}");
     let edited_text = format!("Edited through canonical target sync {suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -9392,7 +9392,7 @@ async fn whatsapp_importer_syncs_canonical_target_ids_into_existing_pending_outb
                 "provider_kind": "whatsapp_web",
                 "display_name": "WhatsApp Canonical Target Sync Flow",
                 "external_account_id": format!("wa-canonical-target-sync-device-{suffix}"),
-                "device_name": "Hermes Canonical Target Sync Fixture",
+                "device_name": "Макошь Canonical Target Sync Fixture",
                 "local_state_path": format!("docker/data/whatsapp/canonical-target-sync-{suffix}")
             }),
             LOCAL_API_TOKEN,
@@ -9476,7 +9476,7 @@ async fn whatsapp_importer_syncs_canonical_target_ids_into_existing_pending_outb
             $4, $5, $6, $7,
             'available', 'provider_write', 'pending', 'queued',
             0, 3, NULL, '{}'::jsonb, '{}'::jsonb,
-            'hermes-frontend', $8, NULL, $8, $8
+            'makosh-frontend', $8, NULL, $8, $8
         )
         "#,
     )
@@ -9648,7 +9648,7 @@ async fn whatsapp_fixture_receipt_projects_source_record_and_emits_realtime_even
     let provider_chat_id = format!("wa-receipt-chat-{suffix}");
     let provider_message_id = format!("wa-receipt-message-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -9664,7 +9664,7 @@ async fn whatsapp_fixture_receipt_projects_source_record_and_emits_realtime_even
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Receipt Source",
             "external_account_id": format!("wa-receipt-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/receipt-{suffix}")
         }),
     )
@@ -9786,7 +9786,7 @@ async fn whatsapp_fixture_presence_projects_source_record_and_emits_realtime_eve
     let provider_chat_id = format!("wa-presence-chat-{suffix}");
     let provider_identity_id = format!("wa:+3412345{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -9802,7 +9802,7 @@ async fn whatsapp_fixture_presence_projects_source_record_and_emits_realtime_eve
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Presence Source",
             "external_account_id": format!("wa-presence-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/presence-{suffix}")
         }),
     )
@@ -9959,7 +9959,7 @@ async fn whatsapp_fixture_call_projects_source_record_and_emits_realtime_event()
     let provider_chat_id = format!("wa-call-chat-{suffix}");
     let provider_call_id = format!("wa-call-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -9975,7 +9975,7 @@ async fn whatsapp_fixture_call_projects_source_record_and_emits_realtime_event()
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Call Source",
             "external_account_id": format!("wa-call-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/call-{suffix}")
         }),
     )
@@ -10088,7 +10088,7 @@ async fn whatsapp_fixture_runtime_event_is_captured_as_signal_and_sanitized_real
     let account_id = format!("whatsapp-runtime-event-{suffix}");
     let provider_event_id = format!("wa-runtime-event-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -10104,7 +10104,7 @@ async fn whatsapp_fixture_runtime_event_is_captured_as_signal_and_sanitized_real
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Runtime Event Source",
             "external_account_id": format!("wa-runtime-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/runtime-event-{suffix}")
         }),
     )
@@ -10245,7 +10245,7 @@ async fn whatsapp_unknown_runtime_event_defaults_to_degraded_warning_markers() {
     let account_id = format!("whatsapp-runtime-unknown-{suffix}");
     let provider_event_id = format!("wa-runtime-unknown-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -10261,7 +10261,7 @@ async fn whatsapp_unknown_runtime_event_defaults_to_degraded_warning_markers() {
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Unknown Runtime Event Source",
             "external_account_id": format!("wa-runtime-unknown-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/runtime-unknown-{suffix}")
         }),
     )
@@ -10337,7 +10337,7 @@ async fn whatsapp_fixture_status_view_and_delete_project_source_records_and_emit
     let provider_status_id = format!("wa-status-{suffix}");
     let viewer_id = format!("viewer-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -10353,7 +10353,7 @@ async fn whatsapp_fixture_status_view_and_delete_project_source_records_and_emit
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Status Source",
             "external_account_id": format!("wa-status-source-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/status-{suffix}")
         }),
     )
@@ -10563,7 +10563,7 @@ async fn whatsapp_fixture_status_reconciles_publish_status_command_via_observed_
     let command_id = format!("wa-status-command-{suffix}");
     let published_text = format!("Status by observed reconciliation {suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -10579,7 +10579,7 @@ async fn whatsapp_fixture_status_reconciles_publish_status_command_via_observed_
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Status Reconcile",
             "external_account_id": format!("wa-status-reconcile-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/status-reconcile-{suffix}")
         }),
     )
@@ -10606,7 +10606,7 @@ async fn whatsapp_fixture_status_reconciles_publish_status_command_via_observed_
                 "account_id": account_id,
                 "provider_status_id": format!("provider-status:{command_id}"),
                 "sender_id": account_id,
-                "sender_display_name": "Hermes Owner",
+                "sender_display_name": "Макошь Owner",
                 "text": published_text,
                 "import_batch_id": format!("whatsapp-status-reconcile-{suffix}"),
                 "occurred_at": "2026-06-06T12:10:00Z"
@@ -10730,7 +10730,7 @@ async fn whatsapp_fixture_media_reconciles_send_media_command_via_observed_event
     let provider_message_id = format!("provider-message:{command_id}");
     let provider_attachment_id = format!("provider-attachment:{command_id}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -10746,7 +10746,7 @@ async fn whatsapp_fixture_media_reconciles_send_media_command_via_observed_event
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Media Reconcile",
             "external_account_id": format!("wa-media-reconcile-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/media-reconcile-{suffix}")
         }),
     )
@@ -10779,7 +10779,7 @@ async fn whatsapp_fixture_media_reconciles_send_media_command_via_observed_event
                 "provider_message_id": provider_message_id,
                 "chat_title": "Media Reconciliation",
                 "sender_id": account_id,
-                "sender_display_name": "Hermes Owner",
+                "sender_display_name": "Макошь Owner",
                 "text": "Observed media message",
                 "import_batch_id": format!("whatsapp-media-message-{suffix}"),
                 "occurred_at": "2026-06-06T12:09:00Z",
@@ -10945,7 +10945,7 @@ async fn whatsapp_fixture_media_reconciles_download_media_command_via_observed_e
     let provider_message_id = format!("wa-source-message-{suffix}");
     let provider_attachment_id = format!("wa-download-attachment-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -10961,7 +10961,7 @@ async fn whatsapp_fixture_media_reconciles_download_media_command_via_observed_e
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Download Reconcile",
             "external_account_id": format!("wa-download-reconcile-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/download-reconcile-{suffix}")
         }),
     )
@@ -11163,7 +11163,7 @@ async fn whatsapp_fixture_media_reconciles_send_voice_note_command_via_observed_
     let provider_message_id = format!("provider-message:{command_id}");
     let provider_attachment_id = format!("provider-attachment:{command_id}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -11179,7 +11179,7 @@ async fn whatsapp_fixture_media_reconciles_send_voice_note_command_via_observed_
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Voice Note Reconcile",
             "external_account_id": format!("wa-voice-reconcile-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/voice-reconcile-{suffix}")
         }),
     )
@@ -11213,7 +11213,7 @@ async fn whatsapp_fixture_media_reconciles_send_voice_note_command_via_observed_
                 "provider_message_id": provider_message_id,
                 "chat_title": "Voice Note Reconciliation",
                 "sender_id": account_id,
-                "sender_display_name": "Hermes Owner",
+                "sender_display_name": "Макошь Owner",
                 "text": "Observed voice note message",
                 "import_batch_id": format!("whatsapp-voice-message-{suffix}"),
                 "occurred_at": "2026-06-06T12:09:00Z",
@@ -11379,7 +11379,7 @@ async fn whatsapp_fixture_message_reconciles_send_text_command_via_observed_even
     let provider_message_id = format!("provider-message:{command_id}");
     let text = format!("Observed send_text reconciliation {suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -11395,7 +11395,7 @@ async fn whatsapp_fixture_message_reconciles_send_text_command_via_observed_even
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Send Text Reconcile",
             "external_account_id": format!("wa-send-text-reconcile-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/send-text-reconcile-{suffix}")
         }),
     )
@@ -11424,7 +11424,7 @@ async fn whatsapp_fixture_message_reconciles_send_text_command_via_observed_even
                 "provider_message_id": provider_message_id,
                 "chat_title": "Send Text Reconciliation",
                 "sender_id": account_id,
-                "sender_display_name": "Hermes Owner",
+                "sender_display_name": "Макошь Owner",
                 "text": text,
                 "import_batch_id": format!("whatsapp-send-text-reconcile-{suffix}"),
                 "occurred_at": "2026-06-06T12:10:00Z",
@@ -11617,7 +11617,7 @@ async fn whatsapp_runtime_bridge_message_reconciles_send_text_command_with_live_
     let provider_message_id = format!("provider-message:{command_id}");
     let text = format!("Observed runtime bridge send_text reconciliation {suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -11665,7 +11665,7 @@ async fn whatsapp_runtime_bridge_message_reconciles_send_text_command_with_live_
                 "provider_message_id": provider_message_id,
                 "chat_title": "Runtime Bridge Send Text Reconciliation",
                 "sender_id": account_id,
-                "sender_display_name": "Hermes Owner",
+                "sender_display_name": "Макошь Owner",
                 "text": text,
                 "import_batch_id": format!("wa-runtime-bridge-send-text-reconcile-{suffix}"),
                 "occurred_at": "2026-06-06T12:10:00Z",
@@ -11757,7 +11757,7 @@ async fn whatsapp_runtime_bridge_dialog_reconciles_archive_command_with_live_pro
     let provider_chat_id = format!("wa-runtime-bridge-dialog-chat-{suffix}");
     let command_id = format!("wa-runtime-bridge-dialog-command-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -11905,7 +11905,7 @@ async fn whatsapp_runtime_bridge_participant_reconciles_join_group_command_with_
     let self_provider_identity_id = format!("wa-runtime-bridge-self-{suffix}");
     let command_id = format!("wa-runtime-bridge-join-group-command-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -11954,7 +11954,7 @@ async fn whatsapp_runtime_bridge_participant_reconciles_join_group_command_with_
                 "chat_kind": "group",
                 "provider_identity_id": self_provider_identity_id,
                 "identity_kind": "whatsapp_user",
-                "display_name": "Hermes Owner",
+                "display_name": "Макошь Owner",
                 "role": "member",
                 "status": "joined",
                 "import_batch_id": format!("whatsapp-runtime-bridge-participant-reconcile-{suffix}"),
@@ -12054,7 +12054,7 @@ async fn whatsapp_fixture_dialog_reconciles_archive_command_via_observed_event()
     let provider_chat_id = format!("wa-dialog-chat-{suffix}");
     let command_id = format!("wa-dialog-command-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -12070,7 +12070,7 @@ async fn whatsapp_fixture_dialog_reconciles_archive_command_via_observed_event()
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Dialog Reconcile",
             "external_account_id": format!("wa-dialog-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/dialog-{suffix}")
         }),
     )
@@ -12189,7 +12189,7 @@ async fn whatsapp_fixture_dialog_reconciles_mute_and_mark_unread_commands_via_ob
     let mute_command_id = format!("wa-dialog-mute-command-{suffix}");
     let unread_command_id = format!("wa-dialog-unread-command-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -12205,7 +12205,7 @@ async fn whatsapp_fixture_dialog_reconciles_mute_and_mark_unread_commands_via_ob
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Dialog State Reconcile",
             "external_account_id": format!("wa-dialog-state-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/dialog-state-{suffix}")
         }),
     )
@@ -12325,7 +12325,7 @@ async fn whatsapp_fixture_dialog_reconciles_unarchive_unpin_unmute_and_mark_read
     let unmute_command_id = format!("wa-dialog-unmute-command-{suffix}");
     let mark_read_command_id = format!("wa-dialog-read-command-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -12341,7 +12341,7 @@ async fn whatsapp_fixture_dialog_reconciles_unarchive_unpin_unmute_and_mark_read
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Dialog Inverse Reconcile",
             "external_account_id": format!("wa-dialog-inverse-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/dialog-inverse-{suffix}")
         }),
     )
@@ -12490,7 +12490,7 @@ async fn whatsapp_fixture_participant_reconciles_join_and_leave_group_commands_v
     let join_command_id = format!("wa-reconcile-join-{suffix}");
     let leave_command_id = format!("wa-reconcile-leave-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -12506,7 +12506,7 @@ async fn whatsapp_fixture_participant_reconciles_join_and_leave_group_commands_v
             "provider_kind": "whatsapp_web",
             "display_name": "WhatsApp Reconcile Join/Leave Fixture",
             "external_account_id": format!("wa-reconcile-join-leave-{suffix}"),
-            "device_name": "Hermes Desktop Fixture",
+            "device_name": "Макошь Desktop Fixture",
             "local_state_path": format!("docker/data/whatsapp/reconcile-join-leave-{suffix}")
         }),
     )
@@ -12537,8 +12537,8 @@ async fn whatsapp_fixture_participant_reconciles_join_and_leave_group_commands_v
                 "provider_member_id": format!("self-member:{account_id}"),
                 "provider_identity_id": format!("self-identity:{account_id}"),
                 "identity_kind": "whatsapp_self",
-                "display_name": "Hermes Owner",
-                "push_name": "Hermes Owner",
+                "display_name": "Макошь Owner",
+                "push_name": "Макошь Owner",
                 "role": "member",
                 "status": "member",
                 "is_self": true,
@@ -12644,8 +12644,8 @@ async fn whatsapp_fixture_participant_reconciles_join_and_leave_group_commands_v
                 "provider_member_id": format!("self-member:{account_id}"),
                 "provider_identity_id": format!("self-identity:{account_id}"),
                 "identity_kind": "whatsapp_self",
-                "display_name": "Hermes Owner",
-                "push_name": "Hermes Owner",
+                "display_name": "Макошь Owner",
+                "push_name": "Макошь Owner",
                 "role": "member",
                 "status": "left",
                 "is_self": true,
@@ -12821,7 +12821,7 @@ async fn seed_whatsapp_provider_command(
             $1, $2, $3, $4, $5,
             $6, $7, $8, 'available', 'provider_write',
             'confirmed', 'executing', 0, 3, '{}'::jsonb,
-            '{"provider":"whatsapp"}'::jsonb, 'hermes-frontend', '2026-06-06T11:59:00Z'::timestamptz,
+            '{"provider":"whatsapp"}'::jsonb, 'makosh-frontend', '2026-06-06T11:59:00Z'::timestamptz,
             '2026-06-06T11:59:00Z'::timestamptz, '2026-06-06T11:59:00Z'::timestamptz, 'awaiting_provider'
         )
         "#,
@@ -12843,7 +12843,7 @@ fn json_post_request_with_actor(path: &str, body: Value, token: &str) -> Request
     Request::builder()
         .method("POST")
         .uri(path)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .header(header::CONTENT_TYPE, "application/json")
         .body(Body::from(body.to_string()))
         .expect("request")
@@ -12853,7 +12853,7 @@ fn json_delete_request_with_actor(path: &str, body: Value, token: &str) -> Reque
     Request::builder()
         .method("DELETE")
         .uri(path)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .header(header::CONTENT_TYPE, "application/json")
         .body(Body::from(body.to_string()))
         .expect("request")
@@ -12863,7 +12863,7 @@ fn get_request_with_token(path: &str, token: &str) -> Request<Body> {
     Request::builder()
         .method("GET")
         .uri(path)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }

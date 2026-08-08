@@ -89,7 +89,7 @@ ClientSystemStatusChangedV1
 Realtime envelope использует exact значения:
 
 ```text
-contract_name    = hermes.gateway.system-status
+contract_name    = makosh.gateway.system-status
 contract_version = 1
 event_kind       = platform.system_status.changed
 ```

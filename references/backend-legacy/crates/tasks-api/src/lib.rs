@@ -16,7 +16,7 @@ pub struct TaskRead {
     pub source_type: String,
     pub project_id: Option<String>,
     pub status: String,
-    pub hermes_status: String,
+    pub makosh_status: String,
     pub priority_score: Option<f64>,
     pub risk_score: Option<f64>,
     pub readiness_score: Option<f64>,

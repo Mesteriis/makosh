@@ -59,8 +59,8 @@ export function validateManifest(manifest) {
   if (manifest.docker_socket_access !== false) {
     errors.push('docker_socket_access must be false');
   }
-  if (manifest.service_contract !== 'hermes_platform_service_v1') {
-    errors.push('service_contract must be hermes_platform_service_v1');
+  if (manifest.service_contract !== 'makosh_platform_service_v1') {
+    errors.push('service_contract must be makosh_platform_service_v1');
   }
   if (!isObject(manifest.cosign) || typeof manifest.cosign.certificate_identity !== 'string'
     || manifest.cosign.certificate_identity.length === 0
@@ -166,7 +166,7 @@ function verifySignedManifest(manifestPath, trust) {
   );
   requireRegularNonSymlinkFile(trust.signaturePath, 'release manifest signature');
   requireRegularNonSymlinkFile(trust.certificatePath, 'release manifest certificate');
-  const temporaryDirectory = mkdtempSync(`${tmpdir()}/hermes-release-manifest-`);
+  const temporaryDirectory = mkdtempSync(`${tmpdir()}/makosh-release-manifest-`);
   const manifestCopy = `${temporaryDirectory}/release.json`;
   try {
     writeFileSync(manifestCopy, manifestBytes, { mode: 0o600 });

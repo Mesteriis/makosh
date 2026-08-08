@@ -1,4 +1,4 @@
-# Hermes backend clean room
+# Макошь backend clean room
 
 The current exact production policy slice is
 `attachment_security_engine_v1`. It contains the admitted platform/Core
@@ -120,7 +120,7 @@ signed distribution manifest; a promoted external executable requires an
 owner-pinned digest. Kernel never downloads code and never rolls back
 automatically.
 
-ADR-0220 defines the exact `hermes-events-protocol` package for binary
+ADR-0220 defines the exact `makosh-events-protocol` package for binary
 `DurableEnvelopeV1`. It keeps owner payload opaque, binds it to exact contract
 revision/schema SHA-256, preserves outbox bytes through NATS publication and
 separates durable Ack, broker ACK, terminal result, technical DLQ and client
@@ -130,13 +130,13 @@ Test-only delivery scaffolds exercised that port against PostgreSQL in a separat
 schema per designable owner and relayed exact bytes through an authenticated
 JetStream test runtime before the first owner admission, but contain no owner
 package, domain table, handler, migration or public contract. Their one narrow SQL allowance is
-`hermes-events-jetstream-testkit:dev:sqlx`; the Cargo guard rejects this client
+`makosh-events-jetstream-testkit:dev:sqlx`; the Cargo guard rejects this client
 for production packages and all other test packages. The NATS platform gate is
 open. The later `first_owner_v1` gate admitted the Communications owner, and the
 current `attachment_security_engine_v1` slice also admits the separate
 Attachment Security Engine.
 
-ADR-0221 defines the exact `hermes-runtime-protocol` package for
+ADR-0221 defines the exact `makosh-runtime-protocol` package for
 `ModuleDescriptorV1`. Distribution manifest, descriptor, GrantSet and
 RuntimeState have separate authority; capabilities are approved, resolved and
 degraded independently. The package contains wire types only; the current
@@ -266,16 +266,16 @@ open `storage_control_v1`; the documented same-UID direct-endpoint limitation
 is not misrepresented as physical sandbox isolation.
 
 ADR-0225 establishes the six-package `kernel_recovery_only_v1` baseline:
-`hermes-events-protocol`,
-`hermes-runtime-protocol`, `hermes-gateway-protocol`, the Control Store port and
-SQLite adapter, and `hermes-kernel`. Later accepted foundation work opens
+`makosh-events-protocol`,
+`makosh-runtime-protocol`, `makosh-gateway-protocol`, the Control Store port and
+SQLite adapter, and `makosh-kernel`. Later accepted foundation work opens
 private module-control/managed-launch trust and adds the five Vault packages,
 but it still has no NATS or business data plane and cannot reach `ready`.
 `clock_v1` adds only the standalone Clock contract. `blob_v1` is open as a platform
 gate: it provides an opaque-reference contract, encrypted atomic owner-fenced filesystem
 storage, and descriptor-declared quota requests retained in the Control Store and exposed
 only through approved grants. Its key lease accepts only a scoped Vault response and the
-Blob runtime has a ciphertext-only Vault route adapter. The distinct `hermes-blob-service`
+Blob runtime has a ciphertext-only Vault route adapter. The distinct `makosh-blob-service`
 is a verified managed child with one-shot private configuration and generation-bound status
 attestation. It owns a private 0600 direct data socket rather than sending content through
 Kernel; the socket accepts only a short-lived, one-use Kernel-signed session grant and
@@ -301,7 +301,7 @@ while rejecting replayed and stale-runtime grants. The fixture-only Vault-status
 test remains as a narrow protocol negative-path check. Blob technical retention,
 revoke fencing and backup classification are implemented; owner metadata and
 whole-instance restore remain separate future gates. The NATS foundation
-adds the separate `hermes-events-jetstream` adapter: an Event Hub-only topology
+adds the separate `makosh-events-jetstream` adapter: an Event Hub-only topology
 connection, bounded exact subjects and streams, and a runtime-only exact-byte
 publisher with `Nats-Msg-Id` deduplication. Its Docker conformance uses separate
 admin/runtime ACL identities and proves that an undeclared subject is rejected.
@@ -339,7 +339,7 @@ active runtime NKey, then has the managed Events authority resolve its fenced
 System Account credential through Vault and publish the resulting Account JWT
 through the full resolver; it proves that the broker disconnects the active
 runtime. The isolated
-`hermes-events-authority` foundation validates an account signer before its
+`makosh-events-authority` foundation validates an account signer before its
 first enrollment, writes it only through an authority-fenced encrypted Vault
 route, and resolves it only for one runtime-JWT issuance. It has no Kernel
 dependency or local-secret fallback. Kernel now persists only the public NATS
@@ -350,7 +350,7 @@ signer seed never appears in Control Store or inherited arguments. The
 resolver-backed Docker contour now proves the whole managed
 Vault → Authority → Kernel → HPKE runtime delivery path and broker acceptance
 of the resulting JWT, including broker-side rejection of an undeclared subject.
-`hermes-events-jetstream` can also publish an already-signed Account JWT through
+`makosh-events-jetstream` can also publish an already-signed Account JWT through
 the full resolver with scoped System Account `.creds`: it validates the exact
 Account-NKey binding and uses only the matching claims-update subject. The
 broker resolver remains the cryptographic verifier; this adapter neither holds
@@ -373,7 +373,7 @@ proves that missing contour with a real file-initialized Vault runtime, signed
 managed Vault/authority bindings, an authority-fenced Event Hub credential
 lease, Kernel topology relay and independent broker verification. It does not
 create owner data or replace durable owner outbox/inbox conformance.
-`hermes-events-authority-runtime` is now the supervised-child foundation: it
+`makosh-events-authority-runtime` is now the supervised-child foundation: it
 authenticates its inherited descriptor, verifies the current signer through a
 fenced Vault lease before it sends `ready`, and exposes a sanitized status plus
 a private credential-issuance operation afterward. The operation accepts only
@@ -394,7 +394,7 @@ revocation-driven runtime disconnect. This opened `nats_data_plane_v1` as a
 platform gate; the later `first_owner_v1` slice implemented the durable
 Communications owner delivery path.
 
-`hermes-events-protocol` now fixes the owner-local exact-byte `OutboxRecordV1`
+`makosh-events-protocol` now fixes the owner-local exact-byte `OutboxRecordV1`
 and SHA-256-based `InboxRecordV1` duplicate/hash-conflict contract; it does not
 introduce a shared event database. PostgreSQL outage/replay conformance remains
 available through owner-neutral test scaffolds. Communications now owns its
@@ -414,7 +414,7 @@ executable evidence proves it.
 
 ## Current recovery runtime
 
-`hermes-kernel serve` bootstraps an owner-private data directory, anchors its
+`makosh-kernel serve` bootstraps an owner-private data directory, anchors its
 SQLite Control Store to an installation ID and holds one single-instance lock.
 With a trustworthy store, one Kernel process owns four `0600` private Unix
 sockets: recovery, owner control, module registration and external runtime
@@ -450,12 +450,12 @@ browser caller. Это ещё не browser application delivery и не `client_
 умолчанию и меняется только локально при остановленном Kernel:
 
 ```sh
-cargo +1.97.0 run --manifest-path backend/Cargo.toml --package hermes-kernel -- \
-  --data-dir /absolute/hermes/data developer-mode status
-cargo +1.97.0 run --manifest-path backend/Cargo.toml --package hermes-kernel -- \
-  --data-dir /absolute/hermes/data developer-mode enable
-cargo +1.97.0 run --manifest-path backend/Cargo.toml --package hermes-kernel -- \
-  --data-dir /absolute/hermes/data developer-mode disable
+cargo +1.97.0 run --manifest-path backend/Cargo.toml --package makosh-kernel -- \
+  --data-dir /absolute/makosh/data developer-mode status
+cargo +1.97.0 run --manifest-path backend/Cargo.toml --package makosh-kernel -- \
+  --data-dir /absolute/makosh/data developer-mode enable
+cargo +1.97.0 run --manifest-path backend/Cargo.toml --package makosh-kernel -- \
+  --data-dir /absolute/makosh/data developer-mode disable
 ```
 
 В enabled state browser-Gateway input обязан указывать один literal
@@ -468,7 +468,7 @@ cookie и dynamic IDs. Public `paired_remote` profile это не ослабля
 security contract зафиксирован в ADR-0235.
 
 Offline restore/reset reserves monotonic generation, identity and grant fences
-in `.hermes-recovery-fence-v1` before atomically replacing SQLite. Restored
+in `.makosh-recovery-fence-v1` before atomically replacing SQLite. Restored
 registrations are suspended and runtime attestations, sessions and managed
 launch records are removed. A fence/store mismatch therefore boots
 recovery-only instead of accepting rollback state.
@@ -491,11 +491,11 @@ by design: protecting this file is equivalent to protecting the owner-device
 signing authority. Generate it explicitly, then enroll the first owner/device:
 
 ```sh
-cargo +1.97.0 run --manifest-path backend/Cargo.toml --package hermes-kernel -- \
-  --data-dir /absolute/hermes/data device-key-generate
+cargo +1.97.0 run --manifest-path backend/Cargo.toml --package makosh-kernel -- \
+  --data-dir /absolute/makosh/data device-key-generate
 
-cargo +1.97.0 run --manifest-path backend/Cargo.toml --package hermes-kernel -- \
-  --data-dir /absolute/hermes/data \
+cargo +1.97.0 run --manifest-path backend/Cargo.toml --package makosh-kernel -- \
+  --data-dir /absolute/makosh/data \
   initial-owner-enroll --owner-id owner-1 --device-id desktop-1
 ```
 
@@ -518,7 +518,7 @@ ADR-0300 keeps this as a development assembly unit: it starts the loopback-only
 Compose dependencies, Kernel/Core Gateway and Vite, and waits for both direct
 and same-origin readiness at `http://127.0.0.1:5173/`. The developer opens
 that URL in an existing browser tab; automatic browser launching is opt-in via
-`HERMES_DEV_NO_BROWSER=0`. A per-run
+`MAKOSH_DEV_NO_BROWSER=0`. A per-run
 owner-private proxy proof stays outside browser JavaScript. The command does
 not become a signed release assembly, create provider credentials, or silently
 admit managed domain/integration runtimes.

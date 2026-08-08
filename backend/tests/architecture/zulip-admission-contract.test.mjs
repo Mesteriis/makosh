@@ -9,7 +9,7 @@ test('Zulip admission uses exact route, settings and platform capability units',
     await Promise.all([
       readFile(
         new URL(
-          'src/zulip-api/proto/hermes/zulip/v1/client.proto',
+          'src/zulip-api/proto/makosh/zulip/v1/client.proto',
           BACKEND_ROOT,
         ),
         'utf8',
@@ -58,11 +58,11 @@ test('Zulip admission uses exact route, settings and platform capability units',
   assert.match(contract, /pub const fn descriptor_set\(self\)/);
   assert.match(
     contract,
-    /\/hermes\.zulip\.v1\.ZulipCommandService\/ExecuteCommand/,
+    /\/makosh\.zulip\.v1\.ZulipCommandService\/ExecuteCommand/,
   );
   assert.match(
     contract,
-    /\/hermes\.zulip\.v1\.ZulipQueryService\/GetOperationStatus/,
+    /\/makosh\.zulip\.v1\.ZulipQueryService\/GetOperationStatus/,
   );
 
   assert.match(clientPort, /Sha256::digest\(contract\.descriptor_set\(\)\)/);

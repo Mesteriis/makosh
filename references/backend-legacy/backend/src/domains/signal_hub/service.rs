@@ -1,15 +1,15 @@
 use chrono::Utc;
-use hermes_events_api::{EventEnvelope, NewEventEnvelope, StoredEventEnvelope};
-use hermes_signal_hub_api::raw_signals::RawSignalPersistencePort;
-use hermes_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
+use makosh_events_api::{EventEnvelope, NewEventEnvelope, StoredEventEnvelope};
+use makosh_signal_hub_api::raw_signals::RawSignalPersistencePort;
+use makosh_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
 use serde_json::{Value, json};
 use sqlx::postgres::PgPool;
 use std::sync::Arc;
 
 use super::policies::{SignalPolicyDecision, SignalPolicyEvaluator};
 use super::store::{SignalHubError, SignalHubStore};
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::store::EventStore;
 
 pub const SIGNAL_HUB_RAW_SIGNAL_CONSUMER: &str = "signal_hub_raw_signal_dispatcher";
 const SIGNAL_HUB_RAW_SIGNAL_RUNTIME_SOURCE: &str = "system";

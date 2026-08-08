@@ -1,5 +1,5 @@
 [package]
-name = "hermes-communication-delivery-intent-assembly"
+name = "makosh-communication-delivery-intent-assembly"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,19 +8,19 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-communication-delivery-intent-assembly"
+name = "makosh-communication-delivery-intent-assembly"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "communication_delivery_intent"
 surface = "assembly"
 
 [dependencies]
-hermes-communication-delivery-intent-persistence = { path = "../communication-delivery-intent-persistence" }
-hermes-communication-delivery-intent-runtime = { path = "../communication-delivery-intent-runtime" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-communication-delivery-intent-persistence = { path = "../communication-delivery-intent-persistence" }
+makosh-communication-delivery-intent-runtime = { path = "../communication-delivery-intent-runtime" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
 serde_json = "=1.0.150"

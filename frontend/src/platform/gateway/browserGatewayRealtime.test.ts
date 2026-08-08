@@ -6,7 +6,7 @@ import {
 	ClientRealtimeFrameV1Schema,
 	ClientReplayGapV1Schema,
 	type ClientRealtimeFrameV1,
-} from '../../gen/hermes/gateway/v1/client_realtime_pb'
+} from '../../gen/makosh/gateway/v1/client_realtime_pb'
 import { BrowserGatewayRealtime, type BrowserGatewayEventSource } from './browserGatewayRealtime'
 
 class EventSourceFixture implements BrowserGatewayEventSource {
@@ -38,12 +38,12 @@ describe('BrowserGatewayRealtime', () => {
 		})
 
 		expect(factory).toHaveBeenCalledWith('/api/realtime/v1/events', { withCredentials: true })
-		source.emit('hermes.realtime.v1', frameData({
+		source.emit('makosh.realtime.v1', frameData({
 			case: 'event',
 			value: create(ClientRealtimeEventV1Schema, {
 				eventId: new Uint8Array([7]),
 				cursor: 'cursor-1',
-				contractName: 'hermes.client.status',
+				contractName: 'makosh.client.status',
 				contractVersion: 1,
 				eventKind: 'status_changed',
 				occurredAtUnixMillis: 1n,
@@ -69,14 +69,14 @@ describe('BrowserGatewayRealtime', () => {
 			onProtocolError,
 		})
 
-		source.emit('hermes.realtime.v1', frameData({
+		source.emit('makosh.realtime.v1', frameData({
 			case: 'replayGap',
 			value: create(ClientReplayGapV1Schema, { reasonCode: 'live_buffer_overrun' }),
 		}))
 		expect(source.close).toHaveBeenCalledTimes(1)
 		expect(onReplayGap).toHaveBeenCalledWith(expect.objectContaining({ reasonCode: 'live_buffer_overrun' }))
 
-		source.emit('hermes.realtime.v1', 'invalid payload')
+		source.emit('makosh.realtime.v1', 'invalid payload')
 		expect(source.close).toHaveBeenCalledTimes(2)
 		expect(onProtocolError).toHaveBeenCalledTimes(1)
 	})

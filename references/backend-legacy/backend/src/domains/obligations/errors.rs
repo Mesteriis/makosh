@@ -1,6 +1,6 @@
 use thiserror::Error;
 
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 #[derive(Debug, Error)]
 pub enum ObligationStoreError {

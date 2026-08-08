@@ -33,9 +33,9 @@ pub(crate) fn yandex_telemost_provider_runtime_service(
     event_bus: InMemoryEventBus,
 ) -> YandexTelemostProviderRuntimeApplicationService {
     YandexTelemostProviderRuntimeApplicationService::new(YandexTelemostStore::new(
-        Arc::new(hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(pool.clone())),
-        Arc::new(hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(pool.clone())),
-        hermes_events_postgres::store::EventStore::new(pool), event_bus,
+        Arc::new(makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(pool.clone())),
+        Arc::new(makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(pool.clone())),
+        makosh_events_postgres::store::EventStore::new(pool), event_bus,
     ))
 }
 
@@ -44,24 +44,24 @@ pub(crate) fn telegram_provider_runtime_store(
 ) -> crate::integrations::telegram::client::store::TelegramStore {
     crate::integrations::telegram::client::store::TelegramStore::new(
         pool.clone(),
-        Arc::new(hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(pool.clone())),
-        Arc::new(hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(pool.clone())),
+        Arc::new(makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(pool.clone())),
+        Arc::new(makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(pool.clone())),
         Arc::new(crate::domains::communications::messages::provider_channel_store::ProviderChannelMessageStore::new(pool.clone())),
-        Arc::new(hermes_communications_postgres::store::CommunicationIngestionStore::new(pool.clone())),
+        Arc::new(makosh_communications_postgres::store::CommunicationIngestionStore::new(pool.clone())),
         Arc::new(crate::platform::communications::EventStoreProviderMessageObservationEventPort::new(pool)),
     )
 }
 
 pub(crate) fn whatsapp_provider_runtime(pool: PgPool) -> WhatsAppProviderRuntimeRef {
     let provider_account_store = Arc::new(
-        hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
+        makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
             pool.clone(),
         ),
     );
-    let provider_secret_binding_store = Arc::new(hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(pool.clone()));
+    let provider_secret_binding_store = Arc::new(makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(pool.clone()));
     let provider_channel_message_store = Arc::new(crate::domains::communications::messages::provider_channel_store::ProviderChannelMessageStore::new(pool.clone()));
     let provider_command_mirror = Arc::new(
-        hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore::new(
+        makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore::new(
             pool.clone(),
         ),
     );
@@ -80,10 +80,10 @@ pub(crate) fn zoom_provider_runtime_store(
 ) -> crate::integrations::zoom::client::store::ZoomStore {
     crate::integrations::zoom::client::store::ZoomStore::new(
         pool.clone(),
-        Arc::new(hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(pool.clone())),
-        Arc::new(hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(pool.clone())),
+        Arc::new(makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(pool.clone())),
+        Arc::new(makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(pool.clone())),
         Arc::new(crate::domains::communications::storage::store::CommunicationStorageStore::new(pool.clone())),
         crate::platform::calls::store::CallIntelligenceStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool), event_bus,
+        makosh_events_postgres::store::EventStore::new(pool), event_bus,
     )
 }

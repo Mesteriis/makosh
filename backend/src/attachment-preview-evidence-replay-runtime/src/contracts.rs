@@ -1,11 +1,11 @@
-use hermes_attachment_preview_evidence_replay_api::{
+use makosh_attachment_preview_evidence_replay_api::{
     ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_CONTRACT_MAJOR_V1,
     ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_CONTRACT_NAME_V1,
     ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_CONTRACT_REVISION_V1,
     ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_OWNER_V1,
     ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_SCHEMA_SHA256_V1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 
 #[must_use]
 pub(crate) fn client_command_contract_v1() -> ContractReferenceV1 {

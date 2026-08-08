@@ -8,7 +8,7 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     AcknowledgeRuntimeSettingsLifecycleRequestV1, AcknowledgeRuntimeSettingsLifecycleResponseV1,
     AuthorizeExternalRuntimeCapabilityRequestV1, AuthorizeExternalRuntimeCapabilityResponseV1,
     BeginExternalRuntimeSessionRequestV1, BeginExternalRuntimeSessionResponseV1,
@@ -18,8 +18,8 @@ use hermes_gateway_protocol::v1::{
     RouteVaultCiphertextRequestV1, RouteVaultCiphertextResponseV1,
     SubmitRuntimeSettingsSchemaRequestV1, SubmitRuntimeSettingsSchemaResponseV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     ManagedVaultRuntimeControlRequestV1, ManagedVaultRuntimeControlResponseV1,
     managed_vault_runtime_control_request_v1::Operation as VaultOperation,
     managed_vault_runtime_control_response_v1::Result as VaultResult,
@@ -119,7 +119,7 @@ fn handle(
     sessions: &mut ExternalRuntimeSessions,
     request: ExternalRuntimeSessionRequestV1,
 ) -> ExternalRuntimeSessionResponseV1 {
-    use hermes_gateway_protocol::v1::external_runtime_session_request_v1::Operation;
+    use makosh_gateway_protocol::v1::external_runtime_session_request_v1::Operation;
     let result = match request.operation {
         Some(Operation::Begin(request)) => begin_session(store, sessions, request),
         Some(Operation::Complete(request)) => complete_session(store, sessions, request),
@@ -149,7 +149,7 @@ fn handle(
     }
 }
 
-type SessionResult = hermes_gateway_protocol::v1::external_runtime_session_response_v1::Result;
+type SessionResult = makosh_gateway_protocol::v1::external_runtime_session_response_v1::Result;
 
 fn begin_session(
     store: &SqliteControlStore,

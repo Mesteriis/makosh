@@ -1,5 +1,5 @@
 [package]
-name = "hermes-attachment-preview-core"
+name = "makosh-attachment-preview-core"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,10 +7,10 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "attachment_preview"
 surface = "implementation"
 
 [dependencies]
-hermes-attachment-preview-api = { path = "../attachment-preview-api" }
+makosh-attachment-preview-api = { path = "../attachment-preview-api" }

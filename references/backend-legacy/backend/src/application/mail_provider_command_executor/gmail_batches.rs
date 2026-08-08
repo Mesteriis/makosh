@@ -1,4 +1,4 @@
-use hermes_communications_api::commands::{CommunicationProviderCommand, ProviderCommandQueuePort};
+use makosh_communications_api::commands::{CommunicationProviderCommand, ProviderCommandQueuePort};
 use std::collections::{BTreeMap, BTreeSet};
 
 use chrono::Utc;
@@ -11,7 +11,7 @@ use super::{
 use crate::integrations::mail::read_state::{
     EmailProviderMessageMutation, EmailReadStateRequest, gmail_label_ids_for_mutation,
 };
-use hermes_communications_api::accounts::ProviderAccount;
+use makosh_communications_api::accounts::ProviderAccount;
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 struct GmailBatchKey {
@@ -212,24 +212,24 @@ mod tests {
     use std::sync::{Arc, Mutex};
     use std::thread;
 
-    use hermes_backend_testkit::context::TestContext;
+    use makosh_backend_testkit::context::TestContext;
     use serde_json::{Value, json};
     use tempfile::tempdir;
 
     use super::MailProviderCommandWorker;
     use crate::domains::communications::messages::projection::project_raw_email_message;
     use crate::domains::communications::messages::store::MessageProjectionStore;
-    use hermes_communications_api::accounts::{
+    use makosh_communications_api::accounts::{
         CommunicationProviderKind, NewProviderAccount, NewProviderAccountSecretBinding,
         ProviderAccountSecretPurpose,
     };
-    use hermes_communications_api::commands::NewCommunicationProviderCommand;
-    use hermes_communications_api::evidence::NewRawCommunicationRecord;
-    use hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore;
-    use hermes_communications_postgres::provider_store::{
+    use makosh_communications_api::commands::NewCommunicationProviderCommand;
+    use makosh_communications_api::evidence::NewRawCommunicationRecord;
+    use makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore;
+    use makosh_communications_postgres::provider_store::{
         CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
     };
-    use hermes_communications_postgres::store::CommunicationIngestionStore;
+    use makosh_communications_postgres::store::CommunicationIngestionStore;
 
     use crate::platform::secrets::models::{NewSecretReference, SecretKind, SecretStoreKind};
     use crate::vault::HostVault;

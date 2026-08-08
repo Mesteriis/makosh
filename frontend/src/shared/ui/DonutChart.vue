@@ -36,20 +36,20 @@ const renderedSegments = computed(() => {
 })
 
 const classes = computed(() => [
-  'hermes-donut-chart',
-  `hermes-donut-chart--${props.size}`,
+  'makosh-donut-chart',
+  `makosh-donut-chart--${props.size}`,
   props.class
 ])
 </script>
 
 <template>
   <figure :class="classes" role="img" :aria-label="label">
-    <svg class="hermes-donut-chart__svg" viewBox="0 0 48 48" aria-hidden="true">
-      <circle class="hermes-donut-chart__track" cx="24" cy="24" :r="radius" />
+    <svg class="makosh-donut-chart__svg" viewBox="0 0 48 48" aria-hidden="true">
+      <circle class="makosh-donut-chart__track" cx="24" cy="24" :r="radius" />
       <circle
         v-for="segment in renderedSegments"
         :key="segment.id"
-        :class="['hermes-donut-chart__segment', `hermes-donut-chart__segment--${segment.tone}`]"
+        :class="['makosh-donut-chart__segment', `makosh-donut-chart__segment--${segment.tone}`]"
         cx="24"
         cy="24"
         :r="radius"
@@ -57,16 +57,16 @@ const classes = computed(() => [
         :stroke-dashoffset="segment.dashOffset"
       />
     </svg>
-    <figcaption v-if="$slots.default" class="hermes-donut-chart__caption">
+    <figcaption v-if="$slots.default" class="makosh-donut-chart__caption">
       <slot />
     </figcaption>
-    <ul v-if="showLegend" class="hermes-donut-chart__legend" aria-hidden="true">
+    <ul v-if="showLegend" class="makosh-donut-chart__legend" aria-hidden="true">
       <li
         v-for="segment in renderedSegments"
         :key="segment.id"
-        :class="['hermes-donut-chart__legend-item', `hermes-donut-chart__legend-item--${segment.tone}`]"
+        :class="['makosh-donut-chart__legend-item', `makosh-donut-chart__legend-item--${segment.tone}`]"
       >
-        <span class="hermes-donut-chart__legend-dot"></span>
+        <span class="makosh-donut-chart__legend-dot"></span>
         <span>{{ segment.label }}</span>
         <strong>{{ segment.percentage }}%</strong>
       </li>

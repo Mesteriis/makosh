@@ -2,15 +2,15 @@
 
 use super::*;
 
-use hermes_contacts_mail_sync_source_api::CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1;
-use hermes_mail_address_book_contract::MAIL_ADDRESS_BOOK_CAPABILITY_ID_V1;
-use hermes_mail_api::{
+use makosh_contacts_mail_sync_source_api::CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1;
+use makosh_mail_address_book_contract::MAIL_ADDRESS_BOOK_CAPABILITY_ID_V1;
+use makosh_mail_api::{
     MailCredentialPurpose,
     account::{MailBindCredentialRequestV1, MailCredentialPurposeV1},
     client_contract::{MAIL_MODULE_ID, MAIL_OWNER_ID, MailClientContractV1},
 };
-use hermes_mail_persistence::GmailOAuthCredentialBindingV1;
-use hermes_mail_runtime::{
+use makosh_mail_persistence::GmailOAuthCredentialBindingV1;
+use makosh_mail_runtime::{
     admission::{
         MAIL_ATTACHMENT_ANCHOR_CONSUME_CAPABILITY_ID,
         MAIL_ATTACHMENT_BLOB_ADMISSION_PUBLISH_CAPABILITY_ID,
@@ -29,10 +29,10 @@ use hermes_mail_runtime::{
     settings::mail_settings_schema_bytes_v2,
     storage_bundle::mail_runtime_storage_bundle_v1,
 };
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_protocol::{SecretClassV1, VaultActionV1, VaultPurposeRequestV1};
-use hermes_vault_store_sqlcipher::{SecretRecordId, SecretRecordScope, VaultStore};
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_protocol::{SecretClassV1, VaultActionV1, VaultPurposeRequestV1};
+use makosh_vault_store_sqlcipher::{SecretRecordId, SecretRecordScope, VaultStore};
 
 const MAIL_RELEASE_ARTIFACT_ID: &str = "integration.mail";
 pub(super) const MAIL_ACCOUNT_ID: &str = "mail-account-1";
@@ -522,7 +522,7 @@ fn admit_mail_runtime_profile(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             MAIL_RELEASE_ARTIFACT_ID,
             Sha256::digest(std::fs::read(mail_binary()).expect("Mail runtime binary bytes")).into(),
             Sha256::digest(&descriptor_bytes).into(),
@@ -945,7 +945,7 @@ fn start_mail_runtime_with_settings_for_human_owner(
         .platform_event_hub_topology()
         .expect("read Event Hub topology")
         .expect("Event Hub topology");
-    let configuration = hermes_runtime_protocol::v1::ManagedIntegrationRuntimeConfigurationV1 {
+    let configuration = makosh_runtime_protocol::v1::ManagedIntegrationRuntimeConfigurationV1 {
         major: 1,
         logical_owner_id: MAIL_OWNER_ID.to_owned(),
         registration_id: admitted.registration_id.clone(),
@@ -999,7 +999,7 @@ pub(super) fn mail_delivery_settings_snapshot(
     imap_port: u16,
     smtp: MailSmtpFixtureSettingsV1,
     revision: u64,
-) -> hermes_runtime_protocol::v1::SettingsSnapshotV1 {
+) -> makosh_runtime_protocol::v1::SettingsSnapshotV1 {
     mail_settings_snapshot(
         MailSettingsProfileV1::Imap {
             port: imap_port,
@@ -1014,8 +1014,8 @@ fn mail_settings_snapshot(
     profile: MailSettingsProfileV1,
     revision: u64,
     target_id: &str,
-) -> hermes_runtime_protocol::v1::SettingsSnapshotV1 {
-    use hermes_runtime_protocol::v1::{
+) -> makosh_runtime_protocol::v1::SettingsSnapshotV1 {
+    use makosh_runtime_protocol::v1::{
         SettingValueV1, SettingsValueEntryV1, setting_value_v1::Value,
     };
 
@@ -1206,7 +1206,7 @@ fn mail_settings_snapshot(
         }
     }
     values.sort_by(|left, right| left.setting_id.cmp(&right.setting_id));
-    hermes_runtime_protocol::v1::SettingsSnapshotV1 {
+    makosh_runtime_protocol::v1::SettingsSnapshotV1 {
         target_id: target_id.to_owned(),
         revision,
         values,
@@ -1255,5 +1255,5 @@ fn current_mail_settings_snapshot(
 }
 
 fn mail_binary() -> PathBuf {
-    binary("HERMES_MAIL_RUNTIME_BIN")
+    binary("MAKOSH_MAIL_RUNTIME_BIN")
 }

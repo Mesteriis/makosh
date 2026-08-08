@@ -9,12 +9,12 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-fieldset',
-	props.disabled && 'hermes-fieldset--disabled',
+	'makosh-fieldset',
+	props.disabled && 'makosh-fieldset--disabled',
 	props.class
 ])
 
-const descriptionId = `hermes-fieldset-description-${useId()}`
+const descriptionId = `makosh-fieldset-description-${useId()}`
 </script>
 
 <template>
@@ -23,17 +23,17 @@ const descriptionId = `hermes-fieldset-description-${useId()}`
 		:disabled="disabled"
 		:aria-describedby="$slots.description ? descriptionId : undefined"
 	>
-		<legend v-if="$slots.legend" class="hermes-fieldset-legend">
+		<legend v-if="$slots.legend" class="makosh-fieldset-legend">
 			<slot name="legend" />
 		</legend>
 		<p
 			v-if="$slots.description"
 			:id="descriptionId"
-			class="hermes-fieldset-description"
+			class="makosh-fieldset-description"
 		>
 			<slot name="description" />
 		</p>
-		<div class="hermes-fieldset-content">
+		<div class="makosh-fieldset-content">
 			<slot />
 		</div>
 	</fieldset>

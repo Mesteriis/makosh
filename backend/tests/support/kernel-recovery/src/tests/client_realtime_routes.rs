@@ -1,13 +1,13 @@
 use std::sync::Arc;
 
-use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-use hermes_kernel_control_store::{
+use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+use makosh_kernel_control_store::{
     BundledManagedLaunchBinding, InitialOwnerIdentity, ManagedLaunchRecord,
     ModuleClientRealtimeContractVersionV1, ModuleClientRealtimeRouteV1,
     ModuleDescriptorRegistrationRequestsV1, ModuleRegistration, ModuleRegistrationState,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ManagedRuntimeClientRealtimePublishRequestV1,
 };
 
@@ -19,14 +19,14 @@ use crate::runtime::lifecycle::control::{
 use super::common::unique_target_root;
 
 const REGISTRATION: &str = "delivery-intent";
-const MODULE: &str = "hermes-communication-delivery-intent-runtime";
+const MODULE: &str = "makosh-communication-delivery-intent-runtime";
 const OWNER: &str = "communication_delivery_intent";
 const LOGICAL_OWNER: &str = "owner_local";
 const CAPABILITY: &str = "communication.delivery_intent.v1";
 
 #[test]
 fn managed_realtime_publication_is_exact_owner_fenced_and_idempotent() {
-    let fixture = RealtimeRouteFixture::new("hermes-client-realtime-route");
+    let fixture = RealtimeRouteFixture::new("makosh-client-realtime-route");
     let source = InMemoryBrowserRealtimeSource::new(8).expect("source");
     let handler = ClientRealtimePublishHandlerV1::new(Arc::clone(&fixture.store), source);
     let request = publication(LOGICAL_OWNER, b"status-v1");

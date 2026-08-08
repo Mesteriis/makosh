@@ -44,13 +44,13 @@ const activeIndex = ref(0)
 const rootRef = ref<HTMLElement | null>(null)
 const popoverRef = ref<HTMLElement | null>(null)
 const listboxRef = ref<HTMLElement | null>(null)
-const componentId = `hermes-searchable-select-${useId()}`
+const componentId = `makosh-searchable-select-${useId()}`
 const { cancelMouseLeaveDismiss, scheduleMouseLeaveDismiss } = useMouseLeaveDismiss(closeList, undefined, {
 	isOpen,
 	getBoundaryElements: () => [rootRef.value, popoverRef.value]
 })
 
-const classes = computed(() => ['hermes-searchable-select', props.class])
+const classes = computed(() => ['makosh-searchable-select', props.class])
 const listId = computed(() => `${componentId}-listbox`)
 const selectedOption = computed(() => props.options.find((option) => option.value === props.modelValue))
 const enabledOptions = computed(() => props.options.filter((option) => !option.disabled))
@@ -159,7 +159,7 @@ function clearSelection(): void {
 }
 
 function isSearchInputTarget(target: EventTarget | null): boolean {
-	return target instanceof HTMLInputElement && target.classList.contains('hermes-searchable-select__search')
+	return target instanceof HTMLInputElement && target.classList.contains('makosh-searchable-select__search')
 }
 
 function handleKeydown(event: KeyboardEvent): void {
@@ -224,8 +224,8 @@ function handleFocusout(event: FocusEvent): void {
 		@mouseleave="scheduleMouseLeaveDismiss"
 	>
 		<button
-			class="hermes-searchable-select__trigger"
-			:class="{ 'hermes-searchable-select__trigger--readonly': readonly }"
+			class="makosh-searchable-select__trigger"
+			:class="{ 'makosh-searchable-select__trigger--readonly': readonly }"
 			type="button"
 			:aria-activedescendant="activeOptionId"
 			:aria-controls="listId"
@@ -237,23 +237,23 @@ function handleFocusout(event: FocusEvent): void {
 			role="combobox"
 			@click="isOpen ? closeList() : openList()"
 		>
-			<span class="hermes-searchable-select__value" :class="{ 'hermes-searchable-select__value--placeholder': !selectedOption }">
+			<span class="makosh-searchable-select__value" :class="{ 'makosh-searchable-select__value--placeholder': !selectedOption }">
 				{{ displayLabel }}
 			</span>
-			<Icon icon="tabler:chevron-down" size="1rem" class="hermes-searchable-select__chevron" aria-hidden="true" />
+			<Icon icon="tabler:chevron-down" size="1rem" class="makosh-searchable-select__chevron" aria-hidden="true" />
 		</button>
 		<button
 			v-if="canClear"
-			class="hermes-searchable-select__clear"
+			class="makosh-searchable-select__clear"
 			type="button"
 			:aria-label="clearLabel"
 			@click.stop="clearSelection"
 		>
 			<Icon icon="tabler:x" size="0.875rem" aria-hidden="true" />
 		</button>
-		<div v-if="isOpen" ref="popoverRef" class="hermes-searchable-select__popover">
+		<div v-if="isOpen" ref="popoverRef" class="makosh-searchable-select__popover">
 			<input
-				class="hermes-native-control hermes-searchable-select__search"
+				class="makosh-native-control makosh-searchable-select__search"
 				:aria-activedescendant="activeOptionId"
 				:aria-controls="listId"
 				:aria-label="searchInputAriaLabel"
@@ -264,25 +264,25 @@ function handleFocusout(event: FocusEvent): void {
 				:value="query"
 				@input="handleSearchInput"
 			/>
-			<ul :id="listId" ref="listboxRef" class="hermes-selection-listbox" role="listbox">
+			<ul :id="listId" ref="listboxRef" class="makosh-selection-listbox" role="listbox">
 				<li
 					v-for="(option, index) in filteredOptions"
 					:id="optionId(index)"
 					:key="option.value"
-					class="hermes-selection-option"
-					:class="{ 'hermes-selection-option--active': index === activeIndex }"
+					class="makosh-selection-option"
+					:class="{ 'makosh-selection-option--active': index === activeIndex }"
 					:aria-selected="option.value === modelValue"
 					role="option"
 					@mousedown.prevent="selectOption(option)"
 				>
-					<Icon v-if="option.icon" :icon="option.icon" size="1rem" class="hermes-selection-option__icon" aria-hidden="true" />
-					<span class="hermes-selection-option__body">
-						<span class="hermes-selection-option__label">{{ option.label }}</span>
-						<span v-if="option.description" class="hermes-selection-option__description">{{ option.description }}</span>
+					<Icon v-if="option.icon" :icon="option.icon" size="1rem" class="makosh-selection-option__icon" aria-hidden="true" />
+					<span class="makosh-selection-option__body">
+						<span class="makosh-selection-option__label">{{ option.label }}</span>
+						<span v-if="option.description" class="makosh-selection-option__description">{{ option.description }}</span>
 					</span>
-					<Icon v-if="option.value === modelValue" icon="tabler:check" size="0.875rem" class="hermes-selection-option__check" aria-hidden="true" />
+					<Icon v-if="option.value === modelValue" icon="tabler:check" size="0.875rem" class="makosh-selection-option__check" aria-hidden="true" />
 				</li>
-				<li v-if="filteredOptions.length === 0" class="hermes-selection-empty" role="presentation">{{ emptyLabel }}</li>
+				<li v-if="filteredOptions.length === 0" class="makosh-selection-empty" role="presentation">{{ emptyLabel }}</li>
 			</ul>
 		</div>
 	</div>

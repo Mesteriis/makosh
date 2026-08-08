@@ -3,7 +3,7 @@ import { create } from '@bufbuild/protobuf'
 import {
 	WhatsAppOperationalReplayRequestV1Schema,
 	type WhatsAppOperationalReplayResponseV1,
-} from '../../../gen/hermes/whatsapp/operational/realtime/v1/client_pb'
+} from '../../../gen/makosh/whatsapp/operational/realtime/v1/client_pb'
 import { getWhatsAppOperationalRealtimeConnectClient } from './whatsAppOperationalRealtimeClient'
 
 const DEFAULT_REPLAY_LIMIT = 100

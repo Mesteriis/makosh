@@ -8,19 +8,19 @@ use std::io::Write;
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
-use hermes_zulip_persistence::zulip_storage_bundle_v1;
-use hermes_zulip_runtime::admission::zulip_module_descriptor_v1;
-use hermes_zulip_runtime::settings::zulip_settings_schema_v3;
+use makosh_storage_protocol::validation::validate_storage_bundle;
+use makosh_zulip_persistence::zulip_storage_bundle_v1;
+use makosh_zulip_runtime::admission::zulip_module_descriptor_v1;
+use makosh_zulip_runtime::settings::zulip_settings_schema_v3;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
 pub const ZULIP_ASSEMBLY_FRAGMENT_VERSION_V1: u32 = 1;
-pub const ZULIP_ASSEMBLY_OWNER_ID: &str = hermes_zulip_runtime::admission::ZULIP_OWNER_ID;
-pub const ZULIP_ASSEMBLY_MODULE_ID: &str = hermes_zulip_runtime::admission::ZULIP_MODULE_ID;
+pub const ZULIP_ASSEMBLY_OWNER_ID: &str = makosh_zulip_runtime::admission::ZULIP_OWNER_ID;
+pub const ZULIP_ASSEMBLY_MODULE_ID: &str = makosh_zulip_runtime::admission::ZULIP_MODULE_ID;
 pub const ZULIP_RUNTIME_ARTIFACT_ID: &str = "zulip.runtime.v1";
 pub const ZULIP_STORAGE_ARTIFACT_ID: &str = "zulip.storage.v1";
 pub const ZULIP_DESCRIPTOR_FILE: &str = "zulip.runtime.descriptor.pb";
@@ -28,7 +28,7 @@ pub const ZULIP_SETTINGS_FILE: &str = "zulip.runtime.settings.pb";
 pub const ZULIP_STORAGE_BUNDLE_FILE: &str = "zulip.storage.bundle.pb";
 pub const ZULIP_ARTIFACT_FRAGMENT_FILE: &str = "zulip.release-artifacts.json";
 
-const ZULIP_RUNTIME_RELATIVE_PATH: &str = "bin/hermes-zulip-runtime";
+const ZULIP_RUNTIME_RELATIVE_PATH: &str = "bin/makosh-zulip-runtime";
 const ZULIP_DESCRIPTOR_RELATIVE_PATH: &str = "contracts/zulip.runtime.descriptor.pb";
 const ZULIP_SETTINGS_RELATIVE_PATH: &str = "contracts/zulip.runtime.settings.pb";
 const ZULIP_STORAGE_RELATIVE_PATH: &str = "storage/zulip.storage.bundle.pb";
@@ -255,10 +255,10 @@ mod tests {
     use std::fs;
     use std::sync::atomic::{AtomicU64, Ordering};
 
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         decode_descriptor_v1, decode_settings_schema_v1,
     };
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -294,7 +294,7 @@ mod tests {
         assert_eq!(descriptor.module_id, ZULIP_ASSEMBLY_MODULE_ID);
         assert_eq!(
             settings.major,
-            hermes_zulip_runtime::settings::ZULIP_SETTINGS_SCHEMA_MAJOR_V3
+            makosh_zulip_runtime::settings::ZULIP_SETTINGS_SCHEMA_MAJOR_V3
         );
         assert_eq!(storage.owner_id, ZULIP_ASSEMBLY_OWNER_ID);
         assert_eq!(
@@ -387,7 +387,7 @@ mod tests {
     fn temporary_directory() -> PathBuf {
         let id = NEXT_TEMPORARY_ID.fetch_add(1, Ordering::Relaxed);
         let path =
-            std::env::temp_dir().join(format!("hermes-zulip-assembly-{}-{id}", std::process::id()));
+            std::env::temp_dir().join(format!("makosh-zulip-assembly-{}-{id}", std::process::id()));
         fs::create_dir(&path).expect("create fixture root");
         path
     }

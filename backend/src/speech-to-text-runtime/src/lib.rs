@@ -19,4 +19,4 @@ pub use worker::{
     execute_speech_to_text_payload_v1,
 };
 
-pub const PACKAGE: &str = "hermes-speech-to-text-runtime";
+pub const PACKAGE: &str = "makosh-speech-to-text-runtime";

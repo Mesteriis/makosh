@@ -4,8 +4,8 @@ use crate::StoreError;
 
 pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
     transaction.execute_batch(
-        "CREATE TABLE hermes_kernel_owner_pinned_artifact_binding (
-            registration_id TEXT PRIMARY KEY REFERENCES hermes_kernel_module_registration(registration_id) ON DELETE CASCADE,
+        "CREATE TABLE makosh_kernel_owner_pinned_artifact_binding (
+            registration_id TEXT PRIMARY KEY REFERENCES makosh_kernel_module_registration(registration_id) ON DELETE CASCADE,
             binding_revision INTEGER NOT NULL CHECK (binding_revision >= 1),
             canonical_artifact_path TEXT NOT NULL,
             artifact_sha256 BLOB NOT NULL CHECK (length(artifact_sha256) = 32),
@@ -14,7 +14,7 @@ pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
             artifact_inode INTEGER NOT NULL CHECK (artifact_inode >= 1),
             owner_signature_raw BLOB NOT NULL CHECK (length(owner_signature_raw) = 64)
         ) STRICT;
-        UPDATE hermes_kernel_control_store_metadata SET schema_version = 10 WHERE singleton = 1;",
+        UPDATE makosh_kernel_control_store_metadata SET schema_version = 10 WHERE singleton = 1;",
     )?;
     Ok(())
 }

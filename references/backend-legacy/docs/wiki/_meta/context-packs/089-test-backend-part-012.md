@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `test`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/tests/telegram_account_setup_capabilities.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/telegram_account_setup_capabilities.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/telegram_account_setup_capabilities.rs`
 - Size bytes / Размер в байтах: `19645`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -69,9 +69,9 @@ use sqlx::Row;
 use tempfile::tempdir;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::secrets::{SecretKind, SecretReferenceStore, SecretStoreKind};
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::secrets::{SecretKind, SecretReferenceStore, SecretStoreKind};
+use makosh_hub_backend::platform::storage::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_capability_status, assert_ok, get_request_with_token, json_body,
     json_post_request_with_actor, unique_suffix, vault_entropy_events,
@@ -91,13 +91,13 @@ async fn telegram_live_account_setup_stores_bot_token_in_host_vault() {
     let app = build_router_with_database(
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_dir.path().join("vault").to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     vault_dir
                         .path()
                         .join("dev")
@@ -139,7 +139,7 @@ async fn telegram_live_account_setup_stores_bot_token_in_host_vault() {
                 "account_id": account_id,
                 "provider_kind": "telegram_bot",
                 "display_name": "Telegram Bot",
-                "external_account_id": format!("@hermes_bot_{suffix}"),
+                "external_account_id": format!("@makosh_bot_{suffix}"),
                 "bot_token": "123456:telegram-bot-token",
                 "transcription_enabled": false
             }),
@@ -219,13 +219,13 @@ async fn telegram_qr_authorized_account_setup_persists_metadata_without_host_vau
     let app = build_router_with_database(
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_dir.path().join("vault").to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     vault_dir
                         .path()
                         .join("dev")
@@ -233,8 +233,8 @@ async fn telegram_qr_authorized_account_setup_persists_metadata_without_host_vau
                         .to_str()
                         .expect("dev key path"),
                 ),
-                ("HERMES_TELEGRAM_API_ID", "12345"),
-                ("HERMES_TELEGRAM_API_HASH", "telegram-api-hash"),
+                ("MAKOSH_TELEGRAM_API_ID", "12345"),
+                ("MAKOSH_TELEGRAM_API_HASH", "telegram-api-hash"),
             ])
             .expect("config"),
         database,
@@ -311,13 +311,13 @@ async fn telegram_finalized_qr_account_setup_infers_qr_authorized_runtime() {
     let app = build_router_with_database(
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_dir.path().join("vault").to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     vault_dir
                         .path()
                         .join("dev")
@@ -325,8 +325,8 @@ async fn telegram_finalized_qr_account_setup_infers_qr_authorized_runtime() {
                         .to_str()
                         .expect("dev key path"),
                 ),
-                ("HERMES_TELEGRAM_API_ID", "12345"),
-                ("HERMES_TELEGRAM_API_HASH", "telegram-api-hash"),
+                ("MAKOSH_TELEGRAM_API_ID", "12345"),
+                ("MAKOSH_TELEGRAM_API_HASH", "telegram-api-hash"),
             ])
             .expect("config"),
         database,
@@ -381,7 +381,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/telegram_architecture.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/telegram_architecture.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/telegram_architecture.rs`
 - Size bytes / Размер в байтах: `2645`
 - Included characters / Включено символов: `2645`
 - Truncated / Обрезано: `no`
@@ -472,7 +472,7 @@ fn is_implementation_file(path: &Path) -> bool {
 
 ### `backend/tests/telegram_commands_query_filters.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/telegram_commands_query_filters.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/telegram_commands_query_filters.rs`
 - Size bytes / Размер в байтах: `3883`
 - Included characters / Включено символов: `3883`
 - Truncated / Обрезано: `no`
@@ -484,9 +484,9 @@ use axum::http::StatusCode;
 use serde_json::json;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::integrations::telegram::client::lifecycle;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::integrations::telegram::client::lifecycle;
+use makosh_hub_backend::platform::storage::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_ok, get_request_with_token, json_body, unique_suffix,
 };
@@ -600,7 +600,7 @@ async fn insert_command(
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({"source": "telegram_commands_query_filters"}),
         json!({"provider_chat_id": provider_chat_id}),
         json!({"source": "test"}),
@@ -612,7 +612,7 @@ async fn insert_command(
 
 ### `backend/tests/telegram_core.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/telegram_core.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/telegram_core.rs`
 - Size bytes / Размер в байтах: `24750`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -627,8 +627,8 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::storage::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_capability_status, assert_ok, get_request_with_token, json_body,
     json_post_request_with_actor, unique_suffix,
@@ -939,7 +939,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/telegram_dialog_actions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/telegram_dialog_actions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/telegram_dialog_actions.rs`
 - Size bytes / Размер в байтах: `7542`
 - Included characters / Включено символов: `7536`
 - Truncated / Обрезано: `no`
@@ -952,8 +952,8 @@ use serde_json::json;
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::storage::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_ok, delete_request_with_token, get_request_with_token, json_body,
     json_post_request_with_actor, unique_suffix,
@@ -1146,7 +1146,7 @@ async fn telegram_restore_and_reaction_actions_record_durable_command_rows() {
 
 ### `backend/tests/telegram_dialog_capability_gates.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/telegram_dialog_capability_gates.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/telegram_dialog_capability_gates.rs`
 - Size bytes / Размер в байтах: `9045`
 - Included characters / Включено символов: `9045`
 - Truncated / Обрезано: `no`
@@ -1158,8 +1158,8 @@ use axum::http::StatusCode;
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::storage::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_ok, get_request_with_token, json_body, json_post_request_with_actor,
     unique_suffix,
@@ -1443,7 +1443,7 @@ where
 
 ### `backend/tests/telegram_dialog_read_reconciliation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/telegram_dialog_read_reconciliation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/telegram_dialog_read_reconciliation.rs`
 - Size bytes / Размер в байтах: `18137`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1456,14 +1456,14 @@ use chrono::Utc;
 use serde_json::json;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::integrations::telegram::client::lifecycle::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::integrations::telegram::client::lifecycle::{
     insert_command, new_command_id,
 };
-use hermes_hub_backend::integrations::telegram::client::{
+use makosh_hub_backend::integrations::telegram::client::{
     reconcile_mark_read_commands_from_provider_state, reconcile_pin_commands_from_provider_state,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_ok, get_request_with_token, json_body, unique_suffix,
 };
@@ -1546,7 +1546,7 @@ async fn mark_read_reconciliation_completes_targeted_read_commands_from_chat_rea
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_dialog_read_reconciliation",
             "last_read_inbox_provider_message_id": target_message_id,
@@ -1628,7 +1628,7 @@ async fn dialog_pin_reconciliation_marks_mismatched_unpin_command_failed() {
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_dialog_read_reconciliation",
             "is_pinned": false,
@@ -1714,7 +1714,7 @@ async fn dialog_archive_reconciliation_marks_mismatched_unarchive_command_failed
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_dialog_read_reconciliation",
             "is_archived": false,
@@ -1729,7 +1729,7 @@ async fn dialog_archive_reconciliation_marks_mismatched_unarchive_command_failed
     .await
     .expect("unarchive command row");
 
-    let reconciled = hermes_hub_backend::integrations::telegram::client::reconcile_archive_commands_from_provider_state(
+    let reconciled = makosh_hub_backend::integrations::telegram::client::reconcile_archive_commands_from_provider_state(
         &pool,
         &account_id,
         &provider_chat_id,
@@ -1800,7 +1800,7 @@ async fn dialog_mute_reconciliation_marks_mismatched_unmute_command_failed() {
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_dialog_read_reconciliation",
             "use_default_mute_for": true,
@@ -1816,7 +1816,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/telegram_folder_actions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/telegram_folder_actions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/telegram_folder_actions.rs`
 - Size bytes / Размер в байтах: `15412`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1829,8 +1829,8 @@ use serde_json::json;
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::storage::Database;
 use telegram_support::{LOCAL_API_TOKEN, json_body, json_post_request_with_actor, unique_suffix};
 use testkit::context::TestContext;
 
@@ -2134,7 +2134,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/telegram_manual_send_capability_gates.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/telegram_manual_send_capability_gates.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/telegram_manual_send_capability_gates.rs`
 - Size bytes / Размер в байтах: `5429`
 - Included characters / Включено символов: `5429`
 - Truncated / Обрезано: `no`
@@ -2146,8 +2146,8 @@ use axum::http::StatusCode;
 use serde_json::json;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::storage::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_ok, get_request_with_token, json_body, json_post_request_with_actor,
     unique_suffix,
@@ -2196,7 +2196,7 @@ async fn removed_account_blocks_manual_send_before_message_audit_and_events() {
             "chat_title": "Manual Send Gate Chat",
             "sender_id": format!("sender-{suffix}"),
             "sender_display_name": "Maria Petrova",
-            "text": "Can Hermes still send after account removal?",
+            "text": "Can Макошь still send after account removal?",
             "import_batch_id": format!("telegram-send-gates-{suffix}"),
             "occurred_at": "2026-06-06T12:00:00Z",
             "delivery_state": "received"
@@ -2214,7 +2214,7 @@ async fn removed_account_blocks_manual_send_before_message_audit_and_events() {
                 .uri(format!(
                     "/api/v1/integrations/telegram/accounts/{account_id}"
                 ))
-                .header("x-hermes-secret", LOCAL_API_TOKEN)
+                .header("x-makosh-secret", LOCAL_API_TOKEN)
                 .body(axum::body::Body::empty())
                 .expect("delete request"),
         )
@@ -2294,7 +2294,7 @@ where
 
 ### `backend/tests/telegram_media_projection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/telegram_media_projection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/telegram_media_projection.rs`
 - Size bytes / Размер в байтах: `7869`
 - Included characters / Включено символов: `7869`
 - Truncated / Обрезано: `no`
@@ -2307,14 +2307,14 @@ use chrono::Utc;
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, CommunicationProviderKind, NewProviderAccount,
     NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::consume_accepted_signal_event;
-use hermes_hub_backend::domains::signal_hub::dispatch_telegram_raw_signal;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::domains::communications::messages::consume_accepted_signal_event;
+use makosh_hub_backend::domains::signal_hub::dispatch_telegram_raw_signal;
+use makosh_hub_backend::platform::storage::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_ok, json_body, json_post_request_with_actor, unique_suffix,
 };
@@ -2510,7 +2510,7 @@ async fn telegram_fixture_media_download_fails_closed_without_live_runtime() {
 
 ### `backend/tests/telegram_media_upload.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/telegram_media_upload.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/telegram_media_upload.rs`
 - Size bytes / Размер в байтах: `11827`
 - Included characters / Включено символов: `11827`
 - Truncated / Обрезано: `no`
@@ -2524,11 +2524,11 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, CommunicationProviderKind, NewProviderAccount,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const LOCAL_API_TOKEN: &str = "telegram-media-upload-test-secret";
@@ -2813,7 +2813,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
     Request::builder()
         .method("POST")
         .uri(uri)
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .header(header::CONTENT_TYPE, "application/json")
         .body(Body::from(body.to_string()))
         .expect("request")
@@ -2855,7 +2855,7 @@ fn unique_suffix() -> String {
 
 ### `backend/tests/telegram_members_admin_roster.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/telegram_members_admin_roster.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/telegram_members_admin_roster.rs`
 - Size bytes / Размер в байтах: `5252`
 - Included characters / Включено символов: `5252`
 - Truncated / Обрезано: `no`
@@ -2867,8 +2867,8 @@ use serde_json::{Value, json};
 use sqlx::query;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const LOCAL_API_TOKEN: &str = "telegram-members-admin-test-secret";
@@ -2975,7 +2975,7 @@ fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .method("GET")
         .uri(uri)
-        .header("X-Hermes-Secret", LOCAL_API_TOKEN)
+        .header("X-Макошь-Secret", LOCAL_API_TOKEN)
         .body(Body::empty())
         .expect("request")
 }
@@ -2992,7 +2992,7 @@ where
                 .method("POST")
                 .uri(uri)
                 .header(header::CONTENT_TYPE, "application/json")
-                .header("X-Hermes-Secret", LOCAL_API_TOKEN)
+                .header("X-Макошь-Secret", LOCAL_API_TOKEN)
                 .body(Body::from(body.to_string()))
                 .expect("request"),
         )
@@ -3011,7 +3011,7 @@ async fn json_body(response: axum::response::Response) -> Value {
 
 ### `backend/tests/telegram_members_inactive_filter.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/telegram_members_inactive_filter.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/telegram_members_inactive_filter.rs`
 - Size bytes / Размер в байтах: `5127`
 - Included characters / Включено символов: `5127`
 - Truncated / Обрезано: `no`
@@ -3023,8 +3023,8 @@ use serde_json::{Value, json};
 use sqlx::query;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const LOCAL_API_TOKEN: &str = "telegram-members-inactive-test-secret";
@@ -3124,7 +3124,7 @@ fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .method("GET")
         .uri(uri)
-        .header("X-Hermes-Secret", LOCAL_API_TOKEN)
+        .header("X-Макошь-Secret", LOCAL_API_TOKEN)
         .body(Body::empty())
         .expect("request")
 }
@@ -3141,7 +3141,7 @@ where
                 .method("POST")
                 .uri(uri)
                 .header(header::CONTENT_TYPE, "application/json")
-                .header("X-Hermes-Secret", LOCAL_API_TOKEN)
+                .header("X-Макошь-Secret", LOCAL_API_TOKEN)
                 .body(Body::from(body.to_string()))
                 .expect("request"),
         )
@@ -3161,7 +3161,7 @@ async fn json_body(response: axum::response::Response) -> Value {
 
 ### `backend/tests/telegram_members_sync_exhaustive_absence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/telegram_members_sync_exhaustive_absence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/telegram_members_sync_exhaustive_absence.rs`
 - Size bytes / Размер в байтах: `5499`
 - Included characters / Включено символов: `5499`
 - Truncated / Обрезано: `no`
@@ -3173,9 +3173,9 @@ use serde_json::{Value, json};
 use sqlx::query;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::integrations::telegram::client::mark_absent_members_from_exhaustive_roster;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::integrations::telegram::client::mark_absent_members_from_exhaustive_roster;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const LOCAL_API_TOKEN: &str = "telegram-members-absence-test-secret";
@@ -3292,7 +3292,7 @@ fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .method("GET")
         .uri(uri)
-        .header("X-Hermes-Secret", LOCAL_API_TOKEN)
+        .header("X-Макошь-Secret", LOCAL_API_TOKEN)
         .body(Body::empty())
         .expect("request")
 }
@@ -3309,7 +3309,7 @@ where
                 .method("POST")
                 .uri(uri)
                 .header(header::CONTENT_TYPE, "application/json")
-                .header("X-Hermes-Secret", LOCAL_API_TOKEN)
+                .header("X-Макошь-Secret", LOCAL_API_TOKEN)
                 .body(Body::from(body.to_string()))
                 .expect("request"),
         )

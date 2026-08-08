@@ -12,7 +12,7 @@ ADR-0045 intentionally limited the first graph core to four node kinds and five 
 
 Add a local `projects` read model as the first project memory spine.
 
-Projects are canonical local records with deterministic `project_id` values, human-readable metadata and explicit `project_keywords`. Keywords are user/system configured matching rules, not AI inference. The first implementation may seed a local `Hermes Hub` project record so a development database has a real project anchor, but all project relationships must still be derived from stored messages and documents.
+Projects are canonical local records with deterministic `project_id` values, human-readable metadata and explicit `project_keywords`. Keywords are user/system configured matching rules, not AI inference. The first implementation may seed a local `Макошь` project record so a development database has a real project anchor, but all project relationships must still be derived from stored messages and documents.
 
 Extend the PostgreSQL graph projection with:
 

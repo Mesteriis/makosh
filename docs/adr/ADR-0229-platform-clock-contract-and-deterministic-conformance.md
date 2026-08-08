@@ -28,11 +28,11 @@ Clock имеет ровно два production packages:
 
 | Package | Metadata | Ответственность |
 |---|---|---|
-| `hermes-clock-protocol` | `platform:clock:contract` | UTC, monotonic reading, discontinuity policy и explicit timezone context |
-| `hermes-clock-runtime` | `platform:clock:implementation` | system adapter и deterministic fake clock |
+| `makosh-clock-protocol` | `platform:clock:contract` | UTC, monotonic reading, discontinuity policy и explicit timezone context |
+| `makosh-clock-runtime` | `platform:clock:implementation` | system adapter и deterministic fake clock |
 
 Оба лежат в `backend/src/platform/clock/{protocol,runtime}`. Отдельный
-`hermes-clock-testkit` находится только в `backend/tests/support/clock`; он не
+`makosh-clock-testkit` находится только в `backend/tests/support/clock`; он не
 может быть production dependency.
 
 ### Time semantics

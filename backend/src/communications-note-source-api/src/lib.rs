@@ -8,12 +8,12 @@ pub use envelope::{
     build_communication_note_source_prepared_outbox_record_v1,
     build_communication_note_source_rejected_outbox_record_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-communications-note-source-api";
+pub const PACKAGE: &str = "makosh-communications-note-source-api";
 pub const COMMUNICATIONS_NOTE_SOURCE_OWNER_V1: &str = "communications";
 pub const COMMUNICATION_NOTE_SOURCE_PREPARE_CONTRACT_NAME_V1: &str =
     "communication_note_source_prepare";
@@ -30,14 +30,14 @@ pub const COMMUNICATIONS_NOTE_SOURCE_CAPABILITY_ID_V1: &str = "communications.no
 pub const COMMUNICATION_NOTE_SOURCE_BLOB_TARGET_OWNER_ID_V1: &str =
     "communication_note_candidate_extraction";
 pub const COMMUNICATION_NOTE_SOURCE_BLOB_TARGET_MODULE_ID_V1: &str =
-    "hermes-communication-note-candidate-runtime";
+    "makosh-communication-note-candidate-runtime";
 pub const COMMUNICATION_NOTE_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "communication_note_candidate_extraction.source.blob.v1";
 
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communications.note_source.v1.rs"
+        "/makosh.communications.note_source.v1.rs"
     ));
 }
 
@@ -203,7 +203,7 @@ mod tests {
             "communication_note_candidate_extraction.source.blob.v1"
         );
         let source =
-            include_str!("../proto/hermes/communications/note_source/v1/note_source.proto");
+            include_str!("../proto/makosh/communications/note_source/v1/note_source.proto");
         assert!(source.contains("CommunicationNoteSourceContentV1"));
         assert!(source.contains("subject_utf8"));
         assert!(source.contains("body_utf8"));

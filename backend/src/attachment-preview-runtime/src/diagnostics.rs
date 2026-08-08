@@ -2,7 +2,7 @@
 
 use std::fmt::{self, Display, Formatter};
 
-use hermes_attachment_preview_runtime::runtime::AttachmentPreviewRuntimeErrorV1;
+use makosh_attachment_preview_runtime::runtime::AttachmentPreviewRuntimeErrorV1;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum AttachmentPreviewDiagnosticStageV1 {
@@ -49,7 +49,7 @@ pub(crate) fn emit_attachment_preview_diagnostic_v1(
     stage: AttachmentPreviewDiagnosticStageV1,
     error: AttachmentPreviewRuntimeErrorV1,
 ) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("{}", AttachmentPreviewDiagnosticV1 { stage, error });
     }
 }

@@ -16,10 +16,10 @@ try {
 	const headers = {
 		'content-type': 'application/json',
 		'origin': 'http://127.0.0.1:5173',
-		'x-hermes-development-host-proof': proof,
+		'x-makosh-development-host-proof': proof,
 	}
 	const startedResponse = await fetch(
-		'http://127.0.0.1:9445/__hermes/owner-vault-host/v1/start',
+		'http://127.0.0.1:9445/__makosh/owner-vault-host/v1/start',
 		{
 			method: 'POST',
 			headers,
@@ -36,7 +36,7 @@ try {
 		process.exit(1)
 	}
 	const cancelResponse = await fetch(
-		'http://127.0.0.1:9445/__hermes/owner-vault-host/v1/cancel',
+		'http://127.0.0.1:9445/__makosh/owner-vault-host/v1/cancel',
 		{
 			method: 'POST',
 			headers,

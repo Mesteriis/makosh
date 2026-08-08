@@ -1,4 +1,4 @@
-use hermes_hub_backend::engines::search::{
+use makosh_hub_backend::engines::search::{
     engine::SearchIndex,
     errors::SearchError,
     models::{SearchDocument, SearchResult},

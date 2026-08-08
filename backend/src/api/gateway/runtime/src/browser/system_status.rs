@@ -1,8 +1,8 @@
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     ClientSystemComponentIdV1 as WireSystemComponentId,
     ClientSystemComponentStateV1 as WireSystemComponentState, ClientSystemComponentStatusV1,
 };
-use hermes_gateway_session_contract::{
+use makosh_gateway_session_contract::{
     ClientSystemComponentIdV1 as ProjectionSystemComponentId,
     ClientSystemComponentStateV1 as ProjectionSystemComponentState,
     ClientSystemComponentStatusProjectionV1,

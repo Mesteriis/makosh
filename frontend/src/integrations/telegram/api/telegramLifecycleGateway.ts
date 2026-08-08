@@ -3,7 +3,7 @@ import type {
 	TelegramAccountResponse,
 	TelegramOperationResponse,
 	TelegramReconfigurationResponseV1,
-} from '../../../gen/hermes/telegram/v1/client_pb'
+} from '../../../gen/makosh/telegram/v1/client_pb'
 import { getTelegramLifecycleConnectClient } from './telegramLifecycleClient'
 import { getTelegramReconfigurationConnectClient } from './telegramReconfigurationClient'
 

@@ -12,12 +12,12 @@ pub use envelope::{
     communication_delivery_intent_submit_message_id_v1,
     communication_delivery_intent_submitted_message_id_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-communication-delivery-intent-ingress-api";
+pub const PACKAGE: &str = "makosh-communication-delivery-intent-ingress-api";
 pub const COMMUNICATION_DELIVERY_INTENT_INGRESS_OWNER_V1: &str = "communication_delivery_intent";
 pub const COMMUNICATION_DELIVERY_INTENT_SUBMIT_CONTRACT_NAME_V1: &str =
     "communication_delivery_intent_submit";
@@ -35,14 +35,14 @@ pub const COMMUNICATION_DELIVERY_INTENT_INGRESS_COMMAND_CAPABILITY_ID_V1: &str =
 pub const COMMUNICATION_DELIVERY_INTENT_BLOB_TARGET_OWNER_ID_V1: &str =
     "communication_delivery_intent";
 pub const COMMUNICATION_DELIVERY_INTENT_BLOB_TARGET_MODULE_ID_V1: &str =
-    "hermes-communication-delivery-intent-runtime";
+    "makosh-communication-delivery-intent-runtime";
 pub const COMMUNICATION_DELIVERY_INTENT_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "communication_delivery_intent.blob.v1";
 
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communication_delivery_intent.ingress.v1.rs"
+        "/makosh.communication_delivery_intent.ingress.v1.rs"
     ));
 }
 
@@ -214,7 +214,7 @@ mod tests {
         );
         assert_eq!(
             COMMUNICATION_DELIVERY_INTENT_BLOB_TARGET_MODULE_ID_V1,
-            "hermes-communication-delivery-intent-runtime"
+            "makosh-communication-delivery-intent-runtime"
         );
         assert_eq!(
             COMMUNICATION_DELIVERY_INTENT_BLOB_TARGET_CAPABILITY_ID_V1,

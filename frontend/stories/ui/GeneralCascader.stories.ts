@@ -3,7 +3,7 @@ import { Cascader, FormField, FormLabel } from '@/shared/ui'
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Cascader',
+	title: 'Макошь UI/General/Cascader',
 	render: (_args, context) => ({
 		components: { Cascader, FormField, FormLabel },
 		data() {

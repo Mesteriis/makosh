@@ -1,5 +1,5 @@
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_scheduler_protocol::{ConcurrencyKeyV1, SchedulePolicyV1};
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_scheduler_protocol::{ConcurrencyKeyV1, SchedulePolicyV1};
 use sqlx::{Postgres, Transaction, query};
 
 use super::runs::{SchedulerPostgresStoreV1, SchedulerRunClaimErrorV1};
@@ -32,7 +32,7 @@ pub(super) async fn ensure_slot(
     now: UtcMillisV1,
 ) -> Result<(), SchedulerRunClaimErrorV1> {
     let configured = query(
-        "INSERT INTO hermes_platform.scheduler_concurrency (concurrency_key, active_runs, max_parallelism, updated_at_unix_ms) VALUES ($1, 0, $2, $3) ON CONFLICT (concurrency_key) DO UPDATE SET max_parallelism = EXCLUDED.max_parallelism, updated_at_unix_ms = EXCLUDED.updated_at_unix_ms WHERE hermes_platform.scheduler_concurrency.active_runs = 0 OR hermes_platform.scheduler_concurrency.max_parallelism = EXCLUDED.max_parallelism",
+        "INSERT INTO makosh_platform.scheduler_concurrency (concurrency_key, active_runs, max_parallelism, updated_at_unix_ms) VALUES ($1, 0, $2, $3) ON CONFLICT (concurrency_key) DO UPDATE SET max_parallelism = EXCLUDED.max_parallelism, updated_at_unix_ms = EXCLUDED.updated_at_unix_ms WHERE makosh_platform.scheduler_concurrency.active_runs = 0 OR makosh_platform.scheduler_concurrency.max_parallelism = EXCLUDED.max_parallelism",
     )
     .bind(key.value())
     .bind(i32::from(policy.max_parallelism()))

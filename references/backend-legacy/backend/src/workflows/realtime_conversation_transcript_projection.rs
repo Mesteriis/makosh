@@ -1,4 +1,4 @@
-use hermes_events_api::StoredEventEnvelope;
+use makosh_events_api::StoredEventEnvelope;
 use std::fs;
 use std::path::Path;
 
@@ -11,9 +11,9 @@ use crate::domains::documents::core::models::NewDocumentImport;
 use crate::domains::documents::ports::DocumentImportPort;
 use crate::platform::realtime_conversation::events::REALTIME_CONVERSATION_TRANSCRIPT_COMPLETED;
 use crate::platform::realtime_conversation::models::CallBundleManifest;
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 
 pub const REALTIME_CONVERSATION_TRANSCRIPT_PROJECTION_CONSUMER: &str =
     "realtime_conversation_transcript_projection";
@@ -33,7 +33,7 @@ pub enum RealtimeConversationTranscriptProjectionError {
     DocumentImport(#[from] crate::domains::documents::core::errors::DocumentImportError),
 
     #[error(transparent)]
-    Observation(#[from] hermes_observations_postgres::errors::ObservationStoreError),
+    Observation(#[from] makosh_observations_postgres::errors::ObservationStoreError),
 
     #[error(transparent)]
     Meetings(#[from] crate::domains::calendar::meetings::errors::MeetingsError),

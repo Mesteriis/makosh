@@ -66,7 +66,7 @@ test('communication translation agreement isolates workflow domain engine and pr
     readFile(new URL('src/communication-translation-api/src/lib.rs', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/communication-translation-api/proto/hermes/communication_translation/v1/translation.proto',
+        'src/communication-translation-api/proto/makosh/communication_translation/v1/translation.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -109,12 +109,12 @@ test('communication translation agreement isolates workflow domain engine and pr
     readFile(new URL('src/communications-runtime/src/event_runtime.rs', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/communications-ai-source-api/proto/hermes/communications/ai_source/v1/ai_source.proto',
+        'src/communications-ai-source-api/proto/makosh/communications/ai_source/v1/ai_source.proto',
         BACKEND_ROOT,
       ),
       'utf8',
     ),
-    readFile(new URL('src/ai-contracts/proto/hermes/ai/contracts/v1/ai.proto', BACKEND_ROOT), 'utf8'),
+    readFile(new URL('src/ai-contracts/proto/makosh/ai/contracts/v1/ai.proto', BACKEND_ROOT), 'utf8'),
     readFile(new URL('src/ai-contracts/src/lib.rs', BACKEND_ROOT), 'utf8'),
     readFile(new URL('src/ai-contracts/src/translation.rs', BACKEND_ROOT), 'utf8'),
     readFile(new URL('src/ai-inference-core/src/translation.rs', BACKEND_ROOT), 'utf8'),
@@ -190,11 +190,11 @@ test('communication translation agreement isolates workflow domain engine and pr
     ],
   });
   for (const unit of [
-    'hermes-communication-translation-api',
-    'hermes-communication-translation-core',
-    'hermes-communication-translation-persistence',
-    'hermes-communication-translation-runtime',
-    'hermes-communication-translation-assembly',
+    'makosh-communication-translation-api',
+    'makosh-communication-translation-core',
+    'makosh-communication-translation-persistence',
+    'makosh-communication-translation-runtime',
+    'makosh-communication-translation-assembly',
   ]) {
     assert.match(adr, new RegExp(`\\b${unit}\\b`));
   }
@@ -225,7 +225,7 @@ test('communication translation agreement isolates workflow domain engine and pr
   assert.doesNotMatch(protocol, /provider_id|model_id|endpoint|prompt|source_body|thread_id|attachment_id|map</);
   assert.match(core, /transition_communication_translation_v1/);
   assert.match(core, /DigestMismatch/);
-  assert.doesNotMatch(core, /communication_summary|hermes_ai|ollama|communications_domain/);
+  assert.doesNotMatch(core, /communication_summary|makosh_ai|ollama|communications_domain/);
   for (const capability of [
     'ai.provider.translate.v1',
     'ai.translation.request.v1',
@@ -244,7 +244,7 @@ test('communication translation agreement isolates workflow domain engine and pr
   assert.match(communicationsTranslationSource, /delivery\.acknowledge\(\)/);
   assert.doesNotMatch(
     communicationsTranslationSource,
-    /hermes_communication_translation_runtime|hermes_ai_inference|hermes_ollama|provider_id|model_id|prompt/,
+    /makosh_communication_translation_runtime|makosh_ai_inference|makosh_ollama|provider_id|model_id|prompt/,
   );
   assert.match(communicationsAdmission, /communications_translation_source_capability_v1/);
   assert.match(communicationsAdmission, /communications_translation_source_blob_capability_v1/);
@@ -260,7 +260,7 @@ test('communication translation agreement isolates workflow domain engine and pr
   assert.match(aiTranslationCore, /build_translation_provider_input_v1/);
   assert.match(aiTranslationCore, /body_utf8/);
   assert.match(aiTranslationCore, /provider_result\.target_language != run\.request\.target_language/);
-  assert.match(aiTranslationSchema, /hermes_data\.ai_translation_runs/);
+  assert.match(aiTranslationSchema, /makosh_data\.ai_translation_runs/);
   assert.match(aiTranslationSchema, /result_translated_text_utf8/);
   assert.match(aiTranslationSchema, /result_detected_source_language/);
   assert.match(aiTranslationRepository, /ON CONFLICT \(logical_owner_id, run_id\) DO NOTHING/);
@@ -282,7 +282,7 @@ test('communication translation agreement isolates workflow domain engine and pr
   assert.match(ollamaCore, /target_language: request\.target_language/);
   assert.match(ollamaHttp, /translation_json_schema_v1/);
   assert.match(ollamaHttp, /detected_source_language/);
-  assert.match(ollamaTranslationSchema, /hermes_data\.ollama_ai_translation_runs/);
+  assert.match(ollamaTranslationSchema, /makosh_data\.ollama_ai_translation_runs/);
   assert.match(ollamaTranslationSchema, /result_translated_text_utf8/);
   assert.match(ollamaTranslationRepository, /ON CONFLICT \(logical_owner_id, request_id\) DO NOTHING/);
   assert.match(ollamaTranslationWorker, /execute_translation_payload_v1/);
@@ -291,7 +291,7 @@ test('communication translation agreement isolates workflow domain engine and pr
   assert.match(ollamaManagedRuntime, /execute_translation_payload_v1/);
   assert.doesNotMatch(
     `${ollamaCore}\n${ollamaHttp}\n${ollamaTranslationSchema}\n${ollamaTranslationRepository}\n${ollamaTranslationWorker}\n${ollamaRuntimeAdmission}\n${ollamaManagedRuntime}`,
-    /hermes_communications|hermes_ai_inference|communication_translation_runtime|communications_domain|provider_id|endpoint_url/,
+    /makosh_communications|makosh_ai_inference|communication_translation_runtime|communications_domain|provider_id|endpoint_url/,
   );
   assert.doesNotMatch(aiProtocol, /provider_id|model_id|map</);
   assert.match(persistenceManifest, /owner = "communication_translation"/);
@@ -328,8 +328,8 @@ test('communication translation agreement isolates workflow domain engine and pr
   assert.match(assembly, /communication_translation_storage_bundle_v1/);
   assert.match(assembly, /communication_translation\.runtime\.v1/);
   assert.match(assembly, /communication_translation\.storage\.v1/);
-  assert.match(release, /--package hermes-communication-translation-runtime/);
-  assert.match(release, /--package hermes-communication-translation-assembly/);
+  assert.match(release, /--package makosh-communication-translation-runtime/);
+  assert.match(release, /--package makosh-communication-translation-assembly/);
   assert.match(release, /communication_translation\.release-artifacts\.json/);
   assert.doesNotMatch(assembly, /communication_summary|ollama|ai_inference|communications_domain/);
   assert.match(managedSetup, /InstalledSignedBundle::install/);
@@ -344,7 +344,7 @@ test('communication translation agreement isolates workflow domain engine and pr
   assert.match(managedFlow, /stale Communication Translation grant epoch/);
   assert.match(managedFlow, /CommunicationTranslationErrorCodeSourceRejected/);
   assert.match(managedFlow, /managed_communication_translation_completes_real_provider_through_gateway_sse/);
-  assert.match(managedFlow, /HERMES_OLLAMA_LIVE_PORT/);
-  assert.match(managedScript, /HERMES_COMMUNICATION_TRANSLATION_RUNTIME_BIN/);
+  assert.match(managedFlow, /MAKOSH_OLLAMA_LIVE_PORT/);
+  assert.match(managedScript, /MAKOSH_COMMUNICATION_TRANSLATION_RUNTIME_BIN/);
   assert.match(managedScript, /managed_communication_translation_reaches_ai_and_replays_through_gateway_sse/);
 });

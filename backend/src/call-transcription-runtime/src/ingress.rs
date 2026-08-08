@@ -1,22 +1,22 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_call_transcription_api::run_id_v1;
-use hermes_call_transcription_core::{CallTranscriptionRejectionV1, RecordingSourceV1};
-use hermes_call_transcription_ingress::{
+use makosh_call_transcription_api::run_id_v1;
+use makosh_call_transcription_core::{CallTranscriptionRejectionV1, RecordingSourceV1};
+use makosh_call_transcription_ingress::{
     RECORDING_READY_CONTRACT_NAME_V1, RECORDING_REJECTED_CONTRACT_NAME_V1, contract_reference_v1,
     recording_ready_event_id_v1, recording_rejected_event_id_v1,
     wire::{RecordingReadyV1, RecordingRejectedV1},
 };
-use hermes_call_transcription_persistence::{
+use makosh_call_transcription_persistence::{
     CallTranscriptionInboxOutcomeV1, CallTranscriptionPersistenceErrorV1,
     CallTranscriptionPersistenceV1, PersistRecordingIngressV1, RecordingIngressOutcomeV1,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{DurableEnvelopeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::ContractReferenceV1,
 };
@@ -231,7 +231,7 @@ fn decode_exact_event(
 }
 
 fn exact_contract(
-    actual: Option<&hermes_events_protocol::v1::ContractRefV1>,
+    actual: Option<&makosh_events_protocol::v1::ContractRefV1>,
     expected: &ContractReferenceV1,
 ) -> bool {
     actual.is_some_and(|actual| {

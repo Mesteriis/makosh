@@ -1,7 +1,7 @@
 //! Explicit backend composition for integration tests.
 
 use axum::Router;
-use hermes_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::app::router::build_router_with_database;
 
 use crate::app::TEST_API_SECRET;
 use crate::context::TestContext;

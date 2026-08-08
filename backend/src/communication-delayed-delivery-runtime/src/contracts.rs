@@ -1,4 +1,4 @@
-use hermes_communication_delayed_delivery_api::{
+use makosh_communication_delayed_delivery_api::{
     COMMUNICATION_DELAYED_DELIVERY_CANCEL_COMMAND_CONTRACT_NAME_V1,
     COMMUNICATION_DELAYED_DELIVERY_CONTRACT_MAJOR_V1,
     COMMUNICATION_DELAYED_DELIVERY_CONTRACT_REVISION_V1, COMMUNICATION_DELAYED_DELIVERY_OWNER_V1,
@@ -7,13 +7,13 @@ use hermes_communication_delayed_delivery_api::{
     COMMUNICATION_DELAYED_DELIVERY_SCHEDULE_COMMAND_CONTRACT_NAME_V1,
     COMMUNICATION_DELAYED_DELIVERY_SCHEMA_SHA256,
 };
-use hermes_communication_delivery_intent_api::{
+use makosh_communication_delivery_intent_api::{
     COMMUNICATION_DELIVERY_INTENT_COMMAND_CONTRACT_NAME_V1,
     COMMUNICATION_DELIVERY_INTENT_CONTRACT_MAJOR_V1,
     COMMUNICATION_DELIVERY_INTENT_CONTRACT_REVISION_V1, COMMUNICATION_DELIVERY_INTENT_OWNER_V1,
     COMMUNICATION_DELIVERY_INTENT_SCHEMA_SHA256,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 
 #[must_use]
 pub fn delayed_delivery_schedule_command_contract_v1() -> ContractReferenceV1 {

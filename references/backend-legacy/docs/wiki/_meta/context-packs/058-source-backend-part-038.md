@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/integrations/mail/accounts/helpers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/helpers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/helpers.rs`
 - Size bytes / Размер в байтах: `2531`
 - Included characters / Включено символов: `2531`
 - Truncated / Обрезано: `no`
@@ -148,7 +148,7 @@ pub(super) fn pkce_challenge(code_verifier: &str) -> String {
 
 ### `backend/src/integrations/mail/accounts/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/models.rs`
 - Size bytes / Размер в байтах: `9713`
 - Included characters / Включено символов: `9713`
 - Truncated / Обрезано: `no`
@@ -453,7 +453,7 @@ pub(super) struct OAuthTokenResponse {
 
 ### `backend/src/integrations/mail/accounts/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/service.rs`
 - Size bytes / Размер в байтах: `1095`
 - Included characters / Включено символов: `1095`
 - Truncated / Обрезано: `no`
@@ -495,7 +495,7 @@ pub struct EmailAccountSetupService {
 
 ### `backend/src/integrations/mail/accounts/service/constructors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/service/constructors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/service/constructors.rs`
 - Size bytes / Размер в байтах: `2481`
 - Included characters / Включено символов: `2481`
 - Truncated / Обрезано: `no`
@@ -579,7 +579,7 @@ impl EmailAccountSetupService {
 
 ### `backend/src/integrations/mail/accounts/service/gmail_complete.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/service/gmail_complete.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/service/gmail_complete.rs`
 - Size bytes / Размер в байтах: `4474`
 - Included characters / Включено символов: `4474`
 - Truncated / Обрезано: `no`
@@ -701,7 +701,7 @@ impl EmailAccountSetupService {
 
 ### `backend/src/integrations/mail/accounts/service/gmail_payloads.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/service/gmail_payloads.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/service/gmail_payloads.rs`
 - Size bytes / Размер в байтах: `1320`
 - Included characters / Включено символов: `1320`
 - Truncated / Обрезано: `no`
@@ -752,7 +752,7 @@ fn gmail_send_scope_requested(pending: &GmailOAuthPendingGrant) -> bool {
 
 ### `backend/src/integrations/mail/accounts/service/gmail_refresh.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/service/gmail_refresh.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/service/gmail_refresh.rs`
 - Size bytes / Размер в байтах: `2269`
 - Included characters / Включено символов: `2269`
 - Truncated / Обрезано: `no`
@@ -821,7 +821,7 @@ impl EmailAccountSetupService {
 
 ### `backend/src/integrations/mail/accounts/service/gmail_start.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/service/gmail_start.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/service/gmail_start.rs`
 - Size bytes / Размер в байтах: `1582`
 - Included characters / Включено символов: `1582`
 - Truncated / Обрезано: `no`
@@ -872,7 +872,7 @@ impl EmailAccountSetupService {
 
 ### `backend/src/integrations/mail/accounts/service/imap.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/service/imap.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/service/imap.rs`
 - Size bytes / Размер в байтах: `4466`
 - Included characters / Включено символов: `4466`
 - Truncated / Обрезано: `no`
@@ -995,7 +995,7 @@ impl EmailAccountSetupService {
 
 ### `backend/src/integrations/mail/accounts/service/imap_payloads.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/service/imap_payloads.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/service/imap_payloads.rs`
 - Size bytes / Размер в байтах: `1548`
 - Included characters / Включено символов: `1548`
 - Truncated / Обрезано: `no`
@@ -1048,7 +1048,7 @@ pub(in crate::integrations::mail::accounts::service) fn imap_secret_metadata(
 
 ### `backend/src/integrations/mail/accounts/service/stores.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/service/stores.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/service/stores.rs`
 - Size bytes / Размер в байтах: `1479`
 - Included characters / Включено символов: `1479`
 - Truncated / Обрезано: `no`
@@ -1102,7 +1102,7 @@ impl EmailAccountSetupService {
 
 ### `backend/src/integrations/mail/accounts/service/token_http.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/service/token_http.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/service/token_http.rs`
 - Size bytes / Размер в байтах: `2000`
 - Included characters / Включено символов: `2000`
 - Truncated / Обрезано: `no`
@@ -1168,7 +1168,7 @@ impl EmailAccountSetupService {
 
 ### `backend/src/integrations/mail/accounts/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/validation.rs`
 - Size bytes / Размер в байтах: `348`
 - Included characters / Включено символов: `348`
 - Truncated / Обрезано: `no`
@@ -1193,7 +1193,7 @@ pub(super) fn validate_non_empty(
 
 ### `backend/src/integrations/mail/accounts/vault.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/vault.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/vault.rs`
 - Size bytes / Размер в байтах: `2277`
 - Included characters / Включено символов: `2277`
 - Truncated / Обрезано: `no`
@@ -1278,7 +1278,7 @@ impl SecretResolver for AccountSecretVault {
 
 ### `backend/src/integrations/mail/gmail/client.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/gmail/client.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/gmail/client.rs`
 - Size bytes / Размер в байтах: `269`
 - Included characters / Включено символов: `269`
 - Truncated / Обрезано: `no`
@@ -1299,7 +1299,7 @@ pub use options::{GmailFetchOptions, GmailHistoryFetchOptions, ImapFetchOptions}
 
 ### `backend/src/integrations/mail/gmail/client/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/gmail/client/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/gmail/client/errors.rs`
 - Size bytes / Размер в байтах: `1016`
 - Included characters / Включено символов: `1016`
 - Truncated / Обрезано: `no`
@@ -1346,7 +1346,7 @@ pub enum EmailProviderNetworkError {
 
 ### `backend/src/integrations/mail/gmail/client/gmail_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/gmail/client/gmail_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/gmail/client/gmail_api.rs`
 - Size bytes / Размер в байтах: `10740`
 - Included characters / Включено символов: `10740`
 - Truncated / Обрезано: `no`
@@ -1653,7 +1653,7 @@ impl GmailApiClient {
 
 ### `backend/src/integrations/mail/gmail/client/helpers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/gmail/client/helpers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/gmail/client/helpers.rs`
 - Size bytes / Размер в байтах: `7187`
 - Included characters / Включено символов: `7187`
 - Truncated / Обрезано: `no`
@@ -1927,7 +1927,7 @@ mod tests {
 
 ### `backend/src/integrations/mail/gmail/client/imap.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/gmail/client/imap.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/gmail/client/imap.rs`
 - Size bytes / Размер в байтах: `5713`
 - Included characters / Включено символов: `5713`
 - Truncated / Обрезано: `no`
@@ -2102,7 +2102,7 @@ where
 
 ### `backend/src/integrations/mail/gmail/client/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/gmail/client/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/gmail/client/models.rs`
 - Size bytes / Размер в байтах: `1594`
 - Included characters / Включено символов: `1594`
 - Truncated / Обрезано: `no`
@@ -2169,7 +2169,7 @@ pub(super) struct GmailHistoryMessage {
 
 ### `backend/src/integrations/mail/gmail/client/options.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/gmail/client/options.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/gmail/client/options.rs`
 - Size bytes / Размер в байтах: `5112`
 - Included characters / Включено символов: `5112`
 - Truncated / Обрезано: `no`
@@ -2356,7 +2356,7 @@ impl ImapFetchOptions {
 
 ### `backend/src/integrations/mail/gmail/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/gmail/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/gmail/mod.rs`
 - Size bytes / Размер в байтах: `16`
 - Included characters / Включено символов: `16`
 - Truncated / Обрезано: `no`
@@ -2367,7 +2367,7 @@ pub mod client;
 
 ### `backend/src/integrations/mail/imap_write.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/imap_write.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/imap_write.rs`
 - Size bytes / Размер в байтах: `3236`
 - Included characters / Включено символов: `3236`
 - Truncated / Обрезано: `no`
@@ -2486,7 +2486,7 @@ pub enum ImapWriteError {
 
 ### `backend/src/integrations/mail/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/mod.rs`
 - Size bytes / Размер в байтах: `136`
 - Included characters / Включено символов: `136`
 - Truncated / Обрезано: `no`
@@ -2504,7 +2504,7 @@ pub mod sync_provider;
 
 ### `backend/src/integrations/mail/outbox.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/outbox.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/outbox.rs`
 - Size bytes / Размер в байтах: `1892`
 - Included characters / Включено символов: `1892`
 - Truncated / Обрезано: `no`

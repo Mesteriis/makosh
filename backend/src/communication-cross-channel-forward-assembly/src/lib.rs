@@ -10,22 +10,22 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use hermes_communication_cross_channel_forward_persistence::schema::communication_cross_channel_forward_storage_bundle_v1;
-use hermes_communication_cross_channel_forward_runtime::{
+use makosh_communication_cross_channel_forward_persistence::schema::communication_cross_channel_forward_storage_bundle_v1;
+use makosh_communication_cross_channel_forward_runtime::{
     communication_cross_channel_forward_module_descriptor_v1,
     communication_cross_channel_forward_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
 pub const CROSS_CHANNEL_FORWARD_ASSEMBLY_FRAGMENT_VERSION_V1: u32 = 1;
 pub const CROSS_CHANNEL_FORWARD_ASSEMBLY_OWNER_ID: &str = "communication_cross_channel_forward";
 pub const CROSS_CHANNEL_FORWARD_ASSEMBLY_MODULE_ID: &str =
-    "hermes-communication-cross-channel-forward-runtime";
+    "makosh-communication-cross-channel-forward-runtime";
 pub const CROSS_CHANNEL_FORWARD_RUNTIME_ARTIFACT_ID: &str =
     "communication_cross_channel_forward.runtime.v1";
 pub const CROSS_CHANNEL_FORWARD_STORAGE_ARTIFACT_ID: &str =
@@ -39,7 +39,7 @@ pub const CROSS_CHANNEL_FORWARD_STORAGE_BUNDLE_FILE: &str =
 pub const CROSS_CHANNEL_FORWARD_ARTIFACT_FRAGMENT_FILE: &str =
     "communication_cross_channel_forward.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH: &str = "bin/hermes-communication-cross-channel-forward-runtime";
+const RUNTIME_RELATIVE_PATH: &str = "bin/makosh-communication-cross-channel-forward-runtime";
 const DESCRIPTOR_RELATIVE_PATH: &str =
     "contracts/communication_cross_channel_forward.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH: &str =
@@ -267,8 +267,8 @@ mod tests {
         sync::atomic::{AtomicU64, Ordering},
     };
 
-    use hermes_runtime_protocol::v1::{ModuleDescriptorV1, SettingsSchemaV1};
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_runtime_protocol::v1::{ModuleDescriptorV1, SettingsSchemaV1};
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -277,7 +277,7 @@ mod tests {
     #[test]
     fn materializes_exact_unsigned_workflow_runtime_and_storage_fragment() {
         let root = temporary_directory();
-        let runtime = root.join("hermes-communication-cross-channel-forward-runtime");
+        let runtime = root.join("makosh-communication-cross-channel-forward-runtime");
         fs::write(&runtime, b"runtime").expect("write runtime");
         let output = root.join("assembly");
         let paths =

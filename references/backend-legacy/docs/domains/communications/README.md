@@ -2,9 +2,9 @@
 
 Status: documentation package aligned to the current repository structure.
 
-Communications are the primary ingestion spine of Hermes.
+Communications are the primary ingestion spine of Макошь.
 
-Hermes receives messages, meetings, calls and provider events as evidence. From
+Макошь receives messages, meetings, calls and provider events as evidence. From
 that evidence it extracts knowledge, memory, relationships, obligations, tasks,
 decisions and project context.
 
@@ -18,7 +18,7 @@ Communication
   -> Obligations / Tasks / Decisions / Projects
 ```
 
-Hermes includes first-class provider operational screens. Those screens and
+Макошь includes first-class provider operational screens. Those screens and
 their provider-specific state belong to integration plugins; Communications
 owns only the neutral evidence/context boundary of the Personal Memory System.
 
@@ -52,7 +52,7 @@ The Communications domain does not own:
 
 ## Communication Types
 
-Hermes treats the following as one family only after they cross the neutral
+Макошь treats the following as one family only after they cross the neutral
 evidence boundary:
 
 - email;

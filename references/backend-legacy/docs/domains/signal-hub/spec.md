@@ -1,9 +1,9 @@
 # Signal Hub Domain
 
 Signal Hub is the domain that owns the durable registry and control state for
-all signal sources in Hermes.
+all signal sources in Макошь.
 
-It exists because Hermes is a memory system that receives evidence from many
+It exists because Макошь is a memory system that receives evidence from many
 places, not a collection of provider apps. Email, Telegram, WhatsApp, GitHub,
 Browser capture, RSS, Calendar, Filesystem, Home Assistant and fixtures are all
 sources of signals.

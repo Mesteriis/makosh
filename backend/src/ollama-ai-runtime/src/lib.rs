@@ -12,4 +12,4 @@ pub use managed_runtime::{
     OllamaAiManagedRuntimeErrorV1, OllamaAiManagedRuntimeV1, OllamaAiRuntimeAdmissionV1,
 };
 
-pub const PACKAGE: &str = "hermes-ollama-ai-runtime";
+pub const PACKAGE: &str = "makosh-ollama-ai-runtime";

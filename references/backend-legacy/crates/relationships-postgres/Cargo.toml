@@ -1,5 +1,5 @@
 [package]
-name = "hermes-relationships-postgres"
+name = "makosh-relationships-postgres"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.89"
@@ -8,8 +8,8 @@ license = "MIT"
 
 [dependencies]
 chrono = { version = "0.4", default-features = false, features = ["clock", "serde"] }
-hermes-relationships-api = { path = "../relationships-api" }
-hermes-observations-postgres = { path = "../observations-postgres" }
+makosh-relationships-api = { path = "../relationships-api" }
+makosh-observations-postgres = { path = "../observations-postgres" }
 serde_json = "1"
 sqlx = { version = "0.8", default-features = false, features = ["chrono", "json", "postgres", "runtime-tokio-rustls"] }
 thiserror = "2"

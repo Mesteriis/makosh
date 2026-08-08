@@ -45,7 +45,7 @@ test('Knowledge admission is exact verified-note ownership with atomic owner-loc
     readFile(new URL('src/knowledge-command-api/src/envelope.rs', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/knowledge-command-api/proto/hermes/knowledge/command/v1/knowledge_command.proto',
+        'src/knowledge-command-api/proto/makosh/knowledge/command/v1/knowledge_command.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -84,13 +84,13 @@ test('Knowledge admission is exact verified-note ownership with atomic owner-loc
   assert.match(adr, /Cross-owner path остаётся[\s\S]*event-only/);
 
   for (const unit of [
-    'hermes-knowledge-command-api',
-    'hermes-knowledge-core',
-    'hermes-knowledge-persistence',
-    'hermes-knowledge-runtime',
-    'hermes-knowledge-assembly',
+    'makosh-knowledge-command-api',
+    'makosh-knowledge-core',
+    'makosh-knowledge-persistence',
+    'makosh-knowledge-runtime',
+    'makosh-knowledge-assembly',
   ]) {
-    assert.match(workspace, new RegExp(`"src/${unit.replace('hermes-', '')}"`));
+    assert.match(workspace, new RegExp(`"src/${unit.replace('makosh-', '')}"`));
     assert.match(adr, new RegExp(`\\b${unit}\\b`));
     assert.equal(policy.implementation.productionPackages.some(({ name }) => name === unit), true);
   }
@@ -104,11 +104,11 @@ test('Knowledge admission is exact verified-note ownership with atomic owner-loc
   assert.match(persistenceManifest, /role = "domain"/);
   assert.match(persistenceManifest, /owner = "knowledge"/);
   assert.match(persistenceManifest, /surface = "persistence"/);
-  assert.match(persistenceManifest, /hermes-knowledge-core/);
-  assert.match(persistenceManifest, /hermes-storage-protocol/);
+  assert.match(persistenceManifest, /makosh-knowledge-core/);
+  assert.match(persistenceManifest, /makosh-storage-protocol/);
   assert.doesNotMatch(
     persistenceManifest,
-    /hermes-(communications|review|tasks|documents|mail|telegram|whatsapp|zulip)/,
+    /makosh-(communications|review|tasks|documents|mail|telegram|whatsapp|zulip)/,
   );
 
   assert.match(api, /knowledge\.reviewed-candidate\.command\.v1/);
@@ -142,7 +142,7 @@ test('Knowledge admission is exact verified-note ownership with atomic owner-loc
   assert.match(creation, /unordered_hints_and_invalid_confidence_are_rejected/);
   assert.doesNotMatch(
     `${core}\n${model}\n${creation}`,
-    /hermes_communications|hermes_review|hermes_tasks|hermes_documents|graph|search|context|ollama|sqlx|reqwest/,
+    /makosh_communications|makosh_review|makosh_tasks|makosh_documents|graph|search|context|ollama|sqlx|reqwest/,
   );
 
   assert.match(persistence, /KnowledgePersistenceV1/);
@@ -161,7 +161,7 @@ test('Knowledge admission is exact verified-note ownership with atomic owner-loc
     'knowledge_state',
     'knowledge_outbox',
   ]) {
-    assert.match(migration, new RegExp(`hermes_data\\.${table}`));
+    assert.match(migration, new RegExp(`makosh_data\\.${table}`));
   }
   assert.match(migration, /note_creation_fingerprint/);
   assert.match(migration, /materialized_blob_declared_bytes/);
@@ -178,17 +178,17 @@ test('Knowledge admission is exact verified-note ownership with atomic owner-loc
   assert.match(runtimeManifest, /owner = "knowledge"/);
   assert.match(runtimeManifest, /surface = "runtime"/);
   for (const dependency of [
-    'hermes-knowledge-command-api',
-    'hermes-knowledge-core',
-    'hermes-knowledge-persistence',
-    'hermes-events-jetstream',
-    'hermes-blob-client',
+    'makosh-knowledge-command-api',
+    'makosh-knowledge-core',
+    'makosh-knowledge-persistence',
+    'makosh-events-jetstream',
+    'makosh-blob-client',
   ]) {
     assert.match(runtimeManifest, new RegExp(dependency));
   }
   assert.doesNotMatch(
     runtimeManifest,
-    /hermes-(communications|review|tasks|documents|mail|telegram|whatsapp|zulip)/,
+    /makosh-(communications|review|tasks|documents|mail|telegram|whatsapp|zulip)/,
   );
   assert.match(runtime, /KnowledgeManagedRuntimeV1/);
   assert.match(admission, /ModuleKindV1::Domain/);
@@ -208,7 +208,7 @@ test('Knowledge admission is exact verified-note ownership with atomic owner-loc
   assert.match(eventOutbox, /publish_exact/);
   assert.doesNotMatch(
     `${runtime}\n${admission}\n${blob.split('#[cfg(test)]')[0]}\n${command.split('#[cfg(test)]')[0]}\n${managedRuntime}\n${eventOutbox}`,
-    /hermes_(communications|review|tasks|documents)|provider_id|account_id|ollama|reqwest|client_polling/,
+    /makosh_(communications|review|tasks|documents)|provider_id|account_id|ollama|reqwest|client_polling/,
   );
 
   assert.match(assemblyManifest, /role = "domain"/);
@@ -220,6 +220,6 @@ test('Knowledge admission is exact verified-note ownership with atomic owner-loc
   assert.match(assembly, /create_new\(true\)/);
   assert.doesNotMatch(
     `${assemblyManifest}\n${assembly.split('#[cfg(test)]')[0]}`,
-    /hermes-(communications|review|tasks|documents|mail|telegram|whatsapp|zulip)|SigningKey|private_key|p256|ollama/,
+    /makosh-(communications|review|tasks|documents|mail|telegram|whatsapp|zulip)|SigningKey|private_key|p256|ollama/,
   );
 });

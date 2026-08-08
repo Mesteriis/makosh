@@ -1,4 +1,4 @@
-use hermes_call_transcription_api::{
+use makosh_call_transcription_api::{
     CONTRACT_MAJOR_V1, GET_CONTRACT_NAME_V1, MODULE_ID_V1, OWNER_ID_V1, READ_CONTRACT_NAME_V1,
     READ_TICKET_BYTES_V1, START_CONTRACT_NAME_V1, TICKET_CONTRACT_NAME_V1, contract_reference_v1,
     wire::{
@@ -11,16 +11,16 @@ use hermes_call_transcription_api::{
         StartCallTranscriptionRequestV1, StartCallTranscriptionResponseV1,
     },
 };
-use hermes_call_transcription_core::{
+use makosh_call_transcription_core::{
     CallTranscriptionCompletenessV1, CallTranscriptionDraftV1, CallTranscriptionLanguageV1,
     CallTranscriptionRejectionV1, CallTranscriptionStateV1, TranscriptArtifactV1,
 };
-use hermes_call_transcription_persistence::{
+use makosh_call_transcription_persistence::{
     CallTranscriptionPersistenceErrorV1, CallTranscriptionPersistenceV1,
     CreateCallTranscriptionRunOutcomeV1, CreateCallTranscriptionRunV1, IssueCallTranscriptTicketV1,
     PersistedCallTranscriptionRunV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ModuleClientBlobAuthorizationV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
 use prost::Message;
@@ -361,7 +361,7 @@ fn validate_request(
 
 fn device_actor_sha256(request: &ModuleClientRequestV1) -> [u8; 32] {
     bound_identity_sha256(
-        b"hermes.call-transcription.device-actor.v1\0",
+        b"makosh.call-transcription.device-actor.v1\0",
         &request.logical_owner_id,
         &request.authenticated_device_id,
     )
@@ -369,7 +369,7 @@ fn device_actor_sha256(request: &ModuleClientRequestV1) -> [u8; 32] {
 
 fn client_session_sha256(request: &ModuleClientRequestV1) -> [u8; 32] {
     bound_identity_sha256(
-        b"hermes.call-transcription.client-session.v1\0",
+        b"makosh.call-transcription.client-session.v1\0",
         &request.logical_owner_id,
         &request.authenticated_client_session_id,
     )

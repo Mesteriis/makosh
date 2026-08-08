@@ -10,8 +10,8 @@ directories before `tauri build`:
 - `macos-universal/libtdjson.dylib`
 
 Use `make tdlib-macos-resource` to populate the matching directory from
-`HERMES_TDJSON_SOURCE`, `HERMES_TDJSON_PATH`, or an installed Homebrew `tdlib`.
-For release CI, `HERMES_TDLIB_BUILD_FROM_SOURCE=1 make tdlib-macos-resource`
+`MAKOSH_TDJSON_SOURCE`, `MAKOSH_TDJSON_PATH`, or an installed Homebrew `tdlib`.
+For release CI, `MAKOSH_TDLIB_BUILD_FROM_SOURCE=1 make tdlib-macos-resource`
 can build TDLib from source before copying the generated dynamic library.
 Generated dynamic libraries are ignored by Git.
 

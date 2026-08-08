@@ -8,7 +8,7 @@ Status: Accepted
 
 ## Deciders
 
-Alex (hermes-hub maintainer)
+Alex (makosh maintainer)
 
 ## Supersedes
 
@@ -20,7 +20,7 @@ Alex (hermes-hub maintainer)
 
 ## Context
 
-Hermes Hub evolves from a small desktop application into a long-term Personal
+Макошь evolves from a small desktop application into a long-term Personal
 Memory System that integrates:
 
 - Mail
@@ -39,7 +39,7 @@ The project is built as a desktop-first application using:
 - Rust
 - Tauri
 
-Hermes is not a traditional website and does not require:
+Макошь is not a traditional website and does not require:
 
 - SEO
 - Public SSR pages
@@ -195,7 +195,7 @@ inside components (except in query definitions).
 | Tailwind CSS | Utility-first CSS framework |
 | shadcn-vue | Accessible component primitives (become project-owned code) |
 
-Hermes UI is not tied to any third-party design system. shadcn-vue components
+Макошь UI is not tied to any third-party design system. shadcn-vue components
 are copied into the project and customized as needed.
 
 ### Animations

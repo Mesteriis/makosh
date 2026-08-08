@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package makosh.communication_translation.v1;
+
+message StartCommunicationTranslationRequestV1 {
+  uint32 protocol_major = 1;
+  bytes operation_id = 2;
+  bytes source_message_id = 3;
+  uint64 expected_source_revision = 4;
+  CommunicationTranslationLanguageV1 target_language = 5;
+}
+
+message StartCommunicationTranslationResponseV1 {
+  bytes run_id = 1;
+  CommunicationTranslationStateV1 state = 2;
+  CommunicationTranslationErrorCodeV1 error = 15;
+}
+
+message GetCommunicationTranslationRequestV1 {
+  uint32 protocol_major = 1;
+  bytes run_id = 2;
+}
+
+message GetCommunicationTranslationResponseV1 {
+  bytes run_id = 1;
+  bytes source_message_id = 2;
+  uint64 expected_source_revision = 3;
+  CommunicationTranslationStateV1 state = 4;
+  uint64 state_revision = 5;
+  optional CommunicationTranslationCandidateV1 candidate = 6;
+  CommunicationTranslationErrorCodeV1 error = 15;
+}
+
+message CommunicationTranslationCandidateV1 {
+  bytes translated_text_utf8 = 1;
+  CommunicationTranslationDetectedLanguageV1 detected_source_language = 2;
+  CommunicationTranslationLanguageV1 target_language = 3;
+  CommunicationTranslationCompletenessV1 completeness = 4;
+  uint32 confidence_basis_points = 5;
+}
+
+message CommunicationTranslationStatusChangedV1 {
+  bytes run_id = 1;
+  CommunicationTranslationStateV1 state = 2;
+  uint64 state_revision = 3;
+  uint64 occurred_at_unix_millis = 4;
+  CommunicationTranslationErrorCodeV1 error = 15;
+}
+
+service CommunicationTranslationCommandService {
+  rpc Start(StartCommunicationTranslationRequestV1)
+      returns (StartCommunicationTranslationResponseV1);
+}
+
+service CommunicationTranslationQueryService {
+  rpc Get(GetCommunicationTranslationRequestV1)
+      returns (GetCommunicationTranslationResponseV1);
+}
+
+enum CommunicationTranslationLanguageV1 {
+  COMMUNICATION_TRANSLATION_LANGUAGE_UNSPECIFIED = 0;
+  COMMUNICATION_TRANSLATION_LANGUAGE_ENGLISH = 1;
+  COMMUNICATION_TRANSLATION_LANGUAGE_RUSSIAN = 2;
+  COMMUNICATION_TRANSLATION_LANGUAGE_SPANISH = 3;
+}
+
+enum CommunicationTranslationDetectedLanguageV1 {
+  COMMUNICATION_TRANSLATION_DETECTED_LANGUAGE_UNSPECIFIED = 0;
+  COMMUNICATION_TRANSLATION_DETECTED_LANGUAGE_UNKNOWN = 1;
+  COMMUNICATION_TRANSLATION_DETECTED_LANGUAGE_ENGLISH = 2;
+  COMMUNICATION_TRANSLATION_DETECTED_LANGUAGE_RUSSIAN = 3;
+  COMMUNICATION_TRANSLATION_DETECTED_LANGUAGE_SPANISH = 4;
+}
+
+enum CommunicationTranslationStateV1 {
+  COMMUNICATION_TRANSLATION_STATE_UNSPECIFIED = 0;
+  COMMUNICATION_TRANSLATION_STATE_ACCEPTED = 1;
+  COMMUNICATION_TRANSLATION_STATE_PREPARING_SOURCE = 2;
+  COMMUNICATION_TRANSLATION_STATE_AWAITING_INFERENCE = 3;
+  COMMUNICATION_TRANSLATION_STATE_READY = 4;
+  COMMUNICATION_TRANSLATION_STATE_REJECTED = 5;
+}
+
+enum CommunicationTranslationCompletenessV1 {
+  COMMUNICATION_TRANSLATION_COMPLETENESS_UNSPECIFIED = 0;
+  COMMUNICATION_TRANSLATION_COMPLETENESS_COMPLETE = 1;
+  COMMUNICATION_TRANSLATION_COMPLETENESS_PARTIAL = 2;
+}
+
+enum CommunicationTranslationErrorCodeV1 {
+  COMMUNICATION_TRANSLATION_ERROR_CODE_UNSPECIFIED = 0;
+  COMMUNICATION_TRANSLATION_ERROR_CODE_INVALID_REQUEST = 1;
+  COMMUNICATION_TRANSLATION_ERROR_CODE_NOT_FOUND = 2;
+  COMMUNICATION_TRANSLATION_ERROR_CODE_SOURCE_REJECTED = 3;
+  COMMUNICATION_TRANSLATION_ERROR_CODE_INFERENCE_REJECTED = 4;
+  COMMUNICATION_TRANSLATION_ERROR_CODE_POLICY = 5;
+  COMMUNICATION_TRANSLATION_ERROR_CODE_UNAVAILABLE = 6;
+}

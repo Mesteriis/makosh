@@ -5,7 +5,7 @@ mod file_source;
 
 use std::path::Path;
 
-use hermes_vault_store_sqlcipher::VaultStore;
+use makosh_vault_store_sqlcipher::VaultStore;
 
 use self::credentials::PlatformCredentialSeeds;
 use self::file_source::FilePlatformCredentialSource;

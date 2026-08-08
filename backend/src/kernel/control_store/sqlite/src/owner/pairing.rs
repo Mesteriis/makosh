@@ -1,6 +1,6 @@
 //! SQLite persistence for the one-shot server bootstrap pairing ceremony.
 
-use hermes_kernel_control_store::{InitialOwnerIdentity, ServerBootstrapPairing};
+use makosh_kernel_control_store::{InitialOwnerIdentity, ServerBootstrapPairing};
 use rusqlite::{OptionalExtension, params};
 
 use crate::{SqliteControlStore, StoreError, valid_identity_token};
@@ -50,7 +50,7 @@ fn begin_pairing(
     }
     let existing = transaction
             .query_row(
-                "SELECT status, expires_at_unix_ms FROM hermes_kernel_server_bootstrap_pairing WHERE singleton = 1",
+                "SELECT status, expires_at_unix_ms FROM makosh_kernel_server_bootstrap_pairing WHERE singleton = 1",
                 [],
                 |row| Ok((row.get::<_, String>(0)?, row.get::<_, i64>(1)?)),
             )
@@ -60,7 +60,7 @@ fn begin_pairing(
         return Err(StoreError::ServerBootstrapPairingAlreadyActive);
     }
     transaction.execute(
-            "INSERT INTO hermes_kernel_server_bootstrap_pairing (singleton, token_sha256, certificate_sha256, challenge, expires_at_unix_ms, status) VALUES (1, ?1, ?2, ?3, ?4, 'active') ON CONFLICT(singleton) DO UPDATE SET token_sha256 = excluded.token_sha256, certificate_sha256 = excluded.certificate_sha256, challenge = excluded.challenge, expires_at_unix_ms = excluded.expires_at_unix_ms, status = 'active'",
+            "INSERT INTO makosh_kernel_server_bootstrap_pairing (singleton, token_sha256, certificate_sha256, challenge, expires_at_unix_ms, status) VALUES (1, ?1, ?2, ?3, ?4, 'active') ON CONFLICT(singleton) DO UPDATE SET token_sha256 = excluded.token_sha256, certificate_sha256 = excluded.certificate_sha256, challenge = excluded.challenge, expires_at_unix_ms = excluded.expires_at_unix_ms, status = 'active'",
             params![
                 pairing.token_sha256().as_slice(),
                 pairing.certificate_sha256().as_slice(),
@@ -84,7 +84,7 @@ fn claim_pairing(
     }
     let pairing = transaction
             .query_row(
-                "SELECT token_sha256, expires_at_unix_ms, status FROM hermes_kernel_server_bootstrap_pairing WHERE singleton = 1",
+                "SELECT token_sha256, expires_at_unix_ms, status FROM makosh_kernel_server_bootstrap_pairing WHERE singleton = 1",
                 [],
                 |row| Ok((row.get::<_, Vec<u8>>(0)?, row.get::<_, i64>(1)?, row.get::<_, String>(2)?)),
             )
@@ -99,7 +99,7 @@ fn claim_pairing(
     }
     if pairing.1 <= now {
         transaction.execute(
-                "UPDATE hermes_kernel_server_bootstrap_pairing SET status = 'expired' WHERE singleton = 1 AND status = 'active'",
+                "UPDATE makosh_kernel_server_bootstrap_pairing SET status = 'expired' WHERE singleton = 1 AND status = 'active'",
                 [],
             )?;
         transaction.commit()?;
@@ -109,14 +109,14 @@ fn claim_pairing(
         return Err(StoreError::ServerBootstrapPairingTokenRejected);
     }
     let claimed = transaction.execute(
-            "INSERT OR IGNORE INTO hermes_kernel_initial_owner_identity (singleton, owner_id, device_id, public_key_sec1) VALUES (1, ?1, ?2, ?3)",
+            "INSERT OR IGNORE INTO makosh_kernel_initial_owner_identity (singleton, owner_id, device_id, public_key_sec1) VALUES (1, ?1, ?2, ?3)",
             params![identity.owner_id(), identity.device_id(), identity.public_key_sec1().as_slice()],
         )?;
     if claimed != 1 {
         return Err(StoreError::InitialOwnerAlreadyClaimed);
     }
     let consumed = transaction.execute(
-            "UPDATE hermes_kernel_server_bootstrap_pairing SET status = 'consumed' WHERE singleton = 1 AND status = 'active'",
+            "UPDATE makosh_kernel_server_bootstrap_pairing SET status = 'consumed' WHERE singleton = 1 AND status = 'active'",
             [],
         )?;
     if consumed != 1 {
@@ -129,7 +129,7 @@ fn claim_pairing(
 fn initial_owner_exists(transaction: &rusqlite::Transaction<'_>) -> Result<bool, StoreError> {
     transaction
         .query_row(
-            "SELECT 1 FROM hermes_kernel_initial_owner_identity WHERE singleton = 1",
+            "SELECT 1 FROM makosh_kernel_initial_owner_identity WHERE singleton = 1",
             [],
             |_| Ok(()),
         )

@@ -1,4 +1,4 @@
-use hermes_attachment_preview_renderer_contract::AttachmentPreviewRendererErrorV1;
+use makosh_attachment_preview_renderer_contract::AttachmentPreviewRendererErrorV1;
 use quick_xml::{Reader, escape::unescape, events::Event};
 
 const MAX_DOCUMENT_TEXT_BYTES_V1: u64 = 8 * 1024 * 1024;

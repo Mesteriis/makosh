@@ -2,8 +2,8 @@
 
 use std::sync::Mutex;
 
-use hermes_communications_api::CommunicationMessageIdV1;
-use hermes_communications_persistence::CommunicationsBodyContentReceiptV1;
+use makosh_communications_api::CommunicationMessageIdV1;
+use makosh_communications_persistence::CommunicationsBodyContentReceiptV1;
 
 const TICKET_BYTES: usize = 32;
 const TICKET_TTL_SECONDS: i64 = 30;

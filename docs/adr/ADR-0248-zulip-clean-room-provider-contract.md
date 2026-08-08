@@ -8,11 +8,11 @@ Zulip is an integration owner, not a Communications domain, Gateway facade, or
 generic provider implementation. Its clean-room package graph is exact:
 
 ```text
-hermes-zulip-api
-hermes-zulip-core
-hermes-zulip-http
-hermes-zulip-persistence
-hermes-zulip-runtime
+makosh-zulip-api
+makosh-zulip-core
+makosh-zulip-http
+makosh-zulip-persistence
+makosh-zulip-runtime
 ```
 
 `api` owns only typed Zulip operational contracts. `core` owns the Zulip
@@ -38,7 +38,7 @@ dependency.
 ## Communications boundary
 
 The only Zulip to Communications dependency is
-`hermes-communications-ingress`. Zulip publishes typed, metadata-only neutral
+`makosh-communications-ingress`. Zulip publishes typed, metadata-only neutral
 observations through its own exact-byte outbox. Communications never imports a
 Zulip DTO, HTTP adapter, cursor, or persistence crate. No command is completed
 solely by HTTP acceptance when its provider observation/reconciliation contract

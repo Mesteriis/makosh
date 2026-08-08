@@ -1,23 +1,23 @@
 use std::time::Duration;
 
 use futures_util::StreamExt;
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     ConsumerBudgetV1, ConsumerSpecV1, DurableSubjectV1, EventHubTopologyPlanV1, JetStreamClient,
     NatsPasswordCredentialV1, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, StreamBudgetV1, StreamKindV1, StreamSpecV1,
 };
-use hermes_events_protocol::v1::{
+use makosh_events_protocol::v1::{
     ActorKindV1, ActorRefV1, ContractRefV1, DurableEnvelopeV1, EventMetadataV1, FenceKindV1,
     SourceFenceV1, SourceRefV1, durable_envelope_v1::Semantics,
 };
 use prost::Message;
 use prost_types::Timestamp;
 
-const ENDPOINT: &str = "HERMES_NATS_TEST_ENDPOINT";
-const HUB_USER: &str = "HERMES_NATS_EVENT_HUB_USERNAME";
-const HUB_PASSWORD: &str = "HERMES_NATS_EVENT_HUB_PASSWORD";
-const RUNTIME_USER: &str = "HERMES_NATS_RUNTIME_USERNAME";
-const RUNTIME_PASSWORD: &str = "HERMES_NATS_RUNTIME_PASSWORD";
+const ENDPOINT: &str = "MAKOSH_NATS_TEST_ENDPOINT";
+const HUB_USER: &str = "MAKOSH_NATS_EVENT_HUB_USERNAME";
+const HUB_PASSWORD: &str = "MAKOSH_NATS_EVENT_HUB_PASSWORD";
+const RUNTIME_USER: &str = "MAKOSH_NATS_RUNTIME_USERNAME";
+const RUNTIME_PASSWORD: &str = "MAKOSH_NATS_RUNTIME_PASSWORD";
 
 #[tokio::test(flavor = "multi_thread")]
 #[ignore = "requires the authenticated Docker JetStream contour"]
@@ -45,7 +45,7 @@ pub(super) async fn configure_event_hub(endpoint: &str) {
     let consumer = ConsumerSpecV1::new(
         StreamKindV1::Event,
         "notes_projection",
-        "hermes.event.v1.notes.changed.v1",
+        "makosh.event.v1.notes.changed.v1",
         consumer_budget,
     )
     .expect("consumer spec");
@@ -85,7 +85,7 @@ async fn publish_from_runtime(endpoint: &str) -> Vec<u8> {
         .publish_exact(&permit, &expected)
         .await
         .expect("publish duplicate copy");
-    assert_eq!(first.stream(), "HERMES_EVENT_V1");
+    assert_eq!(first.stream(), "MAKOSH_EVENT_V1");
     assert!(!first.duplicate());
     assert!(second.duplicate());
     assert!(
@@ -114,7 +114,7 @@ pub(super) async fn assert_exact_runtime_delivery(endpoint: &str, expected: &[u8
         ConsumerSpecV1::new(
             StreamKindV1::Event,
             "notes_projection",
-            "hermes.event.v1.notes.changed.v1",
+            "makosh.event.v1.notes.changed.v1",
             ConsumerBudgetV1::new(16, 3, Duration::from_secs(2)).expect("consumer budget"),
         )
         .expect("consumer spec"),

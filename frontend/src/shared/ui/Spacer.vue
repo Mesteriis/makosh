@@ -11,8 +11,8 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-spacer',
-	`hermes-spacer--${props.orientation}`,
+	'makosh-spacer',
+	`makosh-spacer--${props.orientation}`,
 	props.class
 ])
 </script>

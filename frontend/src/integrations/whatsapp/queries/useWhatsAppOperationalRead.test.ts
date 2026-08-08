@@ -6,7 +6,7 @@ import {
 	ClientModuleSettingsBootstrapV1Schema,
 	ClientSettingValueEntryV1Schema,
 	ClientSettingValueV1Schema,
-} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	getWhatsAppOperationalRuntimeStatus,
 	listWhatsAppOperationalDialogs,
@@ -153,7 +153,7 @@ describe('WhatsApp operational read controller', () => {
 function whatsAppModule(capabilityId: string) {
 	return create(ClientModuleBootstrapV1Schema, {
 		registrationId: 'whatsapp-primary',
-		moduleId: 'hermes-whatsapp-runtime',
+		moduleId: 'makosh-whatsapp-runtime',
 		sectionsEnabled: true,
 		capabilityIds: [capabilityId],
 		settings: create(ClientModuleSettingsBootstrapV1Schema, {

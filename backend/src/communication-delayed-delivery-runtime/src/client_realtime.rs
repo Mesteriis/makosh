@@ -1,15 +1,15 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_delayed_delivery_api::{
+use makosh_communication_delayed_delivery_api::{
     COMMUNICATION_DELAYED_DELIVERY_REALTIME_EVENT_KIND_V1,
     wire::{DelayedDeliveryStateV1 as WireState, DelayedDeliveryStatusChangedV1},
 };
-use hermes_communication_delayed_delivery_core::DelayedDeliveryStateV1;
-use hermes_communication_delayed_delivery_persistence::{
+use makosh_communication_delayed_delivery_core::DelayedDeliveryStateV1;
+use makosh_communication_delayed_delivery_persistence::{
     CommunicationDelayedDeliveryPersistenceV1, DelayedDeliveryClientRealtimeTransitionV1,
     DelayedDeliveryPersistenceErrorV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeClientRealtimePublishRequestV1, ManagedRuntimeControlRequestV1,
@@ -153,10 +153,10 @@ fn event_id(delayed_operation_id: [u8; 16], state_revision: u64) -> [u8; 16] {
 #[cfg(test)]
 mod tests {
     use super::{client_realtime_request, event_id, wire_state};
-    use hermes_communication_delayed_delivery_api::wire::DelayedDeliveryStateV1 as WireState;
-    use hermes_communication_delayed_delivery_core::DelayedDeliveryStateV1;
-    use hermes_communication_delayed_delivery_persistence::DelayedDeliveryClientRealtimeTransitionV1;
-    use hermes_runtime_protocol::validation::client_realtime::validate_managed_client_realtime_publish_request_v1;
+    use makosh_communication_delayed_delivery_api::wire::DelayedDeliveryStateV1 as WireState;
+    use makosh_communication_delayed_delivery_core::DelayedDeliveryStateV1;
+    use makosh_communication_delayed_delivery_persistence::DelayedDeliveryClientRealtimeTransitionV1;
+    use makosh_runtime_protocol::validation::client_realtime::validate_managed_client_realtime_publish_request_v1;
 
     #[test]
     fn event_identity_binds_operation_and_revision() {

@@ -1,5 +1,5 @@
-use hermes_contacts_persistence::{ContactsPersistenceErrorV1, ContactsPersistenceV1};
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_contacts_persistence::{ContactsPersistenceErrorV1, ContactsPersistenceV1};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum ContactsEventRelayErrorV1 {

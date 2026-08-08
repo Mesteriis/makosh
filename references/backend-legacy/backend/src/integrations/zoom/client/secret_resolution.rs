@@ -4,8 +4,8 @@ use super::{ZoomError, ZoomStore};
 use crate::platform::secrets::models::{SecretKind, SecretStoreKind};
 use crate::platform::secrets::store::SecretReferenceStore;
 use crate::vault::HostVault;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
-use hermes_provider_zoom::protocol::ZoomAuthShape;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_provider_zoom::protocol::ZoomAuthShape;
 
 impl ZoomStore {
     pub(super) async fn load_token_bundle(

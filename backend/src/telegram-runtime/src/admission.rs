@@ -4,9 +4,9 @@
 //! descriptor does not register Telegram in the production inventory or grant
 //! any capability.
 
-use hermes_communications_call_evidence_ingress::call_evidence_observed_publish_request_v1;
-use hermes_communications_ingress::admission::communication_observed_publish_request_v1;
-use hermes_runtime_protocol::v1::{
+use makosh_communications_call_evidence_ingress::call_evidence_observed_publish_request_v1;
+use makosh_communications_ingress::admission::communication_observed_publish_request_v1;
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ClientRpcRouteV1, ContractReferenceV1, IntegrationStateRequestV1,
     ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1,
@@ -14,22 +14,22 @@ use hermes_runtime_protocol::v1::{
     StorageNamespaceRequestV1, VaultActionV1, VaultPurposeRequestV1, VaultSecretClassV1,
     VaultTargetScopeV1, capability_request_v1::Request,
 };
-use hermes_telegram_api::client_contract::{
+use makosh_telegram_api::client_contract::{
     TELEGRAM_AUTHORIZATION_REALTIME_CAPABILITY_ID_V1,
     TELEGRAM_AUTHORIZATION_STATUS_CHANGED_CONTRACT_NAME_V1, TELEGRAM_CLIENT_CONTRACT_MAJOR,
     TELEGRAM_CLIENT_CONTRACT_REVISION, TELEGRAM_CLIENT_DESCRIPTOR_SET_V1, TELEGRAM_MODULE_ID,
     TELEGRAM_OWNER_ID, TelegramClientContractV1,
 };
-use hermes_telegram_automation_api::contract::{
+use makosh_telegram_automation_api::contract::{
     TELEGRAM_AUTOMATION_CONTRACT_MAJOR, TELEGRAM_AUTOMATION_CONTRACT_REVISION,
     TELEGRAM_AUTOMATION_DESCRIPTOR_SET_V1, TelegramAutomationContractV1,
 };
-use hermes_telegram_calls_api::contract::{
+use makosh_telegram_calls_api::contract::{
     TELEGRAM_CALLS_CONTRACT_MAJOR, TELEGRAM_CALLS_CONTRACT_REVISION,
     TELEGRAM_CALLS_DESCRIPTOR_SET_V1, TelegramCallsContractV1,
 };
-use hermes_telegram_core::{TELEGRAM_API_HASH_PURPOSE_ID, TELEGRAM_SESSION_STORE_KEY_PURPOSE_ID};
-use hermes_telegram_delivery_intent_contract::{
+use makosh_telegram_core::{TELEGRAM_API_HASH_PURPOSE_ID, TELEGRAM_SESSION_STORE_KEY_PURPOSE_ID};
+use makosh_telegram_delivery_intent_contract::{
     TELEGRAM_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1,
     telegram_delivery_intent_execute_consume_request_v1,
     telegram_delivery_intent_rejected_publish_request_v1,
@@ -389,16 +389,16 @@ pub fn telegram_module_descriptor_v1(build_id: &str) -> ModuleDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::{
+    use makosh_runtime_protocol::{
         v1::{
             ModuleKindV1, ProvidedSurfaceKindV1, RuntimeArtifactUseV1,
             capability_request_v1::Request,
         },
         validation::descriptor::validate_descriptor_v1,
     };
-    use hermes_telegram_api::client_contract::TelegramClientContractV1;
-    use hermes_telegram_automation_api::contract::TelegramAutomationContractV1;
-    use hermes_telegram_calls_api::contract::TelegramCallsContractV1;
+    use makosh_telegram_api::client_contract::TelegramClientContractV1;
+    use makosh_telegram_automation_api::contract::TelegramAutomationContractV1;
+    use makosh_telegram_calls_api::contract::TelegramCallsContractV1;
 
     use super::{
         TELEGRAM_API_HASH_PROVISIONING_CAPABILITY_ID, TELEGRAM_BLOB_CAPABILITY_ID,
@@ -407,7 +407,7 @@ mod tests {
         TELEGRAM_SESSION_STORE_KEY_PROVISIONING_CAPABILITY_ID, TELEGRAM_STORAGE_CAPABILITY_ID,
         telegram_module_descriptor_v1,
     };
-    use hermes_telegram_delivery_intent_contract::TELEGRAM_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1;
+    use makosh_telegram_delivery_intent_contract::TELEGRAM_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1;
 
     #[test]
     fn descriptor_is_valid_and_keeps_client_and_platform_capabilities_separate() {

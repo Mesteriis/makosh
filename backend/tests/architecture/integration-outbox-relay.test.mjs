@@ -35,12 +35,12 @@ test('every Communications integration relay publishes exact durable envelopes',
 
 test('integration packages reach Communications only through explicit public contract units', () => {
   const communicationsPackages = new Set([
-    'hermes-communications-api',
-    'hermes-communications-attachment-contract',
-    'hermes-communications-domain',
-    'hermes-communications-ingress',
-    'hermes-communications-persistence',
-    'hermes-communications-runtime',
+    'makosh-communications-api',
+    'makosh-communications-attachment-contract',
+    'makosh-communications-domain',
+    'makosh-communications-ingress',
+    'makosh-communications-persistence',
+    'makosh-communications-runtime',
   ]);
 
   const integrationManifests = readdirSync(join(backendRoot, 'src'), { withFileTypes: true })
@@ -62,8 +62,8 @@ test('integration packages reach Communications only through explicit public con
       .filter((name) => communicationsPackages.has(name));
     assert.ok(
       communicationsDependencies.every((name) => [
-        'hermes-communications-attachment-contract',
-        'hermes-communications-ingress',
+        'makosh-communications-attachment-contract',
+        'makosh-communications-ingress',
       ].includes(name)),
       `${manifestPath} has a direct Communications implementation edge`,
     );

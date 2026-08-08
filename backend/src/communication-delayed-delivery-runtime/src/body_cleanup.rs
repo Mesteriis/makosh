@@ -1,12 +1,12 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_delayed_delivery_execution::{
+use makosh_communication_delayed_delivery_execution::{
     DelayedDeliveryCleanupErrorV1, DelayedDeliveryCleanupOutcomeV1, process_body_cleanup_once_v1,
 };
-use hermes_communication_delayed_delivery_persistence::CommunicationDelayedDeliveryPersistenceV1;
-use hermes_communication_delayed_delivery_runtime_adapters::ManagedDelayedDeliveryRuntimePortV1;
-use hermes_communication_delayed_delivery_store_adapters::DelayedDeliveryExecutionStoreAdapterV1;
-use hermes_runtime_protocol::managed_control::{
+use makosh_communication_delayed_delivery_persistence::CommunicationDelayedDeliveryPersistenceV1;
+use makosh_communication_delayed_delivery_runtime_adapters::ManagedDelayedDeliveryRuntimePortV1;
+use makosh_communication_delayed_delivery_store_adapters::DelayedDeliveryExecutionStoreAdapterV1;
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
 

@@ -1,22 +1,22 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub(crate) use chrono::Utc;
-pub(crate) use hermes_communications_api::evidence::NewIngestionCheckpoint;
-pub(crate) use hermes_communications_postgres::store::CommunicationIngestionStore;
-pub(crate) use hermes_hub_backend::domains::communications::credentials::{
+pub(crate) use makosh_communications_api::evidence::NewIngestionCheckpoint;
+pub(crate) use makosh_communications_postgres::store::CommunicationIngestionStore;
+pub(crate) use makosh_hub_backend::domains::communications::credentials::{
     ProviderCredentialError, ProviderCredentialReader,
 };
 
-pub(crate) use hermes_hub_backend::platform::secrets::errors::SecretResolutionError;
-pub(crate) use hermes_hub_backend::platform::secrets::models::{
+pub(crate) use makosh_hub_backend::platform::secrets::errors::SecretResolutionError;
+pub(crate) use makosh_hub_backend::platform::secrets::models::{
     NewSecretReference, SecretKind, SecretStoreKind,
 };
-pub(crate) use hermes_hub_backend::platform::secrets::resolver::{
+pub(crate) use makosh_hub_backend::platform::secrets::resolver::{
     InMemorySecretResolver, SecretResolver,
 };
-pub(crate) use hermes_hub_backend::platform::secrets::store::SecretReferenceStore;
-pub(crate) use hermes_hub_backend::platform::storage::database::Database;
+pub(crate) use makosh_hub_backend::platform::secrets::store::SecretReferenceStore;
+pub(crate) use makosh_hub_backend::platform::storage::database::Database;
 pub(crate) use serde_json::json;
 
 pub(crate) async fn test_database_url(test_name: &str) -> Option<String> {

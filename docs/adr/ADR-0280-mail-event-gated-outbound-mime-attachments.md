@@ -53,15 +53,15 @@ Outbound attachment delivery остаётся capability одного integratio
 `mail`, а не новым domain, workflow или Kernel service:
 
 ```text
-hermes-mail-api          generated client contract and bounded value types
-hermes-mail-core         deterministic MIME composition and validation
-hermes-mail-persistence  Mail-owned materialization/safety/delivery state
-hermes-mail-runtime      event consumers, Blob sessions and orchestration
-hermes-mail-smtp         ready-RFC822 SMTP adapter
-hermes-mail-gmail        ready-RFC822 Gmail adapter
+makosh-mail-api          generated client contract and bounded value types
+makosh-mail-core         deterministic MIME composition and validation
+makosh-mail-persistence  Mail-owned materialization/safety/delivery state
+makosh-mail-runtime      event consumers, Blob sessions and orchestration
+makosh-mail-smtp         ready-RFC822 SMTP adapter
+makosh-mail-gmail        ready-RFC822 Gmail adapter
 ```
 
-`hermes-mail-core` не открывает sockets и не знает Blob, Storage,
+`makosh-mail-core` не открывает sockets и не знает Blob, Storage,
 Communications runtime или provider implementation. SMTP/Gmail packages не
 получают anchor IDs, Blob references, safety state или persistence access.
 Runtime остаётся единственным Mail composition root.
@@ -96,7 +96,7 @@ Attachment Security observation
 
 Mail не импортирует Communications domain/runtime/persistence, не вызывает
 Communications RPC и не получает его database role. Public
-`hermes-communications-attachment-contract` остаётся единственной compile-time
+`makosh-communications-attachment-contract` остаётся единственной compile-time
 границей для lifecycle event.
 
 ### Mail-owned attachment materialization
@@ -115,7 +115,7 @@ quota и at-rest custody принадлежат Blob Platform. Ни одна Mai
 foreign key или SQL lookup в Communications.
 
 IMAP и Gmail используют один bounded MIME extraction contract из
-`hermes-mail-core`. Gmail materialization не копирует Gmail API semantics в
+`makosh-mail-core`. Gmail materialization не копирует Gmail API semantics в
 core: adapter возвращает exact raw RFC822, core выбирает exact bounded part, а
 runtime выполняет тот же Mail Blob admission/event flow, что и IMAP.
 
@@ -232,7 +232,7 @@ Frontend не является proof этого gate.
 | Event-only canonical safety | Complete | Mail имеет отдельный durable consume capability для `communication_attachment_safety_state_changed.v1`; projection проверяет exact contract/source/partition/lineage и применяет owner-local CAS без Communications query/runtime/storage edge. |
 | Mail Blob custody | Complete | Descriptor запрашивает только `Write` и `ReadRange` для `mail.attachment.content.v1`; delivery сверяет persisted reference, declared size и receipt SHA-256 до MIME/provider call. |
 | Durable Mail state | Complete | Immutable Storage bundle V5 добавляет materialization, safety projection и delivery manifest; V6 вводит monotonic `causal_sequence`, чтобы body observation всегда предшествовал attachment update при одинаковом wall-clock timestamp. |
-| Deterministic MIME and adapter SRP | Complete | `hermes-mail-core::outbound_mime` владеет bounded RFC822/MIME, injection/metadata/hash/size validation; SMTP и Gmail получают только готовые bytes и не импортируют Communications/Blob/persistence. |
+| Deterministic MIME and adapter SRP | Complete | `makosh-mail-core::outbound_mime` владеет bounded RFC822/MIME, injection/metadata/hash/size validation; SMTP и Gmail получают только готовые bytes и не импортируют Communications/Blob/persistence. |
 | Live SMTP and Gmail conformance | Complete | `managed_mail_delivers_only_canonical_safe_attachment_from_its_blob_custody` и `managed_gmail_materializes_then_delivers_canonical_safe_attachment` проходят через managed Vault, Blob, Storage, NATS, Communications CAS и exact decoded provider attachment. |
 | Failure/replay matrix | Complete | Live evidence покрывает unknown/stale/quarantined safety, exact duplicate, successor Mail runtime restart, NATS outage, post-DATA provider ambiguity и отсутствие автоматической повторной provider mutation. |
 | Executable architecture and quality gates | Complete | Policy schema, exact Cargo dependency/feature inventory, Communications/domain isolation, Mail SRP boundary, Cargo/Clippy/workspace/integration/full backend gates являются обязательной commit evidence. |

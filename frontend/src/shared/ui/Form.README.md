@@ -1,6 +1,6 @@
 # Form
 
-Hermes form shell.
+Макошь form shell.
 
 Use to group UI-only form fields and emit a controlled submit event.
 

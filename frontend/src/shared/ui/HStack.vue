@@ -18,12 +18,12 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-stack',
-	'hermes-stack--row',
-	`hermes-stack--gap-${props.gap}`,
-	`hermes-stack--align-${props.align}`,
-	`hermes-stack--justify-${props.justify}`,
-	{ 'hermes-stack--wrap': props.wrap },
+	'makosh-stack',
+	'makosh-stack--row',
+	`makosh-stack--gap-${props.gap}`,
+	`makosh-stack--align-${props.align}`,
+	`makosh-stack--justify-${props.justify}`,
+	{ 'makosh-stack--wrap': props.wrap },
 	props.class
 ])
 </script>

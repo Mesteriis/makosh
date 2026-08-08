@@ -19,19 +19,19 @@ test('call transcription assembly emits only unsigned workflow release inputs', 
   );
 
   assert.equal(policy.implementation.currentSlice, 'call_transcription_managed_conformance_v1');
-  assert.deepEqual(packages.get('hermes-call-transcription-assembly'), {
-    name: 'hermes-call-transcription-assembly',
+  assert.deepEqual(packages.get('makosh-call-transcription-assembly'), {
+    name: 'makosh-call-transcription-assembly',
     role: 'workflow',
     owner: 'call_transcription',
     surface: 'assembly',
   });
   assert.match(manifest, /owner = "call_transcription"/);
   assert.match(manifest, /surface = "assembly"/);
-  assert.match(manifest, /hermes-call-transcription-runtime/);
-  assert.match(manifest, /hermes-call-transcription-persistence/);
+  assert.match(manifest, /makosh-call-transcription-runtime/);
+  assert.match(manifest, /makosh-call-transcription-persistence/);
   assert.doesNotMatch(
     manifest,
-    /hermes-communications|hermes-desktop-call-recording|hermes-speech-to-text|hermes-whisper/,
+    /makosh-communications|makosh-desktop-call-recording|makosh-speech-to-text|makosh-whisper/,
   );
   assert.match(assembly, /module_runtime/);
   assert.match(assembly, /storage_bundle/);

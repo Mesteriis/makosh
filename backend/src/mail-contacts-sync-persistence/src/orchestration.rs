@@ -1,4 +1,4 @@
-use hermes_mail_contacts_sync_core::{
+use makosh_mail_contacts_sync_core::{
     MailContactsSyncStateV1, MailContactsSyncTransitionV1, transition_mail_contacts_sync_v1,
 };
 use sqlx::{Postgres, Row, Transaction};
@@ -25,7 +25,7 @@ impl MailContactsSyncPersistenceV1 {
             return Err(MailContactsSyncPersistenceErrorV1::InvalidInput);
         }
         sqlx::query_scalar::<_, Vec<u8>>(
-            "SELECT run_id FROM hermes_data.mail_contacts_sync_entries
+            "SELECT run_id FROM makosh_data.mail_contacts_sync_entries
              WHERE logical_owner_id = $1 AND contact_command_id = $2",
         )
         .bind(logical_owner_id)
@@ -61,12 +61,12 @@ impl MailContactsSyncPersistenceV1 {
         }
         let counts = sqlx::query(
             "SELECT expected_entries,
-                    (SELECT COUNT(*) FROM hermes_data.mail_contacts_sync_entries entries
+                    (SELECT COUNT(*) FROM makosh_data.mail_contacts_sync_entries entries
                      WHERE entries.logical_owner_id = pages.logical_owner_id
                        AND entries.run_id = pages.run_id
                        AND entries.page_sequence = pages.page_sequence
                        AND entries.outcome_accounted) AS accounted_entries
-             FROM hermes_data.mail_contacts_sync_pages pages
+             FROM makosh_data.mail_contacts_sync_pages pages
              WHERE logical_owner_id = $1 AND run_id = $2 AND page_sequence = $3",
         )
         .bind(&input.logical_owner_id)
@@ -86,7 +86,7 @@ impl MailContactsSyncPersistenceV1 {
             }
             MailContactsSyncTransitionV1::BeginProviderPage
         } else if current.draft.direction
-            == hermes_mail_contacts_sync_core::MailContactsSyncDirectionV1::Bidirectional
+            == makosh_mail_contacts_sync_core::MailContactsSyncDirectionV1::Bidirectional
             && current.status.counters.contacts_created + current.status.counters.contacts_updated
                 > 0
         {
@@ -157,7 +157,7 @@ impl MailContactsSyncPersistenceV1 {
             return Err(MailContactsSyncPersistenceErrorV1::InvalidTransition);
         }
         sqlx::query(
-            "INSERT INTO hermes_data.mail_contacts_sync_entries (
+            "INSERT INTO makosh_data.mail_contacts_sync_entries (
                logical_owner_id, run_id, page_sequence, contact_command_id, entry_digest,
                observation_message_id, observation_envelope_sha256, outcome, outcome_accounted
              ) VALUES ($1, $2, $3, $4, $5, $6, $7, 0, FALSE)",
@@ -213,7 +213,7 @@ impl MailContactsSyncPersistenceV1 {
         let current =
             load_for_update(&mut transaction, &input.logical_owner_id, &input.run_id).await?;
         let recorded: i64 = sqlx::query_scalar(
-            "SELECT COUNT(*) FROM hermes_data.mail_contacts_sync_entries
+            "SELECT COUNT(*) FROM makosh_data.mail_contacts_sync_entries
              WHERE logical_owner_id = $1 AND run_id = $2 AND page_sequence = $3",
         )
         .bind(&input.logical_owner_id)
@@ -250,7 +250,7 @@ impl MailContactsSyncPersistenceV1 {
         )
         .await?;
         sqlx::query(
-            "INSERT INTO hermes_data.mail_contacts_sync_pages (
+            "INSERT INTO makosh_data.mail_contacts_sync_pages (
                logical_owner_id, run_id, page_sequence, expected_entries,
                next_continuation_cursor, completed_message_id, completed_envelope_sha256
              ) VALUES ($1, $2, $3, $4, $5, $6, $7)",
@@ -299,7 +299,7 @@ impl MailContactsSyncPersistenceV1 {
         validate_outcome(input)?;
         let mut transaction = self.pool.begin().await.map_err(storage)?;
         let run_id: [u8; 16] = sqlx::query_scalar::<_, Vec<u8>>(
-            "SELECT run_id FROM hermes_data.mail_contacts_sync_entries
+            "SELECT run_id FROM makosh_data.mail_contacts_sync_entries
              WHERE logical_owner_id = $1 AND contact_command_id = $2",
         )
         .bind(&input.logical_owner_id)
@@ -316,7 +316,7 @@ impl MailContactsSyncPersistenceV1 {
         let _run = load_for_update(&mut transaction, &input.logical_owner_id, &run_id).await?;
         let entry = sqlx::query(
             "SELECT outcome, outcome_message_id, outcome_envelope_sha256
-             FROM hermes_data.mail_contacts_sync_entries
+             FROM makosh_data.mail_contacts_sync_entries
              WHERE logical_owner_id = $1 AND contact_command_id = $2 FOR UPDATE",
         )
         .bind(&input.logical_owner_id)
@@ -357,7 +357,7 @@ impl MailContactsSyncPersistenceV1 {
             return Err(MailContactsSyncPersistenceErrorV1::InboxConflict);
         }
         sqlx::query(
-            "UPDATE hermes_data.mail_contacts_sync_entries SET
+            "UPDATE makosh_data.mail_contacts_sync_entries SET
                outcome = $1, outcome_message_id = $2, outcome_envelope_sha256 = $3
              WHERE logical_owner_id = $4 AND contact_command_id = $5 AND outcome = 0",
         )
@@ -408,16 +408,16 @@ impl MailContactsSyncPersistenceV1 {
         }
         let row = sqlx::query(
             "SELECT page_sequence, expected_entries, next_continuation_cursor,
-                    (SELECT COUNT(*) FROM hermes_data.mail_contacts_sync_entries entries
+                    (SELECT COUNT(*) FROM makosh_data.mail_contacts_sync_entries entries
                      WHERE entries.logical_owner_id = pages.logical_owner_id
                        AND entries.run_id = pages.run_id
                        AND entries.page_sequence = pages.page_sequence) AS recorded_entries,
-                    (SELECT COUNT(*) FROM hermes_data.mail_contacts_sync_entries entries
+                    (SELECT COUNT(*) FROM makosh_data.mail_contacts_sync_entries entries
                      WHERE entries.logical_owner_id = pages.logical_owner_id
                        AND entries.run_id = pages.run_id
                        AND entries.page_sequence = pages.page_sequence
                        AND entries.outcome_accounted) AS accounted_entries
-             FROM hermes_data.mail_contacts_sync_pages pages
+             FROM makosh_data.mail_contacts_sync_pages pages
              WHERE logical_owner_id = $1 AND run_id = $2
              ORDER BY page_sequence DESC LIMIT 1",
         )
@@ -459,7 +459,7 @@ async fn account_pending_outcomes(
            COUNT(*) FILTER (WHERE outcome = 2) AS updated,
            COUNT(*) FILTER (WHERE outcome = 3) AS unchanged,
            COUNT(*) FILTER (WHERE outcome = 4) AS rejected
-         FROM hermes_data.mail_contacts_sync_entries
+         FROM makosh_data.mail_contacts_sync_entries
          WHERE logical_owner_id = $1 AND run_id = $2 AND outcome != 0 AND NOT outcome_accounted",
     )
     .bind(logical_owner_id)
@@ -497,7 +497,7 @@ async fn account_pending_outcomes(
     )
     .await?;
     sqlx::query(
-        "UPDATE hermes_data.mail_contacts_sync_entries SET outcome_accounted = TRUE
+        "UPDATE makosh_data.mail_contacts_sync_entries SET outcome_accounted = TRUE
          WHERE logical_owner_id = $1 AND run_id = $2 AND outcome != 0 AND NOT outcome_accounted",
     )
     .bind(logical_owner_id)
@@ -513,11 +513,11 @@ pub(crate) async fn update_run(
     logical_owner_id: &str,
     run_id: &[u8; 16],
     current: &crate::PersistedMailContactsSyncRunV1,
-    next: &hermes_mail_contacts_sync_core::MailContactsSyncStatusV1,
+    next: &makosh_mail_contacts_sync_core::MailContactsSyncStatusV1,
     occurred_at_unix_millis: i64,
 ) -> Result<(), MailContactsSyncPersistenceErrorV1> {
     let updated = sqlx::query(
-        "UPDATE hermes_data.mail_contacts_sync_runs SET
+        "UPDATE makosh_data.mail_contacts_sync_runs SET
            state = $1, state_revision = $2, page_sequence = $3, continuation_cursor = $4,
            provider_entries_seen = $5, contacts_created = $6, contacts_updated = $7,
            contacts_unchanged = $8, provider_entries_written = $9, rejected_entries = $10,
@@ -558,7 +558,7 @@ async fn duplicate_inbox(
     run_id: &[u8; 16],
 ) -> Result<bool, MailContactsSyncPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT envelope_sha256, run_id FROM hermes_data.mail_contacts_sync_inbox
+        "SELECT envelope_sha256, run_id FROM makosh_data.mail_contacts_sync_inbox
          WHERE logical_owner_id = $1 AND message_id = $2",
     )
     .bind(logical_owner_id)
@@ -591,7 +591,7 @@ async fn insert_inbox(
     occurred_at_unix_millis: i64,
 ) -> Result<(), MailContactsSyncPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.mail_contacts_sync_inbox (
+        "INSERT INTO makosh_data.mail_contacts_sync_inbox (
            logical_owner_id, message_id, envelope_sha256, run_id, processed_at_unix_millis
          ) VALUES ($1, $2, $3, $4, $5)",
     )

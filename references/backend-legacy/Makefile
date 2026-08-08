@@ -9,7 +9,7 @@ CARGO_VALIDATE_CLIPPY_TARGET_DIR ?= $(CARGO_TARGET_ROOT)/validate-clippy
 CARGO_VALIDATE_TEST_TARGET_DIR ?= $(CARGO_TARGET_ROOT)/validate-test
 CARGO_BUILD_TARGET_DIR ?= $(CARGO_TARGET_ROOT)/build
 CARGO_COVERAGE_TARGET_DIR ?= $(CARGO_TARGET_ROOT)/coverage
-HERMES_NEXTEST_JOBS ?= 4
+MAKOSH_NEXTEST_JOBS ?= 4
 CARGO_AUDIT_IGNORES ?= RUSTSEC-2023-0071
 CARGO_AUDIT_IGNORE_FLAGS = $(foreach advisory,$(CARGO_AUDIT_IGNORES),--ignore $(advisory))
 BACKEND_ARCHITECTURE_TARGETS = $(shell node scripts/test/backend-test-targets.mjs targets architecture)
@@ -17,38 +17,38 @@ BACKEND_E2E_TARGETS = $(shell node scripts/test/backend-test-targets.mjs targets
 BACKEND_INTEGRATION_TARGETS = $(shell node scripts/test/backend-test-targets.mjs targets integration)
 BACKEND_SNAPSHOT_TARGETS = $(shell node scripts/test/backend-test-targets.mjs targets snapshot)
 SCCACHE_BIN := $(shell command -v sccache 2>/dev/null)
-HERMES_LAB_PROVIDER = $(if $(PROVIDER),$(PROVIDER),zulip)
-HERMES_LAB_ACTION = $(if $(ACTION),$(ACTION),help)
-HERMES_LAB_EXTRA_ARGS =
+MAKOSH_LAB_PROVIDER = $(if $(PROVIDER),$(PROVIDER),zulip)
+MAKOSH_LAB_ACTION = $(if $(ACTION),$(ACTION),help)
+MAKOSH_LAB_EXTRA_ARGS =
 ifneq ($(strip $(EXECUTE)),)
-HERMES_LAB_EXTRA_ARGS += --execute
+MAKOSH_LAB_EXTRA_ARGS += --execute
 endif
 ifneq ($(strip $(TESTCONTAINERS)),)
-HERMES_LAB_EXTRA_ARGS += --testcontainers
+MAKOSH_LAB_EXTRA_ARGS += --testcontainers
 endif
 ifneq ($(strip $(BACKEND)),)
-HERMES_LAB_EXTRA_ARGS += --backend-evidence
+MAKOSH_LAB_EXTRA_ARGS += --backend-evidence
 endif
 ifneq ($(strip $(SCENARIO)),)
-HERMES_LAB_EXTRA_ARGS += --scenario "$(SCENARIO)"
+MAKOSH_LAB_EXTRA_ARGS += --scenario "$(SCENARIO)"
 endif
 ifneq ($(strip $(REPORT_DIR)),)
-HERMES_LAB_EXTRA_ARGS += --report-dir "$(REPORT_DIR)"
+MAKOSH_LAB_EXTRA_ARGS += --report-dir "$(REPORT_DIR)"
 endif
 ifneq ($(strip $(REQUIRE_CLOSED)),)
-HERMES_LAB_EXTRA_ARGS += --require-closed
+MAKOSH_LAB_EXTRA_ARGS += --require-closed
 endif
 
 ifneq ($(strip $(SCCACHE_BIN)),)
 export RUSTC_WRAPPER := $(SCCACHE_BIN)
 endif
 
-.PHONY: help docker-env docker-app-config docker-app-up docker-app-stop docker-app-logs dev dev-desktop logs build migrate validate lint-architecture lint-rust lint-frontend architecture-check code-boundaries-check backend-fmt-check backend-clippy backend-test backend-validate frontend-lint frontend-test frontend-visual frontend-visual-update frontend-build frontend-validate test test-fast test-ci test-unit test-integration test-e2e test-architecture test-snapshot test-backup-integrity snapshot-test snapshot-accept coverage coverage-html coverage-ci mutants audit deny security udeps watch-test watch-unit watch-integration cache-stats cache-reset test-performance-report testcontainers-clean hermes-lab mail-domain-closure-audit mail-domain-closure-gate vault-backup vault-restore clean clean-dev clean-validate clean-build clean-data clean-vault
+.PHONY: help docker-env docker-app-config docker-app-up docker-app-stop docker-app-logs dev dev-desktop logs build migrate validate lint-architecture lint-rust lint-frontend architecture-check code-boundaries-check backend-fmt-check backend-clippy backend-test backend-validate frontend-lint frontend-test frontend-visual frontend-visual-update frontend-build frontend-validate test test-fast test-ci test-unit test-integration test-e2e test-architecture test-snapshot test-backup-integrity snapshot-test snapshot-accept coverage coverage-html coverage-ci mutants audit deny security udeps watch-test watch-unit watch-integration cache-stats cache-reset test-performance-report testcontainers-clean makosh-lab mail-domain-closure-audit mail-domain-closure-gate vault-backup vault-restore clean clean-dev clean-validate clean-build clean-data clean-vault
 
 help:
-	@printf '%s\n' 'Hermes development commands:'
+	@printf '%s\n' 'Макошь development commands:'
 	@printf '%s\n' '  make docker-env    Create docker/.env from docker/.env.example when missing'
-	@printf '%s\n' '  make docker-app-up Start Hermes backend and frontend in Docker Compose'
+	@printf '%s\n' '  make docker-app-up Start Макошь backend and frontend in Docker Compose'
 	@printf '%s\n' '  make docker-app-stop Stop the Docker Compose backend and frontend'
 	@printf '%s\n' '  make docker-app-logs Tail Docker Compose backend and frontend logs'
 	@printf '%s\n' '  make dev           Start PostgreSQL, backend watcher, and Vite dev server'
@@ -81,12 +81,12 @@ help:
 	@printf '%s\n' '  make cache-stats   Show sccache stats'
 	@printf '%s\n' '  make cache-reset   Reset sccache stats'
 	@printf '%s\n' '  make test-performance-report Rebuild reports from existing nextest JUnit XML files'
-	@printf '%s\n' '  make testcontainers-clean Remove Hermes-owned testcontainers'
-	@printf '%s\n' '  make hermes-lab ACTION=readiness PROVIDER=zulip Run Hermes Lab provider action'
-	@printf '%s\n' '  make hermes-lab ACTION=scenario PROVIDER=zulip EXECUTE=1 TESTCONTAINERS=1 Run scenario against local Zulip fixture'
-	@printf '%s\n' '  make hermes-lab ACTION=scenario PROVIDER=zulip EXECUTE=1 TESTCONTAINERS=1 BACKEND=1 Run provider scenario plus backend live evidence'
-	@printf '%s\n' '  make hermes-lab ACTION=compliance PROVIDER=zulip Generate Zulip Communication Compliance Suite report'
-	@printf '%s\n' '  make hermes-lab ACTION=compliance PROVIDER=zulip BACKEND=1 Run backend contract evidence before report'
+	@printf '%s\n' '  make testcontainers-clean Remove Макошь-owned testcontainers'
+	@printf '%s\n' '  make makosh-lab ACTION=readiness PROVIDER=zulip Run Макошь Lab provider action'
+	@printf '%s\n' '  make makosh-lab ACTION=scenario PROVIDER=zulip EXECUTE=1 TESTCONTAINERS=1 Run scenario against local Zulip fixture'
+	@printf '%s\n' '  make makosh-lab ACTION=scenario PROVIDER=zulip EXECUTE=1 TESTCONTAINERS=1 BACKEND=1 Run provider scenario plus backend live evidence'
+	@printf '%s\n' '  make makosh-lab ACTION=compliance PROVIDER=zulip Generate Zulip Communication Compliance Suite report'
+	@printf '%s\n' '  make makosh-lab ACTION=compliance PROVIDER=zulip BACKEND=1 Run backend contract evidence before report'
 	@printf '%s\n' '  make mail-domain-closure-audit Report Mail closure gaps from gap-analysis.md'
 	@printf '%s\n' '  make mail-domain-closure-gate Fail until every Mail gap row is implemented or ADR-excluded'
 	@printf '%s\n' '  make vault-backup  Create a timestamped PostgreSQL + vault + mail-blob backup'
@@ -159,7 +159,7 @@ backend-test:
 backend-validate: backend-fmt-check backend-clippy backend-test
 
 test-unit:
-	@bash -lc 'source scripts/lib/rust-tooling.sh; require_cargo_subcommand nextest "cargo install --locked cargo-nextest"; NEXTEST_SHOW_PROGRESS="$${NEXTEST_SHOW_PROGRESS:-bar}"; export CARGO_INCREMENTAL="$${CARGO_INCREMENTAL:-1}"; disable_sccache_for_incremental; CARGO_TARGET_DIR="$(CARGO_VALIDATE_TARGET_DIR)" cargo nextest run --workspace --lib --profile default --show-progress "$${NEXTEST_SHOW_PROGRESS}" --test-threads $(HERMES_NEXTEST_JOBS)'
+	@bash -lc 'source scripts/lib/rust-tooling.sh; require_cargo_subcommand nextest "cargo install --locked cargo-nextest"; NEXTEST_SHOW_PROGRESS="$${NEXTEST_SHOW_PROGRESS:-bar}"; export CARGO_INCREMENTAL="$${CARGO_INCREMENTAL:-1}"; disable_sccache_for_incremental; CARGO_TARGET_DIR="$(CARGO_VALIDATE_TARGET_DIR)" cargo nextest run --workspace --lib --profile default --show-progress "$${NEXTEST_SHOW_PROGRESS}" --test-threads $(MAKOSH_NEXTEST_JOBS)'
 	@node scripts/test/analyze-nextest-junit.mjs --input target/nextest/default/junit.xml --suite unit --output reports/test-performance/unit
 
 test-integration:
@@ -172,17 +172,17 @@ test-e2e:
 
 test-architecture:
 	@$(MAKE) architecture-check
-	@bash -lc 'source scripts/lib/rust-tooling.sh; require_cargo_subcommand nextest "cargo install --locked cargo-nextest"; NEXTEST_SHOW_PROGRESS="$${NEXTEST_SHOW_PROGRESS:-bar}"; export CARGO_INCREMENTAL="$${CARGO_INCREMENTAL:-1}"; disable_sccache_for_incremental; CARGO_TARGET_DIR="$(CARGO_VALIDATE_TARGET_DIR)" cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress "$${NEXTEST_SHOW_PROGRESS}" --test-threads $(HERMES_NEXTEST_JOBS) $(foreach target,$(BACKEND_ARCHITECTURE_TARGETS),--test $(target))'
+	@bash -lc 'source scripts/lib/rust-tooling.sh; require_cargo_subcommand nextest "cargo install --locked cargo-nextest"; NEXTEST_SHOW_PROGRESS="$${NEXTEST_SHOW_PROGRESS:-bar}"; export CARGO_INCREMENTAL="$${CARGO_INCREMENTAL:-1}"; disable_sccache_for_incremental; CARGO_TARGET_DIR="$(CARGO_VALIDATE_TARGET_DIR)" cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress "$${NEXTEST_SHOW_PROGRESS}" --test-threads $(MAKOSH_NEXTEST_JOBS) $(foreach target,$(BACKEND_ARCHITECTURE_TARGETS),--test $(target))'
 	@node scripts/test/analyze-nextest-junit.mjs --input target/nextest/default/junit.xml --suite architecture --output reports/test-performance/architecture
 
 test-snapshot: snapshot-test
 
 snapshot-test:
-	@bash -lc 'source scripts/lib/rust-tooling.sh; require_cargo_subcommand nextest "cargo install --locked cargo-nextest"; NEXTEST_SHOW_PROGRESS="$${NEXTEST_SHOW_PROGRESS:-bar}"; export CARGO_INCREMENTAL="$${CARGO_INCREMENTAL:-1}"; disable_sccache_for_incremental; CARGO_TARGET_DIR="$(CARGO_VALIDATE_TARGET_DIR)" cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress "$${NEXTEST_SHOW_PROGRESS}" --test-threads $(HERMES_NEXTEST_JOBS) $(foreach target,$(BACKEND_SNAPSHOT_TARGETS),--test $(target))'
+	@bash -lc 'source scripts/lib/rust-tooling.sh; require_cargo_subcommand nextest "cargo install --locked cargo-nextest"; NEXTEST_SHOW_PROGRESS="$${NEXTEST_SHOW_PROGRESS:-bar}"; export CARGO_INCREMENTAL="$${CARGO_INCREMENTAL:-1}"; disable_sccache_for_incremental; CARGO_TARGET_DIR="$(CARGO_VALIDATE_TARGET_DIR)" cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress "$${NEXTEST_SHOW_PROGRESS}" --test-threads $(MAKOSH_NEXTEST_JOBS) $(foreach target,$(BACKEND_SNAPSHOT_TARGETS),--test $(target))'
 	@node scripts/test/analyze-nextest-junit.mjs --input target/nextest/default/junit.xml --suite snapshot --output reports/test-performance/snapshot
 
 snapshot-accept:
-	@bash -lc 'source scripts/lib/rust-tooling.sh; require_cargo_subcommand nextest "cargo install --locked cargo-nextest"; NEXTEST_SHOW_PROGRESS="$${NEXTEST_SHOW_PROGRESS:-bar}"; export CARGO_INCREMENTAL="$${CARGO_INCREMENTAL:-1}"; disable_sccache_for_incremental; INSTA_UPDATE=always CARGO_TARGET_DIR="$(CARGO_VALIDATE_TARGET_DIR)" cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress "$${NEXTEST_SHOW_PROGRESS}" --test-threads $(HERMES_NEXTEST_JOBS) $(foreach target,$(BACKEND_SNAPSHOT_TARGETS),--test $(target))'
+	@bash -lc 'source scripts/lib/rust-tooling.sh; require_cargo_subcommand nextest "cargo install --locked cargo-nextest"; NEXTEST_SHOW_PROGRESS="$${NEXTEST_SHOW_PROGRESS:-bar}"; export CARGO_INCREMENTAL="$${CARGO_INCREMENTAL:-1}"; disable_sccache_for_incremental; INSTA_UPDATE=always CARGO_TARGET_DIR="$(CARGO_VALIDATE_TARGET_DIR)" cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress "$${NEXTEST_SHOW_PROGRESS}" --test-threads $(MAKOSH_NEXTEST_JOBS) $(foreach target,$(BACKEND_SNAPSHOT_TARGETS),--test $(target))'
 
 test-fast: test-backup-integrity test-unit test-architecture test-snapshot frontend-test
 
@@ -242,8 +242,8 @@ test-performance-report:
 testcontainers-clean:
 	@./scripts/test/clean-testcontainers.sh --all
 
-hermes-lab:
-	@node scripts/hermes-lab.mjs --provider "$(HERMES_LAB_PROVIDER)" $(HERMES_LAB_EXTRA_ARGS) "$(HERMES_LAB_ACTION)"
+makosh-lab:
+	@node scripts/makosh-lab.mjs --provider "$(MAKOSH_LAB_PROVIDER)" $(MAKOSH_LAB_EXTRA_ARGS) "$(MAKOSH_LAB_ACTION)"
 
 mail-domain-closure-audit:
 	@node scripts/mail-domain-closure-audit.mjs
@@ -291,7 +291,7 @@ clean-build:
 	@rm -rf "$(CARGO_BUILD_TARGET_DIR)"
 	@rm -rf "frontend/src-tauri/target"
 	@rm -rf "frontend/dist" "frontend/build"
-	@rm -f frontend/src-tauri/binaries/hermes-hub-backend-*
+	@rm -f frontend/src-tauri/binaries/makosh-backend-*
 
 clean-data:
 	@./scripts/clean-data.sh

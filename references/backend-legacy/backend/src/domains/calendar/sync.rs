@@ -13,7 +13,7 @@ pub fn export_event_ics(
     let desc = description.unwrap_or("");
     let loc = location.unwrap_or("");
     format!(
-        "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Hermes Hub//Calendar//EN\r\nBEGIN:VEVENT\r\nDTSTART;TZID={tz}:{start_at}\r\nDTEND;TZID={tz}:{end_at}\r\nSUMMARY:{title}\r\nDESCRIPTION:{desc}\r\nLOCATION:{loc}\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n"
+        "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Макошь//Calendar//EN\r\nBEGIN:VEVENT\r\nDTSTART;TZID={tz}:{start_at}\r\nDTEND;TZID={tz}:{end_at}\r\nSUMMARY:{title}\r\nDESCRIPTION:{desc}\r\nLOCATION:{loc}\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n"
     )
 }
 

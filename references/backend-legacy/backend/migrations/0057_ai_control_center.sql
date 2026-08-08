@@ -301,7 +301,7 @@ VALUES
         'prompt-version:system:global:default_chat:v1',
         'prompt:system:global:default_chat',
         'v1',
-        'Answer using only cited Hermes context. Query: {{query}}',
+        'Answer using only cited Макошь context. Query: {{query}}',
         '["query"]'::jsonb,
         'active',
         'system:ai-control-center'

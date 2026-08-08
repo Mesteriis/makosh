@@ -9,12 +9,12 @@ use std::{
     time::Duration,
 };
 
-use hermes_knowledge_persistence::{KnowledgePersistenceErrorV1, knowledge_storage_bundle_v1};
-use hermes_knowledge_runtime::{
+use makosh_knowledge_persistence::{KnowledgePersistenceErrorV1, knowledge_storage_bundle_v1};
+use makosh_knowledge_runtime::{
     KnowledgeManagedRuntimeErrorV1, KnowledgeManagedRuntimeV1, KnowledgeRuntimeAdmissionV1,
     knowledge_module_descriptor_v1, knowledge_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedDomainRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,

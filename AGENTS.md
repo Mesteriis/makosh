@@ -1,9 +1,9 @@
 # AGENTS.md
 
-Локальные инструкции для AI-агентов, работающих в репозитории Hermes Hub.
+Локальные инструкции для AI-агентов, работающих в репозитории Макошь.
 
 Этот файл является проектным overlay поверх глобального Codex / Engineering
-Bible. Он не заменяет глобальные правила, а сужает их под Hermes. Нельзя
+Bible. Он не заменяет глобальные правила, а сужает их под Макошь. Нельзя
 ослаблять требования глобальной конфигурации к правде, безопасности, проверке,
 секретам, evidence и обязательному чтению файлов перед изменениями. Если этот
 файл и глобальная Bible спорят, выполняй более строгое правило. Да, даже если
@@ -11,11 +11,11 @@ Bible. Он не заменяет глобальные правила, а суж
 
 ## 1. Назначение
 
-Используй этот файл в корне репозитория Hermes.
+Используй этот файл в корне репозитория Макошь.
 
 Он задаёт проектные правила для:
 
-- продуктовых инвариантов Hermes;
+- продуктовых инвариантов Макошь;
 - архитектурных границ;
 - маршрутизации по ADR и документации;
 - backend, frontend, provider, vault и AI-ограничений;
@@ -71,9 +71,9 @@ local-first Personal Operating System.
 I cannot confirm this from the available context.
 ```
 
-## 4. Продуктовый инвариант Hermes
+## 4. Продуктовый инвариант Макошь
 
-Hermes Hub - local-first Personal Memory System / Personal Operating System для:
+Макошь - local-first Personal Memory System / Personal Operating System для:
 
 - communications;
 - knowledge;
@@ -91,13 +91,13 @@ Hermes Hub - local-first Personal Memory System / Personal Operating System дл
 - review;
 - context packs.
 
-Hermes имеет два равноправных пользовательских слоя:
+Макошь имеет два равноправных пользовательских слоя:
 
 1. полноценные provider-specific operational experiences для Mail, Telegram,
    WhatsApp, Zulip и других встроенных integration-плагинов;
 2. provider-neutral evidence, memory и context поверх этих каналов.
 
-Hermes не является набором несвязанных:
+Макошь не является набором несвязанных:
 
 - email/messenger clients без общего evidence и context layer;
 - CRM;
@@ -110,7 +110,7 @@ Hermes не является набором несвязанных:
 - billing platform.
 
 Operational channel screens являются частью продукта, но не отдельными
-business domains. Главная отличительная ценность Hermes - context и memory над
+business domains. Главная отличительная ценность Макошь - context и memory над
 каналами, а не CRUD или копирование provider UI.
 
 Базовая продуктовая цепочка:
@@ -140,7 +140,7 @@ truth, если текущие ADR и реализация явно не зад�
 
 ## 5. Текущее состояние репозитория
 
-Файлы репозитория являются источником истины. На момент этого файла Hermes
+Файлы репозитория являются источником истины. На момент этого файла Макошь
 использует:
 
 - clean-room Cargo workspace в `backend/` с private module control plane,
@@ -216,10 +216,10 @@ validation.
 Если сборка или validation не может продолжаться из-за нехватки места, сначала
 подтверди это через `df` и проверь project-scoped build state. После этого можно
 без дополнительного согласования очищать только воспроизводимые артефакты
-Hermes: Cargo target directories, frontend build/test caches и остановленные
+Макошь: Cargo target directories, frontend build/test caches и остановленные
 containers, images или build cache Docker Compose этого проекта. Не затрагивай
 Docker-ресурсы других проектов, host-wide caches, vault/provider state или
-пользовательские данные. Docker volumes и bind-mounted data Hermes удаляй только
+пользовательские данные. Docker volumes и bind-mounted data Макошь удаляй только
 по отдельному явному разрешению пользователя.
 
 ## 7. Маршрутизация по документации и архивным ADR
@@ -262,7 +262,7 @@ Active policy находится в ADR-0200…ADR-0226 и executable companion
 contract и guards в `references/backend-legacy/scripts/` являются только
 reference и не доказывают соблюдение новой архитектуры.
 
-Hermes использует следующие interaction kinds:
+Макошь использует следующие interaction kinds:
 
 ```text
 local_call
@@ -311,7 +311,7 @@ host_bridge
   packages и шесть отдельных Attachment Security engine packages;
   integrations остаются отдельными units, а Kernel пока не заявляет отдельное
   состояние `ready`;
-- обязательного bootstrap configuration file и Hermes-specific environment
+- обязательного bootstrap configuration file и Макошь-specific environment
   overlay нет; data directory выбирается через OS-standard location либо
   explicit `--data-dir`;
 - boot-critical registrations/grants/settings revisions/desired topology живут
@@ -356,8 +356,8 @@ host_bridge
 - Kernel/Gateway не зависят от owner-specific Cargo packages, а modules не
   зависят от Kernel implementation;
 - runtime не агрегирует другой runtime; integration видит из business domains
-  только exact public contract units `hermes-communications-ingress` и
-  `hermes-communications-attachment-contract`;
+  только exact public contract units `makosh-communications-ingress` и
+  `makosh-communications-attachment-contract`;
 - compile-isolation pattern применяется ко всем domains и integrations, а не к
   одному provider-примеру; WhatsApp implementation остаётся host-only hidden
   WebView;
@@ -452,7 +452,7 @@ Target domain event
 
 ## 10. Review, Radar, Signal Hub и evidence
 
-Hermes должен помнить signals до того, как принудительно превращать их в
+Макошь должен помнить signals до того, как принудительно превращать их в
 entities.
 
 Lifecycle для uncertain input:
@@ -791,12 +791,12 @@ Risks:
 Не раскрывай private chain-of-thought. Давай concise decision summaries,
 evidence и tradeoffs.
 
-## 19. Финальное правило Hermes
+## 19. Финальное правило Макошь
 
 Перед добавлением чего-либо спроси:
 
 ```text
-Does this help Hermes remember, preserve evidence, understand context,
+Does this help Макошь remember, preserve evidence, understand context,
 and make better decisions for the owner?
 ```
 

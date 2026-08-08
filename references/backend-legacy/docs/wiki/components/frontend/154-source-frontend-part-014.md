@@ -27,7 +27,7 @@ generated_by: code-wiki-ru
 
 ## Обзор
 
-Фронтенд Hermes Hub построен как SPA на **Vue 3** с **Pinia** (состояние) и **@tanstack/vue-query** (запросы и кеширование). Точка входа — `main.ts`, которая инициализирует приложение, конфигурацию окружения, API-клиент и клиент реального времени (SSE/WebSocket).
+Фронтенд Макошь построен как SPA на **Vue 3** с **Pinia** (состояние) и **@tanstack/vue-query** (запросы и кеширование). Точка входа — `main.ts`, которая инициализирует приложение, конфигурацию окружения, API-клиент и клиент реального времени (SSE/WebSocket).
 
 ## API-клиент (`ApiClient`)
 
@@ -35,7 +35,7 @@ generated_by: code-wiki-ru
 
 - `get<T>(path)`, `post<T>(path, body)`, `put<T>(path, body)`, `patch<T>(path, body)`, `delete<T>(path)`, `deleteWithBody<T>(path, body)`.
 
-Каждый запрос добавляет заголовок `X-Hermes-Secret` с переданным секретом. При HTTP‑ошибках выбрасывается `ApiError` с полями `message`, `status`, `code`. Для статуса 204 No Content ответ интерпретируется как `undefined`.
+Каждый запрос добавляет заголовок `X-Макошь-Secret` с переданным секретом. При HTTP‑ошибках выбрасывается `ApiError` с полями `message`, `status`, `code`. Для статуса 204 No Content ответ интерпретируется как `undefined`.
 
 Клиент используется всеми API-функциями интеграций, например, запросы к Zoom проходят через `ApiClient.instance.get`/`.post`.
 
@@ -87,7 +87,7 @@ API-функции (`api/zoom.ts`) оборачивают соответству
 - WebSocket: `WebSocketClientOptions` (url, lastEventId, secret, onMessage…).
 - При потере WebSocket‑соединения происходит автоматический переход на SSE. Ручной вызов `reconnect` возвращает предпочтение WebSocket.
 
-Курсор воспроизведения (replay cursor) хранится в `localStorage` с ключом `hermes.realtime.lastEventId` и обновляется при каждом не‑`lagged` событии. Для событий `lagged` курсор не сдвигается, но вызывается инвалидация широкого набора запросов (почта, Telegram, WhatsApp, Zoom, Signal Hub).
+Курсор воспроизведения (replay cursor) хранится в `localStorage` с ключом `makosh.realtime.lastEventId` и обновляется при каждом не‑`lagged` событии. Для событий `lagged` курсор не сдвигается, но вызывается инвалидация широкого набора запросов (почта, Telegram, WhatsApp, Zoom, Signal Hub).
 
 Метод `handleRealtimeEvent` маршрутизирует события:
 
@@ -143,7 +143,7 @@ API-функции (`api/zoom.ts`) оборачивают соответству
 - `frontend/src/integrations/zoom/queries/zoomQueryKeys.test.ts` / `zoomQueryKeys.ts` — зафиксированы все ключи под пространством `['integrations', 'zoom', ...]`; в вики перечислены основные ключи.
 - `frontend/src/integrations/zoom/types/zoom.ts` — упомянуты ключевые интерфейсы, на которых основаны API‑функции и хуки.
 - `frontend/src/main.ts` — описан процесс начальной загрузки: Vue, Pinia, VueQuery, `loadFrontendConfig`, инициализация API и realtime.
-- `frontend/src/platform/api/ApiClient.ts` — полностью задокументирован синглтон: методы, заголовок `X-Hermes-Secret`, обработка 204, ошибки.
+- `frontend/src/platform/api/ApiClient.ts` — полностью задокументирован синглтон: методы, заголовок `X-Макошь-Secret`, обработка 204, ошибки.
 - `frontend/src/platform/api/index.ts` / `types.ts` — подтверждены экспорты `ApiClient`, `ApiError`, `PaginatedResponse`.
 - `frontend/src/platform/bootstrap/api.test.ts` / `api.ts` — показана функция `initializeApiClient` и её тест.
 - `frontend/src/platform/bootstrap/businessCommunicationOwnership.boundary.test.ts` — изложены три правила модульных границ.

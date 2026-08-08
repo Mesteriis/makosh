@@ -3,7 +3,7 @@ import { FormField, FormLabel, MultiSelect } from '@/shared/ui'
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Multi Select',
+	title: 'Макошь UI/General/Multi Select',
 	render: (_args, context) => ({
 		components: { FormField, FormLabel, MultiSelect },
 		data() {

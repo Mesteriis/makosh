@@ -9,7 +9,7 @@ function storageEntry(content, overrides = {}) {
   return {
     path: 'modules/tasks/migrations/0001.sql',
     content,
-    packageName: 'hermes-tasks-persistence',
+    packageName: 'makosh-tasks-persistence',
     role: 'domain',
     owner: 'tasks',
     surface: 'persistence',
@@ -45,29 +45,29 @@ test('Storage quarantines policy-invalid owner bundles before bootstrap grants',
 test('allows schema-qualified owner-local SQL and additive migrations', () => {
   const violations = validateStorageEntries(policy(), [
     storageEntry(`
-      CREATE TYPE hermes_data.tasks_state AS ENUM ('open', 'closed');
-      CREATE TABLE hermes_data.tasks_items (
+      CREATE TYPE makosh_data.tasks_state AS ENUM ('open', 'closed');
+      CREATE TABLE makosh_data.tasks_items (
         id UUID PRIMARY KEY,
-        state hermes_data.tasks_state NOT NULL,
-        parent_id UUID REFERENCES hermes_data.tasks_items(id) ON UPDATE CASCADE
+        state makosh_data.tasks_state NOT NULL,
+        parent_id UUID REFERENCES makosh_data.tasks_items(id) ON UPDATE CASCADE
       );
-      CREATE INDEX tasks_items_id_idx ON hermes_data.tasks_items (id);
-      ALTER TABLE hermes_data.tasks_items ADD COLUMN title TEXT;
-      UPDATE hermes_data.tasks_items SET title = 'owned' WHERE id = $1;
-      SELECT * FROM hermes_data.tasks_items;
+      CREATE INDEX tasks_items_id_idx ON makosh_data.tasks_items (id);
+      ALTER TABLE makosh_data.tasks_items ADD COLUMN title TEXT;
+      UPDATE makosh_data.tasks_items SET title = 'owned' WHERE id = $1;
+      SELECT * FROM makosh_data.tasks_items;
     `),
   ]);
 
   assert.deepEqual(violations, []);
 });
 
-test('allows platform persistence only in hermes_platform', () => {
+test('allows platform persistence only in makosh_platform', () => {
   const violations = validateStorageEntries(policy(), [
     storageEntry(`
-      CREATE TABLE hermes_platform.events_outbox (id UUID PRIMARY KEY);
-      SELECT * FROM hermes_platform.events_outbox;
+      CREATE TABLE makosh_platform.events_outbox (id UUID PRIMARY KEY);
+      SELECT * FROM makosh_platform.events_outbox;
     `, {
-      packageName: 'hermes-events-postgres',
+      packageName: 'makosh-events-postgres',
       role: 'platform',
       owner: 'events',
     }),
@@ -78,13 +78,13 @@ test('allows platform persistence only in hermes_platform', () => {
 
 for (const sqlitePackage of [
   {
-    packageName: 'hermes-kernel-control-store-sqlite',
+    packageName: 'makosh-kernel-control-store-sqlite',
     role: 'core',
     owner: 'kernel',
     table: 'kernel_registrations',
   },
   {
-    packageName: 'hermes-vault-store-sqlcipher',
+    packageName: 'makosh-vault-store-sqlcipher',
     role: 'platform',
     owner: 'vault',
     table: 'vault_secrets',
@@ -102,7 +102,7 @@ for (const sqlitePackage of [
 test('retains owner-prefix enforcement for the exact SQLite packages', () => {
   const violations = validateStorageEntries(policy(), [
     storageEntry('CREATE TABLE secrets (id TEXT PRIMARY KEY);', {
-      packageName: 'hermes-vault-store-sqlcipher',
+      packageName: 'makosh-vault-store-sqlcipher',
       role: 'platform',
       owner: 'vault',
     }),
@@ -114,7 +114,7 @@ test('retains owner-prefix enforcement for the exact SQLite packages', () => {
 test('does not exempt an unregistered SQLite-looking package from PostgreSQL schemas', () => {
   const violations = validateStorageEntries(policy(), [
     storageEntry('CREATE TABLE tasks_items (id TEXT PRIMARY KEY);', {
-      packageName: 'hermes-tasks-sqlite',
+      packageName: 'makosh-tasks-sqlite',
     }),
   ]);
 
@@ -123,8 +123,8 @@ test('does not exempt an unregistered SQLite-looking package from PostgreSQL sch
 
 test('rejects SQL files outside a persistence surface', () => {
   const violations = validateStorageEntries(policy(), [
-    storageEntry('SELECT * FROM hermes_data.tasks_items;', {
-      packageName: 'hermes-tasks-runtime',
+    storageEntry('SELECT * FROM makosh_data.tasks_items;', {
+      packageName: 'makosh-tasks-runtime',
       surface: 'runtime',
     }),
   ]);
@@ -135,10 +135,10 @@ test('rejects SQL files outside a persistence surface', () => {
 test('rejects raw cross-owner SQL reads and foreign keys', () => {
   const violations = validateStorageEntries(policy(), [
     storageEntry(`
-      SELECT * FROM hermes_data.contacts_people;
-      CREATE TABLE hermes_data.tasks_items (
+      SELECT * FROM makosh_data.contacts_people;
+      CREATE TABLE makosh_data.tasks_items (
         id UUID PRIMARY KEY,
-        contact_id UUID REFERENCES hermes_data.contacts_people(id)
+        contact_id UUID REFERENCES makosh_data.contacts_people(id)
       );
     `),
   ]);
@@ -148,9 +148,9 @@ test('rejects raw cross-owner SQL reads and foreign keys', () => {
 
 test('prevents AI persistence from reading another owner table for context', () => {
   const violations = validateStorageEntries(policy(), [
-    storageEntry('SELECT * FROM hermes_data.tasks_items;', {
+    storageEntry('SELECT * FROM makosh_data.tasks_items;', {
       path: 'modules/ai/persistence/src/sql/context.sql',
-      packageName: 'hermes-ai-persistence',
+      packageName: 'makosh-ai-persistence',
       owner: 'ai',
     }),
   ]);
@@ -159,9 +159,9 @@ test('prevents AI persistence from reading another owner table for context', () 
 });
 
 for (const statement of [
-  'INSERT INTO hermes_data.contacts_people (id) VALUES ($1);',
-  'UPDATE hermes_data.contacts_people SET name = $2 WHERE id = $1;',
-  'DELETE FROM hermes_data.contacts_people WHERE id = $1;',
+  'INSERT INTO makosh_data.contacts_people (id) VALUES ($1);',
+  'UPDATE makosh_data.contacts_people SET name = $2 WHERE id = $1;',
+  'DELETE FROM makosh_data.contacts_people WHERE id = $1;',
 ]) {
   test(`rejects raw cross-owner DML: ${statement.split(' ')[0]}`, () => {
     const violations = validateStorageEntries(policy(), [
@@ -183,14 +183,14 @@ test('rejects unqualified PostgreSQL identifiers', () => {
 test('rejects a cross-owner PostgreSQL index name while keeping its table qualified', () => {
   const violations = validateStorageEntries(policy(), [
     storageEntry(`
-      CREATE INDEX contacts_items_id_idx ON hermes_data.tasks_items (id);
+      CREATE INDEX contacts_items_id_idx ON makosh_data.tasks_items (id);
     `),
   ]);
 
   assert.ok(codes(violations).has('cross_owner_sql'));
 });
 
-for (const schema of ['public', 'private', 'hermes_platform']) {
+for (const schema of ['public', 'private', 'makosh_platform']) {
   test(`rejects ${schema} for a domain raw table access`, () => {
     const violations = validateStorageEntries(policy(), [
       storageEntry(`SELECT * FROM ${schema}.tasks_items;`),
@@ -200,10 +200,10 @@ for (const schema of ['public', 'private', 'hermes_platform']) {
   });
 }
 
-test('rejects hermes_data for platform raw table access', () => {
+test('rejects makosh_data for platform raw table access', () => {
   const violations = validateStorageEntries(policy(), [
-    storageEntry('SELECT * FROM hermes_data.events_outbox;', {
-      packageName: 'hermes-events-postgres',
+    storageEntry('SELECT * FROM makosh_data.events_outbox;', {
+      packageName: 'makosh-events-postgres',
       role: 'platform',
       owner: 'events',
     }),
@@ -214,8 +214,8 @@ test('rejects hermes_data for platform raw table access', () => {
 
 test('rejects owner-prefixed SQL for an unsupported PostgreSQL role', () => {
   const violations = validateStorageEntries(policy(), [
-    storageEntry('SELECT * FROM hermes_data.gateway_state;', {
-      packageName: 'hermes-gateway-persistence',
+    storageEntry('SELECT * FROM makosh_data.gateway_state;', {
+      packageName: 'makosh-gateway-persistence',
       role: 'api',
       owner: 'gateway',
     }),
@@ -224,24 +224,24 @@ test('rejects owner-prefixed SQL for an unsupported PostgreSQL role', () => {
   assert.ok(codes(violations).has('unsupported_sql_role'));
 });
 
-test('allows a versioned hermes_platform technical function instead of raw platform DML', () => {
+test('allows a versioned makosh_platform technical function instead of raw platform DML', () => {
   const violations = validateStorageEntries(policy(), [
     storageEntry(`
-      INSERT INTO hermes_data.tasks_items (id) VALUES ($1);
-      SELECT hermes_platform.events_append_outbox_v1($1, $2);
-      SELECT * FROM hermes_platform.events_accept_inbox_v1($1);
+      INSERT INTO makosh_data.tasks_items (id) VALUES ($1);
+      SELECT makosh_platform.events_append_outbox_v1($1, $2);
+      SELECT * FROM makosh_platform.events_accept_inbox_v1($1);
     `, { path: 'modules/tasks/src/sql/create_task.sql' }),
   ]);
 
   assert.deepEqual(violations, []);
 });
 
-test('rejects unversioned, unlisted and non-platform-owned hermes_platform functions', () => {
+test('rejects unversioned, unlisted and non-platform-owned makosh_platform functions', () => {
   const violations = validateStorageEntries(policy(), [
     storageEntry(`
-      SELECT hermes_platform.events_append_outbox($1);
-      SELECT hermes_platform.storage_claim_v2($1);
-      SELECT hermes_platform.contacts_lookup_v1($1);
+      SELECT makosh_platform.events_append_outbox($1);
+      SELECT makosh_platform.storage_claim_v2($1);
+      SELECT makosh_platform.contacts_lookup_v1($1);
     `, { path: 'modules/tasks/src/sql/create_task.sql' }),
   ]);
 
@@ -250,7 +250,7 @@ test('rejects unversioned, unlisted and non-platform-owned hermes_platform funct
 
 test('rejects SQL not associated with a workspace package', () => {
   const violations = validateStorageEntries(policy(), [
-    storageEntry('CREATE TABLE hermes_data.tasks_items (id UUID PRIMARY KEY);', {
+    storageEntry('CREATE TABLE makosh_data.tasks_items (id UUID PRIMARY KEY);', {
       packageName: null,
       role: null,
       owner: null,
@@ -266,9 +266,9 @@ test('ignores ownership-looking SQL inside comments', () => {
     storageEntry(`
       -- SELECT * FROM contacts_people;
       /* CREATE TABLE projects_items (id UUID); */
-      CREATE TABLE hermes_data.tasks_items (
+      CREATE TABLE makosh_data.tasks_items (
         id UUID PRIMARY KEY,
-        note TEXT DEFAULT 'DROP TABLE hermes_data.contacts_people'
+        note TEXT DEFAULT 'DROP TABLE makosh_data.contacts_people'
       );
     `),
   ]);
@@ -277,32 +277,32 @@ test('ignores ownership-looking SQL inside comments', () => {
 });
 
 const forbiddenMigrationCases = [
-  ['DROP', 'DROP TABLE hermes_data.tasks_items;'],
-  ['TRUNCATE', 'TRUNCATE TABLE hermes_data.tasks_items;'],
-  ['rename', 'ALTER TABLE hermes_data.tasks_items RENAME TO tasks_old;'],
-  ['destructive ALTER TYPE', 'ALTER TABLE hermes_data.tasks_items ALTER COLUMN id TYPE TEXT;'],
-  ['ALTER COLUMN DEFAULT', 'ALTER TABLE hermes_data.tasks_items ALTER COLUMN id SET DEFAULT gen_random_uuid();'],
+  ['DROP', 'DROP TABLE makosh_data.tasks_items;'],
+  ['TRUNCATE', 'TRUNCATE TABLE makosh_data.tasks_items;'],
+  ['rename', 'ALTER TABLE makosh_data.tasks_items RENAME TO tasks_old;'],
+  ['destructive ALTER TYPE', 'ALTER TABLE makosh_data.tasks_items ALTER COLUMN id TYPE TEXT;'],
+  ['ALTER COLUMN DEFAULT', 'ALTER TABLE makosh_data.tasks_items ALTER COLUMN id SET DEFAULT gen_random_uuid();'],
   ['ROLE', 'CREATE ROLE tasks_runtime;'],
   ['DATABASE', 'CREATE DATABASE tasks;'],
   ['SCHEMA', 'CREATE SCHEMA tasks;'],
   ['EXTENSION', 'CREATE EXTENSION pg_trgm;'],
-  ['GRANT', 'GRANT SELECT ON hermes_data.tasks_items TO tasks_runtime;'],
-  ['REVOKE', 'REVOKE SELECT ON hermes_data.tasks_items FROM tasks_runtime;'],
+  ['GRANT', 'GRANT SELECT ON makosh_data.tasks_items TO tasks_runtime;'],
+  ['REVOKE', 'REVOKE SELECT ON makosh_data.tasks_items FROM tasks_runtime;'],
   ['DO block', 'DO $$ BEGIN NULL; END $$;'],
-  ['dynamic EXECUTE', "EXECUTE 'DELETE FROM hermes_data.tasks_items';"],
-  ['prepared SQL', 'PREPARE remove_task AS DELETE FROM hermes_data.tasks_items;'],
-  ['function', 'CREATE FUNCTION hermes_data.tasks_touch_v1() RETURNS void AS $$ BEGIN END $$ LANGUAGE plpgsql;'],
-  ['trigger', 'CREATE TRIGGER tasks_touch BEFORE UPDATE ON hermes_data.tasks_items EXECUTE FUNCTION hermes_data.tasks_touch_v1();'],
-  ['FDW', 'CREATE FOREIGN TABLE hermes_data.tasks_remote (id UUID) SERVER remote;'],
-  ['COPY PROGRAM', "COPY hermes_data.tasks_items FROM PROGRAM 'cat /tmp/tasks';"],
+  ['dynamic EXECUTE', "EXECUTE 'DELETE FROM makosh_data.tasks_items';"],
+  ['prepared SQL', 'PREPARE remove_task AS DELETE FROM makosh_data.tasks_items;'],
+  ['function', 'CREATE FUNCTION makosh_data.tasks_touch_v1() RETURNS void AS $$ BEGIN END $$ LANGUAGE plpgsql;'],
+  ['trigger', 'CREATE TRIGGER tasks_touch BEFORE UPDATE ON makosh_data.tasks_items EXECUTE FUNCTION makosh_data.tasks_touch_v1();'],
+  ['FDW', 'CREATE FOREIGN TABLE makosh_data.tasks_remote (id UUID) SERVER remote;'],
+  ['COPY PROGRAM', "COPY makosh_data.tasks_items FROM PROGRAM 'cat /tmp/tasks';"],
   ['ALTER SYSTEM', "ALTER SYSTEM SET shared_buffers = '1GB';"],
-  ['CONCURRENTLY', 'CREATE INDEX CONCURRENTLY tasks_id_idx ON hermes_data.tasks_items (id);'],
-  ['TABLESPACE', 'ALTER TABLE hermes_data.tasks_items SET TABLESPACE fast_space;'],
+  ['CONCURRENTLY', 'CREATE INDEX CONCURRENTLY tasks_id_idx ON makosh_data.tasks_items (id);'],
+  ['TABLESPACE', 'ALTER TABLE makosh_data.tasks_items SET TABLESPACE fast_space;'],
   ['LOAD', "LOAD 'unsafe_extension';"],
-  ['VACUUM', 'VACUUM hermes_data.tasks_items;'],
-  ['REINDEX', 'REINDEX TABLE hermes_data.tasks_items;'],
-  ['CLUSTER', 'CLUSTER hermes_data.tasks_items;'],
-  ['BEGIN', 'BEGIN; SELECT * FROM hermes_data.tasks_items; COMMIT;'],
+  ['VACUUM', 'VACUUM makosh_data.tasks_items;'],
+  ['REINDEX', 'REINDEX TABLE makosh_data.tasks_items;'],
+  ['CLUSTER', 'CLUSTER makosh_data.tasks_items;'],
+  ['BEGIN', 'BEGIN; SELECT * FROM makosh_data.tasks_items; COMMIT;'],
   ['START TRANSACTION', 'START TRANSACTION;'],
   ['COMMIT', 'COMMIT;'],
   ['ROLLBACK', 'ROLLBACK;'],
@@ -327,7 +327,7 @@ for (const path of [
 ]) {
   test(`rejects down migration file ${path}`, () => {
     const violations = validateStorageEntries(policy(), [
-      storageEntry('SELECT * FROM hermes_data.tasks_items;', { path }),
+      storageEntry('SELECT * FROM makosh_data.tasks_items;', { path }),
     ]);
 
     assert.ok(codes(violations).has('down_migration'));
@@ -337,9 +337,9 @@ for (const path of [
 test('migration heuristics ignore forbidden words in comments and literals', () => {
   const violations = validateStorageEntries(policy(), [
     storageEntry(`
-      -- DROP TABLE hermes_data.tasks_items;
+      -- DROP TABLE makosh_data.tasks_items;
       -- BEGIN; LOAD 'unsafe'; SAVEPOINT ignored;
-      ALTER TABLE hermes_data.tasks_items
+      ALTER TABLE makosh_data.tasks_items
         ADD COLUMN note TEXT DEFAULT
           'TRUNCATE, ALTER SYSTEM, TABLESPACE, COMMIT and ROLLBACK are documentation';
     `),

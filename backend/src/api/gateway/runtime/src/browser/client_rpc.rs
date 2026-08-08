@@ -2,11 +2,11 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use bytes::Bytes;
-use hermes_gateway_session_contract::BrowserAuthenticationAuthority;
 use http_body_util::{BodyExt, Limited};
 use hyper::body::Body;
 use hyper::header::{CACHE_CONTROL, CONTENT_TYPE, COOKIE, HeaderName};
 use hyper::{Method, Request, Response, StatusCode};
+use makosh_gateway_session_contract::BrowserAuthenticationAuthority;
 use tokio::task;
 use tokio::time::{Instant, timeout_at};
 
@@ -265,12 +265,12 @@ fn connect_error(status: StatusCode, code: &'static str) -> GatewayHttpResponse 
 
 #[cfg(test)]
 mod tests {
-    use hermes_gateway_session::BrowserGatewaySessionService;
-    use hermes_gateway_session_contract::{
+    use http_body_util::{BodyExt, Full};
+    use makosh_gateway_session::BrowserGatewaySessionService;
+    use makosh_gateway_session_contract::{
         BrowserAssertionAuthority, BrowserAuthenticationAuthority, BrowserDeviceAuthority,
         BrowserDeviceCredentialV1, BrowserDevicePrincipalV1, GatewayIdentityFenceV1,
     };
-    use http_body_util::{BodyExt, Full};
 
     use super::*;
 

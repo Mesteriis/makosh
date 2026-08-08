@@ -1,6 +1,6 @@
 # Agent Assisted Recall
 
-This workflow explains how an agent retrieves and uses Hermes context.
+This workflow explains how an agent retrieves and uses Макошь context.
 
 Agents help the Owner Persona operate the Personal Memory System. They do not
 own source truth.

@@ -1,6 +1,6 @@
 //! Deterministic time source for conformance and owner tests.
 
-use hermes_clock_protocol::{ClockDiscontinuityV1, ClockReadingV1, MonotonicMillisV1, UtcMillisV1};
+use makosh_clock_protocol::{ClockDiscontinuityV1, ClockReadingV1, MonotonicMillisV1, UtcMillisV1};
 
 #[derive(Clone, Debug)]
 pub struct DeterministicClockV1 {

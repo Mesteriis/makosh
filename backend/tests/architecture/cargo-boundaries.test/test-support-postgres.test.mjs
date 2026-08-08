@@ -13,16 +13,16 @@ import {
 import { canonicalPolicyForTests } from '../support/canonical-policy.mjs';
 
 test('allows sqlx only for exact test-only PostgreSQL conformance kits', () => {
-  for (const name of ['hermes-events-jetstream-testkit', 'hermes-scheduler-testkit']) {
+  for (const name of ['makosh-events-jetstream-testkit', 'makosh-scheduler-testkit']) {
     const allowed = [...basePackages(), testSupport([dependency('sqlx', 'dev')], name)];
     assert.deepEqual(validateCargoMetadata(canonicalPolicyForTests(), metadata(allowed)), []);
   }
 
   for (const [name, metadataOverrides, kind] of [
-    ['hermes-scheduler-testkit', {}, null],
-    ['hermes-scheduler-testkit', {}, 'build'],
-    ['hermes-events-jetstream-testkit', { surface: 'implementation' }, 'dev'],
-    ['hermes-other-testkit', {}, 'dev'],
+    ['makosh-scheduler-testkit', {}, null],
+    ['makosh-scheduler-testkit', {}, 'build'],
+    ['makosh-events-jetstream-testkit', { surface: 'implementation' }, 'dev'],
+    ['makosh-other-testkit', {}, 'dev'],
   ]) {
     const packages = [
       ...basePackages(),
@@ -38,14 +38,14 @@ test('allows sqlx only for exact test-only PostgreSQL conformance kits', () => {
 function basePackages() {
   return [
     kernel(),
-    workspacePackage('hermes-events-protocol', {
+    workspacePackage('makosh-events-protocol', {
       role: 'platform', owner: 'events', surface: 'contract',
     }),
     runtimeProtocol(),
   ];
 }
 
-function testSupport(dependencies, name = 'hermes-events-jetstream-testkit', overrides = {}) {
+function testSupport(dependencies, name = 'makosh-events-jetstream-testkit', overrides = {}) {
   return workspacePackage(
     name,
     { role: 'test', owner: 'test', surface: 'test_support', ...overrides },

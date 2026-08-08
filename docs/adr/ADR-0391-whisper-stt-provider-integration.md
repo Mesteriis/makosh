@@ -35,7 +35,7 @@ diagnostics не должны попадать в engine contract, Kernel или
 `whisper_stt` является отдельной bundled integration с owner
 `whisper_stt`. Она предоставляет exact
 `speech_to_text.provider_transcribe.v1` request RPC из
-`hermes-speech-to-text-api` и не предоставляет business/client API.
+`makosh-speech-to-text-api` и не предоставляет business/client API.
 
 ```text
 Speech-to-Text engine
@@ -53,17 +53,17 @@ STT engine не импортирует Whisper packages и не выбирает
 
 ### Build units
 
-- `hermes-speech-transcript-artifact` — canonical private Blob document schema
+- `makosh-speech-transcript-artifact` — canonical private Blob document schema
   и bounded validation; contract не является query/SSE/event payload;
-- `hermes-whisper-stt-core` — provider execution policy, input/result plan и
+- `makosh-whisper-stt-core` — provider execution policy, input/result plan и
   idempotency invariants без process/Blob/storage;
-- `hermes-whisper-stt-process` — exact whisper.cpp CLI dialect, private work
+- `makosh-whisper-stt-process` — exact whisper.cpp CLI dialect, private work
   files, bounded timeout/output parsing и no-shell execution;
-- `hermes-whisper-stt-persistence` — integration-local idempotency/fences and
+- `makosh-whisper-stt-persistence` — integration-local idempotency/fences and
   safe terminal metadata without audio, transcript or custody proofs;
-- `hermes-whisper-stt-runtime` — managed request handler, Blob read/write,
+- `makosh-whisper-stt-runtime` — managed request handler, Blob read/write,
   process orchestration and settings application;
-- `hermes-whisper-stt-assembly` — unsigned runtime, descriptor, settings,
+- `makosh-whisper-stt-assembly` — unsigned runtime, descriptor, settings,
   storage, native executable and model artifacts.
 
 ### Canonical transcript artifact
@@ -86,7 +86,7 @@ Runtime получает два exact managed artifacts:
 - `whisper_stt.model.v1` с use `read_only_data`;
 - `whisper_stt.runner.v1` с use `native_executable`.
 
-Artifacts связаны с `hermes-whisper-stt-runtime`, входят в signed distribution
+Artifacts связаны с `makosh-whisper-stt-runtime`, входят в signed distribution
 manifest, копируются Kernel в private staged root и повторно проверяются runtime
 по size, SHA-256, inode и mode. System executable/model fallback, PATH lookup,
 runtime download, symlink и mutable shared model запрещены.

@@ -1,7 +1,7 @@
 //! Opaque Vault route contract validation.
 
 use super::common::*;
-use hermes_runtime_protocol::validation::vault::{
+use makosh_runtime_protocol::validation::vault::{
     VaultCiphertextRouteValidationError, validate_vault_ciphertext_route_v1,
 };
 
@@ -68,7 +68,7 @@ fn vault_ciphertext_response_must_match_the_current_request_fence() {
         storage_runtime_principal: String::new(),
         storage_owner_id: String::new(),
     };
-    let response = hermes_runtime_protocol::v1::VaultCiphertextResponseV1 {
+    let response = makosh_runtime_protocol::v1::VaultCiphertextResponseV1 {
         major: 1,
         vault_runtime_generation: 7,
         caller_runtime_generation: 3,
@@ -83,7 +83,7 @@ fn vault_ciphertext_response_must_match_the_current_request_fence() {
     assert!(
         vault_ciphertext_route::validate_response(
             &request,
-            hermes_runtime_protocol::v1::VaultCiphertextResponseV1 {
+            makosh_runtime_protocol::v1::VaultCiphertextResponseV1 {
                 vault_runtime_generation: 8,
                 ..response.clone()
             }
@@ -93,7 +93,7 @@ fn vault_ciphertext_response_must_match_the_current_request_fence() {
     assert!(
         vault_ciphertext_route::validate_response(
             &request,
-            hermes_runtime_protocol::v1::VaultCiphertextResponseV1 {
+            makosh_runtime_protocol::v1::VaultCiphertextResponseV1 {
                 caller_runtime_generation: 4,
                 ..response
             }

@@ -24,9 +24,9 @@ test('WhatsApp managed admission is wired as an integration-owned conformance sl
   ]);
 
   for (const packageName of [
-    'hermes-whatsapp-api',
-    'hermes-whatsapp-persistence',
-    'hermes-whatsapp-runtime',
+    'makosh-whatsapp-api',
+    'makosh-whatsapp-persistence',
+    'makosh-whatsapp-runtime',
   ]) {
     assert.match(manifest, new RegExp(`^${packageName} = `, 'm'));
   }
@@ -41,7 +41,7 @@ test('WhatsApp managed admission is wired as an integration-owned conformance sl
     assert.match(harness, new RegExp(`mod ${supportModule};`));
   }
 
-  assert.match(runner, /'-p',\s*'hermes-whatsapp-runtime'/);
+  assert.match(runner, /'-p',\s*'makosh-whatsapp-runtime'/);
   assert.match(
     runner,
     /managed_whatsapp_runtime_uses_signed_kernel_admission_and_host_route_fencing/,
@@ -50,7 +50,7 @@ test('WhatsApp managed admission is wired as an integration-owned conformance sl
     runner,
     /managed_whatsapp_runtime_delivers_live_command_and_event_only_communications_handoff/,
   );
-  assert.match(runner, /HERMES_WHATSAPP_RUNTIME_BIN:/);
+  assert.match(runner, /MAKOSH_WHATSAPP_RUNTIME_BIN:/);
 });
 
 test('WhatsApp managed read conformance covers projection, cursors and access fences', async () => {
@@ -158,7 +158,7 @@ test('WhatsApp managed launch receives an exact Kernel-fenced private host route
   assert.match(setup, /reservation\.runtime_generation\(\)/);
   assert.match(setup, /reservation\.grant_epoch\(\)/);
   assert.match(setup, /route_binding_sha256/);
-  assert.doesNotMatch(setup, /hermes_communications_(?:runtime|persistence)/);
+  assert.doesNotMatch(setup, /makosh_communications_(?:runtime|persistence)/);
   assert.doesNotMatch(
     managedRuntime,
     /durable\s*\.\s*initialize\s*\(/,

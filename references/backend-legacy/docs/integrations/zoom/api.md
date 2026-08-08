@@ -47,7 +47,7 @@ They are not product-domain routes.
 | `POST` | `/runtime-bridge/transcripts` | Ingests transcript observation as call transcript evidence. |
 | `POST` | `/runtime-bridge/transcript-files` | Imports VTT/SRT/plain transcript file text as call transcript evidence. |
 | `POST` | `/runtime-bridge/webhooks?account_id=...` | Handles account-scoped endpoint URL validation and signed Zoom meeting/recording webhooks. |
-| binary | `hermes-zoom-edge-proxy` | Public/edge webhook ingress that forwards raw Zoom webhook bodies and `x-zm-*` headers into the protected bridge. |
+| binary | `makosh-zoom-edge-proxy` | Public/edge webhook ingress that forwards raw Zoom webhook bodies and `x-zm-*` headers into the protected bridge. |
 
 Detailed pages:
 

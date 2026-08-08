@@ -1,6 +1,6 @@
 use std::{ffi::OsStr, path::PathBuf};
 
-use hermes_whisper_stt_assembly::materialize_whisper_stt_release_assembly_v1;
+use makosh_whisper_stt_assembly::materialize_whisper_stt_release_assembly_v1;
 
 fn main() -> Result<(), String> {
     let mut arguments = std::env::args_os();

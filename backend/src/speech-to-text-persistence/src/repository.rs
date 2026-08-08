@@ -1,8 +1,8 @@
-use hermes_speech_to_text_core::{
+use makosh_speech_to_text_core::{
     SpeechAudioFormatV1, SpeechLanguageV1, SpeechToTextRejectionV1, SpeechToTextRunStateV1,
     SpeechToTextRunV1, SpeechTranscriptCompletenessV1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool, Row,
     postgres::{PgConnectOptions, PgPoolOptions, PgRow},
@@ -56,7 +56,7 @@ impl SpeechToTextPersistenceV1 {
     }
 
     pub async fn verify_storage_ready(&self) -> Result<(), SpeechToTextPersistenceErrorV1> {
-        sqlx::query("SELECT 1 FROM hermes_data.speech_to_text_runs LIMIT 0")
+        sqlx::query("SELECT 1 FROM makosh_data.speech_to_text_runs LIMIT 0")
             .execute(&self.pool)
             .await
             .map(|_| ())
@@ -70,7 +70,7 @@ impl SpeechToTextPersistenceV1 {
         validate_accepted(&run)?;
         let request = &run.request;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.speech_to_text_runs (
+            "INSERT INTO makosh_data.speech_to_text_runs (
                logical_owner_id, request_id, request_digest, source_reference_id,
                source_declared_bytes, source_sha256, audio_format, duration_millis,
                requested_language, consent_receipt_id, consent_policy_revision,
@@ -168,7 +168,7 @@ impl SpeechToTextPersistenceV1 {
         validate_transition(&current, &transition)?;
         let (artifact, rejection) = terminal_parts(&transition.next_run)?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.speech_to_text_runs SET
+            "UPDATE makosh_data.speech_to_text_runs SET
                state_revision = $4, run_state = $5,
                transcript_reference_id = $6, transcript_declared_bytes = $7,
                transcript_sha256 = $8, detected_language = $9, segment_count = $10,
@@ -256,17 +256,17 @@ const SELECT_COLUMNS: &str = "
 const SELECT_RUN: &str = concat!(
     "SELECT ",
     "logical_owner_id, request_id, request_digest, source_reference_id, source_declared_bytes, source_sha256, audio_format, duration_millis, requested_language, consent_receipt_id, consent_policy_revision, maximum_transcript_bytes, maximum_segments, state_revision, run_state, transcript_reference_id, transcript_declared_bytes, transcript_sha256, detected_language, segment_count, completeness, confidence_basis_points, provider_contract_schema_sha256, model_revision_sha256, provider_settings_revision, provider_policy_revision, rejection_code ",
-    "FROM hermes_data.speech_to_text_runs WHERE logical_owner_id = $1 AND request_id = $2"
+    "FROM makosh_data.speech_to_text_runs WHERE logical_owner_id = $1 AND request_id = $2"
 );
 const SELECT_RUN_FOR_UPDATE: &str = concat!(
     "SELECT ",
     "logical_owner_id, request_id, request_digest, source_reference_id, source_declared_bytes, source_sha256, audio_format, duration_millis, requested_language, consent_receipt_id, consent_policy_revision, maximum_transcript_bytes, maximum_segments, state_revision, run_state, transcript_reference_id, transcript_declared_bytes, transcript_sha256, detected_language, segment_count, completeness, confidence_basis_points, provider_contract_schema_sha256, model_revision_sha256, provider_settings_revision, provider_policy_revision, rejection_code ",
-    "FROM hermes_data.speech_to_text_runs WHERE logical_owner_id = $1 AND request_id = $2 FOR UPDATE"
+    "FROM makosh_data.speech_to_text_runs WHERE logical_owner_id = $1 AND request_id = $2 FOR UPDATE"
 );
 const SELECT_RECOVERABLE: &str = concat!(
     "SELECT ",
     "logical_owner_id, request_id, request_digest, source_reference_id, source_declared_bytes, source_sha256, audio_format, duration_millis, requested_language, consent_receipt_id, consent_policy_revision, maximum_transcript_bytes, maximum_segments, state_revision, run_state, transcript_reference_id, transcript_declared_bytes, transcript_sha256, detected_language, segment_count, completeness, confidence_basis_points, provider_contract_schema_sha256, model_revision_sha256, provider_settings_revision, provider_policy_revision, rejection_code ",
-    "FROM hermes_data.speech_to_text_runs WHERE logical_owner_id = $1 AND run_state IN (1, 2) ORDER BY state_revision, request_id LIMIT $2"
+    "FROM makosh_data.speech_to_text_runs WHERE logical_owner_id = $1 AND run_state IN (1, 2) ORDER BY state_revision, request_id LIMIT $2"
 );
 
 fn persisted_from_row(

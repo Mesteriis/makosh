@@ -9,10 +9,10 @@ use crate::application::review_transitions::DecisionReviewApplicationService;
 use crate::domains::decisions::models::decision::Decision;
 use crate::domains::decisions::models::states::DecisionReviewState;
 use crate::platform::audit::models::NewApiAuditRecord;
-use hermes_decisions_api::{DecisionListQuery, DecisionReadPort};
-use hermes_decisions_postgres::DecisionPostgresReadQuery;
+use makosh_decisions_api::{DecisionListQuery, DecisionReadPort};
+use makosh_decisions_postgres::DecisionPostgresReadQuery;
 
-const DECISION_API_ACTOR_ID: &str = "hermes-frontend";
+const DECISION_API_ACTOR_ID: &str = "makosh-frontend";
 const DEFAULT_DECISION_LIMIT: i64 = 50;
 const MIN_DECISION_LIMIT: i64 = 1;
 const MAX_DECISION_LIMIT: i64 = 100;
@@ -21,7 +21,7 @@ pub(crate) async fn get_v1_decisions(
     State(state): State<AppState>,
     Query(query): Query<DecisionListQuery>,
 ) -> Result<Json<DecisionListResponse>, ApiError> {
-    let query = hermes_decisions_api::DecisionListQuery {
+    let query = makosh_decisions_api::DecisionListQuery {
         limit: Some(validate_limit(query.limit)?),
         entity_kind: query.entity_kind,
         entity_id: query.entity_id,

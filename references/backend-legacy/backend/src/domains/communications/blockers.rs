@@ -1,4 +1,4 @@
-//! # Hermes Mail — Explicit Architecture Blockers
+//! # Макошь Mail — Explicit Architecture Blockers
 //!
 //! Sections that are NOT implemented and WHY.
 //! This file serves as authoritative documentation of known gaps.

@@ -23,7 +23,7 @@ const imageSources = [
 ]
 
 const meta = {
-	title: 'Hermes UI/General/Media',
+	title: 'Макошь UI/General/Media',
 	component: Image,
 	args: {
 		src: imageSources[0],

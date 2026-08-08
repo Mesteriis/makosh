@@ -4,13 +4,13 @@ Status: Temporary
 
 ## Context
 
-Hermes Hub is currently defined as a desktop-first personal productivity system for PC and laptop use. Mobile UI introduces a separate product surface with different constraints: small-screen navigation, touch-first interactions, mobile OS permissions, background sync, notification behavior and mobile QA breakpoints.
+Макошь is currently defined as a desktop-first personal productivity system for PC and laptop use. Mobile UI introduces a separate product surface with different constraints: small-screen navigation, touch-first interactions, mobile OS permissions, background sync, notification behavior and mobile QA breakpoints.
 
 ADR-0026 keeps responsive behavior for desktop window resizing and future web optionality, but it does not require mobile product design.
 
 ## Decision
 
-Until this ADR is superseded, Hermes Hub will not design, implement or validate a mobile UI.
+Until this ADR is superseded, Макошь will not design, implement or validate a mobile UI.
 
 Product, UX and frontend architecture work target PC and laptop layouts only. Responsive behavior means usable desktop resizing, not phone or tablet workflows.
 

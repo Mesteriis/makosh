@@ -1,10 +1,10 @@
 use chrono::{DateTime, Duration, Utc};
 
 use crate::platform::events::bus::InMemoryEventBus;
-use hermes_events_api::DispatchableEventOutboxItem;
-use hermes_events_nats::jetstream::{NatsJetStreamEventBus, NatsJetStreamEventBusError};
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_api::DispatchableEventOutboxItem;
+use makosh_events_nats::jetstream::{NatsJetStreamEventBus, NatsJetStreamEventBusError};
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::store::EventStore;
 
 const DEFAULT_DISPATCH_BATCH_SIZE: u32 = 100;
 const DEFAULT_STALE_DISPATCH_AFTER_SECONDS: i64 = 60;

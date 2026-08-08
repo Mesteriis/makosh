@@ -3,10 +3,10 @@ import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 
 const panels = [
-	['mail', 'hermes-mail-runtime'],
-	['telegram', 'hermes-telegram-runtime'],
-	['whatsapp', 'hermes-whatsapp-runtime'],
-	['zulip', 'hermes-zulip-runtime'],
+	['mail', 'makosh-mail-runtime'],
+	['telegram', 'makosh-telegram-runtime'],
+	['whatsapp', 'makosh-whatsapp-runtime'],
+	['zulip', 'makosh-zulip-runtime'],
 ] as const
 
 describe('provider settings panel boundaries', () => {

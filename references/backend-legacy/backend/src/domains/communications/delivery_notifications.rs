@@ -255,7 +255,7 @@ pub fn provider_event_from_delivery_notification(
 
 pub async fn project_accepted_mail_delivery_signal_if_runtime_allows(
     pool: PgPool,
-    event: &hermes_events_api::EventEnvelope,
+    event: &makosh_events_api::EventEnvelope,
 ) -> Result<Option<CommunicationDeliveryNotificationRecord>, CommunicationDeliveryNotificationError>
 {
     if !crate::platform::events::runtime::runtime_allows_processing(
@@ -277,7 +277,7 @@ pub async fn project_accepted_mail_delivery_signal_if_runtime_allows(
 
 pub async fn consume_accepted_mail_delivery_signal(
     pool: PgPool,
-    event: &hermes_events_api::EventEnvelope,
+    event: &makosh_events_api::EventEnvelope,
 ) -> Result<Option<CommunicationDeliveryNotificationRecord>, CommunicationDeliveryNotificationError>
 {
     let Some(provider_event) = provider_event_from_accepted_signal(event)? else {
@@ -321,7 +321,7 @@ fn read_receipt_response(
 }
 
 fn provider_event_from_accepted_signal(
-    event: &hermes_events_api::EventEnvelope,
+    event: &makosh_events_api::EventEnvelope,
 ) -> Result<Option<NewProviderDeliveryEvent>, CommunicationDeliveryNotificationError> {
     match event.event_type.as_str() {
         "signal.accepted.mail.delivery_status" => Ok(Some(NewProviderDeliveryEvent {

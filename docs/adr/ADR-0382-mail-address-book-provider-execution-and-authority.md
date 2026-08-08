@@ -58,9 +58,9 @@ receipt. Это намеренно: Contacts domain и workflow не должн�
 
 Mail integration получает две отдельные provider implementation units:
 
-- `hermes-mail-google-people` — bounded Google People list/create/update HTTP
+- `makosh-mail-google-people` — bounded Google People list/create/update HTTP
   adapter без persistence, Vault, Event Hub или Contacts imports;
-- `hermes-mail-carddav` — bounded CardDAV list adapter. Remote write для iCloud
+- `makosh-mail-carddav` — bounded CardDAV list adapter. Remote write для iCloud
   в первом gate запрещён и возвращает typed `READ_ONLY_PROVIDER` до provider
   mutation.
 
@@ -78,7 +78,7 @@ bindings fail closed до повторной authorization. CardDAV получа
 Vault purpose `mail_icloud_carddav_password`; IMAP credential для него не
 переиспользуется.
 
-Owner-local package `hermes-mail-address-book-persistence` добавляет exact
+Owner-local package `makosh-mail-address-book-persistence` добавляет exact
 successor к `mail_state` после retained-replay revisions. Он владеет только
 address-book inbox/job/result-outbox и replay fencing. Он не читает Contacts или
 workflow tables. Mail runtime:
@@ -123,7 +123,7 @@ pre-push evidence.
 
 ## Отклонённые варианты
 
-### Добавить People методы в `hermes-mail-gmail`
+### Добавить People методы в `makosh-mail-gmail`
 
 Gmail mailbox transport и Google People address book имеют разные API,
 endpoints, scopes и причины изменения.

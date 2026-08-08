@@ -1,27 +1,27 @@
 //! Exact durable result consumers for the Communications-owned source port.
 
-use hermes_communications_evidence_export_source_api::{
+use makosh_communications_evidence_export_source_api::{
     evidence_export_prepared_contract_reference_v1, evidence_export_rejected_contract_reference_v1,
     wire::{
         EvidenceExportBodyStateV1, EvidenceExportDirectionV1, EvidenceExportPreparedV1,
         EvidenceExportRejectedV1,
     },
 };
-use hermes_communications_export_core::EvidenceExportDirectionV1 as CoreDirectionV1;
-use hermes_communications_export_persistence::{
+use makosh_communications_export_core::EvidenceExportDirectionV1 as CoreDirectionV1;
+use makosh_communications_export_persistence::{
     CommunicationsExportPersistenceErrorV1, CommunicationsExportPersistenceV1,
     CommunicationsExportPreparedItemV1, CommunicationsExportSourceReceiptV1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -110,13 +110,13 @@ pub async fn consume_next_rejected_result_v1(
 fn exact_result_envelope(
     record: &OutboxRecordV1,
     expected: &ContractReferenceV1,
-) -> Result<hermes_events_protocol::v1::DurableEnvelopeV1, CommunicationsExportEventConsumerErrorV1>
+) -> Result<makosh_events_protocol::v1::DurableEnvelopeV1, CommunicationsExportEventConsumerErrorV1>
 {
     let envelope = decode_envelope_v1(record.exact_bytes())
         .map_err(|_| CommunicationsExportEventConsumerErrorV1::InvalidEnvelope)?;
     if !exact_contract(envelope.contract.as_ref(), expected)
         || envelope.source.as_ref().is_none_or(|source| {
-            source.module_id != "hermes-communications-runtime" || source.runtime_generation == 0
+            source.module_id != "makosh-communications-runtime" || source.runtime_generation == 0
         })
         || !matches!(envelope.semantics, Some(Semantics::Result(_)))
     {
@@ -126,7 +126,7 @@ fn exact_result_envelope(
 }
 
 fn result_export_id(
-    envelope: &hermes_events_protocol::v1::DurableEnvelopeV1,
+    envelope: &makosh_events_protocol::v1::DurableEnvelopeV1,
     payload_export_id: &[u8],
 ) -> Result<[u8; 16], CommunicationsExportEventConsumerErrorV1> {
     let export_id = id16(payload_export_id)?;
@@ -143,7 +143,7 @@ fn result_export_id(
 }
 
 fn prepared_item(
-    item: hermes_communications_evidence_export_source_api::wire::EvidenceExportSourceItemV1,
+    item: makosh_communications_evidence_export_source_api::wire::EvidenceExportSourceItemV1,
 ) -> Result<CommunicationsExportPreparedItemV1, CommunicationsExportEventConsumerErrorV1> {
     let direction = match EvidenceExportDirectionV1::try_from(item.direction) {
         Ok(EvidenceExportDirectionV1::EvidenceExportDirectionIncoming) => CoreDirectionV1::Incoming,
@@ -231,7 +231,7 @@ fn delivery_error(_: RuntimePullDeliveryErrorV1) -> CommunicationsExportEventCon
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_communications_evidence_export_source_api::wire::{
+    use makosh_communications_evidence_export_source_api::wire::{
         EvidenceExportBodySourceReceiptV1, EvidenceExportSourceItemV1,
     };
 

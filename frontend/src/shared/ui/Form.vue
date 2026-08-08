@@ -14,7 +14,7 @@ const emit = defineEmits<{
 	submit: [event: SubmitEvent]
 }>()
 
-const classes = computed(() => ['hermes-form', { 'hermes-form--disabled': props.disabled }, props.class])
+const classes = computed(() => ['makosh-form', { 'makosh-form--disabled': props.disabled }, props.class])
 
 function handleSubmit(event: SubmitEvent): void {
 	emit('submit', event)

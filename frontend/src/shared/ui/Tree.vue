@@ -22,7 +22,7 @@ const emit = defineEmits<{
 	select: [item: TreeItemData]
 }>()
 
-const classes = computed(() => ['hermes-tree', props.class])
+const classes = computed(() => ['makosh-tree', props.class])
 
 function toggleItem(item: TreeItemData): void {
 	const expanded = new Set(props.expanded)

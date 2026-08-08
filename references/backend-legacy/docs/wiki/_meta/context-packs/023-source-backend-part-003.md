@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/ai/core/semantic/source_persons.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/semantic/source_persons.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/semantic/source_persons.rs`
 - Size bytes / Размер в байтах: `1031`
 - Included characters / Включено символов: `1031`
 - Truncated / Обрезано: `no`
@@ -101,7 +101,7 @@ pub(super) async fn append_person_sources(
 
 ### `backend/src/ai/core/semantic/source_projects.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/semantic/source_projects.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/semantic/source_projects.rs`
 - Size bytes / Размер в байтах: `1726`
 - Included characters / Включено символов: `1726`
 - Truncated / Обрезано: `no`
@@ -164,7 +164,7 @@ pub(super) async fn append_project_sources(
 
 ### `backend/src/ai/core/semantic/source_tasks.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/semantic/source_tasks.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/semantic/source_tasks.rs`
 - Size bytes / Размер в байтах: `1134`
 - Included characters / Включено символов: `1134`
 - Truncated / Обрезано: `no`
@@ -212,7 +212,7 @@ pub(super) async fn append_task_sources(
 
 ### `backend/src/ai/core/semantic/sources.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/semantic/sources.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/semantic/sources.rs`
 - Size bytes / Размер в байтах: `878`
 - Included characters / Включено символов: `878`
 - Truncated / Обрезано: `no`
@@ -244,7 +244,7 @@ impl SemanticEmbeddingStore {
 
 ### `backend/src/ai/core/semantic/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/semantic/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/semantic/store.rs`
 - Size bytes / Размер в байтах: `213`
 - Included characters / Включено символов: `213`
 - Truncated / Обрезано: `no`
@@ -266,7 +266,7 @@ impl SemanticEmbeddingStore {
 
 ### `backend/src/ai/core/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/service.rs`
 - Size bytes / Размер в байтах: `366`
 - Included characters / Включено символов: `366`
 - Truncated / Обрезано: `no`
@@ -293,7 +293,7 @@ pub use core::AiService;
 
 ### `backend/src/ai/core/service/answer.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/service/answer.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/service/answer.rs`
 - Size bytes / Размер в байтах: `4055`
 - Included characters / Включено символов: `4055`
 - Truncated / Обрезано: `no`
@@ -409,7 +409,7 @@ impl AiService {
 
 ### `backend/src/ai/core/service/attribution.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/service/attribution.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/service/attribution.rs`
 - Size bytes / Размер в байтах: `904`
 - Included characters / Включено символов: `904`
 - Truncated / Обрезано: `no`
@@ -448,7 +448,7 @@ impl AiService {
 
 ### `backend/src/ai/core/service/attribution_port.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/service/attribution_port.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/service/attribution_port.rs`
 - Size bytes / Размер в байтах: `975`
 - Included characters / Включено символов: `975`
 - Truncated / Обрезано: `no`
@@ -496,7 +496,7 @@ pub trait AiPersonaAttributionPort: Send + Sync {
 
 ### `backend/src/ai/core/service/core.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/service/core.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/service/core.rs`
 - Size bytes / Размер в байтах: `1565`
 - Included characters / Включено символов: `1565`
 - Truncated / Обрезано: `no`
@@ -559,7 +559,7 @@ impl AiService {
 
 ### `backend/src/ai/core/service/events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/service/events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/service/events.rs`
 - Size bytes / Размер в байтах: `3961`
 - Included characters / Включено символов: `3961`
 - Truncated / Обрезано: `no`
@@ -689,7 +689,7 @@ fn signal_safe_payload(payload: &Value) -> Value {
 
 ### `backend/src/ai/core/service/meeting_prep.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/service/meeting_prep.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/service/meeting_prep.rs`
 - Size bytes / Размер в байтах: `4370`
 - Included characters / Включено символов: `4370`
 - Truncated / Обрезано: `no`
@@ -813,7 +813,7 @@ impl AiService {
 
 ### `backend/src/ai/core/service/model_config.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/service/model_config.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/service/model_config.rs`
 - Size bytes / Размер в байтах: `1011`
 - Included characters / Включено символов: `1011`
 - Truncated / Обрезано: `no`
@@ -848,7 +848,7 @@ impl AiService {
 
 ### `backend/src/ai/core/service/retrieval.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/service/retrieval.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/service/retrieval.rs`
 - Size bytes / Размер в байтах: `1645`
 - Included characters / Включено символов: `1645`
 - Truncated / Обрезано: `no`
@@ -902,7 +902,7 @@ impl AiService {
 
 ### `backend/src/ai/core/service/status.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/service/status.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/service/status.rs`
 - Size bytes / Размер в байтах: `1528`
 - Included characters / Включено символов: `1528`
 - Truncated / Обрезано: `no`
@@ -958,7 +958,7 @@ impl AiService {
 
 ### `backend/src/ai/core/service/task_candidate_persistence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/service/task_candidate_persistence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/service/task_candidate_persistence.rs`
 - Size bytes / Размер в байтах: `4964`
 - Included characters / Включено символов: `4964`
 - Truncated / Обрезано: `no`
@@ -1104,7 +1104,7 @@ async fn task_candidate_observation_id(
 
 ### `backend/src/ai/core/service/task_candidates.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/service/task_candidates.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/service/task_candidates.rs`
 - Size bytes / Размер в байтах: `5185`
 - Included characters / Включено символов: `5185`
 - Truncated / Обрезано: `no`
@@ -1134,7 +1134,7 @@ impl AiService {
     ) -> Result<AiTaskCandidateRefreshResponse, AiError> {
         let command_id = validate_non_empty("command_id", &request.command_id)?;
         let query = validate_non_empty("query", &request.query)?;
-        let agent_id = "HERMES".to_owned();
+        let agent_id = "MAKOSH".to_owned();
         let started_at = Instant::now();
         let run_id = run_id_from_command("task-refresh", &command_id);
         let requested_event_id = event_id_from_command("ai.run.requested", &command_id);
@@ -1242,7 +1242,7 @@ impl AiService {
 
 ### `backend/src/ai/core/types.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/core/types.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/core/types.rs`
 - Size bytes / Размер в байтах: `4196`
 - Included characters / Включено символов: `4196`
 - Truncated / Обрезано: `no`
@@ -1398,7 +1398,7 @@ pub struct AiStatusResponse {
 
 ### `backend/src/ai/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/mod.rs`
 - Size bytes / Размер в байтах: `51`
 - Included characters / Включено символов: `51`
 - Truncated / Обрезано: `no`
@@ -1411,7 +1411,7 @@ pub mod core;
 
 ### `backend/src/app/api_support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support.rs`
 - Size bytes / Размер в байтах: `8683`
 - Included characters / Включено символов: `8683`
 - Truncated / Обрезано: `no`
@@ -1605,7 +1605,7 @@ pub(crate) fn ensure_fixture_routes_enabled(state: &AppState) -> Result<(), ApiE
 
 ### `backend/src/app/api_support/automation_calls.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/automation_calls.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/automation_calls.rs`
 - Size bytes / Размер в байтах: `3611`
 - Included characters / Включено символов: `3611`
 - Truncated / Обрезано: `no`
@@ -1734,7 +1734,7 @@ pub(crate) struct CallTranscriptResponse {
 
 ### `backend/src/app/api_support/communications.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/communications.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/communications.rs`
 - Size bytes / Размер в байтах: `7137`
 - Included characters / Включено символов: `7137`
 - Truncated / Обрезано: `no`
@@ -1923,7 +1923,7 @@ impl From<StoredCommunicationAttachmentWithBlob> for CommunicationAttachmentResp
 
 ### `backend/src/app/api_support/formatting.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/formatting.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/formatting.rs`
 - Size bytes / Размер в байтах: `411`
 - Included characters / Включено символов: `411`
 - Truncated / Обрезано: `no`
@@ -1953,7 +1953,7 @@ pub(crate) fn html_escape(value: &str) -> String {
 
 ### `backend/src/app/api_support/messaging_integrations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/messaging_integrations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/messaging_integrations.rs`
 - Size bytes / Размер в байтах: `1338`
 - Included characters / Включено символов: `1338`
 - Truncated / Обрезано: `no`
@@ -2011,7 +2011,7 @@ pub(crate) struct TelegramReactionDeleteQuery {
 
 ### `backend/src/app/api_support/platform_dtos.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/platform_dtos.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/platform_dtos.rs`
 - Size bytes / Размер в байтах: `2628`
 - Included characters / Включено символов: `2628`
 - Truncated / Обрезано: `no`

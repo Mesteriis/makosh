@@ -186,7 +186,7 @@ Mail добавляет exact generated
 `mail.account.catalog.query.v1`:
 
 ```text
-/hermes.mail.account.v1.MailAccountCatalogService/List
+/makosh.mail.account.v1.MailAccountCatalogService/List
 ```
 
 List возвращает bounded deterministic список существующих Mail account

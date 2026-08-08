@@ -1,15 +1,15 @@
 #![forbid(unsafe_code)]
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-telegram-delivery-intent-contract";
+pub const PACKAGE: &str = "makosh-telegram-delivery-intent-contract";
 pub const TELEGRAM_DELIVERY_INTENT_OWNER_ID_V1: &str = "telegram";
 pub const TELEGRAM_DELIVERY_INTENT_SOURCE_MODULE_ID_V1: &str =
-    "hermes-communication-delivery-intent-runtime";
-pub const TELEGRAM_DELIVERY_INTENT_TARGET_MODULE_ID_V1: &str = "hermes-telegram-runtime";
+    "makosh-communication-delivery-intent-runtime";
+pub const TELEGRAM_DELIVERY_INTENT_TARGET_MODULE_ID_V1: &str = "makosh-telegram-runtime";
 pub const TELEGRAM_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1: &str = "telegram.delivery-intent.v1";
 pub const TELEGRAM_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1: &str = "telegram.blob.v1";
 pub const TELEGRAM_DELIVERY_INTENT_CUSTODY_SCOPE_ID_V1: &str = "telegram.delivery-intent-body.v1";
@@ -29,7 +29,7 @@ pub const TELEGRAM_DELIVERY_INTENT_MAX_IN_FLIGHT_V1: u32 = 32;
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.telegram.delivery_intent.v1.rs"
+        "/makosh.telegram.delivery_intent.v1.rs"
     ));
 }
 
@@ -263,7 +263,7 @@ mod tests {
         assert_eq!(TELEGRAM_DELIVERY_INTENT_OWNER_ID_V1, "telegram");
         assert_eq!(
             TELEGRAM_DELIVERY_INTENT_TARGET_MODULE_ID_V1,
-            "hermes-telegram-runtime"
+            "makosh-telegram-runtime"
         );
         assert_eq!(
             TELEGRAM_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1,

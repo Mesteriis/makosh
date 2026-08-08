@@ -1,5 +1,5 @@
 use crate::support::*;
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 
 #[tokio::test]
 async fn document_processing_retry_failed_job_requeues_job_against_postgres() {

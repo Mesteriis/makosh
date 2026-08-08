@@ -25,7 +25,7 @@ generated_by: code-wiki-ru
 ```markdown
 # Бэкенд
 
-Обзор платформенных модулей бэкенда Hermes Hub.
+Обзор платформенных модулей бэкенда Макошь.
 
 ## Модуль звонков (`calls`)
 
@@ -188,12 +188,12 @@ generated_by: code-wiki-ru
 - `zoom_token_maintenance_scheduler_enabled`, `zoom_recording_sync_scheduler_enabled`, `zoom_retention_cleanup_scheduler_enabled` — булевы флаги.
 - Параметры Ollama: `base_url`, `chat_model`, `embed_model`, `timeout_seconds`.
 - Параметры OmniRoute: `base_url`, `chat_model`, `embed_model`, `timeout_seconds`, `api_key` (опционально).
-- По умолчанию: `service_name = "hermes-hub"`, HTTP на `127.0.0.1:3000`, AI провайдер — Ollama с предопределёнными моделями и таймаутами (значения см. в `constants`). ZooM-шедулеры по умолчанию `true`.
+- По умолчанию: `service_name = "makosh"`, HTTP на `127.0.0.1:3000`, AI провайдер — Ollama с предопределёнными моделями и таймаутами (значения см. в `constants`). ZooM-шедулеры по умолчанию `true`.
 
 #### Загрузка из переменных окружения
 
-- `apply_core_env` обрабатывает: `HERMES_HTTP_ADDR`, `DATABASE_URL`, `HERMES_LOCAL_API_SECRET`, `HERMES_NATS_SERVER_URL`, `HERMES_SECRET_VAULT_PATH`, `HERMES_SECRET_VAULT_KEY`, `HERMES_VAULT_HOME`, `HERMES_DEV_MODE`, `HERMES_DEV_KEY_PATH`.
-- `apply_ai_env` обрабатывает: `HERMES_AI_PROVIDER`, `HERMES_OLLAMA_*`, `HERMES_OMNIROUTE_*`. Таймауты должны быть положительными числами.
+- `apply_core_env` обрабатывает: `MAKOSH_HTTP_ADDR`, `DATABASE_URL`, `MAKOSH_LOCAL_API_SECRET`, `MAKOSH_NATS_SERVER_URL`, `MAKOSH_SECRET_VAULT_PATH`, `MAKOSH_SECRET_VAULT_KEY`, `MAKOSH_VAULT_HOME`, `MAKOSH_DEV_MODE`, `MAKOSH_DEV_KEY_PATH`.
+- `apply_ai_env` обрабатывает: `MAKOSH_AI_PROVIDER`, `MAKOSH_OLLAMA_*`, `MAKOSH_OMNIROUTE_*`. Таймауты должны быть положительными числами.
 - Пустые значения обязательных параметров приводят к соответствующей ошибке `ConfigError`.
 - Секреты оборачиваются в `ResolvedSecret`.
 

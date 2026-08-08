@@ -1,5 +1,5 @@
 [package]
-name = "hermes-mail-imap"
+name = "makosh-mail-imap"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -11,7 +11,7 @@ path = "src/lib.rs"
 default = []
 conformance-test-support = []
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "mail"
 surface = "implementation"
@@ -21,6 +21,6 @@ async-imap = "=0.11.2"
 async-native-tls = "=0.6.0"
 async-std = "=1.13.2"
 futures-util = "=0.3.32"
-hermes-mail-core = { path = "../mail-core" }
-hermes-mail-api = { path = "../mail-api" }
+makosh-mail-core = { path = "../mail-core" }
+makosh-mail-api = { path = "../mail-api" }
 imap-proto = "=0.16.7"

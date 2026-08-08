@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<{
 
 <template>
   <Transition
-    :name="`hermes-slide-${props.direction}`"
+    :name="`makosh-slide-${props.direction}`"
     :mode="mode"
     :appear="appear"
   >

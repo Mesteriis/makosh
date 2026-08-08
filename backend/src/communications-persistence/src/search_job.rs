@@ -1,6 +1,6 @@
 //! Typed owner-local derived-index job records; no content or key material crosses this seam.
 
-use hermes_communications_api::{
+use makosh_communications_api::{
     CommunicationBodyBlobReferenceV1, CommunicationConversationIdV1, CommunicationMessageIdV1,
     CommunicationObservationIdV1,
 };
@@ -96,7 +96,7 @@ impl CommunicationsDurablePersistence {
         let revision = i32::try_from(projection_revision)
             .map_err(|_| CommunicationsPersistenceError::InvalidRow)?;
         let rows = sqlx::query(
-            "SELECT message.message_id, message.conversation_id, message.lifecycle_state, evidence.observation_id AS evidence_id, evidence.body_state, evidence.body_blob_ref AS blob_ref, evidence.body_blob_reference_id AS blob_reference_id, evidence.body_blob_declared_bytes AS blob_declared_bytes, evidence.body_blob_sha256 AS blob_sha256, evidence.observed_at_unix_seconds, projection.projection_revision AS indexed_revision, projection.observed_at_unix_seconds AS indexed_observed_at, tombstone.projection_revision AS tombstone_revision, tombstone.observed_at_unix_seconds AS tombstone_observed_at, failure.evidence_id AS failure_evidence_id FROM hermes_data.communications_messages AS message JOIN hermes_data.communications_evidence_summaries AS evidence ON evidence.observation_id = message.last_evidence_id LEFT JOIN hermes_data.communications_derived_index_projections AS projection ON projection.message_id = message.message_id LEFT JOIN hermes_data.communications_derived_index_tombstones AS tombstone ON tombstone.message_id = message.message_id LEFT JOIN hermes_data.communications_derived_index_failures AS failure ON failure.evidence_id = evidence.observation_id WHERE (message.lifecycle_state = 1 AND evidence.body_state = 4 AND ((evidence.body_blob_declared_bytes > 262144 AND failure.evidence_id IS NULL) OR (evidence.body_blob_declared_bytes <= 262144 AND (projection.message_id IS NULL OR projection.projection_revision < $1 OR (projection.projection_revision = $1 AND projection.observed_at_unix_seconds < evidence.observed_at_unix_seconds))))) OR ((message.lifecycle_state <> 1 OR evidence.body_state <> 4) AND (tombstone.message_id IS NULL OR tombstone.projection_revision < $1 OR (tombstone.projection_revision = $1 AND tombstone.observed_at_unix_seconds < evidence.observed_at_unix_seconds))) ORDER BY message.message_id ASC LIMIT 64",
+            "SELECT message.message_id, message.conversation_id, message.lifecycle_state, evidence.observation_id AS evidence_id, evidence.body_state, evidence.body_blob_ref AS blob_ref, evidence.body_blob_reference_id AS blob_reference_id, evidence.body_blob_declared_bytes AS blob_declared_bytes, evidence.body_blob_sha256 AS blob_sha256, evidence.observed_at_unix_seconds, projection.projection_revision AS indexed_revision, projection.observed_at_unix_seconds AS indexed_observed_at, tombstone.projection_revision AS tombstone_revision, tombstone.observed_at_unix_seconds AS tombstone_observed_at, failure.evidence_id AS failure_evidence_id FROM makosh_data.communications_messages AS message JOIN makosh_data.communications_evidence_summaries AS evidence ON evidence.observation_id = message.last_evidence_id LEFT JOIN makosh_data.communications_derived_index_projections AS projection ON projection.message_id = message.message_id LEFT JOIN makosh_data.communications_derived_index_tombstones AS tombstone ON tombstone.message_id = message.message_id LEFT JOIN makosh_data.communications_derived_index_failures AS failure ON failure.evidence_id = evidence.observation_id WHERE (message.lifecycle_state = 1 AND evidence.body_state = 4 AND ((evidence.body_blob_declared_bytes > 262144 AND failure.evidence_id IS NULL) OR (evidence.body_blob_declared_bytes <= 262144 AND (projection.message_id IS NULL OR projection.projection_revision < $1 OR (projection.projection_revision = $1 AND projection.observed_at_unix_seconds < evidence.observed_at_unix_seconds))))) OR ((message.lifecycle_state <> 1 OR evidence.body_state <> 4) AND (tombstone.message_id IS NULL OR tombstone.projection_revision < $1 OR (tombstone.projection_revision = $1 AND tombstone.observed_at_unix_seconds < evidence.observed_at_unix_seconds))) ORDER BY message.message_id ASC LIMIT 64",
         )
         .bind(revision)
         .fetch_all(&self.pool)
@@ -152,7 +152,7 @@ impl CommunicationsDurablePersistence {
                     blob_from_row(&row)?.ok_or(CommunicationsPersistenceError::InvalidRow)?;
                 if blob.declared_bytes > 256 * 1024 {
                     if failure_exists.is_none() {
-                        let result = sqlx::query("INSERT INTO hermes_data.communications_derived_index_failures (evidence_id, message_id, projection_revision, observed_at_unix_seconds, failure_code, recorded_at_unix_seconds) VALUES ($1, $2, $3, $4, 6, $5) ON CONFLICT (evidence_id) DO NOTHING")
+                        let result = sqlx::query("INSERT INTO makosh_data.communications_derived_index_failures (evidence_id, message_id, projection_revision, observed_at_unix_seconds, failure_code, recorded_at_unix_seconds) VALUES ($1, $2, $3, $4, 6, $5) ON CONFLICT (evidence_id) DO NOTHING")
                             .bind(evidence_id.bytes().as_slice())
                             .bind(message_id.bytes().as_slice())
                             .bind(revision)
@@ -253,7 +253,7 @@ impl CommunicationsDurablePersistence {
             return Err(CommunicationsPersistenceError::InvalidRow);
         }
         let row = sqlx::query(
-            "WITH candidate AS (SELECT job_id FROM hermes_data.communications_derived_index_jobs WHERE completed_at_unix_seconds IS NULL AND (lease_expires_at_unix_seconds IS NULL OR lease_expires_at_unix_seconds <= $2) ORDER BY created_at_unix_seconds ASC, job_id ASC LIMIT 1 FOR UPDATE SKIP LOCKED) UPDATE hermes_data.communications_derived_index_jobs AS job SET claimed_by = $1, lease_expires_at_unix_seconds = $3, attempt_count = job.attempt_count + 1 FROM candidate WHERE job.job_id = candidate.job_id RETURNING job.job_id, job.operation, job.evidence_id, job.message_id, job.conversation_id, job.blob_ref, job.blob_reference_id, job.blob_declared_bytes, job.blob_sha256, job.projection_revision, job.observed_at_unix_seconds, job.created_at_unix_seconds",
+            "WITH candidate AS (SELECT job_id FROM makosh_data.communications_derived_index_jobs WHERE completed_at_unix_seconds IS NULL AND (lease_expires_at_unix_seconds IS NULL OR lease_expires_at_unix_seconds <= $2) ORDER BY created_at_unix_seconds ASC, job_id ASC LIMIT 1 FOR UPDATE SKIP LOCKED) UPDATE makosh_data.communications_derived_index_jobs AS job SET claimed_by = $1, lease_expires_at_unix_seconds = $3, attempt_count = job.attempt_count + 1 FROM candidate WHERE job.job_id = candidate.job_id RETURNING job.job_id, job.operation, job.evidence_id, job.message_id, job.conversation_id, job.blob_ref, job.blob_reference_id, job.blob_declared_bytes, job.blob_sha256, job.projection_revision, job.observed_at_unix_seconds, job.created_at_unix_seconds",
         )
         .bind(worker_id)
         .bind(claimed_at_unix_seconds)
@@ -306,7 +306,7 @@ impl CommunicationsDurablePersistence {
         worker_id: &str,
     ) -> Result<bool, CommunicationsPersistenceError> {
         let result = sqlx::query(
-            "UPDATE hermes_data.communications_derived_index_jobs SET claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE job_id = $1 AND claimed_by = $2 AND completed_at_unix_seconds IS NULL",
+            "UPDATE makosh_data.communications_derived_index_jobs SET claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE job_id = $1 AND claimed_by = $2 AND completed_at_unix_seconds IS NULL",
         )
         .bind(job_id.as_slice())
         .bind(worker_id)
@@ -323,7 +323,7 @@ pub fn communications_derived_index_job_id_v1(
     revision: u32,
 ) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communications.derived-index-job.v1\0");
+    digest.update(b"makosh.communications.derived-index-job.v1\0");
     digest.update(evidence_id);
     digest.update(message_id);
     digest.update(revision.to_be_bytes());
@@ -349,7 +349,7 @@ async fn enqueue_reconciled_job(
 ) -> Result<usize, CommunicationsPersistenceError> {
     job.validate()
         .map_err(|_| CommunicationsPersistenceError::InvalidRow)?;
-    let result = sqlx::query("INSERT INTO hermes_data.communications_derived_index_jobs (job_id, operation, evidence_id, message_id, conversation_id, blob_ref, blob_reference_id, blob_declared_bytes, blob_sha256, projection_revision, observed_at_unix_seconds, created_at_unix_seconds) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) ON CONFLICT (job_id) DO UPDATE SET operation = EXCLUDED.operation, evidence_id = EXCLUDED.evidence_id, message_id = EXCLUDED.message_id, conversation_id = EXCLUDED.conversation_id, blob_ref = EXCLUDED.blob_ref, blob_reference_id = EXCLUDED.blob_reference_id, blob_declared_bytes = EXCLUDED.blob_declared_bytes, blob_sha256 = EXCLUDED.blob_sha256, projection_revision = EXCLUDED.projection_revision, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, created_at_unix_seconds = EXCLUDED.created_at_unix_seconds, completed_at_unix_seconds = NULL, outcome = NULL, failure_code = NULL, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE hermes_data.communications_derived_index_jobs.completed_at_unix_seconds IS NOT NULL AND hermes_data.communications_derived_index_jobs.outcome = 1")
+    let result = sqlx::query("INSERT INTO makosh_data.communications_derived_index_jobs (job_id, operation, evidence_id, message_id, conversation_id, blob_ref, blob_reference_id, blob_declared_bytes, blob_sha256, projection_revision, observed_at_unix_seconds, created_at_unix_seconds) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) ON CONFLICT (job_id) DO UPDATE SET operation = EXCLUDED.operation, evidence_id = EXCLUDED.evidence_id, message_id = EXCLUDED.message_id, conversation_id = EXCLUDED.conversation_id, blob_ref = EXCLUDED.blob_ref, blob_reference_id = EXCLUDED.blob_reference_id, blob_declared_bytes = EXCLUDED.blob_declared_bytes, blob_sha256 = EXCLUDED.blob_sha256, projection_revision = EXCLUDED.projection_revision, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, created_at_unix_seconds = EXCLUDED.created_at_unix_seconds, completed_at_unix_seconds = NULL, outcome = NULL, failure_code = NULL, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE makosh_data.communications_derived_index_jobs.completed_at_unix_seconds IS NOT NULL AND makosh_data.communications_derived_index_jobs.outcome = 1")
         .bind(job.job_id.as_slice())
         .bind(match job.operation { CommunicationsDerivedIndexJobOperationV1::Index => 1_i16, CommunicationsDerivedIndexJobOperationV1::Remove => 2_i16 })
         .bind(job.evidence_id.bytes().as_slice())
@@ -377,7 +377,7 @@ async fn settle_derived_index_job(
     completed_at_unix_seconds: i64,
 ) -> Result<bool, CommunicationsPersistenceError> {
     let result = sqlx::query(
-        "UPDATE hermes_data.communications_derived_index_jobs SET completed_at_unix_seconds = $3, outcome = $4, failure_code = $5, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE job_id = $1 AND claimed_by = $2 AND completed_at_unix_seconds IS NULL",
+        "UPDATE makosh_data.communications_derived_index_jobs SET completed_at_unix_seconds = $3, outcome = $4, failure_code = $5, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE job_id = $1 AND claimed_by = $2 AND completed_at_unix_seconds IS NULL",
     )
     .bind(job_id.as_slice())
     .bind(worker_id)

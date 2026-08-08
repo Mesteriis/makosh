@@ -1,12 +1,12 @@
 //! Exact managed Engine descriptor for the event-only archive worker slice.
 
-use hermes_attachment_archive_inspection_api::{
+use makosh_attachment_archive_inspection_api::{
     ATTACHMENT_ARCHIVE_INSPECTION_CAPABILITY_ID_V1,
     ATTACHMENT_ARCHIVE_INSPECTION_COMMAND_CONNECT_PATH_V1,
     ATTACHMENT_ARCHIVE_INSPECTION_MODULE_ID_V1, ATTACHMENT_ARCHIVE_INSPECTION_OWNER_V1,
     ATTACHMENT_ARCHIVE_INSPECTION_QUERY_CONNECT_PATH_V1,
 };
-use hermes_attachment_archive_inspection_ingress::{
+use makosh_attachment_archive_inspection_ingress::{
     ATTACHMENT_ARCHIVE_INSPECTION_BLOB_TARGET_CAPABILITY_ID_V1,
     ATTACHMENT_ARCHIVE_INSPECTION_INGRESS_MAX_IN_FLIGHT_V1,
     archive_inspection_custody_delegated_contract_reference_v1,
@@ -14,15 +14,15 @@ use hermes_attachment_archive_inspection_ingress::{
     archive_inspection_custody_delegation_requested_contract_reference_v1,
     archive_inspection_custody_delegation_requested_publish_request_v1,
 };
-use hermes_attachment_security_contract::admission::{
+use makosh_attachment_security_contract::admission::{
     ATTACHMENT_SECURITY_MAX_IN_FLIGHT,
     attachment_security_scan_candidate_observed_contract_reference_v1,
 };
-use hermes_communications_attachment_contract::admission::{
+use makosh_communications_attachment_contract::admission::{
     COMMUNICATION_ATTACHMENT_MAX_IN_FLIGHT,
     communication_attachment_safety_state_changed_contract_reference_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ClientRpcRouteV1, ContractReferenceV1, DurableEnvelopeKindV1,
     EventRouteDirectionV1, EventRouteRequestV1, EventSubscriptionRequirementV1, ModuleDescriptorV1,
@@ -254,7 +254,7 @@ fn blob() -> CapabilityDescriptorV1 {
         criticality: CapabilityCriticalityV1::Required as i32,
         requests: vec![CapabilityRequestV1 {
             request: Some(Request::BlobQuota(BlobQuotaRequestV1 {
-                max_bytes: hermes_attachment_archive_inspection_core::DEFAULT_MAX_ARCHIVE_BYTES_V1,
+                max_bytes: makosh_attachment_archive_inspection_core::DEFAULT_MAX_ARCHIVE_BYTES_V1,
                 custody_scope_id: ATTACHMENT_ARCHIVE_INSPECTION_BLOB_SCOPE_ID.to_owned(),
                 allowed_operations: vec![
                     BlobQuotaOperationV1::ReadRange as i32,
@@ -284,7 +284,7 @@ fn storage() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::validate_descriptor_v1;
+    use makosh_runtime_protocol::validation::descriptor::validate_descriptor_v1;
 
     use super::*;
 

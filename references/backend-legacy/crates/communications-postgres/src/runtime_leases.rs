@@ -1,5 +1,5 @@
 use chrono::{DateTime, Duration, Utc};
-use hermes_communications_api::commands::{
+use makosh_communications_api::commands::{
     ProviderCommandQueuePortError, ProviderRuntimeLease as LeaseContract,
     ProviderRuntimeLeaseFuture, ProviderRuntimeLeasePort,
 };

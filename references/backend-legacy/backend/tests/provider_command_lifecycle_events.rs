@@ -1,12 +1,12 @@
 use chrono::{Duration, Utc};
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::commands::NewCommunicationProviderCommand;
-use hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore;
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::commands::NewCommunicationProviderCommand;
+use makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore;
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
 
-use hermes_backend_testkit::app::TestApp;
-use hermes_backend_testkit::composition::router_for_context;
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::app::TestApp;
+use makosh_backend_testkit::composition::router_for_context;
+use makosh_backend_testkit::context::TestContext;
 use serde_json::{Value, json};
 
 const PRIVATE_TARGET: &str = "private-target-message";

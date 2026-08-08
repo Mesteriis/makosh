@@ -1,20 +1,20 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobClientError, BlobDataClient, ManagedBlobCustodyReleaseRequestV1,
     ManagedBlobCustodyTransferRequestV1, ManagedBlobSessionRequestV1,
     request_managed_blob_custody_release_v2, request_managed_blob_custody_transfer_v2,
     request_managed_blob_session_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{BlobCustodyReleaseReasonV1, BlobDataOperationV1},
 };
-use hermes_tasks_command_api::{
+use makosh_tasks_command_api::{
     TASKS_REVIEWED_CANDIDATE_BLOB_CAPABILITY_ID_V1, TASKS_REVIEWED_CANDIDATE_MAX_BLOB_BYTES_V1,
     wire::ReviewedTaskCandidateContentV1,
 };
-use hermes_tasks_persistence::{TasksBlobCleanupV1, TasksBlobReceiptV1};
+use makosh_tasks_persistence::{TasksBlobCleanupV1, TasksBlobReceiptV1};
 use prost::Message;
 use sha2::{Digest, Sha256};
 use zeroize::Zeroizing;
@@ -159,7 +159,7 @@ fn validate_receipt(receipt: &TasksBlobReceiptV1) -> Result<(), TasksBlobErrorV1
         || receipt.sha256.iter().all(|byte| *byte == 0)
         || receipt.custody_transfer_source_proof.is_empty()
         || receipt.custody_transfer_source_proof.len()
-            > hermes_tasks_command_api::TASKS_REVIEWED_CANDIDATE_MAX_PROOF_BYTES_V1
+            > makosh_tasks_command_api::TASKS_REVIEWED_CANDIDATE_MAX_PROOF_BYTES_V1
     {
         return Err(TasksBlobErrorV1::InvalidReceipt);
     }
@@ -172,7 +172,7 @@ fn validate_cleanup(receipt: &TasksBlobCleanupV1) -> Result<(), TasksBlobErrorV1
         || receipt.sha256.iter().all(|byte| *byte == 0)
         || receipt.custody_proof.is_empty()
         || receipt.custody_proof.len()
-            > hermes_tasks_command_api::TASKS_REVIEWED_CANDIDATE_MAX_PROOF_BYTES_V1
+            > makosh_tasks_command_api::TASKS_REVIEWED_CANDIDATE_MAX_PROOF_BYTES_V1
     {
         return Err(TasksBlobErrorV1::InvalidReceipt);
     }
@@ -198,7 +198,7 @@ fn classify_blob_client_error_v1(error: BlobClientError) -> TasksBlobErrorV1 {
 
 fn release_operation_id(command_id: [u8; 16]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.tasks.reviewed-candidate.release.v1\0");
+    digest.update(b"makosh.tasks.reviewed-candidate.release.v1\0");
     digest.update(command_id);
     digest.finalize()[..16].try_into().expect("digest prefix")
 }

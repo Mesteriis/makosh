@@ -136,7 +136,7 @@ async fn execute_once(
 
 fn unavailable(stage: &str) -> ZulipHttpErrorV1 {
     #[cfg(feature = "conformance-test-support")]
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         let diagnostic = format!("developer_zulip_http_unavailable stage={stage}\n");
         let mut stderr = std::io::stderr().lock();
         let _ = std::io::Write::write_all(&mut stderr, diagnostic.as_bytes());
@@ -158,7 +158,7 @@ fn tls_connector(host: &str) -> Result<TlsConnector, ZulipHttpErrorV1> {
     if host != "localhost" && host != "127.0.0.1" && host != "::1" {
         return Ok(TlsConnector::new());
     }
-    let certificate_path = std::env::var_os("HERMES_MANAGED_RUNTIME_CONFORMANCE_CA_CERT_FILE")
+    let certificate_path = std::env::var_os("MAKOSH_MANAGED_RUNTIME_CONFORMANCE_CA_CERT_FILE")
         .ok_or(ZulipHttpErrorV1::InvalidConfiguration)?;
     let certificate_bytes =
         std::fs::read(certificate_path).map_err(|_| ZulipHttpErrorV1::InvalidConfiguration)?;

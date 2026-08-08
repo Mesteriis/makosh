@@ -7,11 +7,11 @@ index f9949f82b..1f2927fc4 100644
      visibility = ["//visibility:public"],
  )
 +
-+# Hermes production tgcalls bridge uses the platform-default macOS audio
++# Макошь production tgcalls bridge uses the platform-default macOS audio
 +# device. The upstream tgcalls_core target references AudioDeviceModule::Create
 +# but intentionally omits the non-iOS platform implementation sources.
 +cc_library(
-+    name = "hermes_portaudio_ringbuffer",
++    name = "makosh_portaudio_ringbuffer",
 +    srcs = [
 +        "webrtc/modules/third_party/portaudio/pa_ringbuffer.c",
 +    ],
@@ -28,7 +28,7 @@ index f9949f82b..1f2927fc4 100644
 +)
 +
 +cc_library(
-+    name = "hermes_macos_audio_device",
++    name = "makosh_macos_audio_device",
 +    srcs = [
 +        "webrtc/modules/audio_device/audio_device_impl.cc",
 +        "webrtc/modules/audio_device/mac/audio_device_mac.cc",
@@ -50,7 +50,7 @@ index f9949f82b..1f2927fc4 100644
 +        "-w",
 +    ],
 +    deps = [
-+        ":hermes_portaudio_ringbuffer",
++        ":makosh_portaudio_ringbuffer",
 +        ":webrtc",
 +    ],
 +    linkopts = [

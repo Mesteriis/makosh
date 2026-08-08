@@ -1,10 +1,10 @@
 //! Applies only canonical bundles whose exact digest is bound into a staged binding.
 
-use hermes_storage_postgres::{
+use makosh_storage_postgres::{
     PLATFORM_ADMIN_USERNAME, PostgresAdapterErrorV1, PostgresAdminConnectorV1, StorageRoleSpecV1,
     apply_storage_bundle,
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     v1::{StorageBindingV1, StorageBundleV1, StorageRuntimeTopologyV1},
     validation::storage_binding_from_message,
 };

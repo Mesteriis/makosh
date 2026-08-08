@@ -5,12 +5,12 @@ import {
 	MailContactsSyncErrorCodeV1,
 	MailContactsSyncStateV1,
 	MailContactsSyncStatusChangedV1Schema,
-} from '../../../gen/hermes/mail_contacts_sync/v1/sync_pb'
+} from '../../../gen/makosh/mail_contacts_sync/v1/sync_pb'
 import {
 	ClientRealtimeEventV1Schema,
 	ClientRealtimeStreamStateKindV1,
 	ClientRealtimeStreamStateV1Schema,
-} from '../../../gen/hermes/gateway/v1/client_realtime_pb'
+} from '../../../gen/makosh/gateway/v1/client_realtime_pb'
 import type { BrowserGatewayRealtimeObserver } from '../../../platform/gateway/browserGatewayRealtime'
 import { openMailContactsSyncRealtime } from './mailContactsSync'
 

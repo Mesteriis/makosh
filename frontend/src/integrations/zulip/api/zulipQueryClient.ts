@@ -1,7 +1,7 @@
 import { createClient } from '@connectrpc/connect'
 import type { Client } from '@connectrpc/connect'
 
-import { ZulipQueryService } from '../../../gen/hermes/zulip/v1/client_pb'
+import { ZulipQueryService } from '../../../gen/makosh/zulip/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 let zulipQueryClient: Client<typeof ZulipQueryService> | null = null

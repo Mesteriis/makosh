@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/app/vault_reconciliation/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/vault_reconciliation/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/vault_reconciliation/errors.rs`
 - Size bytes / Размер в байтах: `655`
 - Included characters / Включено символов: `655`
 - Truncated / Обрезано: `no`
@@ -89,7 +89,7 @@ pub(super) enum HostVaultReconciliationError {
 
 ### `backend/src/app/vault_reconciliation/lifecycle.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/vault_reconciliation/lifecycle.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/vault_reconciliation/lifecycle.rs`
 - Size bytes / Размер в байтах: `1456`
 - Included characters / Включено символов: `1456`
 - Truncated / Обрезано: `no`
@@ -142,7 +142,7 @@ pub(crate) fn spawn_host_vault_manifest_reconciliation(state: &AppState) {
 
 ### `backend/src/app/vault_reconciliation/manifest_enrichment.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/vault_reconciliation/manifest_enrichment.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/vault_reconciliation/manifest_enrichment.rs`
 - Size bytes / Размер в байтах: `2607`
 - Included characters / Включено символов: `2607`
 - Truncated / Обрезано: `no`
@@ -235,7 +235,7 @@ fn manifest_metadata_from_row(
 
 ### `backend/src/app/vault_reconciliation/metadata.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/vault_reconciliation/metadata.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/vault_reconciliation/metadata.rs`
 - Size bytes / Размер в байтах: `1982`
 - Included characters / Включено символов: `1982`
 - Truncated / Обрезано: `no`
@@ -310,7 +310,7 @@ pub(super) fn non_empty(value: Option<String>) -> Option<String> {
 
 ### `backend/src/app/vault_reconciliation/provider_recovery.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/vault_reconciliation/provider_recovery.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/vault_reconciliation/provider_recovery.rs`
 - Size bytes / Размер в байтах: `3025`
 - Included characters / Включено символов: `3025`
 - Truncated / Обрезано: `no`
@@ -400,7 +400,7 @@ impl RecoverableProviderSecret {
 
 ### `backend/src/app/vault_reconciliation/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/vault_reconciliation/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/vault_reconciliation/service.rs`
 - Size bytes / Размер в байтах: `3518`
 - Included characters / Включено символов: `3518`
 - Truncated / Обрезано: `no`
@@ -510,7 +510,7 @@ async fn restore_provider_account_secret_binding(
 
 ### `backend/src/app/vault_reconciliation/summary.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/vault_reconciliation/summary.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/vault_reconciliation/summary.rs`
 - Size bytes / Размер в байтах: `198`
 - Included characters / Включено символов: `198`
 - Truncated / Обрезано: `no`
@@ -525,7 +525,7 @@ pub(super) struct HostVaultReconciliationSummary {
 
 ### `backend/src/application/ai_signal_dispatch.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/ai_signal_dispatch.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/ai_signal_dispatch.rs`
 - Size bytes / Размер в байтах: `665`
 - Included characters / Включено символов: `665`
 - Truncated / Обрезано: `no`
@@ -561,7 +561,7 @@ pub(crate) async fn dispatch_ai_runtime_signal(
 
 ### `backend/src/application/bootstrap.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/bootstrap.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/bootstrap.rs`
 - Size bytes / Размер в байтах: `94596`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -812,13 +812,13 @@ fn start_mail_outbox_delivery(context: ApplicationBootstrapContext) {
                 crate::domains::communications::outbox::CommunicationOutboxStore::new(pool.clone());
             let sender =
                 crate::domains::communications::outbox::CommunicationOutboxEmailSender::new(
-         
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/application/calendar_meeting_outcomes.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/calendar_meeting_outcomes.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/calendar_meeting_outcomes.rs`
 - Size bytes / Размер в байтах: `8662`
 - Included characters / Включено символов: `8662`
 - Truncated / Обрезано: `no`
@@ -1091,7 +1091,7 @@ pub enum CalendarMeetingOutcomeApplicationError {
 
 ### `backend/src/application/communication_fixture_ingest.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/communication_fixture_ingest.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/communication_fixture_ingest.rs`
 - Size bytes / Размер в байтах: `120732`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1148,7 +1148,7 @@ use crate::platform::communications::NewRawCommunicationRecord;
 use crate::platform::events::bus::{telegram_event_types, whatsapp_event_types};
 use crate::platform::events::{EventBus, EventStore, EventStoreError, NewEventEnvelope};
 
-const AUDIT_ACTOR_ID: &str = "hermes-frontend";
+const AUDIT_ACTOR_ID: &str = "makosh-frontend";
 const WHATSAPP_CHANNEL_KINDS: &[&str] = &["whatsapp_web", "whatsapp_business_cloud"];
 static WHATSAPP_FIXTURE_EVENT_SEQUENCE: AtomicU64 = AtomicU64::new(1);
 
@@ -1414,7 +1414,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/application/communication_provider_writes.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/communication_provider_writes.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/communication_provider_writes.rs`
 - Size bytes / Размер в байтах: `52121`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1454,7 +1454,7 @@ use crate::platform::audit::{ApiAuditError, ApiAuditLog, NewApiAuditRecord};
 use crate::platform::events::bus::telegram_event_types;
 use crate::platform::events::{EventBus, EventStore, NewEventEnvelope};
 
-const AUDIT_ACTOR_ID: &str = "hermes-frontend";
+const AUDIT_ACTOR_ID: &str = "makosh-frontend";
 const CANONICAL_REFERENCE_CHAIN_DEPTH: usize = 16;
 const CANONICAL_REFERENCE_CHAIN_EDGES: usize = 128;
 
@@ -1755,13 +1755,13 @@ async fn canonical_reply_refs_by_source(
     pool: &sqlx::PgPool,
     message_id: &str,
 ) -> Result<Vec<TelegramReplyRef>, TelegramError> {
-  
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/application/communication_send.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/communication_send.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/communication_send.rs`
 - Size bytes / Размер в байтах: `4848`
 - Included characters / Включено символов: `4848`
 - Truncated / Обрезано: `no`
@@ -1889,7 +1889,7 @@ pub(crate) async fn send_email(
 
     deps.audit_log
         .record(&NewApiAuditRecord::communication_email_send(
-            "hermes-frontend",
+            "makosh-frontend",
             &account.account_id,
             recipient_count,
         ))
@@ -1929,7 +1929,7 @@ pub(crate) enum CommunicationSendError {
 
 ### `backend/src/application/consistency_review.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/consistency_review.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/consistency_review.rs`
 - Size bytes / Размер в байтах: `56`
 - Included characters / Включено символов: `56`
 - Truncated / Обрезано: `no`
@@ -1940,7 +1940,7 @@ pub(crate) use crate::workflows::consistency_review::*;
 
 ### `backend/src/application/email_intelligence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/email_intelligence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/email_intelligence.rs`
 - Size bytes / Размер в байтах: `56`
 - Included characters / Включено символов: `56`
 - Truncated / Обрезано: `no`
@@ -1951,7 +1951,7 @@ pub(crate) use crate::workflows::email_intelligence::*;
 
 ### `backend/src/application/mail_background_sync.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/mail_background_sync.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/mail_background_sync.rs`
 - Size bytes / Размер в байтах: `58`
 - Included characters / Включено символов: `58`
 - Truncated / Обрезано: `no`
@@ -1962,7 +1962,7 @@ pub(crate) use crate::workflows::mail_background_sync::*;
 
 ### `backend/src/application/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/mod.rs`
 - Size bytes / Размер в байтах: `2694`
 - Included characters / Включено символов: `2694`
 - Truncated / Обрезано: `no`
@@ -2037,7 +2037,7 @@ pub(crate) use zoom_signal_detection::*;
 
 ### `backend/src/application/organization_contact_links.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/organization_contact_links.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/organization_contact_links.rs`
 - Size bytes / Размер в байтах: `3975`
 - Included characters / Включено символов: `3975`
 - Truncated / Обрезано: `no`
@@ -2171,7 +2171,7 @@ pub enum OrganizationContactLinkApplicationError {
 
 ### `backend/src/application/person_derived_evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/person_derived_evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/person_derived_evidence.rs`
 - Size bytes / Размер в байтах: `61`
 - Included characters / Включено символов: `61`
 - Truncated / Обрезано: `no`
@@ -2182,7 +2182,7 @@ pub(crate) use crate::workflows::person_derived_evidence::*;
 
 ### `backend/src/application/project_link_review_effects.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/project_link_review_effects.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/project_link_review_effects.rs`
 - Size bytes / Размер в байтах: `65`
 - Included characters / Включено символов: `65`
 - Truncated / Обрезано: `no`
@@ -2193,7 +2193,7 @@ pub(crate) use crate::workflows::project_link_review_effects::*;
 
 ### `backend/src/application/project_link_review_mirror.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/project_link_review_mirror.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/project_link_review_mirror.rs`
 - Size bytes / Размер в байтах: `1510`
 - Included characters / Включено символов: `1510`
 - Truncated / Обрезано: `no`
@@ -2259,7 +2259,7 @@ pub(crate) async fn sync_project_link_review_state_in_transaction(
 
 ### `backend/src/application/provider_runtime_contracts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/provider_runtime_contracts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/provider_runtime_contracts.rs`
 - Size bytes / Размер в байтах: `10546`
 - Included characters / Включено символов: `10546`
 - Truncated / Обрезано: `no`
@@ -2478,7 +2478,7 @@ pub(crate) use crate::integrations::yandex_telemost::client::{
 
 ### `backend/src/application/provider_runtime_services.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/provider_runtime_services.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/provider_runtime_services.rs`
 - Size bytes / Размер в байтах: `88258`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2814,7 +2814,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/application/realtime_conversation_transcript_execution.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/realtime_conversation_transcript_execution.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/realtime_conversation_transcript_execution.rs`
 - Size bytes / Размер в байтах: `740`
 - Included characters / Включено символов: `740`
 - Truncated / Обрезано: `no`
@@ -2844,7 +2844,7 @@ pub(crate) async fn complete_realtime_conversation_transcript_bridge(
 
 ### `backend/src/application/realtime_conversation_transcript_projection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/realtime_conversation_transcript_projection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/realtime_conversation_transcript_projection.rs`
 - Size bytes / Размер в байтах: `81`
 - Included characters / Включено символов: `81`
 - Truncated / Обрезано: `no`

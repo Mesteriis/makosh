@@ -1,7 +1,7 @@
 use std::future::Future;
 use std::pin::Pin;
 
-use hermes_events_api::EventEnvelope;
+use makosh_events_api::EventEnvelope;
 use thiserror::Error;
 
 use crate::policies::SignalPolicy;

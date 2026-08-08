@@ -5,7 +5,7 @@ import type {
 	TelegramOperationResponse,
 	TelegramParticipantProjection,
 	TelegramTopicProjection,
-} from '../../../gen/hermes/telegram/v1/client_pb'
+} from '../../../gen/makosh/telegram/v1/client_pb'
 import type { TelegramChatContext } from '../api/telegramDiscoveryGateway'
 
 export type TelegramDiscoveryResultRow = {

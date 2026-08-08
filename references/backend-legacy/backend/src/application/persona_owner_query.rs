@@ -1,4 +1,4 @@
-use hermes_personas_api::{
+use makosh_personas_api::{
     PersonaOwnerQuery, PersonaOwnerQueryError, PersonaOwnerQueryFuture, PersonaRead,
     PersonaUpdateCommand, PersonaWriteError, PersonaWriteFuture, PersonaWritePort,
 };

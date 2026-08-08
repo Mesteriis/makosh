@@ -73,7 +73,7 @@ bypassed. New code must not create a second event subsystem.
 ```text
 contracts/
 ├── proto/
-│   └── hermes/
+│   └── makosh/
 │       ├── signal_hub/v1/signal_hub.proto
 │       ├── events/v1/event_envelope.proto
 │       ├── communications/v1/communications.proto
@@ -152,7 +152,7 @@ Forbidden:
 
 ## Code Size Rule
 
-Signal Hub must follow existing Hermes anti-god-file rules:
+Signal Hub must follow existing Макошь anti-god-file rules:
 
 - files over 700 lines require written justification;
 - files over 1000 lines are architectural problems;

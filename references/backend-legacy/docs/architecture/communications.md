@@ -10,8 +10,8 @@ frontend/backend boundary guards.
 
 ## Purpose
 
-Communications are the primary intake spine for Hermes. Messages, calls,
-meetings, provider events and communication attachments enter Hermes as source
+Communications are the primary intake spine for Макошь. Messages, calls,
+meetings, provider events and communication attachments enter Макошь as source
 evidence, then feed memory, relationships, decisions, obligations, tasks,
 projects, documents and context.
 
@@ -181,8 +181,8 @@ Frontend channel work must use:
 
 ## Reasons For Existence
 
-Communications exist because real-world context mostly enters Hermes through
-interaction. Hermes must understand not just message bodies, but timing,
+Communications exist because real-world context mostly enters Макошь through
+interaction. Макошь must understand not just message bodies, but timing,
 participants, silence, replies, attachments, delivery, source provenance and
 provider state. Without a shared Communications model, each channel would
 duplicate lifecycle, capability, audit, search, attachment and extraction logic.

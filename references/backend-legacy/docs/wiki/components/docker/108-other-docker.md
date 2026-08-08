@@ -48,7 +48,7 @@ Dockerfile определяет multi-stage сборку из трёх стад�
   ```
   cargo build \
       --manifest-path backend/Cargo.toml \
-      --bin hermes-whatsapp-business-cloud-edge-proxy \
+      --bin makosh-whatsapp-business-cloud-edge-proxy \
       --release
   ```
 
@@ -60,11 +60,11 @@ Dockerfile определяет multi-stage сборку из трёх стад�
 - Копирование артефакта:
   ```
   COPY --from=backend-builder \
-      /workspace/target/release/hermes-whatsapp-business-cloud-edge-proxy \
-      /usr/local/bin/hermes-whatsapp-business-cloud-edge-proxy
+      /workspace/target/release/makosh-whatsapp-business-cloud-edge-proxy \
+      /usr/local/bin/makosh-whatsapp-business-cloud-edge-proxy
   ```
 - EXPOSE порт: `8787`
-- Команда запуска: `hermes-whatsapp-business-cloud-edge-proxy`
+- Команда запуска: `makosh-whatsapp-business-cloud-edge-proxy`
 
 ## Прочие файлы
 

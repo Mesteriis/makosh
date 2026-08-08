@@ -1,5 +1,5 @@
 [package]
-name = "hermes-blob-client"
+name = "makosh-blob-client"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,14 +7,14 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "blob"
 surface = "contract"
 
 [dependencies]
-hermes-blob-client-contract = { path = "../client-contract" }
-hermes-runtime-protocol = { path = "../../runtime_protocol" }
+makosh-blob-client-contract = { path = "../client-contract" }
+makosh-runtime-protocol = { path = "../../runtime_protocol" }
 getrandom = "=0.3.4"
 prost = "=0.14.4"
 sha2 = "=0.10.9"

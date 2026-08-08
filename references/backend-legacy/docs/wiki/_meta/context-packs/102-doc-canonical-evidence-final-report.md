@@ -21,9 +21,9 @@
 - Group / Группа: `canonical-evidence-final-report`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `canonical-evidence-final-report.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/canonical-evidence-final-report.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/canonical-evidence-final-report.md`
 - Size bytes / Размер в байтах: `243072`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -137,7 +137,7 @@ gap в текущем периоде закрыт.
 | Calendar account/source duplicate owner cleanup | Старые compatibility CRUD stores `domains/calendar/events/accounts.rs` и orphan `domains/calendar/events/sources.rs` удалены; `domains/calendar/events.rs` теперь оставляет единственный owner path через re-export `crate::vault::{CalendarAccountStore, CalendarSourceStore}`. | Дальше остаются другие technical stores вне calendar/tasks/mail provider metadata, где еще есть direct durable writes и может быть размазанное ownership. | Следующий ownership pass: remaining technical config/queue stores after `ai/control_center`. | Частично |
 | AI control center evidence trail | `ai/control_center` mutation paths `create_provider`, `update_provider`, `record_consent`, `bind_api_key_secret` и `put_model_route` теперь работают в transaction-bound evidence contract: добавлены registry-backed observation kinds `AI_PROVIDER_ACCOUNT`, `AI_PROVIDER_SECRET_BINDING`, `AI_MODEL_ROUTE`, каждая durable mutation пишет canonical observation + `observation_link` в `domain = ai`. PostgreSQL regression test подтверждает полный trail для provider lifecycle, secret binding и model route. Architecture guard теперь также запрещает direct `ai_model_routes` mutations вне owner file. | Остались соседние technical queues/runtime states, например provider command queues и часть integration-owned write logs, которые еще живут без такого же canonical evidence trail. | Следующий technical pass: Telegram provider write commands и другие remaining queue/state owners с direct durable writes. | Частично |
 | Telegram provider command queue evidence trail | `telegram_provider_write_commands` теперь materialize canonical evidence trail через owner-file `integrations/telegram/client/commands.rs`: добавлены observation kinds `TELEGRAM_PROVIDER_WRITE_COMMAND` и `TELEGRAM_PROVIDER_WRITE_COMMAND_STATUS`; enqueue, claim, retry, dead-letter, awaiting-provider, manual retry, stale recovery, reconciled и mismatch transitions пишут append-only observations и `observation_link` на `telegram/provider_write_command`. Reconciliation paths из `chat_reconciliation`, `chat_state`, `participants`, `reactions`, `lifecycle/provider_reconciliation` и `runtime/manager/topic_events` сведены к централизованным helpers вместо прямых SQL updates. Architecture guard теперь запрещает direct `INSERT/UPDATE telegram_provider_write_commands` вне owner-файла. | Еще остаются другие technical queue/state owners за пределами Telegram command queue и broader runtime/projection mutation surfaces, которые не все уже покрыты таким же contract. | Следующий technical pass: remaining queue/state tables outside Telegram command queue, затем новые guard rules на соседние runtime mutation owners. | Частично |
-| AI agent run evidence trail | `ai_agent_runs` теперь тоже пишут canonical evidence trail: `AiRunStore::start_run`, `complete_run`, `fail_run` materialize observations `AI_AGENT_RUN` и `AI_AGENT_RUN_STATUS` с link на `ai/agent_run`. Existing integration test на AI answer run расширен assertion-ом на presence of canonical observations для run lifecycle. | Live verification этого пути зависит от `HERMES_TEST_DATABASE_URL`; без него test only compiles and skips. Остаются другие execution/job owners вне AI run store. | Следующий technical pass: `document_processing_jobs` и `communication_mail_sync_runs`. | Частично |
+| AI agent run evidence trail | `ai_agent_runs` теперь тоже пишут canonical evidence trail: `AiRunStore::start_run`, `complete_run`, `fail_run` materialize observations `AI_AGENT_RUN` и `AI_AGENT_RUN_STATUS` с link на `ai/agent_run`. Existing integration test на AI answer run расширен assertion-ом на presence of canonical observations для run lifecycle. | Live verification этого пути зависит от `MAKOSH_TEST_DATABASE_URL`; без него test only compiles and skips. Остаются другие execution/job owners вне AI run store. | Следующий technical pass: `document_processing_jobs` и `communication_mail_sync_runs`. | Частично |
 | Document processing job evidence trail | `document_processing_jobs` теперь пишут canonical evidence tr
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._

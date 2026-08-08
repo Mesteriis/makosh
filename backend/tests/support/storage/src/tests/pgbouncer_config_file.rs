@@ -2,7 +2,7 @@
 
 use std::os::unix::fs::{MetadataExt, PermissionsExt, symlink};
 
-use hermes_storage_pgbouncer::{
+use makosh_storage_pgbouncer::{
     PLATFORM_ADMIN_USERNAME, PgBouncerAuthEntryV1, PgBouncerAuthFileV1,
     PgBouncerDatabaseConfigFileV1, PgBouncerRuntimeConfigV1, PoolAliasV1, PoolConfigErrorV1,
 };
@@ -24,7 +24,7 @@ fn replaces_a_private_database_include_in_stable_alias_order() {
     assert!(!directory.path().join(".databases.ini.next").exists());
     assert_eq!(
         std::fs::read_to_string(path).expect("database include"),
-        "[databases]\nruntime_registration_mail_1 = host=127.0.0.1 port=5432 dbname=hermes pool_mode=transaction max_db_client_connections=8\nruntime_registration_notes_1 = host=127.0.0.1 port=5432 dbname=hermes pool_mode=transaction max_db_client_connections=8\n"
+        "[databases]\nruntime_registration_mail_1 = host=127.0.0.1 port=5432 dbname=makosh pool_mode=transaction max_db_client_connections=8\nruntime_registration_notes_1 = host=127.0.0.1 port=5432 dbname=makosh pool_mode=transaction max_db_client_connections=8\n"
     );
 }
 
@@ -71,7 +71,7 @@ fn replaces_a_private_auth_file_with_pooler_admin_and_scram_verifier() {
     assert_eq!(metadata.uid(), unsafe { libc::geteuid() });
     assert_eq!(
         std::fs::read_to_string(path).expect("auth file"),
-        "\"hermes_pgbouncer_admin\" \"0123456789abcdef\"\n\"runtime_mail\" \"SCRAM-SHA-256$4096:c2FsdA==$c3RvcmVka2V5$c2VydmVya2V5\"\n"
+        "\"makosh_pgbouncer_admin\" \"0123456789abcdef\"\n\"runtime_mail\" \"SCRAM-SHA-256$4096:c2FsdA==$c3RvcmVka2V5$c2VydmVya2V5\"\n"
     );
 }
 
@@ -92,7 +92,7 @@ fn config(owner: &str) -> PgBouncerRuntimeConfigV1 {
         alias,
         "127.0.0.1".to_owned(),
         5432,
-        "hermes".to_owned(),
+        "makosh".to_owned(),
         format!("runtime_{owner}"),
         8,
     )

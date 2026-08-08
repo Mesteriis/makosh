@@ -1,13 +1,13 @@
 //! Validates and commits one operator-managed Settings snapshot revision.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     HealthRecoveryStore, OwnerIdentityStore, SettingsDesiredSnapshot, SettingsRegistryStore,
 };
-use hermes_kernel_control_store_sqlite::StoreError;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store_sqlite::StoreError;
+use makosh_runtime_protocol::v1::{
     SettingClientVisibilityV1, SettingMutationAuthorityV1, SettingsSnapshotV1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     decode_settings_schema_v1, decode_settings_snapshot_v1,
     validate_settings_snapshot_against_schema_v1,
 };

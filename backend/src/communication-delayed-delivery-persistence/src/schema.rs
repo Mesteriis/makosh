@@ -1,4 +1,4 @@
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use sha2::{Digest, Sha256};
 
 pub const COMMUNICATION_DELAYED_DELIVERY_STORAGE_BUNDLE_REVISION_V1: u32 = 1;

@@ -2,7 +2,7 @@ use std::fmt;
 
 use zeroize::Zeroize;
 
-pub const PACKAGE: &str = "hermes-telegram-call-media-contract";
+pub const PACKAGE: &str = "makosh-telegram-call-media-contract";
 pub const TD_CALL_MIN_LAYER_V1: i32 = 65;
 pub const TD_CALL_MAX_LAYER_V1: i32 = 92;
 pub const MAX_LIBRARY_VERSION_BYTES: usize = 128;

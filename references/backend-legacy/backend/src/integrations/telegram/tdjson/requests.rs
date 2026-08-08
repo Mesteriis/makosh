@@ -33,7 +33,7 @@ pub(crate) fn set_tdlib_parameters_request(
         "api_id": api_id,
         "api_hash": api_hash,
         "system_language_code": "en",
-        "device_model": "Hermes Hub",
+        "device_model": "Макошь",
         "system_version": std::env::consts::OS,
         "application_version": env!("CARGO_PKG_VERSION"),
         "enable_storage_optimizer": true,
@@ -43,7 +43,7 @@ pub(crate) fn set_tdlib_parameters_request(
     Ok(json!({
         "@type": "setTdlibParameters",
         "parameters": parameters,
-        "@extra": "hermes-set-tdlib-parameters"
+        "@extra": "makosh-set-tdlib-parameters"
     }))
 }
 
@@ -65,7 +65,7 @@ pub(crate) fn check_database_encryption_key_request(
     json!({
         "@type": "checkDatabaseEncryptionKey",
         "encryption_key": tdlib_database_encryption_key(request),
-        "@extra": "hermes-check-database-encryption-key"
+        "@extra": "makosh-check-database-encryption-key"
     })
 }
 

@@ -22,7 +22,7 @@ test('WhatsApp operational read remains an integration-owned SRP slice', async (
     readFile(new URL('src/whatsapp-runtime/Cargo.toml', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/whatsapp-api/proto/hermes/whatsapp/operational/v1/client.proto',
+        'src/whatsapp-api/proto/makosh/whatsapp/operational/v1/client.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -43,11 +43,11 @@ test('WhatsApp operational read remains an integration-owned SRP slice', async (
     runtimeManifest,
   ]) {
     for (const forbiddenOwner of [
-      'hermes-kernel',
-      'hermes-gateway',
-      'hermes-communications-domain',
-      'hermes-communications-persistence',
-      'hermes-communications-runtime',
+      'makosh-kernel',
+      'makosh-gateway',
+      'makosh-communications-domain',
+      'makosh-communications-persistence',
+      'makosh-communications-runtime',
     ]) {
       assert.doesNotMatch(manifest, new RegExp(forbiddenOwner));
     }
@@ -67,7 +67,7 @@ test('WhatsApp operational read remains an integration-owned SRP slice', async (
     coreProjection,
     /metadata_only_message_does_not_invent_operational_content/,
   );
-  assert.doesNotMatch(coreProjection, /sqlx|hermes_communications/);
+  assert.doesNotMatch(coreProjection, /sqlx|makosh_communications/);
 
   assert.match(
     persistenceProjection,
@@ -82,7 +82,7 @@ test('WhatsApp operational read remains an integration-owned SRP slice', async (
   assert.match(persistenceProjection, /transaction\s*\.commit\(\)/);
   assert.doesNotMatch(
     persistenceProjection,
-    /hermes_data\.communications_|hermes_(?:kernel|gateway)/,
+    /makosh_data\.communications_|makosh_(?:kernel|gateway)/,
   );
 
   assert.match(runtimeComposition, /project_operational_host_observation/);

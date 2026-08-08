@@ -1,7 +1,7 @@
-use hermes_reviewed_task_candidate_promotion_core::{
+use makosh_reviewed_task_candidate_promotion_core::{
     derive_reviewed_task_candidate_command_id_v1, derive_reviewed_task_candidate_result_id_v1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool, Postgres, Row, Transaction,
     postgres::{PgConnectOptions, PgPoolOptions},
@@ -74,7 +74,7 @@ impl ReviewedTaskCandidatePromotionPersistenceV1 {
         }
         let row = sqlx::query(
             "SELECT review_id, candidate_id, decision_revision, tasks_result_message_id
-             FROM hermes_data.reviewed_task_candidate_promotion_requests
+             FROM makosh_data.reviewed_task_candidate_promotion_requests
              WHERE logical_owner_id = $1 AND tasks_command_id = $2",
         )
         .bind(logical_owner_id)
@@ -100,7 +100,7 @@ impl ReviewedTaskCandidatePromotionPersistenceV1 {
         let decision_revision = signed_revision(input.decision_revision)?;
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.reviewed_task_candidate_promotion_requests (
+            "INSERT INTO makosh_data.reviewed_task_candidate_promotion_requests (
                logical_owner_id, approval_message_id, approval_envelope_sha256,
                review_id, candidate_id, decision_revision,
                tasks_command_id, tasks_command_message_id,
@@ -183,7 +183,7 @@ impl ReviewedTaskCandidatePromotionPersistenceV1 {
             return Ok(PersistPromotionResultOutcomeV1::Duplicate);
         }
         let inbox_inserted = sqlx::query(
-            "INSERT INTO hermes_data.reviewed_task_candidate_promotion_result_inbox (
+            "INSERT INTO makosh_data.reviewed_task_candidate_promotion_result_inbox (
                logical_owner_id, result_message_id, envelope_sha256,
                tasks_command_id, review_id, processed_at_unix_millis
              ) VALUES ($1, $2, $3, $4, $5, $6)
@@ -211,7 +211,7 @@ impl ReviewedTaskCandidatePromotionPersistenceV1 {
         .await?;
         let (outcome, task_id, failure_code) = encoded_outcome(input.outcome);
         let updated = sqlx::query(
-            "UPDATE hermes_data.reviewed_task_candidate_promotion_requests
+            "UPDATE makosh_data.reviewed_task_candidate_promotion_requests
              SET tasks_result_message_id = $1, promotion_outcome = $2,
                  task_id = $3, failure_code = $4, updated_at_unix_millis = $5
              WHERE logical_owner_id = $6 AND tasks_command_id = $7
@@ -341,7 +341,7 @@ async fn verify_result_inbox(
 ) -> Result<(), ReviewedTaskCandidatePromotionPersistenceErrorV1> {
     let row = sqlx::query(
         "SELECT envelope_sha256, tasks_command_id, review_id
-         FROM hermes_data.reviewed_task_candidate_promotion_result_inbox
+         FROM makosh_data.reviewed_task_candidate_promotion_result_inbox
          WHERE logical_owner_id = $1 AND result_message_id = $2",
     )
     .bind(&input.logical_owner_id)
@@ -461,10 +461,10 @@ fn storage_error(_: sqlx::Error) -> ReviewedTaskCandidatePromotionPersistenceErr
 const REQUEST_BY_APPROVAL: &str = "SELECT approval_envelope_sha256, review_id, candidate_id, decision_revision, \
      tasks_command_id, tasks_command_message_id, tasks_result_message_id, \
      promotion_outcome, task_id, failure_code \
-     FROM hermes_data.reviewed_task_candidate_promotion_requests \
+     FROM makosh_data.reviewed_task_candidate_promotion_requests \
      WHERE logical_owner_id = $1 AND approval_message_id = $2";
 const REQUEST_BY_COMMAND_FOR_UPDATE: &str = "SELECT approval_envelope_sha256, review_id, candidate_id, decision_revision, \
      tasks_command_id, tasks_command_message_id, tasks_result_message_id, \
      promotion_outcome, task_id, failure_code \
-     FROM hermes_data.reviewed_task_candidate_promotion_requests \
+     FROM makosh_data.reviewed_task_candidate_promotion_requests \
      WHERE logical_owner_id = $1 AND tasks_command_id = $2 FOR UPDATE";

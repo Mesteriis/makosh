@@ -1,21 +1,21 @@
-use hermes_review_task_candidate_api::{
+use makosh_review_task_candidate_api::{
     review_task_candidate_approved_consume_request_v1,
     review_task_candidate_approved_contract_reference_v1,
 };
-use hermes_review_task_candidate_promotion_api::{
+use makosh_review_task_candidate_promotion_api::{
     review_task_candidate_promotion_result_contract_reference_v1,
     review_task_candidate_promotion_result_publish_request_v1,
 };
-use hermes_reviewed_task_candidate_promotion_core::{
+use makosh_reviewed_task_candidate_promotion_core::{
     REVIEWED_TASK_CANDIDATE_PROMOTION_MODULE_ID_V1, REVIEWED_TASK_CANDIDATE_PROMOTION_OWNER_V1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityCriticalityV1, CapabilityDescriptorV1, CapabilityRequestV1, ContractReferenceV1,
     ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1,
     RuntimeBudgetRequestV1, SettingsSchemaRefV1, SettingsSchemaV1, StorageNamespaceRequestV1,
     capability_request_v1::Request,
 };
-use hermes_tasks_command_api::{
+use makosh_tasks_command_api::{
     create_task_from_reviewed_candidate_contract_reference_v1,
     create_task_from_reviewed_candidate_publish_request_v1,
     task_created_from_reviewed_candidate_consume_request_v1,
@@ -150,7 +150,7 @@ fn storage_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::{
+    use makosh_runtime_protocol::{
         v1::ProvidedSurfaceKindV1,
         validation::descriptor::{validate_descriptor_v1, validate_settings_schema_v1},
     };

@@ -1,5 +1,5 @@
 [package]
-name = "hermes-events-authority-runtime-control"
+name = "makosh-events-authority-runtime-control"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,14 +7,14 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "events"
 surface = "implementation"
 
 [dependencies]
-hermes-events-authority = { path = "../.." }
-hermes-events-jetstream = { path = "../../../jetstream" }
-hermes-runtime-protocol = { path = "../../../../runtime_protocol" }
+makosh-events-authority = { path = "../.." }
+makosh-events-jetstream = { path = "../../../jetstream" }
+makosh-runtime-protocol = { path = "../../../../runtime_protocol" }
 prost = "=0.14.4"
 tokio = { version = "=1.52.4", default-features = false, features = ["net", "rt", "time"] }

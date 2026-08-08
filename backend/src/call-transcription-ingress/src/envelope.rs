@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, ContractRefV1, DurableEnvelopeV1, EventMetadataV1, FenceKindV1,
@@ -210,13 +210,13 @@ fn outbox_error(_: OutboxRecordError) -> CallTranscriptionIngressEnvelopeBuildEr
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_events_protocol::{
+    use makosh_events_protocol::{
         v1::durable_envelope_v1::Semantics, validation::envelope::decode_envelope_v1,
     };
 
     fn context() -> CallTranscriptionIngressEnvelopeContextV1 {
         CallTranscriptionIngressEnvelopeContextV1 {
-            module_id: "hermes-desktop-call-recording-runtime".to_owned(),
+            module_id: "makosh-desktop-call-recording-runtime".to_owned(),
             runtime_instance_id: "runtime-1".to_owned(),
             runtime_generation: 4,
             recorded_at_unix_seconds: 1_800_000_000,

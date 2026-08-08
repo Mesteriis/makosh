@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 
-import type { ClientModuleBootstrapV1 } from '../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import type { ClientModuleBootstrapV1 } from '../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import MailSettingsPanel from '../../integrations/mail/presentation/MailSettingsPanel.vue'
 import { useMailAccountConnections } from '../../integrations/mail/queries/useMailAccountConnections'
 import MailContactsSyncSettingsPanel from '../../workflows/mail-contacts-sync/presentation/MailContactsSyncSettingsPanel.vue'

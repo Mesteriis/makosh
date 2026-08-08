@@ -5,13 +5,13 @@ use std::os::unix::net::UnixStream;
 use std::task::{Context, Poll, Waker};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_events_authority::NatsJwtCredentialAuthorityV1;
-use hermes_events_jetstream::{
+use makosh_events_authority::NatsJwtCredentialAuthorityV1;
+use makosh_events_jetstream::{
     DurableSubjectV1, NatsAccountSignerFenceV1, NatsJwtConsumerGrantV1, NatsJwtPermissionSetV1,
     NatsRuntimeCredentialDeliveryBindingV1, NatsRuntimeCredentialFenceV1,
     NatsRuntimeCredentialRecipientPublicKeyV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::{
         EventsAuthorityRuntimeConfigurationV1, EventsAuthorityRuntimeControlRequestV1,
         EventsAuthorityRuntimeControlResponseV1, EventsAuthorityRuntimeStateV1,
@@ -177,7 +177,7 @@ fn response_for(
 
 fn reconcile_topology_response(
     channel: &UnixStream,
-    request: hermes_runtime_protocol::v1::ReconcileEventsTopologyRequestV1,
+    request: makosh_runtime_protocol::v1::ReconcileEventsTopologyRequestV1,
     identity: &EventsAuthorityRuntimeIdentityV1,
     configuration: &EventsAuthorityRuntimeConfigurationV1,
 ) -> EventsAuthorityRuntimeControlResponseV1 {
@@ -187,7 +187,7 @@ fn reconcile_topology_response(
     match topology::reconcile(channel, identity, configuration, request) {
         Ok(()) => EventsAuthorityRuntimeControlResponseV1 {
             result: Some(ResponseResult::TopologyReconciled(
-                hermes_runtime_protocol::v1::ReconcileEventsTopologyResponseV1 {
+                makosh_runtime_protocol::v1::ReconcileEventsTopologyResponseV1 {
                     topology_revision: revision,
                     stream_count,
                     consumer_count,
@@ -286,7 +286,7 @@ fn delivery_binding(
         .map_err(|_| ())?;
     let recipient_key =
         NatsRuntimeCredentialRecipientPublicKeyV1::from_bytes(recipient_key).map_err(|_| ())?;
-    hermes_events_jetstream::bind_runtime_credential_delivery(
+    makosh_events_jetstream::bind_runtime_credential_delivery(
         runtime_fence,
         request_id,
         recipient_key,

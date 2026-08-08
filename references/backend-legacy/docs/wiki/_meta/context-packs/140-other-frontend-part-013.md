@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/shared/ui/DropdownMenuSeparator.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/DropdownMenuSeparator.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/DropdownMenuSeparator.vue`
 - Size bytes / Размер в байтах: `298`
 - Included characters / Включено символов: `298`
 - Truncated / Обрезано: `no`
@@ -66,11 +66,11 @@ import { DropdownMenuSeparator } from 'reka-ui'
 </script>
 
 <template>
-  <DropdownMenuSeparator class="hermes-dropdown-separator" />
+  <DropdownMenuSeparator class="makosh-dropdown-separator" />
 </template>
 
 <style scoped>
-.hermes-dropdown-separator {
+.makosh-dropdown-separator {
   height: 1px;
   background: var(--hh-border);
   margin: 0.25rem 0.5rem;
@@ -80,7 +80,7 @@ import { DropdownMenuSeparator } from 'reka-ui'
 
 ### `frontend/src/shared/ui/Icon.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Icon.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Icon.vue`
 - Size bytes / Размер в байтах: `413`
 - Included characters / Включено символов: `413`
 - Truncated / Обрезано: `no`
@@ -114,7 +114,7 @@ const iconClass = computed(() => props.class || '')
 
 ### `frontend/src/shared/ui/Input.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Input.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Input.vue`
 - Size bytes / Размер в байтах: `2307`
 - Included characters / Включено символов: `2307`
 - Truncated / Обрезано: `no`
@@ -146,8 +146,8 @@ const emit = defineEmits<{
 }>()
 
 const classes = computed(() => [
-  'hermes-input',
-  { 'hermes-input--error': props.error },
+  'makosh-input',
+  { 'makosh-input--error': props.error },
   props.class
 ])
 
@@ -166,7 +166,7 @@ function handleBlur(event: FocusEvent): void {
 </script>
 
 <template>
-  <div class="hermes-input-wrapper">
+  <div class="makosh-input-wrapper">
     <input
       :class="classes"
       :value="modelValue"
@@ -178,18 +178,18 @@ function handleBlur(event: FocusEvent): void {
       @focus="handleFocus"
       @blur="handleBlur"
     />
-    <span v-if="error" class="hermes-input-error">{{ error }}</span>
+    <span v-if="error" class="makosh-input-error">{{ error }}</span>
   </div>
 </template>
 
 <style scoped>
-.hermes-input-wrapper {
+.makosh-input-wrapper {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
-.hermes-input {
+.makosh-input {
   width: 100%;
   height: 2.125rem;
   padding: 0 0.75rem;
@@ -204,33 +204,33 @@ function handleBlur(event: FocusEvent): void {
   box-sizing: border-box;
 }
 
-.hermes-input::placeholder {
+.makosh-input::placeholder {
   color: var(--hh-text-muted);
 }
 
-.hermes-input:hover:not(:disabled):not(:read-only) {
+.makosh-input:hover:not(:disabled):not(:read-only) {
   border-color: var(--hh-border-accent);
 }
 
-.hermes-input:focus {
+.makosh-input:focus {
   border-color: var(--hh-accent);
   box-shadow: 0 0 0 1px var(--hh-focus-ring);
 }
 
-.hermes-input:disabled {
+.makosh-input:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.hermes-input--error {
+.makosh-input--error {
   border-color: var(--hh-color-danger);
 }
 
-.hermes-input--error:focus {
+.makosh-input--error:focus {
   box-shadow: 0 0 0 1px var(--hh-color-danger);
 }
 
-.hermes-input-error {
+.makosh-input-error {
   font-size: 0.75rem;
   color: var(--hh-color-danger);
 }
@@ -239,7 +239,7 @@ function handleBlur(event: FocusEvent): void {
 
 ### `frontend/src/shared/ui/Label.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Label.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Label.vue`
 - Size bytes / Размер в байтах: `447`
 - Included characters / Включено символов: `447`
 - Truncated / Обрезано: `no`
@@ -253,7 +253,7 @@ const props = withDefaults(defineProps<{
   class?: string
 }>(), {})
 
-const classes = computed(() => ['hermes-label', props.class])
+const classes = computed(() => ['makosh-label', props.class])
 </script>
 
 <template>
@@ -263,7 +263,7 @@ const classes = computed(() => ['hermes-label', props.class])
 </template>
 
 <style scoped>
-.hermes-label {
+.makosh-label {
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--hh-text-primary);
@@ -274,7 +274,7 @@ const classes = computed(() => ['hermes-label', props.class])
 
 ### `frontend/src/shared/ui/Popover.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Popover.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Popover.vue`
 - Size bytes / Размер в байтах: `2215`
 - Included characters / Включено символов: `2215`
 - Truncated / Обрезано: `no`
@@ -301,7 +301,7 @@ const emit = defineEmits<{
   'update:open': [value: boolean]
 }>()
 
-const contentClasses = computed(() => ['hermes-popover-content', props.class])
+const contentClasses = computed(() => ['makosh-popover-content', props.class])
 </script>
 
 <template>
@@ -311,10 +311,10 @@ const contentClasses = computed(() => ['hermes-popover-content', props.class])
     </PopoverTrigger>
     <PopoverPortal>
       <PopoverContent :class="contentClasses" :side="side" :side-offset="sideOffset" :align="align">
-        <PopoverArrow class="hermes-popover-arrow" />
+        <PopoverArrow class="makosh-popover-arrow" />
         <slot />
-        <PopoverClose class="hermes-popover-close" as-child>
-          <button class="hermes-popover-close-btn">
+        <PopoverClose class="makosh-popover-close" as-child>
+          <button class="makosh-popover-close-btn">
             <Icon icon="tabler:x" size="0.875rem" />
           </button>
         </PopoverClose>
@@ -324,7 +324,7 @@ const contentClasses = computed(() => ['hermes-popover-content', props.class])
 </template>
 
 <style scoped>
-.hermes-popover-content {
+.makosh-popover-content {
   min-width: 200px;
   padding: 1rem;
   background: var(--hh-surface-panel);
@@ -335,17 +335,17 @@ const contentClasses = computed(() => ['hermes-popover-content', props.class])
   animation: popover-in 150ms ease;
 }
 
-.hermes-popover-arrow {
+.makosh-popover-arrow {
   fill: var(--hh-surface-panel);
 }
 
-.hermes-popover-close {
+.makosh-popover-close {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
 }
 
-.hermes-popover-close-btn {
+.makosh-popover-close-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -359,7 +359,7 @@ const contentClasses = computed(() => ['hermes-popover-content', props.class])
   transition: all 150ms ease;
 }
 
-.hermes-popover-close-btn:hover {
+.makosh-popover-close-btn:hover {
   background: var(--hh-hover-bg);
   color: var(--hh-text-primary);
 }
@@ -373,7 +373,7 @@ const contentClasses = computed(() => ['hermes-popover-content', props.class])
 
 ### `frontend/src/shared/ui/Progress.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Progress.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Progress.vue`
 - Size bytes / Размер в байтах: `2162`
 - Included characters / Включено символов: `2162`
 - Truncated / Обрезано: `no`
@@ -406,10 +406,10 @@ const percentage = computed(() => {
 })
 
 const rootClasses = computed(() => [
-  'hermes-progress-root',
-  `hermes-progress--${props.size}`,
+  'makosh-progress-root',
+  `makosh-progress--${props.size}`,
   props.class,
-  { 'hermes-progress--indeterminate': props.indeterminate }
+  { 'makosh-progress--indeterminate': props.indeterminate }
 ])
 
 const indicatorRef = ref<InstanceType<typeof ProgressIndicator> | null>(null)
@@ -428,12 +428,12 @@ watchEffect(() => {
     :class="rootClasses"
     @update:model-value="(val: any) => emit('update:modelValue', Number(val))"
   >
-    <ProgressIndicator ref="indicatorRef" class="hermes-progress-indicator" />
+    <ProgressIndicator ref="indicatorRef" class="makosh-progress-indicator" />
   </ProgressRoot>
 </template>
 
 <style scoped>
-.hermes-progress-root {
+.makosh-progress-root {
   position: relative;
   overflow: hidden;
   background: var(--hh-hover-bg);
@@ -441,19 +441,19 @@ watchEffect(() => {
   width: 100%;
 }
 
-.hermes-progress--sm {
+.makosh-progress--sm {
   height: 0.25rem;
 }
 
-.hermes-progress--md {
+.makosh-progress--md {
   height: 0.5rem;
 }
 
-.hermes-progress--lg {
+.makosh-progress--lg {
   height: 0.75rem;
 }
 
-.hermes-progress-indicator {
+.makosh-progress-indicator {
   width: 100%;
   height: 100%;
   border-radius: inherit;
@@ -461,7 +461,7 @@ watchEffect(() => {
   transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hermes-progress--indeterminate .hermes-progress-indicator {
+.makosh-progress--indeterminate .makosh-progress-indicator {
   animation: progress-indeterminate 1.5s ease-in-out infinite;
   width: 40%;
   background: linear-gradient(90deg, transparent, var(--hh-accent), transparent);
@@ -480,7 +480,7 @@ watchEffect(() => {
 
 ### `frontend/src/shared/ui/ScrollArea.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/ScrollArea.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/ScrollArea.vue`
 - Size bytes / Размер в байтах: `1724`
 - Included characters / Включено символов: `1724`
 - Truncated / Обрезано: `no`
@@ -495,35 +495,35 @@ const props = withDefaults(defineProps<{
   maxHeight?: string
 }>(), {})
 
-const classes = computed(() => ['hermes-scroll-area', props.class])
+const classes = computed(() => ['makosh-scroll-area', props.class])
 </script>
 
 <template>
   <ScrollAreaRoot :class="classes">
-    <ScrollAreaViewport class="hermes-scroll-viewport">
+    <ScrollAreaViewport class="makosh-scroll-viewport">
       <slot />
     </ScrollAreaViewport>
-    <ScrollAreaScrollbar class="hermes-scrollbar" orientation="vertical">
-      <ScrollAreaThumb class="hermes-scroll-thumb" />
+    <ScrollAreaScrollbar class="makosh-scrollbar" orientation="vertical">
+      <ScrollAreaThumb class="makosh-scroll-thumb" />
     </ScrollAreaScrollbar>
-    <ScrollAreaScrollbar class="hermes-scrollbar" orientation="horizontal">
-      <ScrollAreaThumb class="hermes-scroll-thumb" />
+    <ScrollAreaScrollbar class="makosh-scrollbar" orientation="horizontal">
+      <ScrollAreaThumb class="makosh-scroll-thumb" />
     </ScrollAreaScrollbar>
   </ScrollAreaRoot>
 </template>
 
 <style scoped>
-.hermes-scroll-area {
+.makosh-scroll-area {
   overflow: hidden;
   position: relative;
 }
 
-.hermes-scroll-viewport {
+.makosh-scroll-viewport {
   width: 100%;
   height: 100%;
 }
 
-.hermes-scrollbar {
+.makosh-scrollbar {
   display: flex;
   user-select: none;
   touch-action: none;
@@ -531,29 +531,29 @@ const classes = computed(() => ['hermes-scroll-area', props.class])
   background: transparent;
 }
 
-.hermes-scrollbar[data-orientation="vertical"] {
+.makosh-scrollbar[data-orientation="vertical"] {
   width: 0.5rem;
   padding: 0.125rem 0;
 }
 
-.hermes-scrollbar[data-orientation="horizontal"] {
+.makosh-scrollbar[data-orientation="horizontal"] {
   height: 0.5rem;
   padding: 0 0.125rem;
   flex-direction: column;
 }
 
-.hermes-scrollbar:hover {
+.makosh-scrollbar:hover {
   background: var(--hh-hover-bg);
 }
 
-.hermes-scroll-thumb {
+.makosh-scroll-thumb {
   flex: 1;
   background: var(--hh-border);
   border-radius: var(--hh-radius-pill);
   position: relative;
 }
 
-.hermes-scroll-thumb::before {
+.makosh-scroll-thumb::before {
   content: '';
   position: absolute;
   top: 50%;
@@ -569,7 +569,7 @@ const classes = computed(() => ['hermes-scroll-area', props.class])
 
 ### `frontend/src/shared/ui/Select.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Select.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Select.vue`
 - Size bytes / Размер в байтах: `4059`
 - Included characters / Включено символов: `4057`
 - Truncated / Обрезано: `no`
@@ -598,34 +598,34 @@ const emit = defineEmits<{
 }>()
 
 const triggerClasses = computed(() => [
-  'hermes-select-trigger',
-  { 'hermes-select--error': props.error },
+  'makosh-select-trigger',
+  { 'makosh-select--error': props.error },
   props.class
 ])
 </script>
 
 <template>
-  <div class="hermes-select-wrapper">
+  <div class="makosh-select-wrapper">
     <SelectRoot
       :model-value="modelValue || undefined"
       :disabled="disabled"
       @update:model-value="(val) => emit('update:modelValue', val || '')"
     >
       <SelectTrigger :class="triggerClasses">
-        <SelectValue :placeholder="placeholder" class="hermes-select-value" />
-        <Icon icon="tabler:chevron-down" size="1rem" class="hermes-select-chevron" />
+        <SelectValue :placeholder="placeholder" class="makosh-select-value" />
+        <Icon icon="tabler:chevron-down" size="1rem" class="makosh-select-chevron" />
       </SelectTrigger>
       <SelectPortal>
-        <SelectContent class="hermes-select-content" :side-offset="4">
-          <SelectViewport class="hermes-select-viewport">
+        <SelectContent class="makosh-select-content" :side-offset="4">
+          <SelectViewport class="makosh-select-viewport">
             <SelectItem
               v-for="opt in options"
               :key="opt.value"
               :value="opt.value"
-              class="hermes-select-item"
+              class="makosh-select-item"
             >
               <SelectItemIndicator>
-                <Icon icon="tabler:check" size="0.875rem" class="hermes-select-check" />
+                <Icon icon="tabler:check" size="0.875rem" class="makosh-select-check" />
               </SelectItemIndicator>
               <span>{{ opt.label }}</span>
             </SelectItem>
@@ -633,18 +633,18 @@ const triggerClasses = computed(() => [
         </SelectContent>
       </SelectPortal>
     </SelectRoot>
-    <span v-if="error" class="hermes-select-error">{{ error }}</span>
+    <span v-if="error" class="makosh-select-error">{{ error }}</span>
   </div>
 </template>
 
 <style scoped>
-.hermes-select-wrapper {
+.makosh-select-wrapper {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
-.hermes-select-trigger {
+.makosh-select-trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -665,34 +665,34 @@ const triggerClasses = computed(() => [
   box-sizing: border-box;
 }
 
-.hermes-select-trigger:hover {
+.makosh-select-trigger:hover {
   border-color: var(--hh-border-accent);
 }
 
-.hermes-select-trigger:focus-visible {
+.makosh-select-trigger:focus-visible {
   border-color: var(--hh-accent);
   box-shadow: 0 0 0 1px var(--hh-focus-ring);
 }
 
-.hermes-select-trigger[data-placeholder] .hermes-select-value {
+.makosh-select-trigger[data-placeholder] .makosh-select-value {
   color: var(--hh-text-muted);
 }
 
-.hermes-select--error {
+.makosh-select--error {
   border-color: var(--hh-color-danger);
 }
 
-.hermes-select-chevron {
+.makosh-select-chevron {
   color: var(--hh-text-muted);
   flex-shrink: 0;
   transition: transform 200ms ease;
 }
 
-.hermes-select-trigger[data-state="open"] .hermes-select-chevron {
+.makosh-select-trigger[data-state="open"] .makosh-select-chevron {
   transform: rotate(180deg);
 }
 
-.hermes-select-content {
+.makosh-select-content {
   background: var(--hh-surface-panel);
   border: 1px solid var(--hh-border);
   border-radius: var(--hh-radius-md);
@@ -702,11 +702,11 @@ const triggerClasses = computed(() => [
   overflow: hidden;
 }
 
-.hermes-select-viewport {
+.makosh-select-viewport {
   padding: 0.25rem;
 }
 
-.hermes-select-item {
+.makosh-select-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -720,21 +720,21 @@ const triggerClasses = computed(() => [
   transition: background 100ms ease;
 }
 
-.hermes-select-item[data-highlighted] {
+.makosh-select-item[data-highlighted] {
   background: var(--hh-hover-bg);
   color: var(--hh-text-primary);
 }
 
-.hermes-select-item[data-state="checked"] {
+.makosh-select-item[data-state="checked"] {
   color: var(--hh-accent);
 }
 
-.hermes-select-check {
+.makosh-select-check {
   color: var(--hh-accent);
   flex-shrink: 0;
 }
 
-.hermes-select-error {
+.makosh-select-error {
   font-size: 0.75rem;
   color: var(--hh-color-danger);
 }
@@ -743,7 +743,7 @@ const triggerClasses = computed(() => [
 
 ### `frontend/src/shared/ui/Separator.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Separator.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Separator.vue`
 - Size bytes / Размер в байтах: `771`
 - Included characters / Включено символов: `771`
 - Truncated / Обрезано: `no`
@@ -763,8 +763,8 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-separator',
-  `hermes-separator--${props.orientation}`,
+  'makosh-separator',
+  `makosh-separator--${props.orientation}`,
   props.class
 ])
 </script>
@@ -778,17 +778,17 @@ const classes = computed(() => [
 </template>
 
 <style scoped>
-.hermes-separator {
+.makosh-separator {
   flex-shrink: 0;
   background: var(--hh-border);
 }
 
-.hermes-separator--horizontal {
+.makosh-separator--horizontal {
   height: 1px;
   width: 100%;
 }
 
-.hermes-separator--vertical {
+.makosh-separator--vertical {
   width: 1px;
   height: 100%;
 }
@@ -797,7 +797,7 @@ const classes = computed(() => [
 
 ### `frontend/src/shared/ui/Sheet.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Sheet.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Sheet.vue`
 - Size bytes / Размер в байтах: `4383`
 - Included characters / Включено символов: `4383`
 - Truncated / Обрезано: `no`
@@ -825,8 +825,8 @@ const emit = defineEmits<{
 }>()
 
 const contentClasses = computed(() => [
-  'hermes-sheet-content',
-  `hermes-sheet--${props.side}`,
+  'makosh-sheet-content',
+  `makosh-sheet--${props.side}`,
   props.contentClass
 ])
 </script>
@@ -837,21 +837,21 @@ const contentClasses = computed(() => [
       <slot name="trigger" />
     </DialogTrigger>
     <DialogPortal>
-      <DialogOverlay class="hermes-sheet-overlay">
+      <DialogOverlay class="makosh-sheet-overlay">
         <DialogContent :class="contentClasses">
-          <div class="hermes-sheet-header">
-            <DialogTitle v-if="title" class="hermes-sheet-title">{{ title }}</DialogTitle>
-            <DialogDescription v-if="description" class="hermes-sheet-description">{{ description }}</DialogDescription>
+          <div class="makosh-sheet-header">
+            <DialogTitle v-if="title" class="makosh-sheet-title">{{ title }}</DialogTitle>
+            <DialogDescription v-if="description" class="makosh-sheet-description">{{ description }}</DialogDescription>
             <slot name="header" />
           </div>
-          <div class="hermes-sheet-body">
+          <div class="makosh-sheet-body">
             <slot />
           </div>
-          <div v-if="$slots.footer" class="hermes-sheet-footer">
+          <div v-if="$slots.footer" class="makosh-sheet-footer">
             <slot name="footer" />
           </div>
-          <DialogClose class="hermes-sheet-close" as-child>
-            <button class="hermes-sheet-close-btn">
+          <DialogClose class="makosh-sheet-close" as-child>
+            <button class="makosh-sheet-close-btn">
               <Icon icon="tabler:x" size="1.125rem" />
             </button>
           </DialogClose>
@@ -862,7 +862,7 @@ const contentClasses = computed(() => [
 </template>
 
 <style scoped>
-.hermes-sheet-overlay {
+.makosh-sheet-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
@@ -872,31 +872,31 @@ const contentClasses = computed(() => [
 }
 
 /* Side alignment */
-.hermes-sheet--left {
+.makosh-sheet--left {
   align-self: stretch;
   margin-right: auto;
   animation: sheet-slide-left 250ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hermes-sheet--right {
+.makosh-sheet--right {
   align-self: stretch;
   margin-left: auto;
   animation: sheet-slide-right 250ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hermes-sheet--top {
+.makosh-sheet--top {
   align-self: flex-start;
   width: 100%;
   animation: sheet-slide-top 250ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hermes-sheet--bottom {
+.makosh-sheet--bottom {
   align-self: flex-end;
   width: 100%;
   animation: sheet-slide-bottom 250ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hermes-sheet-content {
+.makosh-sheet-content {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -909,31 +909,31 @@ const contentClasses = computed(() => [
   overflow-y: auto;
 }
 
-.hermes-sheet-header {
+.makosh-sheet-header {
   padding: 1.5rem 1.5rem 0;
   flex-shrink: 0;
 }
 
-.hermes-sheet-title {
+.makosh-sheet-title {
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--hh-text-primary);
   margin-bottom: 0.25rem;
 }
 
-.hermes-sheet-description {
+.makosh-sheet-description {
   font-size: 0.8125rem;
   color: var(--hh-text-muted);
   line-height: 1.4;
 }
 
-.hermes-sheet-body {
+.makosh-sheet-body {
   padding: 1.25rem 1.5rem;
   flex: 1;
   overflow-y: auto;
 }
 
-.hermes-sheet-footer {
+.makosh-sheet-footer {
   padding: 1rem 1.5rem;
   display: flex;
   align-items: center;
@@ -943,13 +943,13 @@ const contentClasses = computed(() => [
   flex-shrink: 0;
 }
 
-.hermes-sheet-close {
+.makosh-sheet-close {
   position: absolute;
   top: 1rem;
   right: 1rem;
 }
 
-.hermes-sheet-close-btn {
+.makosh-sheet-close-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -963,7 +963,7 @@ const contentClasses = computed(() => [
   transition: background 150ms ease, color 150ms ease;
 }
 
-.hermes-sheet-close-btn:hover {
+.makosh-sheet-close-btn:hover {
   background: var(--hh-hover-bg);
   color: var(--hh-text-primary);
 }
@@ -997,7 +997,7 @@ const contentClasses = computed(() => [
 
 ### `frontend/src/shared/ui/Skeleton.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Skeleton.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Skeleton.vue`
 - Size bytes / Размер в байтах: `800`
 - Included characters / Включено символов: `800`
 - Truncated / Обрезано: `no`
@@ -1018,8 +1018,8 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-skeleton',
-  { 'hermes-skeleton--rounded': props.rounded },
+  'makosh-skeleton',
+  { 'makosh-skeleton--rounded': props.rounded },
   props.class
 ])
 </script>
@@ -1029,19 +1029,19 @@ const classes = computed(() => [
 </template>
 
 <style scoped>
-.hermes-skeleton {
+.makosh-skeleton {
   background: var(--hh-hover-bg);
   border-radius: var(--hh-radius-xs);
   width: 100%;
   height: 1rem;
-  animation: hermes-skeleton-pulse 1.5s ease-in-out infinite;
+  animation: makosh-skeleton-pulse 1.5s ease-in-out infinite;
 }
 
-.hermes-skeleton--rounded {
+.makosh-skeleton--rounded {
   border-radius: var(--hh-radius-pill);
 }
 
-@keyframes hermes-skeleton-pulse {
+@keyframes makosh-skeleton-pulse {
   0%, 100% {
     opacity: 0.4;
   }
@@ -1054,7 +1054,7 @@ const classes = computed(() => [
 
 ### `frontend/src/shared/ui/Surface.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Surface.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Surface.vue`
 - Size bytes / Размер в байтах: `316`
 - Included characters / Включено символов: `316`
 - Truncated / Обрезано: `no`
@@ -1084,7 +1084,7 @@ withDefaults(
 
 ### `frontend/src/shared/ui/Switch.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Switch.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Switch.vue`
 - Size bytes / Размер в байтах: `1533`
 - Included characters / Включено символов: `1533`
 - Truncated / Обрезано: `no`
@@ -1107,7 +1107,7 @@ const emit = defineEmits<{
   'update:modelValue': [value: boolean]
 }>()
 
-const rootClasses = computed(() => ['hermes-switch', { 'hermes-switch--disabled': props.disabled }, props.class])
+const rootClasses = computed(() => ['makosh-switch', { 'makosh-switch--disabled': props.disabled }, props.class])
 </script>
 
 <template>
@@ -1117,12 +1117,12 @@ const rootClasses = computed(() => ['hermes-switch', { 'hermes-switch--disabled'
     :disabled="disabled"
     @update:checked="(val: boolean) => emit('update:modelValue', val)"
   >
-    <SwitchThumb class="hermes-switch-thumb" />
+    <SwitchThumb class="makosh-switch-thumb" />
   </SwitchRoot>
 </template>
 
 <style scoped>
-.hermes-switch {
+.makosh-switch {
   position: relative;
   width: 2rem;
   height: 1.125rem;
@@ -1134,21 +1134,21 @@ const rootClasses = computed(() => ['hermes-switch', { 'hermes-switch--disabled'
   flex-shrink: 0;
 }
 
-.hermes-switch[data-state="checked"] {
+.makosh-switch[data-state="checked"] {
   background: var(--hh-accent);
 }
 
-.hermes-switch--disabled {
+.makosh-switch--disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.hermes-switch:focus-visible {
+.makosh-switch:focus-visible {
   outline: 2px solid var(--hh-focus-ring);
   outline-offset: 2px;
 }
 
-.hermes-switch-thumb {
+.makosh-switch-thumb {
   display: block;
   width: 0.875rem;
   height: 0.875rem;
@@ -1159,7 +1159,7 @@ const rootClasses = computed(() => ['hermes-switch', { 'hermes-switch--disabled'
   will-change: transform;
 }
 
-.hermes-switch[data-state="checked"] .hermes-switch-thumb {
+.makosh-switch[data-state="checked"] .makosh-switch-thumb {
   transform: translateX(1rem);
 }
 </style>
@@ -1167,7 +1167,7 @@ const rootClasses = computed(() => ['hermes-switch', { 'hermes-switch--disabled'
 
 ### `frontend/src/shared/ui/TabContent.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/TabContent.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/TabContent.vue`
 - Size bytes / Размер в байтах: `654`
 - Included characters / Включено символов: `654`
 - Truncated / Обрезано: `no`
@@ -1185,7 +1185,7 @@ const props = withDefaults(defineProps<{
   forceMount: false
 })
 
-const classes = computed(() => ['hermes-tab-content', props.class])
+const classes = computed(() => ['makosh-tab-content', props.class])
 </script>
 
 <template>
@@ -1199,11 +1199,11 @@ const classes = computed(() => ['hermes-tab-content', props.class])
 </template>
 
 <style scoped>
-.hermes-tab-content {
+.makosh-tab-content {
   outline: none;
 }
 
-.hermes-tab-content:focus-visible {
+.makosh-tab-content:focus-visible {
   outline: 2px solid var(--hh-focus-ring);
   outline-offset: 2px;
   border-radius: var(--hh-radius-sm);
@@ -1213,7 +1213,7 @@ const classes = computed(() => ['hermes-tab-content', props.class])
 
 ### `frontend/src/shared/ui/TabTrigger.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/TabTrigger.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/TabTrigger.vue`
 - Size bytes / Размер в байтах: `1363`
 - Included characters / Включено символов: `1363`
 - Truncated / Обрезано: `no`
@@ -1231,7 +1231,7 @@ const props = withDefaults(defineProps<{
   disabled: false
 })
 
-const classes = computed(() => ['hermes-tab-trigger', { 'hermes-tab-trigger--disabled': props.disabled }, props.class])
+const classes = computed(() => ['makosh-tab-trigger', { 'makosh-tab-trigger--disabled': props.disabled }, props.class])
 </script>
 
 <template>
@@ -1245,7 +1245,7 @@ const classes = computed(() => ['hermes-tab-trigger', { 'hermes-tab-trigger--dis
 </template>
 
 <style scoped>
-.hermes-tab-trigger {
+.makosh-tab-trigger {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1265,22 +1265,22 @@ const classes = computed(() => ['hermes-tab-trigger', { 'hermes-tab-trigger--dis
   outline: none;
 }
 
-.hermes-tab-trigger:hover {
+.makosh-tab-trigger:hover {
   color: var(--hh-text-secondary);
 }
 
-.hermes-tab-trigger[data-state="active"] {
+.makosh-tab-trigger[data-state="active"] {
   color: var(--hh-accent);
   background: var(--hh-surface-panel);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.hermes-tab-trigger:focus-visible {
+.makosh-tab-trigger:focus-visible {
   outline: 2px solid var(--hh-focus-ring);
   outline-offset: 2px;
 }
 
-.hermes-tab-trigger--disabled {
+.makosh-tab-trigger--disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -1289,7 +1289,7 @@ const classes = computed(() => ['hermes-tab-trigger', { 'hermes-tab-trigger--dis
 
 ### `frontend/src/shared/ui/Tabs.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Tabs.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Tabs.vue`
 - Size bytes / Размер в байтах: `2389`
 - Included characters / Включено символов: `2389`
 - Truncated / Обрезано: `no`
@@ -1299,12 +1299,12 @@ const classes = computed(() => ['hermes-tab-trigger', { 'hermes-tab-trigger--dis
 import { TabsRoot, TabsList, TabsTrigger } from 'reka-ui'
 import { computed } from 'vue'
 
-type HermesTab = {
+type МакошьTab = {
   id: string
   label: string
 }
 
-// Re-export with Hermes styling
+// Re-export with Макошь styling
 const props = withDefaults(defineProps<{
   modelValue?: string
   active?: string
@@ -1313,7 +1313,7 @@ const props = withDefaults(defineProps<{
   class?: string
   listClass?: string
   contentClass?: string
-  tabs?: HermesTab[]
+  tabs?: МакошьTab[]
 }>(), {
   orientation: 'horizontal'
 })
@@ -1325,8 +1325,8 @@ const emit = defineEmits<{
 
 const tabs = computed(() => props.tabs ?? [])
 const selectedValue = computed(() => props.modelValue ?? props.active)
-const rootClasses = computed(() => ['hermes-tabs', props.class])
-const listClasses = computed(() => ['hermes-tabs-list', `hermes-tabs-list--${props.orientation}`, props.listClass])
+const rootClasses = computed(() => ['makosh-tabs', props.class])
+const listClasses = computed(() => ['makosh-tabs-list', `makosh-tabs-list--${props.orientation}`, props.listClass])
 
 function handleUpdateModelValue(value: string | number) {
   const nextValue = String(value)
@@ -1349,7 +1349,7 @@ function handleUpdateModelValue(value: string | number) {
           v-for="tab in tabs"
           :key="tab.id"
           :value="tab.id"
-          class="hermes-tabs-trigger"
+          class="makosh-tabs-trigger"
         >
           {{ tab.label }}
         </TabsTrigger>
@@ -1360,13 +1360,13 @@ function handleUpdateModelValue(value: string | number) {
 </template>
 
 <style scoped>
-.hermes-tabs {
+.makosh-tabs {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.hermes-tabs-list {
+.makosh-tabs-list {
   display: flex;
   gap: 0.125rem;
   background: var(--hh-hover-bg);
@@ -1374,11 +1374,11 @@ function handleUpdateModelValue(value: string | number) {
   padding: 0.1875rem;
 }
 
-.hermes-tabs-list--vertical {
+.makosh-tabs-list--vertical {
   flex-direction: column;
 }
 
-.hermes-tabs-trigger {
+.makosh-tabs-trigger {
   border: none;
   border-radius: var(--hh-radius-xs, 0.25rem);
   background: transparent;
@@ -1389,12 +1389,12 @@ function handleUpdateModelValue(value: string | number) {
   padding: 0.375rem 0.625rem;
 }
 
-.hermes-tabs-trigger:hover {
+.makosh-tabs-trigger:hover {
   background: var(--hh-bg-hover, #f3f4f6);
   color: var(--hh-text-primary, #1f2937);
 }
 
-.hermes-tabs-trigger[data-state='active'] {
+.makosh-tabs-trigger[data-state='active'] {
   background: var(--hh-bg-primary, #ffffff);
   color: var(--hh-accent, #3b82f6);
   font-weight: 600;
@@ -1404,7 +1404,7 @@ function handleUpdateModelValue(value: string | number) {
 
 ### `frontend/src/shared/ui/Textarea.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Textarea.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Textarea.vue`
 - Size bytes / Размер в байтах: `1953`
 - Included characters / Включено символов: `1953`
 - Truncated / Обрезано: `no`
@@ -1432,8 +1432,8 @@ const emit = defineEmits<{
 }>()
 
 const classes = computed(() => [
-  'hermes-textarea',
-  { 'hermes-textarea--error': props.error },
+  'makosh-textarea',
+  { 'makosh-textarea--error': props.error },
   props.class
 ])
 
@@ -1444,7 +1444,7 @@ function handleInput(event: Event): void {
 </script>
 
 <template>
-  <div class="hermes-textarea-wrapper">
+  <div class="makosh-textarea-wrapper">
     <textarea
       :class="classes"
       :value="modelValue"
@@ -1453,18 +1453,18 @@ function handleInput(event: Event): void {
       :rows="rows"
       @input="handleInput"
     />
-    <span v-if="error" class="hermes-textarea-error">{{ error }}</span>
+    <span v-if="error" class="makosh-textarea-error">{{ error }}</span>
   </div>
 </template>
 
 <style scoped>
-.hermes-textarea-wrapper {
+.makosh-textarea-wrapper {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
-.hermes-textarea {
+.makosh-textarea {
   width: 100%;
   padding: 0.625rem 0.75rem;
   font-family: var(--hh-font-sans);
@@ -1480,29 +1480,29 @@ function handleInput(event: Event): void {
   line-height: 1.5;
 }
 
-.hermes-textarea::placeholder {
+.makosh-textarea::placeholder {
   color: var(--hh-text-muted);
 }
 
-.hermes-textarea:hover:not(:disabled) {
+.makosh-textarea:hover:not(:disabled) {
   border-color: var(--hh-border-accent);
 }
 
-.hermes-textarea:focus {
+.makosh-textarea:focus {
   border-color: var(--hh-accent);
   box-shadow: 0 0 0 1px var(--hh-focus-ring);
 }
 
-.hermes-textarea:disabled {
+.makosh-textarea:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.hermes-textarea--error {
+.makosh-textarea--error {
   border-color: var(--hh-color-danger);
 }
 
-.hermes-textarea-error {
+.makosh-textarea-error {
   font-size: 0.75rem;
   color: var(--hh-color-danger);
 }
@@ -1511,7 +1511,7 @@ function handleInput(event: Event): void {
 
 ### `frontend/src/shared/ui/Toast.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Toast.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Toast.vue`
 - Size bytes / Размер в байтах: `5513`
 - Included characters / Включено символов: `5513`
 - Truncated / Обрезано: `no`
@@ -1530,7 +1530,7 @@ export interface ToastItem {
   duration?: number
 }
 
-const TOAST_INJECTION_KEY = 'hermes-toast-context'
+const TOAST_INJECTION_KEY = 'makosh-toast-context'
 
 const props = withDefaults(defineProps<{
   /** Swipe direction to dismiss */
@@ -1572,7 +1572,7 @@ function error(title: string, description?: string): string {
 provide(TOAST_INJECTION_KEY, { addToast, removeToast, success, warning, error })
 
 const viewportClasses = computed(() => [
-  'hermes-toast-viewport',
+  'makosh-toast-viewport',
   props.class
 ])
 
@@ -1591,25 +1591,25 @@ const variantIcons: Record<string, string> = {
       <ToastRoot
         v-for="toast in toasts"
         :key="toast.id"
-        :class="['hermes-toast-root', `hermes-toast--${toast.variant || 'default'}`]"
+        :class="['makosh-toast-root', `makosh-toast--${toast.variant || 'default'}`]"
         @update:open="(open: boolean) => { if (!open) removeToast(toast.id) }"
       >
-        <div class="hermes-toast-inner">
+        <div class="makosh-toast-inner">
           <Icon
             v-if="toast.variant && toast.variant !== 'default'"
             :icon="variantIcons[toast.variant]"
             size="1.125rem"
-            class="hermes-toast-variant-icon"
+            class="makosh-toast-variant-icon"
           />
-          <div class="hermes-toast-content">
-            <ToastTitle v-if="toast.title" class="hermes-toast-title">
+          <div class="makosh-toast-content">
+            <ToastTitle v-if="toast.title" class="makosh-toast-title">
               {{ toast.title }}
             </ToastTitle>
-            <ToastDescription v-if="toast.description" class="hermes-toast-description">
+            <ToastDescription v-if="toast.description" class="makosh-toast-description">
               {{ toast.description }}
             </ToastDescription>
           </div>
-          <ToastClose class="hermes-toast-close-btn">
+          <ToastClose class="makosh-toast-close-btn">
             <Icon icon="tabler:x" size="1rem" />
           </ToastClose>
         </div>
@@ -1619,7 +1619,7 @@ const variantIcons: Record<string, string> = {
 </template>
 
 <style scoped>
-.hermes-toast-viewport {
+.makosh-toast-viewport {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
@@ -1634,7 +1634,7 @@ const variantIcons: Record<string, string> = {
   list-style: none;
 }
 
-.hermes-toast-root {
+.makosh-toast-root {
   background: var(--hh-surface-panel);
   border: 1px solid var(--hh-border);
   border-radius: var(--hh-radius-md);
@@ -1643,65 +1643,65 @@ const variantIcons: Record<string, string> = {
   animation: toast-slide-in 250ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hermes-toast-root[data-state="closed"] {
+.makosh-toast-root[data-state="closed"] {
   animation: toast-slide-out 200ms ease;
 }
 
-.hermes-toast-inner {
+.makosh-toast-inner {
   display: flex;
   align-items: flex-start;
   gap: 0.625rem;
 }
 
-.hermes-toast-variant-icon {
+.makosh-toast-variant-icon {
   flex-shrink: 0;
   margin-top: 0.0625rem;
 }
 
-.hermes-toast--success .hermes-toast-variant-icon {
+.makosh-toast--success .makosh-toast-variant-icon {
   color: var(--hh-status-success, #22c55e);
 }
 
-.hermes-toast--warning .hermes-toast-variant-icon {
+.makosh-toast--warning .makosh-toast-variant-icon {
   color: var(--hh-status-warning, #f59e0b);
 }
 
-.hermes-toast--error .hermes-toast-variant-icon {
+.makosh-toast--error .makosh-toast-variant-icon {
   color: var(--hh-status-danger, #ef4444);
 }
 
-.hermes-toast--success {
+.makosh-toast--success {
   border-color: color-mix(in srgb, var(--hh-status-success, #22c55e) 30%, transparent);
 }
 
-.hermes-toast--warning {
+.makosh-toast--warning {
   border-color: color-mix(in srgb, var(--hh-status-warning, #f59e0b) 30%, transparent);
 }
 
-.hermes-toast--error {
+.makosh-toast--error {
   border-color: color-mix(in srgb, var(--hh-status-danger, #ef4444) 30%, transparent);
 }
 
-.hermes-toast-content {
+.makosh-toast-content {
   flex: 1;
   min-width: 0;
 }
 
-.hermes-toast-title {
+.makosh-toast-title {
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--hh-text-primary);
   line-height: 1.4;
 }
 
-.hermes-toast-description {
+.makosh-toast-description {
   font-size: 0.75rem;
   color: var(--hh-text-secondary);
   line-height: 1.4;
   margin-top: 0.125rem;
 }
 
-.hermes-toast-close-btn {
+.makosh-toast-close-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1716,7 +1716,7 @@ const variantIcons: Record<string, string> = {
   transition: background 150ms ease, color 150ms ease;
 }
 
-.hermes-toast-close-btn:hover {
+.makosh-toast-close-btn:hover {
   background: var(--hh-hover-bg);
   color: var(--hh-text-primary);
 }
@@ -1747,7 +1747,7 @@ const variantIcons: Record<string, string> = {
 
 ### `frontend/src/shared/ui/Tooltip.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Tooltip.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Tooltip.vue`
 - Size bytes / Размер в байтах: `1471`
 - Included characters / Включено символов: `1471`
 - Truncated / Обрезано: `no`
@@ -1769,7 +1769,7 @@ const props = withDefaults(defineProps<{
   delayDuration: 400
 })
 
-const contentClasses = computed(() => ['hermes-tooltip-content', props.class])
+const contentClasses = computed(() => ['makosh-tooltip-content', props.class])
 </script>
 
 <template>
@@ -1780,14 +1780,14 @@ const contentClasses = computed(() => ['hermes-tooltip-content', props.class])
     <TooltipPortal>
       <TooltipContent :class="contentClasses" :side="side" :side-offset="sideOffset">
         <slot>{{ content }}</slot>
-        <TooltipArrow class="hermes-tooltip-arrow" />
+        <TooltipArrow class="makosh-tooltip-arrow" />
       </TooltipContent>
     </TooltipPortal>
   </TooltipRoot>
 </template>
 
 <style scoped>
-.hermes-tooltip-content {
+.makosh-tooltip-content {
   padding: 0.375rem 0.625rem;
   font-size: 0.75rem;
   font-weight: 500;
@@ -1801,7 +1801,7 @@ const contentClasses = computed(() => ['hermes-tooltip-content', props.class])
   animation: tooltip-in 150ms ease;
 }
 
-.hermes-tooltip-arrow {
+.makosh-tooltip-arrow {
   fill: var(--hh-surface-deep, #041215);
 }
 
@@ -1814,7 +1814,7 @@ const contentClasses = computed(() => ['hermes-tooltip-content', props.class])
 
 ### `frontend/src/shared/yandexTelemost/YandexTelemostSettingsPanelShell.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/yandexTelemost/YandexTelemostSettingsPanelShell.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/yandexTelemost/YandexTelemostSettingsPanelShell.vue`
 - Size bytes / Размер в байтах: `367`
 - Included characters / Включено символов: `367`
 - Truncated / Обрезано: `no`
@@ -1836,7 +1836,7 @@ defineProps<{
 
 ### `frontend/src/shared/zoom/ZoomSettingsPanelShell.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/zoom/ZoomSettingsPanelShell.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/zoom/ZoomSettingsPanelShell.vue`
 - Size bytes / Размер в байтах: `399`
 - Included characters / Включено символов: `399`
 - Truncated / Обрезано: `no`
@@ -1865,7 +1865,7 @@ defineEmits<{
 
 ### `frontend/src/style.css`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/style.css`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/style.css`
 - Size bytes / Размер в байтах: `6791`
 - Included characters / Включено символов: `6789`
 - Truncated / Обрезано: `no`
@@ -1875,7 +1875,7 @@ defineEmits<{
 @tailwind components;
 @tailwind utilities;
 
-/* Hermes Design Tokens — CSS custom properties for runtime access */
+/* Макошь Design Tokens — CSS custom properties for runtime access */
 :root {
 	/* Font family */
 	--hh-font-sans: 'Inter', 'SF Pro Display', ui-sans-serif, system-ui, -apple-system,
@@ -2061,7 +2061,7 @@ body {
 
 ### `frontend/src/styles/surfaces.css`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/styles/surfaces.css`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/styles/surfaces.css`
 - Size bytes / Размер в байтах: `7160`
 - Included characters / Включено символов: `7160`
 - Truncated / Обрезано: `no`
@@ -2441,7 +2441,7 @@ body {
 
 ### `frontend/src/styles/theme-classes.css`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/styles/theme-classes.css`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/styles/theme-classes.css`
 - Size bytes / Размер в байтах: `6380`
 - Included characters / Включено символов: `6380`
 - Truncated / Обрезано: `no`

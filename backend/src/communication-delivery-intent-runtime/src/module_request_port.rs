@@ -2,7 +2,7 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::ManagedControlRequestDispatcherV2,
     v1::{ManagedRuntimeModuleRequestDeliveryV1, ManagedRuntimeModuleRequestResponseV1},
     validation::module_request::validate_module_request_delivery_v1,

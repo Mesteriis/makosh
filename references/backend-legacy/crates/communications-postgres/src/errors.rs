@@ -1,8 +1,8 @@
 use thiserror::Error;
 
-use hermes_communications_api::accounts::CommunicationAccountError;
-use hermes_communications_api::evidence::CommunicationEvidenceError;
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_communications_api::accounts::CommunicationAccountError;
+use makosh_communications_api::evidence::CommunicationEvidenceError;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 #[derive(Debug, Error)]
 pub enum CommunicationIngestionError {

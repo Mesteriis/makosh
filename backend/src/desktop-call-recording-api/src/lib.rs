@@ -1,12 +1,12 @@
 #![forbid(unsafe_code)]
 
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 
 pub mod host_bridge;
 
-pub const PACKAGE: &str = "hermes-desktop-call-recording-api";
+pub const PACKAGE: &str = "makosh-desktop-call-recording-api";
 pub const OWNER_ID_V1: &str = "desktop_call_recording";
-pub const MODULE_ID_V1: &str = "hermes-desktop-call-recording-runtime";
+pub const MODULE_ID_V1: &str = "makosh-desktop-call-recording-runtime";
 pub const START_CONTRACT_NAME_V1: &str = "desktop_call_recording.start";
 pub const STOP_CONTRACT_NAME_V1: &str = "desktop_call_recording.stop";
 pub const GET_CONTRACT_NAME_V1: &str = "desktop_call_recording.get";
@@ -24,7 +24,7 @@ pub const CONSENT_PURPOSE_V1: &str = "call_transcription";
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.desktop_call_recording.v1.rs"
+        "/makosh.desktop_call_recording.v1.rs"
     ));
 }
 
@@ -52,7 +52,7 @@ mod tests {
 
     #[test]
     fn public_contract_has_no_boolean_consent_or_private_audio_locator() {
-        let source = include_str!("../proto/hermes/desktop_call_recording/v1/recording.proto");
+        let source = include_str!("../proto/makosh/desktop_call_recording/v1/recording.proto");
         for forbidden in [
             "consent_attested",
             "filesystem_path",

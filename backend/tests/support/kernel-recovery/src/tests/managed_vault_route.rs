@@ -1,12 +1,12 @@
 use super::common::*;
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     PlatformManagedProcessBinding, PlatformManagedProcessLaunch, PlatformStorageBindingInputV1,
     PlatformStorageBindingV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{ManagedRuntimeVaultRouteRequestV1, VaultCiphertextResponseV1};
-use hermes_runtime_protocol::validation::vault::STORAGE_REVOKE_AUDIENCE_OPERATION_DIGEST_V1;
-use hermes_vault_protocol::VaultTransportCommandV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{ManagedRuntimeVaultRouteRequestV1, VaultCiphertextResponseV1};
+use makosh_runtime_protocol::validation::vault::STORAGE_REVOKE_AUDIENCE_OPERATION_DIGEST_V1;
+use makosh_vault_protocol::VaultTransportCommandV1;
 use std::io::{Read, Write};
 
 use crate::runtime::lifecycle::control::{
@@ -24,7 +24,7 @@ fn runtime_protocol_keeps_the_revoking_storage_route_fence_exact() {
 
 #[test]
 fn platform_managed_runtime_fence_rejects_a_replaced_binding() {
-    let root = unique_target_root("hermes-platform-runtime-fence");
+    let root = unique_target_root("makosh-platform-runtime-fence");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -72,7 +72,7 @@ fn platform_managed_runtime_fence_rejects_a_replaced_binding() {
 
 #[test]
 fn current_storage_can_revoke_an_exact_reserved_binding_after_target_grants_are_fenced() {
-    let root = unique_target_root("hermes-storage-revoking-vault-route");
+    let root = unique_target_root("makosh-storage-revoking-vault-route");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -157,7 +157,7 @@ fn current_storage_can_revoke_an_exact_reserved_binding_after_target_grants_are_
     assert_eq!(reserved.owner_id(), route.storage_owner_id);
     assert_eq!(
         reserved.state(),
-        hermes_kernel_control_store::PlatformStorageBindingStateV1::Revoking
+        makosh_kernel_control_store::PlatformStorageBindingStateV1::Revoking
     );
     assert_eq!(
         route.operation_digest_sha256,
@@ -308,7 +308,7 @@ fn route_child_fixture() -> (
     staged_native_artifact::StagedNativeArtifact,
     ManagedRuntimeExpectation,
 ) {
-    let root = unique_target_root("hermes-managed-vault-route");
+    let root = unique_target_root("makosh-managed-vault-route");
     let descriptor = ModuleDescriptorV1 {
         descriptor_major: 1,
         descriptor_revision: 1,
@@ -339,7 +339,7 @@ fn stage_route_child(
 ) -> staged_native_artifact::StagedNativeArtifact {
     let describe = ManagedRuntimeControlRequestV1 {
         operation: Some(
-            hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
+            makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
                 DescribeManagedRuntimeRequestV1 {
                     descriptor_bytes: descriptor_bytes.to_vec(),
                     settings_schema_bytes: Vec::new(),
@@ -423,7 +423,7 @@ fn route_child_payload(
         frame(
             &ManagedRuntimeControlRequestV1 {
                 operation: Some(
-                    hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::RouteVaultCiphertext(
+                    makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::RouteVaultCiphertext(
                         route,
                     ),
                 ),
@@ -437,7 +437,7 @@ fn route_child_payload(
 fn managed_vault_route_request(route: VaultCiphertextRouteV1) -> ManagedRuntimeControlRequestV1 {
     ManagedRuntimeControlRequestV1 {
         operation: Some(
-            hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::RouteVaultCiphertext(
+            makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::RouteVaultCiphertext(
                 ManagedRuntimeVaultRouteRequestV1 { route: Some(route) },
             ),
         ),

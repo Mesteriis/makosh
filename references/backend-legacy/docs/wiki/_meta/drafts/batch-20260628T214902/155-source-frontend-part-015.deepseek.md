@@ -1,6 +1,6 @@
 ### Summary / Резюме
 
-Страница `components/frontend.md` отсутствует в русской wiki. На основе предоставленных исходных файлов платформенного слоя фронтенда (реальное время, конфигурация, Connect-клиенты, трейсинг событий, загрузка медиа) необходимо создать её описание. Страница документирует основные подсистемы фронтенда hermes-hub: патчинг кешей реального времени, инвалидацию запросов, загрузку медиафайлов в Telegram, переменные окружения, gRPC-клиенты и трейсинг событий.
+Страница `components/frontend.md` отсутствует в русской wiki. На основе предоставленных исходных файлов платформенного слоя фронтенда (реальное время, конфигурация, Connect-клиенты, трейсинг событий, загрузка медиа) необходимо создать её описание. Страница документирует основные подсистемы фронтенда makosh: патчинг кешей реального времени, инвалидацию запросов, загрузку медиафайлов в Telegram, переменные окружения, gRPC-клиенты и трейсинг событий.
 
 ### Proposed pages / Предлагаемые страницы
 
@@ -105,26 +105,26 @@
 
 | Поле | Переменная окружения | Значение по умолчанию |
 | --- | --- | --- |
-| `apiBaseUrl` | `VITE_HERMES_API_BASE_URL` | `http://127.0.0.1:8080` |
-| `apiSecret` | `VITE_HERMES_LOCAL_API_SECRET` | обязательно (иначе ошибка) |
-| `sseUrl` | `VITE_HERMES_SSE_URL` | `{apiBaseUrl}/api/events/stream` |
-| `webSocketUrl` | `VITE_HERMES_WEBSOCKET_URL` | формируется из `apiBaseUrl` с заменой протокола на `ws:`/`wss:` и путём `/api/events/ws` |
-| `realtimeTransport` | `VITE_HERMES_REALTIME_TRANSPORT` | `'sse'`; значение `'websocket'` включает WebSocket |
+| `apiBaseUrl` | `VITE_MAKOSH_API_BASE_URL` | `http://127.0.0.1:8080` |
+| `apiSecret` | `VITE_MAKOSH_LOCAL_API_SECRET` | обязательно (иначе ошибка) |
+| `sseUrl` | `VITE_MAKOSH_SSE_URL` | `{apiBaseUrl}/api/events/stream` |
+| `webSocketUrl` | `VITE_MAKOSH_WEBSOCKET_URL` | формируется из `apiBaseUrl` с заменой протокола на `ws:`/`wss:` и путём `/api/events/ws` |
+| `realtimeTransport` | `VITE_MAKOSH_REALTIME_TRANSPORT` | `'sse'`; значение `'websocket'` включает WebSocket |
 
-Требование: `VITE_HERMES_LOCAL_API_SECRET` должен быть непустой строкой, иначе выбрасывается ошибка `"VITE_HERMES_LOCAL_API_SECRET is required"`.
+Требование: `VITE_MAKOSH_LOCAL_API_SECRET` должен быть непустой строкой, иначе выбрасывается ошибка `"VITE_MAKOSH_LOCAL_API_SECRET is required"`.
 
 ## Connect-клиенты (gRPC-Web)
 
 Расположены в `frontend/src/platform/connect/`.
 
-- **`communicationsClient.ts`** — клиент для `CommunicationsService`. Создаётся через `@connectrpc/connect-web`, передаёт заголовок `X-Hermes-Secret` с секретом из `ApiClient.instance`. Синглтон, с функцией сброса для тестов (`resetCommunicationsConnectClientForTests`).
+- **`communicationsClient.ts`** — клиент для `CommunicationsService`. Создаётся через `@connectrpc/connect-web`, передаёт заголовок `X-Макошь-Secret` с секретом из `ApiClient.instance`. Синглтон, с функцией сброса для тестов (`resetCommunicationsConnectClientForTests`).
 - **`signalHubClient.ts`** — клиент для `SignalHubService`. Аналогичная реализация.
 
 Оба используют `useBinaryFormat: false`, что означает JSON-сериализацию.
 
 ## Трейсинг событий (Event Tracing)
 
-Модуль `frontend/src/platform/event-tracing/` предоставляет API, React Query хуки и типы для просмотра трассировки событий Hermes.
+Модуль `frontend/src/platform/event-tracing/` предоставляет API, React Query хуки и типы для просмотра трассировки событий Макошь.
 
 ### API
 

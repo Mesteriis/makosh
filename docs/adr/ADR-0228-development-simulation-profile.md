@@ -3,7 +3,7 @@
 Статус: Принято
 Дата: 2026-07-16
 Состояние реализации: executable policy фиксирует full-platform development
-contract; отдельный `hermes-development-kernel-operator` выполняет bounded
+contract; отдельный `makosh-development-kernel-operator` выполняет bounded
 native TCP probe явно переданных development PostgreSQL/NATS endpoints и
 one-shot TLS pairing simulation с file-backed ES256 proof. Compose contour даёт
 real service smoke внутри private network. Runtime adapters и services ещё

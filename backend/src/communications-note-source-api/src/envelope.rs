@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
@@ -319,11 +319,11 @@ fn outbox_error(_: OutboxRecordError) -> CommunicationNoteSourceEnvelopeBuildErr
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_events_protocol::v1::DurableEnvelopeV1;
+    use makosh_events_protocol::v1::DurableEnvelopeV1;
 
     fn context() -> CommunicationNoteSourceEnvelopeContextV1 {
         CommunicationNoteSourceEnvelopeContextV1 {
-            module_id: "hermes-communication-note-candidate-runtime".to_owned(),
+            module_id: "makosh-communication-note-candidate-runtime".to_owned(),
             runtime_instance_id: "runtime-note-source-1".to_owned(),
             runtime_generation: 7,
             recorded_at_unix_seconds: 1_800_000_000,

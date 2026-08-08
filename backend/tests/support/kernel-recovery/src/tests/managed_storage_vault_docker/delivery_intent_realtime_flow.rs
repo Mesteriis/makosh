@@ -3,7 +3,9 @@
 use super::*;
 
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
-use hermes_communication_delivery_intent_api::{
+use http_body_util::BodyExt as _;
+use hyper::{Request, StatusCode, body::Bytes};
+use makosh_communication_delivery_intent_api::{
     COMMUNICATION_DELIVERY_INTENT_COMMAND_CONNECT_PATH_V1,
     COMMUNICATION_DELIVERY_INTENT_REALTIME_CONTRACT_NAME_V1,
     COMMUNICATION_DELIVERY_INTENT_REALTIME_EVENT_KIND_V1,
@@ -12,25 +14,23 @@ use hermes_communication_delivery_intent_api::{
         SubmitDeliveryIntentRequestV1, SubmitDeliveryIntentResponseV1,
     },
 };
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
 };
-use http_body_util::BodyExt as _;
-use hyper::{Request, StatusCode, body::Bytes};
 
-pub(super) type DeliveryIntentGateway = hermes_gateway_runtime::GatewayApplicationRouter<
+pub(super) type DeliveryIntentGateway = makosh_gateway_runtime::GatewayApplicationRouter<
     crate::identity::browser_gateway::ControlStoreBrowserAuthority,
-    hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 >;
 
 #[test]
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Blob, NATS, Communications and delivery-intent binaries"]
 fn managed_delivery_intent_reaches_gateway_sse_and_replays_after_restart() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-delivery-intent-realtime");
+    let root = unique_target_root("makosh-managed-delivery-intent-realtime");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -38,11 +38,11 @@ fn managed_delivery_intent_reaches_gateway_sse_and_replays_after_restart() {
     );
     let release = installed_communications_delivery_intent_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             DELIVERY_INTENT_LOGICAL_OWNER_ID,
             "desktop-1",
             [4; 65],
@@ -57,7 +57,7 @@ fn managed_delivery_intent_reaches_gateway_sse_and_replays_after_restart() {
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(32).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(32).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     configure_delivery_intent_runtime_routes(&supervisor, &store, realtime.clone());
     supervisor
@@ -188,7 +188,7 @@ fn managed_delivery_intent_reaches_gateway_sse_and_replays_after_restart() {
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove fixture");
     std::fs::remove_dir_all(data).expect("remove kernel fixture");
@@ -199,7 +199,7 @@ pub(super) fn canonical_conversation_for_message(
     supervisor: &ManagedRuntimeSupervisor,
     message_id: &[u8],
 ) -> Vec<u8> {
-    use hermes_communications_api::query_wire::{
+    use makosh_communications_api::query_wire::{
         CommunicationsQueryRequestV1, GetMessageRequestV1,
         communications_query_request_v1::Operation, communications_query_response_v1::Result,
     };
@@ -230,7 +230,7 @@ pub(super) fn canonical_conversation_for_message(
         &CommunicationsQueryRequestV1 {
             protocol_major: 1,
             operation: Some(Operation::GetConversation(
-                hermes_communications_api::query_wire::GetConversationRequestV1 {
+                makosh_communications_api::query_wire::GetConversationRequestV1 {
                     conversation_id: conversation_id.clone(),
                 },
             )),
@@ -249,7 +249,7 @@ pub(super) fn delivery_intent_gateway(
     supervisor: &ManagedRuntimeSupervisor,
     root: &Path,
     data: &Path,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 ) -> DeliveryIntentGateway {
     let configuration = crate::platform::gateway::BrowserGatewayConfigurationV1::new(
         "127.0.0.1:9443".parse().expect("loopback Gateway address"),
@@ -274,7 +274,7 @@ fn read_delivery_intent_sse_event(
     router: &DeliveryIntentGateway,
     runtime: &tokio::runtime::Runtime,
     cookie: &str,
-) -> hermes_gateway_protocol::v1::ClientRealtimeEventV1 {
+) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1 {
     let response = runtime.block_on(
         router.route(
             Request::builder()
@@ -305,7 +305,7 @@ fn read_delivery_intent_sse_event(
 
 async fn find_delivery_intent_event<B>(
     mut body: B,
-) -> hermes_gateway_protocol::v1::ClientRealtimeEventV1
+) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1
 where
     B: hyper::body::Body<Data = Bytes> + Unpin,
     B::Error: std::fmt::Debug,
@@ -339,7 +339,7 @@ where
 }
 
 fn assert_client_safe_event(
-    event: &hermes_gateway_protocol::v1::ClientRealtimeEventV1,
+    event: &makosh_gateway_protocol::v1::ClientRealtimeEventV1,
     intent_id: &[u8],
     private_body: &[u8],
 ) {

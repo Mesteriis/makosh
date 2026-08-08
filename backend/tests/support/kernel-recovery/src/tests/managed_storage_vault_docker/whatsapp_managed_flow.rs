@@ -2,8 +2,8 @@
 
 use super::*;
 
-use hermes_kernel_control_store::{ModuleRegistrationState, PlatformStorageBindingStateV1};
-use hermes_whatsapp_api::{
+use makosh_kernel_control_store::{ModuleRegistrationState, PlatformStorageBindingStateV1};
+use makosh_whatsapp_api::{
     WhatsAppProviderCommand, WhatsAppPublicClientRequestV1, WhatsAppPublicClientResponseV1,
     client_contract::WhatsAppClientContractV1,
     host_bridge::{
@@ -13,7 +13,7 @@ use hermes_whatsapp_api::{
     operational::WhatsAppOperationalQueryV1,
     realtime::WhatsAppOperationalReplayRequestV1,
 };
-use hermes_whatsapp_runtime::{
+use makosh_whatsapp_runtime::{
     admission::WHATSAPP_STORAGE_CAPABILITY_ID,
     client_port::{decode_module_response, encode_module_request},
 };

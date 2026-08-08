@@ -93,7 +93,7 @@ impl CommunicationsDurablePersistence {
             LockedSavedSearchV1::Missing => {}
         }
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.communications_saved_query_definitions \
+            "INSERT INTO makosh_data.communications_saved_query_definitions \
              (saved_search_id, name, description, account_id, token_count, \
               key_schema_revision, lifecycle_state, revision, \
               created_at_unix_seconds, updated_at_unix_seconds) \
@@ -166,7 +166,7 @@ impl CommunicationsDurablePersistence {
         ensure_account_scope(&mut transaction, write.account_id).await?;
         let revision = expected_revision.checked_add(1).ok_or_else(invalid)?;
         sqlx::query(
-            "UPDATE hermes_data.communications_saved_query_definitions SET \
+            "UPDATE makosh_data.communications_saved_query_definitions SET \
              name = $2, description = $3, account_id = $4, token_count = $5, \
              key_schema_revision = $6, revision = $7, updated_at_unix_seconds = $8 \
              WHERE saved_search_id = $1 AND lifecycle_state = $9 AND revision = $10",
@@ -225,7 +225,7 @@ impl CommunicationsDurablePersistence {
         }
         let revision = expected_revision.checked_add(1).ok_or_else(invalid)?;
         sqlx::query(
-            "UPDATE hermes_data.communications_saved_query_definitions SET \
+            "UPDATE makosh_data.communications_saved_query_definitions SET \
              lifecycle_state = $2, revision = $3, updated_at_unix_seconds = $4 \
              WHERE saved_search_id = $1 AND lifecycle_state = $5 AND revision = $6",
         )
@@ -239,7 +239,7 @@ impl CommunicationsDurablePersistence {
         .await
         .map_err(|_| storage())?;
         sqlx::query(
-            "DELETE FROM hermes_data.communications_saved_query_token_digests \
+            "DELETE FROM makosh_data.communications_saved_query_token_digests \
              WHERE saved_search_id = $1",
         )
         .bind(saved_search_id.as_slice())
@@ -281,7 +281,7 @@ impl CommunicationsDurablePersistence {
         let rows = sqlx::query(
             "SELECT saved_search_id, name, description, account_id, token_count, \
              revision, created_at_unix_seconds, updated_at_unix_seconds \
-             FROM hermes_data.communications_saved_query_definitions \
+             FROM makosh_data.communications_saved_query_definitions \
              WHERE lifecycle_state = $1 \
                AND ($2::BIGINT IS NULL OR updated_at_unix_seconds < $2 \
                  OR (updated_at_unix_seconds = $2 AND saved_search_id > $3)) \
@@ -311,7 +311,7 @@ impl CommunicationsDurablePersistence {
         let row = sqlx::query(
             "SELECT saved_search_id, name, description, account_id, token_count, \
              key_schema_revision, revision, created_at_unix_seconds, \
-             updated_at_unix_seconds FROM hermes_data.communications_saved_query_definitions \
+             updated_at_unix_seconds FROM makosh_data.communications_saved_query_definitions \
              WHERE saved_search_id = $1 AND lifecycle_state = $2",
         )
         .bind(saved_search_id.as_slice())
@@ -360,7 +360,7 @@ async fn ensure_account_scope(
         return Ok(());
     };
     let exists = sqlx::query(
-        "SELECT account_id FROM hermes_data.communications_accounts \
+        "SELECT account_id FROM makosh_data.communications_accounts \
          WHERE account_id = $1 FOR SHARE",
     )
     .bind(account_id.as_slice())
@@ -383,7 +383,7 @@ async fn load_definition_for_update(
         "SELECT saved_search_id, name, description, account_id, token_count, \
          key_schema_revision, revision, created_at_unix_seconds, \
          updated_at_unix_seconds, lifecycle_state \
-         FROM hermes_data.communications_saved_query_definitions \
+         FROM makosh_data.communications_saved_query_definitions \
          WHERE saved_search_id = $1 FOR UPDATE",
     )
     .bind(saved_search_id.as_slice())
@@ -400,7 +400,7 @@ async fn load_definition_for_update(
     let summary = summary_from_row(&row)?;
     let key_schema_revision: i32 = row.try_get("key_schema_revision").map_err(|_| invalid())?;
     let digest_rows = sqlx::query(
-        "SELECT token_digest FROM hermes_data.communications_saved_query_token_digests \
+        "SELECT token_digest FROM makosh_data.communications_saved_query_token_digests \
          WHERE saved_search_id = $1 ORDER BY position ASC",
     )
     .bind(saved_search_id.as_slice())
@@ -430,7 +430,7 @@ async fn load_digests(
     saved_search_id: [u8; 16],
 ) -> Result<Vec<[u8; 32]>, CommunicationsSavedSearchMutationErrorV1> {
     sqlx::query(
-        "SELECT token_digest FROM hermes_data.communications_saved_query_token_digests \
+        "SELECT token_digest FROM makosh_data.communications_saved_query_token_digests \
          WHERE saved_search_id = $1 ORDER BY position ASC",
     )
     .bind(saved_search_id.as_slice())
@@ -453,7 +453,7 @@ async fn replace_digests(
     token_digests: &[[u8; 32]],
 ) -> Result<(), CommunicationsSavedSearchMutationErrorV1> {
     sqlx::query(
-        "DELETE FROM hermes_data.communications_saved_query_token_digests \
+        "DELETE FROM makosh_data.communications_saved_query_token_digests \
          WHERE saved_search_id = $1",
     )
     .bind(saved_search_id.as_slice())
@@ -462,7 +462,7 @@ async fn replace_digests(
     .map_err(|_| storage())?;
     for (position, digest) in token_digests.iter().enumerate() {
         sqlx::query(
-            "INSERT INTO hermes_data.communications_saved_query_token_digests \
+            "INSERT INTO makosh_data.communications_saved_query_token_digests \
              (saved_search_id, position, token_digest) VALUES ($1, $2, $3)",
         )
         .bind(saved_search_id.as_slice())
@@ -506,7 +506,7 @@ async fn append_audit_hash(
     changed_at_unix_seconds: i64,
 ) -> Result<(), CommunicationsSavedSearchMutationErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.communications_saved_query_audit \
+        "INSERT INTO makosh_data.communications_saved_query_audit \
          (saved_search_id, revision, change_kind, definition_sha256, changed_at_unix_seconds) \
          VALUES ($1, $2, $3, $4, $5)",
     )
@@ -603,7 +603,7 @@ fn summary_from_row(
 
 fn definition_sha256(definition: &CommunicationsSavedSearchDefinitionV1) -> [u8; 32] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communications.saved-search.definition.v1\0");
+    digest.update(b"makosh.communications.saved-search.definition.v1\0");
     digest.update(definition.summary.saved_search_id);
     digest.update((definition.summary.name.len() as u64).to_be_bytes());
     digest.update(definition.summary.name.as_bytes());

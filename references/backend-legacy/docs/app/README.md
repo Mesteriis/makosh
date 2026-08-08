@@ -1,4 +1,4 @@
-# Hermes App Layer
+# Макошь App Layer
 
 Status: documentation package aligned to the current repository structure.
 

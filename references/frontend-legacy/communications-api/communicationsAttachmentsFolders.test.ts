@@ -50,7 +50,7 @@ describe('communications API attachment and folder helpers', () => {
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/SearchAttachments'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/SearchAttachments'
     )
     expect(init.method).toBe('POST')
     expect(JSON.parse(decodeBody(init.body))).toEqual({
@@ -94,7 +94,7 @@ describe('communications API attachment and folder helpers', () => {
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/TranslateAttachment'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/TranslateAttachment'
     )
     expect(init.method).toBe('POST')
     expect(JSON.parse(decodeBody(init.body))).toEqual({
@@ -134,7 +134,7 @@ describe('communications API attachment and folder helpers', () => {
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetAttachmentArchiveInspection'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetAttachmentArchiveInspection'
     )
     expect(init.method).toBe('POST')
     expect(JSON.parse(decodeBody(init.body))).toEqual({
@@ -174,7 +174,7 @@ describe('communications API attachment and folder helpers', () => {
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetAttachmentPreview'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetAttachmentPreview'
     )
     expect(init.method).toBe('POST')
     expect(JSON.parse(decodeBody(init.body))).toEqual({
@@ -274,11 +274,11 @@ describe('communications API attachment and folder helpers', () => {
     expect(fetchMock).toHaveBeenCalledTimes(5)
     expect(folders.items[0].message_count).toBe(3)
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListFolders'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListFolders'
     )
     expect(fetchMock.mock.calls[1][1].method).toBe('POST')
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/CreateFolder'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/CreateFolder'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[1][1].body))).toEqual({
       name: 'Clients',
@@ -287,14 +287,14 @@ describe('communications API attachment and folder helpers', () => {
       sortOrder: 10
     })
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/CopyMessageToFolder'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/CopyMessageToFolder'
     )
     expect(fetchMock.mock.calls[2][1].method).toBe('POST')
     expect(fetchMock.mock.calls[3][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/MoveMessageToFolder'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/MoveMessageToFolder'
     )
     expect(fetchMock.mock.calls[4][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListFolderMessages'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListFolderMessages'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[4][1].body))).toMatchObject({
       folderId: 'mail_folder:1',
@@ -324,7 +324,7 @@ describe('communications API attachment and folder helpers', () => {
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/TranslateThread'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/TranslateThread'
     )
     expect(init.method).toBe('POST')
     expect(JSON.parse(decodeBody(init.body))).toEqual({
@@ -363,7 +363,7 @@ describe('communications API attachment and folder helpers', () => {
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/RedirectMessage'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/RedirectMessage'
     )
     expect(init.method).toBe('POST')
     expect(JSON.parse(decodeBody(init.body))).toEqual({

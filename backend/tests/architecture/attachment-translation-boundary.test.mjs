@@ -17,14 +17,14 @@ test('attachment translation agreement keeps workflow source engine and provider
     readFile(new URL('src/attachment-translation-api/src/lib.rs', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/attachment-translation-api/proto/hermes/attachment_translation/v1/translation.proto',
+        'src/attachment-translation-api/proto/makosh/attachment_translation/v1/translation.proto',
         BACKEND_ROOT,
       ),
       'utf8',
     ),
     readFile(
       new URL(
-        'src/attachment-translation-api/proto/hermes/attachment_translation/read/v1/read.proto',
+        'src/attachment-translation-api/proto/makosh/attachment_translation/read/v1/read.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -38,7 +38,7 @@ test('attachment translation agreement keeps workflow source engine and provider
     readFile(new URL('src/attachment-translation-persistence/migrations/0001_translation.sql', BACKEND_ROOT), 'utf8'),
     readFile(new URL('src/attachment-translation-persistence/migrations/0002_translation_read_tickets.sql', BACKEND_ROOT), 'utf8'),
     readFile(new URL('src/attachment-translation-persistence/src/tickets.rs', BACKEND_ROOT), 'utf8'),
-    readFile(new URL('src/ai-contracts/proto/hermes/ai/contracts/v1/ai.proto', BACKEND_ROOT), 'utf8'),
+    readFile(new URL('src/ai-contracts/proto/makosh/ai/contracts/v1/ai.proto', BACKEND_ROOT), 'utf8'),
     readFile(new URL('src/ai-contracts/src/attachment_translation.rs', BACKEND_ROOT), 'utf8'),
     readFile(new URL('src/ai-inference-core/src/attachment_translation.rs', BACKEND_ROOT), 'utf8'),
     readFile(new URL('src/ai-inference-persistence/migrations/0005_ai_attachment_translation_runs.sql', BACKEND_ROOT), 'utf8'),
@@ -74,13 +74,13 @@ test('attachment translation agreement keeps workflow source engine and provider
     ],
   });
   for (const unit of [
-    'hermes-attachment-translation-api',
-    'hermes-attachment-translation-ingress',
-    'hermes-attachment-translation-core',
-    'hermes-attachment-translation-persistence',
-    'hermes-attachment-translation-persistence',
-    'hermes-attachment-translation-runtime',
-    'hermes-attachment-translation-assembly',
+    'makosh-attachment-translation-api',
+    'makosh-attachment-translation-ingress',
+    'makosh-attachment-translation-core',
+    'makosh-attachment-translation-persistence',
+    'makosh-attachment-translation-persistence',
+    'makosh-attachment-translation-runtime',
+    'makosh-attachment-translation-assembly',
   ]) {
     assert.match(adr, new RegExp(`\\b${unit}\\b`));
   }
@@ -93,9 +93,9 @@ test('attachment translation agreement keeps workflow source engine and provider
   assert.equal(policy.implementation.currentSlice, 'call_transcription_managed_conformance_v1');
   assert(policy.implementation.ownerInventory.workflows.includes('attachment_translation'));
   for (const packageName of [
-    'hermes-attachment-translation-api',
-    'hermes-attachment-translation-ingress',
-    'hermes-attachment-translation-core',
+    'makosh-attachment-translation-api',
+    'makosh-attachment-translation-ingress',
+    'makosh-attachment-translation-core',
   ]) {
     assert(policy.implementation.productionPackages.some(({ name }) => name === packageName));
   }
@@ -140,7 +140,7 @@ test('attachment translation agreement keeps workflow source engine and provider
   assert.match(aiContract, /AiUseCaseAttachmentTranslation/);
   assert.match(aiCore, /build_attachment_translation_provider_input_v1/);
   assert.match(aiCore, /validate_attachment_translation_source_text_v1/);
-  assert.match(aiSchema, /hermes_data\.ai_attachment_translation_runs/);
+  assert.match(aiSchema, /makosh_data\.ai_attachment_translation_runs/);
   assert.match(aiRepository, /load_recoverable_attachment_translation_runs/);
   assert.match(aiWorker, /execute_attachment_translation_payload_v1/);
   assert.match(aiWorker, /materialize_attachment_translation_source/);
@@ -204,10 +204,10 @@ test('text extraction produces translation source only through durable target-ow
   ]);
   const policy = JSON.parse(policySource);
 
-  assert.match(runtimeManifest, /hermes-attachment-translation-ingress/);
+  assert.match(runtimeManifest, /makosh-attachment-translation-ingress/);
   assert.doesNotMatch(
     runtimeManifest,
-    /hermes-attachment-translation-(?:core|persistence|runtime|assembly)/,
+    /makosh-attachment-translation-(?:core|persistence|runtime|assembly)/,
   );
   assert.match(admission, /ATTACHMENT_TEXT_EXTRACTION_TRANSLATION_SOURCE_CAPABILITY_ID_V1/);
   assert.match(admission, /attachment_translation_source_requested_consume_request_v1/);
@@ -225,7 +225,7 @@ test('text extraction produces translation source only through durable target-ow
   assert.match(migration, /translation_source_inbox/);
   assert.match(migration, /translation_source_outbox/);
   assert.doesNotMatch(migration, /source_text|translated_text|provider_id|model_id|prompt/);
-  assert.match(release, /hermes-attachment-translation-assembly/);
+  assert.match(release, /makosh-attachment-translation-assembly/);
   assert.match(release, /attachment_translation\.release-artifacts\.json/);
   assert.match(developmentAssembly, /ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT/);
   assert.match(developmentAssembly, /PRE_ATTACHMENT_TRANSLATION_MODULE_PLAN_RUNTIME_ARTIFACTS_V3/);
@@ -276,7 +276,7 @@ test('attachment translation has an exact signed managed lifecycle and restart g
   assert.match(setup, /storage_successor::reserve/);
   assert.match(flow, /managed_attachment_translation_reaches_source_ai_and_gateway_sse/);
   assert.match(flow, /managed_attachment_translation_completes_and_reads_real_provider_result/);
-  assert.match(flow, /required\("HERMES_OLLAMA_LIVE_PORT"\)/);
+  assert.match(flow, /required\("MAKOSH_OLLAMA_LIVE_PORT"\)/);
   assert.match(flow, /Text Extraction workflow/);
   assert.match(flow, /AttachmentTranslationErrorCodeInferenceRejected/);
   assert.match(flow, /AttachmentTranslationErrorCodeSourceRejected/);
@@ -295,8 +295,8 @@ test('attachment translation has an exact signed managed lifecycle and restart g
   assert.match(harness, /mod attachment_translation_managed_setup/);
   assert.match(harness, /mod attachment_translation_gateway_fixture/);
   assert.match(harness, /mod attachment_translation_managed_flow/);
-  assert.match(runner, /hermes-attachment-translation-runtime/);
-  assert.match(runner, /HERMES_ATTACHMENT_TRANSLATION_RUNTIME_BIN/);
+  assert.match(runner, /makosh-attachment-translation-runtime/);
+  assert.match(runner, /MAKOSH_ATTACHMENT_TRANSLATION_RUNTIME_BIN/);
   assert.match(
     runner,
     /managed_attachment_translation_reaches_source_ai_and_gateway_sse/,
@@ -304,7 +304,7 @@ test('attachment translation has an exact signed managed lifecycle and restart g
   assert.match(recovery, /materialize_ai_source_from_authority_v1/);
   assert.match(recovery, /refresh_runtime_bound_source/);
   assert.match(recovery, /complete_source_cleanup/);
-  assert.match(testkitManifest, /hermes-attachment-translation-api/);
-  assert.match(testkitManifest, /hermes-attachment-translation-persistence/);
-  assert.match(testkitManifest, /hermes-attachment-translation-runtime/);
+  assert.match(testkitManifest, /makosh-attachment-translation-api/);
+  assert.match(testkitManifest, /makosh-attachment-translation-persistence/);
+  assert.match(testkitManifest, /makosh-attachment-translation-runtime/);
 });

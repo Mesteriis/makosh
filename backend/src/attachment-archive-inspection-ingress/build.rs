@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/attachment_archive_inspection/ingress/v1/custody_delegation.proto"],
+            &["proto/makosh/attachment_archive_inspection/ingress/v1/custody_delegation.proto"],
             &["proto"],
         )
         .expect("Attachment Archive Inspection ingress protocol must compile");

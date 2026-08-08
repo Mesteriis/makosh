@@ -1,4 +1,4 @@
-# Hermes frontend
+# Макошь frontend
 
 Статус: активный clean-room client surface для Communications и Settings
 

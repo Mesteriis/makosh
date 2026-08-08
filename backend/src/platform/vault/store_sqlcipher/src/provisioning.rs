@@ -1,6 +1,6 @@
 //! Exact write-only owner provisioning input for the SQLCipher actor.
 
-use hermes_vault_protocol::{VaultActionV1, VaultProvisioningReceiptV1};
+use makosh_vault_protocol::{VaultActionV1, VaultProvisioningReceiptV1};
 use zeroize::Zeroizing;
 
 use crate::SecretRecordScope;

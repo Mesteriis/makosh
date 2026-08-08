@@ -4,7 +4,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub needs durable relational state, event storage, graph-like relationships, JSON payloads, migrations and local deployment.
+Макошь needs durable relational state, event storage, graph-like relationships, JSON payloads, migrations and local deployment.
 
 ## Decision
 

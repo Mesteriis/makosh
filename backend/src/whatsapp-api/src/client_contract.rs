@@ -1,16 +1,16 @@
 pub const WHATSAPP_DESCRIPTOR_SET_V1: &[u8] =
-    include_bytes!(concat!(env!("OUT_DIR"), "/hermes.whatsapp.v1.bin"));
+    include_bytes!(concat!(env!("OUT_DIR"), "/makosh.whatsapp.v1.bin"));
 pub const WHATSAPP_OPERATIONAL_DESCRIPTOR_SET_V1: &[u8] = include_bytes!(concat!(
     env!("OUT_DIR"),
-    "/hermes.whatsapp.operational.v1.bin"
+    "/makosh.whatsapp.operational.v1.bin"
 ));
 pub const WHATSAPP_OPERATIONAL_REALTIME_DESCRIPTOR_SET_V1: &[u8] = include_bytes!(concat!(
     env!("OUT_DIR"),
-    "/hermes.whatsapp.operational.realtime.v1.bin"
+    "/makosh.whatsapp.operational.realtime.v1.bin"
 ));
 pub const WHATSAPP_CLIENT_CONTRACT_MAJOR: u32 = 1;
 pub const WHATSAPP_CLIENT_CONTRACT_REVISION: u32 = 1;
-pub const WHATSAPP_MODULE_ID: &str = "hermes-whatsapp-runtime";
+pub const WHATSAPP_MODULE_ID: &str = "makosh-whatsapp-runtime";
 pub const WHATSAPP_OWNER_ID: &str = "whatsapp";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -47,13 +47,13 @@ impl WhatsAppClientContractV1 {
     #[must_use]
     pub const fn connect_path(self) -> &'static str {
         match self {
-            Self::Command => "/hermes.whatsapp.v1.WhatsAppCommandService/ExecuteCommand",
-            Self::Query => "/hermes.whatsapp.v1.WhatsAppQueryService/GetOperationStatus",
+            Self::Command => "/makosh.whatsapp.v1.WhatsAppCommandService/ExecuteCommand",
+            Self::Query => "/makosh.whatsapp.v1.WhatsAppQueryService/GetOperationStatus",
             Self::OperationalQuery => {
-                "/hermes.whatsapp.operational.v1.WhatsAppOperationalQueryService/Query"
+                "/makosh.whatsapp.operational.v1.WhatsAppOperationalQueryService/Query"
             }
             Self::OperationalRealtime => {
-                "/hermes.whatsapp.operational.realtime.v1.WhatsAppOperationalRealtimeService/Replay"
+                "/makosh.whatsapp.operational.realtime.v1.WhatsAppOperationalRealtimeService/Replay"
             }
         }
     }

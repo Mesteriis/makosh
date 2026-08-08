@@ -5,9 +5,9 @@ Date: 2026-06-28
 
 ## Context
 
-Hermes needs Yandex Telemost support for conference creation, conference links,
+Макошь needs Yandex Telemost support for conference creation, conference links,
 visible WebView joining, local audio capture and later transcription. Telemost is
-an external provider, not a Hermes domain.
+an external provider, not a Макошь domain.
 
 The integration also needs local desktop behavior that the backend provider API
 cannot own: visible WebView opening, system/loopback audio capture and speaker
@@ -75,7 +75,7 @@ Rejected because providers are external systems, not bounded contexts.
 
 ### Hidden background browser join and capture
 
-Rejected because it breaks the Hermes owner-visible runtime model and creates a
+Rejected because it breaks the Макошь owner-visible runtime model and creates a
 hidden capture path that the provider runtime must not own.
 
 ### Treat WebView active-speaker DOM as truth

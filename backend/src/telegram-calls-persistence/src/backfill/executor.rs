@@ -1,4 +1,4 @@
-use hermes_telegram_calls_core::{
+use makosh_telegram_calls_core::{
     TELEGRAM_CALLS_REALTIME_BACKFILL_BATCH_SIZE_V1,
     telegram_calls_realtime_backfill_lease_expiry_v1, telegram_calls_realtime_backfill_run_id_v1,
 };
@@ -118,8 +118,8 @@ async fn claim_accepted(
     let (original_max, source_count): (i64, i64) = sqlx::query_as(
         "SELECT \
          COALESCE((SELECT MAX(event_sequence) \
-             FROM hermes_data.telegram_call_realtime_events), 0), \
-         (SELECT COUNT(*) FROM hermes_data.telegram_call_realtime_frames)",
+             FROM makosh_data.telegram_call_realtime_events), 0), \
+         (SELECT COUNT(*) FROM makosh_data.telegram_call_realtime_frames)",
     )
     .fetch_one(&mut **transaction)
     .await
@@ -138,7 +138,7 @@ async fn claim_accepted(
         "rebase"
     };
     sqlx::query(
-        "UPDATE hermes_data.telegram_call_realtime_backfill_jobs \
+        "UPDATE makosh_data.telegram_call_realtime_backfill_jobs \
          SET execution_state = 'running', execution_phase = $2, \
              execution_runtime_generation = $3, lease_epoch = 1, \
              lease_expires_at_unix_millis = $4, \
@@ -186,7 +186,7 @@ async fn claim_running(
         .checked_add(1)
         .ok_or(TelegramCallsBackfillErrorV1::SequenceOverflow)?;
     sqlx::query(
-        "UPDATE hermes_data.telegram_call_realtime_backfill_jobs \
+        "UPDATE makosh_data.telegram_call_realtime_backfill_jobs \
          SET execution_runtime_generation = $2, lease_epoch = $3, \
              lease_expires_at_unix_millis = $4, attempt_count = attempt_count + 1, \
              updated_at_unix_millis = $5 \
@@ -242,8 +242,8 @@ async fn execute_rebase_batch(
     let result = sqlx::query(
         "WITH selected AS (\
              SELECT events.event_sequence \
-             FROM hermes_data.telegram_call_realtime_events AS events \
-             LEFT JOIN hermes_data.telegram_call_realtime_replay_order AS replay \
+             FROM makosh_data.telegram_call_realtime_events AS events \
+             LEFT JOIN makosh_data.telegram_call_realtime_replay_order AS replay \
                ON replay.event_sequence = events.event_sequence \
              WHERE events.event_sequence <= $1 \
                AND replay.event_sequence IS NULL \
@@ -251,7 +251,7 @@ async fn execute_rebase_batch(
              LIMIT $2 \
              FOR SHARE OF events\
          ) \
-         INSERT INTO hermes_data.telegram_call_realtime_replay_order (\
+         INSERT INTO makosh_data.telegram_call_realtime_replay_order (\
              replay_sequence, event_sequence\
          ) \
          SELECT selected.event_sequence + $3, selected.event_sequence \
@@ -268,8 +268,8 @@ async fn execute_rebase_batch(
     let has_more: bool = sqlx::query_scalar(
         "SELECT EXISTS(\
              SELECT 1 \
-             FROM hermes_data.telegram_call_realtime_events AS events \
-             LEFT JOIN hermes_data.telegram_call_realtime_replay_order AS replay \
+             FROM makosh_data.telegram_call_realtime_events AS events \
+             LEFT JOIN makosh_data.telegram_call_realtime_replay_order AS replay \
                ON replay.event_sequence = events.event_sequence \
              WHERE events.event_sequence <= $1 \
                AND replay.event_sequence IS NULL\
@@ -283,7 +283,7 @@ async fn execute_rebase_batch(
     let renewed_expiry = telegram_calls_realtime_backfill_lease_expiry_v1(now_unix_millis)
         .ok_or(TelegramCallsBackfillErrorV1::InvalidRequest)?;
     sqlx::query(
-        "UPDATE hermes_data.telegram_call_realtime_backfill_jobs \
+        "UPDATE makosh_data.telegram_call_realtime_backfill_jobs \
          SET execution_phase = $2, \
              rebase_mapped_event_count = rebase_mapped_event_count + $3, \
              lease_expires_at_unix_millis = $4, updated_at_unix_millis = $5 \
@@ -347,7 +347,7 @@ async fn execute_source_batch(
     }
     let has_more: bool = sqlx::query_scalar(
         "SELECT EXISTS(\
-             SELECT 1 FROM hermes_data.telegram_call_realtime_frames \
+             SELECT 1 FROM makosh_data.telegram_call_realtime_frames \
              WHERE frame_sequence > $1\
          )",
     )
@@ -416,14 +416,14 @@ async fn source_rows(
          events.event_kind, events.local_muted AS event_local_muted, \
          events.observed_at_unix_seconds AS event_observed_at_unix_seconds, \
          replay.replay_sequence AS event_replay_sequence \
-         FROM hermes_data.telegram_call_realtime_frames AS frames \
-         LEFT JOIN hermes_data.telegram_call_state_history AS history \
+         FROM makosh_data.telegram_call_realtime_frames AS frames \
+         LEFT JOIN makosh_data.telegram_call_state_history AS history \
            ON history.call_session_id = frames.call_session_id \
           AND history.revision = frames.call_revision \
-         LEFT JOIN hermes_data.telegram_call_realtime_events AS events \
+         LEFT JOIN makosh_data.telegram_call_realtime_events AS events \
            ON events.call_session_id = frames.call_session_id \
           AND events.call_revision = frames.call_revision \
-         LEFT JOIN hermes_data.telegram_call_realtime_replay_order AS replay \
+         LEFT JOIN makosh_data.telegram_call_realtime_replay_order AS replay \
            ON replay.event_sequence = events.event_sequence \
          WHERE frames.frame_sequence > $1 \
          ORDER BY frames.frame_sequence ASC \
@@ -521,7 +521,7 @@ async fn insert_backfilled_event(
     target_sequence: u64,
 ) -> Result<(), TelegramCallsBackfillErrorV1> {
     let event_sequence: i64 = sqlx::query_scalar(
-        "INSERT INTO hermes_data.telegram_call_realtime_events (\
+        "INSERT INTO makosh_data.telegram_call_realtime_events (\
              account_id, event_kind, call_session_id, call_revision, \
              operation_id, operation_revision, local_muted, observed_at_unix_seconds\
          ) VALUES ($1, 'call', $2, $3, NULL, NULL, FALSE, $4) \
@@ -535,7 +535,7 @@ async fn insert_backfilled_event(
     .await
     .map_err(|_| TelegramCallsBackfillErrorV1::RealtimeEventConflict)?;
     let result = sqlx::query(
-        "INSERT INTO hermes_data.telegram_call_realtime_replay_order (\
+        "INSERT INTO makosh_data.telegram_call_realtime_replay_order (\
              replay_sequence, event_sequence\
          ) \
          VALUES ($1, $2)",
@@ -560,7 +560,7 @@ async fn update_source_progress(
     now_unix_millis: i64,
 ) -> Result<(), TelegramCallsBackfillErrorV1> {
     sqlx::query(
-        "UPDATE hermes_data.telegram_call_realtime_backfill_jobs \
+        "UPDATE makosh_data.telegram_call_realtime_backfill_jobs \
          SET checkpoint_frame_sequence = $2, \
              processed_frame_count = processed_frame_count + $3, \
              backfilled_frame_count = backfilled_frame_count + $4, \
@@ -590,7 +590,7 @@ async fn complete_source_progress(
 ) -> Result<(), TelegramCallsBackfillErrorV1> {
     let maximum_sequence: i64 = sqlx::query_scalar(
         "SELECT COALESCE(MAX(replay_sequence), 0) \
-         FROM hermes_data.telegram_call_realtime_replay_order",
+         FROM makosh_data.telegram_call_realtime_replay_order",
     )
     .fetch_one(&mut **transaction)
     .await
@@ -600,7 +600,7 @@ async fn complete_source_progress(
         .filter(|value| *value > 0)
         .ok_or(TelegramCallsBackfillErrorV1::SequenceOverflow)?;
     sqlx::query(
-        "INSERT INTO hermes_data.telegram_call_realtime_replay_cursor (\
+        "INSERT INTO makosh_data.telegram_call_realtime_replay_cursor (\
              cursor_scope, next_sequence\
          ) VALUES ('owner', $1) \
          ON CONFLICT (cursor_scope) DO NOTHING",
@@ -611,7 +611,7 @@ async fn complete_source_progress(
     .map_err(|_| TelegramCallsBackfillErrorV1::Database)?;
     let persisted_next: i64 = sqlx::query_scalar(
         "SELECT next_sequence \
-         FROM hermes_data.telegram_call_realtime_replay_cursor \
+         FROM makosh_data.telegram_call_realtime_replay_cursor \
          WHERE cursor_scope = 'owner' \
          FOR UPDATE",
     )
@@ -622,7 +622,7 @@ async fn complete_source_progress(
         return Err(TelegramCallsBackfillErrorV1::RealtimeEventConflict);
     }
     sqlx::query(
-        "UPDATE hermes_data.telegram_call_realtime_backfill_jobs \
+        "UPDATE makosh_data.telegram_call_realtime_backfill_jobs \
          SET execution_state = 'succeeded', execution_phase = 'complete', \
              checkpoint_frame_sequence = $2, \
              processed_frame_count = processed_frame_count + $3, \

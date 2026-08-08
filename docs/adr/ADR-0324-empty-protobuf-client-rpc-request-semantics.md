@@ -59,7 +59,7 @@ Connect response semantics не меняются. Empty successful response уж
 
 ## SRP и единицы сборки
 
-- `hermes-gateway-runtime` владеет HTTP/Connect и Protobuf transport semantics;
+- `makosh-gateway-runtime` владеет HTTP/Connect и Protobuf transport semantics;
 - owner API package владеет request schema и validation;
 - integration/domain runtime владеет meaning пустого request;
 - Kernel relay переносит opaque bytes и не интерпретирует owner payload;

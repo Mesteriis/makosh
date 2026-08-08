@@ -1,14 +1,14 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     AI_OWNER_V1, attachment_translation_inference_contract_reference_v1,
     communication_explanation_inference_contract_reference_v1,
     communication_reply_inference_contract_reference_v1,
     communication_summary_inference_contract_reference_v1,
     communication_translation_inference_contract_reference_v1,
 };
-use hermes_ai_inference_persistence::{AiInferencePersistenceErrorV1, AiInferencePersistenceV1};
-use hermes_runtime_protocol::{
+use makosh_ai_inference_persistence::{AiInferencePersistenceErrorV1, AiInferencePersistenceV1};
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::{
         ManagedRuntimeControlResponseV1, ManagedRuntimeModuleRequestResponseV1,
@@ -20,11 +20,11 @@ use hermes_runtime_protocol::{
         validate_module_request_delivery_v1, validate_module_request_response_v1,
     },
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 
@@ -468,7 +468,7 @@ fn runtime_error(error: AiInferenceWorkerErrorV1) -> AiInferenceManagedRuntimeEr
 
 #[cfg(test)]
 mod tests {
-    use hermes_ai_contracts::AI_INFERENCE_MODULE_ID_V1;
+    use makosh_ai_contracts::AI_INFERENCE_MODULE_ID_V1;
 
     use super::*;
 

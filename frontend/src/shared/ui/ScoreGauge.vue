@@ -30,9 +30,9 @@ const roundedValue = computed(() => Math.round(normalizedValue.value))
 const valueText = computed(() => `${roundedValue.value}${props.unit}`)
 
 const classes = computed(() => [
-  'hermes-score-gauge',
-  `hermes-score-gauge--${props.size}`,
-  `hermes-score-gauge--${props.tone}`,
+  'makosh-score-gauge',
+  `makosh-score-gauge--${props.size}`,
+  `makosh-score-gauge--${props.tone}`,
   props.class
 ])
 </script>
@@ -47,10 +47,10 @@ const classes = computed(() => [
     :aria-valuenow="normalizedValue"
     :aria-valuetext="valueText"
   >
-    <svg class="hermes-score-gauge__svg" viewBox="0 0 56 56" aria-hidden="true">
-      <circle class="hermes-score-gauge__track" cx="28" cy="28" :r="radius" />
+    <svg class="makosh-score-gauge__svg" viewBox="0 0 56 56" aria-hidden="true">
+      <circle class="makosh-score-gauge__track" cx="28" cy="28" :r="radius" />
       <circle
-        class="hermes-score-gauge__value"
+        class="makosh-score-gauge__value"
         cx="28"
         cy="28"
         :r="radius"
@@ -58,7 +58,7 @@ const classes = computed(() => [
         :stroke-dashoffset="dashOffset"
       />
     </svg>
-    <span v-if="showValue" class="hermes-score-gauge__label" aria-hidden="true">
+    <span v-if="showValue" class="makosh-score-gauge__label" aria-hidden="true">
       <strong>{{ roundedValue }}</strong>
       <small v-if="unit">{{ unit }}</small>
     </span>

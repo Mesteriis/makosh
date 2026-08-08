@@ -1,6 +1,6 @@
 //! Workflow reconciliation of Contacts-owned provider-link terminal results.
 
-use hermes_contacts_command_api::{
+use makosh_contacts_command_api::{
     CONTACTS_MODULE_ID_V1, bind_mail_address_book_provider_link_rejected_contract_reference_v1,
     mail_address_book_provider_link_bound_contract_reference_v1,
     wire::{
@@ -8,21 +8,21 @@ use hermes_contacts_command_api::{
         MailAddressBookProviderLinkBoundV1,
     },
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, ResultMetadataV1, ResultOutcomeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_mail_contacts_sync_core::MailContactsSyncRejectCodeV1;
-use hermes_mail_contacts_sync_persistence::{
+use makosh_mail_contacts_sync_core::MailContactsSyncRejectCodeV1;
+use makosh_mail_contacts_sync_persistence::{
     CompleteContactsProviderLinkV1, MailContactsSyncPersistenceErrorV1,
     MailContactsSyncPersistenceV1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -155,7 +155,7 @@ fn decode_result(
     expected: &ContractReferenceV1,
     expected_outcome: ResultOutcomeV1,
     context: &MailContactsSyncProviderLinkResultContextV1<'_>,
-) -> Result<hermes_events_protocol::v1::DurableEnvelopeV1, MailContactsSyncProviderLinkResultErrorV1>
+) -> Result<makosh_events_protocol::v1::DurableEnvelopeV1, MailContactsSyncProviderLinkResultErrorV1>
 {
     if context.now_unix_millis <= 0 {
         return Err(MailContactsSyncProviderLinkResultErrorV1::InvalidPayload);
@@ -176,7 +176,7 @@ fn decode_result(
 
 fn result_identity(
     record: &OutboxRecordV1,
-    envelope: &hermes_events_protocol::v1::DurableEnvelopeV1,
+    envelope: &makosh_events_protocol::v1::DurableEnvelopeV1,
     payload_command_id: &[u8],
 ) -> Result<ResultIdentityV1, MailContactsSyncProviderLinkResultErrorV1> {
     let command_id = id16(payload_command_id)?;

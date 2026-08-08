@@ -21,9 +21,9 @@ Exact Kernel admission, owner-neutral Gateway command/query routes, shared SSE
 
 ## Контекст
 
-Historical Communications UI смешивал provider actions и Hermes attention
+Historical Communications UI смешивал provider actions и Макошь attention
 state. Provider read/archive/mute/label принадлежат integration runtime.
-Hermes pending/reviewed/dismissed, pin, importance и snooze являются отдельной
+Макошь pending/reviewed/dismissed, pin, importance и snooze являются отдельной
 business truth и принадлежат Review.
 
 Хранение этих полей в Communications создало бы скрытый Review facade. Импорт
@@ -35,17 +35,17 @@ compile isolation. Review owner ранее был blocked, поэтому contra
 
 Review открывается как отдельный domain owner начиная с двух build units:
 
-- `hermes-review-attention-api` — generated command/query/realtime contract;
-- `hermes-review-attention-core` — pure attention aggregate and invariants.
+- `makosh-review-attention-api` — generated command/query/realtime contract;
+- `makosh-review-attention-core` — pure attention aggregate and invariants.
 
 Owner-local persistence реализован отдельной unit
-`hermes-review-attention-persistence`: operation ID вместе с exact request hash
+`makosh-review-attention-persistence`: operation ID вместе с exact request hash
 даёт idempotent replay, а aggregate mutation и operation result фиксируются в
 одной PostgreSQL transaction. Owner-local get/list использует bounded keyset
 paging, а каждое semantic изменение атомарно добавляет durable realtime
 transition для restart-safe SSE replay.
 
-`hermes-review-attention-runtime` является самостоятельным managed domain
+`makosh-review-attention-runtime` является самостоятельным managed domain
 process. Он получает module owner `review` и отдельный authenticated human
 owner, использует только Review API/core/persistence и platform
 Runtime/Storage/Vault contracts, не запрашивает Event Hub и не импортирует
@@ -53,7 +53,7 @@ Communications. Durable replay читается один раз при стар�
 этого новые client realtime frames публикуются только вследствие принятой
 Review command. Периодический query polling и таймерный pump отсутствуют.
 
-`hermes-review-attention-assembly` отдельно материализует canonical descriptor,
+`makosh-review-attention-assembly` отдельно материализует canonical descriptor,
 settings schema, Storage migration bundle и отсортированный unsigned release
 fragment. Assembly не запускает runtime, не импортирует Kernel/Gateway и не
 получает signing authority.

@@ -1,6 +1,6 @@
 use crate::domains::communications::outbox::CommunicationOutboxItem;
 use chrono::{DateTime, Utc};
-use hermes_connectrpc_contracts::hermes::communications::v1::CommunicationOutboxItem as ProtoCommunicationOutboxItem;
+use makosh_connectrpc_contracts::makosh::communications::v1::CommunicationOutboxItem as ProtoCommunicationOutboxItem;
 fn timestamp_string(value: DateTime<Utc>) -> String {
     value.to_rfc3339()
 }

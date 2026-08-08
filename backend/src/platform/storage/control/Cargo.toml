@@ -1,14 +1,14 @@
 [package]
-name = "hermes-storage-control"
+name = "makosh-storage-control"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 [lib]
 path = "src/lib.rs"
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "storage"
 surface = "implementation"
 [dependencies]
-hermes-storage-protocol = { path = "../protocol" }
-hermes-storage-vault = { path = "../vault" }
+makosh-storage-protocol = { path = "../protocol" }
+makosh-storage-vault = { path = "../vault" }

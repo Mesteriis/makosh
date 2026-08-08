@@ -39,7 +39,7 @@ secret resolver; account config stores only non-secret SMTP metadata.
 
 | Метод | Путь | Описание |
 |---|---|---|
-| GET | `/api/events/ws?after_position=&hermes_secret=` | Protected WebSocket event stream with replay and heartbeat foundation; browser clients pass the local API secret as `hermes_secret` because native WebSocket requests cannot set `X-Hermes-Secret` |
+| GET | `/api/events/ws?after_position=&makosh_secret=` | Protected WebSocket event stream with replay and heartbeat foundation; browser clients pass the local API secret as `makosh_secret` because native WebSocket requests cannot set `X-Макошь-Secret` |
 | GET | `/api/events/stream?after_position=` | Protected SSE stream with replay and heartbeat |
 | GET | `/api/v1/events?after_position=&limit=&wait_seconds=` | Protected JSON replay / long-poll fallback; records `event.list` audit entry |
 
@@ -198,7 +198,7 @@ Canonical local draft event types emitted by draft mutations:
 | POST | `/folders/{folder_id}/messages/{message_id}/copy` | Copy a message into a local custom folder; returns the projected folder-message row and appends a canonical event |
 | POST | `/folders/{folder_id}/messages/{message_id}/move` | Move a message into a local custom folder, removing it from other custom folders; returns the projected folder-message row and appends a canonical event |
 
-Custom folders are local-first Hermes organization state. These routes do not
+Custom folders are local-first Макошь organization state. These routes do not
 perform provider-side Gmail/IMAP folder mutations.
 
 The current Mail UI presents slash-delimited folder names as a local hierarchy

@@ -9,7 +9,7 @@ mod repository;
 mod schema;
 mod tickets;
 
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool,
     postgres::{PgConnectOptions, PgPoolOptions},
@@ -32,7 +32,7 @@ pub use schema::{
     attachment_preview_storage_bundle_v1,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-preview-persistence";
+pub const PACKAGE: &str = "makosh-attachment-preview-persistence";
 
 pub struct AttachmentPreviewPersistenceV1 {
     pub(crate) pool: PgPool,
@@ -86,7 +86,7 @@ impl AttachmentPreviewPersistenceV1 {
 
     pub async fn verify_storage_ready(&self) -> Result<(), AttachmentPreviewPersistenceErrorV1> {
         sqlx::query(
-            "SELECT 1 FROM hermes_data.attachment_preview_runs, hermes_data.attachment_preview_event_inbox, hermes_data.attachment_preview_scan_candidates, hermes_data.attachment_preview_safety_facts, hermes_data.attachment_preview_custody_outbox, hermes_data.attachment_preview_custody_result_inbox, hermes_data.attachment_preview_jobs, hermes_data.attachment_preview_artifacts, hermes_data.attachment_preview_read_tickets, hermes_data.attachment_preview_realtime LIMIT 0",
+            "SELECT 1 FROM makosh_data.attachment_preview_runs, makosh_data.attachment_preview_event_inbox, makosh_data.attachment_preview_scan_candidates, makosh_data.attachment_preview_safety_facts, makosh_data.attachment_preview_custody_outbox, makosh_data.attachment_preview_custody_result_inbox, makosh_data.attachment_preview_jobs, makosh_data.attachment_preview_artifacts, makosh_data.attachment_preview_read_tickets, makosh_data.attachment_preview_realtime LIMIT 0",
         )
         .execute(&self.pool)
         .await

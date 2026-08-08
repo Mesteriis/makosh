@@ -1,11 +1,11 @@
 use std::fs;
 use std::os::unix::fs::PermissionsExt;
 
-use hermes_blob_protocol::{
+use makosh_blob_protocol::{
     BlobAccessFenceV1, BlobBackupClassV1, BlobCustodyScopeV1, BlobRangeV1, BlobRefV1,
 };
-use hermes_blob_runtime::lease::BlobKeyLeaseV1;
-use hermes_blob_runtime::storage::{BlobStorageError, EncryptedBlobStore};
+use makosh_blob_runtime::lease::BlobKeyLeaseV1;
+use makosh_blob_runtime::storage::{BlobStorageError, EncryptedBlobStore};
 use zeroize::Zeroizing;
 
 fn reference() -> BlobRefV1 {
@@ -227,7 +227,7 @@ fn lease_fence_expiry_and_symlink_attacks_fail_closed() {
             1_500,
         ),
         Err(BlobStorageError::Lease(
-            hermes_blob_runtime::lease::BlobLeaseError::Expired
+            makosh_blob_runtime::lease::BlobLeaseError::Expired
         )),
     );
 

@@ -25,7 +25,7 @@ generated_by: code-wiki-ru
 ```markdown
 # Компоненты фронтенда
 
-Данная страница содержит описание Vue-компонентов, реализующих UI для интеграций Hermes Hub. Компоненты расположены в `frontend/src/integrations/<integration>/components/` и `frontend/src/integrations/<integration>/views/`.
+Данная страница содержит описание Vue-компонентов, реализующих UI для интеграций Макошь. Компоненты расположены в `frontend/src/integrations/<integration>/components/` и `frontend/src/integrations/<integration>/views/`.
 
 ## Telegram
 
@@ -175,7 +175,7 @@ generated_by: code-wiki-ru
   1. Форма подключения аккаунта: `account_id`, `display_name`, `external_account_id`, `oauth_token`, `oauth_token_ref`, `api_base_url`.
   2. (При выбранном аккаунте) Информация о рантайме (`lifecycle_state`, `blockers`).
   3. Форма создания конференции: `waiting_room_level`, чекбокс авто-саммари, кнопка «Create conference».
-  4. Блок открытия WebView и записи: поля `join_url`, `conference_id`, кнопки «Open in Hermes WebView», «Start local MP3 recording», «Stop recording».
+  4. Блок открытия WebView и записи: поля `join_url`, `conference_id`, кнопки «Open in Макошь WebView», «Start local MP3 recording», «Stop recording».
   5. Отображение последней конференции и активной записи.
   6. Строка «Safety boundary» с данными из `capabilities`.
 

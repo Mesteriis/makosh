@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
-import { MailContactsSyncDirectionV1 } from '../../../gen/hermes/mail_contacts_sync/v1/sync_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
+import { MailContactsSyncDirectionV1 } from '../../../gen/makosh/mail_contacts_sync/v1/sync_pb'
 import {
 	mailContactsSyncStateLabel,
 	type MailContactsSyncAccountChoiceV1,

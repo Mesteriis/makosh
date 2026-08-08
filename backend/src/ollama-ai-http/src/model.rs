@@ -1,4 +1,4 @@
-use hermes_ollama_ai_core::{
+use makosh_ollama_ai_core::{
     OllamaExplanationPlanV1, OllamaGenerationPlanV1, OllamaHttpGenerationV1,
     OllamaSummaryGenerationPlanV1, OllamaTranslationPlanV1,
 };

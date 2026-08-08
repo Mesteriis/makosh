@@ -88,7 +88,7 @@ function error(title: string, description?: string): string {
 provide(TOAST_INJECTION_KEY, { addToast, removeToast, success, warning, error })
 
 const viewportClasses = computed(() => [
-  'hermes-toast-viewport',
+  'makosh-toast-viewport',
   props.class
 ])
 
@@ -117,25 +117,25 @@ onBeforeUnmount(() => {
         :key="toast.id"
         as="div"
         :data-toast-id="toast.id"
-        :class="['hermes-toast-root', `hermes-toast--${toast.variant || 'default'}`]"
+        :class="['makosh-toast-root', `makosh-toast--${toast.variant || 'default'}`]"
         @update:open="handleToastOpenChange(toast.id, $event)"
       >
-        <div class="hermes-toast-inner">
+        <div class="makosh-toast-inner">
           <Icon
             v-if="toast.variant && toast.variant !== 'default'"
             :icon="variantIcons[toast.variant]"
             size="1.125rem"
-            class="hermes-toast-variant-icon"
+            class="makosh-toast-variant-icon"
           />
-          <div class="hermes-toast-content">
-            <ToastTitle v-if="toast.title" class="hermes-toast-title">
+          <div class="makosh-toast-content">
+            <ToastTitle v-if="toast.title" class="makosh-toast-title">
               {{ toast.title }}
             </ToastTitle>
-            <ToastDescription v-if="toast.description" class="hermes-toast-description">
+            <ToastDescription v-if="toast.description" class="makosh-toast-description">
               {{ toast.description }}
             </ToastDescription>
           </div>
-          <ToastClose class="hermes-toast-close-btn" :aria-label="closeLabel">
+          <ToastClose class="makosh-toast-close-btn" :aria-label="closeLabel">
             <Icon icon="tabler:x" size="1rem" />
           </ToastClose>
         </div>

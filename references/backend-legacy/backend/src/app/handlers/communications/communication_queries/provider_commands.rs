@@ -1,6 +1,6 @@
 use super::super::*;
-use hermes_communications_api::commands::CommunicationProviderCommandDiagnostics;
-use hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore;
+use makosh_communications_api::commands::CommunicationProviderCommandDiagnostics;
+use makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore;
 
 #[derive(Deserialize)]
 pub(crate) struct ProviderCommandDiagnosticsQuery {

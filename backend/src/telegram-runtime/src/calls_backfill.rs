@@ -1,18 +1,18 @@
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_events_protocol::{
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_events_protocol::{
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
         SourceFenceV1, SourceRefV1, durable_envelope_v1::Semantics,
     },
     validation::envelope::validate_envelope_v1,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     OwnerJobLeaseV1, SCHEDULER_JOB_DESCRIPTOR_SET_V1, build_owner_job_command_v1,
     v1::OwnerJobTriggerKindV1,
 };
-use hermes_telegram_calls_core::{
+use makosh_telegram_calls_core::{
     TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_MAJOR_V1, TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_NAME_V1,
     TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_OWNER_V1,
     TELEGRAM_CALLS_REALTIME_BACKFILL_MAX_BATCHES_PER_BOOT_V1,
@@ -21,7 +21,7 @@ use hermes_telegram_calls_core::{
     telegram_calls_realtime_backfill_message_id_v1, telegram_calls_realtime_backfill_run_id_v1,
     telegram_calls_realtime_backfill_scope_v1,
 };
-use hermes_telegram_calls_persistence::{
+use makosh_telegram_calls_persistence::{
     TelegramCallsBackfillErrorV1, TelegramCallsBackfillStateV1, TelegramCallsPersistence,
 };
 use prost::Message;
@@ -30,7 +30,7 @@ use sha2::{Digest, Sha256};
 
 use crate::managed_control::TelegramManagedRuntimeIdentity;
 
-const TELEGRAM_RUNTIME_MODULE_ID: &str = "hermes-telegram-runtime";
+const TELEGRAM_RUNTIME_MODULE_ID: &str = "makosh-telegram-runtime";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum TelegramCallsBackfillRuntimeErrorV1 {
@@ -167,7 +167,7 @@ fn current_unix_millis() -> Result<i64, TelegramCallsBackfillRuntimeErrorV1> {
 
 fn runtime_source_reference(runtime_instance_id: &str) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.runtime.source-reference.v1\0");
+    hasher.update(b"makosh.runtime.source-reference.v1\0");
     hasher.update(runtime_instance_id.as_bytes());
     let digest: [u8; 32] = hasher.finalize().into();
     digest[..16]

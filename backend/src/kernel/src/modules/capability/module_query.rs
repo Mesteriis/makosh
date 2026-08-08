@@ -3,9 +3,9 @@
 use std::sync::Arc;
 use std::time::Duration;
 
-use hermes_kernel_control_store::ModuleQueryContractV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store::ModuleQueryContractV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     v1::{
         ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
         ManagedRuntimeModuleQueryDeliveryV1, ManagedRuntimeModuleQueryRequestV1,
@@ -143,7 +143,7 @@ fn resolve_caller_capability(
     store: &SqliteControlStore,
     registration_id: &str,
     granted_capabilities: &[String],
-    contract: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    contract: &makosh_runtime_protocol::v1::ContractReferenceV1,
 ) -> Result<(), String> {
     for capability_id in granted_capabilities {
         let dependencies = store
@@ -161,7 +161,7 @@ fn resolve_caller_capability(
 
 fn resolve_provider(
     store: &SqliteControlStore,
-    contract: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    contract: &makosh_runtime_protocol::v1::ContractReferenceV1,
 ) -> Result<ModuleQueryContractV1, String> {
     let routes = store
         .approved_module_query_rpc_routes()
@@ -180,7 +180,7 @@ fn resolve_provider(
 
 fn exact_contract_matches(
     expected: &ModuleQueryContractV1,
-    actual: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    actual: &makosh_runtime_protocol::v1::ContractReferenceV1,
 ) -> bool {
     expected.owner() == actual.owner
         && expected.name() == actual.name
@@ -208,7 +208,7 @@ fn ensure_caller_fence(
 fn current_provider_launch(
     store: &SqliteControlStore,
     provider: &ModuleQueryContractV1,
-) -> Result<hermes_kernel_control_store::ManagedLaunchRecord, String> {
+) -> Result<makosh_kernel_control_store::ManagedLaunchRecord, String> {
     let launch = store
         .effective_managed_launch_record(provider.registration_id())
         .map_err(|_| "managed module query provider is unavailable".to_owned())?
@@ -220,7 +220,7 @@ fn current_provider_launch(
 fn ensure_provider_fence(
     store: &SqliteControlStore,
     provider: &ModuleQueryContractV1,
-    launch: &hermes_kernel_control_store::ManagedLaunchRecord,
+    launch: &makosh_kernel_control_store::ManagedLaunchRecord,
 ) -> Result<(), String> {
     current_managed_runtime_matches(
         store,

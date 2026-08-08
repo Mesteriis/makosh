@@ -1,7 +1,7 @@
 use crate::integrations::telegram::client::errors::TelegramError;
 use crate::platform::secrets::store::SecretReferenceStore;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
-use hermes_communications_api::accounts::ProviderSecretBindingLookupPort;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::ProviderSecretBindingLookupPort;
 
 use crate::platform::secrets::resolver::SecretResolver;
 

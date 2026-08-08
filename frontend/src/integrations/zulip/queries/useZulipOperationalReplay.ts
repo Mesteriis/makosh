@@ -1,7 +1,7 @@
 import { computed, ref, shallowRef } from 'vue'
 
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
-import type { ZulipOperationalReplayFrameV1 } from '../../../gen/hermes/zulip/operational/realtime/v1/client_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
+import type { ZulipOperationalReplayFrameV1 } from '../../../gen/makosh/zulip/operational/realtime/v1/client_pb'
 import { replayZulipOperationalEvents } from '../api/zulipOperationalReplayGateway'
 import {
 	buildZulipOperationalReplayModel,

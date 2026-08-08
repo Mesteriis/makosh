@@ -16,9 +16,9 @@ describe('Mail composition presentation model', () => {
 	})
 
 	it('parses only explicit name=value template entries', () => {
-		expect(parseTemplateValues('owner=AVM\nignored\nteam=Hermes=Hub')).toEqual({
+		expect(parseTemplateValues('owner=AVM\nignored\nteam=Макошь=Hub')).toEqual({
 			owner: 'AVM',
-			team: 'Hermes=Hub',
+			team: 'Макошь=Hub',
 		})
 	})
 

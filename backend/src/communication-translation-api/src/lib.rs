@@ -1,8 +1,8 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-communication-translation-api";
+pub const PACKAGE: &str = "makosh-communication-translation-api";
 pub const COMMUNICATION_TRANSLATION_OWNER_V1: &str = "communication_translation";
-pub const COMMUNICATION_TRANSLATION_MODULE_ID_V1: &str = "hermes-communication-translation-runtime";
+pub const COMMUNICATION_TRANSLATION_MODULE_ID_V1: &str = "makosh-communication-translation-runtime";
 pub const COMMUNICATION_TRANSLATION_CAPABILITY_ID_V1: &str = "communication.translation.v1";
 pub const COMMUNICATION_TRANSLATION_COMMAND_CONTRACT_NAME_V1: &str =
     "communication.translation.command";
@@ -13,9 +13,9 @@ pub const COMMUNICATION_TRANSLATION_REALTIME_CONTRACT_NAME_V1: &str =
 pub const COMMUNICATION_TRANSLATION_REALTIME_EVENT_KIND_V1: &str =
     "communication.translation.status_changed";
 pub const COMMUNICATION_TRANSLATION_COMMAND_CONNECT_PATH_V1: &str =
-    "/hermes.communication_translation.v1.CommunicationTranslationCommandService/Start";
+    "/makosh.communication_translation.v1.CommunicationTranslationCommandService/Start";
 pub const COMMUNICATION_TRANSLATION_QUERY_CONNECT_PATH_V1: &str =
-    "/hermes.communication_translation.v1.CommunicationTranslationQueryService/Get";
+    "/makosh.communication_translation.v1.CommunicationTranslationQueryService/Get";
 pub const COMMUNICATION_TRANSLATION_CONTRACT_MAJOR_V1: u32 = 1;
 pub const COMMUNICATION_TRANSLATION_CONTRACT_REVISION_V1: u32 = 1;
 pub const COMMUNICATION_TRANSLATION_MAX_BYTES_V1: usize = 64 * 1024;
@@ -23,7 +23,7 @@ pub const COMMUNICATION_TRANSLATION_MAX_BYTES_V1: usize = 64 * 1024;
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communication_translation.v1.rs"
+        "/makosh.communication_translation.v1.rs"
     ));
 }
 
@@ -45,7 +45,7 @@ mod tests {
     fn client_contract_is_exact_provider_neutral_and_single_message_only() {
         assert!(COMMUNICATION_TRANSLATION_COMMAND_CONNECT_PATH_V1.starts_with('/'));
         assert!(COMMUNICATION_TRANSLATION_QUERY_CONNECT_PATH_V1.starts_with('/'));
-        let source = include_str!("../proto/hermes/communication_translation/v1/translation.proto");
+        let source = include_str!("../proto/makosh/communication_translation/v1/translation.proto");
         assert!(source.contains("CommunicationTranslationCandidateV1"));
         assert!(source.contains("COMMUNICATION_TRANSLATION_LANGUAGE_SPANISH"));
         for forbidden in [

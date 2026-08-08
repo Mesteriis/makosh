@@ -11,11 +11,11 @@ use crate::identity::device::signer::DeviceSigner;
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Blob, NATS and Attachment Security binaries"]
 fn managed_attachment_security_engine_starts_with_exact_signed_contracts() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let clamav = AttachmentSecurityClamAvFixture::start();
-    let root = unique_target_root("hermes-managed-attachment-security");
+    let root = unique_target_root("makosh-managed-attachment-security");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -23,13 +23,13 @@ fn managed_attachment_security_engine_starts_with_exact_signed_contracts() {
     );
     let release = installed_communications_mail_attachment_security_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             "owner-1",
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -109,13 +109,13 @@ fn managed_attachment_security_engine_starts_with_exact_signed_contracts() {
     );
     assert_eq!(
         wait_for_attachment_state(&store, &supervisor, attachment.attachment_anchor_id),
-        hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
+        makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
             as u32
     );
     assert_stale_attachment_security_verdict_cas_is_rejected(&store, &attachment);
     assert_eq!(
         wait_for_attachment_state(&store, &supervisor, attachment.attachment_anchor_id),
-        hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
+        makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
             as u32
     );
 
@@ -169,7 +169,7 @@ fn managed_attachment_security_engine_starts_with_exact_signed_contracts() {
             &supervisor,
             outage_attachment.attachment_anchor_id
         ),
-        hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
+        makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
             as u32
     );
 
@@ -195,7 +195,7 @@ fn managed_attachment_security_engine_starts_with_exact_signed_contracts() {
             &supervisor,
             threat_attachment.attachment_anchor_id
         ),
-        hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::Quarantined
+        makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::Quarantined
             as u32
     );
 
@@ -239,7 +239,7 @@ fn managed_attachment_security_engine_starts_with_exact_signed_contracts() {
                 &supervisor,
                 failure_attachment.attachment_anchor_id
             ),
-            hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::BlobAdmitted
+            makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::BlobAdmitted
                 as u32
         );
     }
@@ -276,7 +276,7 @@ fn managed_attachment_security_engine_starts_with_exact_signed_contracts() {
             &supervisor,
             successor_source_attachment.attachment_anchor_id
         ),
-        hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
+        makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
             as u32
     );
 
@@ -307,7 +307,7 @@ fn managed_attachment_security_engine_starts_with_exact_signed_contracts() {
             &supervisor,
             revoked_source_attachment.attachment_anchor_id
         ),
-        hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::BlobAdmitted
+        makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::BlobAdmitted
             as u32
     );
 
@@ -368,7 +368,7 @@ fn managed_attachment_security_engine_starts_with_exact_signed_contracts() {
             &supervisor,
             vault_outage_attachment.attachment_anchor_id
         ),
-        hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::BlobAdmitted
+        makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::BlobAdmitted
             as u32
     );
     supervisor
@@ -430,7 +430,7 @@ fn managed_attachment_security_engine_starts_with_exact_signed_contracts() {
             &supervisor,
             blob_outage_attachment.attachment_anchor_id
         ),
-        hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::BlobAdmitted
+        makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::BlobAdmitted
             as u32
     );
     assert_eq!(
@@ -464,13 +464,13 @@ fn managed_attachment_security_engine_starts_with_exact_signed_contracts() {
             &supervisor,
             target_revoked_attachment.attachment_anchor_id
         ),
-        hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::BlobAdmitted
+        makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::BlobAdmitted
             as u32
     );
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove fixture");
     std::fs::remove_dir_all(data).expect("remove short kernel data fixture");

@@ -1,4 +1,4 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 use serde_json::json;
 
 use super::WhatsappWebStore;
@@ -7,7 +7,7 @@ use crate::integrations::whatsapp::client::models::{
     NewWhatsappWebSession, WhatsappLiveAccountSetupRequest, WhatsappWebAccountSetupRequest,
     WhatsappWebAccountSetupResponse, WhatsappWebCompanionRuntime, WhatsappWebLinkState,
 };
-use hermes_provider_whatsapp::ids::whatsapp_web_session_id;
+use makosh_provider_whatsapp::ids::whatsapp_web_session_id;
 
 impl WhatsappWebStore {
     pub async fn setup_fixture_account(

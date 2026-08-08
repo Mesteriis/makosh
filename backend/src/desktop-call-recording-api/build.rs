@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/desktop_call_recording/v1/recording.proto"],
+            &["proto/makosh/desktop_call_recording/v1/recording.proto"],
             &["proto"],
         )
         .expect("desktop recording protocol");

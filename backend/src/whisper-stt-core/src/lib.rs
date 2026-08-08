@@ -1,6 +1,6 @@
 #![forbid(unsafe_code)]
 
-use hermes_speech_to_text_api::{
+use makosh_speech_to_text_api::{
     SPEECH_TO_TEXT_SCHEMA_SHA256, validate_speech_to_text_request_v1,
     validate_speech_to_text_result_v1,
     wire::{
@@ -9,7 +9,7 @@ use hermes_speech_to_text_api::{
         SpeechTranscriptArtifactReceiptV1, SpeechTranscriptCompletenessV1,
     },
 };
-use hermes_speech_transcript_artifact::{
+use makosh_speech_transcript_artifact::{
     SPEECH_TRANSCRIPT_ARTIFACT_PROTOCOL_MAJOR_V1, encode_speech_transcript_document_v1,
     speech_transcript_document_sha256_v1,
     wire::{
@@ -18,7 +18,7 @@ use hermes_speech_transcript_artifact::{
     },
 };
 
-pub const PACKAGE: &str = "hermes-whisper-stt-core";
+pub const PACKAGE: &str = "makosh-whisper-stt-core";
 pub const WHISPER_STT_POLICY_REVISION_V1: u32 = 1;
 pub const WHISPER_STT_MIN_TIMEOUT_MILLIS_V1: u64 = 1_000;
 pub const WHISPER_STT_MAX_TIMEOUT_MILLIS_V1: u64 = 30 * 60 * 1_000;
@@ -258,7 +258,7 @@ fn artifact_completeness(
 
 #[cfg(test)]
 mod tests {
-    use hermes_speech_to_text_api::{
+    use makosh_speech_to_text_api::{
         seal_speech_to_text_request_v1,
         wire::{SpeechAudioFormatV1, SpeechAudioSourceReceiptV1},
     };

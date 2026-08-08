@@ -6,8 +6,8 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc;
 use std::time::Duration;
 
-use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use crate::identity::owner_control;
 use crate::modules::capability::module_query::ModuleQueryRouteHandlerV1;
@@ -519,7 +519,7 @@ fn supervise_workers(
                 shutdown_requested.store(true, Ordering::Release);
             }
             Ok(completion) => {
-                if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                     let result = completion
                         .result
                         .err()

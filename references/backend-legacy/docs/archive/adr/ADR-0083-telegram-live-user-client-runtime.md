@@ -10,7 +10,7 @@ policy dry-runs, call metadata and transcript storage. A usable Telegram client
 needs a live `telegram_user` runtime that can keep TDLib state warm, sync chats,
 sync selected history, send user-confirmed messages and fetch media on demand.
 
-This must not turn Telegram into the source of truth. Hermes Hub remains
+This must not turn Telegram into the source of truth. Макошь remains
 local-first and event-backed: Telegram provider data is preserved as source
 evidence, while canonical messages, graph links and task candidates remain local
 projections.

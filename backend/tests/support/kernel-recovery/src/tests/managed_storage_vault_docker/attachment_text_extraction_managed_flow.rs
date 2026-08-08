@@ -29,7 +29,8 @@ use super::{
 };
 
 use crate::identity::device::signer::DeviceSigner;
-use hermes_attachment_text_extraction_api::{
+use hyper::StatusCode;
+use makosh_attachment_text_extraction_api::{
     ATTACHMENT_TEXT_EXTRACTION_CAPABILITY_ID_V1,
     ATTACHMENT_TEXT_EXTRACTION_COMMAND_CONNECT_PATH_V1,
     ATTACHMENT_TEXT_EXTRACTION_COMMAND_CONTRACT_NAME_V1,
@@ -45,11 +46,10 @@ use hermes_attachment_text_extraction_api::{
         StartAttachmentTextExtractionResponseV1,
     },
 };
-use hermes_attachment_text_extraction_runtime::AttachmentTextExtractionParserRuntimeV1;
-use hermes_runtime_protocol::v1::{
+use makosh_attachment_text_extraction_runtime::AttachmentTextExtractionParserRuntimeV1;
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
-use hyper::StatusCode;
 
 const PRIVATE_SOURCE_TEXT: &[u8] =
     b"Private clean-room attachment text that must stay out of events and SSE.\r\nLine two.";
@@ -58,11 +58,11 @@ const PRIVATE_SOURCE_TEXT: &[u8] =
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Blob, NATS, Communications, Attachment Security and Text Extraction binaries"]
 fn managed_attachment_text_extraction_completes_through_gateway_and_replays_after_restart() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let clamav = AttachmentSecurityClamAvFixture::start();
-    let root = unique_target_root("hermes-managed-attachment-text-extraction");
+    let root = unique_target_root("makosh-managed-attachment-text-extraction");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -70,13 +70,13 @@ fn managed_attachment_text_extraction_completes_through_gateway_and_replays_afte
     );
     let release = installed_attachment_text_extraction_ensemble_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             ATTACHMENT_TEXT_EXTRACTION_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -93,7 +93,7 @@ fn managed_attachment_text_extraction_completes_through_gateway_and_replays_afte
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     configure_attachment_text_extraction_realtime_v1(&supervisor, &store, realtime.clone());
     supervisor
@@ -169,7 +169,7 @@ fn managed_attachment_text_extraction_completes_through_gateway_and_replays_afte
     );
     assert_eq!(
         wait_for_attachment_state(&store, &supervisor, attachment.attachment_anchor_id),
-        hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
+        makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
             as u32
     );
     wait_for_attachment_text_evidence_v1(1);
@@ -405,18 +405,18 @@ fn managed_attachment_text_extraction_completes_through_gateway_and_replays_afte
             "text-extraction-pdf",
             [0xb1; 16],
             [0xb2; 16],
-            attachment_text_pdf_source_v1("Hermes managed PDF"),
+            attachment_text_pdf_source_v1("Макошь managed PDF"),
             AttachmentTextFormatV1::Pdf,
-            "Hermes managed PDF",
+            "Макошь managed PDF",
         ),
         (
             3_i64,
             "text-extraction-docx",
             [0xc1; 16],
             [0xc2; 16],
-            attachment_text_docx_source_v1("Hermes managed DOCX"),
+            attachment_text_docx_source_v1("Макошь managed DOCX"),
             AttachmentTextFormatV1::Docx,
-            "Hermes managed DOCX",
+            "Макошь managed DOCX",
         ),
         (
             4_i64,
@@ -425,7 +425,7 @@ fn managed_attachment_text_extraction_completes_through_gateway_and_replays_afte
             [0xd2; 16],
             attachment_text_ocr_png_source_v1(),
             AttachmentTextFormatV1::Ocr,
-            "HERMES",
+            "MAKOSH",
         ),
     ] {
         eprintln!("managed_attachment_text_extraction_scenario={scenario_id}");
@@ -450,7 +450,7 @@ fn managed_attachment_text_extraction_completes_through_gateway_and_replays_afte
                 &supervisor,
                 scenario_attachment.attachment_anchor_id,
             ),
-            hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
+            makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
                 as u32
         );
         wait_for_attachment_text_evidence_v1(expected_count);
@@ -572,7 +572,7 @@ fn managed_attachment_text_extraction_completes_through_gateway_and_replays_afte
             &supervisor,
             stale_proof_attachment.attachment_anchor_id,
         ),
-        hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
+        makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
             as u32
     );
     wait_for_attachment_text_evidence_v1(5);
@@ -798,7 +798,7 @@ fn managed_attachment_text_extraction_completes_through_gateway_and_replays_afte
     supervisor.shutdown().expect("stop managed processes");
     shutdown.store(true, Ordering::SeqCst);
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Attachment Text Extraction fixture");
     std::fs::remove_dir_all(data).expect("remove short Attachment Text Extraction Kernel fixture");
@@ -862,7 +862,7 @@ impl ManagedAttachmentTextNegativeContourV1<'_> {
                 self.supervisor,
                 attachment.attachment_anchor_id,
             ),
-            hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
+            makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
                 as u32
         );
         wait_for_attachment_text_evidence_v1(expected_count);

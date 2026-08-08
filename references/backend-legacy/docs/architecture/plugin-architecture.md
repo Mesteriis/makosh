@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Plugins allow Hermes Hub to extend providers, tools, document processors, UI panels and AI capabilities without turning the core system into an unbounded integration layer.
+Plugins allow Макошь to extend providers, tools, document processors, UI panels and AI capabilities without turning the core system into an unbounded integration layer.
 
 ## Plugin Types
 

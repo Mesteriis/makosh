@@ -4,7 +4,7 @@ import { storybookLocaleFromGlobals } from './storybook-i18n'
 import { generalStoryCopy } from './general-story-copy'
 
 const meta = {
-	title: 'Hermes UI/Foundation/Spacing',
+	title: 'Макошь UI/Foundation/Spacing',
 	render: (_args, context) => ({
 		components: { Badge },
 		setup() {

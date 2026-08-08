@@ -4,7 +4,7 @@ use crate::domains::communications::messages::errors::MessageProjectionError;
 use crate::domains::communications::storage::errors::CommunicationStorageError;
 use crate::integrations::mail::accounts::errors::EmailAccountSetupError;
 use crate::workflows::email_intelligence::errors::EmailIntelligenceError;
-use hermes_communications_postgres::errors::CommunicationIngestionError;
+use makosh_communications_postgres::errors::CommunicationIngestionError;
 
 impl From<CommunicationIngestionError> for ApiError {
     fn from(error: CommunicationIngestionError) -> Self {
@@ -354,11 +354,11 @@ impl From<CommunicationCommandServiceError> for ApiError {
     }
 }
 
-impl From<hermes_communications_postgres::provider_commands::CommunicationProviderCommandError>
+impl From<makosh_communications_postgres::provider_commands::CommunicationProviderCommandError>
     for ApiError
 {
     fn from(
-        error: hermes_communications_postgres::provider_commands::CommunicationProviderCommandError,
+        error: makosh_communications_postgres::provider_commands::CommunicationProviderCommandError,
     ) -> Self {
         tracing::error!(error = %error, "mail provider command diagnostics failed");
         ApiError::InvalidCommunicationQuery("mail provider command diagnostics failed")
@@ -386,8 +386,8 @@ impl From<crate::domains::communications::export::CommunicationExportError> for 
     }
 }
 
-impl From<hermes_communications_api::email::EmailSendError> for ApiError {
-    fn from(error: hermes_communications_api::email::EmailSendError) -> Self {
+impl From<makosh_communications_api::email::EmailSendError> for ApiError {
+    fn from(error: makosh_communications_api::email::EmailSendError) -> Self {
         tracing::error!(error = %error, "email send failed");
         ApiError::InvalidCommunicationQuery("email send failed")
     }

@@ -28,7 +28,7 @@ impl MailContactsSyncPersistenceV1 {
             sqlx::query(
                 "SELECT realtime_sequence, run_id, state, state_revision,
                         rejection_code, occurred_at_unix_millis
-                 FROM hermes_data.mail_contacts_sync_realtime
+                 FROM makosh_data.mail_contacts_sync_realtime
                  WHERE logical_owner_id = $1 AND realtime_sequence > $2
                  ORDER BY realtime_sequence LIMIT $3",
             )
@@ -43,7 +43,7 @@ impl MailContactsSyncPersistenceV1 {
                         rejection_code, occurred_at_unix_millis FROM (
                    SELECT realtime_sequence, run_id, state, state_revision,
                           rejection_code, occurred_at_unix_millis
-                   FROM hermes_data.mail_contacts_sync_realtime
+                   FROM makosh_data.mail_contacts_sync_realtime
                    WHERE logical_owner_id = $1
                    ORDER BY realtime_sequence DESC LIMIT $2
                  ) replay ORDER BY realtime_sequence",

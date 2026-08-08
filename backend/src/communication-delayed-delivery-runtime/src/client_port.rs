@@ -1,28 +1,28 @@
-use hermes_communication_delayed_delivery_api::wire::{
+use makosh_communication_delayed_delivery_api::wire::{
     CancelDelayedDeliveryRequestV1, CancelDelayedDeliveryResponseV1,
     DelayedDeliveryErrorCodeV1 as WireError, DelayedDeliveryReceiptKindV1 as WireReceipt,
     DelayedDeliveryStateV1 as WireState, GetDelayedDeliveryStatusRequestV1,
     GetDelayedDeliveryStatusResponseV1, ScheduleDelayedDeliveryRequestV1,
     ScheduleDelayedDeliveryResponseV1,
 };
-use hermes_communication_delayed_delivery_core::{
+use makosh_communication_delayed_delivery_core::{
     DelayedDeliveryDraftV1, DelayedDeliveryLifecycleV1, DelayedDeliveryStateV1,
     prepare_delayed_delivery_v1, request_cancellation_v1,
 };
-use hermes_communication_delayed_delivery_event_adapters::{
+use makosh_communication_delayed_delivery_event_adapters::{
     DelayedDeliverySchedulerCommandContextV1, DelayedDeliverySchedulerMessageV1,
     build_scheduler_command_v1,
 };
-use hermes_communication_delayed_delivery_persistence::{
+use makosh_communication_delayed_delivery_persistence::{
     CommunicationDelayedDeliveryPersistenceV1, CreateDelayedDeliveryOperationOutcomeV1,
     CreateDelayedDeliveryOperationV1, DelayedDeliveryBodyReceiptV1,
     DelayedDeliveryDurableMessageV1, DelayedDeliveryOperationStatusV1,
     DelayedDeliveryPersistenceErrorV1, RequestDelayedDeliveryCancellationV1,
 };
-use hermes_communication_delayed_delivery_runtime_adapters::{
+use makosh_communication_delayed_delivery_runtime_adapters::{
     DelayedDeliveryBodyCustodyReceiptV1, ManagedDelayedDeliveryRuntimePortV1,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     SCHEDULER_JOB_DESCRIPTOR_SET_V1,
     v1::{
         CancelOneShotScheduleV1, EnsureOneShotScheduleV1, JobKindV1,
@@ -286,7 +286,7 @@ pub async fn get_delayed_delivery_status_payload_v1(
 }
 
 fn ensure_scheduler_command(
-    operation: &hermes_communication_delayed_delivery_core::DelayedDeliveryOperationV1,
+    operation: &makosh_communication_delayed_delivery_core::DelayedDeliveryOperationV1,
 ) -> Option<SchedulerScheduleControlCommandV1> {
     let scope = scope_id(operation.delayed_operation_id());
     Some(SchedulerScheduleControlCommandV1 {
@@ -382,7 +382,7 @@ fn cancel_operation_id(
     expected_workflow_revision: u64,
 ) -> [u8; 16] {
     let digest = Sha256::new()
-        .chain_update(b"hermes.communication-delayed-delivery.cancel.v1\0")
+        .chain_update(b"makosh.communication-delayed-delivery.cancel.v1\0")
         .chain_update(delayed_operation_id)
         .chain_update(expected_workflow_revision.to_be_bytes())
         .finalize();

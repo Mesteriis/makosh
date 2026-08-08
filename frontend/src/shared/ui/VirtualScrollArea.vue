@@ -24,13 +24,13 @@ const rangeLabel = computed(() => {
 	if (props.total === 0) return props.emptyText
 	return `${safeStart.value + 1}-${safeEnd.value} / ${props.total}`
 })
-const classes = computed(() => ['hermes-virtual-scroll-area', props.class])
+const classes = computed(() => ['makosh-virtual-scroll-area', props.class])
 </script>
 
 <template>
 	<component :is="as" :class="classes" :aria-label="label">
-		<div class="hermes-virtual-scroll-area__meta">{{ rangeLabel }}</div>
-		<ScrollArea class="hermes-virtual-scroll-area__viewport">
+		<div class="makosh-virtual-scroll-area__meta">{{ rangeLabel }}</div>
+		<ScrollArea class="makosh-virtual-scroll-area__viewport">
 			<slot :visible-start="safeStart" :visible-end="safeEnd" />
 		</ScrollArea>
 	</component>

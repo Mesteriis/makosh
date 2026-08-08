@@ -134,9 +134,9 @@ describe('communications ConnectRPC API', () => {
     expect(response.has_more).toBe(true)
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, options] = fetchMock.mock.calls[0]
-    expect(url).toBe('http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListMessages')
+    expect(url).toBe('http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListMessages')
     expect(options.method).toBe('POST')
-    expect(new Headers(options.headers).get('X-Hermes-Secret')).toBe('test-secret')
+    expect(new Headers(options.headers).get('X-Макошь-Secret')).toBe('test-secret')
     expect(JSON.parse(decodeBody(options.body))).toMatchObject({
       accountId: 'account-1',
       workflowState: 'needs_action',
@@ -203,13 +203,13 @@ describe('communications ConnectRPC API', () => {
       title: '[Ada] Quarterly update'
     })
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/TransitionMessageWorkflowState'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/TransitionMessageWorkflowState'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListMessageWorkflowStateCounts'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListMessageWorkflowStateCounts'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/SearchMessages'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/SearchMessages'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[0][1].body))).toMatchObject({
       messageId: 'msg-1',
@@ -328,16 +328,16 @@ describe('communications ConnectRPC API', () => {
       resolution: 'Connect callback/runtime ingestion'
     }])
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListSubscriptions'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListSubscriptions'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetMailboxHealth'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetMailboxHealth'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListTopSenders'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListTopSenders'
     )
     expect(fetchMock.mock.calls[3][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListCommunicationBlockers'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListCommunicationBlockers'
     )
   })
 
@@ -528,7 +528,7 @@ describe('communications ConnectRPC API', () => {
       }
     })
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/RunWorkflowAction'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/RunWorkflowAction'
     )
   })
 
@@ -593,13 +593,13 @@ describe('communications ConnectRPC API', () => {
       not_found: []
     })
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/TrashMessage'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/TrashMessage'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/RestoreMessage'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/RestoreMessage'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/BulkMessageAction'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/BulkMessageAction'
     )
   })
 
@@ -643,10 +643,10 @@ describe('communications ConnectRPC API', () => {
       provider_deleted: false
     })
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/MarkMessageRead'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/MarkMessageRead'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/DeleteMessageFromProvider'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/DeleteMessageFromProvider'
     )
   })
 
@@ -730,13 +730,13 @@ describe('communications ConnectRPC API', () => {
       suggestions: ['finance@example.com', 'owner@example.com']
     })
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/AnalyzeMessage'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/AnalyzeMessage'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetMessageExplain'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetMessageExplain'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetMessageSmartCc'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetMessageSmartCc'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[0][1].body))).toMatchObject({
       messageId: 'msg-1'
@@ -811,13 +811,13 @@ describe('communications ConnectRPC API', () => {
       cert_expiry_warning: null
     })
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetMessageExport'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetMessageExport'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetMessageAuth'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetMessageAuth'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetMessageSignature'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetMessageSignature'
     )
   })
 
@@ -891,22 +891,22 @@ describe('communications ConnectRPC API', () => {
     expect(labeled).toEqual({ labeled: true })
     expect(removed).toEqual({ removed: true })
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ToggleMessagePin'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ToggleMessagePin'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ToggleMessageImportant'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ToggleMessageImportant'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ToggleMessageMute'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ToggleMessageMute'
     )
     expect(fetchMock.mock.calls[3][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/SnoozeMessage'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/SnoozeMessage'
     )
     expect(fetchMock.mock.calls[4][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/AddMessageLabel'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/AddMessageLabel'
     )
     expect(fetchMock.mock.calls[5][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/RemoveMessageLabel'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/RemoveMessageLabel'
     )
   })
 
@@ -994,16 +994,16 @@ describe('communications ConnectRPC API', () => {
       source: 'heuristic'
     })
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/DetectMessageLanguage'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/DetectMessageLanguage'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/TranslateMessage'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/TranslateMessage'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ExtractMessageTasks'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ExtractMessageTasks'
     )
     expect(fetchMock.mock.calls[3][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ExtractMessageNotes'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ExtractMessageNotes'
     )
   })
 
@@ -1168,19 +1168,19 @@ describe('communications ConnectRPC API', () => {
     expect(outbox.items[0].metadata.source).toBe('connect')
     expect(outbox.next_cursor).toBe('outbox-next')
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetMessage'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetMessage'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListThreads'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListThreads'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListThreadMessages'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListThreadMessages'
     )
     expect(fetchMock.mock.calls[3][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListDrafts'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListDrafts'
     )
     expect(fetchMock.mock.calls[4][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListOutbox'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListOutbox'
     )
   })
 
@@ -1217,7 +1217,7 @@ describe('communications ConnectRPC API', () => {
     expect(response.account_id).toBe('account-1')
     expect(response.items[0].original_language).toBe('ru')
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/TranslateThread'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/TranslateThread'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[0][1].body))).toMatchObject({
       accountId: 'account-1',
@@ -1276,7 +1276,7 @@ describe('communications ConnectRPC API', () => {
     expect(response.undo_deadline_at).toBe('2026-06-23T10:05:00Z')
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, options] = fetchMock.mock.calls[0]
-    expect(url).toBe('http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/SendMessage')
+    expect(url).toBe('http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/SendMessage')
     expect(JSON.parse(decodeBody(options.body))).toMatchObject({
       accountId: 'account-1',
       toRecipients: ['bob@example.com'],
@@ -1317,7 +1317,7 @@ describe('communications ConnectRPC API', () => {
     expect(response.transport).toBe('outbox')
     expect(fetchMock).toHaveBeenCalledOnce()
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/RedirectMessage'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/RedirectMessage'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[0][1].body))).toMatchObject({
       messageId: 'msg-1',
@@ -1398,7 +1398,7 @@ describe('communications ConnectRPC API', () => {
     expect(outboxItem.outbox_id).toBe('outbox-1')
     expect(outboxItem.status).toBe('canceled')
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/CreateDraft'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/CreateDraft'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[0][1].body))).toMatchObject({
       draftId: 'draft-1',
@@ -1409,13 +1409,13 @@ describe('communications ConnectRPC API', () => {
       metadataJson: '{"compose_mode":"reply"}'
     })
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/DeleteDraft'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/DeleteDraft'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[1][1].body))).toMatchObject({
       draftId: 'draft-1'
     })
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/UndoOutboxItem'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/UndoOutboxItem'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[2][1].body))).toMatchObject({
       outboxId: 'outbox-1'
@@ -1529,7 +1529,7 @@ describe('communications ConnectRPC API', () => {
     expect(updated.workflow_state).toBe('waiting')
     expect(deleted.deleted).toBe(true)
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListSavedSearches'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListSavedSearches'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[0][1].body))).toMatchObject({
       accountId: 'account-1',
@@ -1540,7 +1540,7 @@ describe('communications ConnectRPC API', () => {
       }
     })
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/CreateSavedSearch'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/CreateSavedSearch'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[1][1].body))).toMatchObject({
       name: 'Invoices',
@@ -1554,7 +1554,7 @@ describe('communications ConnectRPC API', () => {
       sortOrder: 10
     })
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/UpdateSavedSearch'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/UpdateSavedSearch'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[2][1].body))).toMatchObject({
       savedSearchId: 'mail_saved_search:1',
@@ -1564,7 +1564,7 @@ describe('communications ConnectRPC API', () => {
       sortOrder: 20
     })
     expect(fetchMock.mock.calls[3][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/DeleteSavedSearch'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/DeleteSavedSearch'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[3][1].body))).toMatchObject({
       savedSearchId: 'mail_saved_search:1'
@@ -1740,7 +1740,7 @@ describe('communications ConnectRPC API', () => {
     expect(copied.operation).toBe('copy')
     expect(moved.operation).toBe('move')
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListFolders'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListFolders'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[0][1].body))).toMatchObject({
       accountId: 'account-1',
@@ -1750,22 +1750,22 @@ describe('communications ConnectRPC API', () => {
       }
     })
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/CreateFolder'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/CreateFolder'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/UpdateFolder'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/UpdateFolder'
     )
     expect(fetchMock.mock.calls[3][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/DeleteFolder'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/DeleteFolder'
     )
     expect(fetchMock.mock.calls[4][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListFolderMessages'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListFolderMessages'
     )
     expect(fetchMock.mock.calls[5][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/CopyMessageToFolder'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/CopyMessageToFolder'
     )
     expect(fetchMock.mock.calls[6][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/MoveMessageToFolder'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/MoveMessageToFolder'
     )
   })
 
@@ -1820,10 +1820,10 @@ describe('communications ConnectRPC API', () => {
     expect(variants.variants).toHaveLength(2)
     expect(variants.variants[1].tone).toBe('friendly')
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GenerateAiReply'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GenerateAiReply'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GenerateAiReplyVariants'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GenerateAiReplyVariants'
     )
   })
 })

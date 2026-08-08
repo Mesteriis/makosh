@@ -15,7 +15,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   contract: new URL(
-    'src/api/gateway/contracts/proto/hermes/gateway/v1/owner_module_settings.proto',
+    'src/api/gateway/contracts/proto/makosh/gateway/v1/owner_module_settings.proto',
     BACKEND_ROOT,
   ),
   router: new URL(
@@ -71,7 +71,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   bootstrapContract: new URL(
-    'src/api/gateway/contracts/proto/hermes/gateway/v1/client_bootstrap.proto',
+    'src/api/gateway/contracts/proto/makosh/gateway/v1/client_bootstrap.proto',
     BACKEND_ROOT,
   ),
   bootstrapProjection: new URL(
@@ -167,6 +167,6 @@ test('owner module Settings is one provider-neutral fresh-proof Gateway authorit
   assert.match(bootstrapConformance, /configuration-current/);
   assert.doesNotMatch(
     `${contract}\n${router}\n${proof}\n${authority}\n${authorization}\n${values}\n${operation}\n${state}\n${launch}\n${workflowLaunch}`,
-    /hermes_(?:mail|telegram|whatsapp|zulip|communications)|Mail|Telegram|WhatsApp|Zulip/,
+    /makosh_(?:mail|telegram|whatsapp|zulip|communications)|Mail|Telegram|WhatsApp|Zulip/,
   );
 });

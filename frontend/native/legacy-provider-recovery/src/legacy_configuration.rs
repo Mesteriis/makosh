@@ -6,15 +6,15 @@ use zeroize::Zeroizing;
 use crate::error::{LegacyProviderRecoveryErrorV1, LegacyProviderRecoveryResultV1};
 
 const PROVIDER_KEYS: [&str; 3] = [
-    "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH",
-    "HERMES_TELEGRAM_API_HASH",
-    "HERMES_TELEGRAM_API_ID",
+    "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH",
+    "MAKOSH_TELEGRAM_API_HASH",
+    "MAKOSH_TELEGRAM_API_ID",
 ];
 #[cfg(feature = "prepare")]
 const DATABASE_KEYS: [&str; 3] = [
-    "HERMES_POSTGRES_DB",
-    "HERMES_POSTGRES_PASSWORD",
-    "HERMES_POSTGRES_USER",
+    "MAKOSH_POSTGRES_DB",
+    "MAKOSH_POSTGRES_PASSWORD",
+    "MAKOSH_POSTGRES_USER",
 ];
 
 pub(crate) struct LegacyProviderSourceConfigurationV1 {
@@ -59,25 +59,25 @@ pub(crate) fn parse_database_configuration(
     bytes: &[u8],
 ) -> LegacyProviderRecoveryResultV1<LegacyDatabaseSourceConfigurationV1> {
     let allowed = [
-        "HERMES_BACKEND_BIND",
-        "HERMES_BACKEND_PORT",
-        "HERMES_DEV_KEY_PATH",
-        "HERMES_DEV_MODE",
-        "HERMES_FRONTEND_BIND",
-        "HERMES_FRONTEND_PORT",
-        "HERMES_HOST_VAULT_HOME",
-        "HERMES_LOCAL_API_SECRET",
-        "HERMES_OLLAMA_BASE_URL",
-        "HERMES_OLLAMA_CHAT_MODEL",
-        "HERMES_OLLAMA_EMBED_MODEL",
-        "HERMES_OLLAMA_TIMEOUT_SECONDS",
-        "HERMES_POSTGRES_BIND",
-        "HERMES_POSTGRES_DB",
-        "HERMES_POSTGRES_PASSWORD",
-        "HERMES_POSTGRES_PORT",
-        "HERMES_POSTGRES_USER",
-        "HERMES_SECRET_VAULT_KEY",
-        "HERMES_VAULT_HOME",
+        "MAKOSH_BACKEND_BIND",
+        "MAKOSH_BACKEND_PORT",
+        "MAKOSH_DEV_KEY_PATH",
+        "MAKOSH_DEV_MODE",
+        "MAKOSH_FRONTEND_BIND",
+        "MAKOSH_FRONTEND_PORT",
+        "MAKOSH_HOST_VAULT_HOME",
+        "MAKOSH_LOCAL_API_SECRET",
+        "MAKOSH_OLLAMA_BASE_URL",
+        "MAKOSH_OLLAMA_CHAT_MODEL",
+        "MAKOSH_OLLAMA_EMBED_MODEL",
+        "MAKOSH_OLLAMA_TIMEOUT_SECONDS",
+        "MAKOSH_POSTGRES_BIND",
+        "MAKOSH_POSTGRES_DB",
+        "MAKOSH_POSTGRES_PASSWORD",
+        "MAKOSH_POSTGRES_PORT",
+        "MAKOSH_POSTGRES_USER",
+        "MAKOSH_SECRET_VAULT_KEY",
+        "MAKOSH_VAULT_HOME",
     ]
     .into_iter()
     .collect();
@@ -159,9 +159,9 @@ mod tests {
     fn provider_parser_accepts_only_exact_literal_keys() {
         let parsed = parse_provider_configuration(
             br#"
-            export HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH="/private/oauth.json"
-            export HERMES_TELEGRAM_API_HASH='private-hash'
-            export HERMES_TELEGRAM_API_ID=12345
+            export MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH="/private/oauth.json"
+            export MAKOSH_TELEGRAM_API_HASH='private-hash'
+            export MAKOSH_TELEGRAM_API_ID=12345
             "#,
         )
         .expect("parse exact provider configuration");
@@ -177,14 +177,14 @@ mod tests {
     fn provider_parser_rejects_shell_evaluation_and_unknown_keys() {
         assert_eq!(
             parse_provider_configuration(
-                b"HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH=$(echo bad)\nHERMES_TELEGRAM_API_HASH=x\nHERMES_TELEGRAM_API_ID=1",
+                b"MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH=$(echo bad)\nMAKOSH_TELEGRAM_API_HASH=x\nMAKOSH_TELEGRAM_API_ID=1",
             )
             .err(),
             Some(LegacyProviderRecoveryErrorV1::InvalidConfiguration),
         );
         assert_eq!(
             parse_provider_configuration(
-                b"HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH=/private/oauth.json\nHERMES_TELEGRAM_API_HASH=x\nHERMES_TELEGRAM_API_ID=1\nUNKNOWN=value",
+                b"MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH=/private/oauth.json\nMAKOSH_TELEGRAM_API_HASH=x\nMAKOSH_TELEGRAM_API_ID=1\nUNKNOWN=value",
             )
             .err(),
             Some(LegacyProviderRecoveryErrorV1::InvalidConfiguration),

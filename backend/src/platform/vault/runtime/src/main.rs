@@ -11,9 +11,9 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::AtomicBool;
 
 use clap::{Parser, Subcommand};
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_store_sqlcipher::VaultStore;
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_store_sqlcipher::VaultStore;
 
 #[derive(Parser)]
 struct CommandLine {

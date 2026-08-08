@@ -96,7 +96,7 @@ fn start_external_process(paths: &ProcessPaths) -> Result<std::process::Child, S
         .and_then(|current| {
             Command::new(current)
                 .args(["external_runtime_process_fixture", "--nocapture"])
-                .env("HERMES_EXTERNAL_STORAGE_PROCESS_CONFIG", &paths.config)
+                .env("MAKOSH_EXTERNAL_STORAGE_PROCESS_CONFIG", &paths.config)
                 .spawn()
                 .map_err(|error| error.to_string())
         })

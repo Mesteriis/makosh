@@ -13,8 +13,8 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-spinner',
-  `hermes-spinner--${props.size}`,
+  'makosh-spinner',
+  `makosh-spinner--${props.size}`,
   props.class
 ])
 
@@ -24,7 +24,7 @@ const ariaLabel = computed(() => props.decorative ? undefined : props.label)
 
 <template>
   <span :class="classes" :role="role" :aria-label="ariaLabel">
-    <span class="hermes-spinner-mark" aria-hidden="true" />
-    <span v-if="!decorative && label" class="hermes-sr-only">{{ label }}</span>
+    <span class="makosh-spinner-mark" aria-hidden="true" />
+    <span v-if="!decorative && label" class="makosh-sr-only">{{ label }}</span>
   </span>
 </template>

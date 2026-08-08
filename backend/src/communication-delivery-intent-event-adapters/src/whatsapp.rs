@@ -1,5 +1,5 @@
-use hermes_events_protocol::{delivery::OutboxRecordV1, v1::ResultOutcomeV1};
-use hermes_whatsapp_delivery_intent_contract::{
+use makosh_events_protocol::{delivery::OutboxRecordV1, v1::ResultOutcomeV1};
+use makosh_whatsapp_delivery_intent_contract::{
     WHATSAPP_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1, WHATSAPP_DELIVERY_INTENT_TARGET_MODULE_ID_V1,
     validate_whatsapp_delivery_intent_execute_v1, validate_whatsapp_delivery_intent_rejected_v1,
     validate_whatsapp_delivery_intent_succeeded_v1,
@@ -19,7 +19,7 @@ use crate::{
     decode_result_envelope_v1, validate_result_identity_v1,
 };
 
-const MESSAGE_DOMAIN: &[u8] = b"hermes.whatsapp.delivery-intent.execute.v1";
+const MESSAGE_DOMAIN: &[u8] = b"makosh.whatsapp.delivery-intent.execute.v1";
 
 pub fn build_execute_outbox_v1(
     intent_id: [u8; 16],

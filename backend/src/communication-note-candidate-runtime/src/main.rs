@@ -9,17 +9,17 @@ use std::{
     time::Duration,
 };
 
-use hermes_communication_note_candidate_persistence::{
+use makosh_communication_note_candidate_persistence::{
     CommunicationNoteCandidatePersistenceErrorV1,
     communication_note_candidate_extraction_storage_bundle_v1,
 };
-use hermes_communication_note_candidate_runtime::{
+use makosh_communication_note_candidate_runtime::{
     CommunicationNoteCandidateManagedRuntimeErrorV1, CommunicationNoteCandidateManagedRuntimeV1,
     CommunicationNoteCandidateRuntimeAdmissionV1,
     communication_note_candidate_module_descriptor_v1,
     communication_note_candidate_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,

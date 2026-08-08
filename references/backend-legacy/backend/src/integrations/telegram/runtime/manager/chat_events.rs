@@ -1,5 +1,5 @@
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 use sqlx::PgPool;
 
@@ -23,7 +23,7 @@ use crate::integrations::telegram::tdjson::parsing::events::{
 use crate::integrations::telegram::tdjson::snapshots::TelegramTdlibChatFolderSnapshot;
 use crate::platform::events::bus::InMemoryEventBus;
 use crate::platform::events::bus::telegram_event_types;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use super::chat_event_payloads::{
     chat_archived_updated_event, chat_folder_labels_updated_event,

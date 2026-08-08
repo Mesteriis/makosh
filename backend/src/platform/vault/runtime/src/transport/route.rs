@@ -1,8 +1,8 @@
 //! Private execution of an opaque, Kernel-fenced Vault ciphertext route.
 
-use hermes_runtime_protocol::v1::{VaultCiphertextResponseV1, VaultCiphertextRouteV1};
-use hermes_runtime_protocol::validation::vault::validate_vault_ciphertext_route_v1;
-use hermes_vault_protocol::{
+use makosh_runtime_protocol::v1::{VaultCiphertextResponseV1, VaultCiphertextRouteV1};
+use makosh_runtime_protocol::validation::vault::validate_vault_ciphertext_route_v1;
+use makosh_vault_protocol::{
     LeaseAudienceV1, VaultCiphertextFrameV1, VaultTransportBindingV1, VaultTransportDirectionV1,
     VaultTransportSessionV1,
 };
@@ -49,7 +49,7 @@ pub fn execute_route(
         execute_session(replay_guard, keys, service, &session, now_unix_seconds)
     }
     .map_err(|error| {
-        if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+        if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
             return format!("developer Vault ciphertext route was denied: {error:?}");
         }
         "Vault ciphertext route was denied".to_owned()
@@ -70,7 +70,7 @@ pub(crate) fn verify_kernel_authorization(
         .map_err(|_| "Vault route authorization is invalid".to_owned())?;
     let mut unsigned = route.clone();
     unsigned.kernel_authorization_signature_raw.clear();
-    let mut message = b"hermes.vault-route-authorization.v1\0".to_vec();
+    let mut message = b"makosh.vault-route-authorization.v1\0".to_vec();
     message.extend_from_slice(&unsigned.encode_to_vec());
     verifying_key
         .verify(&message, &signature)

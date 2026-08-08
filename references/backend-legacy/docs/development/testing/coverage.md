@@ -10,4 +10,4 @@ Commands:
 
 Important constraint:
 
-Coverage commands also run through the `hermes_test_session` harness so integration tests keep the same testcontainer lifecycle guarantees as normal backend runs.
+Coverage commands also run through the `makosh_test_session` harness so integration tests keep the same testcontainer lifecycle guarantees as normal backend runs.

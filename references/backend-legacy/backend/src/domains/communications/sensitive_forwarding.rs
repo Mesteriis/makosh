@@ -1,10 +1,10 @@
 use chrono::{DateTime, NaiveTime, Utc};
-use hermes_communications_api::content_egress::AccountContentEgressPermissions;
-use hermes_communications_api::sensitive_forwarding::{
+use makosh_communications_api::content_egress::AccountContentEgressPermissions;
+use makosh_communications_api::sensitive_forwarding::{
     NewSensitiveForwardingPolicy, SensitiveForwardingDispatchReport, SensitiveForwardingRequest,
     SensitiveForwardingSuppression, StoredSensitiveForwardingPolicy,
 };
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::{Value, json};
 use sqlx::postgres::{PgPool, PgRow};
 use sqlx::{Row, Transaction};
@@ -18,8 +18,8 @@ use crate::domains::communications::outbox::{
     CommunicationOutboxError, CommunicationOutboxItem, CommunicationOutboxStatus,
     NewCommunicationOutboxItem, enqueue_in_transaction,
 };
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::store::EventStore;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum SensitiveForwardingOutcome {
@@ -572,7 +572,7 @@ fn sensitive_forwarding_queued_event(
             "account_id": request.source_account_id,
         }),
     )
-    .actor(json!({ "actor_id": "hermes-mail-automation" }))
+    .actor(json!({ "actor_id": "makosh-mail-automation" }))
     .payload(json!({
         "policy_id": policy.policy_id,
         "outbox_id": outbox.outbox_id,
@@ -619,7 +619,7 @@ pub enum SensitiveForwardingError {
 #[cfg(test)]
 mod tests {
     use chrono::{TimeZone, Utc};
-    use hermes_backend_testkit::context::TestContext;
+    use makosh_backend_testkit::context::TestContext;
     use serde_json::json;
 
     use super::{
@@ -630,10 +630,10 @@ mod tests {
     };
     use crate::domains::communications::messages::models::NewProjectedMessage;
     use crate::domains::communications::messages::store::MessageProjectionStore;
-    use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-    use hermes_communications_api::evidence::NewRawCommunicationRecord;
-    use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
-    use hermes_communications_postgres::store::CommunicationIngestionStore;
+    use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+    use makosh_communications_api::evidence::NewRawCommunicationRecord;
+    use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
+    use makosh_communications_postgres::store::CommunicationIngestionStore;
 
     fn policy() -> NewSensitiveForwardingPolicy {
         NewSensitiveForwardingPolicy {

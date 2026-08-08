@@ -6,14 +6,14 @@ use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-use hermes_mail_retained_evidence_replay_persistence::RetainedMailReplayErrorV1;
-use hermes_mail_runtime::managed::{
+use makosh_mail_retained_evidence_replay_persistence::RetainedMailReplayErrorV1;
+use makosh_mail_runtime::managed::{
     CompletedImapSyncProviderOperationV1, ImapSyncProviderPageDeliveryV1,
     MailDeliveryDispatchErrorV1, MailMessageFlagDispatchErrorV1,
     MailMessageLocationDispatchErrorV1, MailMessagePermanentDeleteDispatchErrorV1,
     execute_imap_sync_provider_operation,
 };
-use hermes_mail_runtime::{
+use makosh_mail_runtime::{
     MailRuntimeAdmission,
     address_book_consumer::MailAddressBookConsumeErrorV1,
     address_book_fetch_worker::{
@@ -41,7 +41,7 @@ use hermes_mail_runtime::{
     retained_evidence_replay_result::MailReplayResultRelayErrorV1,
     settings,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedIntegrationRuntimeConfigurationV1,
     validation::{
         descriptor::{
@@ -501,7 +501,7 @@ where
             | Err(MailReplayCommandConsumeErrorV1::EventUnavailable)
             | Err(MailReplayCommandConsumeErrorV1::ReplayRetryable)
             | Err(MailReplayCommandConsumeErrorV1::Persistence(
-                hermes_mail_retained_evidence_replay_persistence::RetainedMailReplayErrorV1::StorageUnavailable,
+                makosh_mail_retained_evidence_replay_persistence::RetainedMailReplayErrorV1::StorageUnavailable,
             )) => {}
             Err(error) => {
                 developer_diagnostic(&format!("developer_mail_replay_command_error={error:?}"));
@@ -556,7 +556,7 @@ where
             Ok(_)
             | Err(MailReplayResultRelayErrorV1::EventUnavailable)
             | Err(MailReplayResultRelayErrorV1::Persistence(
-                hermes_mail_retained_evidence_replay_persistence::RetainedMailReplayErrorV1::StorageUnavailable,
+                makosh_mail_retained_evidence_replay_persistence::RetainedMailReplayErrorV1::StorageUnavailable,
             )) => {}
             Err(error) => {
                 developer_diagnostic(&format!("developer_mail_replay_result_error={error:?}"));
@@ -775,7 +775,7 @@ fn defer_runtime_tick() {
 }
 
 fn developer_diagnostic(message: &str) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("{message}");
     }
 }

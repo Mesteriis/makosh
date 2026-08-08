@@ -3,7 +3,7 @@
 use std::io::{self, Write};
 use std::path::PathBuf;
 
-use hermes_gateway_protocol::owner_control_client::{
+use makosh_gateway_protocol::owner_control_client::{
     OwnerControlClientV1, OwnerControlProofSignerV1,
 };
 

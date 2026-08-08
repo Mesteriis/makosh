@@ -30,13 +30,13 @@ business queries. Module runtimes ходят только через PgBouncer. 
 ## Packages
 
 ```text
-backend/src/platform/storage/protocol/     hermes-storage-protocol
-backend/src/platform/storage/control/      hermes-storage-control
-backend/src/platform/storage/vault/        hermes-storage-vault
-backend/src/platform/storage/runtime/      hermes-storage-runtime
-backend/src/platform/storage/postgres/     hermes-storage-postgres
-backend/src/platform/storage/pgbouncer/    hermes-storage-pgbouncer
-backend/src/platform/storage/migrations/   hermes-storage-migrations
+backend/src/platform/storage/protocol/     makosh-storage-protocol
+backend/src/platform/storage/control/      makosh-storage-control
+backend/src/platform/storage/vault/        makosh-storage-vault
+backend/src/platform/storage/runtime/      makosh-storage-runtime
+backend/src/platform/storage/postgres/     makosh-storage-postgres
+backend/src/platform/storage/pgbouncer/    makosh-storage-pgbouncer
+backend/src/platform/storage/migrations/   makosh-storage-migrations
 ```
 
 Только protocol является public dependency Kernel/modules. SQL-free control
@@ -47,12 +47,12 @@ Control не зависит от всех owner persistence packages.
 
 ## Data boundary
 
-Используются один managed PostgreSQL cluster, одна Hermes database и три fixed
+Используются один managed PostgreSQL cluster, одна Макошь database и три fixed
 schemas:
 
-- `hermes_data` — owner-prefixed business/provider objects;
-- `hermes_platform` — technical state, ledgers и shared outbox/inbox;
-- `hermes_extensions` — extension-owned objects.
+- `makosh_data` — owner-prefixed business/provider objects;
+- `makosh_platform` — technical state, ledgers и shared outbox/inbox;
+- `makosh_extensions` — extension-owned objects.
 
 `PUBLIC CREATE` отозван. Runtime `search_path` содержит только `pg_catalog`, SQL
 всегда schema-qualified. Каждый durable owner имеет `NOLOGIN` DDL role и
@@ -137,7 +137,7 @@ Storage Vault adapter формирует fenced ciphertext-only `RevokeAudience`
 принимает только AAD-bound encrypted response. Concrete trusted
 managed Storage→Kernel dispatcher уже существует: он сверяет registration,
 caller runtime generation, grant epoch и active Vault generation, затем
-подписывает и relay-ит opaque route. `hermes-storage-runtime serve-inherited`
+подписывает и relay-ит opaque route. `makosh-storage-runtime serve-inherited`
 уже принимает только descriptor-bound inherited FD и обслуживает typed status,
 привязанный к exact managed runtime generation. Private owner control сохраняет
 non-secret desired topology с monotonic revision и завершает active runtime

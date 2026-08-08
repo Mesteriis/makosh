@@ -7,14 +7,14 @@ import path from 'node:path';
 import test from 'node:test';
 
 const BACKEND = path.resolve(import.meta.dirname, '../..');
-const COLLECTOR = path.join(BACKEND, 'target/debug/hermes-telemetry-collector');
+const COLLECTOR = path.join(BACKEND, 'target/debug/makosh-telemetry-collector');
 
 test('collector accepts one bounded private telemetry frame into a segment', async () => {
-  execFileSync('cargo', ['+1.97.0', 'build', '-p', 'hermes-telemetry-collector'], {
+  execFileSync('cargo', ['+1.97.0', 'build', '-p', 'makosh-telemetry-collector'], {
     cwd: BACKEND,
     stdio: 'ignore',
   });
-  const root = await mkdtemp(path.join(os.tmpdir(), 'hermes-telemetry-'));
+  const root = await mkdtemp(path.join(os.tmpdir(), 'makosh-telemetry-'));
   const dataDir = path.join(root, 'data');
   const runtimeDir = path.join(root, 'runtime');
   const child = spawn(COLLECTOR, ['serve', '--data-dir', dataDir, '--runtime-dir', runtimeDir], { stdio: 'ignore' });
@@ -33,11 +33,11 @@ test('collector accepts one bounded private telemetry frame into a segment', asy
 });
 
 test('collector reserves bounded diagnostic capacity after normal producer quota', async () => {
-  execFileSync('cargo', ['+1.97.0', 'build', '-p', 'hermes-telemetry-collector'], {
+  execFileSync('cargo', ['+1.97.0', 'build', '-p', 'makosh-telemetry-collector'], {
     cwd: BACKEND,
     stdio: 'ignore',
   });
-  const root = await mkdtemp(path.join(os.tmpdir(), 'hermes-telemetry-'));
+  const root = await mkdtemp(path.join(os.tmpdir(), 'makosh-telemetry-'));
   const dataDir = path.join(root, 'data');
   const runtimeDir = path.join(root, 'runtime');
   const child = spawn(COLLECTOR, ['serve', '--data-dir', dataDir, '--runtime-dir', runtimeDir], { stdio: 'ignore' });
@@ -60,7 +60,7 @@ test('collector reserves bounded diagnostic capacity after normal producer quota
 });
 
 test('collector restart retains finalized segments after an unclean stop', async () => {
-  const root = await mkdtemp(path.join(os.tmpdir(), 'hermes-telemetry-'));
+  const root = await mkdtemp(path.join(os.tmpdir(), 'makosh-telemetry-'));
   const dataDir = path.join(root, 'data');
   const runtimeDir = path.join(root, 'runtime');
   let child = spawnCollector(dataDir, runtimeDir);
@@ -85,7 +85,7 @@ test('collector restart retains finalized segments after an unclean stop', async
 });
 
 test('collector inherited launch rejects a missing settings schema contract', async () => {
-  const root = await mkdtemp(path.join(os.tmpdir(), 'hermes-telemetry-'));
+  const root = await mkdtemp(path.join(os.tmpdir(), 'makosh-telemetry-'));
   const child = spawn(COLLECTOR, [
     'serve-inherited',
     '--data-dir', path.join(root, 'data'),

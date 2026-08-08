@@ -32,11 +32,11 @@ const sources = {
   gateway: new URL('src/kernel/src/platform/gateway.rs', BACKEND_ROOT),
   cli: new URL('src/kernel/src/cli/mod.rs', BACKEND_ROOT),
   protocol: new URL(
-    'src/api/gateway/contracts/proto/hermes/gateway/v1/browser_session.proto',
+    'src/api/gateway/contracts/proto/makosh/gateway/v1/browser_session.proto',
     BACKEND_ROOT,
   ),
   ownerControl: new URL(
-    'src/api/gateway/contracts/proto/hermes/gateway/v1/owner_control.proto',
+    'src/api/gateway/contracts/proto/makosh/gateway/v1/owner_control.proto',
     BACKEND_ROOT,
   ),
 };
@@ -78,7 +78,7 @@ test('root make dev owns one loopback full-stack browser assembly', async () => 
   assert.match(assembly, /run_compose up --detach --wait/);
   assert.match(
     assembly,
-    /run_compose exec --no-TTY pgbouncer[\s\\]+test -r \/etc\/pgbouncer\/pgbouncer\.ini[\s\\]+-a -r \/etc\/hermes\/runtime\/databases\.ini[\s\\]+-a -r \/etc\/hermes\/auth\/users\.txt/,
+    /run_compose exec --no-TTY pgbouncer[\s\\]+test -r \/etc\/pgbouncer\/pgbouncer\.ini[\s\\]+-a -r \/etc\/makosh\/runtime\/databases\.ini[\s\\]+-a -r \/etc\/makosh\/auth\/users\.txt/,
   );
   assert.match(
     assembly,
@@ -89,27 +89,27 @@ test('root make dev owns one loopback full-stack browser assembly', async () => 
   assert.match(authenticatedCompose, /image: clamav\/clamav:1\.5\.3-debian13-slim/);
   assert.match(
     authenticatedCompose,
-    /- hermes-authenticated-development-nats:\/var\/lib\/hermes/,
+    /- makosh-authenticated-development-nats:\/var\/lib\/makosh/,
     'JetStream state must survive a normal development ensemble restart',
   );
   assert.match(
     authenticatedCompose,
-    /- hermes-authenticated-development-postgres:\/var\/lib\/postgresql\/data/,
+    /- makosh-authenticated-development-postgres:\/var\/lib\/postgresql\/data/,
     'authenticated PostgreSQL must not rely on an anonymous Docker volume',
   );
   assert.match(
     authenticatedCompose,
-    /^volumes:\n  hermes-authenticated-development-nats:\n  hermes-authenticated-development-postgres:/m,
+    /^volumes:\n  makosh-authenticated-development-nats:\n  makosh-authenticated-development-postgres:/m,
   );
   assert.match(
     authenticatedCompose,
-    /\.\/nats-server\.conf:\/etc\/nats\/hermes-development\.conf:ro/,
+    /\.\/nats-server\.conf:\/etc\/nats\/makosh-development\.conf:ro/,
   );
   assert.match(authenticatedNats, /^max_control_line: 16384$/m);
   assert.doesNotMatch(authenticatedNats, /authorization|password|token|users/i);
   assert.match(
     authenticatedCompose,
-    /127\.0\.0\.1:\$\{HERMES_ATTACHMENT_SECURITY_CLAMAV_PORT:-3310\}:3310/,
+    /127\.0\.0\.1:\$\{MAKOSH_ATTACHMENT_SECURITY_CLAMAV_PORT:-3310\}:3310/,
   );
   assert.match(authenticatedCompose, /test: \["CMD", "clamdscan", "--ping", "1"\]/);
   assert.doesNotMatch(authenticatedCompose, /(?:^|\s)(?:0\.0\.0\.0|::):.*3310/m);
@@ -122,10 +122,10 @@ test('root make dev owns one loopback full-stack browser assembly', async () => 
   assert.match(assembly, /--distribution-generation "\$distribution_generation"/);
   assert.match(assembly, /--browser-gateway-listen-address "\$gateway_address"/);
   assert.match(assembly, /--browser-gateway-development-proxy-proof-file "\$proof_file"/);
-  assert.match(assembly, /HERMES_DEV_GATEWAY_PROOF_FILE="\$proof_file"/);
+  assert.match(assembly, /MAKOSH_DEV_GATEWAY_PROOF_FILE="\$proof_file"/);
   assert.match(assembly, /probe-dev-gateway\.mjs/);
   assert.match(assembly, /curl .*"\$browser_origin\/readyz"/);
-  assert.match(assembly, /no_browser="\$\{HERMES_DEV_NO_BROWSER:-1\}"/);
+  assert.match(assembly, /no_browser="\$\{MAKOSH_DEV_NO_BROWSER:-1\}"/);
   assert.match(assembly, /if test "\$no_browser" = 0; then[\s\S]*open "\$browser_url"/);
   assert.match(assembly, /Browser opening skipped/);
   assert.match(assembly, /trap cleanup EXIT/);
@@ -137,18 +137,18 @@ test('root make dev owns one loopback full-stack browser assembly', async () => 
   assert.doesNotMatch(assembly, /wait -n|0\.0\.0\.0|--browser-gateway-development-proxy-proof [^"-]/);
   assert.doesNotMatch(assembly, /rm -rf .*kernel-dev|rm -rf .*control|reset/);
 
-  assert.match(release, /hermes-communications-assembly/);
-  assert.match(release, /hermes-attachment-security-assembly/);
+  assert.match(release, /makosh-communications-assembly/);
+  assert.match(release, /makosh-attachment-security-assembly/);
   assert.match(release, /build-attachment-text-extraction-ocr-macos\.sh/);
-  assert.match(release, /hermes-attachment-text-extraction-assembly/);
+  assert.match(release, /makosh-attachment-text-extraction-assembly/);
   assert.match(
     release,
     /attachment_text_extraction\.release-artifacts\.json/,
   );
-  assert.match(release, /hermes-mail-assembly/);
-  assert.match(release, /hermes-telegram-assembly/);
-  assert.match(release, /hermes-whatsapp-assembly/);
-  assert.match(release, /hermes-zulip-assembly/);
+  assert.match(release, /makosh-mail-assembly/);
+  assert.match(release, /makosh-telegram-assembly/);
+  assert.match(release, /makosh-whatsapp-assembly/);
+  assert.match(release, /makosh-zulip-assembly/);
   assert.match(release, /build-distribution-release\.mjs/);
   assert.match(release, /next_distribution_generation/);
   assert.match(release, /--generation "\$distribution_generation"/);
@@ -178,12 +178,12 @@ test('root make dev owns one loopback full-stack browser assembly', async () => 
 
   assert.match(probe, /host: '127\.0\.0\.1'/);
   assert.match(probe, /origin: 'http:\/\/127\.0\.0\.1:5173'/);
-  assert.match(probe, /'x-hermes-development-proxy-proof': proof/);
+  assert.match(probe, /'x-makosh-development-proxy-proof': proof/);
   assert.doesNotMatch(probe, /console\.(?:log|error)|process\.stdout|process\.stderr/);
 
   assert.match(vite, /host: '127\.0\.0\.1'/);
   assert.match(vite, /strictPort: true/);
-  assert.match(vite, /'\^\/hermes\\\\\.'/);
+  assert.match(vite, /'\^\/makosh\\\\\.'/);
   assert.match(vite, /'\/api\/realtime\/v1\/events'/);
   assert.match(vite, /'\/healthz'/);
   assert.match(vite, /'\/readyz'/);

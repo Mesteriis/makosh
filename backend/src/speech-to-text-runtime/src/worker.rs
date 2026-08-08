@@ -1,4 +1,4 @@
-use hermes_speech_to_text_api::{
+use makosh_speech_to_text_api::{
     validate_speech_to_text_request_v1 as validate_wire_request,
     validate_speech_to_text_result_v1 as validate_wire_result,
     wire::{
@@ -8,14 +8,14 @@ use hermes_speech_to_text_api::{
         SpeechTranscriptCompletenessV1 as WireCompletenessV1,
     },
 };
-use hermes_speech_to_text_core::{
+use makosh_speech_to_text_core::{
     SpeechAudioFormatV1, SpeechBlobReceiptV1, SpeechLanguageV1, SpeechToTextExecutionReceiptV1,
     SpeechToTextRejectionV1, SpeechToTextRequestV1, SpeechToTextResultV1, SpeechToTextRunStateV1,
     SpeechToTextRunV1, SpeechToTextTerminalV1, SpeechTranscriptArtifactV1,
     SpeechTranscriptCompletenessV1, accept_speech_to_text_v1, begin_speech_to_text_v1,
     complete_speech_to_text_v1, reject_speech_to_text_v1,
 };
-use hermes_speech_to_text_persistence::{
+use makosh_speech_to_text_persistence::{
     PersistedSpeechToTextRunV1, SpeechToTextPersistenceErrorV1, SpeechToTextPersistenceV1,
     SpeechToTextTransitionV1,
 };

@@ -16,8 +16,8 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 
-use hermes_gateway_protocol::v1::RecoveryControlRequestV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_gateway_protocol::v1::RecoveryControlRequestV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use prost::Message;
 
 use crate::infrastructure::filesystem::remove_stale_owner_unix_socket;

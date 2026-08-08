@@ -1,9 +1,9 @@
 #![forbid(unsafe_code)]
 
-use hermes_communication_delayed_delivery_execution as execution;
-use hermes_communication_delayed_delivery_persistence as persistence;
+use makosh_communication_delayed_delivery_execution as execution;
+use makosh_communication_delayed_delivery_persistence as persistence;
 
-pub const PACKAGE: &str = "hermes-communication-delayed-delivery-store-adapters";
+pub const PACKAGE: &str = "makosh-communication-delayed-delivery-store-adapters";
 
 #[derive(Clone)]
 pub struct DelayedDeliveryExecutionStoreAdapterV1 {

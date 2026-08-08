@@ -1,6 +1,6 @@
 ## Summary / Резюме
 
-Чанк предоставляет исходные файлы frontend-части репозитория Hermes Hub. Необходимо обновить или создать страницу `components/frontend.md` в русской Obsidian-вики, отражающую структуру модуля, сборочные скрипты, архитектурные правила, клиентский код и интеграцию с Tauri. На основе встроенных исходников страница должна документировать обнаруженные факты и указать на выявленные расхождения с остальной кодовой базой (например, устаревший скрипт разделения CSS).
+Чанк предоставляет исходные файлы frontend-части репозитория Макошь. Необходимо обновить или создать страницу `components/frontend.md` в русской Obsidian-вики, отражающую структуру модуля, сборочные скрипты, архитектурные правила, клиентский код и интеграцию с Tauri. На основе встроенных исходников страница должна документировать обнаруженные факты и указать на выявленные расхождения с остальной кодовой базой (например, устаревший скрипт разделения CSS).
 
 ## Proposed pages / Предлагаемые страницы
 
@@ -11,7 +11,7 @@
 
 ## Обзор
 
-Модуль `frontend` является десктопным клиентом Hermes Hub на базе Vue 3 и Tauri. Он включает пользовательский интерфейс с несколькими рабочими областями, взаимодействует с backend-сервером через REST API и предоставляет Tauri-команды для интеграции с WhatsApp Web и Яндекс.Телемост.
+Модуль `frontend` является десктопным клиентом Макошь на базе Vue 3 и Tauri. Он включает пользовательский интерфейс с несколькими рабочими областями, взаимодействует с backend-сервером через REST API и предоставляет Tauri-команды для интеграции с WhatsApp Web и Яндекс.Телемост.
 
 ## Технологический стек
 
@@ -25,10 +25,10 @@
 
 | Скрипт | Назначение |
 |--------|-----------|
-| `capture-layout-screenshots.mjs` | Создаёт скриншоты всех представлений (Home, Communications, Mail, Telegram, WhatsApp, Calls, Timeline, Persons, Projects, Tasks, Calendar, Documents, Notes, Knowledge Graph, AI Agents, Settings) для нескольких вьюпортов (800×600, 1024×768, 1366×768, 1920×1080) с помощью Playwright. Фиксирует layout-метрики, ошибки консоли, выравнивание виджетов и мультиколоночные раскладки. Использует фикстуру `layoutStatusFixture` (версия 'layout-capture', поверхности `messages`, `persons`, `search`, `documents`, `account_setup`). Режимы: `baseline`, `after`; по умолчанию подключается к `http://localhost:5174/`. Результаты сохраняются во временную директорию `hermes-layout-{mode}-{timestamp}`. |
+| `capture-layout-screenshots.mjs` | Создаёт скриншоты всех представлений (Home, Communications, Mail, Telegram, WhatsApp, Calls, Timeline, Persons, Projects, Tasks, Calendar, Documents, Notes, Knowledge Graph, AI Agents, Settings) для нескольких вьюпортов (800×600, 1024×768, 1366×768, 1920×1080) с помощью Playwright. Фиксирует layout-метрики, ошибки консоли, выравнивание виджетов и мультиколоночные раскладки. Использует фикстуру `layoutStatusFixture` (версия 'layout-capture', поверхности `messages`, `persons`, `search`, `documents`, `account_setup`). Режимы: `baseline`, `after`; по умолчанию подключается к `http://localhost:5174/`. Результаты сохраняются во временную директорию `makosh-layout-{mode}-{timestamp}`. |
 | `check-component-lines.mjs` | Проверяет количество строк в продуктовых файлах с расширениями `.ts`, `.tsx`, `.vue`. Исключает тесты (файлы в `__tests__/` и с суффиксами `.test.*`/`.spec.*`) и сгенерированный код (`src/gen/`). Пороги: warning ≥ 500 строк, failure ≥ 700 строк, critical ≥ 1000 строк. При наличии failure-файлов завершается с кодом 1. Может использоваться как CLI или импортироваться. |
 | `check-no-inline-styles.mjs` | Запрещает атрибуты `style`, `:style` и `v-bind:style` в шаблонах `.vue` и `.html`. Разрешён динамический `:style` только для файлов из `dynamicLayoutStyleAllowlist` (например, `AttachmentSearchPanel.vue`, `CommunicationList.vue`, `KnowledgeGraphCanvas.vue`, `PersonsList.vue` и др.). Сканирует только секции `<template>` в `.vue`. При нарушениях завершается с кодом 1. |
-| `generate-proto.mjs` | Генерирует TypeScript-код из protobuf-определений через `protoc` с плагином `protoc-gen-es`. Входные `.proto` файлы: `contracts/proto/hermes/common/v1/common.proto`, `hermes/events/v1/event_envelope.proto`, `hermes/signal_hub/v1/signal_hub.proto`, `hermes/communications/v1/communications.proto`. Результат помещается в `frontend/src/gen` с опцией `target=ts`. |
+| `generate-proto.mjs` | Генерирует TypeScript-код из protobuf-определений через `protoc` с плагином `protoc-gen-es`. Входные `.proto` файлы: `contracts/proto/makosh/common/v1/common.proto`, `makosh/events/v1/event_envelope.proto`, `makosh/signal_hub/v1/signal_hub.proto`, `makosh/communications/v1/communications.proto`. Результат помещается в `frontend/src/gen` с опцией `target=ts`. |
 | `split-css.py` | Парсит плоский CSS, разбивает на блоки правил и распределяет по тематическим группам на основе префиксов классов. Группы: `vault` (`.vault-`), `sidebar`, `topbar`, `notifications`, `panels`, `pages`. Для каждой группы генерируется отдельный CSS-файл, и определяется инструкция импорта. Обрабатывает вложенные `@media`. **Примечание: скрипт ссылается на Svelte-компоненты и пути (`$lib`, `.svelte`), что не соответствует текущему Vue-коду (см. раздел «Кандидаты на drift»).** |
 
 ### Проверки на уровне архитектуры
@@ -43,7 +43,7 @@
   - Подключает плагин `tauri-plugin-shell`.
   - Регистрирует все команды из `whatsapp_companion` и `yandex_telemost_companion`.
   - В режиме отладки включает логирование через `tauri-plugin-log` на уровне `Info`.
-  - Создаёт `BackendSidecar` для запуска backend-процесса (sidecar `hermes-hub-backend`) с переменными окружения: `HERMES_HTTP_ADDR=127.0.0.1:8080`, `HERMES_LOCAL_API_SECRET`, а также опционально пробрасывает `DATABASE_URL`, `HERMES_SECRET_VAULT_KEY`, параметры Ollama, Google OAuth, Telegram API ID/Hash, путь к tdlib. Запуск sidecar можно отключить переменной `HERMES_DISABLE_BACKEND_SIDECAR`.
+  - Создаёт `BackendSidecar` для запуска backend-процесса (sidecar `makosh-backend`) с переменными окружения: `MAKOSH_HTTP_ADDR=127.0.0.1:8080`, `MAKOSH_LOCAL_API_SECRET`, а также опционально пробрасывает `DATABASE_URL`, `MAKOSH_SECRET_VAULT_KEY`, параметры Ollama, Google OAuth, Telegram API ID/Hash, путь к tdlib. Запуск sidecar можно отключить переменной `MAKOSH_DISABLE_BACKEND_SIDECAR`.
   - Пытается найти bundled `tdlib` (под разные платформы macOS arm64/x64, universal) и Google OAuth конфиг (`client_secret.json`).
 - `src/main.rs` — точка входа, вызывает `app_lib::run()`, предотвращает дополнительное окно консоли на Windows в релизе.
 - `src/whatsapp_companion.rs` — интеграция с WhatsApp Web:
@@ -101,7 +101,7 @@
 
 - Отклоняет пустой secret.
 - Убирает концевой слеш у `baseUrl`.
-- Отправляет HTTP-запросы (`GET`, `POST`, `DELETE`) с заголовком `X-Hermes-Secret`, в POST-запросах — `Content-Type: application/json`.
+- Отправляет HTTP-запросы (`GET`, `POST`, `DELETE`) с заголовком `X-Макошь-Secret`, в POST-запросах — `Content-Type: application/json`.
 - Для ответа 204 возвращает `undefined`.
 - При не-OK статусе выбрасывает ошибку с полями `message` (текст ответа или fallback) и `status`.
 

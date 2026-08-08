@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/communication_delivery_intent/v1/delivery.proto"],
+            &["proto/makosh/communication_delivery_intent/v1/delivery.proto"],
             &["proto"],
         )
         .expect("Communication delivery intent protocol must compile");

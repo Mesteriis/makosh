@@ -1,6 +1,6 @@
 //! Immutable Mail-owned schema bundle for future independent Storage admission.
 
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use sha2::{Digest, Sha256};
 
 use crate::{
@@ -41,7 +41,7 @@ pub const MAIL_ICLOUD_CARDDAV_CREDENTIAL_STORAGE_BUNDLE_REVISION_V1: u32 = 29;
 pub const MAIL_SYNC_DEADLINE_FAILURE_STORAGE_BUNDLE_REVISION_V1: u32 = 31;
 
 pub const MAIL_SYNC_DEADLINE_FAILURE_SCHEMA_V1: &str = r#"
-ALTER TABLE hermes_data.mail_sync_runs
+ALTER TABLE makosh_data.mail_sync_runs
     ADD COLUMN deadline_exceeded BOOLEAN NOT NULL DEFAULT FALSE;
 "#;
 
@@ -202,7 +202,7 @@ pub fn append_mail_icloud_carddav_credential_storage_v1(
         || predecessor.bundle_id != "mail_state"
         || predecessor.owner_id != "mail"
         || predecessor.steps.last().map(|step| step.revision) != Some(predecessor.revision)
-        || hermes_storage_protocol::validation::validate_storage_bundle(&predecessor).is_err()
+        || makosh_storage_protocol::validation::validate_storage_bundle(&predecessor).is_err()
     {
         return Err(MailIcloudCardDavCredentialSchemaErrorV1::InvalidPredecessor);
     }
@@ -213,7 +213,7 @@ pub fn append_mail_icloud_carddav_credential_storage_v1(
         sha256: Sha256::digest(MAIL_ICLOUD_CARDDAV_CREDENTIAL_SCHEMA_V1.as_bytes()).to_vec(),
     });
     predecessor.revision = MAIL_ICLOUD_CARDDAV_CREDENTIAL_STORAGE_BUNDLE_REVISION_V1;
-    hermes_storage_protocol::validation::validate_storage_bundle(&predecessor)
+    makosh_storage_protocol::validation::validate_storage_bundle(&predecessor)
         .map(|()| predecessor)
         .map_err(|_| MailIcloudCardDavCredentialSchemaErrorV1::InvalidSuccessor)
 }
@@ -226,7 +226,7 @@ pub fn append_mail_sync_deadline_failure_storage_v1(
         || predecessor.bundle_id != "mail_state"
         || predecessor.owner_id != "mail"
         || predecessor.steps.last().map(|step| step.revision) != Some(predecessor.revision)
-        || hermes_storage_protocol::validation::validate_storage_bundle(&predecessor).is_err()
+        || makosh_storage_protocol::validation::validate_storage_bundle(&predecessor).is_err()
     {
         return Err(MailSyncDeadlineFailureSchemaErrorV1::InvalidPredecessor);
     }
@@ -237,14 +237,14 @@ pub fn append_mail_sync_deadline_failure_storage_v1(
         sha256: Sha256::digest(MAIL_SYNC_DEADLINE_FAILURE_SCHEMA_V1.as_bytes()).to_vec(),
     });
     predecessor.revision = MAIL_SYNC_DEADLINE_FAILURE_STORAGE_BUNDLE_REVISION_V1;
-    hermes_storage_protocol::validation::validate_storage_bundle(&predecessor)
+    makosh_storage_protocol::validation::validate_storage_bundle(&predecessor)
         .map(|()| predecessor)
         .map_err(|_| MailSyncDeadlineFailureSchemaErrorV1::InvalidSuccessor)
 }
 
 #[cfg(test)]
 mod tests {
-    use hermes_storage_protocol::validation::validate_storage_bundle;
+    use makosh_storage_protocol::validation::validate_storage_bundle;
 
     use super::*;
 
@@ -267,10 +267,10 @@ mod tests {
             .join("\n");
         assert_eq!(sql.matches("CREATE TABLE IF NOT EXISTS ").count(), 39);
         assert_eq!(
-            sql.matches("CREATE TABLE IF NOT EXISTS hermes_data.")
+            sql.matches("CREATE TABLE IF NOT EXISTS makosh_data.")
                 .count(),
             39,
-            "every Mail table belongs to the owner-scoped hermes_data schema"
+            "every Mail table belongs to the owner-scoped makosh_data schema"
         );
         assert!(sql.contains("mail_attachment_security_outbox"));
         assert!(sql.contains("mail_delivery_queue"));
@@ -301,7 +301,7 @@ mod tests {
         assert!(sql.contains("mail_message_location_operations"));
         assert!(sql.contains("mail_message_permanent_delete_operations"));
         assert!(sql.contains("mail_imap_message_locators"));
-        assert!(!sql.contains("hermes_data.attachment_security_"));
+        assert!(!sql.contains("makosh_data.attachment_security_"));
     }
 
     #[test]
@@ -312,9 +312,9 @@ mod tests {
             revision: 28,
             migration_id: "mail_address_book_predecessor".to_owned(),
             forward_sql_utf8:
-                b"CREATE TABLE hermes_data.mail_address_book_predecessor (id BIGINT);".to_vec(),
+                b"CREATE TABLE makosh_data.mail_address_book_predecessor (id BIGINT);".to_vec(),
             sha256: Sha256::digest(
-                b"CREATE TABLE hermes_data.mail_address_book_predecessor (id BIGINT);",
+                b"CREATE TABLE makosh_data.mail_address_book_predecessor (id BIGINT);",
             )
             .to_vec(),
         });
@@ -336,10 +336,10 @@ mod tests {
         predecessor.steps.push(StorageMigrationStepV1 {
             revision: MAIL_ICLOUD_CARDDAV_CREDENTIAL_STORAGE_BUNDLE_REVISION_V1,
             migration_id: "mail_revision_29_predecessor".to_owned(),
-            forward_sql_utf8: b"CREATE TABLE hermes_data.mail_revision_29_predecessor (id BIGINT);"
+            forward_sql_utf8: b"CREATE TABLE makosh_data.mail_revision_29_predecessor (id BIGINT);"
                 .to_vec(),
             sha256: Sha256::digest(
-                b"CREATE TABLE hermes_data.mail_revision_29_predecessor (id BIGINT);",
+                b"CREATE TABLE makosh_data.mail_revision_29_predecessor (id BIGINT);",
             )
             .to_vec(),
         });

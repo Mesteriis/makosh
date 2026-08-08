@@ -1,4 +1,4 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use serde_json::json;
 use sqlx::PgPool;
 
@@ -380,7 +380,7 @@ async fn publish_chat_position_event_reconciles_folder_add_and_remove_commands()
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({"provider_folder_id": 7}),
         json!({"telegram_chat_id": chat.telegram_chat_id, "provider_chat_id": provider_chat_id}),
         json!({"source": "runtime-test"}),
@@ -398,7 +398,7 @@ async fn publish_chat_position_event_reconciles_folder_add_and_remove_commands()
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({"provider_folder_id": 7}),
         json!({"telegram_chat_id": chat.telegram_chat_id, "provider_chat_id": provider_chat_id}),
         json!({"source": "runtime-test"}),
@@ -542,7 +542,7 @@ async fn publish_chat_unread_event_reconciles_mark_read_command_and_emits_events
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_runtime",
             "last_read_inbox_provider_message_id": target_message_id,

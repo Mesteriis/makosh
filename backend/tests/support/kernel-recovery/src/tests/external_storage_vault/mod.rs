@@ -44,7 +44,7 @@ fn external_runtime_receives_rotated_credential_only_while_its_attestation_is_cu
 
 fn resolve<T>(
     adapter: &mut StorageVaultLeaseAdapterV1<T>,
-    binding: &hermes_storage_protocol::StorageBindingV1,
+    binding: &makosh_storage_protocol::StorageBindingV1,
 ) -> Vec<u8>
 where
     T: crate::vault::StorageVaultRoutePortV1 + Send,

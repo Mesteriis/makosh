@@ -70,7 +70,7 @@ outside the current UI slice.
 
 | Method | Path | Описание |
 |---|---|---|
-| GET | `/api/events/ws?after_position=&hermes_secret=` | Protected WebSocket event stream with replay/heartbeat |
+| GET | `/api/events/ws?after_position=&makosh_secret=` | Protected WebSocket event stream with replay/heartbeat |
 | GET | `/api/events/stream?after_position=` | Protected SSE stream |
 | GET | `/api/v1/events?after_position=&limit=&wait_seconds=` | Protected JSON replay/long-poll fallback |
 | POST | `/api/v1/events` | Local event API command boundary |
@@ -289,7 +289,7 @@ Current media download lifecycle events carry:
 When the database-backed event log is configured, these same typed events are
 also appended into canonical `event_log`, so they are available through:
 
-- `GET /api/events/ws?after_position=&hermes_secret=`;
+- `GET /api/events/ws?after_position=&makosh_secret=`;
 - `GET /api/events/stream?after_position=`;
 - `GET /api/v1/events?after_position=&limit=&wait_seconds=`.
 

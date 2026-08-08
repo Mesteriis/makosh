@@ -29,6 +29,6 @@ pub use managed_runtime::{
     DelayedDeliveryRuntimeAdmissionV1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-delayed-delivery-runtime";
+pub const PACKAGE: &str = "makosh-communication-delayed-delivery-runtime";
 pub const COMMUNICATION_DELAYED_DELIVERY_BLOB_CAPABILITY_ID_V1: &str =
     "communication.delayed_delivery.blob.v1";

@@ -72,23 +72,23 @@ Production runtime identity:
 
 ```text
 owner_id  = zulip
-module_id = hermes-zulip-runtime
+module_id = makosh-zulip-runtime
 ```
 
 Zulip source units:
 
 ```text
-hermes-zulip-api          generated provider operational contracts
-hermes-zulip-core         provider anti-corruption and neutral evidence mapper
-hermes-zulip-http         HTTPS protocol adapter
-hermes-zulip-persistence  owner-local PostgreSQL state and outbox
-hermes-zulip-runtime      managed application/runtime composition
+makosh-zulip-api          generated provider operational contracts
+makosh-zulip-core         provider anti-corruption and neutral evidence mapper
+makosh-zulip-http         HTTPS protocol adapter
+makosh-zulip-persistence  owner-local PostgreSQL state and outbox
+makosh-zulip-runtime      managed application/runtime composition
 ```
 
 Release composition is a separate integration-owned assembly unit from
 ADR-0272. It is not a runtime, domain, platform component or signing authority.
 
-`hermes-communications-ingress` remains the only Zulip dependency owned by
+`makosh-communications-ingress` remains the only Zulip dependency owned by
 Communications and exposes typed provider-neutral observation construction,
 not domain implementation. Zulip must not import Communications API, domain,
 persistence or runtime. Communications, Kernel and Gateway must not import a
@@ -123,8 +123,8 @@ Generated Protobuf exposes two independent public client contracts:
 
 | Capability | Contract | Connect path |
 |---|---|---|
-| `zulip.command.v1` | `zulip.command.v1` | `/hermes.zulip.v1.ZulipCommandService/ExecuteCommand` |
-| `zulip.query.v1` | `zulip.query.v1` | `/hermes.zulip.v1.ZulipQueryService/GetOperationStatus` |
+| `zulip.command.v1` | `zulip.command.v1` | `/makosh.zulip.v1.ZulipCommandService/ExecuteCommand` |
+| `zulip.query.v1` | `zulip.query.v1` | `/makosh.zulip.v1.ZulipQueryService/GetOperationStatus` |
 
 Both use exact descriptor-set SHA-256, `major = 1`, `revision = 1`. A command
 grant never authorizes query and a query grant never authorizes provider
@@ -152,7 +152,7 @@ through `zulip.query.v1` or a separately admitted realtime contract.
 ### Event-only Communications handoff
 
 Zulip maps provider frames into typed provider-neutral observations through
-`hermes-communications-ingress`, persists exact bytes in its own outbox and
+`makosh-communications-ingress`, persists exact bytes in its own outbox and
 relays them without re-encoding. Communications ACKs only after inbox
 deduplication and owner-local mutation/outbox commit.
 
@@ -222,7 +222,7 @@ Clippy, architecture/SRP/Cargo boundary gates и relevant live conformance.
   passed в disposable authenticated PostgreSQL/PgBouncer/NATS contour;
 - Zulip runtime установил TLS-соединение только с loopback fixture и explicit
   conformance CA; production TLS validation не ослаблена;
-- Storage Control применил immutable Zulip bundle в `hermes_data`, выдал
+- Storage Control применил immutable Zulip bundle в `makosh_data`, выдал
   owner-scoped runtime DML grants и PgBouncer pool alias; runtime не повторяет
   DDL;
 - focused Zulip tests и strict Clippy: passed;
@@ -230,7 +230,7 @@ Clippy, architecture/SRP/Cargo boundary gates и relevant live conformance.
 - `managed_zulip_runtime_delivers_live_command_and_event_only_communications_handoff`:
   passed в том же disposable managed contour; live command исполнена provider
   fixture ровно один раз, terminal query вернул provider message ID, а source
-  observation использует canonical `hermes-zulip-runtime` identity;
+  observation использует canonical `makosh-zulip-runtime` identity;
 - повтор exact observation не создал второе Communications event; второй
   provider event был принят при остановленном NATS, Zulip runtime остался
   активным без `last_failure`, а outbox доставил observation после reconnect;
@@ -240,7 +240,7 @@ Clippy, architecture/SRP/Cargo boundary gates и relevant live conformance.
 - `zulip-privacy-boundary.test.mjs` доказывает typed permit-derived subject,
   отсутствие dynamic subject literals, generic route error codes, hidden
   non-secret settings references и отсутствие Zulip-owned health surface;
-- live managed conformance с `HERMES_DEVELOPER_VERBOSE=1` и fail-closed output
+- live managed conformance с `MAKOSH_DEVELOPER_VERBOSE=1` и fail-closed output
   scanner не обнаружил API key, queue ID, bot/sender identity, realm URL или
   provider bodies в stdout/stderr;
 - Zulip HTTP tests: 7 passed; architecture tests: 466 passed, включая

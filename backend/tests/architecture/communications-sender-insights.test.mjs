@@ -10,7 +10,7 @@ const paths = {
   policy: new URL('architecture/policy.json', BACKEND_ROOT),
   manifest: new URL('src/communications-sender-insights-api/Cargo.toml', BACKEND_ROOT),
   proto: new URL(
-    'src/communications-sender-insights-api/proto/hermes/communications/sender_insights/v1/sender_insights.proto',
+    'src/communications-sender-insights-api/proto/makosh/communications/sender_insights/v1/sender_insights.proto',
     BACKEND_ROOT,
   ),
   migration: new URL(
@@ -68,7 +68,7 @@ test('sender insights is one exact Communications build-unit capability', async 
     'communications.sender-insights.v1',
   ));
   assert.match(adr, /Состояние реализации: implemented/);
-  assert.match(manifest, /name = "hermes-communications-sender-insights-api"/);
+  assert.match(manifest, /name = "makosh-communications-sender-insights-api"/);
   assert.match(manifest, /role = "domain"[\s\S]*owner = "communications"/);
   assert.match(proto, /service CommunicationsSenderInsightsService/);
   assert.match(admission, /COMMUNICATIONS_SENDER_INSIGHTS_CAPABILITY_ID/);

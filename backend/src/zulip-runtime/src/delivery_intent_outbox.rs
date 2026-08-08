@@ -1,7 +1,7 @@
 //! Zulip-owned exact-byte relay for delivery-intent terminal results.
 
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
-use hermes_zulip_persistence::{ZulipDeliveryIntentStoreV1, ZulipDurablePersistenceError};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_zulip_persistence::{ZulipDeliveryIntentStoreV1, ZulipDurablePersistenceError};
 
 #[derive(Debug)]
 pub enum ZulipDeliveryIntentOutboxRelayErrorV1 {

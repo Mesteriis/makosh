@@ -1,8 +1,8 @@
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::{
     CommunicationProviderKind, ProviderSecretBindingLookupPort,
 };
-use hermes_communications_api::address_book::{
+use makosh_communications_api::address_book::{
     AddressBookProviderBatch, AddressBookProviderEntry, AddressBookProviderFetchRequest,
     AddressBookProviderSyncError, AddressBookProviderSyncPort, AddressBookProviderUpsertRequest,
 };

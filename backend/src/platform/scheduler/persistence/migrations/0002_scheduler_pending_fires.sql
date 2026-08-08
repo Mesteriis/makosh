@@ -1,4 +1,4 @@
-CREATE TABLE hermes_platform.scheduler_pending_fires (
+CREATE TABLE makosh_platform.scheduler_pending_fires (
   fire_key BYTEA PRIMARY KEY,
   schedule_id BYTEA NOT NULL,
   schedule_revision BIGINT NOT NULL,

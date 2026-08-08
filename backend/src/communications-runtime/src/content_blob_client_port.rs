@@ -3,9 +3,9 @@
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_communications_content_api::{CONTENT_CONTRACT_MAJOR_V1, ReadMessageBodyRequestV1};
-use hermes_communications_persistence::CommunicationsDurablePersistence;
-use hermes_runtime_protocol::v1::{
+use makosh_communications_content_api::{CONTENT_CONTRACT_MAJOR_V1, ReadMessageBodyRequestV1};
+use makosh_communications_persistence::CommunicationsDurablePersistence;
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientBlobAuthorizationV1, ModuleClientRequestV1,
     ModuleClientResponseV1,
 };
@@ -69,9 +69,9 @@ pub async fn handle_module_content_blob_request_v1(
 }
 
 fn current_receipt_if_unchanged(
-    current: Option<hermes_communications_persistence::CommunicationsBodyContentReceiptV1>,
-    ticket_receipt: &hermes_communications_persistence::CommunicationsBodyContentReceiptV1,
-) -> Option<hermes_communications_persistence::CommunicationsBodyContentReceiptV1> {
+    current: Option<makosh_communications_persistence::CommunicationsBodyContentReceiptV1>,
+    ticket_receipt: &makosh_communications_persistence::CommunicationsBodyContentReceiptV1,
+) -> Option<makosh_communications_persistence::CommunicationsBodyContentReceiptV1> {
     current.filter(|receipt| receipt == ticket_receipt)
 }
 
@@ -127,7 +127,7 @@ fn now_unix_seconds() -> Result<i64, CommunicationsContentBlobClientPortErrorV1>
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_communications_persistence::CommunicationsBodyContentReceiptV1;
+    use makosh_communications_persistence::CommunicationsBodyContentReceiptV1;
 
     #[test]
     fn edit_delete_or_replaced_receipt_invalidates_the_ticket() {

@@ -41,7 +41,7 @@ fn remote_image_client(
     let mut builder = reqwest::Client::builder()
         .timeout(REMOTE_IMAGE_TIMEOUT)
         .redirect(reqwest::redirect::Policy::limited(4))
-        .user_agent("HermesHub-MailImageProxy/0.1");
+        .user_agent("МакошьHub-MailImageProxy/0.1");
     if let Some((host, addrs)) = dns_override {
         builder = builder.resolve_to_addrs(host, addrs);
     }

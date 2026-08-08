@@ -17,7 +17,7 @@ const mediaComponents = [
 	'HtmlPreview'
 ]
 
-describe('Hermes UI media component contracts', () => {
+describe('Макошь UI media component contracts', () => {
 	it('keeps the media batch documented and exported through the UI kit', () => {
 		const uiRoot = fileURLToPath(new URL('.', import.meta.url))
 		const barrel = readFileSync(join(uiRoot, 'index.ts'), 'utf8')

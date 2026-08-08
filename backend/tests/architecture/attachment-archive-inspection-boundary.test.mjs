@@ -42,7 +42,7 @@ test('archive inspection production gate is implemented as an exact engine inven
   ));
   assert(policy.implementation.productionPackages.some(
     ({ name, role, owner, surface }) =>
-      name === 'hermes-attachment-archive-inspection-persistence'
+      name === 'makosh-attachment-archive-inspection-persistence'
       && role === 'engine'
       && owner === 'attachment_archive_inspection'
       && surface === 'persistence',
@@ -57,7 +57,7 @@ test('archive inspection live evidence keeps module authority distinct from huma
     await Promise.all([
       readFile(
         new URL(
-          'src/platform/runtime_protocol/proto/hermes/runtime/v1/managed_engine_runtime.proto',
+          'src/platform/runtime_protocol/proto/makosh/runtime/v1/managed_engine_runtime.proto',
           BACKEND_ROOT,
         ),
         'utf8',
@@ -128,7 +128,7 @@ test('archive inspection API is bounded and carries no Blob or provider authorit
     ),
     readFile(
       new URL(
-        'src/attachment-archive-inspection-api/proto/hermes/attachment_archive_inspection/v1/archive_inspection.proto',
+        'src/attachment-archive-inspection-api/proto/makosh/attachment_archive_inspection/v1/archive_inspection.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -142,7 +142,7 @@ test('archive inspection API is bounded and carries no Blob or provider authorit
   assert.match(manifest, /role = "engine"/);
   assert.match(manifest, /owner = "attachment_archive_inspection"/);
   assert.match(manifest, /surface = "contract"/);
-  assert.doesNotMatch(manifest, /hermes-(?:communications|attachment-security|blob|kernel)/);
+  assert.doesNotMatch(manifest, /makosh-(?:communications|attachment-security|blob|kernel)/);
   assert.match(proto, /bytes operation_id = 2/);
   assert.match(proto, /bytes attachment_anchor_id = 3/);
   assert.match(proto, /repeated ArchiveEntryV1 entries = 4/);
@@ -162,7 +162,7 @@ test('archive ingress is a target-owned event contract without engine implementa
     ),
     readFile(
       new URL(
-        'src/attachment-archive-inspection-ingress/proto/hermes/attachment_archive_inspection/ingress/v1/custody_delegation.proto',
+        'src/attachment-archive-inspection-ingress/proto/makosh/attachment_archive_inspection/ingress/v1/custody_delegation.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -176,11 +176,11 @@ test('archive ingress is a target-owned event contract without engine implementa
   assert.match(manifest, /role = "engine"/);
   assert.match(manifest, /owner = "attachment_archive_inspection"/);
   assert.match(manifest, /surface = "contract"/);
-  assert.match(manifest, /hermes-events-protocol/);
-  assert.match(manifest, /hermes-runtime-protocol/);
+  assert.match(manifest, /makosh-events-protocol/);
+  assert.match(manifest, /makosh-runtime-protocol/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:attachment-security|attachment-archive-inspection-(?:api|core|persistence|runtime|assembly)|communications|blob|kernel)/,
+    /makosh-(?:attachment-security|attachment-archive-inspection-(?:api|core|persistence|runtime|assembly)|communications|blob|kernel)/,
   );
   assert.match(proto, /message RequestArchiveInspectionCustodyDelegationV1/);
   assert.match(proto, /bytes candidate_envelope_sha256 = 5/);
@@ -216,10 +216,10 @@ test('pure archive core owns policy without transport, storage or parser depende
     ),
   ]);
 
-  assert.match(manifest, /hermes-attachment-archive-inspection-api/);
+  assert.match(manifest, /makosh-attachment-archive-inspection-api/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications|attachment-security|blob|events|runtime|storage|kernel)|\bzip\s*=/,
+    /makosh-(?:communications|attachment-security|blob|events|runtime|storage|kernel)|\bzip\s*=/,
   );
   assert.match(source, /ArchiveInspectionLimitsV1/);
   assert.match(source, /DuplicateEntryPath/);
@@ -237,7 +237,7 @@ test('pure archive core owns policy without transport, storage or parser depende
   );
   assert.doesNotMatch(
     source,
-    /TcpStream|File::|sqlx|postgres|nats|jetstream|hermes_communications|hermes_attachment_security/,
+    /TcpStream|File::|sqlx|postgres|nats|jetstream|makosh_communications|makosh_attachment_security/,
   );
 });
 
@@ -278,13 +278,13 @@ test('archive persistence owns replay, event join and fenced jobs without foreig
   assert.match(manifest, /role = "engine"/);
   assert.match(manifest, /owner = "attachment_archive_inspection"/);
   assert.match(manifest, /surface = "persistence"/);
-  assert.match(manifest, /hermes-attachment-archive-inspection-core/);
-  assert.match(manifest, /hermes-attachment-archive-inspection-ingress/);
-  assert.match(manifest, /hermes-events-protocol/);
-  assert.match(manifest, /hermes-storage-protocol/);
+  assert.match(manifest, /makosh-attachment-archive-inspection-core/);
+  assert.match(manifest, /makosh-attachment-archive-inspection-ingress/);
+  assert.match(manifest, /makosh-events-protocol/);
+  assert.match(manifest, /makosh-storage-protocol/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications|attachment-security|blob|kernel|mail|telegram|whatsapp|zulip)/,
+    /makosh-(?:communications|attachment-security|blob|kernel|mail|telegram|whatsapp|zulip)/,
   );
   for (const table of [
     'attachment_archive_inspection_runs',
@@ -321,7 +321,7 @@ test('archive persistence owns replay, event join and fenced jobs without foreig
   assert.match(jobs, /verify_claim/);
   assert.doesNotMatch(
     `${library}\n${observations}\n${custody}\n${jobs}`,
-    /hermes_(?:communications|attachment_security|blob|kernel|mail|telegram|whatsapp|zulip)/,
+    /makosh_(?:communications|attachment_security|blob|kernel|mail|telegram|whatsapp|zulip)/,
   );
 });
 
@@ -360,11 +360,11 @@ test('archive runtime is a separate managed engine with event-only custody and r
   assert.match(manifest, /role = "engine"/);
   assert.match(manifest, /owner = "attachment_archive_inspection"/);
   assert.match(manifest, /surface = "runtime"/);
-  assert.match(manifest, /hermes-attachment-security-contract/);
-  assert.match(manifest, /hermes-communications-attachment-contract/);
+  assert.match(manifest, /makosh-attachment-security-contract/);
+  assert.match(manifest, /makosh-communications-attachment-contract/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:attachment-security-(?:core|persistence|runtime)|communications-(?:core|persistence|runtime)|mail|telegram|whatsapp|zulip)/,
+    /makosh-(?:attachment-security-(?:core|persistence|runtime)|communications-(?:core|persistence|runtime)|mail|telegram|whatsapp|zulip)/,
   );
   assert.match(admission, /ATTACHMENT_ARCHIVE_INSPECTION_BLOB_TARGET_CAPABILITY_ID_V1/);
   for (const capability of [
@@ -391,7 +391,7 @@ test('archive runtime is a separate managed engine with event-only custody and r
   assert.match(settings, /ApplyModeV1::Restart/);
   assert.doesNotMatch(
     `${admission}\n${runtime}\n${blob}\n${eventDecode}\n${outbox}\n${settings}`,
-    /hermes_(?:attachment_security_(?:core|persistence|runtime)|communications_(?:core|persistence|runtime)|mail|telegram|whatsapp|zulip)/,
+    /makosh_(?:attachment_security_(?:core|persistence|runtime)|communications_(?:core|persistence|runtime)|mail|telegram|whatsapp|zulip)/,
   );
 });
 
@@ -462,11 +462,11 @@ test('archive release assembly is a separate unsigned engine unit', async () => 
   assert.match(manifest, /role = "engine"/);
   assert.match(manifest, /owner = "attachment_archive_inspection"/);
   assert.match(manifest, /surface = "assembly"/);
-  assert.match(manifest, /hermes-attachment-archive-inspection-runtime/);
-  assert.match(manifest, /hermes-attachment-archive-inspection-persistence/);
+  assert.match(manifest, /makosh-attachment-archive-inspection-runtime/);
+  assert.match(manifest, /makosh-attachment-archive-inspection-persistence/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:attachment-security|communications|mail|telegram|whatsapp|zulip)/,
+    /makosh-(?:attachment-security|communications|mail|telegram|whatsapp|zulip)/,
   );
   assert.match(library, /attachment_archive_inspection_module_descriptor_v1/);
   assert.match(library, /attachment_archive_inspection_settings_schema_v1/);
@@ -495,10 +495,10 @@ test('ZIP adapter is exact, metadata-only and cannot extract to disk', async () 
     manifest,
     /zip = \{ version = "=6\.0\.0", default-features = false, features = \["deflate-flate2-zlib-rs"\] \}/,
   );
-  assert.match(manifest, /hermes-attachment-archive-inspection-core/);
+  assert.match(manifest, /makosh-attachment-archive-inspection-core/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications|attachment-security|blob|events|runtime|storage|kernel)/,
+    /makosh-(?:communications|attachment-security|blob|events|runtime|storage|kernel)/,
   );
   assert.match(source, /ZipArchive::new/);
   assert.match(source, /file\.compressed_size\(\)/);

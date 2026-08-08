@@ -61,7 +61,7 @@ mod tests {
     #[test]
     fn accepted_data_stream_waits_for_the_complete_frame() {
         let root = std::env::temp_dir().join(format!(
-            "hermes-blob-data-socket-{}-{}",
+            "makosh-blob-data-socket-{}-{}",
             std::process::id(),
             NEXT_SOCKET.fetch_add(1, Ordering::Relaxed)
         ));

@@ -2,7 +2,7 @@
 
 Status: documentation package aligned to the current repository structure.
 
-Notes are lightweight capture artifacts in the current Hermes model.
+Notes are lightweight capture artifacts in the current Макошь model.
 
 They are not a first-class domain unless a future ADR promotes them.
 

@@ -4,7 +4,7 @@ use std::net::TcpListener;
 
 use super::*;
 
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     AI_CONTRACT_MAJOR_V1, AI_CONTRACT_REVISION_V1, AI_CONTRACTS_SCHEMA_SHA256,
     AI_LOCAL_EGRESS_POLICY_REVISION_V1, communication_reply_inference_contract_reference_v1,
     encode_reply_source_content_v1, seal_reply_inference_request_v1,
@@ -16,7 +16,7 @@ use hermes_ai_contracts::{
         CommunicationReplySuggestionInferenceResultV1,
     },
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
     ManagedRuntimeModuleRequestDeliveryV1, ManagedRuntimeModuleRequestResponseV1,
     managed_runtime_control_request_v1::Operation,
@@ -27,7 +27,7 @@ use hermes_runtime_protocol::v1::{
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Blob, AI inference and Ollama AI binaries"]
 fn managed_ai_inference_routes_to_ollama_and_replays_after_restart() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let port_reservation =
@@ -38,7 +38,7 @@ fn managed_ai_inference_routes_to_ollama_and_replays_after_restart() {
         .port();
     drop(port_reservation);
 
-    let root = unique_target_root("hermes-managed-ai-inference-negative");
+    let root = unique_target_root("makosh-managed-ai-inference-negative");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -46,13 +46,13 @@ fn managed_ai_inference_routes_to_ollama_and_replays_after_restart() {
     );
     let release = installed_ai_inference_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_store(&root, release.kernel()));
     crate::platform::blob::binding::bind_installed_release(&store, release.kernel())
         .expect("bind signed Blob release");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             AI_INFERENCE_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             [4; 65],
@@ -144,23 +144,23 @@ fn managed_ai_inference_routes_to_ollama_and_replays_after_restart() {
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove AI inference fixture");
     std::fs::remove_dir_all(data).expect("remove short AI inference kernel data fixture");
 }
 
 #[test]
-#[ignore = "requires disposable Docker plus a real loopback Ollama service with hermes-conformance:latest"]
+#[ignore = "requires disposable Docker plus a real loopback Ollama service with makosh-conformance:latest"]
 fn managed_ai_inference_completes_real_provider_generation() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let ollama_port = required("HERMES_OLLAMA_LIVE_PORT")
+    let ollama_port = required("MAKOSH_OLLAMA_LIVE_PORT")
         .parse::<u16>()
         .expect("valid live Ollama port");
-    let root = unique_target_root("hermes-managed-ai-inference-live");
+    let root = unique_target_root("makosh-managed-ai-inference-live");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -168,13 +168,13 @@ fn managed_ai_inference_completes_real_provider_generation() {
     );
     let release = installed_ai_inference_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_store(&root, release.kernel()));
     crate::platform::blob::binding::bind_installed_release(&store, release.kernel())
         .expect("bind signed Blob release");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             AI_INFERENCE_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             [4; 65],
@@ -275,7 +275,7 @@ fn managed_ai_inference_completes_real_provider_generation() {
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove live AI inference fixture");
     std::fs::remove_dir_all(data).expect("remove short live AI inference kernel data fixture");

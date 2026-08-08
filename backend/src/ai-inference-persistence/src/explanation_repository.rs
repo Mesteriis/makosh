@@ -1,11 +1,11 @@
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     decode_explanation_inference_result_v1, encode_explanation_inference_result_v1,
     wire::{
         AiContextReceiptV1, AiPrivateSourceReceiptV1, AiUseCaseV1,
         CommunicationExplanationInferenceRequestV1,
     },
 };
-use hermes_ai_inference_core::{AiExplanationRunV1, AiInferenceRunStateV1};
+use makosh_ai_inference_core::{AiExplanationRunV1, AiInferenceRunStateV1};
 use sqlx::{Row, postgres::PgRow};
 
 use crate::{
@@ -27,7 +27,7 @@ impl AiInferencePersistenceV1 {
         let context = request.context.as_ref().ok_or(invalid_input())?;
         let source = request.source.as_ref().ok_or(invalid_input())?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.ai_explanation_runs (
+            "INSERT INTO makosh_data.ai_explanation_runs (
                logical_owner_id, run_id, request_digest, context_id, source_evidence_id,
                source_evidence_revision, contract_major, contract_revision,
                contract_schema_sha256, source_reference_id, source_declared_bytes,
@@ -75,7 +75,7 @@ impl AiInferencePersistenceV1 {
                 AiInferenceRunStateV1::Accepted | AiInferenceRunStateV1::Executing
             ) {
                 let updated = sqlx::query(
-                    "UPDATE hermes_data.ai_explanation_runs SET source_custody_proof=$1
+                    "UPDATE makosh_data.ai_explanation_runs SET source_custody_proof=$1
                      WHERE logical_owner_id=$2 AND run_id=$3 AND request_digest=$4 AND run_state IN (1,2)",
                 )
                 .bind(&source.custody_transfer_source_proof)
@@ -161,7 +161,7 @@ impl AiInferencePersistenceV1 {
             .transpose()
             .map_err(|_| invalid_input())?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.ai_explanation_runs SET state_revision=$4, run_state=$5,
+            "UPDATE makosh_data.ai_explanation_runs SET state_revision=$4, run_state=$5,
              selected_provider_settings_revision=$6, result_exact_bytes=$7,
              result_terminal_status=$8
              WHERE logical_owner_id=$1 AND run_id=$2 AND state_revision=$3",
@@ -194,7 +194,7 @@ const SELECT_EXPLANATION_RUN: &str = "SELECT logical_owner_id, run_id, request_d
  source_custody_proof, maximum_reasons, maximum_reason_text_bytes,
  maximum_output_tokens, egress_policy, egress_policy_revision, state_revision, run_state,
  selected_provider_settings_revision, result_exact_bytes, result_terminal_status
- FROM hermes_data.ai_explanation_runs WHERE logical_owner_id=$1 AND run_id=$2";
+ FROM makosh_data.ai_explanation_runs WHERE logical_owner_id=$1 AND run_id=$2";
 const SELECT_EXPLANATION_RUN_FOR_UPDATE: &str =
     "SELECT logical_owner_id, run_id, request_digest, context_id,
  source_evidence_id, source_evidence_revision, contract_major, contract_revision,
@@ -202,7 +202,7 @@ const SELECT_EXPLANATION_RUN_FOR_UPDATE: &str =
  source_custody_proof, maximum_reasons, maximum_reason_text_bytes,
  maximum_output_tokens, egress_policy, egress_policy_revision, state_revision, run_state,
  selected_provider_settings_revision, result_exact_bytes, result_terminal_status
- FROM hermes_data.ai_explanation_runs
+ FROM makosh_data.ai_explanation_runs
  WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE";
 const SELECT_RECOVERABLE_EXPLANATION_RUNS: &str =
     "SELECT logical_owner_id, run_id, request_digest, context_id,
@@ -211,7 +211,7 @@ const SELECT_RECOVERABLE_EXPLANATION_RUNS: &str =
  source_custody_proof, maximum_reasons, maximum_reason_text_bytes,
  maximum_output_tokens, egress_policy, egress_policy_revision, state_revision, run_state,
  selected_provider_settings_revision, result_exact_bytes, result_terminal_status
- FROM hermes_data.ai_explanation_runs
+ FROM makosh_data.ai_explanation_runs
  WHERE logical_owner_id=$1 AND run_state IN (1,2)
  ORDER BY state_revision, run_id LIMIT $2";
 

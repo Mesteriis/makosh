@@ -114,7 +114,7 @@ binding revision.
 `ManagedLaunchBinding` имеет один из двух origins:
 
 1. `bundled_distribution` — executable входит в подписанный immutable
-   `DistributionManifestV1` текущей установленной Hermes release вместе с exact
+   `DistributionManifestV1` текущей установленной Макошь release вместе с exact
    descriptor/settings schema artifact digests;
 2. `owner_pinned` — владелец явно выбрал local executable и подтвердил его
    exact executable, descriptor и optional settings schema digests fresh
@@ -183,7 +183,7 @@ Public verification key pin `DistributionManifestV1` поставляется в
 Kernel release.
 Private release key существует только в release pipeline/offline signing
 boundary и никогда не попадает в application bundle, Kernel Control Store,
-Vault, logs или backups Hermes.
+Vault, logs или backups Макошь.
 
 Outer desktop update artifact и inner `DistributionManifestV1` имеют разные
 purpose-specific signing keys. Это не позволяет ошибочно использовать owner

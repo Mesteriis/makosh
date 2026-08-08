@@ -1,9 +1,9 @@
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_events_protocol::{
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_events_protocol::{
     delivery::OutboxRecordV1, v1::durable_envelope_v1::Semantics,
     validation::envelope::decode_envelope_v1,
 };
-use hermes_scheduler_protocol::{ScheduleIdV1, ScheduleRevisionV1};
+use makosh_scheduler_protocol::{ScheduleIdV1, ScheduleRevisionV1};
 
 use crate::SchedulerScheduleUpsertV1;
 

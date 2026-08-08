@@ -1,6 +1,6 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     attachment_translation_inference_contract_reference_v1,
     validate_attachment_translation_inference_request_v1,
     validate_attachment_translation_inference_result_v1,
@@ -10,17 +10,17 @@ use hermes_ai_contracts::{
         AttachmentTranslationInferenceResultV1,
     },
 };
-use hermes_attachment_translation_core::{
+use makosh_attachment_translation_core::{
     AttachmentTranslationCompletenessV1, AttachmentTranslationDetectedLanguageV1,
     AttachmentTranslationLanguageV1, AttachmentTranslationPendingResultV1,
     AttachmentTranslationRejectionCodeV1, AttachmentTranslationTransitionV1,
 };
-use hermes_attachment_translation_persistence::{
+use makosh_attachment_translation_persistence::{
     AttachmentTranslationInferenceResultV1 as PersistInferenceResultV1,
     AttachmentTranslationMaterializationResultV1, AttachmentTranslationPersistenceErrorV1,
     AttachmentTranslationPersistenceV1, PersistedAttachmentTranslationRunV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeControlRequestV1, ManagedRuntimeModuleRequestRequestV1,
@@ -366,7 +366,7 @@ fn array32(value: &[u8]) -> Result<[u8; 32], AttachmentTranslationInferenceError
 
 fn inference_message_id(run_id: [u8; 16], request_digest: [u8; 32]) -> [u8; 16] {
     deterministic_id(
-        b"hermes.attachment-translation.inference-result.v1\0",
+        b"makosh.attachment-translation.inference-result.v1\0",
         run_id,
         request_digest,
     )
@@ -374,7 +374,7 @@ fn inference_message_id(run_id: [u8; 16], request_digest: [u8; 32]) -> [u8; 16] 
 
 fn materialization_message_id(run_id: [u8; 16], sha256: [u8; 32]) -> [u8; 16] {
     deterministic_id(
-        b"hermes.attachment-translation.materialization-result.v1\0",
+        b"makosh.attachment-translation.materialization-result.v1\0",
         run_id,
         sha256,
     )
@@ -385,7 +385,7 @@ fn rejection_message_id(
     rejection: AttachmentTranslationRejectionCodeV1,
 ) -> [u8; 16] {
     deterministic_id(
-        b"hermes.attachment-translation.inference-rejection.v1\0",
+        b"makosh.attachment-translation.inference-rejection.v1\0",
         run_id,
         [rejection as u8; 32],
     )

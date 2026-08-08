@@ -11,7 +11,7 @@ use zeroize::Zeroizing;
 
 use crate::{LeaseAudienceV1, MAX_SESSION_CREDENTIAL_BYTES};
 
-const TRANSPORT_INFO: &[u8] = b"hermes-vault/hpke/v1";
+const TRANSPORT_INFO: &[u8] = b"makosh-vault/hpke/v1";
 const REQUEST_ID_BYTES: usize = 16;
 const OPERATION_DIGEST_BYTES: usize = 32;
 const X25519_BYTES: usize = 32;

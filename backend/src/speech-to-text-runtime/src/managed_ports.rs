@@ -1,13 +1,13 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobClientError, BlobDataClient, ManagedBlobCustodyDelegationRequestV1,
     ManagedBlobCustodyTargetV1, ManagedBlobCustodyTransferRequestV1,
     ManagedBlobResolvedProviderCustodyDelegationRequestV1,
     request_managed_blob_custody_delegation_v2, request_managed_blob_custody_transfer_v2,
     request_managed_blob_resolved_provider_custody_delegation_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeControlRequestV1, ManagedRuntimeModuleRequestRequestV1,
@@ -19,7 +19,7 @@ use hermes_runtime_protocol::{
         validate_module_request_response_v1,
     },
 };
-use hermes_speech_to_text_api::{
+use makosh_speech_to_text_api::{
     seal_speech_to_text_request_v1, speech_to_text_provider_contract_reference_v1,
     validate_speech_to_text_request_v1, validate_speech_to_text_result_v1,
     wire::{SpeechToTextRequestV1, SpeechToTextResultV1, SpeechToTextTerminalStatusV1},
@@ -216,7 +216,7 @@ impl SpeechToTextExecutionPortsV1 for ManagedSpeechToTextExecutionPortsV1<'_> {
 
 fn operation_id(domain: &[u8], request_id: &[u8; 16], request_digest: &[u8; 32]) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.speech-to-text.operation.v1\0");
+    hasher.update(b"makosh.speech-to-text.operation.v1\0");
     hasher.update(domain);
     hasher.update(request_id);
     hasher.update(request_digest);

@@ -131,7 +131,7 @@ function handleAddressBookToggle(value: boolean): void {
             <small>{{ selectedPersona.tone || t('Current') }}</small>
           </li>
           <li>
-            <span>{{ t('Hermes context') }}</span>
+            <span>{{ t('Макошь context') }}</span>
             <small>{{ selectedPersonaRelationships.length }} {{ t('links') }}</small>
           </li>
         </ul>

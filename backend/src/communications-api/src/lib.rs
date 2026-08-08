@@ -1,15 +1,15 @@
 //! Public typed contract for the canonical Communications owner.
 
-pub const PACKAGE: &str = "hermes-communications-api";
+pub const PACKAGE: &str = "makosh-communications-api";
 
 pub mod wire {
-    include!(concat!(env!("OUT_DIR"), "/hermes.communications.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.communications.v1.rs"));
 }
 
 pub mod query_wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communications.query.v1.rs"
+        "/makosh.communications.query.v1.rs"
     ));
 }
 

@@ -27,7 +27,7 @@ const entityIcons: Record<EntityIconKind, string> = {
 	generic: 'tabler:cube'
 }
 
-const classes = computed(() => ['hermes-entity-icon', `hermes-entity-icon--${props.entity}`, props.class])
+const classes = computed(() => ['makosh-entity-icon', `makosh-entity-icon--${props.entity}`, props.class])
 const accessibleLabel = computed(() => props.label ?? props.entity)
 </script>
 

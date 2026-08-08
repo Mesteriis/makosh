@@ -2,8 +2,8 @@
 
 use std::net::TcpListener;
 
-use hermes_storage_control::{StorageEndpointPreflightV1, preflight_storage_endpoints};
-use hermes_storage_protocol::v1::{StorageDeploymentProfileV1, StorageRuntimeTopologyV1};
+use makosh_storage_control::{StorageEndpointPreflightV1, preflight_storage_endpoints};
+use makosh_storage_protocol::v1::{StorageDeploymentProfileV1, StorageRuntimeTopologyV1};
 
 #[test]
 fn endpoint_preflight_accepts_two_reachable_endpoints() {
@@ -34,7 +34,7 @@ fn topology(postgres_port: u16, pgbouncer_port: u16) -> StorageRuntimeTopologyV1
         topology_revision: 1,
         storage_generation: 1,
         storage_instance_id: "storage_main".into(),
-        database_id: "hermes".into(),
+        database_id: "makosh".into(),
         deployment_profile: StorageDeploymentProfileV1::MacosTauriEmbedded as i32,
         postgres_artifact_sha256: vec![1; 32],
         pgbouncer_artifact_sha256: vec![2; 32],

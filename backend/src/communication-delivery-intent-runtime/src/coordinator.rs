@@ -1,9 +1,9 @@
 //! Plaintext-to-Blob persistence boundary owned by the workflow runtime.
 
-use hermes_communication_delivery_intent_core::{
+use makosh_communication_delivery_intent_core::{
     CommunicationProviderProvenanceV1, PlannedDeliveryIntentV1,
 };
-use hermes_communication_delivery_intent_persistence::{
+use makosh_communication_delivery_intent_persistence::{
     CreateDeliveryIntentV1, DeliveryIntentBodyBlobReceiptV1,
 };
 use sha2::{Digest, Sha256};
@@ -58,7 +58,7 @@ fn request_fingerprint_v1(
     body: &DeliveryIntentBodyBlobReceiptV1,
 ) -> [u8; 32] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communication-delivery-intent.request.v1\0");
+    digest.update(b"makosh.communication-delivery-intent.request.v1\0");
     digest.update(logical_owner_id.as_bytes());
     digest.update([0]);
     digest.update(planned.intent_id);
@@ -105,7 +105,7 @@ fn valid_logical_owner_id(value: &str) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use hermes_communication_delivery_intent_core::{
+    use makosh_communication_delivery_intent_core::{
         CommunicationConversationIdV1, CommunicationDeliveryRouteV1, CommunicationSourceCursorV1,
         ValidatedDeliveryBodyV1,
     };

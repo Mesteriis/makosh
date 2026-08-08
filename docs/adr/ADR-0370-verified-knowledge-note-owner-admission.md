@@ -42,13 +42,13 @@ Legacy Notes были document-like capture artifacts, а legacy Knowledge Graph
 blocked list. Разблокировка разрешает только принятый здесь verified-note
 contour:
 
-- `hermes-knowledge-command-api` — exact durable command/result contract;
-- `hermes-knowledge-core` — pure verified-note aggregate and invariants;
-- `hermes-knowledge-persistence` — owner-local inbox/state/outbox и Storage
+- `makosh-knowledge-command-api` — exact durable command/result contract;
+- `makosh-knowledge-core` — pure verified-note aggregate and invariants;
+- `makosh-knowledge-persistence` — owner-local inbox/state/outbox и Storage
   bundle;
-- `hermes-knowledge-runtime` — managed event consumer, Blob custody client и
+- `makosh-knowledge-runtime` — managed event consumer, Blob custody client и
   exact outbox relay;
-- `hermes-knowledge-assembly` — unsigned descriptor/settings/storage/runtime
+- `makosh-knowledge-assembly` — unsigned descriptor/settings/storage/runtime
   release fragment без signing authority.
 
 Generic note CRUD, Knowledge Graph, Search, Timeline, Context, Memory,

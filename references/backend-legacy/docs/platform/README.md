@@ -1,4 +1,4 @@
-# Hermes Platform Layer
+# Макошь Platform Layer
 
 Status: documentation package aligned to the current repository structure.
 

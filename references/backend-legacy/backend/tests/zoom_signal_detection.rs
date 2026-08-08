@@ -1,23 +1,23 @@
 use std::sync::Arc;
 
 use chrono::Utc;
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_postgres::provider_store::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
-use hermes_events_api::EventLogQuery;
-use hermes_events_postgres::store::EventStore;
-use hermes_hub_backend::domains::signal_hub::profiles::SignalHubProfileService;
-use hermes_hub_backend::domains::signal_hub::store::SignalHubStore;
-use hermes_hub_backend::integrations::zoom::client::{
+use makosh_events_api::EventLogQuery;
+use makosh_events_postgres::store::EventStore;
+use makosh_hub_backend::domains::signal_hub::profiles::SignalHubProfileService;
+use makosh_hub_backend::domains::signal_hub::store::SignalHubStore;
+use makosh_hub_backend::integrations::zoom::client::{
     models::{ZoomAccountSetupRequest, ZoomMeetingObservationRequest},
     store::ZoomStore,
 };
-use hermes_hub_backend::platform::calls::store::CallIntelligenceStore;
-use hermes_hub_backend::platform::events::bus::InMemoryEventBus;
-use hermes_hub_backend::platform::settings::store::ApplicationSettingsStore;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::workflows::zoom_signal_detection::project_zoom_signal_detection;
+use makosh_hub_backend::platform::calls::store::CallIntelligenceStore;
+use makosh_hub_backend::platform::events::bus::InMemoryEventBus;
+use makosh_hub_backend::platform::settings::store::ApplicationSettingsStore;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::workflows::zoom_signal_detection::project_zoom_signal_detection;
 use serde_json::json;
 
 #[tokio::test]
@@ -38,7 +38,7 @@ async fn zoom_meeting_events_flow_into_signal_hub_detection_events() {
         Arc::new(CommunicationProviderAccountStore::new(pool.clone())),
         Arc::new(CommunicationProviderSecretBindingStore::new(pool.clone())),
         Arc::new(
-            hermes_hub_backend::domains::communications::storage::store::CommunicationStorageStore::new(
+            makosh_hub_backend::domains::communications::storage::store::CommunicationStorageStore::new(
                 pool.clone(),
             ),
         ),
@@ -186,7 +186,7 @@ async fn zoom_meeting_signal_detection_respects_testing_profile_muting() {
         Arc::new(CommunicationProviderAccountStore::new(pool.clone())),
         Arc::new(CommunicationProviderSecretBindingStore::new(pool.clone())),
         Arc::new(
-            hermes_hub_backend::domains::communications::storage::store::CommunicationStorageStore::new(
+            makosh_hub_backend::domains::communications::storage::store::CommunicationStorageStore::new(
                 pool.clone(),
             ),
         ),

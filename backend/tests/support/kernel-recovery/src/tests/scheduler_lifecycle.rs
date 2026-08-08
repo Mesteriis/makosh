@@ -1,9 +1,9 @@
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BundledManagedLaunchBinding, ManagedLaunchRecord, ModuleRegistration, ModuleRegistrationState,
     ModuleStorageRequestV1, PlatformStorageBindingStateV1, PlatformStorageBundleV1,
     PlatformStorageEndpointV1, PlatformStorageTopology, StorageDeploymentProfileV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use sha2::{Digest, Sha256};
 use std::{
     sync::{
@@ -73,7 +73,7 @@ fn lifecycle_blocks_after_first_failed_successor_launch() {
     let worker = std::thread::spawn(move || {
         scheduler_lifecycle::serve(
             worker_store,
-            std::path::Path::new("/unavailable/hermes-kernel"),
+            std::path::Path::new("/unavailable/makosh-kernel"),
             &runtime_dir,
             worker_shutdown,
             worker_supervisor,
@@ -120,9 +120,9 @@ fn active_scheduler_fixture() -> (
     Arc<SqliteControlStore>,
     ModuleRegistration,
     String,
-    hermes_kernel_control_store::PlatformStorageBindingV1,
+    makosh_kernel_control_store::PlatformStorageBindingV1,
 ) {
-    let root = unique_target_root("hermes-scheduler-lifecycle");
+    let root = unique_target_root("makosh-scheduler-lifecycle");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = Arc::new(
         SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
@@ -208,11 +208,11 @@ fn admit_scheduler_registration(
 fn record_storage_topology_and_bundle(store: &SqliteControlStore) {
     store
         .record_platform_storage_topology(&PlatformStorageTopology::new(
-            hermes_kernel_control_store::PlatformStorageTopologyInputV1 {
+            makosh_kernel_control_store::PlatformStorageTopologyInputV1 {
                 revision: 1,
                 storage_generation: 1,
                 storage_instance_id: "storage_main".to_owned(),
-                database_id: "hermes".to_owned(),
+                database_id: "makosh".to_owned(),
                 deployment_profile: StorageDeploymentProfileV1::MacosTauriEmbedded,
                 postgres_endpoint: PlatformStorageEndpointV1::new("127.0.0.1", 5_432),
                 pgbouncer_endpoint: PlatformStorageEndpointV1::new("127.0.0.1", 6_432),

@@ -3,19 +3,19 @@ import type {
 	CreateOwnerModuleSettingsTargetReceiptV1,
 	ExportEffectiveOwnerModuleSettingsReceiptV1,
 	UpdateOwnerModuleSettingsReceiptV1,
-} from '../../../gen/hermes/gateway/v1/owner_module_settings_pb'
+} from '../../../gen/makosh/gateway/v1/owner_module_settings_pb'
 import {
 	MailAccountReadinessV1,
 	type MailAccountStatusV1,
 	type MailCredentialBindingReceiptV1,
 	MailCredentialPurposeV1,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
 import type {
 	GmailOAuthOperationStatusV1,
 	GmailOAuthStartedV1,
 	MailAcceptedV1,
-} from '../../../gen/hermes/mail/v1/client_pb'
-import type { MailAccountExportV1 } from '../../../gen/hermes/mail/portability/v1/portability_pb'
+} from '../../../gen/makosh/mail/v1/client_pb'
+import type { MailAccountExportV1 } from '../../../gen/makosh/mail/portability/v1/portability_pb'
 import { resolveOwnerOperationIdV1 } from '../../../platform/gateway/ownerOperationId'
 import {
 	OwnerModuleSettingsClientV1,

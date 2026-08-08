@@ -1,6 +1,6 @@
 //! Exact descriptor/grant/distribution intersection for managed runtime resources.
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     DistributionArtifactKindV1, DistributionManifestArtifactV1, DistributionManifestV1,
     ModuleDescriptorV1, ModuleKindV1, RuntimeArtifactUseV1, capability_request_v1,
 };
@@ -160,7 +160,7 @@ const fn distribution_kind(use_kind: RuntimeArtifactUseV1) -> DistributionArtifa
 #[cfg(test)]
 mod tests {
     use super::select;
-    use hermes_runtime_protocol::v1::{
+    use makosh_runtime_protocol::v1::{
         CapabilityCriticalityV1, CapabilityDescriptorV1, CapabilityRequestV1,
         DistributionArtifactKindV1, DistributionManifestArtifactV1, DistributionManifestV1,
         IntegrationStateRequestV1, ModuleDescriptorV1, ModuleKindV1, RuntimeArtifactRequestV1,
@@ -170,7 +170,7 @@ mod tests {
     #[test]
     fn selects_only_granted_exact_module_artifacts_and_one_state_layout() {
         let descriptor = descriptor();
-        let manifest = manifest("hermes-telegram-runtime");
+        let manifest = manifest("makosh-telegram-runtime");
 
         let none = select(&descriptor, &[], &manifest).expect("no grants");
         assert!(none.runtime_artifacts().is_empty());
@@ -193,7 +193,7 @@ mod tests {
             select(
                 &descriptor,
                 &["telegram.unknown.v1".to_owned()],
-                &manifest("hermes-telegram-runtime"),
+                &manifest("makosh-telegram-runtime"),
             )
             .is_err()
         );
@@ -201,7 +201,7 @@ mod tests {
             select(
                 &descriptor,
                 &["telegram.runtime.v1".to_owned()],
-                &manifest("hermes-other-runtime"),
+                &manifest("makosh-other-runtime"),
             )
             .is_err()
         );
@@ -210,7 +210,7 @@ mod tests {
     #[test]
     fn selects_exact_workflow_executable_and_model_data_but_rejects_domains() {
         let mut descriptor = descriptor();
-        descriptor.module_id = "hermes-attachment-text-extraction-runtime".to_owned();
+        descriptor.module_id = "makosh-attachment-text-extraction-runtime".to_owned();
         descriptor.owner_id = "attachment_text_extraction".to_owned();
         descriptor.module_kind = ModuleKindV1::Workflow as i32;
         descriptor.capabilities[0].capability_id =
@@ -290,7 +290,7 @@ mod tests {
         ModuleDescriptorV1 {
             descriptor_major: 1,
             descriptor_revision: 1,
-            module_id: "hermes-telegram-runtime".to_owned(),
+            module_id: "makosh-telegram-runtime".to_owned(),
             owner_id: "telegram".to_owned(),
             module_kind: ModuleKindV1::Integration as i32,
             module_version: "1".to_owned(),

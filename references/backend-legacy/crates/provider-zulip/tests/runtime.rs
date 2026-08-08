@@ -1,8 +1,8 @@
 use chrono::Utc;
-use hermes_provider_api::{
+use makosh_provider_api::{
     CredentialLease, ProviderCommandEnvelope, ProviderCommandInput, ProviderId, ProviderRuntimePort,
 };
-use hermes_provider_zulip::runtime::{ZulipInProcessRuntime, ZulipRuntimeConfig};
+use makosh_provider_zulip::runtime::{ZulipInProcessRuntime, ZulipRuntimeConfig};
 use serde_json::json;
 
 fn command(account_id: &str, lease_epoch: u64) -> ProviderCommandEnvelope {

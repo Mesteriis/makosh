@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/attachment_preview_evidence_replay/v1/replay.proto"],
+            &["proto/makosh/attachment_preview_evidence_replay/v1/replay.proto"],
             &["proto"],
         )
         .expect("Attachment Preview evidence replay API must compile");

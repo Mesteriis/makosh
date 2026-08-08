@@ -4,12 +4,12 @@ use std::time::{Duration, Instant};
 
 use base64::Engine as _;
 use base64::engine::general_purpose::URL_SAFE_NO_PAD;
-use hermes_events_protocol::validation::envelope::decode_envelope_v1;
-use hermes_mail_api::{
+use makosh_events_protocol::validation::envelope::decode_envelope_v1;
+use makosh_mail_api::{
     MailClientRequestV1, MailClientResponseV1, MailSendMailRequestV1,
     client_contract::MailClientContractV1,
 };
-use hermes_mail_persistence::GmailOAuthCredentialBindingV1;
+use makosh_mail_persistence::GmailOAuthCredentialBindingV1;
 
 use crate::identity::device::signer::DeviceSigner;
 
@@ -25,24 +25,24 @@ const GMAIL_ACCESS_TOKEN: &str = "managed-mail-gmail-access-token";
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Mail, Gmail TLS and NATS"]
 fn managed_mail_gmail_runtime_mutates_once_and_replays_event_without_private_payload() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let gmail = MailGmailFixture::start();
-    let root = unique_target_root("hermes-managed-mail-gmail-delivery");
+    let root = unique_target_root("makosh-managed-mail-gmail-delivery");
     let data = private_directory(short_communications_kernel_data_directory());
     let vault_dir = private_directory(data.join("vault"));
     initialize_vault(&vault_dir, &credential_directory());
     let seeded_gmail = seed_mail_vault(&vault_dir);
     let release = installed_communications_mail_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             "owner-1",
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -221,7 +221,7 @@ fn managed_mail_gmail_runtime_mutates_once_and_replays_event_without_private_pay
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Gmail fixture");
     std::fs::remove_dir_all(data).expect("remove short kernel data fixture");

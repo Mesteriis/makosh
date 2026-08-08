@@ -28,7 +28,7 @@ Vault/Storage/Blob/NATS, проводит safe attachment до ready extraction 
 unsupported language, stale source revision, provider failure, explicit stale
 runtime/grant fences, generation successor, metadata/SSE replay после restart,
 owner revoke и privacy. Отдельный positive contour прошёл через настоящий
-loopback Ollama process и модель `hermes-conformance`: workflow получил реальный
+loopback Ollama process и модель `makosh-conformance`: workflow получил реальный
 переведённый candidate, выдал actor-bound one-use Blob ticket, закрыл wrong-actor
 и ticket replay, а после restart запретил новую выдачу authority для артефакта
 предыдущего generation. Поэтому `attachment_translation_v1` переведён в
@@ -105,12 +105,12 @@ client audience, тогда как durable workflow требует target-bound 
 Workflow вводит шесть отдельных Cargo packages:
 
 ```text
-hermes-attachment-translation-api
-hermes-attachment-translation-ingress
-hermes-attachment-translation-core
-hermes-attachment-translation-persistence
-hermes-attachment-translation-runtime
-hermes-attachment-translation-assembly
+makosh-attachment-translation-api
+makosh-attachment-translation-ingress
+makosh-attachment-translation-core
+makosh-attachment-translation-persistence
+makosh-attachment-translation-runtime
+makosh-attachment-translation-assembly
 ```
 
 Причины изменения разделены функционально:
@@ -123,7 +123,7 @@ hermes-attachment-translation-assembly
 - `assembly` — unsigned descriptor, settings, Storage bundle и release fragment.
 
 Attachment Text Extraction получает зависимость только на public
-`hermes-attachment-translation-ingress`. Attachment Translation runtime не
+`makosh-attachment-translation-ingress`. Attachment Translation runtime не
 импортирует Text Extraction, Communications, Attachment Security, AI Engine,
 Ollama, Blob, Kernel или Gateway implementation/storage packages.
 
@@ -244,9 +244,9 @@ private content, не выбирают AI provider и не становятся 
 `attachment_translation_contracts_v1` является отдельным атомарным foundation
 gate и включает только:
 
-1. `hermes-attachment-translation-api`;
-2. `hermes-attachment-translation-ingress`;
-3. `hermes-attachment-translation-core`;
+1. `makosh-attachment-translation-api`;
+2. `makosh-attachment-translation-ingress`;
+3. `makosh-attachment-translation-core`;
 4. generated schema digests, event envelope validation, pure lifecycle tests и
    compile-isolation evidence.
 
@@ -254,7 +254,7 @@ gate и включает только:
 не меняет состояние `attachment_translation_v1`.
 
 Следующий phase gate `attachment_translation_persistence_v1` добавляет только
-`hermes-attachment-translation-persistence`: owner-local additive Storage
+`makosh-attachment-translation-persistence`: owner-local additive Storage
 bundle, operation fingerprint, commit-before-Ack inbox, exact outbox bytes,
 recoverable non-terminal runs и replayable realtime sequence. Он не вводит
 runtime, AI provider или cross-owner SQL и также не меняет состояние полного

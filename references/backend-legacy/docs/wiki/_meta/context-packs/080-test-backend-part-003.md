@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `test`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/tests/communication_ingestion/credential_reader.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/communication_ingestion/credential_reader.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/communication_ingestion/credential_reader.rs`
 - Size bytes / Размер в байтах: `9314`
 - Included characters / Включено символов: `9314`
 - Truncated / Обрезано: `no`
@@ -73,7 +73,7 @@ async fn provider_credential_reader_resolves_bound_account_secret_against_postgr
     let pool = database.pool().expect("configured pool").clone();
     let communication_store = CommunicationIngestionStore::new(pool.clone());
     let secret_binding_store =
-        hermes_hub_backend::domains::communications::core::CommunicationProviderSecretBindingStore::new(
+        makosh_hub_backend::domains::communications::core::CommunicationProviderSecretBindingStore::new(
             pool.clone(),
         );
     let secret_store = SecretReferenceStore::new(pool);
@@ -143,7 +143,7 @@ async fn provider_credential_reader_reports_missing_binding_against_postgres() {
     let pool = database.pool().expect("configured pool").clone();
     let communication_store = CommunicationIngestionStore::new(pool.clone());
     let secret_binding_store =
-        hermes_hub_backend::domains::communications::core::CommunicationProviderSecretBindingStore::new(
+        makosh_hub_backend::domains::communications::core::CommunicationProviderSecretBindingStore::new(
             pool.clone(),
         );
     let secret_store = SecretReferenceStore::new(pool);
@@ -190,7 +190,7 @@ async fn provider_credential_reader_propagates_resolver_failures_against_postgre
     let pool = database.pool().expect("configured pool").clone();
     let communication_store = CommunicationIngestionStore::new(pool.clone());
     let secret_binding_store =
-        hermes_hub_backend::domains::communications::core::CommunicationProviderSecretBindingStore::new(
+        makosh_hub_backend::domains::communications::core::CommunicationProviderSecretBindingStore::new(
             pool.clone(),
         );
     let secret_store = SecretReferenceStore::new(pool);
@@ -254,7 +254,7 @@ async fn provider_credential_reader_rejects_incompatible_secret_kind_against_pos
     let pool = database.pool().expect("configured pool").clone();
     let communication_store = CommunicationIngestionStore::new(pool.clone());
     let secret_binding_store =
-        hermes_hub_backend::domains::communications::core::CommunicationProviderSecretBindingStore::new(
+        makosh_hub_backend::domains::communications::core::CommunicationProviderSecretBindingStore::new(
             pool.clone(),
         );
     let secret_store = SecretReferenceStore::new(pool);
@@ -313,7 +313,7 @@ async fn provider_credential_reader_rejects_incompatible_secret_kind_against_pos
 
 ### `backend/tests/communication_ingestion/raw_records.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/communication_ingestion/raw_records.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/communication_ingestion/raw_records.rs`
 - Size bytes / Размер в байтах: `4292`
 - Included characters / Включено символов: `4292`
 - Truncated / Обрезано: `no`
@@ -455,7 +455,7 @@ async fn communication_ingestion_records_raw_sources_idempotently_against_postgr
 
 ### `backend/tests/communication_ingestion/secret_bindings.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/communication_ingestion/secret_bindings.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/communication_ingestion/secret_bindings.rs`
 - Size bytes / Размер в байтах: `9777`
 - Included characters / Включено символов: `9777`
 - Truncated / Обрезано: `no`
@@ -738,7 +738,7 @@ async fn communication_ingestion_scopes_secret_refs_by_provider_account_against_
 
 ### `backend/tests/communication_ingestion/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/communication_ingestion/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/communication_ingestion/support.rs`
 - Size bytes / Размер в байтах: `1384`
 - Included characters / Включено символов: `1384`
 - Truncated / Обрезано: `no`
@@ -748,16 +748,16 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use testkit::context::TestContext;
 
 pub(crate) use chrono::Utc;
-pub(crate) use hermes_hub_backend::domains::communications::core::{
+pub(crate) use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewIngestionCheckpoint, NewProviderAccount,
     NewProviderAccountSecretBinding, NewRawCommunicationRecord, ProviderAccountSecretPurpose,
     ProviderCredentialError, ProviderCredentialReader,
 };
-pub(crate) use hermes_hub_backend::platform::secrets::{
+pub(crate) use makosh_hub_backend::platform::secrets::{
     InMemorySecretResolver, NewSecretReference, SecretKind, SecretReferenceStore,
     SecretResolutionError, SecretResolver, SecretStoreKind,
 };
-pub(crate) use hermes_hub_backend::platform::storage::Database;
+pub(crate) use makosh_hub_backend::platform::storage::Database;
 pub(crate) use serde_json::json;
 
 pub(crate) async fn test_database_url(test_name: &str) -> Option<String> {
@@ -786,7 +786,7 @@ pub(crate) fn unique_suffix() -> u128 {
 
 ### `backend/tests/communication_ingestion_architecture.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/communication_ingestion_architecture.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/communication_ingestion_architecture.rs`
 - Size bytes / Размер в байтах: `2094`
 - Included characters / Включено символов: `2094`
 - Truncated / Обрезано: `no`
@@ -860,7 +860,7 @@ fn is_communication_ingestion_test_file(path: &Path) -> bool {
 
 ### `backend/tests/communications_architecture_target.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/communications_architecture_target.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/communications_architecture_target.rs`
 - Size bytes / Размер в байтах: `64797`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1141,7 +1141,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/communications_connectrpc.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/communications_connectrpc.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/communications_connectrpc.rs`
 - Size bytes / Размер в байтах: `44239`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1150,24 +1150,24 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 use axum::body::to_bytes;
 use axum::http::StatusCode;
 use chrono::Utc;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::drafts::{
+use makosh_hub_backend::domains::communications::drafts::{
     CommunicationDraftStore, DraftStatus, NewCommunicationDraft,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, project_raw_email_message,
 };
-use hermes_hub_backend::domains::communications::outbox::{
+use makosh_hub_backend::domains::communications::outbox::{
     CommunicationOutboxStatus, CommunicationOutboxStore, NewCommunicationOutboxItem,
 };
-use hermes_hub_backend::domains::communications::storage::{
+use makosh_hub_backend::domains::communications::storage::{
     AttachmentSafetyScanReport, AttachmentSafetyScanStatus, CommunicationAttachmentDisposition,
     CommunicationStorageStore, LocalCommunicationBlobStore, NewCommunicationAttachment,
     NewCommunicationBlob,
 };
-use hermes_hub_backend::workflows::mail_background_sync::DEFAULT_MAIL_SYNC_BLOB_ROOT;
+use makosh_hub_backend::workflows::mail_background_sync::DEFAULT_MAIL_SYNC_BLOB_ROOT;
 use serde_json::{Value, json};
 use testkit::app::{TestApp, post_json};
 use tower::ServiceExt;
@@ -1182,7 +1182,7 @@ async fn communications_connect_api_requires_local_api_secret() {
         .oneshot(
             axum::http::Request::builder()
                 .method("POST")
-                .uri("/hermes.communications.v1.CommunicationsService/ListMessages")
+                .uri("/makosh.communications.v1.CommunicationsService/ListMessages")
                 .header("content-type", "application/json")
                 .body(axum::body::Body::from("{}"))
                 .expect("connect request without secret"),
@@ -1193,7 +1193,7 @@ async fn communications_connect_api_requires_local_api_secret() {
 
     let allowed_response = router
         .oneshot(post_json(
-            "/hermes.communications.v1.CommunicationsService/ListMessages",
+            "/makosh.communications.v1.CommunicationsService/ListMessages",
             json!({}),
         ))
         .await
@@ -1329,7 +1329,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ListMessages",
+                "/makosh.communications.v1.CommunicationsService/ListMessages",
                 json!({
                     "account_id": "acct-connectrpc-mail",
                     "limit": 10
@@ -1354,7 +1354,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/GetMessage",
+                "/makosh.communications.v1.CommunicationsService/GetMessage",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -1373,7 +1373,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/TransitionMessageWorkflowState",
+                "/makosh.communications.v1.CommunicationsService/TransitionMessageWorkflowState",
                 json!({
                     "message_id": projected.message_id,
                     "workflow_state": "reviewed"
@@ -1391,7 +1391,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/TrashMessage",
+                "/makosh.communications.v1.CommunicationsService/TrashMessage",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -1407,7 +1407,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/RestoreMessage",
+                "/makosh.communications.v1.CommunicationsService/RestoreMessage",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -1423,7 +1423,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/MarkMessageRead",
+                "/makosh.communications.v1.CommunicationsService/MarkMessageRead",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -1440,7 +1440,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/DeleteMessageFromProvider",
+                "/makosh.communications.v1.CommunicationsService/DeleteMessageFromProvider",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -1457,7 +1457,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/RestoreMessage",
+                "/makosh.communications.v1.CommunicationsService/RestoreMessage",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -1472,7 +1472,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/BulkMessageAction",
+                "/makosh.communications.v1.CommunicationsService/BulkMessageAction",
                 json!({
                     "action": "trash",
                     "message_ids": [projected.message_id]
@@ -1491,7 +1491,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/config.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/config.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/config.rs`
 - Size bytes / Размер в байтах: `11566`
 - Included characters / Включено символов: `11566`
 - Truncated / Обрезано: `no`
@@ -1500,7 +1500,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use std::path::Path;
 
-use hermes_hub_backend::platform::config::{AiRuntimeProvider, AppConfig, ConfigError};
+use makosh_hub_backend::platform::config::{AiRuntimeProvider, AppConfig, ConfigError};
 
 #[test]
 fn default_config_binds_to_localhost_without_database_url() {
@@ -1510,7 +1510,7 @@ fn default_config_binds_to_localhost_without_database_url() {
         config.http_addr(),
         SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), 8080)
     );
-    assert_eq!(config.service_name(), "hermes-hub-backend");
+    assert_eq!(config.service_name(), "makosh-backend");
     assert_eq!(config.database_url(), None);
     assert_eq!(config.local_api_secret(), None);
     assert_eq!(config.secret_vault_path(), None);
@@ -1524,12 +1524,12 @@ fn default_config_binds_to_localhost_without_database_url() {
 #[test]
 fn config_from_pairs_overrides_http_addr_database_url_and_local_api_secret() {
     let config = AppConfig::from_pairs([
-        ("HERMES_HTTP_ADDR", "127.0.0.1:9090"),
+        ("MAKOSH_HTTP_ADDR", "127.0.0.1:9090"),
         (
             "DATABASE_URL",
-            "postgres://hermes:local-dev-password@postgres:5432/hermes_hub",
+            "postgres://makosh:local-dev-password@postgres:5432/makosh_hub",
         ),
-        ("HERMES_LOCAL_API_SECRET", "local-dev-api-secret"),
+        ("MAKOSH_LOCAL_API_SECRET", "local-dev-api-secret"),
     ])
     .expect("valid config");
 
@@ -1539,7 +1539,7 @@ fn config_from_pairs_overrides_http_addr_database_url_and_local_api_secret() {
     );
     assert_eq!(
         config.database_url(),
-        Some("postgres://hermes:local-dev-password@postgres:5432/hermes_hub")
+        Some("postgres://makosh:local-dev-password@postgres:5432/makosh_hub")
     );
     assert_eq!(config.local_api_secret(), Some("local-dev-api-secret"));
 }
@@ -1548,16 +1548,16 @@ fn config_from_pairs_overrides_http_addr_database_url_and_local_api_secret() {
 fn config_from_pairs_accepts_secret_vault_path_and_key() {
     let config = AppConfig::from_pairs([
         (
-            "HERMES_SECRET_VAULT_PATH",
-            "docker/data/secrets/hermes.vault.json",
+            "MAKOSH_SECRET_VAULT_PATH",
+            "docker/data/secrets/makosh.vault.json",
         ),
-        ("HERMES_SECRET_VAULT_KEY", "local-vault-key"),
+        ("MAKOSH_SECRET_VAULT_KEY", "local-vault-key"),
     ])
     .expect("valid secret vault config");
 
     assert_eq!(
         config.secret_vault_path(),
-        Some(Path::new("docker/data/secrets/hermes.vault.json"))
+        Some(Path::new("docker/data/secrets/makosh.vault.json"))
     );
     assert_eq!(
         config
@@ -1575,10 +1575,10 @@ fn config_from_pairs_accepts_secret_vault_path_and_key() {
 #[test]
 fn config_from_pairs_accepts_ollama_runtime_overrides() {
     let config = AppConfig::from_pairs([
-        ("HERMES_OLLAMA_BASE_URL", "http://192.168.1.2:11434"),
-        ("HERMES_OLLAMA_CHAT_MODEL", "qwen3:4b"),
-        ("HERMES_OLLAMA_EMBED_MODEL", "qwen3-embedding:4b"),
-        ("HERMES_OLLAMA_TIMEOUT_SECONDS", "120"),
+        ("MAKOSH_OLLAMA_BASE_URL", "http://192.168.1.2:11434"),
+        ("MAKOSH_OLLAMA_CHAT_MODEL", "qwen3:4b"),
+        ("MAKOSH_OLLAMA_EMBED_MODEL", "qwen3-embedding:4b"),
+        ("MAKOSH_OLLAMA_TIMEOUT_SECONDS", "120"),
     ])
     .expect("valid Ollama config");
 
@@ -1591,15 +1591,15 @@ fn config_from_pairs_accepts_ollama_runtime_overrides() {
 #[test]
 fn config_from_pairs_accepts_omniroute_runtime_overrides_without_printing_key() {
     let config = AppConfig::from_pairs([
-        ("HERMES_AI_PROVIDER", "omniroute"),
-        ("HERMES_OMNIROUTE_BASE_URL", "https://ai.sh-inc.ru/v1/"),
-        ("HERMES_OMNIROUTE_CHAT_MODEL", "codex/gpt-5.5"),
+        ("MAKOSH_AI_PROVIDER", "omniroute"),
+        ("MAKOSH_OMNIROUTE_BASE_URL", "https://ai.sh-inc.ru/v1/"),
+        ("MAKOSH_OMNIROUTE_CHAT_MODEL", "codex/gpt-5.5"),
         (
-            "HERMES_OMNIROUTE_EMBED_MODEL",
+            "MAKOSH_OMNIROUTE_EMBED_MODEL",
             "openai-compatible-chat-ollama-pve/qwen3-embedding:4b",
         ),
-        ("HERMES_OMNIROUTE_TIMEOUT_SECONDS", "90"),
-        ("HERMES_OMNIROUTE_API_KEY", "omniroute-test-key"),
+        ("MAKOSH_OMNIROUTE_TIMEOUT_SECONDS", "90"),
+        ("MAKOSH_OMNIROUTE_API_KEY", "omniroute-test-key"),
     ])
     .expect("valid OmniRoute config");
 
@@ -1630,7 +1630,7 @@ fn config_from_pairs_accepts_omniroute_runtime_overrides_without_printing_key() 
 #[test]
 fn config_from_pairs_accepts_tdjson_runtime_path() {
     let config =
-        AppConfig::from_pairs([("HERMES_TDJSON_PATH", "/opt/homebrew/lib/libtdjson.dylib")])
+        AppConfig::from_pairs([("MAKOSH_TDJSON_PATH", "/opt/homebrew/lib/libtdjson.dylib")])
             .expect("valid TDLib JSON runtime config");
 
     assert_eq!(
@@ -1642,8 +1642,8 @@ fn config_from_pairs_accepts_tdjson_runtime_path() {
 #[test]
 fn config_from_pairs_accepts_telegram_app_credentials() {
     let config = AppConfig::from_pairs([
-        ("HERMES_TELEGRAM_API_ID", "12345"),
-        ("HERMES_TELEGRAM_API_HASH", "telegram-api-hash"),
+        ("MAKOSH_TELEGRAM_API_ID", "12345"),
+        ("MAKOSH_TELEGRAM_API_HASH", "telegram-api-hash"),
     ])
     .expect("valid Telegram app credential config");
 
@@ -1667,7 +1667,7 @@ fn config_from_pairs_accepts_telegram_app_credentials() {
 #[test]
 fn config_from_pairs_accepts_zoom_token_maintenance_scheduler_toggle() {
     let config =
-        AppConfig::from_pairs([("HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED", "false")])
+        AppConfig::from_pairs([("MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED", "false")])
             .expect("valid Zoom token maintenance scheduler config");
 
     assert!(!config.zoom_token_maintenance_scheduler_enabled());
@@ -1675,7 +1675,7 @@ fn config_from_pairs_accepts_zoom_token_maintenance_scheduler_toggle() {
 
 #[test]
 fn config_from_pairs_accepts_zoom_recording_sync_scheduler_toggle() {
-    let config = AppConfig::from_pairs([("HERMES_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED", "false")])
+    let config = AppConfig::from_pairs([("MAKOSH_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED", "false")])
         .expect("valid Zoom recording sync scheduler config");
 
     assert!(!config.zoom_recording_sync_scheduler_enabled());
@@ -1684,7 +1684,7 @@ fn config_from_pairs_accepts_zoom_recording_sync_scheduler_toggle() {
 #[test]
 fn config_from_pairs_accepts_zoom_retention_cleanup_scheduler_toggle() {
     let config =
-        AppConfig::from_pairs([("HERMES_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED", "false")])
+        AppConfig::from_pairs([("MAKOSH_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED", "false")])
             .expect("valid Zoom retention cleanup scheduler config");
 
     assert!(!config.zoom_retention_cleanup_scheduler_enabled());
@@ -1711,7 +1711,7 @@ fn default_config_uses_local_ollama_and_qwen_models() {
 
 #[test]
 fn config_from_pairs_rejects_invalid_http_addr() {
-    let error = AppConfig::from_pairs([("HERMES_HTTP_ADDR", "not-a-socket")])
+    let error = AppConfig::from_pairs([("MAKOSH_HTTP_ADDR", "not-a-socket")])
         .expect_err("invalid socket address must fail");
 
     assert!(matches!(error, ConfigError::InvalidHttpAddr { .. }));
@@ -1727,7 +1727,7 @@ fn config_from_pairs_rejects_empty_database_url() {
 
 #[test]
 fn config_from_pairs_rejects_empty_local_api_secret() {
-    let error = AppConfig::from_pairs([("HERMES_LOCAL_API_SECRET", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_LOCAL_API_SECRET", "   ")])
         .expect_err("empty local API secret must fail");
 
     assert!(matches!(error, ConfigError::EmptyLocalApiSecret));
@@ -1735,7 +1735,7 @@ fn config_from_pairs_rejects_empty_local_api_secret() {
 
 #[test]
 fn config_from_pairs_rejects_empty_secret_vault_path() {
-    let error = AppConfig::from_pairs([("HERMES_SECRET_VAULT_PATH", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_SECRET_VAULT_PATH", "   ")])
         .expect_err("empty secret vault path must fail");
 
     assert!(matches!(error, ConfigError::EmptySecretVaultPath));
@@ -1743,7 +1743,7 @@ fn config_from_pairs_rejects_empty_secret_vault_path() {
 
 #[test]
 fn config_from_pairs_rejects_empty_secret_vault_key() {
-    let error = AppConfig::from_pairs([("HERMES_SECRET_VAULT_KEY", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_SECRET_VAULT_KEY", "   ")])
         .expect_err("empty secret vault key must fail");
 
     assert!(matches!(error, ConfigError::EmptySecretVaultKey));
@@ -1751,7 +1751,7 @@ fn config_from_pairs_rejects_empty_secret_vault_key() {
 
 #[test]
 fn config_from_pairs_rejects_empty_tdjson_path() {
-    let error = AppConfig::from_pairs([("HERMES_TDJSON_PATH", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_TDJSON_PATH", "   ")])
         .expect_err("empty TDLib JSON runtime path must fail");
 
     assert!(matches!(error, ConfigError::EmptyTdjsonPath));
@@ -1759,61 +1759,61 @@ fn config_from_pairs_rejects_empty_tdjson_path() {
 
 #[test]
 fn config_from_pairs_rejects_invalid_telegram_app_credentials() {
-    let error = AppConfig::from_pairs([("HERMES_TELEGRAM_API_ID", "0")])
+    let error = AppConfig::from_pairs([("MAKOSH_TELEGRAM_API_ID", "0")])
         .expect_err("zero Telegram API ID must fail");
     assert!(matches!(error, ConfigError::InvalidTelegramApiId { .. }));
 
-    let error = AppConfig::from_pairs([("HERMES_TELEGRAM_API_ID", "not-a-number")])
+    let error = AppConfig::from_pairs([("MAKOSH_TELEGRAM_API_ID", "not-a-number")])
         .expect_err("non-numeric Telegram API ID must fail");
     assert!(matches!(error, ConfigError::InvalidTelegramApiId { .. }));
 
-    let error = AppConfig::from_pairs([("HERMES_TELEGRAM_API_HASH", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_TELEGRAM_API_HASH", "   ")])
         .expect_err("empty Telegram API hash must fail");
     assert!(matches!(error, ConfigError::EmptyTelegramApiHash));
 }
 
 #[test]
 fn config_from_pairs_rejects_invalid_ollama_values() {
-    let error = AppConfig::from_pairs([("HERMES_OLLAMA_BASE_URL", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_OLLAMA_BASE_URL", "   ")])
         .expect_err("empty Ollama base URL must fail");
     assert!(matches!(error, ConfigError::EmptyOllamaBaseUrl));
 
-    let error = AppConfig::from_pairs([("HERMES_OLLAMA_CHAT_MODEL", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_OLLAMA_CHAT_MODEL", "   ")])
         .expect_err("empty Ollama chat model must fail");
     assert!(matches!(error, ConfigError::EmptyOllamaChatModel));
 
-    let error = AppConfig::from_pairs([("HERMES_OLLAMA_EMBED_MODEL", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_OLLAMA_EMBED_MODEL", "   ")])
         .expect_err("empty Ollama embed model must fail");
     assert!(matches!(error, ConfigError::EmptyOllamaEmbedModel));
 
-    let error = AppConfig::from_pairs([("HERMES_OLLAMA_TIMEOUT_SECONDS", "0")])
+    let error = AppConfig::from_pairs([("MAKOSH_OLLAMA_TIMEOUT_SECONDS", "0")])
         .expect_err("zero Ollama timeout must fail");
     assert!(matches!(error, ConfigError::InvalidOllamaTimeout { .. }));
 }
 
 #[test]
 fn config_from_pairs_rejects_invalid_omniroute_values() {
-    let error = AppConfig::from_pairs([("HERMES_AI_PROVIDER", "cloudy")])
+    let error = AppConfig::from_pairs([("MAKOSH_AI_PROVIDER", "cloudy")])
         .expect_err("unknown AI provider must fail");
     assert!(matches!(error, ConfigError::InvalidAiProvider { .. }));
 
-    let error = AppConfig::from_pairs([("HERMES_OMNIROUTE_BASE_URL", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_OMNIROUTE_BASE_URL", "   ")])
         .expect_err("empty OmniRoute base URL must fail");
     assert!(matches!(error, ConfigError::EmptyOmniRouteBaseUrl));
 
-    let error = AppConfig::from_pairs([("HERMES_OMNIROUTE_CHAT_MODEL", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_OMNIROUTE_CHAT_MODEL", "   ")])
         .expect_err("empty OmniRoute chat model must fail");
     assert!(matches!(error, ConfigError::EmptyOmniRouteChatModel));
 
-    let error = AppConfig::from_pairs([("HERMES_OMNIROUTE_EMBED_MODEL", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_OMNIROUTE_EMBED_MODEL", "   ")])
         .expect_err("empty OmniRoute embed model must fail");
     assert!(matches!(error, ConfigError::EmptyOmniRouteEmbedModel));
 
-    let error = AppConfig::from_pairs([("HERMES_OMNIROUTE_TIMEOUT_SECONDS", "0")])
+    let error = AppConfig::from_pairs([("MAKOSH_OMNIROUTE_TIMEOUT_SECONDS", "0")])
         .expect_err("zero OmniRoute timeout must fail");
     assert!(matches!(error, ConfigError::InvalidOmniRouteTimeout { .. }));
 
-    let error = AppConfig::from_pairs([("HERMES_OMNIROUTE_API_KEY", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_OMNIROUTE_API_KEY", "   ")])
         .expect_err("empty OmniRoute API key must fail");
     assert!(matches!(error, ConfigError::EmptyOmniRouteApiKey));
 }
@@ -1821,7 +1821,7 @@ fn config_from_pairs_rejects_invalid_omniroute_values() {
 
 ### `backend/tests/consistency_contradiction.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/consistency_contradiction.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/consistency_contradiction.rs`
 - Size bytes / Размер в байтах: `482`
 - Included characters / Включено символов: `482`
 - Truncated / Обрезано: `no`
@@ -1843,13 +1843,13 @@ mod support;
 
 ### `backend/tests/consistency_contradiction/engine.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/consistency_contradiction/engine.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/consistency_contradiction/engine.rs`
 - Size bytes / Размер в байтах: `7515`
 - Included characters / Включено символов: `7515`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::engines::consistency::{
+use makosh_hub_backend::engines::consistency::{
     AcceptedClaim, ConsistencyEngine, ContradictionReviewState, ContradictionSeverity,
     ContradictionSourceKind, EvidenceClaimExtractionInput, NewEvidenceClaim,
 };
@@ -1904,7 +1904,7 @@ fn consistency_engine_detects_direct_claim_contradiction_from_structured_claims(
 #[test]
 fn consistency_engine_ignores_matching_claims_after_normalization() {
     let accepted = AcceptedClaim {
-        subject_id: "project:v1:hermes".to_owned(),
+        subject_id: "project:v1:makosh".to_owned(),
         claim_type: "status".to_owned(),
         value: " Active ".to_owned(),
         source_kind: ContradictionSourceKind::Knowledge,
@@ -1912,7 +1912,7 @@ fn consistency_engine_ignores_matching_claims_after_normalization() {
         confidence: 0.9,
     };
     let new_claim = NewEvidenceClaim {
-        subject_id: "project:v1:hermes".to_owned(),
+        subject_id: "project:v1:makosh".to_owned(),
         claim_type: "status".to_owned(),
         value: "active".to_owned(),
         source_kind: ContradictionSourceKind::Communication,
@@ -2001,7 +2001,7 @@ fn consistency_engine_extracts_deterministic_natural_language_claims_from_eviden
 #[test]
 fn consistency_engine_detects_document_evidence_contradiction_after_claim_extraction() {
     let accepted = AcceptedClaim {
-        subject_id: "project:v1:hermes".to_owned(),
+        subject_id: "project:v1:makosh".to_owned(),
         claim_type: "status".to_owned(),
         value: "green".to_owned(),
         source_kind: ContradictionSourceKind::Memory,
@@ -2009,7 +2009,7 @@ fn consistency_engine_detects_document_evidence_contradiction_after_claim_extrac
         confidence: 0.92,
     };
     let document = EvidenceClaimExtractionInput {
-        subject_id: "project:v1:hermes".to_owned(),
+        subject_id: "project:v1:makosh".to_owned(),
         source_kind: ContradictionSourceKind::Document,
         source_id: "document:weekly-report".to_owned(),
         text: "Status: blocked".to_owned(),
@@ -2045,13 +2045,13 @@ fn consistency_engine_detects_document_evidence_contradiction_after_claim_extrac
 
 ### `backend/tests/consistency_contradiction/observation_store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/consistency_contradiction/observation_store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/consistency_contradiction/observation_store.rs`
 - Size bytes / Размер в байтах: `3529`
 - Included characters / Включено символов: `3529`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::engines::consistency::{
+use makosh_hub_backend::engines::consistency::{
     ContradictionObservationStore, ContradictionReviewState, ContradictionSeverity,
     ContradictionSourceKind, NewContradictionObservation,
 };
@@ -2154,23 +2154,23 @@ fn contradiction_observation_rejects_invalid_confidence_before_database_write() 
 
 ### `backend/tests/consistency_contradiction/refresh_event_call.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/consistency_contradiction/refresh_event_call.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/consistency_contradiction/refresh_event_call.rs`
 - Size bytes / Размер в байтах: `9000`
 - Included characters / Включено символов: `9000`
 - Truncated / Обрезано: `no`
 
 ```rust
 use chrono::{Duration, Utc};
-use hermes_hub_backend::domains::calendar::events::{CalendarEventStore, NewCalendarEvent};
-use hermes_hub_backend::domains::calendar::meetings::MeetingNoteStore;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::calendar::events::{CalendarEventStore, NewCalendarEvent};
+use makosh_hub_backend::domains::calendar::meetings::MeetingNoteStore;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount,
 };
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::engines::consistency::{
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::engines::consistency::{
     ContradictionObservationStore, ContradictionSeverity, ContradictionSourceKind,
 };
-use hermes_hub_backend::platform::calls::{
+use makosh_hub_backend::platform::calls::{
     CallDirection, CallIntelligenceStore, CallState, NewCallTranscript, NewTelegramCall,
     TranscriptStatus,
 };
@@ -2405,15 +2405,15 @@ async fn contradiction_refresh_detects_call_transcript_claim_against_active_pers
 
 ### `backend/tests/consistency_contradiction/refresh_message_document.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/consistency_contradiction/refresh_message_document.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/consistency_contradiction/refresh_message_document.rs`
 - Size bytes / Размер в байтах: `8419`
 - Included characters / Включено символов: `8419`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::engines::consistency::{
+use makosh_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::engines::consistency::{
     ContradictionObservationStore, ContradictionSeverity, ContradictionSourceKind,
 };
 use serde_json::json;
@@ -2647,14 +2647,14 @@ async fn contradiction_refresh_detects_document_claim_against_active_person_fact
 
 ### `backend/tests/consistency_contradiction/refresh_provider_messages.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/consistency_contradiction/refresh_provider_messages.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/consistency_contradiction/refresh_provider_messages.rs`
 - Size bytes / Размер в байтах: `6284`
 - Included characters / Включено символов: `6284`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::engines::consistency::{
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::engines::consistency::{
     ContradictionObservationStore, ContradictionSeverity, ContradictionSourceKind,
 };
 use serde_json::json;
@@ -2830,7 +2830,7 @@ async fn contradiction_refresh_detects_whatsapp_message_claim_against_active_per
 
 ### `backend/tests/consistency_contradiction/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/consistency_contradiction/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/consistency_contradiction/support.rs`
 - Size bytes / Размер в байтах: `7375`
 - Included characters / Включено символов: `7375`
 - Truncated / Обрезано: `no`
@@ -2842,17 +2842,17 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use testkit::context::TestContext;
 
 use chrono::Utc;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, CommunicationProviderKind, EmailProviderKind, NewProviderAccount,
     NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, consume_accepted_signal_event, project_raw_email_message,
 };
-use hermes_hub_backend::domains::signal_hub::{
+use makosh_hub_backend::domains::signal_hub::{
     dispatch_telegram_raw_signal, dispatch_whatsapp_raw_signal,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::json;
 use sqlx::postgres::PgPool;
 
@@ -3050,7 +3050,7 @@ pub async fn seed_whatsapp_message(
 
 ### `backend/tests/consistency_contradiction_architecture.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/consistency_contradiction_architecture.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/consistency_contradiction_architecture.rs`
 - Size bytes / Размер в байтах: `2114`
 - Included characters / Включено символов: `2114`
 - Truncated / Обрезано: `no`
@@ -3124,7 +3124,7 @@ fn is_consistency_contradiction_test_file(path: &Path) -> bool {
 
 ### `backend/tests/context_packs.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/context_packs.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/context_packs.rs`
 - Size bytes / Размер в байтах: `4875`
 - Included characters / Включено символов: `4875`
 - Truncated / Обрезано: `no`
@@ -3134,14 +3134,14 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use testkit::context::TestContext;
 
 use chrono::{TimeZone, Utc};
-use hermes_hub_backend::engines::context_packs::{
+use makosh_hub_backend::engines::context_packs::{
     ContextPackKind, ContextPackSourceKind, ContextPackStore, ContextPackStoreError,
     NewContextPack, NewContextPackSource,
 };
-use hermes_hub_backend::platform::observations::{
+use makosh_hub_backend::platform::observations::{
     NewObservation, ObservationOriginKind, ObservationStore,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::json;
 use sqlx::postgres::{PgPool, PgPoolOptions};
 
@@ -3259,7 +3259,7 @@ async fn live_context_pack_context(
 
 fn disconnected_context_pack_store() -> ContextPackStore {
     let pool = PgPoolOptions::new()
-        .connect_lazy("postgres://hermes:unused@127.0.0.1:1/hermes_hub")
+        .connect_lazy("postgres://makosh:unused@127.0.0.1:1/makosh_hub")
         .expect("create lazy test pool");
     ContextPackStore::new(pool)
 }

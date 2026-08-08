@@ -2,49 +2,49 @@
 
 use super::*;
 
-use hermes_communication_task_candidate_api::{
+use makosh_communication_task_candidate_api::{
     COMMUNICATION_TASK_CANDIDATE_MODULE_ID_V1, COMMUNICATION_TASK_CANDIDATE_OWNER_V1,
 };
-use hermes_communication_task_candidate_persistence::{
+use makosh_communication_task_candidate_persistence::{
     COMMUNICATION_TASK_CANDIDATE_STORAGE_BUNDLE_REVISION_V1,
     communication_task_candidate_extraction_storage_bundle_v1,
 };
-use hermes_communication_task_candidate_runtime::{
+use makosh_communication_task_candidate_runtime::{
     COMMUNICATION_TASK_CANDIDATE_STORAGE_CAPABILITY_ID_V1,
     communication_task_candidate_module_descriptor_v1,
     communication_task_candidate_settings_schema_bytes_v1,
 };
-use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_review_task_candidate_api::{
+use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_review_task_candidate_api::{
     REVIEW_TASK_CANDIDATE_MODULE_ID_V1, REVIEW_TASK_CANDIDATE_OWNER_V1,
 };
-use hermes_review_task_candidate_persistence::{
+use makosh_review_task_candidate_persistence::{
     REVIEW_TASK_CANDIDATE_STORAGE_BUNDLE_REVISION_V1, review_task_candidate_storage_bundle_v1,
 };
-use hermes_review_task_candidate_runtime::{
+use makosh_review_task_candidate_runtime::{
     REVIEW_TASK_CANDIDATE_STORAGE_CAPABILITY_ID_V1, review_task_candidate_module_descriptor_v1,
     review_task_candidate_settings_schema_bytes_v1,
 };
-use hermes_reviewed_task_candidate_promotion_core::{
+use makosh_reviewed_task_candidate_promotion_core::{
     REVIEWED_TASK_CANDIDATE_PROMOTION_MODULE_ID_V1, REVIEWED_TASK_CANDIDATE_PROMOTION_OWNER_V1,
 };
-use hermes_reviewed_task_candidate_promotion_persistence::schema::{
+use makosh_reviewed_task_candidate_promotion_persistence::schema::{
     REVIEWED_TASK_CANDIDATE_PROMOTION_STORAGE_BUNDLE_REVISION_V1,
     reviewed_task_candidate_promotion_storage_bundle_v1,
 };
-use hermes_reviewed_task_candidate_promotion_runtime::{
+use makosh_reviewed_task_candidate_promotion_runtime::{
     REVIEWED_TASK_CANDIDATE_PROMOTION_STORAGE_CAPABILITY_ID_V1,
     reviewed_task_candidate_promotion_module_descriptor_v1,
     reviewed_task_candidate_promotion_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedWorkflowRuntimeConfigurationV1, ModuleDescriptorV1, ModuleKindV1,
 };
-use hermes_storage_protocol::v1::StorageBundleV1;
-use hermes_tasks_command_api::{TASKS_MODULE_ID_V1, TASKS_OWNER_ID_V1};
-use hermes_tasks_persistence::{TASKS_STORAGE_BUNDLE_REVISION_V1, tasks_storage_bundle_v1};
-use hermes_tasks_runtime::{
+use makosh_storage_protocol::v1::StorageBundleV1;
+use makosh_tasks_command_api::{TASKS_MODULE_ID_V1, TASKS_OWNER_ID_V1};
+use makosh_tasks_persistence::{TASKS_STORAGE_BUNDLE_REVISION_V1, tasks_storage_bundle_v1};
+use makosh_tasks_runtime::{
     TASKS_STORAGE_CAPABILITY_ID_V1, tasks_module_descriptor_v1, tasks_settings_schema_bytes_v1,
 };
 
@@ -146,7 +146,7 @@ fn task_candidate_units_v1() -> [TaskCandidateManagedUnitV1; 4] {
         TaskCandidateManagedUnitV1 {
             label: "Communication Task Candidate",
             artifact_id: "communication_task_candidate_extraction.runtime.v1",
-            binary_environment: "HERMES_COMMUNICATION_TASK_CANDIDATE_RUNTIME_BIN",
+            binary_environment: "MAKOSH_COMMUNICATION_TASK_CANDIDATE_RUNTIME_BIN",
             storage_capability_id: COMMUNICATION_TASK_CANDIDATE_STORAGE_CAPABILITY_ID_V1,
             storage_revision: COMMUNICATION_TASK_CANDIDATE_STORAGE_BUNDLE_REVISION_V1,
             descriptor: communication_task_candidate_module_descriptor_v1(
@@ -158,7 +158,7 @@ fn task_candidate_units_v1() -> [TaskCandidateManagedUnitV1; 4] {
         TaskCandidateManagedUnitV1 {
             label: "Review Task Candidate",
             artifact_id: "review.task-candidate.runtime.v1",
-            binary_environment: "HERMES_REVIEW_TASK_CANDIDATE_RUNTIME_BIN",
+            binary_environment: "MAKOSH_REVIEW_TASK_CANDIDATE_RUNTIME_BIN",
             storage_capability_id: REVIEW_TASK_CANDIDATE_STORAGE_CAPABILITY_ID_V1,
             storage_revision: REVIEW_TASK_CANDIDATE_STORAGE_BUNDLE_REVISION_V1,
             descriptor: review_task_candidate_module_descriptor_v1(TASK_CANDIDATE_BUILD_ID_V1),
@@ -168,7 +168,7 @@ fn task_candidate_units_v1() -> [TaskCandidateManagedUnitV1; 4] {
         TaskCandidateManagedUnitV1 {
             label: "Reviewed Task Candidate Promotion",
             artifact_id: "reviewed_task_candidate_promotion.runtime.v1",
-            binary_environment: "HERMES_REVIEWED_TASK_CANDIDATE_PROMOTION_RUNTIME_BIN",
+            binary_environment: "MAKOSH_REVIEWED_TASK_CANDIDATE_PROMOTION_RUNTIME_BIN",
             storage_capability_id: REVIEWED_TASK_CANDIDATE_PROMOTION_STORAGE_CAPABILITY_ID_V1,
             storage_revision: REVIEWED_TASK_CANDIDATE_PROMOTION_STORAGE_BUNDLE_REVISION_V1,
             descriptor: reviewed_task_candidate_promotion_module_descriptor_v1(
@@ -180,7 +180,7 @@ fn task_candidate_units_v1() -> [TaskCandidateManagedUnitV1; 4] {
         TaskCandidateManagedUnitV1 {
             label: "Tasks",
             artifact_id: "tasks.runtime.v1",
-            binary_environment: "HERMES_TASKS_RUNTIME_BIN",
+            binary_environment: "MAKOSH_TASKS_RUNTIME_BIN",
             storage_capability_id: TASKS_STORAGE_CAPABILITY_ID_V1,
             storage_revision: TASKS_STORAGE_BUNDLE_REVISION_V1,
             descriptor: tasks_module_descriptor_v1(TASK_CANDIDATE_BUILD_ID_V1),
@@ -214,7 +214,7 @@ fn admit_task_candidate_unit_v1(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             unit.artifact_id,
             Sha256::digest(
                 std::fs::read(binary(unit.binary_environment))
@@ -430,7 +430,7 @@ fn start_reserved_task_candidate_unit_v1(
 fn active_task_candidate_storage_binding_v1(
     store: &SqliteControlStore,
     admitted: &AdmittedTaskCandidateRuntimeV1,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(
             &admitted.registration_id,

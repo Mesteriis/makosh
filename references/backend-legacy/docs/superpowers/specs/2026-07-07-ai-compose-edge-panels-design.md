@@ -95,7 +95,7 @@ normal compose surface.
 
 ## Account Selection
 
-Compose must allow choosing among all mail-capable accounts available to Hermes.
+Compose must allow choosing among all mail-capable accounts available to Макошь.
 
 The sender selector should display user-facing account labels and addresses, not
 technical account ids. If multiple accounts are available, the selector is shown

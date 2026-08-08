@@ -30,8 +30,8 @@ realtime. Domain-separated 16-byte actor evidence строится только 
 `authenticated_device_id`, переданного Gateway вне client payload. Runtime
 package сохраняет exact Domain descriptor, семь отдельных
 client/Blob/event/storage capabilities и пустую typed Settings schema, но
-Tasks staged slice теперь реализует отдельные `hermes-tasks-command-api` и
-`hermes-tasks-core`: exact target-owned durable command/results, deterministic
+Tasks staged slice теперь реализует отдельные `makosh-tasks-command-api` и
+`makosh-tasks-core`: exact target-owned durable command/results, deterministic
 Task identity, source/review provenance и hints без создания Calendar, Contact,
 Project или Obligation truth. Tasks owner-local persistence теперь резервирует
 exact command envelope hash/fingerprint до Blob read, атомарно сохраняет Task и
@@ -116,38 +116,38 @@ Communications, поместить Tasks state в Communications или дать
 Extraction принадлежит workflow owner
 `communication_task_candidate_extraction` и состоит из пяти units:
 
-- `hermes-communication-task-candidate-api` — generated Start/Get/realtime
+- `makosh-communication-task-candidate-api` — generated Start/Get/realtime
   contract;
-- `hermes-communication-task-candidate-core` — pure extraction lifecycle,
+- `makosh-communication-task-candidate-core` — pure extraction lifecycle,
   bounded deterministic V1 rules и validation;
-- `hermes-communication-task-candidate-persistence` — owner-local run state,
+- `makosh-communication-task-candidate-persistence` — owner-local run state,
   inbox/outbox и realtime replay;
-- `hermes-communication-task-candidate-runtime` — managed orchestration;
-- `hermes-communication-task-candidate-assembly` — descriptor, settings,
+- `makosh-communication-task-candidate-runtime` — managed orchestration;
+- `makosh-communication-task-candidate-assembly` — descriptor, settings,
   Storage bundle и release fragment.
 
 Communications отдельно публикует exact source contract unit
-`hermes-communications-task-source-api`; source producer остаётся в
+`makosh-communications-task-source-api`; source producer остаётся в
 Communications runtime и persistence. Workflow не импортирует Communications
 implementation или storage.
 
 Review получает отдельный task-candidate capability, не режим существующего
 attention API:
 
-- `hermes-review-task-candidate-api`;
-- `hermes-review-task-candidate-core`;
-- `hermes-review-task-candidate-persistence`;
-- `hermes-review-task-candidate-runtime`;
-- `hermes-review-task-candidate-assembly`.
+- `makosh-review-task-candidate-api`;
+- `makosh-review-task-candidate-core`;
+- `makosh-review-task-candidate-persistence`;
+- `makosh-review-task-candidate-runtime`;
+- `makosh-review-task-candidate-assembly`.
 
 Tasks получает минимальный production slice для создания Task только из
 подтверждённого candidate:
 
-- `hermes-tasks-command-api`;
-- `hermes-tasks-core`;
-- `hermes-tasks-persistence`;
-- `hermes-tasks-runtime`;
-- `hermes-tasks-assembly`.
+- `makosh-tasks-command-api`;
+- `makosh-tasks-core`;
+- `makosh-tasks-persistence`;
+- `makosh-tasks-runtime`;
+- `makosh-tasks-assembly`.
 
 Одинаковый domain owner у нескольких units не объединяет их функциональные
 ответственности. Ни один domain package не импортирует implementation,

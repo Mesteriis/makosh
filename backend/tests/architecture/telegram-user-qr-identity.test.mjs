@@ -17,7 +17,7 @@ const paths = {
   api: new URL('src/telegram-api/src/lib.rs', BACKEND_ROOT),
   clientContract: new URL('src/telegram-api/src/client_contract.rs', BACKEND_ROOT),
   clientProto: new URL(
-    'src/telegram-api/proto/hermes/telegram/v1/client.proto',
+    'src/telegram-api/proto/makosh/telegram/v1/client.proto',
     BACKEND_ROOT,
   ),
   core: new URL('src/telegram-core/src/lib.rs', BACKEND_ROOT),

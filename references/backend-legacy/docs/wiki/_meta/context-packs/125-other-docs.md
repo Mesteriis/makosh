@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -53,18 +53,18 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ## Source Files / Исходные файлы
 
-### `docs/site/assets/hermes-logo-mark.png`
+### `docs/site/assets/makosh-logo-mark.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/site/assets/hermes-logo-mark.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/site/assets/makosh-logo-mark.png`
 - Size bytes / Размер в байтах: `106906`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
 
 _Binary file content omitted; use the path and metadata only. / Содержимое бинарного файла не включено; используй только путь и metadata._
 
-### `docs/site/hermes-docs.css`
+### `docs/site/makosh-docs.css`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/site/hermes-docs.css`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/site/makosh-docs.css`
 - Size bytes / Размер в байтах: `7653`
 - Included characters / Включено символов: `7653`
 - Truncated / Обрезано: `no`
@@ -474,7 +474,7 @@ code {
 
 ### `docs/site/index.html`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/site/index.html`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/site/index.html`
 - Size bytes / Размер в байтах: `8283`
 - Included characters / Включено символов: `8283`
 - Truncated / Обрезано: `no`
@@ -485,24 +485,24 @@ code {
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Hermes Hub Documentation</title>
+		<title>Макошь Documentation</title>
 		<meta
 			name="description"
-			content="Hermes Hub documentation portal for the Personal Memory System model, domains, engines, workflows and ADRs."
+			content="Макошь documentation portal for the Personal Memory System model, domains, engines, workflows and ADRs."
 		/>
-		<link rel="stylesheet" href="hermes-docs.css" />
+		<link rel="stylesheet" href="makosh-docs.css" />
 	</head>
 	<body>
 		<div class="docs-shell">
 			<aside class="docs-sidebar" aria-label="Documentation navigation">
-				<a class="brand" href="#top" aria-label="Hermes Hub documentation home">
+				<a class="brand" href="#top" aria-label="Макошь documentation home">
 					<img
 						class="brand-mark"
-						src="assets/hermes-logo-mark.png"
+						src="assets/makosh-logo-mark.png"
 						alt=""
 					/>
 					<span class="brand-copy">
-						<strong>Hermes Hub</strong>
+						<strong>Макошь</strong>
 						<span>Documentation</span>
 					</span>
 				</a>
@@ -530,7 +530,7 @@ code {
 					<p class="eyebrow">Canonical model</p>
 					<h1>Personal Memory System</h1>
 					<p class="lead">
-						Hermes stores context about communications, knowledge, memory,
+						Макошь stores context about communications, knowledge, memory,
 						relationships, projects, documents, decisions, obligations and the
 						owner's operating context.
 					</p>
@@ -548,17 +548,17 @@ code {
 						<p class="eyebrow">Start here</p>
 						<h2 id="entrypoints-title">Canonical Entrypoints</h2>
 						<div class="link-list">
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/product/master-spec.md">Product Master Spec</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/foundation/vision.md">Foundation Vision</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/foundation/glossary.md">Glossary</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/foundation/world-model.md">World Model</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/README.md">Documentation Index</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/product/master-spec.md">Product Master Spec</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/foundation/vision.md">Foundation Vision</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/foundation/glossary.md">Glossary</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/foundation/world-model.md">World Model</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/README.md">Documentation Index</a>
 						</div>
 					</div>
 
 					<div class="panel">
 						<p class="eyebrow">Current rule</p>
-						<h2>What Hermes Is Not</h2>
+						<h2>What Макошь Is Not</h2>
 						<ul class="plain-list">
 							<li>Email client</li>
 							<li>CRM or contact manager</li>
@@ -573,16 +573,16 @@ code {
 					<p class="eyebrow">Durable entities</p>
 					<h2 id="domains-title">Domains</h2>
 					<div class="tile-grid">
-						<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/domains/persons/README.md">Personas</a>
-						<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/domains/communications/README.md">Communications</a>
-						<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/domains/organizations/spec.md">Organizations</a>
-						<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/domains/projects/README.md">Projects</a>
-						<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/domains/documents/README.md">Documents</a>
-						<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/domains/tasks/spec.md">Tasks</a>
-						<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/domains/calendar/spec.md">Calendar and Events</a>
-						<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/domains/decisions/README.md">Decisions</a>
-						<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/domains/obligations/README.md">Obligations</a>
-						<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/domains/graph/README.md">Knowledge Graph</a>
+						<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/domains/persons/README.md">Personas</a>
+						<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/domains/communications/README.md">Communications</a>
+						<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/domains/organizations/spec.md">Organizations</a>
+						<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/domains/projects/README.md">Projects</a>
+						<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/domains/documents/README.md">Documents</a>
+						<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/domains/tasks/spec.md">Tasks</a>
+						<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/domains/calendar/spec.md">Calendar and Events</a>
+						<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/domains/decisions/README.md">Decisions</a>
+						<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/domains/obligations/README.md">Obligations</a>
+						<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/domains/graph/README.md">Knowledge Graph</a>
 					</div>
 				</section>
 
@@ -591,14 +591,14 @@ code {
 						<p class="eyebrow">Derived mechanisms</p>
 						<h2 id="engines-title">Engines</h2>
 						<div class="compact-links">
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/engines/memory/README.md">Memory</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/engines/timeline/README.md">Timeline</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/engines/trust/README.md">Trust</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/engines/search/README.md">Search</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/engines/enrichment/README.md">Enrichment</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/engines/obligation/README.md">Obligation</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/engines/risk/README.md">Risk</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/engines/consistency/README.md">Polygraph</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/engines/memory/README.md">Memory</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/engines/timeline/README.md">Timeline</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/engines/trust/README.md">Trust</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/engines/search/README.md">Search</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/engines/enrichment/README.md">Enrichment</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/engines/obligation/README.md">Obligation</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/engines/risk/README.md">Risk</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/engines/consistency/README.md">Polygraph</a>
 						</div>
 					</div>
 
@@ -606,12 +606,12 @@ code {
 						<p class="eyebrow">Evidence flow</p>
 						<h2 id="workflows-title">Workflows</h2>
 						<div class="compact-links">
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/workflows/communication-to-knowledge.md">Communication to Knowledge</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/workflows/communication-to-obligation.md">Communication to Obligation</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/workflows/meeting-to-decisions.md">Meeting to Decisions</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/workflows/document-to-context.md">Document to Context</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/workflows/contradiction-review.md">Contradiction Review</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/workflows/dossier-generation.md">Dossier Generation</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/workflows/communication-to-knowledge.md">Communication to Knowledge</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/workflows/communication-to-obligation.md">Communication to Obligation</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/workflows/meeting-to-decisions.md">Meeting to Decisions</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/workflows/document-to-context.md">Document to Context</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/workflows/contradiction-review.md">Contradiction Review</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/workflows/dossier-generation.md">Dossier Generation</a>
 						</div>
 					</div>
 				</section>
@@ -623,7 +623,7 @@ code {
 						<ul class="plain-list">
 							<li>Active identity route: <code>/api/v1/persons/{person_id}/identity</code></li>
 							<li>Historical <code>contacts</code> projection was renamed to <code>persons</code>.</li>
-							<li>Protected local APIs use <code>X-Hermes-Secret</code>.</li>
+							<li>Protected local APIs use <code>X-Макошь-Secret</code>.</li>
 							<li>New credentials use host vault storage.</li>
 							<li>Email channel code remains under current mail modules.</li>
 						</ul>
@@ -633,11 +633,11 @@ code {
 						<p class="eyebrow">Next work</p>
 						<h2 id="refactoring-title">Refactoring Plans</h2>
 						<div class="link-list">
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/refactoring/completion-audit.md">Completion Audit</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/refactoring/implementation-alignment-plan.md">Implementation Alignment Plan</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/refactoring/product-alignment-plan.md">Product Alignment Plan</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/product/development-roadmap.md">Development Roadmap</a>
-							<a href="https://github.com/Mesteriis/hermes-os/blob/main/docs/adr/README.md">ADR Index</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/refactoring/completion-audit.md">Completion Audit</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/refactoring/implementation-alignment-plan.md">Implementation Alignment Plan</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/refactoring/product-alignment-plan.md">Product Alignment Plan</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/product/development-roadmap.md">Development Roadmap</a>
+							<a href="https://github.com/Mesteriis/makosh-os/blob/main/docs/adr/README.md">ADR Index</a>
 						</div>
 					</div>
 				</section>

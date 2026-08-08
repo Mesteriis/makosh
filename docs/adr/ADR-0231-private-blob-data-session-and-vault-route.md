@@ -2,7 +2,7 @@
 
 Статус: Принято
 Дата: 2026-07-18
-Состояние реализации: Реализовано как platform gate. `hermes-blob-service` открывает
+Состояние реализации: Реализовано как platform gate. `makosh-blob-service` открывает
 private 0600 Unix socket из staged configuration, проверяет one-use P-256
 `BlobDataSessionGrantV1` (Kernel instance, Blob/runtime/grant fences, expiry и
 32-byte channel binding, exact operation и stable custody scope) и умеет

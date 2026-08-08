@@ -1817,4138 +1817,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 
 [[package]]
-name = "hermes-ai-contracts"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-ai-inference-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-ai-inference-persistence",
- "hermes-ai-inference-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-ai-inference-core"
-version = "0.1.0"
-dependencies = [
- "hermes-ai-contracts",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-ai-inference-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-ai-contracts",
- "hermes-ai-inference-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-ai-inference-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-ai-contracts",
- "hermes-ai-inference-core",
- "hermes-ai-inference-persistence",
- "hermes-blob-client",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-attachment-archive-inspection-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-attachment-archive-inspection-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-archive-inspection-api",
- "hermes-attachment-archive-inspection-persistence",
- "hermes-attachment-archive-inspection-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-attachment-archive-inspection-core"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-archive-inspection-api",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-attachment-archive-inspection-ingress"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-attachment-archive-inspection-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-archive-inspection-core",
- "hermes-attachment-archive-inspection-ingress",
- "hermes-events-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-attachment-archive-inspection-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-archive-inspection-api",
- "hermes-attachment-archive-inspection-core",
- "hermes-attachment-archive-inspection-ingress",
- "hermes-attachment-archive-inspection-persistence",
- "hermes-attachment-archive-inspection-zip",
- "hermes-attachment-security-contract",
- "hermes-blob-client",
- "hermes-communications-attachment-contract",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-attachment-archive-inspection-zip"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-archive-inspection-core",
- "zip",
-]
-
-[[package]]
-name = "hermes-attachment-preview-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-attachment-preview-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-preview-api",
- "hermes-attachment-preview-persistence",
- "hermes-attachment-preview-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-attachment-preview-core"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-preview-api",
-]
-
-[[package]]
-name = "hermes-attachment-preview-docx"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-preview-api",
- "hermes-attachment-preview-renderer-contract",
- "image",
- "quick-xml",
- "swash",
- "zip",
-]
-
-[[package]]
-name = "hermes-attachment-preview-evidence-replay-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-attachment-preview-evidence-replay-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-preview-evidence-replay-persistence",
- "hermes-attachment-preview-evidence-replay-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-attachment-preview-evidence-replay-core"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-preview-evidence-replay-api",
-]
-
-[[package]]
-name = "hermes-attachment-preview-evidence-replay-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-preview-evidence-replay-api",
- "hermes-attachment-preview-evidence-replay-core",
- "hermes-communications-retained-evidence-replay-contract",
- "hermes-events-protocol",
- "hermes-mail-retained-evidence-replay-contract",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-attachment-preview-evidence-replay-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-preview-evidence-replay-api",
- "hermes-attachment-preview-evidence-replay-core",
- "hermes-attachment-preview-evidence-replay-persistence",
- "hermes-communications-retained-evidence-replay-contract",
- "hermes-events-jetstream",
- "hermes-mail-retained-evidence-replay-contract",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-attachment-preview-image"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-preview-api",
- "hermes-attachment-preview-renderer-contract",
- "image",
-]
-
-[[package]]
-name = "hermes-attachment-preview-ingress"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-attachment-preview-media"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-preview-api",
- "hermes-attachment-preview-renderer-contract",
-]
-
-[[package]]
-name = "hermes-attachment-preview-pdf"
-version = "0.1.0"
-dependencies = [
- "hayro",
- "hermes-attachment-preview-api",
- "hermes-attachment-preview-renderer-contract",
- "image",
-]
-
-[[package]]
-name = "hermes-attachment-preview-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-preview-api",
- "hermes-attachment-preview-core",
- "hermes-attachment-preview-ingress",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-attachment-preview-renderer-contract"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-preview-api",
-]
-
-[[package]]
-name = "hermes-attachment-preview-runtime"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "hermes-attachment-preview-api",
- "hermes-attachment-preview-core",
- "hermes-attachment-preview-docx",
- "hermes-attachment-preview-image",
- "hermes-attachment-preview-ingress",
- "hermes-attachment-preview-media",
- "hermes-attachment-preview-pdf",
- "hermes-attachment-preview-persistence",
- "hermes-attachment-preview-renderer-contract",
- "hermes-attachment-preview-text",
- "hermes-attachment-security-contract",
- "hermes-blob-client",
- "hermes-communications-attachment-contract",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-attachment-preview-text"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-preview-api",
- "hermes-attachment-preview-renderer-contract",
-]
-
-[[package]]
-name = "hermes-attachment-security-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-security-persistence",
- "hermes-attachment-security-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-attachment-security-clamav"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-security-contract",
- "hermes-attachment-security-core",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-attachment-security-contract"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-attachment-security-core"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-security-contract",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-attachment-security-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-archive-inspection-ingress",
- "hermes-attachment-preview-ingress",
- "hermes-attachment-security-core",
- "hermes-attachment-text-extraction-ingress",
- "hermes-communications-attachment-contract",
- "hermes-events-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-attachment-security-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-archive-inspection-ingress",
- "hermes-attachment-preview-ingress",
- "hermes-attachment-security-clamav",
- "hermes-attachment-security-contract",
- "hermes-attachment-security-core",
- "hermes-attachment-security-persistence",
- "hermes-attachment-text-extraction-ingress",
- "hermes-blob-client",
- "hermes-communications-attachment-contract",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-attachment-text-extraction-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-attachment-text-extraction-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-text-extraction-api",
- "hermes-attachment-text-extraction-persistence",
- "hermes-attachment-text-extraction-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-attachment-text-extraction-core"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-text-extraction-api",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-attachment-text-extraction-docx"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-text-extraction-parser-contract",
- "quick-xml",
- "zip",
-]
-
-[[package]]
-name = "hermes-attachment-text-extraction-ingress"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-attachment-text-extraction-ocr"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-text-extraction-parser-contract",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-attachment-text-extraction-parser-contract"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-attachment-text-extraction-pdf"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-text-extraction-parser-contract",
- "pdf-text-extract",
-]
-
-[[package]]
-name = "hermes-attachment-text-extraction-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-text-extraction-core",
- "hermes-attachment-text-extraction-ingress",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-attachment-text-extraction-plain"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-text-extraction-parser-contract",
-]
-
-[[package]]
-name = "hermes-attachment-text-extraction-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-security-contract",
- "hermes-attachment-text-extraction-api",
- "hermes-attachment-text-extraction-core",
- "hermes-attachment-text-extraction-docx",
- "hermes-attachment-text-extraction-ingress",
- "hermes-attachment-text-extraction-ocr",
- "hermes-attachment-text-extraction-parser-contract",
- "hermes-attachment-text-extraction-pdf",
- "hermes-attachment-text-extraction-persistence",
- "hermes-attachment-text-extraction-plain",
- "hermes-attachment-translation-ingress",
- "hermes-blob-client",
- "hermes-communications-attachment-contract",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-attachment-translation-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-attachment-translation-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-translation-persistence",
- "hermes-attachment-translation-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-attachment-translation-core"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-attachment-translation-ingress"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-attachment-translation-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-translation-api",
- "hermes-attachment-translation-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-attachment-translation-runtime"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "hermes-ai-contracts",
- "hermes-attachment-translation-api",
- "hermes-attachment-translation-core",
- "hermes-attachment-translation-ingress",
- "hermes-attachment-translation-persistence",
- "hermes-blob-client",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-blob-client"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.3.4",
- "hermes-blob-client-contract",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "sha2 0.10.9",
-]
-
-[[package]]
-name = "hermes-blob-client-contract"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
-]
-
-[[package]]
-name = "hermes-blob-protocol"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-blob-runtime"
-version = "0.1.0"
-dependencies = [
- "chacha20poly1305",
- "getrandom 0.4.3",
- "hermes-blob-protocol",
- "hermes-runtime-protocol",
- "hermes-vault-protocol",
- "libc",
- "sha2 0.11.0",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-blob-service"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-protocol",
- "hermes-blob-runtime",
- "hermes-runtime-protocol",
- "hermes-vault-protocol",
- "libc",
- "p256",
- "prost 0.14.4",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-blob-testkit"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-protocol",
- "hermes-blob-runtime",
- "hermes-runtime-protocol",
- "hermes-vault-protocol",
- "sha2 0.11.0",
- "tempfile",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-call-transcription-api"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-call-transcription-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-call-transcription-persistence",
- "hermes-call-transcription-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-call-transcription-core"
-version = "0.1.0"
-dependencies = [
- "hermes-call-transcription-api",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-call-transcription-ingress"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-call-transcription-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-call-transcription-api",
- "hermes-call-transcription-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-call-transcription-runtime"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "hermes-blob-client",
- "hermes-call-transcription-api",
- "hermes-call-transcription-core",
- "hermes-call-transcription-ingress",
- "hermes-call-transcription-persistence",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-speech-to-text-api",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-clock-protocol"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-clock-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-clock-protocol",
-]
-
-[[package]]
-name = "hermes-clock-testkit"
-version = "0.1.0"
-dependencies = [
- "hermes-clock-protocol",
- "hermes-clock-runtime",
-]
-
-[[package]]
-name = "hermes-communication-bulk-action-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-bulk-action-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-bulk-action-persistence",
- "hermes-communication-bulk-action-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-communication-bulk-action-core"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-communication-bulk-action-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-bulk-action-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-communication-bulk-action-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-bulk-action-api",
- "hermes-communication-bulk-action-core",
- "hermes-communication-bulk-action-persistence",
- "hermes-communication-delivery-intent-api",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-communication-cross-channel-forward-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-cross-channel-forward-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-cross-channel-forward-persistence",
- "hermes-communication-cross-channel-forward-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-communication-cross-channel-forward-core"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-communication-cross-channel-forward-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-cross-channel-forward-core",
- "hermes-events-protocol",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-communication-cross-channel-forward-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-communication-cross-channel-forward-api",
- "hermes-communication-cross-channel-forward-core",
- "hermes-communication-cross-channel-forward-persistence",
- "hermes-communication-delivery-intent-ingress-api",
- "hermes-communications-cross-channel-forward-source-api",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-communication-cross-channel-forward-testkit"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-cross-channel-forward-core",
- "hermes-communication-cross-channel-forward-persistence",
- "hermes-communication-delivery-intent-ingress-api",
- "hermes-communications-cross-channel-forward-source-api",
- "tokio",
-]
-
-[[package]]
-name = "hermes-communication-delayed-delivery-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-delayed-delivery-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-delayed-delivery-persistence",
- "hermes-communication-delayed-delivery-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-communication-delayed-delivery-core"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-communication-delayed-delivery-event-adapters"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-delayed-delivery-api",
- "hermes-events-protocol",
- "hermes-scheduler-protocol",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-delayed-delivery-execution"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-delivery-intent-api",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-communication-delayed-delivery-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-delayed-delivery-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-communication-delayed-delivery-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-delayed-delivery-api",
- "hermes-communication-delayed-delivery-core",
- "hermes-communication-delayed-delivery-event-adapters",
- "hermes-communication-delayed-delivery-execution",
- "hermes-communication-delayed-delivery-persistence",
- "hermes-communication-delayed-delivery-runtime-adapters",
- "hermes-communication-delayed-delivery-store-adapters",
- "hermes-communication-delivery-intent-api",
- "hermes-events-jetstream",
- "hermes-runtime-protocol",
- "hermes-scheduler-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-communication-delayed-delivery-runtime-adapters"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-communication-delayed-delivery-api",
- "hermes-communication-delayed-delivery-execution",
- "hermes-communication-delivery-intent-api",
- "hermes-runtime-protocol",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-delayed-delivery-store-adapters"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-delayed-delivery-execution",
- "hermes-communication-delayed-delivery-persistence",
-]
-
-[[package]]
-name = "hermes-communication-delayed-delivery-testkit"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-delayed-delivery-core",
- "hermes-communication-delayed-delivery-persistence",
- "prost 0.14.4",
- "sqlx",
- "tokio",
-]
-
-[[package]]
-name = "hermes-communication-delivery-intent-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-delivery-intent-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-delivery-intent-persistence",
- "hermes-communication-delivery-intent-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-communication-delivery-intent-core"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-api",
-]
-
-[[package]]
-name = "hermes-communication-delivery-intent-event-adapters"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-mail-delivery-intent-contract",
- "hermes-runtime-protocol",
- "hermes-telegram-delivery-intent-contract",
- "hermes-whatsapp-delivery-intent-contract",
- "hermes-zulip-delivery-intent-contract",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-delivery-intent-ingress-api"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-delivery-intent-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-delivery-intent-core",
- "hermes-events-protocol",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-communication-delivery-intent-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-communication-delivery-intent-api",
- "hermes-communication-delivery-intent-core",
- "hermes-communication-delivery-intent-event-adapters",
- "hermes-communication-delivery-intent-ingress-api",
- "hermes-communication-delivery-intent-persistence",
- "hermes-communications-api",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-mail-delivery-intent-contract",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "hermes-telegram-delivery-intent-contract",
- "hermes-whatsapp-delivery-intent-contract",
- "hermes-zulip-delivery-intent-contract",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-communication-delivery-intent-testkit"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-delivery-intent-core",
- "hermes-communication-delivery-intent-ingress-api",
- "hermes-communication-delivery-intent-persistence",
- "hermes-events-protocol",
- "tokio",
-]
-
-[[package]]
-name = "hermes-communication-explanation-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-explanation-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-explanation-persistence",
- "hermes-communication-explanation-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-communication-explanation-core"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-communication-explanation-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-explanation-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-communication-explanation-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-ai-contracts",
- "hermes-blob-client",
- "hermes-communication-explanation-api",
- "hermes-communication-explanation-core",
- "hermes-communication-explanation-persistence",
- "hermes-communications-ai-source-api",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-communication-note-candidate-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-note-candidate-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-note-candidate-persistence",
- "hermes-communication-note-candidate-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-communication-note-candidate-core"
-version = "0.1.0"
-dependencies = [
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-note-candidate-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-note-candidate-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-communication-note-candidate-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-communication-note-candidate-api",
- "hermes-communication-note-candidate-core",
- "hermes-communication-note-candidate-persistence",
- "hermes-communications-note-source-api",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-review-note-candidate-api",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-communication-recipient-suggestion-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-recipient-suggestion-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-recipient-suggestion-persistence",
- "hermes-communication-recipient-suggestion-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-communication-recipient-suggestion-core"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-communication-recipient-suggestion-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-recipient-suggestion-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-communication-recipient-suggestion-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-communication-recipient-suggestion-api",
- "hermes-communication-recipient-suggestion-core",
- "hermes-communication-recipient-suggestion-persistence",
- "hermes-communications-recipient-source-api",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-communication-reply-suggestion-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-reply-suggestion-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-reply-suggestion-persistence",
- "hermes-communication-reply-suggestion-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-communication-reply-suggestion-core"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-communication-reply-suggestion-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-reply-suggestion-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-communication-reply-suggestion-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-ai-contracts",
- "hermes-blob-client",
- "hermes-communication-reply-suggestion-api",
- "hermes-communication-reply-suggestion-core",
- "hermes-communication-reply-suggestion-persistence",
- "hermes-communications-ai-source-api",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-communication-summary-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-summary-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-summary-persistence",
- "hermes-communication-summary-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-communication-summary-core"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-communication-summary-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-summary-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-communication-summary-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-ai-contracts",
- "hermes-blob-client",
- "hermes-communication-summary-api",
- "hermes-communication-summary-core",
- "hermes-communication-summary-persistence",
- "hermes-communications-ai-source-api",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-communication-task-candidate-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-task-candidate-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-task-candidate-persistence",
- "hermes-communication-task-candidate-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-communication-task-candidate-core"
-version = "0.1.0"
-dependencies = [
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-task-candidate-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-task-candidate-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-communication-task-candidate-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-communication-task-candidate-api",
- "hermes-communication-task-candidate-core",
- "hermes-communication-task-candidate-persistence",
- "hermes-communications-task-source-api",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-review-task-candidate-api",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-communication-translation-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communication-translation-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-translation-persistence",
- "hermes-communication-translation-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-communication-translation-core"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-communication-translation-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communication-translation-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-communication-translation-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-ai-contracts",
- "hermes-blob-client",
- "hermes-communication-translation-api",
- "hermes-communication-translation-core",
- "hermes-communication-translation-persistence",
- "hermes-communications-ai-source-api",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-communications-ai-source-api"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-communications-attachment-contract"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-call-evidence-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-call-evidence-core"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-call-evidence-ingress",
- "prost-types 0.14.4",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-call-evidence-ingress"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-call-evidence-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-call-evidence-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-communications-content-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-cross-channel-forward-source-api"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-domain"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-api",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-evidence-export-source-api"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-export-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-export-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-export-persistence",
- "hermes-communications-export-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-communications-export-core"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-export-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-export-core",
- "hermes-events-protocol",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-communications-export-runtime"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "hermes-blob-client",
- "hermes-communications-evidence-export-source-api",
- "hermes-communications-export-api",
- "hermes-communications-export-core",
- "hermes-communications-export-persistence",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-managed-vault-client",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-communications-ingress"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-note-source-api"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-api",
- "hermes-events-protocol",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-communications-recipient-source-api"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-retained-evidence-replay-contract"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-retained-evidence-replay-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-attachment-contract",
- "hermes-communications-retained-evidence-replay-contract",
- "hermes-events-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-communications-runtime"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "hermes-blob-client",
- "hermes-communications-ai-source-api",
- "hermes-communications-api",
- "hermes-communications-attachment-contract",
- "hermes-communications-call-evidence-api",
- "hermes-communications-call-evidence-core",
- "hermes-communications-call-evidence-ingress",
- "hermes-communications-call-evidence-persistence",
- "hermes-communications-content-api",
- "hermes-communications-cross-channel-forward-source-api",
- "hermes-communications-domain",
- "hermes-communications-evidence-export-source-api",
- "hermes-communications-ingress",
- "hermes-communications-note-source-api",
- "hermes-communications-persistence",
- "hermes-communications-recipient-source-api",
- "hermes-communications-retained-evidence-replay-contract",
- "hermes-communications-retained-evidence-replay-persistence",
- "hermes-communications-saved-query-api",
- "hermes-communications-sender-insights-api",
- "hermes-communications-task-source-api",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-managed-vault-client",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-communications-saved-query-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-sender-insights-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-communications-task-source-api"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-contacts-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-contacts-persistence",
- "hermes-contacts-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-contacts-command-api"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-contacts-core"
-version = "0.1.0"
-dependencies = [
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-contacts-mail-sync-source-api"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-contacts-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-contacts-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-contacts-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-contacts-command-api",
- "hermes-contacts-core",
- "hermes-contacts-mail-sync-source-api",
- "hermes-contacts-persistence",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-contacts-testkit"
-version = "0.1.0"
-dependencies = [
- "hermes-contacts-core",
- "hermes-contacts-persistence",
- "sha2 0.11.0",
- "tokio",
-]
-
-[[package]]
-name = "hermes-desktop-call-recording-api"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-desktop-call-recording-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-desktop-call-recording-persistence",
- "hermes-desktop-call-recording-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-desktop-call-recording-core"
-version = "0.1.0"
-dependencies = [
- "hermes-desktop-call-recording-api",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-desktop-call-recording-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-desktop-call-recording-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-desktop-call-recording-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-call-transcription-ingress",
- "hermes-desktop-call-recording-api",
- "hermes-desktop-call-recording-core",
- "hermes-desktop-call-recording-persistence",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-development-assembly"
-version = "0.1.0"
-dependencies = [
- "clap",
- "directories",
- "getrandom 0.4.3",
- "hermes-gateway-protocol",
- "nats-jwt",
- "p256",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-development-kernel-operator"
-version = "0.1.0"
-dependencies = [
- "clap",
- "directories",
- "getrandom 0.4.3",
- "hermes-kernel-control-store",
- "hermes-kernel-control-store-sqlite",
- "hermes-runtime-protocol",
- "libc",
- "p256",
- "prost 0.14.4",
- "rcgen",
- "rustls",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-events-authority"
-version = "0.1.0"
-dependencies = [
- "hermes-events-jetstream",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-events-authority-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-events-authority-runtime-control",
- "hermes-runtime-protocol",
- "libc",
- "prost 0.14.4",
-]
-
-[[package]]
-name = "hermes-events-authority-runtime-control"
-version = "0.1.0"
-dependencies = [
- "hermes-events-authority",
- "hermes-events-jetstream",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "tokio",
-]
-
-[[package]]
-name = "hermes-events-jetstream"
-version = "0.1.0"
-dependencies = [
- "async-nats",
- "base64 0.22.1",
- "futures-util",
- "getrandom 0.4.3",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-scheduler-protocol",
- "hermes-vault-protocol",
- "hpke",
- "nats-jwt",
- "prost 0.14.4",
- "serde",
- "serde_json",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-events-jetstream-testkit"
-version = "0.1.0"
-dependencies = [
- "async-nats",
- "futures-util",
- "hermes-events-authority",
- "hermes-events-authority-runtime-control",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-vault-protocol",
- "nats-jwt",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sqlx",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-events-protocol"
-version = "0.1.0"
-dependencies = [
- "hpke",
- "nats-jwt",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-gateway-protocol"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
-]
-
-[[package]]
-name = "hermes-gateway-runtime"
-version = "0.1.0"
-dependencies = [
- "base64 0.22.1",
- "bytes",
- "futures-util",
- "h3",
- "h3-quinn",
- "hermes-gateway-protocol",
- "hermes-gateway-session",
- "hermes-gateway-session-contract",
- "http-body-util",
- "hyper",
- "hyper-util",
- "prost 0.14.4",
- "quinn",
- "serde",
- "serde_json",
- "tokio",
- "tokio-rustls",
- "webauthn-rs-core",
-]
-
-[[package]]
-name = "hermes-gateway-session"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "hermes-gateway-session-contract",
- "p256",
- "serde_cbor_2",
- "url",
- "webauthn-rs-core",
-]
-
-[[package]]
-name = "hermes-gateway-session-contract"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-kernel"
-version = "0.1.0"
-dependencies = [
- "chacha20poly1305",
- "clap",
- "directories",
- "getrandom 0.4.3",
- "hermes-blob-client",
- "hermes-gateway-protocol",
- "hermes-gateway-runtime",
- "hermes-gateway-session",
- "hermes-gateway-session-contract",
- "hermes-kernel-control-store",
- "hermes-kernel-control-store-sqlite",
- "hermes-runtime-protocol",
- "hermes-scheduler-protocol",
- "hermes-secure-file",
- "hermes-storage-protocol",
- "hermes-vault-protocol",
- "libc",
- "p256",
- "prost 0.14.4",
- "quinn",
- "rcgen",
- "rustls",
- "sha2 0.11.0",
- "signal-hook",
- "tokio",
- "tokio-rustls",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-kernel-control-store"
-version = "0.1.0"
-dependencies = [
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-kernel-control-store-sqlite"
-version = "0.1.0"
-dependencies = [
- "hermes-kernel-control-store",
- "rusqlite",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-kernel-recovery-testkit"
-version = "0.1.0"
-dependencies = [
- "async-nats",
- "base64 0.22.1",
- "chacha20poly1305",
- "directories",
- "futures-util",
- "getrandom 0.4.3",
- "h2",
- "h3",
- "h3-quinn",
- "hermes-ai-contracts",
- "hermes-ai-inference-persistence",
- "hermes-ai-inference-runtime",
- "hermes-attachment-archive-inspection-api",
- "hermes-attachment-archive-inspection-persistence",
- "hermes-attachment-archive-inspection-runtime",
- "hermes-attachment-preview-api",
- "hermes-attachment-preview-evidence-replay-api",
- "hermes-attachment-preview-evidence-replay-persistence",
- "hermes-attachment-preview-evidence-replay-runtime",
- "hermes-attachment-preview-persistence",
- "hermes-attachment-preview-runtime",
- "hermes-attachment-security-contract",
- "hermes-attachment-security-persistence",
- "hermes-attachment-security-runtime",
- "hermes-attachment-text-extraction-api",
- "hermes-attachment-text-extraction-persistence",
- "hermes-attachment-text-extraction-runtime",
- "hermes-attachment-translation-api",
- "hermes-attachment-translation-persistence",
- "hermes-attachment-translation-runtime",
- "hermes-blob-client",
- "hermes-call-transcription-api",
- "hermes-call-transcription-ingress",
- "hermes-call-transcription-persistence",
- "hermes-call-transcription-runtime",
- "hermes-communication-bulk-action-api",
- "hermes-communication-bulk-action-persistence",
- "hermes-communication-bulk-action-runtime",
- "hermes-communication-cross-channel-forward-api",
- "hermes-communication-cross-channel-forward-persistence",
- "hermes-communication-cross-channel-forward-runtime",
- "hermes-communication-delayed-delivery-api",
- "hermes-communication-delayed-delivery-persistence",
- "hermes-communication-delayed-delivery-runtime",
- "hermes-communication-delivery-intent-api",
- "hermes-communication-delivery-intent-persistence",
- "hermes-communication-delivery-intent-runtime",
- "hermes-communication-explanation-api",
- "hermes-communication-explanation-persistence",
- "hermes-communication-explanation-runtime",
- "hermes-communication-note-candidate-api",
- "hermes-communication-note-candidate-persistence",
- "hermes-communication-note-candidate-runtime",
- "hermes-communication-recipient-suggestion-api",
- "hermes-communication-recipient-suggestion-persistence",
- "hermes-communication-recipient-suggestion-runtime",
- "hermes-communication-reply-suggestion-api",
- "hermes-communication-reply-suggestion-persistence",
- "hermes-communication-reply-suggestion-runtime",
- "hermes-communication-summary-api",
- "hermes-communication-summary-persistence",
- "hermes-communication-summary-runtime",
- "hermes-communication-task-candidate-api",
- "hermes-communication-task-candidate-persistence",
- "hermes-communication-task-candidate-runtime",
- "hermes-communication-translation-api",
- "hermes-communication-translation-persistence",
- "hermes-communication-translation-runtime",
- "hermes-communications-ai-source-api",
- "hermes-communications-api",
- "hermes-communications-attachment-contract",
- "hermes-communications-call-evidence-api",
- "hermes-communications-call-evidence-ingress",
- "hermes-communications-content-api",
- "hermes-communications-cross-channel-forward-source-api",
- "hermes-communications-evidence-export-source-api",
- "hermes-communications-export-api",
- "hermes-communications-export-persistence",
- "hermes-communications-export-runtime",
- "hermes-communications-ingress",
- "hermes-communications-note-source-api",
- "hermes-communications-persistence",
- "hermes-communications-recipient-source-api",
- "hermes-communications-retained-evidence-replay-contract",
- "hermes-communications-runtime",
- "hermes-communications-saved-query-api",
- "hermes-communications-sender-insights-api",
- "hermes-communications-task-source-api",
- "hermes-contacts-command-api",
- "hermes-contacts-mail-sync-source-api",
- "hermes-contacts-persistence",
- "hermes-contacts-runtime",
- "hermes-desktop-call-recording-api",
- "hermes-desktop-call-recording-persistence",
- "hermes-desktop-call-recording-runtime",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-gateway-protocol",
- "hermes-gateway-runtime",
- "hermes-gateway-session",
- "hermes-gateway-session-contract",
- "hermes-kernel-control-store",
- "hermes-kernel-control-store-sqlite",
- "hermes-knowledge-command-api",
- "hermes-knowledge-persistence",
- "hermes-knowledge-runtime",
- "hermes-mail-address-book-contract",
- "hermes-mail-api",
- "hermes-mail-contacts-sync-api",
- "hermes-mail-contacts-sync-persistence",
- "hermes-mail-contacts-sync-runtime",
- "hermes-mail-core",
- "hermes-mail-gmail",
- "hermes-mail-persistence",
- "hermes-mail-runtime",
- "hermes-ollama-ai-api",
- "hermes-ollama-ai-persistence",
- "hermes-ollama-ai-runtime",
- "hermes-review-attention-api",
- "hermes-review-attention-persistence",
- "hermes-review-attention-runtime",
- "hermes-review-note-candidate-api",
- "hermes-review-note-candidate-core",
- "hermes-review-note-candidate-persistence",
- "hermes-review-note-candidate-promotion-api",
- "hermes-review-note-candidate-runtime",
- "hermes-review-task-candidate-api",
- "hermes-review-task-candidate-core",
- "hermes-review-task-candidate-persistence",
- "hermes-review-task-candidate-promotion-api",
- "hermes-review-task-candidate-runtime",
- "hermes-reviewed-note-candidate-promotion-core",
- "hermes-reviewed-note-candidate-promotion-persistence",
- "hermes-reviewed-note-candidate-promotion-runtime",
- "hermes-reviewed-task-candidate-promotion-core",
- "hermes-reviewed-task-candidate-promotion-persistence",
- "hermes-reviewed-task-candidate-promotion-runtime",
- "hermes-runtime-protocol",
- "hermes-scheduler-persistence",
- "hermes-scheduler-protocol",
- "hermes-secure-file",
- "hermes-speech-to-text-api",
- "hermes-speech-to-text-persistence",
- "hermes-speech-to-text-runtime",
- "hermes-speech-transcript-artifact",
- "hermes-storage-control",
- "hermes-storage-protocol",
- "hermes-tasks-command-api",
- "hermes-tasks-persistence",
- "hermes-tasks-runtime",
- "hermes-telegram-api",
- "hermes-telegram-assembly",
- "hermes-telegram-automation-api",
- "hermes-telegram-calls-api",
- "hermes-telegram-calls-core",
- "hermes-telegram-calls-persistence",
- "hermes-telegram-core",
- "hermes-telegram-persistence",
- "hermes-telegram-runtime",
- "hermes-telegram-tdlib",
- "hermes-vault-key-provider",
- "hermes-vault-key-provider-file",
- "hermes-vault-protocol",
- "hermes-vault-store-sqlcipher",
- "hermes-whatsapp-api",
- "hermes-whatsapp-persistence",
- "hermes-whatsapp-runtime",
- "hermes-whisper-stt-persistence",
- "hermes-whisper-stt-runtime",
- "hermes-zulip-api",
- "hermes-zulip-core",
- "hermes-zulip-persistence",
- "hermes-zulip-runtime",
- "hpke",
- "http-body-util",
- "hyper",
- "libc",
- "nats-jwt",
- "p256",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "quinn",
- "rcgen",
- "rusqlite",
- "rustls",
- "serde_cbor_2",
- "serde_json",
- "sha2 0.11.0",
- "sqlx",
- "tokio",
- "tokio-rustls",
- "webauthn-rs-core",
- "zeroize",
- "zip",
-]
-
-[[package]]
-name = "hermes-knowledge-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-knowledge-persistence",
- "hermes-knowledge-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-knowledge-command-api"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-knowledge-core"
-version = "0.1.0"
-dependencies = [
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-knowledge-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-knowledge-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-knowledge-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-knowledge-command-api",
- "hermes-knowledge-core",
- "hermes-knowledge-persistence",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-mail-address-book-contract"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-mail-address-book-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-mail-address-book-contract",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-mail-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
-]
-
-[[package]]
-name = "hermes-mail-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-mail-persistence",
- "hermes-mail-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-mail-carddav"
-version = "0.1.0"
-dependencies = [
- "async-native-tls",
- "async-std",
- "base64 0.22.1",
- "futures-util",
- "quick-xml",
-]
-
-[[package]]
-name = "hermes-mail-communications-slice-testkit"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-api",
- "hermes-communications-domain",
- "hermes-communications-ingress",
- "hermes-communications-persistence",
- "hermes-events-protocol",
- "hermes-mail-api",
- "hermes-mail-core",
- "hermes-mail-imap",
- "prost 0.14.4",
-]
-
-[[package]]
-name = "hermes-mail-contacts-sync-api"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-mail-contacts-sync-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-mail-contacts-sync-persistence",
- "hermes-mail-contacts-sync-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-mail-contacts-sync-core"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-mail-contacts-sync-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-mail-contacts-sync-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-mail-contacts-sync-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-contacts-command-api",
- "hermes-contacts-mail-sync-source-api",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-mail-address-book-contract",
- "hermes-mail-contacts-sync-api",
- "hermes-mail-contacts-sync-core",
- "hermes-mail-contacts-sync-persistence",
- "hermes-runtime-protocol",
- "hermes-scheduler-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-mail-contacts-sync-testkit"
-version = "0.1.0"
-dependencies = [
- "hermes-mail-address-book-contract",
- "hermes-mail-address-book-persistence",
- "hermes-mail-contacts-sync-core",
- "hermes-mail-contacts-sync-persistence",
- "prost-types 0.14.4",
- "sha2 0.11.0",
- "tokio",
-]
-
-[[package]]
-name = "hermes-mail-core"
-version = "0.1.0"
-dependencies = [
- "base64 0.22.1",
- "hermes-communications-ingress",
- "hermes-mail-api",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-mail-delivery-intent-contract"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-mail-gmail"
-version = "0.1.0"
-dependencies = [
- "async-native-tls",
- "async-std",
- "base64 0.22.1",
- "futures-util",
- "hermes-mail-api",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-mail-google-people"
-version = "0.1.0"
-dependencies = [
- "async-native-tls",
- "async-std",
- "futures-util",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-mail-imap"
-version = "0.1.0"
-dependencies = [
- "async-imap",
- "async-native-tls",
- "async-std",
- "futures-util",
- "hermes-mail-api",
- "hermes-mail-core",
- "imap-proto",
-]
-
-[[package]]
-name = "hermes-mail-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-mail-api",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-mail-retained-evidence-replay-contract"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-mail-retained-evidence-replay-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-attachment-security-contract",
- "hermes-events-protocol",
- "hermes-mail-retained-evidence-replay-contract",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-mail-runtime"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "hermes-attachment-security-contract",
- "hermes-blob-client",
- "hermes-communications-attachment-contract",
- "hermes-communications-ingress",
- "hermes-contacts-mail-sync-source-api",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-mail-address-book-contract",
- "hermes-mail-address-book-persistence",
- "hermes-mail-api",
- "hermes-mail-carddav",
- "hermes-mail-core",
- "hermes-mail-delivery-intent-contract",
- "hermes-mail-gmail",
- "hermes-mail-google-people",
- "hermes-mail-imap",
- "hermes-mail-persistence",
- "hermes-mail-retained-evidence-replay-contract",
- "hermes-mail-retained-evidence-replay-persistence",
- "hermes-mail-smtp",
- "hermes-managed-vault-client",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "hermes-vault-protocol",
- "libc",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-mail-smtp"
-version = "0.1.0"
-dependencies = [
- "async-native-tls",
- "async-std",
- "hermes-mail-api",
-]
-
-[[package]]
-name = "hermes-managed-vault-client"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "hermes-runtime-protocol",
- "hermes-vault-protocol",
- "prost 0.14.4",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-ollama-ai-api"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "prost 0.14.4",
-]
-
-[[package]]
-name = "hermes-ollama-ai-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-ollama-ai-api",
- "hermes-ollama-ai-persistence",
- "hermes-ollama-ai-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-ollama-ai-core"
-version = "0.1.0"
-dependencies = [
- "hermes-ai-contracts",
- "hermes-ollama-ai-api",
- "serde",
- "serde_json",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-ollama-ai-http"
-version = "0.1.0"
-dependencies = [
- "async-std",
- "hermes-ollama-ai-api",
- "hermes-ollama-ai-core",
- "serde",
- "serde_json",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-ollama-ai-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-ai-contracts",
- "hermes-ollama-ai-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-ollama-ai-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-ai-contracts",
- "hermes-ollama-ai-api",
- "hermes-ollama-ai-core",
- "hermes-ollama-ai-http",
- "hermes-ollama-ai-persistence",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-retained-evidence-replay-protocol"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-review-attention-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-review-attention-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-review-attention-persistence",
- "hermes-review-attention-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-review-attention-core"
-version = "0.1.0"
-dependencies = [
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-review-attention-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-review-attention-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-review-attention-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-review-attention-api",
- "hermes-review-attention-core",
- "hermes-review-attention-persistence",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-review-note-candidate-api"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-review-note-candidate-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-review-note-candidate-persistence",
- "hermes-review-note-candidate-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-review-note-candidate-core"
-version = "0.1.0"
-dependencies = [
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-review-note-candidate-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-review-note-candidate-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-review-note-candidate-promotion-api"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-review-note-candidate-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-review-note-candidate-api",
- "hermes-review-note-candidate-core",
- "hermes-review-note-candidate-persistence",
- "hermes-review-note-candidate-promotion-api",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-review-task-candidate-api"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-review-task-candidate-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-review-task-candidate-persistence",
- "hermes-review-task-candidate-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-review-task-candidate-core"
-version = "0.1.0"
-dependencies = [
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-review-task-candidate-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-review-task-candidate-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-review-task-candidate-promotion-api"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-review-task-candidate-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-review-task-candidate-api",
- "hermes-review-task-candidate-core",
- "hermes-review-task-candidate-persistence",
- "hermes-review-task-candidate-promotion-api",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-reviewed-note-candidate-promotion-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-reviewed-note-candidate-promotion-persistence",
- "hermes-reviewed-note-candidate-promotion-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-reviewed-note-candidate-promotion-core"
-version = "0.1.0"
-dependencies = [
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-reviewed-note-candidate-promotion-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-reviewed-note-candidate-promotion-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-reviewed-note-candidate-promotion-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-knowledge-command-api",
- "hermes-review-note-candidate-api",
- "hermes-review-note-candidate-promotion-api",
- "hermes-reviewed-note-candidate-promotion-core",
- "hermes-reviewed-note-candidate-promotion-persistence",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-reviewed-task-candidate-promotion-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-reviewed-task-candidate-promotion-persistence",
- "hermes-reviewed-task-candidate-promotion-runtime",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-reviewed-task-candidate-promotion-core"
-version = "0.1.0"
-dependencies = [
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-reviewed-task-candidate-promotion-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-reviewed-task-candidate-promotion-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-reviewed-task-candidate-promotion-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-review-task-candidate-api",
- "hermes-review-task-candidate-promotion-api",
- "hermes-reviewed-task-candidate-promotion-core",
- "hermes-reviewed-task-candidate-promotion-persistence",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "hermes-tasks-command-api",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-runtime-protocol"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
-]
-
-[[package]]
-name = "hermes-scheduler"
-version = "0.1.0"
-dependencies = [
- "hermes-clock-protocol",
- "hermes-events-protocol",
- "hermes-scheduler-protocol",
- "prost 0.14.4",
- "prost-types 0.14.4",
-]
-
-[[package]]
-name = "hermes-scheduler-jetstream"
-version = "0.1.0"
-dependencies = [
- "async-nats",
- "futures-util",
- "getrandom 0.4.3",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-scheduler-protocol",
- "nats-jwt",
- "prost 0.14.4",
- "tokio",
-]
-
-[[package]]
-name = "hermes-scheduler-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-clock-protocol",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-scheduler",
- "hermes-scheduler-protocol",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-scheduler-protocol"
-version = "0.1.0"
-dependencies = [
- "hermes-clock-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
-]
-
-[[package]]
-name = "hermes-scheduler-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-clock-protocol",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-scheduler",
- "hermes-scheduler-jetstream",
- "hermes-scheduler-persistence",
- "hermes-scheduler-protocol",
- "hermes-secure-file",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-scheduler-testkit"
-version = "0.1.0"
-dependencies = [
- "async-nats",
- "futures-util",
- "hermes-clock-protocol",
- "hermes-clock-runtime",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-scheduler",
- "hermes-scheduler-jetstream",
- "hermes-scheduler-persistence",
- "hermes-scheduler-protocol",
- "hermes-storage-migrations",
- "hermes-storage-protocol",
- "nats-jwt",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sqlx",
- "tokio",
-]
-
-[[package]]
-name = "hermes-secure-file"
-version = "0.1.0"
-dependencies = [
- "libc",
-]
-
-[[package]]
-name = "hermes-speech-to-text-api"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-speech-to-text-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "hermes-speech-to-text-persistence",
- "hermes-speech-to-text-runtime",
- "hermes-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-speech-to-text-core"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-speech-to-text-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-speech-to-text-core",
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-speech-to-text-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-runtime-protocol",
- "hermes-speech-to-text-api",
- "hermes-speech-to-text-core",
- "hermes-speech-to-text-persistence",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-speech-transcript-artifact"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-storage-control"
-version = "0.1.0"
-dependencies = [
- "hermes-storage-protocol",
- "hermes-storage-vault",
-]
-
-[[package]]
-name = "hermes-storage-migrations"
-version = "0.1.0"
-dependencies = [
- "hermes-storage-control",
- "hermes-storage-protocol",
- "pg_query",
-]
-
-[[package]]
-name = "hermes-storage-pgbouncer"
-version = "0.1.0"
-dependencies = [
- "hermes-storage-control",
- "hermes-storage-protocol",
- "libc",
- "tokio",
- "tokio-postgres",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-storage-postgres"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "hermes-storage-control",
- "hermes-storage-migrations",
- "hermes-storage-protocol",
- "libc",
- "sha2 0.11.0",
- "sqlx",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-storage-protocol"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-storage-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "hermes-storage-control",
- "hermes-storage-migrations",
- "hermes-storage-pgbouncer",
- "hermes-storage-postgres",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "hermes-vault-protocol",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-storage-testkit"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "hermes-attachment-security-persistence",
- "hermes-communications-persistence",
- "hermes-runtime-protocol",
- "hermes-storage-control",
- "hermes-storage-migrations",
- "hermes-storage-pgbouncer",
- "hermes-storage-postgres",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "hermes-telegram-assembly",
- "hermes-telegram-persistence",
- "hermes-vault-protocol",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tempfile",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-storage-vault"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-vault-protocol",
- "prost 0.14.4",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-tasks-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-tasks-persistence",
- "hermes-tasks-runtime",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-tasks-command-api"
-version = "0.1.0"
-dependencies = [
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-tasks-core"
-version = "0.1.0"
-dependencies = [
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-tasks-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-storage-protocol",
- "hermes-tasks-core",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-tasks-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "hermes-tasks-command-api",
- "hermes-tasks-core",
- "hermes-tasks-persistence",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-telegram-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "serde",
-]
-
-[[package]]
-name = "hermes-telegram-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-telegram-automation-persistence",
- "hermes-telegram-calls-persistence",
- "hermes-telegram-persistence",
- "hermes-telegram-runtime",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-telegram-automation-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
-]
-
-[[package]]
-name = "hermes-telegram-automation-core"
-version = "0.1.0"
-dependencies = [
- "sha2 0.10.9",
-]
-
-[[package]]
-name = "hermes-telegram-automation-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-storage-protocol",
- "hermes-telegram-automation-core",
- "sha2 0.10.9",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-telegram-call-media-contract"
-version = "0.1.0"
-dependencies = [
- "zeroize",
-]
-
-[[package]]
-name = "hermes-telegram-call-media-tgcalls"
-version = "0.1.0"
-dependencies = [
- "hermes-telegram-call-media-contract",
- "libloading",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-telegram-calls-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
-]
-
-[[package]]
-name = "hermes-telegram-calls-core"
-version = "0.1.0"
-dependencies = [
- "hermes-scheduler-protocol",
- "sha2 0.10.9",
-]
-
-[[package]]
-name = "hermes-telegram-calls-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-call-evidence-ingress",
- "hermes-events-protocol",
- "hermes-scheduler-protocol",
- "hermes-storage-protocol",
- "hermes-telegram-calls-core",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sha2 0.10.9",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-telegram-calls-testkit"
-version = "0.1.0"
-dependencies = [
- "hermes-clock-protocol",
- "hermes-events-protocol",
- "hermes-scheduler-protocol",
- "hermes-telegram-calls-core",
- "hermes-telegram-calls-persistence",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sha2 0.10.9",
- "tokio",
-]
-
-[[package]]
-name = "hermes-telegram-core"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-ingress",
- "hermes-telegram-api",
- "hermes-vault-protocol",
- "serde_json",
- "sha2 0.10.9",
-]
-
-[[package]]
-name = "hermes-telegram-delivery-intent-contract"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-telegram-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-ingress",
- "hermes-events-protocol",
- "hermes-storage-protocol",
- "hermes-telegram-api",
- "serde",
- "serde_json",
- "sha2 0.10.9",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-telegram-runtime"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "hermes-blob-client",
- "hermes-blob-client-contract",
- "hermes-clock-protocol",
- "hermes-communications-call-evidence-ingress",
- "hermes-communications-ingress",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-managed-vault-client",
- "hermes-runtime-protocol",
- "hermes-scheduler-protocol",
- "hermes-secure-file",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "hermes-telegram-api",
- "hermes-telegram-automation-api",
- "hermes-telegram-automation-core",
- "hermes-telegram-automation-persistence",
- "hermes-telegram-call-media-contract",
- "hermes-telegram-call-media-tgcalls",
- "hermes-telegram-calls-api",
- "hermes-telegram-calls-core",
- "hermes-telegram-calls-persistence",
- "hermes-telegram-core",
- "hermes-telegram-delivery-intent-contract",
- "hermes-telegram-persistence",
- "hermes-telegram-tdlib",
- "hermes-vault-protocol",
- "libc",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "serde_json",
- "sha2 0.10.9",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-telegram-tdlib"
-version = "0.1.0"
-dependencies = [
- "base64 0.22.1",
- "hermes-telegram-api",
- "hermes-telegram-call-media-contract",
- "libloading",
- "serde_json",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-telemetry-collector"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "hermes-telemetry-protocol",
- "libc",
- "prost 0.14.4",
-]
-
-[[package]]
-name = "hermes-telemetry-protocol"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-telemetry-testkit"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "hermes-telemetry-protocol",
- "libc",
- "prost 0.14.4",
-]
-
-[[package]]
-name = "hermes-vault-key-provider"
-version = "0.1.0"
-
-[[package]]
-name = "hermes-vault-key-provider-file"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "hermes-secure-file",
- "hermes-vault-key-provider",
- "libc",
-]
-
-[[package]]
-name = "hermes-vault-protocol"
-version = "0.1.0"
-dependencies = [
- "hpke",
- "sha2 0.11.0",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-vault-runtime"
-version = "0.1.0"
-dependencies = [
- "clap",
- "getrandom 0.4.3",
- "hermes-runtime-protocol",
- "hermes-secure-file",
- "hermes-vault-key-provider",
- "hermes-vault-key-provider-file",
- "hermes-vault-protocol",
- "hermes-vault-store-sqlcipher",
- "hpke",
- "libc",
- "p256",
- "prost 0.14.4",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-vault-store-sqlcipher"
-version = "0.1.0"
-dependencies = [
- "bip39",
- "chacha20poly1305",
- "getrandom 0.4.3",
- "hermes-vault-key-provider",
- "hermes-vault-protocol",
- "hkdf",
- "libc",
- "rusqlite",
- "sha2 0.11.0",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-vault-testkit"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "hermes-runtime-protocol",
- "hermes-vault-key-provider",
- "hermes-vault-key-provider-file",
- "hermes-vault-protocol",
- "hermes-vault-store-sqlcipher",
- "hpke",
- "libc",
- "p256",
- "prost 0.14.4",
- "tempfile",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-whatsapp-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "serde",
-]
-
-[[package]]
-name = "hermes-whatsapp-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-whatsapp-persistence",
- "hermes-whatsapp-runtime",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-whatsapp-core"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-ingress",
- "hermes-whatsapp-api",
-]
-
-[[package]]
-name = "hermes-whatsapp-delivery-intent-contract"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-whatsapp-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-ingress",
- "hermes-events-protocol",
- "hermes-storage-protocol",
- "hermes-whatsapp-api",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-whatsapp-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-blob-client-contract",
- "hermes-communications-ingress",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "hermes-vault-protocol",
- "hermes-whatsapp-api",
- "hermes-whatsapp-core",
- "hermes-whatsapp-delivery-intent-contract",
- "hermes-whatsapp-persistence",
- "libc",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sha2 0.11.0",
- "tokio",
-]
-
-[[package]]
-name = "hermes-whisper-stt-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-whisper-stt-persistence",
- "hermes-whisper-stt-runtime",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-whisper-stt-core"
-version = "0.1.0"
-dependencies = [
- "hermes-speech-to-text-api",
- "hermes-speech-transcript-artifact",
-]
-
-[[package]]
-name = "hermes-whisper-stt-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-whisper-stt-process"
-version = "0.1.0"
-dependencies = [
- "hermes-speech-to-text-api",
- "hermes-whisper-stt-core",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-whisper-stt-runtime"
-version = "0.1.0"
-dependencies = [
- "hermes-blob-client",
- "hermes-runtime-protocol",
- "hermes-speech-to-text-api",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "hermes-whisper-stt-core",
- "hermes-whisper-stt-persistence",
- "hermes-whisper-stt-process",
- "libc",
- "prost 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-zulip-api"
-version = "0.1.0"
-dependencies = [
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
-]
-
-[[package]]
-name = "hermes-zulip-assembly"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-zulip-persistence",
- "hermes-zulip-runtime",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "hermes-zulip-core"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-ingress",
- "hermes-vault-protocol",
- "hermes-zulip-api",
-]
-
-[[package]]
-name = "hermes-zulip-delivery-intent-contract"
-version = "0.1.0"
-dependencies = [
- "hermes-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "hermes-zulip-http"
-version = "0.1.0"
-dependencies = [
- "async-native-tls",
- "async-std",
- "hermes-zulip-api",
- "serde_json",
- "zeroize",
-]
-
-[[package]]
-name = "hermes-zulip-persistence"
-version = "0.1.0"
-dependencies = [
- "hermes-communications-ingress",
- "hermes-events-protocol",
- "hermes-storage-protocol",
- "hermes-zulip-api",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "hermes-zulip-runtime"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "hermes-blob-client",
- "hermes-blob-client-contract",
- "hermes-communications-ingress",
- "hermes-events-jetstream",
- "hermes-events-protocol",
- "hermes-managed-vault-client",
- "hermes-runtime-protocol",
- "hermes-storage-protocol",
- "hermes-storage-vault",
- "hermes-vault-protocol",
- "hermes-zulip-api",
- "hermes-zulip-core",
- "hermes-zulip-delivery-intent-contract",
- "hermes-zulip-http",
- "hermes-zulip-persistence",
- "libc",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
 name = "hermit-abi"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6474,6 +2342,4138 @@ name = "lru-slab"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "112b39cec0b298b6c1999fee3e31427f74f676e4cb9879ed1a121b43661a4154"
+
+[[package]]
+name = "makosh-ai-contracts"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-ai-inference-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-ai-inference-persistence",
+ "makosh-ai-inference-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-ai-inference-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-ai-contracts",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-ai-inference-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-ai-contracts",
+ "makosh-ai-inference-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-ai-inference-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-ai-contracts",
+ "makosh-ai-inference-core",
+ "makosh-ai-inference-persistence",
+ "makosh-blob-client",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-attachment-archive-inspection-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-attachment-archive-inspection-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-archive-inspection-api",
+ "makosh-attachment-archive-inspection-persistence",
+ "makosh-attachment-archive-inspection-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-attachment-archive-inspection-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-archive-inspection-api",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-attachment-archive-inspection-ingress"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-attachment-archive-inspection-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-archive-inspection-core",
+ "makosh-attachment-archive-inspection-ingress",
+ "makosh-events-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-attachment-archive-inspection-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-attachment-archive-inspection-api",
+ "makosh-attachment-archive-inspection-core",
+ "makosh-attachment-archive-inspection-ingress",
+ "makosh-attachment-archive-inspection-persistence",
+ "makosh-attachment-archive-inspection-zip",
+ "makosh-attachment-security-contract",
+ "makosh-blob-client",
+ "makosh-communications-attachment-contract",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-attachment-archive-inspection-zip"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-archive-inspection-core",
+ "zip",
+]
+
+[[package]]
+name = "makosh-attachment-preview-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-attachment-preview-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-preview-api",
+ "makosh-attachment-preview-persistence",
+ "makosh-attachment-preview-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-attachment-preview-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-preview-api",
+]
+
+[[package]]
+name = "makosh-attachment-preview-docx"
+version = "0.1.0"
+dependencies = [
+ "image",
+ "makosh-attachment-preview-api",
+ "makosh-attachment-preview-renderer-contract",
+ "quick-xml",
+ "swash",
+ "zip",
+]
+
+[[package]]
+name = "makosh-attachment-preview-evidence-replay-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-attachment-preview-evidence-replay-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-preview-evidence-replay-persistence",
+ "makosh-attachment-preview-evidence-replay-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-attachment-preview-evidence-replay-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-preview-evidence-replay-api",
+]
+
+[[package]]
+name = "makosh-attachment-preview-evidence-replay-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-preview-evidence-replay-api",
+ "makosh-attachment-preview-evidence-replay-core",
+ "makosh-communications-retained-evidence-replay-contract",
+ "makosh-events-protocol",
+ "makosh-mail-retained-evidence-replay-contract",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-attachment-preview-evidence-replay-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-attachment-preview-evidence-replay-api",
+ "makosh-attachment-preview-evidence-replay-core",
+ "makosh-attachment-preview-evidence-replay-persistence",
+ "makosh-communications-retained-evidence-replay-contract",
+ "makosh-events-jetstream",
+ "makosh-mail-retained-evidence-replay-contract",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-attachment-preview-image"
+version = "0.1.0"
+dependencies = [
+ "image",
+ "makosh-attachment-preview-api",
+ "makosh-attachment-preview-renderer-contract",
+]
+
+[[package]]
+name = "makosh-attachment-preview-ingress"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-attachment-preview-media"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-preview-api",
+ "makosh-attachment-preview-renderer-contract",
+]
+
+[[package]]
+name = "makosh-attachment-preview-pdf"
+version = "0.1.0"
+dependencies = [
+ "hayro",
+ "image",
+ "makosh-attachment-preview-api",
+ "makosh-attachment-preview-renderer-contract",
+]
+
+[[package]]
+name = "makosh-attachment-preview-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-preview-api",
+ "makosh-attachment-preview-core",
+ "makosh-attachment-preview-ingress",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-attachment-preview-renderer-contract"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-preview-api",
+]
+
+[[package]]
+name = "makosh-attachment-preview-runtime"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "libc",
+ "makosh-attachment-preview-api",
+ "makosh-attachment-preview-core",
+ "makosh-attachment-preview-docx",
+ "makosh-attachment-preview-image",
+ "makosh-attachment-preview-ingress",
+ "makosh-attachment-preview-media",
+ "makosh-attachment-preview-pdf",
+ "makosh-attachment-preview-persistence",
+ "makosh-attachment-preview-renderer-contract",
+ "makosh-attachment-preview-text",
+ "makosh-attachment-security-contract",
+ "makosh-blob-client",
+ "makosh-communications-attachment-contract",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-attachment-preview-text"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-preview-api",
+ "makosh-attachment-preview-renderer-contract",
+]
+
+[[package]]
+name = "makosh-attachment-security-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-security-persistence",
+ "makosh-attachment-security-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-attachment-security-clamav"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-security-contract",
+ "makosh-attachment-security-core",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-attachment-security-contract"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-attachment-security-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-security-contract",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-attachment-security-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-archive-inspection-ingress",
+ "makosh-attachment-preview-ingress",
+ "makosh-attachment-security-core",
+ "makosh-attachment-text-extraction-ingress",
+ "makosh-communications-attachment-contract",
+ "makosh-events-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-attachment-security-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-attachment-archive-inspection-ingress",
+ "makosh-attachment-preview-ingress",
+ "makosh-attachment-security-clamav",
+ "makosh-attachment-security-contract",
+ "makosh-attachment-security-core",
+ "makosh-attachment-security-persistence",
+ "makosh-attachment-text-extraction-ingress",
+ "makosh-blob-client",
+ "makosh-communications-attachment-contract",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-attachment-text-extraction-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-attachment-text-extraction-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-text-extraction-api",
+ "makosh-attachment-text-extraction-persistence",
+ "makosh-attachment-text-extraction-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-attachment-text-extraction-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-text-extraction-api",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-attachment-text-extraction-docx"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-text-extraction-parser-contract",
+ "quick-xml",
+ "zip",
+]
+
+[[package]]
+name = "makosh-attachment-text-extraction-ingress"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-attachment-text-extraction-ocr"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-text-extraction-parser-contract",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-attachment-text-extraction-parser-contract"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-attachment-text-extraction-pdf"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-text-extraction-parser-contract",
+ "pdf-text-extract",
+]
+
+[[package]]
+name = "makosh-attachment-text-extraction-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-text-extraction-core",
+ "makosh-attachment-text-extraction-ingress",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-attachment-text-extraction-plain"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-text-extraction-parser-contract",
+]
+
+[[package]]
+name = "makosh-attachment-text-extraction-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-attachment-security-contract",
+ "makosh-attachment-text-extraction-api",
+ "makosh-attachment-text-extraction-core",
+ "makosh-attachment-text-extraction-docx",
+ "makosh-attachment-text-extraction-ingress",
+ "makosh-attachment-text-extraction-ocr",
+ "makosh-attachment-text-extraction-parser-contract",
+ "makosh-attachment-text-extraction-pdf",
+ "makosh-attachment-text-extraction-persistence",
+ "makosh-attachment-text-extraction-plain",
+ "makosh-attachment-translation-ingress",
+ "makosh-blob-client",
+ "makosh-communications-attachment-contract",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-attachment-translation-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-attachment-translation-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-translation-persistence",
+ "makosh-attachment-translation-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-attachment-translation-core"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-attachment-translation-ingress"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-attachment-translation-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-translation-api",
+ "makosh-attachment-translation-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-attachment-translation-runtime"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "libc",
+ "makosh-ai-contracts",
+ "makosh-attachment-translation-api",
+ "makosh-attachment-translation-core",
+ "makosh-attachment-translation-ingress",
+ "makosh-attachment-translation-persistence",
+ "makosh-blob-client",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-blob-client"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.3.4",
+ "makosh-blob-client-contract",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "sha2 0.10.9",
+]
+
+[[package]]
+name = "makosh-blob-client-contract"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+]
+
+[[package]]
+name = "makosh-blob-protocol"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-blob-runtime"
+version = "0.1.0"
+dependencies = [
+ "chacha20poly1305",
+ "getrandom 0.4.3",
+ "libc",
+ "makosh-blob-protocol",
+ "makosh-runtime-protocol",
+ "makosh-vault-protocol",
+ "sha2 0.11.0",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-blob-service"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-protocol",
+ "makosh-blob-runtime",
+ "makosh-runtime-protocol",
+ "makosh-vault-protocol",
+ "p256",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-blob-testkit"
+version = "0.1.0"
+dependencies = [
+ "makosh-blob-protocol",
+ "makosh-blob-runtime",
+ "makosh-runtime-protocol",
+ "makosh-vault-protocol",
+ "sha2 0.11.0",
+ "tempfile",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-call-transcription-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-call-transcription-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-call-transcription-persistence",
+ "makosh-call-transcription-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-call-transcription-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-call-transcription-api",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-call-transcription-ingress"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-call-transcription-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-call-transcription-api",
+ "makosh-call-transcription-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-call-transcription-runtime"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "libc",
+ "makosh-blob-client",
+ "makosh-call-transcription-api",
+ "makosh-call-transcription-core",
+ "makosh-call-transcription-ingress",
+ "makosh-call-transcription-persistence",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-speech-to-text-api",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-clock-protocol"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-clock-runtime"
+version = "0.1.0"
+dependencies = [
+ "makosh-clock-protocol",
+]
+
+[[package]]
+name = "makosh-clock-testkit"
+version = "0.1.0"
+dependencies = [
+ "makosh-clock-protocol",
+ "makosh-clock-runtime",
+]
+
+[[package]]
+name = "makosh-communication-bulk-action-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-bulk-action-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-bulk-action-persistence",
+ "makosh-communication-bulk-action-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-communication-bulk-action-core"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-communication-bulk-action-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-bulk-action-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-communication-bulk-action-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-communication-bulk-action-api",
+ "makosh-communication-bulk-action-core",
+ "makosh-communication-bulk-action-persistence",
+ "makosh-communication-delivery-intent-api",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-communication-cross-channel-forward-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-cross-channel-forward-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-cross-channel-forward-persistence",
+ "makosh-communication-cross-channel-forward-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-communication-cross-channel-forward-core"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-communication-cross-channel-forward-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-cross-channel-forward-core",
+ "makosh-events-protocol",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-communication-cross-channel-forward-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-communication-cross-channel-forward-api",
+ "makosh-communication-cross-channel-forward-core",
+ "makosh-communication-cross-channel-forward-persistence",
+ "makosh-communication-delivery-intent-ingress-api",
+ "makosh-communications-cross-channel-forward-source-api",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-communication-cross-channel-forward-testkit"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-cross-channel-forward-core",
+ "makosh-communication-cross-channel-forward-persistence",
+ "makosh-communication-delivery-intent-ingress-api",
+ "makosh-communications-cross-channel-forward-source-api",
+ "tokio",
+]
+
+[[package]]
+name = "makosh-communication-delayed-delivery-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-delayed-delivery-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-delayed-delivery-persistence",
+ "makosh-communication-delayed-delivery-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-communication-delayed-delivery-core"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-communication-delayed-delivery-event-adapters"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-delayed-delivery-api",
+ "makosh-events-protocol",
+ "makosh-scheduler-protocol",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-delayed-delivery-execution"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-delivery-intent-api",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-communication-delayed-delivery-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-delayed-delivery-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-communication-delayed-delivery-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-communication-delayed-delivery-api",
+ "makosh-communication-delayed-delivery-core",
+ "makosh-communication-delayed-delivery-event-adapters",
+ "makosh-communication-delayed-delivery-execution",
+ "makosh-communication-delayed-delivery-persistence",
+ "makosh-communication-delayed-delivery-runtime-adapters",
+ "makosh-communication-delayed-delivery-store-adapters",
+ "makosh-communication-delivery-intent-api",
+ "makosh-events-jetstream",
+ "makosh-runtime-protocol",
+ "makosh-scheduler-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-communication-delayed-delivery-runtime-adapters"
+version = "0.1.0"
+dependencies = [
+ "makosh-blob-client",
+ "makosh-communication-delayed-delivery-api",
+ "makosh-communication-delayed-delivery-execution",
+ "makosh-communication-delivery-intent-api",
+ "makosh-runtime-protocol",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-delayed-delivery-store-adapters"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-delayed-delivery-execution",
+ "makosh-communication-delayed-delivery-persistence",
+]
+
+[[package]]
+name = "makosh-communication-delayed-delivery-testkit"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-delayed-delivery-core",
+ "makosh-communication-delayed-delivery-persistence",
+ "prost 0.14.4",
+ "sqlx",
+ "tokio",
+]
+
+[[package]]
+name = "makosh-communication-delivery-intent-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-delivery-intent-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-delivery-intent-persistence",
+ "makosh-communication-delivery-intent-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-communication-delivery-intent-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-api",
+]
+
+[[package]]
+name = "makosh-communication-delivery-intent-event-adapters"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-mail-delivery-intent-contract",
+ "makosh-runtime-protocol",
+ "makosh-telegram-delivery-intent-contract",
+ "makosh-whatsapp-delivery-intent-contract",
+ "makosh-zulip-delivery-intent-contract",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-delivery-intent-ingress-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-delivery-intent-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-delivery-intent-core",
+ "makosh-events-protocol",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-communication-delivery-intent-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-communication-delivery-intent-api",
+ "makosh-communication-delivery-intent-core",
+ "makosh-communication-delivery-intent-event-adapters",
+ "makosh-communication-delivery-intent-ingress-api",
+ "makosh-communication-delivery-intent-persistence",
+ "makosh-communications-api",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-mail-delivery-intent-contract",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "makosh-telegram-delivery-intent-contract",
+ "makosh-whatsapp-delivery-intent-contract",
+ "makosh-zulip-delivery-intent-contract",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-communication-delivery-intent-testkit"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-delivery-intent-core",
+ "makosh-communication-delivery-intent-ingress-api",
+ "makosh-communication-delivery-intent-persistence",
+ "makosh-events-protocol",
+ "tokio",
+]
+
+[[package]]
+name = "makosh-communication-explanation-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-explanation-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-explanation-persistence",
+ "makosh-communication-explanation-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-communication-explanation-core"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-communication-explanation-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-explanation-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-communication-explanation-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-ai-contracts",
+ "makosh-blob-client",
+ "makosh-communication-explanation-api",
+ "makosh-communication-explanation-core",
+ "makosh-communication-explanation-persistence",
+ "makosh-communications-ai-source-api",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-communication-note-candidate-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-note-candidate-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-note-candidate-persistence",
+ "makosh-communication-note-candidate-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-communication-note-candidate-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-note-candidate-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-note-candidate-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-communication-note-candidate-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-communication-note-candidate-api",
+ "makosh-communication-note-candidate-core",
+ "makosh-communication-note-candidate-persistence",
+ "makosh-communications-note-source-api",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-review-note-candidate-api",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-communication-recipient-suggestion-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-recipient-suggestion-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-recipient-suggestion-persistence",
+ "makosh-communication-recipient-suggestion-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-communication-recipient-suggestion-core"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-communication-recipient-suggestion-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-recipient-suggestion-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-communication-recipient-suggestion-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-communication-recipient-suggestion-api",
+ "makosh-communication-recipient-suggestion-core",
+ "makosh-communication-recipient-suggestion-persistence",
+ "makosh-communications-recipient-source-api",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-communication-reply-suggestion-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-reply-suggestion-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-reply-suggestion-persistence",
+ "makosh-communication-reply-suggestion-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-communication-reply-suggestion-core"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-communication-reply-suggestion-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-reply-suggestion-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-communication-reply-suggestion-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-ai-contracts",
+ "makosh-blob-client",
+ "makosh-communication-reply-suggestion-api",
+ "makosh-communication-reply-suggestion-core",
+ "makosh-communication-reply-suggestion-persistence",
+ "makosh-communications-ai-source-api",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-communication-summary-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-summary-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-summary-persistence",
+ "makosh-communication-summary-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-communication-summary-core"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-communication-summary-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-summary-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-communication-summary-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-ai-contracts",
+ "makosh-blob-client",
+ "makosh-communication-summary-api",
+ "makosh-communication-summary-core",
+ "makosh-communication-summary-persistence",
+ "makosh-communications-ai-source-api",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-communication-task-candidate-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-task-candidate-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-task-candidate-persistence",
+ "makosh-communication-task-candidate-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-communication-task-candidate-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-task-candidate-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-task-candidate-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-communication-task-candidate-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-communication-task-candidate-api",
+ "makosh-communication-task-candidate-core",
+ "makosh-communication-task-candidate-persistence",
+ "makosh-communications-task-source-api",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-review-task-candidate-api",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-communication-translation-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communication-translation-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-translation-persistence",
+ "makosh-communication-translation-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-communication-translation-core"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-communication-translation-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communication-translation-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-communication-translation-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-ai-contracts",
+ "makosh-blob-client",
+ "makosh-communication-translation-api",
+ "makosh-communication-translation-core",
+ "makosh-communication-translation-persistence",
+ "makosh-communications-ai-source-api",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-communications-ai-source-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-communications-attachment-contract"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-call-evidence-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-call-evidence-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-call-evidence-ingress",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-call-evidence-ingress"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-call-evidence-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-call-evidence-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-communications-content-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-cross-channel-forward-source-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-domain"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-api",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-evidence-export-source-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-export-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-export-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-export-persistence",
+ "makosh-communications-export-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-communications-export-core"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-export-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-export-core",
+ "makosh-events-protocol",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-communications-export-runtime"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "libc",
+ "makosh-blob-client",
+ "makosh-communications-evidence-export-source-api",
+ "makosh-communications-export-api",
+ "makosh-communications-export-core",
+ "makosh-communications-export-persistence",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-managed-vault-client",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-communications-ingress"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-note-source-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-api",
+ "makosh-events-protocol",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-communications-recipient-source-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-retained-evidence-replay-contract"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-retained-evidence-replay-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-attachment-contract",
+ "makosh-communications-retained-evidence-replay-contract",
+ "makosh-events-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-communications-runtime"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "libc",
+ "makosh-blob-client",
+ "makosh-communications-ai-source-api",
+ "makosh-communications-api",
+ "makosh-communications-attachment-contract",
+ "makosh-communications-call-evidence-api",
+ "makosh-communications-call-evidence-core",
+ "makosh-communications-call-evidence-ingress",
+ "makosh-communications-call-evidence-persistence",
+ "makosh-communications-content-api",
+ "makosh-communications-cross-channel-forward-source-api",
+ "makosh-communications-domain",
+ "makosh-communications-evidence-export-source-api",
+ "makosh-communications-ingress",
+ "makosh-communications-note-source-api",
+ "makosh-communications-persistence",
+ "makosh-communications-recipient-source-api",
+ "makosh-communications-retained-evidence-replay-contract",
+ "makosh-communications-retained-evidence-replay-persistence",
+ "makosh-communications-saved-query-api",
+ "makosh-communications-sender-insights-api",
+ "makosh-communications-task-source-api",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-managed-vault-client",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-communications-saved-query-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-sender-insights-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-communications-task-source-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-contacts-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-contacts-persistence",
+ "makosh-contacts-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-contacts-command-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-contacts-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-contacts-mail-sync-source-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-contacts-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-contacts-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-contacts-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-contacts-command-api",
+ "makosh-contacts-core",
+ "makosh-contacts-mail-sync-source-api",
+ "makosh-contacts-persistence",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-contacts-testkit"
+version = "0.1.0"
+dependencies = [
+ "makosh-contacts-core",
+ "makosh-contacts-persistence",
+ "sha2 0.11.0",
+ "tokio",
+]
+
+[[package]]
+name = "makosh-desktop-call-recording-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-desktop-call-recording-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-desktop-call-recording-persistence",
+ "makosh-desktop-call-recording-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-desktop-call-recording-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-desktop-call-recording-api",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-desktop-call-recording-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-desktop-call-recording-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-desktop-call-recording-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-call-transcription-ingress",
+ "makosh-desktop-call-recording-api",
+ "makosh-desktop-call-recording-core",
+ "makosh-desktop-call-recording-persistence",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-development-assembly"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "directories",
+ "getrandom 0.4.3",
+ "makosh-gateway-protocol",
+ "nats-jwt",
+ "p256",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-development-kernel-operator"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "directories",
+ "getrandom 0.4.3",
+ "libc",
+ "makosh-kernel-control-store",
+ "makosh-kernel-control-store-sqlite",
+ "makosh-runtime-protocol",
+ "p256",
+ "prost 0.14.4",
+ "rcgen",
+ "rustls",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-events-authority"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-jetstream",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-events-authority-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-events-authority-runtime-control",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+]
+
+[[package]]
+name = "makosh-events-authority-runtime-control"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-authority",
+ "makosh-events-jetstream",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "tokio",
+]
+
+[[package]]
+name = "makosh-events-jetstream"
+version = "0.1.0"
+dependencies = [
+ "async-nats",
+ "base64 0.22.1",
+ "futures-util",
+ "getrandom 0.4.3",
+ "hpke",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-scheduler-protocol",
+ "makosh-vault-protocol",
+ "nats-jwt",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-events-jetstream-testkit"
+version = "0.1.0"
+dependencies = [
+ "async-nats",
+ "futures-util",
+ "makosh-events-authority",
+ "makosh-events-authority-runtime-control",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-vault-protocol",
+ "nats-jwt",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sqlx",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-events-protocol"
+version = "0.1.0"
+dependencies = [
+ "hpke",
+ "nats-jwt",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-gateway-protocol"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+]
+
+[[package]]
+name = "makosh-gateway-runtime"
+version = "0.1.0"
+dependencies = [
+ "base64 0.22.1",
+ "bytes",
+ "futures-util",
+ "h3",
+ "h3-quinn",
+ "http-body-util",
+ "hyper",
+ "hyper-util",
+ "makosh-gateway-protocol",
+ "makosh-gateway-session",
+ "makosh-gateway-session-contract",
+ "prost 0.14.4",
+ "quinn",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tokio-rustls",
+ "webauthn-rs-core",
+]
+
+[[package]]
+name = "makosh-gateway-session"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "makosh-gateway-session-contract",
+ "p256",
+ "serde_cbor_2",
+ "url",
+ "webauthn-rs-core",
+]
+
+[[package]]
+name = "makosh-gateway-session-contract"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-kernel"
+version = "0.1.0"
+dependencies = [
+ "chacha20poly1305",
+ "clap",
+ "directories",
+ "getrandom 0.4.3",
+ "libc",
+ "makosh-blob-client",
+ "makosh-gateway-protocol",
+ "makosh-gateway-runtime",
+ "makosh-gateway-session",
+ "makosh-gateway-session-contract",
+ "makosh-kernel-control-store",
+ "makosh-kernel-control-store-sqlite",
+ "makosh-runtime-protocol",
+ "makosh-scheduler-protocol",
+ "makosh-secure-file",
+ "makosh-storage-protocol",
+ "makosh-vault-protocol",
+ "p256",
+ "prost 0.14.4",
+ "quinn",
+ "rcgen",
+ "rustls",
+ "sha2 0.11.0",
+ "signal-hook",
+ "tokio",
+ "tokio-rustls",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-kernel-control-store"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-kernel-control-store-sqlite"
+version = "0.1.0"
+dependencies = [
+ "makosh-kernel-control-store",
+ "rusqlite",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-kernel-recovery-testkit"
+version = "0.1.0"
+dependencies = [
+ "async-nats",
+ "base64 0.22.1",
+ "chacha20poly1305",
+ "directories",
+ "futures-util",
+ "getrandom 0.4.3",
+ "h2",
+ "h3",
+ "h3-quinn",
+ "hpke",
+ "http-body-util",
+ "hyper",
+ "libc",
+ "makosh-ai-contracts",
+ "makosh-ai-inference-persistence",
+ "makosh-ai-inference-runtime",
+ "makosh-attachment-archive-inspection-api",
+ "makosh-attachment-archive-inspection-persistence",
+ "makosh-attachment-archive-inspection-runtime",
+ "makosh-attachment-preview-api",
+ "makosh-attachment-preview-evidence-replay-api",
+ "makosh-attachment-preview-evidence-replay-persistence",
+ "makosh-attachment-preview-evidence-replay-runtime",
+ "makosh-attachment-preview-persistence",
+ "makosh-attachment-preview-runtime",
+ "makosh-attachment-security-contract",
+ "makosh-attachment-security-persistence",
+ "makosh-attachment-security-runtime",
+ "makosh-attachment-text-extraction-api",
+ "makosh-attachment-text-extraction-persistence",
+ "makosh-attachment-text-extraction-runtime",
+ "makosh-attachment-translation-api",
+ "makosh-attachment-translation-persistence",
+ "makosh-attachment-translation-runtime",
+ "makosh-blob-client",
+ "makosh-call-transcription-api",
+ "makosh-call-transcription-ingress",
+ "makosh-call-transcription-persistence",
+ "makosh-call-transcription-runtime",
+ "makosh-communication-bulk-action-api",
+ "makosh-communication-bulk-action-persistence",
+ "makosh-communication-bulk-action-runtime",
+ "makosh-communication-cross-channel-forward-api",
+ "makosh-communication-cross-channel-forward-persistence",
+ "makosh-communication-cross-channel-forward-runtime",
+ "makosh-communication-delayed-delivery-api",
+ "makosh-communication-delayed-delivery-persistence",
+ "makosh-communication-delayed-delivery-runtime",
+ "makosh-communication-delivery-intent-api",
+ "makosh-communication-delivery-intent-persistence",
+ "makosh-communication-delivery-intent-runtime",
+ "makosh-communication-explanation-api",
+ "makosh-communication-explanation-persistence",
+ "makosh-communication-explanation-runtime",
+ "makosh-communication-note-candidate-api",
+ "makosh-communication-note-candidate-persistence",
+ "makosh-communication-note-candidate-runtime",
+ "makosh-communication-recipient-suggestion-api",
+ "makosh-communication-recipient-suggestion-persistence",
+ "makosh-communication-recipient-suggestion-runtime",
+ "makosh-communication-reply-suggestion-api",
+ "makosh-communication-reply-suggestion-persistence",
+ "makosh-communication-reply-suggestion-runtime",
+ "makosh-communication-summary-api",
+ "makosh-communication-summary-persistence",
+ "makosh-communication-summary-runtime",
+ "makosh-communication-task-candidate-api",
+ "makosh-communication-task-candidate-persistence",
+ "makosh-communication-task-candidate-runtime",
+ "makosh-communication-translation-api",
+ "makosh-communication-translation-persistence",
+ "makosh-communication-translation-runtime",
+ "makosh-communications-ai-source-api",
+ "makosh-communications-api",
+ "makosh-communications-attachment-contract",
+ "makosh-communications-call-evidence-api",
+ "makosh-communications-call-evidence-ingress",
+ "makosh-communications-content-api",
+ "makosh-communications-cross-channel-forward-source-api",
+ "makosh-communications-evidence-export-source-api",
+ "makosh-communications-export-api",
+ "makosh-communications-export-persistence",
+ "makosh-communications-export-runtime",
+ "makosh-communications-ingress",
+ "makosh-communications-note-source-api",
+ "makosh-communications-persistence",
+ "makosh-communications-recipient-source-api",
+ "makosh-communications-retained-evidence-replay-contract",
+ "makosh-communications-runtime",
+ "makosh-communications-saved-query-api",
+ "makosh-communications-sender-insights-api",
+ "makosh-communications-task-source-api",
+ "makosh-contacts-command-api",
+ "makosh-contacts-mail-sync-source-api",
+ "makosh-contacts-persistence",
+ "makosh-contacts-runtime",
+ "makosh-desktop-call-recording-api",
+ "makosh-desktop-call-recording-persistence",
+ "makosh-desktop-call-recording-runtime",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-gateway-protocol",
+ "makosh-gateway-runtime",
+ "makosh-gateway-session",
+ "makosh-gateway-session-contract",
+ "makosh-kernel-control-store",
+ "makosh-kernel-control-store-sqlite",
+ "makosh-knowledge-command-api",
+ "makosh-knowledge-persistence",
+ "makosh-knowledge-runtime",
+ "makosh-mail-address-book-contract",
+ "makosh-mail-api",
+ "makosh-mail-contacts-sync-api",
+ "makosh-mail-contacts-sync-persistence",
+ "makosh-mail-contacts-sync-runtime",
+ "makosh-mail-core",
+ "makosh-mail-gmail",
+ "makosh-mail-persistence",
+ "makosh-mail-runtime",
+ "makosh-ollama-ai-api",
+ "makosh-ollama-ai-persistence",
+ "makosh-ollama-ai-runtime",
+ "makosh-review-attention-api",
+ "makosh-review-attention-persistence",
+ "makosh-review-attention-runtime",
+ "makosh-review-note-candidate-api",
+ "makosh-review-note-candidate-core",
+ "makosh-review-note-candidate-persistence",
+ "makosh-review-note-candidate-promotion-api",
+ "makosh-review-note-candidate-runtime",
+ "makosh-review-task-candidate-api",
+ "makosh-review-task-candidate-core",
+ "makosh-review-task-candidate-persistence",
+ "makosh-review-task-candidate-promotion-api",
+ "makosh-review-task-candidate-runtime",
+ "makosh-reviewed-note-candidate-promotion-core",
+ "makosh-reviewed-note-candidate-promotion-persistence",
+ "makosh-reviewed-note-candidate-promotion-runtime",
+ "makosh-reviewed-task-candidate-promotion-core",
+ "makosh-reviewed-task-candidate-promotion-persistence",
+ "makosh-reviewed-task-candidate-promotion-runtime",
+ "makosh-runtime-protocol",
+ "makosh-scheduler-persistence",
+ "makosh-scheduler-protocol",
+ "makosh-secure-file",
+ "makosh-speech-to-text-api",
+ "makosh-speech-to-text-persistence",
+ "makosh-speech-to-text-runtime",
+ "makosh-speech-transcript-artifact",
+ "makosh-storage-control",
+ "makosh-storage-protocol",
+ "makosh-tasks-command-api",
+ "makosh-tasks-persistence",
+ "makosh-tasks-runtime",
+ "makosh-telegram-api",
+ "makosh-telegram-assembly",
+ "makosh-telegram-automation-api",
+ "makosh-telegram-calls-api",
+ "makosh-telegram-calls-core",
+ "makosh-telegram-calls-persistence",
+ "makosh-telegram-core",
+ "makosh-telegram-persistence",
+ "makosh-telegram-runtime",
+ "makosh-telegram-tdlib",
+ "makosh-vault-key-provider",
+ "makosh-vault-key-provider-file",
+ "makosh-vault-protocol",
+ "makosh-vault-store-sqlcipher",
+ "makosh-whatsapp-api",
+ "makosh-whatsapp-persistence",
+ "makosh-whatsapp-runtime",
+ "makosh-whisper-stt-persistence",
+ "makosh-whisper-stt-runtime",
+ "makosh-zulip-api",
+ "makosh-zulip-core",
+ "makosh-zulip-persistence",
+ "makosh-zulip-runtime",
+ "nats-jwt",
+ "p256",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "quinn",
+ "rcgen",
+ "rusqlite",
+ "rustls",
+ "serde_cbor_2",
+ "serde_json",
+ "sha2 0.11.0",
+ "sqlx",
+ "tokio",
+ "tokio-rustls",
+ "webauthn-rs-core",
+ "zeroize",
+ "zip",
+]
+
+[[package]]
+name = "makosh-knowledge-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-knowledge-persistence",
+ "makosh-knowledge-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-knowledge-command-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-knowledge-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-knowledge-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-knowledge-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-knowledge-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-knowledge-command-api",
+ "makosh-knowledge-core",
+ "makosh-knowledge-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-mail-address-book-contract"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-mail-address-book-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-mail-address-book-contract",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-mail-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+]
+
+[[package]]
+name = "makosh-mail-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-mail-persistence",
+ "makosh-mail-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-mail-carddav"
+version = "0.1.0"
+dependencies = [
+ "async-native-tls",
+ "async-std",
+ "base64 0.22.1",
+ "futures-util",
+ "quick-xml",
+]
+
+[[package]]
+name = "makosh-mail-communications-slice-testkit"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-api",
+ "makosh-communications-domain",
+ "makosh-communications-ingress",
+ "makosh-communications-persistence",
+ "makosh-events-protocol",
+ "makosh-mail-api",
+ "makosh-mail-core",
+ "makosh-mail-imap",
+ "prost 0.14.4",
+]
+
+[[package]]
+name = "makosh-mail-contacts-sync-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-mail-contacts-sync-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-mail-contacts-sync-persistence",
+ "makosh-mail-contacts-sync-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-mail-contacts-sync-core"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-mail-contacts-sync-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-mail-contacts-sync-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-mail-contacts-sync-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-contacts-command-api",
+ "makosh-contacts-mail-sync-source-api",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-mail-address-book-contract",
+ "makosh-mail-contacts-sync-api",
+ "makosh-mail-contacts-sync-core",
+ "makosh-mail-contacts-sync-persistence",
+ "makosh-runtime-protocol",
+ "makosh-scheduler-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-mail-contacts-sync-testkit"
+version = "0.1.0"
+dependencies = [
+ "makosh-mail-address-book-contract",
+ "makosh-mail-address-book-persistence",
+ "makosh-mail-contacts-sync-core",
+ "makosh-mail-contacts-sync-persistence",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+]
+
+[[package]]
+name = "makosh-mail-core"
+version = "0.1.0"
+dependencies = [
+ "base64 0.22.1",
+ "makosh-communications-ingress",
+ "makosh-mail-api",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-mail-delivery-intent-contract"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-mail-gmail"
+version = "0.1.0"
+dependencies = [
+ "async-native-tls",
+ "async-std",
+ "base64 0.22.1",
+ "futures-util",
+ "makosh-mail-api",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-mail-google-people"
+version = "0.1.0"
+dependencies = [
+ "async-native-tls",
+ "async-std",
+ "futures-util",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-mail-imap"
+version = "0.1.0"
+dependencies = [
+ "async-imap",
+ "async-native-tls",
+ "async-std",
+ "futures-util",
+ "imap-proto",
+ "makosh-mail-api",
+ "makosh-mail-core",
+]
+
+[[package]]
+name = "makosh-mail-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-mail-api",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-mail-retained-evidence-replay-contract"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-mail-retained-evidence-replay-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-attachment-security-contract",
+ "makosh-events-protocol",
+ "makosh-mail-retained-evidence-replay-contract",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-mail-runtime"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "libc",
+ "makosh-attachment-security-contract",
+ "makosh-blob-client",
+ "makosh-communications-attachment-contract",
+ "makosh-communications-ingress",
+ "makosh-contacts-mail-sync-source-api",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-mail-address-book-contract",
+ "makosh-mail-address-book-persistence",
+ "makosh-mail-api",
+ "makosh-mail-carddav",
+ "makosh-mail-core",
+ "makosh-mail-delivery-intent-contract",
+ "makosh-mail-gmail",
+ "makosh-mail-google-people",
+ "makosh-mail-imap",
+ "makosh-mail-persistence",
+ "makosh-mail-retained-evidence-replay-contract",
+ "makosh-mail-retained-evidence-replay-persistence",
+ "makosh-mail-smtp",
+ "makosh-managed-vault-client",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "makosh-vault-protocol",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-mail-smtp"
+version = "0.1.0"
+dependencies = [
+ "async-native-tls",
+ "async-std",
+ "makosh-mail-api",
+]
+
+[[package]]
+name = "makosh-managed-vault-client"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "makosh-runtime-protocol",
+ "makosh-vault-protocol",
+ "prost 0.14.4",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-ollama-ai-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+]
+
+[[package]]
+name = "makosh-ollama-ai-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-ollama-ai-api",
+ "makosh-ollama-ai-persistence",
+ "makosh-ollama-ai-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-ollama-ai-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-ai-contracts",
+ "makosh-ollama-ai-api",
+ "serde",
+ "serde_json",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-ollama-ai-http"
+version = "0.1.0"
+dependencies = [
+ "async-std",
+ "makosh-ollama-ai-api",
+ "makosh-ollama-ai-core",
+ "serde",
+ "serde_json",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-ollama-ai-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-ai-contracts",
+ "makosh-ollama-ai-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-ollama-ai-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-ai-contracts",
+ "makosh-ollama-ai-api",
+ "makosh-ollama-ai-core",
+ "makosh-ollama-ai-http",
+ "makosh-ollama-ai-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-retained-evidence-replay-protocol"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-review-attention-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-review-attention-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-review-attention-persistence",
+ "makosh-review-attention-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-review-attention-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-review-attention-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-review-attention-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-review-attention-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-review-attention-api",
+ "makosh-review-attention-core",
+ "makosh-review-attention-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-review-note-candidate-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-review-note-candidate-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-review-note-candidate-persistence",
+ "makosh-review-note-candidate-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-review-note-candidate-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-review-note-candidate-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-review-note-candidate-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-review-note-candidate-promotion-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-review-note-candidate-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-review-note-candidate-api",
+ "makosh-review-note-candidate-core",
+ "makosh-review-note-candidate-persistence",
+ "makosh-review-note-candidate-promotion-api",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-review-task-candidate-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-review-task-candidate-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-review-task-candidate-persistence",
+ "makosh-review-task-candidate-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-review-task-candidate-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-review-task-candidate-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-review-task-candidate-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-review-task-candidate-promotion-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-review-task-candidate-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-review-task-candidate-api",
+ "makosh-review-task-candidate-core",
+ "makosh-review-task-candidate-persistence",
+ "makosh-review-task-candidate-promotion-api",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-reviewed-note-candidate-promotion-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-reviewed-note-candidate-promotion-persistence",
+ "makosh-reviewed-note-candidate-promotion-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-reviewed-note-candidate-promotion-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-reviewed-note-candidate-promotion-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-reviewed-note-candidate-promotion-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-reviewed-note-candidate-promotion-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-knowledge-command-api",
+ "makosh-review-note-candidate-api",
+ "makosh-review-note-candidate-promotion-api",
+ "makosh-reviewed-note-candidate-promotion-core",
+ "makosh-reviewed-note-candidate-promotion-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-reviewed-task-candidate-promotion-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-reviewed-task-candidate-promotion-persistence",
+ "makosh-reviewed-task-candidate-promotion-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-reviewed-task-candidate-promotion-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-reviewed-task-candidate-promotion-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-reviewed-task-candidate-promotion-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-reviewed-task-candidate-promotion-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-review-task-candidate-api",
+ "makosh-review-task-candidate-promotion-api",
+ "makosh-reviewed-task-candidate-promotion-core",
+ "makosh-reviewed-task-candidate-promotion-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "makosh-tasks-command-api",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-runtime-protocol"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+]
+
+[[package]]
+name = "makosh-scheduler"
+version = "0.1.0"
+dependencies = [
+ "makosh-clock-protocol",
+ "makosh-events-protocol",
+ "makosh-scheduler-protocol",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+]
+
+[[package]]
+name = "makosh-scheduler-jetstream"
+version = "0.1.0"
+dependencies = [
+ "async-nats",
+ "futures-util",
+ "getrandom 0.4.3",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-scheduler-protocol",
+ "nats-jwt",
+ "prost 0.14.4",
+ "tokio",
+]
+
+[[package]]
+name = "makosh-scheduler-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-clock-protocol",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-scheduler",
+ "makosh-scheduler-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-scheduler-protocol"
+version = "0.1.0"
+dependencies = [
+ "makosh-clock-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+]
+
+[[package]]
+name = "makosh-scheduler-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-clock-protocol",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-scheduler",
+ "makosh-scheduler-jetstream",
+ "makosh-scheduler-persistence",
+ "makosh-scheduler-protocol",
+ "makosh-secure-file",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-scheduler-testkit"
+version = "0.1.0"
+dependencies = [
+ "async-nats",
+ "futures-util",
+ "makosh-clock-protocol",
+ "makosh-clock-runtime",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-scheduler",
+ "makosh-scheduler-jetstream",
+ "makosh-scheduler-persistence",
+ "makosh-scheduler-protocol",
+ "makosh-storage-migrations",
+ "makosh-storage-protocol",
+ "nats-jwt",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sqlx",
+ "tokio",
+]
+
+[[package]]
+name = "makosh-secure-file"
+version = "0.1.0"
+dependencies = [
+ "libc",
+]
+
+[[package]]
+name = "makosh-speech-to-text-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-speech-to-text-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "makosh-speech-to-text-persistence",
+ "makosh-speech-to-text-runtime",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-speech-to-text-core"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-speech-to-text-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-speech-to-text-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-speech-to-text-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-runtime-protocol",
+ "makosh-speech-to-text-api",
+ "makosh-speech-to-text-core",
+ "makosh-speech-to-text-persistence",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-speech-transcript-artifact"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-storage-control"
+version = "0.1.0"
+dependencies = [
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+]
+
+[[package]]
+name = "makosh-storage-migrations"
+version = "0.1.0"
+dependencies = [
+ "makosh-storage-control",
+ "makosh-storage-protocol",
+ "pg_query",
+]
+
+[[package]]
+name = "makosh-storage-pgbouncer"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-storage-control",
+ "makosh-storage-protocol",
+ "tokio",
+ "tokio-postgres",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-storage-postgres"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "libc",
+ "makosh-storage-control",
+ "makosh-storage-migrations",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-storage-protocol"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-storage-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-runtime-protocol",
+ "makosh-storage-control",
+ "makosh-storage-migrations",
+ "makosh-storage-pgbouncer",
+ "makosh-storage-postgres",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "makosh-vault-protocol",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-storage-testkit"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "libc",
+ "makosh-attachment-security-persistence",
+ "makosh-communications-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-control",
+ "makosh-storage-migrations",
+ "makosh-storage-pgbouncer",
+ "makosh-storage-postgres",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "makosh-telegram-assembly",
+ "makosh-telegram-persistence",
+ "makosh-vault-protocol",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tempfile",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-storage-vault"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-vault-protocol",
+ "prost 0.14.4",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-tasks-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-tasks-persistence",
+ "makosh-tasks-runtime",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-tasks-command-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-tasks-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-tasks-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-storage-protocol",
+ "makosh-tasks-core",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-tasks-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "makosh-tasks-command-api",
+ "makosh-tasks-core",
+ "makosh-tasks-persistence",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-telegram-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "serde",
+]
+
+[[package]]
+name = "makosh-telegram-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-telegram-automation-persistence",
+ "makosh-telegram-calls-persistence",
+ "makosh-telegram-persistence",
+ "makosh-telegram-runtime",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-telegram-automation-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+]
+
+[[package]]
+name = "makosh-telegram-automation-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.10.9",
+]
+
+[[package]]
+name = "makosh-telegram-automation-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-storage-protocol",
+ "makosh-telegram-automation-core",
+ "sha2 0.10.9",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-telegram-call-media-contract"
+version = "0.1.0"
+dependencies = [
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-telegram-call-media-tgcalls"
+version = "0.1.0"
+dependencies = [
+ "libloading",
+ "makosh-telegram-call-media-contract",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-telegram-calls-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+]
+
+[[package]]
+name = "makosh-telegram-calls-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-scheduler-protocol",
+ "sha2 0.10.9",
+]
+
+[[package]]
+name = "makosh-telegram-calls-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-call-evidence-ingress",
+ "makosh-events-protocol",
+ "makosh-scheduler-protocol",
+ "makosh-storage-protocol",
+ "makosh-telegram-calls-core",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.10.9",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-telegram-calls-testkit"
+version = "0.1.0"
+dependencies = [
+ "makosh-clock-protocol",
+ "makosh-events-protocol",
+ "makosh-scheduler-protocol",
+ "makosh-telegram-calls-core",
+ "makosh-telegram-calls-persistence",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.10.9",
+ "tokio",
+]
+
+[[package]]
+name = "makosh-telegram-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-ingress",
+ "makosh-telegram-api",
+ "makosh-vault-protocol",
+ "serde_json",
+ "sha2 0.10.9",
+]
+
+[[package]]
+name = "makosh-telegram-delivery-intent-contract"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-telegram-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-ingress",
+ "makosh-events-protocol",
+ "makosh-storage-protocol",
+ "makosh-telegram-api",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-telegram-runtime"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "libc",
+ "makosh-blob-client",
+ "makosh-blob-client-contract",
+ "makosh-clock-protocol",
+ "makosh-communications-call-evidence-ingress",
+ "makosh-communications-ingress",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-managed-vault-client",
+ "makosh-runtime-protocol",
+ "makosh-scheduler-protocol",
+ "makosh-secure-file",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "makosh-telegram-api",
+ "makosh-telegram-automation-api",
+ "makosh-telegram-automation-core",
+ "makosh-telegram-automation-persistence",
+ "makosh-telegram-call-media-contract",
+ "makosh-telegram-call-media-tgcalls",
+ "makosh-telegram-calls-api",
+ "makosh-telegram-calls-core",
+ "makosh-telegram-calls-persistence",
+ "makosh-telegram-core",
+ "makosh-telegram-delivery-intent-contract",
+ "makosh-telegram-persistence",
+ "makosh-telegram-tdlib",
+ "makosh-vault-protocol",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "serde_json",
+ "sha2 0.10.9",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-telegram-tdlib"
+version = "0.1.0"
+dependencies = [
+ "base64 0.22.1",
+ "libloading",
+ "makosh-telegram-api",
+ "makosh-telegram-call-media-contract",
+ "serde_json",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-telemetry-collector"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-runtime-protocol",
+ "makosh-telemetry-protocol",
+ "prost 0.14.4",
+]
+
+[[package]]
+name = "makosh-telemetry-protocol"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-telemetry-testkit"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-runtime-protocol",
+ "makosh-telemetry-protocol",
+ "prost 0.14.4",
+]
+
+[[package]]
+name = "makosh-vault-key-provider"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-vault-key-provider-file"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "libc",
+ "makosh-secure-file",
+ "makosh-vault-key-provider",
+]
+
+[[package]]
+name = "makosh-vault-protocol"
+version = "0.1.0"
+dependencies = [
+ "hpke",
+ "sha2 0.11.0",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-vault-runtime"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "getrandom 0.4.3",
+ "hpke",
+ "libc",
+ "makosh-runtime-protocol",
+ "makosh-secure-file",
+ "makosh-vault-key-provider",
+ "makosh-vault-key-provider-file",
+ "makosh-vault-protocol",
+ "makosh-vault-store-sqlcipher",
+ "p256",
+ "prost 0.14.4",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-vault-store-sqlcipher"
+version = "0.1.0"
+dependencies = [
+ "bip39",
+ "chacha20poly1305",
+ "getrandom 0.4.3",
+ "hkdf",
+ "libc",
+ "makosh-vault-key-provider",
+ "makosh-vault-protocol",
+ "rusqlite",
+ "sha2 0.11.0",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-vault-testkit"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "hpke",
+ "libc",
+ "makosh-runtime-protocol",
+ "makosh-vault-key-provider",
+ "makosh-vault-key-provider-file",
+ "makosh-vault-protocol",
+ "makosh-vault-store-sqlcipher",
+ "p256",
+ "prost 0.14.4",
+ "tempfile",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-whatsapp-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "serde",
+]
+
+[[package]]
+name = "makosh-whatsapp-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-whatsapp-persistence",
+ "makosh-whatsapp-runtime",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-whatsapp-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-ingress",
+ "makosh-whatsapp-api",
+]
+
+[[package]]
+name = "makosh-whatsapp-delivery-intent-contract"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-whatsapp-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-ingress",
+ "makosh-events-protocol",
+ "makosh-storage-protocol",
+ "makosh-whatsapp-api",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-whatsapp-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-blob-client-contract",
+ "makosh-communications-ingress",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "makosh-vault-protocol",
+ "makosh-whatsapp-api",
+ "makosh-whatsapp-core",
+ "makosh-whatsapp-delivery-intent-contract",
+ "makosh-whatsapp-persistence",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+]
+
+[[package]]
+name = "makosh-whisper-stt-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-whisper-stt-persistence",
+ "makosh-whisper-stt-runtime",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-whisper-stt-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-speech-to-text-api",
+ "makosh-speech-transcript-artifact",
+]
+
+[[package]]
+name = "makosh-whisper-stt-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-whisper-stt-process"
+version = "0.1.0"
+dependencies = [
+ "makosh-speech-to-text-api",
+ "makosh-whisper-stt-core",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-whisper-stt-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-runtime-protocol",
+ "makosh-speech-to-text-api",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "makosh-whisper-stt-core",
+ "makosh-whisper-stt-persistence",
+ "makosh-whisper-stt-process",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-zulip-api"
+version = "0.1.0"
+dependencies = [
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+]
+
+[[package]]
+name = "makosh-zulip-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-zulip-persistence",
+ "makosh-zulip-runtime",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-zulip-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-ingress",
+ "makosh-vault-protocol",
+ "makosh-zulip-api",
+]
+
+[[package]]
+name = "makosh-zulip-delivery-intent-contract"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-zulip-http"
+version = "0.1.0"
+dependencies = [
+ "async-native-tls",
+ "async-std",
+ "makosh-zulip-api",
+ "serde_json",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-zulip-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-ingress",
+ "makosh-events-protocol",
+ "makosh-storage-protocol",
+ "makosh-zulip-api",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-zulip-runtime"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "libc",
+ "makosh-blob-client",
+ "makosh-blob-client-contract",
+ "makosh-communications-ingress",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-managed-vault-client",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "makosh-vault-protocol",
+ "makosh-zulip-api",
+ "makosh-zulip-core",
+ "makosh-zulip-delivery-intent-contract",
+ "makosh-zulip-http",
+ "makosh-zulip-persistence",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
 
 [[package]]
 name = "md-5"

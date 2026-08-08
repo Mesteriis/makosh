@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communication_cross_channel_forward_event_inbox (
+CREATE TABLE makosh_data.communication_cross_channel_forward_event_inbox (
   message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
   envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
   event_kind SMALLINT NOT NULL CHECK (event_kind BETWEEN 1 AND 4),
@@ -10,13 +10,13 @@ CREATE TABLE hermes_data.communication_cross_channel_forward_event_inbox (
     consumed_at_unix_millis > 0
   ),
   FOREIGN KEY (logical_owner_id, forward_id) REFERENCES
-    hermes_data.communication_cross_channel_forward_operations (
+    makosh_data.communication_cross_channel_forward_operations (
       logical_owner_id,
       forward_id
     )
 );
 
-CREATE TABLE hermes_data.communication_cross_channel_forward_event_outbox (
+CREATE TABLE makosh_data.communication_cross_channel_forward_event_outbox (
   message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
   envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
   exact_envelope_bytes BYTEA NOT NULL CHECK (
@@ -36,25 +36,25 @@ CREATE TABLE hermes_data.communication_cross_channel_forward_event_outbox (
   ),
   UNIQUE (logical_owner_id, forward_id, event_kind),
   FOREIGN KEY (logical_owner_id, forward_id) REFERENCES
-    hermes_data.communication_cross_channel_forward_operations (
+    makosh_data.communication_cross_channel_forward_operations (
       logical_owner_id,
       forward_id
     )
 );
 
 CREATE INDEX communication_cross_channel_forward_event_outbox_pending_idx
-  ON hermes_data.communication_cross_channel_forward_event_outbox (
+  ON makosh_data.communication_cross_channel_forward_event_outbox (
     created_at_unix_millis,
     message_id
   )
   WHERE published_at_unix_millis IS NULL;
 
-ALTER TABLE hermes_data.communication_cross_channel_forward_operations
+ALTER TABLE makosh_data.communication_cross_channel_forward_operations
   ADD COLUMN source_evidence_id BYTEA CHECK (
     source_evidence_id IS NULL OR octet_length(source_evidence_id) = 16
   ),
   ADD COLUMN source_result_message_id BYTEA UNIQUE REFERENCES
-    hermes_data.communication_cross_channel_forward_event_inbox (message_id),
+    makosh_data.communication_cross_channel_forward_event_inbox (message_id),
   ADD COLUMN delivery_body_reference_id BYTEA CHECK (
     delivery_body_reference_id IS NULL
     OR octet_length(delivery_body_reference_id) = 16
@@ -71,7 +71,7 @@ ALTER TABLE hermes_data.communication_cross_channel_forward_operations
     OR octet_length(delivery_body_custody_proof) BETWEEN 1 AND 2048
   ),
   ADD COLUMN delivery_submit_message_id BYTEA UNIQUE REFERENCES
-    hermes_data.communication_cross_channel_forward_event_outbox (message_id),
+    makosh_data.communication_cross_channel_forward_event_outbox (message_id),
   ADD CONSTRAINT communication_cross_channel_forward_event_receipts_complete
   CHECK (
     (

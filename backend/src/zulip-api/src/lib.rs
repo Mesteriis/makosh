@@ -10,25 +10,25 @@ pub mod realtime;
 pub mod realtime_wire;
 #[allow(clippy::large_enum_variant)]
 pub mod wire {
-    include!(concat!(env!("OUT_DIR"), "/hermes.zulip.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.zulip.v1.rs"));
 }
 #[allow(clippy::large_enum_variant)]
 pub mod operational_wire_generated {
-    include!(concat!(env!("OUT_DIR"), "/hermes.zulip.operational.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.zulip.operational.v1.rs"));
 }
 #[allow(clippy::large_enum_variant)]
 pub mod realtime_wire_generated {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.zulip.operational.realtime.v1.rs"
+        "/makosh.zulip.operational.realtime.v1.rs"
     ));
 }
 #[allow(clippy::large_enum_variant)]
 pub mod account_wire_generated {
-    include!(concat!(env!("OUT_DIR"), "/hermes.zulip.account.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.zulip.account.v1.rs"));
 }
 
-pub const PACKAGE: &str = "hermes-zulip-api";
+pub const PACKAGE: &str = "makosh-zulip-api";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ZulipAccountV1 {

@@ -1,10 +1,10 @@
 //! File-backed device proof verification for server bootstrap pairing.
 
-use hermes_kernel_control_store::InitialOwnerIdentity;
+use makosh_kernel_control_store::InitialOwnerIdentity;
 use p256::ecdsa::signature::Verifier;
 use p256::ecdsa::{Signature, VerifyingKey};
 
-const PROOF_DOMAIN: &[u8] = b"hermes.server-bootstrap-pairing.v1\0";
+const PROOF_DOMAIN: &[u8] = b"makosh.server-bootstrap-pairing.v1\0";
 
 pub fn verify(
     challenge: &[u8; 32],

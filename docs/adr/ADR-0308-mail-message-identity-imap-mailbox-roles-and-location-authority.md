@@ -194,19 +194,19 @@ Permanent IMAP delete использует `\Deleted` плюс `UID EXPUNGE` т�
 ### Ownership и build units
 
 ```text
-hermes-mail-api
+makosh-mail-api
   public message identity and exact command/query contracts
 
-hermes-mail-imap
+makosh-mail-imap
   LIST/special-use, UIDVALIDITY, MOVE/COPYUID and UID EXPUNGE protocol
 
-hermes-mail-gmail
+makosh-mail-gmail
   exact Gmail label/trash/untrash/delete HTTP adapter
 
-hermes-mail-persistence
+makosh-mail-persistence
   stable identity, private locators, folders and durable journals
 
-hermes-mail-runtime
+makosh-mail-runtime
   current-fence orchestration and provider result classification
 
 frontend Mail integration

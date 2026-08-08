@@ -2,7 +2,7 @@
 
 use std::path::{Path, PathBuf};
 
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use super::digest::read_stable_regular_file;
 use super::owner_proof::{approval_message, verify_owner_proof};

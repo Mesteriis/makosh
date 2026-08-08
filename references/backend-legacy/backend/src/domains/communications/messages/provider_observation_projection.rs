@@ -1,4 +1,4 @@
-use hermes_events_api::{EventEnvelope, NewEventEnvelope, StoredEventEnvelope};
+use makosh_events_api::{EventEnvelope, NewEventEnvelope, StoredEventEnvelope};
 use std::path::Path;
 
 use chrono::{DateTime, Utc};
@@ -19,14 +19,14 @@ use crate::domains::communications::delivery_notifications::consume_accepted_mai
 use crate::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
 use crate::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
 use crate::platform::communications::errors::ProviderCommunicationMessagePortError;
-use hermes_communications_api::evidence::StoredRawCommunicationRecord;
-use hermes_communications_api::provider_messages::{
+use makosh_communications_api::evidence::StoredRawCommunicationRecord;
+use makosh_communications_api::provider_messages::{
     ProviderAttachmentDownloadStateUpdate, ProviderChannelMessage,
     ProviderMessageProjectionObservationContext,
 };
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_events_postgres::store::EventStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::store::EventStore;
 
 pub const COMMUNICATION_PROVIDER_OBSERVATION_CONSUMER: &str =
     "communication_provider_observation_projection";
@@ -488,7 +488,7 @@ pub enum CommunicationSignalProjectionError {
     Sqlx(#[from] sqlx::Error),
 
     #[error(transparent)]
-    Communication(#[from] hermes_communications_postgres::errors::CommunicationIngestionError),
+    Communication(#[from] makosh_communications_postgres::errors::CommunicationIngestionError),
 
     #[error(transparent)]
     ProviderCommunication(#[from] ProviderCommunicationMessagePortError),

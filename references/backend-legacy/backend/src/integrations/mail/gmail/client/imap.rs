@@ -12,7 +12,7 @@ use tokio::io::{AsyncRead, AsyncWrite};
 
 use crate::platform::communications::email_sync::imap_mailbox_stream_id;
 use crate::platform::secrets::models::ResolvedSecret;
-use hermes_communications_api::email_sync::{EmailSyncBatch, FetchedCommunicationSourceMessage};
+use makosh_communications_api::email_sync::{EmailSyncBatch, FetchedCommunicationSourceMessage};
 
 use super::errors::EmailProviderNetworkError;
 use super::helpers::{
@@ -416,7 +416,7 @@ mod tests {
         ImapIdleOptions, ImapMailboxListOptions,
     };
     use crate::platform::secrets::models::ResolvedSecret;
-    use hermes_communications_api::email_sync::FetchedCommunicationSourceMessage;
+    use makosh_communications_api::email_sync::FetchedCommunicationSourceMessage;
 
     #[test]
     fn imap_provider_record_id_is_scoped_to_mailbox_uid_validity_and_uid() {

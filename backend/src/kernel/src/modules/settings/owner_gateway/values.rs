@@ -1,10 +1,10 @@
 //! Public-to-canonical typed Settings value conversion.
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     OwnerSettingEntryV1, OwnerSettingValueV1, owner_setting_value_v1,
 };
-use hermes_gateway_runtime::OwnerModuleSettingsRouteErrorV1;
-use hermes_runtime_protocol::v1::{
+use makosh_gateway_runtime::OwnerModuleSettingsRouteErrorV1;
+use makosh_runtime_protocol::v1::{
     SettingClientVisibilityV1, SettingValueV1, SettingsSchemaV1, SettingsSnapshotV1,
     SettingsValueEntryV1, setting_value_v1,
 };

@@ -1,6 +1,6 @@
 use crate::domains::communications::folders::{FolderMessage, FolderMessageActionResponse};
 use chrono::{DateTime, Utc};
-use hermes_connectrpc_contracts::hermes::communications::v1::{
+use makosh_connectrpc_contracts::makosh::communications::v1::{
     FolderMessage as ProtoFolderMessage,
     FolderMessageActionResult as ProtoFolderMessageActionResult,
 };

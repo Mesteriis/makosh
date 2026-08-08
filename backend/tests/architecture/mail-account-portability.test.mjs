@@ -19,13 +19,13 @@ const paths = {
     BACKEND_ROOT,
   ),
   contract: new URL(
-    'src/mail-api/proto/hermes/mail/portability/v1/portability.proto',
+    'src/mail-api/proto/makosh/mail/portability/v1/portability.proto',
     BACKEND_ROOT,
   ),
   validator: new URL('src/mail-api/src/portability.rs', BACKEND_ROOT),
   runtimeSettings: new URL('src/mail-runtime/src/settings.rs', BACKEND_ROOT),
   generatedClient: new URL(
-    'frontend/src/gen/hermes/mail/portability/v1/portability_pb.ts',
+    'frontend/src/gen/makosh/mail/portability/v1/portability_pb.ts',
     PROJECT_ROOT,
   ),
   codec: new URL(
@@ -136,7 +136,7 @@ test('Mail account portability is one typed desktop app composition with explici
   assert.match(validator, /valid_account_configuration/);
   assert.match(validator, /valid_gmail_oauth_configuration/);
   assert.match(validator, /profile_matches/);
-  assert.match(runtimeSettings, /pub use hermes_mail_api::\{[\s\S]*MAIL_SETTINGS_SCHEMA_MAJOR_V2/);
+  assert.match(runtimeSettings, /pub use makosh_mail_api::\{[\s\S]*MAIL_SETTINGS_SCHEMA_MAJOR_V2/);
   assert.match(generatedClient, /export type MailAccountExportV1/);
   assert.match(codec, /ignoreUnknownFields: false/);
   assert.match(codec, /mailAccountExportSettingsInputs/);
@@ -160,6 +160,6 @@ test('Mail account portability is one typed desktop app composition with explici
   assert.match(vaultHost, /owner_vault_provisioning_host_seal/);
   assert.doesNotMatch(
     `${contract}\n${validator}\n${codec}\n${workflow}\n${ui}`,
-    /domains\/communications|hermes_communications|hermes-kernel|mail-runtime|mail-persistence|vault-store/i,
+    /domains\/communications|makosh_communications|makosh-kernel|mail-runtime|mail-persistence|vault-store/i,
   );
 });

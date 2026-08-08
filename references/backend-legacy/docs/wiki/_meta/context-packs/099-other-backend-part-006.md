@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/migrations/0126_add_telegram_chat_observation_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0126_add_telegram_chat_observation_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0126_add_telegram_chat_observation_kind.sql`
 - Size bytes / Размер в байтах: `342`
 - Included characters / Включено символов: `342`
 - Truncated / Обрезано: `no`
@@ -82,7 +82,7 @@ ON CONFLICT (code, version) DO NOTHING;
 
 ### `backend/migrations/0127_add_telegram_chat_participant_observation_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0127_add_telegram_chat_participant_observation_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0127_add_telegram_chat_participant_observation_kind.sql`
 - Size bytes / Размер в байтах: `391`
 - Included characters / Включено символов: `391`
 - Truncated / Обрезано: `no`
@@ -109,7 +109,7 @@ ON CONFLICT (code, version) DO NOTHING;
 
 ### `backend/migrations/0128_add_telegram_topic_observation_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0128_add_telegram_topic_observation_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0128_add_telegram_topic_observation_kind.sql`
 - Size bytes / Размер в байтах: `346`
 - Included characters / Включено символов: `346`
 - Truncated / Обрезано: `no`
@@ -136,7 +136,7 @@ ON CONFLICT (code, version) DO NOTHING;
 
 ### `backend/migrations/0129_add_telegram_message_reaction_observation_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0129_add_telegram_message_reaction_observation_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0129_add_telegram_message_reaction_observation_kind.sql`
 - Size bytes / Размер в байтах: `390`
 - Included characters / Включено символов: `390`
 - Truncated / Обрезано: `no`
@@ -163,7 +163,7 @@ ON CONFLICT (code, version) DO NOTHING;
 
 ### `backend/migrations/0130_add_telegram_message_lifecycle_observation_kinds.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0130_add_telegram_message_lifecycle_observation_kinds.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0130_add_telegram_message_lifecycle_observation_kinds.sql`
 - Size bytes / Размер в байтах: `614`
 - Included characters / Включено символов: `614`
 - Truncated / Обрезано: `no`
@@ -199,7 +199,7 @@ ON CONFLICT (code, version) DO NOTHING;
 
 ### `backend/migrations/0131_add_automation_observation_kinds.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0131_add_automation_observation_kinds.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0131_add_automation_observation_kinds.sql`
 - Size bytes / Размер в байтах: `1117`
 - Included characters / Включено символов: `1117`
 - Truncated / Обрезано: `no`
@@ -249,7 +249,7 @@ ON CONFLICT (kind_definition_id) DO UPDATE SET
 
 ### `backend/migrations/0132_add_review_transition_observation_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0132_add_review_transition_observation_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0132_add_review_transition_observation_kind.sql`
 - Size bytes / Размер в байтах: `630`
 - Included characters / Включено символов: `630`
 - Truncated / Обрезано: `no`
@@ -282,7 +282,7 @@ ON CONFLICT (kind_definition_id) DO UPDATE SET
 
 ### `backend/migrations/0133_add_person_identity_candidate_observation_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0133_add_person_identity_candidate_observation_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0133_add_person_identity_candidate_observation_kind.sql`
 - Size bytes / Размер в байтах: `638`
 - Included characters / Включено символов: `638`
 - Truncated / Обрезано: `no`
@@ -315,7 +315,7 @@ ON CONFLICT (kind_definition_id) DO UPDATE SET
 
 ### `backend/migrations/0134_add_project_link_review_observation_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0134_add_project_link_review_observation_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0134_add_project_link_review_observation_kind.sql`
 - Size bytes / Размер в байтах: `607`
 - Included characters / Включено символов: `607`
 - Truncated / Обрезано: `no`
@@ -348,7 +348,7 @@ ON CONFLICT (kind_definition_id) DO UPDATE SET
 
 ### `backend/migrations/0135_add_task_mutation_observation_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0135_add_task_mutation_observation_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0135_add_task_mutation_observation_kind.sql`
 - Size bytes / Размер в байтах: `617`
 - Included characters / Включено символов: `617`
 - Truncated / Обрезано: `no`
@@ -381,7 +381,7 @@ ON CONFLICT (kind_definition_id) DO UPDATE SET
 
 ### `backend/migrations/0136_add_person_mutation_observation_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0136_add_person_mutation_observation_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0136_add_person_mutation_observation_kind.sql`
 - Size bytes / Размер в байтах: `662`
 - Included characters / Включено символов: `662`
 - Truncated / Обрезано: `no`
@@ -414,7 +414,7 @@ ON CONFLICT (kind_definition_id) DO UPDATE SET
 
 ### `backend/migrations/0137_add_organization_mutation_observation_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0137_add_organization_mutation_observation_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0137_add_organization_mutation_observation_kind.sql`
 - Size bytes / Размер в байтах: `626`
 - Included characters / Включено символов: `626`
 - Truncated / Обрезано: `no`
@@ -447,7 +447,7 @@ ON CONFLICT (kind_definition_id) DO UPDATE SET
 
 ### `backend/migrations/0138_add_organization_record_mutation_observation_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0138_add_organization_record_mutation_observation_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0138_add_organization_record_mutation_observation_kind.sql`
 - Size bytes / Размер в байтах: `691`
 - Included characters / Включено символов: `691`
 - Truncated / Обрезано: `no`
@@ -480,7 +480,7 @@ ON CONFLICT (kind_definition_id) DO UPDATE SET
 
 ### `backend/migrations/0139_add_person_record_mutation_observation_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0139_add_person_record_mutation_observation_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0139_add_person_record_mutation_observation_kind.sql`
 - Size bytes / Размер в байтах: `723`
 - Included characters / Включено символов: `723`
 - Truncated / Обрезано: `no`
@@ -513,7 +513,7 @@ ON CONFLICT (kind_definition_id) DO UPDATE SET
 
 ### `backend/migrations/0140_add_vault_owner_observation_kinds.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0140_add_vault_owner_observation_kinds.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0140_add_vault_owner_observation_kinds.sql`
 - Size bytes / Размер в байтах: `1374`
 - Included characters / Включено символов: `1374`
 - Truncated / Обрезано: `no`
@@ -571,7 +571,7 @@ ON CONFLICT (kind_definition_id) DO UPDATE SET
 
 ### `backend/migrations/0141_add_calendar_account_mutation_observation_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0141_add_calendar_account_mutation_observation_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0141_add_calendar_account_mutation_observation_kind.sql`
 - Size bytes / Размер в байтах: `649`
 - Included characters / Включено символов: `649`
 - Truncated / Обрезано: `no`
@@ -604,7 +604,7 @@ ON CONFLICT (kind_definition_id) DO UPDATE SET
 
 ### `backend/migrations/0142_add_vault_removal_observation_kinds.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0142_add_vault_removal_observation_kinds.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0142_add_vault_removal_observation_kinds.sql`
 - Size bytes / Размер в байтах: `979`
 - Included characters / Включено символов: `979`
 - Truncated / Обрезано: `no`
@@ -646,7 +646,7 @@ ON CONFLICT (kind_definition_id) DO UPDATE SET
 
 ### `backend/migrations/0143_add_communication_provider_account_config_mutation_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0143_add_communication_provider_account_config_mutation_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0143_add_communication_provider_account_config_mutation_kind.sql`
 - Size bytes / Размер в байтах: `683`
 - Included characters / Включено символов: `683`
 - Truncated / Обрезано: `no`
@@ -679,7 +679,7 @@ ON CONFLICT (kind_definition_id) DO UPDATE SET
 
 ### `backend/migrations/0144_add_person_calendar_document_replacement_kinds.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0144_add_person_calendar_document_replacement_kinds.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0144_add_person_calendar_document_replacement_kinds.sql`
 - Size bytes / Размер в байтах: `1403`
 - Included characters / Включено символов: `1403`
 - Truncated / Обрезано: `no`
@@ -745,7 +745,7 @@ ON CONFLICT (kind_definition_id) DO UPDATE SET
 
 ### `backend/migrations/0145_add_person_derived_evidence_observation_kinds.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0145_add_person_derived_evidence_observation_kinds.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0145_add_person_derived_evidence_observation_kinds.sql`
 - Size bytes / Размер в байтах: `1066`
 - Included characters / Включено символов: `1066`
 - Truncated / Обрезано: `no`
@@ -795,7 +795,7 @@ ON CONFLICT (kind_definition_id) DO UPDATE SET
 
 ### `backend/migrations/0146_expand_review_item_kind_constraint.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0146_expand_review_item_kind_constraint.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0146_expand_review_item_kind_constraint.sql`
 - Size bytes / Размер в байтах: `569`
 - Included characters / Включено символов: `569`
 - Truncated / Обрезано: `no`
@@ -824,7 +824,7 @@ ALTER TABLE review_items
 
 ### `backend/migrations/0147_allow_observation_task_sources.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0147_allow_observation_task_sources.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0147_allow_observation_task_sources.sql`
 - Size bytes / Размер в байтах: `672`
 - Included characters / Включено символов: `672`
 - Truncated / Обрезано: `no`
@@ -863,7 +863,7 @@ ALTER TABLE tasks
 
 ### `backend/migrations/0148_allow_observation_task_source_type.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0148_allow_observation_task_source_type.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0148_allow_observation_task_source_type.sql`
 - Size bytes / Размер в байтах: `678`
 - Included characters / Включено символов: `678`
 - Truncated / Обрезано: `no`
@@ -902,7 +902,7 @@ ALTER TABLE tasks
 
 ### `backend/migrations/0149_create_canonical_communication_tables.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0149_create_canonical_communication_tables.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0149_create_canonical_communication_tables.sql`
 - Size bytes / Размер в байтах: `33331`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1149,7 +1149,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/migrations/0150_create_communication_ai_states.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0150_create_communication_ai_states.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0150_create_communication_ai_states.sql`
 - Size bytes / Размер в байтах: `1188`
 - Included characters / Включено символов: `1188`
 - Truncated / Обрезано: `no`

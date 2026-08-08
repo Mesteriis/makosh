@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::path::{Path, PathBuf};
 
-use hermes_kernel_control_store::{ControlStore, RecoveryFences};
+use makosh_kernel_control_store::{ControlStore, RecoveryFences};
 use rusqlite::{Connection, params};
 use sha2::{Digest, Sha256};
 
@@ -64,7 +64,7 @@ fn fence_staged_store(
     configure_writable(&connection)?;
     let transaction = connection.unchecked_transaction()?;
     transaction.execute(
-        "UPDATE hermes_kernel_control_store_metadata
+        "UPDATE makosh_kernel_control_store_metadata
          SET generation = ?1, identity_epoch = ?2, grant_epoch = ?3
          WHERE singleton = 1 AND instance_id = ?4",
         params![
@@ -75,18 +75,18 @@ fn fence_staged_store(
         ],
     )?;
     transaction.execute(
-        "UPDATE hermes_kernel_module_registration
+        "UPDATE makosh_kernel_module_registration
          SET state = CASE WHEN state = 'revoked' THEN 'revoked' ELSE 'suspended' END,
              grant_epoch = ?1",
         [as_sqlite_integer(fences.grant_epoch())?],
     )?;
     transaction.execute(
-        "UPDATE hermes_kernel_module_registration_capability SET approved = 0",
+        "UPDATE makosh_kernel_module_registration_capability SET approved = 0",
         [],
     )?;
-    transaction.execute("DELETE FROM hermes_kernel_external_runtime_attestation", [])?;
-    transaction.execute("DELETE FROM hermes_kernel_managed_launch_record", [])?;
-    transaction.execute("DELETE FROM hermes_kernel_server_bootstrap_pairing", [])?;
+    transaction.execute("DELETE FROM makosh_kernel_external_runtime_attestation", [])?;
+    transaction.execute("DELETE FROM makosh_kernel_managed_launch_record", [])?;
+    transaction.execute("DELETE FROM makosh_kernel_server_bootstrap_pairing", [])?;
     transaction.commit()?;
     validate_quick_check(&connection)?;
     Ok(ControlStore::with_recovery_fences(

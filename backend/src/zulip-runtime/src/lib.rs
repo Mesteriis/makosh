@@ -14,13 +14,13 @@ pub mod delivery_intent_result;
 pub mod delivery_intent_worker;
 pub mod managed;
 
-use hermes_communications_ingress::{
+use makosh_communications_ingress::{
     BodyAdmissionFailureV1, BodyAvailabilityV1, BodyBlobReceiptV1, CommunicationEvidenceKindV1,
     CommunicationObservationDraft, ObservationEnvelopeBuildErrorV1, ObservationEnvelopeContextV1,
     build_observation_outbox_record_v1, with_admitted_body_blob, with_body_admission_failure,
 };
-use hermes_runtime_protocol::v1::BlobDataOperationV1;
-use hermes_zulip_api::{
+use makosh_runtime_protocol::v1::BlobDataOperationV1;
+use makosh_zulip_api::{
     ZulipCommandOperationStatusV1, ZulipCommandReceiptV1, ZulipCommandV1, ZulipEventQueueV1,
     ZulipPolledEventV1,
     client_contract::ZULIP_MODULE_ID,
@@ -31,13 +31,13 @@ use hermes_zulip_api::{
     },
     realtime::{ZulipOperationalReplayRequestV1, ZulipOperationalReplayResponseV1},
 };
-use hermes_zulip_core::{ZulipCoreError, observation_drafts};
-use hermes_zulip_http::{
+use makosh_zulip_core::{ZulipCoreError, observation_drafts};
+use makosh_zulip_http::{
     ZulipHttpConfigV1, ZulipHttpErrorV1, download_user_upload,
     execute_command as execute_http_command, fetch_message_history_page, poll_event_queue,
     register_event_queue, upload_file,
 };
-use hermes_zulip_persistence::{
+use makosh_zulip_persistence::{
     ZulipCommandOperationStateV1, ZulipDeliveryRouteLocatorV1, ZulipDurablePersistence,
     ZulipDurablePersistenceError, ZulipOperationalIngestV1, ZulipQueueCursorV1,
 };
@@ -48,7 +48,7 @@ pub use communications_outbox::{
     ZulipCommunicationsOutboxRelayError, relay_communications_outbox_once,
 };
 
-pub const PACKAGE: &str = "hermes-zulip-runtime";
+pub const PACKAGE: &str = "makosh-zulip-runtime";
 
 pub mod settings;
 
@@ -92,7 +92,7 @@ pub async fn submit_command(
             operation_id,
             command_account_id(command),
             &command_sha256,
-            &hermes_zulip_api::client_wire::encode_command_request(command),
+            &makosh_zulip_api::client_wire::encode_command_request(command),
             requested_at_unix_seconds,
         )
         .await
@@ -130,10 +130,10 @@ pub async fn execute_next_command_with_blob(
     durable: &ZulipDurablePersistence,
     config: &ZulipHttpConfigV1,
     blob_materializer: Option<
-        &Mutex<Option<blob::ZulipBlobMaterializer<hermes_blob_client::BlobDataClient>>>,
+        &Mutex<Option<blob::ZulipBlobMaterializer<makosh_blob_client::BlobDataClient>>>,
     >,
     blob_write_materializer: Option<
-        &Mutex<Option<blob::ZulipBlobWriteMaterializer<hermes_blob_client::BlobDataClient>>>,
+        &Mutex<Option<blob::ZulipBlobWriteMaterializer<makosh_blob_client::BlobDataClient>>>,
     >,
     mut authorize_blob: impl FnMut(
         &ZulipCommandV1,
@@ -150,7 +150,7 @@ pub async fn execute_next_command_with_blob(
         return Ok(false);
     };
     let command =
-        hermes_zulip_api::client_wire::decode_command_request(&queued.exact_command_bytes)
+        makosh_zulip_api::client_wire::decode_command_request(&queued.exact_command_bytes)
             .map_err(|_| {
                 ZulipRuntimeErrorV1::Persistence(ZulipDurablePersistenceError::InvalidRow)
             })?;
@@ -216,7 +216,7 @@ pub async fn execute_next_command_with_blob(
                 .map_err(ZulipRuntimeErrorV1::Http)?;
             write_downloaded_blob(blob_write_materializer, &blob.blob_ref, bytes)?;
             (
-                Ok(hermes_zulip_http::ZulipHttpResponseV1 {
+                Ok(makosh_zulip_http::ZulipHttpResponseV1 {
                     status: 200,
                     provider_message_id: None,
                 }),
@@ -263,7 +263,7 @@ pub async fn execute_next_command_with_blob(
 
 fn write_downloaded_blob(
     materializer: Option<
-        &Mutex<Option<blob::ZulipBlobWriteMaterializer<hermes_blob_client::BlobDataClient>>>,
+        &Mutex<Option<blob::ZulipBlobWriteMaterializer<makosh_blob_client::BlobDataClient>>>,
     >,
     blob_ref: &str,
     bytes: Vec<u8>,
@@ -279,7 +279,7 @@ fn write_downloaded_blob(
 
 fn take_blob_bytes(
     materializer: Option<
-        &Mutex<Option<blob::ZulipBlobMaterializer<hermes_blob_client::BlobDataClient>>>,
+        &Mutex<Option<blob::ZulipBlobMaterializer<makosh_blob_client::BlobDataClient>>>,
     >,
     blob_ref: &str,
 ) -> Result<Vec<u8>, ZulipRuntimeErrorV1> {
@@ -515,13 +515,13 @@ pub async fn replay_operational_events(
 
 fn admit_message_body<F>(
     draft: CommunicationObservationDraft,
-    event: &hermes_zulip_api::ZulipEventV1,
+    event: &makosh_zulip_api::ZulipEventV1,
     body_admitter: &mut F,
 ) -> Result<CommunicationObservationDraft, ZulipRuntimeErrorV1>
 where
     F: FnMut(&[u8]) -> Result<BodyBlobReceiptV1, BodyAdmissionFailureV1>,
 {
-    let hermes_zulip_api::ZulipEventV1::Message {
+    let makosh_zulip_api::ZulipEventV1::Message {
         content: Some(content),
         ..
     } = event

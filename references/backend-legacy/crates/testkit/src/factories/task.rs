@@ -1,5 +1,5 @@
 use chrono::Utc;
-use hermes_hub_backend::domains::tasks::api::{NewTask, TaskStore};
+use makosh_hub_backend::domains::tasks::api::{NewTask, TaskStore};
 use sqlx::postgres::PgPool;
 use uuid::Uuid;
 
@@ -71,8 +71,8 @@ impl<'a> TaskFactory<'a> {
     pub async fn create(
         self,
     ) -> Result<
-        hermes_hub_backend::domains::tasks::api::Task,
-        hermes_hub_backend::domains::tasks::api::TaskError,
+        makosh_hub_backend::domains::tasks::api::Task,
+        makosh_hub_backend::domains::tasks::api::TaskError,
     > {
         let store = TaskStore::new(self.pool.clone());
         let new_task = NewTask {
@@ -84,7 +84,7 @@ impl<'a> TaskFactory<'a> {
             source_id: Some(format!("test-src-{}", Uuid::new_v4())),
             source_type: Some("import".into()),
             project_id: self.project_id,
-            hermes_status: self.status,
+            makosh_status: self.status,
             priority_score: self.priority_score,
             area: self.area,
             why: Some("Created by TaskFactory for integration testing".into()),

@@ -8,18 +8,18 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use hermes_desktop_call_recording_persistence::desktop_call_recording_storage_bundle_v1;
-use hermes_desktop_call_recording_runtime::{
+use makosh_desktop_call_recording_persistence::desktop_call_recording_storage_bundle_v1;
+use makosh_desktop_call_recording_runtime::{
     admission::module_descriptor_v1, settings::settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
-pub const PACKAGE: &str = "hermes-desktop-call-recording-assembly";
+pub const PACKAGE: &str = "makosh-desktop-call-recording-assembly";
 pub const RUNTIME_ARTIFACT_ID_V1: &str = "desktop_call_recording.runtime.v1";
 pub const STORAGE_ARTIFACT_ID_V1: &str = "desktop_call_recording.storage.v1";
 
@@ -176,7 +176,7 @@ fn artifact_fragment(
         ReleaseArtifactInputV1::ModuleRuntime(ModuleRuntimeArtifactInputV1 {
             artifact_kind: "module_runtime".to_owned(),
             artifact_id: RUNTIME_ARTIFACT_ID_V1.to_owned(),
-            relative_path: "bin/hermes-desktop-call-recording-runtime".to_owned(),
+            relative_path: "bin/makosh-desktop-call-recording-runtime".to_owned(),
             source_path: utf8_path(runtime_source)?,
             required: true,
             descriptor: ReleaseContractInputV1 {
@@ -236,7 +236,7 @@ mod tests {
     #[test]
     fn emits_exact_unsigned_runtime_and_storage_inputs() {
         let root = std::env::temp_dir().join(format!(
-            "hermes-desktop-recording-assembly-{}-{}",
+            "makosh-desktop-recording-assembly-{}-{}",
             std::process::id(),
             NEXT_ID.fetch_add(1, Ordering::Relaxed)
         ));
@@ -249,7 +249,7 @@ mod tests {
             serde_json::from_slice(&fs::read(paths.artifact_fragment).expect("fragment"))
                 .expect("fragment json");
         assert_eq!(fragment.owner_id, "desktop_call_recording");
-        assert_eq!(fragment.module_id, "hermes-desktop-call-recording-runtime");
+        assert_eq!(fragment.module_id, "makosh-desktop-call-recording-runtime");
         assert_eq!(fragment.artifacts.len(), 2);
         fs::remove_dir_all(root).expect("cleanup");
     }

@@ -2,7 +2,7 @@
 
 ## Release Goal
 
-The first Version 2 slice is complete when Hermes Hub builds a deterministic,
+The first Version 2 slice is complete when Макошь builds a deterministic,
 read-only Knowledge Graph projection from existing Persona-compatible identity
 records, communication messages and documents, exposes protected read APIs, and
 renders graph-backed desktop dashboard data.

@@ -2,7 +2,7 @@
 
 use std::collections::HashMap;
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     CommitOwnerVaultProvisioningResponseV1, PrepareOwnerVaultProvisioningRequestV1,
 };
 

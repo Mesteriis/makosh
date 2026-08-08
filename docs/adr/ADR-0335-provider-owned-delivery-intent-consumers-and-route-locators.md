@@ -52,10 +52,10 @@ lifecycle:
 persistence units:
 
 ```text
-Mail      -> hermes-mail-runtime / hermes-mail-persistence
-Telegram  -> hermes-telegram-runtime / hermes-telegram-persistence
-WhatsApp  -> hermes-whatsapp-runtime / hermes-whatsapp-persistence
-Zulip     -> hermes-zulip-runtime / hermes-zulip-persistence
+Mail      -> makosh-mail-runtime / makosh-mail-persistence
+Telegram  -> makosh-telegram-runtime / makosh-telegram-persistence
+WhatsApp  -> makosh-whatsapp-runtime / makosh-whatsapp-persistence
+Zulip     -> makosh-zulip-runtime / makosh-zulip-persistence
 ```
 
 Общего provider consumer, enum dispatch, runtime facade, persistence crate или
@@ -83,7 +83,7 @@ observation outbox, из которых был получен canonical source c
 - provider projection revision и lifecycle state.
 
 Cursor derivation использует exact public functions из
-`hermes-communications-ingress`; provider не импортирует Communications domain,
+`makosh-communications-ingress`; provider не импортирует Communications domain,
 runtime или persistence. Collision одного cursor с другим locator отклоняется
 fail-closed. Removed/unlinked account не разрешается как active route.
 
@@ -162,7 +162,7 @@ Outbox relay публикует сохранённые bytes без re-encode. P
 - provider persistence не импортирует provider contract и хранит opaque exact
   envelope bytes;
 - provider contract не импортирует runtime/persistence/SDK;
-- `hermes-communications-ingress` остаётся единственным разрешённым public
+- `makosh-communications-ingress` остаётся единственным разрешённым public
   contract для source cursor derivation;
 - Communications domain, workflow store и provider stores не импортируют друг
   друга;

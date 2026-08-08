@@ -7,8 +7,8 @@ use super::super::evidence::link_consistency_entity_in_transaction;
 use super::super::helpers::contradiction_observation_id;
 use super::super::models::{ContradictionObservation, NewContradictionObservation};
 use super::super::rows::row_to_observation;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 
 pub(super) async fn upsert(
     pool: &PgPool,
@@ -168,7 +168,7 @@ pub(crate) async fn link_contradiction_observation_in_transaction(
 async fn capture_contradiction_observation_in_transaction(
     transaction: &mut Transaction<'_, Postgres>,
     contradiction: &ContradictionObservation,
-) -> Result<hermes_observations_api::models::Observation, ConsistencyError> {
+) -> Result<makosh_observations_api::models::Observation, ConsistencyError> {
     let observation = ObservationStore::capture_in_transaction(
         transaction,
         &NewObservation::new(

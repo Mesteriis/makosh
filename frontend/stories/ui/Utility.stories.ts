@@ -14,10 +14,10 @@ import {
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Utility',
+	title: 'Макошь UI/General/Utility',
 	component: CopyButton,
 	args: {
-		value: 'hermes://local/context-pack'
+		value: 'makosh://local/context-pack'
 	}
 } satisfies Meta<typeof CopyButton>
 
@@ -74,8 +74,8 @@ export const SwitchersAndCopy: Story = {
 		const text = storybookText(storybookLocaleFromGlobals(globals))
 		const canvas = within(canvasElement)
 		await expect(canvas.getByText(text.utility.title)).toBeVisible()
-		await userEvent.click(canvas.getByRole('radio', { name: 'Hermes' }))
-		await expect(canvas.getByRole('radio', { name: 'Hermes' })).toHaveAttribute('aria-checked', 'true')
+		await userEvent.click(canvas.getByRole('radio', { name: 'Макошь' }))
+		await expect(canvas.getByRole('radio', { name: 'Макошь' })).toHaveAttribute('aria-checked', 'true')
 		await userEvent.click(canvas.getByRole('radio', { name: 'Dark' }))
 		await expect(canvas.getByRole('radio', { name: 'Dark' })).toHaveAttribute('aria-checked', 'true')
 	}

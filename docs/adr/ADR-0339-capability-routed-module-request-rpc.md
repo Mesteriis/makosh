@@ -133,7 +133,7 @@ Kernel разрешает route только если одновременно:
 2. caller effective capability содержит exact contract dependency;
 3. ровно один current approved provider объявляет exact `request_rpc`;
 4. provider capability granted, runtime managed и current;
-5. caller и provider принадлежат одному logical Hermes owner;
+5. caller и provider принадлежат одному logical Макошь owner;
 6. request/delivery/response проходят structural validation;
 7. provider и caller fences повторно current после response.
 

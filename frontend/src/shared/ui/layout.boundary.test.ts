@@ -27,7 +27,7 @@ const layoutComponents = [
 	'VirtualScrollArea'
 ]
 
-describe('Hermes UI layout component contracts', () => {
+describe('Макошь UI layout component contracts', () => {
 	it('keeps the layout batch documented and exported through the UI kit', () => {
 		const uiRoot = fileURLToPath(new URL('.', import.meta.url))
 		const barrel = readFileSync(join(uiRoot, 'index.ts'), 'utf8')

@@ -1,5 +1,5 @@
 [package]
-name = "hermes-storage-vault"
+name = "makosh-storage-vault"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,15 +7,15 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "storage"
 surface = "contract"
 
 [dependencies]
 getrandom = { version = "=0.4.3", default-features = false }
-hermes-runtime-protocol = { path = "../../runtime_protocol" }
-hermes-storage-protocol = { path = "../protocol" }
-hermes-vault-protocol = { path = "../../vault/protocol" }
+makosh-runtime-protocol = { path = "../../runtime_protocol" }
+makosh-storage-protocol = { path = "../protocol" }
+makosh-vault-protocol = { path = "../../vault/protocol" }
 prost = "=0.14.4"
 zeroize = "=1.9.0"

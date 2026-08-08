@@ -1,5 +1,5 @@
 [package]
-name = "hermes-events-jetstream-testkit"
+name = "makosh-events-jetstream-testkit"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,19 +7,19 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "test"
 owner = "test"
 surface = "test_support"
 
 [dev-dependencies]
 async-nats = "=0.49.1"
-hermes-events-jetstream = { path = "../../../src/platform/events/jetstream" }
-hermes-events-authority = { path = "../../../src/platform/events/authority" }
-hermes-events-authority-runtime-control = { path = "../../../src/platform/events/authority/runtime/control" }
-hermes-events-protocol = { path = "../../../src/platform/events" }
-hermes-runtime-protocol = { path = "../../../src/platform/runtime_protocol" }
-hermes-vault-protocol = { path = "../../../src/platform/vault/protocol" }
+makosh-events-jetstream = { path = "../../../src/platform/events/jetstream" }
+makosh-events-authority = { path = "../../../src/platform/events/authority" }
+makosh-events-authority-runtime-control = { path = "../../../src/platform/events/authority/runtime/control" }
+makosh-events-protocol = { path = "../../../src/platform/events" }
+makosh-runtime-protocol = { path = "../../../src/platform/runtime_protocol" }
+makosh-vault-protocol = { path = "../../../src/platform/vault/protocol" }
 futures-util = "=0.3.32"
 nats-jwt = "=0.3.0"
 prost = "=0.14.4"

@@ -28,7 +28,7 @@ export const FRONTEND_LOCALE_SETTING_KEY = 'frontend.locale'
 export const FRONTEND_THEME_SETTING_KEY = 'frontend.theme'
 export const FRONTEND_UI_STATE_SETTING_KEY = 'frontend.ui_state'
 
-const LOCAL_APPLICATION_SETTINGS_STORAGE_KEY = 'hermes-application-settings-v1'
+const LOCAL_APPLICATION_SETTINGS_STORAGE_KEY = 'makosh-application-settings-v1'
 
 const KNOWN_KEYS = new Set(
 	[

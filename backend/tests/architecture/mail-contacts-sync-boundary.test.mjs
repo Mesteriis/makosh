@@ -31,14 +31,14 @@ const files = {
   apiManifest: new URL('src/contacts-command-api/Cargo.toml', BACKEND_ROOT),
   coreManifest: new URL('src/contacts-core/Cargo.toml', BACKEND_ROOT),
   proto: new URL(
-    'src/contacts-command-api/proto/hermes/contacts/command/v1/contacts_command.proto',
+    'src/contacts-command-api/proto/makosh/contacts/command/v1/contacts_command.proto',
     BACKEND_ROOT,
   ),
   api: new URL('src/contacts-command-api/src/lib.rs', BACKEND_ROOT),
   envelope: new URL('src/contacts-command-api/src/envelope.rs', BACKEND_ROOT),
   sourceApiManifest: new URL('src/contacts-mail-sync-source-api/Cargo.toml', BACKEND_ROOT),
   sourceProto: new URL(
-    'src/contacts-mail-sync-source-api/proto/hermes/contacts/mail_sync_source/v1/mail_sync_source.proto',
+    'src/contacts-mail-sync-source-api/proto/makosh/contacts/mail_sync_source/v1/mail_sync_source.proto',
     BACKEND_ROOT,
   ),
   sourceApi: new URL('src/contacts-mail-sync-source-api/src/lib.rs', BACKEND_ROOT),
@@ -78,7 +78,7 @@ const files = {
   developmentRelease: new URL('scripts/materialize-dev-release.sh', BACKEND_ROOT),
   mailContractManifest: new URL('src/mail-address-book-contract/Cargo.toml', BACKEND_ROOT),
   mailContract: new URL(
-    'src/mail-address-book-contract/proto/hermes/mail/address_book/v1/address_book.proto',
+    'src/mail-address-book-contract/proto/makosh/mail/address_book/v1/address_book.proto',
     BACKEND_ROOT,
   ),
   googlePeopleManifest: new URL('src/mail-google-people/Cargo.toml', BACKEND_ROOT),
@@ -185,12 +185,12 @@ const files = {
   mailOAuthCore: new URL('src/mail-core/src/oauth.rs', BACKEND_ROOT),
   mailOAuthPersistence: new URL('src/mail-persistence/src/oauth.rs', BACKEND_ROOT),
   mailPortabilityProto: new URL(
-    'src/mail-api/proto/hermes/mail/portability/v1/portability.proto',
+    'src/mail-api/proto/makosh/mail/portability/v1/portability.proto',
     BACKEND_ROOT,
   ),
   workflowApiManifest: new URL('src/mail-contacts-sync-api/Cargo.toml', BACKEND_ROOT),
   workflowApi: new URL(
-    'src/mail-contacts-sync-api/proto/hermes/mail_contacts_sync/v1/sync.proto',
+    'src/mail-contacts-sync-api/proto/makosh/mail_contacts_sync/v1/sync.proto',
     BACKEND_ROOT,
   ),
   workflowCoreManifest: new URL('src/mail-contacts-sync-core/Cargo.toml', BACKEND_ROOT),
@@ -371,7 +371,7 @@ test('managed sync runtime uses staged settings and exact event-only owner contr
   assert.match(manifest, /role = "workflow"/);
   assert.match(manifest, /owner = "mail_contacts_sync"/);
   assert.match(manifest, /surface = "runtime"/);
-  assert.doesNotMatch(manifest, /hermes-mail-(?:runtime|persistence)|hermes-contacts-(?:runtime|persistence)/);
+  assert.doesNotMatch(manifest, /makosh-mail-(?:runtime|persistence)|makosh-contacts-(?:runtime|persistence)/);
   assert.match(admission, /SchedulerJobRequestV1/);
   assert.match(admission, /DurableEnvelopeKindV1::Ack/);
   assert.match(admission, /DurableEnvelopeKindV1::Result/);
@@ -411,11 +411,11 @@ test('mail contacts sync assembly is a distinct unsigned workflow build unit', a
   assert.match(manifest, /role = "workflow"/);
   assert.match(manifest, /owner = "mail_contacts_sync"/);
   assert.match(manifest, /surface = "assembly"/);
-  assert.match(manifest, /hermes-mail-contacts-sync-persistence/);
-  assert.match(manifest, /hermes-mail-contacts-sync-runtime/);
+  assert.match(manifest, /makosh-mail-contacts-sync-persistence/);
+  assert.match(manifest, /makosh-mail-contacts-sync-runtime/);
   assert.doesNotMatch(
     manifest,
-    /hermes-mail-(?:runtime|persistence)|hermes-contacts-(?:runtime|persistence)/,
+    /makosh-mail-(?:runtime|persistence)|makosh-contacts-(?:runtime|persistence)/,
   );
   assert.match(assembly, /mail_contacts_sync_module_descriptor_v1/);
   assert.match(assembly, /mail_contacts_sync_settings_schema_v1/);
@@ -425,7 +425,7 @@ test('mail contacts sync assembly is a distinct unsigned workflow build unit', a
     assembly,
     /SigningKey|--signing-key|private[_-]?key|provider_kind|reqwest/i,
   );
-  assert.match(developmentRelease, /--package hermes-mail-contacts-sync-assembly/);
+  assert.match(developmentRelease, /--package makosh-mail-contacts-sync-assembly/);
   assert.match(
     developmentRelease,
     /mail_contacts_sync\.release-artifacts\.json/,
@@ -447,18 +447,18 @@ test('Mail address-book providers are separate bounded integration adapters', as
     policy.implementation.productionPackages.map((descriptor) => [descriptor.name, descriptor]),
   );
 
-  assert.match(adr, /hermes-mail-google-people/);
-  assert.match(adr, /hermes-mail-carddav/);
+  assert.match(adr, /makosh-mail-google-people/);
+  assert.match(adr, /makosh-mail-carddav/);
   assert.match(adr, /никогда не выводит provider из[\s\S]*hostname, email suffix/);
   assert.match(adr, /mail_icloud_carddav_password/);
-  assert.deepEqual(packages.get('hermes-mail-google-people'), {
-    name: 'hermes-mail-google-people',
+  assert.deepEqual(packages.get('makosh-mail-google-people'), {
+    name: 'makosh-mail-google-people',
     role: 'integration',
     owner: 'mail',
     surface: 'implementation',
   });
-  assert.deepEqual(packages.get('hermes-mail-carddav'), {
-    name: 'hermes-mail-carddav',
+  assert.deepEqual(packages.get('makosh-mail-carddav'), {
+    name: 'makosh-mail-carddav',
     role: 'integration',
     owner: 'mail',
     surface: 'implementation',
@@ -470,7 +470,7 @@ test('Mail address-book providers are separate bounded integration adapters', as
     assert.match(manifest, /surface = "implementation"/);
     assert.doesNotMatch(
       manifest,
-      /hermes-(?:contacts|communications|mail-contacts-sync|events|storage|vault)/,
+      /makosh-(?:contacts|communications|mail-contacts-sync|events|storage|vault)/,
     );
   }
   assert.match(google, /GOOGLE_PEOPLE_API_HOST_V1: &str = "people.googleapis.com"/);
@@ -478,14 +478,14 @@ test('Mail address-book providers are separate bounded integration adapters', as
   assert.match(google, /OutcomeUnknown/);
   assert.match(google, /expected_etag/);
   assert.match(google, /take\(\(MAX_RESPONSE_BYTES \+ 1\) as u64\)/);
-  assert.doesNotMatch(google, /reqwest|sqlx|async_nats|hermes_contacts/i);
+  assert.doesNotMatch(google, /reqwest|sqlx|async_nats|makosh_contacts/i);
 
   assert.match(cardDav, /ICLOUD_CARDDAV_HOST_V1: &str = "contacts.icloud.com"/);
   assert.match(cardDav, /ICLOUD_CARDDAV_CREDENTIAL_PURPOSE_V1/);
   assert.match(cardDav, /ReadOnlyProvider/);
   assert.match(cardDav, /supports_remote_write/);
   assert.match(cardDav, /take\(\(MAX_RESPONSE_BYTES \+ 1\) as u64\)/);
-  assert.doesNotMatch(cardDav, /reqwest|sqlx|async_nats|hermes_contacts/i);
+  assert.doesNotMatch(cardDav, /reqwest|sqlx|async_nats|makosh_contacts/i);
 });
 
 test('Mail owns address-book persistence settings and credential authority without Contacts storage', async () => {
@@ -528,11 +528,11 @@ test('Mail owns address-book persistence settings and credential authority witho
   ]);
   const policy = JSON.parse(policySource);
   const descriptor = policy.implementation.productionPackages.find(
-    ({ name }) => name === 'hermes-mail-address-book-persistence',
+    ({ name }) => name === 'makosh-mail-address-book-persistence',
   );
 
   assert.deepEqual(descriptor, {
-    name: 'hermes-mail-address-book-persistence',
+    name: 'makosh-mail-address-book-persistence',
     role: 'integration',
     owner: 'mail',
     surface: 'persistence',
@@ -540,7 +540,7 @@ test('Mail owns address-book persistence settings and credential authority witho
   assert.match(manifest, /role = "integration"/);
   assert.match(manifest, /owner = "mail"/);
   assert.match(manifest, /surface = "persistence"/);
-  assert.doesNotMatch(manifest, /hermes-contacts|hermes-mail-contacts-sync/);
+  assert.doesNotMatch(manifest, /makosh-contacts|makosh-mail-contacts-sync/);
   assert.match(schema, /MAIL_ADDRESS_BOOK_STORAGE_BUNDLE_REVISION_V1: u32 = 28/);
   assert.match(storageBundle, /append_mail_address_book_storage_v1/);
   assert.match(storageBundle, /append_mail_icloud_carddav_credential_storage_v1/);
@@ -563,14 +563,14 @@ test('Mail owns address-book persistence settings and credential authority witho
   assert.match(fetchDelivery, /complete_fetch_command/);
   assert.match(fetchDelivery, /pending_fetch_events/);
   assert.match(fetchDelivery, /FOR UPDATE/);
-  assert.doesNotMatch(migration, /CREATE TABLE hermes_data\.contacts_/);
-  assert.doesNotMatch(custodyMigration, /hermes_data\.contacts_/);
-  assert.doesNotMatch(providerPageMigration, /hermes_data\.contacts_/);
+  assert.doesNotMatch(migration, /CREATE TABLE makosh_data\.contacts_/);
+  assert.doesNotMatch(custodyMigration, /makosh_data\.contacts_/);
+  assert.doesNotMatch(providerPageMigration, /makosh_data\.contacts_/);
   assert.doesNotMatch(migration, /mail_contacts_sync_/);
   assert.match(delivery, /mark_dispatch_started/);
   assert.match(delivery, /uncertain_upserts/);
   assert.match(delivery, /exact_envelope_bytes/);
-  assert.doesNotMatch(delivery, /SELECT[\s\S]*hermes_data\.contacts_/i);
+  assert.doesNotMatch(delivery, /SELECT[\s\S]*makosh_data\.contacts_/i);
   assert.match(settings, /mail\.address_book\.provider/);
   assert.match(settings, /MailAddressBookProviderV1::GooglePeople/);
   assert.match(settings, /MailAddressBookProviderV1::IcloudCardDav/);
@@ -608,11 +608,11 @@ test('Mail runtime executes reverse sync through exact event Blob and provider b
   ]);
   const policy = JSON.parse(policySource);
 
-  assert.match(manifest, /hermes-mail-address-book-contract/);
-  assert.match(manifest, /hermes-mail-address-book-persistence/);
-  assert.match(manifest, /hermes-mail-google-people/);
-  assert.match(manifest, /hermes-contacts-mail-sync-source-api/);
-  assert.doesNotMatch(manifest, /hermes-contacts-(?:runtime|persistence|core)/);
+  assert.match(manifest, /makosh-mail-address-book-contract/);
+  assert.match(manifest, /makosh-mail-address-book-persistence/);
+  assert.match(manifest, /makosh-mail-google-people/);
+  assert.match(manifest, /makosh-contacts-mail-sync-source-api/);
+  assert.doesNotMatch(manifest, /makosh-contacts-(?:runtime|persistence|core)/);
   assert.match(admission, /MAIL_ADDRESS_BOOK_CAPABILITY_ID_V1/);
   assert.match(admission, /CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1/);
   assert.match(admission, /BlobQuotaOperationV1::CustodyTransfer/);
@@ -671,7 +671,7 @@ test('Mail runtime paginates provider address books behind typed event-only comm
   assert.match(worker, /complete_fetch_command/);
   assert.match(worker, /GOOGLE_CURSOR_PREFIX/);
   assert.match(worker, /CARDDAV_CURSOR_PREFIX/);
-  assert.doesNotMatch(worker, /hermes_contacts|mail_contacts_sync/);
+  assert.doesNotMatch(worker, /makosh_contacts|mail_contacts_sync/);
   assert.match(outbox, /pending_fetch_events/);
   assert.match(managed, /address_book_fetch_subscribe_permit/);
   assert.match(main, /process_next_mail_address_book_fetch_v1/);
@@ -715,7 +715,7 @@ test('managed Mail provider conformance keeps endpoints credentials and evidence
   assert.match(cardDavFixture, /authorization/);
   assert.match(cardDavFixture, /set_nonblocking\(false\)/);
   assert.doesNotMatch(cardDavFixture, /managed-mail-carddav-password/);
-  assert.doesNotMatch(`${worker}\n${setup}`, /hermes_contacts_(?:runtime|persistence)/);
+  assert.doesNotMatch(`${worker}\n${setup}`, /makosh_contacts_(?:runtime|persistence)/);
 });
 
 test('managed bidirectional and scheduled sync cross owners only through durable events', async () => {
@@ -775,7 +775,7 @@ test('managed bidirectional and scheduled sync cross owners only through durable
   assert.match(completionMigration, /mail_contacts_sync_scheduler_runs/);
   assert.match(completionMigration, /terminal_receipt_queued/);
   assert.match(runtimeMain, /queue_scheduler_terminal_once/);
-  assert.match(harness, /hermes-mail-contacts-sync-runtime/);
+  assert.match(harness, /makosh-mail-contacts-sync-runtime/);
   assert.match(harness, /managed_mail_contacts_sync_reaches_contacts_through_events/);
   assert.match(mailManaged, /address_book_upsert_subscribe_permit,[\s\S]*&self\.logical_human_owner_id/);
   assert.match(mailManaged, /address_book_fetch_subscribe_permit,[\s\S]*&self\.logical_human_owner_id/);
@@ -800,7 +800,7 @@ test('Mail provider contract and sync workflow foundation preserve owner boundar
 
   assert.match(mailContractManifest, /role = "integration"/);
   assert.match(mailContractManifest, /owner = "mail"/);
-  assert.doesNotMatch(mailContractManifest, /hermes-contacts|hermes-communications/);
+  assert.doesNotMatch(mailContractManifest, /makosh-contacts|makosh-communications/);
   assert.match(mailContract, /FetchMailAddressBookPageCommandV1/);
   assert.match(mailContract, /MailAddressBookEntryObservedV1/);
   assert.match(mailContract, /UpsertMailAddressBookEntryCommandV1/);
@@ -823,7 +823,7 @@ test('Mail provider contract and sync workflow foundation preserve owner boundar
   for (const manifest of [workflowApiManifest, workflowCoreManifest]) {
     assert.match(manifest, /role = "workflow"/);
     assert.match(manifest, /owner = "mail_contacts_sync"/);
-    assert.doesNotMatch(manifest, /hermes-mail-(?:runtime|persistence)|hermes-contacts-(?:runtime|persistence)/);
+    assert.doesNotMatch(manifest, /makosh-mail-(?:runtime|persistence)|makosh-contacts-(?:runtime|persistence)/);
   }
   assert.match(workflowApi, /rpc Start/);
   assert.match(workflowApi, /rpc Get/);
@@ -868,7 +868,7 @@ test('sync persistence owns atomic state relay, reverse operations and SSE repla
   assert.match(manifest, /role = "workflow"/);
   assert.match(manifest, /owner = "mail_contacts_sync"/);
   assert.match(manifest, /surface = "persistence"/);
-  assert.doesNotMatch(manifest, /hermes-mail-(?:runtime|persistence)|hermes-contacts-(?:runtime|persistence)/);
+  assert.doesNotMatch(manifest, /makosh-mail-(?:runtime|persistence)|makosh-contacts-(?:runtime|persistence)/);
   assert.match(repository, /create_run/);
   assert.match(repository, /apply_transition/);
   assert.match(repository, /mail_contacts_sync_inbox/);
@@ -912,7 +912,7 @@ test('sync persistence owns atomic state relay, reverse operations and SSE repla
   assert.match(postgresLive, /MailContactsSyncStateV1::Completed/);
   assert.doesNotMatch(
     `${migration}\n${orchestrationMigration}\n${reverseMigration}\n${schedulerCompletionMigration}\n${reverseOriginMigration}\n${providerLinkMigration}`,
-    /hermes_data\.(?:contacts_state|contacts_provider_links|mail_accounts|communications_)/,
+    /makosh_data\.(?:contacts_state|contacts_provider_links|mail_accounts|communications_)/,
   );
   assert.doesNotMatch(
     `${repository}\n${orchestration}\n${reversePersistence}\n${relay}\n${realtime}`,
@@ -1047,7 +1047,7 @@ test('staged Contacts slice keeps six functional build units isolated', async ()
   for (const manifest of [apiManifest, sourceApiManifest, coreManifest]) {
     assert.match(manifest, /role = "domain"/);
     assert.match(manifest, /owner = "contacts"/);
-    assert.doesNotMatch(manifest, /hermes-mail|hermes-communications|sqlx|reqwest/);
+    assert.doesNotMatch(manifest, /makosh-mail|makosh-communications|sqlx|reqwest/);
   }
   assert.match(proto, /message UpsertContactFromMailAddressBookEntryCommandV1/);
   assert.match(proto, /message ContactUpsertedFromMailAddressBookEntryV1/);
@@ -1067,7 +1067,7 @@ test('staged Contacts slice keeps six functional build units isolated', async ()
     .split('message PrepareContactMailSyncSourceCommandV1')[0];
   assert.doesNotMatch(changedEvent, /display_name|email|phone|provider_kind|provider_entry_id|etag/);
   assert.match(sourceApi, /CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_OWNER_ID_V1: &str = "mail"/);
-  assert.match(sourceApi, /CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_MODULE_ID_V1: &str = "hermes-mail-runtime"/);
+  assert.match(sourceApi, /CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_MODULE_ID_V1: &str = "makosh-mail-runtime"/);
   assert.match(sourceApi, /mail\.address-book\.contact-source\.blob\.v1/);
   assert.match(sourceEnvelope, /Semantics::Event\(EventMetadataV1/);
   assert.match(sourceEnvelope, /Semantics::Command\(CommandMetadataV1/);
@@ -1085,7 +1085,7 @@ test('staged Contacts slice keeps six functional build units isolated', async ()
   assert.match(persistenceManifest, /role = "domain"/);
   assert.match(persistenceManifest, /owner = "contacts"/);
   assert.match(persistenceManifest, /surface = "persistence"/);
-  assert.doesNotMatch(persistenceManifest, /hermes-mail|hermes-communications/);
+  assert.doesNotMatch(persistenceManifest, /makosh-mail|makosh-communications/);
   assert.match(persistence, /reserve_inbox/);
   assert.match(persistence, /reserve_contact_mail_sync_source/);
   assert.match(persistence, /persist_contact_mail_sync_source_result/);
@@ -1104,7 +1104,7 @@ test('staged Contacts slice keeps six functional build units isolated', async ()
   for (const manifest of [runtimeManifest, assemblyManifest]) {
     assert.match(manifest, /role = "domain"/);
     assert.match(manifest, /owner = "contacts"/);
-    assert.doesNotMatch(manifest, /hermes-mail|hermes-communications/);
+    assert.doesNotMatch(manifest, /makosh-mail|makosh-communications/);
   }
   assert.match(runtimeManifest, /surface = "runtime"/);
   assert.match(assemblyManifest, /surface = "assembly"/);
@@ -1131,13 +1131,13 @@ test('staged Contacts slice keeps six functional build units isolated', async ()
   assert.match(managedRuntime, /StorageVaultLeaseAdapterV1/);
   assert.match(managedRuntime, /connect_runtime_with_jwt/);
   assert.match(managedRuntime, /signal_ready/);
-  assert.doesNotMatch(managedRuntime, /hermes_mail|hermes_communications/);
+  assert.doesNotMatch(managedRuntime, /makosh_mail|makosh_communications/);
   assert.match(assembly, /Unsigned Contacts release assembly/);
   assert.match(assembly, /contacts_storage_bundle_v1/);
   assert.match(assembly, /materialize_contacts_release_assembly_v1/);
   assert.doesNotMatch(assembly, /sign_release|launch_managed|KernelReleaseAuthorityV1/);
-  assert.match(developmentRelease, /--package hermes-contacts-runtime/);
-  assert.match(developmentRelease, /--package hermes-contacts-assembly/);
+  assert.match(developmentRelease, /--package makosh-contacts-runtime/);
+  assert.match(developmentRelease, /--package makosh-contacts-assembly/);
   assert.match(
     developmentRelease,
     /--artifact-fragment "\$contacts_assembly\/contacts\.release-artifacts\.json"/,
@@ -1153,7 +1153,7 @@ test('Mail Contacts Sync frontend is app-composed and uses generated Start/Get w
       readFile(new URL('frontend/src/workflows/mail-contacts-sync/api/mailContactsSync.ts', PROJECT_ROOT), 'utf8'),
       readFile(new URL('frontend/src/platform/connect/mailContactsSyncCommandClient.ts', PROJECT_ROOT), 'utf8'),
       readFile(new URL('frontend/src/platform/connect/mailContactsSyncQueryClient.ts', PROJECT_ROOT), 'utf8'),
-      readFile(new URL('frontend/src/gen/hermes/mail_contacts_sync/v1/sync_pb.ts', PROJECT_ROOT), 'utf8'),
+      readFile(new URL('frontend/src/gen/makosh/mail_contacts_sync/v1/sync_pb.ts', PROJECT_ROOT), 'utf8'),
     ]);
 
   assert.match(composition, /MailSettingsPanel/);

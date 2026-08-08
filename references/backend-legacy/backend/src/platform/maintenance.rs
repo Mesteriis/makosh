@@ -187,7 +187,7 @@ pub fn run_maintenance_action(
             backup_local_storage()
         }
         "restore_database" => Err(MaintenanceError::Unsupported(
-            "Database and vault restore is CLI-only while the backend is running. Stop Hermes and run make vault-restore.".to_owned(),
+            "Database and vault restore is CLI-only while the backend is running. Stop Макошь and run make vault-restore.".to_owned(),
         )),
         "restore_storage" => Err(MaintenanceError::Unsupported(
             "Storage restore is intentionally disabled in the live API until a stopped-process restore workflow exists.".to_owned(),
@@ -327,13 +327,13 @@ fn maintenance_actions(repo: &Path) -> Vec<MaintenanceActionDescriptor> {
             enabled: false,
             requires_confirmation: true,
             confirmation_phrase: Some("RESTORE".to_owned()),
-            disabled_reason: Some("Stop Hermes and run make vault-restore".to_owned()),
+            disabled_reason: Some("Stop Макошь and run make vault-restore".to_owned()),
         },
         MaintenanceActionDescriptor {
             id: "restore_storage".to_owned(),
             label: "Restore storage".to_owned(),
             description:
-                "Storage restore is blocked until Hermes has a stopped-process restore workflow."
+                "Storage restore is blocked until Макошь has a stopped-process restore workflow."
                     .to_owned(),
             icon: "tabler:archive-off".to_owned(),
             destructive: true,

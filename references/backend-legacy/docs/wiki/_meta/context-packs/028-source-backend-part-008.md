@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/app/handlers/communications/communication_queries/imports.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/communication_queries/imports.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/communication_queries/imports.rs`
 - Size bytes / Размер в байтах: `2582`
 - Included characters / Включено символов: `2582`
 - Truncated / Обрезано: `no`
@@ -137,7 +137,7 @@ fn import_response(
 
 ### `backend/src/app/handlers/communications/communication_queries/outbox.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/communication_queries/outbox.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/communication_queries/outbox.rs`
 - Size bytes / Размер в байтах: `2173`
 - Included characters / Включено символов: `2173`
 - Truncated / Обрезано: `no`
@@ -222,7 +222,7 @@ pub(super) fn outbox_store(
 
 ### `backend/src/app/handlers/communications/communication_queries/personas.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/communication_queries/personas.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/communication_queries/personas.rs`
 - Size bytes / Размер в байтах: `2235`
 - Included characters / Включено символов: `2235`
 - Truncated / Обрезано: `no`
@@ -296,7 +296,7 @@ pub(crate) async fn post_v1_persona(
 
 ### `backend/src/app/handlers/communications/communication_queries/read_receipts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/communication_queries/read_receipts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/communication_queries/read_receipts.rs`
 - Size bytes / Размер в байтах: `5035`
 - Included characters / Включено символов: `5035`
 - Truncated / Обрезано: `no`
@@ -429,7 +429,7 @@ async fn dispatch_provider_delivery_event(
 
 ### `backend/src/app/handlers/communications/communication_queries/saved_searches.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/communication_queries/saved_searches.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/communication_queries/saved_searches.rs`
 - Size bytes / Размер в байтах: `3298`
 - Included characters / Включено символов: `3298`
 - Truncated / Обрезано: `no`
@@ -542,7 +542,7 @@ fn saved_search_store(state: &AppState) -> Result<CommunicationSavedSearchStore,
 
 ### `backend/src/app/handlers/communications/communication_queries/search.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/communication_queries/search.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/communication_queries/search.rs`
 - Size bytes / Размер в байтах: `1946`
 - Included characters / Включено символов: `1946`
 - Truncated / Обрезано: `no`
@@ -584,7 +584,7 @@ pub(crate) async fn get_v1_email_search(
         .clone();
     let store = crate::app::api_support::app_store::<MessageProjectionStore>(pool.clone());
 
-    let search_path: Option<String> = std::env::var("HERMES_SEARCH_INDEX_PATH").ok();
+    let search_path: Option<String> = std::env::var("MAKOSH_SEARCH_INDEX_PATH").ok();
     if let Some(path) = search_path {
         let index =
             crate::engines::search::SearchIndex::open_or_create(std::path::Path::new(&path))?;
@@ -613,7 +613,7 @@ pub(crate) async fn get_v1_email_search(
 
 ### `backend/src/app/handlers/communications/communication_queries/threads.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/communication_queries/threads.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/communication_queries/threads.rs`
 - Size bytes / Размер в байтах: `1699`
 - Included characters / Включено символов: `1699`
 - Truncated / Обрезано: `no`
@@ -680,7 +680,7 @@ pub(crate) async fn get_v1_thread_messages(
 
 ### `backend/src/app/handlers/communications/finance_analytics.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/finance_analytics.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/finance_analytics.rs`
 - Size bytes / Размер в байтах: `165`
 - Included characters / Включено символов: `165`
 - Truncated / Обрезано: `no`
@@ -699,7 +699,7 @@ pub(crate) use models::*;
 
 ### `backend/src/app/handlers/communications/finance_analytics/analytics.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/finance_analytics/analytics.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/finance_analytics/analytics.rs`
 - Size bytes / Размер в байтах: `1848`
 - Included characters / Включено символов: `1848`
 - Truncated / Обрезано: `no`
@@ -771,7 +771,7 @@ pub(crate) async fn get_v1_analytics_senders(
 
 ### `backend/src/app/handlers/communications/finance_analytics/explain.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/finance_analytics/explain.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/finance_analytics/explain.rs`
 - Size bytes / Размер в байтах: `1199`
 - Included characters / Включено символов: `1199`
 - Truncated / Обрезано: `no`
@@ -820,7 +820,7 @@ pub(crate) async fn get_v1_message_smart_cc(
 
 ### `backend/src/app/handlers/communications/finance_analytics/invoices.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/finance_analytics/invoices.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/finance_analytics/invoices.rs`
 - Size bytes / Размер в байтах: `2965`
 - Included characters / Включено символов: `2965`
 - Truncated / Обрезано: `no`
@@ -914,7 +914,7 @@ pub(crate) async fn post_v1_invoice(
 
 ### `backend/src/app/handlers/communications/finance_analytics/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/finance_analytics/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/finance_analytics/models.rs`
 - Size bytes / Размер в байтах: `418`
 - Included characters / Включено символов: `418`
 - Truncated / Обрезано: `no`
@@ -937,7 +937,7 @@ pub(crate) struct ImportantToggleResponse {
 
 ### `backend/src/app/handlers/communications/legal_export.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/legal_export.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/legal_export.rs`
 - Size bytes / Размер в байтах: `5381`
 - Included characters / Включено символов: `5381`
 - Truncated / Обрезано: `no`
@@ -1100,7 +1100,7 @@ pub(crate) struct SendResponse {
 
 ### `backend/src/app/handlers/communications/message_actions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/message_actions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/message_actions.rs`
 - Size bytes / Размер в байтах: `8810`
 - Included characters / Включено символов: `8810`
 - Truncated / Обрезано: `no`
@@ -1383,7 +1383,7 @@ pub(crate) struct LegalDocListResponse {
 
 ### `backend/src/app/handlers/communications/message_ai_state.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/message_ai_state.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/message_ai_state.rs`
 - Size bytes / Размер в байтах: `1380`
 - Included characters / Включено символов: `1380`
 - Truncated / Обрезано: `no`
@@ -1433,7 +1433,7 @@ fn ai_state_store(state: &AppState) -> Result<CommunicationAiStateStore, ApiErro
 
 ### `backend/src/app/handlers/communications/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/mod.rs`
 - Size bytes / Размер в байтах: `8401`
 - Included characters / Включено символов: `8401`
 - Truncated / Обрезано: `no`
@@ -1622,7 +1622,7 @@ use crate::app::{ApiError, AppState};
 
 ### `backend/src/app/handlers/communications/remote_images.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/remote_images.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/remote_images.rs`
 - Size bytes / Размер в байтах: `146`
 - Included characters / Включено символов: `146`
 - Truncated / Обрезано: `no`
@@ -1640,7 +1640,7 @@ pub(crate) use handler::get_v1_communication_message_remote_image;
 
 ### `backend/src/app/handlers/communications/remote_images/dns.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/remote_images/dns.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/remote_images/dns.rs`
 - Size bytes / Размер в байтах: `1356`
 - Included characters / Включено символов: `1356`
 - Truncated / Обрезано: `no`
@@ -1700,7 +1700,7 @@ pub(super) async fn resolve_public_image_addrs(
 
 ### `backend/src/app/handlers/communications/remote_images/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/remote_images/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/remote_images/errors.rs`
 - Size bytes / Размер в байтах: `1243`
 - Included characters / Включено символов: `1243`
 - Truncated / Обрезано: `no`
@@ -1746,7 +1746,7 @@ pub(super) fn remote_image_fetch_api_error(error: RemoteImageFetchError) -> ApiE
 
 ### `backend/src/app/handlers/communications/remote_images/fetcher.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/remote_images/fetcher.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/remote_images/fetcher.rs`
 - Size bytes / Размер в байтах: `2879`
 - Included characters / Включено символов: `2879`
 - Truncated / Обрезано: `no`
@@ -1795,7 +1795,7 @@ fn remote_image_client(
     let mut builder = reqwest::Client::builder()
         .timeout(REMOTE_IMAGE_TIMEOUT)
         .redirect(reqwest::redirect::Policy::limited(4))
-        .user_agent("HermesHub-MailImageProxy/0.1");
+        .user_agent("МакошьHub-MailImageProxy/0.1");
     if let Some((host, addrs)) = dns_override {
         builder = builder.resolve_to_addrs(host, addrs);
     }
@@ -1838,7 +1838,7 @@ async fn fetch_remote_image_with_client(
 
 ### `backend/src/app/handlers/communications/remote_images/handler.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/remote_images/handler.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/remote_images/handler.rs`
 - Size bytes / Размер в байтах: `1899`
 - Included characters / Включено символов: `1899`
 - Truncated / Обрезано: `no`
@@ -1902,7 +1902,7 @@ pub(crate) async fn get_v1_communication_message_remote_image(
 
 ### `backend/src/app/handlers/communications/remote_images/reference.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/remote_images/reference.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/remote_images/reference.rs`
 - Size bytes / Размер в байтах: `699`
 - Included characters / Включено символов: `699`
 - Truncated / Обрезано: `no`
@@ -1935,7 +1935,7 @@ mod tests {
 
 ### `backend/src/app/handlers/communications/remote_images/url_policy.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/remote_images/url_policy.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/remote_images/url_policy.rs`
 - Size bytes / Размер в байтах: `3022`
 - Included characters / Включено символов: `3022`
 - Truncated / Обрезано: `no`
@@ -2039,7 +2039,7 @@ mod tests {
 
 ### `backend/src/app/handlers/communications/sending.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/sending.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/sending.rs`
 - Size bytes / Размер в байтах: `930`
 - Included characters / Включено символов: `930`
 - Truncated / Обрезано: `no`
@@ -2075,7 +2075,7 @@ pub(crate) use provider_send::post_v1_send;
 
 ### `backend/src/app/handlers/communications/sending/ai_reply.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/communications/sending/ai_reply.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/communications/sending/ai_reply.rs`
 - Size bytes / Размер в байтах: `3926`
 - Included characters / Включено символов: `3926`
 - Truncated / Обрезано: `no`

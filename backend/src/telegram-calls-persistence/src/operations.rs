@@ -1,4 +1,4 @@
-use hermes_telegram_calls_core::{
+use makosh_telegram_calls_core::{
     TelegramCallCommand, TelegramCallCommandError, TelegramCallDirection,
     TelegramCallFailureCategory, TelegramCallOperation, TelegramCallOperationKind,
     TelegramCallOperationState, TelegramCallSession, TelegramProviderCallState,
@@ -81,7 +81,7 @@ impl TelegramCallsPersistence {
              request_fingerprint_sha256, provider_user_id, requested_mute, runtime_generation, \
              grant_epoch, tdlib_call_id, revision, accepted_at_unix_seconds, \
              updated_at_unix_seconds, completed_at_unix_seconds, failure_category \
-             FROM hermes_data.telegram_call_operations \
+             FROM makosh_data.telegram_call_operations \
              WHERE account_id = $1 AND runtime_generation = $2 AND grant_epoch = $3 \
                AND (operation_state = 'accepted' OR ( \
                     operation_state = 'dispatching' AND operation_kind = 'set_local_mute' \
@@ -209,7 +209,7 @@ impl TelegramCallsPersistence {
             .requested_mute
             .ok_or(TelegramCallsPersistenceError::InvalidRow)?;
         sqlx::query(
-            "INSERT INTO hermes_data.telegram_call_local_mute ( \
+            "INSERT INTO makosh_data.telegram_call_local_mute ( \
              call_session_id, account_id, muted, operation_id, updated_at_unix_seconds \
              ) VALUES ($1, $2, $3, $4, $5) \
              ON CONFLICT (call_session_id) DO UPDATE SET \
@@ -251,7 +251,7 @@ impl TelegramCallsPersistence {
              request_fingerprint_sha256, provider_user_id, requested_mute, runtime_generation, \
              grant_epoch, tdlib_call_id, revision, accepted_at_unix_seconds, \
              updated_at_unix_seconds, completed_at_unix_seconds, failure_category \
-             FROM hermes_data.telegram_call_operations \
+             FROM makosh_data.telegram_call_operations \
              WHERE account_id = $1 \
                AND operation_state IN ('accepted', 'dispatching', 'awaiting_provider') \
                AND (runtime_generation <> $2 OR grant_epoch <> $3) \
@@ -302,7 +302,7 @@ impl TelegramCallsPersistence {
              request_fingerprint_sha256, provider_user_id, requested_mute, runtime_generation, \
              grant_epoch, tdlib_call_id, revision, accepted_at_unix_seconds, \
              updated_at_unix_seconds, completed_at_unix_seconds, failure_category \
-             FROM hermes_data.telegram_call_operations \
+             FROM makosh_data.telegram_call_operations \
              WHERE account_id = $1 AND operation_id = $2",
         )
         .bind(account_id)
@@ -325,7 +325,7 @@ impl TelegramCallsPersistence {
              request_fingerprint_sha256, provider_user_id, requested_mute, runtime_generation, \
              grant_epoch, tdlib_call_id, revision, accepted_at_unix_seconds, \
              updated_at_unix_seconds, completed_at_unix_seconds, failure_category \
-             FROM hermes_data.telegram_call_operations \
+             FROM makosh_data.telegram_call_operations \
              WHERE account_id = $1 AND ($2 = '' OR operation_id > $2) \
              ORDER BY operation_id LIMIT $3",
         )
@@ -344,7 +344,7 @@ impl TelegramCallsPersistence {
         call_session_id: &str,
     ) -> Result<bool, TelegramCallsPersistenceError> {
         sqlx::query_scalar::<_, bool>(
-            "SELECT muted FROM hermes_data.telegram_call_local_mute \
+            "SELECT muted FROM makosh_data.telegram_call_local_mute \
              WHERE account_id = $1 AND call_session_id = $2",
         )
         .bind(account_id)
@@ -363,7 +363,7 @@ impl TelegramCallsPersistence {
         provider_user_id: &str,
     ) -> Result<Option<String>, TelegramCallsPersistenceError> {
         sqlx::query_scalar(
-            "SELECT call_session_id FROM hermes_data.telegram_call_operations \
+            "SELECT call_session_id FROM makosh_data.telegram_call_operations \
              WHERE account_id = $1 AND runtime_generation = $2 AND tdlib_call_id = $3 \
                AND provider_user_id = $4 AND operation_kind = 'initiate_audio' \
                AND operation_state IN ('dispatching', 'awaiting_provider') \
@@ -389,7 +389,7 @@ pub(crate) async fn reconcile_operations_for_call(
          request_fingerprint_sha256, provider_user_id, requested_mute, runtime_generation, \
          grant_epoch, tdlib_call_id, revision, accepted_at_unix_seconds, \
          updated_at_unix_seconds, completed_at_unix_seconds, failure_category \
-         FROM hermes_data.telegram_call_operations \
+         FROM makosh_data.telegram_call_operations \
          WHERE account_id = $1 AND call_session_id = $2 \
            AND operation_state IN ('dispatching', 'awaiting_provider') \
          ORDER BY accepted_at_unix_seconds, operation_id FOR UPDATE",
@@ -466,7 +466,7 @@ async fn load_command_call_for_update(
              provider_call_unique_id, provider_user_id, direction, provider_state, \
              pending_created, pending_received, discard_reason, failure_category, revision, \
              created_at_unix_seconds, updated_at_unix_seconds, ended_at_unix_seconds \
-             FROM hermes_data.telegram_call_sessions \
+             FROM makosh_data.telegram_call_sessions \
              WHERE account_id = $1 AND provider_state NOT IN ('discarded', 'error') \
              ORDER BY created_at_unix_seconds DESC LIMIT 1 FOR UPDATE",
         )
@@ -480,7 +480,7 @@ async fn load_command_call_for_update(
              provider_call_unique_id, provider_user_id, direction, provider_state, \
              pending_created, pending_received, discard_reason, failure_category, revision, \
              created_at_unix_seconds, updated_at_unix_seconds, ended_at_unix_seconds \
-             FROM hermes_data.telegram_call_sessions \
+             FROM makosh_data.telegram_call_sessions \
              WHERE account_id = $1 AND call_session_id = $2 FOR UPDATE",
         )
         .bind(command.account_id())
@@ -501,7 +501,7 @@ async fn load_operation_for_update(
          request_fingerprint_sha256, provider_user_id, requested_mute, runtime_generation, \
          grant_epoch, tdlib_call_id, revision, accepted_at_unix_seconds, \
          updated_at_unix_seconds, completed_at_unix_seconds, failure_category \
-         FROM hermes_data.telegram_call_operations \
+         FROM makosh_data.telegram_call_operations \
          WHERE operation_id = $1 FOR UPDATE",
     )
     .bind(operation_id)
@@ -516,7 +516,7 @@ async fn insert_operation(
     operation: &TelegramCallOperation,
 ) -> Result<(), TelegramCallsPersistenceError> {
     sqlx::query(
-        "INSERT INTO hermes_data.telegram_call_operations ( \
+        "INSERT INTO makosh_data.telegram_call_operations ( \
          operation_id, account_id, call_session_id, operation_kind, operation_state, \
          request_fingerprint_sha256, provider_user_id, requested_mute, runtime_generation, \
          grant_epoch, tdlib_call_id, revision, accepted_at_unix_seconds, \
@@ -573,7 +573,7 @@ async fn transition_operation(
     operation.updated_at_unix_seconds = now_unix_seconds;
     operation.completed_at_unix_seconds = next_state.is_terminal().then_some(now_unix_seconds);
     let result = sqlx::query(
-        "UPDATE hermes_data.telegram_call_operations SET \
+        "UPDATE makosh_data.telegram_call_operations SET \
          operation_state = $1, tdlib_call_id = $2, revision = $3, \
          updated_at_unix_seconds = $4, completed_at_unix_seconds = $5, \
          failure_category = $6 \
@@ -607,7 +607,7 @@ async fn persist_operation_history(
     operation: &TelegramCallOperation,
 ) -> Result<(), TelegramCallsPersistenceError> {
     sqlx::query(
-        "INSERT INTO hermes_data.telegram_call_operation_history ( \
+        "INSERT INTO makosh_data.telegram_call_operation_history ( \
          operation_id, revision, operation_state, tdlib_call_id, \
          updated_at_unix_seconds, completed_at_unix_seconds, failure_category \
          ) VALUES ($1, $2, $3, $4, $5, $6, $7)",

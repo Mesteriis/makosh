@@ -7,9 +7,9 @@ use super::errors::CalendarError;
 use super::models::{CalendarEvent, CalendarEventUpdate, NewCalendarEvent};
 use super::queries::CalendarEventListQuery;
 use super::rows::row_to_event;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::review_links::link_domain_entity_in_transaction;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::review_links::link_domain_entity_in_transaction;
+use makosh_observations_postgres::store::ObservationStore;
 
 const CALENDAR_EVENT_COLUMNS: &str = "event_id, observation_id, source_event_id, account_id, source_id, title, description, location, start_at, end_at, timezone, all_day, recurrence_rule, status, visibility, event_type, importance_score, readiness_score, sync_status, conference_url, conference_provider, preparation_reminder_minutes, travel_buffer_minutes, created_at, updated_at";
 
@@ -849,7 +849,7 @@ async fn link_calendar_event_from_observation_in_transaction(
     event_id: &str,
     relationship_kind: Option<&str>,
     metadata: serde_json::Value,
-) -> Result<(), hermes_observations_postgres::errors::ObservationStoreError> {
+) -> Result<(), makosh_observations_postgres::errors::ObservationStoreError> {
     link_domain_entity_in_transaction(
         transaction,
         observation_id,

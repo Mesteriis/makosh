@@ -6,10 +6,10 @@ use std::{
     time::{SystemTime, UNIX_EPOCH},
 };
 
-use hermes_communications_evidence_export_source_api::{
+use makosh_communications_evidence_export_source_api::{
     EvidenceExportEnvelopeContextV1, build_evidence_export_prepare_outbox_record_v1,
 };
-use hermes_communications_export_api::{
+use makosh_communications_export_api::{
     COMMUNICATIONS_EXPORT_CONTRACT_MAJOR_V1, COMMUNICATIONS_EXPORT_MAX_MESSAGES_V1,
     COMMUNICATIONS_EXPORT_MODULE_ID_V1, COMMUNICATIONS_EXPORT_OWNER_V1,
     COMMUNICATIONS_EXPORT_READ_TICKET_BYTES_V1,
@@ -21,10 +21,10 @@ use hermes_communications_export_api::{
         StartEvidenceExportResponseV1,
     },
 };
-use hermes_communications_export_persistence::{
+use makosh_communications_export_persistence::{
     CommunicationsExportPersistenceErrorV1, CommunicationsExportPersistenceV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ModuleClientBlobAuthorizationV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
 use prost::Message;

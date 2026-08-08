@@ -10,7 +10,7 @@ const props = withDefaults(defineProps<{
   disabled: false
 })
 
-const classes = computed(() => ['hermes-tab-trigger', { 'hermes-tab-trigger--disabled': props.disabled }, props.class])
+const classes = computed(() => ['makosh-tab-trigger', { 'makosh-tab-trigger--disabled': props.disabled }, props.class])
 </script>
 
 <template>

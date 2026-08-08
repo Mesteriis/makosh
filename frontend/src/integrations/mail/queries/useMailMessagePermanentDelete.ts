@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import {
 	MailMessagePermanentDeleteOperationOutcomeV1,
 	type MailMessagePermanentDeleteOperationStatusV1,
-} from '../../../gen/hermes/mail/message_permanent_delete/v1/client_pb'
+} from '../../../gen/makosh/mail/message_permanent_delete/v1/client_pb'
 import {
 	getMailMessagePermanentDeleteStatus,
 	permanentlyDeleteMailMessage,

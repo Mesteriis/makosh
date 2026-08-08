@@ -11,12 +11,12 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-toolbar-section',
-	`hermes-toolbar-section--${props.orientation}`,
+	'makosh-toolbar-section',
+	`makosh-toolbar-section--${props.orientation}`,
 	props.class
 ])
 
-const labelId = `hermes-toolbar-section-label-${useId()}`
+const labelId = `makosh-toolbar-section-label-${useId()}`
 </script>
 
 <template>
@@ -28,11 +28,11 @@ const labelId = `hermes-toolbar-section-label-${useId()}`
 		<span
 			v-if="$slots.label"
 			:id="labelId"
-			class="hermes-toolbar-section-label"
+			class="makosh-toolbar-section-label"
 		>
 			<slot name="label" />
 		</span>
-		<div class="hermes-toolbar-section-content">
+		<div class="makosh-toolbar-section-content">
 			<slot />
 		</div>
 	</section>

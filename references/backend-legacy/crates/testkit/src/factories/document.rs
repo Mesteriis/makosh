@@ -1,6 +1,6 @@
-use hermes_hub_backend::domains::documents::core::errors::DocumentImportError;
-use hermes_hub_backend::domains::documents::core::models::{ImportedDocument, NewDocumentImport};
-use hermes_hub_backend::domains::documents::core::store::DocumentImportStore;
+use makosh_hub_backend::domains::documents::core::errors::DocumentImportError;
+use makosh_hub_backend::domains::documents::core::models::{ImportedDocument, NewDocumentImport};
+use makosh_hub_backend::domains::documents::core::store::DocumentImportStore;
 use sha2::{Digest, Sha256};
 use sqlx::postgres::PgPool;
 use uuid::Uuid;

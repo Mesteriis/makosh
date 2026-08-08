@@ -27,7 +27,7 @@
 
 ## Контекст
 
-Hermes должен самостоятельно управлять локальными PostgreSQL, PgBouncer, NATS
+Макошь должен самостоятельно управлять локальными PostgreSQL, PgBouncer, NATS
 JetStream, Telemetry Collector, Vault и module runtimes. При этом отдельный
 обязательный Host Supervisor рядом с Kernel увеличил бы количество процессов и
 создал ещё одну lifecycle-границу до появления доказанной необходимости.
@@ -46,13 +46,13 @@ headless topology — операционная система.
 
 ### Иерархия supervision
 
-Supervisor является независимой подсистемой Hermes Kernel, а не отдельным
-обязательным Hermes-процессом:
+Supervisor является независимой подсистемой Макошь Kernel, а не отдельным
+обязательным Макошь-процессом:
 
 ```text
 Tauri или OS watchdog
         ↓
-Hermes Kernel process
+Макошь Kernel process
   ├── supervisor subsystem
   ├── Settings Registry
   ├── capability router и Event Hub
@@ -128,7 +128,7 @@ effect. Эти modes не являются pre-store bootstrap inputs; Kernel н
 Desktop default:
 
 - managed Telemetry Collector с private local store;
-- приватный managed PostgreSQL cluster в Hermes data directory;
+- приватный managed PostgreSQL cluster в Макошь data directory;
 - managed PgBouncer;
 - managed Storage Control runtime ADR-0224;
 - managed NATS с приватным JetStream directory;
@@ -165,7 +165,7 @@ Storage, NATS, Event Hub, Scheduler и modules не выполняются во�
 
 Стандартный managed startup:
 
-1. получить single-instance lock на Hermes runtime/data directory;
+1. получить single-instance lock на Макошь runtime/data directory;
 2. проверить permissions, ownership, доступное место и version compatibility;
 3. открыть Kernel Control Store и проверить integrity/schema version;
 4. загрузить trustworthy desired infrastructure state, Settings Registry
@@ -346,11 +346,11 @@ module или storage errors и не перезапускает отдельны
 Внешний watchdog не очищает runtime/data directories. После restart Kernel сам
 выполняет managed-child reconciliation и полную readiness sequence.
 
-Отдельный постоянный `hermes-host` process не вводится. Он может быть рассмотрен
+Отдельный постоянный `makosh-host` process не вводится. Он может быть рассмотрен
 новым ADR только при доказанной необходимости, например:
 
 - headless runtime должен переживать закрытие Tauri;
-- несколько клиентов подключаются к одному постоянно работающему Hermes;
+- несколько клиентов подключаются к одному постоянно работающему Макошь;
 - supervisor должен переживать полный crash Kernel process;
 - требуется независимое обновление Kernel без остановки managed services.
 
@@ -381,7 +381,7 @@ loops.
 Положительные:
 
 - Kernel самостоятельно управляет всей приватной local infrastructure;
-- отдельный обязательный Hermes supervisor process не нужен;
+- отдельный обязательный Макошь supervisor process не нужен;
 - отказ PostgreSQL или NATS не выключает control/recovery loop;
 - отказ Telemetry Collector не останавливает Kernel или modules;
 - managed и external services не смешиваются;

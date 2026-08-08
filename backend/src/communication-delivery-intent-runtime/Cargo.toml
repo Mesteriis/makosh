@@ -1,5 +1,5 @@
 [package]
-name = "hermes-communication-delivery-intent-runtime"
+name = "makosh-communication-delivery-intent-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,31 +8,31 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-communication-delivery-intent-runtime"
+name = "makosh-communication-delivery-intent-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "communication_delivery_intent"
 surface = "runtime"
 
 [dependencies]
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-communication-delivery-intent-api = { path = "../communication-delivery-intent-api" }
-hermes-communication-delivery-intent-core = { path = "../communication-delivery-intent-core" }
-hermes-communication-delivery-intent-event-adapters = { path = "../communication-delivery-intent-event-adapters" }
-hermes-communication-delivery-intent-ingress-api = { path = "../communication-delivery-intent-ingress-api" }
-hermes-communication-delivery-intent-persistence = { path = "../communication-delivery-intent-persistence" }
-hermes-communications-api = { path = "../communications-api" }
-hermes-events-jetstream = { path = "../platform/events/jetstream" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-mail-delivery-intent-contract = { path = "../mail-delivery-intent-contract" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
-hermes-telegram-delivery-intent-contract = { path = "../telegram-delivery-intent-contract" }
-hermes-whatsapp-delivery-intent-contract = { path = "../whatsapp-delivery-intent-contract" }
-hermes-zulip-delivery-intent-contract = { path = "../zulip-delivery-intent-contract" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-communication-delivery-intent-api = { path = "../communication-delivery-intent-api" }
+makosh-communication-delivery-intent-core = { path = "../communication-delivery-intent-core" }
+makosh-communication-delivery-intent-event-adapters = { path = "../communication-delivery-intent-event-adapters" }
+makosh-communication-delivery-intent-ingress-api = { path = "../communication-delivery-intent-ingress-api" }
+makosh-communication-delivery-intent-persistence = { path = "../communication-delivery-intent-persistence" }
+makosh-communications-api = { path = "../communications-api" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-mail-delivery-intent-contract = { path = "../mail-delivery-intent-contract" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
+makosh-telegram-delivery-intent-contract = { path = "../telegram-delivery-intent-contract" }
+makosh-whatsapp-delivery-intent-contract = { path = "../whatsapp-delivery-intent-contract" }
+makosh-zulip-delivery-intent-contract = { path = "../zulip-delivery-intent-contract" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }

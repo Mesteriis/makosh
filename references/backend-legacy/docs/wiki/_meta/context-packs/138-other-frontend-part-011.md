@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/integrations/telegram/components/TelegramAccountManager.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/components/TelegramAccountManager.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/components/TelegramAccountManager.vue`
 - Size bytes / Размер в байтах: `10732`
 - Included characters / Включено символов: `10730`
 - Truncated / Обрезано: `no`
@@ -378,7 +378,7 @@ function applyQrSuggestedAccount(payload: {
 
 ### `frontend/src/integrations/telegram/components/TelegramCallTranscriptPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/components/TelegramCallTranscriptPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/components/TelegramCallTranscriptPanel.vue`
 - Size bytes / Размер в байтах: `4940`
 - Included characters / Включено символов: `4932`
 - Truncated / Обрезано: `no`
@@ -580,7 +580,7 @@ function formatDate(value: string | null | undefined): string {
 
 ### `frontend/src/integrations/telegram/components/TelegramCallsPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/components/TelegramCallsPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/components/TelegramCallsPanel.vue`
 - Size bytes / Размер в байтах: `3433`
 - Included characters / Включено символов: `3433`
 - Truncated / Обрезано: `no`
@@ -713,7 +713,7 @@ const filteredCalls = computed(() => {
 
 ### `frontend/src/integrations/telegram/components/TelegramCapabilityMatrix.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/components/TelegramCapabilityMatrix.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/components/TelegramCapabilityMatrix.vue`
 - Size bytes / Размер в байтах: `5359`
 - Included characters / Включено символов: `5355`
 - Truncated / Обрезано: `no`
@@ -889,7 +889,7 @@ function tone(status: string): string {
 
 ### `frontend/src/integrations/telegram/components/TelegramCommandAuditPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/components/TelegramCommandAuditPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/components/TelegramCommandAuditPanel.vue`
 - Size bytes / Размер в байтах: `8821`
 - Included characters / Включено символов: `8814`
 - Truncated / Обрезано: `no`
@@ -1189,7 +1189,7 @@ function canRetry(command: TelegramProviderWriteCommand): boolean {
 
 ### `frontend/src/integrations/telegram/components/TelegramQrLoginPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/components/TelegramQrLoginPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/components/TelegramQrLoginPanel.vue`
 - Size bytes / Размер в байтах: `8190`
 - Included characters / Включено символов: `8184`
 - Truncated / Обрезано: `no`
@@ -1474,7 +1474,7 @@ function applySuggested() {
 
 ### `frontend/src/integrations/telegram/components/TelegramStatusMessages.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/components/TelegramStatusMessages.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/components/TelegramStatusMessages.vue`
 - Size bytes / Размер в байтах: `2567`
 - Included characters / Включено символов: `2567`
 - Truncated / Обрезано: `no`
@@ -1580,7 +1580,7 @@ defineProps<{
 
 ### `frontend/src/integrations/telegram/views/TelegramRuntimePanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/views/TelegramRuntimePanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/views/TelegramRuntimePanel.vue`
 - Size bytes / Размер в байтах: `7077`
 - Included characters / Включено символов: `7070`
 - Truncated / Обрезано: `no`
@@ -1798,7 +1798,7 @@ async function setTelegramRuntime(action: 'start' | 'stop' | 'restart') {
 
 ### `frontend/src/integrations/whatsapp/components/WhatsAppRail.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/components/WhatsAppRail.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/components/WhatsAppRail.vue`
 - Size bytes / Размер в байтах: `5260`
 - Included characters / Включено символов: `5260`
 - Truncated / Обрезано: `no`
@@ -1933,7 +1933,7 @@ function capabilityLabel(capability: string): string {
 
 ### `frontend/src/integrations/whatsapp/components/WhatsAppRuntimeAccountList.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/components/WhatsAppRuntimeAccountList.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/components/WhatsAppRuntimeAccountList.vue`
 - Size bytes / Размер в байтах: `1647`
 - Included characters / Включено символов: `1646`
 - Truncated / Обрезано: `no`
@@ -1997,7 +1997,7 @@ const includeRemovedAccountsModel = computed({
 
 ### `frontend/src/integrations/whatsapp/components/WhatsAppRuntimeAccountProvisioning.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/components/WhatsAppRuntimeAccountProvisioning.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/components/WhatsAppRuntimeAccountProvisioning.vue`
 - Size bytes / Размер в байтах: `4354`
 - Included characters / Включено символов: `4354`
 - Truncated / Обрезано: `no`
@@ -2126,7 +2126,7 @@ const liveAccountLocalStatePathModel = computed({
 
 ### `frontend/src/integrations/whatsapp/components/WhatsAppRuntimeCapabilities.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/components/WhatsAppRuntimeCapabilities.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/components/WhatsAppRuntimeCapabilities.vue`
 - Size bytes / Размер в байтах: `1080`
 - Included characters / Включено символов: `1080`
 - Truncated / Обрезано: `no`
@@ -2168,7 +2168,7 @@ const { t } = useI18n()
 
 ### `frontend/src/integrations/whatsapp/components/WhatsAppRuntimeCommandAudit.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/components/WhatsAppRuntimeCommandAudit.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/components/WhatsAppRuntimeCommandAudit.vue`
 - Size bytes / Размер в байтах: `2404`
 - Included characters / Включено символов: `2404`
 - Truncated / Обрезано: `no`
@@ -2249,7 +2249,7 @@ const { t } = useI18n()
 
 ### `frontend/src/integrations/whatsapp/components/WhatsAppRuntimeControl.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/components/WhatsAppRuntimeControl.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/components/WhatsAppRuntimeControl.vue`
 - Size bytes / Размер в байтах: `4956`
 - Included characters / Включено символов: `4952`
 - Truncated / Обрезано: `no`
@@ -2367,7 +2367,7 @@ const { t } = useI18n()
 
 ### `frontend/src/integrations/whatsapp/components/WhatsAppRuntimeLinking.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/components/WhatsAppRuntimeLinking.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/components/WhatsAppRuntimeLinking.vue`
 - Size bytes / Размер в байтах: `2267`
 - Included characters / Включено символов: `2265`
 - Truncated / Обрезано: `no`
@@ -2438,7 +2438,7 @@ const pairCodePhoneNumberModel = computed({
 
 ### `frontend/src/integrations/whatsapp/components/WhatsAppRuntimeSnapshots.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/components/WhatsAppRuntimeSnapshots.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/components/WhatsAppRuntimeSnapshots.vue`
 - Size bytes / Размер в байтах: `6978`
 - Included characters / Включено символов: `6971`
 - Truncated / Обрезано: `no`
@@ -2654,7 +2654,7 @@ const statusText = computed({
 
 ### `frontend/src/integrations/whatsapp/components/WhatsAppSessionList.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/components/WhatsAppSessionList.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/components/WhatsAppSessionList.vue`
 - Size bytes / Размер в байтах: `4329`
 - Included characters / Включено символов: `4329`
 - Truncated / Обрезано: `no`
@@ -2810,7 +2810,7 @@ function sessionLinkStateClass(state: string): string {
 
 ### `frontend/src/integrations/whatsapp/components/WhatsAppStatusMessages.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/components/WhatsAppStatusMessages.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/components/WhatsAppStatusMessages.vue`
 - Size bytes / Размер в байтах: `251`
 - Included characters / Включено символов: `251`
 - Truncated / Обрезано: `no`
@@ -2831,7 +2831,7 @@ defineProps<{
 
 ### `frontend/src/integrations/whatsapp/views/WhatsAppRuntimePanel.css`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/views/WhatsAppRuntimePanel.css`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/views/WhatsAppRuntimePanel.css`
 - Size bytes / Размер в байтах: `4539`
 - Included characters / Включено символов: `4539`
 - Truncated / Обрезано: `no`
@@ -3078,7 +3078,7 @@ defineProps<{
 
 ### `frontend/src/integrations/whatsapp/views/WhatsAppRuntimePanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/views/WhatsAppRuntimePanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/views/WhatsAppRuntimePanel.vue`
 - Size bytes / Размер в байтах: `27713`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3208,7 +3208,7 @@ const liveAccountShape = ref<WhatsappProviderShape>('whatsapp_web_companion')
 const liveAccountId = ref('whatsapp-live-primary')
 const liveAccountDisplayName = ref('WhatsApp Live')
 const liveAccountExternalId = ref('whatsapp-live-primary')
-const liveAccountDeviceName = ref('Hermes WhatsApp companion')
+const liveAccountDeviceName = ref('Макошь WhatsApp companion')
 const liveAccountLocalStatePath = ref('docker/data/whatsapp/blocked/whatsapp-live-primary')
 
 const runtimeCapabilities = computed(
@@ -3279,8 +3279,8 @@ watch(liveAccountShape, (shape) => {
   if (!liveAccountDeviceName.value.trim()) {
     liveAccountDeviceName.value =
       shape === 'whatsapp_native_md'
-        ? 'Hermes WhatsApp native runtime'
-        : 'Hermes WhatsApp companion'
+        ? 'Макошь WhatsApp native runtime'
+        : 'Макошь WhatsApp companion'
   }
   liveAccountLocalStatePath.value = `docker/data/whatsapp/blocked/${liveAccountId.value.trim() || 'whatsapp-live-primary'}`
 }, { immediate: true })
@@ -3380,7 +3380,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/integrations/yandexTelemost/components/YandexTelemostSettingsPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/yandexTelemost/components/YandexTelemostSettingsPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/yandexTelemost/components/YandexTelemostSettingsPanel.vue`
 - Size bytes / Размер в байтах: `11620`
 - Included characters / Включено символов: `11618`
 - Truncated / Обрезано: `no`
@@ -3593,7 +3593,7 @@ function valueOrUndefined(input: string): string | undefined {
       <label>{{ t('OAuth token') }}<input v-model="setupForm.oauth_token" type="password" autocomplete="off" /></label>
       <label>{{ t('Existing token secret ref') }}<input v-model="setupForm.oauth_token_ref" /></label>
       <label>{{ t('API base URL') }}<input v-model="setupForm.api_base_url" placeholder="https://cloud-api.yandex.net/v1/telemost-api" /></label>
-      <button type="submit" class="hermes-btn hermes-btn--primary" :disabled="activeAction==='setup'">
+      <button type="submit" class="makosh-btn makosh-btn--primary" :disabled="activeAction==='setup'">
         {{ t('Connect Yandex Telemost') }}
       </button>
     </form>
@@ -3607,7 +3607,7 @@ function valueOrUndefined(input: string): string | undefined {
       <div class="integration-form split">
         <label>{{ t('Waiting room level') }}<input v-model="conferenceForm.waiting_room_level" placeholder="PUBLIC" /></label>
         <label class="inline-check"><input v-model="conferenceForm.auto_summary" type="checkbox" /> {{ t('Request provider auto-summary') }}</label>
-        <button type="button" class="hermes-btn hermes-btn--secondary" :disabled="!canUseSelected || activeAction==='create'" @click="handleCreateConference">
+        <button type="button" class="makosh-btn makosh-btn--secondary" :disabled="!canUseSelected || activeAction==='create'" @click="handleCreateConference">
           {{ t('Create conference') }}
         </button>
       </div>
@@ -3615,13 +3615,13 @@ function valueOrUndefined(input: string): string | undefined {
       <div class="integration-form split">
         <label>{{ t('Join URL') }}<input v-model="manualOpenForm.join_url" placeholder="https://telemost.yandex.ru/j/..." /></label>
         <label>{{ t('Conference id') }}<input v-model="manualOpenForm.conference_id" /></label>
-        <button type="button" class="hermes-btn hermes-btn--secondary" :disabled="!manualOpenForm.join_url.trim() || activeAction==='open'" @click="handleOpenWebview">
-          {{ t('Open in Hermes WebView') }}
+        <button type="button" class="makosh-btn makosh-btn--secondary" :disabled="!manualOpenForm.join_url.trim() || activeAction==='open'" @click="handleOpenWebview">
+          {{ t('Open in Макошь WebView') }}
         </button>
-        <button type="button" class="hermes-btn hermes-btn--outline" :disabled="!manualOpenForm.join_url.trim() || Boolean(activeRecording) || activeAction==='record'" @click="handleStartRecording">
+        <button type="button" class="makosh-btn makosh-btn--outline" :disabled="!manualOpenForm.join_url.trim() || Boolean(activeRecording) || activeAction==='record'" @click="handleStartRecording">
           {{ t('Start local MP3 recording') }}
         </button>
-        <button type="button" class="hermes-btn hermes-btn--outline" :disabled="!activeRecording || activeAction==='stop-recording'" @click="handleStopRecording">
+        <button type="button" class="makosh-btn makosh-btn--outline" :disabled="!activeRecording || activeAction==='stop-recording'" @click="handleStopRecording">
           {{ t('Stop recording') }}
         </button>
       </div>
@@ -3660,7 +3660,7 @@ function valueOrUndefined(input: string): string | undefined {
 
 ### `frontend/src/integrations/zoom/components/ZoomAuditEventsPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/components/ZoomAuditEventsPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/components/ZoomAuditEventsPanel.vue`
 - Size bytes / Размер в байтах: `4191`
 - Included characters / Включено символов: `4181`
 - Truncated / Обрезано: `no`

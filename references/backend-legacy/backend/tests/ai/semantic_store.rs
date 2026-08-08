@@ -1,8 +1,8 @@
 use crate::support::*;
 use chrono::Utc;
-use hermes_backend_testkit::context::TestContext;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_backend_testkit::context::TestContext;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 use sqlx::Row;
 
 #[tokio::test]
@@ -41,7 +41,7 @@ async fn pgvector_semantic_store_indexes_and_searches_sources_against_postgres()
             source_id: &format!("message-semantic-{suffix}"),
             observation_id: Some(message_observation.observation_id.as_str()),
             title: "Roadmap planning",
-            source_text: "Discussed Hermes Hub AI roadmap and local retrieval.",
+            source_text: "Discussed Макошь AI roadmap and local retrieval.",
             embedding_model: &embedding_model,
             embedding: &unit_embedding(0),
             graph_node_id: Some(&format!("graph:message:{suffix}")),
@@ -68,7 +68,7 @@ async fn pgvector_semantic_store_indexes_and_searches_sources_against_postgres()
             source_id: &format!("message-semantic-{suffix}"),
             observation_id: Some(message_observation.observation_id.as_str()),
             title: "Roadmap planning",
-            source_text: "Discussed Hermes Hub AI roadmap and local retrieval.",
+            source_text: "Discussed Макошь AI roadmap and local retrieval.",
             embedding_model: &embedding_model,
             embedding: &unit_embedding(0),
             graph_node_id: Some(&format!("graph:message:{suffix}")),

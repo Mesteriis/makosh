@@ -1,6 +1,6 @@
 use crate::domains::communications::drafts::CommunicationDraft;
 use chrono::{DateTime, Utc};
-use hermes_connectrpc_contracts::hermes::communications::v1::{
+use makosh_connectrpc_contracts::makosh::communications::v1::{
     CommunicationDraft as ProtoCommunicationDraft,
     CommunicationDraftAttachmentRef as ProtoCommunicationDraftAttachmentRef,
 };

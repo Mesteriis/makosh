@@ -1,6 +1,6 @@
 //! Per-runtime broker credential creation and resolution through Vault leases.
 
-use hermes_vault_protocol::{
+use makosh_vault_protocol::{
     DEFAULT_LEASE_TTL_SECONDS, LeaseAudienceV1, LeaseIdV1, SecretClassV1, VaultActionV1,
     VaultLeaseIssueRequestV1, VaultPurposeRequestV1, VaultTransportCommandV1,
 };

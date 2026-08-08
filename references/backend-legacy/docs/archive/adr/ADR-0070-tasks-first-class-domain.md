@@ -4,7 +4,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub needs a task management module that unifies local tasks and external trackers (Jira, YouTrack, GitHub Issues, etc.) with a personal context layer. Tasks must be linked to contacts, organizations, projects, emails, meetings, and documents.
+Макошь needs a task management module that unifies local tasks and external trackers (Jira, YouTrack, GitHub Issues, etc.) with a personal context layer. Tasks must be linked to contacts, organizations, projects, emails, meetings, and documents.
 
 ## Decision
 

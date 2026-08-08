@@ -2,7 +2,7 @@
 
 Status: documentation package aligned to the current repository structure.
 
-The Memory Engine assembles durable, source-backed context across Hermes.
+The Memory Engine assembles durable, source-backed context across Макошь.
 
 Memory is not a generic note store and not an AI summary. Memory is accepted,
 reviewable understanding derived from evidence.

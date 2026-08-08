@@ -83,7 +83,7 @@ function canonicalTemporaryDirectory(prefix) {
 }
 
 test('compiles a signed P-256 distribution manifest and matching trust root', async () => {
-  const root = canonicalTemporaryDirectory('hermes-release-compiler-');
+  const root = canonicalTemporaryDirectory('makosh-release-compiler-');
   try {
     const runtime = join(root, 'runtime');
     const descriptor = join(root, 'descriptor.pb');
@@ -98,7 +98,7 @@ test('compiles a signed P-256 distribution manifest and matching trust root', as
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-1',
       target_triple: 'aarch64-apple-darwin',
@@ -130,7 +130,7 @@ test('compiles a signed P-256 distribution manifest and matching trust root', as
       signed.get(3)[0],
     ));
     const manifest = decodeFields(rawManifest);
-    assert.equal(fieldString(manifest, 3), 'hermes-desktop');
+    assert.equal(fieldString(manifest, 3), 'makosh-desktop');
     assert.equal(manifest.get(8)?.length, 1);
     const artifact = decodeFields(manifest.get(8)[0]);
     assert.equal(fieldString(artifact, 2), 'runtime.mail');
@@ -149,7 +149,7 @@ test('compiles a signed P-256 distribution manifest and matching trust root', as
 });
 
 test('produces an identical unsigned content manifest from independent build inputs', async () => {
-  const root = canonicalTemporaryDirectory('hermes-release-reproducibility-');
+  const root = canonicalTemporaryDirectory('makosh-release-reproducibility-');
   try {
     const firstRoot = join(root, 'first');
     const secondRoot = join(root, 'second');
@@ -175,7 +175,7 @@ test('produces an identical unsigned content manifest from independent build inp
 });
 
 test('accepts exact ASCII artifact order when Vite hashes introduce punctuation', async () => {
-  const root = canonicalTemporaryDirectory('hermes-release-ascii-artifact-order-');
+  const root = canonicalTemporaryDirectory('makosh-release-ascii-artifact-order-');
   try {
     const css = join(root, 'index--style.css');
     const javascript = join(root, 'index-_runtime.js');
@@ -185,7 +185,7 @@ test('accepts exact ASCII artifact order when Vite hashes introduce punctuation'
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-browser-assets',
       target_triple: 'aarch64-apple-darwin',
@@ -215,7 +215,7 @@ test('accepts exact ASCII artifact order when Vite hashes introduce punctuation'
 });
 
 test('release reproducibility CLI refuses divergent unsigned content before signing', () => {
-  const root = canonicalTemporaryDirectory('hermes-release-reproducibility-cli-');
+  const root = canonicalTemporaryDirectory('makosh-release-reproducibility-cli-');
   try {
     const firstRoot = join(root, 'first');
     const secondRoot = join(root, 'second');
@@ -249,7 +249,7 @@ test('release reproducibility CLI refuses divergent unsigned content before sign
 });
 
 test('binds a browser bootstrap document as a non-module signed release artifact', async () => {
-  const root = canonicalTemporaryDirectory('hermes-browser-bootstrap-release-');
+  const root = canonicalTemporaryDirectory('makosh-browser-bootstrap-release-');
   try {
     const privateKeyPath = join(root, 'release-key.pem');
     assert.match(readFileSync(browserBootstrapSource, 'utf8'), /navigator\.credentials\.create/);
@@ -259,7 +259,7 @@ test('binds a browser bootstrap document as a non-module signed release artifact
     });
     const release = await compileReleaseDistribution({
       verification_key_id: 'release-2026', trust_root_revision: 1, revision: 1,
-      distribution_id: 'hermes-desktop', release_version: '1.0.0', build_id: 'build-browser',
+      distribution_id: 'makosh-desktop', release_version: '1.0.0', build_id: 'build-browser',
       target_triple: 'aarch64-apple-darwin', generation: 1, ...releaseProvenance, additional_verification_keys: [],
       artifacts: [{
         artifact_kind: 'browser_bootstrap_bundle', artifact_id: 'browser.bootstrap',
@@ -279,7 +279,7 @@ test('binds a browser bootstrap document as a non-module signed release artifact
 });
 
 test('binds a native runtime dependency to one exact managed module', async () => {
-  const root = canonicalTemporaryDirectory('hermes-native-dependency-release-');
+  const root = canonicalTemporaryDirectory('makosh-native-dependency-release-');
   try {
     const library = join(root, 'libtdjson.dylib');
     writeFileSync(library, 'native library bytes', { mode: 0o700 });
@@ -287,7 +287,7 @@ test('binds a native runtime dependency to one exact managed module', async () =
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-native-dependency',
       target_triple: 'aarch64-apple-darwin',
@@ -300,21 +300,21 @@ test('binds a native runtime dependency to one exact managed module', async () =
         relative_path: 'lib/libtdjson.dylib',
         source_path: library,
         required: true,
-        bound_module_id: 'hermes-telegram-runtime',
+        bound_module_id: 'makosh-telegram-runtime',
       }],
     });
     const manifest = decodeFields(release.rawManifest);
     const artifact = decodeFields(manifest.get(8)[0]);
     assert.equal(artifact.get(1)[0], 6n);
     assert.equal(fieldString(artifact, 2), 'telegram.tdjson.v1');
-    assert.equal(fieldString(artifact, 13), 'hermes-telegram-runtime');
+    assert.equal(fieldString(artifact, 13), 'makosh-telegram-runtime');
     assert.equal(artifact.get(6), undefined);
 
     const invalid = {
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-invalid-native-dependency',
       target_triple: 'aarch64-apple-darwin',
@@ -340,7 +340,7 @@ test('binds a native runtime dependency to one exact managed module', async () =
 });
 
 test('binds native executables and read-only data to one exact managed module', async () => {
-  const root = canonicalTemporaryDirectory('hermes-runtime-resources-release-');
+  const root = canonicalTemporaryDirectory('makosh-runtime-resources-release-');
   try {
     const runner = join(root, 'tesseract-runner');
     const model = join(root, 'eng.traineddata');
@@ -350,7 +350,7 @@ test('binds native executables and read-only data to one exact managed module', 
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-runtime-resources',
       target_triple: 'aarch64-apple-darwin',
@@ -364,7 +364,7 @@ test('binds native executables and read-only data to one exact managed module', 
           relative_path: 'runtime-resources/eng.traineddata',
           source_path: model,
           required: true,
-          bound_module_id: 'hermes-attachment-text-extraction-runtime',
+          bound_module_id: 'makosh-attachment-text-extraction-runtime',
         },
         {
           artifact_kind: 'module_runtime_native_executable',
@@ -372,7 +372,7 @@ test('binds native executables and read-only data to one exact managed module', 
           relative_path: 'runtime-resources/tesseract-runner',
           source_path: runner,
           required: true,
-          bound_module_id: 'hermes-attachment-text-extraction-runtime',
+          bound_module_id: 'makosh-attachment-text-extraction-runtime',
         },
       ],
     });
@@ -380,7 +380,7 @@ test('binds native executables and read-only data to one exact managed module', 
     const artifacts = manifest.get(8).map(decodeFields);
     assert.deepEqual(artifacts.map((artifact) => artifact.get(1)[0]), [8n, 7n]);
     assert.ok(artifacts.every(
-      (artifact) => fieldString(artifact, 13) === 'hermes-attachment-text-extraction-runtime',
+      (artifact) => fieldString(artifact, 13) === 'makosh-attachment-text-extraction-runtime',
     ));
   } finally {
     rmSync(root, { recursive: true, force: true });
@@ -388,9 +388,9 @@ test('binds native executables and read-only data to one exact managed module', 
 });
 
 test('composes an exact Telegram artifact fragment before signing the full distribution', async () => {
-  const root = canonicalTemporaryDirectory('hermes-telegram-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-telegram-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-telegram-runtime');
+    const runtime = join(root, 'makosh-telegram-runtime');
     const descriptor = join(root, 'telegram.runtime.descriptor.pb');
     const settings = join(root, 'telegram.runtime.settings.pb');
     const storage = join(root, 'telegram.storage.bundle.pb');
@@ -415,7 +415,7 @@ test('composes an exact Telegram artifact fragment before signing the full distr
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-telegram',
       target_triple: 'aarch64-apple-darwin',
@@ -433,12 +433,12 @@ test('composes an exact Telegram artifact fragment before signing the full distr
     const fragment = {
       version: 1,
       owner_id: 'telegram',
-      module_id: 'hermes-telegram-runtime',
+      module_id: 'makosh-telegram-runtime',
       artifacts: [
         {
           artifact_kind: 'module_runtime',
           artifact_id: 'telegram.runtime.v1',
-          relative_path: 'bin/hermes-telegram-runtime',
+          relative_path: 'bin/makosh-telegram-runtime',
           source_path: runtime,
           required: true,
           descriptor: {
@@ -463,7 +463,7 @@ test('composes an exact Telegram artifact fragment before signing the full distr
           relative_path: 'lib/libtdjson.dylib',
           source_path: tdjson,
           required: true,
-          bound_module_id: 'hermes-telegram-runtime',
+          bound_module_id: 'makosh-telegram-runtime',
         },
       ],
     };
@@ -487,10 +487,10 @@ test('composes an exact Telegram artifact fragment before signing the full distr
     );
     assert.equal(artifacts[1].get(6)[0].length, 32);
     assert.equal(artifacts[1].get(7)[0].length, 32);
-    assert.equal(fieldString(artifacts[3], 13), 'hermes-telegram-runtime');
+    assert.equal(fieldString(artifacts[3], 13), 'makosh-telegram-runtime');
 
     const wrongBinding = structuredClone(fragment);
-    wrongBinding.artifacts[2].bound_module_id = 'hermes-other-runtime';
+    wrongBinding.artifacts[2].bound_module_id = 'makosh-other-runtime';
     assert.throws(
       () => composeReleaseCompilerInput(baseInput, [wrongBinding]),
       /artifact fragment binding is invalid/,
@@ -501,9 +501,9 @@ test('composes an exact Telegram artifact fragment before signing the full distr
 });
 
 test('signs the exact Mail runtime and Storage entries emitted by Mail assembly', async () => {
-  const root = canonicalTemporaryDirectory('hermes-mail-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-mail-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-mail-runtime');
+    const runtime = join(root, 'makosh-mail-runtime');
     const assemblyOutput = join(root, 'assembly');
     const privateKeyPath = join(root, 'release-key.pem');
     writeFileSync(runtime, 'mail runtime bytes', { mode: 0o700 });
@@ -517,7 +517,7 @@ test('signs the exact Mail runtime and Storage entries emitted by Mail assembly'
       'run',
       '--quiet',
       '-p',
-      'hermes-mail-assembly',
+      'makosh-mail-assembly',
       '--',
       '--build-id',
       'build-mail',
@@ -538,13 +538,13 @@ test('signs the exact Mail runtime and Storage entries emitted by Mail assembly'
       ],
     );
     assert.equal(fragment.owner_id, 'mail');
-    assert.equal(fragment.module_id, 'hermes-mail-runtime');
+    assert.equal(fragment.module_id, 'makosh-mail-runtime');
 
     const input = composeReleaseCompilerInput({
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-mail',
       target_triple: 'aarch64-apple-darwin',
@@ -583,9 +583,9 @@ test('signs the exact Mail runtime and Storage entries emitted by Mail assembly'
 });
 
 test('signs the exact Zulip runtime and Storage entries emitted by Zulip assembly', async () => {
-  const root = canonicalTemporaryDirectory('hermes-zulip-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-zulip-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-zulip-runtime');
+    const runtime = join(root, 'makosh-zulip-runtime');
     const assemblyOutput = join(root, 'assembly');
     const privateKeyPath = join(root, 'release-key.pem');
     writeFileSync(runtime, 'zulip runtime bytes', { mode: 0o700 });
@@ -599,7 +599,7 @@ test('signs the exact Zulip runtime and Storage entries emitted by Zulip assembl
       'run',
       '--quiet',
       '-p',
-      'hermes-zulip-assembly',
+      'makosh-zulip-assembly',
       '--',
       '--build-id',
       'build-zulip',
@@ -620,13 +620,13 @@ test('signs the exact Zulip runtime and Storage entries emitted by Zulip assembl
       ],
     );
     assert.equal(fragment.owner_id, 'zulip');
-    assert.equal(fragment.module_id, 'hermes-zulip-runtime');
+    assert.equal(fragment.module_id, 'makosh-zulip-runtime');
 
     const input = composeReleaseCompilerInput({
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-zulip',
       target_triple: 'aarch64-apple-darwin',
@@ -665,9 +665,9 @@ test('signs the exact Zulip runtime and Storage entries emitted by Zulip assembl
 });
 
 test('signs the exact WhatsApp runtime and Storage entries emitted by WhatsApp assembly', async () => {
-  const root = canonicalTemporaryDirectory('hermes-whatsapp-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-whatsapp-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-whatsapp-runtime');
+    const runtime = join(root, 'makosh-whatsapp-runtime');
     const assemblyOutput = join(root, 'assembly');
     const privateKeyPath = join(root, 'release-key.pem');
     writeFileSync(runtime, 'whatsapp runtime bytes', { mode: 0o700 });
@@ -681,7 +681,7 @@ test('signs the exact WhatsApp runtime and Storage entries emitted by WhatsApp a
       'run',
       '--quiet',
       '-p',
-      'hermes-whatsapp-assembly',
+      'makosh-whatsapp-assembly',
       '--',
       '--build-id',
       'build-whatsapp',
@@ -702,13 +702,13 @@ test('signs the exact WhatsApp runtime and Storage entries emitted by WhatsApp a
       ],
     );
     assert.equal(fragment.owner_id, 'whatsapp');
-    assert.equal(fragment.module_id, 'hermes-whatsapp-runtime');
+    assert.equal(fragment.module_id, 'makosh-whatsapp-runtime');
 
     const input = composeReleaseCompilerInput({
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-whatsapp',
       target_triple: 'aarch64-apple-darwin',
@@ -747,9 +747,9 @@ test('signs the exact WhatsApp runtime and Storage entries emitted by WhatsApp a
 });
 
 test('signs the exact Attachment Security runtime and Storage entries emitted by its assembly', async () => {
-  const root = canonicalTemporaryDirectory('hermes-attachment-security-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-attachment-security-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-attachment-security-runtime');
+    const runtime = join(root, 'makosh-attachment-security-runtime');
     const assemblyOutput = join(root, 'assembly');
     const privateKeyPath = join(root, 'release-key.pem');
     writeFileSync(runtime, 'attachment security runtime bytes', { mode: 0o700 });
@@ -763,7 +763,7 @@ test('signs the exact Attachment Security runtime and Storage entries emitted by
       'run',
       '--quiet',
       '-p',
-      'hermes-attachment-security-assembly',
+      'makosh-attachment-security-assembly',
       '--',
       '--build-id',
       'build-attachment-security',
@@ -784,13 +784,13 @@ test('signs the exact Attachment Security runtime and Storage entries emitted by
       ],
     );
     assert.equal(fragment.owner_id, 'attachment_security');
-    assert.equal(fragment.module_id, 'hermes-attachment-security-runtime');
+    assert.equal(fragment.module_id, 'makosh-attachment-security-runtime');
 
     const input = composeReleaseCompilerInput({
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-attachment-security',
       target_triple: 'aarch64-apple-darwin',
@@ -829,9 +829,9 @@ test('signs the exact Attachment Security runtime and Storage entries emitted by
 });
 
 test('signs the exact Preview runtime and Storage entries emitted by its assembly', async () => {
-  const root = canonicalTemporaryDirectory('hermes-attachment-preview-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-attachment-preview-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-attachment-preview-runtime');
+    const runtime = join(root, 'makosh-attachment-preview-runtime');
     const assemblyOutput = join(root, 'assembly');
     const privateKeyPath = join(root, 'release-key.pem');
     writeFileSync(runtime, 'attachment preview runtime bytes', { mode: 0o700 });
@@ -845,7 +845,7 @@ test('signs the exact Preview runtime and Storage entries emitted by its assembl
       'run',
       '--quiet',
       '-p',
-      'hermes-attachment-preview-assembly',
+      'makosh-attachment-preview-assembly',
       '--',
       '--build-id',
       'build-attachment-preview',
@@ -866,13 +866,13 @@ test('signs the exact Preview runtime and Storage entries emitted by its assembl
       ],
     );
     assert.equal(fragment.owner_id, 'attachment_preview');
-    assert.equal(fragment.module_id, 'hermes-attachment-preview-runtime');
+    assert.equal(fragment.module_id, 'makosh-attachment-preview-runtime');
 
     const input = composeReleaseCompilerInput({
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-attachment-preview',
       target_triple: 'aarch64-apple-darwin',
@@ -911,9 +911,9 @@ test('signs the exact Preview runtime and Storage entries emitted by its assembl
 });
 
 test('signs the exact text extraction runtime Storage and OCR entries emitted by its assembly', async () => {
-  const root = canonicalTemporaryDirectory('hermes-text-extraction-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-text-extraction-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-attachment-text-extraction-runtime');
+    const runtime = join(root, 'makosh-attachment-text-extraction-runtime');
     const runner = join(root, 'tesseract-runner');
     const english = join(root, 'eng.traineddata');
     const russian = join(root, 'rus.traineddata');
@@ -933,7 +933,7 @@ test('signs the exact text extraction runtime Storage and OCR entries emitted by
       'run',
       '--quiet',
       '-p',
-      'hermes-attachment-text-extraction-assembly',
+      'makosh-attachment-text-extraction-assembly',
       '--',
       '--build-id',
       'build-text-extraction',
@@ -963,13 +963,13 @@ test('signs the exact text extraction runtime Storage and OCR entries emitted by
       ],
     );
     assert.equal(fragment.owner_id, 'attachment_text_extraction');
-    assert.equal(fragment.module_id, 'hermes-attachment-text-extraction-runtime');
+    assert.equal(fragment.module_id, 'makosh-attachment-text-extraction-runtime');
 
     const input = composeReleaseCompilerInput({
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-text-extraction',
       target_triple: 'aarch64-apple-darwin',
@@ -1003,7 +1003,7 @@ test('signs the exact text extraction runtime Storage and OCR entries emitted by
       ],
     );
     assert.ok(artifacts.slice(0, 3).every(
-      (artifact) => fieldString(artifact, 13) === 'hermes-attachment-text-extraction-runtime',
+      (artifact) => fieldString(artifact, 13) === 'makosh-attachment-text-extraction-runtime',
     ));
   } finally {
     rmSync(root, { recursive: true, force: true });
@@ -1011,9 +1011,9 @@ test('signs the exact text extraction runtime Storage and OCR entries emitted by
 });
 
 test('signs the exact Review attention runtime and Storage entries emitted by its assembly', async () => {
-  const root = canonicalTemporaryDirectory('hermes-review-attention-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-review-attention-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-review-attention-runtime');
+    const runtime = join(root, 'makosh-review-attention-runtime');
     const assemblyOutput = join(root, 'assembly');
     const privateKeyPath = join(root, 'release-key.pem');
     writeFileSync(runtime, 'review attention runtime bytes', { mode: 0o700 });
@@ -1027,7 +1027,7 @@ test('signs the exact Review attention runtime and Storage entries emitted by it
       'run',
       '--quiet',
       '-p',
-      'hermes-review-attention-assembly',
+      'makosh-review-attention-assembly',
       '--',
       '--build-id',
       'build-review-attention',
@@ -1048,13 +1048,13 @@ test('signs the exact Review attention runtime and Storage entries emitted by it
       ],
     );
     assert.equal(fragment.owner_id, 'review');
-    assert.equal(fragment.module_id, 'hermes-review-runtime');
+    assert.equal(fragment.module_id, 'makosh-review-runtime');
 
     const input = composeReleaseCompilerInput({
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-review-attention',
       target_triple: 'aarch64-apple-darwin',
@@ -1093,7 +1093,7 @@ test('signs the exact Review attention runtime and Storage entries emitted by it
 });
 
 test('signs distinct task note Contacts and mail sync runtime and Storage entries', async () => {
-  const root = canonicalTemporaryDirectory('hermes-task-candidate-release-fragments-');
+  const root = canonicalTemporaryDirectory('makosh-task-candidate-release-fragments-');
   try {
     const privateKeyPath = join(root, 'release-key.pem');
     const keyPair = generateKeyPairSync('ec', { namedCurve: 'prime256v1' });
@@ -1104,8 +1104,8 @@ test('signs distinct task note Contacts and mail sync runtime and Storage entrie
     );
     const units = [
       {
-        package: 'hermes-communication-task-candidate-assembly',
-        runtimeName: 'hermes-communication-task-candidate-runtime',
+        package: 'makosh-communication-task-candidate-assembly',
+        runtimeName: 'makosh-communication-task-candidate-runtime',
         fragmentName: 'communication_task_candidate.release-artifacts.json',
         owner: 'communication_task_candidate_extraction',
         ids: [
@@ -1114,8 +1114,8 @@ test('signs distinct task note Contacts and mail sync runtime and Storage entrie
         ],
       },
       {
-        package: 'hermes-communication-note-candidate-assembly',
-        runtimeName: 'hermes-communication-note-candidate-runtime',
+        package: 'makosh-communication-note-candidate-assembly',
+        runtimeName: 'makosh-communication-note-candidate-runtime',
         fragmentName: 'communication_note_candidate.release-artifacts.json',
         owner: 'communication_note_candidate_extraction',
         ids: [
@@ -1124,15 +1124,15 @@ test('signs distinct task note Contacts and mail sync runtime and Storage entrie
         ],
       },
       {
-        package: 'hermes-review-task-candidate-assembly',
-        runtimeName: 'hermes-review-task-candidate-runtime',
+        package: 'makosh-review-task-candidate-assembly',
+        runtimeName: 'makosh-review-task-candidate-runtime',
         fragmentName: 'review-task-candidate.release-artifacts.json',
         owner: 'review',
         ids: ['review.task-candidate.runtime.v1', 'review.task-candidate.storage.v1'],
       },
       {
-        package: 'hermes-reviewed-task-candidate-promotion-assembly',
-        runtimeName: 'hermes-reviewed-task-candidate-promotion-runtime',
+        package: 'makosh-reviewed-task-candidate-promotion-assembly',
+        runtimeName: 'makosh-reviewed-task-candidate-promotion-runtime',
         fragmentName: 'reviewed_task_candidate_promotion.release-artifacts.json',
         owner: 'reviewed_task_candidate_promotion',
         ids: [
@@ -1141,22 +1141,22 @@ test('signs distinct task note Contacts and mail sync runtime and Storage entrie
         ],
       },
       {
-        package: 'hermes-tasks-assembly',
-        runtimeName: 'hermes-tasks-runtime',
+        package: 'makosh-tasks-assembly',
+        runtimeName: 'makosh-tasks-runtime',
         fragmentName: 'tasks.release-artifacts.json',
         owner: 'tasks',
         ids: ['tasks.runtime.v1', 'tasks.storage.v1'],
       },
       {
-        package: 'hermes-contacts-assembly',
-        runtimeName: 'hermes-contacts-runtime',
+        package: 'makosh-contacts-assembly',
+        runtimeName: 'makosh-contacts-runtime',
         fragmentName: 'contacts.release-artifacts.json',
         owner: 'contacts',
         ids: ['contacts.runtime.v1', 'contacts.storage.v1'],
       },
       {
-        package: 'hermes-mail-contacts-sync-assembly',
-        runtimeName: 'hermes-mail-contacts-sync-runtime',
+        package: 'makosh-mail-contacts-sync-assembly',
+        runtimeName: 'makosh-mail-contacts-sync-runtime',
         fragmentName: 'mail_contacts_sync.release-artifacts.json',
         owner: 'mail_contacts_sync',
         ids: ['mail_contacts_sync.runtime.v1', 'mail_contacts_sync.storage.v1'],
@@ -1191,7 +1191,7 @@ test('signs distinct task note Contacts and mail sync runtime and Storage entrie
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-task-candidate-chain',
       target_triple: 'aarch64-apple-darwin',
@@ -1240,9 +1240,9 @@ test('signs distinct task note Contacts and mail sync runtime and Storage entrie
 });
 
 test('signs the exact Reply Suggestion runtime and Storage entries emitted by its assembly', async () => {
-  const root = canonicalTemporaryDirectory('hermes-reply-suggestion-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-reply-suggestion-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-communication-reply-suggestion-runtime');
+    const runtime = join(root, 'makosh-communication-reply-suggestion-runtime');
     const assemblyOutput = join(root, 'assembly');
     const privateKeyPath = join(root, 'release-key.pem');
     writeFileSync(runtime, 'reply suggestion runtime bytes', { mode: 0o700 });
@@ -1256,7 +1256,7 @@ test('signs the exact Reply Suggestion runtime and Storage entries emitted by it
       'run',
       '--quiet',
       '-p',
-      'hermes-communication-reply-suggestion-assembly',
+      'makosh-communication-reply-suggestion-assembly',
       '--',
       '--build-id',
       'build-reply-suggestion',
@@ -1277,13 +1277,13 @@ test('signs the exact Reply Suggestion runtime and Storage entries emitted by it
       ],
     );
     assert.equal(fragment.owner_id, 'communication_reply_suggestion');
-    assert.equal(fragment.module_id, 'hermes-communication-reply-suggestion-runtime');
+    assert.equal(fragment.module_id, 'makosh-communication-reply-suggestion-runtime');
 
     const input = composeReleaseCompilerInput({
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-reply-suggestion',
       target_triple: 'aarch64-apple-darwin',
@@ -1322,9 +1322,9 @@ test('signs the exact Reply Suggestion runtime and Storage entries emitted by it
 });
 
 test('signs the exact Communication Summary runtime and Storage entries emitted by its assembly', async () => {
-  const root = canonicalTemporaryDirectory('hermes-communication-summary-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-communication-summary-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-communication-summary-runtime');
+    const runtime = join(root, 'makosh-communication-summary-runtime');
     const assemblyOutput = join(root, 'assembly');
     const privateKeyPath = join(root, 'release-key.pem');
     writeFileSync(runtime, 'communication summary runtime bytes', { mode: 0o700 });
@@ -1338,7 +1338,7 @@ test('signs the exact Communication Summary runtime and Storage entries emitted 
       'run',
       '--quiet',
       '-p',
-      'hermes-communication-summary-assembly',
+      'makosh-communication-summary-assembly',
       '--',
       '--build-id',
       'build-communication-summary',
@@ -1359,13 +1359,13 @@ test('signs the exact Communication Summary runtime and Storage entries emitted 
       ],
     );
     assert.equal(fragment.owner_id, 'communication_summary');
-    assert.equal(fragment.module_id, 'hermes-communication-summary-runtime');
+    assert.equal(fragment.module_id, 'makosh-communication-summary-runtime');
 
     const input = composeReleaseCompilerInput({
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-communication-summary',
       target_triple: 'aarch64-apple-darwin',
@@ -1404,9 +1404,9 @@ test('signs the exact Communication Summary runtime and Storage entries emitted 
 });
 
 test('signs the exact Communication Translation runtime and Storage entries emitted by its assembly', async () => {
-  const root = canonicalTemporaryDirectory('hermes-communication-translation-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-communication-translation-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-communication-translation-runtime');
+    const runtime = join(root, 'makosh-communication-translation-runtime');
     const assemblyOutput = join(root, 'assembly');
     const privateKeyPath = join(root, 'release-key.pem');
     writeFileSync(runtime, 'communication translation runtime bytes', { mode: 0o700 });
@@ -1420,7 +1420,7 @@ test('signs the exact Communication Translation runtime and Storage entries emit
       'run',
       '--quiet',
       '-p',
-      'hermes-communication-translation-assembly',
+      'makosh-communication-translation-assembly',
       '--',
       '--build-id',
       'build-communication-translation',
@@ -1441,13 +1441,13 @@ test('signs the exact Communication Translation runtime and Storage entries emit
       ],
     );
     assert.equal(fragment.owner_id, 'communication_translation');
-    assert.equal(fragment.module_id, 'hermes-communication-translation-runtime');
+    assert.equal(fragment.module_id, 'makosh-communication-translation-runtime');
 
     const input = composeReleaseCompilerInput({
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-communication-translation',
       target_triple: 'aarch64-apple-darwin',
@@ -1486,9 +1486,9 @@ test('signs the exact Communication Translation runtime and Storage entries emit
 });
 
 test('signs the exact Communication Explanation runtime and Storage entries emitted by its assembly', async () => {
-  const root = canonicalTemporaryDirectory('hermes-communication-explanation-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-communication-explanation-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-communication-explanation-runtime');
+    const runtime = join(root, 'makosh-communication-explanation-runtime');
     const assemblyOutput = join(root, 'assembly');
     const privateKeyPath = join(root, 'release-key.pem');
     writeFileSync(runtime, 'communication explanation runtime bytes', { mode: 0o700 });
@@ -1502,7 +1502,7 @@ test('signs the exact Communication Explanation runtime and Storage entries emit
       'run',
       '--quiet',
       '-p',
-      'hermes-communication-explanation-assembly',
+      'makosh-communication-explanation-assembly',
       '--',
       '--build-id',
       'build-communication-explanation',
@@ -1523,13 +1523,13 @@ test('signs the exact Communication Explanation runtime and Storage entries emit
       ],
     );
     assert.equal(fragment.owner_id, 'communication_explanation');
-    assert.equal(fragment.module_id, 'hermes-communication-explanation-runtime');
+    assert.equal(fragment.module_id, 'makosh-communication-explanation-runtime');
 
     const input = composeReleaseCompilerInput({
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-communication-explanation',
       target_triple: 'aarch64-apple-darwin',
@@ -1568,9 +1568,9 @@ test('signs the exact Communication Explanation runtime and Storage entries emit
 });
 
 test('signs the exact Recipient Suggestion runtime and Storage entries emitted by its assembly', async () => {
-  const root = canonicalTemporaryDirectory('hermes-communication-recipient-suggestion-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-communication-recipient-suggestion-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-communication-recipient-suggestion-runtime');
+    const runtime = join(root, 'makosh-communication-recipient-suggestion-runtime');
     const assemblyOutput = join(root, 'assembly');
     const privateKeyPath = join(root, 'release-key.pem');
     writeFileSync(runtime, 'communication recipient suggestion runtime bytes', { mode: 0o700 });
@@ -1584,7 +1584,7 @@ test('signs the exact Recipient Suggestion runtime and Storage entries emitted b
       'run',
       '--quiet',
       '-p',
-      'hermes-communication-recipient-suggestion-assembly',
+      'makosh-communication-recipient-suggestion-assembly',
       '--',
       '--build-id',
       'build-communication-recipient-suggestion',
@@ -1605,13 +1605,13 @@ test('signs the exact Recipient Suggestion runtime and Storage entries emitted b
       ],
     );
     assert.equal(fragment.owner_id, 'communication_recipient_suggestion');
-    assert.equal(fragment.module_id, 'hermes-communication-recipient-suggestion-runtime');
+    assert.equal(fragment.module_id, 'makosh-communication-recipient-suggestion-runtime');
 
     const input = composeReleaseCompilerInput({
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-communication-recipient-suggestion',
       target_triple: 'aarch64-apple-darwin',
@@ -1651,9 +1651,9 @@ test('signs the exact Recipient Suggestion runtime and Storage entries emitted b
 
 
 test('signs the exact Ollama AI runtime and Storage entries emitted by its assembly', async () => {
-  const root = canonicalTemporaryDirectory('hermes-ollama-ai-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-ollama-ai-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-ollama-ai-runtime');
+    const runtime = join(root, 'makosh-ollama-ai-runtime');
     const assemblyOutput = join(root, 'assembly');
     const privateKeyPath = join(root, 'release-key.pem');
     writeFileSync(runtime, 'ollama ai runtime bytes', { mode: 0o700 });
@@ -1667,7 +1667,7 @@ test('signs the exact Ollama AI runtime and Storage entries emitted by its assem
       'run',
       '--quiet',
       '-p',
-      'hermes-ollama-ai-assembly',
+      'makosh-ollama-ai-assembly',
       '--',
       '--build-id',
       'build-ollama-ai',
@@ -1688,13 +1688,13 @@ test('signs the exact Ollama AI runtime and Storage entries emitted by its assem
       ],
     );
     assert.equal(fragment.owner_id, 'ollama');
-    assert.equal(fragment.module_id, 'hermes-ollama-ai-runtime');
+    assert.equal(fragment.module_id, 'makosh-ollama-ai-runtime');
 
     const input = composeReleaseCompilerInput({
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-ollama-ai',
       target_triple: 'aarch64-apple-darwin',
@@ -1733,9 +1733,9 @@ test('signs the exact Ollama AI runtime and Storage entries emitted by its assem
 });
 
 test('signs the exact Speech-to-Text engine runtime and Storage entries emitted by its assembly', async () => {
-  const root = canonicalTemporaryDirectory('hermes-speech-to-text-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-speech-to-text-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-speech-to-text-runtime');
+    const runtime = join(root, 'makosh-speech-to-text-runtime');
     const assemblyOutput = join(root, 'assembly');
     const privateKeyPath = join(root, 'release-key.pem');
     writeFileSync(runtime, 'speech engine runtime bytes', { mode: 0o700 });
@@ -1749,7 +1749,7 @@ test('signs the exact Speech-to-Text engine runtime and Storage entries emitted 
       'run',
       '--quiet',
       '-p',
-      'hermes-speech-to-text-assembly',
+      'makosh-speech-to-text-assembly',
       '--',
       '--output-dir',
       assemblyOutput,
@@ -1770,13 +1770,13 @@ test('signs the exact Speech-to-Text engine runtime and Storage entries emitted 
       ],
     );
     assert.equal(fragment.owner_id, 'speech_to_text');
-    assert.equal(fragment.module_id, 'hermes-speech-to-text-runtime');
+    assert.equal(fragment.module_id, 'makosh-speech-to-text-runtime');
 
     const input = composeReleaseCompilerInput({
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-speech-to-text',
       target_triple: 'aarch64-apple-darwin',
@@ -1815,9 +1815,9 @@ test('signs the exact Speech-to-Text engine runtime and Storage entries emitted 
 });
 
 test('signs the exact Whisper runtime Storage runner and model entries emitted by its assembly', async () => {
-  const root = canonicalTemporaryDirectory('hermes-whisper-stt-release-fragment-');
+  const root = canonicalTemporaryDirectory('makosh-whisper-stt-release-fragment-');
   try {
-    const runtime = join(root, 'hermes-whisper-stt-runtime');
+    const runtime = join(root, 'makosh-whisper-stt-runtime');
     const runner = join(root, 'whisper-cli');
     const model = join(root, 'ggml-base.bin');
     const assemblyOutput = join(root, 'assembly');
@@ -1835,7 +1835,7 @@ test('signs the exact Whisper runtime Storage runner and model entries emitted b
       'run',
       '--quiet',
       '-p',
-      'hermes-whisper-stt-assembly',
+      'makosh-whisper-stt-assembly',
       '--',
       '--output',
       assemblyOutput,
@@ -1862,13 +1862,13 @@ test('signs the exact Whisper runtime Storage runner and model entries emitted b
       ],
     );
     assert.equal(fragment.owner_id, 'whisper_stt');
-    assert.equal(fragment.module_id, 'hermes-whisper-stt-runtime');
+    assert.equal(fragment.module_id, 'makosh-whisper-stt-runtime');
 
     const input = composeReleaseCompilerInput({
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-whisper-stt',
       target_triple: 'aarch64-apple-darwin',
@@ -1901,8 +1901,8 @@ test('signs the exact Whisper runtime Storage runner and model entries emitted b
         ['whisper_stt.storage.v1', 3n],
       ],
     );
-    assert.equal(fieldString(artifacts[1], 13), 'hermes-whisper-stt-runtime');
-    assert.equal(fieldString(artifacts[2], 13), 'hermes-whisper-stt-runtime');
+    assert.equal(fieldString(artifacts[1], 13), 'makosh-whisper-stt-runtime');
+    assert.equal(fieldString(artifacts[2], 13), 'makosh-whisper-stt-runtime');
     assert.equal(artifacts[3].get(6)[0].length, 32);
     assert.equal(artifacts[3].get(7)[0].length, 32);
   } finally {
@@ -1911,7 +1911,7 @@ test('signs the exact Whisper runtime Storage runner and model entries emitted b
 });
 
 test('rejects unordered artifacts and an exposed release signing key', async () => {
-  const root = canonicalTemporaryDirectory('hermes-release-compiler-invalid-');
+  const root = canonicalTemporaryDirectory('makosh-release-compiler-invalid-');
   try {
     const runtime = join(root, 'runtime');
     const descriptor = join(root, 'descriptor.pb');
@@ -1926,7 +1926,7 @@ test('rejects unordered artifacts and an exposed release signing key', async () 
       verification_key_id: 'release-2026',
       trust_root_revision: 1,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-1',
       target_triple: 'aarch64-apple-darwin',
@@ -1958,7 +1958,7 @@ test('rejects unordered artifacts and an exposed release signing key', async () 
 });
 
 test('adds sorted public P-256 rotation keys to the release trust root', async () => {
-  const root = canonicalTemporaryDirectory('hermes-release-rotation-');
+  const root = canonicalTemporaryDirectory('makosh-release-rotation-');
   try {
     const runtime = join(root, 'runtime');
     const descriptor = join(root, 'descriptor.pb');
@@ -1978,7 +1978,7 @@ test('adds sorted public P-256 rotation keys to the release trust root', async (
       verification_key_id: 'release-2026',
       trust_root_revision: 2,
       revision: 1,
-      distribution_id: 'hermes-desktop',
+      distribution_id: 'makosh-desktop',
       release_version: '1.0.0',
       build_id: 'build-rotation',
       target_triple: 'aarch64-apple-darwin',
@@ -2015,7 +2015,7 @@ test('adds sorted public P-256 rotation keys to the release trust root', async (
         verification_key_id: 'release-2026',
         trust_root_revision: 2,
         revision: 1,
-        distribution_id: 'hermes-desktop',
+        distribution_id: 'makosh-desktop',
         release_version: '1.0.0',
         build_id: 'build-reject-private-key',
         target_triple: 'aarch64-apple-darwin',
@@ -2043,7 +2043,7 @@ test('adds sorted public P-256 rotation keys to the release trust root', async (
 });
 
 test('never overwrites a release artifact output', () => {
-  const root = canonicalTemporaryDirectory('hermes-release-output-');
+  const root = canonicalTemporaryDirectory('makosh-release-output-');
   try {
     const output = join(root, 'trust-root.pb');
     writeReleaseArtifact(output, Buffer.from('first'));
@@ -2054,7 +2054,7 @@ test('never overwrites a release artifact output', () => {
 });
 
 test('generates an owner-private P-256 release key without overwriting an existing file', () => {
-  const root = canonicalTemporaryDirectory('hermes-release-key-');
+  const root = canonicalTemporaryDirectory('makosh-release-key-');
   try {
     const output = join(root, 'release-key.pem');
     generateReleaseSigningKey(output);
@@ -2067,7 +2067,7 @@ test('generates an owner-private P-256 release key without overwriting an existi
 });
 
 test('release build CLI materializes every signed artifact and preflights all outputs', () => {
-  const root = canonicalTemporaryDirectory('hermes-release-cli-');
+  const root = canonicalTemporaryDirectory('makosh-release-cli-');
   try {
     const runtime = join(root, 'runtime');
     const descriptor = join(root, 'descriptor.pb');
@@ -2118,7 +2118,7 @@ function releaseInput(runtime, descriptor, browserBootstrap) {
     verification_key_id: 'release-2026',
     trust_root_revision: 1,
     revision: 1,
-    distribution_id: 'hermes-desktop',
+    distribution_id: 'makosh-desktop',
     release_version: '1.0.0',
     build_id: 'build-cli',
     target_triple: 'aarch64-apple-darwin',

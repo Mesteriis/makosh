@@ -2,7 +2,7 @@
 
 use std::{os::unix::net::UnixStream, time::Duration};
 
-use hermes_attachment_archive_inspection_ingress::{
+use makosh_attachment_archive_inspection_ingress::{
     ATTACHMENT_ARCHIVE_INSPECTION_BLOB_TARGET_CAPABILITY_ID_V1,
     ATTACHMENT_ARCHIVE_INSPECTION_BLOB_TARGET_MODULE_ID_V1,
     ATTACHMENT_ARCHIVE_INSPECTION_BLOB_TARGET_OWNER_ID_V1,
@@ -14,15 +14,15 @@ use hermes_attachment_archive_inspection_ingress::{
         ArchiveInspectionCustodyDelegationRejectedV1,
     },
 };
-use hermes_attachment_security_persistence::{
+use makosh_attachment_security_persistence::{
     AttachmentSecurityArchiveDelegationWorkV1, ClaimedAttachmentSecurityArchiveDelegationV1,
 };
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobClientError, ManagedBlobCustodyDelegationRequestV1, ManagedBlobCustodyTargetV1,
     request_managed_blob_custody_delegation_v2,
 };
-use hermes_events_protocol::delivery::OutboxRecordV1;
-use hermes_runtime_protocol::managed_control::{
+use makosh_events_protocol::delivery::OutboxRecordV1;
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, RejectManagedControlRequestsV2,
 };
 
@@ -130,7 +130,7 @@ pub fn materialize_archive_delegation_exhausted_v1(
 
 fn build_rejected(
     command_message_id: [u8; 16],
-    request: &hermes_attachment_archive_inspection_ingress::wire::RequestArchiveInspectionCustodyDelegationV1,
+    request: &makosh_attachment_archive_inspection_ingress::wire::RequestArchiveInspectionCustodyDelegationV1,
     code: ArchiveInspectionCustodyDelegationRejectCodeV1,
     context: &ArchiveInspectionCustodyEnvelopeContextV1,
 ) -> Result<OutboxRecordV1, AttachmentSecurityArchiveDelegationErrorV1> {

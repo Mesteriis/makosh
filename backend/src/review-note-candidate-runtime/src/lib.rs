@@ -19,4 +19,4 @@ pub use managed_runtime::{
     ReviewNoteCandidateRuntimeAdmissionV1,
 };
 
-pub const PACKAGE: &str = "hermes-review-note-candidate-runtime";
+pub const PACKAGE: &str = "makosh-review-note-candidate-runtime";

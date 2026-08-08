@@ -128,7 +128,7 @@ mod tests {
         admit_owner_local_additive_sql(
             "mail",
             r#"
-ALTER TABLE hermes_data.mail_sync_runs
+ALTER TABLE makosh_data.mail_sync_runs
     ADD COLUMN deadline_exceeded BOOLEAN NOT NULL DEFAULT FALSE;
 "#,
         )

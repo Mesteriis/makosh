@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/integrations/yandexTelemost/types/yandexTelemost.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/yandexTelemost/types/yandexTelemost.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/yandexTelemost/types/yandexTelemost.ts`
 - Size bytes / Размер в байтах: `6354`
 - Included characters / Включено символов: `6354`
 - Truncated / Обрезано: `no`
@@ -315,7 +315,7 @@ export interface YandexTelemostRecordingBridgeResponse {
 
 ### `frontend/src/integrations/zoom/api/zoom.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/api/zoom.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/api/zoom.test.ts`
 - Size bytes / Размер в байтах: `17006`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -465,8 +465,8 @@ describe('zoom integration API', () => {
         checked_at: '2026-06-27T10:00:00Z',
         subscription: {
           subscription_id: 'zoom-subscription-1',
-          subscription_name: 'Hermes Zoom Runtime',
-          endpoint_url: 'https://hermes.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks',
+          subscription_name: 'Макошь Zoom Runtime',
+          endpoint_url: 'https://makosh.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks',
           event_types: ['meeting.started'],
         },
       }))
@@ -552,7 +552,7 @@ describe('zoom integration API', () => {
     await fetchZoomWebhookSubscriptionStatus('zoom-live-1', 'https://api.zoom.example.test/v2')
     await reconcileZoomWebhookSubscription({
       account_id: 'zoom-live-1',
-      endpoint_url: 'https://hermes.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks',
+      endpoint_url: 'https://makosh.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks',
       event_types: ['meeting.started'],
       api_base_url: 'https://api.zoom.example.test/v2',
     })
@@ -629,7 +629,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/integrations/zoom/api/zoom.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/api/zoom.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/api/zoom.ts`
 - Size bytes / Размер в байтах: `10342`
 - Included characters / Включено символов: `10342`
 - Truncated / Обрезано: `no`
@@ -955,7 +955,7 @@ export async function importZoomTranscriptFile(
 
 ### `frontend/src/integrations/zoom/components/ZoomBridgeLab.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/components/ZoomBridgeLab.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/components/ZoomBridgeLab.boundary.test.ts`
 - Size bytes / Размер в байтах: `824`
 - Included characters / Включено символов: `824`
 - Truncated / Обрезано: `no`
@@ -983,7 +983,7 @@ describe('ZoomBridgeLab boundary', () => {
 
 ### `frontend/src/integrations/zoom/components/ZoomObservedCallsPanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/components/ZoomObservedCallsPanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/components/ZoomObservedCallsPanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `836`
 - Included characters / Включено символов: `836`
 - Truncated / Обрезано: `no`
@@ -1011,7 +1011,7 @@ describe('ZoomObservedCallsPanel boundary', () => {
 
 ### `frontend/src/integrations/zoom/components/ZoomSettingsPanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/components/ZoomSettingsPanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/components/ZoomSettingsPanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `3018`
 - Included characters / Включено символов: `3018`
 - Truncated / Обрезано: `no`
@@ -1066,7 +1066,7 @@ describe('ZoomSettingsPanel boundary', () => {
 
 ### `frontend/src/integrations/zoom/components/zoomEvidence.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/components/zoomEvidence.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/components/zoomEvidence.test.ts`
 - Size bytes / Размер в байтах: `1349`
 - Included characters / Включено символов: `1345`
 - Truncated / Обрезано: `no`
@@ -1129,7 +1129,7 @@ describe('zoomEvidence', () => {
 
 ### `frontend/src/integrations/zoom/components/zoomEvidence.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/components/zoomEvidence.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/components/zoomEvidence.ts`
 - Size bytes / Размер в байтах: `1482`
 - Included characters / Включено символов: `1478`
 - Truncated / Обрезано: `no`
@@ -1183,7 +1183,7 @@ function sortObject(value: UnknownRecord): UnknownRecord {
 
 ### `frontend/src/integrations/zoom/queries/useZoomRuntimeQuery.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/queries/useZoomRuntimeQuery.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/queries/useZoomRuntimeQuery.boundary.test.ts`
 - Size bytes / Размер в байтах: `953`
 - Included characters / Включено символов: `953`
 - Truncated / Обрезано: `no`
@@ -1210,7 +1210,7 @@ describe('zoom runtime query mutation invalidation boundary', () => {
 
 ### `frontend/src/integrations/zoom/queries/useZoomRuntimeQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/queries/useZoomRuntimeQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/queries/useZoomRuntimeQuery.ts`
 - Size bytes / Размер в байтах: `13152`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1595,7 +1595,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/integrations/zoom/queries/zoomQueryKeys.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/queries/zoomQueryKeys.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/queries/zoomQueryKeys.test.ts`
 - Size bytes / Размер в байтах: `527`
 - Included characters / Включено символов: `527`
 - Truncated / Обрезано: `no`
@@ -1620,7 +1620,7 @@ describe('zoom query keys', () => {
 
 ### `frontend/src/integrations/zoom/queries/zoomQueryKeys.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/queries/zoomQueryKeys.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/queries/zoomQueryKeys.ts`
 - Size bytes / Размер в байтах: `1019`
 - Included characters / Включено символов: `1019`
 - Truncated / Обрезано: `no`
@@ -1645,7 +1645,7 @@ export const zoomQueryKeys = {
 
 ### `frontend/src/integrations/zoom/types/zoom.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/zoom/types/zoom.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/zoom/types/zoom.ts`
 - Size bytes / Размер в байтах: `11884`
 - Included characters / Включено символов: `11884`
 - Truncated / Обрезано: `no`
@@ -2164,7 +2164,7 @@ export interface ZoomCallTranscriptResponse {
 
 ### `frontend/src/main.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/main.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/main.ts`
 - Size bytes / Размер в байтах: `1724`
 - Included characters / Включено символов: `1724`
 - Truncated / Обрезано: `no`
@@ -2203,7 +2203,7 @@ try {
 	})
 	realtimeStatus.setReconnectHandler(() => realtimeClient?.reconnect())
 } catch (error) {
-	document.body.innerHTML = `<main class="startup-error"><h1>Hermes Hub cannot start</h1><p>${escapeHtml(error instanceof Error ? error.message : 'Unknown startup error')}</p></main>`
+	document.body.innerHTML = `<main class="startup-error"><h1>Макошь cannot start</h1><p>${escapeHtml(error instanceof Error ? error.message : 'Unknown startup error')}</p></main>`
 	throw error
 }
 
@@ -2225,7 +2225,7 @@ function escapeHtml(value: string): string {
 
 ### `frontend/src/platform/api/ApiClient.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/api/ApiClient.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/api/ApiClient.ts`
 - Size bytes / Размер в байтах: `2680`
 - Included characters / Включено символов: `2680`
 - Truncated / Обрезано: `no`
@@ -2251,7 +2251,7 @@ export class ApiClient {
 		const url = `${this.baseUrl}${path}`
 		const headers: Record<string, string> = {
 			'Content-Type': 'application/json',
-			'X-Hermes-Secret': this.secret
+			'X-Макошь-Secret': this.secret
 		}
 
 		const res = await fetch(url, {
@@ -2325,7 +2325,7 @@ export class ApiClient {
 
 	static init(baseUrl: string, secret: string): ApiClient {
 		if (secret.trim().length === 0) {
-			throw new Error('X-Hermes-Secret cannot be empty')
+			throw new Error('X-Макошь-Secret cannot be empty')
 		}
 
 		ApiClient._instance = new ApiClient(baseUrl, secret)
@@ -2340,7 +2340,7 @@ export class ApiClient {
 
 ### `frontend/src/platform/api/index.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/api/index.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/api/index.ts`
 - Size bytes / Размер в байтах: `99`
 - Included characters / Включено символов: `99`
 - Truncated / Обрезано: `no`
@@ -2352,7 +2352,7 @@ export type { ApiError, PaginatedResponse } from './types'
 
 ### `frontend/src/platform/api/types.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/api/types.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/api/types.ts`
 - Size bytes / Размер в байтах: `173`
 - Included characters / Включено символов: `173`
 - Truncated / Обрезано: `no`
@@ -2374,7 +2374,7 @@ export type PaginatedResponse<T> = {
 
 ### `frontend/src/platform/bootstrap/api.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/api.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/api.test.ts`
 - Size bytes / Размер в байтах: `596`
 - Included characters / Включено символов: `596`
 - Truncated / Обрезано: `no`
@@ -2405,7 +2405,7 @@ describe('initializeApiClient', () => {
 
 ### `frontend/src/platform/bootstrap/api.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/api.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/api.ts`
 - Size bytes / Размер в байтах: `233`
 - Included characters / Включено символов: `233`
 - Truncated / Обрезано: `no`
@@ -2421,7 +2421,7 @@ export function initializeApiClient(config: FrontendConfig): ApiClient {
 
 ### `frontend/src/platform/bootstrap/businessCommunicationOwnership.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/businessCommunicationOwnership.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/businessCommunicationOwnership.boundary.test.ts`
 - Size bytes / Размер в байтах: `1891`
 - Included characters / Включено символов: `1891`
 - Truncated / Обрезано: `no`
@@ -2482,7 +2482,7 @@ describe('business communication hooks ownership boundary', () => {
 
 ### `frontend/src/platform/bootstrap/realtime.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtime.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtime.test.ts`
 - Size bytes / Размер в байтах: `15067`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2657,7 +2657,7 @@ describe('realtime bootstrap', () => {
     const options = capturedOptions as unknown as SseClientOptions
     expect(options.lastEventId).toBe('41')
     options.onMessage?.({ id: '42', event: 'event', data: '{}' })
-    expect(storage.setItem).toHaveBeenCalledWith('hermes.realtime.lastEventId', '42')
+    expect(storage.setItem).toHaveBeenCalledWith('makosh.realtime.lastEventId', '42')
   })
 
   it('reports lagged realtime gaps without advancing the replay cursor', () => {
@@ -2735,7 +2735,7 @@ describe('realtime bootstrap', () => {
 
     options.onMessage?.({ id: '51', event: 'event', data: '{}' })
     expect(storage.setItem).toHaveBeenCalledOnce()
-    expect(storage.setItem).toHaveBeenCalledWith('hermes.realtime.lastEventId', '51')
+    expect(storage.setItem).toHaveBeenCalledWith('makosh.realtime.lastEventId', '51')
   })
 
   it('invalidates broad communication and telegram queries when realtime reports a replay gap', () => {
@@ -2882,7 +2882,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/platform/bootstrap/realtime.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtime.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtime.ts`
 - Size bytes / Размер в байтах: `17930`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2934,7 +2934,7 @@ export type RealtimeBootstrapOptions = {
 	onStatus?: RealtimeStatusHandler
 }
 
-const REALTIME_CURSOR_STORAGE_KEY = 'hermes.realtime.lastEventId'
+const REALTIME_CURSOR_STORAGE_KEY = 'makosh.realtime.lastEventId'
 
 const REALTIME_QUERY_KEYS: readonly (readonly unknown[])[] = [
 	['communications-list'],
@@ -3268,7 +3268,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/platform/bootstrap/realtimeCachePatches.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtimeCachePatches.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtimeCachePatches.test.ts`
 - Size bytes / Размер в байтах: `7969`
 - Included characters / Включено символов: `7969`
 - Truncated / Обрезано: `no`
@@ -3565,7 +3565,7 @@ describe('realtime cache patch handling', () => {
 
 ### `frontend/src/platform/bootstrap/realtimeMailCachePatches.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtimeMailCachePatches.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtimeMailCachePatches.test.ts`
 - Size bytes / Размер в байтах: `6459`
 - Included characters / Включено символов: `6459`
 - Truncated / Обрезано: `no`
@@ -3815,7 +3815,7 @@ describe('realtime bootstrap mail cache patches', () => {
 
 ### `frontend/src/platform/bootstrap/realtimeSignalHubInvalidation.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtimeSignalHubInvalidation.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtimeSignalHubInvalidation.test.ts`
 - Size bytes / Размер в байтах: `1493`
 - Included characters / Включено символов: `1493`
 - Truncated / Обрезано: `no`

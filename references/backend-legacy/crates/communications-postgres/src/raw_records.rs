@@ -3,12 +3,12 @@ use super::store::CommunicationIngestionStore;
 use super::validation::validate_non_empty;
 use crate::errors::CommunicationIngestionError;
 use chrono::Utc;
-use hermes_communications_api::evidence::{
+use makosh_communications_api::evidence::{
     CommunicationEvidencePortError, CommunicationEvidencePortFuture,
     CommunicationRawEvidenceCommandPort, NewRawCommunicationRecord, StoredRawCommunicationRecord,
 };
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 use serde_json::json;
 
 impl CommunicationIngestionStore {

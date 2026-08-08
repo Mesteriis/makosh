@@ -1,17 +1,17 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyReleaseRequestV1, ManagedBlobCustodyTargetV1,
     ManagedBlobCustodyTransferRequestV1, ManagedBlobSessionRequestV1,
     request_managed_blob_custody_release_v2, request_managed_blob_custody_transfer_v2,
     request_managed_blob_session_v2,
 };
-use hermes_communication_note_candidate_core::{
+use makosh_communication_note_candidate_core::{
     CommunicationNoteCandidateV1, CommunicationNoteSourceBasisV1, CommunicationNoteTopicHintV1,
 };
-use hermes_communication_note_candidate_persistence::CommunicationNoteCandidateBlobCleanupV1;
-use hermes_communications_note_source_api::COMMUNICATION_NOTE_SOURCE_MAX_BYTES_V1;
-use hermes_review_note_candidate_api::{
+use makosh_communication_note_candidate_persistence::CommunicationNoteCandidateBlobCleanupV1;
+use makosh_communications_note_source_api::COMMUNICATION_NOTE_SOURCE_MAX_BYTES_V1;
+use makosh_review_note_candidate_api::{
     REVIEW_NOTE_CANDIDATE_BLOB_TARGET_CAPABILITY_ID_V1,
     REVIEW_NOTE_CANDIDATE_BLOB_TARGET_MODULE_ID_V1, REVIEW_NOTE_CANDIDATE_BLOB_TARGET_OWNER_ID_V1,
     REVIEW_NOTE_CANDIDATE_MAX_BLOB_BYTES_V1, REVIEW_NOTE_CANDIDATE_MAX_PROOF_BYTES_V1,
@@ -20,7 +20,7 @@ use hermes_review_note_candidate_api::{
         ReviewTargetBoundCandidateReceiptV1,
     },
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{BlobCustodyReleaseReasonV1, BlobDataOperationV1},
 };
@@ -296,7 +296,7 @@ fn id16(value: &[u8]) -> Result<[u8; 16], CommunicationNoteCandidateBlobErrorV1>
 
 fn release_operation_id(run_id: [u8; 16]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communication_note_candidate.release_source.v1\0");
+    digest.update(b"makosh.communication_note_candidate.release_source.v1\0");
     digest.update(run_id);
     digest.finalize()[..16]
         .try_into()
@@ -305,7 +305,7 @@ fn release_operation_id(run_id: [u8; 16]) -> [u8; 16] {
 
 fn review_reference_id(candidate: &CommunicationNoteCandidateV1, sha256: [u8; 32]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communication_note_candidate.review-copy.v1\0");
+    digest.update(b"makosh.communication_note_candidate.review-copy.v1\0");
     digest.update(candidate.candidate_id);
     digest.update(candidate.candidate_digest);
     digest.update(sha256);

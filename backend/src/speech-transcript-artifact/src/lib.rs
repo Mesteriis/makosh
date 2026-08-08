@@ -3,14 +3,14 @@
 use prost::Message;
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-speech-transcript-artifact";
+pub const PACKAGE: &str = "makosh-speech-transcript-artifact";
 pub const SPEECH_TRANSCRIPT_ARTIFACT_PROTOCOL_MAJOR_V1: u32 = 1;
 pub const SPEECH_TRANSCRIPT_ARTIFACT_MAX_BYTES_V1: usize = 4 * 1024 * 1024;
 pub const SPEECH_TRANSCRIPT_ARTIFACT_MAX_SEGMENTS_V1: usize = 100_000;
 pub const SPEECH_TRANSCRIPT_ARTIFACT_MAX_SEGMENT_BYTES_V1: usize = 64 * 1024;
 
 pub mod wire {
-    include!(concat!(env!("OUT_DIR"), "/hermes.speech_transcript.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.speech_transcript.v1.rs"));
 }
 
 include!(concat!(
@@ -178,7 +178,7 @@ mod tests {
 
     #[test]
     fn schema_is_private_content_only_and_provider_neutral() {
-        let source = include_str!("../proto/hermes/speech_transcript/v1/transcript.proto");
+        let source = include_str!("../proto/makosh/speech_transcript/v1/transcript.proto");
         assert!(source.contains("content_utf8"));
         for forbidden in [
             "provider_name",

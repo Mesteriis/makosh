@@ -20,17 +20,17 @@ use async_std::net::TcpStream;
 use async_std::task;
 use futures_util::TryStreamExt;
 use futures_util::io::{AsyncRead, AsyncWrite};
-use hermes_mail_api::{MAX_PLAIN_TEXT_BYTES, MAX_WINDOW, MAX_WINDOWS, WINDOW_DEADLINE_SECONDS};
-use hermes_mail_core::rfc822::{
-    AttachmentDispositionV1, Rfc822BodyContentV1, attachment_metadata, extract_attachment_part,
-    operational_preview, readable_body_content, readable_text_body,
-};
 use imap_proto::{
     Response, Status,
     types::{ResponseCode, UidSetMember},
 };
+use makosh_mail_api::{MAX_PLAIN_TEXT_BYTES, MAX_WINDOW, MAX_WINDOWS, WINDOW_DEADLINE_SECONDS};
+use makosh_mail_core::rfc822::{
+    AttachmentDispositionV1, Rfc822BodyContentV1, attachment_metadata, extract_attachment_part,
+    operational_preview, readable_body_content, readable_text_body,
+};
 
-pub const PACKAGE: &str = "hermes-mail-imap";
+pub const PACKAGE: &str = "makosh-mail-imap";
 
 #[cfg(not(feature = "conformance-test-support"))]
 type ImapTransport = async_native_tls::TlsStream<TcpStream>;
@@ -1166,7 +1166,7 @@ where
 }
 
 fn developer_imap_stage(stage: &str, started: Instant, item_count: usize) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!(
             "developer_mail_imap_stage={stage} elapsed_millis={} item_count={item_count}",
             started.elapsed().as_millis()
@@ -1177,7 +1177,7 @@ fn developer_imap_stage(stage: &str, started: Instant, item_count: usize) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_mail_api::{IMAP_PORT, MAX_WINDOW, MAX_WINDOWS};
+    use makosh_mail_api::{IMAP_PORT, MAX_WINDOW, MAX_WINDOWS};
 
     #[test]
     fn uid_fetch_timeout_matches_contract_window_deadline() {

@@ -94,7 +94,7 @@ test('delivery intent event adapters preserve four exact routes without a provid
       .filter(({ owner }) => owner === 'communication_delivery_intent')
       .map(({ name }) => name)
       .filter((name) => name.endsWith('event-adapters')),
-    ['hermes-communication-delivery-intent-event-adapters'],
+    ['makosh-communication-delivery-intent-event-adapters'],
   );
 
   assert.match(workspace, /"src\/communication-delivery-intent-event-adapters"/);
@@ -103,24 +103,24 @@ test('delivery intent event adapters preserve four exact routes without a provid
     /role = "workflow"[\s\S]*owner = "communication_delivery_intent"[\s\S]*surface = "implementation"/,
   );
   for (const provider of providers) {
-    assert.match(manifest, new RegExp(`hermes-${provider}-delivery-intent-contract`));
+    assert.match(manifest, new RegExp(`makosh-${provider}-delivery-intent-contract`));
   }
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications-domain|communications-persistence|mail-runtime|mail-persistence|telegram-runtime|telegram-persistence|whatsapp-runtime|whatsapp-persistence|zulip-runtime|zulip-persistence)|sqlx|async-nats/,
+    /makosh-(?:communications-domain|communications-persistence|mail-runtime|mail-persistence|telegram-runtime|telegram-persistence|whatsapp-runtime|whatsapp-persistence|zulip-runtime|zulip-persistence)|sqlx|async-nats/,
   );
   assert.doesNotMatch(adapterCore, /enum Provider|ProviderKind|dispatch_provider|execute_any/);
 
   for (const [index, provider] of providers.entries()) {
     const source = providerModules[index];
-    assert.match(source, new RegExp(`hermes_${provider}_delivery_intent_contract`));
+    assert.match(source, new RegExp(`makosh_${provider}_delivery_intent_contract`));
     assert.match(source, /pub fn build_execute_outbox_v1/);
     assert.match(source, /pub fn decode_succeeded_v1/);
     assert.match(source, /pub fn decode_rejected_v1/);
     for (const other of providers.filter((value) => value !== provider)) {
       assert.doesNotMatch(
         source,
-        new RegExp(`hermes_${other}_delivery_intent_contract`),
+        new RegExp(`makosh_${other}_delivery_intent_contract`),
       );
     }
     assert.doesNotMatch(source, /communications_(?:domain|persistence)|provider sdk|execute_any/);
@@ -128,11 +128,11 @@ test('delivery intent event adapters preserve four exact routes without a provid
 
   assert.match(
     runtimeManifest,
-    /hermes-communication-delivery-intent-event-adapters/,
+    /makosh-communication-delivery-intent-event-adapters/,
   );
   assert.doesNotMatch(
     runtimeManifest,
-    /hermes-(?:mail|telegram|whatsapp|zulip)-(?:runtime|persistence)/,
+    /makosh-(?:mail|telegram|whatsapp|zulip)-(?:runtime|persistence)/,
   );
   for (const provider of providers) {
     assert.match(runtimeAdapter, new RegExp(`enqueue_${provider}_command_v1`));
@@ -141,10 +141,10 @@ test('delivery intent event adapters preserve four exact routes without a provid
     assert.match(runtimeAdapter, new RegExp(`apply_${provider}_rejected_v1`));
   }
 
-  assert.match(persistenceManifest, /hermes-events-protocol/);
+  assert.match(persistenceManifest, /makosh-events-protocol/);
   assert.doesNotMatch(
     persistenceManifest,
-    /hermes-(?:mail|telegram|whatsapp|zulip)-delivery-intent-contract/,
+    /makosh-(?:mail|telegram|whatsapp|zulip)-delivery-intent-contract/,
   );
   assert.match(persistence, /enqueue_provider_command/);
   assert.match(persistence, /pending_provider_commands/);

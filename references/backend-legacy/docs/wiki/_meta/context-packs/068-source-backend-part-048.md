@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/integrations/zoom/client/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/zoom/client/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/zoom/client/models.rs`
 - Size bytes / Размер в байтах: `55426`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -92,7 +92,7 @@ pub const ZOOM_PROVIDER_SYNC_MAX_PAGE_SIZE: usize = 100;
 pub const ZOOM_PROVIDER_SYNC_DEFAULT_MAX_MEETINGS: usize = 100;
 pub const ZOOM_PROVIDER_SYNC_MAX_MEETINGS: usize = 500;
 pub const ZOOM_MAX_RECORDING_MEDIA_DOWNLOAD_BYTES: usize = 268_435_456;
-pub const ZOOM_DEFAULT_WEBHOOK_SUBSCRIPTION_NAME: &str = "Hermes Zoom Runtime";
+pub const ZOOM_DEFAULT_WEBHOOK_SUBSCRIPTION_NAME: &str = "Макошь Zoom Runtime";
 pub const ZOOM_DEFAULT_WEBHOOK_EVENT_TYPES: &[&str] = &[
     "meeting.started",
     "meeting.ended",
@@ -411,7 +411,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/zoom/client/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/zoom/client/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/zoom/client/store.rs`
 - Size bytes / Размер в байтах: `148312`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -716,7 +716,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/zoom/client/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/zoom/client/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/zoom/client/validation.rs`
 - Size bytes / Размер в байтах: `848`
 - Included characters / Включено символов: `848`
 - Truncated / Обрезано: `no`
@@ -757,7 +757,7 @@ pub(super) fn validate_array(field: &'static str, value: &Value) -> Result<(), Z
 
 ### `backend/src/integrations/zoom/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/zoom/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/zoom/mod.rs`
 - Size bytes / Размер в байтах: `33`
 - Included characters / Включено символов: `33`
 - Truncated / Обрезано: `no`
@@ -769,7 +769,7 @@ pub mod runtime;
 
 ### `backend/src/integrations/zoom/runtime.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/zoom/runtime.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/zoom/runtime.rs`
 - Size bytes / Размер в байтах: `157`
 - Included characters / Включено символов: `157`
 - Truncated / Обрезано: `no`
@@ -783,7 +783,7 @@ pub use super::client::{
 
 ### `backend/src/lib.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/lib.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/lib.rs`
 - Size bytes / Размер в байтах: `294`
 - Included characters / Включено символов: `294`
 - Truncated / Обрезано: `no`
@@ -806,25 +806,25 @@ pub mod workflows;
 
 ### `backend/src/main.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/main.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/main.rs`
 - Size bytes / Размер в байтах: `581`
 - Included characters / Включено символов: `581`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::config::AppConfig;
 use tracing::Instrument;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     color_eyre::install()?;
-    hermes_hub_backend::app::init_tracing();
-    let flow_id = std::env::var("HERMES_FLOW_ID").unwrap_or_else(|_| "unknown".to_owned());
-    let runtime_span = tracing::info_span!("hermes_runtime", flow_id = %flow_id);
+    makosh_hub_backend::app::init_tracing();
+    let flow_id = std::env::var("MAKOSH_FLOW_ID").unwrap_or_else(|_| "unknown".to_owned());
+    let runtime_span = tracing::info_span!("makosh_runtime", flow_id = %flow_id);
 
     async move {
         let config = AppConfig::from_env()?;
-        hermes_hub_backend::app::run(config).await?;
+        makosh_hub_backend::app::run(config).await?;
         Ok(())
     }
     .instrument(runtime_span)
@@ -834,7 +834,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ### `backend/src/platform/ai_runtime.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/ai_runtime.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/ai_runtime.rs`
 - Size bytes / Размер в байтах: `1294`
 - Included characters / Включено символов: `1294`
 - Truncated / Обрезано: `no`
@@ -896,7 +896,7 @@ pub trait AiRuntimePort: Send + Sync {
 
 ### `backend/src/platform/audit.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/audit.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/audit.rs`
 - Size bytes / Размер в байтах: `312`
 - Included characters / Включено символов: `312`
 - Truncated / Обрезано: `no`
@@ -923,7 +923,7 @@ pub use store::ApiAuditLog;
 
 ### `backend/src/platform/audit/communication.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/audit/communication.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/audit/communication.rs`
 - Size bytes / Размер в байтах: `668`
 - Included characters / Включено символов: `668`
 - Truncated / Обрезано: `no`
@@ -958,7 +958,7 @@ impl NewApiAuditRecord {
 
 ### `backend/src/platform/audit/constants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/audit/constants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/audit/constants.rs`
 - Size bytes / Размер в байтах: `113`
 - Included characters / Включено символов: `113`
 - Truncated / Обрезано: `no`
@@ -970,7 +970,7 @@ pub(super) const EVENT_TARGET_KIND: &str = "event";
 
 ### `backend/src/platform/audit/documents.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/audit/documents.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/audit/documents.rs`
 - Size bytes / Размер в байтах: `499`
 - Included characters / Включено символов: `499`
 - Truncated / Обрезано: `no`
@@ -1000,7 +1000,7 @@ impl NewApiAuditRecord {
 
 ### `backend/src/platform/audit/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/audit/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/audit/errors.rs`
 - Size bytes / Размер в байтах: `131`
 - Included characters / Включено символов: `131`
 - Truncated / Обрезано: `no`
@@ -1017,7 +1017,7 @@ pub enum ApiAuditError {
 
 ### `backend/src/platform/audit/events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/audit/events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/audit/events.rs`
 - Size bytes / Размер в байтах: `1265`
 - Included characters / Включено символов: `1265`
 - Truncated / Обрезано: `no`
@@ -1078,7 +1078,7 @@ impl NewApiAuditRecord {
 
 ### `backend/src/platform/audit/helpers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/audit/helpers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/audit/helpers.rs`
 - Size bytes / Размер в байтах: `697`
 - Included characters / Включено символов: `697`
 - Truncated / Обрезано: `no`
@@ -1119,7 +1119,7 @@ pub(super) fn non_empty_optional(value: String) -> Option<String> {
 
 ### `backend/src/platform/audit/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/audit/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/audit/models.rs`
 - Size bytes / Размер в байтах: `1513`
 - Included characters / Включено символов: `1513`
 - Truncated / Обрезано: `no`
@@ -1183,7 +1183,7 @@ impl NewApiAuditRecord {
 
 ### `backend/src/platform/audit/reviews.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/audit/reviews.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/audit/reviews.rs`
 - Size bytes / Размер в байтах: `3734`
 - Included characters / Включено символов: `3734`
 - Truncated / Обрезано: `no`
@@ -1328,7 +1328,7 @@ impl NewApiAuditRecord {
 
 ### `backend/src/platform/audit/settings.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/audit/settings.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/audit/settings.rs`
 - Size bytes / Размер в байтах: `475`
 - Included characters / Включено символов: `475`
 - Truncated / Обрезано: `no`
@@ -1358,7 +1358,7 @@ impl NewApiAuditRecord {
 
 ### `backend/src/platform/audit/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/audit/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/audit/store.rs`
 - Size bytes / Размер в байтах: `3171`
 - Included characters / Включено символов: `3171`
 - Truncated / Обрезано: `no`
@@ -1476,7 +1476,7 @@ fn row_to_audit_record(row: sqlx::postgres::PgRow) -> Result<ApiAuditRecord, Api
 
 ### `backend/src/platform/audit/telegram.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/audit/telegram.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/audit/telegram.rs`
 - Size bytes / Размер в байтах: `21468`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1810,7 +1810,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/platform/audit/telegram_dialogs.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/audit/telegram_dialogs.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/audit/telegram_dialogs.rs`
 - Size bytes / Размер в байтах: `10762`
 - Included characters / Включено символов: `10762`
 - Truncated / Обрезано: `no`
@@ -2096,7 +2096,7 @@ impl NewApiAuditRecord {
 
 ### `backend/src/platform/audit/telegram_participants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/audit/telegram_participants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/audit/telegram_participants.rs`
 - Size bytes / Размер в байтах: `2661`
 - Included characters / Включено символов: `2661`
 - Truncated / Обрезано: `no`
@@ -2152,7 +2152,7 @@ mod tests {
     #[test]
     fn telegram_participants_sync_audit_preserves_capability_metadata() {
         let record = NewApiAuditRecord::telegram_participants_sync(
-            "hermes-frontend",
+            "makosh-frontend",
             "telegram-chat-1",
             "account-1",
             "provider-chat-1",
@@ -2179,7 +2179,7 @@ mod tests {
 
 ### `backend/src/platform/calls.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/calls.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/calls.rs`
 - Size bytes / Размер в байтах: `391`
 - Included characters / Включено символов: `391`
 - Truncated / Обрезано: `no`
@@ -2203,7 +2203,7 @@ pub use stt::{FixtureSpeechToTextProvider, FixtureTranscript, SpeechToTextProvid
 
 ### `backend/src/platform/calls/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/calls/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/calls/errors.rs`
 - Size bytes / Размер в байтах: `211`
 - Included characters / Включено символов: `211`
 - Truncated / Обрезано: `no`
@@ -2223,7 +2223,7 @@ pub enum CallError {
 
 ### `backend/src/platform/calls/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/calls/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/calls/models.rs`
 - Size bytes / Размер в байтах: `4389`
 - Included characters / Включено символов: `4389`
 - Truncated / Обрезано: `no`

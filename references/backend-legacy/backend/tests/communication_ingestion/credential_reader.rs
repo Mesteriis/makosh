@@ -1,5 +1,5 @@
 use crate::support::*;
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::{
     CommunicationProviderKind, NewProviderAccount, NewProviderAccountSecretBinding,
     ProviderAccountSecretPurpose,
 };
@@ -14,7 +14,7 @@ async fn provider_credential_reader_resolves_bound_account_secret_against_postgr
     let pool = database.pool().expect("configured pool").clone();
     let communication_store = CommunicationIngestionStore::new(pool.clone());
     let secret_binding_store =
-        hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
+        makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
             pool.clone(),
         );
     let secret_store = SecretReferenceStore::new(pool);
@@ -84,7 +84,7 @@ async fn provider_credential_reader_reports_missing_binding_against_postgres() {
     let pool = database.pool().expect("configured pool").clone();
     let communication_store = CommunicationIngestionStore::new(pool.clone());
     let secret_binding_store =
-        hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
+        makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
             pool.clone(),
         );
     let secret_store = SecretReferenceStore::new(pool);
@@ -131,7 +131,7 @@ async fn provider_credential_reader_propagates_resolver_failures_against_postgre
     let pool = database.pool().expect("configured pool").clone();
     let communication_store = CommunicationIngestionStore::new(pool.clone());
     let secret_binding_store =
-        hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
+        makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
             pool.clone(),
         );
     let secret_store = SecretReferenceStore::new(pool);
@@ -195,7 +195,7 @@ async fn provider_credential_reader_rejects_incompatible_secret_kind_against_pos
     let pool = database.pool().expect("configured pool").clone();
     let communication_store = CommunicationIngestionStore::new(pool.clone());
     let secret_binding_store =
-        hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
+        makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
             pool.clone(),
         );
     let secret_store = SecretReferenceStore::new(pool);

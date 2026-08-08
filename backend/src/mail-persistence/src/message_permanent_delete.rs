@@ -1,6 +1,6 @@
 //! Durable provider-owned permanent deletion journal and operational cleanup.
 
-use hermes_mail_api::{
+use makosh_mail_api::{
     message_permanent_delete::{
         MailMessagePermanentDeleteAcceptedV1, MailMessagePermanentDeleteCommandV1,
         MailMessagePermanentDeleteConfirmationV1, MailMessagePermanentDeleteOperationOutcomeV1,
@@ -23,7 +23,7 @@ use crate::{
 const MAIL_FOLDER_KIND_TRASH_DB_VALUE: i16 = 4;
 
 pub const MAIL_SCHEMA_V17: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.mail_message_permanent_delete_operations (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_message_permanent_delete_operations (
     operation_id TEXT PRIMARY KEY,
     connection_id TEXT NOT NULL,
     message_id TEXT NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_message_permanent_delete_operations 
             AND deletion_projection_revision IS NULL))
 );
 CREATE INDEX IF NOT EXISTS mail_message_permanent_delete_pending_idx
-    ON hermes_data.mail_message_permanent_delete_operations
+    ON makosh_data.mail_message_permanent_delete_operations
     (connection_id, requested_at_unix_seconds, operation_id)
     WHERE outcome = 1;
 "#;
@@ -110,7 +110,7 @@ impl MailDurablePersistence {
             .map_err(|_| MailMessagePermanentDeletePersistenceErrorV1::Database)?;
         if let Some(row) = sqlx::query(
             "SELECT request_sha256 \
-             FROM hermes_data.mail_message_permanent_delete_operations \
+             FROM makosh_data.mail_message_permanent_delete_operations \
              WHERE operation_id = $1",
         )
         .bind(&command.operation_id)
@@ -140,7 +140,7 @@ impl MailDurablePersistence {
         )
         .await?;
         sqlx::query(
-            "INSERT INTO hermes_data.mail_message_permanent_delete_operations \
+            "INSERT INTO makosh_data.mail_message_permanent_delete_operations \
              (operation_id, connection_id, message_id, expected_projection_revision, confirmation, \
               request_sha256, exact_command_bytes, requested_at_unix_seconds) \
              VALUES ($1, $2, $3, $4, 1, $5, $6, $7)",
@@ -180,7 +180,7 @@ impl MailDurablePersistence {
             "SELECT operation_id, connection_id, message_id, expected_projection_revision, \
                     confirmation, outcome, requested_at_unix_seconds, \
                     completed_at_unix_seconds, deletion_projection_revision \
-             FROM hermes_data.mail_message_permanent_delete_operations \
+             FROM makosh_data.mail_message_permanent_delete_operations \
              WHERE operation_id = $1 AND connection_id = $2",
         )
         .bind(&request.operation_id)
@@ -204,7 +204,7 @@ impl MailDurablePersistence {
         let row = sqlx::query(
             "SELECT operation_id, connection_id, message_id, expected_projection_revision, \
                     request_sha256, exact_command_bytes \
-             FROM hermes_data.mail_message_permanent_delete_operations \
+             FROM makosh_data.mail_message_permanent_delete_operations \
              WHERE connection_id = $1 AND outcome = 1 \
              ORDER BY requested_at_unix_seconds, operation_id LIMIT 1",
         )
@@ -235,7 +235,7 @@ impl MailDurablePersistence {
         .await?;
         let locator = sqlx::query(
             "SELECT mailbox_id, uid_validity, uid \
-             FROM hermes_data.mail_imap_message_locators \
+             FROM makosh_data.mail_imap_message_locators \
              WHERE connection_id = $1 AND message_id = $2",
         )
         .bind(&queued.connection_id)
@@ -278,7 +278,7 @@ impl MailDurablePersistence {
         )
         .await?;
         let deleted = sqlx::query(
-            "DELETE FROM hermes_data.mail_operational_messages \
+            "DELETE FROM makosh_data.mail_operational_messages \
              WHERE connection_id = $1 AND message_id = $2",
         )
         .bind(&queued.connection_id)
@@ -313,7 +313,7 @@ impl MailDurablePersistence {
             .checked_add(1)
             .ok_or(MailMessagePermanentDeletePersistenceErrorV1::InvalidRow)?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_message_permanent_delete_operations \
+            "UPDATE makosh_data.mail_message_permanent_delete_operations \
              SET outcome = 2, completed_at_unix_seconds = $3, \
                  deletion_projection_revision = $4 \
              WHERE operation_id = $1 AND connection_id = $2 AND outcome = 1",
@@ -360,7 +360,7 @@ impl MailDurablePersistence {
             return Err(MailMessagePermanentDeletePersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_message_permanent_delete_operations \
+            "UPDATE makosh_data.mail_message_permanent_delete_operations \
              SET outcome = $3, completed_at_unix_seconds = $4 \
              WHERE operation_id = $1 AND connection_id = $2 AND outcome = 1",
         )
@@ -387,7 +387,7 @@ async fn validate_current_delete_target(
 ) -> Result<(String, Vec<String>), MailMessagePermanentDeletePersistenceErrorV1> {
     let row = sqlx::query(
         "SELECT provider_thread_id, projection_revision \
-         FROM hermes_data.mail_operational_messages \
+         FROM makosh_data.mail_operational_messages \
          WHERE connection_id = $1 AND message_id = $2 FOR UPDATE",
     )
     .bind(connection_id)
@@ -406,8 +406,8 @@ async fn validate_current_delete_target(
     }
     let folders = sqlx::query(
         "SELECT membership.folder_id, folder.kind \
-         FROM hermes_data.mail_operational_message_folders membership \
-         JOIN hermes_data.mail_operational_folders folder \
+         FROM makosh_data.mail_operational_message_folders membership \
+         JOIN makosh_data.mail_operational_folders folder \
            ON folder.connection_id = membership.connection_id \
           AND folder.folder_id = membership.folder_id \
          WHERE membership.connection_id = $1 AND membership.message_id = $2 \
@@ -564,7 +564,7 @@ mod tests {
 
     #[test]
     fn schema_is_owner_local_and_keeps_the_command_bytes() {
-        assert!(MAIL_SCHEMA_V17.contains("hermes_data.mail_message_permanent_delete_operations"));
+        assert!(MAIL_SCHEMA_V17.contains("makosh_data.mail_message_permanent_delete_operations"));
         assert!(MAIL_SCHEMA_V17.contains("exact_command_bytes"));
         assert!(!MAIL_SCHEMA_V17.contains("communications"));
     }

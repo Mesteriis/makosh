@@ -56,7 +56,7 @@
 - **Тестов всего**: 1401
 - **Упавших**: 0
 - **Flaky-тесты**:
-  - `hermes-hub-backend::event_platform::event_outbox_dispatcher_publishes_pending_events_to_nats`
+  - `makosh-backend::event_platform::event_outbox_dispatcher_publishes_pending_events_to_nats`
 - **Суммарное время**: 6710.525 с
 - **Среднее время**: 4.79 с
 - **P95**: 12.795 с, **P99**: 20.413 с
@@ -107,7 +107,7 @@
   - Конкретное значение `source`: `target/nextest/default/junit.xml`.
   - Фактические метрики для набора `backend-full`: 1401 тест, 0 упавших, 1 flaky-тест, суммарное время 6710.525 с, среднее 4.79 с, перцентили 12.795 с / 20.413 с.
   - Список 10 самых медленных тестов с идентификаторами и временем.
-  - Идентификатор flaky-теста: `hermes-hub-backend::event_platform::event_outbox_dispatcher_publishes_pending_events_to_nats`.
+  - Идентификатор flaky-теста: `makosh-backend::event_platform::event_outbox_dispatcher_publishes_pending_events_to_nats`.
 
 - **`reports/test-performance/unit.json`** (2876 символов, не обрезан)
   - Аналогичная структура отчёта для набора `unit`.

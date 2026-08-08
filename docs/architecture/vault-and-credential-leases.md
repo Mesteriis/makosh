@@ -13,7 +13,7 @@
 
 ## Назначение
 
-Hermes Vault хранит только небольшой credential material, который нужен
+Макошь Vault хранит только небольшой credential material, который нужен
 авторизованным module runtimes:
 
 - passwords и app passwords;
@@ -34,9 +34,9 @@ verified `managed` OS process:
 ```text
 Kernel supervisor
     ↓ verify / start / quiesce / drain / stop / bounded restart
-hermes-vault-runtime
-    ├─ hermes-vault-store-sqlcipher
-    └─ hermes-vault-key-provider-file
+makosh-vault-runtime
+    ├─ makosh-vault-store-sqlcipher
+    └─ makosh-vault-key-provider-file
             ↓ sealed CredentialLeaseV1 through capability routing
 authorized module runtime
 ```
@@ -58,7 +58,7 @@ Vault runtime:
   runtime audience и current grant epoch;
 - не интерпретирует provider или domain semantics.
 
-Module runtime зависит только от `hermes-vault-protocol`. Он не получает
+Module runtime зависит только от `makosh-vault-protocol`. Он не получает
 database path, SQL, root key, key slots, enumeration API или generic
 `GetSecret(secret_ref)`.
 
@@ -197,7 +197,7 @@ WhatsApp использует OS-managed per-account WebView profile. Больш
 - platform slot использует отдельный owner-private regular file `0600` через
   `FileWrappingKeyAdapter`;
 - recovery slot использует независимый `RecoveryKeyV1`, который владелец хранит
-  вне Hermes;
+  вне Макошь;
 - Owner/device signing key не используется для Vault encryption или wrapping.
 
 Kernel Control Store не содержит Vault keys, slots, secret IDs/bindings или
@@ -231,22 +231,22 @@ file key никогда не создают empty Vault и не перезапи
 Зафиксированы packages:
 
 ```text
-hermes-vault-protocol
-hermes-vault-key-provider
-hermes-vault-runtime
-hermes-vault-store-sqlcipher
-hermes-vault-key-provider-file
+makosh-vault-protocol
+makosh-vault-key-provider
+makosh-vault-runtime
+makosh-vault-store-sqlcipher
+makosh-vault-key-provider-file
 ```
 
 Kernel и modules могут зависеть только от public protocol там, где это разрешено
-architecture policy. `hermes-vault-key-provider` является private adapter port
+architecture policy. `makosh-vault-key-provider` является private adapter port
 Vault owner. Runtime/store/file-key packages не попадают в Kernel или module
 compile graphs.
 
 ## Состояние реализации
 
 На 2026-07-16 существует `vault_v1`: пять canonical
-`hermes-vault-*` packages, file-backed wrapping-key adapter, authenticated
+`makosh-vault-*` packages, file-backed wrapping-key adapter, authenticated
 single platform `vault.anchor` slot, SQLCipher metadata schema и conformance
 для private paths/reopen/wrong key/tamper. Store имеет single-epoch
 XChaCha20-Poly1305 record envelope, который связывает credential с exact
@@ -302,7 +302,7 @@ Request binding также содержит ephemeral response-recipient X25519 
 в AAD; private Vault runtime шифрует результат в отдельный `FromVault` frame.
 Поэтому Kernel relay никогда не получает credential plaintext и не может
 подменить recipient key без authentication failure.
-`hermes-vault-runtime serve` сейчас предоставляет только private 0600 Unix-socket
+`makosh-vault-runtime serve` сейчас предоставляет только private 0600 Unix-socket
 status с ephemeral HPKE public key и generation; secret frames проходят только
 через inherited Kernel relay после указанной authorization. Legacy `HostVault`
 используется только как evidence и не является implementation template или

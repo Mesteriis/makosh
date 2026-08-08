@@ -23,12 +23,12 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-panel',
-	`hermes-panel--${props.tone}`,
-	`hermes-panel--padding-${props.padding}`,
-	`hermes-panel--radius-${props.radius}`,
-	props.bordered && 'hermes-panel--bordered',
-	props.clip && 'hermes-panel--clip',
+	'makosh-panel',
+	`makosh-panel--${props.tone}`,
+	`makosh-panel--padding-${props.padding}`,
+	`makosh-panel--radius-${props.radius}`,
+	props.bordered && 'makosh-panel--bordered',
+	props.clip && 'makosh-panel--clip',
 	props.class
 ])
 </script>

@@ -1,5 +1,5 @@
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 use sqlx::Row;
 use sqlx::postgres::PgPool;
@@ -14,11 +14,11 @@ use crate::platform::communications::attachment_text::{
     render_rich_attachment_safe_preview, rich_attachment_extraction_kind,
     rich_attachment_extractor_address,
 };
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
-const PDF_PREVIEW_RENDERER: &str = "hermes.attachment_extractor.pdf_preview.v1";
-const DOCX_PREVIEW_RENDERER: &str = "hermes.attachment_extractor.docx_preview.v1";
-const UNSUPPORTED_PREVIEW_RENDERER: &str = "hermes.attachment_extractor.safe_preview.v1";
+const PDF_PREVIEW_RENDERER: &str = "makosh.attachment_extractor.pdf_preview.v1";
+const DOCX_PREVIEW_RENDERER: &str = "makosh.attachment_extractor.docx_preview.v1";
+const UNSUPPORTED_PREVIEW_RENDERER: &str = "makosh.attachment_extractor.safe_preview.v1";
 const MAX_SAFE_PREVIEW_BYTES: usize = 2 * 1024 * 1024;
 
 #[derive(Clone)]
@@ -365,7 +365,7 @@ impl AttachmentSafePreviewService {
                 "message_id": message_id,
             }),
         )
-        .actor(json!({ "actor_id": "hermes-attachment-preview-renderer" }))
+        .actor(json!({ "actor_id": "makosh-attachment-preview-renderer" }))
         .payload(json!({
             "attachment_id": attachment_id,
             "message_id": message_id,
@@ -437,7 +437,7 @@ pub enum AttachmentSafePreviewServiceError {
     #[error(transparent)]
     Sqlx(#[from] sqlx::Error),
     #[error(transparent)]
-    Event(#[from] hermes_events_postgres::errors::EventStoreError),
+    Event(#[from] makosh_events_postgres::errors::EventStoreError),
     #[error(transparent)]
-    EventEnvelope(#[from] hermes_events_api::EventEnvelopeError),
+    EventEnvelope(#[from] makosh_events_api::EventEnvelopeError),
 }

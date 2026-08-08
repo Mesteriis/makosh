@@ -1,9 +1,9 @@
 use std::os::unix::fs::PermissionsExt;
 
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_protocol::{SecretClassV1, VaultActionV1, VaultPurposeRequestV1};
-use hermes_vault_store_sqlcipher::{SecretRecordScope, VaultRecoveryKeyV1, VaultStore};
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_protocol::{SecretClassV1, VaultActionV1, VaultPurposeRequestV1};
+use makosh_vault_store_sqlcipher::{SecretRecordScope, VaultRecoveryKeyV1, VaultStore};
 use tempfile::TempDir;
 
 #[test]
@@ -166,7 +166,7 @@ fn offline_root_rotation_rejects_a_symlinked_recovery_reservation() {
     std::fs::write(&sentinel, b"do not touch").expect("sentinel");
     std::os::unix::fs::symlink(
         &sentinel,
-        temporary.path().join(".hermes-vault-root-rotation-v1"),
+        temporary.path().join(".makosh-vault-root-rotation-v1"),
     )
     .expect("symlinked reservation");
 
@@ -178,7 +178,7 @@ fn offline_root_rotation_rejects_a_symlinked_recovery_reservation() {
     assert!(
         temporary
             .path()
-            .join(".hermes-vault-root-rotation-v1")
+            .join(".makosh-vault-root-rotation-v1")
             .is_symlink()
     );
 }
@@ -210,7 +210,7 @@ fn credential_scope() -> SecretRecordScope {
 
 fn assert_record_survives(
     store: VaultStore,
-    record_id: &hermes_vault_store_sqlcipher::SecretRecordId,
+    record_id: &makosh_vault_store_sqlcipher::SecretRecordId,
     scope: &SecretRecordScope,
 ) {
     assert_eq!(

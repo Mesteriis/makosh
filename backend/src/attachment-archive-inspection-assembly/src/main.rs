@@ -2,14 +2,14 @@ use std::collections::BTreeMap;
 use std::path::PathBuf;
 use std::process::ExitCode;
 
-use hermes_attachment_archive_inspection_assembly::materialize_archive_inspection_release_assembly_v1;
+use makosh_attachment_archive_inspection_assembly::materialize_archive_inspection_release_assembly_v1;
 
 const OPTIONS: [&str; 3] = ["--build-id", "--output-dir", "--runtime"];
 
 fn main() -> ExitCode {
     let Some(arguments) = arguments(std::env::args().skip(1).collect()) else {
         return fail(
-            "usage: hermes-attachment-archive-inspection-assembly --build-id <id> \
+            "usage: makosh-attachment-archive-inspection-assembly --build-id <id> \
              --output-dir <absolute-path> --runtime <absolute-path>",
         );
     };

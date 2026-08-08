@@ -38,7 +38,7 @@ Communications. Он не доказывает полный provider experience:
 Удалённый legacy REST/UI не считается переносом. Reference-код подтверждает
 send/edit/delete/reaction/file/event-queue use cases, но не является authority
 для clean-room contracts. Отсутствующие history/query/replay contracts
-определяются этим ADR по общим правилам Hermes.
+определяются этим ADR по общим правилам Макошь.
 
 ## Решение
 
@@ -48,18 +48,18 @@ Zulip остаётся integration, а не domain:
 
 ```text
 owner_id  = zulip
-module_id = hermes-zulip-runtime
+module_id = makosh-zulip-runtime
 ```
 
 Причины изменения разделены внутри существующих owner packages:
 
 ```text
-hermes-zulip-api          account/read/replay public contracts and validation
-hermes-zulip-core         provider event to neutral evidence mapping only
-hermes-zulip-http         Zulip HTTPS command, history and event-queue adapter
-hermes-zulip-persistence  owner-local projection, sync cursor and replay journal
-hermes-zulip-runtime      admitted orchestration and exact route handlers
-hermes-zulip-assembly     immutable release composition only
+makosh-zulip-api          account/read/replay public contracts and validation
+makosh-zulip-core         provider event to neutral evidence mapping only
+makosh-zulip-http         Zulip HTTPS command, history and event-queue adapter
+makosh-zulip-persistence  owner-local projection, sync cursor and replay journal
+makosh-zulip-runtime      admitted orchestration and exact route handlers
+makosh-zulip-assembly     immutable release composition only
 ```
 
 API, provider protocol, persistence, runtime и assembly не объединяются.
@@ -109,7 +109,7 @@ projection. После admitted startup runtime:
 6. только после этого выставляет `history_ready`.
 
 Каждая page bounded; бесконечный request и unbounded in-memory accumulation
-запрещены. Provider authorization scope определяет доступную историю. Hermes
+запрещены. Provider authorization scope определяет доступную историю. Макошь
 не заявляет доступ к сообщениям, которые Zulip account не имеет права читать.
 
 Backfill snapshot не перезаписывает более свежую event-driven edit/delete.
@@ -126,7 +126,7 @@ restart convergence, queue/backfill race evidence и explicit partial readiness.
 
 ```text
 capability = zulip.operational.query.v1
-route      = /hermes.zulip.operational.v1.ZulipOperationalQueryService/Query
+route      = /makosh.zulip.operational.v1.ZulipOperationalQueryService/Query
 gate       = zulip_operational_read_v1
 ```
 
@@ -158,7 +158,7 @@ Existing `zulip.query.v1` остаётся только terminal provider-operat
 
 ```text
 capability = zulip.operational.realtime.v1
-route      = /hermes.zulip.operational.realtime.v1.ZulipOperationalRealtimeService/Replay
+route      = /makosh.zulip.operational.realtime.v1.ZulipOperationalRealtimeService/Replay
 gate       = zulip_operational_realtime_v1
 ```
 
@@ -216,7 +216,7 @@ Kernel/Core согласуют только:
 
 Kernel, Gateway и Settings не:
 
-- импортируют `hermes-zulip-*`;
+- импортируют `makosh-zulip-*`;
 - декодируют query/replay payload;
 - выбирают stream/topic/direct/history filters;
 - читают Zulip tables;
@@ -246,7 +246,7 @@ provider-neutral evidence и ссылку на Zulip operational experience, н�
 Frontend cutover реализован отдельными SRP units:
 
 - generated query/replay messages и service descriptors в
-  `frontend/src/gen/hermes/zulip/operational`;
+  `frontend/src/gen/makosh/zulip/operational`;
 - route-specific ConnectRPC factories и validating gateways в
   `frontend/src/integrations/zulip/api`;
 - exact effective-account discovery и независимые read/replay controllers в
@@ -322,10 +322,10 @@ provider history, credential binding или replay retention.
 
 ## Фактическая реализация
 
-- `hermes-zulip-api` публикует отдельные descriptor sets и exact capabilities
+- `makosh-zulip-api` публикует отдельные descriptor sets и exact capabilities
   `zulip.operational.query.v1` и `zulip.operational.realtime.v1`; command,
   operation status, content read и replay не имеют общего route/grant.
-- `hermes-zulip-http::history` выполняет bounded
+- `makosh-zulip-http::history` выполняет bounded
   `GET /api/v1/messages` pages с `apply_markdown=false`, exact anchor и
   explicit `found_oldest`; event queue сохраняет typed stream/topic/direct,
   attachments, reactions, edit/delete fields.
@@ -333,7 +333,7 @@ provider history, credential binding или replay retention.
   account/history state, messages/conversations/attachments/reactions,
   mutation fence и append-only operational journal, не изменяя immutable
   revision 1.
-- `hermes-zulip-persistence::operational` одной transaction продвигает queue
+- `makosh-zulip-persistence::operational` одной transaction продвигает queue
   cursor, применяет projection, пишет replay event и Communications outbox.
   Backfill пишет отдельную transaction и не перезаписывает более свежий
   mutation sequence.
@@ -356,9 +356,9 @@ provider history, credential binding или replay retention.
 Live managed conformance:
 
 ```bash
-HERMES_STORAGE_MANAGED_TEST_FILTER=managed_zulip_runtime_delivers_live_command_and_event_only_communications_handoff node scripts/test-authenticated-storage.mjs 1.97.0
-HERMES_STORAGE_MANAGED_TEST_FILTER=managed_zulip_runtime_uses_kernel_leases_and_route_specific_admission node scripts/test-authenticated-storage.mjs 1.97.0
-HERMES_STORAGE_MANAGED_TEST_FILTER=managed_zulip_account_rotation_and_retirement_use_settings_successors node scripts/test-authenticated-storage.mjs 1.97.0
+MAKOSH_STORAGE_MANAGED_TEST_FILTER=managed_zulip_runtime_delivers_live_command_and_event_only_communications_handoff node scripts/test-authenticated-storage.mjs 1.97.0
+MAKOSH_STORAGE_MANAGED_TEST_FILTER=managed_zulip_runtime_uses_kernel_leases_and_route_specific_admission node scripts/test-authenticated-storage.mjs 1.97.0
+MAKOSH_STORAGE_MANAGED_TEST_FILTER=managed_zulip_account_rotation_and_retirement_use_settings_successors node scripts/test-authenticated-storage.mjs 1.97.0
 ```
 
 Первый contour доказал real TLS provider fixture, две bounded history pages,

@@ -14,7 +14,7 @@ use crate::platform::events::bus::InMemoryEventBus;
 use crate::platform::events::bus::telegram_event_types;
 use crate::platform::secrets::resolver::InMemorySecretResolver;
 use crate::platform::secrets::store::SecretReferenceStore;
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use serde_json::json;
 use sqlx::{PgPool, Row};
 
@@ -66,7 +66,7 @@ async fn sync_provider_roster_snapshots_appends_join_reconciliation_after_partic
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({}),
         json!({"telegram_chat_id": chat.telegram_chat_id, "provider_chat_id": provider_chat_id}),
         json!({"source": "test"}),
@@ -228,7 +228,7 @@ async fn sync_provider_roster_snapshots_appends_leave_reconciliation_after_absen
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({}),
         json!({"telegram_chat_id": chat.telegram_chat_id, "provider_chat_id": provider_chat_id}),
         json!({"source": "test"}),

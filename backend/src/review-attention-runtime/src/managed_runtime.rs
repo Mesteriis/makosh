@@ -1,11 +1,11 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_review_attention_api::{REVIEW_ATTENTION_MODULE_ID_V1, REVIEW_ATTENTION_OWNER_V1};
-use hermes_review_attention_persistence::{
+use makosh_review_attention_api::{REVIEW_ATTENTION_MODULE_ID_V1, REVIEW_ATTENTION_OWNER_V1};
+use makosh_review_attention_persistence::{
     ReviewAttentionPersistenceErrorV1, ReviewAttentionPersistenceV1,
 };
-use hermes_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
+use makosh_runtime_protocol::{
     managed_control::{
         ManagedControlChannelV2, ManagedControlRequestDispatcherV2, ManagedControlTransportErrorV2,
         RejectManagedControlRequestsV2,
@@ -20,11 +20,11 @@ use hermes_runtime_protocol::{
         validate_module_client_request_v1, validate_module_client_response_v1,
     },
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 
@@ -74,7 +74,7 @@ impl ManagedControlRequestDispatcherV2<UnixStream>
         &mut self,
         channel: &mut ManagedControlChannelV2<UnixStream>,
         correlation_id: [u8; MANAGED_CONTROL_CORRELATION_ID_BYTES],
-        request: hermes_runtime_protocol::v1::ManagedRuntimeControlRequestV1,
+        request: makosh_runtime_protocol::v1::ManagedRuntimeControlRequestV1,
     ) -> Result<(), ManagedControlTransportErrorV2> {
         let response = match request.operation {
             Some(Operation::ClientDelivery(delivery)) => match delivery.request {
@@ -463,7 +463,7 @@ fn realtime_error_at(
     stage: &str,
     error: ReviewAttentionRealtimeErrorV1,
 ) -> ReviewAttentionManagedRuntimeErrorV1 {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_review_attention_runtime_error stage={stage} kind={error:?}");
     }
     realtime_error(error)
@@ -473,7 +473,7 @@ fn persistence_error_at(
     stage: &str,
     error: ReviewAttentionPersistenceErrorV1,
 ) -> ReviewAttentionManagedRuntimeErrorV1 {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_review_attention_runtime_error stage={stage} kind={error:?}");
     }
     ReviewAttentionManagedRuntimeErrorV1::Persistence(error)

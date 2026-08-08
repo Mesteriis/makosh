@@ -1,5 +1,5 @@
 [package]
-name = "hermes-communication-cross-channel-forward-runtime"
+name = "makosh-communication-cross-channel-forward-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,26 +8,26 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-communication-cross-channel-forward-runtime"
+name = "makosh-communication-cross-channel-forward-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "communication_cross_channel_forward"
 surface = "runtime"
 
 [dependencies]
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-communication-cross-channel-forward-api = { path = "../communication-cross-channel-forward-api" }
-hermes-communication-cross-channel-forward-core = { path = "../communication-cross-channel-forward-core" }
-hermes-communication-cross-channel-forward-persistence = { path = "../communication-cross-channel-forward-persistence" }
-hermes-communication-delivery-intent-ingress-api = { path = "../communication-delivery-intent-ingress-api" }
-hermes-communications-cross-channel-forward-source-api = { path = "../communications-cross-channel-forward-source-api" }
-hermes-events-jetstream = { path = "../platform/events/jetstream" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-communication-cross-channel-forward-api = { path = "../communication-cross-channel-forward-api" }
+makosh-communication-cross-channel-forward-core = { path = "../communication-cross-channel-forward-core" }
+makosh-communication-cross-channel-forward-persistence = { path = "../communication-cross-channel-forward-persistence" }
+makosh-communication-delivery-intent-ingress-api = { path = "../communication-delivery-intent-ingress-api" }
+makosh-communications-cross-channel-forward-source-api = { path = "../communications-cross-channel-forward-source-api" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }

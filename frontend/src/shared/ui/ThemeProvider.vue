@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<{
 	theme: 'base-light'
 })
 
-const classes = computed(() => ['hermes-theme-provider', props.class])
+const classes = computed(() => ['makosh-theme-provider', props.class])
 const resolvedTheme = computed(() => normalizeUiThemeName(props.theme))
 const resolvedThemeSelection = computed(() => themeNameToSelection(resolvedTheme.value))
 </script>

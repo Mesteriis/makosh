@@ -1,6 +1,6 @@
 //! SQLite persistence for immutable canonical owner-local Storage bundles.
 
-use hermes_kernel_control_store::PlatformStorageBundleV1;
+use makosh_kernel_control_store::PlatformStorageBundleV1;
 use rusqlite::{OptionalExtension, params};
 
 use crate::{SqliteControlStore, StoreError};
@@ -14,7 +14,7 @@ impl SqliteControlStore {
         self.with_connection(move |connection| {
             let transaction = connection.transaction()?;
             let changed = transaction.execute(
-                "INSERT INTO hermes_kernel_platform_storage_bundle
+                "INSERT INTO makosh_kernel_platform_storage_bundle
                  (owner_id, revision, sha256, canonical_bytes)
                  VALUES (?1, ?2, ?3, ?4)
                  ON CONFLICT(owner_id, revision) DO NOTHING",
@@ -28,7 +28,7 @@ impl SqliteControlStore {
             if changed == 0 {
                 let existing = transaction.query_row(
                     "SELECT sha256, canonical_bytes
-                     FROM hermes_kernel_platform_storage_bundle
+                     FROM makosh_kernel_platform_storage_bundle
                      WHERE owner_id = ?1 AND revision = ?2",
                     params![bundle.owner_id(), as_sql(bundle.revision())?],
                     |row| Ok((row.get::<_, Vec<u8>>(0)?, row.get::<_, Vec<u8>>(1)?)),
@@ -54,7 +54,7 @@ impl SqliteControlStore {
             connection
                 .query_row(
                     "SELECT sha256, canonical_bytes
-                     FROM hermes_kernel_platform_storage_bundle
+                     FROM makosh_kernel_platform_storage_bundle
                      WHERE owner_id = ?1 AND revision = ?2",
                     params![owner_id, as_sql(revision)?],
                     |row| decode_bundle(row, &owner_id, revision),

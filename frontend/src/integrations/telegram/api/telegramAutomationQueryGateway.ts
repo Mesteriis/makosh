@@ -2,7 +2,7 @@ import type {
 	AutomationPolicyV1,
 	AutomationPreviewReceiptV1,
 	AutomationTemplateV1,
-} from '../../../gen/hermes/telegram/automation/v1/automation_pb'
+} from '../../../gen/makosh/telegram/automation/v1/automation_pb'
 import { getTelegramAutomationQueryClient } from './telegramAutomationQueryClient'
 import { telegramAutomationFailure } from './telegramAutomationFailure'
 

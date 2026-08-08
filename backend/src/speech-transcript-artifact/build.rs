@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/speech_transcript/v1/transcript.proto"],
+            &["proto/makosh/speech_transcript/v1/transcript.proto"],
             &["proto"],
         )
         .expect("Speech transcript artifact protocol must compile");

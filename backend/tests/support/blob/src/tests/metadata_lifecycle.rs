@@ -1,12 +1,12 @@
 use std::fs;
 use std::os::unix::fs::PermissionsExt;
 
-use hermes_blob_protocol::{
+use makosh_blob_protocol::{
     BlobAccessFenceV1, BlobBackupClassV1, BlobCustodyScopeV1, BlobQuotaGrantV1, BlobRefV1,
 };
-use hermes_blob_runtime::lease::BlobKeyLeaseV1;
-use hermes_blob_runtime::metadata::{BlobMetadataError, BlobMetadataLedger};
-use hermes_blob_runtime::storage::{
+use makosh_blob_runtime::lease::BlobKeyLeaseV1;
+use makosh_blob_runtime::metadata::{BlobMetadataError, BlobMetadataLedger};
+use makosh_blob_runtime::storage::{
     BlobContentLifecycleStore, BlobContentWriteRequestV1, BlobLifecycleError, EncryptedBlobStore,
 };
 use sha2::{Digest, Sha256};

@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/engines/search/engine.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/search/engine.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/search/engine.rs`
 - Size bytes / Размер в байтах: `3435`
 - Included characters / Включено символов: `3435`
 - Truncated / Обрезано: `no`
@@ -170,7 +170,7 @@ impl SearchIndex {
 
 ### `backend/src/engines/search/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/search/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/search/errors.rs`
 - Size bytes / Размер в байтах: `646`
 - Included characters / Включено символов: `646`
 - Truncated / Обрезано: `no`
@@ -205,7 +205,7 @@ pub enum SearchError {
 
 ### `backend/src/engines/search/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/search/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/search/mod.rs`
 - Size bytes / Размер в байтах: `143`
 - Included characters / Включено символов: `143`
 - Truncated / Обрезано: `no`
@@ -222,7 +222,7 @@ pub use models::{SearchDocument, SearchResult};
 
 ### `backend/src/engines/search/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/search/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/search/models.rs`
 - Size bytes / Размер в байтах: `2751`
 - Included characters / Включено символов: `2751`
 - Truncated / Обрезано: `no`
@@ -327,7 +327,7 @@ pub fn validate_non_empty(field_name: &'static str, value: &str) -> Result<(), S
 
 ### `backend/src/engines/speaker_identity/engine.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/speaker_identity/engine.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/speaker_identity/engine.rs`
 - Size bytes / Размер в байтах: `3152`
 - Included characters / Включено символов: `3152`
 - Truncated / Обрезано: `no`
@@ -426,7 +426,7 @@ fn normalize_label(value: &str) -> String {
 
 ### `backend/src/engines/speaker_identity/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/speaker_identity/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/speaker_identity/mod.rs`
 - Size bytes / Размер в байтах: `181`
 - Included characters / Включено символов: `181`
 - Truncated / Обрезано: `no`
@@ -443,7 +443,7 @@ pub use models::{
 
 ### `backend/src/engines/speaker_identity/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/speaker_identity/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/speaker_identity/models.rs`
 - Size bytes / Размер в байтах: `1137`
 - Included characters / Включено символов: `1137`
 - Truncated / Обрезано: `no`
@@ -494,7 +494,7 @@ pub struct SpeakerIdentityMergePlan {
 
 ### `backend/src/engines/timeline.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/timeline.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/timeline.rs`
 - Size bytes / Размер в байтах: `3402`
 - Included characters / Включено символов: `3402`
 - Truncated / Обрезано: `no`
@@ -618,7 +618,7 @@ impl TimelineEngine {
 
 ### `backend/src/engines/timeline/analysis.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/timeline/analysis.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/timeline/analysis.rs`
 - Size bytes / Размер в байтах: `5258`
 - Included characters / Включено символов: `5258`
 - Truncated / Обрезано: `no`
@@ -799,7 +799,7 @@ fn events_by_source<'a>(
 
 ### `backend/src/engines/timeline/cross_domain.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/timeline/cross_domain.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/timeline/cross_domain.rs`
 - Size bytes / Размер в байтах: `1034`
 - Included characters / Включено символов: `1034`
 - Truncated / Обрезано: `no`
@@ -845,7 +845,7 @@ pub(super) fn cross_domain_timeline(
 
 ### `backend/src/engines/timeline/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/timeline/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/timeline/errors.rs`
 - Size bytes / Размер в байтах: `841`
 - Included characters / Включено символов: `841`
 - Truncated / Обрезано: `no`
@@ -883,7 +883,7 @@ pub enum TimelineProjectionError {
 
 ### `backend/src/engines/timeline/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/timeline/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/timeline/models.rs`
 - Size bytes / Размер в байтах: `2840`
 - Included characters / Включено символов: `2840`
 - Truncated / Обрезано: `no`
@@ -996,7 +996,7 @@ pub struct TimelineProjectionRun {
 
 ### `backend/src/engines/timeline/policy.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/timeline/policy.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/timeline/policy.rs`
 - Size bytes / Размер в байтах: `673`
 - Included characters / Включено символов: `673`
 - Truncated / Обрезано: `no`
@@ -1027,7 +1027,7 @@ pub(super) fn validate_event(event: &TimelineEventDraft<'_>) -> Result<(), Timel
 
 ### `backend/src/engines/timeline/projection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/timeline/projection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/timeline/projection.rs`
 - Size bytes / Размер в байтах: `1402`
 - Included characters / Включено символов: `1402`
 - Truncated / Обрезано: `no`
@@ -1076,7 +1076,7 @@ pub(super) async fn run_event_log_projection(
 
 ### `backend/src/engines/timeline/replay.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/timeline/replay.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/timeline/replay.rs`
 - Size bytes / Размер в байтах: `2005`
 - Included characters / Включено символов: `2005`
 - Truncated / Обрезано: `no`
@@ -1147,7 +1147,7 @@ pub(super) fn replay_event_log(
 
 ### `backend/src/engines/timeline/summaries.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/timeline/summaries.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/timeline/summaries.rs`
 - Size bytes / Размер в байтах: `1188`
 - Included characters / Включено символов: `1188`
 - Truncated / Обрезано: `no`
@@ -1200,7 +1200,7 @@ pub(super) fn period_summary(
 
 ### `backend/src/engines/timeline/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/timeline/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/timeline/validation.rs`
 - Size bytes / Размер в байтах: `1468`
 - Included characters / Включено символов: `1468`
 - Truncated / Обрезано: `no`
@@ -1263,7 +1263,7 @@ pub(super) fn event_log_source_ref(event: &crate::platform::events::EventEnvelop
 
 ### `backend/src/engines/trust/engine.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/trust/engine.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/trust/engine.rs`
 - Size bytes / Размер в байтах: `1482`
 - Included characters / Включено символов: `1482`
 - Truncated / Обрезано: `no`
@@ -1312,7 +1312,7 @@ impl TrustEngine {
 
 ### `backend/src/engines/trust/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/trust/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/trust/errors.rs`
 - Size bytes / Размер в байтах: `267`
 - Included characters / Включено символов: `267`
 - Truncated / Обрезано: `no`
@@ -1332,7 +1332,7 @@ pub enum TrustEngineError {
 
 ### `backend/src/engines/trust/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/trust/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/trust/mod.rs`
 - Size bytes / Размер в байтах: `133`
 - Included characters / Включено символов: `133`
 - Truncated / Обрезано: `no`
@@ -1349,7 +1349,7 @@ pub use models::TrustSignalKind;
 
 ### `backend/src/engines/trust/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/engines/trust/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/engines/trust/models.rs`
 - Size bytes / Размер в байтах: `1989`
 - Included characters / Включено символов: `1989`
 - Truncated / Обрезано: `no`
@@ -1436,7 +1436,7 @@ pub fn validate_confidence(confidence: f64) -> Result<(), TrustEngineError> {
 
 ### `backend/src/integrations/ai_runtime.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/ai_runtime.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/ai_runtime.rs`
 - Size bytes / Размер в байтах: `5054`
 - Included characters / Включено символов: `5054`
 - Truncated / Обрезано: `no`
@@ -1605,7 +1605,7 @@ impl AiRuntimePort for AiRuntimeClient {
 
 ### `backend/src/integrations/mail/accounts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts.rs`
 - Size bytes / Размер в байтах: `303`
 - Included characters / Включено символов: `303`
 - Truncated / Обрезано: `no`
@@ -1629,7 +1629,7 @@ pub use service::EmailAccountSetupService;
 
 ### `backend/src/integrations/mail/accounts/constants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/constants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/constants.rs`
 - Size bytes / Размер в байтах: `795`
 - Included characters / Включено символов: `795`
 - Truncated / Обрезано: `no`
@@ -1654,7 +1654,7 @@ pub(super) const DEFAULT_GOOGLE_WORKSPACE_SCOPES: [&str; 4] = [
 
 ### `backend/src/integrations/mail/accounts/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/accounts/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/accounts/errors.rs`
 - Size bytes / Размер в байтах: `1110`
 - Included characters / Включено символов: `1110`
 - Truncated / Обрезано: `no`

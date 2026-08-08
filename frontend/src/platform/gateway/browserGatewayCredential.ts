@@ -1,4 +1,4 @@
-const credentialStorageKey = 'hermes.browser.credential-id.v1'
+const credentialStorageKey = 'makosh.browser.credential-id.v1'
 
 /** Only the public WebAuthn credential identifier is persisted client-side. */
 export function readBrowserGatewayCredentialId(): string {

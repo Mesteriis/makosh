@@ -1,5 +1,5 @@
 use crate::domains::communications::blockers::ArchitectureBlocker;
-use hermes_connectrpc_contracts::hermes::communications::v1::CommunicationArchitectureBlocker;
+use makosh_connectrpc_contracts::makosh::communications::v1::CommunicationArchitectureBlocker;
 
 pub(super) fn from_domain(item: ArchitectureBlocker) -> CommunicationArchitectureBlocker {
     CommunicationArchitectureBlocker {

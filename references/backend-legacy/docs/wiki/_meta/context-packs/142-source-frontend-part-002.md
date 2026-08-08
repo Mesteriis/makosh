@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/domains/communications/api/aiState.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/aiState.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/aiState.ts`
 - Size bytes / Размер в байтах: `811`
 - Included characters / Включено символов: `811`
 - Truncated / Обрезано: `no`
@@ -88,7 +88,7 @@ export async function updateMessageAiState(
 
 ### `frontend/src/domains/communications/api/attachmentApi.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/attachmentApi.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/attachmentApi.ts`
 - Size bytes / Размер в байтах: `1143`
 - Included characters / Включено символов: `1143`
 - Truncated / Обрезано: `no`
@@ -137,7 +137,7 @@ export async function translateAttachment(
 
 ### `frontend/src/domains/communications/api/attachmentImportApi.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/attachmentImportApi.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/attachmentImportApi.test.ts`
 - Size bytes / Размер в байтах: `1564`
 - Included characters / Включено символов: `1564`
 - Truncated / Обрезано: `no`
@@ -195,7 +195,7 @@ describe('Communication attachment import API', () => {
 
 ### `frontend/src/domains/communications/api/attachmentImportApi.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/attachmentImportApi.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/attachmentImportApi.ts`
 - Size bytes / Размер в байтах: `946`
 - Included characters / Включено символов: `946`
 - Truncated / Обрезано: `no`
@@ -240,7 +240,7 @@ export async function importCommunicationAttachment(
 
 ### `frontend/src/domains/communications/api/bilingualReplyFlow.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/bilingualReplyFlow.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/bilingualReplyFlow.test.ts`
 - Size bytes / Размер в байтах: `2230`
 - Included characters / Включено символов: `2202`
 - Truncated / Обрезано: `no`
@@ -312,7 +312,7 @@ describe('bilingual reply flow API', () => {
       'http://127.0.0.1:8080/api/v1/communications/messages/mail_message%3A1/bilingual-reply-flow'
     )
     expect(init.method).toBe('POST')
-    expect(init.headers['X-Hermes-Secret']).toBe('test-secret')
+    expect(init.headers['X-Макошь-Secret']).toBe('test-secret')
     expect(JSON.parse(init.body as string)).toEqual({
       reply_text_ru: 'Спасибо.',
       tone: 'business'
@@ -323,7 +323,7 @@ describe('bilingual reply flow API', () => {
 
 ### `frontend/src/domains/communications/api/bilingualReplyFlow.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/bilingualReplyFlow.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/bilingualReplyFlow.ts`
 - Size bytes / Размер в байтах: `538`
 - Included characters / Включено символов: `538`
 - Truncated / Обрезано: `no`
@@ -349,7 +349,7 @@ export async function prepareBilingualReplyFlow(
 
 ### `frontend/src/domains/communications/api/callApi.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/callApi.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/callApi.test.ts`
 - Size bytes / Размер в байтах: `1279`
 - Included characters / Включено символов: `1279`
 - Truncated / Обрезано: `no`
@@ -395,7 +395,7 @@ describe('communications call API', () => {
 
 ### `frontend/src/domains/communications/api/callApi.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/callApi.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/callApi.ts`
 - Size bytes / Размер в байтах: `951`
 - Included characters / Включено символов: `951`
 - Truncated / Обрезано: `no`
@@ -434,7 +434,7 @@ export async function fetchProviderCallTranscript(
 
 ### `frontend/src/domains/communications/api/certificateApi.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/certificateApi.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/certificateApi.ts`
 - Size bytes / Размер в байтах: `1041`
 - Included characters / Включено символов: `1041`
 - Truncated / Обрезано: `no`
@@ -475,7 +475,7 @@ export async function createMailCertificate(
 
 ### `frontend/src/domains/communications/api/communications.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/communications.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/communications.test.ts`
 - Size bytes / Размер в байтах: `45949`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -573,7 +573,7 @@ describe('communications API', () => {
     expect(response.has_more).toBe(true)
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url] = fetchMock.mock.calls[0]
-    expect(url).toBe('http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListMessages')
+    expect(url).toBe('http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListMessages')
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[0][1].body))).toMatchObject({
       accountId: 'account-1',
       workflowState: 'new',
@@ -624,13 +624,13 @@ describe('communications API', () => {
     expect(counts.counts[0]).toEqual({ state: 'reviewed', count: 3 })
     expect(search.results[0].object_kind).toBe('communication_message')
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/TransitionMessageWorkflowState'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/TransitionMessageWorkflowState'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListMessageWorkflowStateCounts'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListMessageWorkflowStateCounts'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/SearchMessages'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/SearchMessages'
     )
   })
 
@@ -696,16 +696,16 @@ describe('communications API', () => {
     expect(tasks.tasks[0].title).toBe('Reply by Friday')
     expect(notes.notes[0].tags).toEqual(['legal'])
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/DetectMessageLanguage'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/DetectMessageLanguage'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/TranslateMessage'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/TranslateMessage'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ExtractMessageTasks'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ExtractMessageTasks'
     )
     expect(fetchMock.mock.calls[3][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ExtractMessageNotes'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ExtractMessageNotes'
     )
   })
 
@@ -768,13 +768,13 @@ describe('communications API', () => {
     expect(explained.reasons).toEqual(['Contains request'])
     expect(smartCc.suggestions).toEqual(['sales@example.com'])
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/AnalyzeMessage'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/AnalyzeMessage'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetMessageExplain'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetMessageExplain'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetMessageSmartCc'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetMessageSmartCc'
     )
   })
 
@@ -830,13 +830,13 @@ describe('communications API', () => {
     expect(auth.auth.spf?.domain).toBe('alice@example.com')
     expect(signature.has_signature).toBe(false)
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetMessageExport'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetMessageExport'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetMessageAuth'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetMessageAuth'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetMessageSignature'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetMessageSignature'
     )
   })
 
@@ -862,7 +862,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/api/communications.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/communications.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/communications.ts`
 - Size bytes / Размер в байтах: `2427`
 - Included characters / Включено символов: `2427`
 - Truncated / Обрезано: `no`
@@ -978,7 +978,7 @@ export type { CommunicationSearchResponse } from '../types/communications'
 
 ### `frontend/src/domains/communications/api/communicationsAttachmentsFolders.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/communicationsAttachmentsFolders.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/communicationsAttachmentsFolders.test.ts`
 - Size bytes / Размер в байтах: `13040`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1035,7 +1035,7 @@ describe('communications API attachment and folder helpers', () => {
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/SearchAttachments'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/SearchAttachments'
     )
     expect(init.method).toBe('POST')
     expect(JSON.parse(decodeBody(init.body))).toEqual({
@@ -1080,7 +1080,7 @@ describe('communications API attachment and folder helpers', () => {
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/TranslateAttachment'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/TranslateAttachment'
     )
     expect(init.method).toBe('POST')
     expect(JSON.parse(decodeBody(init.body))).toEqual({
@@ -1121,7 +1121,7 @@ describe('communications API attachment and folder helpers', () => {
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetAttachmentArchiveInspection'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetAttachmentArchiveInspection'
     )
     expect(init.method).toBe('POST')
     expect(JSON.parse(decodeBody(init.body))).toEqual({
@@ -1161,7 +1161,7 @@ describe('communications API attachment and folder helpers', () => {
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetAttachmentPreview'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetAttachmentPreview'
     )
     expect(init.method).toBe('POST')
     expect(JSON.parse(decodeBody(init.body))).toEqual({
@@ -1261,11 +1261,11 @@ describe('communications API attachment and folder helpers', () => {
     expect(fetchMock).toHaveBeenCalledTimes(5)
     expect(folders.items[0].message_count).toBe(3)
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListFolders'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListFolders'
     )
     expect(fetchMock.mock.calls[1][1].method).toBe('POST')
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/CreateFolder'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/CreateFolder'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[1][1].body))).toEqual({
       name: 'Clients',
@@ -1274,14 +1274,14 @@ describe('communications API attachment and folder helpers', () => {
       sortOrder: 10
     })
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/CopyMessageToFolder'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/CopyMessageToFolder'
     )
     expect(fetchMock.mock.calls[2][1].method).toBe('POST')
     expect(fetchMock.mock.calls[3][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/MoveMessageToFolder'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/MoveMessageToFolder'
     )
     expect(fetchMock.mock.calls[4][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListFolderMessages'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListFolderMessages'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[4][1].body))).toMatchObject({
       folderId: 'mail_folder:1',
@@ -1311,7 +1311,7 @@ describe('communications API attachment and folder helpers', () => {
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/TranslateThread'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/TranslateThread'
     )
     expect(init.method).toBe('POST')
     expect(JSON.parse(decodeBody(init.body))).toEqual({
@@ -1337,7 +1337,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/api/connect/collections.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/connect/collections.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/connect/collections.ts`
 - Size bytes / Размер в байтах: `17818`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1727,7 +1727,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/api/connect/insights.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/connect/insights.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/connect/insights.ts`
 - Size bytes / Размер в байтах: `9336`
 - Included characters / Включено символов: `9336`
 - Truncated / Обрезано: `no`
@@ -2037,7 +2037,7 @@ export async function translateMessageConnect(
 
 ### `frontend/src/domains/communications/api/connect/mapping.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/connect/mapping.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/connect/mapping.ts`
 - Size bytes / Размер в байтах: `15344`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2446,7 +2446,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/api/connect/messageLifecycle.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/connect/messageLifecycle.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/connect/messageLifecycle.ts`
 - Size bytes / Размер в байтах: `15243`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2790,13 +2790,13 @@ export async function fetchMessageAuthConnect(messageId: string): Promise<Messag
             domain: response.auth.dmarc.domain ?? null,
             ip: response.auth.dmarc.ip ?? null,
             selector: response.auth.dmarc.selector ?? null,
-         
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `frontend/src/domains/communications/api/connect/shared.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/connect/shared.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/connect/shared.ts`
 - Size bytes / Размер в байтах: `696`
 - Included characters / Включено символов: `696`
 - Truncated / Обрезано: `no`
@@ -2810,12 +2810,12 @@ export async function postCommunicationsConnectJson<T>(
 ): Promise<T> {
   const apiClient = ApiClient.instance
   const response = await fetch(
-    `${apiClient.getBaseUrl()}/hermes.communications.v1.CommunicationsService/${method}`,
+    `${apiClient.getBaseUrl()}/makosh.communications.v1.CommunicationsService/${method}`,
     {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Hermes-Secret': apiClient.getSecret()
+        'X-Макошь-Secret': apiClient.getSecret()
       },
       body: JSON.stringify(body)
     }
@@ -2829,7 +2829,7 @@ export async function postCommunicationsConnectJson<T>(
 
 ### `frontend/src/domains/communications/api/connectCommunications.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/connectCommunications.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/connectCommunications.test.ts`
 - Size bytes / Размер в байтах: `61306`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2970,9 +2970,9 @@ describe('communications ConnectRPC API', () => {
     expect(response.has_more).toBe(true)
     expect(fetchMock).toHaveBeenCalledOnce()
     const [url, options] = fetchMock.mock.calls[0]
-    expect(url).toBe('http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListMessages')
+    expect(url).toBe('http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListMessages')
     expect(options.method).toBe('POST')
-    expect(new Headers(options.headers).get('X-Hermes-Secret')).toBe('test-secret')
+    expect(new Headers(options.headers).get('X-Макошь-Secret')).toBe('test-secret')
     expect(JSON.parse(decodeBody(options.body))).toMatchObject({
       accountId: 'account-1',
       workflowState: 'needs_action',
@@ -3039,13 +3039,13 @@ describe('communications ConnectRPC API', () => {
       title: '[Ada] Quarterly update'
     })
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/TransitionMessageWorkflowState'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/TransitionMessageWorkflowState'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListMessageWorkflowStateCounts'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListMessageWorkflowStateCounts'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/SearchMessages'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/SearchMessages'
     )
     expect(JSON.parse(decodeBody(fetchMock.mock.calls[0][1].body))).toMatchObject({
       messageId: 'msg-1',
@@ -3164,16 +3164,16 @@ describe('communications ConnectRPC API', () => {
       resolution: 'Connect callback/runtime ingestion'
     }])
     expect(fetchMock.mock.calls[0][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListSubscriptions'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListSubscriptions'
     )
     expect(fetchMock.mock.calls[1][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/GetMailboxHealth'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/GetMailboxHealth'
     )
     expect(fetchMock.mock.calls[2][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListTopSenders'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListTopSenders'
     )
     expect(fetchMock.mock.calls[3][0]).toBe(
-      'http://127.0.0.1:8080/hermes.communications.v1.CommunicationsService/ListCommunicationBlockers'
+      'http://127.0.0.1:8080/makosh.communications.v1.CommunicationsService/ListCommunicationBlockers'
     )
   })
 
@@ -3203,7 +3203,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/api/connectCommunications.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/connectCommunications.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/connectCommunications.ts`
 - Size bytes / Размер в байтах: `2242`
 - Included characters / Включено символов: `2242`
 - Truncated / Обрезано: `no`
@@ -3287,7 +3287,7 @@ export {
 
 ### `frontend/src/domains/communications/api/folderApi.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/folderApi.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/folderApi.ts`
 - Size bytes / Размер в байтах: `1871`
 - Included characters / Включено символов: `1871`
 - Truncated / Обрезано: `no`
@@ -3360,7 +3360,7 @@ export async function moveMessageToFolder(
 
 ### `frontend/src/domains/communications/api/messageApi.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/messageApi.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/messageApi.ts`
 - Size bytes / Размер в байтах: `9547`
 - Included characters / Включено символов: `9547`
 - Truncated / Обрезано: `no`
@@ -3686,7 +3686,7 @@ export async function fetchCommunicationBlockers(): Promise<CommunicationArchite
 
 ### `frontend/src/domains/communications/api/outboxApi.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/outboxApi.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/outboxApi.ts`
 - Size bytes / Размер в байтах: `640`
 - Included characters / Включено символов: `640`
 - Truncated / Обрезано: `no`
@@ -3711,7 +3711,7 @@ export async function undoOutboxItem(outboxId: string): Promise<CommunicationOut
 
 ### `frontend/src/domains/communications/api/providerChannels.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/providerChannels.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/providerChannels.boundary.test.ts`
 - Size bytes / Размер в байтах: `2613`
 - Included characters / Включено символов: `2613`
 - Truncated / Обрезано: `no`
@@ -3781,7 +3781,7 @@ describe('communications provider-neutral channel API boundary', () => {
 
 ### `frontend/src/domains/communications/api/providerChannels.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/providerChannels.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/providerChannels.ts`
 - Size bytes / Размер в байтах: `6142`
 - Included characters / Включено символов: `6142`
 - Truncated / Обрезано: `no`
@@ -3961,7 +3961,7 @@ export async function searchCommunicationTopics(
 
 ### `frontend/src/domains/communications/api/readReceipts.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/readReceipts.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/readReceipts.test.ts`
 - Size bytes / Размер в байтах: `1555`
 - Included characters / Включено символов: `1555`
 - Truncated / Обрезано: `no`

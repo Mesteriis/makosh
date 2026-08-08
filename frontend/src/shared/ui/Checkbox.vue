@@ -15,7 +15,7 @@ const emit = defineEmits<{
 	'update:modelValue': [value: boolean]
 }>()
 
-const classes = computed(() => ['hermes-choice', { 'hermes-choice--disabled': props.disabled }, props.class])
+const classes = computed(() => ['makosh-choice', { 'makosh-choice--disabled': props.disabled }, props.class])
 
 function handleChange(event: Event): void {
 	const target = event.target as HTMLInputElement
@@ -26,7 +26,7 @@ function handleChange(event: Event): void {
 <template>
 	<label :class="classes">
 		<input
-			class="hermes-checkbox-input"
+			class="makosh-checkbox-input"
 			:checked="modelValue"
 			:disabled="disabled"
 			type="checkbox"

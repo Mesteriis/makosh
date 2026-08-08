@@ -1,25 +1,25 @@
 //! Exact event-only adapter from integration call observations to Communications state.
 
-use hermes_communications_call_evidence_core::{
+use makosh_communications_call_evidence_core::{
     RecordCallEvidenceV1, decode_call_evidence_observation_v1,
 };
-use hermes_communications_call_evidence_ingress::{
+use makosh_communications_call_evidence_ingress::{
     call_evidence_observed_contract_reference_v1, wire::CallEvidenceObservedV1,
 };
-use hermes_communications_call_evidence_persistence::{
+use makosh_communications_call_evidence_persistence::{
     CallEvidenceConsumeOutcomeV1, CallEvidencePersistenceErrorV1,
     CommunicationsCallEvidencePersistenceV1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ActorKindV1, DurableEnvelopeV1, FenceKindV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 
 use crate::consumer::{CommunicationsDeliveryErrorV1, CommunicationsEventConsumeErrorV1};
@@ -176,7 +176,7 @@ fn persistence_error(error: CallEvidencePersistenceErrorV1) -> CommunicationsDel
 
 #[cfg(test)]
 mod tests {
-    use hermes_communications_call_evidence_ingress::{
+    use makosh_communications_call_evidence_ingress::{
         CallDirectionV1, CallEvidenceEnvelopeContextV1, CallEvidenceObservationDraftV1,
         CallLifecycleStateV1, CallMediaKindV1, CallProviderProvenanceV1,
         build_call_evidence_observed_outbox_record_v1,

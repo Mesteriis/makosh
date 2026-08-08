@@ -1,3 +1,3 @@
 # ProgressBar
 
-Native progress-based horizontal loading indicator with Hermes sizing and tone tokens.
+Native progress-based horizontal loading indicator with Макошь sizing and tone tokens.

@@ -44,12 +44,12 @@ use crate::domains::tasks::api::{NewTask, TaskError};
 use crate::domains::tasks::command_service::{TaskCommandService, TaskCommandServiceError};
 use crate::domains::tasks::core::errors::TaskCoreError;
 use crate::domains::tasks::workflow_commands::TaskWorkflowCommands;
-use hermes_observations_api::models::{NewObservation, Observation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::review_links::{
+use makosh_observations_api::models::{NewObservation, Observation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::review_links::{
     link_domain_entity, materialize_review_transition_link,
 };
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_postgres::store::ObservationStore;
 
 #[derive(Debug, Error)]
 pub enum ReviewPromotionError {
@@ -287,7 +287,7 @@ impl ReviewPromotionService {
                         source_kind: Some("observation".to_owned()),
                         source_id: Some(primary_observation_id),
                         source_type: Some("observation".to_owned()),
-                        hermes_status: Some("ready".to_owned()),
+                        makosh_status: Some("ready".to_owned()),
                         priority_score: Some(item.confidence),
                         why: Some(item.summary.clone()),
                         tags: Some(json!(["review_promoted"])),
@@ -767,7 +767,7 @@ impl ReviewPromotionService {
                 item.title.trim(),
                 "review_promoted",
                 item.summary.trim(),
-                "Hermes Review",
+                "Макошь Review",
                 review_keywords(item),
             ))
             .await?;

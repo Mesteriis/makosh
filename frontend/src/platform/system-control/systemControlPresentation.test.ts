@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { ClientSurfaceAvailabilityStateV1 } from '../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import { ClientSurfaceAvailabilityStateV1 } from '../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import { recoveryClientBootstrap } from '../gateway/clientBootstrap'
 import {
   systemControlAvailableSurfaceCount,

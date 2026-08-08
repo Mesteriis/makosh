@@ -64,7 +64,7 @@ const emit = defineEmits<{
 	change: [value: string]
 }>()
 
-const generatedEditorId = `hermes-rich-text-editor-${++richTextEditorId}`
+const generatedEditorId = `makosh-rich-text-editor-${++richTextEditorId}`
 const editorRevision = ref(0)
 const editorText = ref('')
 const currentHtml = ref(normalizeEditorHtml(props.modelValue))
@@ -78,7 +78,7 @@ const editor = useEditor({
 			id: props.id ?? generatedEditorId,
 			role: 'textbox',
 			'aria-label': props.label ?? props.placeholder,
-			class: 'hermes-rich-text-editor__prosemirror'
+			class: 'makosh-rich-text-editor__prosemirror'
 		}
 	},
 	onCreate: ({ editor: currentEditor }) => syncEditorSnapshot(currentEditor),
@@ -97,16 +97,16 @@ const remainingCharacters = computed(() => {
 })
 const isOverLimit = computed(() => typeof remainingCharacters.value === 'number' && remainingCharacters.value < 0)
 const classes = computed(() => [
-	'hermes-rich-text-editor',
+	'makosh-rich-text-editor',
 	{
-		'hermes-rich-text-editor--disabled': props.disabled,
-		'hermes-rich-text-editor--over-limit': isOverLimit.value
+		'makosh-rich-text-editor--disabled': props.disabled,
+		'makosh-rich-text-editor--over-limit': isOverLimit.value
 	},
 	props.class
 ])
 const counterClasses = computed(() => [
-	'hermes-rich-text-editor__counter',
-	{ 'hermes-rich-text-editor__counter--over': isOverLimit.value }
+	'makosh-rich-text-editor__counter',
+	{ 'makosh-rich-text-editor__counter--over': isOverLimit.value }
 ])
 
 watch(() => props.disabled, (disabled) => {
@@ -129,7 +129,7 @@ watch([() => props.id, () => props.label, () => props.placeholder], () => {
 				id: editorId.value,
 				role: 'textbox',
 				'aria-label': props.label ?? props.placeholder,
-				class: 'hermes-rich-text-editor__prosemirror'
+				class: 'makosh-rich-text-editor__prosemirror'
 			}
 		}
 	})
@@ -205,8 +205,8 @@ function isActionActive(action: RichTextEditorAction): boolean {
 
 function actionClass(action: RichTextEditorToolbarAction, index: number): string {
 	return [
-		isActionActive(action.id) ? 'hermes-rich-text-editor__action--active' : '',
-		isSeparatedAction(action, index) ? 'hermes-rich-text-editor__action--separated' : ''
+		isActionActive(action.id) ? 'makosh-rich-text-editor__action--active' : '',
+		isSeparatedAction(action, index) ? 'makosh-rich-text-editor__action--separated' : ''
 	].filter(Boolean).join(' ')
 }
 
@@ -291,12 +291,12 @@ function toggleLink(): void {
 
 <template>
 	<section :class="classes" v-bind="$attrs">
-		<div v-if="label || helper || remainingCharacters !== null" class="hermes-rich-text-editor__header">
-			<div class="hermes-rich-text-editor__copy">
-				<label v-if="label" class="hermes-rich-text-editor__label" :for="editorId">
+		<div v-if="label || helper || remainingCharacters !== null" class="makosh-rich-text-editor__header">
+			<div class="makosh-rich-text-editor__copy">
+				<label v-if="label" class="makosh-rich-text-editor__label" :for="editorId">
 					{{ label }}
 				</label>
-				<p v-if="helper" class="hermes-rich-text-editor__helper">
+				<p v-if="helper" class="makosh-rich-text-editor__helper">
 					{{ helper }}
 				</p>
 			</div>
@@ -305,7 +305,7 @@ function toggleLink(): void {
 			</span>
 		</div>
 
-		<div class="hermes-rich-text-editor__toolbar" role="toolbar" :aria-label="toolbarLabel">
+		<div class="makosh-rich-text-editor__toolbar" role="toolbar" :aria-label="toolbarLabel">
 			<Tooltip v-for="(action, index) in toolbarActions" :key="action.id" :content="action.label">
 				<template #trigger>
 					<IconButton
@@ -323,14 +323,14 @@ function toggleLink(): void {
 			<slot name="toolbar-end" />
 		</div>
 
-		<div class="hermes-rich-text-editor__surface">
-			<span v-if="isEditorEmpty" class="hermes-rich-text-editor__placeholder">
+		<div class="makosh-rich-text-editor__surface">
+			<span v-if="isEditorEmpty" class="makosh-rich-text-editor__placeholder">
 				{{ placeholder }}
 			</span>
-			<EditorContent :editor="editor" class="hermes-rich-text-editor__content" />
+			<EditorContent :editor="editor" class="makosh-rich-text-editor__content" />
 		</div>
 
-		<div class="hermes-rich-text-editor__footer">
+		<div class="makosh-rich-text-editor__footer">
 			<span>{{ outputLabel }}</span>
 			<code>html</code>
 		</div>

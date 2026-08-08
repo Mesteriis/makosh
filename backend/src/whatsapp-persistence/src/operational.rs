@@ -2,8 +2,8 @@
 //! transaction. Communications tables and provider session state are outside
 //! this module.
 
-use hermes_events_protocol::delivery::OutboxRecordV1;
-use hermes_whatsapp_api::{
+use makosh_events_protocol::delivery::OutboxRecordV1;
+use makosh_whatsapp_api::{
     WhatsAppDialog, WhatsAppMessage, WhatsAppParticipant, WhatsAppProviderEvent,
     operational::{
         WhatsAppOperationalPageV1, WhatsAppOperationalQueryResponseV1, WhatsAppOperationalQueryV1,
@@ -71,7 +71,7 @@ impl WhatsAppDurablePersistence {
             .await
             .map_err(|_| WhatsAppDurablePersistenceError::Database)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.whatsapp_host_observations (account_id, provider_event_id, evidence_kind, observed_at_unix_seconds, operational_sha256) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (account_id, provider_event_id) DO NOTHING RETURNING account_id",
+            "INSERT INTO makosh_data.whatsapp_host_observations (account_id, provider_event_id, evidence_kind, observed_at_unix_seconds, operational_sha256) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (account_id, provider_event_id) DO NOTHING RETURNING account_id",
         )
         .bind(&observation.account_id)
         .bind(&observation.provider_event_id)
@@ -104,7 +104,7 @@ impl WhatsAppDurablePersistence {
         }
         if let Some(record) = outbox {
             sqlx::query(
-                "INSERT INTO hermes_data.whatsapp_communications_outbox (message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING",
+                "INSERT INTO makosh_data.whatsapp_communications_outbox (message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING",
             )
             .bind(record.message_id().as_slice())
             .bind(record.envelope_sha256().as_slice())
@@ -210,7 +210,7 @@ impl WhatsAppDurablePersistence {
         validate_operational_replay_request(request)
             .map_err(|_| WhatsAppDurablePersistenceError::InvalidRow)?;
         let bounds = sqlx::query(
-            "SELECT MIN(sequence) AS earliest_sequence, MAX(sequence) AS latest_sequence FROM hermes_data.whatsapp_operational_events WHERE account_id = $1",
+            "SELECT MIN(sequence) AS earliest_sequence, MAX(sequence) AS latest_sequence FROM makosh_data.whatsapp_operational_events WHERE account_id = $1",
         )
         .bind(&request.account_id)
         .fetch_one(&self.pool)
@@ -224,7 +224,7 @@ impl WhatsAppDurablePersistence {
             true
         } else {
             sqlx::query_scalar::<_, bool>(
-                "SELECT EXISTS(SELECT 1 FROM hermes_data.whatsapp_operational_events WHERE account_id = $1 AND sequence = $2)",
+                "SELECT EXISTS(SELECT 1 FROM makosh_data.whatsapp_operational_events WHERE account_id = $1 AND sequence = $2)",
             )
             .bind(&request.account_id)
             .bind(after_sequence)
@@ -237,7 +237,7 @@ impl WhatsAppDurablePersistence {
             return replay_response(&request.account_id, earliest, latest, Vec::new(), 0, true);
         }
         let rows = sqlx::query(
-            "SELECT sequence, exact_event_bytes, event_sha256 FROM hermes_data.whatsapp_operational_events WHERE account_id = $1 AND sequence > $2 ORDER BY sequence ASC LIMIT $3",
+            "SELECT sequence, exact_event_bytes, event_sha256 FROM makosh_data.whatsapp_operational_events WHERE account_id = $1 AND sequence > $2 ORDER BY sequence ASC LIMIT $3",
         )
         .bind(&request.account_id)
         .bind(after_sequence)
@@ -297,7 +297,7 @@ impl WhatsAppDurablePersistence {
             .await
             .map_err(|_| WhatsAppDurablePersistenceError::Database)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.whatsapp_operational_controls (account_id, provider_event_id, control_kind, content_sha256, observed_at_unix_seconds) VALUES ($1, $2, 1, $3, $4) ON CONFLICT (account_id, provider_event_id) DO NOTHING RETURNING account_id",
+            "INSERT INTO makosh_data.whatsapp_operational_controls (account_id, provider_event_id, control_kind, content_sha256, observed_at_unix_seconds) VALUES ($1, $2, 1, $3, $4) ON CONFLICT (account_id, provider_event_id) DO NOTHING RETURNING account_id",
         )
         .bind(account_id)
         .bind(provider_event_id)
@@ -308,7 +308,7 @@ impl WhatsAppDurablePersistence {
         .map_err(|_| WhatsAppDurablePersistenceError::Database)?;
         if inserted.is_none() {
             let row = sqlx::query(
-                "SELECT content_sha256, observed_at_unix_seconds FROM hermes_data.whatsapp_operational_controls WHERE account_id = $1 AND provider_event_id = $2",
+                "SELECT content_sha256, observed_at_unix_seconds FROM makosh_data.whatsapp_operational_controls WHERE account_id = $1 AND provider_event_id = $2",
             )
             .bind(account_id)
             .bind(provider_event_id)
@@ -333,14 +333,14 @@ impl WhatsAppDurablePersistence {
             return Ok(false);
         }
         let latest_sequence: i64 = sqlx::query_scalar(
-            "SELECT COALESCE(MAX(sequence), 0) FROM hermes_data.whatsapp_operational_events WHERE account_id = $1",
+            "SELECT COALESCE(MAX(sequence), 0) FROM makosh_data.whatsapp_operational_events WHERE account_id = $1",
         )
         .bind(account_id)
         .fetch_one(&mut *transaction)
         .await
         .map_err(|_| WhatsAppDurablePersistenceError::Database)?;
         sqlx::query(
-            "INSERT INTO hermes_data.whatsapp_operational_runtime_status (account_id, runtime_state, projection_ready, observed_at_unix_seconds, last_sequence) VALUES ($1, NULL, $2, $3, $4) ON CONFLICT (account_id) DO UPDATE SET projection_ready = EXCLUDED.projection_ready, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, last_sequence = GREATEST(hermes_data.whatsapp_operational_runtime_status.last_sequence, EXCLUDED.last_sequence) WHERE EXCLUDED.observed_at_unix_seconds >= hermes_data.whatsapp_operational_runtime_status.observed_at_unix_seconds",
+            "INSERT INTO makosh_data.whatsapp_operational_runtime_status (account_id, runtime_state, projection_ready, observed_at_unix_seconds, last_sequence) VALUES ($1, NULL, $2, $3, $4) ON CONFLICT (account_id) DO UPDATE SET projection_ready = EXCLUDED.projection_ready, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, last_sequence = GREATEST(makosh_data.whatsapp_operational_runtime_status.last_sequence, EXCLUDED.last_sequence) WHERE EXCLUDED.observed_at_unix_seconds >= makosh_data.whatsapp_operational_runtime_status.observed_at_unix_seconds",
         )
         .bind(account_id)
         .bind(*complete)
@@ -378,7 +378,7 @@ impl WhatsAppDurablePersistence {
         );
         let before = decode_cursor(cursor.as_deref(), "messages", &scope)?;
         let mut builder = QueryBuilder::<Postgres>::new(
-            "SELECT account_id, provider_chat_id, provider_message_id, sender_id, sender_display_name, body_text, reply_to_provider_message_id, delivery_state, occurred_at_unix_seconds, last_sequence FROM hermes_data.whatsapp_operational_messages WHERE account_id = ",
+            "SELECT account_id, provider_chat_id, provider_message_id, sender_id, sender_display_name, body_text, reply_to_provider_message_id, delivery_state, occurred_at_unix_seconds, last_sequence FROM makosh_data.whatsapp_operational_messages WHERE account_id = ",
         );
         builder.push_bind(account_id);
         if let Some(provider_chat_id) = provider_chat_id {
@@ -438,7 +438,7 @@ impl WhatsAppDurablePersistence {
         let scope = cursor_scope("dialogs", &[account_id]);
         let before = decode_cursor(cursor.as_deref(), "dialogs", &scope)?;
         let rows = sqlx::query(
-            "SELECT account_id, provider_chat_id, title, dialog_kind, is_archived, is_pinned, is_muted, is_unread, unread_count, participant_count, observed_at_unix_seconds, last_sequence FROM hermes_data.whatsapp_operational_dialogs WHERE account_id = $1 AND last_sequence < $2 ORDER BY last_sequence DESC LIMIT $3",
+            "SELECT account_id, provider_chat_id, title, dialog_kind, is_archived, is_pinned, is_muted, is_unread, unread_count, participant_count, observed_at_unix_seconds, last_sequence FROM makosh_data.whatsapp_operational_dialogs WHERE account_id = $1 AND last_sequence < $2 ORDER BY last_sequence DESC LIMIT $3",
         )
         .bind(account_id)
         .bind(before)
@@ -482,7 +482,7 @@ impl WhatsAppDurablePersistence {
         let scope = cursor_scope("participants", &[account_id, provider_chat_id]);
         let before = decode_cursor(cursor.as_deref(), "participants", &scope)?;
         let rows = sqlx::query(
-            "SELECT account_id, provider_chat_id, provider_identity_id, display_name, participant_role, participant_status, is_self, observed_at_unix_seconds, last_sequence FROM hermes_data.whatsapp_operational_participants WHERE account_id = $1 AND provider_chat_id = $2 AND last_sequence < $3 ORDER BY last_sequence DESC LIMIT $4",
+            "SELECT account_id, provider_chat_id, provider_identity_id, display_name, participant_role, participant_status, is_self, observed_at_unix_seconds, last_sequence FROM makosh_data.whatsapp_operational_participants WHERE account_id = $1 AND provider_chat_id = $2 AND last_sequence < $3 ORDER BY last_sequence DESC LIMIT $4",
         )
         .bind(account_id)
         .bind(provider_chat_id)
@@ -517,7 +517,7 @@ impl WhatsAppDurablePersistence {
     async fn list_events(
         &self,
         account_id: &str,
-        kind: Option<hermes_whatsapp_api::WhatsAppProviderEventKind>,
+        kind: Option<makosh_whatsapp_api::WhatsAppProviderEventKind>,
         provider_chat_id: Option<&str>,
         cursor: &Option<String>,
         limit: u32,
@@ -535,7 +535,7 @@ impl WhatsAppDurablePersistence {
         );
         let before = decode_cursor(cursor.as_deref(), "events", &scope)?;
         let mut builder = QueryBuilder::<Postgres>::new(
-            "SELECT sequence, exact_event_bytes, event_sha256 FROM hermes_data.whatsapp_operational_events WHERE account_id = ",
+            "SELECT sequence, exact_event_bytes, event_sha256 FROM makosh_data.whatsapp_operational_events WHERE account_id = ",
         );
         builder.push_bind(account_id);
         if let Some(kind) = kind {
@@ -577,14 +577,14 @@ impl WhatsAppDurablePersistence {
         account_id: &str,
     ) -> Result<WhatsAppOperationalQueryResponseV1, WhatsAppDurablePersistenceError> {
         let row = sqlx::query(
-            "SELECT runtime_state, projection_ready FROM hermes_data.whatsapp_operational_runtime_status WHERE account_id = $1",
+            "SELECT runtime_state, projection_ready FROM makosh_data.whatsapp_operational_runtime_status WHERE account_id = $1",
         )
         .bind(account_id)
         .fetch_optional(&self.pool)
         .await
         .map_err(|_| WhatsAppDurablePersistenceError::Database)?;
         let latest_event_sequence: i64 = sqlx::query_scalar(
-            "SELECT COALESCE(MAX(sequence), 0) FROM hermes_data.whatsapp_operational_events WHERE account_id = $1",
+            "SELECT COALESCE(MAX(sequence), 0) FROM makosh_data.whatsapp_operational_events WHERE account_id = $1",
         )
         .bind(account_id)
         .fetch_one(&self.pool)
@@ -663,7 +663,7 @@ async fn verify_existing_observation(
     operational_sha256: Option<&[u8; 32]>,
 ) -> Result<(), WhatsAppDurablePersistenceError> {
     let row = sqlx::query(
-        "SELECT evidence_kind, observed_at_unix_seconds, operational_sha256 FROM hermes_data.whatsapp_host_observations WHERE account_id = $1 AND provider_event_id = $2",
+        "SELECT evidence_kind, observed_at_unix_seconds, operational_sha256 FROM makosh_data.whatsapp_host_observations WHERE account_id = $1 AND provider_event_id = $2",
     )
     .bind(&observation.account_id)
     .bind(&observation.provider_event_id)
@@ -701,7 +701,7 @@ async fn persist_operational_observation(
         } => {
             let exact_event_bytes = encode_provider_event(event);
             let sequence: i64 = sqlx::query_scalar(
-                "INSERT INTO hermes_data.whatsapp_operational_events (account_id, provider_event_id, event_kind, provider_chat_id, exact_event_bytes, event_sha256, observed_at_unix_seconds) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING sequence",
+                "INSERT INTO makosh_data.whatsapp_operational_events (account_id, provider_event_id, event_kind, provider_chat_id, exact_event_bytes, event_sha256, observed_at_unix_seconds) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING sequence",
             )
             .bind(&host.account_id)
             .bind(provider_event_id)
@@ -732,7 +732,7 @@ async fn apply_projection(
             account_id, state, ..
         } => {
             sqlx::query(
-                "INSERT INTO hermes_data.whatsapp_operational_runtime_status (account_id, runtime_state, projection_ready, observed_at_unix_seconds, last_sequence) VALUES ($1, $2, FALSE, $3, $4) ON CONFLICT (account_id) DO UPDATE SET runtime_state = EXCLUDED.runtime_state, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, last_sequence = EXCLUDED.last_sequence WHERE EXCLUDED.observed_at_unix_seconds >= hermes_data.whatsapp_operational_runtime_status.observed_at_unix_seconds",
+                "INSERT INTO makosh_data.whatsapp_operational_runtime_status (account_id, runtime_state, projection_ready, observed_at_unix_seconds, last_sequence) VALUES ($1, $2, FALSE, $3, $4) ON CONFLICT (account_id) DO UPDATE SET runtime_state = EXCLUDED.runtime_state, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, last_sequence = EXCLUDED.last_sequence WHERE EXCLUDED.observed_at_unix_seconds >= makosh_data.whatsapp_operational_runtime_status.observed_at_unix_seconds",
             )
             .bind(account_id)
             .bind(runtime_state_name(*state))
@@ -756,7 +756,7 @@ async fn apply_projection(
                 return Ok(());
             }
             sqlx::query(
-                "INSERT INTO hermes_data.whatsapp_operational_messages (account_id, provider_chat_id, provider_message_id, sender_id, sender_display_name, body_text, reply_to_provider_message_id, delivery_state, occurred_at_unix_seconds, observed_at_unix_seconds, last_sequence) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) ON CONFLICT (account_id, provider_chat_id, provider_message_id) DO UPDATE SET sender_id = EXCLUDED.sender_id, sender_display_name = EXCLUDED.sender_display_name, body_text = EXCLUDED.body_text, reply_to_provider_message_id = EXCLUDED.reply_to_provider_message_id, delivery_state = EXCLUDED.delivery_state, occurred_at_unix_seconds = EXCLUDED.occurred_at_unix_seconds, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, last_sequence = EXCLUDED.last_sequence WHERE EXCLUDED.observed_at_unix_seconds >= hermes_data.whatsapp_operational_messages.observed_at_unix_seconds",
+                "INSERT INTO makosh_data.whatsapp_operational_messages (account_id, provider_chat_id, provider_message_id, sender_id, sender_display_name, body_text, reply_to_provider_message_id, delivery_state, occurred_at_unix_seconds, observed_at_unix_seconds, last_sequence) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) ON CONFLICT (account_id, provider_chat_id, provider_message_id) DO UPDATE SET sender_id = EXCLUDED.sender_id, sender_display_name = EXCLUDED.sender_display_name, body_text = EXCLUDED.body_text, reply_to_provider_message_id = EXCLUDED.reply_to_provider_message_id, delivery_state = EXCLUDED.delivery_state, occurred_at_unix_seconds = EXCLUDED.occurred_at_unix_seconds, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, last_sequence = EXCLUDED.last_sequence WHERE EXCLUDED.observed_at_unix_seconds >= makosh_data.whatsapp_operational_messages.observed_at_unix_seconds",
             )
             .bind(&value.account_id)
             .bind(&value.provider_chat_id)
@@ -781,7 +781,7 @@ async fn apply_projection(
             ..
         } => {
             sqlx::query(
-                "UPDATE hermes_data.whatsapp_operational_messages SET body_text = COALESCE($4, body_text), observed_at_unix_seconds = $5, last_sequence = $6 WHERE account_id = $1 AND provider_chat_id = $2 AND provider_message_id = $3 AND observed_at_unix_seconds <= $5",
+                "UPDATE makosh_data.whatsapp_operational_messages SET body_text = COALESCE($4, body_text), observed_at_unix_seconds = $5, last_sequence = $6 WHERE account_id = $1 AND provider_chat_id = $2 AND provider_message_id = $3 AND observed_at_unix_seconds <= $5",
             )
             .bind(account_id)
             .bind(provider_chat_id)
@@ -810,7 +810,7 @@ async fn apply_projection(
             )
             .await?;
             sqlx::query(
-                "DELETE FROM hermes_data.whatsapp_operational_messages WHERE account_id = $1 AND provider_chat_id = $2 AND provider_message_id = $3 AND observed_at_unix_seconds <= $4",
+                "DELETE FROM makosh_data.whatsapp_operational_messages WHERE account_id = $1 AND provider_chat_id = $2 AND provider_message_id = $3 AND observed_at_unix_seconds <= $4",
             )
             .bind(account_id)
             .bind(provider_chat_id)
@@ -828,7 +828,7 @@ async fn apply_projection(
             ..
         } => {
             sqlx::query(
-                "UPDATE hermes_data.whatsapp_operational_messages SET delivery_state = $4, observed_at_unix_seconds = $5, last_sequence = $6 WHERE account_id = $1 AND provider_chat_id = $2 AND provider_message_id = $3 AND observed_at_unix_seconds <= $5",
+                "UPDATE makosh_data.whatsapp_operational_messages SET delivery_state = $4, observed_at_unix_seconds = $5, last_sequence = $6 WHERE account_id = $1 AND provider_chat_id = $2 AND provider_message_id = $3 AND observed_at_unix_seconds <= $5",
             )
             .bind(account_id)
             .bind(provider_chat_id)
@@ -852,7 +852,7 @@ async fn apply_projection(
                 .transpose()
                 .map_err(|_| WhatsAppDurablePersistenceError::InvalidRow)?;
             sqlx::query(
-                "INSERT INTO hermes_data.whatsapp_operational_dialogs (account_id, provider_chat_id, title, dialog_kind, is_archived, is_pinned, is_muted, is_unread, unread_count, participant_count, observed_at_unix_seconds, last_sequence) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) ON CONFLICT (account_id, provider_chat_id) DO UPDATE SET title = EXCLUDED.title, dialog_kind = EXCLUDED.dialog_kind, is_archived = EXCLUDED.is_archived, is_pinned = EXCLUDED.is_pinned, is_muted = EXCLUDED.is_muted, is_unread = EXCLUDED.is_unread, unread_count = EXCLUDED.unread_count, participant_count = EXCLUDED.participant_count, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, last_sequence = EXCLUDED.last_sequence WHERE EXCLUDED.observed_at_unix_seconds >= hermes_data.whatsapp_operational_dialogs.observed_at_unix_seconds",
+                "INSERT INTO makosh_data.whatsapp_operational_dialogs (account_id, provider_chat_id, title, dialog_kind, is_archived, is_pinned, is_muted, is_unread, unread_count, participant_count, observed_at_unix_seconds, last_sequence) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) ON CONFLICT (account_id, provider_chat_id) DO UPDATE SET title = EXCLUDED.title, dialog_kind = EXCLUDED.dialog_kind, is_archived = EXCLUDED.is_archived, is_pinned = EXCLUDED.is_pinned, is_muted = EXCLUDED.is_muted, is_unread = EXCLUDED.is_unread, unread_count = EXCLUDED.unread_count, participant_count = EXCLUDED.participant_count, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, last_sequence = EXCLUDED.last_sequence WHERE EXCLUDED.observed_at_unix_seconds >= makosh_data.whatsapp_operational_dialogs.observed_at_unix_seconds",
             )
             .bind(&value.account_id)
             .bind(&value.provider_chat_id)
@@ -884,7 +884,7 @@ async fn apply_projection(
                 return Ok(());
             }
             sqlx::query(
-                "INSERT INTO hermes_data.whatsapp_operational_participants (account_id, provider_chat_id, provider_identity_id, display_name, participant_role, participant_status, is_self, observed_at_unix_seconds, last_sequence) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (account_id, provider_chat_id, provider_identity_id) DO UPDATE SET display_name = EXCLUDED.display_name, participant_role = EXCLUDED.participant_role, participant_status = EXCLUDED.participant_status, is_self = EXCLUDED.is_self, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, last_sequence = EXCLUDED.last_sequence WHERE EXCLUDED.observed_at_unix_seconds >= hermes_data.whatsapp_operational_participants.observed_at_unix_seconds",
+                "INSERT INTO makosh_data.whatsapp_operational_participants (account_id, provider_chat_id, provider_identity_id, display_name, participant_role, participant_status, is_self, observed_at_unix_seconds, last_sequence) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (account_id, provider_chat_id, provider_identity_id) DO UPDATE SET display_name = EXCLUDED.display_name, participant_role = EXCLUDED.participant_role, participant_status = EXCLUDED.participant_status, is_self = EXCLUDED.is_self, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, last_sequence = EXCLUDED.last_sequence WHERE EXCLUDED.observed_at_unix_seconds >= makosh_data.whatsapp_operational_participants.observed_at_unix_seconds",
             )
             .bind(&value.account_id)
             .bind(&value.provider_chat_id)
@@ -916,7 +916,7 @@ async fn apply_projection(
             )
             .await?;
             sqlx::query(
-                "DELETE FROM hermes_data.whatsapp_operational_participants WHERE account_id = $1 AND provider_chat_id = $2 AND provider_identity_id = $3 AND observed_at_unix_seconds <= $4",
+                "DELETE FROM makosh_data.whatsapp_operational_participants WHERE account_id = $1 AND provider_chat_id = $2 AND provider_identity_id = $3 AND observed_at_unix_seconds <= $4",
             )
             .bind(account_id)
             .bind(provider_chat_id)
@@ -940,7 +940,7 @@ async fn projection_is_suppressed_by_tombstone(
     observed_at_unix_seconds: i64,
 ) -> Result<bool, WhatsAppDurablePersistenceError> {
     let tombstone_observed_at: Option<i64> = sqlx::query_scalar(
-        "SELECT observed_at_unix_seconds FROM hermes_data.whatsapp_operational_tombstones WHERE account_id = $1 AND entity_kind = $2 AND provider_chat_id = $3 AND provider_entity_id = $4",
+        "SELECT observed_at_unix_seconds FROM makosh_data.whatsapp_operational_tombstones WHERE account_id = $1 AND entity_kind = $2 AND provider_chat_id = $3 AND provider_entity_id = $4",
     )
     .bind(account_id)
     .bind(entity_kind)
@@ -956,7 +956,7 @@ async fn projection_is_suppressed_by_tombstone(
         return Ok(true);
     }
     sqlx::query(
-        "DELETE FROM hermes_data.whatsapp_operational_tombstones WHERE account_id = $1 AND entity_kind = $2 AND provider_chat_id = $3 AND provider_entity_id = $4",
+        "DELETE FROM makosh_data.whatsapp_operational_tombstones WHERE account_id = $1 AND entity_kind = $2 AND provider_chat_id = $3 AND provider_entity_id = $4",
     )
     .bind(account_id)
     .bind(entity_kind)
@@ -978,7 +978,7 @@ async fn record_tombstone(
     sequence: i64,
 ) -> Result<(), WhatsAppDurablePersistenceError> {
     sqlx::query(
-        "INSERT INTO hermes_data.whatsapp_operational_tombstones (account_id, entity_kind, provider_chat_id, provider_entity_id, observed_at_unix_seconds, last_sequence) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (account_id, entity_kind, provider_chat_id, provider_entity_id) DO UPDATE SET observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, last_sequence = EXCLUDED.last_sequence WHERE EXCLUDED.observed_at_unix_seconds >= hermes_data.whatsapp_operational_tombstones.observed_at_unix_seconds",
+        "INSERT INTO makosh_data.whatsapp_operational_tombstones (account_id, entity_kind, provider_chat_id, provider_entity_id, observed_at_unix_seconds, last_sequence) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (account_id, entity_kind, provider_chat_id, provider_entity_id) DO UPDATE SET observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, last_sequence = EXCLUDED.last_sequence WHERE EXCLUDED.observed_at_unix_seconds >= makosh_data.whatsapp_operational_tombstones.observed_at_unix_seconds",
     )
     .bind(account_id)
     .bind(entity_kind)
@@ -1089,13 +1089,13 @@ fn search_pattern(value: &str) -> String {
     )
 }
 
-fn runtime_state_name(value: hermes_whatsapp_api::WhatsAppRuntimeState) -> &'static str {
+fn runtime_state_name(value: makosh_whatsapp_api::WhatsAppRuntimeState) -> &'static str {
     match value {
-        hermes_whatsapp_api::WhatsAppRuntimeState::Stopped => "stopped",
-        hermes_whatsapp_api::WhatsAppRuntimeState::Starting => "starting",
-        hermes_whatsapp_api::WhatsAppRuntimeState::Running => "running",
-        hermes_whatsapp_api::WhatsAppRuntimeState::Degraded => "degraded",
-        hermes_whatsapp_api::WhatsAppRuntimeState::Blocked => "blocked",
+        makosh_whatsapp_api::WhatsAppRuntimeState::Stopped => "stopped",
+        makosh_whatsapp_api::WhatsAppRuntimeState::Starting => "starting",
+        makosh_whatsapp_api::WhatsAppRuntimeState::Running => "running",
+        makosh_whatsapp_api::WhatsAppRuntimeState::Degraded => "degraded",
+        makosh_whatsapp_api::WhatsAppRuntimeState::Blocked => "blocked",
     }
 }
 
@@ -1218,7 +1218,7 @@ mod tests {
             account_id: "account-1".to_owned(),
         };
         assert_eq!(
-            hermes_whatsapp_api::operational::operational_query_account_id(&query),
+            makosh_whatsapp_api::operational::operational_query_account_id(&query),
             "account-1"
         );
     }

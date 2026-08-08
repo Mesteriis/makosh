@@ -4,11 +4,11 @@ use std::collections::BTreeMap;
 
 use sha2::{Digest, Sha256};
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleEventDeliveryPolicyV1, ModuleEventEnvelopeKindV1, ModuleEventSubscriptionRequirementV1,
     PlatformEventHubTopologyV1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 
 use crate::platform::events::catalog::{EventCatalogContractV1, EventCatalogParticipantV1};
 
@@ -260,7 +260,7 @@ fn consumer(
 
 fn durable_name(participant: &EventCatalogParticipantV1, subject: &EventSubjectV1) -> String {
     let mut digest = Sha256::new();
-    digest.update(b"hermes-event-consumer-v1\0");
+    digest.update(b"makosh-event-consumer-v1\0");
     digest.update(participant.registration_id().as_bytes());
     digest.update(b"\0");
     digest.update(participant.capability_id().as_bytes());

@@ -3,9 +3,9 @@
 use std::path::Path;
 use std::time::Duration;
 
-use hermes_kernel_control_store::PlatformManagedProcessLaunch;
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store::PlatformManagedProcessLaunch;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use crate::distribution::staged_contracts::StagedRuntimeContracts;
 use crate::infrastructure::filesystem::prepare_owner_private_directory;
@@ -111,8 +111,8 @@ fn desired_configuration(
     store: &SqliteControlStore,
 ) -> Result<
     (
-        Vec<hermes_kernel_control_store::PlatformStorageBindingV1>,
-        Vec<hermes_kernel_control_store::PlatformStorageBundleV1>,
+        Vec<makosh_kernel_control_store::PlatformStorageBindingV1>,
+        Vec<makosh_kernel_control_store::PlatformStorageBundleV1>,
     ),
     String,
 > {
@@ -134,8 +134,8 @@ fn ensure_inactive(supervisor: &ManagedRuntimeSupervisor) -> Result<(), String> 
 
 fn load_bundles(
     store: &SqliteControlStore,
-    bindings: &[hermes_kernel_control_store::PlatformStorageBindingV1],
-) -> Result<Vec<hermes_kernel_control_store::PlatformStorageBundleV1>, String> {
+    bindings: &[makosh_kernel_control_store::PlatformStorageBindingV1],
+) -> Result<Vec<makosh_kernel_control_store::PlatformStorageBundleV1>, String> {
     bindings
         .iter()
         .map(|binding| {
@@ -149,7 +149,7 @@ fn load_bundles(
 
 fn validate_desired_bindings(
     store: &SqliteControlStore,
-    desired_bindings: &[hermes_kernel_control_store::PlatformStorageBindingV1],
+    desired_bindings: &[makosh_kernel_control_store::PlatformStorageBindingV1],
 ) -> Result<(), String> {
     for binding in desired_bindings {
         let current = authorize_managed_binding(
@@ -189,7 +189,7 @@ pub(crate) fn current_launch(
 
 fn storage_binding(
     store: &SqliteControlStore,
-) -> Result<hermes_kernel_control_store::PlatformManagedProcessBinding, String> {
+) -> Result<makosh_kernel_control_store::PlatformManagedProcessBinding, String> {
     store
         .platform_managed_process_binding(STORAGE_PROCESS_ID)
         .map_err(|error| format!("{error:?}"))?
@@ -198,10 +198,10 @@ fn storage_binding(
 
 struct StorageLaunchInputV1<'a> {
     kernel: &'a Path,
-    binding: &'a hermes_kernel_control_store::PlatformManagedProcessBinding,
-    topology: &'a hermes_kernel_control_store::PlatformStorageTopology,
-    desired_bindings: &'a [hermes_kernel_control_store::PlatformStorageBindingV1],
-    desired_bundles: &'a [hermes_kernel_control_store::PlatformStorageBundleV1],
+    binding: &'a makosh_kernel_control_store::PlatformManagedProcessBinding,
+    topology: &'a makosh_kernel_control_store::PlatformStorageTopology,
+    desired_bindings: &'a [makosh_kernel_control_store::PlatformStorageBindingV1],
+    desired_bundles: &'a [makosh_kernel_control_store::PlatformStorageBundleV1],
     vault_instance_id: &'a str,
     vault: &'a vault_status::ManagedVaultStatus,
     runtime_dir: &'a Path,

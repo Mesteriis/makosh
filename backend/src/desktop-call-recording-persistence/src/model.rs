@@ -1,4 +1,4 @@
-use hermes_desktop_call_recording_core::RecordingStateV1;
+use makosh_desktop_call_recording_core::RecordingStateV1;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct NewRecordingRunV1 {

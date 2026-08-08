@@ -2,7 +2,7 @@
 
 use std::time::Duration;
 
-use hermes_mail_api::{
+use makosh_mail_api::{
     MailClientRequestV1, MailClientResponseV1, MailSyncInboxRequestV1,
     client_contract::MailClientContractV1,
     message_flags::{
@@ -21,7 +21,7 @@ use hermes_mail_api::{
         MailFolderKindV1, MailMessageFlagV1, MailOperationalQueryResponseV1, MailOperationalQueryV1,
     },
 };
-use hermes_mail_runtime::client_port::{
+use makosh_mail_runtime::client_port::{
     MailClientPortErrorV1, decode_module_response, encode_module_request,
 };
 
@@ -621,7 +621,7 @@ fn wait_for_message_location_status(
     mail: &StartedMailRuntime,
     request_id: u64,
     operation_id: &str,
-) -> hermes_mail_api::message_location::MailMessageLocationOperationStatusV1 {
+) -> makosh_mail_api::message_location::MailMessageLocationOperationStatusV1 {
     (0..50)
         .find_map(|attempt| {
             let status = query_message_location_status(
@@ -648,7 +648,7 @@ fn query_message_location_status(
     mail: &StartedMailRuntime,
     request_id: u64,
     operation_id: &str,
-) -> hermes_mail_api::message_location::MailMessageLocationOperationStatusV1 {
+) -> makosh_mail_api::message_location::MailMessageLocationOperationStatusV1 {
     let request = encode_module_request(
         request_id,
         &MailClientRequestV1::MessageLocationStatus(MailMessageLocationStatusRequestV1 {
@@ -737,7 +737,7 @@ fn wait_for_message_permanent_delete_status(
     mail: &StartedMailRuntime,
     request_id: u64,
     operation_id: &str,
-) -> hermes_mail_api::message_permanent_delete::MailMessagePermanentDeleteOperationStatusV1 {
+) -> makosh_mail_api::message_permanent_delete::MailMessagePermanentDeleteOperationStatusV1 {
     (0..50)
         .find_map(|attempt| {
             let status = query_message_permanent_delete_status(
@@ -764,7 +764,7 @@ fn query_message_permanent_delete_status(
     mail: &StartedMailRuntime,
     request_id: u64,
     operation_id: &str,
-) -> hermes_mail_api::message_permanent_delete::MailMessagePermanentDeleteOperationStatusV1 {
+) -> makosh_mail_api::message_permanent_delete::MailMessagePermanentDeleteOperationStatusV1 {
     let request = encode_module_request(
         request_id,
         &MailClientRequestV1::MessagePermanentDeleteStatus(
@@ -902,7 +902,7 @@ fn query_message_flag_status(
     mail: &StartedMailRuntime,
     request_id: u64,
     operation_id: &str,
-) -> hermes_mail_api::message_flags::MailMessageFlagOperationStatusV1 {
+) -> makosh_mail_api::message_flags::MailMessageFlagOperationStatusV1 {
     let request = encode_module_request(
         request_id,
         &MailClientRequestV1::MessageFlagStatus(MailMessageFlagStatusRequestV1 {
@@ -984,7 +984,7 @@ fn assert_operational_response_is_private(
         b"managed-mail-imap-password".as_slice(),
         b"Content-Type: multipart/mixed".as_slice(),
         b"Y2xlYW4tcm9vbS1hdHRhY2htZW50".as_slice(),
-        b"hermes-fixture--".as_slice(),
+        b"makosh-fixture--".as_slice(),
     ] {
         assert!(
             !response

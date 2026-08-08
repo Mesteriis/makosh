@@ -54,7 +54,7 @@ generated_by: code-wiki-ru
 | Параметр                | Значение                     |
 | ----------------------- | ---------------------------- |
 | `path`                  | `"junit.xml"`                |
-| `report-name`           | `"hermes-backend-default"`   |
+| `report-name`           | `"makosh-backend-default"`   |
 | `store-success-output`  | `false`                      |
 | `store-failure-output`  | `true`                       |
 
@@ -76,7 +76,7 @@ generated_by: code-wiki-ru
 | Параметр      | Значение                |
 | ------------- | ----------------------- |
 | `path`        | `"junit.xml"`           |
-| `report-name` | `"hermes-backend-ci"`   |
+| `report-name` | `"makosh-backend-ci"`   |
 
 Остальные параметры JUnit-отчёта унаследованы от `default`.
 
@@ -98,7 +98,7 @@ generated_by: code-wiki-ru
 | Параметр      | Значение                       |
 | ------------- | ------------------------------ |
 | `path`        | `"junit.xml"`                  |
-| `report-name` | `"hermes-backend-integration"` |
+| `report-name` | `"makosh-backend-integration"` |
 
 Остальные параметры JUnit-отчёта унаследованы от `default`.
 ```

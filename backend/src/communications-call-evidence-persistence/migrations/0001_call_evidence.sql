@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communications_call_evidence_inbox (
+CREATE TABLE makosh_data.communications_call_evidence_inbox (
     logical_owner_id TEXT NOT NULL CHECK (
         length(logical_owner_id) BETWEEN 1 AND 256
     ),
@@ -39,7 +39,7 @@ CREATE TABLE hermes_data.communications_call_evidence_inbox (
     )
 );
 
-CREATE TABLE hermes_data.communications_call_evidence_projection (
+CREATE TABLE makosh_data.communications_call_evidence_projection (
     logical_owner_id TEXT NOT NULL CHECK (
         length(logical_owner_id) BETWEEN 1 AND 256
     ),
@@ -89,13 +89,13 @@ CREATE TABLE hermes_data.communications_call_evidence_projection (
 );
 
 CREATE INDEX communications_call_evidence_projection_owner_updated_idx
-ON hermes_data.communications_call_evidence_projection (
+ON makosh_data.communications_call_evidence_projection (
     logical_owner_id,
     updated_at_unix_seconds DESC,
     call_evidence_id
 );
 
-CREATE TABLE hermes_data.communications_call_evidence_history (
+CREATE TABLE makosh_data.communications_call_evidence_history (
     logical_owner_id TEXT NOT NULL CHECK (
         length(logical_owner_id) BETWEEN 1 AND 256
     ),
@@ -114,14 +114,14 @@ CREATE TABLE hermes_data.communications_call_evidence_history (
     UNIQUE (logical_owner_id, message_id)
 );
 
-CREATE TABLE hermes_data.communications_call_evidence_realtime_sequence (
+CREATE TABLE makosh_data.communications_call_evidence_realtime_sequence (
     logical_owner_id TEXT PRIMARY KEY CHECK (
         length(logical_owner_id) BETWEEN 1 AND 256
     ),
     next_sequence BIGINT NOT NULL CHECK (next_sequence > 0)
 );
 
-CREATE TABLE hermes_data.communications_call_evidence_realtime_frames (
+CREATE TABLE makosh_data.communications_call_evidence_realtime_frames (
     logical_owner_id TEXT NOT NULL CHECK (
         length(logical_owner_id) BETWEEN 1 AND 256
     ),

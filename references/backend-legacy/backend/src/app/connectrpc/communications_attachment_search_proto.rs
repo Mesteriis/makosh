@@ -2,7 +2,7 @@ use crate::domains::communications::attachment_search::{
     AttachmentSearchPage, AttachmentSearchResult,
 };
 use chrono::{DateTime, Utc};
-use hermes_connectrpc_contracts::hermes::communications::v1::{
+use makosh_connectrpc_contracts::makosh::communications::v1::{
     AttachmentSearchItem as ProtoAttachmentSearchItem, AttachmentSearchResponse,
 };
 fn timestamp_string(value: DateTime<Utc>) -> String {

@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/zulip/delivery_intent/v1/delivery_intent.proto"],
+            &["proto/makosh/zulip/delivery_intent/v1/delivery_intent.proto"],
             &["proto"],
         )
         .expect("Zulip delivery-intent protocol must compile");

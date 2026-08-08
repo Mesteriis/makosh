@@ -1,4 +1,4 @@
-use hermes_communication_delayed_delivery_core::DelayedDeliveryStateV1;
+use makosh_communication_delayed_delivery_core::DelayedDeliveryStateV1;
 use sqlx::{Postgres, Row, Transaction};
 
 use crate::{
@@ -37,7 +37,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
             sqlx::query(
                 "SELECT realtime_sequence, delayed_operation_id, state,
                         state_revision, occurred_at_unix_millis
-                 FROM hermes_data.communication_delayed_delivery_realtime
+                 FROM makosh_data.communication_delayed_delivery_realtime
                  WHERE logical_owner_id = $1 AND realtime_sequence > $2
                  ORDER BY realtime_sequence
                  LIMIT $3",
@@ -54,7 +54,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
                  FROM (
                    SELECT realtime_sequence, delayed_operation_id, state,
                           state_revision, occurred_at_unix_millis
-                   FROM hermes_data.communication_delayed_delivery_realtime
+                   FROM makosh_data.communication_delayed_delivery_realtime
                    WHERE logical_owner_id = $1
                    ORDER BY realtime_sequence DESC
                    LIMIT $2
@@ -78,12 +78,12 @@ pub(crate) async fn insert_operation_transition(
     occurred_at_unix_millis: i64,
 ) -> Result<(), DelayedDeliveryPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.communication_delayed_delivery_realtime (
+        "INSERT INTO makosh_data.communication_delayed_delivery_realtime (
            logical_owner_id, delayed_operation_id, state_revision, state,
            occurred_at_unix_millis
          )
          SELECT logical_owner_id, delayed_operation_id, state_revision, state, $1
-         FROM hermes_data.communication_delayed_delivery_operations
+         FROM makosh_data.communication_delayed_delivery_operations
          WHERE logical_owner_id = $2 AND delayed_operation_id = $3",
     )
     .bind(occurred_at_unix_millis)

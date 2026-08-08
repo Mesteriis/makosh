@@ -1,15 +1,15 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_communications_export_api::{
+use makosh_communications_export_api::{
     COMMUNICATIONS_EXPORT_REALTIME_EVENT_KIND_V1,
     wire::{
         CommunicationsExportErrorCodeV1, EvidenceExportStatusChangedV1, EvidenceExportStatusV1,
     },
 };
-use hermes_communications_export_persistence::{
+use makosh_communications_export_persistence::{
     CommunicationsExportPersistenceErrorV1, CommunicationsExportPersistenceV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeClientRealtimePublishRequestV1, ManagedRuntimeControlRequestV1,
@@ -116,7 +116,7 @@ impl CommunicationsExportClientRealtimePublisherV1 {
 }
 
 fn diagnostic(stage: &str, detail: Option<&str>) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_none() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_none() {
         return;
     }
     if let Some(detail) = detail {

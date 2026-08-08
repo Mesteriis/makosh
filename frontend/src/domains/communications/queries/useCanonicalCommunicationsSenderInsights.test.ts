@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { nextTick, ref } from 'vue'
 
-import type { SenderInsightV1 } from '../../../gen/hermes/communications/sender_insights/v1/sender_insights_pb'
+import type { SenderInsightV1 } from '../../../gen/makosh/communications/sender_insights/v1/sender_insights_pb'
 import { useCanonicalCommunicationsSenderInsights } from './useCanonicalCommunicationsSenderInsights'
 
 describe('canonical sender-insights lifecycle', () => {
@@ -78,7 +78,7 @@ function operationsFixture() {
 
 function sender(seed: number, displayLabel: string): SenderInsightV1 {
 	return {
-		$typeName: 'hermes.communications.sender_insights.v1.SenderInsightV1',
+		$typeName: 'makosh.communications.sender_insights.v1.SenderInsightV1',
 		senderId: new Uint8Array(16).fill(seed),
 		displayLabel,
 		messageCount: 1n,

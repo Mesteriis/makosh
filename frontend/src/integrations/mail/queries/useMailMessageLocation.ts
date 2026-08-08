@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import {
 	MailMessageLocationOperationOutcomeV1,
 	type MailMessageLocationOperationStatusV1,
-} from '../../../gen/hermes/mail/message_location/v1/client_pb'
+} from '../../../gen/makosh/mail/message_location/v1/client_pb'
 import {
 	getMailMessageLocationStatus,
 	mutateMailMessageLocation,

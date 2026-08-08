@@ -2,29 +2,29 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobClientError, BlobDataClient, ManagedBlobCustodyTargetV1, ManagedBlobSessionRequestV1,
     request_managed_blob_session_v2,
 };
-use hermes_communication_delivery_intent_core::CommunicationProviderProvenanceV1;
-use hermes_communication_delivery_intent_persistence::DeliveryIntentBodyBlobReceiptV1;
-use hermes_mail_delivery_intent_contract::{
+use makosh_communication_delivery_intent_core::CommunicationProviderProvenanceV1;
+use makosh_communication_delivery_intent_persistence::DeliveryIntentBodyBlobReceiptV1;
+use makosh_mail_delivery_intent_contract::{
     MAIL_DELIVERY_INTENT_OWNER_ID_V1, MAIL_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1,
     MAIL_DELIVERY_INTENT_TARGET_MODULE_ID_V1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::BlobDataOperationV1,
 };
-use hermes_telegram_delivery_intent_contract::{
+use makosh_telegram_delivery_intent_contract::{
     TELEGRAM_DELIVERY_INTENT_OWNER_ID_V1, TELEGRAM_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1,
     TELEGRAM_DELIVERY_INTENT_TARGET_MODULE_ID_V1,
 };
-use hermes_whatsapp_delivery_intent_contract::{
+use makosh_whatsapp_delivery_intent_contract::{
     WHATSAPP_DELIVERY_INTENT_OWNER_ID_V1, WHATSAPP_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1,
     WHATSAPP_DELIVERY_INTENT_TARGET_MODULE_ID_V1,
 };
-use hermes_zulip_delivery_intent_contract::{
+use makosh_zulip_delivery_intent_contract::{
     ZULIP_DELIVERY_INTENT_OWNER_ID_V1, ZULIP_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1,
     ZULIP_DELIVERY_INTENT_TARGET_MODULE_ID_V1,
 };
@@ -122,7 +122,7 @@ fn body_reference_id_v1(
     body_sha256: [u8; 32],
 ) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communication-delivery-intent.body.v1\0");
+    digest.update(b"makosh.communication-delivery-intent.body.v1\0");
     digest.update(logical_owner_id.as_bytes());
     digest.update([0]);
     digest.update(intent_id);
@@ -142,7 +142,7 @@ mod tests {
     fn targets_are_exact_provider_public_contracts() {
         let mail = provider_blob_target_v1(CommunicationProviderProvenanceV1::MailSmtp);
         assert_eq!(mail.owner_id, "mail");
-        assert_eq!(mail.module_id, "hermes-mail-runtime");
+        assert_eq!(mail.module_id, "makosh-mail-runtime");
         assert_eq!(mail.capability_id, "mail.blob.v1");
 
         let telegram = provider_blob_target_v1(CommunicationProviderProvenanceV1::Telegram);

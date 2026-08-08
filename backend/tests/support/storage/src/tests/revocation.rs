@@ -1,9 +1,9 @@
-use hermes_storage_control::{
+use makosh_storage_control::{
     StorageFenceOutcomeV1, StorageLifecycleStateV1, StorageLifecycleV1, StoragePoolFenceCommandV1,
     StoragePoolFencePortV1, StoragePostgresFencePortV1, StorageRevocationErrorV1, StorageRevokerV1,
     StorageVaultLeasePortV1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use std::cell::RefCell;
 use std::future::Future;
 use std::rc::Rc;
@@ -69,7 +69,7 @@ fn revoke(
     vault: &mut RecordingVault,
     pool: &mut RecordingPool,
     postgres: &mut RecordingPostgres,
-) -> Result<hermes_storage_control::StorageRevocationReportV1, StorageRevocationErrorV1> {
+) -> Result<makosh_storage_control::StorageRevocationReportV1, StorageRevocationErrorV1> {
     tokio::runtime::Builder::new_current_thread()
         .build()
         .expect("test runtime")

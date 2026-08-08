@@ -2,7 +2,7 @@
 
 Status: proposed.
 
-| Scenario | Provider action | Expected Hermes trace | Phase |
+| Scenario | Provider action | Expected Макошь trace | Phase |
 |---|---|---|---:|
 | Message observed | Send channel/topic message | `signal.raw.zulip.message.observed` | 1 |
 | Message recorded | Send channel/topic message | `communication.message.recorded` | 2 |

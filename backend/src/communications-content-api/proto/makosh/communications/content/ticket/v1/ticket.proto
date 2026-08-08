@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package makosh.communications.content.ticket.v1;
+
+// Generated owner contract for a short-lived, one-use canonical body read.
+// It exposes no Blob reference, digest, provider locator, credential or body.
+message IssueMessageBodyReadRequestV1 {
+  uint32 protocol_major = 1;
+  bytes message_id = 2;
+}
+
+message IssueMessageBodyReadResponseV1 {
+  bytes opaque_read_capability = 1;
+  uint64 declared_bytes = 2;
+  int64 expires_at_unix_seconds = 3;
+  string media_type = 4;
+  string error_code = 15;
+}
+
+service CommunicationsContentTicketService {
+  rpc IssueMessageBodyRead(IssueMessageBodyReadRequestV1)
+      returns (IssueMessageBodyReadResponseV1);
+}

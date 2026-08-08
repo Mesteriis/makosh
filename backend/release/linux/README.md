@@ -9,11 +9,11 @@ Every platform service image must then be an immutable
 `repository@sha256:<digest>` reference and is verified individually with the
 same pinned signer before Compose/systemd is allowed to consume it.
 
-The manifest must declare `service_contract: "hermes_platform_service_v1"`.
+The manifest must declare `service_contract: "makosh_platform_service_v1"`.
 This is an image contract, not an assumption about upstream images: every
-Hermes-built platform image, including the PostgreSQL and NATS derivatives,
-must provide `/usr/local/bin/hermes-platform-healthcheck` and keep its durable
-state at `/var/lib/hermes`. A release fails before Compose generation if it
+Макошь-built platform image, including the PostgreSQL and NATS derivatives,
+must provide `/usr/local/bin/makosh-platform-healthcheck` and keep its durable
+state at `/var/lib/makosh`. A release fails before Compose generation if it
 does not opt into that exact contract. Kernel protocol attestation remains
 independent from Compose health.
 
@@ -38,8 +38,8 @@ The release operator places the PostgreSQL bootstrap secret in the sibling
 permissions. The secret bytes are mounted to `/run/secrets`; the sole
 environment value is the PostgreSQL-supported file *path*, never the secret.
 
-`make -C backend render-linux-systemd-unit COMPOSE=/absolute/hermes.compose.yaml
-SYSTEMD_UNIT=/absolute/hermes-platform.service` generates the `Type=oneshot`
+`make -C backend render-linux-systemd-unit COMPOSE=/absolute/makosh.compose.yaml
+SYSTEMD_UNIT=/absolute/makosh-platform.service` generates the `Type=oneshot`
 unit used by systemd to own Compose start/stop. It deliberately has no restart
 directive and does not delete named volumes on stop. Updates and rollbacks are
 explicit operations using a separately Cosign-verified digest manifest.

@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/contacts/command/v1/contacts_command.proto"],
+            &["proto/makosh/contacts/command/v1/contacts_command.proto"],
             &["proto"],
         )
         .expect("Contacts command protocol must compile");

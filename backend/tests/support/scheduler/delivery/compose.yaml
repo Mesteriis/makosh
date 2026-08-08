@@ -1,4 +1,4 @@
-name: hermes-scheduler-delivery-conformance
+name: makosh-scheduler-delivery-conformance
 
 services:
   nats:

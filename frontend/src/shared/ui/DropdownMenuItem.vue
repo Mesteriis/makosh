@@ -14,15 +14,15 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-dropdown-item',
-  { 'hermes-dropdown-item--inset': props.inset, 'hermes-dropdown-item--disabled': props.disabled },
+  'makosh-dropdown-item',
+  { 'makosh-dropdown-item--inset': props.inset, 'makosh-dropdown-item--disabled': props.disabled },
   props.class
 ])
 </script>
 
 <template>
   <DropdownMenuItem :class="classes" :disabled="disabled">
-    <Icon v-if="icon" :icon="icon" size="1rem" class="hermes-dropdown-item-icon" />
+    <Icon v-if="icon" :icon="icon" size="1rem" class="makosh-dropdown-item-icon" />
     <slot />
   </DropdownMenuItem>
 </template>

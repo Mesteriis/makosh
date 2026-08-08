@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	publicModuleSettingRows,
 	publicModuleSettingsReasonCode,
@@ -11,7 +11,7 @@ import type { ModuleSettingsPanelModel } from '../../../shared/ui/settings/Modul
 import TelegramAccountManagementPanel from './TelegramAccountManagementPanel.vue'
 import TelegramAccountSetupPanel from './TelegramAccountSetupPanel.vue'
 
-const TELEGRAM_MODULE_ID = 'hermes-telegram-runtime'
+const TELEGRAM_MODULE_ID = 'makosh-telegram-runtime'
 const props = defineProps<{ module: ClientModuleBootstrapV1 | null }>()
 const accountRefreshRequest = ref(0)
 const model = computed<ModuleSettingsPanelModel>(() => {

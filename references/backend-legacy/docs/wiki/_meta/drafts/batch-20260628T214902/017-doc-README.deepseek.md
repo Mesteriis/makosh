@@ -1,6 +1,6 @@
 ### Summary / Резюме
 
-Создать новую страницу `operations/documentation-map.md` в русской Obsidian wiki, отражающую структуру документации и ключевые документы, описанные в `README.md` репозитория hermes-hub. Страница служит навигационной картой документации и полностью основана на встроенном исходном тексте.
+Создать новую страницу `operations/documentation-map.md` в русской Obsidian wiki, отражающую структуру документации и ключевые документы, описанные в `README.md` репозитория makosh. Страница служит навигационной картой документации и полностью основана на встроенном исходном тексте.
 
 ### Proposed pages / Предлагаемые страницы
 
@@ -11,13 +11,13 @@
 
 ## Порталы и индексы
 
-- [Hermes Hub Documentation Portal](https://mesteriis.github.io/hermes-os/) — стилизованная точка входа GitHub Pages.
+- [Макошь Documentation Portal](https://mesteriis.github.io/makosh-os/) — стилизованная точка входа GitHub Pages.
 - [Индекс документации репозитория](docs/README.md) — исходная документация в репозитории.
 
 ## Разделы документации
 
 - **`docs/foundation`** — каноническая модель, glossary, engines и domain map.
-- **`docs/site`** — портал документации GitHub Pages, стилизованный дизайн-языком оболочки Hermes.
+- **`docs/site`** — портал документации GitHub Pages, стилизованный дизайн-языком оболочки Макошь.
 - **`docs/vision`** — долгосрочное видение.
 - **`docs/product`** — charter, scope и продуктовые границы.
 - **`docs/architecture`** — системная архитектура и ключевые технические модели.

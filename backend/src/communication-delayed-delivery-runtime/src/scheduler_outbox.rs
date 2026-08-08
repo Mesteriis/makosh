@@ -1,8 +1,8 @@
-use hermes_communication_delayed_delivery_persistence::{
+use makosh_communication_delayed_delivery_persistence::{
     CommunicationDelayedDeliveryPersistenceV1, DelayedDeliveryOutboxRecordV1,
     DelayedDeliveryOutboxStreamV1, DelayedDeliveryPersistenceErrorV1,
 };
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
 
 const RELAY_BATCH_V1: u16 = 64;
 

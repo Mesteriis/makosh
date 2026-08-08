@@ -1,7 +1,7 @@
 # Code Wiki RU Run Report
 
 Дата завершения проверки: `2026-06-29T01:27:20+02:00`
-Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
+Репозиторий: `/Users/avm/projects/Personal/makosh`
 Ветка: `main` (`feature/telemost` также указывает на текущий HEAD)
 Wiki path: `docs/wiki`
 Meta path: `docs/wiki/_meta`
@@ -66,12 +66,12 @@ Batch result:
 
 Во время batch были обработаны два guard edge case:
 
-- `078-test-backend-part-001`: guard принял безопасный placeholder `HERMES_API_SECRET=...` за secret-shaped assignment; resume использовал уточнённую проверку placeholder-значений.
+- `078-test-backend-part-001`: guard принял безопасный placeholder `MAKOSH_API_SECRET=...` за secret-shaped assignment; resume использовал уточнённую проверку placeholder-значений.
 - `123-adr-docs-part-004`: draft использовал русские названия обязательных секций; resume использовал bilingual section validation.
 
 ## Validation
 
-- Ran: `python3 /Users/avm/.codex/skills/code-wiki-ru/scripts/validate_wiki.py --repo /Users/avm/projects/Personal/hermes-hub --wiki-path docs/wiki --meta-path docs/wiki/_meta`
+- Ran: `python3 /Users/avm/.codex/skills/code-wiki-ru/scripts/validate_wiki.py --repo /Users/avm/projects/Personal/makosh --wiki-path docs/wiki --meta-path docs/wiki/_meta`
 - Result: `Wiki validation passed`
 
 - Ran: strict context-pack coverage audit over `docs/wiki/_meta/context-packs/*.md`

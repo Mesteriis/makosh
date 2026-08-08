@@ -1,5 +1,5 @@
 [package]
-name = "hermes-ollama-ai-persistence"
+name = "makosh-ollama-ai-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,14 +7,14 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "ollama"
 surface = "persistence"
 
 [dependencies]
-hermes-ai-contracts = { path = "../ai-contracts" }
-hermes-ollama-ai-core = { path = "../ollama-ai-core" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-ai-contracts = { path = "../ai-contracts" }
+makosh-ollama-ai-core = { path = "../ollama-ai-core" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 sha2 = { version = "=0.11.0", default-features = false }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

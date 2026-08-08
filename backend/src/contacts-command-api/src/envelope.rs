@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
@@ -466,7 +466,7 @@ mod tests {
 
     fn context() -> ContactsCommandEnvelopeContextV1 {
         ContactsCommandEnvelopeContextV1 {
-            module_id: "hermes-mail-contacts-sync-runtime".to_owned(),
+            module_id: "makosh-mail-contacts-sync-runtime".to_owned(),
             runtime_instance_id: "runtime-1".to_owned(),
             runtime_generation: 7,
             recorded_at_unix_seconds: 1_800_000_000,

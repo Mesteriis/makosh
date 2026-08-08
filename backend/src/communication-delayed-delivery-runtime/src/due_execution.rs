@@ -1,27 +1,27 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_delayed_delivery_event_adapters::{
+use makosh_communication_delayed_delivery_event_adapters::{
     DecodedDelayedDeliveryDueCommandV1, DelayedDeliveryDueContractV1, DelayedDeliveryDueMessageV1,
     DelayedDeliveryDueRuntimeContextV1, build_delayed_delivery_terminal_receipt_v1,
     decode_delayed_delivery_due_command_v1,
 };
-use hermes_communication_delayed_delivery_execution::{
+use makosh_communication_delayed_delivery_execution::{
     ClaimDueExecutionV1, DelayedDeliveryDurableMessageV1, DelayedDeliveryExecutionClaimV1,
     DelayedDeliveryExecutionOutcomeV1, ExecutionStoreErrorV1, SchedulerExecutionFenceV1,
     SchedulerReceiptErrorV1, SchedulerReceiptFactoryPortV1, SchedulerTerminalOutcomeV1,
     execute_due_delivery_v1,
 };
-use hermes_communication_delayed_delivery_persistence::CommunicationDelayedDeliveryPersistenceV1;
-use hermes_communication_delayed_delivery_runtime_adapters::ManagedDelayedDeliveryRuntimePortV1;
-use hermes_communication_delayed_delivery_store_adapters::DelayedDeliveryExecutionStoreAdapterV1;
-use hermes_events_jetstream::{
+use makosh_communication_delayed_delivery_persistence::CommunicationDelayedDeliveryPersistenceV1;
+use makosh_communication_delayed_delivery_runtime_adapters::ManagedDelayedDeliveryRuntimePortV1;
+use makosh_communication_delayed_delivery_store_adapters::DelayedDeliveryExecutionStoreAdapterV1;
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
-use hermes_scheduler_protocol::{SCHEDULER_JOB_DESCRIPTOR_SET_V1, v1::JobRunOutcomeV1};
+use makosh_scheduler_protocol::{SCHEDULER_JOB_DESCRIPTOR_SET_V1, v1::JobRunOutcomeV1};
 use sha2::{Digest, Sha256};
 
 use crate::COMMUNICATION_DELAYED_DELIVERY_BLOB_CAPABILITY_ID_V1;
@@ -79,7 +79,7 @@ pub(crate) async fn consume_due_delivery_v1(
     )
     .await
     .map_err(|error| match error {
-        hermes_communication_delayed_delivery_execution::DelayedDeliveryWorkerErrorV1::Store(
+        makosh_communication_delayed_delivery_execution::DelayedDeliveryWorkerErrorV1::Store(
             error,
         ) => DelayedDeliveryDueExecutionErrorV1::Store(error),
     })?;
@@ -96,7 +96,7 @@ pub(crate) async fn consume_due_delivery_v1(
 async fn discard_invalid_due_command(
     delivery: RuntimePullDeliveryV1,
 ) -> Result<bool, DelayedDeliveryDueExecutionErrorV1> {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_delayed_delivery_due_rejected=invalid_command");
     }
     delivery

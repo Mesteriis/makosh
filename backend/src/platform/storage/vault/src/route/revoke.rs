@@ -1,8 +1,8 @@
 //! Storage revoke command over the shared encrypted Vault session.
 
-use hermes_storage_control::{StorageFenceOutcomeV1, StorageVaultLeasePortV1};
-use hermes_storage_protocol::StorageBindingV1;
-use hermes_vault_protocol::VaultTransportCommandV1;
+use makosh_storage_control::{StorageFenceOutcomeV1, StorageVaultLeasePortV1};
+use makosh_storage_protocol::StorageBindingV1;
+use makosh_vault_protocol::VaultTransportCommandV1;
 
 use super::{StorageVaultLeaseAdapterV1, StorageVaultRoutePortV1, session};
 

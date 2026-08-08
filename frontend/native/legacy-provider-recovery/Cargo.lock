@@ -372,7 +372,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-legacy-provider-recovery"
+name = "makosh-legacy-provider-recovery"
 version = "0.1.0"
 dependencies = [
  "base64",

@@ -2,7 +2,7 @@ use super::common::*;
 
 #[test]
 fn staged_runtime_contracts_preserve_verified_bytes_and_remove_them_after_launch() {
-    let root = unique_target_root("hermes-staged-runtime-contracts");
+    let root = unique_target_root("makosh-staged-runtime-contracts");
     let contracts = StagedRuntimeContracts::stage(
         &root.join("contracts"),
         b"verified-descriptor-bytes",

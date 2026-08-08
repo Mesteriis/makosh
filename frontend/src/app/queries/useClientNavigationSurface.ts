@@ -4,7 +4,7 @@ import {
 	ClientSystemComponentIdV1,
 	ClientSystemComponentStateV1,
 	type ClientSystemComponentStatusV1,
-} from '../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../gen/makosh/gateway/v1/client_bootstrap_pb'
 
 import {
 	clientSurfaceCatalog,
@@ -53,9 +53,9 @@ export type ClientNavigationHealthCheck = {
 
 export function useClientNavigationSurface() {
 	const selectedRouteId = ref<ClientSurfaceRouteId>('settings')
-	// The recovery shell must preserve Hermes' established first impression even
+	// The recovery shell must preserve Макошь' established first impression even
 	// before any product surface is admitted by the Kernel.
-	const currentThemeFamily = ref<UiThemeFamily>('hermes')
+	const currentThemeFamily = ref<UiThemeFamily>('makosh')
 	const currentThemeMode = ref<UiThemeMode>('dark')
 	const currentLanguage = ref<'ru' | 'en'>(readInterfaceLanguage())
 	const bootstrap = ref<ClientBootstrapSnapshot>(recoveryClientBootstrap())
@@ -129,7 +129,7 @@ export function useClientNavigationSurface() {
 		if (value !== 'ru' && value !== 'en') return
 		currentLanguage.value = value
 		document.documentElement.lang = value
-		try { window.localStorage.setItem('hermes.interface-language', value) } catch { /* preference remains memory-only */ }
+		try { window.localStorage.setItem('makosh.interface-language', value) } catch { /* preference remains memory-only */ }
 	}
 
 	function openRealtime(): void {
@@ -189,7 +189,7 @@ export function useClientNavigationSurface() {
 		notificationsCount: computed(() => 0),
 		selectedRouteId,
 		selectedTopLevelRouteId,
-		themeFamilyOptions: [{ value: 'base' as const, label: 'Base' }, { value: 'hermes' as const, label: 'Hermes' }],
+		themeFamilyOptions: [{ value: 'base' as const, label: 'Base' }, { value: 'makosh' as const, label: 'Макошь' }],
 		themeModeOptions: [{ value: 'light' as const, label: 'Light' }, { value: 'dark' as const, label: 'Dark' }],
 		clearNotifications: () => undefined,
 		dismissNotification: () => undefined,
@@ -278,7 +278,7 @@ function aggregateHealth(checks: readonly ClientNavigationHealthCheck[]): Client
 
 function readInterfaceLanguage(): 'ru' | 'en' {
 	try {
-		const value = window.localStorage.getItem('hermes.interface-language')
+		const value = window.localStorage.getItem('makosh.interface-language')
 		if (value === 'ru' || value === 'en') return value
 	} catch { /* use the product default */ }
 	return 'ru'

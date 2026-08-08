@@ -4,18 +4,18 @@
 
 ```mermaid
 flowchart LR
-    User["Owner Persona"] --> Hermes["Hermes Hub\nPersonal Memory System"]
+    User["Owner Persona"] --> Макошь["Макошь\nPersonal Memory System"]
 
-    Hermes <--> Email["Email providers\nIMAP/SMTP/API"]
-    Hermes <--> Telegram["Telegram"]
-    Hermes <--> WhatsApp["WhatsApp"]
-    Hermes <--> Calendar["Calendar providers"]
-    Hermes <--> Files["Local file system"]
-    Hermes <--> Ollama["Ollama local models"]
-    Hermes <--> OptionalCloud["Optional cloud services"]
+    Макошь <--> Email["Email providers\nIMAP/SMTP/API"]
+    Макошь <--> Telegram["Telegram"]
+    Макошь <--> WhatsApp["WhatsApp"]
+    Макошь <--> Calendar["Calendar providers"]
+    Макошь <--> Files["Local file system"]
+    Макошь <--> Ollama["Ollama local models"]
+    Макошь <--> OptionalCloud["Optional cloud services"]
 
-    Hermes --> Backup["Local/self-hosted backups"]
-    Hermes --> Telemetry["Local OpenTelemetry collector"]
+    Макошь --> Backup["Local/self-hosted backups"]
+    Макошь --> Telemetry["Local OpenTelemetry collector"]
 ```
 
 ## External Actors
@@ -34,7 +34,7 @@ flowchart LR
 
 ## Context Rules
 
-- Hermes Hub must continue to operate without optional cloud services.
+- Макошь must continue to operate without optional cloud services.
 - External providers are never the canonical memory layer.
 - Provider records are preserved as source evidence for Communications, Events,
   Documents and downstream Memory.

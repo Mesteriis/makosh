@@ -7,8 +7,8 @@ use std::path::{Path, PathBuf};
 use std::process::Stdio;
 use std::time::Duration;
 
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_secure_file::{SecureReadPolicy, read as read_secure_file};
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_secure_file::{SecureReadPolicy, read as read_secure_file};
 
 use crate::distribution::staged_artifact::StagedNativeArtifact;
 use crate::infrastructure::paths::prepare_offline_control_store;

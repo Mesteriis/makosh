@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package makosh.communications_export.v1;
+
+message StartEvidenceExportRequestV1 {
+  uint32 protocol_major = 1;
+  repeated bytes message_ids = 2;
+  // Stable client-generated idempotency key and resulting export ID.
+  bytes operation_id = 3;
+}
+
+message StartEvidenceExportResponseV1 {
+  bytes export_id = 1;
+  CommunicationsExportErrorCodeV1 error = 15;
+}
+
+message GetEvidenceExportStatusRequestV1 {
+  uint32 protocol_major = 1;
+  bytes export_id = 2;
+}
+
+message GetEvidenceExportStatusResponseV1 {
+  bytes export_id = 1;
+  EvidenceExportStatusV1 status = 2;
+  uint32 requested_items = 3;
+  uint32 completed_items = 4;
+  uint64 artifact_bytes = 5;
+  CommunicationsExportErrorCodeV1 error = 15;
+}
+
+message EvidenceExportStatusChangedV1 {
+  bytes export_id = 1;
+  EvidenceExportStatusV1 status = 2;
+  uint32 requested_items = 3;
+  uint32 completed_items = 4;
+  uint64 artifact_bytes = 5;
+  uint64 occurred_at_unix_millis = 6;
+  CommunicationsExportErrorCodeV1 error = 15;
+}
+
+message IssueEvidenceExportReadRequestV1 {
+  uint32 protocol_major = 1;
+  bytes export_id = 2;
+}
+
+message IssueEvidenceExportReadResponseV1 {
+  bytes opaque_read_capability = 1;
+  uint64 declared_bytes = 2;
+  int64 expires_at_unix_seconds = 3;
+  CommunicationsExportErrorCodeV1 error = 15;
+}
+
+message EvidenceExportArtifactReadRequestV1 {
+  bytes opaque_read_capability = 1;
+}
+
+service CommunicationsExportCommandService {
+  rpc Start(StartEvidenceExportRequestV1)
+      returns (StartEvidenceExportResponseV1);
+}
+
+service CommunicationsExportQueryService {
+  rpc GetStatus(GetEvidenceExportStatusRequestV1)
+      returns (GetEvidenceExportStatusResponseV1);
+}
+
+service CommunicationsExportTicketService {
+  rpc IssueRead(IssueEvidenceExportReadRequestV1)
+      returns (IssueEvidenceExportReadResponseV1);
+}
+
+enum EvidenceExportStatusV1 {
+  EVIDENCE_EXPORT_STATUS_UNSPECIFIED = 0;
+  EVIDENCE_EXPORT_STATUS_PENDING_SOURCE = 1;
+  EVIDENCE_EXPORT_STATUS_MATERIALIZING = 2;
+  EVIDENCE_EXPORT_STATUS_READY = 3;
+  EVIDENCE_EXPORT_STATUS_REJECTED = 4;
+}
+
+enum CommunicationsExportErrorCodeV1 {
+  COMMUNICATIONS_EXPORT_ERROR_CODE_UNSPECIFIED = 0;
+  COMMUNICATIONS_EXPORT_ERROR_CODE_INVALID_REQUEST = 1;
+  COMMUNICATIONS_EXPORT_ERROR_CODE_NOT_FOUND = 2;
+  COMMUNICATIONS_EXPORT_ERROR_CODE_NOT_READY = 3;
+  COMMUNICATIONS_EXPORT_ERROR_CODE_POLICY_REJECTED = 4;
+  COMMUNICATIONS_EXPORT_ERROR_CODE_UNAVAILABLE = 5;
+}

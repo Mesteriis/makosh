@@ -1,12 +1,12 @@
 use chrono::{Duration, Utc};
-use hermes_hub_backend::application::calendar_meeting_outcomes::CalendarMeetingOutcomeApplicationService;
-use hermes_hub_backend::domains::calendar::events::{
+use makosh_hub_backend::application::calendar_meeting_outcomes::CalendarMeetingOutcomeApplicationService;
+use makosh_hub_backend::domains::calendar::events::{
     account_store::CalendarAccountStore, event_store::CalendarEventStore, models::NewCalendarEvent,
 };
-use hermes_hub_backend::domains::calendar::meetings::{
+use makosh_hub_backend::domains::calendar::meetings::{
     notes::MeetingNoteStore, outcomes::MeetingOutcomeStore,
 };
-use hermes_hub_backend::domains::obligations::models::entity_kind::ObligationEntityKind;
+use makosh_hub_backend::domains::obligations::models::entity_kind::ObligationEntityKind;
 
 use super::support::{live_pool, unique_suffix};
 
@@ -281,9 +281,9 @@ async fn meeting_outcome_promise_creates_suggested_obligation_and_review_item_wi
             .expect("task link count");
     assert_eq!(task_link_count, 0);
 }
-use hermes_hub_backend::domains::decisions::models::{
+use makosh_hub_backend::domains::decisions::models::{
     entity_kind::DecisionEntityKind, states::DecisionReviewState,
 };
-use hermes_hub_backend::domains::decisions::store::DecisionStore;
-use hermes_hub_backend::domains::obligations::models::states::ObligationReviewState;
-use hermes_hub_backend::domains::obligations::store::ObligationStore;
+use makosh_hub_backend::domains::decisions::store::DecisionStore;
+use makosh_hub_backend::domains::obligations::models::states::ObligationReviewState;
+use makosh_hub_backend::domains::obligations::store::ObligationStore;

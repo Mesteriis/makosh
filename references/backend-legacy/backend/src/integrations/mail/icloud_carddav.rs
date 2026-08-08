@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use hermes_communications_api::address_book::{AddressBookProviderBatch, AddressBookProviderEntry};
+use makosh_communications_api::address_book::{AddressBookProviderBatch, AddressBookProviderEntry};
 use quick_xml::escape::unescape;
 use reqwest::{Client, Method};
 use serde_json::Value;

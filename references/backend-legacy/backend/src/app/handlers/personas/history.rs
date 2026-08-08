@@ -148,7 +148,7 @@ pub(crate) async fn put_identity_candidate_review(
     Path(identity_candidate_id): Path<String>,
     Json(request): Json<PersonaIdentityReviewApiRequest>,
 ) -> Result<Json<PersonaIdentityReviewApiResponse>, ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let command = request.into_command(identity_candidate_id, actor_id)?;
     let pool = state
         .database

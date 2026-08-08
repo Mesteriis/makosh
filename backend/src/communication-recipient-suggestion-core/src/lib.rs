@@ -2,7 +2,7 @@
 
 use std::collections::BTreeSet;
 
-pub const PACKAGE: &str = "hermes-communication-recipient-suggestion-core";
+pub const PACKAGE: &str = "makosh-communication-recipient-suggestion-core";
 pub const COMMUNICATION_RECIPIENT_SOURCE_MAX_BYTES_V1: usize = 256 * 1024;
 pub const COMMUNICATION_RECIPIENT_MAX_CANDIDATES_V1: usize = 3;
 pub const COMMUNICATION_RECIPIENT_MAX_CONFIDENCE_BASIS_POINTS_V1: u32 = 10_000;

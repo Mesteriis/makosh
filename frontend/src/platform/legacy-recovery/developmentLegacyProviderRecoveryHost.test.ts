@@ -32,7 +32,7 @@ describe('DevelopmentLegacyProviderRecoveryHostV1', () => {
 			gmailDeleted: 2,
 		})
 		expect(fetchImpl).toHaveBeenCalledWith(
-			'/__hermes/legacy-provider-recovery/v1/start',
+			'/__makosh/legacy-provider-recovery/v1/start',
 			expect.objectContaining({
 				credentials: 'same-origin',
 				cache: 'no-store',

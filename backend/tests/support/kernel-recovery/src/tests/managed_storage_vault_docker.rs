@@ -6,11 +6,11 @@ use std::{
 };
 
 use futures_util::StreamExt;
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     NatsRuntimeCredentialDeliveryBindingInputV1, NatsRuntimeCredentialDeliveryBindingV1,
     NatsRuntimeCredentialRecipientPublicKeyV1, RuntimeNatsJwtCredentialV1, v1::DurableEnvelopeV1,
 };
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BundledManagedLaunchBinding, ManagedLaunchRecord, ModuleEventDeliveryPolicyV1,
     ModuleEventEnvelopeKindV1, ModuleEventRouteDirectionV1, ModuleEventRouteRequestV1,
     ModuleEventSubscriptionRequirementV1, ModuleRegistration, ModuleRegistrationState,
@@ -18,7 +18,7 @@ use hermes_kernel_control_store::{
     PlatformStorageBundleV1, PlatformStorageEndpointV1, PlatformStorageTopology,
     StorageDeploymentProfileV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedDomainRuntimeConfigurationV1, ManagedRuntimeEventCredentialDeliveryV1,
     ManagedRuntimeEventCredentialRequestV1, SchedulerRuntimeControlRequestV1,
     SchedulerRuntimeControlResponseV1, SchedulerScheduleUpsertOutcomeV1, SettingsSchemaRefV1,
@@ -26,10 +26,10 @@ use hermes_runtime_protocol::v1::{
     scheduler_runtime_control_request_v1::Operation as SchedulerOperation,
     scheduler_runtime_control_response_v1::Result as SchedulerResult,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     SCHEDULER_JOB_DESCRIPTOR_SET_V1, SCHEDULER_RUNTIME_MODULE_ID_V1, v1::ScheduledJobCommandV1,
 };
-use hermes_storage_protocol::v1::{
+use makosh_storage_protocol::v1::{
     GetStorageRuntimeStatusRequestV1, StorageRuntimeControlRequestV1,
     StorageRuntimeControlResponseV1, StorageRuntimeStateV1,
     storage_runtime_control_request_v1::Operation,
@@ -377,10 +377,10 @@ mod whatsapp_managed_flow;
 #[ignore = "requires disposable Docker plus real managed Vault and Storage binaries"]
 fn managed_storage_binary_bootstraps_through_live_vault() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-storage-vault-docker");
+    let root = unique_target_root("makosh-managed-storage-vault-docker");
     let data = private_directory(root.join("kernel"));
     let vault_dir = private_directory(data.join("vault"));
     initialize_vault(&vault_dir, &credential_directory());
@@ -429,7 +429,7 @@ fn managed_storage_binary_bootstraps_through_live_vault() {
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Scheduler and NATS binaries"]
 fn managed_scheduler_crash_uses_storage_control_successor_provisioning() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let fixture = SchedulerRecoveryFixture::start();
@@ -445,10 +445,10 @@ fn managed_scheduler_crash_uses_storage_control_successor_provisioning() {
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, NATS and Communications binaries"]
 fn managed_communications_domain_starts_with_owner_local_storage_and_events() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-communications-domain");
+    let root = unique_target_root("makosh-managed-communications-domain");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -456,11 +456,11 @@ fn managed_communications_domain_starts_with_owner_local_storage_and_events() {
     );
     let release = installed_communications_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             "owner-1",
             "desktop-1",
             [4; 65],
@@ -536,7 +536,7 @@ fn managed_communications_domain_starts_with_owner_local_storage_and_events() {
     supervisor.shutdown().expect("stop managed processes");
     assert_communications_storage_backup_restore(&root);
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove fixture");
     std::fs::remove_dir_all(data).expect("remove short kernel data fixture");
@@ -545,8 +545,8 @@ fn managed_communications_domain_starts_with_owner_local_storage_and_events() {
 #[test]
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, NATS, Blob and Communications Export workflow binaries"]
 fn managed_communications_export_workflow_starts_with_owner_local_storage_and_events() {
-    use hermes_communications_evidence_export_source_api::wire::EvidenceExportRejectCodeV1;
-    use hermes_communications_export_api::{
+    use makosh_communications_evidence_export_source_api::wire::EvidenceExportRejectCodeV1;
+    use makosh_communications_export_api::{
         COMMUNICATIONS_EXPORT_CAPABILITY_ID_V1, COMMUNICATIONS_EXPORT_MODULE_ID_V1,
         COMMUNICATIONS_EXPORT_OWNER_V1,
         wire::{
@@ -557,17 +557,17 @@ fn managed_communications_export_workflow_starts_with_owner_local_storage_and_ev
             StartEvidenceExportResponseV1,
         },
     };
-    use hermes_communications_export_runtime::admission::{
+    use makosh_communications_export_runtime::admission::{
         communications_export_command_contract_reference_v1,
         communications_export_query_contract_reference_v1,
         communications_export_ticket_contract_reference_v1,
     };
-    use hermes_runtime_protocol::v1::{ModuleClientRequestV1, ModuleClientResponseV1};
+    use makosh_runtime_protocol::v1::{ModuleClientRequestV1, ModuleClientResponseV1};
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-communications-export");
+    let root = unique_target_root("makosh-managed-communications-export");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -575,11 +575,11 @@ fn managed_communications_export_workflow_starts_with_owner_local_storage_and_ev
     );
     let release = installed_communications_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             "owner-1",
             "desktop-1",
             [4; 65],
@@ -589,7 +589,7 @@ fn managed_communications_export_workflow_starts_with_owner_local_storage_and_ev
     let _ = FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
-    let export_realtime = hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(64)
+    let export_realtime = makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(64)
         .expect("Communications Export realtime source");
     let revision_race = Arc::new(CommunicationsExportRevisionRaceV1::new());
     let race_blob_session_handler = Arc::new(CommunicationsExportRaceBlobSessionHandlerV1::new(
@@ -699,7 +699,7 @@ fn managed_communications_export_workflow_starts_with_owner_local_storage_and_ev
     let mut realtime_body = realtime_response.into_body();
     let route_as = |request_id: u64,
                     logical_owner_id: &str,
-                    contract: hermes_runtime_protocol::v1::ContractReferenceV1,
+                    contract: makosh_runtime_protocol::v1::ContractReferenceV1,
                     request_payload: Vec<u8>| {
         let request = ModuleClientRequestV1 {
             protocol_major: 1,
@@ -742,7 +742,7 @@ fn managed_communications_export_workflow_starts_with_owner_local_storage_and_ev
         response.response_payload
     };
     let route = |request_id: u64,
-                 contract: hermes_runtime_protocol::v1::ContractReferenceV1,
+                 contract: makosh_runtime_protocol::v1::ContractReferenceV1,
                  request_payload: Vec<u8>| {
         route_as(request_id, "owner-1", contract, request_payload)
     };
@@ -1201,7 +1201,7 @@ fn managed_communications_export_workflow_starts_with_owner_local_storage_and_ev
     );
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove fixture");
     std::fs::remove_dir_all(data).expect("remove short kernel data fixture");
@@ -1211,7 +1211,7 @@ fn await_terminal_communications_export_event<B>(
     runtime: &tokio::runtime::Runtime,
     body: &mut B,
     export_id: &[u8],
-) -> hermes_communications_export_api::wire::EvidenceExportStatusChangedV1
+) -> makosh_communications_export_api::wire::EvidenceExportStatusChangedV1
 where
     B: hyper::body::Body<Data = hyper::body::Bytes> + Unpin,
     B::Error: std::fmt::Debug,
@@ -1229,21 +1229,21 @@ where
 async fn find_terminal_communications_export_event<B>(
     body: &mut B,
     export_id: &[u8],
-) -> hermes_communications_export_api::wire::EvidenceExportStatusChangedV1
+) -> makosh_communications_export_api::wire::EvidenceExportStatusChangedV1
 where
     B: hyper::body::Body<Data = hyper::body::Bytes> + Unpin,
     B::Error: std::fmt::Debug,
 {
     use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
-    use hermes_communications_export_api::{
+    use http_body_util::BodyExt as _;
+    use makosh_communications_export_api::{
         COMMUNICATIONS_EXPORT_REALTIME_CONTRACT_NAME_V1,
         COMMUNICATIONS_EXPORT_REALTIME_EVENT_KIND_V1,
         wire::{EvidenceExportStatusChangedV1, EvidenceExportStatusV1},
     };
-    use hermes_gateway_protocol::v1::{
+    use makosh_gateway_protocol::v1::{
         ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
     };
-    use http_body_util::BodyExt as _;
 
     let mut pending = Vec::new();
     while let Some(frame) = body.frame().await {
@@ -1312,10 +1312,10 @@ fn assert_communications_export_gateway_delivery(
     fixture: &CommunicationsExportGatewayFixtureV1<'_>,
     inputs: CommunicationsExportGatewayDeliveryInputsV1<'_>,
 ) {
-    use hermes_communications_export_api::{
+    use http_body_util::BodyExt as _;
+    use makosh_communications_export_api::{
         COMMUNICATIONS_EXPORT_READ_BLOB_PATH_V1, wire::EvidenceExportArtifactReadRequestV1,
     };
-    use http_body_util::BodyExt as _;
     let router = fixture.router;
     let runtime = fixture.runtime;
     let cookie = fixture.cookie;
@@ -1386,7 +1386,7 @@ fn assert_communications_export_gateway_delivery(
         Some(inputs.declared_bytes)
     );
     assert!(artifact.starts_with(
-        br#"{"record_type":"manifest","schema":"hermes.communications.evidence-export.v1"#
+        br#"{"record_type":"manifest","schema":"makosh.communications.evidence-export.v1"#
     ));
     assert!(
         artifact
@@ -1492,7 +1492,7 @@ fn assert_communications_export_gateway_rejects_revoked_ticket(
     fixture: &CommunicationsExportGatewayFixtureV1<'_>,
     opaque_read_capability: Vec<u8>,
 ) {
-    use hermes_communications_export_api::{
+    use makosh_communications_export_api::{
         COMMUNICATIONS_EXPORT_READ_BLOB_PATH_V1, wire::EvidenceExportArtifactReadRequestV1,
     };
     let router = fixture.router;
@@ -1527,7 +1527,7 @@ fn short_communications_kernel_data_directory() -> PathBuf {
         .duration_since(UNIX_EPOCH)
         .expect("clock")
         .as_nanos();
-    PathBuf::from("/tmp").join(format!("hermes-comms-{}-{suffix}", std::process::id()))
+    PathBuf::from("/tmp").join(format!("makosh-comms-{}-{suffix}", std::process::id()))
 }
 
 fn assert_communications_gateway_query_delivery(
@@ -1550,7 +1550,7 @@ fn assert_communications_gateway_query_delivery(
         Arc::clone(store),
         kernel_data,
         supervisor.clone(),
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(1_024)
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(1_024)
             .expect("test realtime source"),
         &configuration,
         None,
@@ -1559,12 +1559,12 @@ fn assert_communications_gateway_query_delivery(
     let runtime = tokio::runtime::Runtime::new().expect("Gateway test runtime");
     let cookie = super::browser_gateway_session::authenticate_gateway_router(&router, &runtime);
     let route_query =
-        |request: hermes_communications_api::query_wire::CommunicationsQueryRequestV1| {
+        |request: makosh_communications_api::query_wire::CommunicationsQueryRequestV1| {
             let response = runtime.block_on(
                 router.route(
                     hyper::Request::builder()
                         .method("POST")
-                        .uri("/hermes.communications.query.v1.CommunicationsQueryService/Query")
+                        .uri("/makosh.communications.query.v1.CommunicationsQueryService/Query")
                         .header("content-type", "application/connect+proto")
                         .header("cookie", &cookie)
                         .body(http_body_util::Full::new(hyper::body::Bytes::from(
@@ -1592,18 +1592,18 @@ fn assert_communications_gateway_query_delivery(
                 .block_on(response.into_body().collect())
                 .expect("Gateway owner query response")
                 .to_bytes();
-            hermes_communications_api::query_wire::CommunicationsQueryResponseV1::decode(
+            makosh_communications_api::query_wire::CommunicationsQueryResponseV1::decode(
                 bytes.as_ref(),
             )
             .expect("decode Gateway Communications query response")
         };
     let route_saved_search =
-        |request: hermes_communications_saved_query_api::CommunicationsSavedSearchRequestV1| {
+        |request: makosh_communications_saved_query_api::CommunicationsSavedSearchRequestV1| {
             let response = runtime.block_on(
                 router.route(
                     hyper::Request::builder()
                         .method("POST")
-                        .uri(hermes_communications_saved_query_api::SAVED_SEARCH_CONNECT_PATH_V1)
+                        .uri(makosh_communications_saved_query_api::SAVED_SEARCH_CONNECT_PATH_V1)
                         .header("content-type", "application/connect+proto")
                         .header("cookie", &cookie)
                         .body(http_body_util::Full::new(hyper::body::Bytes::from(
@@ -1617,19 +1617,19 @@ fn assert_communications_gateway_query_delivery(
                 .block_on(response.into_body().collect())
                 .expect("Gateway Communications saved-search response")
                 .to_bytes();
-            hermes_communications_saved_query_api::CommunicationsSavedSearchResponseV1::decode(
+            makosh_communications_saved_query_api::CommunicationsSavedSearchResponseV1::decode(
                 bytes.as_ref(),
             )
             .expect("decode Gateway Communications saved-search response")
         };
     let route_sender_insights =
-        |request: hermes_communications_sender_insights_api::ListSenderInsightsRequestV1| {
+        |request: makosh_communications_sender_insights_api::ListSenderInsightsRequestV1| {
             let response = runtime.block_on(
                 router.route(
                     hyper::Request::builder()
                         .method("POST")
                         .uri(
-                            hermes_communications_sender_insights_api::SENDER_INSIGHTS_CONNECT_PATH_V1,
+                            makosh_communications_sender_insights_api::SENDER_INSIGHTS_CONNECT_PATH_V1,
                         )
                         .header("content-type", "application/connect+proto")
                         .header("cookie", &cookie)
@@ -1644,17 +1644,17 @@ fn assert_communications_gateway_query_delivery(
                 .block_on(response.into_body().collect())
                 .expect("Gateway Communications sender-insights response")
                 .to_bytes();
-            hermes_communications_sender_insights_api::ListSenderInsightsResponseV1::decode(
+            makosh_communications_sender_insights_api::ListSenderInsightsResponseV1::decode(
                 bytes.as_ref(),
             )
             .expect("decode Gateway Communications sender-insights response")
         };
     let response = route_query(
-        hermes_communications_api::query_wire::CommunicationsQueryRequestV1 {
+        makosh_communications_api::query_wire::CommunicationsQueryRequestV1 {
             protocol_major: 1,
             operation: Some(
-                hermes_communications_api::query_wire::communications_query_request_v1::Operation::ListAccounts(
-                    hermes_communications_api::query_wire::ListAccountsRequestV1 {
+                makosh_communications_api::query_wire::communications_query_request_v1::Operation::ListAccounts(
+                    makosh_communications_api::query_wire::ListAccountsRequestV1 {
                         limit: 16,
                         cursor: Vec::new(),
                     },
@@ -1664,16 +1664,16 @@ fn assert_communications_gateway_query_delivery(
     );
     assert!(matches!(
         response.result,
-        Some(hermes_communications_api::query_wire::communications_query_response_v1::Result::ListAccounts(accounts))
+        Some(makosh_communications_api::query_wire::communications_query_response_v1::Result::ListAccounts(accounts))
             if !accounts.accounts.is_empty()
     ));
 
     let response = route_query(
-        hermes_communications_api::query_wire::CommunicationsQueryRequestV1 {
+        makosh_communications_api::query_wire::CommunicationsQueryRequestV1 {
             protocol_major: 1,
             operation: Some(
-                hermes_communications_api::query_wire::communications_query_request_v1::Operation::SearchCommunications(
-                    hermes_communications_api::query_wire::SearchCommunicationsRequestV1 {
+                makosh_communications_api::query_wire::communications_query_request_v1::Operation::SearchCommunications(
+                    makosh_communications_api::query_wire::SearchCommunicationsRequestV1 {
                         query: "fixture".to_owned(),
                         limit: 16,
                         cursor: Vec::new(),
@@ -1685,7 +1685,7 @@ fn assert_communications_gateway_query_delivery(
     assert!(response.error_code.is_empty());
     assert!(matches!(
         &response.result,
-        Some(hermes_communications_api::query_wire::communications_query_response_v1::Result::SearchCommunications(hits))
+        Some(makosh_communications_api::query_wire::communications_query_response_v1::Result::SearchCommunications(hits))
             if !hits.hits.is_empty()
                 && hits.hits.iter().all(|hit| {
                     hit.evidence_id.len() == 16
@@ -1696,7 +1696,7 @@ fn assert_communications_gateway_query_delivery(
     ));
     let message_id = match &response.result {
         Some(
-            hermes_communications_api::query_wire::communications_query_response_v1::Result::SearchCommunications(
+            makosh_communications_api::query_wire::communications_query_response_v1::Result::SearchCommunications(
                 hits,
             ),
         ) => hits
@@ -1704,11 +1704,11 @@ fn assert_communications_gateway_query_delivery(
             .iter()
             .find_map(|hit| {
                 let detail = route_query(
-                    hermes_communications_api::query_wire::CommunicationsQueryRequestV1 {
+                    makosh_communications_api::query_wire::CommunicationsQueryRequestV1 {
                         protocol_major: 1,
                         operation: Some(
-                            hermes_communications_api::query_wire::communications_query_request_v1::Operation::GetMessage(
-                                hermes_communications_api::query_wire::GetMessageRequestV1 {
+                            makosh_communications_api::query_wire::communications_query_request_v1::Operation::GetMessage(
+                                makosh_communications_api::query_wire::GetMessageRequestV1 {
                                     message_id: hit.message_id.clone(),
                                 },
                             ),
@@ -1718,8 +1718,8 @@ fn assert_communications_gateway_query_delivery(
                 matches!(
                     detail.result,
                     Some(
-                        hermes_communications_api::query_wire::communications_query_response_v1::Result::GetMessage(
-                            hermes_communications_api::query_wire::GetMessageResponseV1 {
+                        makosh_communications_api::query_wire::communications_query_response_v1::Result::GetMessage(
+                            makosh_communications_api::query_wire::GetMessageResponseV1 {
                                 message: Some(ref message),
                             },
                         ),
@@ -1744,7 +1744,7 @@ fn assert_communications_gateway_query_delivery(
     }
 
     let sender_insights = route_sender_insights(
-        hermes_communications_sender_insights_api::ListSenderInsightsRequestV1 {
+        makosh_communications_sender_insights_api::ListSenderInsightsRequestV1 {
             protocol_major: 1,
             account_id: None,
             limit: 20,
@@ -1753,7 +1753,7 @@ fn assert_communications_gateway_query_delivery(
     );
     assert_eq!(
         sender_insights.error,
-        hermes_communications_sender_insights_api::SenderInsightsErrorCodeV1::SenderInsightsErrorCodeUnspecified
+        makosh_communications_sender_insights_api::SenderInsightsErrorCodeV1::SenderInsightsErrorCodeUnspecified
             as i32
     );
     let sender_insight = sender_insights
@@ -1788,7 +1788,7 @@ fn assert_communications_gateway_query_delivery(
         );
     }
 
-    use hermes_communications_saved_query_api::{
+    use makosh_communications_saved_query_api::{
         CommunicationsSavedSearchRequestV1, CreateSavedSearchRequestV1, DeleteSavedSearchRequestV1,
         ExecuteSavedSearchRequestV1, ListSavedSearchesRequestV1, ReplaceSavedSearchRequestV1,
         SavedSearchErrorCodeV1,
@@ -1895,11 +1895,11 @@ fn assert_communications_gateway_query_delivery(
         router.route(
             hyper::Request::builder()
                 .method("POST")
-                .uri(hermes_communications_content_api::CONTENT_TICKET_CONNECT_PATH_V1)
+                .uri(makosh_communications_content_api::CONTENT_TICKET_CONNECT_PATH_V1)
                 .header("content-type", "application/connect+proto")
                 .header("cookie", &cookie)
                 .body(http_body_util::Full::new(hyper::body::Bytes::from(
-                    hermes_communications_content_api::IssueMessageBodyReadRequestV1 {
+                    makosh_communications_content_api::IssueMessageBodyReadRequestV1 {
                         protocol_major: 1,
                         message_id,
                     }
@@ -1913,7 +1913,7 @@ fn assert_communications_gateway_query_delivery(
         .block_on(ticket_response.into_body().collect())
         .expect("Gateway Communications content ticket response")
         .to_bytes();
-    let ticket = hermes_communications_content_api::IssueMessageBodyReadResponseV1::decode(
+    let ticket = makosh_communications_content_api::IssueMessageBodyReadResponseV1::decode(
         ticket_bytes.as_ref(),
     )
     .expect("decode Communications content ticket");
@@ -1923,7 +1923,7 @@ fn assert_communications_gateway_query_delivery(
         ticket.declared_bytes,
         u64::try_from("fixture source body for custody transfer".len()).expect("fixture body size")
     );
-    let read_request = hermes_communications_content_api::ReadMessageBodyRequestV1 {
+    let read_request = makosh_communications_content_api::ReadMessageBodyRequestV1 {
         protocol_major: 1,
         opaque_read_capability: ticket.opaque_read_capability,
     }
@@ -1933,7 +1933,7 @@ fn assert_communications_gateway_query_delivery(
             router.route(
                 hyper::Request::builder()
                     .method("POST")
-                    .uri(hermes_communications_content_api::CONTENT_READ_BLOB_PATH_V1)
+                    .uri(makosh_communications_content_api::CONTENT_READ_BLOB_PATH_V1)
                     .header("content-type", "application/proto")
                     .header("cookie", &cookie)
                     .body(http_body_util::Full::new(hyper::body::Bytes::from(
@@ -1975,7 +1975,7 @@ struct SchedulerRecoveryFixture {
 
 impl SchedulerRecoveryFixture {
     fn start() -> Self {
-        let root = unique_target_root("hermes-managed-scheduler-lifecycle");
+        let root = unique_target_root("makosh-managed-scheduler-lifecycle");
         let data = private_directory(root.join("kernel"));
         initialize_vault(
             &private_directory(data.join("vault")),
@@ -2017,7 +2017,7 @@ impl SchedulerRecoveryFixture {
         }
     }
 
-    fn start_initial_scheduler(&self) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+    fn start_initial_scheduler(&self) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
         let reservation =
             managed_launch::load(&self.supervisor, &self.store, SCHEDULER_REGISTRATION)
                 .expect("load initial Scheduler reservation");
@@ -2072,9 +2072,9 @@ impl SchedulerRecoveryFixture {
 
     fn assert_successor(
         &self,
-        binding: &hermes_kernel_control_store::PlatformStorageBindingV1,
+        binding: &makosh_kernel_control_store::PlatformStorageBindingV1,
         due_at: i64,
-    ) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+    ) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
         wait_for_scheduler_generation(&self.supervisor, &self.store, 2);
         let successor = scheduler_binding(&self.store);
         assert_eq!(successor.runtime_generation(), 2);
@@ -2090,7 +2090,7 @@ impl SchedulerRecoveryFixture {
 
     fn assert_revoked_binding_does_not_restart(
         &self,
-        successor: hermes_kernel_control_store::PlatformStorageBindingV1,
+        successor: makosh_kernel_control_store::PlatformStorageBindingV1,
     ) {
         let revoking = self
             .store
@@ -2279,7 +2279,7 @@ const SCHEDULE_CONTROL_RESULT_CAPABILITY: &str = "events.scheduler.schedule_cont
 
 fn scheduler_binding(
     store: &SqliteControlStore,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(SCHEDULER_REGISTRATION, STORAGE_CAPABILITY)
         .expect("read Scheduler Storage binding")

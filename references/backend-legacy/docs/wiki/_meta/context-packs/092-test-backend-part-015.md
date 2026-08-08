@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `test`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/tests/v1_communications_attachment_search.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v1_communications_attachment_search.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v1_communications_attachment_search.rs`
 - Size bytes / Размер в байтах: `8238`
 - Included characters / Включено символов: `8238`
 - Truncated / Обрезано: `no`
@@ -68,18 +68,18 @@ use axum::http::{Request, StatusCode};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, project_raw_email_message,
 };
-use hermes_hub_backend::domains::communications::storage::{
+use makosh_hub_backend::domains::communications::storage::{
     AttachmentSafetyScanReport, AttachmentSafetyScanStatus, CommunicationAttachmentDisposition,
     CommunicationStorageStore, NewCommunicationAttachment, NewCommunicationBlob,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const T: &str = "v1comms-attachment-search-test-token";
@@ -97,7 +97,7 @@ async fn router(database_url: &str) -> axum::Router {
 fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("request")
 }
@@ -292,7 +292,7 @@ fn uid() -> u128 {
 
 ### `backend/tests/v1_communications_attachment_translation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v1_communications_attachment_translation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v1_communications_attachment_translation.rs`
 - Size bytes / Размер в байтах: `10081`
 - Included characters / Включено символов: `10079`
 - Truncated / Обрезано: `no`
@@ -305,19 +305,19 @@ use axum::http::{Request, StatusCode, header};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, project_raw_email_message,
 };
-use hermes_hub_backend::domains::communications::storage::{
+use makosh_hub_backend::domains::communications::storage::{
     AttachmentSafetyScanReport, AttachmentSafetyScanStatus, CommunicationAttachmentDisposition,
     CommunicationStorageStore, NewCommunicationAttachment, NewCommunicationBlob,
 };
-use hermes_hub_backend::platform::settings::ApplicationSettingsStore;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::settings::ApplicationSettingsStore;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const LOCAL_API_TOKEN: &str = "v1comms-attachment-translation-test-token";
@@ -523,7 +523,7 @@ fn post(uri: &str, value: Value) -> Request<Body> {
         .method("POST")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .body(Body::from(value.to_string()))
         .expect("request")
 }
@@ -591,7 +591,7 @@ async fn configure_fake_ollama_setting(pool: &sqlx::PgPool, ollama_base_url: &st
         .update_setting_value(
             "ai.ollama_base_url",
             &json!(ollama_base_url),
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("fake Ollama setting");
@@ -600,7 +600,7 @@ async fn configure_fake_ollama_setting(pool: &sqlx::PgPool, ollama_base_url: &st
 
 ### `backend/tests/v1_communications_bilingual_reply_flow.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v1_communications_bilingual_reply_flow.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v1_communications_bilingual_reply_flow.rs`
 - Size bytes / Размер в байтах: `10274`
 - Included characters / Включено символов: `10139`
 - Truncated / Обрезано: `no`
@@ -613,15 +613,15 @@ use axum::http::{Request, StatusCode, header};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, project_raw_email_message,
 };
-use hermes_hub_backend::platform::settings::ApplicationSettingsStore;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::settings::ApplicationSettingsStore;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const LOCAL_API_TOKEN: &str = "v1comms-bilingual-reply-flow-test-token";
@@ -816,7 +816,7 @@ fn post(uri: &str, value: Value) -> Request<Body> {
         .method("POST")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .body(Body::from(value.to_string()))
         .expect("request")
 }
@@ -894,7 +894,7 @@ async fn configure_fake_ollama_setting(pool: &sqlx::PgPool, ollama_base_url: &st
         .update_setting_value(
             "ai.ollama_base_url",
             &json!(ollama_base_url),
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("fake Ollama setting");
@@ -903,7 +903,7 @@ async fn configure_fake_ollama_setting(pool: &sqlx::PgPool, ollama_base_url: &st
 
 ### `backend/tests/v1_communications_folders.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v1_communications_folders.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v1_communications_folders.rs`
 - Size bytes / Размер в байтах: `12837`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -917,14 +917,14 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, project_raw_email_message,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const T: &str = "v1comms-folder-test-token";
@@ -943,7 +943,7 @@ fn request(method: Method, uri: &str, body: Option<Value>) -> Request<Body> {
     let mut builder = Request::builder()
         .method(method)
         .uri(uri)
-        .header("x-hermes-secret", T);
+        .header("x-makosh-secret", T);
     if body.is_some() {
         builder = builder.header(header::CONTENT_TYPE, "application/json");
     }
@@ -1274,7 +1274,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/v1_communications_message_actions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v1_communications_message_actions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v1_communications_message_actions.rs`
 - Size bytes / Размер в байтах: `27528`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1288,14 +1288,14 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, project_raw_email_message,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const T: &str = "v1comms-action-test-token";
@@ -1303,7 +1303,7 @@ const T: &str = "v1comms-action-test-token";
 fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("request")
 }
@@ -1313,7 +1313,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -1322,7 +1322,7 @@ fn delete(uri: &str) -> Request<Body> {
     Request::builder()
         .method(Method::DELETE)
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("request")
 }
@@ -1655,7 +1655,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/v1_communications_read_receipts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v1_communications_read_receipts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v1_communications_read_receipts.rs`
 - Size bytes / Размер в байтах: `25036`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1670,15 +1670,15 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount,
 };
-use hermes_hub_backend::domains::communications::outbox::{
+use makosh_hub_backend::domains::communications::outbox::{
     CommunicationOutboxStatus, CommunicationOutboxStore, NewCommunicationOutboxItem,
     OutboxSendReceipt,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const T: &str = "v1comms-read-receipt-test-token";
@@ -1688,7 +1688,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -1696,7 +1696,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
 fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("request")
 }
@@ -1999,7 +1999,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/v1_communications_regressions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v1_communications_regressions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v1_communications_regressions.rs`
 - Size bytes / Размер в байтах: `298`
 - Included characters / Включено символов: `298`
 - Truncated / Обрезано: `no`
@@ -2017,7 +2017,7 @@ mod support;
 
 ### `backend/tests/v1_communications_regressions/analytics.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v1_communications_regressions/analytics.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v1_communications_regressions/analytics.rs`
 - Size bytes / Размер в байтах: `4231`
 - Included characters / Включено символов: `4231`
 - Truncated / Обрезано: `no`
@@ -2147,7 +2147,7 @@ async fn v1_top_senders_list_is_cursor_paginated_against_postgres() {
 
 ### `backend/tests/v1_communications_regressions/drafts_outbox.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v1_communications_regressions/drafts_outbox.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v1_communications_regressions/drafts_outbox.rs`
 - Size bytes / Размер в байтах: `16547`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2155,7 +2155,7 @@ async fn v1_top_senders_list_is_cursor_paginated_against_postgres() {
 ```rust
 use axum::http::StatusCode;
 use chrono::{Duration, Utc};
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount,
 };
 use serde_json::json;
@@ -2501,7 +2501,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/v1_communications_regressions/messages_threads.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v1_communications_regressions/messages_threads.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v1_communications_regressions/messages_threads.rs`
 - Size bytes / Размер в байтах: `23362`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2512,12 +2512,12 @@ use std::net::SocketAddr;
 use axum::http::StatusCode;
 use axum::routing::{get as axum_get, post as axum_post};
 use axum::{Json, Router};
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::signal_hub::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::signal_hub::{
     SignalHubStore, SignalPolicy, SignalPolicyMode, SignalPolicyScope,
 };
-use hermes_hub_backend::platform::settings::ApplicationSettingsStore;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::settings::ApplicationSettingsStore;
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::json;
 use testkit::context::TestContext;
 use tokio::net::TcpListener;
@@ -2855,7 +2855,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/v1_communications_regressions/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v1_communications_regressions/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v1_communications_regressions/support.rs`
 - Size bytes / Размер в байтах: `6795`
 - Included characters / Включено символов: `6795`
 - Truncated / Обрезано: `no`
@@ -2866,14 +2866,14 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use axum::body::{Body, to_bytes};
 use axum::http::{Method, Request, header};
 use chrono::Utc;
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, project_raw_email_message,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::{Value, json};
 
 pub(crate) const T: &str = "v1comms-regression-test-token";
@@ -2881,7 +2881,7 @@ pub(crate) const T: &str = "v1comms-regression-test-token";
 pub(crate) fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("request")
 }
@@ -2891,7 +2891,7 @@ pub(crate) fn post(uri: &str, body: Value) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -2900,7 +2900,7 @@ pub(crate) fn delete(uri: &str) -> Request<Body> {
     Request::builder()
         .method(Method::DELETE)
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("request")
 }
@@ -2910,8 +2910,8 @@ pub(crate) fn post_with_actor(uri: &str, body: Value) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
-        .header("x-hermes-actor-id", "hermes-frontend")
+        .header("x-makosh-secret", T)
+        .header("x-makosh-actor-id", "makosh-frontend")
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -3077,7 +3077,7 @@ pub(crate) async fn seed_projected_message_from_sender(
 
 ### `backend/tests/v1_communications_regressions_architecture.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v1_communications_regressions_architecture.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v1_communications_regressions_architecture.rs`
 - Size bytes / Размер в байтах: `2147`
 - Included characters / Включено символов: `2147`
 - Truncated / Обрезано: `no`
@@ -3151,7 +3151,7 @@ fn is_v1_communications_regression_test_file(path: &Path) -> bool {
 
 ### `backend/tests/v1_communications_saved_searches.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/v1_communications_saved_searches.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/v1_communications_saved_searches.rs`
 - Size bytes / Размер в байтах: `18240`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3163,14 +3163,14 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, WorkflowState, project_raw_email_message,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const T: &str = "v1comms-saved-search-test-token";
@@ -3189,7 +3189,7 @@ fn request(method: Method, uri: &str, body: Option<Value>) -> Request<Body> {
     let mut builder = Request::builder()
         .method(method)
         .uri(uri)
-        .header("x-hermes-secret", T);
+        .header("x-makosh-secret", T);
     if body.is_some() {
         builder = builder.header(header::CONTENT_TYPE, "application/json");
     }

@@ -21,9 +21,9 @@
 - Group / Группа: `.supergoal`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -53,9 +53,9 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ## Source Files / Исходные файлы
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-state.sh`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-state.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-state.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-state.sh`
 - Size bytes / Размер в байтах: `6039`
 - Included characters / Включено символов: `6011`
 - Truncated / Обрезано: `no`

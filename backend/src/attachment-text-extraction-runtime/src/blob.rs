@@ -1,15 +1,15 @@
 use std::{os::unix::net::UnixStream, time::Duration};
 
-use hermes_attachment_text_extraction_persistence::{
+use makosh_attachment_text_extraction_persistence::{
     ClaimedAttachmentTextExtractionJobV1, PersistedAttachmentTextArtifactV1,
     TextExtractionTargetBlobReceiptV1,
 };
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTargetV1, ManagedBlobCustodyTransferRequestV1,
     ManagedBlobSessionRequestV1, request_managed_blob_custody_transfer_v2,
     request_managed_blob_session_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::BlobDataOperationV1,
 };
@@ -17,7 +17,7 @@ use sha2::{Digest, Sha256};
 use zeroize::Zeroizing;
 
 use crate::ATTACHMENT_TEXT_EXTRACTION_BLOB_CAPABILITY_ID_V1;
-use hermes_attachment_translation_ingress::{
+use makosh_attachment_translation_ingress::{
     ATTACHMENT_TRANSLATION_BLOB_TARGET_CAPABILITY_ID_V1,
     ATTACHMENT_TRANSLATION_BLOB_TARGET_MODULE_ID_V1,
     ATTACHMENT_TRANSLATION_BLOB_TARGET_OWNER_ID_V1, ATTACHMENT_TRANSLATION_MAX_PROOF_BYTES_V1,
@@ -275,7 +275,7 @@ fn derived_reference_id(
     derived_receipt: [u8; 32],
 ) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.attachment-text-extraction.derived-blob.v1\0");
+    digest.update(b"makosh.attachment-text-extraction.derived-blob.v1\0");
     digest.update(run_id);
     digest.update(source_receipt);
     digest.update(parser_identity);
@@ -290,7 +290,7 @@ fn translation_source_reference_id(
     receipt_sha256: [u8; 32],
 ) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.attachment-text-extraction.translation-source.v1\0");
+    digest.update(b"makosh.attachment-text-extraction.translation-source.v1\0");
     digest.update(translation_run_id);
     digest.update(source_extraction_run_id);
     digest.update(source_revision.to_be_bytes());

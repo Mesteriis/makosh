@@ -3,7 +3,7 @@
 use super::*;
 
 use crate::identity::device::signer::DeviceSigner;
-use hermes_communication_note_candidate_api::{
+use makosh_communication_note_candidate_api::{
     COMMUNICATION_NOTE_CANDIDATE_CAPABILITY_ID_V1,
     COMMUNICATION_NOTE_CANDIDATE_COMMAND_CONTRACT_NAME_V1,
     COMMUNICATION_NOTE_CANDIDATE_CONTRACT_MAJOR_V1,
@@ -14,18 +14,18 @@ use hermes_communication_note_candidate_api::{
         StartCommunicationNoteCandidateRequestV1,
     },
 };
-use hermes_knowledge_command_api::{KNOWLEDGE_MODULE_ID_V1, KNOWLEDGE_OWNER_ID_V1};
-use hermes_review_note_candidate_api::{
+use makosh_knowledge_command_api::{KNOWLEDGE_MODULE_ID_V1, KNOWLEDGE_OWNER_ID_V1};
+use makosh_review_note_candidate_api::{
     REVIEW_NOTE_CANDIDATE_MODULE_ID_V1, REVIEW_NOTE_CANDIDATE_OWNER_V1,
     wire::{
         ReviewNoteCandidateDecisionV1, ReviewNoteCandidateErrorCodeV1,
         ReviewNoteCandidatePromotionStatusV1, ReviewNoteCandidateStateV1,
     },
 };
-use hermes_reviewed_note_candidate_promotion_core::{
+use makosh_reviewed_note_candidate_promotion_core::{
     REVIEWED_NOTE_CANDIDATE_PROMOTION_MODULE_ID_V1, REVIEWED_NOTE_CANDIDATE_PROMOTION_OWNER_V1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
 
@@ -38,10 +38,10 @@ const REJECTED_NOTE_SOURCE_BODY_V1: &[u8] =
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Blob, NATS, Communications, extraction, Review and Knowledge binaries"]
 fn managed_note_candidate_approve_reject_reaches_gateway_sse_and_replays_after_restart() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-reviewed-note-candidate");
+    let root = unique_target_root("makosh-managed-reviewed-note-candidate");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -49,13 +49,13 @@ fn managed_note_candidate_approve_reject_reaches_gateway_sse_and_replays_after_r
     );
     let release = installed_note_candidate_ensemble_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             NOTE_CANDIDATE_LOGICAL_HUMAN_OWNER_ID_V1,
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -68,7 +68,7 @@ fn managed_note_candidate_approve_reject_reaches_gateway_sse_and_replays_after_r
     let admitted = admit_note_candidate_ensemble_v1(&store);
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
-    let realtime = hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(64)
+    let realtime = makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(64)
         .expect("reviewed Note candidate realtime source");
     configure_route_handler(&supervisor, &store, &data);
     configure_note_candidate_realtime_v1(&supervisor, &store, realtime.clone());
@@ -525,7 +525,7 @@ fn managed_note_candidate_approve_reject_reaches_gateway_sse_and_replays_after_r
     supervisor.shutdown().expect("stop managed processes");
     assert_reviewed_note_candidate_persistence_negatives_v1(&gateway_runtime);
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove reviewed Note candidate fixture");
 }

@@ -64,25 +64,25 @@ Review и Knowledge имеют разные причины изменения и
 
 Source contract принадлежит Communications:
 
-- `hermes-communications-note-source-api`.
+- `makosh-communications-note-source-api`.
 
 Extraction принадлежит workflow owner
 `communication_note_candidate_extraction`:
 
-- `hermes-communication-note-candidate-api`;
-- `hermes-communication-note-candidate-core`;
-- `hermes-communication-note-candidate-persistence`;
-- `hermes-communication-note-candidate-runtime`;
-- `hermes-communication-note-candidate-assembly`.
+- `makosh-communication-note-candidate-api`;
+- `makosh-communication-note-candidate-core`;
+- `makosh-communication-note-candidate-persistence`;
+- `makosh-communication-note-candidate-runtime`;
+- `makosh-communication-note-candidate-assembly`.
 
 Review получает отдельный note-candidate slice:
 
-- `hermes-review-note-candidate-api`;
-- `hermes-review-note-candidate-core`;
-- `hermes-review-note-candidate-persistence`;
-- `hermes-review-note-candidate-promotion-api`;
-- `hermes-review-note-candidate-runtime`;
-- `hermes-review-note-candidate-assembly`.
+- `makosh-review-note-candidate-api`;
+- `makosh-review-note-candidate-core`;
+- `makosh-review-note-candidate-persistence`;
+- `makosh-review-note-candidate-promotion-api`;
+- `makosh-review-note-candidate-runtime`;
+- `makosh-review-note-candidate-assembly`.
 
 Он не расширяет task-candidate payload generic union и не хранит Knowledge
 truth. После approve Review переносит presentation bytes в Blob, bound к
@@ -95,10 +95,10 @@ assembly units. Только Knowledge создаёт durable verified note. Pro
 между terminal Review decision и Knowledge command выполняет отдельный
 `reviewed_note_candidate_promotion` workflow:
 
-- `hermes-reviewed-note-candidate-promotion-core`;
-- `hermes-reviewed-note-candidate-promotion-persistence`;
-- `hermes-reviewed-note-candidate-promotion-runtime`;
-- `hermes-reviewed-note-candidate-promotion-assembly`.
+- `makosh-reviewed-note-candidate-promotion-core`;
+- `makosh-reviewed-note-candidate-promotion-persistence`;
+- `makosh-reviewed-note-candidate-promotion-runtime`;
+- `makosh-reviewed-note-candidate-promotion-assembly`.
 
 Workflow не переиспользует Review receipt как Knowledge receipt. Он получает
 custody как отдельный admitted owner, проверяет exact bytes/hash и закрытую

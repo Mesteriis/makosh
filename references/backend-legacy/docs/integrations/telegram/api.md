@@ -4,8 +4,8 @@
 
 Все текущие маршруты защищены локальным API guard из ADR-0056, если явно не
 указано иначе. Browser WebSocket clients передают local secret через
-`hermes_secret`, потому что native WebSocket requests не могут выставить
-`X-Hermes-Secret`.
+`makosh_secret`, потому что native WebSocket requests не могут выставить
+`X-Макошь-Secret`.
 
 ## Base
 
@@ -22,9 +22,9 @@
 
 ## Scope Notes
 
-- Telegram в Hermes остаётся Communication Channel, а не отдельным memory или
+- Telegram в Макошь остаётся Communication Channel, а не отдельным memory или
   intelligence доменом.
 - Все provider writes должны проходить через capability gates, audit boundary и
   durable outbox/provider command model.
-- Realtime контракты описаны отдельно, но используют общий Hermes event bus и
+- Realtime контракты описаны отдельно, но используют общий Макошь event bus и
   общие transport routes.

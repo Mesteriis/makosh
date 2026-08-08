@@ -4,13 +4,13 @@ use std::path::Path;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicU64, Ordering};
 
-use hermes_blob_client::BlobDataClient;
-use hermes_gateway_runtime::{
+use makosh_blob_client::BlobDataClient;
+use makosh_gateway_runtime::{
     ClientBlobContractVersionV1, ClientBlobRouteErrorV1, ClientBlobRouteHandler, ClientBlobRouteV1,
     ClientBlobRouter, ClientBlobTransportV1, SharedBrowserGatewaySessionService,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     BlobDataOperationV1, ContractReferenceV1, ManagedRuntimeBlobSessionRequestV1,
     ModuleClientBlobAuthorizationV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };

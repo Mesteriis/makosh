@@ -17,10 +17,10 @@ use crate::platform::communications::mbox::{MboxParseError, split_mbox_messages}
 use crate::platform::communications::rfc822::errors::EmailRfc822ParseError;
 use crate::platform::communications::rfc822::models::ParsedEmailAttachmentDisposition;
 use crate::platform::communications::rfc822::parser::parse_rfc822_message;
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
-use hermes_communications_api::evidence::StoredRawCommunicationRecord;
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
-use hermes_communications_postgres::store::CommunicationIngestionStore;
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_api::evidence::StoredRawCommunicationRecord;
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
 use serde_json::json;
 
 #[derive(Clone)]
@@ -236,7 +236,7 @@ pub(crate) enum EmlImportError {
     #[error(transparent)]
     Mbox(#[from] MboxParseError),
     #[error(transparent)]
-    Ingestion(#[from] hermes_communications_postgres::errors::CommunicationIngestionError),
+    Ingestion(#[from] makosh_communications_postgres::errors::CommunicationIngestionError),
     #[error(transparent)]
     MessageProjection(#[from] MessageProjectionError),
     #[error(transparent)]

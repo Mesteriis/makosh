@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communications_derived_index_jobs (
+CREATE TABLE makosh_data.communications_derived_index_jobs (
   job_id BYTEA PRIMARY KEY CHECK (octet_length(job_id) = 16),
   operation SMALLINT NOT NULL CHECK (operation IN (1, 2)),
   evidence_id BYTEA NOT NULL CHECK (octet_length(evidence_id) = 16),
@@ -18,5 +18,5 @@ CREATE TABLE hermes_data.communications_derived_index_jobs (
   )
 );
 CREATE INDEX communications_derived_index_jobs_pending
-  ON hermes_data.communications_derived_index_jobs (created_at_unix_seconds, job_id)
+  ON makosh_data.communications_derived_index_jobs (created_at_unix_seconds, job_id)
   WHERE completed_at_unix_seconds IS NULL;

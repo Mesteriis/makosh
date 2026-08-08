@@ -1,4 +1,4 @@
-use hermes_attachment_preview_api::wire::{
+use makosh_attachment_preview_api::wire::{
     AttachmentPreviewContentTypeV1, AttachmentPreviewErrorCodeV1, AttachmentPreviewKindV1,
     AttachmentPreviewStateV1,
 };

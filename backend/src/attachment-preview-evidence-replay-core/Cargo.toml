@@ -1,5 +1,5 @@
 [package]
-name = "hermes-attachment-preview-evidence-replay-core"
+name = "makosh-attachment-preview-evidence-replay-core"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,10 +7,10 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "attachment_preview_evidence_replay"
 surface = "implementation"
 
 [dependencies]
-hermes-attachment-preview-evidence-replay-api = { path = "../attachment-preview-evidence-replay-api" }
+makosh-attachment-preview-evidence-replay-api = { path = "../attachment-preview-evidence-replay-api" }

@@ -1,14 +1,14 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     seal_attachment_translation_inference_request_v1,
     wire::{AiPrivateSourceReceiptV1, AttachmentTranslationInferenceRequestV1},
 };
-use hermes_attachment_translation_core::AttachmentTranslationStateV1;
-use hermes_attachment_translation_persistence::{
+use makosh_attachment_translation_core::AttachmentTranslationStateV1;
+use makosh_attachment_translation_persistence::{
     AttachmentTranslationPersistenceV1, PersistedAttachmentTranslationRunV1,
 };
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
 use prost::Message;
@@ -115,16 +115,16 @@ fn refresh_runtime_bound_source(
 
 #[cfg(test)]
 mod tests {
-    use hermes_ai_contracts::{
+    use makosh_ai_contracts::{
         AI_CONTRACT_MAJOR_V1, AI_CONTRACT_REVISION_V1, AI_CONTRACTS_SCHEMA_SHA256,
         AI_LOCAL_EGRESS_POLICY_REVISION_V1,
         wire::{AiContextReceiptV1, AiEgressPolicyV1, AiTranslationLanguageV1, AiUseCaseV1},
     };
-    use hermes_attachment_translation_core::{
+    use makosh_attachment_translation_core::{
         AttachmentTranslationDraftV1, AttachmentTranslationLanguageV1,
         AttachmentTranslationStatusV1,
     };
-    use hermes_attachment_translation_persistence::AttachmentTranslationSourceAuthorityV1;
+    use makosh_attachment_translation_persistence::AttachmentTranslationSourceAuthorityV1;
     use sha2::{Digest, Sha256};
 
     use super::*;

@@ -21,7 +21,7 @@ pub use model::{
 };
 pub use repository::ReviewedNoteCandidatePromotionPersistenceV1;
 
-pub const PACKAGE: &str = "hermes-reviewed-note-candidate-promotion-persistence";
+pub const PACKAGE: &str = "makosh-reviewed-note-candidate-promotion-persistence";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ReviewedNoteCandidatePromotionPersistenceErrorV1 {

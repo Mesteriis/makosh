@@ -2,15 +2,15 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobSessionRequestV1, request_managed_blob_session_v2,
 };
-use hermes_communications_api::CommunicationBodyBlobReferenceV1;
-use hermes_communications_domain::COMMUNICATIONS_SEARCH_MAX_DOCUMENT_BYTES_V1;
-use hermes_managed_vault_client::owner_derived_key::{
+use makosh_communications_api::CommunicationBodyBlobReferenceV1;
+use makosh_communications_domain::COMMUNICATIONS_SEARCH_MAX_DOCUMENT_BYTES_V1;
+use makosh_managed_vault_client::owner_derived_key::{
     ManagedOwnerDerivedKeyContextV1, ensure_managed_owner_derived_key_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{BlobDataOperationV1, ManagedStorageRuntimeConfigurationV1},
 };

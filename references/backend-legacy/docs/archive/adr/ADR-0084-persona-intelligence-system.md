@@ -16,14 +16,14 @@ Clarifies:
 
 ## Context
 
-Hermes Hub is a local-first Personal Memory System. The Personas domain was
+Макошь is a local-first Personal Memory System. The Personas domain was
 previously documented as a partially renamed contact system: contacts became
 persons, but the model still used CRM-shaped concepts such as contact merge,
 roles, nested personas, favorites, watchlists, health status, fingerprints,
 analytics and investigator flows.
 
-The domain direction has changed. Hermes does not treat people as contacts.
-Hermes treats subjects as Personas.
+The domain direction has changed. Макошь does not treat people as contacts.
+Макошь treats subjects as Personas.
 
 A Persona is a durable digital representation of a subject that can accumulate
 identity, relationships, communication context, memory, timeline, knowledge and
@@ -130,7 +130,7 @@ input aliases remain readable for replay and established request contracts.
 
 Positive:
 
-- The domain aligns with Hermes as a Personal Memory System.
+- The domain aligns with Макошь as a Personal Memory System.
 - People, agents, organization proxies and system actors can exist in one graph.
 - Relationships become queryable, provenance-backed records.
 - The Owner Persona gives agents a clear subject boundary.

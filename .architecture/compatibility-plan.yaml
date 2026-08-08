@@ -3,8 +3,8 @@ kind: compatibility-plan
 actions:
   - id: COMPAT-0001
     status: approved
-    old_public_path: hermes_events::envelope_validation
-    new_public_path: hermes_events::validation::envelope
+    old_public_path: makosh_events::envelope_validation
+    new_public_path: makosh_events::validation::envelope
     strategy: explicit re-export from the crate root only
     removal_policy: no module-path compatibility facade; external callers use the existing crate-root exports
     evidence: [{type: public-api, path: backend/src/platform/events/src/lib.rs, detail: public event API is crate-root based}]

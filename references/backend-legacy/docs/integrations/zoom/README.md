@@ -1,4 +1,4 @@
-# Hermes Communications - Zoom Provider Stage
+# Макошь Communications - Zoom Provider Stage
 
 Status: `FOUNDATION_IMPLEMENTED`, 2026-06-28.
 
@@ -7,8 +7,8 @@ Implementation evidence in this checkout: foundation code is present under
 Zoom migration, backend routes, targeted backend tests and targeted frontend
 tests. ADR-0102 is `Accepted` after target backend and frontend zoom validation.
 
-Zoom in Hermes is an external communication provider adapter. It is not a
-Hermes domain, not a meeting CRM and not a calendar source of truth. Zoom can
+Zoom in Макошь is an external communication provider adapter. It is not a
+Макошь domain, not a meeting CRM and not a calendar source of truth. Zoom can
 provide meeting evidence, recording evidence, transcript evidence, provider
 account metadata and runtime lifecycle signals.
 
@@ -39,7 +39,7 @@ The Zoom foundation provides:
 - token maintenance route for scanning authorized accounts and refreshing
   expiring HostVault token bundles;
 - scheduled token maintenance daemon with Signal Hub runtime gating,
-  HostVault unlock gating and `HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`
+  HostVault unlock gating and `MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`
   operational toggle;
 - managed webhook subscription status/reconcile/remove routes for authorized
   accounts, using app-owned access tokens and HostVault-backed webhook secret
@@ -49,10 +49,10 @@ The Zoom foundation provides:
   recording media and transcript-like text file import;
 - owner-visible privacy policy setting
   `privacy.zoom_remote_recording_download_enabled`, which must be enabled
-  before Hermes fetches recording media files directly from Zoom;
+  before Макошь fetches recording media files directly from Zoom;
 - owner-visible privacy policy setting
   `privacy.zoom_remote_transcript_download_enabled`, which must be enabled
-  before Hermes fetches transcript-like text files directly from Zoom;
+  before Макошь fetches transcript-like text files directly from Zoom;
 - owner-visible retention policy settings
   `privacy.zoom_recording_import_retention_days` and
   `privacy.zoom_transcript_retention_days`, which stamp retention metadata and
@@ -71,7 +71,7 @@ The Zoom foundation provides:
   `download_url`;
 - protected account-scoped webhook URL validation and signed
   meeting/recording webhook normalization;
-- `hermes-zoom-edge-proxy` public/edge ingress that preserves raw Zoom webhook
+- `makosh-zoom-edge-proxy` public/edge ingress that preserves raw Zoom webhook
   bodies and `x-zm-*` headers before forwarding to the protected bridge;
 - canonical Zoom events with causation and correlation support;
 - provider account listing with optional removed-account visibility;
@@ -84,7 +84,7 @@ The Zoom foundation provides:
   blobs and expired transcript evidence using stamped retention expiry intent;
 - scheduled retention cleanup daemon that periodically prunes expired imported
   recording blobs and transcript evidence through the same local retention
-  boundary, gated by `HERMES_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED`;
+  boundary, gated by `MAKOSH_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED`;
 - read-only account-scoped Zoom event audit route and settings-panel inspection
   for recent authorization, refresh/maintenance, runtime and bridge events;
 - provider-neutral Communications `calls` and `meetings` sections that read the

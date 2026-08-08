@@ -18,7 +18,7 @@ generated_by: code-wiki-ru
 
 Страница `operations/documentation-map.md` должна быть обновлена на основе
 содержимого `backend/README.md`. Она предоставит структурированную карту
-документации backend-компонента Hermes Hub: обзор возможностей, перечень
+документации backend-компонента Макошь: обзор возможностей, перечень
 команд разработки и тестирования, переменные окружения, HTTP API (health,
 readiness, V1‑статус, хранилище, события, аудит, граф, интеграции почты),
 защищённые Workflow API, описание дымовых тестов (smoke tests), операции с
@@ -33,7 +33,7 @@ email‑фикстурами, графовую проекцию, AI‑подси
 # Карта документации backend
 
 Карта построена на основе `backend/README.md` и описывает документацию,
-доступную для backend‑компонента Hermes Hub.
+доступную для backend‑компонента Макошь.
 
 ## Обзор
 
@@ -99,45 +99,45 @@ Backend реализован на Rust. Текущий состав включа
 
 ```sh
 cargo run --manifest-path backend/Cargo.toml
-cargo run --manifest-path backend/Cargo.toml --bin hermes-graph-project
-cargo run --manifest-path backend/Cargo.toml --bin hermes-email-fixture-export
-cargo run --manifest-path backend/Cargo.toml --bin hermes-email-fixture-dev
-cargo run --manifest-path backend/Cargo.toml --bin hermes-email-sync-dev
+cargo run --manifest-path backend/Cargo.toml --bin makosh-graph-project
+cargo run --manifest-path backend/Cargo.toml --bin makosh-email-fixture-export
+cargo run --manifest-path backend/Cargo.toml --bin makosh-email-fixture-dev
+cargo run --manifest-path backend/Cargo.toml --bin makosh-email-sync-dev
 cargo test --manifest-path backend/Cargo.toml
 cargo clippy --manifest-path backend/Cargo.toml --all-targets --all-features -- -D warnings
 ```
 
 ## Переменные окружения
 
-- `HERMES_HTTP_ADDR` – адрес прослушивания, по умолчанию `127.0.0.1:8080`.
-- `HERMES_BACKEND_STARTUP_ATTEMPTS` / `HERMES_BACKEND_STARTUP_SLEEP_SECONDS` –
+- `MAKOSH_HTTP_ADDR` – адрес прослушивания, по умолчанию `127.0.0.1:8080`.
+- `MAKOSH_BACKEND_STARTUP_ATTEMPTS` / `MAKOSH_BACKEND_STARTUP_SLEEP_SECONDS` –
   управление опросом готовности backend для `make dev` (по умолчанию
   300 попыток, интервал 1 с).
-- `HERMES_FRONTEND_STARTUP_ATTEMPTS` / `HERMES_FRONTEND_STARTUP_SLEEP_SECONDS` –
+- `MAKOSH_FRONTEND_STARTUP_ATTEMPTS` / `MAKOSH_FRONTEND_STARTUP_SLEEP_SECONDS` –
   аналогично для фронтенда (по умолчанию 120 попыток, интервал 1 с).
 - `DATABASE_URL` – опциональный URL PostgreSQL. Эндпоинт `/healthz` не
   требует соединения с БД.
-- `HERMES_LOCAL_API_SECRET` – локальный общий секрет, требуемый охранной
+- `MAKOSH_LOCAL_API_SECRET` – локальный общий секрет, требуемый охранной
   защитой маршрутизатора для защищённых локальных API.
-- `HERMES_VAULT_HOME` – директория host‑vault; по умолчанию локальный
-  Hermes‑vault‑home.
-- `HERMES_DEV_MODE` – при значении `true` включает отладочное поведение
+- `MAKOSH_VAULT_HOME` – директория host‑vault; по умолчанию локальный
+  Макошь‑vault‑home.
+- `MAKOSH_DEV_MODE` – при значении `true` включает отладочное поведение
   ключа разработки host‑vault.
-- `HERMES_DEV_KEY_PATH` – путь к отладочному ключу разработки host‑vault.
-- `HERMES_SECRET_VAULT_KEY` – устаревший мастер‑ключ зашифрованного
+- `MAKOSH_DEV_KEY_PATH` – путь к отладочному ключу разработки host‑vault.
+- `MAKOSH_SECRET_VAULT_KEY` – устаревший мастер‑ключ зашифрованного
   database‑vault, **запрещено коммитить, логировать или сохранять в
   PostgreSQL**.
-- `HERMES_OLLAMA_BASE_URL` – URL Ollama, по умолчанию `http://127.0.0.1:11434`.
-- `HERMES_OLLAMA_CHAT_MODEL` – модель чата, по умолчанию `qwen3:4b`.
-- `HERMES_OLLAMA_EMBED_MODEL` – модель эмбеддингов, по умолчанию
+- `MAKOSH_OLLAMA_BASE_URL` – URL Ollama, по умолчанию `http://127.0.0.1:11434`.
+- `MAKOSH_OLLAMA_CHAT_MODEL` – модель чата, по умолчанию `qwen3:4b`.
+- `MAKOSH_OLLAMA_EMBED_MODEL` – модель эмбеддингов, по умолчанию
   `qwen3-embedding:4b`.
-- `HERMES_OLLAMA_TIMEOUT_SECONDS` – таймаут запроса к Ollama, по умолчанию
+- `MAKOSH_OLLAMA_TIMEOUT_SECONDS` – таймаут запроса к Ollama, по умолчанию
   `120`.
 
 ## HTTP API
 
 Все эндпоинты `/api/v1/*` требуют заголовок
-`X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>`, если не указано иное.
+`X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>`, если не указано иное.
 
 ### Health и Readiness
 
@@ -162,7 +162,7 @@ cargo clippy --manifest-path backend/Cargo.toml --all-targets --all-features -- 
 
 | Метод | Путь | Описание |
 |-------|------|----------|
-| `POST` | `/api/v1/events` | Добавление канонического события. Авторизованные вызовы записываются в `api_audit_log` с актором `hermes-frontend`. Значение API‑секрета никогда не сохраняется. |
+| `POST` | `/api/v1/events` | Добавление канонического события. Авторизованные вызовы записываются в `api_audit_log` с актором `makosh-frontend`. Значение API‑секрета никогда не сохраняется. |
 | `GET` | `/api/v1/events/{event_id}` | Загрузка события по ID. |
 | `GET` | `/api/v1/audit/events` | Записи аудита, параметры: `target_id`, `actor_id`, `after_audit_id`, `limit`. |
 
@@ -185,7 +185,7 @@ cargo clippy --manifest-path backend/Cargo.toml --all-targets --all-features -- 
 
 ### Workflow API (защищённые)
 
-Все требуют `X-Hermes-Secret`.
+Все требуют `X-Макошь-Secret`.
 
 | Метод | Путь | Описание |
 |-------|------|----------|
@@ -212,16 +212,16 @@ cargo clippy --manifest-path backend/Cargo.toml --all-targets --all-features -- 
 - `make backend-ai-smoke-dev` – стартует локальный PostgreSQL для
   pgvector/API‑тестов и выполняет живую проверку Ollama против
   `http://192.168.1.2:11434` по умолчанию. Переопределить эндпоинт можно
-  переменной `HERMES_AI_SMOKE_OLLAMA_BASE_URL`.
+  переменной `MAKOSH_AI_SMOKE_OLLAMA_BASE_URL`.
 - `backend-contacts-smoke-dev` – устаревшее имя, запускает тестовый набор
   `persons`.
 
 ## Работа с email‑фикстурами
 
 - `make backend-email-fixture-export-icloud-dev` – экспорт redacted‑фикстуры
-  из iCloud IMAP. Требует переменные `HERMES_IMAP_FIXTURE_USERNAME`,
-  `HERMES_IMAP_FIXTURE_PASSWORD`, `HERMES_IMAP_FIXTURE_MAX_MESSAGES`,
-  `HERMES_IMAP_FIXTURE_OUTPUT`. Использует IMAP‑команды `EXAMINE`,
+  из iCloud IMAP. Требует переменные `MAKOSH_IMAP_FIXTURE_USERNAME`,
+  `MAKOSH_IMAP_FIXTURE_PASSWORD`, `MAKOSH_IMAP_FIXTURE_MAX_MESSAGES`,
+  `MAKOSH_IMAP_FIXTURE_OUTPUT`. Использует IMAP‑команды `EXAMINE`,
   `UID SEARCH` и `BODY.PEEK[]`, не импортирует в PostgreSQL. Результат по
   умолчанию в `tmp/` (игнорируется Git).
 - `make backend-email-fixture-import-dev` – импорт redacted‑фикстуры в
@@ -246,8 +246,8 @@ cargo clippy --manifest-path backend/Cargo.toml --all-targets --all-features -- 
 AI Workflow API работают на базе Ollama и pgvector для семантического
 поиска. Параметры задаются переменными окружения:
 
-- `HERMES_OLLAMA_BASE_URL`, `HERMES_OLLAMA_CHAT_MODEL`,
-  `HERMES_OLLAMA_EMBED_MODEL`, `HERMES_OLLAMA_TIMEOUT_SECONDS`.
+- `MAKOSH_OLLAMA_BASE_URL`, `MAKOSH_OLLAMA_CHAT_MODEL`,
+  `MAKOSH_OLLAMA_EMBED_MODEL`, `MAKOSH_OLLAMA_TIMEOUT_SECONDS`.
 
 Дымовой тест: `make backend-ai-smoke-dev`.
 
@@ -270,10 +270,10 @@ AI Workflow API работают на базе Ollama и pgvector для сем�
   email‑фикстурами, графовой проекцией и AI;
 - прямые Cargo‑команды;
 - переменные окружения с типами, значениями по умолчанию и
-  комментариями безопасности (`HERMES_SECRET_VAULT_KEY`);
+  комментариями безопасности (`MAKOSH_SECRET_VAULT_KEY`);
 - полные пути и методы HTTP‑эндпоинтов (`/healthz`, `/readyz`,
   `/api/v1/*`, в том числе vault, events, audit, graph, интеграции
-  почты и Workflow API), требования к заголовку `X-Hermes-Secret`;
+  почты и Workflow API), требования к заголовку `X-Макошь-Secret`;
 - границы дымовых тестов (граф, workflow, AI, устаревший
   `contacts-smoke`) и особенности их запуска;
 - операции экспорта/импорта email‑фикстур и синхронизации почтового

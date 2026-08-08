@@ -1,5 +1,5 @@
 use crate::support::*;
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 
 #[tokio::test]
 async fn enqueue_for_document_creates_extract_text_and_ocr_jobs() {

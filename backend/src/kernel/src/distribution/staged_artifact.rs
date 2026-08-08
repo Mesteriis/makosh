@@ -174,7 +174,7 @@ mod tests {
     #[test]
     fn stages_executable_and_data_with_distinct_exact_permissions() {
         let root = std::env::temp_dir().join(format!(
-            "hermes-staged-artifact-{}-{}",
+            "makosh-staged-artifact-{}-{}",
             std::process::id(),
             TEST_ID.fetch_add(1, Ordering::Relaxed)
         ));

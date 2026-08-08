@@ -4,17 +4,17 @@ use std::path::Path;
 use std::ptr::{self, NonNull};
 use std::sync::Arc;
 
-use hermes_telegram_call_media_contract::{
+use libloading::Library;
+use makosh_telegram_call_media_contract::{
     CALL_ENCRYPTION_KEY_BYTES, MAX_LIBRARY_VERSION_BYTES, MAX_LIBRARY_VERSIONS,
     MAX_SIGNALING_DATA_BYTES, TD_CALL_MAX_LAYER_V1, TelegramCallDiscardContextV1,
     TelegramCallMediaContractError, TelegramCallMediaEventV1, TelegramCallMediaFinalV1,
     TelegramCallMediaStateV1, TelegramCallProtocolV1, TelegramCallReadyPlanV1,
     TelegramCallSecretBytesV1, TelegramCallServerKindV1, TelegramCallSignalingMediaPort,
 };
-use libloading::Library;
 use zeroize::{Zeroize, Zeroizing};
 
-pub const PACKAGE: &str = "hermes-telegram-call-media-tgcalls";
+pub const PACKAGE: &str = "makosh-telegram-call-media-tgcalls";
 pub const TGCALLS_BRIDGE_ABI_VERSION_V1: u32 = 1;
 
 const RESULT_OK: i32 = 0;
@@ -139,23 +139,23 @@ impl NativeApi {
             .map_err(|_| TelegramCallMediaContractError::Unavailable)?;
         let api = unsafe {
             Self {
-                abi_version: load_symbol(&library, b"hermes_tgcalls_abi_version_v1\0")?,
-                version_count: load_symbol(&library, b"hermes_tgcalls_version_count_v1\0")?,
-                version_at: load_symbol(&library, b"hermes_tgcalls_version_at_v1\0")?,
-                max_layer: load_symbol(&library, b"hermes_tgcalls_max_layer_v1\0")?,
-                session_create: load_symbol(&library, b"hermes_tgcalls_session_create_v1\0")?,
+                abi_version: load_symbol(&library, b"makosh_tgcalls_abi_version_v1\0")?,
+                version_count: load_symbol(&library, b"makosh_tgcalls_version_count_v1\0")?,
+                version_at: load_symbol(&library, b"makosh_tgcalls_version_at_v1\0")?,
+                max_layer: load_symbol(&library, b"makosh_tgcalls_max_layer_v1\0")?,
+                session_create: load_symbol(&library, b"makosh_tgcalls_session_create_v1\0")?,
                 session_receive_signaling: load_symbol(
                     &library,
-                    b"hermes_tgcalls_session_receive_signaling_v1\0",
+                    b"makosh_tgcalls_session_receive_signaling_v1\0",
                 )?,
-                session_set_muted: load_symbol(&library, b"hermes_tgcalls_session_set_muted_v1\0")?,
+                session_set_muted: load_symbol(&library, b"makosh_tgcalls_session_set_muted_v1\0")?,
                 session_poll_event: load_symbol(
                     &library,
-                    b"hermes_tgcalls_session_poll_event_v1\0",
+                    b"makosh_tgcalls_session_poll_event_v1\0",
                 )?,
-                session_snapshot: load_symbol(&library, b"hermes_tgcalls_session_snapshot_v1\0")?,
-                session_stop: load_symbol(&library, b"hermes_tgcalls_session_stop_v1\0")?,
-                session_destroy: load_symbol(&library, b"hermes_tgcalls_session_destroy_v1\0")?,
+                session_snapshot: load_symbol(&library, b"makosh_tgcalls_session_snapshot_v1\0")?,
+                session_stop: load_symbol(&library, b"makosh_tgcalls_session_stop_v1\0")?,
+                session_destroy: load_symbol(&library, b"makosh_tgcalls_session_destroy_v1\0")?,
                 _library: library,
             }
         };
@@ -691,9 +691,9 @@ mod tests {
     #[test]
     #[ignore = "requires exact pinned tgcalls bridge artifact"]
     fn exact_bridge_reports_tdlib_compatible_protocol() {
-        let path = std::env::var_os("HERMES_TGCALLS_BRIDGE_PATH")
+        let path = std::env::var_os("MAKOSH_TGCALLS_BRIDGE_PATH")
             .map(std::path::PathBuf::from)
-            .expect("HERMES_TGCALLS_BRIDGE_PATH");
+            .expect("MAKOSH_TGCALLS_BRIDGE_PATH");
         let adapter = TgCallsMediaAdapter::load_exact(&path).expect("exact bridge");
         let protocol = adapter.supported_protocol().expect("protocol");
 

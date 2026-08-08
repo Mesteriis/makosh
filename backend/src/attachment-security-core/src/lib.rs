@@ -17,4 +17,4 @@ pub use verdict::{
     AttachmentSecurityVerdictV1, ScannerOutcomeV1, decide_attachment_security_verdict_v1,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-security-core";
+pub const PACKAGE: &str = "makosh-attachment-security-core";

@@ -28,4 +28,4 @@ pub use schema::{
     append_communications_retained_evidence_replay_storage_v1,
 };
 
-pub const PACKAGE: &str = "hermes-communications-retained-evidence-replay-persistence";
+pub const PACKAGE: &str = "makosh-communications-retained-evidence-replay-persistence";

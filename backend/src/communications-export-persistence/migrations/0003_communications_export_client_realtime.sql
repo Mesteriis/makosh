@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communications_export_client_realtime (
+CREATE TABLE makosh_data.communications_export_client_realtime (
     realtime_sequence BIGSERIAL PRIMARY KEY,
     logical_owner_id TEXT NOT NULL,
     export_id BYTEA NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE hermes_data.communications_export_client_realtime (
 );
 
 CREATE INDEX communications_export_client_realtime_owner_idx
-ON hermes_data.communications_export_client_realtime (
+ON makosh_data.communications_export_client_realtime (
     logical_owner_id,
     realtime_sequence
 );

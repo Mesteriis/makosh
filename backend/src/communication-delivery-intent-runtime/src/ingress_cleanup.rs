@@ -1,13 +1,13 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     ManagedBlobCustodyReleaseRequestV1, request_managed_blob_custody_release_v2,
 };
-use hermes_communication_delivery_intent_persistence::{
+use makosh_communication_delivery_intent_persistence::{
     CommunicationDeliveryIntentPersistenceV1, DeliveryIntentIngressCleanupJobV1,
     DeliveryIntentIngressCleanupReasonV1, DeliveryIntentPersistenceErrorV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::BlobCustodyReleaseReasonV1,
 };
@@ -117,7 +117,7 @@ impl DeliveryIntentManagedRuntimeV1 {
             .set_nonblocking(false)
             .map_err(|_| DeliveryIntentRuntimeErrorV1::Unavailable)?;
         let mut dispatcher =
-            hermes_runtime_protocol::managed_control::RejectManagedControlRequestsV2;
+            makosh_runtime_protocol::managed_control::RejectManagedControlRequestsV2;
         let result = {
             let mut release_port = ManagedDeliveryIntentIngressCustodyReleasePortV1 {
                 control_channel: &mut self.control_channel,

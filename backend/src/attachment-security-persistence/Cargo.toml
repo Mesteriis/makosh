@@ -1,5 +1,5 @@
 [package]
-name = "hermes-attachment-security-persistence"
+name = "makosh-attachment-security-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,19 +7,19 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "engine"
 owner = "attachment_security"
 surface = "persistence"
 
 [dependencies]
-hermes-attachment-archive-inspection-ingress = { path = "../attachment-archive-inspection-ingress" }
-hermes-attachment-preview-ingress = { path = "../attachment-preview-ingress" }
-hermes-attachment-text-extraction-ingress = { path = "../attachment-text-extraction-ingress" }
-hermes-attachment-security-core = { path = "../attachment-security-core" }
-hermes-communications-attachment-contract = { path = "../communications-attachment-contract" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-attachment-archive-inspection-ingress = { path = "../attachment-archive-inspection-ingress" }
+makosh-attachment-preview-ingress = { path = "../attachment-preview-ingress" }
+makosh-attachment-text-extraction-ingress = { path = "../attachment-text-extraction-ingress" }
+makosh-attachment-security-core = { path = "../attachment-security-core" }
+makosh-communications-attachment-contract = { path = "../communications-attachment-contract" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

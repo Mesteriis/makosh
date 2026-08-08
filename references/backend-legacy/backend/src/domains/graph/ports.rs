@@ -26,7 +26,7 @@ impl GraphProjectionPort {
 
     pub async fn summary(
         &self,
-    ) -> Result<hermes_graph_api::GraphSummary, GraphProjectionPortError> {
+    ) -> Result<makosh_graph_api::GraphSummary, GraphProjectionPortError> {
         self.0.summary().await.map_err(GraphProjectionPortError)
     }
 

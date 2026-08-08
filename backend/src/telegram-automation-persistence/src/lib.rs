@@ -7,4 +7,4 @@ pub use repository::{
     PersistedMutation, TelegramAutomationPersistence, TelegramAutomationPersistenceError,
 };
 
-pub const PACKAGE: &str = "hermes-telegram-automation-persistence";
+pub const PACKAGE: &str = "makosh-telegram-automation-persistence";

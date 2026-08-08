@@ -1,11 +1,11 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::EventEnvelope;
+use makosh_events_api::EventEnvelope;
 use serde_json::{Value, json};
 use sqlx::Transaction;
 use sqlx::postgres::Postgres;
 
-use hermes_events_postgres::store::EventStore;
-use hermes_observations_postgres::review_links::materialize_review_transition_link_in_transaction;
+use makosh_events_postgres::store::EventStore;
+use makosh_observations_postgres::review_links::materialize_review_transition_link_in_transaction;
 
 use super::super::constants::{TASK_CANDIDATE_EVENT_PREFIX, TASK_CANDIDATE_REVIEW_EVENT_TYPE};
 use super::super::errors::TaskCandidateError;

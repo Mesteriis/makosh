@@ -10,4 +10,4 @@ chunk_count: 1
 
 | Chunk | Role | Group | Sources | Summary |
 |---|---|---:|---:|---|
-| [[components/docs/125-other-docs|125-other-docs]] | `other` | `docs` | 3 | Обновить страницу `components/docs.md` в русской Obsidian‑wiki на основе последних исходников статического документационного сайта Hermes Hub (`docs/site/index.html` и `docs/site/hermes-docs.css`). Страница должна описа… |
+| [[components/docs/125-other-docs|125-other-docs]] | `other` | `docs` | 3 | Обновить страницу `components/docs.md` в русской Obsidian‑wiki на основе последних исходников статического документационного сайта Макошь (`docs/site/index.html` и `docs/site/makosh-docs.css`). Страница должна описа… |

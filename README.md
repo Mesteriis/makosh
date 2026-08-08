@@ -1,6 +1,6 @@
-# Hermes Hub
+# Макошь
 
-Hermes Hub — local-first Personal Memory System / Personal Operating System.
+Макошь — local-first Personal Memory System / Personal Operating System.
 Он объединяет коммуникации, evidence, знания, память, отношения, проекты,
 документы, задачи, календарный контекст, решения и обязательства владельца.
 
@@ -38,14 +38,14 @@ make pre-push
 ```
 
 `test` запускает только проверки, затронутые текущими изменениями (базовый
-commit можно переопределить через `HERMES_TEST_BASE`). `dev` поднимает
+commit можно переопределить через `MAKOSH_TEST_BASE`). `dev` поднимает
 development Compose contour, создаёт только отсутствующую pristine
 development owner identity, запускает Kernel с loopback Core Gateway и Vite,
 ждёт direct и same-origin readiness, затем открывает
 `http://127.0.0.1:5173/`. Kernel и Vite имеют один foreground lifecycle;
 Compose остаётся запущенным после остановки. По умолчанию используется
 `.local/kernel-dev`; другой абсолютный data directory задаётся через
-`HERMES_DEV_DATA_DIR`. `tauri` собирает desktop app.
+`MAKOSH_DEV_DATA_DIR`. `tauri` собирает desktop app.
 
 `.pre-commit-config.yaml` устанавливает оба Git hook type одной командой:
 
@@ -60,7 +60,7 @@ supply-chain checks, frontend unit/visual tests и production build выполн
 на `pre-push` через канонические `backend ci` и `frontend validate`.
 
 Не следует использовать старые legacy `make`-цели,
-`/api/v1/**` routes или `X-Hermes-Secret` как описание новой системы. Legacy
+`/api/v1/**` routes или `X-Макошь-Secret` как описание новой системы. Legacy
 Makefile, scripts и связанные tool/CI configs перенесены в
 `references/backend-legacy/` и не являются поддерживаемым command surface.
 
@@ -78,7 +78,7 @@ Legacy backend можно читать и исследовать, но запр�
 
 ## Продуктовая модель
 
-Hermes имеет два связанных пользовательских слоя:
+Макошь имеет два связанных пользовательских слоя:
 
 1. Полноценные provider-specific operational experiences для Mail, Telegram,
    WhatsApp, Zulip и других встроенных integrations.

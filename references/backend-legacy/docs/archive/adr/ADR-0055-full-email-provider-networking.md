@@ -6,9 +6,9 @@ Supersedes: ADR-0043
 
 ## Context
 
-ADR-0043 mandated read-only email provider networking as a temporary safety measure during the initial implementation phase. Hermes Hub has now matured to a point where full email functionality is required: the system must send emails, reply to threads, forward messages, and mutate server-side state (flags, labels, mailbox moves, deletions).
+ADR-0043 mandated read-only email provider networking as a temporary safety measure during the initial implementation phase. Макошь has now matured to a point where full email functionality is required: the system must send emails, reply to threads, forward messages, and mutate server-side state (flags, labels, mailbox moves, deletions).
 
-The read-only restriction was always intended to be temporary for a personal local-first system. The owner controls their own data and provider credentials. Hermes Hub is not a multi-tenant SaaS — there is no risk of one user mutating another user's mailbox.
+The read-only restriction was always intended to be temporary for a personal local-first system. The owner controls their own data and provider credentials. Макошь is not a multi-tenant SaaS — there is no risk of one user mutating another user's mailbox.
 
 ## Decision
 
@@ -43,7 +43,7 @@ Email provider networking supports both read and write operations.
 
 ## Consequences
 
-- Hermes Hub gains full email client functionality: compose, reply, forward, flag management, mailbox organization.
+- Макошь gains full email client functionality: compose, reply, forward, flag management, mailbox organization.
 - IMAP provider adapters must handle both `EXAMINE` (read) and `SELECT` (read-write) modes.
 - SMTP networking introduces a new transport layer alongside existing IMAP/Gmail API clients.
 - Test infrastructure must clearly separate read-only fixture tests from optional write-path integration tests.

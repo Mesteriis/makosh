@@ -1,16 +1,16 @@
-use hermes_communication_delayed_delivery_event_adapters::{
+use makosh_communication_delayed_delivery_event_adapters::{
     DecodedSchedulerScheduleResultV1, DelayedDeliverySchedulerResultContextV1,
     decode_scheduler_result_v1, scheduler_result_causation_id_v1,
 };
-use hermes_communication_delayed_delivery_persistence::{
+use makosh_communication_delayed_delivery_persistence::{
     ApplySchedulerResultV1, CommunicationDelayedDeliveryPersistenceV1,
     DelayedDeliveryPersistenceErrorV1, SchedulerScheduleResultV1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_scheduler_protocol::SCHEDULER_JOB_DESCRIPTOR_SET_V1;
+use makosh_scheduler_protocol::SCHEDULER_JOB_DESCRIPTOR_SET_V1;
 use sha2::{Digest, Sha256};
 
 pub(crate) async fn consume_scheduler_result_v1(
@@ -75,7 +75,7 @@ async fn discard_invalid_scheduler_result(
     delivery: RuntimePullDeliveryV1,
     reason: &str,
 ) -> Result<bool, DelayedDeliverySchedulerResultErrorV1> {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_delayed_delivery_scheduler_result_rejected={reason}");
     }
     delivery

@@ -1,4 +1,4 @@
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     AI_CONTRACT_MAJOR_V1, AI_CONTRACT_REVISION_V1, AI_CONTRACTS_SCHEMA_SHA256,
     AI_LOCAL_EGRESS_POLICY_REVISION_V1, AI_MAX_EXPLANATION_REASON_TEXT_BYTES_V1,
     AI_MAX_EXPLANATION_REASONS_V1, AI_MAX_OUTPUT_TOKENS_V1, seal_explanation_inference_request_v1,
@@ -9,36 +9,36 @@ use hermes_ai_contracts::{
 };
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_explanation_core::{
+use makosh_communication_explanation_core::{
     CommunicationExplanationRejectionCodeV1, CommunicationExplanationStateV1,
     CommunicationExplanationTransitionV1,
 };
-use hermes_communication_explanation_persistence::{
+use makosh_communication_explanation_persistence::{
     CommunicationExplanationPersistenceErrorV1, CommunicationExplanationPersistenceV1,
     CommunicationExplanationSourceResultV1,
 };
-use hermes_communications_ai_source_api::{
+use makosh_communications_ai_source_api::{
     communication_explanation_source_prepared_contract_reference_v1,
     communication_explanation_source_rejected_contract_reference_v1,
     wire::{CommunicationExplanationSourcePreparedV1, CommunicationExplanationSourceRejectedV1},
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, ResultOutcomeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 use sha2::{Digest, Sha256};
 
-const COMMUNICATIONS_RUNTIME_MODULE_ID_V1: &str = "hermes-communications-runtime";
+const COMMUNICATIONS_RUNTIME_MODULE_ID_V1: &str = "makosh-communications-runtime";
 
 use crate::{
     CommunicationExplanationBlobErrorV1, CommunicationExplanationInferenceErrorV1,
@@ -146,10 +146,10 @@ pub async fn consume_explanation_source_prepared_once_v1(
         .await
         .map_err(CommunicationExplanationSourceResultErrorV1::Persistence)?;
     let persisted = match persisted {
-        hermes_communication_explanation_persistence::CommunicationExplanationInboxResultV1::Applied(
+        makosh_communication_explanation_persistence::CommunicationExplanationInboxResultV1::Applied(
             value,
         )
-        | hermes_communication_explanation_persistence::CommunicationExplanationInboxResultV1::Duplicate(
+        | makosh_communication_explanation_persistence::CommunicationExplanationInboxResultV1::Duplicate(
             value,
         ) => value,
     };
@@ -247,7 +247,7 @@ struct PreparedSourceV1 {
     source_evidence_id: [u8; 16],
     source_evidence_revision: u64,
     source_content: Option<
-        hermes_communications_ai_source_api::wire::CommunicationExplanationSourceContentReceiptV1,
+        makosh_communications_ai_source_api::wire::CommunicationExplanationSourceContentReceiptV1,
     >,
 }
 
@@ -396,7 +396,7 @@ fn exact_contract(actual: Option<&ContractRefV1>, expected: &ContractReferenceV1
 
 fn context_id(run_id: &[u8; 16], evidence_id: &[u8; 16]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communication_explanation.context.v1\0");
+    digest.update(b"makosh.communication_explanation.context.v1\0");
     digest.update(run_id);
     digest.update(evidence_id);
     digest.finalize()[..16].try_into().expect("digest prefix")

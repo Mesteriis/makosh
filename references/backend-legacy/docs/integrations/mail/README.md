@@ -1,8 +1,8 @@
-# Hermes Communications - Email Channel
+# Макошь Communications - Email Channel
 
 Status: documentation package aligned to the current repository structure.
 
-Email is a communication channel inside Hermes, not the product identity.
+Email is a communication channel inside Макошь, not the product identity.
 The Mail operational screen is a first-class provider experience. Its bundled
 integration plugin preserves source evidence and maps provider records into the
 provider-neutral Communications evidence contract without giving the

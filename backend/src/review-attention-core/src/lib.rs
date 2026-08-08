@@ -2,7 +2,7 @@
 
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-review-attention-core";
+pub const PACKAGE: &str = "makosh-review-attention-core";
 pub const STABLE_ID_BYTES_V1: usize = 16;
 pub const MAX_SNOOZE_SECONDS_V1: i64 = 366 * 24 * 60 * 60;
 
@@ -136,7 +136,7 @@ pub fn derive_attention_id_v1(
         return Err(ReviewAttentionErrorV1::InvalidSourceEvidence);
     }
     let mut digest = Sha256::new();
-    digest.update(b"hermes.review.communication-attention.v1");
+    digest.update(b"makosh.review.communication-attention.v1");
     digest.update([0]);
     digest.update(logical_owner_id.as_bytes());
     digest.update([0]);

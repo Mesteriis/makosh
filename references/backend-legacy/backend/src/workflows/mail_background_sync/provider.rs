@@ -1,12 +1,12 @@
-use hermes_communications_api::accounts::ProviderAccount;
+use makosh_communications_api::accounts::ProviderAccount;
 mod gmail;
 mod imap;
 mod projection;
 pub(super) mod summary;
 pub(super) mod types;
 
-use hermes_communications_api::email_sync::EmailSyncAdapterConfig;
-use hermes_communications_api::mail_resources::{
+use makosh_communications_api::email_sync::EmailSyncAdapterConfig;
+use makosh_communications_api::mail_resources::{
     GmailResourceDiscoveryRequest, ImapMailboxListRequest,
 };
 
@@ -113,7 +113,7 @@ mod tests {
     use serde_json::json;
 
     use super::*;
-    use hermes_communications_api::email_sync::EmailSyncAdapterConfig;
+    use makosh_communications_api::email_sync::EmailSyncAdapterConfig;
 
     fn account(
         provider_kind: CommunicationProviderKind,

@@ -14,9 +14,9 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-overlay-host',
-	`hermes-overlay-host--${props.layer}`,
-	{ 'hermes-overlay-host--passive': props.passive },
+	'makosh-overlay-host',
+	`makosh-overlay-host--${props.layer}`,
+	{ 'makosh-overlay-host--passive': props.passive },
 	props.class
 ])
 </script>

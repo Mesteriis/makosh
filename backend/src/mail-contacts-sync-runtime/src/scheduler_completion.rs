@@ -1,9 +1,9 @@
-use hermes_mail_contacts_sync_persistence::{
+use makosh_mail_contacts_sync_persistence::{
     MailContactsSyncPersistenceErrorV1, MailContactsSyncPersistenceV1,
     MailContactsSyncScheduledTerminalOutcomeV1, OutboxEnvelopeV1,
     QueueMailContactsSyncScheduledTerminalV1,
 };
-use hermes_scheduler_protocol::v1::JobRunOutcomeV1;
+use makosh_scheduler_protocol::v1::JobRunOutcomeV1;
 
 use crate::{
     MailContactsSyncDueRuntimeContextV1, MailContactsSyncTerminalReceiptBindingV1,

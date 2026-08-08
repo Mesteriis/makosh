@@ -256,7 +256,7 @@ export function useAppLayoutNavbarSurface() {
 
   const themeFamilyOptions: AppLayoutNavbarThemeFamilyOption[] = [
     { value: 'base', label: 'Base' },
-    { value: 'hermes', label: 'Hermes' },
+    { value: 'makosh', label: 'Макошь' },
   ]
 
   const themeModeOptions: AppLayoutNavbarThemeModeOption[] = [
@@ -532,7 +532,7 @@ function navbarNotification(
     id: notification.id,
     title: notification.title,
     body: notification.body,
-    sourceLabel: notification.sourceLabel ?? 'Hermes',
+    sourceLabel: notification.sourceLabel ?? 'Макошь',
     timeLabel: notificationTimeLabel(notification.time),
     icon: notification.icon,
     tone: notification.tone ?? 'info',
@@ -547,7 +547,7 @@ function notificationTimeLabel(time: Date): string {
 
 function oauthReturnRouteId(search: string): string | null {
   const params = new URLSearchParams(search)
-  return params.get('hermes_route')?.trim() || null
+  return params.get('makosh_route')?.trim() || null
 }
 
 function normalizeLegacyRouteId(routeId: string): string {

@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `test`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/tests/signal_hub.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/signal_hub.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/signal_hub.rs`
 - Size bytes / Размер в байтах: `95434`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -68,18 +68,18 @@ use chrono::{Duration, Utc};
 use serde_json::json;
 use testkit::context::TestContext;
 
-use hermes_hub_backend::application::SignalHubReplayService;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::application::SignalHubReplayService;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionPort, CommunicationProviderAccountStore, CommunicationProviderKind,
     NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     COMMUNICATION_PROVIDER_OBSERVATION_CONSUMER, consume_accepted_signal_event,
     project_accepted_signal_if_runtime_allows,
 };
-use hermes_hub_backend::domains::persons::core::PERSON_ROLE_ASSIGNED_EVENT_TYPE;
-use hermes_hub_backend::domains::signal_hub::dispatch_telegram_raw_signal;
-use hermes_hub_backend::domains::signal_hub::{
+use makosh_hub_backend::domains::persons::core::PERSON_ROLE_ASSIGNED_EVENT_TYPE;
+use makosh_hub_backend::domains::signal_hub::dispatch_telegram_raw_signal;
+use makosh_hub_backend::domains::signal_hub::{
     SIGNAL_HUB_RAW_SIGNAL_CONSUMER, SignalConnectionCreate, SignalFixtureEmitRequest,
     SignalFixtureSourceService, SignalHealthCheckRequest, SignalHubConnectionService,
     SignalHubControlRequest, SignalHubControlService, SignalHubHealthService,
@@ -88,16 +88,16 @@ use hermes_hub_backend::domains::signal_hub::{
     SignalProcessingOutcome, SignalReplayRequestCreate, SignalRuntimeStateUpdate,
     process_signal_hub_raw_event,
 };
-use hermes_hub_backend::platform::events::{
+use makosh_hub_backend::platform::events::{
     EventConsumerConfig, EventConsumerRunner, EventConsumerStore, EventDeadLetterReviewState,
     EventLogQuery, EventStore, EventStoreError, NewEventEnvelope, ProjectionCursorStore,
     runtime_allows_processing,
 };
-use hermes_hub_backend::platform::settings::ApplicationSettingsStore;
-use hermes_hub_backend::workflows::person_derived_evidence::{
+use makosh_hub_backend::platform::settings::ApplicationSettingsStore;
+use makosh_hub_backend::workflows::person_derived_evidence::{
     PERSON_DERIVED_EVIDENCE_CONSUMER, project_person_derived_evidence_event,
 };
-use hermes_hub_backend::workflows::project_link_review_effects::{
+use makosh_hub_backend::workflows::project_link_review_effects::{
     PROJECT_LINK_REVIEW_EFFECTS_CONSUMER, PROJECT_LINK_REVIEW_EVENT_TYPE,
     project_link_review_effect_event,
 };
@@ -436,7 +436,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/signal_hub_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/signal_hub_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/signal_hub_api.rs`
 - Size bytes / Размер в байтах: `62066`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -445,15 +445,15 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 use axum::body::{Body, to_bytes};
 use axum::http::{Request, StatusCode};
 use chrono::Utc;
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionPort, CommunicationProviderAccountStore, CommunicationProviderKind,
     NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     COMMUNICATION_PROVIDER_OBSERVATION_CONSUMER, project_accepted_signal_if_runtime_allows,
 };
-use hermes_hub_backend::domains::signal_hub::dispatch_telegram_raw_signal;
+use makosh_hub_backend::domains::signal_hub::dispatch_telegram_raw_signal;
 use serde_json::Value;
 use testkit::app::{TestApp, delete, get, patch_json, post_json};
 use testkit::context::TestContext;
@@ -742,7 +742,7 @@ async fn signal_hub_connect_api_requires_local_api_secret() {
         .oneshot(
             Request::builder()
                 .method("POST")
-                .uri("/hermes.signal_hub.v1.SignalHubService/ListSources")
+                .uri("/makosh.signal_hub.v1.SignalHubService/ListSources")
                 .header("content-type", "application/json")
                 .body(Body::from("{}"))
                 .expect("connect request without secret"),
@@ -760,7 +760,7 @@ async fn signal_hub_connect_api_requires_local_api_secret() {
     let allowed_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/ListSources",
+            "/makosh.signal_hub.v1.SignalHubService/ListSources",
             serde_json::json!({}),
         ))
         .await
@@ -772,8 +772,8 @@ async fn signal_hub_connect_api_requires_local_api_secret() {
 async fn signal_hub_api_runs_ai_health_check_against_runtime_status() {
     let ctx = TestContext::new().await;
     let config = ctx
-        .app_config("hermes-test-api-secret")
-        .with_test_pairs([("HERMES_OLLAMA_BASE_URL", "http://127.0.0.1:9")])
+        .app_config("makosh-test-api-secret")
+        .with_test_pairs([("MAKOSH_OLLAMA_BASE_URL", "http://127.0.0.1:9")])
         .expect("ai runtime test config");
     let router = build_router_with_da
 ```
@@ -781,7 +781,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/snapshot_smoke.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/snapshot_smoke.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/snapshot_smoke.rs`
 - Size bytes / Размер в байтах: `687`
 - Included characters / Включено символов: `687`
 - Truncated / Обрезано: `no`
@@ -817,7 +817,7 @@ fn event_payload_snapshot_remains_stable() {
 
 ### `backend/tests/snapshots/snapshot_smoke__event_payload_snapshot_remains_stable.snap`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/snapshots/snapshot_smoke__event_payload_snapshot_remains_stable.snap`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/snapshots/snapshot_smoke__event_payload_snapshot_remains_stable.snap`
 - Size bytes / Размер в байтах: `450`
 - Included characters / Включено символов: `450`
 - Truncated / Обрезано: `no`
@@ -847,7 +847,7 @@ expression: "serde_json::to_string_pretty(&payload).expect(\"snapshot payload mu
 
 ### `backend/tests/storage.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/storage.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/storage.rs`
 - Size bytes / Размер в байтах: `2544`
 - Included characters / Включено символов: `2544`
 - Truncated / Обрезано: `no`
@@ -856,7 +856,7 @@ expression: "serde_json::to_string_pretty(&payload).expect(\"snapshot payload mu
 use testkit::context::TestContext;
 
 use chrono::{DateTime, Utc};
-use hermes_hub_backend::platform::storage::{Database, ReadinessStatus};
+use makosh_hub_backend::platform::storage::{Database, ReadinessStatus};
 
 #[tokio::test]
 async fn database_without_url_reports_not_configured() {
@@ -945,7 +945,7 @@ async fn migration_readiness_rejects_missing_latest_migration_against_postgres()
 
 ### `backend/tests/task_candidates.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/task_candidates.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/task_candidates.rs`
 - Size bytes / Размер в байтах: `216`
 - Included characters / Включено символов: `216`
 - Truncated / Обрезано: `no`
@@ -963,13 +963,13 @@ mod support;
 
 ### `backend/tests/task_candidates/event_replay.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/task_candidates/event_replay.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/task_candidates/event_replay.rs`
 - Size bytes / Размер в байтах: `3346`
 - Included characters / Включено символов: `3346`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::tasks::candidates::TaskCandidateReviewState;
+use makosh_hub_backend::domains::tasks::candidates::TaskCandidateReviewState;
 
 use super::support::{
     build_review_event, live_task_candidate_context, seed_message, unique_suffix,
@@ -1082,7 +1082,7 @@ async fn task_candidate_review_event_rebuilds_state_against_postgres() {
 
 ### `backend/tests/task_candidates/refresh.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/task_candidates/refresh.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/task_candidates/refresh.rs`
 - Size bytes / Размер в байтах: `10326`
 - Included characters / Включено символов: `10326`
 - Truncated / Обрезано: `no`
@@ -1410,16 +1410,16 @@ async fn task_candidate_refresh_updates_existing_source_title_candidate_against_
 
 ### `backend/tests/task_candidates/review.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/task_candidates/review.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/task_candidates/review.rs`
 - Size bytes / Размер в байтах: `18268`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
 
 ```rust
-use hermes_hub_backend::domains::tasks::candidates::{
+use makosh_hub_backend::domains::tasks::candidates::{
     TaskCandidateReviewCommand, TaskCandidateReviewState,
 };
-use hermes_hub_backend::platform::observations::{
+use makosh_hub_backend::platform::observations::{
     NewObservation, ObservationOriginKind, ObservationStore,
 };
 use serde_json::json;
@@ -1766,7 +1766,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/task_candidates/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/task_candidates/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/task_candidates/support.rs`
 - Size bytes / Размер в байтах: `4632`
 - Included characters / Включено символов: `4632`
 - Truncated / Обрезано: `no`
@@ -1776,18 +1776,18 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use testkit::context::TestContext;
 
 use chrono::Utc;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, project_raw_email_message,
 };
-use hermes_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
-use hermes_hub_backend::domains::tasks::candidates::{
+use makosh_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
+use makosh_hub_backend::domains::tasks::candidates::{
     TaskCandidateReviewState, TaskCandidateStore,
 };
-use hermes_hub_backend::platform::events::{EventStore, NewEventEnvelope};
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::events::{EventStore, NewEventEnvelope};
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::json;
 use sqlx::postgres::PgPool;
 
@@ -1919,7 +1919,7 @@ pub(crate) fn unique_suffix() -> u128 {
 
 ### `backend/tests/task_candidates_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/task_candidates_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/task_candidates_api.rs`
 - Size bytes / Размер в байтах: `13893`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1935,17 +1935,17 @@ use sqlx::Row;
 use sqlx::postgres::PgPool;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::{build_router, build_router_with_database};
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::{build_router, build_router_with_database};
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, project_raw_email_message,
 };
-use hermes_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
-use hermes_hub_backend::domains::tasks::candidates::TaskCandidateStore;
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
+use makosh_hub_backend::domains::tasks::candidates::TaskCandidateStore;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 
 const LOCAL_API_TOKEN: &str = "task-candidates-api-test-token";
 
@@ -1965,7 +1965,7 @@ async fn task_candidates_reject_missing_local_api_secret() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -2245,7 +2245,7 @@ fn get_request(uri: &str) -> Request<Body> {
 fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -2255,7 +2255,7 @@ fn json_put_request_with_actor(uri: &str, value: Value, token: &str) -> Request<
         .method("PUT")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(value.to_string()))
         .expect("request")
 }
@@ -2286,7 +2286,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/task_candidates_architecture.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/task_candidates_architecture.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/task_candidates_architecture.rs`
 - Size bytes / Размер в байтах: `1995`
 - Included characters / Включено символов: `1995`
 - Truncated / Обрезано: `no`
@@ -2358,7 +2358,7 @@ fn is_task_candidate_test_file(path: &Path) -> bool {
 
 ### `backend/tests/tasks.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/tasks.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/tasks.rs`
 - Size bytes / Размер в байтах: `42866`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2368,34 +2368,34 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use testkit::context::TestContext;
 
 use chrono::{Duration, Utc};
-use hermes_hub_backend::domains::decisions::{
+use makosh_hub_backend::domains::decisions::{
     DecisionEvidenceSourceKind, DecisionReviewState, DecisionStore, NewDecision,
     NewDecisionEvidence,
 };
-use hermes_hub_backend::domains::obligations::{
+use makosh_hub_backend::domains::obligations::{
     NewObligation, NewObligationEvidence, ObligationEntityKind, ObligationEvidenceSourceKind,
     ObligationReviewState, ObligationStore,
 };
-use hermes_hub_backend::domains::relationships::{
+use makosh_hub_backend::domains::relationships::{
     RelationshipEntityKind, RelationshipEvidenceSourceKind, RelationshipReviewState,
     RelationshipStore,
 };
-use hermes_hub_backend::domains::review::{
+use makosh_hub_backend::domains::review::{
     NewReviewItem, NewReviewItemEvidence, ReviewInboxStore, ReviewItemKind,
 };
-use hermes_hub_backend::domains::tasks::api::{NewTask, TaskListQuery, TaskStore, TaskUpdate};
-use hermes_hub_backend::domains::tasks::brain::TaskBrainService;
-use hermes_hub_backend::domains::tasks::core::{
+use makosh_hub_backend::domains::tasks::api::{NewTask, TaskListQuery, TaskStore, TaskUpdate};
+use makosh_hub_backend::domains::tasks::brain::TaskBrainService;
+use makosh_hub_backend::domains::tasks::core::{
     TaskChecklistStore, TaskContextPackStore, TaskEvidenceStore, TaskProviderStore,
     TaskRelationStore, TaskSubtaskStore,
 };
-use hermes_hub_backend::domains::tasks::health::TaskWatchtowerService;
-use hermes_hub_backend::domains::tasks::intelligence::TaskIntelligenceService;
-use hermes_hub_backend::domains::tasks::rules::{TaskRuleStore, TaskTemplateStore};
-use hermes_hub_backend::platform::observations::{
+use makosh_hub_backend::domains::tasks::health::TaskWatchtowerService;
+use makosh_hub_backend::domains::tasks::intelligence::TaskIntelligenceService;
+use makosh_hub_backend::domains::tasks::rules::{TaskRuleStore, TaskTemplateStore};
+use makosh_hub_backend::platform::observations::{
     NewObservation, ObservationOriginKind, ObservationStore,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::json;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::{PgPool, Row};
@@ -2441,14 +2441,14 @@ async fn task_crud_against_postgres() {
             title: format!("Test {suffix}"),
             description: Some("desc".into()),
             source_type: Some("manual".into()),
-            hermes_status: Some("new".into()),
+            makosh_status: Some("new".into()),
             priority_score: Some(0.8),
             ..Default::default()
         })
         .await
         .expect("create");
     assert!(task.task_id.starts_with("task:v1:"));
-    assert_eq!(task.hermes_status, "new");
+    assert_eq!(task.makosh_status, "new");
     assert_eq!(task.provenance_kind, "observation");
     assert!(task.provenance_id.starts_with("observation:v1:"));
     assert_eq!(task.source_kind, "observation");
@@ -2466,14 +2466,14 @@ async fn task_crud_against_postgres() {
         .update(
             &task.task_id,
             &TaskUpdate {
-                hermes_status: Some("in_progress".into()),
+                makosh_status: Some("in_progress".into()),
                 priority_score: Some(0.9),
                 ..Default::default()
             },
         )
         .await
         .expect("update");
-    assert_eq!(updated.hermes_status, "in_progress");
+    assert_eq!(updated.makosh_status, "in_progress");
     assert_float_eq(updated.priority_score.expect("updated priority score"), 0.9);
 
     store
@@ -2485,7 +2485,7 @@ async fn task_crud_against_postgres() {
         .await
         .expect("get")
         .expect("exists");
-    assert_eq!(done.hermes_status, "done");
+    assert_eq!(done.makosh_status, "done");
     assert!(done.completed_at.is_some());
 
     store.archive(&task.task_id).await.expect("archive");
@@ -2494,7 +2494,7 @@ async fn task_crud_against_postgres() {
         .await
         .expect("get")
         .expect("exists");
-    assert_eq!(archived.hermes_status, "archived");
+    assert_eq!(archived.makosh_status, "archived");
 }
 
 #[tokio::test]
@@ -2738,7 +2738,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/tasks_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/tasks_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/tasks_api.rs`
 - Size bytes / Размер в байтах: `218`
 - Included characters / Включено символов: `218`
 - Truncated / Обрезано: `no`
@@ -2758,7 +2758,7 @@ mod support;
 
 ### `backend/tests/tasks_api/auth.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/tasks_api/auth.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/tasks_api/auth.rs`
 - Size bytes / Размер в байтах: `500`
 - Included characters / Включено символов: `500`
 - Truncated / Обрезано: `no`
@@ -2777,21 +2777,21 @@ async fn tasks_rejects_missing_local_api_secret() {
     let body = json_body(response).await;
     assert_eq!(
         body,
-        json!({"error": "invalid_api_secret", "message": "missing or invalid x-hermes-secret header"})
+        json!({"error": "invalid_api_secret", "message": "missing or invalid x-makosh-secret header"})
     );
 }
 ```
 
 ### `backend/tests/tasks_api/crud.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/tasks_api/crud.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/tasks_api/crud.rs`
 - Size bytes / Размер в байтах: `21541`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
 
 ```rust
 use crate::support::*;
-use hermes_hub_backend::domains::decisions::{
+use makosh_hub_backend::domains::decisions::{
     DecisionEvidenceSourceKind, DecisionReviewState, DecisionStore, NewDecision,
     NewDecisionEvidence,
 };
@@ -3162,13 +3162,13 @@ async fn task_evidence_manual_create_path_captures_observation_against_postgres(
         return;
     };
 
-   
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/tests/tasks_api/mutations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/tasks_api/mutations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/tasks_api/mutations.rs`
 - Size bytes / Размер в байтах: `4525`
 - Included characters / Включено символов: `4525`
 - Truncated / Обрезано: `no`
@@ -3334,7 +3334,7 @@ async fn task_candidate_review() {
 
 ### `backend/tests/tasks_api/reads.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/tasks_api/reads.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/tasks_api/reads.rs`
 - Size bytes / Размер в байтах: `2891`
 - Included characters / Включено символов: `2891`
 - Truncated / Обрезано: `no`
@@ -3417,7 +3417,7 @@ task_get_simple!(task_candidates_list_returns_ok, "/api/v1/task-candidates");
 
 ### `backend/tests/tasks_api/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/tasks_api/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/tasks_api/support.rs`
 - Size bytes / Размер в байтах: `3735`
 - Included characters / Включено символов: `3735`
 - Truncated / Обрезано: `no`
@@ -3429,9 +3429,9 @@ use testkit::context::TestContext;
 pub(crate) use axum::Router;
 pub(crate) use axum::body::{Body, to_bytes};
 pub(crate) use axum::http::{Method, Request, StatusCode, header};
-pub(crate) use hermes_hub_backend::app::{build_router, build_router_with_database};
-pub(crate) use hermes_hub_backend::platform::config::AppConfig;
-pub(crate) use hermes_hub_backend::platform::storage::Database;
+pub(crate) use makosh_hub_backend::app::{build_router, build_router_with_database};
+pub(crate) use makosh_hub_backend::platform::config::AppConfig;
+pub(crate) use makosh_hub_backend::platform::storage::Database;
 pub(crate) use serde_json::{Value, json};
 pub(crate) use tower::ServiceExt;
 
@@ -3458,7 +3458,7 @@ pub(crate) fn get_request(uri: &str) -> Request<Body> {
 pub(crate) fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -3468,7 +3468,7 @@ pub(crate) fn post_request_with_token(uri: &str, body: Value, token: &str) -> Re
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -3478,7 +3478,7 @@ pub(crate) fn put_request_with_token(uri: &str, body: Value, token: &str) -> Req
         .method(Method::PUT)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -3487,7 +3487,7 @@ pub(crate) fn delete_request_with_token(uri: &str, token: &str) -> Request<Body>
     Request::builder()
         .method(Method::DELETE)
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -3546,7 +3546,7 @@ pub(crate) async fn create_task(app: &Router, suffix: u128) -> Option<String> {
 
 ### `backend/tests/tasks_api_architecture.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/tasks_api_architecture.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/tasks_api_architecture.rs`
 - Size bytes / Размер в байтах: `1942`
 - Included characters / Включено символов: `1942`
 - Truncated / Обрезано: `no`
@@ -3618,16 +3618,16 @@ fn is_tasks_api_test_file(path: &Path) -> bool {
 
 ### `backend/tests/telegram.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/telegram.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/telegram.rs`
 - Size bytes / Размер в байтах: `1044`
 - Included characters / Включено символов: `1044`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationProviderKind, ProviderAccountSecretPurpose,
 };
-use hermes_hub_backend::platform::secrets::SecretKind;
+use makosh_hub_backend::platform::secrets::SecretKind;
 
 #[test]
 fn telegram_provider_and_secret_kinds_are_account_scoped() {

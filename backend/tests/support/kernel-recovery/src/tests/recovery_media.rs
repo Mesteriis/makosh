@@ -20,7 +20,7 @@ use crate::tests::common::{Signer, SigningKey, unique_target_root};
 
 #[test]
 fn recovery_media_requires_an_exact_regular_file_inventory() {
-    let root = unique_target_root("hermes-recovery-media");
+    let root = unique_target_root("makosh-recovery-media");
     fs::create_dir_all(root.join("vault")).expect("media root");
     let entry = write_entry(
         &root,
@@ -58,7 +58,7 @@ fn recovery_media_rejects_path_escape_digest_drift_and_wrong_classification() {
         )
         .is_err()
     );
-    let root = unique_target_root("hermes-recovery-media-digest");
+    let root = unique_target_root("makosh-recovery-media-digest");
     fs::create_dir_all(root.join("control-store")).expect("media root");
     fs::write(root.join("control-store/store.bin"), b"changed").expect("control store");
     let entry = RecoveryMediaEntryV1::new(
@@ -75,9 +75,9 @@ fn recovery_media_rejects_path_escape_digest_drift_and_wrong_classification() {
 
 #[test]
 fn recovery_media_rejects_symlinked_manifest_entry() {
-    let root = unique_target_root("hermes-recovery-media-symlink");
+    let root = unique_target_root("makosh-recovery-media-symlink");
     fs::create_dir_all(root.join("vault")).expect("media root");
-    let external = unique_target_root("hermes-recovery-media-external");
+    let external = unique_target_root("makosh-recovery-media-external");
     fs::write(&external, b"external").expect("external file");
     std::os::unix::fs::symlink(&external, root.join("vault/snapshot.bin")).expect("media symlink");
     let entry = RecoveryMediaEntryV1::new(
@@ -96,7 +96,7 @@ fn recovery_media_rejects_symlinked_manifest_entry() {
 #[test]
 fn recovery_media_requires_the_pinned_manifest_signature() {
     let key = SigningKey::from_bytes((&[7_u8; 32]).into()).expect("signing key");
-    let root = unique_target_root("hermes-recovery-media-signed");
+    let root = unique_target_root("makosh-recovery-media-signed");
     fs::create_dir_all(&root).expect("media root");
     let raw = RecoveryMediaManifestV1::encode(
         provenance(),
@@ -129,7 +129,7 @@ fn recovery_media_requires_the_pinned_manifest_signature() {
 
 #[test]
 fn recovery_media_binds_conditional_components_to_the_signed_plan() {
-    let root = unique_target_root("hermes-recovery-media-plan");
+    let root = unique_target_root("makosh-recovery-media-plan");
     fs::create_dir_all(&root).expect("media root");
     let mut entries = required_entries(&root);
     entries.push(write_entry(
@@ -161,7 +161,7 @@ fn recovery_media_binds_conditional_components_to_the_signed_plan() {
 
 #[test]
 fn recovery_media_publisher_creates_one_private_verified_directory() {
-    let parent = private_parent("hermes-recovery-publish");
+    let parent = private_parent("makosh-recovery-publish");
     let destination = parent.join("published");
     let publisher = RecoveryMediaPublisher::create(&destination).expect("publisher");
     let _ = required_entries(publisher.payload_root());
@@ -189,7 +189,7 @@ fn recovery_media_publisher_creates_one_private_verified_directory() {
 
 #[test]
 fn recovery_media_publisher_rechecks_payload_and_removes_failed_staging() {
-    let parent = private_parent("hermes-recovery-publish-race");
+    let parent = private_parent("makosh-recovery-publish-race");
     let destination = parent.join("published");
     let publisher = RecoveryMediaPublisher::create(&destination).expect("publisher");
     let _ = required_entries(publisher.payload_root());
@@ -219,7 +219,7 @@ fn recovery_media_publisher_rechecks_payload_and_removes_failed_staging() {
 
 #[test]
 fn recovery_media_encrypts_large_payloads_and_rejects_the_wrong_recovery_key() {
-    let parent = private_parent("hermes-recovery-encryption");
+    let parent = private_parent("makosh-recovery-encryption");
     let destination = parent.join("published");
     let publisher = RecoveryMediaPublisher::create(&destination).expect("publisher");
     let mut plaintext = vec![0x5a; 1024 * 1024 + 37];
@@ -252,7 +252,7 @@ fn recovery_media_encrypts_large_payloads_and_rejects_the_wrong_recovery_key() {
                 entry
                     .file_name()
                     .to_string_lossy()
-                    .starts_with(".hermes-recovery-decrypt-")
+                    .starts_with(".makosh-recovery-decrypt-")
             })
             .count(),
         0

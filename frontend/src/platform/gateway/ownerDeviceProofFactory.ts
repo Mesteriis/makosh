@@ -5,7 +5,7 @@ import {
 } from './ownerDeviceProof'
 
 export function hasDevelopmentOwnerDeviceProofHostV1(): boolean {
-	return import.meta.env.VITE_HERMES_DEV_OWNER_DEVICE_PROOF_HOST === '1'
+	return import.meta.env.VITE_MAKOSH_DEV_OWNER_DEVICE_PROOF_HOST === '1'
 }
 
 export function createOwnerDeviceProofV1(): OwnerDeviceProofV1 {

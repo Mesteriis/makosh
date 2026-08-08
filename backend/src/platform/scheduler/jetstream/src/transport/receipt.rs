@@ -7,12 +7,12 @@ use std::{
 
 use async_nats::jetstream::consumer::{AckPolicy, PullConsumer};
 use futures_util::StreamExt;
-use hermes_events_protocol::RuntimeNatsJwtCredentialV1;
-use hermes_runtime_protocol::{
+use makosh_events_protocol::RuntimeNatsJwtCredentialV1;
+use makosh_runtime_protocol::{
     v1::SchedulerRuntimeReceiptConsumerBindingV1,
     validation::scheduler::validate_scheduler_runtime_receipt_consumer_binding,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     SchedulerReceiptDeliveryErrorV1, SchedulerReceiptDeliveryPortV1, SchedulerReceiptDeliveryV1,
 };
 use nats_jwt::KeyPair;

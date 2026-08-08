@@ -2,18 +2,18 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_delivery_intent_api::{
+use makosh_communication_delivery_intent_api::{
     COMMUNICATION_DELIVERY_INTENT_CONTRACT_MAJOR_V1,
     COMMUNICATION_DELIVERY_INTENT_CONTRACT_REVISION_V1, COMMUNICATION_DELIVERY_INTENT_OWNER_V1,
     COMMUNICATION_DELIVERY_INTENT_REALTIME_CONTRACT_NAME_V1,
     COMMUNICATION_DELIVERY_INTENT_REALTIME_EVENT_KIND_V1,
     COMMUNICATION_DELIVERY_INTENT_SCHEMA_SHA256, wire::DeliveryIntentStatusChangedV1,
 };
-use hermes_communication_delivery_intent_persistence::{
+use makosh_communication_delivery_intent_persistence::{
     CommunicationDeliveryIntentPersistenceV1, DeliveryIntentClientRealtimeTransitionV1,
     DeliveryIntentPersistenceErrorV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ContractReferenceV1, ManagedRuntimeClientRealtimePublishRequestV1,
@@ -149,10 +149,10 @@ fn event_id(transition: &DeliveryIntentClientRealtimeTransitionV1) -> [u8; 16] {
 
 #[cfg(test)]
 mod tests {
-    use hermes_communication_delivery_intent_api::wire::{
+    use makosh_communication_delivery_intent_api::wire::{
         DeliveryIntentErrorCodeV1, DeliveryIntentStatusChangedV1,
     };
-    use hermes_communication_delivery_intent_persistence::DeliveryIntentStateV1;
+    use makosh_communication_delivery_intent_persistence::DeliveryIntentStateV1;
 
     use super::*;
 

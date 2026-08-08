@@ -136,87 +136,87 @@
   "workspace": {
     "roles": {
       "kernel": {
-        "packages": ["hermes-kernel"],
-        "forbidden_dependencies": ["hermes-hub-backend", "reqwest", "sqlx"]
+        "packages": ["makosh-kernel"],
+        "forbidden_dependencies": ["makosh-backend", "reqwest", "sqlx"]
       },
       "event_api": {
-        "packages": ["hermes-events-api"],
-        "forbidden_dependencies": ["hermes-hub-backend", "reqwest", "sqlx"]
+        "packages": ["makosh-events-api"],
+        "forbidden_dependencies": ["makosh-backend", "reqwest", "sqlx"]
       },
       "event_postgres": {
-        "packages": ["hermes-events-postgres"],
-        "forbidden_dependencies": ["hermes-hub-backend", "reqwest"]
+        "packages": ["makosh-events-postgres"],
+        "forbidden_dependencies": ["makosh-backend", "reqwest"]
       },
       "event_nats": {
-        "packages": ["hermes-events-nats"],
-        "forbidden_dependencies": ["hermes-hub-backend", "reqwest", "sqlx"]
+        "packages": ["makosh-events-nats"],
+        "forbidden_dependencies": ["makosh-backend", "reqwest", "sqlx"]
       },
       "provider_api": {
-        "packages": ["hermes-provider-api"],
-        "forbidden_dependencies": ["hermes-hub-backend", "reqwest", "sqlx"]
+        "packages": ["makosh-provider-api"],
+        "forbidden_dependencies": ["makosh-backend", "reqwest", "sqlx"]
       },
       "vault_api": {
-        "packages": ["hermes-vault-api"],
-        "forbidden_dependencies": ["hermes-hub-backend", "reqwest", "sqlx"]
+        "packages": ["makosh-vault-api"],
+        "forbidden_dependencies": ["makosh-backend", "reqwest", "sqlx"]
       },
       "blob_api": {
-        "packages": ["hermes-blob-api"],
-        "forbidden_dependencies": ["hermes-hub-backend", "reqwest", "sqlx"]
+        "packages": ["makosh-blob-api"],
+        "forbidden_dependencies": ["makosh-backend", "reqwest", "sqlx"]
       },
       "contract_api": {
-        "packages": ["hermes-connectrpc-contracts"],
-        "forbidden_dependencies": ["hermes-hub-backend", "reqwest", "sqlx"]
+        "packages": ["makosh-connectrpc-contracts"],
+        "forbidden_dependencies": ["makosh-backend", "reqwest", "sqlx"]
       },
       "provider_impl": {
-        "packages": ["hermes-provider-zulip", "hermes-provider-zoom", "hermes-provider-telemost", "hermes-provider-mail", "hermes-provider-telegram", "hermes-provider-whatsapp"],
-        "forbidden_dependencies": ["hermes-hub-backend", "sqlx", "hermes-backend-testkit"]
+        "packages": ["makosh-provider-zulip", "makosh-provider-zoom", "makosh-provider-telemost", "makosh-provider-mail", "makosh-provider-telegram", "makosh-provider-whatsapp"],
+        "forbidden_dependencies": ["makosh-backend", "sqlx", "makosh-backend-testkit"]
       },
       "connector_runtime": {
-        "packages": ["hermes-zulip-connector"],
-        "forbidden_dependencies": ["hermes-hub-backend", "sqlx", "hermes-backend-testkit", "hermes-communications-postgres"]
+        "packages": ["makosh-zulip-connector"],
+        "forbidden_dependencies": ["makosh-backend", "sqlx", "makosh-backend-testkit", "makosh-communications-postgres"]
       },
       "test_session": {
-        "packages": ["hermes-test-session"],
-        "forbidden_dependencies": ["hermes-hub-backend", "hermes-backend-testkit"]
+        "packages": ["makosh-test-session"],
+        "forbidden_dependencies": ["makosh-backend", "makosh-backend-testkit"]
       },
       "composition": {
-        "packages": ["hermes-hub-backend"],
+        "packages": ["makosh-backend"],
         "forbidden_dependencies": []
       },
       "test_support": {
-        "packages": ["hermes-backend-testkit"],
+        "packages": ["makosh-backend-testkit"],
         "forbidden_dependencies": []
       },
       "api": {
-        "packages": ["hermes-api"],
-        "forbidden_dependencies": ["hermes-hub-backend", "sqlx"]
+        "packages": ["makosh-api"],
+        "forbidden_dependencies": ["makosh-backend", "sqlx"]
       },
       "worker_runtime": {
-        "packages": ["hermes-worker-runtime"],
-        "forbidden_dependencies": ["hermes-hub-backend", "sqlx"]
+        "packages": ["makosh-worker-runtime"],
+        "forbidden_dependencies": ["makosh-backend", "sqlx"]
       },
       "desktop_composition": {
-        "packages": ["hermes-desktop-runtime"],
-        "forbidden_dependencies": ["hermes-backend-testkit"]
+        "packages": ["makosh-desktop-runtime"],
+        "forbidden_dependencies": ["makosh-backend-testkit"]
       },
       "schema": {
-        "packages": ["hermes-schema"],
-        "forbidden_dependencies": ["hermes-hub-backend", "hermes-backend-testkit"]
+        "packages": ["makosh-schema"],
+        "forbidden_dependencies": ["makosh-backend", "makosh-backend-testkit"]
       },
       "domain_api": {
-        "packages": ["hermes-communications-api", "hermes-signal-hub-api", "hermes-personas-api", "hermes-graph-api", "hermes-relationships-api", "hermes-decisions-api", "hermes-obligations-api", "hermes-calendar-api", "hermes-tasks-api", "hermes-projects-api"],
+        "packages": ["makosh-communications-api", "makosh-signal-hub-api", "makosh-personas-api", "makosh-graph-api", "makosh-relationships-api", "makosh-decisions-api", "makosh-obligations-api", "makosh-calendar-api", "makosh-tasks-api", "makosh-projects-api"],
         "forbidden_dependencies": ["sqlx", "reqwest"]
       },
       "observation_api": {
-        "packages": ["hermes-observations-api"],
+        "packages": ["makosh-observations-api"],
         "forbidden_dependencies": ["sqlx", "reqwest"]
       },
       "persistence_adapter": {
-        "packages": ["hermes-observations-postgres", "hermes-communications-postgres", "hermes-signal-hub-postgres", "hermes-relationships-postgres", "hermes-graph-postgres", "hermes-personas-postgres", "hermes-decisions-postgres", "hermes-obligations-postgres", "hermes-calendar-postgres", "hermes-tasks-postgres", "hermes-projects-postgres"],
+        "packages": ["makosh-observations-postgres", "makosh-communications-postgres", "makosh-signal-hub-postgres", "makosh-relationships-postgres", "makosh-graph-postgres", "makosh-personas-postgres", "makosh-decisions-postgres", "makosh-obligations-postgres", "makosh-calendar-postgres", "makosh-tasks-postgres", "makosh-projects-postgres"],
         "forbidden_dependencies": []
       },
       "application": {
-        "packages": ["hermes-provider-orchestration"],
+        "packages": ["makosh-provider-orchestration"],
         "forbidden_dependencies": []
       },
       "runtime": {

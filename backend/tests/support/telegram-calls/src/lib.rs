@@ -1,1 +1,1 @@
-pub const PACKAGE: &str = "hermes-telegram-calls-testkit";
+pub const PACKAGE: &str = "makosh-telegram-calls-testkit";

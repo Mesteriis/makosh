@@ -1,4 +1,4 @@
-//! Supervised lifecycle primitives for the bundled Hermes desktop runtime.
+//! Supervised lifecycle primitives for the bundled Макошь desktop runtime.
 //!
 //! This crate deliberately knows nothing about HTTP, PostgreSQL, providers or
 //! vaults. Composition supplies managed tasks and observes lifecycle events.

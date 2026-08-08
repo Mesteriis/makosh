@@ -134,7 +134,7 @@ Failure после durable desired commit:
 
 ```text
 capability = zulip.account.lifecycle.v1
-route      = /hermes.zulip.account.v1.ZulipAccountLifecycleService/Apply
+route      = /makosh.zulip.account.v1.ZulipAccountLifecycleService/Apply
 ```
 
 Контракт переносит только sanitized revision metadata:
@@ -328,7 +328,7 @@ adapter.
 Live evidence:
 
 ```bash
-HERMES_STORAGE_MANAGED_TEST_FILTER=managed_zulip_account_rotation_and_retirement_use_settings_successors node scripts/test-authenticated-storage.mjs 1.97.0
+MAKOSH_STORAGE_MANAGED_TEST_FILTER=managed_zulip_account_rotation_and_retirement_use_settings_successors node scripts/test-authenticated-storage.mjs 1.97.0
 ```
 
 Disposable direct Vault seed/replace в этом contour является test support.

@@ -1,13 +1,13 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyReleaseRequestV1, ManagedBlobCustodyTransferRequestV1,
     ManagedBlobSessionRequestV1, request_managed_blob_custody_release_v2,
     request_managed_blob_custody_transfer_v2, request_managed_blob_session_v2,
 };
-use hermes_communication_recipient_suggestion_persistence::CommunicationRecipientSuggestionBlobCleanupV1;
-use hermes_communications_recipient_source_api::COMMUNICATION_RECIPIENT_SOURCE_MAX_BYTES_V1;
-use hermes_runtime_protocol::{
+use makosh_communication_recipient_suggestion_persistence::CommunicationRecipientSuggestionBlobCleanupV1;
+use makosh_communications_recipient_source_api::COMMUNICATION_RECIPIENT_SOURCE_MAX_BYTES_V1;
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{BlobCustodyReleaseReasonV1, BlobDataOperationV1},
 };
@@ -190,7 +190,7 @@ fn id16(value: &[u8]) -> Result<[u8; 16], CommunicationRecipientSuggestionBlobEr
 
 fn release_operation_id(run_id: [u8; 16]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communication_recipient_suggestion.release_source.v1\0");
+    digest.update(b"makosh.communication_recipient_suggestion.release_source.v1\0");
     digest.update(run_id);
     digest.finalize()[..16]
         .try_into()

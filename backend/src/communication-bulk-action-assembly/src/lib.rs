@@ -10,20 +10,20 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use hermes_communication_bulk_action_persistence::schema::communication_bulk_action_storage_bundle_v1;
-use hermes_communication_bulk_action_runtime::admission::{
+use makosh_communication_bulk_action_persistence::schema::communication_bulk_action_storage_bundle_v1;
+use makosh_communication_bulk_action_runtime::admission::{
     communication_bulk_action_module_descriptor_v1, communication_bulk_action_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
 pub const BULK_ACTION_ASSEMBLY_FRAGMENT_VERSION_V1: u32 = 1;
 pub const BULK_ACTION_ASSEMBLY_OWNER_ID: &str = "communication_bulk_action";
-pub const BULK_ACTION_ASSEMBLY_MODULE_ID: &str = "hermes-communication-bulk-action-runtime";
+pub const BULK_ACTION_ASSEMBLY_MODULE_ID: &str = "makosh-communication-bulk-action-runtime";
 pub const BULK_ACTION_RUNTIME_ARTIFACT_ID: &str = "communication_bulk_action.runtime.v1";
 pub const BULK_ACTION_STORAGE_ARTIFACT_ID: &str = "communication_bulk_action.storage.v1";
 pub const BULK_ACTION_DESCRIPTOR_FILE: &str = "communication_bulk_action.runtime.descriptor.pb";
@@ -32,7 +32,7 @@ pub const BULK_ACTION_STORAGE_BUNDLE_FILE: &str = "communication_bulk_action.sto
 pub const BULK_ACTION_ARTIFACT_FRAGMENT_FILE: &str =
     "communication_bulk_action.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH: &str = "bin/hermes-communication-bulk-action-runtime";
+const RUNTIME_RELATIVE_PATH: &str = "bin/makosh-communication-bulk-action-runtime";
 const DESCRIPTOR_RELATIVE_PATH: &str = "contracts/communication_bulk_action.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH: &str = "contracts/communication_bulk_action.runtime.settings.pb";
 const STORAGE_RELATIVE_PATH: &str = "storage/communication_bulk_action.storage.bundle.pb";
@@ -257,8 +257,8 @@ mod tests {
         sync::atomic::{AtomicU64, Ordering},
     };
 
-    use hermes_runtime_protocol::v1::{ModuleDescriptorV1, SettingsSchemaV1};
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_runtime_protocol::v1::{ModuleDescriptorV1, SettingsSchemaV1};
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -267,7 +267,7 @@ mod tests {
     #[test]
     fn materializes_exact_unsigned_workflow_runtime_and_storage_fragment() {
         let root = temporary_directory();
-        let runtime = root.join("hermes-communication-bulk-action-runtime");
+        let runtime = root.join("makosh-communication-bulk-action-runtime");
         fs::write(&runtime, b"runtime").expect("write runtime");
         let output = root.join("assembly");
         let paths = materialize_bulk_action_release_assembly_v1(&output, "build-1", &runtime)

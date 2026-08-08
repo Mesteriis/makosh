@@ -7,7 +7,7 @@ import {
 	type CallTranscriptionArtifactV1,
 	type CallTranscriptionStatusChangedV1,
 	type GetCallTranscriptionResponseV1,
-} from '../../../gen/hermes/call_transcription/v1/transcription_pb'
+} from '../../../gen/makosh/call_transcription/v1/transcription_pb'
 import {
 	getCallTranscriptionStatus,
 	openCallTranscriptionRealtime,

@@ -54,7 +54,7 @@ Kernel должен прочитать control state, чтобы запусти�
 ```
 
 Обычный JSON/CBOR-файл убрал бы external service dependency, но заставил бы
-Hermes самостоятельно реализовать multi-record transactions, crash-safe
+Макошь самостоятельно реализовать multi-record transactions, crash-safe
 rename/fsync, locking, migrations, constraints и corruption recovery. Для
 состояния authorization и lifecycle частично записанный transition опаснее,
 чем отказ всей операции.
@@ -73,14 +73,14 @@ rename/fsync, locking, migrations, constraints и corruption recovery. Для
 
 ### SQLite является private technical store Kernel
 
-Kernel использует один private SQLite database в Hermes Kernel data directory.
+Kernel использует один private SQLite database в Макошь Kernel data directory.
 Доступ осуществляется через `rusqlite` внутри отдельного kernel-owned
 persistence package.
 
 По ADR-0217 data directory по умолчанию определяется из OS-standard per-user
 local application-data location. Обязательного `bootstrap.toml` нет;
 единственный override первой версии — explicit `--data-dir`, выбирающий
-отдельный Hermes instance без scanning, merge или silent fallback.
+отдельный Макошь instance без scanning, merge или silent fallback.
 
 Store:
 
@@ -133,21 +133,21 @@ Dependency inversion и compile isolation фиксируются отдельн�
 
 ```text
 backend/src/kernel/control_store/contract/
-    hermes-kernel-control-store
+    makosh-kernel-control-store
     typed records, commands, errors и KernelControlStore port
 
 backend/src/kernel/control_store/sqlite/
-    hermes-kernel-control-store-sqlite
+    makosh-kernel-control-store-sqlite
     rusqlite, schema, migrations, integrity и backup adapter
 
 backend/src/kernel/
-    hermes-kernel
+    makosh-kernel
     boot/recovery state machine и composition
 ```
 
-`hermes-kernel-control-store` не зависит от SQLite, SQL clients, Tokio runtime,
+`makosh-kernel-control-store` не зависит от SQLite, SQL clients, Tokio runtime,
 Kernel executable или module packages. SQLite adapter зависит от этого port.
-`hermes-kernel` runtime композит port и adapter, но остальные modules не видят
+`makosh-kernel` runtime композит port и adapter, но остальные modules не видят
 ни один из них.
 
 `rusqlite` разрешён только package с surface `persistence`. Он запрещён в
@@ -296,8 +296,8 @@ WAL не нужен для первого single-writer actor. Он добави
 
 ### Schema и migrations
 
-SQLite schema принадлежит `hermes-kernel-control-store-sqlite`, а не общей
-`hermes-schema` и не PostgreSQL migrations.
+SQLite schema принадлежит `makosh-kernel-control-store-sqlite`, а не общей
+`makosh-schema` и не PostgreSQL migrations.
 
 Правила:
 
@@ -346,7 +346,7 @@ Kernel поддерживает versioned last-known-good backup/export:
 6. требует остановить Kernel для explicit offline restore/reset под exclusive
    lock;
 7. до замены БД резервирует fixed binary `0600`
-   `.hermes-recovery-fence-v1` через temp file, file `fsync`, atomic rename и
+   `.makosh-recovery-fence-v1` через temp file, file `fsync`, atomic rename и
    directory `fsync`;
 8. вычисляет generation/identity/grant high-water как maximum внешнего fence,
    trustworthy current store и backup плюс один;
@@ -362,7 +362,7 @@ generation, Kernel переходит в `fatal` по ADR-0206. PostgreSQL не 
 
 ### Backup scope
 
-Kernel Control Store включается в technical recovery backup Hermes вместе с
+Kernel Control Store включается в technical recovery backup Макошь вместе с
 его schema/generation metadata. Он не включается в domain export как business
 database и не заменяет отдельные backup policies PostgreSQL, Vault, provider
 sessions, blobs, JetStream или Telemetry.
@@ -372,7 +372,7 @@ restore только SQLite без fencing всех issued capabilities запр
 
 ### Безопасность
 
-- файл и backup доступны только владельцу Hermes;
+- файл и backup доступны только владельцу Макошь;
 - SQLite URI, path и error не содержат secrets/private content;
 - SQL parameters bound, а не interpolated;
 - extension loading и arbitrary ATTACH запрещены;
@@ -461,7 +461,7 @@ checkpoint и дополнительные files расширяют recovery sur
 - запуск без bootstrap configuration file выбирает OS-standard data directory;
 - explicit `--data-dir` выбирает ровно один instance и не смешивается с
   default store;
-- Hermes-specific environment не переопределяет data directory;
+- Макошь-specific environment не переопределяет data directory;
 - invalid explicit data directory не вызывает silent fallback;
 - Kernel process стартует и достигает `recovery_only` без
   PostgreSQL/PgBouncer/NATS/Vault/Blob/Scheduler/modules;
@@ -524,7 +524,7 @@ checkpoint и дополнительные files расширяют recovery sur
 
 Стоимость:
 
-- Hermes имеет отдельный маленький technical database помимо PostgreSQL;
+- Макошь имеет отдельный маленький technical database помимо PostgreSQL;
 - нужно поддерживать отдельные schema migrations, backup и corruption tests;
 - bundled SQLite добавляет C compilation только в Kernel persistence graph;
 - synchronous adapter требует отдельный actor и bounded queue;

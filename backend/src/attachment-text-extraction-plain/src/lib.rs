@@ -1,11 +1,11 @@
 #![forbid(unsafe_code)]
 
-use hermes_attachment_text_extraction_parser_contract::{
+use makosh_attachment_text_extraction_parser_contract::{
     AttachmentTextParserErrorV1, AttachmentTextParserKindV1, AttachmentTextParserOutputV1,
     bounded_parser_output_v1, validate_source_bound,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-text-extraction-plain";
+pub const PACKAGE: &str = "makosh-attachment-text-extraction-plain";
 
 pub fn extract_plain_text_v1(
     source: &[u8],
@@ -26,9 +26,9 @@ mod tests {
 
     #[test]
     fn extracts_bounded_utf8_without_interpreting_a_declared_type() {
-        let output = extract_plain_text_v1(b"name,value\r\nHermes,1\r").expect("plain text");
+        let output = extract_plain_text_v1(b"name,value\r\nmakosh,1\r").expect("plain text");
         assert_eq!(output.parser, AttachmentTextParserKindV1::PlainUtf8);
-        assert_eq!(output.text_utf8, b"name,value\nHermes,1\n");
+        assert_eq!(output.text_utf8, b"name,value\nmakosh,1\n");
         assert!(!output.extraction_truncated);
     }
 

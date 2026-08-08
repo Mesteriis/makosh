@@ -1,5 +1,5 @@
 [package]
-name = "hermes-contacts-runtime"
+name = "makosh-contacts-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,25 +8,25 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-contacts-runtime"
+name = "makosh-contacts-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "domain"
 owner = "contacts"
 surface = "runtime"
 
 [dependencies]
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-contacts-command-api = { path = "../contacts-command-api" }
-hermes-contacts-mail-sync-source-api = { path = "../contacts-mail-sync-source-api" }
-hermes-contacts-core = { path = "../contacts-core" }
-hermes-contacts-persistence = { path = "../contacts-persistence" }
-hermes-events-jetstream = { path = "../platform/events/jetstream" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-contacts-command-api = { path = "../contacts-command-api" }
+makosh-contacts-mail-sync-source-api = { path = "../contacts-mail-sync-source-api" }
+makosh-contacts-core = { path = "../contacts-core" }
+makosh-contacts-persistence = { path = "../contacts-persistence" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 prost-types = "=0.14.4"

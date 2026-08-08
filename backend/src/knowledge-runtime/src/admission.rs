@@ -1,4 +1,4 @@
-use hermes_knowledge_command_api::{
+use makosh_knowledge_command_api::{
     KNOWLEDGE_MODULE_ID_V1, KNOWLEDGE_OWNER_ID_V1,
     KNOWLEDGE_REVIEWED_CANDIDATE_BLOB_CAPABILITY_ID_V1,
     KNOWLEDGE_REVIEWED_CANDIDATE_COMMAND_CAPABILITY_ID_V1,
@@ -9,7 +9,7 @@ use hermes_knowledge_command_api::{
     knowledge_note_creation_from_reviewed_candidate_rejected_contract_reference_v1,
     knowledge_note_creation_from_reviewed_candidate_rejected_publish_request_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ContractReferenceV1, ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1,
     ProvidedSurfaceKindV1, ProvidedSurfaceV1, RuntimeBudgetRequestV1, SettingsSchemaRefV1,
@@ -97,7 +97,7 @@ fn blob_capability() -> CapabilityDescriptorV1 {
         requests: vec![CapabilityRequestV1 {
             request: Some(Request::BlobQuota(BlobQuotaRequestV1 {
                 max_bytes:
-                    hermes_knowledge_command_api::KNOWLEDGE_REVIEWED_CANDIDATE_MAX_BLOB_BYTES_V1,
+                    makosh_knowledge_command_api::KNOWLEDGE_REVIEWED_CANDIDATE_MAX_BLOB_BYTES_V1,
                 custody_scope_id: KNOWLEDGE_OWNER_ID_V1.to_owned(),
                 allowed_operations: vec![
                     BlobQuotaOperationV1::ReadRange as i32,
@@ -149,7 +149,7 @@ fn storage_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         validate_descriptor_v1, validate_settings_schema_v1,
     };
 

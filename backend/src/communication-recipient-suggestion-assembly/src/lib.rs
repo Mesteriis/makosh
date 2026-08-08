@@ -10,15 +10,15 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use hermes_communication_recipient_suggestion_persistence::communication_recipient_suggestion_storage_bundle_v1;
-use hermes_communication_recipient_suggestion_runtime::{
+use makosh_communication_recipient_suggestion_persistence::communication_recipient_suggestion_storage_bundle_v1;
+use makosh_communication_recipient_suggestion_runtime::{
     communication_recipient_suggestion_module_descriptor_v1,
     communication_recipient_suggestion_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
@@ -26,7 +26,7 @@ pub const COMMUNICATION_RECIPIENT_SUGGESTION_ASSEMBLY_FRAGMENT_VERSION_V1: u32 =
 pub const COMMUNICATION_RECIPIENT_SUGGESTION_ASSEMBLY_OWNER_ID: &str =
     "communication_recipient_suggestion";
 pub const COMMUNICATION_RECIPIENT_SUGGESTION_ASSEMBLY_MODULE_ID: &str =
-    "hermes-communication-recipient-suggestion-runtime";
+    "makosh-communication-recipient-suggestion-runtime";
 pub const COMMUNICATION_RECIPIENT_SUGGESTION_RUNTIME_ARTIFACT_ID: &str =
     "communication_recipient_suggestion.runtime.v1";
 pub const COMMUNICATION_RECIPIENT_SUGGESTION_STORAGE_ARTIFACT_ID: &str =
@@ -40,7 +40,7 @@ pub const COMMUNICATION_RECIPIENT_SUGGESTION_STORAGE_BUNDLE_FILE: &str =
 pub const COMMUNICATION_RECIPIENT_SUGGESTION_ARTIFACT_FRAGMENT_FILE: &str =
     "communication_recipient_suggestion.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH: &str = "bin/hermes-communication-recipient-suggestion-runtime";
+const RUNTIME_RELATIVE_PATH: &str = "bin/makosh-communication-recipient-suggestion-runtime";
 const DESCRIPTOR_RELATIVE_PATH: &str =
     "contracts/communication_recipient_suggestion.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH: &str =
@@ -287,8 +287,8 @@ fn write_new_private_file(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
 mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 
-    use hermes_runtime_protocol::v1::ModuleDescriptorV1;
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_runtime_protocol::v1::ModuleDescriptorV1;
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -297,7 +297,7 @@ mod tests {
     #[test]
     fn materializes_exact_unsigned_runtime_and_storage_fragment() {
         let root = temporary_directory();
-        let runtime = root.join("hermes-communication-recipient-suggestion-runtime");
+        let runtime = root.join("makosh-communication-recipient-suggestion-runtime");
         fs::write(&runtime, b"runtime").expect("runtime");
         let paths = materialize_communication_recipient_suggestion_release_assembly_v1(
             &root.join("assembly"),

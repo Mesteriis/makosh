@@ -1,11 +1,11 @@
-use hermes_hub_backend::domains::personas::api::store::PersonaProjectionStore;
-use hermes_hub_backend::domains::personas::expertise::PersonaExpertiseStore;
-use hermes_hub_backend::domains::personas::health::PersonaHealthStore;
-use hermes_hub_backend::domains::personas::investigator::service::PersonaInvestigator;
-use hermes_hub_backend::domains::personas::memory::{
+use makosh_hub_backend::domains::personas::api::store::PersonaProjectionStore;
+use makosh_hub_backend::domains::personas::expertise::PersonaExpertiseStore;
+use makosh_hub_backend::domains::personas::health::PersonaHealthStore;
+use makosh_hub_backend::domains::personas::investigator::service::PersonaInvestigator;
+use makosh_hub_backend::domains::personas::memory::{
     facts::PersonaFactStore, preferences::PersonaPreferenceStore,
 };
-use hermes_hub_backend::domains::personas::trust::risks::PersonaRiskStore;
+use makosh_hub_backend::domains::personas::trust::risks::PersonaRiskStore;
 
 use super::support::{live_personas_pool, unique_suffix};
 
@@ -106,7 +106,7 @@ async fn persona_dossier_includes_target_sections_and_source_refs_against_postgr
         .upsert(
             &person.persona_id,
             "project",
-            "Hermes Memory Graph",
+            "Макошь Memory Graph",
             "document:dossier-project",
             0.8,
         )
@@ -116,7 +116,7 @@ async fn persona_dossier_includes_target_sections_and_source_refs_against_postgr
         .upsert(
             &person.persona_id,
             "organization",
-            "Hermes Lab",
+            "Макошь Lab",
             "relationship:dossier-organization",
             0.85,
         )
@@ -153,8 +153,8 @@ async fn persona_dossier_includes_target_sections_and_source_refs_against_postgr
         dossier_json["interests"][0]["source_refs"][0],
         "message:dossier-interest"
     );
-    assert_eq!(dossier_json["projects"][0]["value"], "Hermes Memory Graph");
-    assert_eq!(dossier_json["organizations"][0]["value"], "Hermes Lab");
+    assert_eq!(dossier_json["projects"][0]["value"], "Макошь Memory Graph");
+    assert_eq!(dossier_json["organizations"][0]["value"], "Макошь Lab");
     assert_eq!(
         dossier_json["skills"][0]["value"],
         "Rust backend architecture"

@@ -1,20 +1,20 @@
 use axum::body::{Body, to_bytes};
 use axum::http::{Method, Request, StatusCode, header};
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::mail_resources::{
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::mail_resources::{
     MailProviderResourceKind, MailProviderSemanticRole,
 };
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::communications::provider_resources::{
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::communications::provider_resources::{
     MailProviderResourceStore, NewMailProviderResource,
 };
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const TOKEN: &str = "mail-provider-resource-api-test-token";
 
@@ -23,7 +23,7 @@ async fn app(context: &TestContext) -> axum::Router {
         .await
         .expect("database");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             TOKEN,
             context.connection_string(),
         ),
@@ -35,7 +35,7 @@ fn request(method: Method, uri: &str, body: Option<Value>) -> Request<Body> {
     let mut builder = Request::builder()
         .method(method)
         .uri(uri)
-        .header("x-hermes-secret", TOKEN);
+        .header("x-makosh-secret", TOKEN);
     if body.is_some() {
         builder = builder.header(header::CONTENT_TYPE, "application/json");
     }

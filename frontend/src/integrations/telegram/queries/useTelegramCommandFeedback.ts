@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import type { TelegramOperationResponse } from '../../../gen/hermes/telegram/v1/client_pb'
+import type { TelegramOperationResponse } from '../../../gen/makosh/telegram/v1/client_pb'
 
 export function useTelegramCommandFeedback(canCommand: () => boolean) {
 	const pending = ref(false)

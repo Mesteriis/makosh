@@ -35,11 +35,11 @@ generated_by: code-wiki-ru
 
 | ID                        | Название                                       | Команда                      | Условие срабатывания                                                                                                                                                                                                 |
 |---------------------------|------------------------------------------------|------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `hermes-architecture-guards` | Hermes architecture and code guards            | `make architecture-check`    | Всегда (`always_run: true`)                                                                                                                                                                                          |
-| `hermes-code-boundaries`    | Hermes code boundary guards                    | `make code-boundaries-check` | При изменениях в `backend/src/`, `frontend/src/` или `Makefile` (`files: ^(backend/src/\|frontend/src/\|Makefile$)`)                                                                                               |
-| `hermes-rust-fmt`           | Hermes Rust format check                        | `make backend-fmt-check`     | При изменениях в файлах с расширением `.rs` внутри `backend/` (`files: ^backend/.*\\.rs$`)                                                                                                                            |
-| `hermes-rust-clippy`       | Hermes Rust clippy                              | `make backend-clippy`        | При изменениях в файлах с расширением `.rs` внутри `backend/` (`files: ^backend/.*\\.rs$`)                                                                                                                            |
-| `hermes-frontend-lint`     | Hermes frontend lint (style + TypeScript/Vue, no tests) | `make frontend-lint`         | При изменениях в `frontend/(src\|static\|scripts)/` или в `frontend/package.json`, `frontend/pnpm-lock.yaml`, `frontend/tsconfig.json`, `frontend/vite.config.ts` (`files: ^frontend/(src\|static\|scripts)/\|^frontend/(package\\.json\|pnpm-lock\\.yaml\|tsconfig\\.json\|vite\\.config\\.ts)$`) |
+| `makosh-architecture-guards` | Макошь architecture and code guards            | `make architecture-check`    | Всегда (`always_run: true`)                                                                                                                                                                                          |
+| `makosh-code-boundaries`    | Макошь code boundary guards                    | `make code-boundaries-check` | При изменениях в `backend/src/`, `frontend/src/` или `Makefile` (`files: ^(backend/src/\|frontend/src/\|Makefile$)`)                                                                                               |
+| `makosh-rust-fmt`           | Макошь Rust format check                        | `make backend-fmt-check`     | При изменениях в файлах с расширением `.rs` внутри `backend/` (`files: ^backend/.*\\.rs$`)                                                                                                                            |
+| `makosh-rust-clippy`       | Макошь Rust clippy                              | `make backend-clippy`        | При изменениях в файлах с расширением `.rs` внутри `backend/` (`files: ^backend/.*\\.rs$`)                                                                                                                            |
+| `makosh-frontend-lint`     | Макошь frontend lint (style + TypeScript/Vue, no tests) | `make frontend-lint`         | При изменениях в `frontend/(src\|static\|scripts)/` или в `frontend/package.json`, `frontend/pnpm-lock.yaml`, `frontend/tsconfig.json`, `frontend/vite.config.ts` (`files: ^frontend/(src\|static\|scripts)/\|^frontend/(package\\.json\|pnpm-lock\\.yaml\|tsconfig\\.json\|vite\\.config\\.ts)$`) |
 
 Конкретный смысл выполняемых Make‑команд (например, какие именно инструменты вызываются внутри `make architecture-check`) не подтверждён данным контекстом и здесь не описан.
 ```
@@ -49,9 +49,9 @@ generated_by: code-wiki-ru
 **`.pre-commit-config.yaml`**
 
 - В файле определён один блок `repo: local` без удалённых репозиториев.
-- Перечислены пять хуков с идентификаторами: `hermes-architecture-guards`, `hermes-code-boundaries`, `hermes-rust-fmt`, `hermes-rust-clippy`, `hermes-frontend-lint`.
+- Перечислены пять хуков с идентификаторами: `makosh-architecture-guards`, `makosh-code-boundaries`, `makosh-rust-fmt`, `makosh-rust-clippy`, `makosh-frontend-lint`.
 - Для каждого хука заданы `entry` (команда Make), `language: system`, `pass_filenames: false`.
-- Хук `hermes-architecture-guards` имеет `always_run: true` и не содержит фильтр `files`.
+- Хук `makosh-architecture-guards` имеет `always_run: true` и не содержит фильтр `files`.
 - Остальные четыре хука содержат поле `files` с регулярными выражениями для пути/имени файла.
 - Все команды `entry` являются Make‑целями: `make architecture-check`, `make code-boundaries-check`, `make backend-fmt-check`, `make backend-clippy`, `make frontend-lint`.
 - Файл является валидным YAML; на данном уровне нет указаний на условные профили, переменные окружения или вызовы внешних инструментов, кроме Make.

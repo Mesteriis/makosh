@@ -1,4 +1,4 @@
-use hermes_events_api::{EventEnvelope, StoredEventEnvelope};
+use makosh_events_api::{EventEnvelope, StoredEventEnvelope};
 use std::collections::HashSet;
 
 use serde::Deserialize;
@@ -11,10 +11,10 @@ use crate::domains::calendar::events::errors::CalendarError;
 use crate::domains::calendar::ports::CalendarEventQueryPort;
 use crate::domains::calendar::ports::{EventParticipantPort, EventRelationPort};
 use crate::platform::events::bus::yandex_telemost_event_types;
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::store::ObservationStore;
 
 pub const YANDEX_TELEMOST_CALENDAR_MATCHING_CONSUMER: &str = "yandex_telemost_calendar_matching";
 pub const YANDEX_TELEMOST_CALENDAR_MATCHING_PROJECTION: &str = "yandex_telemost_calendar_matching";

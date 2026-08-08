@@ -1,6 +1,6 @@
 //! Telegram Calls exact-byte outbox adapter for Communications call evidence.
 
-use hermes_events_protocol::delivery::{
+use makosh_events_protocol::delivery::{
     OutboxEntryV1, OutboxPublishReceiptV1, OutboxRecordV1, OutboxRelayErrorV1,
     OwnerOutboxStorePortV1,
 };
@@ -59,7 +59,7 @@ pub(crate) async fn insert_call_evidence_outbox(
     created_at_unix_seconds: u64,
 ) -> Result<(), TelegramCallsPersistenceError> {
     let insert_result = sqlx::query(
-        "INSERT INTO hermes_data.telegram_call_evidence_outbox (\
+        "INSERT INTO makosh_data.telegram_call_evidence_outbox (\
              message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds\
          ) VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING",
     )
@@ -77,7 +77,7 @@ pub(crate) async fn insert_call_evidence_outbox(
     if insert_result.rows_affected() == 0 {
         let existing = sqlx::query(
             "SELECT envelope_sha256, exact_envelope_bytes \
-             FROM hermes_data.telegram_call_evidence_outbox WHERE message_id = $1",
+             FROM makosh_data.telegram_call_evidence_outbox WHERE message_id = $1",
         )
         .bind(record.message_id().as_slice())
         .fetch_one(&mut **transaction)
@@ -105,7 +105,7 @@ impl TelegramCallsPersistence {
     ) -> Result<Option<OutboxRecordV1>, TelegramCallsPersistenceError> {
         let row = sqlx::query(
             "SELECT exact_envelope_bytes \
-             FROM hermes_data.telegram_call_evidence_outbox \
+             FROM makosh_data.telegram_call_evidence_outbox \
              WHERE published_at_unix_seconds IS NULL \
              ORDER BY created_at_unix_seconds, message_id LIMIT 1",
         )
@@ -132,7 +132,7 @@ impl TelegramCallsPersistence {
             ));
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.telegram_call_evidence_outbox \
+            "UPDATE makosh_data.telegram_call_evidence_outbox \
              SET published_at_unix_seconds = $2 \
              WHERE message_id = $1 AND published_at_unix_seconds IS NULL",
         )

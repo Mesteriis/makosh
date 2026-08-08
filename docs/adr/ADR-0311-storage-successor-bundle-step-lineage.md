@@ -17,7 +17,7 @@ generation `20` без удаления volume или owner data.
 
 ## Контекст
 
-Owner persistence bundles в Hermes являются cumulative: bundle revision `N`
+Owner persistence bundles в Макошь являются cumulative: bundle revision `N`
 содержит immutable steps прежних revisions и новый forward step. PostgreSQL
 ledger V1 сохраняет:
 
@@ -75,17 +75,17 @@ data reset запрещены.
 ## Units of assembly
 
 ```text
-hermes-storage-protocol    immutable StorageBundleV1 transport, unchanged
-hermes-storage-migrations AST admission before execution, unchanged
-hermes-storage-postgres   lineage classification, DDL and ledger transaction
-hermes-storage-runtime    sanitized failure mapping, unchanged
+makosh-storage-protocol    immutable StorageBundleV1 transport, unchanged
+makosh-storage-migrations AST admission before execution, unchanged
+makosh-storage-postgres   lineage classification, DDL and ledger transaction
+makosh-storage-runtime    sanitized failure mapping, unchanged
 owner persistence         cumulative exact steps and digests
 Kernel Control Store      exact bundle bytes/digest admission, no SQL lineage
 ```
 
 Storage lineage остаётся platform responsibility. Mail, Telegram, WhatsApp,
 Zulip, Communications и другие owners не реализуют собственный migration
-runner и не получают доступ к `hermes_platform.storage_migration_ledger`.
+runner и не получают доступ к `makosh_platform.storage_migration_ledger`.
 
 ## Gate `storage_successor_step_lineage_v1`
 

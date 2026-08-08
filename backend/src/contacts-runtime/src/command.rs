@@ -1,4 +1,4 @@
-use hermes_contacts_command_api::{
+use makosh_contacts_command_api::{
     CONTACTS_MAIL_IDENTITY_COMMAND_CAPABILITY_ID_V1, CONTACTS_MODULE_ID_V1,
     ContactsCommandEnvelopeContextV1, build_contact_upsert_rejected_outbox_record_v1,
     build_contact_upserted_outbox_record_v1, upsert_contact_command_contract_reference_v1,
@@ -10,30 +10,30 @@ use hermes_contacts_command_api::{
         UpsertContactFromMailAddressBookEntryCommandV1,
     },
 };
-use hermes_contacts_core::{
+use makosh_contacts_core::{
     ContactProviderKindV1, ContactProviderProvenanceV1, ContactTimestampV1, ContactUpsertDraftV1,
     ContactUpsertOutcomeV1,
 };
-use hermes_contacts_mail_sync_source_api::{
+use makosh_contacts_mail_sync_source_api::{
     ContactsMailSyncSourceEnvelopeContextV1,
     build_contact_changed_for_mail_sync_outbox_record_caused_by_v1,
     wire::ContactChangedForMailSyncV1,
 };
-use hermes_contacts_persistence::{
+use makosh_contacts_persistence::{
     ApplyMailEntryCommandV1, ContactMailEntryRejectCodeV1, ContactMutationOutboxV1,
     ContactsOutboxRecordV1, ContactsPersistenceErrorV1, ContactsPersistenceV1,
     RejectMailEntryCommandV1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{CommandMetadataV1, ContractRefV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -385,7 +385,7 @@ fn event_error(_: RuntimePullDeliveryErrorV1) -> ContactsCommandErrorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_contacts_command_api::{
+    use makosh_contacts_command_api::{
         ContactsCommandEnvelopeContextV1, build_upsert_contact_command_outbox_record_v1,
     };
     use prost_types::Timestamp;

@@ -1,5 +1,5 @@
 [package]
-name = "hermes-telegram-automation-persistence"
+name = "makosh-telegram-automation-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -11,13 +11,13 @@ path = "src/lib.rs"
 default = []
 conformance-test-support = []
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "telegram"
 surface = "persistence"
 
 [dependencies]
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-telegram-automation-core = { path = "../telegram-automation-core" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-telegram-automation-core = { path = "../telegram-automation-core" }
 sha2 = { version = "=0.10.9", default-features = false }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

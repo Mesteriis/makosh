@@ -14,7 +14,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
             "ui_control": "text",
             "placeholder": "http://127.0.0.1:8080",
             "bootstrap": true,
-            "env_var": "VITE_HERMES_API_BASE_URL"
+            "env_var": "VITE_MAKOSH_API_BASE_URL"
         }),
         is_editable: true,
     }]

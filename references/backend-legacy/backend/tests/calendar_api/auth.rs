@@ -2,7 +2,7 @@ use axum::http::StatusCode;
 use serde_json::json;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::router::build_router;
+use makosh_hub_backend::app::router::build_router;
 
 use super::support::{config_with_api_token, get_request, json_body};
 
@@ -17,7 +17,7 @@ async fn calendar_accounts_rejects_missing_local_api_secret() {
     let body = json_body(response).await;
     assert_eq!(
         body,
-        json!({"error": "invalid_api_secret", "message": "missing or invalid x-hermes-secret header"})
+        json!({"error": "invalid_api_secret", "message": "missing or invalid x-makosh-secret header"})
     );
 }
 

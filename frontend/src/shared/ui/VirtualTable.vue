@@ -27,8 +27,8 @@ const rangeLabel = computed(() => {
 </script>
 
 <template>
-  <section :class="['hermes-virtual-table', props.class]" :aria-label="caption">
-    <div class="hermes-virtual-meta">{{ rangeLabel }}</div>
+  <section :class="['makosh-virtual-table', props.class]" :aria-label="caption">
+    <div class="makosh-virtual-meta">{{ rangeLabel }}</div>
     <Table :columns="columns" :rows="visibleRows" :caption="caption" :empty-text="emptyText" density="compact" />
   </section>
 </template>

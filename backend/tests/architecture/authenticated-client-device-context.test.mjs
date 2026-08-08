@@ -8,7 +8,7 @@ const read = (relative) => fs.readFileSync(path.join(root, relative), 'utf8');
 
 test('authenticated browser device and session context reach the owner-neutral module envelope', () => {
   const protocol = read(
-    'src/platform/runtime_protocol/proto/hermes/runtime/v1/module_client.proto',
+    'src/platform/runtime_protocol/proto/makosh/runtime/v1/module_client.proto',
   );
   const validation = read(
     'src/platform/runtime_protocol/src/validation/module_client.rs',
@@ -40,7 +40,7 @@ test('authenticated browser device and session context reach the owner-neutral m
 
 test('client payload cannot claim the authenticated device actor', () => {
   const review = read(
-    'src/review-task-candidate-api/proto/hermes/review/task_candidate/v1/task_candidate.proto',
+    'src/review-task-candidate-api/proto/makosh/review/task_candidate/v1/task_candidate.proto',
   );
   const decision = review
     .split('message DecideReviewTaskCandidateRequestV1')[1]

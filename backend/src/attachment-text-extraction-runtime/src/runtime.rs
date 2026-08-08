@@ -3,13 +3,13 @@ use std::{
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
-use hermes_attachment_security_contract::admission::attachment_security_scan_candidate_observed_contract_reference_v1;
-use hermes_attachment_text_extraction_api::{
+use makosh_attachment_security_contract::admission::attachment_security_scan_candidate_observed_contract_reference_v1;
+use makosh_attachment_text_extraction_api::{
     ATTACHMENT_TEXT_EXTRACTION_MODULE_ID_V1, ATTACHMENT_TEXT_EXTRACTION_OWNER_V1,
     wire::AttachmentTextExtractionErrorCodeV1 as WireError,
 };
-use hermes_attachment_text_extraction_core::AttachmentTextExtractionErrorV1;
-use hermes_attachment_text_extraction_ingress::{
+use makosh_attachment_text_extraction_core::AttachmentTextExtractionErrorV1;
+use makosh_attachment_text_extraction_ingress::{
     AttachmentTextCustodyEnvelopeContextV1,
     attachment_text_custody_delegated_contract_reference_v1,
     attachment_text_custody_delegation_rejected_contract_reference_v1,
@@ -17,18 +17,18 @@ use hermes_attachment_text_extraction_ingress::{
     build_request_attachment_text_custody_delegation_outbox_record_v1,
     wire::RequestAttachmentTextCustodyDelegationV1,
 };
-use hermes_attachment_text_extraction_persistence::{
+use makosh_attachment_text_extraction_persistence::{
     AttachmentTextExtractionPersistenceErrorV1, AttachmentTextExtractionPersistenceV1,
     PersistAttachmentTextCustodyDelegationV1, PersistedAttachmentTextArtifactV1,
 };
-use hermes_attachment_translation_ingress::attachment_translation_source_requested_contract_reference_v1;
-use hermes_communications_attachment_contract::admission::communication_attachment_safety_state_changed_contract_reference_v1;
-use hermes_events_jetstream::{
+use makosh_attachment_translation_ingress::attachment_translation_source_requested_contract_reference_v1;
+use makosh_communications_attachment_contract::admission::communication_attachment_safety_state_changed_contract_reference_v1;
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
     try_receive_runtime_pull_delivery,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::{
         ContractReferenceV1, ManagedRuntimeClientDeliveryResponseV1,
@@ -40,11 +40,11 @@ use hermes_runtime_protocol::{
         validate_module_client_request_v1, validate_module_client_response_v1,
     },
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 use zeroize::Zeroizing;

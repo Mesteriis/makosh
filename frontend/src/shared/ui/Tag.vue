@@ -10,12 +10,12 @@ const props = withDefaults(defineProps<{
 	tone: 'neutral'
 })
 
-const classes = computed(() => ['hermes-tag', `hermes-tag--${props.tone}`, props.class])
+const classes = computed(() => ['makosh-tag', `makosh-tag--${props.tone}`, props.class])
 </script>
 
 <template>
 	<span :class="classes">
 		<Icon v-if="icon" :icon="icon" size="1em" />
-		<span class="hermes-tag__label"><slot /></span>
+		<span class="makosh-tag__label"><slot /></span>
 	</span>
 </template>

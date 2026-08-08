@@ -1,6 +1,6 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeControlRequestV1, ManagedRuntimeModuleRequestRequestV1,

@@ -1,12 +1,12 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_translation_api::{
+use makosh_communication_translation_api::{
     COMMUNICATION_TRANSLATION_REALTIME_EVENT_KIND_V1, wire::CommunicationTranslationStatusChangedV1,
 };
-use hermes_communication_translation_persistence::{
+use makosh_communication_translation_persistence::{
     CommunicationTranslationPersistenceErrorV1, CommunicationTranslationPersistenceV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeClientRealtimePublishRequestV1, ManagedRuntimeControlRequestV1,

@@ -1,6 +1,6 @@
 use crate::platform::secrets::store::SecretReferenceStore;
-use hermes_communications_api::accounts::CommunicationProviderKind;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
 use serde_json::{Value, json};
 
 use crate::platform::secrets::models::SecretKind;
@@ -149,13 +149,13 @@ mod tests {
             api_hash: None,
             bot_token: None,
             session_encryption_key: Some("session-key".to_owned()),
-            tdlib_data_path: Some("/tmp/hermes-tdlib/user-42".to_owned()),
+            tdlib_data_path: Some("/tmp/makosh-tdlib/user-42".to_owned()),
             qr_authorized: true,
             transcription_enabled: true,
         };
         let account_config = json!({
             "runtime": "tdlib_qr_authorized",
-            "tdlib_data_path": "/tmp/hermes-tdlib/user-42",
+            "tdlib_data_path": "/tmp/makosh-tdlib/user-42",
             "transcription_enabled": true
         });
 

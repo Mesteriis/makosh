@@ -1,27 +1,27 @@
 //! Exact workflow descriptor and capability admission.
 
-use hermes_attachment_preview_api::{
+use makosh_attachment_preview_api::{
     ATTACHMENT_PREVIEW_COMMAND_CONNECT_PATH_V1, ATTACHMENT_PREVIEW_MAX_VIDEO_BYTES_V1,
     ATTACHMENT_PREVIEW_MODULE_ID_V1, ATTACHMENT_PREVIEW_OWNER_V1,
     ATTACHMENT_PREVIEW_QUERY_CONNECT_PATH_V1, ATTACHMENT_PREVIEW_READ_BLOB_PATH_V1,
     ATTACHMENT_PREVIEW_TICKET_CONNECT_PATH_V1,
 };
-use hermes_attachment_preview_ingress::{
+use makosh_attachment_preview_ingress::{
     ATTACHMENT_PREVIEW_BLOB_TARGET_CAPABILITY_ID_V1, ATTACHMENT_PREVIEW_INGRESS_MAX_IN_FLIGHT_V1,
     attachment_preview_custody_delegated_contract_reference_v1,
     attachment_preview_custody_delegation_rejected_contract_reference_v1,
     attachment_preview_custody_delegation_requested_contract_reference_v1,
     attachment_preview_custody_delegation_requested_publish_request_v1,
 };
-use hermes_attachment_security_contract::admission::{
+use makosh_attachment_security_contract::admission::{
     ATTACHMENT_SECURITY_MAX_IN_FLIGHT,
     attachment_security_scan_candidate_observed_contract_reference_v1,
 };
-use hermes_communications_attachment_contract::admission::{
+use makosh_communications_attachment_contract::admission::{
     COMMUNICATION_ATTACHMENT_MAX_IN_FLIGHT,
     communication_attachment_safety_state_changed_contract_reference_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ClientBlobRouteV1, ClientRpcRouteV1, ContractReferenceV1,
     DurableEnvelopeKindV1, EventRouteDirectionV1, EventRouteRequestV1,
@@ -308,7 +308,7 @@ fn event_route(
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         validate_descriptor_v1, validate_settings_schema_v1,
     };
 

@@ -1,9 +1,9 @@
 //! Resolves Scheduler JobKind admission facts from approved Control Store state.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleGrantSnapshot, ModuleRegistryStore, ModuleSchedulerJobRequestV1,
 };
-use hermes_kernel_control_store_sqlite::StoreError;
+use makosh_kernel_control_store_sqlite::StoreError;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SchedulerJobCatalogEntryV1 {

@@ -24,7 +24,7 @@ through both the acting agent Persona and the Owner Persona.
 | Agent | Role |
 |---|---|
 | HESTIA | coordinator, intent routing, policy mediation |
-| HERMES | communications triage, threads, drafting, channel context |
+| MAKOSH | communications triage, threads, drafting, channel context |
 | MNEMOSYNE | memory, graph linking, recall, provenance |
 | ATHENA | analysis, trend detection, decision support |
 | HEPHAESTUS | development, maintenance and tool automation |

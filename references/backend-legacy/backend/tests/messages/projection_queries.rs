@@ -1,12 +1,12 @@
 use serde_json::json;
 
-use hermes_hub_backend::domains::communications::messages::errors::MessageProjectionError;
-use hermes_hub_backend::domains::communications::messages::models::MessageSearchMatchMode;
-use hermes_hub_backend::domains::communications::messages::models::{
+use makosh_hub_backend::domains::communications::messages::errors::MessageProjectionError;
+use makosh_hub_backend::domains::communications::messages::models::MessageSearchMatchMode;
+use makosh_hub_backend::domains::communications::messages::models::{
     MessageSearchQuery, NewProjectedMessage, ProjectedMessagePageQuery,
 };
-use hermes_hub_backend::domains::communications::messages::projection::project_raw_email_message;
-use hermes_hub_backend::domains::communications::messages::states::{
+use makosh_hub_backend::domains::communications::messages::projection::project_raw_email_message;
+use makosh_hub_backend::domains::communications::messages::states::{
     LocalMessageState, WorkflowState,
 };
 

@@ -3,10 +3,10 @@ import { computed, ref } from 'vue'
 import {
 	ClientSettingsApplyStateV1,
 	type ClientModuleBootstrapV1,
-} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import { OwnerModuleSettingsClientV1 } from '../../../platform/settings/ownerModuleSettingsClient'
 
-const MAIL_MODULE_ID = 'hermes-mail-runtime'
+const MAIL_MODULE_ID = 'makosh-mail-runtime'
 const MAIL_STORAGE_CAPABILITY_ID = 'mail.storage.v1'
 
 type MailSettingsActivationPortV1 = Pick<OwnerModuleSettingsClientV1, 'applyManagedIntegration'>

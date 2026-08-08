@@ -12,7 +12,7 @@ Clarifies:
 
 ## Context
 
-Hermes is a Personal Memory System. New Communications, Documents, Events,
+Макошь is a Personal Memory System. New Communications, Documents, Events,
 Decisions and Obligations can contradict accepted Memory and Knowledge.
 
 ADR-0085 introduced the Consistency / Contradiction Engine, user-facing alias

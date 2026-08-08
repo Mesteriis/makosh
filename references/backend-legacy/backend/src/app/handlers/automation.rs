@@ -21,7 +21,7 @@ pub(crate) async fn post_policy_template(
     State(state): State<AppState>,
     Json(request): Json<PolicyTemplateApiRequest>,
 ) -> Result<Json<AutomationTemplate>, ApiError> {
-    let actor_id = "hermes-frontend";
+    let actor_id = "makosh-frontend";
     Ok(Json(
         automation_store(&state)?
             .upsert_template(&request.into_template(), actor_id)
@@ -41,7 +41,7 @@ pub(crate) async fn post_policy(
     State(state): State<AppState>,
     Json(request): Json<PolicyApiRequest>,
 ) -> Result<Json<AutomationPolicy>, ApiError> {
-    let actor_id = "hermes-frontend";
+    let actor_id = "makosh-frontend";
     Ok(Json(
         automation_store(&state)?
             .upsert_policy(&request.into_policy(), actor_id)
@@ -61,7 +61,7 @@ pub(crate) async fn post_telegram_send_dry_run(
     State(state): State<AppState>,
     Json(request): Json<TelegramSendDryRunRequest>,
 ) -> Result<Json<TelegramSendDryRunResponse>, ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let response = match automation_store(&state)?
         .dry_run_send(&request, &actor_id)
         .await

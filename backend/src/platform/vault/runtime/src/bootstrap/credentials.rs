@@ -1,7 +1,7 @@
 //! Exact platform credential scopes accepted during Vault initialization.
 
-use hermes_vault_protocol::{SecretClassV1, VaultActionV1, VaultPurposeRequestV1};
-use hermes_vault_store_sqlcipher::SecretRecordScope;
+use makosh_vault_protocol::{SecretClassV1, VaultActionV1, VaultPurposeRequestV1};
+use makosh_vault_store_sqlcipher::SecretRecordScope;
 use zeroize::Zeroizing;
 
 const STORAGE_OWNER: &str = "storage";

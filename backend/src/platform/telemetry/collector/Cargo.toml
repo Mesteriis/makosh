@@ -1,21 +1,21 @@
 [package]
-name = "hermes-telemetry-collector"
+name = "makosh-telemetry-collector"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
 [[bin]]
-name = "hermes-telemetry-collector"
+name = "makosh-telemetry-collector"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "telemetry"
 surface = "runtime"
 components = ["telemetry_collector"]
 
 [dependencies]
-hermes-telemetry-protocol = { path = "../protocol" }
-hermes-runtime-protocol = { path = "../../runtime_protocol" }
+makosh-telemetry-protocol = { path = "../protocol" }
+makosh-runtime-protocol = { path = "../../runtime_protocol" }
 libc = "=0.2.186"
 prost = "=0.14.4"

@@ -1,5 +1,5 @@
 [package]
-name = "hermes-provider-whatsapp"
+name = "makosh-provider-whatsapp"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.89"
@@ -7,5 +7,5 @@ publish = false
 license = "MIT"
 
 [dependencies]
-hermes-provider-api = { path = "../provider-api" }
+makosh-provider-api = { path = "../provider-api" }
 sha2 = "0.10"

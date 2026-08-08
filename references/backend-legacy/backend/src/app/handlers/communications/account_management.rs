@@ -11,9 +11,9 @@ use crate::platform::secrets::store::SecretReferenceStore;
 use crate::workflows::mail_background_sync::models::{
     progress::MailSyncTrigger, settings::MailSyncSettingsUpdate,
 };
-use hermes_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
-use hermes_communications_api::content_egress::AccountContentEgressPermissions;
-use hermes_communications_api::sensitive_forwarding::NewSensitiveForwardingPolicy;
+use makosh_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
+use makosh_communications_api::content_egress::AccountContentEgressPermissions;
+use makosh_communications_api::sensitive_forwarding::NewSensitiveForwardingPolicy;
 
 pub(crate) async fn get_v1_email_accounts(
     State(state): State<AppState>,
@@ -106,7 +106,7 @@ pub(crate) async fn post_v1_email_account_import(
         CommunicationProviderAccountStore,
     >(pool)
     .upsert(
-        &hermes_communications_api::accounts::NewProviderAccount::new(
+        &makosh_communications_api::accounts::NewProviderAccount::new(
             request.account.account_id,
             provider_kind,
             request.account.display_name,
@@ -219,7 +219,7 @@ pub(crate) async fn delete_v1_email_account(
         CommunicationProviderAccountStore,
     >(pool.clone());
     let usage = store.usage(&account.account_id).await?;
-    let binding_store = hermes_communications_postgres::provider_store::
+    let binding_store = makosh_communications_postgres::provider_store::
         CommunicationProviderSecretBindingStore::new(pool.clone());
     if binding_store
         .account_has_host_vault_secret_refs(&account.account_id)
@@ -252,7 +252,7 @@ async fn delete_unbound_host_vault_secrets(
     secret_refs: &[String],
 ) -> Result<(Vec<String>, Vec<String>), ApiError> {
     let secret_store = SecretReferenceStore::new(pool.clone());
-    let binding_store = hermes_communications_postgres::provider_store::
+    let binding_store = makosh_communications_postgres::provider_store::
         CommunicationProviderSecretBindingStore::new(pool.clone());
     let mut vault_deleted_secret_refs = Vec::new();
     let mut retained_secret_refs = Vec::new();

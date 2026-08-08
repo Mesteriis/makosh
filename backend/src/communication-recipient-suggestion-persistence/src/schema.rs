@@ -1,4 +1,4 @@
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use sha2::{Digest, Sha256};
 
 pub const COMMUNICATION_RECIPIENT_SUGGESTION_STORAGE_BUNDLE_REVISION_V1: u32 = 1;
@@ -23,7 +23,7 @@ pub fn communication_recipient_suggestion_storage_bundle_v1() -> StorageBundleV1
 
 #[cfg(test)]
 mod tests {
-    use hermes_storage_protocol::validation::validate_storage_bundle;
+    use makosh_storage_protocol::validation::validate_storage_bundle;
 
     use super::*;
 

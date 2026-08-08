@@ -2,7 +2,7 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_communications_api::{
+use makosh_communications_api::{
     COMMUNICATIONS_QUERY_SCHEMA_SHA256, CommunicationConversationIdV1,
     CommunicationConversationSummaryV1, CommunicationMessageIdV1, CommunicationMessageSummaryV1,
     CommunicationsQueryProjectionErrorV1,
@@ -12,7 +12,7 @@ use hermes_communications_api::{
         communications_query_response_v1::Result as QueryResult,
     },
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{
         ManagedControlChannelV2, ManagedControlRequestDispatcherV2, ManagedControlTransportErrorV2,
     },
@@ -159,7 +159,7 @@ impl ManagedCommunicationsQueryClientV1<'_> {
 }
 
 fn developer_log_route_error(error_code: &str) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_delivery_intent_query_route_error={error_code}");
     }
 }
@@ -188,7 +188,7 @@ fn communications_query_contract() -> ContractReferenceV1 {
 
 fn derived_request_id(operation_id: [u8; 16], purpose: &[u8]) -> [u8; 16] {
     let digest = Sha256::new()
-        .chain_update(b"hermes.communication-delivery-intent.query-request.v1\0")
+        .chain_update(b"makosh.communication-delivery-intent.query-request.v1\0")
         .chain_update(operation_id)
         .chain_update(purpose)
         .finalize();
@@ -239,21 +239,21 @@ mod tests {
     fn response_decode_rejects_correlation_and_error_ambiguity() {
         let query_response = CommunicationsQueryResponseV1 {
             result: Some(QueryResult::GetConversation(
-                hermes_communications_api::query_wire::GetConversationResponseV1 {
+                makosh_communications_api::query_wire::GetConversationResponseV1 {
                     conversation: Some(
                         (&CommunicationConversationSummaryV1 {
                             conversation_id: CommunicationConversationIdV1::new([3; 16]),
-                            account_cursor: hermes_communications_api::CommunicationSourceCursorV1::new(
+                            account_cursor: makosh_communications_api::CommunicationSourceCursorV1::new(
                                 [4; 32],
                             ),
                             conversation_cursor:
-                                hermes_communications_api::CommunicationSourceCursorV1::new([5; 32]),
+                                makosh_communications_api::CommunicationSourceCursorV1::new([5; 32]),
                             provider:
-                                hermes_communications_api::CommunicationProviderProvenanceV1::Telegram,
+                                makosh_communications_api::CommunicationProviderProvenanceV1::Telegram,
                             first_observed_at_unix_seconds: 1,
                             last_observed_at_unix_seconds: 2,
                             last_evidence_id:
-                                hermes_communications_api::CommunicationObservationIdV1::new([6; 16]),
+                                makosh_communications_api::CommunicationObservationIdV1::new([6; 16]),
                         })
                             .into(),
                     ),

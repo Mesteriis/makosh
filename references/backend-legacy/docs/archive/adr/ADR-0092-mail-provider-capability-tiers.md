@@ -12,7 +12,7 @@ Clarifies:
 
 ## Context
 
-Hermes mail has a provider-neutral storage boundary, Gmail OAuth setup,
+Макошь mail has a provider-neutral storage boundary, Gmail OAuth setup,
 iCloud/generic IMAP account setup, SMTP sending for IMAP-backed accounts,
 background sync status, local trash and message projections.
 
@@ -25,7 +25,7 @@ accounts would hide real capability differences:
 - Microsoft 365 and Exchange Online should prefer Microsoft Graph OAuth over
   IMAP basic credentials.
 - Legacy/on-prem Exchange may require EWS or a local bridge.
-- Proton support should normally use Proton Mail Bridge locally; Hermes must not
+- Proton support should normally use Proton Mail Bridge locally; Макошь must not
   attempt to handle Proton account passwords directly.
 - Fastmail, Mail.ru and Yandex can work as IMAP/SMTP presets before they need
   first-class provider kinds.

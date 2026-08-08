@@ -4,15 +4,15 @@ import {
 	MailCredentialBindingStateV1,
 	MailCredentialPurposeV1,
 	type MailAccountStatusV1,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import { hasOwnerVaultProvisioningHostV1 } from '../../../platform/vault'
 import {
 	MailAccountManagementWorkflowV1,
 	type MailPasswordPurposeV1,
 } from './mailAccountManagementWorkflow'
 
-const MAIL_MODULE_ID = 'hermes-mail-runtime'
+const MAIL_MODULE_ID = 'makosh-mail-runtime'
 const MAIL_STORAGE_CAPABILITY_ID = 'mail.storage.v1'
 
 type MailAccountManagementWorkflow = Pick<

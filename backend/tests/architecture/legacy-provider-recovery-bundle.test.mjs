@@ -82,14 +82,14 @@ test('legacy provider recovery is an isolated first-party app build unit', async
   assert.equal(custodyGate?.state, 'implemented');
   assert.match(adr, /Состояние реализации: implemented/);
 
-  assert.match(manifest, /name = "hermes-legacy-provider-recovery"/);
+  assert.match(manifest, /name = "makosh-legacy-provider-recovery"/);
   assert.match(manifest, /role = "app"/);
   assert.match(manifest, /owner = "first_party_client"/);
   assert.match(manifest, /surface = "maintenance_source_adapter"/);
   assert.match(manifest, /prepare = \["dep:postgres"\]/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications|mail|telegram|whatsapp|zulip|kernel|gateway)/,
+    /makosh-(?:communications|mail|telegram|whatsapp|zulip|kernel|gateway)/,
   );
   assert.doesNotMatch(manifest, /(?:reqwest|keyring|teloxide|tdlib|imap|oauth2)\s*=/);
 

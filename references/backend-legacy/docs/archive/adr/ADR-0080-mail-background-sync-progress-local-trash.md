@@ -2,17 +2,17 @@
 
 Status: Accepted
 Date: 2026-06-10
-Deciders: Alex (hermes-hub maintainer)
+Deciders: Alex (makosh maintainer)
 
 ## Context
 
-Hermes Hub mail already has provider account setup, raw/blob preservation,
+Макошь mail already has provider account setup, raw/blob preservation,
 message projection and provider SMTP send for iCloud/generic IMAP. The mail
 workbench now needs continuous account-scoped ingestion instead of only manual or
 fixture-driven imports.
 
-The owner also clarified deletion semantics: deleting mail in the Hermes UI must
-not delete, move, trash or expunge the original provider message. Hermes Hub
+The owner also clarified deletion semantics: deleting mail in the Макошь UI must
+not delete, move, trash or expunge the original provider message. Макошь
 should hide the item from active workbench views while preserving local raw/blob
 content and metadata for replay, AI analysis and analytics.
 

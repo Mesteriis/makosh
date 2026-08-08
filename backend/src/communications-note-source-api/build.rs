@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/communications/note_source/v1/note_source.proto"],
+            &["proto/makosh/communications/note_source/v1/note_source.proto"],
             &["proto"],
         )
         .expect("Communications note source protocol must compile");

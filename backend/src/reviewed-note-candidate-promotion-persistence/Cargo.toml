@@ -1,5 +1,5 @@
 [package]
-name = "hermes-reviewed-note-candidate-promotion-persistence"
+name = "makosh-reviewed-note-candidate-promotion-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -11,14 +11,14 @@ path = "src/lib.rs"
 default = []
 conformance-test-support = []
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "reviewed_note_candidate_promotion"
 surface = "persistence"
 
 [dependencies]
-hermes-events-protocol = { path = "../platform/events" }
-hermes-reviewed-note-candidate-promotion-core = { path = "../reviewed-note-candidate-promotion-core" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-reviewed-note-candidate-promotion-core = { path = "../reviewed-note-candidate-promotion-core" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 sha2 = { version = "=0.11.0", default-features = false }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

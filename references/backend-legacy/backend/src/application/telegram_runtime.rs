@@ -21,7 +21,7 @@ use crate::platform::config::app_config::AppConfig;
 use crate::platform::events::bus::InMemoryEventBus;
 use crate::platform::secrets::store::SecretReferenceStore;
 use crate::vault::HostVault;
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
 

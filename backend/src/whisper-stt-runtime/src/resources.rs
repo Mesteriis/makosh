@@ -5,8 +5,8 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use hermes_runtime_protocol::v1::{ManagedRuntimeArtifactBindingV1, RuntimeArtifactUseV1};
-use hermes_whisper_stt_process::WhisperSttProcessConfigurationV1;
+use makosh_runtime_protocol::v1::{ManagedRuntimeArtifactBindingV1, RuntimeArtifactUseV1};
+use makosh_whisper_stt_process::WhisperSttProcessConfigurationV1;
 use sha2::{Digest, Sha256};
 
 use crate::admission::{WHISPER_STT_MODEL_ARTIFACT_ID_V1, WHISPER_STT_RUNNER_ARTIFACT_ID_V1};
@@ -201,7 +201,7 @@ mod tests {
     #[test]
     fn accepts_only_exact_digest_mode_inode_and_artifact_use() {
         let root = std::env::temp_dir().join(format!(
-            "hermes-whisper-resources-{}-{}",
+            "makosh-whisper-resources-{}-{}",
             std::process::id(),
             NEXT_ID.fetch_add(1, Ordering::Relaxed)
         ));
@@ -233,7 +233,7 @@ mod tests {
     #[test]
     fn rejects_digest_drift_and_symlink_substitution() {
         let root = std::env::temp_dir().join(format!(
-            "hermes-whisper-resources-negative-{}-{}",
+            "makosh-whisper-resources-negative-{}-{}",
             std::process::id(),
             NEXT_ID.fetch_add(1, Ordering::Relaxed)
         ));

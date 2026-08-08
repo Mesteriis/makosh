@@ -7,7 +7,7 @@ import {
 	ClientSettingValueEntryV1Schema,
 	ClientSettingValueV1Schema,
 	ClientSettingsApplyStateV1,
-} from '../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	publicModuleSettingRows,
 	publicModuleStringSetting,
@@ -18,7 +18,7 @@ describe('public module settings projection', () => {
 	it('projects only typed sanitized bootstrap values', () => {
 		const rows = publicModuleSettingRows([create(ClientModuleBootstrapV1Schema, {
 			registrationId: 'mail.local',
-			moduleId: 'hermes-mail-runtime',
+			moduleId: 'makosh-mail-runtime',
 			settings: create(ClientModuleSettingsBootstrapV1Schema, {
 				applyState: ClientSettingsApplyStateV1.CURRENT,
 				values: [create(ClientSettingValueEntryV1Schema, {
@@ -33,7 +33,7 @@ describe('public module settings projection', () => {
 		})])
 
 		expect(rows).toEqual([expect.objectContaining({
-			moduleId: 'hermes-mail-runtime',
+			moduleId: 'makosh-mail-runtime',
 			label: 'Sync interval',
 			value: '15000 ms',
 			editable: true,
@@ -45,7 +45,7 @@ describe('public module settings projection', () => {
 	it('does not project entries whose typed value is absent', () => {
 		const rows = publicModuleSettingRows([create(ClientModuleBootstrapV1Schema, {
 			registrationId: 'mail.local',
-			moduleId: 'hermes-mail-runtime',
+			moduleId: 'makosh-mail-runtime',
 			settings: create(ClientModuleSettingsBootstrapV1Schema, {
 				values: [create(ClientSettingValueEntryV1Schema, {
 					settingId: 'missing',
@@ -59,7 +59,7 @@ describe('public module settings projection', () => {
 	it('reads only an exact sanitized string setting', () => {
 		const module = create(ClientModuleBootstrapV1Schema, {
 			registrationId: 'mail.local',
-			moduleId: 'hermes-mail-runtime',
+			moduleId: 'makosh-mail-runtime',
 			settings: {
 				values: [
 					{
@@ -81,14 +81,14 @@ describe('public module settings projection', () => {
 
 	it('distinguishes absent modules, absent schemas, and current schemas', () => {
 		const withoutSchema = create(ClientModuleBootstrapV1Schema, {
-			moduleId: 'hermes-mail-runtime',
+			moduleId: 'makosh-mail-runtime',
 		})
 		const current = create(ClientModuleBootstrapV1Schema, {
-			moduleId: 'hermes-mail-runtime',
+			moduleId: 'makosh-mail-runtime',
 			settings: create(ClientModuleSettingsBootstrapV1Schema),
 		})
 		const blocked = create(ClientModuleBootstrapV1Schema, {
-			moduleId: 'hermes-mail-runtime',
+			moduleId: 'makosh-mail-runtime',
 			settings: create(ClientModuleSettingsBootstrapV1Schema, {
 				sanitizedReasonCode: 'owner_action_required',
 			}),

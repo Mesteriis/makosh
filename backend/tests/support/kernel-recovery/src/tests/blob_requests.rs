@@ -1,12 +1,12 @@
 use std::sync::Arc;
 use std::sync::atomic::AtomicBool;
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BundledManagedLaunchBinding, InitialOwnerIdentity, ManagedLaunchRecord, ModuleBlobOperationV1,
     ModuleBlobQuotaRequestV1, ModuleRegistration, ModuleRegistrationState,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     BlobDataOperationV1, BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1,
     CapabilityDescriptorV1, CapabilityRequestV1, ManagedRuntimeBlobSessionRequestV1,
     ModuleDescriptorV1, ModuleKindV1, capability_request_v1::Request,
@@ -27,7 +27,7 @@ const CUSTODY_SCOPE_ID: &str = "notes.content.v1";
 
 #[test]
 fn blob_quotas_become_visible_only_after_exact_capability_approval() {
-    let root = unique_target_root("hermes-blob-quota-request");
+    let root = unique_target_root("makosh-blob-quota-request");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -69,7 +69,7 @@ fn blob_quotas_become_visible_only_after_exact_capability_approval() {
 
 #[test]
 fn control_store_rejects_invalid_or_unrequested_blob_quotas_atomically() {
-    let root = unique_target_root("hermes-blob-quota-request-invalid");
+    let root = unique_target_root("makosh-blob-quota-request-invalid");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -126,7 +126,7 @@ fn control_store_rejects_invalid_or_unrequested_blob_quotas_atomically() {
 
 #[test]
 fn kernel_denies_a_blob_operation_not_declared_by_the_capability() {
-    let root = unique_target_root("hermes-blob-operation-scope");
+    let root = unique_target_root("makosh-blob-operation-scope");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = Arc::new(
         SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
@@ -208,7 +208,7 @@ fn kernel_denies_a_blob_operation_not_declared_by_the_capability() {
 
 #[test]
 fn module_registration_retains_a_descriptor_declared_blob_quota() {
-    let root = unique_target_root("hermes-blob-descriptor-registration");
+    let root = unique_target_root("makosh-blob-descriptor-registration");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -243,7 +243,7 @@ fn module_registration_retains_a_descriptor_declared_blob_quota() {
 
 #[test]
 fn module_registration_rejects_conflicting_quotas_for_one_custody_scope() {
-    let root = unique_target_root("hermes-blob-conflicting-scope-quota");
+    let root = unique_target_root("makosh-blob-conflicting-scope-quota");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");

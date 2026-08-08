@@ -16,7 +16,7 @@ const overlayComponents = [
 	'FocusTrap'
 ]
 
-describe('Hermes UI overlay component contracts', () => {
+describe('Макошь UI overlay component contracts', () => {
 	it('keeps the overlay batch documented and exported through the UI kit', () => {
 		const uiRoot = fileURLToPath(new URL('.', import.meta.url))
 		const barrel = readFileSync(join(uiRoot, 'index.ts'), 'utf8')

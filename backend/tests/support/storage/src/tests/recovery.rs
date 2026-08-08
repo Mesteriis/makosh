@@ -182,8 +182,8 @@ impl RecoveryFixture {
         [
             ("--host", OsString::from("127.0.0.1")),
             ("--port", OsString::from("5432")),
-            ("--database", OsString::from("hermes")),
-            ("--username", OsString::from("hermes_owner")),
+            ("--database", OsString::from("makosh")),
+            ("--username", OsString::from("makosh_owner")),
             ("--ssl-mode", OsString::from("require")),
             ("--password-file", self.password_file.as_os_str().to_owned()),
         ]
@@ -214,7 +214,7 @@ impl RecoveryFixture {
                 entry
                     .file_name()
                     .to_string_lossy()
-                    .starts_with(".hermes-postgres-")
+                    .starts_with(".makosh-postgres-")
             });
         assert!(!has_staging, "recovery staging must be removed");
     }

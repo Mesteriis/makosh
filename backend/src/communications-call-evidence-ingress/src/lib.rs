@@ -6,12 +6,12 @@ pub use envelope::{
     CallEvidenceEnvelopeBuildErrorV1, CallEvidenceEnvelopeContextV1,
     build_call_evidence_observed_outbox_record_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-communications-call-evidence-ingress";
+pub const PACKAGE: &str = "makosh-communications-call-evidence-ingress";
 pub const CALL_EVIDENCE_CONTRACT_OWNER_V1: &str = "communications";
 pub const CALL_EVIDENCE_OBSERVED_CONTRACT_NAME_V1: &str = "call_evidence_observed";
 pub const CALL_EVIDENCE_CONTRACT_MAJOR_V1: u32 = 1;
@@ -25,7 +25,7 @@ pub const MAX_CALL_DURATION_SECONDS_V1: u64 = 31 * 24 * 60 * 60;
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communications.call_evidence.v1.rs"
+        "/makosh.communications.call_evidence.v1.rs"
     ));
 }
 

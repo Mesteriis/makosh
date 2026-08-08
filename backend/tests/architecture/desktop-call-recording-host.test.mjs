@@ -22,12 +22,12 @@ test('desktop recording native host stays route-bound and outside business owner
   for (const featureDependency of [
     'dep:cpal',
     'dep:getrandom',
-    'dep:hermes-desktop-call-recording-api',
+    'dep:makosh-desktop-call-recording-api',
     'dep:rfd',
   ]) {
     assert.match(manifest, new RegExp(`"${featureDependency}"`));
   }
-  assert.match(manifest, /hermes-desktop-call-recording-api/);
+  assert.match(manifest, /makosh-desktop-call-recording-api/);
   assert.match(root, /DesktopRecordingHostCommandClaimV1/);
   assert.match(root, /ConsentAuthorityV1/);
   assert.match(root, /SelectedInputV1::system_default/);
@@ -46,8 +46,8 @@ test('desktop recording native host stays route-bound and outside business owner
   assert.doesNotMatch(capability, /desktop-call-recording-host/);
 
   for (const forbidden of [
-    'hermes-communications',
-    'hermes-call-transcription',
+    'makosh-communications',
+    'makosh-call-transcription',
     'sqlx',
     'nats',
     'blob_reference',

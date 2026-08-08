@@ -1,7 +1,7 @@
-use hermes_communication_cross_channel_forward_persistence::{
+use makosh_communication_cross_channel_forward_persistence::{
     CommunicationCrossChannelForwardPersistenceV1, CrossChannelForwardPersistenceErrorV1,
 };
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum CrossChannelForwardEventRelayErrorV1 {

@@ -1,13 +1,13 @@
-use hermes_events_protocol::v1::{
+use makosh_events_protocol::v1::{
     ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
     SourceFenceV1, SourceRefV1, durable_envelope_v1::Semantics,
 };
-use hermes_scheduler::{
+use makosh_scheduler::{
     SchedulerApprovedJobV1, SchedulerScheduleControlAdmissionErrorV1,
     SchedulerScheduleControlContractV1, SchedulerScheduleControlGrantV1,
     SchedulerScheduleControlOperationV1, admit_schedule_control_command_v1,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     JobContractBindingV1, JobKindV1 as CanonicalJobKindV1,
     v1::{
         EnsureOneShotScheduleV1, JobKindV1, SchedulerScheduleControlCommandV1,

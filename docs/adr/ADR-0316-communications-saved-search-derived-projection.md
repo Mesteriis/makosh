@@ -24,12 +24,12 @@ folders и не ослабить private-content boundary ADR-0254.
 
 Saved search остаётся derived projection домена `communications`.
 
-- `hermes-communications-saved-query-api` — отдельная contract build unit;
-- `hermes-communications-domain` — owner-local validation и normalization;
-- `hermes-communications-persistence` — owner-local PostgreSQL projection;
-- `hermes-communications-runtime` — transient key lease, digest construction,
+- `makosh-communications-saved-query-api` — отдельная contract build unit;
+- `makosh-communications-domain` — owner-local validation и normalization;
+- `makosh-communications-persistence` — owner-local PostgreSQL projection;
+- `makosh-communications-runtime` — transient key lease, digest construction,
   client dispatch и execution;
-- `hermes-communications-assembly` — существующая Communications assembly,
+- `makosh-communications-assembly` — существующая Communications assembly,
   без отдельного process или integration.
 
 Новая integration, workflow, provider branch или independently managed runtime

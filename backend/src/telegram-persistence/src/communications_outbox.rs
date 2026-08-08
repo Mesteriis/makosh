@@ -1,6 +1,6 @@
 //! Telegram-owned adapter for the canonical exact-byte outbox relay.
 
-use hermes_events_protocol::delivery::{
+use makosh_events_protocol::delivery::{
     OutboxEntryV1, OutboxPublishReceiptV1, OutboxRelayErrorV1, OwnerOutboxStorePortV1,
 };
 

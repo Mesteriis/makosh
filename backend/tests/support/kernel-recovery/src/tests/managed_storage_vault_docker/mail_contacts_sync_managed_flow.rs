@@ -2,16 +2,16 @@
 
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
-use hermes_contacts_mail_sync_source_api::{
+use makosh_contacts_mail_sync_source_api::{
     ContactsMailSyncSourceEnvelopeContextV1, build_contact_changed_for_mail_sync_outbox_record_v1,
     wire::ContactChangedForMailSyncV1,
 };
-use hermes_events_protocol::validation::envelope::decode_envelope_v1;
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_mail_address_book_contract::wire::{
+use makosh_events_protocol::validation::envelope::decode_envelope_v1;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_mail_address_book_contract::wire::{
     MailAddressBookEntryUpsertRejectedV1, MailAddressBookRejectCodeV1,
 };
-use hermes_mail_contacts_sync_api::{
+use makosh_mail_contacts_sync_api::{
     MAIL_CONTACTS_SYNC_CAPABILITY_ID_V1, MAIL_CONTACTS_SYNC_MODULE_ID_V1,
     MAIL_CONTACTS_SYNC_OWNER_ID_V1, mail_contacts_sync_query_contract_v1,
     mail_contacts_sync_start_contract_v1,
@@ -21,16 +21,16 @@ use hermes_mail_contacts_sync_api::{
         StartMailContactsSyncResponseV1,
     },
 };
-use hermes_mail_contacts_sync_runtime::MAIL_CONTACTS_SYNC_STORAGE_CAPABILITY_ID_V1;
-use hermes_mail_persistence::GmailOAuthCredentialBindingV1;
-use hermes_runtime_protocol::v1::{
+use makosh_mail_contacts_sync_runtime::MAIL_CONTACTS_SYNC_STORAGE_CAPABILITY_ID_V1;
+use makosh_mail_persistence::GmailOAuthCredentialBindingV1;
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
     SchedulerRuntimeControlRequestV1, SchedulerRuntimeControlResponseV1,
     SchedulerScheduleUpsertOutcomeV1, UpsertSchedulerScheduleRequestV1,
     scheduler_runtime_control_request_v1::Operation as SchedulerOperation,
     scheduler_runtime_control_response_v1::Result as SchedulerResult,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     MisfirePolicyV1, OverlapPolicyV1, RetryPolicyV1, SCHEDULER_JOB_DESCRIPTOR_SET_V1,
     SchedulePolicyV1, ScheduleTriggerV1,
 };
@@ -49,24 +49,24 @@ const MANAGED_EVENT_DEADLINE: Duration = Duration::from_secs(60);
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, NATS, Mail, workflow and Contacts binaries"]
 fn managed_mail_contacts_sync_reaches_contacts_through_events() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let provider = MailGmailFixture::start();
-    let root = unique_target_root("hermes-managed-mail-contacts-sync");
+    let root = unique_target_root("makosh-managed-mail-contacts-sync");
     let data = private_directory(short_communications_kernel_data_directory());
     let vault_dir = private_directory(data.join("vault"));
     initialize_vault(&vault_dir, &credential_directory());
     let seeded = seed_mail_vault(&vault_dir);
     let release = installed_mail_contacts_sync_ensemble_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             MAIL_CONTACTS_SYNC_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -80,7 +80,7 @@ fn managed_mail_contacts_sync_reaches_contacts_through_events() {
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     configure_mail_contacts_sync_realtime_v1(&supervisor, &store, realtime);
     supervisor
@@ -358,14 +358,14 @@ fn managed_mail_contacts_sync_reaches_contacts_through_events() {
     runtime.block_on(async {
         let pool = contacts_admin_pool_v1().await;
         let contacts_count: i64 = sqlx::query_scalar(
-            "SELECT count(*) FROM hermes_data.contacts_state WHERE logical_owner_id=$1",
+            "SELECT count(*) FROM makosh_data.contacts_state WHERE logical_owner_id=$1",
         )
         .bind(MAIL_CONTACTS_SYNC_LOGICAL_OWNER_ID_V1)
         .fetch_one(&pool)
         .await
         .expect("count synced Contacts state");
         let completed_inbox: i64 = sqlx::query_scalar(
-            "SELECT count(*) FROM hermes_data.contacts_mail_entry_inbox
+            "SELECT count(*) FROM makosh_data.contacts_mail_entry_inbox
              WHERE logical_owner_id=$1 AND completed=TRUE",
         )
         .bind(MAIL_CONTACTS_SYNC_LOGICAL_OWNER_ID_V1)
@@ -453,7 +453,7 @@ fn managed_mail_contacts_sync_reaches_contacts_through_events() {
         .expect("owner control server result");
     shutdown.store(true, Ordering::SeqCst);
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Mail Contacts Sync fixture");
     std::fs::remove_dir_all(data).expect("remove Mail Contacts Sync Kernel fixture");
@@ -523,11 +523,11 @@ async fn reverse_diagnostic() -> Vec<(i16, bool, bool, Option<i16>, Option<i16>)
         "SELECT operation.state, operation.origin_run_id IS NOT NULL, \
                 operation.mail_command_message_id IS NOT NULL, run.rejection_code, \
                 mail_command.state \
-         FROM hermes_data.mail_contacts_sync_reverse_operations AS operation \
-         LEFT JOIN hermes_data.mail_contacts_sync_runs AS run \
+         FROM makosh_data.mail_contacts_sync_reverse_operations AS operation \
+         LEFT JOIN makosh_data.mail_contacts_sync_runs AS run \
            ON run.logical_owner_id=operation.logical_owner_id \
           AND run.run_id=operation.origin_run_id \
-         LEFT JOIN hermes_data.mail_address_book_upsert_inbox AS mail_command \
+         LEFT JOIN makosh_data.mail_address_book_upsert_inbox AS mail_command \
            ON mail_command.command_message_id=operation.mail_command_message_id \
          WHERE operation.logical_owner_id=$1 \
          ORDER BY operation.created_at_unix_millis, operation.operation_id",
@@ -545,7 +545,7 @@ async fn wait_for_workflow_pending_outbox() {
     let deadline = Instant::now() + Duration::from_secs(10);
     loop {
         let pending: i64 = sqlx::query_scalar(
-            "SELECT count(*) FROM hermes_data.mail_contacts_sync_outbox WHERE \
+            "SELECT count(*) FROM makosh_data.mail_contacts_sync_outbox WHERE \
              logical_owner_id=$1 AND published_at_unix_millis IS NULL",
         )
         .bind(MAIL_CONTACTS_SYNC_LOGICAL_OWNER_ID_V1)
@@ -567,7 +567,7 @@ async fn wait_for_workflow_pending_outbox() {
 async fn assert_latest_mail_write_is_outcome_unknown() {
     let pool = contacts_admin_pool_v1().await;
     let exact_bytes: Vec<u8> = sqlx::query_scalar(
-        "SELECT exact_envelope_bytes FROM hermes_data.mail_address_book_upsert_result_outbox \
+        "SELECT exact_envelope_bytes FROM makosh_data.mail_address_book_upsert_result_outbox \
          ORDER BY created_at_unix_seconds DESC, message_id DESC LIMIT 1",
     )
     .fetch_one(&pool)
@@ -593,7 +593,7 @@ async fn wait_for_reverse_terminal(
     let deadline = Instant::now() + MANAGED_EVENT_DEADLINE;
     loop {
         let state = sqlx::query_scalar::<_, i16>(
-            "SELECT state FROM hermes_data.mail_contacts_sync_reverse_operations \
+            "SELECT state FROM makosh_data.mail_contacts_sync_reverse_operations \
              WHERE logical_owner_id=$1 ORDER BY created_at_unix_millis DESC LIMIT 1",
         )
         .bind(MAIL_CONTACTS_SYNC_LOGICAL_OWNER_ID_V1)
@@ -626,7 +626,7 @@ async fn queue_local_contact_change(
     let now_millis = now_seconds * 1_000 + i64::try_from(revision).expect("bounded revision");
     if revision == 1 {
         sqlx::query(
-            "INSERT INTO hermes_data.contacts_state (logical_owner_id, contact_id, display_name, \
+            "INSERT INTO makosh_data.contacts_state (logical_owner_id, contact_id, display_name, \
              contact_revision, created_at_unix_seconds, created_at_nanos, updated_at_unix_seconds, \
              updated_at_nanos) VALUES ($1,$2,$3,$4,$5,0,$5,0)",
         )
@@ -639,7 +639,7 @@ async fn queue_local_contact_change(
         .await
         .expect("seed local Contact state");
         sqlx::query(
-            "INSERT INTO hermes_data.contacts_email_identities \
+            "INSERT INTO makosh_data.contacts_email_identities \
              (logical_owner_id, normalized_email, contact_id) VALUES ($1,$2,$3)",
         )
         .bind(MAIL_CONTACTS_SYNC_LOGICAL_OWNER_ID_V1)
@@ -649,7 +649,7 @@ async fn queue_local_contact_change(
         .await
         .expect("seed local Contact email");
         sqlx::query(
-            "INSERT INTO hermes_data.contacts_phone_identities \
+            "INSERT INTO makosh_data.contacts_phone_identities \
              (logical_owner_id, normalized_phone, contact_id) VALUES ($1,$2,$3)",
         )
         .bind(MAIL_CONTACTS_SYNC_LOGICAL_OWNER_ID_V1)
@@ -660,7 +660,7 @@ async fn queue_local_contact_change(
         .expect("seed local Contact phone");
     } else {
         let updated = sqlx::query(
-            "UPDATE hermes_data.contacts_state SET display_name=$3, contact_revision=$4, \
+            "UPDATE makosh_data.contacts_state SET display_name=$3, contact_revision=$4, \
              updated_at_unix_seconds=$5 WHERE logical_owner_id=$1 AND contact_id=$2 AND \
              contact_revision=$4-1",
         )
@@ -681,7 +681,7 @@ async fn queue_local_contact_change(
             logical_owner_id: MAIL_CONTACTS_SYNC_LOGICAL_OWNER_ID_V1.to_owned(),
         },
         &ContactsMailSyncSourceEnvelopeContextV1 {
-            module_id: "hermes-contacts-runtime".to_owned(),
+            module_id: "makosh-contacts-runtime".to_owned(),
             runtime_instance_id: "managed-contacts-create-source".to_owned(),
             runtime_generation,
             recorded_at_unix_seconds: now_seconds,
@@ -690,7 +690,7 @@ async fn queue_local_contact_change(
     )
     .expect("build local Contact changed event");
     sqlx::query(
-        "INSERT INTO hermes_data.contacts_outbox (logical_owner_id, message_id, envelope_sha256, \
+        "INSERT INTO makosh_data.contacts_outbox (logical_owner_id, message_id, envelope_sha256, \
          envelope_bytes, created_at_unix_millis) VALUES ($1,$2,$3,$4,$5)",
     )
     .bind(MAIL_CONTACTS_SYNC_LOGICAL_OWNER_ID_V1)
@@ -713,7 +713,7 @@ async fn wait_for_reverse_contact_terminal(
     let deadline = Instant::now() + MANAGED_EVENT_DEADLINE;
     loop {
         let state = sqlx::query_scalar::<_, i16>(
-            "SELECT state FROM hermes_data.mail_contacts_sync_reverse_operations WHERE \
+            "SELECT state FROM makosh_data.mail_contacts_sync_reverse_operations WHERE \
              logical_owner_id=$1 AND contact_id=$2 AND contact_revision=$3",
         )
         .bind(MAIL_CONTACTS_SYNC_LOGICAL_OWNER_ID_V1)
@@ -737,7 +737,7 @@ async fn wait_for_reverse_contact_terminal(
 async fn assert_provider_link(contact_id: [u8; 16], entry_id: &str, etag: &str) {
     let pool = contacts_admin_pool_v1().await;
     let actual = sqlx::query_as::<_, (String, Option<String>)>(
-        "SELECT provider_entry_id, provider_etag FROM hermes_data.contacts_provider_links WHERE \
+        "SELECT provider_entry_id, provider_etag FROM makosh_data.contacts_provider_links WHERE \
          logical_owner_id=$1 AND contact_id=$2 AND source_account_id=$3",
     )
     .bind(MAIL_CONTACTS_SYNC_LOGICAL_OWNER_ID_V1)
@@ -804,7 +804,7 @@ async fn wait_for_scheduled_run_id() -> [u8; 16] {
     let deadline = Instant::now() + MANAGED_EVENT_DEADLINE;
     loop {
         let row = sqlx::query_scalar::<_, Vec<u8>>(
-            "SELECT run_id FROM hermes_data.mail_contacts_sync_runs
+            "SELECT run_id FROM makosh_data.mail_contacts_sync_runs
              WHERE logical_owner_id=$1 AND trigger_kind=2
              ORDER BY created_at_unix_millis DESC LIMIT 1",
         )
@@ -829,7 +829,7 @@ async fn wait_for_scheduler_terminal(run_id: &[u8; 16]) {
     let deadline = Instant::now() + MANAGED_EVENT_DEADLINE;
     loop {
         let outcome = sqlx::query_scalar::<_, String>(
-            "SELECT outcome FROM hermes_platform.scheduler_run_results WHERE run_id=$1",
+            "SELECT outcome FROM makosh_platform.scheduler_run_results WHERE run_id=$1",
         )
         .bind(run_id.as_slice())
         .fetch_optional(&pool)
@@ -981,22 +981,22 @@ fn try_route_sync_request(
 async fn contacts_admin_pool_v1() -> sqlx::PgPool {
     let password = Zeroizing::new(
         std::fs::read_to_string(required(
-            "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+            "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
         ))
         .expect("read disposable PostgreSQL credential")
         .trim()
         .to_owned(),
     );
     let options = PgConnectOptions::new()
-        .host(&required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
+        .host(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
         .port(
-            required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+            required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
                 .parse()
                 .expect("valid PostgreSQL port"),
         )
-        .username("hermes_postgres_admin")
+        .username("makosh_postgres_admin")
         .password(password.as_str())
-        .database("hermes_storage_authenticated")
+        .database("makosh_storage_authenticated")
         .ssl_mode(PgSslMode::Disable);
     PgPoolOptions::new()
         .max_connections(1)

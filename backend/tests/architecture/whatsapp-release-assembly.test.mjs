@@ -52,7 +52,7 @@ test('WhatsApp descriptor, storage and release assembly remain separate owner un
 
   assert.match(workspace, /"src\/whatsapp-assembly"/);
   assert.match(persistenceManifest, /surface = "persistence"/);
-  assert.match(persistenceManifest, /hermes-storage-protocol/);
+  assert.match(persistenceManifest, /makosh-storage-protocol/);
   assert.match(persistenceSchema, /owner_id: "whatsapp"\.to_owned\(\)/);
   for (const revision of ['V1', 'V2']) {
     assert.match(
@@ -74,10 +74,10 @@ test('WhatsApp descriptor, storage and release assembly remain separate owner un
     persistenceSchema,
     /for forbidden in \["INSERT ", "UPDATE ", "DELETE "\]/,
   );
-  assert.match(persistenceSchema, /hermes_data\.whatsapp_/);
+  assert.match(persistenceSchema, /makosh_data\.whatsapp_/);
   assert.doesNotMatch(
     persistenceSchema,
-    /CREATE TABLE[^\n]*hermes_data\.communications_/,
+    /CREATE TABLE[^\n]*makosh_data\.communications_/,
   );
 
   assert.match(admission, /whatsapp_module_descriptor_v1/);
@@ -110,24 +110,24 @@ test('WhatsApp descriptor, storage and release assembly remain separate owner un
   assert.match(assemblyManifest, /owner = "whatsapp"/);
   assert.match(assemblyManifest, /surface = "assembly"/);
   for (const dependency of [
-    'hermes-whatsapp-runtime',
-    'hermes-whatsapp-persistence',
-    'hermes-runtime-protocol',
-    'hermes-storage-protocol',
+    'makosh-whatsapp-runtime',
+    'makosh-whatsapp-persistence',
+    'makosh-runtime-protocol',
+    'makosh-storage-protocol',
   ]) {
     assert.match(assemblyManifest, new RegExp(dependency));
   }
   for (const forbiddenDependency of [
-    'hermes-kernel',
-    'hermes-gateway',
-    'hermes-communications',
+    'makosh-kernel',
+    'makosh-gateway',
+    'makosh-communications',
     'ring',
     'sha2',
   ]) {
     assert.doesNotMatch(assemblyManifest, new RegExp(forbiddenDependency));
   }
-  assert.doesNotMatch(runtimeManifest, /hermes-whatsapp-assembly/);
-  assert.doesNotMatch(persistenceManifest, /hermes-whatsapp-assembly/);
+  assert.doesNotMatch(runtimeManifest, /makosh-whatsapp-assembly/);
+  assert.doesNotMatch(persistenceManifest, /makosh-whatsapp-assembly/);
 
   assert.match(
     assemblySource,

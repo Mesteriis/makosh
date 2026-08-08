@@ -1,7 +1,7 @@
-use hermes_storage_migrations::{
+use makosh_storage_migrations::{
     MigrationAdmissionErrorV1, MigrationBundleAdmissionErrorV1, admit_storage_bundle,
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     v1::{StorageBundleV1, StorageMigrationStepV1},
     validation::{StorageBundleValidationErrorV1, validate_storage_bundle},
 };
@@ -16,8 +16,8 @@ fn valid_bundle() -> StorageBundleV1 {
         steps: vec![StorageMigrationStepV1 {
             revision: 1,
             migration_id: "create_entries".into(),
-            forward_sql_utf8: b"CREATE TABLE hermes_data.notes_entries (entry_id uuid);".to_vec(),
-            sha256: Sha256::digest(b"CREATE TABLE hermes_data.notes_entries (entry_id uuid);")
+            forward_sql_utf8: b"CREATE TABLE makosh_data.notes_entries (entry_id uuid);".to_vec(),
+            sha256: Sha256::digest(b"CREATE TABLE makosh_data.notes_entries (entry_id uuid);")
                 .to_vec(),
         }],
     }
@@ -31,25 +31,25 @@ fn accepts_a_bounded_ordered_bundle() {
 
 #[test]
 fn admits_the_canonical_communications_bundle() {
-    let bundle = hermes_communications_persistence::communications_storage_bundle_v1();
+    let bundle = makosh_communications_persistence::communications_storage_bundle_v1();
     assert_eq!(admit_storage_bundle(&bundle), Ok(()));
 }
 
 #[test]
 fn admits_the_canonical_attachment_security_bundle() {
-    let bundle = hermes_attachment_security_persistence::attachment_security_storage_bundle_v1();
+    let bundle = makosh_attachment_security_persistence::attachment_security_storage_bundle_v1();
     assert_eq!(admit_storage_bundle(&bundle), Ok(()));
 }
 
 #[test]
 fn admits_the_canonical_telegram_bundle() {
-    let bundle = hermes_telegram_persistence::telegram_storage_bundle_v1();
+    let bundle = makosh_telegram_persistence::telegram_storage_bundle_v1();
     assert_eq!(admit_storage_bundle(&bundle), Ok(()));
 }
 
 #[test]
 fn admits_the_canonical_telegram_release_bundle() {
-    let bundle = hermes_telegram_assembly::telegram_storage_bundle_with_calls_backfill_v6();
+    let bundle = makosh_telegram_assembly::telegram_storage_bundle_with_calls_backfill_v6();
     assert_eq!(admit_storage_bundle(&bundle), Ok(()));
 }
 
@@ -61,8 +61,8 @@ fn rejects_unversioned_or_reordered_steps() {
     reordered.steps.push(StorageMigrationStepV1 {
         revision: 1,
         migration_id: "duplicate_revision".into(),
-        forward_sql_utf8: b"ALTER TABLE hermes_data.notes_entries ADD COLUMN title text;".to_vec(),
-        sha256: Sha256::digest(b"ALTER TABLE hermes_data.notes_entries ADD COLUMN title text;")
+        forward_sql_utf8: b"ALTER TABLE makosh_data.notes_entries ADD COLUMN title text;".to_vec(),
+        sha256: Sha256::digest(b"ALTER TABLE makosh_data.notes_entries ADD COLUMN title text;")
             .to_vec(),
     });
 

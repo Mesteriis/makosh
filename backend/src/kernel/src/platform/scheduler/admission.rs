@@ -1,7 +1,7 @@
 //! Current approved JobKind admission for Scheduler-owned schedule mutations.
 
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::UpsertSchedulerScheduleRequestV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::UpsertSchedulerScheduleRequestV1;
 
 use super::scheduler_catalog;
 

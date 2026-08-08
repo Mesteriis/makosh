@@ -7,7 +7,7 @@ Clarifies ADR-0177. Its former DOCX non-goal is superseded in part by ADR-0180.
 
 ## Decision
 
-Hermes may create a derived content-disarmed artifact only for an attachment
+Макошь may create a derived content-disarmed artifact only for an attachment
 with a current `clean` scan verdict and a verified PDF type. The isolated
 attachment worker rasterizes a bounded number of pages with Poppler and writes
 a new image-only PDF with Pillow. It never copies objects, scripts, forms,

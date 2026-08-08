@@ -7,7 +7,7 @@ use crate::platform::secrets::models::SecretStoreKind;
 use crate::platform::secrets::resolver::SecretResolver;
 use crate::platform::secrets::store::SecretReferenceStore;
 use crate::vault::HostVault;
-use hermes_communications_api::accounts::ProviderAccountSecretBinding;
+use makosh_communications_api::accounts::ProviderAccountSecretBinding;
 
 impl WhatsappWebStore {
     pub(super) async fn optional_restored_session_secret_ref(

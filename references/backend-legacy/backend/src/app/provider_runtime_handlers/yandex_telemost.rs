@@ -1,12 +1,12 @@
 use axum::Json;
 use axum::extract::{Path, Query, State};
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
-use hermes_provider_telemost::models::{
+use makosh_events_api::NewEventEnvelope;
+use makosh_provider_telemost::models::{
     YandexTelemostCohostPage, YandexTelemostConference, YandexTelemostConferencePatchRequest,
     YandexTelemostCreateConferenceCommand,
 };
-use hermes_provider_telemost::protocol::{
+use makosh_provider_telemost::protocol::{
     YANDEX_TELEMOST_API_BASE_URL, YANDEX_TELEMOST_PROVIDER_KIND_STR,
     sanitize_yandex_telemost_payload, validate_required, validate_telemost_join_url,
 };
@@ -54,8 +54,8 @@ use crate::workflows::realtime_conversation_radar_projection::{
 };
 #[path = "yandex_telemost_support.rs"]
 mod yandex_telemost_support;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 use yandex_telemost_support::*;
 
 const REALTIME_CONVERSATION_RADAR_SIGNAL_OBSERVATION_KIND: &str =

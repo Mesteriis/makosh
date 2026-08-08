@@ -1,16 +1,16 @@
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1, ProvidedSurfaceKindV1,
     ProvidedSurfaceV1, RuntimeArtifactRequestV1, RuntimeArtifactUseV1, RuntimeBudgetRequestV1,
     SettingsSchemaRefV1, StorageNamespaceRequestV1, capability_request_v1::Request,
 };
-use hermes_speech_to_text_api::speech_to_text_provider_contract_reference_v1;
+use makosh_speech_to_text_api::speech_to_text_provider_contract_reference_v1;
 use sha2::{Digest, Sha256};
 
 use crate::settings::whisper_stt_settings_schema_bytes_v1;
 
 pub const WHISPER_STT_OWNER_ID_V1: &str = "whisper_stt";
-pub const WHISPER_STT_MODULE_ID_V1: &str = "hermes-whisper-stt-runtime";
+pub const WHISPER_STT_MODULE_ID_V1: &str = "makosh-whisper-stt-runtime";
 pub const WHISPER_STT_PROVIDER_CAPABILITY_ID_V1: &str = "whisper_stt.provider.v1";
 pub const WHISPER_STT_BLOB_CAPABILITY_ID_V1: &str = "whisper_stt.blob.v1";
 pub const WHISPER_STT_STORAGE_CAPABILITY_ID_V1: &str = "whisper_stt.storage.v1";
@@ -137,7 +137,7 @@ fn storage_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::validate_descriptor_v1;
+    use makosh_runtime_protocol::validation::descriptor::validate_descriptor_v1;
 
     use super::*;
 

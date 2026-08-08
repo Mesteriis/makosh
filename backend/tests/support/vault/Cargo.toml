@@ -1,21 +1,21 @@
 [package]
-name = "hermes-vault-testkit"
+name = "makosh-vault-testkit"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "test"
 owner = "test"
 surface = "test_support"
 
 [dev-dependencies]
 getrandom = { version = "=0.4.3", default-features = false }
-hermes-vault-key-provider = { path = "../../../src/platform/vault/key_provider" }
-hermes-vault-key-provider-file = { path = "../../../src/platform/vault/key_provider_file" }
-hermes-vault-protocol = { path = "../../../src/platform/vault/protocol" }
-hermes-vault-store-sqlcipher = { path = "../../../src/platform/vault/store_sqlcipher" }
-hermes-runtime-protocol = { path = "../../../src/platform/runtime_protocol" }
+makosh-vault-key-provider = { path = "../../../src/platform/vault/key_provider" }
+makosh-vault-key-provider-file = { path = "../../../src/platform/vault/key_provider_file" }
+makosh-vault-protocol = { path = "../../../src/platform/vault/protocol" }
+makosh-vault-store-sqlcipher = { path = "../../../src/platform/vault/store_sqlcipher" }
+makosh-runtime-protocol = { path = "../../../src/platform/runtime_protocol" }
 hpke = { version = "=0.14.0", default-features = false, features = ["alloc", "chacha", "getrandom", "x25519"] }
 libc = "=0.2.186"
 prost = "=0.14.4"

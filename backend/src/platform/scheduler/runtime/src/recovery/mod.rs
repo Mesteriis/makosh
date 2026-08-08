@@ -1,9 +1,9 @@
 //! Scheduler-owned stopped-instance preparation for exact Event Hub replay.
 
-use hermes_scheduler_persistence::{
+use makosh_scheduler_persistence::{
     SchedulerPostgresStoreV1, SchedulerRecoveryDatabaseV1, scheduler_storage_bundle_v1,
 };
-use hermes_secure_file::{SecureReadPolicy, read as read_secure_file};
+use makosh_secure_file::{SecureReadPolicy, read as read_secure_file};
 use prost::Message;
 use std::fs::{File, OpenOptions};
 use std::io::Write;

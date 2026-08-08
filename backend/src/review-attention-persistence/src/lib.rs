@@ -14,4 +14,4 @@ pub use repository::{
     ReviewAttentionPersistenceOutcomeV1, ReviewAttentionPersistenceV1,
 };
 
-pub const PACKAGE: &str = "hermes-review-attention-persistence";
+pub const PACKAGE: &str = "makosh-review-attention-persistence";

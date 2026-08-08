@@ -16,7 +16,7 @@ pub mod managed_runtime;
 pub mod recovery;
 pub mod stt;
 
-pub const PACKAGE: &str = "hermes-call-transcription-runtime";
+pub const PACKAGE: &str = "makosh-call-transcription-runtime";
 
 pub use admission::{module_descriptor_v1, settings_schema_bytes_v1};
 pub use managed_runtime::{

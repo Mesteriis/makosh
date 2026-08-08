@@ -8,11 +8,11 @@ use super::messages::models::ProjectedMessage;
 use super::spam_reputation::{
     SenderReputationDecision, SenderReputationError, SenderReputationStore,
 };
-use hermes_communications_api::evidence::{
+use makosh_communications_api::evidence::{
     NewRawCommunicationRecord, StoredRawCommunicationRecord,
 };
-use hermes_communications_postgres::errors::CommunicationIngestionError;
-use hermes_communications_postgres::store::CommunicationIngestionStore;
+use makosh_communications_postgres::errors::CommunicationIngestionError;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
 
 #[derive(Clone)]
 pub struct CommunicationRawEvidencePort(CommunicationIngestionStore);

@@ -1,5 +1,5 @@
 use chrono::Utc;
-use hermes_provider_zoom::protocol::{
+use makosh_provider_zoom::protocol::{
     ZOOM_PROVIDER_SYNC_DEFAULT_MAX_MEETINGS, ZOOM_PROVIDER_SYNC_DEFAULT_PAGE_SIZE,
 };
 use sqlx::postgres::PgPool;

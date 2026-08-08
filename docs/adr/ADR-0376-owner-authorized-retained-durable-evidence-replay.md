@@ -20,20 +20,20 @@ workflow generation без выдачи private payload. Полный pre-push g
 состояние не было достигнуто: generated frontend replay client и
 provider-neutral acquisition exact producer selection пока отсутствуют.
 Поэтому phase gate и inventory остаются `planned`. Отдельный workflow-owned
-build unit `hermes-retained-evidence-replay-protocol` реализует bounded exact
+build unit `makosh-retained-evidence-replay-protocol` реализует bounded exact
 message selection, producer registration, owner-device actor hash,
 runtime/grant fences и sanitized terminal result без subject/query/payload
 surface. Communications build unit
-`hermes-communications-retained-evidence-replay-persistence` добавляет exact
+`makosh-communications-retained-evidence-replay-persistence` добавляет exact
 index поверх собственного `communications_domain_outbox`, проверяет сохранённые
 bytes/message/hash/contract и ведёт append-only replay audit как storage bundle
 revision 17. Integration build unit
-`hermes-mail-retained-evidence-replay-persistence` аналогично индексирует только
+`makosh-mail-retained-evidence-replay-persistence` аналогично индексирует только
 собственный `mail_attachment_security_outbox`, проверяет exact scan-candidate
 contract и добавляет Mail storage successor revision 23. Producer-local publish
 adapters реализованы поверх разных owner-specific command/result contracts:
-`hermes-communications-retained-evidence-replay-contract` и
-`hermes-mail-retained-evidence-replay-contract`; их wire schemas не импортируют
+`makosh-communications-retained-evidence-replay-contract` и
+`makosh-mail-retained-evidence-replay-contract`; их wire schemas не импортируют
 workflow protocol или реализацию другого owner. Оба adapters сверяют exact
 registration/runtime/grant fences, получают original owner-local bytes,
 фиксируют append-only audit и публикуют их без decode/re-encode и без изменения

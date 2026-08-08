@@ -1,5 +1,5 @@
-use hermes_ai_contracts::validate_provider_reply_generation_result_v1;
-use hermes_ollama_ai_core::{OllamaAiRunStateV1, OllamaAiRunV1};
+use makosh_ai_contracts::validate_provider_reply_generation_result_v1;
+use makosh_ollama_ai_core::{OllamaAiRunStateV1, OllamaAiRunV1};
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct PersistedOllamaAiRunV1 {
@@ -123,7 +123,7 @@ pub(crate) fn validate_transition(
 
 #[cfg(test)]
 mod tests {
-    use hermes_ollama_ai_core::OllamaAiRunStateV1;
+    use makosh_ollama_ai_core::OllamaAiRunStateV1;
 
     use super::*;
 

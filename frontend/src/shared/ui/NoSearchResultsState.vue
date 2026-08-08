@@ -11,16 +11,16 @@ const props = withDefaults(defineProps<{
   title: 'No results'
 })
 
-const classes = computed(() => ['hermes-state', 'hermes-state--no-results', props.class])
+const classes = computed(() => ['makosh-state', 'makosh-state--no-results', props.class])
 </script>
 
 <template>
   <section :class="classes" role="status" aria-live="polite">
-    <Icon icon="tabler:search-off" size="2rem" class="hermes-state-icon" />
-    <div class="hermes-state-copy">
-      <h3 class="hermes-state-title">{{ title }}</h3>
-      <p v-if="description" class="hermes-state-description">{{ description }}</p>
-      <p v-if="query" class="hermes-state-query">{{ query }}</p>
+    <Icon icon="tabler:search-off" size="2rem" class="makosh-state-icon" />
+    <div class="makosh-state-copy">
+      <h3 class="makosh-state-title">{{ title }}</h3>
+      <p v-if="description" class="makosh-state-description">{{ description }}</p>
+      <p v-if="query" class="makosh-state-query">{{ query }}</p>
     </div>
   </section>
 </template>

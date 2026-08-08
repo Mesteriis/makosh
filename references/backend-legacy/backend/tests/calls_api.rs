@@ -1,4 +1,4 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
@@ -6,20 +6,20 @@ use axum::http::{Method, Request, StatusCode, header};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::router::{build_router, build_router_with_database};
-use hermes_hub_backend::platform::config::app_config::AppConfig;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::app::router::{build_router, build_router_with_database};
+use makosh_hub_backend::platform::config::app_config::AppConfig;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const TOKEN: &str = "calls-test-token";
 
 fn cfg() -> AppConfig {
-    hermes_backend_testkit::app::config_with_secret(TOKEN)
+    makosh_backend_testkit::app::config_with_secret(TOKEN)
 }
 
 fn get(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("req")
 }
@@ -29,7 +29,7 @@ fn post(uri: &str, body: Value, token: &str) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("req")
 }
@@ -51,7 +51,7 @@ fn uid() -> u128 {
 async fn app(db: &str) -> axum::Router {
     let database = Database::connect(Some(db)).await.expect("db");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(TOKEN, db),
+        makosh_backend_testkit::app::config_with_secret_and_database_url(TOKEN, db),
         database,
     )
 }

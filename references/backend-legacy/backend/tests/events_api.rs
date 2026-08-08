@@ -1,4 +1,4 @@
-use hermes_backend_testkit::{self, context::TestContext};
+use makosh_backend_testkit::{self, context::TestContext};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
@@ -8,17 +8,17 @@ use serde_json::json;
 use sqlx::postgres::PgPool;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::router::{build_router, build_router_with_database};
-use hermes_hub_backend::platform::config::app_config::AppConfig;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::app::router::{build_router, build_router_with_database};
+use makosh_hub_backend::platform::config::app_config::AppConfig;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const LOCAL_API_TOKEN: &str = "events-api-test-token";
 
 #[tokio::test]
 async fn post_event_rejects_when_local_api_secret_is_not_configured() {
     let app = build_router(
-        hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
-            .with_test_pairs([("HERMES_DEV_MODE", "true")])
+        makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+            .with_test_pairs([("MAKOSH_DEV_MODE", "true")])
             .expect("app config"),
     );
 
@@ -43,7 +43,7 @@ async fn post_event_rejects_when_local_api_secret_is_not_configured() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -73,7 +73,7 @@ async fn post_event_rejects_missing_local_api_secret() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -104,7 +104,7 @@ async fn post_event_rejects_invalid_local_api_secret() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -171,7 +171,7 @@ async fn get_event_rejects_missing_local_api_secret_before_database_access() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -195,7 +195,7 @@ async fn get_event_rejects_invalid_local_api_secret_before_database_access() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -218,7 +218,7 @@ async fn get_audit_events_rejects_missing_local_api_secret_before_database_acces
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -451,7 +451,7 @@ async fn get_audit_events_returns_records_without_self_auditing_against_postgres
     for item in items {
         assert!(item["audit_id"].as_i64().expect("audit_id") > 0);
         assert_eq!(item["actor_kind"], "frontend");
-        assert_eq!(item["actor_id"], "hermes-frontend");
+        assert_eq!(item["actor_id"], "makosh-frontend");
         assert_eq!(item["target_kind"], "event");
         assert_eq!(item["target_id"], event_id);
         assert!(
@@ -501,7 +501,7 @@ async fn get_audit_events_returns_records_without_self_auditing_against_postgres
 
     let actor_filtered_response = app
         .oneshot(get_request_with_token(
-            &format!("/api/v1/audit/events?target_id={event_id}&actor_id=hermes-frontend"),
+            &format!("/api/v1/audit/events?target_id={event_id}&actor_id=makosh-frontend"),
             LOCAL_API_TOKEN,
         ))
         .await
@@ -536,7 +536,7 @@ async fn app_and_pool_with_database(database_url: &str) -> (axum::Router, PgPool
 }
 
 fn config_with_api_token() -> AppConfig {
-    hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+    makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
 }
 
 fn json_request(uri: &str, value: serde_json::Value) -> Request<Body> {
@@ -549,7 +549,7 @@ fn json_request(uri: &str, value: serde_json::Value) -> Request<Body> {
 }
 
 fn json_request_with_token(uri: &str, value: serde_json::Value, token: &str) -> Request<Body> {
-    json_request_with_token_and_actor(uri, value, token, "hermes-frontend")
+    json_request_with_token_and_actor(uri, value, token, "makosh-frontend")
 }
 
 fn json_request_with_token_without_actor(
@@ -561,7 +561,7 @@ fn json_request_with_token_without_actor(
         .method("POST")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(value.to_string()))
         .expect("request")
 }
@@ -576,7 +576,7 @@ fn json_request_with_token_and_actor(
         .method("POST")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(value.to_string()))
         .expect("request")
 }
@@ -589,13 +589,13 @@ fn get_request(uri: &str) -> Request<Body> {
 }
 
 fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
-    get_request_with_token_and_actor(uri, token, "hermes-frontend")
+    get_request_with_token_and_actor(uri, token, "makosh-frontend")
 }
 
 fn get_request_with_token_and_actor(uri: &str, token: &str, _actor_id: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }

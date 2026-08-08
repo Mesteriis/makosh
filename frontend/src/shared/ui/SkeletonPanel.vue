@@ -16,25 +16,25 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-skeleton-panel',
-  { 'hermes-skeleton-panel--fill': props.fill },
+  'makosh-skeleton-panel',
+  { 'makosh-skeleton-panel--fill': props.fill },
   props.class
 ])
 </script>
 
 <template>
   <section :class="classes" aria-busy="true" role="status">
-    <header v-if="title || description" class="hermes-skeleton-panel__header">
+    <header v-if="title || description" class="makosh-skeleton-panel__header">
       <strong v-if="title">{{ title }}</strong>
       <p v-if="description">{{ description }}</p>
     </header>
 
-    <div class="hermes-skeleton-panel__body">
+    <div class="makosh-skeleton-panel__body">
       <Skeleton height="64px" />
       <div
         v-for="row in rows"
         :key="row"
-        class="hermes-skeleton-panel__row"
+        class="makosh-skeleton-panel__row"
       >
         <Skeleton width="44px" height="44px" rounded />
         <span>

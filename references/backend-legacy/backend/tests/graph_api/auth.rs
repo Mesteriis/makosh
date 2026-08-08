@@ -16,7 +16,7 @@ async fn graph_summary_rejects_missing_local_api_secret() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -56,7 +56,7 @@ async fn graph_search_rejects_missing_local_api_secret_before_missing_query_vali
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -77,7 +77,7 @@ async fn graph_nodes_rejects_missing_local_api_secret() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -100,7 +100,7 @@ async fn graph_neighborhood_rejects_missing_local_api_secret_before_malformed_qu
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }

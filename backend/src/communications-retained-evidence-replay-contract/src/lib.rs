@@ -10,7 +10,7 @@ pub use envelope::{
     build_communications_replay_command_outbox_v1, build_communications_replay_result_outbox_v1,
 };
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
@@ -18,7 +18,7 @@ use hermes_runtime_protocol::v1::{
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communications.replay.v1.rs"
+        "/makosh.communications.replay.v1.rs"
     ));
 }
 
@@ -27,11 +27,11 @@ include!(concat!(env!("OUT_DIR"), "/communications_replay_schema.rs"));
 pub const COMMUNICATIONS_REPLAY_DESCRIPTOR_SET_V1: &[u8] =
     include_bytes!(concat!(env!("OUT_DIR"), "/communications-replay-v1.bin"));
 
-pub const PACKAGE: &str = "hermes-communications-retained-evidence-replay-contract";
+pub const PACKAGE: &str = "makosh-communications-retained-evidence-replay-contract";
 pub const COMMUNICATIONS_REPLAY_OWNER_ID_V1: &str = "communications";
 pub const COMMUNICATIONS_REPLAY_SOURCE_MODULE_ID_V1: &str =
-    "hermes-attachment-preview-evidence-replay-runtime";
-pub const COMMUNICATIONS_REPLAY_TARGET_MODULE_ID_V1: &str = "hermes-communications-runtime";
+    "makosh-attachment-preview-evidence-replay-runtime";
+pub const COMMUNICATIONS_REPLAY_TARGET_MODULE_ID_V1: &str = "makosh-communications-runtime";
 pub const COMMUNICATIONS_REPLAY_CAPABILITY_ID_V1: &str =
     "communications.retained-evidence-replay.v1";
 pub const COMMUNICATIONS_REPLAY_COMMAND_CONTRACT_NAME_V1: &str =

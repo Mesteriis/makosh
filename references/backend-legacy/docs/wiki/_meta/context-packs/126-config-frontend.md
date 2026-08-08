@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `config`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/.gitignore`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/.gitignore`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/.gitignore`
 - Size bytes / Размер в байтах: `161`
 - Included characters / Включено символов: `161`
 - Truncated / Обрезано: `no`
@@ -83,7 +83,7 @@ vite.config.ts.timestamp-*
 
 ### `frontend/package.json`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/package.json`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/package.json`
 - Size bytes / Размер в байтах: `1633`
 - Included characters / Включено символов: `1633`
 - Truncated / Обрезано: `no`
@@ -150,7 +150,7 @@ vite.config.ts.timestamp-*
 
 ### `frontend/pnpm-lock.yaml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/pnpm-lock.yaml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/pnpm-lock.yaml`
 - Size bytes / Размер в байтах: `95613`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -467,7 +467,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/pnpm-workspace.yaml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/pnpm-workspace.yaml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/pnpm-workspace.yaml`
 - Size bytes / Размер в байтах: `30`
 - Included characters / Включено символов: `30`
 - Truncated / Обрезано: `no`
@@ -479,7 +479,7 @@ allowBuilds:
 
 ### `frontend/src-tauri/.gitignore`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/.gitignore`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/.gitignore`
 - Size bytes / Размер в байтах: `86`
 - Included characters / Включено символов: `86`
 - Truncated / Обрезано: `no`
@@ -493,7 +493,7 @@ allowBuilds:
 
 ### `frontend/src-tauri/Cargo.lock`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/Cargo.lock`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/Cargo.lock`
 - Size bytes / Размер в байтах: `127309`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -979,7 +979,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src-tauri/Cargo.toml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/Cargo.toml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/Cargo.toml`
 - Size bytes / Размер в байтах: `683`
 - Included characters / Включено символов: `683`
 - Truncated / Обрезано: `no`
@@ -988,8 +988,8 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 [package]
 name = "app"
 version = "0.1.0"
-description = "Hermes Hub desktop shell"
-authors = ["Hermes Hub"]
+description = "Макошь desktop shell"
+authors = ["Макошь"]
 license = ""
 repository = ""
 edition = "2024"
@@ -1016,7 +1016,7 @@ ureq = { version = "3.3.0", default-features = false, features = ["json"] }
 
 ### `frontend/src-tauri/capabilities/default.json`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/capabilities/default.json`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/capabilities/default.json`
 - Size bytes / Размер в байтах: `524`
 - Included characters / Включено символов: `524`
 - Truncated / Обрезано: `no`
@@ -1044,7 +1044,7 @@ ureq = { version = "3.3.0", default-features = false, features = ["json"] }
 
 ### `frontend/src-tauri/capabilities/whatsapp-companion-relay.json`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/capabilities/whatsapp-companion-relay.json`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/capabilities/whatsapp-companion-relay.json`
 - Size bytes / Размер в байтах: `438`
 - Included characters / Включено символов: `438`
 - Truncated / Обрезано: `no`
@@ -1071,7 +1071,7 @@ ureq = { version = "3.3.0", default-features = false, features = ["json"] }
 
 ### `frontend/src-tauri/capabilities/yandex-telemost-companion-relay.json`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/capabilities/yandex-telemost-companion-relay.json`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/capabilities/yandex-telemost-companion-relay.json`
 - Size bytes / Размер в байтах: `483`
 - Included characters / Включено символов: `483`
 - Truncated / Обрезано: `no`
@@ -1099,7 +1099,7 @@ ureq = { version = "3.3.0", default-features = false, features = ["json"] }
 
 ### `frontend/src-tauri/permissions/autogenerated/open_whatsapp_web_companion.toml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/permissions/autogenerated/open_whatsapp_web_companion.toml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/permissions/autogenerated/open_whatsapp_web_companion.toml`
 - Size bytes / Размер в байтах: `462`
 - Included characters / Включено символов: `462`
 - Truncated / Обрезано: `no`
@@ -1120,7 +1120,7 @@ commands.deny = ["open_whatsapp_web_companion"]
 
 ### `frontend/src-tauri/permissions/autogenerated/open_yandex_telemost_companion.toml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/permissions/autogenerated/open_yandex_telemost_companion.toml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/permissions/autogenerated/open_yandex_telemost_companion.toml`
 - Size bytes / Размер в байтах: `480`
 - Included characters / Включено символов: `480`
 - Truncated / Обрезано: `no`
@@ -1141,7 +1141,7 @@ commands.deny = ["open_yandex_telemost_companion"]
 
 ### `frontend/src-tauri/permissions/autogenerated/whatsapp_web_companion_manifest.toml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/permissions/autogenerated/whatsapp_web_companion_manifest.toml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/permissions/autogenerated/whatsapp_web_companion_manifest.toml`
 - Size bytes / Размер в байтах: `486`
 - Included characters / Включено символов: `486`
 - Truncated / Обрезано: `no`
@@ -1162,7 +1162,7 @@ commands.deny = ["whatsapp_web_companion_manifest"]
 
 ### `frontend/src-tauri/permissions/autogenerated/whatsapp_web_companion_relay_observation.toml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/permissions/autogenerated/whatsapp_web_companion_relay_observation.toml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/permissions/autogenerated/whatsapp_web_companion_relay_observation.toml`
 - Size bytes / Размер в байтах: `540`
 - Included characters / Включено символов: `540`
 - Truncated / Обрезано: `no`
@@ -1183,7 +1183,7 @@ commands.deny = ["whatsapp_web_companion_relay_observation"]
 
 ### `frontend/src-tauri/permissions/autogenerated/yandex_telemost_companion_manifest.toml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/permissions/autogenerated/yandex_telemost_companion_manifest.toml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/permissions/autogenerated/yandex_telemost_companion_manifest.toml`
 - Size bytes / Размер в байтах: `504`
 - Included characters / Включено символов: `504`
 - Truncated / Обрезано: `no`
@@ -1204,7 +1204,7 @@ commands.deny = ["yandex_telemost_companion_manifest"]
 
 ### `frontend/src-tauri/permissions/autogenerated/yandex_telemost_prepare_audio_device.toml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/permissions/autogenerated/yandex_telemost_prepare_audio_device.toml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/permissions/autogenerated/yandex_telemost_prepare_audio_device.toml`
 - Size bytes / Размер в байтах: `516`
 - Included characters / Включено символов: `516`
 - Truncated / Обрезано: `no`
@@ -1225,7 +1225,7 @@ commands.deny = ["yandex_telemost_prepare_audio_device"]
 
 ### `frontend/src-tauri/permissions/autogenerated/yandex_telemost_recording_start.toml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/permissions/autogenerated/yandex_telemost_recording_start.toml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/permissions/autogenerated/yandex_telemost_recording_start.toml`
 - Size bytes / Размер в байтах: `486`
 - Included characters / Включено символов: `486`
 - Truncated / Обрезано: `no`
@@ -1246,7 +1246,7 @@ commands.deny = ["yandex_telemost_recording_start"]
 
 ### `frontend/src-tauri/permissions/autogenerated/yandex_telemost_recording_stop.toml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/permissions/autogenerated/yandex_telemost_recording_stop.toml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/permissions/autogenerated/yandex_telemost_recording_stop.toml`
 - Size bytes / Размер в байтах: `480`
 - Included characters / Включено символов: `480`
 - Truncated / Обрезано: `no`
@@ -1267,7 +1267,7 @@ commands.deny = ["yandex_telemost_recording_stop"]
 
 ### `frontend/src-tauri/permissions/autogenerated/yandex_telemost_speaker_timeline_append.toml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/permissions/autogenerated/yandex_telemost_speaker_timeline_append.toml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/permissions/autogenerated/yandex_telemost_speaker_timeline_append.toml`
 - Size bytes / Размер в байтах: `534`
 - Included characters / Включено символов: `534`
 - Truncated / Обрезано: `no`
@@ -1288,7 +1288,7 @@ commands.deny = ["yandex_telemost_speaker_timeline_append"]
 
 ### `frontend/src-tauri/tauri.conf.json`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/tauri.conf.json`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/tauri.conf.json`
 - Size bytes / Размер в байтах: `866`
 - Included characters / Включено символов: `866`
 - Truncated / Обрезано: `no`
@@ -1296,9 +1296,9 @@ commands.deny = ["yandex_telemost_speaker_timeline_append"]
 ```json
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "Hermes Hub",
+  "productName": "Макошь",
   "version": "0.1.0",
-  "identifier": "dev.hermes-hub.desktop",
+  "identifier": "dev.makosh.desktop",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://127.0.0.1:5173"
@@ -1306,7 +1306,7 @@ commands.deny = ["yandex_telemost_speaker_timeline_append"]
   "app": {
     "windows": [
       {
-        "title": "Hermes Hub",
+        "title": "Макошь",
         "width": 1280,
         "height": 800,
         "resizable": true,
@@ -1321,7 +1321,7 @@ commands.deny = ["yandex_telemost_speaker_timeline_append"]
     "active": true,
     "targets": "all",
     "externalBin": [
-      "binaries/hermes-hub-backend"
+      "binaries/makosh-backend"
     ],
     "resources": {
       "resources/google-oauth/": "google-oauth",
@@ -1340,7 +1340,7 @@ commands.deny = ["yandex_telemost_speaker_timeline_append"]
 
 ### `frontend/src/platform/i18n/en.json`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/i18n/en.json`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/i18n/en.json`
 - Size bytes / Размер в байтах: `40328`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1530,7 +1530,7 @@ commands.deny = ["yandex_telemost_speaker_timeline_append"]
 	"Account Detail Status": "Account Detail Status",
 	"Security And Runtime Status": "Security And Runtime Status",
 	"Minimum window size is 800 x 600": "Minimum window size is 800 x 600",
-	"Increase the Hermes Hub window size to continue.": "Increase the Hermes Hub window size to continue.",
+	"Increase the Макошь window size to continue.": "Increase the Макошь window size to continue.",
 	"Good evening, Alex": "Good evening, Alex",
 	"Here's what's happening in your world today.": "Here's what's happening in your world today.",
 	"All your conversations. All channels. One place.": "All your conversations. All channels. One place.",
@@ -1547,7 +1547,7 @@ commands.deny = ["yandex_telemost_speaker_timeline_append"]
 	"Your intelligent assistants working across your data and tools": "Your intelligent assistants working across your data and tools",
 	"All companies and organizations from your communications": "All companies and organizations from your communications",
 	"Runtime settings and connected accounts.": "Runtime settings and connected accounts.",
-	"Hermes Hub": "Hermes Hub",
+	"Макошь": "Макошь",
 	"Telegram Client": "Telegram Client",
 	"WhatsApp Web": "WhatsApp Web",
 	"Companies": "Companies",
@@ -1570,13 +1570,13 @@ commands.deny = ["yandex_telemost_speaker_timeline_append"]
 	"Personal OS": "Personal OS",
 	"Messages": "Messages",
 	"Needs attention": "Needs attention",
-	"Hermes Secure Vault": "Hermes Secure Vault",
+	"Макошь Secure Vault": "Макошь Secure Vault",
 	"Create Your Personal Secure Vault": "Create Your Personal Secure Vault",
 	"Unlock Secure Vault": "Unlock Secure Vault",
-	"Hermes Hub needs the secure vault unlocked before it can save provider credentials on this device.": "Hermes Hub needs the secure vault unlocked before it can save provider credentials on this device.",
+	"Макошь needs the secure vault unlocked before it can save provider credentials on this device.": "Макошь needs the secure vault unlocked before it can save provider credentials on this device.",
 	"Unlock Existing Vault": "Unlock Existing Vault",
-	"Hermes Secure Vault is locked. Unlock the vault, then start Google mail connection again.": "Hermes Secure Vault is locked. Unlock the vault, then start Google mail connection again.",
-	"Hermes Secure Vault is not initialized. Create the vault, then start Google mail connection again.": "Hermes Secure Vault is not initialized. Create the vault, then start Google mail connection again.",
+	"Макошь Secure Vault is locked. Unlock the vault, then start Google mail connection again.": "Макошь Secure Vault is locked. Unlock the vault, then start Google mail connection again.",
+	"Макошь Secure Vault is not initialized. Create the vault, then start Google mail connection again.": "Макошь Secure Vault is not initialized. Create the vault, then start Google mail connection again.",
 	"Notifications": "Notifications",
 	"No active notifications.": "No active notifications.",
 	"Key changes and important updates": "Key changes and important updates",
@@ -1608,13 +1608,13 @@ commands.deny = ["yandex_telemost_speaker_timeline_append"]
 	"Calendars": "Calendars",
 	"Local Calendar": "Local Calendar",
 	"Google Calendar": "Google Calendar",
-	"Google OAuth client credentials are not configured. Add HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH or HERMES_GOOGLE_OAUTH_CLIENT_ID to docker/.env, the
+	"Google OAuth client credentials are not configured. Add MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH or MAKOSH_GOOGLE_OAUTH_CLIENT_ID to docker/.env, the
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `frontend/src/platform/i18n/ru.json`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/i18n/ru.json`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/i18n/ru.json`
 - Size bytes / Размер в байтах: `56199`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1805,7 +1805,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 	"Account Detail Status": "Статус аккаунта",
 	"Security And Runtime Status": "Безопасность и состояние",
 	"Minimum window size is 800 x 600": "Минимальный размер окна: 800 × 600",
-	"Increase the Hermes Hub window size to continue.": "Увеличьте окно Hermes Hub для продолжения.",
+	"Increase the Макошь window size to continue.": "Увеличьте окно Макошь для продолжения.",
 	"Good evening, Alex": "Добрый вечер, Алекс",
 	"Here's what's happening in your world today.": "Главное за сегодня.",
 	"All your conversations. All channels. One place.": "Все ваши разговоры. Все каналы. В одном месте.",
@@ -1822,7 +1822,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 	"Your intelligent assistants working across your data and tools": "Ваши интеллектуальные ассистенты",
 	"All companies and organizations from your communications": "Все компании и организации из коммуникаций",
 	"Runtime settings and connected accounts.": "Настройки среды и подключённые аккаунты.",
-	"Hermes Hub": "Hermes Hub",
+	"Макошь": "Макошь",
 	"Telegram Client": "Telegram",
 	"WhatsApp Web": "WhatsApp Web",
 	"Companies": "Компании",
@@ -1845,13 +1845,13 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 	"Personal OS": "Персональная ОС",
 	"Messages": "Сообщения",
 	"Needs attention": "Требуют внимания",
-	"Hermes Secure Vault": "Защищённое хранилище Hermes",
+	"Макошь Secure Vault": "Защищённое хранилище Макошь",
 	"Create Your Personal Secure Vault": "Создайте личное защищённое хранилище",
 	"Unlock Secure Vault": "Разблокируйте защищённое хранилище",
-	"Hermes Hub needs the secure vault unlocked before it can save provider credentials on this device.": "Hermes Hub нужно разблокированное защищённое хранилище, чтобы сохранять учётные данные провайдеров на этом устройстве.",
+	"Макошь needs the secure vault unlocked before it can save provider credentials on this device.": "Макошь нужно разблокированное защищённое хранилище, чтобы сохранять учётные данные провайдеров на этом устройстве.",
 	"Unlock Existing Vault": "Разблокировать хранилище",
-	"Hermes Secure Vault is locked. Unlock the vault, then start Google mail connection again.": "Защищённое хранилище Hermes заблокировано. Разблокируйте хранилище, затем снова начните подключение Google Mail.",
-	"Hermes Secure Vault is not initialized. Create the vault, then start Google mail connection again.": "Защищённое хранилище Hermes ещё не создано. Создайте хранилище, затем снова начните подключение Google Mail.",
+	"Макошь Secure Vault is locked. Unlock the vault, then start Google mail connection again.": "Защищённое хранилище Макошь заблокировано. Разблокируйте хранилище, затем снова начните подключение Google Mail.",
+	"Макошь Secure Vault is not initialized. Create the vault, then start Google mail connection again.": "Защищённое хранилище Макошь ещё не создано. Создайте хранилище, затем снова начните подключение Google Mail.",
 	"Notifications": "Уведомления",
 	"No active notifications.": "Нет активных уведомлений.",
 	"Key changes and important updates": "Ключевые изменения и обновления",
@@ -1888,7 +1888,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/tsconfig.json`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/tsconfig.json`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/tsconfig.json`
 - Size bytes / Размер в байтах: `538`
 - Included characters / Включено символов: `538`
 - Truncated / Обрезано: `no`

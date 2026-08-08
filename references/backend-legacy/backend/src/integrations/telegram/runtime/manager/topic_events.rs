@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 use sqlx::PgPool;
 
@@ -12,7 +12,7 @@ use crate::integrations::telegram::tdjson::parsing::events::TelegramTdlibTopicUp
 use crate::integrations::telegram::tdjson::snapshots::TelegramTdlibTopicSnapshot;
 use crate::platform::events::bus::InMemoryEventBus;
 use crate::platform::events::bus::telegram_event_types;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use super::realtime_events::{
     TelegramRuntimeEventBridgeContext, publish_command_reconciled_events,
@@ -187,7 +187,7 @@ fn topic_updated_event(
     account_id: &str,
     topic: &TelegramTopic,
     occurred_at: DateTime<Utc>,
-) -> Result<NewEventEnvelope, hermes_events_api::EventEnvelopeError> {
+) -> Result<NewEventEnvelope, makosh_events_api::EventEnvelopeError> {
     NewEventEnvelope::builder(
         format!(
             "evt_telegram_topic_{}_{}_{}",
@@ -230,7 +230,7 @@ fn topic_updated_event(
 #[cfg(test)]
 mod tests {
     use chrono::TimeZone;
-    use hermes_backend_testkit::context::TestContext;
+    use makosh_backend_testkit::context::TestContext;
     use sqlx::Row;
 
     use super::*;
@@ -312,7 +312,7 @@ mod tests {
             "available",
             "provider_write",
             "confirmed",
-            "hermes-frontend",
+            "makosh-frontend",
             json!({
                 "provider_topic_id": 42,
                 "is_closed": true

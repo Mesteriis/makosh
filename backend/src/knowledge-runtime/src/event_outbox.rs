@@ -1,5 +1,5 @@
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
-use hermes_knowledge_persistence::{KnowledgePersistenceErrorV1, KnowledgePersistenceV1};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_knowledge_persistence::{KnowledgePersistenceErrorV1, KnowledgePersistenceV1};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum KnowledgeEventRelayErrorV1 {

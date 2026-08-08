@@ -8,35 +8,35 @@ const PROJECT_ROOT = new URL('../../../', import.meta.url);
 const providers = [
   {
     owner: 'mail',
-    module: 'hermes-mail-runtime',
+    module: 'makosh-mail-runtime',
     blobCapability: 'mail.blob.v1',
     custodyScope: 'mail.delivery-intent-body.v1',
     messagePrefix: 'Mail',
-    protoPackage: 'hermes.mail.delivery_intent.v1',
+    protoPackage: 'makosh.mail.delivery_intent.v1',
   },
   {
     owner: 'telegram',
-    module: 'hermes-telegram-runtime',
+    module: 'makosh-telegram-runtime',
     blobCapability: 'telegram.blob.v1',
     custodyScope: 'telegram.delivery-intent-body.v1',
     messagePrefix: 'Telegram',
-    protoPackage: 'hermes.telegram.delivery_intent.v1',
+    protoPackage: 'makosh.telegram.delivery_intent.v1',
   },
   {
     owner: 'whatsapp',
-    module: 'hermes-whatsapp-runtime',
+    module: 'makosh-whatsapp-runtime',
     blobCapability: 'whatsapp.blob.v1',
     custodyScope: 'whatsapp.delivery-intent-body.v1',
     messagePrefix: 'WhatsApp',
-    protoPackage: 'hermes.whatsapp.delivery_intent.v1',
+    protoPackage: 'makosh.whatsapp.delivery_intent.v1',
   },
   {
     owner: 'zulip',
-    module: 'hermes-zulip-runtime',
+    module: 'makosh-zulip-runtime',
     blobCapability: 'zulip.blob.v1',
     custodyScope: 'zulip.delivery-intent-body.v1',
     messagePrefix: 'Zulip',
-    protoPackage: 'hermes.zulip.delivery_intent.v1',
+    protoPackage: 'makosh.zulip.delivery_intent.v1',
   },
 ];
 
@@ -90,18 +90,18 @@ test('provider delivery intents are four separate integration-owned contract bui
     policy.implementation.productionPackages
       .filter(({ name }) => name.endsWith('-delivery-intent-contract'))
       .map(({ name }) => name),
-    providers.map(({ owner }) => `hermes-${owner}-delivery-intent-contract`),
+    providers.map(({ owner }) => `makosh-${owner}-delivery-intent-contract`),
   );
 
   for (const provider of providers) {
-    const packageName = `hermes-${provider.owner}-delivery-intent-contract`;
+    const packageName = `makosh-${provider.owner}-delivery-intent-contract`;
     const [manifest, contract, proto] = await Promise.all([
       readFile(cratePath(provider.owner, 'Cargo.toml'), 'utf8'),
       readFile(cratePath(provider.owner, 'src/lib.rs'), 'utf8'),
       readFile(
         cratePath(
           provider.owner,
-          `proto/hermes/${provider.owner}/delivery_intent/v1/delivery_intent.proto`,
+          `proto/makosh/${provider.owner}/delivery_intent/v1/delivery_intent.proto`,
         ),
         'utf8',
       ),
@@ -116,10 +116,10 @@ test('provider delivery intents are four separate integration-owned contract bui
         `role = "integration"[\\s\\S]*owner = "${provider.owner}"[\\s\\S]*surface = "contract"`,
       ),
     );
-    assert.match(manifest, /hermes-runtime-protocol/);
+    assert.match(manifest, /makosh-runtime-protocol/);
     assert.doesNotMatch(
       manifest,
-      /hermes-(?:communications|communication-delivery-intent|mail|telegram|whatsapp|zulip)-(?:api|core|runtime|persistence|assembly)|sqlx|async-nats/,
+      /makosh-(?:communications|communication-delivery-intent|mail|telegram|whatsapp|zulip)-(?:api|core|runtime|persistence|assembly)|sqlx|async-nats/,
     );
 
     assert.match(wire, new RegExp(`package ${provider.protoPackage.replaceAll('.', '\\.')};`));
@@ -154,17 +154,17 @@ test('provider delivery intents are four separate integration-owned contract bui
 
   assert.doesNotMatch(
     workflowManifests.join('\n'),
-    /hermes-(?:mail|telegram|whatsapp|zulip)-delivery-intent-contract/,
+    /makosh-(?:mail|telegram|whatsapp|zulip)-delivery-intent-contract/,
   );
   for (const provider of providers) {
     assert.match(
       runtimeManifest,
-      new RegExp(`hermes-${provider.owner}-delivery-intent-contract`),
+      new RegExp(`makosh-${provider.owner}-delivery-intent-contract`),
     );
   }
   assert.doesNotMatch(
     runtimeManifest,
-    /hermes-(?:mail|telegram|whatsapp|zulip)-(?:runtime|persistence)/,
+    /makosh-(?:mail|telegram|whatsapp|zulip)-(?:runtime|persistence)/,
   );
 });
 

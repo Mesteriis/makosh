@@ -1,10 +1,10 @@
 //! Telegram-owned exact-byte relay for Communications observations.
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimeOutboxPublisherV1, RuntimePublishPermitV1,
 };
-use hermes_events_protocol::delivery::{OutboxRelayErrorV1, OutboxRelayOutcomeV1, relay_once};
-use hermes_telegram_persistence::{
+use makosh_events_protocol::delivery::{OutboxRelayErrorV1, OutboxRelayOutcomeV1, relay_once};
+use makosh_telegram_persistence::{
     TelegramCommunicationsOutboxStoreV1, TelegramDurablePersistence,
 };
 

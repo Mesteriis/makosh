@@ -2,10 +2,10 @@
 
 use super::*;
 
-use hermes_events_jetstream::DurableSubjectV1;
-use hermes_events_protocol::v1::DurableEnvelopeV1;
-use hermes_reviewed_task_candidate_promotion_core::REVIEWED_TASK_CANDIDATE_PROMOTION_MODULE_ID_V1;
-use hermes_tasks_command_api::{
+use makosh_events_jetstream::DurableSubjectV1;
+use makosh_events_protocol::v1::DurableEnvelopeV1;
+use makosh_reviewed_task_candidate_promotion_core::REVIEWED_TASK_CANDIDATE_PROMOTION_MODULE_ID_V1;
+use makosh_tasks_command_api::{
     TasksCommandEnvelopeContextV1, build_create_task_from_reviewed_candidate_outbox_record_v1,
     wire::{
         CreateTaskFromReviewedCandidateCommandV1, TaskCreationFromReviewedCandidateRejectedV1,
@@ -62,7 +62,7 @@ pub(super) fn assert_tasks_reject_stale_blob_receipt_v1(
             .await
             .expect("connect stale Blob observer");
         let mut results = client
-            .subscribe("hermes.result.v1.tasks.>")
+            .subscribe("makosh.result.v1.tasks.>")
             .await
             .expect("subscribe stale Blob Tasks results");
         let context = async_nats::jetstream::new(client);
@@ -101,7 +101,7 @@ pub(super) fn assert_tasks_reject_stale_blob_receipt_v1(
         );
         let pool = task_candidate_admin_pool_v1().await;
         let tasks: i64 = sqlx::query_scalar(
-            "SELECT count(*) FROM hermes_data.tasks_state
+            "SELECT count(*) FROM makosh_data.tasks_state
              WHERE logical_owner_id=$1 AND approved_candidate_id=$2",
         )
         .bind(TASK_CANDIDATE_LOGICAL_HUMAN_OWNER_ID_V1)

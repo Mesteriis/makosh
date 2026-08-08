@@ -39,7 +39,7 @@ test('managed client realtime keeps transport owner neutral and replay owner loc
     ),
     readFile(
       new URL(
-        'src/platform/runtime_protocol/proto/hermes/runtime/v1/managed_runtime_control.proto',
+        'src/platform/runtime_protocol/proto/makosh/runtime/v1/managed_runtime_control.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -71,7 +71,7 @@ test('managed client realtime keeps transport owner neutral and replay owner loc
     ),
     readFile(
       new URL(
-        'src/communication-delivery-intent-api/proto/hermes/communication_delivery_intent/v1/delivery.proto',
+        'src/communication-delivery-intent-api/proto/makosh/communication_delivery_intent/v1/delivery.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -176,11 +176,11 @@ test('managed client realtime keeps transport owner neutral and replay owner loc
   );
   assert.match(
     materializeDevelopmentRelease,
-    /--package hermes-communication-delivery-intent-runtime/,
+    /--package makosh-communication-delivery-intent-runtime/,
   );
   assert.match(
     materializeDevelopmentRelease,
-    /--package hermes-communication-delivery-intent-assembly/,
+    /--package makosh-communication-delivery-intent-assembly/,
   );
   assert.ok(clientEvent);
   assert.doesNotMatch(
@@ -189,6 +189,6 @@ test('managed client realtime keeps transport owner neutral and replay owner loc
   );
   assert.doesNotMatch(
     `${protocol}\n${validation}\n${kernelRoute}\n${routeStore}`,
-    /hermes_communication_delivery_intent|DeliveryIntentStatusChangedV1/,
+    /makosh_communication_delivery_intent|DeliveryIntentStatusChangedV1/,
   );
 });

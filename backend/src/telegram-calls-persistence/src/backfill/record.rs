@@ -1,6 +1,6 @@
 use sqlx::{PgPool, Postgres, Row, Transaction, postgres::PgRow};
 
-use hermes_telegram_calls_core::{
+use makosh_telegram_calls_core::{
     TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_MAJOR_V1, TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_NAME_V1,
     TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_OWNER_V1, TELEGRAM_CALLS_REALTIME_BACKFILL_SCOPE_V1,
 };
@@ -19,7 +19,7 @@ checkpoint_frame_sequence, processed_frame_count, backfilled_frame_count, \
 rebase_original_max_event_sequence, rebase_offset, rebase_mapped_event_count, \
 attempt_count, accepted_at_unix_millis, updated_at_unix_millis, \
 completed_at_unix_millis \
-FROM hermes_data.telegram_call_realtime_backfill_jobs \
+FROM makosh_data.telegram_call_realtime_backfill_jobs \
 WHERE job_run_id = $1";
 
 const EXECUTION_SELECT_FOR_UPDATE: &str = "\
@@ -30,7 +30,7 @@ checkpoint_frame_sequence, processed_frame_count, backfilled_frame_count, \
 rebase_original_max_event_sequence, rebase_offset, rebase_mapped_event_count, \
 attempt_count, accepted_at_unix_millis, updated_at_unix_millis, \
 completed_at_unix_millis \
-FROM hermes_data.telegram_call_realtime_backfill_jobs \
+FROM makosh_data.telegram_call_realtime_backfill_jobs \
 WHERE job_run_id = $1 \
 FOR UPDATE";
 

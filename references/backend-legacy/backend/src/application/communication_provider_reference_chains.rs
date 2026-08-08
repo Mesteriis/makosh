@@ -8,7 +8,7 @@ use crate::integrations::telegram::client::errors::TelegramError;
 use crate::integrations::telegram::client::models::message_references::{
     TelegramForwardChainResponse, TelegramForwardRef, TelegramReplyChainResponse, TelegramReplyRef,
 };
-use hermes_communications_api::canonical::CanonicalMessageReadPort;
+use makosh_communications_api::canonical::CanonicalMessageReadPort;
 
 const MAX_DEPTH: usize = 16;
 const MAX_EDGES: usize = 128;

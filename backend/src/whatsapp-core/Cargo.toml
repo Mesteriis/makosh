@@ -1,5 +1,5 @@
 [package]
-name = "hermes-whatsapp-core"
+name = "makosh-whatsapp-core"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,11 +7,11 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "whatsapp"
 surface = "implementation"
 
 [dependencies]
-hermes-communications-ingress = { path = "../communications-ingress" }
-hermes-whatsapp-api = { path = "../whatsapp-api" }
+makosh-communications-ingress = { path = "../communications-ingress" }
+makosh-whatsapp-api = { path = "../whatsapp-api" }

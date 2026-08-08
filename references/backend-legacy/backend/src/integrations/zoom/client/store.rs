@@ -1,11 +1,11 @@
 use crate::platform::calls::store::CallIntelligenceStore;
 use crate::platform::secrets::store::SecretReferenceStore;
-use hermes_communications_api::accounts::ProviderSecretBindingCommandPort;
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::ProviderSecretBindingCommandPort;
+use makosh_communications_api::accounts::{
     NewProviderAccountSecretBinding, ProviderAccountCommandPort, ProviderAccountSecretPurpose,
 };
-use hermes_events_api::NewEventEnvelope;
-use hermes_provider_zoom::protocol::{
+use makosh_events_api::NewEventEnvelope;
+use makosh_provider_zoom::protocol::{
     ZOOM_EXPLICIT_TOKEN_REFRESH_THRESHOLD_SECONDS, ZOOM_LIVE_AUTHORIZED_RUNTIME_KIND,
     ZOOM_MAX_RECORDING_MEDIA_DOWNLOAD_BYTES, ZOOM_MAX_TOKEN_REFRESH_THRESHOLD_SECONDS,
     ZOOM_PROVIDER_KIND_STR, ZOOM_RUNTIME_KIND, ZOOM_TOKEN_EXPIRY_SAFETY_MARGIN_SECONDS,
@@ -35,7 +35,7 @@ use crate::platform::storage::communication_media::{
 };
 use crate::vault::HostVault;
 use crate::vault::models::SecretEntryContext;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use super::errors::ZoomError;
 #[path = "account_state.rs"]

@@ -1,53 +1,53 @@
-.hermes-rich-text-editor {
+.makosh-rich-text-editor {
 	display: grid;
 	gap: var(--h-space-2);
 	min-width: 0;
 	color: var(--h-color-text);
 }
 
-.hermes-rich-text-editor__header,
-.hermes-rich-text-editor__toolbar,
-.hermes-rich-text-editor__footer {
+.makosh-rich-text-editor__header,
+.makosh-rich-text-editor__toolbar,
+.makosh-rich-text-editor__footer {
 	display: flex;
 	align-items: center;
 	gap: var(--h-space-2);
 }
 
-.hermes-rich-text-editor__header {
+.makosh-rich-text-editor__header {
 	justify-content: space-between;
 }
 
-.hermes-rich-text-editor__copy {
+.makosh-rich-text-editor__copy {
 	display: grid;
 	gap: var(--h-space-1);
 	min-width: 0;
 }
 
-.hermes-rich-text-editor__label {
+.makosh-rich-text-editor__label {
 	color: var(--h-color-text-soft);
 	font-size: var(--h-font-size-sm);
 	font-weight: 700;
 	line-height: var(--h-line-height-tight);
 }
 
-.hermes-rich-text-editor__helper,
-.hermes-rich-text-editor__counter,
-.hermes-rich-text-editor__footer {
+.makosh-rich-text-editor__helper,
+.makosh-rich-text-editor__counter,
+.makosh-rich-text-editor__footer {
 	color: var(--h-color-text-muted);
 	font-size: var(--h-font-size-sm);
 	line-height: var(--h-line-height-default);
 }
 
-.hermes-rich-text-editor__helper {
+.makosh-rich-text-editor__helper {
 	margin: 0;
 }
 
-.hermes-rich-text-editor__counter--over {
+.makosh-rich-text-editor__counter--over {
 	color: var(--h-color-danger);
 	font-weight: 700;
 }
 
-.hermes-rich-text-editor__toolbar {
+.makosh-rich-text-editor__toolbar {
 	flex-wrap: wrap;
 	width: fit-content;
 	max-width: 100%;
@@ -58,21 +58,21 @@
 	box-shadow: var(--h-shadow-xs);
 }
 
-.hermes-rich-text-editor__toolbar .hermes-icon-button {
+.makosh-rich-text-editor__toolbar .makosh-icon-button {
 	color: var(--h-color-text-soft);
 }
 
-.hermes-rich-text-editor__action--active {
+.makosh-rich-text-editor__action--active {
 	background: var(--h-color-accent-soft);
 	border-color: var(--h-color-border-strong);
 	color: var(--h-color-accent);
 }
 
-.hermes-rich-text-editor__action--separated {
+.makosh-rich-text-editor__action--separated {
 	margin-left: var(--h-space-1);
 }
 
-.hermes-rich-text-editor__surface {
+.makosh-rich-text-editor__surface {
 	position: relative;
 	min-height: 180px;
 	border: 1px solid var(--h-color-border);
@@ -82,16 +82,16 @@
 	overflow: hidden;
 }
 
-.hermes-rich-text-editor__surface:hover {
+.makosh-rich-text-editor__surface:hover {
 	border-color: var(--h-color-border-strong);
 }
 
-.hermes-rich-text-editor__content,
-.hermes-rich-text-editor__prosemirror {
+.makosh-rich-text-editor__content,
+.makosh-rich-text-editor__prosemirror {
 	min-height: 180px;
 }
 
-.hermes-rich-text-editor__prosemirror {
+.makosh-rich-text-editor__prosemirror {
 	display: block;
 	padding: var(--h-space-4);
 	color: var(--h-color-text);
@@ -100,51 +100,51 @@
 	outline: 0;
 }
 
-.hermes-rich-text-editor__prosemirror:focus-visible {
+.makosh-rich-text-editor__prosemirror:focus-visible {
 	box-shadow: inset var(--h-focus-ring);
 }
 
-.hermes-rich-text-editor__prosemirror > * {
+.makosh-rich-text-editor__prosemirror > * {
 	margin-block: 0;
 }
 
-.hermes-rich-text-editor__prosemirror > * + * {
+.makosh-rich-text-editor__prosemirror > * + * {
 	margin-top: var(--h-space-3);
 }
 
-.hermes-rich-text-editor__prosemirror h2,
-.hermes-rich-text-editor__prosemirror h3 {
+.makosh-rich-text-editor__prosemirror h2,
+.makosh-rich-text-editor__prosemirror h3 {
 	color: var(--h-color-text-strong);
 	font-weight: 780;
 	line-height: var(--h-line-height-tight);
 }
 
-.hermes-rich-text-editor__prosemirror h2 {
+.makosh-rich-text-editor__prosemirror h2 {
 	font-size: var(--h-font-size-xl);
 }
 
-.hermes-rich-text-editor__prosemirror h3 {
+.makosh-rich-text-editor__prosemirror h3 {
 	font-size: var(--h-font-size-lg);
 }
 
-.hermes-rich-text-editor__prosemirror blockquote {
+.makosh-rich-text-editor__prosemirror blockquote {
 	border-left: 3px solid var(--h-color-border-strong);
 	margin-left: 0;
 	padding-left: var(--h-space-3);
 	color: var(--h-color-text-soft);
 }
 
-.hermes-rich-text-editor__prosemirror ul {
+.makosh-rich-text-editor__prosemirror ul {
 	margin-left: var(--h-space-4);
 	padding-left: var(--h-space-2);
 }
 
-.hermes-rich-text-editor__prosemirror ol {
+.makosh-rich-text-editor__prosemirror ol {
 	margin-left: var(--h-space-4);
 	padding-left: var(--h-space-2);
 }
 
-.hermes-rich-text-editor__prosemirror code {
+.makosh-rich-text-editor__prosemirror code {
 	border: 1px solid var(--h-color-border);
 	border-radius: var(--h-radius-sm);
 	background: var(--h-color-bg-muted);
@@ -154,7 +154,7 @@
 	font-size: 0.92em;
 }
 
-.hermes-rich-text-editor__prosemirror pre {
+.makosh-rich-text-editor__prosemirror pre {
 	border: 1px solid var(--h-color-border);
 	border-radius: var(--h-radius-md);
 	background: var(--h-color-bg-muted);
@@ -162,25 +162,25 @@
 	padding: var(--h-space-3);
 }
 
-.hermes-rich-text-editor__prosemirror pre code {
+.makosh-rich-text-editor__prosemirror pre code {
 	border: 0;
 	background: transparent;
 	padding: 0;
 }
 
-.hermes-rich-text-editor__prosemirror hr {
+.makosh-rich-text-editor__prosemirror hr {
 	border: 0;
 	border-top: 1px solid var(--h-color-border);
 	margin-block: var(--h-space-4);
 }
 
-.hermes-rich-text-editor__prosemirror a {
+.makosh-rich-text-editor__prosemirror a {
 	color: var(--h-color-accent);
 	text-decoration: underline;
 	text-underline-offset: 3px;
 }
 
-.hermes-rich-text-editor__placeholder {
+.makosh-rich-text-editor__placeholder {
 	position: absolute;
 	top: var(--h-space-4);
 	left: var(--h-space-4);
@@ -190,11 +190,11 @@
 	pointer-events: none;
 }
 
-.hermes-rich-text-editor__footer {
+.makosh-rich-text-editor__footer {
 	justify-content: flex-end;
 }
 
-.hermes-rich-text-editor__footer code {
+.makosh-rich-text-editor__footer code {
 	border: 1px solid var(--h-color-border);
 	border-radius: var(--h-radius-sm);
 	background: var(--h-color-bg-muted);
@@ -204,10 +204,10 @@
 	font-size: var(--h-font-size-xs);
 }
 
-.hermes-rich-text-editor--disabled {
+.makosh-rich-text-editor--disabled {
 	opacity: 0.62;
 }
 
-.hermes-rich-text-editor--disabled .hermes-rich-text-editor__surface {
+.makosh-rich-text-editor--disabled .makosh-rich-text-editor__surface {
 	background: var(--h-color-bg-muted);
 }

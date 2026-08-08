@@ -1,6 +1,6 @@
 //! Immutable Vault route context supplied by the verified Blob runtime launch.
 
-use hermes_vault_protocol::{LeaseAudienceV1, VaultTransportPublicKey, validate_vault_instance_id};
+use makosh_vault_protocol::{LeaseAudienceV1, VaultTransportPublicKey, validate_vault_instance_id};
 
 #[derive(Clone)]
 pub struct BlobVaultRouteContextV1 {

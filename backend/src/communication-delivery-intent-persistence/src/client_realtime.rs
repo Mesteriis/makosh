@@ -40,7 +40,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
             sqlx::query(
                 "SELECT realtime_sequence, intent_id, state, state_revision,
                         rejection_code, occurred_at_unix_seconds
-                 FROM hermes_data.communication_delivery_intent_transitions
+                 FROM makosh_data.communication_delivery_intent_transitions
                  WHERE logical_owner_id = $1 AND realtime_sequence > $2
                  ORDER BY realtime_sequence ASC
                  LIMIT $3",
@@ -57,7 +57,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
                  FROM (
                    SELECT realtime_sequence, intent_id, state, state_revision,
                           rejection_code, occurred_at_unix_seconds
-                   FROM hermes_data.communication_delivery_intent_transitions
+                   FROM makosh_data.communication_delivery_intent_transitions
                    WHERE logical_owner_id = $1
                    ORDER BY realtime_sequence DESC
                    LIMIT $2

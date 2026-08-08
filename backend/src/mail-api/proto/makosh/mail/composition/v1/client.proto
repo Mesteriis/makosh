@@ -1,0 +1,254 @@
+syntax = "proto3";
+package makosh.mail.composition.v1;
+
+enum MailCompositionModeV1 {
+  MAIL_COMPOSITION_MODE_UNSPECIFIED = 0;
+  MAIL_COMPOSITION_MODE_NEW = 1;
+  MAIL_COMPOSITION_MODE_REPLY = 2;
+  MAIL_COMPOSITION_MODE_REPLY_ALL = 3;
+  MAIL_COMPOSITION_MODE_FORWARD = 4;
+  MAIL_COMPOSITION_MODE_REDIRECT = 5;
+}
+
+enum MailCompositionEntityKindV1 {
+  MAIL_COMPOSITION_ENTITY_KIND_UNSPECIFIED = 0;
+  MAIL_COMPOSITION_ENTITY_KIND_DRAFT = 1;
+  MAIL_COMPOSITION_ENTITY_KIND_TEMPLATE = 2;
+  MAIL_COMPOSITION_ENTITY_KIND_SIGNATURE = 3;
+}
+
+message MailDraftInputV1 {
+  string connection_id = 1;
+  string draft_id = 2;
+  MailCompositionModeV1 mode = 3;
+  optional string provider_conversation_id = 4;
+  optional string in_reply_to_provider_message_id = 5;
+  repeated string to_recipient = 6;
+  repeated string cc_recipient = 7;
+  repeated string bcc_recipient = 8;
+  string subject = 9;
+  string text_body = 10;
+  optional string template_id = 11;
+  optional string signature_id = 12;
+}
+
+message MailTemplateInputV1 {
+  string connection_id = 1;
+  string template_id = 2;
+  string name = 3;
+  string subject_template = 4;
+  string text_body_template = 5;
+  repeated string variable = 6;
+  optional string locale = 7;
+}
+
+message MailSignatureInputV1 {
+  string connection_id = 1;
+  string signature_id = 2;
+  string name = 3;
+  string text_body = 4;
+  bool is_default = 5;
+}
+
+message UpsertMailDraftCommandV1 {
+  string operation_id = 1;
+  MailDraftInputV1 draft = 2;
+  optional uint64 expected_revision = 3;
+}
+
+message DeleteMailDraftCommandV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+  string draft_id = 3;
+  uint64 expected_revision = 4;
+}
+
+message UpsertMailTemplateCommandV1 {
+  string operation_id = 1;
+  MailTemplateInputV1 template = 2;
+  optional uint64 expected_revision = 3;
+}
+
+message DeleteMailTemplateCommandV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+  string template_id = 3;
+  uint64 expected_revision = 4;
+}
+
+message UpsertMailSignatureCommandV1 {
+  string operation_id = 1;
+  MailSignatureInputV1 signature = 2;
+  optional uint64 expected_revision = 3;
+}
+
+message DeleteMailSignatureCommandV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+  string signature_id = 3;
+  uint64 expected_revision = 4;
+}
+
+message MailCompositionCommandV1 {
+  oneof command {
+    UpsertMailDraftCommandV1 upsert_draft = 1;
+    DeleteMailDraftCommandV1 delete_draft = 2;
+    UpsertMailTemplateCommandV1 upsert_template = 3;
+    DeleteMailTemplateCommandV1 delete_template = 4;
+    UpsertMailSignatureCommandV1 upsert_signature = 5;
+    DeleteMailSignatureCommandV1 delete_signature = 6;
+  }
+}
+
+message MailCompositionMutationReceiptV1 {
+  string operation_id = 1;
+  string connection_id = 2;
+  MailCompositionEntityKindV1 entity_kind = 3;
+  string entity_id = 4;
+  uint64 revision = 5;
+  bool deleted = 6;
+}
+
+message ListMailDraftsQueryV1 {
+  string connection_id = 1;
+  optional string cursor = 2;
+  uint32 limit = 3;
+}
+
+message GetMailDraftQueryV1 {
+  string connection_id = 1;
+  string draft_id = 2;
+}
+
+message ListMailTemplatesQueryV1 {
+  string connection_id = 1;
+  optional string cursor = 2;
+  uint32 limit = 3;
+}
+
+message GetMailTemplateQueryV1 {
+  string connection_id = 1;
+  string template_id = 2;
+}
+
+message MailTemplateVariableValueV1 {
+  string name = 1;
+  string value = 2;
+}
+
+message PreviewMailTemplateQueryV1 {
+  string connection_id = 1;
+  string template_id = 2;
+  repeated MailTemplateVariableValueV1 value = 3;
+}
+
+message ListMailSignaturesQueryV1 {
+  string connection_id = 1;
+  optional string cursor = 2;
+  uint32 limit = 3;
+}
+
+message GetMailSignatureQueryV1 {
+  string connection_id = 1;
+  string signature_id = 2;
+}
+
+message MailCompositionQueryV1 {
+  oneof query {
+    ListMailDraftsQueryV1 list_drafts = 1;
+    GetMailDraftQueryV1 get_draft = 2;
+    ListMailTemplatesQueryV1 list_templates = 3;
+    GetMailTemplateQueryV1 get_template = 4;
+    PreviewMailTemplateQueryV1 preview_template = 5;
+    ListMailSignaturesQueryV1 list_signatures = 6;
+    GetMailSignatureQueryV1 get_signature = 7;
+  }
+}
+
+message MailDraftV1 {
+  string connection_id = 1;
+  string draft_id = 2;
+  uint64 revision = 3;
+  MailCompositionModeV1 mode = 4;
+  optional string provider_conversation_id = 5;
+  optional string in_reply_to_provider_message_id = 6;
+  repeated string to_recipient = 7;
+  repeated string cc_recipient = 8;
+  repeated string bcc_recipient = 9;
+  string subject = 10;
+  string text_body = 11;
+  optional string template_id = 12;
+  optional string signature_id = 13;
+  int64 created_at_unix_seconds = 14;
+  int64 updated_at_unix_seconds = 15;
+}
+
+message MailTemplateV1 {
+  string connection_id = 1;
+  string template_id = 2;
+  uint64 revision = 3;
+  string name = 4;
+  string subject_template = 5;
+  string text_body_template = 6;
+  repeated string variable = 7;
+  optional string locale = 8;
+  int64 created_at_unix_seconds = 9;
+  int64 updated_at_unix_seconds = 10;
+}
+
+message MailSignatureV1 {
+  string connection_id = 1;
+  string signature_id = 2;
+  uint64 revision = 3;
+  string name = 4;
+  string text_body = 5;
+  bool is_default = 6;
+  int64 created_at_unix_seconds = 7;
+  int64 updated_at_unix_seconds = 8;
+}
+
+message MailDraftPageV1 {
+  repeated MailDraftV1 item = 1;
+  optional string next_cursor = 2;
+}
+
+message MailTemplatePageV1 {
+  repeated MailTemplateV1 item = 1;
+  optional string next_cursor = 2;
+}
+
+message MailSignaturePageV1 {
+  repeated MailSignatureV1 item = 1;
+  optional string next_cursor = 2;
+}
+
+message MailTemplatePreviewV1 {
+  string template_id = 1;
+  string subject = 2;
+  string text_body = 3;
+  repeated string missing_variable = 4;
+  repeated string unresolved_variable = 5;
+  repeated string malformed_placeholder = 6;
+  bool ready = 7;
+}
+
+message MailCompositionQueryResponseV1 {
+  oneof response {
+    MailDraftPageV1 drafts = 1;
+    MailDraftV1 draft = 2;
+    MailTemplatePageV1 templates = 3;
+    MailTemplateV1 template = 4;
+    MailTemplatePreviewV1 template_preview = 5;
+    MailSignaturePageV1 signatures = 6;
+    MailSignatureV1 signature = 7;
+    bool not_found = 8;
+  }
+}
+
+service MailCompositionCommandService {
+  rpc Mutate(MailCompositionCommandV1) returns (MailCompositionMutationReceiptV1);
+}
+
+service MailCompositionQueryService {
+  rpc Query(MailCompositionQueryV1) returns (MailCompositionQueryResponseV1);
+}

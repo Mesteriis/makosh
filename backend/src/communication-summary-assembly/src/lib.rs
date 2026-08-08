@@ -10,20 +10,20 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use hermes_communication_summary_persistence::communication_summary_storage_bundle_v1;
-use hermes_communication_summary_runtime::{
+use makosh_communication_summary_persistence::communication_summary_storage_bundle_v1;
+use makosh_communication_summary_runtime::{
     communication_summary_module_descriptor_v1, communication_summary_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
 pub const COMMUNICATION_SUMMARY_ASSEMBLY_FRAGMENT_VERSION_V1: u32 = 1;
 pub const COMMUNICATION_SUMMARY_ASSEMBLY_OWNER_ID: &str = "communication_summary";
-pub const COMMUNICATION_SUMMARY_ASSEMBLY_MODULE_ID: &str = "hermes-communication-summary-runtime";
+pub const COMMUNICATION_SUMMARY_ASSEMBLY_MODULE_ID: &str = "makosh-communication-summary-runtime";
 pub const COMMUNICATION_SUMMARY_RUNTIME_ARTIFACT_ID: &str = "communication_summary.runtime.v1";
 pub const COMMUNICATION_SUMMARY_STORAGE_ARTIFACT_ID: &str = "communication_summary.storage.v1";
 pub const COMMUNICATION_SUMMARY_DESCRIPTOR_FILE: &str =
@@ -34,7 +34,7 @@ pub const COMMUNICATION_SUMMARY_STORAGE_BUNDLE_FILE: &str =
 pub const COMMUNICATION_SUMMARY_ARTIFACT_FRAGMENT_FILE: &str =
     "communication_summary.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH: &str = "bin/hermes-communication-summary-runtime";
+const RUNTIME_RELATIVE_PATH: &str = "bin/makosh-communication-summary-runtime";
 const DESCRIPTOR_RELATIVE_PATH: &str = "contracts/communication_summary.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH: &str = "contracts/communication_summary.runtime.settings.pb";
 const STORAGE_RELATIVE_PATH: &str = "storage/communication_summary.storage.bundle.pb";
@@ -260,8 +260,8 @@ fn write_new_private_file(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
 mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 
-    use hermes_runtime_protocol::v1::ModuleDescriptorV1;
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_runtime_protocol::v1::ModuleDescriptorV1;
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -270,7 +270,7 @@ mod tests {
     #[test]
     fn materializes_exact_unsigned_runtime_and_storage_fragment() {
         let root = temporary_directory();
-        let runtime = root.join("hermes-communication-summary-runtime");
+        let runtime = root.join("makosh-communication-summary-runtime");
         fs::write(&runtime, b"runtime").expect("runtime");
         let paths = materialize_communication_summary_release_assembly_v1(
             &root.join("assembly"),

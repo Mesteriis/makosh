@@ -1,15 +1,15 @@
 [package]
-name = "hermes-storage-migrations"
+name = "makosh-storage-migrations"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 [lib]
 path = "src/lib.rs"
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "storage"
 surface = "implementation"
 [dependencies]
-hermes-storage-control = { path = "../control" }
-hermes-storage-protocol = { path = "../protocol" }
+makosh-storage-control = { path = "../control" }
+makosh-storage-protocol = { path = "../protocol" }
 pg_query = "=6.1.1"

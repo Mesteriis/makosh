@@ -4,7 +4,7 @@ Status: documentation package aligned to the current repository structure.
 
 ## Purpose
 
-The knowledge graph represents durable relationships between Hermes world-model
+The knowledge graph represents durable relationships between Макошь world-model
 entities. It is the primary substrate for relationship-aware memory and context.
 
 The graph is not a generic visualization feature. It stores relationship records

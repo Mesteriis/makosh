@@ -6,7 +6,7 @@
 
 use std::future::Future;
 
-use hermes_desktop_runtime::{RuntimeShutdownReport, RuntimeSupervisor, RuntimeSupervisorError};
+use makosh_desktop_runtime::{RuntimeShutdownReport, RuntimeSupervisor, RuntimeSupervisorError};
 use thiserror::Error;
 use tokio::task::JoinHandle;
 use tokio_util::sync::CancellationToken;
@@ -73,7 +73,7 @@ mod tests {
     use std::sync::Arc;
     use std::time::Duration;
 
-    use hermes_desktop_runtime::{
+    use makosh_desktop_runtime::{
         NoopRuntimeLifecycleObserver, RuntimeShutdownConfig, RuntimeTaskClass, RuntimeTaskError,
         RuntimeTaskFactory, RuntimeTaskFuture, RuntimeTaskSpec,
     };
@@ -93,7 +93,7 @@ mod tests {
             vec![RuntimeTaskSpec::new(
                 "worker",
                 RuntimeTaskClass::Background,
-                hermes_desktop_runtime::RuntimeExitPolicy::MarkDegraded,
+                makosh_desktop_runtime::RuntimeExitPolicy::MarkDegraded,
                 task,
             )],
             RuntimeShutdownConfig {
@@ -123,7 +123,7 @@ mod tests {
             vec![RuntimeTaskSpec::new(
                 "worker",
                 RuntimeTaskClass::Background,
-                hermes_desktop_runtime::RuntimeExitPolicy::MarkDegraded,
+                makosh_desktop_runtime::RuntimeExitPolicy::MarkDegraded,
                 task,
             )],
             RuntimeShutdownConfig {

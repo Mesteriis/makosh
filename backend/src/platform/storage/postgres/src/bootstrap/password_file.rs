@@ -10,7 +10,7 @@ use zeroize::Zeroizing;
 
 use crate::PostgresAdapterErrorV1;
 
-const PASSWORD_FILE_PREFIX: &str = ".hermes-initdb-password-";
+const PASSWORD_FILE_PREFIX: &str = ".makosh-initdb-password-";
 const PASSWORD_FILE_ATTEMPTS: u8 = 3;
 
 pub struct InitdbPasswordFileV1 {

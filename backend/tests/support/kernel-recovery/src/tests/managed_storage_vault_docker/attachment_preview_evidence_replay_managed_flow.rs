@@ -18,7 +18,8 @@ use super::{
 };
 
 use crate::identity::device::signer::DeviceSigner;
-use hermes_attachment_preview_api::{
+use hyper::StatusCode;
+use makosh_attachment_preview_api::{
     ATTACHMENT_PREVIEW_COMMAND_CONNECT_PATH_V1, ATTACHMENT_PREVIEW_TICKET_CONNECT_PATH_V1,
     wire::{
         AttachmentPreviewErrorCodeV1, AttachmentPreviewStateV1,
@@ -26,7 +27,7 @@ use hermes_attachment_preview_api::{
         StartAttachmentPreviewRequestV1, StartAttachmentPreviewResponseV1,
     },
 };
-use hermes_attachment_preview_evidence_replay_api::{
+use makosh_attachment_preview_evidence_replay_api::{
     ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_CONNECT_PATH_V1,
     wire::{
         AttachmentPreviewEvidenceReplayErrorV1, AttachmentPreviewEvidenceReplayStateV1,
@@ -34,21 +35,20 @@ use hermes_attachment_preview_evidence_replay_api::{
         StartAttachmentPreviewEvidenceReplayResponseV1,
     },
 };
-use hyper::StatusCode;
 
 const SAFETY_STATE_SUBJECT_V1: &str =
-    "hermes.event.v1.communications.communication_attachment_safety_state_changed.v1";
-const SCAN_CANDIDATE_SUBJECT_V1: &str = "hermes.observation.v1.attachment_security.\
+    "makosh.event.v1.communications.communication_attachment_safety_state_changed.v1";
+const SCAN_CANDIDATE_SUBJECT_V1: &str = "makosh.observation.v1.attachment_security.\
     attachment_security_scan_candidate_observed.v1";
 
 #[test]
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, NATS, Communications and replay workflow binaries"]
 fn managed_attachment_preview_evidence_replay_runtime_starts_with_exact_signed_contracts() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-attachment-preview-evidence-replay");
+    let root = unique_target_root("makosh-managed-attachment-preview-evidence-replay");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -56,13 +56,13 @@ fn managed_attachment_preview_evidence_replay_runtime_starts_with_exact_signed_c
     );
     let release = installed_attachment_preview_replay_ensemble_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             ATTACHMENT_PREVIEW_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -127,7 +127,7 @@ fn managed_attachment_preview_evidence_replay_runtime_starts_with_exact_signed_c
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove retained Preview evidence replay fixture");
     std::fs::remove_dir_all(data).expect("remove short kernel data fixture");
@@ -137,25 +137,25 @@ fn managed_attachment_preview_evidence_replay_runtime_starts_with_exact_signed_c
 #[ignore = "requires disposable Docker plus the complete retained Preview evidence replay managed ensemble"]
 fn managed_attachment_preview_evidence_replay_restores_expired_sources_to_browser_preview() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let imap = MailImapFixture::start();
     let clamav = AttachmentSecurityClamAvFixture::start();
-    let root = unique_target_root("hermes-managed-attachment-preview-evidence-recovery");
+    let root = unique_target_root("makosh-managed-attachment-preview-evidence-recovery");
     let data = private_directory(short_communications_kernel_data_directory());
     let vault_dir = private_directory(data.join("vault"));
     initialize_vault(&vault_dir, &credential_directory());
     seed_mail_vault(&vault_dir);
     let release = installed_attachment_preview_replay_ensemble_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             ATTACHMENT_PREVIEW_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -173,7 +173,7 @@ fn managed_attachment_preview_evidence_replay_restores_expired_sources_to_browse
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     configure_attachment_preview_realtime_v1(&supervisor, &store, realtime.clone());
     supervisor
@@ -243,7 +243,7 @@ fn managed_attachment_preview_evidence_replay_restores_expired_sources_to_browse
         &store,
         &supervisor,
         attachment_anchor_id,
-        hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
+        makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
             as u32,
     );
     wait_for_retained_preview_evidence_indexes_v1(attachment_anchor_id);
@@ -499,7 +499,7 @@ fn managed_attachment_preview_evidence_replay_restores_expired_sources_to_browse
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove retained Preview recovery fixture");
     std::fs::remove_dir_all(data).expect("remove short kernel data fixture");

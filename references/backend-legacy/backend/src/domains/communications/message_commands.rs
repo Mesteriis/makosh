@@ -1,9 +1,9 @@
 use chrono::Utc;
-use hermes_communications_api::accounts::ProviderAccount;
-use hermes_communications_api::commands::NewCommunicationProviderCommand;
-use hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_communications_api::accounts::ProviderAccount;
+use makosh_communications_api::commands::NewCommunicationProviderCommand;
+use makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 use serde_json::{Value, json};
 use uuid::Uuid;
 
@@ -15,9 +15,9 @@ use super::messages::store::MessageProjectionStore;
 use super::outbox::provider_send_store::ProviderSendStore;
 use super::spam_reputation::{SenderReputationClassification, SenderReputationStore};
 use crate::domains::communications::evidence::link_mail_entity_in_transaction;
-use hermes_communications_api::email::OutgoingEmail;
+use makosh_communications_api::email::OutgoingEmail;
 
-const LOCAL_USER_ACTOR_ID: &str = "hermes-local-user";
+const LOCAL_USER_ACTOR_ID: &str = "makosh-local-user";
 
 impl CommunicationCommandService {
     pub(crate) async fn enqueue_archive_provider_command_in_transaction(
@@ -321,7 +321,7 @@ impl CommunicationCommandService {
         &self,
         message_id: &str,
     ) -> Result<ProjectedMessage, CommunicationCommandServiceError> {
-        self.set_message_read_local_with_provider_command(message_id, true, "hermes-local-user")
+        self.set_message_read_local_with_provider_command(message_id, true, "makosh-local-user")
             .await
     }
 

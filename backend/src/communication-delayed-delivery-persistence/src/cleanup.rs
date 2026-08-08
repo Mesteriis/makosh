@@ -47,8 +47,8 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
             "SELECT cleanup.delayed_operation_id, cleanup.reason, cleanup.attempt_count,
                     operation.body_reference_id, operation.body_declared_bytes,
                     operation.body_sha256, operation.body_custody_proof
-             FROM hermes_data.communication_delayed_delivery_body_cleanup AS cleanup
-             JOIN hermes_data.communication_delayed_delivery_operations AS operation
+             FROM makosh_data.communication_delayed_delivery_body_cleanup AS cleanup
+             JOIN makosh_data.communication_delayed_delivery_operations AS operation
                ON operation.logical_owner_id = cleanup.logical_owner_id
               AND operation.delayed_operation_id = cleanup.delayed_operation_id
              WHERE cleanup.logical_owner_id = $1
@@ -84,7 +84,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         }
         let completed_at = signed(completed_at_unix_millis)?;
         let affected = sqlx::query(
-            "UPDATE hermes_data.communication_delayed_delivery_body_cleanup
+            "UPDATE makosh_data.communication_delayed_delivery_body_cleanup
              SET completed_at_unix_millis = $3, updated_at_unix_millis = $3
              WHERE logical_owner_id = $1 AND delayed_operation_id = $2
                AND completed_at_unix_millis IS NULL",
@@ -122,7 +122,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         let next_attempt_at = signed(next_attempt_at_unix_millis)?;
         let rescheduled_at = signed(rescheduled_at_unix_millis)?;
         let affected = sqlx::query(
-            "UPDATE hermes_data.communication_delayed_delivery_body_cleanup
+            "UPDATE makosh_data.communication_delayed_delivery_body_cleanup
              SET attempt_count = LEAST(attempt_count + 1, 32),
                  next_attempt_at_unix_millis = $4,
                  updated_at_unix_millis = $5
@@ -157,7 +157,7 @@ pub(crate) async fn enqueue_body_cleanup(
     created_at_unix_millis: i64,
 ) -> Result<(), DelayedDeliveryPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.communication_delayed_delivery_body_cleanup (
+        "INSERT INTO makosh_data.communication_delayed_delivery_body_cleanup (
            logical_owner_id, delayed_operation_id, reason, attempt_count,
            next_attempt_at_unix_millis, created_at_unix_millis,
            updated_at_unix_millis
@@ -177,7 +177,7 @@ pub(crate) async fn enqueue_body_cleanup(
     }
     let existing = sqlx::query_scalar::<_, i16>(
         "SELECT reason
-         FROM hermes_data.communication_delayed_delivery_body_cleanup
+         FROM makosh_data.communication_delayed_delivery_body_cleanup
          WHERE logical_owner_id = $1 AND delayed_operation_id = $2",
     )
     .bind(logical_owner_id)
@@ -196,7 +196,7 @@ async fn reconcile_terminal_cleanup(
     now_unix_millis: i64,
 ) -> Result<(), DelayedDeliveryPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.communication_delayed_delivery_body_cleanup (
+        "INSERT INTO makosh_data.communication_delayed_delivery_body_cleanup (
            logical_owner_id, delayed_operation_id, reason, attempt_count,
            next_attempt_at_unix_millis, created_at_unix_millis,
            updated_at_unix_millis
@@ -204,7 +204,7 @@ async fn reconcile_terminal_cleanup(
          SELECT logical_owner_id, delayed_operation_id,
                 CASE state WHEN $2 THEN 1 WHEN $3 THEN 3 ELSE 2 END,
                 0, $5, $5, $5
-         FROM hermes_data.communication_delayed_delivery_operations
+         FROM makosh_data.communication_delayed_delivery_operations
          WHERE logical_owner_id = $1 AND state = ANY($4)
          ON CONFLICT (logical_owner_id, delayed_operation_id) DO NOTHING",
     )

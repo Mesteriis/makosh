@@ -1,5 +1,5 @@
 use crate::support::*;
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 
 #[tokio::test]
 async fn ai_meeting_prep_returns_briefing_without_calendar_dependency() {
@@ -37,11 +37,11 @@ async fn ai_meeting_prep_returns_briefing_without_calendar_dependency() {
     .await;
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
-        .with_test_pairs([("HERMES_OLLAMA_BASE_URL", ollama_base_url.as_str())])
+        .with_test_pairs([("MAKOSH_OLLAMA_BASE_URL", ollama_base_url.as_str())])
         .expect("config"),
         database,
     );
@@ -129,7 +129,7 @@ async fn ai_agents_api_materializes_agent_personas_against_postgres() {
         .expect("database connection");
     let pool = database.pool().expect("configured pool").clone();
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),

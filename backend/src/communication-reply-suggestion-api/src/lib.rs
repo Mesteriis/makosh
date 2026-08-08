@@ -1,9 +1,9 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-communication-reply-suggestion-api";
+pub const PACKAGE: &str = "makosh-communication-reply-suggestion-api";
 pub const COMMUNICATION_REPLY_SUGGESTION_OWNER_V1: &str = "communication_reply_suggestion";
 pub const COMMUNICATION_REPLY_SUGGESTION_MODULE_ID_V1: &str =
-    "hermes-communication-reply-suggestion-runtime";
+    "makosh-communication-reply-suggestion-runtime";
 pub const COMMUNICATION_REPLY_SUGGESTION_CAPABILITY_ID_V1: &str =
     "communication.reply_suggestion.v1";
 pub const COMMUNICATION_REPLY_SUGGESTION_COMMAND_CONTRACT_NAME_V1: &str =
@@ -15,9 +15,9 @@ pub const COMMUNICATION_REPLY_SUGGESTION_REALTIME_CONTRACT_NAME_V1: &str =
 pub const COMMUNICATION_REPLY_SUGGESTION_REALTIME_EVENT_KIND_V1: &str =
     "communication.reply_suggestion.status_changed";
 pub const COMMUNICATION_REPLY_SUGGESTION_COMMAND_CONNECT_PATH_V1: &str =
-    "/hermes.communication_reply_suggestion.v1.CommunicationReplySuggestionCommandService/Start";
+    "/makosh.communication_reply_suggestion.v1.CommunicationReplySuggestionCommandService/Start";
 pub const COMMUNICATION_REPLY_SUGGESTION_QUERY_CONNECT_PATH_V1: &str =
-    "/hermes.communication_reply_suggestion.v1.CommunicationReplySuggestionQueryService/Get";
+    "/makosh.communication_reply_suggestion.v1.CommunicationReplySuggestionQueryService/Get";
 pub const COMMUNICATION_REPLY_SUGGESTION_CONTRACT_MAJOR_V1: u32 = 1;
 pub const COMMUNICATION_REPLY_SUGGESTION_CONTRACT_REVISION_V1: u32 = 1;
 pub const COMMUNICATION_REPLY_SUGGESTION_MAX_SUBJECT_BYTES_V1: usize = 998;
@@ -26,7 +26,7 @@ pub const COMMUNICATION_REPLY_SUGGESTION_MAX_BODY_BYTES_V1: usize = 64 * 1024;
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communication_reply_suggestion.v1.rs"
+        "/makosh.communication_reply_suggestion.v1.rs"
     ));
 }
 
@@ -49,7 +49,7 @@ mod tests {
         assert!(COMMUNICATION_REPLY_SUGGESTION_COMMAND_CONNECT_PATH_V1.starts_with('/'));
         assert!(COMMUNICATION_REPLY_SUGGESTION_QUERY_CONNECT_PATH_V1.starts_with('/'));
         let source = include_str!(
-            "../proto/hermes/communication_reply_suggestion/v1/reply_suggestion.proto"
+            "../proto/makosh/communication_reply_suggestion/v1/reply_suggestion.proto"
         );
         assert!(source.contains("ReplySuggestionCandidateV1"));
         assert!(source.contains("REPLY_SUGGESTION_TONE_PROFESSIONAL"));

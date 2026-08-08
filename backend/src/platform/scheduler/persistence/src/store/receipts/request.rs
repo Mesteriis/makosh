@@ -1,5 +1,5 @@
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_scheduler_protocol::{
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_scheduler_protocol::{
     SchedulerReceiptValidationErrorV1,
     v1::{JobRunOutcomeV1, JobRunReceiptV1},
     validate_job_run_receipt_v1,

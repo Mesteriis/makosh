@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,24 +55,24 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/build.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/build.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/build.rs`
 - Size bytes / Размер в байтах: `815`
 - Included characters / Включено символов: `815`
 - Truncated / Обрезано: `no`
 
 ```rust
 fn main() {
-    println!("cargo:rerun-if-changed=../contracts/proto/hermes/common/v1/common.proto");
-    println!("cargo:rerun-if-changed=../contracts/proto/hermes/signal_hub/v1/signal_hub.proto");
+    println!("cargo:rerun-if-changed=../contracts/proto/makosh/common/v1/common.proto");
+    println!("cargo:rerun-if-changed=../contracts/proto/makosh/signal_hub/v1/signal_hub.proto");
     println!(
-        "cargo:rerun-if-changed=../contracts/proto/hermes/communications/v1/communications.proto"
+        "cargo:rerun-if-changed=../contracts/proto/makosh/communications/v1/communications.proto"
     );
     println!("cargo:rerun-if-changed=../contracts/proto");
     connectrpc_build::Config::new()
         .files(&[
-            "../contracts/proto/hermes/common/v1/common.proto",
-            "../contracts/proto/hermes/signal_hub/v1/signal_hub.proto",
-            "../contracts/proto/hermes/communications/v1/communications.proto",
+            "../contracts/proto/makosh/common/v1/common.proto",
+            "../contracts/proto/makosh/signal_hub/v1/signal_hub.proto",
+            "../contracts/proto/makosh/communications/v1/communications.proto",
         ])
         .includes(&["../contracts/proto"])
         .include_file("_connectrpc.rs")
@@ -83,7 +83,7 @@ fn main() {
 
 ### `backend/src/ai/api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/api.rs`
 - Size bytes / Размер в байтах: `571`
 - Included characters / Включено символов: `571`
 - Truncated / Обрезано: `no`
@@ -108,7 +108,7 @@ pub(crate) use runtime::{
 
 ### `backend/src/ai/api/control_center.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/api/control_center.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/api/control_center.rs`
 - Size bytes / Размер в байтах: `7521`
 - Included characters / Включено символов: `7521`
 - Truncated / Обрезано: `no`
@@ -342,7 +342,7 @@ fn ensure_host_vault_unlocked_for_api_key(state: &AppState) -> Result<(), ApiErr
 
 ### `backend/src/ai/api/helpers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/api/helpers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/api/helpers.rs`
 - Size bytes / Размер в байтах: `666`
 - Included characters / Включено символов: `666`
 - Truncated / Обрезано: `no`
@@ -363,18 +363,18 @@ pub(super) fn ai_control_center_store(state: &AppState) -> Result<AiControlCente
 
 pub(super) fn request_actor_id(headers: &HeaderMap) -> String {
     headers
-        .get("x-hermes-actor-id")
+        .get("x-makosh-actor-id")
         .and_then(|value| value.to_str().ok())
         .map(str::trim)
         .filter(|value| !value.is_empty())
-        .unwrap_or("hermes-frontend")
+        .unwrap_or("makosh-frontend")
         .to_owned()
 }
 ```
 
 ### `backend/src/ai/api/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/api/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/api/models.rs`
 - Size bytes / Размер в байтах: `447`
 - Included characters / Включено символов: `447`
 - Truncated / Обрезано: `no`
@@ -402,7 +402,7 @@ pub(crate) struct AiPromptListResponse {
 
 ### `backend/src/ai/api/runtime.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/api/runtime.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/api/runtime.rs`
 - Size bytes / Размер в байтах: `4807`
 - Included characters / Включено символов: `4807`
 - Truncated / Обрезано: `no`
@@ -506,7 +506,7 @@ pub(crate) async fn post_ai_answer(
     Json(request): Json<AiAnswerRequest>,
 ) -> Result<Json<crate::ai::core::AiAnswerResponse>, ApiError> {
     ensure_ai_requests_allowed(&state).await?;
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let service = ai_service(&state).await?;
     let response = service.answer(request, &actor_id).await?;
 
@@ -518,7 +518,7 @@ pub(crate) async fn post_ai_task_candidates_refresh(
     Json(request): Json<AiTaskCandidateRefreshRequest>,
 ) -> Result<Json<crate::ai::core::AiTaskCandidateRefreshResponse>, ApiError> {
     ensure_ai_requests_allowed(&state).await?;
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let service = ai_service(&state).await?;
     let response = service.refresh_task_candidates(request, &actor_id).await?;
 
@@ -530,7 +530,7 @@ pub(crate) async fn post_ai_meeting_prep(
     Json(request): Json<AiMeetingPrepRequest>,
 ) -> Result<Json<crate::ai::core::AiMeetingPrepResponse>, ApiError> {
     ensure_ai_requests_allowed(&state).await?;
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let service = ai_service(&state).await?;
     let response = service.meeting_prep(request, &actor_id).await?;
 
@@ -550,7 +550,7 @@ async fn ensure_ai_requests_allowed(state: &AppState) -> Result<(), ApiError> {
 
 ### `backend/src/ai/control_center.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center.rs`
 - Size bytes / Размер в байтах: `866`
 - Included characters / Включено символов: `866`
 - Truncated / Обрезано: `no`
@@ -587,7 +587,7 @@ pub use vault::store_api_key_in_host_vault;
 
 ### `backend/src/ai/control_center/availability.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/availability.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/availability.rs`
 - Size bytes / Размер в байтах: `2989`
 - Included characters / Включено символов: `2989`
 - Truncated / Обрезано: `no`
@@ -687,7 +687,7 @@ fn provider_ready_status(status: &str) -> Result<(), AiControlCenterError> {
 
 ### `backend/src/ai/control_center/availability/secrets.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/availability/secrets.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/availability/secrets.rs`
 - Size bytes / Размер в байтах: `2003`
 - Included characters / Включено символов: `2003`
 - Truncated / Обрезано: `no`
@@ -759,7 +759,7 @@ impl AiControlCenterStore {
 
 ### `backend/src/ai/control_center/catalog.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/catalog.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/catalog.rs`
 - Size bytes / Размер в байтах: `4585`
 - Included characters / Включено символов: `4585`
 - Truncated / Обрезано: `no`
@@ -908,7 +908,7 @@ impl AiControlCenterStore {
 
 ### `backend/src/ai/control_center/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/errors.rs`
 - Size bytes / Размер в байтах: `1416`
 - Included characters / Включено символов: `1416`
 - Truncated / Обрезано: `no`
@@ -973,7 +973,7 @@ impl AiControlCenterError {
 
 ### `backend/src/ai/control_center/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/evidence.rs`
 - Size bytes / Размер в байтах: `11485`
 - Included characters / Включено символов: `11485`
 - Truncated / Обрезано: `no`
@@ -1344,7 +1344,7 @@ async fn link_ai_entity_in_transaction(
 
 ### `backend/src/ai/control_center/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/models.rs`
 - Size bytes / Размер в байтах: `7834`
 - Included characters / Включено символов: `7834`
 - Truncated / Обрезано: `no`
@@ -1616,7 +1616,7 @@ pub struct AiPromptEvalRun {
 
 ### `backend/src/ai/control_center/presets.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/presets.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/presets.rs`
 - Size bytes / Размер в байтах: `10285`
 - Included characters / Включено символов: `10285`
 - Truncated / Обрезано: `no`
@@ -1893,7 +1893,7 @@ fn capability_description(slot: &str) -> String {
 
 ### `backend/src/ai/control_center/prompts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/prompts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/prompts.rs`
 - Size bytes / Размер в байтах: `89`
 - Included characters / Включено символов: `89`
 - Truncated / Обрезано: `no`
@@ -1909,7 +1909,7 @@ mod versions;
 
 ### `backend/src/ai/control_center/prompts/activation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/prompts/activation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/prompts/activation.rs`
 - Size bytes / Размер в байтах: `3884`
 - Included characters / Включено символов: `3884`
 - Truncated / Обрезано: `no`
@@ -2026,7 +2026,7 @@ impl AiControlCenterStore {
 
 ### `backend/src/ai/control_center/prompts/eval_runs.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/prompts/eval_runs.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/prompts/eval_runs.rs`
 - Size bytes / Размер в байтах: `1059`
 - Included characters / Включено символов: `1059`
 - Truncated / Обрезано: `no`
@@ -2073,7 +2073,7 @@ impl AiControlCenterStore {
 
 ### `backend/src/ai/control_center/prompts/evaluation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/prompts/evaluation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/prompts/evaluation.rs`
 - Size bytes / Размер в байтах: `3406`
 - Included characters / Включено символов: `3406`
 - Truncated / Обрезано: `no`
@@ -2176,7 +2176,7 @@ impl AiControlCenterStore {
 
 ### `backend/src/ai/control_center/prompts/lookups.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/prompts/lookups.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/prompts/lookups.rs`
 - Size bytes / Размер в байтах: `1798`
 - Included characters / Включено символов: `1798`
 - Truncated / Обрезано: `no`
@@ -2249,7 +2249,7 @@ impl AiControlCenterStore {
 
 ### `backend/src/ai/control_center/prompts/templates.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/prompts/templates.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/prompts/templates.rs`
 - Size bytes / Размер в байтах: `3267`
 - Included characters / Включено символов: `3267`
 - Truncated / Обрезано: `no`
@@ -2362,7 +2362,7 @@ impl AiControlCenterStore {
 
 ### `backend/src/ai/control_center/prompts/versions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/prompts/versions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/prompts/versions.rs`
 - Size bytes / Размер в байтах: `3106`
 - Included characters / Включено символов: `3106`
 - Truncated / Обрезано: `no`
@@ -2463,7 +2463,7 @@ impl AiControlCenterStore {
 
 ### `backend/src/ai/control_center/providers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/providers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/providers.rs`
 - Size bytes / Размер в байтах: `77`
 - Included characters / Включено символов: `77`
 - Truncated / Обрезано: `no`
@@ -2479,7 +2479,7 @@ mod update;
 
 ### `backend/src/ai/control_center/providers/commands.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/providers/commands.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/providers/commands.rs`
 - Size bytes / Размер в байтах: `2513`
 - Included characters / Включено символов: `2513`
 - Truncated / Обрезано: `no`
@@ -2549,7 +2549,7 @@ impl AiControlCenterStore {
 
 ### `backend/src/ai/control_center/providers/consent.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/providers/consent.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/providers/consent.rs`
 - Size bytes / Размер в байтах: `2171`
 - Included characters / Включено символов: `2171`
 - Truncated / Обрезано: `no`
@@ -2626,7 +2626,7 @@ impl AiControlCenterStore {
 
 ### `backend/src/ai/control_center/providers/create.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/ai/control_center/providers/create.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/ai/control_center/providers/create.rs`
 - Size bytes / Размер в байтах: `4146`
 - Included characters / Включено символов: `4146`
 - Truncated / Обрезано: `no`

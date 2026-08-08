@@ -1,0 +1,153 @@
+syntax = "proto3";
+
+package makosh.storage.v1;
+
+// Immutable owner-local migration artifact. Its SHA-256 is bound externally
+// by signed distribution metadata or an explicit owner pin.
+message StorageBundleV1 {
+  uint32 major = 1;
+  uint32 revision = 2;
+  string bundle_id = 3;
+  string owner_id = 4;
+  repeated StorageMigrationStepV1 steps = 5;
+}
+
+message StorageMigrationStepV1 {
+  uint32 revision = 1;
+  string migration_id = 2;
+  bytes forward_sql_utf8 = 3;
+  bytes sha256 = 4;
+}
+
+message StorageEffectiveBudgetsV1 {
+  uint32 max_connections = 1;
+  uint32 statement_timeout_millis = 2;
+}
+
+// A credential-free connection binding. The lease itself is issued separately
+// by Vault and must be fenced against every generation carried here.
+message StorageBindingV1 {
+  string storage_instance_id = 1;
+  uint64 storage_generation = 2;
+  string database_id = 3;
+  string owner = 4;
+  string registration_id = 5;
+  string runtime_instance_id = 6;
+  uint64 runtime_generation = 7;
+  uint64 grant_epoch = 8;
+  uint64 role_epoch = 9;
+  string runtime_principal = 10;
+  string pool_alias = 11;
+  StorageEffectiveBudgetsV1 effective_budgets = 12;
+  uint64 credential_lease_revision = 13;
+  uint64 storage_bundle_revision = 14;
+  bytes storage_bundle_digest = 15;
+}
+
+enum StorageDeploymentProfileV1 {
+  STORAGE_DEPLOYMENT_PROFILE_V1_UNSPECIFIED = 0;
+  STORAGE_DEPLOYMENT_PROFILE_V1_MACOS_TAURI_EMBEDDED = 1;
+  STORAGE_DEPLOYMENT_PROFILE_V1_LINUX_DOCKER_SERVER = 2;
+}
+
+// A non-secret desired infrastructure record. It declares exact artifact
+// identities, but does not constitute attestation or carry credentials.
+message StorageRuntimeTopologyV1 {
+  uint64 topology_revision = 1;
+  uint64 storage_generation = 2;
+  string storage_instance_id = 3;
+  string database_id = 4;
+  StorageDeploymentProfileV1 deployment_profile = 5;
+  bytes postgres_artifact_sha256 = 6;
+  bytes pgbouncer_artifact_sha256 = 7;
+  string postgres_host = 8;
+  uint32 postgres_port = 9;
+  string pgbouncer_host = 10;
+  uint32 pgbouncer_port = 11;
+  // Backend endpoint as resolved by the PgBouncer process itself. It may
+  // differ from the Storage Runtime's host-side PostgreSQL admin endpoint.
+  string pgbouncer_postgres_host = 12;
+  uint32 pgbouncer_postgres_port = 13;
+}
+
+// Private, short-lived managed-child contract. Vault facts are copied from a
+// current authenticated runtime status at launch and never persisted in the
+// desired topology or Control Store.
+message StorageRuntimeConfigurationV1 {
+  StorageRuntimeTopologyV1 topology = 1;
+  string vault_instance_id = 2;
+  uint64 vault_runtime_generation = 3;
+  bytes vault_hpke_public_key_x25519 = 4;
+  // Bindings are staged only by the authenticated Kernel launch path. They
+  // remain short-lived and are never part of desired topology.
+  repeated StorageBindingV1 desired_bindings = 5;
+  // Private Storage-owned include used by the PgBouncer runtime. It is
+  // meaningful only when desired_bindings is non-empty.
+  string pgbouncer_database_config_path = 6;
+  // Canonical owner-local bundles whose exact digests are bound by
+  // desired_bindings. Kernel stages these only for a verified child launch.
+  repeated StorageBundleV1 desired_bundles = 7;
+  // Private Storage-owned PgBouncer auth file. It contains only the pooler
+  // admin entry and exact PostgreSQL SCRAM verifiers for active bindings; it
+  // must never contain a runtime credential plaintext.
+  string pgbouncer_auth_file_path = 8;
+}
+
+enum StorageRuntimeStateV1 {
+  STORAGE_RUNTIME_STATE_V1_UNSPECIFIED = 0;
+  STORAGE_RUNTIME_STATE_V1_UNCONFIGURED = 1;
+  STORAGE_RUNTIME_STATE_V1_RECONCILING = 2;
+  STORAGE_RUNTIME_STATE_V1_READY = 3;
+  STORAGE_RUNTIME_STATE_V1_REVOKING = 4;
+  STORAGE_RUNTIME_STATE_V1_FAILED = 5;
+  STORAGE_RUNTIME_STATE_V1_STOPPED = 6;
+}
+
+message GetStorageRuntimeStatusRequestV1 {}
+
+// Kernel submits this only after it has durably reserved the exact binding
+// for revocation. Storage Control matches the complete binding against its
+// launch-staged set before it contacts Vault, PgBouncer, or PostgreSQL.
+message RevokeStorageBindingRequestV1 {
+  StorageBindingV1 binding = 1;
+}
+
+// Kernel submits this only for a newly reserved, still-current binding. Storage
+// owns role/migration/credential/pool provisioning and returns the exact binding
+// only after every stage completed. The bundle travels with the request so a
+// running Storage process never consults Kernel-owned state directly.
+message ApplyStorageBindingRequestV1 {
+  StorageBindingV1 binding = 1;
+  StorageBundleV1 bundle = 2;
+}
+
+message StorageRuntimeStatusV1 {
+  StorageRuntimeStateV1 state = 1;
+  uint64 storage_generation = 2;
+  repeated StorageBindingV1 active_bindings = 3;
+  string blocker_code = 4;
+  // This is the managed child generation authenticated by the inherited
+  // Kernel channel. A status without it cannot prove process identity.
+  uint64 runtime_generation = 5;
+  uint64 topology_revision = 6;
+  // The exact Vault runtime generation whose public key was staged with this
+  // child. Kernel rejects this status after Vault restarts or becomes stale.
+  uint64 vault_runtime_generation = 7;
+}
+
+message StorageRuntimeControlRequestV1 {
+  oneof operation {
+    GetStorageRuntimeStatusRequestV1 get_status = 1;
+    RevokeStorageBindingRequestV1 revoke_binding = 2;
+    ApplyStorageBindingRequestV1 apply_binding = 3;
+  }
+}
+
+message StorageRuntimeControlResponseV1 {
+  oneof result {
+    StorageRuntimeStatusV1 status = 1;
+    StorageBindingV1 revoked_binding = 2;
+    StorageBindingV1 active_binding = 3;
+  }
+  string error_code = 15;
+}

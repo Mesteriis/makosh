@@ -2,7 +2,7 @@ import { computed, ref, shallowRef } from 'vue'
 import type {
 	MailTemplatePreviewV1,
 	MailTemplateV1,
-} from '../../../gen/hermes/mail/composition/v1/client_pb'
+} from '../../../gen/makosh/mail/composition/v1/client_pb'
 import {
 	deleteMailTemplate,
 	listMailTemplates,

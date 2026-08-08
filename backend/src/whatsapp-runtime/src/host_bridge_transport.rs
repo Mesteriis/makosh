@@ -4,7 +4,7 @@ use std::io::{ErrorKind, Read, Write};
 use std::os::unix::net::UnixStream;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_whatsapp_api::host_bridge::{
+use makosh_whatsapp_api::host_bridge::{
     decode_host_bridge_handshake, encode_host_bridge_handshake_accepted,
 };
 

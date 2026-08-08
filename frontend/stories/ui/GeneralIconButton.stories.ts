@@ -4,7 +4,7 @@ import { storybookLocaleFromGlobals } from './storybook-i18n'
 import { generalStoryCopy } from './general-story-copy'
 
 const meta = {
-	title: 'Hermes UI/General/Icon Button',
+	title: 'Макошь UI/General/Icon Button',
 	component: IconButton,
 	render: (_args, context) => ({
 		components: { IconButton },

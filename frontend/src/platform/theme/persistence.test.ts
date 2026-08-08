@@ -42,14 +42,14 @@ describe('theme persistence', () => {
 
 		expect(result.source).toBe('local_storage')
 		expect(result.errorMessage).toContain('local browser storage')
-		expect(JSON.parse(storage.get('hermes-theme-settings') ?? '{}')).toMatchObject({
+		expect(JSON.parse(storage.get('makosh-theme-settings') ?? '{}')).toMatchObject({
 			accentColor: 'violet'
 		})
 	})
 
 	it('reports backend load fallback while keeping locally stored settings usable', async () => {
 		storage.set(
-			'hermes-theme-settings',
+			'makosh-theme-settings',
 			JSON.stringify({
 				...defaultThemeSettings(),
 				accentColor: 'cyan'

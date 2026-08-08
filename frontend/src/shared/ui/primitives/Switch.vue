@@ -17,7 +17,7 @@ const emit = defineEmits<{
   'update:modelValue': [value: boolean]
 }>()
 
-const rootClasses = computed(() => ['hermes-switch', { 'hermes-switch--disabled': props.disabled }, props.class])
+const rootClasses = computed(() => ['makosh-switch', { 'makosh-switch--disabled': props.disabled }, props.class])
 const accessibleLabel = computed(() => props.ariaLabel ?? 'Toggle')
 </script>
 
@@ -29,6 +29,6 @@ const accessibleLabel = computed(() => props.ariaLabel ?? 'Toggle')
     :disabled="disabled"
     @update:checked="(val: boolean) => emit('update:modelValue', val)"
   >
-    <SwitchThumb class="hermes-switch-thumb" />
+    <SwitchThumb class="makosh-switch-thumb" />
   </SwitchRoot>
 </template>

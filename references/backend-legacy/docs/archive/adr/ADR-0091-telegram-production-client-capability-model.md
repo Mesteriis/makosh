@@ -21,7 +21,7 @@ Clarified by:
 
 ## Context
 
-Hermes Hub already has a Telegram foundation: provider account records,
+Макошь already has a Telegram foundation: provider account records,
 fixture accounts, QR/live-blocked account setup, a TDLib-oriented runtime
 manager, chat/history sync endpoints, manual send routing, media download
 facade, policy dry-runs, call metadata, transcript storage and a desktop
@@ -33,11 +33,11 @@ message history, media, voice/video messages, calls, channels, groups, forums,
 search, drafts, notifications, address book data, media gallery, offline mode,
 exports and desktop UX.
 
-This must not turn Hermes into a generic Telegram clone. Telegram remains a
+This must not turn Макошь into a generic Telegram clone. Telegram remains a
 Communication channel feeding source evidence into a local-first Personal Memory
 System. Provider behavior is preserved at adapter and source-record boundaries;
 canonical Communication, Memory, Relationship, Obligation, Decision, Task,
-Document and Context behavior remains Hermes-owned.
+Document and Context behavior remains Макошь-owned.
 
 External protocol references used by this ADR:
 
@@ -72,7 +72,7 @@ Capability states:
 - `planned`: the feature is intentionally deferred to a named initiative and is
   not part of base Telegram channel capability completion.
 - `unsupported`: the feature is intentionally out of current scope or conflicts
-  with Hermes policy.
+  with Макошь policy.
 
 Capability action classes follow ADR-0052:
 
@@ -133,7 +133,7 @@ Rules:
 
 ### Source Evidence And Local Truth
 
-Telegram source data must enter Hermes through append-only raw source records and
+Telegram source data must enter Макошь through append-only raw source records and
 canonical events.
 
 Rules:
@@ -192,7 +192,7 @@ Rules:
 
 ### Soft Delete And Message History
 
-Hermes never physically deletes local Telegram message evidence as the default
+Макошь never physically deletes local Telegram message evidence as the default
 delete behavior.
 
 Rules:
@@ -206,7 +206,7 @@ Rules:
 - UI must show deletion reason, deletion time and deletion history where known.
 - Provider-side delete requests are destructive commands and must still leave
   the local tombstone and historical source evidence.
-- Message edit history is versioned from observed updates. Hermes must not claim
+- Message edit history is versioned from observed updates. Макошь must not claim
   to reconstruct provider edit versions that were never observed locally.
 - Version diff views compare local observed versions and must cite source
   records or events.
@@ -285,7 +285,7 @@ Rules:
 
 ### Search, Drafts, Notifications And Offline
 
-Global Telegram search participates in the Hermes Search Engine. Search results
+Global Telegram search participates in the Макошь Search Engine. Search results
 must distinguish local cache hits from provider search results.
 
 Rules:
@@ -325,7 +325,7 @@ Rules:
 
 Positive:
 
-- Telegram can reach production depth without violating Hermes local-first,
+- Telegram can reach production depth without violating Макошь local-first,
   source-evidence and Personal Memory System boundaries.
 - High-risk actions have one policy/audit model instead of ad-hoc UI checks.
 - Session, proxy, media and export handling stays aligned with the host-vault
@@ -359,7 +359,7 @@ Risk handling:
 
 - Mobile UI.
 - Cloud relay service.
-- Turning Hermes into a generic Telegram clone.
+- Turning Макошь into a generic Telegram clone.
 - Physical deletion of local source evidence as the default delete action.
 - Hidden recording.
 - Fine-tuning or training on private Telegram data.

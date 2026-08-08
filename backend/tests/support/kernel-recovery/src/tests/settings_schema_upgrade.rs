@@ -1,9 +1,9 @@
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleRegistration, ModuleRegistrationState, SettingsApplyState, SettingsConfigurationTarget,
     SettingsConfigurationTargetInputV1, SettingsInitialSnapshot, SettingsSchemaBinding,
     SettingsSchemaBindingInputV1, SettingsSchemaTargetSuccessor,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 #[test]
 fn settings_schema_upgrade_commits_binding_artifact_and_successor_snapshot_atomically() {
@@ -143,7 +143,7 @@ fn binding(
 
 fn fixture_path() -> std::path::PathBuf {
     std::env::temp_dir().join(format!(
-        "hermes-settings-schema-upgrade-{}-{}.sqlite",
+        "makosh-settings-schema-upgrade-{}-{}.sqlite",
         std::process::id(),
         std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)

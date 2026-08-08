@@ -29,10 +29,10 @@ Gateway:
 - не декодирует business semantics и не импортирует owner Cargo package.
 
 Для Communications public query path принадлежит
-`hermes-communications-api`:
+`makosh-communications-api`:
 
 ```text
-/hermes.communications.query.v1.CommunicationsQueryService/Query
+/makosh.communications.query.v1.CommunicationsQueryService/Query
 ```
 
 Gateway wrapper service, provider endpoint, runtime command facade, handwritten
@@ -52,10 +52,10 @@ Durable command возвращает receipt, а не provider completion. Termi
 ## Exact package inventory
 
 ```text
-hermes-gateway-protocol
-hermes-gateway-session-contract
-hermes-gateway-session
-hermes-gateway-runtime
+makosh-gateway-protocol
+makosh-gateway-session-contract
+makosh-gateway-session
+makosh-gateway-runtime
 ```
 
 Kernel композирует эти adapters, но Gateway packages не зависят от Kernel,

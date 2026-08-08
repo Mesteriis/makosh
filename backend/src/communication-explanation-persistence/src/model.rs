@@ -1,4 +1,4 @@
-use hermes_communication_explanation_core::{
+use makosh_communication_explanation_core::{
     COMMUNICATION_EXPLANATION_MAX_REASON_TEXT_BYTES_V1, COMMUNICATION_EXPLANATION_MAX_REASONS_V1,
     CommunicationExplanationDraftV1, CommunicationExplanationReasonKindV1,
     CommunicationExplanationReasonV1, CommunicationExplanationRejectionCodeV1,
@@ -90,7 +90,7 @@ pub enum CommunicationExplanationPersistenceErrorV1 {
 
 pub(crate) fn request_fingerprint(draft: &CommunicationExplanationDraftV1) -> [u8; 32] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.communication_explanation.start.v1\0");
+    hash.update(b"makosh.communication_explanation.start.v1\0");
     hash.update(draft.source_message_id);
     hash.update(draft.expected_source_revision.to_be_bytes());
     hash.finalize().into()

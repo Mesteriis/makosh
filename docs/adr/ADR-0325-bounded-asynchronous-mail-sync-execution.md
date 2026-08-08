@@ -158,12 +158,12 @@ intent. Idempotency Mail persistence остаётся последней защ�
 
 ### SRP и единицы сборки
 
-- `hermes-mail-api` меняется с public command/status language;
-- `hermes-mail-imap` меняется с IMAP paging, chunking, deadlines и provider
+- `makosh-mail-api` меняется с public command/status language;
+- `makosh-mail-imap` меняется с IMAP paging, chunking, deadlines и provider
   error classification;
-- `hermes-mail-persistence` меняется с durable run claim/checkpoint/terminal
+- `makosh-mail-persistence` меняется с durable run claim/checkpoint/terminal
   state;
-- `hermes-mail-runtime` композирует provider worker и owner-local
+- `makosh-mail-runtime` композирует provider worker и owner-local
   materialization, но не становится assembly;
 - Mail release assembly только связывает уже admitted exact artifacts;
 - frontend generated client, controller и presentation меняются отдельным

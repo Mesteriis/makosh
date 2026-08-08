@@ -8,13 +8,13 @@ pub use envelope::{
     build_attachment_translation_source_rejected_outbox_record_v1,
     build_request_attachment_translation_source_outbox_record_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-attachment-translation-ingress";
+pub const PACKAGE: &str = "makosh-attachment-translation-ingress";
 pub const ATTACHMENT_TRANSLATION_INGRESS_OWNER_V1: &str = "attachment_translation";
 pub const ATTACHMENT_TRANSLATION_SOURCE_REQUESTED_CONTRACT_NAME_V1: &str =
     "attachment_translation_source_requested";
@@ -31,14 +31,14 @@ pub const ATTACHMENT_TEXT_EXTRACTION_TRANSLATION_SOURCE_CAPABILITY_ID_V1: &str =
     "attachment_text_extraction.translation-source.v1";
 pub const ATTACHMENT_TRANSLATION_BLOB_TARGET_OWNER_ID_V1: &str = "attachment_translation";
 pub const ATTACHMENT_TRANSLATION_BLOB_TARGET_MODULE_ID_V1: &str =
-    "hermes-attachment-translation-runtime";
+    "makosh-attachment-translation-runtime";
 pub const ATTACHMENT_TRANSLATION_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "attachment_translation.blob.v1";
 
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.attachment_translation.ingress.v1.rs"
+        "/makosh.attachment_translation.ingress.v1.rs"
     ));
 }
 
@@ -59,7 +59,7 @@ pub fn attachment_translation_source_request_id_v1(
     expected_source_revision: u64,
 ) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-translation.source-request.v1\0");
+    hasher.update(b"makosh.attachment-translation.source-request.v1\0");
     hasher.update(translation_run_id);
     hasher.update(source_extraction_run_id);
     hasher.update(expected_source_revision.to_be_bytes());
@@ -191,7 +191,7 @@ fn event_route(
 
 fn source_result_message_id_v1(label: &[u8], request_id: [u8; 16]) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-translation.source-result.v1\0");
+    hasher.update(b"makosh.attachment-translation.source-result.v1\0");
     hasher.update(label);
     hasher.update(request_id);
     hasher.finalize()[..16].try_into().expect("digest prefix")
@@ -205,7 +205,7 @@ mod tests {
     fn event_routes_and_target_are_exact() {
         assert_eq!(
             ATTACHMENT_TRANSLATION_BLOB_TARGET_MODULE_ID_V1,
-            "hermes-attachment-translation-runtime"
+            "makosh-attachment-translation-runtime"
         );
         let Some(Request::EventRoute(route)) =
             attachment_translation_source_requested_consume_request_v1().request

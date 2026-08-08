@@ -9,7 +9,7 @@
 ```markdown
 # Backend-компоненты (база данных)
 
-Документ описывает таблицы, создаваемые миграциями `0026`–`0050` проекта hermes‑hub.
+Документ описывает таблицы, создаваемые миграциями `0026`–`0050` проекта makosh‑hub.
 Информация основывается исключительно на DDL; поведенческие детали,
 не подтверждённые исходным SQL, не приводятся.
 
@@ -455,7 +455,7 @@
 - `due_at TIMESTAMPTZ`
 - `completed_at TIMESTAMPTZ`
 - `archived_at TIMESTAMPTZ`
-- `hermes_status TEXT DEFAULT 'new' CHECK(IN ('new','triaged','ready','in_progress','waiting','blocked','review','done','cancelled','archived'))`
+- `makosh_status TEXT DEFAULT 'new' CHECK(IN ('new','triaged','ready','in_progress','waiting','blocked','review','done','cancelled','archived'))`
 - `waiting_reason TEXT`
 - `energy_type TEXT`
 - `confidentiality TEXT DEFAULT 'private_local' CHECK(IN ('public_to_provider','private_local','sensitive','confidential'))`
@@ -464,13 +464,13 @@
 - `linked_person_id TEXT`
 - `linked_organization_id TEXT`
 
-Индексы: по `hermes_status`, `due_at`, `priority_score`, `linked_person_id`, `linked_organization_id`.
+Индексы: по `makosh_status`, `due_at`, `priority_score`, `linked_person_id`, `linked_organization_id`.
 
 ### Провайдеры задач (миграция 0049)
 
 - **`task_provider_accounts`** – учётные записи внешних систем задач: `provider CHECK(IN ('jira','youtrack','github','gitlab','linear','todoist','apple_reminders','ms_todo','trello','local'))`, `sync_mode CHECK(IN ('manual','read_only','two_way'))`, `capabilities JSONB`.
-- **`external_task_identities`** – связь задач Hermes с внешними задачами: `task_id`, `provider`, `account_id`, `external_project_id`, `external_task_id`, `external_url`, `external_status`, `sync_status CHECK(IN ('local_only','syncing','synced','conflict','error'))`.
-- **`provider_status_mappings`** – маппинг статусов провайдеров на статусы Hermes: `UNIQUE(provider, external_status)`.
+- **`external_task_identities`** – связь задач Макошь с внешними задачами: `task_id`, `provider`, `account_id`, `external_project_id`, `external_task_id`, `external_url`, `external_status`, `sync_status CHECK(IN ('local_only','syncing','synced','conflict','error'))`.
+- **`provider_status_mappings`** – маппинг статусов провайдеров на статусы Макошь: `UNIQUE(provider, external_status)`.
 
 ### Контекст, доказательства, связи, чеклисты (миграция 0050)
 

@@ -20,7 +20,7 @@ runtime conformance. Client-facing telemetry export остаётся часть�
 `client_gateway_v1` и не открывается этим gate.
 Production Kernel не содержит development profile или development operator;
 simulation-команды живут только в отдельном
-`hermes-development-kernel-operator`. `clock_v1` открыт отдельным ADR-0229:
+`makosh-development-kernel-operator`. `clock_v1` открыт отдельным ADR-0229:
 exact UTC/monotonic Clock packages и deterministic conformance существуют без
 Scheduler, module timers или data plane.
 `browser_client_v1` открыт как отдельный owner-neutral local Gateway phase:
@@ -95,14 +95,14 @@ entry или обнаруженный executable не открывает фаз�
 
 Базовый `kernel_recovery_only_v1` разрешил ровно шесть production packages:
 
-| Package | Hermes metadata | Ответственность |
+| Package | Макошь metadata | Ответственность |
 |---|---|---|
-| `hermes-events-protocol` | `platform:events:contract` | Реальный binary `DurableEnvelopeV1` contract ADR-0220 без NATS/outbox runtime |
-| `hermes-runtime-protocol` | `platform:runtime_protocol:contract` | Реальные lifecycle, health, descriptor и settings wire types ADR-0221 без module activation |
-| `hermes-gateway-protocol` | `api:gateway:contract` | Typed local recovery requests, results и safe errors |
-| `hermes-kernel-control-store` | `core:kernel:contract` | Узкий Control Store port, models и typed errors без `rusqlite` |
-| `hermes-kernel-control-store-sqlite` | `core:kernel:persistence` | Private SQLite schema, migrations, integrity validation и Control Store export/restore adapter |
-| `hermes-kernel` | `core:kernel:runtime` | Один process/binary: bootstrap, lock, state machine, recovery routing и bounded shutdown |
+| `makosh-events-protocol` | `platform:events:contract` | Реальный binary `DurableEnvelopeV1` contract ADR-0220 без NATS/outbox runtime |
+| `makosh-runtime-protocol` | `platform:runtime_protocol:contract` | Реальные lifecycle, health, descriptor и settings wire types ADR-0221 без module activation |
+| `makosh-gateway-protocol` | `api:gateway:contract` | Typed local recovery requests, results и safe errors |
+| `makosh-kernel-control-store` | `core:kernel:contract` | Узкий Control Store port, models и typed errors без `rusqlite` |
+| `makosh-kernel-control-store-sqlite` | `core:kernel:persistence` | Private SQLite schema, migrations, integrity validation и Control Store export/restore adapter |
+| `makosh-kernel` | `core:kernel:runtime` | Один process/binary: bootstrap, lock, state machine, recovery routing и bounded shutdown |
 
 Пустой scaffold не считается package. Protocol packages содержат принятые
 Protobuf V1 messages и conformance tests, даже если соответствующий data plane
@@ -111,37 +111,37 @@ Protobuf V1 messages и conformance tests, даже если соответст�
 Допустимый production dependency graph:
 
 ```text
-hermes-kernel-control-store-sqlite
-  -> hermes-kernel-control-store
+makosh-kernel-control-store-sqlite
+  -> makosh-kernel-control-store
 
-hermes-kernel
-  -> hermes-kernel-control-store
-  -> hermes-kernel-control-store-sqlite
-  -> hermes-gateway-protocol
-  -> hermes-runtime-protocol
+makosh-kernel
+  -> makosh-kernel-control-store
+  -> makosh-kernel-control-store-sqlite
+  -> makosh-gateway-protocol
+  -> makosh-runtime-protocol
 
-hermes-events-protocol
+makosh-events-protocol
   -> no production implementation
 ```
 
-`hermes-gateway-protocol` может зависеть только от необходимых platform
+`makosh-gateway-protocol` может зависеть только от необходимых platform
 contracts. Он не переиспользует internal durable envelope как client frame.
 Protocol packages не зависят от Kernel, SQLite, SQLx, NATS, HTTP clients,
 filesystem или owner packages.
 
 Test-only package не входит в production inventory. Если нужен shared process
 harness, он живёт только в `backend/tests/support/kernel-recovery/` как
-`hermes-kernel-recovery-testkit` с metadata `test:test:test_support`, запускает
+`makosh-kernel-recovery-testkit` с metadata `test:test:test_support`, запускает
 Kernel как внешний child и не импортирует production composition root.
 
 Текущий executable inventory имеет slice `clock_v1`: к базовым
-шести packages добавлены ровно `hermes-vault-protocol`,
-`hermes-vault-key-provider`, `hermes-vault-key-provider-file`,
-`hermes-vault-store-sqlcipher`, `hermes-vault-runtime`,
-`hermes-clock-protocol` и `hermes-clock-runtime`. Это exact inventory открытых
+шести packages добавлены ровно `makosh-vault-protocol`,
+`makosh-vault-key-provider`, `makosh-vault-key-provider-file`,
+`makosh-vault-store-sqlcipher`, `makosh-vault-runtime`,
+`makosh-clock-protocol` и `makosh-clock-runtime`. Это exact inventory открытых
 `vault_v1` и `clock_v1`; ни один data-plane package этим не авторизуется.
 Текущий `gateway_session_foundation_v1` добавляет один API implementation
-package `hermes-gateway-session`: он владеет только memory-only session fences
+package `makosh-gateway-session`: он владеет только memory-only session fences
 через gateway-owned authority port и не зависит от Kernel/SQLite implementation,
 не запускает listener и не открывает `client_gateway_v1`.
 
@@ -259,9 +259,9 @@ copy. На 2026-07-16 разрешён только следующий direct cr
 
 | Package | Exact direct dependency profile |
 |---|---|
-| три `hermes-*-protocol` | `prost =0.14.4`, `prost-types =0.14.4`, build-only `prost-build =0.14.4`, `protoc-bin-vendored =3.2.0`; default features |
-| `hermes-kernel-control-store-sqlite` | `rusqlite =0.40.1`, defaults off, `backup,bundled`; `sha2 =0.11.0`, defaults off |
-| `hermes-kernel` | `clap =4.6.2`, defaults off, `derive,error-context,help,std,usage`; `directories =6.0.0`; `p256 =0.14.0`, defaults off, `ecdsa`; `getrandom =0.4.3`, defaults off; `sha2 =0.11.0`, defaults off; `signal-hook =0.3.18` |
+| три `makosh-*-protocol` | `prost =0.14.4`, `prost-types =0.14.4`, build-only `prost-build =0.14.4`, `protoc-bin-vendored =3.2.0`; default features |
+| `makosh-kernel-control-store-sqlite` | `rusqlite =0.40.1`, defaults off, `backup,bundled`; `sha2 =0.11.0`, defaults off |
+| `makosh-kernel` | `clap =4.6.2`, defaults off, `derive,error-context,help,std,usage`; `directories =6.0.0`; `p256 =0.14.0`, defaults off, `ecdsa`; `getrandom =0.4.3`, defaults off; `sha2 =0.11.0`, defaults off; `signal-hook =0.3.18` |
 
 Version requirement, dependency kind, crates.io source, default-feature mode и
 feature set проверяются executable policy. Rename, optional edge, git/path
@@ -300,7 +300,7 @@ Unix socket использует `std::os::unix::net`. Поддержка Window
 
 Полностью исключить clock нельзя: bootstrap challenge, session deadline,
 expiry и bounded shutdown уже требуют корректного времени. Поэтому
-`hermes-kernel` использует внутренний внедряемый `KernelClock` port:
+`makosh-kernel` использует внутренний внедряемый `KernelClock` port:
 
 - wall clock используется только для UTC timestamps и persisted absolute
   instants;
@@ -409,7 +409,7 @@ durable truth. До gate требуются:
   disconnect и runtime/grant-generation fencing;
 - outage, replay, duplicate и stale-generation tests.
 
-Shared broker token и временный wildcard `hermes.>` запрещены.
+Shared broker token и временный wildcard `makosh.>` запрещены.
 
 Current implementation evidence includes a managed Events authority that
 receives an already signed bounded Account JWT only through owner-private
@@ -575,7 +575,7 @@ owner admission.
   разрешается только к exact Cargo package ID, а не registry namesake;
 - direct third-party dependencies совпадают по crate, exact version, kind,
   crates.io source, default-feature mode и feature set;
-- Cargo features не могут скрыто открывать phase, а `hermes-kernel` имеет один
+- Cargo features не могут скрыто открывать phase, а `makosh-kernel` имеет один
   binary target без собственного build script;
 - runtime state set не содержит `ready`, `degraded` или startup states будущих
   managed capabilities;

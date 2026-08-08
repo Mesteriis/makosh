@@ -16,21 +16,21 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-activity-item',
-  `hermes-activity-item--${props.tone}`,
+  'makosh-activity-item',
+  `makosh-activity-item--${props.tone}`,
   props.class
 ])
 </script>
 
 <template>
   <article :class="classes">
-    <span class="hermes-activity-icon" aria-hidden="true">
+    <span class="makosh-activity-icon" aria-hidden="true">
       <Icon :icon="icon" size="1rem" />
     </span>
-    <div class="hermes-activity-copy">
-      <strong class="hermes-activity-title">{{ title }}</strong>
-      <span v-if="description" class="hermes-activity-description">{{ description }}</span>
+    <div class="makosh-activity-copy">
+      <strong class="makosh-activity-title">{{ title }}</strong>
+      <span v-if="description" class="makosh-activity-description">{{ description }}</span>
     </div>
-    <span v-if="meta" class="hermes-activity-meta">{{ meta }}</span>
+    <span v-if="meta" class="makosh-activity-meta">{{ meta }}</span>
   </article>
 </template>

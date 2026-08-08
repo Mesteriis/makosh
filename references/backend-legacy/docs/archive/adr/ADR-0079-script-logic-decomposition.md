@@ -2,7 +2,7 @@
 
 Status: Superseded by ADR-0093
 Date: 2026-06-09
-Deciders: Alex (hermes-hub maintainer)
+Deciders: Alex (makosh maintainer)
 
 ## Superseded
 
@@ -32,8 +32,8 @@ Move `apiBaseUrl` and `apiSecret` from `+page.svelte` to a shared config module:
 
 ```ts
 // lib/config.ts
-export const apiBaseUrl = import.meta.env.VITE_HERMES_API_BASE_URL ?? 'http://127.0.0.1:8080';
-export const apiSecret = import.meta.env.VITE_HERMES_LOCAL_API_SECRET ?? 'change-me-local-api-secret';
+export const apiBaseUrl = import.meta.env.VITE_MAKOSH_API_BASE_URL ?? 'http://127.0.0.1:8080';
+export const apiSecret = import.meta.env.VITE_MAKOSH_LOCAL_API_SECRET ?? 'change-me-local-api-secret';
 ```
 
 All service modules and components import from here instead of receiving these

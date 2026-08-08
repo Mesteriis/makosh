@@ -3,10 +3,10 @@
 use std::io::{ErrorKind, Read, Write};
 use std::os::unix::net::UnixStream;
 
-use hermes_telegram_automation_persistence::TelegramAutomationPersistence;
-use hermes_telegram_calls_persistence::TelegramCallsPersistence;
-use hermes_telegram_persistence::TelegramDurablePersistence;
-use hermes_telegram_tdlib::TdlibTransport;
+use makosh_telegram_automation_persistence::TelegramAutomationPersistence;
+use makosh_telegram_calls_persistence::TelegramCallsPersistence;
+use makosh_telegram_persistence::TelegramDurablePersistence;
+use makosh_telegram_tdlib::TdlibTransport;
 
 use crate::{TelegramRuntime, TelegramRuntimeComposition, client_port::TelegramClientPortError};
 
@@ -15,7 +15,7 @@ const MAX_CLIENT_FRAME_BYTES: usize = 512 * 1024;
 pub fn serve_authorization_connection(
     mut stream: UnixStream,
     composition: &mut TelegramRuntimeComposition,
-    status: Option<&hermes_telegram_api::TelegramAuthorizationStatus>,
+    status: Option<&makosh_telegram_api::TelegramAuthorizationStatus>,
 ) -> Result<(), TelegramClientTransportError> {
     loop {
         let request = match read_frame(&mut stream) {
@@ -26,7 +26,7 @@ pub fn serve_authorization_connection(
         let (request_id, contract, payload) =
             crate::client_port::decode_module_request_payload(&request)
                 .map_err(TelegramClientTransportError::Port)?;
-        if contract != hermes_telegram_api::client_contract::TelegramClientContractV1::Authorization
+        if contract != makosh_telegram_api::client_contract::TelegramClientContractV1::Authorization
         {
             return Err(TelegramClientTransportError::Port(
                 TelegramClientPortError::Protocol(
@@ -34,33 +34,33 @@ pub fn serve_authorization_connection(
                 ),
             ));
         }
-        let request = hermes_telegram_api::client_wire::decode_request(&payload).map_err(|_| {
+        let request = makosh_telegram_api::client_wire::decode_request(&payload).map_err(|_| {
             TelegramClientTransportError::Port(TelegramClientPortError::Protocol(
                 "Telegram authorization payload is invalid".to_owned(),
             ))
         })?;
         let response = match request {
-            hermes_telegram_api::client_wire::TelegramAuthorizationRequest::Status => {
-                hermes_telegram_api::client_wire::TelegramAuthorizationResponse::Status(
+            makosh_telegram_api::client_wire::TelegramAuthorizationRequest::Status => {
+                makosh_telegram_api::client_wire::TelegramAuthorizationResponse::Status(
                     status
                         .cloned()
-                        .unwrap_or(hermes_telegram_api::TelegramAuthorizationStatus {
+                        .unwrap_or(makosh_telegram_api::TelegramAuthorizationStatus {
                             state: "starting".to_owned(),
                             qr_link: None,
                             password_hint: None,
                         }),
                 )
             }
-            hermes_telegram_api::client_wire::TelegramAuthorizationRequest::SubmitPassword(
+            makosh_telegram_api::client_wire::TelegramAuthorizationRequest::SubmitPassword(
                 password,
             ) => {
                 composition.submit_password(&password).map_err(|error| {
                     TelegramClientTransportError::Port(TelegramClientPortError::Provider(error))
                 })?;
-                hermes_telegram_api::client_wire::TelegramAuthorizationResponse::PasswordAccepted
+                makosh_telegram_api::client_wire::TelegramAuthorizationResponse::PasswordAccepted
             }
         };
-        let response_payload = hermes_telegram_api::client_wire::encode_response(&response);
+        let response_payload = makosh_telegram_api::client_wire::encode_response(&response);
         let encoded =
             crate::client_port::encode_module_response_payload(request_id, response_payload)
                 .map_err(TelegramClientTransportError::Port)?;
@@ -219,7 +219,7 @@ fn read_length(stream: &mut UnixStream) -> Result<usize, TelegramClientTransport
 
 #[cfg(test)]
 mod tests {
-    use hermes_telegram_persistence::TelegramDurablePersistenceError;
+    use makosh_telegram_persistence::TelegramDurablePersistenceError;
 
     use super::*;
 

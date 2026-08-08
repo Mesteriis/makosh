@@ -73,21 +73,21 @@ test('loopback development owner-device proof host is a separate development uni
   assert.match(adr, /Состояние реализации: implemented/i);
 
   assert.match(manifest, /development-server/);
-  assert.match(manifest, /hermes-owner-vault-development-host/);
+  assert.match(manifest, /makosh-owner-vault-development-host/);
 
   assert.match(server, /OWNER_DEVICE_PROOF_SIGN_PATH/);
-  assert.match(server, /\/__hermes\/owner-device-proof\/v1\/sign/);
+  assert.match(server, /\/__makosh\/owner-device-proof\/v1\/sign/);
   assert.match(server, /sign_challenge\(&exact_array\(request\.challenge_bytes\)\?/);
   assert.match(server, /authorize_request_metadata\(/);
   assert.match(server, /EXACT_BROWSER_ORIGIN/);
-  assert.match(server, /x-hermes-development-host-proof/);
+  assert.match(server, /x-makosh-development-host-proof/);
 
   assert.match(client, /credentials: 'same-origin'/);
   assert.match(client, /cache: 'no-store'/);
   assert.match(client, /redirect: 'error'/);
   assert.match(client, /signatureRaw/);
   assert.match(factory, /hasDevelopmentOwnerDeviceProofHostV1/);
-  assert.match(factory, /VITE_HERMES_DEV_OWNER_DEVICE_PROOF_HOST === '1'/);
+  assert.match(factory, /VITE_MAKOSH_DEV_OWNER_DEVICE_PROOF_HOST === '1'/);
   assert.match(ownerDeviceProofSource, /interface OwnerDeviceProofV1/);
 
   assert.match(ownerSettingsClient, /createOwnerDeviceProofV1\(\)/);
@@ -95,11 +95,11 @@ test('loopback development owner-device proof host is a separate development uni
   assert.match(ownerSettingsClient, /class OwnerModuleSettingsClientV1/);
   assert.match(vaultClient, /class OwnerVaultProvisioningClientV1/);
 
-  assert.match(vite, /\/__hermes\/owner-device-proof\/v1/);
+  assert.match(vite, /\/__makosh\/owner-device-proof\/v1/);
   assert.match(vite, /DEVELOPMENT_HOST_PROOF_HEADER/);
   assert.match(vite, /request\.removeHeader\(DEVELOPMENT_HOST_PROOF_HEADER\)/);
   assert.match(vite, /request\.setHeader\(DEVELOPMENT_HOST_PROOF_HEADER, host\.proof\)/);
 
-  assert.match(ensemble, /VITE_HERMES_DEV_OWNER_DEVICE_PROOF_HOST=1/);
-  assert.match(ensemble, /VITE_HERMES_DEV_OWNER_VAULT_HOST=1/);
+  assert.match(ensemble, /VITE_MAKOSH_DEV_OWNER_DEVICE_PROOF_HOST=1/);
+  assert.match(ensemble, /VITE_MAKOSH_DEV_OWNER_VAULT_HOST=1/);
 });

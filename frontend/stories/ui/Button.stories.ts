@@ -3,7 +3,7 @@ import { Button, IconButton, Kbd } from '@/shared/ui'
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Button',
+	title: 'Макошь UI/General/Button',
 	component: Button,
 	argTypes: {
 		variant: { control: 'select', options: ['default', 'secondary', 'outline', 'ghost', 'destructive'] },

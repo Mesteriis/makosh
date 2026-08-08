@@ -21,9 +21,9 @@
 - Group / Группа: `.github`
 - Role / Роль: `config`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `.github/workflows/ci.yml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.github/workflows/ci.yml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.github/workflows/ci.yml`
 - Size bytes / Размер в байтах: `8511`
 - Included characters / Включено символов: `8511`
 - Truncated / Обрезано: `no`
@@ -102,7 +102,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      CARGO_TARGET_ROOT: /tmp/hermes-cargo-target-${{ github.job }}
+      CARGO_TARGET_ROOT: /tmp/makosh-cargo-target-${{ github.job }}
 
     steps:
       - name: Checkout
@@ -121,7 +121,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
-      CARGO_TARGET_ROOT: /tmp/hermes-cargo-target-${{ github.job }}
+      CARGO_TARGET_ROOT: /tmp/makosh-cargo-target-${{ github.job }}
 
     steps:
       - name: Checkout
@@ -148,7 +148,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      CARGO_TARGET_ROOT: /tmp/hermes-cargo-target-${{ github.job }}
+      CARGO_TARGET_ROOT: /tmp/makosh-cargo-target-${{ github.job }}
 
     steps:
       - name: Checkout
@@ -195,7 +195,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      CARGO_TARGET_ROOT: /tmp/hermes-cargo-target-${{ github.job }}
+      CARGO_TARGET_ROOT: /tmp/makosh-cargo-target-${{ github.job }}
 
     steps:
       - name: Checkout
@@ -225,7 +225,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      CARGO_TARGET_ROOT: /tmp/hermes-cargo-target-${{ github.job }}
+      CARGO_TARGET_ROOT: /tmp/makosh-cargo-target-${{ github.job }}
 
     steps:
       - name: Checkout
@@ -263,7 +263,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      CARGO_TARGET_ROOT: /tmp/hermes-cargo-target-${{ github.job }}
+      CARGO_TARGET_ROOT: /tmp/makosh-cargo-target-${{ github.job }}
 
     steps:
       - name: Checkout
@@ -398,7 +398,7 @@ jobs:
 
 ### `.github/workflows/nightly.yml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.github/workflows/nightly.yml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.github/workflows/nightly.yml`
 - Size bytes / Размер в байтах: `1410`
 - Included characters / Включено символов: `1410`
 - Truncated / Обрезано: `no`
@@ -417,7 +417,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      CARGO_TARGET_ROOT: /tmp/hermes-cargo-target-${{ github.job }}
+      CARGO_TARGET_ROOT: /tmp/makosh-cargo-target-${{ github.job }}
 
     steps:
       - name: Checkout
@@ -449,7 +449,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 180
     env:
-      CARGO_TARGET_ROOT: /tmp/hermes-cargo-target-${{ github.job }}
+      CARGO_TARGET_ROOT: /tmp/makosh-cargo-target-${{ github.job }}
 
     steps:
       - name: Checkout
@@ -471,7 +471,7 @@ jobs:
 
 ### `.github/workflows/pages.yml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.github/workflows/pages.yml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.github/workflows/pages.yml`
 - Size bytes / Размер в байтах: `817`
 - Included characters / Включено символов: `817`
 - Truncated / Обрезано: `no`

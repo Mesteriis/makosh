@@ -1,22 +1,22 @@
-use hermes_call_transcription_api::{
+use makosh_call_transcription_api::{
     CAPABILITY_ID_V1, GET_CONNECT_PATH_V1, GET_CONTRACT_NAME_V1, MAX_TRANSCRIPT_BYTES_V1,
     MODULE_ID_V1, OWNER_ID_V1, READ_CONTRACT_NAME_V1, REALTIME_CONTRACT_NAME_V1,
     START_CONNECT_PATH_V1, START_CONTRACT_NAME_V1, TICKET_CONNECT_PATH_V1, TICKET_CONTRACT_NAME_V1,
     TRANSCRIPT_BLOB_PATH_V1, contract_reference_v1,
 };
-use hermes_call_transcription_ingress::{
+use makosh_call_transcription_ingress::{
     RECORDING_READY_CONTRACT_NAME_V1, RECORDING_REJECTED_CONTRACT_NAME_V1,
     TARGET_BLOB_CAPABILITY_ID_V1, contract_reference_v1 as ingress_contract_reference_v1,
     recording_ready_consume_request_v1, recording_rejected_consume_request_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ClientBlobRouteV1, ClientRpcRouteV1, ContractReferenceV1,
     ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1,
     RuntimeBudgetRequestV1, SettingsSchemaRefV1, SettingsSchemaV1, StorageNamespaceRequestV1,
     capability_request_v1::Request,
 };
-use hermes_speech_to_text_api::speech_to_text_contract_reference_v1;
+use makosh_speech_to_text_api::speech_to_text_contract_reference_v1;
 use prost::Message;
 use sha2::{Digest, Sha256};
 
@@ -214,7 +214,7 @@ fn storage_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         validate_descriptor_v1, validate_settings_schema_v1,
     };
 

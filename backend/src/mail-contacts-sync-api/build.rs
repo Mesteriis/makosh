@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/mail_contacts_sync/v1/sync.proto"],
+            &["proto/makosh/mail_contacts_sync/v1/sync.proto"],
             &["proto"],
         )
         .expect("Mail Contacts sync protocol must compile");

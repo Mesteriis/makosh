@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/communication_translation/v1/translation.proto"],
+            &["proto/makosh/communication_translation/v1/translation.proto"],
             &["proto"],
         )
         .expect("Communication translation protocol must compile");

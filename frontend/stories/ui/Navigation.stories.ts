@@ -18,7 +18,7 @@ import type { CommandGroup, NavigationItem, TreeItemData } from '@/shared/ui'
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Navigation',
+	title: 'Макошь UI/General/Navigation',
 	render: (_args, context) => ({
 		components: {
 			Breadcrumbs,

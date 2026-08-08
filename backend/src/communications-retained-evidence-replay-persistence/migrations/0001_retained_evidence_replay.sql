@@ -1,6 +1,6 @@
-CREATE TABLE hermes_data.communications_retained_evidence_replay_index (
+CREATE TABLE makosh_data.communications_retained_evidence_replay_index (
     attachment_anchor_id BYTEA PRIMARY KEY CHECK (octet_length(attachment_anchor_id) = 16),
-    message_id BYTEA NOT NULL UNIQUE REFERENCES hermes_data.communications_domain_outbox (
+    message_id BYTEA NOT NULL UNIQUE REFERENCES makosh_data.communications_domain_outbox (
         message_id
     ),
     envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
@@ -16,7 +16,7 @@ CREATE TABLE hermes_data.communications_retained_evidence_replay_index (
     indexed_at_unix_seconds BIGINT NOT NULL CHECK (indexed_at_unix_seconds > 0)
 );
 
-CREATE TABLE hermes_data.communications_retained_evidence_replay_audit (
+CREATE TABLE makosh_data.communications_retained_evidence_replay_audit (
     audit_sequence BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     operation_id BYTEA NOT NULL CHECK (octet_length(operation_id) = 16),
     logical_owner_id TEXT NOT NULL CHECK (length(logical_owner_id) BETWEEN 1 AND 128),
@@ -39,7 +39,7 @@ CREATE TABLE hermes_data.communications_retained_evidence_replay_audit (
 );
 
 CREATE INDEX communications_retained_evidence_replay_audit_operation_idx
-ON hermes_data.communications_retained_evidence_replay_audit (
+ON makosh_data.communications_retained_evidence_replay_audit (
     operation_id,
     original_message_id,
     audit_sequence

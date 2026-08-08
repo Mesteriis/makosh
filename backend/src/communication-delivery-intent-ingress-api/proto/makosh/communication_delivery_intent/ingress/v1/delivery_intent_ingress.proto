@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package makosh.communication_delivery_intent.ingress.v1;
+
+// Exact event-only workflow ingress. Content is transferred through the fixed
+// delivery-intent Blob audience and never embedded in this command.
+message SubmitCommunicationDeliveryIntentCommandV1 {
+  bytes intent_id = 1;
+  bytes target_conversation_id = 2;
+  bytes target_reply_to_message_id = 3;
+  DeliveryIntentBodySourceReceiptV1 body_source = 4;
+  string logical_owner_id = 5;
+}
+
+// Durable admission only. Provider delivery completion remains a separate
+// delivery-intent state transition.
+message CommunicationDeliveryIntentSubmittedV1 {
+  bytes intent_id = 1;
+  string logical_owner_id = 2;
+}
+
+message CommunicationDeliveryIntentRejectedV1 {
+  bytes intent_id = 1;
+  CommunicationDeliveryIntentIngressRejectCodeV1 code = 2;
+  string logical_owner_id = 3;
+}
+
+// Receipt for the compile-time fixed communication_delivery_intent Blob
+// audience. Arbitrary target fields and plaintext are deliberately absent.
+message DeliveryIntentBodySourceReceiptV1 {
+  bytes reference_id = 1;
+  uint64 declared_bytes = 2;
+  bytes sha256 = 3;
+  bytes custody_transfer_source_proof = 4;
+}
+
+enum CommunicationDeliveryIntentIngressRejectCodeV1 {
+  COMMUNICATION_DELIVERY_INTENT_INGRESS_REJECT_CODE_UNSPECIFIED = 0;
+  COMMUNICATION_DELIVERY_INTENT_INGRESS_REJECT_CODE_INVALID_REQUEST = 1;
+  COMMUNICATION_DELIVERY_INTENT_INGRESS_REJECT_CODE_CUSTODY_INVALID = 2;
+  COMMUNICATION_DELIVERY_INTENT_INGRESS_REJECT_CODE_CANONICAL_TARGET_UNAVAILABLE = 3;
+  COMMUNICATION_DELIVERY_INTENT_INGRESS_REJECT_CODE_POLICY = 4;
+  COMMUNICATION_DELIVERY_INTENT_INGRESS_REJECT_CODE_UNAVAILABLE = 5;
+}

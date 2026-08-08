@@ -1,4 +1,4 @@
-use hermes_telegram_automation_core::{
+use makosh_telegram_automation_core::{
     AutomationError, AutomationPolicy, AutomationPolicyDraft, AutomationPreviewReceipt,
     AutomationPreviewRequest, AutomationTemplate, AutomationTemplateDraft, render_preview,
     validate_identifier,
@@ -67,7 +67,7 @@ impl TelegramAutomationPersistence {
             "SELECT preview_id, policy_id, policy_revision, template_id, template_revision, \
              account_id, provider_chat_id, rendered_text, rendered_sha256, \
              created_at_unix_seconds \
-             FROM hermes_data.telegram_automation_preview_receipts WHERE preview_id = $1",
+             FROM makosh_data.telegram_automation_preview_receipts WHERE preview_id = $1",
         )
         .bind(preview_id)
         .fetch_optional(&self.pool)
@@ -82,7 +82,7 @@ impl TelegramAutomationPersistence {
         limit: u32,
     ) -> Result<Vec<AutomationTemplate>, TelegramAutomationPersistenceError> {
         let rows = sqlx::query(
-            "SELECT template_id FROM hermes_data.telegram_automation_templates \
+            "SELECT template_id FROM makosh_data.telegram_automation_templates \
              WHERE template_id > $1 ORDER BY template_id ASC LIMIT $2",
         )
         .bind(after_template_id)
@@ -110,7 +110,7 @@ impl TelegramAutomationPersistence {
         limit: u32,
     ) -> Result<Vec<AutomationPolicy>, TelegramAutomationPersistenceError> {
         let rows = sqlx::query(
-            "SELECT policy_id FROM hermes_data.telegram_automation_policies \
+            "SELECT policy_id FROM makosh_data.telegram_automation_policies \
              WHERE policy_id > $1 ORDER BY policy_id ASC LIMIT $2",
         )
         .bind(after_policy_id)
@@ -171,7 +171,7 @@ impl TelegramAutomationPersistence {
 
         let current = sqlx::query(
             "SELECT revision, created_at_unix_seconds \
-             FROM hermes_data.telegram_automation_templates \
+             FROM makosh_data.telegram_automation_templates \
              WHERE template_id = $1 FOR UPDATE",
         )
         .bind(&draft.template_id)
@@ -190,7 +190,7 @@ impl TelegramAutomationPersistence {
             updated_at_unix_seconds: now_unix_seconds,
         };
         sqlx::query(
-            "INSERT INTO hermes_data.telegram_automation_templates \
+            "INSERT INTO makosh_data.telegram_automation_templates \
              (template_id, revision, name, body_template, created_at_unix_seconds, updated_at_unix_seconds) \
              VALUES ($1, $2, $3, $4, $5, $6) \
              ON CONFLICT (template_id) DO UPDATE SET revision = EXCLUDED.revision, \
@@ -207,7 +207,7 @@ impl TelegramAutomationPersistence {
         .await
         .map_err(|_| TelegramAutomationPersistenceError::Database)?;
         sqlx::query(
-            "DELETE FROM hermes_data.telegram_automation_template_variables WHERE template_id = $1",
+            "DELETE FROM makosh_data.telegram_automation_template_variables WHERE template_id = $1",
         )
         .bind(&template.template_id)
         .execute(&mut *transaction)
@@ -215,7 +215,7 @@ impl TelegramAutomationPersistence {
         .map_err(|_| TelegramAutomationPersistenceError::Database)?;
         for (ordinal, variable_name) in template.required_variables.iter().enumerate() {
             sqlx::query(
-                "INSERT INTO hermes_data.telegram_automation_template_variables \
+                "INSERT INTO makosh_data.telegram_automation_template_variables \
                  (template_id, ordinal, variable_name) VALUES ($1, $2, $3)",
             )
             .bind(&template.template_id)
@@ -285,7 +285,7 @@ impl TelegramAutomationPersistence {
             return Ok(PersistedMutation::Replayed { response_payload });
         }
         let template_exists: bool = sqlx::query_scalar(
-            "SELECT EXISTS (SELECT 1 FROM hermes_data.telegram_automation_templates \
+            "SELECT EXISTS (SELECT 1 FROM makosh_data.telegram_automation_templates \
              WHERE template_id = $1)",
         )
         .bind(&draft.template_id)
@@ -296,7 +296,7 @@ impl TelegramAutomationPersistence {
             return Err(TelegramAutomationPersistenceError::MissingTemplate);
         }
         let account_exists: bool = sqlx::query_scalar(
-            "SELECT EXISTS (SELECT 1 FROM hermes_data.telegram_accounts WHERE account_id = $1)",
+            "SELECT EXISTS (SELECT 1 FROM makosh_data.telegram_accounts WHERE account_id = $1)",
         )
         .bind(&draft.account_id)
         .fetch_one(&mut *transaction)
@@ -307,7 +307,7 @@ impl TelegramAutomationPersistence {
         }
         let current = sqlx::query(
             "SELECT revision, created_at_unix_seconds \
-             FROM hermes_data.telegram_automation_policies \
+             FROM makosh_data.telegram_automation_policies \
              WHERE policy_id = $1 FOR UPDATE",
         )
         .bind(&draft.policy_id)
@@ -329,7 +329,7 @@ impl TelegramAutomationPersistence {
             updated_at_unix_seconds: now_unix_seconds,
         };
         sqlx::query(
-            "INSERT INTO hermes_data.telegram_automation_policies \
+            "INSERT INTO makosh_data.telegram_automation_policies \
              (policy_id, template_id, revision, name, enabled, account_id, \
               expires_at_unix_seconds, created_at_unix_seconds, updated_at_unix_seconds) \
              VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) \
@@ -351,7 +351,7 @@ impl TelegramAutomationPersistence {
         .await
         .map_err(|_| TelegramAutomationPersistenceError::Database)?;
         sqlx::query(
-            "DELETE FROM hermes_data.telegram_automation_policy_chat_scopes WHERE policy_id = $1",
+            "DELETE FROM makosh_data.telegram_automation_policy_chat_scopes WHERE policy_id = $1",
         )
         .bind(&policy.policy_id)
         .execute(&mut *transaction)
@@ -359,7 +359,7 @@ impl TelegramAutomationPersistence {
         .map_err(|_| TelegramAutomationPersistenceError::Database)?;
         for provider_chat_id in &policy.provider_chat_ids {
             sqlx::query(
-                "INSERT INTO hermes_data.telegram_automation_policy_chat_scopes \
+                "INSERT INTO makosh_data.telegram_automation_policy_chat_scopes \
                  (policy_id, provider_chat_id) VALUES ($1, $2)",
             )
             .bind(&policy.policy_id)
@@ -428,7 +428,7 @@ impl TelegramAutomationPersistence {
             .map_err(TelegramAutomationPersistenceError::Core)?;
         let response_payload = encode_response(&receipt);
         sqlx::query(
-            "INSERT INTO hermes_data.telegram_automation_preview_receipts \
+            "INSERT INTO makosh_data.telegram_automation_preview_receipts \
              (preview_id, request_sha256, policy_id, policy_revision, template_id, \
               template_revision, account_id, provider_chat_id, rendered_text, \
               rendered_sha256, response_payload, created_at_unix_seconds) \
@@ -468,7 +468,7 @@ async fn replay_mutation(
 ) -> Result<Option<Vec<u8>>, TelegramAutomationPersistenceError> {
     let row = sqlx::query(
         "SELECT mutation_kind, request_sha256, response_payload \
-         FROM hermes_data.telegram_automation_mutation_receipts WHERE mutation_id = $1 FOR UPDATE",
+         FROM makosh_data.telegram_automation_mutation_receipts WHERE mutation_id = $1 FOR UPDATE",
     )
     .bind(mutation_id)
     .fetch_optional(&mut **transaction)
@@ -501,7 +501,7 @@ async fn persist_mutation(
     now_unix_seconds: u64,
 ) -> Result<(), TelegramAutomationPersistenceError> {
     sqlx::query(
-        "INSERT INTO hermes_data.telegram_automation_mutation_receipts \
+        "INSERT INTO makosh_data.telegram_automation_mutation_receipts \
          (mutation_id, mutation_kind, request_sha256, response_payload, created_at_unix_seconds) \
          VALUES ($1, $2, $3, $4, $5)",
     )
@@ -522,7 +522,7 @@ async fn preview_replay(
 ) -> Result<Option<([u8; 32], Vec<u8>)>, TelegramAutomationPersistenceError> {
     let row = sqlx::query(
         "SELECT request_sha256, response_payload \
-         FROM hermes_data.telegram_automation_preview_receipts WHERE preview_id = $1 FOR UPDATE",
+         FROM makosh_data.telegram_automation_preview_receipts WHERE preview_id = $1 FOR UPDATE",
     )
     .bind(preview_id)
     .fetch_optional(&mut **transaction)
@@ -602,11 +602,11 @@ async fn load_template_in_transaction(
 ) -> Result<Option<AutomationTemplate>, TelegramAutomationPersistenceError> {
     let query = if lock {
         "SELECT template_id, revision, name, body_template, created_at_unix_seconds, \
-         updated_at_unix_seconds FROM hermes_data.telegram_automation_templates \
+         updated_at_unix_seconds FROM makosh_data.telegram_automation_templates \
          WHERE template_id = $1 FOR SHARE"
     } else {
         "SELECT template_id, revision, name, body_template, created_at_unix_seconds, \
-         updated_at_unix_seconds FROM hermes_data.telegram_automation_templates \
+         updated_at_unix_seconds FROM makosh_data.telegram_automation_templates \
          WHERE template_id = $1"
     };
     let row = sqlx::query(query)
@@ -618,7 +618,7 @@ async fn load_template_in_transaction(
         return Ok(None);
     };
     let variable_rows = sqlx::query(
-        "SELECT variable_name FROM hermes_data.telegram_automation_template_variables \
+        "SELECT variable_name FROM makosh_data.telegram_automation_template_variables \
          WHERE template_id = $1 ORDER BY ordinal ASC",
     )
     .bind(template_id)
@@ -681,11 +681,11 @@ async fn load_policy_in_transaction(
     let query = if lock {
         "SELECT policy_id, template_id, revision, name, enabled, account_id, \
          expires_at_unix_seconds, created_at_unix_seconds, updated_at_unix_seconds \
-         FROM hermes_data.telegram_automation_policies WHERE policy_id = $1 FOR SHARE"
+         FROM makosh_data.telegram_automation_policies WHERE policy_id = $1 FOR SHARE"
     } else {
         "SELECT policy_id, template_id, revision, name, enabled, account_id, \
          expires_at_unix_seconds, created_at_unix_seconds, updated_at_unix_seconds \
-         FROM hermes_data.telegram_automation_policies WHERE policy_id = $1"
+         FROM makosh_data.telegram_automation_policies WHERE policy_id = $1"
     };
     let row = sqlx::query(query)
         .bind(policy_id)
@@ -696,7 +696,7 @@ async fn load_policy_in_transaction(
         return Ok(None);
     };
     let scope_rows = sqlx::query(
-        "SELECT provider_chat_id FROM hermes_data.telegram_automation_policy_chat_scopes \
+        "SELECT provider_chat_id FROM makosh_data.telegram_automation_policy_chat_scopes \
          WHERE policy_id = $1 ORDER BY provider_chat_id ASC",
     )
     .bind(policy_id)

@@ -1,9 +1,9 @@
-use hermes_review_task_candidate_core::{
+use makosh_review_task_candidate_core::{
     ReviewTaskCandidateDecisionV1, ReviewTaskCandidatePromotionStatusV1,
     ReviewTaskCandidateStateV1, ReviewTaskCandidateV1, create_review_task_candidate_v1,
     decide_review_task_candidate_v1, record_review_task_candidate_promotion_v1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool, Row,
     postgres::{PgConnectOptions, PgPoolOptions},
@@ -85,7 +85,7 @@ impl ReviewTaskCandidatePersistenceV1 {
     {
         validate_reservation(&input)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.review_task_candidate_submissions (
+            "INSERT INTO makosh_data.review_task_candidate_submissions (
                logical_owner_id, submission_message_id, submission_envelope_sha256,
                submission_id, candidate_id, candidate_digest, source_evidence_id,
                source_evidence_revision, candidate_blob_reference_id,
@@ -174,7 +174,7 @@ impl ReviewTaskCandidatePersistenceV1 {
             return Ok(current);
         }
         let affected = sqlx::query(
-            "UPDATE hermes_data.review_task_candidate_submissions
+            "UPDATE makosh_data.review_task_candidate_submissions
              SET materialized_blob_reference_id=$1
              WHERE logical_owner_id=$2 AND submission_message_id=$3
                AND materialized_blob_reference_id IS NULL",
@@ -209,7 +209,7 @@ impl ReviewTaskCandidatePersistenceV1 {
             return Err(ReviewTaskCandidatePersistenceErrorV1::InvalidInput);
         }
         let affected = sqlx::query(
-            "UPDATE hermes_data.review_task_candidate_submissions
+            "UPDATE makosh_data.review_task_candidate_submissions
              SET cleanup_completed_at_unix_millis=$1
              WHERE logical_owner_id=$2 AND submission_message_id=$3
                AND materialized_blob_reference_id=$4
@@ -281,7 +281,7 @@ impl ReviewTaskCandidatePersistenceV1 {
         }
         insert_review(&mut transaction, &review).await?;
         let affected = sqlx::query(
-            "UPDATE hermes_data.review_task_candidate_submissions
+            "UPDATE makosh_data.review_task_candidate_submissions
              SET completed=TRUE, review_id=$1, completed_at_unix_millis=$2
              WHERE logical_owner_id=$3 AND submission_message_id=$4 AND NOT completed",
         )
@@ -335,7 +335,7 @@ impl ReviewTaskCandidatePersistenceV1 {
             };
         }
         sqlx::query(
-            "UPDATE hermes_data.review_task_candidate_submissions
+            "UPDATE makosh_data.review_task_candidate_submissions
              SET completed=TRUE, rejected=TRUE, completed_at_unix_millis=$1
              WHERE logical_owner_id=$2 AND submission_message_id=$3 AND NOT completed",
         )
@@ -383,7 +383,7 @@ impl ReviewTaskCandidatePersistenceV1 {
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         if let Some(row) = sqlx::query(
             "SELECT request_sha256, decision_fingerprint, review_id, result_review_revision
-             FROM hermes_data.review_task_candidate_operations
+             FROM makosh_data.review_task_candidate_operations
              WHERE logical_owner_id=$1 AND operation_id=$2",
         )
         .bind(&input.logical_owner_id)
@@ -430,7 +430,7 @@ impl ReviewTaskCandidatePersistenceV1 {
             .await?;
         }
         sqlx::query(
-            "INSERT INTO hermes_data.review_task_candidate_operations (
+            "INSERT INTO makosh_data.review_task_candidate_operations (
                logical_owner_id, operation_id, request_sha256, decision_fingerprint,
                review_id, expected_review_revision, result_review_revision,
                completed_at_unix_millis
@@ -460,7 +460,7 @@ impl ReviewTaskCandidatePersistenceV1 {
         let fingerprint = decision_replay_fingerprint(input);
         let Some(row) = sqlx::query(
             "SELECT request_sha256, decision_fingerprint, review_id
-             FROM hermes_data.review_task_candidate_operations
+             FROM makosh_data.review_task_candidate_operations
              WHERE logical_owner_id=$1 AND operation_id=$2",
         )
         .bind(&input.logical_owner_id)
@@ -500,7 +500,7 @@ impl ReviewTaskCandidatePersistenceV1 {
         }
         if let Some(row) = sqlx::query(
             "SELECT result_envelope_sha256, review_id
-             FROM hermes_data.review_task_candidate_promotion_inbox
+             FROM makosh_data.review_task_candidate_promotion_inbox
              WHERE logical_owner_id=$1 AND result_message_id=$2",
         )
         .bind(&input.logical_owner_id)
@@ -528,7 +528,7 @@ impl ReviewTaskCandidatePersistenceV1 {
         .map_err(transition_error)?;
         update_review(&mut transaction, current.review_revision, &next).await?;
         sqlx::query(
-            "INSERT INTO hermes_data.review_task_candidate_promotion_inbox (
+            "INSERT INTO makosh_data.review_task_candidate_promotion_inbox (
                logical_owner_id, result_message_id, result_envelope_sha256,
                review_id, result_review_revision, processed_at_unix_millis
              ) VALUES ($1,$2,$3,$4,$5,$6)",
@@ -586,7 +586,7 @@ impl ReviewTaskCandidatePersistenceV1 {
         sqlx::query(
             "SELECT realtime_sequence, review_id, candidate_id, state,
                     promotion_status, review_revision, occurred_at_unix_millis
-             FROM hermes_data.review_task_candidate_realtime
+             FROM makosh_data.review_task_candidate_realtime
              WHERE logical_owner_id=$1 AND realtime_sequence>$2
              ORDER BY realtime_sequence LIMIT $3",
         )
@@ -614,7 +614,7 @@ impl ReviewTaskCandidatePersistenceV1 {
         }
         sqlx::query(
             "SELECT message_id, envelope_sha256, envelope_bytes
-             FROM hermes_data.review_task_candidate_outbox
+             FROM makosh_data.review_task_candidate_outbox
              WHERE logical_owner_id=$1 AND published_at_unix_millis IS NULL
              ORDER BY created_at_unix_millis, message_id LIMIT $2",
         )
@@ -643,7 +643,7 @@ impl ReviewTaskCandidatePersistenceV1 {
             return Err(ReviewTaskCandidatePersistenceErrorV1::InvalidInput);
         }
         let affected = sqlx::query(
-            "UPDATE hermes_data.review_task_candidate_outbox
+            "UPDATE makosh_data.review_task_candidate_outbox
              SET published_at_unix_millis=$1
              WHERE logical_owner_id=$2 AND message_id=$3 AND envelope_sha256=$4
                AND published_at_unix_millis IS NULL",
@@ -716,7 +716,7 @@ async fn insert_outbox(
     created_at_unix_millis: i64,
 ) -> Result<(), ReviewTaskCandidatePersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.review_task_candidate_outbox (
+        "INSERT INTO makosh_data.review_task_candidate_outbox (
            logical_owner_id, message_id, envelope_sha256, envelope_bytes,
            created_at_unix_millis
          ) VALUES ($1,$2,$3,$4,$5)",
@@ -738,7 +738,7 @@ async fn insert_realtime(
     occurred_at_unix_millis: i64,
 ) -> Result<(), ReviewTaskCandidatePersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.review_task_candidate_realtime (
+        "INSERT INTO makosh_data.review_task_candidate_realtime (
            logical_owner_id, review_id, candidate_id, state, promotion_status,
            review_revision, occurred_at_unix_millis
          ) VALUES ($1,$2,$3,$4,$5,$6,$7)",
@@ -897,10 +897,10 @@ fn array<const N: usize>(value: Vec<u8>) -> Result<[u8; N], ReviewTaskCandidateP
 }
 
 fn transition_error(
-    error: hermes_review_task_candidate_core::ReviewTaskCandidateTransitionErrorV1,
+    error: makosh_review_task_candidate_core::ReviewTaskCandidateTransitionErrorV1,
 ) -> ReviewTaskCandidatePersistenceErrorV1 {
     match error {
-        hermes_review_task_candidate_core::ReviewTaskCandidateTransitionErrorV1::RevisionConflict => {
+        makosh_review_task_candidate_core::ReviewTaskCandidateTransitionErrorV1::RevisionConflict => {
             ReviewTaskCandidatePersistenceErrorV1::RevisionConflict
         }
         _ => ReviewTaskCandidatePersistenceErrorV1::InvalidTransition,

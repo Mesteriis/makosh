@@ -14,4 +14,4 @@ pub use schema::{
     CommunicationsCallEvidenceSchemaErrorV1, append_communications_call_evidence_storage_v1,
 };
 
-pub const PACKAGE: &str = "hermes-communications-call-evidence-persistence";
+pub const PACKAGE: &str = "makosh-communications-call-evidence-persistence";

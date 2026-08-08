@@ -1,5 +1,5 @@
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_events_protocol::{
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
@@ -7,11 +7,11 @@ use hermes_events_protocol::{
     },
     validation::envelope::decode_envelope_v1,
 };
-use hermes_scheduler::{
+use makosh_scheduler::{
     SchedulerDispatchIdentityV1, SchedulerScheduleControlContractV1,
     SchedulerScheduleControlResultBuildErrorV1, build_schedule_control_result_envelope_v1,
 };
-use hermes_scheduler_protocol::v1::{
+use makosh_scheduler_protocol::v1::{
     EnsureOneShotScheduleV1, JobKindV1, SchedulerScheduleControlCommandV1,
     SchedulerScheduleControlOutcomeV1, SchedulerScheduleControlResultV1,
     scheduler_schedule_control_command_v1::Operation,

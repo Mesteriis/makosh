@@ -8,7 +8,7 @@
 
 - [ADR-0200: Модульная модель и изоляция runtime](ADR-0200-clean-room-module-model-and-runtime-isolation.md);
 - [ADR-0204: Встроенные integration-плагины и нейтральная граница контекста](ADR-0204-bundled-integration-plugins-and-provider-neutral-context-boundary.md);
-- [ADR-0207: Канонический реестр бизнес-доменов Hermes](ADR-0207-canonical-business-domain-registry.md);
+- [ADR-0207: Канонический реестр бизнес-доменов Макошь](ADR-0207-canonical-business-domain-registry.md);
 - [ADR-0225: Первый recovery-only Kernel slice и фазовые ворота](ADR-0225-first-production-recovery-only-kernel-slice-and-phase-gates.md).
 
 ## Контекст

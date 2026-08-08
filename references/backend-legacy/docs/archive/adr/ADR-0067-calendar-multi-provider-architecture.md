@@ -4,7 +4,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub needs a calendar module that treats events as first-class knowledge graph nodes, not as isolated time blocks. Events must connect to Personas, organizations, projects, documents, tasks, and emails. The system must support multiple calendar providers (Google, Microsoft, Apple, CalDAV, ICS, local) with multiple accounts per provider and multiple calendars per account.
+Макошь needs a calendar module that treats events as first-class knowledge graph nodes, not as isolated time blocks. Events must connect to Personas, organizations, projects, documents, tasks, and emails. The system must support multiple calendar providers (Google, Microsoft, Apple, CalDAV, ICS, local) with multiple accounts per provider and multiple calendars per account.
 
 ## Decision
 

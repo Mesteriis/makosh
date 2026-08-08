@@ -34,7 +34,7 @@ The complete previous Rust workspace is archived under
 `references/backend-legacy/`. It is excluded from production builds and may
 never be a dependency of the new backend.
 
-The new backend starts without a Cargo package. Before implementation, Hermes
+The new backend starts without a Cargo package. Before implementation, Макошь
 will establish an evidence-backed inventory of supported product capabilities,
 contracts, domain ownership, runtime lifecycle and fresh-schema requirements.
 Legacy code may be consulted only to recover a verified invariant or observable

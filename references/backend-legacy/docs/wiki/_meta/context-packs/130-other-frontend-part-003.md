@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src-tauri/icons/128x128@2x.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/128x128@2x.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/128x128@2x.png`
 - Size bytes / Размер в байтах: `32527`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -64,7 +64,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/src-tauri/icons/32x32.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/32x32.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/32x32.png`
 - Size bytes / Размер в байтах: `1823`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -73,7 +73,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/src-tauri/icons/Square107x107Logo.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/Square107x107Logo.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/Square107x107Logo.png`
 - Size bytes / Размер в байтах: `8925`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -82,7 +82,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/src-tauri/icons/Square142x142Logo.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/Square142x142Logo.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/Square142x142Logo.png`
 - Size bytes / Размер в байтах: `13632`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -91,7 +91,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/src-tauri/icons/Square150x150Logo.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/Square150x150Logo.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/Square150x150Logo.png`
 - Size bytes / Размер в байтах: `14518`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -100,7 +100,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/src-tauri/icons/Square284x284Logo.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/Square284x284Logo.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/Square284x284Logo.png`
 - Size bytes / Размер в байтах: `38596`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -109,7 +109,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/src-tauri/icons/Square30x30Logo.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/Square30x30Logo.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/Square30x30Logo.png`
 - Size bytes / Размер в байтах: `1683`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -118,7 +118,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/src-tauri/icons/Square310x310Logo.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/Square310x310Logo.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/Square310x310Logo.png`
 - Size bytes / Размер в байтах: `44550`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -127,7 +127,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/src-tauri/icons/Square44x44Logo.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/Square44x44Logo.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/Square44x44Logo.png`
 - Size bytes / Размер в байтах: `2879`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -136,7 +136,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/src-tauri/icons/Square71x71Logo.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/Square71x71Logo.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/Square71x71Logo.png`
 - Size bytes / Размер в байтах: `5332`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -145,7 +145,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/src-tauri/icons/Square89x89Logo.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/Square89x89Logo.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/Square89x89Logo.png`
 - Size bytes / Размер в байтах: `6934`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -154,7 +154,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/src-tauri/icons/StoreLogo.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/StoreLogo.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/StoreLogo.png`
 - Size bytes / Размер в байтах: `3356`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -163,7 +163,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/src-tauri/icons/icon.icns`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/icon.icns`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/icon.icns`
 - Size bytes / Размер в байтах: `2121887`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -172,7 +172,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/src-tauri/icons/icon.ico`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/icon.ico`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/icon.ico`
 - Size bytes / Размер в байтах: `56039`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`

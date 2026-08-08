@@ -9,12 +9,12 @@ import test from 'node:test';
 import { waitForChildExit } from './support.mjs';
 
 test('Kernel rejects a data directory that is readable by other users', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-permissions-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-permissions-'));
   try {
     await chmod(dataDir, 0o755);
     const result = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'status'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.notEqual(result.status, 0);
@@ -24,7 +24,7 @@ test('Kernel rejects a data directory that is readable by other users', async ()
   }
 });
 test('Kernel rejects symlinked data and control-store paths', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-kernel-symlink-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-kernel-symlink-'));
   const target = join(root, 'target');
   const linkedDataDir = join(root, 'linked-data');
   const dataDir = join(root, 'data');
@@ -33,7 +33,7 @@ test('Kernel rejects symlinked data and control-store paths', async () => {
     await symlink(target, linkedDataDir);
     const linkedDirectory = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', linkedDataDir, 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', linkedDataDir, 'status'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.notEqual(linkedDirectory.status, 0);
@@ -44,7 +44,7 @@ test('Kernel rejects symlinked data and control-store paths', async () => {
     await symlink(join(root, 'store-target'), join(dataDir, 'kernel-control-store.sqlite'));
     const linkedStore = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'status'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.equal(linkedStore.status, 0, linkedStore.stderr);
@@ -57,12 +57,12 @@ test('Kernel rejects symlinked data and control-store paths', async () => {
 
 
 test('Kernel keeps a corrupt control store in restricted recovery_only', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-corrupt-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-corrupt-'));
   try {
     await writeFile(join(dataDir, 'kernel-control-store.sqlite'), 'not a sqlite database', { mode: 0o600 });
     const result = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'status'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.equal(result.status, 0, result.stderr);
@@ -75,21 +75,21 @@ test('Kernel keeps a corrupt control store in restricted recovery_only', async (
 
 
 test('Installation anchor prevents a missing Store from becoming a new instance', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-anchor-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-anchor-'));
   const storePath = join(dataDir, 'kernel-control-store.sqlite');
   try {
     const first = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'status'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.equal(first.status, 0, first.stderr);
-    await stat(join(dataDir, '.hermes-installation-anchor-v1'));
+    await stat(join(dataDir, '.makosh-installation-anchor-v1'));
     await rm(storePath);
 
     const second = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'status'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.equal(second.status, 0, second.stderr);
@@ -103,28 +103,28 @@ test('Installation anchor prevents a missing Store from becoming a new instance'
 
 
 test('Offline restore requires confirmation, verifies the anchor and advances fences', async () => {
-  const sourceDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-restore-source-'));
-  const targetDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-restore-target-'));
+  const sourceDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-restore-source-'));
+  const targetDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-restore-target-'));
   try {
     const sourceBootstrap = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', sourceDir, 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', sourceDir, 'status'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.equal(sourceBootstrap.status, 0, sourceBootstrap.stderr);
     await copyFile(
-      join(sourceDir, '.hermes-installation-anchor-v1'),
-      join(targetDir, '.hermes-installation-anchor-v1'),
+      join(sourceDir, '.makosh-installation-anchor-v1'),
+      join(targetDir, '.makosh-installation-anchor-v1'),
     );
     await copyFile(
-      join(sourceDir, '.hermes-recovery-fence-v1'),
-      join(targetDir, '.hermes-recovery-fence-v1'),
+      join(sourceDir, '.makosh-recovery-fence-v1'),
+      join(targetDir, '.makosh-recovery-fence-v1'),
     );
     await writeFile(join(targetDir, 'kernel-control-store.sqlite'), 'corrupt store', { mode: 0o600 });
 
     const unconfirmed = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', targetDir, 'control-store', 'restore', '--source', join(sourceDir, 'kernel-control-store.sqlite')],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', targetDir, 'control-store', 'restore', '--source', join(sourceDir, 'kernel-control-store.sqlite')],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8', input: 'no\n' },
     );
     assert.notEqual(unconfirmed.status, 0);
@@ -132,7 +132,7 @@ test('Offline restore requires confirmation, verifies the anchor and advances fe
 
     const restored = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', targetDir, 'control-store', 'restore', '--source', join(sourceDir, 'kernel-control-store.sqlite')],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', targetDir, 'control-store', 'restore', '--source', join(sourceDir, 'kernel-control-store.sqlite')],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8', input: 'RESTORE\n' },
     );
     assert.equal(restored.status, 0, restored.stderr);
@@ -141,7 +141,7 @@ test('Offline restore requires confirmation, verifies the anchor and advances fe
 
     const status = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', targetDir, 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', targetDir, 'status'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.equal(status.status, 0, status.stderr);
@@ -155,18 +155,18 @@ test('Offline restore requires confirmation, verifies the anchor and advances fe
 
 
 test('Offline reset requires explicit data directory and confirmation', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-reset-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-reset-'));
   try {
     const bootstrap = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'status'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.equal(bootstrap.status, 0, bootstrap.stderr);
 
     const reset = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'control-store', 'reset'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'control-store', 'reset'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8', input: 'RESET\n' },
     );
     assert.equal(reset.status, 0, reset.stderr);
@@ -175,7 +175,7 @@ test('Offline reset requires explicit data directory and confirmation', async ()
 
     const missingDataDir = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', 'control-store', 'reset'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', 'control-store', 'reset'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8', input: 'RESET\n' },
     );
     assert.notEqual(missingDataDir.status, 0);
@@ -188,13 +188,13 @@ test('Offline reset requires explicit data directory and confirmation', async ()
 
 
 test('Offline reset replaces a corrupt control store only through a new-instance ceremony', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-reset-corrupt-'));
-  const anchorPath = join(dataDir, '.hermes-installation-anchor-v1');
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-reset-corrupt-'));
+  const anchorPath = join(dataDir, '.makosh-installation-anchor-v1');
   const storePath = join(dataDir, 'kernel-control-store.sqlite');
   try {
     const bootstrap = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'status'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.equal(bootstrap.status, 0, bootstrap.stderr);
@@ -203,7 +203,7 @@ test('Offline reset replaces a corrupt control store only through a new-instance
 
     const reset = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'control-store', 'reset'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'control-store', 'reset'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8', input: 'RESET\n' },
     );
     assert.equal(reset.status, 0, reset.stderr);
@@ -213,7 +213,7 @@ test('Offline reset replaces a corrupt control store only through a new-instance
 
     const status = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'status'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'status'],
       { cwd: new URL('../../', import.meta.url), encoding: 'utf8' },
     );
     assert.equal(status.status, 0, status.stderr);
@@ -226,10 +226,10 @@ test('Offline reset replaces a corrupt control store only through a new-instance
 
 
 test('Recovery IPC uses a bounded protobuf length-delimited frame without waiting for EOF', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-ipc-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-ipc-'));
   const kernel = spawn(
     'cargo',
-    ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'serve'],
+    ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'serve'],
     { cwd: new URL('../../', import.meta.url), stdio: 'pipe' },
   );
   try {
@@ -270,10 +270,10 @@ test('Recovery IPC uses a bounded protobuf length-delimited frame without waitin
 
 
 test('Kernel handles SIGTERM by closing the recovery socket within a bounded interval', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-sigterm-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-sigterm-'));
   const kernel = spawn(
     'cargo',
-    ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'serve'],
+    ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'serve'],
     { cwd: new URL('../../', import.meta.url), stdio: 'pipe' },
   );
   try {
@@ -309,10 +309,10 @@ test('Kernel handles SIGTERM by closing the recovery socket within a bounded int
 
 
 test('Recovery IPC isolates malformed clients and keeps the Kernel serving', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-ipc-error-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-ipc-error-'));
   const kernel = spawn(
     'cargo',
-    ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'serve'],
+    ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'serve'],
     { cwd: new URL('../../', import.meta.url), stdio: 'pipe' },
   );
   try {
@@ -359,10 +359,10 @@ test('Recovery IPC isolates malformed clients and keeps the Kernel serving', asy
 
 
 test('Kernel removes an owner-owned stale recovery socket after SIGKILL', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-stale-socket-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-stale-socket-'));
   const startKernel = () => spawn(
     'cargo',
-    ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'serve'],
+    ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'serve'],
     { cwd: new URL('../../', import.meta.url), stdio: 'pipe' },
   );
   const waitForSocket = (kernel) => new Promise((resolve, reject) => {
@@ -404,10 +404,10 @@ test('Kernel removes an owner-owned stale recovery socket after SIGKILL', async 
 
 
 test('Recovery IPC exports through SQLite backup and honours bounded shutdown', async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-kernel-export-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'makosh-kernel-export-'));
   const kernel = spawn(
     'cargo',
-    ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'serve'],
+    ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'serve'],
     { cwd: new URL('../../', import.meta.url), stdio: 'pipe' },
   );
   try {

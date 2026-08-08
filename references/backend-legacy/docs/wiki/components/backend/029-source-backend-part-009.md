@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-В русскую wiki добавляется страница `components/backend.md`, документирующая backend-компонент приложения `hermes-hub` на основе предоставленных обработчиков. Страница описывает группу API-обработчиков, относящихся к коммуникациям (отправка, перевод, шаблоны, локальное состояние), рабочим действиям (workflow actions), проверке согласованности и решениям. Факты взяты строго из встроенных исходных файлов данного чанка.
+В русскую wiki добавляется страница `components/backend.md`, документирующая backend-компонент приложения `makosh` на основе предоставленных обработчиков. Страница описывает группу API-обработчиков, относящихся к коммуникациям (отправка, перевод, шаблоны, локальное состояние), рабочим действиям (workflow actions), проверке согласованности и решениям. Факты взяты строго из встроенных исходных файлов данного чанка.
 
 ## Предложенные страницы
 
@@ -27,7 +27,7 @@ generated_by: code-wiki-ru
 
 ## Обзор
 
-Backend-компонент `hermes-hub` предоставляет REST API для работы с коммуникационными сообщениями, рабочими процессами, согласованностью данных и автоматизированными решениями. Ниже описаны обработчики, обнаруженные в данном срезе исходного кода.
+Backend-компонент `makosh` предоставляет REST API для работы с коммуникационными сообщениями, рабочими процессами, согласованностью данных и автоматизированными решениями. Ниже описаны обработчики, обнаруженные в данном срезе исходного кода.
 
 ## Обработчики API
 
@@ -147,7 +147,7 @@ Backend-компонент `hermes-hub` предоставляет REST API дл
     - `Archive` — архивировать сообщение (с проверкой допустимости перехода состояния).
   - Каждое действие выполняется в транзакции, результат записывается как событие `workflow.action_executed` в хранилище событий.
   - Обеспечена идемпотентность: если событие с `event_id = "workflow_action:{command_id}"` уже существует, возвращается сохранённый результат.
-  - Идентификатор актора извлекается из заголовка `x-hermes-actor-id` (по умолчанию `hermes-frontend`).
+  - Идентификатор актора извлекается из заголовка `x-makosh-actor-id` (по умолчанию `makosh-frontend`).
 
 ### Состояния рабочего процесса (`workflow_state`)
 
@@ -187,7 +187,7 @@ Backend-компонент `hermes-hub` предоставляет REST API дл
 - `backend/src/app/handlers/communications/sending/multilingual.rs` — эндпоинты `GET /v1/detect_language/:message_id`, `POST /v1/translate/:message_id`, `POST /v1/translate_attachment/:attachment_id`, `POST /v1/translate_thread`; константа `MAX_ATTACHMENT_TRANSLATION_SOURCE_CHARS` (64 000); отправка сигналов `message_translation`, `attachment_translation`, `thread_message_translation`; причины `"no LLM configured"` и `"translation runtime unavailable"`.
 - `backend/src/app/handlers/communications/sending/provider_send.rs` — эндпоинт `POST /v1/send`; требование `confirmed_provider_write`, вызов `send_email`, маппинг ошибок `CommunicationSendError` → `ApiError`.
 - `backend/src/app/handlers/communications/templates_status.rs` — эндпоинты шаблонов (CRUD, рендеринг, mail merge до 250 строк), блокировок (`GET /v1/blockers`), статуса (`GET /v1/status` с версией `1.0` и поверхностями), операций с хранилищем (`vault`).
-- `backend/src/app/handlers/communications/workflow_actions/` (включая `actions/`, `handler.rs`, `models.rs`, `response.rs`, `source.rs`, `validation.rs`) — эндпоинт `POST /v1/workflow_action`; идемпотентность через event store, транзакционное выполнение действий (`WorkflowActionKind`: 8 видов), загрузка сообщения‑источника, валидация и извлечение заголовка `x-hermes-actor-id`, сохранение результата как события в `EventStore`.
+- `backend/src/app/handlers/communications/workflow_actions/` (включая `actions/`, `handler.rs`, `models.rs`, `response.rs`, `source.rs`, `validation.rs`) — эндпоинт `POST /v1/workflow_action`; идемпотентность через event store, транзакционное выполнение действий (`WorkflowActionKind`: 8 видов), загрузка сообщения‑источника, валидация и извлечение заголовка `x-makosh-actor-id`, сохранение результата как события в `EventStore`.
 - `backend/src/app/handlers/communications/workflow_state.rs` — эндпоинты `PUT /v1/message_workflow_state/:message_id`, `GET /v1/message_workflow_state_counts`, `POST /v1/message_analyze/:message_id`; эвристический анализ с автоматическим переходом в `NeedsAction` при high score, обновление кандидатов на обзор знаний, структура ответа анализа.
 - `backend/src/app/handlers/consistency.rs` — эндпоинты `GET /v1/contradictions` и `PUT /v1/contradiction_review/:observation_id`; валидация лимита (1–100), использование `ContradictionReviewService`.
 - `backend/src/app/handlers/decisions/handlers.rs` — эндпоинты `GET /v1/decisions` и `PUT /v1/decision_review/:decision_id`; валидация лимита (1–100), парсинг `review_state` и `entity_kind`, аудит.

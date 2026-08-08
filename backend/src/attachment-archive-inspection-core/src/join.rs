@@ -187,7 +187,7 @@ pub fn archive_inspection_rejection_evidence_id_v1(
     rejection: ArchiveInspectionRejectionV1,
 ) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-archive-inspection.rejection.v1\0");
+    hasher.update(b"makosh.attachment-archive-inspection.rejection.v1\0");
     hasher.update(request.run_id);
     hasher.update(request.attachment_anchor_id);
     hasher.update([rejection_code(rejection)]);

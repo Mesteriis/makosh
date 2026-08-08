@@ -56,7 +56,7 @@ test('client contract keeps status separate from bounded private content', async
     ),
     readFile(
       new URL(
-        'src/attachment-text-extraction-api/proto/hermes/attachment_text_extraction/v1/text_extraction.proto',
+        'src/attachment-text-extraction-api/proto/makosh/attachment_text_extraction/v1/text_extraction.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -72,7 +72,7 @@ test('client contract keeps status separate from bounded private content', async
   assert.match(manifest, /surface = "contract"/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications|attachment-security|blob|kernel)/,
+    /makosh-(?:communications|attachment-security|blob|kernel)/,
   );
   assert.match(proto, /rpc Start/);
   assert.match(proto, /rpc Get/);
@@ -104,7 +104,7 @@ test('target-owned ingress carries event custody without caller-selected authori
     ),
     readFile(
       new URL(
-        'src/attachment-text-extraction-ingress/proto/hermes/attachment_text_extraction/ingress/v1/custody_delegation.proto',
+        'src/attachment-text-extraction-ingress/proto/makosh/attachment_text_extraction/ingress/v1/custody_delegation.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -123,7 +123,7 @@ test('target-owned ingress carries event custody without caller-selected authori
   assert.match(manifest, /surface = "contract"/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications|attachment-security|blob|kernel|attachment-text-extraction-(?:api|core|runtime|persistence|assembly))/,
+    /makosh-(?:communications|attachment-security|blob|kernel|attachment-text-extraction-(?:api|core|runtime|persistence|assembly))/,
   );
   assert.match(proto, /message RequestAttachmentTextCustodyDelegationV1/);
   assert.match(proto, /message AttachmentTextCustodyDelegatedV1/);
@@ -165,10 +165,10 @@ test('pure core owns join and lifecycle without transport storage or parsers', a
     ),
   ]);
 
-  assert.match(manifest, /hermes-attachment-text-extraction-api/);
+  assert.match(manifest, /makosh-attachment-text-extraction-api/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications|attachment-security|blob|events|runtime|storage|kernel)|\b(?:pdf|docx|ocr|sqlx|tokio)\s*=/,
+    /makosh-(?:communications|attachment-security|blob|events|runtime|storage|kernel)|\b(?:pdf|docx|ocr|sqlx|tokio)\s*=/,
   );
   assert.match(join, /AttachmentTextCustodyDelegationIntentV1/);
   const intent = join.slice(
@@ -183,7 +183,7 @@ test('pure core owns join and lifecycle without transport storage or parsers', a
   assert.match(content, /visible_attachment_text_v1/);
   assert.doesNotMatch(
     `${source}\n${join}\n${lifecycle}\n${content}`,
-    /TcpStream|File::|sqlx|postgres|nats|jetstream|hermes_communications|hermes_attachment_security/,
+    /TcpStream|File::|sqlx|postgres|nats|jetstream|makosh_communications|makosh_attachment_security/,
   );
 });
 
@@ -226,7 +226,7 @@ test('parser contract and adapters are five isolated byte-only units', async () 
     assert.match(manifest, /owner = "attachment_text_extraction"/);
     assert.doesNotMatch(
       manifest,
-      /hermes-(?:communications|attachment-security|blob|events|runtime|storage|kernel|attachment-text-extraction-(?:api|core|persistence|runtime|assembly))/,
+      /makosh-(?:communications|attachment-security|blob|events|runtime|storage|kernel|attachment-text-extraction-(?:api|core|persistence|runtime|assembly))/,
     );
   }
   assert.match(contract, /detect_attachment_text_parser_v1/);
@@ -277,11 +277,11 @@ test('text extraction persistence owns exact joins and fenced jobs without trans
   assert.match(manifest, /role = "workflow"/);
   assert.match(manifest, /owner = "attachment_text_extraction"/);
   assert.match(manifest, /surface = "persistence"/);
-  assert.match(manifest, /hermes-attachment-text-extraction-core/);
-  assert.match(manifest, /hermes-storage-protocol/);
+  assert.match(manifest, /makosh-attachment-text-extraction-core/);
+  assert.match(manifest, /makosh-storage-protocol/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications|attachment-security|blob|events|runtime|kernel)|attachment-text-extraction-(?:plain|pdf|docx|ocr|runtime|assembly)/,
+    /makosh-(?:communications|attachment-security|blob|events|runtime|kernel)|attachment-text-extraction-(?:plain|pdf|docx|ocr|runtime|assembly)/,
   );
   for (const table of [
     'attachment_text_extraction_runs',
@@ -294,7 +294,7 @@ test('text extraction persistence owns exact joins and fenced jobs without trans
     'attachment_text_extraction_artifacts',
     'attachment_text_extraction_realtime',
   ]) {
-    assert.match(schema, new RegExp(`hermes_data\\.${table}`));
+    assert.match(schema, new RegExp(`makosh_data\\.${table}`));
   }
   assert.doesNotMatch(
     schema,
@@ -313,7 +313,7 @@ test('text extraction persistence owns exact joins and fenced jobs without trans
   assert.match(custody, /candidate_declared_size != payload\.declared_size/);
   assert.match(custody, /candidate_receipt_sha256 != id32_input\(&payload\.receipt_sha256\)/);
   assert.match(custody, /attachment_text_extraction_scan_candidates c/);
-  assert.doesNotMatch(custody, /DurableEnvelopeV1|hermes_events_protocol|prost::Message/);
+  assert.doesNotMatch(custody, /DurableEnvelopeV1|makosh_events_protocol|prost::Message/);
   assert.match(jobs, /FOR UPDATE SKIP LOCKED/);
   assert.match(jobs, /runtime_generation/);
   assert.match(jobs, /grant_epoch/);
@@ -344,12 +344,12 @@ test('managed runtime composes exact Event Blob parser client SSE and OCR resour
 
   assert.match(manifest, /role = "workflow"/);
   assert.match(manifest, /surface = "runtime"/);
-  assert.match(manifest, /hermes-events-jetstream/);
-  assert.match(manifest, /hermes-blob-client/);
-  assert.match(manifest, /hermes-attachment-text-extraction-persistence/);
+  assert.match(manifest, /makosh-events-jetstream/);
+  assert.match(manifest, /makosh-blob-client/);
+  assert.match(manifest, /makosh-attachment-text-extraction-persistence/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications-runtime|attachment-security-engine|kernel)/,
+    /makosh-(?:communications-runtime|attachment-security-engine|kernel)/,
   );
   assert.match(admission, /ModuleKindV1::Workflow/);
   assert.match(admission, /ATTACHMENT_TEXT_EXTRACTION_CONTENT_CONNECT_PATH_V1/);
@@ -407,7 +407,7 @@ test('release assembly is a separate unsigned build unit and never launches runt
 
   assert.match(manifest, /role = "workflow"/);
   assert.match(manifest, /surface = "assembly"/);
-  assert.match(manifest, /hermes-attachment-text-extraction-runtime/);
+  assert.match(manifest, /makosh-attachment-text-extraction-runtime/);
   assert.match(source, /attachment_text_extraction_module_descriptor_v1/);
   assert.match(source, /attachment_text_extraction_storage_bundle_v1/);
   assert.match(source, /artifact_kind: "module_runtime"/);
@@ -446,7 +446,7 @@ test('OCR native release build is pinned static reproducible and system-fallback
   assert.match(build, /-DDISABLE_CURL=ON/);
   assert.match(build, /otool -L/);
   assert.match(build, /echo "\$\{RUNNER_NAME\}:"/);
-  assert.match(build, /-ffile-prefix-map=\$\{isolated_build_root\}=\/usr\/src\/hermes-ocr\/build/);
+  assert.match(build, /-ffile-prefix-map=\$\{isolated_build_root\}=\/usr\/src\/makosh-ocr\/build/);
   assert.match(build, /grep -Ev '\^\(\/usr\/lib\/\|\/System\/Library\/\)'/);
   assert.match(build, /--verify-reproducibility/);
   assert.match(build, /cmp -s/);
@@ -518,5 +518,5 @@ test('managed conformance stages exact OCR resources through the workflow releas
     harness,
     /managed_attachment_text_extraction_completes_through_gateway_and_replays_after_restart/,
   );
-  assert.match(harness, /HERMES_ATTACHMENT_TEXT_EXTRACTION_OCR_RUNNER/);
+  assert.match(harness, /MAKOSH_ATTACHMENT_TEXT_EXTRACTION_OCR_RUNNER/);
 });

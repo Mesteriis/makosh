@@ -1,5 +1,5 @@
 use chrono::Utc;
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use serde_json::json;
 
 use super::*;

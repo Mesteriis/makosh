@@ -3,7 +3,7 @@
 use std::collections::BTreeSet;
 use std::fmt;
 
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 
 use crate::{subjects::DurableSubjectV1, topology::ConsumerSpecV1};
 
@@ -272,7 +272,7 @@ fn valid_contract_reference(value: &ContractReferenceV1) -> bool {
 fn contract_subject_matches(consumer: &ConsumerSpecV1, contract: &ContractReferenceV1) -> bool {
     consumer.filter_subject()
         == format!(
-            "hermes.{}.v1.{}.{}.v{}",
+            "makosh.{}.v1.{}.{}.v{}",
             consumer.stream_kind().subject_token(),
             contract.owner,
             contract.name,
@@ -284,7 +284,7 @@ fn contract_subject_matches(consumer: &ConsumerSpecV1, contract: &ContractRefere
 mod tests {
     use std::time::Duration;
 
-    use hermes_runtime_protocol::v1::ContractReferenceV1;
+    use makosh_runtime_protocol::v1::ContractReferenceV1;
 
     use super::*;
     use crate::topology::{ConsumerBudgetV1, StreamKindV1};
@@ -294,7 +294,7 @@ mod tests {
         let consumer = ConsumerSpecV1::new(
             StreamKindV1::Observation,
             "consumer",
-            "hermes.observation.v1.communications.communication_observed.v1",
+            "makosh.observation.v1.communications.communication_observed.v1",
             ConsumerBudgetV1::new(1, 1, Duration::from_secs(1)).expect("budget"),
         )
         .expect("consumer");

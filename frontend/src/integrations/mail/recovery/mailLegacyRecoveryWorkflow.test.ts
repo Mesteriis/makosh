@@ -1,7 +1,7 @@
 import {
 	MailAccountReadinessV1,
 	MailCredentialBindingStateV1,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
 import { describe, expect, it, vi } from 'vitest'
 
 import { MailLegacyRecoveryWorkflowV1 } from './mailLegacyRecoveryWorkflow'

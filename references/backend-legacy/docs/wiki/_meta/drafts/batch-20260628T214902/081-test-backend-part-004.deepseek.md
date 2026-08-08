@@ -1,6 +1,6 @@
 ## Summary / Резюме
 
-Создать/обновить страницу `operations/backend-tests.md` в русской Obsidian‑wiki, документирующую интеграционные backend‑тесты из репозитория `hermes-hub`. На основе предоставленных исходных файлов описаны структура тестовых наборов, ключевые проверяемые сценарии и используемая тестовая инфраструктура. Страница охватывает тесты API противоречий, движка решений, хранилища решений, API решений, обработки документов, API обработки документов, импорта документов, управления почтовыми аккаунтами и настройки почтовых аккаунтов.
+Создать/обновить страницу `operations/backend-tests.md` в русской Obsidian‑wiki, документирующую интеграционные backend‑тесты из репозитория `makosh`. На основе предоставленных исходных файлов описаны структура тестовых наборов, ключевые проверяемые сценарии и используемая тестовая инфраструктура. Страница охватывает тесты API противоречий, движка решений, хранилища решений, API решений, обработки документов, API обработки документов, импорта документов, управления почтовыми аккаунтами и настройки почтовых аккаунтов.
 
 ## Proposed pages / Предлагаемые страницы
 
@@ -11,7 +11,7 @@
 
 ## Обзор
 
-Backend‑тесты в `hermes-hub` — это интеграционные тесты, работающие с временной базой PostgreSQL через `testkit::context::TestContext`. Тесты проверяют бизнес‑логику через HTTP‑эндпоинты (используя `axum::Router`) и прямые вызовы хранилищ (`Store`), включая запись в таблицы БД, создание наблюдений (`observation_links`, `observations`, `observation_kind_definitions`), элементов ревью (`review_items`), проекции графа (`graph_nodes`, `graph_edges`, `graph_evidence`) и аудит‑логи (`api_audit_log`).
+Backend‑тесты в `makosh` — это интеграционные тесты, работающие с временной базой PostgreSQL через `testkit::context::TestContext`. Тесты проверяют бизнес‑логику через HTTP‑эндпоинты (используя `axum::Router`) и прямые вызовы хранилищ (`Store`), включая запись в таблицы БД, создание наблюдений (`observation_links`, `observations`, `observation_kind_definitions`), элементов ревью (`review_items`), проекции графа (`graph_nodes`, `graph_edges`, `graph_evidence`) и аудит‑логи (`api_audit_log`).
 
 Все тесты изолированы: каждый генерирует уникальный суффикс через наносекунды `SystemTime`, чтобы избежать коллизий между параллельными запусками.
 
@@ -20,8 +20,8 @@ Backend‑тесты в `hermes-hub` — это интеграционные т�
 - **`TestContext::new().await`** — создаёт временную PostgreSQL и возвращает строку подключения.
 - **`app_and_pool(database_url)`** / **`live_context(test_name)`** — создают `PgPool` и экземпляр `axum::Router` с маршрутами `build_router_with_database`, сконфигурированный с тестовым секретом (`LOCAL_API_TOKEN`).
 - **`unique_suffix() -> u128`** — уникальный суффикс на основе `SystemTime::now().duration_since(UNIX_EPOCH).as_nanos()`.
-- **`get_request_with_token(uri, token)`** — `GET`‑запрос с заголовком `x-hermes-secret`.
-- **`json_put_request(uri, value, token)`** — `PUT`‑запрос с JSON‑телом и заголовками `Content-Type: application/json` и `x-hermes-secret`.
+- **`get_request_with_token(uri, token)`** — `GET`‑запрос с заголовком `x-makosh-secret`.
+- **`json_put_request(uri, value, token)`** — `PUT`‑запрос с JSON‑телом и заголовками `Content-Type: application/json` и `x-makosh-secret`.
 - **`json_body(response) -> Value`** — десериализация тела ответа в `serde_json::Value`.
 - **`path_segment(value)`** — URL‑кодирование идентификатора для подстановки в путь запроса.
 - **`quiesce_*`** — вспомогательные функции для «заморозки» состояний обработки документов (перевод в `skipped`), чтобы изолировать тестируемые задания.
@@ -50,7 +50,7 @@ Backend‑тесты в `hermes-hub` — это интеграционные т�
 - **`put_contradiction_review_updates_review_state_with_observation_trail`**
   - Создаёт наблюдение противоречия.
   - Выполняет `PUT /api/v1/contradictions/{observation_id}/review` с JSON `{ "review_state": "user_confirmed", "resolution": "confirmed from source review" }`.
-  - Ожидает `200 OK` и тело ответа с `observation_id`, `review_state = "user_confirmed"`, `reviewed_by = "hermes-frontend"`, `resolution`.
+  - Ожидает `200 OK` и тело ответа с `observation_id`, `review_state = "user_confirmed"`, `reviewed_by = "makosh-frontend"`, `resolution`.
   - Проверяет, что в `contradiction_observations` обновлены `review_state` и `resolution`.
   - Проверяет, что количество записей в `person_facts` с `value` равным `new_claim` остаётся равным 0 (перезапись памяти не происходит).
   - Проверяет создание записи‑наблюдения `review_transition` в `observation_links` для домена `consistency`, `entity_kind = 'contradiction_observation'`.
@@ -78,7 +78,7 @@ Unit‑тесты для `DecisionEngine::detect_candidates`.
     - `review_state = DecisionReviewState::Suggested`
     - `evidence_source_kind = DecisionEvidenceSourceKind::Communication`
     - `evidence_source_id = "message:decision-engine"`
-    - один элемент в `impacted_entities` с `entity_kind = DecisionEntityKind::Project` и `entity_id = "project:v1:hermes"`
+    - один элемент в `impacted_entities` с `entity_kind = DecisionEntityKind::Project` и `entity_id = "project:v1:makosh"`
   - Вызывает `to_decision_draft()` и проверяет возвращаемые черновики решения, доказательства и затронутые сущности (включая `impact_type = "decision_context"`, `metadata` с `engine: "decision"`).
 
 - **`decision_engine_ignores_non_decision_evidence`**
@@ -199,7 +199,7 @@ Unit‑тесты для `DecisionEngine::detect_candidates`.
 Файл: `backend/tests/document_processing_api.rs` (полный файл обрезан).
 
 - **`get_document_processing_jobs_rejects_missing_local_api_secret`**
-  - Запрос без секрета возвращает `403 FORBIDDEN`, тело: `{ "error": "invalid_api_secret", "message": "missing or invalid x-hermes-secret header" }`.
+  - Запрос без секрета возвращает `403 FORBIDDEN`, тело: `{ "error": "invalid_api_secret", "message": "missing or invalid x-makosh-secret header" }`.
 
 - **`get_document_processing_for_missing_document_returns_404`**
   - Запрос для несуществующего `document_id` возвращает `404 NOT_FOUND`, тело: `{ "error": "document_processing_store_error", "message": "document processing job was not found" }`.
@@ -212,7 +212,7 @@ Unit‑тесты для `DecisionEngine::detect_candidates`.
   - Создаёт документ, вручную делает задание `extract_text` проваленным.
   - `POST /api/v1/document-processing/jobs/{job_id}/retry` с `{ "command_id": "..." }`.
   - Ответ `200 OK`: `job_id`, `status = "queued"`, `event_id = "document_processing_retry:{command_id}"`.
-  - Проверяет запись в `api_audit_log`: `operation = "document_processing.job.retry"`, `actor_id = "hermes-frontend"`, `method = "POST"`, `path_template = "/api/v1/document-processing/jobs/{job_id}/retry"`, `target_kind = "document_processing_job"`, `target_id = job_id`.
+  - Проверяет запись в `api_audit_log`: `operation = "document_processing.job.retry"`, `actor_id = "makosh-frontend"`, `method = "POST"`, `path_template = "/api/v1/document-processing/jobs/{job_id}/retry"`, `target_kind = "document_processing_job"`, `target_id = job_id`.
   - Проверяет observation‑связь `retry_command` с `kind.code = "DOCUMENT_PROCESSING_JOB_STATUS"`.
 
 - **`post_document_processing_job_retry_rejects_non_failed_job_with_stable_body`**
@@ -295,7 +295,7 @@ Unit‑тесты для `DecisionEngine::detect_candidates`.
   - `GmailOAuthSetupRequest::new` по умолчанию включает scopes: `gmail.readonly`, `gmail.send`, `calendar.readonly`, `contacts.readonly`.
 
 - **`app_config_accepts_google_oauth_client_credentials`**
-  - `AppConfig::from_pairs` с `HERMES_GOOGLE_OAUTH_CLIENT_ID` и `HERMES_GOOGLE_OAUTH_CLIENT_SECRET` корректно сохраняет и возвращает эти значения (секрет оборачивается в `SecretString`).
+  - `AppConfig::from_pairs` с `MAKOSH_GOOGLE_OAUTH_CLIENT_ID` и `MAKOSH_GOOGLE_OAUTH_CLIENT_SECRET` корректно сохраняет и возвращает эти значения (секрет оборачивается в `SecretString`).
 
 - **`app_config_accepts_google_oauth_installed_client_json`**
   - `AppConfig` парсит JSON с `"installed": { client_id, client_secret, auth_uri, token_uri, redirect_uris }`.

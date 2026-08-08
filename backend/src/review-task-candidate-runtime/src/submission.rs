@@ -1,15 +1,15 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{CommandMetadataV1, ContractRefV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_review_task_candidate_api::{
+use makosh_review_task_candidate_api::{
     REVIEW_TASK_CANDIDATE_MODULE_ID_V1, REVIEW_TASK_CANDIDATE_SUBMISSION_CAPABILITY_ID_V1,
     ReviewTaskCandidateEnvelopeContextV1,
     build_review_task_candidate_submission_rejected_outbox_record_v1,
@@ -20,17 +20,17 @@ use hermes_review_task_candidate_api::{
         TaskCandidateReviewSubmissionRejectedV1, TaskCandidateReviewSubmittedV1,
     },
 };
-use hermes_review_task_candidate_core::{
+use makosh_review_task_candidate_core::{
     ReviewTaskCandidateDraftV1, ReviewTaskCandidateTimestampV1,
 };
-use hermes_review_task_candidate_persistence::{
+use makosh_review_task_candidate_persistence::{
     CompleteReviewTaskCandidateSubmissionV1, PersistReviewTaskCandidateMaterializationV1,
     RejectReviewTaskCandidateSubmissionV1, ReserveReviewTaskCandidateSubmissionOutcomeV1,
     ReserveReviewTaskCandidateSubmissionV1, ReviewTaskCandidateBlobReceiptV1,
     ReviewTaskCandidateOutboxRecordV1, ReviewTaskCandidatePersistenceErrorV1,
     ReviewTaskCandidatePersistenceV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::ContractReferenceV1,
 };
@@ -220,7 +220,7 @@ pub(crate) async fn consume_review_task_candidate_submission_once_v1(
         assignee_label_hint: content.assignee_label_hint,
         submitted_at: timestamp(runtime.now_unix_millis),
     };
-    let review_id = hermes_review_task_candidate_core::derive_review_task_candidate_id_v1(
+    let review_id = makosh_review_task_candidate_core::derive_review_task_candidate_id_v1(
         runtime.logical_owner_id,
         &command.candidate_id,
         &command.candidate_digest,
@@ -269,19 +269,19 @@ pub(crate) async fn consume_review_task_candidate_submission_once_v1(
 
 struct MaterializedReviewTaskCandidateV1 {
     bytes: zeroize::Zeroizing<Vec<u8>>,
-    cleanup: hermes_review_task_candidate_persistence::ReviewTaskCandidateBlobCleanupV1,
+    cleanup: makosh_review_task_candidate_persistence::ReviewTaskCandidateBlobCleanupV1,
 }
 
 enum MaterializationReadOutcomeV1 {
     Ready(MaterializedReviewTaskCandidateV1),
-    Invalid(hermes_review_task_candidate_persistence::ReviewTaskCandidateBlobCleanupV1),
+    Invalid(makosh_review_task_candidate_persistence::ReviewTaskCandidateBlobCleanupV1),
 }
 
 async fn materialize_or_read(
     persistence: &ReviewTaskCandidatePersistenceV1,
     channel: &mut ManagedControlChannelV2<UnixStream>,
     dispatcher: &mut dyn ManagedControlRequestDispatcherV2<UnixStream>,
-    submission: &hermes_review_task_candidate_persistence::PersistedReviewTaskCandidateSubmissionV1,
+    submission: &makosh_review_task_candidate_persistence::PersistedReviewTaskCandidateSubmissionV1,
     now_unix_millis: i64,
 ) -> Result<MaterializationReadOutcomeV1, ReviewTaskCandidateSubmissionErrorV1> {
     let cleanup = if let Some(cleanup) = &submission.materialization {
@@ -321,7 +321,7 @@ async fn cleanup_submission(
     persistence: &ReviewTaskCandidatePersistenceV1,
     channel: &mut ManagedControlChannelV2<UnixStream>,
     dispatcher: &mut dyn ManagedControlRequestDispatcherV2<UnixStream>,
-    submission: &hermes_review_task_candidate_persistence::PersistedReviewTaskCandidateSubmissionV1,
+    submission: &makosh_review_task_candidate_persistence::PersistedReviewTaskCandidateSubmissionV1,
     accepted: bool,
     now_unix_millis: i64,
 ) -> Result<(), ReviewTaskCandidateSubmissionErrorV1> {
@@ -349,7 +349,7 @@ struct CleanupMaterializationV1<'a> {
     submission_message_id: [u8; 16],
     submission_id: [u8; 16],
     materialization:
-        Option<&'a hermes_review_task_candidate_persistence::ReviewTaskCandidateBlobCleanupV1>,
+        Option<&'a makosh_review_task_candidate_persistence::ReviewTaskCandidateBlobCleanupV1>,
     accepted: bool,
     now_unix_millis: i64,
 }
@@ -546,7 +546,7 @@ fn event_error(_: RuntimePullDeliveryErrorV1) -> ReviewTaskCandidateSubmissionEr
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_review_task_candidate_api::{
+    use makosh_review_task_candidate_api::{
         ReviewTaskCandidateEnvelopeContextV1, build_submit_review_task_candidate_outbox_record_v1,
         wire::ReviewTargetBoundCandidateReceiptV1,
     };
@@ -570,7 +570,7 @@ mod tests {
             },
             1_800_000_100,
             &ReviewTaskCandidateEnvelopeContextV1 {
-                module_id: "hermes-communication-task-candidate-runtime".to_owned(),
+                module_id: "makosh-communication-task-candidate-runtime".to_owned(),
                 runtime_instance_id: "runtime-1".to_owned(),
                 runtime_generation: 1,
                 recorded_at_unix_seconds: 1_800_000_000,

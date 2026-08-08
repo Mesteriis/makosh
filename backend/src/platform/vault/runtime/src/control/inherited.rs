@@ -5,7 +5,7 @@ use std::os::fd::{AsRawFd, FromRawFd, RawFd};
 use std::os::unix::net::UnixStream;
 use std::time::Duration;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     DescribeManagedRuntimeRequestV1, ManagedRuntimeControlRequestV1,
     ManagedRuntimeControlResponseV1, ManagedRuntimeReadyRequestV1,
     managed_runtime_control_request_v1::Operation,

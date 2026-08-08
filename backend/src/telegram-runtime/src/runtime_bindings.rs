@@ -2,11 +2,11 @@ use std::fs::{self, DirBuilder};
 use std::os::unix::fs::{DirBuilderExt, MetadataExt};
 use std::path::{Path, PathBuf};
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedIntegrationRuntimeConfigurationV1, ManagedRuntimeArtifactBindingV1, RuntimeArtifactUseV1,
 };
-use hermes_secure_file::{SecureReadPolicy, read};
-use hermes_telegram_runtime::admission::{
+use makosh_secure_file::{SecureReadPolicy, read};
+use makosh_telegram_runtime::admission::{
     TELEGRAM_STATE_LAYOUT_REVISION_V1, TELEGRAM_TDJSON_ARTIFACT_ID, TELEGRAM_TGCALLS_ARTIFACT_ID,
 };
 use sha2::{Digest, Sha256};
@@ -146,11 +146,11 @@ mod tests {
     use std::path::{Path, PathBuf};
     use std::time::{SystemTime, UNIX_EPOCH};
 
-    use hermes_runtime_protocol::v1::{
+    use makosh_runtime_protocol::v1::{
         IntegrationStateRootV1, ManagedIntegrationRuntimeConfigurationV1,
         ManagedRuntimeArtifactBindingV1, RuntimeArtifactUseV1,
     };
-    use hermes_telegram_runtime::admission::{
+    use makosh_telegram_runtime::admission::{
         TELEGRAM_TDJSON_ARTIFACT_ID, TELEGRAM_TGCALLS_ARTIFACT_ID,
     };
     use sha2::{Digest, Sha256};
@@ -163,7 +163,7 @@ mod tests {
         let tdjson = write_artifact(&directory, "libtdjson.dylib", b"exact-tdlib");
         let tgcalls = write_artifact(
             &directory,
-            "libhermes_tgcalls_bridge.dylib",
+            "libmakosh_tgcalls_bridge.dylib",
             b"exact-tgcalls",
         );
         let state_root = directory.join("state");
@@ -204,7 +204,7 @@ mod tests {
         let tdjson = write_artifact(&directory, "libtdjson.dylib", b"exact-tdlib");
         let tgcalls = write_artifact(
             &directory,
-            "libhermes_tgcalls_bridge.dylib",
+            "libmakosh_tgcalls_bridge.dylib",
             b"exact-tgcalls",
         );
         let state_root = directory.join("state");
@@ -294,7 +294,7 @@ mod tests {
             .expect("time")
             .as_nanos();
         std::env::temp_dir().join(format!(
-            "hermes-telegram-runtime-bindings-{label}-{}-{nonce}",
+            "makosh-telegram-runtime-bindings-{label}-{}-{nonce}",
             std::process::id()
         ))
     }

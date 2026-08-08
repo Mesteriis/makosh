@@ -17,7 +17,7 @@ storage и test-layout guards существуют, code-shape и lifecycle evid
 - [ADR-0212: Топология Cargo packages и изоляция пересборки модулей](ADR-0212-crate-topology-and-compile-isolation.md);
 - [ADR-0224: Storage Control Plane, owner-scoped PostgreSQL и lifecycle migrations](ADR-0224-storage-control-plane-owner-scoped-postgresql-and-migration-lifecycle.md).
 
-Этот ADR определяет, как писать новый backend-код Hermes внутри уже принятых
+Этот ADR определяет, как писать новый backend-код Макошь внутри уже принятых
 module и Cargo boundaries. Он применяется к Kernel, platform, domains,
 integrations, workflows, engines, services и test support. Он не разблокирует
 запрещённые ADR-0208 domains или projections.
@@ -31,7 +31,7 @@ god trait. Integration может иметь отдельный runtime, но т
 Communications implementation для каждого provider action. В обоих случаях
 изоляция существует только в дереве каталогов.
 
-Hermes нужен единый engineering contract, который одновременно сохраняет:
+Макошь нужен единый engineering contract, который одновременно сохраняет:
 
 - ownership и независимые причины изменения;
 - самостоятельную сборку, тестирование и lifecycle модулей;
@@ -119,7 +119,7 @@ capability может быть функционально недоступен, 
 | Owner | Разрешённые compile-time dependencies |
 |---|---|
 | Domain | собственные packages и необходимые platform protocols |
-| Integration | собственные packages, platform protocols и точный `hermes-communications-ingress` |
+| Integration | собственные packages, platform protocols и точный `makosh-communications-ingress` |
 | Workflow | public contracts участников, собственные state/lifecycle packages и platform protocols |
 | Engine | pure mechanism contracts; adapters только при отдельной реальной ответственности |
 | Kernel | platform и gateway protocols без owner-specific module packages |
@@ -194,7 +194,7 @@ api + core + adapters + persistence ← integration runtime
 
 Integration не импортирует business domain. Единственное разрешённое
 compile-time пересечение — neutral evidence contract
-`hermes-communications-ingress`. Если Communications runtime недоступен,
+`makosh-communications-ingress`. Если Communications runtime недоступен,
 provider operational capability продолжает работать настолько, насколько это
 позволяют provider и local state, а observations ждут bounded durable delivery.
 

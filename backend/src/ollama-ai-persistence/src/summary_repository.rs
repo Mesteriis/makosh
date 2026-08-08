@@ -1,5 +1,5 @@
-use hermes_ai_contracts::wire::AiProviderSummaryGenerationResultV1;
-use hermes_ollama_ai_core::{OllamaAiRunStateV1, OllamaSummaryRunV1};
+use makosh_ai_contracts::wire::AiProviderSummaryGenerationResultV1;
+use makosh_ollama_ai_core::{OllamaAiRunStateV1, OllamaSummaryRunV1};
 use sqlx::{Row, postgres::PgRow};
 
 use crate::{
@@ -17,7 +17,7 @@ impl OllamaAiPersistenceV1 {
     ) -> Result<OllamaSummaryPersistenceOutcomeV1, OllamaAiPersistenceErrorV1> {
         validate_summary_accepted(logical_owner_id, &run)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.ollama_ai_summary_runs (
+            "INSERT INTO makosh_data.ollama_ai_summary_runs (
                logical_owner_id, request_id, request_digest, settings_revision,
                state_revision, run_state
              ) VALUES ($1,$2,$3,$4,$5,$6)
@@ -85,7 +85,7 @@ impl OllamaAiPersistenceV1 {
         validate_summary_transition(&current, &transition)?;
         let result = transition.next_run.terminal_result.as_ref();
         let updated = sqlx::query(
-            "UPDATE hermes_data.ollama_ai_summary_runs SET
+            "UPDATE makosh_data.ollama_ai_summary_runs SET
                state_revision=$4, run_state=$5, selected_model_revision_sha256=$6,
                result_summary_utf8=$7, result_resolved_language=$8,
                result_resolved_length=$9, result_model_revision_sha256=$10,
@@ -142,14 +142,14 @@ const SELECT_RUN: &str = "SELECT logical_owner_id, request_id, request_digest, s
  result_resolved_language, result_resolved_length, result_model_revision_sha256,
  result_input_tokens, result_output_tokens, result_terminal_status, result_completeness,
  result_confidence_basis_points, result_provider_settings_revision
- FROM hermes_data.ollama_ai_summary_runs WHERE logical_owner_id=$1 AND request_id=$2";
+ FROM makosh_data.ollama_ai_summary_runs WHERE logical_owner_id=$1 AND request_id=$2";
 const SELECT_RUN_FOR_UPDATE: &str =
     "SELECT logical_owner_id, request_id, request_digest, settings_revision,
  state_revision, run_state, selected_model_revision_sha256, result_summary_utf8,
  result_resolved_language, result_resolved_length, result_model_revision_sha256,
  result_input_tokens, result_output_tokens, result_terminal_status, result_completeness,
  result_confidence_basis_points, result_provider_settings_revision
- FROM hermes_data.ollama_ai_summary_runs WHERE logical_owner_id=$1 AND request_id=$2 FOR UPDATE";
+ FROM makosh_data.ollama_ai_summary_runs WHERE logical_owner_id=$1 AND request_id=$2 FOR UPDATE";
 
 fn persisted_from_row(
     row: &PgRow,

@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package makosh.communications.task_source.v1;
+
+// Exact workflow command into the Communications public source port.
+// It contains canonical IDs only and never provider identity or content.
+message PrepareCommunicationTaskSourceCommandV1 {
+  bytes run_id = 1;
+  bytes source_message_id = 2;
+  uint64 expected_source_revision = 3;
+  string logical_owner_id = 4;
+}
+
+message CommunicationTaskSourcePreparedV1 {
+  bytes run_id = 1;
+  bytes source_message_id = 2;
+  uint64 expected_source_revision = 3;
+  bytes source_evidence_id = 4;
+  uint64 source_evidence_revision = 5;
+  CommunicationTaskSourceContentReceiptV1 source_content = 6;
+  string logical_owner_id = 7;
+}
+
+message CommunicationTaskSourceRejectedV1 {
+  bytes run_id = 1;
+  CommunicationTaskSourceRejectCodeV1 code = 2;
+  string logical_owner_id = 3;
+}
+
+// Target-bound source receipt for communication_task_candidate_extraction.
+// Plaintext, participant addresses and provider identity are absent.
+message CommunicationTaskSourceContentReceiptV1 {
+  bytes reference_id = 1;
+  uint64 declared_bytes = 2;
+  bytes sha256 = 3;
+  bytes custody_transfer_source_proof = 4;
+}
+
+// Exact plaintext schema inside the workflow-target-bound Blob. Durable
+// envelopes carry only the receipt above, never these private bytes.
+message CommunicationTaskSourceContentV1 {
+  bytes subject_utf8 = 1;
+  bytes body_utf8 = 2;
+}
+
+enum CommunicationTaskSourceRejectCodeV1 {
+  COMMUNICATION_TASK_SOURCE_REJECT_CODE_UNSPECIFIED = 0;
+  COMMUNICATION_TASK_SOURCE_REJECT_CODE_INVALID_REQUEST = 1;
+  COMMUNICATION_TASK_SOURCE_REJECT_CODE_SOURCE_MISSING_OR_INACTIVE = 2;
+  COMMUNICATION_TASK_SOURCE_REJECT_CODE_STALE_SOURCE_REVISION = 3;
+  COMMUNICATION_TASK_SOURCE_REJECT_CODE_CONTENT_UNAVAILABLE = 4;
+  COMMUNICATION_TASK_SOURCE_REJECT_CODE_INVALID_UTF8 = 5;
+  COMMUNICATION_TASK_SOURCE_REJECT_CODE_CONTENT_LIMIT = 6;
+  COMMUNICATION_TASK_SOURCE_REJECT_CODE_POLICY = 7;
+}

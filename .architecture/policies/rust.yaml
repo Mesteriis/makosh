@@ -1,6 +1,6 @@
 version: 1
 kind: srp-policy
-policy_version: hermes-rust-srp-v1
+policy_version: makosh-rust-srp-v1
 scope:
   roots: [backend/src, backend/development, backend/tests]
   extensions: [.rs, .mjs]

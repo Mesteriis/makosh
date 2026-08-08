@@ -15,6 +15,6 @@ test('Linux target compilation uses an isolated native Linux compiler container'
   assert.match(source, /check-target:[\s\S]*x86_64-unknown-linux-gnu[\s\S]*check-linux-container/);
   assert.match(source, /check-linux-container:[\s\S]*\$\(DOCKER\) run --rm --platform \$\(LINUX_CI_PLATFORM\)/);
   assert.match(source, /src="\$\(CURDIR\)",dst=\/workspace,readonly/);
-  assert.match(source, /CARGO_TARGET_DIR=\/tmp\/hermes-target/);
+  assert.match(source, /CARGO_TARGET_DIR=\/tmp\/makosh-target/);
   assert.match(source, /cargo \+\$\(RUST_TOOLCHAIN\) check --locked --workspace --target x86_64-unknown-linux-gnu/);
 });

@@ -1,4 +1,4 @@
-use hermes_provider_telemost::protocol::{
+use makosh_provider_telemost::protocol::{
     sanitize_yandex_telemost_payload, validate_telemost_join_url,
 };
 use serde_json::json;

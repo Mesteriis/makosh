@@ -1,5 +1,5 @@
 [package]
-name = "hermes-telegram-core"
+name = "makosh-telegram-core"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,14 +7,14 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "telegram"
 surface = "implementation"
 
 [dependencies]
-hermes-communications-ingress = { path = "../communications-ingress" }
-hermes-telegram-api = { path = "../telegram-api" }
-hermes-vault-protocol = { path = "../platform/vault/protocol" }
+makosh-communications-ingress = { path = "../communications-ingress" }
+makosh-telegram-api = { path = "../telegram-api" }
+makosh-vault-protocol = { path = "../platform/vault/protocol" }
 serde_json = "=1.0.150"
 sha2 = "=0.10.9"

@@ -1,5 +1,5 @@
 [package]
-name = "hermes-call-transcription-persistence"
+name = "makosh-call-transcription-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,14 +7,14 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "call_transcription"
 surface = "persistence"
 
 [dependencies]
-hermes-call-transcription-api = { path = "../call-transcription-api" }
-hermes-call-transcription-core = { path = "../call-transcription-core" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-call-transcription-api = { path = "../call-transcription-api" }
+makosh-call-transcription-core = { path = "../call-transcription-core" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 sha2 = { version = "=0.11.0", default-features = false }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

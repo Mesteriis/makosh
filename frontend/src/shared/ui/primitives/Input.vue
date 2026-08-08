@@ -27,8 +27,8 @@ const emit = defineEmits<{
 }>()
 
 const classes = computed(() => [
-  'hermes-input',
-  { 'hermes-input--error': props.error },
+  'makosh-input',
+  { 'makosh-input--error': props.error },
   props.class
 ])
 
@@ -47,7 +47,7 @@ function handleBlur(event: FocusEvent): void {
 </script>
 
 <template>
-  <div class="hermes-input-wrapper">
+  <div class="makosh-input-wrapper">
     <input
       :class="classes"
       :id="id"
@@ -61,6 +61,6 @@ function handleBlur(event: FocusEvent): void {
       @focus="handleFocus"
       @blur="handleBlur"
     />
-    <span v-if="error" class="hermes-input-error">{{ error }}</span>
+    <span v-if="error" class="makosh-input-error">{{ error }}</span>
   </div>
 </template>

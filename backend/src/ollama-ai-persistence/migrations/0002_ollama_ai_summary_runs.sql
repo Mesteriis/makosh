@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.ollama_ai_summary_runs (
+CREATE TABLE makosh_data.ollama_ai_summary_runs (
     logical_owner_id TEXT NOT NULL,
     request_id BYTEA NOT NULL,
     request_digest BYTEA NOT NULL,

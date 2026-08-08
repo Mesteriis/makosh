@@ -4,7 +4,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub projections must be rebuildable and resumable. `event_log.position` and `projection_cursors` define durable replay state, but workers also need consistent checkpoint semantics to avoid skipping failed events.
+Макошь projections must be rebuildable and resumable. `event_log.position` and `projection_cursors` define durable replay state, but workers also need consistent checkpoint semantics to avoid skipping failed events.
 
 ## Decision
 

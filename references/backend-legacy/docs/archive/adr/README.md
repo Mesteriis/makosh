@@ -57,11 +57,11 @@ ADR status vocabulary:
 
 - [ADR-0102 Zoom Provider Runtime Boundary](ADR-0102-zoom-provider-runtime-boundary.md)
 - [ADR-0104 Yandex Telemost Provider Runtime Boundary](ADR-0104-yandex-telemost-provider-runtime-boundary.md)
-- [ADR-0105 Zulip Reference Provider and Hermes Lab](ADR-0105-zulip-reference-provider-and-hermes-lab.md)
+- [ADR-0105 Zulip Reference Provider and Макошь Lab](ADR-0105-zulip-reference-provider-and-makosh-lab.md)
 
 ## Recent Frontend ADRs
 
-- [ADR-0172 Hermes UI Kit на базе shadcn-vue / Reka UI](ADR-0172-frontend-ui-kit-shadcn-vue.md)
+- [ADR-0172 Макошь UI Kit на базе shadcn-vue / Reka UI](ADR-0172-frontend-ui-kit-shadcn-vue.md)
 - [ADR-0173 Frontend Capability Surfaces and Thin Vue Components](ADR-0173-frontend-capability-surfaces-and-thin-vue-components.md)
 
 ## Recent Domain ADRs

@@ -1,28 +1,28 @@
 [package]
-name = "hermes-scheduler-runtime"
+name = "makosh-scheduler-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
 [[bin]]
-name = "hermes-scheduler-runtime"
+name = "makosh-scheduler-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "scheduler"
 surface = "runtime"
 
 [dependencies]
-hermes-clock-protocol = { path = "../../clock/protocol" }
-hermes-events-protocol = { path = "../../events" }
-hermes-runtime-protocol = { path = "../../runtime_protocol" }
-hermes-secure-file = { path = "../../secure_file" }
-hermes-scheduler = { path = "../implementation" }
-hermes-scheduler-jetstream = { path = "../jetstream" }
-hermes-scheduler-persistence = { path = "../persistence" }
-hermes-scheduler-protocol = { path = "../protocol" }
-hermes-storage-vault = { path = "../../storage/vault" }
+makosh-clock-protocol = { path = "../../clock/protocol" }
+makosh-events-protocol = { path = "../../events" }
+makosh-runtime-protocol = { path = "../../runtime_protocol" }
+makosh-secure-file = { path = "../../secure_file" }
+makosh-scheduler = { path = "../implementation" }
+makosh-scheduler-jetstream = { path = "../jetstream" }
+makosh-scheduler-persistence = { path = "../persistence" }
+makosh-scheduler-protocol = { path = "../protocol" }
+makosh-storage-vault = { path = "../../storage/vault" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 tokio = { version = "=1.52.4", default-features = false, features = ["net", "rt-multi-thread", "time"] }

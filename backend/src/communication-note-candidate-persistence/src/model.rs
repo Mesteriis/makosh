@@ -1,4 +1,4 @@
-use hermes_communication_note_candidate_core::{
+use makosh_communication_note_candidate_core::{
     COMMUNICATION_NOTE_MAX_CANDIDATES_V1, COMMUNICATION_NOTE_MAX_CONFIDENCE_BASIS_POINTS_V1,
     COMMUNICATION_NOTE_MAX_EXCERPT_CHARS_V1, COMMUNICATION_NOTE_MAX_TITLE_CHARS_V1,
     CommunicationNoteCandidateDraftV1, CommunicationNoteCandidateRejectionCodeV1,
@@ -91,7 +91,7 @@ pub enum CommunicationNoteCandidatePersistenceErrorV1 {
 
 pub(crate) fn request_fingerprint(draft: &CommunicationNoteCandidateDraftV1) -> [u8; 32] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.communication_note_candidate_extraction.start.v1\0");
+    hash.update(b"makosh.communication_note_candidate_extraction.start.v1\0");
     hash.update(draft.source_message_id);
     hash.update(draft.expected_source_revision.to_be_bytes());
     hash.finalize().into()

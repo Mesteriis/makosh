@@ -1,13 +1,13 @@
 use crate::platform::secrets::store::SecretReferenceStore;
 use chrono::{DateTime, Utc};
-use hermes_blob_api::BlobReadPort;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
-use hermes_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
-use hermes_communications_api::attachments::CommunicationAttachmentLookupPort;
-use hermes_communications_api::commands::{
+use makosh_blob_api::BlobReadPort;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
+use makosh_communications_api::attachments::CommunicationAttachmentLookupPort;
+use makosh_communications_api::commands::{
     CommunicationProviderCommand, ProviderCommandQueuePort, ProviderCommandQueuePortError,
 };
-use hermes_provider_api::{CredentialLease, ProviderId};
+use makosh_provider_api::{CredentialLease, ProviderId};
 use serde_json::{Value, json};
 use sqlx::postgres::PgPool;
 use thiserror::Error;
@@ -22,22 +22,22 @@ use crate::domains::communications::storage::models::{
 };
 use crate::domains::communications::storage::port::CommunicationAttachmentPort;
 use crate::domains::communications::storage::store::CommunicationStorageStore;
-use hermes_communications_postgres::errors::CommunicationIngestionError;
-use hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore;
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_postgres::errors::CommunicationIngestionError;
+use makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore;
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
 
 use crate::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
 use crate::platform::secrets::resolver::SecretResolver;
-use hermes_provider_orchestration::{
+use makosh_provider_orchestration::{
     communication_command_to_provider_envelope, execute_provider_command,
 };
-use hermes_provider_zulip::client::{ZulipApiClient, ZulipClientConfig};
-use hermes_provider_zulip::command_execution::{
+use makosh_provider_zulip::client::{ZulipApiClient, ZulipClientConfig};
+use makosh_provider_zulip::command_execution::{
     ZulipCommandExecutionError, ZulipExecutableCommand, ZulipPreparedUpload, execute_zulip_command,
 };
-use hermes_provider_zulip::runtime::{ZulipInProcessRuntime, ZulipRuntimeConfig};
+use makosh_provider_zulip::runtime::{ZulipInProcessRuntime, ZulipRuntimeConfig};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct ZulipCommandExecutionReport {

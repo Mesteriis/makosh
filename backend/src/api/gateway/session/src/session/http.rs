@@ -1,7 +1,7 @@
 use std::net::IpAddr;
 use url::Url;
 
-const COOKIE_NAME: &str = "__Host-hermes-session";
+const COOKIE_NAME: &str = "__Host-makosh-session";
 
 pub struct BrowserSameOriginSessionV1;
 

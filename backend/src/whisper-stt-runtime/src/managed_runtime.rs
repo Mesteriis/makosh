@@ -1,6 +1,6 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::ManagedControlChannelV2,
     v1::{
         ManagedRuntimeControlResponseV1, ManagedRuntimeModuleRequestResponseV1,
@@ -12,15 +12,15 @@ use hermes_runtime_protocol::{
         validate_module_request_delivery_v1, validate_module_request_response_v1,
     },
 };
-use hermes_speech_to_text_api::speech_to_text_provider_contract_reference_v1;
-use hermes_storage_protocol::{
+use makosh_speech_to_text_api::speech_to_text_provider_contract_reference_v1;
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
-use hermes_whisper_stt_persistence::{WhisperSttPersistenceErrorV1, WhisperSttPersistenceV1};
+use makosh_whisper_stt_persistence::{WhisperSttPersistenceErrorV1, WhisperSttPersistenceV1};
 
 use crate::{
     PreparedWhisperSttResourcesV1, WHISPER_STT_OWNER_ID_V1, WhisperSttRuntimeSettingsV1,

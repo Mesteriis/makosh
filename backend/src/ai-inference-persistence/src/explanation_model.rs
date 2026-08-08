@@ -1,7 +1,7 @@
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     validate_explanation_inference_request_v1, validate_explanation_inference_result_v1,
 };
-use hermes_ai_inference_core::{AiExplanationRunV1, AiInferenceRunStateV1};
+use makosh_ai_inference_core::{AiExplanationRunV1, AiInferenceRunStateV1};
 
 use crate::AiInferencePersistenceErrorV1;
 

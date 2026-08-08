@@ -25,7 +25,7 @@ policy через ссылки из новых документов.
 - [ADR-0204: Встроенные integration-плагины и нейтральная граница контекста](ADR-0204-bundled-integration-plugins-and-provider-neutral-context-boundary.md)
 - [ADR-0205: Core Gateway и транспорт клиентских приложений](ADR-0205-core-gateway-and-client-transport.md)
 - [ADR-0206: Конституция Kernel и автомат запуска и восстановления](ADR-0206-kernel-constitution-boot-and-recovery-state-machine.md)
-- [ADR-0207: Канонический реестр бизнес-доменов Hermes](ADR-0207-canonical-business-domain-registry.md)
+- [ADR-0207: Канонический реестр бизнес-доменов Макошь](ADR-0207-canonical-business-domain-registry.md)
 - [ADR-0208: Allowlist разработки доменов и запрет проекций](ADR-0208-domain-development-allowlist-and-projection-freeze.md)
 - [ADR-0209: Kernel Event Hub и контроль подписок](ADR-0209-kernel-event-hub-and-subscription-control-plane.md)
 - [ADR-0210: Telemetry Hub и локальная диагностика](ADR-0210-telemetry-hub-and-local-diagnostics.md)
@@ -187,7 +187,7 @@ ADR-0216 сохраняет registrations, grant epochs и desired infrastructur
 стартует и поднимает local recovery surface без PostgreSQL, PgBouncer, NATS,
 Vault и modules; business data и secrets в Control Store запрещены.
 ADR-0217 запрещает обязательный bootstrap configuration file и любые
-Hermes-specific environment overlays. Default data directory определяется
+Макошь-specific environment overlays. Default data directory определяется
 операционной системой, explicit `--data-dir` выбирает отдельный instance, а
 недоверенный Control Store оставляет только restricted local recovery.
 ADR-0218 отделяет logical OwnerAuthority от OS identity и module
@@ -585,7 +585,7 @@ Live managed Telegram → NATS → Communications → Gateway SSE conformance
 ADR-0350 разделяет module owner и authenticated human owner в managed
 domain/integration launch: первый остаётся authority для grants, Event Hub и
 storage, второй — для provider/domain tenancy и client realtime.
-ADR-0351 открывает Review как отдельного domain owner для Hermes
+ADR-0351 открывает Review как отдельного domain owner для Макошь
 pending/reviewed/dismissed, pin, importance и snooze. Contract/core и
 owner-local idempotent command/query/realtime persistence units реализованы
 без Communications dependency. Самостоятельный managed Review runtime,

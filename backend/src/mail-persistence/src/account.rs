@@ -1,6 +1,6 @@
 //! Mail-owned purpose-specific credential binding state.
 
-use hermes_mail_api::account::{
+use makosh_mail_api::account::{
     MailBindCredentialRequestV1, MailCredentialBindingReceiptV1, MailCredentialBindingStateV1,
     MailCredentialPurposeV1, validate_bind_credential_request,
 };
@@ -9,7 +9,7 @@ use sqlx::Row;
 use crate::{MailDurablePersistence, MailDurablePersistenceError};
 
 pub const MAIL_SCHEMA_V7: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.mail_account_credential_bindings (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_account_credential_bindings (
     connection_id TEXT NOT NULL,
     configuration_instance_id TEXT NOT NULL,
     purpose SMALLINT NOT NULL CHECK (purpose IN (1, 2)),
@@ -52,14 +52,14 @@ impl MailDurablePersistence {
         let address_book = request.purpose == MailCredentialPurposeV1::IcloudCardDavPassword;
         let row = if request.expected_binding_revision == 0 {
             let statement = if address_book {
-                "INSERT INTO hermes_data.mail_icloud_carddav_credential_bindings (
+                "INSERT INTO makosh_data.mail_icloud_carddav_credential_bindings (
                     connection_id, configuration_instance_id, purpose, credential_revision,
                     binding_revision, state, updated_at_unix_seconds
                  ) VALUES ($1, $2, $3, $4, 1, 2, $5)
                  ON CONFLICT (connection_id) DO NOTHING
                  RETURNING connection_id, purpose, binding_revision, state"
             } else {
-                "INSERT INTO hermes_data.mail_account_credential_bindings (
+                "INSERT INTO makosh_data.mail_account_credential_bindings (
                     connection_id, configuration_instance_id, purpose, credential_revision,
                     binding_revision, state, updated_at_unix_seconds
                  ) VALUES ($1, $2, $3, $4, 1, 2, $5)
@@ -76,7 +76,7 @@ impl MailDurablePersistence {
                 .await
         } else {
             let statement = if address_book {
-                "UPDATE hermes_data.mail_icloud_carddav_credential_bindings
+                "UPDATE makosh_data.mail_icloud_carddav_credential_bindings
                  SET credential_revision = $1, binding_revision = binding_revision + 1,
                      state = 2, applied_runtime_generation = NULL,
                      updated_at_unix_seconds = $2
@@ -84,7 +84,7 @@ impl MailDurablePersistence {
                    AND purpose = $5 AND binding_revision = $6 AND state NOT IN (5)
                  RETURNING connection_id, purpose, binding_revision, state"
             } else {
-                "UPDATE hermes_data.mail_account_credential_bindings
+                "UPDATE makosh_data.mail_account_credential_bindings
                  SET credential_revision = $1, binding_revision = binding_revision + 1,
                      state = 2, applied_runtime_generation = NULL,
                      updated_at_unix_seconds = $2
@@ -131,12 +131,12 @@ impl MailDurablePersistence {
         let statement = if purpose == MailCredentialPurposeV1::IcloudCardDavPassword {
             "SELECT connection_id, configuration_instance_id, purpose, credential_revision,
                     binding_revision, state, applied_runtime_generation
-             FROM hermes_data.mail_icloud_carddav_credential_bindings
+             FROM makosh_data.mail_icloud_carddav_credential_bindings
              WHERE connection_id = $1 AND purpose = $2"
         } else {
             "SELECT connection_id, configuration_instance_id, purpose, credential_revision,
                     binding_revision, state, applied_runtime_generation
-             FROM hermes_data.mail_account_credential_bindings
+             FROM makosh_data.mail_account_credential_bindings
              WHERE connection_id = $1 AND purpose = $2"
         };
         sqlx::query(statement)
@@ -159,12 +159,12 @@ impl MailDurablePersistence {
         sqlx::query(
             "SELECT connection_id, configuration_instance_id, purpose, credential_revision,
                     binding_revision, state, applied_runtime_generation
-             FROM hermes_data.mail_account_credential_bindings
+             FROM makosh_data.mail_account_credential_bindings
              WHERE connection_id = $1
              UNION ALL
              SELECT connection_id, configuration_instance_id, purpose, credential_revision,
                     binding_revision, state, applied_runtime_generation
-             FROM hermes_data.mail_icloud_carddav_credential_bindings
+             FROM makosh_data.mail_icloud_carddav_credential_bindings
              WHERE connection_id = $1
              ORDER BY purpose",
         )
@@ -199,13 +199,13 @@ impl MailDurablePersistence {
             return Err(MailDurablePersistenceError::InvalidRow);
         }
         let statement = if purpose == MailCredentialPurposeV1::IcloudCardDavPassword {
-            "UPDATE hermes_data.mail_icloud_carddav_credential_bindings
+            "UPDATE makosh_data.mail_icloud_carddav_credential_bindings
              SET state = 3, applied_runtime_generation = $1, updated_at_unix_seconds = $2
              WHERE connection_id = $3 AND configuration_instance_id = $4
                AND purpose = $5 AND binding_revision = $6 AND credential_revision = $7
                AND state IN (2, 3)"
         } else {
-            "UPDATE hermes_data.mail_account_credential_bindings
+            "UPDATE makosh_data.mail_account_credential_bindings
              SET state = 3, applied_runtime_generation = $1, updated_at_unix_seconds = $2
              WHERE connection_id = $3 AND configuration_instance_id = $4
                AND purpose = $5 AND binding_revision = $6 AND credential_revision = $7

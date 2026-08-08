@@ -41,7 +41,7 @@ test('Zulip keeps provider delivery event-only and retries a durable outbox afte
   assert.match(liveFlow, /while relay\.is_ready\(&contour\.zulip\.registration_id\) != Ok\(true\)/);
   assert.match(liveFlow, /duplicate Zulip observation must not create a second Communications event/);
   assert.match(liveFlow, /assert_communications_query_delivery/);
-  assert.doesNotMatch(liveFlow, /hermes_communications_(domain|persistence|runtime)/);
+  assert.doesNotMatch(liveFlow, /makosh_communications_(domain|persistence|runtime)/);
 
   assert.match(managedSuite, /mod zulip_event_flow;/);
   assert.match(

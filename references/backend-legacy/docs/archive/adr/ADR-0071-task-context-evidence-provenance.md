@@ -4,7 +4,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Tasks must track where each task came from, why it exists, and what context surrounds it. AI-extracted tasks from emails, meetings, and documents need evidence provenance. Tasks need a materialized context pack for instant retrieval.
+Макошь Tasks must track where each task came from, why it exists, and what context surrounds it. AI-extracted tasks from emails, meetings, and documents need evidence provenance. Tasks need a materialized context pack for instant retrieval.
 
 ## Decision
 

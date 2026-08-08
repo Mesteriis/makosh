@@ -1,16 +1,16 @@
 [package]
-name = "hermes-telemetry-testkit"
+name = "makosh-telemetry-testkit"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "test"
 owner = "test"
 surface = "test_support"
 
 [dev-dependencies]
-hermes-telemetry-protocol = { path = "../../../src/platform/telemetry/protocol" }
-hermes-runtime-protocol = { path = "../../../src/platform/runtime_protocol" }
+makosh-telemetry-protocol = { path = "../../../src/platform/telemetry/protocol" }
+makosh-runtime-protocol = { path = "../../../src/platform/runtime_protocol" }
 libc = "=0.2.186"
 prost = "=0.14.4"

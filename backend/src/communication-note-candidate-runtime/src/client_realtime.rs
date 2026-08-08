@@ -1,13 +1,13 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_note_candidate_api::{
+use makosh_communication_note_candidate_api::{
     COMMUNICATION_NOTE_CANDIDATE_REALTIME_EVENT_KIND_V1,
     wire::CommunicationNoteCandidateStatusChangedV1,
 };
-use hermes_communication_note_candidate_persistence::{
+use makosh_communication_note_candidate_persistence::{
     CommunicationNoteCandidatePersistenceErrorV1, CommunicationNoteCandidatePersistenceV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeClientRealtimePublishRequestV1, ManagedRuntimeControlRequestV1,

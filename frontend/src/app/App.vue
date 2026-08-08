@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import AppLayoutRoot from './layout/AppLayoutRoot.vue'
 import BrowserGatewayAccessGate from '../platform/gateway/BrowserGatewayAccessGate.vue'
-import { BrowserGatewayAccessModeV1 } from '../gen/hermes/gateway/v1/browser_session_pb'
+import { BrowserGatewayAccessModeV1 } from '../gen/makosh/gateway/v1/browser_session_pb'
 import { fetchBrowserGatewaySessionStatus } from '../platform/gateway/browserGatewaySession'
 
 const authenticated = ref(false)

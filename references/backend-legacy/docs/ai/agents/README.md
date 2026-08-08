@@ -2,7 +2,7 @@
 
 Status: documentation package aligned to the current repository structure.
 
-This package documents Hermes agent actors and local AI architecture. Agents are
+This package documents Макошь agent actors and local AI architecture. Agents are
 audited, permissioned actors; they are not sources of truth.
 
 ## Navigation

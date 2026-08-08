@@ -15,7 +15,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   contract: new URL(
-    'src/api/gateway/contracts/proto/hermes/gateway/v1/owner_module_settings.proto',
+    'src/api/gateway/contracts/proto/makosh/gateway/v1/owner_module_settings.proto',
     BACKEND_ROOT,
   ),
   exportAuthority: new URL(
@@ -31,7 +31,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   generatedClient: new URL(
-    'frontend/src/gen/hermes/gateway/v1/owner_module_settings_pb.ts',
+    'frontend/src/gen/makosh/gateway/v1/owner_module_settings_pb.ts',
     PROJECT_ROOT,
   ),
   desktopAdapter: new URL(
@@ -109,6 +109,6 @@ test('effective Settings export is fresh-proof, current, typed and provider-neut
   assert.match(deviceProof, /signBrowserLocalDeviceChallenge/);
   assert.doesNotMatch(
     `${contract}\n${exportAuthority}\n${values}\n${desktopAdapter}\n${deviceProof}\n${deviceProofFactory}`,
-    /hermes_(?:mail|telegram|whatsapp|zulip|communications)|Mail|Telegram|WhatsApp|Zulip/,
+    /makosh_(?:mail|telegram|whatsapp|zulip|communications)|Mail|Telegram|WhatsApp|Zulip/,
   );
 });

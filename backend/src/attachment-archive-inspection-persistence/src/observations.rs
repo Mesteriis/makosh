@@ -1,4 +1,4 @@
-use hermes_attachment_archive_inspection_core::{
+use makosh_attachment_archive_inspection_core::{
     ArchiveInspectionCanonicalSafetyFactV1, ArchiveInspectionErrorV1,
     ArchiveInspectionRecordDecisionV1, ArchiveInspectionRejectionV1, ArchiveInspectionRequestV1,
     ArchiveInspectionSafetyStateV1, ArchiveInspectionScanCandidateV1, ArchiveInspectionStatusV1,
@@ -264,7 +264,7 @@ pub(crate) async fn load_candidate(
     attachment_anchor_id: [u8; 16],
 ) -> Result<Option<ArchiveInspectionScanCandidateV1>, ArchiveInspectionPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT message_id, blob_reference_id, declared_size, blob_receipt_sha256, custody_transfer_source_proof, observed_at_unix_seconds FROM hermes_data.attachment_archive_inspection_scan_candidates WHERE logical_owner_id = $1 AND attachment_anchor_id = $2",
+        "SELECT message_id, blob_reference_id, declared_size, blob_receipt_sha256, custody_transfer_source_proof, observed_at_unix_seconds FROM makosh_data.attachment_archive_inspection_scan_candidates WHERE logical_owner_id = $1 AND attachment_anchor_id = $2",
     )
     .bind(logical_owner_id)
     .bind(attachment_anchor_id.as_slice())
@@ -311,7 +311,7 @@ pub(crate) async fn load_candidate_envelope_sha256(
 ) -> Result<Option<[u8; 32]>, ArchiveInspectionPersistenceErrorV1> {
     let row = sqlx::query(
         "SELECT envelope_sha256
-         FROM hermes_data.attachment_archive_inspection_scan_candidates
+         FROM makosh_data.attachment_archive_inspection_scan_candidates
          WHERE logical_owner_id = $1 AND attachment_anchor_id = $2",
     )
     .bind(logical_owner_id)
@@ -335,7 +335,7 @@ pub(crate) async fn load_safety(
     attachment_anchor_id: [u8; 16],
 ) -> Result<Option<ArchiveInspectionCanonicalSafetyFactV1>, ArchiveInspectionPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT message_id, expected_state, next_state, evidence_id, observed_at_unix_seconds FROM hermes_data.attachment_archive_inspection_safety_facts WHERE logical_owner_id = $1 AND attachment_anchor_id = $2",
+        "SELECT message_id, expected_state, next_state, evidence_id, observed_at_unix_seconds FROM makosh_data.attachment_archive_inspection_safety_facts WHERE logical_owner_id = $1 AND attachment_anchor_id = $2",
     )
     .bind(logical_owner_id)
     .bind(attachment_anchor_id.as_slice())
@@ -381,7 +381,7 @@ async fn insert_inbox(
     processed_at_unix_millis: i64,
 ) -> Result<InboxInsertV1, ArchiveInspectionPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.attachment_archive_inspection_event_inbox (logical_owner_id, message_id, envelope_sha256, event_kind, attachment_anchor_id, processed_at_unix_millis) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (logical_owner_id, message_id) DO NOTHING",
+        "INSERT INTO makosh_data.attachment_archive_inspection_event_inbox (logical_owner_id, message_id, envelope_sha256, event_kind, attachment_anchor_id, processed_at_unix_millis) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (logical_owner_id, message_id) DO NOTHING",
     )
     .bind(logical_owner_id)
     .bind(message_id.as_slice())
@@ -398,7 +398,7 @@ async fn insert_inbox(
         return Ok(InboxInsertV1::New);
     }
     let row = sqlx::query(
-        "SELECT envelope_sha256, event_kind, attachment_anchor_id FROM hermes_data.attachment_archive_inspection_event_inbox WHERE logical_owner_id = $1 AND message_id = $2",
+        "SELECT envelope_sha256, event_kind, attachment_anchor_id FROM makosh_data.attachment_archive_inspection_event_inbox WHERE logical_owner_id = $1 AND message_id = $2",
     )
     .bind(logical_owner_id)
     .bind(message_id.as_slice())
@@ -435,7 +435,7 @@ async fn insert_candidate(
     envelope_sha256: [u8; 32],
 ) -> Result<(), ArchiveInspectionPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.attachment_archive_inspection_scan_candidates (logical_owner_id, attachment_anchor_id, message_id, envelope_sha256, blob_reference_id, declared_size, blob_receipt_sha256, custody_transfer_source_proof, observed_at_unix_seconds) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+        "INSERT INTO makosh_data.attachment_archive_inspection_scan_candidates (logical_owner_id, attachment_anchor_id, message_id, envelope_sha256, blob_reference_id, declared_size, blob_receipt_sha256, custody_transfer_source_proof, observed_at_unix_seconds) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
     )
     .bind(logical_owner_id)
     .bind(candidate.attachment_anchor_id.as_slice())
@@ -459,7 +459,7 @@ async fn insert_safety(
     envelope_sha256: [u8; 32],
 ) -> Result<(), ArchiveInspectionPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.attachment_archive_inspection_safety_facts (logical_owner_id, attachment_anchor_id, message_id, envelope_sha256, expected_state, next_state, evidence_id, observed_at_unix_seconds) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+        "INSERT INTO makosh_data.attachment_archive_inspection_safety_facts (logical_owner_id, attachment_anchor_id, message_id, envelope_sha256, expected_state, next_state, evidence_id, observed_at_unix_seconds) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
     )
     .bind(logical_owner_id)
     .bind(safety.attachment_anchor_id.as_slice())
@@ -483,7 +483,7 @@ async fn reject_anchor_runs(
     occurred_at_unix_millis: i64,
 ) -> Result<u32, ArchiveInspectionPersistenceErrorV1> {
     let rows = sqlx::query(
-        "SELECT run_id, operation_id, state, state_revision FROM hermes_data.attachment_archive_inspection_runs WHERE logical_owner_id = $1 AND attachment_anchor_id = $2 AND state IN (1, 2, 3) ORDER BY run_id FOR UPDATE",
+        "SELECT run_id, operation_id, state, state_revision FROM makosh_data.attachment_archive_inspection_runs WHERE logical_owner_id = $1 AND attachment_anchor_id = $2 AND state IN (1, 2, 3) ORDER BY run_id FOR UPDATE",
     )
     .bind(logical_owner_id)
     .bind(attachment_anchor_id.as_slice())

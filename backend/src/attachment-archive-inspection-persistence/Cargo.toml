@@ -1,5 +1,5 @@
 [package]
-name = "hermes-attachment-archive-inspection-persistence"
+name = "makosh-attachment-archive-inspection-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,16 +7,16 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "engine"
 owner = "attachment_archive_inspection"
 surface = "persistence"
 
 [dependencies]
-hermes-attachment-archive-inspection-core = { path = "../attachment-archive-inspection-core" }
-hermes-attachment-archive-inspection-ingress = { path = "../attachment-archive-inspection-ingress" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-attachment-archive-inspection-core = { path = "../attachment-archive-inspection-core" }
+makosh-attachment-archive-inspection-ingress = { path = "../attachment-archive-inspection-ingress" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

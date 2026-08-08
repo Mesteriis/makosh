@@ -215,7 +215,7 @@ module control channel.
 
 ## Последствия
 
-Hermes получает безопасную цепочку нескольких independently owned content
+Макошь получает безопасную цепочку нескольких independently owned content
 processors. Каждый переход остаётся exact target-bound, event-backed и
 replayable; integrations, domains, workflows и engines не импортируют чужую
 implementation, а Kernel и Blob Platform не становятся business facades.

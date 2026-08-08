@@ -1,6 +1,6 @@
 //! Atomic proposal of a verified bundled module artifact and its pending registration.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BundledManagedArtifactProposalInputV1, BundledManagedArtifactProposalReceiptV1,
     ModuleDescriptorRegistrationRequestsV1, ModuleRegistration,
 };
@@ -47,7 +47,7 @@ impl SqliteControlStore {
             if let Some((request_digest, registration_id)) = transaction
                 .query_row(
                     "SELECT request_digest, registration_id
-                     FROM hermes_kernel_bundled_artifact_proposal
+                     FROM makosh_kernel_bundled_artifact_proposal
                      WHERE operation_id = ?1",
                     [proposal.operation_id().as_bytes().as_slice()],
                     |row| Ok((row.get::<_, Vec<u8>>(0)?, row.get::<_, String>(1)?)),
@@ -78,7 +78,7 @@ impl SqliteControlStore {
             insert_client_blob_routes(&transaction, &client_blob_routes)?;
             insert_client_realtime_routes(&transaction, &client_realtime_routes)?;
             transaction.execute(
-                "INSERT INTO hermes_kernel_bundled_artifact_proposal
+                "INSERT INTO makosh_kernel_bundled_artifact_proposal
                  (operation_id, request_digest, registration_id, distribution_id,
                   distribution_generation, artifact_id, descriptor_sha256)
                  VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",

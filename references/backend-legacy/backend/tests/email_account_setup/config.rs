@@ -1,5 +1,5 @@
-use hermes_hub_backend::integrations::mail::accounts::models::GmailOAuthSetupRequest;
-use hermes_hub_backend::platform::config::{app_config::AppConfig, google::GoogleOAuthClientType};
+use makosh_hub_backend::integrations::mail::accounts::models::GmailOAuthSetupRequest;
+use makosh_hub_backend::platform::config::{app_config::AppConfig, google::GoogleOAuthClientType};
 
 #[test]
 fn gmail_oauth_setup_defaults_to_mail_send_calendar_and_contacts_scopes() {
@@ -25,8 +25,8 @@ fn gmail_oauth_setup_defaults_to_mail_send_calendar_and_contacts_scopes() {
 #[test]
 fn app_config_accepts_google_oauth_client_credentials() {
     let config = AppConfig::from_pairs([
-        ("HERMES_GOOGLE_OAUTH_CLIENT_ID", "google-client-id"),
-        ("HERMES_GOOGLE_OAUTH_CLIENT_SECRET", "google-client-secret"),
+        ("MAKOSH_GOOGLE_OAUTH_CLIENT_ID", "google-client-id"),
+        ("MAKOSH_GOOGLE_OAUTH_CLIENT_SECRET", "google-client-secret"),
     ])
     .expect("config");
 
@@ -43,11 +43,11 @@ fn app_config_accepts_google_oauth_client_credentials() {
 #[test]
 fn app_config_accepts_google_oauth_installed_client_json() {
     let config = AppConfig::from_pairs([(
-        "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
+        "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
         r#"{
             "installed": {
                 "client_id": "desktop-client-id.apps.googleusercontent.com",
-                "project_id": "hermes-hub-local",
+                "project_id": "makosh-local",
                 "auth_uri": "https://accounts.google.com/o/oauth2/auth",
                 "token_uri": "https://oauth2.googleapis.com/token",
                 "client_secret": "desktop-client-secret",

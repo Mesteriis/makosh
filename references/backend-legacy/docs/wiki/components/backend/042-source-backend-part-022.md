@@ -170,7 +170,7 @@ generated_by: code-wiki-ru
   2. «Активные» расширения (`.exe`, `.dll`, `.ps1`, `.vbs` и др.) → `Malicious`.
   3. Расширения документов с макросами (`.docm`, `.xlsm`, `.pptm` и др.) → `Suspicious`.
   4. Несовпадение MIME-типа и расширения для известных пар → `Suspicious`.
-- Собирает причины (`reasons`), возвращает отчёт с `engine = "hermes_heuristic_v1"`, временем проверки, сводкой и метаданными.
+- Собирает причины (`reasons`), возвращает отчёт с `engine = "makosh_heuristic_v1"`, временем проверки, сводкой и метаданными.
 
 `NoopAttachmentSafetyScanner` – всегда возвращает `NotScanned`.
 

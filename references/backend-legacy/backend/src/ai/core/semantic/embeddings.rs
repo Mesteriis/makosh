@@ -11,8 +11,8 @@ use super::super::helpers::{
 use super::models::{NewSemanticEmbedding, SemanticEmbedding, SemanticSourceKind};
 use super::rows::row_to_semantic_embedding;
 use super::store::SemanticEmbeddingStore;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 
 impl SemanticEmbeddingStore {
     pub async fn upsert_embedding(

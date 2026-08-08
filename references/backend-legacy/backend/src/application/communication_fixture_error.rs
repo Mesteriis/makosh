@@ -7,7 +7,7 @@ use crate::integrations::whatsapp::client::errors::WhatsappWebError;
 use crate::platform::calls::errors::CallError;
 use crate::platform::communications::errors::ProviderCommunicationMessagePortError;
 use crate::workflows::review_inbox::ReviewInboxWorkflowError;
-use hermes_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::errors::EventStoreError;
 use thiserror::Error;
 
 #[derive(Debug, Error)]
@@ -17,7 +17,7 @@ pub(crate) enum CommunicationFixtureIngestError {
     #[error(transparent)]
     Whatsapp(#[from] WhatsappWebError),
     #[error(transparent)]
-    Communication(#[from] hermes_communications_postgres::errors::CommunicationIngestionError),
+    Communication(#[from] makosh_communications_postgres::errors::CommunicationIngestionError),
     #[error(transparent)]
     ProviderMessage(#[from] ProviderCommunicationMessagePortError),
     #[error(transparent)]

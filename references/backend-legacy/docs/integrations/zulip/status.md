@@ -4,15 +4,15 @@ Status date: 2026-06-30.
 
 ## Current state
 
-This package is a reference-provider foundation with backend runtime, Hermes Lab
+This package is a reference-provider foundation with backend runtime, Макошь Lab
 evidence and a Settings integration surface for Zulip bot account setup and
 reference upload commands. It has local testcontainers live-realm evidence for
-the provider API, event queue and Hermes projection path.
+the provider API, event queue and Макошь projection path.
 
 ## Done by initial slice
 
 - Documentation package.
-- ADR for Zulip as reference provider and Hermes Lab.
+- ADR for Zulip as reference provider and Макошь Lab.
 - Signal Hub raw event types.
 - Planned scenario matrix.
 - REST client and DTOs in `backend/src/integrations/zulip`, including
@@ -104,29 +104,29 @@ the provider API, event queue and Hermes projection path.
   materialization to the storage/scanner workflow.
 - Always-on application bootstrap wiring for the Zulip attachment download
   worker, gated by Signal Hub runtime state and unlocked HostVault state.
-- Hermes Lab scenario actions for Zulip stream send, direct send, reaction,
+- Макошь Lab scenario actions for Zulip stream send, direct send, reaction,
   edit, delete, upload, send-with-upload and same-realm user-upload download.
-- Single Hermes Lab CLI and scenario fixtures, including a dedicated attachment
+- Single Макошь Lab CLI and scenario fixtures, including a dedicated attachment
   materialization scenario whose reports store file size/hash instead of bytes
   and a direct-message scenario for provider-side direct send evidence.
-- Hermes Lab `TESTCONTAINERS=1` scenario execution that starts the local Zulip
+- Макошь Lab `TESTCONTAINERS=1` scenario execution that starts the local Zulip
   Compose fixture, provisions a real realm/bot/human/stream, executes provider
   actions with visible progress output, writes sanitized local reports and
   cleans the temporary Compose project with volumes.
-- Hermes Lab `BACKEND=1` scenario execution that runs the Zulip backend live
+- Макошь Lab `BACKEND=1` scenario execution that runs the Zulip backend live
   harness, writes a sanitized backend evidence report, merges backend observed
   stages into the Lab scenario report and enforces `backend_expected_stages`
   against actual backend evidence.
-- Hermes Lab `ACTION=compliance` Communication Compliance Suite report that
+- Макошь Lab `ACTION=compliance` Communication Compliance Suite report that
   aggregates Zulip scenario contracts, local Lab reports and backend evidence
   into pass/pending/deferred capability status under
-  `.local/hermes-lab/reports/zulip/compliance`.
-- Hermes Lab `ACTION=compliance BACKEND=1` backend contract evidence mode that
+  `.local/makosh-lab/reports/zulip/compliance`.
+- Макошь Lab `ACTION=compliance BACKEND=1` backend contract evidence mode that
   runs the targeted Zulip, Polygraph and multilingual task-candidate suites
-  through `hermes_test_session`, writes a machine-readable backend contract
+  through `makosh_test_session`, writes a machine-readable backend contract
   evidence report, and folds those passes into the compliance report.
 - Shared Zulip realm provisioning script used by both the Rust live fixture and
-  Hermes Lab to avoid divergent test-realm setup.
+  Макошь Lab to avoid divergent test-realm setup.
 - Testcontainers-backed local Zulip live fixture that provisions a real realm,
   owner, bot, human user and stream, then verifies real provider events for
   stream messages, direct messages, attachment messages, reaction add/remove,
@@ -159,25 +159,25 @@ Validated on 2026-06-30:
 
 ```sh
 cargo test --manifest-path backend/Cargo.toml domains::tasks::candidates::extraction::tests -- --nocapture
-cargo run --manifest-path crates/testkit/Cargo.toml --bin hermes_test_session -- cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress none --test-threads 1 --test task_candidates task_candidate_refresh_detects_multilingual_message_actions_against_postgres
-cargo run --manifest-path crates/testkit/Cargo.toml --bin hermes_test_session -- cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress none --test-threads 1 --test task_candidates task_candidate_refresh_detects_freeform_multilingual_message_requests_against_postgres
-cargo run --manifest-path crates/testkit/Cargo.toml --bin hermes_test_session -- cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress none --test-threads 1 --test task_candidates
-cargo run --manifest-path crates/testkit/Cargo.toml --bin hermes_test_session -- cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress none --test-threads 1 --test consistency_contradiction contradiction_refresh_detects_zulip_message_claim_against_active_person_fact_without_overwriting_memory
-cargo run --manifest-path crates/testkit/Cargo.toml --bin hermes_test_session -- cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress none --test-threads 1 --test consistency_contradiction
+cargo run --manifest-path crates/testkit/Cargo.toml --bin makosh_test_session -- cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress none --test-threads 1 --test task_candidates task_candidate_refresh_detects_multilingual_message_actions_against_postgres
+cargo run --manifest-path crates/testkit/Cargo.toml --bin makosh_test_session -- cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress none --test-threads 1 --test task_candidates task_candidate_refresh_detects_freeform_multilingual_message_requests_against_postgres
+cargo run --manifest-path crates/testkit/Cargo.toml --bin makosh_test_session -- cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress none --test-threads 1 --test task_candidates
+cargo run --manifest-path crates/testkit/Cargo.toml --bin makosh_test_session -- cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress none --test-threads 1 --test consistency_contradiction contradiction_refresh_detects_zulip_message_claim_against_active_person_fact_without_overwriting_memory
+cargo run --manifest-path crates/testkit/Cargo.toml --bin makosh_test_session -- cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress none --test-threads 1 --test consistency_contradiction
 cargo fmt --manifest-path backend/Cargo.toml --check
-node --check scripts/hermes-lab.mjs
+node --check scripts/makosh-lab.mjs
 cargo fmt --manifest-path crates/testkit/Cargo.toml --check
 cargo test --manifest-path backend/Cargo.toml --test zulip_live --no-run
-make hermes-lab ACTION=readiness
-make hermes-lab ACTION=scenario PROVIDER=zulip EXECUTE=1 TESTCONTAINERS=1 BACKEND=1
+make makosh-lab ACTION=readiness
+make makosh-lab ACTION=scenario PROVIDER=zulip EXECUTE=1 TESTCONTAINERS=1 BACKEND=1
 make testcontainers-clean
-cargo run --manifest-path crates/testkit/Cargo.toml --bin hermes_test_session -- cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress bar --test-threads 1 --test email_account_setup startup_reconciles_icloud_account_from_host_vault_manifest_after_postgres_metadata_wipe
+cargo run --manifest-path crates/testkit/Cargo.toml --bin makosh_test_session -- cargo nextest run --manifest-path backend/Cargo.toml --profile default --show-progress bar --test-threads 1 --test email_account_setup startup_reconciles_icloud_account_from_host_vault_manifest_after_postgres_metadata_wipe
 cd frontend && pnpm test:unit -- src/platform/event-tracing/fixtures/zulipMessageToTaskTrace.test.ts src/platform/event-tracing/EventTracePanel.boundary.test.ts src/integrations/zulip/components/ZulipSettingsPanel.boundary.test.ts
 cd frontend && pnpm typecheck
 cd frontend && pnpm lint:ox
 make validate
 git diff --check
-make hermes-lab ACTION=compliance PROVIDER=zulip REQUIRE_CLOSED=1
+make makosh-lab ACTION=compliance PROVIDER=zulip REQUIRE_CLOSED=1
 ```
 
 Result: passed. The targeted extraction unit tests cover Spanish, French and
@@ -191,17 +191,17 @@ extraction, obligation extraction and review promotion behavior. The targeted
 Zulip Polygraph regression passed, and the full session-backed
 `consistency_contradiction` run passed 15/15 tests against PostgreSQL/NATS
 testcontainers, including Telegram, WhatsApp and Zulip provider message
-contradiction detection. The test sessions reported no stale Hermes
-testcontainers before startup and no remaining Hermes testcontainers after
-cleanup. The live Hermes Lab run started a real local Zulip fixture, provisioned
+contradiction detection. The test sessions reported no stale Макошь
+testcontainers before startup and no remaining Макошь testcontainers after
+cleanup. The live Макошь Lab run started a real local Zulip fixture, provisioned
 a realm/bot/human/stream, observed provider raw stages, removed the temporary
 Compose project, then ran the Rust `zulip_live` backend evidence harness against
 a second real Zulip testcontainers fixture. The backend evidence report was
 written to
-`.local/hermes-lab/reports/zulip/backend/zulip_backend_live_trace-2026-06-30T00-49-02.805538-00-00.json`;
+`.local/makosh-lab/reports/zulip/backend/zulip_backend_live_trace-2026-06-30T00-49-02.805538-00-00.json`;
 the scenario report was written to
-`.local/hermes-lab/reports/zulip/zulip_message_to_task_candidate-2026-06-30T00-46-55.499Z.json`.
-Post-run Docker checks found no Hermes-labelled testcontainers and no
+`.local/makosh-lab/reports/zulip/zulip_message_to_task_candidate-2026-06-30T00-46-55.499Z.json`.
+Post-run Docker checks found no Макошь-labelled testcontainers and no
 stopped/created/dead containers.
 The frontend unit command completed with the full Vitest suite green
 (154 test files, 538 tests), including the sanitized Zulip Event Trace UI
@@ -215,7 +215,7 @@ zero pending/deferred capabilities.
 Earlier Zulip provider evidence:
 
 ```sh
-HERMES_ZULIP_TESTCONTAINERS=1 HERMES_ZULIP_START_TIMEOUT_SECS=900 cargo test --manifest-path backend/Cargo.toml --test zulip_live -- --ignored --nocapture
+MAKOSH_ZULIP_TESTCONTAINERS=1 MAKOSH_ZULIP_START_TIMEOUT_SECS=900 cargo test --manifest-path backend/Cargo.toml --test zulip_live -- --ignored --nocapture
 ```
 
 Result: passed, 1/1. The observed real Zulip queue events included
@@ -227,23 +227,23 @@ checkpoint by re-registering the queue and ingesting a subsequent provider
 message.
 
 ```sh
-make hermes-lab ACTION=scenario PROVIDER=zulip EXECUTE=1 TESTCONTAINERS=1
-make hermes-lab ACTION=scenario PROVIDER=zulip EXECUTE=1 TESTCONTAINERS=1 SCENARIO=testing/hermes-lab/scenarios/zulip/attachment-materialization.json
-make hermes-lab ACTION=scenario PROVIDER=zulip EXECUTE=1 TESTCONTAINERS=1 SCENARIO=testing/hermes-lab/scenarios/zulip/direct-message.json
+make makosh-lab ACTION=scenario PROVIDER=zulip EXECUTE=1 TESTCONTAINERS=1
+make makosh-lab ACTION=scenario PROVIDER=zulip EXECUTE=1 TESTCONTAINERS=1 SCENARIO=testing/makosh-lab/scenarios/zulip/attachment-materialization.json
+make makosh-lab ACTION=scenario PROVIDER=zulip EXECUTE=1 TESTCONTAINERS=1 SCENARIO=testing/makosh-lab/scenarios/zulip/direct-message.json
 ```
 
 Result: passed. The three provider-side lab reports were written under
-`.local/hermes-lab/reports/zulip` with zero failures, sanitized fixture metadata,
+`.local/makosh-lab/reports/zulip` with zero failures, sanitized fixture metadata,
 no credential payloads, and observed raw Zulip stages for stream message,
 reaction, message update, message delete, attachment message and direct message
 events.
 
 ```sh
-make hermes-lab ACTION=scenario PROVIDER=zulip EXECUTE=1 TESTCONTAINERS=1 BACKEND=1 SCENARIO=testing/hermes-lab/scenarios/zulip/direct-message.json
-make hermes-lab ACTION=compliance PROVIDER=zulip
-make hermes-lab ACTION=compliance PROVIDER=zulip BACKEND=1
-make hermes-lab ACTION=compliance PROVIDER=zulip REQUIRE_CLOSED=1
-make hermes-lab ACTION=compliance PROVIDER=zulip BACKEND=1 REQUIRE_CLOSED=1
+make makosh-lab ACTION=scenario PROVIDER=zulip EXECUTE=1 TESTCONTAINERS=1 BACKEND=1 SCENARIO=testing/makosh-lab/scenarios/zulip/direct-message.json
+make makosh-lab ACTION=compliance PROVIDER=zulip
+make makosh-lab ACTION=compliance PROVIDER=zulip BACKEND=1
+make makosh-lab ACTION=compliance PROVIDER=zulip REQUIRE_CLOSED=1
+make makosh-lab ACTION=compliance PROVIDER=zulip BACKEND=1 REQUIRE_CLOSED=1
 ```
 
 Result: passed. The Lab report status was `provider_and_backend_observed`,
@@ -298,7 +298,7 @@ attachment metadata retained as evidence without blob-backed materialization
 attachment bytes transferred through scanner boundary into communication_attachments
 always-on scheduler/bootstrap wiring for Zulip attachment downloads
 zulip.command.reconciled event append
-trace metadata visible in Hermes
+trace metadata visible in Макошь
 review/radar candidate path for Russian task-like message
 review/radar candidate path for Spanish/French/German deterministic task-like messages
 person identity trace support for Zulip senders

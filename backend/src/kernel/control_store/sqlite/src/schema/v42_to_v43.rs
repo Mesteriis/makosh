@@ -5,9 +5,9 @@ use rusqlite::Transaction;
 
 pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
     transaction.execute_batch(
-        "CREATE TABLE hermes_kernel_module_client_blob_route_request_v43 (
+        "CREATE TABLE makosh_kernel_module_client_blob_route_request_v43 (
             registration_id TEXT NOT NULL
-                REFERENCES hermes_kernel_module_registration(registration_id),
+                REFERENCES makosh_kernel_module_registration(registration_id),
             capability_id TEXT NOT NULL,
             contract_owner TEXT NOT NULL CHECK (length(contract_owner) BETWEEN 1 AND 128),
             contract_name TEXT NOT NULL CHECK (length(contract_name) BETWEEN 1 AND 128),
@@ -19,9 +19,9 @@ pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
                 CHECK (max_response_bytes BETWEEN 1 AND 25165824),
             PRIMARY KEY (registration_id, capability_id, path),
             FOREIGN KEY (registration_id, capability_id)
-                REFERENCES hermes_kernel_module_registration_capability(registration_id, capability_id)
+                REFERENCES makosh_kernel_module_registration_capability(registration_id, capability_id)
          ) STRICT;
-         INSERT INTO hermes_kernel_module_client_blob_route_request_v43 (
+         INSERT INTO makosh_kernel_module_client_blob_route_request_v43 (
             registration_id,
             capability_id,
             contract_owner,
@@ -41,11 +41,11 @@ pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
                 contract_schema_sha256,
                 path,
                 max_response_bytes
-         FROM hermes_kernel_module_client_blob_route_request;
-         DROP TABLE hermes_kernel_module_client_blob_route_request;
-         ALTER TABLE hermes_kernel_module_client_blob_route_request_v43
-            RENAME TO hermes_kernel_module_client_blob_route_request;
-         UPDATE hermes_kernel_control_store_metadata
+         FROM makosh_kernel_module_client_blob_route_request;
+         DROP TABLE makosh_kernel_module_client_blob_route_request;
+         ALTER TABLE makosh_kernel_module_client_blob_route_request_v43
+            RENAME TO makosh_kernel_module_client_blob_route_request;
+         UPDATE makosh_kernel_control_store_metadata
          SET schema_version = 43 WHERE singleton = 1;",
     )?;
     Ok(())
@@ -61,30 +61,30 @@ mod tests {
         let connection = Connection::open_in_memory().expect("connection");
         connection
             .execute_batch(
-                "CREATE TABLE hermes_kernel_control_store_metadata (
+                "CREATE TABLE makosh_kernel_control_store_metadata (
                     singleton INTEGER PRIMARY KEY,
                     schema_version INTEGER NOT NULL
                  ) STRICT;
-                 INSERT INTO hermes_kernel_control_store_metadata VALUES (1, 42);
-                 CREATE TABLE hermes_kernel_module_registration (
+                 INSERT INTO makosh_kernel_control_store_metadata VALUES (1, 42);
+                 CREATE TABLE makosh_kernel_module_registration (
                     registration_id TEXT PRIMARY KEY
                  ) STRICT;
-                 INSERT INTO hermes_kernel_module_registration VALUES
+                 INSERT INTO makosh_kernel_module_registration VALUES
                     ('existing'),
                     ('ceiling'),
                     ('over-ceiling');
-                 CREATE TABLE hermes_kernel_module_registration_capability (
+                 CREATE TABLE makosh_kernel_module_registration_capability (
                     registration_id TEXT NOT NULL,
                     capability_id TEXT NOT NULL,
                     PRIMARY KEY (registration_id, capability_id),
                     FOREIGN KEY (registration_id)
-                        REFERENCES hermes_kernel_module_registration(registration_id)
+                        REFERENCES makosh_kernel_module_registration(registration_id)
                  ) STRICT;
-                 INSERT INTO hermes_kernel_module_registration_capability VALUES
+                 INSERT INTO makosh_kernel_module_registration_capability VALUES
                     ('existing', 'export'),
                     ('ceiling', 'export'),
                     ('over-ceiling', 'export');
-                 CREATE TABLE hermes_kernel_module_client_blob_route_request (
+                 CREATE TABLE makosh_kernel_module_client_blob_route_request (
                     registration_id TEXT NOT NULL,
                     capability_id TEXT NOT NULL,
                     contract_owner TEXT NOT NULL CHECK (length(contract_owner) BETWEEN 1 AND 128),
@@ -113,7 +113,7 @@ mod tests {
 
         let preserved: i64 = connection
             .query_row(
-                "SELECT COUNT(*) FROM hermes_kernel_module_client_blob_route_request
+                "SELECT COUNT(*) FROM makosh_kernel_module_client_blob_route_request
                  WHERE registration_id = 'existing'",
                 [],
                 |row| row.get(0),
@@ -145,7 +145,7 @@ mod tests {
         max_response_bytes: i64,
     ) -> rusqlite::Result<usize> {
         connection.execute(
-            "INSERT INTO hermes_kernel_module_client_blob_route_request (
+            "INSERT INTO makosh_kernel_module_client_blob_route_request (
                 registration_id,
                 capability_id,
                 contract_owner,

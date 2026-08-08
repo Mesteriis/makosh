@@ -1,13 +1,13 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     ManagedBlobCustodyReleaseRequestV1, request_managed_blob_custody_release_v2,
 };
-use hermes_communication_cross_channel_forward_persistence::{
+use makosh_communication_cross_channel_forward_persistence::{
     CommunicationCrossChannelForwardPersistenceV1, CrossChannelForwardCleanupJobV1,
     CrossChannelForwardCleanupReasonV1, CrossChannelForwardPersistenceErrorV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::BlobCustodyReleaseReasonV1,
 };

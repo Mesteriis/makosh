@@ -1,7 +1,7 @@
 use crate::domains::communications::storage::port::LocalBlobPort;
 use crate::workflows::email_sync_pipeline::service::project_email_sync_batch_with_mail_blobs;
 use crate::workflows::graph_projection::service::GraphProjectionService;
-use hermes_communications_api::email_sync::EmailSyncBatch;
+use makosh_communications_api::email_sync::EmailSyncBatch;
 
 use super::super::errors::ProviderSyncError;
 use super::super::models::progress::{MailSyncPhase, ProgressMode, ProgressUpdate};

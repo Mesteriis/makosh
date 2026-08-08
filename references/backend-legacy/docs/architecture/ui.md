@@ -8,7 +8,7 @@ authorize frontend refactoring by itself.
 
 ## Purpose
 
-The UI is the Personal Operating System surface over Hermes memory and context.
+The UI is the Personal Operating System surface over Макошь memory and context.
 It is not a collection of provider clones.
 
 ## Responsibility
@@ -100,7 +100,7 @@ the Vue architecture direction.
 - Desktop may use dense keyboard-first layouts. Android uses mobile-appropriate
   navigation and interaction without changing backend contracts.
 - Keyboard-first workflows and command palette remain target UI patterns.
-- Provider channel workbenches may look familiar, but they must show Hermes
+- Provider channel workbenches may look familiar, but they must show Макошь
   evidence, review, context and capability semantics.
 - Message bodies, document contents and private data must not leak into audit,
   telemetry or unsafe logs.
@@ -110,6 +110,6 @@ the Vue architecture direction.
 
 ## Reasons For Existence
 
-Hermes needs an operating surface because memory without action is passive, and
+Макошь needs an operating surface because memory without action is passive, and
 action without evidence is unsafe. The UI ties context, review and owner
 decisions together without letting provider surfaces redefine the product.

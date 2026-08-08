@@ -13,9 +13,9 @@ describe('Telegram automation presentation model', () => {
 			'chat-2',
 			'chat-3',
 		])
-		expect(parseAutomationVariables('name=Ada\nteam=Hermes')).toEqual([
+		expect(parseAutomationVariables('name=Ada\nteam=Макошь')).toEqual([
 			{ name: 'name', value: 'Ada' },
-			{ name: 'team', value: 'Hermes' },
+			{ name: 'team', value: 'Макошь' },
 		])
 	})
 

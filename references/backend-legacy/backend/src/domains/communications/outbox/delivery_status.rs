@@ -1,13 +1,13 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde::Serialize;
 use serde_json::json;
 use sqlx::Transaction;
 use sqlx::postgres::Postgres;
 
-use hermes_events_postgres::store::EventStore;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_events_postgres::store::EventStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 
 use super::super::evidence::link_mail_entity_in_transaction;
 use super::{
@@ -228,7 +228,7 @@ fn outbox_delivery_status_event(
             "outbox_id": record.outbox_id,
         }),
     )
-    .actor(json!({ "actor_id": "hermes-delivery-notification" }))
+    .actor(json!({ "actor_id": "makosh-delivery-notification" }))
     .payload(json!({
         "account_id": record.account_id,
         "outbox_id": record.outbox_id,

@@ -6,7 +6,7 @@
 
 Состояние реализации: реализовано. Production gate
 `attachment_text_extraction_v1` закрыт exact eleven-unit topology:
-`hermes-attachment-text-extraction-api`, `-ingress`, `-core`,
+`makosh-attachment-text-extraction-api`, `-ingress`, `-core`,
 `-parser-contract`, `-plain`, `-pdf`, `-docx`, `-ocr`, `-persistence`,
 `-runtime` и `-assembly`. Workflow владеет versioned Start/Get/ReadText и
 realtime contracts, order-independent owner-local evidence join, exact
@@ -57,7 +57,7 @@ canonical Communications truth и не Attachment Security verdict.
 
 ```text
 owner_id  = attachment_text_extraction
-module_id = hermes-attachment-text-extraction-runtime
+module_id = makosh-attachment-text-extraction-runtime
 kind      = workflow
 ```
 
@@ -100,7 +100,7 @@ storage и не импортирует их implementation. Kernel, Gateway, Eve
 
 ## Event-only custody contract
 
-Target-owned `hermes-attachment-text-extraction-ingress` содержит три exact
+Target-owned `makosh-attachment-text-extraction-ingress` содержит три exact
 durable contracts:
 
 ```text
@@ -114,7 +114,7 @@ safety message/evidence и logical owner. Target triple является кон�
 
 ```text
 owner      = attachment_text_extraction
-module     = hermes-attachment-text-extraction-runtime
+module     = makosh-attachment-text-extraction-runtime
 capability = attachment_text_extraction.blob.v1
 ```
 
@@ -130,7 +130,7 @@ engine-inside-workflow и не facade.
 
 ## Client boundary
 
-`hermes-attachment-text-extraction-api` разделяет три причины вызова:
+`makosh-attachment-text-extraction-api` разделяет три причины вызова:
 
 - `Start` — command/request receipt;
 - `Get` — metadata-only status query;
@@ -184,31 +184,31 @@ Search indexing, preview, translation и AI egress являются отдель
 ## Единицы сборки и SRP
 
 ```text
-hermes-attachment-text-extraction-api
+makosh-attachment-text-extraction-api
   generated Start/Get/ReadText/realtime client contract
 
-hermes-attachment-text-extraction-ingress
+makosh-attachment-text-extraction-ingress
   target-owned custody command/result event contracts
 
-hermes-attachment-text-extraction-core
+makosh-attachment-text-extraction-core
   pure join, lifecycle, format/output bounds and terminal decisions
 
-hermes-attachment-text-extraction-parser-contract
+makosh-attachment-text-extraction-parser-contract
   byte-only parser request/result/error contract and exact format detection
 
-hermes-attachment-text-extraction-plain
-hermes-attachment-text-extraction-pdf
-hermes-attachment-text-extraction-docx
-hermes-attachment-text-extraction-ocr
+makosh-attachment-text-extraction-plain
+makosh-attachment-text-extraction-pdf
+makosh-attachment-text-extraction-docx
+makosh-attachment-text-extraction-ocr
   independent bounded parser adapters
 
-hermes-attachment-text-extraction-persistence
+makosh-attachment-text-extraction-persistence
   owner-local PostgreSQL inbox/outbox/run/job/artifact/realtime state
 
-hermes-attachment-text-extraction-runtime
+makosh-attachment-text-extraction-runtime
   managed request/query/Event/Blob/parser orchestration only
 
-hermes-attachment-text-extraction-assembly
+makosh-attachment-text-extraction-assembly
   descriptor/settings/Storage artifacts and unsigned release fragment only
 ```
 

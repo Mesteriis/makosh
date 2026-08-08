@@ -2,11 +2,11 @@ import { computed, ref, shallowRef } from 'vue'
 import {
 	MailConnectorProfileV1,
 	type MailAccountStatusV1,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
 import {
 	GmailOAuthOutcomeV1,
 	type GmailOAuthStartedV1,
-} from '../../../gen/hermes/mail/v1/client_pb'
+} from '../../../gen/makosh/mail/v1/client_pb'
 import { MailGmailOAuthClientV1 } from '../api/mailGmailOAuthClient'
 import { listMailAccounts } from '../api/mailAccountQueryClient'
 

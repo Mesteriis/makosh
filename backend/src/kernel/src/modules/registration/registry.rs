@@ -1,12 +1,12 @@
 //! Module Registry mutations and read model shared by local control transports.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BundledArtifactProposalStore, BundledManagedArtifactProposalInputV1,
     BundledManagedArtifactProposalReceiptV1, ExternalRuntimeAttestation, ExternalRuntimeIdentity,
     GrantSet, HealthRecoveryStore, ModuleRegistration, ModuleRegistrationState,
     ModuleRegistryStore, OperationIdV1, OwnerIdentityStore, RuntimeTrustStore,
 };
-use hermes_kernel_control_store_sqlite::StoreError;
+use makosh_kernel_control_store_sqlite::StoreError;
 
 use crate::identity::owner::authorization::{authorize as authorize_file_owner, operation_digest};
 use crate::infrastructure::filesystem::new_instance_id;
@@ -124,7 +124,7 @@ where
             &proposal,
             &registration,
             requests.capability_ids(),
-            hermes_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
+            makosh_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
                 storage: &bound.storage,
                 events: &bound.events,
                 blobs: &bound.blobs,
@@ -192,7 +192,7 @@ where
         .upgrade_approved_registration_with_all_descriptor_requests(
             &replacement,
             requests.capability_ids(),
-            hermes_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
+            makosh_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
                 storage: &bound.storage,
                 events: &bound.events,
                 blobs: &bound.blobs,
@@ -233,7 +233,7 @@ where
         match store.create_pending_registration_with_all_descriptor_requests(
             &registration,
             requests.capability_ids(),
-            hermes_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
+            makosh_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
                 storage: &bound.storage,
                 events: &bound.events,
                 blobs: &bound.blobs,
@@ -249,7 +249,7 @@ where
         ) {
             Ok(()) => return Ok(registration),
             Err(
-                hermes_kernel_control_store_sqlite::StoreError::ModuleRegistrationAlreadyExists,
+                makosh_kernel_control_store_sqlite::StoreError::ModuleRegistrationAlreadyExists,
             ) => {}
             Err(error) => return Err(format!("{error:?}")),
         }

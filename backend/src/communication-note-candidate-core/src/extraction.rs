@@ -198,7 +198,7 @@ fn confidence(hints: &[CommunicationNoteTopicHintV1]) -> u32 {
 
 fn refresh_identity(candidate: &mut CommunicationNoteCandidateV1) {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communication-note-candidate.digest.v1\0");
+    digest.update(b"makosh.communication-note-candidate.digest.v1\0");
     digest.update(candidate.source_evidence_id);
     digest.update(candidate.source_evidence_revision.to_be_bytes());
     digest.update([basis_byte(candidate.source_basis)]);
@@ -212,7 +212,7 @@ fn refresh_identity(candidate: &mut CommunicationNoteCandidateV1) {
     candidate.candidate_digest = digest.finalize().into();
 
     let mut identity = Sha256::new();
-    identity.update(b"hermes.communication-note-candidate.id.v1\0");
+    identity.update(b"makosh.communication-note-candidate.id.v1\0");
     identity.update(candidate.candidate_digest);
     let identity: [u8; 32] = identity.finalize().into();
     candidate.candidate_id.copy_from_slice(&identity[..16]);

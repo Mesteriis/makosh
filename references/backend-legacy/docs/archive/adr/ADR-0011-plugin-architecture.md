@@ -4,7 +4,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub will need new providers, processors, tools and UI extensions over time. Hardcoding all integrations into core will not scale.
+Макошь will need new providers, processors, tools and UI extensions over time. Hardcoding all integrations into core will not scale.
 
 ## Decision
 

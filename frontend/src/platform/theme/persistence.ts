@@ -5,7 +5,7 @@ import {
 } from '../settings/applicationSettingsClient'
 import { defaultThemeSettings, parseThemeSettings, type ThemeSettings } from './settings'
 
-const LOCAL_STORAGE_KEY = 'hermes-theme-settings'
+const LOCAL_STORAGE_KEY = 'makosh-theme-settings'
 
 export type ThemePersistenceSource = 'application_settings' | 'local_storage'
 

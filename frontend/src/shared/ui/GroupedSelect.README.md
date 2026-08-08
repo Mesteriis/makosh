@@ -24,7 +24,7 @@ Boundary rules:
 - `ariaLabel?: string` - accessible trigger label.
 - `disabled?: boolean` - disables interaction.
 - `emptyLabel?: string` - empty state shown after filtering.
-- `class?: string` - extra class forwarded with the `hermes-grouped-select`
+- `class?: string` - extra class forwarded with the `makosh-grouped-select`
   marker.
 
 ## Events

@@ -1,5 +1,5 @@
-use hermes_events_api::EventEnvelope;
-use hermes_signal_hub_api::raw_signals::RawSignalPersistenceError;
+use makosh_events_api::EventEnvelope;
+use makosh_signal_hub_api::raw_signals::RawSignalPersistenceError;
 use serde_json::Value;
 use sqlx::postgres::PgPool;
 use uuid::Uuid;

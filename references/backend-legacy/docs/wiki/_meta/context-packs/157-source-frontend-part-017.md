@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/shared/mailSync/runtimeQueries.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/mailSync/runtimeQueries.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/mailSync/runtimeQueries.ts`
 - Size bytes / Размер в байтах: `3048`
 - Included characters / Включено символов: `3048`
 - Truncated / Обрезано: `no`
@@ -152,7 +152,7 @@ export function useRunMailFullResyncMutation() {
 
 ### `frontend/src/shared/mailSync/syncApi.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/mailSync/syncApi.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/mailSync/syncApi.ts`
 - Size bytes / Размер в байтах: `1605`
 - Included characters / Включено символов: `1605`
 - Truncated / Обрезано: `no`
@@ -210,7 +210,7 @@ export async function runMailFullResync(accountId: string): Promise<MailSyncRunR
 
 ### `frontend/src/shared/mailSync/syncSettingsForm.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/mailSync/syncSettingsForm.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/mailSync/syncSettingsForm.ts`
 - Size bytes / Размер в байтах: `1318`
 - Included characters / Включено символов: `1318`
 - Truncated / Обрезано: `no`
@@ -260,7 +260,7 @@ export function syncSettingsFormToUpdate(values: SyncSettingsFormValues): MailSy
 
 ### `frontend/src/shared/mailSync/types.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/mailSync/types.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/mailSync/types.ts`
 - Size bytes / Размер в байтах: `1621`
 - Included characters / Включено символов: `1621`
 - Truncated / Обрезано: `no`
@@ -331,7 +331,7 @@ export type MailSyncRunResponse = {
 
 ### `frontend/src/shared/sanitize/emailHtml.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/sanitize/emailHtml.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/sanitize/emailHtml.boundary.test.ts`
 - Size bytes / Размер в байтах: `623`
 - Included characters / Включено символов: `623`
 - Truncated / Обрезано: `no`
@@ -346,7 +346,7 @@ describe('emailHtml remote image privacy boundary', () => {
 
     expect(source).toContain('remoteImageUrlsFromHtml')
     expect(source).toContain('rewriteRemoteImageSources')
-    expect(source).toContain('data-hermes-remote-src')
+    expect(source).toContain('data-makosh-remote-src')
     expect(source).toContain('isRemoteImageUrl')
     expect(source).not.toContain('fetch(')
     expect(source).not.toContain('ApiClient')
@@ -356,7 +356,7 @@ describe('emailHtml remote image privacy boundary', () => {
 
 ### `frontend/src/shared/sanitize/emailHtml.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/sanitize/emailHtml.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/sanitize/emailHtml.ts`
 - Size bytes / Размер в байтах: `8030`
 - Included characters / Включено символов: `8030`
 - Truncated / Обрезано: `no`
@@ -489,7 +489,7 @@ export function rewriteRemoteImageSources(
 		if (!replacement) {
 			return tag.replace(
 				/\bsrc="[^"]*"/i,
-				`src="${BLOCKED_REMOTE_IMAGE_SRC}" data-hermes-remote-src="${escapeAttribute(decoded)}" aria-label="Remote image blocked"`
+				`src="${BLOCKED_REMOTE_IMAGE_SRC}" data-makosh-remote-src="${escapeAttribute(decoded)}" aria-label="Remote image blocked"`
 			)
 		}
 
@@ -689,7 +689,7 @@ function decodeCodePoint(codePoint: number): string {
 
 ### `frontend/src/shared/stores/layoutEditor.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/stores/layoutEditor.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/stores/layoutEditor.ts`
 - Size bytes / Размер в байтах: `16147`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -964,7 +964,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/shared/stores/navigation.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/stores/navigation.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/stores/navigation.boundary.test.ts`
 - Size bytes / Размер в байтах: `888`
 - Included characters / Включено символов: `888`
 - Truncated / Обрезано: `no`
@@ -993,7 +993,7 @@ describe('navigation communication source routing boundary', () => {
 
 ### `frontend/src/shared/stores/navigation.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/stores/navigation.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/stores/navigation.ts`
 - Size bytes / Размер в байтах: `6372`
 - Included characters / Включено символов: `6340`
 - Truncated / Обрезано: `no`
@@ -1186,7 +1186,7 @@ export const useNavigationStore = defineStore('navigation', () => {
 
 ### `frontend/src/shared/stores/notifications.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/stores/notifications.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/stores/notifications.ts`
 - Size bytes / Размер в байтах: `2701`
 - Included characters / Включено символов: `2701`
 - Truncated / Обрезано: `no`
@@ -1284,7 +1284,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
 
 ### `frontend/src/shared/stores/realtimeStatus.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/stores/realtimeStatus.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/stores/realtimeStatus.test.ts`
 - Size bytes / Размер в байтах: `3322`
 - Included characters / Включено символов: `3322`
 - Truncated / Обрезано: `no`
@@ -1396,7 +1396,7 @@ describe('realtime status store', () => {
 
 ### `frontend/src/shared/stores/realtimeStatus.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/stores/realtimeStatus.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/stores/realtimeStatus.ts`
 - Size bytes / Размер в байтах: `5692`
 - Included characters / Включено символов: `5692`
 - Truncated / Обрезано: `no`
@@ -1603,7 +1603,7 @@ function formatRecoveryTimestamp(value: string): string {
 
 ### `frontend/src/shared/stores/sidebar.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/stores/sidebar.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/stores/sidebar.ts`
 - Size bytes / Размер в байтах: `14656`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1974,7 +1974,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/shared/stores/theme.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/stores/theme.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/stores/theme.ts`
 - Size bytes / Размер в байтах: `5715`
 - Included characters / Включено символов: `5715`
 - Truncated / Обрезано: `no`
@@ -2182,7 +2182,7 @@ export const useThemeStore = defineStore('theme', () => {
 
 ### `frontend/src/shared/transitions/index.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/transitions/index.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/transitions/index.ts`
 - Size bytes / Размер в байтах: `132`
 - Included characters / Включено символов: `132`
 - Truncated / Обрезано: `no`
@@ -2194,7 +2194,7 @@ export { default as SlideTransition } from './SlideTransition.vue'
 
 ### `frontend/src/shared/ui/Dialog.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Dialog.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Dialog.boundary.test.ts`
 - Size bytes / Размер в байтах: `497`
 - Included characters / Включено символов: `497`
 - Truncated / Обрезано: `no`
@@ -2215,7 +2215,7 @@ describe('Dialog controlled mode compatibility', () => {
 
 ### `frontend/src/shared/ui/Tabs.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/Tabs.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/Tabs.boundary.test.ts`
 - Size bytes / Размер в байтах: `634`
 - Included characters / Включено символов: `634`
 - Truncated / Обрезано: `no`
@@ -2228,7 +2228,7 @@ describe('Tabs compatibility API', () => {
   it('renders trigger buttons from tabs/active props and emits select events', () => {
     const source = readFileSync(new URL('./Tabs.vue', import.meta.url), 'utf8')
 
-    expect(source).toContain('tabs?: HermesTab[]')
+    expect(source).toContain('tabs?: МакошьTab[]')
     expect(source).toContain('active?: string')
     expect(source).toContain('select: [value: string]')
     expect(source).toContain('<TabsTrigger')
@@ -2240,7 +2240,7 @@ describe('Tabs compatibility API', () => {
 
 ### `frontend/src/shared/ui/index.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/ui/index.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/ui/index.ts`
 - Size bytes / Размер в байтах: `1728`
 - Included characters / Включено символов: `1728`
 - Truncated / Обрезано: `no`
@@ -2282,7 +2282,7 @@ export { default as Popover } from './Popover.vue'
 
 ### `frontend/src/shared/yandexTelemost/settingsBridge.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/yandexTelemost/settingsBridge.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/yandexTelemost/settingsBridge.ts`
 - Size bytes / Размер в байтах: `77`
 - Included characters / Включено символов: `77`
 - Truncated / Обрезано: `no`
@@ -2293,7 +2293,7 @@ export type { ProviderAccount } from '../../domains/settings/types/settings'
 
 ### `frontend/src/shared/zoom/settingsBridge.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/shared/zoom/settingsBridge.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/shared/zoom/settingsBridge.ts`
 - Size bytes / Размер в байтах: `259`
 - Included characters / Включено символов: `259`
 - Truncated / Обрезано: `no`
@@ -2306,7 +2306,7 @@ export type { ProviderAccount } from '../../domains/settings/types/settings'
 
 ### `frontend/src/vite-env.d.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/vite-env.d.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/vite-env.d.ts`
 - Size bytes / Размер в байтах: `195`
 - Included characters / Включено символов: `195`
 - Truncated / Обрезано: `no`
@@ -2323,7 +2323,7 @@ declare module '*.vue' {
 
 ### `frontend/tailwind.config.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/tailwind.config.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/tailwind.config.ts`
 - Size bytes / Размер в байтах: `2982`
 - Included characters / Включено символов: `2982`
 - Truncated / Обрезано: `no`
@@ -2435,7 +2435,7 @@ export default {
 
 ### `frontend/vite.config.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/vite.config.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/vite.config.ts`
 - Size bytes / Размер в байтах: `588`
 - Included characters / Включено символов: `588`
 - Truncated / Обрезано: `no`

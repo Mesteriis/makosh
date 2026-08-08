@@ -19,7 +19,7 @@ const emit = defineEmits<{
 	select: [item: NavigationItem]
 }>()
 
-const classes = computed(() => ['hermes-menu', props.class])
+const classes = computed(() => ['makosh-menu', props.class])
 
 function selectItem(item: NavigationItem): void {
 	if (item.disabled) {
@@ -35,13 +35,13 @@ function selectItem(item: NavigationItem): void {
 		<button
 			v-for="item in items"
 			:key="item.id"
-			class="hermes-menu__item"
+			class="makosh-menu__item"
 			type="button"
 			:aria-current="item.id === modelValue || item.current ? 'page' : undefined"
 			:disabled="item.disabled"
 			@click="selectItem(item)"
 		>
-			<Icon v-if="item.icon" :icon="item.icon" size="1rem" class="hermes-menu__icon" aria-hidden="true" />
+			<Icon v-if="item.icon" :icon="item.icon" size="1rem" class="makosh-menu__icon" aria-hidden="true" />
 			<span>{{ item.label }}</span>
 		</button>
 	</nav>

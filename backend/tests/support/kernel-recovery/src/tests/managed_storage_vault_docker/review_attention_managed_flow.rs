@@ -3,10 +3,12 @@
 use super::*;
 
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
-use hermes_gateway_protocol::v1::{
+use http_body_util::BodyExt as _;
+use hyper::{Request, StatusCode, body::Bytes};
+use makosh_gateway_protocol::v1::{
     ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
 };
-use hermes_review_attention_api::{
+use makosh_review_attention_api::{
     REVIEW_ATTENTION_COMMAND_CONNECT_PATH_V1, REVIEW_ATTENTION_QUERY_CONNECT_PATH_V1,
     REVIEW_ATTENTION_REALTIME_CONTRACT_NAME_V1, REVIEW_ATTENTION_REALTIME_EVENT_KIND_V1,
     wire::{
@@ -18,22 +20,20 @@ use hermes_review_attention_api::{
         review_attention_query_response_v1::Result as QueryResult,
     },
 };
-use http_body_util::BodyExt as _;
-use hyper::{Request, StatusCode, body::Bytes};
 
-type ReviewAttentionGateway = hermes_gateway_runtime::GatewayApplicationRouter<
+type ReviewAttentionGateway = makosh_gateway_runtime::GatewayApplicationRouter<
     crate::identity::browser_gateway::ControlStoreBrowserAuthority,
-    hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 >;
 
 #[test]
 #[ignore = "requires disposable Docker plus real managed Vault, Storage and Review binaries"]
 fn managed_review_attention_reaches_gateway_sse_and_replays_after_restart() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-review-attention");
+    let root = unique_target_root("makosh-managed-review-attention");
     let data = private_directory(root.join("kernel"));
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -41,11 +41,11 @@ fn managed_review_attention_reaches_gateway_sse_and_replays_after_restart() {
     );
     let release = installed_review_attention_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_store(&root, release.kernel()));
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             REVIEW_ATTENTION_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             [4; 65],
@@ -60,7 +60,7 @@ fn managed_review_attention_reaches_gateway_sse_and_replays_after_restart() {
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(32).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(32).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     configure_review_attention_realtime_v1(&supervisor, &store, realtime.clone());
     start_vault(&supervisor, &store, &data, release.kernel());
@@ -178,7 +178,7 @@ fn managed_review_attention_reaches_gateway_sse_and_replays_after_restart() {
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Review fixture");
 }
@@ -188,7 +188,7 @@ fn review_attention_gateway(
     supervisor: &ManagedRuntimeSupervisor,
     root: &Path,
     data: &Path,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 ) -> ReviewAttentionGateway {
     let configuration = crate::platform::gateway::BrowserGatewayConfigurationV1::new(
         "127.0.0.1:9443".parse().expect("loopback Gateway address"),
@@ -245,7 +245,7 @@ fn read_review_attention_sse_event(
     router: &ReviewAttentionGateway,
     runtime: &tokio::runtime::Runtime,
     cookie: &str,
-) -> hermes_gateway_protocol::v1::ClientRealtimeEventV1 {
+) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1 {
     let response = runtime.block_on(
         router.route(
             Request::builder()
@@ -269,7 +269,7 @@ fn read_review_attention_sse_event(
 
 async fn find_review_attention_event<B>(
     mut body: B,
-) -> hermes_gateway_protocol::v1::ClientRealtimeEventV1
+) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1
 where
     B: hyper::body::Body<Data = Bytes> + Unpin,
     B::Error: std::fmt::Debug,

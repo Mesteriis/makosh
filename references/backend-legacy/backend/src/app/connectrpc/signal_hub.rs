@@ -28,7 +28,7 @@ use crate::domains::signal_hub::store::{
 };
 use crate::platform::config::app_config::AppConfig;
 use crate::platform::settings::store::ApplicationSettingsStore;
-use hermes_connectrpc_contracts::hermes::signal_hub::v1::{
+use makosh_connectrpc_contracts::makosh::signal_hub::v1::{
     ApplyProfileRequest, ApplyProfileResponse, CreateConnectionRequest, CreateConnectionResponse,
     CreatePolicyRequest, CreatePolicyResponse, CreateProfileRequest, CreateProfileResponse,
     DisableSignalsRequest, DisableSignalsResponse, DisableSourceRequest, DisableSourceResponse,
@@ -57,8 +57,8 @@ use hermes_connectrpc_contracts::hermes::signal_hub::v1::{
 #[path = "signal_hub_service_impl.rs"]
 #[allow(refining_impl_trait)]
 mod signal_hub_service_impl;
-use hermes_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
-use hermes_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
+use makosh_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
+use makosh_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
 
 pub(crate) fn register(
     router: ConnectRouter,
@@ -91,24 +91,24 @@ impl SignalHubConnectService {
             capability_service: SignalHubCapabilityService::new(store.clone()),
             fixture_service: SignalFixtureSourceService::new(
                 store.clone(),
-                hermes_events_postgres::store::EventStore::new(pool.clone()),
+                makosh_events_postgres::store::EventStore::new(pool.clone()),
             ),
             connection_service: SignalHubConnectionService::new(
                 store.clone(),
-                hermes_events_postgres::store::EventStore::new(pool.clone()),
+                makosh_events_postgres::store::EventStore::new(pool.clone()),
             ),
             control_service: SignalHubControlService::new(
                 store.clone(),
-                hermes_events_postgres::store::EventStore::new(pool.clone()),
+                makosh_events_postgres::store::EventStore::new(pool.clone()),
             ),
             profile_service: SignalHubProfileService::new(
                 store.clone(),
                 ApplicationSettingsStore::new(pool.clone()),
-                hermes_events_postgres::store::EventStore::new(pool.clone()),
+                makosh_events_postgres::store::EventStore::new(pool.clone()),
             ),
             replay_service: SignalHubReplayService::new(
                 store.clone(),
-                hermes_events_postgres::store::EventStore::new(pool),
+                makosh_events_postgres::store::EventStore::new(pool),
             ),
             store,
         }

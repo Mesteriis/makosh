@@ -6,13 +6,13 @@ import {
 	MailAccountStatusV1Schema,
 	MailConnectorProfileV1,
 	MailProviderPathReadinessV1,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
 import {
 	ExportEffectiveOwnerModuleSettingsReceiptV1Schema,
 	OwnerSettingEntryV1Schema,
 	OwnerSettingValueV1Schema,
-} from '../../../gen/hermes/gateway/v1/owner_module_settings_pb'
-import { MailAddressBookProviderV1 } from '../../../gen/hermes/mail/portability/v1/portability_pb'
+} from '../../../gen/makosh/gateway/v1/owner_module_settings_pb'
+import { MailAddressBookProviderV1 } from '../../../gen/makosh/mail/portability/v1/portability_pb'
 import {
 	buildMailAccountExportV1,
 	MAIL_SETTINGS_SCHEMA_REVISION_V2,

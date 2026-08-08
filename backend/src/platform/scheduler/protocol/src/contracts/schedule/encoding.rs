@@ -1,4 +1,4 @@
-use hermes_clock_protocol::{TimeZoneContextV1, UtcMillisV1};
+use makosh_clock_protocol::{TimeZoneContextV1, UtcMillisV1};
 
 use super::{
     MisfirePolicyV1, OverlapPolicyV1, RetryPolicyV1, ScheduleCodecErrorV1, SchedulePolicyV1,

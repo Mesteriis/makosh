@@ -5,7 +5,7 @@ pub enum CalendarError {
     #[error(transparent)]
     Sqlx(#[from] sqlx::Error),
     #[error(transparent)]
-    Observation(#[from] hermes_observations_postgres::errors::ObservationStoreError),
+    Observation(#[from] makosh_observations_postgres::errors::ObservationStoreError),
     #[error("not found")]
     NotFound,
 }

@@ -34,17 +34,17 @@ const defaultLabels: Record<PresenceStatus, string> = {
 const label = computed(() => props.label ?? defaultLabels[props.status])
 
 const classes = computed(() => [
-  'hermes-presence-indicator',
-  `hermes-presence-indicator--${props.status}`,
-  `hermes-presence-indicator--${props.size}`,
-  `hermes-status-indicator--${statusTone[props.status]}`,
+  'makosh-presence-indicator',
+  `makosh-presence-indicator--${props.status}`,
+  `makosh-presence-indicator--${props.size}`,
+  `makosh-status-indicator--${statusTone[props.status]}`,
   props.class
 ])
 </script>
 
 <template>
   <span :class="classes" :aria-label="label">
-    <span class="hermes-status-indicator-dot" aria-hidden="true" />
-    <span v-if="showLabel" class="hermes-status-indicator-label">{{ label }}</span>
+    <span class="makosh-status-indicator-dot" aria-hidden="true" />
+    <span v-if="showLabel" class="makosh-status-indicator-label">{{ label }}</span>
   </span>
 </template>

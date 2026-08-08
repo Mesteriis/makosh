@@ -1,19 +1,19 @@
 [package]
-name = "hermes-mail-contacts-sync-testkit"
+name = "makosh-mail-contacts-sync-testkit"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "test"
 owner = "test"
 surface = "test_support"
 
 [dev-dependencies]
-hermes-mail-address-book-contract = { path = "../../../src/mail-address-book-contract" }
-hermes-mail-address-book-persistence = { path = "../../../src/mail-address-book-persistence", features = ["conformance-test-support"] }
-hermes-mail-contacts-sync-core = { path = "../../../src/mail-contacts-sync-core" }
-hermes-mail-contacts-sync-persistence = { path = "../../../src/mail-contacts-sync-persistence", features = ["conformance-test-support"] }
+makosh-mail-address-book-contract = { path = "../../../src/mail-address-book-contract" }
+makosh-mail-address-book-persistence = { path = "../../../src/mail-address-book-persistence", features = ["conformance-test-support"] }
+makosh-mail-contacts-sync-core = { path = "../../../src/mail-contacts-sync-core" }
+makosh-mail-contacts-sync-persistence = { path = "../../../src/mail-contacts-sync-persistence", features = ["conformance-test-support"] }
 sha2 = { version = "=0.11.0", default-features = false }
 prost-types = "=0.14.4"
 tokio = { version = "=1.52.4", default-features = false, features = ["macros", "rt-multi-thread"] }

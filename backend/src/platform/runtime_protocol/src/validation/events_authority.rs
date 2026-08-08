@@ -267,7 +267,7 @@ fn valid_consumer_subject(envelope_kind: i32, subject: &str) -> bool {
         Some(DurableEnvelopeKindV1::Ack) => "ack",
         _ => return false,
     };
-    subject.starts_with(&format!("hermes.{token}.v1."))
+    subject.starts_with(&format!("makosh.{token}.v1."))
         && subject.len() <= 256
         && !subject.contains(['>', '*'])
         && subject.bytes().all(|byte| {

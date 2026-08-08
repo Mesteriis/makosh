@@ -6,13 +6,13 @@ mod resolver_update_live;
 use std::io::{Read, Write};
 use std::os::unix::net::UnixStream;
 
-use hermes_events_authority_runtime_control::serve_inherited_on_channel;
-use hermes_events_jetstream::NatsRuntimeCredentialFenceV1;
-use hermes_events_protocol::{
+use makosh_events_authority_runtime_control::serve_inherited_on_channel;
+use makosh_events_jetstream::NatsRuntimeCredentialFenceV1;
+use makosh_events_protocol::{
     NatsRuntimeCredentialDeliveryBindingV1, NatsRuntimeCredentialDeliveryV1,
     NatsRuntimeCredentialRecipientPublicKeyV1, NatsRuntimeCredentialRecipientV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ApplyEventsAccountJwtUpdateRequestV1, DescribeManagedRuntimeResponseV1,
     EventsAuthorityRuntimeConfigurationV1, EventsAuthorityRuntimeControlRequestV1,
     EventsAuthorityRuntimeControlResponseV1, GetEventsAuthorityRuntimeStatusRequestV1,
@@ -154,12 +154,12 @@ pub(super) fn start_runtime_with_account(
 }
 
 fn nats_endpoint() -> String {
-    std::env::var("HERMES_NATS_TEST_ENDPOINT")
+    std::env::var("MAKOSH_NATS_TEST_ENDPOINT")
         .unwrap_or_else(|_| "nats://127.0.0.1:4222".to_owned())
 }
 
 fn nats_username() -> String {
-    std::env::var("HERMES_NATS_EVENT_HUB_USERNAME").unwrap_or_else(|_| "event_hub".to_owned())
+    std::env::var("MAKOSH_NATS_EVENT_HUB_USERNAME").unwrap_or_else(|_| "event_hub".to_owned())
 }
 
 fn complete_descriptor_and_signer_bootstrap(kernel: &mut UnixStream, account_seed: &str) {
@@ -191,7 +191,7 @@ fn credential_request(
         runtime_generation: 3,
         grant_epoch: 8,
         credential_revision: 2,
-        publish_subjects: vec!["hermes.event.v1.contacts.changed.v1".to_owned()],
+        publish_subjects: vec!["makosh.event.v1.contacts.changed.v1".to_owned()],
         subscribe_subjects: Vec::new(),
         ttl_seconds: 60,
         request_id: vec![7; 16],
@@ -219,7 +219,7 @@ fn credential_binding(
         .expect("recipient key");
     let recipient = NatsRuntimeCredentialRecipientPublicKeyV1::from_bytes(recipient)
         .expect("recipient key validates");
-    hermes_events_jetstream::bind_runtime_credential_delivery(&fence, [7; 16], recipient)
+    makosh_events_jetstream::bind_runtime_credential_delivery(&fence, [7; 16], recipient)
         .expect("delivery binding")
 }
 
@@ -304,7 +304,7 @@ fn respond_to_vault_route(
 }
 
 fn vault_public_key() -> [u8; 32] {
-    hermes_vault_protocol::VaultResponseRecipientV1::generate()
+    makosh_vault_protocol::VaultResponseRecipientV1::generate()
         .public_key()
         .as_bytes()
         .to_owned()

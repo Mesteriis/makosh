@@ -49,22 +49,22 @@ test('allows PostgreSQL and AST clients only in their exact Storage packages', (
 
 test('allows public Storage Vault contracts while rejecting private Storage implementations', () => {
   const allowed = [
-    kernel([dependency('hermes-storage-protocol')]),
-    workspacePackage('hermes-scheduler-runtime', {
+    kernel([dependency('makosh-storage-protocol')]),
+    workspacePackage('makosh-scheduler-runtime', {
       role: 'platform',
       owner: 'scheduler',
       surface: 'runtime',
-    }, [dependency('hermes-storage-vault')]),
+    }, [dependency('makosh-storage-vault')]),
     ...storagePackages(),
   ];
   assert.deepEqual(validateCargoMetadata(canonicalPolicyForTests(), metadata(allowed)), []);
 
   const forbidden = [
-    workspacePackage('hermes-untrusted-scheduler-runtime', {
+    workspacePackage('makosh-untrusted-scheduler-runtime', {
       role: 'platform',
       owner: 'scheduler',
       surface: 'runtime',
-    }, [dependency('hermes-storage-control')]),
+    }, [dependency('makosh-storage-control')]),
     ...storagePackages(),
   ];
   assert.ok(
@@ -76,7 +76,7 @@ test('allows public Storage Vault contracts while rejecting private Storage impl
 
 
 test('prevents Storage packages from depending on Kernel, Gateway or modules', () => {
-  const contacts = workspacePackage('hermes-contacts-api', {
+  const contacts = workspacePackage('makosh-contacts-api', {
     role: 'domain',
     owner: 'contacts',
     surface: 'contract',
@@ -84,7 +84,7 @@ test('prevents Storage packages from depending on Kernel, Gateway or modules', (
   const packages = [
     kernel(),
     contacts,
-    ...storagePackages({ controlDependencies: [dependency('hermes-contacts-api')] }),
+    ...storagePackages({ controlDependencies: [dependency('makosh-contacts-api')] }),
   ];
 
   assert.ok(
@@ -99,7 +99,7 @@ test('rejects SQLite clients in owner PostgreSQL persistence packages', () => {
   const packages = [
     kernel(),
     workspacePackage(
-      'hermes-contacts-persistence',
+      'makosh-contacts-persistence',
       { role: 'domain', owner: 'contacts', surface: 'persistence' },
       [dependency('rusqlite')],
     ),
@@ -136,7 +136,7 @@ test('allows only one package to claim the canonical events protocol owner', () 
   const packages = [
     kernel(),
     eventsProtocol(),
-    workspacePackage('hermes-events-protocol-alias', {
+    workspacePackage('makosh-events-protocol-alias', {
       role: 'platform',
       owner: 'events',
       surface: 'contract',
@@ -190,7 +190,7 @@ test('allows protobuf-only dependencies in the canonical events protocol', () =>
 
 
 test('allows an integration to publish only through explicit Communications contracts', () => {
-  const communicationsContract = workspacePackage('hermes-communications-ingress', {
+  const communicationsContract = workspacePackage('makosh-communications-ingress', {
     role: 'domain',
     owner: 'communications',
     surface: 'contract',
@@ -199,15 +199,15 @@ test('allows an integration to publish only through explicit Communications cont
     kernel(),
     communicationsContract,
     workspacePackage(
-      'hermes-telegram-runtime',
+      'makosh-telegram-runtime',
       { role: 'integration', owner: 'telegram', surface: 'runtime' },
-      [dependency('hermes-communications-ingress')],
+      [dependency('makosh-communications-ingress')],
     ),
   ];
 
   assert.deepEqual(validateCargoMetadata(canonicalPolicyForTests(), metadata(allowed)), []);
 
-  const attachmentContract = workspacePackage('hermes-communications-attachment-contract', {
+  const attachmentContract = workspacePackage('makosh-communications-attachment-contract', {
     role: 'domain',
     owner: 'communications',
     surface: 'contract',
@@ -216,9 +216,9 @@ test('allows an integration to publish only through explicit Communications cont
     kernel(),
     attachmentContract,
     workspacePackage(
-      'hermes-mail-runtime',
+      'makosh-mail-runtime',
       { role: 'integration', owner: 'mail', surface: 'runtime' },
-      [dependency('hermes-communications-attachment-contract')],
+      [dependency('makosh-communications-attachment-contract')],
     ),
   ];
 
@@ -227,7 +227,7 @@ test('allows an integration to publish only through explicit Communications cont
     [],
   );
 
-  const clientContract = workspacePackage('hermes-communications-api', {
+  const clientContract = workspacePackage('makosh-communications-api', {
     role: 'domain',
     owner: 'communications',
     surface: 'contract',
@@ -236,9 +236,9 @@ test('allows an integration to publish only through explicit Communications cont
     kernel(),
     clientContract,
     workspacePackage(
-      'hermes-telegram-runtime',
+      'makosh-telegram-runtime',
       { role: 'integration', owner: 'telegram', surface: 'runtime' },
-      [dependency('hermes-communications-api')],
+      [dependency('makosh-communications-api')],
     ),
   ];
 
@@ -246,7 +246,7 @@ test('allows an integration to publish only through explicit Communications cont
 });
 
 test('allows an engine to use only the exact Communications attachment contract', () => {
-  const attachmentContract = workspacePackage('hermes-communications-attachment-contract', {
+  const attachmentContract = workspacePackage('makosh-communications-attachment-contract', {
     role: 'domain',
     owner: 'communications',
     surface: 'contract',
@@ -255,15 +255,15 @@ test('allows an engine to use only the exact Communications attachment contract'
     kernel(),
     attachmentContract,
     workspacePackage(
-      'hermes-attachment-security-runtime',
+      'makosh-attachment-security-runtime',
       { role: 'engine', owner: 'attachment_security', surface: 'runtime' },
-      [dependency('hermes-communications-attachment-contract')],
+      [dependency('makosh-communications-attachment-contract')],
     ),
   ];
 
   assert.deepEqual(validateCargoMetadata(canonicalPolicyForTests(), metadata(allowed)), []);
 
-  const communicationsApi = workspacePackage('hermes-communications-api', {
+  const communicationsApi = workspacePackage('makosh-communications-api', {
     role: 'domain',
     owner: 'communications',
     surface: 'contract',
@@ -272,9 +272,9 @@ test('allows an engine to use only the exact Communications attachment contract'
     kernel(),
     communicationsApi,
     workspacePackage(
-      'hermes-attachment-security-runtime',
+      'makosh-attachment-security-runtime',
       { role: 'engine', owner: 'attachment_security', surface: 'runtime' },
-      [dependency('hermes-communications-api')],
+      [dependency('makosh-communications-api')],
     ),
   ];
 
@@ -285,7 +285,7 @@ test('allows an engine to use only the exact Communications attachment contract'
 });
 
 test('allows an integration to publish only through the exact Attachment Security contract', () => {
-  const candidateContract = workspacePackage('hermes-attachment-security-contract', {
+  const candidateContract = workspacePackage('makosh-attachment-security-contract', {
     role: 'engine',
     owner: 'attachment_security',
     surface: 'contract',
@@ -294,15 +294,15 @@ test('allows an integration to publish only through the exact Attachment Securit
     kernel(),
     candidateContract,
     workspacePackage(
-      'hermes-mail-runtime',
+      'makosh-mail-runtime',
       { role: 'integration', owner: 'mail', surface: 'runtime' },
-      [dependency('hermes-attachment-security-contract')],
+      [dependency('makosh-attachment-security-contract')],
     ),
   ];
 
   assert.deepEqual(validateCargoMetadata(canonicalPolicyForTests(), metadata(allowed)), []);
 
-  const engineCore = workspacePackage('hermes-other-engine-contract', {
+  const engineCore = workspacePackage('makosh-other-engine-contract', {
     role: 'engine',
     owner: 'other_engine',
     surface: 'contract',
@@ -311,9 +311,9 @@ test('allows an integration to publish only through the exact Attachment Securit
     kernel(),
     engineCore,
     workspacePackage(
-      'hermes-mail-runtime',
+      'makosh-mail-runtime',
       { role: 'integration', owner: 'mail', surface: 'runtime' },
-      [dependency('hermes-other-engine-contract')],
+      [dependency('makosh-other-engine-contract')],
     ),
   ];
 
@@ -324,7 +324,7 @@ test('allows an integration to publish only through the exact Attachment Securit
 });
 
 test('allows an engine runtime to use only the shared Event Hub transport implementation', () => {
-  const eventTransport = workspacePackage('hermes-events-jetstream', {
+  const eventTransport = workspacePackage('makosh-events-jetstream', {
     role: 'platform',
     owner: 'events',
     surface: 'implementation',
@@ -333,15 +333,15 @@ test('allows an engine runtime to use only the shared Event Hub transport implem
     kernel(),
     eventTransport,
     workspacePackage(
-      'hermes-attachment-security-runtime',
+      'makosh-attachment-security-runtime',
       { role: 'engine', owner: 'attachment_security', surface: 'runtime' },
-      [dependency('hermes-events-jetstream')],
+      [dependency('makosh-events-jetstream')],
     ),
   ];
 
   assert.deepEqual(validateCargoMetadata(canonicalPolicyForTests(), metadata(allowed)), []);
 
-  const eventAuthority = workspacePackage('hermes-events-authority', {
+  const eventAuthority = workspacePackage('makosh-events-authority', {
     role: 'platform',
     owner: 'events',
     surface: 'implementation',
@@ -350,9 +350,9 @@ test('allows an engine runtime to use only the shared Event Hub transport implem
     kernel(),
     eventAuthority,
     workspacePackage(
-      'hermes-attachment-security-runtime',
+      'makosh-attachment-security-runtime',
       { role: 'engine', owner: 'attachment_security', surface: 'runtime' },
-      [dependency('hermes-events-authority')],
+      [dependency('makosh-events-authority')],
     ),
   ];
 
@@ -363,7 +363,7 @@ test('allows an engine runtime to use only the shared Event Hub transport implem
 });
 
 test('allows a workflow runtime to use only the shared Event Hub transport implementation', () => {
-  const eventTransport = workspacePackage('hermes-events-jetstream', {
+  const eventTransport = workspacePackage('makosh-events-jetstream', {
     role: 'platform',
     owner: 'events',
     surface: 'implementation',
@@ -372,15 +372,15 @@ test('allows a workflow runtime to use only the shared Event Hub transport imple
     kernel(),
     eventTransport,
     workspacePackage(
-      'hermes-communications-export-runtime',
+      'makosh-communications-export-runtime',
       { role: 'workflow', owner: 'communications_export', surface: 'runtime' },
-      [dependency('hermes-events-jetstream')],
+      [dependency('makosh-events-jetstream')],
     ),
   ];
 
   assert.deepEqual(validateCargoMetadata(canonicalPolicyForTests(), metadata(allowed)), []);
 
-  const eventAuthority = workspacePackage('hermes-events-authority', {
+  const eventAuthority = workspacePackage('makosh-events-authority', {
     role: 'platform',
     owner: 'events',
     surface: 'implementation',
@@ -389,9 +389,9 @@ test('allows a workflow runtime to use only the shared Event Hub transport imple
     kernel(),
     eventAuthority,
     workspacePackage(
-      'hermes-communications-export-runtime',
+      'makosh-communications-export-runtime',
       { role: 'workflow', owner: 'communications_export', surface: 'runtime' },
-      [dependency('hermes-events-authority')],
+      [dependency('makosh-events-authority')],
     ),
   ];
 
@@ -402,7 +402,7 @@ test('allows a workflow runtime to use only the shared Event Hub transport imple
 });
 
 test('forbids a domain from importing an engine contract', () => {
-  const engineContract = workspacePackage('hermes-attachment-security-contract', {
+  const engineContract = workspacePackage('makosh-attachment-security-contract', {
     role: 'engine',
     owner: 'attachment_security',
     surface: 'contract',
@@ -411,9 +411,9 @@ test('forbids a domain from importing an engine contract', () => {
     kernel(),
     engineContract,
     workspacePackage(
-      'hermes-communications-runtime',
+      'makosh-communications-runtime',
       { role: 'domain', owner: 'communications', surface: 'runtime' },
-      [dependency('hermes-attachment-security-contract')],
+      [dependency('makosh-attachment-security-contract')],
     ),
   ];
 
@@ -424,30 +424,30 @@ test('forbids a domain from importing an engine contract', () => {
 });
 
 test('allows an engine to serve only an explicitly admitted workflow ingress contract', () => {
-  const ingress = workspacePackage('hermes-attachment-text-extraction-ingress', {
+  const ingress = workspacePackage('makosh-attachment-text-extraction-ingress', {
     role: 'workflow',
     owner: 'attachment_text_extraction',
     surface: 'contract',
   });
   const engine = workspacePackage(
-    'hermes-attachment-security-runtime',
+    'makosh-attachment-security-runtime',
     { role: 'engine', owner: 'attachment_security', surface: 'runtime' },
-    [dependency('hermes-attachment-text-extraction-ingress')],
+    [dependency('makosh-attachment-text-extraction-ingress')],
   );
   assert.deepEqual(
     validateCargoMetadata(canonicalPolicyForTests(), metadata([kernel(), ingress, engine])),
     [],
   );
 
-  const unadmitted = workspacePackage('hermes-unadmitted-workflow-api', {
+  const unadmitted = workspacePackage('makosh-unadmitted-workflow-api', {
     role: 'workflow',
     owner: 'unadmitted_workflow',
     surface: 'contract',
   });
   const forbidden = workspacePackage(
-    'hermes-attachment-security-runtime',
+    'makosh-attachment-security-runtime',
     { role: 'engine', owner: 'attachment_security', surface: 'runtime' },
-    [dependency('hermes-unadmitted-workflow-api')],
+    [dependency('makosh-unadmitted-workflow-api')],
   );
   assert.ok(codes(validateCargoMetadata(
     canonicalPolicyForTests(),
@@ -458,13 +458,13 @@ test('allows an engine to serve only an explicitly admitted workflow ingress con
 
 
 for (const packageName of [
-  'hermes-hub-backend',
-  'hermes-api',
-  'hermes-worker-runtime',
-  'hermes-desktop-runtime',
-  'hermes-schema',
-  'hermes-common',
-  'hermes-provider-api',
+  'makosh-backend',
+  'makosh-api',
+  'makosh-worker-runtime',
+  'makosh-desktop-runtime',
+  'makosh-schema',
+  'makosh-common',
+  'makosh-provider-api',
 ]) {
   test(`rejects compile-graph aggregation package ${packageName}`, () => {
     const packages = [
@@ -485,9 +485,9 @@ test('prevents module packages from depending on Kernel implementation', () => {
   const packages = [
     kernel(),
     workspacePackage(
-      'hermes-telegram-core',
+      'makosh-telegram-core',
       { role: 'integration', owner: 'telegram', surface: 'implementation' },
-      [dependency('hermes-kernel')],
+      [dependency('makosh-kernel')],
     ),
   ];
 
@@ -498,8 +498,8 @@ test('prevents module packages from depending on Kernel implementation', () => {
 
 test('prevents Kernel from compiling owner-specific module contracts', () => {
   const packages = [
-    kernel([dependency('hermes-contacts-contracts')]),
-    workspacePackage('hermes-contacts-contracts', {
+    kernel([dependency('makosh-contacts-contracts')]),
+    workspacePackage('makosh-contacts-contracts', {
       role: 'domain',
       owner: 'contacts',
       surface: 'contract',
@@ -515,11 +515,11 @@ test('keeps Gateway protocol independent from owner-specific contracts', () => {
   const packages = [
     kernel(),
     workspacePackage(
-      'hermes-gateway-protocol',
+      'makosh-gateway-protocol',
       { role: 'api', owner: 'gateway', surface: 'contract' },
-      [dependency('hermes-contacts-contracts')],
+      [dependency('makosh-contacts-contracts')],
     ),
-    workspacePackage('hermes-contacts-contracts', {
+    workspacePackage('makosh-contacts-contracts', {
       role: 'domain',
       owner: 'contacts',
       surface: 'contract',
@@ -535,11 +535,11 @@ test('prevents one runtime package from aggregating another runtime', () => {
   const packages = [
     kernel(),
     workspacePackage(
-      'hermes-telegram-runtime',
+      'makosh-telegram-runtime',
       { role: 'integration', owner: 'telegram', surface: 'runtime' },
-      [dependency('hermes-telegram-sync-runtime')],
+      [dependency('makosh-telegram-sync-runtime')],
     ),
-    workspacePackage('hermes-telegram-sync-runtime', {
+    workspacePackage('makosh-telegram-sync-runtime', {
       role: 'integration',
       owner: 'telegram',
       surface: 'runtime',
@@ -555,11 +555,11 @@ test('rejects persistence adapter dependencies across owners', () => {
   const packages = [
     kernel(),
     workspacePackage(
-      'hermes-tasks-persistence',
+      'makosh-tasks-persistence',
       { role: 'domain', owner: 'tasks', surface: 'persistence' },
-      [dependency('hermes-contacts-persistence')],
+      [dependency('makosh-contacts-persistence')],
     ),
-    workspacePackage('hermes-contacts-persistence', {
+    workspacePackage('makosh-contacts-persistence', {
       role: 'domain',
       owner: 'contacts',
       surface: 'persistence',
@@ -578,41 +578,41 @@ for (const { owner, adapters } of [
 ]) {
   test(`accepts an isolated ${owner} package graph without a Communications implementation dependency`, () => {
     const adapterPackages = adapters.map((adapter) => workspacePackage(
-      `hermes-${owner}-${adapter}`,
+      `makosh-${owner}-${adapter}`,
       { role: 'integration', owner, surface: 'implementation' },
-      [dependency(`hermes-${owner}-core`)],
+      [dependency(`makosh-${owner}-core`)],
     ));
     const packages = [
       kernel(),
-      workspacePackage('hermes-communications-ingress', {
+      workspacePackage('makosh-communications-ingress', {
         role: 'domain',
         owner: 'communications',
         surface: 'contract',
       }),
-      workspacePackage(`hermes-${owner}-api`, {
+      workspacePackage(`makosh-${owner}-api`, {
         role: 'integration',
         owner,
         surface: 'contract',
       }),
       workspacePackage(
-        `hermes-${owner}-core`,
+        `makosh-${owner}-core`,
         { role: 'integration', owner, surface: 'implementation' },
-        [dependency('hermes-communications-ingress')],
+        [dependency('makosh-communications-ingress')],
       ),
       ...adapterPackages,
       workspacePackage(
-        `hermes-${owner}-persistence`,
+        `makosh-${owner}-persistence`,
         { role: 'integration', owner, surface: 'persistence' },
-        [dependency(`hermes-${owner}-core`)],
+        [dependency(`makosh-${owner}-core`)],
       ),
       workspacePackage(
-        `hermes-${owner}-runtime`,
+        `makosh-${owner}-runtime`,
         { role: 'integration', owner, surface: 'runtime' },
         [
-          dependency(`hermes-${owner}-api`),
-          dependency(`hermes-${owner}-core`),
-          ...adapters.map((adapter) => dependency(`hermes-${owner}-${adapter}`)),
-          dependency(`hermes-${owner}-persistence`),
+          dependency(`makosh-${owner}-api`),
+          dependency(`makosh-${owner}-core`),
+          ...adapters.map((adapter) => dependency(`makosh-${owner}-${adapter}`)),
+          dependency(`makosh-${owner}-persistence`),
         ],
       ),
     ];
@@ -627,28 +627,28 @@ for (const owner of ['contacts', 'organizations', 'tasks', 'calendar', 'document
   test(`accepts an isolated package graph for enabled domain ${owner}`, () => {
     const packages = [
       kernel(),
-      workspacePackage(`hermes-${owner}-contracts`, {
+      workspacePackage(`makosh-${owner}-contracts`, {
         role: 'domain',
         owner,
         surface: 'contract',
       }),
       workspacePackage(
-        `hermes-${owner}-domain`,
+        `makosh-${owner}-domain`,
         { role: 'domain', owner, surface: 'implementation' },
-        [dependency(`hermes-${owner}-contracts`)],
+        [dependency(`makosh-${owner}-contracts`)],
       ),
       workspacePackage(
-        `hermes-${owner}-persistence`,
+        `makosh-${owner}-persistence`,
         { role: 'domain', owner, surface: 'persistence' },
-        [dependency(`hermes-${owner}-domain`)],
+        [dependency(`makosh-${owner}-domain`)],
       ),
       workspacePackage(
-        `hermes-${owner}-runtime`,
+        `makosh-${owner}-runtime`,
         { role: 'domain', owner, surface: 'runtime' },
         [
-          dependency(`hermes-${owner}-contracts`),
-          dependency(`hermes-${owner}-domain`),
-          dependency(`hermes-${owner}-persistence`),
+          dependency(`makosh-${owner}-contracts`),
+          dependency(`makosh-${owner}-domain`),
+          dependency(`makosh-${owner}-persistence`),
         ],
       ),
     ];
@@ -660,40 +660,40 @@ for (const owner of ['contacts', 'organizations', 'tasks', 'calendar', 'document
 test('accepts the split Communications ingress, attachment, and client API package graph', () => {
   const packages = [
     kernel(),
-    workspacePackage('hermes-communications-ingress', {
+    workspacePackage('makosh-communications-ingress', {
       role: 'domain',
       owner: 'communications',
       surface: 'contract',
     }),
-    workspacePackage('hermes-communications-api', {
+    workspacePackage('makosh-communications-api', {
       role: 'domain',
       owner: 'communications',
       surface: 'contract',
     }),
-    workspacePackage('hermes-communications-attachment-contract', {
+    workspacePackage('makosh-communications-attachment-contract', {
       role: 'domain',
       owner: 'communications',
       surface: 'contract',
     }),
     workspacePackage(
-      'hermes-communications-domain',
+      'makosh-communications-domain',
       { role: 'domain', owner: 'communications', surface: 'implementation' },
-      [dependency('hermes-communications-api')],
+      [dependency('makosh-communications-api')],
     ),
     workspacePackage(
-      'hermes-communications-persistence',
+      'makosh-communications-persistence',
       { role: 'domain', owner: 'communications', surface: 'persistence' },
-      [dependency('hermes-communications-domain')],
+      [dependency('makosh-communications-domain')],
     ),
     workspacePackage(
-      'hermes-communications-runtime',
+      'makosh-communications-runtime',
       { role: 'domain', owner: 'communications', surface: 'runtime' },
       [
-        dependency('hermes-communications-attachment-contract'),
-        dependency('hermes-communications-ingress'),
-        dependency('hermes-communications-api'),
-        dependency('hermes-communications-domain'),
-        dependency('hermes-communications-persistence'),
+        dependency('makosh-communications-attachment-contract'),
+        dependency('makosh-communications-ingress'),
+        dependency('makosh-communications-api'),
+        dependency('makosh-communications-domain'),
+        dependency('makosh-communications-persistence'),
       ],
     ),
   ];
@@ -704,7 +704,7 @@ test('accepts the split Communications ingress, attachment, and client API packa
 test('keeps WhatsApp implementation in the hidden host WebView boundary', () => {
   const packages = [
     kernel(),
-    workspacePackage('hermes-whatsapp-runtime', {
+    workspacePackage('makosh-whatsapp-runtime', {
       role: 'integration',
       owner: 'whatsapp',
       surface: 'runtime',
@@ -720,7 +720,7 @@ for (const owner of ['relationships', 'projects', 'obligations', 'decisions']) {
   test(`rejects a Cargo package owned by blocked domain ${owner}`, () => {
     const packages = [
       kernel(),
-      workspacePackage(`hermes-${owner}-runtime`, {
+      workspacePackage(`makosh-${owner}-runtime`, {
         role: 'domain',
         owner,
         surface: 'runtime',

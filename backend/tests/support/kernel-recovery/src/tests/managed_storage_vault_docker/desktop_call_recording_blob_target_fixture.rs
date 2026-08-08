@@ -2,12 +2,12 @@
 
 use super::*;
 
-use hermes_blob_client::BlobDataClient;
-use hermes_call_transcription_ingress::{
+use makosh_blob_client::BlobDataClient;
+use makosh_call_transcription_ingress::{
     OWNER_ID_V1 as TARGET_OWNER_ID_V1, TARGET_BLOB_CAPABILITY_ID_V1, TARGET_MODULE_ID_V1,
 };
-use hermes_kernel_control_store::{ModuleBlobOperationV1, ModuleBlobQuotaRequestV1};
-use hermes_runtime_protocol::v1::{BlobDataOperationV1, ManagedRuntimeBlobSessionRequestV1};
+use makosh_kernel_control_store::{ModuleBlobOperationV1, ModuleBlobQuotaRequestV1};
+use makosh_runtime_protocol::v1::{BlobDataOperationV1, ManagedRuntimeBlobSessionRequestV1};
 
 const TARGET_REGISTRATION_ID_V1: &str = "call-transcription-recording-target-fixture";
 const TARGET_RUNTIME_INSTANCE_ID_V1: &str = "92929292929292929292929292929292";

@@ -2,13 +2,13 @@
 
 use std::sync::Arc;
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     ClientRealtimeEventV1, ClientRealtimeFrameV1, client_realtime_frame_v1::Frame,
 };
-use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-use hermes_kernel_control_store::ModuleClientRealtimeRouteV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+use makosh_kernel_control_store::ModuleClientRealtimeRouteV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     v1::{
         ContractReferenceV1, ManagedRuntimeClientRealtimePublishRequestV1,
         ManagedRuntimeClientRealtimePublishResponseV1,

@@ -3,16 +3,16 @@
 use super::*;
 
 use crate::modules::capability::module_request::ModuleRequestRouteHandlerV1;
-use hermes_ai_contracts::{AI_INFERENCE_MODULE_ID_V1, AI_OWNER_V1};
-use hermes_ai_inference_persistence::schema::{
+use makosh_ai_contracts::{AI_INFERENCE_MODULE_ID_V1, AI_OWNER_V1};
+use makosh_ai_inference_persistence::schema::{
     AI_INFERENCE_STORAGE_BUNDLE_REVISION_V1, ai_inference_storage_bundle_v1,
 };
-use hermes_ai_inference_runtime::{
+use makosh_ai_inference_runtime::{
     AI_INFERENCE_STORAGE_CAPABILITY_ID_V1, ai_inference_module_descriptor_v1,
     ai_inference_settings_schema_bytes_v1,
 };
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_runtime_protocol::v1::{ManagedEngineRuntimeConfigurationV1, SettingsSnapshotV1};
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_runtime_protocol::v1::{ManagedEngineRuntimeConfigurationV1, SettingsSnapshotV1};
 
 const AI_INFERENCE_RELEASE_ARTIFACT_ID_V1: &str = "ai_inference.runtime.v1";
 const AI_INFERENCE_BUILD_ID_V1: &str = "managed-ai-inference-negative";
@@ -99,7 +99,7 @@ pub(super) fn admit_ai_inference_runtime_v1(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             AI_INFERENCE_RELEASE_ARTIFACT_ID_V1,
             Sha256::digest(
                 std::fs::read(ai_inference_binary()).expect("AI inference runtime binary"),
@@ -279,7 +279,7 @@ fn start_reserved_ai_inference_runtime_v1(
 fn ai_inference_storage_binding_v1(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(registration_id, AI_INFERENCE_STORAGE_CAPABILITY_ID_V1)
         .expect("read AI inference Storage binding")
@@ -288,5 +288,5 @@ fn ai_inference_storage_binding_v1(
 }
 
 fn ai_inference_binary() -> PathBuf {
-    binary("HERMES_AI_INFERENCE_RUNTIME_BIN")
+    binary("MAKOSH_AI_INFERENCE_RUNTIME_BIN")
 }

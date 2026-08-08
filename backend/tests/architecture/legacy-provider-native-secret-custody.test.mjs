@@ -100,10 +100,10 @@ test('legacy provider source secrets stay in the native recovery and Vault hosts
   assert.match(adr, /Legacy `telegram_session_key`.*игнорируется/s);
   assert.match(adr, /Gmail legacy OAuth secret не получает native handle/);
 
-  assert.match(recoveryManifest, /hermes-legacy-provider-recovery/);
+  assert.match(recoveryManifest, /makosh-legacy-provider-recovery/);
   assert.match(recoveryLibrary, /LegacyProviderRecoverySessionsV1/);
   assert.match(recoveryLibrary, /LegacyProviderRecoverySecretPurposeV1/);
-  assert.match(vaultHostManifest, /hermes-legacy-provider-recovery/);
+  assert.match(vaultHostManifest, /makosh-legacy-provider-recovery/);
   assert.match(vaultHostLibrary, /pub fn seal_custodied/);
   assert.match(vaultHostLibrary, /Zeroizing<Vec<u8>>/);
 
@@ -118,14 +118,14 @@ test('legacy provider source secrets stay in the native recovery and Vault hosts
   assert.doesNotMatch(developmentHost, /LegacyProviderRecoverySecretPurposeV1::TelegramSession/);
   assert.doesNotMatch(developmentHost, /println!\([^)]*(?:source|secret|email|username)/s);
 
-  assert.match(vite, /\/__hermes\/legacy-provider-recovery\/v1/);
-  assert.match(ensemble, /HERMES_LEGACY_PROVIDER_RECOVERY_BUNDLE_ROOT/);
+  assert.match(vite, /\/__makosh\/legacy-provider-recovery\/v1/);
+  assert.match(ensemble, /MAKOSH_LEGACY_PROVIDER_RECOVERY_BUNDLE_ROOT/);
   assert.match(ensemble, /maintenance\/legacy-provider-recovery-v1/);
   assert.match(ensemble, /--legacy-recovery-receipt-file/);
-  assert.match(ensemble, /VITE_HERMES_LEGACY_PROVIDER_RECOVERY/);
+  assert.match(ensemble, /VITE_MAKOSH_LEGACY_PROVIDER_RECOVERY/);
   assert.match(ensemble, /probe-dev-legacy-provider-recovery\.mjs/);
-  assert.match(probe, /\/__hermes\/legacy-provider-recovery\/v1\/start/);
-  assert.match(probe, /\/__hermes\/legacy-provider-recovery\/v1\/cancel/);
+  assert.match(probe, /\/__makosh\/legacy-provider-recovery\/v1\/start/);
+  assert.match(probe, /\/__makosh\/legacy-provider-recovery\/v1\/cancel/);
   assert.doesNotMatch(probe, /console\.(?:log|info|debug|error)/);
 
   assert.match(receipt, /bundle_fingerprint_sha256/);

@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/migrations/0001_create_event_log.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0001_create_event_log.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0001_create_event_log.sql`
 - Size bytes / Размер в байтах: `2474`
 - Included characters / Включено символов: `2474`
 - Truncated / Обрезано: `no`
@@ -133,7 +133,7 @@ CREATE TRIGGER event_log_prevent_delete
 
 ### `backend/migrations/0002_create_projection_cursors.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0002_create_projection_cursors.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0002_create_projection_cursors.sql`
 - Size bytes / Размер в байтах: `484`
 - Included characters / Включено символов: `484`
 - Truncated / Обрезано: `no`
@@ -154,7 +154,7 @@ CREATE INDEX IF NOT EXISTS projection_cursors_updated_at_idx
 
 ### `backend/migrations/0003_create_api_audit_log.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0003_create_api_audit_log.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0003_create_api_audit_log.sql`
 - Size bytes / Размер в байтах: `1870`
 - Included characters / Включено символов: `1870`
 - Truncated / Обрезано: `no`
@@ -213,7 +213,7 @@ CREATE TRIGGER api_audit_log_prevent_delete
 
 ### `backend/migrations/0004_add_api_audit_actor_id.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0004_add_api_audit_actor_id.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0004_add_api_audit_actor_id.sql`
 - Size bytes / Размер в байтах: `322`
 - Included characters / Включено символов: `322`
 - Truncated / Обрезано: `no`
@@ -233,7 +233,7 @@ CREATE INDEX api_audit_log_actor_idx
 
 ### `backend/migrations/0005_create_communication_ingestion.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0005_create_communication_ingestion.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0005_create_communication_ingestion.sql`
 - Size bytes / Размер в байтах: `4097`
 - Included characters / Включено символов: `4097`
 - Truncated / Обрезано: `no`
@@ -325,7 +325,7 @@ CREATE TRIGGER communication_raw_records_prevent_delete
 
 ### `backend/migrations/0006_create_secret_references.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0006_create_secret_references.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0006_create_secret_references.sql`
 - Size bytes / Размер в байтах: `1862`
 - Included characters / Включено символов: `1862`
 - Truncated / Обрезано: `no`
@@ -374,7 +374,7 @@ CREATE INDEX IF NOT EXISTS communication_provider_account_secret_refs_secret_idx
 
 ### `backend/migrations/0007_create_communication_messages.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0007_create_communication_messages.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0007_create_communication_messages.sql`
 - Size bytes / Размер в байтах: `946`
 - Included characters / Включено символов: `946`
 - Truncated / Обрезано: `no`
@@ -402,7 +402,7 @@ CREATE TABLE IF NOT EXISTS communication_messages (
 
 ### `backend/migrations/0008_create_contacts.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0008_create_contacts.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0008_create_contacts.sql`
 - Size bytes / Размер в байтах: `416`
 - Included characters / Включено символов: `416`
 - Truncated / Обрезано: `no`
@@ -422,7 +422,7 @@ CREATE TABLE IF NOT EXISTS contacts (
 
 ### `backend/migrations/0009_create_documents.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0009_create_documents.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0009_create_documents.sql`
 - Size bytes / Размер в байтах: `501`
 - Included characters / Включено символов: `501`
 - Truncated / Обрезано: `no`
@@ -444,7 +444,7 @@ CREATE TABLE IF NOT EXISTS documents (
 
 ### `backend/migrations/0010_create_graph_core.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0010_create_graph_core.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0010_create_graph_core.sql`
 - Size bytes / Размер в байтах: `3048`
 - Included characters / Включено символов: `3048`
 - Truncated / Обрезано: `no`
@@ -522,7 +522,7 @@ CREATE INDEX IF NOT EXISTS graph_evidence_edge_idx ON graph_evidence (edge_id);
 
 ### `backend/migrations/0011_create_mail_blob_storage.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0011_create_mail_blob_storage.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0011_create_mail_blob_storage.sql`
 - Size bytes / Размер в байтах: `2894`
 - Included characters / Включено символов: `2894`
 - Truncated / Обрезано: `no`
@@ -587,7 +587,7 @@ CREATE INDEX IF NOT EXISTS communication_attachments_blob_idx
 
 ### `backend/migrations/0012_add_attachment_scan_metadata.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0012_add_attachment_scan_metadata.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0012_add_attachment_scan_metadata.sql`
 - Size bytes / Размер в байтах: `848`
 - Included characters / Включено символов: `848`
 - Truncated / Обрезано: `no`
@@ -615,7 +615,7 @@ ALTER TABLE communication_attachments
 
 ### `backend/migrations/0013_create_projects_and_extend_graph.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0013_create_projects_and_extend_graph.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0013_create_projects_and_extend_graph.sql`
 - Size bytes / Размер в байтах: `3036`
 - Included characters / Включено символов: `3036`
 - Truncated / Обрезано: `no`
@@ -690,8 +690,8 @@ INSERT INTO projects (
     target_date
 )
 VALUES (
-    'project:v1:hermes-hub',
-    'Hermes Hub',
+    'project:v1:makosh',
+    'Макошь',
     'Product Development',
     'active',
     'Personal knowledge system for local-first communications, documents, graph memory and workflows.',
@@ -704,15 +704,15 @@ ON CONFLICT (project_id) DO NOTHING;
 
 INSERT INTO project_keywords (project_id, keyword)
 VALUES
-    ('project:v1:hermes-hub', 'Hermes Hub'),
-    ('project:v1:hermes-hub', 'Hermes Project'),
-    ('project:v1:hermes-hub', 'hermes')
+    ('project:v1:makosh', 'Макошь'),
+    ('project:v1:makosh', 'Макошь Project'),
+    ('project:v1:makosh', 'makosh')
 ON CONFLICT (project_id, keyword) DO NOTHING;
 ```
 
 ### `backend/migrations/0014_create_project_link_reviews.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0014_create_project_link_reviews.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0014_create_project_link_reviews.sql`
 - Size bytes / Размер в байтах: `1302`
 - Included characters / Включено символов: `1302`
 - Truncated / Обрезано: `no`
@@ -751,7 +751,7 @@ CREATE INDEX IF NOT EXISTS project_link_reviews_review_state_idx
 
 ### `backend/migrations/0015_create_task_candidates.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0015_create_task_candidates.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0015_create_task_candidates.sql`
 - Size bytes / Размер в байтах: `2734`
 - Included characters / Включено символов: `2734`
 - Truncated / Обрезано: `no`
@@ -826,7 +826,7 @@ CREATE INDEX IF NOT EXISTS tasks_source_idx ON tasks (source_kind, source_id);
 
 ### `backend/migrations/0016_create_contact_identity_reviews.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0016_create_contact_identity_reviews.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0016_create_contact_identity_reviews.sql`
 - Size bytes / Размер в байтах: `2222`
 - Included characters / Включено символов: `2222`
 - Truncated / Обрезано: `no`
@@ -883,7 +883,7 @@ CREATE INDEX IF NOT EXISTS contact_identity_right_contact_idx
 
 ### `backend/migrations/0017_create_document_processing.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0017_create_document_processing.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0017_create_document_processing.sql`
 - Size bytes / Размер в байтах: `2539`
 - Included characters / Включено символов: `2539`
 - Truncated / Обрезано: `no`
@@ -952,7 +952,7 @@ CREATE INDEX IF NOT EXISTS document_artifacts_job_idx
 
 ### `backend/migrations/0018_create_ai_runtime.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0018_create_ai_runtime.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0018_create_ai_runtime.sql`
 - Size bytes / Размер в байтах: `3758`
 - Included characters / Включено символов: `3758`
 - Truncated / Обрезано: `no`
@@ -1049,7 +1049,7 @@ CREATE INDEX IF NOT EXISTS task_candidates_agent_run_idx
 
 ### `backend/migrations/0019_rebuild_graph_projection_after_v3.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0019_rebuild_graph_projection_after_v3.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0019_rebuild_graph_projection_after_v3.sql`
 - Size bytes / Размер в байтах: `296`
 - Included characters / Включено символов: `296`
 - Truncated / Обрезано: `no`
@@ -1063,7 +1063,7 @@ TRUNCATE TABLE graph_evidence, graph_edges, graph_nodes;
 
 ### `backend/migrations/0020_create_v4_telegram_policy_calls.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0020_create_v4_telegram_policy_calls.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0020_create_v4_telegram_policy_calls.sql`
 - Size bytes / Размер в байтах: `8949`
 - Included characters / Включено символов: `8949`
 - Truncated / Обрезано: `no`
@@ -1252,7 +1252,7 @@ CREATE INDEX IF NOT EXISTS call_transcripts_call_idx
 
 ### `backend/migrations/0021_create_v5_whatsapp_web_foundation.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0021_create_v5_whatsapp_web_foundation.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0021_create_v5_whatsapp_web_foundation.sql`
 - Size bytes / Размер в байтах: `2562`
 - Included characters / Включено символов: `2562`
 - Truncated / Обрезано: `no`
@@ -1327,7 +1327,7 @@ CREATE INDEX IF NOT EXISTS whatsapp_web_sessions_state_idx
 
 ### `backend/migrations/0022_create_database_encrypted_secret_vault.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0022_create_database_encrypted_secret_vault.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0022_create_database_encrypted_secret_vault.sql`
 - Size bytes / Размер в байтах: `1319`
 - Included characters / Включено символов: `1319`
 - Truncated / Обрезано: `no`
@@ -1369,7 +1369,7 @@ CREATE INDEX IF NOT EXISTS encrypted_secret_vault_entries_updated_idx
 
 ### `backend/migrations/0023_create_application_settings.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0023_create_application_settings.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0023_create_application_settings.sql`
 - Size bytes / Размер в байтах: `4158`
 - Included characters / Включено символов: `4158`
 - Truncated / Обрезано: `no`
@@ -1421,7 +1421,7 @@ VALUES
         '"127.0.0.1:8080"'::jsonb,
         'Backend HTTP bind',
         'Backend HTTP address used when the local server starts. Changes require a backend restart.',
-        '{"ui_control":"text","placeholder":"127.0.0.1:8080","restart_required":true,"bootstrap":true,"env_var":"HERMES_HTTP_ADDR"}'::jsonb
+        '{"ui_control":"text","placeholder":"127.0.0.1:8080","restart_required":true,"bootstrap":true,"env_var":"MAKOSH_HTTP_ADDR"}'::jsonb
     ),
     (
         'frontend.api_base_url',
@@ -1430,7 +1430,7 @@ VALUES
         '"http://127.0.0.1:8080"'::jsonb,
         'Frontend API base URL',
         'Backend URL used by the desktop shell after it has loaded local settings.',
-        '{"ui_control":"text","placeholder":"http://127.0.0.1:8080","bootstrap":true,"env_var":"VITE_HERMES_API_BASE_URL"}'::jsonb
+        '{"ui_control":"text","placeholder":"http://127.0.0.1:8080","bootstrap":true,"env_var":"VITE_MAKOSH_API_BASE_URL"}'::jsonb
     ),
     (
         'frontend.actor_id',
@@ -1439,7 +1439,7 @@ VALUES
         '"desktop-shell"'::jsonb,
         'Frontend actor ID',
         'Non-secret local actor identifier sent with protected API requests for audit records.',
-        '{"ui_control":"text","placeholder":"desktop-shell","env_var":"VITE_HERMES_ACTOR_ID"}'::jsonb
+        '{"ui_control":"text","placeholder":"desktop-shell","env_var":"VITE_MAKOSH_ACTOR_ID"}'::jsonb
     ),
     (
         'ai.ollama_base_url',
@@ -1500,7 +1500,7 @@ ON CONFLICT (setting_key) DO NOTHING;
 
 ### `backend/migrations/0024_seed_runtime_application_settings.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0024_seed_runtime_application_settings.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0024_seed_runtime_application_settings.sql`
 - Size bytes / Размер в байтах: `1280`
 - Included characters / Включено символов: `1280`
 - Truncated / Обрезано: `no`
@@ -1523,7 +1523,7 @@ VALUES
         '"127.0.0.1:8080"'::jsonb,
         'Backend HTTP bind',
         'Backend HTTP address used when the local server starts. Changes require a backend restart.',
-        '{"ui_control":"text","placeholder":"127.0.0.1:8080","restart_required":true,"bootstrap":true,"env_var":"HERMES_HTTP_ADDR"}'::jsonb
+        '{"ui_control":"text","placeholder":"127.0.0.1:8080","restart_required":true,"bootstrap":true,"env_var":"MAKOSH_HTTP_ADDR"}'::jsonb
     ),
     (
         'frontend.api_base_url',
@@ -1532,7 +1532,7 @@ VALUES
         '"http://127.0.0.1:8080"'::jsonb,
         'Frontend API base URL',
         'Backend URL used by the desktop shell after it has loaded local settings.',
-        '{"ui_control":"text","placeholder":"http://127.0.0.1:8080","bootstrap":true,"env_var":"VITE_HERMES_API_BASE_URL"}'::jsonb
+        '{"ui_control":"text","placeholder":"http://127.0.0.1:8080","bootstrap":true,"env_var":"VITE_MAKOSH_API_BASE_URL"}'::jsonb
     ),
     (
         'frontend.actor_id',
@@ -1541,14 +1541,14 @@ VALUES
         '"desktop-shell"'::jsonb,
         'Frontend actor ID',
         'Non-secret local actor identifier sent with protected API requests for audit records.',
-        '{"ui_control":"text","placeholder":"desktop-shell","env_var":"VITE_HERMES_ACTOR_ID"}'::jsonb
+        '{"ui_control":"text","placeholder":"desktop-shell","env_var":"VITE_MAKOSH_ACTOR_ID"}'::jsonb
     )
 ON CONFLICT (setting_key) DO NOTHING;
 ```
 
 ### `backend/migrations/0025_add_message_workflow_state.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0025_add_message_workflow_state.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0025_add_message_workflow_state.sql`
 - Size bytes / Размер в байтах: `1182`
 - Included characters / Включено символов: `1182`
 - Truncated / Обрезано: `no`

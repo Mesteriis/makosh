@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package makosh.communications.ingress.v1;
+
+// Provider locators, content, previews, credentials and session state are absent.
+message CommunicationObservationV1 {
+  ProviderProvenanceV1 provider = 1;
+  CommunicationEvidenceKindV1 kind = 2;
+  BodyAvailabilityV1 body = 3;
+  // Deterministic provider-scoped hashes. Raw account and conversation IDs
+  // remain inside the integration that produced this observation.
+  bytes account_cursor_sha256 = 4;
+  bytes conversation_cursor_sha256 = 5;
+  bytes participant_cursor_sha256 = 6;
+  bytes media_cursor_sha256 = 7;
+  bytes reply_to_source_cursor_sha256 = 8;
+  bytes forward_origin_source_cursor_sha256 = 9;
+  AttachmentDescriptorV1 attachment_descriptor = 10;
+  CommunicationDirectionV1 direction = 11;
+  BodyBlobReceiptV1 body_blob = 12;
+  BodyAdmissionFailureV1 body_admission_failure = 13;
+  // Bounded provider-neutral display metadata. It is not an identity, cursor,
+  // authorization input or provider locator.
+  optional string participant_display_label = 14;
+  // Bounded provider-neutral message evidence. Integrations leave it absent
+  // when the provider has no exact subject; it is never fabricated from a
+  // conversation title or used for routing/authorization.
+  optional string message_subject = 15;
+}
+
+message BodyBlobReceiptV1 {
+  string blob_ref = 1;
+  bytes reference_id = 2;
+  uint64 declared_bytes = 3;
+  bytes sha256 = 4;
+  // Opaque Kernel-signed custody proof. It carries no plaintext or Blob key.
+  bytes custody_transfer_source_proof = 5;
+  string media_type = 6;
+}
+
+enum BodyAdmissionFailureV1 {
+  BODY_ADMISSION_FAILURE_V1_UNSPECIFIED = 0;
+  BODY_ADMISSION_FAILURE_V1_SOURCE_UNAVAILABLE = 1;
+  BODY_ADMISSION_FAILURE_V1_SIZE_LIMIT_EXCEEDED = 2;
+  BODY_ADMISSION_FAILURE_V1_INTEGRITY_MISMATCH = 3;
+  BODY_ADMISSION_FAILURE_V1_POLICY_REJECTED = 4;
+}
+
+message AttachmentDescriptorV1 {
+  string filename = 1;
+  string media_type = 2;
+  uint64 declared_bytes = 3;
+  bytes sha256 = 4;
+  AttachmentDispositionV1 disposition = 5;
+}
+
+enum AttachmentDispositionV1 {
+  ATTACHMENT_DISPOSITION_V1_UNSPECIFIED = 0;
+  ATTACHMENT_DISPOSITION_V1_ATTACHMENT = 1;
+  ATTACHMENT_DISPOSITION_V1_INLINE = 2;
+  ATTACHMENT_DISPOSITION_V1_UNKNOWN = 3;
+}
+
+enum ProviderProvenanceV1 {
+  PROVIDER_PROVENANCE_V1_UNSPECIFIED = 0;
+  PROVIDER_PROVENANCE_V1_MAIL_IMAP = 1;
+  PROVIDER_PROVENANCE_V1_TELEGRAM = 2;
+  PROVIDER_PROVENANCE_V1_WHATSAPP_WEB = 3;
+  PROVIDER_PROVENANCE_V1_MAIL_SMTP = 4;
+  PROVIDER_PROVENANCE_V1_ZULIP = 5;
+  PROVIDER_PROVENANCE_V1_MAIL_GMAIL = 6;
+}
+
+enum CommunicationDirectionV1 {
+  COMMUNICATION_DIRECTION_V1_UNSPECIFIED = 0;
+  COMMUNICATION_DIRECTION_V1_INCOMING = 1;
+  COMMUNICATION_DIRECTION_V1_OUTGOING = 2;
+  COMMUNICATION_DIRECTION_V1_UNKNOWN = 3;
+}
+
+enum CommunicationEvidenceKindV1 {
+  COMMUNICATION_EVIDENCE_KIND_V1_UNSPECIFIED = 0;
+  COMMUNICATION_EVIDENCE_KIND_V1_EMAIL_MESSAGE = 1;
+  COMMUNICATION_EVIDENCE_KIND_V1_CHAT_MESSAGE = 2;
+  COMMUNICATION_EVIDENCE_KIND_V1_MESSAGE_EDITED = 3;
+  COMMUNICATION_EVIDENCE_KIND_V1_MESSAGE_DELETED = 4;
+  COMMUNICATION_EVIDENCE_KIND_V1_REACTION_CHANGED = 5;
+  COMMUNICATION_EVIDENCE_KIND_V1_DELIVERY_STATE_CHANGED = 6;
+  COMMUNICATION_EVIDENCE_KIND_V1_CONVERSATION_STATE_CHANGED = 7;
+  COMMUNICATION_EVIDENCE_KIND_V1_PARTICIPANT_CHANGED = 8;
+  COMMUNICATION_EVIDENCE_KIND_V1_MEDIA_CHANGED = 9;
+  COMMUNICATION_EVIDENCE_KIND_V1_TOPIC_CHANGED = 10;
+  COMMUNICATION_EVIDENCE_KIND_V1_TYPING_CHANGED = 11;
+}
+
+enum BodyAvailabilityV1 {
+  BODY_AVAILABILITY_V1_UNSPECIFIED = 0;
+  BODY_AVAILABILITY_V1_METADATA_ONLY = 1;
+  BODY_AVAILABILITY_V1_PENDING_BLOB = 2;
+  BODY_AVAILABILITY_V1_UNAVAILABLE = 3;
+  BODY_AVAILABILITY_V1_ADMITTED_BLOB = 4;
+}

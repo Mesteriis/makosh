@@ -2,18 +2,18 @@
 
 use std::{os::unix::net::UnixStream, time::Duration};
 
-use hermes_attachment_security_clamav::{
+use makosh_attachment_security_clamav::{
     ClamAvInstreamLimitsV1, ClamAvLoopbackEndpointV1, ClamAvTimeoutsV1, scan_clamav_loopback_v1,
 };
-use hermes_attachment_security_core::ScannerOutcomeV1;
-use hermes_attachment_security_persistence::{
+use makosh_attachment_security_core::ScannerOutcomeV1;
+use makosh_attachment_security_persistence::{
     AttachmentSecurityTargetBlobReceiptV1, ClaimedAttachmentSecurityScanJobV1,
 };
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTransferRequestV1, ManagedBlobSessionRequestV1,
     request_managed_blob_custody_transfer_v2, request_managed_blob_session_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::BlobDataOperationV1,
 };

@@ -1,6 +1,6 @@
 ### Summary / Резюме
 
-Создать или обновить страницу `operations/backend-tests.md` в русской Obsidian‑wiki, описывающую состав и свойства интеграционных и юнит‑тестов бэкенда из репозитория `hermes-hub`. Страница должна отражать только факты, присутствующие во встроенных исходных файлах тестов, и не добавлять внешних знаний о фреймворках. Структура страницы: обзор тестового набора, разбивка по группам (Telegram‑интеграции, движки, v1 API, тестовая инфраструктура), перечень тестируемых сценариев и используемых хелперов.
+Создать или обновить страницу `operations/backend-tests.md` в русской Obsidian‑wiki, описывающую состав и свойства интеграционных и юнит‑тестов бэкенда из репозитория `makosh`. Страница должна отражать только факты, присутствующие во встроенных исходных файлах тестов, и не добавлять внешних знаний о фреймворках. Структура страницы: обзор тестового набора, разбивка по группам (Telegram‑интеграции, движки, v1 API, тестовая инфраструктура), перечень тестируемых сценариев и используемых хелперов.
 
 ### Proposed pages / Предлагаемые страницы
 
@@ -63,7 +63,7 @@
   - Проверяет записи в `api_audit_log` для операций `telegram.runtime.stop` и `telegram.runtime.restart` с полями `capability`, `action_class`, `account_id`, `runtime_kind`, `status`.
 
 - Тест-функция: `telegram_runtime_status_reports_tdlib_diagnostics_for_qr_authorized_user_accounts`
-  - Использует конфигурацию с `HERMES_DEV_MODE`, `HERMES_TDJSON_PATH` (путь к несуществующей dylib), `HERMES_TELEGRAM_API_ID` и `HERMES_TELEGRAM_API_HASH`.
+  - Использует конфигурацию с `MAKOSH_DEV_MODE`, `MAKOSH_TDJSON_PATH` (путь к несуществующей dylib), `MAKOSH_TELEGRAM_API_ID` и `MAKOSH_TELEGRAM_API_HASH`.
   - Создаёт аккаунт через `POST /api/v1/integrations/telegram/accounts`.
   - Проверяет статус runtime:
     - `runtime_kind: "tdlib_qr_authorized"`
@@ -88,7 +88,7 @@
 - Тест-функция: `telegram_media_search_filters_by_free_text_query`
   - Создаётся сообщение со вложением `invoice-2026.pdf` через прямое обновление `communication_messages.message_metadata`.
   - Запрос `GET /api/v1/communications/search/media?q=invoice&account_id=…&provider_chat_id=…&limit=20`
-  - Ответ: `items` содержит одно вложение с `file_name: "invoice-2026.pdf"`, `provider_attachment_id: "attachment-invoice-1"`, `tdlib_file_id: 4201`, `local_path: "/tmp/hermes/invoice-2026.pdf"`. Поле `source: "projection"`, `provider_search_attempted: false`.
+  - Ответ: `items` содержит одно вложение с `file_name: "invoice-2026.pdf"`, `provider_attachment_id: "attachment-invoice-1"`, `tdlib_file_id: 4201`, `local_path: "/tmp/makosh/invoice-2026.pdf"`. Поле `source: "projection"`, `provider_search_attempted: false`.
 
 - Тест-функция: `telegram_pinned_messages_route_returns_projection_backed_items`
   - Создаются сообщения, часть помечается как `is_pinned: true` в `message_metadata`.
@@ -164,13 +164,13 @@
   - `GET /api/v1/communications/messages?limit=100` – в списке присутствует сообщение с `subject` и `attachment_count: 1`.
   - `GET /api/v1/communications/messages/{message_id}` – возвращает `message.body_text`, `attachments` с полями `filename`, `content_type`, `scan_status: "not_scanned"`, `storage_kind: "local_fs"`, `storage_path`.
 - `v1_status_rejects_missing_local_api_secret_before_database_access`:
-  - Запрос без токена → `403 FORBIDDEN`, тело `{"error": "invalid_api_secret", "message": "missing or invalid x-hermes-secret header"}`.
+  - Запрос без токена → `403 FORBIDDEN`, тело `{"error": "invalid_api_secret", "message": "missing or invalid x-makosh-secret header"}`.
 - `v1_status_accepts_local_frontend_cors_preflight_before_auth`:
   - OPTIONS‑запросы от локальных origin (`http://127.0.0.1:5174`, `http://localhost:5173`, `http://tauri.localhost`, `tauri://localhost`) отвечают `200 OK` с `Access-Control-Allow-Origin`, равным запрошенному origin.
 - `v1_status_rejects_invalid_local_api_secret_before_database_access`:
   - Неверный токен → `403 FORBIDDEN`.
 - `v1_status_accepts_secret_without_actor_header_before_database_access`:
-  - Корректный токен без `x-hermes-actor-id` → `503 SERVICE_UNAVAILABLE` с `error: "database_not_configured"`.
+  - Корректный токен без `x-makosh-actor-id` → `503 SERVICE_UNAVAILABLE` с `error: "database_not_configured"`.
 - `v1_status_ignores_actor_header_before_database_access`:
   - Корректный токен с невалидным actor → аналогично `503`.
 - `v1_status_returns_service_unavailable_after_auth_when_database_is_not_configured`:
@@ -192,7 +192,7 @@
   - В таблице `observation_links` фиксируются связи `COMMUNICATION_MAIL_SYNC_RUN` и `COMMUNICATION_MAIL_SYNC_RUN_STATUS`, последняя с `relationship_kind: "skipped"`.
   - `POST …/sync-full-resync` работает аналогично `sync-now`, в ответе также ожидаются `account_id`, `status`, `phase`, `run_id`.
 - `v1_send_requires_explicit_provider_write_confirmation`:
-  - Отправка `POST /api/v1/communications/send` с actor‑заголовком `"hermes-frontend"` и телом без явного подтверждения записи – проверяется, что возвращается ошибка или специальный статус (текст обрезан, но видно, что тест проверяет guard записи).
+  - Отправка `POST /api/v1/communications/send` с actor‑заголовком `"makosh-frontend"` и телом без явного подтверждения записи – проверяется, что возвращается ошибка или специальный статус (текст обрезан, но видно, что тест проверяет guard записи).
 
 ### `v1_communications_ai_state.rs`
 
@@ -263,4 +263,4 @@
 
 ### Drift candidates / Кандидаты на drift
 
-Из предоставленного контекста видимых расхождений между кодом тестов и документацией или ADR нет. Тесты ссылаются на конкретные env‑переменные (`HERMES_TDJSON_PATH`) и значения (`LOCAL_API_TOKEN`), которые могут измениться при рефакторинге конфигурации, но подтвердить дрейф без дополнительной документации невозможно. Пути к фикстурным endpoint’ам (`/api/v1/integrations/telegram/fixtures/…`) и названия таблиц соответствуют только тому, что зафиксировано в тестах; гарантии их стабильности в других частях системы не предоставлены.
+Из предоставленного контекста видимых расхождений между кодом тестов и документацией или ADR нет. Тесты ссылаются на конкретные env‑переменные (`MAKOSH_TDJSON_PATH`) и значения (`LOCAL_API_TOKEN`), которые могут измениться при рефакторинге конфигурации, но подтвердить дрейф без дополнительной документации невозможно. Пути к фикстурным endpoint’ам (`/api/v1/integrations/telegram/fixtures/…`) и названия таблиц соответствуют только тому, что зафиксировано в тестах; гарантии их стабильности в других частях системы не предоставлены.

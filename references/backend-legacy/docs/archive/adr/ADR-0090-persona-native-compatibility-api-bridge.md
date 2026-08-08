@@ -13,7 +13,7 @@ ADR-0084 defines Persona as the target domain entity. Durable storage now uses
 `/api/v1/personas/*`; internal `person_id` storage columns remain as explicit
 physical compatibility.
 
-Hermes needs Persona-native read and write surfaces so new UI and agent flows
+Макошь needs Persona-native read and write surfaces so new UI and agent flows
 can speak the target language. A physical identifier rename away from
 `person_id` columns is still a separate migration decision because existing
 projections, graph rows, tasks, communications and historical event payloads

@@ -25,19 +25,19 @@ const GMAIL_INBOUND_MESSAGE: &[u8] = concat!(
     "From: gmail-source@example.test\r\n",
     "To: owner@example.test\r\n",
     "Subject: managed Gmail attachment evidence\r\n",
-    "Content-Type: multipart/mixed; boundary=hermes-gmail-fixture\r\n",
+    "Content-Type: multipart/mixed; boundary=makosh-gmail-fixture\r\n",
     "\r\n",
-    "--hermes-gmail-fixture\r\n",
+    "--makosh-gmail-fixture\r\n",
     "Content-Type: text/plain; charset=utf-8\r\n",
     "\r\n",
     "managed Gmail body\r\n",
-    "--hermes-gmail-fixture\r\n",
+    "--makosh-gmail-fixture\r\n",
     "Content-Type: text/plain; name=gmail-evidence.txt\r\n",
     "Content-Disposition: attachment; filename=gmail-evidence.txt\r\n",
     "Content-Transfer-Encoding: base64\r\n",
     "\r\n",
     "Z21haWwtY2xlYW4tcm9vbS1hdHRhY2htZW50\r\n",
-    "--hermes-gmail-fixture--\r\n",
+    "--makosh-gmail-fixture--\r\n",
 )
 .as_bytes();
 
@@ -533,13 +533,13 @@ fn read_line(stream: &mut StreamOwned<ServerConnection, std::net::TcpStream>) ->
 
 #[test]
 fn inbound_fixture_contains_the_exact_bounded_attachment() {
-    let metadata = hermes_mail_core::rfc822::attachment_metadata(GMAIL_INBOUND_MESSAGE);
+    let metadata = makosh_mail_core::rfc822::attachment_metadata(GMAIL_INBOUND_MESSAGE);
 
     assert_eq!(metadata.len(), 1);
     assert_eq!(metadata[0].filename.as_deref(), Some("gmail-evidence.txt"));
     assert_eq!(metadata[0].media_type, "text/plain");
     assert_eq!(
-        hermes_mail_core::rfc822::extract_attachment_part(
+        makosh_mail_core::rfc822::extract_attachment_part(
             GMAIL_INBOUND_MESSAGE,
             metadata[0].part_id,
         ),

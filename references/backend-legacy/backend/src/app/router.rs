@@ -120,12 +120,12 @@ pub async fn run(config: AppConfig) -> Result<(), AppError> {
     let database = Database::connect(config.database_url()).await?;
     let listener = TcpListener::bind(http_addr).await?;
 
-    tracing::info!(%http_addr, "starting Hermes Hub backend");
+    tracing::info!(%http_addr, "starting Макошь backend");
 
     let components = compose_application(config, database);
     let runtime = crate::app::runtime::start_application_runtime(&components);
     let termination = runtime.termination_signal();
-    let server_result = hermes_api::serve(
+    let server_result = makosh_api::serve(
         listener,
         build_router_from_state(components.state),
         termination,
@@ -142,7 +142,7 @@ pub async fn run(config: AppConfig) -> Result<(), AppError> {
 
 pub fn init_tracing() {
     let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
-    let log_format = std::env::var("HERMES_LOG_FORMAT").unwrap_or_else(|_| "plain".to_owned());
+    let log_format = std::env::var("MAKOSH_LOG_FORMAT").unwrap_or_else(|_| "plain".to_owned());
 
     if log_format.eq_ignore_ascii_case("json") {
         let _ = tracing_subscriber::fmt()
@@ -181,8 +181,8 @@ pub(crate) fn local_frontend_cors_layer() -> CorsLayer {
             HeaderName::from_static("connect-timeout-ms"),
             header::CONTENT_TYPE,
             HeaderName::from_static("last-event-id"),
-            HeaderName::from_static("x-hermes-actor-id"),
-            HeaderName::from_static("x-hermes-secret"),
+            HeaderName::from_static("x-makosh-actor-id"),
+            HeaderName::from_static("x-makosh-secret"),
         ])
 }
 

@@ -1,7 +1,7 @@
 import {
 	ClientSurfaceAvailabilityStateV1,
 	ClientSurfaceIdV1,
-} from '../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../gen/makosh/gateway/v1/client_bootstrap_pb'
 
 export const CLIENT_SURFACE_CONTRACT_MAJOR = 1
 

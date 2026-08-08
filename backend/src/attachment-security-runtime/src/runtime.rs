@@ -5,41 +5,41 @@ use std::{
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
-use hermes_attachment_archive_inspection_ingress::archive_inspection_custody_delegation_requested_contract_reference_v1;
-use hermes_attachment_preview_ingress::attachment_preview_custody_delegation_requested_contract_reference_v1;
-use hermes_attachment_security_contract::admission::attachment_security_scan_candidate_observed_contract_reference_v1;
-use hermes_attachment_security_core::{
+use makosh_attachment_archive_inspection_ingress::archive_inspection_custody_delegation_requested_contract_reference_v1;
+use makosh_attachment_preview_ingress::attachment_preview_custody_delegation_requested_contract_reference_v1;
+use makosh_attachment_security_contract::admission::attachment_security_scan_candidate_observed_contract_reference_v1;
+use makosh_attachment_security_core::{
     AttachmentSecurityJoinPolicyV1, AttachmentSecurityVerdictV1,
     decide_attachment_security_verdict_v1,
 };
-use hermes_attachment_security_persistence::{
+use makosh_attachment_security_persistence::{
     AttachmentSecurityPersistenceErrorV1, AttachmentSecurityPersistenceV1,
     AttachmentSecurityRetryPolicyV1, ClaimedAttachmentSecurityArchiveDelegationV1,
     ClaimedAttachmentSecurityPreviewDelegationV1, ClaimedAttachmentSecurityScanJobV1,
     ClaimedAttachmentSecurityTextDelegationV1,
 };
-use hermes_attachment_text_extraction_ingress::attachment_text_custody_delegation_requested_contract_reference_v1;
-use hermes_communications_attachment_contract::{
+use makosh_attachment_text_extraction_ingress::attachment_text_custody_delegation_requested_contract_reference_v1;
+use makosh_communications_attachment_contract::{
     AttachmentObservationEnvelopeContextV1, AttachmentSafetyExpectedStateV1,
     AttachmentSafetyVerdictFactV1,
     AttachmentSafetyVerdictV1 as CommunicationsAttachmentSafetyVerdictV1,
     admission::communication_attachment_safety_state_changed_contract_reference_v1,
     build_attachment_safety_verdict_outbox_record_v1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
     try_receive_runtime_pull_delivery,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::ManagedControlChannelV2,
     v1::{ContractReferenceV1, ManagedRuntimeReadyRequestV1, ManagedStorageRuntimeConfigurationV1},
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 
@@ -654,10 +654,10 @@ impl AttachmentSecurityRuntimeV1 {
             .await
             .map_err(persistence_error)?
         {
-            hermes_attachment_security_persistence::RetryAttachmentSecurityArchiveDelegationOutcomeV1::Scheduled => {
+            makosh_attachment_security_persistence::RetryAttachmentSecurityArchiveDelegationOutcomeV1::Scheduled => {
                 Ok(AttachmentSecurityArchiveDelegationTickV1::RetryScheduled)
             }
-            hermes_attachment_security_persistence::RetryAttachmentSecurityArchiveDelegationOutcomeV1::Exhausted => {
+            makosh_attachment_security_persistence::RetryAttachmentSecurityArchiveDelegationOutcomeV1::Exhausted => {
                 let record = materialize_archive_delegation_exhausted_v1(
                     claimed,
                     &self.runtime_instance_id,
@@ -695,10 +695,10 @@ impl AttachmentSecurityRuntimeV1 {
             .await
             .map_err(persistence_error)?
         {
-            hermes_attachment_security_persistence::RetryAttachmentSecurityTextDelegationOutcomeV1::Scheduled => {
+            makosh_attachment_security_persistence::RetryAttachmentSecurityTextDelegationOutcomeV1::Scheduled => {
                 Ok(AttachmentSecurityTextDelegationTickV1::RetryScheduled)
             }
-            hermes_attachment_security_persistence::RetryAttachmentSecurityTextDelegationOutcomeV1::Exhausted => {
+            makosh_attachment_security_persistence::RetryAttachmentSecurityTextDelegationOutcomeV1::Exhausted => {
                 let record = materialize_text_delegation_exhausted_v1(
                     claimed,
                     &self.runtime_instance_id,
@@ -736,10 +736,10 @@ impl AttachmentSecurityRuntimeV1 {
             .await
             .map_err(persistence_error)?
         {
-            hermes_attachment_security_persistence::RetryAttachmentSecurityPreviewDelegationOutcomeV1::Scheduled => {
+            makosh_attachment_security_persistence::RetryAttachmentSecurityPreviewDelegationOutcomeV1::Scheduled => {
                 Ok(AttachmentSecurityPreviewDelegationTickV1::RetryScheduled)
             }
-            hermes_attachment_security_persistence::RetryAttachmentSecurityPreviewDelegationOutcomeV1::Exhausted => {
+            makosh_attachment_security_persistence::RetryAttachmentSecurityPreviewDelegationOutcomeV1::Exhausted => {
                 let record = materialize_preview_delegation_exhausted_v1(
                     claimed,
                     &self.runtime_instance_id,
@@ -779,10 +779,10 @@ impl AttachmentSecurityRuntimeV1 {
             .map_err(persistence_error)?;
         Ok(
             match outcome {
-                hermes_attachment_security_persistence::RetryAttachmentSecurityScanJobOutcomeV1::Scheduled => {
+                makosh_attachment_security_persistence::RetryAttachmentSecurityScanJobOutcomeV1::Scheduled => {
                     AttachmentSecurityScanTickV1::RetryScheduled(error)
                 }
-                hermes_attachment_security_persistence::RetryAttachmentSecurityScanJobOutcomeV1::Exhausted => {
+                makosh_attachment_security_persistence::RetryAttachmentSecurityScanJobOutcomeV1::Exhausted => {
                     AttachmentSecurityScanTickV1::Exhausted(error)
                 }
             },

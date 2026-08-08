@@ -22,7 +22,7 @@ use crate::integrations::telegram::tdjson::qr_login::commands::{
 };
 use crate::integrations::telegram::tdjson::qr_login::driver::start_qr_login;
 use crate::integrations::telegram::tdjson::requests::tdlib_database_directory;
-use hermes_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::CommunicationProviderKind;
 
 pub(crate) async fn post_telegram_qr_login_start(
     State(state): State<AppState>,

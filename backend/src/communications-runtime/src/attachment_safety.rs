@@ -1,10 +1,10 @@
 //! Communications-owned attachment safety transition use case.
 
-use hermes_communications_api::{
+use makosh_communications_api::{
     AttachmentSafetyTransitionCommandV1, AttachmentSafetyTransitionDecisionV1,
 };
-use hermes_communications_domain::decide_attachment_safety_transition;
-use hermes_communications_persistence::CommunicationsDurablePersistence;
+use makosh_communications_domain::decide_attachment_safety_transition;
+use makosh_communications_persistence::CommunicationsDurablePersistence;
 
 use crate::canonical_outbox::{
     CanonicalEventContextV1, build_attachment_safety_state_changed_outbox_v1,

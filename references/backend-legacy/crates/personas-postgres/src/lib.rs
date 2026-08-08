@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_personas_api::{
+use makosh_personas_api::{
     PersonaIdentityProjection, PersonaIdentityProjectionListFuture, PersonaIdentityProjectionPort,
     PersonaListFuture, PersonaQueryError, PersonaRead, PersonaReadFuture, PersonaReadPort,
 };

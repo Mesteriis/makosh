@@ -1,5 +1,5 @@
 use chrono::{Duration, Utc};
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::{Value, json};
 use sqlx::PgPool;
 
@@ -9,7 +9,7 @@ use crate::integrations::telegram::client::models::messages::TelegramProviderWri
 use crate::integrations::telegram::client::store::TelegramStore;
 use crate::platform::events::bus::InMemoryEventBus;
 use crate::platform::events::bus::telegram_event_types;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use super::TelegramRuntimeManager;
 use super::command_executor_dispatch::{DispatchOutcome, dispatch_command};

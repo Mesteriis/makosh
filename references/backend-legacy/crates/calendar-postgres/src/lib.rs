@@ -1,4 +1,4 @@
-use hermes_calendar_api::{
+use makosh_calendar_api::{
     CalendarEventListFuture, CalendarEventListQuery, CalendarEventRead, CalendarEventReadPort,
     CalendarQueryError,
 };

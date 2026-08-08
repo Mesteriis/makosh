@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/review/task_candidate/v1/task_candidate.proto"],
+            &["proto/makosh/review/task_candidate/v1/task_candidate.proto"],
             &["proto"],
         )
         .expect("Review task-candidate protocol must compile");

@@ -1,8 +1,8 @@
-use hermes_communication_cross_channel_forward_persistence::{
+use makosh_communication_cross_channel_forward_persistence::{
     CommunicationCrossChannelForwardPersistenceV1, CrossChannelForwardDeliveryRejectedEventV1,
     CrossChannelForwardDeliverySubmittedEventV1, CrossChannelForwardPersistenceErrorV1,
 };
-use hermes_communication_delivery_intent_ingress_api::{
+use makosh_communication_delivery_intent_ingress_api::{
     COMMUNICATION_DELIVERY_INTENT_BLOB_TARGET_MODULE_ID_V1,
     communication_delivery_intent_rejected_contract_reference_v1,
     communication_delivery_intent_rejected_message_id_v1,
@@ -14,18 +14,18 @@ use hermes_communication_delivery_intent_ingress_api::{
         CommunicationDeliveryIntentSubmittedV1,
     },
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{
         ActorKindV1, ContractRefV1, FenceKindV1, ResultOutcomeV1, durable_envelope_v1::Semantics,
     },
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -146,7 +146,7 @@ fn decode_rejected(
 
 fn validate_result_envelope(
     record: &OutboxRecordV1,
-    envelope: &hermes_events_protocol::v1::DurableEnvelopeV1,
+    envelope: &makosh_events_protocol::v1::DurableEnvelopeV1,
     expected_contract: &ContractReferenceV1,
     expected_outcome: ResultOutcomeV1,
 ) -> Result<([u8; 16], [u8; 16]), CrossChannelForwardDeliveryResultErrorV1> {
@@ -238,7 +238,7 @@ fn event_error(_: RuntimePullDeliveryErrorV1) -> CrossChannelForwardDeliveryResu
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_communication_delivery_intent_ingress_api::{
+    use makosh_communication_delivery_intent_ingress_api::{
         CommunicationDeliveryIntentIngressEnvelopeContextV1,
         build_communication_delivery_intent_rejected_outbox_record_v1,
         build_communication_delivery_intent_submitted_outbox_record_v1,
@@ -275,7 +275,7 @@ mod tests {
                     CommunicationDeliveryIntentIngressRejectCodePolicy as i32,
                 logical_owner_id: "owner-1".to_owned(),
             },
-            &context("hermes-not-delivery-intent-runtime"),
+            &context("makosh-not-delivery-intent-runtime"),
         )
         .expect("rejected");
         assert!(decode_rejected(&wrong_source, "owner-1").is_err());

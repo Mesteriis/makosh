@@ -13,7 +13,7 @@ pub(super) struct VaultOwnedEntityLink {
 pub(super) async fn link_vault_owned_entity_in_transaction(
     transaction: &mut Transaction<'_, Postgres>,
     request: VaultOwnedEntityLink,
-) -> Result<(), hermes_observations_postgres::errors::ObservationStoreError> {
+) -> Result<(), makosh_observations_postgres::errors::ObservationStoreError> {
     let metadata = match request.extra_metadata {
         Some(extra) if request.base_metadata.is_object() && extra.is_object() => {
             let mut merged = request.base_metadata;

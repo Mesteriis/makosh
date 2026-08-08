@@ -24,10 +24,10 @@ const emit = defineEmits<{
 const fileInput = ref<HTMLInputElement>()
 const isDragging = ref(false)
 const classes = computed(() => [
-	'hermes-file-drop-zone',
+	'makosh-file-drop-zone',
 	{
-		'hermes-file-drop-zone--dragging': isDragging.value,
-		'hermes-file-drop-zone--disabled': props.disabled
+		'makosh-file-drop-zone--dragging': isDragging.value,
+		'makosh-file-drop-zone--disabled': props.disabled
 	},
 	props.class
 ])
@@ -68,7 +68,7 @@ function handleNativeChange(event: Event): void {
 <template>
 	<input
 		ref="fileInput"
-		class="hermes-file-drop-zone__input"
+		class="makosh-file-drop-zone__input"
 		:accept="accept"
 		:aria-label="label"
 		:disabled="disabled"
@@ -92,7 +92,7 @@ function handleNativeChange(event: Event): void {
 		@keydown.space.prevent="openPicker"
 	>
 		<Icon icon="tabler:upload" size="1.25rem" aria-hidden="true" />
-		<span class="hermes-file-drop-zone__label">{{ label }}</span>
-		<span class="hermes-file-drop-zone__hint">{{ hint }}</span>
+		<span class="makosh-file-drop-zone__label">{{ label }}</span>
+		<span class="makosh-file-drop-zone__hint">{{ hint }}</span>
 	</div>
 </template>

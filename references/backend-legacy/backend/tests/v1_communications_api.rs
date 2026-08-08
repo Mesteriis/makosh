@@ -1,4 +1,4 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
@@ -7,24 +7,24 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::{build_router, build_router_with_database};
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::{build_router, build_router_with_database};
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::config::app_config::AppConfig;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::workflows::mail_background_sync::store::MailSyncStore;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::config::app_config::AppConfig;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::workflows::mail_background_sync::store::MailSyncStore;
 
 const T: &str = "v1comms-test-token";
 
 fn cfg() -> AppConfig {
-    hermes_backend_testkit::app::config_with_secret(T)
+    makosh_backend_testkit::app::config_with_secret(T)
 }
 
 fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("req")
 }
@@ -34,7 +34,7 @@ fn put(uri: &str, body: Value) -> Request<Body> {
         .method(Method::PUT)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::from(body.to_string()))
         .expect("put request")
 }
@@ -44,7 +44,7 @@ fn pget(uri: &str, body: Value) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::from(body.to_string()))
         .expect("req")
 }
@@ -54,8 +54,8 @@ fn pget_with_actor(uri: &str, body: Value) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
-        .header("x-hermes-actor-id", "hermes-frontend")
+        .header("x-makosh-secret", T)
+        .header("x-makosh-actor-id", "makosh-frontend")
         .body(Body::from(body.to_string()))
         .expect("req")
 }
@@ -65,7 +65,7 @@ fn pput(uri: &str, body: Value) -> Request<Body> {
         .method(Method::PUT)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::from(body.to_string()))
         .expect("req")
 }
@@ -80,7 +80,7 @@ fn uid() -> u128 {
 async fn router(db: &str) -> axum::Router {
     let database = Database::connect(Some(db)).await.expect("db");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(T, db),
+        makosh_backend_testkit::app::config_with_secret_and_database_url(T, db),
         database,
     )
 }

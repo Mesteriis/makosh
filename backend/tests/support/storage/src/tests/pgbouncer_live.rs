@@ -1,11 +1,11 @@
 //! Live transaction-pool conformance for the disposable Compose contour.
 
-use hermes_storage_pgbouncer::{
+use makosh_storage_pgbouncer::{
     PLATFORM_ADMIN_USERNAME, PgBouncerAdminCredentialV1, PgBouncerAdminEndpointV1,
     PgBouncerAdminPortV1, PoolLifecycleOutcomeV1, TokioPostgresPgBouncerAdminPortV1,
     verify_admin_connection,
 };
-use hermes_storage_postgres::{
+use makosh_storage_postgres::{
     PostgresAdminConnectorV1, PostgresRuntimeSessionProbeV1, StorageRoleSpecV1,
     ensure_platform_schemas, ensure_storage_roles,
 };
@@ -13,13 +13,13 @@ use zeroize::Zeroizing;
 
 use super::fixtures::storage_role_binding;
 
-const DATABASE_URL_ENV: &str = "HERMES_STORAGE_TEST_DATABASE_URL";
-const PGBOUNCER_URL_ENV: &str = "HERMES_STORAGE_TEST_PGBOUNCER_URL";
-const AUTHENTICATED_TEST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_TEST";
+const DATABASE_URL_ENV: &str = "MAKOSH_STORAGE_TEST_DATABASE_URL";
+const PGBOUNCER_URL_ENV: &str = "MAKOSH_STORAGE_TEST_PGBOUNCER_URL";
+const AUTHENTICATED_TEST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_TEST";
 const AUTHENTICATED_PASSWORD_FILE_ENV: &str =
-    "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE";
-const AUTHENTICATED_HOST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_HOST";
-const AUTHENTICATED_PORT_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PORT";
+    "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE";
+const AUTHENTICATED_HOST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_HOST";
+const AUTHENTICATED_PORT_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PORT";
 
 #[test]
 #[ignore = "requires the disposable development PgBouncer contour"]
@@ -60,7 +60,7 @@ fn runtime_role_reaches_postgres_only_through_the_transaction_pool() {
 fn administrative_port_reaches_the_disposable_admin_console() {
     let endpoint = admin_endpoint(&required_url(PGBOUNCER_URL_ENV));
     let credential = PgBouncerAdminCredentialV1::new(
-        "hermes_development".to_owned(),
+        "makosh_development".to_owned(),
         Zeroizing::new(String::new()),
     )
     .expect("development admin credential shape");

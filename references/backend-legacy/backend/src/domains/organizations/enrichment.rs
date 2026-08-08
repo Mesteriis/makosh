@@ -10,7 +10,7 @@ use thiserror::Error;
 
 use crate::domains::organizations::core::errors::OrgCoreError;
 use crate::domains::organizations::core::evidence::link_review_transition_in_transaction;
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct OrgEnrichmentResult {

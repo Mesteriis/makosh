@@ -21,7 +21,7 @@ const emit = defineEmits<{
 	select: [item: CommandItem]
 }>()
 
-const classes = computed(() => ['hermes-search-palette', props.class].filter(Boolean).join(' '))
+const classes = computed(() => ['makosh-search-palette', props.class].filter(Boolean).join(' '))
 </script>
 
 <template>

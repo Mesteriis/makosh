@@ -1,4 +1,4 @@
-//! HTTP serving boundary for Hermes.
+//! HTTP serving boundary for Макошь.
 //!
 //! Route construction is supplied by composition. This crate owns only Axum
 //! serving and graceful termination, so it stays independent of SQL, vaults,

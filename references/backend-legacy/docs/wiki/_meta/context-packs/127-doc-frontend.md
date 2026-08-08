@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/README.md`
 - Size bytes / Размер в байтах: `5427`
 - Included characters / Включено символов: `5399`
 - Truncated / Обрезано: `no`
@@ -63,7 +63,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 ````markdown
 # Frontend
 
-Vue 3 + TypeScript desktop UI for Hermes Hub, packaged by Tauri.
+Vue 3 + TypeScript desktop UI for Макошь, packaged by Tauri.
 
 Current scope is a desktop/laptop shell for the local backend APIs with provider account setup wizards for Gmail, iCloud and raw IMAP, graph/project/task/Persona identity/document workflow surfaces, and local AI workflow surfaces. Mobile UI is out of scope while ADR-0031 is active.
 
@@ -90,7 +90,7 @@ pnpm install
 Tauri was initialized with:
 
 ```sh
-pnpm tauri init --ci --app-name "Hermes Hub" --window-title "Hermes Hub" --frontend-dist "../dist" --dev-url "http://localhost:5173" --before-dev-command "pnpm dev" --before-build-command "pnpm build"
+pnpm tauri init --ci --app-name "Макошь" --window-title "Макошь" --frontend-dist "../dist" --dev-url "http://localhost:5173" --before-dev-command "pnpm dev" --before-build-command "pnpm build"
 ```
 
 ## Commands
@@ -132,8 +132,8 @@ make build
 
 The internal build step copies `libtdjson.dylib` from, in order:
 
-1. `HERMES_TDJSON_SOURCE`
-2. `HERMES_TDJSON_PATH`
+1. `MAKOSH_TDJSON_SOURCE`
+2. `MAKOSH_TDJSON_PATH`
 3. Homebrew `tdlib`
 4. `/opt/homebrew/lib/libtdjson.dylib`
 5. `/usr/local/lib/libtdjson.dylib`
@@ -141,20 +141,20 @@ The internal build step copies `libtdjson.dylib` from, in order:
 Release CI can build TDLib from source instead of relying on a system install:
 
 ```sh
-HERMES_TDLIB_BUILD_FROM_SOURCE=1 make build
+MAKOSH_TDLIB_BUILD_FROM_SOURCE=1 make build
 ```
 
-The backend still accepts `HERMES_TDJSON_PATH` as a development override, but a
+The backend still accepts `MAKOSH_TDJSON_PATH` as a development override, but a
 packaged macOS app should resolve TDLib from the bundled Tauri resource path.
 Linux is supported only as a development/container target and is not packaged as
 a desktop TDLib bundle.
 
 Telegram QR login also needs Telegram app credentials. Development runs can set
-`HERMES_TELEGRAM_API_ID` and `HERMES_TELEGRAM_API_HASH` in the backend
+`MAKOSH_TELEGRAM_API_ID` and `MAKOSH_TELEGRAM_API_HASH` in the backend
 environment. Packaged macOS builds can inject them into the Tauri launcher with
-`HERMES_BUNDLED_TELEGRAM_API_ID` and `HERMES_BUNDLED_TELEGRAM_API_HASH`; the
+`MAKOSH_BUNDLED_TELEGRAM_API_ID` and `MAKOSH_BUNDLED_TELEGRAM_API_HASH`; the
 launcher forwards those values to the backend sidecar as runtime
-`HERMES_TELEGRAM_API_ID` and `HERMES_TELEGRAM_API_HASH`.
+`MAKOSH_TELEGRAM_API_ID` and `MAKOSH_TELEGRAM_API_HASH`.
 
 Google mail setup needs one project-owned OAuth Desktop app client. End users of
 the packaged app should not create their own Google Cloud project. Release builds
@@ -164,11 +164,11 @@ copy the downloaded Desktop app JSON into the Tauri resource bundle:
 make build
 ```
 
-The internal build step reads `HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH` from
-`docker/.env`, or `HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_SOURCE` from the shell, and
+The internal build step reads `MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH` from
+`docker/.env`, or `MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_SOURCE` from the shell, and
 copies the file to `frontend/src-tauri/resources/google-oauth/client_secret.json`.
 That generated resource is ignored by Git. The packaged launcher passes the bundled resource path to the backend sidecar as
-`HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH`.
+`MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH`.
 
 ## Bundled Backend Sidecar
 
@@ -203,7 +203,7 @@ domains/<name>/
 
 Data flow: API → TanStack Query → Component (direct) or API → Pinia Store → Component.
 
-Requests use `X-Hermes-Secret: <secret>` via the centralized `ApiClient` (see `src/platform/api/ApiClient.ts`).
+Requests use `X-Макошь-Secret: <secret>` via the centralized `ApiClient` (see `src/platform/api/ApiClient.ts`).
 
 Validate frontend packaging changes with:
 
@@ -220,16 +220,16 @@ make dev
 
 ### `frontend/docs/code-review-2026-06-14.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/docs/code-review-2026-06-14.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/docs/code-review-2026-06-14.md`
 - Size bytes / Размер в байтах: `68271`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
 
 ```markdown
-# Полное ревью фронтенда Hermes Hub
+# Полное ревью фронтенда Макошь
 
-**Дата:** 2026-06-14  
-**Объём:** 80+ файлов прочитано (конфигурация, API, типы, эндпоинты, сервисы, стор-файлы, страницы, тесты, i18n, стили)  
+**Дата:** 2026-06-14
+**Объём:** 80+ файлов прочитано (конфигурация, API, типы, эндпоинты, сервисы, стор-файлы, страницы, тесты, i18n, стили)
 **Вердикт:** Фундамент качественный, но есть критические проблемы, которые нужно исправить перед расширением.
 
 ---
@@ -260,13 +260,13 @@ make dev
 
 **Файлы:** `frontend/src/config/index.ts`, `Makefile`, `frontend/src-tauri/src/lib.rs`
 
-`frontend-dev` передает `VITE_HERMES_API_BASE_URL` и `VITE_HERMES_LOCAL_API_SECRET`, backend sidecar стартует на `127.0.0.1:8080`, но новый config читает `VITE_API_BASE_URL` / `VITE_HERMES_API_SECRET` и default-ит API base URL в `http://localhost:3000`.
+`frontend-dev` передает `VITE_MAKOSH_API_BASE_URL` и `VITE_MAKOSH_LOCAL_API_SECRET`, backend sidecar стартует на `127.0.0.1:8080`, но новый config читает `VITE_API_BASE_URL` / `VITE_MAKOSH_API_SECRET` и default-ит API base URL в `http://localhost:3000`.
 
 **Evidence:** `frontend/src/config/index.ts:4-13`, `Makefile:277-280`, `frontend/src-tauri/src/lib.rs:53`.
 
-**Impact:** даже после исправления `ApiClient.init` frontend по умолчанию будет ходить не в Hermes backend и отправлять пустой `X-Hermes-Secret`. Protected endpoints по ADR-0056 будут недоступны, а dev loop через `make frontend-dev` не сможет поднять рабочий UI без ручного дублирования env vars.
+**Impact:** даже после исправления `ApiClient.init` frontend по умолчанию будет ходить не в Макошь backend и отправлять пустой `X-Макошь-Secret`. Protected endpoints по ADR-0056 будут недоступны, а dev loop через `make frontend-dev` не сможет поднять рабочий UI без ручного дублирования env vars.
 
-**Fix:** вернуть единый public env contract: `VITE_HERMES_API_BASE_URL` with default `http://127.0.0.1:8080` and required `VITE_HERMES_LOCAL_API_SECRET`; пустой secret должен быть bootstrap error, а не silently accepted config.
+**Fix:** вернуть единый public env contract: `VITE_MAKOSH_API_BASE_URL` with default `http://127.0.0.1:8080` and required `VITE_MAKOSH_LOCAL_API_SECRET`; пустой secret должен быть bootstrap error, а не silently accepted config.
 
 ### Critical: renderer писем снова вставляет непроверенный HTML через `innerHTML`
 
@@ -352,7 +352,7 @@ Vue 3 migration itself is consistent with ADR-0093 as a platform decision. The b
 
 ## Дополнение: ревью текущего AI Control Center diff
 
-**Объём:** backend AI Control Center readiness guard, provider split, Testcontainers testkit retry, frontend AI Settings selector.  
+**Объём:** backend AI Control Center readiness guard, provider split, Testcontainers testkit retry, frontend AI Settings selector.
 **ADR:** ADR-0082, ADR-0076.
 
 ### Major: API key можно сохранить для не-API provider
@@ -381,7 +381,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src-tauri/binaries/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/binaries/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/binaries/README.md`
 - Size bytes / Размер в байтах: `339`
 - Included characters / Включено символов: `339`
 - Truncated / Обрезано: `no`
@@ -393,8 +393,8 @@ This directory holds generated Tauri sidecar binaries.
 
 macOS release builds expect:
 
-- `hermes-hub-backend-aarch64-apple-darwin`
-- `hermes-hub-backend-x86_64-apple-darwin`
+- `makosh-backend-aarch64-apple-darwin`
+- `makosh-backend-x86_64-apple-darwin`
 
 Generate the current host sidecar with:
 
@@ -407,7 +407,7 @@ Generated binaries are local build artifacts and are not committed.
 
 ### `frontend/src-tauri/resources/google-oauth/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/resources/google-oauth/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/resources/google-oauth/README.md`
 - Size bytes / Размер в байтах: `709`
 - Included characters / Включено символов: `709`
 - Truncated / Обрезано: `no`
@@ -429,18 +429,18 @@ make frontend-tauri-build
 ```
 
 `make google-oauth-resource` copies the JSON from
-`HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH` in `docker/.env`, or from
-`HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_SOURCE` when set in the shell.
+`MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH` in `docker/.env`, or from
+`MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_SOURCE` when set in the shell.
 
 The generated `client_secret.json` is ignored by Git. It is intentionally a
 bundle artifact, not a source-controlled credential file. Packaged builds pass
 the bundled file path to the backend sidecar as
-`HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH`.
+`MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH`.
 ````
 
 ### `frontend/src-tauri/resources/tdlib/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/resources/tdlib/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/resources/tdlib/README.md`
 - Size bytes / Размер в байтах: `769`
 - Included characters / Включено символов: `769`
 - Truncated / Обрезано: `no`
@@ -458,8 +458,8 @@ directories before `tauri build`:
 - `macos-universal/libtdjson.dylib`
 
 Use `make tdlib-macos-resource` to populate the matching directory from
-`HERMES_TDJSON_SOURCE`, `HERMES_TDJSON_PATH`, or an installed Homebrew `tdlib`.
-For release CI, `HERMES_TDLIB_BUILD_FROM_SOURCE=1 make tdlib-macos-resource`
+`MAKOSH_TDJSON_SOURCE`, `MAKOSH_TDJSON_PATH`, or an installed Homebrew `tdlib`.
+For release CI, `MAKOSH_TDLIB_BUILD_FROM_SOURCE=1 make tdlib-macos-resource`
 can build TDLib from source before copying the generated dynamic library.
 Generated dynamic libraries are ignored by Git.
 

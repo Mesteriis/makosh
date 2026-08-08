@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/domains/communications/queries/mailOperationQueries.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/mailOperationQueries.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/mailOperationQueries.ts`
 - Size bytes / Размер в байтах: `17721`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -405,7 +405,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/queries/mailWorkspaceQueries.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/mailWorkspaceQueries.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/mailWorkspaceQueries.ts`
 - Size bytes / Размер в байтах: `21295`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -758,13 +758,13 @@ export function useUpdateSavedSearchMutation() {
   >({
     mutationFn: async ({ savedSearchId, request }) => updateSavedSearch(savedSearchId, request),
     onSuccess: () => {
-      
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `frontend/src/domains/communications/queries/messageLocalIntelligence.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/messageLocalIntelligence.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/messageLocalIntelligence.boundary.test.ts`
 - Size bytes / Размер в байтах: `554`
 - Included characters / Включено символов: `554`
 - Truncated / Обрезано: `no`
@@ -788,7 +788,7 @@ describe('message local intelligence query boundary', () => {
 
 ### `frontend/src/domains/communications/queries/optimisticFolderMessageUpdates.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/optimisticFolderMessageUpdates.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/optimisticFolderMessageUpdates.test.ts`
 - Size bytes / Размер в байтах: `3149`
 - Included characters / Включено символов: `3149`
 - Truncated / Обрезано: `no`
@@ -904,7 +904,7 @@ describe('optimistic folder message updates', () => {
 
 ### `frontend/src/domains/communications/queries/optimisticFolderMessageUpdates.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/optimisticFolderMessageUpdates.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/optimisticFolderMessageUpdates.ts`
 - Size bytes / Размер в байтах: `2777`
 - Included characters / Включено символов: `2777`
 - Truncated / Обрезано: `no`
@@ -1016,7 +1016,7 @@ function sortFolderMessages(items: FolderMessage[]): FolderMessage[] {
 
 ### `frontend/src/domains/communications/queries/optimisticFolderUpdates.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/optimisticFolderUpdates.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/optimisticFolderUpdates.test.ts`
 - Size bytes / Размер в байтах: `3205`
 - Included characters / Включено символов: `3205`
 - Truncated / Обрезано: `no`
@@ -1136,7 +1136,7 @@ describe('optimistic folder updates', () => {
 
 ### `frontend/src/domains/communications/queries/optimisticFolderUpdates.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/optimisticFolderUpdates.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/optimisticFolderUpdates.ts`
 - Size bytes / Размер в байтах: `2622`
 - Included characters / Включено символов: `2622`
 - Truncated / Обрезано: `no`
@@ -1231,7 +1231,7 @@ function sortFolders(folders: CommunicationFolder[]): CommunicationFolder[] {
 
 ### `frontend/src/domains/communications/queries/optimisticMailUpdates.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/optimisticMailUpdates.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/optimisticMailUpdates.test.ts`
 - Size bytes / Размер в байтах: `6409`
 - Included characters / Включено символов: `6409`
 - Truncated / Обрезано: `no`
@@ -1453,7 +1453,7 @@ describe('optimistic mail updates', () => {
 
 ### `frontend/src/domains/communications/queries/optimisticMailUpdates.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/optimisticMailUpdates.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/optimisticMailUpdates.ts`
 - Size bytes / Размер в байтах: `8103`
 - Included characters / Включено символов: `8103`
 - Truncated / Обрезано: `no`
@@ -1741,7 +1741,7 @@ function isLocalState(value: unknown): value is LocalMessageState {
 
 ### `frontend/src/domains/communications/queries/outboxInfiniteQuery.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/outboxInfiniteQuery.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/outboxInfiniteQuery.boundary.test.ts`
 - Size bytes / Размер в байтах: `1438`
 - Included characters / Включено символов: `1438`
 - Truncated / Обрезано: `no`
@@ -1787,7 +1787,7 @@ describe('outbox infinite query boundary', () => {
 
 ### `frontend/src/domains/communications/queries/outboxStatusStrip.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/outboxStatusStrip.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/outboxStatusStrip.ts`
 - Size bytes / Размер в байтах: `2184`
 - Included characters / Включено символов: `2184`
 - Truncated / Обрезано: `no`
@@ -1865,7 +1865,7 @@ export function useOutboxStatusStrip(
 
 ### `frontend/src/domains/communications/queries/queryTypes.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/queryTypes.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/queryTypes.ts`
 - Size bytes / Размер в байтах: `168`
 - Included characters / Включено символов: `168`
 - Truncated / Обрезано: `no`
@@ -1879,7 +1879,7 @@ export type NullableQueryParam<T> = MaybeRefOrGetter<T | null>
 
 ### `frontend/src/domains/communications/queries/realtimeMailPatches.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/realtimeMailPatches.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/realtimeMailPatches.ts`
 - Size bytes / Размер в байтах: `21122`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2271,7 +2271,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/queries/realtimePatchShared.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/realtimePatchShared.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/realtimePatchShared.ts`
 - Size bytes / Размер в байтах: `75`
 - Included characters / Включено символов: `75`
 - Truncated / Обрезано: `no`
@@ -2282,7 +2282,7 @@ export * from '../../../shared/communications/queries/realtimePatchShared'
 
 ### `frontend/src/domains/communications/queries/realtimeTelegramMediaPatches.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/realtimeTelegramMediaPatches.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/realtimeTelegramMediaPatches.ts`
 - Size bytes / Размер в байтах: `10512`
 - Included characters / Включено символов: `10512`
 - Truncated / Обрезано: `no`
@@ -2528,7 +2528,7 @@ function matchesMediaQuery(item: TelegramMediaItem, query: string): boolean {
 
 ### `frontend/src/domains/communications/queries/realtimeTelegramParticipantPatches.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/realtimeTelegramParticipantPatches.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/realtimeTelegramParticipantPatches.ts`
 - Size bytes / Размер в байтах: `5797`
 - Included characters / Включено символов: `5797`
 - Truncated / Обрезано: `no`
@@ -2700,7 +2700,7 @@ function isInfiniteData(value: unknown): value is TelegramChatMembersInfiniteDat
 
 ### `frontend/src/domains/communications/queries/realtimeTelegramPatchShared.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/realtimeTelegramPatchShared.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/realtimeTelegramPatchShared.ts`
 - Size bytes / Размер в байтах: `7739`
 - Included characters / Включено символов: `7739`
 - Truncated / Обрезано: `no`
@@ -2923,7 +2923,7 @@ function chatRecencyKey(c: TelegramChat): string { return c.last_message_at ?? c
 
 ### `frontend/src/domains/communications/queries/realtimeTelegramPatches.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/realtimeTelegramPatches.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/realtimeTelegramPatches.ts`
 - Size bytes / Размер в байтах: `24655`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3267,7 +3267,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/queries/realtimeTelegramTopicPatches.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/realtimeTelegramTopicPatches.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/realtimeTelegramTopicPatches.ts`
 - Size bytes / Размер в байтах: `3385`
 - Included characters / Включено символов: `3385`
 - Truncated / Обрезано: `no`
@@ -3356,7 +3356,7 @@ function topicSortKey(topic: TelegramTopic): string {
 
 ### `frontend/src/domains/communications/queries/realtimeWhatsAppPatches.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/realtimeWhatsAppPatches.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/realtimeWhatsAppPatches.ts`
 - Size bytes / Размер в байтах: `14945`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3697,13 +3697,13 @@ function whatsappConversationSnapshot(
 	const accountId = stringValue(value.account_id)
 	const providerChatId = stringValue(value.provider_chat_id)
 	const title = stringValue(value.chat_title)
-	const 
+	const
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `frontend/src/domains/communications/queries/resourceOverviewInfiniteQuery.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/resourceOverviewInfiniteQuery.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/resourceOverviewInfiniteQuery.boundary.test.ts`
 - Size bytes / Размер в байтах: `831`
 - Included characters / Включено символов: `831`
 - Truncated / Обрезано: `no`
@@ -3728,7 +3728,7 @@ describe('resource overview infinite query boundary', () => {
 
 ### `frontend/src/domains/communications/queries/savedSearchInfiniteQuery.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/queries/savedSearchInfiniteQuery.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/queries/savedSearchInfiniteQuery.boundary.test.ts`
 - Size bytes / Размер в байтах: `712`
 - Included characters / Включено символов: `712`
 - Truncated / Обрезано: `no`

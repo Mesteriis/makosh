@@ -1,7 +1,7 @@
 use crate::app::handlers::communications::workflow_actions::models::{
     WorkflowActionKind, WorkflowActionResponse, WorkflowActionStatus, WorkflowActionTargetKind,
 };
-use hermes_connectrpc_contracts::hermes::communications::v1::{
+use makosh_connectrpc_contracts::makosh::communications::v1::{
     WorkflowActionProvenance as ProtoWorkflowActionProvenance,
     WorkflowActionResponse as ProtoWorkflowActionResponse,
     WorkflowActionTarget as ProtoWorkflowActionTarget,

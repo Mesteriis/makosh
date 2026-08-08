@@ -1,10 +1,10 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_desktop_call_recording_api::{REALTIME_CONTRACT_NAME_V1, contract_reference_v1};
-use hermes_desktop_call_recording_persistence::{
+use makosh_desktop_call_recording_api::{REALTIME_CONTRACT_NAME_V1, contract_reference_v1};
+use makosh_desktop_call_recording_persistence::{
     DesktopCallRecordingRepositoryV1, PersistenceErrorV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeClientRealtimePublishRequestV1, ManagedRuntimeControlRequestV1,
@@ -90,7 +90,7 @@ pub async fn publish_pending_realtime_v1(
 
 fn event_id(recording_id: [u8; 16], revision: u64) -> [u8; 16] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.desktop-call-recording.client-realtime.v1\0");
+    hash.update(b"makosh.desktop-call-recording.client-realtime.v1\0");
     hash.update(recording_id);
     hash.update(revision.to_be_bytes());
     hash.finalize()[..16]

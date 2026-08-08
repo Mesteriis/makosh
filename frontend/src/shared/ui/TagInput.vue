@@ -27,8 +27,8 @@ const emit = defineEmits<{
 
 const draft = ref('')
 const classes = computed(() => [
-	'hermes-tag-input',
-	{ 'hermes-tag-input--disabled': props.disabled },
+	'makosh-tag-input',
+	{ 'makosh-tag-input--disabled': props.disabled },
 	props.class
 ])
 const filteredSuggestions = computed(() => {
@@ -71,11 +71,11 @@ function handleKeydown(event: KeyboardEvent): void {
 
 <template>
 	<div :class="classes">
-		<div class="hermes-tag-input__control">
-			<span v-for="tag in modelValue" :key="tag" class="hermes-tag-input__tag">
+		<div class="makosh-tag-input__control">
+			<span v-for="tag in modelValue" :key="tag" class="makosh-tag-input__tag">
 				<span>{{ tag }}</span>
 				<button
-					class="hermes-tag-input__remove"
+					class="makosh-tag-input__remove"
 					type="button"
 					:aria-label="`${removeLabel} ${tag}`"
 					:disabled="disabled"
@@ -86,7 +86,7 @@ function handleKeydown(event: KeyboardEvent): void {
 			</span>
 			<input
 				v-model="draft"
-				class="hermes-tag-input__field"
+				class="makosh-tag-input__field"
 				:aria-label="ariaLabel"
 				:disabled="disabled"
 				:placeholder="placeholder"
@@ -94,11 +94,11 @@ function handleKeydown(event: KeyboardEvent): void {
 				@keydown="handleKeydown"
 			/>
 		</div>
-		<div v-if="filteredSuggestions.length > 0" class="hermes-tag-input__suggestions" role="listbox" :aria-label="ariaLabel">
+		<div v-if="filteredSuggestions.length > 0" class="makosh-tag-input__suggestions" role="listbox" :aria-label="ariaLabel">
 			<button
 				v-for="suggestion in filteredSuggestions"
 				:key="suggestion"
-				class="hermes-tag-input__suggestion"
+				class="makosh-tag-input__suggestion"
 				type="button"
 				role="option"
 				@click="addTag(suggestion)"

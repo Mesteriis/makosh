@@ -16,14 +16,14 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Создаётся страница `operations/documentation-map.md` — обзорная карта документации проекта Hermes. Она собирает ссылки на существующие документирующие файлы доменов (`signal-hub`, `tasks`) и движков (`engines`), группирует их по категориям и указывает краткое описание и статус каждого документа, взятые непосредственно из встроенных исходных текстов. Карта служит навигационным указателем для разработчиков и сопровождающих, опираясь только на реально присутствующие в репозитории файлы документации.
+Создаётся страница `operations/documentation-map.md` — обзорная карта документации проекта Макошь. Она собирает ссылки на существующие документирующие файлы доменов (`signal-hub`, `tasks`) и движков (`engines`), группирует их по категориям и указывает краткое описание и статус каждого документа, взятые непосредственно из встроенных исходных текстов. Карта служит навигационным указателем для разработчиков и сопровождающих, опираясь только на реально присутствующие в репозитории файлы документации.
 
 ## Предложенные страницы
 
 #### `operations/documentation-map.md`
 
 ```markdown
-# Карта документации Hermes
+# Карта документации Макошь
 
 Статус: обзорный навигационный документ.
 
@@ -93,13 +93,13 @@ generated_by: code-wiki-ru
 - **`docs/domains/signal-hub/spec.md`**: заголовок «Signal Hub Domain», список владения и не-владения, доменные правила.
 - **`docs/domains/signal-hub/status.md`**: заголовок «Signal Hub Status», дата статуса «2026-06-23», общий статус «IMPLEMENTATION STARTED», таблицы готовности.
 - **`docs/domains/signal-hub/testing.md`**: заголовок «Signal Hub Testing», принцип заменяемых фикстурных источников, слои тестирования.
-- **`docs/domains/tasks/README.md`**: заголовок «Hermes Tasks», предметная граница.
+- **`docs/domains/tasks/README.md`**: заголовок «Макошь Tasks», предметная граница.
 - **`docs/domains/tasks/api.md`**: заголовок «Tasks — API Reference», перечисление REST‑маршрутов.
 - **`docs/domains/tasks/architecture.md`**: заголовок «Tasks Architecture», описание модулей и слоёв.
 - **`docs/domains/tasks/data-model.md`**: заголовок «Tasks Data Model», таблицы, ID‑форматы, статусы.
 - **`docs/domains/tasks/spec.md`**: заголовок «Tasks Domain», жизненный цикл, правила извлечения.
 - **`docs/domains/tasks/status.md`**: заголовок «Tasks — Статус реализации», факт 84 % реализации (87/104 разделов).
-- **`docs/engines/README.md`**: заголовок «Hermes Engine Catalog», определение движка, список спецификаций и текущих реализаций.
+- **`docs/engines/README.md`**: заголовок «Макошь Engine Catalog», определение движка, список спецификаций и текущих реализаций.
 - **`docs/engines/automation/README.md`**: заголовок «Automation Engine», статус «code‑aligned documentation package», текущая реализация.
 - **`docs/engines/call-intelligence/README.md`**: заголовок «Call Intelligence Engine», описание конвейера.
 - **`docs/engines/consistency/README.md`**: заголовок «Consistency / Contradiction Engine», псевдоним «Polygraph», статус и текущая реализация.

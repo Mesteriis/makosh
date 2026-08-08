@@ -1,10 +1,10 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 
 use crate::integrations::telegram::client::models::chats::TelegramChatMember;
 use crate::platform::events::bus::telegram_event_types;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use super::realtime_events::TelegramRuntimeEventBridgeContext;
 
@@ -53,7 +53,7 @@ fn participant_updated_event(
     participant: &TelegramChatMember,
     source: &str,
     occurred_at: DateTime<Utc>,
-) -> Result<NewEventEnvelope, hermes_events_api::EventEnvelopeError> {
+) -> Result<NewEventEnvelope, makosh_events_api::EventEnvelopeError> {
     let tdlib_event = participant_event_source(source);
     NewEventEnvelope::builder(
         format!(

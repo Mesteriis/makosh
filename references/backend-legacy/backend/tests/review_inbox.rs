@@ -1,42 +1,42 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
 use axum::http::{Method, Request, StatusCode, header};
 use chrono::{TimeZone, Utc};
-use hermes_events_postgres::store::EventStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::decisions::store::DecisionStore;
-use hermes_hub_backend::domains::documents::core::{
+use makosh_events_postgres::store::EventStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::decisions::store::DecisionStore;
+use makosh_hub_backend::domains::documents::core::{
     models::NewDocumentImport, store::DocumentImportStore,
 };
-use hermes_hub_backend::domains::obligations::store::ObligationStore;
-use hermes_hub_backend::domains::personas::api::store::PersonaProjectionStore;
-use hermes_hub_backend::domains::personas::identity::store::PersonaIdentityReviewStore;
-use hermes_hub_backend::domains::projects::core::store::ProjectStore;
-use hermes_hub_backend::domains::relationships::{
+use makosh_hub_backend::domains::obligations::store::ObligationStore;
+use makosh_hub_backend::domains::personas::api::store::PersonaProjectionStore;
+use makosh_hub_backend::domains::personas::identity::store::PersonaIdentityReviewStore;
+use makosh_hub_backend::domains::projects::core::store::ProjectStore;
+use makosh_hub_backend::domains::relationships::{
     models::{
         NewRelationship, NewRelationshipEvidence, RelationshipEntityKind, RelationshipReviewState,
     },
     store::RelationshipStore,
 };
-use hermes_hub_backend::domains::review::{
+use makosh_hub_backend::domains::review::{
     models::{
         NewReviewItem, NewReviewItemEvidence, ReviewItemKind, ReviewItemStatus,
         ReviewPromotionTarget,
     },
     store::ReviewInboxStore,
 };
-use hermes_hub_backend::domains::tasks::api::TaskStore;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::workflows::review_inbox::project_persona_identity_review_event;
-use hermes_hub_backend::workflows::review_inbox::sync_decisions_to_review_for_observations;
-use hermes_hub_backend::workflows::review_inbox::sync_obligations_to_review_for_observations;
-use hermes_hub_backend::workflows::review_inbox::sync_relationships_to_review_for_observations;
-use hermes_hub_backend::workflows::review_inbox::sync_task_candidates_to_review_for_observations;
-use hermes_hub_backend::workflows::review_promotion::ReviewPromotionService;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_hub_backend::domains::tasks::api::TaskStore;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::workflows::review_inbox::project_persona_identity_review_event;
+use makosh_hub_backend::workflows::review_inbox::sync_decisions_to_review_for_observations;
+use makosh_hub_backend::workflows::review_inbox::sync_obligations_to_review_for_observations;
+use makosh_hub_backend::workflows::review_inbox::sync_relationships_to_review_for_observations;
+use makosh_hub_backend::workflows::review_inbox::sync_task_candidates_to_review_for_observations;
+use makosh_hub_backend::workflows::review_promotion::ReviewPromotionService;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 use serde_json::json;
 use sqlx::Row;
 use sqlx::postgres::PgPool;
@@ -754,7 +754,7 @@ async fn review_item_promotion_rejects_missing_evidence_with_bad_request() {
                         path_segment(&item.review_item_id)
                     ))
                     .header(header::CONTENT_TYPE, "application/json")
-                    .header("x-hermes-secret", REVIEW_API_TOKEN)
+                    .header("x-makosh-secret", REVIEW_API_TOKEN)
                     .body(Body::from(
                         json!({
                             "target_domain": target_domain,
@@ -791,7 +791,7 @@ async fn review_item_creation_rejects_unknown_observation_with_bad_request() {
                 .method(Method::POST)
                 .uri("/api/v1/review/items")
                 .header(header::CONTENT_TYPE, "application/json")
-                .header("x-hermes-secret", REVIEW_API_TOKEN)
+                .header("x-makosh-secret", REVIEW_API_TOKEN)
                 .body(Body::from(
                     json!({
                         "item_kind": "potential_task",
@@ -856,7 +856,7 @@ async fn review_item_api_lifecycle_captures_observation_trail_against_postgres()
                     "/api/v1/review/items/{}/take",
                     path_segment(&promotable.review_item_id)
                 ))
-                .header("x-hermes-secret", REVIEW_API_TOKEN)
+                .header("x-makosh-secret", REVIEW_API_TOKEN)
                 .body(Body::empty())
                 .expect("take request"),
         )
@@ -873,7 +873,7 @@ async fn review_item_api_lifecycle_captures_observation_trail_against_postgres()
                     "/api/v1/review/items/{}/approve",
                     path_segment(&promotable.review_item_id)
                 ))
-                .header("x-hermes-secret", REVIEW_API_TOKEN)
+                .header("x-makosh-secret", REVIEW_API_TOKEN)
                 .body(Body::empty())
                 .expect("approve request"),
         )
@@ -891,7 +891,7 @@ async fn review_item_api_lifecycle_captures_observation_trail_against_postgres()
                     path_segment(&promotable.review_item_id)
                 ))
                 .header(header::CONTENT_TYPE, "application/json")
-                .header("x-hermes-secret", REVIEW_API_TOKEN)
+                .header("x-makosh-secret", REVIEW_API_TOKEN)
                 .body(Body::from(
                     json!({
                         "target_domain": "decisions",
@@ -928,7 +928,7 @@ async fn review_item_api_lifecycle_captures_observation_trail_against_postgres()
                     "/api/v1/review/items/{}/dismiss",
                     path_segment(&disposable.review_item_id)
                 ))
-                .header("x-hermes-secret", REVIEW_API_TOKEN)
+                .header("x-makosh-secret", REVIEW_API_TOKEN)
                 .body(Body::empty())
                 .expect("dismiss request"),
         )
@@ -944,7 +944,7 @@ async fn review_item_api_lifecycle_captures_observation_trail_against_postgres()
                     "/api/v1/review/items/{}/archive",
                     path_segment(&disposable.review_item_id)
                 ))
-                .header("x-hermes-secret", REVIEW_API_TOKEN)
+                .header("x-makosh-secret", REVIEW_API_TOKEN)
                 .body(Body::empty())
                 .expect("archive request"),
         )
@@ -1117,7 +1117,7 @@ async fn task_candidate_review_mirror_promotes_obligation_candidate_against_post
     assert_eq!(review_item.metadata["due_text"], json!("Friday 5pm"));
 
     let promoted =
-        hermes_hub_backend::workflows::review_promotion::ReviewPromotionService::new(pool.clone())
+        makosh_hub_backend::workflows::review_promotion::ReviewPromotionService::new(pool.clone())
             .promote(
                 &review_item.review_item_id,
                 ReviewPromotionTarget::new("tasks", "task", format!("task:v1:mirror:{suffix}")),
@@ -1168,14 +1168,14 @@ async fn decision_review_mirror_promotes_existing_decision_against_postgres() {
 
     let decision = DecisionStore::new(pool.clone())
         .upsert_with_evidence(
-            &hermes_hub_backend::domains::decisions::models::decision::NewDecision::new(
+            &makosh_hub_backend::domains::decisions::models::decision::NewDecision::new(
                 format!("Buy mirrored NAS {suffix}"),
                 "local evidence matters",
                 0.83,
-                hermes_hub_backend::domains::decisions::models::states::DecisionReviewState::Suggested,
+                makosh_hub_backend::domains::decisions::models::states::DecisionReviewState::Suggested,
             ),
             &[
-                hermes_hub_backend::domains::decisions::models::evidence::NewDecisionEvidence::observation(
+                makosh_hub_backend::domains::decisions::models::evidence::NewDecisionEvidence::observation(
                     observation.observation_id.clone(),
                 )
                 .quote(format!(
@@ -1204,7 +1204,7 @@ async fn decision_review_mirror_promotes_existing_decision_against_postgres() {
         .expect("mirrored decision review item");
 
     let promoted =
-        hermes_hub_backend::workflows::review_promotion::ReviewPromotionService::new(pool.clone())
+        makosh_hub_backend::workflows::review_promotion::ReviewPromotionService::new(pool.clone())
             .promote(
                 &review_item.review_item_id,
                 ReviewPromotionTarget::new(
@@ -1289,15 +1289,15 @@ async fn obligation_review_mirror_promotes_existing_obligation_against_postgres(
 
     let obligation = ObligationStore::new(pool.clone())
         .upsert_with_evidence(
-            &hermes_hub_backend::domains::obligations::models::obligation::NewObligation::new(
-                hermes_hub_backend::domains::obligations::models::entity_kind::ObligationEntityKind::Knowledge,
+            &makosh_hub_backend::domains::obligations::models::obligation::NewObligation::new(
+                makosh_hub_backend::domains::obligations::models::entity_kind::ObligationEntityKind::Knowledge,
                 format!("knowledge:v1:mirror:{suffix}"),
                 format!("Send NAS follow-up package {suffix}"),
                 0.82,
-                hermes_hub_backend::domains::obligations::models::states::ObligationReviewState::Suggested,
+                makosh_hub_backend::domains::obligations::models::states::ObligationReviewState::Suggested,
             ),
             &[
-                hermes_hub_backend::domains::obligations::models::evidence::NewObligationEvidence::observation(
+                makosh_hub_backend::domains::obligations::models::evidence::NewObligationEvidence::observation(
                     observation.observation_id.clone(),
                 )
                 .quote(format!(
@@ -1325,7 +1325,7 @@ async fn obligation_review_mirror_promotes_existing_obligation_against_postgres(
         .expect("mirrored obligation review item");
 
     let promoted =
-        hermes_hub_backend::workflows::review_promotion::ReviewPromotionService::new(pool.clone())
+        makosh_hub_backend::workflows::review_promotion::ReviewPromotionService::new(pool.clone())
             .promote(
                 &review_item.review_item_id,
                 ReviewPromotionTarget::new(
@@ -1450,7 +1450,7 @@ async fn relationship_review_mirror_promotes_existing_relationship_against_postg
         .expect("mirrored relationship review item");
 
     let promoted =
-        hermes_hub_backend::workflows::review_promotion::ReviewPromotionService::new(pool.clone())
+        makosh_hub_backend::workflows::review_promotion::ReviewPromotionService::new(pool.clone())
             .promote(
                 &review_item.review_item_id,
                 ReviewPromotionTarget::new(
@@ -1580,7 +1580,7 @@ async fn identity_candidate_review_mirror_promotes_existing_candidate_against_po
     assert!(review_item.metadata.get("right_person_id").is_none());
 
     let promoted =
-        hermes_hub_backend::workflows::review_promotion::ReviewPromotionService::new(pool.clone())
+        makosh_hub_backend::workflows::review_promotion::ReviewPromotionService::new(pool.clone())
             .promote(
                 &review_item.review_item_id,
                 ReviewPromotionTarget::new(
@@ -1736,7 +1736,7 @@ async fn project_link_candidate_review_promotes_existing_candidate_against_postg
     let project_id = format!("project:v1:review-link:{suffix}");
     ProjectStore::new(pool.clone())
         .upsert_project(
-            &hermes_hub_backend::domains::projects::core::models::NewProject::active(
+            &makosh_hub_backend::domains::projects::core::models::NewProject::active(
                 &project_id,
                 format!("Review Link Project {suffix}"),
                 "Product Development",
@@ -1776,7 +1776,7 @@ async fn project_link_candidate_review_promotes_existing_candidate_against_postg
         .expect("create project link review item");
 
     let promoted =
-        hermes_hub_backend::workflows::review_promotion::ReviewPromotionService::new(pool.clone())
+        makosh_hub_backend::workflows::review_promotion::ReviewPromotionService::new(pool.clone())
             .promote(
                 &item.review_item_id,
                 ReviewPromotionTarget::new(
@@ -2012,7 +2012,7 @@ async fn assert_materialized_target(
         "obligations" => {
             let obligations = ObligationStore::new(pool.clone())
                 .list_by_review_state(
-                    hermes_hub_backend::domains::obligations::models::states::ObligationReviewState::UserConfirmed,
+                    makosh_hub_backend::domains::obligations::models::states::ObligationReviewState::UserConfirmed,
                     100,
                 )
                 .await
@@ -2052,7 +2052,7 @@ async fn assert_materialized_target(
         "decisions" => {
             let decisions = DecisionStore::new(pool.clone())
                 .list_by_review_state(
-                    hermes_hub_backend::domains::decisions::models::states::DecisionReviewState::UserConfirmed,
+                    makosh_hub_backend::domains::decisions::models::states::DecisionReviewState::UserConfirmed,
                     100,
                 )
                 .await
@@ -2288,7 +2288,7 @@ async fn build_review_api_app(database_url: &str) -> axum::Router {
         .await
         .expect("database connection");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             REVIEW_API_TOKEN,
             database_url,
         ),

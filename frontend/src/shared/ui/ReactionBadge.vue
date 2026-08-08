@@ -19,10 +19,10 @@ const emit = defineEmits<{
 }>()
 
 const classes = computed(() => [
-	'hermes-reaction-badge',
+	'makosh-reaction-badge',
 	{
-		'hermes-reaction-badge--active': props.active,
-		'hermes-reaction-badge--interactive': props.interactive
+		'makosh-reaction-badge--active': props.active,
+		'makosh-reaction-badge--interactive': props.interactive
 	},
 	props.class
 ])

@@ -3,7 +3,7 @@
 use sha2::{Digest, Sha256};
 
 const HMAC_BLOCK_BYTES: usize = 64;
-const SEARCH_TOKEN_DOMAIN_V1: &[u8] = b"hermes.communications.search.token.v1\0";
+const SEARCH_TOKEN_DOMAIN_V1: &[u8] = b"makosh.communications.search.token.v1\0";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum CommunicationsSearchDigestErrorV1 {

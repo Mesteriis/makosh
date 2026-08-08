@@ -2,9 +2,9 @@
 
 use std::path::PathBuf;
 
-use hermes_kernel_control_store::InitialOwnerIdentity;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store::InitialOwnerIdentity;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     v1::{InitialOwnerEnrollmentChallengeV1, InitialOwnerEnrollmentV1},
     validation::descriptor::validate_initial_owner_enrollment,
 };
@@ -15,7 +15,7 @@ use prost::Message;
 use crate::identity::device::signer::{DeviceSigner, FileDeviceSigner};
 use crate::identity::enrollment::store::prepare_pristine;
 
-const INITIAL_ENROLLMENT_DOMAIN: &[u8] = b"hermes.initial-owner-enrollment.v1\0";
+const INITIAL_ENROLLMENT_DOMAIN: &[u8] = b"makosh.initial-owner-enrollment.v1\0";
 
 pub fn run(
     data_dir_override: Option<PathBuf>,

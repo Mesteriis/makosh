@@ -3,15 +3,15 @@
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     ManagedVaultRuntimeControlRequestV1, ManagedVaultRuntimeControlResponseV1,
     VaultCiphertextResponseV1, VaultCiphertextRouteV1,
     managed_vault_runtime_control_request_v1::Operation,
     managed_vault_runtime_control_response_v1::Result as ResponseResult,
 };
-use hermes_runtime_protocol::validation::vault::{
+use makosh_runtime_protocol::validation::vault::{
     STORAGE_REVOKE_AUDIENCE_OPERATION_DIGEST_V1, validate_vault_ciphertext_route_v1,
 };
 use prost::Message;
@@ -177,7 +177,7 @@ pub(crate) fn relay_kernel_authorized_route(
     let response = ManagedVaultRuntimeControlResponseV1::decode(response.as_slice())
         .map_err(|_| "managed Vault ciphertext response is invalid".to_owned())?;
     if !response.error_code.is_empty() {
-        if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+        if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
             eprintln!(
                 "developer_vault_ciphertext_response_error_code={}",
                 response.error_code

@@ -1,5 +1,5 @@
 [package]
-name = "hermes-ai-inference-assembly"
+name = "makosh-ai-inference-assembly"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,19 +8,19 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-ai-inference-assembly"
+name = "makosh-ai-inference-assembly"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "engine"
 owner = "ai"
 surface = "assembly"
 
 [dependencies]
-hermes-ai-inference-persistence = { path = "../ai-inference-persistence" }
-hermes-ai-inference-runtime = { path = "../ai-inference-runtime" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-ai-inference-persistence = { path = "../ai-inference-persistence" }
+makosh-ai-inference-runtime = { path = "../ai-inference-runtime" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
 serde_json = "=1.0.150"

@@ -1,4 +1,4 @@
-use hermes_mail_contacts_sync_core::{
+use makosh_mail_contacts_sync_core::{
     MailContactsSyncDirectionV1, MailContactsSyncDraftV1, MailContactsSyncStatusV1,
     MailContactsSyncTransitionV1,
 };
@@ -19,9 +19,9 @@ pub struct OutboxEnvelopeV1 {
 pub struct MailContactsSyncRealtimeTransitionV1 {
     pub sequence: u64,
     pub run_id: [u8; 16],
-    pub state: hermes_mail_contacts_sync_core::MailContactsSyncStateV1,
+    pub state: makosh_mail_contacts_sync_core::MailContactsSyncStateV1,
     pub state_revision: u64,
-    pub rejection: Option<hermes_mail_contacts_sync_core::MailContactsSyncRejectCodeV1>,
+    pub rejection: Option<makosh_mail_contacts_sync_core::MailContactsSyncRejectCodeV1>,
     pub occurred_at_unix_millis: i64,
 }
 
@@ -199,7 +199,7 @@ pub enum MailContactsSyncPersistenceErrorV1 {
 
 pub(crate) fn request_fingerprint(draft: &MailContactsSyncDraftV1) -> [u8; 32] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.mail_contacts_sync.start.v1\0");
+    hash.update(b"makosh.mail_contacts_sync.start.v1\0");
     hash.update(draft.account_id.as_bytes());
     hash.update([direction_code(draft.direction) as u8]);
     hash.update([trigger_code(draft.trigger) as u8]);
@@ -214,11 +214,11 @@ pub(crate) const fn direction_code(value: MailContactsSyncDirectionV1) -> i16 {
 }
 
 pub(crate) const fn trigger_code(
-    value: hermes_mail_contacts_sync_core::MailContactsSyncTriggerV1,
+    value: makosh_mail_contacts_sync_core::MailContactsSyncTriggerV1,
 ) -> i16 {
     match value {
-        hermes_mail_contacts_sync_core::MailContactsSyncTriggerV1::Manual => 1,
-        hermes_mail_contacts_sync_core::MailContactsSyncTriggerV1::Scheduled => 2,
+        makosh_mail_contacts_sync_core::MailContactsSyncTriggerV1::Manual => 1,
+        makosh_mail_contacts_sync_core::MailContactsSyncTriggerV1::Scheduled => 2,
     }
 }
 

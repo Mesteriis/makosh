@@ -1,6 +1,6 @@
 import { createClient, type Client } from '@connectrpc/connect'
 
-import { MailSyncHealthQueryService } from '../../../gen/hermes/mail/sync_health/v1/client_pb'
+import { MailSyncHealthQueryService } from '../../../gen/makosh/mail/sync_health/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 let mailSyncHealthClient: Client<typeof MailSyncHealthQueryService> | null = null

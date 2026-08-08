@@ -133,7 +133,7 @@ impl CommunicationsService for CommunicationsConnectService {
             return Err(invalid_argument_error("message_id must not be empty"));
         }
         let new_state = parse_workflow_state(&req.workflow_state)?;
-        let actor_id = "hermes-frontend";
+        let actor_id = "makosh-frontend";
 
         self.audit_log
             .record(&NewApiAuditRecord::message_workflow_state_set(
@@ -209,13 +209,13 @@ impl CommunicationsService for CommunicationsConnectService {
         if req.message_id.trim().is_empty() {
             return Err(invalid_argument_error("message_id must not be empty"));
         }
-        // Hermes owns local read state. The provider command is committed with
+        // Макошь owns local read state. The provider command is committed with
         // that intent and is executed asynchronously after this response.
         let updated = CommunicationCommandService::new(self.pool.clone())
             .set_message_read_local_with_provider_command(
                 &req.message_id,
                 true,
-                "hermes-local-user",
+                "makosh-local-user",
             )
             .await
             .map_err(command_connect_error)?;
@@ -524,7 +524,7 @@ impl CommunicationsService for CommunicationsConnectService {
     ) -> ServiceResult<ProtoWorkflowActionResponse> {
         let req = req.to_owned_message();
         let request = super::super::communications_workflow_request_proto::request(req)?;
-        let response = execute_workflow_action(&self.pool, "hermes-frontend", request)
+        let response = execute_workflow_action(&self.pool, "makosh-frontend", request)
             .await
             .map_err(api_error_connect_error)?;
         Response::ok(super::super::communications_workflow_response_proto::response(response))
@@ -635,7 +635,7 @@ impl CommunicationsService for CommunicationsConnectService {
             .ok_or_else(|| {
                 ConnectError::new(ErrorCode::NotFound, "communication message was not found")
             })?;
-        let auth = match hermes_communications_postgres::store::CommunicationIngestionStore::new(
+        let auth = match makosh_communications_postgres::store::CommunicationIngestionStore::new(
             self.pool.clone(),
         )
         .raw_record(&message.raw_record_id)
@@ -1189,7 +1189,7 @@ impl CommunicationsService for CommunicationsConnectService {
             return Err(invalid_argument_error("query must not be empty"));
         }
 
-        let Some(path) = std::env::var("HERMES_SEARCH_INDEX_PATH").ok() else {
+        let Some(path) = std::env::var("MAKOSH_SEARCH_INDEX_PATH").ok() else {
             return Response::ok(SearchMessagesResponse {
                 results: Vec::new(),
                 ..Default::default()
@@ -2238,7 +2238,7 @@ impl CommunicationsService for CommunicationsConnectService {
 
         self.audit_log
             .record(&NewApiAuditRecord::communication_email_send(
-                "hermes-frontend",
+                "makosh-frontend",
                 &outbox.account_id,
                 recipient_count,
             ))

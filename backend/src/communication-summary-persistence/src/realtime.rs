@@ -1,4 +1,4 @@
-use hermes_communication_summary_core::{
+use makosh_communication_summary_core::{
     CommunicationSummaryRejectionCodeV1, CommunicationSummaryStateV1,
 };
 use sqlx::{Postgres, Row, Transaction};
@@ -39,7 +39,7 @@ impl crate::CommunicationSummaryPersistenceV1 {
             sqlx::query(
                 "SELECT realtime_sequence, run_id, state, state_revision,
                         rejection_code, occurred_at_unix_millis
-                 FROM hermes_data.communication_summary_realtime
+                 FROM makosh_data.communication_summary_realtime
                  WHERE logical_owner_id = $1 AND realtime_sequence > $2
                  ORDER BY realtime_sequence
                  LIMIT $3",
@@ -56,7 +56,7 @@ impl crate::CommunicationSummaryPersistenceV1 {
                  FROM (
                    SELECT realtime_sequence, run_id, state, state_revision,
                           rejection_code, occurred_at_unix_millis
-                   FROM hermes_data.communication_summary_realtime
+                   FROM makosh_data.communication_summary_realtime
                    WHERE logical_owner_id = $1
                    ORDER BY realtime_sequence DESC
                    LIMIT $2
@@ -80,13 +80,13 @@ pub(crate) async fn insert_realtime_transition(
     occurred_at_unix_millis: i64,
 ) -> Result<(), CommunicationSummaryPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.communication_summary_realtime (
+        "INSERT INTO makosh_data.communication_summary_realtime (
            logical_owner_id, run_id, state, state_revision,
            rejection_code, occurred_at_unix_millis
          )
          SELECT logical_owner_id, run_id, state, state_revision,
                 rejection_code, $1
-         FROM hermes_data.communication_summary_runs
+         FROM makosh_data.communication_summary_runs
          WHERE logical_owner_id = $2 AND run_id = $3",
     )
     .bind(occurred_at_unix_millis)

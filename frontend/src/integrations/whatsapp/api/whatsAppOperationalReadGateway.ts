@@ -14,8 +14,8 @@ import {
 	type WhatsAppOperationalQueryV1,
 	type WhatsAppOperationalRuntimeStatusV1,
 	type WhatsAppParticipantPageV1,
-} from '../../../gen/hermes/whatsapp/operational/v1/client_pb'
-import type { ProviderEventKind } from '../../../gen/hermes/whatsapp/v1/client_pb'
+} from '../../../gen/makosh/whatsapp/operational/v1/client_pb'
+import type { ProviderEventKind } from '../../../gen/makosh/whatsapp/v1/client_pb'
 import { getWhatsAppOperationalReadConnectClient } from './whatsAppOperationalReadClient'
 
 const DEFAULT_PAGE_LIMIT = 50

@@ -1,5 +1,5 @@
 [package]
-name = "hermes-provider-orchestration"
+name = "makosh-provider-orchestration"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.89"
@@ -8,9 +8,9 @@ license = "MIT"
 
 [dependencies]
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
-hermes-communications-api = { path = "../communications-api" }
-hermes-provider-api = { path = "../provider-api" }
-hermes-signal-hub-api = { path = "../signal-hub-api" }
+makosh-communications-api = { path = "../communications-api" }
+makosh-provider-api = { path = "../provider-api" }
+makosh-signal-hub-api = { path = "../signal-hub-api" }
 serde_json = "1"
 thiserror = "2"
 

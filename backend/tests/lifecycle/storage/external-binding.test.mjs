@@ -29,7 +29,7 @@ const capabilityId = 'storage.access';
 const runtimeId = 'runtime_storage';
 
 test('owner IPC issues and rotates one external Storage binding behind current attestation', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-external-storage-binding-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-external-storage-binding-'));
   const dataDir = join(root, 'data');
   let server;
   try {
@@ -93,7 +93,7 @@ function storageDescriptor() {
 }
 
 function storageBundle() {
-  const sql = Buffer.from('CREATE TABLE hermes_data.owner_storage_probe (probe_id uuid);', 'utf8');
+  const sql = Buffer.from('CREATE TABLE makosh_data.owner_storage_probe (probe_id uuid);', 'utf8');
   const step = Buffer.concat([
     uint64(1, 1), text(2, 'create_probe'), field(3, sql),
     field(4, createHash('sha256').update(sql).digest()),
@@ -107,7 +107,7 @@ function storageBundle() {
 
 async function configureTopology(socketPath, ownerSessionId) {
   const response = await request(socketPath, field(17, Buffer.concat([
-    text(1, ownerSessionId), uint64(2, 1), text(3, 'storage_main'), text(4, 'hermes'),
+    text(1, ownerSessionId), uint64(2, 1), text(3, 'storage_main'), text(4, 'makosh'),
     uint64(5, 1), field(6, Buffer.alloc(32, 3)), field(7, Buffer.alloc(32, 4)),
     text(8, '127.0.0.1'), uint64(9, 5_432), text(10, '127.0.0.1'), uint64(11, 6_432),
   ])));

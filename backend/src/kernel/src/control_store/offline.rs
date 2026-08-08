@@ -4,7 +4,7 @@ use std::fs::File;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
-use hermes_kernel_control_store_sqlite::{SqliteControlStore, StagedControlStoreRestore};
+use makosh_kernel_control_store_sqlite::{SqliteControlStore, StagedControlStoreRestore};
 
 use crate::cli::OfflineControlStoreCommand;
 use crate::control_store::lifecycle::{
@@ -71,7 +71,7 @@ fn install_fenced_restore(
     source: &Path,
     destination: &Path,
     instance_id: &str,
-) -> Result<hermes_kernel_control_store::ControlStore, String> {
+) -> Result<makosh_kernel_control_store::ControlStore, String> {
     let anchor =
         recovery_fence::read(data_dir).map_err(|error| format!("read recovery fence: {error}"))?;
     let source_store = SqliteControlStore::open(source)
@@ -91,8 +91,8 @@ fn install_staged(
     source: &Path,
     destination: &Path,
     instance_id: &str,
-    fences: hermes_kernel_control_store::RecoveryFences,
-) -> Result<hermes_kernel_control_store::ControlStore, String> {
+    fences: makosh_kernel_control_store::RecoveryFences,
+) -> Result<makosh_kernel_control_store::ControlStore, String> {
     let staged_path = data_dir.join(".kernel-control-store.sqlite.restore.tmp");
     let _ = std::fs::remove_file(&staged_path);
     let staged = StagedControlStoreRestore::prepare(source, &staged_path, instance_id, fences)

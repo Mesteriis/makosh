@@ -1,7 +1,7 @@
-use hermes_storage_control::{
+use makosh_storage_control::{
     StorageFenceOutcomeV1, StoragePoolFenceCommandV1, StoragePoolFencePortV1,
 };
-use hermes_storage_pgbouncer::{
+use makosh_storage_pgbouncer::{
     PgBouncerAdminPortV1, PgBouncerPoolFenceAdapterV1, PgBouncerRuntimeConfigV1, PoolAliasV1,
     PoolConfigErrorV1, PoolLifecycleCommandV1, PoolLifecycleOutcomeV1, PoolRevokePlanV1,
 };
@@ -27,7 +27,7 @@ fn renders_a_generation_scoped_transaction_pool_without_credentials() {
         alias.clone(),
         "127.0.0.1".into(),
         5_432,
-        "hermes".into(),
+        "makosh".into(),
         "runtime_notes".into(),
         8,
     )
@@ -51,7 +51,7 @@ fn derives_a_safe_alias_for_a_hyphenated_registration_id() {
 
     assert_eq!(
         alias.as_str(),
-        hermes_storage_protocol::storage_runtime_pool_alias("communications-runtime", 1),
+        makosh_storage_protocol::storage_runtime_pool_alias("communications-runtime", 1),
     );
     assert!(
         alias
@@ -68,7 +68,7 @@ fn rejects_config_that_cannot_be_safely_rendered() {
         alias,
         "db.example.com; KILL all".into(),
         5_432,
-        "hermes".into(),
+        "makosh".into(),
         "runtime_notes".into(),
         1,
     );

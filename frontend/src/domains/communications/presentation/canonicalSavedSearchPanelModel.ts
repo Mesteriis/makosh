@@ -1,7 +1,7 @@
 import type {
 	SavedSearchHitV1,
 	SavedSearchSummaryV1,
-} from '../../../gen/hermes/communications/saved_search/v1/saved_search_pb'
+} from '../../../gen/makosh/communications/saved_search/v1/saved_search_pb'
 import {
 	buildCanonicalSearchRows,
 	bytesKey,

@@ -59,7 +59,7 @@ test('recipient suggestion agreement separates source ownership from workflow de
     readFile(new URL('src/communication-recipient-suggestion-api/src/lib.rs', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/communication-recipient-suggestion-api/proto/hermes/communication_recipient_suggestion/v1/recipient_suggestion.proto',
+        'src/communication-recipient-suggestion-api/proto/makosh/communication_recipient_suggestion/v1/recipient_suggestion.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -70,7 +70,7 @@ test('recipient suggestion agreement separates source ownership from workflow de
     readFile(new URL('src/communications-recipient-source-api/src/lib.rs', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/communications-recipient-source-api/proto/hermes/communications/recipient_source/v1/recipient_source.proto',
+        'src/communications-recipient-source-api/proto/makosh/communications/recipient_source/v1/recipient_source.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -150,12 +150,12 @@ test('recipient suggestion agreement separates source ownership from workflow de
     dependsOn: ['communications_recipient_source_v1', 'client_gateway_v1', 'blob_v1'],
   });
   for (const unit of [
-    'hermes-communications-recipient-source-api',
-    'hermes-communication-recipient-suggestion-api',
-    'hermes-communication-recipient-suggestion-core',
-    'hermes-communication-recipient-suggestion-persistence',
-    'hermes-communication-recipient-suggestion-runtime',
-    'hermes-communication-recipient-suggestion-assembly',
+    'makosh-communications-recipient-source-api',
+    'makosh-communication-recipient-suggestion-api',
+    'makosh-communication-recipient-suggestion-core',
+    'makosh-communication-recipient-suggestion-persistence',
+    'makosh-communication-recipient-suggestion-runtime',
+    'makosh-communication-recipient-suggestion-assembly',
   ]) {
     assert.match(adr, new RegExp(`\\b${unit}\\b`));
   }
@@ -198,7 +198,7 @@ test('recipient suggestion agreement separates source ownership from workflow de
   assert.match(core, /SourceDigestMismatch/);
   assert.doesNotMatch(
     core,
-    /hermes_ai|ollama|communications_domain|communication_explanation|communication_reply_suggestion/,
+    /makosh_ai|ollama|communications_domain|communication_explanation|communication_reply_suggestion/,
   );
   assert.match(sourceManifest, /owner = "communications"/);
   assert.match(sourceManifest, /surface = "contract"/);
@@ -233,11 +233,11 @@ test('recipient suggestion agreement separates source ownership from workflow de
   }
   assert.match(runtimeManifest, /owner = "communication_recipient_suggestion"/);
   assert.match(runtimeManifest, /surface = "runtime"/);
-  assert.doesNotMatch(runtimeManifest, /hermes-ai-contracts|ollama|communication-explanation/);
+  assert.doesNotMatch(runtimeManifest, /makosh-ai-contracts|ollama|communication-explanation/);
   assert.match(runtimeAdmission, /ModuleKindV1::Workflow/);
   assert.match(runtimeAdmission, /ProvidedSurfaceKindV1::ClientRealtime/);
   assert.match(runtimeAdmission, /communication_recipient_source_prepared_consume_request_v1/);
-  assert.doesNotMatch(runtimeAdmission, /inference|hermes_ai|ollama/i);
+  assert.doesNotMatch(runtimeAdmission, /inference|makosh_ai|ollama/i);
   assert.match(runtimeEvaluation, /evaluate_communication_recipient_candidates_v1/);
   assert.match(runtimeSourceResults, /receive_runtime_pull_delivery/);
   assert.match(runtimeSourceResults, /materialize_recipient_source_v1/);
@@ -245,9 +245,9 @@ test('recipient suggestion agreement separates source ownership from workflow de
   assert.match(runtimeManaged, /publish_pending/);
   assert.doesNotMatch(
     [runtimeAdmission, runtimeEvaluation, runtimeSourceResults, runtimeManaged].join('\n'),
-    /communications-domain|hermes-communications-(?:core|persistence)|hermes_ai|ollama/i,
+    /communications-domain|makosh-communications-(?:core|persistence)|makosh_ai|ollama/i,
   );
-  assert.match(communicationsRuntimeManifest, /hermes-communications-recipient-source-api/);
+  assert.match(communicationsRuntimeManifest, /makosh-communications-recipient-source-api/);
   assert.match(
     communicationsAdmission,
     /COMMUNICATIONS_RECIPIENT_SOURCE_BLOB_CAPABILITY_ID/,
@@ -265,7 +265,7 @@ test('recipient suggestion agreement separates source ownership from workflow de
   assert.match(communicationsRecipientSource, /persist_source_result/);
   assert.doesNotMatch(
     communicationsRecipientSource,
-    /sender_utf8|subject_utf8|provider_id|account_id|email_address|hermes_ai|ollama/,
+    /sender_utf8|subject_utf8|provider_id|account_id|email_address|makosh_ai|ollama/,
   );
   assert.match(communicationsSourceSnapshot, /CommunicationsSourceSnapshotV1/);
   assert.doesNotMatch(communicationsSourceSnapshot, /CommunicationsAiSource/);
@@ -275,8 +275,8 @@ test('recipient suggestion agreement separates source ownership from workflow de
   assert.match(assembly, /communication_recipient_suggestion_module_descriptor_v1/);
   assert.match(assembly, /communication_recipient_suggestion_storage_bundle_v1/);
   assert.match(assembly, /communication_recipient_suggestion\.release-artifacts\.json/);
-  assert.doesNotMatch(assembly, /signing_key|private_key|hermes_provider|ollama/i);
-  assert.match(releaseScript, /--package hermes-communication-recipient-suggestion-assembly/);
+  assert.doesNotMatch(assembly, /signing_key|private_key|makosh_provider|ollama/i);
+  assert.match(releaseScript, /--package makosh-communication-recipient-suggestion-assembly/);
   assert.match(
     releaseScript,
     /communication_recipient_suggestion\.release-artifacts\.json/,
@@ -295,7 +295,7 @@ test('recipient suggestion agreement separates source ownership from workflow de
   assert.match(managedFlow, /stale/);
   assert.match(managedFlow, /revoke_owner/);
   assert.match(managedFlow, /assert_private_content_absent/);
-  assert.doesNotMatch(`${managedSetup}\n${managedFlow}`, /ollama|hermes_ai|communication_explanation/i);
+  assert.doesNotMatch(`${managedSetup}\n${managedFlow}`, /ollama|makosh_ai|communication_explanation/i);
   assert.match(
     managedScript,
     /managed_recipient_suggestion_reaches_gateway_sse_and_replays_after_restart/,

@@ -46,12 +46,12 @@ pub use envelope::{
     build_communication_translation_source_prepared_outbox_record_v1,
     build_communication_translation_source_rejected_outbox_record_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-communications-ai-source-api";
+pub const PACKAGE: &str = "makosh-communications-ai-source-api";
 pub const COMMUNICATIONS_AI_SOURCE_OWNER_V1: &str = "communications";
 pub const COMMUNICATION_REPLY_SOURCE_PREPARE_CONTRACT_NAME_V1: &str =
     "communication_reply_source_prepare";
@@ -108,37 +108,37 @@ pub const COMMUNICATIONS_EXPLANATION_SOURCE_CAPABILITY_ID_V1: &str =
 pub const COMMUNICATION_REPLY_SOURCE_BLOB_TARGET_OWNER_ID_V1: &str =
     "communication_reply_suggestion";
 pub const COMMUNICATION_REPLY_SOURCE_BLOB_TARGET_MODULE_ID_V1: &str =
-    "hermes-communication-reply-suggestion-runtime";
+    "makosh-communication-reply-suggestion-runtime";
 pub const COMMUNICATION_REPLY_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "communication_reply_suggestion.source.blob.v1";
 pub const COMMUNICATION_CALL_TRANSCRIPTION_SOURCE_BLOB_TARGET_OWNER_ID_V1: &str =
     "call_transcription";
 pub const COMMUNICATION_CALL_TRANSCRIPTION_SOURCE_BLOB_TARGET_MODULE_ID_V1: &str =
-    "hermes-call-transcription-runtime";
+    "makosh-call-transcription-runtime";
 pub const COMMUNICATION_CALL_TRANSCRIPTION_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "call_transcription.source.blob.v1";
 pub const COMMUNICATION_SUMMARY_SOURCE_BLOB_TARGET_OWNER_ID_V1: &str = "communication_summary";
 pub const COMMUNICATION_SUMMARY_SOURCE_BLOB_TARGET_MODULE_ID_V1: &str =
-    "hermes-communication-summary-runtime";
+    "makosh-communication-summary-runtime";
 pub const COMMUNICATION_SUMMARY_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "communication_summary.source.blob.v1";
 pub const COMMUNICATION_TRANSLATION_SOURCE_BLOB_TARGET_OWNER_ID_V1: &str =
     "communication_translation";
 pub const COMMUNICATION_TRANSLATION_SOURCE_BLOB_TARGET_MODULE_ID_V1: &str =
-    "hermes-communication-translation-runtime";
+    "makosh-communication-translation-runtime";
 pub const COMMUNICATION_TRANSLATION_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "communication_translation.source.blob.v1";
 pub const COMMUNICATION_EXPLANATION_SOURCE_BLOB_TARGET_OWNER_ID_V1: &str =
     "communication_explanation";
 pub const COMMUNICATION_EXPLANATION_SOURCE_BLOB_TARGET_MODULE_ID_V1: &str =
-    "hermes-communication-explanation-runtime";
+    "makosh-communication-explanation-runtime";
 pub const COMMUNICATION_EXPLANATION_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "communication_explanation.source.blob.v1";
 
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communications.ai_source.v1.rs"
+        "/makosh.communications.ai_source.v1.rs"
     ));
 }
 
@@ -566,7 +566,7 @@ mod tests {
         );
         assert_eq!(
             COMMUNICATION_REPLY_SOURCE_BLOB_TARGET_MODULE_ID_V1,
-            "hermes-communication-reply-suggestion-runtime"
+            "makosh-communication-reply-suggestion-runtime"
         );
         assert_eq!(
             COMMUNICATION_REPLY_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1,
@@ -582,7 +582,7 @@ mod tests {
         );
         assert_eq!(
             COMMUNICATION_SUMMARY_SOURCE_BLOB_TARGET_MODULE_ID_V1,
-            "hermes-communication-summary-runtime"
+            "makosh-communication-summary-runtime"
         );
         assert_eq!(
             COMMUNICATION_SUMMARY_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1,
@@ -602,7 +602,7 @@ mod tests {
         );
         assert_eq!(
             COMMUNICATION_TRANSLATION_SOURCE_BLOB_TARGET_MODULE_ID_V1,
-            "hermes-communication-translation-runtime"
+            "makosh-communication-translation-runtime"
         );
         assert_eq!(
             COMMUNICATION_TRANSLATION_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1,
@@ -622,7 +622,7 @@ mod tests {
         );
         assert_eq!(
             COMMUNICATION_EXPLANATION_SOURCE_BLOB_TARGET_MODULE_ID_V1,
-            "hermes-communication-explanation-runtime"
+            "makosh-communication-explanation-runtime"
         );
         assert_eq!(
             COMMUNICATION_EXPLANATION_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1,
@@ -642,7 +642,7 @@ mod tests {
         );
         assert_eq!(
             COMMUNICATION_CALL_TRANSCRIPTION_SOURCE_BLOB_TARGET_MODULE_ID_V1,
-            "hermes-call-transcription-runtime"
+            "makosh-call-transcription-runtime"
         );
         assert_eq!(
             COMMUNICATION_CALL_TRANSCRIPTION_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1,

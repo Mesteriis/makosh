@@ -18,7 +18,7 @@ Polygraph.
 | 6 | Task Identity | `task_id` + `external_task_identities` — provider, account_id, external_project_id, external_task_id, external_url |
 | 7 | Deduplication | `task_relations` с `relation_type = 'duplicates'` |
 | 8 | Lifecycle | 10 статусов: new → triaged → ready → in_progress → waiting/blocked → review → done → cancelled → archived |
-| 9 | Provider Status Mapping | `provider_status_mappings` — provider, external_status → hermes_status |
+| 9 | Provider Status Mapping | `provider_status_mappings` — provider, external_status → makosh_status |
 | 10 | Source Tracking | `source_type` CHECK — 18 источников (manual, email, telegram, whatsapp, calendar, meeting, jira, youtrack, github, ...) |
 | 11 | Task Evidence | `task_evidence` — source_type, source_id, quote, confidence |
 | 12 | Task Confidence | confidence REAL поле + Low → suggested inbox |
@@ -29,8 +29,8 @@ Polygraph.
 | 18 | Task context explanation | `POST /tasks/brain` compatibility route → what, why, status, source, context, evidence |
 | 19 | Task Why | `why` поле на `tasks` |
 | 20 | Next Action | `suggest_next_action()` — template per status: "Review and set priority", "Start working", "Follow up: {reason}", "Resolve blockers", "Archive" |
-| 21 | Blocking Intelligence | `hermes_status = 'blocked'` + `waiting_reason` |
-| 22 | Waiting Tasks | `hermes_status = 'waiting'` + waiting_reason + waiting_too_long detector |
+| 21 | Blocking Intelligence | `makosh_status = 'blocked'` + `waiting_reason` |
+| 22 | Waiting Tasks | `makosh_status = 'waiting'` + waiting_reason + waiting_too_long detector |
 | 23 | Priority Score | `calculate_priority()` — deadline proximity, legal/tax context, Persona/Organization/Project presence, blockers |
 | 24 | Risk Analysis | `calculate_risk()` — deadline close, missing docs, no owner, external dependency, legal, urgent keywords |
 | 25 | Readiness Score | `calculate_readiness()` — description, context, docs, deadline, no blockers, Personas resolved |

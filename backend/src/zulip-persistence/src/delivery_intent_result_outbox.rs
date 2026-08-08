@@ -1,12 +1,12 @@
 //! Zulip-owned terminal delivery-result outbox.
 
-use hermes_events_protocol::delivery::OutboxRecordV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
 use sqlx::Row;
 
 use crate::{ZulipDeliveryIntentStoreV1, ZulipDurablePersistenceError};
 
 pub const ZULIP_DELIVERY_INTENT_RESULT_OUTBOX_SCHEMA_V1: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.zulip_delivery_intent_result_outbox (
+CREATE TABLE IF NOT EXISTS makosh_data.zulip_delivery_intent_result_outbox (
     message_id BYTEA PRIMARY KEY,
     envelope_sha256 BYTEA NOT NULL,
     exact_envelope_bytes BYTEA NOT NULL,
@@ -30,7 +30,7 @@ impl ZulipDeliveryIntentStoreV1 {
         }
         let rows = sqlx::query(
             "SELECT message_id, envelope_sha256, exact_envelope_bytes
-             FROM hermes_data.zulip_delivery_intent_result_outbox
+             FROM makosh_data.zulip_delivery_intent_result_outbox
              WHERE published_at_unix_seconds IS NULL
              ORDER BY created_at_unix_seconds, message_id
              LIMIT $1",
@@ -67,7 +67,7 @@ impl ZulipDeliveryIntentStoreV1 {
             return Err(ZulipDurablePersistenceError::InvalidRow);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.zulip_delivery_intent_result_outbox
+            "UPDATE makosh_data.zulip_delivery_intent_result_outbox
              SET published_at_unix_seconds = $1
              WHERE message_id = $2
                AND published_at_unix_seconds IS NULL",
@@ -91,7 +91,7 @@ pub(crate) async fn insert_result_outbox(
     created_at_unix_seconds: i64,
 ) -> Result<(), ZulipDurablePersistenceError> {
     sqlx::query(
-        "INSERT INTO hermes_data.zulip_delivery_intent_result_outbox
+        "INSERT INTO makosh_data.zulip_delivery_intent_result_outbox
             (message_id, envelope_sha256, exact_envelope_bytes, intent_id,
              created_at_unix_seconds)
          VALUES ($1, $2, $3, $4, $5)",

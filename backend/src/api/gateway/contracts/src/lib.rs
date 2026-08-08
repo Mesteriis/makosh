@@ -1,7 +1,7 @@
 //! Typed private Kernel control contracts.
 
 pub mod v1 {
-    include!(concat!(env!("OUT_DIR"), "/hermes.gateway.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.gateway.v1.rs"));
 }
 
 pub mod owner_control_client;

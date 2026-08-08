@@ -1,4 +1,4 @@
-use hermes_contacts_core::{ContactUpsertDraftV1, ContactUpsertOutcomeV1};
+use makosh_contacts_core::{ContactUpsertDraftV1, ContactUpsertOutcomeV1};
 use sha2::{Digest, Sha256};
 
 pub const CONTACTS_MAX_EVENT_BYTES_V1: usize = 64 * 1024;
@@ -192,7 +192,7 @@ pub(crate) fn valid_apply(value: &ApplyMailEntryCommandV1) -> bool {
     nonzero(&value.command_message_id)
         && nonzero(&value.command_envelope_sha256)
         && nonzero(&value.command_id)
-        && hermes_contacts_core::upsert_fingerprint_v1(&value.draft).is_ok()
+        && makosh_contacts_core::upsert_fingerprint_v1(&value.draft).is_ok()
         && value.received_at_unix_millis > 0
         && value.completed_at_unix_millis >= value.received_at_unix_millis
 }
@@ -279,7 +279,7 @@ fn source_command_fingerprint(
     target_mail_account_id: &str,
 ) -> [u8; 32] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.contacts.mail-sync-source.command.v1\0");
+    hash.update(b"makosh.contacts.mail-sync-source.command.v1\0");
     hash.update(command_envelope_sha256);
     hash.update(operation_id);
     hash.update(contact_id);
@@ -310,7 +310,7 @@ fn command_fingerprint(
     entry_digest: [u8; 32],
 ) -> [u8; 32] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.contacts.mail-entry.command.v1\0");
+    hash.update(b"makosh.contacts.mail-entry.command.v1\0");
     hash.update(command_envelope_sha256);
     hash.update(command_id);
     hash.update(entry_digest);
@@ -320,7 +320,7 @@ fn command_fingerprint(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_contacts_core::{
+    use makosh_contacts_core::{
         ContactProviderKindV1, ContactProviderProvenanceV1, ContactTimestampV1,
     };
 

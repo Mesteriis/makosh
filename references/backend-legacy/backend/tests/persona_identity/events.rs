@@ -1,4 +1,4 @@
-use hermes_hub_backend::domains::personas::identity::models::{
+use makosh_hub_backend::domains::personas::identity::models::{
     PersonaIdentityReviewCommand, PersonaIdentityReviewState,
 };
 

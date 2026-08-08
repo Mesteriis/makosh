@@ -30,17 +30,17 @@ pub(super) fn attachment_text_extraction_diagnostics_v1() -> AttachmentTextExtra
             let pool = attachment_text_extraction_diagnostics_pool_v1().await;
             let row = sqlx::query(
                 "SELECT \
-                 (SELECT count(*) FROM hermes_data.attachment_text_extraction_scan_candidates) AS candidates, \
-                 (SELECT count(*) FROM hermes_data.attachment_text_extraction_safety_facts) AS safety_facts, \
-                 (SELECT count(*) FROM hermes_data.attachment_text_extraction_custody_outbox) AS custody_requests, \
-                 (SELECT count(*) FROM hermes_data.attachment_text_extraction_custody_outbox WHERE published_at_unix_millis IS NULL) AS pending_custody_outbox, \
-                 (SELECT count(*) FROM hermes_data.attachment_text_extraction_custody_result_inbox) AS custody_results, \
-                 (SELECT count(*) FROM hermes_data.attachment_text_extraction_jobs) AS jobs, \
-                 (SELECT coalesce(sum(attempt_count), 0) FROM hermes_data.attachment_text_extraction_jobs) AS attempts, \
-                 (SELECT count(*) FROM hermes_data.attachment_text_extraction_artifacts) AS artifacts, \
-                 (SELECT count(*) FROM hermes_data.attachment_security_text_extraction_delegation_inbox) AS security_delegation_commands, \
-                 (SELECT coalesce(sum(attempt_count), 0) FROM hermes_data.attachment_security_text_extraction_delegation_jobs) AS security_delegation_attempts, \
-                 (SELECT count(*) FROM hermes_data.attachment_security_text_extraction_delegation_outbox) AS security_delegation_results",
+                 (SELECT count(*) FROM makosh_data.attachment_text_extraction_scan_candidates) AS candidates, \
+                 (SELECT count(*) FROM makosh_data.attachment_text_extraction_safety_facts) AS safety_facts, \
+                 (SELECT count(*) FROM makosh_data.attachment_text_extraction_custody_outbox) AS custody_requests, \
+                 (SELECT count(*) FROM makosh_data.attachment_text_extraction_custody_outbox WHERE published_at_unix_millis IS NULL) AS pending_custody_outbox, \
+                 (SELECT count(*) FROM makosh_data.attachment_text_extraction_custody_result_inbox) AS custody_results, \
+                 (SELECT count(*) FROM makosh_data.attachment_text_extraction_jobs) AS jobs, \
+                 (SELECT coalesce(sum(attempt_count), 0) FROM makosh_data.attachment_text_extraction_jobs) AS attempts, \
+                 (SELECT count(*) FROM makosh_data.attachment_text_extraction_artifacts) AS artifacts, \
+                 (SELECT count(*) FROM makosh_data.attachment_security_text_extraction_delegation_inbox) AS security_delegation_commands, \
+                 (SELECT coalesce(sum(attempt_count), 0) FROM makosh_data.attachment_security_text_extraction_delegation_jobs) AS security_delegation_attempts, \
+                 (SELECT count(*) FROM makosh_data.attachment_security_text_extraction_delegation_outbox) AS security_delegation_results",
             )
             .fetch_one(&pool)
             .await
@@ -83,7 +83,7 @@ pub(super) fn replace_attachment_text_parser_identity_v1(
         .block_on(async {
             let pool = attachment_text_extraction_diagnostics_pool_v1().await;
             let changed = sqlx::query(
-                "UPDATE hermes_data.attachment_text_extraction_artifacts SET parser_identity_sha256=$4 WHERE logical_owner_id=$1 AND run_id=$2 AND parser_identity_sha256=$3",
+                "UPDATE makosh_data.attachment_text_extraction_artifacts SET parser_identity_sha256=$4 WHERE logical_owner_id=$1 AND run_id=$2 AND parser_identity_sha256=$3",
             )
             .bind(logical_owner_id)
             .bind(run_id)
@@ -100,22 +100,22 @@ pub(super) fn replace_attachment_text_parser_identity_v1(
 async fn attachment_text_extraction_diagnostics_pool_v1() -> sqlx::PgPool {
     let password = Zeroizing::new(
         std::fs::read_to_string(required(
-            "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+            "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
         ))
         .expect("read disposable PostgreSQL credential")
         .trim()
         .to_owned(),
     );
     let options = PgConnectOptions::new()
-        .host(&required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
+        .host(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
         .port(
-            required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+            required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
                 .parse()
                 .expect("valid PostgreSQL port"),
         )
-        .username("hermes_postgres_admin")
+        .username("makosh_postgres_admin")
         .password(password.as_str())
-        .database("hermes_storage_authenticated")
+        .database("makosh_storage_authenticated")
         .ssl_mode(PgSslMode::Disable);
     PgPoolOptions::new()
         .max_connections(1)

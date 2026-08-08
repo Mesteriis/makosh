@@ -28,7 +28,7 @@ const emit = defineEmits<{
 	clear: []
 }>()
 
-const classes = computed(() => ['hermes-grouped-select', props.class].filter(Boolean).join(' '))
+const classes = computed(() => ['makosh-grouped-select', props.class].filter(Boolean).join(' '))
 const options = computed<SelectOption[]>(() => {
 	return props.groups.flatMap((group) =>
 		group.options.map((option) => ({

@@ -1,6 +1,6 @@
 use super::*;
-use hermes_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
-use hermes_communications_api::sensitive_forwarding::StoredSensitiveForwardingPolicy;
+use makosh_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
+use makosh_communications_api::sensitive_forwarding::StoredSensitiveForwardingPolicy;
 
 #[derive(Serialize)]
 pub(crate) struct MailSyncStatusListResponse {
@@ -326,7 +326,7 @@ pub(crate) fn mail_sync_service(
                 pool.clone(),
                 state.vault.clone(),
                 std::sync::Arc::new(crate::app::api_support::stores::domain_stores::app_store::<
-                    hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore,
+                    makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore,
                 >(pool.clone())),
                 crate::workflows::mail_background_sync::DEFAULT_GMAIL_API_BASE_URL,
             ),
@@ -337,12 +337,12 @@ pub(crate) fn mail_sync_service(
             ),
         ),
         std::sync::Arc::new(
-            hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
+            makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
                 pool.clone(),
             ),
         ),
         std::sync::Arc::new(
-            hermes_communications_postgres::store::CommunicationIngestionStore::new(
+            makosh_communications_postgres::store::CommunicationIngestionStore::new(
                 pool.clone(),
             ),
         ),
@@ -362,13 +362,13 @@ pub(crate) fn address_book_sync_service(
             crate::integrations::mail::address_book_sync_provider::LiveAddressBookProviderSyncPort::new(
                 pool.clone(),
                 state.vault.clone(),
-                std::sync::Arc::new(hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
+                std::sync::Arc::new(makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
                     pool.clone(),
                 )),
                 crate::workflows::mail_background_sync::DEFAULT_GMAIL_API_BASE_URL,
             ),
         ),
-        std::sync::Arc::new(hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(pool.clone())),
+        std::sync::Arc::new(makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(pool.clone())),
     ))
 }
 

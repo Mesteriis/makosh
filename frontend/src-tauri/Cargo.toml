@@ -1,8 +1,8 @@
 [package]
 name = "app"
 version = "0.1.0"
-description = "Hermes Hub desktop shell"
-authors = ["Hermes Hub"]
+description = "Макошь desktop shell"
+authors = ["Макошь"]
 license = ""
 repository = ""
 edition = "2024"
@@ -23,7 +23,7 @@ telemost-host-companion = []
 desktop-call-recording-host = [
     "dep:cpal",
     "dep:getrandom",
-    "dep:hermes-desktop-call-recording-api",
+    "dep:makosh-desktop-call-recording-api",
     "dep:rfd",
 ]
 
@@ -31,10 +31,10 @@ desktop-call-recording-host = [
 tauri-build = { version = "2.6.2", features = [] }
 
 [dependencies]
-hermes-owner-vault-provisioning-host = { path = "../native/owner-vault-provisioning-host" }
-hermes-runtime-protocol = { path = "../../backend/src/platform/runtime_protocol" }
-hermes-whatsapp-api = { path = "../../backend/src/whatsapp-api" }
-hermes-desktop-call-recording-api = { path = "../../backend/src/desktop-call-recording-api", optional = true }
+makosh-owner-vault-provisioning-host = { path = "../native/owner-vault-provisioning-host" }
+makosh-runtime-protocol = { path = "../../backend/src/platform/runtime_protocol" }
+makosh-whatsapp-api = { path = "../../backend/src/whatsapp-api" }
+makosh-desktop-call-recording-api = { path = "../../backend/src/desktop-call-recording-api", optional = true }
 cpal = { version = "=0.18.1", optional = true }
 directories = "=6.0.0"
 getrandom = { version = "=0.4.3", optional = true }

@@ -100,7 +100,7 @@ async function prepareRuntime(dataDir, schema, descriptor) {
 async function exerciseAcceptedLifecycle(context, dataDir, schemaLength) {
   const { socketPaths, registrationId, runtimeSessionId } = context;
   assert.equal(sqlite(
-    dataDir, 'SELECT length(schema_bytes) FROM hermes_kernel_settings_schema_artifact;',
+    dataDir, 'SELECT length(schema_bytes) FROM makosh_kernel_settings_schema_artifact;',
   ), `${schemaLength}\n`);
   const ownerSessionId = await openOwnerSession(socketPaths.owner, dataDir);
   const snapshot = settingsSnapshot(registrationId);
@@ -121,7 +121,7 @@ async function exerciseAcceptedLifecycle(context, dataDir, schemaLength) {
   }
   assert.equal(sqlite(
     dataDir,
-    'SELECT desired_revision || ":" || effective_revision || ":" || apply_state FROM hermes_kernel_settings_schema_binding;',
+    'SELECT desired_revision || ":" || effective_revision || ":" || apply_state FROM makosh_kernel_settings_schema_binding;',
   ), '1:1:current\n');
 }
 
@@ -140,7 +140,7 @@ async function exerciseRejectedLifecycle(context, dataDir) {
   );
   assert.equal(sqlite(
     dataDir,
-    'SELECT apply_state || ":" || sanitized_reason_code FROM hermes_kernel_settings_schema_binding;',
+    'SELECT apply_state || ":" || sanitized_reason_code FROM makosh_kernel_settings_schema_binding;',
   ), 'blocked_config:validation.invalid_interval\n');
   const changedSchema = schemaArtifact('Updated interval');
   assert.equal(errorCode(await request(
@@ -150,7 +150,7 @@ async function exerciseRejectedLifecycle(context, dataDir) {
 }
 
 test('settings schema admission persists only exact approved descriptor artifacts', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-settings-schema-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-settings-schema-'));
   const dataDir = join(root, 'data');
   let server;
   try {

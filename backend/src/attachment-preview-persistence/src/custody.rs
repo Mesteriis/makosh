@@ -1,10 +1,10 @@
 //! Exact custody outbox and result inbox owned by Attachment Preview.
 
-use hermes_attachment_preview_api::wire::{AttachmentPreviewErrorCodeV1, AttachmentPreviewStateV1};
-use hermes_attachment_preview_core::{
+use makosh_attachment_preview_api::wire::{AttachmentPreviewErrorCodeV1, AttachmentPreviewStateV1};
+use makosh_attachment_preview_core::{
     AttachmentPreviewTransitionV1, transition_attachment_preview_status_v1,
 };
-use hermes_attachment_preview_ingress::{
+use makosh_attachment_preview_ingress::{
     ATTACHMENT_PREVIEW_MAX_PROOF_BYTES_V1, ATTACHMENT_PREVIEW_MAX_SOURCE_BYTES_V1,
     attachment_preview_custody_delegated_message_id_v1,
     attachment_preview_custody_delegation_rejected_message_id_v1,
@@ -62,7 +62,7 @@ impl AttachmentPreviewPersistenceV1 {
         }
         let mut transaction = self.pool.begin().await.map_err(storage_unavailable)?;
         let evidence = sqlx::query(
-            "SELECT r.run_id FROM hermes_data.attachment_preview_runs r JOIN hermes_data.attachment_preview_scan_candidates c ON c.logical_owner_id=r.logical_owner_id AND c.attachment_anchor_id=r.attachment_anchor_id JOIN hermes_data.attachment_preview_safety_facts s ON s.logical_owner_id=r.logical_owner_id AND s.attachment_anchor_id=r.attachment_anchor_id WHERE r.logical_owner_id=$1 AND r.run_id=$2 AND r.state=2 AND c.message_id=$3 AND s.message_id=$4 AND s.expected_state=3 AND s.next_state=4 FOR UPDATE OF r",
+            "SELECT r.run_id FROM makosh_data.attachment_preview_runs r JOIN makosh_data.attachment_preview_scan_candidates c ON c.logical_owner_id=r.logical_owner_id AND c.attachment_anchor_id=r.attachment_anchor_id JOIN makosh_data.attachment_preview_safety_facts s ON s.logical_owner_id=r.logical_owner_id AND s.attachment_anchor_id=r.attachment_anchor_id WHERE r.logical_owner_id=$1 AND r.run_id=$2 AND r.state=2 AND c.message_id=$3 AND s.message_id=$4 AND s.expected_state=3 AND s.next_state=4 FOR UPDATE OF r",
         )
         .bind(logical_owner_id)
         .bind(record.run_id.as_slice())
@@ -76,7 +76,7 @@ impl AttachmentPreviewPersistenceV1 {
             return Err(AttachmentPreviewPersistenceErrorV1::EvidenceConflict);
         }
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.attachment_preview_custody_outbox (logical_owner_id,request_id,run_id,candidate_message_id,safety_message_id,envelope_sha256,exact_envelope_bytes,published_at_unix_millis,created_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,NULL,$8) ON CONFLICT (logical_owner_id,run_id) DO NOTHING",
+            "INSERT INTO makosh_data.attachment_preview_custody_outbox (logical_owner_id,request_id,run_id,candidate_message_id,safety_message_id,envelope_sha256,exact_envelope_bytes,published_at_unix_millis,created_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,NULL,$8) ON CONFLICT (logical_owner_id,run_id) DO NOTHING",
         )
         .bind(logical_owner_id)
         .bind(record.request_id.as_slice())
@@ -91,7 +91,7 @@ impl AttachmentPreviewPersistenceV1 {
         .map_err(storage_unavailable)?;
         if inserted.rows_affected() == 0 {
             let existing = sqlx::query(
-                "SELECT request_id,envelope_sha256,exact_envelope_bytes FROM hermes_data.attachment_preview_custody_outbox WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE",
+                "SELECT request_id,envelope_sha256,exact_envelope_bytes FROM makosh_data.attachment_preview_custody_outbox WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE",
             )
             .bind(logical_owner_id)
             .bind(record.run_id.as_slice())
@@ -123,7 +123,7 @@ impl AttachmentPreviewPersistenceV1 {
             return Err(AttachmentPreviewPersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "SELECT request_id,envelope_sha256,exact_envelope_bytes FROM hermes_data.attachment_preview_custody_outbox WHERE logical_owner_id=$1 AND published_at_unix_millis IS NULL ORDER BY created_at_unix_millis,request_id LIMIT $2",
+            "SELECT request_id,envelope_sha256,exact_envelope_bytes FROM makosh_data.attachment_preview_custody_outbox WHERE logical_owner_id=$1 AND published_at_unix_millis IS NULL ORDER BY created_at_unix_millis,request_id LIMIT $2",
         )
         .bind(logical_owner_id)
         .bind(i64::from(limit))
@@ -168,7 +168,7 @@ impl AttachmentPreviewPersistenceV1 {
             return Err(AttachmentPreviewPersistenceErrorV1::InvalidInput);
         }
         let changed = sqlx::query(
-            "UPDATE hermes_data.attachment_preview_custody_outbox SET published_at_unix_millis=$1 WHERE logical_owner_id=$2 AND request_id=$3 AND envelope_sha256=$4 AND published_at_unix_millis IS NULL AND created_at_unix_millis<=$1",
+            "UPDATE makosh_data.attachment_preview_custody_outbox SET published_at_unix_millis=$1 WHERE logical_owner_id=$2 AND request_id=$3 AND envelope_sha256=$4 AND published_at_unix_millis IS NULL AND created_at_unix_millis<=$1",
         )
         .bind(published_at_unix_millis)
         .bind(logical_owner_id)
@@ -342,7 +342,7 @@ async fn lock_request(
     request_id: [u8; 16],
 ) -> Result<LockedRequestV1, AttachmentPreviewPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT o.run_id,o.candidate_message_id,o.safety_message_id,r.operation_id,r.attachment_anchor_id,c.declared_size AS candidate_declared_size,c.source_receipt_sha256 AS candidate_receipt_sha256 FROM hermes_data.attachment_preview_custody_outbox o JOIN hermes_data.attachment_preview_runs r ON r.logical_owner_id=o.logical_owner_id AND r.run_id=o.run_id JOIN hermes_data.attachment_preview_scan_candidates c ON c.logical_owner_id=o.logical_owner_id AND c.message_id=o.candidate_message_id AND c.attachment_anchor_id=r.attachment_anchor_id WHERE o.logical_owner_id=$1 AND o.request_id=$2 FOR UPDATE OF o,r,c",
+        "SELECT o.run_id,o.candidate_message_id,o.safety_message_id,r.operation_id,r.attachment_anchor_id,c.declared_size AS candidate_declared_size,c.source_receipt_sha256 AS candidate_receipt_sha256 FROM makosh_data.attachment_preview_custody_outbox o JOIN makosh_data.attachment_preview_runs r ON r.logical_owner_id=o.logical_owner_id AND r.run_id=o.run_id JOIN makosh_data.attachment_preview_scan_candidates c ON c.logical_owner_id=o.logical_owner_id AND c.message_id=o.candidate_message_id AND c.attachment_anchor_id=r.attachment_anchor_id WHERE o.logical_owner_id=$1 AND o.request_id=$2 FOR UPDATE OF o,r,c",
     )
     .bind(logical_owner_id)
     .bind(request_id.as_slice())
@@ -463,7 +463,7 @@ async fn insert_result_inbox(
     fact: ResultInboxFactV1<'_>,
 ) -> Result<ResultInboxInsertV1, AttachmentPreviewPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.attachment_preview_custody_result_inbox (logical_owner_id,message_id,envelope_sha256,request_id,run_id,attachment_anchor_id,result_kind,processed_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (logical_owner_id,message_id) DO NOTHING",
+        "INSERT INTO makosh_data.attachment_preview_custody_result_inbox (logical_owner_id,message_id,envelope_sha256,request_id,run_id,attachment_anchor_id,result_kind,processed_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (logical_owner_id,message_id) DO NOTHING",
     )
     .bind(fact.logical_owner_id)
     .bind(fact.message_id.as_slice())
@@ -480,7 +480,7 @@ async fn insert_result_inbox(
         return Ok(ResultInboxInsertV1::New);
     }
     let row = sqlx::query(
-        "SELECT envelope_sha256,request_id,run_id,attachment_anchor_id,result_kind FROM hermes_data.attachment_preview_custody_result_inbox WHERE logical_owner_id=$1 AND message_id=$2 FOR UPDATE",
+        "SELECT envelope_sha256,request_id,run_id,attachment_anchor_id,result_kind FROM makosh_data.attachment_preview_custody_result_inbox WHERE logical_owner_id=$1 AND message_id=$2 FOR UPDATE",
     )
     .bind(fact.logical_owner_id)
     .bind(fact.message_id.as_slice())

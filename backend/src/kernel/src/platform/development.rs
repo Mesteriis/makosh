@@ -4,7 +4,7 @@
 //! complete local configuration. Event Hub and Scheduler remain owner-configured
 //! until their NATS and module-grant records are provisioned.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleDescriptorRegistrationRequestsV1, ModuleEventDeliveryPolicyV1, ModuleEventEnvelopeKindV1,
     ModuleEventRouteDirectionV1, ModuleEventRouteRequestInputV1, ModuleEventRouteRequestV1,
     ModuleEventSubscriptionRequirementV1, ModuleRegistration, ModuleRegistrationState,
@@ -13,9 +13,9 @@ use hermes_kernel_control_store::{
     PlatformStorageEndpointV1, PlatformStorageTopology, PlatformStorageTopologyInputV1,
     StorageDeploymentProfileV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_scheduler_protocol::SCHEDULER_JOB_DESCRIPTOR_SET_V1;
-use hermes_storage_protocol::v1::StorageBundleV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_scheduler_protocol::SCHEDULER_JOB_DESCRIPTOR_SET_V1;
+use makosh_storage_protocol::v1::StorageBundleV1;
 use prost::Message;
 use sha2::{Digest, Sha256};
 use std::path::Path;
@@ -121,7 +121,7 @@ fn restore_scheduler_developer_grants(
 
 fn ensure_vault_binding(
     store: &SqliteControlStore,
-) -> Result<hermes_kernel_control_store::PlatformManagedProcessBinding, String> {
+) -> Result<makosh_kernel_control_store::PlatformManagedProcessBinding, String> {
     // The developer bundle may be rebuilt between local launches. Rebind the
     // exact installed artifact rather than retaining a stale digest from a
     // prior temporary bundle.
@@ -161,7 +161,7 @@ fn ensure_storage_topology(store: &SqliteControlStore) -> Result<(), String> {
         revision: 1,
         storage_generation: 1,
         storage_instance_id: "storage_main".to_owned(),
-        database_id: "hermes_storage_authenticated".to_owned(),
+        database_id: "makosh_storage_authenticated".to_owned(),
         deployment_profile: StorageDeploymentProfileV1::MacosTauriEmbedded,
         postgres_endpoint: PlatformStorageEndpointV1::new("127.0.0.1", 35_532),
         pgbouncer_endpoint: PlatformStorageEndpointV1::new("127.0.0.1", 36_532),

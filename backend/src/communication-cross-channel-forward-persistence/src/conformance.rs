@@ -37,7 +37,7 @@ impl CrossChannelForwardPersistenceConformanceV1 {
     ) -> Result<(), CrossChannelForwardPersistenceErrorV1> {
         persistence
             .pool
-            .execute("CREATE SCHEMA IF NOT EXISTS hermes_data;")
+            .execute("CREATE SCHEMA IF NOT EXISTS makosh_data;")
             .await
             .map_err(|_| CrossChannelForwardPersistenceErrorV1::StorageUnavailable)?;
         for step in communication_cross_channel_forward_storage_bundle_v1().steps {

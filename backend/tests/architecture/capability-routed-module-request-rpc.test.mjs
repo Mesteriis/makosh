@@ -40,7 +40,7 @@ test('managed module request RPC routing is typed bounded and separate from quer
       ),
       readFile(
         new URL(
-          'src/platform/runtime_protocol/proto/hermes/runtime/v1/managed_runtime_control.proto',
+          'src/platform/runtime_protocol/proto/makosh/runtime/v1/managed_runtime_control.proto',
           BACKEND_ROOT,
         ),
         'utf8',
@@ -171,7 +171,7 @@ test('managed module request RPC routing is typed bounded and separate from quer
   );
   assert.match(
     migration,
-    /CREATE TABLE hermes_kernel_module_request_rpc_route_request/,
+    /CREATE TABLE makosh_kernel_module_request_rpc_route_request/,
   );
   assert.match(router, /module_contract_dependencies/);
   assert.match(router, /approved_module_request_rpc_routes/);
@@ -188,6 +188,6 @@ test('managed module request RPC routing is typed bounded and separate from quer
   assert.match(liveConformance, /DeliveryIntentStatusAccepted/);
   assert.doesNotMatch(
     `${protocol}\n${validation}\n${control}\n${supervisor}\n${descriptor}\n${routeStore}\n${router}\n${migration}`,
-    /hermes_(?:communications|mail|telegram|whatsapp|zulip)|Communications|Mail|Telegram|WhatsApp|Zulip/,
+    /makosh_(?:communications|mail|telegram|whatsapp|zulip)|Communications|Mail|Telegram|WhatsApp|Zulip/,
   );
 });

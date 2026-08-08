@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Trace tests prove that Hermes can reconstruct causal event graphs without
+Trace tests prove that Макошь can reconstruct causal event graphs without
 external telemetry infrastructure.
 
 ## Unit Tests
@@ -29,7 +29,7 @@ Required PostgreSQL-backed coverage:
 
 Use existing repository conventions:
 
-- `testcontainers-rs` lifecycle through `crates/test-session`, with backend fixtures in `crates/testkit` (`hermes-backend-testkit`);
+- `testcontainers-rs` lifecycle through `crates/test-session`, with backend fixtures in `crates/testkit` (`makosh-backend-testkit`);
 - `cargo nextest` through Makefile targets for full backend validation;
 - deterministic fixtures instead of live Telegram, WhatsApp, Mail or external
   providers;

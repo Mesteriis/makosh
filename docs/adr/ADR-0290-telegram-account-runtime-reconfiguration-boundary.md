@@ -43,8 +43,8 @@ topology, executable binding, settings revision или managed runtime generatio
 
 ```text
 owner_id  = telegram
-module_id = hermes-telegram-runtime
-route     = /hermes.telegram.v1.TelegramReconfigurationService/Execute
+module_id = makosh-telegram-runtime
+route     = /makosh.telegram.v1.TelegramReconfigurationService/Execute
 contract  = telegram.reconfiguration.v1
 gate      = telegram_runtime_reconfiguration_v1
 ```
@@ -52,11 +52,11 @@ gate      = telegram_runtime_reconfiguration_v1
 Functional units остаются разделены по причинам изменения:
 
 ```text
-hermes-telegram-api          typed request, receipt and status
-hermes-telegram-core         epoch/state transition invariants
-hermes-telegram-tdlib        replaceable provider-client factory boundary
-hermes-telegram-persistence  durable intent, fencing and completion
-hermes-telegram-runtime      stop/start/restore orchestration
+makosh-telegram-api          typed request, receipt and status
+makosh-telegram-core         epoch/state transition invariants
+makosh-telegram-tdlib        replaceable provider-client factory boundary
+makosh-telegram-persistence  durable intent, fencing and completion
+makosh-telegram-runtime      stop/start/restore orchestration
 ```
 
 Integration assembly только связывает эти units. Communications, Kernel,
@@ -158,7 +158,7 @@ durable restore он находит единственный pending record и �
 возвращает этот terminal result.
 
 Process restart может физически создать provider client более одного раза при
-повторных crash, но durable target epoch применяется ровно один раз. Hermes не
+повторных crash, но durable target epoch применяется ровно один раз. Макошь не
 обещает невозможную атомарность между PostgreSQL и внешним TDLib process; он
 гарантирует durable intent, fencing и convergent terminal state.
 
@@ -201,18 +201,18 @@ Telegram в production inventory.
 
 ## Фактическая реализация
 
-- `hermes-telegram-api` публикует только exact
+- `makosh-telegram-api` публикует только exact
   `telegram.reconfiguration.v1` Begin/Status contract; fake public
   `StartAccount`, `StopAccount` и `RestartAccount` удалены и зарезервированы на
   wire.
-- `hermes-telegram-core` владеет expected/target epoch и terminal transition
+- `makosh-telegram-core` владеет expected/target epoch и terminal transition
   invariants.
-- `hermes-telegram-persistence` сохраняет единственный active account intent,
+- `makosh-telegram-persistence` сохраняет единственный active account intent,
   exact retry/collision fence и одну transaction для account epoch плюс
   completed record.
-- `hermes-telegram-tdlib` удерживает exact verified library handle и создаёт
+- `makosh-telegram-tdlib` удерживает exact verified library handle и создаёт
   новый client; drop старого client вызывает `td_json_client_destroy`.
-- `hermes-telegram-runtime` после accepted response заново получает exact Vault
+- `makosh-telegram-runtime` после accepted response заново получает exact Vault
   credential leases, останавливает call media, заменяет TDLib client и завершает
   record только после durable restore.
 - Managed conformance доказывает exact missing-grant rejection, свежий provider

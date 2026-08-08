@@ -60,15 +60,15 @@ Kernel и Core Gateway маршрутизируют transport authority. Они 
 
 Production slice разделён по причинам изменения:
 
-- `hermes-desktop-call-recording-api` — generated client, realtime и private
+- `makosh-desktop-call-recording-api` — generated client, realtime и private
   host-bridge contracts;
-- `hermes-desktop-call-recording-core` — provider-neutral capture lifecycle,
+- `makosh-desktop-call-recording-core` — provider-neutral capture lifecycle,
   consent binding, canonical audio validation и idempotency;
-- `hermes-desktop-call-recording-persistence` — owner-local challenges,
+- `makosh-desktop-call-recording-persistence` — owner-local challenges,
   sessions, host command leases, inbox/outbox и replay transitions;
-- `hermes-desktop-call-recording-runtime` — managed client/host ports, Blob
+- `makosh-desktop-call-recording-runtime` — managed client/host ports, Blob
   materialization, custody delegation и durable event publication;
-- `hermes-desktop-call-recording-assembly` — unsigned runtime, descriptor,
+- `makosh-desktop-call-recording-assembly` — unsigned runtime, descriptor,
   settings schema и storage artifacts;
 - Tauri `desktop_call_recording_host` adapter — visible native permission and
   bounded capture only. Он зависит от public recording contract и runtime
@@ -76,7 +76,7 @@ Production slice разделён по причинам изменения:
   recording runtime implementation.
 
 Target-owned durable event остаётся в отдельной
-`hermes-call-transcription-ingress` unit. Source integration может зависеть
+`makosh-call-transcription-ingress` unit. Source integration может зависеть
 только от этого exact public ingress contract; workflow implementation не
 импортируется.
 

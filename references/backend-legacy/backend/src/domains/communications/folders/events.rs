@@ -1,4 +1,4 @@
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::Utc;
@@ -30,7 +30,7 @@ pub(super) fn folder_event(
             "id": folder.folder_id,
         }),
     )
-    .actor(json!({ "actor_id": "hermes-frontend" }))
+    .actor(json!({ "actor_id": "makosh-frontend" }))
     .payload(serde_json::to_value(folder)?)
     .provenance(json!({
         "source_kind": "local_api",
@@ -60,7 +60,7 @@ pub(super) fn folder_message_event(
             "message_id": response.message_id,
         }),
     )
-    .actor(json!({ "actor_id": "hermes-frontend" }))
+    .actor(json!({ "actor_id": "makosh-frontend" }))
     .payload(serde_json::to_value(response)?)
     .provenance(json!({
         "source_kind": "local_api",

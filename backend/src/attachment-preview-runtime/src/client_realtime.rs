@@ -1,13 +1,13 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_attachment_preview_api::{
+use makosh_attachment_preview_api::{
     ATTACHMENT_PREVIEW_REALTIME_EVENT_KIND_V1, wire::AttachmentPreviewStatusChangedV1,
 };
-use hermes_attachment_preview_persistence::{
+use makosh_attachment_preview_persistence::{
     ATTACHMENT_PREVIEW_REALTIME_LIMIT_V1, AttachmentPreviewPersistenceErrorV1,
     AttachmentPreviewPersistenceV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeClientRealtimePublishRequestV1, ManagedRuntimeControlRequestV1,
@@ -108,7 +108,7 @@ impl ClientRealtimePublisherV1 {
 
 fn event_id(run_id: [u8; 16], revision: u64) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.attachment-preview.client-realtime.v1\0");
+    digest.update(b"makosh.attachment-preview.client-realtime.v1\0");
     digest.update(run_id);
     digest.update(revision.to_be_bytes());
     digest.finalize()[..16].try_into().expect("digest prefix")

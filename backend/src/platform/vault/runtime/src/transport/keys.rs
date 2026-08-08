@@ -1,3 +1,3 @@
 //! Vault's private name for the generic ephemeral HPKE response recipient.
 
-pub type VaultTransportKeyPair = hermes_vault_protocol::VaultResponseRecipientV1;
+pub type VaultTransportKeyPair = makosh_vault_protocol::VaultResponseRecipientV1;

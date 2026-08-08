@@ -1,8 +1,8 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::Utc;
-use hermes_hub_backend::domains::graph::core::{
+use makosh_hub_backend::domains::graph::core::{
     errors::GraphStoreError,
     ids::{edge_id, evidence_id},
     models::{
@@ -11,7 +11,7 @@ use hermes_hub_backend::domains::graph::core::{
     },
     store::GraphStore,
 };
-use hermes_hub_backend::platform::graph::GraphNodeKind;
+use makosh_hub_backend::platform::graph::GraphNodeKind;
 use serde_json::{Value, json};
 use sqlx::Row;
 
@@ -251,7 +251,7 @@ async fn live_graph_context(_test_name: &str) -> Option<(sqlx::postgres::PgPool,
 
 fn disconnected_graph_store() -> GraphStore {
     let pool = sqlx::postgres::PgPoolOptions::new()
-        .connect_lazy("postgres://hermes:unused@127.0.0.1:1/hermes_hub")
+        .connect_lazy("postgres://makosh:unused@127.0.0.1:1/makosh_hub")
         .expect("create lazy test pool");
     GraphStore::new(pool)
 }

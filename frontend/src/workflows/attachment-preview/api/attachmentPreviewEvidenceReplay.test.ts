@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import {
 	AttachmentPreviewEvidenceReplayErrorV1,
 	AttachmentPreviewEvidenceReplayStateV1,
-} from '../../../gen/hermes/attachment_preview_evidence_replay/v1/replay_pb'
+} from '../../../gen/makosh/attachment_preview_evidence_replay/v1/replay_pb'
 import { startAttachmentPreviewEvidenceReplay } from './attachmentPreviewEvidenceReplay'
 
 const anchorId = new Uint8Array(16).fill(1)

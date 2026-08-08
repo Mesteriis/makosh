@@ -19,7 +19,7 @@ use super::storage::store::CommunicationStorageStore;
 use crate::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
 
 const MAX_ATTACHMENT_IMPORT_BYTES: usize = 50 * 1024 * 1024;
-const LOCAL_IMPORT_ACTOR_ID: &str = "hermes-frontend";
+const LOCAL_IMPORT_ACTOR_ID: &str = "makosh-frontend";
 
 impl CommunicationCommandService {
     pub async fn import_attachment(

@@ -1,13 +1,13 @@
 //! Fresh-proof projection of one current client-visible Settings snapshot.
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     CommitOwnerModuleSettingsResponseV1, ExportEffectiveOwnerModuleSettingsReceiptV1,
     ExportEffectiveOwnerModuleSettingsV1, commit_owner_module_settings_response_v1,
 };
-use hermes_gateway_runtime::OwnerModuleSettingsRouteErrorV1;
-use hermes_kernel_control_store::SettingsApplyState;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_gateway_runtime::OwnerModuleSettingsRouteErrorV1;
+use makosh_kernel_control_store::SettingsApplyState;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::validation::descriptor::{
     decode_settings_schema_v1, decode_settings_snapshot_v1,
     validate_settings_snapshot_against_schema_v1,
 };

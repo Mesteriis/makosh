@@ -91,7 +91,7 @@ pub fn build_call_bundle_manifest(
         pipeline_state: CallBundlePipelineState::queued_from_local_recording(),
         privacy_policy: CallBundlePrivacyPolicy::local_visible_capture(),
         provenance: json!({
-            "source": "hermes_realtime_conversation_bundle_builder",
+            "source": "makosh_realtime_conversation_bundle_builder",
             "single_source_of_truth": false,
             "notes": "Provider DOM speaker state is only a hint for later AI processing."
         }),

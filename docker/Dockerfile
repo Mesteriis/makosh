@@ -55,12 +55,12 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY docker/attachment-extractor.py /usr/local/bin/hermes-attachment-extractor
+COPY docker/attachment-extractor.py /usr/local/bin/makosh-attachment-extractor
 
-ENTRYPOINT ["/usr/bin/python3", "/usr/local/bin/hermes-attachment-extractor"]
+ENTRYPOINT ["/usr/bin/python3", "/usr/local/bin/makosh-attachment-extractor"]
 
 FROM python:3.13-slim-bookworm AS attachment-extractor-gateway
 
-COPY docker/attachment-extractor-gateway.py /usr/local/bin/hermes-attachment-extractor-gateway
+COPY docker/attachment-extractor-gateway.py /usr/local/bin/makosh-attachment-extractor-gateway
 
-ENTRYPOINT ["python3", "/usr/local/bin/hermes-attachment-extractor-gateway"]
+ENTRYPOINT ["python3", "/usr/local/bin/makosh-attachment-extractor-gateway"]

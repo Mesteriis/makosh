@@ -3,7 +3,7 @@ import { FormField, FormLabel, SearchableSelect } from '@/shared/ui'
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Searchable Select',
+	title: 'Макошь UI/General/Searchable Select',
 	render: (_args, context) => ({
 		components: { FormField, FormLabel, SearchableSelect },
 		data() {

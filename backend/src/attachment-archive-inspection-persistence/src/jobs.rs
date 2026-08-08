@@ -1,4 +1,4 @@
-use hermes_attachment_archive_inspection_core::{
+use makosh_attachment_archive_inspection_core::{
     ArchiveInspectionErrorV1, ArchiveInspectionReportV1, ArchiveInspectionRequestV1,
     ArchiveInspectionStateV1, ArchiveInspectionStatusV1, ArchiveInspectionTransitionV1,
     transition_archive_inspection_status_v1,
@@ -67,7 +67,7 @@ impl AttachmentArchiveInspectionPersistenceV1 {
             .await
             .map_err(|_| ArchiveInspectionPersistenceErrorV1::StorageUnavailable)?;
         let row = sqlx::query(
-            "SELECT job_id FROM hermes_data.attachment_archive_inspection_jobs WHERE logical_owner_id = $1 AND state = 1 AND attempt_count < max_attempts ORDER BY created_at_unix_millis, job_id FOR UPDATE SKIP LOCKED LIMIT 1",
+            "SELECT job_id FROM makosh_data.attachment_archive_inspection_jobs WHERE logical_owner_id = $1 AND state = 1 AND attempt_count < max_attempts ORDER BY created_at_unix_millis, job_id FOR UPDATE SKIP LOCKED LIMIT 1",
         )
         .bind(logical_owner_id)
         .fetch_optional(&mut *transaction)
@@ -86,7 +86,7 @@ impl AttachmentArchiveInspectionPersistenceV1 {
                 .as_slice(),
         )?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.attachment_archive_inspection_jobs SET state = 2, attempt_count = attempt_count + 1, worker_id = $3, runtime_generation = $4, grant_epoch = $5, lease_fence = lease_fence + 1, lease_expires_at_unix_millis = $6, updated_at_unix_millis = $7 WHERE logical_owner_id = $1 AND job_id = $2 AND state = 1",
+            "UPDATE makosh_data.attachment_archive_inspection_jobs SET state = 2, attempt_count = attempt_count + 1, worker_id = $3, runtime_generation = $4, grant_epoch = $5, lease_fence = lease_fence + 1, lease_expires_at_unix_millis = $6, updated_at_unix_millis = $7 WHERE logical_owner_id = $1 AND job_id = $2 AND state = 1",
         )
         .bind(logical_owner_id)
         .bind(job_id.as_slice())
@@ -168,7 +168,7 @@ impl AttachmentArchiveInspectionPersistenceV1 {
             return Err(ArchiveInspectionPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.attachment_archive_inspection_jobs
+            "UPDATE makosh_data.attachment_archive_inspection_jobs
              SET target_reference_id = $8, target_receipt_sha256 = $9,
                  updated_at_unix_millis = $7
              WHERE logical_owner_id = $1 AND job_id = $2 AND state = 2
@@ -255,7 +255,7 @@ impl AttachmentArchiveInspectionPersistenceV1 {
             .await
             .map_err(|_| ArchiveInspectionPersistenceErrorV1::StorageUnavailable)?;
         let retry_rows = sqlx::query(
-            "UPDATE hermes_data.attachment_archive_inspection_jobs SET state = 1, worker_id = NULL, runtime_generation = NULL, grant_epoch = NULL, lease_expires_at_unix_millis = NULL, updated_at_unix_millis = $2 WHERE logical_owner_id = $1 AND state = 2 AND lease_expires_at_unix_millis <= $2 AND attempt_count < max_attempts RETURNING job_id",
+            "UPDATE makosh_data.attachment_archive_inspection_jobs SET state = 1, worker_id = NULL, runtime_generation = NULL, grant_epoch = NULL, lease_expires_at_unix_millis = NULL, updated_at_unix_millis = $2 WHERE logical_owner_id = $1 AND state = 2 AND lease_expires_at_unix_millis <= $2 AND attempt_count < max_attempts RETURNING job_id",
         )
         .bind(logical_owner_id)
         .bind(now_unix_millis)
@@ -263,7 +263,7 @@ impl AttachmentArchiveInspectionPersistenceV1 {
         .await
         .map_err(|_| ArchiveInspectionPersistenceErrorV1::StorageUnavailable)?;
         let exhausted = sqlx::query(
-            "SELECT job_id, run_id FROM hermes_data.attachment_archive_inspection_jobs WHERE logical_owner_id = $1 AND state = 2 AND lease_expires_at_unix_millis <= $2 AND attempt_count >= max_attempts ORDER BY job_id FOR UPDATE",
+            "SELECT job_id, run_id FROM makosh_data.attachment_archive_inspection_jobs WHERE logical_owner_id = $1 AND state = 2 AND lease_expires_at_unix_millis <= $2 AND attempt_count >= max_attempts ORDER BY job_id FOR UPDATE",
         )
         .bind(logical_owner_id)
         .bind(now_unix_millis)
@@ -282,7 +282,7 @@ impl AttachmentArchiveInspectionPersistenceV1 {
                     .as_slice(),
             )?;
             let updated = sqlx::query(
-                "UPDATE hermes_data.attachment_archive_inspection_jobs SET state = 3, worker_id = NULL, runtime_generation = NULL, grant_epoch = NULL, lease_expires_at_unix_millis = NULL, updated_at_unix_millis = $3 WHERE logical_owner_id = $1 AND job_id = $2 AND state = 2",
+                "UPDATE makosh_data.attachment_archive_inspection_jobs SET state = 3, worker_id = NULL, runtime_generation = NULL, grant_epoch = NULL, lease_expires_at_unix_millis = NULL, updated_at_unix_millis = $3 WHERE logical_owner_id = $1 AND job_id = $2 AND state = 2",
             )
             .bind(logical_owner_id)
             .bind(job_id.as_slice())
@@ -336,7 +336,7 @@ pub(crate) async fn enqueue_archive_inspection_work(
         work.delegation_result_message_id,
     );
     sqlx::query(
-        "INSERT INTO hermes_data.attachment_archive_inspection_jobs (logical_owner_id, job_id, run_id, candidate_message_id, safety_message_id, delegation_request_id, delegation_result_message_id, attachment_anchor_id, source_reference_id, declared_size, blob_receipt_sha256, custody_transfer_source_proof, safety_evidence_id, state, attempt_count, max_attempts, worker_id, runtime_generation, grant_epoch, lease_fence, lease_expires_at_unix_millis, created_at_unix_millis, updated_at_unix_millis) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 1, 0, $14, NULL, NULL, NULL, 0, NULL, $15, $15) ON CONFLICT (logical_owner_id, run_id) DO NOTHING",
+        "INSERT INTO makosh_data.attachment_archive_inspection_jobs (logical_owner_id, job_id, run_id, candidate_message_id, safety_message_id, delegation_request_id, delegation_result_message_id, attachment_anchor_id, source_reference_id, declared_size, blob_receipt_sha256, custody_transfer_source_proof, safety_evidence_id, state, attempt_count, max_attempts, worker_id, runtime_generation, grant_epoch, lease_fence, lease_expires_at_unix_millis, created_at_unix_millis, updated_at_unix_millis) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 1, 0, $14, NULL, NULL, NULL, 0, NULL, $15, $15) ON CONFLICT (logical_owner_id, run_id) DO NOTHING",
     )
     .bind(logical_owner_id)
     .bind(job_id.as_slice())
@@ -357,7 +357,7 @@ pub(crate) async fn enqueue_archive_inspection_work(
     .await
     .map_err(|_| ArchiveInspectionPersistenceErrorV1::StorageUnavailable)?;
     let row = sqlx::query(
-        "SELECT job_id, candidate_message_id, safety_message_id, delegation_request_id, delegation_result_message_id, attachment_anchor_id, source_reference_id, declared_size, blob_receipt_sha256, custody_transfer_source_proof, safety_evidence_id FROM hermes_data.attachment_archive_inspection_jobs WHERE logical_owner_id = $1 AND run_id = $2",
+        "SELECT job_id, candidate_message_id, safety_message_id, delegation_request_id, delegation_result_message_id, attachment_anchor_id, source_reference_id, declared_size, blob_receipt_sha256, custody_transfer_source_proof, safety_evidence_id FROM makosh_data.attachment_archive_inspection_jobs WHERE logical_owner_id = $1 AND run_id = $2",
     )
     .bind(logical_owner_id)
     .bind(work.run_id.as_slice())
@@ -440,11 +440,11 @@ async fn load_claimed_job(
                 jobs.attempt_count, jobs.max_attempts, jobs.worker_id,
                 jobs.runtime_generation, jobs.grant_epoch, jobs.lease_fence,
                 jobs.lease_expires_at_unix_millis
-         FROM hermes_data.attachment_archive_inspection_jobs jobs
-         JOIN hermes_data.attachment_archive_inspection_runs runs
+         FROM makosh_data.attachment_archive_inspection_jobs jobs
+         JOIN makosh_data.attachment_archive_inspection_runs runs
            ON runs.logical_owner_id = jobs.logical_owner_id
           AND runs.run_id = jobs.run_id
-         JOIN hermes_data.attachment_archive_inspection_custody_result_inbox result_inbox
+         JOIN makosh_data.attachment_archive_inspection_custody_result_inbox result_inbox
            ON result_inbox.logical_owner_id = jobs.logical_owner_id
           AND result_inbox.message_id = jobs.delegation_result_message_id
          WHERE jobs.logical_owner_id = $1 AND jobs.job_id = $2 AND jobs.state = 2",
@@ -560,7 +560,7 @@ async fn verify_claim(
     completed_at_unix_millis: i64,
 ) -> Result<(), ArchiveInspectionPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT worker_id, runtime_generation, grant_epoch, lease_fence, lease_expires_at_unix_millis FROM hermes_data.attachment_archive_inspection_jobs WHERE logical_owner_id = $1 AND job_id = $2 AND state = 2 FOR UPDATE",
+        "SELECT worker_id, runtime_generation, grant_epoch, lease_fence, lease_expires_at_unix_millis FROM makosh_data.attachment_archive_inspection_jobs WHERE logical_owner_id = $1 AND job_id = $2 AND state = 2 FOR UPDATE",
     )
     .bind(&claimed.logical_owner_id)
     .bind(claimed.job_id.as_slice())
@@ -604,7 +604,7 @@ async fn finish_job(
     completed_at_unix_millis: i64,
 ) -> Result<(), ArchiveInspectionPersistenceErrorV1> {
     let updated = sqlx::query(
-        "UPDATE hermes_data.attachment_archive_inspection_jobs SET state = 3, worker_id = NULL, runtime_generation = NULL, grant_epoch = NULL, lease_expires_at_unix_millis = NULL, updated_at_unix_millis = $3 WHERE logical_owner_id = $1 AND job_id = $2 AND state = 2 AND lease_fence = $4",
+        "UPDATE makosh_data.attachment_archive_inspection_jobs SET state = 3, worker_id = NULL, runtime_generation = NULL, grant_epoch = NULL, lease_expires_at_unix_millis = NULL, updated_at_unix_millis = $3 WHERE logical_owner_id = $1 AND job_id = $2 AND state = 2 AND lease_fence = $4",
     )
     .bind(&claimed.logical_owner_id)
     .bind(claimed.job_id.as_slice())
@@ -628,7 +628,7 @@ async fn insert_report(
     completed_at_unix_millis: i64,
 ) -> Result<(), ArchiveInspectionPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.attachment_archive_inspection_reports (logical_owner_id, run_id, entry_count, total_uncompressed_bytes, completed_at_unix_millis) VALUES ($1, $2, $3, $4, $5)",
+        "INSERT INTO makosh_data.attachment_archive_inspection_reports (logical_owner_id, run_id, entry_count, total_uncompressed_bytes, completed_at_unix_millis) VALUES ($1, $2, $3, $4, $5)",
     )
     .bind(logical_owner_id)
     .bind(run_id.as_slice())
@@ -640,7 +640,7 @@ async fn insert_report(
     .map_err(|_| ArchiveInspectionPersistenceErrorV1::StorageUnavailable)?;
     for (ordinal, entry) in report.entries.iter().enumerate() {
         sqlx::query(
-            "INSERT INTO hermes_data.attachment_archive_inspection_report_entries (logical_owner_id, run_id, entry_ordinal, normalized_path_utf8, compressed_size, uncompressed_size, entry_kind) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+            "INSERT INTO makosh_data.attachment_archive_inspection_report_entries (logical_owner_id, run_id, entry_ordinal, normalized_path_utf8, compressed_size, uncompressed_size, entry_kind) VALUES ($1, $2, $3, $4, $5, $6, $7)",
         )
         .bind(logical_owner_id)
         .bind(run_id.as_slice())
@@ -665,7 +665,7 @@ async fn transition_run_from_inspecting(
     occurred_at_unix_millis: i64,
 ) -> Result<(), ArchiveInspectionPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT state, state_revision FROM hermes_data.attachment_archive_inspection_runs WHERE logical_owner_id = $1 AND run_id = $2 FOR UPDATE",
+        "SELECT state, state_revision FROM makosh_data.attachment_archive_inspection_runs WHERE logical_owner_id = $1 AND run_id = $2 FOR UPDATE",
     )
     .bind(logical_owner_id)
     .bind(run_id.as_slice())

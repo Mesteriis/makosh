@@ -61,7 +61,7 @@ function updateDirectoryFilter(value: string | string[]): void {
           @update:model-value="emit('update:searchQuery', $event)"
         />
         <ToggleGroup
-          class="personas-directory-filter hermes-toggle-group--tabs"
+          class="personas-directory-filter makosh-toggle-group--tabs"
           :model-value="directoryFilter"
           :items="directoryFilterItems"
           :aria-label="t('Directory filter')"

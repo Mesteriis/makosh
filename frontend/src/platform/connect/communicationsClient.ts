@@ -1,6 +1,6 @@
 import { createClient } from '@connectrpc/connect'
 import type { Client } from '@connectrpc/connect'
-import { CommunicationsService } from '../../gen/hermes/communications/v1/communications_pb'
+import { CommunicationsService } from '../../gen/makosh/communications/v1/communications_pb'
 import { createBrowserGatewayConnectTransport } from '../gateway/browserGatewayConnect'
 
 let communicationsClient: Client<typeof CommunicationsService> | null = null

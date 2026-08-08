@@ -16,7 +16,7 @@ import {
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Feedback',
+	title: 'Макошь UI/General/Feedback',
 	render: (_args, context) => ({
 		components: {
 			Alert,

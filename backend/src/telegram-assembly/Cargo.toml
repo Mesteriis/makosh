@@ -1,5 +1,5 @@
 [package]
-name = "hermes-telegram-assembly"
+name = "makosh-telegram-assembly"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,21 +8,21 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-telegram-assembly"
+name = "makosh-telegram-assembly"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "telegram"
 surface = "assembly"
 
 [dependencies]
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-telegram-automation-persistence = { path = "../telegram-automation-persistence" }
-hermes-telegram-calls-persistence = { path = "../telegram-calls-persistence" }
-hermes-telegram-persistence = { path = "../telegram-persistence" }
-hermes-telegram-runtime = { path = "../telegram-runtime" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-telegram-automation-persistence = { path = "../telegram-automation-persistence" }
+makosh-telegram-calls-persistence = { path = "../telegram-calls-persistence" }
+makosh-telegram-persistence = { path = "../telegram-persistence" }
+makosh-telegram-runtime = { path = "../telegram-runtime" }
 prost = "=0.14.4"
 serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
 serde_json = "=1.0.150"

@@ -9,7 +9,7 @@ import {
 	CallTranscriptionStateV1,
 	CallTranscriptionStatusChangedV1Schema,
 	GetCallTranscriptionResponseV1Schema,
-} from '../../../gen/hermes/call_transcription/v1/transcription_pb'
+} from '../../../gen/makosh/call_transcription/v1/transcription_pb'
 import type {
 	CallTranscriptionRealtimeObserverV1,
 	CallTranscriptionSourceV1,

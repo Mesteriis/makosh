@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/events/replay/v1/retained_evidence_replay.proto"],
+            &["proto/makosh/events/replay/v1/retained_evidence_replay.proto"],
             &["proto"],
         )
         .expect("retained evidence replay protocol must compile");

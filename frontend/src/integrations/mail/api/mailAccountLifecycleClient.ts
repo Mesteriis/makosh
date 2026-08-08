@@ -10,7 +10,7 @@ import {
 	MailAccountLifecycleStatusRequestV1Schema,
 	MailAccountLifecycleStatusService,
 	MailAccountRetireService,
-} from '../../../gen/hermes/mail/account_lifecycle/v1/client_pb'
+} from '../../../gen/makosh/mail/account_lifecycle/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 type LifecycleCommandInputV1 = {

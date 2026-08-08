@@ -48,12 +48,12 @@ Important corrections:
 - Migrations currently run through **0024**, not 0023.
 - `backend/src/lib.rs` is **3,784 lines**.
 - Binary targets are **small** at present:
-  - `hermes_email_sync_dev.rs` - 302 lines
-  - `hermes_email_fixture_export.rs` - 224 lines
-  - `hermes_email_fixture_dev.rs` - 148 lines
-  - `hermes_graph_project.rs` - 79 lines
-  - `hermes_document_process.rs` - 65 lines
-- The original concern that `hermes_email_sync_dev` is a 10k-line production-sized binary is not true in the current tree.
+  - `makosh_email_sync_dev.rs` - 302 lines
+  - `makosh_email_fixture_export.rs` - 224 lines
+  - `makosh_email_fixture_dev.rs` - 148 lines
+  - `makosh_graph_project.rs` - 79 lines
+  - `makosh_document_process.rs` - 65 lines
+- The original concern that `makosh_email_sync_dev` is a 10k-line production-sized binary is not true in the current tree.
 
 ## Current State
 
@@ -405,7 +405,7 @@ After route modules are stable, consider one of these:
 
 Severity: None
 
-The original draft stated that `hermes_email_sync_dev` was over 10k lines. Current source inspection shows it is 302 lines. The binary targets are not the present bottleneck.
+The original draft stated that `makosh_email_sync_dev` was over 10k lines. Current source inspection shows it is 302 lines. The binary targets are not the present bottleneck.
 
 Recommendation:
 
@@ -489,7 +489,7 @@ Validation:
 
 Historical note: the route paths and auth extraction language below reflect the
 2026-06-06 review state. Current implementation and docs use `/api/v1/settings`
-and ADR-0056 router-level `X-Hermes-Secret` auth.
+and ADR-0056 router-level `X-Макошь-Secret` auth.
 
 Goal: prove the route-module pattern on a small, cohesive API surface.
 

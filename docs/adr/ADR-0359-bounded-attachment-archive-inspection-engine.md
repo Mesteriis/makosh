@@ -5,15 +5,15 @@
 Дата: 2026-07-31
 
 Состояние реализации: реализовано. Отдельные
-`hermes-attachment-archive-inspection-api`,
-`hermes-attachment-archive-inspection-core` и
-`hermes-attachment-archive-inspection-zip` units реализуют provider-neutral
+`makosh-attachment-archive-inspection-api`,
+`makosh-attachment-archive-inspection-core` и
+`makosh-attachment-archive-inspection-zip` units реализуют provider-neutral
 client contract, pure bounded policy и ZIP metadata adapter без extraction.
-`hermes-attachment-archive-inspection-persistence` реализует owner-local
+`makosh-attachment-archive-inspection-persistence` реализует owner-local
 request idempotency, exact message/hash inbox, порядок-независимый join,
 bounded report/realtime storage и job lease fencing по worker, runtime
 generation, grant epoch и monotonic fence. Отдельный target-owned
-`hermes-attachment-archive-inspection-ingress` реализует typed event routes,
+`makosh-attachment-archive-inspection-ingress` реализует typed event routes,
 deterministic request/result envelopes, exact target constants и bounded
 private proof validation для event-only custody delegation. Archive
 persistence после exact three-way join атомарно создаёт deterministic
@@ -72,7 +72,7 @@ verdict, не изменяет safety lifecycle и не получает пра�
 
 ```text
 owner_id  = attachment_archive_inspection
-module_id = hermes-attachment-archive-inspection-runtime
+module_id = makosh-attachment-archive-inspection-runtime
 kind      = engine
 ```
 
@@ -146,7 +146,7 @@ RequestArchiveInspectionCustodyDelegationV1
 Payload не содержит Blob reference, proof, bytes, provider/account identity,
 filesystem path или выбираемый target triple. Target
 `owner=attachment_archive_inspection`,
-`module=hermes-attachment-archive-inspection-runtime`,
+`module=makosh-attachment-archive-inspection-runtime`,
 `capability=attachment_archive_inspection.blob.v1` является константой
 контракта.
 
@@ -185,13 +185,13 @@ reference остаются только во внутренних event/persiste
 не попадают в client API, SSE, logs, health или telemetry.
 
 Request/result schema принадлежит target owner в отдельном
-`hermes-attachment-archive-inspection-ingress` package. Attachment Security
+`makosh-attachment-archive-inspection-ingress` package. Attachment Security
 может импортировать только эту public contract unit, но не archive API,
 persistence, runtime, parser или assembly. Это тот же target-owned ingress
 pattern, которым integrations публикуют Communications observations; contract
 dependency не превращает source engine в target engine и не создаёт
 engine-to-engine RPC. Обратный event-consumer edge импортирует только публичный
-`hermes-attachment-security-contract`, которому принадлежит scan-candidate
+`makosh-attachment-security-contract`, которому принадлежит scan-candidate
 observation. Executable dependency policy разрешает ровно эти две contract
 units через exact `engineEngineContractPackages` allowlist; произвольные
 engine-to-engine contract или implementation dependencies остаются запрещены.
@@ -199,25 +199,25 @@ engine-to-engine contract или implementation dependencies остаются з
 ### Единицы сборки
 
 ```text
-hermes-attachment-archive-inspection-api
+makosh-attachment-archive-inspection-api
   typed Start/Get/realtime client contract and bounded report schema
 
-hermes-attachment-archive-inspection-ingress
+makosh-attachment-archive-inspection-ingress
   typed durable custody-delegation command/result contracts and envelopes
 
-hermes-attachment-archive-inspection-core
+makosh-attachment-archive-inspection-core
   pure limits, path normalization, entry policy and terminal decisions
 
-hermes-attachment-archive-inspection-zip
+makosh-attachment-archive-inspection-zip
   reviewed ZIP central-directory metadata adapter; never extracts files
 
-hermes-attachment-archive-inspection-persistence
+makosh-attachment-archive-inspection-persistence
   owner-local request/event inbox, join, fenced jobs, result and exact outbox
 
-hermes-attachment-archive-inspection-runtime
+makosh-attachment-archive-inspection-runtime
   managed control, request/query, Event Hub, Blob custody/read and orchestration
 
-hermes-attachment-archive-inspection-assembly
+makosh-attachment-archive-inspection-assembly
   descriptor/settings/Storage artifacts and unsigned release fragment only
 ```
 

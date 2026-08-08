@@ -8,21 +8,21 @@ use std::io::Write;
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 
-use hermes_attachment_security_persistence::attachment_security_storage_bundle_v1;
-use hermes_attachment_security_runtime::admission::attachment_security_module_descriptor_v1;
-use hermes_attachment_security_runtime::settings::attachment_security_settings_schema_v1;
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_attachment_security_persistence::attachment_security_storage_bundle_v1;
+use makosh_attachment_security_runtime::admission::attachment_security_module_descriptor_v1;
+use makosh_attachment_security_runtime::settings::attachment_security_settings_schema_v1;
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
 pub const ATTACHMENT_SECURITY_ASSEMBLY_FRAGMENT_VERSION_V1: u32 = 1;
 pub const ATTACHMENT_SECURITY_ASSEMBLY_OWNER_ID: &str =
-    hermes_attachment_security_runtime::admission::ATTACHMENT_SECURITY_OWNER_ID;
+    makosh_attachment_security_runtime::admission::ATTACHMENT_SECURITY_OWNER_ID;
 pub const ATTACHMENT_SECURITY_ASSEMBLY_MODULE_ID: &str =
-    hermes_attachment_security_runtime::admission::ATTACHMENT_SECURITY_MODULE_ID;
+    makosh_attachment_security_runtime::admission::ATTACHMENT_SECURITY_MODULE_ID;
 pub const ATTACHMENT_SECURITY_RUNTIME_ARTIFACT_ID: &str = "attachment_security.runtime.v1";
 pub const ATTACHMENT_SECURITY_STORAGE_ARTIFACT_ID: &str = "attachment_security.storage.v1";
 pub const ATTACHMENT_SECURITY_DESCRIPTOR_FILE: &str = "attachment-security.runtime.descriptor.pb";
@@ -31,7 +31,7 @@ pub const ATTACHMENT_SECURITY_STORAGE_BUNDLE_FILE: &str = "attachment-security.s
 pub const ATTACHMENT_SECURITY_ARTIFACT_FRAGMENT_FILE: &str =
     "attachment-security.release-artifacts.json";
 
-const ATTACHMENT_SECURITY_RUNTIME_RELATIVE_PATH: &str = "bin/hermes-attachment-security-runtime";
+const ATTACHMENT_SECURITY_RUNTIME_RELATIVE_PATH: &str = "bin/makosh-attachment-security-runtime";
 const ATTACHMENT_SECURITY_DESCRIPTOR_RELATIVE_PATH: &str =
     "contracts/attachment-security.runtime.descriptor.pb";
 const ATTACHMENT_SECURITY_SETTINGS_RELATIVE_PATH: &str =
@@ -261,10 +261,10 @@ mod tests {
     use std::fs;
     use std::sync::atomic::{AtomicU64, Ordering};
 
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         decode_descriptor_v1, decode_settings_schema_v1,
     };
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -307,7 +307,7 @@ mod tests {
         assert_eq!(descriptor.module_id, ATTACHMENT_SECURITY_ASSEMBLY_MODULE_ID);
         assert_eq!(
             descriptor.module_kind,
-            hermes_runtime_protocol::v1::ModuleKindV1::Engine as i32
+            makosh_runtime_protocol::v1::ModuleKindV1::Engine as i32
         );
         assert_eq!(settings.major, 1);
         assert_eq!(storage.owner_id, ATTACHMENT_SECURITY_ASSEMBLY_OWNER_ID);
@@ -422,7 +422,7 @@ mod tests {
     fn temporary_directory() -> PathBuf {
         let id = NEXT_TEMPORARY_ID.fetch_add(1, Ordering::Relaxed);
         let path = std::env::temp_dir().join(format!(
-            "hermes-attachment-security-assembly-{}-{id}",
+            "makosh-attachment-security-assembly-{}-{id}",
             std::process::id()
         ));
         fs::create_dir(&path).expect("create fixture root");

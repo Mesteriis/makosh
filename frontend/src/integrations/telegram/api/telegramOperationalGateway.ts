@@ -2,7 +2,7 @@ import type {
 	TelegramChatProjection,
 	TelegramMessageProjection,
 	TelegramOperationResponse,
-} from '../../../gen/hermes/telegram/v1/client_pb'
+} from '../../../gen/makosh/telegram/v1/client_pb'
 import { getTelegramOperationalConnectClient } from './telegramOperationalClient'
 
 const PAGE_LIMIT = 100

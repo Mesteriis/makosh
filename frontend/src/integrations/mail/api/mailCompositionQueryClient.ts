@@ -1,6 +1,6 @@
 import { createClient, type Client } from '@connectrpc/connect'
 
-import { MailCompositionQueryService } from '../../../gen/hermes/mail/composition/v1/client_pb'
+import { MailCompositionQueryService } from '../../../gen/makosh/mail/composition/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 let mailCompositionQueryClient: Client<typeof MailCompositionQueryService> | null = null

@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package makosh.communication_recipient_suggestion.v1;
+
+message StartCommunicationRecipientSuggestionRequestV1 {
+  uint32 protocol_major = 1;
+  bytes operation_id = 2;
+  bytes source_message_id = 3;
+  uint64 expected_source_revision = 4;
+}
+
+message StartCommunicationRecipientSuggestionResponseV1 {
+  bytes run_id = 1;
+  CommunicationRecipientSuggestionStateV1 state = 2;
+  CommunicationRecipientSuggestionErrorCodeV1 error = 15;
+}
+
+message GetCommunicationRecipientSuggestionRequestV1 {
+  uint32 protocol_major = 1;
+  bytes run_id = 2;
+}
+
+message GetCommunicationRecipientSuggestionResponseV1 {
+  bytes run_id = 1;
+  bytes source_message_id = 2;
+  uint64 expected_source_revision = 3;
+  CommunicationRecipientSuggestionStateV1 state = 4;
+  uint64 state_revision = 5;
+  repeated CommunicationRecipientRoleCandidateV1 candidates = 6;
+  CommunicationRecipientSuggestionErrorCodeV1 error = 15;
+}
+
+message CommunicationRecipientRoleCandidateV1 {
+  CommunicationRecipientRoleV1 role = 1;
+  CommunicationRecipientRationaleV1 rationale = 2;
+  CommunicationRecipientSourceBasisV1 source_basis = 3;
+  uint32 confidence_basis_points = 4;
+}
+
+message CommunicationRecipientSuggestionStatusChangedV1 {
+  bytes run_id = 1;
+  CommunicationRecipientSuggestionStateV1 state = 2;
+  uint64 state_revision = 3;
+  uint64 occurred_at_unix_millis = 4;
+  CommunicationRecipientSuggestionErrorCodeV1 error = 15;
+}
+
+service CommunicationRecipientSuggestionCommandService {
+  rpc Start(StartCommunicationRecipientSuggestionRequestV1)
+      returns (StartCommunicationRecipientSuggestionResponseV1);
+}
+
+service CommunicationRecipientSuggestionQueryService {
+  rpc Get(GetCommunicationRecipientSuggestionRequestV1)
+      returns (GetCommunicationRecipientSuggestionResponseV1);
+}
+
+enum CommunicationRecipientRoleV1 {
+  COMMUNICATION_RECIPIENT_ROLE_UNSPECIFIED = 0;
+  COMMUNICATION_RECIPIENT_ROLE_ACCOUNTING_OR_BOOKKEEPING = 1;
+  COMMUNICATION_RECIPIENT_ROLE_LEGAL_COUNSEL = 2;
+  COMMUNICATION_RECIPIENT_ROLE_PROJECT_STAKEHOLDER = 3;
+}
+
+enum CommunicationRecipientRationaleV1 {
+  COMMUNICATION_RECIPIENT_RATIONALE_UNSPECIFIED = 0;
+  COMMUNICATION_RECIPIENT_RATIONALE_FINANCIAL_DOCUMENT_OR_PAYMENT = 1;
+  COMMUNICATION_RECIPIENT_RATIONALE_LEGAL_OR_CONTRACTUAL_REVIEW = 2;
+  COMMUNICATION_RECIPIENT_RATIONALE_PROJECT_STATUS_OR_UPDATE = 3;
+}
+
+enum CommunicationRecipientSourceBasisV1 {
+  COMMUNICATION_RECIPIENT_SOURCE_BASIS_UNSPECIFIED = 0;
+  COMMUNICATION_RECIPIENT_SOURCE_BASIS_BODY = 1;
+}
+
+enum CommunicationRecipientSuggestionStateV1 {
+  COMMUNICATION_RECIPIENT_SUGGESTION_STATE_UNSPECIFIED = 0;
+  COMMUNICATION_RECIPIENT_SUGGESTION_STATE_ACCEPTED = 1;
+  COMMUNICATION_RECIPIENT_SUGGESTION_STATE_PREPARING_SOURCE = 2;
+  COMMUNICATION_RECIPIENT_SUGGESTION_STATE_EVALUATING = 3;
+  COMMUNICATION_RECIPIENT_SUGGESTION_STATE_READY = 4;
+  COMMUNICATION_RECIPIENT_SUGGESTION_STATE_REJECTED = 5;
+}
+
+enum CommunicationRecipientSuggestionErrorCodeV1 {
+  COMMUNICATION_RECIPIENT_SUGGESTION_ERROR_CODE_UNSPECIFIED = 0;
+  COMMUNICATION_RECIPIENT_SUGGESTION_ERROR_CODE_INVALID_REQUEST = 1;
+  COMMUNICATION_RECIPIENT_SUGGESTION_ERROR_CODE_NOT_FOUND = 2;
+  COMMUNICATION_RECIPIENT_SUGGESTION_ERROR_CODE_SOURCE_REJECTED = 3;
+  COMMUNICATION_RECIPIENT_SUGGESTION_ERROR_CODE_EVALUATION_REJECTED = 4;
+  COMMUNICATION_RECIPIENT_SUGGESTION_ERROR_CODE_POLICY = 5;
+  COMMUNICATION_RECIPIENT_SUGGESTION_ERROR_CODE_UNAVAILABLE = 6;
+}

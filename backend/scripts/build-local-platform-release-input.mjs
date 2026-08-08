@@ -11,12 +11,12 @@ const REQUIRED_OPTIONS = [
 ];
 
 const PLATFORM_ARTIFACTS = [
-  ['platform.blob', 'blob', 'blob', 'hermes-blob-service'],
-  ['platform.events-authority', 'events', 'events', 'hermes-events-authority-runtime'],
-  ['platform.scheduler', 'scheduler', 'scheduler', 'hermes-scheduler-runtime'],
-  ['platform.storage', 'storage', 'storage', 'hermes-storage-runtime'],
-  ['platform.telemetry', 'telemetry', 'telemetry', 'hermes-telemetry-collector'],
-  ['platform.vault', 'vault', 'vault', 'hermes-vault-runtime'],
+  ['platform.blob', 'blob', 'blob', 'makosh-blob-service'],
+  ['platform.events-authority', 'events', 'events', 'makosh-events-authority-runtime'],
+  ['platform.scheduler', 'scheduler', 'scheduler', 'makosh-scheduler-runtime'],
+  ['platform.storage', 'storage', 'storage', 'makosh-storage-runtime'],
+  ['platform.telemetry', 'telemetry', 'telemetry', 'makosh-telemetry-collector'],
+  ['platform.vault', 'vault', 'vault', 'makosh-vault-runtime'],
 ];
 
 function fail(message) {

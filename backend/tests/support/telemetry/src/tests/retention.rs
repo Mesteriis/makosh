@@ -1,6 +1,6 @@
 use crate::collector::storage::{TelemetryRetentionV1, TelemetrySegmentStore};
 use crate::fixtures::directory::unique_directory;
-use hermes_telemetry_protocol::{
+use makosh_telemetry_protocol::{
     TelemetryPriorityV1, TelemetrySignalInputV1, TelemetrySignalKindV1, TelemetrySignalV1,
     TelemetrySourceV1,
 };

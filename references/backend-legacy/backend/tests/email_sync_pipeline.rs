@@ -1,7 +1,7 @@
-use hermes_backend_testkit::context::TestContext;
-use hermes_backend_testkit::factories::persona::PersonaFactory;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::email_sync::{EmailSyncBatch, FetchedCommunicationSourceMessage};
+use makosh_backend_testkit::context::TestContext;
+use makosh_backend_testkit::factories::persona::PersonaFactory;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::email_sync::{EmailSyncBatch, FetchedCommunicationSourceMessage};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use base64::Engine as _;
@@ -9,11 +9,11 @@ use chrono::{TimeZone, Utc};
 use serde_json::json;
 use sqlx::Row;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::domains::communications::storage::port::LocalBlobPort;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::domains::communications::storage::port::LocalBlobPort;
 
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::workflows::email_sync_pipeline::service::project_email_sync_batch_with_mail_blobs;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::workflows::email_sync_pipeline::service::project_email_sync_batch_with_mail_blobs;
 
 #[tokio::test]
 async fn email_sync_pipeline_records_raw_blob_and_links_confirmed_message_participants_against_postgres()
@@ -549,19 +549,19 @@ async fn email_sync_pipeline_extracts_attachment_metadata_with_initial_scan_stat
         "Subject: Attachment Pipeline\r\n",
         "From: Sender <sender@example.invalid>\r\n",
         "To: Recipient <recipient@example.invalid>\r\n",
-        "Content-Type: multipart/mixed; boundary=\"hermes-boundary\"\r\n",
+        "Content-Type: multipart/mixed; boundary=\"makosh-boundary\"\r\n",
         "\r\n",
-        "--hermes-boundary\r\n",
+        "--makosh-boundary\r\n",
         "Content-Type: text/plain; charset=utf-8\r\n",
         "\r\n",
         "See attached cache fixture.\r\n",
-        "--hermes-boundary\r\n",
+        "--makosh-boundary\r\n",
         "Content-Type: text/plain; name=\"invoice.txt\"\r\n",
         "Content-Disposition: attachment; filename=\"invoice.txt\"\r\n",
         "Content-Transfer-Encoding: base64\r\n",
         "\r\n",
         "YXR0YWNobWVudCBieXRlcw==\r\n",
-        "--hermes-boundary--\r\n"
+        "--makosh-boundary--\r\n"
     );
     let raw_rfc822_base64 = base64::engine::general_purpose::STANDARD.encode(raw_rfc822);
     let batch = EmailSyncBatch {
@@ -688,19 +688,19 @@ async fn email_sync_pipeline_marks_executable_attachment_payloads_malicious() {
         "Subject: Attachment Safety\r\n\
          From: Sender <sender@example.invalid>\r\n\
          To: Recipient <recipient@example.invalid>\r\n\
-         Content-Type: multipart/mixed; boundary=\"hermes-boundary\"\r\n\
+         Content-Type: multipart/mixed; boundary=\"makosh-boundary\"\r\n\
          \r\n\
-         --hermes-boundary\r\n\
+         --makosh-boundary\r\n\
          Content-Type: text/plain; charset=utf-8\r\n\
          \r\n\
          See attached executable payload.\r\n\
-         --hermes-boundary\r\n\
+         --makosh-boundary\r\n\
          Content-Type: application/pdf; name=\"invoice.pdf\"\r\n\
          Content-Disposition: attachment; filename=\"invoice.pdf\"\r\n\
          Content-Transfer-Encoding: base64\r\n\
          \r\n\
          {attachment_body}\r\n\
-         --hermes-boundary--\r\n"
+         --makosh-boundary--\r\n"
     );
     let raw_rfc822_base64 = base64::engine::general_purpose::STANDARD.encode(raw_rfc822);
     let batch = EmailSyncBatch {
@@ -763,7 +763,7 @@ async fn email_sync_pipeline_marks_executable_attachment_payloads_malicious() {
         attachment.try_get("scan_metadata").expect("scan_metadata");
 
     assert_eq!(scan_status, "malicious");
-    assert_eq!(scan_engine.as_deref(), Some("hermes_heuristic_v1"));
+    assert_eq!(scan_engine.as_deref(), Some("makosh_heuristic_v1"));
     assert!(scan_checked_at.is_some());
     assert_eq!(scan_summary.as_deref(), Some("Executable payload detected"));
     assert_eq!(scan_metadata["reasons"], json!(["executable_magic"]));

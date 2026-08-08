@@ -1,0 +1,170 @@
+syntax = "proto3";
+
+package makosh.telegram.automation.v1;
+
+service TelegramAutomationQueryService {
+  rpc Query(AutomationQueryRequestV1) returns (AutomationQueryResponseV1);
+}
+
+service TelegramAutomationCommandService {
+  rpc Execute(AutomationCommandRequestV1) returns (AutomationCommandResponseV1);
+}
+
+message AutomationTemplateV1 {
+  string template_id = 1;
+  string name = 2;
+  string body_template = 3;
+  repeated string required_variables = 4;
+  uint64 revision = 5;
+  uint64 created_at_unix_seconds = 6;
+  uint64 updated_at_unix_seconds = 7;
+}
+
+message AutomationPolicyV1 {
+  string policy_id = 1;
+  string template_id = 2;
+  string name = 3;
+  bool enabled = 4;
+  string account_id = 5;
+  repeated string provider_chat_ids = 6;
+  optional uint64 expires_at_unix_seconds = 7;
+  uint64 revision = 8;
+  uint64 created_at_unix_seconds = 9;
+  uint64 updated_at_unix_seconds = 10;
+}
+
+message AutomationVariableV1 {
+  string name = 1;
+  string value = 2;
+}
+
+message AutomationPreviewReceiptV1 {
+  string preview_id = 1;
+  string policy_id = 2;
+  uint64 policy_revision = 3;
+  string template_id = 4;
+  uint64 template_revision = 5;
+  string account_id = 6;
+  string provider_chat_id = 7;
+  string rendered_text = 8;
+  bytes rendered_sha256 = 9;
+  uint64 created_at_unix_seconds = 10;
+}
+
+enum AutomationFailureCodeV1 {
+  AUTOMATION_FAILURE_CODE_UNSPECIFIED = 0;
+  AUTOMATION_FAILURE_CODE_INVALID_REQUEST = 1;
+  AUTOMATION_FAILURE_CODE_NOT_FOUND = 2;
+  AUTOMATION_FAILURE_CODE_REVISION_CONFLICT = 3;
+  AUTOMATION_FAILURE_CODE_IDEMPOTENCY_CONFLICT = 4;
+  AUTOMATION_FAILURE_CODE_POLICY_DISABLED = 5;
+  AUTOMATION_FAILURE_CODE_POLICY_EXPIRED = 6;
+  AUTOMATION_FAILURE_CODE_SCOPE_DENIED = 7;
+  AUTOMATION_FAILURE_CODE_VARIABLE_MISSING = 8;
+  AUTOMATION_FAILURE_CODE_VARIABLE_UNDECLARED = 9;
+  AUTOMATION_FAILURE_CODE_UNAVAILABLE = 10;
+}
+
+message AutomationFailureV1 {
+  AutomationFailureCodeV1 code = 1;
+  string field = 2;
+}
+
+message ListAutomationTemplatesQueryV1 {
+  uint32 limit = 1;
+  string after_template_id = 2;
+}
+
+message GetAutomationTemplateQueryV1 {
+  string template_id = 1;
+}
+
+message ListAutomationPoliciesQueryV1 {
+  uint32 limit = 1;
+  string after_policy_id = 2;
+}
+
+message GetAutomationPolicyQueryV1 {
+  string policy_id = 1;
+}
+
+message GetAutomationPreviewReceiptQueryV1 {
+  string preview_id = 1;
+}
+
+message AutomationQueryRequestV1 {
+  oneof request {
+    ListAutomationTemplatesQueryV1 list_templates = 1;
+    GetAutomationTemplateQueryV1 get_template = 2;
+    ListAutomationPoliciesQueryV1 list_policies = 3;
+    GetAutomationPolicyQueryV1 get_policy = 4;
+    GetAutomationPreviewReceiptQueryV1 get_preview_receipt = 5;
+  }
+}
+
+message AutomationTemplateListV1 {
+  repeated AutomationTemplateV1 items = 1;
+  string next_after_template_id = 2;
+}
+
+message AutomationPolicyListV1 {
+  repeated AutomationPolicyV1 items = 1;
+  string next_after_policy_id = 2;
+}
+
+message AutomationQueryResponseV1 {
+  oneof response {
+    AutomationTemplateListV1 templates = 1;
+    AutomationTemplateV1 template = 2;
+    AutomationPolicyListV1 policies = 3;
+    AutomationPolicyV1 policy = 4;
+    AutomationPreviewReceiptV1 preview_receipt = 5;
+    AutomationFailureV1 failure = 6;
+  }
+}
+
+message UpsertAutomationTemplateCommandV1 {
+  string mutation_id = 1;
+  uint64 expected_revision = 2;
+  string template_id = 3;
+  string name = 4;
+  string body_template = 5;
+  repeated string required_variables = 6;
+}
+
+message UpsertAutomationPolicyCommandV1 {
+  string mutation_id = 1;
+  uint64 expected_revision = 2;
+  string policy_id = 3;
+  string template_id = 4;
+  string name = 5;
+  bool enabled = 6;
+  string account_id = 7;
+  repeated string provider_chat_ids = 8;
+  optional uint64 expires_at_unix_seconds = 9;
+}
+
+message PreviewAutomationPolicyCommandV1 {
+  string preview_id = 1;
+  string policy_id = 2;
+  string account_id = 3;
+  string provider_chat_id = 4;
+  repeated AutomationVariableV1 variables = 5;
+}
+
+message AutomationCommandRequestV1 {
+  oneof command {
+    UpsertAutomationTemplateCommandV1 upsert_template = 1;
+    UpsertAutomationPolicyCommandV1 upsert_policy = 2;
+    PreviewAutomationPolicyCommandV1 preview_policy = 3;
+  }
+}
+
+message AutomationCommandResponseV1 {
+  oneof response {
+    AutomationTemplateV1 template = 1;
+    AutomationPolicyV1 policy = 2;
+    AutomationPreviewReceiptV1 preview = 3;
+    AutomationFailureV1 failure = 4;
+  }
+}

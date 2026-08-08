@@ -8,22 +8,22 @@ import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
 const toolchain = process.argv[2] || '1.97.0';
-const project = `hermes-storage-authenticated-${process.pid}`;
+const project = `makosh-storage-authenticated-${process.pid}`;
 const compose = ['compose', '--project-name', project, '-f', 'development/authenticated/compose.yaml'];
-const focusedTest = process.env.HERMES_STORAGE_AUTHENTICATED_TEST_FILTER?.trim();
-const managedTest = process.env.HERMES_STORAGE_MANAGED_TEST_FILTER?.trim();
-const schedulerPostgresTest = process.env.HERMES_SCHEDULER_POSTGRES_TEST_FILTER?.trim();
+const focusedTest = process.env.MAKOSH_STORAGE_AUTHENTICATED_TEST_FILTER?.trim();
+const managedTest = process.env.MAKOSH_STORAGE_MANAGED_TEST_FILTER?.trim();
+const schedulerPostgresTest = process.env.MAKOSH_SCHEDULER_POSTGRES_TEST_FILTER?.trim();
 const delayedDeliveryPostgresTest =
-  process.env.HERMES_COMMUNICATION_DELAYED_DELIVERY_POSTGRES_TEST_FILTER?.trim();
+  process.env.MAKOSH_COMMUNICATION_DELAYED_DELIVERY_POSTGRES_TEST_FILTER?.trim();
 const deliveryIntentPostgresTest =
-  process.env.HERMES_COMMUNICATION_DELIVERY_INTENT_POSTGRES_TEST_FILTER?.trim();
+  process.env.MAKOSH_COMMUNICATION_DELIVERY_INTENT_POSTGRES_TEST_FILTER?.trim();
 const crossChannelForwardPostgresTest =
-  process.env.HERMES_COMMUNICATION_CROSS_CHANNEL_FORWARD_POSTGRES_TEST_FILTER?.trim();
-const telegramCallsTest = process.env.HERMES_TELEGRAM_CALLS_POSTGRES_TEST_FILTER?.trim();
-const contactsPostgresTest = process.env.HERMES_CONTACTS_POSTGRES_TEST_FILTER?.trim();
+  process.env.MAKOSH_COMMUNICATION_CROSS_CHANNEL_FORWARD_POSTGRES_TEST_FILTER?.trim();
+const telegramCallsTest = process.env.MAKOSH_TELEGRAM_CALLS_POSTGRES_TEST_FILTER?.trim();
+const contactsPostgresTest = process.env.MAKOSH_CONTACTS_POSTGRES_TEST_FILTER?.trim();
 const mailContactsSyncPostgresTest =
-  process.env.HERMES_MAIL_CONTACTS_SYNC_POSTGRES_TEST_FILTER?.trim();
-const keepContour = process.env.HERMES_STORAGE_KEEP_CONTOUR === '1';
+  process.env.MAKOSH_MAIL_CONTACTS_SYNC_POSTGRES_TEST_FILTER?.trim();
+const keepContour = process.env.MAKOSH_STORAGE_KEEP_CONTOUR === '1';
 const authenticatedTests = [
   'authenticated_revoke_fences_the_real_pool_and_postgres_role',
   'authenticated_runtime_revokes_the_exact_staged_binding_through_vault',
@@ -39,7 +39,7 @@ const authenticatedTests = [
 ];
 
 async function run(command, args, options = {}) {
-  if (process.env.HERMES_STORAGE_UNBUFFERED === '1') {
+  if (process.env.MAKOSH_STORAGE_UNBUFFERED === '1') {
     await new Promise((resolve, reject) => {
       const child = spawn(command, args, { stdio: 'inherit', ...options });
       child.once('error', reject);
@@ -54,7 +54,7 @@ async function run(command, args, options = {}) {
 }
 
 async function create_secret_files() {
-  const directory = await mkdtemp(join(tmpdir(), 'hermes-storage-auth-'));
+  const directory = await mkdtemp(join(tmpdir(), 'makosh-storage-auth-'));
   const ports = await allocate_loopback_ports();
   await chmod(directory, 0o700);
   const postgresPath = await create_secret_file(directory, 'postgres-admin-password');
@@ -126,15 +126,15 @@ async function create_secret_file(directory, name) {
 function compose_environment(secrets) {
   return {
     ...process.env,
-    HERMES_STORAGE_POSTGRES_SECRET_FILE: secrets.postgresPath,
-    HERMES_STORAGE_PGBOUNCER_SECRET_FILE: secrets.pgbouncerPath,
-    HERMES_STORAGE_PGBOUNCER_DATABASES_DIRECTORY: secrets.pgbouncerDirectory,
-    HERMES_STORAGE_PGBOUNCER_AUTH_DIRECTORY: secrets.pgbouncerAuthDirectory,
-    HERMES_STORAGE_PGBOUNCER_RUNTIME_UID: String(process.getuid()),
-    HERMES_STORAGE_AUTHENTICATED_NATS_PORT: String(secrets.natsPort),
-    HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT: String(secrets.postgresPort),
-    HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PORT: String(secrets.pgbouncerPort),
-    HERMES_ATTACHMENT_SECURITY_CLAMAV_PORT: String(secrets.clamavPort),
+    MAKOSH_STORAGE_POSTGRES_SECRET_FILE: secrets.postgresPath,
+    MAKOSH_STORAGE_PGBOUNCER_SECRET_FILE: secrets.pgbouncerPath,
+    MAKOSH_STORAGE_PGBOUNCER_DATABASES_DIRECTORY: secrets.pgbouncerDirectory,
+    MAKOSH_STORAGE_PGBOUNCER_AUTH_DIRECTORY: secrets.pgbouncerAuthDirectory,
+    MAKOSH_STORAGE_PGBOUNCER_RUNTIME_UID: String(process.getuid()),
+    MAKOSH_STORAGE_AUTHENTICATED_NATS_PORT: String(secrets.natsPort),
+    MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT: String(secrets.postgresPort),
+    MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PORT: String(secrets.pgbouncerPort),
+    MAKOSH_ATTACHMENT_SECURITY_CLAMAV_PORT: String(secrets.clamavPort),
   };
 }
 
@@ -238,7 +238,7 @@ async function run_conformance(secrets) {
     'test',
     '--locked',
     '-p',
-    'hermes-storage-testkit',
+    'makosh-storage-testkit',
     '--',
     '--ignored',
     test,
@@ -246,17 +246,17 @@ async function run_conformance(secrets) {
     ], {
     env: {
       ...process.env,
-      HERMES_STORAGE_TEST_DATABASE_URL: await postgres_test_database_url(secrets),
-      HERMES_STORAGE_AUTHENTICATED_TEST: '1',
-      HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE: secrets.pgbouncerPath,
-      HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE: secrets.postgresPath,
-      HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_HOST: '127.0.0.1',
-      HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PORT: String(secrets.pgbouncerPort),
-      HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST: '127.0.0.1',
-      HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT: String(secrets.postgresPort),
-      HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_DATABASES_FILE: secrets.databasesPath,
-      HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_AUTH_FILE: secrets.authPath,
-      HERMES_STORAGE_AUTHENTICATED_POSTGRES_CONTAINER: secrets.postgresContainer,
+      MAKOSH_STORAGE_TEST_DATABASE_URL: await postgres_test_database_url(secrets),
+      MAKOSH_STORAGE_AUTHENTICATED_TEST: '1',
+      MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE: secrets.pgbouncerPath,
+      MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE: secrets.postgresPath,
+      MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_HOST: '127.0.0.1',
+      MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PORT: String(secrets.pgbouncerPort),
+      MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST: '127.0.0.1',
+      MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT: String(secrets.postgresPort),
+      MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_DATABASES_FILE: secrets.databasesPath,
+      MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_AUTH_FILE: secrets.authPath,
+      MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_CONTAINER: secrets.postgresContainer,
     },
         });
       } finally {
@@ -282,7 +282,7 @@ async function run_scheduler_postgres_conformance(secrets, test) {
       'test',
       '--locked',
       '-p',
-      'hermes-scheduler-testkit',
+      'makosh-scheduler-testkit',
       '--test',
       'postgres_live',
       '--',
@@ -292,7 +292,7 @@ async function run_scheduler_postgres_conformance(secrets, test) {
     ], {
       env: {
         ...process.env,
-        HERMES_SCHEDULER_POSTGRES_URL: await postgres_test_database_url(secrets),
+        MAKOSH_SCHEDULER_POSTGRES_URL: await postgres_test_database_url(secrets),
       },
     });
   } finally {
@@ -310,7 +310,7 @@ async function run_delayed_delivery_postgres_conformance(secrets, test) {
       'test',
       '--locked',
       '-p',
-      'hermes-communication-delayed-delivery-testkit',
+      'makosh-communication-delayed-delivery-testkit',
       '--test',
       'postgres_live',
       '--',
@@ -320,7 +320,7 @@ async function run_delayed_delivery_postgres_conformance(secrets, test) {
     ], {
       env: {
         ...process.env,
-        HERMES_COMMUNICATION_DELAYED_DELIVERY_POSTGRES_URL:
+        MAKOSH_COMMUNICATION_DELAYED_DELIVERY_POSTGRES_URL:
           await postgres_test_database_url(secrets),
       },
     });
@@ -339,7 +339,7 @@ async function run_delivery_intent_postgres_conformance(secrets, test) {
       'test',
       '--locked',
       '-p',
-      'hermes-communication-delivery-intent-testkit',
+      'makosh-communication-delivery-intent-testkit',
       '--test',
       'postgres_live',
       '--',
@@ -349,7 +349,7 @@ async function run_delivery_intent_postgres_conformance(secrets, test) {
     ], {
       env: {
         ...process.env,
-        HERMES_COMMUNICATION_DELIVERY_INTENT_POSTGRES_URL:
+        MAKOSH_COMMUNICATION_DELIVERY_INTENT_POSTGRES_URL:
           await postgres_test_database_url(secrets),
       },
     });
@@ -368,7 +368,7 @@ async function run_cross_channel_forward_postgres_conformance(secrets, test) {
       'test',
       '--locked',
       '-p',
-      'hermes-communication-cross-channel-forward-testkit',
+      'makosh-communication-cross-channel-forward-testkit',
       '--test',
       'postgres_live',
       '--',
@@ -378,7 +378,7 @@ async function run_cross_channel_forward_postgres_conformance(secrets, test) {
     ], {
       env: {
         ...process.env,
-        HERMES_COMMUNICATION_CROSS_CHANNEL_FORWARD_POSTGRES_URL:
+        MAKOSH_COMMUNICATION_CROSS_CHANNEL_FORWARD_POSTGRES_URL:
           await postgres_test_database_url(secrets),
       },
     });
@@ -397,7 +397,7 @@ async function run_telegram_calls_conformance(secrets, test) {
       'test',
       '--locked',
       '-p',
-      'hermes-telegram-calls-testkit',
+      'makosh-telegram-calls-testkit',
       '--test',
       'postgres_live',
       '--',
@@ -407,7 +407,7 @@ async function run_telegram_calls_conformance(secrets, test) {
     ], {
       env: {
         ...process.env,
-        HERMES_TELEGRAM_CALLS_POSTGRES_URL: await postgres_test_database_url(secrets),
+        MAKOSH_TELEGRAM_CALLS_POSTGRES_URL: await postgres_test_database_url(secrets),
       },
     });
   } finally {
@@ -425,7 +425,7 @@ async function run_contacts_postgres_conformance(secrets, test) {
       'test',
       '--locked',
       '-p',
-      'hermes-contacts-testkit',
+      'makosh-contacts-testkit',
       '--test',
       'postgres_live',
       '--',
@@ -435,7 +435,7 @@ async function run_contacts_postgres_conformance(secrets, test) {
     ], {
       env: {
         ...process.env,
-        HERMES_CONTACTS_POSTGRES_URL: await postgres_test_database_url(secrets),
+        MAKOSH_CONTACTS_POSTGRES_URL: await postgres_test_database_url(secrets),
       },
     });
   } finally {
@@ -453,7 +453,7 @@ async function run_mail_contacts_sync_postgres_conformance(secrets, test) {
       'test',
       '--locked',
       '-p',
-      'hermes-mail-contacts-sync-testkit',
+      'makosh-mail-contacts-sync-testkit',
       '--test',
       'postgres_live',
       '--',
@@ -463,7 +463,7 @@ async function run_mail_contacts_sync_postgres_conformance(secrets, test) {
     ], {
       env: {
         ...process.env,
-        HERMES_MAIL_CONTACTS_SYNC_POSTGRES_URL: await postgres_test_database_url(secrets),
+        MAKOSH_MAIL_CONTACTS_SYNC_POSTGRES_URL: await postgres_test_database_url(secrets),
       },
     });
   } finally {
@@ -474,7 +474,7 @@ async function run_mail_contacts_sync_postgres_conformance(secrets, test) {
 async function postgres_test_database_url(secrets) {
   const password = (await readFile(secrets.postgresPath, 'utf8')).trim();
   const databaseUrl = new URL(
-    'postgres://hermes_postgres_admin@127.0.0.1/hermes_storage_authenticated',
+    'postgres://makosh_postgres_admin@127.0.0.1/makosh_storage_authenticated',
   );
   databaseUrl.password = password;
   databaseUrl.port = String(secrets.postgresPort);
@@ -494,91 +494,91 @@ async function run_managed_process_conformance(secrets) {
     'build',
     '--locked',
     '-p',
-    'hermes-vault-runtime',
+    'makosh-vault-runtime',
     '-p',
-    'hermes-storage-runtime',
+    'makosh-storage-runtime',
     '-p',
-    'hermes-scheduler-runtime',
+    'makosh-scheduler-runtime',
     '-p',
-    'hermes-communications-runtime',
+    'makosh-communications-runtime',
     '-p',
-    'hermes-communications-export-runtime',
+    'makosh-communications-export-runtime',
     '-p',
-    'hermes-communication-delivery-intent-runtime',
+    'makosh-communication-delivery-intent-runtime',
     '-p',
-    'hermes-communication-cross-channel-forward-runtime',
+    'makosh-communication-cross-channel-forward-runtime',
     '-p',
-    'hermes-communication-delayed-delivery-runtime',
+    'makosh-communication-delayed-delivery-runtime',
     '-p',
-    'hermes-communication-bulk-action-runtime',
+    'makosh-communication-bulk-action-runtime',
     '-p',
-    'hermes-communication-reply-suggestion-runtime',
+    'makosh-communication-reply-suggestion-runtime',
     '-p',
-    'hermes-communication-summary-runtime',
+    'makosh-communication-summary-runtime',
     '-p',
-    'hermes-communication-translation-runtime',
+    'makosh-communication-translation-runtime',
     '-p',
-    'hermes-communication-explanation-runtime',
+    'makosh-communication-explanation-runtime',
     '-p',
-    'hermes-communication-recipient-suggestion-runtime',
+    'makosh-communication-recipient-suggestion-runtime',
     '-p',
-    'hermes-communication-task-candidate-runtime',
+    'makosh-communication-task-candidate-runtime',
     '-p',
-    'hermes-communication-note-candidate-runtime',
+    'makosh-communication-note-candidate-runtime',
     '-p',
-    'hermes-attachment-security-runtime',
+    'makosh-attachment-security-runtime',
     '-p',
-    'hermes-attachment-archive-inspection-runtime',
+    'makosh-attachment-archive-inspection-runtime',
     '-p',
-    'hermes-attachment-text-extraction-runtime',
+    'makosh-attachment-text-extraction-runtime',
     '-p',
-    'hermes-attachment-translation-runtime',
+    'makosh-attachment-translation-runtime',
     '-p',
-    'hermes-attachment-preview-runtime',
+    'makosh-attachment-preview-runtime',
     '-p',
-    'hermes-attachment-preview-evidence-replay-runtime',
+    'makosh-attachment-preview-evidence-replay-runtime',
     '-p',
-    'hermes-review-attention-runtime',
+    'makosh-review-attention-runtime',
     '-p',
-    'hermes-review-task-candidate-runtime',
+    'makosh-review-task-candidate-runtime',
     '-p',
-    'hermes-reviewed-task-candidate-promotion-runtime',
+    'makosh-reviewed-task-candidate-promotion-runtime',
     '-p',
-    'hermes-tasks-runtime',
+    'makosh-tasks-runtime',
     '-p',
-    'hermes-contacts-runtime',
+    'makosh-contacts-runtime',
     '-p',
-    'hermes-mail-contacts-sync-runtime',
+    'makosh-mail-contacts-sync-runtime',
     '-p',
-    'hermes-review-note-candidate-runtime',
+    'makosh-review-note-candidate-runtime',
     '-p',
-    'hermes-reviewed-note-candidate-promotion-runtime',
+    'makosh-reviewed-note-candidate-promotion-runtime',
     '-p',
-    'hermes-knowledge-runtime',
+    'makosh-knowledge-runtime',
     '-p',
-    'hermes-ai-inference-runtime',
+    'makosh-ai-inference-runtime',
     '-p',
-    'hermes-ollama-ai-runtime',
+    'makosh-ollama-ai-runtime',
     '-p',
-    'hermes-speech-to-text-runtime',
+    'makosh-speech-to-text-runtime',
     '-p',
-    'hermes-whisper-stt-runtime',
+    'makosh-whisper-stt-runtime',
     '-p',
-    'hermes-desktop-call-recording-runtime',
+    'makosh-desktop-call-recording-runtime',
     '-p',
-    'hermes-call-transcription-runtime',
+    'makosh-call-transcription-runtime',
     '-p',
-    'hermes-mail-runtime',
+    'makosh-mail-runtime',
     '-p',
-    'hermes-telegram-runtime',
+    'makosh-telegram-runtime',
     '-p',
-    'hermes-zulip-runtime',
+    'makosh-zulip-runtime',
     '-p',
-    'hermes-whatsapp-runtime',
+    'makosh-whatsapp-runtime',
     '-p',
-    'hermes-blob-service',
+    'makosh-blob-service',
     '--features',
-    'hermes-mail-runtime/conformance-test-support,hermes-zulip-runtime/conformance-test-support',
+    'makosh-mail-runtime/conformance-test-support,makosh-zulip-runtime/conformance-test-support',
   ]);
   for (const test of managedTest ? [managedTest] : [
     'managed_storage_binary_bootstraps_through_live_vault',
@@ -635,7 +635,7 @@ async function run_managed_process_conformance(secrets) {
     'test',
     '--locked',
     '-p',
-    'hermes-kernel-recovery-testkit',
+    'makosh-kernel-recovery-testkit',
     '--',
     '--ignored',
     test,
@@ -643,58 +643,58 @@ async function run_managed_process_conformance(secrets) {
   ], {
     env: {
       ...authenticated_environment(secrets),
-      HERMES_VAULT_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-vault-runtime`,
-      HERMES_STORAGE_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-storage-runtime`,
-      HERMES_SCHEDULER_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-scheduler-runtime`,
-      HERMES_SCHEDULER_LIVE_NATS_ENDPOINT: `nats://127.0.0.1:${secrets.natsPort}`,
-      HERMES_COMMUNICATIONS_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-communications-runtime`,
-      HERMES_COMMUNICATIONS_EXPORT_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-communications-export-runtime`,
-      HERMES_COMMUNICATION_DELIVERY_INTENT_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-communication-delivery-intent-runtime`,
-      HERMES_COMMUNICATION_CROSS_CHANNEL_FORWARD_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-communication-cross-channel-forward-runtime`,
-      HERMES_COMMUNICATION_DELAYED_DELIVERY_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-communication-delayed-delivery-runtime`,
-      HERMES_COMMUNICATION_BULK_ACTION_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-communication-bulk-action-runtime`,
-      HERMES_COMMUNICATION_REPLY_SUGGESTION_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-communication-reply-suggestion-runtime`,
-      HERMES_COMMUNICATION_SUMMARY_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-communication-summary-runtime`,
-      HERMES_COMMUNICATION_TRANSLATION_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-communication-translation-runtime`,
-      HERMES_COMMUNICATION_EXPLANATION_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-communication-explanation-runtime`,
-      HERMES_COMMUNICATION_RECIPIENT_SUGGESTION_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-communication-recipient-suggestion-runtime`,
-      HERMES_COMMUNICATION_TASK_CANDIDATE_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-communication-task-candidate-runtime`,
-      HERMES_COMMUNICATION_NOTE_CANDIDATE_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-communication-note-candidate-runtime`,
-      HERMES_ATTACHMENT_SECURITY_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-attachment-security-runtime`,
-      HERMES_ATTACHMENT_ARCHIVE_INSPECTION_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-attachment-archive-inspection-runtime`,
-      HERMES_ATTACHMENT_TEXT_EXTRACTION_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-attachment-text-extraction-runtime`,
-      HERMES_ATTACHMENT_TRANSLATION_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-attachment-translation-runtime`,
-      HERMES_ATTACHMENT_PREVIEW_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-attachment-preview-runtime`,
-      HERMES_ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-attachment-preview-evidence-replay-runtime`,
-      HERMES_ATTACHMENT_TEXT_EXTRACTION_OCR_RUNNER: textExtractionOcr.runner,
-      HERMES_ATTACHMENT_TEXT_EXTRACTION_OCR_ENG: textExtractionOcr.english,
-      HERMES_ATTACHMENT_TEXT_EXTRACTION_OCR_RUS: textExtractionOcr.russian,
-      HERMES_REVIEW_ATTENTION_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-review-attention-runtime`,
-      HERMES_REVIEW_TASK_CANDIDATE_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-review-task-candidate-runtime`,
-      HERMES_REVIEWED_TASK_CANDIDATE_PROMOTION_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-reviewed-task-candidate-promotion-runtime`,
-      HERMES_TASKS_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-tasks-runtime`,
-      HERMES_CONTACTS_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-contacts-runtime`,
-      HERMES_MAIL_CONTACTS_SYNC_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-mail-contacts-sync-runtime`,
-      HERMES_REVIEW_NOTE_CANDIDATE_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-review-note-candidate-runtime`,
-      HERMES_REVIEWED_NOTE_CANDIDATE_PROMOTION_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-reviewed-note-candidate-promotion-runtime`,
-      HERMES_KNOWLEDGE_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-knowledge-runtime`,
-      HERMES_AI_INFERENCE_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-ai-inference-runtime`,
-      HERMES_OLLAMA_AI_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-ollama-ai-runtime`,
-      HERMES_SPEECH_TO_TEXT_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-speech-to-text-runtime`,
-      HERMES_WHISPER_STT_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-whisper-stt-runtime`,
-      HERMES_DESKTOP_CALL_RECORDING_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-desktop-call-recording-runtime`,
-      HERMES_CALL_TRANSCRIPTION_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-call-transcription-runtime`,
-      HERMES_WHISPER_STT_RUNNER: whisperStt.runner,
-      HERMES_WHISPER_STT_MODEL: whisperStt.model,
-      HERMES_WHISPER_STT_TEST_WAV: whisperStt.testWav,
-      HERMES_MAIL_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-mail-runtime`,
-      HERMES_TELEGRAM_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-telegram-runtime`,
-      HERMES_ZULIP_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-zulip-runtime`,
-      HERMES_WHATSAPP_RUNTIME_BIN: `${process.cwd()}/target/debug/hermes-whatsapp-runtime`,
-      HERMES_TELEGRAM_TDJSON_FIXTURE: tdjsonFixture,
-      HERMES_TELEGRAM_TGCALLS_FIXTURE: tgcallsFixture,
-      HERMES_BLOB_SERVICE_BIN: `${process.cwd()}/target/debug/hermes-blob-service`,
-      HERMES_COMMUNICATIONS_LIVE_NATS_ENDPOINT: `nats://127.0.0.1:${secrets.natsPort}`,
+      MAKOSH_VAULT_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-vault-runtime`,
+      MAKOSH_STORAGE_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-storage-runtime`,
+      MAKOSH_SCHEDULER_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-scheduler-runtime`,
+      MAKOSH_SCHEDULER_LIVE_NATS_ENDPOINT: `nats://127.0.0.1:${secrets.natsPort}`,
+      MAKOSH_COMMUNICATIONS_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-communications-runtime`,
+      MAKOSH_COMMUNICATIONS_EXPORT_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-communications-export-runtime`,
+      MAKOSH_COMMUNICATION_DELIVERY_INTENT_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-communication-delivery-intent-runtime`,
+      MAKOSH_COMMUNICATION_CROSS_CHANNEL_FORWARD_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-communication-cross-channel-forward-runtime`,
+      MAKOSH_COMMUNICATION_DELAYED_DELIVERY_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-communication-delayed-delivery-runtime`,
+      MAKOSH_COMMUNICATION_BULK_ACTION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-communication-bulk-action-runtime`,
+      MAKOSH_COMMUNICATION_REPLY_SUGGESTION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-communication-reply-suggestion-runtime`,
+      MAKOSH_COMMUNICATION_SUMMARY_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-communication-summary-runtime`,
+      MAKOSH_COMMUNICATION_TRANSLATION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-communication-translation-runtime`,
+      MAKOSH_COMMUNICATION_EXPLANATION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-communication-explanation-runtime`,
+      MAKOSH_COMMUNICATION_RECIPIENT_SUGGESTION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-communication-recipient-suggestion-runtime`,
+      MAKOSH_COMMUNICATION_TASK_CANDIDATE_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-communication-task-candidate-runtime`,
+      MAKOSH_COMMUNICATION_NOTE_CANDIDATE_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-communication-note-candidate-runtime`,
+      MAKOSH_ATTACHMENT_SECURITY_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-attachment-security-runtime`,
+      MAKOSH_ATTACHMENT_ARCHIVE_INSPECTION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-attachment-archive-inspection-runtime`,
+      MAKOSH_ATTACHMENT_TEXT_EXTRACTION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-attachment-text-extraction-runtime`,
+      MAKOSH_ATTACHMENT_TRANSLATION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-attachment-translation-runtime`,
+      MAKOSH_ATTACHMENT_PREVIEW_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-attachment-preview-runtime`,
+      MAKOSH_ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-attachment-preview-evidence-replay-runtime`,
+      MAKOSH_ATTACHMENT_TEXT_EXTRACTION_OCR_RUNNER: textExtractionOcr.runner,
+      MAKOSH_ATTACHMENT_TEXT_EXTRACTION_OCR_ENG: textExtractionOcr.english,
+      MAKOSH_ATTACHMENT_TEXT_EXTRACTION_OCR_RUS: textExtractionOcr.russian,
+      MAKOSH_REVIEW_ATTENTION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-review-attention-runtime`,
+      MAKOSH_REVIEW_TASK_CANDIDATE_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-review-task-candidate-runtime`,
+      MAKOSH_REVIEWED_TASK_CANDIDATE_PROMOTION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-reviewed-task-candidate-promotion-runtime`,
+      MAKOSH_TASKS_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-tasks-runtime`,
+      MAKOSH_CONTACTS_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-contacts-runtime`,
+      MAKOSH_MAIL_CONTACTS_SYNC_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-mail-contacts-sync-runtime`,
+      MAKOSH_REVIEW_NOTE_CANDIDATE_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-review-note-candidate-runtime`,
+      MAKOSH_REVIEWED_NOTE_CANDIDATE_PROMOTION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-reviewed-note-candidate-promotion-runtime`,
+      MAKOSH_KNOWLEDGE_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-knowledge-runtime`,
+      MAKOSH_AI_INFERENCE_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-ai-inference-runtime`,
+      MAKOSH_OLLAMA_AI_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-ollama-ai-runtime`,
+      MAKOSH_SPEECH_TO_TEXT_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-speech-to-text-runtime`,
+      MAKOSH_WHISPER_STT_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-whisper-stt-runtime`,
+      MAKOSH_DESKTOP_CALL_RECORDING_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-desktop-call-recording-runtime`,
+      MAKOSH_CALL_TRANSCRIPTION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-call-transcription-runtime`,
+      MAKOSH_WHISPER_STT_RUNNER: whisperStt.runner,
+      MAKOSH_WHISPER_STT_MODEL: whisperStt.model,
+      MAKOSH_WHISPER_STT_TEST_WAV: whisperStt.testWav,
+      MAKOSH_MAIL_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-mail-runtime`,
+      MAKOSH_TELEGRAM_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-telegram-runtime`,
+      MAKOSH_ZULIP_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-zulip-runtime`,
+      MAKOSH_WHATSAPP_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-whatsapp-runtime`,
+      MAKOSH_TELEGRAM_TDJSON_FIXTURE: tdjsonFixture,
+      MAKOSH_TELEGRAM_TGCALLS_FIXTURE: tgcallsFixture,
+      MAKOSH_BLOB_SERVICE_BIN: `${process.cwd()}/target/debug/makosh-blob-service`,
+      MAKOSH_COMMUNICATIONS_LIVE_NATS_ENDPOINT: `nats://127.0.0.1:${secrets.natsPort}`,
     },
       });
     } finally {
@@ -704,7 +704,7 @@ async function run_managed_process_conformance(secrets) {
 }
 
 async function prepare_attachment_text_extraction_ocr() {
-  const root = process.env.HERMES_TEST_ATTACHMENT_TEXT_EXTRACTION_OCR_ROOT
+  const root = process.env.MAKOSH_TEST_ATTACHMENT_TEXT_EXTRACTION_OCR_ROOT
     || join(process.cwd(), '..', '.local', 'dev-native', 'attachment-text-extraction-ocr');
   const resources = {
     runner: join(root, 'tesseract-runner'),
@@ -724,7 +724,7 @@ async function prepare_attachment_text_extraction_ocr() {
 }
 
 async function prepare_whisper_stt(secrets) {
-  const root = process.env.HERMES_TEST_WHISPER_STT_ROOT
+  const root = process.env.MAKOSH_TEST_WHISPER_STT_ROOT
     || join(process.cwd(), '..', '.local', 'dev-native', 'whisper-stt');
   const resources = {
     runner: join(root, 'whisper-cli'),
@@ -748,7 +748,7 @@ async function prepare_whisper_stt(secrets) {
     '120',
     '-o',
     source,
-    'Hermes clean room transcription. Hermes managed speech engine. Hermes private audio evidence.',
+    'Макошь clean room transcription. Макошь managed speech engine. Макошь private audio evidence.',
   ]);
   await run('/usr/bin/afconvert', [
     '-f',
@@ -833,7 +833,7 @@ async function compile_tdjson_fixture(secrets) {
     'telegram-tdjson',
     'tdjson.c',
   );
-  const output = join(secrets.directory, 'libhermes-telegram-tdjson-fixture.dylib');
+  const output = join(secrets.directory, 'libmakosh-telegram-tdjson-fixture.dylib');
   const linkMode = process.platform === 'darwin' ? '-dynamiclib' : '-shared';
   await run('cc', [
     linkMode,
@@ -856,7 +856,7 @@ async function compile_tgcalls_fixture(secrets) {
     'telegram-tgcalls',
     'bridge.c',
   );
-  const output = join(secrets.directory, 'libhermes-telegram-tgcalls-fixture.dylib');
+  const output = join(secrets.directory, 'libmakosh-telegram-tgcalls-fixture.dylib');
   const linkMode = process.platform === 'darwin' ? '-dynamiclib' : '-shared';
   await run('cc', [
     linkMode,
@@ -874,17 +874,17 @@ async function compile_tgcalls_fixture(secrets) {
 function authenticated_environment(secrets) {
   return {
     ...process.env,
-    HERMES_STORAGE_AUTHENTICATED_TEST: '1',
-    HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE: secrets.pgbouncerPath,
-    HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE: secrets.postgresPath,
-    HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_HOST: '127.0.0.1',
-    HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PORT: String(secrets.pgbouncerPort),
-    HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST: '127.0.0.1',
-    HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT: String(secrets.postgresPort),
-    HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_DATABASES_FILE: secrets.databasesPath,
-    HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_AUTH_FILE: secrets.authPath,
-    HERMES_STORAGE_AUTHENTICATED_POSTGRES_CONTAINER: secrets.postgresContainer,
-    HERMES_STORAGE_AUTHENTICATED_NATS_CONTAINER: secrets.natsContainer,
+    MAKOSH_STORAGE_AUTHENTICATED_TEST: '1',
+    MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE: secrets.pgbouncerPath,
+    MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE: secrets.postgresPath,
+    MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_HOST: '127.0.0.1',
+    MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PORT: String(secrets.pgbouncerPort),
+    MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST: '127.0.0.1',
+    MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT: String(secrets.postgresPort),
+    MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_DATABASES_FILE: secrets.databasesPath,
+    MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_AUTH_FILE: secrets.authPath,
+    MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_CONTAINER: secrets.postgresContainer,
+    MAKOSH_STORAGE_AUTHENTICATED_NATS_CONTAINER: secrets.natsContainer,
   };
 }
 

@@ -7,8 +7,8 @@ use sqlx::Row;
 use std::net::SocketAddr;
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::ai::control_center::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::ai::control_center::{
     errors::AiControlCenterError,
     models::{
         AiModelAvailabilityUpdateRequest, AiModelRouteUpdateRequest, AiPromptActivateRequest,
@@ -18,27 +18,27 @@ use hermes_hub_backend::ai::control_center::{
     },
     store::AiControlCenterStore,
 };
-use hermes_hub_backend::app::router::{build_router, build_router_with_database};
-use hermes_hub_backend::platform::config::app_config::AppConfig;
-use hermes_hub_backend::platform::secrets::models::{
+use makosh_hub_backend::app::router::{build_router, build_router_with_database};
+use makosh_hub_backend::platform::config::app_config::AppConfig;
+use makosh_hub_backend::platform::secrets::models::{
     NewSecretReference, SecretKind, SecretStoreKind,
 };
-use hermes_hub_backend::platform::secrets::store::SecretReferenceStore;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::secrets::store::SecretReferenceStore;
+use makosh_hub_backend::platform::storage::database::Database;
 use tokio::net::TcpListener;
 
 const LOCAL_API_TOKEN: &str = "ai-control-center-test-token";
 
 fn cfg() -> AppConfig {
-    hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+    makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
 }
 
 fn json_request(method: Method, uri: &str, body: Value) -> Request<Body> {
     Request::builder()
         .method(method)
         .uri(uri)
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
-        .header("x-hermes-actor-id", "hermes-frontend")
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-actor-id", "makosh-frontend")
         .header(header::CONTENT_TYPE, "application/json")
         .body(Body::from(body.to_string()))
         .expect("request")
@@ -47,8 +47,8 @@ fn json_request(method: Method, uri: &str, body: Value) -> Request<Body> {
 fn get_request(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
-        .header("x-hermes-actor-id", "hermes-frontend")
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-actor-id", "makosh-frontend")
         .body(Body::empty())
         .expect("request")
 }
@@ -589,7 +589,7 @@ async fn ollama_model_download_marks_model_available_without_creating_route() {
         .await
         .expect("patch provider base url");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -652,7 +652,7 @@ async fn ollama_model_download_failure_appends_failed_event() {
         .await
         .expect("patch provider base url");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -726,7 +726,7 @@ async fn remote_api_provider_models_require_host_vault_secret_before_private_con
                 score: None,
                 notes: None,
             },
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect_err("prompt preview selection requires provider readiness");
@@ -890,11 +890,11 @@ async fn api_provider_create_with_locked_host_vault_does_not_leave_provider_row(
         .await
         .expect("database");
     let vault_home = vault_home.path().to_string_lossy().to_string();
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
-    .with_test_pairs([("HERMES_VAULT_HOME", vault_home.as_str())])
+    .with_test_pairs([("MAKOSH_VAULT_HOME", vault_home.as_str())])
     .expect("config");
     let app = build_router_with_database(config, database);
     let provider_id = "provider:api:locked-vault-create";
@@ -939,11 +939,11 @@ async fn api_provider_create_with_api_key_marks_ready_and_binds_host_vault_secre
         .await
         .expect("database");
     let vault_home = vault_home.path().to_string_lossy().to_string();
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
-    .with_test_pairs([("HERMES_VAULT_HOME", vault_home.as_str())])
+    .with_test_pairs([("MAKOSH_VAULT_HOME", vault_home.as_str())])
     .expect("config");
     let app = build_router_with_database(config, database);
     let provider_id = "provider:api:omniroute-ready";
@@ -1119,7 +1119,7 @@ async fn ai_control_center_mutations_record_observation_trail_against_postgres()
                 description: Some("Prompt observation trail".to_owned()),
                 metadata: Some(json!({"team": "core"})),
             },
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("create prompt");
@@ -1132,7 +1132,7 @@ async fn ai_control_center_mutations_record_observation_trail_against_postgres()
                 body_template: "Answer {{query}}".to_owned(),
                 variables: vec!["query".to_owned()],
             },
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("create prompt version");
@@ -1142,7 +1142,7 @@ async fn ai_control_center_mutations_record_observation_trail_against_postgres()
             &AiPromptActivateRequest {
                 prompt_version_id: version.prompt_version_id.clone(),
             },
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("activate prompt version");
@@ -1158,7 +1158,7 @@ async fn ai_control_center_mutations_record_observation_trail_against_postgres()
                 score: Some(5),
                 notes: Some("looks good".to_owned()),
             },
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("test prompt");
@@ -1398,7 +1398,7 @@ async fn ai_prompt_create_canonicalizes_legacy_person_scope_to_persona_against_p
                 description: None,
                 metadata: Some(json!({})),
             },
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("create prompt with legacy person entity scope");

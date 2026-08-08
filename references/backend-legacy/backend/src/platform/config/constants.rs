@@ -1,5 +1,5 @@
 pub(crate) const DEFAULT_HTTP_ADDR: &str = "127.0.0.1:8080";
-pub(crate) const DEFAULT_SERVICE_NAME: &str = "hermes-hub-backend";
+pub(crate) const DEFAULT_SERVICE_NAME: &str = "makosh-backend";
 // Local-development fallback per ADR-0056: the API binds to 127.0.0.1 only, so
 // a well-known default lets `cargo run` / `make dev` work without env setup.
 // Packaged desktop builds override it with a per-build random secret.

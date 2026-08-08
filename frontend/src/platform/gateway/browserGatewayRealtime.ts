@@ -6,10 +6,10 @@ import {
 	type ClientRealtimeFrameV1,
 	type ClientRealtimeStreamStateV1,
 	type ClientReplayGapV1,
-} from '../../gen/hermes/gateway/v1/client_realtime_pb'
+} from '../../gen/makosh/gateway/v1/client_realtime_pb'
 
 const REALTIME_PATH = '/api/realtime/v1/events'
-const REALTIME_EVENT_TYPE = 'hermes.realtime.v1'
+const REALTIME_EVENT_TYPE = 'makosh.realtime.v1'
 
 export type BrowserGatewayEventSource = {
 	addEventListener(type: string, listener: (event: Event) => void): void

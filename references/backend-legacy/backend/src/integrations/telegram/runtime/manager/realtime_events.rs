@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 use tokio::sync::mpsc::UnboundedReceiver;
 
@@ -8,7 +8,7 @@ use crate::integrations::telegram::client::store::TelegramStore;
 use crate::integrations::telegram::tdjson::parsing::events::TelegramTdlibTypingSnapshot;
 use crate::platform::events::bus::InMemoryEventBus;
 use crate::platform::events::bus::telegram_event_types;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use super::super::state::TelegramRuntimeEvent;
 use super::chat_events::{
@@ -322,7 +322,7 @@ async fn publish_command_event(
 #[cfg(test)]
 mod typing_tests {
     use chrono::Utc;
-    use hermes_backend_testkit::context::TestContext;
+    use makosh_backend_testkit::context::TestContext;
     use serde_json::json;
 
     use super::command_event_payload;
@@ -349,7 +349,7 @@ mod typing_tests {
             last_error: Some("temporary failure".to_owned()),
             result_payload: json!({"projection_message_id": "msg-1"}),
             audit_metadata: json!({"source": "test"}),
-            actor_id: "hermes-frontend".to_owned(),
+            actor_id: "makosh-frontend".to_owned(),
             happened_at: Utc::now(),
             next_attempt_at: None,
             last_attempt_at: Some(Utc::now()),
@@ -461,7 +461,7 @@ fn typing_changed_event(
     account_id: &str,
     snapshot: &TelegramTdlibTypingSnapshot,
     occurred_at: DateTime<Utc>,
-) -> Result<NewEventEnvelope, hermes_events_api::EventEnvelopeError> {
+) -> Result<NewEventEnvelope, makosh_events_api::EventEnvelopeError> {
     NewEventEnvelope::builder(
         format!(
             "evt_telegram_typing_{}_{}_{}",
@@ -503,7 +503,7 @@ mod tests {
     use std::time::Duration;
 
     use chrono::TimeZone;
-    use hermes_backend_testkit::context::TestContext;
+    use makosh_backend_testkit::context::TestContext;
     use serde_json::json;
     use tokio::sync::mpsc::unbounded_channel;
     use tokio::time::timeout;

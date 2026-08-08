@@ -2,12 +2,12 @@ use serde_json::json;
 use tempfile::tempdir;
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::platform::secrets::store::SecretReferenceStore;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::vault::{HostVault, models::HostVaultConfig};
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::platform::secrets::store::SecretReferenceStore;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::vault::{HostVault, models::HostVaultConfig};
 
 use super::support::{
     LOCAL_API_TOKEN, delete_request_with_token, json_body, json_request_with_token_and_actor,
@@ -24,18 +24,18 @@ async fn delete_mail_account_removes_unbound_host_vault_secret_and_reference() {
     let database = Database::connect(Some(&database_url))
         .await
         .expect("database connection");
-    let config = hermes_backend_testkit::app::config_with_secret_and_database_url(
+    let config = makosh_backend_testkit::app::config_with_secret_and_database_url(
         LOCAL_API_TOKEN,
         database_url.as_str(),
     )
     .with_test_pairs([
-        ("HERMES_DEV_MODE", "true"),
+        ("MAKOSH_DEV_MODE", "true"),
         (
-            "HERMES_VAULT_HOME",
+            "MAKOSH_VAULT_HOME",
             vault_home.to_str().expect("vault path"),
         ),
         (
-            "HERMES_DEV_KEY_PATH",
+            "MAKOSH_DEV_KEY_PATH",
             dev_key_path.to_str().expect("dev key path"),
         ),
     ])
@@ -64,7 +64,7 @@ async fn delete_mail_account_removes_unbound_host_vault_secret_and_reference() {
                 "secret_kind": "app_password"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("setup response");

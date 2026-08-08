@@ -1,9 +1,9 @@
-use hermes_communications_call_evidence_core::{
+use makosh_communications_call_evidence_core::{
     CallDirectionV1, CallEvidenceApplyOutcomeV1, CallEvidenceCoreErrorV1, CallEvidenceProjectionV1,
     CallLifecycleStateV1, CallMediaKindV1, CallProviderProvenanceV1, CallTerminalDispositionV1,
     RecordCallEvidenceV1, apply_call_evidence_v1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool, Row,
     postgres::{PgConnectOptions, PgPoolOptions},
@@ -137,7 +137,7 @@ impl CommunicationsCallEvidencePersistenceV1 {
     pub async fn verify_storage_ready(&self) -> Result<(), CallEvidencePersistenceErrorV1> {
         sqlx::query(
             "SELECT call_evidence_id \
-             FROM hermes_data.communications_call_evidence_projection \
+             FROM makosh_data.communications_call_evidence_projection \
              WHERE FALSE",
         )
         .execute(&self.pool)
@@ -291,7 +291,7 @@ impl CommunicationsCallEvidencePersistenceV1 {
                     canonical_revision, started_at_unix_seconds, connected_at_unix_seconds, \
                     ended_at_unix_seconds, duration_seconds, participant_display_label, \
                     payload_sha256 \
-             FROM hermes_data.communications_call_evidence_projection \
+             FROM makosh_data.communications_call_evidence_projection \
              WHERE logical_owner_id = $1 AND call_evidence_id = $2",
         )
         .bind(logical_owner_id)
@@ -323,7 +323,7 @@ impl CommunicationsCallEvidencePersistenceV1 {
                     canonical_revision, started_at_unix_seconds, connected_at_unix_seconds, \
                     ended_at_unix_seconds, duration_seconds, participant_display_label, \
                     payload_sha256 \
-             FROM hermes_data.communications_call_evidence_projection \
+             FROM makosh_data.communications_call_evidence_projection \
              WHERE logical_owner_id = $1 \
                AND ($2::SMALLINT IS NULL OR provider = $2) \
                AND ($3::SMALLINT IS NULL OR direction = $3) \
@@ -381,7 +381,7 @@ impl CommunicationsCallEvidencePersistenceV1 {
         let rows = sqlx::query(
             "SELECT sequence, call_evidence_id, canonical_revision, lifecycle_state, \
                     terminal_disposition, observed_at_unix_seconds, participant_display_label \
-             FROM hermes_data.communications_call_evidence_realtime_frames \
+             FROM makosh_data.communications_call_evidence_realtime_frames \
              WHERE logical_owner_id = $1 AND sequence > $2 \
              ORDER BY sequence ASC LIMIT $3",
         )
@@ -403,7 +403,7 @@ async fn existing_inbox_outcome(
 ) -> Result<Option<CallEvidenceConsumeOutcomeV1>, CallEvidencePersistenceErrorV1> {
     let row = sqlx::query(
         "SELECT envelope_sha256, outcome, rejection_code, canonical_revision, realtime_sequence \
-         FROM hermes_data.communications_call_evidence_inbox \
+         FROM makosh_data.communications_call_evidence_inbox \
          WHERE logical_owner_id = $1 AND message_id = $2 FOR UPDATE",
     )
     .bind(logical_owner_id)
@@ -454,7 +454,7 @@ async fn load_projection_for_update(
                 canonical_revision, started_at_unix_seconds, connected_at_unix_seconds, \
                 ended_at_unix_seconds, duration_seconds, participant_display_label, \
                 payload_sha256 \
-         FROM hermes_data.communications_call_evidence_projection \
+         FROM makosh_data.communications_call_evidence_projection \
          WHERE logical_owner_id = $1 AND call_evidence_id = $2 FOR UPDATE",
     )
     .bind(logical_owner_id)
@@ -507,7 +507,7 @@ async fn persist_projection(
 ) -> Result<(), CallEvidencePersistenceErrorV1> {
     let evidence = &projection.evidence;
     sqlx::query(
-        "INSERT INTO hermes_data.communications_call_evidence_projection ( \
+        "INSERT INTO makosh_data.communications_call_evidence_projection ( \
              logical_owner_id, call_evidence_id, source_call_cursor_sha256, \
              account_cursor_sha256, conversation_cursor_sha256, participant_cursor_sha256, \
              provider, direction, media_kind, lifecycle_state, terminal_disposition, \
@@ -579,7 +579,7 @@ async fn insert_history(
 ) -> Result<(), CallEvidencePersistenceErrorV1> {
     let evidence = &projection.evidence;
     sqlx::query(
-        "INSERT INTO hermes_data.communications_call_evidence_history ( \
+        "INSERT INTO makosh_data.communications_call_evidence_history ( \
              logical_owner_id, call_evidence_id, canonical_revision, source_revision, \
              message_id, envelope_sha256, lifecycle_state, terminal_disposition, \
              observed_at_unix_seconds \
@@ -605,11 +605,11 @@ async fn next_realtime_sequence(
     logical_owner_id: &str,
 ) -> Result<u64, CallEvidencePersistenceErrorV1> {
     let sequence: i64 = sqlx::query_scalar(
-        "INSERT INTO hermes_data.communications_call_evidence_realtime_sequence ( \
+        "INSERT INTO makosh_data.communications_call_evidence_realtime_sequence ( \
              logical_owner_id, next_sequence \
          ) VALUES ($1, 2) \
          ON CONFLICT (logical_owner_id) DO UPDATE SET \
-             next_sequence = hermes_data.communications_call_evidence_realtime_sequence.next_sequence + 1 \
+             next_sequence = makosh_data.communications_call_evidence_realtime_sequence.next_sequence + 1 \
          RETURNING next_sequence - 1",
     )
     .bind(logical_owner_id)
@@ -628,7 +628,7 @@ async fn insert_realtime_frame(
 ) -> Result<(), CallEvidencePersistenceErrorV1> {
     let evidence = &projection.evidence;
     sqlx::query(
-        "INSERT INTO hermes_data.communications_call_evidence_realtime_frames ( \
+        "INSERT INTO makosh_data.communications_call_evidence_realtime_frames ( \
              logical_owner_id, sequence, call_evidence_id, canonical_revision, \
              lifecycle_state, terminal_disposition, observed_at_unix_seconds, \
              participant_display_label \
@@ -662,7 +662,7 @@ async fn insert_inbox(
     consumed_at_unix_seconds: i64,
 ) -> Result<(), CallEvidencePersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.communications_call_evidence_inbox ( \
+        "INSERT INTO makosh_data.communications_call_evidence_inbox ( \
              logical_owner_id, message_id, envelope_sha256, call_evidence_id, outcome, \
              rejection_code, canonical_revision, realtime_sequence, consumed_at_unix_seconds \
          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",

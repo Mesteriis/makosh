@@ -1,7 +1,7 @@
 # ScrollArea
 
 ## Description
-Tokenized scroll container using the shared Hermes/Reka boundary.
+Tokenized scroll container using the shared Макошь/Reka boundary.
 
 ## When to use
 Use for local scroll regions inside panels, lists and component previews.

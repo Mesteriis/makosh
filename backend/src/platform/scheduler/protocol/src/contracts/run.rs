@@ -1,6 +1,6 @@
 //! Run identity and lease fencing for one scheduled fire point.
 
-use hermes_clock_protocol::UtcMillisV1;
+use makosh_clock_protocol::UtcMillisV1;
 
 use crate::contracts::schedule::{ScheduleIdV1, ScheduleRevisionV1};
 

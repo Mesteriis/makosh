@@ -21,9 +21,9 @@
 - Group / Группа: `.supergoal`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -53,17 +53,17 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ## Source Files / Исходные файлы
 
-### `.supergoal/hermes-docs-alignment-Q2wXmK/ROADMAP.md`
+### `.supergoal/makosh-docs-alignment-Q2wXmK/ROADMAP.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-docs-alignment-Q2wXmK/ROADMAP.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-docs-alignment-Q2wXmK/ROADMAP.md`
 - Size bytes / Размер в байтах: `23557`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
 
 ````markdown
-# Roadmap: Hermes Docs Alignment
+# Roadmap: Макошь Docs Alignment
 
-**Task:** Устранить расхождения между документацией и реализацией в Hermes Hub: Persona naming, Communication domain, Notes backend, frontend states, Telegram/Mail parity и тестовая инфраструктура.
+**Task:** Устранить расхождения между документацией и реализацией в Макошь: Persona naming, Communication domain, Notes backend, frontend states, Telegram/Mail parity и тестовая инфраструктура.
 
 **Type:** brownfield, refactor, alignment
 
@@ -313,9 +313,9 @@ flowchart TD
 ````
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
-### `.supergoal/hermes-docs-alignment-Q2wXmK/STATE.md`
+### `.supergoal/makosh-docs-alignment-Q2wXmK/STATE.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-docs-alignment-Q2wXmK/STATE.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-docs-alignment-Q2wXmK/STATE.md`
 - Size bytes / Размер в байтах: `1907`
 - Included characters / Включено символов: `1841`
 - Truncated / Обрезано: `no`
@@ -323,9 +323,9 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 ```markdown
 # Supergoal State
 
-**Run:** Hermes Docs Alignment
+**Run:** Макошь Docs Alignment
 
-**Root:** `.supergoal/hermes-docs-alignment-Q2wXmK`
+**Root:** `.supergoal/makosh-docs-alignment-Q2wXmK`
 
 **Status:** PLANNING
 
@@ -372,15 +372,15 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 - 2026-06-14 — 12 gaps identified from documentation/backend/frontend audits.
 ```
 
-### `.supergoal/hermes-docs-alignment-Q2wXmK/THINKING.md`
+### `.supergoal/makosh-docs-alignment-Q2wXmK/THINKING.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-docs-alignment-Q2wXmK/THINKING.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-docs-alignment-Q2wXmK/THINKING.md`
 - Size bytes / Размер в байтах: `22926`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
 
 ````markdown
-# THINKING — Hermes Docs Alignment
+# THINKING — Макошь Docs Alignment
 
 ## Goals
 
@@ -413,7 +413,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### Продуктовые (из master-spec.md)
 
-- Hermes — Personal Memory System, не email client, CRM, task tracker, calendar, notes app.
+- Макошь — Personal Memory System, не email client, CRM, task tracker, calendar, notes app.
 - Центральная ценность — context, не CRUD.
 - Notes — lightweight document-like artifact, не полноценный domain без ADR.
 - Communications — единый domain; email, Telegram, WhatsApp, calls, meetings — channels.
@@ -434,7 +434,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 |---|---|
 | **1. Breaking API changes при rename Persons→Personas** | Ввести `/api/v1/personas/` как новый route, оставить `/api/v1/persons/` как redirect/compatibility. ADR перед rename. |
 | **2. God component CommunicationsPage (891 строк) невозможно рефакторить без регрессий** | Декомпозиция пошагово: вынести query-логику в composables, затем выделить подкомпоненты (MailPanel, TelegramPanel, WhatsAppPanel), верифицировать каждый шаг build pass. |
-| **3. Cross-domain review store ломает domain isolation** | Выделить shared `@hermes-types/review` с minimal интерфейсами. Review store импортирует только shared types, не конкретные domain modules. |
+| **3. Cross-domain review store ломает domain isolation** | Выделить shared `@makosh-types/review` с minimal интерфейсами. Review store импортирует только shared types, не конкретные domain modules. |
 | **4. Notes backend отсутствует — frontend вызывает `/api/v1/notes` который не существует** | Добавить placeholder backend handler, возвращающий `{ items: [] }`. Либо explicit error с понятным сообщением. |
 | **5. Только 1 placeholder тест — регрессии не отлавливаются** | Каждая фаза alignment должна включать добавление тестов (хотя бы smoke/integration для изменённых модулей). |
 | **6. Telegram/Mail parity — огромный объём, нереалистичный для одной фазы** | Разбить на подфазы: baseline (существующее), must-have (критическое для использования), nice-to-have (отложить). |
@@ -477,7 +477,7 @@ flowchart TD
 
 ## Memory Hits Applied
 
-- **Vue 3 SvelteKit Migration завершена** — `.supergoal/hermes-frontend-migration-vue-3-WzENWm/STATE.md` подтверждает 15 фаз, build pass на каждой. Фронтенд现在是 Vue 3 + Pinia + TanStack Query.
+- **Vue 3 SvelteKit Migration завершена** — `.supergoal/makosh-frontend-migration-vue-3-WzENWm/STATE.md` подтверждает 15 фаз, build pass на каждой. Фронтенд现在是 Vue 3 + Pinia + TanStack Query.
 - **God component CommunicationsPage** — 891 строка, 17 imports, смесь TanStack Query и raw `fetch()`. Наследие от SvelteKit migration.
 - **Review store** (`frontend/src/domains/review/stores/review.ts`) импортирует напрямую из `personas/api/personas`, `tasks/api/tasks`, `knowledge/api/knowledge` — прямое нарушение domain isolation.
 - **Organizations domain** не имеет Pinia store (только types и components).
@@ -600,13 +600,13 @@ export interface ReviewRelationship {
 
 **Детали**:
 #### Frontend:
-- Вынести TanStack Query хуки из 
+- Вынести TanStack Query хуки из
 ````
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
-### `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-1.md`
+### `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-1.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-1.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-1.md`
 - Size bytes / Размер в байтах: `4409`
 - Included characters / Включено символов: `3530`
 - Truncated / Обрезано: `no`
@@ -700,9 +700,9 @@ Depends on phases: none
 - Инвентаризацию сохранить в `docs/refactoring/` для reference
 ```
 
-### `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-10.md`
+### `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-10.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-10.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-10.md`
 - Size bytes / Размер в байтах: `5686`
 - Included characters / Включено символов: `4744`
 - Truncated / Обрезано: `no`
@@ -730,7 +730,7 @@ Depends on phases: all phases P1-P9
 
 ### 2. Security Review
 - [ ] **Input validation:** Проверить все новые API endpoints на валидацию входных данных
-- [ ] **X-Hermes-Secret:** Убедиться, что все frontend API calls используют централизованный ApiClient с X-Hermes-Secret
+- [ ] **X-Макошь-Secret:** Убедиться, что все frontend API calls используют централизованный ApiClient с X-Макошь-Secret
 - [ ] **No secrets in bundle:** Проверить frontend bundle на наличие API keys, tokens
 - [ ] **No credential exposure:** Проверить audit logs на отсутствие credential payloads
 
@@ -804,9 +804,9 @@ Depends on phases: all phases P1-P9
 - Обновить STATE.md до COMPLETE статуса после завершения
 ```
 
-### `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-2.md`
+### `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-2.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-2.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-2.md`
 - Size bytes / Размер в байтах: `4186`
 - Included characters / Включено символов: `3565`
 - Truncated / Обрезано: `no`
@@ -892,9 +892,9 @@ Depends on phases: Phase 1
 - Check `docs/adr/ADR-0090` if exists for compatible storage decisions
 ```
 
-### `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-3.md`
+### `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-3.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-3.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-3.md`
 - Size bytes / Размер в байтах: `4556`
 - Included characters / Включено символов: `3939`
 - Truncated / Обрезано: `no`
@@ -986,9 +986,9 @@ domains/mail/ содержит ~100+ файлов и является God direct
 - ADR-0073 backend module organization — reference для структуры модулей
 ```
 
-### `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-4.md`
+### `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-4.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-4.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-4.md`
 - Size bytes / Размер в байтах: `4216`
 - Included characters / Включено символов: `3571`
 - Truncated / Обрезано: `no`
@@ -1078,9 +1078,9 @@ docs/domains/notes.md и frontend компоненты NotesList.vue сущес�
 - Не требуется schema migration если используется event store или JSONB в существующей таблице
 ```
 
-### `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-5.md`
+### `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-5.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-5.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-5.md`
 - Size bytes / Размер в байтах: `5447`
 - Included characters / Включено символов: `4862`
 - Truncated / Обрезано: `no`
@@ -1187,9 +1187,9 @@ CommunicationsPage.vue 891 строк превышает порог 500 стро
 - Reference существующие store patterns в других domains
 ```
 
-### `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-6.md`
+### `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-6.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-6.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-6.md`
 - Size bytes / Размер в байтах: `4814`
 - Included characters / Включено символов: `4136`
 - Truncated / Обрезано: `no`
@@ -1288,9 +1288,9 @@ WhatsApp domain GAP-6 и Organizations domain GAP-6 не имеют Pinia stores
 - Reference persons store `frontend/src/domains/personas/stores/personas.ts` как pattern
 ```
 
-### `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-7.md`
+### `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-7.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-7.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-7.md`
 - Size bytes / Размер в байтах: `4384`
 - Included characters / Включено символов: `3841`
 - Truncated / Обрезано: `no`
@@ -1385,9 +1385,9 @@ Depends on phases: Phase 2, Phase 6
 - Переименовывать файлы через git mv или create new + redirect old
 ```
 
-### `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-8.md`
+### `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-8.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-8.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-8.md`
 - Size bytes / Размер в байтах: `4010`
 - Included characters / Включено символов: `3658`
 - Truncated / Обрезано: `no`
@@ -1403,7 +1403,7 @@ Depends on phases: Phase 3
 
 ## Why
 
-Telegram модуль GAP-9 имеет частичную реализацию. Требуется паритет с Telegram Desktop для ключевых сценариев, чтобы пользователи могли полностью управлять Telegram через Hermes.
+Telegram модуль GAP-9 имеет частичную реализацию. Требуется паритет с Telegram Desktop для ключевых сценариев, чтобы пользователи могли полностью управлять Telegram через Макошь.
 
 ## Work
 
@@ -1496,9 +1496,9 @@ Telegram модуль GAP-9 имеет частичную реализацию. 
 - Telegram store refactor: только UI state в store, business logic в composables
 ```
 
-### `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-9.md`
+### `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-9.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-9.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-9.md`
 - Size bytes / Размер в байтах: `4318`
 - Included characters / Включено символов: `3944`
 - Truncated / Обрезано: `no`
@@ -1514,7 +1514,7 @@ Depends on phases: Phase 3
 
 ## Why
 
-Mail модуль GAP-10 требует паритет с Outlook/Apple Mail/Thunderbird для ключевых сценариев. Rich composition, rules, templates, signatures и multi-account sync необходимы для полноценного использования Hermes как primary mail client.
+Mail модуль GAP-10 требует паритет с Outlook/Apple Mail/Thunderbird для ключевых сценариев. Rich composition, rules, templates, signatures и multi-account sync необходимы для полноценного использования Макошь как primary mail client.
 
 ## Work
 
@@ -1618,9 +1618,9 @@ Mail модуль GAP-10 требует паритет с Outlook/Apple Mail/Thu
 - Mail module parity — крупнейшая фаза по объёму; рассмотреть разбивку на sub-phases
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/PROTOCOL.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/PROTOCOL.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/PROTOCOL.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/PROTOCOL.md`
 - Size bytes / Размер в байтах: `9371`
 - Included characters / Включено символов: `9341`
 - Truncated / Обрезано: `no`
@@ -1630,17 +1630,17 @@ Mail модуль GAP-10 требует паритет с Outlook/Apple Mail/Thu
 
 This file is read by the executing agent at the start of the single `/goal` session and followed throughout. It is the operating manual for the autonomous run.
 
-All paths below are rooted at this run's artifact directory (`.supergoal/hermes-frontend-migration-vue-3-WzENWm`) — the concrete namespaced path is baked in when this file is copied at Stage 7, so two runs in the same working tree read and write entirely separate artifacts.
+All paths below are rooted at this run's artifact directory (`.supergoal/makosh-frontend-migration-vue-3-WzENWm`) — the concrete namespaced path is baked in when this file is copied at Stage 7, so two runs in the same working tree read and write entirely separate artifacts.
 
 ## The loop
 
 Repeat until `SUPERGOAL_RUN_COMPLETE` is printed:
 
-1. Read `.supergoal/hermes-frontend-migration-vue-3-WzENWm/STATE.md`. Find `Current phase: N`.
-2. Read `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-N.md`. This is your full work spec.
+1. Read `.supergoal/makosh-frontend-migration-vue-3-WzENWm/STATE.md`. Find `Current phase: N`.
+2. Read `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-N.md`. This is your full work spec.
 3. Print `SUPERGOAL_PHASE_START` with the spec's metadata (phase number, name, task, mandatory commands, acceptance count, evidence types, dependencies).
 4. Do the work described in the spec. Run mandatory commands. Surface evidence into the transcript (command output last ~10 lines + exit code; file listings; key diff excerpts).
-5. Print `SUPERGOAL_PHASE_VERIFY`: each acceptance criterion `pass|fail` with evidence; engineering checks (build/typecheck/lint/tests); **cleanliness checks** — run `bash .supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-state.sh added-lines <Baseline ref>` (the complete set of added/new lines since baseline, **including uncommitted and untracked work**) and grep it for stack-specific debug patterns — `console.log`/`console.error` for JS/TS; `print(`/`pprint(` for Python; `print(`/`dump(` for Swift; `fmt.Println`/`log.Println` for Go; session TODO/FIXME added this phase; dead imports added; files changed count via `bash .supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-state.sh changed-files <Baseline ref> | wc -l`; notable diff one-liners. Any non-zero cleanliness count triggers the same 3-strike treatment as a failed criterion unless the phase spec explicitly declares a `Cleanliness override:` line (e.g., a debug-tooling phase legitimately ships logs). The complete-working-tree comparison is documented once in `references/repo-state-comparison.md`.
+5. Print `SUPERGOAL_PHASE_VERIFY`: each acceptance criterion `pass|fail` with evidence; engineering checks (build/typecheck/lint/tests); **cleanliness checks** — run `bash .supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-state.sh added-lines <Baseline ref>` (the complete set of added/new lines since baseline, **including uncommitted and untracked work**) and grep it for stack-specific debug patterns — `console.log`/`console.error` for JS/TS; `print(`/`pprint(` for Python; `print(`/`dump(` for Swift; `fmt.Println`/`log.Println` for Go; session TODO/FIXME added this phase; dead imports added; files changed count via `bash .supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-state.sh changed-files <Baseline ref> | wc -l`; notable diff one-liners. Any non-zero cleanliness count triggers the same 3-strike treatment as a failed criterion unless the phase spec explicitly declares a `Cleanliness override:` line (e.g., a debug-tooling phase legitimately ships logs). The complete-working-tree comparison is documented once in `references/repo-state-comparison.md`.
 6. **Memory writeback check.** Anything non-obvious learned this phase? If yes, write a memory file under the detected MEM_DIR (frontmatter: `name`, `description`, `metadata.type` of `feedback`/`project`/`reference`/`user`); link it from `MEMORY.md`. Print `MEMORY_SAVED: <name>` or `MEMORY_SAVED: none`.
 7. Print `SUPERGOAL_PHASE_DONE`. Update `STATE.md`: mark phase N completed; set `Current phase: N+1`; bump `Last update` timestamp; append a one-line event.
 8. **User-interrupt check.** If a user message has arrived since the last turn, pause; address the message; ask before resuming.
@@ -1654,15 +1654,15 @@ Per-phase VERIFY blocks are self-reports. The audit closes that loophole by re-v
 ### Audit steps (one round)
 
 1. Print `AUDIT_START` (round number, total phase count, criteria count, deduplicated mandatory commands to re-run).
-2. Re-read `.supergoal/hermes-frontend-migration-vue-3-WzENWm/ROADMAP.md` and pull every phase's acceptance criteria fresh from the original plan.
+2. Re-read `.supergoal/makosh-frontend-migration-vue-3-WzENWm/ROADMAP.md` and pull every phase's acceptance criteria fresh from the original plan.
 3. **Phase completeness:** scan the transcript for one `SUPERGOAL_PHASE_DONE` per phase 1..N. Any missing = an `AUDIT_GAP`.
 4. **Re-run aggregated mandatory commands** once each (build / typecheck / lint / full test suite — whatever the union of all phases' mandatory commands is, deduplicated). Surface last ~10 lines + exit code. Non-zero exit = an `AUDIT_GAP`.
 5. **Spot-check verifiable acceptance criteria** across all phases:
    - "File X exists" / "Function Y exported" / "Config key Z set" / "No `console.log` in app code" → re-check via `ls`/`grep`/`cat`.
    - "Screenshot showed X" / "Manual smoke test passed" / non-deterministic checks → mark `trust-prior-verify`, don't re-run.
-5b. **Deliverable check** — for each phase block in `.supergoal/hermes-frontend-migration-vue-3-WzENWm/ROADMAP.md`, parse the `**Deliverables:**` bullets. For every bullet that names a file path or glob:
-   - Read `Baseline ref:` from `.supergoal/hermes-frontend-migration-vue-3-WzENWm/STATE.md`.
-   - Run `bash .supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-state.sh deliverable <baseline-ref> "<path>"`. It compares the **complete working tree** (committed + staged + unstaged + deleted) against the baseline and detects untracked new files separately, printing `present — <evidence>` (exit 0) or `missing` (exit 1). An invalid/unavailable baseline degrades to a filesystem existence check. Strategy: `references/repo-state-comparison.md`.
+5b. **Deliverable check** — for each phase block in `.supergoal/makosh-frontend-migration-vue-3-WzENWm/ROADMAP.md`, parse the `**Deliverables:**` bullets. For every bullet that names a file path or glob:
+   - Read `Baseline ref:` from `.supergoal/makosh-frontend-migration-vue-3-WzENWm/STATE.md`.
+   - Run `bash .supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-state.sh deliverable <baseline-ref> "<path>"`. It compares the **complete working tree** (committed + staged + unstaged + deleted) against the baseline and detects untracked new files separately, printing `present — <evidence>` (exit 0) or `missing` (exit 1). An invalid/unavailable baseline degrades to a filesystem existence check. Strategy: `references/repo-state-comparison.md`.
    - `missing` (exit 1) → `AUDIT_GAP: phase <N> deliverable "<bullet>" not present in working tree or diff`.
    - This is repository ground truth, not transcript self-report — it catches the "agent said done but didn't ship" case the per-phase VERIFY cannot, even when the run never committed.
 6. Print `AUDIT_VERIFY` with each phase's status, each command's exit, each criterion's pass/fail/trust-prior + evidence, and a `Deliverables:` block summarizing the step-5b check (`<deliverable>: present|missing` lines).
@@ -1670,7 +1670,7 @@ Per-phase VERIFY blocks are self-reports. The audit closes that loophole by re-v
 ### If gaps found
 
 1. Print `AUDIT_GAPS` with the list.
-2. Write `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/audit-fix-<round>.md` — a focused fix spec that targets only the failing criteria. Forbid scope creep. Use the affected phases' original VERIFY as the success gate.
+2. Write `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/audit-fix-<round>.md` — a focused fix spec that targets only the failing criteria. Forbid scope creep. Use the affected phases' original VERIFY as the success gate.
 3. Execute the fix spec inline (same agent, same `/goal`, same per-criterion 3-strike protocol from regular phases).
 4. On fix success: loop back to step 1 of the audit (round + 1).
 5. On 3rd round's audit failure: print `AUDIT_HANDOFF` (full gap history, suggested next move), update `STATE.md` to `BLOCKED`, stop. Do **not** print `SUPERGOAL_RUN_COMPLETE`.
@@ -1686,13 +1686,13 @@ Per-phase VERIFY blocks are self-reports. The audit closes that loophole by re-v
 ### First failure of any acceptance criterion
 
 1. Print `FAILURE_PROBE` (phase, failed criterion, what was tried, root-cause hypothesis).
-2. Append the probe to `.supergoal/hermes-frontend-migration-vue-3-WzENWm/STATE.md` failure log.
+2. Append the probe to `.supergoal/makosh-frontend-migration-vue-3-WzENWm/STATE.md` failure log.
 3. **Auto-retry the same phase once.** Inject the probe as a "Previous attempt failed because: …" preamble. Do not advance.
 
 ### Second failure (auto-retry also failed)
 
 1. Print `FAILURE_ESCALATE`.
-2. Write a focused **fix spec** at `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-N.fix.md`. The fix spec:
+2. Write a focused **fix spec** at `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-N.fix.md`. The fix spec:
    - Targets only the failing criterion.
    - Forbids scope creep ("do not touch unrelated files").
    - Ends with the original phase's VERIFY block as the success gate.
@@ -1735,17 +1735,17 @@ See `references/goal-format.md` for the exact format of:
 - `FAILURE_PROBE` / `FAILURE_ESCALATE` / `FAILURE_HANDOFF`
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/ROADMAP.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/ROADMAP.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/ROADMAP.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/ROADMAP.md`
 - Size bytes / Размер в байтах: `20457`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
 
 ```markdown
-# Roadmap: Hermes Frontend Migration to Vue 3
+# Roadmap: Макошь Frontend Migration to Vue 3
 
-**Task:** Complete migration of Hermes Hub frontend from SvelteKit 2 + Svelte 5 to Vue 3 + TypeScript + Vite + Tauri 2
+**Task:** Complete migration of Макошь frontend from SvelteKit 2 + Svelte 5 to Vue 3 + TypeScript + Vite + Tauri 2
 **Type:** brownfield, refactor, ui
 **Created:** 2026-06-14
 **Total phases:** 15
@@ -1806,8 +1806,8 @@ Non-blocking decisions recorded here so we can proceed without round-trips. If a
 - `frontend/package.json`, `frontend/pnpm-lock.yaml` with Vue 3 + all target dependencies
 - `frontend/vite.config.ts` configured for Vue 3 + Tauri 2
 - `frontend/tsconfig.json` with strict TypeScript
-- `frontend/tailwind.config.ts` with Hermes theme tokens
-- `frontend/src/platform/api-client.ts` — ported ApiClient with X-Hermes-Secret
+- `frontend/tailwind.config.ts` with Макошь theme tokens
+- `frontend/src/platform/api-client.ts` — ported ApiClient with X-Макошь-Secret
 - `frontend/src/platform/sse-client.ts` — SSE client foundation
 - `frontend/src/platform/i18n/` — i18n system (ru.json, en.json, composable)
 - `frontend/tailwind.config.ts` — theme tokens from tokens.css
@@ -1819,8 +1819,8 @@ Non-blocking decisions recorded here so we can proceed without round-trips. If a
 - [ ] `pnpm lint` passes (or has baseline lint config)
 - [ ] Vue app renders blank page at `http://localhost:5173`
 - [ ] i18n system loads ru.json and renders Russian text
-- [ ] ApiClient sends X-Hermes-Secret header correctly
-- [ ] Tailwind theme matches Hermes color tokens (check primary, surface, text colors)
+- [ ] ApiClient sends X-Макошь-Secret header correctly
+- [ ] Tailwind theme matches Макошь color tokens (check primary, surface, text colors)
 - [ ] TypeScript strict mode enabled (no `strict: false`)
 - [ ] No `.svelte` or `.svelte-kit` files in new `src/` directory
 - [ ] Old SvelteKit code exists in `frontend/src-svelte/` and is ignored by new build
@@ -1833,7 +1833,7 @@ Non-blocking decisions recorded here so we can proceed without round-trips. If a
 - `pnpm build` output last 10 lines
 - File listing of new `frontend/src/` directory
 - File listing confirming `frontend/src-svelte/` exists with old code
-- Tailwind config showing Hermes theme tokens
+- Tailwind config showing Макошь theme tokens
 
 **Dependencies:** none
 
@@ -1864,7 +1864,7 @@ Non-blocking decisions recorded here so we can proceed without round-trips. If a
 - [ ] Notifications drawer opens/closes
 - [ ] User menu opens/closes
 - [ ] Layout editing mode can be toggled
-- [ ] All CSS/styling matches existing Hermes visual identity
+- [ ] All CSS/styling matches existing Макошь visual identity
 - [ ] `pnpm build` passes
 - [ ] No Svelte code in new src/
 
@@ -1891,14 +1891,14 @@ Non-blocking decisions recorded here so we can proceed without round-trips. If a
 
 **Acceptance criteria:**
 - [ ] All shadcn-vue components render correctly in isolation
-- [ ] Components use Hermes theme tokens (colors, spacing, typography)
+- [ ] Components use Макошь theme tokens (colors, spacing, typography)
 - [ ] Button supports variants (default, secondary, outline, ghost, destructive)
 - [ ] Dialog opens/closes with animation
 - [ ] Dropdown menu opens on click
 - [ ] Tooltip shows on hover
 - [ ] Toast notification shows and auto-dismisses
 - [ ] `pnpm build` passes
-- [ ] Components match existing Hermes visual style (not generic shadcn defaults)
+- [ ] Components match existing Макошь visual style (not generic shadcn defaults)
 - [ ] TypeScript strict — no `any` without written explanation
 
 **Mandatory commands:**
@@ -1934,7 +1934,7 @@ Non-blocking decisions recorded here so we can proceed without round-trips. If a
 - [ ] AI settings panels render
 - [ ] Settings changes are saved via API
 - [ ] `pnpm build` passes
-- [ ] Visual style matches existing Hermes settings
+- [ ] Visual style matches existing Макошь settings
 
 **Mandatory commands:**
 - `cd frontend && pnpm build`
@@ -1964,7 +1964,7 @@ Non-blocking decisions recorded here so we can proceed without round-trips. If a
 - [ ] Widgets show real data from API (not mock data)
 - [ ] Widget layout responds to workspace resizing
 - [ ] `pnpm build` passes
-- [ ] Visual style matches existing Hermes home
+- [ ] Visual style matches existing Макошь home
 
 **Mandatory commands:**
 - `cd frontend && pnpm build`
@@ -1993,7 +1993,7 @@ Non-blocking decisions recorded here so we can proceed without round-trips. If a
 - [ ] Relationship review panel renders
 - [ ] Organizations page renders with dashboard, hero, rail widgets
 - [ ] `pnpm build` passes
-- [ ] Visual style matches existing Hermes
+- [ ] Visual style matches existing Макошь
 
 **Mandatory commands:**
 - `cd frontend && pnpm build`
@@ -2014,21 +2014,21 @@ Non-blocking decisions recorded here so we can proceed without round-trips. If a
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/STATE.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/STATE.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/STATE.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/STATE.md`
 - Size bytes / Размер в байтах: `14877`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
 
 ```markdown
-# State: Hermes Frontend Migration to Vue 3
+# State: Макошь Frontend Migration to Vue 3
 
 **Status:** COMPLETED
 **Current phase:** 15 (COMPLETE)
 **Started:** 2026-06-14
 **Last update:** 2026-06-14
-**Run root:** .supergoal/hermes-frontend-migration-vue-3-WzENWm
+**Run root:** .supergoal/makosh-frontend-migration-vue-3-WzENWm
 **Baseline ref:** 7f1cf42f18d5616ecb3bd9e93bf2c8d47903a772
 
 ## Phase progress
@@ -2076,7 +2076,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 - 2026-06-14 — Pre-flight green: all 3 commands clean (build 0, lint 0, test 0).
 - 2026-06-14 — Phase 1 complete: Vue scaffold, deps, platform layer, Tailwind, i18n, SSE. Build passes.
 - 2026-06-14 — Phase 2 complete: 16 placeholder views, Vue Router with hash mode, 5 Pinia stores (navigation, theme, sidebar, notifications, layoutEditor), 4 shell components (Sidebar, Topbar, NotificationsDrawer, LayoutEditControls), AppShell layout, shell CSS variables and theme classes. Build passes with all 10 ACs.
-- 2026-06-14 — Phase 3 complete: 32 Hermes-themed UI primitives built from reka-ui headless components (Button, Input, Textarea, Label, Badge, Card system, Tabs, Select, Switch, Separator, Skeleton, ScrollArea, Icon, Dialog, Sheet, Avatar, Progress, Toast, Command, DropdownMenu, Tooltip, Popover), 4 composables (useClickOutside, useKeyboard, useEscapeKey, useResizeObserver), 2 transition wrappers (FadeTransition, SlideTransition), barrel export. Build passes (123 modules, 652ms).
+- 2026-06-14 — Phase 3 complete: 32 Макошь-themed UI primitives built from reka-ui headless components (Button, Input, Textarea, Label, Badge, Card system, Tabs, Select, Switch, Separator, Skeleton, ScrollArea, Icon, Dialog, Sheet, Avatar, Progress, Toast, Command, DropdownMenu, Tooltip, Popover), 4 composables (useClickOutside, useKeyboard, useEscapeKey, useResizeObserver), 2 transition wrappers (FadeTransition, SlideTransition), barrel export. Build passes (123 modules, 652ms).
 - 2026-06-14 — Phase 4 complete: 6 settings panels (AppearanceSettings, LanguageSettings, ApplicationSettings, SidebarSettings, IntegrationsSettings, AISettingsControlCenter), SettingsPage with navigation tree, route via SettingsView. Build passes (150 modules, 770ms).
 - 2026-06-14 — Phase 5 complete: Home domain (types/api/queries), 7 widget components (HomeMetrics, HomeWhatsNew, HomePriorities, HomeUpcoming, HomePeopleTalked, HomeSystemStatus, HomeActiveProjects), HomePage with data wiring. Route /home via existing HomeView. Build passes (780ms).
 - 2026-06-14 — Phase 6 complete: Personas domain (types/api/queries/store, 5 widgets, PersonsPage), Organizations domain (types/queries, 2 widgets, OrganizationsPage), route registration. Build passes (206 modules, 1.17s).
@@ -2090,15 +2090,15 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/THINKING.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/THINKING.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/THINKING.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/THINKING.md`
 - Size bytes / Размер в байтах: `6378`
 - Included characters / Включено символов: `6314`
 - Truncated / Обрезано: `no`
 
 ```markdown
-# THINKING.md — Hermes Frontend Vue 3 Migration
+# THINKING.md — Макошь Frontend Vue 3 Migration
 
 ## Goals
 
@@ -2118,7 +2118,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 - **ADR-0004**: Tauri 2 desktop shell. `frontendDist` in tauri.conf.json points to build output. `beforeDevCommand` runs pnpm dev.
 - **ADR-0026**: Desktop-first responsive UI (800x600 minimum).
 - **ADR-0031**: No mobile UI design or validation.
-- **ADR-0056**: X-Hermes-Secret header for API auth. Actor = "hermes-frontend".
+- **ADR-0056**: X-Макошь-Secret header for API auth. Actor = "makosh-frontend".
 - **ADR-0077**: i18n with ru.json and en.json dictionaries. English strings = translation keys.
 - **AGENTS.md**: TDD preferred, no broad rewrites without validation, must run configured lint/test.
 - **User spec**: Visual identity must be preserved. No redesign. Same colors, typography, spacing, surfaces.
@@ -2163,7 +2163,7 @@ Target stack uses many new libraries (TanStack Query, TanStack Table, TanStack V
 
 ## Open Questions (Assumed)
 
-- **AQ1**: Vue app will be created in `frontend/` directory, replacing the SvelteKit `src/` contents. The old SvelteKit code will be kept in a backup directory or git branch until cutover. 
+- **AQ1**: Vue app will be created in `frontend/` directory, replacing the SvelteKit `src/` contents. The old SvelteKit code will be kept in a backup directory or git branch until cutover.
   - *Decision*: Actually, creating alongside is safer. Vue app goes in `frontend/` as the new primary, SvelteKit remains in `frontend/src-svelte/` during migration.
 - **AQ2**: Tauri config will be updated at cutover phase to point to Vue build output.
 - **AQ3**: Migration order: Foundation → Shell → Settings → Home → Persons → Projects → Tasks → Calendar → Documents → Notes → Knowledge → Review → Organizations → Agents → Timeline → Communications → Telegram → WhatsApp → Polish → Cutover.
@@ -2191,9 +2191,9 @@ None — no memory directory found for this project.
 - TDD for new logic (write failing test first)
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/context.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/context.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/context.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/context.md`
 - Size bytes / Размер в байтах: `975`
 - Included characters / Включено символов: `973`
 - Truncated / Обрезано: `no`
@@ -2235,7 +2235,7 @@ Makefile targets:
 
 ## Git
 - Branch: `main`
-- Remote: git@github.com:Mesteriis/hermes-os.git
+- Remote: git@github.com:Mesteriis/makosh-os.git
 - Working tree: 22 files changed
 
 ## Test / lint heuristics
@@ -2243,9 +2243,9 @@ Makefile targets:
 _End stack context._
 ```
 
-### `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-1.md`
+### `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-1.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-1.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-1.md`
 - Size bytes / Размер в байтах: `6771`
 - Included characters / Включено символов: `6727`
 - Truncated / Обрезано: `no`
@@ -2298,7 +2298,7 @@ All subsequent phases depend on the Vue project scaffold, build configuration, p
      - Shadow/elevation tokens
      - Transition durations
    - Create `frontend/src/platform/theme/tokens.ts` — typed token constants for use outside Tailwind classes
-   - Create CSS bridge file that imports Tailwind directives + applies Hermes custom properties at `:root`
+   - Create CSS bridge file that imports Tailwind directives + applies Макошь custom properties at `:root`
 
 5. **Port i18n system:**
    - Create `frontend/src/platform/i18n/ru.json` — copy from existing ru.json dictionary
@@ -2311,7 +2311,7 @@ All subsequent phases depend on the Vue project scaffold, build configuration, p
 6. **Port API client:**
    - Create `frontend/src/platform/api/ApiClient.ts` — port from existing `frontend/src-svelte/lib/api/client.ts`
    - Same interface: `get<T>`, `post<T>`, `put<T>`, `patch<T>`, `delete<T>`
-   - Same auth: reads `X-Hermes-Secret` from config/env
+   - Same auth: reads `X-Макошь-Secret` from config/env
    - Create `frontend/src/platform/api/index.ts` — exports singleton instance
    - Create `frontend/src/platform/api/types.ts` — shared API types (ApiError, pagination types)
    - Create `frontend/src/config/index.ts` — `apiBaseUrl` from env/Vite import.meta.env
@@ -2338,8 +2338,8 @@ All subsequent phases depend on the Vue project scaffold, build configuration, p
 - [ ] AC2: `cd frontend && pnpm lint:ts` (vue-tsc) exits 0
 - [ ] AC3: Vue app renders a blank page at `http://localhost:5173` (start dev server, verify)
 - [ ] AC4: i18n system loads ru.json and renders Russian text in the test component
-- [ ] AC5: ApiClient sends `X-Hermes-Secret` header correctly (inspect via curl or log)
-- [ ] AC6: Tailwind theme in `tailwind.config.ts` matches all Hermes color tokens from tokens.css
+- [ ] AC5: ApiClient sends `X-Макошь-Secret` header correctly (inspect via curl or log)
+- [ ] AC6: Tailwind theme in `tailwind.config.ts` matches all Макошь color tokens from tokens.css
 - [ ] AC7: TypeScript strict mode enabled in tsconfig (`strict: true`, no `strict: false`)
 - [ ] AC8: No `.svelte` or `.svelte-kit` files in the new `frontend/src/` directory
 - [ ] AC9: Old SvelteKit code exists in `frontend/src-svelte/` and is excluded from the new build
@@ -2354,8 +2354,8 @@ All subsequent phases depend on the Vue project scaffold, build configuration, p
 - `pnpm build` output — last 10 lines showing success
 - File listing of `frontend/src/` (showing new Vue structure)
 - File listing confirming `frontend/src-svelte/` exists
-- Tailwind config snippet showing Hermes color tokens
-- ApiClient class showing X-Hermes-Secret header
+- Tailwind config snippet showing Макошь color tokens
+- ApiClient class showing X-Макошь-Secret header
 
 ## Notes
 

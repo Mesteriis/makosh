@@ -19,7 +19,7 @@ runtime lifecycles, command paths, health contracts and test fixtures. That
 made a personal communication source look like a provider platform and kept
 large, unrelated branches in the backend composition root.
 
-Hermes currently needs one local-first WhatsApp acquisition boundary. It does
+Макошь currently needs one local-first WhatsApp acquisition boundary. It does
 not need a Business API, a native protocol implementation or automatic runtime
 topology selection.
 
@@ -32,7 +32,7 @@ WebView for `https://web.whatsapp.com/`.
   `provider_shape = whatsapp_web_companion`; the latter is now an internal
   provider identifier, not a visible-window promise.
 - The WebView is created with `visible(false)` and is never shown or focused by
-  a Hermes command. Its lifecycle is controlled through the existing explicit
+  a Макошь command. Its lifecycle is controlled through the existing explicit
   start/stop/revoke/relink/remove runtime operations.
 - The injected contract remains main-frame-only, origin-guarded and
   metadata-only. It must not read cookies, Web Storage, IndexedDB, browser

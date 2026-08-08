@@ -1,23 +1,23 @@
 use std::{os::unix::net::UnixStream, time::Duration};
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTransferRequestV1, ManagedBlobSessionRequestV1,
     request_managed_blob_custody_transfer_v2, request_managed_blob_session_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::BlobDataOperationV1,
 };
-use hermes_telegram_api::{TelegramProviderCommand, TelegramSendMessage};
-use hermes_telegram_delivery_intent_contract::TELEGRAM_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1;
-use hermes_telegram_persistence::{
+use makosh_telegram_api::{TelegramProviderCommand, TelegramSendMessage};
+use makosh_telegram_delivery_intent_contract::TELEGRAM_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1;
+use makosh_telegram_persistence::{
     ClaimedTelegramDeliveryIntentJobV1, TelegramDeliveryIntentJobStateV1,
     TelegramDeliveryIntentJobV1, TelegramDurablePersistence,
 };
 use sha2::{Digest, Sha256};
 
 use crate::TelegramRuntime;
-use hermes_telegram_tdlib::TdJsonTransport;
+use makosh_telegram_tdlib::TdJsonTransport;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum TelegramDeliveryIntentExecutionErrorV1 {

@@ -21,9 +21,9 @@
 - Group / Группа: `AGENTS`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `AGENTS.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/AGENTS.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/AGENTS.md`
 - Size bytes / Размер в байтах: `17411`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -63,7 +63,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 ````markdown
 # AGENTS.md
 
-Правила работы агентов в репозитории Hermes Hub.
+Правила работы агентов в репозитории Макошь.
 
 Эти правила обязательны для любых изменений в проекте. Репозиторий проектируется как долгосрочная local-first Personal Memory System, а не как MVP, CRM, почтовый клиент, task tracker, calendar app или note-taking app.
 
@@ -127,7 +127,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 - `ADR-0046` - persistent dev mail cache and blob storage; mail bytes/attachments live under `docker/data/mail/`, PostgreSQL stores metadata, references and attachment scan state.
 - `ADR-0054` - application settings store; user-editable runtime/UI settings live in `application_settings`, while provider accounts remain domain records.
 - `ADR-0055` - full email provider networking with read and write operations; supersedes ADR-0043. Read-only restriction retained only for automated integration tests.
-- `ADR-0056` - local API simplified auth with router-level `X-Hermes-Secret`.
+- `ADR-0056` - local API simplified auth with router-level `X-Макошь-Secret`.
 - `ADR-0076` - host vault on macOS; supersedes ADR-0044 and ADR-0053.
 - `ADR-0077` - i18n with Russian and English interface via JSON dictionaries and Svelte stores; English strings serve as translation keys, ru.json provides Russian translations.
 - `ADR-0084` - Persona Intelligence System; supersedes Contact/Person CRM framing.
@@ -143,7 +143,7 @@ when a newer ADR supersedes them.
 
 ## 3.1 Canonical Product Model
 
-Hermes is a Personal Memory System for:
+Макошь is a Personal Memory System for:
 
 - Communications;
 - Knowledge;
@@ -166,7 +166,7 @@ Communication -> Source Evidence -> Extracted Knowledge -> Memory -> Context
 Tasks, decisions, projects, obligations, dossiers, timelines and search results
 are built from evidence, events, graph links and reviewed memory.
 
-Do not describe Hermes as:
+Do not describe Макошь as:
 
 - Email Client;
 - CRM;
@@ -303,7 +303,7 @@ make backend-validate
 ```
 
 Run `make validate` before reporting broad backend or development-infrastructure work as complete. Use `make backend-validate` for targeted backend-only changes.
-For full backend validation, prefer `make backend-test` or `make backend-validate` over direct `cargo test`. These targets run the `crates/testkit` session harness (`hermes_test_session`) that reuses the shared testcontainers PostgreSQL session correctly and cleans it up after the run. Direct full-suite `cargo test` bypasses that harness, can create excessive testcontainers churn, and may leave Docker container garbage behind after failures or interrupted runs.
+For full backend validation, prefer `make backend-test` or `make backend-validate` over direct `cargo test`. These targets run the `crates/testkit` session harness (`makosh_test_session`) that reuses the shared testcontainers PostgreSQL session correctly and cleans it up after the run. Direct full-suite `cargo test` bypasses that harness, can create excessive testcontainers churn, and may leave Docker container garbage behind after failures or interrupted runs.
 
 ### SvelteKit / TypeScript validation
 
@@ -359,11 +359,11 @@ Use the repository-configured tool first. If no tool exists, report that validat
 - Mobile UI is out of scope until `ADR-0031` is superseded.
 - Docker development infrastructure must stay under `docker/` per `ADR-0032`.
 - Protected local API endpoints must use the router-level shared secret guard
-  from `ADR-0056`: `HERMES_LOCAL_API_SECRET` plus the `X-Hermes-Secret`
+  from `ADR-0056`: `MAKOSH_LOCAL_API_SECRET` plus the `X-Макошь-Secret`
   request header.
 - Local event API access must be recorded in append-only `api_audit_log` per `ADR-0039`; do not store tokens or secrets in audit records.
-- API audit actor identity is the constant `hermes-frontend` unless a newer ADR
-  changes the local actor model. Do not require `X-Hermes-Actor-Id`.
+- API audit actor identity is the constant `makosh-frontend` unless a newer ADR
+  changes the local actor model. Do not require `X-Макошь-Actor-Id`.
 - Email ingestion provider accounts must support `gmail`, `icloud` and `imap` per `ADR-0041`; account config must not store OAuth tokens, app passwords or mailbox
 ````
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._

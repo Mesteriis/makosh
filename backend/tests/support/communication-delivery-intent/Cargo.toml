@@ -1,17 +1,17 @@
 [package]
-name = "hermes-communication-delivery-intent-testkit"
+name = "makosh-communication-delivery-intent-testkit"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "test"
 owner = "test"
 surface = "test_support"
 
 [dev-dependencies]
-hermes-communication-delivery-intent-core = { path = "../../../src/communication-delivery-intent-core" }
-hermes-communication-delivery-intent-ingress-api = { path = "../../../src/communication-delivery-intent-ingress-api" }
-hermes-communication-delivery-intent-persistence = { path = "../../../src/communication-delivery-intent-persistence", features = ["conformance-test-support"] }
-hermes-events-protocol = { path = "../../../src/platform/events" }
+makosh-communication-delivery-intent-core = { path = "../../../src/communication-delivery-intent-core" }
+makosh-communication-delivery-intent-ingress-api = { path = "../../../src/communication-delivery-intent-ingress-api" }
+makosh-communication-delivery-intent-persistence = { path = "../../../src/communication-delivery-intent-persistence", features = ["conformance-test-support"] }
+makosh-events-protocol = { path = "../../../src/platform/events" }
 tokio = { version = "=1.52.4", default-features = false, features = ["macros", "rt-multi-thread"] }

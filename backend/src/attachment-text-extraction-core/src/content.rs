@@ -1,4 +1,4 @@
-use hermes_attachment_text_extraction_api::{
+use makosh_attachment_text_extraction_api::{
     ATTACHMENT_TEXT_EXTRACTION_MAX_DERIVED_BYTES_V1,
     ATTACHMENT_TEXT_EXTRACTION_MAX_VISIBLE_BYTES_V1,
 };

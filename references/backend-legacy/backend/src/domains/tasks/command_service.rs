@@ -4,9 +4,9 @@ use serde_json::{Value, json};
 use sqlx::postgres::PgPool;
 use thiserror::Error;
 
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::store::ObservationStore;
 
 use super::api::{NewTask, Task, TaskError, TaskStore, TaskUpdate};
 use super::core::checklists::{TaskChecklist, TaskChecklistStore};
@@ -53,7 +53,7 @@ impl TaskCommandService {
                     "task_id": task_id,
                     "title": update.title.as_deref(),
                     "description": update.description.as_deref(),
-                    "hermes_status": update.hermes_status.as_deref(),
+                    "makosh_status": update.makosh_status.as_deref(),
                     "priority_score": update.priority_score,
                     "risk_score": update.risk_score,
                     "readiness_score": update.readiness_score,
@@ -217,7 +217,7 @@ impl TaskCommandService {
             task.project_id.is_some(),
         );
         let next_action = TaskIntelligenceService::suggest_next_action(
-            &task.hermes_status,
+            &task.makosh_status,
             false,
             false,
             task.waiting_reason.as_deref(),
@@ -403,7 +403,7 @@ impl TaskCommandService {
         payload: Value,
         source_ref: String,
         provenance: Value,
-    ) -> Result<hermes_observations_api::models::Observation, TaskCommandServiceError> {
+    ) -> Result<makosh_observations_api::models::Observation, TaskCommandServiceError> {
         ObservationStore::new(self.pool.clone())
             .capture(
                 &NewObservation::new(
@@ -649,7 +649,7 @@ impl TaskCommandService {
     async fn seed_observation_from_task(
         &self,
         req: &NewTask,
-    ) -> Result<hermes_observations_api::models::Observation, TaskCommandServiceError> {
+    ) -> Result<makosh_observations_api::models::Observation, TaskCommandServiceError> {
         let title_words = req
             .title
             .chars()

@@ -1,4 +1,4 @@
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     NatsAccountJwtUpdateV1, NatsResolverCredentialFenceV1, NatsResolverCredentialLeaseAdapterV1,
     NatsResolverSystemCredentialsV1, NatsVaultRouteContextV1, ResolverUpdateErrorV1,
 };
@@ -90,7 +90,7 @@ fn resolver_credential_fence_rejects_an_unfenced_revision() {
 }
 
 fn context() -> NatsVaultRouteContextV1 {
-    let public_key = hermes_vault_protocol::VaultResponseRecipientV1::generate()
+    let public_key = makosh_vault_protocol::VaultResponseRecipientV1::generate()
         .public_key()
         .as_bytes()
         .to_owned();

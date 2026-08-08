@@ -4,7 +4,7 @@ import { storybookLocaleFromGlobals } from './storybook-i18n'
 import { generalStoryCopy } from './general-story-copy'
 
 const meta = {
-	title: 'Hermes UI/General/Timeline',
+	title: 'Макошь UI/General/Timeline',
 	component: TimelineItem,
 	render: (_args, context) => ({
 		components: { TimelineItem },

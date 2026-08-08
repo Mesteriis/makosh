@@ -1,6 +1,6 @@
 //! Owner-local persistence for opaque Communications search projection digests.
 
-use hermes_communications_api::{
+use makosh_communications_api::{
     CommunicationConversationIdV1, CommunicationMessageIdV1, CommunicationObservationIdV1,
     CommunicationSearchHitV1,
 };
@@ -42,7 +42,7 @@ impl CommunicationsDurablePersistence {
             .await
             .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
         let applied = sqlx::query(
-            "INSERT INTO hermes_data.communications_derived_index_projections (message_id, evidence_id, conversation_id, observed_at_unix_seconds, projection_revision, indexed_at_unix_seconds) SELECT $1, $2, $3, $4, $5, $6 WHERE NOT EXISTS (SELECT 1 FROM hermes_data.communications_derived_index_tombstones WHERE message_id = $1 AND (projection_revision > $5 OR (projection_revision = $5 AND observed_at_unix_seconds > $4))) ON CONFLICT (message_id) DO UPDATE SET evidence_id = EXCLUDED.evidence_id, conversation_id = EXCLUDED.conversation_id, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, projection_revision = EXCLUDED.projection_revision, indexed_at_unix_seconds = EXCLUDED.indexed_at_unix_seconds WHERE communications_derived_index_projections.projection_revision < EXCLUDED.projection_revision OR (communications_derived_index_projections.projection_revision = EXCLUDED.projection_revision AND communications_derived_index_projections.observed_at_unix_seconds <= EXCLUDED.observed_at_unix_seconds) RETURNING message_id",
+            "INSERT INTO makosh_data.communications_derived_index_projections (message_id, evidence_id, conversation_id, observed_at_unix_seconds, projection_revision, indexed_at_unix_seconds) SELECT $1, $2, $3, $4, $5, $6 WHERE NOT EXISTS (SELECT 1 FROM makosh_data.communications_derived_index_tombstones WHERE message_id = $1 AND (projection_revision > $5 OR (projection_revision = $5 AND observed_at_unix_seconds > $4))) ON CONFLICT (message_id) DO UPDATE SET evidence_id = EXCLUDED.evidence_id, conversation_id = EXCLUDED.conversation_id, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, projection_revision = EXCLUDED.projection_revision, indexed_at_unix_seconds = EXCLUDED.indexed_at_unix_seconds WHERE communications_derived_index_projections.projection_revision < EXCLUDED.projection_revision OR (communications_derived_index_projections.projection_revision = EXCLUDED.projection_revision AND communications_derived_index_projections.observed_at_unix_seconds <= EXCLUDED.observed_at_unix_seconds) RETURNING message_id",
         )
         .bind(projection.message_id.bytes().as_slice())
         .bind(projection.evidence_id.bytes().as_slice())
@@ -61,20 +61,20 @@ impl CommunicationsDurablePersistence {
                 .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
             return Ok(false);
         }
-        sqlx::query("DELETE FROM hermes_data.communications_derived_index_tombstones WHERE message_id = $1 AND (projection_revision < $2 OR (projection_revision = $2 AND observed_at_unix_seconds <= $3))")
+        sqlx::query("DELETE FROM makosh_data.communications_derived_index_tombstones WHERE message_id = $1 AND (projection_revision < $2 OR (projection_revision = $2 AND observed_at_unix_seconds <= $3))")
             .bind(projection.message_id.bytes().as_slice())
             .bind(i32::try_from(projection.projection_revision).map_err(|_| CommunicationsPersistenceError::InvalidRow)?)
             .bind(projection.observed_at_unix_seconds)
             .execute(&mut *transaction)
             .await
             .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
-        sqlx::query("DELETE FROM hermes_data.communications_derived_index_token_digests WHERE message_id = $1")
+        sqlx::query("DELETE FROM makosh_data.communications_derived_index_token_digests WHERE message_id = $1")
             .bind(projection.message_id.bytes().as_slice())
             .execute(&mut *transaction)
             .await
             .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
         for digest in &projection.token_digests {
-            sqlx::query("INSERT INTO hermes_data.communications_derived_index_token_digests (message_id, token_digest) VALUES ($1, $2)")
+            sqlx::query("INSERT INTO makosh_data.communications_derived_index_token_digests (message_id, token_digest) VALUES ($1, $2)")
                 .bind(projection.message_id.bytes().as_slice())
                 .bind(digest.as_slice())
                 .execute(&mut *transaction)
@@ -105,7 +105,7 @@ impl CommunicationsDurablePersistence {
             .begin()
             .await
             .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
-        let applied = sqlx::query("INSERT INTO hermes_data.communications_derived_index_tombstones (message_id, evidence_id, observed_at_unix_seconds, projection_revision, removed_at_unix_seconds) VALUES ($1, $2, $3, $4, $3) ON CONFLICT (message_id) DO UPDATE SET evidence_id = EXCLUDED.evidence_id, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, projection_revision = EXCLUDED.projection_revision, removed_at_unix_seconds = EXCLUDED.removed_at_unix_seconds WHERE hermes_data.communications_derived_index_tombstones.projection_revision < EXCLUDED.projection_revision OR (hermes_data.communications_derived_index_tombstones.projection_revision = EXCLUDED.projection_revision AND hermes_data.communications_derived_index_tombstones.observed_at_unix_seconds <= EXCLUDED.observed_at_unix_seconds) RETURNING message_id")
+        let applied = sqlx::query("INSERT INTO makosh_data.communications_derived_index_tombstones (message_id, evidence_id, observed_at_unix_seconds, projection_revision, removed_at_unix_seconds) VALUES ($1, $2, $3, $4, $3) ON CONFLICT (message_id) DO UPDATE SET evidence_id = EXCLUDED.evidence_id, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, projection_revision = EXCLUDED.projection_revision, removed_at_unix_seconds = EXCLUDED.removed_at_unix_seconds WHERE makosh_data.communications_derived_index_tombstones.projection_revision < EXCLUDED.projection_revision OR (makosh_data.communications_derived_index_tombstones.projection_revision = EXCLUDED.projection_revision AND makosh_data.communications_derived_index_tombstones.observed_at_unix_seconds <= EXCLUDED.observed_at_unix_seconds) RETURNING message_id")
             .bind(message_id.bytes().as_slice())
             .bind(evidence_id.bytes().as_slice())
             .bind(observed_at_unix_seconds)
@@ -121,7 +121,7 @@ impl CommunicationsDurablePersistence {
                 .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
             return Ok(false);
         }
-        sqlx::query("DELETE FROM hermes_data.communications_derived_index_projections WHERE message_id = $1 AND (projection_revision < $2 OR (projection_revision = $2 AND observed_at_unix_seconds <= $3))")
+        sqlx::query("DELETE FROM makosh_data.communications_derived_index_projections WHERE message_id = $1 AND (projection_revision < $2 OR (projection_revision = $2 AND observed_at_unix_seconds <= $3))")
             .bind(message_id.bytes().as_slice())
             .bind(revision)
             .bind(observed_at_unix_seconds)
@@ -160,8 +160,8 @@ impl CommunicationsDurablePersistence {
             "SELECT projection.evidence_id, projection.message_id, \
              projection.conversation_id, projection.observed_at_unix_seconds, \
              COUNT(DISTINCT digest.token_digest) AS matched_token_count \
-             FROM hermes_data.communications_derived_index_projections projection \
-             JOIN hermes_data.communications_derived_index_token_digests digest \
+             FROM makosh_data.communications_derived_index_projections projection \
+             JOIN makosh_data.communications_derived_index_token_digests digest \
                ON digest.message_id = projection.message_id \
              WHERE digest.token_digest = ANY($1::bytea[]) \
                AND ($2::BIGINT IS NULL \
@@ -247,12 +247,12 @@ impl CommunicationsDurablePersistence {
             "SELECT projection.evidence_id, projection.message_id, \
              projection.conversation_id, projection.observed_at_unix_seconds, \
              COUNT(DISTINCT digest.token_digest) AS matched_token_count \
-             FROM hermes_data.communications_derived_index_projections projection \
-             JOIN hermes_data.communications_derived_index_token_digests digest \
+             FROM makosh_data.communications_derived_index_projections projection \
+             JOIN makosh_data.communications_derived_index_token_digests digest \
                ON digest.message_id = projection.message_id \
-             JOIN hermes_data.communications_conversations conversation \
+             JOIN makosh_data.communications_conversations conversation \
                ON conversation.conversation_id = projection.conversation_id \
-             JOIN hermes_data.communications_accounts account \
+             JOIN makosh_data.communications_accounts account \
                ON account.account_cursor_sha256 = conversation.account_cursor_sha256 \
              WHERE digest.token_digest = ANY($1::bytea[]) \
                AND ($2::bytea IS NULL OR account.account_id = $2) \

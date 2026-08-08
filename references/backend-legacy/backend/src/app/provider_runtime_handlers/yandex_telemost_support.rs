@@ -31,7 +31,7 @@ pub(super) async fn publish_yandex_telemost_companion_event(
         "event_name": event_name,
         "extra": extra,
     })))
-    .provenance(json!({ "origin": "hermes_desktop_companion_contract" }))
+    .provenance(json!({ "origin": "makosh_desktop_companion_contract" }))
     .correlation_id(format!("yandex-telemost:{}:{}", request.account_id, entity_id))
     .build()?;
     if event_store(state)?
@@ -311,7 +311,7 @@ pub(super) async fn publish_local_recording_completed_event(
         "consent_attested": request.consent_attested,
         "stopped_at_epoch_ms": request.stopped_at_epoch_ms,
     })))
-    .provenance(json!({ "origin": "hermes_desktop_companion_runtime_bridge" }))
+    .provenance(json!({ "origin": "makosh_desktop_companion_runtime_bridge" }))
     .correlation_id(format!("yandex-telemost:{}:{}", request.account_id, entity_id))
     .build()?;
     append_and_broadcast(state, &event).await
@@ -828,11 +828,11 @@ pub(super) fn recording_policy_manifest() -> YandexTelemostLocalRecordingManifes
         consent_required: true,
         default_output_policy: "app_data_dir/telemost-recordings/{account_id}/{recording_session_id}",
         audio_device_policy: YandexTelemostLocalRecordingPolicy {
-            macos: "use explicit loopback input such as BlackHole 2ch; Hermes does not install kernel audio drivers silently",
-            linux: "prepare command can create a PulseAudio/PipeWire null sink named hermes_telemost and record hermes_telemost.monitor",
+            macos: "use explicit loopback input such as BlackHole 2ch; Макошь does not install kernel audio drivers silently",
+            linux: "prepare command can create a PulseAudio/PipeWire null sink named makosh_telemost and record makosh_telemost.monitor",
             windows: "use WASAPI loopback or an explicitly configured virtual input",
-            ffmpeg_path_env: "HERMES_TELEMOST_FFMPEG_PATH",
-            ffmpeg_input_env: "HERMES_TELEMOST_FFMPEG_INPUT",
+            ffmpeg_path_env: "MAKOSH_TELEMOST_FFMPEG_PATH",
+            ffmpeg_input_env: "MAKOSH_TELEMOST_FFMPEG_INPUT",
         },
     }
 }

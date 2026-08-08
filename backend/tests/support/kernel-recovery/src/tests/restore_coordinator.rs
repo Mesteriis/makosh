@@ -177,7 +177,7 @@ impl RecoveryMediaSigner for TestMediaSigner {
 }
 
 fn published_media(blob_enabled: bool, scheduler_enabled: bool) -> (PathBuf, [u8; 65]) {
-    let parent = unique_target_root("hermes-whole-restore-parent");
+    let parent = unique_target_root("makosh-whole-restore-parent");
     fs::create_dir(&parent).expect("media parent");
     fs::set_permissions(&parent, fs::Permissions::from_mode(0o700)).expect("private parent");
     let destination = parent.join("published");

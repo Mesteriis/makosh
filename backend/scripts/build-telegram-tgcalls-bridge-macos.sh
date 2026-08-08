@@ -11,8 +11,8 @@ readonly TGCALLS_LICENSE_SHA256="da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21
 readonly BAZEL_VERSION="8.4.2"
 readonly BAZEL_SHA256="45e9388abf21d1107e146ea366ad080eb93cb6a5f3a4a3b048f78de0bc3faffa"
 readonly XCODE_VERSION="26.2"
-readonly ARTIFACT_NAME="libhermes_tgcalls_bridge.dylib"
-readonly AUDIO_CONFORMANCE_NAME="hermes_tgcalls_audio_device_conformance"
+readonly ARTIFACT_NAME="libmakosh_tgcalls_bridge.dylib"
+readonly AUDIO_CONFORMANCE_NAME="makosh_tgcalls_audio_device_conformance"
 
 usage() {
   echo "usage: $0 --output-dir <new-absolute-directory> [--development-audio-conformance]" >&2
@@ -67,7 +67,7 @@ script_directory="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 backend_directory="$(CDPATH= cd -- "${script_directory}/.." && pwd)"
 native_directory="${backend_directory}/src/telegram-call-media-tgcalls/native"
 patch_path="${native_directory}/patches/telegram-ios-macos-audio-device.patch"
-scratch_directory="$(mktemp -d "${TMPDIR:-/tmp}/hermes-tgcalls-build.XXXXXXXX")"
+scratch_directory="$(mktemp -d "${TMPDIR:-/tmp}/makosh-tgcalls-build.XXXXXXXX")"
 checkout_directory="${scratch_directory}/Telegram-iOS"
 release_directory="${scratch_directory}/release"
 trap 'rm -rf -- "$scratch_directory"' EXIT
@@ -142,7 +142,7 @@ if [[ "$actual_bazel_sha" != "$BAZEL_SHA256" ]]; then
 fi
 chmod 0555 "$bazel_path"
 
-bridge_directory="${checkout_directory}/hermes-tgcalls-bridge"
+bridge_directory="${checkout_directory}/makosh-tgcalls-bridge"
 mkdir "$bridge_directory"
 cp \
   "${native_directory}/BUILD.bazel" \
@@ -156,11 +156,11 @@ git -C "$checkout_directory" apply "$patch_path"
 (
   cd "$checkout_directory"
   build_targets=(
-    //hermes-tgcalls-bridge:libhermes_tgcalls_bridge.dylib
+    //makosh-tgcalls-bridge:libmakosh_tgcalls_bridge.dylib
   )
   if [[ "$build_profile" == "development-audio-conformance" ]]; then
     build_targets+=(
-      //hermes-tgcalls-bridge:hermes_tgcalls_audio_device_conformance
+      //makosh-tgcalls-bridge:makosh_tgcalls_audio_device_conformance
     )
   fi
   "$bazel_path" build \
@@ -171,7 +171,7 @@ git -C "$checkout_directory" apply "$patch_path"
 
 mkdir "$release_directory"
 install -m 0555 \
-  "${checkout_directory}/bazel-bin/hermes-tgcalls-bridge/${ARTIFACT_NAME}" \
+  "${checkout_directory}/bazel-bin/makosh-tgcalls-bridge/${ARTIFACT_NAME}" \
   "${release_directory}/${ARTIFACT_NAME}"
 install -m 0444 \
   "${checkout_directory}/submodules/TgVoipWebrtc/tgcalls/LICENSE" \
@@ -180,7 +180,7 @@ release_eligible=true
 audio_conformance_artifact=null
 if [[ "$build_profile" == "development-audio-conformance" ]]; then
   install -m 0555 \
-    "${checkout_directory}/bazel-bin/hermes-tgcalls-bridge/${AUDIO_CONFORMANCE_NAME}" \
+    "${checkout_directory}/bazel-bin/makosh-tgcalls-bridge/${AUDIO_CONFORMANCE_NAME}" \
     "${release_directory}/${AUDIO_CONFORMANCE_NAME}"
   release_eligible=false
   audio_conformance_artifact="\"${AUDIO_CONFORMANCE_NAME}\""
@@ -197,7 +197,7 @@ cat >"${release_directory}/provenance.json" <<EOF
   "bazel_version": "${BAZEL_VERSION}",
   "bridge_abi": 1,
   "build_profile": "${build_profile}",
-  "build_target": "//hermes-tgcalls-bridge:libhermes_tgcalls_bridge.dylib",
+  "build_target": "//makosh-tgcalls-bridge:libmakosh_tgcalls_bridge.dylib",
   "dav1d_commit": "${DAV1D_COMMIT}",
   "libvpx_commit": "${LIBVPX_COMMIT}",
   "patch_sha256": "${patch_sha}",

@@ -1,7 +1,7 @@
-use hermes_attachment_text_extraction_persistence::{
+use makosh_attachment_text_extraction_persistence::{
     AttachmentTextExtractionPersistenceErrorV1, AttachmentTextExtractionPersistenceV1,
 };
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
 
 pub(crate) async fn relay_custody_outbox_once_v1(
     persistence: &AttachmentTextExtractionPersistenceV1,

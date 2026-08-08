@@ -5,13 +5,13 @@ chunk_count: 163
 source_count: 2949
 ---
 
-# Hermes Hub Code Wiki
+# Макошь Code Wiki
 
 Эта wiki собрана из реального кода, документации и ADR репозитория через `code-wiki-ru` и DeepSeek/OpenCode bounded drafts.
 
 ```mermaid
 graph TD
-  repo["Hermes Hub"] --> systems["systems"]
+  repo["Макошь"] --> systems["systems"]
   repo --> components["components"]
   repo --> operations["operations"]
   repo --> decisions["decisions"]

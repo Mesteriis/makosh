@@ -6,7 +6,7 @@ use serde_json::{Value, json};
 
 use super::errors::{SecretReferenceError, SecretResolutionError};
 use super::validation::{validate_non_empty, validate_object};
-use hermes_communications_api::accounts::ProviderAccountSecretBinding;
+use makosh_communications_api::accounts::ProviderAccountSecretBinding;
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -32,7 +32,7 @@ impl SecretKind {
     }
 }
 
-impl hermes_communications_api::accounts::SecretKindTag for SecretKind {
+impl makosh_communications_api::accounts::SecretKindTag for SecretKind {
     fn secret_kind_tag(self) -> &'static str {
         self.as_str()
     }

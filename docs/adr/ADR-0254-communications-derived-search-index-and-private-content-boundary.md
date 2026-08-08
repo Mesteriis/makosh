@@ -93,7 +93,7 @@ that message, so obsolete content cannot remain searchable.
 
 ## Boundary rules
 
-- Integration packages continue to publish only `hermes-communications-ingress`
+- Integration packages continue to publish only `makosh-communications-ingress`
   observations and exact durable envelopes. They do not tokenize, index or
   query canonical Communications state.
 - Communications may read only its own admitted Blob reference through the

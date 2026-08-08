@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.review_note_candidate_submissions (
+CREATE TABLE makosh_data.review_note_candidate_submissions (
     logical_owner_id TEXT NOT NULL,
     submission_message_id BYTEA NOT NULL,
     submission_envelope_sha256 BYTEA NOT NULL,
@@ -48,13 +48,13 @@ CREATE TABLE hermes_data.review_note_candidate_submissions (
 );
 
 CREATE INDEX review_note_candidate_submission_recovery_idx
-ON hermes_data.review_note_candidate_submissions (
+ON makosh_data.review_note_candidate_submissions (
     logical_owner_id,
     completed,
     received_at_unix_millis
 );
 
-CREATE TABLE hermes_data.review_note_candidate_state (
+CREATE TABLE makosh_data.review_note_candidate_state (
     logical_owner_id TEXT NOT NULL,
     review_id BYTEA NOT NULL,
     candidate_id BYTEA NOT NULL,
@@ -111,14 +111,14 @@ CREATE TABLE hermes_data.review_note_candidate_state (
 );
 
 CREATE INDEX review_note_candidate_promotion_recovery_idx
-ON hermes_data.review_note_candidate_state (
+ON makosh_data.review_note_candidate_state (
     logical_owner_id,
     state,
     promotion_status,
     review_revision
 );
 
-CREATE TABLE hermes_data.review_note_candidate_operations (
+CREATE TABLE makosh_data.review_note_candidate_operations (
     logical_owner_id TEXT NOT NULL,
     operation_id BYTEA NOT NULL,
     request_sha256 BYTEA NOT NULL,
@@ -138,7 +138,7 @@ CREATE TABLE hermes_data.review_note_candidate_operations (
     CHECK (completed_at_unix_millis > 0)
 );
 
-CREATE TABLE hermes_data.review_note_candidate_promotion_inbox (
+CREATE TABLE makosh_data.review_note_candidate_promotion_inbox (
     logical_owner_id TEXT NOT NULL,
     result_message_id BYTEA NOT NULL,
     result_envelope_sha256 BYTEA NOT NULL,
@@ -154,7 +154,7 @@ CREATE TABLE hermes_data.review_note_candidate_promotion_inbox (
     CHECK (processed_at_unix_millis > 0)
 );
 
-CREATE TABLE hermes_data.review_note_candidate_outbox (
+CREATE TABLE makosh_data.review_note_candidate_outbox (
     logical_owner_id TEXT NOT NULL,
     message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -171,14 +171,14 @@ CREATE TABLE hermes_data.review_note_candidate_outbox (
 );
 
 CREATE INDEX review_note_candidate_outbox_pending_idx
-ON hermes_data.review_note_candidate_outbox (
+ON makosh_data.review_note_candidate_outbox (
     logical_owner_id,
     created_at_unix_millis,
     message_id
 )
 WHERE published_at_unix_millis IS NULL;
 
-CREATE TABLE hermes_data.review_note_candidate_realtime (
+CREATE TABLE makosh_data.review_note_candidate_realtime (
     realtime_sequence BIGSERIAL PRIMARY KEY,
     logical_owner_id TEXT NOT NULL,
     review_id BYTEA NOT NULL,
@@ -198,7 +198,7 @@ CREATE TABLE hermes_data.review_note_candidate_realtime (
 );
 
 CREATE INDEX review_note_candidate_realtime_owner_idx
-ON hermes_data.review_note_candidate_realtime (
+ON makosh_data.review_note_candidate_realtime (
     logical_owner_id,
     realtime_sequence
 );

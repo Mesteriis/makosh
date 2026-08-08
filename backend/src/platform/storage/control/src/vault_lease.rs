@@ -1,5 +1,5 @@
-use hermes_storage_protocol::StorageBindingV1;
-use hermes_storage_vault::{StorageVaultLeaseAdapterV1, StorageVaultRoutePortV1};
+use makosh_storage_protocol::StorageBindingV1;
+use makosh_storage_vault::{StorageVaultLeaseAdapterV1, StorageVaultRoutePortV1};
 
 use crate::{StorageFenceOutcomeV1, StorageVaultLeasePortV1};
 
@@ -15,10 +15,10 @@ where
         async move {
             match self.revoke_runtime_credential(binding).await {
                 Ok(()) => StorageFenceOutcomeV1::Applied,
-                Err(hermes_storage_vault::StorageVaultRouteFailureV1::Rejected) => {
+                Err(makosh_storage_vault::StorageVaultRouteFailureV1::Rejected) => {
                     StorageFenceOutcomeV1::Rejected
                 }
-                Err(hermes_storage_vault::StorageVaultRouteFailureV1::Unavailable) => {
+                Err(makosh_storage_vault::StorageVaultRouteFailureV1::Unavailable) => {
                     StorageFenceOutcomeV1::Unavailable
                 }
             }

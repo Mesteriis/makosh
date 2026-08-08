@@ -5,7 +5,7 @@ use sqlx::Row;
 use sqlx::postgres::PgPool;
 use thiserror::Error;
 
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 use super::evidence::link_calendar_entity_in_transaction;
 

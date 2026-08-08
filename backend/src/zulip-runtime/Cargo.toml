@@ -1,42 +1,42 @@
 [package]
-name = "hermes-zulip-runtime"
+name = "makosh-zulip-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
 [lib]
-name = "hermes_zulip_runtime"
+name = "makosh_zulip_runtime"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-zulip-runtime"
+name = "makosh-zulip-runtime"
 path = "src/main.rs"
 
 [features]
 default = []
-conformance-test-support = ["hermes-zulip-http/conformance-test-support"]
+conformance-test-support = ["makosh-zulip-http/conformance-test-support"]
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "zulip"
 surface = "runtime"
 
 [dependencies]
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-blob-client-contract = { path = "../platform/blob/client-contract" }
-hermes-communications-ingress = { path = "../communications-ingress" }
-hermes-events-jetstream = { path = "../platform/events/jetstream" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-managed-vault-client = { path = "../platform/vault/managed_client" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-zulip-api = { path = "../zulip-api" }
-hermes-zulip-core = { path = "../zulip-core" }
-hermes-zulip-delivery-intent-contract = { path = "../zulip-delivery-intent-contract" }
-hermes-zulip-http = { path = "../zulip-http" }
-hermes-zulip-persistence = { path = "../zulip-persistence" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
-hermes-vault-protocol = { path = "../platform/vault/protocol" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-blob-client-contract = { path = "../platform/blob/client-contract" }
+makosh-communications-ingress = { path = "../communications-ingress" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-managed-vault-client = { path = "../platform/vault/managed_client" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-zulip-api = { path = "../zulip-api" }
+makosh-zulip-core = { path = "../zulip-core" }
+makosh-zulip-delivery-intent-contract = { path = "../zulip-delivery-intent-contract" }
+makosh-zulip-http = { path = "../zulip-http" }
+makosh-zulip-persistence = { path = "../zulip-persistence" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
+makosh-vault-protocol = { path = "../platform/vault/protocol" }
 getrandom = { version = "=0.4.3", default-features = false }
 libc = "=0.2.186"
 prost = "=0.14.4"

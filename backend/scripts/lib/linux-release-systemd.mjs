@@ -15,10 +15,10 @@ export function renderSystemdUnit(composePath) {
     throw new TypeError('Compose path must contain only safe characters');
   }
   const workingDirectory = dirname(composePath);
-  const compose = `/usr/bin/docker compose --project-name hermes-platform --file ${composePath}`;
+  const compose = `/usr/bin/docker compose --project-name makosh-platform --file ${composePath}`;
   return [
     '[Unit]',
-    'Description=Hermes external Compose platform',
+    'Description=Макошь external Compose platform',
     'Wants=docker.service',
     'After=docker.service network-online.target',
     '',

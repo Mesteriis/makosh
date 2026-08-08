@@ -1,9 +1,9 @@
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use std::fs;
 use std::path::{Path, PathBuf};
 
 use chrono::Utc;
-use hermes_provider_telemost::protocol::validate_required;
+use makosh_provider_telemost::protocol::validate_required;
 use serde_json::{Value, json};
 use uuid::Uuid;
 
@@ -14,7 +14,7 @@ use crate::integrations::yandex_telemost::client::models::{
 use crate::platform::events::bus::InMemoryEventBus;
 use crate::platform::realtime_conversation::events::REALTIME_CONVERSATION_TRANSCRIPT_COMPLETED;
 use crate::platform::realtime_conversation::models::{CallBundleArtifact, CallBundleManifest};
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 pub(crate) struct MaterializedTelemostTranscriptBundle {
     pub(crate) bundle_root: PathBuf,

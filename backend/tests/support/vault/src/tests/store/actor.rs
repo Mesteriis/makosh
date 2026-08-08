@@ -1,10 +1,10 @@
 use std::os::unix::fs::PermissionsExt;
 use std::sync::Arc;
 
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_protocol::{SecretClassV1, VaultActionV1, VaultPurposeRequestV1};
-use hermes_vault_store_sqlcipher::{SecretRecordScope, VaultStore};
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_protocol::{SecretClassV1, VaultActionV1, VaultPurposeRequestV1};
+use makosh_vault_store_sqlcipher::{SecretRecordScope, VaultStore};
 use tempfile::TempDir;
 
 #[test]
@@ -50,7 +50,7 @@ fn concurrent_record_requests_are_serialized_by_the_bounded_vault_actor() {
 
 fn assert_reopen_after_actor_shutdown(
     temporary: &TempDir,
-    key: &hermes_vault_key_provider::WrappingKey,
+    key: &makosh_vault_key_provider::WrappingKey,
 ) {
     let reopened = VaultStore::open(
         &temporary.path().join("vault.db"),
@@ -64,7 +64,7 @@ fn assert_reopen_after_actor_shutdown(
 fn store_one_record(
     store: &VaultStore,
     revision: u64,
-) -> hermes_vault_store_sqlcipher::SecretRecordId {
+) -> makosh_vault_store_sqlcipher::SecretRecordId {
     let scope = scope_for_revision(revision);
     store
         .store_secret(&scope, format!("credential-{revision}").as_bytes())

@@ -71,7 +71,7 @@ make dev
        -> PostgreSQL
        -> PgBouncer
        -> NATS
-  -> hermes-kernel serve
+  -> makosh-kernel serve
        -> Core Gateway at 127.0.0.1:9444
   -> Vite at 127.0.0.1:5173
        -> exact same-origin Gateway proxy

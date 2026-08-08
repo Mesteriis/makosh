@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `test`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/tests/email_sync_pipeline.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/email_sync_pipeline.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/email_sync_pipeline.rs`
 - Size bytes / Размер в байтах: `31207`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -69,15 +69,15 @@ use chrono::{TimeZone, Utc};
 use serde_json::json;
 use sqlx::Row;
 
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount,
 };
-use hermes_hub_backend::domains::communications::storage::LocalCommunicationBlobStore;
-use hermes_hub_backend::integrations::mail::sync::{
+use makosh_hub_backend::domains::communications::storage::LocalCommunicationBlobStore;
+use makosh_hub_backend::integrations::mail::sync::{
     EmailSyncBatch, FetchedCommunicationSourceMessage,
 };
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::email_sync_pipeline::project_email_sync_batch_with_mail_blobs;
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::email_sync_pipeline::project_email_sync_batch_with_mail_blobs;
 
 #[tokio::test]
 async fn email_sync_pipeline_records_raw_blob_and_projects_message_persons_against_postgres() {
@@ -391,19 +391,19 @@ async fn email_sync_pipeline_records_raw_blob_and_projects_message_persons_again
         FROM observation_links
         WHERE observation_id = $1
           AND domain = 'organizations'
-        
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/tests/enrichment_engine.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/enrichment_engine.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/enrichment_engine.rs`
 - Size bytes / Размер в байтах: `2563`
 - Included characters / Включено символов: `2563`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::engines::enrichment::EnrichmentEngine;
+use makosh_hub_backend::engines::enrichment::EnrichmentEngine;
 use serde_json::json;
 
 #[test]
@@ -485,7 +485,7 @@ fn enrichment_engine_rejects_unsourced_persona_observation_candidate() {
 
 ### `backend/tests/event_consumers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/event_consumers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/event_consumers.rs`
 - Size bytes / Размер в байтах: `28817`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -498,29 +498,29 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use chrono::Utc;
 use serde_json::json;
 
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionPort, CommunicationProviderAccountStore, CommunicationProviderKind,
     NewProviderAccount,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     COMMUNICATION_PROVIDER_OBSERVATION_CONSUMER, ProviderChannelMessageStore,
     consume_accepted_signal_event, project_provider_observation_event,
 };
-use hermes_hub_backend::domains::signal_hub::{
+use makosh_hub_backend::domains::signal_hub::{
     SIGNAL_HUB_RAW_SIGNAL_CONSUMER, dispatch_telegram_raw_signal, process_signal_hub_raw_event,
 };
-use hermes_hub_backend::integrations::telegram::client::{
+use makosh_hub_backend::integrations::telegram::client::{
     NewTelegramMessage, TelegramChatKind, TelegramDeliveryState, TelegramStore,
 };
-use hermes_hub_backend::platform::communications::{
+use makosh_hub_backend::platform::communications::{
     EventStoreProviderMessageObservationEventPort, ProviderMessageObservationEvent,
     ProviderMessageObservationEventPort,
 };
-use hermes_hub_backend::platform::events::{
+use makosh_hub_backend::platform::events::{
     EventConsumerConfig, EventConsumerRunner, EventDeadLetterReviewState, EventStore,
     EventStoreError, NewEventEnvelope,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 async fn live_context(_test_name: &str) -> Option<(Database, EventStore)> {
@@ -873,13 +873,13 @@ async fn provider_observation_events_are_emitted_with_required_telegram_event_ty
                 "body_text": "event type content",
                 "message_metadata": {"event_type_test": "content"},
                 "observed_at": observed_at,
-         
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/tests/event_log.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/event_log.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/event_log.rs`
 - Size bytes / Размер в байтах: `18168`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -891,11 +891,11 @@ use testkit::context::TestContext;
 use chrono::{DateTime, Utc};
 use serde_json::json;
 
-use hermes_hub_backend::platform::events::{
+use makosh_hub_backend::platform::events::{
     EventConsumerStore, EventEnvelope, EventStore, NewEventEnvelope, ProjectionCursorStore,
     StoredEventEnvelope, TraceContext,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 
 #[test]
 fn new_event_envelope_rejects_empty_event_type() {
@@ -1213,11 +1213,11 @@ async fn event_store_reconstructs_trace_edges_against_postgres() {
     assert_eq!(
         trace.edges,
         vec![
-            hermes_hub_backend::platform::events::EventTraceEdge {
+            makosh_hub_backend::platform::events::EventTraceEdge {
                 parent_event_id: root_id.clone(),
                 child_event_id: child_id.clone(),
             },
-            hermes_hub_backend::platform::events::EventTraceEdge {
+            makosh_hub_backend::platform::events::EventTraceEdge {
                 parent_event_id: child_id.clone(),
                 child_event_id: grandchild_id,
             },
@@ -1253,7 +1253,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/event_platform.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/event_platform.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/event_platform.rs`
 - Size bytes / Размер в байтах: `9948`
 - Included characters / Включено символов: `9948`
 - Truncated / Обрезано: `no`
@@ -1266,7 +1266,7 @@ use sqlx::Row;
 use testkit::context::TestContext;
 use tokio::time::{Duration, timeout};
 
-use hermes_hub_backend::platform::events::{
+use makosh_hub_backend::platform::events::{
     EventOutboxDispatcher, EventStore, InMemoryEventBus, NatsJetStreamEventBus, NewEventEnvelope,
 };
 
@@ -1410,7 +1410,7 @@ async fn event_outbox_dispatcher_publishes_pending_events_to_nats() {
         .await
         .expect("message receive timeout")
         .expect("subscription yields message");
-    let published_event: hermes_hub_backend::platform::events::EventEnvelope =
+    let published_event: makosh_hub_backend::platform::events::EventEnvelope =
         serde_json::from_slice(&message.payload).expect("decode published event");
     assert_eq!(published_event.event_id, event.event_id);
     assert_eq!(published_event.event_type, event.event_type);
@@ -1575,7 +1575,7 @@ async fn event_outbox_dispatcher_recovers_stale_dispatching_items() {
         .await
         .expect("message receive timeout")
         .expect("subscription yields message");
-    let published_event: hermes_hub_backend::platform::events::EventEnvelope =
+    let published_event: makosh_hub_backend::platform::events::EventEnvelope =
         serde_json::from_slice(&message.payload).expect("decode published event");
     assert_eq!(published_event.event_id, event.event_id);
 }
@@ -1583,7 +1583,7 @@ async fn event_outbox_dispatcher_recovers_stale_dispatching_items() {
 
 ### `backend/tests/events_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/events_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/events_api.rs`
 - Size bytes / Размер в байтах: `19900`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1599,9 +1599,9 @@ use serde_json::json;
 use sqlx::postgres::PgPool;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::{build_router, build_router_with_database};
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::{build_router, build_router_with_database};
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 
 const LOCAL_API_TOKEN: &str = "events-api-test-token";
 
@@ -1609,7 +1609,7 @@ const LOCAL_API_TOKEN: &str = "events-api-test-token";
 async fn post_event_rejects_when_local_api_secret_is_not_configured() {
     let app = build_router(
         testkit::app::config_with_secret(LOCAL_API_TOKEN)
-            .with_test_pairs([("HERMES_DEV_MODE", "true")])
+            .with_test_pairs([("MAKOSH_DEV_MODE", "true")])
             .expect("app config"),
     );
 
@@ -1634,7 +1634,7 @@ async fn post_event_rejects_when_local_api_secret_is_not_configured() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -1664,7 +1664,7 @@ async fn post_event_rejects_missing_local_api_secret() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -1695,7 +1695,7 @@ async fn post_event_rejects_invalid_local_api_secret() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -1762,7 +1762,7 @@ async fn get_event_rejects_missing_local_api_secret_before_database_access() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -1786,7 +1786,7 @@ async fn get_event_rejects_invalid_local_api_secret_before_database_access() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -1809,7 +1809,7 @@ async fn get_audit_events_rejects_missing_local_api_secret_before_database_acces
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -1980,7 +1980,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/events_long_poll_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/events_long_poll_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/events_long_poll_api.rs`
 - Size bytes / Размер в байтах: `4939`
 - Included characters / Включено символов: `4939`
 - Truncated / Обрезано: `no`
@@ -1995,9 +1995,9 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const LOCAL_API_TOKEN: &str = "events-long-poll-test-token";
@@ -2088,7 +2088,7 @@ fn json_request_with_token(uri: &str, value: Value, token: &str) -> Request<Body
         .method("POST")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(value.to_string()))
         .expect("request")
 }
@@ -2096,7 +2096,7 @@ fn json_request_with_token(uri: &str, value: Value, token: &str) -> Request<Body
 fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -2135,7 +2135,7 @@ async fn latest_event_list_audit_record(pool: &sqlx::PgPool) -> Value {
 
 ### `backend/tests/events_stream_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/events_stream_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/events_stream_api.rs`
 - Size bytes / Размер в байтах: `7341`
 - Included characters / Включено символов: `7341`
 - Truncated / Обрезано: `no`
@@ -2151,9 +2151,9 @@ use serde_json::json;
 use tokio::time::timeout;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const LOCAL_API_TOKEN: &str = "events-stream-test-token";
@@ -2334,7 +2334,7 @@ fn json_request_with_token(uri: &str, value: serde_json::Value, token: &str) -> 
         .method("POST")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(value.to_string()))
         .expect("request")
 }
@@ -2342,7 +2342,7 @@ fn json_request_with_token(uri: &str, value: serde_json::Value, token: &str) -> 
 fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -2358,7 +2358,7 @@ async fn json_body(response: axum::response::Response) -> serde_json::Value {
 
 ### `backend/tests/events_websocket_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/events_websocket_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/events_websocket_api.rs`
 - Size bytes / Размер в байтах: `3896`
 - Included characters / Включено символов: `3896`
 - Truncated / Обрезано: `no`
@@ -2376,9 +2376,9 @@ use tokio::net::{TcpListener, TcpStream};
 use tokio::time::timeout;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const LOCAL_API_TOKEN: &str = "events-websocket-test-token";
@@ -2426,7 +2426,7 @@ async fn event_websocket_accepts_protected_upgrade_against_postgres() {
     stream
         .write_all(
             format!(
-                "GET /api/events/ws?after_position=0&batch_size=10&heartbeat_seconds=1&hermes_secret={LOCAL_API_TOKEN} HTTP/1.1\r\n\
+                "GET /api/events/ws?after_position=0&batch_size=10&heartbeat_seconds=1&makosh_secret={LOCAL_API_TOKEN} HTTP/1.1\r\n\
                  Host: {address}\r\n\
                  Connection: Upgrade\r\n\
                  Upgrade: websocket\r\n\
@@ -2475,7 +2475,7 @@ fn json_request_with_token(uri: &str, value: serde_json::Value, token: &str) -> 
         .method("POST")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(value.to_string()))
         .expect("request")
 }
@@ -2483,7 +2483,7 @@ fn json_request_with_token(uri: &str, value: serde_json::Value, token: &str) -> 
 
 ### `backend/tests/gmail_outbox_delivery.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/gmail_outbox_delivery.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/gmail_outbox_delivery.rs`
 - Size bytes / Размер в байтах: `12596`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2501,22 +2501,22 @@ use serde_json::{Value, json};
 use tempfile::tempdir;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount,
     NewProviderAccountSecretBinding, ProviderAccountSecretPurpose,
 };
-use hermes_hub_backend::domains::communications::outbox::{
+use makosh_hub_backend::domains::communications::outbox::{
     CommunicationOutboxEmailSender, CommunicationOutboxStatus, CommunicationOutboxStore,
     EmailOutboxDeliveryWorker, NewCommunicationOutboxItem,
 };
-use hermes_hub_backend::integrations::mail::outbox::LiveGmailOutboxTransport;
-use hermes_hub_backend::integrations::mail::send::LiveSmtpTransport;
-use hermes_hub_backend::platform::secrets::{
+use makosh_hub_backend::integrations::mail::outbox::LiveGmailOutboxTransport;
+use makosh_hub_backend::integrations::mail::send::LiveSmtpTransport;
+use makosh_hub_backend::platform::secrets::{
     NewSecretReference, SecretKind, SecretReferenceStore, SecretStoreKind,
 };
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::vault::{HostVault, HostVaultConfig, SecretEntryContext};
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::vault::{HostVault, HostVaultConfig, SecretEntryContext};
 use testkit::context::TestContext;
 
 const LOCAL_API_TOKEN: &str = "gmail-outbox-delivery-test-token";
@@ -2535,13 +2535,13 @@ async fn outbox_delivery_worker_sends_gmail_items_through_gmail_api_against_post
     let config =
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_home.to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     dev_key_path.to_str().expect("dev key path"),
                 ),
             ])
@@ -2685,7 +2685,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
         .method("POST")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -2847,7 +2847,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/gmail_send_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/gmail_send_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/gmail_send_api.rs`
 - Size bytes / Размер в байтах: `12261`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2865,16 +2865,16 @@ use sqlx::Row;
 use tempfile::tempdir;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount,
     NewProviderAccountSecretBinding, ProviderAccountSecretPurpose,
 };
-use hermes_hub_backend::platform::secrets::{
+use makosh_hub_backend::platform::secrets::{
     NewSecretReference, SecretKind, SecretReferenceStore, SecretStoreKind,
 };
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::vault::{HostVault, HostVaultConfig, SecretEntryContext};
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::vault::{HostVault, HostVaultConfig, SecretEntryContext};
 use testkit::context::TestContext;
 
 const LOCAL_API_TOKEN: &str = "gmail-send-api-test-token";
@@ -2893,13 +2893,13 @@ async fn gmail_send_api_queues_outbox_when_send_scope_enabled_against_postgres()
     let config =
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_home.to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     dev_key_path.to_str().expect("dev key path"),
                 ),
             ])
@@ -3044,7 +3044,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
         .method("POST")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -3211,7 +3211,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/graph.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/graph.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/graph.rs`
 - Size bytes / Размер в байтах: `8781`
 - Included characters / Включено символов: `8781`
 - Truncated / Обрезано: `no`
@@ -3221,11 +3221,11 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use testkit::context::TestContext;
 
 use chrono::Utc;
-use hermes_hub_backend::domains::graph::core::{
+use makosh_hub_backend::domains::graph::core::{
     GraphEvidenceSourceKind, GraphNodeKind, GraphReviewState, GraphStore, GraphStoreError,
     NewGraphEdge, NewGraphEvidence, NewGraphNode, RelationshipType, edge_id, evidence_id,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::{Value, json};
 use sqlx::Row;
 
@@ -3468,7 +3468,7 @@ async fn live_graph_context(_test_name: &str) -> Option<(sqlx::postgres::PgPool,
 
 fn disconnected_graph_store() -> GraphStore {
     let pool = sqlx::postgres::PgPoolOptions::new()
-        .connect_lazy("postgres://hermes:unused@127.0.0.1:1/hermes_hub")
+        .connect_lazy("postgres://makosh:unused@127.0.0.1:1/makosh_hub")
         .expect("create lazy test pool");
     GraphStore::new(pool)
 }
@@ -3483,7 +3483,7 @@ fn unique_suffix() -> u128 {
 
 ### `backend/tests/graph_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/graph_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/graph_api.rs`
 - Size bytes / Размер в байтах: `186`
 - Included characters / Включено символов: `186`
 - Truncated / Обрезано: `no`
@@ -3501,7 +3501,7 @@ mod support;
 
 ### `backend/tests/graph_api/auth.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/graph_api/auth.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/graph_api/auth.rs`
 - Size bytes / Размер в байтах: `2842`
 - Included characters / Включено символов: `2842`
 - Truncated / Обрезано: `no`
@@ -3525,7 +3525,7 @@ async fn graph_summary_rejects_missing_local_api_secret() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -3565,7 +3565,7 @@ async fn graph_search_rejects_missing_local_api_secret_before_missing_query_vali
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -3586,7 +3586,7 @@ async fn graph_nodes_rejects_missing_local_api_secret() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -3609,7 +3609,7 @@ async fn graph_neighborhood_rejects_missing_local_api_secret_before_malformed_qu
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }

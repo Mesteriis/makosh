@@ -28,7 +28,7 @@ Project graph edges remain rebuildable projection state. During graph projection
 
 Persona and email-address project links remain derived from active project-message links. Direct Persona review is out of scope for this slice.
 
-Protected local review APIs must require the temporary local bearer token and `X-Hermes-Actor-Id`.
+Protected local review APIs must require the temporary local bearer token and `X-Макошь-Actor-Id`.
 
 ## Non-Goals
 

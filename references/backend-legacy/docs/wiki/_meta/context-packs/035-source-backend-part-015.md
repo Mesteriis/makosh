@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/application/review_inbox.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/review_inbox.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/review_inbox.rs`
 - Size bytes / Размер в байтах: `50`
 - Included characters / Включено символов: `50`
 - Truncated / Обрезано: `no`
@@ -66,7 +66,7 @@ pub(crate) use crate::workflows::review_inbox::*;
 
 ### `backend/src/application/review_promotion.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/review_promotion.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/review_promotion.rs`
 - Size bytes / Размер в байтах: `54`
 - Included characters / Включено символов: `54`
 - Truncated / Обрезано: `no`
@@ -77,7 +77,7 @@ pub(crate) use crate::workflows::review_promotion::*;
 
 ### `backend/src/application/review_transitions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/review_transitions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/review_transitions.rs`
 - Size bytes / Размер в байтах: `10229`
 - Included characters / Включено символов: `10229`
 - Truncated / Обрезано: `no`
@@ -133,7 +133,7 @@ impl DecisionReviewApplicationService {
                         "decision_id": decision_id,
                         "review_state": review_state.as_str(),
                         "operation": "decision_review",
-                        "actor_id": "hermes-frontend",
+                        "actor_id": "makosh-frontend",
                     }),
                     format!("decision://{decision_id}/review"),
                 )
@@ -204,7 +204,7 @@ impl ObligationReviewApplicationService {
                         "obligation_id": obligation_id,
                         "review_state": review_state.as_str(),
                         "operation": "obligation_review",
-                        "actor_id": "hermes-frontend",
+                        "actor_id": "makosh-frontend",
                     }),
                     format!("obligation://{obligation_id}/review"),
                 )
@@ -272,7 +272,7 @@ impl RelationshipReviewApplicationService {
                         "relationship_id": relationship_id,
                         "review_state": review_state.as_str(),
                         "operation": "relationship_review",
-                        "actor_id": "hermes-frontend",
+                        "actor_id": "makosh-frontend",
                     }),
                     format!("relationship://{relationship_id}/review"),
                 )
@@ -404,7 +404,7 @@ pub enum TaskCandidateReviewApplicationError {
 
 ### `backend/src/application/signal_hub_replay.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/signal_hub_replay.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/signal_hub_replay.rs`
 - Size bytes / Размер в байтах: `39311`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -711,13 +711,13 @@ impl SignalHubReplayService {
                     )
                 })
         }) {
-            if let 
+            if let
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/application/task_creation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/task_creation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/task_creation.rs`
 - Size bytes / Размер в байтах: `51`
 - Included characters / Включено символов: `51`
 - Truncated / Обрезано: `no`
@@ -728,7 +728,7 @@ pub(crate) use crate::workflows::task_creation::*;
 
 ### `backend/src/application/telegram_runtime.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/telegram_runtime.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/telegram_runtime.rs`
 - Size bytes / Размер в байтах: `9426`
 - Included characters / Включено символов: `9426`
 - Truncated / Обрезано: `no`
@@ -1000,7 +1000,7 @@ pub(crate) async fn download_media(
 
 ### `backend/src/application/whatsapp_command_executor.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/whatsapp_command_executor.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/whatsapp_command_executor.rs`
 - Size bytes / Размер в байтах: `74387`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1322,7 +1322,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/application/whatsapp_provider_observation_reconciliation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/whatsapp_provider_observation_reconciliation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/whatsapp_provider_observation_reconciliation.rs`
 - Size bytes / Размер в байтах: `25763`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1541,7 +1541,7 @@ async fn publish_whatsapp_command_event(
         json!({
             "channel": "whatsapp",
             "account_id": command.account_id,
-            "actor_id": "hermes-frontend",
+            "actor_id": "makosh-frontend",
             "kind": "whatsapp_provider_commands",
             "source_id": source_id,
         }),
@@ -1655,7 +1655,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/application/whatsapp_runtime_event_projection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/whatsapp_runtime_event_projection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/whatsapp_runtime_event_projection.rs`
 - Size bytes / Размер в байтах: `17243`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2017,7 +2017,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/application/whatsapp_runtime_signal_ingest.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/whatsapp_runtime_signal_ingest.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/whatsapp_runtime_signal_ingest.rs`
 - Size bytes / Размер в байтах: `17998`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2372,7 +2372,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/application/workflow_action_person_projection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/workflow_action_person_projection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/workflow_action_person_projection.rs`
 - Size bytes / Размер в байтах: `71`
 - Included characters / Включено символов: `71`
 - Truncated / Обрезано: `no`
@@ -2383,7 +2383,7 @@ pub(crate) use crate::workflows::workflow_action_person_projection::*;
 
 ### `backend/src/application/yandex_telemost_calendar_matching.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/yandex_telemost_calendar_matching.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/yandex_telemost_calendar_matching.rs`
 - Size bytes / Размер в байтах: `71`
 - Included characters / Включено символов: `71`
 - Truncated / Обрезано: `no`
@@ -2394,7 +2394,7 @@ pub(crate) use crate::workflows::yandex_telemost_calendar_matching::*;
 
 ### `backend/src/application/zoom_calendar_matching.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/zoom_calendar_matching.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/zoom_calendar_matching.rs`
 - Size bytes / Размер в байтах: `60`
 - Included characters / Включено символов: `60`
 - Truncated / Обрезано: `no`
@@ -2405,7 +2405,7 @@ pub(crate) use crate::workflows::zoom_calendar_matching::*;
 
 ### `backend/src/application/zoom_participant_identity.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/zoom_participant_identity.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/zoom_participant_identity.rs`
 - Size bytes / Размер в байтах: `63`
 - Included characters / Включено символов: `63`
 - Truncated / Обрезано: `no`
@@ -2416,7 +2416,7 @@ pub(crate) use crate::workflows::zoom_participant_identity::*;
 
 ### `backend/src/application/zoom_signal_detection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/application/zoom_signal_detection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/application/zoom_signal_detection.rs`
 - Size bytes / Размер в байтах: `59`
 - Included characters / Включено символов: `59`
 - Truncated / Обрезано: `no`
@@ -2425,9 +2425,9 @@ pub(crate) use crate::workflows::zoom_participant_identity::*;
 pub(crate) use crate::workflows::zoom_signal_detection::*;
 ```
 
-### `backend/src/bin/hermes_document_process.rs`
+### `backend/src/bin/makosh_document_process.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_document_process.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_document_process.rs`
 - Size bytes / Размер в байтах: `1761`
 - Included characters / Включено символов: `1761`
 - Truncated / Обрезано: `no`
@@ -2435,11 +2435,11 @@ pub(crate) use crate::workflows::zoom_signal_detection::*;
 ```rust
 use std::env;
 
-use hermes_hub_backend::domains::documents::processing::{
+use makosh_hub_backend::domains::documents::processing::{
     DocumentProcessingRunReport, DocumentProcessingStore,
 };
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 use serde::Serialize;
 use thiserror::Error;
 
@@ -2453,7 +2453,7 @@ struct DocumentProcessCommandReport {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    hermes_hub_backend::app::init_tracing();
+    makosh_hub_backend::app::init_tracing();
 
     let config = AppConfig::from_env()?;
     let database_url = config
@@ -2500,9 +2500,9 @@ enum DocumentProcessCommandError {
 }
 ```
 
-### `backend/src/bin/hermes_email_fixture_dev.rs`
+### `backend/src/bin/makosh_email_fixture_dev.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_email_fixture_dev.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_email_fixture_dev.rs`
 - Size bytes / Размер в байтах: `5154`
 - Included characters / Включено символов: `5154`
 - Truncated / Обрезано: `no`
@@ -2513,10 +2513,10 @@ use std::fs;
 use std::path::PathBuf;
 
 use chrono::Utc;
-use hermes_hub_backend::domains::communications::core::EmailProviderKind;
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::email_fixture_pipeline::{
+use makosh_hub_backend::domains::communications::core::EmailProviderKind;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::email_fixture_pipeline::{
     EmailFixturePipelineRequest, import_fixture_email_messages_for_dev,
     project_fixture_email_messages,
 };
@@ -2529,7 +2529,7 @@ const DEFAULT_EXTERNAL_ACCOUNT_ID: &str = "redacted-icloud@example.invalid";
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    hermes_hub_backend::app::init_tracing();
+    makosh_hub_backend::app::init_tracing();
 
     let config = EmailFixtureDevConfig::from_env()?;
     let app_config = AppConfig::from_env()?;
@@ -2583,12 +2583,12 @@ struct EmailFixtureDevConfig {
 impl EmailFixtureDevConfig {
     fn from_env() -> Result<Self, EmailFixtureDevConfigError> {
         let mode = parse_mode(
-            optional_env("HERMES_EMAIL_FIXTURE_MODE")
+            optional_env("MAKOSH_EMAIL_FIXTURE_MODE")
                 .unwrap_or_else(|| "project".to_owned())
                 .as_str(),
         )?;
         let provider_kind = parse_provider_kind(
-            optional_env("HERMES_EMAIL_FIXTURE_PROVIDER")
+            optional_env("MAKOSH_EMAIL_FIXTURE_PROVIDER")
                 .unwrap_or_else(|| "icloud".to_owned())
                 .as_str(),
         )?;
@@ -2596,17 +2596,17 @@ impl EmailFixtureDevConfig {
         Ok(Self {
             mode,
             fixture_path: PathBuf::from(
-                optional_env("HERMES_EMAIL_FIXTURE_PATH")
+                optional_env("MAKOSH_EMAIL_FIXTURE_PATH")
                     .unwrap_or_else(|| DEFAULT_FIXTURE_PATH.to_owned()),
             ),
-            account_id: optional_env("HERMES_EMAIL_FIXTURE_ACCOUNT_ID")
+            account_id: optional_env("MAKOSH_EMAIL_FIXTURE_ACCOUNT_ID")
                 .unwrap_or_else(|| DEFAULT_ACCOUNT_ID.to_owned()),
-            display_name: optional_env("HERMES_EMAIL_FIXTURE_DISPLAY_NAME")
+            display_name: optional_env("MAKOSH_EMAIL_FIXTURE_DISPLAY_NAME")
                 .unwrap_or_else(|| DEFAULT_DISPLAY_NAME.to_owned()),
-            external_account_id: optional_env("HERMES_EMAIL_FIXTURE_EXTERNAL_ACCOUNT_ID")
+            external_account_id: optional_env("MAKOSH_EMAIL_FIXTURE_EXTERNAL_ACCOUNT_ID")
                 .unwrap_or_else(|| DEFAULT_EXTERNAL_ACCOUNT_ID.to_owned()),
             provider_kind,
-            import_batch_id: optional_env("HERMES_EMAIL_FIXTURE_IMPORT_BATCH_ID")
+            import_batch_id: optional_env("MAKOSH_EMAIL_FIXTURE_IMPORT_BATCH_ID")
                 .unwrap_or_else(|| format!("fixture-dev-{}", Utc::now().timestamp())),
         })
     }
@@ -2650,17 +2650,17 @@ enum EmailFixtureDevConfigError {
         source: std::io::Error,
     },
 
-    #[error("invalid HERMES_EMAIL_FIXTURE_MODE `{0}`; expected `import` or `project`")]
+    #[error("invalid MAKOSH_EMAIL_FIXTURE_MODE `{0}`; expected `import` or `project`")]
     InvalidMode(String),
 
-    #[error("invalid HERMES_EMAIL_FIXTURE_PROVIDER `{0}`; expected `gmail`, `icloud` or `imap`")]
+    #[error("invalid MAKOSH_EMAIL_FIXTURE_PROVIDER `{0}`; expected `gmail`, `icloud` or `imap`")]
     InvalidProviderKind(String),
 }
 ```
 
-### `backend/src/bin/hermes_email_fixture_export.rs`
+### `backend/src/bin/makosh_email_fixture_export.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_email_fixture_export.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_email_fixture_export.rs`
 - Size bytes / Размер в байтах: `7138`
 - Included characters / Включено символов: `7138`
 - Truncated / Обрезано: `no`
@@ -2670,12 +2670,12 @@ use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use hermes_hub_backend::domains::communications::core::EmailProviderKind;
-use hermes_hub_backend::domains::communications::fixtures::export::{
+use makosh_hub_backend::domains::communications::core::EmailProviderKind;
+use makosh_hub_backend::domains::communications::fixtures::export::{
     EmailFixtureExportOptions, export_fixture_messages_from_sync_batch,
 };
-use hermes_hub_backend::integrations::mail::gmail::client::{ImapFetchOptions, ImapNetworkClient};
-use hermes_hub_backend::platform::secrets::ResolvedSecret;
+use makosh_hub_backend::integrations::mail::gmail::client::{ImapFetchOptions, ImapNetworkClient};
+use makosh_hub_backend::platform::secrets::ResolvedSecret;
 use serde::Serialize;
 use thiserror::Error;
 
@@ -2687,7 +2687,7 @@ const DEFAULT_OUTPUT_PATH: &str = "tmp/email-fixtures/icloud-inbox-redacted.json
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    hermes_hub_backend::app::init_tracing();
+    makosh_hub_backend::app::init_tracing();
 
     let config = LiveImapFixtureConfig::from_env()?;
     ensure_parent_dir(&config.output_path)?;
@@ -2751,29 +2751,29 @@ struct LiveImapFixtureConfig {
 impl LiveImapFixtureConfig {
     fn from_env() -> Result<Self, LiveImapFixtureConfigError> {
         Ok(Self {
-            username: first_env(["HERMES_IMAP_FIXTURE_USERNAME", "ICLOUD_LOGIN"])?,
-            password: first_env(["HERMES_IMAP_FIXTURE_PASSWORD", "ICLOUD_2FA"])?,
-            host: optional_env("HERMES_IMAP_FIXTURE_HOST")
+            username: first_env(["MAKOSH_IMAP_FIXTURE_USERNAME", "ICLOUD_LOGIN"])?,
+            password: first_env(["MAKOSH_IMAP_FIXTURE_PASSWORD", "ICLOUD_2FA"])?,
+            host: optional_env("MAKOSH_IMAP_FIXTURE_HOST")
                 .unwrap_or_else(|| DEFAULT_ICLOUD_IMAP_HOST.to_owned()),
-            port: optional_env("HERMES_IMAP_FIXTURE_PORT")
-                .map(|value| parse_port("HERMES_IMAP_FIXTURE_PORT", &value))
+            port: optional_env("MAKOSH_IMAP_FIXTURE_PORT")
+                .map(|value| parse_port("MAKOSH_IMAP_FIXTURE_PORT", &value))
                 .transpose()?
                 .unwrap_or(DEFAULT_IMAP_PORT),
-            tls: optional_env("HERMES_IMAP_FIXTURE_TLS")
-                .map(|value| parse_bool("HERMES_IMAP_FIXTURE_TLS", &value))
+            tls: optional_env("MAKOSH_IMAP_FIXTURE_TLS")
+                .map(|value| parse_bool("MAKOSH_IMAP_FIXTURE_TLS", &value))
                 .transpose()?
                 .unwrap_or(true),
-            mailbox: optional_env("HERMES_IMAP_FIXTURE_MAILBOX")
+            mailbox: optional_env("MAKOSH_IMAP_FIXTURE_MAILBOX")
                 .unwrap_or_else(|| DEFAULT_MAILBOX.to_owned()),
-            max_messages: optional_env("HERMES_IMAP_FIXTURE_MAX_MESSAGES")
-                .map(|value| parse_usize("HERMES_IMAP_FIXTURE_MAX_MESSAGES", &value))
+            max_messages: optional_env("MAKOSH_IMAP_FIXTURE_MAX_MESSAGES")
+                .map(|value| parse_usize("MAKOSH_IMAP_FIXTURE_MAX_MESSAGES", &value))
                 .transpose()?
                 .unwrap_or(DEFAULT_MAX_MESSAGES),
-            last_seen_uid: optional_env("HERMES_IMAP_FIXTURE_LAST_SEEN_UID")
-                .map(|value| parse_u32("HERMES_IMAP_FIXTURE_LAST_SEEN_UID", &value))
+            last_seen_uid: optional_env("MAKOSH_IMAP_FIXTURE_LAST_SEEN_UID")
+                .map(|value| parse_u32("MAKOSH_IMAP_FIXTURE_LAST_SEEN_UID", &value))
                 .transpose()?,
             output_path: PathBuf::from(
-                optional_env("HERMES_IMAP_FIXTURE_OUTPUT")
+                optional_env("MAKOSH_IMAP_FIXTURE_OUTPUT")
                     .unwrap_or_else(|| DEFAULT_OUTPUT_PATH.to_owned()),
             ),
         })
@@ -2892,9 +2892,9 @@ enum LiveImapFixtureConfigError {
 }
 ```
 
-### `backend/src/bin/hermes_email_reproject_dev.rs`
+### `backend/src/bin/makosh_email_reproject_dev.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_email_reproject_dev.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_email_reproject_dev.rs`
 - Size bytes / Размер в байтах: `7076`
 - Included characters / Включено символов: `7070`
 - Truncated / Обрезано: `no`
@@ -2904,15 +2904,15 @@ use std::env;
 use std::path::PathBuf;
 
 use chrono::{DateTime, Utc};
-use hermes_hub_backend::app::init_tracing;
-use hermes_hub_backend::domains::communications::core::StoredRawCommunicationRecord;
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::app::init_tracing;
+use makosh_hub_backend::domains::communications::core::StoredRawCommunicationRecord;
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, parse_raw_email_message_from_blob, project_parsed_raw_email_message,
 };
-use hermes_hub_backend::domains::communications::storage::LocalCommunicationBlobStore;
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::mail_background_sync::DEFAULT_MAIL_SYNC_BLOB_ROOT;
+use makosh_hub_backend::domains::communications::storage::LocalCommunicationBlobStore;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::mail_background_sync::DEFAULT_MAIL_SYNC_BLOB_ROOT;
 use serde::Serialize;
 use serde_json::Value;
 use sqlx::Row;
@@ -3056,13 +3056,13 @@ struct ReprojectDevConfig {
 impl ReprojectDevConfig {
     fn from_env() -> Result<Self, ReprojectDevError> {
         Ok(Self {
-            account_id: optional_env("HERMES_EMAIL_REPROJECT_ACCOUNT_ID"),
-            only_corrupt: optional_env("HERMES_EMAIL_REPROJECT_ONLY_CORRUPT")
-                .map(|value| parse_bool("HERMES_EMAIL_REPROJECT_ONLY_CORRUPT", &value))
+            account_id: optional_env("MAKOSH_EMAIL_REPROJECT_ACCOUNT_ID"),
+            only_corrupt: optional_env("MAKOSH_EMAIL_REPROJECT_ONLY_CORRUPT")
+                .map(|value| parse_bool("MAKOSH_EMAIL_REPROJECT_ONLY_CORRUPT", &value))
                 .transpose()?
                 .unwrap_or(true),
             blob_root: PathBuf::from(
-                optional_env("HERMES_EMAIL_REPROJECT_BLOB_ROOT")
+                optional_env("MAKOSH_EMAIL_REPROJECT_BLOB_ROOT")
                     .unwrap_or_else(|| DEFAULT_MAIL_SYNC_BLOB_ROOT.to_owned()),
             ),
         })
@@ -3115,31 +3115,31 @@ enum ReprojectDevError {
 }
 ```
 
-### `backend/src/bin/hermes_email_sync_dev.rs`
+### `backend/src/bin/makosh_email_sync_dev.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_email_sync_dev.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_email_sync_dev.rs`
 - Size bytes / Размер в байтах: `895`
 - Included characters / Включено символов: `895`
 - Truncated / Обрезано: `no`
 
 ```rust
-#[path = "hermes_email_sync_dev/account.rs"]
+#[path = "makosh_email_sync_dev/account.rs"]
 mod account;
-#[path = "hermes_email_sync_dev/checkpoint.rs"]
+#[path = "makosh_email_sync_dev/checkpoint.rs"]
 mod checkpoint;
-#[path = "hermes_email_sync_dev/config.rs"]
+#[path = "makosh_email_sync_dev/config.rs"]
 mod config;
-#[path = "hermes_email_sync_dev/env.rs"]
+#[path = "makosh_email_sync_dev/env.rs"]
 mod env;
-#[path = "hermes_email_sync_dev/errors.rs"]
+#[path = "makosh_email_sync_dev/errors.rs"]
 mod errors;
-#[path = "hermes_email_sync_dev/fetch.rs"]
+#[path = "makosh_email_sync_dev/fetch.rs"]
 mod fetch;
-#[path = "hermes_email_sync_dev/provider.rs"]
+#[path = "makosh_email_sync_dev/provider.rs"]
 mod provider;
-#[path = "hermes_email_sync_dev/report.rs"]
+#[path = "makosh_email_sync_dev/report.rs"]
 mod report;
-#[path = "hermes_email_sync_dev/runner.rs"]
+#[path = "makosh_email_sync_dev/runner.rs"]
 mod runner;
 
 use config::DevEmailSyncConfig;
@@ -3148,7 +3148,7 @@ use runner::run_dev_email_sync;
 
 #[tokio::main]
 async fn main() -> Result<(), DevEmailSyncError> {
-    hermes_hub_backend::app::init_tracing();
+    makosh_hub_backend::app::init_tracing();
 
     let config = DevEmailSyncConfig::from_env()?;
     let report = run_dev_email_sync(config).await?;
@@ -3158,16 +3158,16 @@ async fn main() -> Result<(), DevEmailSyncError> {
 }
 ```
 
-### `backend/src/bin/hermes_email_sync_dev/account.rs`
+### `backend/src/bin/makosh_email_sync_dev/account.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_email_sync_dev/account.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_email_sync_dev/account.rs`
 - Size bytes / Размер в байтах: `804`
 - Included characters / Включено символов: `804`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::communications::core::CommunicationProviderAccountStore;
-use hermes_hub_backend::domains::communications::core::NewProviderAccount;
+use makosh_hub_backend::domains::communications::core::CommunicationProviderAccountStore;
+use makosh_hub_backend::domains::communications::core::NewProviderAccount;
 use serde_json::json;
 
 use crate::config::DevEmailSyncConfig;
@@ -3196,15 +3196,15 @@ pub(super) async fn upsert_dev_provider_account(
 }
 ```
 
-### `backend/src/bin/hermes_email_sync_dev/checkpoint.rs`
+### `backend/src/bin/makosh_email_sync_dev/checkpoint.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_email_sync_dev/checkpoint.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_email_sync_dev/checkpoint.rs`
 - Size bytes / Размер в байтах: `528`
 - Included characters / Включено символов: `528`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::communications::core::CommunicationIngestionStore;
+use makosh_hub_backend::domains::communications::core::CommunicationIngestionStore;
 
 use crate::errors::DevEmailSyncError;
 
@@ -3220,9 +3220,9 @@ pub(super) async fn last_seen_uid(
 }
 ```
 
-### `backend/src/bin/hermes_email_sync_dev/config.rs`
+### `backend/src/bin/makosh_email_sync_dev/config.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_email_sync_dev/config.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_email_sync_dev/config.rs`
 - Size bytes / Размер в байтах: `3461`
 - Included characters / Включено символов: `3461`
 - Truncated / Обрезано: `no`
@@ -3230,8 +3230,8 @@ pub(super) async fn last_seen_uid(
 ```rust
 use std::path::PathBuf;
 
-use hermes_hub_backend::domains::communications::core::EmailProviderKind;
-use hermes_hub_backend::platform::secrets::ResolvedSecret;
+use makosh_hub_backend::domains::communications::core::EmailProviderKind;
+use makosh_hub_backend::platform::secrets::ResolvedSecret;
 
 use crate::env::{first_env, optional_env, parse_bool, parse_port, parse_usize};
 use crate::errors::DevEmailSyncError;
@@ -3260,62 +3260,62 @@ pub(super) struct DevEmailSyncConfig {
 impl DevEmailSyncConfig {
     pub(super) fn from_env() -> Result<Self, DevEmailSyncError> {
         let provider_kind = parse_provider_kind(
-            optional_env("HERMES_EMAIL_SYNC_PROVIDER")
+            optional_env("MAKOSH_EMAIL_SYNC_PROVIDER")
                 .unwrap_or_else(|| "icloud".to_owned())
                 .as_str(),
         )?;
         let username = first_env([
-            "HERMES_EMAIL_SYNC_USERNAME",
-            "HERMES_IMAP_FIXTURE_USERNAME",
+            "MAKOSH_EMAIL_SYNC_USERNAME",
+            "MAKOSH_IMAP_FIXTURE_USERNAME",
             "ICLOUD_LOGIN",
         ])?;
-        let external_account_id = optional_env("HERMES_EMAIL_SYNC_EXTERNAL_ACCOUNT_ID")
+        let external_account_id = optional_env("MAKOSH_EMAIL_SYNC_EXTERNAL_ACCOUNT_ID")
             .unwrap_or_else(|| username.clone());
         let password = ResolvedSecret::new(first_env([
-            "HERMES_EMAIL_SYNC_PASSWORD",
-            "HERMES_IMAP_FIXTURE_PASSWORD",
+            "MAKOSH_EMAIL_SYNC_PASSWORD",
+            "MAKOSH_IMAP_FIXTURE_PASSWORD",
             "ICLOUD_2FA",
         ])?)?;
 
         Ok(Self {
-            account_id: optional_env("HERMES_EMAIL_SYNC_ACCOUNT_ID")
+            account_id: optional_env("MAKOSH_EMAIL_SYNC_ACCOUNT_ID")
                 .unwrap_or_else(|| format!("dev-{}-mail-cache", provider_kind.as_str())),
-            display_name: optional_env("HERMES_EMAIL_SYNC_DISPLAY_NAME")
+            display_name: optional_env("MAKOSH_EMAIL_SYNC_DISPLAY_NAME")
                 .unwrap_or_else(|| "Dev Mail Cache".to_owned()),
             external_account_id,
             provider_kind,
             username,
             password,
-            host: optional_env("HERMES_EMAIL_SYNC_HOST")
+            host: optional_env("MAKOSH_EMAIL_SYNC_HOST")
                 .unwrap_or_else(|| default_host(provider_kind).to_owned()),
-            port: optional_env("HERMES_EMAIL_SYNC_PORT")
-                .map(|value| parse_port("HERMES_EMAIL_SYNC_PORT", &value))
+            port: optional_env("MAKOSH_EMAIL_SYNC_PORT")
+                .map(|value| parse_port("MAKOSH_EMAIL_SYNC_PORT", &value))
                 .transpose()?
                 .unwrap_or(crate::provider::DEFAULT_IMAP_PORT),
-            tls: optional_env("HERMES_EMAIL_SYNC_TLS")
-                .map(|value| parse_bool("HERMES_EMAIL_SYNC_TLS", &value))
+            tls: optional_env("MAKOSH_EMAIL_SYNC_TLS")
+                .map(|value| parse_bool("MAKOSH_EMAIL_SYNC_TLS", &value))
                 .transpose()?
                 .unwrap_or(true),
-            mailbox: optional_env("HERMES_EMAIL_SYNC_MAILBOX")
+            mailbox: optional_env("MAKOSH_EMAIL_SYNC_MAILBOX")
                 .unwrap_or_else(|| DEFAULT_MAILBOX.to_owned()),
-            max_messages: optional_env("HERMES_EMAIL_SYNC_MAX_MESSAGES")
-                .map(|value| parse_usize("HERMES_EMAIL_SYNC_MAX_MESSAGES", &value))
+            max_messages: optional_env("MAKOSH_EMAIL_SYNC_MAX_MESSAGES")
+                .map(|value| parse_usize("MAKOSH_EMAIL_SYNC_MAX_MESSAGES", &value))
                 .transpose()?
                 .unwrap_or(DEFAULT_MAX_MESSAGES),
             blob_root: PathBuf::from(
-                optional_env("HERMES_EMAIL_SYNC_BLOB_ROOT")
+                optional_env("MAKOSH_EMAIL_SYNC_BLOB_ROOT")
                     .unwrap_or_else(|| DEFAULT_BLOB_ROOT.to_owned()),
             ),
-            import_batch_id: optional_env("HERMES_EMAIL_SYNC_IMPORT_BATCH_ID")
+            import_batch_id: optional_env("MAKOSH_EMAIL_SYNC_IMPORT_BATCH_ID")
                 .unwrap_or_else(|| format!("email-sync-dev-{}", chrono::Utc::now().timestamp())),
         })
     }
 }
 ```
 
-### `backend/src/bin/hermes_email_sync_dev/env.rs`
+### `backend/src/bin/makosh_email_sync_dev/env.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_email_sync_dev/env.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_email_sync_dev/env.rs`
 - Size bytes / Размер в байтах: `2117`
 - Included characters / Включено символов: `2117`
 - Truncated / Обрезано: `no`
@@ -3396,20 +3396,20 @@ fn parse_u16(name: &'static str, value: &str) -> Result<u16, DevEmailSyncError> 
 }
 ```
 
-### `backend/src/bin/hermes_email_sync_dev/errors.rs`
+### `backend/src/bin/makosh_email_sync_dev/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_email_sync_dev/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_email_sync_dev/errors.rs`
 - Size bytes / Размер в байтах: `1589`
 - Included characters / Включено символов: `1589`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::communications::core::CommunicationIngestionError;
-use hermes_hub_backend::integrations::mail::gmail::client::EmailProviderNetworkError;
-use hermes_hub_backend::platform::config::ConfigError;
-use hermes_hub_backend::platform::secrets::SecretResolutionError;
-use hermes_hub_backend::platform::storage::StorageError;
-use hermes_hub_backend::workflows::email_sync_pipeline::EmailSyncPipelineError;
+use makosh_hub_backend::domains::communications::core::CommunicationIngestionError;
+use makosh_hub_backend::integrations::mail::gmail::client::EmailProviderNetworkError;
+use makosh_hub_backend::platform::config::ConfigError;
+use makosh_hub_backend::platform::secrets::SecretResolutionError;
+use makosh_hub_backend::platform::storage::StorageError;
+use makosh_hub_backend::workflows::email_sync_pipeline::EmailSyncPipelineError;
 use thiserror::Error;
 
 #[derive(Debug, Error)]
@@ -3420,7 +3420,7 @@ pub(super) enum DevEmailSyncError {
     #[error("missing required environment variable: {0}")]
     MissingEnv(String),
 
-    #[error("invalid HERMES_EMAIL_SYNC_PROVIDER `{0}`; expected `icloud` or `imap`")]
+    #[error("invalid MAKOSH_EMAIL_SYNC_PROVIDER `{0}`; expected `icloud` or `imap`")]
     InvalidProviderKind(String),
 
     #[error("Gmail dev sync is not supported by this IMAP-only command")]

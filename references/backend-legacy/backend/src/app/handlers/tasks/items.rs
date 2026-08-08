@@ -9,12 +9,12 @@ use crate::domains::tasks::api::{NewTask, Task, TaskUpdate};
 use crate::domains::tasks::command_service::TaskCommandService;
 
 use super::support::database_pool;
-use hermes_tasks_api::{TaskListQuery, TaskReadPort};
-use hermes_tasks_postgres::TaskPostgresReadQuery;
+use makosh_tasks_api::{TaskListQuery, TaskReadPort};
+use makosh_tasks_postgres::TaskPostgresReadQuery;
 
 #[derive(Serialize)]
 pub(crate) struct TaskRecordsResponse {
-    items: Vec<hermes_tasks_api::TaskRead>,
+    items: Vec<makosh_tasks_api::TaskRead>,
 }
 
 #[derive(Deserialize)]
@@ -58,7 +58,7 @@ pub(crate) async fn post_task(
 pub(crate) async fn get_task(
     State(state): State<AppState>,
     Path(task_id): Path<String>,
-) -> Result<Json<hermes_tasks_api::TaskRead>, ApiError> {
+) -> Result<Json<makosh_tasks_api::TaskRead>, ApiError> {
     let pool = database_pool(&state)?;
     TaskReadPort::get(&TaskPostgresReadQuery::new(pool), &task_id)
         .await

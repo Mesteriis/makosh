@@ -2,13 +2,13 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_storage_control::{StorageLifecycleV1, StorageRevocationErrorV1, StorageRevokerV1};
-use hermes_storage_pgbouncer::{
+use makosh_storage_control::{StorageLifecycleV1, StorageRevocationErrorV1, StorageRevokerV1};
+use makosh_storage_pgbouncer::{
     PgBouncerPoolFenceAdapterV1, PoolAliasV1, TokioPostgresPgBouncerAdminPortV1,
     database_is_configured,
 };
-use hermes_storage_postgres::{PostgresRuntimeFenceAdapterV1, StorageRoleSpecV1};
-use hermes_storage_protocol::{
+use makosh_storage_postgres::{PostgresRuntimeFenceAdapterV1, StorageRoleSpecV1};
+use makosh_storage_protocol::{
     v1::{StorageBindingV1, StorageRuntimeConfigurationV1},
     validation::storage_binding_from_message,
 };

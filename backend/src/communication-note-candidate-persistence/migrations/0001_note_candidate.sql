@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communication_note_candidate_extraction_runs (
+CREATE TABLE makosh_data.communication_note_candidate_extraction_runs (
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
     operation_id BYTEA NOT NULL,
@@ -94,13 +94,13 @@ CREATE TABLE hermes_data.communication_note_candidate_extraction_runs (
 );
 
 CREATE INDEX communication_note_candidate_extraction_recoverable_idx
-ON hermes_data.communication_note_candidate_extraction_runs (
+ON makosh_data.communication_note_candidate_extraction_runs (
     logical_owner_id,
     state,
     state_revision
 );
 
-CREATE TABLE hermes_data.communication_note_candidate_extraction_inbox (
+CREATE TABLE makosh_data.communication_note_candidate_extraction_inbox (
     logical_owner_id TEXT NOT NULL,
     result_message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -114,7 +114,7 @@ CREATE TABLE hermes_data.communication_note_candidate_extraction_inbox (
     CHECK (processed_at_unix_millis > 0)
 );
 
-CREATE TABLE hermes_data.communication_note_candidate_extraction_outbox (
+CREATE TABLE makosh_data.communication_note_candidate_extraction_outbox (
     logical_owner_id TEXT NOT NULL,
     message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -134,14 +134,14 @@ CREATE TABLE hermes_data.communication_note_candidate_extraction_outbox (
 );
 
 CREATE INDEX communication_note_candidate_extraction_outbox_pending_idx
-ON hermes_data.communication_note_candidate_extraction_outbox (
+ON makosh_data.communication_note_candidate_extraction_outbox (
     logical_owner_id,
     created_at_unix_millis,
     message_id
 )
 WHERE published_at_unix_millis IS NULL;
 
-CREATE TABLE hermes_data.communication_note_candidate_extraction_realtime (
+CREATE TABLE makosh_data.communication_note_candidate_extraction_realtime (
     realtime_sequence BIGSERIAL PRIMARY KEY,
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
@@ -158,7 +158,7 @@ CREATE TABLE hermes_data.communication_note_candidate_extraction_realtime (
 );
 
 CREATE INDEX communication_note_candidate_extraction_realtime_owner_idx
-ON hermes_data.communication_note_candidate_extraction_realtime (
+ON makosh_data.communication_note_candidate_extraction_realtime (
     logical_owner_id,
     realtime_sequence
 );

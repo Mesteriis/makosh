@@ -34,7 +34,7 @@ const selectedOwner = ref<SettingsOwnerId>(props.initialOwner ?? 'system')
 
 const mailModule = computed(() => clientSettingsModule(props.bootstrap.modules, 'mail'))
 const mailContactsSyncModule = computed(() => props.bootstrap.modules.find(
-	(module) => module.moduleId === 'hermes-mail-contacts-sync-runtime',
+	(module) => module.moduleId === 'makosh-mail-contacts-sync-runtime',
 ) ?? null)
 const telegramModule = computed(() => clientSettingsModule(props.bootstrap.modules, 'telegram'))
 const whatsAppModule = computed(() => clientSettingsModule(props.bootstrap.modules, 'whatsapp'))

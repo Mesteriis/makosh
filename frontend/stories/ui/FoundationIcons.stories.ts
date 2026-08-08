@@ -6,7 +6,7 @@ import { generalStoryCopy } from './general-story-copy'
 const icons = ['tabler:messages', 'tabler:radar', 'tabler:brain', 'tabler:archive', 'tabler:checks']
 
 const meta = {
-	title: 'Hermes UI/Foundation/Icons',
+	title: 'Макошь UI/Foundation/Icons',
 	component: Icon,
 	render: (_args, context) => ({
 		components: { Icon, Kbd },

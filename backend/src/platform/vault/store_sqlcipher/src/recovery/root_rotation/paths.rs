@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 
 use crate::database::store::VaultStoreError;
 
-pub(super) const JOURNAL_NAME: &str = ".hermes-vault-root-rotation-v1";
+pub(super) const JOURNAL_NAME: &str = ".makosh-vault-root-rotation-v1";
 
 pub(super) fn journal_path(database_path: &Path) -> Result<PathBuf, VaultStoreError> {
     database_path

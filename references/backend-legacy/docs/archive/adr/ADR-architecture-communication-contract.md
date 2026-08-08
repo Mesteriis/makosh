@@ -19,7 +19,7 @@ Clarifies:
 
 ## Context
 
-Hermes has enough domain and provider surface that "do not import another
+Макошь has enough domain and provider surface that "do not import another
 domain" is no longer precise enough. The architecture needs one communication
 contract that applies to backend modules, frontend modules, events, projections,
 provider runtimes and AI outputs.
@@ -30,7 +30,7 @@ must be fixed, not registered as exceptions.
 
 ## Decision
 
-Hermes uses exactly these component interaction kinds:
+Макошь uses exactly these component interaction kinds:
 
 ```text
 direct_call

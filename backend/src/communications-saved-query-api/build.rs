@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/communications/saved_search/v1/saved_search.proto"],
+            &["proto/makosh/communications/saved_search/v1/saved_search.proto"],
             &["proto"],
         )
         .expect("Communications saved-search protocol must compile");

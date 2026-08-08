@@ -16,7 +16,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
                 "placeholder": "127.0.0.1:8080",
                 "restart_required": true,
                 "bootstrap": true,
-                "env_var": "HERMES_HTTP_ADDR"
+                "env_var": "MAKOSH_HTTP_ADDR"
             }),
             is_editable: true,
         },

@@ -38,7 +38,7 @@ impl CommunicationsExportPersistenceV1 {
                 "SELECT realtime_sequence, export_id, state, requested_items,
                         completed_items, artifact_bytes, rejection_code,
                         occurred_at_unix_millis
-                 FROM hermes_data.communications_export_client_realtime
+                 FROM makosh_data.communications_export_client_realtime
                  WHERE logical_owner_id = $1 AND realtime_sequence > $2
                  ORDER BY realtime_sequence
                  LIMIT $3",
@@ -60,7 +60,7 @@ impl CommunicationsExportPersistenceV1 {
                    SELECT realtime_sequence, export_id, state, requested_items,
                           completed_items, artifact_bytes, rejection_code,
                           occurred_at_unix_millis
-                   FROM hermes_data.communications_export_client_realtime
+                   FROM makosh_data.communications_export_client_realtime
                    WHERE logical_owner_id = $1
                    ORDER BY realtime_sequence DESC
                    LIMIT $2
@@ -90,13 +90,13 @@ pub(crate) async fn insert_realtime_transition(
         .checked_mul(1_000)
         .ok_or(CommunicationsExportPersistenceErrorV1::InvalidInput)?;
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.communications_export_client_realtime (
+        "INSERT INTO makosh_data.communications_export_client_realtime (
            logical_owner_id, export_id, state, requested_items, completed_items,
            artifact_bytes, rejection_code, occurred_at_unix_millis
          )
          SELECT logical_owner_id, export_id, state, requested_items, completed_items,
                 COALESCE(artifact_declared_bytes, 0), rejection_code, $1
-         FROM hermes_data.communications_export_jobs
+         FROM makosh_data.communications_export_jobs
          WHERE logical_owner_id = $2 AND export_id = $3
          ON CONFLICT (logical_owner_id, export_id, state) DO NOTHING",
     )

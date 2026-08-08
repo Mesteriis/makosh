@@ -1,4 +1,4 @@
-import type { CommunicationSearchHitV1 } from '../../../gen/hermes/communications/query/v1/query_pb'
+import type { CommunicationSearchHitV1 } from '../../../gen/makosh/communications/query/v1/query_pb'
 import { getCommunicationsQueryConnectClient } from '../../../platform/connect/communicationsQueryClient'
 import type { CanonicalCommunicationsPage } from './canonicalCommunicationsRead'
 

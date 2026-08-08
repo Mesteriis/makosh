@@ -1,4 +1,4 @@
-import type { ZulipCommandOperationStatusV1 } from '../../../gen/hermes/zulip/v1/client_pb'
+import type { ZulipCommandOperationStatusV1 } from '../../../gen/makosh/zulip/v1/client_pb'
 
 export type ZulipDestination = 'direct' | 'stream'
 

@@ -1,5 +1,5 @@
-use hermes_kernel_control_store::PlatformEventsAuthorityConfigurationV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store::PlatformEventsAuthorityConfigurationV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use super::common::unique_target_root;
 
@@ -7,7 +7,7 @@ const ACCOUNT_KEY: &str = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 #[test]
 fn events_authority_configuration_is_durable_and_monotonically_fenced() {
-    let root = unique_target_root("hermes-events-authority-configuration");
+    let root = unique_target_root("makosh-events-authority-configuration");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -48,7 +48,7 @@ fn events_authority_configuration_is_durable_and_monotonically_fenced() {
 
 #[test]
 fn events_authority_configuration_rejects_non_account_identity() {
-    let root = unique_target_root("hermes-events-authority-configuration-invalid");
+    let root = unique_target_root("makosh-events-authority-configuration-invalid");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");

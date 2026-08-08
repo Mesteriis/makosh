@@ -2,7 +2,7 @@
 
 use std::sync::Mutex;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ApplyEventsAccountJwtUpdateResponseV1, EventsAuthorityRuntimeControlRequestV1,
     EventsAuthorityRuntimeControlResponseV1,
     events_authority_runtime_control_request_v1::Operation,

@@ -1,10 +1,10 @@
 use std::io::Cursor;
 
-use hermes_attachment_preview_api::ATTACHMENT_PREVIEW_MAX_IMAGE_BYTES_V1;
-use hermes_attachment_preview_renderer_contract::{
+use image::{DynamicImage, ImageFormat, Rgba, RgbaImage};
+use makosh_attachment_preview_api::ATTACHMENT_PREVIEW_MAX_IMAGE_BYTES_V1;
+use makosh_attachment_preview_renderer_contract::{
     ATTACHMENT_PREVIEW_MAX_IMAGE_PIXELS_V1, AttachmentPreviewRendererErrorV1,
 };
-use image::{DynamicImage, ImageFormat, Rgba, RgbaImage};
 use swash::{
     FontRef,
     scale::{Render, ScaleContext, Source, image::Content},
@@ -22,8 +22,8 @@ pub(crate) const BODY_TOP_V1: f32 = 156.0;
 const BODY_FONT_SIZE_V1: f32 = 24.0;
 const BODY_LINE_HEIGHT_V1: f32 = 34.0;
 const TITLE_FONT_SIZE_V1: f32 = 32.0;
-const TITLE_V1: &str = "Hermes safe DOCX preview";
-const TRUNCATED_V1: &str = "[Preview truncated by Hermes safety limit]";
+const TITLE_V1: &str = "Макошь safe DOCX preview";
+const TRUNCATED_V1: &str = "[Preview truncated by Макошь safety limit]";
 
 pub(crate) struct RenderedDocxCardV1 {
     pub(crate) bytes: Vec<u8>,

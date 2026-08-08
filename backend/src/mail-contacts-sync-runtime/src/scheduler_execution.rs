@@ -1,12 +1,12 @@
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimeSubscribePermitV1, receive_runtime_pull_delivery,
 };
-use hermes_mail_contacts_sync_core::{MailContactsSyncDraftV1, MailContactsSyncTriggerV1};
-use hermes_mail_contacts_sync_persistence::{
+use makosh_mail_contacts_sync_core::{MailContactsSyncDraftV1, MailContactsSyncTriggerV1};
+use makosh_mail_contacts_sync_persistence::{
     AcceptScheduledMailContactsSyncDueOutcomeV1, AcceptScheduledMailContactsSyncDueV1,
     MailContactsSyncPersistenceV1, OutboxEnvelopeV1,
 };
-use hermes_scheduler_protocol::v1::JobRunOutcomeV1;
+use makosh_scheduler_protocol::v1::JobRunOutcomeV1;
 
 use crate::{
     MailContactsSyncDueRuntimeContextV1, MailContactsSyncRuntimeSettingsV1,

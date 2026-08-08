@@ -1,4 +1,4 @@
-use hermes_events_api::StoredEventEnvelope;
+use makosh_events_api::StoredEventEnvelope;
 use std::fs;
 use std::path::Path;
 use std::process::Command;
@@ -17,14 +17,14 @@ use crate::application::realtime_conversation_transcript_execution::{
 use crate::platform::events::bus::InMemoryEventBus;
 use crate::platform::realtime_conversation::events::REALTIME_CONVERSATION_TRANSCRIPT_REQUESTED;
 use crate::platform::realtime_conversation::models::CallBundleManifest;
-use hermes_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::errors::EventStoreError;
 
 pub const REALTIME_CONVERSATION_TRANSCRIPT_EXECUTION_CONSUMER: &str =
     "realtime_conversation_transcript_execution";
-const TRANSCRIBER_PATH_ENV: &str = "HERMES_REALTIME_CONVERSATION_TRANSCRIBER";
-const TRANSCRIBER_ARGS_JSON_ENV: &str = "HERMES_REALTIME_CONVERSATION_TRANSCRIBER_ARGS_JSON";
+const TRANSCRIBER_PATH_ENV: &str = "MAKOSH_REALTIME_CONVERSATION_TRANSCRIBER";
+const TRANSCRIBER_ARGS_JSON_ENV: &str = "MAKOSH_REALTIME_CONVERSATION_TRANSCRIBER_ARGS_JSON";
 const TRANSCRIBER_TIMEOUT_SECONDS_ENV: &str =
-    "HERMES_REALTIME_CONVERSATION_TRANSCRIBER_TIMEOUT_SECONDS";
+    "MAKOSH_REALTIME_CONVERSATION_TRANSCRIBER_TIMEOUT_SECONDS";
 const DEFAULT_TRANSCRIBER_TIMEOUT_SECONDS: u64 = 900;
 
 #[derive(Debug, Error)]
@@ -118,7 +118,7 @@ async fn execute_realtime_conversation_transcript_request_event_inner(
         confidence: output.confidence,
         metadata: output.metadata,
     };
-    let event_store = hermes_events_postgres::store::EventStore::new(pool.clone());
+    let event_store = makosh_events_postgres::store::EventStore::new(pool.clone());
     complete_realtime_conversation_transcript_bridge(&event_store, Some(event_bus), &request)
         .await?;
     Ok(())
@@ -242,17 +242,17 @@ async fn run_transcriber_command(
         spawn_blocking(move || {
             let mut command = Command::new(&config.executable);
             command.args(&config.args);
-            command.env("HERMES_TRANSCRIPT_BUNDLE_ID", &payload.bundle_id);
-            command.env("HERMES_TRANSCRIPT_ACCOUNT_ID", &payload.account_id);
+            command.env("MAKOSH_TRANSCRIPT_BUNDLE_ID", &payload.bundle_id);
+            command.env("MAKOSH_TRANSCRIPT_ACCOUNT_ID", &payload.account_id);
             command.env(
-                "HERMES_TRANSCRIPT_CONFERENCE_ID",
+                "MAKOSH_TRANSCRIPT_CONFERENCE_ID",
                 payload.conference_id.as_deref().unwrap_or(""),
             );
-            command.env("HERMES_TRANSCRIPT_PROVIDER_KIND", &payload.provider_kind);
-            command.env("HERMES_TRANSCRIPT_BUNDLE_ROOT", &payload.bundle_root);
-            command.env("HERMES_TRANSCRIPT_MANIFEST_PATH", &payload.manifest_path);
-            command.env("HERMES_TRANSCRIPT_AUDIO_PATH", &payload.audio_path);
-            command.env("HERMES_TRANSCRIPT_MANIFEST_JSON", manifest_json);
+            command.env("MAKOSH_TRANSCRIPT_PROVIDER_KIND", &payload.provider_kind);
+            command.env("MAKOSH_TRANSCRIPT_BUNDLE_ROOT", &payload.bundle_root);
+            command.env("MAKOSH_TRANSCRIPT_MANIFEST_PATH", &payload.manifest_path);
+            command.env("MAKOSH_TRANSCRIPT_AUDIO_PATH", &payload.audio_path);
+            command.env("MAKOSH_TRANSCRIPT_MANIFEST_JSON", manifest_json);
             command.output()
         }),
     )

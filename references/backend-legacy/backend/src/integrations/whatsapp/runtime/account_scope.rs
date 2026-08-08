@@ -1,4 +1,4 @@
-use hermes_communications_api::accounts::ProviderAccountLookupPort;
+use makosh_communications_api::accounts::ProviderAccountLookupPort;
 use serde_json::Value;
 
 use super::WhatsappWebError;

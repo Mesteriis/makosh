@@ -35,7 +35,7 @@ impl CommunicationBulkActionPersistenceV1 {
             sqlx::query(
                 "SELECT realtime_sequence, batch_id, state, state_revision,
                         occurred_at_unix_seconds
-                 FROM hermes_data.communication_bulk_action_realtime
+                 FROM makosh_data.communication_bulk_action_realtime
                  WHERE logical_owner_id = $1 AND realtime_sequence > $2
                  ORDER BY realtime_sequence
                  LIMIT $3",
@@ -52,7 +52,7 @@ impl CommunicationBulkActionPersistenceV1 {
                  FROM (
                    SELECT realtime_sequence, batch_id, state, state_revision,
                           occurred_at_unix_seconds
-                   FROM hermes_data.communication_bulk_action_realtime
+                   FROM makosh_data.communication_bulk_action_realtime
                    WHERE logical_owner_id = $1
                    ORDER BY realtime_sequence DESC
                    LIMIT $2
@@ -76,7 +76,7 @@ pub(crate) async fn insert_batch_transition(
     occurred_at_unix_seconds: i64,
 ) -> Result<(), BulkDeliveryPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.communication_bulk_action_realtime (
+        "INSERT INTO makosh_data.communication_bulk_action_realtime (
            logical_owner_id, batch_id, state_revision, state,
            occurred_at_unix_seconds
          )
@@ -93,8 +93,8 @@ pub(crate) async fn insert_batch_transition(
                   ELSE 3
                 END,
                 $1
-         FROM hermes_data.communication_bulk_action_batches AS batches
-         JOIN hermes_data.communication_bulk_action_targets AS targets
+         FROM makosh_data.communication_bulk_action_batches AS batches
+         JOIN makosh_data.communication_bulk_action_targets AS targets
            ON targets.logical_owner_id = batches.logical_owner_id
           AND targets.batch_id = batches.batch_id
          WHERE batches.logical_owner_id = $2 AND batches.batch_id = $3

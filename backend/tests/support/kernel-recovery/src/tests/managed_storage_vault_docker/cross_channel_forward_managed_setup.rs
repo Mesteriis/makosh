@@ -2,20 +2,20 @@
 
 use super::*;
 
-use hermes_communication_cross_channel_forward_api::{
+use makosh_communication_cross_channel_forward_api::{
     COMMUNICATION_CROSS_CHANNEL_FORWARD_MODULE_ID_V1, COMMUNICATION_CROSS_CHANNEL_FORWARD_OWNER_V1,
 };
-use hermes_communication_cross_channel_forward_persistence::schema::{
+use makosh_communication_cross_channel_forward_persistence::schema::{
     COMMUNICATION_CROSS_CHANNEL_FORWARD_STORAGE_BUNDLE_REVISION_V3,
     communication_cross_channel_forward_storage_bundle_v1,
 };
-use hermes_communication_cross_channel_forward_runtime::{
+use makosh_communication_cross_channel_forward_runtime::{
     COMMUNICATION_CROSS_CHANNEL_FORWARD_STORAGE_CAPABILITY_ID_V1,
     communication_cross_channel_forward_module_descriptor_v1,
     communication_cross_channel_forward_settings_schema_bytes_v1,
 };
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
 
 const CROSS_CHANNEL_FORWARD_RELEASE_ARTIFACT_ID: &str =
     "workflow.communication_cross_channel_forward";
@@ -78,7 +78,7 @@ pub(super) fn admit_cross_channel_forward_runtime(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             CROSS_CHANNEL_FORWARD_RELEASE_ARTIFACT_ID,
             Sha256::digest(
                 std::fs::read(cross_channel_forward_binary())
@@ -245,7 +245,7 @@ pub(super) fn restart_cross_channel_forward_runtime(
 fn cross_channel_forward_storage_binding(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(
             registration_id,
@@ -278,5 +278,5 @@ pub(super) fn cross_channel_forward_database_id(
 }
 
 pub(super) fn cross_channel_forward_binary() -> PathBuf {
-    binary("HERMES_COMMUNICATION_CROSS_CHANNEL_FORWARD_RUNTIME_BIN")
+    binary("MAKOSH_COMMUNICATION_CROSS_CHANNEL_FORWARD_RUNTIME_BIN")
 }

@@ -3,7 +3,7 @@
 use std::net::{TcpStream, ToSocketAddrs};
 use std::time::Duration;
 
-use hermes_storage_protocol::v1::StorageRuntimeTopologyV1;
+use makosh_storage_protocol::v1::StorageRuntimeTopologyV1;
 
 const CONNECT_TIMEOUT: Duration = Duration::from_millis(100);
 const MAX_RESOLVED_ADDRESSES: usize = 4;

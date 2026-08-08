@@ -1,12 +1,12 @@
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use std::path::Path;
 
 use serde_json::json;
 use sha2::{Digest, Sha256};
 
-use hermes_communications_api::evidence::StoredRawCommunicationRecord;
+use makosh_communications_api::evidence::StoredRawCommunicationRecord;
 
-use hermes_observations_postgres::store::observation_captured_event_id;
+use makosh_observations_postgres::store::observation_captured_event_id;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum CommunicationRawSignalSource {
@@ -45,7 +45,7 @@ pub fn build_communication_raw_signal_event(
     source: CommunicationRawSignalSource,
     raw_record: &StoredRawCommunicationRecord,
     raw_blob_root: Option<&Path>,
-) -> Result<NewEventEnvelope, hermes_events_api::EventEnvelopeError> {
+) -> Result<NewEventEnvelope, makosh_events_api::EventEnvelopeError> {
     let occurred_at = raw_record.occurred_at.unwrap_or(raw_record.captured_at);
     let source_code = source.source_code();
     let mut provenance = json!({

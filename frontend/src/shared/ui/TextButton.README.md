@@ -1,6 +1,6 @@
 # TextButton
 
-Low-emphasis command button for dense Hermes surfaces.
+Low-emphasis command button for dense Макошь surfaces.
 
 Use for secondary inline actions, toolbar actions, and low-risk commands.
 

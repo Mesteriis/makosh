@@ -4,7 +4,7 @@ import { storybookLocaleFromGlobals } from './storybook-i18n'
 import { generalStoryCopy } from './general-story-copy'
 
 const meta = {
-	title: 'Hermes UI/General/Split Button',
+	title: 'Макошь UI/General/Split Button',
 	component: SplitButton,
 	render: (_args, context) => ({
 		components: { SplitButton },

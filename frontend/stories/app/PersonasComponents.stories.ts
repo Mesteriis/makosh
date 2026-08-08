@@ -21,7 +21,7 @@ import type {
 import { storybookLocaleFromGlobals } from '../ui/storybook-i18n'
 
 const meta = {
-	title: 'Hermes App/Personas/Components',
+	title: 'Макошь App/Personas/Components',
 	component: PersonaOverviewPanel
 } satisfies Meta<typeof PersonaOverviewPanel>
 
@@ -35,7 +35,7 @@ const personas: readonly EnrichedPersona[] = [
 	persona({
 		id: 'persona:owner',
 		name: 'Александр Мещеряков',
-		email: 'avm@hermes.local',
+		email: 'avm@makosh.local',
 		language: 'ru',
 		tone: 'direct',
 		trust: 96,

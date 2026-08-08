@@ -18,7 +18,7 @@ pub(super) fn build_email_analysis_prompt(
     };
 
     format!(
-        "You are an email intelligence assistant inside Hermes Hub. Analyze this email and respond with a JSON object containing:\n\
+        "You are an email intelligence assistant inside Макошь. Analyze this email and respond with a JSON object containing:\n\
 - category: one of [critical, important, personal, work, finance, legal, notification, newsletter, marketing, spam, scam, phishing, suspicious]\n\
 - summary: 1-2 sentence TL;DR in target_language when translation is needed\n\
 - key_points: array of up to 5 short evidence-backed key points\n\

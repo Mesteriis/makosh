@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `adr`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docs/adr/ADR-0026-desktop-first-responsive-ui.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0026-desktop-first-responsive-ui.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0026-desktop-first-responsive-ui.md`
 - Size bytes / Размер в байтах: `556`
 - Included characters / Включено символов: `556`
 - Truncated / Обрезано: `no`
@@ -83,7 +83,7 @@ Design desktop-first, with responsive layouts that preserve usability across nar
 
 ### `docs/adr/ADR-0027-capability-based-permission-model.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0027-capability-based-permission-model.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0027-capability-based-permission-model.md`
 - Size bytes / Размер в байтах: `541`
 - Included characters / Включено символов: `541`
 - Truncated / Обрезано: `no`
@@ -111,7 +111,7 @@ Use a capability-based permission model for agents, plugins and external actions
 
 ### `docs/adr/ADR-0028-backup-and-restore-as-core-feature.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0028-backup-and-restore-as-core-feature.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0028-backup-and-restore-as-core-feature.md`
 - Size bytes / Размер в байтах: `510`
 - Included characters / Включено символов: `510`
 - Truncated / Обрезано: `no`
@@ -139,7 +139,7 @@ Treat backup and restore as core product architecture, not operational afterthou
 
 ### `docs/adr/ADR-0029-explicit-schema-evolution.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0029-explicit-schema-evolution.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0029-explicit-schema-evolution.md`
 - Size bytes / Размер в байтах: `441`
 - Included characters / Включено символов: `441`
 - Truncated / Обрезано: `no`
@@ -167,7 +167,7 @@ Use explicit schema versions, migrations and compatibility checks for durable da
 
 ### `docs/adr/ADR-0030-documentation-first-monorepo.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0030-documentation-first-monorepo.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0030-documentation-first-monorepo.md`
 - Size bytes / Размер в байтах: `704`
 - Included characters / Включено символов: `704`
 - Truncated / Обрезано: `no`
@@ -195,7 +195,7 @@ Use a documentation-first monorepo skeleton with dedicated directories for docs,
 
 ### `docs/adr/ADR-0031-temporary-desktop-only-ui-scope.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0031-temporary-desktop-only-ui-scope.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0031-temporary-desktop-only-ui-scope.md`
 - Size bytes / Размер в байтах: `1234`
 - Included characters / Включено символов: `1234`
 - Truncated / Обрезано: `no`
@@ -207,13 +207,13 @@ Status: Temporary
 
 ## Context
 
-Hermes Hub is currently defined as a desktop-first personal productivity system for PC and laptop use. Mobile UI introduces a separate product surface with different constraints: small-screen navigation, touch-first interactions, mobile OS permissions, background sync, notification behavior and mobile QA breakpoints.
+Макошь is currently defined as a desktop-first personal productivity system for PC and laptop use. Mobile UI introduces a separate product surface with different constraints: small-screen navigation, touch-first interactions, mobile OS permissions, background sync, notification behavior and mobile QA breakpoints.
 
 ADR-0026 keeps responsive behavior for desktop window resizing and future web optionality, but it does not require mobile product design.
 
 ## Decision
 
-Until this ADR is superseded, Hermes Hub will not design, implement or validate a mobile UI.
+Until this ADR is superseded, Макошь will not design, implement or validate a mobile UI.
 
 Product, UX and frontend architecture work target PC and laptop layouts only. Responsive behavior means usable desktop resizing, not phone or tablet workflows.
 
@@ -227,7 +227,7 @@ Product, UX and frontend architecture work target PC and laptop layouts only. Re
 
 ### `docs/adr/ADR-0032-docker-compose-development-environment.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0032-docker-compose-development-environment.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0032-docker-compose-development-environment.md`
 - Size bytes / Размер в байтах: `1002`
 - Included characters / Включено символов: `1002`
 - Truncated / Обрезано: `no`
@@ -239,7 +239,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub targets a local-first desktop product with PostgreSQL, Rust, SvelteKit and Tauri. Development needs a repeatable local environment without introducing production deployment semantics or scattering Docker files across the repository.
+Макошь targets a local-first desktop product with PostgreSQL, Rust, SvelteKit and Tauri. Development needs a repeatable local environment without introducing production deployment semantics or scattering Docker files across the repository.
 
 ## Decision
 
@@ -258,7 +258,7 @@ Expose developer commands through the root `Makefile`.
 
 ### `docs/adr/ADR-0033-backend-managed-local-schema-migrations.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0033-backend-managed-local-schema-migrations.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0033-backend-managed-local-schema-migrations.md`
 - Size bytes / Размер в байтах: `1233`
 - Included characters / Включено символов: `1233`
 - Truncated / Обрезано: `no`
@@ -270,7 +270,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub is a local-first desktop product with PostgreSQL as primary store. The user must be able to start the local app without manually applying schema changes, while schema evolution still needs explicit, reviewable migration files.
+Макошь is a local-first desktop product with PostgreSQL as primary store. The user must be able to start the local app without manually applying schema changes, while schema evolution still needs explicit, reviewable migration files.
 
 ## Decision
 
@@ -291,7 +291,7 @@ Migration files live in `backend/migrations/` and must be append-only once relea
 
 ### `docs/adr/ADR-0034-event-replay-and-projection-cursors.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0034-event-replay-and-projection-cursors.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0034-event-replay-and-projection-cursors.md`
 - Size bytes / Размер в байтах: `940`
 - Included characters / Включено символов: `940`
 - Truncated / Обрезано: `no`
@@ -321,7 +321,7 @@ Projection cursor updates are monotonic: saving a lower position must not move a
 
 ### `docs/adr/ADR-0035-local-event-api-command-boundary.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0035-local-event-api-command-boundary.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0035-local-event-api-command-boundary.md`
 - Size bytes / Размер в байтах: `1086`
 - Included characters / Включено символов: `1086`
 - Truncated / Обрезано: `no`
@@ -356,7 +356,7 @@ The API uses the same event envelope validation and PostgreSQL idempotency const
 
 ### `docs/adr/ADR-0036-projection-runner-checkpoint-semantics.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0036-projection-runner-checkpoint-semantics.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0036-projection-runner-checkpoint-semantics.md`
 - Size bytes / Размер в байтах: `847`
 - Included characters / Включено символов: `847`
 - Truncated / Обрезано: `no`
@@ -368,7 +368,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub projections must be rebuildable and resumable. `event_log.position` and `projection_cursors` define durable replay state, but workers also need consistent checkpoint semantics to avoid skipping failed events.
+Макошь projections must be rebuildable and resumable. `event_log.position` and `projection_cursors` define durable replay state, but workers also need consistent checkpoint semantics to avoid skipping failed events.
 
 ## Decision
 
@@ -386,7 +386,7 @@ If a handler fails, the batch fails and the cursor remains at the last successfu
 
 ### `docs/adr/ADR-0037-local-write-capability-token.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0037-local-write-capability-token.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0037-local-write-capability-token.md`
 - Size bytes / Размер в байтах: `1704`
 - Included characters / Включено символов: `1704`
 - Truncated / Обрезано: `no`
@@ -410,10 +410,10 @@ This decision was superseded by ADR-0038 because read endpoints also expose priv
 
 Rules:
 
-- `HERMES_LOCAL_WRITE_TOKEN` configures the local write token.
-- Empty `HERMES_LOCAL_WRITE_TOKEN` is invalid configuration.
+- `MAKOSH_LOCAL_WRITE_TOKEN` configures the local write token.
+- Empty `MAKOSH_LOCAL_WRITE_TOKEN` is invalid configuration.
 - `POST /api/events` requires `Authorization: Bearer <token>`.
-- If `HERMES_LOCAL_WRITE_TOKEN` is not configured, write commands fail closed with `503 write_token_not_configured`.
+- If `MAKOSH_LOCAL_WRITE_TOKEN` is not configured, write commands fail closed with `503 write_token_not_configured`.
 - If the bearer token is missing or invalid, write commands return `401 invalid_write_token`.
 - `GET /healthz` and `GET /readyz` remain unauthenticated operational probes.
 
@@ -422,14 +422,14 @@ This token is a local-development and local-desktop command guard, not a substit
 ## Consequences
 
 - Accidental unauthenticated writes to the event log are blocked.
-- Local smoke and development commands must provide `HERMES_LOCAL_WRITE_TOKEN`.
+- Local smoke and development commands must provide `MAKOSH_LOCAL_WRITE_TOKEN`.
 - `docker/.env.example` may contain only a non-secret placeholder token.
 - Before network exposure, multi-user access, plugins or agents can perform writes, this temporary token must be replaced or wrapped by the full capability policy model.
 ```
 
 ### `docs/adr/ADR-0038-local-event-api-capability-token.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0038-local-event-api-capability-token.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0038-local-event-api-capability-token.md`
 - Size bytes / Размер в байтах: `1768`
 - Included characters / Включено символов: `1768`
 - Truncated / Обрезано: `no`
@@ -451,9 +451,9 @@ Use a temporary local API capability token for local event API endpoints.
 
 Rules:
 
-- `HERMES_LOCAL_API_TOKEN` configures the local API token.
-- Empty `HERMES_LOCAL_API_TOKEN` is invalid configuration.
-- `HERMES_LOCAL_WRITE_TOKEN` remains a legacy fallback during the transition from ADR-0037.
+- `MAKOSH_LOCAL_API_TOKEN` configures the local API token.
+- Empty `MAKOSH_LOCAL_API_TOKEN` is invalid configuration.
+- `MAKOSH_LOCAL_WRITE_TOKEN` remains a legacy fallback during the transition from ADR-0037.
 - `POST /api/events` requires `Authorization: Bearer <token>`.
 - `GET /api/events/{event_id}` requires `Authorization: Bearer <token>`.
 - If no local API token is configured, API calls fail closed with `503 api_token_not_configured`.
@@ -465,15 +465,15 @@ This token is a local-development and local-desktop API guard, not a substitute 
 ## Consequences
 
 - Event reads and writes both require local API authorization.
-- Local smoke and development commands must provide `HERMES_LOCAL_API_TOKEN`.
-- Existing `HERMES_LOCAL_WRITE_TOKEN` development setups continue to work as a fallback.
+- Local smoke and development commands must provide `MAKOSH_LOCAL_API_TOKEN`.
+- Existing `MAKOSH_LOCAL_WRITE_TOKEN` development setups continue to work as a fallback.
 - `docker/.env.example` may contain only a non-secret placeholder token.
 - Before network exposure, multi-user access, plugins or agents can perform reads or writes, this temporary token must be replaced or wrapped by the full capability policy model.
 ```
 
 ### `docs/adr/ADR-0039-local-event-api-access-audit-log.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0039-local-event-api-access-audit-log.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0039-local-event-api-access-audit-log.md`
 - Size bytes / Размер в байтах: `1988`
 - Included characters / Включено символов: `1988`
 - Truncated / Обрезано: `no`
@@ -516,7 +516,7 @@ Rules:
 
 ### `docs/adr/ADR-0040-local-api-actor-identity.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0040-local-api-actor-identity.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0040-local-api-actor-identity.md`
 - Size bytes / Размер в байтах: `1784`
 - Included characters / Включено символов: `1784`
 - Truncated / Обрезано: `no`
@@ -538,9 +538,9 @@ Require a temporary local API actor identity header for protected local event AP
 
 Rules:
 
-- Protected local event API requests must include `Authorization: Bearer <HERMES_LOCAL_API_TOKEN>`.
-- After the bearer token is valid, protected local event API requests must include `X-Hermes-Actor-Id`.
-- `X-Hermes-Actor-Id` is a stable local client identifier, not a secret.
+- Protected local event API requests must include `Authorization: Bearer <MAKOSH_LOCAL_API_TOKEN>`.
+- After the bearer token is valid, protected local event API requests must include `X-Макошь-Actor-Id`.
+- `X-Макошь-Actor-Id` is a stable local client identifier, not a secret.
 - The accepted actor ID character set is ASCII letters, digits, `.`, `_`, `-`, `:`, `@` and `/`.
 - Actor IDs must be non-empty after trimming and at most 128 bytes.
 - Missing or invalid actor IDs return `400 invalid_actor_id`.
@@ -551,14 +551,14 @@ Rules:
 ## Consequences
 
 - Local event API audit records can distinguish authorized local clients.
-- Existing clients must send `X-Hermes-Actor-Id` in addition to the bearer token.
+- Existing clients must send `X-Макошь-Actor-Id` in addition to the bearer token.
 - This remains self-asserted identity while the temporary token model exists.
 - The full capability runtime must replace this with authenticated capability and actor identifiers before multi-user access, plugins or agents are allowed to perform broad reads or writes.
 ```
 
 ### `docs/adr/ADR-0041-email-provider-ingestion-foundation.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0041-email-provider-ingestion-foundation.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0041-email-provider-ingestion-foundation.md`
 - Size bytes / Размер в байтах: `2370`
 - Included characters / Включено символов: `2370`
 - Truncated / Обрезано: `no`
@@ -607,7 +607,7 @@ Rules:
 
 ### `docs/adr/ADR-0042-secret-references-for-provider-credentials.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0042-secret-references-for-provider-credentials.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0042-secret-references-for-provider-credentials.md`
 - Size bytes / Размер в байтах: `3228`
 - Included characters / Включено символов: `3228`
 - Truncated / Обрезано: `no`
@@ -661,7 +661,7 @@ Rules:
 
 ### `docs/adr/ADR-0043-read-only-email-provider-networking.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0043-read-only-email-provider-networking.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0043-read-only-email-provider-networking.md`
 - Size bytes / Размер в байтах: `535`
 - Included characters / Включено символов: `533`
 - Truncated / Обрезано: `no`
@@ -671,14 +671,14 @@ Rules:
 
 Status: Superseded by ADR-0055
 
-Superseded because: the read-only constraint was a temporary safety measure for the initial implementation phase. Hermes Hub is a personal local-first system and needs full email functionality including sending, replying, flag mutations, and server-side state changes. The read-only restriction now applies ONLY to automated integration tests — production code must support both read and write provider operations.
+Superseded because: the read-only constraint was a temporary safety measure for the initial implementation phase. Макошь is a personal local-first system and needs full email functionality including sending, replying, flag mutations, and server-side state changes. The read-only restriction now applies ONLY to automated integration tests — production code must support both read and write provider operations.
 
 See ADR-0055 for the current policy.
 ```
 
 ### `docs/adr/ADR-0044-account-setup-and-encrypted-secret-vault.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0044-account-setup-and-encrypted-secret-vault.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0044-account-setup-and-encrypted-secret-vault.md`
 - Size bytes / Размер в байтах: `2281`
 - Included characters / Включено символов: `2281`
 - Truncated / Обрезано: `no`
@@ -688,7 +688,7 @@ See ADR-0055 for the current policy.
 
 Status: Superseded by ADR-0076
 
-This decision was superseded by ADR-0053 and then ADR-0076. ADR-0076 keeps encrypted local account setup but moves new secret payloads to a dedicated macOS host vault under `~/.hermes/vault`.
+This decision was superseded by ADR-0053 and then ADR-0076. ADR-0076 keeps encrypted local account setup but moves new secret payloads to a dedicated macOS host vault under `~/.makosh/vault`.
 
 ## Context
 
@@ -700,8 +700,8 @@ Add a local account setup boundary backed by an encrypted secret vault.
 
 Rules:
 
-- `HERMES_SECRET_VAULT_PATH` points to the local encrypted vault file.
-- `HERMES_SECRET_VAULT_KEY` is the local vault master key and must not be logged, persisted in PostgreSQL or committed.
+- `MAKOSH_SECRET_VAULT_PATH` points to the local encrypted vault file.
+- `MAKOSH_SECRET_VAULT_KEY` is the local vault master key and must not be logged, persisted in PostgreSQL or committed.
 - The encrypted vault uses per-entry AES-256-GCM encryption with an Argon2id-derived key and authenticated `secret_ref` associated data.
 - Gmail account setup uses OAuth authorization code with PKCE and `gmail.readonly` scope.
 - Gmail token bundles are stored only in the encrypted vault and include access token, refresh token, token endpoint and OAuth client material required for refresh.
@@ -720,7 +720,7 @@ Rules:
 
 ### `docs/adr/ADR-0045-graph-core-projection.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0045-graph-core-projection.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0045-graph-core-projection.md`
 - Size bytes / Размер в байтах: `2043`
 - Included characters / Включено символов: `2043`
 - Truncated / Обрезано: `no`
@@ -732,7 +732,7 @@ Status: Proposed
 
 ## Context
 
-Version 2 starts by turning the Knowledge Graph into a real backend projection. Hermes Hub already has local PostgreSQL storage for contacts, communication messages and documents. ADR-0008 requires relationships to be durable records with provenance and confidence. ADR-0023 requires derived state to be rebuildable. ADR-0019 forbids ambiguous automatic identity merges. ADR-0031 keeps the UI desktop/laptop only.
+Version 2 starts by turning the Knowledge Graph into a real backend projection. Макошь already has local PostgreSQL storage for contacts, communication messages and documents. ADR-0008 requires relationships to be durable records with provenance and confidence. ADR-0023 requires derived state to be rebuildable. ADR-0019 forbids ambiguous automatic identity merges. ADR-0031 keeps the UI desktop/laptop only.
 
 ## Decision
 
@@ -761,7 +761,7 @@ Initial relationship types:
 
 System-created edges require evidence. The first projection only uses exact email matching to connect messages to contacts. When no exact contact exists, the graph uses an `email_address` node instead of inventing a person.
 
-Read APIs are local-only, read-only and protected by the existing bearer token plus `X-Hermes-Actor-Id`.
+Read APIs are local-only, read-only and protected by the existing bearer token plus `X-Макошь-Actor-Id`.
 
 ## Non-Goals
 
@@ -791,7 +791,7 @@ Negative:
 
 ### `docs/adr/ADR-0046-persistent-dev-mail-cache-and-blob-storage.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0046-persistent-dev-mail-cache-and-blob-storage.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0046-persistent-dev-mail-cache-and-blob-storage.md`
 - Size bytes / Размер в байтах: `4075`
 - Included characters / Включено символов: `4075`
 - Truncated / Обрезано: `no`
@@ -840,7 +840,7 @@ Initial implementation may keep fixture import redacted and attachment-free. Ful
 
 ### `docs/adr/ADR-0047-project-memory-spine.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0047-project-memory-spine.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0047-project-memory-spine.md`
 - Size bytes / Размер в байтах: `2740`
 - Included characters / Включено символов: `2740`
 - Truncated / Обрезано: `no`
@@ -860,7 +860,7 @@ ADR-0045 intentionally limited the first graph core to four node kinds and five 
 
 Add a local `projects` read model as the first project memory spine.
 
-Projects are canonical local records with deterministic `project_id` values, human-readable metadata and explicit `project_keywords`. Keywords are user/system configured matching rules, not AI inference. The first implementation may seed a local `Hermes Hub` project record so a development database has a real project anchor, but all project relationships must still be derived from stored messages and documents.
+Projects are canonical local records with deterministic `project_id` values, human-readable metadata and explicit `project_keywords`. Keywords are user/system configured matching rules, not AI inference. The first implementation may seed a local `Макошь` project record so a development database has a real project anchor, but all project relationships must still be derived from stored messages and documents.
 
 Extend the PostgreSQL graph projection with:
 
@@ -907,7 +907,7 @@ Negative:
 
 ### `docs/adr/ADR-0048-project-link-review-workflow.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0048-project-link-review-workflow.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0048-project-link-review-workflow.md`
 - Size bytes / Размер в байтах: `2188`
 - Included characters / Включено символов: `2188`
 - Truncated / Обрезано: `no`
@@ -943,7 +943,7 @@ Project graph edges remain rebuildable projection state. During graph projection
 
 People and email-address project links remain derived from active project-message links. Direct people review is out of scope for this slice.
 
-Protected local review APIs must require the temporary local bearer token and `X-Hermes-Actor-Id`.
+Protected local review APIs must require the temporary local bearer token and `X-Макошь-Actor-Id`.
 
 ## Non-Goals
 
@@ -973,7 +973,7 @@ Negative:
 
 ### `docs/adr/ADR-0049-v3-local-ai-runtime-and-retrieval.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0049-v3-local-ai-runtime-and-retrieval.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0049-v3-local-ai-runtime-and-retrieval.md`
 - Size bytes / Размер в байтах: `2605`
 - Included characters / Включено символов: `2605`
 - Truncated / Обрезано: `no`
@@ -1006,7 +1006,7 @@ Implement V3 AI as a thin local runtime over existing canonical projections:
 - AI run requested/completed/failed and AI task extraction lifecycle events are represented as canonical events.
 - V3 task extraction may create only `suggested` task candidates linked to `agent_run_id`; existing review APIs remain the only path to active tasks.
 - V3 meeting prep returns a local briefing packet and does not require calendar ingestion.
-- V3 protected APIs require `Authorization: Bearer <HERMES_LOCAL_API_TOKEN>` and `X-Hermes-Actor-Id`.
+- V3 protected APIs require `Authorization: Bearer <MAKOSH_LOCAL_API_TOKEN>` and `X-Макошь-Actor-Id`.
 
 ## Non-Goals
 
@@ -1036,7 +1036,7 @@ Negative:
 
 ### `docs/adr/ADR-0050-v4-telegram-client-policy-and-call-intelligence.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0050-v4-telegram-client-policy-and-call-intelligence.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0050-v4-telegram-client-policy-and-call-intelligence.md`
 - Size bytes / Размер в байтах: `4140`
 - Included characters / Включено символов: `4140`
 - Truncated / Обрезано: `no`
@@ -1048,7 +1048,7 @@ Status: Proposed
 
 ## Context
 
-Version 4 expands Hermes Hub from read-only memory and source-backed AI into a Telegram-capable local client with controlled outbound automation and call-derived task context. Telegram user accounts and bot accounts have different API surfaces, credentials, and limits. Telegram user accounts require a full client runtime, while bot accounts are constrained by Bot API visibility.
+Version 4 expands Макошь from read-only memory and source-backed AI into a Telegram-capable local client with controlled outbound automation and call-derived task context. Telegram user accounts and bot accounts have different API surfaces, credentials, and limits. Telegram user accounts require a full client runtime, while bot accounts are constrained by Bot API visibility.
 
 AI and automation are now allowed to send Telegram messages without per-message confirmation, but only when an explicit user-configured policy and approved template authorize the send. Call transcription is required for enabled Telegram accounts/chats and must remain local.
 

@@ -2,7 +2,7 @@
 
 use std::collections::BTreeSet;
 
-use hermes_runtime_protocol::v1::SchedulerRuntimeDispatchPublisherBindingV1;
+use makosh_runtime_protocol::v1::SchedulerRuntimeDispatchPublisherBindingV1;
 
 use super::{EventTopologyPlanV1, subject::EventStreamKindV1};
 

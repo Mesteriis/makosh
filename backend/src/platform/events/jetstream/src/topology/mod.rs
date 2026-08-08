@@ -51,24 +51,24 @@ impl StreamKindV1 {
     #[must_use]
     pub const fn stream_name(self) -> &'static str {
         match self {
-            Self::Command => "HERMES_COMMAND_V1",
-            Self::Event => "HERMES_EVENT_V1",
-            Self::Observation => "HERMES_OBSERVATION_V1",
-            Self::Result => "HERMES_RESULT_V1",
-            Self::Ack => "HERMES_ACK_V1",
-            Self::Dead => "HERMES_DEAD_V1",
+            Self::Command => "MAKOSH_COMMAND_V1",
+            Self::Event => "MAKOSH_EVENT_V1",
+            Self::Observation => "MAKOSH_OBSERVATION_V1",
+            Self::Result => "MAKOSH_RESULT_V1",
+            Self::Ack => "MAKOSH_ACK_V1",
+            Self::Dead => "MAKOSH_DEAD_V1",
         }
     }
 
     #[must_use]
     pub const fn stream_subject(self) -> &'static str {
         match self {
-            Self::Command => "hermes.command.v1.>",
-            Self::Event => "hermes.event.v1.>",
-            Self::Observation => "hermes.observation.v1.>",
-            Self::Result => "hermes.result.v1.>",
-            Self::Ack => "hermes.ack.v1.>",
-            Self::Dead => "hermes.dead.v1.>",
+            Self::Command => "makosh.command.v1.>",
+            Self::Event => "makosh.event.v1.>",
+            Self::Observation => "makosh.observation.v1.>",
+            Self::Result => "makosh.result.v1.>",
+            Self::Ack => "makosh.ack.v1.>",
+            Self::Dead => "makosh.dead.v1.>",
         }
     }
 }
@@ -190,7 +190,7 @@ impl ConsumerSpecV1 {
     ) -> Result<Self, String> {
         let durable_name = durable_name.into();
         let filter_subject = filter_subject.into();
-        let prefix = format!("hermes.{}.v1.", stream_kind.subject_token());
+        let prefix = format!("makosh.{}.v1.", stream_kind.subject_token());
         (valid_durable_name(&durable_name)
             && filter_subject.starts_with(&prefix)
             && !filter_subject.contains('>')

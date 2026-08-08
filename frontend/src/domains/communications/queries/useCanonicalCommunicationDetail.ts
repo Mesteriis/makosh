@@ -7,7 +7,7 @@ import type {
 	MessageReferenceSummaryV1,
 	MessageSummaryV1,
 	ObservedParticipantSummaryV1,
-} from '../../../gen/hermes/communications/query/v1/query_pb'
+} from '../../../gen/makosh/communications/query/v1/query_pb'
 import {
 	buildCanonicalCommunicationDetailModel,
 	type CanonicalCommunicationDetailStatus,

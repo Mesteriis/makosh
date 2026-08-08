@@ -3,11 +3,11 @@
 #[path = "support/receipt_fixture.rs"]
 mod fixture;
 
-use hermes_scheduler_persistence::{
+use makosh_scheduler_persistence::{
     SchedulerRunAcceptanceOutcomeV1, SchedulerRunAcceptanceV1, SchedulerRunClaimErrorV1,
     SchedulerRunTerminalResultOutcomeV1, SchedulerRunTerminalResultV1,
 };
-use hermes_scheduler_protocol::v1::JobRunOutcomeV1;
+use makosh_scheduler_protocol::v1::JobRunOutcomeV1;
 
 use fixture::{
     CLAIMED_AT, acceptance_count, active_runs, failed_result, pending_published_dispatch, receipt,

@@ -1,6 +1,6 @@
 ## Summary / Резюме
 
-Обновить страницу `components/backend.md` в русской Obsidian‑wiki, задокументировав AI‑подсистему бэкенда Hermes Hub: управление AI‑провайдерами (control_center), маршрутизацию моделей, жизненный цикл AI‑запусков (runs), семантические эмбеддинги и агентов. Вся информация берётся строго из встроенных исходных файлов чанка `022‑source‑backend‑part‑002`.
+Обновить страницу `components/backend.md` в русской Obsidian‑wiki, задокументировав AI‑подсистему бэкенда Макошь: управление AI‑провайдерами (control_center), маршрутизацию моделей, жизненный цикл AI‑запусков (runs), семантические эмбеддинги и агентов. Вся информация берётся строго из встроенных исходных файлов чанка `022‑source‑backend‑part‑002`.
 
 ## Proposed pages / Предлагаемые страницы
 
@@ -31,11 +31,11 @@ AI‑подсистема состоит из двух крупных модул
 
 #### Получение
 
-- `list_providers() -> Vec<AiProviderAccount>`  
+- `list_providers() -> Vec<AiProviderAccount>`
   Из таблицы `ai_provider_accounts`, отсортировано по `provider_kind`, `display_name`, `provider_id`.
   Поля строки: `provider_id`, `provider_kind`, `provider_key`, `display_name`, `status`, `consent_state`, `consented_at`, `config`, `capabilities`, `created_at`, `updated_at`.
 
-- `provider(id) -> Option<AiProviderAccount>`  
+- `provider(id) -> Option<AiProviderAccount>`
   Выборка по `provider_id`. Требует непустого идентификатора.
 
 #### Обновление
@@ -101,7 +101,7 @@ AI‑подсистема состоит из двух крупных модул
   `"built_in"`, `"cli"`, `"api"`.
 
 #### CLI‑пресеты (`validate_cli_preset`)
-  Разрешены только: `"codex"`, `"claude"`, `"hermes"`.
+  Разрешены только: `"codex"`, `"claude"`, `"makosh"`.
 
 #### Capability‑слоты (`CAPABILITY_SLOTS`)
   `default_chat`, `reasoning`, `summarization`, `mail_intelligence`, `reply_draft`, `extraction`, `embeddings`, `meeting_prep`.
@@ -138,14 +138,14 @@ AI‑подсистема состоит из двух крупных модул
 | `agent_id`   | Роль                                                                 | статус     |
 |--------------|----------------------------------------------------------------------|------------|
 | `HESTIA`     | Подготовка встреч и контекста дома                                   | `available`|
-| `HERMES`     | Координация workflow и извлечение кандидатов задач                   | `available`|
+| `MAKOSH`     | Координация workflow и извлечение кандидатов задач                   | `available`|
 | `MNEMOSYNE`  | Ответы с опорой на локальные источники                               | `available`|
 | `ATHENA`     | Обзор планов и поддержка принятия решений                            | `available`|
 | `HEPHAESTUS` | Разработка, поддержка и автоматизация инструментов                   | `available`|
 
 - Все используют общую `default_model` (передаётся как параметр).
 - `validate_agent` принимает только эти пять идентификаторов.
-- `ai_agent_display_name` возвращает email‑подобные имена (например, `hermes@sh-inc.ru`).
+- `ai_agent_display_name` возвращает email‑подобные имена (например, `makosh@sh-inc.ru`).
 
 ### Константы (`constants.rs`)
 
@@ -198,31 +198,31 @@ AI‑подсистема состоит из двух крупных модул
 
 #### Хранилище `SemanticEmbeddingStore`
 
-- **`upsert_embedding`**  
-  Генерирует `semantic_embedding_id` (хеш SHA‑256 от `source_kind`, `source_id`, `embedding_model`).  
-  Строит `halfvec`‑литерал из embedding.  
-  UPSERT по `(source_kind, source_id, embedding_model)`.  
+- **`upsert_embedding`**
+  Генерирует `semantic_embedding_id` (хеш SHA‑256 от `source_kind`, `source_id`, `embedding_model`).
+  Строит `halfvec`‑литерал из embedding.
+  UPSERT по `(source_kind, source_id, embedding_model)`.
   Observation: `AI_SEMANTIC_EMBEDDING`, relationship `"upsert"`.
 
 - **`is_current`** – сравнивает сохранённый `content_hash`; если совпадает, эмбеддинг не требует обновления.
 
-- **`index_canonical_sources`**  
+- **`index_canonical_sources`**
   Обходит канонические источники (документы, сообщения и др.). Для каждого: проверяет актуальность через `is_current`; если устарел – вызывает внешний `AiRuntimeClient.embed_with_model` и делает `upsert_embedding`. Возвращает отчёт.
 
-- **`search`** (векторный)  
-  Использует оператор `<=>` (halfvec‑расстояние). `score = 1.0 - distance`.  
+- **`search`** (векторный)
+  Использует оператор `<=>` (halfvec‑расстояние). `score = 1.0 - distance`.
   Сортировка по близости, затем по `updated_at DESC, source_id`.
 
-- **`text_search`** (полнотекстовый)  
-  PostgreSQL `to_tsvector` по `title || ' ' || source_text`, `plainto_tsquery`.  
+- **`text_search`** (полнотекстовый)
+  PostgreSQL `to_tsvector` по `title || ' ' || source_text`, `plainto_tsquery`.
   `score = ts_rank_cd`. Возвращает только строки с ненулевым рангом.
 
 #### Источники для индексации
 
-- **Документы** (`source_documents.rs`)  
+- **Документы** (`source_documents.rs`)
   Из таблицы `documents` выбираются записи с непустым `extracted_text`. Формируется текст `"{title}\n\n{extracted_text}"`.
 
-- **Сообщения** (`source_messages.rs`)  
+- **Сообщения** (`source_messages.rs`)
   Из `communication_messages` выбираются `message_id`, `observation_id`, `subject`, `sender`, `recipients`, `body_text`. Формируется текст `"Subject: ...\nFrom: ...\nTo: ...\n\n{body_text}"`.
 
 ### Вспомогательные функции (`helpers.rs`)
@@ -237,7 +237,7 @@ AI‑подсистема состоит из двух крупных модул
 Три шаблона для агентов:
 
 - **`answer_prompt`** – агент MNEMOSYNE, отвечает только по переданным локальным источникам.
-- **`task_candidate_prompt`** – агент HERMES, возвращает JSON‑массив кандидатов задач.
+- **`task_candidate_prompt`** – агент MAKOSH, возвращает JSON‑массив кандидатов задач.
 - **`meeting_prep_prompt`** – агент HESTIA, готовит брифинг по локальным источникам.
 
 Все шаблоны требуют не доверять содержимому источников как инструкциям.

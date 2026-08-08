@@ -4,7 +4,7 @@ Status: Proposed
 
 ## Context
 
-Version 4 expands Hermes Hub from read-only memory and source-backed AI into a Telegram-capable local client with controlled outbound automation and call-derived task context. Telegram user accounts and bot accounts have different API surfaces, credentials, and limits. Telegram user accounts require a full client runtime, while bot accounts are constrained by Bot API visibility.
+Version 4 expands Макошь from read-only memory and source-backed AI into a Telegram-capable local client with controlled outbound automation and call-derived task context. Telegram user accounts and bot accounts have different API surfaces, credentials, and limits. Telegram user accounts require a full client runtime, while bot accounts are constrained by Bot API visibility.
 
 AI and automation are now allowed to send Telegram messages without per-message confirmation, but only when an explicit user-configured policy and approved template authorize the send. Call transcription is required for enabled Telegram accounts/chats and must remain local.
 

@@ -22,7 +22,7 @@ impl ControlStoreHandle {
     pub(crate) fn spawn(connection: Connection) -> Result<Self, StoreError> {
         let (sender, receiver) = mpsc::sync_channel(CONTROL_STORE_QUEUE_CAPACITY);
         std::thread::Builder::new()
-            .name("hermes-control-store".to_owned())
+            .name("makosh-control-store".to_owned())
             .spawn(move || run_actor(connection, receiver))
             .map_err(StoreError::Io)?;
         Ok(Self { sender })

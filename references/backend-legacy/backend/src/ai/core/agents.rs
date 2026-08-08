@@ -35,8 +35,8 @@ pub fn v3_agents(chat_model: &str) -> Vec<AiAgentDescriptor> {
             persona_email: None,
         },
         AiAgentDescriptor {
-            agent_id: "HERMES",
-            display_name: "hermes@sh-inc.ru",
+            agent_id: "MAKOSH",
+            display_name: "makosh@sh-inc.ru",
             role: "workflow coordination and task candidate extraction",
             default_model: chat_model.to_owned(),
             status: "available",
@@ -79,7 +79,7 @@ pub fn v3_agents(chat_model: &str) -> Vec<AiAgentDescriptor> {
 
 pub(super) fn validate_agent(agent_id: &str) -> Result<(), AiError> {
     match agent_id {
-        "HESTIA" | "HERMES" | "MNEMOSYNE" | "ATHENA" | "HEPHAESTUS" => Ok(()),
+        "HESTIA" | "MAKOSH" | "MNEMOSYNE" | "ATHENA" | "HEPHAESTUS" => Ok(()),
         _ => Err(AiError::UnknownAgent(agent_id.to_owned())),
     }
 }
@@ -87,7 +87,7 @@ pub(super) fn validate_agent(agent_id: &str) -> Result<(), AiError> {
 pub(super) fn ai_agent_display_name(agent_id: &str) -> Result<&'static str, AiError> {
     match agent_id {
         "HESTIA" => Ok("hestia@sh-inc.ru"),
-        "HERMES" => Ok("hermes@sh-inc.ru"),
+        "MAKOSH" => Ok("makosh@sh-inc.ru"),
         "MNEMOSYNE" => Ok("mnemosyne@sh-inc.ru"),
         "ATHENA" => Ok("athena@sh-inc.ru"),
         "HEPHAESTUS" => Ok("hephaestus@sh-inc.ru"),

@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::{EventEnvelope, StoredEventEnvelope};
+use makosh_events_api::{EventEnvelope, StoredEventEnvelope};
 use serde_json::{Value, json};
 use sqlx::postgres::PgPool;
 use thiserror::Error;
@@ -9,10 +9,10 @@ use crate::domains::calendar::events::errors::CalendarError;
 use crate::domains::calendar::ports::CalendarEventQueryPort;
 use crate::domains::calendar::ports::EventRelationPort;
 use crate::platform::events::bus::zoom_event_types;
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::store::ObservationStore;
 
 pub const ZOOM_CALENDAR_MATCHING_CONSUMER: &str = "zoom_calendar_matching";
 pub const ZOOM_CALENDAR_MATCHING_PROJECTION: &str = "zoom_calendar_matching";

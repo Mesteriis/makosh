@@ -1,5 +1,5 @@
 [package]
-name = "hermes-attachment-text-extraction-assembly"
+name = "makosh-attachment-text-extraction-assembly"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,20 +8,20 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-attachment-text-extraction-assembly"
+name = "makosh-attachment-text-extraction-assembly"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "attachment_text_extraction"
 surface = "assembly"
 
 [dependencies]
-hermes-attachment-text-extraction-api = { path = "../attachment-text-extraction-api" }
-hermes-attachment-text-extraction-persistence = { path = "../attachment-text-extraction-persistence" }
-hermes-attachment-text-extraction-runtime = { path = "../attachment-text-extraction-runtime" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-attachment-text-extraction-api = { path = "../attachment-text-extraction-api" }
+makosh-attachment-text-extraction-persistence = { path = "../attachment-text-extraction-persistence" }
+makosh-attachment-text-extraction-runtime = { path = "../attachment-text-extraction-runtime" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
 serde_json = "=1.0.150"

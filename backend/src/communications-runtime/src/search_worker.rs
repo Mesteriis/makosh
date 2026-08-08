@@ -1,11 +1,11 @@
 //! Executes one owner-local derived-index job without exposing private content.
 
-use hermes_communications_domain::CommunicationsSearchIndexJobV1;
-use hermes_communications_persistence::{
+use makosh_communications_domain::CommunicationsSearchIndexJobV1;
+use makosh_communications_persistence::{
     CommunicationsDerivedIndexFailureV1, CommunicationsDerivedIndexJobOperationV1,
     CommunicationsDurablePersistence, CommunicationsPersistenceError,
 };
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
 use std::os::unix::net::UnixStream;
@@ -90,7 +90,7 @@ async fn execute_claimed_job(
     access: &mut CommunicationsSearchAccessV1,
     control_channel: &mut ManagedControlChannelV2<UnixStream>,
     dispatcher: &mut dyn ManagedControlRequestDispatcherV2<UnixStream>,
-    job: &hermes_communications_persistence::CommunicationsDerivedIndexJobV1,
+    job: &makosh_communications_persistence::CommunicationsDerivedIndexJobV1,
     now_unix_seconds: i64,
 ) -> Result<(), ExecutionErrorV1> {
     match job.operation {

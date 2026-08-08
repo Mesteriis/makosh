@@ -2,7 +2,7 @@ use crate::repository::{
     ReviewAttentionPersistenceErrorV1, ReviewAttentionPersistenceV1, attention_from_row,
     disposition_code, importance_code,
 };
-use hermes_review_attention_core::{
+use makosh_review_attention_core::{
     ReviewAttentionV1, ReviewDispositionV1, ReviewImportanceV1, STABLE_ID_BYTES_V1,
 };
 
@@ -37,7 +37,7 @@ impl ReviewAttentionPersistenceV1 {
             "SELECT attention_id, source_evidence_id, state_revision, disposition,
                     pinned, importance, snoozed_until_unix_seconds,
                     snoozed_until_nanos, updated_at_unix_seconds, updated_at_nanos
-             FROM hermes_data.review_attention_state
+             FROM makosh_data.review_attention_state
              WHERE logical_owner_id = $1 AND attention_id = $2",
         )
         .bind(logical_owner_id)
@@ -68,7 +68,7 @@ impl ReviewAttentionPersistenceV1 {
             "SELECT attention_id, source_evidence_id, state_revision, disposition,
                     pinned, importance, snoozed_until_unix_seconds,
                     snoozed_until_nanos, updated_at_unix_seconds, updated_at_nanos
-             FROM hermes_data.review_attention_state
+             FROM makosh_data.review_attention_state
              WHERE logical_owner_id = $1
                AND ($2::BYTEA IS NULL OR attention_id > $2)
                AND ($3::SMALLINT IS NULL OR disposition = $3)

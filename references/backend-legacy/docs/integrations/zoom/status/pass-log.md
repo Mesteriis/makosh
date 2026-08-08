@@ -28,7 +28,7 @@ provider stage.
 | Check | Result | Evidence |
 |---|---|---|
 | Backend integration module exists | PASS | `backend/src/integrations/zoom`. |
-| Zoom edge proxy binary exists | PASS | `backend/src/bin/hermes_zoom_edge_proxy.rs`. |
+| Zoom edge proxy binary exists | PASS | `backend/src/bin/makosh_zoom_edge_proxy.rs`. |
 | Frontend integration module exists | PASS | `frontend/src/integrations/zoom`. |
 | Zoom migration exists | PASS | `backend/migrations/0160_add_zoom_provider_kind.sql`. |
 | Zoom targeted backend tests pass | PASS | `cargo test --manifest-path backend/Cargo.toml --test zoom_provider_foundation` |
@@ -57,7 +57,7 @@ provider stage.
 | Zoom remote transcript download privacy policy tests pass | PASS | `cargo test --manifest-path backend/Cargo.toml --test zoom_provider_foundation` |
 | Zoom remote recording media download privacy policy tests pass | PASS | `cargo test --manifest-path backend/Cargo.toml --test zoom_provider_foundation` |
 | Zoom transcript file import tests pass | PASS | `cargo test --manifest-path backend/Cargo.toml --test zoom_provider_foundation` |
-| Zoom edge proxy tests pass | PASS | `cargo test --manifest-path backend/Cargo.toml --bin hermes-zoom-edge-proxy`. |
+| Zoom edge proxy tests pass | PASS | `cargo test --manifest-path backend/Cargo.toml --bin makosh-zoom-edge-proxy`. |
 | Zoom targeted frontend tests pass | PASS | `pnpm exec vitest run src/integrations/zoom/api/zoom.test.ts src/integrations/zoom/queries/zoomQueryKeys.test.ts src/platform/bootstrap/realtimeZoomInvalidation.test.ts`. |
 | Zoom recording import retention/remove frontend API wiring tests pass | PASS | `cd frontend && pnpm exec vitest run src/integrations/zoom/api/zoom.test.ts src/integrations/zoom/components/ZoomSettingsPanel.boundary.test.ts`; `cd frontend && pnpm typecheck`. |
 | Zoom recording import audit frontend wiring tests pass | PASS | `cd frontend && pnpm exec vitest run src/integrations/zoom/api/zoom.test.ts src/integrations/zoom/queries/zoomQueryKeys.test.ts src/integrations/zoom/components/ZoomSettingsPanel.boundary.test.ts`; `cd frontend && pnpm typecheck`. |
@@ -66,7 +66,7 @@ provider stage.
 | Shared Calls route filters Zoom evidence by `provider=zoom` | PASS | `cargo test --manifest-path backend/Cargo.toml --test zoom_provider_foundation`. |
 | Zoom realtime invalidation covers recording import and audit keys | PASS | `cd frontend && pnpm exec vitest run src/platform/bootstrap/realtimeZoomInvalidation.test.ts`. |
 | Zoom evidence panel recording/provenance frontend tests pass | PASS | `cd frontend && pnpm exec vitest run src/integrations/zoom/components/zoomEvidence.test.ts src/integrations/zoom/components/ZoomObservedCallsPanel.boundary.test.ts`; `cd frontend && pnpm typecheck`; `cd frontend && pnpm lint`. |
-| Full backend validation gate | BLOCKED | Not rerun in this environment while container backends (`HERMES_TEST_POSTGRES_HOST_PORT`/`HERMES_TEST_NATS_HOST_PORT` or Docker sockets) are unavailable. |
+| Full backend validation gate | BLOCKED | Not rerun in this environment while container backends (`MAKOSH_TEST_POSTGRES_HOST_PORT`/`MAKOSH_TEST_NATS_HOST_PORT` or Docker sockets) are unavailable. |
 | Frontend lint/typecheck gate | PASS | `cd frontend && pnpm lint`; `cd frontend && pnpm typecheck`. |
 | Diff whitespace gate | PASS | `git diff --check`. |
 

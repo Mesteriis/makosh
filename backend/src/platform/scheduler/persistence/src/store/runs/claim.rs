@@ -51,12 +51,12 @@ impl SchedulerPostgresStoreV1 {
     pub async fn renew_claim_lease(
         &self,
         claim: &SchedulerRunClaimV1,
-        renewed_at: hermes_clock_protocol::UtcMillisV1,
-        renewed_until: hermes_clock_protocol::UtcMillisV1,
+        renewed_at: makosh_clock_protocol::UtcMillisV1,
+        renewed_until: makosh_clock_protocol::UtcMillisV1,
     ) -> Result<(), SchedulerRunClaimErrorV1> {
         claim.validate_renewal(renewed_at, renewed_until)?;
         let updated = query(
-            "UPDATE hermes_platform.scheduler_runs SET lease_expires_at_unix_ms = $3 WHERE run_id = $1 AND lease_epoch = $2 AND state IN ('pending_dispatch', 'dispatched', 'running') AND lease_expires_at_unix_ms > $4 AND lease_expires_at_unix_ms < $3",
+            "UPDATE makosh_platform.scheduler_runs SET lease_expires_at_unix_ms = $3 WHERE run_id = $1 AND lease_epoch = $2 AND state IN ('pending_dispatch', 'dispatched', 'running') AND lease_expires_at_unix_ms > $4 AND lease_expires_at_unix_ms < $3",
         )
         .bind(claim.run_id().bytes().to_vec())
         .bind(i64::try_from(claim.lease_epoch()).map_err(|_| SchedulerRunClaimErrorV1::Denied)?)
@@ -76,7 +76,7 @@ pub(crate) async fn reserve_concurrency_slot(
     claim: &SchedulerRunClaimV1,
 ) -> Result<(), SchedulerRunClaimErrorV1> {
     let updated = query(
-        "UPDATE hermes_platform.scheduler_concurrency SET active_runs = active_runs + 1, updated_at_unix_ms = $3 WHERE concurrency_key = $1 AND max_parallelism = $2 AND active_runs < max_parallelism",
+        "UPDATE makosh_platform.scheduler_concurrency SET active_runs = active_runs + 1, updated_at_unix_ms = $3 WHERE concurrency_key = $1 AND max_parallelism = $2 AND active_runs < max_parallelism",
     )
     .bind(claim.concurrency_key().value())
     .bind(i32::from(claim.max_parallelism()))
@@ -97,7 +97,7 @@ async fn reserve_schedule(
         return verify_fixed_delay_due(transaction, claim).await;
     }
     let updated = query(
-        "UPDATE hermes_platform.scheduler_schedules SET next_due_at_unix_ms = $1, updated_at_unix_ms = $2 WHERE schedule_id = $3 AND schedule_revision = $4 AND enabled = TRUE AND next_due_at_unix_ms <= $5 AND concurrency_key = $6 AND max_parallelism = $7",
+        "UPDATE makosh_platform.scheduler_schedules SET next_due_at_unix_ms = $1, updated_at_unix_ms = $2 WHERE schedule_id = $3 AND schedule_revision = $4 AND enabled = TRUE AND next_due_at_unix_ms <= $5 AND concurrency_key = $6 AND max_parallelism = $7",
     )
     .bind(claim.next_due_at().value())
     .bind(claim.claimed_at().value())
@@ -119,7 +119,7 @@ async fn verify_fixed_delay_due(
     claim: &SchedulerRunClaimV1,
 ) -> Result<(), SchedulerRunClaimErrorV1> {
     let found = query_scalar::<_, i32>(
-        "SELECT 1 FROM hermes_platform.scheduler_schedules WHERE schedule_id = $1 AND schedule_revision = $2 AND enabled = TRUE AND next_due_at_unix_ms <= $3 AND concurrency_key = $4 AND max_parallelism = $5 AND policy_bytes = $6 FOR UPDATE",
+        "SELECT 1 FROM makosh_platform.scheduler_schedules WHERE schedule_id = $1 AND schedule_revision = $2 AND enabled = TRUE AND next_due_at_unix_ms <= $3 AND concurrency_key = $4 AND max_parallelism = $5 AND policy_bytes = $6 FOR UPDATE",
     )
     .bind(claim.schedule_id().bytes().to_vec())
     .bind(i64::try_from(claim.schedule_revision().value()).map_err(|_| SchedulerRunClaimErrorV1::Denied)?)
@@ -141,7 +141,7 @@ pub(crate) async fn reserve_run(
     claim: &SchedulerRunClaimV1,
 ) -> Result<(), SchedulerRunClaimErrorV1> {
     let inserted = query(
-        "INSERT INTO hermes_platform.scheduler_runs (run_id, schedule_id, schedule_revision, scheduled_for_unix_ms, lease_epoch, lease_expires_at_unix_ms, state, attempt_count, dispatch_message_id, fire_key, concurrency_key, created_at_unix_ms) VALUES ($1, $2, $3, $4, $5, $6, 'pending_dispatch', 1, $7, $8, $9, $10) ON CONFLICT (fire_key) DO NOTHING",
+        "INSERT INTO makosh_platform.scheduler_runs (run_id, schedule_id, schedule_revision, scheduled_for_unix_ms, lease_epoch, lease_expires_at_unix_ms, state, attempt_count, dispatch_message_id, fire_key, concurrency_key, created_at_unix_ms) VALUES ($1, $2, $3, $4, $5, $6, 'pending_dispatch', 1, $7, $8, $9, $10) ON CONFLICT (fire_key) DO NOTHING",
     )
     .bind(claim.run_id().bytes().to_vec())
     .bind(claim.schedule_id().bytes().to_vec())

@@ -1,5 +1,5 @@
 [package]
-name = "hermes-reviewed-task-candidate-promotion-core"
+name = "makosh-reviewed-task-candidate-promotion-core"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,7 +7,7 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "reviewed_task_candidate_promotion"
 surface = "implementation"

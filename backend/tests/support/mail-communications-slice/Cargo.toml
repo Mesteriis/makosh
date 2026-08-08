@@ -1,21 +1,21 @@
 [package]
-name = "hermes-mail-communications-slice-testkit"
+name = "makosh-mail-communications-slice-testkit"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "test"
 owner = "test"
 surface = "test_support"
 
 [dependencies]
-hermes-communications-api = { path = "../../../src/communications-api" }
-hermes-communications-domain = { path = "../../../src/communications-domain" }
-hermes-communications-ingress = { path = "../../../src/communications-ingress" }
-hermes-communications-persistence = { path = "../../../src/communications-persistence" }
-hermes-events-protocol = { path = "../../../src/platform/events" }
-hermes-mail-api = { path = "../../../src/mail-api" }
-hermes-mail-core = { path = "../../../src/mail-core" }
-hermes-mail-imap = { path = "../../../src/mail-imap" }
+makosh-communications-api = { path = "../../../src/communications-api" }
+makosh-communications-domain = { path = "../../../src/communications-domain" }
+makosh-communications-ingress = { path = "../../../src/communications-ingress" }
+makosh-communications-persistence = { path = "../../../src/communications-persistence" }
+makosh-events-protocol = { path = "../../../src/platform/events" }
+makosh-mail-api = { path = "../../../src/mail-api" }
+makosh-mail-core = { path = "../../../src/mail-core" }
+makosh-mail-imap = { path = "../../../src/mail-imap" }
 prost = "=0.14.4"

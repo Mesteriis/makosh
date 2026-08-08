@@ -1,5 +1,5 @@
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
-use hermes_tasks_persistence::{TasksPersistenceErrorV1, TasksPersistenceV1};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_tasks_persistence::{TasksPersistenceErrorV1, TasksPersistenceV1};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum TasksEventRelayErrorV1 {

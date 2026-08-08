@@ -1,4 +1,4 @@
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use sha2::{Digest, Sha256};
 
 pub const COMMUNICATION_TASK_CANDIDATE_STORAGE_BUNDLE_REVISION_V1: u32 = 1;
@@ -23,7 +23,7 @@ pub fn communication_task_candidate_extraction_storage_bundle_v1() -> StorageBun
 
 #[cfg(test)]
 mod tests {
-    use hermes_storage_protocol::validation::validate_storage_bundle;
+    use makosh_storage_protocol::validation::validate_storage_bundle;
 
     use super::*;
 

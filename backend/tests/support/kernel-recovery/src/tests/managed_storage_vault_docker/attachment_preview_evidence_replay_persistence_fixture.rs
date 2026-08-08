@@ -44,14 +44,14 @@ pub(super) fn wait_for_retained_preview_evidence_indexes_v1(attachment_anchor_id
         let result = runtime.block_on(async {
             let pool = retained_preview_diagnostics_pool_v1().await;
             let communications = sqlx::query(
-                "SELECT message_id FROM hermes_data.communications_retained_evidence_replay_index WHERE attachment_anchor_id=$1",
+                "SELECT message_id FROM makosh_data.communications_retained_evidence_replay_index WHERE attachment_anchor_id=$1",
             )
             .bind(attachment_anchor_id.as_slice())
             .fetch_optional(&pool)
             .await
             .expect("read retained Communications evidence index");
             let mail = sqlx::query(
-                "SELECT message_id FROM hermes_data.mail_retained_evidence_replay_index WHERE attachment_anchor_id=$1",
+                "SELECT message_id FROM makosh_data.mail_retained_evidence_replay_index WHERE attachment_anchor_id=$1",
             )
             .bind(attachment_anchor_id.as_slice())
             .fetch_optional(&pool)
@@ -87,70 +87,70 @@ pub(super) fn wait_for_retained_preview_replay_terminal_v1(
         let diagnostics = runtime.block_on(async {
             let pool = retained_preview_diagnostics_pool_v1().await;
             let operation = sqlx::query(
-                "SELECT state,error FROM hermes_data.attachment_preview_evidence_replay_operations WHERE operation_id=$1",
+                "SELECT state,error FROM makosh_data.attachment_preview_evidence_replay_operations WHERE operation_id=$1",
             )
             .bind(operation_id.as_slice())
             .fetch_one(&pool)
             .await
             .expect("read retained Preview replay operation");
             let producer_results: i64 = sqlx::query_scalar(
-                "SELECT COUNT(*) FROM hermes_data.attachment_preview_evidence_replay_anchor_result_inbox WHERE operation_id=$1",
+                "SELECT COUNT(*) FROM makosh_data.attachment_preview_evidence_replay_anchor_result_inbox WHERE operation_id=$1",
             )
             .bind(operation_id.as_slice())
             .fetch_one(&pool)
             .await
             .expect("count retained Preview replay producer results");
             let communications_results: i64 = sqlx::query_scalar(
-                "SELECT COUNT(*) FROM hermes_data.attachment_preview_evidence_replay_anchor_result_inbox WHERE operation_id=$1 AND producer=1",
+                "SELECT COUNT(*) FROM makosh_data.attachment_preview_evidence_replay_anchor_result_inbox WHERE operation_id=$1 AND producer=1",
             )
             .bind(operation_id.as_slice())
             .fetch_one(&pool)
             .await
             .expect("count retained Communications replay results");
             let mail_results: i64 = sqlx::query_scalar(
-                "SELECT COUNT(*) FROM hermes_data.attachment_preview_evidence_replay_anchor_result_inbox WHERE operation_id=$1 AND producer=2",
+                "SELECT COUNT(*) FROM makosh_data.attachment_preview_evidence_replay_anchor_result_inbox WHERE operation_id=$1 AND producer=2",
             )
             .bind(operation_id.as_slice())
             .fetch_one(&pool)
             .await
             .expect("count retained Mail replay results");
             let communications_result_published: bool = sqlx::query_scalar(
-                "SELECT COALESCE((SELECT published_at_unix_seconds IS NOT NULL FROM hermes_data.communications_retained_evidence_replay_result_outbox WHERE operation_id=$1),FALSE)",
+                "SELECT COALESCE((SELECT published_at_unix_seconds IS NOT NULL FROM makosh_data.communications_retained_evidence_replay_result_outbox WHERE operation_id=$1),FALSE)",
             )
             .bind(operation_id.as_slice())
             .fetch_one(&pool)
             .await
             .expect("read retained Communications result publish state");
             let mail_result_published: bool = sqlx::query_scalar(
-                "SELECT COALESCE((SELECT published_at_unix_seconds IS NOT NULL FROM hermes_data.mail_retained_evidence_replay_result_outbox WHERE operation_id=$1),FALSE)",
+                "SELECT COALESCE((SELECT published_at_unix_seconds IS NOT NULL FROM makosh_data.mail_retained_evidence_replay_result_outbox WHERE operation_id=$1),FALSE)",
             )
             .bind(operation_id.as_slice())
             .fetch_one(&pool)
             .await
             .expect("read retained Mail result publish state");
             let communications_failure: i16 = sqlx::query_scalar(
-                "SELECT failure FROM hermes_data.attachment_preview_evidence_replay_anchor_producers WHERE operation_id=$1 AND producer=1",
+                "SELECT failure FROM makosh_data.attachment_preview_evidence_replay_anchor_producers WHERE operation_id=$1 AND producer=1",
             )
             .bind(operation_id.as_slice())
             .fetch_one(&pool)
             .await
             .expect("read retained Communications replay failure");
             let mail_failure: i16 = sqlx::query_scalar(
-                "SELECT failure FROM hermes_data.attachment_preview_evidence_replay_anchor_producers WHERE operation_id=$1 AND producer=2",
+                "SELECT failure FROM makosh_data.attachment_preview_evidence_replay_anchor_producers WHERE operation_id=$1 AND producer=2",
             )
             .bind(operation_id.as_slice())
             .fetch_one(&pool)
             .await
             .expect("read retained Mail replay failure");
             let communications_published_audits: i64 = sqlx::query_scalar(
-                "SELECT COUNT(*) FROM hermes_data.communications_retained_evidence_replay_audit WHERE operation_id=$1 AND phase=2",
+                "SELECT COUNT(*) FROM makosh_data.communications_retained_evidence_replay_audit WHERE operation_id=$1 AND phase=2",
             )
             .bind(operation_id.as_slice())
             .fetch_one(&pool)
             .await
             .expect("count retained Communications replay audits");
             let mail_published_audits: i64 = sqlx::query_scalar(
-                "SELECT COUNT(*) FROM hermes_data.mail_retained_evidence_replay_audit WHERE operation_id=$1 AND phase=2",
+                "SELECT COUNT(*) FROM makosh_data.mail_retained_evidence_replay_audit WHERE operation_id=$1 AND phase=2",
             )
             .bind(operation_id.as_slice())
             .fetch_one(&pool)
@@ -190,7 +190,7 @@ pub(super) fn remove_retained_mail_replay_index_v1(
     runtime.block_on(async {
         let pool = retained_preview_diagnostics_pool_v1().await;
         let row = sqlx::query(
-            "DELETE FROM hermes_data.mail_retained_evidence_replay_index WHERE attachment_anchor_id=$1 RETURNING attachment_anchor_id,message_id,envelope_sha256,contract_owner,contract_name,contract_major,contract_revision,contract_schema_sha256,indexed_at_unix_seconds",
+            "DELETE FROM makosh_data.mail_retained_evidence_replay_index WHERE attachment_anchor_id=$1 RETURNING attachment_anchor_id,message_id,envelope_sha256,contract_owner,contract_name,contract_major,contract_revision,contract_schema_sha256,indexed_at_unix_seconds",
         )
         .bind(attachment_anchor_id.as_slice())
         .fetch_one(&pool)
@@ -219,7 +219,7 @@ pub(super) fn restore_retained_mail_replay_index_v1(row: RetainedMailReplayIndex
     runtime.block_on(async {
         let pool = retained_preview_diagnostics_pool_v1().await;
         sqlx::query(
-            "INSERT INTO hermes_data.mail_retained_evidence_replay_index (attachment_anchor_id,message_id,envelope_sha256,contract_owner,contract_name,contract_major,contract_revision,contract_schema_sha256,indexed_at_unix_seconds) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)",
+            "INSERT INTO makosh_data.mail_retained_evidence_replay_index (attachment_anchor_id,message_id,envelope_sha256,contract_owner,contract_name,contract_major,contract_revision,contract_schema_sha256,indexed_at_unix_seconds) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)",
         )
         .bind(row.attachment_anchor_id.as_slice())
         .bind(row.message_id.as_slice())
@@ -253,22 +253,22 @@ fn id32(row: &sqlx::postgres::PgRow, column: &str) -> [u8; 32] {
 async fn retained_preview_diagnostics_pool_v1() -> sqlx::PgPool {
     let password = Zeroizing::new(
         std::fs::read_to_string(required(
-            "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+            "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
         ))
         .expect("read disposable PostgreSQL credential")
         .trim()
         .to_owned(),
     );
     let options = PgConnectOptions::new()
-        .host(&required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
+        .host(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
         .port(
-            required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+            required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
                 .parse()
                 .expect("valid PostgreSQL port"),
         )
-        .username("hermes_postgres_admin")
+        .username("makosh_postgres_admin")
         .password(password.as_str())
-        .database("hermes_storage_authenticated")
+        .database("makosh_storage_authenticated")
         .ssl_mode(PgSslMode::Disable);
     PgPoolOptions::new()
         .max_connections(1)

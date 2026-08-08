@@ -51,7 +51,7 @@ mod tests {
             runtime_instance_id: "whatsapp_runtime_1".to_owned(),
             runtime_generation: 1,
             grant_epoch: 1,
-            socket_path: "/private/tmp/hermes/host-bridge.sock".to_owned(),
+            socket_path: "/private/tmp/makosh/host-bridge.sock".to_owned(),
             route_binding_sha256: vec![7; 32],
         };
 

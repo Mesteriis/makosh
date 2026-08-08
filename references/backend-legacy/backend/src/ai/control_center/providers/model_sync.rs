@@ -454,7 +454,7 @@ fn discovered_models_from_response(
         let (capabilities, capability_source) = if reported_capabilities.is_empty() {
             (
                 inferred_model_capabilities(provider, model_key, &category),
-                "hermes_model_key_heuristic",
+                "makosh_model_key_heuristic",
             )
         } else {
             (reported_capabilities, "provider_models_api")
@@ -745,7 +745,7 @@ fn cli_model_capabilities(
     let category = inferred_model_category(model_key);
     (
         inferred_model_capabilities(provider, model_key, category),
-        "hermes_cli_settings_heuristic",
+        "makosh_cli_settings_heuristic",
     )
 }
 
@@ -1003,7 +1003,7 @@ fn ollama_model_capabilities(
 
     if category == "embeddings" || model_key.to_ascii_lowercase().contains("embed") {
         push_unique_capability(&mut capabilities, "embeddings");
-        return (capabilities, "hermes_model_key_heuristic");
+        return (capabilities, "makosh_model_key_heuristic");
     }
 
     (capabilities, "runtime_not_reported")

@@ -146,7 +146,7 @@ fn start_kernel_sidecar<R: Runtime>(
 
     let command = app
         .shell()
-        .sidecar("hermes-kernel")?
+        .sidecar("makosh-kernel")?
         .env_clear()
         .arg("--data-dir")
         .arg(app.path().app_local_data_dir()?)
@@ -162,16 +162,16 @@ fn start_kernel_sidecar<R: Runtime>(
 
     let app_for_events = app.clone();
     tauri::async_runtime::spawn(async move {
-        log::info!("Hermes Kernel sidecar started with pid {pid}");
+        log::info!("Макошь Kernel sidecar started with pid {pid}");
         while let Some(event) = events.recv().await {
             match event {
                 CommandEvent::Stdout(_) | CommandEvent::Stderr(_) => {
-                    log::debug!("Hermes Kernel sidecar emitted output (suppressed)");
+                    log::debug!("Макошь Kernel sidecar emitted output (suppressed)");
                 }
-                CommandEvent::Error(_) => log::error!("Hermes Kernel sidecar event error"),
+                CommandEvent::Error(_) => log::error!("Макошь Kernel sidecar event error"),
                 CommandEvent::Terminated(payload) => {
                     log::warn!(
-                        "Hermes Kernel sidecar terminated: code={:?} signal={:?}",
+                        "Макошь Kernel sidecar terminated: code={:?} signal={:?}",
                         payload.code,
                         payload.signal
                     );
@@ -180,7 +180,7 @@ fn start_kernel_sidecar<R: Runtime>(
                         && let Err(error) =
                             start_kernel_sidecar(app_for_events.clone(), restart_attempt + 1)
                     {
-                        log::error!("Hermes Kernel bounded restart failed: {error}");
+                        log::error!("Макошь Kernel bounded restart failed: {error}");
                     }
                     return;
                 }

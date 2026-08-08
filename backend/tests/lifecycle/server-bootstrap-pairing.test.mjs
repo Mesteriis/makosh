@@ -8,11 +8,11 @@ import test from 'node:test';
 import tls from 'node:tls';
 
 const backendRoot = new URL('../../', import.meta.url).pathname;
-const proofDomain = Buffer.from('hermes.server-bootstrap-pairing.v1\0', 'ascii');
+const proofDomain = Buffer.from('makosh.server-bootstrap-pairing.v1\0', 'ascii');
 
 function startPairing(dataDir) {
   const child = spawn('cargo', [
-    'run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir,
+    'run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir,
     'server-bootstrap-pairing', '--listen-address', '127.0.0.1:0', '--ttl-seconds', '10',
   ], { cwd: backendRoot, encoding: 'utf8' });
   let stdout = '';
@@ -85,7 +85,7 @@ function request(endpoint, fingerprint, token, signedProof, path = '/v1/initial-
         return;
       }
       socket.write(
-        `POST ${path} HTTP/1.1\r\nHost: localhost\r\nAuthorization: Bearer ${token}\r\nX-Hermes-Owner-Id: owner_1\r\nX-Hermes-Device-Id: device_1\r\nX-Hermes-Device-Public-Key-Sec1: ${signedProof.publicKey}\r\nX-Hermes-Device-Signature-Raw: ${signedProof.signature}\r\n\r\n`,
+        `POST ${path} HTTP/1.1\r\nHost: localhost\r\nAuthorization: Bearer ${token}\r\nX-Макошь-Owner-Id: owner_1\r\nX-Макошь-Device-Id: device_1\r\nX-Макошь-Device-Public-Key-Sec1: ${signedProof.publicKey}\r\nX-Макошь-Device-Signature-Raw: ${signedProof.signature}\r\n\r\n`,
       );
     });
     socket.on('data', (chunk) => { response += chunk; });
@@ -97,7 +97,7 @@ function request(endpoint, fingerprint, token, signedProof, path = '/v1/initial-
 }
 
 test('server bootstrap pairing pins TLS, rejects a bad token and consumes a valid file-ES256 proof once', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-server-bootstrap-pairing-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-server-bootstrap-pairing-'));
   const dataDir = join(root, 'data');
   const storePath = join(dataDir, 'kernel-control-store.sqlite');
   try {
@@ -120,7 +120,7 @@ test('server bootstrap pairing pins TLS, rejects a bad token and consumes a vali
 
     const persisted = spawnSync(
       'sqlite3',
-      [storePath, "SELECT status, length(token_sha256), length(certificate_sha256), length(challenge) FROM hermes_kernel_server_bootstrap_pairing;"],
+      [storePath, "SELECT status, length(token_sha256), length(certificate_sha256), length(challenge) FROM makosh_kernel_server_bootstrap_pairing;"],
       { encoding: 'utf8' },
     );
     assert.equal(persisted.status, 0, persisted.stderr);
@@ -128,7 +128,7 @@ test('server bootstrap pairing pins TLS, rejects a bad token and consumes a vali
 
     const replay = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'server-bootstrap-pairing', '--listen-address', '127.0.0.1:0'],
+      ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'server-bootstrap-pairing', '--listen-address', '127.0.0.1:0'],
       { cwd: backendRoot, encoding: 'utf8' },
     );
     assert.notEqual(replay.status, 0);
@@ -139,7 +139,7 @@ test('server bootstrap pairing pins TLS, rejects a bad token and consumes a vali
 });
 
 test('server bootstrap pairing stops after its bounded failed-request limit', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-server-bootstrap-rate-limit-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-server-bootstrap-rate-limit-'));
   const dataDir = join(root, 'data');
   try {
     const listener = startPairing(dataDir);

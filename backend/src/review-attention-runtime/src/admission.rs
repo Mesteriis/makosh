@@ -1,10 +1,10 @@
-use hermes_review_attention_api::{
+use makosh_review_attention_api::{
     REVIEW_ATTENTION_COMMAND_CAPABILITY_ID_V1, REVIEW_ATTENTION_COMMAND_CONNECT_PATH_V1,
     REVIEW_ATTENTION_MODULE_ID_V1, REVIEW_ATTENTION_OWNER_V1,
     REVIEW_ATTENTION_QUERY_CAPABILITY_ID_V1, REVIEW_ATTENTION_QUERY_CONNECT_PATH_V1,
     REVIEW_ATTENTION_REALTIME_CAPABILITY_ID_V1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityCriticalityV1, CapabilityDescriptorV1, CapabilityRequestV1, ClientRpcRouteV1,
     ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1,
     RuntimeBudgetRequestV1, SettingsSchemaRefV1, SettingsSchemaV1, StorageNamespaceRequestV1,
@@ -103,7 +103,7 @@ fn realtime_capability() -> CapabilityDescriptorV1 {
 
 fn client_capability(
     capability_id: &str,
-    contract: hermes_runtime_protocol::v1::ContractReferenceV1,
+    contract: makosh_runtime_protocol::v1::ContractReferenceV1,
     client_path: Option<&str>,
     service_kind: ProvidedSurfaceKindV1,
 ) -> CapabilityDescriptorV1 {
@@ -150,7 +150,7 @@ fn storage_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         validate_descriptor_v1, validate_settings_schema_v1,
     };
 

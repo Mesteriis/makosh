@@ -6,8 +6,8 @@ use super::models::{PersonaListResponse, PersonaReadModel, persona_read_model_fr
 use crate::app::error::types::ApiError;
 use crate::app::state::AppState;
 use crate::application::persona_owner_query::PostgresPersonaOwnerQuery;
-use hermes_personas_api::{PersonaReadPort, PersonaUpdateCommand, PersonaWritePort};
-use hermes_personas_postgres::PersonaPostgresReadQuery;
+use makosh_personas_api::{PersonaReadPort, PersonaUpdateCommand, PersonaWritePort};
+use makosh_personas_postgres::PersonaPostgresReadQuery;
 #[derive(Deserialize)]
 pub(crate) struct PersonaListQuery {
     limit: Option<i64>,

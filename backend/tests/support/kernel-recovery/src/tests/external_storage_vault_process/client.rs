@@ -4,16 +4,16 @@ use std::os::unix::fs::OpenOptionsExt;
 use std::path::{Path, PathBuf};
 use std::time::{Duration, Instant};
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     BeginExternalRuntimeSessionRequestV1, CompleteExternalRuntimeSessionRequestV1,
     ExternalRuntimeSessionRequestV1, ExternalRuntimeSessionResponseV1,
     GetExternalRuntimeStorageBindingRequestV1, RouteVaultCiphertextRequestV1,
     external_runtime_session_request_v1::Operation as RequestOperation,
     external_runtime_session_response_v1::Result as ResponseResult,
 };
-use hermes_runtime_protocol::v1::{VaultCiphertextRouteDirectionV1, VaultCiphertextRouteV1};
-use hermes_storage_protocol::v1::StorageBindingV1;
-use hermes_vault_protocol::{
+use makosh_runtime_protocol::v1::{VaultCiphertextRouteDirectionV1, VaultCiphertextRouteV1};
+use makosh_storage_protocol::v1::StorageBindingV1;
+use makosh_vault_protocol::{
     LeaseAudienceV1, LeaseIdV1, SecretClassV1, VaultActionV1, VaultCiphertextFrameV1,
     VaultLeaseIssueRequestV1, VaultPurposeRequestV1, VaultResponseRecipientV1,
     VaultTransportBindingV1, VaultTransportCommandV1, VaultTransportDirectionV1,
@@ -26,8 +26,8 @@ use sha2::{Digest, Sha256};
 
 use super::transport;
 
-const CONFIG_ENV: &str = "HERMES_EXTERNAL_STORAGE_PROCESS_CONFIG";
-const PROOF_DOMAIN: &[u8] = b"hermes.external-runtime-session.v1\0";
+const CONFIG_ENV: &str = "MAKOSH_EXTERNAL_STORAGE_PROCESS_CONFIG";
+const PROOF_DOMAIN: &[u8] = b"makosh.external-runtime-session.v1\0";
 
 #[test]
 fn external_runtime_process_fixture() {
@@ -156,7 +156,7 @@ fn authenticate(config: &ClientConfig) -> Result<String, String> {
 
 fn proof_message(
     config: &ClientConfig,
-    challenge: &hermes_gateway_protocol::v1::BeginExternalRuntimeSessionResponseV1,
+    challenge: &makosh_gateway_protocol::v1::BeginExternalRuntimeSessionResponseV1,
     digest: [u8; 32],
 ) -> Result<Vec<u8>, String> {
     let mut message = PROOF_DOMAIN.to_vec();
@@ -396,7 +396,7 @@ fn transport_binding(
 }
 
 fn valid_response(
-    response: &hermes_runtime_protocol::v1::VaultCiphertextResponseV1,
+    response: &makosh_runtime_protocol::v1::VaultCiphertextResponseV1,
     binding: &ExternalBinding,
     request_id: [u8; 16],
     digest: [u8; 32],

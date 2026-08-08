@@ -10,20 +10,20 @@ use sqlx::{Postgres, Row, Transaction, postgres::PgRow};
 use crate::{MailDurablePersistence, MailDurablePersistenceError};
 
 pub const MAIL_SCHEMA_V13: &str = r#"
-ALTER TABLE hermes_data.mail_operational_messages
+ALTER TABLE makosh_data.mail_operational_messages
     ADD COLUMN message_id TEXT
     GENERATED ALWAYS AS (provider_message_id) STORED;
-ALTER TABLE hermes_data.mail_operational_message_folders
+ALTER TABLE makosh_data.mail_operational_message_folders
     ADD COLUMN message_id TEXT
     GENERATED ALWAYS AS (provider_message_id) STORED;
-ALTER TABLE hermes_data.mail_message_flag_operations
+ALTER TABLE makosh_data.mail_message_flag_operations
     ADD COLUMN message_id TEXT
     GENERATED ALWAYS AS (provider_message_id) STORED;
 
 CREATE UNIQUE INDEX IF NOT EXISTS mail_operational_messages_stable_message_idx
-    ON hermes_data.mail_operational_messages (connection_id, message_id);
+    ON makosh_data.mail_operational_messages (connection_id, message_id);
 
-CREATE TABLE IF NOT EXISTS hermes_data.mail_imap_message_locators (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_imap_message_locators (
     connection_id TEXT NOT NULL,
     message_id TEXT NOT NULL,
     mailbox_id TEXT NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_imap_message_locators (
     PRIMARY KEY (connection_id, message_id),
     UNIQUE (connection_id, mailbox_id, uid_validity, uid),
     FOREIGN KEY (connection_id, message_id)
-        REFERENCES hermes_data.mail_operational_messages (connection_id, message_id)
+        REFERENCES makosh_data.mail_operational_messages (connection_id, message_id)
         ON DELETE CASCADE,
     CHECK (connection_id <> ''),
     CHECK (message_id <> ''),
@@ -45,9 +45,9 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_imap_message_locators (
 
 pub const MAIL_SCHEMA_V14: &str = r#"
 CREATE INDEX IF NOT EXISTS mail_operational_message_folders_message_idx
-    ON hermes_data.mail_operational_message_folders (connection_id, message_id, folder_id);
+    ON makosh_data.mail_operational_message_folders (connection_id, message_id, folder_id);
 CREATE INDEX IF NOT EXISTS mail_operational_messages_thread_stable_idx
-    ON hermes_data.mail_operational_messages
+    ON makosh_data.mail_operational_messages
     (connection_id, provider_thread_id, updated_at_unix_seconds DESC, message_id DESC);
 "#;
 
@@ -67,7 +67,7 @@ pub fn initial_imap_message_id(
         return Err(MailDurablePersistenceError::InvalidRow);
     }
     let mut digest = Sha256::new();
-    digest.update(b"hermes-mail-imap-message-v1\0");
+    digest.update(b"makosh-mail-imap-message-v1\0");
     digest.update(connection_id.as_bytes());
     digest.update(b"\0");
     digest.update(locator.mailbox_id.as_bytes());
@@ -88,8 +88,8 @@ impl MailDurablePersistence {
         }
         let rows = sqlx::query(
             "SELECT locator.uid \
-             FROM hermes_data.mail_imap_message_locators AS locator \
-             JOIN hermes_data.mail_operational_messages AS message \
+             FROM makosh_data.mail_imap_message_locators AS locator \
+             JOIN makosh_data.mail_operational_messages AS message \
                ON message.connection_id = locator.connection_id \
               AND message.message_id = locator.message_id \
              WHERE locator.connection_id = $1 \
@@ -123,7 +123,7 @@ impl MailDurablePersistence {
         }
         let row = sqlx::query(
             "SELECT mailbox_id, uid_validity, uid \
-             FROM hermes_data.mail_imap_message_locators \
+             FROM makosh_data.mail_imap_message_locators \
              WHERE connection_id = $1 AND message_id = $2",
         )
         .bind(connection_id)
@@ -145,7 +145,7 @@ impl MailDurablePersistence {
             return Err(MailDurablePersistenceError::InvalidRow);
         }
         let exact = sqlx::query(
-            "SELECT message_id FROM hermes_data.mail_imap_message_locators \
+            "SELECT message_id FROM makosh_data.mail_imap_message_locators \
              WHERE connection_id = $1 AND mailbox_id = $2 \
                AND uid_validity = $3 AND uid = $4",
         )
@@ -165,10 +165,10 @@ impl MailDurablePersistence {
 
         let legacy = sqlx::query(
             "SELECT message.message_id \
-             FROM hermes_data.mail_operational_messages AS message \
+             FROM makosh_data.mail_operational_messages AS message \
              WHERE message.connection_id = $1 AND message.message_id = $2 \
                AND NOT EXISTS ( \
-                 SELECT 1 FROM hermes_data.mail_imap_message_locators AS locator \
+                 SELECT 1 FROM makosh_data.mail_imap_message_locators AS locator \
                  WHERE locator.connection_id = message.connection_id \
                    AND locator.message_id = message.message_id \
                )",
@@ -200,7 +200,7 @@ pub(crate) async fn upsert_imap_message_locator(
         return Err(MailDurablePersistenceError::InvalidRow);
     }
     sqlx::query(
-        "INSERT INTO hermes_data.mail_imap_message_locators \
+        "INSERT INTO makosh_data.mail_imap_message_locators \
          (connection_id, message_id, mailbox_id, uid_validity, uid, observed_at_unix_seconds) \
          VALUES ($1, $2, $3, $4, $5, $6) \
          ON CONFLICT (connection_id, message_id) DO UPDATE SET \

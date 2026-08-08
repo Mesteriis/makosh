@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/postcss.config.js`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/postcss.config.js`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/postcss.config.js`
 - Size bytes / Размер в байтах: `72`
 - Included characters / Включено символов: `72`
 - Truncated / Обрезано: `no`
@@ -71,7 +71,7 @@ export default {
 
 ### `frontend/scripts/capture-layout-screenshots.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/scripts/capture-layout-screenshots.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/scripts/capture-layout-screenshots.mjs`
 - Size bytes / Размер в байтах: `21992`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -116,7 +116,7 @@ if (!['baseline', 'after'].includes(mode)) {
 
 const url = process.argv[3] ?? 'http://localhost:5174/';
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-const outputDir = path.join(os.tmpdir(), `hermes-layout-${mode}-${timestamp}`);
+const outputDir = path.join(os.tmpdir(), `makosh-layout-${mode}-${timestamp}`);
 
 await mkdir(outputDir, { recursive: true });
 
@@ -405,7 +405,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/scripts/check-component-lines.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/scripts/check-component-lines.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/scripts/check-component-lines.mjs`
 - Size bytes / Размер в байтах: `4322`
 - Included characters / Включено символов: `4322`
 - Truncated / Обрезано: `no`
@@ -572,7 +572,7 @@ if (import.meta.url === entryPointUrl) {
 
 ### `frontend/scripts/check-component-lines.test.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/scripts/check-component-lines.test.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/scripts/check-component-lines.test.mjs`
 - Size bytes / Размер в байтах: `1841`
 - Included characters / Включено символов: `1841`
 - Truncated / Обрезано: `no`
@@ -604,7 +604,7 @@ describe('check-component-lines policy', () => {
 		expect(isLineCountCheckedSourceFile('src/platform/bootstrap/realtime.test.ts')).toBe(false);
 		expect(isLineCountCheckedSourceFile('src/domains/foo/__tests__/foo.ts')).toBe(false);
 		expect(isLineCountCheckedSourceFile('src/domains/foo/__tests__/foo.vue')).toBe(false);
-		expect(isLineCountCheckedSourceFile('src/gen/hermes/signal_hub/v1/signal_hub_pb.ts')).toBe(false);
+		expect(isLineCountCheckedSourceFile('src/gen/makosh/signal_hub/v1/signal_hub_pb.ts')).toBe(false);
 	});
 
 	it('treats 700 lines as a failure and 1000 lines as critical', () => {
@@ -618,7 +618,7 @@ describe('check-component-lines policy', () => {
 
 ### `frontend/scripts/check-no-inline-styles.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/scripts/check-no-inline-styles.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/scripts/check-no-inline-styles.mjs`
 - Size bytes / Размер в байтах: `3855`
 - Included characters / Включено символов: `3855`
 - Truncated / Обрезано: `no`
@@ -770,7 +770,7 @@ if (violations.length > 0) {
 
 ### `frontend/scripts/generate-proto.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/scripts/generate-proto.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/scripts/generate-proto.mjs`
 - Size bytes / Размер в байтах: `1164`
 - Included characters / Включено символов: `1164`
 - Truncated / Обрезано: `no`
@@ -788,10 +788,10 @@ const protoRoot = join(repoRoot, 'contracts', 'proto')
 const outputDir = join(frontendRoot, 'src', 'gen')
 const pluginPath = join(frontendRoot, 'node_modules', '.bin', 'protoc-gen-es')
 const protoFiles = [
-  join(protoRoot, 'hermes', 'common', 'v1', 'common.proto'),
-  join(protoRoot, 'hermes', 'events', 'v1', 'event_envelope.proto'),
-  join(protoRoot, 'hermes', 'signal_hub', 'v1', 'signal_hub.proto'),
-  join(protoRoot, 'hermes', 'communications', 'v1', 'communications.proto')
+  join(protoRoot, 'makosh', 'common', 'v1', 'common.proto'),
+  join(protoRoot, 'makosh', 'events', 'v1', 'event_envelope.proto'),
+  join(protoRoot, 'makosh', 'signal_hub', 'v1', 'signal_hub.proto'),
+  join(protoRoot, 'makosh', 'communications', 'v1', 'communications.proto')
 ]
 
 mkdirSync(outputDir, { recursive: true })
@@ -819,7 +819,7 @@ if (result.status !== 0) {
 
 ### `frontend/scripts/split-css.py`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/scripts/split-css.py`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/scripts/split-css.py`
 - Size bytes / Размер в байтах: `14938`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1124,13 +1124,13 @@ def process_blocks(blocks):
                     'selector': block['selector'],
                     'body': '\n'.join(b['full'] for b in inner_remaining),
                     'full': media_wrapper,
-           
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `frontend/src-tauri/build.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/build.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/build.rs`
 - Size bytes / Размер в байтах: `634`
 - Included characters / Включено символов: `634`
 - Truncated / Обрезано: `no`
@@ -1157,7 +1157,7 @@ fn main() {
 
 ### `frontend/src-tauri/src/lib.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/src/lib.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/src/lib.rs`
 - Size bytes / Размер в байтах: `7040`
 - Included characters / Включено символов: `7040`
 - Truncated / Обрезано: `no`
@@ -1222,61 +1222,61 @@ pub fn run() {
 }
 
 fn start_backend_sidecar<R: Runtime>(app: &AppHandle<R>) -> Result<(), Box<dyn std::error::Error>> {
-    if std::env::var_os("HERMES_DISABLE_BACKEND_SIDECAR").is_some() {
-        log::info!("Hermes backend sidecar disabled by HERMES_DISABLE_BACKEND_SIDECAR");
+    if std::env::var_os("MAKOSH_DISABLE_BACKEND_SIDECAR").is_some() {
+        log::info!("Макошь backend sidecar disabled by MAKOSH_DISABLE_BACKEND_SIDECAR");
         return Ok(());
     }
 
     let mut command = app
         .shell()
-        .sidecar("hermes-hub-backend")?
-        .env("HERMES_HTTP_ADDR", "127.0.0.1:8080")
+        .sidecar("makosh-backend")?
+        .env("MAKOSH_HTTP_ADDR", "127.0.0.1:8080")
         .env(
-            "HERMES_LOCAL_API_SECRET",
-            std::env::var_os("HERMES_LOCAL_API_SECRET")
+            "MAKOSH_LOCAL_API_SECRET",
+            std::env::var_os("MAKOSH_LOCAL_API_SECRET")
                 .unwrap_or_else(|| "change-me-local-api-secret".into()),
         );
 
     for key in [
         "DATABASE_URL",
-        "HERMES_SECRET_VAULT_KEY",
-        "HERMES_OLLAMA_BASE_URL",
-        "HERMES_OLLAMA_CHAT_MODEL",
-        "HERMES_OLLAMA_EMBED_MODEL",
-        "HERMES_OLLAMA_TIMEOUT_SECONDS",
-        "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
-        "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH",
-        "HERMES_GOOGLE_OAUTH_CLIENT_ID",
-        "HERMES_GOOGLE_OAUTH_CLIENT_SECRET",
+        "MAKOSH_SECRET_VAULT_KEY",
+        "MAKOSH_OLLAMA_BASE_URL",
+        "MAKOSH_OLLAMA_CHAT_MODEL",
+        "MAKOSH_OLLAMA_EMBED_MODEL",
+        "MAKOSH_OLLAMA_TIMEOUT_SECONDS",
+        "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
+        "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH",
+        "MAKOSH_GOOGLE_OAUTH_CLIENT_ID",
+        "MAKOSH_GOOGLE_OAUTH_CLIENT_SECRET",
     ] {
         if let Some(value) = std::env::var_os(key) {
             command = command.env(key, value);
         }
     }
-    if let Some(value) = std::env::var_os("HERMES_TELEGRAM_API_ID")
-        .or_else(|| option_env!("HERMES_BUNDLED_TELEGRAM_API_ID").map(std::ffi::OsString::from))
+    if let Some(value) = std::env::var_os("MAKOSH_TELEGRAM_API_ID")
+        .or_else(|| option_env!("MAKOSH_BUNDLED_TELEGRAM_API_ID").map(std::ffi::OsString::from))
     {
-        command = command.env("HERMES_TELEGRAM_API_ID", value);
+        command = command.env("MAKOSH_TELEGRAM_API_ID", value);
     }
-    if let Some(value) = std::env::var_os("HERMES_TELEGRAM_API_HASH")
-        .or_else(|| option_env!("HERMES_BUNDLED_TELEGRAM_API_HASH").map(std::ffi::OsString::from))
+    if let Some(value) = std::env::var_os("MAKOSH_TELEGRAM_API_HASH")
+        .or_else(|| option_env!("MAKOSH_BUNDLED_TELEGRAM_API_HASH").map(std::ffi::OsString::from))
     {
-        command = command.env("HERMES_TELEGRAM_API_HASH", value);
+        command = command.env("MAKOSH_TELEGRAM_API_HASH", value);
     }
 
-    if std::env::var_os("HERMES_TDJSON_PATH").is_none() {
+    if std::env::var_os("MAKOSH_TDJSON_PATH").is_none() {
         if let Some(tdjson_path) = bundled_tdjson_path(app) {
-            command = command.env("HERMES_TDJSON_PATH", tdjson_path);
+            command = command.env("MAKOSH_TDJSON_PATH", tdjson_path);
         }
     }
-    if std::env::var_os("HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH").is_none()
-        && std::env::var_os("HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_JSON").is_none()
-        && std::env::var_os("HERMES_GOOGLE_OAUTH_CLIENT_ID").is_none()
+    if std::env::var_os("MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH").is_none()
+        && std::env::var_os("MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_JSON").is_none()
+        && std::env::var_os("MAKOSH_GOOGLE_OAUTH_CLIENT_ID").is_none()
     {
         if let Some(google_oauth_client_config_path) = bundled_google_oauth_client_config_path(app)
         {
             command = command.env(
-                "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH",
+                "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH",
                 google_oauth_client_config_path,
             );
         }
@@ -1291,17 +1291,17 @@ fn start_backend_sidecar<R: Runtime>(app: &AppHandle<R>) -> Result<(), Box<dyn s
         .replace(child);
 
     tauri::async_runtime::spawn(async move {
-        log::info!("Hermes backend sidecar started with pid {pid}");
+        log::info!("Макошь backend sidecar started with pid {pid}");
         while let Some(event) = events.recv().await {
             match event {
                 CommandEvent::Stdout(line) => log_sidecar_line(log::Level::Info, &line),
                 CommandEvent::Stderr(line) => log_sidecar_line(log::Level::Warn, &line),
                 CommandEvent::Error(error) => {
-                    log::error!("Hermes backend sidecar event error: {error}");
+                    log::error!("Макошь backend sidecar event error: {error}");
                 }
                 CommandEvent::Terminated(payload) => {
                     log::warn!(
-                        "Hermes backend sidecar terminated: code={:?} signal={:?}",
+                        "Макошь backend sidecar terminated: code={:?} signal={:?}",
                         payload.code,
                         payload.signal
                     );
@@ -1319,7 +1319,7 @@ fn log_sidecar_line(level: log::Level, bytes: &[u8]) {
     if line.is_empty() {
         return;
     }
-    log::log!(level, "Hermes backend sidecar: {line}");
+    log::log!(level, "Макошь backend sidecar: {line}");
 }
 
 fn bundled_tdjson_path<R: Runtime>(app: &AppHandle<R>) -> Option<PathBuf> {
@@ -1369,7 +1369,7 @@ fn tdlib_library_file_name() -> &'static str {
 
 ### `frontend/src-tauri/src/main.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/src/main.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/src/main.rs`
 - Size bytes / Размер в байтах: `179`
 - Included characters / Включено символов: `179`
 - Truncated / Обрезано: `no`
@@ -1385,7 +1385,7 @@ fn main() {
 
 ### `frontend/src-tauri/src/whatsapp_companion.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/src/whatsapp_companion.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/src/whatsapp_companion.rs`
 - Size bytes / Размер в байтах: `31838`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1675,7 +1675,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src-tauri/src/yandex_telemost_companion.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/src/yandex_telemost_companion.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/src/yandex_telemost_companion.rs`
 - Size bytes / Размер в байтах: `30833`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1699,7 +1699,7 @@ const WINDOW_LABEL_PREFIX: &str = "yandex-telemost";
 const TELEMOST_ALLOWED_HOST_RU: &str = "telemost.yandex.ru";
 const TELEMOST_ALLOWED_HOST_COM: &str = "telemost.yandex.com";
 const DEFAULT_FFMPEG_PATH: &str = "ffmpeg";
-const DEFAULT_LINUX_MONITOR: &str = "hermes_telemost.monitor";
+const DEFAULT_LINUX_MONITOR: &str = "makosh_telemost.monitor";
 
 #[derive(Default)]
 pub(crate) struct TelemostLocalRecorder {
@@ -1885,7 +1885,7 @@ pub(crate) async fn open_yandex_telemost_companion(
         .map_err(|error| format!("invalid Yandex Telemost join URL: {error}"))?;
     let initialization_script = telemost_initialization_script(&request, &window_label)?;
     let window = WebviewWindowBuilder::new(&app, window_label.clone(), WebviewUrl::External(url))
-        .title("Yandex Telemost · Hermes")
+        .title("Yandex Telemost · Макошь")
         .visible(true)
         .resizable(true)
         .inner_size(1220.0, 820.0)
@@ -1920,7 +1920,7 @@ pub(crate) async fn yandex_telemost_recording_start(
     request: YandexTelemostRecordingStartRequest,
 ) -> Result<YandexTelemostRecordingSession, String> {
     if !request.consent_attested {
-        return Err("recording requires explicit consent_attested=true; Hermes will not start hidden conference capture".to_owned());
+        return Err("recording requires explicit consent_attested=true; Макошь will not start hidden conference capture".to_owned());
     }
     validate_join_url(&request.join_url)?;
     let account_id = required_slug("account_id", &request.account_id)?;
@@ -2015,7 +2015,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/__tests__/apiClient.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/__tests__/apiClient.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/__tests__/apiClient.test.ts`
 - Size bytes / Размер в байтах: `3905`
 - Included characters / Включено символов: `3903`
 - Truncated / Обрезано: `no`
@@ -2041,7 +2041,7 @@ describe('ApiClient', () => {
 
 	it('rejects an empty secret', () => {
 		expect(() => ApiClient.init('http://localhost:3000', '   ')).toThrow(
-			'X-Hermes-Secret cannot be empty'
+			'X-Макошь-Secret cannot be empty'
 		)
 	})
 
@@ -2051,7 +2051,7 @@ describe('ApiClient', () => {
 		expect(client).toBeInstanceOf(ApiClient)
 	})
 
-	it('sends X-Hermes-Secret header with GET requests', async () => {
+	it('sends X-Макошь-Secret header with GET requests', async () => {
 		const mockFetch = vi.fn().mockResolvedValue({
 			ok: true,
 			status: 200,
@@ -2065,7 +2065,7 @@ describe('ApiClient', () => {
 		expect(mockFetch).toHaveBeenCalledTimes(1)
 		const [url, options] = mockFetch.mock.calls[0]
 		expect(url).toBe('http://localhost:3000/api/v1/test')
-		expect(options.headers['X-Hermes-Secret']).toBe('my-secret')
+		expect(options.headers['X-Макошь-Secret']).toBe('my-secret')
 		expect(options.method).toBe('GET')
 
 		vi.unstubAllGlobals()
@@ -2167,7 +2167,7 @@ describe('ApiClient', () => {
 
 ### `frontend/src/__tests__/sanitizeEmailHtml.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/__tests__/sanitizeEmailHtml.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/__tests__/sanitizeEmailHtml.test.ts`
 - Size bytes / Размер в байтах: `3080`
 - Included characters / Включено символов: `3080`
 - Truncated / Обрезано: `no`
@@ -2257,7 +2257,7 @@ describe('renderMessageBody', () => {
 
 ### `frontend/src/app/router.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/router.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/router.ts`
 - Size bytes / Размер в байтах: `2100`
 - Included characters / Включено символов: `2100`
 - Truncated / Обрезано: `no`
@@ -2311,7 +2311,7 @@ export default router
 
 ### `frontend/src/config/index.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/config/index.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/config/index.ts`
 - Size bytes / Размер в байтах: `104`
 - Included characters / Включено символов: `104`
 - Truncated / Обрезано: `no`
@@ -2324,7 +2324,7 @@ export const config = loadFrontendConfig()
 
 ### `frontend/src/domains/agents/api/agents.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/agents/api/agents.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/agents/api/agents.ts`
 - Size bytes / Размер в байтах: `1876`
 - Included characters / Включено символов: `1876`
 - Truncated / Обрезано: `no`
@@ -2392,7 +2392,7 @@ export async function refreshAiTaskCandidates(
 
 ### `frontend/src/domains/agents/queries/useAgentsQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/agents/queries/useAgentsQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/agents/queries/useAgentsQuery.ts`
 - Size bytes / Размер в байтах: `1144`
 - Included characters / Включено символов: `1144`
 - Truncated / Обрезано: `no`
@@ -2441,7 +2441,7 @@ export function useAiRunsQuery() {
 
 ### `frontend/src/domains/agents/stores/agents.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/agents/stores/agents.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/agents/stores/agents.ts`
 - Size bytes / Размер в байтах: `7351`
 - Included characters / Включено символов: `7351`
 - Truncated / Обрезано: `no`
@@ -2478,7 +2478,7 @@ export const useAgentsStore = defineStore('agents-ui', () => {
 	const isAiMeetingPrepSubmitting = ref(false)
 	const isAiTaskRefreshSubmitting = ref(false)
 	const selectedAgentIndex = ref(0)
-	const aiQuestion = ref('What does the local memory say about Hermes Hub V3?')
+	const aiQuestion = ref('What does the local memory say about Макошь V3?')
 	const aiMeetingTopic = ref('Prepare a V3 implementation review brief')
 	const aiTaskQuery = ref('Find open task candidates from local messages and documents')
 	const aiAnswerResult = ref<AiAnswerResponse | null>(null)
@@ -2644,7 +2644,7 @@ function agentVisual(agentId: string): { icon: string; tone: string } {
 	switch (agentId) {
 		case 'HESTIA':
 			return { icon: 'tabler:calendar-stats', tone: 'mint' }
-		case 'HERMES':
+		case 'MAKOSH':
 			return { icon: 'tabler:route', tone: 'blue' }
 		case 'MNEMOSYNE':
 			return { icon: 'tabler:database-search', tone: 'purple' }
@@ -2707,7 +2707,7 @@ function isAiCitation(value: unknown): value is AiCitation {
 
 ### `frontend/src/domains/agents/types/agents.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/agents/types/agents.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/agents/types/agents.ts`
 - Size bytes / Размер в байтах: `2739`
 - Included characters / Включено символов: `2739`
 - Truncated / Обрезано: `no`
@@ -2863,7 +2863,7 @@ export interface AgentCard {
 
 ### `frontend/src/domains/calendar/api/calendar.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/calendar/api/calendar.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/calendar/api/calendar.ts`
 - Size bytes / Размер в байтах: `5158`
 - Included characters / Включено символов: `5158`
 - Truncated / Обрезано: `no`
@@ -3027,7 +3027,7 @@ export async function searchCalendarEvents(q: string): Promise<Record<string, un
 
 ### `frontend/src/domains/calendar/queries/useCalendarEventsQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/calendar/queries/useCalendarEventsQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/calendar/queries/useCalendarEventsQuery.ts`
 - Size bytes / Размер в байтах: `681`
 - Included characters / Включено символов: `681`
 - Truncated / Обрезано: `no`
@@ -3060,7 +3060,7 @@ export function useCalendarEventsQuery(limit = 200) {
 
 ### `frontend/src/domains/calendar/stores/calendar.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/calendar/stores/calendar.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/calendar/stores/calendar.ts`
 - Size bytes / Размер в байтах: `4405`
 - Included characters / Включено символов: `4405`
 - Truncated / Обрезано: `no`
@@ -3225,7 +3225,7 @@ export function filterWeekEvents(events: CalendarEvent[], weekStart: Date): Cale
 
 ### `frontend/src/domains/calendar/types/calendar.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/calendar/types/calendar.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/calendar/types/calendar.ts`
 - Size bytes / Размер в байтах: `3617`
 - Included characters / Включено символов: `3617`
 - Truncated / Обрезано: `no`
@@ -3411,7 +3411,7 @@ export interface CalendarFetchParams {
 
 ### `frontend/src/domains/communications/api/aiState.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/api/aiState.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/api/aiState.test.ts`
 - Size bytes / Размер в байтах: `1730`
 - Included characters / Включено символов: `1730`
 - Truncated / Обрезано: `no`

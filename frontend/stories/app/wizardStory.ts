@@ -166,7 +166,7 @@ export const wizardStoryModels = {
 		content: [
 			{
 				fields: [
-					{ label: 'Устройство', value: 'Hermes Desktop' },
+					{ label: 'Устройство', value: 'Макошь Desktop' },
 					{ label: 'Название аккаунта', value: 'Personal WhatsApp' }
 				]
 			},
@@ -188,7 +188,7 @@ export const wizardStoryModels = {
 	},
 	ai: {
 		title: 'Подключение AI провайдера',
-		subtitle: 'AI-модели и действия Hermes.',
+		subtitle: 'AI-модели и действия Макошь.',
 		providerLabel: 'AI провайдер',
 		icon: 'tabler:sparkles',
 		tone: 'ai',
@@ -196,7 +196,7 @@ export const wizardStoryModels = {
 		steps: [
 			{ title: 'Параметры API' },
 			{ title: 'Проверка' },
-			{ title: 'Модели Hermes' }
+			{ title: 'Модели Макошь' }
 		],
 		content: [
 			{

@@ -25,7 +25,7 @@ Implement V3 AI as a thin local runtime over existing canonical projections:
 - AI run requested/completed/failed and AI task extraction lifecycle events are represented as canonical events.
 - V3 task extraction may create only `suggested` task candidates linked to `agent_run_id`; existing review APIs remain the only path to active tasks.
 - V3 meeting prep returns a local briefing packet and does not require calendar ingestion.
-- V3 protected APIs require `Authorization: Bearer <HERMES_LOCAL_API_TOKEN>` and `X-Hermes-Actor-Id`.
+- V3 protected APIs require `Authorization: Bearer <MAKOSH_LOCAL_API_TOKEN>` and `X-Макошь-Actor-Id`.
 
 ## Non-Goals
 

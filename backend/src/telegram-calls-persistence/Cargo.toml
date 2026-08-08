@@ -1,5 +1,5 @@
 [package]
-name = "hermes-telegram-calls-persistence"
+name = "makosh-telegram-calls-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -11,17 +11,17 @@ path = "src/lib.rs"
 default = []
 conformance-test-support = []
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "telegram"
 surface = "persistence"
 
 [dependencies]
-hermes-communications-call-evidence-ingress = { path = "../communications-call-evidence-ingress" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-scheduler-protocol = { path = "../platform/scheduler/protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-telegram-calls-core = { path = "../telegram-calls-core" }
+makosh-communications-call-evidence-ingress = { path = "../communications-call-evidence-ingress" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-scheduler-protocol = { path = "../platform/scheduler/protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-telegram-calls-core = { path = "../telegram-calls-core" }
 prost = "=0.14.4"
 prost-types = "=0.14.4"
 sha2 = { version = "=0.10.9", default-features = false }

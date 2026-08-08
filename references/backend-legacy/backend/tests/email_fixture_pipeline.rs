@@ -1,13 +1,13 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde_json::json;
 use sqlx::Row;
 
-use hermes_communications_api::accounts::CommunicationProviderKind;
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::workflows::email_fixture_pipeline::{
+use makosh_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::workflows::email_fixture_pipeline::{
     EmailFixturePipelineRequest, project_fixture_email_messages,
 };
 
@@ -36,7 +36,7 @@ async fn fixture_email_pipeline_imports_projects_persons_and_graph_against_postg
     .to_string();
 
     let provider_accounts =
-        hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
+        makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
             pool.clone(),
         );
     let communication_evidence = CommunicationIngestionStore::new(pool.clone());

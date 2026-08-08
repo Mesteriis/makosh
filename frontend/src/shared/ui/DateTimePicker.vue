@@ -20,7 +20,7 @@ const emit = defineEmits<{
 	'update:modelValue': [value: string]
 }>()
 
-const classes = computed(() => ['hermes-native-control', props.class])
+const classes = computed(() => ['makosh-native-control', props.class])
 
 function handleInput(event: Event): void {
 	const target = event.target as HTMLInputElement

@@ -2,10 +2,10 @@
 
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-reviewed-task-candidate-promotion-core";
+pub const PACKAGE: &str = "makosh-reviewed-task-candidate-promotion-core";
 pub const REVIEWED_TASK_CANDIDATE_PROMOTION_OWNER_V1: &str = "reviewed_task_candidate_promotion";
 pub const REVIEWED_TASK_CANDIDATE_PROMOTION_MODULE_ID_V1: &str =
-    "hermes-reviewed-task-candidate-promotion-runtime";
+    "makosh-reviewed-task-candidate-promotion-runtime";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ReviewedTaskCandidatePromotionIdentityErrorV1 {
@@ -35,7 +35,7 @@ pub fn derive_reviewed_task_candidate_command_id_v1(
         return Err(ReviewedTaskCandidatePromotionIdentityErrorV1::InvalidDecisionRevision);
     }
     Ok(digest(
-        b"hermes.reviewed-task-candidate-promotion.command.v1",
+        b"makosh.reviewed-task-candidate-promotion.command.v1",
         &[
             approval_message_id.as_slice(),
             review_id.as_slice(),
@@ -60,7 +60,7 @@ pub fn derive_reviewed_task_candidate_result_id_v1(
         return Err(ReviewedTaskCandidatePromotionIdentityErrorV1::InvalidReviewId);
     }
     Ok(digest(
-        b"hermes.reviewed-task-candidate-promotion.result.v1",
+        b"makosh.reviewed-task-candidate-promotion.result.v1",
         &[
             tasks_result_message_id.as_slice(),
             command_id.as_slice(),

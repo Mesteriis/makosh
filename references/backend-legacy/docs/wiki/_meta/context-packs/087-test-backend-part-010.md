@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `test`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/tests/project_link_reviews.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/project_link_reviews.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/project_link_reviews.rs`
 - Size bytes / Размер в байтах: `23852`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -67,28 +67,28 @@ use testkit::context::TestContext;
 use chrono::Utc;
 use serde_json::json;
 
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, project_raw_email_message,
 };
-use hermes_hub_backend::domains::decisions::{
+use makosh_hub_backend::domains::decisions::{
     DecisionEntityKind, DecisionReviewState, DecisionStore,
 };
-use hermes_hub_backend::domains::projects::core::{NewProject, ProjectStore};
-use hermes_hub_backend::domains::projects::link_reviews::{
+use makosh_hub_backend::domains::projects::core::{NewProject, ProjectStore};
+use makosh_hub_backend::domains::projects::link_reviews::{
     ProjectLinkReviewCommand, ProjectLinkReviewCommandResult, ProjectLinkReviewState,
     ProjectLinkReviewStore, ProjectLinkTargetKind,
 };
-use hermes_hub_backend::domains::relationships::{
+use makosh_hub_backend::domains::relationships::{
     RelationshipEntityKind, RelationshipReviewState, RelationshipStore,
 };
-use hermes_hub_backend::platform::events::{
+use makosh_hub_backend::platform::events::{
     EventConsumerConfig, EventConsumerRunner, EventStore, NewEventEnvelope,
 };
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::project_link_review_effects::{
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::project_link_review_effects::{
     PROJECT_LINK_REVIEW_EFFECTS_CONSUMER, project_link_review_effect_event,
 };
 
@@ -394,7 +394,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/projection_runner.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/projection_runner.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/projection_runner.rs`
 - Size bytes / Размер в байтах: `5289`
 - Included characters / Включено символов: `5289`
 - Truncated / Обрезано: `no`
@@ -407,11 +407,11 @@ use testkit::context::TestContext;
 use chrono::Utc;
 use serde_json::json;
 
-use hermes_hub_backend::platform::events::{EventStore, NewEventEnvelope, ProjectionCursorStore};
-use hermes_hub_backend::platform::projections::{
+use makosh_hub_backend::platform::events::{EventStore, NewEventEnvelope, ProjectionCursorStore};
+use makosh_hub_backend::platform::projections::{
     ProjectionBatchOutcome, ProjectionHandlerError, run_projection_batch,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 
 #[tokio::test]
 async fn projection_runner_processes_batch_and_advances_cursor_against_postgres() {
@@ -572,7 +572,7 @@ async fn latest_event_position(pool: &sqlx::PgPool) -> i64 {
 
 ### `backend/tests/projects.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/projects.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/projects.rs`
 - Size bytes / Размер в байтах: `11122`
 - Included characters / Включено символов: `11122`
 - Truncated / Обрезано: `no`
@@ -585,19 +585,19 @@ use chrono::Utc;
 use serde_json::json;
 use sqlx::postgres::PgPool;
 
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, project_raw_email_message,
 };
-use hermes_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::domains::projects::core::{NewProject, ProjectStore};
-use hermes_hub_backend::domains::projects::link_reviews::{
+use makosh_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::domains::projects::core::{NewProject, ProjectStore};
+use makosh_hub_backend::domains::projects::link_reviews::{
     ProjectLinkReviewCommand, ProjectLinkReviewState, ProjectLinkReviewStore, ProjectLinkTargetKind,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 
 #[tokio::test]
 async fn project_detail_links_keyword_messages_documents_and_people_against_postgres() {
@@ -922,7 +922,7 @@ fn unique_suffix() -> u128 {
 
 ### `backend/tests/projects_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/projects_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/projects_api.rs`
 - Size bytes / Размер в байтах: `17713`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -937,17 +937,17 @@ use serde_json::{Value, json};
 use sqlx::postgres::PgPool;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::{build_router, build_router_with_database};
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::{build_router, build_router_with_database};
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-use hermes_hub_backend::domains::communications::messages::{
+use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, project_raw_email_message,
 };
-use hermes_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
-use hermes_hub_backend::domains::projects::core::{NewProject, ProjectStore};
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
+use makosh_hub_backend::domains::projects::core::{NewProject, ProjectStore};
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 
 const LOCAL_API_TOKEN: &str = "projects-api-test-token";
 
@@ -967,7 +967,7 @@ async fn projects_rejects_missing_local_api_secret() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -1045,7 +1045,7 @@ async fn project_link_candidates_rejects_missing_local_api_secret() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -1297,7 +1297,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/relationships.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/relationships.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/relationships.rs`
 - Size bytes / Размер в байтах: `25941`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1307,19 +1307,19 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use testkit::context::TestContext;
 
 use chrono::Utc;
-use hermes_hub_backend::application::OrganizationContactLinkApplicationService;
-use hermes_hub_backend::domains::graph::core::{GraphNodeKind, node_id};
-use hermes_hub_backend::domains::organizations::api::OrganizationStore;
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::domains::relationships::{
+use makosh_hub_backend::application::OrganizationContactLinkApplicationService;
+use makosh_hub_backend::domains::graph::core::{GraphNodeKind, node_id};
+use makosh_hub_backend::domains::organizations::api::OrganizationStore;
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::domains::relationships::{
     NewRelationship, NewRelationshipEvidence, RelationshipEntityKind,
     RelationshipEvidenceSourceKind, RelationshipReviewState, RelationshipStore,
     RelationshipStoreError,
 };
-use hermes_hub_backend::platform::observations::{
+use makosh_hub_backend::platform::observations::{
     NewObservation, ObservationOriginKind, ObservationStore,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::{Value, json};
 use sqlx::Row;
 use sqlx::postgres::PgPool;
@@ -1356,7 +1356,7 @@ async fn relationship_store_upserts_persona_relationship_with_evidence_against_p
         RelationshipEvidenceSourceKind::Communication,
         evidence_source_id.clone(),
     )
-    .excerpt("We agreed to collaborate on the Hermes relationship model.")
+    .excerpt("We agreed to collaborate on the Макошь relationship model.")
     .metadata(json!({"channel": "email", "revision": 1}));
     let second_evidence = NewRelationshipEvidence::new(
         RelationshipEvidenceSourceKind::Communication,
@@ -1632,7 +1632,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/relationships_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/relationships_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/relationships_api.rs`
 - Size bytes / Размер в байтах: `10820`
 - Included characters / Включено символов: `10820`
 - Truncated / Обрезано: `no`
@@ -1648,14 +1648,14 @@ use sqlx::Row;
 use sqlx::postgres::PgPool;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::graph::core::{GraphNodeKind, node_id};
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::domains::relationships::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::graph::core::{GraphNodeKind, node_id};
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::domains::relationships::{
     NewRelationship, NewRelationshipEvidence, Relationship, RelationshipEvidenceSourceKind,
     RelationshipReviewState, RelationshipStore,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 
 const LOCAL_API_TOKEN: &str = "relationships-api-test-token";
 
@@ -1912,7 +1912,7 @@ async fn seed_persona_relationship_with_state(
 fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -1922,7 +1922,7 @@ fn json_put_request(uri: &str, value: Value, token: &str) -> Request<Body> {
         .method("PUT")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(value.to_string()))
         .expect("request")
 }
@@ -1957,7 +1957,7 @@ fn path_segment(value: &str) -> String {
 
 ### `backend/tests/review_inbox.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/review_inbox.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/review_inbox.rs`
 - Size bytes / Размер в байтах: `77558`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1969,30 +1969,30 @@ use testkit::context::TestContext;
 use axum::body::{Body, to_bytes};
 use axum::http::{Method, Request, StatusCode, header};
 use chrono::{TimeZone, Utc};
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::decisions::DecisionStore;
-use hermes_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
-use hermes_hub_backend::domains::obligations::ObligationStore;
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::domains::persons::identity::PersonIdentityStore;
-use hermes_hub_backend::domains::projects::core::ProjectStore;
-use hermes_hub_backend::domains::relationships::RelationshipStore;
-use hermes_hub_backend::domains::review::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::decisions::DecisionStore;
+use makosh_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
+use makosh_hub_backend::domains::obligations::ObligationStore;
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::domains::persons::identity::PersonIdentityStore;
+use makosh_hub_backend::domains::projects::core::ProjectStore;
+use makosh_hub_backend::domains::relationships::RelationshipStore;
+use makosh_hub_backend::domains::review::{
     NewReviewItem, NewReviewItemEvidence, ReviewInboxStore, ReviewItemKind, ReviewItemStatus,
     ReviewPromotionTarget,
 };
-use hermes_hub_backend::domains::tasks::api::TaskStore;
-use hermes_hub_backend::platform::events::EventStore;
-use hermes_hub_backend::platform::observations::{
+use makosh_hub_backend::domains::tasks::api::TaskStore;
+use makosh_hub_backend::platform::events::EventStore;
+use makosh_hub_backend::platform::observations::{
     NewObservation, ObservationOriginKind, ObservationStore,
 };
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::review_inbox::project_person_identity_review_event;
-use hermes_hub_backend::workflows::review_inbox::sync_decisions_to_review_for_observations;
-use hermes_hub_backend::workflows::review_inbox::sync_obligations_to_review_for_observations;
-use hermes_hub_backend::workflows::review_inbox::sync_relationships_to_review_for_observations;
-use hermes_hub_backend::workflows::review_inbox::sync_task_candidates_to_review_for_observations;
-use hermes_hub_backend::workflows::review_promotion::ReviewPromotionService;
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::review_inbox::project_person_identity_review_event;
+use makosh_hub_backend::workflows::review_inbox::sync_decisions_to_review_for_observations;
+use makosh_hub_backend::workflows::review_inbox::sync_obligations_to_review_for_observations;
+use makosh_hub_backend::workflows::review_inbox::sync_relationships_to_review_for_observations;
+use makosh_hub_backend::workflows::review_inbox::sync_task_candidates_to_review_for_observations;
+use makosh_hub_backend::workflows::review_promotion::ReviewPromotionService;
 use serde_json::json;
 use sqlx::Row;
 use sqlx::postgres::PgPool;
@@ -2313,13 +2313,13 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/risk_engine.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/risk_engine.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/risk_engine.rs`
 - Size bytes / Размер в байтах: `2824`
 - Included characters / Включено символов: `2824`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::engines::risk::{
+use makosh_hub_backend::engines::risk::{
     RiskAttentionStatus, RiskEngine, RiskSeverity, RiskSignal,
 };
 
@@ -2404,13 +2404,13 @@ fn risk_engine_rejects_unsourced_persona_observation() {
 
 ### `backend/tests/search.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/search.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/search.rs`
 - Size bytes / Размер в байтах: `7722`
 - Included characters / Включено символов: `7722`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::engines::search::{SearchDocument, SearchError, SearchIndex};
+use makosh_hub_backend::engines::search::{SearchDocument, SearchError, SearchIndex};
 
 #[test]
 fn search_index_returns_message_by_body_term() {
@@ -2525,7 +2525,7 @@ fn search_index_replaces_existing_document_identity() {
     assert_eq!(old_results, Vec::new());
     assert_eq!(
         new_results,
-        vec![hermes_hub_backend::engines::search::SearchResult {
+        vec![makosh_hub_backend::engines::search::SearchResult {
             object_id: "message-1".to_owned(),
             object_kind: "message".to_owned(),
             title: "Roadmap review".to_owned(),
@@ -2567,7 +2567,7 @@ fn search_index_replaces_committed_document_identity() {
     assert_eq!(old_results, Vec::new());
     assert_eq!(
         new_results,
-        vec![hermes_hub_backend::engines::search::SearchResult {
+        vec![makosh_hub_backend::engines::search::SearchResult {
             object_id: "message-1".to_owned(),
             object_kind: "message".to_owned(),
             title: "Roadmap review".to_owned(),
@@ -2594,7 +2594,7 @@ fn search_index_accepts_blank_body_for_title_only_documents() {
 
     assert_eq!(
         results,
-        vec![hermes_hub_backend::engines::search::SearchResult {
+        vec![makosh_hub_backend::engines::search::SearchResult {
             object_id: "document-1".to_owned(),
             object_kind: "document".to_owned(),
             title: "PDF metadata overview".to_owned(),
@@ -2633,7 +2633,7 @@ fn search_index_distinguishes_delimiter_bearing_document_identities() {
 
 ### `backend/tests/secret_vault.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/secret_vault.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/secret_vault.rs`
 - Size bytes / Размер в байтах: `15834`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2646,20 +2646,20 @@ use testkit::context::TestContext;
 use chrono::Utc;
 use tempfile::tempdir;
 
-use hermes_hub_backend::platform::secrets::{DatabaseEncryptedSecretVault, EncryptedSecretVault};
-use hermes_hub_backend::platform::secrets::{
+use makosh_hub_backend::platform::secrets::{DatabaseEncryptedSecretVault, EncryptedSecretVault};
+use makosh_hub_backend::platform::secrets::{
     NewSecretReference, ResolvedSecret, SecretKind, SecretReference, SecretReferenceStore,
     SecretResolutionError, SecretResolver, SecretStoreKind,
 };
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::vault::{
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::vault::{
     EntropyEvent, HostVault, HostVaultConfig, SecretEntryContext, VaultMode,
 };
 
 #[tokio::test]
 async fn encrypted_vault_persists_secrets_without_plaintext_leakage() {
     let directory = tempdir().expect("tempdir");
-    let vault_path = directory.path().join("hermes-secrets.vault.json");
+    let vault_path = directory.path().join("makosh-secrets.vault.json");
     let vault = EncryptedSecretVault::new(
         &vault_path,
         ResolvedSecret::new("correct horse battery staple").expect("vault key"),
@@ -2686,7 +2686,7 @@ async fn encrypted_vault_persists_secrets_without_plaintext_leakage() {
 #[tokio::test]
 async fn encrypted_vault_rejects_wrong_master_key() {
     let directory = tempdir().expect("tempdir");
-    let vault_path = directory.path().join("hermes-secrets.vault.json");
+    let vault_path = directory.path().join("makosh-secrets.vault.json");
     let vault = EncryptedSecretVault::new(
         &vault_path,
         ResolvedSecret::new("correct horse battery staple").expect("vault key"),
@@ -2995,7 +2995,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/secrets.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/secrets.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/secrets.rs`
 - Size bytes / Размер в байтах: `5324`
 - Included characters / Включено символов: `5324`
 - Truncated / Обрезано: `no`
@@ -3008,11 +3008,11 @@ use serde_json::json;
 
 use chrono::Utc;
 
-use hermes_hub_backend::platform::secrets::{
+use makosh_hub_backend::platform::secrets::{
     InMemorySecretResolver, NewSecretReference, SecretKind, SecretReference, SecretReferenceStore,
     SecretResolutionError, SecretResolver, SecretStoreKind,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 
 #[test]
 fn secret_reference_enums_reject_unsupported_values() {
@@ -3133,7 +3133,7 @@ async fn secret_references_store_only_metadata_against_postgres() {
                 "Gmail OAuth credential",
             )
             .metadata(json!({
-                "service": "hermes-hub",
+                "service": "makosh",
                 "account": format!("gmail-user-{suffix}@example.com")
             })),
         )
@@ -3143,7 +3143,7 @@ async fn secret_references_store_only_metadata_against_postgres() {
     assert_eq!(stored.secret_ref, secret_ref);
     assert_eq!(stored.secret_kind, SecretKind::OauthToken);
     assert_eq!(stored.store_kind, SecretStoreKind::OsKeychain);
-    assert_eq!(stored.metadata["service"], "hermes-hub");
+    assert_eq!(stored.metadata["service"], "makosh");
 
     let loaded = store
         .secret_reference(&stored.secret_ref)
@@ -3181,7 +3181,7 @@ fn test_secret_reference(
 
 ### `backend/tests/settings.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/settings.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/settings.rs`
 - Size bytes / Размер в байтах: `19550`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3195,12 +3195,12 @@ use axum::http::{Request, StatusCode, header};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount,
 };
-use hermes_hub_backend::platform::settings::{ApplicationSettingsStore, SettingValueKind};
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::settings::{ApplicationSettingsStore, SettingValueKind};
+use makosh_hub_backend::platform::storage::Database;
 
 const LOCAL_API_TOKEN: &str = "settings-api-test-token";
 

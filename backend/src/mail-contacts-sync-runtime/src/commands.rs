@@ -1,9 +1,9 @@
-use hermes_mail_address_book_contract::{
+use makosh_mail_address_book_contract::{
     MAIL_ADDRESS_BOOK_MAX_PAGE_SIZE_V1, MailAddressBookEnvelopeContextV1,
     build_fetch_mail_address_book_page_command_v1, wire::FetchMailAddressBookPageCommandV1,
 };
-use hermes_mail_contacts_sync_api::MAIL_CONTACTS_SYNC_MODULE_ID_V1;
-use hermes_mail_contacts_sync_persistence::OutboxEnvelopeV1;
+use makosh_mail_contacts_sync_api::MAIL_CONTACTS_SYNC_MODULE_ID_V1;
+use makosh_mail_contacts_sync_persistence::OutboxEnvelopeV1;
 use sha2::{Digest, Sha256};
 
 use crate::MAIL_CONTACTS_SYNC_COMMAND_DEADLINE_SECONDS_V1;

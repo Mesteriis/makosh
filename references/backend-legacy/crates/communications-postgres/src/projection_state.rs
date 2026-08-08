@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_communications_api::projection_state::{
+use makosh_communications_api::projection_state::{
     MessageProjectionState, MessageProjectionStateError, MessageProjectionStateFuture,
     MessageProjectionStateQueryPort,
 };

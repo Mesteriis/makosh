@@ -102,7 +102,7 @@
 	width: 100%;
 }
 
-.personas-directory-filter .hermes-toggle-group__item {
+.personas-directory-filter .makosh-toggle-group__item {
 	flex: 1 1 0;
 	justify-content: center;
 	min-width: 0;
@@ -231,7 +231,7 @@
 	box-shadow: 0 14px 40px color-mix(in srgb, var(--h-color-accent) 16%, transparent);
 }
 
-.personas-avatar-ring :deep(.hermes-avatar-root) {
+.personas-avatar-ring :deep(.makosh-avatar-root) {
 	width: 82px;
 	height: 82px;
 	font-size: 24px;
@@ -666,21 +666,21 @@
 	cursor: pointer;
 }
 
-.personas-relationship-avatar-node .hermes-avatar-root {
+.personas-relationship-avatar-node .makosh-avatar-root {
 	width: 58px;
 	height: 58px;
 	border: 2px solid color-mix(in srgb, var(--h-color-accent) 24%, var(--h-color-border));
 	box-shadow: 0 10px 24px color-mix(in srgb, var(--h-color-text) 10%, transparent);
 }
 
-.personas-relationship-flow-node.is-root .personas-relationship-avatar-node .hermes-avatar-root {
+.personas-relationship-flow-node.is-root .personas-relationship-avatar-node .makosh-avatar-root {
 	border-color: var(--h-color-accent);
 	box-shadow: 0 14px 32px color-mix(in srgb, var(--h-color-accent) 22%, transparent);
 }
 
-.personas-relationship-avatar-node:hover .hermes-avatar-root,
-.personas-relationship-avatar-node.is-selected .hermes-avatar-root,
-.personas-relationship-flow .vue-flow__node-default.selected .personas-relationship-avatar-node .hermes-avatar-root {
+.personas-relationship-avatar-node:hover .makosh-avatar-root,
+.personas-relationship-avatar-node.is-selected .makosh-avatar-root,
+.personas-relationship-flow .vue-flow__node-default.selected .personas-relationship-avatar-node .makosh-avatar-root {
 	border-color: var(--h-color-accent);
 	box-shadow: var(--h-focus-ring);
 }
@@ -712,7 +712,7 @@
 	outline: 0;
 }
 
-.personas-relationship-avatar-node:focus-visible .hermes-avatar-root {
+.personas-relationship-avatar-node:focus-visible .makosh-avatar-root {
 	box-shadow: var(--h-focus-ring);
 }
 
@@ -1044,7 +1044,7 @@
 }
 
 .personas-loading svg {
-	animation: hermes-spin 900ms linear infinite;
+	animation: makosh-spin 900ms linear infinite;
 }
 
 @media (max-width: 1300px) {

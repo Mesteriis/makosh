@@ -1,6 +1,6 @@
 use std::{collections::BTreeMap, path::PathBuf, process::ExitCode};
 
-use hermes_call_transcription_assembly::materialize_release_assembly_v1;
+use makosh_call_transcription_assembly::materialize_release_assembly_v1;
 
 const OPTIONS: [&str; 3] = ["--build-id", "--output-dir", "--runtime"];
 
@@ -20,7 +20,7 @@ fn main() -> ExitCode {
             ExitCode::SUCCESS
         }
         None => fail(
-            "usage: hermes-call-transcription-assembly --build-id <id> \
+            "usage: makosh-call-transcription-assembly --build-id <id> \
              --output-dir <absolute-path> --runtime <absolute-path>",
         ),
     }
@@ -65,7 +65,7 @@ mod tests {
     fn parses_exact_options() {
         let parsed = arguments(vec![
             "--runtime".to_owned(),
-            "/tmp/hermes-call-transcription-runtime".to_owned(),
+            "/tmp/makosh-call-transcription-runtime".to_owned(),
             "--build-id".to_owned(),
             "build-1".to_owned(),
             "--output-dir".to_owned(),
@@ -75,7 +75,7 @@ mod tests {
         assert_eq!(parsed.build_id, "build-1");
         assert_eq!(
             parsed.runtime,
-            PathBuf::from("/tmp/hermes-call-transcription-runtime")
+            PathBuf::from("/tmp/makosh-call-transcription-runtime")
         );
     }
 }

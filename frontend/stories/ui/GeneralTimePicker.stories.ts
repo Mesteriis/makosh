@@ -4,7 +4,7 @@ import { storybookLocaleFromGlobals } from './storybook-i18n'
 import { generalStoryCopy } from './general-story-copy'
 
 const meta = {
-	title: 'Hermes UI/General/Time Picker',
+	title: 'Макошь UI/General/Time Picker',
 	component: TimePicker,
 	render: (_args, context) => ({
 		components: { FormField, FormLabel, TimePicker },

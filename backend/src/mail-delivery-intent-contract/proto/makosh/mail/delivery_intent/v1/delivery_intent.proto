@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package makosh.mail.delivery_intent.v1;
+
+message ExecuteMailDeliveryIntentCommandV1 {
+  bytes intent_id = 1;
+  string logical_owner_id = 2;
+  bytes account_source_cursor = 3;
+  bytes conversation_source_cursor = 4;
+  optional bytes reply_to_source_cursor = 5;
+  MailDeliveryIntentBodySourceReceiptV1 body_source = 6;
+}
+
+message MailDeliveryIntentBodySourceReceiptV1 {
+  bytes reference_id = 1;
+  uint64 declared_bytes = 2;
+  bytes sha256 = 3;
+  bytes custody_transfer_source_proof = 4;
+}
+
+message MailDeliveryIntentSucceededV1 {
+  bytes intent_id = 1;
+  string logical_owner_id = 2;
+  bytes provider_operation_id = 3;
+}
+
+message MailDeliveryIntentRejectedV1 {
+  bytes intent_id = 1;
+  string logical_owner_id = 2;
+  MailDeliveryIntentRejectCodeV1 code = 3;
+}
+
+enum MailDeliveryIntentRejectCodeV1 {
+  MAIL_DELIVERY_INTENT_REJECT_CODE_UNSPECIFIED = 0;
+  MAIL_DELIVERY_INTENT_REJECT_CODE_INVALID_REQUEST = 1;
+  MAIL_DELIVERY_INTENT_REJECT_CODE_ROUTE_NOT_FOUND = 2;
+  MAIL_DELIVERY_INTENT_REJECT_CODE_CUSTODY_REJECTED = 3;
+  MAIL_DELIVERY_INTENT_REJECT_CODE_PROVIDER_REJECTED = 4;
+  MAIL_DELIVERY_INTENT_REJECT_CODE_PROVIDER_AMBIGUOUS = 5;
+  MAIL_DELIVERY_INTENT_REJECT_CODE_UNAVAILABLE = 6;
+}

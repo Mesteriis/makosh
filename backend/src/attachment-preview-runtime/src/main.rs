@@ -6,9 +6,9 @@ use std::{
     time::Duration,
 };
 
-use hermes_attachment_preview_api::ATTACHMENT_PREVIEW_OWNER_V1;
-use hermes_attachment_preview_persistence::attachment_preview_storage_bundle_v1;
-use hermes_attachment_preview_runtime::{
+use makosh_attachment_preview_api::ATTACHMENT_PREVIEW_OWNER_V1;
+use makosh_attachment_preview_persistence::attachment_preview_storage_bundle_v1;
+use makosh_attachment_preview_runtime::{
     AttachmentPreviewRendererRuntimeV1, attachment_preview_module_descriptor_v1,
     attachment_preview_settings_schema_bytes_v1,
     runtime::{
@@ -16,7 +16,7 @@ use hermes_attachment_preview_runtime::{
         current_runtime_time_v1,
     },
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,

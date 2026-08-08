@@ -6,32 +6,32 @@
 
 Состояние реализации: managed multi-format Gateway/client Blob/SSE slice. Clean-room owner boundary,
 client/private-content boundary, event-only custody, renderer topology и phase
-gate определены. Отдельные `hermes-attachment-preview-api`, `-ingress`, `-core`
+gate определены. Отдельные `makosh-attachment-preview-api`, `-ingress`, `-core`
 и `-renderer-contract` admitted и реализуют versioned Start/Get/IssueRead/
 client_blob contracts, target-owned custody envelopes, pure order-independent
 evidence join/lifecycle/output policy и byte-only magic detection. Независимые
-`hermes-attachment-preview-text`, `-image` и `-media` реализуют bounded UTF-8
+`makosh-attachment-preview-text`, `-image` и `-media` реализуют bounded UTF-8
 normalization, decode-and-fresh-PNG image rendering и fail-closed MP3/MP4
-container validation. Отдельный `hermes-attachment-preview-pdf` реализует
+container validation. Отдельный `makosh-attachment-preview-pdf` реализует
 pure-Rust first-page rasterization с bounded viewport, fresh PNG output и
 fail-closed active-content policy без native library или shell. Отдельный
-`hermes-attachment-preview-docx` проверяет bounded OPC/ZIP structure, запрещает
+`makosh-attachment-preview-docx` проверяет bounded OPC/ZIP structure, запрещает
 external relationships, macros, ActiveX/OLE и source-provided fonts, извлекает
 только bounded `word/document.xml` и строит fresh first-card PNG bundled
 DejaVu Sans с pinned digest и включённой лицензией. Pure core теперь валидирует
 полный status/result lifecycle, exact safe transition и source custody facts.
-Отдельный `hermes-attachment-preview-persistence` реализует owner-local
+Отдельный `makosh-attachment-preview-persistence` реализует owner-local
 PostgreSQL request replay, exact inbox/outbox, order-independent evidence join,
 fenced jobs, derived artifact metadata, replayable realtime и hashed one-use
 actor-bound read tickets без private content или ticket plaintext. Отдельный
-`hermes-attachment-preview-runtime` теперь является admitted managed workflow
+`makosh-attachment-preview-runtime` теперь является admitted managed workflow
 binary: он аутентифицирует exact descriptor/settings, получает fenced NATS,
 Storage, Vault и Blob grants, owner-locally обрабатывает request/query/
 client_blob, custody inbox/outbox, magic-only renderer dispatch, derived Blob
 commit и metadata-only replayable realtime. Runtime не импортирует
 Communications или Attachment Security implementation, не содержит SQL и не
 возвращает private bytes через query/SSE. Отдельный
-`hermes-attachment-preview-assembly` fail-closed материализует canonical
+`makosh-attachment-preview-assembly` fail-closed материализует canonical
 descriptor, empty typed settings schema, owner-local Storage bundle и sorted
 unsigned runtime/storage release fragment; он не запускает runtime, renderer и
 не получает signing authority. Development release теперь собирает этот fragment
@@ -125,7 +125,7 @@ use-case workflow и производит только derived presentation arti
 
 ```text
 owner_id  = attachment_preview
-module_id = hermes-attachment-preview-runtime
+module_id = makosh-attachment-preview-runtime
 kind      = workflow
 ```
 
@@ -168,7 +168,7 @@ storage и не импортирует implementation. Kernel, Gateway, Event Hu
 
 ## Event-only custody contract
 
-Target-owned `hermes-attachment-preview-ingress` содержит три exact durable
+Target-owned `makosh-attachment-preview-ingress` содержит три exact durable
 contracts:
 
 ```text
@@ -182,7 +182,7 @@ safety message/evidence и logical owner. Target triple является кон�
 
 ```text
 owner      = attachment_preview
-module     = hermes-attachment-preview-runtime
+module     = makosh-attachment-preview-runtime
 capability = attachment_preview.blob.v1
 ```
 
@@ -198,7 +198,7 @@ contracts, но не engine/domain implementation. Это contract edge, не en
 
 ## Client и private-content boundary
 
-`hermes-attachment-preview-api` разделяет четыре причины вызова:
+`makosh-attachment-preview-api` разделяет четыре причины вызова:
 
 - `Start` — idempotent command/request receipt;
 - `Get` — metadata-only status query;
@@ -301,40 +301,40 @@ preview.
 ## Единицы сборки и SRP
 
 ```text
-hermes-attachment-preview-api
+makosh-attachment-preview-api
   generated Start/Get/IssueRead/client_blob/realtime contracts
 
-hermes-attachment-preview-ingress
+makosh-attachment-preview-ingress
   target-owned custody command/result event contracts
 
-hermes-attachment-preview-core
+makosh-attachment-preview-core
   pure join, lifecycle, format/output bounds and terminal decisions
 
-hermes-attachment-preview-renderer-contract
+makosh-attachment-preview-renderer-contract
   byte-only render request/result/error and exact format detection
 
-hermes-attachment-preview-text
+makosh-attachment-preview-text
   bounded UTF-8 normalization and visible truncation
 
-hermes-attachment-preview-image
+makosh-attachment-preview-image
   bounded image decode, metadata removal and PNG re-encode
 
-hermes-attachment-preview-pdf
+makosh-attachment-preview-pdf
   isolated first-page PNG renderer
 
-hermes-attachment-preview-docx
+makosh-attachment-preview-docx
   isolated fixed-font card/page PNG renderer
 
-hermes-attachment-preview-media
+makosh-attachment-preview-media
   bounded MP3/MP4 container validation and presentation copy
 
-hermes-attachment-preview-persistence
+makosh-attachment-preview-persistence
   owner-local PostgreSQL inbox/outbox/run/job/artifact/ticket/realtime state
 
-hermes-attachment-preview-runtime
+makosh-attachment-preview-runtime
   managed request/query/client_blob/Event/Blob/renderer orchestration only
 
-hermes-attachment-preview-assembly
+makosh-attachment-preview-assembly
   descriptor/settings/Storage/runtime-resource artifacts and unsigned release fragment only
 ```
 

@@ -14,6 +14,6 @@ describe('Dialog controlled mode compatibility', () => {
     expect(source).toContain('@interact-outside="handleOutsideCloseEvent"')
     expect(source).toContain('@pointer-down-outside="handleOutsideCloseEvent"')
     expect(source).toContain('<slot name="chrome" />')
-    expect(source).toContain('<DialogClose v-if="showClose" class="hermes-dialog-close" as-child>')
+    expect(source).toContain('<DialogClose v-if="showClose" class="makosh-dialog-close" as-child>')
   })
 })

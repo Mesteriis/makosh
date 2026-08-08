@@ -1,36 +1,36 @@
 [package]
-name = "hermes-whatsapp-runtime"
+name = "makosh-whatsapp-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
 [lib]
-name = "hermes_whatsapp_runtime"
+name = "makosh_whatsapp_runtime"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-whatsapp-runtime"
+name = "makosh-whatsapp-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "whatsapp"
 surface = "runtime"
 
 [dependencies]
-hermes-blob-client-contract = { path = "../platform/blob/client-contract" }
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-communications-ingress = { path = "../communications-ingress" }
-hermes-events-jetstream = { path = "../platform/events/jetstream" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
-hermes-vault-protocol = { path = "../platform/vault/protocol" }
-hermes-whatsapp-api = { path = "../whatsapp-api" }
-hermes-whatsapp-core = { path = "../whatsapp-core" }
-hermes-whatsapp-delivery-intent-contract = { path = "../whatsapp-delivery-intent-contract" }
-hermes-whatsapp-persistence = { path = "../whatsapp-persistence" }
+makosh-blob-client-contract = { path = "../platform/blob/client-contract" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-communications-ingress = { path = "../communications-ingress" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
+makosh-vault-protocol = { path = "../platform/vault/protocol" }
+makosh-whatsapp-api = { path = "../whatsapp-api" }
+makosh-whatsapp-core = { path = "../whatsapp-core" }
+makosh-whatsapp-delivery-intent-contract = { path = "../whatsapp-delivery-intent-contract" }
+makosh-whatsapp-persistence = { path = "../whatsapp-persistence" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 prost-types = "=0.14.4"

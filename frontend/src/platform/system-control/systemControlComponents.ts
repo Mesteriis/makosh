@@ -2,7 +2,7 @@ import {
 	ClientSystemComponentIdV1,
 	ClientSystemComponentStateV1,
 	type ClientSystemComponentStatusV1,
-} from '../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../gen/makosh/gateway/v1/client_bootstrap_pb'
 export {
 	publicModuleSettingRows,
 	type PublicModuleSettingRow,

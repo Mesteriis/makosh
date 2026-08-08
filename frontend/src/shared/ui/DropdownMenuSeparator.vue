@@ -3,6 +3,6 @@ import { DropdownMenuSeparator } from 'reka-ui'
 </script>
 
 <template>
-  <DropdownMenuSeparator class="hermes-dropdown-separator" />
+  <DropdownMenuSeparator class="makosh-dropdown-separator" />
 </template>
 

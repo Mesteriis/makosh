@@ -2,8 +2,8 @@ use thiserror::Error;
 
 use crate::ai::hub::AiHubError;
 use crate::workflows::review_inbox::ReviewInboxWorkflowError;
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 use super::service::attribution_port::AiPersonaAttributionError;
 
@@ -28,7 +28,7 @@ pub enum AiError {
     Runtime(#[from] AiHubError),
 
     #[error(transparent)]
-    EventEnvelope(#[from] hermes_events_api::EventEnvelopeError),
+    EventEnvelope(#[from] makosh_events_api::EventEnvelopeError),
 
     #[error(transparent)]
     EventStore(#[from] EventStoreError),

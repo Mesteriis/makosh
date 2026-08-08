@@ -9,11 +9,11 @@ use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
-use hermes_blob_client_contract::{BlobReadError, BlobReadPort};
-use hermes_runtime_protocol::managed_control::{
+use makosh_blob_client_contract::{BlobReadError, BlobReadPort};
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobCustodyReleaseOutcomeV1, BlobCustodyReleaseReasonV1, BlobCustodySourceProofKindV1,
     BlobCustodySourceProofV1, BlobCustodyTransferGrantV1, BlobDataCustodyTransferRequestV1,
     BlobDataOperationV1, BlobDataReadRangeRequestV1, BlobDataRequestV1, BlobDataResponseV1,
@@ -27,7 +27,7 @@ use hermes_runtime_protocol::v1::{
 use prost::Message;
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-blob-client";
+pub const PACKAGE: &str = "makosh-blob-client";
 const MAX_FRAME_BYTES: usize = 64 * 1024 * 1024 + 32 * 1024;
 const CONTROL_FRAME_BYTES: usize = 512 * 1024;
 
@@ -437,7 +437,7 @@ fn decode_resolved_custody_delegation_response(
 fn delegation_delivery(
     response: ManagedRuntimeControlResponseV1,
 ) -> Result<
-    hermes_runtime_protocol::v1::ManagedRuntimeBlobCustodyDelegationDeliveryV1,
+    makosh_runtime_protocol::v1::ManagedRuntimeBlobCustodyDelegationDeliveryV1,
     BlobClientError,
 > {
     match response.result {
@@ -454,7 +454,7 @@ fn delegation_delivery(
 }
 
 fn decode_delegation_proof(
-    delivery: &hermes_runtime_protocol::v1::ManagedRuntimeBlobCustodyDelegationDeliveryV1,
+    delivery: &makosh_runtime_protocol::v1::ManagedRuntimeBlobCustodyDelegationDeliveryV1,
     expected_request_id: &[u8; 16],
     expected_reference_id: &[u8; 16],
     predecessor_proof: &[u8],
@@ -1077,7 +1077,7 @@ mod tests {
     fn custody_release_response_is_exact_and_typed() {
         let response = ManagedRuntimeControlResponseV1 {
             result: Some(ControlResult::BlobCustodyRelease(
-                hermes_runtime_protocol::v1::ManagedRuntimeBlobCustodyReleaseDeliveryV1 {
+                makosh_runtime_protocol::v1::ManagedRuntimeBlobCustodyReleaseDeliveryV1 {
                     operation_id: vec![1; 16],
                     outcome: BlobCustodyReleaseOutcomeV1::BlobCustodyReleaseOutcomeExistingV1
                         as i32,
@@ -1109,7 +1109,7 @@ mod tests {
         let predecessor_envelope_sha256 = [5; 32];
         let target = ManagedBlobCustodyTargetV1 {
             owner_id: "attachment_archive_inspection",
-            module_id: "hermes-attachment-archive-inspection-runtime",
+            module_id: "makosh-attachment-archive-inspection-runtime",
             capability_id: "attachment_archive_inspection.blob.v1",
         };
         let request = ManagedBlobCustodyDelegationRequestV1 {
@@ -1133,7 +1133,7 @@ mod tests {
         };
         let response = ManagedRuntimeControlResponseV1 {
             result: Some(ControlResult::BlobCustodyDelegation(
-                hermes_runtime_protocol::v1::ManagedRuntimeBlobCustodyDelegationDeliveryV1 {
+                makosh_runtime_protocol::v1::ManagedRuntimeBlobCustodyDelegationDeliveryV1 {
                     request_id: request_id.to_vec(),
                     custody_transfer_source_proof: proof.encode_to_vec(),
                     resolved_target_owner_id: target.owner_id.to_owned(),
@@ -1150,7 +1150,7 @@ mod tests {
         let wrong_target = ManagedBlobCustodyDelegationRequestV1 {
             target: ManagedBlobCustodyTargetV1 {
                 owner_id: "communications",
-                module_id: "hermes-communications-runtime",
+                module_id: "makosh-communications-runtime",
                 capability_id: "communications.blob.v1",
             },
             ..request
@@ -1190,17 +1190,17 @@ mod tests {
             predecessor_proof_sha256: Sha256::digest(predecessor).to_vec(),
             reference_id: reference_id.to_vec(),
             target_owner_id: "whisper_stt".to_owned(),
-            target_module_id: "hermes-whisper-stt-runtime".to_owned(),
+            target_module_id: "makosh-whisper-stt-runtime".to_owned(),
             target_capability_id: "speech_to_text.provider.v1".to_owned(),
             ..Default::default()
         };
         let response = ManagedRuntimeControlResponseV1 {
             result: Some(ControlResult::BlobCustodyDelegation(
-                hermes_runtime_protocol::v1::ManagedRuntimeBlobCustodyDelegationDeliveryV1 {
+                makosh_runtime_protocol::v1::ManagedRuntimeBlobCustodyDelegationDeliveryV1 {
                     request_id: request_id.to_vec(),
                     custody_transfer_source_proof: proof.encode_to_vec(),
                     resolved_target_owner_id: "whisper_stt".to_owned(),
-                    resolved_target_module_id: "hermes-whisper-stt-runtime".to_owned(),
+                    resolved_target_module_id: "makosh-whisper-stt-runtime".to_owned(),
                     resolved_target_capability_id: "speech_to_text.provider.v1".to_owned(),
                 },
             )),
@@ -1211,7 +1211,7 @@ mod tests {
         assert_eq!(decoded.resolved_target_owner_id, "whisper_stt");
         assert_eq!(
             decoded.resolved_target_module_id,
-            "hermes-whisper-stt-runtime"
+            "makosh-whisper-stt-runtime"
         );
     }
 
@@ -1240,7 +1240,7 @@ mod tests {
         let receipt = [7; 32];
         let target = ManagedBlobCustodyTargetV1 {
             owner_id: "attachment_security",
-            module_id: "hermes-attachment-security-runtime",
+            module_id: "makosh-attachment-security-runtime",
             capability_id: "attachment_security.blob.v1",
         };
         assert!(valid_custody_target(

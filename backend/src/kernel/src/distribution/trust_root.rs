@@ -2,7 +2,7 @@
 
 use std::{fs::File, io::Read, os::unix::fs::MetadataExt, path::Path};
 
-use hermes_runtime_protocol::validation::distribution::{
+use makosh_runtime_protocol::validation::distribution::{
     MAX_RELEASE_TRUST_ROOT_BYTES, decode_release_trust_root_v1,
 };
 use p256::ecdsa::VerifyingKey;

@@ -1,5 +1,5 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
@@ -9,13 +9,13 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::communications::messages::models::NewProjectedMessage;
-use hermes_hub_backend::domains::communications::messages::store::MessageProjectionStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::communications::messages::models::NewProjectedMessage;
+use makosh_hub_backend::domains::communications::messages::store::MessageProjectionStore;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const TOKEN: &str = "message-flags-api-test-token";
 
@@ -24,7 +24,7 @@ async fn app(ctx: &TestContext) -> axum::Router {
         .await
         .expect("database");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             TOKEN,
             ctx.connection_string().as_str(),
         ),
@@ -36,7 +36,7 @@ fn request(method: Method, uri: &str) -> Request<Body> {
     Request::builder()
         .method(method)
         .uri(uri)
-        .header("x-hermes-secret", TOKEN)
+        .header("x-makosh-secret", TOKEN)
         .body(Body::empty())
         .expect("request")
 }

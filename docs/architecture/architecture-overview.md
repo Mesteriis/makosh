@@ -5,7 +5,7 @@
 
 ## Architectural Thesis
 
-Hermes Hub — local-first Personal Memory System с двумя связанными продуктовыми
+Макошь — local-first Personal Memory System с двумя связанными продуктовыми
 слоями:
 
 1. полноценные provider-specific operational experiences;
@@ -64,8 +64,8 @@ layout guard.
 ADR-0212 отделяет compile isolation от process isolation. Kernel и Gateway не
 линкуют owner-specific packages; каждый domain/integration runtime собирает
 только packages своего владельца. Integration видит из business domains только
-exact Communications contract units: `hermes-communications-ingress` и
-`hermes-communications-attachment-contract`. Поэтому изменение implementation
+exact Communications contract units: `makosh-communications-ingress` и
+`makosh-communications-attachment-contract`. Поэтому изменение implementation
 Mail, Telegram, Zulip или будущей integration не пересобирает Communications,
 Kernel или другие providers. WhatsApp implementation остаётся в hidden host
 WebView и не получает backend runtime package.
@@ -115,13 +115,13 @@ Kernel проверяет binding перед каждым spawn/restart, ник�
 устанавливает code и не выполняет automatic rollback.
 
 ADR-0220 фиксирует один `DurableEnvelopeV1` в
-`hermes-events-protocol`: five-kind `oneof`, catalog-bound opaque Protobuf
+`makosh-events-protocol`: five-kind `oneof`, catalog-bound opaque Protobuf
 payload, independent envelope/owner versions и byte-for-byte outbox-to-NATS
 delivery. Result является только terminal, durable Ack отделён от JetStream
 ACK, dead letter — отдельная sanitized technical record, а client SSE использует
 другой gateway protocol.
 
-ADR-0221 фиксирует `ModuleDescriptorV1` в `hermes-runtime-protocol` и разделяет
+ADR-0221 фиксирует `ModuleDescriptorV1` в `makosh-runtime-protocol` и разделяет
 distribution inventory, runtime declaration, effective GrantSet и observed
 state. Capability является единицей approval/readiness/revoke, а dependencies
 ссылаются на contracts/capabilities, но не на implementation identity.
@@ -451,7 +451,7 @@ readiness. Он не проксирует и не декодирует business 
 
 PostgreSQL является canonical relational store для module-owned business и
 operational state. Один cluster и одна database используют fixed schemas
-`hermes_data`, `hermes_platform` и `hermes_extensions`; owner objects имеют
+`makosh_data`, `makosh_platform` и `makosh_extensions`; owner objects имеют
 собственные prefixes, roles/grants и fully-qualified SQL. Cross-owner business
 SQL, tables и foreign keys запрещены. NATS является delivery/replay transport,
 а не заменой canonical owner storage.

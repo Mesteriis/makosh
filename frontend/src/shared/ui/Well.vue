@@ -16,9 +16,9 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-well',
-	`hermes-well--${props.tone}`,
-	`hermes-well--padding-${props.padding}`,
+	'makosh-well',
+	`makosh-well--${props.tone}`,
+	`makosh-well--padding-${props.padding}`,
 	props.class
 ])
 </script>

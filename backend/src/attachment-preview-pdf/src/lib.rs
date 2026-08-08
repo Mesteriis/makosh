@@ -5,18 +5,18 @@ use std::{io::Cursor, panic::AssertUnwindSafe};
 use hayro::{
     RenderCache, RenderSettings, hayro_interpret::InterpreterSettings, hayro_syntax::Pdf, render,
 };
-use hermes_attachment_preview_api::{
+use image::{DynamicImage, ImageFormat, RgbaImage};
+use makosh_attachment_preview_api::{
     ATTACHMENT_PREVIEW_MAX_IMAGE_BYTES_V1,
     wire::{AttachmentPreviewContentTypeV1, AttachmentPreviewKindV1},
 };
-use hermes_attachment_preview_renderer_contract::{
+use makosh_attachment_preview_renderer_contract::{
     ATTACHMENT_PREVIEW_MAX_IMAGE_PIXELS_V1, AttachmentPreviewRenderRequestV1,
     AttachmentPreviewRenderResultV1, AttachmentPreviewRendererErrorV1, AttachmentPreviewRendererV1,
     AttachmentPreviewSourceFormatV1,
 };
-use image::{DynamicImage, ImageFormat, RgbaImage};
 
-pub const PACKAGE: &str = "hermes-attachment-preview-pdf";
+pub const PACKAGE: &str = "makosh-attachment-preview-pdf";
 const MAX_PDF_SOURCE_BYTES_V1: usize = 32 * 1024 * 1024;
 const MAX_RENDER_DIMENSION_V1: f32 = 2_048.0;
 const MAX_RENDER_SCALE_V1: f32 = 2.0;

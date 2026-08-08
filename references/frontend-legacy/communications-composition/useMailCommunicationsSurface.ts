@@ -41,7 +41,7 @@ export function useMailCommunicationsSurface() {
           },
           {
             id: 'mail-inspector',
-            labelKey: 'Mail Hermes inspector',
+            labelKey: 'Mail Макошь inspector',
             descriptionKey: 'Candidates, extracted entities, evidence and suggested actions.',
             icon: 'tabler:sparkles',
             status: 'available',

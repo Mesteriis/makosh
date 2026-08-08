@@ -18,215 +18,215 @@ const IMPLEMENTATION_KEYS = [
 ];
 
 const RECOVERY_PRODUCTION_PACKAGES = [
-  { name: 'hermes-events-protocol', role: 'platform', owner: 'events', surface: 'contract' },
-  { name: 'hermes-runtime-protocol', role: 'platform', owner: 'runtime_protocol', surface: 'contract' },
-  { name: 'hermes-gateway-protocol', role: 'api', owner: 'gateway', surface: 'contract' },
-  { name: 'hermes-kernel-control-store', role: 'core', owner: 'kernel', surface: 'contract' },
-  { name: 'hermes-kernel-control-store-sqlite', role: 'core', owner: 'kernel', surface: 'persistence' },
-  { name: 'hermes-kernel', role: 'core', owner: 'kernel', surface: 'runtime' },
+  { name: 'makosh-events-protocol', role: 'platform', owner: 'events', surface: 'contract' },
+  { name: 'makosh-runtime-protocol', role: 'platform', owner: 'runtime_protocol', surface: 'contract' },
+  { name: 'makosh-gateway-protocol', role: 'api', owner: 'gateway', surface: 'contract' },
+  { name: 'makosh-kernel-control-store', role: 'core', owner: 'kernel', surface: 'contract' },
+  { name: 'makosh-kernel-control-store-sqlite', role: 'core', owner: 'kernel', surface: 'persistence' },
+  { name: 'makosh-kernel', role: 'core', owner: 'kernel', surface: 'runtime' },
 ];
 
 const VAULT_FOUNDATION_PRODUCTION_PACKAGES = [
   ...RECOVERY_PRODUCTION_PACKAGES,
-  { name: 'hermes-vault-protocol', role: 'platform', owner: 'vault', surface: 'contract' },
-  { name: 'hermes-managed-vault-client', role: 'platform', owner: 'vault', surface: 'contract' },
-  { name: 'hermes-vault-key-provider', role: 'platform', owner: 'vault', surface: 'contract' },
-  { name: 'hermes-vault-key-provider-file', role: 'platform', owner: 'vault', surface: 'implementation' },
-  { name: 'hermes-secure-file', role: 'platform', owner: 'secure_file', surface: 'contract' },
-  { name: 'hermes-vault-store-sqlcipher', role: 'platform', owner: 'vault', surface: 'persistence' },
-  { name: 'hermes-vault-runtime', role: 'platform', owner: 'vault', surface: 'runtime' },
+  { name: 'makosh-vault-protocol', role: 'platform', owner: 'vault', surface: 'contract' },
+  { name: 'makosh-managed-vault-client', role: 'platform', owner: 'vault', surface: 'contract' },
+  { name: 'makosh-vault-key-provider', role: 'platform', owner: 'vault', surface: 'contract' },
+  { name: 'makosh-vault-key-provider-file', role: 'platform', owner: 'vault', surface: 'implementation' },
+  { name: 'makosh-secure-file', role: 'platform', owner: 'secure_file', surface: 'contract' },
+  { name: 'makosh-vault-store-sqlcipher', role: 'platform', owner: 'vault', surface: 'persistence' },
+  { name: 'makosh-vault-runtime', role: 'platform', owner: 'vault', surface: 'runtime' },
 ];
 
 const CLOCK_PRODUCTION_PACKAGES = [
   ...VAULT_FOUNDATION_PRODUCTION_PACKAGES,
-  { name: 'hermes-clock-protocol', role: 'platform', owner: 'clock', surface: 'contract' },
-  { name: 'hermes-clock-runtime', role: 'platform', owner: 'clock', surface: 'implementation' },
+  { name: 'makosh-clock-protocol', role: 'platform', owner: 'clock', surface: 'contract' },
+  { name: 'makosh-clock-runtime', role: 'platform', owner: 'clock', surface: 'implementation' },
 ];
 
 const TELEMETRY_FOUNDATION_PRODUCTION_PACKAGES = [
   ...CLOCK_PRODUCTION_PACKAGES,
-  { name: 'hermes-telemetry-protocol', role: 'platform', owner: 'telemetry', surface: 'contract' },
-  { name: 'hermes-telemetry-collector', role: 'platform', owner: 'telemetry', surface: 'runtime' },
+  { name: 'makosh-telemetry-protocol', role: 'platform', owner: 'telemetry', surface: 'contract' },
+  { name: 'makosh-telemetry-collector', role: 'platform', owner: 'telemetry', surface: 'runtime' },
 ];
 
 const STORAGE_FOUNDATION_PRODUCTION_PACKAGES = [
   ...TELEMETRY_FOUNDATION_PRODUCTION_PACKAGES,
-  { name: 'hermes-storage-protocol', role: 'platform', owner: 'storage', surface: 'contract' },
-  { name: 'hermes-storage-control', role: 'platform', owner: 'storage', surface: 'implementation' },
-  { name: 'hermes-storage-vault', role: 'platform', owner: 'storage', surface: 'contract' },
-  { name: 'hermes-storage-runtime', role: 'platform', owner: 'storage', surface: 'runtime' },
-  { name: 'hermes-storage-postgres', role: 'platform', owner: 'storage', surface: 'persistence' },
-  { name: 'hermes-storage-pgbouncer', role: 'platform', owner: 'storage', surface: 'implementation' },
-  { name: 'hermes-storage-migrations', role: 'platform', owner: 'storage', surface: 'implementation' },
+  { name: 'makosh-storage-protocol', role: 'platform', owner: 'storage', surface: 'contract' },
+  { name: 'makosh-storage-control', role: 'platform', owner: 'storage', surface: 'implementation' },
+  { name: 'makosh-storage-vault', role: 'platform', owner: 'storage', surface: 'contract' },
+  { name: 'makosh-storage-runtime', role: 'platform', owner: 'storage', surface: 'runtime' },
+  { name: 'makosh-storage-postgres', role: 'platform', owner: 'storage', surface: 'persistence' },
+  { name: 'makosh-storage-pgbouncer', role: 'platform', owner: 'storage', surface: 'implementation' },
+  { name: 'makosh-storage-migrations', role: 'platform', owner: 'storage', surface: 'implementation' },
 ];
 
 const NATS_FOUNDATION_PRODUCTION_PACKAGES = [
   ...STORAGE_FOUNDATION_PRODUCTION_PACKAGES,
-  { name: 'hermes-events-jetstream', role: 'platform', owner: 'events', surface: 'implementation' },
-  { name: 'hermes-events-authority', role: 'platform', owner: 'events', surface: 'implementation' },
-  { name: 'hermes-events-authority-runtime-control', role: 'platform', owner: 'events', surface: 'implementation' },
-  { name: 'hermes-events-authority-runtime', role: 'platform', owner: 'events', surface: 'runtime' },
+  { name: 'makosh-events-jetstream', role: 'platform', owner: 'events', surface: 'implementation' },
+  { name: 'makosh-events-authority', role: 'platform', owner: 'events', surface: 'implementation' },
+  { name: 'makosh-events-authority-runtime-control', role: 'platform', owner: 'events', surface: 'implementation' },
+  { name: 'makosh-events-authority-runtime', role: 'platform', owner: 'events', surface: 'runtime' },
 ];
 
 const RECOVERY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
-  'hermes-events-protocol': [],
-  'hermes-runtime-protocol': [],
-  'hermes-gateway-protocol': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-events-protocol': [],
+  'makosh-runtime-protocol': [],
+  'makosh-gateway-protocol': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-kernel-control-store': [],
-  'hermes-kernel-control-store-sqlite': [
-    { name: 'hermes-kernel-control-store', kind: 'normal' },
+  'makosh-kernel-control-store': [],
+  'makosh-kernel-control-store-sqlite': [
+    { name: 'makosh-kernel-control-store', kind: 'normal' },
   ],
-  'hermes-kernel': [
-    { name: 'hermes-gateway-protocol', kind: 'normal' },
-    { name: 'hermes-kernel-control-store', kind: 'normal' },
-    { name: 'hermes-kernel-control-store-sqlite', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-secure-file', kind: 'normal' },
+  'makosh-kernel': [
+    { name: 'makosh-gateway-protocol', kind: 'normal' },
+    { name: 'makosh-kernel-control-store', kind: 'normal' },
+    { name: 'makosh-kernel-control-store-sqlite', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-secure-file', kind: 'normal' },
   ],
-  'hermes-secure-file': [],
+  'makosh-secure-file': [],
 };
 
 const VAULT_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...RECOVERY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-vault-protocol': [],
-  'hermes-managed-vault-client': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
+  'makosh-vault-protocol': [],
+  'makosh-managed-vault-client': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
   ],
-  'hermes-vault-key-provider': [],
-  'hermes-vault-key-provider-file': [
-    { name: 'hermes-vault-key-provider', kind: 'normal' },
-    { name: 'hermes-secure-file', kind: 'normal' },
+  'makosh-vault-key-provider': [],
+  'makosh-vault-key-provider-file': [
+    { name: 'makosh-vault-key-provider', kind: 'normal' },
+    { name: 'makosh-secure-file', kind: 'normal' },
   ],
-  'hermes-vault-store-sqlcipher': [
-    { name: 'hermes-vault-key-provider', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
+  'makosh-vault-store-sqlcipher': [
+    { name: 'makosh-vault-key-provider', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
   ],
-  'hermes-vault-runtime': [
-    { name: 'hermes-vault-key-provider', kind: 'normal' },
-    { name: 'hermes-vault-key-provider-file', kind: 'normal' },
-    { name: 'hermes-secure-file', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
-    { name: 'hermes-vault-store-sqlcipher', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-vault-runtime': [
+    { name: 'makosh-vault-key-provider', kind: 'normal' },
+    { name: 'makosh-vault-key-provider-file', kind: 'normal' },
+    { name: 'makosh-secure-file', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
+    { name: 'makosh-vault-store-sqlcipher', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
 };
 
 const CLOCK_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...VAULT_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-clock-protocol': [],
-  'hermes-clock-runtime': [
-    { name: 'hermes-clock-protocol', kind: 'normal' },
+  'makosh-clock-protocol': [],
+  'makosh-clock-runtime': [
+    { name: 'makosh-clock-protocol', kind: 'normal' },
   ],
 };
 
 const TELEMETRY_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...CLOCK_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-telemetry-protocol': [],
-  'hermes-telemetry-collector': [
-    { name: 'hermes-telemetry-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-telemetry-protocol': [],
+  'makosh-telemetry-collector': [
+    { name: 'makosh-telemetry-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
 };
 
 const STORAGE_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...TELEMETRY_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-kernel': [
-    ...RECOVERY_WORKSPACE_DEPENDENCY_ALLOWLIST['hermes-kernel'],
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-kernel': [
+    ...RECOVERY_WORKSPACE_DEPENDENCY_ALLOWLIST['makosh-kernel'],
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-storage-protocol': [],
-  'hermes-storage-control': [
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-storage-protocol': [],
+  'makosh-storage-control': [
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
-  'hermes-storage-vault': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
+  'makosh-storage-vault': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
   ],
-  'hermes-storage-runtime': [
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-control', kind: 'normal' },
-    { name: 'hermes-storage-postgres', kind: 'normal' },
-    { name: 'hermes-storage-pgbouncer', kind: 'normal' },
-    { name: 'hermes-storage-migrations', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
+  'makosh-storage-runtime': [
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-control', kind: 'normal' },
+    { name: 'makosh-storage-postgres', kind: 'normal' },
+    { name: 'makosh-storage-pgbouncer', kind: 'normal' },
+    { name: 'makosh-storage-migrations', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
   ],
-  'hermes-storage-postgres': [
-    { name: 'hermes-storage-control', kind: 'normal' },
-    { name: 'hermes-storage-migrations', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-storage-postgres': [
+    { name: 'makosh-storage-control', kind: 'normal' },
+    { name: 'makosh-storage-migrations', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-storage-pgbouncer': [
-    { name: 'hermes-storage-control', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-storage-pgbouncer': [
+    { name: 'makosh-storage-control', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-storage-migrations': [
-    { name: 'hermes-storage-control', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-storage-migrations': [
+    { name: 'makosh-storage-control', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const NATS_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...STORAGE_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-events-jetstream': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-scheduler-protocol', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
+  'makosh-events-jetstream': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-scheduler-protocol', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
   ],
-  'hermes-events-authority': [
-    { name: 'hermes-events-jetstream', kind: 'normal' },
+  'makosh-events-authority': [
+    { name: 'makosh-events-jetstream', kind: 'normal' },
   ],
-  'hermes-events-authority-runtime-control': [
-    { name: 'hermes-events-authority', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-events-authority-runtime-control': [
+    { name: 'makosh-events-authority', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-events-authority-runtime': [
-    { name: 'hermes-events-authority-runtime-control', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-events-authority-runtime': [
+    { name: 'makosh-events-authority-runtime-control', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
 };
 
 const BLOB_FOUNDATION_PRODUCTION_PACKAGES = [
   ...NATS_FOUNDATION_PRODUCTION_PACKAGES,
-  { name: 'hermes-blob-protocol', role: 'platform', owner: 'blob', surface: 'contract' },
+  { name: 'makosh-blob-protocol', role: 'platform', owner: 'blob', surface: 'contract' },
 ];
 
 const BLOB_RUNTIME_FOUNDATION_PRODUCTION_PACKAGES = [
   ...BLOB_FOUNDATION_PRODUCTION_PACKAGES,
-  { name: 'hermes-blob-client-contract', role: 'platform', owner: 'blob', surface: 'contract' },
-  { name: 'hermes-blob-client', role: 'platform', owner: 'blob', surface: 'contract' },
-  { name: 'hermes-blob-runtime', role: 'platform', owner: 'blob', surface: 'implementation' },
-  { name: 'hermes-blob-service', role: 'platform', owner: 'blob', surface: 'runtime' },
+  { name: 'makosh-blob-client-contract', role: 'platform', owner: 'blob', surface: 'contract' },
+  { name: 'makosh-blob-client', role: 'platform', owner: 'blob', surface: 'contract' },
+  { name: 'makosh-blob-runtime', role: 'platform', owner: 'blob', surface: 'implementation' },
+  { name: 'makosh-blob-service', role: 'platform', owner: 'blob', surface: 'runtime' },
 ];
 
 const SCHEDULER_PROTOCOL_FOUNDATION_PRODUCTION_PACKAGES = [
   ...BLOB_RUNTIME_FOUNDATION_PRODUCTION_PACKAGES,
-  { name: 'hermes-scheduler-protocol', role: 'platform', owner: 'scheduler', surface: 'contract' },
+  { name: 'makosh-scheduler-protocol', role: 'platform', owner: 'scheduler', surface: 'contract' },
 ];
 
 const SCHEDULER_FOUNDATION_PRODUCTION_PACKAGES = [
   ...SCHEDULER_PROTOCOL_FOUNDATION_PRODUCTION_PACKAGES,
-  { name: 'hermes-scheduler', role: 'platform', owner: 'scheduler', surface: 'implementation' },
+  { name: 'makosh-scheduler', role: 'platform', owner: 'scheduler', surface: 'implementation' },
 ];
 
 const SCHEDULER_PERSISTENCE_FOUNDATION_PRODUCTION_PACKAGES = [
   ...SCHEDULER_FOUNDATION_PRODUCTION_PACKAGES,
-  { name: 'hermes-scheduler-persistence', role: 'platform', owner: 'scheduler', surface: 'persistence' },
+  { name: 'makosh-scheduler-persistence', role: 'platform', owner: 'scheduler', surface: 'persistence' },
 ];
 
 const GATEWAY_SESSION_FOUNDATION_PRODUCTION_PACKAGES = [
   ...SCHEDULER_PERSISTENCE_FOUNDATION_PRODUCTION_PACKAGES,
-  { name: 'hermes-gateway-session-contract', role: 'api', owner: 'gateway', surface: 'contract' },
-  { name: 'hermes-gateway-session', role: 'api', owner: 'gateway', surface: 'implementation' },
+  { name: 'makosh-gateway-session-contract', role: 'api', owner: 'gateway', surface: 'contract' },
+  { name: 'makosh-gateway-session', role: 'api', owner: 'gateway', surface: 'implementation' },
 ];
 
 const SCHEDULER_RECEIPT_DELIVERY_FOUNDATION_PRODUCTION_PACKAGES = [
@@ -235,91 +235,91 @@ const SCHEDULER_RECEIPT_DELIVERY_FOUNDATION_PRODUCTION_PACKAGES = [
 
 const SCHEDULER_JETSTREAM_FOUNDATION_PRODUCTION_PACKAGES = [
   ...SCHEDULER_RECEIPT_DELIVERY_FOUNDATION_PRODUCTION_PACKAGES,
-  { name: 'hermes-scheduler-jetstream', role: 'platform', owner: 'scheduler', surface: 'implementation' },
+  { name: 'makosh-scheduler-jetstream', role: 'platform', owner: 'scheduler', surface: 'implementation' },
 ];
 
 const SCHEDULER_RUNTIME_FOUNDATION_PRODUCTION_PACKAGES = [
   ...SCHEDULER_JETSTREAM_FOUNDATION_PRODUCTION_PACKAGES,
-  { name: 'hermes-scheduler-runtime', role: 'platform', owner: 'scheduler', surface: 'runtime' },
+  { name: 'makosh-scheduler-runtime', role: 'platform', owner: 'scheduler', surface: 'runtime' },
 ];
 
 const GATEWAY_RUNTIME_FOUNDATION_PRODUCTION_PACKAGES = [
   ...SCHEDULER_RUNTIME_FOUNDATION_PRODUCTION_PACKAGES,
-  { name: 'hermes-gateway-runtime', role: 'api', owner: 'gateway', surface: 'implementation' },
+  { name: 'makosh-gateway-runtime', role: 'api', owner: 'gateway', surface: 'implementation' },
 ];
 
 const MAIL_COMMUNICATIONS_FOUNDATION_PRODUCTION_PACKAGES = [
   ...GATEWAY_RUNTIME_FOUNDATION_PRODUCTION_PACKAGES,
-  { name: 'hermes-mail-api', role: 'integration', owner: 'mail', surface: 'contract' },
-  { name: 'hermes-mail-core', role: 'integration', owner: 'mail', surface: 'implementation' },
-  { name: 'hermes-mail-imap', role: 'integration', owner: 'mail', surface: 'implementation' },
-  { name: 'hermes-mail-gmail', role: 'integration', owner: 'mail', surface: 'implementation' },
-  { name: 'hermes-mail-smtp', role: 'integration', owner: 'mail', surface: 'implementation' },
-  { name: 'hermes-mail-persistence', role: 'integration', owner: 'mail', surface: 'persistence' },
-  { name: 'hermes-mail-runtime', role: 'integration', owner: 'mail', surface: 'runtime' },
-  { name: 'hermes-mail-assembly', role: 'integration', owner: 'mail', surface: 'assembly' },
-  { name: 'hermes-telegram-api', role: 'integration', owner: 'telegram', surface: 'contract' },
-  { name: 'hermes-telegram-core', role: 'integration', owner: 'telegram', surface: 'implementation' },
-  { name: 'hermes-telegram-tdlib', role: 'integration', owner: 'telegram', surface: 'implementation' },
-  { name: 'hermes-telegram-persistence', role: 'integration', owner: 'telegram', surface: 'persistence' },
-  { name: 'hermes-telegram-runtime', role: 'integration', owner: 'telegram', surface: 'runtime' },
-  { name: 'hermes-telegram-assembly', role: 'integration', owner: 'telegram', surface: 'assembly' },
-  { name: 'hermes-whatsapp-api', role: 'integration', owner: 'whatsapp', surface: 'contract' },
-  { name: 'hermes-whatsapp-core', role: 'integration', owner: 'whatsapp', surface: 'implementation' },
-  { name: 'hermes-whatsapp-persistence', role: 'integration', owner: 'whatsapp', surface: 'persistence' },
-  { name: 'hermes-whatsapp-runtime', role: 'integration', owner: 'whatsapp', surface: 'runtime' },
-  { name: 'hermes-whatsapp-assembly', role: 'integration', owner: 'whatsapp', surface: 'assembly' },
-  { name: 'hermes-zulip-api', role: 'integration', owner: 'zulip', surface: 'contract' },
-  { name: 'hermes-zulip-core', role: 'integration', owner: 'zulip', surface: 'implementation' },
-  { name: 'hermes-zulip-http', role: 'integration', owner: 'zulip', surface: 'implementation' },
-  { name: 'hermes-zulip-persistence', role: 'integration', owner: 'zulip', surface: 'persistence' },
-  { name: 'hermes-zulip-runtime', role: 'integration', owner: 'zulip', surface: 'runtime' },
-  { name: 'hermes-communications-ingress', role: 'domain', owner: 'communications', surface: 'contract' },
-  { name: 'hermes-communications-attachment-contract', role: 'domain', owner: 'communications', surface: 'contract' },
-  { name: 'hermes-communications-api', role: 'domain', owner: 'communications', surface: 'contract' },
-  { name: 'hermes-communications-domain', role: 'domain', owner: 'communications', surface: 'implementation' },
-  { name: 'hermes-communications-persistence', role: 'domain', owner: 'communications', surface: 'persistence' },
-  { name: 'hermes-communications-runtime', role: 'domain', owner: 'communications', surface: 'runtime' },
-  { name: 'hermes-communications-assembly', role: 'domain', owner: 'communications', surface: 'assembly' },
+  { name: 'makosh-mail-api', role: 'integration', owner: 'mail', surface: 'contract' },
+  { name: 'makosh-mail-core', role: 'integration', owner: 'mail', surface: 'implementation' },
+  { name: 'makosh-mail-imap', role: 'integration', owner: 'mail', surface: 'implementation' },
+  { name: 'makosh-mail-gmail', role: 'integration', owner: 'mail', surface: 'implementation' },
+  { name: 'makosh-mail-smtp', role: 'integration', owner: 'mail', surface: 'implementation' },
+  { name: 'makosh-mail-persistence', role: 'integration', owner: 'mail', surface: 'persistence' },
+  { name: 'makosh-mail-runtime', role: 'integration', owner: 'mail', surface: 'runtime' },
+  { name: 'makosh-mail-assembly', role: 'integration', owner: 'mail', surface: 'assembly' },
+  { name: 'makosh-telegram-api', role: 'integration', owner: 'telegram', surface: 'contract' },
+  { name: 'makosh-telegram-core', role: 'integration', owner: 'telegram', surface: 'implementation' },
+  { name: 'makosh-telegram-tdlib', role: 'integration', owner: 'telegram', surface: 'implementation' },
+  { name: 'makosh-telegram-persistence', role: 'integration', owner: 'telegram', surface: 'persistence' },
+  { name: 'makosh-telegram-runtime', role: 'integration', owner: 'telegram', surface: 'runtime' },
+  { name: 'makosh-telegram-assembly', role: 'integration', owner: 'telegram', surface: 'assembly' },
+  { name: 'makosh-whatsapp-api', role: 'integration', owner: 'whatsapp', surface: 'contract' },
+  { name: 'makosh-whatsapp-core', role: 'integration', owner: 'whatsapp', surface: 'implementation' },
+  { name: 'makosh-whatsapp-persistence', role: 'integration', owner: 'whatsapp', surface: 'persistence' },
+  { name: 'makosh-whatsapp-runtime', role: 'integration', owner: 'whatsapp', surface: 'runtime' },
+  { name: 'makosh-whatsapp-assembly', role: 'integration', owner: 'whatsapp', surface: 'assembly' },
+  { name: 'makosh-zulip-api', role: 'integration', owner: 'zulip', surface: 'contract' },
+  { name: 'makosh-zulip-core', role: 'integration', owner: 'zulip', surface: 'implementation' },
+  { name: 'makosh-zulip-http', role: 'integration', owner: 'zulip', surface: 'implementation' },
+  { name: 'makosh-zulip-persistence', role: 'integration', owner: 'zulip', surface: 'persistence' },
+  { name: 'makosh-zulip-runtime', role: 'integration', owner: 'zulip', surface: 'runtime' },
+  { name: 'makosh-communications-ingress', role: 'domain', owner: 'communications', surface: 'contract' },
+  { name: 'makosh-communications-attachment-contract', role: 'domain', owner: 'communications', surface: 'contract' },
+  { name: 'makosh-communications-api', role: 'domain', owner: 'communications', surface: 'contract' },
+  { name: 'makosh-communications-domain', role: 'domain', owner: 'communications', surface: 'implementation' },
+  { name: 'makosh-communications-persistence', role: 'domain', owner: 'communications', surface: 'persistence' },
+  { name: 'makosh-communications-runtime', role: 'domain', owner: 'communications', surface: 'runtime' },
+  { name: 'makosh-communications-assembly', role: 'domain', owner: 'communications', surface: 'assembly' },
 ];
 
 const FIRST_OWNER_PRODUCTION_PACKAGES = [
   ...GATEWAY_RUNTIME_FOUNDATION_PRODUCTION_PACKAGES,
-  { name: 'hermes-communications-ingress', role: 'domain', owner: 'communications', surface: 'contract' },
-  { name: 'hermes-communications-attachment-contract', role: 'domain', owner: 'communications', surface: 'contract' },
-  { name: 'hermes-communications-api', role: 'domain', owner: 'communications', surface: 'contract' },
-  { name: 'hermes-communications-domain', role: 'domain', owner: 'communications', surface: 'implementation' },
-  { name: 'hermes-communications-persistence', role: 'domain', owner: 'communications', surface: 'persistence' },
-  { name: 'hermes-communications-runtime', role: 'domain', owner: 'communications', surface: 'runtime' },
-  { name: 'hermes-communications-assembly', role: 'domain', owner: 'communications', surface: 'assembly' },
+  { name: 'makosh-communications-ingress', role: 'domain', owner: 'communications', surface: 'contract' },
+  { name: 'makosh-communications-attachment-contract', role: 'domain', owner: 'communications', surface: 'contract' },
+  { name: 'makosh-communications-api', role: 'domain', owner: 'communications', surface: 'contract' },
+  { name: 'makosh-communications-domain', role: 'domain', owner: 'communications', surface: 'implementation' },
+  { name: 'makosh-communications-persistence', role: 'domain', owner: 'communications', surface: 'persistence' },
+  { name: 'makosh-communications-runtime', role: 'domain', owner: 'communications', surface: 'runtime' },
+  { name: 'makosh-communications-assembly', role: 'domain', owner: 'communications', surface: 'assembly' },
 ];
 
 const ATTACHMENT_SECURITY_ENGINE_PRODUCTION_PACKAGES = [
   ...FIRST_OWNER_PRODUCTION_PACKAGES,
-  { name: 'hermes-attachment-security-contract', role: 'engine', owner: 'attachment_security', surface: 'contract' },
-  { name: 'hermes-attachment-security-core', role: 'engine', owner: 'attachment_security', surface: 'implementation' },
-  { name: 'hermes-attachment-security-clamav', role: 'engine', owner: 'attachment_security', surface: 'implementation' },
-  { name: 'hermes-attachment-security-persistence', role: 'engine', owner: 'attachment_security', surface: 'persistence' },
-  { name: 'hermes-attachment-security-runtime', role: 'engine', owner: 'attachment_security', surface: 'runtime' },
-  { name: 'hermes-attachment-security-assembly', role: 'engine', owner: 'attachment_security', surface: 'assembly' },
+  { name: 'makosh-attachment-security-contract', role: 'engine', owner: 'attachment_security', surface: 'contract' },
+  { name: 'makosh-attachment-security-core', role: 'engine', owner: 'attachment_security', surface: 'implementation' },
+  { name: 'makosh-attachment-security-clamav', role: 'engine', owner: 'attachment_security', surface: 'implementation' },
+  { name: 'makosh-attachment-security-persistence', role: 'engine', owner: 'attachment_security', surface: 'persistence' },
+  { name: 'makosh-attachment-security-runtime', role: 'engine', owner: 'attachment_security', surface: 'runtime' },
+  { name: 'makosh-attachment-security-assembly', role: 'engine', owner: 'attachment_security', surface: 'assembly' },
 ];
 
 const MAIL_OUTBOUND_MIME_ATTACHMENTS_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_SECURITY_ENGINE_PRODUCTION_PACKAGES,
-  { name: 'hermes-mail-api', role: 'integration', owner: 'mail', surface: 'contract' },
-  { name: 'hermes-mail-core', role: 'integration', owner: 'mail', surface: 'implementation' },
-  { name: 'hermes-mail-imap', role: 'integration', owner: 'mail', surface: 'implementation' },
-  { name: 'hermes-mail-gmail', role: 'integration', owner: 'mail', surface: 'implementation' },
-  { name: 'hermes-mail-smtp', role: 'integration', owner: 'mail', surface: 'implementation' },
-  { name: 'hermes-mail-persistence', role: 'integration', owner: 'mail', surface: 'persistence' },
-  { name: 'hermes-mail-runtime', role: 'integration', owner: 'mail', surface: 'runtime' },
-  { name: 'hermes-mail-assembly', role: 'integration', owner: 'mail', surface: 'assembly' },
+  { name: 'makosh-mail-api', role: 'integration', owner: 'mail', surface: 'contract' },
+  { name: 'makosh-mail-core', role: 'integration', owner: 'mail', surface: 'implementation' },
+  { name: 'makosh-mail-imap', role: 'integration', owner: 'mail', surface: 'implementation' },
+  { name: 'makosh-mail-gmail', role: 'integration', owner: 'mail', surface: 'implementation' },
+  { name: 'makosh-mail-smtp', role: 'integration', owner: 'mail', surface: 'implementation' },
+  { name: 'makosh-mail-persistence', role: 'integration', owner: 'mail', surface: 'persistence' },
+  { name: 'makosh-mail-runtime', role: 'integration', owner: 'mail', surface: 'runtime' },
+  { name: 'makosh-mail-assembly', role: 'integration', owner: 'mail', surface: 'assembly' },
 ];
 
 const COMMUNICATIONS_CONTENT_READ_PRODUCTION_PACKAGES = [
   ...MAIL_OUTBOUND_MIME_ATTACHMENTS_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communications-content-api',
+    name: 'makosh-communications-content-api',
     role: 'domain',
     owner: 'communications',
     surface: 'contract',
@@ -329,7 +329,7 @@ const COMMUNICATIONS_CONTENT_READ_PRODUCTION_PACKAGES = [
 const COMMUNICATIONS_SAVED_SEARCH_PRODUCTION_PACKAGES = [
   ...COMMUNICATIONS_CONTENT_READ_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communications-saved-query-api',
+    name: 'makosh-communications-saved-query-api',
     role: 'domain',
     owner: 'communications',
     surface: 'contract',
@@ -339,7 +339,7 @@ const COMMUNICATIONS_SAVED_SEARCH_PRODUCTION_PACKAGES = [
 const COMMUNICATIONS_SENDER_INSIGHTS_PRODUCTION_PACKAGES = [
   ...COMMUNICATIONS_SAVED_SEARCH_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communications-sender-insights-api',
+    name: 'makosh-communications-sender-insights-api',
     role: 'domain',
     owner: 'communications',
     surface: 'contract',
@@ -349,37 +349,37 @@ const COMMUNICATIONS_SENDER_INSIGHTS_PRODUCTION_PACKAGES = [
 const COMMUNICATIONS_EXPORT_PRODUCTION_PACKAGES = [
   ...COMMUNICATIONS_SENDER_INSIGHTS_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communications-evidence-export-source-api',
+    name: 'makosh-communications-evidence-export-source-api',
     role: 'domain',
     owner: 'communications',
     surface: 'contract',
   },
   {
-    name: 'hermes-communications-export-api',
+    name: 'makosh-communications-export-api',
     role: 'workflow',
     owner: 'communications_export',
     surface: 'contract',
   },
   {
-    name: 'hermes-communications-export-core',
+    name: 'makosh-communications-export-core',
     role: 'workflow',
     owner: 'communications_export',
     surface: 'implementation',
   },
   {
-    name: 'hermes-communications-export-persistence',
+    name: 'makosh-communications-export-persistence',
     role: 'workflow',
     owner: 'communications_export',
     surface: 'persistence',
   },
   {
-    name: 'hermes-communications-export-runtime',
+    name: 'makosh-communications-export-runtime',
     role: 'workflow',
     owner: 'communications_export',
     surface: 'runtime',
   },
   {
-    name: 'hermes-communications-export-assembly',
+    name: 'makosh-communications-export-assembly',
     role: 'workflow',
     owner: 'communications_export',
     surface: 'assembly',
@@ -389,13 +389,13 @@ const COMMUNICATIONS_EXPORT_PRODUCTION_PACKAGES = [
 const COMMUNICATION_DELIVERY_INTENT_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...COMMUNICATIONS_EXPORT_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-delivery-intent-api',
+    name: 'makosh-communication-delivery-intent-api',
     role: 'workflow',
     owner: 'communication_delivery_intent',
     surface: 'contract',
   },
   {
-    name: 'hermes-communication-delivery-intent-core',
+    name: 'makosh-communication-delivery-intent-core',
     role: 'workflow',
     owner: 'communication_delivery_intent',
     surface: 'implementation',
@@ -405,7 +405,7 @@ const COMMUNICATION_DELIVERY_INTENT_CONTRACT_CORE_PRODUCTION_PACKAGES = [
 const COMMUNICATION_DELIVERY_INTENT_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_DELIVERY_INTENT_CONTRACT_CORE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-delivery-intent-persistence',
+    name: 'makosh-communication-delivery-intent-persistence',
     role: 'workflow',
     owner: 'communication_delivery_intent',
     surface: 'persistence',
@@ -415,7 +415,7 @@ const COMMUNICATION_DELIVERY_INTENT_PERSISTENCE_PRODUCTION_PACKAGES = [
 const COMMUNICATION_DELIVERY_INTENT_RUNTIME_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_DELIVERY_INTENT_PERSISTENCE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-delivery-intent-runtime',
+    name: 'makosh-communication-delivery-intent-runtime',
     role: 'workflow',
     owner: 'communication_delivery_intent',
     surface: 'runtime',
@@ -425,7 +425,7 @@ const COMMUNICATION_DELIVERY_INTENT_RUNTIME_PRODUCTION_PACKAGES = [
 const COMMUNICATION_DELIVERY_INTENT_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_DELIVERY_INTENT_RUNTIME_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-delivery-intent-assembly',
+    name: 'makosh-communication-delivery-intent-assembly',
     role: 'workflow',
     owner: 'communication_delivery_intent',
     surface: 'assembly',
@@ -435,31 +435,31 @@ const COMMUNICATION_DELIVERY_INTENT_ASSEMBLY_PRODUCTION_PACKAGES = [
 const DELIVERY_INTENT_TRANSACTIONAL_EVENT_ADAPTERS_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_DELIVERY_INTENT_ASSEMBLY_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-mail-delivery-intent-contract',
+    name: 'makosh-mail-delivery-intent-contract',
     role: 'integration',
     owner: 'mail',
     surface: 'contract',
   },
   {
-    name: 'hermes-telegram-delivery-intent-contract',
+    name: 'makosh-telegram-delivery-intent-contract',
     role: 'integration',
     owner: 'telegram',
     surface: 'contract',
   },
   {
-    name: 'hermes-whatsapp-delivery-intent-contract',
+    name: 'makosh-whatsapp-delivery-intent-contract',
     role: 'integration',
     owner: 'whatsapp',
     surface: 'contract',
   },
   {
-    name: 'hermes-zulip-delivery-intent-contract',
+    name: 'makosh-zulip-delivery-intent-contract',
     role: 'integration',
     owner: 'zulip',
     surface: 'contract',
   },
   {
-    name: 'hermes-communication-delivery-intent-event-adapters',
+    name: 'makosh-communication-delivery-intent-event-adapters',
     role: 'workflow',
     owner: 'communication_delivery_intent',
     surface: 'implementation',
@@ -469,13 +469,13 @@ const DELIVERY_INTENT_TRANSACTIONAL_EVENT_ADAPTERS_PRODUCTION_PACKAGES = [
 const COMMUNICATION_BULK_ACTION_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...DELIVERY_INTENT_TRANSACTIONAL_EVENT_ADAPTERS_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-bulk-action-api',
+    name: 'makosh-communication-bulk-action-api',
     role: 'workflow',
     owner: 'communication_bulk_action',
     surface: 'contract',
   },
   {
-    name: 'hermes-communication-bulk-action-core',
+    name: 'makosh-communication-bulk-action-core',
     role: 'workflow',
     owner: 'communication_bulk_action',
     surface: 'implementation',
@@ -485,7 +485,7 @@ const COMMUNICATION_BULK_ACTION_CONTRACT_CORE_PRODUCTION_PACKAGES = [
 const COMMUNICATION_BULK_ACTION_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_BULK_ACTION_CONTRACT_CORE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-bulk-action-persistence',
+    name: 'makosh-communication-bulk-action-persistence',
     role: 'workflow',
     owner: 'communication_bulk_action',
     surface: 'persistence',
@@ -495,7 +495,7 @@ const COMMUNICATION_BULK_ACTION_PERSISTENCE_PRODUCTION_PACKAGES = [
 const COMMUNICATION_BULK_ACTION_RUNTIME_CORE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_BULK_ACTION_PERSISTENCE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-bulk-action-runtime',
+    name: 'makosh-communication-bulk-action-runtime',
     role: 'workflow',
     owner: 'communication_bulk_action',
     surface: 'runtime',
@@ -505,7 +505,7 @@ const COMMUNICATION_BULK_ACTION_RUNTIME_CORE_PRODUCTION_PACKAGES = [
 const COMMUNICATION_BULK_ACTION_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_BULK_ACTION_RUNTIME_CORE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-bulk-action-assembly',
+    name: 'makosh-communication-bulk-action-assembly',
     role: 'workflow',
     owner: 'communication_bulk_action',
     surface: 'assembly',
@@ -515,13 +515,13 @@ const COMMUNICATION_BULK_ACTION_ASSEMBLY_PRODUCTION_PACKAGES = [
 const COMMUNICATION_DELAYED_DELIVERY_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_BULK_ACTION_ASSEMBLY_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-delayed-delivery-api',
+    name: 'makosh-communication-delayed-delivery-api',
     role: 'workflow',
     owner: 'communication_delayed_delivery',
     surface: 'contract',
   },
   {
-    name: 'hermes-communication-delayed-delivery-core',
+    name: 'makosh-communication-delayed-delivery-core',
     role: 'workflow',
     owner: 'communication_delayed_delivery',
     surface: 'implementation',
@@ -531,7 +531,7 @@ const COMMUNICATION_DELAYED_DELIVERY_CONTRACT_CORE_PRODUCTION_PACKAGES = [
 const COMMUNICATION_DELAYED_DELIVERY_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_DELAYED_DELIVERY_CONTRACT_CORE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-delayed-delivery-persistence',
+    name: 'makosh-communication-delayed-delivery-persistence',
     role: 'workflow',
     owner: 'communication_delayed_delivery',
     surface: 'persistence',
@@ -541,7 +541,7 @@ const COMMUNICATION_DELAYED_DELIVERY_PERSISTENCE_PRODUCTION_PACKAGES = [
 const COMMUNICATION_DELAYED_DELIVERY_EXECUTION_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_DELAYED_DELIVERY_PERSISTENCE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-delayed-delivery-execution',
+    name: 'makosh-communication-delayed-delivery-execution',
     role: 'workflow',
     owner: 'communication_delayed_delivery',
     surface: 'implementation',
@@ -551,7 +551,7 @@ const COMMUNICATION_DELAYED_DELIVERY_EXECUTION_PRODUCTION_PACKAGES = [
 const COMMUNICATION_DELAYED_DELIVERY_EVENT_ADAPTERS_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_DELAYED_DELIVERY_EXECUTION_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-delayed-delivery-event-adapters',
+    name: 'makosh-communication-delayed-delivery-event-adapters',
     role: 'workflow',
     owner: 'communication_delayed_delivery',
     surface: 'implementation',
@@ -561,7 +561,7 @@ const COMMUNICATION_DELAYED_DELIVERY_EVENT_ADAPTERS_PRODUCTION_PACKAGES = [
 const COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ADAPTERS_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_DELAYED_DELIVERY_EVENT_ADAPTERS_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-delayed-delivery-runtime-adapters',
+    name: 'makosh-communication-delayed-delivery-runtime-adapters',
     role: 'workflow',
     owner: 'communication_delayed_delivery',
     surface: 'implementation',
@@ -571,7 +571,7 @@ const COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ADAPTERS_PRODUCTION_PACKAGES = [
 const COMMUNICATION_DELAYED_DELIVERY_STORE_ADAPTERS_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ADAPTERS_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-delayed-delivery-store-adapters',
+    name: 'makosh-communication-delayed-delivery-store-adapters',
     role: 'workflow',
     owner: 'communication_delayed_delivery',
     surface: 'persistence',
@@ -581,7 +581,7 @@ const COMMUNICATION_DELAYED_DELIVERY_STORE_ADAPTERS_PRODUCTION_PACKAGES = [
 const COMMUNICATION_DELAYED_DELIVERY_MANAGED_RUNTIME_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_DELAYED_DELIVERY_STORE_ADAPTERS_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-delayed-delivery-runtime',
+    name: 'makosh-communication-delayed-delivery-runtime',
     role: 'workflow',
     owner: 'communication_delayed_delivery',
     surface: 'runtime',
@@ -591,7 +591,7 @@ const COMMUNICATION_DELAYED_DELIVERY_MANAGED_RUNTIME_PRODUCTION_PACKAGES = [
 const COMMUNICATION_DELAYED_DELIVERY_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_DELAYED_DELIVERY_MANAGED_RUNTIME_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-delayed-delivery-assembly',
+    name: 'makosh-communication-delayed-delivery-assembly',
     role: 'workflow',
     owner: 'communication_delayed_delivery',
     surface: 'assembly',
@@ -601,13 +601,13 @@ const COMMUNICATION_DELAYED_DELIVERY_ASSEMBLY_PRODUCTION_PACKAGES = [
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_DELAYED_DELIVERY_ASSEMBLY_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-cross-channel-forward-api',
+    name: 'makosh-communication-cross-channel-forward-api',
     role: 'workflow',
     owner: 'communication_cross_channel_forward',
     surface: 'contract',
   },
   {
-    name: 'hermes-communication-cross-channel-forward-core',
+    name: 'makosh-communication-cross-channel-forward-core',
     role: 'workflow',
     owner: 'communication_cross_channel_forward',
     surface: 'implementation',
@@ -617,7 +617,7 @@ const COMMUNICATION_CROSS_CHANNEL_FORWARD_CONTRACT_CORE_PRODUCTION_PACKAGES = [
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_CONTRACT_CORE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-cross-channel-forward-persistence',
+    name: 'makosh-communication-cross-channel-forward-persistence',
     role: 'workflow',
     owner: 'communication_cross_channel_forward',
     surface: 'persistence',
@@ -627,7 +627,7 @@ const COMMUNICATION_CROSS_CHANNEL_FORWARD_PERSISTENCE_PRODUCTION_PACKAGES = [
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_SOURCE_CONTRACT_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_PERSISTENCE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communications-cross-channel-forward-source-api',
+    name: 'makosh-communications-cross-channel-forward-source-api',
     role: 'domain',
     owner: 'communications',
     surface: 'contract',
@@ -637,7 +637,7 @@ const COMMUNICATION_CROSS_CHANNEL_FORWARD_SOURCE_CONTRACT_PRODUCTION_PACKAGES = 
 const COMMUNICATION_DELIVERY_INTENT_INGRESS_CONTRACT_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_SOURCE_CONTRACT_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-delivery-intent-ingress-api',
+    name: 'makosh-communication-delivery-intent-ingress-api',
     role: 'workflow',
     owner: 'communication_delivery_intent',
     surface: 'contract',
@@ -650,7 +650,7 @@ const COMMUNICATION_CROSS_CHANNEL_FORWARD_EVENT_PERSISTENCE_PRODUCTION_PACKAGES 
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_MANAGED_RUNTIME_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_EVENT_PERSISTENCE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-cross-channel-forward-runtime',
+    name: 'makosh-communication-cross-channel-forward-runtime',
     role: 'workflow',
     owner: 'communication_cross_channel_forward',
     surface: 'runtime',
@@ -660,7 +660,7 @@ const COMMUNICATION_CROSS_CHANNEL_FORWARD_MANAGED_RUNTIME_PRODUCTION_PACKAGES = 
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_CLIENT_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_MANAGED_RUNTIME_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communication-cross-channel-forward-assembly',
+    name: 'makosh-communication-cross-channel-forward-assembly',
     role: 'workflow',
     owner: 'communication_cross_channel_forward',
     surface: 'assembly',
@@ -670,13 +670,13 @@ const COMMUNICATION_CROSS_CHANNEL_FORWARD_CLIENT_ASSEMBLY_PRODUCTION_PACKAGES = 
 const COMMUNICATIONS_CALL_EVIDENCE_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_CLIENT_ASSEMBLY_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communications-call-evidence-ingress',
+    name: 'makosh-communications-call-evidence-ingress',
     role: 'domain',
     owner: 'communications',
     surface: 'contract',
   },
   {
-    name: 'hermes-communications-call-evidence-core',
+    name: 'makosh-communications-call-evidence-core',
     role: 'domain',
     owner: 'communications',
     surface: 'implementation',
@@ -686,7 +686,7 @@ const COMMUNICATIONS_CALL_EVIDENCE_CONTRACT_CORE_PRODUCTION_PACKAGES = [
 const COMMUNICATIONS_CALL_EVIDENCE_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...COMMUNICATIONS_CALL_EVIDENCE_CONTRACT_CORE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communications-call-evidence-persistence',
+    name: 'makosh-communications-call-evidence-persistence',
     role: 'domain',
     owner: 'communications',
     surface: 'persistence',
@@ -696,7 +696,7 @@ const COMMUNICATIONS_CALL_EVIDENCE_PERSISTENCE_PRODUCTION_PACKAGES = [
 const COMMUNICATIONS_CALL_EVIDENCE_QUERY_REALTIME_PRODUCTION_PACKAGES = [
   ...COMMUNICATIONS_CALL_EVIDENCE_PERSISTENCE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communications-call-evidence-api',
+    name: 'makosh-communications-call-evidence-api',
     role: 'domain',
     owner: 'communications',
     surface: 'contract',
@@ -706,13 +706,13 @@ const COMMUNICATIONS_CALL_EVIDENCE_QUERY_REALTIME_PRODUCTION_PACKAGES = [
 const REVIEW_COMMUNICATIONS_ATTENTION_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...COMMUNICATIONS_CALL_EVIDENCE_QUERY_REALTIME_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-review-attention-api',
+    name: 'makosh-review-attention-api',
     role: 'domain',
     owner: 'review',
     surface: 'contract',
   },
   {
-    name: 'hermes-review-attention-core',
+    name: 'makosh-review-attention-core',
     role: 'domain',
     owner: 'review',
     surface: 'implementation',
@@ -722,7 +722,7 @@ const REVIEW_COMMUNICATIONS_ATTENTION_CONTRACT_CORE_PRODUCTION_PACKAGES = [
 const REVIEW_COMMUNICATIONS_ATTENTION_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...REVIEW_COMMUNICATIONS_ATTENTION_CONTRACT_CORE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-review-attention-persistence',
+    name: 'makosh-review-attention-persistence',
     role: 'domain',
     owner: 'review',
     surface: 'persistence',
@@ -732,7 +732,7 @@ const REVIEW_COMMUNICATIONS_ATTENTION_PERSISTENCE_PRODUCTION_PACKAGES = [
 const REVIEW_COMMUNICATIONS_ATTENTION_MANAGED_RUNTIME_PRODUCTION_PACKAGES = [
   ...REVIEW_COMMUNICATIONS_ATTENTION_PERSISTENCE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-review-attention-runtime',
+    name: 'makosh-review-attention-runtime',
     role: 'domain',
     owner: 'review',
     surface: 'runtime',
@@ -742,7 +742,7 @@ const REVIEW_COMMUNICATIONS_ATTENTION_MANAGED_RUNTIME_PRODUCTION_PACKAGES = [
 const REVIEW_COMMUNICATIONS_ATTENTION_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...REVIEW_COMMUNICATIONS_ATTENTION_MANAGED_RUNTIME_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-review-attention-assembly',
+    name: 'makosh-review-attention-assembly',
     role: 'domain',
     owner: 'review',
     surface: 'assembly',
@@ -752,91 +752,91 @@ const REVIEW_COMMUNICATIONS_ATTENTION_ASSEMBLY_PRODUCTION_PACKAGES = [
 const COMMUNICATIONS_AI_SOURCE_CONTRACT_PRODUCTION_PACKAGES = [
   ...REVIEW_COMMUNICATIONS_ATTENTION_ASSEMBLY_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-communications-ai-source-api',
+    name: 'makosh-communications-ai-source-api',
     role: 'domain',
     owner: 'communications',
     surface: 'contract',
   },
   {
-    name: 'hermes-communication-reply-suggestion-api',
+    name: 'makosh-communication-reply-suggestion-api',
     role: 'workflow',
     owner: 'communication_reply_suggestion',
     surface: 'contract',
   },
   {
-    name: 'hermes-communication-reply-suggestion-core',
+    name: 'makosh-communication-reply-suggestion-core',
     role: 'workflow',
     owner: 'communication_reply_suggestion',
     surface: 'implementation',
   },
   {
-    name: 'hermes-communication-reply-suggestion-persistence',
+    name: 'makosh-communication-reply-suggestion-persistence',
     role: 'workflow',
     owner: 'communication_reply_suggestion',
     surface: 'persistence',
   },
   {
-    name: 'hermes-communication-reply-suggestion-runtime',
+    name: 'makosh-communication-reply-suggestion-runtime',
     role: 'workflow',
     owner: 'communication_reply_suggestion',
     surface: 'runtime',
   },
   {
-    name: 'hermes-communication-reply-suggestion-assembly',
+    name: 'makosh-communication-reply-suggestion-assembly',
     role: 'workflow',
     owner: 'communication_reply_suggestion',
     surface: 'assembly',
   },
   {
-    name: 'hermes-ai-contracts',
+    name: 'makosh-ai-contracts',
     role: 'engine',
     owner: 'ai',
     surface: 'contract',
   },
   {
-    name: 'hermes-ai-inference-core',
+    name: 'makosh-ai-inference-core',
     role: 'engine',
     owner: 'ai',
     surface: 'implementation',
   },
   {
-    name: 'hermes-ai-inference-persistence',
+    name: 'makosh-ai-inference-persistence',
     role: 'engine',
     owner: 'ai',
     surface: 'persistence',
   },
   {
-    name: 'hermes-ollama-ai-api',
+    name: 'makosh-ollama-ai-api',
     role: 'integration',
     owner: 'ollama',
     surface: 'contract',
   },
   {
-    name: 'hermes-ollama-ai-assembly',
+    name: 'makosh-ollama-ai-assembly',
     role: 'integration',
     owner: 'ollama',
     surface: 'assembly',
   },
   {
-    name: 'hermes-ollama-ai-core',
+    name: 'makosh-ollama-ai-core',
     role: 'integration',
     owner: 'ollama',
     surface: 'implementation',
   },
   {
-    name: 'hermes-ollama-ai-http',
+    name: 'makosh-ollama-ai-http',
     role: 'integration',
     owner: 'ollama',
     surface: 'implementation',
   },
   {
-    name: 'hermes-ollama-ai-persistence',
+    name: 'makosh-ollama-ai-persistence',
     role: 'integration',
     owner: 'ollama',
     surface: 'persistence',
   },
   {
-    name: 'hermes-ollama-ai-runtime',
+    name: 'makosh-ollama-ai-runtime',
     role: 'integration',
     owner: 'ollama',
     surface: 'runtime',
@@ -846,25 +846,25 @@ const COMMUNICATIONS_AI_SOURCE_CONTRACT_PRODUCTION_PACKAGES = [
 const ATTACHMENT_ARCHIVE_INSPECTION_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...COMMUNICATIONS_AI_SOURCE_CONTRACT_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-attachment-archive-inspection-api',
+    name: 'makosh-attachment-archive-inspection-api',
     role: 'engine',
     owner: 'attachment_archive_inspection',
     surface: 'contract',
   },
   {
-    name: 'hermes-attachment-archive-inspection-ingress',
+    name: 'makosh-attachment-archive-inspection-ingress',
     role: 'engine',
     owner: 'attachment_archive_inspection',
     surface: 'contract',
   },
   {
-    name: 'hermes-attachment-archive-inspection-core',
+    name: 'makosh-attachment-archive-inspection-core',
     role: 'engine',
     owner: 'attachment_archive_inspection',
     surface: 'implementation',
   },
   {
-    name: 'hermes-attachment-archive-inspection-zip',
+    name: 'makosh-attachment-archive-inspection-zip',
     role: 'engine',
     owner: 'attachment_archive_inspection',
     surface: 'implementation',
@@ -874,7 +874,7 @@ const ATTACHMENT_ARCHIVE_INSPECTION_CONTRACT_CORE_PRODUCTION_PACKAGES = [
 const ATTACHMENT_ARCHIVE_INSPECTION_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_ARCHIVE_INSPECTION_CONTRACT_CORE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-attachment-archive-inspection-persistence',
+    name: 'makosh-attachment-archive-inspection-persistence',
     role: 'engine',
     owner: 'attachment_archive_inspection',
     surface: 'persistence',
@@ -884,7 +884,7 @@ const ATTACHMENT_ARCHIVE_INSPECTION_PERSISTENCE_PRODUCTION_PACKAGES = [
 const ATTACHMENT_ARCHIVE_INSPECTION_RUNTIME_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_ARCHIVE_INSPECTION_PERSISTENCE_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-attachment-archive-inspection-runtime',
+    name: 'makosh-attachment-archive-inspection-runtime',
     role: 'engine',
     owner: 'attachment_archive_inspection',
     surface: 'runtime',
@@ -894,7 +894,7 @@ const ATTACHMENT_ARCHIVE_INSPECTION_RUNTIME_PRODUCTION_PACKAGES = [
 const ATTACHMENT_ARCHIVE_INSPECTION_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_ARCHIVE_INSPECTION_RUNTIME_PRODUCTION_PACKAGES,
   {
-    name: 'hermes-attachment-archive-inspection-assembly',
+    name: 'makosh-attachment-archive-inspection-assembly',
     role: 'engine',
     owner: 'attachment_archive_inspection',
     surface: 'assembly',
@@ -903,405 +903,405 @@ const ATTACHMENT_ARCHIVE_INSPECTION_ASSEMBLY_PRODUCTION_PACKAGES = [
 
 const COMMUNICATION_SUMMARY_BUILD_UNITS_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_ARCHIVE_INSPECTION_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-summary-api', role: 'workflow', owner: 'communication_summary', surface: 'contract' },
-  { name: 'hermes-communication-summary-core', role: 'workflow', owner: 'communication_summary', surface: 'implementation' },
-  { name: 'hermes-communication-summary-persistence', role: 'workflow', owner: 'communication_summary', surface: 'persistence' },
-  { name: 'hermes-communication-summary-runtime', role: 'workflow', owner: 'communication_summary', surface: 'runtime' },
-  { name: 'hermes-communication-summary-assembly', role: 'workflow', owner: 'communication_summary', surface: 'assembly' },
+  { name: 'makosh-communication-summary-api', role: 'workflow', owner: 'communication_summary', surface: 'contract' },
+  { name: 'makosh-communication-summary-core', role: 'workflow', owner: 'communication_summary', surface: 'implementation' },
+  { name: 'makosh-communication-summary-persistence', role: 'workflow', owner: 'communication_summary', surface: 'persistence' },
+  { name: 'makosh-communication-summary-runtime', role: 'workflow', owner: 'communication_summary', surface: 'runtime' },
+  { name: 'makosh-communication-summary-assembly', role: 'workflow', owner: 'communication_summary', surface: 'assembly' },
 ];
 
 const COMMUNICATION_TRANSLATION_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_SUMMARY_BUILD_UNITS_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-translation-api', role: 'workflow', owner: 'communication_translation', surface: 'contract' },
-  { name: 'hermes-communication-translation-core', role: 'workflow', owner: 'communication_translation', surface: 'implementation' },
+  { name: 'makosh-communication-translation-api', role: 'workflow', owner: 'communication_translation', surface: 'contract' },
+  { name: 'makosh-communication-translation-core', role: 'workflow', owner: 'communication_translation', surface: 'implementation' },
 ];
 
 const COMMUNICATION_TRANSLATION_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_TRANSLATION_CONTRACT_CORE_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-translation-persistence', role: 'workflow', owner: 'communication_translation', surface: 'persistence' },
+  { name: 'makosh-communication-translation-persistence', role: 'workflow', owner: 'communication_translation', surface: 'persistence' },
 ];
 
 const COMMUNICATION_TRANSLATION_RUNTIME_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_TRANSLATION_PERSISTENCE_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-translation-runtime', role: 'workflow', owner: 'communication_translation', surface: 'runtime' },
+  { name: 'makosh-communication-translation-runtime', role: 'workflow', owner: 'communication_translation', surface: 'runtime' },
 ];
 
 const COMMUNICATION_TRANSLATION_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_TRANSLATION_RUNTIME_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-translation-assembly', role: 'workflow', owner: 'communication_translation', surface: 'assembly' },
+  { name: 'makosh-communication-translation-assembly', role: 'workflow', owner: 'communication_translation', surface: 'assembly' },
 ];
 
 const COMMUNICATION_EXPLANATION_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_TRANSLATION_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-explanation-api', role: 'workflow', owner: 'communication_explanation', surface: 'contract' },
-  { name: 'hermes-communication-explanation-core', role: 'workflow', owner: 'communication_explanation', surface: 'implementation' },
+  { name: 'makosh-communication-explanation-api', role: 'workflow', owner: 'communication_explanation', surface: 'contract' },
+  { name: 'makosh-communication-explanation-core', role: 'workflow', owner: 'communication_explanation', surface: 'implementation' },
 ];
 
 const COMMUNICATION_EXPLANATION_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_EXPLANATION_CONTRACT_CORE_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-explanation-persistence', role: 'workflow', owner: 'communication_explanation', surface: 'persistence' },
+  { name: 'makosh-communication-explanation-persistence', role: 'workflow', owner: 'communication_explanation', surface: 'persistence' },
 ];
 
 const COMMUNICATION_EXPLANATION_RUNTIME_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_EXPLANATION_PERSISTENCE_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-explanation-runtime', role: 'workflow', owner: 'communication_explanation', surface: 'runtime' },
+  { name: 'makosh-communication-explanation-runtime', role: 'workflow', owner: 'communication_explanation', surface: 'runtime' },
 ];
 
 const COMMUNICATION_EXPLANATION_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_EXPLANATION_RUNTIME_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-explanation-assembly', role: 'workflow', owner: 'communication_explanation', surface: 'assembly' },
+  { name: 'makosh-communication-explanation-assembly', role: 'workflow', owner: 'communication_explanation', surface: 'assembly' },
 ];
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_EXPLANATION_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-recipient-suggestion-api', role: 'workflow', owner: 'communication_recipient_suggestion', surface: 'contract' },
-  { name: 'hermes-communication-recipient-suggestion-core', role: 'workflow', owner: 'communication_recipient_suggestion', surface: 'implementation' },
+  { name: 'makosh-communication-recipient-suggestion-api', role: 'workflow', owner: 'communication_recipient_suggestion', surface: 'contract' },
+  { name: 'makosh-communication-recipient-suggestion-core', role: 'workflow', owner: 'communication_recipient_suggestion', surface: 'implementation' },
 ];
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_SOURCE_CONTRACT_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_CORE_PRODUCTION_PACKAGES,
-  { name: 'hermes-communications-recipient-source-api', role: 'domain', owner: 'communications', surface: 'contract' },
+  { name: 'makosh-communications-recipient-source-api', role: 'domain', owner: 'communications', surface: 'contract' },
 ];
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_CORE_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-recipient-suggestion-persistence', role: 'workflow', owner: 'communication_recipient_suggestion', surface: 'persistence' },
-  { name: 'hermes-communications-recipient-source-api', role: 'domain', owner: 'communications', surface: 'contract' },
+  { name: 'makosh-communication-recipient-suggestion-persistence', role: 'workflow', owner: 'communication_recipient_suggestion', surface: 'persistence' },
+  { name: 'makosh-communications-recipient-source-api', role: 'domain', owner: 'communications', surface: 'contract' },
 ];
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_RUNTIME_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_CORE_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-recipient-suggestion-persistence', role: 'workflow', owner: 'communication_recipient_suggestion', surface: 'persistence' },
-  { name: 'hermes-communication-recipient-suggestion-runtime', role: 'workflow', owner: 'communication_recipient_suggestion', surface: 'runtime' },
-  { name: 'hermes-communications-recipient-source-api', role: 'domain', owner: 'communications', surface: 'contract' },
+  { name: 'makosh-communication-recipient-suggestion-persistence', role: 'workflow', owner: 'communication_recipient_suggestion', surface: 'persistence' },
+  { name: 'makosh-communication-recipient-suggestion-runtime', role: 'workflow', owner: 'communication_recipient_suggestion', surface: 'runtime' },
+  { name: 'makosh-communications-recipient-source-api', role: 'domain', owner: 'communications', surface: 'contract' },
 ];
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_RECIPIENT_SUGGESTION_RUNTIME_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-recipient-suggestion-assembly', role: 'workflow', owner: 'communication_recipient_suggestion', surface: 'assembly' },
+  { name: 'makosh-communication-recipient-suggestion-assembly', role: 'workflow', owner: 'communication_recipient_suggestion', surface: 'assembly' },
 ];
 
 const COMMUNICATION_TASK_CANDIDATE_CONTRACT_CORE_SOURCE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_RECIPIENT_SUGGESTION_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-task-candidate-api', role: 'workflow', owner: 'communication_task_candidate_extraction', surface: 'contract' },
-  { name: 'hermes-communication-task-candidate-core', role: 'workflow', owner: 'communication_task_candidate_extraction', surface: 'implementation' },
-  { name: 'hermes-communications-task-source-api', role: 'domain', owner: 'communications', surface: 'contract' },
+  { name: 'makosh-communication-task-candidate-api', role: 'workflow', owner: 'communication_task_candidate_extraction', surface: 'contract' },
+  { name: 'makosh-communication-task-candidate-core', role: 'workflow', owner: 'communication_task_candidate_extraction', surface: 'implementation' },
+  { name: 'makosh-communications-task-source-api', role: 'domain', owner: 'communications', surface: 'contract' },
 ];
 
 const COMMUNICATION_TASK_CANDIDATE_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_TASK_CANDIDATE_CONTRACT_CORE_SOURCE_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-task-candidate-persistence', role: 'workflow', owner: 'communication_task_candidate_extraction', surface: 'persistence' },
+  { name: 'makosh-communication-task-candidate-persistence', role: 'workflow', owner: 'communication_task_candidate_extraction', surface: 'persistence' },
 ];
 
 const COMMUNICATION_TASK_CANDIDATE_RUNTIME_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_TASK_CANDIDATE_PERSISTENCE_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-task-candidate-runtime', role: 'workflow', owner: 'communication_task_candidate_extraction', surface: 'runtime' },
+  { name: 'makosh-communication-task-candidate-runtime', role: 'workflow', owner: 'communication_task_candidate_extraction', surface: 'runtime' },
 ];
 
 const COMMUNICATION_TASK_CANDIDATE_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_TASK_CANDIDATE_RUNTIME_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-task-candidate-assembly', role: 'workflow', owner: 'communication_task_candidate_extraction', surface: 'assembly' },
+  { name: 'makosh-communication-task-candidate-assembly', role: 'workflow', owner: 'communication_task_candidate_extraction', surface: 'assembly' },
 ];
 
 const REVIEW_TASK_CANDIDATE_CORE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_TASK_CANDIDATE_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-review-task-candidate-api', role: 'domain', owner: 'review', surface: 'contract' },
-  { name: 'hermes-review-task-candidate-core', role: 'domain', owner: 'review', surface: 'implementation' },
+  { name: 'makosh-review-task-candidate-api', role: 'domain', owner: 'review', surface: 'contract' },
+  { name: 'makosh-review-task-candidate-core', role: 'domain', owner: 'review', surface: 'implementation' },
 ];
 
 const REVIEW_TASK_CANDIDATE_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...REVIEW_TASK_CANDIDATE_CORE_PRODUCTION_PACKAGES,
-  { name: 'hermes-review-task-candidate-persistence', role: 'domain', owner: 'review', surface: 'persistence' },
+  { name: 'makosh-review-task-candidate-persistence', role: 'domain', owner: 'review', surface: 'persistence' },
 ];
 
 const REVIEW_TASK_CANDIDATE_MANAGED_RUNTIME_PRODUCTION_PACKAGES = [
   ...REVIEW_TASK_CANDIDATE_PERSISTENCE_PRODUCTION_PACKAGES,
-  { name: 'hermes-review-task-candidate-runtime', role: 'domain', owner: 'review', surface: 'runtime' },
+  { name: 'makosh-review-task-candidate-runtime', role: 'domain', owner: 'review', surface: 'runtime' },
 ];
 
 const REVIEW_TASK_CANDIDATE_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...REVIEW_TASK_CANDIDATE_MANAGED_RUNTIME_PRODUCTION_PACKAGES,
-  { name: 'hermes-review-task-candidate-assembly', role: 'domain', owner: 'review', surface: 'assembly' },
+  { name: 'makosh-review-task-candidate-assembly', role: 'domain', owner: 'review', surface: 'assembly' },
 ];
 
 const TASKS_REVIEWED_CANDIDATE_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...REVIEW_TASK_CANDIDATE_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-tasks-command-api', role: 'domain', owner: 'tasks', surface: 'contract' },
-  { name: 'hermes-tasks-core', role: 'domain', owner: 'tasks', surface: 'implementation' },
+  { name: 'makosh-tasks-command-api', role: 'domain', owner: 'tasks', surface: 'contract' },
+  { name: 'makosh-tasks-core', role: 'domain', owner: 'tasks', surface: 'implementation' },
 ];
 
 const TASKS_REVIEWED_CANDIDATE_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...TASKS_REVIEWED_CANDIDATE_CONTRACT_CORE_PRODUCTION_PACKAGES,
-  { name: 'hermes-tasks-persistence', role: 'domain', owner: 'tasks', surface: 'persistence' },
+  { name: 'makosh-tasks-persistence', role: 'domain', owner: 'tasks', surface: 'persistence' },
 ];
 
 const TASKS_REVIEWED_CANDIDATE_MANAGED_RUNTIME_PRODUCTION_PACKAGES = [
   ...TASKS_REVIEWED_CANDIDATE_PERSISTENCE_PRODUCTION_PACKAGES,
-  { name: 'hermes-tasks-runtime', role: 'domain', owner: 'tasks', surface: 'runtime' },
+  { name: 'makosh-tasks-runtime', role: 'domain', owner: 'tasks', surface: 'runtime' },
 ];
 
 const TASKS_REVIEWED_CANDIDATE_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...TASKS_REVIEWED_CANDIDATE_MANAGED_RUNTIME_PRODUCTION_PACKAGES,
-  { name: 'hermes-tasks-assembly', role: 'domain', owner: 'tasks', surface: 'assembly' },
+  { name: 'makosh-tasks-assembly', role: 'domain', owner: 'tasks', surface: 'assembly' },
 ];
 
 const REVIEWED_TASK_CANDIDATE_PROMOTION_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...TASKS_REVIEWED_CANDIDATE_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-review-task-candidate-promotion-api', role: 'domain', owner: 'review', surface: 'contract' },
-  { name: 'hermes-reviewed-task-candidate-promotion-core', role: 'workflow', owner: 'reviewed_task_candidate_promotion', surface: 'implementation' },
+  { name: 'makosh-review-task-candidate-promotion-api', role: 'domain', owner: 'review', surface: 'contract' },
+  { name: 'makosh-reviewed-task-candidate-promotion-core', role: 'workflow', owner: 'reviewed_task_candidate_promotion', surface: 'implementation' },
 ];
 
 const REVIEWED_TASK_CANDIDATE_PROMOTION_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...REVIEWED_TASK_CANDIDATE_PROMOTION_CONTRACT_CORE_PRODUCTION_PACKAGES,
-  { name: 'hermes-reviewed-task-candidate-promotion-persistence', role: 'workflow', owner: 'reviewed_task_candidate_promotion', surface: 'persistence' },
+  { name: 'makosh-reviewed-task-candidate-promotion-persistence', role: 'workflow', owner: 'reviewed_task_candidate_promotion', surface: 'persistence' },
 ];
 
 const REVIEWED_TASK_CANDIDATE_PROMOTION_RUNTIME_PRODUCTION_PACKAGES = [
   ...REVIEWED_TASK_CANDIDATE_PROMOTION_PERSISTENCE_PRODUCTION_PACKAGES,
-  { name: 'hermes-reviewed-task-candidate-promotion-runtime', role: 'workflow', owner: 'reviewed_task_candidate_promotion', surface: 'runtime' },
+  { name: 'makosh-reviewed-task-candidate-promotion-runtime', role: 'workflow', owner: 'reviewed_task_candidate_promotion', surface: 'runtime' },
 ];
 
 const REVIEWED_TASK_CANDIDATE_PROMOTION_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...REVIEWED_TASK_CANDIDATE_PROMOTION_RUNTIME_PRODUCTION_PACKAGES,
-  { name: 'hermes-reviewed-task-candidate-promotion-assembly', role: 'workflow', owner: 'reviewed_task_candidate_promotion', surface: 'assembly' },
+  { name: 'makosh-reviewed-task-candidate-promotion-assembly', role: 'workflow', owner: 'reviewed_task_candidate_promotion', surface: 'assembly' },
 ];
 
 const COMMUNICATION_NOTE_CANDIDATE_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...REVIEWED_TASK_CANDIDATE_PROMOTION_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-note-candidate-api', role: 'workflow', owner: 'communication_note_candidate_extraction', surface: 'contract' },
-  { name: 'hermes-communication-note-candidate-core', role: 'workflow', owner: 'communication_note_candidate_extraction', surface: 'implementation' },
-  { name: 'hermes-communications-note-source-api', role: 'domain', owner: 'communications', surface: 'contract' },
+  { name: 'makosh-communication-note-candidate-api', role: 'workflow', owner: 'communication_note_candidate_extraction', surface: 'contract' },
+  { name: 'makosh-communication-note-candidate-core', role: 'workflow', owner: 'communication_note_candidate_extraction', surface: 'implementation' },
+  { name: 'makosh-communications-note-source-api', role: 'domain', owner: 'communications', surface: 'contract' },
 ];
 
 const COMMUNICATION_NOTE_CANDIDATE_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_NOTE_CANDIDATE_CONTRACT_CORE_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-note-candidate-persistence', role: 'workflow', owner: 'communication_note_candidate_extraction', surface: 'persistence' },
+  { name: 'makosh-communication-note-candidate-persistence', role: 'workflow', owner: 'communication_note_candidate_extraction', surface: 'persistence' },
 ];
 
 const REVIEW_NOTE_CANDIDATE_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_NOTE_CANDIDATE_PERSISTENCE_PRODUCTION_PACKAGES,
-  { name: 'hermes-review-note-candidate-api', role: 'domain', owner: 'review', surface: 'contract' },
-  { name: 'hermes-review-note-candidate-core', role: 'domain', owner: 'review', surface: 'implementation' },
+  { name: 'makosh-review-note-candidate-api', role: 'domain', owner: 'review', surface: 'contract' },
+  { name: 'makosh-review-note-candidate-core', role: 'domain', owner: 'review', surface: 'implementation' },
 ];
 
 const KNOWLEDGE_VERIFIED_NOTE_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...REVIEW_NOTE_CANDIDATE_CONTRACT_CORE_PRODUCTION_PACKAGES,
-  { name: 'hermes-knowledge-command-api', role: 'domain', owner: 'knowledge', surface: 'contract' },
-  { name: 'hermes-knowledge-core', role: 'domain', owner: 'knowledge', surface: 'implementation' },
+  { name: 'makosh-knowledge-command-api', role: 'domain', owner: 'knowledge', surface: 'contract' },
+  { name: 'makosh-knowledge-core', role: 'domain', owner: 'knowledge', surface: 'implementation' },
 ];
 
 const KNOWLEDGE_VERIFIED_NOTE_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...KNOWLEDGE_VERIFIED_NOTE_CONTRACT_CORE_PRODUCTION_PACKAGES,
-  { name: 'hermes-knowledge-persistence', role: 'domain', owner: 'knowledge', surface: 'persistence' },
+  { name: 'makosh-knowledge-persistence', role: 'domain', owner: 'knowledge', surface: 'persistence' },
 ];
 
 const KNOWLEDGE_VERIFIED_NOTE_MANAGED_RUNTIME_PRODUCTION_PACKAGES = [
   ...KNOWLEDGE_VERIFIED_NOTE_PERSISTENCE_PRODUCTION_PACKAGES,
-  { name: 'hermes-knowledge-runtime', role: 'domain', owner: 'knowledge', surface: 'runtime' },
+  { name: 'makosh-knowledge-runtime', role: 'domain', owner: 'knowledge', surface: 'runtime' },
 ];
 
 const KNOWLEDGE_VERIFIED_NOTE_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...KNOWLEDGE_VERIFIED_NOTE_MANAGED_RUNTIME_PRODUCTION_PACKAGES,
-  { name: 'hermes-knowledge-assembly', role: 'domain', owner: 'knowledge', surface: 'assembly' },
+  { name: 'makosh-knowledge-assembly', role: 'domain', owner: 'knowledge', surface: 'assembly' },
 ];
 
 const REVIEW_NOTE_CANDIDATE_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...KNOWLEDGE_VERIFIED_NOTE_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-review-note-candidate-persistence', role: 'domain', owner: 'review', surface: 'persistence' },
+  { name: 'makosh-review-note-candidate-persistence', role: 'domain', owner: 'review', surface: 'persistence' },
 ];
 
 const REVIEW_NOTE_CANDIDATE_MANAGED_RUNTIME_PRODUCTION_PACKAGES = [
   ...REVIEW_NOTE_CANDIDATE_PERSISTENCE_PRODUCTION_PACKAGES,
-  { name: 'hermes-review-note-candidate-promotion-api', role: 'domain', owner: 'review', surface: 'contract' },
-  { name: 'hermes-review-note-candidate-runtime', role: 'domain', owner: 'review', surface: 'runtime' },
+  { name: 'makosh-review-note-candidate-promotion-api', role: 'domain', owner: 'review', surface: 'contract' },
+  { name: 'makosh-review-note-candidate-runtime', role: 'domain', owner: 'review', surface: 'runtime' },
 ];
 
 const REVIEW_NOTE_CANDIDATE_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...REVIEW_NOTE_CANDIDATE_MANAGED_RUNTIME_PRODUCTION_PACKAGES,
-  { name: 'hermes-review-note-candidate-assembly', role: 'domain', owner: 'review', surface: 'assembly' },
+  { name: 'makosh-review-note-candidate-assembly', role: 'domain', owner: 'review', surface: 'assembly' },
 ];
 
 const REVIEWED_NOTE_CANDIDATE_PROMOTION_PRODUCTION_PACKAGES = [
   ...REVIEW_NOTE_CANDIDATE_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-reviewed-note-candidate-promotion-core', role: 'workflow', owner: 'reviewed_note_candidate_promotion', surface: 'implementation' },
-  { name: 'hermes-reviewed-note-candidate-promotion-persistence', role: 'workflow', owner: 'reviewed_note_candidate_promotion', surface: 'persistence' },
-  { name: 'hermes-reviewed-note-candidate-promotion-runtime', role: 'workflow', owner: 'reviewed_note_candidate_promotion', surface: 'runtime' },
-  { name: 'hermes-reviewed-note-candidate-promotion-assembly', role: 'workflow', owner: 'reviewed_note_candidate_promotion', surface: 'assembly' },
+  { name: 'makosh-reviewed-note-candidate-promotion-core', role: 'workflow', owner: 'reviewed_note_candidate_promotion', surface: 'implementation' },
+  { name: 'makosh-reviewed-note-candidate-promotion-persistence', role: 'workflow', owner: 'reviewed_note_candidate_promotion', surface: 'persistence' },
+  { name: 'makosh-reviewed-note-candidate-promotion-runtime', role: 'workflow', owner: 'reviewed_note_candidate_promotion', surface: 'runtime' },
+  { name: 'makosh-reviewed-note-candidate-promotion-assembly', role: 'workflow', owner: 'reviewed_note_candidate_promotion', surface: 'assembly' },
 ];
 
 const COMMUNICATION_NOTE_CANDIDATE_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...REVIEWED_NOTE_CANDIDATE_PROMOTION_PRODUCTION_PACKAGES,
-  { name: 'hermes-communication-note-candidate-runtime', role: 'workflow', owner: 'communication_note_candidate_extraction', surface: 'runtime' },
-  { name: 'hermes-communication-note-candidate-assembly', role: 'workflow', owner: 'communication_note_candidate_extraction', surface: 'assembly' },
+  { name: 'makosh-communication-note-candidate-runtime', role: 'workflow', owner: 'communication_note_candidate_extraction', surface: 'runtime' },
+  { name: 'makosh-communication-note-candidate-assembly', role: 'workflow', owner: 'communication_note_candidate_extraction', surface: 'assembly' },
 ];
 
 const ATTACHMENT_TEXT_EXTRACTION_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...COMMUNICATION_NOTE_CANDIDATE_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-attachment-text-extraction-api', role: 'workflow', owner: 'attachment_text_extraction', surface: 'contract' },
-  { name: 'hermes-attachment-text-extraction-ingress', role: 'workflow', owner: 'attachment_text_extraction', surface: 'contract' },
-  { name: 'hermes-attachment-text-extraction-core', role: 'workflow', owner: 'attachment_text_extraction', surface: 'implementation' },
+  { name: 'makosh-attachment-text-extraction-api', role: 'workflow', owner: 'attachment_text_extraction', surface: 'contract' },
+  { name: 'makosh-attachment-text-extraction-ingress', role: 'workflow', owner: 'attachment_text_extraction', surface: 'contract' },
+  { name: 'makosh-attachment-text-extraction-core', role: 'workflow', owner: 'attachment_text_extraction', surface: 'implementation' },
 ];
 
 const ATTACHMENT_TEXT_EXTRACTION_PARSER_ADAPTERS_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_TEXT_EXTRACTION_CONTRACT_CORE_PRODUCTION_PACKAGES,
-  { name: 'hermes-attachment-text-extraction-parser-contract', role: 'workflow', owner: 'attachment_text_extraction', surface: 'contract' },
-  { name: 'hermes-attachment-text-extraction-plain', role: 'workflow', owner: 'attachment_text_extraction', surface: 'implementation' },
-  { name: 'hermes-attachment-text-extraction-pdf', role: 'workflow', owner: 'attachment_text_extraction', surface: 'implementation' },
-  { name: 'hermes-attachment-text-extraction-docx', role: 'workflow', owner: 'attachment_text_extraction', surface: 'implementation' },
-  { name: 'hermes-attachment-text-extraction-ocr', role: 'workflow', owner: 'attachment_text_extraction', surface: 'implementation' },
+  { name: 'makosh-attachment-text-extraction-parser-contract', role: 'workflow', owner: 'attachment_text_extraction', surface: 'contract' },
+  { name: 'makosh-attachment-text-extraction-plain', role: 'workflow', owner: 'attachment_text_extraction', surface: 'implementation' },
+  { name: 'makosh-attachment-text-extraction-pdf', role: 'workflow', owner: 'attachment_text_extraction', surface: 'implementation' },
+  { name: 'makosh-attachment-text-extraction-docx', role: 'workflow', owner: 'attachment_text_extraction', surface: 'implementation' },
+  { name: 'makosh-attachment-text-extraction-ocr', role: 'workflow', owner: 'attachment_text_extraction', surface: 'implementation' },
 ];
 
 const ATTACHMENT_TEXT_EXTRACTION_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_TEXT_EXTRACTION_PARSER_ADAPTERS_PRODUCTION_PACKAGES,
-  { name: 'hermes-attachment-text-extraction-persistence', role: 'workflow', owner: 'attachment_text_extraction', surface: 'persistence' },
+  { name: 'makosh-attachment-text-extraction-persistence', role: 'workflow', owner: 'attachment_text_extraction', surface: 'persistence' },
 ];
 
 const ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_TEXT_EXTRACTION_PERSISTENCE_PRODUCTION_PACKAGES,
-  { name: 'hermes-attachment-text-extraction-runtime', role: 'workflow', owner: 'attachment_text_extraction', surface: 'runtime' },
-  { name: 'hermes-attachment-text-extraction-assembly', role: 'workflow', owner: 'attachment_text_extraction', surface: 'assembly' },
+  { name: 'makosh-attachment-text-extraction-runtime', role: 'workflow', owner: 'attachment_text_extraction', surface: 'runtime' },
+  { name: 'makosh-attachment-text-extraction-assembly', role: 'workflow', owner: 'attachment_text_extraction', surface: 'assembly' },
 ];
 
 const ATTACHMENT_PREVIEW_FOUNDATION_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-attachment-preview-api', role: 'workflow', owner: 'attachment_preview', surface: 'contract' },
-  { name: 'hermes-attachment-preview-ingress', role: 'workflow', owner: 'attachment_preview', surface: 'contract' },
-  { name: 'hermes-attachment-preview-core', role: 'workflow', owner: 'attachment_preview', surface: 'implementation' },
-  { name: 'hermes-attachment-preview-renderer-contract', role: 'workflow', owner: 'attachment_preview', surface: 'contract' },
+  { name: 'makosh-attachment-preview-api', role: 'workflow', owner: 'attachment_preview', surface: 'contract' },
+  { name: 'makosh-attachment-preview-ingress', role: 'workflow', owner: 'attachment_preview', surface: 'contract' },
+  { name: 'makosh-attachment-preview-core', role: 'workflow', owner: 'attachment_preview', surface: 'implementation' },
+  { name: 'makosh-attachment-preview-renderer-contract', role: 'workflow', owner: 'attachment_preview', surface: 'contract' },
 ];
 
 const ATTACHMENT_PREVIEW_SAFE_ADAPTERS_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_PREVIEW_FOUNDATION_PRODUCTION_PACKAGES,
-  { name: 'hermes-attachment-preview-text', role: 'workflow', owner: 'attachment_preview', surface: 'implementation' },
-  { name: 'hermes-attachment-preview-image', role: 'workflow', owner: 'attachment_preview', surface: 'implementation' },
-  { name: 'hermes-attachment-preview-media', role: 'workflow', owner: 'attachment_preview', surface: 'implementation' },
+  { name: 'makosh-attachment-preview-text', role: 'workflow', owner: 'attachment_preview', surface: 'implementation' },
+  { name: 'makosh-attachment-preview-image', role: 'workflow', owner: 'attachment_preview', surface: 'implementation' },
+  { name: 'makosh-attachment-preview-media', role: 'workflow', owner: 'attachment_preview', surface: 'implementation' },
 ];
 
 const ATTACHMENT_PREVIEW_PDF_ADAPTER_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_PREVIEW_SAFE_ADAPTERS_PRODUCTION_PACKAGES,
-  { name: 'hermes-attachment-preview-pdf', role: 'workflow', owner: 'attachment_preview', surface: 'implementation' },
+  { name: 'makosh-attachment-preview-pdf', role: 'workflow', owner: 'attachment_preview', surface: 'implementation' },
 ];
 
 const ATTACHMENT_PREVIEW_DOCX_ADAPTER_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_PREVIEW_PDF_ADAPTER_PRODUCTION_PACKAGES,
-  { name: 'hermes-attachment-preview-docx', role: 'workflow', owner: 'attachment_preview', surface: 'implementation' },
+  { name: 'makosh-attachment-preview-docx', role: 'workflow', owner: 'attachment_preview', surface: 'implementation' },
 ];
 
 const ATTACHMENT_PREVIEW_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_PREVIEW_DOCX_ADAPTER_PRODUCTION_PACKAGES,
-  { name: 'hermes-attachment-preview-persistence', role: 'workflow', owner: 'attachment_preview', surface: 'persistence' },
+  { name: 'makosh-attachment-preview-persistence', role: 'workflow', owner: 'attachment_preview', surface: 'persistence' },
 ];
 
 const ATTACHMENT_PREVIEW_RUNTIME_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_PREVIEW_PERSISTENCE_PRODUCTION_PACKAGES,
-  { name: 'hermes-attachment-preview-runtime', role: 'workflow', owner: 'attachment_preview', surface: 'runtime' },
+  { name: 'makosh-attachment-preview-runtime', role: 'workflow', owner: 'attachment_preview', surface: 'runtime' },
 ];
 
 const ATTACHMENT_PREVIEW_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_PREVIEW_RUNTIME_PRODUCTION_PACKAGES,
-  { name: 'hermes-attachment-preview-assembly', role: 'workflow', owner: 'attachment_preview', surface: 'assembly' },
+  { name: 'makosh-attachment-preview-assembly', role: 'workflow', owner: 'attachment_preview', surface: 'assembly' },
 ];
 
 const ATTACHMENT_PREVIEW_RETAINED_EVIDENCE_REPLAY_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_PREVIEW_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-retained-evidence-replay-protocol', role: 'workflow', owner: 'attachment_preview_evidence_replay', surface: 'contract' },
-  { name: 'hermes-attachment-preview-evidence-replay-api', role: 'workflow', owner: 'attachment_preview_evidence_replay', surface: 'contract' },
-  { name: 'hermes-attachment-preview-evidence-replay-core', role: 'workflow', owner: 'attachment_preview_evidence_replay', surface: 'implementation' },
-  { name: 'hermes-attachment-preview-evidence-replay-persistence', role: 'workflow', owner: 'attachment_preview_evidence_replay', surface: 'persistence' },
-  { name: 'hermes-attachment-preview-evidence-replay-runtime', role: 'workflow', owner: 'attachment_preview_evidence_replay', surface: 'runtime' },
-  { name: 'hermes-attachment-preview-evidence-replay-assembly', role: 'workflow', owner: 'attachment_preview_evidence_replay', surface: 'assembly' },
-  { name: 'hermes-communications-retained-evidence-replay-persistence', role: 'domain', owner: 'communications', surface: 'persistence' },
-  { name: 'hermes-mail-retained-evidence-replay-persistence', role: 'integration', owner: 'mail', surface: 'persistence' },
-  { name: 'hermes-communications-retained-evidence-replay-contract', role: 'domain', owner: 'communications', surface: 'contract' },
-  { name: 'hermes-mail-retained-evidence-replay-contract', role: 'integration', owner: 'mail', surface: 'contract' },
+  { name: 'makosh-retained-evidence-replay-protocol', role: 'workflow', owner: 'attachment_preview_evidence_replay', surface: 'contract' },
+  { name: 'makosh-attachment-preview-evidence-replay-api', role: 'workflow', owner: 'attachment_preview_evidence_replay', surface: 'contract' },
+  { name: 'makosh-attachment-preview-evidence-replay-core', role: 'workflow', owner: 'attachment_preview_evidence_replay', surface: 'implementation' },
+  { name: 'makosh-attachment-preview-evidence-replay-persistence', role: 'workflow', owner: 'attachment_preview_evidence_replay', surface: 'persistence' },
+  { name: 'makosh-attachment-preview-evidence-replay-runtime', role: 'workflow', owner: 'attachment_preview_evidence_replay', surface: 'runtime' },
+  { name: 'makosh-attachment-preview-evidence-replay-assembly', role: 'workflow', owner: 'attachment_preview_evidence_replay', surface: 'assembly' },
+  { name: 'makosh-communications-retained-evidence-replay-persistence', role: 'domain', owner: 'communications', surface: 'persistence' },
+  { name: 'makosh-mail-retained-evidence-replay-persistence', role: 'integration', owner: 'mail', surface: 'persistence' },
+  { name: 'makosh-communications-retained-evidence-replay-contract', role: 'domain', owner: 'communications', surface: 'contract' },
+  { name: 'makosh-mail-retained-evidence-replay-contract', role: 'integration', owner: 'mail', surface: 'contract' },
 ];
 
 const ATTACHMENT_TRANSLATION_CONTRACTS_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_PREVIEW_RETAINED_EVIDENCE_REPLAY_PRODUCTION_PACKAGES,
-  { name: 'hermes-attachment-translation-api', role: 'workflow', owner: 'attachment_translation', surface: 'contract' },
-  { name: 'hermes-attachment-translation-ingress', role: 'workflow', owner: 'attachment_translation', surface: 'contract' },
-  { name: 'hermes-attachment-translation-core', role: 'workflow', owner: 'attachment_translation', surface: 'implementation' },
+  { name: 'makosh-attachment-translation-api', role: 'workflow', owner: 'attachment_translation', surface: 'contract' },
+  { name: 'makosh-attachment-translation-ingress', role: 'workflow', owner: 'attachment_translation', surface: 'contract' },
+  { name: 'makosh-attachment-translation-core', role: 'workflow', owner: 'attachment_translation', surface: 'implementation' },
 ];
 
 const ATTACHMENT_TRANSLATION_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_TRANSLATION_CONTRACTS_PRODUCTION_PACKAGES,
-  { name: 'hermes-attachment-translation-persistence', role: 'workflow', owner: 'attachment_translation', surface: 'persistence' },
+  { name: 'makosh-attachment-translation-persistence', role: 'workflow', owner: 'attachment_translation', surface: 'persistence' },
 ];
 
 const ATTACHMENT_TRANSLATION_RUNTIME_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...ATTACHMENT_TRANSLATION_PERSISTENCE_PRODUCTION_PACKAGES,
-  { name: 'hermes-attachment-translation-runtime', role: 'workflow', owner: 'attachment_translation', surface: 'runtime' },
-  { name: 'hermes-attachment-translation-assembly', role: 'workflow', owner: 'attachment_translation', surface: 'assembly' },
+  { name: 'makosh-attachment-translation-runtime', role: 'workflow', owner: 'attachment_translation', surface: 'runtime' },
+  { name: 'makosh-attachment-translation-assembly', role: 'workflow', owner: 'attachment_translation', surface: 'assembly' },
 ];
 
 const CONTACTS_MAIL_IDENTITY_COMMAND_CONTRACT_CORE_PRODUCTION_PACKAGES =
   ATTACHMENT_TRANSLATION_RUNTIME_ASSEMBLY_PRODUCTION_PACKAGES.flatMap((packageDescriptor) => (
-    packageDescriptor.name === 'hermes-tasks-core'
+    packageDescriptor.name === 'makosh-tasks-core'
       ? [
           packageDescriptor,
-          { name: 'hermes-contacts-command-api', role: 'domain', owner: 'contacts', surface: 'contract' },
-          { name: 'hermes-contacts-core', role: 'domain', owner: 'contacts', surface: 'implementation' },
+          { name: 'makosh-contacts-command-api', role: 'domain', owner: 'contacts', surface: 'contract' },
+          { name: 'makosh-contacts-core', role: 'domain', owner: 'contacts', surface: 'implementation' },
         ]
       : [packageDescriptor]
   ));
 
 const CONTACTS_MAIL_IDENTITY_COMMAND_PERSISTENCE_PRODUCTION_PACKAGES =
   CONTACTS_MAIL_IDENTITY_COMMAND_CONTRACT_CORE_PRODUCTION_PACKAGES.flatMap((packageDescriptor) => (
-    packageDescriptor.name === 'hermes-contacts-core'
+    packageDescriptor.name === 'makosh-contacts-core'
       ? [
           packageDescriptor,
-          { name: 'hermes-contacts-persistence', role: 'domain', owner: 'contacts', surface: 'persistence' },
+          { name: 'makosh-contacts-persistence', role: 'domain', owner: 'contacts', surface: 'persistence' },
         ]
       : [packageDescriptor]
   ));
 
 const CONTACTS_MAIL_IDENTITY_COMMAND_RUNTIME_ASSEMBLY_PRODUCTION_PACKAGES =
   CONTACTS_MAIL_IDENTITY_COMMAND_PERSISTENCE_PRODUCTION_PACKAGES.flatMap((packageDescriptor) => (
-    packageDescriptor.name === 'hermes-contacts-persistence'
+    packageDescriptor.name === 'makosh-contacts-persistence'
       ? [
           packageDescriptor,
-          { name: 'hermes-contacts-runtime', role: 'domain', owner: 'contacts', surface: 'runtime' },
-          { name: 'hermes-contacts-assembly', role: 'domain', owner: 'contacts', surface: 'assembly' },
+          { name: 'makosh-contacts-runtime', role: 'domain', owner: 'contacts', surface: 'runtime' },
+          { name: 'makosh-contacts-assembly', role: 'domain', owner: 'contacts', surface: 'assembly' },
         ]
       : [packageDescriptor]
   ));
 
 const MAIL_CONTACTS_SYNC_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...CONTACTS_MAIL_IDENTITY_COMMAND_RUNTIME_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-mail-address-book-contract', role: 'integration', owner: 'mail', surface: 'contract' },
-  { name: 'hermes-mail-contacts-sync-api', role: 'workflow', owner: 'mail_contacts_sync', surface: 'contract' },
-  { name: 'hermes-mail-contacts-sync-core', role: 'workflow', owner: 'mail_contacts_sync', surface: 'implementation' },
+  { name: 'makosh-mail-address-book-contract', role: 'integration', owner: 'mail', surface: 'contract' },
+  { name: 'makosh-mail-contacts-sync-api', role: 'workflow', owner: 'mail_contacts_sync', surface: 'contract' },
+  { name: 'makosh-mail-contacts-sync-core', role: 'workflow', owner: 'mail_contacts_sync', surface: 'implementation' },
 ];
 
 const MAIL_CONTACTS_SYNC_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...MAIL_CONTACTS_SYNC_CONTRACT_CORE_PRODUCTION_PACKAGES,
-  { name: 'hermes-mail-contacts-sync-persistence', role: 'workflow', owner: 'mail_contacts_sync', surface: 'persistence' },
+  { name: 'makosh-mail-contacts-sync-persistence', role: 'workflow', owner: 'mail_contacts_sync', surface: 'persistence' },
 ];
 
 const MAIL_CONTACTS_SYNC_RUNTIME_ADMISSION_PRODUCTION_PACKAGES =
   MAIL_CONTACTS_SYNC_PERSISTENCE_PRODUCTION_PACKAGES.flatMap((packageDescriptor) => (
-    packageDescriptor.name === 'hermes-contacts-command-api'
+    packageDescriptor.name === 'makosh-contacts-command-api'
       ? [
           packageDescriptor,
-          { name: 'hermes-contacts-mail-sync-source-api', role: 'domain', owner: 'contacts', surface: 'contract' },
+          { name: 'makosh-contacts-mail-sync-source-api', role: 'domain', owner: 'contacts', surface: 'contract' },
         ]
       : [packageDescriptor]
   )).concat([
-    { name: 'hermes-mail-contacts-sync-runtime', role: 'workflow', owner: 'mail_contacts_sync', surface: 'runtime' },
+    { name: 'makosh-mail-contacts-sync-runtime', role: 'workflow', owner: 'mail_contacts_sync', surface: 'runtime' },
   ]);
 
 const MAIL_ADDRESS_BOOK_PROVIDER_ADAPTERS_PRODUCTION_PACKAGES = [
   ...MAIL_CONTACTS_SYNC_RUNTIME_ADMISSION_PRODUCTION_PACKAGES,
-  { name: 'hermes-mail-google-people', role: 'integration', owner: 'mail', surface: 'implementation' },
-  { name: 'hermes-mail-carddav', role: 'integration', owner: 'mail', surface: 'implementation' },
+  { name: 'makosh-mail-google-people', role: 'integration', owner: 'mail', surface: 'implementation' },
+  { name: 'makosh-mail-carddav', role: 'integration', owner: 'mail', surface: 'implementation' },
 ];
 
 const MAIL_ADDRESS_BOOK_PERSISTENCE_AUTHORITY_PRODUCTION_PACKAGES =
   MAIL_ADDRESS_BOOK_PROVIDER_ADAPTERS_PRODUCTION_PACKAGES.flatMap((packageDescriptor) => (
-    packageDescriptor.name === 'hermes-mail-address-book-contract'
+    packageDescriptor.name === 'makosh-mail-address-book-contract'
       ? [
           packageDescriptor,
-          { name: 'hermes-mail-address-book-persistence', role: 'integration', owner: 'mail', surface: 'persistence' },
+          { name: 'makosh-mail-address-book-persistence', role: 'integration', owner: 'mail', surface: 'persistence' },
         ]
       : [packageDescriptor]
   ));
@@ -1311,123 +1311,123 @@ const MAIL_ADDRESS_BOOK_RUNTIME_EXECUTION_PRODUCTION_PACKAGES =
 
 const MAIL_CONTACTS_SYNC_RELEASE_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...MAIL_ADDRESS_BOOK_RUNTIME_EXECUTION_PRODUCTION_PACKAGES,
-  { name: 'hermes-mail-contacts-sync-assembly', role: 'workflow', owner: 'mail_contacts_sync', surface: 'assembly' },
-  { name: 'hermes-speech-to-text-api', role: 'engine', owner: 'speech_to_text', surface: 'contract' },
-  { name: 'hermes-speech-to-text-core', role: 'engine', owner: 'speech_to_text', surface: 'implementation' },
-  { name: 'hermes-speech-to-text-persistence', role: 'engine', owner: 'speech_to_text', surface: 'persistence' },
+  { name: 'makosh-mail-contacts-sync-assembly', role: 'workflow', owner: 'mail_contacts_sync', surface: 'assembly' },
+  { name: 'makosh-speech-to-text-api', role: 'engine', owner: 'speech_to_text', surface: 'contract' },
+  { name: 'makosh-speech-to-text-core', role: 'engine', owner: 'speech_to_text', surface: 'implementation' },
+  { name: 'makosh-speech-to-text-persistence', role: 'engine', owner: 'speech_to_text', surface: 'persistence' },
 ];
 
 const DESKTOP_CALL_RECORDING_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...MAIL_CONTACTS_SYNC_RELEASE_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-desktop-call-recording-api', role: 'integration', owner: 'desktop_call_recording', surface: 'contract' },
-  { name: 'hermes-desktop-call-recording-core', role: 'integration', owner: 'desktop_call_recording', surface: 'implementation' },
-  { name: 'hermes-call-transcription-ingress', role: 'workflow', owner: 'call_transcription', surface: 'contract' },
+  { name: 'makosh-desktop-call-recording-api', role: 'integration', owner: 'desktop_call_recording', surface: 'contract' },
+  { name: 'makosh-desktop-call-recording-core', role: 'integration', owner: 'desktop_call_recording', surface: 'implementation' },
+  { name: 'makosh-call-transcription-ingress', role: 'workflow', owner: 'call_transcription', surface: 'contract' },
 ];
 
 const DESKTOP_CALL_RECORDING_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...DESKTOP_CALL_RECORDING_CONTRACT_CORE_PRODUCTION_PACKAGES,
-  { name: 'hermes-desktop-call-recording-persistence', role: 'integration', owner: 'desktop_call_recording', surface: 'persistence' },
+  { name: 'makosh-desktop-call-recording-persistence', role: 'integration', owner: 'desktop_call_recording', surface: 'persistence' },
 ];
 
 const DESKTOP_CALL_RECORDING_RUNTIME_PRODUCTION_PACKAGES = [
   ...DESKTOP_CALL_RECORDING_PERSISTENCE_PRODUCTION_PACKAGES,
-  { name: 'hermes-desktop-call-recording-runtime', role: 'integration', owner: 'desktop_call_recording', surface: 'runtime' },
+  { name: 'makosh-desktop-call-recording-runtime', role: 'integration', owner: 'desktop_call_recording', surface: 'runtime' },
 ];
 
 const DESKTOP_CALL_RECORDING_RELEASE_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...DESKTOP_CALL_RECORDING_RUNTIME_PRODUCTION_PACKAGES,
-  { name: 'hermes-desktop-call-recording-assembly', role: 'integration', owner: 'desktop_call_recording', surface: 'assembly' },
+  { name: 'makosh-desktop-call-recording-assembly', role: 'integration', owner: 'desktop_call_recording', surface: 'assembly' },
 ];
 
 const CALL_TRANSCRIPTION_CONTRACT_CORE_PRODUCTION_PACKAGES = [
   ...DESKTOP_CALL_RECORDING_RELEASE_ASSEMBLY_PRODUCTION_PACKAGES,
-  { name: 'hermes-call-transcription-api', role: 'workflow', owner: 'call_transcription', surface: 'contract' },
-  { name: 'hermes-call-transcription-core', role: 'workflow', owner: 'call_transcription', surface: 'implementation' },
+  { name: 'makosh-call-transcription-api', role: 'workflow', owner: 'call_transcription', surface: 'contract' },
+  { name: 'makosh-call-transcription-core', role: 'workflow', owner: 'call_transcription', surface: 'implementation' },
 ];
 
 const CALL_TRANSCRIPTION_PERSISTENCE_PRODUCTION_PACKAGES = [
   ...CALL_TRANSCRIPTION_CONTRACT_CORE_PRODUCTION_PACKAGES,
-  { name: 'hermes-call-transcription-persistence', role: 'workflow', owner: 'call_transcription', surface: 'persistence' },
+  { name: 'makosh-call-transcription-persistence', role: 'workflow', owner: 'call_transcription', surface: 'persistence' },
 ];
 
 const CALL_TRANSCRIPTION_RUNTIME_PRODUCTION_PACKAGES = [
   ...CALL_TRANSCRIPTION_PERSISTENCE_PRODUCTION_PACKAGES,
-  { name: 'hermes-call-transcription-runtime', role: 'workflow', owner: 'call_transcription', surface: 'runtime' },
+  { name: 'makosh-call-transcription-runtime', role: 'workflow', owner: 'call_transcription', surface: 'runtime' },
 ];
 
 const CALL_TRANSCRIPTION_RELEASE_ASSEMBLY_PRODUCTION_PACKAGES = [
   ...CALL_TRANSCRIPTION_RUNTIME_PRODUCTION_PACKAGES,
-  { name: 'hermes-call-transcription-assembly', role: 'workflow', owner: 'call_transcription', surface: 'assembly' },
+  { name: 'makosh-call-transcription-assembly', role: 'workflow', owner: 'call_transcription', surface: 'assembly' },
 ];
 
 const BLOB_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...NATS_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-blob-protocol': [],
+  'makosh-blob-protocol': [],
 };
 
 const BLOB_RUNTIME_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...BLOB_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-blob-client-contract': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-blob-client-contract': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-blob-client': [
-    { name: 'hermes-blob-client-contract', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-blob-client': [
+    { name: 'makosh-blob-client-contract', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-blob-runtime': [
-    { name: 'hermes-blob-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
+  'makosh-blob-runtime': [
+    { name: 'makosh-blob-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
   ],
-  'hermes-blob-service': [
-    { name: 'hermes-blob-protocol', kind: 'normal' },
-    { name: 'hermes-blob-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
+  'makosh-blob-service': [
+    { name: 'makosh-blob-protocol', kind: 'normal' },
+    { name: 'makosh-blob-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
   ],
 };
 
 const SCHEDULER_PROTOCOL_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...BLOB_RUNTIME_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-kernel': [
-    ...BLOB_RUNTIME_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST['hermes-kernel'],
-    { name: 'hermes-scheduler-protocol', kind: 'normal' },
+  'makosh-kernel': [
+    ...BLOB_RUNTIME_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST['makosh-kernel'],
+    { name: 'makosh-scheduler-protocol', kind: 'normal' },
   ],
-  'hermes-scheduler-protocol': [
-    { name: 'hermes-clock-protocol', kind: 'normal' },
+  'makosh-scheduler-protocol': [
+    { name: 'makosh-clock-protocol', kind: 'normal' },
   ],
 };
 
 const SCHEDULER_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...SCHEDULER_PROTOCOL_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-scheduler': [
-    { name: 'hermes-clock-protocol', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-scheduler-protocol', kind: 'normal' },
+  'makosh-scheduler': [
+    { name: 'makosh-clock-protocol', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-scheduler-protocol', kind: 'normal' },
   ],
 };
 
 const SCHEDULER_PERSISTENCE_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...SCHEDULER_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-scheduler-persistence': [
-    { name: 'hermes-clock-protocol', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-scheduler', kind: 'normal' },
-    { name: 'hermes-scheduler-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-scheduler-persistence': [
+    { name: 'makosh-clock-protocol', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-scheduler', kind: 'normal' },
+    { name: 'makosh-scheduler-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const GATEWAY_SESSION_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...SCHEDULER_PERSISTENCE_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-kernel': [
-    ...SCHEDULER_PERSISTENCE_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST['hermes-kernel'],
-    { name: 'hermes-gateway-session-contract', kind: 'normal' },
+  'makosh-kernel': [
+    ...SCHEDULER_PERSISTENCE_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST['makosh-kernel'],
+    { name: 'makosh-gateway-session-contract', kind: 'normal' },
   ],
-  'hermes-gateway-session-contract': [],
-  'hermes-gateway-session': [
-    { name: 'hermes-gateway-session-contract', kind: 'normal' },
+  'makosh-gateway-session-contract': [],
+  'makosh-gateway-session': [
+    { name: 'makosh-gateway-session-contract', kind: 'normal' },
   ],
 };
 
@@ -1437,217 +1437,217 @@ const SCHEDULER_RECEIPT_DELIVERY_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
 
 const SCHEDULER_JETSTREAM_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...SCHEDULER_RECEIPT_DELIVERY_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-scheduler-jetstream': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-scheduler-protocol', kind: 'normal' },
+  'makosh-scheduler-jetstream': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-scheduler-protocol', kind: 'normal' },
   ],
 };
 
 const SCHEDULER_RUNTIME_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...SCHEDULER_JETSTREAM_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-scheduler-runtime': [
-    { name: 'hermes-clock-protocol', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-scheduler', kind: 'normal' },
-    { name: 'hermes-scheduler-jetstream', kind: 'normal' },
-    { name: 'hermes-scheduler-persistence', kind: 'normal' },
-    { name: 'hermes-scheduler-protocol', kind: 'normal' },
-    { name: 'hermes-secure-file', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-scheduler-runtime': [
+    { name: 'makosh-clock-protocol', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-scheduler', kind: 'normal' },
+    { name: 'makosh-scheduler-jetstream', kind: 'normal' },
+    { name: 'makosh-scheduler-persistence', kind: 'normal' },
+    { name: 'makosh-scheduler-protocol', kind: 'normal' },
+    { name: 'makosh-secure-file', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const GATEWAY_RUNTIME_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...SCHEDULER_RUNTIME_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-kernel': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    ...SCHEDULER_RUNTIME_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST['hermes-kernel'],
-    { name: 'hermes-gateway-runtime', kind: 'normal' },
-    { name: 'hermes-gateway-session', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
+  'makosh-kernel': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    ...SCHEDULER_RUNTIME_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST['makosh-kernel'],
+    { name: 'makosh-gateway-runtime', kind: 'normal' },
+    { name: 'makosh-gateway-session', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
   ],
-  'hermes-gateway-runtime': [
-    { name: 'hermes-gateway-protocol', kind: 'normal' },
-    { name: 'hermes-gateway-session', kind: 'normal' },
-    { name: 'hermes-gateway-session-contract', kind: 'normal' },
+  'makosh-gateway-runtime': [
+    { name: 'makosh-gateway-protocol', kind: 'normal' },
+    { name: 'makosh-gateway-session', kind: 'normal' },
+    { name: 'makosh-gateway-session-contract', kind: 'normal' },
   ],
 };
 
 const MAIL_COMMUNICATIONS_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...GATEWAY_RUNTIME_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-api': [],
-  'hermes-mail-core': [
-    { name: 'hermes-mail-api', kind: 'normal' },
-    { name: 'hermes-communications-ingress', kind: 'normal' },
+  'makosh-mail-api': [],
+  'makosh-mail-core': [
+    { name: 'makosh-mail-api', kind: 'normal' },
+    { name: 'makosh-communications-ingress', kind: 'normal' },
   ],
-  'hermes-mail-imap': [
-    { name: 'hermes-mail-core', kind: 'normal' },
-    { name: 'hermes-mail-api', kind: 'normal' },
+  'makosh-mail-imap': [
+    { name: 'makosh-mail-core', kind: 'normal' },
+    { name: 'makosh-mail-api', kind: 'normal' },
   ],
-  'hermes-mail-gmail': [
-    { name: 'hermes-mail-api', kind: 'normal' },
+  'makosh-mail-gmail': [
+    { name: 'makosh-mail-api', kind: 'normal' },
   ],
-  'hermes-mail-smtp': [
-    { name: 'hermes-mail-api', kind: 'normal' },
+  'makosh-mail-smtp': [
+    { name: 'makosh-mail-api', kind: 'normal' },
   ],
-  'hermes-mail-persistence': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-mail-api', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-mail-persistence': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-mail-api', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-mail-runtime': [
-    { name: 'hermes-mail-api', kind: 'normal' },
-    { name: 'hermes-mail-core', kind: 'normal' },
-    { name: 'hermes-mail-imap', kind: 'normal' },
-    { name: 'hermes-mail-gmail', kind: 'normal' },
-    { name: 'hermes-mail-smtp', kind: 'normal' },
-    { name: 'hermes-mail-persistence', kind: 'normal' },
-    { name: 'hermes-attachment-security-contract', kind: 'normal' },
-    { name: 'hermes-communications-attachment-contract', kind: 'normal' },
-    { name: 'hermes-communications-ingress', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-managed-vault-client', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
+  'makosh-mail-runtime': [
+    { name: 'makosh-mail-api', kind: 'normal' },
+    { name: 'makosh-mail-core', kind: 'normal' },
+    { name: 'makosh-mail-imap', kind: 'normal' },
+    { name: 'makosh-mail-gmail', kind: 'normal' },
+    { name: 'makosh-mail-smtp', kind: 'normal' },
+    { name: 'makosh-mail-persistence', kind: 'normal' },
+    { name: 'makosh-attachment-security-contract', kind: 'normal' },
+    { name: 'makosh-communications-attachment-contract', kind: 'normal' },
+    { name: 'makosh-communications-ingress', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-managed-vault-client', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
   ],
-  'hermes-mail-assembly': [
-    { name: 'hermes-mail-persistence', kind: 'normal' },
-    { name: 'hermes-mail-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-mail-assembly': [
+    { name: 'makosh-mail-persistence', kind: 'normal' },
+    { name: 'makosh-mail-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-telegram-api': [],
-  'hermes-telegram-core': [
-    { name: 'hermes-telegram-api', kind: 'normal' },
-    { name: 'hermes-communications-ingress', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
+  'makosh-telegram-api': [],
+  'makosh-telegram-core': [
+    { name: 'makosh-telegram-api', kind: 'normal' },
+    { name: 'makosh-communications-ingress', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
   ],
-  'hermes-telegram-tdlib': [
-    { name: 'hermes-telegram-api', kind: 'normal' },
+  'makosh-telegram-tdlib': [
+    { name: 'makosh-telegram-api', kind: 'normal' },
   ],
-  'hermes-telegram-persistence': [
-    { name: 'hermes-communications-ingress', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-telegram-api', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-telegram-persistence': [
+    { name: 'makosh-communications-ingress', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-telegram-api', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-telegram-runtime': [
-    { name: 'hermes-blob-client-contract', kind: 'normal' },
-    { name: 'hermes-communications-ingress', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-managed-vault-client', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
-    { name: 'hermes-telegram-api', kind: 'normal' },
-    { name: 'hermes-telegram-core', kind: 'normal' },
-    { name: 'hermes-telegram-persistence', kind: 'normal' },
-    { name: 'hermes-telegram-tdlib', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
-    { name: 'hermes-blob-client', kind: 'normal' },
+  'makosh-telegram-runtime': [
+    { name: 'makosh-blob-client-contract', kind: 'normal' },
+    { name: 'makosh-communications-ingress', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-managed-vault-client', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+    { name: 'makosh-telegram-api', kind: 'normal' },
+    { name: 'makosh-telegram-core', kind: 'normal' },
+    { name: 'makosh-telegram-persistence', kind: 'normal' },
+    { name: 'makosh-telegram-tdlib', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
+    { name: 'makosh-blob-client', kind: 'normal' },
   ],
-  'hermes-telegram-assembly': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-telegram-persistence', kind: 'normal' },
-    { name: 'hermes-telegram-runtime', kind: 'normal' },
+  'makosh-telegram-assembly': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-telegram-persistence', kind: 'normal' },
+    { name: 'makosh-telegram-runtime', kind: 'normal' },
   ],
-  'hermes-whatsapp-api': [],
-  'hermes-whatsapp-core': [
-    { name: 'hermes-communications-ingress', kind: 'normal' },
-    { name: 'hermes-whatsapp-api', kind: 'normal' },
+  'makosh-whatsapp-api': [],
+  'makosh-whatsapp-core': [
+    { name: 'makosh-communications-ingress', kind: 'normal' },
+    { name: 'makosh-whatsapp-api', kind: 'normal' },
   ],
-  'hermes-whatsapp-persistence': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-whatsapp-persistence': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-whatsapp-runtime': [
-    { name: 'hermes-communications-ingress', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
-    { name: 'hermes-whatsapp-api', kind: 'normal' },
-    { name: 'hermes-whatsapp-core', kind: 'normal' },
-    { name: 'hermes-whatsapp-persistence', kind: 'normal' },
+  'makosh-whatsapp-runtime': [
+    { name: 'makosh-communications-ingress', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
+    { name: 'makosh-whatsapp-api', kind: 'normal' },
+    { name: 'makosh-whatsapp-core', kind: 'normal' },
+    { name: 'makosh-whatsapp-persistence', kind: 'normal' },
   ],
-  'hermes-whatsapp-assembly': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-whatsapp-persistence', kind: 'normal' },
-    { name: 'hermes-whatsapp-runtime', kind: 'normal' },
+  'makosh-whatsapp-assembly': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-whatsapp-persistence', kind: 'normal' },
+    { name: 'makosh-whatsapp-runtime', kind: 'normal' },
   ],
-  'hermes-zulip-api': [],
-  'hermes-zulip-core': [
-    { name: 'hermes-communications-ingress', kind: 'normal' },
-    { name: 'hermes-zulip-api', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
+  'makosh-zulip-api': [],
+  'makosh-zulip-core': [
+    { name: 'makosh-communications-ingress', kind: 'normal' },
+    { name: 'makosh-zulip-api', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
   ],
-  'hermes-zulip-http': [{ name: 'hermes-zulip-api', kind: 'normal' }],
-  'hermes-zulip-persistence': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-zulip-api', kind: 'normal' },
+  'makosh-zulip-http': [{ name: 'makosh-zulip-api', kind: 'normal' }],
+  'makosh-zulip-persistence': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-zulip-api', kind: 'normal' },
   ],
-  'hermes-zulip-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-blob-client-contract', kind: 'normal' },
-    { name: 'hermes-communications-ingress', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-managed-vault-client', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-zulip-api', kind: 'normal' },
-    { name: 'hermes-zulip-core', kind: 'normal' },
-    { name: 'hermes-zulip-http', kind: 'normal' },
-    { name: 'hermes-zulip-persistence', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
+  'makosh-zulip-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-blob-client-contract', kind: 'normal' },
+    { name: 'makosh-communications-ingress', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-managed-vault-client', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-zulip-api', kind: 'normal' },
+    { name: 'makosh-zulip-core', kind: 'normal' },
+    { name: 'makosh-zulip-http', kind: 'normal' },
+    { name: 'makosh-zulip-persistence', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
   ],
-  'hermes-communications-ingress': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-communications-ingress': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-communications-attachment-contract': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-communications-attachment-contract': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-communications-api': [],
-  'hermes-communications-domain': [
-    { name: 'hermes-communications-api', kind: 'normal' },
+  'makosh-communications-api': [],
+  'makosh-communications-domain': [
+    { name: 'makosh-communications-api', kind: 'normal' },
   ],
-  'hermes-communications-persistence': [
-    { name: 'hermes-communications-api', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communications-persistence': [
+    { name: 'makosh-communications-api', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-communications-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communications-attachment-contract', kind: 'normal' },
-    { name: 'hermes-communications-ingress', kind: 'normal' },
-    { name: 'hermes-communications-api', kind: 'normal' },
-    { name: 'hermes-communications-domain', kind: 'normal' },
-    { name: 'hermes-communications-persistence', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-managed-vault-client', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communications-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communications-attachment-contract', kind: 'normal' },
+    { name: 'makosh-communications-ingress', kind: 'normal' },
+    { name: 'makosh-communications-api', kind: 'normal' },
+    { name: 'makosh-communications-domain', kind: 'normal' },
+    { name: 'makosh-communications-persistence', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-managed-vault-client', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
-  'hermes-communications-assembly': [
-    { name: 'hermes-communications-persistence', kind: 'normal' },
-    { name: 'hermes-communications-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communications-assembly': [
+    { name: 'makosh-communications-persistence', kind: 'normal' },
+    { name: 'makosh-communications-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
@@ -1660,47 +1660,47 @@ const FIRST_OWNER_WORKSPACE_DEPENDENCY_ALLOWLIST = Object.fromEntries(
 
 const ATTACHMENT_SECURITY_ENGINE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...FIRST_OWNER_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-security-contract': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-attachment-security-contract': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-attachment-security-core': [
-    { name: 'hermes-attachment-security-contract', kind: 'normal' },
+  'makosh-attachment-security-core': [
+    { name: 'makosh-attachment-security-contract', kind: 'normal' },
   ],
-  'hermes-attachment-security-clamav': [
-    { name: 'hermes-attachment-security-contract', kind: 'normal' },
-    { name: 'hermes-attachment-security-core', kind: 'normal' },
+  'makosh-attachment-security-clamav': [
+    { name: 'makosh-attachment-security-contract', kind: 'normal' },
+    { name: 'makosh-attachment-security-core', kind: 'normal' },
   ],
-  'hermes-attachment-security-persistence': [
-    { name: 'hermes-attachment-archive-inspection-ingress', kind: 'normal' },
-    { name: 'hermes-attachment-preview-ingress', kind: 'normal' },
-    { name: 'hermes-attachment-text-extraction-ingress', kind: 'normal' },
-    { name: 'hermes-attachment-security-core', kind: 'normal' },
-    { name: 'hermes-communications-attachment-contract', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-attachment-security-persistence': [
+    { name: 'makosh-attachment-archive-inspection-ingress', kind: 'normal' },
+    { name: 'makosh-attachment-preview-ingress', kind: 'normal' },
+    { name: 'makosh-attachment-text-extraction-ingress', kind: 'normal' },
+    { name: 'makosh-attachment-security-core', kind: 'normal' },
+    { name: 'makosh-communications-attachment-contract', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-attachment-security-runtime': [
-    { name: 'hermes-attachment-archive-inspection-ingress', kind: 'normal' },
-    { name: 'hermes-attachment-preview-ingress', kind: 'normal' },
-    { name: 'hermes-attachment-text-extraction-ingress', kind: 'normal' },
-    { name: 'hermes-attachment-security-clamav', kind: 'normal' },
-    { name: 'hermes-attachment-security-contract', kind: 'normal' },
-    { name: 'hermes-attachment-security-core', kind: 'normal' },
-    { name: 'hermes-attachment-security-persistence', kind: 'normal' },
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communications-attachment-contract', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-attachment-security-runtime': [
+    { name: 'makosh-attachment-archive-inspection-ingress', kind: 'normal' },
+    { name: 'makosh-attachment-preview-ingress', kind: 'normal' },
+    { name: 'makosh-attachment-text-extraction-ingress', kind: 'normal' },
+    { name: 'makosh-attachment-security-clamav', kind: 'normal' },
+    { name: 'makosh-attachment-security-contract', kind: 'normal' },
+    { name: 'makosh-attachment-security-core', kind: 'normal' },
+    { name: 'makosh-attachment-security-persistence', kind: 'normal' },
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communications-attachment-contract', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
-  'hermes-attachment-security-assembly': [
-    { name: 'hermes-attachment-security-persistence', kind: 'normal' },
-    { name: 'hermes-attachment-security-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-attachment-security-assembly': [
+    { name: 'makosh-attachment-security-persistence', kind: 'normal' },
+    { name: 'makosh-attachment-security-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
@@ -1718,116 +1718,116 @@ const MAIL_OUTBOUND_MIME_ATTACHMENTS_WORKSPACE_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATIONS_CONTENT_READ_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...MAIL_OUTBOUND_MIME_ATTACHMENTS_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-content-api': [],
-  'hermes-communications-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communications-attachment-contract', kind: 'normal' },
-    { name: 'hermes-communications-content-api', kind: 'normal' },
-    { name: 'hermes-communications-ingress', kind: 'normal' },
-    { name: 'hermes-communications-api', kind: 'normal' },
-    { name: 'hermes-communications-domain', kind: 'normal' },
-    { name: 'hermes-communications-persistence', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-managed-vault-client', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communications-content-api': [],
+  'makosh-communications-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communications-attachment-contract', kind: 'normal' },
+    { name: 'makosh-communications-content-api', kind: 'normal' },
+    { name: 'makosh-communications-ingress', kind: 'normal' },
+    { name: 'makosh-communications-api', kind: 'normal' },
+    { name: 'makosh-communications-domain', kind: 'normal' },
+    { name: 'makosh-communications-persistence', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-managed-vault-client', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const COMMUNICATIONS_SAVED_SEARCH_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_CONTENT_READ_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-saved-query-api': [],
-  'hermes-communications-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communications-attachment-contract', kind: 'normal' },
-    { name: 'hermes-communications-content-api', kind: 'normal' },
-    { name: 'hermes-communications-ingress', kind: 'normal' },
-    { name: 'hermes-communications-api', kind: 'normal' },
-    { name: 'hermes-communications-domain', kind: 'normal' },
-    { name: 'hermes-communications-persistence', kind: 'normal' },
-    { name: 'hermes-communications-saved-query-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-managed-vault-client', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communications-saved-query-api': [],
+  'makosh-communications-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communications-attachment-contract', kind: 'normal' },
+    { name: 'makosh-communications-content-api', kind: 'normal' },
+    { name: 'makosh-communications-ingress', kind: 'normal' },
+    { name: 'makosh-communications-api', kind: 'normal' },
+    { name: 'makosh-communications-domain', kind: 'normal' },
+    { name: 'makosh-communications-persistence', kind: 'normal' },
+    { name: 'makosh-communications-saved-query-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-managed-vault-client', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const COMMUNICATIONS_SENDER_INSIGHTS_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_SAVED_SEARCH_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-sender-insights-api': [],
-  'hermes-communications-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communications-attachment-contract', kind: 'normal' },
-    { name: 'hermes-communications-content-api', kind: 'normal' },
-    { name: 'hermes-communications-ingress', kind: 'normal' },
-    { name: 'hermes-communications-api', kind: 'normal' },
-    { name: 'hermes-communications-domain', kind: 'normal' },
-    { name: 'hermes-communications-persistence', kind: 'normal' },
-    { name: 'hermes-communications-saved-query-api', kind: 'normal' },
-    { name: 'hermes-communications-sender-insights-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-managed-vault-client', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communications-sender-insights-api': [],
+  'makosh-communications-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communications-attachment-contract', kind: 'normal' },
+    { name: 'makosh-communications-content-api', kind: 'normal' },
+    { name: 'makosh-communications-ingress', kind: 'normal' },
+    { name: 'makosh-communications-api', kind: 'normal' },
+    { name: 'makosh-communications-domain', kind: 'normal' },
+    { name: 'makosh-communications-persistence', kind: 'normal' },
+    { name: 'makosh-communications-saved-query-api', kind: 'normal' },
+    { name: 'makosh-communications-sender-insights-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-managed-vault-client', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const COMMUNICATIONS_EXPORT_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_SENDER_INSIGHTS_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-evidence-export-source-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-communications-evidence-export-source-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-communications-export-api': [],
-  'hermes-communications-export-core': [],
-  'hermes-communications-export-persistence': [
-    { name: 'hermes-communications-export-core', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communications-export-api': [],
+  'makosh-communications-export-core': [],
+  'makosh-communications-export-persistence': [
+    { name: 'makosh-communications-export-core', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-communications-export-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communications-evidence-export-source-api', kind: 'normal' },
-    { name: 'hermes-communications-export-api', kind: 'normal' },
-    { name: 'hermes-communications-export-core', kind: 'normal' },
-    { name: 'hermes-communications-export-persistence', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-managed-vault-client', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communications-export-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communications-evidence-export-source-api', kind: 'normal' },
+    { name: 'makosh-communications-export-api', kind: 'normal' },
+    { name: 'makosh-communications-export-core', kind: 'normal' },
+    { name: 'makosh-communications-export-persistence', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-managed-vault-client', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
-  'hermes-communications-export-assembly': [
-    { name: 'hermes-communications-export-persistence', kind: 'normal' },
-    { name: 'hermes-communications-export-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communications-export-assembly': [
+    { name: 'makosh-communications-export-persistence', kind: 'normal' },
+    { name: 'makosh-communications-export-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-communications-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communications-attachment-contract', kind: 'normal' },
-    { name: 'hermes-communications-content-api', kind: 'normal' },
-    { name: 'hermes-communications-evidence-export-source-api', kind: 'normal' },
-    { name: 'hermes-communications-ingress', kind: 'normal' },
-    { name: 'hermes-communications-api', kind: 'normal' },
-    { name: 'hermes-communications-domain', kind: 'normal' },
-    { name: 'hermes-communications-persistence', kind: 'normal' },
-    { name: 'hermes-communications-saved-query-api', kind: 'normal' },
-    { name: 'hermes-communications-sender-insights-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-managed-vault-client', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communications-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communications-attachment-contract', kind: 'normal' },
+    { name: 'makosh-communications-content-api', kind: 'normal' },
+    { name: 'makosh-communications-evidence-export-source-api', kind: 'normal' },
+    { name: 'makosh-communications-ingress', kind: 'normal' },
+    { name: 'makosh-communications-api', kind: 'normal' },
+    { name: 'makosh-communications-domain', kind: 'normal' },
+    { name: 'makosh-communications-persistence', kind: 'normal' },
+    { name: 'makosh-communications-saved-query-api', kind: 'normal' },
+    { name: 'makosh-communications-sender-insights-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-managed-vault-client', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
@@ -1847,22 +1847,22 @@ const PROTOCOL_THIRD_PARTY_DEPENDENCIES = [
 ];
 
 const RECOVERY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
-  'hermes-events-protocol': [
+  'makosh-events-protocol': [
     ...PROTOCOL_THIRD_PARTY_DEPENDENCIES,
     { name: 'hpke', kind: 'normal', source: 'crates_io', version: '=0.14.0', defaultFeatures: false, features: ['alloc', 'chacha', 'getrandom', 'x25519'] },
     { name: 'nats-jwt', kind: 'normal', source: 'crates_io', version: '=0.3.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-runtime-protocol': [
+  'makosh-runtime-protocol': [
     ...PROTOCOL_THIRD_PARTY_DEPENDENCIES,
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
   ],
-  'hermes-gateway-protocol': PROTOCOL_THIRD_PARTY_DEPENDENCIES,
-  'hermes-kernel-control-store': [
+  'makosh-gateway-protocol': PROTOCOL_THIRD_PARTY_DEPENDENCIES,
+  'makosh-kernel-control-store': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-kernel-control-store-sqlite': [
+  'makosh-kernel-control-store-sqlite': [
     {
       name: 'rusqlite', kind: 'normal', source: 'crates_io', version: '=0.32.0', defaultFeatures: false, features: ['backup', 'bundled'],
     },
@@ -1870,7 +1870,7 @@ const RECOVERY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
       name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [],
     },
   ],
-  'hermes-kernel': [
+  'makosh-kernel': [
     {
       name: 'clap', kind: 'normal', source: 'crates_io', version: '=4.6.2', defaultFeatures: false, features: ['derive', 'error-context', 'help', 'std', 'usage'],
     },
@@ -1902,29 +1902,29 @@ const RECOVERY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
       name: 'signal-hook', kind: 'normal', source: 'crates_io', version: '=0.3.18', defaultFeatures: true, features: [],
     },
   ],
-  'hermes-secure-file': [
+  'makosh-secure-file': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
   ],
 };
 
 const VAULT_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...RECOVERY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-vault-protocol': [
+  'makosh-vault-protocol': [
     { name: 'hpke', kind: 'normal', source: 'crates_io', version: '=0.14.0', defaultFeatures: false, features: ['alloc', 'chacha', 'getrandom', 'x25519'] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-managed-vault-client': [
+  'makosh-managed-vault-client': [
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-vault-key-provider': [],
-  'hermes-vault-key-provider-file': [
+  'makosh-vault-key-provider': [],
+  'makosh-vault-key-provider-file': [
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
   ],
-  'hermes-vault-store-sqlcipher': [
+  'makosh-vault-store-sqlcipher': [
     { name: 'bip39', kind: 'normal', source: 'crates_io', version: '=2.2.2', defaultFeatures: false, features: ['std'] },
     { name: 'chacha20poly1305', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: ['alloc', 'zeroize'] },
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
@@ -1934,7 +1934,7 @@ const VAULT_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-vault-runtime': [
+  'makosh-vault-runtime': [
     { name: 'clap', kind: 'normal', source: 'crates_io', version: '=4.6.2', defaultFeatures: false, features: ['derive', 'error-context', 'help', 'std', 'usage'] },
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
     { name: 'hpke', kind: 'normal', source: 'crates_io', version: '=0.14.0', defaultFeatures: false, features: ['alloc', 'chacha', 'getrandom', 'x25519'] },
@@ -1947,14 +1947,14 @@ const VAULT_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const CLOCK_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...VAULT_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-clock-protocol': [],
-  'hermes-clock-runtime': [],
+  'makosh-clock-protocol': [],
+  'makosh-clock-runtime': [],
 };
 
 const TELEMETRY_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...CLOCK_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-telemetry-protocol': [],
-  'hermes-telemetry-collector': [
+  'makosh-telemetry-protocol': [],
+  'makosh-telemetry-collector': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
   ],
@@ -1962,46 +1962,46 @@ const TELEMETRY_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const STORAGE_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...TELEMETRY_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-storage-protocol': [
+  'makosh-storage-protocol': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-storage-control': [],
-  'hermes-storage-vault': [
+  'makosh-storage-control': [],
+  'makosh-storage-vault': [
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-storage-runtime': [
+  'makosh-storage-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['net', 'rt', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-storage-postgres': [
+  'makosh-storage-postgres': [
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-storage-pgbouncer': [
+  'makosh-storage-pgbouncer': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt', 'time'] },
     { name: 'tokio-postgres', kind: 'normal', source: 'crates_io', version: '=0.7.18', defaultFeatures: false, features: ['runtime'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-storage-migrations': [
+  'makosh-storage-migrations': [
     { name: 'pg_query', kind: 'normal', source: 'crates_io', version: '=6.1.1', defaultFeatures: true, features: [] },
   ],
 };
 
 const NATS_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...STORAGE_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-events-jetstream': [
+  'makosh-events-jetstream': [
     { name: 'async-nats', kind: 'normal', source: 'crates_io', version: '=0.49.1', defaultFeatures: true, features: [] },
     { name: 'base64', kind: 'normal', source: 'crates_io', version: '=0.22.1', defaultFeatures: true, features: [] },
     { name: 'futures-util', kind: 'normal', source: 'crates_io', version: '=0.3.32', defaultFeatures: true, features: [] },
@@ -2014,14 +2014,14 @@ const NATS_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-events-authority': [
+  'makosh-events-authority': [
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-events-authority-runtime-control': [
+  'makosh-events-authority-runtime-control': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['net', 'rt', 'time'] },
   ],
-  'hermes-events-authority-runtime': [
+  'makosh-events-authority-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
   ],
@@ -2029,23 +2029,23 @@ const NATS_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const BLOB_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...NATS_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-blob-protocol': [],
+  'makosh-blob-protocol': [],
 };
 
 const BLOB_RUNTIME_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...BLOB_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-blob-client-contract': [],
-  'hermes-blob-client': [
+  'makosh-blob-client-contract': [],
+  'makosh-blob-client': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
   ],
-  'hermes-blob-runtime': [
+  'makosh-blob-runtime': [
     { name: 'chacha20poly1305', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: ['alloc', 'zeroize'] },
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-blob-service': [
+  'makosh-blob-service': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'p256', kind: 'normal', source: 'crates_io', version: '=0.14.0', defaultFeatures: false, features: ['ecdsa'] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -2055,7 +2055,7 @@ const BLOB_RUNTIME_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const SCHEDULER_PROTOCOL_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...BLOB_RUNTIME_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-scheduler-protocol': [
+  'makosh-scheduler-protocol': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
@@ -2064,7 +2064,7 @@ const SCHEDULER_PROTOCOL_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const SCHEDULER_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...SCHEDULER_PROTOCOL_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-scheduler': [
+  'makosh-scheduler': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
   ],
@@ -2072,7 +2072,7 @@ const SCHEDULER_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const SCHEDULER_PERSISTENCE_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...SCHEDULER_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-scheduler-persistence': [
+  'makosh-scheduler-persistence': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
@@ -2081,8 +2081,8 @@ const SCHEDULER_PERSISTENCE_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const GATEWAY_SESSION_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...SCHEDULER_PERSISTENCE_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-gateway-session-contract': [],
-  'hermes-gateway-session': [
+  'makosh-gateway-session-contract': [],
+  'makosh-gateway-session': [
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
     { name: 'p256', kind: 'normal', source: 'crates_io', version: '=0.14.0', defaultFeatures: false, features: ['ecdsa'] },
     { name: 'serde_cbor_2', kind: 'normal', source: 'crates_io', version: '=0.13.0', defaultFeatures: true, features: [] },
@@ -2097,7 +2097,7 @@ const SCHEDULER_RECEIPT_DELIVERY_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const SCHEDULER_JETSTREAM_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...SCHEDULER_RECEIPT_DELIVERY_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-scheduler-jetstream': [
+  'makosh-scheduler-jetstream': [
     { name: 'async-nats', kind: 'normal', source: 'crates_io', version: '=0.49.1', defaultFeatures: true, features: [] },
     { name: 'futures-util', kind: 'normal', source: 'crates_io', version: '=0.3.32', defaultFeatures: true, features: [] },
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
@@ -2109,7 +2109,7 @@ const SCHEDULER_JETSTREAM_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const SCHEDULER_RUNTIME_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...SCHEDULER_JETSTREAM_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-scheduler-runtime': [
+  'makosh-scheduler-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['net', 'rt-multi-thread', 'time'] },
@@ -2119,16 +2119,16 @@ const SCHEDULER_RUNTIME_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const GATEWAY_RUNTIME_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...SCHEDULER_RUNTIME_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-gateway-protocol': PROTOCOL_THIRD_PARTY_DEPENDENCIES,
-  'hermes-kernel': [
-    ...SCHEDULER_RUNTIME_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST['hermes-kernel'],
+  'makosh-gateway-protocol': PROTOCOL_THIRD_PARTY_DEPENDENCIES,
+  'makosh-kernel': [
+    ...SCHEDULER_RUNTIME_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST['makosh-kernel'],
     { name: 'chacha20poly1305', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: ['alloc', 'zeroize'] },
     { name: 'quinn', kind: 'normal', source: 'crates_io', version: '=0.11.7', defaultFeatures: true, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['net', 'rt-multi-thread', 'sync', 'time'] },
     { name: 'tokio-rustls', kind: 'normal', source: 'crates_io', version: '=0.26.4', defaultFeatures: true, features: [] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-gateway-runtime': [
+  'makosh-gateway-runtime': [
     { name: 'base64', kind: 'normal', source: 'crates_io', version: '=0.22.1', defaultFeatures: true, features: [] },
     { name: 'bytes', kind: 'normal', source: 'crates_io', version: '=1.12.1', defaultFeatures: true, features: [] },
     { name: 'futures-util', kind: 'normal', source: 'crates_io', version: '=0.3.32', defaultFeatures: true, features: [] },
@@ -2149,29 +2149,29 @@ const GATEWAY_RUNTIME_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const MAIL_COMMUNICATIONS_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...GATEWAY_RUNTIME_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-blob-client-contract': [],
-  'hermes-blob-client': [
+  'makosh-blob-client-contract': [],
+  'makosh-blob-client': [
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.3.4', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.10.9', defaultFeatures: true, features: [] },
   ],
-  'hermes-mail-api': [
+  'makosh-mail-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-mail-core': [
+  'makosh-mail-core': [
     { name: 'base64', kind: 'normal', source: 'crates_io', version: '=0.22.1', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-mail-imap': [
+  'makosh-mail-imap': [
     { name: 'async-imap', kind: 'normal', source: 'crates_io', version: '=0.11.2', defaultFeatures: true, features: [] },
     { name: 'async-native-tls', kind: 'normal', source: 'crates_io', version: '=0.6.0', defaultFeatures: true, features: [] },
     { name: 'async-std', kind: 'normal', source: 'crates_io', version: '=1.13.2', defaultFeatures: true, features: [] },
     { name: 'futures-util', kind: 'normal', source: 'crates_io', version: '=0.3.32', defaultFeatures: true, features: [] },
     { name: 'imap-proto', kind: 'normal', source: 'crates_io', version: '=0.16.7', defaultFeatures: true, features: [] },
   ],
-  'hermes-mail-gmail': [
+  'makosh-mail-gmail': [
     { name: 'async-native-tls', kind: 'normal', source: 'crates_io', version: '=0.6.0', defaultFeatures: true, features: [] },
     { name: 'async-std', kind: 'normal', source: 'crates_io', version: '=1.13.2', defaultFeatures: true, features: [] },
     { name: 'base64', kind: 'normal', source: 'crates_io', version: '=0.22.1', defaultFeatures: true, features: [] },
@@ -2179,16 +2179,16 @@ const MAIL_COMMUNICATIONS_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: true, features: ['derive'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
   ],
-  'hermes-mail-smtp': [
+  'makosh-mail-smtp': [
     { name: 'async-native-tls', kind: 'normal', source: 'crates_io', version: '=0.6.0', defaultFeatures: true, features: [] },
     { name: 'async-std', kind: 'normal', source: 'crates_io', version: '=1.13.2', defaultFeatures: true, features: [] },
   ],
-  'hermes-mail-persistence': [
+  'makosh-mail-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-mail-runtime': [
+  'makosh-mail-runtime': [
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -2196,33 +2196,33 @@ const MAIL_COMMUNICATIONS_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-mail-assembly': [
+  'makosh-mail-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
   ],
-  'hermes-telegram-api': [
+  'makosh-telegram-api': [
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive'] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-telegram-core': [
+  'makosh-telegram-core': [
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.10.9', defaultFeatures: true, features: [] },
   ],
-  'hermes-telegram-tdlib': [
+  'makosh-telegram-tdlib': [
     { name: 'base64', kind: 'normal', source: 'crates_io', version: '=0.22.1', defaultFeatures: true, features: [] },
     { name: 'libloading', kind: 'normal', source: 'crates_io', version: '=0.8.9', defaultFeatures: true, features: [] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-telegram-persistence': [
+  'makosh-telegram-persistence': [
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.10.9', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['json', 'postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
-  'hermes-telegram-runtime': [
+  'makosh-telegram-runtime': [
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -2231,47 +2231,47 @@ const MAIL_COMMUNICATIONS_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt', 'rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-telegram-assembly': [
+  'makosh-telegram-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
   ],
-  'hermes-whatsapp-api': [
+  'makosh-whatsapp-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['alloc', 'derive'] },
   ],
-  'hermes-whatsapp-core': [],
-  'hermes-whatsapp-persistence': [
+  'makosh-whatsapp-core': [],
+  'makosh-whatsapp-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
-  'hermes-whatsapp-runtime': [
+  'makosh-whatsapp-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread'] },
   ],
-  'hermes-whatsapp-assembly': [
+  'makosh-whatsapp-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
   ],
-  'hermes-zulip-api': [
+  'makosh-zulip-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-zulip-core': [],
-  'hermes-zulip-http': [
+  'makosh-zulip-core': [],
+  'makosh-zulip-http': [
     { name: 'async-native-tls', kind: 'normal', source: 'crates_io', version: '=0.6.0', defaultFeatures: true, features: [] },
     { name: 'async-std', kind: 'normal', source: 'crates_io', version: '=1.13.2', defaultFeatures: true, features: [] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-zulip-persistence': [{ name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] }],
-  'hermes-zulip-runtime': [
+  'makosh-zulip-persistence': [{ name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] }],
+  'makosh-zulip-runtime': [
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -2279,7 +2279,7 @@ const MAIL_COMMUNICATIONS_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-communications-ingress': [
+  'makosh-communications-ingress': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -2287,7 +2287,7 @@ const MAIL_COMMUNICATIONS_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communications-attachment-contract': [
+  'makosh-communications-attachment-contract': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -2295,20 +2295,20 @@ const MAIL_COMMUNICATIONS_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communications-api': [
+  'makosh-communications-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communications-domain': [
+  'makosh-communications-domain': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communications-persistence': [
+  'makosh-communications-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
-  'hermes-communications-runtime': [
+  'makosh-communications-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -2316,7 +2316,7 @@ const MAIL_COMMUNICATIONS_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt', 'rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-communications-assembly': [
+  'makosh-communications-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -2332,7 +2332,7 @@ const FIRST_OWNER_THIRD_PARTY_DEPENDENCY_ALLOWLIST = Object.fromEntries(
 
 const ATTACHMENT_SECURITY_ENGINE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...FIRST_OWNER_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-security-contract': [
+  'makosh-attachment-security-contract': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -2340,18 +2340,18 @@ const ATTACHMENT_SECURITY_ENGINE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-attachment-security-core': [
+  'makosh-attachment-security-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-attachment-security-clamav': [
+  'makosh-attachment-security-clamav': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-attachment-security-persistence': [
+  'makosh-attachment-security-persistence': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
-  'hermes-attachment-security-runtime': [
+  'makosh-attachment-security-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -2359,7 +2359,7 @@ const ATTACHMENT_SECURITY_ENGINE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-attachment-security-assembly': [
+  'makosh-attachment-security-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -2380,23 +2380,23 @@ const MAIL_OUTBOUND_MIME_ATTACHMENTS_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATIONS_CONTENT_READ_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...MAIL_OUTBOUND_MIME_ATTACHMENTS_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-content-api': [
+  'makosh-communications-content-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communications-runtime': [
+  'makosh-communications-runtime': [
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: true, features: [] },
     ...MAIL_COMMUNICATIONS_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST[
-      'hermes-communications-runtime'
+      'makosh-communications-runtime'
     ],
   ],
 };
 
 const COMMUNICATIONS_SAVED_SEARCH_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_CONTENT_READ_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-saved-query-api': [
+  'makosh-communications-saved-query-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
@@ -2406,7 +2406,7 @@ const COMMUNICATIONS_SAVED_SEARCH_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATIONS_SENDER_INSIGHTS_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_SAVED_SEARCH_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-sender-insights-api': [
+  'makosh-communications-sender-insights-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
@@ -2416,377 +2416,377 @@ const COMMUNICATIONS_SENDER_INSIGHTS_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATION_DELIVERY_INTENT_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_EXPORT_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delivery-intent-api': [],
-  'hermes-communication-delivery-intent-core': [
-    { name: 'hermes-communications-api', kind: 'normal' },
+  'makosh-communication-delivery-intent-api': [],
+  'makosh-communication-delivery-intent-core': [
+    { name: 'makosh-communications-api', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_DELIVERY_INTENT_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELIVERY_INTENT_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delivery-intent-persistence': [
-    { name: 'hermes-communication-delivery-intent-core', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-delivery-intent-persistence': [
+    { name: 'makosh-communication-delivery-intent-core', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_DELIVERY_INTENT_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELIVERY_INTENT_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delivery-intent-runtime': [
-    { name: 'hermes-communication-delivery-intent-api', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-core', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-event-adapters', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-persistence', kind: 'normal' },
-    { name: 'hermes-communications-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communication-delivery-intent-runtime': [
+    { name: 'makosh-communication-delivery-intent-api', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-core', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-event-adapters', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-persistence', kind: 'normal' },
+    { name: 'makosh-communications-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_DELIVERY_INTENT_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELIVERY_INTENT_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delivery-intent-assembly': [
-    { name: 'hermes-communication-delivery-intent-persistence', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-delivery-intent-assembly': [
+    { name: 'makosh-communication-delivery-intent-persistence', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const DELIVERY_INTENT_TRANSACTIONAL_EVENT_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELIVERY_INTENT_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-delivery-intent-contract': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-mail-delivery-intent-contract': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-telegram-delivery-intent-contract': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-telegram-delivery-intent-contract': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-whatsapp-delivery-intent-contract': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-whatsapp-delivery-intent-contract': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-zulip-delivery-intent-contract': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-zulip-delivery-intent-contract': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-communication-delivery-intent-event-adapters': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-mail-delivery-intent-contract', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-telegram-delivery-intent-contract', kind: 'normal' },
-    { name: 'hermes-whatsapp-delivery-intent-contract', kind: 'normal' },
-    { name: 'hermes-zulip-delivery-intent-contract', kind: 'normal' },
+  'makosh-communication-delivery-intent-event-adapters': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-mail-delivery-intent-contract', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-telegram-delivery-intent-contract', kind: 'normal' },
+    { name: 'makosh-whatsapp-delivery-intent-contract', kind: 'normal' },
+    { name: 'makosh-zulip-delivery-intent-contract', kind: 'normal' },
   ],
 };
 
 const DELIVERY_INTENT_TARGET_BOUND_BLOB_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...DELIVERY_INTENT_TRANSACTIONAL_EVENT_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-runtime': [
-    { name: 'hermes-mail-api', kind: 'normal' },
-    { name: 'hermes-mail-core', kind: 'normal' },
-    { name: 'hermes-mail-imap', kind: 'normal' },
-    { name: 'hermes-mail-gmail', kind: 'normal' },
-    { name: 'hermes-mail-smtp', kind: 'normal' },
-    { name: 'hermes-mail-persistence', kind: 'normal' },
-    { name: 'hermes-mail-delivery-intent-contract', kind: 'normal' },
-    { name: 'hermes-attachment-security-contract', kind: 'normal' },
-    { name: 'hermes-communications-attachment-contract', kind: 'normal' },
-    { name: 'hermes-communications-ingress', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-managed-vault-client', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
-    { name: 'hermes-vault-protocol', kind: 'normal' },
+  'makosh-mail-runtime': [
+    { name: 'makosh-mail-api', kind: 'normal' },
+    { name: 'makosh-mail-core', kind: 'normal' },
+    { name: 'makosh-mail-imap', kind: 'normal' },
+    { name: 'makosh-mail-gmail', kind: 'normal' },
+    { name: 'makosh-mail-smtp', kind: 'normal' },
+    { name: 'makosh-mail-persistence', kind: 'normal' },
+    { name: 'makosh-mail-delivery-intent-contract', kind: 'normal' },
+    { name: 'makosh-attachment-security-contract', kind: 'normal' },
+    { name: 'makosh-communications-attachment-contract', kind: 'normal' },
+    { name: 'makosh-communications-ingress', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-managed-vault-client', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+    { name: 'makosh-vault-protocol', kind: 'normal' },
   ],
-  'hermes-communication-delivery-intent-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-api', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-core', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-event-adapters', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-persistence', kind: 'normal' },
-    { name: 'hermes-communications-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-mail-delivery-intent-contract', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
-    { name: 'hermes-telegram-delivery-intent-contract', kind: 'normal' },
-    { name: 'hermes-whatsapp-delivery-intent-contract', kind: 'normal' },
-    { name: 'hermes-zulip-delivery-intent-contract', kind: 'normal' },
+  'makosh-communication-delivery-intent-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-api', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-core', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-event-adapters', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-persistence', kind: 'normal' },
+    { name: 'makosh-communications-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-mail-delivery-intent-contract', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+    { name: 'makosh-telegram-delivery-intent-contract', kind: 'normal' },
+    { name: 'makosh-whatsapp-delivery-intent-contract', kind: 'normal' },
+    { name: 'makosh-zulip-delivery-intent-contract', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_BULK_ACTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...DELIVERY_INTENT_TARGET_BOUND_BLOB_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-bulk-action-api': [],
-  'hermes-communication-bulk-action-core': [],
+  'makosh-communication-bulk-action-api': [],
+  'makosh-communication-bulk-action-core': [],
 };
 
 const COMMUNICATION_BULK_ACTION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_BULK_ACTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-bulk-action-persistence': [
-    { name: 'hermes-communication-bulk-action-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-bulk-action-persistence': [
+    { name: 'makosh-communication-bulk-action-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_BULK_ACTION_RUNTIME_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_BULK_ACTION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-bulk-action-runtime': [
-    { name: 'hermes-communication-bulk-action-api', kind: 'normal' },
-    { name: 'hermes-communication-bulk-action-core', kind: 'normal' },
-    { name: 'hermes-communication-bulk-action-persistence', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-api', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communication-bulk-action-runtime': [
+    { name: 'makosh-communication-bulk-action-api', kind: 'normal' },
+    { name: 'makosh-communication-bulk-action-core', kind: 'normal' },
+    { name: 'makosh-communication-bulk-action-persistence', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-api', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_BULK_ACTION_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_BULK_ACTION_RUNTIME_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-bulk-action-assembly': [
-    { name: 'hermes-communication-bulk-action-persistence', kind: 'normal' },
-    { name: 'hermes-communication-bulk-action-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-bulk-action-assembly': [
+    { name: 'makosh-communication-bulk-action-persistence', kind: 'normal' },
+    { name: 'makosh-communication-bulk-action-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_DELAYED_DELIVERY_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_BULK_ACTION_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-api': [],
-  'hermes-communication-delayed-delivery-core': [],
+  'makosh-communication-delayed-delivery-api': [],
+  'makosh-communication-delayed-delivery-core': [],
 };
 
 const COMMUNICATION_DELAYED_DELIVERY_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-persistence': [
-    { name: 'hermes-communication-delayed-delivery-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-delayed-delivery-persistence': [
+    { name: 'makosh-communication-delayed-delivery-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_DELAYED_DELIVERY_EXECUTION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-execution': [
-    { name: 'hermes-communication-delivery-intent-api', kind: 'normal' },
+  'makosh-communication-delayed-delivery-execution': [
+    { name: 'makosh-communication-delivery-intent-api', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_DELAYED_DELIVERY_EVENT_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_EXECUTION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-event-adapters': [
-    { name: 'hermes-communication-delayed-delivery-api', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-scheduler-protocol', kind: 'normal' },
+  'makosh-communication-delayed-delivery-event-adapters': [
+    { name: 'makosh-communication-delayed-delivery-api', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-scheduler-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_EVENT_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-runtime-adapters': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communication-delayed-delivery-api', kind: 'normal' },
-    { name: 'hermes-communication-delayed-delivery-execution', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-api', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-communication-delayed-delivery-runtime-adapters': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communication-delayed-delivery-api', kind: 'normal' },
+    { name: 'makosh-communication-delayed-delivery-execution', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-api', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_DELAYED_DELIVERY_STORE_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-store-adapters': [
-    { name: 'hermes-communication-delayed-delivery-execution', kind: 'normal' },
-    { name: 'hermes-communication-delayed-delivery-persistence', kind: 'normal' },
+  'makosh-communication-delayed-delivery-store-adapters': [
+    { name: 'makosh-communication-delayed-delivery-execution', kind: 'normal' },
+    { name: 'makosh-communication-delayed-delivery-persistence', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_DELAYED_DELIVERY_MANAGED_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_STORE_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-runtime': [
-    { name: 'hermes-communication-delayed-delivery-api', kind: 'normal' },
-    { name: 'hermes-communication-delayed-delivery-core', kind: 'normal' },
-    { name: 'hermes-communication-delayed-delivery-event-adapters', kind: 'normal' },
-    { name: 'hermes-communication-delayed-delivery-execution', kind: 'normal' },
-    { name: 'hermes-communication-delayed-delivery-persistence', kind: 'normal' },
-    { name: 'hermes-communication-delayed-delivery-runtime-adapters', kind: 'normal' },
-    { name: 'hermes-communication-delayed-delivery-store-adapters', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-scheduler-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communication-delayed-delivery-runtime': [
+    { name: 'makosh-communication-delayed-delivery-api', kind: 'normal' },
+    { name: 'makosh-communication-delayed-delivery-core', kind: 'normal' },
+    { name: 'makosh-communication-delayed-delivery-event-adapters', kind: 'normal' },
+    { name: 'makosh-communication-delayed-delivery-execution', kind: 'normal' },
+    { name: 'makosh-communication-delayed-delivery-persistence', kind: 'normal' },
+    { name: 'makosh-communication-delayed-delivery-runtime-adapters', kind: 'normal' },
+    { name: 'makosh-communication-delayed-delivery-store-adapters', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-scheduler-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_DELAYED_DELIVERY_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_MANAGED_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-assembly': [
-    { name: 'hermes-communication-delayed-delivery-persistence', kind: 'normal' },
-    { name: 'hermes-communication-delayed-delivery-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-delayed-delivery-assembly': [
+    { name: 'makosh-communication-delayed-delivery-persistence', kind: 'normal' },
+    { name: 'makosh-communication-delayed-delivery-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-cross-channel-forward-api': [],
-  'hermes-communication-cross-channel-forward-core': [],
+  'makosh-communication-cross-channel-forward-api': [],
+  'makosh-communication-cross-channel-forward-core': [],
 };
 
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-cross-channel-forward-persistence': [
-    { name: 'hermes-communication-cross-channel-forward-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-cross-channel-forward-persistence': [
+    { name: 'makosh-communication-cross-channel-forward-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_SOURCE_CONTRACT_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-runtime':
+  'makosh-communications-runtime':
     COMMUNICATION_CROSS_CHANNEL_FORWARD_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST[
-      'hermes-communications-runtime'
+      'makosh-communications-runtime'
     ].flatMap((dependency) => (
-      dependency.name === 'hermes-communications-evidence-export-source-api'
+      dependency.name === 'makosh-communications-evidence-export-source-api'
         ? [
             dependency,
             {
-              name: 'hermes-communications-cross-channel-forward-source-api',
+              name: 'makosh-communications-cross-channel-forward-source-api',
               kind: 'normal',
             },
           ]
         : [dependency]
     )),
-  'hermes-communications-cross-channel-forward-source-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-communications-cross-channel-forward-source-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_DELIVERY_INTENT_INGRESS_CONTRACT_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_SOURCE_CONTRACT_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delivery-intent-ingress-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-communication-delivery-intent-ingress-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_EVENT_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELIVERY_INTENT_INGRESS_CONTRACT_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-cross-channel-forward-persistence': [
-    { name: 'hermes-communication-cross-channel-forward-core', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-cross-channel-forward-persistence': [
+    { name: 'makosh-communication-cross-channel-forward-core', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_MANAGED_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_EVENT_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-cross-channel-forward-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communication-cross-channel-forward-api', kind: 'normal' },
-    { name: 'hermes-communication-cross-channel-forward-core', kind: 'normal' },
-    { name: 'hermes-communication-cross-channel-forward-persistence', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-ingress-api', kind: 'normal' },
-    { name: 'hermes-communications-cross-channel-forward-source-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communication-cross-channel-forward-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communication-cross-channel-forward-api', kind: 'normal' },
+    { name: 'makosh-communication-cross-channel-forward-core', kind: 'normal' },
+    { name: 'makosh-communication-cross-channel-forward-persistence', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-ingress-api', kind: 'normal' },
+    { name: 'makosh-communications-cross-channel-forward-source-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_DELIVERY_INTENT_EVENT_INGRESS_CONSUMER_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_MANAGED_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delivery-intent-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-api', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-core', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-event-adapters', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-ingress-api', kind: 'normal' },
-    { name: 'hermes-communication-delivery-intent-persistence', kind: 'normal' },
-    { name: 'hermes-communications-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-mail-delivery-intent-contract', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
-    { name: 'hermes-telegram-delivery-intent-contract', kind: 'normal' },
-    { name: 'hermes-whatsapp-delivery-intent-contract', kind: 'normal' },
-    { name: 'hermes-zulip-delivery-intent-contract', kind: 'normal' },
+  'makosh-communication-delivery-intent-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-api', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-core', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-event-adapters', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-ingress-api', kind: 'normal' },
+    { name: 'makosh-communication-delivery-intent-persistence', kind: 'normal' },
+    { name: 'makosh-communications-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-mail-delivery-intent-contract', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+    { name: 'makosh-telegram-delivery-intent-contract', kind: 'normal' },
+    { name: 'makosh-whatsapp-delivery-intent-contract', kind: 'normal' },
+    { name: 'makosh-zulip-delivery-intent-contract', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_CLIENT_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELIVERY_INTENT_EVENT_INGRESS_CONSUMER_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-cross-channel-forward-assembly': [
-    { name: 'hermes-communication-cross-channel-forward-persistence', kind: 'normal' },
-    { name: 'hermes-communication-cross-channel-forward-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-cross-channel-forward-assembly': [
+    { name: 'makosh-communication-cross-channel-forward-persistence', kind: 'normal' },
+    { name: 'makosh-communication-cross-channel-forward-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATIONS_CALL_EVIDENCE_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_CLIENT_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-call-evidence-ingress': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-communications-call-evidence-ingress': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-communications-call-evidence-core': [
-    { name: 'hermes-communications-call-evidence-ingress', kind: 'normal' },
+  'makosh-communications-call-evidence-core': [
+    { name: 'makosh-communications-call-evidence-ingress', kind: 'normal' },
   ],
 };
 
 const COMMUNICATIONS_CALL_EVIDENCE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_CALL_EVIDENCE_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-call-evidence-persistence': [
-    { name: 'hermes-communications-call-evidence-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communications-call-evidence-persistence': [
+    { name: 'makosh-communications-call-evidence-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATIONS_CALL_EVIDENCE_MANAGED_CONSUMER_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_CALL_EVIDENCE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-runtime':
+  'makosh-communications-runtime':
     COMMUNICATIONS_CALL_EVIDENCE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST[
-      'hermes-communications-runtime'
+      'makosh-communications-runtime'
     ].flatMap((dependency) => (
-      dependency.name === 'hermes-communications-attachment-contract'
+      dependency.name === 'makosh-communications-attachment-contract'
         ? [
             dependency,
-            { name: 'hermes-communications-call-evidence-core', kind: 'normal' },
-            { name: 'hermes-communications-call-evidence-ingress', kind: 'normal' },
-            { name: 'hermes-communications-call-evidence-persistence', kind: 'normal' },
+            { name: 'makosh-communications-call-evidence-core', kind: 'normal' },
+            { name: 'makosh-communications-call-evidence-ingress', kind: 'normal' },
+            { name: 'makosh-communications-call-evidence-persistence', kind: 'normal' },
           ]
         : [dependency]
     )),
-  'hermes-communications-assembly':
+  'makosh-communications-assembly':
     COMMUNICATIONS_CALL_EVIDENCE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST[
-      'hermes-communications-assembly'
-    ].filter((dependency) => dependency.name !== 'hermes-communications-persistence'),
+      'makosh-communications-assembly'
+    ].filter((dependency) => dependency.name !== 'makosh-communications-persistence'),
 };
 
 const COMMUNICATIONS_CALL_EVIDENCE_QUERY_REALTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_CALL_EVIDENCE_MANAGED_CONSUMER_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-call-evidence-api': [],
-  'hermes-communications-runtime':
+  'makosh-communications-call-evidence-api': [],
+  'makosh-communications-runtime':
     COMMUNICATIONS_CALL_EVIDENCE_MANAGED_CONSUMER_WORKSPACE_DEPENDENCY_ALLOWLIST[
-      'hermes-communications-runtime'
+      'makosh-communications-runtime'
     ].flatMap((dependency) => (
-      dependency.name === 'hermes-communications-call-evidence-core'
+      dependency.name === 'makosh-communications-call-evidence-core'
         ? [
-            { name: 'hermes-communications-call-evidence-api', kind: 'normal' },
+            { name: 'makosh-communications-call-evidence-api', kind: 'normal' },
             dependency,
           ]
         : [dependency]
@@ -2795,1131 +2795,1131 @@ const COMMUNICATIONS_CALL_EVIDENCE_QUERY_REALTIME_WORKSPACE_DEPENDENCY_ALLOWLIST
 
 const REVIEW_COMMUNICATIONS_ATTENTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_CALL_EVIDENCE_QUERY_REALTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-review-attention-api': [],
-  'hermes-review-attention-core': [],
+  'makosh-review-attention-api': [],
+  'makosh-review-attention-core': [],
 };
 
 const REVIEW_COMMUNICATIONS_ATTENTION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_COMMUNICATIONS_ATTENTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-review-attention-persistence': [
-    { name: 'hermes-review-attention-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-review-attention-persistence': [
+    { name: 'makosh-review-attention-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const REVIEW_COMMUNICATIONS_ATTENTION_MANAGED_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_COMMUNICATIONS_ATTENTION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-review-attention-runtime': [
-    { name: 'hermes-review-attention-api', kind: 'normal' },
-    { name: 'hermes-review-attention-core', kind: 'normal' },
-    { name: 'hermes-review-attention-persistence', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-review-attention-runtime': [
+    { name: 'makosh-review-attention-api', kind: 'normal' },
+    { name: 'makosh-review-attention-core', kind: 'normal' },
+    { name: 'makosh-review-attention-persistence', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const REVIEW_COMMUNICATIONS_ATTENTION_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_COMMUNICATIONS_ATTENTION_MANAGED_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-review-attention-assembly': [
-    { name: 'hermes-review-attention-persistence', kind: 'normal' },
-    { name: 'hermes-review-attention-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-review-attention-assembly': [
+    { name: 'makosh-review-attention-persistence', kind: 'normal' },
+    { name: 'makosh-review-attention-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATIONS_AI_SOURCE_CONTRACT_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_COMMUNICATIONS_ATTENTION_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-runtime':
+  'makosh-communications-runtime':
     REVIEW_COMMUNICATIONS_ATTENTION_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST[
-      'hermes-communications-runtime'
+      'makosh-communications-runtime'
     ].flatMap((dependency) => (
-      dependency.name === 'hermes-communications-attachment-contract'
+      dependency.name === 'makosh-communications-attachment-contract'
         ? [
-            { name: 'hermes-communications-ai-source-api', kind: 'normal' },
+            { name: 'makosh-communications-ai-source-api', kind: 'normal' },
             dependency,
           ]
         : [dependency]
     )),
-  'hermes-communications-ai-source-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-communications-ai-source-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-communication-reply-suggestion-api': [],
-  'hermes-communication-reply-suggestion-core': [],
-  'hermes-communication-reply-suggestion-persistence': [
-    { name: 'hermes-communication-reply-suggestion-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-reply-suggestion-api': [],
+  'makosh-communication-reply-suggestion-core': [],
+  'makosh-communication-reply-suggestion-persistence': [
+    { name: 'makosh-communication-reply-suggestion-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-communication-reply-suggestion-runtime': [
-    { name: 'hermes-ai-contracts', kind: 'normal' },
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communication-reply-suggestion-api', kind: 'normal' },
-    { name: 'hermes-communication-reply-suggestion-core', kind: 'normal' },
-    { name: 'hermes-communication-reply-suggestion-persistence', kind: 'normal' },
-    { name: 'hermes-communications-ai-source-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communication-reply-suggestion-runtime': [
+    { name: 'makosh-ai-contracts', kind: 'normal' },
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communication-reply-suggestion-api', kind: 'normal' },
+    { name: 'makosh-communication-reply-suggestion-core', kind: 'normal' },
+    { name: 'makosh-communication-reply-suggestion-persistence', kind: 'normal' },
+    { name: 'makosh-communications-ai-source-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
-  'hermes-communication-reply-suggestion-assembly': [
-    { name: 'hermes-communication-reply-suggestion-persistence', kind: 'normal' },
-    { name: 'hermes-communication-reply-suggestion-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-reply-suggestion-assembly': [
+    { name: 'makosh-communication-reply-suggestion-persistence', kind: 'normal' },
+    { name: 'makosh-communication-reply-suggestion-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-ai-contracts': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-ai-contracts': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-ai-inference-core': [
-    { name: 'hermes-ai-contracts', kind: 'normal' },
+  'makosh-ai-inference-core': [
+    { name: 'makosh-ai-contracts', kind: 'normal' },
   ],
-  'hermes-ai-inference-persistence': [
-    { name: 'hermes-ai-contracts', kind: 'normal' },
-    { name: 'hermes-ai-inference-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-ai-inference-persistence': [
+    { name: 'makosh-ai-contracts', kind: 'normal' },
+    { name: 'makosh-ai-inference-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-ollama-ai-api': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-ollama-ai-api': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-ollama-ai-assembly': [
-    { name: 'hermes-ollama-ai-api', kind: 'normal' },
-    { name: 'hermes-ollama-ai-persistence', kind: 'normal' },
-    { name: 'hermes-ollama-ai-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-ollama-ai-assembly': [
+    { name: 'makosh-ollama-ai-api', kind: 'normal' },
+    { name: 'makosh-ollama-ai-persistence', kind: 'normal' },
+    { name: 'makosh-ollama-ai-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-ollama-ai-core': [
-    { name: 'hermes-ai-contracts', kind: 'normal' },
-    { name: 'hermes-ollama-ai-api', kind: 'normal' },
+  'makosh-ollama-ai-core': [
+    { name: 'makosh-ai-contracts', kind: 'normal' },
+    { name: 'makosh-ollama-ai-api', kind: 'normal' },
   ],
-  'hermes-ollama-ai-http': [
-    { name: 'hermes-ollama-ai-api', kind: 'normal' },
-    { name: 'hermes-ollama-ai-core', kind: 'normal' },
+  'makosh-ollama-ai-http': [
+    { name: 'makosh-ollama-ai-api', kind: 'normal' },
+    { name: 'makosh-ollama-ai-core', kind: 'normal' },
   ],
-  'hermes-ollama-ai-persistence': [
-    { name: 'hermes-ai-contracts', kind: 'normal' },
-    { name: 'hermes-ollama-ai-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-ollama-ai-persistence': [
+    { name: 'makosh-ai-contracts', kind: 'normal' },
+    { name: 'makosh-ollama-ai-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-ollama-ai-runtime': [
-    { name: 'hermes-ai-contracts', kind: 'normal' },
-    { name: 'hermes-ollama-ai-api', kind: 'normal' },
-    { name: 'hermes-ollama-ai-core', kind: 'normal' },
-    { name: 'hermes-ollama-ai-http', kind: 'normal' },
-    { name: 'hermes-ollama-ai-persistence', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-ollama-ai-runtime': [
+    { name: 'makosh-ai-contracts', kind: 'normal' },
+    { name: 'makosh-ollama-ai-api', kind: 'normal' },
+    { name: 'makosh-ollama-ai-core', kind: 'normal' },
+    { name: 'makosh-ollama-ai-http', kind: 'normal' },
+    { name: 'makosh-ollama-ai-persistence', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_ARCHIVE_INSPECTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_AI_SOURCE_CONTRACT_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-archive-inspection-api': [],
-  'hermes-attachment-archive-inspection-ingress': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-attachment-archive-inspection-api': [],
+  'makosh-attachment-archive-inspection-ingress': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-attachment-archive-inspection-core': [
-    { name: 'hermes-attachment-archive-inspection-api', kind: 'normal' },
+  'makosh-attachment-archive-inspection-core': [
+    { name: 'makosh-attachment-archive-inspection-api', kind: 'normal' },
   ],
-  'hermes-attachment-archive-inspection-zip': [
-    { name: 'hermes-attachment-archive-inspection-core', kind: 'normal' },
+  'makosh-attachment-archive-inspection-zip': [
+    { name: 'makosh-attachment-archive-inspection-core', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_ARCHIVE_INSPECTION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_ARCHIVE_INSPECTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-archive-inspection-persistence': [
-    { name: 'hermes-attachment-archive-inspection-core', kind: 'normal' },
-    { name: 'hermes-attachment-archive-inspection-ingress', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-attachment-archive-inspection-persistence': [
+    { name: 'makosh-attachment-archive-inspection-core', kind: 'normal' },
+    { name: 'makosh-attachment-archive-inspection-ingress', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_ARCHIVE_INSPECTION_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_ARCHIVE_INSPECTION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-archive-inspection-runtime': [
-    { name: 'hermes-attachment-archive-inspection-api', kind: 'normal' },
-    { name: 'hermes-attachment-archive-inspection-core', kind: 'normal' },
-    { name: 'hermes-attachment-archive-inspection-ingress', kind: 'normal' },
-    { name: 'hermes-attachment-archive-inspection-persistence', kind: 'normal' },
-    { name: 'hermes-attachment-archive-inspection-zip', kind: 'normal' },
-    { name: 'hermes-attachment-security-contract', kind: 'normal' },
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communications-attachment-contract', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-attachment-archive-inspection-runtime': [
+    { name: 'makosh-attachment-archive-inspection-api', kind: 'normal' },
+    { name: 'makosh-attachment-archive-inspection-core', kind: 'normal' },
+    { name: 'makosh-attachment-archive-inspection-ingress', kind: 'normal' },
+    { name: 'makosh-attachment-archive-inspection-persistence', kind: 'normal' },
+    { name: 'makosh-attachment-archive-inspection-zip', kind: 'normal' },
+    { name: 'makosh-attachment-security-contract', kind: 'normal' },
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communications-attachment-contract', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_ARCHIVE_INSPECTION_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_ARCHIVE_INSPECTION_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-archive-inspection-assembly': [
-    { name: 'hermes-attachment-archive-inspection-api', kind: 'normal' },
-    { name: 'hermes-attachment-archive-inspection-persistence', kind: 'normal' },
-    { name: 'hermes-attachment-archive-inspection-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-attachment-archive-inspection-assembly': [
+    { name: 'makosh-attachment-archive-inspection-api', kind: 'normal' },
+    { name: 'makosh-attachment-archive-inspection-persistence', kind: 'normal' },
+    { name: 'makosh-attachment-archive-inspection-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_SUMMARY_BUILD_UNITS_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_ARCHIVE_INSPECTION_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-summary-api': [],
-  'hermes-communication-summary-core': [],
-  'hermes-communication-summary-persistence': [
-    { name: 'hermes-communication-summary-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-summary-api': [],
+  'makosh-communication-summary-core': [],
+  'makosh-communication-summary-persistence': [
+    { name: 'makosh-communication-summary-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-communication-summary-runtime': [
-    { name: 'hermes-ai-contracts', kind: 'normal' },
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communication-summary-api', kind: 'normal' },
-    { name: 'hermes-communication-summary-core', kind: 'normal' },
-    { name: 'hermes-communication-summary-persistence', kind: 'normal' },
-    { name: 'hermes-communications-ai-source-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communication-summary-runtime': [
+    { name: 'makosh-ai-contracts', kind: 'normal' },
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communication-summary-api', kind: 'normal' },
+    { name: 'makosh-communication-summary-core', kind: 'normal' },
+    { name: 'makosh-communication-summary-persistence', kind: 'normal' },
+    { name: 'makosh-communications-ai-source-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
-  'hermes-communication-summary-assembly': [
-    { name: 'hermes-communication-summary-persistence', kind: 'normal' },
-    { name: 'hermes-communication-summary-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-summary-assembly': [
+    { name: 'makosh-communication-summary-persistence', kind: 'normal' },
+    { name: 'makosh-communication-summary-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_TRANSLATION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_SUMMARY_BUILD_UNITS_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-translation-api': [],
-  'hermes-communication-translation-core': [],
+  'makosh-communication-translation-api': [],
+  'makosh-communication-translation-core': [],
 };
 
 const COMMUNICATION_TRANSLATION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TRANSLATION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-translation-persistence': [
-    { name: 'hermes-communication-translation-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-translation-persistence': [
+    { name: 'makosh-communication-translation-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_TRANSLATION_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TRANSLATION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-translation-runtime': [
-    { name: 'hermes-ai-contracts', kind: 'normal' },
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communication-translation-api', kind: 'normal' },
-    { name: 'hermes-communication-translation-core', kind: 'normal' },
-    { name: 'hermes-communication-translation-persistence', kind: 'normal' },
-    { name: 'hermes-communications-ai-source-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communication-translation-runtime': [
+    { name: 'makosh-ai-contracts', kind: 'normal' },
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communication-translation-api', kind: 'normal' },
+    { name: 'makosh-communication-translation-core', kind: 'normal' },
+    { name: 'makosh-communication-translation-persistence', kind: 'normal' },
+    { name: 'makosh-communications-ai-source-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_TRANSLATION_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TRANSLATION_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-translation-assembly': [
-    { name: 'hermes-communication-translation-persistence', kind: 'normal' },
-    { name: 'hermes-communication-translation-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-translation-assembly': [
+    { name: 'makosh-communication-translation-persistence', kind: 'normal' },
+    { name: 'makosh-communication-translation-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_EXPLANATION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TRANSLATION_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-explanation-api': [],
-  'hermes-communication-explanation-core': [],
+  'makosh-communication-explanation-api': [],
+  'makosh-communication-explanation-core': [],
 };
 
 const COMMUNICATION_EXPLANATION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_EXPLANATION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-explanation-persistence': [
-    { name: 'hermes-communication-explanation-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-explanation-persistence': [
+    { name: 'makosh-communication-explanation-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_EXPLANATION_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_EXPLANATION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-explanation-runtime': [
-    { name: 'hermes-ai-contracts', kind: 'normal' },
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communication-explanation-api', kind: 'normal' },
-    { name: 'hermes-communication-explanation-core', kind: 'normal' },
-    { name: 'hermes-communication-explanation-persistence', kind: 'normal' },
-    { name: 'hermes-communications-ai-source-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communication-explanation-runtime': [
+    { name: 'makosh-ai-contracts', kind: 'normal' },
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communication-explanation-api', kind: 'normal' },
+    { name: 'makosh-communication-explanation-core', kind: 'normal' },
+    { name: 'makosh-communication-explanation-persistence', kind: 'normal' },
+    { name: 'makosh-communications-ai-source-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_EXPLANATION_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_EXPLANATION_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-explanation-assembly': [
-    { name: 'hermes-communication-explanation-persistence', kind: 'normal' },
-    { name: 'hermes-communication-explanation-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-explanation-assembly': [
+    { name: 'makosh-communication-explanation-persistence', kind: 'normal' },
+    { name: 'makosh-communication-explanation-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_EXPLANATION_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-recipient-suggestion-api': [],
-  'hermes-communication-recipient-suggestion-core': [],
+  'makosh-communication-recipient-suggestion-api': [],
+  'makosh-communication-recipient-suggestion-core': [],
 };
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_SOURCE_CONTRACT_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-recipient-source-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-communications-recipient-source-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-recipient-suggestion-persistence': [
-    { name: 'hermes-communication-recipient-suggestion-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-recipient-suggestion-persistence': [
+    { name: 'makosh-communication-recipient-suggestion-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-communications-recipient-source-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-communications-recipient-source-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-recipient-suggestion-persistence': [
-    { name: 'hermes-communication-recipient-suggestion-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-recipient-suggestion-persistence': [
+    { name: 'makosh-communication-recipient-suggestion-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-communication-recipient-suggestion-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communication-recipient-suggestion-api', kind: 'normal' },
-    { name: 'hermes-communication-recipient-suggestion-core', kind: 'normal' },
-    { name: 'hermes-communication-recipient-suggestion-persistence', kind: 'normal' },
-    { name: 'hermes-communications-recipient-source-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communication-recipient-suggestion-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communication-recipient-suggestion-api', kind: 'normal' },
+    { name: 'makosh-communication-recipient-suggestion-core', kind: 'normal' },
+    { name: 'makosh-communication-recipient-suggestion-persistence', kind: 'normal' },
+    { name: 'makosh-communications-recipient-source-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
-  'hermes-communications-recipient-source-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-communications-recipient-source-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_SOURCE_PRODUCER_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_RECIPIENT_SUGGESTION_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-runtime': [
-    ...COMMUNICATION_RECIPIENT_SUGGESTION_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST['hermes-communications-runtime'],
-    { name: 'hermes-communications-recipient-source-api', kind: 'normal' },
+  'makosh-communications-runtime': [
+    ...COMMUNICATION_RECIPIENT_SUGGESTION_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST['makosh-communications-runtime'],
+    { name: 'makosh-communications-recipient-source-api', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_RECIPIENT_SUGGESTION_SOURCE_PRODUCER_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-recipient-suggestion-assembly': [
-    { name: 'hermes-communication-recipient-suggestion-persistence', kind: 'normal' },
-    { name: 'hermes-communication-recipient-suggestion-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-recipient-suggestion-assembly': [
+    { name: 'makosh-communication-recipient-suggestion-persistence', kind: 'normal' },
+    { name: 'makosh-communication-recipient-suggestion-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_TASK_CANDIDATE_CONTRACT_CORE_SOURCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_RECIPIENT_SUGGESTION_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-task-candidate-api': [],
-  'hermes-communication-task-candidate-core': [],
-  'hermes-communications-task-source-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-communication-task-candidate-api': [],
+  'makosh-communication-task-candidate-core': [],
+  'makosh-communications-task-source-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_TASK_CANDIDATE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TASK_CANDIDATE_CONTRACT_CORE_SOURCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-task-candidate-persistence': [
-    { name: 'hermes-communication-task-candidate-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-task-candidate-persistence': [
+    { name: 'makosh-communication-task-candidate-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_TASK_CANDIDATE_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TASK_CANDIDATE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-task-candidate-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communication-task-candidate-api', kind: 'normal' },
-    { name: 'hermes-communication-task-candidate-core', kind: 'normal' },
-    { name: 'hermes-communication-task-candidate-persistence', kind: 'normal' },
-    { name: 'hermes-communications-task-source-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-review-task-candidate-api', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communication-task-candidate-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communication-task-candidate-api', kind: 'normal' },
+    { name: 'makosh-communication-task-candidate-core', kind: 'normal' },
+    { name: 'makosh-communication-task-candidate-persistence', kind: 'normal' },
+    { name: 'makosh-communications-task-source-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-review-task-candidate-api', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_TASK_CANDIDATE_SOURCE_PRODUCER_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TASK_CANDIDATE_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-runtime': [
-    ...COMMUNICATION_TASK_CANDIDATE_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST['hermes-communications-runtime'],
-    { name: 'hermes-communications-task-source-api', kind: 'normal' },
+  'makosh-communications-runtime': [
+    ...COMMUNICATION_TASK_CANDIDATE_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST['makosh-communications-runtime'],
+    { name: 'makosh-communications-task-source-api', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_TASK_CANDIDATE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TASK_CANDIDATE_SOURCE_PRODUCER_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-task-candidate-assembly': [
-    { name: 'hermes-communication-task-candidate-persistence', kind: 'normal' },
-    { name: 'hermes-communication-task-candidate-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-task-candidate-assembly': [
+    { name: 'makosh-communication-task-candidate-persistence', kind: 'normal' },
+    { name: 'makosh-communication-task-candidate-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const REVIEW_TASK_CANDIDATE_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TASK_CANDIDATE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-review-task-candidate-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-review-task-candidate-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-review-task-candidate-core': [],
+  'makosh-review-task-candidate-core': [],
 };
 
 const REVIEW_TASK_CANDIDATE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_TASK_CANDIDATE_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-review-task-candidate-persistence': [
-    { name: 'hermes-review-task-candidate-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-review-task-candidate-persistence': [
+    { name: 'makosh-review-task-candidate-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const REVIEW_TASK_CANDIDATE_MANAGED_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_TASK_CANDIDATE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-review-task-candidate-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-review-task-candidate-api', kind: 'normal' },
-    { name: 'hermes-review-task-candidate-core', kind: 'normal' },
-    { name: 'hermes-review-task-candidate-persistence', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-review-task-candidate-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-review-task-candidate-api', kind: 'normal' },
+    { name: 'makosh-review-task-candidate-core', kind: 'normal' },
+    { name: 'makosh-review-task-candidate-persistence', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const REVIEW_TASK_CANDIDATE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_TASK_CANDIDATE_MANAGED_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-review-task-candidate-assembly': [
-    { name: 'hermes-review-task-candidate-persistence', kind: 'normal' },
-    { name: 'hermes-review-task-candidate-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-review-task-candidate-assembly': [
+    { name: 'makosh-review-task-candidate-persistence', kind: 'normal' },
+    { name: 'makosh-review-task-candidate-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const TASKS_REVIEWED_CANDIDATE_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_TASK_CANDIDATE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-tasks-command-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-tasks-command-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-tasks-core': [],
+  'makosh-tasks-core': [],
 };
 
 const TASKS_REVIEWED_CANDIDATE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...TASKS_REVIEWED_CANDIDATE_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-tasks-persistence': [
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-tasks-core', kind: 'normal' },
+  'makosh-tasks-persistence': [
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-tasks-core', kind: 'normal' },
   ],
 };
 
 const TASKS_REVIEWED_CANDIDATE_MANAGED_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...TASKS_REVIEWED_CANDIDATE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-tasks-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
-    { name: 'hermes-tasks-command-api', kind: 'normal' },
-    { name: 'hermes-tasks-core', kind: 'normal' },
-    { name: 'hermes-tasks-persistence', kind: 'normal' },
+  'makosh-tasks-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+    { name: 'makosh-tasks-command-api', kind: 'normal' },
+    { name: 'makosh-tasks-core', kind: 'normal' },
+    { name: 'makosh-tasks-persistence', kind: 'normal' },
   ],
 };
 
 const TASKS_REVIEWED_CANDIDATE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...TASKS_REVIEWED_CANDIDATE_MANAGED_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-tasks-assembly': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-tasks-persistence', kind: 'normal' },
-    { name: 'hermes-tasks-runtime', kind: 'normal' },
+  'makosh-tasks-assembly': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-tasks-persistence', kind: 'normal' },
+    { name: 'makosh-tasks-runtime', kind: 'normal' },
   ],
 };
 
 const REVIEWED_TASK_CANDIDATE_PROMOTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...TASKS_REVIEWED_CANDIDATE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-review-task-candidate-promotion-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-review-task-candidate-promotion-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-reviewed-task-candidate-promotion-core': [],
+  'makosh-reviewed-task-candidate-promotion-core': [],
 };
 
 const REVIEWED_TASK_CANDIDATE_PROMOTION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEWED_TASK_CANDIDATE_PROMOTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-reviewed-task-candidate-promotion-persistence': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-reviewed-task-candidate-promotion-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-reviewed-task-candidate-promotion-persistence': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-reviewed-task-candidate-promotion-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const REVIEWED_TASK_CANDIDATE_PROMOTION_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEWED_TASK_CANDIDATE_PROMOTION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-reviewed-task-candidate-promotion-runtime': [
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-review-task-candidate-api', kind: 'normal' },
-    { name: 'hermes-review-task-candidate-promotion-api', kind: 'normal' },
-    { name: 'hermes-reviewed-task-candidate-promotion-core', kind: 'normal' },
-    { name: 'hermes-reviewed-task-candidate-promotion-persistence', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
-    { name: 'hermes-tasks-command-api', kind: 'normal' },
+  'makosh-reviewed-task-candidate-promotion-runtime': [
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-review-task-candidate-api', kind: 'normal' },
+    { name: 'makosh-review-task-candidate-promotion-api', kind: 'normal' },
+    { name: 'makosh-reviewed-task-candidate-promotion-core', kind: 'normal' },
+    { name: 'makosh-reviewed-task-candidate-promotion-persistence', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+    { name: 'makosh-tasks-command-api', kind: 'normal' },
   ],
 };
 
 const REVIEW_TASK_CANDIDATE_PROMOTION_RESULT_CONSUMER_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEWED_TASK_CANDIDATE_PROMOTION_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-review-task-candidate-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-review-task-candidate-api', kind: 'normal' },
-    { name: 'hermes-review-task-candidate-core', kind: 'normal' },
-    { name: 'hermes-review-task-candidate-persistence', kind: 'normal' },
-    { name: 'hermes-review-task-candidate-promotion-api', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-review-task-candidate-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-review-task-candidate-api', kind: 'normal' },
+    { name: 'makosh-review-task-candidate-core', kind: 'normal' },
+    { name: 'makosh-review-task-candidate-persistence', kind: 'normal' },
+    { name: 'makosh-review-task-candidate-promotion-api', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const REVIEWED_TASK_CANDIDATE_PROMOTION_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_TASK_CANDIDATE_PROMOTION_RESULT_CONSUMER_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-reviewed-task-candidate-promotion-assembly': [
-    { name: 'hermes-reviewed-task-candidate-promotion-persistence', kind: 'normal' },
-    { name: 'hermes-reviewed-task-candidate-promotion-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-reviewed-task-candidate-promotion-assembly': [
+    { name: 'makosh-reviewed-task-candidate-promotion-persistence', kind: 'normal' },
+    { name: 'makosh-reviewed-task-candidate-promotion-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_NOTE_CANDIDATE_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEWED_TASK_CANDIDATE_PROMOTION_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-note-candidate-api': [],
-  'hermes-communication-note-candidate-core': [],
-  'hermes-communications-note-source-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-communication-note-candidate-api': [],
+  'makosh-communication-note-candidate-core': [],
+  'makosh-communications-note-source-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_NOTE_CANDIDATE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_NOTE_CANDIDATE_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-note-candidate-persistence': [
-    { name: 'hermes-communication-note-candidate-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-note-candidate-persistence': [
+    { name: 'makosh-communication-note-candidate-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const REVIEW_NOTE_CANDIDATE_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_NOTE_CANDIDATE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-review-note-candidate-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-review-note-candidate-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-review-note-candidate-core': [],
+  'makosh-review-note-candidate-core': [],
 };
 
 const KNOWLEDGE_VERIFIED_NOTE_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_NOTE_CANDIDATE_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-knowledge-command-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-knowledge-command-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-knowledge-core': [],
+  'makosh-knowledge-core': [],
 };
 
 const KNOWLEDGE_VERIFIED_NOTE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...KNOWLEDGE_VERIFIED_NOTE_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-knowledge-persistence': [
-    { name: 'hermes-knowledge-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-knowledge-persistence': [
+    { name: 'makosh-knowledge-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const KNOWLEDGE_VERIFIED_NOTE_MANAGED_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...KNOWLEDGE_VERIFIED_NOTE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-knowledge-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-knowledge-command-api', kind: 'normal' },
-    { name: 'hermes-knowledge-core', kind: 'normal' },
-    { name: 'hermes-knowledge-persistence', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-knowledge-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-knowledge-command-api', kind: 'normal' },
+    { name: 'makosh-knowledge-core', kind: 'normal' },
+    { name: 'makosh-knowledge-persistence', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const KNOWLEDGE_VERIFIED_NOTE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...KNOWLEDGE_VERIFIED_NOTE_MANAGED_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-knowledge-assembly': [
-    { name: 'hermes-knowledge-persistence', kind: 'normal' },
-    { name: 'hermes-knowledge-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-knowledge-assembly': [
+    { name: 'makosh-knowledge-persistence', kind: 'normal' },
+    { name: 'makosh-knowledge-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const REVIEW_NOTE_CANDIDATE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...KNOWLEDGE_VERIFIED_NOTE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-review-note-candidate-persistence': [
-    { name: 'hermes-review-note-candidate-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-review-note-candidate-persistence': [
+    { name: 'makosh-review-note-candidate-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const REVIEW_NOTE_CANDIDATE_MANAGED_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_NOTE_CANDIDATE_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-review-note-candidate-promotion-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-review-note-candidate-promotion-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-review-note-candidate-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-review-note-candidate-api', kind: 'normal' },
-    { name: 'hermes-review-note-candidate-core', kind: 'normal' },
-    { name: 'hermes-review-note-candidate-persistence', kind: 'normal' },
-    { name: 'hermes-review-note-candidate-promotion-api', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-review-note-candidate-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-review-note-candidate-api', kind: 'normal' },
+    { name: 'makosh-review-note-candidate-core', kind: 'normal' },
+    { name: 'makosh-review-note-candidate-persistence', kind: 'normal' },
+    { name: 'makosh-review-note-candidate-promotion-api', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const REVIEW_NOTE_CANDIDATE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_NOTE_CANDIDATE_MANAGED_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-review-note-candidate-assembly': [
-    { name: 'hermes-review-note-candidate-persistence', kind: 'normal' },
-    { name: 'hermes-review-note-candidate-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-review-note-candidate-assembly': [
+    { name: 'makosh-review-note-candidate-persistence', kind: 'normal' },
+    { name: 'makosh-review-note-candidate-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const REVIEWED_NOTE_CANDIDATE_PROMOTION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_NOTE_CANDIDATE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-reviewed-note-candidate-promotion-core': [],
-  'hermes-reviewed-note-candidate-promotion-persistence': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-reviewed-note-candidate-promotion-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-reviewed-note-candidate-promotion-core': [],
+  'makosh-reviewed-note-candidate-promotion-persistence': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-reviewed-note-candidate-promotion-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-reviewed-note-candidate-promotion-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-knowledge-command-api', kind: 'normal' },
-    { name: 'hermes-review-note-candidate-api', kind: 'normal' },
-    { name: 'hermes-review-note-candidate-promotion-api', kind: 'normal' },
-    { name: 'hermes-reviewed-note-candidate-promotion-core', kind: 'normal' },
-    { name: 'hermes-reviewed-note-candidate-promotion-persistence', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-reviewed-note-candidate-promotion-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-knowledge-command-api', kind: 'normal' },
+    { name: 'makosh-review-note-candidate-api', kind: 'normal' },
+    { name: 'makosh-review-note-candidate-promotion-api', kind: 'normal' },
+    { name: 'makosh-reviewed-note-candidate-promotion-core', kind: 'normal' },
+    { name: 'makosh-reviewed-note-candidate-promotion-persistence', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
-  'hermes-reviewed-note-candidate-promotion-assembly': [
-    { name: 'hermes-reviewed-note-candidate-promotion-persistence', kind: 'normal' },
-    { name: 'hermes-reviewed-note-candidate-promotion-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-reviewed-note-candidate-promotion-assembly': [
+    { name: 'makosh-reviewed-note-candidate-promotion-persistence', kind: 'normal' },
+    { name: 'makosh-reviewed-note-candidate-promotion-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATION_NOTE_CANDIDATE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...REVIEWED_NOTE_CANDIDATE_PROMOTION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-note-candidate-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communication-note-candidate-api', kind: 'normal' },
-    { name: 'hermes-communication-note-candidate-core', kind: 'normal' },
-    { name: 'hermes-communication-note-candidate-persistence', kind: 'normal' },
-    { name: 'hermes-communications-note-source-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-review-note-candidate-api', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-communication-note-candidate-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communication-note-candidate-api', kind: 'normal' },
+    { name: 'makosh-communication-note-candidate-core', kind: 'normal' },
+    { name: 'makosh-communication-note-candidate-persistence', kind: 'normal' },
+    { name: 'makosh-communications-note-source-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-review-note-candidate-api', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
-  'hermes-communication-note-candidate-assembly': [
-    { name: 'hermes-communication-note-candidate-persistence', kind: 'normal' },
-    { name: 'hermes-communication-note-candidate-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communication-note-candidate-assembly': [
+    { name: 'makosh-communication-note-candidate-persistence', kind: 'normal' },
+    { name: 'makosh-communication-note-candidate-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-communications-runtime': [
-    ...REVIEWED_NOTE_CANDIDATE_PROMOTION_WORKSPACE_DEPENDENCY_ALLOWLIST['hermes-communications-runtime'],
-    { name: 'hermes-communications-note-source-api', kind: 'normal' },
+  'makosh-communications-runtime': [
+    ...REVIEWED_NOTE_CANDIDATE_PROMOTION_WORKSPACE_DEPENDENCY_ALLOWLIST['makosh-communications-runtime'],
+    { name: 'makosh-communications-note-source-api', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_TEXT_EXTRACTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_NOTE_CANDIDATE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-text-extraction-api': [],
-  'hermes-attachment-text-extraction-ingress': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-attachment-text-extraction-api': [],
+  'makosh-attachment-text-extraction-ingress': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-attachment-text-extraction-core': [
-    { name: 'hermes-attachment-text-extraction-api', kind: 'normal' },
+  'makosh-attachment-text-extraction-core': [
+    { name: 'makosh-attachment-text-extraction-api', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_TEXT_EXTRACTION_PARSER_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_TEXT_EXTRACTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-text-extraction-parser-contract': [],
-  'hermes-attachment-text-extraction-plain': [
-    { name: 'hermes-attachment-text-extraction-parser-contract', kind: 'normal' },
+  'makosh-attachment-text-extraction-parser-contract': [],
+  'makosh-attachment-text-extraction-plain': [
+    { name: 'makosh-attachment-text-extraction-parser-contract', kind: 'normal' },
   ],
-  'hermes-attachment-text-extraction-pdf': [
-    { name: 'hermes-attachment-text-extraction-parser-contract', kind: 'normal' },
+  'makosh-attachment-text-extraction-pdf': [
+    { name: 'makosh-attachment-text-extraction-parser-contract', kind: 'normal' },
   ],
-  'hermes-attachment-text-extraction-docx': [
-    { name: 'hermes-attachment-text-extraction-parser-contract', kind: 'normal' },
+  'makosh-attachment-text-extraction-docx': [
+    { name: 'makosh-attachment-text-extraction-parser-contract', kind: 'normal' },
   ],
-  'hermes-attachment-text-extraction-ocr': [
-    { name: 'hermes-attachment-text-extraction-parser-contract', kind: 'normal' },
+  'makosh-attachment-text-extraction-ocr': [
+    { name: 'makosh-attachment-text-extraction-parser-contract', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_TEXT_EXTRACTION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_TEXT_EXTRACTION_PARSER_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-text-extraction-persistence': [
-    { name: 'hermes-attachment-text-extraction-core', kind: 'normal' },
-    { name: 'hermes-attachment-text-extraction-ingress', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-attachment-text-extraction-persistence': [
+    { name: 'makosh-attachment-text-extraction-core', kind: 'normal' },
+    { name: 'makosh-attachment-text-extraction-ingress', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_TEXT_EXTRACTION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-text-extraction-runtime': [
-    { name: 'hermes-attachment-security-contract', kind: 'normal' },
-    { name: 'hermes-attachment-text-extraction-api', kind: 'normal' },
-    { name: 'hermes-attachment-text-extraction-core', kind: 'normal' },
-    { name: 'hermes-attachment-text-extraction-docx', kind: 'normal' },
-    { name: 'hermes-attachment-text-extraction-ingress', kind: 'normal' },
-    { name: 'hermes-attachment-text-extraction-ocr', kind: 'normal' },
-    { name: 'hermes-attachment-text-extraction-parser-contract', kind: 'normal' },
-    { name: 'hermes-attachment-text-extraction-pdf', kind: 'normal' },
-    { name: 'hermes-attachment-text-extraction-persistence', kind: 'normal' },
-    { name: 'hermes-attachment-text-extraction-plain', kind: 'normal' },
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communications-attachment-contract', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-attachment-text-extraction-runtime': [
+    { name: 'makosh-attachment-security-contract', kind: 'normal' },
+    { name: 'makosh-attachment-text-extraction-api', kind: 'normal' },
+    { name: 'makosh-attachment-text-extraction-core', kind: 'normal' },
+    { name: 'makosh-attachment-text-extraction-docx', kind: 'normal' },
+    { name: 'makosh-attachment-text-extraction-ingress', kind: 'normal' },
+    { name: 'makosh-attachment-text-extraction-ocr', kind: 'normal' },
+    { name: 'makosh-attachment-text-extraction-parser-contract', kind: 'normal' },
+    { name: 'makosh-attachment-text-extraction-pdf', kind: 'normal' },
+    { name: 'makosh-attachment-text-extraction-persistence', kind: 'normal' },
+    { name: 'makosh-attachment-text-extraction-plain', kind: 'normal' },
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communications-attachment-contract', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
-  'hermes-attachment-text-extraction-assembly': [
-    { name: 'hermes-attachment-text-extraction-api', kind: 'normal' },
-    { name: 'hermes-attachment-text-extraction-persistence', kind: 'normal' },
-    { name: 'hermes-attachment-text-extraction-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-attachment-text-extraction-assembly': [
+    { name: 'makosh-attachment-text-extraction-api', kind: 'normal' },
+    { name: 'makosh-attachment-text-extraction-persistence', kind: 'normal' },
+    { name: 'makosh-attachment-text-extraction-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_PREVIEW_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-preview-api': [],
-  'hermes-attachment-preview-ingress': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-attachment-preview-api': [],
+  'makosh-attachment-preview-ingress': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-attachment-preview-core': [
-    { name: 'hermes-attachment-preview-api', kind: 'normal' },
+  'makosh-attachment-preview-core': [
+    { name: 'makosh-attachment-preview-api', kind: 'normal' },
   ],
-  'hermes-attachment-preview-renderer-contract': [
-    { name: 'hermes-attachment-preview-api', kind: 'normal' },
+  'makosh-attachment-preview-renderer-contract': [
+    { name: 'makosh-attachment-preview-api', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_PREVIEW_SAFE_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-preview-text': [
-    { name: 'hermes-attachment-preview-api', kind: 'normal' },
-    { name: 'hermes-attachment-preview-renderer-contract', kind: 'normal' },
+  'makosh-attachment-preview-text': [
+    { name: 'makosh-attachment-preview-api', kind: 'normal' },
+    { name: 'makosh-attachment-preview-renderer-contract', kind: 'normal' },
   ],
-  'hermes-attachment-preview-image': [
-    { name: 'hermes-attachment-preview-api', kind: 'normal' },
-    { name: 'hermes-attachment-preview-renderer-contract', kind: 'normal' },
+  'makosh-attachment-preview-image': [
+    { name: 'makosh-attachment-preview-api', kind: 'normal' },
+    { name: 'makosh-attachment-preview-renderer-contract', kind: 'normal' },
   ],
-  'hermes-attachment-preview-media': [
-    { name: 'hermes-attachment-preview-api', kind: 'normal' },
-    { name: 'hermes-attachment-preview-renderer-contract', kind: 'normal' },
+  'makosh-attachment-preview-media': [
+    { name: 'makosh-attachment-preview-api', kind: 'normal' },
+    { name: 'makosh-attachment-preview-renderer-contract', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_PREVIEW_PDF_ADAPTER_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_SAFE_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-preview-pdf': [
-    { name: 'hermes-attachment-preview-api', kind: 'normal' },
-    { name: 'hermes-attachment-preview-renderer-contract', kind: 'normal' },
+  'makosh-attachment-preview-pdf': [
+    { name: 'makosh-attachment-preview-api', kind: 'normal' },
+    { name: 'makosh-attachment-preview-renderer-contract', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_PREVIEW_DOCX_ADAPTER_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_PDF_ADAPTER_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-preview-docx': [
-    { name: 'hermes-attachment-preview-api', kind: 'normal' },
-    { name: 'hermes-attachment-preview-renderer-contract', kind: 'normal' },
+  'makosh-attachment-preview-docx': [
+    { name: 'makosh-attachment-preview-api', kind: 'normal' },
+    { name: 'makosh-attachment-preview-renderer-contract', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_PREVIEW_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_DOCX_ADAPTER_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-preview-persistence': [
-    { name: 'hermes-attachment-preview-api', kind: 'normal' },
-    { name: 'hermes-attachment-preview-core', kind: 'normal' },
-    { name: 'hermes-attachment-preview-ingress', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-attachment-preview-persistence': [
+    { name: 'makosh-attachment-preview-api', kind: 'normal' },
+    { name: 'makosh-attachment-preview-core', kind: 'normal' },
+    { name: 'makosh-attachment-preview-ingress', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_PREVIEW_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-preview-runtime': [
-    { name: 'hermes-attachment-preview-api', kind: 'normal' },
-    { name: 'hermes-attachment-preview-core', kind: 'normal' },
-    { name: 'hermes-attachment-preview-docx', kind: 'normal' },
-    { name: 'hermes-attachment-preview-image', kind: 'normal' },
-    { name: 'hermes-attachment-preview-ingress', kind: 'normal' },
-    { name: 'hermes-attachment-preview-media', kind: 'normal' },
-    { name: 'hermes-attachment-preview-pdf', kind: 'normal' },
-    { name: 'hermes-attachment-preview-persistence', kind: 'normal' },
-    { name: 'hermes-attachment-preview-renderer-contract', kind: 'normal' },
-    { name: 'hermes-attachment-preview-text', kind: 'normal' },
-    { name: 'hermes-attachment-security-contract', kind: 'normal' },
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-communications-attachment-contract', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-attachment-preview-runtime': [
+    { name: 'makosh-attachment-preview-api', kind: 'normal' },
+    { name: 'makosh-attachment-preview-core', kind: 'normal' },
+    { name: 'makosh-attachment-preview-docx', kind: 'normal' },
+    { name: 'makosh-attachment-preview-image', kind: 'normal' },
+    { name: 'makosh-attachment-preview-ingress', kind: 'normal' },
+    { name: 'makosh-attachment-preview-media', kind: 'normal' },
+    { name: 'makosh-attachment-preview-pdf', kind: 'normal' },
+    { name: 'makosh-attachment-preview-persistence', kind: 'normal' },
+    { name: 'makosh-attachment-preview-renderer-contract', kind: 'normal' },
+    { name: 'makosh-attachment-preview-text', kind: 'normal' },
+    { name: 'makosh-attachment-security-contract', kind: 'normal' },
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-communications-attachment-contract', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_PREVIEW_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-preview-assembly': [
-    { name: 'hermes-attachment-preview-api', kind: 'normal' },
-    { name: 'hermes-attachment-preview-persistence', kind: 'normal' },
-    { name: 'hermes-attachment-preview-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-attachment-preview-assembly': [
+    { name: 'makosh-attachment-preview-api', kind: 'normal' },
+    { name: 'makosh-attachment-preview-persistence', kind: 'normal' },
+    { name: 'makosh-attachment-preview-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_PREVIEW_RETAINED_EVIDENCE_REPLAY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-retained-evidence-replay-protocol': [],
-  'hermes-attachment-preview-evidence-replay-api': [],
-  'hermes-attachment-preview-evidence-replay-core': [
-    { name: 'hermes-attachment-preview-evidence-replay-api', kind: 'normal' },
+  'makosh-retained-evidence-replay-protocol': [],
+  'makosh-attachment-preview-evidence-replay-api': [],
+  'makosh-attachment-preview-evidence-replay-core': [
+    { name: 'makosh-attachment-preview-evidence-replay-api', kind: 'normal' },
   ],
-  'hermes-attachment-preview-evidence-replay-persistence': [
-    { name: 'hermes-attachment-preview-evidence-replay-api', kind: 'normal' },
-    { name: 'hermes-attachment-preview-evidence-replay-core', kind: 'normal' },
-    { name: 'hermes-communications-retained-evidence-replay-contract', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-mail-retained-evidence-replay-contract', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-attachment-preview-evidence-replay-persistence': [
+    { name: 'makosh-attachment-preview-evidence-replay-api', kind: 'normal' },
+    { name: 'makosh-attachment-preview-evidence-replay-core', kind: 'normal' },
+    { name: 'makosh-communications-retained-evidence-replay-contract', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-mail-retained-evidence-replay-contract', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-attachment-preview-evidence-replay-runtime': [
-    { name: 'hermes-attachment-preview-evidence-replay-api', kind: 'normal' },
-    { name: 'hermes-attachment-preview-evidence-replay-core', kind: 'normal' },
-    { name: 'hermes-attachment-preview-evidence-replay-persistence', kind: 'normal' },
-    { name: 'hermes-communications-retained-evidence-replay-contract', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-mail-retained-evidence-replay-contract', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-attachment-preview-evidence-replay-runtime': [
+    { name: 'makosh-attachment-preview-evidence-replay-api', kind: 'normal' },
+    { name: 'makosh-attachment-preview-evidence-replay-core', kind: 'normal' },
+    { name: 'makosh-attachment-preview-evidence-replay-persistence', kind: 'normal' },
+    { name: 'makosh-communications-retained-evidence-replay-contract', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-mail-retained-evidence-replay-contract', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
-  'hermes-attachment-preview-evidence-replay-assembly': [
-    { name: 'hermes-attachment-preview-evidence-replay-persistence', kind: 'normal' },
-    { name: 'hermes-attachment-preview-evidence-replay-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-attachment-preview-evidence-replay-assembly': [
+    { name: 'makosh-attachment-preview-evidence-replay-persistence', kind: 'normal' },
+    { name: 'makosh-attachment-preview-evidence-replay-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-communications-retained-evidence-replay-persistence': [
-    { name: 'hermes-communications-attachment-contract', kind: 'normal' },
-    { name: 'hermes-communications-retained-evidence-replay-contract', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-communications-retained-evidence-replay-persistence': [
+    { name: 'makosh-communications-attachment-contract', kind: 'normal' },
+    { name: 'makosh-communications-retained-evidence-replay-contract', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-communications-runtime': [
-    ...ATTACHMENT_PREVIEW_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST['hermes-communications-runtime'],
-    { name: 'hermes-communications-retained-evidence-replay-persistence', kind: 'normal' },
-    { name: 'hermes-communications-retained-evidence-replay-contract', kind: 'normal' },
+  'makosh-communications-runtime': [
+    ...ATTACHMENT_PREVIEW_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST['makosh-communications-runtime'],
+    { name: 'makosh-communications-retained-evidence-replay-persistence', kind: 'normal' },
+    { name: 'makosh-communications-retained-evidence-replay-contract', kind: 'normal' },
   ],
-  'hermes-mail-retained-evidence-replay-persistence': [
-    { name: 'hermes-attachment-security-contract', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-mail-retained-evidence-replay-contract', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-mail-retained-evidence-replay-persistence': [
+    { name: 'makosh-attachment-security-contract', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-mail-retained-evidence-replay-contract', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-mail-runtime': [
-    ...ATTACHMENT_PREVIEW_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST['hermes-mail-runtime'],
-    { name: 'hermes-mail-retained-evidence-replay-persistence', kind: 'normal' },
-    { name: 'hermes-mail-retained-evidence-replay-contract', kind: 'normal' },
+  'makosh-mail-runtime': [
+    ...ATTACHMENT_PREVIEW_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST['makosh-mail-runtime'],
+    { name: 'makosh-mail-retained-evidence-replay-persistence', kind: 'normal' },
+    { name: 'makosh-mail-retained-evidence-replay-contract', kind: 'normal' },
   ],
-  'hermes-communications-retained-evidence-replay-contract': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-communications-retained-evidence-replay-contract': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-mail-retained-evidence-replay-contract': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-mail-retained-evidence-replay-contract': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_TRANSLATION_CONTRACTS_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_RETAINED_EVIDENCE_REPLAY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-translation-api': [],
-  'hermes-attachment-translation-ingress': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-attachment-translation-api': [],
+  'makosh-attachment-translation-ingress': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-attachment-translation-core': [],
+  'makosh-attachment-translation-core': [],
 };
 
 const ATTACHMENT_TRANSLATION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_TRANSLATION_CONTRACTS_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-translation-persistence': [
-    { name: 'hermes-attachment-translation-api', kind: 'normal' },
-    { name: 'hermes-attachment-translation-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-attachment-translation-persistence': [
+    { name: 'makosh-attachment-translation-api', kind: 'normal' },
+    { name: 'makosh-attachment-translation-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_TRANSLATION_RUNTIME_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_TRANSLATION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-translation-runtime': [
-    { name: 'hermes-ai-contracts', kind: 'normal' },
-    { name: 'hermes-attachment-translation-api', kind: 'normal' },
-    { name: 'hermes-attachment-translation-core', kind: 'normal' },
-    { name: 'hermes-attachment-translation-ingress', kind: 'normal' },
-    { name: 'hermes-attachment-translation-persistence', kind: 'normal' },
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-attachment-translation-runtime': [
+    { name: 'makosh-ai-contracts', kind: 'normal' },
+    { name: 'makosh-attachment-translation-api', kind: 'normal' },
+    { name: 'makosh-attachment-translation-core', kind: 'normal' },
+    { name: 'makosh-attachment-translation-ingress', kind: 'normal' },
+    { name: 'makosh-attachment-translation-persistence', kind: 'normal' },
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
-  'hermes-attachment-translation-assembly': [
-    { name: 'hermes-attachment-translation-persistence', kind: 'normal' },
-    { name: 'hermes-attachment-translation-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-attachment-translation-assembly': [
+    { name: 'makosh-attachment-translation-persistence', kind: 'normal' },
+    { name: 'makosh-attachment-translation-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const ATTACHMENT_TRANSLATION_SOURCE_PRODUCER_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_TRANSLATION_RUNTIME_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-text-extraction-runtime': [
+  'makosh-attachment-text-extraction-runtime': [
     ...ATTACHMENT_TRANSLATION_RUNTIME_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST[
-      'hermes-attachment-text-extraction-runtime'
+      'makosh-attachment-text-extraction-runtime'
     ].slice(0, 1),
-    { name: 'hermes-attachment-translation-ingress', kind: 'normal' },
+    { name: 'makosh-attachment-translation-ingress', kind: 'normal' },
     ...ATTACHMENT_TRANSLATION_RUNTIME_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST[
-      'hermes-attachment-text-extraction-runtime'
+      'makosh-attachment-text-extraction-runtime'
     ].slice(1),
   ],
 };
 
 const CONTACTS_MAIL_IDENTITY_COMMAND_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_TRANSLATION_SOURCE_PRODUCER_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-contacts-command-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-contacts-command-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-contacts-core': [],
+  'makosh-contacts-core': [],
 };
 
 const CONTACTS_MAIL_IDENTITY_COMMAND_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...CONTACTS_MAIL_IDENTITY_COMMAND_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-contacts-persistence': [
-    { name: 'hermes-contacts-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-contacts-persistence': [
+    { name: 'makosh-contacts-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const CONTACTS_MAIL_IDENTITY_COMMAND_RUNTIME_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...CONTACTS_MAIL_IDENTITY_COMMAND_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-contacts-runtime': [
-    { name: 'hermes-contacts-command-api', kind: 'normal' },
-    { name: 'hermes-contacts-core', kind: 'normal' },
-    { name: 'hermes-contacts-persistence', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-contacts-runtime': [
+    { name: 'makosh-contacts-command-api', kind: 'normal' },
+    { name: 'makosh-contacts-core', kind: 'normal' },
+    { name: 'makosh-contacts-persistence', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
-  'hermes-contacts-assembly': [
-    { name: 'hermes-contacts-persistence', kind: 'normal' },
-    { name: 'hermes-contacts-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-contacts-assembly': [
+    { name: 'makosh-contacts-persistence', kind: 'normal' },
+    { name: 'makosh-contacts-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const MAIL_CONTACTS_SYNC_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...CONTACTS_MAIL_IDENTITY_COMMAND_RUNTIME_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-address-book-contract': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-mail-address-book-contract': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-mail-contacts-sync-api': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-mail-contacts-sync-api': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-mail-contacts-sync-core': [],
+  'makosh-mail-contacts-sync-core': [],
 };
 
 const MAIL_CONTACTS_SYNC_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...MAIL_CONTACTS_SYNC_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-contacts-sync-persistence': [
-    { name: 'hermes-mail-contacts-sync-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-mail-contacts-sync-persistence': [
+    { name: 'makosh-mail-contacts-sync-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const MAIL_CONTACTS_SYNC_RUNTIME_ADMISSION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...MAIL_CONTACTS_SYNC_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-contacts-mail-sync-source-api': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-contacts-mail-sync-source-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-contacts-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-contacts-command-api', kind: 'normal' },
-    { name: 'hermes-contacts-core', kind: 'normal' },
-    { name: 'hermes-contacts-mail-sync-source-api', kind: 'normal' },
-    { name: 'hermes-contacts-persistence', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-contacts-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-contacts-command-api', kind: 'normal' },
+    { name: 'makosh-contacts-core', kind: 'normal' },
+    { name: 'makosh-contacts-mail-sync-source-api', kind: 'normal' },
+    { name: 'makosh-contacts-persistence', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
-  'hermes-mail-contacts-sync-runtime': [
-    { name: 'hermes-contacts-command-api', kind: 'normal' },
-    { name: 'hermes-contacts-mail-sync-source-api', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-mail-address-book-contract', kind: 'normal' },
-    { name: 'hermes-mail-contacts-sync-api', kind: 'normal' },
-    { name: 'hermes-mail-contacts-sync-core', kind: 'normal' },
-    { name: 'hermes-mail-contacts-sync-persistence', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-scheduler-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-mail-contacts-sync-runtime': [
+    { name: 'makosh-contacts-command-api', kind: 'normal' },
+    { name: 'makosh-contacts-mail-sync-source-api', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-mail-address-book-contract', kind: 'normal' },
+    { name: 'makosh-mail-contacts-sync-api', kind: 'normal' },
+    { name: 'makosh-mail-contacts-sync-core', kind: 'normal' },
+    { name: 'makosh-mail-contacts-sync-persistence', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-scheduler-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const MAIL_ADDRESS_BOOK_PROVIDER_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...MAIL_CONTACTS_SYNC_RUNTIME_ADMISSION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-google-people': [],
-  'hermes-mail-carddav': [],
+  'makosh-mail-google-people': [],
+  'makosh-mail-carddav': [],
 };
 
 const MAIL_ADDRESS_BOOK_PERSISTENCE_AUTHORITY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...MAIL_ADDRESS_BOOK_PROVIDER_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-address-book-persistence': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-mail-address-book-contract', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-mail-address-book-persistence': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-mail-address-book-contract', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-mail-runtime': MAIL_ADDRESS_BOOK_PROVIDER_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST[
-    'hermes-mail-runtime'
+  'makosh-mail-runtime': MAIL_ADDRESS_BOOK_PROVIDER_ADAPTERS_WORKSPACE_DEPENDENCY_ALLOWLIST[
+    'makosh-mail-runtime'
   ].flatMap((dependency) => (
-    dependency.name === 'hermes-mail-persistence'
-      ? [dependency, { name: 'hermes-mail-address-book-persistence', kind: 'normal' }]
+    dependency.name === 'makosh-mail-persistence'
+      ? [dependency, { name: 'makosh-mail-address-book-persistence', kind: 'normal' }]
       : [dependency]
   )),
 };
 
 const MAIL_ADDRESS_BOOK_RUNTIME_EXECUTION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...MAIL_ADDRESS_BOOK_PERSISTENCE_AUTHORITY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-runtime': MAIL_ADDRESS_BOOK_PERSISTENCE_AUTHORITY_WORKSPACE_DEPENDENCY_ALLOWLIST[
-    'hermes-mail-runtime'
+  'makosh-mail-runtime': MAIL_ADDRESS_BOOK_PERSISTENCE_AUTHORITY_WORKSPACE_DEPENDENCY_ALLOWLIST[
+    'makosh-mail-runtime'
   ].flatMap((dependency) => (
-    dependency.name === 'hermes-mail-persistence'
+    dependency.name === 'makosh-mail-persistence'
       ? [
           dependency,
-          { name: 'hermes-mail-address-book-contract', kind: 'normal' },
+          { name: 'makosh-mail-address-book-contract', kind: 'normal' },
         ]
-      : dependency.name === 'hermes-mail-address-book-persistence'
+      : dependency.name === 'makosh-mail-address-book-persistence'
         ? [
             dependency,
-            { name: 'hermes-mail-google-people', kind: 'normal' },
-            { name: 'hermes-mail-carddav', kind: 'normal' },
-            { name: 'hermes-contacts-mail-sync-source-api', kind: 'normal' },
+            { name: 'makosh-mail-google-people', kind: 'normal' },
+            { name: 'makosh-mail-carddav', kind: 'normal' },
+            { name: 'makosh-contacts-mail-sync-source-api', kind: 'normal' },
           ]
       : [dependency]
   )),
@@ -3927,119 +3927,119 @@ const MAIL_ADDRESS_BOOK_RUNTIME_EXECUTION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
 
 const MAIL_CONTACTS_SYNC_RELEASE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...MAIL_ADDRESS_BOOK_RUNTIME_EXECUTION_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-contacts-sync-assembly': [
-    { name: 'hermes-mail-contacts-sync-persistence', kind: 'normal' },
-    { name: 'hermes-mail-contacts-sync-runtime', kind: 'normal' },
-      { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-mail-contacts-sync-assembly': [
+    { name: 'makosh-mail-contacts-sync-persistence', kind: 'normal' },
+    { name: 'makosh-mail-contacts-sync-runtime', kind: 'normal' },
+      { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
-  'hermes-speech-to-text-api': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-speech-to-text-api': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-speech-to-text-core': [],
-  'hermes-speech-to-text-persistence': [
-    { name: 'hermes-speech-to-text-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-speech-to-text-core': [],
+  'makosh-speech-to-text-persistence': [
+    { name: 'makosh-speech-to-text-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const DESKTOP_CALL_RECORDING_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...MAIL_CONTACTS_SYNC_RELEASE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-desktop-call-recording-api': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-desktop-call-recording-api': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-desktop-call-recording-core': [
-    { name: 'hermes-desktop-call-recording-api', kind: 'normal' },
+  'makosh-desktop-call-recording-core': [
+    { name: 'makosh-desktop-call-recording-api', kind: 'normal' },
   ],
-  'hermes-call-transcription-ingress': [
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-call-transcription-ingress': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
 };
 
 const DESKTOP_CALL_RECORDING_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...DESKTOP_CALL_RECORDING_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-desktop-call-recording-persistence': [
-    { name: 'hermes-desktop-call-recording-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-desktop-call-recording-persistence': [
+    { name: 'makosh-desktop-call-recording-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const DESKTOP_CALL_RECORDING_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...DESKTOP_CALL_RECORDING_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-desktop-call-recording-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-call-transcription-ingress', kind: 'normal' },
-    { name: 'hermes-desktop-call-recording-api', kind: 'normal' },
-    { name: 'hermes-desktop-call-recording-core', kind: 'normal' },
-    { name: 'hermes-desktop-call-recording-persistence', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-desktop-call-recording-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-call-transcription-ingress', kind: 'normal' },
+    { name: 'makosh-desktop-call-recording-api', kind: 'normal' },
+    { name: 'makosh-desktop-call-recording-core', kind: 'normal' },
+    { name: 'makosh-desktop-call-recording-persistence', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const DESKTOP_CALL_RECORDING_RELEASE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...DESKTOP_CALL_RECORDING_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-desktop-call-recording-assembly': [
-    { name: 'hermes-desktop-call-recording-persistence', kind: 'normal' },
-    { name: 'hermes-desktop-call-recording-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-desktop-call-recording-assembly': [
+    { name: 'makosh-desktop-call-recording-persistence', kind: 'normal' },
+    { name: 'makosh-desktop-call-recording-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const CALL_TRANSCRIPTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...DESKTOP_CALL_RECORDING_RELEASE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-call-transcription-api': [
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
+  'makosh-call-transcription-api': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
   ],
-  'hermes-call-transcription-core': [
-    { name: 'hermes-call-transcription-api', kind: 'normal' },
+  'makosh-call-transcription-core': [
+    { name: 'makosh-call-transcription-api', kind: 'normal' },
   ],
 };
 
 const CALL_TRANSCRIPTION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...CALL_TRANSCRIPTION_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-call-transcription-persistence': [
-    { name: 'hermes-call-transcription-api', kind: 'normal' },
-    { name: 'hermes-call-transcription-core', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-call-transcription-persistence': [
+    { name: 'makosh-call-transcription-api', kind: 'normal' },
+    { name: 'makosh-call-transcription-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const CALL_TRANSCRIPTION_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...CALL_TRANSCRIPTION_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-call-transcription-runtime': [
-    { name: 'hermes-blob-client', kind: 'normal' },
-    { name: 'hermes-call-transcription-api', kind: 'normal' },
-    { name: 'hermes-call-transcription-core', kind: 'normal' },
-    { name: 'hermes-call-transcription-ingress', kind: 'normal' },
-    { name: 'hermes-call-transcription-persistence', kind: 'normal' },
-    { name: 'hermes-events-jetstream', kind: 'normal' },
-    { name: 'hermes-events-protocol', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-speech-to-text-api', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
-    { name: 'hermes-storage-vault', kind: 'normal' },
+  'makosh-call-transcription-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-call-transcription-api', kind: 'normal' },
+    { name: 'makosh-call-transcription-core', kind: 'normal' },
+    { name: 'makosh-call-transcription-ingress', kind: 'normal' },
+    { name: 'makosh-call-transcription-persistence', kind: 'normal' },
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-speech-to-text-api', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
   ],
 };
 
 const CALL_TRANSCRIPTION_RELEASE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...CALL_TRANSCRIPTION_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
-  'hermes-call-transcription-assembly': [
-    { name: 'hermes-call-transcription-persistence', kind: 'normal' },
-    { name: 'hermes-call-transcription-runtime', kind: 'normal' },
-    { name: 'hermes-runtime-protocol', kind: 'normal' },
-    { name: 'hermes-storage-protocol', kind: 'normal' },
+  'makosh-call-transcription-assembly': [
+    { name: 'makosh-call-transcription-persistence', kind: 'normal' },
+    { name: 'makosh-call-transcription-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
   ],
 };
 
 const COMMUNICATIONS_EXPORT_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_SENDER_INSIGHTS_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-evidence-export-source-api': [
+  'makosh-communications-evidence-export-source-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4047,22 +4047,22 @@ const COMMUNICATIONS_EXPORT_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communications-export-api': [
+  'makosh-communications-export-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communications-export-core': [
+  'makosh-communications-export-core': [
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communications-export-persistence': [
+  'makosh-communications-export-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
-  'hermes-communications-export-runtime': [
+  'makosh-communications-export-runtime': [
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: true, features: [] },
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -4070,7 +4070,7 @@ const COMMUNICATIONS_EXPORT_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt', 'rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-communications-export-assembly': [
+  'makosh-communications-export-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4079,18 +4079,18 @@ const COMMUNICATIONS_EXPORT_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATION_DELIVERY_INTENT_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_EXPORT_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delivery-intent-api': [
+  'makosh-communication-delivery-intent-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communication-delivery-intent-core': [],
+  'makosh-communication-delivery-intent-core': [],
 };
 
 const COMMUNICATION_DELIVERY_INTENT_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELIVERY_INTENT_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delivery-intent-persistence': [
+  'makosh-communication-delivery-intent-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -4098,7 +4098,7 @@ const COMMUNICATION_DELIVERY_INTENT_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST
 
 const COMMUNICATION_DELIVERY_INTENT_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELIVERY_INTENT_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delivery-intent-runtime': [
+  'makosh-communication-delivery-intent-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4109,7 +4109,7 @@ const COMMUNICATION_DELIVERY_INTENT_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATION_DELIVERY_INTENT_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELIVERY_INTENT_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delivery-intent-assembly': [
+  'makosh-communication-delivery-intent-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4118,31 +4118,31 @@ const COMMUNICATION_DELIVERY_INTENT_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = 
 
 const DELIVERY_INTENT_TRANSACTIONAL_EVENT_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELIVERY_INTENT_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-delivery-intent-contract': [
+  'makosh-mail-delivery-intent-contract': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-telegram-delivery-intent-contract': [
+  'makosh-telegram-delivery-intent-contract': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-whatsapp-delivery-intent-contract': [
+  'makosh-whatsapp-delivery-intent-contract': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-zulip-delivery-intent-contract': [
+  'makosh-zulip-delivery-intent-contract': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communication-delivery-intent-event-adapters': [
+  'makosh-communication-delivery-intent-event-adapters': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4151,7 +4151,7 @@ const DELIVERY_INTENT_TRANSACTIONAL_EVENT_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWL
 
 const DELIVERY_INTENT_TARGET_BOUND_BLOB_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...DELIVERY_INTENT_TRANSACTIONAL_EVENT_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-runtime': [
+  'makosh-mail-runtime': [
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -4164,18 +4164,18 @@ const DELIVERY_INTENT_TARGET_BOUND_BLOB_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATION_BULK_ACTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...DELIVERY_INTENT_TARGET_BOUND_BLOB_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-bulk-action-api': [
+  'makosh-communication-bulk-action-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communication-bulk-action-core': [],
+  'makosh-communication-bulk-action-core': [],
 };
 
 const COMMUNICATION_BULK_ACTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_BULK_ACTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-bulk-action-persistence': [
+  'makosh-communication-bulk-action-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -4183,7 +4183,7 @@ const COMMUNICATION_BULK_ACTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATION_BULK_ACTION_RUNTIME_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_BULK_ACTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-bulk-action-runtime': [
+  'makosh-communication-bulk-action-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4194,7 +4194,7 @@ const COMMUNICATION_BULK_ACTION_RUNTIME_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = 
 
 const COMMUNICATION_BULK_ACTION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_BULK_ACTION_RUNTIME_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-bulk-action-assembly': [
+  'makosh-communication-bulk-action-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4203,18 +4203,18 @@ const COMMUNICATION_BULK_ACTION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATION_DELAYED_DELIVERY_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_BULK_ACTION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-api': [
+  'makosh-communication-delayed-delivery-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communication-delayed-delivery-core': [],
+  'makosh-communication-delayed-delivery-core': [],
 };
 
 const COMMUNICATION_DELAYED_DELIVERY_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-persistence': [
+  'makosh-communication-delayed-delivery-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -4222,7 +4222,7 @@ const COMMUNICATION_DELAYED_DELIVERY_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIS
 
 const COMMUNICATION_DELAYED_DELIVERY_EXECUTION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-execution': [
+  'makosh-communication-delayed-delivery-execution': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['macros', 'rt'] },
@@ -4232,7 +4232,7 @@ const COMMUNICATION_DELAYED_DELIVERY_EXECUTION_THIRD_PARTY_DEPENDENCY_ALLOWLIST 
 
 const COMMUNICATION_DELAYED_DELIVERY_EVENT_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_EXECUTION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-event-adapters': [
+  'makosh-communication-delayed-delivery-event-adapters': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4241,19 +4241,19 @@ const COMMUNICATION_DELAYED_DELIVERY_EVENT_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOW
 
 const COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_EVENT_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-runtime-adapters': [
+  'makosh-communication-delayed-delivery-runtime-adapters': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
 };
 
 const COMMUNICATION_DELAYED_DELIVERY_STORE_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-store-adapters': [],
+  'makosh-communication-delayed-delivery-store-adapters': [],
 };
 
 const COMMUNICATION_DELAYED_DELIVERY_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_STORE_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-runtime': [
+  'makosh-communication-delayed-delivery-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4264,7 +4264,7 @@ const COMMUNICATION_DELAYED_DELIVERY_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLO
 
 const COMMUNICATION_DELAYED_DELIVERY_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delayed-delivery-assembly': [
+  'makosh-communication-delayed-delivery-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4273,18 +4273,18 @@ const COMMUNICATION_DELAYED_DELIVERY_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST =
 
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELAYED_DELIVERY_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-cross-channel-forward-api': [
+  'makosh-communication-cross-channel-forward-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communication-cross-channel-forward-core': [],
+  'makosh-communication-cross-channel-forward-core': [],
 };
 
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-cross-channel-forward-persistence': [
+  'makosh-communication-cross-channel-forward-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -4292,7 +4292,7 @@ const COMMUNICATION_CROSS_CHANNEL_FORWARD_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALL
 
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_SOURCE_CONTRACT_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-cross-channel-forward-source-api': [
+  'makosh-communications-cross-channel-forward-source-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4304,7 +4304,7 @@ const COMMUNICATION_CROSS_CHANNEL_FORWARD_SOURCE_CONTRACT_THIRD_PARTY_DEPENDENCY
 
 const COMMUNICATION_DELIVERY_INTENT_INGRESS_CONTRACT_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_SOURCE_CONTRACT_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-delivery-intent-ingress-api': [
+  'makosh-communication-delivery-intent-ingress-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4319,7 +4319,7 @@ const COMMUNICATION_CROSS_CHANNEL_FORWARD_EVENT_PERSISTENCE_THIRD_PARTY_DEPENDEN
 
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_EVENT_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-cross-channel-forward-runtime': [
+  'makosh-communication-cross-channel-forward-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4333,7 +4333,7 @@ const COMMUNICATION_DELIVERY_INTENT_EVENT_INGRESS_CONSUMER_THIRD_PARTY_DEPENDENC
 
 const COMMUNICATION_CROSS_CHANNEL_FORWARD_CLIENT_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_DELIVERY_INTENT_EVENT_INGRESS_CONSUMER_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-cross-channel-forward-assembly': [
+  'makosh-communication-cross-channel-forward-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4342,7 +4342,7 @@ const COMMUNICATION_CROSS_CHANNEL_FORWARD_CLIENT_ASSEMBLY_THIRD_PARTY_DEPENDENCY
 
 const COMMUNICATIONS_CALL_EVIDENCE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_CROSS_CHANNEL_FORWARD_CLIENT_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-call-evidence-ingress': [
+  'makosh-communications-call-evidence-ingress': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4350,7 +4350,7 @@ const COMMUNICATIONS_CALL_EVIDENCE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIS
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communications-call-evidence-core': [
+  'makosh-communications-call-evidence-core': [
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
@@ -4358,7 +4358,7 @@ const COMMUNICATIONS_CALL_EVIDENCE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIS
 
 const COMMUNICATIONS_CALL_EVIDENCE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_CALL_EVIDENCE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-call-evidence-persistence': [
+  'makosh-communications-call-evidence-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -4366,7 +4366,7 @@ const COMMUNICATIONS_CALL_EVIDENCE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST 
 
 const COMMUNICATIONS_CALL_EVIDENCE_QUERY_REALTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_CALL_EVIDENCE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-call-evidence-api': [
+  'makosh-communications-call-evidence-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
@@ -4376,20 +4376,20 @@ const COMMUNICATIONS_CALL_EVIDENCE_QUERY_REALTIME_THIRD_PARTY_DEPENDENCY_ALLOWLI
 
 const REVIEW_COMMUNICATIONS_ATTENTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_CALL_EVIDENCE_QUERY_REALTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-review-attention-api': [
+  'makosh-review-attention-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-review-attention-core': [
+  'makosh-review-attention-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
 };
 
 const REVIEW_COMMUNICATIONS_ATTENTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_COMMUNICATIONS_ATTENTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-review-attention-persistence': [
+  'makosh-review-attention-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -4397,7 +4397,7 @@ const REVIEW_COMMUNICATIONS_ATTENTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLI
 
 const REVIEW_COMMUNICATIONS_ATTENTION_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_COMMUNICATIONS_ATTENTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-review-attention-runtime': [
+  'makosh-review-attention-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4408,7 +4408,7 @@ const REVIEW_COMMUNICATIONS_ATTENTION_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALL
 
 const REVIEW_COMMUNICATIONS_ATTENTION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_COMMUNICATIONS_ATTENTION_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-review-attention-assembly': [
+  'makosh-review-attention-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4417,7 +4417,7 @@ const REVIEW_COMMUNICATIONS_ATTENTION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST 
 
 const COMMUNICATIONS_AI_SOURCE_CONTRACT_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_COMMUNICATIONS_ATTENTION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-ai-source-api': [
+  'makosh-communications-ai-source-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4425,67 +4425,67 @@ const COMMUNICATIONS_AI_SOURCE_CONTRACT_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communication-reply-suggestion-api': [
+  'makosh-communication-reply-suggestion-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communication-reply-suggestion-core': [],
-  'hermes-communication-reply-suggestion-persistence': [
+  'makosh-communication-reply-suggestion-core': [],
+  'makosh-communication-reply-suggestion-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
-  'hermes-communication-reply-suggestion-runtime': [
+  'makosh-communication-reply-suggestion-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-communication-reply-suggestion-assembly': [
+  'makosh-communication-reply-suggestion-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
   ],
-  'hermes-ai-contracts': [
+  'makosh-ai-contracts': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-ai-inference-core': [
+  'makosh-ai-inference-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-ai-inference-persistence': [
+  'makosh-ai-inference-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
-  'hermes-ollama-ai-api': [
+  'makosh-ollama-ai-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
   ],
-  'hermes-ollama-ai-assembly': [
+  'makosh-ollama-ai-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
   ],
-  'hermes-ollama-ai-core': [
+  'makosh-ollama-ai-core': [
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-ollama-ai-http': [
+  'makosh-ollama-ai-http': [
     { name: 'async-std', kind: 'normal', source: 'crates_io', version: '=1.13.2', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-ollama-ai-persistence': [
+  'makosh-ollama-ai-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
-  'hermes-ollama-ai-runtime': [
+  'makosh-ollama-ai-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4496,13 +4496,13 @@ const COMMUNICATIONS_AI_SOURCE_CONTRACT_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const ATTACHMENT_ARCHIVE_INSPECTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_AI_SOURCE_CONTRACT_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-archive-inspection-api': [
+  'makosh-attachment-archive-inspection-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-attachment-archive-inspection-ingress': [
+  'makosh-attachment-archive-inspection-ingress': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4510,17 +4510,17 @@ const ATTACHMENT_ARCHIVE_INSPECTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLI
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-attachment-archive-inspection-core': [
+  'makosh-attachment-archive-inspection-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-attachment-archive-inspection-zip': [
+  'makosh-attachment-archive-inspection-zip': [
     { name: 'zip', kind: 'normal', source: 'crates_io', version: '=6.0.0', defaultFeatures: false, features: ['deflate-flate2-zlib-rs'] },
   ],
 };
 
 const ATTACHMENT_ARCHIVE_INSPECTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_ARCHIVE_INSPECTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-archive-inspection-persistence': [
+  'makosh-attachment-archive-inspection-persistence': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
@@ -4529,7 +4529,7 @@ const ATTACHMENT_ARCHIVE_INSPECTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST
 
 const ATTACHMENT_ARCHIVE_INSPECTION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_ARCHIVE_INSPECTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-archive-inspection-runtime': [
+  'makosh-attachment-archive-inspection-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -4541,7 +4541,7 @@ const ATTACHMENT_ARCHIVE_INSPECTION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const ATTACHMENT_ARCHIVE_INSPECTION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_ARCHIVE_INSPECTION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-archive-inspection-assembly': [
+  'makosh-attachment-archive-inspection-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4550,25 +4550,25 @@ const ATTACHMENT_ARCHIVE_INSPECTION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = 
 
 const COMMUNICATION_SUMMARY_BUILD_UNITS_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_ARCHIVE_INSPECTION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-summary-api': [
+  'makosh-communication-summary-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communication-summary-core': [],
-  'hermes-communication-summary-persistence': [
+  'makosh-communication-summary-core': [],
+  'makosh-communication-summary-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
-  'hermes-communication-summary-runtime': [
+  'makosh-communication-summary-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-communication-summary-assembly': [
+  'makosh-communication-summary-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4577,18 +4577,18 @@ const COMMUNICATION_SUMMARY_BUILD_UNITS_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATION_TRANSLATION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_SUMMARY_BUILD_UNITS_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-translation-api': [
+  'makosh-communication-translation-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communication-translation-core': [],
+  'makosh-communication-translation-core': [],
 };
 
 const COMMUNICATION_TRANSLATION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TRANSLATION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-translation-persistence': [
+  'makosh-communication-translation-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -4596,7 +4596,7 @@ const COMMUNICATION_TRANSLATION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATION_TRANSLATION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TRANSLATION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-translation-runtime': [
+  'makosh-communication-translation-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4607,7 +4607,7 @@ const COMMUNICATION_TRANSLATION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATION_TRANSLATION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TRANSLATION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-translation-assembly': [
+  'makosh-communication-translation-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4616,18 +4616,18 @@ const COMMUNICATION_TRANSLATION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATION_EXPLANATION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TRANSLATION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-explanation-api': [
+  'makosh-communication-explanation-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communication-explanation-core': [],
+  'makosh-communication-explanation-core': [],
 };
 
 const COMMUNICATION_EXPLANATION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_EXPLANATION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-explanation-persistence': [
+  'makosh-communication-explanation-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -4635,7 +4635,7 @@ const COMMUNICATION_EXPLANATION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATION_EXPLANATION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_EXPLANATION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-explanation-runtime': [
+  'makosh-communication-explanation-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4646,7 +4646,7 @@ const COMMUNICATION_EXPLANATION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATION_EXPLANATION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_EXPLANATION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-explanation-assembly': [
+  'makosh-communication-explanation-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4655,18 +4655,18 @@ const COMMUNICATION_EXPLANATION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_EXPLANATION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-recipient-suggestion-api': [
+  'makosh-communication-recipient-suggestion-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communication-recipient-suggestion-core': [],
+  'makosh-communication-recipient-suggestion-core': [],
 };
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_SOURCE_CONTRACT_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communications-recipient-source-api': [
+  'makosh-communications-recipient-source-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4678,11 +4678,11 @@ const COMMUNICATION_RECIPIENT_SUGGESTION_SOURCE_CONTRACT_THIRD_PARTY_DEPENDENCY_
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-recipient-suggestion-persistence': [
+  'makosh-communication-recipient-suggestion-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
-  'hermes-communications-recipient-source-api': [
+  'makosh-communications-recipient-source-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4694,18 +4694,18 @@ const COMMUNICATION_RECIPIENT_SUGGESTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLO
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-recipient-suggestion-persistence': [
+  'makosh-communication-recipient-suggestion-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
-  'hermes-communication-recipient-suggestion-runtime': [
+  'makosh-communication-recipient-suggestion-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-communications-recipient-source-api': [
+  'makosh-communications-recipient-source-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4717,7 +4717,7 @@ const COMMUNICATION_RECIPIENT_SUGGESTION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIS
 
 const COMMUNICATION_RECIPIENT_SUGGESTION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_RECIPIENT_SUGGESTION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-recipient-suggestion-assembly': [
+  'makosh-communication-recipient-suggestion-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4726,16 +4726,16 @@ const COMMUNICATION_RECIPIENT_SUGGESTION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLI
 
 const COMMUNICATION_TASK_CANDIDATE_CONTRACT_CORE_SOURCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_RECIPIENT_SUGGESTION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-task-candidate-api': [
+  'makosh-communication-task-candidate-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communication-task-candidate-core': [
+  'makosh-communication-task-candidate-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communications-task-source-api': [
+  'makosh-communications-task-source-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4747,7 +4747,7 @@ const COMMUNICATION_TASK_CANDIDATE_CONTRACT_CORE_SOURCE_THIRD_PARTY_DEPENDENCY_A
 
 const COMMUNICATION_TASK_CANDIDATE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TASK_CANDIDATE_CONTRACT_CORE_SOURCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-task-candidate-persistence': [
+  'makosh-communication-task-candidate-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -4755,7 +4755,7 @@ const COMMUNICATION_TASK_CANDIDATE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST 
 
 const COMMUNICATION_TASK_CANDIDATE_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TASK_CANDIDATE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-task-candidate-runtime': [
+  'makosh-communication-task-candidate-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4766,7 +4766,7 @@ const COMMUNICATION_TASK_CANDIDATE_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATION_TASK_CANDIDATE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TASK_CANDIDATE_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-task-candidate-assembly': [
+  'makosh-communication-task-candidate-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4775,7 +4775,7 @@ const COMMUNICATION_TASK_CANDIDATE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const REVIEW_TASK_CANDIDATE_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_TASK_CANDIDATE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-review-task-candidate-api': [
+  'makosh-review-task-candidate-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4783,14 +4783,14 @@ const REVIEW_TASK_CANDIDATE_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-review-task-candidate-core': [
+  'makosh-review-task-candidate-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
 };
 
 const REVIEW_TASK_CANDIDATE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_TASK_CANDIDATE_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-review-task-candidate-persistence': [
+  'makosh-review-task-candidate-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -4798,7 +4798,7 @@ const REVIEW_TASK_CANDIDATE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const REVIEW_TASK_CANDIDATE_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_TASK_CANDIDATE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-review-task-candidate-runtime': [
+  'makosh-review-task-candidate-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4809,7 +4809,7 @@ const REVIEW_TASK_CANDIDATE_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const REVIEW_TASK_CANDIDATE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_TASK_CANDIDATE_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-review-task-candidate-assembly': [
+  'makosh-review-task-candidate-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4818,7 +4818,7 @@ const REVIEW_TASK_CANDIDATE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const TASKS_REVIEWED_CANDIDATE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_TASK_CANDIDATE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-tasks-command-api': [
+  'makosh-tasks-command-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4826,14 +4826,14 @@ const TASKS_REVIEWED_CANDIDATE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = 
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-tasks-core': [
+  'makosh-tasks-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
 };
 
 const TASKS_REVIEWED_CANDIDATE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...TASKS_REVIEWED_CANDIDATE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-tasks-persistence': [
+  'makosh-tasks-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -4841,7 +4841,7 @@ const TASKS_REVIEWED_CANDIDATE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const TASKS_REVIEWED_CANDIDATE_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...TASKS_REVIEWED_CANDIDATE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-tasks-runtime': [
+  'makosh-tasks-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4852,7 +4852,7 @@ const TASKS_REVIEWED_CANDIDATE_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST 
 
 const TASKS_REVIEWED_CANDIDATE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...TASKS_REVIEWED_CANDIDATE_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-tasks-assembly': [
+  'makosh-tasks-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4861,7 +4861,7 @@ const TASKS_REVIEWED_CANDIDATE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const REVIEWED_TASK_CANDIDATE_PROMOTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...TASKS_REVIEWED_CANDIDATE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-review-task-candidate-promotion-api': [
+  'makosh-review-task-candidate-promotion-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4869,14 +4869,14 @@ const REVIEWED_TASK_CANDIDATE_PROMOTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALL
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-reviewed-task-candidate-promotion-core': [
+  'makosh-reviewed-task-candidate-promotion-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
 };
 
 const REVIEWED_TASK_CANDIDATE_PROMOTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEWED_TASK_CANDIDATE_PROMOTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-reviewed-task-candidate-promotion-persistence': [
+  'makosh-reviewed-task-candidate-promotion-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -4884,7 +4884,7 @@ const REVIEWED_TASK_CANDIDATE_PROMOTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOW
 
 const REVIEWED_TASK_CANDIDATE_PROMOTION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEWED_TASK_CANDIDATE_PROMOTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-reviewed-task-candidate-promotion-runtime': [
+  'makosh-reviewed-task-candidate-promotion-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4895,7 +4895,7 @@ const REVIEWED_TASK_CANDIDATE_PROMOTION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST
 
 const REVIEWED_TASK_CANDIDATE_PROMOTION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEWED_TASK_CANDIDATE_PROMOTION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-reviewed-task-candidate-promotion-assembly': [
+  'makosh-reviewed-task-candidate-promotion-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4904,16 +4904,16 @@ const REVIEWED_TASK_CANDIDATE_PROMOTION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIS
 
 const COMMUNICATION_NOTE_CANDIDATE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEWED_TASK_CANDIDATE_PROMOTION_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-note-candidate-api': [
+  'makosh-communication-note-candidate-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communication-note-candidate-core': [
+  'makosh-communication-note-candidate-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-communications-note-source-api': [
+  'makosh-communications-note-source-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4925,7 +4925,7 @@ const COMMUNICATION_NOTE_CANDIDATE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIS
 
 const COMMUNICATION_NOTE_CANDIDATE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_NOTE_CANDIDATE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-note-candidate-persistence': [
+  'makosh-communication-note-candidate-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -4933,7 +4933,7 @@ const COMMUNICATION_NOTE_CANDIDATE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST 
 
 const REVIEW_NOTE_CANDIDATE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_NOTE_CANDIDATE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-review-note-candidate-api': [
+  'makosh-review-note-candidate-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4941,14 +4941,14 @@ const REVIEW_NOTE_CANDIDATE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-review-note-candidate-core': [
+  'makosh-review-note-candidate-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
 };
 
 const KNOWLEDGE_VERIFIED_NOTE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_NOTE_CANDIDATE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-knowledge-command-api': [
+  'makosh-knowledge-command-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4956,14 +4956,14 @@ const KNOWLEDGE_VERIFIED_NOTE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-knowledge-core': [
+  'makosh-knowledge-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
 };
 
 const KNOWLEDGE_VERIFIED_NOTE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...KNOWLEDGE_VERIFIED_NOTE_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-knowledge-persistence': [
+  'makosh-knowledge-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -4971,7 +4971,7 @@ const KNOWLEDGE_VERIFIED_NOTE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const KNOWLEDGE_VERIFIED_NOTE_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...KNOWLEDGE_VERIFIED_NOTE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-knowledge-runtime': [
+  'makosh-knowledge-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -4982,7 +4982,7 @@ const KNOWLEDGE_VERIFIED_NOTE_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST =
 
 const KNOWLEDGE_VERIFIED_NOTE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...KNOWLEDGE_VERIFIED_NOTE_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-knowledge-assembly': [
+  'makosh-knowledge-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -4991,7 +4991,7 @@ const KNOWLEDGE_VERIFIED_NOTE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const REVIEW_NOTE_CANDIDATE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...KNOWLEDGE_VERIFIED_NOTE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-review-note-candidate-persistence': [
+  'makosh-review-note-candidate-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -4999,7 +4999,7 @@ const REVIEW_NOTE_CANDIDATE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const REVIEW_NOTE_CANDIDATE_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_NOTE_CANDIDATE_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-review-note-candidate-promotion-api': [
+  'makosh-review-note-candidate-promotion-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -5007,7 +5007,7 @@ const REVIEW_NOTE_CANDIDATE_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-review-note-candidate-runtime': [
+  'makosh-review-note-candidate-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -5018,7 +5018,7 @@ const REVIEW_NOTE_CANDIDATE_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const REVIEW_NOTE_CANDIDATE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_NOTE_CANDIDATE_MANAGED_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-review-note-candidate-assembly': [
+  'makosh-review-note-candidate-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -5027,21 +5027,21 @@ const REVIEW_NOTE_CANDIDATE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const REVIEWED_NOTE_CANDIDATE_PROMOTION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEW_NOTE_CANDIDATE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-reviewed-note-candidate-promotion-core': [
+  'makosh-reviewed-note-candidate-promotion-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-reviewed-note-candidate-promotion-persistence': [
+  'makosh-reviewed-note-candidate-promotion-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
-  'hermes-reviewed-note-candidate-promotion-runtime': [
+  'makosh-reviewed-note-candidate-promotion-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-reviewed-note-candidate-promotion-assembly': [
+  'makosh-reviewed-note-candidate-promotion-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -5050,14 +5050,14 @@ const REVIEWED_NOTE_CANDIDATE_PROMOTION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const COMMUNICATION_NOTE_CANDIDATE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...REVIEWED_NOTE_CANDIDATE_PROMOTION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-communication-note-candidate-runtime': [
+  'makosh-communication-note-candidate-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-communication-note-candidate-assembly': [
+  'makosh-communication-note-candidate-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -5066,13 +5066,13 @@ const COMMUNICATION_NOTE_CANDIDATE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const ATTACHMENT_TEXT_EXTRACTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATION_NOTE_CANDIDATE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-text-extraction-api': [
+  'makosh-attachment-text-extraction-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-attachment-text-extraction-ingress': [
+  'makosh-attachment-text-extraction-ingress': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -5080,30 +5080,30 @@ const ATTACHMENT_TEXT_EXTRACTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST 
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-attachment-text-extraction-core': [
+  'makosh-attachment-text-extraction-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
 };
 
 const ATTACHMENT_TEXT_EXTRACTION_PARSER_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_TEXT_EXTRACTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-text-extraction-parser-contract': [],
-  'hermes-attachment-text-extraction-plain': [],
-  'hermes-attachment-text-extraction-pdf': [
+  'makosh-attachment-text-extraction-parser-contract': [],
+  'makosh-attachment-text-extraction-plain': [],
+  'makosh-attachment-text-extraction-pdf': [
     { name: 'pdf-text-extract', kind: 'normal', source: 'crates_io', version: '=0.2.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-attachment-text-extraction-docx': [
+  'makosh-attachment-text-extraction-docx': [
     { name: 'quick-xml', kind: 'normal', source: 'crates_io', version: '=0.41.0', defaultFeatures: false, features: [] },
     { name: 'zip', kind: 'normal', source: 'crates_io', version: '=6.0.0', defaultFeatures: false, features: ['deflate-flate2-zlib-rs'] },
   ],
-  'hermes-attachment-text-extraction-ocr': [
+  'makosh-attachment-text-extraction-ocr': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
 };
 
 const ATTACHMENT_TEXT_EXTRACTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_TEXT_EXTRACTION_PARSER_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-text-extraction-persistence': [
+  'makosh-attachment-text-extraction-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -5111,14 +5111,14 @@ const ATTACHMENT_TEXT_EXTRACTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = 
 
 const ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_TEXT_EXTRACTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-text-extraction-runtime': [
+  'makosh-attachment-text-extraction-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-attachment-text-extraction-assembly': [
+  'makosh-attachment-text-extraction-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -5127,13 +5127,13 @@ const ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLI
 
 const ATTACHMENT_PREVIEW_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-preview-api': [
+  'makosh-attachment-preview-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-attachment-preview-ingress': [
+  'makosh-attachment-preview-ingress': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -5141,22 +5141,22 @@ const ATTACHMENT_PREVIEW_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-attachment-preview-core': [],
-  'hermes-attachment-preview-renderer-contract': [],
+  'makosh-attachment-preview-core': [],
+  'makosh-attachment-preview-renderer-contract': [],
 };
 
 const ATTACHMENT_PREVIEW_SAFE_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-preview-text': [],
-  'hermes-attachment-preview-image': [
+  'makosh-attachment-preview-text': [],
+  'makosh-attachment-preview-image': [
     { name: 'image', kind: 'normal', source: 'crates_io', version: '=0.25.9', defaultFeatures: false, features: ['gif', 'jpeg', 'png', 'webp'] },
   ],
-  'hermes-attachment-preview-media': [],
+  'makosh-attachment-preview-media': [],
 };
 
 const ATTACHMENT_PREVIEW_PDF_ADAPTER_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_SAFE_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-preview-pdf': [
+  'makosh-attachment-preview-pdf': [
     { name: 'image', kind: 'normal', source: 'crates_io', version: '=0.25.9', defaultFeatures: false, features: ['png'] },
     { name: 'hayro', kind: 'normal', source: 'crates_io', version: '=0.7.1', defaultFeatures: true, features: [] },
   ],
@@ -5164,7 +5164,7 @@ const ATTACHMENT_PREVIEW_PDF_ADAPTER_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const ATTACHMENT_PREVIEW_DOCX_ADAPTER_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_PDF_ADAPTER_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-preview-docx': [
+  'makosh-attachment-preview-docx': [
     { name: 'image', kind: 'normal', source: 'crates_io', version: '=0.25.9', defaultFeatures: false, features: ['png'] },
     { name: 'quick-xml', kind: 'normal', source: 'crates_io', version: '=0.41.0', defaultFeatures: false, features: [] },
     { name: 'swash', kind: 'normal', source: 'crates_io', version: '=0.2.10', defaultFeatures: false, features: ['render', 'std'] },
@@ -5174,7 +5174,7 @@ const ATTACHMENT_PREVIEW_DOCX_ADAPTER_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const ATTACHMENT_PREVIEW_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_DOCX_ADAPTER_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-preview-persistence': [
+  'makosh-attachment-preview-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -5182,7 +5182,7 @@ const ATTACHMENT_PREVIEW_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const ATTACHMENT_PREVIEW_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-preview-runtime': [
+  'makosh-attachment-preview-runtime': [
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -5194,7 +5194,7 @@ const ATTACHMENT_PREVIEW_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const ATTACHMENT_PREVIEW_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-preview-assembly': [
+  'makosh-attachment-preview-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -5203,51 +5203,51 @@ const ATTACHMENT_PREVIEW_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const ATTACHMENT_PREVIEW_RETAINED_EVIDENCE_REPLAY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-retained-evidence-replay-protocol': [
+  'makosh-retained-evidence-replay-protocol': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-attachment-preview-evidence-replay-api': [
+  'makosh-attachment-preview-evidence-replay-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-attachment-preview-evidence-replay-core': [],
-  'hermes-attachment-preview-evidence-replay-persistence': [
+  'makosh-attachment-preview-evidence-replay-core': [],
+  'makosh-attachment-preview-evidence-replay-persistence': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
-  'hermes-attachment-preview-evidence-replay-runtime': [
+  'makosh-attachment-preview-evidence-replay-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-attachment-preview-evidence-replay-assembly': [
+  'makosh-attachment-preview-evidence-replay-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
   ],
-  'hermes-communications-retained-evidence-replay-persistence': [
+  'makosh-communications-retained-evidence-replay-persistence': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'dev', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'dev', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
-  'hermes-mail-retained-evidence-replay-persistence': [
+  'makosh-mail-retained-evidence-replay-persistence': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'dev', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'dev', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
-  'hermes-communications-retained-evidence-replay-contract': [
+  'makosh-communications-retained-evidence-replay-contract': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -5255,7 +5255,7 @@ const ATTACHMENT_PREVIEW_RETAINED_EVIDENCE_REPLAY_THIRD_PARTY_DEPENDENCY_ALLOWLI
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-mail-retained-evidence-replay-contract': [
+  'makosh-mail-retained-evidence-replay-contract': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -5267,13 +5267,13 @@ const ATTACHMENT_PREVIEW_RETAINED_EVIDENCE_REPLAY_THIRD_PARTY_DEPENDENCY_ALLOWLI
 
 const ATTACHMENT_TRANSLATION_CONTRACTS_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_PREVIEW_RETAINED_EVIDENCE_REPLAY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-translation-api': [
+  'makosh-attachment-translation-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-attachment-translation-ingress': [
+  'makosh-attachment-translation-ingress': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -5281,12 +5281,12 @@ const ATTACHMENT_TRANSLATION_CONTRACTS_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-attachment-translation-core': [],
+  'makosh-attachment-translation-core': [],
 };
 
 const ATTACHMENT_TRANSLATION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_TRANSLATION_CONTRACTS_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-translation-persistence': [
+  'makosh-attachment-translation-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -5294,7 +5294,7 @@ const ATTACHMENT_TRANSLATION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const ATTACHMENT_TRANSLATION_RUNTIME_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_TRANSLATION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-attachment-translation-runtime': [
+  'makosh-attachment-translation-runtime': [
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: true, features: [] },
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -5302,7 +5302,7 @@ const ATTACHMENT_TRANSLATION_RUNTIME_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST =
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-attachment-translation-assembly': [
+  'makosh-attachment-translation-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -5311,7 +5311,7 @@ const ATTACHMENT_TRANSLATION_RUNTIME_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST =
 
 const CONTACTS_MAIL_IDENTITY_COMMAND_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...ATTACHMENT_TRANSLATION_RUNTIME_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-contacts-command-api': [
+  'makosh-contacts-command-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -5319,14 +5319,14 @@ const CONTACTS_MAIL_IDENTITY_COMMAND_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWL
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-contacts-core': [
+  'makosh-contacts-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
 };
 
 const CONTACTS_MAIL_IDENTITY_COMMAND_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...CONTACTS_MAIL_IDENTITY_COMMAND_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-contacts-persistence': [
+  'makosh-contacts-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -5334,7 +5334,7 @@ const CONTACTS_MAIL_IDENTITY_COMMAND_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIS
 
 const CONTACTS_MAIL_IDENTITY_COMMAND_RUNTIME_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...CONTACTS_MAIL_IDENTITY_COMMAND_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-contacts-runtime': [
+  'makosh-contacts-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -5342,7 +5342,7 @@ const CONTACTS_MAIL_IDENTITY_COMMAND_RUNTIME_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALL
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
-  'hermes-contacts-assembly': [
+  'makosh-contacts-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -5351,7 +5351,7 @@ const CONTACTS_MAIL_IDENTITY_COMMAND_RUNTIME_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALL
 
 const MAIL_CONTACTS_SYNC_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...CONTACTS_MAIL_IDENTITY_COMMAND_RUNTIME_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-address-book-contract': [
+  'makosh-mail-address-book-contract': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -5359,18 +5359,18 @@ const MAIL_CONTACTS_SYNC_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-mail-contacts-sync-api': [
+  'makosh-mail-contacts-sync-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-mail-contacts-sync-core': [],
+  'makosh-mail-contacts-sync-core': [],
 };
 
 const MAIL_CONTACTS_SYNC_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...MAIL_CONTACTS_SYNC_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-contacts-sync-persistence': [
+  'makosh-mail-contacts-sync-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -5378,7 +5378,7 @@ const MAIL_CONTACTS_SYNC_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const MAIL_CONTACTS_SYNC_RUNTIME_ADMISSION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...MAIL_CONTACTS_SYNC_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-contacts-mail-sync-source-api': [
+  'makosh-contacts-mail-sync-source-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -5386,7 +5386,7 @@ const MAIL_CONTACTS_SYNC_RUNTIME_ADMISSION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-mail-contacts-sync-runtime': [
+  'makosh-mail-contacts-sync-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -5398,14 +5398,14 @@ const MAIL_CONTACTS_SYNC_RUNTIME_ADMISSION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const MAIL_ADDRESS_BOOK_PROVIDER_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...MAIL_CONTACTS_SYNC_RUNTIME_ADMISSION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-google-people': [
+  'makosh-mail-google-people': [
     { name: 'async-native-tls', kind: 'normal', source: 'crates_io', version: '=0.6.0', defaultFeatures: true, features: [] },
     { name: 'async-std', kind: 'normal', source: 'crates_io', version: '=1.13.2', defaultFeatures: true, features: [] },
     { name: 'futures-util', kind: 'normal', source: 'crates_io', version: '=0.3.32', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: true, features: ['derive'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
   ],
-  'hermes-mail-carddav': [
+  'makosh-mail-carddav': [
     { name: 'async-native-tls', kind: 'normal', source: 'crates_io', version: '=0.6.0', defaultFeatures: true, features: [] },
     { name: 'async-std', kind: 'normal', source: 'crates_io', version: '=1.13.2', defaultFeatures: true, features: [] },
     { name: 'base64', kind: 'normal', source: 'crates_io', version: '=0.22.1', defaultFeatures: true, features: [] },
@@ -5416,7 +5416,7 @@ const MAIL_ADDRESS_BOOK_PROVIDER_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const MAIL_ADDRESS_BOOK_PERSISTENCE_AUTHORITY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...MAIL_ADDRESS_BOOK_PROVIDER_ADAPTERS_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-address-book-persistence': [
+  'makosh-mail-address-book-persistence': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
@@ -5428,20 +5428,20 @@ const MAIL_ADDRESS_BOOK_RUNTIME_EXECUTION_THIRD_PARTY_DEPENDENCY_ALLOWLIST =
 
 const MAIL_CONTACTS_SYNC_RELEASE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...MAIL_ADDRESS_BOOK_RUNTIME_EXECUTION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-mail-contacts-sync-assembly': [
+  'makosh-mail-contacts-sync-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
   ],
-  'hermes-speech-to-text-api': [
+  'makosh-speech-to-text-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-speech-to-text-core': [],
-  'hermes-speech-to-text-persistence': [
+  'makosh-speech-to-text-core': [],
+  'makosh-speech-to-text-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -5449,17 +5449,17 @@ const MAIL_CONTACTS_SYNC_RELEASE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const DESKTOP_CALL_RECORDING_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...MAIL_CONTACTS_SYNC_RELEASE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-desktop-call-recording-api': [
+  'makosh-desktop-call-recording-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-desktop-call-recording-core': [
+  'makosh-desktop-call-recording-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-call-transcription-ingress': [
+  'makosh-call-transcription-ingress': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -5471,7 +5471,7 @@ const DESKTOP_CALL_RECORDING_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const DESKTOP_CALL_RECORDING_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...DESKTOP_CALL_RECORDING_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-desktop-call-recording-persistence': [
+  'makosh-desktop-call-recording-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -5479,7 +5479,7 @@ const DESKTOP_CALL_RECORDING_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const DESKTOP_CALL_RECORDING_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...DESKTOP_CALL_RECORDING_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-desktop-call-recording-runtime': [
+  'makosh-desktop-call-recording-runtime': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
@@ -5490,7 +5490,7 @@ const DESKTOP_CALL_RECORDING_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const DESKTOP_CALL_RECORDING_RELEASE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...DESKTOP_CALL_RECORDING_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-desktop-call-recording-assembly': [
+  'makosh-desktop-call-recording-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -5499,21 +5499,21 @@ const DESKTOP_CALL_RECORDING_RELEASE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST =
 
 const CALL_TRANSCRIPTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...DESKTOP_CALL_RECORDING_RELEASE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-call-transcription-api': [
+  'makosh-call-transcription-api': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
-  'hermes-call-transcription-core': [
+  'makosh-call-transcription-core': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
   ],
 };
 
 const CALL_TRANSCRIPTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...CALL_TRANSCRIPTION_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-call-transcription-persistence': [
+  'makosh-call-transcription-persistence': [
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
   ],
@@ -5521,7 +5521,7 @@ const CALL_TRANSCRIPTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const CALL_TRANSCRIPTION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...CALL_TRANSCRIPTION_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-call-transcription-runtime': [
+  'makosh-call-transcription-runtime': [
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: true, features: [] },
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
@@ -5533,7 +5533,7 @@ const CALL_TRANSCRIPTION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
 
 const CALL_TRANSCRIPTION_RELEASE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...CALL_TRANSCRIPTION_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
-  'hermes-call-transcription-assembly': [
+  'makosh-call-transcription-assembly': [
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
@@ -5558,21 +5558,21 @@ const FORBIDDEN_DEPENDENCIES = [
 ];
 
 const RECOVERY_FORBIDDEN_DEPENDENCY_PREFIXES = [
-  'hermes-vault-',
-  'hermes-storage-',
-  'hermes-integration-',
-  'hermes-provider-',
+  'makosh-vault-',
+  'makosh-storage-',
+  'makosh-integration-',
+  'makosh-provider-',
 ];
 
 const VAULT_FOUNDATION_FORBIDDEN_DEPENDENCY_PREFIXES = [
-  'hermes-storage-',
-  'hermes-integration-',
-  'hermes-provider-',
+  'makosh-storage-',
+  'makosh-integration-',
+  'makosh-provider-',
 ];
 
 const STORAGE_FOUNDATION_FORBIDDEN_DEPENDENCY_PREFIXES = [
-  'hermes-integration-',
-  'hermes-provider-',
+  'makosh-integration-',
+  'makosh-provider-',
 ];
 
 const KERNEL_PROFILE_KEYS = [
@@ -6416,55 +6416,55 @@ const CALL_TRANSCRIPTION_RUNTIME_INVENTORY = {
 };
 
 const MAIL_OUTBOUND_MIME_ATTACHMENTS_CARGO_FEATURE_ALLOWLIST = {
-  'hermes-communication-cross-channel-forward-persistence': {
+  'makosh-communication-cross-channel-forward-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-communication-delayed-delivery-persistence': {
+  'makosh-communication-delayed-delivery-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-communication-delivery-intent-persistence': {
+  'makosh-communication-delivery-intent-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-reviewed-task-candidate-promotion-persistence': {
+  'makosh-reviewed-task-candidate-promotion-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-reviewed-note-candidate-promotion-persistence': {
+  'makosh-reviewed-note-candidate-promotion-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-mail-api': {
+  'makosh-mail-api': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-mail-imap': {
+  'makosh-mail-imap': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-mail-gmail': {
+  'makosh-mail-gmail': {
     default: [],
-    'conformance-test-support': ['hermes-mail-api/conformance-test-support'],
+    'conformance-test-support': ['makosh-mail-api/conformance-test-support'],
   },
-  'hermes-mail-persistence': {
+  'makosh-mail-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-mail-runtime': {
+  'makosh-mail-runtime': {
     default: [],
     'conformance-test-support': [
-      'hermes-mail-api/conformance-test-support',
-      'hermes-mail-gmail/conformance-test-support',
-      'hermes-mail-imap/conformance-test-support',
+      'makosh-mail-api/conformance-test-support',
+      'makosh-mail-gmail/conformance-test-support',
+      'makosh-mail-imap/conformance-test-support',
     ],
   },
 };
 
 const CONTACTS_MAIL_IDENTITY_COMMAND_PERSISTENCE_CARGO_FEATURE_ALLOWLIST = {
   ...MAIL_OUTBOUND_MIME_ATTACHMENTS_CARGO_FEATURE_ALLOWLIST,
-  'hermes-contacts-persistence': {
+  'makosh-contacts-persistence': {
     default: [],
     'conformance-test-support': [],
   },
@@ -6472,7 +6472,7 @@ const CONTACTS_MAIL_IDENTITY_COMMAND_PERSISTENCE_CARGO_FEATURE_ALLOWLIST = {
 
 const MAIL_CONTACTS_SYNC_PERSISTENCE_CARGO_FEATURE_ALLOWLIST = {
   ...CONTACTS_MAIL_IDENTITY_COMMAND_PERSISTENCE_CARGO_FEATURE_ALLOWLIST,
-  'hermes-mail-contacts-sync-persistence': {
+  'makosh-mail-contacts-sync-persistence': {
     default: [],
     'conformance-test-support': [],
   },
@@ -6480,11 +6480,11 @@ const MAIL_CONTACTS_SYNC_PERSISTENCE_CARGO_FEATURE_ALLOWLIST = {
 
 const MAIL_ADDRESS_BOOK_PROVIDER_ADAPTERS_CARGO_FEATURE_ALLOWLIST = {
   ...MAIL_CONTACTS_SYNC_PERSISTENCE_CARGO_FEATURE_ALLOWLIST,
-  'hermes-mail-google-people': {
+  'makosh-mail-google-people': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-mail-carddav': {
+  'makosh-mail-carddav': {
     default: [],
     'conformance-test-support': [],
   },
@@ -6492,7 +6492,7 @@ const MAIL_ADDRESS_BOOK_PROVIDER_ADAPTERS_CARGO_FEATURE_ALLOWLIST = {
 
 const MAIL_ADDRESS_BOOK_PERSISTENCE_AUTHORITY_CARGO_FEATURE_ALLOWLIST = {
   ...MAIL_ADDRESS_BOOK_PROVIDER_ADAPTERS_CARGO_FEATURE_ALLOWLIST,
-  'hermes-mail-address-book-persistence': {
+  'makosh-mail-address-book-persistence': {
     default: [],
     'conformance-test-support': [],
   },
@@ -6500,14 +6500,14 @@ const MAIL_ADDRESS_BOOK_PERSISTENCE_AUTHORITY_CARGO_FEATURE_ALLOWLIST = {
 
 const MAIL_ADDRESS_BOOK_RUNTIME_EXECUTION_CARGO_FEATURE_ALLOWLIST = {
   ...MAIL_ADDRESS_BOOK_PERSISTENCE_AUTHORITY_CARGO_FEATURE_ALLOWLIST,
-  'hermes-mail-runtime': {
+  'makosh-mail-runtime': {
     default: [],
     'conformance-test-support': [
-      'hermes-mail-api/conformance-test-support',
-      'hermes-mail-carddav/conformance-test-support',
-      'hermes-mail-gmail/conformance-test-support',
-      'hermes-mail-google-people/conformance-test-support',
-      'hermes-mail-imap/conformance-test-support',
+      'makosh-mail-api/conformance-test-support',
+      'makosh-mail-carddav/conformance-test-support',
+      'makosh-mail-gmail/conformance-test-support',
+      'makosh-mail-google-people/conformance-test-support',
+      'makosh-mail-imap/conformance-test-support',
     ],
   },
 };
@@ -6654,75 +6654,75 @@ function isExactTargetPolicy(targetPolicy, expectedPackages) {
     const target = targetPolicy[packageName];
     const packageDescriptor = expectedPackages.find(({ name }) => name === packageName);
     const protocolPackage = [
-      'hermes-events-protocol',
-      'hermes-retained-evidence-replay-protocol',
-      'hermes-attachment-preview-evidence-replay-api',
-      'hermes-communications-retained-evidence-replay-contract',
-      'hermes-mail-retained-evidence-replay-contract',
-      'hermes-runtime-protocol',
-      'hermes-gateway-protocol',
-      'hermes-storage-protocol',
-      'hermes-scheduler-protocol',
-      'hermes-whatsapp-api',
-      'hermes-telegram-api',
-      'hermes-zulip-api',
-      'hermes-mail-api',
-      'hermes-communications-ingress',
-      'hermes-communications-call-evidence-ingress',
-      'hermes-communications-call-evidence-api',
-      'hermes-communications-attachment-contract',
-      'hermes-communications-api',
-      'hermes-communications-content-api',
-      'hermes-communications-saved-query-api',
-      'hermes-communications-sender-insights-api',
-      'hermes-communications-evidence-export-source-api',
-      'hermes-communications-cross-channel-forward-source-api',
-      'hermes-communications-ai-source-api',
-      'hermes-communication-reply-suggestion-api',
-      'hermes-communication-summary-api',
-      'hermes-communication-translation-api',
-      'hermes-communication-explanation-api',
-      'hermes-communication-recipient-suggestion-api',
-      'hermes-communications-recipient-source-api',
-      'hermes-communication-task-candidate-api',
-      'hermes-communications-task-source-api',
-      'hermes-communication-note-candidate-api',
-      'hermes-communications-note-source-api',
-      'hermes-knowledge-command-api',
-      'hermes-ai-contracts',
-      'hermes-attachment-archive-inspection-api',
-      'hermes-attachment-archive-inspection-ingress',
-      'hermes-attachment-text-extraction-api',
-      'hermes-attachment-text-extraction-ingress',
-      'hermes-attachment-preview-api',
-      'hermes-attachment-preview-ingress',
-      'hermes-attachment-translation-api',
-      'hermes-attachment-translation-ingress',
-      'hermes-communications-export-api',
-      'hermes-communication-delivery-intent-api',
-      'hermes-communication-delivery-intent-ingress-api',
-      'hermes-communication-bulk-action-api',
-      'hermes-communication-delayed-delivery-api',
-      'hermes-communication-cross-channel-forward-api',
-      'hermes-review-attention-api',
-      'hermes-review-note-candidate-api',
-      'hermes-review-note-candidate-promotion-api',
-      'hermes-review-task-candidate-api',
-      'hermes-review-task-candidate-promotion-api',
-      'hermes-tasks-command-api',
-      'hermes-contacts-command-api',
-      'hermes-contacts-mail-sync-source-api',
-      'hermes-mail-address-book-contract',
-      'hermes-mail-contacts-sync-api',
-      'hermes-speech-to-text-api',
-      'hermes-desktop-call-recording-api',
-      'hermes-call-transcription-ingress',
-      'hermes-call-transcription-api',
-      'hermes-mail-delivery-intent-contract',
-      'hermes-telegram-delivery-intent-contract',
-      'hermes-whatsapp-delivery-intent-contract',
-      'hermes-zulip-delivery-intent-contract',
-      'hermes-attachment-security-contract',
+      'makosh-events-protocol',
+      'makosh-retained-evidence-replay-protocol',
+      'makosh-attachment-preview-evidence-replay-api',
+      'makosh-communications-retained-evidence-replay-contract',
+      'makosh-mail-retained-evidence-replay-contract',
+      'makosh-runtime-protocol',
+      'makosh-gateway-protocol',
+      'makosh-storage-protocol',
+      'makosh-scheduler-protocol',
+      'makosh-whatsapp-api',
+      'makosh-telegram-api',
+      'makosh-zulip-api',
+      'makosh-mail-api',
+      'makosh-communications-ingress',
+      'makosh-communications-call-evidence-ingress',
+      'makosh-communications-call-evidence-api',
+      'makosh-communications-attachment-contract',
+      'makosh-communications-api',
+      'makosh-communications-content-api',
+      'makosh-communications-saved-query-api',
+      'makosh-communications-sender-insights-api',
+      'makosh-communications-evidence-export-source-api',
+      'makosh-communications-cross-channel-forward-source-api',
+      'makosh-communications-ai-source-api',
+      'makosh-communication-reply-suggestion-api',
+      'makosh-communication-summary-api',
+      'makosh-communication-translation-api',
+      'makosh-communication-explanation-api',
+      'makosh-communication-recipient-suggestion-api',
+      'makosh-communications-recipient-source-api',
+      'makosh-communication-task-candidate-api',
+      'makosh-communications-task-source-api',
+      'makosh-communication-note-candidate-api',
+      'makosh-communications-note-source-api',
+      'makosh-knowledge-command-api',
+      'makosh-ai-contracts',
+      'makosh-attachment-archive-inspection-api',
+      'makosh-attachment-archive-inspection-ingress',
+      'makosh-attachment-text-extraction-api',
+      'makosh-attachment-text-extraction-ingress',
+      'makosh-attachment-preview-api',
+      'makosh-attachment-preview-ingress',
+      'makosh-attachment-translation-api',
+      'makosh-attachment-translation-ingress',
+      'makosh-communications-export-api',
+      'makosh-communication-delivery-intent-api',
+      'makosh-communication-delivery-intent-ingress-api',
+      'makosh-communication-bulk-action-api',
+      'makosh-communication-delayed-delivery-api',
+      'makosh-communication-cross-channel-forward-api',
+      'makosh-review-attention-api',
+      'makosh-review-note-candidate-api',
+      'makosh-review-note-candidate-promotion-api',
+      'makosh-review-task-candidate-api',
+      'makosh-review-task-candidate-promotion-api',
+      'makosh-tasks-command-api',
+      'makosh-contacts-command-api',
+      'makosh-contacts-mail-sync-source-api',
+      'makosh-mail-address-book-contract',
+      'makosh-mail-contacts-sync-api',
+      'makosh-speech-to-text-api',
+      'makosh-desktop-call-recording-api',
+      'makosh-call-transcription-ingress',
+      'makosh-call-transcription-api',
+      'makosh-mail-delivery-intent-contract',
+      'makosh-telegram-delivery-intent-contract',
+      'makosh-whatsapp-delivery-intent-contract',
+      'makosh-zulip-delivery-intent-contract',
+      'makosh-attachment-security-contract',
     ].includes(packageName);
     return hasExactKeys(target, ['primaryKind', 'customBuildAllowed'])
       && target.primaryKind === (
@@ -8507,9 +8507,9 @@ function isExactDevelopmentProfile(profile) {
     && Array.isArray(profile.packages)
     && profile.packages.length === 2
     && profile.packages.every((entry) => hasExactKeys(entry, DEVELOPMENT_PACKAGE_KEYS))
-    && profile.packages[0].package === 'hermes-development-kernel-operator'
+    && profile.packages[0].package === 'makosh-development-kernel-operator'
     && profile.packages[0].surface === 'runtime'
-    && profile.packages[1].package === 'hermes-development-assembly'
+    && profile.packages[1].package === 'makosh-development-assembly'
     && profile.packages[1].surface === 'assembly'
     && profile.selection === 'explicit_development_invocation_only'
     && profile.deviceProof === 'file_adapter_es256'

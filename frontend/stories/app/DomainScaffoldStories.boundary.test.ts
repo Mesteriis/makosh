@@ -10,62 +10,62 @@ type DomainScaffoldStoryExpectation = {
 const domainScaffoldStories: readonly DomainScaffoldStoryExpectation[] = [
   {
     fileName: 'Agents.stories.ts',
-    storyTitle: 'Hermes App/AI Agents/Scaffold',
+    storyTitle: 'Макошь App/AI Agents/Scaffold',
     modelKey: 'agents'
   },
   {
     fileName: 'Calendar.stories.ts',
-    storyTitle: 'Hermes App/Calendar/Scaffold',
+    storyTitle: 'Макошь App/Calendar/Scaffold',
     modelKey: 'calendar'
   },
   {
     fileName: 'Documents.stories.ts',
-    storyTitle: 'Hermes App/Documents/Scaffold',
+    storyTitle: 'Макошь App/Documents/Scaffold',
     modelKey: 'documents'
   },
   {
     fileName: 'EventTraces.stories.ts',
-    storyTitle: 'Hermes App/Event Traces/Scaffold',
+    storyTitle: 'Макошь App/Event Traces/Scaffold',
     modelKey: 'eventTraces'
   },
   {
     fileName: 'Home.stories.ts',
-    storyTitle: 'Hermes App/Home/Scaffold',
+    storyTitle: 'Макошь App/Home/Scaffold',
     modelKey: 'home'
   },
   {
     fileName: 'Knowledge.stories.ts',
-    storyTitle: 'Hermes App/Knowledge Graph/Scaffold',
+    storyTitle: 'Макошь App/Knowledge Graph/Scaffold',
     modelKey: 'knowledge'
   },
   {
     fileName: 'Notes.stories.ts',
-    storyTitle: 'Hermes App/Notes/Scaffold',
+    storyTitle: 'Макошь App/Notes/Scaffold',
     modelKey: 'notes'
   },
   {
     fileName: 'Organizations.stories.ts',
-    storyTitle: 'Hermes App/Organizations/Scaffold',
+    storyTitle: 'Макошь App/Organizations/Scaffold',
     modelKey: 'organizations'
   },
   {
     fileName: 'Projects.stories.ts',
-    storyTitle: 'Hermes App/Projects/Scaffold',
+    storyTitle: 'Макошь App/Projects/Scaffold',
     modelKey: 'projects'
   },
   {
     fileName: 'Review.stories.ts',
-    storyTitle: 'Hermes App/Review/Scaffold',
+    storyTitle: 'Макошь App/Review/Scaffold',
     modelKey: 'review'
   },
   {
     fileName: 'Tasks.stories.ts',
-    storyTitle: 'Hermes App/Tasks/Scaffold',
+    storyTitle: 'Макошь App/Tasks/Scaffold',
     modelKey: 'tasks'
   },
   {
     fileName: 'Timeline.stories.ts',
-    storyTitle: 'Hermes App/Timeline/Scaffold',
+    storyTitle: 'Макошь App/Timeline/Scaffold',
     modelKey: 'timeline'
   }
 ]
@@ -101,11 +101,11 @@ describe('domain scaffold Storybook coverage', () => {
     const source = readFileSync(new URL('./Personas.stories.ts', import.meta.url), 'utf8')
     const componentSource = readFileSync(new URL('./PersonasComponents.stories.ts', import.meta.url), 'utf8')
 
-    expect(source).toContain("title: 'Hermes App/Personas/Workspace'")
+    expect(source).toContain("title: 'Макошь App/Personas/Workspace'")
     expect(source).toContain('PersonasWorkspaceComponent')
     expect(source).not.toContain('createDomainScaffoldStory')
     expect(source).not.toContain('domainScaffoldModels.persons')
-    expect(componentSource).toContain("title: 'Hermes App/Personas/Components'")
+    expect(componentSource).toContain("title: 'Макошь App/Personas/Components'")
     expect(componentSource).toContain('PersonaDirectoryPanel')
     expect(componentSource).toContain('PersonaOverviewPanel')
     expect(componentSource).not.toContain('PersonDirectoryPanel')
@@ -119,7 +119,7 @@ describe('domain scaffold Storybook coverage', () => {
   it('keeps Communications on the canonical owner story instead of the scaffold placeholder', () => {
     const source = readFileSync(new URL('./Communications.stories.ts', import.meta.url), 'utf8')
 
-    expect(source).toContain("title: 'Hermes App/Communications/Canonical'")
+    expect(source).toContain("title: 'Макошь App/Communications/Canonical'")
     expect(source).toContain('CanonicalCommunicationsPage')
     expect(source).not.toContain('createDomainScaffoldStory')
     expect(source).not.toContain('domainScaffoldModels.communications')
@@ -128,7 +128,7 @@ describe('domain scaffold Storybook coverage', () => {
   it('keeps Settings on the app owner workbench story instead of the scaffold placeholder', () => {
     const source = readFileSync(new URL('./Settings.stories.ts', import.meta.url), 'utf8')
 
-    expect(source).toContain("title: 'Hermes App/Settings/Clean Room'")
+    expect(source).toContain("title: 'Макошь App/Settings/Clean Room'")
     expect(source).toContain('AppSettingsPage')
     expect(source).not.toContain('createDomainScaffoldStory')
     expect(source).not.toContain('domainScaffoldModels.settings')

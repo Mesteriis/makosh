@@ -9,7 +9,7 @@
 ```markdown
 # Frontend
 
-Общие модули и конфигурация фронтенд-приложения Hermes Hub.
+Общие модули и конфигурация фронтенд-приложения Макошь.
 
 ## Интеграция с почтовыми аккаунтами (`mailSync`)
 
@@ -67,7 +67,7 @@
 - `sanitizeEmailHtml(html)` — очищает HTML: удаляет заблокированные контейнеры, разрешает только теги из белого списка, проверяет атрибуты по политикам, экранирует текст, закрывает незакрытые теги.
 - `normalizePlainText(text)` — экранирует HTML-сущности и заменяет переводы строк на `<br>`.
 - `remoteImageUrlsFromHtml(html)` — возвращает список URL удалённых изображений (`http://` или `https://`) из санитизированного HTML.
-- `rewriteRemoteImageSources(html, remoteSource)` — заменяет `src` у `<img>` с удалёнными источниками: либо на результат вызова `remoteSource(url)`, либо на однопиксельный `data:image/gif` с атрибутами `data-hermes-remote-src` и `aria-label="Remote image blocked"`.
+- `rewriteRemoteImageSources(html, remoteSource)` — заменяет `src` у `<img>` с удалёнными источниками: либо на результат вызова `remoteSource(url)`, либо на однопиксельный `data:image/gif` с атрибутами `data-makosh-remote-src` и `aria-label="Remote image blocked"`.
 
 ### Политики безопасности
 
@@ -264,7 +264,7 @@
 ### Компонент Tabs
 
 Тест `frontend/src/shared/ui/Tabs.boundary.test.ts` документирует, что компонент `Tabs.vue`:
-- принимает пропсы `tabs` (тип `HermesTab[]`) и `active` (строка);
+- принимает пропсы `tabs` (тип `МакошьTab[]`) и `active` (строка);
 - генерирует событие `select` с аргументом `[value: string]`;
 - рендерит кнопки `TabsTrigger` через `v-for="tab in tabs"` и использует `@update:model-value` для обработки выбора.
 

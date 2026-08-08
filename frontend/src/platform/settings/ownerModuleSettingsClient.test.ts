@@ -12,7 +12,7 @@ import {
 	OwnerSettingValueV1Schema,
 	PrepareOwnerModuleSettingsResponseV1Schema,
 	UpdateOwnerModuleSettingsReceiptV1Schema,
-} from '../../gen/hermes/gateway/v1/owner_module_settings_pb'
+} from '../../gen/makosh/gateway/v1/owner_module_settings_pb'
 import type { OwnerDeviceProofV1 } from '../gateway/ownerDeviceProof'
 import { OwnerModuleSettingsClientV1 } from './ownerModuleSettingsClient'
 
@@ -93,7 +93,7 @@ describe('OwnerModuleSettingsClientV1', () => {
 				effectiveRevision: 4n,
 				runtimeGeneration: 7n,
 				applyState: 'current',
-				hostBridgeSocketPath: '/tmp/hermes-mail.sock',
+				hostBridgeSocketPath: '/tmp/makosh-mail.sock',
 			}),
 		})
 		const receipt = await new OwnerModuleSettingsClientV1(

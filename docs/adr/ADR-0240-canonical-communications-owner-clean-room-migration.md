@@ -11,8 +11,8 @@ and Core Gateway routing to the owner-owned public query contract are present.
 `managed_communications_domain_starts_with_owner_local_storage_and_events`
 runs against the disposable authenticated Storage/NATS/Vault/Blob contour through
 `test-authenticated-storage.mjs`; it proves the generic managed-domain launch
-with owner-local Storage and Event Hub credentials, typed `hermes-mail-core`
-and `hermes-telegram-core` ingress observations and their resulting canonical
+with owner-local Storage and Event Hub credentials, typed `makosh-mail-core`
+and `makosh-telegram-core` ingress observations and their resulting canonical
 owner projections through the
 managed owner query route, and the exact canonical outbox envelope on its
 catalog NATS subject. The same live contour redelivers the exact ingress bytes
@@ -43,7 +43,7 @@ The canonical evidence event retains the ingress correlation ID and names the
 direct ingress message as its causation; it never creates a replacement
 cross-owner correlation.
 Attachment anchor, Blob-admission, safety-verdict and lifecycle schemas now
-have one domain-owned source in `hermes-communications-attachment-contract`;
+have one domain-owned source in `makosh-communications-attachment-contract`;
 the former ingress/API schema locations were removed without a facade or
 duplicate re-export.
 All backend owner criteria below are implemented and covered by the exact
@@ -81,12 +81,12 @@ or switches behaviour by provider identity.
 The owner is composed only from these packages:
 
 ```text
-hermes-communications-ingress
-hermes-communications-attachment-contract
-hermes-communications-api
-hermes-communications-domain
-hermes-communications-persistence
-hermes-communications-runtime
+makosh-communications-ingress
+makosh-communications-attachment-contract
+makosh-communications-api
+makosh-communications-domain
+makosh-communications-persistence
+makosh-communications-runtime
 ```
 
 Their responsibilities are exact:

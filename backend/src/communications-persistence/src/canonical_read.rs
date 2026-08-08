@@ -1,6 +1,6 @@
 //! Keyset-paged metadata reads owned by the Communications domain.
 
-use hermes_communications_api::{
+use makosh_communications_api::{
     CommunicationAccountSummaryV1, CommunicationAttachmentAnchorSummaryV1,
     CommunicationConversationIdV1, CommunicationConversationSummaryV1, CommunicationMessageIdV1,
     CommunicationMessageReferenceSummaryV1, CommunicationMessageSummaryV1,
@@ -49,8 +49,8 @@ impl CommunicationsDurablePersistence {
     ) -> Result<Option<CommunicationMessageIdV1>, CommunicationsPersistenceError> {
         let row = sqlx::query(
             "SELECT message.message_id \
-             FROM hermes_data.communications_evidence_summaries evidence \
-             JOIN hermes_data.communications_messages message \
+             FROM makosh_data.communications_evidence_summaries evidence \
+             JOIN makosh_data.communications_messages message \
                ON message.source_cursor_sha256 = evidence.source_cursor_sha256 \
              WHERE evidence.observation_id = $1",
         )
@@ -75,7 +75,7 @@ impl CommunicationsDurablePersistence {
             "SELECT message_id, conversation_id, source_cursor_sha256, \
              canonical_body_state AS body_state, direction, lifecycle_state, \
              first_observed_at_unix_seconds, last_observed_at_unix_seconds, last_evidence_id \
-             FROM hermes_data.communications_messages WHERE message_id = $1",
+             FROM makosh_data.communications_messages WHERE message_id = $1",
         )
         .bind(message_id.bytes().as_slice())
         .fetch_optional(&self.pool)
@@ -94,7 +94,7 @@ impl CommunicationsDurablePersistence {
         let rows = sqlx::query(
             "SELECT account_id, account_cursor_sha256, provider, \
              first_observed_at_unix_seconds, last_observed_at_unix_seconds, last_evidence_id \
-             FROM hermes_data.communications_accounts \
+             FROM makosh_data.communications_accounts \
              WHERE ($1::BIGINT IS NULL \
                 OR last_observed_at_unix_seconds < $1 \
                 OR (last_observed_at_unix_seconds = $1 AND account_id > $2)) \
@@ -127,7 +127,7 @@ impl CommunicationsDurablePersistence {
         let rows = sqlx::query(
             "SELECT conversation_id, account_cursor_sha256, conversation_cursor_sha256, provider, \
              first_observed_at_unix_seconds, last_observed_at_unix_seconds, last_evidence_id \
-             FROM hermes_data.communications_conversations \
+             FROM makosh_data.communications_conversations \
              WHERE ($1::bytea IS NULL OR account_cursor_sha256 = $1) \
                AND ($2::BIGINT IS NULL \
                  OR last_observed_at_unix_seconds < $2 \
@@ -161,7 +161,7 @@ impl CommunicationsDurablePersistence {
             "SELECT message_id, conversation_id, source_cursor_sha256, \
              canonical_body_state AS body_state, direction, lifecycle_state, \
              first_observed_at_unix_seconds, last_observed_at_unix_seconds, last_evidence_id \
-             FROM hermes_data.communications_messages \
+             FROM makosh_data.communications_messages \
              WHERE conversation_id = $1 \
                AND ($2::BIGINT IS NULL \
                  OR last_observed_at_unix_seconds < $2 \
@@ -196,7 +196,7 @@ impl CommunicationsDurablePersistence {
         let rows = sqlx::query(
             "SELECT participant_id, conversation_id, participant_cursor_sha256, display_label, \
              first_observed_at_unix_seconds, last_observed_at_unix_seconds, last_evidence_id \
-             FROM hermes_data.communications_observed_participants \
+             FROM makosh_data.communications_observed_participants \
              WHERE conversation_id = $1 \
                AND ($2::BIGINT IS NULL \
                  OR last_observed_at_unix_seconds < $2 \
@@ -233,7 +233,7 @@ impl CommunicationsDurablePersistence {
              attachment_filename, attachment_media_type, attachment_declared_bytes, \
              attachment_sha256, attachment_disposition, first_observed_at_unix_seconds, \
              last_observed_at_unix_seconds, last_evidence_id \
-             FROM hermes_data.communications_attachment_anchors \
+             FROM makosh_data.communications_attachment_anchors \
              WHERE message_id = $1 \
                AND ($2::BIGINT IS NULL \
                  OR last_observed_at_unix_seconds < $2 \
@@ -275,8 +275,8 @@ impl CommunicationsDurablePersistence {
             "SELECT reference.reference_id, reference.source_message_id, reference.reference_kind, \
              reference.target_source_cursor_sha256, target.message_id AS target_message_id, \
              reference.observed_at_unix_seconds, reference.evidence_id \
-             FROM hermes_data.communications_message_references reference \
-             LEFT JOIN hermes_data.communications_messages target \
+             FROM makosh_data.communications_message_references reference \
+             LEFT JOIN makosh_data.communications_messages target \
                ON target.source_cursor_sha256 = reference.target_source_cursor_sha256 \
              WHERE reference.source_message_id = $1 \
                AND ($2::BIGINT IS NULL \
@@ -313,8 +313,8 @@ impl CommunicationsDurablePersistence {
         let (after_observed_at, after_id) = descending_after(after);
         let rows = sqlx::query(
             "SELECT summary.observation_id \
-             FROM hermes_data.communications_evidence_summaries summary \
-             INNER JOIN hermes_data.communications_messages message \
+             FROM makosh_data.communications_evidence_summaries summary \
+             INNER JOIN makosh_data.communications_messages message \
                ON message.source_cursor_sha256 = summary.source_cursor_sha256 \
              WHERE message.message_id = $1 \
                AND ($2::BIGINT IS NULL \

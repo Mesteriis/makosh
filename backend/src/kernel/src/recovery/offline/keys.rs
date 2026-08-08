@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use hermes_secure_file::{SecureReadPolicy, read as read_secure_file};
+use makosh_secure_file::{SecureReadPolicy, read as read_secure_file};
 
 pub(crate) fn read_secret_key(path: &Path) -> Result<[u8; 32], String> {
     let bytes = read_secure_file(path, SecureReadPolicy::owner_private(32))

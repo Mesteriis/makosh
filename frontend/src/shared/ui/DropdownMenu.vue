@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<{
   sideOffset: 4
 })
 
-const contentClasses = computed(() => ['hermes-dropdown-content', props.class])
+const contentClasses = computed(() => ['makosh-dropdown-content', props.class])
 const isOpen = ref(false)
 const contentRef = ref<HTMLElement | { $el?: Element | null } | null>(null)
 

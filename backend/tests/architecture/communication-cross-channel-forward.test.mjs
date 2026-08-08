@@ -77,7 +77,7 @@ test('cross-channel forward persistence is owner-local durable and bodyless', as
     ),
     readFile(
       new URL(
-        'src/communication-cross-channel-forward-api/proto/hermes/communication_cross_channel_forward/v1/forward.proto',
+        'src/communication-cross-channel-forward-api/proto/makosh/communication_cross_channel_forward/v1/forward.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -301,11 +301,11 @@ test('cross-channel forward persistence is owner-local durable and bodyless', as
       .filter(({ owner }) => owner === 'communication_cross_channel_forward')
       .map(({ name, surface }) => `${name}:${surface}`),
     [
-      'hermes-communication-cross-channel-forward-api:contract',
-      'hermes-communication-cross-channel-forward-core:implementation',
-      'hermes-communication-cross-channel-forward-persistence:persistence',
-      'hermes-communication-cross-channel-forward-runtime:runtime',
-      'hermes-communication-cross-channel-forward-assembly:assembly',
+      'makosh-communication-cross-channel-forward-api:contract',
+      'makosh-communication-cross-channel-forward-core:implementation',
+      'makosh-communication-cross-channel-forward-persistence:persistence',
+      'makosh-communication-cross-channel-forward-runtime:runtime',
+      'makosh-communication-cross-channel-forward-assembly:assembly',
     ],
   );
   assert.match(apiManifest, /role = "workflow"[\s\S]*surface = "contract"/);
@@ -320,7 +320,7 @@ test('cross-channel forward persistence is owner-local durable and bodyless', as
   assert.doesNotMatch(assemblyLib, /tokio|sqlx|async_nats|JetStreamClient/);
   assert.doesNotMatch(
     `${apiManifest}\n${coreManifest}\n${persistenceManifest}\n${runtimeManifest}\n${assemblyManifest}`,
-    /hermes-(?:communications-domain|mail|telegram|whatsapp|zulip|kernel)/,
+    /makosh-(?:communications-domain|mail|telegram|whatsapp|zulip|kernel)/,
   );
   assert.match(api, /COMMUNICATION_CROSS_CHANNEL_FORWARD_CAPABILITY_ID_V1/);
   assert.match(core, /CrossChannelForwardTransitionV1/);
@@ -370,7 +370,7 @@ test('cross-channel forward persistence is owner-local durable and bodyless', as
   assert.match(realtime, /client_realtime_window/);
   assert.match(postgresConformance, /survives_reconnect/);
   assert.match(postgresConformance, /ClaimLost/);
-  assert.match(storageRunner, /HERMES_COMMUNICATION_CROSS_CHANNEL_FORWARD_POSTGRES/);
+  assert.match(storageRunner, /MAKOSH_COMMUNICATION_CROSS_CHANNEL_FORWARD_POSTGRES/);
   assert.match(schema, /COMMUNICATION_CROSS_CHANNEL_FORWARD_STORAGE_BUNDLE_REVISION_V3/);
   assert.match(runtimeAdmission, /ModuleKindV1::Workflow/);
   assert.match(runtimeAdmission, /max_processes: 1/);
@@ -410,7 +410,7 @@ test('cross-channel forward persistence is owner-local durable and bodyless', as
   assert.match(runtimeEventOutbox, /mark_event_outbox_published/);
   assert.doesNotMatch(
     `${runtimeAdmission}\n${managedRuntime}\n${clientPort}\n${clientRealtime}\n${runtimeContracts}\n${sourcePrepare}\n${sourceResults}\n${deliveryResults}\n${blobTransfer}\n${custodyCleanup}\n${runtimeEventOutbox}`,
-    /hermes-(?:mail|telegram|whatsapp|zulip)-(?:runtime|persistence|core|api)/,
+    /makosh-(?:mail|telegram|whatsapp|zulip)-(?:runtime|persistence|core|api)/,
   );
 });
 
@@ -455,7 +455,7 @@ test('cross-channel source preparation is event-only and Communications-owned', 
     ),
     readFile(
       new URL(
-        'src/communications-cross-channel-forward-source-api/proto/hermes/communications/cross_channel_forward_source/v1/cross_channel_forward_source.proto',
+        'src/communications-cross-channel-forward-source-api/proto/makosh/communications/cross_channel_forward_source/v1/cross_channel_forward_source.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -494,7 +494,7 @@ test('cross-channel source preparation is event-only and Communications-owned', 
   assert.ok(
     policy.implementation.productionPackages.some(
       ({ name, owner, surface }) =>
-        name === 'hermes-communications-cross-channel-forward-source-api'
+        name === 'makosh-communications-cross-channel-forward-source-api'
         && owner === 'communications'
         && surface === 'contract',
     ),
@@ -588,7 +588,7 @@ test('delivery-intent workflow ingress is event-only and bodyless', async () => 
     ),
     readFile(
       new URL(
-        'src/communication-delivery-intent-ingress-api/proto/hermes/communication_delivery_intent/ingress/v1/delivery_intent_ingress.proto',
+        'src/communication-delivery-intent-ingress-api/proto/makosh/communication_delivery_intent/ingress/v1/delivery_intent_ingress.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -660,7 +660,7 @@ test('delivery-intent workflow ingress is event-only and bodyless', async () => 
   ]);
   const policy = JSON.parse(policySource);
 
-  assert.match(ingressAdr, /hermes-communication-delivery-intent-ingress-api/);
+  assert.match(ingressAdr, /makosh-communication-delivery-intent-ingress-api/);
   assert.match(ingressAdr, /communication_delivery_intent_submit\.v1\s+command/);
   assert.match(
     ingressAdr,
@@ -690,7 +690,7 @@ test('delivery-intent workflow ingress is event-only and bodyless', async () => 
   assert.ok(
     policy.implementation.productionPackages.some(
       ({ name, owner, surface }) =>
-        name === 'hermes-communication-delivery-intent-ingress-api'
+        name === 'makosh-communication-delivery-intent-ingress-api'
         && owner === 'communication_delivery_intent'
         && surface === 'contract',
     ),
@@ -705,7 +705,7 @@ test('delivery-intent workflow ingress is event-only and bodyless', async () => 
   );
   assert.match(
     deliveryRuntimeManifest,
-    /hermes-communication-delivery-intent-ingress-api/,
+    /makosh-communication-delivery-intent-ingress-api/,
   );
   assert.match(
     deliveryIngressMigration,
@@ -744,7 +744,7 @@ test('delivery-intent workflow ingress is event-only and bodyless', async () => 
   assert.match(deliveryIngressCleanup, /complete_ingress_cleanup/);
   assert.doesNotMatch(
     `${deliveryIngressPersistence}\n${deliveryEventIngress}\n${deliveryIngressResultOutbox}`,
-    /hermes_communication_cross_channel_forward_(?:runtime|persistence|core)/,
+    /makosh_communication_cross_channel_forward_(?:runtime|persistence|core)/,
   );
   assert.match(
     ingressApi,

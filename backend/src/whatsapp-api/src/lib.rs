@@ -12,24 +12,24 @@ pub mod realtime;
 pub mod realtime_wire;
 
 pub mod wire {
-    include!(concat!(env!("OUT_DIR"), "/hermes.whatsapp.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.whatsapp.v1.rs"));
 }
 
 pub mod operational_wire_generated {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.whatsapp.operational.v1.rs"
+        "/makosh.whatsapp.operational.v1.rs"
     ));
 }
 
 pub mod realtime_wire_generated {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.whatsapp.operational.realtime.v1.rs"
+        "/makosh.whatsapp.operational.realtime.v1.rs"
     ));
 }
 
-pub const PACKAGE: &str = "hermes-whatsapp-api";
+pub const PACKAGE: &str = "makosh-whatsapp-api";
 pub const MAX_ID_LEN: usize = 256;
 pub const MAX_TEXT_BYTES: usize = 256 * 1024;
 

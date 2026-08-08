@@ -5,22 +5,22 @@ use std::{
     time::{Duration, Instant},
 };
 
-use hermes_kernel_control_store::ModuleRegistrationState;
-use hermes_mail_api::{
+use makosh_kernel_control_store::ModuleRegistrationState;
+use makosh_mail_api::{
     GmailOAuthAuthorityV1, GmailOAuthCompleteRequestV1, GmailOAuthOutcomeV1,
     GmailOAuthRefreshRequestV1, GmailOAuthStartRequestV1, GmailOAuthStartedV1,
     GmailOAuthStatusRequestV1, MailClientRequestV1, MailClientResponseV1, MailCredentialPurpose,
     client_contract::MailClientContractV1,
 };
-use hermes_mail_persistence::{GmailOAuthCredentialBindingV1, MailDurablePersistence};
-use hermes_mail_runtime::admission::MAIL_CREDENTIAL_LEASE_TTL_SECONDS;
-use hermes_mail_runtime::client_port::{
+use makosh_mail_persistence::{GmailOAuthCredentialBindingV1, MailDurablePersistence};
+use makosh_mail_runtime::admission::MAIL_CREDENTIAL_LEASE_TTL_SECONDS;
+use makosh_mail_runtime::client_port::{
     MailClientPortErrorV1, decode_module_response, encode_module_request,
 };
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_protocol::{SecretClassV1, VaultActionV1, VaultPurposeRequestV1};
-use hermes_vault_store_sqlcipher::{SecretRecordId, SecretRecordScope, VaultStore};
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_protocol::{SecretClassV1, VaultActionV1, VaultPurposeRequestV1};
+use makosh_vault_store_sqlcipher::{SecretRecordId, SecretRecordScope, VaultStore};
 
 use crate::{
     identity::device::signer::{DeviceSigner, FileDeviceSigner},
@@ -62,23 +62,23 @@ struct ManagedGmailOAuthTestContext {
 
 fn start_managed_gmail_oauth_context() -> ManagedGmailOAuthTestContext {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let provider = MailGmailOAuthFixture::start_successful_rotation();
-    let root = unique_target_root("hermes-managed-mail-gmail-oauth");
+    let root = unique_target_root("makosh-managed-mail-gmail-oauth");
     let data = private_directory(short_communications_kernel_data_directory());
     let vault_dir = private_directory(data.join("vault"));
     initialize_vault(&vault_dir, &credential_directory());
     let release = installed_communications_mail_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             "owner-1",
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -141,7 +141,7 @@ fn start_managed_gmail_oauth_context() -> ManagedGmailOAuthTestContext {
 
 fn remove_managed_gmail_oauth_context(root: PathBuf, data: PathBuf) {
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Gmail OAuth fixture");
     std::fs::remove_dir_all(data).expect("remove short kernel data fixture");
@@ -479,7 +479,7 @@ fn managed_mail_gmail_oauth_route_is_fenced_by_owner_revoke() {
 }
 
 fn developer_test_stage(stage: &str) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_mail_gmail_oauth_test_stage={stage}");
     }
 }
@@ -571,7 +571,7 @@ fn wait_for_oauth_outcome(
     request_id: u64,
     operation_id: &str,
     expected: GmailOAuthOutcomeV1,
-) -> hermes_mail_api::GmailOAuthOperationStatusV1 {
+) -> makosh_mail_api::GmailOAuthOperationStatusV1 {
     let deadline = Instant::now() + Duration::from_secs(10);
     loop {
         let response = route_mail_client(
@@ -856,7 +856,7 @@ fn credential_scope(
     )
     .expect("Gmail OAuth credential purpose");
     SecretRecordScope::new(
-        hermes_mail_api::client_contract::MAIL_OWNER_ID.to_owned(),
+        makosh_mail_api::client_contract::MAIL_OWNER_ID.to_owned(),
         &request,
         secret_class,
         revision,

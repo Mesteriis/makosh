@@ -1,14 +1,14 @@
-use hermes_mail_contacts_sync_api::wire::{
+use makosh_mail_contacts_sync_api::wire::{
     GetMailContactsSyncRequestV1, GetMailContactsSyncResponseV1,
     MailContactsSyncDirectionV1 as WireDirection, MailContactsSyncErrorCodeV1 as WireError,
     MailContactsSyncStateV1 as WireState, MailContactsSyncTriggerV1 as WireTrigger,
     StartMailContactsSyncRequestV1, StartMailContactsSyncResponseV1,
 };
-use hermes_mail_contacts_sync_core::{
+use makosh_mail_contacts_sync_core::{
     MailContactsSyncDirectionV1, MailContactsSyncDraftV1, MailContactsSyncRejectCodeV1,
     MailContactsSyncStateV1, MailContactsSyncTriggerV1,
 };
-use hermes_mail_contacts_sync_persistence::{
+use makosh_mail_contacts_sync_persistence::{
     CreateMailContactsSyncOutcomeV1, CreateMailContactsSyncRunV1,
     MailContactsSyncPersistenceErrorV1, MailContactsSyncPersistenceV1,
     PersistedMailContactsSyncRunV1,

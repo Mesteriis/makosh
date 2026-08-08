@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1,
@@ -352,7 +352,7 @@ mod tests {
 
     fn context() -> ReviewNoteCandidateEnvelopeContextV1 {
         ReviewNoteCandidateEnvelopeContextV1 {
-            module_id: "hermes-review-note-candidate-runtime".to_owned(),
+            module_id: "makosh-review-note-candidate-runtime".to_owned(),
             runtime_instance_id: "runtime-1".to_owned(),
             runtime_generation: 2,
             recorded_at_unix_seconds: 1_800_000_000,

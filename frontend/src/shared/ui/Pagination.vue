@@ -22,7 +22,7 @@ const emit = defineEmits<{
 	change: [value: number]
 }>()
 
-const classes = computed(() => ['hermes-pagination', props.class])
+const classes = computed(() => ['makosh-pagination', props.class])
 const pages = computed(() => {
 	const pageCount = Math.max(props.pageCount, 1)
 	const current = clampPage(props.modelValue)
@@ -45,7 +45,7 @@ function selectPage(page: number): void {
 <template>
 	<nav :class="classes" :aria-label="label">
 		<button
-			class="hermes-pagination__button hermes-pagination__button--icon"
+			class="makosh-pagination__button makosh-pagination__button--icon"
 			type="button"
 			:aria-label="previousLabel"
 			:disabled="modelValue <= 1"
@@ -56,7 +56,7 @@ function selectPage(page: number): void {
 		<button
 			v-for="page in pages"
 			:key="page"
-			class="hermes-pagination__button"
+			class="makosh-pagination__button"
 			type="button"
 			:aria-current="page === modelValue ? 'page' : undefined"
 			@click="selectPage(page)"
@@ -64,7 +64,7 @@ function selectPage(page: number): void {
 			{{ page }}
 		</button>
 		<button
-			class="hermes-pagination__button hermes-pagination__button--icon"
+			class="makosh-pagination__button makosh-pagination__button--icon"
 			type="button"
 			:aria-label="nextLabel"
 			:disabled="modelValue >= pageCount"

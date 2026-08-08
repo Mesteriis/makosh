@@ -1,4 +1,4 @@
-use hermes_contacts_core::ContactProviderKindV1;
+use makosh_contacts_core::ContactProviderKindV1;
 use sqlx::{Postgres, Row, Transaction};
 
 use crate::{
@@ -70,7 +70,7 @@ async fn reserve(
     input: &BindMailProviderLinkCommandV1,
 ) -> Result<bool, ContactsPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.contacts_mail_provider_link_inbox (logical_owner_id, \
+        "INSERT INTO makosh_data.contacts_mail_provider_link_inbox (logical_owner_id, \
          command_message_id, command_envelope_sha256, command_id, contact_id, \
          expected_contact_revision, source_account_id, provider_kind, provider_entry_id, \
          provider_etag, received_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) \
@@ -101,7 +101,7 @@ async fn decide_and_apply(
     input: &BindMailProviderLinkCommandV1,
 ) -> Result<ContactProviderLinkBindOutcomeV1, ContactsPersistenceErrorV1> {
     let revision = sqlx::query_scalar::<_, i64>(
-        "SELECT contact_revision FROM hermes_data.contacts_state WHERE logical_owner_id=$1 \
+        "SELECT contact_revision FROM makosh_data.contacts_state WHERE logical_owner_id=$1 \
          AND contact_id=$2 FOR UPDATE",
     )
     .bind(&input.logical_owner_id)
@@ -120,7 +120,7 @@ async fn decide_and_apply(
         ));
     }
     let collision = sqlx::query_scalar::<_, Vec<u8>>(
-        "SELECT contact_id FROM hermes_data.contacts_provider_links WHERE logical_owner_id=$1 \
+        "SELECT contact_id FROM makosh_data.contacts_provider_links WHERE logical_owner_id=$1 \
          AND provider_kind=$2 AND source_account_id=$3 AND provider_entry_id=$4 FOR UPDATE",
     )
     .bind(&input.logical_owner_id)
@@ -139,7 +139,7 @@ async fn decide_and_apply(
         ));
     }
     let existing = sqlx::query_scalar::<_, String>(
-        "SELECT provider_entry_id FROM hermes_data.contacts_provider_links WHERE \
+        "SELECT provider_entry_id FROM makosh_data.contacts_provider_links WHERE \
          logical_owner_id=$1 AND contact_id=$2 AND source_account_id=$3 ORDER BY provider_kind, \
          provider_entry_id LIMIT 1 FOR UPDATE",
     )
@@ -158,12 +158,12 @@ async fn decide_and_apply(
         ));
     }
     sqlx::query(
-        "INSERT INTO hermes_data.contacts_provider_links (logical_owner_id, provider_kind, \
+        "INSERT INTO makosh_data.contacts_provider_links (logical_owner_id, provider_kind, \
          source_account_id, provider_entry_id, contact_id, provider_etag, source_revision, \
          entry_digest, observed_at_unix_seconds, observed_at_nanos) VALUES \
          ($1,$2,$3,$4,$5,$6,$7,$8,$9,0) ON CONFLICT (logical_owner_id, provider_kind, \
          source_account_id, provider_entry_id) DO UPDATE SET provider_etag=EXCLUDED.provider_etag WHERE \
-         hermes_data.contacts_provider_links.contact_id=EXCLUDED.contact_id",
+         makosh_data.contacts_provider_links.contact_id=EXCLUDED.contact_id",
     )
     .bind(&input.logical_owner_id)
     .bind(provider_kind(input.provider_kind))
@@ -188,7 +188,7 @@ async fn insert_outbox(
     terminal: &ContactsOutboxRecordV1,
 ) -> Result<(), ContactsPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.contacts_outbox (logical_owner_id, message_id, envelope_sha256, \
+        "INSERT INTO makosh_data.contacts_outbox (logical_owner_id, message_id, envelope_sha256, \
          envelope_bytes, created_at_unix_millis) VALUES ($1,$2,$3,$4,$5) ON CONFLICT DO NOTHING",
     )
     .bind(&input.logical_owner_id)
@@ -216,7 +216,7 @@ async fn complete(
         ContactProviderLinkBindOutcomeV1::Rejected(code) => Some(code as i16),
     };
     let updated = sqlx::query(
-        "UPDATE hermes_data.contacts_mail_provider_link_inbox SET completed=TRUE, reject_code=$3, \
+        "UPDATE makosh_data.contacts_mail_provider_link_inbox SET completed=TRUE, reject_code=$3, \
          result_message_id=$4, completed_at_unix_millis=$5 WHERE logical_owner_id=$1 AND \
          command_message_id=$2 AND NOT completed",
     )
@@ -243,8 +243,8 @@ async fn load_replay(
          inbox.expected_contact_revision, inbox.source_account_id, inbox.provider_kind, \
          inbox.provider_entry_id, inbox.provider_etag, inbox.completed, inbox.reject_code, \
          outbox.message_id, outbox.envelope_sha256, outbox.envelope_bytes FROM \
-         hermes_data.contacts_mail_provider_link_inbox AS inbox LEFT JOIN \
-         hermes_data.contacts_outbox AS outbox ON outbox.logical_owner_id=inbox.logical_owner_id \
+         makosh_data.contacts_mail_provider_link_inbox AS inbox LEFT JOIN \
+         makosh_data.contacts_outbox AS outbox ON outbox.logical_owner_id=inbox.logical_owner_id \
          AND outbox.message_id=inbox.result_message_id WHERE inbox.logical_owner_id=$1 AND \
          inbox.command_message_id=$2 FOR UPDATE OF inbox",
     )

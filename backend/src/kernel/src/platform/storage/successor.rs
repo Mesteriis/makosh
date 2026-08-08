@@ -1,7 +1,7 @@
 //! Fenced successor identity and Storage binding for a managed module runtime.
 
-use hermes_kernel_control_store::{PlatformStorageBindingStateV1, PlatformStorageBindingV1};
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store::{PlatformStorageBindingStateV1, PlatformStorageBindingV1};
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use crate::platform::macos::managed_launch::{self, ManagedLaunchReservation};
 use crate::platform::storage::issuance::{StorageBindingIssueV1, issue_managed};

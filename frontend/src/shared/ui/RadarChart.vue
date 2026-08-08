@@ -55,20 +55,20 @@ const axes = computed(() => {
 const gridRings = [0.33, 0.66, 1]
 
 const classes = computed(() => [
-  'hermes-radar-chart',
-  `hermes-radar-chart--${props.size}`,
-  `hermes-radar-chart--${props.tone}`,
+  'makosh-radar-chart',
+  `makosh-radar-chart--${props.size}`,
+  `makosh-radar-chart--${props.tone}`,
   props.class
 ])
 </script>
 
 <template>
   <figure :class="classes" role="img" :aria-label="label">
-    <svg class="hermes-radar-chart__svg" viewBox="0 0 100 100" aria-hidden="true">
+    <svg class="makosh-radar-chart__svg" viewBox="0 0 100 100" aria-hidden="true">
       <circle
         v-for="ring in gridRings"
         :key="ring"
-        class="hermes-radar-chart__ring"
+        class="makosh-radar-chart__ring"
         :cx="center"
         :cy="center"
         :r="radius * ring"
@@ -76,17 +76,17 @@ const classes = computed(() => [
       <line
         v-for="axis in axes"
         :key="axis.id"
-        class="hermes-radar-chart__axis"
+        class="makosh-radar-chart__axis"
         :x1="center"
         :y1="center"
         :x2="axis.x2"
         :y2="axis.y2"
       />
-      <polygon class="hermes-radar-chart__area" :points="polygonPoints" />
+      <polygon class="makosh-radar-chart__area" :points="polygonPoints" />
       <text
         v-for="axis in axes"
         :key="`${axis.id}-label`"
-        class="hermes-radar-chart__label"
+        class="makosh-radar-chart__label"
         :x="axis.labelX"
         :y="axis.labelY"
         text-anchor="middle"

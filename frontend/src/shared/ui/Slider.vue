@@ -23,7 +23,7 @@ const emit = defineEmits<{
 	'update:modelValue': [value: number]
 }>()
 
-const classes = computed(() => ['hermes-slider', props.class])
+const classes = computed(() => ['makosh-slider', props.class])
 
 function handleInput(event: Event): void {
 	const target = event.target as HTMLInputElement
@@ -33,12 +33,12 @@ function handleInput(event: Event): void {
 
 <template>
 	<label :class="classes">
-		<span v-if="label || showValue" class="hermes-slider__header">
+		<span v-if="label || showValue" class="makosh-slider__header">
 			<span>{{ label }}</span>
-			<span v-if="showValue" class="hermes-slider__value">{{ modelValue }}</span>
+			<span v-if="showValue" class="makosh-slider__value">{{ modelValue }}</span>
 		</span>
 		<input
-			class="hermes-slider__input"
+			class="makosh-slider__input"
 			:disabled="disabled"
 			:max="max"
 			:min="min"

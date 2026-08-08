@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+package makosh.communications.call_evidence.client.v1;
+
+message CallEvidenceQueryRequestV1 {
+  uint32 protocol_major = 1;
+  oneof operation {
+    GetCallEvidenceRequestV1 get = 2;
+    ListCallEvidenceRequestV1 list = 3;
+  }
+}
+
+message CallEvidenceQueryResponseV1 {
+  oneof result {
+    GetCallEvidenceResponseV1 get = 1;
+    ListCallEvidenceResponseV1 list = 2;
+  }
+  string error_code = 15;
+}
+
+service CallEvidenceQueryService {
+  rpc Query(CallEvidenceQueryRequestV1) returns (CallEvidenceQueryResponseV1);
+}
+
+message GetCallEvidenceRequestV1 {
+  bytes call_evidence_id = 1;
+}
+
+message GetCallEvidenceResponseV1 {
+  CallEvidenceSummaryV1 evidence = 1;
+}
+
+message ListCallEvidenceRequestV1 {
+  uint32 limit = 1;
+  bytes cursor = 2;
+  optional CallProviderV1 provider = 3;
+  optional CallDirectionV1 direction = 4;
+  optional CallMediaKindV1 media_kind = 5;
+  optional CallLifecycleStateV1 state = 6;
+}
+
+message ListCallEvidenceResponseV1 {
+  repeated CallEvidenceSummaryV1 evidence = 1;
+  bytes next_cursor = 2;
+}
+
+message CallEvidenceSummaryV1 {
+  bytes call_evidence_id = 1;
+  uint64 canonical_revision = 2;
+  CallProviderV1 provider = 3;
+  CallDirectionV1 direction = 4;
+  CallMediaKindV1 media_kind = 5;
+  CallLifecycleStateV1 state = 6;
+  CallTerminalDispositionV1 terminal_disposition = 7;
+  optional int64 started_at_unix_seconds = 8;
+  optional int64 connected_at_unix_seconds = 9;
+  optional int64 ended_at_unix_seconds = 10;
+  optional uint64 duration_seconds = 11;
+  optional string participant_display_label = 12;
+}
+
+message CallEvidenceChangedV1 {
+  bytes call_evidence_id = 1;
+  uint64 canonical_revision = 2;
+  CallLifecycleStateV1 state = 3;
+  CallTerminalDispositionV1 terminal_disposition = 4;
+  optional string participant_display_label = 5;
+}
+
+enum CallProviderV1 {
+  CALL_PROVIDER_UNSPECIFIED = 0;
+  CALL_PROVIDER_TELEGRAM = 1;
+  CALL_PROVIDER_WHATSAPP_WEB = 2;
+  CALL_PROVIDER_ZOOM = 3;
+  CALL_PROVIDER_YANDEX_TELEMOST = 4;
+}
+
+enum CallDirectionV1 {
+  CALL_DIRECTION_UNSPECIFIED = 0;
+  CALL_DIRECTION_INCOMING = 1;
+  CALL_DIRECTION_OUTGOING = 2;
+  CALL_DIRECTION_UNKNOWN = 3;
+}
+
+enum CallMediaKindV1 {
+  CALL_MEDIA_KIND_UNSPECIFIED = 0;
+  CALL_MEDIA_KIND_ONE_TO_ONE_AUDIO = 1;
+  CALL_MEDIA_KIND_MEETING = 2;
+}
+
+enum CallLifecycleStateV1 {
+  CALL_LIFECYCLE_STATE_UNSPECIFIED = 0;
+  CALL_LIFECYCLE_STATE_OBSERVED = 1;
+  CALL_LIFECYCLE_STATE_RINGING = 2;
+  CALL_LIFECYCLE_STATE_CONNECTING = 3;
+  CALL_LIFECYCLE_STATE_ACTIVE = 4;
+  CALL_LIFECYCLE_STATE_ENDED = 5;
+}
+
+enum CallTerminalDispositionV1 {
+  CALL_TERMINAL_DISPOSITION_UNSPECIFIED = 0;
+  CALL_TERMINAL_DISPOSITION_COMPLETED = 1;
+  CALL_TERMINAL_DISPOSITION_MISSED = 2;
+  CALL_TERMINAL_DISPOSITION_DECLINED = 3;
+  CALL_TERMINAL_DISPOSITION_CANCELED = 4;
+  CALL_TERMINAL_DISPOSITION_FAILED = 5;
+  CALL_TERMINAL_DISPOSITION_DISCONNECTED = 6;
+}

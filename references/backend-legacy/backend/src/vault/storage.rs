@@ -69,7 +69,7 @@ impl HostVault {
     }
 
     pub(super) fn recovery_file_path(&self) -> PathBuf {
-        self.home.join("hermes-recovery.key")
+        self.home.join("makosh-recovery.key")
     }
 
     pub(super) fn write_vault_check(&self) -> Result<(), HostVaultError> {
@@ -81,7 +81,7 @@ impl HostVault {
             .encrypt(
                 &nonce,
                 Payload {
-                    msg: b"hermes-host-vault",
+                    msg: b"makosh-host-vault",
                     aad: aad.as_bytes(),
                 },
             )

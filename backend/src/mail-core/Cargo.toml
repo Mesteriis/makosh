@@ -1,5 +1,5 @@
 [package]
-name = "hermes-mail-core"
+name = "makosh-mail-core"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,13 +7,13 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "mail"
 surface = "implementation"
 
 [dependencies]
 base64 = "=0.22.1"
-hermes-communications-ingress = { path = "../communications-ingress" }
-hermes-mail-api = { path = "../mail-api" }
+makosh-communications-ingress = { path = "../communications-ingress" }
+makosh-mail-api = { path = "../mail-api" }
 sha2 = { version = "=0.11.0", default-features = false }

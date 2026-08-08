@@ -1,6 +1,6 @@
 //! Owner-authorized relay of a signed Account JWT to the managed authority.
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::{
         ApplyEventsAccountJwtUpdateRequestV1, EventsAuthorityRuntimeControlRequestV1,
         EventsAuthorityRuntimeControlResponseV1,

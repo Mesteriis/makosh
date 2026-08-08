@@ -1,5 +1,5 @@
 [package]
-name = "hermes-vault-key-provider-file"
+name = "makosh-vault-key-provider-file"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,13 +7,13 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "vault"
 surface = "implementation"
 
 [dependencies]
 getrandom = { version = "=0.4.3", default-features = false }
-hermes-vault-key-provider = { path = "../key_provider" }
-hermes-secure-file = { path = "../../secure_file" }
+makosh-vault-key-provider = { path = "../key_provider" }
+makosh-secure-file = { path = "../../secure_file" }
 libc = "=0.2.186"

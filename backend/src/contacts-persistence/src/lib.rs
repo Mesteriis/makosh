@@ -29,4 +29,4 @@ pub use schema::{
     CONTACTS_STORAGE_BUNDLE_REVISION_V1, contacts_storage_bundle_v1,
 };
 
-pub const PACKAGE: &str = "hermes-contacts-persistence";
+pub const PACKAGE: &str = "makosh-contacts-persistence";

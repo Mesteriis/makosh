@@ -1,5 +1,5 @@
 [package]
-name = "hermes-ai-inference-runtime"
+name = "makosh-ai-inference-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,22 +8,22 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-ai-inference-runtime"
+name = "makosh-ai-inference-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "engine"
 owner = "ai"
 surface = "runtime"
 
 [dependencies]
-hermes-ai-contracts = { path = "../ai-contracts" }
-hermes-ai-inference-core = { path = "../ai-inference-core" }
-hermes-ai-inference-persistence = { path = "../ai-inference-persistence" }
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
+makosh-ai-contracts = { path = "../ai-contracts" }
+makosh-ai-inference-core = { path = "../ai-inference-core" }
+makosh-ai-inference-persistence = { path = "../ai-inference-persistence" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }

@@ -1,7 +1,7 @@
 //! Verifies the exact live Scheduler runtime before exposing it to clients.
 
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     v1::{
         GetSchedulerRuntimeStatusRequestV1, SchedulerRuntimeControlRequestV1,
         SchedulerRuntimeControlResponseV1, SchedulerRuntimeStateV1,

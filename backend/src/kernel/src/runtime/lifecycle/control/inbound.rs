@@ -4,7 +4,7 @@ use std::io::ErrorKind;
 use std::os::fd::AsRawFd;
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeBlobCustodyDelegationDeliveryV1, ManagedRuntimeBlobCustodyDelegationRequestV1,
     ManagedRuntimeBlobCustodyReleaseDeliveryV1, ManagedRuntimeBlobCustodyReleaseRequestV1,
     ManagedRuntimeBlobSessionDeliveryV1, ManagedRuntimeBlobSessionRequestV1,
@@ -21,7 +21,7 @@ use hermes_runtime_protocol::v1::{
 };
 use prost::Message;
 
-use hermes_runtime_protocol::validation::vault::validate_vault_ciphertext_route_v1;
+use makosh_runtime_protocol::validation::vault::validate_vault_ciphertext_route_v1;
 
 use super::{MAX_FRAME_BYTES, read_frame, write_frame};
 
@@ -87,7 +87,7 @@ pub(crate) fn decode_typed_request(
             Ok(ManagedRuntimeInboundRequestV1::BlobCustodyRelease(value))
         }
         Some(Operation::RouteModuleQuery(value))
-            if hermes_runtime_protocol::validation::module_query::validate_module_query_request_v1(
+            if makosh_runtime_protocol::validation::module_query::validate_module_query_request_v1(
                 &value,
             )
             .is_ok() =>
@@ -95,7 +95,7 @@ pub(crate) fn decode_typed_request(
             Ok(ManagedRuntimeInboundRequestV1::ModuleQuery(value))
         }
         Some(Operation::RouteModuleRequest(value))
-            if hermes_runtime_protocol::validation::module_request::validate_module_request_request_v1(
+            if makosh_runtime_protocol::validation::module_request::validate_module_request_request_v1(
                 &value,
             )
             .is_ok() =>
@@ -103,7 +103,7 @@ pub(crate) fn decode_typed_request(
             Ok(ManagedRuntimeInboundRequestV1::ModuleRequest(value))
         }
         Some(Operation::PublishClientRealtime(value))
-            if hermes_runtime_protocol::validation::client_realtime::validate_managed_client_realtime_publish_request_v1(
+            if makosh_runtime_protocol::validation::client_realtime::validate_managed_client_realtime_publish_request_v1(
                 &value,
             )
             .is_ok() =>
@@ -144,7 +144,7 @@ pub(crate) fn module_query_response(
 ) -> ManagedRuntimeControlResponseV1 {
     match result {
         Ok(response)
-            if hermes_runtime_protocol::validation::module_query::validate_module_query_response_v1(
+            if makosh_runtime_protocol::validation::module_query::validate_module_query_response_v1(
                 &response,
             )
             .is_ok() =>
@@ -159,7 +159,7 @@ pub(crate) fn module_query_response(
             error_code: "managed_module_query_invalid_response".to_owned(),
         },
         Err(error) => {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_managed_module_query_error={error}");
             }
             ManagedRuntimeControlResponseV1 {
@@ -185,7 +185,7 @@ pub(crate) fn module_request_response(
 ) -> ManagedRuntimeControlResponseV1 {
     match result {
         Ok(response)
-            if hermes_runtime_protocol::validation::module_request::validate_module_request_response_v1(
+            if makosh_runtime_protocol::validation::module_request::validate_module_request_response_v1(
                 &response,
             )
             .is_ok() =>
@@ -200,7 +200,7 @@ pub(crate) fn module_request_response(
             error_code: "managed_module_request_invalid_response".to_owned(),
         },
         Err(error) => {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_managed_module_request_error={error}");
             }
             ManagedRuntimeControlResponseV1 {
@@ -778,7 +778,7 @@ mod blob_session_error_code_tests {
         ManagedRuntimeInboundRequestV1, VAULT_ROUTE_FIELD_TAG, blob_custody_delegation_request,
         blob_custody_release_request, blob_session_error_code, decode_typed_request,
     };
-    use hermes_runtime_protocol::v1::{
+    use makosh_runtime_protocol::v1::{
         BlobCustodyReleaseReasonV1, ManagedRuntimeBlobCustodyDelegationRequestV1,
         ManagedRuntimeBlobCustodyReleaseRequestV1, ManagedRuntimeControlRequestV1,
         ManagedRuntimeReadyRequestV1, ManagedRuntimeVaultRouteRequestV1,
@@ -865,7 +865,7 @@ mod blob_session_error_code_tests {
                     predecessor_evidence_id: vec![4; 16],
                     predecessor_evidence_envelope_sha256: vec![5; 32],
                     target_owner_id: "attachment_archive_inspection".to_owned(),
-                    target_module_id: "hermes-attachment-archive-inspection-runtime".to_owned(),
+                    target_module_id: "makosh-attachment-archive-inspection-runtime".to_owned(),
                     target_capability_id: "attachment_archive_inspection.blob.v1".to_owned(),
                     target_request_contract: None,
                 },

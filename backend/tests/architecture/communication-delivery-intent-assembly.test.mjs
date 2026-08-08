@@ -70,7 +70,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   contract: new URL(
-    'src/communication-delivery-intent-api/proto/hermes/communication_delivery_intent/v1/delivery.proto',
+    'src/communication-delivery-intent-api/proto/makosh/communication_delivery_intent/v1/delivery.proto',
     BACKEND_ROOT,
   ),
   adr: new URL(
@@ -162,13 +162,13 @@ test('delivery intent assembly is an exact managed event workflow slice', async 
       .filter(({ owner }) => owner === 'communication_delivery_intent')
       .map(({ name, surface }) => `${name}:${surface}`),
     [
-      'hermes-communication-delivery-intent-api:contract',
-      'hermes-communication-delivery-intent-core:implementation',
-      'hermes-communication-delivery-intent-persistence:persistence',
-      'hermes-communication-delivery-intent-runtime:runtime',
-      'hermes-communication-delivery-intent-assembly:assembly',
-      'hermes-communication-delivery-intent-event-adapters:implementation',
-      'hermes-communication-delivery-intent-ingress-api:contract',
+      'makosh-communication-delivery-intent-api:contract',
+      'makosh-communication-delivery-intent-core:implementation',
+      'makosh-communication-delivery-intent-persistence:persistence',
+      'makosh-communication-delivery-intent-runtime:runtime',
+      'makosh-communication-delivery-intent-assembly:assembly',
+      'makosh-communication-delivery-intent-event-adapters:implementation',
+      'makosh-communication-delivery-intent-ingress-api:contract',
     ],
   );
   assert.equal(deliverySlice?.state, 'implemented');
@@ -181,14 +181,14 @@ test('delivery intent assembly is an exact managed event workflow slice', async 
   );
   assert.match(runtimeManifest, /role = "workflow"[\s\S]*surface = "runtime"/);
   assert.match(assemblyManifest, /role = "workflow"[\s\S]*surface = "assembly"/);
-  assert.match(coreManifest, /hermes-communications-api/);
+  assert.match(coreManifest, /makosh-communications-api/);
   assert.doesNotMatch(
     `${apiManifest}\n${coreManifest}\n${persistenceManifest}\n${assemblyManifest}`,
-    /hermes-(?:mail|telegram|whatsapp|zulip|communications-domain|communications-persistence)/,
+    /makosh-(?:mail|telegram|whatsapp|zulip|communications-domain|communications-persistence)/,
   );
   assert.doesNotMatch(
     runtimeManifest,
-    /hermes-(?:mail|telegram|whatsapp|zulip)-(?:runtime|persistence)/,
+    /makosh-(?:mail|telegram|whatsapp|zulip)-(?:runtime|persistence)/,
   );
   assert.match(assembly, /validate_descriptor_v1/);
   assert.match(assembly, /validate_storage_bundle/);

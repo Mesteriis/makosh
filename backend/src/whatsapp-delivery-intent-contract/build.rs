@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/whatsapp/delivery_intent/v1/delivery_intent.proto"],
+            &["proto/makosh/whatsapp/delivery_intent/v1/delivery_intent.proto"],
             &["proto"],
         )
         .expect("WhatsApp delivery-intent protocol must compile");

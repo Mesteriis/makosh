@@ -1,7 +1,7 @@
 # ThemeSwitcher
 
 ## Description
-Controlled theme selector for Hermes UI theme family and light/dark mode.
+Controlled theme selector for Макошь UI theme family and light/dark mode.
 
 ## When to use
 Use in Storybook, settings or shells that own theme state.

@@ -5,16 +5,16 @@ use axum::http::{Method, Request, StatusCode, header};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const T: &str = "v1comms-template-test-token";
 
 async fn router(db: &str) -> axum::Router {
     let database = Database::connect(Some(db)).await.expect("db");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(T, db),
+        makosh_backend_testkit::app::config_with_secret_and_database_url(T, db),
         database,
     )
 }
@@ -22,7 +22,7 @@ async fn router(db: &str) -> axum::Router {
 fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("req")
 }
@@ -32,7 +32,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::from(body.to_string()))
         .expect("req")
 }
@@ -41,7 +41,7 @@ fn delete_req(uri: &str) -> Request<Body> {
     Request::builder()
         .method(Method::DELETE)
         .uri(uri)
-        .header("x-hermes-secret", T)
+        .header("x-makosh-secret", T)
         .body(Body::empty())
         .expect("req")
 }
@@ -124,7 +124,7 @@ async fn rich_template_save_list_render_and_delete_uses_durable_template_store()
                 "template_id": template_id,
                 "variables": {
                     "name": "Alex",
-                    "project": "Hermes",
+                    "project": "Макошь",
                     "status": "green"
                 }
             }),
@@ -139,7 +139,7 @@ async fn rich_template_save_list_render_and_delete_uses_durable_template_store()
     )
     .unwrap();
     assert_eq!(render_body["rendered"]["subject"], "Hello Alex");
-    assert_eq!(render_body["rendered"]["body"], "Project Hermes is green.");
+    assert_eq!(render_body["rendered"]["body"], "Project Макошь is green.");
     assert_eq!(render_body["rendered"]["missing_variables"], json!([]));
     assert_eq!(render_body["rendered"]["unresolved_variables"], json!([]));
     assert_eq!(render_body["rendered"]["malformed_placeholders"], json!([]));
@@ -155,7 +155,7 @@ async fn rich_template_save_list_render_and_delete_uses_durable_template_store()
                         "row_id": "r1",
                         "variables": {
                             "name": "Alex",
-                            "project": "Hermes",
+                            "project": "Макошь",
                             "status": "green"
                         }
                     },
@@ -163,7 +163,7 @@ async fn rich_template_save_list_render_and_delete_uses_durable_template_store()
                         "row_id": "r2",
                         "variables": {
                             "name": "Sam",
-                            "project": "Hermes"
+                            "project": "Макошь"
                         }
                     }
                 ]
@@ -190,7 +190,7 @@ async fn rich_template_save_list_render_and_delete_uses_durable_template_store()
     );
     assert_eq!(
         preview_body["items"][0]["rendered"]["body"],
-        "Project Hermes is green."
+        "Project Макошь is green."
     );
     assert_eq!(preview_body["items"][1]["row_id"], "r2");
     assert_eq!(preview_body["items"][1]["ready"], false);

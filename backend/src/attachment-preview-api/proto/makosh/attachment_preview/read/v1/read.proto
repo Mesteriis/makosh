@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package makosh.attachment_preview.read.v1;
+
+// Body for the exact descriptor-declared client_blob route. Success returns
+// private preview bytes, never internal data-plane authority.
+message ReadAttachmentPreviewRequestV1 {
+  uint32 protocol_major = 1;
+  bytes opaque_read_ticket = 2;
+}

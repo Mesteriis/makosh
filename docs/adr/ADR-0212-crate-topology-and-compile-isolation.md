@@ -35,7 +35,7 @@ Cargo пересобирает изменившийся package и его revers
 composition package, общий `common`, общий provider API или зависимость module
 от Kernel снова соединяют независимые владельцы в широкий compile graph.
 
-Требование Hermes: изменение implementation любого integration не должно
+Требование Макошь: изменение implementation любого integration не должно
 пересобирать Communications, Kernel, другие integrations или business domains.
 Telegram является лишь примером. Аналогично изменение любого domain
 implementation не должно пересобирать соседние domains: изменение Contacts не
@@ -54,7 +54,7 @@ provider API знал Kernel, persistence adapters пересекали ownershi
 
 ### Две независимые границы
 
-Hermes использует обе границы одновременно:
+Макошь использует обе границы одновременно:
 
 1. Cargo package определяет ownership исходного кода и область пересборки.
 2. OS process определяет failure isolation и independently restartable runtime.
@@ -70,82 +70,82 @@ package ради удобства composition. Нельзя также дроб�
 types:
 
 ```text
-backend/src/platform/runtime_protocol/    hermes-runtime-protocol
-backend/src/platform/events/protocol/     hermes-events-protocol
-backend/src/platform/telemetry/protocol/  hermes-telemetry-protocol
-backend/src/platform/storage/protocol/    hermes-storage-protocol
-backend/src/platform/storage/control/     hermes-storage-control
-backend/src/platform/storage/runtime/     hermes-storage-runtime
-backend/src/platform/storage/postgres/    hermes-storage-postgres
-backend/src/platform/storage/pgbouncer/   hermes-storage-pgbouncer
-backend/src/platform/storage/migrations/  hermes-storage-migrations
-backend/src/platform/vault/protocol/      hermes-vault-protocol
-backend/src/platform/vault/key_provider/  hermes-vault-key-provider
-backend/src/platform/vault/runtime/       hermes-vault-runtime
-backend/src/platform/vault/store_sqlcipher/ hermes-vault-store-sqlcipher
-backend/src/platform/vault/key_provider_file/ hermes-vault-key-provider-file
-backend/src/platform/blob/protocol/       hermes-blob-protocol
-backend/src/api/gateway/contracts/        hermes-gateway-protocol
-backend/src/kernel/                       hermes-kernel
-backend/src/kernel/control_store/contract/ hermes-kernel-control-store
-backend/src/kernel/control_store/sqlite/   hermes-kernel-control-store-sqlite
-backend/src/services/telemetry/collector/ hermes-telemetry-collector
+backend/src/platform/runtime_protocol/    makosh-runtime-protocol
+backend/src/platform/events/protocol/     makosh-events-protocol
+backend/src/platform/telemetry/protocol/  makosh-telemetry-protocol
+backend/src/platform/storage/protocol/    makosh-storage-protocol
+backend/src/platform/storage/control/     makosh-storage-control
+backend/src/platform/storage/runtime/     makosh-storage-runtime
+backend/src/platform/storage/postgres/    makosh-storage-postgres
+backend/src/platform/storage/pgbouncer/   makosh-storage-pgbouncer
+backend/src/platform/storage/migrations/  makosh-storage-migrations
+backend/src/platform/vault/protocol/      makosh-vault-protocol
+backend/src/platform/vault/key_provider/  makosh-vault-key-provider
+backend/src/platform/vault/runtime/       makosh-vault-runtime
+backend/src/platform/vault/store_sqlcipher/ makosh-vault-store-sqlcipher
+backend/src/platform/vault/key_provider_file/ makosh-vault-key-provider-file
+backend/src/platform/blob/protocol/       makosh-blob-protocol
+backend/src/api/gateway/contracts/        makosh-gateway-protocol
+backend/src/kernel/                       makosh-kernel
+backend/src/kernel/control_store/contract/ makosh-kernel-control-store
+backend/src/kernel/control_store/sqlite/   makosh-kernel-control-store-sqlite
+backend/src/services/telemetry/collector/ makosh-telemetry-collector
 ```
 
-`hermes-runtime-protocol` владеет `ModuleDescriptorV1`, capability declarations,
+`makosh-runtime-protocol` владеет `ModuleDescriptorV1`, capability declarations,
 lifecycle/control messages, health wire types и settings schema/snapshot wire
 contracts ADR-0221/0222. Module runtime и Kernel зависят от этого protocol;
-module никогда не зависит от `hermes-kernel`.
+module никогда не зависит от `makosh-kernel`.
 
 Этот high-fanout package не содержит owner payloads, Kernel implementation,
 NATS/SQL/SQLite clients, Vault implementation, JSON negotiation или filesystem
 operations. `DistributionManifestV1` остаётся release artifact ADR-0219, а не
 вторым runtime protocol package.
 
-`hermes-events-protocol` владеет только `DurableEnvelopeV1`, kind-specific
+`makosh-events-protocol` владеет только `DurableEnvelopeV1`, kind-specific
 delivery metadata, dead-letter technical record и envelope versioning
 ADR-0220. Его exact metadata — `platform:events:contract`; второму package
 нельзя объявить ownership canonical envelope.
 
 NATS, PostgreSQL outbox/inbox, Event Hub implementation и routing являются
 adapters или Kernel responsibilities, а не частью protocol package.
-`hermes-events-protocol` не зависит от NATS/SQL/SQLite clients, JSON transport,
+`makosh-events-protocol` не зависит от NATS/SQL/SQLite clients, JSON transport,
 Kernel/Gateway или owner-specific contracts. Owner payload остаётся в owner
 contract package и попадает в envelope как catalog-bound opaque Protobuf bytes.
 
 Дополнительный platform protocol создаётся только при доказанной общей
 capability и минимум двух независимых consumers. Один omnibus package
-`hermes-common` запрещён.
+`makosh-common` запрещён.
 
 Storage topology является закрытой группой ADR-0224:
 
-- `hermes-storage-protocol` — единственный public contract для Kernel и
+- `makosh-storage-protocol` — единственный public contract для Kernel и
   authorized modules;
-- `hermes-storage-control` — SQL-free orchestration и internal adapter ports;
-- `hermes-storage-runtime` — отдельный managed process composition с component
+- `makosh-storage-control` — SQL-free orchestration и internal adapter ports;
+- `makosh-storage-runtime` — отдельный managed process composition с component
   `storage_control`;
-- `hermes-storage-postgres` — единственный platform adapter с PostgreSQL
+- `makosh-storage-postgres` — единственный platform adapter с PostgreSQL
   client, cluster/role/grant/ledger implementation и direct admin path;
-- `hermes-storage-pgbouncer` — pooler config/readiness/pause/drain/kill adapter;
-- `hermes-storage-migrations` — `StorageBundleV1` parser, PostgreSQL AST
+- `makosh-storage-pgbouncer` — pooler config/readiness/pause/drain/kill adapter;
+- `makosh-storage-migrations` — `StorageBundleV1` parser, PostgreSQL AST
   admission и migration planning без database credential.
 
 Kernel, Gateway и modules не зависят от пяти private storage packages. Owner
 persistence packages сохраняют собственный SQL и производят immutable
 `StorageBundleV1` artifact, но Storage Control не получает Cargo dependency на
-эти owners. `hermes-storage-protocol` не зависит от SQL/SQLite/NATS clients,
+эти owners. `makosh-storage-protocol` не зависит от SQL/SQLite/NATS clients,
 `serde_json`, Vault implementation или owner modules. Изменение PostgreSQL,
-PgBouncer либо migration adapter пересобирает только `hermes-storage-runtime`
+PgBouncer либо migration adapter пересобирает только `makosh-storage-runtime`
 и storage tests; изменение owner persistence не пересобирает Storage Control.
 
 Vault topology является закрытой owner-local группой ADR-0223:
 
-- `hermes-vault-protocol` — единственный public contract для Kernel, Gateway и
+- `makosh-vault-protocol` — единственный public contract для Kernel, Gateway и
   modules;
-- `hermes-vault-key-provider` — внутренний adapter port владельца Vault;
-- `hermes-vault-runtime` — отдельный managed process composition;
-- `hermes-vault-store-sqlcipher` — encrypted SQLite schema/migrations adapter;
-- `hermes-vault-key-provider-file` — owner-private file wrapping-key adapter.
+- `makosh-vault-key-provider` — внутренний adapter port владельца Vault;
+- `makosh-vault-runtime` — отдельный managed process composition;
+- `makosh-vault-store-sqlcipher` — encrypted SQLite schema/migrations adapter;
+- `makosh-vault-key-provider-file` — owner-private file wrapping-key adapter.
 
 Kernel, Gateway и modules не зависят от четырёх implementation packages. Vault
 runtime не зависит от PostgreSQL/NATS clients, provider SDK, integration/domain
@@ -155,7 +155,7 @@ packages или Kernel implementation. Изменение store/file-key adapter
 
 Kernel Control Store следует обычному правилу ответственности: узкий
 core-owned port отделён от SQLite persistence adapter, чтобы `rusqlite`, schema
-и migrations не попадали в `hermes-kernel` logic и тем более в module compile
+и migrations не попадали в `makosh-kernel` logic и тем более в module compile
 graphs. Оба packages принадлежат owner `kernel`; только SQLite package имеет
 surface `persistence`. Architecture exception не создаётся.
 
@@ -164,10 +164,10 @@ surface `persistence`. Architecture exception не создаётся.
 Независимый durable domain имеет до четырёх owner-local packages:
 
 ```text
-backend/src/domains/<owner>/contracts/      hermes-<owner>-contracts
-backend/src/domains/<owner>/implementation/ hermes-<owner>-domain
-backend/src/domains/<owner>/persistence/    hermes-<owner>-persistence
-backend/src/domains/<owner>/runtime/        hermes-<owner>-runtime
+backend/src/domains/<owner>/contracts/      makosh-<owner>-contracts
+backend/src/domains/<owner>/implementation/ makosh-<owner>-domain
+backend/src/domains/<owner>/persistence/    makosh-<owner>-persistence
+backend/src/domains/<owner>/runtime/        makosh-<owner>-runtime
 ```
 
 - `contracts` — commands, queries, events, typed errors и wire types владельца;
@@ -186,7 +186,7 @@ ADR может добавить optional `assembly` package. Это build-time l
 process runtime: assembly может зависеть вниз от exact owner runtime и
 persistence artifact builders, но ни один runtime/implementation/persistence,
 Kernel, Gateway или другой owner не может импортировать assembly. Первый такой
-exact package — `hermes-telegram-assembly` ADR-0268; он не входит в
+exact package — `makosh-telegram-assembly` ADR-0268; он не входит в
 Communications inventory.
 
 ### Communications
@@ -195,23 +195,23 @@ Communications имеет два разных публичных контрак�
 ingress package:
 
 ```text
-hermes-communications-ingress
-hermes-communications-api
-hermes-communications-domain
-hermes-communications-persistence
-hermes-communications-runtime
+makosh-communications-ingress
+makosh-communications-api
+makosh-communications-domain
+makosh-communications-persistence
+makosh-communications-runtime
 ```
 
-`hermes-communications-ingress` содержит только provider-neutral observation,
+`makosh-communications-ingress` содержит только provider-neutral observation,
 source provenance, attachment/blob references и acknowledgement semantics,
 необходимые integrations для публикации внешнего сигнала.
 
-`hermes-communications-api` содержит client-facing и owner-facing commands,
+`makosh-communications-api` содержит client-facing и owner-facing commands,
 queries и events. Integration не зависит от него. Тем самым provider может
 публиковать evidence, но не получает доступ к Communications behavior или
 storage.
 
-Только точное package name `hermes-communications-ingress` находится в
+Только точное package name `makosh-communications-ingress` находится в
 executable allowlist integration-to-domain contracts. Разрешение по owner
 `communications` было бы слишком широким.
 
@@ -222,11 +222,11 @@ adapter, session/cursor persistence и process runtime. Общая форма о
 для всех providers:
 
 ```text
-hermes-<provider>-api
-hermes-<provider>-core
-hermes-<provider>-<protocol-adapter>
-hermes-<provider>-persistence
-hermes-<provider>-runtime
+makosh-<provider>-api
+makosh-<provider>-core
+makosh-<provider>-<protocol-adapter>
+makosh-<provider>-persistence
+makosh-<provider>-runtime
 ```
 
 Это pattern ownership, а не общий provider abstraction. Packages разных
@@ -242,11 +242,11 @@ Zulip:    api + core + http + persistence + runtime
 На примере Telegram физическая форма выглядит так:
 
 ```text
-backend/src/integrations/telegram/api/         hermes-telegram-api
-backend/src/integrations/telegram/core/        hermes-telegram-core
-backend/src/integrations/telegram/tdlib/       hermes-telegram-tdlib
-backend/src/integrations/telegram/persistence/ hermes-telegram-persistence
-backend/src/integrations/telegram/runtime/     hermes-telegram-runtime
+backend/src/integrations/telegram/api/         makosh-telegram-api
+backend/src/integrations/telegram/core/        makosh-telegram-core
+backend/src/integrations/telegram/tdlib/       makosh-telegram-tdlib
+backend/src/integrations/telegram/persistence/ makosh-telegram-persistence
+backend/src/integrations/telegram/runtime/     makosh-telegram-runtime
 ```
 
 - `api` — provider operational contract для Core Gateway и clients;
@@ -256,8 +256,8 @@ backend/src/integrations/telegram/runtime/     hermes-telegram-runtime
   operational state;
 - `runtime` — единственная owner-local composition этих packages.
 
-`hermes-<provider>-core` может зависеть от
-`hermes-communications-ingress`. Обратной зависимости нет. Поэтому изменение
+`makosh-<provider>-core` может зависеть от
+`makosh-communications-ingress`. Обратной зависимости нет. Поэтому изменение
 Mail, Telegram или Zulip implementation не инвалидирует Communications.
 
 Protocol-specific split (`imap`/`smtp`, `tdlib`, `http`) создаётся только при
@@ -272,7 +272,7 @@ implementation не переносится в backend workspace.
 ### Kernel и Gateway
 
 Kernel обнаруживает module runtime через open local registration и
-`hermes-runtime-protocol` по ADR-0215/0221. Pending `ModuleDescriptorV1` не
+`makosh-runtime-protocol` по ADR-0215/0221. Pending `ModuleDescriptorV1` не
 выдаёт rights; после approval Kernel маршрутизирует только effective opaque
 owner capabilities, но не линкует domain, workflow или integration contracts и
 implementations.
@@ -293,13 +293,13 @@ exact descriptor/settings schema artifacts без Rust dependency Kernel →
 собирает разные owners в один reverse-dependency fan-out:
 
 ```text
-hermes-hub-backend
-hermes-api
-hermes-worker-runtime
-hermes-desktop-runtime
-hermes-schema
-hermes-common
-hermes-provider-api
+makosh-backend
+makosh-api
+makosh-worker-runtime
+makosh-desktop-runtime
+makosh-schema
+makosh-common
+makosh-provider-api
 ```
 
 Это запрет ответственности, а не только имени. Нельзя вернуть ту же агрегацию
@@ -342,20 +342,20 @@ integration api + core + provider adapter + persistence ← integration runtime
 | Изменение | Допустимые reverse dependencies |
 |---|---|
 | Любой provider adapter (`imap`, `tdlib`, `http`) | runtime того же provider и его tests |
-| `hermes-<provider>-core` | adapters/persistence/runtime того же provider и его tests |
-| `hermes-<provider>-persistence` | runtime того же provider и его tests |
-| `hermes-communications-domain` | Communications persistence/runtime и Communications tests |
-| `hermes-contacts-domain` | Contacts persistence/runtime и Contacts tests |
-| `hermes-communications-ingress` | integrations, которые публикуют neutral evidence; это осознанный fan-out |
-| `hermes-communications-attachment-contract` | integrations и engines, которые обмениваются typed attachment facts; это осознанный contract fan-out |
-| `hermes-attachment-security-contract` | integrations, которые публикуют provider-neutral scan candidates; это отдельный exact integration-to-engine allowlist |
+| `makosh-<provider>-core` | adapters/persistence/runtime того же provider и его tests |
+| `makosh-<provider>-persistence` | runtime того же provider и его tests |
+| `makosh-communications-domain` | Communications persistence/runtime и Communications tests |
+| `makosh-contacts-domain` | Contacts persistence/runtime и Contacts tests |
+| `makosh-communications-ingress` | integrations, которые публикуют neutral evidence; это осознанный fan-out |
+| `makosh-communications-attachment-contract` | integrations и engines, которые обмениваются typed attachment facts; это осознанный contract fan-out |
+| `makosh-attachment-security-contract` | integrations, которые публикуют provider-neutral scan candidates; это отдельный exact integration-to-engine allowlist |
 | global runtime/event protocol | его consumers; изменение требует contract review |
-| Storage PostgreSQL/PgBouncer/migration adapter | `hermes-storage-runtime` и Storage tests |
-| `hermes-storage-control` | `hermes-storage-runtime` и Storage tests |
-| `hermes-storage-protocol` | authorized modules, Kernel и Storage runtime; contract review обязателен |
-| Vault store/file-key adapter | `hermes-vault-runtime` и Vault tests |
-| `hermes-vault-protocol` | Vault runtime и authorized protocol consumers; contract review обязателен |
-| `hermes-kernel` implementation | только Kernel tests и packaging |
+| Storage PostgreSQL/PgBouncer/migration adapter | `makosh-storage-runtime` и Storage tests |
+| `makosh-storage-control` | `makosh-storage-runtime` и Storage tests |
+| `makosh-storage-protocol` | authorized modules, Kernel и Storage runtime; contract review обязателен |
+| Vault store/file-key adapter | `makosh-vault-runtime` и Vault tests |
+| `makosh-vault-protocol` | Vault runtime и authorized protocol consumers; contract review обязателен |
+| `makosh-kernel` implementation | только Kernel tests и packaging |
 
 Package-local source change не должен инвалидировать client code, чужие
 domains или integrations. Contract change может иметь больший fan-out; это
@@ -367,14 +367,14 @@ domains или integrations. Contract change может иметь больши�
 
 - точные allowlists integration-to-domain, engine-to-domain и
   integration-to-engine contract packages;
-- единственный `hermes-events-protocol` с metadata
+- единственный `makosh-events-protocol` с metadata
   `platform:events:contract` и без transport/storage dependencies;
 - запрещённые aggregate package names;
 - module → Kernel и Kernel/Gateway → module edges;
 - runtime aggregation;
 - cross-owner persistence dependencies;
-- незаявленные `hermes-storage-*`, SQL client вне owner persistence или
-  `hermes-storage-postgres`, migration/admin dependency module runtime и
+- незаявленные `makosh-storage-*`, SQL client вне owner persistence или
+  `makosh-storage-postgres`, migration/admin dependency module runtime и
   Kernel dependency на private storage implementation;
 - normal, build и dev dependency edges;
 - положительные Mail, Telegram и Zulip graphs без Communications implementation
@@ -434,7 +434,7 @@ phase gate.
 
 Первый slice считается соответствующим этому ADR, когда:
 
-- каждый package имеет ровно одну Hermes role, owner и surface;
+- каждый package имеет ровно одну Макошь role, owner и surface;
 - `cargo metadata` проходит executable guard;
 - `cargo tree` каждого integration не содержит Kernel или Communications
   implementation;

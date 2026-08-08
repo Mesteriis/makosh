@@ -1,4 +1,4 @@
-use hermes_events_api::{EventEnvelope, StoredEventEnvelope};
+use makosh_events_api::{EventEnvelope, StoredEventEnvelope};
 use serde::Deserialize;
 use serde_json::Value;
 use sqlx::postgres::PgPool;
@@ -7,7 +7,7 @@ use thiserror::Error;
 use crate::domains::personas::identity::errors::PersonaIdentityError;
 use crate::domains::personas::identity::ports::PersonaIdentityReviewPort;
 use crate::platform::events::bus::zoom_event_types;
-use hermes_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::errors::EventStoreError;
 
 pub const ZOOM_PARTICIPANT_IDENTITY_CONSUMER: &str = "zoom_participant_identity";
 

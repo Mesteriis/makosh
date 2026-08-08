@@ -1,7 +1,7 @@
 //! Provider-local, in-memory access to owner-authorized Blob data for Zulip.
 
-use hermes_blob_client_contract::{BlobReadError, BlobReadPort};
-use hermes_runtime_protocol::v1::{BlobDataOperationV1, BlobDataSessionGrantV1};
+use makosh_blob_client_contract::{BlobReadError, BlobReadPort};
+use makosh_runtime_protocol::v1::{BlobDataOperationV1, BlobDataSessionGrantV1};
 
 use crate::ZulipRuntimeErrorV1;
 
@@ -82,7 +82,7 @@ impl<W> ZulipBlobWriteMaterializer<W> {
     }
 }
 
-impl ZulipBlobWriteMaterializer<hermes_blob_client::BlobDataClient> {
+impl ZulipBlobWriteMaterializer<makosh_blob_client::BlobDataClient> {
     pub fn write_download(
         &mut self,
         blob_ref: &str,

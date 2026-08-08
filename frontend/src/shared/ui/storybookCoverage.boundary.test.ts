@@ -4,7 +4,7 @@ import type { Dirent } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 
-describe('Hermes UI Storybook visual coverage boundary', () => {
+describe('Макошь UI Storybook visual coverage boundary', () => {
 	it('exports every shared UI component through the kit barrel', () => {
 		const uiDir = fileURLToPath(new URL('.', import.meta.url))
 		const componentNames = ['.', 'primitives', 'patterns']
@@ -29,7 +29,7 @@ describe('Hermes UI Storybook visual coverage boundary', () => {
 		expect(exportedNames.filter((componentName) => !storyImports.includes(componentName))).toEqual([])
 	})
 
-	it('keeps Storybook configured as the Hermes UI lab surface', () => {
+	it('keeps Storybook configured as the Макошь UI lab surface', () => {
 		const frontendRoot = fileURLToPath(new URL('../../../', import.meta.url))
 		const mainConfig = readFileSync(join(frontendRoot, '.storybook/main.ts'), 'utf8')
 		const previewConfig = readFileSync(join(frontendRoot, '.storybook/preview.ts'), 'utf8')
@@ -81,81 +81,81 @@ describe('Hermes UI Storybook visual coverage boundary', () => {
 			.map((fileName) => `${fileName}\n${readFileSync(join(storiesDir, fileName), 'utf8')}`)
 			.join('\n')
 		const requiredGeneralTitles = [
-			'Hermes UI/General/Button',
-			'Hermes UI/General/Button Group',
-			'Hermes UI/General/Icon Button',
-			'Hermes UI/General/Split Button',
-			'Hermes UI/General/Toggle Group',
-			'Hermes UI/General/Select',
-			'Hermes UI/General/Searchable Select',
-			'Hermes UI/General/Multi Select',
-			'Hermes UI/General/Searchable Multi Select',
-			'Hermes UI/General/Grouped Select',
-			'Hermes UI/General/Tree Select',
-			'Hermes UI/General/Cascader',
-			'Hermes UI/General/Async Select',
-			'Hermes UI/General/Input',
-			'Hermes UI/General/Textarea',
-			'Hermes UI/General/Search Input',
-			'Hermes UI/General/Token Input',
-			'Hermes UI/General/Tag Input',
-			'Hermes UI/General/Checkbox',
-			'Hermes UI/General/Communication',
-			'Hermes UI/General/Radio',
-			'Hermes UI/General/Switch',
-			'Hermes UI/General/Slider',
-			'Hermes UI/General/Date Picker',
-			'Hermes UI/General/Date Range Picker',
-			'Hermes UI/General/Time Picker',
-			'Hermes UI/General/Menu',
-			'Hermes UI/General/Context Menu',
-			'Hermes UI/General/Command',
-			'Hermes UI/General/Tabs',
-			'Hermes UI/General/Dialog',
-			'Hermes UI/General/Steps',
-			'Hermes UI/General/Drawer',
-			'Hermes UI/General/Tooltip',
-			'Hermes UI/General/Popover',
-			'Hermes UI/General/Surface',
-			'Hermes UI/General/Table',
-			'Hermes UI/General/List',
-			'Hermes UI/General/Tree',
-			'Hermes UI/General/Timeline',
-			'Hermes UI/General/Media',
-			'Hermes UI/General/Editor',
-			'Hermes UI/General/Feedback',
-			'Hermes UI/General/Graphics',
-			'Hermes UI/General/Layout',
-			'Hermes UI/General/Utility'
+			'Макошь UI/General/Button',
+			'Макошь UI/General/Button Group',
+			'Макошь UI/General/Icon Button',
+			'Макошь UI/General/Split Button',
+			'Макошь UI/General/Toggle Group',
+			'Макошь UI/General/Select',
+			'Макошь UI/General/Searchable Select',
+			'Макошь UI/General/Multi Select',
+			'Макошь UI/General/Searchable Multi Select',
+			'Макошь UI/General/Grouped Select',
+			'Макошь UI/General/Tree Select',
+			'Макошь UI/General/Cascader',
+			'Макошь UI/General/Async Select',
+			'Макошь UI/General/Input',
+			'Макошь UI/General/Textarea',
+			'Макошь UI/General/Search Input',
+			'Макошь UI/General/Token Input',
+			'Макошь UI/General/Tag Input',
+			'Макошь UI/General/Checkbox',
+			'Макошь UI/General/Communication',
+			'Макошь UI/General/Radio',
+			'Макошь UI/General/Switch',
+			'Макошь UI/General/Slider',
+			'Макошь UI/General/Date Picker',
+			'Макошь UI/General/Date Range Picker',
+			'Макошь UI/General/Time Picker',
+			'Макошь UI/General/Menu',
+			'Макошь UI/General/Context Menu',
+			'Макошь UI/General/Command',
+			'Макошь UI/General/Tabs',
+			'Макошь UI/General/Dialog',
+			'Макошь UI/General/Steps',
+			'Макошь UI/General/Drawer',
+			'Макошь UI/General/Tooltip',
+			'Макошь UI/General/Popover',
+			'Макошь UI/General/Surface',
+			'Макошь UI/General/Table',
+			'Макошь UI/General/List',
+			'Макошь UI/General/Tree',
+			'Макошь UI/General/Timeline',
+			'Макошь UI/General/Media',
+			'Макошь UI/General/Editor',
+			'Макошь UI/General/Feedback',
+			'Макошь UI/General/Graphics',
+			'Макошь UI/General/Layout',
+			'Макошь UI/General/Utility'
 		]
 		const requiredFoundationTitles = [
-			'Hermes UI/Foundation/Tokens',
-			'Hermes UI/Foundation/Themes',
-			'Hermes UI/Foundation/Typography',
-			'Hermes UI/Foundation/Icons',
-			'Hermes UI/Foundation/Spacing'
+			'Макошь UI/Foundation/Tokens',
+			'Макошь UI/Foundation/Themes',
+			'Макошь UI/Foundation/Typography',
+			'Макошь UI/Foundation/Icons',
+			'Макошь UI/Foundation/Spacing'
 		]
 		const forbiddenLegacyTopLevelTitles = [
-			'Hermes UI/Command',
-			'Hermes UI/Communication',
-			'Hermes UI/Data Display',
-			'Hermes UI/Editor',
-			'Hermes UI/Feedback',
-			'Hermes UI/Foundation',
-			'Hermes UI/Layout',
-			'Hermes UI/Media',
-			'Hermes UI/Navigation',
-			'Hermes UI/Overlays',
-			'Hermes UI/Primitives',
-			'Hermes UI/Themes',
-			'Hermes UI/Utility'
+			'Макошь UI/Command',
+			'Макошь UI/Communication',
+			'Макошь UI/Data Display',
+			'Макошь UI/Editor',
+			'Макошь UI/Feedback',
+			'Макошь UI/Foundation',
+			'Макошь UI/Layout',
+			'Макошь UI/Media',
+			'Макошь UI/Navigation',
+			'Макошь UI/Overlays',
+			'Макошь UI/Primitives',
+			'Макошь UI/Themes',
+			'Макошь UI/Utility'
 		]
 
-		expect(storySources).not.toContain('Hermes UI/Controls/')
+		expect(storySources).not.toContain('Макошь UI/Controls/')
 		for (const title of [...requiredGeneralTitles, ...requiredFoundationTitles]) {
 			expect(storySources).toContain(`title: '${title}'`)
 		}
-		expect(storySources).not.toContain("title: 'Hermes UI/Domain/")
+		expect(storySources).not.toContain("title: 'Макошь UI/Domain/")
 		for (const title of forbiddenLegacyTopLevelTitles) {
 			expect(storySources).not.toContain(`title: '${title}'`)
 		}
@@ -168,11 +168,11 @@ describe('Hermes UI Storybook visual coverage boundary', () => {
 		)
 
 		expect(visualSpec).toContain(
-			"const CANONICAL_THEMES = ['base-light', 'base-dark', 'hermes-light', 'hermes-dark'] as const"
+			"const CANONICAL_THEMES = ['base-light', 'base-dark', 'makosh-light', 'makosh-dark'] as const"
 		)
 		expect(visualSpec).toContain("const VISUAL_SNAPSHOT_THEMES = ['base-light'] as const")
 		expect(visualSpec).toContain(
-			'Cross-theme token regressions are covered by Hermes UI/Foundation/Themes'
+			'Cross-theme token regressions are covered by Макошь UI/Foundation/Themes'
 		)
 			 expect(visualSpec).toContain("const LOCALES = ['en'] as const")
 		for (const width of [320, 375, 768, 1024, 1440, 1920, 5120]) {
@@ -188,7 +188,7 @@ describe('Hermes UI Storybook visual coverage boundary', () => {
 	it('keeps Storybook visual regression wired into the frontend validation command as a compare-only gate', () => {
 		const frontendRoot = fileURLToPath(new URL('../../../', import.meta.url))
 		const playwrightConfig = readFileSync(join(frontendRoot, 'playwright.config.ts'), 'utf8')
-		expect(playwrightConfig).toContain("process.env.HERMES_STORYBOOK_HOST ?? 'localhost'")
+		expect(playwrightConfig).toContain("process.env.MAKOSH_STORYBOOK_HOST ?? 'localhost'")
 		expect(playwrightConfig).toContain('pnpm exec storybook build --quiet --test --output-dir storybook-static')
 		expect(playwrightConfig).toContain('pnpm storybook:serve')
 		expect(playwrightConfig).toContain('reuseExistingServer: false')
@@ -200,7 +200,7 @@ describe('Hermes UI Storybook visual coverage boundary', () => {
 		expect(packageJson).toContain('test-storybook --url http://localhost:6006')
 	})
 
-	it('keeps vendor UI primitives behind the Hermes UI kit boundary', () => {
+	it('keeps vendor UI primitives behind the Макошь UI kit boundary', () => {
 		const frontendRoot = fileURLToPath(new URL('../../../', import.meta.url))
 		const checkedRoots = ['src', 'stories', '.storybook']
 		const forbiddenImports = /from ['"](reka-ui|shadcn-vue|@radix-ui\/[^'"]+|lucide(?:-[^'"]+)?)['"]/g

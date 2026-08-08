@@ -1,4 +1,4 @@
-use hermes_events_api::{EventEnvelope, StoredEventEnvelope};
+use makosh_events_api::{EventEnvelope, StoredEventEnvelope};
 use std::collections::VecDeque;
 use std::convert::Infallible;
 use std::time::Duration;
@@ -18,13 +18,13 @@ use crate::app::error::types::ApiError;
 use crate::app::state::AppState;
 use crate::platform::audit::models::NewApiAuditRecord;
 use crate::platform::events::bus::sanitize_event_payload;
-use hermes_events_postgres::trace::EventTrace;
+use makosh_events_postgres::trace::EventTrace;
 
 pub(crate) async fn post_event(
     State(state): State<AppState>,
     Json(request): Json<AppendEventRequest>,
 ) -> Result<(StatusCode, Json<AppendEventResponse>), ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
 
     let store = event_store(&state)?;
     let event = request.into_new_event()?;
@@ -50,7 +50,7 @@ pub(crate) async fn get_event(
     State(state): State<AppState>,
     Path(event_id): Path<String>,
 ) -> Result<Json<EventEnvelope>, ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
 
     let store = event_store(&state)?;
     let audit_log = api_audit_log(&state)?;
@@ -144,7 +144,7 @@ pub(crate) async fn get_events(
     let store = event_store(&state)?;
     api_audit_log(&state)?
         .record(&NewApiAuditRecord::event_list(
-            "hermes-frontend",
+            "makosh-frontend",
             after_position,
             limit,
             wait_seconds,
@@ -240,7 +240,7 @@ pub(crate) async fn get_audit_events(
 }
 
 async fn stream_start_position(
-    store: &hermes_events_postgres::store::EventStore,
+    store: &makosh_events_postgres::store::EventStore,
     after_position: Option<i64>,
 ) -> Result<i64, ApiError> {
     match after_position {
@@ -253,7 +253,7 @@ async fn stream_start_position(
 }
 
 struct EventStreamState {
-    store: hermes_events_postgres::store::EventStore,
+    store: makosh_events_postgres::store::EventStore,
     after_position: i64,
     batch_size: u32,
     heartbeat: Duration,

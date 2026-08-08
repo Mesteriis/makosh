@@ -1,14 +1,14 @@
-use hermes_hub_backend::domains::calendar::brain::CalendarBrainService;
-use hermes_hub_backend::domains::calendar::core::{
+use makosh_hub_backend::domains::calendar::brain::CalendarBrainService;
+use makosh_hub_backend::domains::calendar::core::{
     agendas::EventAgendaStore, checklists::EventChecklistStore,
     context_packs::EventContextPackStore, participants::EventParticipantStore,
     relations::EventRelationStore,
 };
-use hermes_hub_backend::domains::calendar::events::event_store::CalendarEventStore;
-use hermes_hub_backend::domains::calendar::health::CalendarWatchtowerService;
-use hermes_hub_backend::domains::calendar::intelligence::CalendarIntelligenceService;
-use hermes_hub_backend::domains::calendar::rules::CalendarRuleStore;
-use hermes_hub_backend::domains::calendar::scheduling::{DeadlineStore, FocusBlockStore};
+use makosh_hub_backend::domains::calendar::events::event_store::CalendarEventStore;
+use makosh_hub_backend::domains::calendar::health::CalendarWatchtowerService;
+use makosh_hub_backend::domains::calendar::intelligence::CalendarIntelligenceService;
+use makosh_hub_backend::domains::calendar::rules::CalendarRuleStore;
+use makosh_hub_backend::domains::calendar::scheduling::{DeadlineStore, FocusBlockStore};
 
 use super::support::{disconnected_pool, live_pool};
 
@@ -111,7 +111,7 @@ async fn brain_services_against_postgres() {
 
 #[test]
 fn sync_ics_export() {
-    let ics = hermes_hub_backend::domains::calendar::sync::export_event_ics(
+    let ics = makosh_hub_backend::domains::calendar::sync::export_event_ics(
         "Test Meeting",
         Some("Description"),
         Some("Office"),
@@ -127,7 +127,7 @@ fn sync_ics_export() {
 
 #[test]
 fn sync_markdown_export() {
-    let md = hermes_hub_backend::domains::calendar::sync::export_event_md(
+    let md = makosh_hub_backend::domains::calendar::sync::export_event_md(
         "Test Meeting",
         Some("Description"),
         Some("Office"),

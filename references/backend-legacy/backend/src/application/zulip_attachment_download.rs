@@ -1,6 +1,6 @@
 use crate::platform::secrets::store::SecretReferenceStore;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
-use hermes_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
 use std::path::{Path, PathBuf};
 
 use chrono::{DateTime, Utc};
@@ -10,10 +10,10 @@ use thiserror::Error;
 
 use crate::domains::communications::credentials::ProviderCredentialReader;
 use crate::domains::communications::messages::provider_channel_store::ProviderChannelMessageStore;
-use hermes_communications_api::attachments::CommunicationMessageAttachmentScanPort;
-use hermes_communications_postgres::attachment_scan::PostgresCommunicationMessageAttachmentScan;
-use hermes_communications_postgres::errors::CommunicationIngestionError;
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_api::attachments::CommunicationMessageAttachmentScanPort;
+use makosh_communications_postgres::attachment_scan::PostgresCommunicationMessageAttachmentScan;
+use makosh_communications_postgres::errors::CommunicationIngestionError;
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
 
@@ -23,7 +23,7 @@ use crate::workflows::zulip_attachment_storage::{
     ZulipAttachmentBytes, ZulipAttachmentMaterialization, ZulipAttachmentStorageError,
     persist_zulip_attachment_bytes,
 };
-use hermes_provider_zulip::client::{ZulipApiClient, ZulipClientConfig, ZulipClientError};
+use makosh_provider_zulip::client::{ZulipApiClient, ZulipClientConfig, ZulipClientError};
 
 const ZULIP_CHANNEL_KIND: &str = "zulip";
 const MAX_MESSAGE_SCAN_LIMIT: i64 = 500;

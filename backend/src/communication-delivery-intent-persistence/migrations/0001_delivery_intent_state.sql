@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communication_delivery_intent_jobs (
+CREATE TABLE makosh_data.communication_delivery_intent_jobs (
   intent_id BYTEA NOT NULL CHECK (octet_length(intent_id) = 16),
   logical_owner_id TEXT NOT NULL CHECK (
     char_length(logical_owner_id) BETWEEN 1 AND 128
@@ -71,7 +71,7 @@ CREATE TABLE hermes_data.communication_delivery_intent_jobs (
   )
 );
 
-CREATE TABLE hermes_data.communication_delivery_intent_transitions (
+CREATE TABLE makosh_data.communication_delivery_intent_transitions (
   logical_owner_id TEXT NOT NULL CHECK (
     char_length(logical_owner_id) BETWEEN 1 AND 128
   ),
@@ -83,14 +83,14 @@ CREATE TABLE hermes_data.communication_delivery_intent_transitions (
   ),
   PRIMARY KEY (logical_owner_id, intent_id, state_revision),
   FOREIGN KEY (logical_owner_id, intent_id) REFERENCES
-    hermes_data.communication_delivery_intent_jobs (
+    makosh_data.communication_delivery_intent_jobs (
       logical_owner_id,
       intent_id
     )
 );
 
 CREATE INDEX communication_delivery_intent_claim_idx
-  ON hermes_data.communication_delivery_intent_jobs (
+  ON makosh_data.communication_delivery_intent_jobs (
     logical_owner_id,
     updated_at_unix_seconds,
     intent_id

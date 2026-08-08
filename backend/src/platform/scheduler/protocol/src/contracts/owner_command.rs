@@ -1,4 +1,4 @@
-use hermes_clock_protocol::UtcMillisV1;
+use makosh_clock_protocol::UtcMillisV1;
 
 use crate::contracts::{job::JobKindV1, run::JobRunIdV1};
 use crate::v1::{JobKindV1 as WireJobKindV1, JobLeaseV1, OwnerJobCommandV1, OwnerJobTriggerKindV1};

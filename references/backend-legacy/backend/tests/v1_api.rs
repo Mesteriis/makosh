@@ -1,25 +1,25 @@
 use axum::body::{Body, to_bytes};
 use axum::http::{HeaderValue, Method, Request, StatusCode, header};
 use chrono::Utc;
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 use serde_json::json;
 use std::time::{SystemTime, UNIX_EPOCH};
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::{build_router, build_router_with_database};
-use hermes_hub_backend::domains::communications::messages::projection::project_raw_email_message;
-use hermes_hub_backend::domains::communications::messages::store::MessageProjectionStore;
-use hermes_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
-use hermes_hub_backend::domains::communications::storage::models::{
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::{build_router, build_router_with_database};
+use makosh_hub_backend::domains::communications::messages::projection::project_raw_email_message;
+use makosh_hub_backend::domains::communications::messages::store::MessageProjectionStore;
+use makosh_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
+use makosh_hub_backend::domains::communications::storage::models::{
     CommunicationAttachmentDisposition, NewCommunicationAttachment, NewCommunicationBlob,
 };
-use hermes_hub_backend::domains::communications::storage::store::CommunicationStorageStore;
+use makosh_hub_backend::domains::communications::storage::store::CommunicationStorageStore;
 
-use hermes_hub_backend::platform::config::app_config::AppConfig;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::config::app_config::AppConfig;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const LOCAL_API_TOKEN: &str = "test-token";
 
@@ -32,7 +32,7 @@ async fn v1_status_returns_enabled_surfaces_against_postgres() {
         .await
         .expect("database connection");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -43,7 +43,7 @@ async fn v1_status_returns_enabled_surfaces_against_postgres() {
         .oneshot(
             Request::builder()
                 .uri("/api/v1/status")
-                .header("x-hermes-secret", HeaderValue::from_static("test-token"))
+                .header("x-makosh-secret", HeaderValue::from_static("test-token"))
                 .body(Body::empty())
                 .expect("request"),
         )
@@ -143,7 +143,7 @@ async fn v1_communications_message_detail_returns_attachment_metadata_against_po
         .expect("attachment metadata");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -155,7 +155,7 @@ async fn v1_communications_message_detail_returns_attachment_metadata_against_po
         .oneshot(get_request_with_token_and_actor(
             "/api/v1/communications/messages?limit=100",
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("list response");
@@ -174,7 +174,7 @@ async fn v1_communications_message_detail_returns_attachment_metadata_against_po
         .oneshot(get_request_with_token_and_actor(
             &format!("/api/v1/communications/messages/{}", message.message_id),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("detail response");
@@ -226,7 +226,7 @@ async fn v1_status_rejects_missing_local_api_secret_before_database_access() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -241,21 +241,21 @@ async fn v1_status_accepts_local_frontend_cors_preflight_before_auth() {
         "http://tauri.localhost",
         "tauri://localhost",
     ] {
-        assert_local_cors_preflight(&app, origin, "GET", "/api/v1/status", "x-hermes-secret").await;
+        assert_local_cors_preflight(&app, origin, "GET", "/api/v1/status", "x-makosh-secret").await;
         assert_local_cors_preflight(
             &app,
             origin,
             "PATCH",
             "/api/v1/communications/messages/message-1",
-            "x-hermes-secret",
+            "x-makosh-secret",
         )
         .await;
         assert_local_cors_preflight(
             &app,
             origin,
             "POST",
-            "/hermes.communications.v1.CommunicationsService/ListMessages",
-            "connect-protocol-version,content-type,x-hermes-secret",
+            "/makosh.communications.v1.CommunicationsService/ListMessages",
+            "connect-protocol-version,content-type,x-makosh-secret",
         )
         .await;
         assert_local_cors_preflight(
@@ -263,7 +263,7 @@ async fn v1_status_accepts_local_frontend_cors_preflight_before_auth() {
             origin,
             "GET",
             "/api/realtime/v2/events?after_position=5",
-            "last-event-id,x-hermes-secret",
+            "last-event-id,x-makosh-secret",
         )
         .await;
     }
@@ -323,7 +323,7 @@ async fn v1_status_rejects_invalid_local_api_secret_before_database_access() {
         .oneshot(get_request_with_token_and_actor(
             "/api/v1/status",
             "wrong-token",
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -335,7 +335,7 @@ async fn v1_status_rejects_invalid_local_api_secret_before_database_access() {
         body,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -387,7 +387,7 @@ async fn v1_status_returns_service_unavailable_after_auth_when_database_is_not_c
         .oneshot(get_request_with_token_and_actor(
             "/api/v1/status",
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -400,7 +400,7 @@ async fn v1_status_returns_service_unavailable_after_auth_when_database_is_not_c
 }
 
 fn config_with_api_token() -> AppConfig {
-    hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+    makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
 }
 
 fn get_request(uri: &str) -> Request<Body> {
@@ -413,7 +413,7 @@ fn get_request(uri: &str) -> Request<Body> {
 fn get_request_with_token_without_actor(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -421,7 +421,7 @@ fn get_request_with_token_without_actor(uri: &str, token: &str) -> Request<Body>
 fn get_request_with_token_and_actor(uri: &str, token: &str, _actor_id: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }

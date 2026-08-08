@@ -3,7 +3,7 @@
 use std::collections::BTreeSet;
 use std::fmt;
 
-use hermes_events_protocol::RuntimeNatsJwtCredentialV1;
+use makosh_events_protocol::RuntimeNatsJwtCredentialV1;
 use nats_jwt::{KeyPair, Token};
 use zeroize::Zeroizing;
 
@@ -209,7 +209,7 @@ fn configured_user_token(
     expires_at_unix_seconds: u64,
 ) -> String {
     let name = format!(
-        "hermes-{}-{}-g{}-e{}",
+        "makosh-{}-{}-g{}-e{}",
         fence.registration_id(),
         fence.runtime_instance_id(),
         fence.runtime_generation(),

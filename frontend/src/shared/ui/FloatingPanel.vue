@@ -15,9 +15,9 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-floating-panel',
-	`hermes-floating-panel--${props.placement}`,
-	`hermes-floating-panel--${props.tone}`,
+	'makosh-floating-panel',
+	`makosh-floating-panel--${props.placement}`,
+	`makosh-floating-panel--${props.tone}`,
 	props.class
 ])
 </script>

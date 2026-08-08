@@ -1,4 +1,4 @@
-use hermes_desktop_runtime::RuntimeTaskSpec;
+use makosh_desktop_runtime::RuntimeTaskSpec;
 
 use crate::app::router::ApplicationComponents;
 

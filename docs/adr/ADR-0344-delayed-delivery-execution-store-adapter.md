@@ -5,7 +5,7 @@
 Дата: 2026-07-30
 
 Состояние реализации: реализовано. Отдельная build unit
-`hermes-communication-delayed-delivery-store-adapters` реализует
+`makosh-communication-delayed-delivery-store-adapters` реализует
 `ExecutionStorePortV1` поверх owner-local delayed-delivery persistence.
 Adapter сохраняет exact inbox/outbox и execution-fence semantics persistence,
 имеет owner-local `persistence` surface, не содержит SQL и не расширяет phase
@@ -38,14 +38,14 @@ composition смешало бы две независимые причины и�
 Добавляется девятая owner-local build unit:
 
 ```text
-hermes-communication-delayed-delivery-store-adapters
+makosh-communication-delayed-delivery-store-adapters
 ```
 
 Она:
 
 - зависит только от
-  `hermes-communication-delayed-delivery-execution` и
-  `hermes-communication-delayed-delivery-persistence`;
+  `makosh-communication-delayed-delivery-execution` и
+  `makosh-communication-delayed-delivery-persistence`;
 - реализует `ExecutionStorePortV1`;
 - выполняет явное типизированное отображение port models в persistence models
   и обратно;

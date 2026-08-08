@@ -1,4 +1,4 @@
-use hermes_zulip_api::{ZulipCommandV1, ZulipReactionOperationV1, direct_recipient_user_ids};
+use makosh_zulip_api::{ZulipCommandV1, ZulipReactionOperationV1, direct_recipient_user_ids};
 
 use crate::{ZulipHttpConfigV1, wire::ZulipHttpErrorV1};
 
@@ -229,7 +229,7 @@ pub fn request_for_upload(
     (!bytes.is_empty() && bytes.len() <= 64 * 1024 * 1024)
         .then_some(())
         .ok_or(ZulipHttpErrorV1::InvalidCommand)?;
-    let boundary = "hermes-zulip-blob-v1";
+    let boundary = "makosh-zulip-blob-v1";
     let mut body = format!("--{boundary}\r\nContent-Disposition: form-data; name=\"file\"; filename=\"{}\"\r\nContent-Type: application/octet-stream\r\n\r\n", filename.replace(['\r', '\n', '"'], "_")).into_bytes();
     body.extend_from_slice(bytes);
     body.extend_from_slice(format!("\r\n--{boundary}--\r\n").as_bytes());
@@ -240,7 +240,7 @@ pub fn request_for_upload(
             realm_path(&config.account.realm_url)?
         ),
         form_body: String::new(),
-        content_type: "multipart/form-data; boundary=hermes-zulip-blob-v1",
+        content_type: "multipart/form-data; boundary=makosh-zulip-blob-v1",
         body,
     })
 }

@@ -1,20 +1,20 @@
 //! Public owner Settings proof, mutation authority and Gateway admission.
 
-use hermes_gateway_protocol::v1::{
+use http_body_util::{BodyExt, Full};
+use hyper::body::Bytes;
+use hyper::{Request, StatusCode};
+use makosh_gateway_protocol::v1::{
     CommitOwnerModuleSettingsRequestV1, CommitOwnerModuleSettingsResponseV1,
     CreateOwnerModuleSettingsTargetV1, ExportEffectiveOwnerModuleSettingsV1, OwnerSettingEntryV1,
     OwnerSettingValueV1, PrepareOwnerModuleSettingsRequestV1, PrepareOwnerModuleSettingsResponseV1,
     UpdateOwnerModuleSettingsV1, commit_owner_module_settings_response_v1, owner_setting_value_v1,
     prepare_owner_module_settings_request_v1,
 };
-use hermes_gateway_runtime::{
+use makosh_gateway_runtime::{
     OWNER_MODULE_SETTINGS_COMMIT_PATH, OWNER_MODULE_SETTINGS_PREPARE_PATH, OwnerBrowserPrincipalV1,
     OwnerModuleSettingsHandlerV1, OwnerModuleSettingsRouteErrorV1,
 };
-use hermes_runtime_protocol::SETTINGS_CONFIGURATION_CATALOG_CAPABILITY_ID;
-use http_body_util::{BodyExt, Full};
-use hyper::body::Bytes;
-use hyper::{Request, StatusCode};
+use makosh_runtime_protocol::SETTINGS_CONFIGURATION_CATALOG_CAPABILITY_ID;
 
 use super::common::*;
 use crate::modules::settings::owner_gateway::KernelOwnerModuleSettingsHandlerV1;
@@ -28,7 +28,7 @@ const SESSION: &str = "000000000000000000000000000000000000000000000000000000000
 
 #[test]
 fn owner_settings_requires_fresh_proof_and_preserves_schema_cas() {
-    let fixture = OwnerSettingsFixture::new("hermes-owner-settings-direct");
+    let fixture = OwnerSettingsFixture::new("makosh-owner-settings-direct");
     let handler = fixture.handler();
     let current_principal = principal(SESSION);
     let signing_key = super::browser_gateway_session::browser_signing_key();
@@ -147,7 +147,7 @@ fn owner_settings_requires_fresh_proof_and_preserves_schema_cas() {
 
 #[test]
 fn owner_settings_creates_idempotent_isolated_configuration_targets() {
-    let fixture = OwnerSettingsFixture::new("hermes-owner-settings-targets");
+    let fixture = OwnerSettingsFixture::new("makosh-owner-settings-targets");
     let handler = fixture.handler();
     let principal = principal(SESSION);
     let signing_key = super::browser_gateway_session::browser_signing_key();
@@ -236,7 +236,7 @@ fn owner_settings_creates_idempotent_isolated_configuration_targets() {
 #[test]
 fn owner_settings_denies_configuration_target_without_exact_catalog_grant() {
     let fixture = OwnerSettingsFixture::new_without_catalog(
-        "hermes-owner-settings-target-without-catalog-grant",
+        "makosh-owner-settings-target-without-catalog-grant",
     );
     let error = fixture
         .handler()
@@ -247,7 +247,7 @@ fn owner_settings_denies_configuration_target_without_exact_catalog_grant() {
 
 #[test]
 fn owner_settings_gateway_requires_authenticated_same_origin_and_denies_lan_mode() {
-    let fixture = OwnerSettingsFixture::new("hermes-owner-settings-gateway");
+    let fixture = OwnerSettingsFixture::new("makosh-owner-settings-gateway");
     let signing_key = super::browser_gateway_session::browser_signing_key();
     let configuration = crate::platform::gateway::BrowserGatewayConfigurationV1::new(
         "127.0.0.1:9443".parse().expect("loopback Gateway address"),
@@ -261,7 +261,7 @@ fn owner_settings_gateway_requires_authenticated_same_origin_and_denies_lan_mode
         Arc::clone(&fixture.store),
         &fixture.data,
         fixture.supervisor.clone(),
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(1_024)
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(1_024)
             .expect("test realtime source"),
         &configuration,
         None,
@@ -316,7 +316,7 @@ fn owner_settings_gateway_requires_authenticated_same_origin_and_denies_lan_mode
         Arc::clone(&fixture.store),
         &fixture.data,
         fixture.supervisor.clone(),
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(1_024)
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(1_024)
             .expect("test realtime source"),
         &loopback_configuration,
         None,
@@ -332,7 +332,7 @@ fn owner_settings_gateway_requires_authenticated_same_origin_and_denies_lan_mode
         .headers_mut()
         .insert("host", "127.0.0.1:5173".parse().expect("host header"));
     loopback_prepare.headers_mut().insert(
-        "x-hermes-development-proxy-proof",
+        "x-makosh-development-proxy-proof",
         proof.parse().expect("proxy proof header"),
     );
     let prepared = runtime.block_on(loopback_router.route(loopback_prepare));
@@ -353,7 +353,7 @@ fn owner_settings_gateway_requires_authenticated_same_origin_and_denies_lan_mode
         .headers_mut()
         .insert("host", "127.0.0.1:5173".parse().expect("host header"));
     loopback_commit.headers_mut().insert(
-        "x-hermes-development-proxy-proof",
+        "x-makosh-development-proxy-proof",
         proof.parse().expect("proxy proof header"),
     );
     let committed = runtime.block_on(loopback_router.route(loopback_commit));
@@ -385,7 +385,7 @@ fn owner_settings_gateway_requires_authenticated_same_origin_and_denies_lan_mode
         Arc::clone(&fixture.store),
         &fixture.data,
         fixture.supervisor.clone(),
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(1_024)
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(1_024)
             .expect("test realtime source"),
         &lan_configuration,
         None,
@@ -402,7 +402,7 @@ fn owner_settings_gateway_requires_authenticated_same_origin_and_denies_lan_mode
 
 #[test]
 fn owner_settings_export_returns_only_current_client_visible_values() {
-    let fixture = OwnerSettingsFixture::new("hermes-owner-settings-export");
+    let fixture = OwnerSettingsFixture::new("makosh-owner-settings-export");
     make_export_snapshot_current(&fixture.store);
     let handler = fixture.handler();
     let current_principal = principal(SESSION);
@@ -555,7 +555,7 @@ fn admit_owner_browser_registration_and_schema(
     store
         .admit_settings_schema(
             &SettingsSchemaBinding::new(
-                hermes_kernel_control_store::SettingsSchemaBindingInputV1 {
+                makosh_kernel_control_store::SettingsSchemaBindingInputV1 {
                     registration_id: REGISTRATION.to_owned(),
                     schema_major: 1,
                     schema_revision: 1,
@@ -616,7 +616,7 @@ fn canonical_snapshot(revision: u64, value: u64) -> SettingsSnapshotV1 {
             setting_id: "mail.sync.window".to_owned(),
             value: Some(SettingValueV1 {
                 value: Some(
-                    hermes_runtime_protocol::v1::setting_value_v1::Value::UnsignedIntegerValue(
+                    makosh_runtime_protocol::v1::setting_value_v1::Value::UnsignedIntegerValue(
                         value,
                     ),
                 ),
@@ -634,7 +634,7 @@ fn export_snapshot(revision: u64, value: u64) -> SettingsSnapshotV1 {
                 setting_id: "mail.internal.hidden".to_owned(),
                 value: Some(SettingValueV1 {
                     value: Some(
-                        hermes_runtime_protocol::v1::setting_value_v1::Value::StringValue(
+                        makosh_runtime_protocol::v1::setting_value_v1::Value::StringValue(
                             "private".to_owned(),
                         ),
                     ),

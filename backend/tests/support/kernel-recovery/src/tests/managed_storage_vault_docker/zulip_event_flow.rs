@@ -4,8 +4,8 @@ use std::time::Instant;
 
 use super::*;
 
-use hermes_events_protocol::validation::envelope::decode_envelope_v1;
-use hermes_zulip_api::{
+use makosh_events_protocol::validation::envelope::decode_envelope_v1;
+use makosh_zulip_api::{
     ZulipClientRequestV1, ZulipClientResponseV1, ZulipCommandOperationOutcomeV1, ZulipCommandV1,
     client_contract::{ZULIP_MODULE_ID, ZulipClientContractV1},
     operational::{
@@ -14,7 +14,7 @@ use hermes_zulip_api::{
     },
     realtime::ZulipOperationalReplayRequestV1,
 };
-use hermes_zulip_runtime::client_port::{
+use makosh_zulip_runtime::client_port::{
     ZulipClientPortErrorV1, decode_module_response, encode_module_request,
 };
 
@@ -22,9 +22,9 @@ use crate::modules::capability::router::{
     ManagedCapabilityRouteRequest, route_managed_client_request,
 };
 
-const OBSERVATION_SUBJECT: &str = "hermes.observation.v1.communications.communication_observed.v1";
+const OBSERVATION_SUBJECT: &str = "makosh.observation.v1.communications.communication_observed.v1";
 const CANONICAL_EVENT_SUBJECT: &str =
-    "hermes.event.v1.communications.communication_evidence_recorded.v1";
+    "makosh.event.v1.communications.communication_evidence_recorded.v1";
 
 #[test]
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, NATS, Communications and Zulip binaries"]

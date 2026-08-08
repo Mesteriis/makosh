@@ -1,7 +1,7 @@
 import {
 	AttachmentPreviewEvidenceReplayErrorV1,
 	AttachmentPreviewEvidenceReplayStateV1,
-} from '../../../gen/hermes/attachment_preview_evidence_replay/v1/replay_pb'
+} from '../../../gen/makosh/attachment_preview_evidence_replay/v1/replay_pb'
 import { getAttachmentPreviewEvidenceReplayCommandClient } from '../../../platform/connect/attachmentPreviewEvidenceReplayCommandClient'
 
 const ID_BYTES = 16

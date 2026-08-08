@@ -1,12 +1,12 @@
 #![forbid(unsafe_code)]
 
-pub use hermes_communications_api::{
+pub use makosh_communications_api::{
     CommunicationConversationIdV1, CommunicationConversationSummaryV1, CommunicationMessageIdV1,
     CommunicationMessageLifecycleStateV1, CommunicationMessageSummaryV1,
     CommunicationProviderProvenanceV1, CommunicationSourceCursorV1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-delivery-intent-core";
+pub const PACKAGE: &str = "makosh-communication-delivery-intent-core";
 pub const MAX_DELIVERY_BODY_BYTES_V1: usize = 64 * 1024;
 
 #[derive(Clone, PartialEq, Eq)]
@@ -132,7 +132,7 @@ fn valid_cursor(cursor: CommunicationSourceCursorV1) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_communications_api::{
+    use makosh_communications_api::{
         CommunicationBodyStateV1, CommunicationDirectionV1, CommunicationObservationIdV1,
     };
 

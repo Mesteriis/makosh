@@ -1,6 +1,6 @@
 //! Bounded decisions for a due fire when its coordination key is occupied.
 
-use hermes_scheduler_protocol::OverlapPolicyV1;
+use makosh_scheduler_protocol::OverlapPolicyV1;
 
 /// Decides whether a due occurrence starts, remains durable pending, or drops.
 #[must_use]

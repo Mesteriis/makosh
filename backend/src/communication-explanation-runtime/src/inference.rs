@@ -1,6 +1,6 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     communication_explanation_inference_contract_reference_v1,
     validate_explanation_inference_request_v1, validate_explanation_inference_result_v1,
     wire::{
@@ -9,17 +9,17 @@ use hermes_ai_contracts::{
         CommunicationExplanationInferenceRequestV1, CommunicationExplanationInferenceResultV1,
     },
 };
-use hermes_communication_explanation_core::{
+use makosh_communication_explanation_core::{
     CommunicationExplanationCandidateV1, CommunicationExplanationCompletenessV1,
     CommunicationExplanationReasonKindV1, CommunicationExplanationReasonV1,
     CommunicationExplanationRejectionCodeV1, CommunicationExplanationSourceBasisV1,
     CommunicationExplanationStateV1, CommunicationExplanationTransitionV1,
 };
-use hermes_communication_explanation_persistence::{
+use makosh_communication_explanation_persistence::{
     CommunicationExplanationPersistenceErrorV1, CommunicationExplanationPersistenceV1,
     PersistedCommunicationExplanationRunV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeControlRequestV1, ManagedRuntimeModuleRequestRequestV1,

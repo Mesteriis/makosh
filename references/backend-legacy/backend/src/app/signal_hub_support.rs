@@ -18,10 +18,10 @@ use crate::integrations::whatsapp::runtime::contracts::WhatsAppRuntimeStatus;
 use crate::platform::config::ai::AiRuntimeProvider;
 use crate::platform::config::app_config::AppConfig;
 use crate::platform::settings::ai_runtime::AiRuntimeSettings;
-use hermes_communications_api::accounts::CommunicationProviderKind;
-use hermes_communications_api::accounts::ProviderAccount;
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
-use hermes_events_postgres::store::EventStore;
+use makosh_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::ProviderAccount;
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_events_postgres::store::EventStore;
 
 pub(crate) async fn provider_account_or_not_found(
     state: &AppState,

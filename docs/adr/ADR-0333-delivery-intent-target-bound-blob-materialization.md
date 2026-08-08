@@ -45,10 +45,10 @@ Source runtime выбирает одну из четырёх exact public integr
 
 | Provider | Target owner | Target module | Target Blob capability |
 |---|---|---|---|
-| Mail | `mail` | `hermes-mail-runtime` | `mail.blob.v1` |
-| Telegram | `telegram` | `hermes-telegram-runtime` | `telegram.blob.v1` |
-| WhatsApp | `whatsapp` | `hermes-whatsapp-runtime` | `whatsapp.blob.v1` |
-| Zulip | `zulip` | `hermes-zulip-runtime` | `zulip.blob.v1` |
+| Mail | `mail` | `makosh-mail-runtime` | `mail.blob.v1` |
+| Telegram | `telegram` | `makosh-telegram-runtime` | `telegram.blob.v1` |
+| WhatsApp | `whatsapp` | `makosh-whatsapp-runtime` | `whatsapp.blob.v1` |
+| Zulip | `zulip` | `makosh-zulip-runtime` | `zulip.blob.v1` |
 
 Workflow runtime импортирует только четыре integration-owned public contract
 units. Он не импортирует provider runtime, storage, SDK или implementation.

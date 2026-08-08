@@ -14,9 +14,9 @@ use crate::engines::consistency::{
     models::{ContradictionObservation, ContradictionReviewState},
     store::ContradictionObservationStore,
 };
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::store::ObservationStore;
 
 #[derive(Clone)]
 pub struct ContradictionReviewService {
@@ -45,7 +45,7 @@ impl ContradictionReviewService {
                         "review_state": review_state.as_str(),
                         "resolution": resolution,
                         "operation": "contradiction_review",
-                        "actor_id": "hermes-frontend",
+                        "actor_id": "makosh-frontend",
                     }),
                     format!("contradiction://{observation_id}/review"),
                 )
@@ -60,7 +60,7 @@ impl ContradictionReviewService {
             .set_review_state_with_observation(
                 observation_id,
                 review_state,
-                "hermes-frontend",
+                "makosh-frontend",
                 resolution,
                 Some(&review_observation.observation_id),
                 None,
@@ -127,7 +127,7 @@ async fn ensure_contradiction_review_item_in_transaction(
 async fn capture_evidence_observation_in_transaction(
     transaction: &mut Transaction<'_, Postgres>,
     contradiction: &ContradictionObservation,
-) -> Result<hermes_observations_api::models::Observation, ObservationStoreError> {
+) -> Result<makosh_observations_api::models::Observation, ObservationStoreError> {
     ObservationStore::capture_in_transaction(
         transaction,
         &NewObservation::new(

@@ -18,4 +18,4 @@ pub use admission::{
 };
 pub use renderer::{AttachmentPreviewRendererRuntimeV1, attachment_preview_renderer_identity_v1};
 
-pub const PACKAGE: &str = "hermes-attachment-preview-runtime";
+pub const PACKAGE: &str = "makosh-attachment-preview-runtime";

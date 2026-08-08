@@ -3,7 +3,7 @@ use serde_json::json;
 
 use crate::platform::secrets::models::{ResolvedSecret, SecretKind};
 use crate::platform::secrets::resolver::SecretResolver;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
 
 use super::super::errors::EmailAccountSetupError;
 use super::super::helpers::expires_at;

@@ -2,14 +2,14 @@ use std::sync::{Arc, Mutex};
 
 use base64::Engine;
 use bytes::Bytes;
-use hermes_gateway_session::{
-    BrowserPairingManager, BrowserSameOriginSessionV1, BrowserWebauthnVerifier,
-};
-use hermes_gateway_session_contract::BrowserEnrollmentAuthority;
 use http_body_util::{BodyExt, Limited};
 use hyper::body::Body;
 use hyper::header::{CACHE_CONTROL, CONTENT_TYPE, ORIGIN};
 use hyper::{Method, Request, Response, StatusCode};
+use makosh_gateway_session::{
+    BrowserPairingManager, BrowserSameOriginSessionV1, BrowserWebauthnVerifier,
+};
+use makosh_gateway_session_contract::BrowserEnrollmentAuthority;
 use serde::{Deserialize, Serialize};
 use webauthn_rs_core::proto::{CreationChallengeResponse, RegisterPublicKeyCredential};
 

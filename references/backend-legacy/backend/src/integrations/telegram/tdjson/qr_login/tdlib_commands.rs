@@ -21,7 +21,7 @@ pub(super) fn drain_qr_login_commands(
                 client.send_json(&json!({
                     "@type": "checkAuthenticationPassword",
                     "password": password,
-                    "@extra": "hermes-check-authentication-password"
+                    "@extra": "makosh-check-authentication-password"
                 }))?;
                 password_submitted = true;
             }

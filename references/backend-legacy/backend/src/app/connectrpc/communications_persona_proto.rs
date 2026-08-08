@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_connectrpc_contracts::hermes::communications::v1::CommunicationPersona;
+use makosh_connectrpc_contracts::makosh::communications::v1::CommunicationPersona;
 
 use crate::domains::communications::personas::CommunicationPersona as DomainCommunicationPersona;
 

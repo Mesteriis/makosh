@@ -1,5 +1,5 @@
 [package]
-name = "hermes-attachment-archive-inspection-core"
+name = "makosh-attachment-archive-inspection-core"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,11 +7,11 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "engine"
 owner = "attachment_archive_inspection"
 surface = "implementation"
 
 [dependencies]
-hermes-attachment-archive-inspection-api = { path = "../attachment-archive-inspection-api" }
+makosh-attachment-archive-inspection-api = { path = "../attachment-archive-inspection-api" }
 sha2 = { version = "=0.11.0", default-features = false }

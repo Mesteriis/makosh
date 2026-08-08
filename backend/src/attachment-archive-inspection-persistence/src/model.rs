@@ -1,9 +1,9 @@
-use hermes_attachment_archive_inspection_core::{
+use makosh_attachment_archive_inspection_core::{
     ArchiveEntryInspectionV1, ArchiveEntryKindV1, ArchiveInspectionErrorV1,
     ArchiveInspectionReportV1, ArchiveInspectionRequestV1, ArchiveInspectionStateV1,
     ArchiveInspectionStatusV1,
 };
-use hermes_attachment_archive_inspection_ingress::wire::RequestArchiveInspectionCustodyDelegationV1;
+use makosh_attachment_archive_inspection_ingress::wire::RequestArchiveInspectionCustodyDelegationV1;
 use sha2::{Digest, Sha256};
 
 use crate::ArchiveInspectionPersistenceErrorV1;
@@ -112,7 +112,7 @@ pub struct ArchiveInspectionRealtimeTransitionV1 {
 #[must_use]
 pub fn archive_inspection_run_id_v1(logical_owner_id: &str, operation_id: [u8; 16]) -> [u8; 16] {
     digest16(
-        b"hermes.attachment-archive-inspection.run.v1\0",
+        b"makosh.attachment-archive-inspection.run.v1\0",
         &[logical_owner_id.as_bytes(), &operation_id],
     )
 }
@@ -120,7 +120,7 @@ pub fn archive_inspection_run_id_v1(logical_owner_id: &str, operation_id: [u8; 1
 #[must_use]
 pub fn archive_inspection_request_fingerprint_v1(attachment_anchor_id: [u8; 16]) -> [u8; 32] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-archive-inspection.request.v1\0");
+    hasher.update(b"makosh.attachment-archive-inspection.request.v1\0");
     hasher.update(attachment_anchor_id);
     hasher.finalize().into()
 }
@@ -134,7 +134,7 @@ pub fn archive_inspection_job_id_v1(
     delegation_result_message_id: [u8; 16],
 ) -> [u8; 16] {
     digest16(
-        b"hermes.attachment-archive-inspection.job.v1\0",
+        b"makosh.attachment-archive-inspection.job.v1\0",
         &[
             &request.run_id,
             &request.attachment_anchor_id,
@@ -152,7 +152,7 @@ pub fn archive_inspection_terminal_evidence_id_v1(
     error: ArchiveInspectionErrorV1,
 ) -> [u8; 16] {
     digest16(
-        b"hermes.attachment-archive-inspection.terminal-error.v1\0",
+        b"makosh.attachment-archive-inspection.terminal-error.v1\0",
         &[
             &run_id,
             &[u8::try_from(error_code(error)).expect("bounded error")],

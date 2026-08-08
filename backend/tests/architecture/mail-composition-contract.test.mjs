@@ -15,7 +15,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   proto: new URL(
-    'src/mail-api/proto/hermes/mail/composition/v1/client.proto',
+    'src/mail-api/proto/makosh/mail/composition/v1/client.proto',
     BACKEND_ROOT,
   ),
   validator: new URL('src/mail-api/src/composition.rs', BACKEND_ROOT),
@@ -37,7 +37,7 @@ const paths = {
   build: new URL('src/mail-api/build.rs', BACKEND_ROOT),
   frontendGenerator: new URL('frontend/scripts/generate-proto.mjs', PROJECT_ROOT),
   frontendGenerated: new URL(
-    'frontend/src/gen/hermes/mail/composition/v1/client_pb.ts',
+    'frontend/src/gen/makosh/mail/composition/v1/client_pb.ts',
     PROJECT_ROOT,
   ),
   frontendCommandClient: new URL(
@@ -138,7 +138,7 @@ test('Mail composition is owner-local, independently admitted and cut over throu
   assert.match(adr, /Runtime не является assembly/);
   assert.match(adr, /live managed Gateway conformance подтверждён/);
 
-  assert.match(proto, /package hermes\.mail\.composition\.v1/);
+  assert.match(proto, /package makosh\.mail\.composition\.v1/);
   assert.match(proto, /service MailCompositionCommandService/);
   assert.match(proto, /service MailCompositionQueryService/);
   assert.match(
@@ -164,14 +164,14 @@ test('Mail composition is owner-local, independently admitted and cut over throu
   assert.match(contract, /mail\.composition\.command\.v1/);
   assert.match(contract, /mail\.composition\.query\.v1/);
 
-  assert.match(persistence, /CREATE TABLE IF NOT EXISTS hermes_data\.mail_composition_commands/);
-  assert.match(persistence, /CREATE TABLE IF NOT EXISTS hermes_data\.mail_drafts/);
-  assert.match(persistence, /CREATE TABLE IF NOT EXISTS hermes_data\.mail_templates/);
-  assert.match(persistence, /CREATE TABLE IF NOT EXISTS hermes_data\.mail_signatures/);
+  assert.match(persistence, /CREATE TABLE IF NOT EXISTS makosh_data\.mail_composition_commands/);
+  assert.match(persistence, /CREATE TABLE IF NOT EXISTS makosh_data\.mail_drafts/);
+  assert.match(persistence, /CREATE TABLE IF NOT EXISTS makosh_data\.mail_templates/);
+  assert.match(persistence, /CREATE TABLE IF NOT EXISTS makosh_data\.mail_signatures/);
   assert.match(persistence, /execute_composition_command/);
   assert.match(persistence, /expected_revision/);
   assert.match(persistence, /mail-composition-cursor-v1/);
-  assert.doesNotMatch(persistence, /hermes_data\.communications|REFERENCES\s+hermes_data\./i);
+  assert.doesNotMatch(persistence, /makosh_data\.communications|REFERENCES\s+makosh_data\./i);
   assert.match(schema, /MAIL_STORAGE_BUNDLE_REVISION_V12/);
   assert.match(schema, /migration_id: "mail_composition"/);
 
@@ -192,7 +192,7 @@ test('Mail composition is owner-local, independently admitted and cut over throu
   assert.match(managedFlow, /assert_stale_revision_is_rejected/);
   assert.match(managedFlow, /assert_default_signature_switch_is_atomic/);
   assert.match(managedFlow, /assert_mail_composition_survives_restart/);
-  assert.match(build, /proto\/hermes\/mail\/composition\/v1\/client\.proto/);
+  assert.match(build, /proto\/makosh\/mail\/composition\/v1\/client\.proto/);
 
   assert.match(frontendGenerator, /mail', 'composition', 'v1', 'client\.proto'/);
   assert.match(frontendGenerated, /MailCompositionCommandService/);
@@ -234,6 +234,6 @@ test('Mail composition is owner-local, independently admitted and cut over throu
   ];
   assert.doesNotMatch(
     compositionOwnedSources.join('\n'),
-    /domains\/communications|integrations\/(?:telegram|whatsapp|zulip)|hermes_communications/,
+    /domains\/communications|integrations\/(?:telegram|whatsapp|zulip)|makosh_communications/,
   );
 });

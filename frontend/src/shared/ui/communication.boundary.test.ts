@@ -17,7 +17,7 @@ const communicationComponents = [
 	'ComposerToolbar'
 ]
 
-describe('Hermes UI communication component contracts', () => {
+describe('Макошь UI communication component contracts', () => {
 	it('keeps the communication batch documented and exported through the UI kit', () => {
 		const uiRoot = fileURLToPath(new URL('.', import.meta.url))
 		const barrel = readFileSync(join(uiRoot, 'index.ts'), 'utf8')

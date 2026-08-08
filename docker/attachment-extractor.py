@@ -37,9 +37,9 @@ MAX_ZIP_ENTRIES = 10_000
 MAX_ZIP_UNCOMPRESSED_BYTES = 50 * 1024 * 1024
 COMMAND_TIMEOUT_SECONDS = 20
 MAIL_ROOT = Path("/mail").resolve()
-SOCKET_PATH = Path(os.environ.get("HERMES_ATTACHMENT_EXTRACTOR_SOCKET", "/run/hermes-extractor/extractor.sock"))
-TCP_BIND = os.environ.get("HERMES_ATTACHMENT_EXTRACTOR_TCP_BIND", "0.0.0.0:8788")
-OCR_LANGUAGES_RAW = os.environ.get("HERMES_ATTACHMENT_OCR_LANGUAGES", "eng+rus")
+SOCKET_PATH = Path(os.environ.get("MAKOSH_ATTACHMENT_EXTRACTOR_SOCKET", "/run/makosh-extractor/extractor.sock"))
+TCP_BIND = os.environ.get("MAKOSH_ATTACHMENT_EXTRACTOR_TCP_BIND", "0.0.0.0:8788")
+OCR_LANGUAGES_RAW = os.environ.get("MAKOSH_ATTACHMENT_OCR_LANGUAGES", "eng+rus")
 
 
 class ExtractionError(Exception):
@@ -51,7 +51,7 @@ def ocr_languages(value: str) -> str:
     if not 1 <= len(languages) <= 8 or any(
         not re.fullmatch(r"[a-z][a-z0-9_]{0,31}", language) for language in languages
     ):
-        raise ValueError("invalid HERMES_ATTACHMENT_OCR_LANGUAGES")
+        raise ValueError("invalid MAKOSH_ATTACHMENT_OCR_LANGUAGES")
     return "+".join(languages)
 
 
@@ -136,7 +136,7 @@ def extract_command(command: list[str]) -> str:
 
 
 def render_pdf_preview(path: Path) -> bytes:
-    with tempfile.TemporaryDirectory(prefix="hermes-preview-", dir="/tmp") as temporary_dir:
+    with tempfile.TemporaryDirectory(prefix="makosh-preview-", dir="/tmp") as temporary_dir:
         output = Path(temporary_dir) / "page"
         try:
             result = subprocess.run(
@@ -184,13 +184,13 @@ def render_docx_preview(path: Path) -> bytes:
         lines = lines[:DOCX_PREVIEW_MAX_LINES]
         truncated = True
     if truncated:
-        lines[-1:] = ["[Preview truncated by Hermes safety limit]"]
+        lines[-1:] = ["[Preview truncated by Макошь safety limit]"]
 
     image = Image.new("RGB", (DOCX_PREVIEW_WIDTH, DOCX_PREVIEW_HEIGHT), "#f8fafc")
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
     title_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
-    draw.text((72, 64), "Hermes safe DOCX preview", fill="#0f172a", font=title_font)
+    draw.text((72, 64), "Макошь safe DOCX preview", fill="#0f172a", font=title_font)
     draw.line((72, 120, DOCX_PREVIEW_WIDTH - 72, 120), fill="#cbd5e1", width=2)
     draw.multiline_text((72, 156), "\n".join(lines), fill="#1e293b", font=font, spacing=10)
     output = BytesIO()
@@ -221,7 +221,7 @@ def disarm_docx(path: Path) -> bytes:
         for page_index, start in enumerate(range(0, len(lines), DOCX_CDR_LINES_PER_PAGE), start=1):
             image = Image.new("RGB", (DOCX_CDR_WIDTH, DOCX_CDR_HEIGHT), "#ffffff")
             draw = ImageDraw.Draw(image)
-            draw.text((56, 48), "Hermes content-disarmed DOCX", fill="#0f172a", font=title_font)
+            draw.text((56, 48), "Макошь content-disarmed DOCX", fill="#0f172a", font=title_font)
             draw.text((DOCX_CDR_WIDTH - 116, 54), f"{page_index}", fill="#64748b", font=font)
             draw.line((56, 102, DOCX_CDR_WIDTH - 56, 102), fill="#cbd5e1", width=2)
             draw.multiline_text(
@@ -257,7 +257,7 @@ def disarm_docx(path: Path) -> bytes:
 
 def disarm_pdf(path: Path) -> bytes:
     """Rasterize a bounded PDF and rebuild it without source PDF objects."""
-    with tempfile.TemporaryDirectory(prefix="hermes-cdr-", dir="/tmp") as temporary_dir:
+    with tempfile.TemporaryDirectory(prefix="makosh-cdr-", dir="/tmp") as temporary_dir:
         output_prefix = Path(temporary_dir) / "page"
         try:
             result = subprocess.run(

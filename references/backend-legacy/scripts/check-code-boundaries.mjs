@@ -70,8 +70,8 @@ const blanketSuppressions = [
 	}
 ];
 const forbiddenBackendTestEnvKeys = [
-	'HERMES_TEST_DATABASE_URL',
-	'HERMES_LOCAL_API_SECRET',
+	'MAKOSH_TEST_DATABASE_URL',
+	'MAKOSH_LOCAL_API_SECRET',
 	'DATABASE_URL'
 ];
 const backendTestEnvKeyAllowlist = new Set(['backend/tests/config.rs']);

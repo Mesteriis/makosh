@@ -7,7 +7,7 @@ Status: Accepted
 ADR-0019 established identity resolution as confidence-scored merge/split
 candidates. The current Persona projection was originally derived from a single
 email address and is already referenced by graph projections, project links and
-task context. Hermes Personas require multi-channel identities (email, Telegram,
+task context. Макошь Personas require multi-channel identities (email, Telegram,
 WhatsApp, phone, GitHub, LinkedIn, and others) linked to a single Persona.
 
 ## Decision

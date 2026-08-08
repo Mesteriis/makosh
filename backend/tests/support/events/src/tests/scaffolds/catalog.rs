@@ -62,41 +62,41 @@ fn reserves_exact_owner_local_delivery_namespaces_without_creating_domain_behavi
         [
             (
                 "communications",
-                "hermes_communications",
+                "makosh_communications",
                 "durable_outbox_v1",
                 "durable_inbox_v1"
             ),
             (
                 "contacts",
-                "hermes_contacts",
+                "makosh_contacts",
                 "durable_outbox_v1",
                 "durable_inbox_v1"
             ),
             (
                 "organizations",
-                "hermes_organizations",
+                "makosh_organizations",
                 "durable_outbox_v1",
                 "durable_inbox_v1"
             ),
             (
                 "tasks",
-                "hermes_tasks",
+                "makosh_tasks",
                 "durable_outbox_v1",
                 "durable_inbox_v1"
             ),
             (
                 "calendar",
-                "hermes_calendar",
+                "makosh_calendar",
                 "durable_outbox_v1",
                 "durable_inbox_v1"
             ),
             (
                 "documents",
-                "hermes_documents",
+                "makosh_documents",
                 "durable_outbox_v1",
                 "durable_inbox_v1"
             ),
-            ("ai", "hermes_ai", "durable_outbox_v1", "durable_inbox_v1"),
+            ("ai", "makosh_ai", "durable_outbox_v1", "durable_inbox_v1"),
         ]
     );
 }

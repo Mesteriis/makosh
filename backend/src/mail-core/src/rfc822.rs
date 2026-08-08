@@ -1,7 +1,7 @@
 //! Bounded RFC822/MIME extraction shared by Mail adapters.
 
 use base64::{Engine as _, engine::general_purpose::STANDARD};
-use hermes_mail_api::{
+use makosh_mail_api::{
     MAX_PLAIN_TEXT_BYTES,
     operational::{
         MAX_OPERATIONAL_ADDRESS_BYTES, MAX_OPERATIONAL_RECIPIENTS, MAX_OPERATIONAL_SNIPPET_BYTES,

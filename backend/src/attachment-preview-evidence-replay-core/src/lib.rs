@@ -2,12 +2,12 @@
 
 use std::collections::HashSet;
 
-use hermes_attachment_preview_evidence_replay_api::{
+use makosh_attachment_preview_evidence_replay_api::{
     ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_MAX_MESSAGES_PER_PRODUCER_V1,
     wire::{AttachmentPreviewEvidenceReplayErrorV1, AttachmentPreviewEvidenceReplayStateV1},
 };
 
-pub const PACKAGE: &str = "hermes-attachment-preview-evidence-replay-core";
+pub const PACKAGE: &str = "makosh-attachment-preview-evidence-replay-core";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[repr(i16)]

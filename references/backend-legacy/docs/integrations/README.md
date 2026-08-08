@@ -1,4 +1,4 @@
-# Hermes Integration Catalog
+# Макошь Integration Catalog
 
 Status: documentation package aligned to the current repository structure.
 
@@ -6,7 +6,7 @@ Integrations are provider and protocol adapters. They observe external systems,
 manage provider runtime/setup state, preserve source provenance and emit events
 or evidence into owner domains, workflows and engines.
 
-An integration is not a Hermes product domain. Provider-specific runtime state
+An integration is not a Макошь product domain. Provider-specific runtime state
 must not own durable product truth such as Personas, Tasks, Documents,
 Decisions, Obligations or Communication business state.
 

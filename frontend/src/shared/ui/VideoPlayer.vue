@@ -18,19 +18,19 @@ const props = withDefaults(defineProps<{
 	fallbackLabel: 'Video unavailable'
 })
 
-const classes = computed(() => ['hermes-video-player', props.class])
+const classes = computed(() => ['makosh-video-player', props.class])
 const mediaLabel = computed(() => props.title || props.fallbackLabel)
 </script>
 
 <template>
 	<section :class="classes" :aria-label="mediaLabel">
-		<header v-if="title || description" class="hermes-media-header">
-			<h3 v-if="title" class="hermes-media-title">{{ title }}</h3>
-			<p v-if="description" class="hermes-media-description">{{ description }}</p>
+		<header v-if="title || description" class="makosh-media-header">
+			<h3 v-if="title" class="makosh-media-title">{{ title }}</h3>
+			<p v-if="description" class="makosh-media-description">{{ description }}</p>
 		</header>
 		<video
 			v-if="src"
-			class="hermes-video-player__asset"
+			class="makosh-video-player__asset"
 			:src="src"
 			:poster="poster"
 			:preload="preload"
@@ -47,7 +47,7 @@ const mediaLabel = computed(() => props.title || props.fallbackLabel)
 				:default="track.default"
 			/>
 		</video>
-		<div v-else class="hermes-media-empty" role="status">
+		<div v-else class="makosh-media-empty" role="status">
 			<Icon icon="tabler:video-off" size="1.25rem" aria-hidden="true" />
 			<span>{{ fallbackLabel }}</span>
 		</div>

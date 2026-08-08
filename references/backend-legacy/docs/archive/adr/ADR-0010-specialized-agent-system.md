@@ -8,7 +8,7 @@ A single generic assistant would blur responsibility and make permissions diffic
 
 ## Decision
 
-Use specialized agents: HESTIA, HERMES, MNEMOSYNE, ATHENA and HEPHAESTUS.
+Use specialized agents: HESTIA, MAKOSH, MNEMOSYNE, ATHENA and HEPHAESTUS.
 
 ## Consequences
 

@@ -3,18 +3,18 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use axum::body::{Body, to_bytes};
 use axum::http::{Method, Request, StatusCode};
 use chrono::{TimeZone, Utc};
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::review::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::review::{
     models::{NewReviewItem, NewReviewItemEvidence, ReviewItemKind},
     store::ReviewInboxStore,
 };
-use hermes_hub_backend::engines::context_packs::{
+use makosh_hub_backend::engines::context_packs::{
     models::ContextPackSourceKind, store::ContextPackStore,
 };
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
@@ -61,7 +61,7 @@ async fn review_context_pack_api_persists_review_pack_with_sources_against_postg
                     "/api/v1/review/items/{}/context-pack",
                     review_item.review_item_id
                 ))
-                .header("x-hermes-secret", REVIEW_API_TOKEN)
+                .header("x-makosh-secret", REVIEW_API_TOKEN)
                 .body(Body::empty())
                 .expect("review context pack request"),
         )
@@ -159,7 +159,7 @@ async fn build_review_api_app(database_url: &str) -> axum::Router {
         .await
         .expect("database connection");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             REVIEW_API_TOKEN,
             database_url,
         ),

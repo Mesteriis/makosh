@@ -33,7 +33,7 @@ backend/src/app/provider_runtime_handlers/zoom.rs
 backend/src/app/handlers/zoom.rs
 backend/src/app/error/response/integrations/zoom.rs
 backend/src/app/router/routes/messaging.rs
-backend/src/bin/hermes_zoom_edge_proxy.rs
+backend/src/bin/makosh_zoom_edge_proxy.rs
 ```
 
 | Module | Responsibility |
@@ -42,7 +42,7 @@ backend/src/bin/hermes_zoom_edge_proxy.rs
 | `handlers/zoom.rs` | Route handler re-export surface. |
 | `error/response/integrations/zoom.rs` | Integration error response mapping. |
 | `router/routes/messaging.rs` | Route registration under `/api/v1/integrations/zoom`. |
-| `bin/hermes_zoom_edge_proxy.rs` | Public/edge webhook proxy that preserves raw Zoom bodies and `x-zm-*` headers while adding local Hermes auth. |
+| `bin/makosh_zoom_edge_proxy.rs` | Public/edge webhook proxy that preserves raw Zoom bodies and `x-zm-*` headers while adding local Макошь auth. |
 
 ## Shared platform dependencies
 

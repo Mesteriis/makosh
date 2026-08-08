@@ -1,15 +1,15 @@
 #![forbid(unsafe_code)]
 
-use hermes_attachment_preview_api::{
+use makosh_attachment_preview_api::{
     ATTACHMENT_PREVIEW_MAX_TEXT_BYTES_V1,
     wire::{AttachmentPreviewContentTypeV1, AttachmentPreviewKindV1},
 };
-use hermes_attachment_preview_renderer_contract::{
+use makosh_attachment_preview_renderer_contract::{
     AttachmentPreviewRenderRequestV1, AttachmentPreviewRenderResultV1,
     AttachmentPreviewRendererErrorV1, AttachmentPreviewRendererV1, AttachmentPreviewSourceFormatV1,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-preview-text";
+pub const PACKAGE: &str = "makosh-attachment-preview-text";
 
 #[derive(Clone, Copy, Debug, Default)]
 pub struct AttachmentPreviewTextRendererV1;

@@ -19,4 +19,4 @@ pub mod provider_events;
 pub mod runtime;
 mod submit_port;
 
-pub const PACKAGE: &str = "hermes-communication-delivery-intent-runtime";
+pub const PACKAGE: &str = "makosh-communication-delivery-intent-runtime";

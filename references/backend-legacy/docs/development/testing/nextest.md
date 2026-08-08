@@ -1,6 +1,6 @@
 # cargo-nextest
 
-`cargo-nextest` is the default Rust test runner in Hermes.
+`cargo-nextest` is the default Rust test runner in Макошь.
 
 Why:
 
@@ -22,4 +22,4 @@ Important constraint:
 
 For full backend runs, prefer `make backend-test`, `make backend-validate`, `make test`, `make test-ci`, `make test-integration`, or `make test-e2e`.
 
-These routes keep the `hermes_test_session` harness in front of nextest so shared testcontainers are reused and cleaned up.
+These routes keep the `makosh_test_session` harness in front of nextest so shared testcontainers are reused and cleaned up.

@@ -12,7 +12,9 @@ use super::*;
 
 use crate::identity::device::signer::DeviceSigner;
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
-use hermes_communication_translation_api::{
+use http_body_util::BodyExt as _;
+use hyper::{Request, StatusCode, body::Bytes};
+use makosh_communication_translation_api::{
     COMMUNICATION_TRANSLATION_CAPABILITY_ID_V1, COMMUNICATION_TRANSLATION_COMMAND_CONNECT_PATH_V1,
     COMMUNICATION_TRANSLATION_COMMAND_CONTRACT_NAME_V1,
     COMMUNICATION_TRANSLATION_CONTRACT_MAJOR_V1, COMMUNICATION_TRANSLATION_CONTRACT_REVISION_V1,
@@ -28,37 +30,35 @@ use hermes_communication_translation_api::{
         StartCommunicationTranslationRequestV1, StartCommunicationTranslationResponseV1,
     },
 };
-use hermes_communication_translation_runtime::COMMUNICATION_TRANSLATION_STORAGE_CAPABILITY_ID_V1;
-use hermes_gateway_protocol::v1::{
+use makosh_communication_translation_runtime::COMMUNICATION_TRANSLATION_STORAGE_CAPABILITY_ID_V1;
+use makosh_gateway_protocol::v1::{
     ClientRealtimeEventV1, ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
 };
-use hermes_kernel_control_store::{ModuleRegistrationState, PlatformStorageBindingStateV1};
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store::{ModuleRegistrationState, PlatformStorageBindingStateV1};
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
-use http_body_util::BodyExt as _;
-use hyper::{Request, StatusCode, body::Bytes};
 
 const SOURCE_BODY: &[u8] = b"fixture source body for custody transfer";
 const SOURCE_SENDER: &[u8] = b"Alice Example <alice@example.test>";
 const SOURCE_SUBJECT: &[u8] = b"Quarterly update";
 
-type CommunicationTranslationGateway = hermes_gateway_runtime::GatewayApplicationRouter<
+type CommunicationTranslationGateway = makosh_gateway_runtime::GatewayApplicationRouter<
     crate::identity::browser_gateway::ControlStoreBrowserAuthority,
-    hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 >;
 
 #[test]
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Blob, NATS, Communications, Communication Translation, AI inference and Ollama AI binaries"]
 fn managed_communication_translation_reaches_ai_and_replays_through_gateway_sse() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let ollama_probe = UnavailableOllamaProbeV1::start();
     let ollama_port = ollama_probe.port();
 
-    let root = unique_target_root("hermes-managed-communication-translation");
+    let root = unique_target_root("makosh-managed-communication-translation");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -66,13 +66,13 @@ fn managed_communication_translation_reaches_ai_and_replays_through_gateway_sse(
     );
     let release = installed_communication_translation_ensemble_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             COMMUNICATION_TRANSLATION_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -88,7 +88,7 @@ fn managed_communication_translation_reaches_ai_and_replays_through_gateway_sse(
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     configure_ai_module_request_router_v1(&supervisor, &store);
     configure_communication_translation_realtime_v1(&supervisor, &store, realtime.clone());
@@ -419,23 +419,23 @@ fn managed_communication_translation_reaches_ai_and_replays_through_gateway_sse(
         .expect("join Communication Translation owner control server")
         .expect("Communication Translation owner control server");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Communication Translation fixture");
     std::fs::remove_dir_all(data).expect("remove short Communication Translation Kernel fixture");
 }
 
 #[test]
-#[ignore = "requires disposable Docker plus a real loopback Ollama service with hermes-conformance:latest"]
+#[ignore = "requires disposable Docker plus a real loopback Ollama service with makosh-conformance:latest"]
 fn managed_communication_translation_completes_real_provider_through_gateway_sse() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let ollama_port = required("HERMES_OLLAMA_LIVE_PORT")
+    let ollama_port = required("MAKOSH_OLLAMA_LIVE_PORT")
         .parse::<u16>()
         .expect("valid live Ollama port");
-    let root = unique_target_root("hermes-managed-communication-translation-live");
+    let root = unique_target_root("makosh-managed-communication-translation-live");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -443,11 +443,11 @@ fn managed_communication_translation_completes_real_provider_through_gateway_sse
     );
     let release = installed_communication_translation_ensemble_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             COMMUNICATION_TRANSLATION_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             [4; 65],
@@ -464,7 +464,7 @@ fn managed_communication_translation_completes_real_provider_through_gateway_sse
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     configure_ai_module_request_router_v1(&supervisor, &store);
     configure_communication_translation_realtime_v1(&supervisor, &store, realtime.clone());
@@ -651,7 +651,7 @@ fn managed_communication_translation_completes_real_provider_through_gateway_sse
     supervisor.shutdown().expect("stop managed processes");
     shutdown.store(true, Ordering::SeqCst);
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove live Communication Translation fixture");
     std::fs::remove_dir_all(data)
@@ -844,7 +844,7 @@ fn communication_translation_gateway(
     supervisor: &ManagedRuntimeSupervisor,
     root: &Path,
     data: &Path,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 ) -> CommunicationTranslationGateway {
     let configuration = crate::platform::gateway::BrowserGatewayConfigurationV1::new(
         "127.0.0.1:9443".parse().expect("loopback Gateway address"),

@@ -51,7 +51,7 @@ const selectionStoryFiles = [
 	'GeneralAsyncSelect.stories.ts'
 ]
 
-describe('Hermes UI input and form component contracts', () => {
+describe('Макошь UI input and form component contracts', () => {
 	it('keeps the input batch documented and exported through the UI kit', () => {
 		const uiRoot = fileURLToPath(new URL('.', import.meta.url))
 		const barrel = readFileSync(join(uiRoot, 'index.ts'), 'utf8')
@@ -79,7 +79,7 @@ describe('Hermes UI input and form component contracts', () => {
 		for (const storyFile of selectionStoryFiles) {
 			expect(existsSync(join(storiesRoot, storyFile)), storyFile).toBe(true)
 			const storySource = readFileSync(join(storiesRoot, storyFile), 'utf8')
-			expect(storySource).toContain('Hermes UI/General/')
+			expect(storySource).toContain('Макошь UI/General/')
 		}
 	})
 
@@ -88,12 +88,12 @@ describe('Hermes UI input and form component contracts', () => {
 		const asyncSelectSource = readFileSync(join(uiRoot, 'AsyncSelect.vue'), 'utf8')
 		const controlsCss = readFileSync(join(uiRoot, 'styles/controls.css'), 'utf8')
 
-		expect(asyncSelectSource).toContain('hermes-async-select__loading-mark')
+		expect(asyncSelectSource).toContain('makosh-async-select__loading-mark')
 		expect(asyncSelectSource).not.toContain("from './Spinner.vue'")
-		expect(controlsCss).toContain('.hermes-async-select__loading-dot')
-		expect(controlsCss).toContain('.hermes-async-select__state > span:not(.hermes-async-select__loading-mark)')
-		expect(controlsCss).toContain('@keyframes hermes-async-select-loading-dot')
+		expect(controlsCss).toContain('.makosh-async-select__loading-dot')
+		expect(controlsCss).toContain('.makosh-async-select__state > span:not(.makosh-async-select__loading-mark)')
+		expect(controlsCss).toContain('@keyframes makosh-async-select-loading-dot')
 		expect(controlsCss).toContain('@media (prefers-reduced-motion: reduce)')
-		expect(controlsCss).not.toContain('hermes-async-select-loading-spin')
+		expect(controlsCss).not.toContain('makosh-async-select-loading-spin')
 	})
 })

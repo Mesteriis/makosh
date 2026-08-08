@@ -1,6 +1,6 @@
 //! Issues short-lived runtime credentials without disclosing the account signer to Kernel.
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     NatsAccountSignerFenceV1, NatsAccountSignerLeaseAdapterV1, NatsAccountSignerLeaseErrorV1,
     NatsJwtIssueErrorV1, NatsJwtPermissionSetV1, NatsRuntimeCredentialDeliveryBindingV1,
     NatsRuntimeCredentialDeliveryV1, NatsRuntimeCredentialFenceV1, NatsVaultRouteContextV1,

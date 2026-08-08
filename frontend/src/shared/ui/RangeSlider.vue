@@ -30,7 +30,7 @@ const emit = defineEmits<{
 	'update:modelValue': [value: RangeSliderValue]
 }>()
 
-const classes = computed(() => ['hermes-slider hermes-range-slider', props.class])
+const classes = computed(() => ['makosh-slider makosh-range-slider', props.class])
 
 function updateMin(event: Event): void {
 	const target = event.target as HTMLInputElement
@@ -47,14 +47,14 @@ function updateMax(event: Event): void {
 
 <template>
 	<div :class="classes">
-		<div v-if="label" class="hermes-slider__header">
+		<div v-if="label" class="makosh-slider__header">
 			<span>{{ label }}</span>
-			<span class="hermes-slider__value">{{ modelValue.min }} - {{ modelValue.max }}</span>
+			<span class="makosh-slider__value">{{ modelValue.min }} - {{ modelValue.max }}</span>
 		</div>
-		<div class="hermes-range-slider__inputs">
+		<div class="makosh-range-slider__inputs">
 			<input
 				:aria-label="minLabel"
-				class="hermes-slider__input"
+				class="makosh-slider__input"
 				:disabled="disabled"
 				:max="max"
 				:min="min"
@@ -65,7 +65,7 @@ function updateMax(event: Event): void {
 			/>
 			<input
 				:aria-label="maxLabel"
-				class="hermes-slider__input"
+				class="makosh-slider__input"
 				:disabled="disabled"
 				:max="max"
 				:min="min"

@@ -1,5 +1,5 @@
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 use sqlx::Row;
 use sqlx::postgres::PgPool;
@@ -14,10 +14,10 @@ use crate::platform::communications::attachment_text::{
     is_locally_extractable_text_type, rich_attachment_extraction_kind,
     rich_attachment_extractor_address,
 };
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
-const LOCAL_EXTRACTOR_NAME: &str = "hermes.local_utf8.v1";
-const RICH_EXTRACTOR_NAME: &str = "hermes.attachment_extractor.v1";
+const LOCAL_EXTRACTOR_NAME: &str = "makosh.local_utf8.v1";
+const RICH_EXTRACTOR_NAME: &str = "makosh.attachment_extractor.v1";
 const MAX_ATTACHMENT_TEXT_READ_BYTES: usize = 64 * 1024;
 
 #[derive(Clone)]
@@ -433,7 +433,7 @@ impl AttachmentTextExtractionService {
                 "message_id": message_id,
             }),
         )
-        .actor(json!({ "actor_id": "hermes-attachment-extractor" }))
+        .actor(json!({ "actor_id": "makosh-attachment-extractor" }))
         .payload(json!({
             "attachment_id": attachment_id,
             "message_id": message_id,
@@ -478,9 +478,9 @@ pub enum AttachmentTextExtractionServiceError {
     #[error(transparent)]
     Sqlx(#[from] sqlx::Error),
     #[error(transparent)]
-    Event(#[from] hermes_events_postgres::errors::EventStoreError),
+    Event(#[from] makosh_events_postgres::errors::EventStoreError),
     #[error(transparent)]
-    EventEnvelope(#[from] hermes_events_api::EventEnvelopeError),
+    EventEnvelope(#[from] makosh_events_api::EventEnvelopeError),
     #[error("derived attachment text is not valid UTF-8")]
     InvalidDerivedText,
 }

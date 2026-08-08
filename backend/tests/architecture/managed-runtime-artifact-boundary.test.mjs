@@ -12,16 +12,16 @@ async function backendSource(path) {
 test('runtime artifact binding is one owner-neutral private bootstrap contract', async () => {
   const [binding, integration, workflow, engine, adr] = await Promise.all([
     backendSource(
-      'src/platform/runtime_protocol/proto/hermes/runtime/v1/managed_runtime_artifact.proto',
+      'src/platform/runtime_protocol/proto/makosh/runtime/v1/managed_runtime_artifact.proto',
     ),
     backendSource(
-      'src/platform/runtime_protocol/proto/hermes/runtime/v1/managed_integration_runtime.proto',
+      'src/platform/runtime_protocol/proto/makosh/runtime/v1/managed_integration_runtime.proto',
     ),
     backendSource(
-      'src/platform/runtime_protocol/proto/hermes/runtime/v1/managed_workflow_runtime.proto',
+      'src/platform/runtime_protocol/proto/makosh/runtime/v1/managed_workflow_runtime.proto',
     ),
     backendSource(
-      'src/platform/runtime_protocol/proto/hermes/runtime/v1/managed_engine_runtime.proto',
+      'src/platform/runtime_protocol/proto/makosh/runtime/v1/managed_engine_runtime.proto',
     ),
     readFile(
       new URL(
@@ -36,7 +36,7 @@ test('runtime artifact binding is one owner-neutral private bootstrap contract',
   assert.match(binding, /RuntimeArtifactUseV1 use = 2/);
   assert.doesNotMatch(integration, /message ManagedRuntimeArtifactBindingV1/);
   for (const configuration of [integration, workflow, engine]) {
-    assert.match(configuration, /import "hermes\/runtime\/v1\/managed_runtime_artifact.proto"/);
+    assert.match(configuration, /import "makosh\/runtime\/v1\/managed_runtime_artifact.proto"/);
     assert.match(configuration, /repeated ManagedRuntimeArtifactBindingV1 runtime_artifacts/);
   }
   assert.match(adr, /Gateway, Event Hub, Settings Registry, client API, health и telemetry этот\n+binding не видят/);
@@ -44,8 +44,8 @@ test('runtime artifact binding is one owner-neutral private bootstrap contract',
 
 test('runtime resource types are exact and domains cannot request them', async () => {
   const [recovery, distribution, descriptor, validator] = await Promise.all([
-    backendSource('src/platform/runtime_protocol/proto/hermes/runtime/v1/recovery.proto'),
-    backendSource('src/platform/runtime_protocol/proto/hermes/runtime/v1/distribution.proto'),
+    backendSource('src/platform/runtime_protocol/proto/makosh/runtime/v1/recovery.proto'),
+    backendSource('src/platform/runtime_protocol/proto/makosh/runtime/v1/distribution.proto'),
     backendSource('src/platform/runtime_protocol/src/validation/descriptor.rs'),
     backendSource(
       'src/platform/runtime_protocol/src/validation/managed_runtime_artifact.rs',

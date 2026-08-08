@@ -123,7 +123,7 @@ pub fn derive_review_note_candidate_id_v1(
         return Err(ReviewNoteCandidateValidationErrorV1::InvalidCandidateDigest);
     }
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.review.note-candidate.v1");
+    hasher.update(b"makosh.review.note-candidate.v1");
     hasher.update([0]);
     hasher.update(logical_owner_id.as_bytes());
     hasher.update([0]);

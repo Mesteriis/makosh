@@ -1,11 +1,11 @@
 //! WhatsApp-owned decoding of an admitted generic settings snapshot.
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     SettingApplyModeV1, SettingClientVisibilityV1, SettingDefinitionV1, SettingMutationAuthorityV1,
     SettingTargetScopeV1, SettingValueTypeV1, SettingsSchemaV1, SettingsSnapshotV1,
     setting_value_v1::Value,
 };
-use hermes_whatsapp_api::MAX_ID_LEN;
+use makosh_whatsapp_api::MAX_ID_LEN;
 use prost::Message;
 
 const ACCOUNT_ID: &str = "whatsapp.account_id";
@@ -72,7 +72,7 @@ fn invalid_settings() -> String {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::{
+    use makosh_runtime_protocol::{
         v1::{
             SettingApplyModeV1, SettingClientVisibilityV1, SettingMutationAuthorityV1,
             SettingTargetScopeV1, SettingValueV1, SettingsSnapshotV1, SettingsValueEntryV1,

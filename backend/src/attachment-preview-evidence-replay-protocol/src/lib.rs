@@ -2,12 +2,12 @@
 
 use std::collections::HashSet;
 
-pub const PACKAGE: &str = "hermes-retained-evidence-replay-protocol";
+pub const PACKAGE: &str = "makosh-retained-evidence-replay-protocol";
 pub const RETAINED_EVIDENCE_REPLAY_PROTOCOL_MAJOR_V1: u32 = 1;
 pub const RETAINED_EVIDENCE_REPLAY_MAX_MESSAGES_V1: usize = 16;
 
 pub mod wire {
-    include!(concat!(env!("OUT_DIR"), "/hermes.events.replay.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.events.replay.v1.rs"));
 }
 
 include!(concat!(
@@ -174,7 +174,7 @@ mod tests {
     #[test]
     fn schema_exposes_no_subject_query_or_payload_bytes() {
         let source =
-            include_str!("../proto/hermes/events/replay/v1/retained_evidence_replay.proto");
+            include_str!("../proto/makosh/events/replay/v1/retained_evidence_replay.proto");
         assert!(!source.contains("subject"));
         assert!(!source.contains("predicate"));
         assert!(!source.contains("payload_bytes"));

@@ -25,7 +25,7 @@ generated_by: code-wiki-ru
 ```markdown
 # Backend
 
-Компонент `backend` — это Rust-приложение (фреймворк `axum`, работа с БД через `sqlx`), реализующее API-сервер платформы `hermes-hub`.
+Компонент `backend` — это Rust-приложение (фреймворк `axum`, работа с БД через `sqlx`), реализующее API-сервер платформы `makosh`.
 
 ## Структура модуля `app`
 
@@ -215,7 +215,7 @@ pub(super) fn database_pool(state: &AppState) -> Result<PgPool, ApiError> {
 Функция `publish_telegram_event` (`helpers.rs`) пытается записать событие в `event_store` (если доступен пул БД), затем всегда отправляет в `event_bus.broadcast`.
 
 ### Аудит
-Большинство мутирующих операций записывают аудит-записи через `api_audit_log` с актором `"hermes-frontend"` (константа `AUDIT_ACTOR_ID`).
+Большинство мутирующих операций записывают аудит-записи через `api_audit_log` с актором `"makosh-frontend"` (константа `AUDIT_ACTOR_ID`).
 
 ### Конфигурация Telegram
 Хеш API (`telegram_api_hash`) извлекается из `AppConfig` через метод `telegram_api_hash()` с преобразованием секрета. Идентификатор API (`telegram_api_id`) — напрямую из конфига.
@@ -245,7 +245,7 @@ pub(super) fn database_pool(state: &AppState) -> Result<PgPool, ApiError> {
 - **`backend/src/app/provider_runtime_handlers/telegram/chat_folder_actions.rs`**: обработчики `post_telegram_chat_add_folder`, `post_telegram_chat_remove_folder`, `post_telegram_chat_reassign_folders`; вычисление добавляемых/удаляемых folder_id; запись команд с payload; аудит.
 - **`backend/src/app/provider_runtime_handlers/telegram/chats.rs`** (обрезан): видимая часть содержит `get_telegram_chats`, `get_telegram_folders`, `get_telegram_chat_detail`, `get_telegram_chat_members`, `post_telegram_chat_members_sync`, вспомогательные функции `list_canonical_communication_conversations`, `canonical_communication_conversation`, `canonical_message_row_to_chat`; SQL-запросы к `communication_conversations` и `communication_messages`.
 - **`backend/src/app/provider_runtime_handlers/telegram/commands.rs`**: обработчик `get_telegram_commands` с фильтрацией по `command_kinds`.
-- **`backend/src/app/provider_runtime_handlers/telegram/helpers.rs`**: константа `AUDIT_ACTOR_ID = "hermes-frontend"`, функции `telegram_api_hash_from_config`, `telegram_secret_store`, `publish_telegram_event`, `ensure_telegram_account_operation_allowed`.
+- **`backend/src/app/provider_runtime_handlers/telegram/helpers.rs`**: константа `AUDIT_ACTOR_ID = "makosh-frontend"`, функции `telegram_api_hash_from_config`, `telegram_secret_store`, `publish_telegram_event`, `ensure_telegram_account_operation_allowed`.
 - **`backend/src/app/provider_runtime_handlers/telegram/media.rs`** (обрезан): видимая часть содержит `post_telegram_media_upload` с валидацией, проверкой runtime-типа, разрешением вложения, идемпотентной записью команды, аудитом и публикацией событий.
 - **`backend/src/app/provider_runtime_handlers/telegram/messages.rs`** (обрезан): видимая часть содержит `post_telegram_fixture_message`, `post_telegram_manual_send`, `post_communication_conversation_message`, `post_telegram_message_reply`, `post_telegram_message_forward`, `post_telegram_message_edit`, `post_telegram_message_delete`, `post_telegram_message_restore_visibility`, `post_telegram_message_pin`; роутинг на WhatsApp для универсальных операций.
 - **`backend/src/app/provider_runtime_handlers/telegram/messages/mark_read.rs`**: обработчик `post_telegram_message_mark_read`.

@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/app/api_support/whatsapp_capability_catalog.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/api_support/whatsapp_capability_catalog.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/api_support/whatsapp_capability_catalog.rs`
 - Size bytes / Размер в байтах: `20960`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -367,7 +367,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/app/connectrpc.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/connectrpc.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/connectrpc.rs`
 - Size bytes / Размер в байтах: `768`
 - Included characters / Включено символов: `768`
 - Truncated / Обрезано: `no`
@@ -406,7 +406,7 @@ pub(crate) fn protected_routes(
 
 ### `backend/src/app/connectrpc/communications.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/connectrpc/communications.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/connectrpc/communications.rs`
 - Size bytes / Размер в байтах: `156976`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -437,8 +437,8 @@ use crate::app::handlers::communications::{
 use crate::application::communication_send::{
     CommunicationSendDependencies, CommunicationSendError, CommunicationSendRequest, send_email,
 };
-use crate::contracts::hermes::common::v1::PageResponse;
-use crate::contracts::hermes::communications::v1::{
+use crate::contracts::makosh::common::v1::PageResponse;
+use crate::contracts::makosh::communications::v1::{
     AddMessageLabelResponse, AiReplyRequest as ProtoAiReplyRequest,
     AiReplyResponse as ProtoAiReplyResponse, AiReplyVariantsRequest as ProtoAiReplyVariantsRequest,
     AiReplyVariantsResponse as ProtoAiReplyVariantsResponse, AnalyzeMessageRequest,
@@ -627,13 +627,13 @@ impl CommunicationsConnectService {
             storage_store: CommunicationStorageStore::new(pool.clone()),
             attachment_search_store: AttachmentSearchStore::new(pool.clone()),
             saved_search_store: CommunicationSavedSearchStore::new(pool.clone()),
-   
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/app/connectrpc/signal_hub.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/connectrpc/signal_hub.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/connectrpc/signal_hub.rs`
 - Size bytes / Размер в байтах: `39189`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -651,7 +651,7 @@ use sqlx::postgres::PgPool;
 
 use crate::app::signal_hub_support::run_signal_hub_health_check;
 use crate::application::SignalHubReplayService;
-use crate::contracts::hermes::signal_hub::v1::{
+use crate::contracts::makosh::signal_hub::v1::{
     ApplyProfileRequest, ApplyProfileResponse, CreateConnectionRequest, CreateConnectionResponse,
     CreatePolicyRequest, CreatePolicyResponse, CreateProfileRequest, CreateProfileResponse,
     DisableSignalsRequest, DisableSignalsResponse, DisableSourceRequest, DisableSourceResponse,
@@ -937,7 +937,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/app/error.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error.rs`
 - Size bytes / Размер в байтах: `87`
 - Included characters / Включено символов: `87`
 - Truncated / Обрезано: `no`
@@ -952,7 +952,7 @@ pub(crate) use types::{ApiError, AppError};
 
 ### `backend/src/app/error/conversions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/conversions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/conversions.rs`
 - Size bytes / Размер в байтах: `147`
 - Included characters / Включено символов: `147`
 - Truncated / Обрезано: `no`
@@ -972,7 +972,7 @@ mod tasks;
 
 ### `backend/src/app/error/conversions/ai.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/conversions/ai.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/conversions/ai.rs`
 - Size bytes / Размер в байтах: `1254`
 - Included characters / Включено символов: `1254`
 - Truncated / Обрезано: `no`
@@ -1022,7 +1022,7 @@ impl From<crate::integrations::ai_runtime::AiRuntimeError> for ApiError {
 
 ### `backend/src/app/error/conversions/calendar.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/conversions/calendar.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/conversions/calendar.rs`
 - Size bytes / Размер в байтах: `5728`
 - Included characters / Включено символов: `5728`
 - Truncated / Обрезано: `no`
@@ -1168,7 +1168,7 @@ impl From<CalendarMeetingOutcomeApplicationError> for ApiError {
 
 ### `backend/src/app/error/conversions/communications.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/conversions/communications.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/conversions/communications.rs`
 - Size bytes / Размер в байтах: `17958`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1452,7 +1452,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/app/error/conversions/documents.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/conversions/documents.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/conversions/documents.rs`
 - Size bytes / Размер в байтах: `917`
 - Included characters / Включено символов: `917`
 - Truncated / Обрезано: `no`
@@ -1486,7 +1486,7 @@ impl From<DocumentProcessingCommandServiceError> for ApiError {
 
 ### `backend/src/app/error/conversions/integrations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/conversions/integrations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/conversions/integrations.rs`
 - Size bytes / Размер в байтах: `1982`
 - Included characters / Включено символов: `1982`
 - Truncated / Обрезано: `no`
@@ -1561,7 +1561,7 @@ impl From<ReviewInboxWorkflowError> for ApiError {
 
 ### `backend/src/app/error/conversions/knowledge.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/conversions/knowledge.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/conversions/knowledge.rs`
 - Size bytes / Размер в байтах: `17737`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1827,13 +1827,13 @@ impl From<RelationshipReviewApplicationError> for ApiError {
 }
 
 impl From<ConsistencyError> for ApiError {
-   
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/app/error/conversions/organizations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/conversions/organizations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/conversions/organizations.rs`
 - Size bytes / Размер в байтах: `4361`
 - Included characters / Включено символов: `4361`
 - Truncated / Обрезано: `no`
@@ -1941,7 +1941,7 @@ impl From<OrganizationContactLinkApplicationError> for ApiError {
 
 ### `backend/src/app/error/conversions/persons.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/conversions/persons.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/conversions/persons.rs`
 - Size bytes / Размер в байтах: `3937`
 - Included characters / Включено символов: `3937`
 - Truncated / Обрезано: `no`
@@ -2044,7 +2044,7 @@ impl From<PersonCommandServiceError> for ApiError {
 
 ### `backend/src/app/error/conversions/platform.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/conversions/platform.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/conversions/platform.rs`
 - Size bytes / Размер в байтах: `1151`
 - Included characters / Включено символов: `1151`
 - Truncated / Обрезано: `no`
@@ -2099,7 +2099,7 @@ impl From<HostVaultError> for ApiError {
 
 ### `backend/src/app/error/conversions/tasks.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/conversions/tasks.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/conversions/tasks.rs`
 - Size bytes / Размер в байтах: `5602`
 - Included characters / Включено символов: `5602`
 - Truncated / Обрезано: `no`
@@ -2242,7 +2242,7 @@ impl From<TaskCommandServiceError> for ApiError {
 
 ### `backend/src/app/error/response.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response.rs`
 - Size bytes / Размер в байтах: `4600`
 - Included characters / Включено символов: `4600`
 - Truncated / Обрезано: `no`
@@ -2370,7 +2370,7 @@ fn parts(error: ApiError) -> ErrorParts {
 
 ### `backend/src/app/error/response/ai.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/ai.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/ai.rs`
 - Size bytes / Размер в байтах: `479`
 - Included characters / Включено символов: `479`
 - Truncated / Обрезано: `no`
@@ -2399,7 +2399,7 @@ pub(super) fn control_center_error_parts(error: AiControlCenterError) -> ErrorPa
 
 ### `backend/src/app/error/response/ai/control_center.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/ai/control_center.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/ai/control_center.rs`
 - Size bytes / Размер в байтах: `2577`
 - Included characters / Включено символов: `2577`
 - Truncated / Обрезано: `no`
@@ -2477,7 +2477,7 @@ fn not_found(error: &'static str, message: &'static str) -> ErrorParts {
 
 ### `backend/src/app/error/response/ai/runtime.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/ai/runtime.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/ai/runtime.rs`
 - Size bytes / Размер в байтах: `2982`
 - Included characters / Включено символов: `2982`
 - Truncated / Обрезано: `no`
@@ -2578,7 +2578,7 @@ fn internal_runtime_error() -> ErrorParts {
 
 ### `backend/src/app/error/response/communication.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/communication.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/communication.rs`
 - Size bytes / Размер в байтах: `3113`
 - Included characters / Включено символов: `3113`
 - Truncated / Обрезано: `no`
@@ -2674,7 +2674,7 @@ fn internal_store(
 
 ### `backend/src/app/error/response/communications.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/communications.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/communications.rs`
 - Size bytes / Размер в байтах: `765`
 - Included characters / Включено символов: `765`
 - Truncated / Обрезано: `no`
@@ -2712,7 +2712,7 @@ pub(super) fn account_setup_error_parts(error: EmailAccountSetupError) -> ErrorP
 
 ### `backend/src/app/error/response/document_processing.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/document_processing.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/document_processing.rs`
 - Size bytes / Размер в байтах: `2374`
 - Included characters / Включено символов: `2374`
 - Truncated / Обрезано: `no`
@@ -2789,7 +2789,7 @@ pub(super) fn parts(error: DocumentProcessingError) -> ErrorParts {
 
 ### `backend/src/app/error/response/integrations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/integrations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/integrations.rs`
 - Size bytes / Размер в байтах: `1046`
 - Included characters / Включено символов: `1046`
 - Truncated / Обрезано: `no`
@@ -2837,7 +2837,7 @@ pub(super) fn call_error_parts(error: CallError) -> ErrorParts {
 
 ### `backend/src/app/error/response/integrations/automation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/error/response/integrations/automation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/error/response/integrations/automation.rs`
 - Size bytes / Размер в байтах: `1779`
 - Included characters / Включено символов: `1779`
 - Truncated / Обрезано: `no`

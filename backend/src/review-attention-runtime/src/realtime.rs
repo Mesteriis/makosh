@@ -1,11 +1,11 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_review_attention_api::REVIEW_ATTENTION_REALTIME_EVENT_KIND_V1;
-use hermes_review_attention_persistence::{
+use makosh_review_attention_api::REVIEW_ATTENTION_REALTIME_EVENT_KIND_V1;
+use makosh_review_attention_persistence::{
     REVIEW_ATTENTION_REALTIME_REPLAY_LIMIT_V1, ReviewAttentionPersistenceErrorV1,
     ReviewAttentionPersistenceV1, ReviewAttentionRealtimeTransitionV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeClientRealtimePublishRequestV1, ManagedRuntimeControlRequestV1,
@@ -101,7 +101,7 @@ fn publish_request(
 
 fn event_id(attention_id: [u8; 16], revision: u64) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.review.attention.client-realtime.v1");
+    digest.update(b"makosh.review.attention.client-realtime.v1");
     digest.update(attention_id);
     digest.update(revision.to_be_bytes());
     digest.finalize()[..16].try_into().expect("exact prefix")
@@ -117,10 +117,10 @@ pub(crate) enum ReviewAttentionRealtimeErrorV1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_review_attention_core::{
+    use makosh_review_attention_core::{
         ReviewDispositionV1, ReviewImportanceV1, ReviewTimestampV1,
     };
-    use hermes_runtime_protocol::validation::client_realtime::validate_managed_client_realtime_publish_request_v1;
+    use makosh_runtime_protocol::validation::client_realtime::validate_managed_client_realtime_publish_request_v1;
 
     #[test]
     fn transition_maps_to_valid_shared_realtime_request() {

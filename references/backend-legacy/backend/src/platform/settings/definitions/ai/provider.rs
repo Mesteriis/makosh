@@ -37,12 +37,12 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
             value_kind: SettingValueKind::String,
             default_value: json!("https://ai.sh-inc.ru/v1"),
             label: "OmniRoute base URL",
-            description: "OpenAI-compatible OmniRoute endpoint. API key is read from HERMES_OMNIROUTE_API_KEY, never from application settings.",
+            description: "OpenAI-compatible OmniRoute endpoint. API key is read from MAKOSH_OMNIROUTE_API_KEY, never from application settings.",
             metadata: json!({
                 "ui_control": "text",
                 "placeholder": "https://ai.sh-inc.ru/v1",
                 "stores_secret": false,
-                "key_env": "HERMES_OMNIROUTE_API_KEY"
+                "key_env": "MAKOSH_OMNIROUTE_API_KEY"
             }),
             is_editable: true,
         },

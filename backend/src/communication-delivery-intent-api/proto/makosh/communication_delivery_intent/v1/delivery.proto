@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package makosh.communication_delivery_intent.v1;
+
+message SubmitDeliveryIntentRequestV1 {
+  uint32 protocol_major = 1;
+  // Stable client-generated idempotency key and resulting intent ID.
+  bytes operation_id = 2;
+  // Canonical Communications identity. Provider routing is resolved by the workflow.
+  bytes conversation_id = 3;
+  optional bytes reply_to_message_id = 4;
+  // Exact UTF-8 bytes. Content is private and must not enter events, logs, or errors.
+  bytes body_utf8 = 5;
+}
+
+message SubmitDeliveryIntentResponseV1 {
+  bytes intent_id = 1;
+  DeliveryIntentStatusV1 status = 2;
+  DeliveryIntentErrorCodeV1 error = 15;
+}
+
+message GetDeliveryIntentStatusRequestV1 {
+  uint32 protocol_major = 1;
+  bytes intent_id = 2;
+}
+
+message GetDeliveryIntentStatusResponseV1 {
+  bytes intent_id = 1;
+  DeliveryIntentStatusV1 status = 2;
+  optional bytes provider_operation_id = 3;
+  DeliveryIntentErrorCodeV1 error = 15;
+}
+
+// Client-safe state invalidation and terminal result. Private body, provider
+// identity, provider operation ID, route cursors and internal envelope metadata
+// are deliberately absent.
+message DeliveryIntentStatusChangedV1 {
+  bytes intent_id = 1;
+  DeliveryIntentStatusV1 status = 2;
+  uint64 state_revision = 3;
+  uint64 occurred_at_unix_millis = 4;
+  DeliveryIntentErrorCodeV1 rejection = 5;
+}
+
+service CommunicationDeliveryIntentCommandService {
+  rpc Submit(SubmitDeliveryIntentRequestV1)
+      returns (SubmitDeliveryIntentResponseV1);
+}
+
+service CommunicationDeliveryIntentQueryService {
+  rpc GetStatus(GetDeliveryIntentStatusRequestV1)
+      returns (GetDeliveryIntentStatusResponseV1);
+}
+
+enum DeliveryIntentStatusV1 {
+  DELIVERY_INTENT_STATUS_UNSPECIFIED = 0;
+  DELIVERY_INTENT_STATUS_ACCEPTED = 1;
+  DELIVERY_INTENT_STATUS_RESOLVING_ROUTE = 2;
+  DELIVERY_INTENT_STATUS_SUBMITTED_TO_PROVIDER = 3;
+  DELIVERY_INTENT_STATUS_PROVIDER_CONFIRMED = 4;
+  DELIVERY_INTENT_STATUS_REJECTED = 5;
+}
+
+enum DeliveryIntentErrorCodeV1 {
+  DELIVERY_INTENT_ERROR_CODE_UNSPECIFIED = 0;
+  DELIVERY_INTENT_ERROR_CODE_INVALID_REQUEST = 1;
+  DELIVERY_INTENT_ERROR_CODE_CANONICAL_SOURCE_NOT_FOUND = 2;
+  DELIVERY_INTENT_ERROR_CODE_ROUTE_UNAVAILABLE = 3;
+  DELIVERY_INTENT_ERROR_CODE_POLICY_REJECTED = 4;
+  DELIVERY_INTENT_ERROR_CODE_PROVIDER_REJECTED = 5;
+  DELIVERY_INTENT_ERROR_CODE_UNAVAILABLE = 6;
+}

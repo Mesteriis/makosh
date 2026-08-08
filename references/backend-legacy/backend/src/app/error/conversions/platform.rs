@@ -1,5 +1,5 @@
 use super::super::types::ApiError;
-use hermes_graph_api::GraphQueryError;
+use makosh_graph_api::GraphQueryError;
 
 impl From<GraphQueryError> for ApiError {
     fn from(error: GraphQueryError) -> Self {
@@ -11,8 +11,8 @@ use crate::domains::signal_hub::store::SignalHubError;
 use crate::platform::audit::errors::ApiAuditError;
 use crate::platform::settings::errors::SettingsError;
 use crate::vault::errors::HostVaultError;
-use hermes_events_api::EventEnvelopeError;
-use hermes_events_postgres::errors::EventStoreError;
+use makosh_events_api::EventEnvelopeError;
+use makosh_events_postgres::errors::EventStoreError;
 
 impl From<EventEnvelopeError> for ApiError {
     fn from(error: EventEnvelopeError) -> Self {

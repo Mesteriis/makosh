@@ -4,7 +4,7 @@ use std::os::unix::net::UnixStream;
 use std::sync::mpsc::{Receiver, TryRecvError};
 use std::time::Duration;
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::{
         ManagedRuntimeControlRequestV1, ManagedRuntimeReadyRequestV1,
         SchedulerRuntimeConfigurationV1, SchedulerRuntimeControlRequestV1,
@@ -18,16 +18,16 @@ use hermes_runtime_protocol::{
         validate_scheduler_runtime_status,
     },
 };
-use hermes_scheduler_jetstream::{
+use makosh_scheduler_jetstream::{
     SchedulerJetStreamDispatchPortV1, SchedulerJetStreamReceiptPortV1,
     SchedulerJetStreamScheduleControlPortV1, request_runtime_credential,
 };
-use hermes_scheduler_persistence::{
+use makosh_scheduler_persistence::{
     SchedulerDispatchAdmissionV1, SchedulerMaterializationSourceV1, SchedulerPostgresEndpointV1,
     SchedulerPostgresStoreV1, scheduler_storage_binding_from_runtime,
 };
-use hermes_scheduler_protocol::SCHEDULER_RUNTIME_MODULE_ID_V1;
-use hermes_storage_vault::{StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1};
+use makosh_scheduler_protocol::SCHEDULER_RUNTIME_MODULE_ID_V1;
+use makosh_storage_vault::{StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1};
 use prost::Message;
 
 use super::{
@@ -373,7 +373,7 @@ fn response_for(
 }
 
 fn upsert_schedule(
-    request: hermes_runtime_protocol::v1::UpsertSchedulerScheduleRequestV1,
+    request: makosh_runtime_protocol::v1::UpsertSchedulerScheduleRequestV1,
     store: &SchedulerPostgresStoreV1,
     runtime: &tokio::runtime::Runtime,
 ) -> SchedulerRuntimeControlResponseV1 {
@@ -394,9 +394,9 @@ fn upsert_schedule(
 }
 
 fn schedule_store_error(
-    error: hermes_scheduler_persistence::SchedulerScheduleStoreErrorV1,
+    error: makosh_scheduler_persistence::SchedulerScheduleStoreErrorV1,
 ) -> &'static str {
-    use hermes_scheduler_persistence::SchedulerScheduleStoreErrorV1;
+    use makosh_scheduler_persistence::SchedulerScheduleStoreErrorV1;
 
     match error {
         SchedulerScheduleStoreErrorV1::StaleRevision => "stale_revision",

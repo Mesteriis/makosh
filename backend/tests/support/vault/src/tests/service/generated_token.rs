@@ -1,12 +1,12 @@
 use std::os::unix::fs::PermissionsExt;
 
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_protocol::{
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_protocol::{
     LeaseAudienceV1, SecretClassV1, VaultActionV1, VaultLeaseIssueRequestV1, VaultPurposeRequestV1,
     VaultTransportCommandV1,
 };
-use hermes_vault_store_sqlcipher::VaultStore;
+use makosh_vault_store_sqlcipher::VaultStore;
 use tempfile::TempDir;
 
 use crate::service::runtime::VaultService;
@@ -154,7 +154,7 @@ fn issue(
     audience: &LeaseAudienceV1,
     action: VaultActionV1,
     now: u64,
-) -> hermes_vault_protocol::LeaseIdV1 {
+) -> makosh_vault_protocol::LeaseIdV1 {
     issue_for(
         service,
         audience,
@@ -170,7 +170,7 @@ fn issue_for(
     secret_class: SecretClassV1,
     action: VaultActionV1,
     now: u64,
-) -> hermes_vault_protocol::LeaseIdV1 {
+) -> makosh_vault_protocol::LeaseIdV1 {
     let purpose = VaultPurposeRequestV1::new(
         "storage.control.pgbouncer.admin".to_owned(),
         "storage-main".to_owned(),

@@ -1,16 +1,16 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_call_transcription_api::{MAX_SEGMENTS_V1, MAX_TRANSCRIPT_BYTES_V1};
-use hermes_call_transcription_core::{
+use makosh_call_transcription_api::{MAX_SEGMENTS_V1, MAX_TRANSCRIPT_BYTES_V1};
+use makosh_call_transcription_core::{
     CallTranscriptionCompletenessV1, CallTranscriptionLanguageV1, CallTranscriptionRejectionV1,
     CallTranscriptionTransitionV1, PendingTranscriptV1, RecordingSourceV1,
 };
-use hermes_call_transcription_persistence::{
+use makosh_call_transcription_persistence::{
     CallTranscriptionPersistenceErrorV1, CallTranscriptionPersistenceV1,
     ClaimedCallTranscriptionJobV1, CompleteSourceCleanupV1, MaterializeTranscriptV1,
     PersistSttResultV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeControlRequestV1, ManagedRuntimeModuleRequestRequestV1,
@@ -22,7 +22,7 @@ use hermes_runtime_protocol::{
         validate_module_request_response_v1,
     },
 };
-use hermes_speech_to_text_api::{
+use makosh_speech_to_text_api::{
     seal_speech_to_text_request_v1, speech_to_text_contract_reference_v1,
     validate_speech_to_text_request_v1, validate_speech_to_text_result_v1,
     wire::{
@@ -53,7 +53,7 @@ pub enum CallTranscriptionSttErrorV1 {
 #[must_use]
 pub fn stt_request_id_v1(run_id: [u8; 16], audio_sha256: [u8; 32]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.call-transcription.stt-request.v1\0");
+    digest.update(b"makosh.call-transcription.stt-request.v1\0");
     digest.update(run_id);
     digest.update(audio_sha256);
     digest.finalize()[..16]
@@ -306,7 +306,7 @@ async fn cleanup_source(
 
 pub(crate) fn artifact_id_v1(run_id: [u8; 16], transcript_sha256: [u8; 32]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.call-transcription.artifact.v1\0");
+    digest.update(b"makosh.call-transcription.artifact.v1\0");
     digest.update(run_id);
     digest.update(transcript_sha256);
     digest.finalize()[..16]

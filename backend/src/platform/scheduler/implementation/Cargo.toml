@@ -1,5 +1,5 @@
 [package]
-name = "hermes-scheduler"
+name = "makosh-scheduler"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,14 +7,14 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "scheduler"
 surface = "implementation"
 
 [dependencies]
-hermes-clock-protocol = { path = "../../clock/protocol" }
-hermes-events-protocol = { path = "../../events" }
-hermes-scheduler-protocol = { path = "../protocol" }
+makosh-clock-protocol = { path = "../../clock/protocol" }
+makosh-events-protocol = { path = "../../events" }
+makosh-scheduler-protocol = { path = "../protocol" }
 prost = "=0.14.4"
 prost-types = "=0.14.4"

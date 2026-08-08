@@ -1,7 +1,9 @@
 use super::*;
 
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
-use hermes_communication_cross_channel_forward_api::{
+use http_body_util::BodyExt;
+use hyper::{Request, StatusCode, body::Bytes, service::Service};
+use makosh_communication_cross_channel_forward_api::{
     COMMUNICATION_CROSS_CHANNEL_FORWARD_COMMAND_CONNECT_PATH_V1,
     COMMUNICATION_CROSS_CHANNEL_FORWARD_QUERY_CONNECT_PATH_V1,
     COMMUNICATION_CROSS_CHANNEL_FORWARD_REALTIME_CONTRACT_NAME_V1,
@@ -12,11 +14,9 @@ use hermes_communication_cross_channel_forward_api::{
         StartCrossChannelForwardResponseV1,
     },
 };
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
 };
-use http_body_util::BodyExt;
-use hyper::{Request, StatusCode, body::Bytes, service::Service};
 use prost::Message;
 use sqlx::postgres::{PgConnectOptions, PgPoolOptions, PgSslMode};
 use std::sync::{
@@ -29,10 +29,10 @@ use zeroize::Zeroizing;
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Blob, NATS, Communications, delivery-intent and cross-channel-forward binaries"]
 fn managed_cross_channel_forward_reaches_delivery_intent_and_replays_after_restart() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-cross-channel-forward");
+    let root = unique_target_root("makosh-managed-cross-channel-forward");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -40,11 +40,11 @@ fn managed_cross_channel_forward_reaches_delivery_intent_and_replays_after_resta
     );
     let release = installed_cross_channel_forward_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             CROSS_CHANNEL_FORWARD_LOGICAL_OWNER_ID,
             "desktop-1",
             [4; 65],
@@ -60,7 +60,7 @@ fn managed_cross_channel_forward_reaches_delivery_intent_and_replays_after_resta
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     configure_delivery_intent_runtime_routes(&supervisor, &store, realtime.clone());
     supervisor
@@ -232,7 +232,7 @@ fn managed_cross_channel_forward_reaches_delivery_intent_and_replays_after_resta
     supervisor.shutdown().expect("stop managed processes");
     shutdown.store(true, Ordering::SeqCst);
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove fixture");
     std::fs::remove_dir_all(data).expect("remove kernel fixture");
@@ -246,20 +246,20 @@ fn assert_cross_channel_forward_cleanup_completed(
     runtime.block_on(async {
         let password = Zeroizing::new(
             std::fs::read_to_string(required(
-                "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+                "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
             ))
             .expect("read disposable PostgreSQL credential")
             .trim()
             .to_owned(),
         );
         let options = PgConnectOptions::new()
-            .host(&required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
+            .host(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
             .port(
-                required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+                required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
                     .parse()
                     .expect("valid PostgreSQL port"),
             )
-            .username("hermes_postgres_admin")
+            .username("makosh_postgres_admin")
             .password(password.as_str())
             .database(database_id)
             .ssl_mode(PgSslMode::Disable);
@@ -269,7 +269,7 @@ fn assert_cross_channel_forward_cleanup_completed(
             .await
             .expect("connect cross-channel-forward conformance database");
         let completed: i64 = sqlx::query_scalar(
-            "SELECT COUNT(*) FROM hermes_data.communication_cross_channel_forward_cleanup
+            "SELECT COUNT(*) FROM makosh_data.communication_cross_channel_forward_cleanup
              WHERE logical_owner_id = $1 AND forward_id = $2
                AND completed_at_unix_millis IS NOT NULL",
         )

@@ -8,7 +8,7 @@
 - `first_owner_v1` снят: исключение для Mail/Communications больше не используется.
   `mail/communications` остаётся в общем owner stack без отдельного targeted gate-исключения.
 - ADR-0239 теперь закрыт на уровне production inventory: exact ten-package срез
-  (`hermes-mail-*`, `hermes-communications-*`) включён в `implementation.currentSlice`
+  (`makosh-mail-*`, `makosh-communications-*`) включён в `implementation.currentSlice`
   как `gateway_runtime_plus_mail_communications_v1`; добавлены `Cargo.toml`/`src`-скелеты
   для всех 10 крейтов, и все новые пакеты проходят проверку архитектурного policy/evidence.
 - Подтверждение: `first_owner_v1` больше не присутствует в `phaseGates`; это
@@ -21,7 +21,7 @@
   - `whole_instance_backup_v1`
   - `client_gateway_v1`
   - `first_owner_v1` (phase gate снят)
-  - ADR-0239 read-only Mail/IMAP срез: контракт + runtime entry points + 24/24 тестов `hermes-mail-communications-slice-testkit` и unit smoke по каждому пакету
+  - ADR-0239 read-only Mail/IMAP срез: контракт + runtime entry points + 24/24 тестов `makosh-mail-communications-slice-testkit` и unit smoke по каждому пакету
   - owner-control runtime dispatcher для Mail/Communications
   - валидация owner-control IPC-команд Mail/Communications (reject `magic-*`,
     недостаточно аргументов для `sync`/`ingest`) через `node --test tests/lifecycle/owner-control-ipc.test.mjs`
@@ -66,7 +66,7 @@
 4. Recreate JetStream topology и exact-byte outbox/inbox replay — реализовано:
    coordinator-пути обрабатывают `ReconcileTopology` через offline relay и проходят
    тесты маршрутизации/топологии + event-hub recovery topology (в рамках
-   `hermes-kernel-recovery-testkit`).
+   `makosh-kernel-recovery-testkit`).
 5. Disposable full restore evidence: corrupt media, wrong/replayed authority,
    Blob orphan, PostgreSQL migration ledger, replay and fencing cases — покрыто
    recovery testkit-сценариями (`capture_coordinator`, `restore_coordinator`,
@@ -75,10 +75,10 @@
 
 `whole_instance_backup_v1` на уровне contour/валидации уже закрыт, а gate остаётся fail-closed в `phaseGates.notAuthorized` (production-конфигурация на текущем этапе). evidence-матрица и contour уже полностью покрыты:
 
-- `make -C backend ci` выполняется стабильно: в `hermes-kernel-recovery-testkit`
+- `make -C backend ci` выполняется стабильно: в `makosh-kernel-recovery-testkit`
   тест `paired_remote_listener_serves_technical_routes_only_after_tls_handshake` более не
   флапает после фиксация ALPN в тестовом TLS handshaked-endpoint'е (`backend/tests/support/kernel-recovery/src/tests/gateway_runtime/paired_peer.rs`).
-- `RUSTC_WRAPPER= cargo test -p hermes-kernel-recovery-testkit -- --nocapture` ✅ (189 passed, 9 ignored),
+- `RUSTC_WRAPPER= cargo test -p makosh-kernel-recovery-testkit -- --nocapture` ✅ (189 passed, 9 ignored),
 - отдельные recovery-scenarios (`capture_coordinator`, `restore_coordinator`, `control_store_media`, `recovery_media`, `recovery_fence`, `process_port`, `gateway_realtime_frames`) — зелёные.
 
 ## Следующий срез: Client Gateway admission
@@ -92,7 +92,7 @@
 
 `client_gateway_v1` больше закрыт через:
 - `make -C backend architecture-policy-check` (прошёл),
-- recovery-тесты `RUSTC_WRAPPER= cargo test -p hermes-kernel-recovery-testkit gateway -- --nocapture` (31 passed).
+- recovery-тесты `RUSTC_WRAPPER= cargo test -p makosh-kernel-recovery-testkit gateway -- --nocapture` (31 passed).
 
 `first_owner_v1` больше не является gate-забором: он убран из policy как fail-closed
 requirement после завершения его подтверждающего slice. Mail/Communications теперь

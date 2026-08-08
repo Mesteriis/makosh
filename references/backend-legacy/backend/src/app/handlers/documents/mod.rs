@@ -42,7 +42,7 @@ pub(crate) async fn post_document_processing_job_retry(
     Path(job_id): Path<String>,
     Json(request): Json<DocumentProcessingRetryApiRequest>,
 ) -> Result<Json<DocumentProcessingRetryApiResponse>, ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let command = request.into_command(job_id, actor_id)?;
 
     api_audit_log(&state)?

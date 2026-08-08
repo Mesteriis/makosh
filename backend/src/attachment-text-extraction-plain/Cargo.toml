@@ -1,5 +1,5 @@
 [package]
-name = "hermes-attachment-text-extraction-plain"
+name = "makosh-attachment-text-extraction-plain"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,10 +7,10 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "attachment_text_extraction"
 surface = "implementation"
 
 [dependencies]
-hermes-attachment-text-extraction-parser-contract = { path = "../attachment-text-extraction-parser-contract" }
+makosh-attachment-text-extraction-parser-contract = { path = "../attachment-text-extraction-parser-contract" }

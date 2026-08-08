@@ -19,4 +19,4 @@ pub use schema::{
     communication_explanation_storage_bundle_v1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-explanation-persistence";
+pub const PACKAGE: &str = "makosh-communication-explanation-persistence";

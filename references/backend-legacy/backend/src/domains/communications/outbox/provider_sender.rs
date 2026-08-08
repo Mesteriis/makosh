@@ -1,18 +1,18 @@
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
-use hermes_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
 use std::future::Future;
 use std::pin::Pin;
 
 use serde_json::Value;
 use sqlx::postgres::PgPool;
 
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
 
 use crate::platform::communications::SmtpTransport;
 use crate::platform::secrets::resolver::SecretResolver;
-use hermes_communications_api::email::{GmailOutboxSendRequest, GmailOutboxTransport};
+use makosh_communications_api::email::{GmailOutboxSendRequest, GmailOutboxTransport};
 
 use super::CommunicationOutboxItem;
 use super::attachments::load_sendable_attachments;

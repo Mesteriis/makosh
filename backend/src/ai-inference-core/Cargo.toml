@@ -1,5 +1,5 @@
 [package]
-name = "hermes-ai-inference-core"
+name = "makosh-ai-inference-core"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,11 +7,11 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "engine"
 owner = "ai"
 surface = "implementation"
 
 [dependencies]
-hermes-ai-contracts = { path = "../ai-contracts" }
+makosh-ai-contracts = { path = "../ai-contracts" }
 sha2 = { version = "=0.11.0", default-features = false }

@@ -5,7 +5,7 @@ import {
 	MailCredentialBindingStateV1,
 	MailCredentialPurposeV1,
 	type MailAccountStatusV1,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
 import { MailAccountManagementWorkflowV1 } from './mailAccountManagementWorkflow'
 
 describe('MailAccountManagementWorkflowV1', () => {

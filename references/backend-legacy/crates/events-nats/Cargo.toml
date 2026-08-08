@@ -1,5 +1,5 @@
 [package]
-name = "hermes-events-nats"
+name = "makosh-events-nats"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.89"
@@ -8,6 +8,6 @@ license = "MIT"
 
 [dependencies]
 async-nats = "0.49.1"
-hermes-events-api = { path = "../events-api" }
+makosh-events-api = { path = "../events-api" }
 serde_json = "1"
 thiserror = "2"

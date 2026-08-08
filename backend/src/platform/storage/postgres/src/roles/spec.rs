@@ -1,6 +1,6 @@
 //! Validated opaque PostgreSQL role names and hard connection limits.
 
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sha2::{Digest, Sha256};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -55,9 +55,9 @@ impl StorageRoleSpecV1 {
 
     pub fn storage_schema(&self) -> &'static str {
         if self.owner_id() == "scheduler" {
-            "hermes_platform"
+            "makosh_platform"
         } else {
-            "hermes_data"
+            "makosh_data"
         }
     }
 

@@ -55,7 +55,7 @@ pub(super) fn persona_read_model(person: Persona) -> PersonaReadModel {
 }
 
 pub(super) fn persona_read_model_from_api(
-    person: hermes_personas_api::PersonaRead,
+    person: makosh_personas_api::PersonaRead,
 ) -> Result<PersonaReadModel, crate::domains::personas::api::errors::PersonaProjectionError> {
     let persona_type =
         crate::domains::personas::api::models::PersonaType::try_from(person.persona_type.as_str())?;

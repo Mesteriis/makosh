@@ -5,24 +5,24 @@ use std::time::{Duration, Instant};
 use super::*;
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
 
-use hermes_communications_api::{
+use makosh_communications_api::{
     AttachmentSafetyStateV1 as CanonicalAttachmentSafetyStateV1,
     AttachmentSafetyTransitionDecisionV1, CommunicationAttachmentAnchorIdV1,
     CommunicationObservationIdV1,
 };
-use hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1;
-use hermes_communications_runtime::canonical_outbox::{
+use makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1;
+use makosh_communications_runtime::canonical_outbox::{
     CanonicalEventContextV1, build_attachment_safety_state_changed_outbox_v1,
 };
-use hermes_mail_api::{
+use makosh_mail_api::{
     MailClientRequestV1, MailClientResponseV1, MailSendMailRequestV1,
     client_contract::MailClientContractV1,
 };
-use hermes_mail_core::rfc822::{attachment_metadata, extract_attachment_part};
-use hermes_mail_persistence::{
+use makosh_mail_core::rfc822::{attachment_metadata, extract_attachment_part};
+use makosh_mail_persistence::{
     MailAttachmentSafetyStateV1 as PersistedAttachmentSafetyStateV1, MailDurablePersistenceError,
 };
-use hermes_mail_runtime::attachment_safety_projection::{
+use makosh_mail_runtime::attachment_safety_projection::{
     MailAttachmentSafetyProjectionErrorV1, project_attachment_safety_state_changed_v1,
 };
 
@@ -41,26 +41,26 @@ const GMAIL_ATTACHMENT_BYTES: &[u8] = b"gmail-clean-room-attachment";
 #[ignore = "requires disposable authenticated PostgreSQL, NATS, PgBouncer and live managed runtimes"]
 fn managed_mail_delivers_only_canonical_safe_attachment_from_its_blob_custody() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let imap = MailImapFixture::start();
     let smtp = MailSmtpFixture::start();
     let clamav = AttachmentSecurityClamAvFixture::start();
-    let root = unique_target_root("hermes-managed-mail-outbound-attachment");
+    let root = unique_target_root("makosh-managed-mail-outbound-attachment");
     let data = private_directory(short_communications_kernel_data_directory());
     let vault_dir = private_directory(data.join("vault"));
     initialize_vault(&vault_dir, &credential_directory());
     seed_mail_vault(&vault_dir);
     let release = installed_communications_mail_attachment_security_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             "owner-1",
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -327,7 +327,7 @@ fn managed_mail_delivers_only_canonical_safe_attachment_from_its_blob_custody() 
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Mail attachment fixture");
     std::fs::remove_dir_all(data).expect("remove short kernel data fixture");
@@ -337,25 +337,25 @@ fn managed_mail_delivers_only_canonical_safe_attachment_from_its_blob_custody() 
 #[ignore = "requires disposable authenticated PostgreSQL, NATS, PgBouncer and live managed runtimes"]
 fn managed_gmail_materializes_then_delivers_canonical_safe_attachment() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let gmail = MailGmailFixture::start();
     let clamav = AttachmentSecurityClamAvFixture::start();
-    let root = unique_target_root("hermes-managed-gmail-outbound-attachment");
+    let root = unique_target_root("makosh-managed-gmail-outbound-attachment");
     let data = private_directory(short_communications_kernel_data_directory());
     let vault_dir = private_directory(data.join("vault"));
     initialize_vault(&vault_dir, &credential_directory());
     let seeded_gmail = seed_mail_vault(&vault_dir);
     let release = installed_communications_mail_attachment_security_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             "owner-1",
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -514,7 +514,7 @@ fn managed_gmail_materializes_then_delivers_canonical_safe_attachment() {
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Gmail attachment fixture");
     std::fs::remove_dir_all(data).expect("remove short kernel data fixture");

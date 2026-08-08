@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
@@ -307,7 +307,7 @@ fn outbox_error(_: OutboxRecordError) -> AttachmentTranslationSourceEnvelopeBuil
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_events_protocol::v1::DurableEnvelopeV1;
+    use makosh_events_protocol::v1::DurableEnvelopeV1;
 
     #[test]
     fn command_is_exact_bounded_and_private() {
@@ -329,7 +329,7 @@ mod tests {
             payload,
             1_800_000_030,
             &AttachmentTranslationSourceEnvelopeContextV1 {
-                module_id: "hermes-attachment-translation-runtime".to_owned(),
+                module_id: "makosh-attachment-translation-runtime".to_owned(),
                 runtime_instance_id: "translation-1".to_owned(),
                 runtime_generation: 2,
                 recorded_at_unix_seconds: 1_800_000_000,

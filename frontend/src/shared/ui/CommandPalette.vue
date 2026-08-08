@@ -23,7 +23,7 @@ const emit = defineEmits<{
 }>()
 
 const internalOpen = ref(false)
-const classes = computed(() => ['hermes-command-palette', props.class])
+const classes = computed(() => ['makosh-command-palette', props.class])
 const isOpen = computed({
 	get: () => props.open ?? internalOpen.value,
 	set: (value: boolean) => {

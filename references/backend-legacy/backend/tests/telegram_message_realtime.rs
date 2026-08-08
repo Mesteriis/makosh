@@ -1,39 +1,39 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 use std::sync::Arc;
 
 use chrono::Utc;
 use serde_json::json;
 use sqlx::Row;
 
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_events_api::EventLogQuery;
-use hermes_events_postgres::store::EventStore;
-use hermes_hub_backend::domains::communications::messages::provider_channel_store::ProviderChannelMessageStore;
-use hermes_hub_backend::domains::communications::messages::provider_observation_projection::{
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_events_api::EventLogQuery;
+use makosh_events_postgres::store::EventStore;
+use makosh_hub_backend::domains::communications::messages::provider_channel_store::ProviderChannelMessageStore;
+use makosh_hub_backend::domains::communications::messages::provider_observation_projection::{
     consume_accepted_signal_event, project_provider_observation_event,
 };
-use hermes_hub_backend::domains::signal_hub::service::process_signal_hub_raw_event;
-use hermes_hub_backend::domains::signal_hub::telegram::dispatch_telegram_raw_signal;
-use hermes_hub_backend::integrations::telegram::client::commands;
-use hermes_hub_backend::integrations::telegram::client::lifecycle::message_versions::record_provider_edit_observation;
-use hermes_hub_backend::integrations::telegram::client::lifecycle::provider_reconciliation::{
+use makosh_hub_backend::domains::signal_hub::service::process_signal_hub_raw_event;
+use makosh_hub_backend::domains::signal_hub::telegram::dispatch_telegram_raw_signal;
+use makosh_hub_backend::integrations::telegram::client::commands;
+use makosh_hub_backend::integrations::telegram::client::lifecycle::message_versions::record_provider_edit_observation;
+use makosh_hub_backend::integrations::telegram::client::lifecycle::provider_reconciliation::{
     reconcile_delete_commands_from_provider_state, reconcile_edit_commands_from_provider_state,
     reconcile_message_pin_commands_from_provider_state,
 };
-use hermes_hub_backend::integrations::telegram::client::lifecycle::tombstones;
-use hermes_hub_backend::integrations::telegram::client::lifecycle::tombstones::record_provider_delete_observation;
-use hermes_hub_backend::integrations::telegram::client::models::chats::TelegramChatKind;
-use hermes_hub_backend::integrations::telegram::client::models::messages::{
+use makosh_hub_backend::integrations::telegram::client::lifecycle::tombstones;
+use makosh_hub_backend::integrations::telegram::client::lifecycle::tombstones::record_provider_delete_observation;
+use makosh_hub_backend::integrations::telegram::client::models::chats::TelegramChatKind;
+use makosh_hub_backend::integrations::telegram::client::models::messages::{
     NewTelegramMessage, TelegramDeliveryState, TelegramMessage,
 };
-use hermes_hub_backend::integrations::telegram::client::store::TelegramStore;
+use makosh_hub_backend::integrations::telegram::client::store::TelegramStore;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_api::provider_messages::ProviderMessageObservationEvent;
-use hermes_hub_backend::platform::communications::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_api::provider_messages::ProviderMessageObservationEvent;
+use makosh_hub_backend::platform::communications::{
     EventStoreProviderMessageObservationEventPort, ProviderMessageObservationEventPort,
 };
 
@@ -76,7 +76,7 @@ async fn telegram_provider_delete_observation_is_idempotent_and_reconciles_delet
         "available",
         "destructive",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({"reason_class": "deleted_by_owner", "is_provider_delete": true}),
         json!({
             "provider_chat_id": provider_chat_id,
@@ -202,7 +202,7 @@ async fn telegram_provider_edit_observation_is_idempotent_and_reconciles_edit_co
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({"new_text": "after"}),
         json!({
             "provider_chat_id": provider_chat_id,
@@ -325,7 +325,7 @@ async fn telegram_provider_edit_observation_marks_mismatched_edit_command_failed
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({"new_text": "expected provider body"}),
         json!({
             "provider_chat_id": provider_chat_id,
@@ -405,7 +405,7 @@ async fn telegram_provider_pin_state_reconciles_message_pin_command() {
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({"is_pinned": true}),
         json!({
             "provider_chat_id": provider_chat_id,
@@ -472,7 +472,7 @@ async fn telegram_provider_pin_state_marks_mismatched_unpin_command_failed() {
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({"is_pinned": false}),
         json!({
             "provider_chat_id": provider_chat_id,
@@ -543,12 +543,12 @@ fn telegram_store(pool: &sqlx::PgPool) -> TelegramStore {
         Arc::new(CommunicationProviderSecretBindingStore::new(pool.clone())),
         Arc::new(ProviderChannelMessageStore::new(pool.clone())),
         Arc::new(
-            hermes_communications_postgres::store::CommunicationIngestionStore::new(
+            makosh_communications_postgres::store::CommunicationIngestionStore::new(
                 pool.clone(),
             ),
         ),
         Arc::new(
-            hermes_hub_backend::platform::communications::EventStoreProviderMessageObservationEventPort::new(
+            makosh_hub_backend::platform::communications::EventStoreProviderMessageObservationEventPort::new(
                 pool.clone(),
             ),
         ),

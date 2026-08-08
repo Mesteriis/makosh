@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.mail_retained_evidence_replay_command_inbox (
+CREATE TABLE makosh_data.mail_retained_evidence_replay_command_inbox (
     message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
     envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
     operation_id BYTEA NOT NULL UNIQUE CHECK (octet_length(operation_id) = 16),
@@ -8,7 +8,7 @@ CREATE TABLE hermes_data.mail_retained_evidence_replay_command_inbox (
     UNIQUE (message_id, operation_id)
 );
 
-CREATE TABLE hermes_data.mail_retained_evidence_replay_result_outbox (
+CREATE TABLE makosh_data.mail_retained_evidence_replay_result_outbox (
     message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
     envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
     exact_envelope_bytes BYTEA NOT NULL CHECK (octet_length(exact_envelope_bytes) > 0),
@@ -19,14 +19,14 @@ CREATE TABLE hermes_data.mail_retained_evidence_replay_result_outbox (
         published_at_unix_seconds IS NULL OR published_at_unix_seconds > 0
     ),
     FOREIGN KEY (command_message_id, operation_id) REFERENCES
-        hermes_data.mail_retained_evidence_replay_command_inbox (
+        makosh_data.mail_retained_evidence_replay_command_inbox (
             message_id,
             operation_id
         )
 );
 
 CREATE INDEX mail_retained_evidence_replay_result_pending_idx
-ON hermes_data.mail_retained_evidence_replay_result_outbox (
+ON makosh_data.mail_retained_evidence_replay_result_outbox (
     created_at_unix_seconds,
     message_id
 )

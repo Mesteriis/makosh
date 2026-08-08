@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docs/integrations/telegram/api/media-search.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/api/media-search.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/api/media-search.md`
 - Size bytes / Размер в байтах: `2143`
 - Included characters / Включено символов: `2141`
 - Truncated / Обрезано: `no`
@@ -88,17 +88,17 @@ Shared Communication attachment and business read-model APIs live under:
 | GET | `/api/v1/communications/attachments/{attachment_id}/preview` | Shared safe preview endpoint |
 | POST | `/api/v1/communications/attachments/import` | Shared local attachment import |
 | GET | `/api/v1/communications/attachments/search` | Shared attachment search |
-| GET | `/api/v1/communications/search/media` | Hermes projected media search/filter |
+| GET | `/api/v1/communications/search/media` | Макошь projected media search/filter |
 
 ## Search Routes
 
 | Method | Path | Description |
 |---|---|---|
 | POST | `/api/v1/integrations/telegram/provider-search` | Provider raw search/refresh trigger; returns status metadata only |
-| GET | `/api/v1/communications/conversations/search` | Hermes projected conversation search |
-| GET | `/api/v1/communications/search/messages` | Hermes projected message search |
-| GET | `/api/v1/communications/search/media` | Hermes projected media search |
-| GET | `/api/v1/communications/search` | Hermes email/full-text business search over the projected read-model |
+| GET | `/api/v1/communications/conversations/search` | Макошь projected conversation search |
+| GET | `/api/v1/communications/search/messages` | Макошь projected message search |
+| GET | `/api/v1/communications/search/media` | Макошь projected media search |
+| GET | `/api/v1/communications/search` | Макошь email/full-text business search over the projected read-model |
 | GET | `/api/v1/communications/saved-searches` | Shared saved-search surface |
 
 ## Notes
@@ -110,7 +110,7 @@ Shared Communication attachment and business read-model APIs live under:
 
 ### `docs/integrations/telegram/api/operations-realtime.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/api/operations-realtime.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/api/operations-realtime.md`
 - Size bytes / Размер в байтах: `13622`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -188,7 +188,7 @@ outside the current UI slice.
 
 | Method | Path | Описание |
 |---|---|---|
-| GET | `/api/events/ws?after_position=&hermes_secret=` | Protected WebSocket event stream with replay/heartbeat |
+| GET | `/api/events/ws?after_position=&makosh_secret=` | Protected WebSocket event stream with replay/heartbeat |
 | GET | `/api/events/stream?after_position=` | Protected SSE stream |
 | GET | `/api/v1/events?after_position=&limit=&wait_seconds=` | Protected JSON replay/long-poll fallback |
 | POST | `/api/v1/events` | Local event API command boundary |
@@ -411,7 +411,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/integrations/telegram/architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/architecture.md`
 - Size bytes / Размер в байтах: `18636`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -430,7 +430,7 @@ Telegram принадлежит Communications Domain как **channel/source bo
 Invariant: A channel is never a domain. A channel is an integration. A
 communication is the domain object.
 
-Telegram должен поставлять Hermes:
+Telegram должен поставлять Макошь:
 
 - raw provider evidence;
 - provider-specific metadata;
@@ -501,7 +501,7 @@ Trace reconstruction belongs to `platform/events`.
 | ADR-0046 | Blob storage and scanner boundary for attachment bytes |
 | ADR-0050 | V4 Telegram policy automation and call intelligence |
 | ADR-0052 | Capability/action confirmation policy |
-| ADR-0056 | Router-level `X-Hermes-Secret` local API auth |
+| ADR-0056 | Router-level `X-Макошь-Secret` local API auth |
 | ADR-0076 | Host vault for new secret payloads |
 | ADR-0083 | Account-scoped TDLib runtime slice |
 | ADR-0085 | Communication spine and Polygraph integration |
@@ -533,7 +533,7 @@ Trace reconstruction belongs to `platform/events`.
 | Store/helpers | `frontend/src/integrations/telegram/stores/telegram.ts` | Local UI state, filters, derived lists |
 | Components | `frontend/src/integrations/telegram/components/` | Chat list, timeline, composer, action rail, inspector |
 
-Realtime delivery on the frontend is shared with the rest of Hermes through
+Realtime delivery on the frontend is shared with the rest of Макошь through
 `frontend/src/platform/bootstrap/realtime.ts`; Telegram panels consume
 communications-scoped query state and cache patches instead of opening a second
 channel-scoped socket.
@@ -812,7 +812,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/integrations/telegram/blockers.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/blockers.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/blockers.md`
 - Size bytes / Размер в байтах: `2013`
 - Included characters / Включено символов: `2013`
 - Truncated / Обрезано: `no`
@@ -854,7 +854,7 @@ plugin execution remain unsupported.
 
 ### `docs/integrations/telegram/gap-analysis.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/gap-analysis.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/gap-analysis.md`
 - Size bytes / Размер в байтах: `3255`
 - Included characters / Включено символов: `3255`
 - Truncated / Обрезано: `no`
@@ -920,7 +920,7 @@ Fixture/projection/outbox/realtime tests are the deterministic closure gate.
 
 ### `docs/integrations/telegram/modules.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/modules.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/modules.md`
 - Size bytes / Размер в байтах: `3454`
 - Included characters / Включено символов: `3454`
 - Truncated / Обрезано: `no`
@@ -996,7 +996,7 @@ provider commands, projections and reviewable traces consumed by those engines.
 
 ### `docs/integrations/telegram/product-research.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/product-research.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/product-research.md`
 - Size bytes / Размер в байтах: `9588`
 - Included characters / Включено символов: `9588`
 - Truncated / Обрезано: `no`
@@ -1013,7 +1013,7 @@ provider-neutral Communications work.
 
 ## Local Context
 
-Telegram in Hermes is an integration channel, not a product domain. ADR-0097
+Telegram in Макошь is an integration channel, not a product domain. ADR-0097
 keeps durable communication state inside the Communications domain. ADR-0099
 keeps source control, pause/resume/replay and source health inside Signal Hub.
 
@@ -1057,7 +1057,7 @@ Useful patterns:
 - Topics organize high-volume groups, while privacy and deletion controls make
   provider history mutable.
 
-Hermes interpretation:
+Макошь interpretation:
 
 - folders and topics are useful as local view and workflow inputs, not as a
   reason to build a Telegram clone;
@@ -1080,9 +1080,9 @@ Useful patterns:
 - cross-device sync and a strong "one app for chats" posture;
 - emphasis on trust, encryption and local/on-device connection where possible.
 
-Hermes interpretation:
+Макошь interpretation:
 
-- unified inbox is useful, but Hermes should differentiate on local-first
+- unified inbox is useful, but Макошь should differentiate on local-first
   evidence, auditability and provider-neutral context rather than chat-client
   aggregation alone.
 
@@ -1098,11 +1098,11 @@ Useful patterns:
 - assignment, transfer, close and reopen workflows;
 - conversation ownership and status as first-class working state.
 
-Hermes interpretation:
+Макошь interpretation:
 
 - the team-inbox model can be adapted to solo/operator workflows: assign to
   self, defer, close, reopen, track owner state and surface unresolved
-  obligations without turning Hermes into a help desk.
+  obligations without turning Макошь into a help desk.
 
 ### Superhuman
 
@@ -1117,7 +1117,7 @@ Useful patterns:
 - keyboard-first triage;
 - AI drafting and live sharing/commenting.
 
-Hermes interpretation:
+Макошь interpretation:
 
 - priority lanes and follow-up obligations are higher-value than more raw
   Telegram UI parity;
@@ -1137,7 +1137,7 @@ Useful patterns:
 - AI-powered search over messages and attachments;
 - automated tasklets for drafts, labels, comments and todo extraction.
 
-Hermes interpretation:
+Макошь interpretation:
 
 - start with local suggestions, drafts, classifications and candidate
   obligations;
@@ -1149,9 +1149,9 @@ Hermes interpretation:
 1. Unified Telegram inbox work should not imitate Telegram. It should expose
    workable conversations across accounts with local overlays: priority, owner
    state, obligation, trust, source evidence and runtime posture.
-2. Folders, topics and saved messages are not only UI categories. In Hermes
+2. Folders, topics and saved messages are not only UI categories. In Макошь
    they can become local saved/search/task/memory surfaces with provenance.
-3. Follow-up and reminder workflows fit Hermes better than generic chat parity.
+3. Follow-up and reminder workflows fit Макошь better than generic chat parity.
 4. AI should draft, summarize, classify and suggest actions locally first.
    Provider writes stay manually confirmed.
 5. Team-inbox ideas can be reduced to solo/operator workflows: assign to self,
@@ -1191,7 +1191,7 @@ Generate evidence-backed candidates from Telegram messages:
 - "follow up";
 - "decision pending".
 
-The owner reviews and promotes candidates. Hermes must not automatically create
+The owner reviews and promotes candidates. Макошь must not automatically create
 tasks, obligations or decisions from private messages without review.
 
 Validation ideas:
@@ -1228,7 +1228,7 @@ Surface local evidence that normal chat clients hide:
 - source citations;
 - scoped export.
 
-This is a Hermes-native differentiator, but it needs careful privacy language
+This is a Макошь-native differentiator, but it needs careful privacy language
 and UI framing.
 
 Validation ideas:
@@ -1306,7 +1306,7 @@ This snapshot combines:
 
 ### `docs/integrations/telegram/status.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/status.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/status.md`
 - Size bytes / Размер в байтах: `1401`
 - Included characters / Включено символов: `1401`
 - Truncated / Обрезано: `no`
@@ -1362,7 +1362,7 @@ regression tests.
 
 ### `docs/integrations/telegram/status/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/status/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/status/README.md`
 - Size bytes / Размер в байтах: `320`
 - Included characters / Включено символов: `320`
 - Truncated / Обрезано: `no`
@@ -1384,7 +1384,7 @@ status document.
 
 ### `docs/integrations/telegram/status/details-core.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/status/details-core.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/status/details-core.md`
 - Size bytes / Размер в байтах: `2210`
 - Included characters / Включено символов: `2210`
 - Truncated / Обрезано: `no`
@@ -1455,7 +1455,7 @@ Base Telegram channel capability set: `COMPLETED`.
 
 ### `docs/integrations/telegram/status/details-extended.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/status/details-extended.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/status/details-extended.md`
 - Size bytes / Размер в байтах: `2250`
 - Included characters / Включено символов: `2250`
 - Truncated / Обрезано: `no`
@@ -1524,7 +1524,7 @@ flows.
 
 ### `docs/integrations/telegram/status/pass-log.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/telegram/status/pass-log.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/telegram/status/pass-log.md`
 - Size bytes / Размер в байтах: `1096`
 - Included characters / Включено символов: `1096`
 - Truncated / Обрезано: `no`
@@ -1572,17 +1572,17 @@ Future work must be opened as separate initiatives:
 
 ### `docs/integrations/whatsapp/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/whatsapp/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/whatsapp/README.md`
 - Size bytes / Размер в байтах: `11149`
 - Included characters / Включено символов: `9412`
 - Truncated / Обрезано: `no`
 
 ````markdown
-# Hermes Communications — WhatsApp Channel
+# Макошь Communications — WhatsApp Channel
 
 Статус: стартовый audit/spec набор на 2026-06-17.
 
-WhatsApp в Hermes — это **Communication Channel** внутри Communications Domain.
+WhatsApp в Макошь — это **Communication Channel** внутри Communications Domain.
 WhatsApp не является отдельным продуктом, отдельным мессенджером и не владеет
 Memory, Knowledge, Tasks, Projects, Personas, Organizations, Decisions или
 Obligations.
@@ -1590,7 +1590,7 @@ Obligations.
 Invariant: A channel is never a domain. A channel is an integration. A
 communication is the domain object.
 
-Hermes не проектируется как WhatsApp-клиент-клон. WhatsApp поставляет:
+Макошь не проектируется как WhatsApp-клиент-клон. WhatsApp поставляет:
 
 - source evidence;
 - provider records;
@@ -1621,9 +1621,9 @@ The following documents extend the original WhatsApp Channel audit toward full
 functionality and provider-runtime selection:
 
 - [`current-audit-2026-06-24.md`](./current-audit-2026-06-24.md) — current repository audit and implemented fixture foundation.
-- [`full-functionality-target.md`](./full-functionality-target.md) — complete WhatsApp capability target plus Hermes intelligence flows.
+- [`full-functionality-target.md`](./full-functionality-target.md) — complete WhatsApp capability target plus Макошь intelligence flows.
 - [`rust-provider-research.md`](./rust-provider-research.md) — Rust project evaluation: `whatsapp-rust`, `wa-rs`, `whatsappweb-rs`, Business Cloud SDKs and references.
-- [`implementation-plan.md`](./implementation-plan.md) — phased implementation plan from fixture foundation to live provider and Hermes intelligence.
+- [`implementation-plan.md`](./implementation-plan.md) — phased implementation plan from fixture foundation to live provider and Макошь intelligence.
 - [`api.md`](./api.md) — current backend integration/runtime API surface.
 - [`fixture-test-matrix.md`](./fixture-test-matrix.md) — fixture/runtime-safe source-record and command-class coverage map.
 - [`live-smoke-checklist.md`](./live-smoke-checklist.md) — manual local checklist for live runtime validation, redaction verification and vault-backed session restore.
@@ -1633,7 +1633,7 @@ functionality and provider-runtime selection:
 
 WhatsApp использует те же базовые границы, что и другие каналы коммуникации:
 
-- provider state не является source of truth для Hermes;
+- provider state не является source of truth для Макошь;
 - raw provider records сохраняются как append-only evidence;
 - canonical `communication_messages` являются проекцией;
 - provider writes проходят через capability, outbox, policy и audit boundary;
@@ -1696,7 +1696,7 @@ unsupported
 
 Личные данные, raw evidence, attachment metadata, local blobs, audit и derived
 context остаются локальными. WhatsApp Web используется как provider/source
-boundary, а не как долговременное хранилище Hermes.
+boundary, а не как долговременное хранилище Макошь.
 
 ### Owner Controlled
 
@@ -1761,7 +1761,7 @@ Persona, Organization или Memory lifecycle.
 - delete;
 - edit, если provider/runtime reliably supports it.
 
-Edit history не должен реконструироваться задним числом. Hermes может хранить
+Edit history не должен реконструироваться задним числом. Макошь может хранить
 только observed versions и source-backed update evidence.
 
 ## Media
@@ -1901,7 +1901,7 @@ source-backed events and projections.
 
 ### `docs/integrations/whatsapp/api.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/whatsapp/api.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/whatsapp/api.md`
 - Size bytes / Размер в байтах: `25637`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1974,7 +1974,7 @@ these Tauri commands directly; this bridge deliberately does not use
 
 The companion window installs a main-frame-only initialization script guarded to
 `https://web.whatsapp.com`, and navigation is constrained to that origin. The
-script exposes a frozen `__HERMES_WHATSAPP_COMPANION__` metadata contract plus a
+script exposes a frozen `__MAKOSH_WHATSAPP_COMPANION__` metadata contract plus a
 local DOM readiness event and an allowlisted metadata-only relay dispatch. It
 does not read cookies, Web Storage, IndexedDB, browser profile secrets, session
 material, message bodies or media bytes, and it does not call `fetch`, XHR,
@@ -1983,7 +1983,7 @@ this as `contract_injected_relay_dispatch_available` with
 `tauri_allowlisted_companion_runtime_bridge_dispatch`. The Tauri relay command
 posts sanitized metadata observations to the protected local
 `/api/v1/integrations/whatsapp/runtime-bridge/runtime-events` route using
-`X-Hermes-Secret` from the Tauri process environment only. This creates
+`X-Макошь-Secret` from the Tauri process environment only. This creates
 runtime-event evidence but does not project typed messages/status/media until a
 richer typed WebView payload exists.
 
@@ -2065,7 +2065,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/integrations/whatsapp/architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/whatsapp/architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/whatsapp/architecture.md`
 - Size bytes / Размер в байтах: `16456`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2084,7 +2084,7 @@ Decision или Obligation.
 Invariant: A channel is never a domain. A channel is an integration. A
 communication is the domain object.
 
-WhatsApp должен поставлять Hermes:
+WhatsApp должен поставлять Макошь:
 
 - raw provider evidence;
 - provider-specific metadata;
@@ -2159,7 +2159,7 @@ state. Trace reconstruction belongs to `platform/events`.
 | ADR-0046 | Blob storage and scanner boundary for attachment bytes |
 | ADR-0051 | WhatsApp Web companion boundary |
 | ADR-0052 | Capability/action confirmation policy |
-| ADR-0056 | Router-level `X-Hermes-Secret` local API auth |
+| ADR-0056 | Router-level `X-Макошь-Secret` local API auth |
 | ADR-0074 | Multi-channel identity traces including WhatsApp/phone |
 | ADR-0076 | Host vault for new secret payloads |
 | ADR-0085 | Communication spine and Polygraph integration |
@@ -2332,7 +2332,7 @@ Required operations:
 | status publish | provider_write | blocked |
 | voice send | provider_write | blocked |
 
-`unsupported` is reserved for operations that conflict with Hermes policy or
+`unsupported` is reserved for operations that conflict with Макошь policy or
 are intentionally outside the current provider shape. `blocked` means
 architecturally allowed but missing required runtime, permission, validation,
 secret or adapter support.
@@ -2407,7 +2407,7 @@ Message identity needs:
 - optional edit version;
 - optional tombstone state.
 
-Hermes must not claim provider edit history that was never observed locally.
+Макошь must not claim provider edit history that was never observed locally.
 
 ## Provider Command Outbox
 
@@ -2489,13 +2489,13 @@ Supported media classes:
 - gif.
 
 Media bytes stay out of PostgreSQL. Attachment metadata must pass through the
-shared attachment safety scanner boundary. A no-op 
+shared attachment safety scanner boundary. A no-op
 ````
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `docs/integrations/whatsapp/blockers.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/whatsapp/blockers.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/whatsapp/blockers.md`
 - Size bytes / Размер в байтах: `10887`
 - Included characters / Включено символов: `10311`
 - Truncated / Обрезано: `no`
@@ -2762,7 +2762,7 @@ fragility would create hidden regressions.
 **Причина**: WhatsApp naturally exposes people, groups, obligations, decisions,
 tasks, organizations, projects, locations and documents.
 
-**Последствия**: Hermes would get channel-specific mini-domains and duplicated
+**Последствия**: Макошь would get channel-specific mini-domains and duplicated
 business logic if WhatsApp implements those lifecycles directly.
 
 **План решения**:
@@ -2776,7 +2776,7 @@ business logic if WhatsApp implements those lifecycles directly.
 
 ### `docs/integrations/whatsapp/current-audit-2026-06-24.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/whatsapp/current-audit-2026-06-24.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/whatsapp/current-audit-2026-06-24.md`
 - Size bytes / Размер в байтах: `54158`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2784,7 +2784,7 @@ business logic if WhatsApp implements those lifecycles directly.
 ````markdown
 # WhatsApp Current Audit — 2026-06-24
 
-Status: current repository audit based on `hermes-os-main (3).zip`.
+Status: current repository audit based on `makosh-os-main (3).zip`.
 
 This document records what exists now before starting the full WhatsApp target implementation. It intentionally separates:
 
@@ -2941,7 +2941,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/integrations/whatsapp/fixture-test-matrix.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/whatsapp/fixture-test-matrix.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/whatsapp/fixture-test-matrix.md`
 - Size bytes / Размер в байтах: `7472`
 - Included characters / Включено символов: `7472`
 - Truncated / Обрезано: `no`

@@ -1,4 +1,4 @@
 use crate::tests::scaffolds::OwnerDeliveryScaffoldV1;
 
 pub(crate) const SCAFFOLD: OwnerDeliveryScaffoldV1 =
-    OwnerDeliveryScaffoldV1::new("tasks", "hermes_tasks");
+    OwnerDeliveryScaffoldV1::new("tasks", "makosh_tasks");

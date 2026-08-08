@@ -9,14 +9,14 @@ use std::{
     time::Duration,
 };
 
-use hermes_call_transcription_persistence::{
+use makosh_call_transcription_persistence::{
     CallTranscriptionPersistenceErrorV1, call_transcription_storage_bundle_v1,
 };
-use hermes_call_transcription_runtime::{
+use makosh_call_transcription_runtime::{
     CallTranscriptionManagedRuntimeErrorV1, CallTranscriptionManagedRuntimeV1,
     CallTranscriptionRuntimeAdmissionV1, module_descriptor_v1, settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,

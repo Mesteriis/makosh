@@ -1,4 +1,4 @@
-use hermes_storage_protocol::v1::StorageMigrationStepV1;
+use makosh_storage_protocol::v1::StorageMigrationStepV1;
 use sha2::{Digest, Sha256};
 
 pub const TELEGRAM_CALLS_STORAGE_REVISION_V1: u32 = 3;
@@ -8,9 +8,9 @@ pub const TELEGRAM_CALLS_STORAGE_REVISION_V4: u32 = 6;
 pub const TELEGRAM_CALLS_STORAGE_REVISION_V5: u32 = 9;
 
 pub const TELEGRAM_CALLS_SCHEMA_V1: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_sessions (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_call_sessions (
     call_session_id TEXT PRIMARY KEY,
-    account_id TEXT NOT NULL REFERENCES hermes_data.telegram_accounts(account_id),
+    account_id TEXT NOT NULL REFERENCES makosh_data.telegram_accounts(account_id),
     runtime_generation BIGINT NOT NULL CHECK (runtime_generation > 0),
     tdlib_call_id INTEGER NOT NULL CHECK (tdlib_call_id > 0),
     provider_call_unique_id BIGINT NULL CHECK (provider_call_unique_id IS NULL OR provider_call_unique_id > 0),
@@ -29,8 +29,8 @@ CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_sessions (
     UNIQUE (account_id, provider_call_unique_id)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_state_history (
-    call_session_id TEXT NOT NULL REFERENCES hermes_data.telegram_call_sessions(call_session_id),
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_call_state_history (
+    call_session_id TEXT NOT NULL REFERENCES makosh_data.telegram_call_sessions(call_session_id),
     revision BIGINT NOT NULL CHECK (revision > 0),
     provider_state TEXT NOT NULL,
     pending_created BOOLEAN NOT NULL,
@@ -41,10 +41,10 @@ CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_state_history (
     PRIMARY KEY (call_session_id, revision)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_realtime_frames (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_call_realtime_frames (
     frame_sequence BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     account_id TEXT NOT NULL,
-    call_session_id TEXT NOT NULL REFERENCES hermes_data.telegram_call_sessions(call_session_id),
+    call_session_id TEXT NOT NULL REFERENCES makosh_data.telegram_call_sessions(call_session_id),
     call_revision BIGINT NOT NULL CHECK (call_revision > 0),
     provider_state TEXT NOT NULL,
     pending_created BOOLEAN NOT NULL,
@@ -56,16 +56,16 @@ CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_realtime_frames (
 );
 
 CREATE INDEX IF NOT EXISTS telegram_call_sessions_account_idx
-    ON hermes_data.telegram_call_sessions (account_id, call_session_id);
+    ON makosh_data.telegram_call_sessions (account_id, call_session_id);
 
 CREATE INDEX IF NOT EXISTS telegram_call_realtime_account_sequence_idx
-    ON hermes_data.telegram_call_realtime_frames (account_id, frame_sequence);
+    ON makosh_data.telegram_call_realtime_frames (account_id, frame_sequence);
 "#;
 
 pub const TELEGRAM_CALLS_SCHEMA_V2: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_operations (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_call_operations (
     operation_id TEXT PRIMARY KEY,
-    account_id TEXT NOT NULL REFERENCES hermes_data.telegram_accounts(account_id),
+    account_id TEXT NOT NULL REFERENCES makosh_data.telegram_accounts(account_id),
     call_session_id TEXT NOT NULL,
     operation_kind TEXT NOT NULL CHECK (operation_kind IN (
         'initiate_audio', 'accept_audio', 'decline', 'end', 'set_local_mute'
@@ -99,19 +99,19 @@ CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_operations (
     )
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_local_mute (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_call_local_mute (
     call_session_id TEXT PRIMARY KEY
-        REFERENCES hermes_data.telegram_call_sessions(call_session_id),
+        REFERENCES makosh_data.telegram_call_sessions(call_session_id),
     account_id TEXT NOT NULL,
     muted BOOLEAN NOT NULL,
     operation_id TEXT NOT NULL
-        REFERENCES hermes_data.telegram_call_operations(operation_id),
+        REFERENCES makosh_data.telegram_call_operations(operation_id),
     updated_at_unix_seconds BIGINT NOT NULL CHECK (updated_at_unix_seconds > 0)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_operation_history (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_call_operation_history (
     operation_id TEXT NOT NULL
-        REFERENCES hermes_data.telegram_call_operations(operation_id),
+        REFERENCES makosh_data.telegram_call_operations(operation_id),
     revision BIGINT NOT NULL CHECK (revision > 0),
     operation_state TEXT NOT NULL,
     tdlib_call_id INTEGER NULL,
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_operation_history (
     PRIMARY KEY (operation_id, revision)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_realtime_events (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_call_realtime_events (
     event_sequence BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     account_id TEXT NOT NULL,
     event_kind TEXT NOT NULL CHECK (event_kind IN ('call', 'operation')),
@@ -146,25 +146,25 @@ CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_realtime_events (
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS telegram_call_sessions_one_active_per_account_idx
-    ON hermes_data.telegram_call_sessions (account_id)
+    ON makosh_data.telegram_call_sessions (account_id)
     WHERE provider_state NOT IN ('discarded', 'error');
 
 CREATE UNIQUE INDEX IF NOT EXISTS telegram_call_operations_one_initiate_per_account_idx
-    ON hermes_data.telegram_call_operations (account_id)
+    ON makosh_data.telegram_call_operations (account_id)
     WHERE operation_kind = 'initiate_audio'
       AND operation_state NOT IN ('completed', 'failed');
 
 CREATE INDEX IF NOT EXISTS telegram_call_operations_account_id_idx
-    ON hermes_data.telegram_call_operations (account_id, operation_id);
+    ON makosh_data.telegram_call_operations (account_id, operation_id);
 
 CREATE INDEX IF NOT EXISTS telegram_call_realtime_events_account_sequence_idx
-    ON hermes_data.telegram_call_realtime_events (account_id, event_sequence);
+    ON makosh_data.telegram_call_realtime_events (account_id, event_sequence);
 "#;
 
 pub const TELEGRAM_CALLS_SCHEMA_V3: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_media_projection (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_call_media_projection (
     call_session_id TEXT PRIMARY KEY
-        REFERENCES hermes_data.telegram_call_sessions(call_session_id),
+        REFERENCES makosh_data.telegram_call_sessions(call_session_id),
     account_id TEXT NOT NULL,
     runtime_generation BIGINT NOT NULL CHECK (runtime_generation > 0),
     provider_revision BIGINT NOT NULL CHECK (provider_revision > 0),
@@ -181,9 +181,9 @@ CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_media_projection (
     )
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_media_state_history (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_call_media_state_history (
     call_session_id TEXT NOT NULL
-        REFERENCES hermes_data.telegram_call_sessions(call_session_id),
+        REFERENCES makosh_data.telegram_call_sessions(call_session_id),
     revision BIGINT NOT NULL CHECK (revision > 0),
     runtime_generation BIGINT NOT NULL CHECK (runtime_generation > 0),
     provider_revision BIGINT NOT NULL CHECK (provider_revision > 0),
@@ -195,22 +195,22 @@ CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_media_state_history (
 );
 
 CREATE INDEX IF NOT EXISTS telegram_call_media_projection_account_idx
-    ON hermes_data.telegram_call_media_projection (account_id, call_session_id);
+    ON makosh_data.telegram_call_media_projection (account_id, call_session_id);
 "#;
 
 pub const TELEGRAM_CALLS_SCHEMA_V4: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_realtime_replay_order (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_call_realtime_replay_order (
     replay_sequence BIGINT PRIMARY KEY CHECK (replay_sequence > 0),
     event_sequence BIGINT NOT NULL UNIQUE
-        REFERENCES hermes_data.telegram_call_realtime_events(event_sequence)
+        REFERENCES makosh_data.telegram_call_realtime_events(event_sequence)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_realtime_replay_cursor (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_call_realtime_replay_cursor (
     cursor_scope TEXT PRIMARY KEY CHECK (cursor_scope = 'owner'),
     next_sequence BIGINT NOT NULL CHECK (next_sequence > 0)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_realtime_backfill_jobs (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_call_realtime_backfill_jobs (
     job_run_id BYTEA PRIMARY KEY CHECK (octet_length(job_run_id) = 16),
     job_owner TEXT NOT NULL CHECK (job_owner = 'telegram'),
     job_name TEXT NOT NULL CHECK (job_name = 'calls_realtime_backfill'),
@@ -305,14 +305,14 @@ CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_realtime_backfill_jobs (
 );
 
 CREATE INDEX IF NOT EXISTS telegram_call_realtime_backfill_state_idx
-    ON hermes_data.telegram_call_realtime_backfill_jobs (
+    ON makosh_data.telegram_call_realtime_backfill_jobs (
         execution_state,
         updated_at_unix_millis
     );
 "#;
 
 pub const TELEGRAM_CALLS_SCHEMA_V5: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_evidence_outbox (
+CREATE TABLE IF NOT EXISTS makosh_data.telegram_call_evidence_outbox (
     message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
     envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
     exact_envelope_bytes BYTEA NOT NULL CHECK (
@@ -327,7 +327,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.telegram_call_evidence_outbox (
 );
 
 CREATE INDEX IF NOT EXISTS telegram_call_evidence_outbox_pending_idx
-    ON hermes_data.telegram_call_evidence_outbox (
+    ON makosh_data.telegram_call_evidence_outbox (
         created_at_unix_seconds,
         message_id
     )
@@ -389,7 +389,7 @@ mod tests {
 
         assert_eq!(migration.revision, 3);
         assert_eq!(migration.migration_id, "telegram_call_history");
-        assert!(TELEGRAM_CALLS_SCHEMA_V1.contains("hermes_data.telegram_call_sessions"));
+        assert!(TELEGRAM_CALLS_SCHEMA_V1.contains("makosh_data.telegram_call_sessions"));
         assert!(TELEGRAM_CALLS_SCHEMA_V1.contains("telegram_call_realtime_frames"));
 
         let signaling = telegram_calls_storage_migration_v2();

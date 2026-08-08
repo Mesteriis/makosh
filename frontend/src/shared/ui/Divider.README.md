@@ -1,6 +1,6 @@
 # Divider
 
-Alias around the Hermes `Separator` primitive.
+Alias around the Макошь `Separator` primitive.
 
 Use when product copy or design language calls the visual boundary a divider.
 

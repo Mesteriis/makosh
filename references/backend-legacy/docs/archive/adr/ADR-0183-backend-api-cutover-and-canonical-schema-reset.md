@@ -13,10 +13,10 @@ Clarifies:
 
 ## Context
 
-The first workspace slices deliberately kept the `hermes-hub-backend` package,
+The first workspace slices deliberately kept the `makosh-backend` package,
 legacy HTTP routes and frontend adapters while ownership moved between crates.
 That was useful during discovery, but retaining two contracts indefinitely would
-leave the old composition root and its stores as permanent dependencies. Hermes
+leave the old composition root and its stores as permanent dependencies. Макошь
 has one frontend and one Tauri desktop consumer, so the final migration can be
 performed as an atomic vertical cutover instead of preserving a second public
 API.
@@ -31,8 +31,8 @@ remain untouched and are not deleted by schema reset.
 ### One breaking API cutover
 
 ConnectRPC is the only product command/query transport. Each durable product
-context owns a versioned `hermes.<context>.v2` service and uses shared
-`hermes.common.v2` identifiers, pagination, timestamps, field violations and
+context owns a versioned `makosh.<context>.v2` service and uses shared
+`makosh.common.v2` identifiers, pagination, timestamps, field violations and
 typed errors. Generated TypeScript messages are the frontend wire model; a
 mapping is allowed only where the UI model is intentionally different.
 
@@ -51,9 +51,9 @@ facades and compatibility re-exports are not permitted.
 
 ### Composition and ownership
 
-`hermes-desktop-runtime` is the sole composition root. `hermes-api` contains
+`makosh-desktop-runtime` is the sole composition root. `makosh-api` contains
 HTTP/ConnectRPC composition over narrow application ports, and
-`hermes-worker-runtime` owns supervised worker scheduling. Neither package may
+`makosh-worker-runtime` owns supervised worker scheduling. Neither package may
 construct concrete stores, provider implementations, SQL adapters or vault
 implementations. Provider implementations and persistence adapters are wired
 only by desktop composition.
@@ -65,7 +65,7 @@ fallback. WhatsApp remains hidden WebView only under ADR-0182.
 ### Canonical schema reset
 
 After all durable owners have moved to their `*-api` and `*-postgres` crates,
-the workspace keeps one canonical baseline schema owned by `hermes-schema`.
+the workspace keeps one canonical baseline schema owned by `makosh-schema`.
 Legacy migrations and obsolete provider/runtime shapes are removed; no
 destructive down migration is created. Development and test PostgreSQL are
 recreated from that baseline, projections and indexes are rebuilt, and

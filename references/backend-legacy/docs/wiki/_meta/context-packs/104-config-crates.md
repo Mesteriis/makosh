@@ -21,9 +21,9 @@
 - Group / Группа: `crates`
 - Role / Роль: `config`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `crates/testkit/Cargo.toml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/Cargo.toml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/Cargo.toml`
 - Size bytes / Размер в байтах: `754`
 - Included characters / Включено символов: `754`
 - Truncated / Обрезано: `no`
@@ -73,7 +73,7 @@ license = "MIT"
 async-nats = "0.49.1"
 axum = "0.8"
 chrono = { version = "0.4", default-features = false, features = ["clock", "serde"] }
-hermes-hub-backend = { path = "../../backend", features = ["test-support"] }
+makosh-backend = { path = "../../backend", features = ["test-support"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"

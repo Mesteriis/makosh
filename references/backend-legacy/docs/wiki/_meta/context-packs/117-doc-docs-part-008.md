@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docs/integrations/zoom/api.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/api.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/api.md`
 - Size bytes / Размер в байтах: `7469`
 - Included characters / Включено символов: `7469`
 - Truncated / Обрезано: `no`
@@ -110,7 +110,7 @@ They are not product-domain routes.
 | `POST` | `/runtime-bridge/transcripts` | Ingests transcript observation as call transcript evidence. |
 | `POST` | `/runtime-bridge/transcript-files` | Imports VTT/SRT/plain transcript file text as call transcript evidence. |
 | `POST` | `/runtime-bridge/webhooks?account_id=...` | Handles account-scoped endpoint URL validation and signed Zoom meeting/recording webhooks. |
-| binary | `hermes-zoom-edge-proxy` | Public/edge webhook ingress that forwards raw Zoom webhook bodies and `x-zm-*` headers into the protected bridge. |
+| binary | `makosh-zoom-edge-proxy` | Public/edge webhook ingress that forwards raw Zoom webhook bodies and `x-zm-*` headers into the protected bridge. |
 
 Detailed pages:
 
@@ -248,7 +248,7 @@ with `provider=zoom`, for example:
 
 ### `docs/integrations/zoom/api/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/api/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/api/README.md`
 - Size bytes / Размер в байтах: `354`
 - Included characters / Включено символов: `354`
 - Truncated / Обрезано: `no`
@@ -270,7 +270,7 @@ The parent package remains the provider runtime boundary.
 
 ### `docs/integrations/zoom/api/accounts.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/api/accounts.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/api/accounts.md`
 - Size bytes / Размер в байтах: `7945`
 - Included characters / Включено символов: `7945`
 - Truncated / Обрезано: `no`
@@ -524,7 +524,7 @@ Scans authorized Zoom live accounts and refreshes only bundles that expire
 within the requested threshold. This is the integration-safe worker boundary
 used by explicit API calls and by the local scheduled token maintenance daemon.
 The scheduler is gated by Signal Hub runtime state, HostVault unlock status and
-`HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`.
+`MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`.
 The maintenance default threshold is 300 seconds. Runtime status exposes the
 same policy under `metadata.token_rotation_policy`, including refresh due
 state, expiry state and the `zoom_token_rotation_required` failure/expiry
@@ -567,7 +567,7 @@ Response:
 Imported recording/blob retention cleanup is a separate local automation path.
 The owner-visible prune route is `POST /api/v1/integrations/zoom/accounts/{account_id}/retention/prune`,
 and the background cleanup daemon is toggled by
-`HERMES_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED`.
+`MAKOSH_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED`.
 
 ## Account list
 
@@ -598,7 +598,7 @@ metadata only.
 
 ### `docs/integrations/zoom/api/runtime-bridge.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/api/runtime-bridge.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/api/runtime-bridge.md`
 - Size bytes / Размер в байтах: `6925`
 - Included characters / Включено символов: `6925`
 - Truncated / Обрезано: `no`
@@ -626,7 +626,7 @@ Request:
   "account_id": "zoom_fixture_primary",
   "meeting_id": "987654321",
   "meeting_uuid": "meeting-uuid",
-  "topic": "Hermes Zoom Review",
+  "topic": "Макошь Zoom Review",
   "host_email": "owner@example.test",
   "join_url": "https://example.invalid/j/987654321",
   "started_at": "2026-06-27T10:00:00Z",
@@ -830,13 +830,13 @@ POST /api/v1/integrations/zoom/runtime-bridge/webhooks?account_id=<zoom_account_
 
 This protected runtime-bridge route handles account-scoped Zoom webhook
 notifications. It is not a public internet receiver; the standalone
-`hermes-zoom-edge-proxy` may forward raw Zoom webhook requests here after
+`makosh-zoom-edge-proxy` may forward raw Zoom webhook requests here after
 preserving the raw body and Zoom headers.
 
 The implemented public/edge ingress for that forwarding role is:
 
 ```text
-hermes-zoom-edge-proxy
+makosh-zoom-edge-proxy
 PUBLIC:  POST /webhooks/zoom
 FORWARDS TO:  POST /api/v1/integrations/zoom/runtime-bridge/webhooks?account_id=...
 ```
@@ -913,7 +913,7 @@ submitting secret values outside secret-reference fields.
 
 ### `docs/integrations/zoom/api/runtime.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/api/runtime.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/api/runtime.md`
 - Size bytes / Размер в байтах: `6507`
 - Included characters / Включено символов: `6507`
 - Truncated / Обрезано: `no`
@@ -956,8 +956,8 @@ Request:
 ```json
 {
   "account_id": "zoom_live_primary",
-  "endpoint_url": "https://hermes.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks",
-  "subscription_name": "Hermes Zoom Runtime",
+  "endpoint_url": "https://makosh.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks",
+  "subscription_name": "Макошь Zoom Runtime",
   "event_types": [
     "meeting.started",
     "meeting.ended",
@@ -974,7 +974,7 @@ Behavior:
 - OAuth user accounts exchange client_credentials for app-owned management tokens;
 - Server-to-Server accounts exchange account_credentials for app-owned management tokens;
 - when the managed subscription already matches endpoint + event types, response status is unchanged;
-- when the managed subscription is missing or stale, Hermes deletes the stale managed subscription and recreates it.
+- when the managed subscription is missing or stale, Макошь deletes the stale managed subscription and recreates it.
 ```
 
 ## Webhook subscription remove
@@ -1161,7 +1161,7 @@ delete.
 
 | Field | Meaning |
 |---|---|
-| `account_id` | Hermes provider account id. |
+| `account_id` | Макошь provider account id. |
 | `provider_kind` | `zoom_user` or `zoom_server_to_server`. |
 | `runtime_kind` | `zoom_fixture_runtime`, `zoom_live_blocked_runtime` or `zoom_live_authorized_runtime`. |
 | `status` | Derived lifecycle status. |
@@ -1184,7 +1184,7 @@ missing token binding or failed last refresh.
 
 ### `docs/integrations/zoom/architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/architecture.md`
 - Size bytes / Размер в байтах: `7469`
 - Included characters / Включено символов: `7469`
 - Truncated / Обрезано: `no`
@@ -1195,7 +1195,7 @@ missing token binding or failed last refresh.
 Status: `FOUNDATION_IMPLEMENTED`, 2026-06-28.
 
 Zoom is a provider runtime integration. It observes provider facts and
-translates them into Hermes evidence. It does not own product meaning.
+translates them into Макошь evidence. It does not own product meaning.
 
 Current repository state: the foundation architecture below is implemented in
 this checkout; ADR-0102 is `Accepted` after target backend and frontend zoom
@@ -1230,7 +1230,7 @@ Zoom observation source
 The first bridge is local/runtime-safe. A protected account-scoped webhook
 bridge validates Zoom URL validation requests and signed meeting/recording
 webhooks before normalizing them into the same bridge methods. The
-`hermes-zoom-edge-proxy` binary provides public/edge forwarding while preserving
+`makosh-zoom-edge-proxy` binary provides public/edge forwarding while preserving
 the raw body and Zoom headers for protected bridge verification.
 
 ## Runtime shapes
@@ -1403,7 +1403,7 @@ Example target outcomes:
 
 ### `docs/integrations/zoom/blockers.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/blockers.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/blockers.md`
 - Size bytes / Размер в байтах: `4794`
 - Included characters / Включено символов: `4794`
 - Truncated / Обрезано: `no`
@@ -1476,14 +1476,14 @@ requires explicit owner-visible setup and audit. Silent capture is unsupported.
   expiring-token renewal.
 - Scheduled token maintenance daemon. Implemented through backend bootstrap
   with Signal Hub runtime gating, HostVault unlock gating and
-  `HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`.
+  `MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`.
 - Scheduled recording sync daemon. Implemented through backend bootstrap for
   started authorized runtimes, with Signal Hub runtime gating, HostVault unlock
-  gating, `HERMES_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED` and the existing
+  gating, `MAKOSH_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED` and the existing
   HostVault-backed provider sync boundary.
 - Scheduled retention cleanup daemon. Implemented through backend bootstrap for
   expired imported recording blobs and transcript evidence, with Signal Hub
-  runtime gating and `HERMES_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED`.
+  runtime gating and `MAKOSH_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED`.
 - Token rotation policy. Implemented through explicit refresh thresholds,
   proactive maintenance threshold metadata, expiry handling and
   `zoom_token_rotation_required` failure/expiry blocker exposure in runtime
@@ -1496,7 +1496,7 @@ requires explicit owner-visible setup and audit. Silent capture is unsupported.
   manual provider-sync downloads.
 - Webhook secret storage through secret references. Implemented for the
   protected account-scoped runtime bridge; public/edge ingress is implemented
-  as `hermes-zoom-edge-proxy`.
+  as `makosh-zoom-edge-proxy`.
 - Sanitization test coverage for nested payloads. Implemented for event payload
   and provider-call metadata in the Zoom foundation tests.
 - Audit events for authorization completion, token refresh success/skip/failure,
@@ -1520,7 +1520,7 @@ requires explicit owner-visible setup and audit. Silent capture is unsupported.
 
 ### `docs/integrations/zoom/fixture-test-matrix.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/fixture-test-matrix.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/fixture-test-matrix.md`
 - Size bytes / Размер в байтах: `4832`
 - Included characters / Включено символов: `4832`
 - Truncated / Обрезано: `no`
@@ -1623,7 +1623,7 @@ defines the target fixture set.
 
 ### `docs/integrations/zoom/gap-analysis.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/gap-analysis.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/gap-analysis.md`
 - Size bytes / Размер в байтах: `7957`
 - Included characters / Включено символов: `7957`
 - Truncated / Обрезано: `no`
@@ -1643,7 +1643,7 @@ end-to-end Zoom provider runtime.
 |---|---|---|
 | Account setup | Fixture setup, blocked live metadata, initial OAuth/S2S authorization, explicit token refresh/renewal, token maintenance scan, scheduled token maintenance daemon and token rotation policy are implemented. | Operational provider worker enablement. |
 | Runtime lifecycle | Metadata-level start/stop/remove implemented; authorized live accounts start as running and can participate in the recording-sync worker. | Broader live runtime state transitions beyond recording sync after auth. |
-| Meeting ingestion | Runtime bridge accepts meeting observations and signed meeting webhooks as provider call evidence; `hermes-zoom-edge-proxy` provides public/edge forwarding and authorized accounts can reconcile managed app event subscriptions. | Broader provider worker coverage beyond webhook/event delivery setup. |
+| Meeting ingestion | Runtime bridge accepts meeting observations and signed meeting webhooks as provider call evidence; `makosh-zoom-edge-proxy` provides public/edge forwarding and authorized accounts can reconcile managed app event subscriptions. | Broader provider worker coverage beyond webhook/event delivery setup. |
 | Recording ingestion | Recording observation event, signed recording webhook normalization, webhook/provider-sync media download/import, and explicit per-import local retention/removal are implemented, gated by explicit privacy opt-in and local blob persistence. | Broader downstream media/document workflows. |
 | Transcript ingestion | Runtime bridge stores explicit transcript text, imports already obtained VTT/SRT/plain transcript file text and auto-downloads transcript-like text files from signed `recording.completed` webhooks and authorized provider sync only after explicit privacy opt-in. | Full live provider worker coverage beyond current recording-driven transcript files. |
 | Calendar matching | `zoom.meeting.observed` is matched to Calendar events through a downstream workflow and relation projection. | Meeting preparation context packs and broader Calendar-side downstream consumers. |
@@ -1667,7 +1667,7 @@ separate domain pathway.
 ### Public webhook ingress
 
 The protected runtime bridge verifies account-scoped Zoom webhook signatures
-before meeting/recording bridge ingestion. `hermes-zoom-edge-proxy` provides
+before meeting/recording bridge ingestion. `makosh-zoom-edge-proxy` provides
 the public/edge ingress path and preserves the raw body,
 `x-zm-request-timestamp` and `x-zm-signature` when forwarding to the protected
 bridge. Managed provider subscription reconciliation through Zoom APIs is now
@@ -1697,11 +1697,11 @@ Authorized recording sync now also best-effort downloads non-transcript
 recording media files after
 `privacy.zoom_remote_recording_download_enabled` is explicitly enabled, stores
 them through the local communication blob store and records attachment-import
-metadata plus heuristic scan status. Hermes now exposes recording import audit
+metadata plus heuristic scan status. Макошь now exposes recording import audit
 plus explicit per-import remove controls for those blobs, the account event log
 now records authorization completion plus token refresh success/skip/failure
 activity, and owner-visible retention settings now stamp expiry intent into
-recording-import metadata and transcript provenance. Hermes now also exposes an
+recording-import metadata and transcript provenance. Макошь now also exposes an
 explicit owner-triggered cleanup surface for expired recording imports and
 expired transcript evidence, plus a local scheduled cleanup daemon that prunes
 the same expired evidence automatically. Remaining work is richer downstream
@@ -1747,7 +1747,7 @@ through Radar/Review before domain mutation.
 
 ### `docs/integrations/zoom/implementation-plan.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/implementation-plan.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/implementation-plan.md`
 - Size bytes / Размер в байтах: `6997`
 - Included characters / Включено символов: `6997`
 - Truncated / Обрезано: `no`
@@ -1839,7 +1839,7 @@ Deliverables:
   refreshing expiring HostVault token bundles;
 - scheduled token maintenance daemon; implemented through backend bootstrap,
   Signal Hub runtime gating, HostVault unlock gating and
-  `HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`;
+  `MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`;
 - token rotation policy; implemented through explicit refresh thresholds,
   proactive maintenance threshold metadata, expiry handling and
   `zoom_token_rotation_required` failure/expiry blocker exposure in runtime
@@ -1858,7 +1858,7 @@ Deliverables:
 
 - webhook endpoint under integration runtime boundary; implemented for
   protected account-scoped runtime bridge;
-- public/edge receiver; implemented as `hermes-zoom-edge-proxy`, which
+- public/edge receiver; implemented as `makosh-zoom-edge-proxy`, which
   forwards raw public Zoom webhook bodies and `x-zm-*` headers to the
   protected runtime bridge;
 - signature verification before bridge ingestion; implemented for normal
@@ -1936,7 +1936,7 @@ Deliverables:
 
 ### `docs/integrations/zoom/integration.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/integration.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/integration.md`
 - Size bytes / Размер в байтах: `5068`
 - Included characters / Включено символов: `5068`
 - Truncated / Обрезано: `no`
@@ -1946,7 +1946,7 @@ Deliverables:
 
 Status: `FOUNDATION_IMPLEMENTED`, 2026-06-27.
 
-Zoom is modeled as an external communication provider adapter, not as a Hermes
+Zoom is modeled as an external communication provider adapter, not as a Макошь
 domain. Business memory remains in canonical domains and engines:
 Communications, Calls, Calendar, Radar, Timeline, Documents and AI extraction.
 
@@ -2070,13 +2070,13 @@ zoom_client_secret
 zoom_webhook_secret
 ```
 
-These are references only. Hermes domains store references and lifecycle state,
+These are references only. Макошь domains store references and lifecycle state,
 never raw Zoom credentials.
 ````
 
 ### `docs/integrations/zoom/live-smoke-checklist.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/live-smoke-checklist.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/live-smoke-checklist.md`
 - Size bytes / Размер в байтах: `4992`
 - Included characters / Включено символов: `4992`
 - Truncated / Обрезано: `no`
@@ -2318,7 +2318,7 @@ GET /accounts?include_removed=true includes it
 
 ### `docs/integrations/zoom/modules.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/modules.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/modules.md`
 - Size bytes / Размер в байтах: `3982`
 - Included characters / Включено символов: `3982`
 - Truncated / Обрезано: `no`
@@ -2359,7 +2359,7 @@ backend/src/app/provider_runtime_handlers/zoom.rs
 backend/src/app/handlers/zoom.rs
 backend/src/app/error/response/integrations/zoom.rs
 backend/src/app/router/routes/messaging.rs
-backend/src/bin/hermes_zoom_edge_proxy.rs
+backend/src/bin/makosh_zoom_edge_proxy.rs
 ```
 
 | Module | Responsibility |
@@ -2368,7 +2368,7 @@ backend/src/bin/hermes_zoom_edge_proxy.rs
 | `handlers/zoom.rs` | Route handler re-export surface. |
 | `error/response/integrations/zoom.rs` | Integration error response mapping. |
 | `router/routes/messaging.rs` | Route registration under `/api/v1/integrations/zoom`. |
-| `bin/hermes_zoom_edge_proxy.rs` | Public/edge webhook proxy that preserves raw Zoom bodies and `x-zm-*` headers while adding local Hermes auth. |
+| `bin/makosh_zoom_edge_proxy.rs` | Public/edge webhook proxy that preserves raw Zoom bodies and `x-zm-*` headers while adding local Макошь auth. |
 
 ## Shared platform dependencies
 
@@ -2434,7 +2434,7 @@ projections.
 
 ### `docs/integrations/zoom/provider-runtime-research.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/provider-runtime-research.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/provider-runtime-research.md`
 - Size bytes / Размер в байтах: `2937`
 - Included characters / Включено символов: `2937`
 - Truncated / Обрезано: `no`
@@ -2444,13 +2444,13 @@ projections.
 
 Status date: 2026-06-27.
 
-This document records Hermes-side runtime shape decisions. It is not a vendor
+This document records Макошь-side runtime shape decisions. It is not a vendor
 API reference. Before implementing live provider calls, verify the current Zoom
 documentation and update this file with source links and exact constraints.
 
-## Runtime shapes represented in Hermes
+## Runtime shapes represented in Макошь
 
-Hermes should model three account/auth shapes:
+Макошь should model three account/auth shapes:
 
 ```text
 fixture
@@ -2491,7 +2491,7 @@ OAuth Runtime
   -> expose health and blockers through runtime status
 ```
 
-## Non-negotiable Hermes rules
+## Non-negotiable Макошь rules
 
 - The adapter must never import business domains.
 - The adapter must never create tasks, Personas, organizations, documents or
@@ -2538,7 +2538,7 @@ docs/adr/ADR-0102-zoom-provider-runtime-boundary.md or a successor ADR
 
 ### `docs/integrations/zoom/status.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/status.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/status.md`
 - Size bytes / Размер в байтах: `12889`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2565,7 +2565,7 @@ As of this implementation pass, the current checkout contains:
 
 - `backend/src/integrations/zoom`;
 - `frontend/src/integrations/zoom`;
-- `backend/src/bin/hermes_zoom_edge_proxy.rs`;
+- `backend/src/bin/makosh_zoom_edge_proxy.rs`;
 - migration `backend/migrations/0160_add_zoom_provider_kind.sql`;
 - `/api/v1/integrations/zoom/*` routes;
 - Zoom event constants under the platform event bus.
@@ -2670,7 +2670,7 @@ Backend/frontend static checks pass:
 | Provider-neutral Calls/Meetings view | Communications `calls` and `meetings` sections surface shared call evidence, transcript reads, participant snapshots and recording references, including projected Zoom meetings. | Present and targeted-tested. |
 | Live provider runtime | Authorized accounts can be started into a running live runtime, and the background recording-sync worker polls recent Zoom cloud recordings through the existing provider-sync boundary. | Present and targeted-tested. |
 | Webhook signature verification | Protected account-scoped runtime bridge. | Present and targeted-tested for URL validation, meeting events, recording events and invalid signatures. |
-| Public/edge webhook receiver | Standalone `hermes-zoom-edge-proxy`. | Present and targeted-tested for readiness, raw body forwarding, Zoom header forwarding and account scoping. |
+| Public/edge webhook receiver | Standalone `makosh-zoom-edge-proxy`. | Present and targeted-tested for readiness, raw body forwarding, Zoom header forwarding and account scoping. |
 | Cloud recording download worker | Authorized accounts can best-effort import provider-side recording media files through the existing recording-sync boundary and signed recording webhooks after explicit owner-visible opt-in, local blob persistence and heuristic safety scan. | Present and targeted-tested. |
 | Calendar matching workflow | Downstream workflow, not integration ownership. | Implemented and targeted-tested via `zoom.meeting.observed` -> Calendar event relation projection. |
 | Participant identity resolution | Downstream candidate/review workflow. | Implemented and targeted-tested for conservative `attach_email_address` identity-candidate generation from `zoom.meeting.observed` participants into the existing Review inbox pipeline. |
@@ -2695,7 +2695,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/integrations/zoom/status/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/status/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/status/README.md`
 - Size bytes / Размер в байтах: `240`
 - Included characters / Включено символов: `240`
 - Truncated / Обрезано: `no`
@@ -2715,7 +2715,7 @@ status document.
 
 ### `docs/integrations/zoom/status/pass-log.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/integrations/zoom/status/pass-log.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/integrations/zoom/status/pass-log.md`
 - Size bytes / Размер в байтах: `9386`
 - Included characters / Включено символов: `9386`
 - Truncated / Обрезано: `no`
@@ -2751,7 +2751,7 @@ provider stage.
 | Check | Result | Evidence |
 |---|---|---|
 | Backend integration module exists | PASS | `backend/src/integrations/zoom`. |
-| Zoom edge proxy binary exists | PASS | `backend/src/bin/hermes_zoom_edge_proxy.rs`. |
+| Zoom edge proxy binary exists | PASS | `backend/src/bin/makosh_zoom_edge_proxy.rs`. |
 | Frontend integration module exists | PASS | `frontend/src/integrations/zoom`. |
 | Zoom migration exists | PASS | `backend/migrations/0160_add_zoom_provider_kind.sql`. |
 | Zoom targeted backend tests pass | PASS | `cargo test --manifest-path backend/Cargo.toml --test zoom_provider_foundation` |
@@ -2780,7 +2780,7 @@ provider stage.
 | Zoom remote transcript download privacy policy tests pass | PASS | `cargo test --manifest-path backend/Cargo.toml --test zoom_provider_foundation` |
 | Zoom remote recording media download privacy policy tests pass | PASS | `cargo test --manifest-path backend/Cargo.toml --test zoom_provider_foundation` |
 | Zoom transcript file import tests pass | PASS | `cargo test --manifest-path backend/Cargo.toml --test zoom_provider_foundation` |
-| Zoom edge proxy tests pass | PASS | `cargo test --manifest-path backend/Cargo.toml --bin hermes-zoom-edge-proxy`. |
+| Zoom edge proxy tests pass | PASS | `cargo test --manifest-path backend/Cargo.toml --bin makosh-zoom-edge-proxy`. |
 | Zoom targeted frontend tests pass | PASS | `pnpm exec vitest run src/integrations/zoom/api/zoom.test.ts src/integrations/zoom/queries/zoomQueryKeys.test.ts src/platform/bootstrap/realtimeZoomInvalidation.test.ts`. |
 | Zoom recording import retention/remove frontend API wiring tests pass | PASS | `cd frontend && pnpm exec vitest run src/integrations/zoom/api/zoom.test.ts src/integrations/zoom/components/ZoomSettingsPanel.boundary.test.ts`; `cd frontend && pnpm typecheck`. |
 | Zoom recording import audit frontend wiring tests pass | PASS | `cd frontend && pnpm exec vitest run src/integrations/zoom/api/zoom.test.ts src/integrations/zoom/queries/zoomQueryKeys.test.ts src/integrations/zoom/components/ZoomSettingsPanel.boundary.test.ts`; `cd frontend && pnpm typecheck`. |
@@ -2789,7 +2789,7 @@ provider stage.
 | Shared Calls route filters Zoom evidence by `provider=zoom` | PASS | `cargo test --manifest-path backend/Cargo.toml --test zoom_provider_foundation`. |
 | Zoom realtime invalidation covers recording import and audit keys | PASS | `cd frontend && pnpm exec vitest run src/platform/bootstrap/realtimeZoomInvalidation.test.ts`. |
 | Zoom evidence panel recording/provenance frontend tests pass | PASS | `cd frontend && pnpm exec vitest run src/integrations/zoom/components/zoomEvidence.test.ts src/integrations/zoom/components/ZoomObservedCallsPanel.boundary.test.ts`; `cd frontend && pnpm typecheck`; `cd frontend && pnpm lint`. |
-| Full backend validation gate | BLOCKED | Not rerun in this environment while container backends (`HERMES_TEST_POSTGRES_HOST_PORT`/`HERMES_TEST_NATS_HOST_PORT` or Docker sockets) are unavailable. |
+| Full backend validation gate | BLOCKED | Not rerun in this environment while container backends (`MAKOSH_TEST_POSTGRES_HOST_PORT`/`MAKOSH_TEST_NATS_HOST_PORT` or Docker sockets) are unavailable. |
 | Frontend lint/typecheck gate | PASS | `cd frontend && pnpm lint`; `cd frontend && pnpm typecheck`. |
 | Diff whitespace gate | PASS | `git diff --check`. |
 
@@ -2811,13 +2811,13 @@ make validate
 
 ### `docs/platform/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/platform/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/platform/README.md`
 - Size bytes / Размер в байтах: `1350`
 - Included characters / Включено символов: `1350`
 - Truncated / Обрезано: `no`
 
 ```markdown
-# Hermes Platform Layer
+# Макошь Platform Layer
 
 Status: documentation package aligned to the current repository structure.
 
@@ -2854,7 +2854,7 @@ that content to the owning domain, integration or workflow package.
 
 ### `docs/platform/event-tracing/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/platform/event-tracing/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/platform/event-tracing/README.md`
 - Size bytes / Размер в байтах: `1346`
 - Included characters / Включено символов: `1346`
 - Truncated / Обрезано: `no`
@@ -2866,12 +2866,12 @@ Status: documentation package aligned to the current repository structure.
 
 ## Purpose
 
-Event Tracing is the causal observability layer of Hermes.
+Event Tracing is the causal observability layer of Макошь.
 
 It does not replace the event backbone. It formalizes how persistent events are
 connected into traces.
 
-Hermes does not need a separate telemetry server to answer:
+Макошь does not need a separate telemetry server to answer:
 
 - why does this object exist?
 - what caused this event?
@@ -2918,7 +2918,7 @@ own the canonical causal graph.
 
 ### `docs/platform/event-tracing/api.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/platform/event-tracing/api.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/platform/event-tracing/api.md`
 - Size bytes / Размер в байтах: `2709`
 - Included characters / Включено символов: `2709`
 - Truncated / Обрезано: `no`
@@ -3037,7 +3037,7 @@ trace state or provider-specific trace query namespaces.
 
 ### `docs/platform/event-tracing/architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/platform/event-tracing/architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/platform/event-tracing/architecture.md`
 - Size bytes / Размер в байтах: `4319`
 - Included characters / Включено символов: `4319`
 - Truncated / Обрезано: `no`
@@ -3228,7 +3228,7 @@ See [status.md](status.md).
 
 ### `docs/platform/event-tracing/data-model.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/platform/event-tracing/data-model.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/platform/event-tracing/data-model.md`
 - Size bytes / Размер в байтах: `1835`
 - Included characters / Включено символов: `1835`
 - Truncated / Обрезано: `no`
@@ -3247,7 +3247,7 @@ canonical event rows and consumer metadata.
 
 ## Canonical Mapping
 
-| Trace concept | Hermes field |
+| Trace concept | Макошь field |
 |---|---|
 | Trace | `correlation_id` |
 | Span | `event_id` |
@@ -3316,7 +3316,7 @@ exists.
 
 ### `docs/platform/event-tracing/gap-analysis.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/platform/event-tracing/gap-analysis.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/platform/event-tracing/gap-analysis.md`
 - Size bytes / Размер в байтах: `1554`
 - Included characters / Включено символов: `1554`
 - Truncated / Обрезано: `no`
@@ -3358,7 +3358,7 @@ Status: living implementation gap list.
 
 ### `docs/platform/event-tracing/operations.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/platform/event-tracing/operations.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/platform/event-tracing/operations.md`
 - Size bytes / Размер в байтах: `1514`
 - Included characters / Включено символов: `1514`
 - Truncated / Обрезано: `no`
@@ -3425,7 +3425,7 @@ material.
 
 ### `docs/platform/event-tracing/status.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/platform/event-tracing/status.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/platform/event-tracing/status.md`
 - Size bytes / Размер в байтах: `2391`
 - Included characters / Включено символов: `2391`
 - Truncated / Обрезано: `no`

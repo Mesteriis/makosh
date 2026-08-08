@@ -21,9 +21,9 @@
 - Group / Группа: `scripts`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `scripts/build.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/build.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/build.sh`
 - Size bytes / Размер в байтах: `1033`
 - Included characters / Включено символов: `1033`
 - Truncated / Обрезано: `no`
@@ -73,7 +73,7 @@ source "$SCRIPT_DIR/lib/env.sh"
 # shellcheck source=./lib/resources.sh
 source "$SCRIPT_DIR/lib/resources.sh"
 
-load_hermes_env
+load_makosh_env
 ensure_frontend_dependencies
 ensure_command cargo
 ensure_command node
@@ -83,7 +83,7 @@ backend_target_dir="${CARGO_TARGET_DIR:-$CARGO_BUILD_TARGET_DIR}"
 
 info "Building backend release binary"
 CARGO_TARGET_DIR="$backend_target_dir" \
-	cargo build --manifest-path "$REPO_ROOT/backend/Cargo.toml" --bin hermes-hub-backend --release
+	cargo build --manifest-path "$REPO_ROOT/backend/Cargo.toml" --bin makosh-backend --release
 
 info "Building frontend release assets"
 (
@@ -107,7 +107,7 @@ success "Release build completed"
 
 ### `scripts/check-architecture-contract.test.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/check-architecture-contract.test.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/check-architecture-contract.test.mjs`
 - Size bytes / Размер в байтах: `2813`
 - Included characters / Включено символов: `2813`
 - Truncated / Обрезано: `no`
@@ -181,7 +181,7 @@ console.log('Architecture contract tests passed.');
 
 ### `scripts/check-architecture.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/check-architecture.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/check-architecture.mjs`
 - Size bytes / Размер в байтах: `106734`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -572,7 +572,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `scripts/check-code-boundaries.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/check-code-boundaries.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/check-code-boundaries.mjs`
 - Size bytes / Размер в байтах: `5619`
 - Included characters / Включено символов: `5619`
 - Truncated / Обрезано: `no`
@@ -648,8 +648,8 @@ const blanketSuppressions = [
 	}
 ];
 const forbiddenBackendTestEnvKeys = [
-	'HERMES_TEST_DATABASE_URL',
-	'HERMES_LOCAL_API_SECRET',
+	'MAKOSH_TEST_DATABASE_URL',
+	'MAKOSH_LOCAL_API_SECRET',
 	'DATABASE_URL'
 ];
 const backendTestEnvKeyAllowlist = new Set(['backend/tests/config.rs']);
@@ -790,7 +790,7 @@ await main();
 
 ### `scripts/clean-data.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/clean-data.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/clean-data.sh`
 - Size bytes / Размер в байтах: `587`
 - Included characters / Включено символов: `587`
 - Truncated / Обрезано: `no`
@@ -808,7 +808,7 @@ source "$SCRIPT_DIR/lib/env.sh"
 # shellcheck source=./lib/postgres.sh
 source "$SCRIPT_DIR/lib/postgres.sh"
 
-load_hermes_env
+load_makosh_env
 confirm_or_exit "This will delete local PostgreSQL data under $(postgres_data_dir)." "DELETE"
 compose_cmd down --remove-orphans >/dev/null 2>&1 || true
 rm -rf "$(postgres_data_dir)"
@@ -818,7 +818,7 @@ success "Deleted PostgreSQL development data"
 
 ### `scripts/clean-vault.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/clean-vault.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/clean-vault.sh`
 - Size bytes / Размер в байтах: `439`
 - Included characters / Включено символов: `439`
 - Truncated / Обрезано: `no`
@@ -834,15 +834,15 @@ source "$SCRIPT_DIR/lib/common.sh"
 # shellcheck source=./lib/env.sh
 source "$SCRIPT_DIR/lib/env.sh"
 
-load_hermes_env
-confirm_or_exit "This will delete local vault data under $HERMES_HOST_VAULT_HOME." "DELETE"
-rm -rf "$HERMES_HOST_VAULT_HOME"
-success "Deleted local vault data at $HERMES_HOST_VAULT_HOME"
+load_makosh_env
+confirm_or_exit "This will delete local vault data under $MAKOSH_HOST_VAULT_HOME." "DELETE"
+rm -rf "$MAKOSH_HOST_VAULT_HOME"
+success "Deleted local vault data at $MAKOSH_HOST_VAULT_HOME"
 ```
 
 ### `scripts/clean.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/clean.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/clean.sh`
 - Size bytes / Размер в байтах: `709`
 - Included characters / Включено символов: `709`
 - Truncated / Обрезано: `no`
@@ -863,16 +863,16 @@ rm -rf "$REPO_ROOT/frontend/node_modules/.vite"
 rm -rf "$REPO_ROOT/frontend/node_modules/.vite-temp"
 rm -rf "$REPO_ROOT/frontend/dist"
 rm -rf "$REPO_ROOT/frontend/build"
-rm -f "$REPO_ROOT"/frontend/src-tauri/binaries/hermes-hub-backend-*
+rm -f "$REPO_ROOT"/frontend/src-tauri/binaries/makosh-backend-*
 rm -rf "$LOG_ROOT"
-rm -rf "$REPO_ROOT/tmp/hermes"
+rm -rf "$REPO_ROOT/tmp/makosh"
 find "$REPO_ROOT" -maxdepth 1 -type f -name '*.log' -delete
 success "Clean completed without deleting database data"
 ```
 
 ### `scripts/dev.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/dev.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/dev.sh`
 - Size bytes / Размер в байтах: `3995`
 - Included characters / Включено символов: `3995`
 - Truncated / Обрезано: `no`
@@ -890,15 +890,15 @@ source "$SCRIPT_DIR/lib/env.sh"
 # shellcheck source=./lib/postgres.sh
 source "$SCRIPT_DIR/lib/postgres.sh"
 
-load_hermes_env
+load_makosh_env
 ensure_frontend_dependencies
 ensure_bacon_available
 ensure_command cargo
 ensure_command curl
 postgres_up
 
-require_port_free "$HERMES_BACKEND_PORT" "Backend"
-require_port_free "$HERMES_FRONTEND_PORT" "Frontend"
+require_port_free "$MAKOSH_BACKEND_PORT" "Backend"
+require_port_free "$MAKOSH_FRONTEND_PORT" "Frontend"
 
 ensure_dir "$LOG_ROOT"
 flow_id="dev-$(timestamp_compact_utc)-$$"
@@ -961,45 +961,45 @@ run_service() {
 }
 
 export DATABASE_URL
-export HERMES_LOCAL_API_SECRET
-export HERMES_DEV_MODE
-export HERMES_VAULT_HOME
-export HERMES_DEV_KEY_PATH
-export HERMES_SECRET_VAULT_KEY
-export HERMES_HTTP_ADDR="$HERMES_BACKEND_BIND:$HERMES_BACKEND_PORT"
-export HERMES_FLOW_ID="$flow_id"
-export HERMES_LOG_FORMAT="json"
+export MAKOSH_LOCAL_API_SECRET
+export MAKOSH_DEV_MODE
+export MAKOSH_VAULT_HOME
+export MAKOSH_DEV_KEY_PATH
+export MAKOSH_SECRET_VAULT_KEY
+export MAKOSH_HTTP_ADDR="$MAKOSH_BACKEND_BIND:$MAKOSH_BACKEND_PORT"
+export MAKOSH_FLOW_ID="$flow_id"
+export MAKOSH_LOG_FORMAT="json"
 export RUST_LOG="${RUST_LOG:-info}"
 export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$CARGO_DEV_TARGET_DIR}"
-export VITE_HERMES_API_BASE_URL="http://$HERMES_BACKEND_BIND:$HERMES_BACKEND_PORT"
-export VITE_HERMES_LOCAL_API_SECRET="$HERMES_LOCAL_API_SECRET"
+export VITE_MAKOSH_API_BASE_URL="http://$MAKOSH_BACKEND_BIND:$MAKOSH_BACKEND_PORT"
+export VITE_MAKOSH_LOCAL_API_SECRET="$MAKOSH_LOCAL_API_SECRET"
 
 run_service backend "$color_cyan" bash -lc "cd '$REPO_ROOT' && exec bacon --headless backend-dev"
 backend_pid="$RUN_SERVICE_PID"
 info "Waiting for backend health check"
-wait_for_service_http "$backend_pid" "http://$HERMES_BACKEND_BIND:$HERMES_BACKEND_PORT/healthz" "Backend healthz" "$HERMES_BACKEND_STARTUP_ATTEMPTS" "$HERMES_BACKEND_STARTUP_SLEEP_SECONDS"
+wait_for_service_http "$backend_pid" "http://$MAKOSH_BACKEND_BIND:$MAKOSH_BACKEND_PORT/healthz" "Backend healthz" "$MAKOSH_BACKEND_STARTUP_ATTEMPTS" "$MAKOSH_BACKEND_STARTUP_SLEEP_SECONDS"
 info "Waiting for backend readiness check"
-wait_for_service_http "$backend_pid" "http://$HERMES_BACKEND_BIND:$HERMES_BACKEND_PORT/readyz" "Backend readyz" "$HERMES_BACKEND_STARTUP_ATTEMPTS" "$HERMES_BACKEND_STARTUP_SLEEP_SECONDS"
+wait_for_service_http "$backend_pid" "http://$MAKOSH_BACKEND_BIND:$MAKOSH_BACKEND_PORT/readyz" "Backend readyz" "$MAKOSH_BACKEND_STARTUP_ATTEMPTS" "$MAKOSH_BACKEND_STARTUP_SLEEP_SECONDS"
 
-run_service frontend "$color_green" bash -lc "cd '$REPO_ROOT/frontend' && exec pnpm dev --host '$HERMES_FRONTEND_BIND' --port '$HERMES_FRONTEND_PORT' --strictPort"
+run_service frontend "$color_green" bash -lc "cd '$REPO_ROOT/frontend' && exec pnpm dev --host '$MAKOSH_FRONTEND_BIND' --port '$MAKOSH_FRONTEND_PORT' --strictPort"
 frontend_pid="$RUN_SERVICE_PID"
 info "Waiting for frontend dev server"
-wait_for_service_http "$frontend_pid" "http://$HERMES_FRONTEND_BIND:$HERMES_FRONTEND_PORT" "Frontend Vite" "$HERMES_FRONTEND_STARTUP_ATTEMPTS" "$HERMES_FRONTEND_STARTUP_SLEEP_SECONDS"
+wait_for_service_http "$frontend_pid" "http://$MAKOSH_FRONTEND_BIND:$MAKOSH_FRONTEND_PORT" "Frontend Vite" "$MAKOSH_FRONTEND_STARTUP_ATTEMPTS" "$MAKOSH_FRONTEND_STARTUP_SLEEP_SECONDS"
 
 info "Flow ID: $flow_id"
 info "Logs: $session_log"
 info "Live log: $current_log_link/live.log"
 printf '%s\n' "PostgreSQL:"
 postgres_status
-printf '%s\n' "Backend:  http://$HERMES_BACKEND_BIND:$HERMES_BACKEND_PORT (pid $backend_pid)"
-printf '%s\n' "Frontend: http://$HERMES_FRONTEND_BIND:$HERMES_FRONTEND_PORT (pid $frontend_pid)"
+printf '%s\n' "Backend:  http://$MAKOSH_BACKEND_BIND:$MAKOSH_BACKEND_PORT (pid $backend_pid)"
+printf '%s\n' "Frontend: http://$MAKOSH_FRONTEND_BIND:$MAKOSH_FRONTEND_PORT (pid $frontend_pid)"
 
 wait "$backend_pid" "$frontend_pid"
 ```
 
 ### `scripts/lib/common.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/lib/common.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/lib/common.sh`
 - Size bytes / Размер в байтах: `4678`
 - Included characters / Включено символов: `4678`
 - Truncated / Обрезано: `no`
@@ -1223,7 +1223,7 @@ wait_for_service_http() {
 
 ### `scripts/lib/env.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/lib/env.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/lib/env.sh`
 - Size bytes / Размер в байтах: `2697`
 - Included characters / Включено символов: `2697`
 - Truncated / Обрезано: `no`
@@ -1246,7 +1246,7 @@ ensure_docker_env_file() {
 	fi
 }
 
-load_hermes_env() {
+load_makosh_env() {
 	prepend_tools_bin_to_path
 	ensure_docker_env_file
 	set -a
@@ -1254,37 +1254,37 @@ load_hermes_env() {
 	. "$DOCKER_ENV_FILE"
 	set +a
 
-	: "${HERMES_POSTGRES_DB:=hermes_hub}"
-	: "${HERMES_POSTGRES_USER:=hermes}"
-	: "${HERMES_POSTGRES_PASSWORD:=change-me-local-dev-only}"
-	: "${HERMES_POSTGRES_BIND:=127.0.0.1}"
-	: "${HERMES_POSTGRES_PORT:=30432}"
-	: "${HERMES_BACKEND_BIND:=127.0.0.1}"
-	: "${HERMES_BACKEND_PORT:=8080}"
-	: "${HERMES_BACKEND_STARTUP_ATTEMPTS:=300}"
-	: "${HERMES_BACKEND_STARTUP_SLEEP_SECONDS:=1}"
-	: "${HERMES_FRONTEND_BIND:=127.0.0.1}"
-	: "${HERMES_FRONTEND_PORT:=5174}"
-	: "${HERMES_FRONTEND_STARTUP_ATTEMPTS:=120}"
-	: "${HERMES_FRONTEND_STARTUP_SLEEP_SECONDS:=1}"
-	: "${HERMES_LOCAL_API_SECRET:=change-me-local-api-secret}"
-	: "${HERMES_DEV_MODE:=true}"
-	: "${HERMES_HOST_VAULT_HOME:=$HOME/.hermes/vault}"
-	: "${HERMES_SECRET_VAULT_KEY:=change-me-local-secret-vault-key}"
-	: "${HERMES_OLLAMA_BASE_URL:=http://127.0.0.1:11434}"
-	: "${HERMES_OLLAMA_CHAT_MODEL:=qwen3:4b}"
-	: "${HERMES_OLLAMA_EMBED_MODEL:=qwen3-embedding:4b}"
-	: "${HERMES_OLLAMA_TIMEOUT_SECONDS:=120}"
+	: "${MAKOSH_POSTGRES_DB:=makosh_hub}"
+	: "${MAKOSH_POSTGRES_USER:=makosh}"
+	: "${MAKOSH_POSTGRES_PASSWORD:=change-me-local-dev-only}"
+	: "${MAKOSH_POSTGRES_BIND:=127.0.0.1}"
+	: "${MAKOSH_POSTGRES_PORT:=30432}"
+	: "${MAKOSH_BACKEND_BIND:=127.0.0.1}"
+	: "${MAKOSH_BACKEND_PORT:=8080}"
+	: "${MAKOSH_BACKEND_STARTUP_ATTEMPTS:=300}"
+	: "${MAKOSH_BACKEND_STARTUP_SLEEP_SECONDS:=1}"
+	: "${MAKOSH_FRONTEND_BIND:=127.0.0.1}"
+	: "${MAKOSH_FRONTEND_PORT:=5174}"
+	: "${MAKOSH_FRONTEND_STARTUP_ATTEMPTS:=120}"
+	: "${MAKOSH_FRONTEND_STARTUP_SLEEP_SECONDS:=1}"
+	: "${MAKOSH_LOCAL_API_SECRET:=change-me-local-api-secret}"
+	: "${MAKOSH_DEV_MODE:=true}"
+	: "${MAKOSH_HOST_VAULT_HOME:=$HOME/.makosh/vault}"
+	: "${MAKOSH_SECRET_VAULT_KEY:=change-me-local-secret-vault-key}"
+	: "${MAKOSH_OLLAMA_BASE_URL:=http://127.0.0.1:11434}"
+	: "${MAKOSH_OLLAMA_CHAT_MODEL:=qwen3:4b}"
+	: "${MAKOSH_OLLAMA_EMBED_MODEL:=qwen3-embedding:4b}"
+	: "${MAKOSH_OLLAMA_TIMEOUT_SECONDS:=120}"
 
-	HERMES_VAULT_HOME="$HERMES_HOST_VAULT_HOME"
-	HERMES_DEV_KEY_PATH="$HERMES_HOST_VAULT_HOME/dev/master.key"
-	DATABASE_URL="postgres://${HERMES_POSTGRES_USER}:${HERMES_POSTGRES_PASSWORD}@127.0.0.1:${HERMES_POSTGRES_PORT}/${HERMES_POSTGRES_DB}"
-	HERMES_NATS_SERVER_URL="${HERMES_NATS_SERVER_URL:-nats://127.0.0.1:${HERMES_NATS_PORT:-34222}}"
+	MAKOSH_VAULT_HOME="$MAKOSH_HOST_VAULT_HOME"
+	MAKOSH_DEV_KEY_PATH="$MAKOSH_HOST_VAULT_HOME/dev/master.key"
+	DATABASE_URL="postgres://${MAKOSH_POSTGRES_USER}:${MAKOSH_POSTGRES_PASSWORD}@127.0.0.1:${MAKOSH_POSTGRES_PORT}/${MAKOSH_POSTGRES_DB}"
+	MAKOSH_NATS_SERVER_URL="${MAKOSH_NATS_SERVER_URL:-nats://127.0.0.1:${MAKOSH_NATS_PORT:-34222}}"
 
-	export HERMES_VAULT_HOME
-	export HERMES_DEV_KEY_PATH
+	export MAKOSH_VAULT_HOME
+	export MAKOSH_DEV_KEY_PATH
 	export DATABASE_URL
-	export HERMES_NATS_SERVER_URL
+	export MAKOSH_NATS_SERVER_URL
 }
 
 ensure_bacon_available() {
@@ -1319,7 +1319,7 @@ ensure_frontend_dependencies() {
 
 ### `scripts/lib/postgres.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/lib/postgres.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/lib/postgres.sh`
 - Size bytes / Размер в байтах: `1259`
 - Included characters / Включено символов: `1259`
 - Truncated / Обрезано: `no`
@@ -1352,7 +1352,7 @@ ensure_postgres_client_dependencies() {
 }
 
 postgres_up() {
-	load_hermes_env
+	load_makosh_env
 	ensure_postgres_runtime_dependencies
 	info "Starting PostgreSQL container"
 	compose_cmd up -d --wait postgres
@@ -1370,17 +1370,17 @@ wait_for_postgres() {
 		sleep 1
 		index=$((index + 1))
 	done
-	error "PostgreSQL did not become ready on 127.0.0.1:$HERMES_POSTGRES_PORT"
+	error "PostgreSQL did not become ready on 127.0.0.1:$MAKOSH_POSTGRES_PORT"
 	exit 1
 }
 
 postgres_status() {
-	load_hermes_env
+	load_makosh_env
 	compose_cmd ps postgres
 }
 
 postgres_stop() {
-	load_hermes_env
+	load_makosh_env
 	compose_cmd stop postgres
 }
 
@@ -1391,7 +1391,7 @@ postgres_data_dir() {
 
 ### `scripts/lib/resources.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/lib/resources.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/lib/resources.sh`
 - Size bytes / Размер в байтах: `5465`
 - Included characters / Включено символов: `5465`
 - Truncated / Обрезано: `no`
@@ -1407,7 +1407,7 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh"
 prepare_backend_sidecar_macos() {
 	local binary_root="$REPO_ROOT/frontend/src-tauri/binaries"
 	local backend_manifest="$REPO_ROOT/backend/Cargo.toml"
-	local backend_bin="hermes-hub-backend"
+	local backend_bin="makosh-backend"
 	local target_root target_triple source_bin target_bin
 
 	if [ "$(uname -s)" != "Darwin" ]; then
@@ -1417,10 +1417,10 @@ prepare_backend_sidecar_macos() {
 
 	case "$(uname -m)" in
 		arm64)
-			target_triple="${HERMES_MACOS_TARGET_TRIPLE:-aarch64-apple-darwin}"
+			target_triple="${MAKOSH_MACOS_TARGET_TRIPLE:-aarch64-apple-darwin}"
 			;;
 		x86_64)
-			target_triple="${HERMES_MACOS_TARGET_TRIPLE:-x86_64-apple-darwin}"
+			target_triple="${MAKOSH_MACOS_TARGET_TRIPLE:-x86_64-apple-darwin}"
 			;;
 		*)
 			error "Unsupported macOS architecture: $(uname -m)"
@@ -1453,10 +1453,10 @@ prepare_google_oauth_resource() {
 	local resource_root="$REPO_ROOT/frontend/src-tauri/resources/google-oauth"
 	local target_json="$resource_root/client_secret.json"
 	local source_json
-	source_json="${HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_SOURCE:-${HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH:-}}"
+	source_json="${MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_SOURCE:-${MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH:-}}"
 
 	if [ -z "$source_json" ]; then
-		error "Unable to prepare bundled Google OAuth Desktop client resource. Set HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH."
+		error "Unable to prepare bundled Google OAuth Desktop client resource. Set MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH."
 		exit 1
 	fi
 	if [ ! -f "$source_json" ]; then
@@ -1496,10 +1496,10 @@ prepare_tdlib_macos() {
 
 	case "$(uname -m)" in
 		arm64)
-			platform_dir="${HERMES_TDLIB_MACOS_PLATFORM_DIR:-macos-arm64}"
+			platform_dir="${MAKOSH_TDLIB_MACOS_PLATFORM_DIR:-macos-arm64}"
 			;;
 		x86_64)
-			platform_dir="${HERMES_TDLIB_MACOS_PLATFORM_DIR:-macos-x64}"
+			platform_dir="${MAKOSH_TDLIB_MACOS_PLATFORM_DIR:-macos-x64}"
 			;;
 		*)
 			error "Unsupported macOS architecture: $(uname -m)"
@@ -1511,11 +1511,11 @@ prepare_tdlib_macos() {
 	target_lib="$target_dir/libtdjson.dylib"
 	source_lib="$(find_tdjson_source_lib || true)"
 
-	if [ -z "$source_lib" ] && [ "${HERMES_TDLIB_BUILD_FROM_SOURCE:-0}" = "1" ]; then
+	if [ -z "$source_lib" ] && [ "${MAKOSH_TDLIB_BUILD_FROM_SOURCE:-0}" = "1" ]; then
 		source_lib="$(build_tdlib_from_source || true)"
 	fi
 	if [ -z "$source_lib" ] || [ ! -f "$source_lib" ]; then
-		error "Unable to find libtdjson.dylib. Set HERMES_TDJSON_SOURCE/HERMES_TDJSON_PATH or install tdlib."
+		error "Unable to find libtdjson.dylib. Set MAKOSH_TDJSON_SOURCE/MAKOSH_TDJSON_PATH or install tdlib."
 		exit 1
 	fi
 
@@ -1526,12 +1526,12 @@ prepare_tdlib_macos() {
 }
 
 find_tdjson_source_lib() {
-	if [ -n "${HERMES_TDJSON_SOURCE:-}" ]; then
-		printf '%s\n' "$HERMES_TDJSON_SOURCE"
+	if [ -n "${MAKOSH_TDJSON_SOURCE:-}" ]; then
+		printf '%s\n' "$MAKOSH_TDJSON_SOURCE"
 		return 0
 	fi
-	if [ -n "${HERMES_TDJSON_PATH:-}" ]; then
-		printf '%s\n' "$HERMES_TDJSON_PATH"
+	if [ -n "${MAKOSH_TDJSON_PATH:-}" ]; then
+		printf '%s\n' "$MAKOSH_TDJSON_PATH"
 		return 0
 	fi
 	if command -v brew >/dev/null 2>&1; then
@@ -1554,10 +1554,10 @@ find_tdjson_source_lib() {
 
 build_tdlib_from_source() {
 	local build_root source_dir build_dir tdlib_ref built_lib
-	build_root="${HERMES_TDLIB_BUILD_ROOT:-$REPO_ROOT/.local/tdlib-build}"
+	build_root="${MAKOSH_TDLIB_BUILD_ROOT:-$REPO_ROOT/.local/tdlib-build}"
 	source_dir="$build_root/td"
 	build_dir="$source_dir/build"
-	tdlib_ref="${HERMES_TDLIB_REF:-master}"
+	tdlib_ref="${MAKOSH_TDLIB_REF:-master}"
 
 	ensure_command git
 	ensure_command cmake
@@ -1584,7 +1584,7 @@ build_tdlib_from_source() {
 
 ### `scripts/lib/rust-tooling.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/lib/rust-tooling.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/lib/rust-tooling.sh`
 - Size bytes / Размер в байтах: `524`
 - Included characters / Включено символов: `524`
 - Truncated / Обрезано: `no`
@@ -1623,7 +1623,7 @@ require_binary() {
 
 ### `scripts/logs.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/logs.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/logs.sh`
 - Size bytes / Размер в байтах: `652`
 - Included characters / Включено символов: `652`
 - Truncated / Обрезано: `no`
@@ -1639,7 +1639,7 @@ source "$SCRIPT_DIR/lib/common.sh"
 
 current_log_dir="$LOG_ROOT/current"
 live_log="$current_log_dir/live.log"
-follow_logs="${HERMES_LOGS_FOLLOW:-1}"
+follow_logs="${MAKOSH_LOGS_FOLLOW:-1}"
 
 if [ ! -L "$current_log_dir" ] && [ ! -d "$current_log_dir" ]; then
 	error "No active dev log session found at $current_log_dir. Run make dev first."
@@ -1661,7 +1661,7 @@ fi
 
 ### `scripts/migrate.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/migrate.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/migrate.sh`
 - Size bytes / Размер в байтах: `621`
 - Included characters / Включено символов: `621`
 - Truncated / Обрезано: `no`
@@ -1679,20 +1679,20 @@ source "$SCRIPT_DIR/lib/env.sh"
 # shellcheck source=./lib/postgres.sh
 source "$SCRIPT_DIR/lib/postgres.sh"
 
-load_hermes_env
+load_makosh_env
 ensure_command cargo
 postgres_up
 
 info "Running backend-managed SQLx migrations"
 CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$CARGO_DEV_TARGET_DIR}" \
-	HERMES_LOG_FORMAT=plain \
-	cargo run --manifest-path "$REPO_ROOT/backend/Cargo.toml" --bin hermes_migrate
+	MAKOSH_LOG_FORMAT=plain \
+	cargo run --manifest-path "$REPO_ROOT/backend/Cargo.toml" --bin makosh_migrate
 success "Migrations applied successfully"
 ```
 
 ### `scripts/vault-backup.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/vault-backup.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/vault-backup.sh`
 - Size bytes / Размер в байтах: `2199`
 - Included characters / Включено символов: `2199`
 - Truncated / Обрезано: `no`
@@ -1710,7 +1710,7 @@ source "$SCRIPT_DIR/lib/env.sh"
 # shellcheck source=./lib/postgres.sh
 source "$SCRIPT_DIR/lib/postgres.sh"
 
-load_hermes_env
+load_makosh_env
 ensure_postgres_client_dependencies
 ensure_command pg_dump
 postgres_up
@@ -1726,22 +1726,22 @@ notes_path="$backup_dir/RESTORE.txt"
 ensure_dir "$vault_target"
 
 info "Creating PostgreSQL dump"
-PGPASSWORD="$HERMES_POSTGRES_PASSWORD" pg_dump \
+PGPASSWORD="$MAKOSH_POSTGRES_PASSWORD" pg_dump \
 	--host 127.0.0.1 \
-	--port "$HERMES_POSTGRES_PORT" \
-	--username "$HERMES_POSTGRES_USER" \
-	--dbname "$HERMES_POSTGRES_DB" \
+	--port "$MAKOSH_POSTGRES_PORT" \
+	--username "$MAKOSH_POSTGRES_USER" \
+	--dbname "$MAKOSH_POSTGRES_DB" \
 	--no-owner \
 	--no-privileges \
 	--file "$postgres_dump"
 
 vault_present=false
-if [ -d "$HERMES_HOST_VAULT_HOME" ]; then
+if [ -d "$MAKOSH_HOST_VAULT_HOME" ]; then
 	vault_present=true
-	info "Copying vault data from $HERMES_HOST_VAULT_HOME"
-	cp -R "$HERMES_HOST_VAULT_HOME"/. "$vault_target"/
+	info "Copying vault data from $MAKOSH_HOST_VAULT_HOME"
+	cp -R "$MAKOSH_HOST_VAULT_HOME"/. "$vault_target"/
 else
-	warn "Vault directory does not exist yet: $HERMES_HOST_VAULT_HOME"
+	warn "Vault directory does not exist yet: $MAKOSH_HOST_VAULT_HOME"
 fi
 
 git_revision="unknown"
@@ -1755,14 +1755,14 @@ cat >"$manifest_path" <<EOF
   "backup_dir": "$(json_escape "$backup_dir")",
   "git_revision": "$(json_escape "$git_revision")",
   "database": {
-    "name": "$(json_escape "$HERMES_POSTGRES_DB")",
-    "user": "$(json_escape "$HERMES_POSTGRES_USER")",
+    "name": "$(json_escape "$MAKOSH_POSTGRES_DB")",
+    "user": "$(json_escape "$MAKOSH_POSTGRES_USER")",
     "host": "127.0.0.1",
-    "port": $HERMES_POSTGRES_PORT,
+    "port": $MAKOSH_POSTGRES_PORT,
     "dump_file": "postgres.sql"
   },
   "vault": {
-    "source_path": "$(json_escape "$HERMES_HOST_VAULT_HOME")",
+    "source_path": "$(json_escape "$MAKOSH_HOST_VAULT_HOME")",
     "relative_path": "vault",
     "present": $vault_present
   }
@@ -1770,10 +1770,10 @@ cat >"$manifest_path" <<EOF
 EOF
 
 cat >"$notes_path" <<EOF
-Hermes backup created at $(now_utc)
+Макошь backup created at $(now_utc)
 
 Contents:
-- postgres.sql: logical PostgreSQL dump for $HERMES_POSTGRES_DB
+- postgres.sql: logical PostgreSQL dump for $MAKOSH_POSTGRES_DB
 - vault/: host vault data snapshot
 - manifest.json: backup metadata
 
@@ -1786,7 +1786,7 @@ success "Backup created: $backup_dir"
 
 ### `scripts/vault-restore.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/vault-restore.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/vault-restore.sh`
 - Size bytes / Размер в байтах: `2488`
 - Included characters / Включено символов: `2488`
 - Truncated / Обрезано: `no`
@@ -1804,7 +1804,7 @@ source "$SCRIPT_DIR/lib/env.sh"
 # shellcheck source=./lib/postgres.sh
 source "$SCRIPT_DIR/lib/postgres.sh"
 
-load_hermes_env
+load_makosh_env
 ensure_postgres_client_dependencies
 ensure_command dropdb
 ensure_command createdb
@@ -1844,48 +1844,48 @@ if [ ! -f "$postgres_dump" ] || [ ! -f "$manifest_path" ] || [ ! -d "$vault_sour
 	exit 1
 fi
 
-confirm_or_exit "Restore will replace database $HERMES_POSTGRES_DB and vault path $HERMES_HOST_VAULT_HOME." "RESTORE"
+confirm_or_exit "Restore will replace database $MAKOSH_POSTGRES_DB and vault path $MAKOSH_HOST_VAULT_HOME." "RESTORE"
 
-info "Recreating PostgreSQL database $HERMES_POSTGRES_DB"
-PGPASSWORD="$HERMES_POSTGRES_PASSWORD" psql \
+info "Recreating PostgreSQL database $MAKOSH_POSTGRES_DB"
+PGPASSWORD="$MAKOSH_POSTGRES_PASSWORD" psql \
 	-h 127.0.0.1 \
-	-p "$HERMES_POSTGRES_PORT" \
-	-U "$HERMES_POSTGRES_USER" \
+	-p "$MAKOSH_POSTGRES_PORT" \
+	-U "$MAKOSH_POSTGRES_USER" \
 	-d postgres \
 	-v ON_ERROR_STOP=1 \
-	-c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$HERMES_POSTGRES_DB' AND pid <> pg_backend_pid();" >/dev/null
-PGPASSWORD="$HERMES_POSTGRES_PASSWORD" dropdb \
+	-c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$MAKOSH_POSTGRES_DB' AND pid <> pg_backend_pid();" >/dev/null
+PGPASSWORD="$MAKOSH_POSTGRES_PASSWORD" dropdb \
 	--if-exists \
 	-h 127.0.0.1 \
-	-p "$HERMES_POSTGRES_PORT" \
-	-U "$HERMES_POSTGRES_USER" \
-	"$HERMES_POSTGRES_DB"
-PGPASSWORD="$HERMES_POSTGRES_PASSWORD" createdb \
+	-p "$MAKOSH_POSTGRES_PORT" \
+	-U "$MAKOSH_POSTGRES_USER" \
+	"$MAKOSH_POSTGRES_DB"
+PGPASSWORD="$MAKOSH_POSTGRES_PASSWORD" createdb \
 	-h 127.0.0.1 \
-	-p "$HERMES_POSTGRES_PORT" \
-	-U "$HERMES_POSTGRES_USER" \
-	"$HERMES_POSTGRES_DB"
+	-p "$MAKOSH_POSTGRES_PORT" \
+	-U "$MAKOSH_POSTGRES_USER" \
+	"$MAKOSH_POSTGRES_DB"
 
 info "Restoring PostgreSQL dump"
-PGPASSWORD="$HERMES_POSTGRES_PASSWORD" psql \
+PGPASSWORD="$MAKOSH_POSTGRES_PASSWORD" psql \
 	-h 127.0.0.1 \
-	-p "$HERMES_POSTGRES_PORT" \
-	-U "$HERMES_POSTGRES_USER" \
-	-d "$HERMES_POSTGRES_DB" \
+	-p "$MAKOSH_POSTGRES_PORT" \
+	-U "$MAKOSH_POSTGRES_USER" \
+	-d "$MAKOSH_POSTGRES_DB" \
 	-v ON_ERROR_STOP=1 \
 	-f "$postgres_dump" >/dev/null
 
 info "Restoring vault data"
-rm -rf "$HERMES_HOST_VAULT_HOME"
-mkdir -p "$HERMES_HOST_VAULT_HOME"
-cp -R "$vault_source"/. "$HERMES_HOST_VAULT_HOME"/
+rm -rf "$MAKOSH_HOST_VAULT_HOME"
+mkdir -p "$MAKOSH_HOST_VAULT_HOME"
+cp -R "$vault_source"/. "$MAKOSH_HOST_VAULT_HOME"/
 
 success "Restore completed from $selected_backup"
 ```
 
 ### `scripts/whatsapp-business-cloud-edge-readiness.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/whatsapp-business-cloud-edge-readiness.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/whatsapp-business-cloud-edge-readiness.mjs`
 - Size bytes / Размер в байтах: `10353`
 - Included characters / Включено символов: `10353`
 - Truncated / Обрезано: `no`
@@ -1900,10 +1900,10 @@ import path from 'node:path'
 import process from 'node:process'
 
 const repoRoot = process.cwd()
-const probeEdge = process.env.HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_PROBE === '1'
-const probeReadyz = process.env.HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_READYZ_PROBE === '1'
+const probeEdge = process.env.MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_PROBE === '1'
+const probeReadyz = process.env.MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_READYZ_PROBE === '1'
 const edgeBaseUrl =
-  process.env.HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_URL ?? 'http://127.0.0.1:8787'
+  process.env.MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_URL ?? 'http://127.0.0.1:8787'
 
 const checks = []
 
@@ -1988,7 +1988,7 @@ function request(method, pathname, headers = {}, body = '') {
 async function probeLocalEdgeProxy() {
   if (!probeEdge) {
     pass('local_edge_proxy_probe', [
-      'local edge probe disabled; set HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_PROBE=1 to probe a running proxy',
+      'local edge probe disabled; set MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_PROBE=1 to probe a running proxy',
     ])
     return
   }
@@ -1998,7 +1998,7 @@ async function probeLocalEdgeProxy() {
   if (
     health.statusCode === 200
     && healthBody?.status === 'ok'
-    && healthBody?.service === 'hermes-whatsapp-business-cloud-edge-proxy'
+    && healthBody?.service === 'makosh-whatsapp-business-cloud-edge-proxy'
   ) {
     pass('local_edge_proxy_healthz', [`${edgeBaseUrl}/healthz returned ok`])
   } else {
@@ -2012,11 +2012,11 @@ async function probeLocalEdgeProxy() {
   if (
     manifest.statusCode === 200
     && manifestBody?.public_webhook_path === '/webhooks/whatsapp/business-cloud'
-    && manifestBody?.protected_hermes_webhook_path
+    && manifestBody?.protected_makosh_webhook_path
       === '/api/v1/integrations/whatsapp/runtime-bridge/business-cloud/webhooks'
-    && manifestBody?.protected_hermes_manifest_path
+    && manifestBody?.protected_makosh_manifest_path
       === '/api/v1/integrations/whatsapp/runtime-bridge/business-cloud/proxy-manifest'
-    && manifestBody?.local_auth_header === 'X-Hermes-Secret'
+    && manifestBody?.local_auth_header === 'X-Макошь-Secret'
     && manifestBody?.signature_header === 'X-Hub-Signature-256'
     && manifestBody?.payload_policy === 'post_body_is_not_parsed_or_rewritten_by_edge_proxy'
   ) {
@@ -2039,7 +2039,7 @@ async function probeLocalEdgeProxy() {
     && unsignedPostBody?.error === 'missing_x_hub_signature_256'
   ) {
     pass('local_edge_proxy_rejects_unsigned_post', [
-      'unsigned Business Cloud POST is rejected before Hermes forwarding',
+      'unsigned Business Cloud POST is rejected before Макошь forwarding',
     ])
   } else {
     fail('local_edge_proxy_rejects_unsigned_post', [
@@ -2049,14 +2049,14 @@ async function probeLocalEdgeProxy() {
 
   if (!probeReadyz) {
     pass('local_edge_proxy_readyz_probe', [
-      'readyz probe disabled; set HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_READYZ_PROBE=1 when Hermes is running',
+      'readyz probe disabled; set MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_READYZ_PROBE=1 when Макошь is running',
     ])
     return
   }
 
   const readyz = await request('GET', '/readyz')
   if (readyz.statusCode >= 200 && readyz.statusCode < 300) {
-    pass('local_edge_proxy_readyz', [`${edgeBaseUrl}/readyz reached protected Hermes manifest`])
+    pass('local_edge_proxy_readyz', [`${edgeBaseUrl}/readyz reached protected Макошь manifest`])
   } else {
     fail('local_edge_proxy_readyz', [
       `${edgeBaseUrl}/readyz returned ${readyz.statusCode}: ${readyz.body}`,
@@ -2064,11 +2064,11 @@ async function probeLocalEdgeProxy() {
   }
 }
 
-requireContains('edge_proxy_public_surface', 'backend/src/bin/hermes_whatsapp_business_cloud_edge_proxy.rs', [
+requireContains('edge_proxy_public_surface', 'backend/src/bin/makosh_whatsapp_business_cloud_edge_proxy.rs', [
   'PUBLIC_WEBHOOK_PATH: &str = "/webhooks/whatsapp/business-cloud"',
-  'PROTECTED_HERMES_WEBHOOK_PATH',
-  'PROTECTED_HERMES_MANIFEST_PATH',
-  'HERMES_SECRET_HEADER: &str = "X-Hermes-Secret"',
+  'PROTECTED_MAKOSH_WEBHOOK_PATH',
+  'PROTECTED_MAKOSH_MANIFEST_PATH',
+  'MAKOSH_SECRET_HEADER: &str = "X-Макошь-Secret"',
   'BUSINESS_CLOUD_SIGNATURE_HEADER: &str = "X-Hub-Signature-256"',
   '.route("/healthz", get(healthz))',
   '.route("/readyz", get(readyz))',
@@ -2076,25 +2076,25 @@ requireContains('edge_proxy_public_surface', 'backend/src/bin/hermes_whatsapp_bu
   'PUBLIC_WEBHOOK_PATH,',
 ])
 
-requireContains('edge_proxy_forwarding_contract', 'backend/src/bin/hermes_whatsapp_business_cloud_edge_proxy.rs', [
-  'forward_hub_query_params_and_optional_account_id_to_protected_hermes',
-  'forward_exact_raw_body_and_x_hub_signature_256_to_protected_hermes',
+requireContains('edge_proxy_forwarding_contract', 'backend/src/bin/makosh_whatsapp_business_cloud_edge_proxy.rs', [
+  'forward_hub_query_params_and_optional_account_id_to_protected_makosh',
+  'forward_exact_raw_body_and_x_hub_signature_256_to_protected_makosh',
   'post_body_is_not_parsed_or_rewritten_by_edge_proxy',
   'missing_x_hub_signature_256',
-  'hermes_url(PROTECTED_HERMES_WEBHOOK_PATH, None, false)',
-  '.header(HERMES_SECRET_HEADER',
+  'makosh_url(PROTECTED_MAKOSH_WEBHOOK_PATH, None, false)',
+  '.header(MAKOSH_SECRET_HEADER',
   '.header(BUSINESS_CLOUD_SIGNATURE_HEADER',
 ])
 
-requireContains('edge_proxy_env_boundary', 'backend/src/bin/hermes_whatsapp_business_cloud_edge_proxy.rs', [
-  'HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_BIND_ADDR',
-  'HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_HERMES_BASE_URL',
-  'HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_HERMES_SECRET',
-  'HERMES_LOCAL_API_SECRET',
-  'HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_ACCOUNT_ID',
+requireContains('edge_proxy_env_boundary', 'backend/src/bin/makosh_whatsapp_business_cloud_edge_proxy.rs', [
+  'MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_BIND_ADDR',
+  'MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_MAKOSH_BASE_URL',
+  'MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_MAKOSH_SECRET',
+  'MAKOSH_LOCAL_API_SECRET',
+  'MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_ACCOUNT_ID',
 ])
 
-requireContains('edge_proxy_behavioral_tests_cover_contract', 'backend/src/bin/hermes_whatsapp_business_cloud_edge_proxy.rs', [
+requireContains('edge_proxy_behavioral_tests_cover_contract', 'backend/src/bin/makosh_whatsapp_business_cloud_edge_proxy.rs', [
   'readyz_checks_manifest_without_account_scoping',
   'get_webhook_forwards_challenge_query_account_scope_and_local_secret',
   'post_webhook_forwards_raw_body_signature_and_no_account_query',
@@ -2103,7 +2103,7 @@ requireContains('edge_proxy_behavioral_tests_cover_contract', 'backend/src/bin/h
 ])
 
 requireContains('edge_proxy_signal_hub_static_guard', 'backend/tests/whatsapp_signal_hub.rs', [
-  'whatsapp_business_cloud_proxy_manifest_keeps_hermes_protected',
+  'whatsapp_business_cloud_proxy_manifest_keeps_makosh_protected',
   '/webhooks/whatsapp/business-cloud',
   'readyz_checks_manifest_without_account_scoping',
   'post_webhook_forwards_raw_body_signature_and_no_account_query',
@@ -2114,24 +2114,24 @@ requireContains('edge_proxy_compose_profile', 'docker/docker-compose.yml', [
   'profiles:',
   'whatsapp-business-cloud-edge',
   'target: whatsapp-business-cloud-edge-proxy',
-  'HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_HERMES_BASE_URL',
-  'HERMES_LOCAL_API_SECRET',
-  '127.0.0.1}:${HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_PORT:-8787}:8787',
+  'MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_MAKOSH_BASE_URL',
+  'MAKOSH_LOCAL_API_SECRET',
+  '127.0.0.1}:${MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_PORT:-8787}:8787',
   'curl -fsS http://127.0.0.1:8787/healthz',
 ])
 
 requireContains('edge_proxy_dockerfile_target', 'docker/Dockerfile', [
-  '--bin hermes-whatsapp-business-cloud-edge-proxy',
+  '--bin makosh-whatsapp-business-cloud-edge-proxy',
   'FROM debian:bookworm-slim AS whatsapp-business-cloud-edge-proxy',
-  '/usr/local/bin/hermes-whatsapp-business-cloud-edge-proxy',
+  '/usr/local/bin/makosh-whatsapp-business-cloud-edge-proxy',
   'EXPOSE 8787',
 ])
 
 requireContains('edge_proxy_env_example_is_loopback_and_non_secret', 'docker/.env.example', [
-  'HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_BIND=127.0.0.1',
-  'HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_PORT=8787',
-  'HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_HERMES_BASE_URL=http://host.docker.internal:8080',
-  '# HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_ACCOUNT_ID=optional-account-scope',
+  'MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_BIND=127.0.0.1',
+  'MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_PORT=8787',
+  'MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_MAKOSH_BASE_URL=http://host.docker.internal:8080',
+  '# MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_ACCOUNT_ID=optional-account-scope',
 ])
 
 requireNotContains('edge_proxy_env_example_has_no_business_cloud_secret_values', 'docker/.env.example', [
@@ -2153,7 +2153,7 @@ requireContains('edge_proxy_docs_smoke_contract', 'docs/integrations/whatsapp/li
   'make whatsapp-business-cloud-edge-up',
   'GET /readyz',
   'Expose only the proxy path `/webhooks/whatsapp/business-cloud`',
-  'do not expose Hermes `/api/v1` directly',
+  'do not expose Макошь `/api/v1` directly',
   'X-Hub-Signature-256',
 ])
 
@@ -2188,7 +2188,7 @@ if (failed.length > 0) {
 
 ### `scripts/whatsapp-domain-closure-audit.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/whatsapp-domain-closure-audit.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/whatsapp-domain-closure-audit.mjs`
 - Size bytes / Размер в байтах: `10123`
 - Included characters / Включено символов: `10123`
 - Truncated / Обрезано: `no`
@@ -2204,9 +2204,9 @@ import process from 'node:process'
 const repoRoot = process.cwd()
 const args = new Set(process.argv.slice(2))
 const requireClosed =
-  args.has('--require-closed') || process.env.HERMES_WHATSAPP_REQUIRE_DOMAIN_CLOSED === '1'
+  args.has('--require-closed') || process.env.MAKOSH_WHATSAPP_REQUIRE_DOMAIN_CLOSED === '1'
 const evidenceDir =
-  process.env.HERMES_WHATSAPP_DOMAIN_CLOSURE_EVIDENCE_DIR ?? '.local/whatsapp'
+  process.env.MAKOSH_WHATSAPP_DOMAIN_CLOSURE_EVIDENCE_DIR ?? '.local/whatsapp'
 
 const requiredEvidenceShapes = [
   'whatsapp_native_md',
@@ -2271,7 +2271,7 @@ function validateEvidenceFile(filePath) {
     cwd: repoRoot,
     env: {
       ...process.env,
-      HERMES_WHATSAPP_LIVE_SMOKE_EVIDENCE: filePath,
+      MAKOSH_WHATSAPP_LIVE_SMOKE_EVIDENCE: filePath,
     },
     encoding: 'utf8',
   })
@@ -2395,7 +2395,7 @@ requireContains('native_md_upgrade_path_context_exists', 'scripts/whatsapp-nativ
 requireContains('native_md_upgrade_docs_track_toolchain_limit', 'docs/integrations/whatsapp/status.md', [
   'native Rust/wa-rs upgrade path verifier',
   'Rust/toolchain upgrade is not treated as sufficient evidence',
-  'HERMES_WA_RS_CRATES_IO_PROBE=1',
+  'MAKOSH_WA_RS_CRATES_IO_PROBE=1',
 ])
 
 requireContains('live_smoke_evidence_collector_exists', 'scripts/whatsapp-live-smoke-collect-evidence.mjs', [
@@ -2517,7 +2517,7 @@ if (!result.ok) {
 
 ### `scripts/whatsapp-live-smoke-collect-evidence.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/whatsapp-live-smoke-collect-evidence.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/whatsapp-live-smoke-collect-evidence.mjs`
 - Size bytes / Размер в байтах: `8679`
 - Included characters / Включено символов: `8679`
 - Truncated / Обрезано: `no`
@@ -2534,7 +2534,7 @@ import process from 'node:process'
 const repoRoot = process.cwd()
 const defaultObservationsPath = '.local/whatsapp/live-smoke-observations.json'
 const observationsPath =
-  process.env.HERMES_WHATSAPP_LIVE_SMOKE_OBSERVATIONS ?? defaultObservationsPath
+  process.env.MAKOSH_WHATSAPP_LIVE_SMOKE_OBSERVATIONS ?? defaultObservationsPath
 const providerShapes = new Set([
   'whatsapp_web_companion',
   'whatsapp_native_md',
@@ -2591,7 +2591,7 @@ function sha256Fingerprint(value) {
 function providerShapeFrom(document) {
   const value =
     argValue('--provider-shape')
-    ?? process.env.HERMES_WHATSAPP_SMOKE_PROVIDER_SHAPE?.trim()
+    ?? process.env.MAKOSH_WHATSAPP_SMOKE_PROVIDER_SHAPE?.trim()
     ?? document?.provider_shape
   if (!providerShapes.has(value)) {
     throw new Error(`provider_shape must be one of ${Array.from(providerShapes).join(', ')}`)
@@ -2650,7 +2650,7 @@ function observationsTemplate(providerShape) {
 }
 
 function outputPath(providerShape) {
-  const explicit = process.env.HERMES_WHATSAPP_LIVE_SMOKE_EVIDENCE ?? argValue('--output')
+  const explicit = process.env.MAKOSH_WHATSAPP_LIVE_SMOKE_EVIDENCE ?? argValue('--output')
   if (explicit?.trim()) {
     return absolutePath(explicit.trim())
   }
@@ -2664,7 +2664,7 @@ function accountFingerprint(observations, providerShape) {
   ) {
     return observations.account_fingerprint
   }
-  const accountId = process.env.HERMES_WHATSAPP_SMOKE_ACCOUNT_ID?.trim()
+  const accountId = process.env.MAKOSH_WHATSAPP_SMOKE_ACCOUNT_ID?.trim()
   if (accountId) {
     return sha256Fingerprint(`${providerShape}:${accountId}`)
   }
@@ -2720,7 +2720,7 @@ function validateEvidence(filePath) {
     cwd: repoRoot,
     env: {
       ...process.env,
-      HERMES_WHATSAPP_LIVE_SMOKE_EVIDENCE: filePath,
+      MAKOSH_WHATSAPP_LIVE_SMOKE_EVIDENCE: filePath,
     },
     encoding: 'utf8',
   })
@@ -2735,7 +2735,7 @@ function validateEvidence(filePath) {
 function writeObservationsTemplate() {
   const providerShape =
     argValue('--provider-shape')
-    ?? process.env.HERMES_WHATSAPP_SMOKE_PROVIDER_SHAPE?.trim()
+    ?? process.env.MAKOSH_WHATSAPP_SMOKE_PROVIDER_SHAPE?.trim()
     ?? 'whatsapp_native_md'
   if (!providerShapes.has(providerShape)) {
     throw new Error(`provider_shape must be one of ${Array.from(providerShapes).join(', ')}`)
@@ -2801,7 +2801,7 @@ try {
 
 ### `scripts/whatsapp-live-smoke-evidence.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/whatsapp-live-smoke-evidence.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/whatsapp-live-smoke-evidence.mjs`
 - Size bytes / Размер в байтах: `18371`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2816,7 +2816,7 @@ import process from 'node:process'
 const repoRoot = process.cwd()
 const defaultEvidencePath = '.local/whatsapp/live-smoke-evidence.json'
 const evidencePath =
-  process.env.HERMES_WHATSAPP_LIVE_SMOKE_EVIDENCE ?? defaultEvidencePath
+  process.env.MAKOSH_WHATSAPP_LIVE_SMOKE_EVIDENCE ?? defaultEvidencePath
 
 const providerShapes = new Set([
   'whatsapp_web_companion',
@@ -2902,7 +2902,7 @@ const businessCloudGateIds = [
   'business_cloud.edge_proxy_public_only_path',
   'business_cloud.edge_proxy_meta_challenge',
   'business_cloud.edge_proxy_signed_webhook',
-  'business_cloud.hermes_api_not_public',
+  'business_cloud.makosh_api_not_public',
   'business_cloud.inbound_message_webhook',
   'business_cloud.receipt_webhook_reconciliation',
   'business_cloud.send_text',
@@ -3015,7 +3015,7 @@ function requiredEvidenceRefPrefixGroups(providerShape, gateId) {
     if (gateId.startsWith('business_cloud.edge_proxy_')) {
       return [['edge_proxy:']]
     }
-    if (gateId === 'business_cloud.hermes_api_not_public') {
+    if (gateId === 'business_cloud.makosh_api_not_public') {
       return [['edge_proxy:', 'runtime_api:']]
     }
     if (gateId === 'business_cloud.inbound_message_webhook') {
@@ -3188,7 +3188,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `scripts/whatsapp-live-smoke-readiness.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/whatsapp-live-smoke-readiness.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/whatsapp-live-smoke-readiness.mjs`
 - Size bytes / Размер в байтах: `17848`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3203,13 +3203,13 @@ import path from 'node:path'
 import process from 'node:process'
 
 const repoRoot = process.cwd()
-const strictEnv = process.env.HERMES_LIVE_SMOKE_STRICT_ENV === '1'
-const probeRuntimeApi = process.env.HERMES_WHATSAPP_RUNTIME_API_PROBE === '1'
+const strictEnv = process.env.MAKOSH_LIVE_SMOKE_STRICT_ENV === '1'
+const probeRuntimeApi = process.env.MAKOSH_WHATSAPP_RUNTIME_API_PROBE === '1'
 const runtimeApiBaseUrl =
-  process.env.HERMES_WHATSAPP_RUNTIME_API_BASE_URL ?? 'http://127.0.0.1:8080'
-const runtimeApiSecret = process.env.HERMES_LOCAL_API_SECRET?.trim() ?? ''
-const smokeAccountId = process.env.HERMES_WHATSAPP_SMOKE_ACCOUNT_ID?.trim() ?? ''
-const expectedProviderShape = process.env.HERMES_WHATSAPP_SMOKE_PROVIDER_SHAPE?.trim() ?? ''
+  process.env.MAKOSH_WHATSAPP_RUNTIME_API_BASE_URL ?? 'http://127.0.0.1:8080'
+const runtimeApiSecret = process.env.MAKOSH_LOCAL_API_SECRET?.trim() ?? ''
+const smokeAccountId = process.env.MAKOSH_WHATSAPP_SMOKE_ACCOUNT_ID?.trim() ?? ''
+const expectedProviderShape = process.env.MAKOSH_WHATSAPP_SMOKE_PROVIDER_SHAPE?.trim() ?? ''
 
 const checks = []
 
@@ -3253,7 +3253,7 @@ function requireNotContains(id, relativePath, needles) {
 
 function requireEnvWhenStrict(id, envNames) {
   if (!strictEnv) {
-    pass(id, ['strict env checks disabled; set HERMES_LIVE_SMOKE_STRICT_ENV=1 for manual smoke'])
+    pass(id, ['strict env checks disabled; set MAKOSH_LIVE_SMOKE_STRICT_ENV=1 for manual smoke'])
     return
   }
   const missing = envNames.filter((name) => !process.env[name]?.trim())
@@ -3360,7 +3360,7 @@ function assertNoSecretLeaks(id, responses) {
 async function probeJsonEndpoint(id, pathname, validate, responses) {
   const response = await requestRuntimeApi('GET', pathname, {
     Accept: 'application/json',
-    'X-Hermes-Secret': runtimeApiSecret,
+    'X-Макошь-Secret': runtimeApiSecret,
   })
   responses.push({ id, body: response.body })
 
@@ -3386,17 +3386,17 @@ async function probeJsonEndpoint(id, pathname, validate, responses) {
 async function probeRuntimeApiEndpoints() {
   if (!probeRuntimeApi) {
     pass('runtime_api_probe', [
-      'runtime API probe disabled; set HERMES_WHATSAPP_RUNTIME_API_PROBE=1 with HERMES_LOCAL_API_SECRET and HERMES_WHATSAPP_SMOKE_ACCOUNT_ID to probe a running Hermes backend',
+      'runtime API probe disabled; set MAKOSH_WHATSAPP_RUNTIME_API_PROBE=1 with MAKOSH_LOCAL_API_SECRET and MAKOSH_WHATSAPP_SMOKE_ACCOUNT_ID to probe a running Макошь backend',
     ])
     return
   }
 
   const missing = []
   if (!runtimeApiSecret) {
-    missing.push('HERMES_LOCAL_API_SECRET')
+    missing.push('MAKOSH_LOCAL_API_SECRET')
   }
   if (!smokeAccountId) {
-    missing.push('HERMES_WHATSAPP_SMOKE_ACCOUNT_ID')
+    missing.push('MAKOSH_WHATSAPP_SMOKE_ACCOUNT_ID')
   }
   if (missing.length > 0) {
     fail('runtime_api_probe_configuration', missing.map((name) => `${name} is required for runtime API probe`))
@@ -3408,7 +3408,7 @@ async function probeRuntimeApiEndpoints() {
     `account id is set (${smokeAccountId.length} chars)`,
     expectedProviderShape
       ? `expected provider shape ${expectedProviderShape}`
-      : 'provider-shape assertion disabled; set HERMES_WHATSAPP_SMOKE_PROVIDER_SHAPE to enable it',
+      : 'provider-shape assertion disabled; set MAKOSH_WHATSAPP_SMOKE_PROVIDER_SHAPE to enable it',
   ])
 
   const responses = []
@@ -3436,7 +3436,7 @@ async function probeRuntimeApiEndpoints() {
         ...(isPlainObject(json.account_scope) ? [] : ['account_scope must be an object']),
         ...(json.account_scope?.account_id === smokeAccountId
           ? []
-          : ['account_scope.account_id must match HERMES_WHATSAPP_SMOKE_ACCOUNT_ID']),
+          : ['account_scope.account_id must match MAKOSH_WHATSAPP_SMOKE_ACCOUNT_ID']),
         ...(typeof json.account_scope?.provider_shape === 'string'
           ? []
           : ['account_scope.provider_shape must be a string']),
@@ -3450,7 +3450,7 @@ async function probeRuntimeApiEndpoints() {
       'runtime_api_status',
       `/api/v1/integrations/whatsapp/runtime/status?account_id=${encodedStatusAccountId}`,
       (json) => [
-        ...(json.account_id === smokeAccountId ? [] : ['account_id must match HERMES_WHATSAPP_SMOKE_ACCOUNT_ID']),
+        ...(json.account_id === smokeAccountId ? [] : ['account_id must match MAKOSH_WHATSAPP_SMOKE_ACCOUNT_ID']),
         ...(typeof json.provider_shape === 'string' ? [] : ['provider_shape must be a string']),
         ...providerShapeErrors(json.provider_shape),
         ...(typeof json.runtime_kind === 'string' ? [] : ['runtime_kind must be a string']),
@@ -3467,7 +3467,7 @@ async function probeRuntimeApiEndpoints() {
       'runtime_api_health',
       `/api/v1/integrations/whatsapp/runtime/health?account_id=${encodedStatusAccountId}`,
       (json) => [
-        ...(json.account_id === smokeAccountId ? [] : ['account_id must match HERMES_WHATSAPP_SMOKE_ACCOUNT_ID']),
+        ...(json.account_id === smokeAccountId ? [] : ['account_id must match MAKOSH_WHATSAPP_SMOKE_ACCOUNT_ID']),
         ...(typeof json.provider_shape === 'string' ? [] : ['provider_shape must be a string']),
         ...providerShapeErrors(json.provider_shape),
         ...(typeof json.runtime_kind === 'string' ? [] : ['runtime_kind must be a string']),
@@ -3492,7 +3492,7 @@ requireContains('webview_runtime_event_relay_dispatch', 'frontend/src-tauri/src/
   '"/api/v1/integrations/whatsapp/runtime-bridge/runtime-events"',
   'runtime_bridge_runtime_event_payload',
   'dispatch_runtime_bridge_runtime_event',
-  'X-Hermes-Secret',
+  'X-Макошь-Secret',
   'is_allowed_local_backend_url',
   'runtime_event_evidence_only_until_richer_typed_payload',
   'provider_observed_event_reconciliation_required',
@@ -3518,7 +3518,7 @@ requireContains('webview_backend_health_contract_dispatch_state', 'backend/src/i
   'tauri_allowlisted_companion_runtime_bridge_dispatch',
   'runtime_events_bridge_wired_smoke_pending',
   'NewWhatsappWebRuntimeEvent',
-  'X-Hermes-Secret_from_tauri_process_env_only',
+  'X-Макошь-Secret_from_tauri_process_env_only',
   'typed_projection',
   'manual_live_smoke_required',
 ])
@@ -3540,7 +3540,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `scripts/whatsapp-native-md-sdk-gap-readiness.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/whatsapp-native-md-sdk-gap-readiness.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/whatsapp-native-md-sdk-gap-readiness.mjs`
 - Size bytes / Размер в байтах: `20273`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3556,7 +3556,7 @@ import process from 'node:process'
 
 const repoRoot = process.cwd()
 const waRsVersion = '0.2.0'
-const cratesIoProbe = process.env.HERMES_WA_RS_CRATES_IO_PROBE === '1'
+const cratesIoProbe = process.env.MAKOSH_WA_RS_CRATES_IO_PROBE === '1'
 const checks = []
 
 const requiredApis = [
@@ -3693,8 +3693,8 @@ function cargoInfoVersion(crateName) {
 }
 
 function waRsSourceRoot() {
-  if (process.env.HERMES_WA_RS_SOURCE_DIR?.trim()) {
-    return process.env.HERMES_WA_RS_SOURCE_DIR.trim()
+  if (process.env.MAKOSH_WA_RS_SOURCE_DIR?.trim()) {
+    return process.env.MAKOSH_WA_RS_SOURCE_DIR.trim()
   }
 
   const cargoHome = process.env.CARGO_HOME?.trim() || path.join(os.homedir(), '.cargo')

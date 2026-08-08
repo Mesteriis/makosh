@@ -2,7 +2,7 @@ mod command;
 mod executor;
 mod record;
 
-use hermes_telegram_calls_core::{
+use makosh_telegram_calls_core::{
     TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_MAJOR_V1, TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_NAME_V1,
     TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_OWNER_V1, TELEGRAM_CALLS_REALTIME_BACKFILL_SCOPE_V1,
     telegram_calls_realtime_backfill_run_id_v1,
@@ -86,7 +86,7 @@ impl TelegramCallsPersistence {
             .await
             .map_err(|_| TelegramCallsBackfillErrorV1::Database)?;
         sqlx::query(
-            "INSERT INTO hermes_data.telegram_call_realtime_backfill_jobs (\
+            "INSERT INTO makosh_data.telegram_call_realtime_backfill_jobs (\
              job_run_id, job_owner, job_name, job_major, scope_id, command_message_id, \
              command_envelope_bytes, command_envelope_sha256, execution_state, execution_phase, \
              lease_epoch, checkpoint_frame_sequence, processed_frame_count, \
@@ -113,7 +113,7 @@ impl TelegramCallsPersistence {
             .ok_or(TelegramCallsBackfillErrorV1::CorruptExecution)?;
         let stored_envelope: Vec<u8> = sqlx::query_scalar(
             "SELECT command_envelope_bytes \
-             FROM hermes_data.telegram_call_realtime_backfill_jobs \
+             FROM makosh_data.telegram_call_realtime_backfill_jobs \
              WHERE job_run_id = $1",
         )
         .bind(command.run_id.as_slice())

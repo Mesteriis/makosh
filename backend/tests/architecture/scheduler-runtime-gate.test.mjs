@@ -52,6 +52,6 @@ test('Scheduler gate is backed by hot reconciliation and managed successor recov
   assert.match(conformance, /assert_revoked_binding_does_not_restart/);
   assert.match(
     runner,
-    /HERMES_STORAGE_MANAGED_TEST_FILTER/,
+    /MAKOSH_STORAGE_MANAGED_TEST_FILTER/,
   );
 });

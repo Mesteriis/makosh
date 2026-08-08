@@ -1,5 +1,5 @@
-use hermes_events_protocol::v1::{ContractRefV1, DurableEnvelopeV1};
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_events_protocol::v1::{ContractRefV1, DurableEnvelopeV1};
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 
 use crate::note_results::ReviewedNoteCandidatePromotionEventErrorV1;
 

@@ -3,12 +3,12 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTargetV1, ManagedBlobSessionRequestV1,
     request_managed_blob_session_v2,
 };
-use hermes_communications_api::CommunicationDirectionV1;
-use hermes_communications_evidence_export_source_api::{
+use makosh_communications_api::CommunicationDirectionV1;
+use makosh_communications_evidence_export_source_api::{
     COMMUNICATIONS_EXPORT_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1,
     COMMUNICATIONS_EXPORT_SOURCE_BLOB_TARGET_MODULE_ID_V1,
     COMMUNICATIONS_EXPORT_SOURCE_BLOB_TARGET_OWNER_ID_V1, EVIDENCE_EXPORT_MAX_SOURCE_BYTES_V1,
@@ -20,21 +20,21 @@ use hermes_communications_evidence_export_source_api::{
         EvidenceExportSourceItemV1, PrepareEvidenceExportCommandV1,
     },
 };
-use hermes_communications_persistence::{
+use makosh_communications_persistence::{
     CommunicationsConsumeOutcomeV1, CommunicationsDurablePersistence,
     CommunicationsEvidenceExportBodyReceiptV1, CommunicationsEvidenceExportSourceErrorV1,
     CommunicationsEvidenceExportSourceItemV1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::BlobDataOperationV1,
 };
@@ -508,7 +508,7 @@ fn id16(value: &[u8]) -> Result<[u8; 16], CommunicationsEvidenceExportDeliveryEr
 
 fn exact_contract(
     contract: Option<&ContractRefV1>,
-    expected: &hermes_runtime_protocol::v1::ContractReferenceV1,
+    expected: &makosh_runtime_protocol::v1::ContractReferenceV1,
 ) -> bool {
     contract.is_some_and(|contract| {
         contract.owner == expected.owner

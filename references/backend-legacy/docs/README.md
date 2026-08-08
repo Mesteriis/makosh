@@ -1,6 +1,6 @@
-# Hermes legacy documentation reference
+# Макошь legacy documentation reference
 
-В этой директории сохранена документация предыдущей реализации Hermes. Она не
+В этой директории сохранена документация предыдущей реализации Макошь. Она не
 является active policy, текущим implementation status или шаблоном структуры
 clean-room backend.
 

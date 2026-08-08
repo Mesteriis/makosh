@@ -29,7 +29,7 @@ coverage/
 
 # Tauri
 src-tauri/target/
-frontend/src-tauri/binaries/hermes-hub-backend-*
+frontend/src-tauri/binaries/makosh-backend-*
 frontend/src-tauri/resources/tdlib/**/libtdjson.*
 frontend/src-tauri/resources/google-oauth/client_secret.json
 

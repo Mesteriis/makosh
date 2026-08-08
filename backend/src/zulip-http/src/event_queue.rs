@@ -1,4 +1,4 @@
-use hermes_zulip_api::{
+use makosh_zulip_api::{
     ZulipEventQueueV1, ZulipEventV1, ZulipMessageSnapshotV1, ZulipPolledEventV1,
     ZulipReactionOperationV1,
     operational::{ZulipConversationKindV1, ZulipReactionStateV1},
@@ -29,7 +29,7 @@ pub async fn register(config: &ZulipHttpConfigV1) -> Result<ZulipEventQueueV1, Z
 
 #[cfg(test)]
 mod attachment_tests {
-    use hermes_zulip_api::ZulipAccountV1;
+    use makosh_zulip_api::ZulipAccountV1;
     use serde_json::json;
 
     use super::{ZulipHttpConfigV1, map_event};
@@ -51,7 +51,7 @@ mod attachment_tests {
                 "sender_email": "other@zulip.test", "content": "[file](/user_uploads/a/b/report.pdf)"
             }
         })).expect("event");
-        let Some(hermes_zulip_api::ZulipEventV1::Message { attachments, .. }) =
+        let Some(makosh_zulip_api::ZulipEventV1::Message { attachments, .. }) =
             event.observations.first()
         else {
             panic!("message")
@@ -190,8 +190,8 @@ pub(crate) fn message_snapshot(
     })
 }
 
-fn message_attachments(message: &Value) -> Vec<hermes_zulip_api::ZulipAttachmentV1> {
-    let paths: Vec<hermes_zulip_api::ZulipAttachmentV1> = message
+fn message_attachments(message: &Value) -> Vec<makosh_zulip_api::ZulipAttachmentV1> {
+    let paths: Vec<makosh_zulip_api::ZulipAttachmentV1> = message
         .get("attachments")
         .and_then(Value::as_array)
         .map(|attachments| {
@@ -210,12 +210,12 @@ fn message_attachments(message: &Value) -> Vec<hermes_zulip_api::ZulipAttachment
                 .map(attachment_from_path)
                 .collect()
         });
-    let mut unique: Vec<hermes_zulip_api::ZulipAttachmentV1> = Vec::new();
+    let mut unique: Vec<makosh_zulip_api::ZulipAttachmentV1> = Vec::new();
     for attachment in paths {
         if !attachment.provider_attachment_id.trim().is_empty()
             && !unique
                 .iter()
-                .any(|existing: &hermes_zulip_api::ZulipAttachmentV1| {
+                .any(|existing: &makosh_zulip_api::ZulipAttachmentV1| {
                     existing.provider_attachment_id == attachment.provider_attachment_id
                 })
         {
@@ -251,7 +251,7 @@ fn message_reactions(message: &Value) -> Vec<ZulipReactionStateV1> {
         .unwrap_or_default()
 }
 
-fn attachment_from_value(value: &Value) -> Option<hermes_zulip_api::ZulipAttachmentV1> {
+fn attachment_from_value(value: &Value) -> Option<makosh_zulip_api::ZulipAttachmentV1> {
     let object = value.as_object()?;
     let id = ["id", "path_id", "url"]
         .iter()
@@ -261,7 +261,7 @@ fn attachment_from_value(value: &Value) -> Option<hermes_zulip_api::ZulipAttachm
         .iter()
         .find_map(|field| object.get(*field))
         .and_then(value_to_string);
-    Some(hermes_zulip_api::ZulipAttachmentV1 {
+    Some(makosh_zulip_api::ZulipAttachmentV1 {
         provider_attachment_id: id,
         filename,
     })
@@ -295,7 +295,7 @@ fn attachment_paths(content: &str) -> Vec<String> {
     paths
 }
 
-fn attachment_from_path(path: String) -> hermes_zulip_api::ZulipAttachmentV1 {
+fn attachment_from_path(path: String) -> makosh_zulip_api::ZulipAttachmentV1 {
     let provider_attachment_id = path
         .strip_prefix("/user_uploads/")
         .unwrap_or(&path)
@@ -306,7 +306,7 @@ fn attachment_from_path(path: String) -> hermes_zulip_api::ZulipAttachmentV1 {
         .next()
         .filter(|value| !value.trim().is_empty())
         .map(ToOwned::to_owned);
-    hermes_zulip_api::ZulipAttachmentV1 {
+    makosh_zulip_api::ZulipAttachmentV1 {
         provider_attachment_id,
         filename,
     }
@@ -405,7 +405,7 @@ fn required_number_string(value: &Value, field: &str) -> Result<String, ZulipHtt
 
 #[cfg(test)]
 mod tests {
-    use hermes_zulip_api::ZulipAccountV1;
+    use makosh_zulip_api::ZulipAccountV1;
     use serde_json::json;
 
     use super::{ZulipHttpConfigV1, map_event};
@@ -440,7 +440,7 @@ mod tests {
         )
         .expect("event");
         assert_eq!(event.event_id, 7);
-        let Some(hermes_zulip_api::ZulipEventV1::Message {
+        let Some(makosh_zulip_api::ZulipEventV1::Message {
             account_id,
             is_outgoing,
             ..

@@ -82,7 +82,7 @@ pub fn build_eml_forward(
 ) -> String {
     let to = forward_to.join(", ");
     format!(
-        "From: hermes-hub@local\r\nTo: {to}\r\nSubject: Fwd: {original_subject}\r\nDate: {}\r\nContent-Type: message/rfc822\r\n\r\nFrom: {original_sender}\r\nDate: {original_date}\r\nSubject: {original_subject}\r\n\r\n{original_body}",
+        "From: makosh@local\r\nTo: {to}\r\nSubject: Fwd: {original_subject}\r\nDate: {}\r\nContent-Type: message/rfc822\r\n\r\nFrom: {original_sender}\r\nDate: {original_date}\r\nSubject: {original_subject}\r\n\r\n{original_body}",
         Utc::now().to_rfc2822()
     )
 }

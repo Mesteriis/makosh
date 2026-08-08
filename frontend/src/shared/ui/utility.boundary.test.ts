@@ -23,7 +23,7 @@ const utilityComponents = [
 	'FileIcon'
 ]
 
-describe('Hermes UI utility component contracts', () => {
+describe('Макошь UI utility component contracts', () => {
 	it('keeps the utility batch documented and exported through the UI kit', () => {
 		const uiRoot = fileURLToPath(new URL('.', import.meta.url))
 		const barrel = readFileSync(join(uiRoot, 'index.ts'), 'utf8')
@@ -66,16 +66,16 @@ describe('Hermes UI utility component contracts', () => {
 	})
 
 	it('keeps theme ids explicit across family and mode axes', () => {
-		expect(uiThemeNames).toEqual(['base-light', 'base-dark', 'hermes-light', 'hermes-dark'])
-		expect(uiThemeFamilyOptions.map((option) => option.value)).toEqual(['base', 'hermes'])
+		expect(uiThemeNames).toEqual(['base-light', 'base-dark', 'makosh-light', 'makosh-dark'])
+		expect(uiThemeFamilyOptions.map((option) => option.value)).toEqual(['base', 'makosh'])
 		expect(uiThemeModeOptions.map((option) => option.value)).toEqual(['light', 'dark'])
 		expect(themeSelectionToName('base', 'light')).toBe('base-light')
 		expect(themeSelectionToName('base', 'dark')).toBe('base-dark')
-		expect(themeSelectionToName('hermes', 'light')).toBe('hermes-light')
-		expect(themeSelectionToName('hermes', 'dark')).toBe('hermes-dark')
-		expect(themeNameToSelection('hermes-light')).toEqual({ family: 'hermes', mode: 'light' })
+		expect(themeSelectionToName('makosh', 'light')).toBe('makosh-light')
+		expect(themeSelectionToName('makosh', 'dark')).toBe('makosh-dark')
+		expect(themeNameToSelection('makosh-light')).toEqual({ family: 'makosh', mode: 'light' })
 		expect(isUiThemeName('light')).toBe(false)
 		expect(isUiThemeName('dark')).toBe(false)
-		expect(isUiThemeName('hermes')).toBe(false)
+		expect(isUiThemeName('makosh')).toBe(false)
 	})
 })

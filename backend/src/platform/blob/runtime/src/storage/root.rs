@@ -4,7 +4,7 @@ use std::fs;
 use std::os::unix::fs::{MetadataExt, PermissionsExt};
 use std::path::{Path, PathBuf};
 
-use hermes_blob_protocol::BlobRefV1;
+use makosh_blob_protocol::BlobRefV1;
 
 use super::store::BlobStorageError;
 

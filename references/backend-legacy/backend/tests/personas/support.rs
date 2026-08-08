@@ -1,12 +1,12 @@
 #![allow(dead_code)]
 
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_events_postgres::consumers::EventConsumerConfig;
-use hermes_events_postgres::consumers::EventConsumerRunner;
-use hermes_hub_backend::domains::personas::api::store::PersonaProjectionStore;
-use hermes_hub_backend::workflows::persona_derived_evidence::{
+use makosh_events_postgres::consumers::EventConsumerConfig;
+use makosh_events_postgres::consumers::EventConsumerRunner;
+use makosh_hub_backend::domains::personas::api::store::PersonaProjectionStore;
+use makosh_hub_backend::workflows::persona_derived_evidence::{
     PERSONA_DERIVED_EVIDENCE_CONSUMER, project_persona_derived_evidence_event,
 };
 use sqlx::postgres::{PgPool, PgPoolOptions};
@@ -28,7 +28,7 @@ pub async fn live_personas_store(test_name: &str) -> Option<PersonaProjectionSto
 
 pub fn disconnected_personas_store() -> PersonaProjectionStore {
     let pool = PgPoolOptions::new()
-        .connect_lazy("postgres://hermes:unused@127.0.0.1:1/hermes_hub")
+        .connect_lazy("postgres://makosh:unused@127.0.0.1:1/makosh_hub")
         .expect("create lazy test pool");
     PersonaProjectionStore::new(pool)
 }

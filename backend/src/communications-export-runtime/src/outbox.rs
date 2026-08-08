@@ -1,9 +1,9 @@
 //! Exact-byte workflow outbox relay.
 
-use hermes_communications_export_persistence::{
+use makosh_communications_export_persistence::{
     CommunicationsExportPersistenceErrorV1, CommunicationsExportPersistenceV1,
 };
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum CommunicationsExportOutboxErrorV1 {

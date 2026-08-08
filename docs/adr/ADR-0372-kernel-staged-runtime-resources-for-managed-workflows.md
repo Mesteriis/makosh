@@ -76,7 +76,7 @@ binding не видят.
 
 `ManagedRuntimeArtifactBindingV1` переносится из integration-specific proto в
 отдельный runtime-protocol source unit. Это не compatibility facade: protobuf
-type остаётся в том же package `hermes.runtime.v1`, а integration, workflow и
+type остаётся в том же package `makosh.runtime.v1`, а integration, workflow и
 engine configurations импортируют один canonical definition.
 
 `RuntimeArtifactUseV1` получает exact варианты:
@@ -168,7 +168,7 @@ attachment_text_extraction.ocr.eng.v1     read_only_data
 attachment_text_extraction.ocr.rus.v1     read_only_data
 ```
 
-Runner является Hermes release artifact, собранным из pinned Tesseract и
+Runner является Макошь release artifact, собранным из pinned Tesseract и
 Leptonica sources отдельной release build unit. Он должен быть self-contained:
 non-system dynamic load commands запрещены; exact source revisions, patches,
 license bytes, compiler/container digest и reproducibility evidence входят в

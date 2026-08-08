@@ -29,7 +29,7 @@ test('Zulip storage and release assembly remain separate owner-local units', asy
 
   assert.match(workspace, /"src\/zulip-assembly"/);
   assert.match(persistenceManifest, /surface = "persistence"/);
-  assert.match(persistenceManifest, /hermes-storage-protocol/);
+  assert.match(persistenceManifest, /makosh-storage-protocol/);
   assert.match(persistenceSchema, /owner_id: "zulip"\.to_owned\(\)/);
   assert.match(
     persistenceSchema,
@@ -44,24 +44,24 @@ test('Zulip storage and release assembly remain separate owner-local units', asy
   assert.match(assemblyManifest, /owner = "zulip"/);
   assert.match(assemblyManifest, /surface = "assembly"/);
   for (const dependency of [
-    'hermes-zulip-runtime',
-    'hermes-zulip-persistence',
-    'hermes-runtime-protocol',
-    'hermes-storage-protocol',
+    'makosh-zulip-runtime',
+    'makosh-zulip-persistence',
+    'makosh-runtime-protocol',
+    'makosh-storage-protocol',
   ]) {
     assert.match(assemblyManifest, new RegExp(dependency));
   }
   for (const forbiddenDependency of [
-    'hermes-kernel',
-    'hermes-gateway',
-    'hermes-communications',
+    'makosh-kernel',
+    'makosh-gateway',
+    'makosh-communications',
     'ring',
     'sha2',
   ]) {
     assert.doesNotMatch(assemblyManifest, new RegExp(forbiddenDependency));
   }
-  assert.doesNotMatch(runtimeManifest, /hermes-zulip-assembly/);
-  assert.doesNotMatch(persistenceManifest, /hermes-zulip-assembly/);
+  assert.doesNotMatch(runtimeManifest, /makosh-zulip-assembly/);
+  assert.doesNotMatch(persistenceManifest, /makosh-zulip-assembly/);
 
   assert.match(
     assemblySource,

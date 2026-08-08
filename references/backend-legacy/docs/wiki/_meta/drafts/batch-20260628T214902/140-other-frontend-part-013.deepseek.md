@@ -1,18 +1,18 @@
 ## Summary / Резюме
 
-Создать страницу `components/frontend.md` в русской Obsidian‑wiki проекта `hermes-hub`. Страница документирует все шаблонные Vue‑компоненты, находящиеся в `frontend/src/shared/ui/`, а также shell‑обёртки, глобальные дизайн‑токены, классы тем и стили поверхностей. Каждое утверждение о поведении компонента опирается исключительно на встроенный исходный код; внешние знания не добавлены.
+Создать страницу `components/frontend.md` в русской Obsidian‑wiki проекта `makosh`. Страница документирует все шаблонные Vue‑компоненты, находящиеся в `frontend/src/shared/ui/`, а также shell‑обёртки, глобальные дизайн‑токены, классы тем и стили поверхностей. Каждое утверждение о поведении компонента опирается исключительно на встроенный исходный код; внешние знания не добавлены.
 
 ## Proposed pages / Предлагаемые страницы
 
 ### `components/frontend.md`
 
 ```markdown
-# Шаблонные компоненты фронтенда (Hermes UI)
+# Шаблонные компоненты фронтенда (Макошь UI)
 
 ## Обзор
 
-Фронтенд-часть проекта `hermes-hub` использует общую библиотеку UI-компонентов,
-построенных на примитивах `reka-ui` с собственной системой стилей Hermes.
+Фронтенд-часть проекта `makosh` использует общую библиотеку UI-компонентов,
+построенных на примитивах `reka-ui` с собственной системой стилей Макошь.
 Компоненты находятся в директории `frontend/src/shared/ui/`, глобальные стили —
 в `frontend/src/style.css`, `frontend/src/styles/surfaces.css` и
 `frontend/src/styles/theme-classes.css`.
@@ -41,7 +41,7 @@
 
 **События:** `update:modelValue(value: string)`, `focus(event: FocusEvent)`, `blur(event: FocusEvent)`
 
-**CSS-классы:** `hermes-input-wrapper`, `hermes-input`, `hermes-input--error`, `hermes-input-error`
+**CSS-классы:** `makosh-input-wrapper`, `makosh-input`, `makosh-input--error`, `makosh-input-error`
 
 **Состояния стилей:** hover (не в `disabled`/`readonly`) меняет цвет границы на
 `--hh-border-accent`; focus добавляет `box-shadow` с `--hh-focus-ring`; disabled
@@ -67,7 +67,7 @@
 
 **События:** `update:modelValue(value: string)`
 
-**CSS-классы:** `hermes-textarea-wrapper`, `hermes-textarea`, `hermes-textarea--error`, `hermes-textarea-error`
+**CSS-классы:** `makosh-textarea-wrapper`, `makosh-textarea`, `makosh-textarea--error`, `makosh-textarea-error`
 
 Состояния hover/focus/disabled/error — аналогично `Input`. Свойство `resize: vertical`.
 
@@ -92,10 +92,10 @@
 
 **События:** `update:modelValue(value: string)`
 
-**CSS-классы:** `hermes-select-wrapper`, `hermes-select-trigger`, `hermes-select-value`,
-`hermes-select-chevron`, `hermes-select-content`, `hermes-select-viewport`,
-`hermes-select-item`, `hermes-select-check`, `hermes-select-error`,
-`hermes-select--error`
+**CSS-классы:** `makosh-select-wrapper`, `makosh-select-trigger`, `makosh-select-value`,
+`makosh-select-chevron`, `makosh-select-content`, `makosh-select-viewport`,
+`makosh-select-item`, `makosh-select-check`, `makosh-select-error`,
+`makosh-select--error`
 
 **Детали реализации:**
 - Индикатор выбранного элемента — иконка `tabler:check` (цвет `--hh-accent`).
@@ -122,7 +122,7 @@
 
 **События:** `update:modelValue(value: boolean)`
 
-**CSS-классы:** `hermes-switch`, `hermes-switch--disabled`, `hermes-switch-thumb`
+**CSS-классы:** `makosh-switch`, `makosh-switch--disabled`, `makosh-switch-thumb`
 
 **Состояния:**
 - `[data-state="checked"]` — фон `--hh-accent`, thumb сдвигается на `translateX(1rem)`.
@@ -144,7 +144,7 @@
 
 **Слот:** default (содержимое метки).
 
-**CSS-класс:** `hermes-label` (font-size `0.8125rem`, font-weight `500`, цвет `--hh-text-primary`).
+**CSS-класс:** `makosh-label` (font-size `0.8125rem`, font-weight `500`, цвет `--hh-text-primary`).
 
 ---
 
@@ -160,8 +160,8 @@
 | `decorative` | `boolean?` | `true` |
 | `class` | `string?` | — |
 
-**CSS-классы:** `hermes-separator`, `hermes-separator--horizontal` (height `1px`, width `100%`),
-`hermes-separator--vertical` (width `1px`, height `100%`). Фон — `--hh-border`.
+**CSS-классы:** `makosh-separator`, `makosh-separator--horizontal` (height `1px`, width `100%`),
+`makosh-separator--vertical` (width `1px`, height `100%`). Фон — `--hh-border`.
 
 `decorative: true` скрывает разделитель от accessibility tree.
 
@@ -171,7 +171,7 @@
 
 Разделитель для выпадающих меню на основе `reka-ui` (`DropdownMenuSeparator`).
 
-Не имеет пропсов. Фиксированный CSS-класс: `hermes-dropdown-separator`
+Не имеет пропсов. Фиксированный CSS-класс: `makosh-dropdown-separator`
 (height `1px`, background `--hh-border`, margin `0.25rem 0.5rem`).
 
 ---
@@ -192,7 +192,7 @@
 
 **Слот:** default (содержимое viewport'а).
 
-**CSS-классы:** `hermes-scroll-area`, `hermes-scroll-viewport`, `hermes-scrollbar`, `hermes-scroll-thumb`
+**CSS-классы:** `makosh-scroll-area`, `makosh-scroll-viewport`, `makosh-scrollbar`, `makosh-scroll-thumb`
 
 Обе оси прокрутки (вертикальная и горизонтальная) отображаются всегда.
 Полоса прокрутки делается видимой при hover (фон `--hh-hover-bg`).
@@ -238,9 +238,9 @@ Thumb использует `background: var(--hh-border)` и `border-radius: var
 > **Примечание:** пропсы `width` и `height` объявлены, но не применены в шаблоне
 > или стилях — компонент рендерит `<div>` только с CSS-классами.
 
-**CSS-классы:** `hermes-skeleton`, `hermes-skeleton--rounded`
+**CSS-классы:** `makosh-skeleton`, `makosh-skeleton--rounded`
 
-Анимация: `hermes-skeleton-pulse` — пульсация opacity между `0.4` и `0.8` с периодом `1.5s`.
+Анимация: `makosh-skeleton-pulse` — пульсация opacity между `0.4` и `0.8` с периодом `1.5s`.
 
 ---
 
@@ -281,7 +281,7 @@ Thumb использует `background: var(--hh-border)` и `border-radius: var
 - `trigger` — элемент-триггер (рендерится через `PopoverTrigger` с `as-child`).
 - `default` — содержимое popover'а.
 
-**CSS-классы:** `hermes-popover-content`, `hermes-popover-arrow`, `hermes-popover-close`, `hermes-popover-close-btn`
+**CSS-классы:** `makosh-popover-content`, `makosh-popover-arrow`, `makosh-popover-close`, `makosh-popover-close-btn`
 
 **Детали:**
 - Кнопка закрытия с иконкой `tabler:x` (размер `0.875rem`) позиционирована абсолютно
@@ -319,11 +319,11 @@ Thumb использует `background: var(--hh-border)` и `border-radius: var
 - `default` — тело панели.
 - `footer` — футер (отображается только если слот передан; имеет верхнюю границу).
 
-**CSS-классы:** `hermes-sheet-overlay`, `hermes-sheet-content`, `hermes-sheet--left`,
-`hermes-sheet--right`, `hermes-sheet--top`, `hermes-sheet--bottom`,
-`hermes-sheet-header`, `hermes-sheet-body`, `hermes-sheet-footer`,
-`hermes-sheet-title`, `hermes-sheet-description`, `hermes-sheet-close`,
-`hermes-sheet-close-btn`
+**CSS-классы:** `makosh-sheet-overlay`, `makosh-sheet-content`, `makosh-sheet--left`,
+`makosh-sheet--right`, `makosh-sheet--top`, `makosh-sheet--bottom`,
+`makosh-sheet-header`, `makosh-sheet-body`, `makosh-sheet-footer`,
+`makosh-sheet-title`, `makosh-sheet-description`, `makosh-sheet-close`,
+`makosh-sheet-close-btn`
 
 **Детали:**
 - Ширина контента: `90vw`, максимум `400px`.
@@ -352,7 +352,7 @@ Thumb использует `background: var(--hh-border)` и `border-radius: var
 - `trigger` — элемент-триггер.
 - `default` — содержимое подсказки (если передан, заменяет пропс `content`).
 
-**CSS-классы:** `hermes-tooltip-content`, `hermes-tooltip-arrow`
+**CSS-классы:** `makosh-tooltip-content`, `makosh-tooltip-arrow`
 
 **Детали:**
 - Задержка перед показом: `400ms` (настраивается через `delayDuration`).
@@ -396,14 +396,14 @@ interface ToastItem {
 - `warning(title: string, description?: string): string`
 - `error(title: string, description?: string): string`
 
-Ключ внедрения: `'hermes-toast-context'`.
+Ключ внедрения: `'makosh-toast-context'`.
 
 **Слот:** default (основное содержимое страницы, в которое встраивается `ToastViewport`).
 
-**CSS-классы:** `hermes-toast-viewport`, `hermes-toast-root`, `hermes-toast-inner`,
-`hermes-toast-variant-icon`, `hermes-toast-content`, `hermes-toast-title`,
-`hermes-toast-description`, `hermes-toast-close-btn`, `hermes-toast--success`,
-`hermes-toast--warning`, `hermes-toast--error`
+**CSS-классы:** `makosh-toast-viewport`, `makosh-toast-root`, `makosh-toast-inner`,
+`makosh-toast-variant-icon`, `makosh-toast-content`, `makosh-toast-title`,
+`makosh-toast-description`, `makosh-toast-close-btn`, `makosh-toast--success`,
+`makosh-toast--warning`, `makosh-toast--error`
 
 **Детали:**
 - Viewport позиционирован фиксированно: `bottom: 1rem; right: 1rem`, max-width `360px`, z-index `200`.
@@ -433,8 +433,8 @@ interface ToastItem {
 
 **События:** `update:modelValue(value: number)`
 
-**CSS-классы:** `hermes-progress-root`, `hermes-progress--sm`, `hermes-progress--md`,
-`hermes-progress--lg`, `hermes-progress--indeterminate`, `hermes-progress-indicator`
+**CSS-классы:** `makosh-progress-root`, `makosh-progress--sm`, `makosh-progress--md`,
+`makosh-progress--lg`, `makosh-progress--indeterminate`, `makosh-progress-indicator`
 
 **Детали:**
 - Размеры: `sm` — height `0.25rem`, `md` — `0.5rem`, `lg` — `0.75rem`.
@@ -479,12 +479,12 @@ interface ToastItem {
   из пропса `tabs`).
 - `default` — содержимое вкладок (обычно компоненты `TabContent`).
 
-**CSS-классы:** `hermes-tabs`, `hermes-tabs-list`, `hermes-tabs-list--horizontal`,
-`hermes-tabs-list--vertical`, `hermes-tabs-trigger`
+**CSS-классы:** `makosh-tabs`, `makosh-tabs-list`, `makosh-tabs-list--horizontal`,
+`makosh-tabs-list--vertical`, `makosh-tabs-trigger`
 
 > **Важно:** автоматически рендерящиеся триггеры (из пропса `tabs`) используют класс
-> `hermes-tabs-trigger` (font-size `0.75rem`, padding `0.375rem 0.625rem`). Это
-> *отличается* от класса `hermes-tab-trigger`, используемого в `TabTrigger.vue`.
+> `makosh-tabs-trigger` (font-size `0.75rem`, padding `0.375rem 0.625rem`). Это
+> *отличается* от класса `makosh-tab-trigger`, используемого в `TabTrigger.vue`.
 
 #### TabTrigger (`TabTrigger.vue`)
 
@@ -500,7 +500,7 @@ interface ToastItem {
 
 **Слот:** default (содержимое триггера).
 
-**CSS-класс:** `hermes-tab-trigger` (font-size `0.8125rem`, height `1.75rem`,
+**CSS-класс:** `makosh-tab-trigger` (font-size `0.8125rem`, height `1.75rem`,
 padding `0 0.75rem`, border-radius `calc(var(--hh-radius-sm) - 2px)`).
 
 Состояние `[data-state="active"]` даёт цвет `--hh-accent`, фон `--hh-surface-panel` и
@@ -520,7 +520,7 @@ padding `0 0.75rem`, border-radius `calc(var(--hh-radius-sm) - 2px)`).
 
 **Слот:** default.
 
-**CSS-класс:** `hermes-tab-content`. При `focus-visible` — outline
+**CSS-класс:** `makosh-tab-content`. При `focus-visible` — outline
 `2px solid var(--hh-focus-ring)`.
 
 ---
@@ -563,7 +563,7 @@ padding `0 0.75rem`, border-radius `calc(var(--hh-radius-sm) - 2px)`).
 Глобальный файл стилей, определяющий:
 
 - **Tailwind-директивы:** `@tailwind base`, `@tailwind components`, `@tailwind utilities`.
-- **CSS-переменные Hermes** в `:root` с префиксом `--hh-*`.
+- **CSS-переменные Макошь** в `:root` с префиксом `--hh-*`.
 
 ### Основные категории токенов
 
@@ -700,22 +700,22 @@ per-view CSS-переопределений.
 
 | Файл | Факты, покрытые в предложенной странице |
 |---|---|
-| `DropdownMenuSeparator.vue` | Компонент-разделитель, зависимость `reka-ui`, CSS-класс `hermes-dropdown-separator`, фиксированные стили |
+| `DropdownMenuSeparator.vue` | Компонент-разделитель, зависимость `reka-ui`, CSS-класс `makosh-dropdown-separator`, фиксированные стили |
 | `Icon.vue` | Обёртка `@iconify/vue`, пропсы `icon`, `size`, `class`, `aria-hidden="true"` |
 | `Input.vue` | Пропсы (`modelValue`, `placeholder`, `disabled`, `readonly`, `type`, `error`, `class`), события (`update:modelValue`, `focus`, `blur`), CSS-классы и состояния стилей |
-| `Label.vue` | Пропсы `htmlFor`, `class`, CSS-класс `hermes-label`, слот по умолчанию |
+| `Label.vue` | Пропсы `htmlFor`, `class`, CSS-класс `makosh-label`, слот по умолчанию |
 | `Popover.vue` | Зависимость `reka-ui` (6 примитивов), пропсы (`open`, `side`, `sideOffset`, `align`, `class`), событие `update:open`, слоты `trigger`/default, кнопка закрытия с `tabler:x`, анимация `popover-in` |
 | `Progress.vue` | Зависимость `reka-ui` (`ProgressRoot`, `ProgressIndicator`), пропсы (`modelValue`, `max`, `indeterminate`, `size`, `class`), событие `update:modelValue`, `watchEffect` для transform, анимация `progress-indeterminate`, размеры `sm`/`md`/`lg` |
 | `ScrollArea.vue` | Зависимость `reka-ui` (4 примитива), пропсы `class`, `maxHeight` (неиспользуемый), CSS-классы, вертикальный и горизонтальный скроллбары |
 | `Select.vue` | Зависимость `reka-ui` (8 примитивов), пропсы, событие `update:modelValue`, `tabler:chevron-down`, `tabler:check`, классы и состояния |
 | `Separator.vue` | Зависимость `reka-ui` (`Separator`), пропсы `orientation`, `decorative`, `class`, CSS-классы |
 | `Sheet.vue` | Зависимость `reka-ui` (7 диалоговых примитивов), пропсы, событие `update:open`, слоты `trigger`/`header`/`default`/`footer`, анимации слайда, кнопка закрытия с `tabler:x` |
-| `Skeleton.vue` | Пропсы (`class`, `width`, `height`, `rounded` — два последних не используются в шаблоне), анимация `hermes-skeleton-pulse` |
+| `Skeleton.vue` | Пропсы (`class`, `width`, `height`, `rounded` — два последних не используются в шаблоне), анимация `makosh-skeleton-pulse` |
 | `Surface.vue` | Пропсы `as`, `tone` (`'panel' \| 'raised' \| 'deep'`), отсутствие scoped-стилей, зависимость от глобального `surfaces.css` |
 | `Switch.vue` | Зависимость `reka-ui` (`SwitchRoot`, `SwitchThumb`), пропсы, событие `update:modelValue`, состояния `checked`/`disabled`/`focus-visible` |
-| `TabContent.vue` | Зависимость `reka-ui` (`TabsContent`), пропсы `value`, `class`, `forceMount`, CSS-класс `hermes-tab-content` |
-| `TabTrigger.vue` | Зависимость `reka-ui` (`TabsTrigger`), пропсы, CSS-класс `hermes-tab-trigger` (отличается от `hermes-tabs-trigger` в `Tabs.vue`) |
-| `Tabs.vue` | Зависимость `reka-ui` (`TabsRoot`, `TabsList`, `TabsTrigger`), пропсы (`modelValue`, `active`, `defaultValue`, `orientation`, `tabs` и др.), события (`update:modelValue`, `select`), слоты `list`/`default`, CSS-класс `hermes-tabs-trigger` |
+| `TabContent.vue` | Зависимость `reka-ui` (`TabsContent`), пропсы `value`, `class`, `forceMount`, CSS-класс `makosh-tab-content` |
+| `TabTrigger.vue` | Зависимость `reka-ui` (`TabsTrigger`), пропсы, CSS-класс `makosh-tab-trigger` (отличается от `makosh-tabs-trigger` в `Tabs.vue`) |
+| `Tabs.vue` | Зависимость `reka-ui` (`TabsRoot`, `TabsList`, `TabsTrigger`), пропсы (`modelValue`, `active`, `defaultValue`, `orientation`, `tabs` и др.), события (`update:modelValue`, `select`), слоты `list`/`default`, CSS-класс `makosh-tabs-trigger` |
 | `Textarea.vue` | Пропсы, событие `update:modelValue`, CSS-классы, состояния стилей |
 | `Toast.vue` | Зависимость `reka-ui` (6 примитивов), интерфейс `ToastItem`, provide-контекст, варианты `default`/`success`/`warning`/`error`, иконки вариантов, анимации появления/закрытия |
 | `Tooltip.vue` | Зависимость `reka-ui` (5 примитивов), пропсы, слоты, задержка `400ms`, анимация `tooltip-in` |
@@ -728,9 +728,9 @@ per-view CSS-переопределений.
 ## Drift candidates / Кандидаты на drift
 
 1. **`Tabs.vue` vs `TabTrigger.vue` — разные CSS-классы для триггеров.**
-   `Tabs.vue` рендерит встроенные триггеры с классом `hermes-tabs-trigger`
+   `Tabs.vue` рендерит встроенные триггеры с классом `makosh-tabs-trigger`
    (font-size `0.75rem`, padding `0.375rem 0.625rem`). Отдельный компонент
-   `TabTrigger.vue` использует класс `hermes-tab-trigger` с отличающимися
+   `TabTrigger.vue` использует класс `makosh-tab-trigger` с отличающимися
    стилями (font-size `0.8125rem`, height `1.75rem`, padding `0 0.75rem`).
    Из контекста неясно, является ли это намеренным разделением
    (compound vs standalone) или расхождением, требующим унификации.

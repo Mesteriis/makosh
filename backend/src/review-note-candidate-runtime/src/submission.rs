@@ -1,15 +1,15 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{CommandMetadataV1, ContractRefV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_review_note_candidate_api::{
+use makosh_review_note_candidate_api::{
     REVIEW_NOTE_CANDIDATE_MODULE_ID_V1, REVIEW_NOTE_CANDIDATE_SUBMISSION_CAPABILITY_ID_V1,
     ReviewNoteCandidateEnvelopeContextV1,
     build_review_note_candidate_submission_rejected_outbox_record_v1,
@@ -20,18 +20,18 @@ use hermes_review_note_candidate_api::{
         ReviewNoteCandidateSubmissionRejectCodeV1, SubmitNoteCandidateForReviewCommandV1,
     },
 };
-use hermes_review_note_candidate_core::{
+use makosh_review_note_candidate_core::{
     ReviewNoteCandidateDraftV1, ReviewNoteCandidateTimestampV1, ReviewNoteSourceBasisV1,
     ReviewNoteTopicHintV1,
 };
-use hermes_review_note_candidate_persistence::{
+use makosh_review_note_candidate_persistence::{
     CompleteReviewNoteCandidateSubmissionV1, PersistReviewNoteCandidateMaterializationV1,
     RejectReviewNoteCandidateSubmissionV1, ReserveReviewNoteCandidateSubmissionOutcomeV1,
     ReserveReviewNoteCandidateSubmissionV1, ReviewNoteCandidateBlobReceiptV1,
     ReviewNoteCandidateOutboxRecordV1, ReviewNoteCandidatePersistenceErrorV1,
     ReviewNoteCandidatePersistenceV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::ContractReferenceV1,
 };
@@ -227,7 +227,7 @@ pub(crate) async fn consume_review_note_candidate_submission_once_v1(
         confidence_basis_points: content.confidence_basis_points,
         submitted_at: timestamp(runtime.now_unix_millis),
     };
-    let review_id = hermes_review_note_candidate_core::derive_review_note_candidate_id_v1(
+    let review_id = makosh_review_note_candidate_core::derive_review_note_candidate_id_v1(
         runtime.logical_owner_id,
         &command.candidate_id,
         &command.candidate_digest,
@@ -297,19 +297,19 @@ fn topic_hint(value: i32) -> Result<ReviewNoteTopicHintV1, ReviewNoteCandidateSu
 
 struct MaterializedReviewNoteCandidateV1 {
     bytes: zeroize::Zeroizing<Vec<u8>>,
-    cleanup: hermes_review_note_candidate_persistence::ReviewNoteCandidateBlobCleanupV1,
+    cleanup: makosh_review_note_candidate_persistence::ReviewNoteCandidateBlobCleanupV1,
 }
 
 enum MaterializationReadOutcomeV1 {
     Ready(MaterializedReviewNoteCandidateV1),
-    Invalid(hermes_review_note_candidate_persistence::ReviewNoteCandidateBlobCleanupV1),
+    Invalid(makosh_review_note_candidate_persistence::ReviewNoteCandidateBlobCleanupV1),
 }
 
 async fn materialize_or_read(
     persistence: &ReviewNoteCandidatePersistenceV1,
     channel: &mut ManagedControlChannelV2<UnixStream>,
     dispatcher: &mut dyn ManagedControlRequestDispatcherV2<UnixStream>,
-    submission: &hermes_review_note_candidate_persistence::PersistedReviewNoteCandidateSubmissionV1,
+    submission: &makosh_review_note_candidate_persistence::PersistedReviewNoteCandidateSubmissionV1,
     now_unix_millis: i64,
 ) -> Result<MaterializationReadOutcomeV1, ReviewNoteCandidateSubmissionErrorV1> {
     let cleanup = if let Some(cleanup) = &submission.materialization {
@@ -349,7 +349,7 @@ async fn cleanup_submission(
     persistence: &ReviewNoteCandidatePersistenceV1,
     channel: &mut ManagedControlChannelV2<UnixStream>,
     dispatcher: &mut dyn ManagedControlRequestDispatcherV2<UnixStream>,
-    submission: &hermes_review_note_candidate_persistence::PersistedReviewNoteCandidateSubmissionV1,
+    submission: &makosh_review_note_candidate_persistence::PersistedReviewNoteCandidateSubmissionV1,
     accepted: bool,
     now_unix_millis: i64,
 ) -> Result<(), ReviewNoteCandidateSubmissionErrorV1> {
@@ -377,7 +377,7 @@ struct CleanupMaterializationV1<'a> {
     submission_message_id: [u8; 16],
     submission_id: [u8; 16],
     materialization:
-        Option<&'a hermes_review_note_candidate_persistence::ReviewNoteCandidateBlobCleanupV1>,
+        Option<&'a makosh_review_note_candidate_persistence::ReviewNoteCandidateBlobCleanupV1>,
     accepted: bool,
     now_unix_millis: i64,
 }
@@ -574,7 +574,7 @@ fn event_error(_: RuntimePullDeliveryErrorV1) -> ReviewNoteCandidateSubmissionEr
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_review_note_candidate_api::{
+    use makosh_review_note_candidate_api::{
         ReviewNoteCandidateEnvelopeContextV1, build_submit_review_note_candidate_outbox_record_v1,
         wire::ReviewTargetBoundCandidateReceiptV1,
     };
@@ -598,7 +598,7 @@ mod tests {
             },
             1_800_000_100,
             &ReviewNoteCandidateEnvelopeContextV1 {
-                module_id: "hermes-communication-note-candidate-runtime".to_owned(),
+                module_id: "makosh-communication-note-candidate-runtime".to_owned(),
                 runtime_instance_id: "runtime-1".to_owned(),
                 runtime_generation: 1,
                 recorded_at_unix_seconds: 1_800_000_000,

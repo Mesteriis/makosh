@@ -100,13 +100,13 @@ canonical truth и не публикует новый cross-owner durable event.
 Ввести exact build unit:
 
 ```text
-hermes-communications-sender-insights-api
+makosh-communications-sender-insights-api
 ```
 
 и generated contract:
 
 ```text
-hermes.communications.sender_insights.v1
+makosh.communications.sender_insights.v1
 communications.sender-insights.v1
 ```
 

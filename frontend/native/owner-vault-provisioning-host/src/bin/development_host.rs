@@ -5,41 +5,41 @@ use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use std::sync::Arc;
 
-use hermes_legacy_provider_recovery::{
+use makosh_legacy_provider_recovery::{
     LegacyProviderCandidateKindV1, LegacyProviderRecoveryBundleV1, LegacyProviderRecoveryCountsV1,
     LegacyProviderRecoveryPlanV1, LegacyProviderRecoverySecretPurposeV1,
     LegacyProviderRecoverySessionsV1, LegacyProviderRecoverySourceV1,
     LegacyProviderRecoveryStateV1, LegacyProviderRecoveryStepDispositionV1,
     LegacyProviderRecoveryTerminalStateV1,
 };
-use hermes_owner_device_proof_host::OwnerDeviceProofHostV1;
-use hermes_owner_vault_provisioning_host::{
+use makosh_owner_device_proof_host::OwnerDeviceProofHostV1;
+use makosh_owner_vault_provisioning_host::{
     AuthorizedProvisioningV1, CommittedProvisioningReceiptV1, OwnerVaultProvisioningHostV1,
     owner_vault_action_from_wire_code_v1, owner_vault_secret_class_from_wire_code_v1,
 };
-use hermes_vault_protocol::{SecretClassV1, VaultActionV1};
+use makosh_vault_protocol::{SecretClassV1, VaultActionV1};
 use serde::{Deserialize, Serialize};
 use tiny_http::{Header, Method, Request, Response, Server, StatusCode};
 use zeroize::Zeroizing;
 
 const DEFAULT_LISTEN_ADDRESS: &str = "127.0.0.1:9445";
 const EXACT_BROWSER_ORIGIN: &str = "http://127.0.0.1:5173";
-const PROOF_HEADER: &str = "x-hermes-development-host-proof";
+const PROOF_HEADER: &str = "x-makosh-development-host-proof";
 const JSON_CONTENT_TYPE: &str = "application/json";
 const MAX_REQUEST_BYTES: usize = 256 * 1024;
-const START_PATH: &str = "/__hermes/owner-vault-host/v1/start";
-const SEAL_PATH: &str = "/__hermes/owner-vault-host/v1/seal";
-const OPEN_RECEIPT_PATH: &str = "/__hermes/owner-vault-host/v1/open-receipt";
-const CANCEL_PATH: &str = "/__hermes/owner-vault-host/v1/cancel";
-const RECOVERY_START_PATH: &str = "/__hermes/legacy-provider-recovery/v1/start";
-const RECOVERY_SOURCE_PATH: &str = "/__hermes/legacy-provider-recovery/v1/source";
-const RECOVERY_SEAL_SOURCE_PATH: &str = "/__hermes/legacy-provider-recovery/v1/seal-source";
-const RECOVERY_BEGIN_STEP_PATH: &str = "/__hermes/legacy-provider-recovery/v1/begin-step";
-const RECOVERY_COMPLETE_STEP_PATH: &str = "/__hermes/legacy-provider-recovery/v1/complete-step";
+const START_PATH: &str = "/__makosh/owner-vault-host/v1/start";
+const SEAL_PATH: &str = "/__makosh/owner-vault-host/v1/seal";
+const OPEN_RECEIPT_PATH: &str = "/__makosh/owner-vault-host/v1/open-receipt";
+const CANCEL_PATH: &str = "/__makosh/owner-vault-host/v1/cancel";
+const RECOVERY_START_PATH: &str = "/__makosh/legacy-provider-recovery/v1/start";
+const RECOVERY_SOURCE_PATH: &str = "/__makosh/legacy-provider-recovery/v1/source";
+const RECOVERY_SEAL_SOURCE_PATH: &str = "/__makosh/legacy-provider-recovery/v1/seal-source";
+const RECOVERY_BEGIN_STEP_PATH: &str = "/__makosh/legacy-provider-recovery/v1/begin-step";
+const RECOVERY_COMPLETE_STEP_PATH: &str = "/__makosh/legacy-provider-recovery/v1/complete-step";
 const RECOVERY_FINISH_CANDIDATE_PATH: &str =
-    "/__hermes/legacy-provider-recovery/v1/finish-candidate";
-const RECOVERY_CANCEL_PATH: &str = "/__hermes/legacy-provider-recovery/v1/cancel";
-const OWNER_DEVICE_PROOF_SIGN_PATH: &str = "/__hermes/owner-device-proof/v1/sign";
+    "/__makosh/legacy-provider-recovery/v1/finish-candidate";
+const RECOVERY_CANCEL_PATH: &str = "/__makosh/legacy-provider-recovery/v1/cancel";
+const OWNER_DEVICE_PROOF_SIGN_PATH: &str = "/__makosh/owner-device-proof/v1/sign";
 
 fn main() -> Result<(), String> {
     let configuration = DevelopmentHostConfigurationV1::from_args(std::env::args().skip(1))?;
@@ -67,7 +67,7 @@ fn main() -> Result<(), String> {
         _ => return Err("legacy provider recovery configuration is incomplete".to_owned()),
     };
     println!(
-        "Hermes development host is ready at {}",
+        "Макошь development host is ready at {}",
         configuration.listen_address
     );
     for request in server.incoming_requests() {

@@ -18,7 +18,7 @@ const emit = defineEmits<{
 	unmountAutoFocus: [event: Event]
 }>()
 
-const classes = computed(() => ['hermes-focus-trap', props.class])
+const classes = computed(() => ['makosh-focus-trap', props.class])
 </script>
 
 <template>

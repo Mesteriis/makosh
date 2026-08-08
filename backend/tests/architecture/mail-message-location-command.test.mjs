@@ -15,7 +15,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   proto: new URL(
-    'src/mail-api/proto/hermes/mail/message_location/v1/client.proto',
+    'src/mail-api/proto/makosh/mail/message_location/v1/client.proto',
     BACKEND_ROOT,
   ),
   contract: new URL('src/mail-api/src/client_contract.rs', BACKEND_ROOT),
@@ -45,7 +45,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   generated: new URL(
-    'frontend/src/gen/hermes/mail/message_location/v1/client_pb.ts',
+    'frontend/src/gen/makosh/mail/message_location/v1/client_pb.ts',
     PROJECT_ROOT,
   ),
   commandClient: new URL(
@@ -126,7 +126,7 @@ test('Mail message location commands are reversible, provider-owned and live-con
 
   assert.match(
     persistence,
-    /CREATE TABLE IF NOT EXISTS hermes_data\.mail_message_location_operations/,
+    /CREATE TABLE IF NOT EXISTS makosh_data\.mail_message_location_operations/,
   );
   assert.match(persistence, /exact_command_bytes BYTEA NOT NULL/);
   assert.match(persistence, /request_sha256 BYTEA NOT NULL/);
@@ -148,9 +148,9 @@ test('Mail message location commands are reversible, provider-owned and live-con
 
   assert.match(runtime, /submit_message_location_command/);
   assert.match(runtime, /execute_next_message_location_command/);
-  assert.match(runtime, /hermes_mail_imap::move_message/);
+  assert.match(runtime, /makosh_mail_imap::move_message/);
   assert.match(runtime, /client\.restore_message/);
-  assert.doesNotMatch(runtime, /hermes_communications_runtime|communications-runtime/);
+  assert.doesNotMatch(runtime, /makosh_communications_runtime|communications-runtime/);
   assert.match(managedSetup, /mail_runtime_storage_bundle_v1/);
   assert.match(managedSetup, /MailClientContractV1::MessageLocationCommand/);
   assert.match(managedSetup, /MailClientContractV1::MessageLocationQuery/);

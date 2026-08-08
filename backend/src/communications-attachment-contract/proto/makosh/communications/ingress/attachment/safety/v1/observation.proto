@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package makosh.communications.ingress.attachment.safety.v1;
+
+// External scanner/security fact. It contains no content, scanner identity,
+// policy detail, labels, provider locator, or generic explanation.
+message AttachmentSafetyVerdictObservationV1 {
+  bytes attachment_anchor_id = 1;
+  AttachmentSafetyExpectedStateV1 expected_state = 2;
+  AttachmentSafetyVerdictV1 verdict = 3;
+  bytes evidence_id = 4;
+  int64 observed_at_unix_seconds = 5;
+}
+
+enum AttachmentSafetyExpectedStateV1 {
+  ATTACHMENT_SAFETY_EXPECTED_STATE_V1_UNSPECIFIED = 0;
+  ATTACHMENT_SAFETY_EXPECTED_STATE_V1_DESCRIPTOR_ONLY = 1;
+  ATTACHMENT_SAFETY_EXPECTED_STATE_V1_BLOB_PENDING = 2;
+  ATTACHMENT_SAFETY_EXPECTED_STATE_V1_BLOB_ADMITTED = 3;
+}
+
+enum AttachmentSafetyVerdictV1 {
+  ATTACHMENT_SAFETY_VERDICT_V1_UNSPECIFIED = 0;
+  ATTACHMENT_SAFETY_VERDICT_V1_SAFE_FOR_DELIVERY = 1;
+  ATTACHMENT_SAFETY_VERDICT_V1_QUARANTINED = 2;
+  ATTACHMENT_SAFETY_VERDICT_V1_REJECTED = 3;
+}

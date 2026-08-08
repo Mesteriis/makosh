@@ -1,5 +1,5 @@
 [package]
-name = "hermes-attachment-archive-inspection-zip"
+name = "makosh-attachment-archive-inspection-zip"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,11 +7,11 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "engine"
 owner = "attachment_archive_inspection"
 surface = "implementation"
 
 [dependencies]
-hermes-attachment-archive-inspection-core = { path = "../attachment-archive-inspection-core" }
+makosh-attachment-archive-inspection-core = { path = "../attachment-archive-inspection-core" }
 zip = { version = "=6.0.0", default-features = false, features = ["deflate-flate2-zlib-rs"] }

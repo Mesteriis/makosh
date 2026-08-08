@@ -13,16 +13,16 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-key-value',
-  `hermes-key-value--${props.tone}`,
+  'makosh-key-value',
+  `makosh-key-value--${props.tone}`,
   props.class
 ])
 </script>
 
 <template>
   <div :class="classes">
-    <dt class="hermes-key-value-label">{{ label }}</dt>
-    <dd class="hermes-key-value-value">{{ value }}</dd>
-    <dd v-if="description" class="hermes-key-value-description">{{ description }}</dd>
+    <dt class="makosh-key-value-label">{{ label }}</dt>
+    <dd class="makosh-key-value-value">{{ value }}</dd>
+    <dd v-if="description" class="makosh-key-value-description">{{ description }}</dd>
   </div>
 </template>

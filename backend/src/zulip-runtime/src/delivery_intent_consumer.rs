@@ -4,10 +4,10 @@
 //! provider discriminator and imports no workflow or Communications domain
 //! implementation.
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimeSubscribePermitV1, receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1, ResultMetadataV1,
@@ -15,8 +15,8 @@ use hermes_events_protocol::{
     },
     validation::envelope::{decode_envelope_v1, validate_envelope_v1},
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
-use hermes_zulip_delivery_intent_contract::{
+use makosh_runtime_protocol::v1::ContractReferenceV1;
+use makosh_zulip_delivery_intent_contract::{
     ZULIP_DELIVERY_INTENT_SOURCE_MODULE_ID_V1, ZULIP_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1,
     validate_zulip_delivery_intent_execute_v1, validate_zulip_delivery_intent_rejected_v1,
     wire::{
@@ -26,7 +26,7 @@ use hermes_zulip_delivery_intent_contract::{
     zulip_delivery_intent_execute_contract_reference_v1,
     zulip_delivery_intent_rejected_contract_reference_v1,
 };
-use hermes_zulip_persistence::{
+use makosh_zulip_persistence::{
     ZulipDeliveryIntentAdmissionV1, ZulipDeliveryIntentInboxOutcomeV1, ZulipDeliveryIntentStoreV1,
     ZulipDurablePersistenceError,
 };
@@ -34,9 +34,9 @@ use prost::Message;
 use prost_types::Timestamp;
 use sha2::{Digest, Sha256};
 
-const MESSAGE_DOMAIN: &[u8] = b"hermes.zulip.delivery-intent.execute.v1";
-const REJECTED_MESSAGE_DOMAIN: &[u8] = b"hermes.zulip.delivery-intent.rejected.v1";
-const ZULIP_RUNTIME_MODULE_ID: &str = "hermes-zulip-runtime";
+const MESSAGE_DOMAIN: &[u8] = b"makosh.zulip.delivery-intent.execute.v1";
+const REJECTED_MESSAGE_DOMAIN: &[u8] = b"makosh.zulip.delivery-intent.rejected.v1";
+const ZULIP_RUNTIME_MODULE_ID: &str = "makosh-zulip-runtime";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DecodedZulipDeliveryIntentV1 {
@@ -208,7 +208,7 @@ pub fn decode_zulip_delivery_intent_v1(
 }
 
 fn exact_contract(
-    value: Option<&hermes_events_protocol::v1::ContractRefV1>,
+    value: Option<&makosh_events_protocol::v1::ContractRefV1>,
     expected: &ContractReferenceV1,
 ) -> bool {
     value.is_some_and(|value| {
@@ -340,15 +340,15 @@ fn id32(value: &[u8]) -> Result<[u8; 32], ZulipDeliveryIntentDecodeErrorV1> {
 
 #[cfg(test)]
 mod tests {
-    use hermes_events_protocol::{
+    use makosh_events_protocol::{
         delivery::OutboxRecordV1,
         v1::{
             ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1,
             FenceKindV1, SourceFenceV1, SourceRefV1, durable_envelope_v1::Semantics,
         },
     };
-    use hermes_runtime_protocol::v1::ContractReferenceV1;
-    use hermes_zulip_delivery_intent_contract::{
+    use makosh_runtime_protocol::v1::ContractReferenceV1;
+    use makosh_zulip_delivery_intent_contract::{
         ZULIP_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1,
         wire::ZulipDeliveryIntentBodySourceReceiptV1,
     };

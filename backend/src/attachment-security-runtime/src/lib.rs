@@ -12,4 +12,4 @@ mod text_delegation;
 
 pub use scan::AttachmentSecurityScanAdapterErrorV1;
 
-pub const PACKAGE: &str = "hermes-attachment-security-runtime";
+pub const PACKAGE: &str = "makosh-attachment-security-runtime";

@@ -1,6 +1,6 @@
 //! SQLite persistence for trusted Event Hub stream budgets.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleEventEnvelopeKindV1, PlatformEventHubTopologyV1, PlatformEventStreamBudgetV1,
 };
 use rusqlite::{OptionalExtension, params};
@@ -22,13 +22,13 @@ impl SqliteControlStore {
         self.with_connection(move |connection| {
             let transaction = connection.unchecked_transaction()?;
             let changed = transaction.execute(
-                "INSERT INTO hermes_kernel_platform_event_hub_topology
+                "INSERT INTO makosh_kernel_platform_event_hub_topology
                  (singleton, revision, nats_endpoint, nats_username, credential_revision)
                  VALUES (1, ?1, ?2, ?3, ?4)
                  ON CONFLICT(singleton) DO UPDATE SET revision=excluded.revision,
                    nats_endpoint=excluded.nats_endpoint, nats_username=excluded.nats_username,
                    credential_revision=excluded.credential_revision
-                 WHERE excluded.revision = hermes_kernel_platform_event_hub_topology.revision + 1",
+                 WHERE excluded.revision = makosh_kernel_platform_event_hub_topology.revision + 1",
                 params![
                     as_sql(topology.revision())?,
                     topology.nats_endpoint(),
@@ -39,10 +39,10 @@ impl SqliteControlStore {
             if changed != 1 {
                 return Err(StoreError::PlatformEventHubTopologyRevisionConflict);
             }
-            transaction.execute("DELETE FROM hermes_kernel_platform_event_stream_budget", [])?;
+            transaction.execute("DELETE FROM makosh_kernel_platform_event_stream_budget", [])?;
             for budget in topology.stream_budgets() {
                 transaction.execute(
-                    "INSERT INTO hermes_kernel_platform_event_stream_budget
+                    "INSERT INTO makosh_kernel_platform_event_stream_budget
                      (envelope_kind, max_bytes, max_age_millis, replicas)
                      VALUES (?1, ?2, ?3, ?4)",
                     params![
@@ -64,7 +64,7 @@ impl SqliteControlStore {
             let row = connection
                 .query_row(
                     "SELECT revision, nats_endpoint, nats_username, credential_revision
-                     FROM hermes_kernel_platform_event_hub_topology WHERE singleton=1",
+                     FROM makosh_kernel_platform_event_hub_topology WHERE singleton=1",
                     [],
                     |row| {
                         Ok((
@@ -88,7 +88,7 @@ fn read_topology(
     let (revision, nats_endpoint, nats_username, credential_revision) = row;
     let mut statement = connection.prepare(
         "SELECT envelope_kind, max_bytes, max_age_millis, replicas
-         FROM hermes_kernel_platform_event_stream_budget ORDER BY envelope_kind",
+         FROM makosh_kernel_platform_event_stream_budget ORDER BY envelope_kind",
     )?;
     let budgets = statement
         .query_map([], |row| {

@@ -1,6 +1,6 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-mail-contacts-sync-core";
+pub const PACKAGE: &str = "makosh-mail-contacts-sync-core";
 pub const MAIL_CONTACTS_SYNC_MAX_ACCOUNT_ID_BYTES_V1: usize = 256;
 pub const MAIL_CONTACTS_SYNC_MAX_CURSOR_BYTES_V1: usize = 4096;
 

@@ -10,21 +10,21 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use hermes_communication_delivery_intent_persistence::schema::communication_delivery_intent_storage_bundle_v1;
-use hermes_communication_delivery_intent_runtime::admission::{
+use makosh_communication_delivery_intent_persistence::schema::communication_delivery_intent_storage_bundle_v1;
+use makosh_communication_delivery_intent_runtime::admission::{
     communication_delivery_intent_module_descriptor_v1,
     communication_delivery_intent_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
 pub const DELIVERY_INTENT_ASSEMBLY_FRAGMENT_VERSION_V1: u32 = 1;
 pub const DELIVERY_INTENT_ASSEMBLY_OWNER_ID: &str = "communication_delivery_intent";
-pub const DELIVERY_INTENT_ASSEMBLY_MODULE_ID: &str = "hermes-communication-delivery-intent-runtime";
+pub const DELIVERY_INTENT_ASSEMBLY_MODULE_ID: &str = "makosh-communication-delivery-intent-runtime";
 pub const DELIVERY_INTENT_RUNTIME_ARTIFACT_ID: &str = "communication_delivery_intent.runtime.v1";
 pub const DELIVERY_INTENT_STORAGE_ARTIFACT_ID: &str = "communication_delivery_intent.storage.v1";
 pub const DELIVERY_INTENT_DESCRIPTOR_FILE: &str =
@@ -35,7 +35,7 @@ pub const DELIVERY_INTENT_STORAGE_BUNDLE_FILE: &str =
 pub const DELIVERY_INTENT_ARTIFACT_FRAGMENT_FILE: &str =
     "communication_delivery_intent.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH: &str = "bin/hermes-communication-delivery-intent-runtime";
+const RUNTIME_RELATIVE_PATH: &str = "bin/makosh-communication-delivery-intent-runtime";
 const DESCRIPTOR_RELATIVE_PATH: &str =
     "contracts/communication_delivery_intent.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH: &str = "contracts/communication_delivery_intent.runtime.settings.pb";
@@ -261,8 +261,8 @@ mod tests {
         sync::atomic::{AtomicU64, Ordering},
     };
 
-    use hermes_runtime_protocol::v1::{ModuleDescriptorV1, SettingsSchemaV1};
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_runtime_protocol::v1::{ModuleDescriptorV1, SettingsSchemaV1};
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -271,7 +271,7 @@ mod tests {
     #[test]
     fn materializes_exact_unsigned_workflow_runtime_and_storage_fragment() {
         let root = temporary_directory();
-        let runtime = root.join("hermes-communication-delivery-intent-runtime");
+        let runtime = root.join("makosh-communication-delivery-intent-runtime");
         fs::write(&runtime, b"runtime").expect("write runtime");
         let output = root.join("assembly");
         let paths = materialize_delivery_intent_release_assembly_v1(&output, "build-1", &runtime)

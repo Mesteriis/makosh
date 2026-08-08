@@ -13,7 +13,7 @@ fn browser_credential_is_resolved_only_while_its_device_is_active() {
 }
 
 fn active_browser_credential_fixture() -> (std::path::PathBuf, Arc<SqliteControlStore>, Vec<u8>) {
-    let root = unique_target_root("hermes-browser-gateway-session");
+    let root = unique_target_root("makosh-browser-gateway-session");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = Arc::new(
         SqliteControlStore::create(&root.join("control.sqlite"), "instance-browser", 1)
@@ -26,7 +26,7 @@ fn active_browser_credential_fixture() -> (std::path::PathBuf, Arc<SqliteControl
     store
         .admit_browser_device(
             &BrowserDeviceEnrollmentV1::new(
-                hermes_kernel_control_store::BrowserDeviceEnrollmentInputV1 {
+                makosh_kernel_control_store::BrowserDeviceEnrollmentInputV1 {
                     owner_id: "owner-1".to_owned(),
                     device_id: "browser-1".to_owned(),
                     credential_id: vec![1],

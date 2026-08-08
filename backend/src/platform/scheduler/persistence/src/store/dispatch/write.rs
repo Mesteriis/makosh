@@ -24,7 +24,7 @@ pub(crate) async fn insert_dispatch(
 ) -> Result<(), SchedulerDispatchClaimErrorV1> {
     let claim = dispatch.claim();
     let record = dispatch.record();
-    let inserted = query("INSERT INTO hermes_platform.scheduler_dispatches (run_id, lease_epoch, message_id, envelope_sha256, exact_envelope_bytes, state, created_at_unix_ms) VALUES ($1, $2, $3, $4, $5, 'pending', $6)")
+    let inserted = query("INSERT INTO makosh_platform.scheduler_dispatches (run_id, lease_epoch, message_id, envelope_sha256, exact_envelope_bytes, state, created_at_unix_ms) VALUES ($1, $2, $3, $4, $5, 'pending', $6)")
         .bind(claim.run_id().bytes().to_vec())
         .bind(i64::try_from(claim.lease_epoch()).map_err(|_| SchedulerDispatchClaimErrorV1::ClaimDenied)?)
         .bind(record.message_id().to_vec())

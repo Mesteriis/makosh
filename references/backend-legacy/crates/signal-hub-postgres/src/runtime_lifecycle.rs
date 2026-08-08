@@ -1,4 +1,4 @@
-use hermes_signal_hub_api::runtime_lifecycle::{
+use makosh_signal_hub_api::runtime_lifecycle::{
     RuntimeLifecyclePort, RuntimeLifecyclePortError, RuntimeLifecyclePortFuture,
     RuntimeLifecycleState, RuntimeLifecycleUpdate,
 };

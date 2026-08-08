@@ -1,6 +1,6 @@
 use chrono::Utc;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 use serde_json::{Value, json};
 
 use super::command_service::{CommunicationCommandService, CommunicationCommandServiceError};
@@ -13,7 +13,7 @@ impl CommunicationCommandService {
         payload: Value,
         source_ref: String,
         provenance: Value,
-    ) -> Result<hermes_observations_api::models::Observation, CommunicationCommandServiceError>
+    ) -> Result<makosh_observations_api::models::Observation, CommunicationCommandServiceError>
     {
         ObservationStore::new(self.pool.clone())
             .capture(
@@ -37,7 +37,7 @@ impl CommunicationCommandService {
         message_id: &str,
         operation: &'static str,
         payload: Value,
-    ) -> Result<hermes_observations_api::models::Observation, CommunicationCommandServiceError>
+    ) -> Result<makosh_observations_api::models::Observation, CommunicationCommandServiceError>
     {
         self.capture_observation(
             "message flag action",

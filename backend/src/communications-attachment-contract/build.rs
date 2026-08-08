@@ -10,25 +10,25 @@ fn main() {
             "communications-attachment-blob-admission-observation-v1.bin",
             "communications_attachment_blob_admission_observation_schema.rs",
             "COMMUNICATION_ATTACHMENT_BLOB_ADMISSION_OBSERVATION_SCHEMA_SHA256",
-            "proto/hermes/communications/ingress/attachment/blob/v1/observation.proto",
+            "proto/makosh/communications/ingress/attachment/blob/v1/observation.proto",
         ),
         (
             "communications-attachment-safety-verdict-observation-v1.bin",
             "communications_attachment_safety_verdict_observation_schema.rs",
             "COMMUNICATION_ATTACHMENT_SAFETY_VERDICT_OBSERVATION_SCHEMA_SHA256",
-            "proto/hermes/communications/ingress/attachment/safety/v1/observation.proto",
+            "proto/makosh/communications/ingress/attachment/safety/v1/observation.proto",
         ),
         (
             "communications-attachment-anchor-recorded-v1.bin",
             "communications_attachment_anchor_recorded_schema.rs",
             "COMMUNICATION_ATTACHMENT_ANCHOR_RECORDED_SCHEMA_SHA256",
-            "proto/hermes/communications/ingress/attachment/anchor/v1/recorded.proto",
+            "proto/makosh/communications/ingress/attachment/anchor/v1/recorded.proto",
         ),
         (
             "communications-attachment-lifecycle-v1.bin",
             "communications_attachment_lifecycle_schema.rs",
             "COMMUNICATIONS_ATTACHMENT_LIFECYCLE_SCHEMA_SHA256",
-            "proto/hermes/communications/attachment/v1/lifecycle.proto",
+            "proto/makosh/communications/attachment/v1/lifecycle.proto",
         ),
     ] {
         compile_schema(&output, descriptor, schema, constant, proto);

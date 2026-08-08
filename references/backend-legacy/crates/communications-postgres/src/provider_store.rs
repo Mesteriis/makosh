@@ -1,4 +1,4 @@
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::{
     CommunicationProviderKind, DeletedProviderAccount, NewProviderAccount,
     NewProviderAccountSecretBinding, ProviderAccount, ProviderAccountCommandPort,
     ProviderAccountLookupPort, ProviderAccountMutationOrigin, ProviderAccountPortError,
@@ -13,9 +13,9 @@ use sqlx::{Postgres, Transaction};
 
 use crate::errors::CommunicationIngestionError;
 
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::review_links::link_domain_entity_in_transaction;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::review_links::link_domain_entity_in_transaction;
+use makosh_observations_postgres::store::ObservationStore;
 
 #[path = "provider_store_support.rs"]
 mod provider_store_support;

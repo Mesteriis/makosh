@@ -2,7 +2,7 @@
 
 use std::collections::BTreeSet;
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleEventDeliveryPolicyV1, ModuleEventEnvelopeKindV1, ModuleEventRouteDirectionV1,
     ModuleEventRouteRequestInputV1, ModuleEventRouteRequestV1,
     ModuleEventSubscriptionRequirementV1, ModuleRegistration,
@@ -92,7 +92,7 @@ pub(crate) fn insert_event_route_requests(
 ) -> Result<(), StoreError> {
     for request in requests {
         connection.execute(
-            "INSERT INTO hermes_kernel_module_event_route_request
+            "INSERT INTO makosh_kernel_module_event_route_request
              (registration_id, capability_id, envelope_kind, contract_owner, contract_name,
               contract_major, contract_revision, contract_schema_sha256, direction, max_in_flight)
              VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
@@ -111,7 +111,7 @@ pub(crate) fn insert_event_route_requests(
         )?;
         if let Some(policy) = request.delivery_policy() {
             connection.execute(
-                "INSERT INTO hermes_kernel_module_event_delivery_policy
+                "INSERT INTO makosh_kernel_module_event_delivery_policy
                  (registration_id, capability_id, envelope_kind, contract_owner, contract_name,
                   contract_major, direction, subscription_requirement, max_deliver, ack_wait_millis)
                  VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
@@ -143,8 +143,8 @@ fn read_event_route_requests(
                 route.contract_revision, route.contract_schema_sha256, route.direction,
                 route.max_in_flight, policy.subscription_requirement, policy.max_deliver,
                 policy.ack_wait_millis
-         FROM hermes_kernel_module_event_route_request route
-         LEFT JOIN hermes_kernel_module_event_delivery_policy policy
+         FROM makosh_kernel_module_event_route_request route
+         LEFT JOIN makosh_kernel_module_event_delivery_policy policy
            ON policy.registration_id = route.registration_id
           AND policy.capability_id = route.capability_id
           AND policy.envelope_kind = route.envelope_kind

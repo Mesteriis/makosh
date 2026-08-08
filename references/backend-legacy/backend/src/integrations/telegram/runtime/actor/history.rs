@@ -1,7 +1,7 @@
 use crate::integrations::telegram::client::errors::TelegramError;
 use crate::integrations::telegram::tdjson::client::TdJsonClient;
 use crate::integrations::telegram::tdjson::{self, snapshots::TelegramTdlibMessageSnapshot};
-use hermes_provider_telegram::tdlib::chats::get_chat_history;
+use makosh_provider_telegram::tdlib::chats::get_chat_history;
 
 use super::super::TDJSON_COMMAND_TIMEOUT;
 use super::super::models::TelegramHistorySyncMode;
@@ -23,7 +23,7 @@ pub(super) fn actor_sync_history(
 
     loop {
         let extra = format!(
-            "hermes-runtime-history-{chat_id}-{}-{page_index}",
+            "makosh-runtime-history-{chat_id}-{}-{page_index}",
             cursor.unwrap_or(0)
         );
         client.send_json(&get_chat_history(

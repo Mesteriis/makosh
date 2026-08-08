@@ -9,7 +9,7 @@ outbox уже существуют. Exact Telegram `ModuleDescriptorV1`, пят�
 route-specific client capabilities, отдельные platform capability units и
 canonical non-secret settings schema реализованы. Telegram persistence
 публикует immutable owner-local `StorageBundleV1`, а отдельная
-`hermes-telegram-assembly` materializes exact descriptor/settings/storage
+`makosh-telegram-assembly` materializes exact descriptor/settings/storage
 artifacts и unsigned fragment для generic signed distribution compiler. Эти
 units не входят в Communications inventory и не дают runtime права сами по
 себе. Telegram runtime теперь использует один correlated V2 control frame pump
@@ -98,30 +98,30 @@ Telegram является integration owner с exact module identity:
 
 ```text
 owner_id  = telegram
-module_id = hermes-telegram-runtime
+module_id = makosh-telegram-runtime
 ```
 
 Его clean-room build unit состоит только из:
 
 ```text
-hermes-telegram-api
-hermes-telegram-core
-hermes-telegram-tdlib
-hermes-telegram-persistence
-hermes-telegram-runtime
+makosh-telegram-api
+makosh-telegram-core
+makosh-telegram-tdlib
+makosh-telegram-persistence
+makosh-telegram-runtime
 ```
 
 Communications остаётся отдельным domain owner и отдельной build unit:
 
 ```text
-hermes-communications-ingress
-hermes-communications-api
-hermes-communications-domain
-hermes-communications-persistence
-hermes-communications-runtime
+makosh-communications-ingress
+makosh-communications-api
+makosh-communications-domain
+makosh-communications-persistence
+makosh-communications-runtime
 ```
 
-`hermes-communications-ingress` является public typed event contract, а не
+`makosh-communications-ingress` является public typed event contract, а не
 domain implementation facade. Telegram может зависеть от него только для
 создания neutral observation envelope. Telegram не импортирует
 Communications API/domain/persistence/runtime. Communications не импортирует
@@ -175,7 +175,7 @@ Core Gateway
         ↓
 approved owner-declared ClientRpc route
         ↓
-hermes-telegram-runtime
+makosh-telegram-runtime
 ```
 
 Telegram descriptor объявляет пять независимых client capabilities. Каждая
@@ -184,11 +184,11 @@ reference:
 
 | Capability | Contract name | Connect path |
 |---|---|---|
-| `telegram.authorization.v1` | `telegram.authorization.v1` | `/hermes.telegram.v1.TelegramAuthorizationService/Authorize` |
-| `telegram.lifecycle.v1` | `telegram.lifecycle.v1` | `/hermes.telegram.v1.TelegramLifecycleService/Execute` |
-| `telegram.command.v1` | `telegram.command.v1` | `/hermes.telegram.v1.TelegramOperationalService/ExecuteCommand` |
-| `telegram.query.v1` | `telegram.query.v1` | `/hermes.telegram.v1.TelegramOperationalService/ExecuteQuery` |
-| `telegram.realtime.v1` | `telegram.realtime.v1` | `/hermes.telegram.v1.TelegramRealtimeService/Replay` |
+| `telegram.authorization.v1` | `telegram.authorization.v1` | `/makosh.telegram.v1.TelegramAuthorizationService/Authorize` |
+| `telegram.lifecycle.v1` | `telegram.lifecycle.v1` | `/makosh.telegram.v1.TelegramLifecycleService/Execute` |
+| `telegram.command.v1` | `telegram.command.v1` | `/makosh.telegram.v1.TelegramOperationalService/ExecuteCommand` |
+| `telegram.query.v1` | `telegram.query.v1` | `/makosh.telegram.v1.TelegramOperationalService/ExecuteQuery` |
+| `telegram.realtime.v1` | `telegram.realtime.v1` | `/makosh.telegram.v1.TelegramRealtimeService/Replay` |
 
 Все пять contracts имеют `major = 1`, `revision = 4` и exact SHA-256 generated
 descriptor set. Совпадение schema digest не объединяет contracts: их stable
@@ -260,7 +260,7 @@ exact stored envelope bytes. Communications подтверждает broker deli
 `owner_id`, `module_id`, contract, runtime generation, grant epoch, causation
 и correlation должны оставаться согласованными с admitted runtime. Для
 Telegram exact module identity в client and observation envelopes —
-`hermes-telegram-runtime`; сокращённый альтернативный ID не допускается.
+`makosh-telegram-runtime`; сокращённый альтернативный ID не допускается.
 
 ### Cross-domain outbound actions
 

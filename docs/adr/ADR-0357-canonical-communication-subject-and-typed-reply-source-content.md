@@ -92,13 +92,13 @@ Ollama integration не импортируют Communications contract.
 
 ### Units и SRP
 
-- `hermes-communications-ingress` владеет public observation wire contract;
-- `hermes-mail-core` только маппит Mail observation в public ingress draft;
-- `hermes-communications-domain` валидирует canonical semantics;
-- `hermes-communications-persistence` владеет canonical subject storage;
-- `hermes-communications-ai-source-api` владеет typed source-content schema;
-- `hermes-communications-runtime` materializes source content;
-- `hermes-communication-reply-suggestion-runtime` выполняет custody,
+- `makosh-communications-ingress` владеет public observation wire contract;
+- `makosh-mail-core` только маппит Mail observation в public ingress draft;
+- `makosh-communications-domain` валидирует canonical semantics;
+- `makosh-communications-persistence` владеет canonical subject storage;
+- `makosh-communications-ai-source-api` владеет typed source-content schema;
+- `makosh-communications-runtime` materializes source content;
+- `makosh-communication-reply-suggestion-runtime` выполняет custody,
   translation в AI contract и cleanup.
 
 Ни один из этих build units не становится facade другого owner.

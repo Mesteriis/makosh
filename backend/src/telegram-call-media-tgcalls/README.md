@@ -29,14 +29,14 @@ backend/scripts/build-telegram-tgcalls-bridge-macos.sh \
 This profile records `release_eligible: false`, the active Xcode version and
 the required release Xcode pin in `provenance.json`. Its dylib must not enter a
 signed release. The extra
-`hermes_tgcalls_audio_device_conformance` binary is a test build unit and is not
+`makosh_tgcalls_audio_device_conformance` binary is a test build unit and is not
 referenced by Telegram assembly.
 
 Running the binary accesses the default microphone and speaker and therefore
 requires an exact explicit flag:
 
 ```sh
-/absolute/development-output-directory/hermes_tgcalls_audio_device_conformance \
+/absolute/development-output-directory/makosh_tgcalls_audio_device_conformance \
   --allow-microphone-and-speaker-access
 ```
 

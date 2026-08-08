@@ -71,7 +71,7 @@
 
 - `loadPersistedThemeSettings()`:
   - Запрашивает настройки через `fetchApplicationSettings`, ищет запись с ключом `frontend.theme`.
-  - При успехе парсит через `parseThemeSettings`, сохраняет в `localStorage` под ключом `hermes-theme-settings` и возвращает с `source: 'application_settings'`.
+  - При успехе парсит через `parseThemeSettings`, сохраняет в `localStorage` под ключом `makosh-theme-settings` и возвращает с `source: 'application_settings'`.
   - При ошибке или отсутствии настройки на бэкенде возвращает локальные настройки с `source: 'local_storage'` и сообщением `errorMessage` (если была ошибка — `'Theme settings backend unavailable; using local browser settings.'`, иначе пустая строка).
 - `savePersistedThemeSettings(settings)`:
   - Отправляет настройки на бэкенд через `saveApplicationSetting`, затем дублирует в `localStorage`.
@@ -90,7 +90,7 @@
 
 ## Реальное время (Realtime)
 
-Пакет `frontend/src/platform/sse/` предоставляет два клиента для защищённого real‑time‑взаимодействия: `SseClient` (SSE с fallback на long polling) и `WebSocketClient`. Оба используют секрет `X-Hermes-Secret` для аутентификации, хранят позицию последнего полученного события (`lastEventId`) и поддерживают автоматическое переподключение.
+Пакет `frontend/src/platform/sse/` предоставляет два клиента для защищённого real‑time‑взаимодействия: `SseClient` (SSE с fallback на long polling) и `WebSocketClient`. Оба используют секрет `X-Макошь-Secret` для аутентификации, хранят позицию последнего полученного события (`lastEventId`) и поддерживают автоматическое переподключение.
 
 ### SSE‑клиент (SseClient)
 
@@ -98,7 +98,7 @@
 
 - Конструктор принимает `SseClientOptions`:
   - `url` — URL потока SSE.
-  - `secret` — обязательный `X-Hermes-Secret`.
+  - `secret` — обязательный `X-Макошь-Secret`.
   - `lastEventId?` — начальная позиция для реплея.
   - `onMessage?`, `onError?`, `onStatus?` — колбэки.
   - `reconnectDelay?` (по умолчанию 3000 мс), `maxReconnectAttempts?` (10).
@@ -106,7 +106,7 @@
   - `fetchImpl?` — кастомная реализация `fetch`.
 - `connect()` запускает SSE‑соединение.
 - `disconnect()` останавливает соединение и предотвращает переподключение.
-- Заголовки запроса: `Accept: text/event-stream`, `X-Hermes-Secret`, и при наличии `lastEventId` — `Last-Event-ID`.
+- Заголовки запроса: `Accept: text/event-stream`, `X-Макошь-Secret`, и при наличии `lastEventId` — `Last-Event-ID`.
 - URL дополняется параметром `after_position` для реплея.
 - Поток парсится вручную: блоки разделяются `\n\n`, внутри строки с полями `id`, `event`, `data`. Собранные события передаются в `onMessage`.
 - При ошибке или закрытии потока запускается механизм переподключения с экспоненциальной задержкой (множитель до 5).
@@ -121,7 +121,7 @@
 - Конструктор принимает `WebSocketClientOptions`: `url`, `secret`, `lastEventId?`, `onMessage?`, `onError?`, `onStatus?`, `reconnectDelay?` (3000), `maxReconnectAttempts?` (10).
 - `connect()` инициирует соединение.
 - `disconnect()` разрывает соединение и предотвращает переподключение.
-- URL формируется функцией `replayUrl()`: к исходному URL добавляется параметр `hermes_secret` со значением секрета, и при наличии `lastEventId` — параметр `after_position`.
+- URL формируется функцией `replayUrl()`: к исходному URL добавляется параметр `makosh_secret` со значением секрета, и при наличии `lastEventId` — параметр `after_position`.
 - Обработка входящих сообщений (`JSON`):
   - `type: 'heartbeat'` — игнорируется.
   - `type: 'lagged'` — извлекается `data.skipped`; если число > 0, в `onMessage` передаётся событие с `event: 'lagged'`, `id = lastEventId`, `data = JSON.stringify({ skipped })`. Если `skipped` отсутствует или некорректен, вызывается `onError`.
@@ -208,12 +208,12 @@
 | `frontend/src/platform/i18n/index.ts` | Локаль `currentLocale` как `ref`, сохранение в `localStorage` по ключу `hh-locale`, значение по умолчанию `ru`, функция `setLocale`, композабл `useI18n`, поведение функции `t` (поиск в словаре, identity‑fallback, интерполяция `{param}`). |
 | `frontend/src/platform/i18n/types.ts` | Типы `Locale`, `TranslationFunction`, `Dictionary`. |
 | `frontend/src/platform/settings/applicationSettingsClient.ts` | Типы `SettingValueKind`, `ApplicationSettingValue`, `ApplicationSetting`, `ApplicationSettingsResponse`. Константы ключей `FRONTEND_*_SETTING_KEY`. Функции `fetchApplicationSettings` (GET `/api/v1/settings`) и `saveApplicationSetting` (PUT `/api/v1/settings/{key}`). |
-| `frontend/src/platform/sse/SseClient.ts` | Класс `SseClient`, опции (`url`, `longPollUrl`, `secret`, `lastEventId`, колбэки, тайминги), логика соединения (fetch‑based SSE, заголовки `X-Hermes-Secret`, `Last-Event-ID`, `Accept`), парсинг SSE‑потока (блоки, поля `id`, `event`, `data`), стратегия переподключения с экспоненциальной задержкой, fallback на long polling при исчерпании попыток SSE, формат long‑poll‑запроса (параметры `after_position`, `limit`, `wait_seconds`), трансформация элементов long‑poll в события, статусные события (`transport`, `state`). |
-| `frontend/src/platform/sse/SseClient.test.ts` | Подтверждение поведения: статусные переходы `sse:connecting → connected → disconnected`, передача `X-Hermes-Secret` и `Last-Event-ID`, построение replay‑URL (относительные и абсолютные), fallback на long polling после исчерпания попыток SSE с корректным URL и заголовками. |
-| `frontend/src/platform/sse/WebSocketClient.ts` | Класс `WebSocketClient`, опции, передача секрета через query‑параметр `hermes_secret` (вместе с `after_position`), обработка типов сообщений (`heartbeat`, `lagged` → извлечение `skipped`, `event` → извлечение `position`, неизвестные типы), механизм переподключения, статусные события `websocket:{connecting,connected,reconnecting,disconnected}`. |
+| `frontend/src/platform/sse/SseClient.ts` | Класс `SseClient`, опции (`url`, `longPollUrl`, `secret`, `lastEventId`, колбэки, тайминги), логика соединения (fetch‑based SSE, заголовки `X-Макошь-Secret`, `Last-Event-ID`, `Accept`), парсинг SSE‑потока (блоки, поля `id`, `event`, `data`), стратегия переподключения с экспоненциальной задержкой, fallback на long polling при исчерпании попыток SSE, формат long‑poll‑запроса (параметры `after_position`, `limit`, `wait_seconds`), трансформация элементов long‑poll в события, статусные события (`transport`, `state`). |
+| `frontend/src/platform/sse/SseClient.test.ts` | Подтверждение поведения: статусные переходы `sse:connecting → connected → disconnected`, передача `X-Макошь-Secret` и `Last-Event-ID`, построение replay‑URL (относительные и абсолютные), fallback на long polling после исчерпания попыток SSE с корректным URL и заголовками. |
+| `frontend/src/platform/sse/WebSocketClient.ts` | Класс `WebSocketClient`, опции, передача секрета через query‑параметр `makosh_secret` (вместе с `after_position`), обработка типов сообщений (`heartbeat`, `lagged` → извлечение `skipped`, `event` → извлечение `position`, неизвестные типы), механизм переподключения, статусные события `websocket:{connecting,connected,reconnecting,disconnected}`. |
 | `frontend/src/platform/sse/WebSocketClient.test.ts` | Проверка обработки `lagged` payloads: событие `lagged` с корректным `skipped` не вызывает ошибку и передаётся в `onMessage`. |
 | `frontend/src/platform/sse/index.ts` | Реэкспорт `SseClient`, `WebSocketClient` и их типов. |
-| `frontend/src/platform/theme/persistence.ts` | Функции `loadPersistedThemeSettings`, `savePersistedThemeSettings`, `loadLocalThemeSettings`. Ключ `hermes-theme-settings` для `localStorage`. Источник `'application_settings'` vs `'local_storage'`. Сообщения об ошибках загрузки/сохранения. Использование `FRONTEND_THEME_SETTING_KEY`. |
+| `frontend/src/platform/theme/persistence.ts` | Функции `loadPersistedThemeSettings`, `savePersistedThemeSettings`, `loadLocalThemeSettings`. Ключ `makosh-theme-settings` для `localStorage`. Источник `'application_settings'` vs `'local_storage'`. Сообщения об ошибках загрузки/сохранения. Использование `FRONTEND_THEME_SETTING_KEY`. |
 | `frontend/src/platform/theme/persistence.test.ts` | Тесты fallback‑сценариев: при ошибке сохранения настройки сохраняются локально с `source: 'local_storage'` и сообщением `'saved locally only'`; при ошибке загрузки настройки берутся из `localStorage` с сообщением `'backend unavailable'`. |
 | `frontend/src/platform/theme/settings.ts` | `THEME_SCHEMA_VERSION`, тип `ThemeSettings`, перечисления разрешённых значений (`shellBackgroundIds`, `backgroundBrightnessValues`, `accentColorIds`, `panelOpacityValues`, `panelBlurValues`, `spacingDensityIds`), `defaultThemeSettings`, `parseThemeSettings` (валидация, fallback к дефолтам), CSS‑хелперы `shellBackgroundClass`, `shellBrightnessClass`, `shellAccentClass`, `shellPanelOpacityClass`, `shellPanelBlurClass`, `shellSpacingDensityClass`. |
 | `frontend/src/platform/theme/settings.test.ts` | Подтверждение: возврат дефолтов для `null` и некорректной версии схемы; сохранение валидных разрешённых значений; корректные имена CSS‑классов для заданных настроек. |

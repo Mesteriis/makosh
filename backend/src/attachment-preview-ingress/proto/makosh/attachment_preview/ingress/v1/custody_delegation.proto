@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package makosh.attachment_preview.ingress.v1;
+
+// Target-owned command. Source Blob authority and target selection are absent;
+// Attachment Security resolves current custody from owner-local completed state.
+message RequestAttachmentPreviewCustodyDelegationV1 {
+  bytes request_id = 1;
+  bytes preview_run_id = 2;
+  bytes attachment_anchor_id = 3;
+  bytes candidate_message_id = 4;
+  bytes candidate_envelope_sha256 = 5;
+  bytes safety_message_id = 6;
+  bytes safety_evidence_id = 7;
+  string logical_owner_id = 8;
+}
+
+// Internal result consumed only by Attachment Preview. The proof and source
+// reference are forbidden from public query, realtime and client_blob bodies.
+message AttachmentPreviewCustodyDelegatedV1 {
+  bytes request_id = 1;
+  bytes preview_run_id = 2;
+  bytes attachment_anchor_id = 3;
+  bytes candidate_message_id = 4;
+  bytes safety_message_id = 5;
+  bytes source_reference_id = 6;
+  uint64 declared_size = 7;
+  bytes receipt_sha256 = 8;
+  bytes custody_transfer_source_proof = 9;
+  string logical_owner_id = 10;
+}
+
+message AttachmentPreviewCustodyDelegationRejectedV1 {
+  bytes request_id = 1;
+  bytes preview_run_id = 2;
+  bytes attachment_anchor_id = 3;
+  AttachmentPreviewCustodyDelegationRejectCodeV1 code = 4;
+  string logical_owner_id = 5;
+}
+
+enum AttachmentPreviewCustodyDelegationRejectCodeV1 {
+  ATTACHMENT_PREVIEW_CUSTODY_DELEGATION_REJECT_CODE_V1_UNSPECIFIED = 0;
+  ATTACHMENT_PREVIEW_CUSTODY_DELEGATION_REJECT_CODE_V1_INVALID_REQUEST = 1;
+  ATTACHMENT_PREVIEW_CUSTODY_DELEGATION_REJECT_CODE_V1_NOT_SAFE = 2;
+  ATTACHMENT_PREVIEW_CUSTODY_DELEGATION_REJECT_CODE_V1_CUSTODY_UNAVAILABLE = 3;
+  ATTACHMENT_PREVIEW_CUSTODY_DELEGATION_REJECT_CODE_V1_POLICY = 4;
+}

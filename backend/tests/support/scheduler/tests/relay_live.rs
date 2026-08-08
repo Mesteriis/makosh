@@ -1,7 +1,7 @@
 //! Disposable PostgreSQL proof that Scheduler dispatches survive broker outages.
 
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_events_protocol::{
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_events_protocol::{
     delivery::{
         ExactOutboxPublisherPortV1, OutboxPublishReceiptV1, OutboxRecordV1, OutboxRelayErrorV1,
         OutboxRelayOutcomeV1, relay_once,
@@ -11,11 +11,11 @@ use hermes_events_protocol::{
         SourceFenceV1, SourceRefV1, durable_envelope_v1::Semantics,
     },
 };
-use hermes_scheduler_persistence::{
+use makosh_scheduler_persistence::{
     SchedulerDispatchClaimV1, SchedulerPostgresStoreV1, SchedulerRunClaimV1,
     scheduler_storage_bundle_v1,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     ConcurrencyKeyV1, JobRunIdV1, MisfirePolicyV1, OverlapPolicyV1, RetryPolicyV1, ScheduleIdV1,
     SchedulePolicyV1, ScheduleRevisionV1, ScheduleRunLeaseV1, ScheduleTriggerV1,
 };
@@ -24,7 +24,7 @@ use prost_types::Timestamp;
 use sqlx::{PgPool, Row, postgres::PgPoolOptions};
 
 const CLAIMED_AT: i64 = 1_000;
-const URL: &str = "HERMES_SCHEDULER_POSTGRES_URL";
+const URL: &str = "MAKOSH_SCHEDULER_POSTGRES_URL";
 
 #[tokio::test]
 #[ignore = "requires the disposable Scheduler PostgreSQL contour"]
@@ -81,12 +81,12 @@ impl ExactOutboxPublisherPortV1 for AcknowledgingPublisher {
         _: &OutboxRecordV1,
     ) -> impl std::future::Future<Output = Result<OutboxPublishReceiptV1, OutboxRelayErrorV1>> + Send
     {
-        async { OutboxPublishReceiptV1::new("HERMES_COMMAND_V1", 1, false) }
+        async { OutboxPublishReceiptV1::new("MAKOSH_COMMAND_V1", 1, false) }
     }
 }
 
 async fn install_schema(pool: &PgPool) {
-    sqlx::raw_sql("DROP SCHEMA IF EXISTS hermes_platform CASCADE; CREATE SCHEMA hermes_platform;")
+    sqlx::raw_sql("DROP SCHEMA IF EXISTS makosh_platform CASCADE; CREATE SCHEMA makosh_platform;")
         .execute(pool)
         .await
         .expect("fresh relay schema");
@@ -123,7 +123,7 @@ async fn install_pending_dispatch(pool: &PgPool) -> SchedulerPostgresStoreV1 {
 }
 
 async fn install_schedule(pool: &PgPool, key: &ConcurrencyKeyV1, policy: &SchedulePolicyV1) {
-    sqlx::query("INSERT INTO hermes_platform.scheduler_schedules (schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms, updated_at_unix_ms) VALUES ($1, 1, 'platform', 'maintenance', 1, 'platform.maintenance', 1, $2, 'scope:technical', $3, 1, TRUE, $4, $5, $5)")
+    sqlx::query("INSERT INTO makosh_platform.scheduler_schedules (schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms, updated_at_unix_ms) VALUES ($1, 1, 'platform', 'maintenance', 1, 'platform.maintenance', 1, $2, 'scope:technical', $3, 1, TRUE, $4, $5, $5)")
         .bind(vec![11_u8; 16]).bind(vec![7_u8; 32]).bind(key.value()).bind(policy.canonical_bytes()).bind(CLAIMED_AT)
         .execute(pool).await.expect("schedule");
 }
@@ -214,13 +214,13 @@ fn envelope(message_id: [u8; 16]) -> DurableEnvelopeV1 {
 
 async fn states(pool: &PgPool) -> (String, String) {
     let dispatch =
-        sqlx::query("SELECT state FROM hermes_platform.scheduler_dispatches WHERE message_id = $1")
+        sqlx::query("SELECT state FROM makosh_platform.scheduler_dispatches WHERE message_id = $1")
             .bind(vec![51_u8; 16])
             .fetch_one(pool)
             .await
             .expect("dispatch row")
             .get("state");
-    let run = sqlx::query("SELECT state FROM hermes_platform.scheduler_runs WHERE run_id = $1")
+    let run = sqlx::query("SELECT state FROM makosh_platform.scheduler_runs WHERE run_id = $1")
         .bind(vec![31_u8; 16])
         .fetch_one(pool)
         .await

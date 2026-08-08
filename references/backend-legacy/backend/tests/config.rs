@@ -1,7 +1,7 @@
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use std::path::Path;
 
-use hermes_hub_backend::platform::config::{
+use makosh_hub_backend::platform::config::{
     ai::AiRuntimeProvider, app_config::AppConfig, errors::ConfigError,
 };
 
@@ -13,7 +13,7 @@ fn default_config_binds_to_localhost_without_database_url() {
         config.http_addr(),
         SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), 8080)
     );
-    assert_eq!(config.service_name(), "hermes-hub-backend");
+    assert_eq!(config.service_name(), "makosh-backend");
     assert_eq!(config.database_url(), None);
     assert_eq!(
         config.local_api_secret(),
@@ -30,12 +30,12 @@ fn default_config_binds_to_localhost_without_database_url() {
 #[test]
 fn config_from_pairs_overrides_http_addr_database_url_and_local_api_secret() {
     let config = AppConfig::from_pairs([
-        ("HERMES_HTTP_ADDR", "127.0.0.1:9090"),
+        ("MAKOSH_HTTP_ADDR", "127.0.0.1:9090"),
         (
             "DATABASE_URL",
-            "postgres://hermes:local-dev-password@postgres:5432/hermes_hub",
+            "postgres://makosh:local-dev-password@postgres:5432/makosh_hub",
         ),
-        ("HERMES_LOCAL_API_SECRET", "local-dev-api-secret"),
+        ("MAKOSH_LOCAL_API_SECRET", "local-dev-api-secret"),
     ])
     .expect("valid config");
 
@@ -45,7 +45,7 @@ fn config_from_pairs_overrides_http_addr_database_url_and_local_api_secret() {
     );
     assert_eq!(
         config.database_url(),
-        Some("postgres://hermes:local-dev-password@postgres:5432/hermes_hub")
+        Some("postgres://makosh:local-dev-password@postgres:5432/makosh_hub")
     );
     assert_eq!(config.local_api_secret(), Some("local-dev-api-secret"));
 }
@@ -54,16 +54,16 @@ fn config_from_pairs_overrides_http_addr_database_url_and_local_api_secret() {
 fn config_from_pairs_accepts_secret_vault_path_and_key() {
     let config = AppConfig::from_pairs([
         (
-            "HERMES_SECRET_VAULT_PATH",
-            "docker/data/secrets/hermes.vault.json",
+            "MAKOSH_SECRET_VAULT_PATH",
+            "docker/data/secrets/makosh.vault.json",
         ),
-        ("HERMES_SECRET_VAULT_KEY", "local-vault-key"),
+        ("MAKOSH_SECRET_VAULT_KEY", "local-vault-key"),
     ])
     .expect("valid secret vault config");
 
     assert_eq!(
         config.secret_vault_path(),
-        Some(Path::new("docker/data/secrets/hermes.vault.json"))
+        Some(Path::new("docker/data/secrets/makosh.vault.json"))
     );
     assert_eq!(
         config
@@ -81,10 +81,10 @@ fn config_from_pairs_accepts_secret_vault_path_and_key() {
 #[test]
 fn config_from_pairs_accepts_ollama_runtime_overrides() {
     let config = AppConfig::from_pairs([
-        ("HERMES_OLLAMA_BASE_URL", "http://192.168.1.2:11434"),
-        ("HERMES_OLLAMA_CHAT_MODEL", "qwen3:4b"),
-        ("HERMES_OLLAMA_EMBED_MODEL", "qwen3-embedding:4b"),
-        ("HERMES_OLLAMA_TIMEOUT_SECONDS", "120"),
+        ("MAKOSH_OLLAMA_BASE_URL", "http://192.168.1.2:11434"),
+        ("MAKOSH_OLLAMA_CHAT_MODEL", "qwen3:4b"),
+        ("MAKOSH_OLLAMA_EMBED_MODEL", "qwen3-embedding:4b"),
+        ("MAKOSH_OLLAMA_TIMEOUT_SECONDS", "120"),
     ])
     .expect("valid Ollama config");
 
@@ -97,15 +97,15 @@ fn config_from_pairs_accepts_ollama_runtime_overrides() {
 #[test]
 fn config_from_pairs_accepts_omniroute_runtime_overrides_without_printing_key() {
     let config = AppConfig::from_pairs([
-        ("HERMES_AI_PROVIDER", "omniroute"),
-        ("HERMES_OMNIROUTE_BASE_URL", "https://ai.sh-inc.ru/v1/"),
-        ("HERMES_OMNIROUTE_CHAT_MODEL", "codex/gpt-5.5"),
+        ("MAKOSH_AI_PROVIDER", "omniroute"),
+        ("MAKOSH_OMNIROUTE_BASE_URL", "https://ai.sh-inc.ru/v1/"),
+        ("MAKOSH_OMNIROUTE_CHAT_MODEL", "codex/gpt-5.5"),
         (
-            "HERMES_OMNIROUTE_EMBED_MODEL",
+            "MAKOSH_OMNIROUTE_EMBED_MODEL",
             "openai-compatible-chat-ollama-pve/qwen3-embedding:4b",
         ),
-        ("HERMES_OMNIROUTE_TIMEOUT_SECONDS", "90"),
-        ("HERMES_OMNIROUTE_API_KEY", "omniroute-test-key"),
+        ("MAKOSH_OMNIROUTE_TIMEOUT_SECONDS", "90"),
+        ("MAKOSH_OMNIROUTE_API_KEY", "omniroute-test-key"),
     ])
     .expect("valid OmniRoute config");
 
@@ -136,7 +136,7 @@ fn config_from_pairs_accepts_omniroute_runtime_overrides_without_printing_key() 
 #[test]
 fn config_from_pairs_accepts_tdjson_runtime_path() {
     let config =
-        AppConfig::from_pairs([("HERMES_TDJSON_PATH", "/opt/homebrew/lib/libtdjson.dylib")])
+        AppConfig::from_pairs([("MAKOSH_TDJSON_PATH", "/opt/homebrew/lib/libtdjson.dylib")])
             .expect("valid TDLib JSON runtime config");
 
     assert_eq!(
@@ -148,8 +148,8 @@ fn config_from_pairs_accepts_tdjson_runtime_path() {
 #[test]
 fn config_from_pairs_accepts_telegram_app_credentials() {
     let config = AppConfig::from_pairs([
-        ("HERMES_TELEGRAM_API_ID", "12345"),
-        ("HERMES_TELEGRAM_API_HASH", "telegram-api-hash"),
+        ("MAKOSH_TELEGRAM_API_ID", "12345"),
+        ("MAKOSH_TELEGRAM_API_HASH", "telegram-api-hash"),
     ])
     .expect("valid Telegram app credential config");
 
@@ -173,7 +173,7 @@ fn config_from_pairs_accepts_telegram_app_credentials() {
 #[test]
 fn config_from_pairs_accepts_zoom_token_maintenance_scheduler_toggle() {
     let config =
-        AppConfig::from_pairs([("HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED", "false")])
+        AppConfig::from_pairs([("MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED", "false")])
             .expect("valid Zoom token maintenance scheduler config");
 
     assert!(!config.zoom_token_maintenance_scheduler_enabled());
@@ -181,7 +181,7 @@ fn config_from_pairs_accepts_zoom_token_maintenance_scheduler_toggle() {
 
 #[test]
 fn config_from_pairs_accepts_zoom_recording_sync_scheduler_toggle() {
-    let config = AppConfig::from_pairs([("HERMES_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED", "false")])
+    let config = AppConfig::from_pairs([("MAKOSH_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED", "false")])
         .expect("valid Zoom recording sync scheduler config");
 
     assert!(!config.zoom_recording_sync_scheduler_enabled());
@@ -190,7 +190,7 @@ fn config_from_pairs_accepts_zoom_recording_sync_scheduler_toggle() {
 #[test]
 fn config_from_pairs_accepts_zoom_retention_cleanup_scheduler_toggle() {
     let config =
-        AppConfig::from_pairs([("HERMES_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED", "false")])
+        AppConfig::from_pairs([("MAKOSH_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED", "false")])
             .expect("valid Zoom retention cleanup scheduler config");
 
     assert!(!config.zoom_retention_cleanup_scheduler_enabled());
@@ -217,7 +217,7 @@ fn default_config_uses_local_ollama_and_qwen_models() {
 
 #[test]
 fn config_from_pairs_rejects_invalid_http_addr() {
-    let error = AppConfig::from_pairs([("HERMES_HTTP_ADDR", "not-a-socket")])
+    let error = AppConfig::from_pairs([("MAKOSH_HTTP_ADDR", "not-a-socket")])
         .expect_err("invalid socket address must fail");
 
     assert!(matches!(error, ConfigError::InvalidHttpAddr { .. }));
@@ -233,7 +233,7 @@ fn config_from_pairs_rejects_empty_database_url() {
 
 #[test]
 fn config_from_pairs_rejects_empty_local_api_secret() {
-    let error = AppConfig::from_pairs([("HERMES_LOCAL_API_SECRET", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_LOCAL_API_SECRET", "   ")])
         .expect_err("empty local API secret must fail");
 
     assert!(matches!(error, ConfigError::EmptyLocalApiSecret));
@@ -241,7 +241,7 @@ fn config_from_pairs_rejects_empty_local_api_secret() {
 
 #[test]
 fn config_from_pairs_rejects_empty_secret_vault_path() {
-    let error = AppConfig::from_pairs([("HERMES_SECRET_VAULT_PATH", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_SECRET_VAULT_PATH", "   ")])
         .expect_err("empty secret vault path must fail");
 
     assert!(matches!(error, ConfigError::EmptySecretVaultPath));
@@ -249,7 +249,7 @@ fn config_from_pairs_rejects_empty_secret_vault_path() {
 
 #[test]
 fn config_from_pairs_rejects_empty_secret_vault_key() {
-    let error = AppConfig::from_pairs([("HERMES_SECRET_VAULT_KEY", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_SECRET_VAULT_KEY", "   ")])
         .expect_err("empty secret vault key must fail");
 
     assert!(matches!(error, ConfigError::EmptySecretVaultKey));
@@ -257,7 +257,7 @@ fn config_from_pairs_rejects_empty_secret_vault_key() {
 
 #[test]
 fn config_from_pairs_rejects_empty_tdjson_path() {
-    let error = AppConfig::from_pairs([("HERMES_TDJSON_PATH", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_TDJSON_PATH", "   ")])
         .expect_err("empty TDLib JSON runtime path must fail");
 
     assert!(matches!(error, ConfigError::EmptyTdjsonPath));
@@ -265,61 +265,61 @@ fn config_from_pairs_rejects_empty_tdjson_path() {
 
 #[test]
 fn config_from_pairs_rejects_invalid_telegram_app_credentials() {
-    let error = AppConfig::from_pairs([("HERMES_TELEGRAM_API_ID", "0")])
+    let error = AppConfig::from_pairs([("MAKOSH_TELEGRAM_API_ID", "0")])
         .expect_err("zero Telegram API ID must fail");
     assert!(matches!(error, ConfigError::InvalidTelegramApiId { .. }));
 
-    let error = AppConfig::from_pairs([("HERMES_TELEGRAM_API_ID", "not-a-number")])
+    let error = AppConfig::from_pairs([("MAKOSH_TELEGRAM_API_ID", "not-a-number")])
         .expect_err("non-numeric Telegram API ID must fail");
     assert!(matches!(error, ConfigError::InvalidTelegramApiId { .. }));
 
-    let error = AppConfig::from_pairs([("HERMES_TELEGRAM_API_HASH", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_TELEGRAM_API_HASH", "   ")])
         .expect_err("empty Telegram API hash must fail");
     assert!(matches!(error, ConfigError::EmptyTelegramApiHash));
 }
 
 #[test]
 fn config_from_pairs_rejects_invalid_ollama_values() {
-    let error = AppConfig::from_pairs([("HERMES_OLLAMA_BASE_URL", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_OLLAMA_BASE_URL", "   ")])
         .expect_err("empty Ollama base URL must fail");
     assert!(matches!(error, ConfigError::EmptyOllamaBaseUrl));
 
-    let error = AppConfig::from_pairs([("HERMES_OLLAMA_CHAT_MODEL", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_OLLAMA_CHAT_MODEL", "   ")])
         .expect_err("empty Ollama chat model must fail");
     assert!(matches!(error, ConfigError::EmptyOllamaChatModel));
 
-    let error = AppConfig::from_pairs([("HERMES_OLLAMA_EMBED_MODEL", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_OLLAMA_EMBED_MODEL", "   ")])
         .expect_err("empty Ollama embed model must fail");
     assert!(matches!(error, ConfigError::EmptyOllamaEmbedModel));
 
-    let error = AppConfig::from_pairs([("HERMES_OLLAMA_TIMEOUT_SECONDS", "0")])
+    let error = AppConfig::from_pairs([("MAKOSH_OLLAMA_TIMEOUT_SECONDS", "0")])
         .expect_err("zero Ollama timeout must fail");
     assert!(matches!(error, ConfigError::InvalidOllamaTimeout { .. }));
 }
 
 #[test]
 fn config_from_pairs_rejects_invalid_omniroute_values() {
-    let error = AppConfig::from_pairs([("HERMES_AI_PROVIDER", "cloudy")])
+    let error = AppConfig::from_pairs([("MAKOSH_AI_PROVIDER", "cloudy")])
         .expect_err("unknown AI provider must fail");
     assert!(matches!(error, ConfigError::InvalidAiProvider { .. }));
 
-    let error = AppConfig::from_pairs([("HERMES_OMNIROUTE_BASE_URL", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_OMNIROUTE_BASE_URL", "   ")])
         .expect_err("empty OmniRoute base URL must fail");
     assert!(matches!(error, ConfigError::EmptyOmniRouteBaseUrl));
 
-    let error = AppConfig::from_pairs([("HERMES_OMNIROUTE_CHAT_MODEL", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_OMNIROUTE_CHAT_MODEL", "   ")])
         .expect_err("empty OmniRoute chat model must fail");
     assert!(matches!(error, ConfigError::EmptyOmniRouteChatModel));
 
-    let error = AppConfig::from_pairs([("HERMES_OMNIROUTE_EMBED_MODEL", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_OMNIROUTE_EMBED_MODEL", "   ")])
         .expect_err("empty OmniRoute embed model must fail");
     assert!(matches!(error, ConfigError::EmptyOmniRouteEmbedModel));
 
-    let error = AppConfig::from_pairs([("HERMES_OMNIROUTE_TIMEOUT_SECONDS", "0")])
+    let error = AppConfig::from_pairs([("MAKOSH_OMNIROUTE_TIMEOUT_SECONDS", "0")])
         .expect_err("zero OmniRoute timeout must fail");
     assert!(matches!(error, ConfigError::InvalidOmniRouteTimeout { .. }));
 
-    let error = AppConfig::from_pairs([("HERMES_OMNIROUTE_API_KEY", "   ")])
+    let error = AppConfig::from_pairs([("MAKOSH_OMNIROUTE_API_KEY", "   ")])
         .expect_err("empty OmniRoute API key must fail");
     assert!(matches!(error, ConfigError::EmptyOmniRouteApiKey));
 }

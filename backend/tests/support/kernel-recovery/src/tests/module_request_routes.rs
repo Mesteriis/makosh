@@ -1,12 +1,12 @@
 use std::sync::{Arc, Mutex};
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BundledManagedLaunchBinding, InitialOwnerIdentity, ManagedLaunchRecord,
     ModuleDescriptorRegistrationRequestsV1, ModuleQueryContractV1, ModuleRegistration,
     ModuleRegistrationState, ModuleRequestContractV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     CapabilityCriticalityV1, CapabilityDescriptorV1, ContractReferenceV1,
     ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
     ManagedRuntimeModuleRequestRequestV1, ManagedRuntimeModuleRequestResponseV1,
@@ -30,7 +30,7 @@ const CALLER_CAPABILITY: &str = "notes.compose";
 
 #[test]
 fn request_providers_are_approval_gated_and_dependencies_remain_capability_scoped() {
-    let root = unique_target_root("hermes-module-request-route");
+    let root = unique_target_root("makosh-module-request-route");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -76,7 +76,7 @@ fn request_providers_are_approval_gated_and_dependencies_remain_capability_scope
 
 #[test]
 fn only_an_integration_may_implement_a_foreign_owned_request_contract() {
-    let root = unique_target_root("hermes-module-request-foreign-owner");
+    let root = unique_target_root("makosh-module-request-foreign-owner");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -123,7 +123,7 @@ fn only_an_integration_may_implement_a_foreign_owned_request_contract() {
 
 #[test]
 fn kernel_routes_an_exact_dependency_without_exposing_module_coordinates() {
-    let fixture = RequestRouteFixture::new("hermes-module-request-success", 1);
+    let fixture = RequestRouteFixture::new("makosh-module-request-success", 1);
     let relay = RequestRelay::success(&fixture.provider_id);
     let handler = ModuleRequestRouteHandlerV1::new(Arc::clone(&fixture.store), relay);
 
@@ -137,7 +137,7 @@ fn kernel_routes_an_exact_dependency_without_exposing_module_coordinates() {
 
 #[test]
 fn kernel_rejects_zero_or_ambiguous_request_providers_before_relay() {
-    let zero = RequestRouteFixture::new("hermes-module-request-zero", 0);
+    let zero = RequestRouteFixture::new("makosh-module-request-zero", 0);
     let zero_error =
         ModuleRequestRouteHandlerV1::new(Arc::clone(&zero.store), RequestRelay::unreachable())
             .route_module_request(&zero.caller_expectation, request_request())
@@ -145,7 +145,7 @@ fn kernel_rejects_zero_or_ambiguous_request_providers_before_relay() {
     assert_eq!(zero_error, "managed module request provider is unavailable");
     std::fs::remove_dir_all(zero.root).expect("remove zero fixture");
 
-    let ambiguous = RequestRouteFixture::new("hermes-module-request-ambiguous", 2);
+    let ambiguous = RequestRouteFixture::new("makosh-module-request-ambiguous", 2);
     let ambiguous_error =
         ModuleRequestRouteHandlerV1::new(Arc::clone(&ambiguous.store), RequestRelay::unreachable())
             .route_module_request(&ambiguous.caller_expectation, request_request())
@@ -159,7 +159,7 @@ fn kernel_rejects_zero_or_ambiguous_request_providers_before_relay() {
 
 #[test]
 fn kernel_does_not_route_a_request_to_a_query_only_provider() {
-    let fixture = RequestRouteFixture::new("hermes-module-request-query-only", 0);
+    let fixture = RequestRouteFixture::new("makosh-module-request-query-only", 0);
     let provider = registration(
         "communications-query-only",
         "communications_query_module",
@@ -219,7 +219,7 @@ fn kernel_does_not_route_a_request_to_a_query_only_provider() {
 
 #[test]
 fn kernel_rejects_stale_caller_and_provider_fences_before_relay() {
-    let stale_caller = RequestRouteFixture::new("hermes-module-request-stale-caller", 1);
+    let stale_caller = RequestRouteFixture::new("makosh-module-request-stale-caller", 1);
     let stale_expectation = ManagedRuntimeExpectation::new(
         stale_caller.caller_id.clone(),
         "caller-runtime",
@@ -238,7 +238,7 @@ fn kernel_rejects_stale_caller_and_provider_fences_before_relay() {
     assert_eq!(caller_error, "managed module request caller fence is stale");
     std::fs::remove_dir_all(stale_caller.root).expect("remove caller fixture");
 
-    let stale_provider = RequestRouteFixture::new("hermes-module-request-stale-provider", 1);
+    let stale_provider = RequestRouteFixture::new("makosh-module-request-stale-provider", 1);
     stale_provider
         .store
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
@@ -266,7 +266,7 @@ fn kernel_rejects_stale_caller_and_provider_fences_before_relay() {
 
 #[test]
 fn kernel_rejects_provider_response_mismatch() {
-    let fixture = RequestRouteFixture::new("hermes-module-request-response-mismatch", 1);
+    let fixture = RequestRouteFixture::new("makosh-module-request-response-mismatch", 1);
     let error = ModuleRequestRouteHandlerV1::new(
         Arc::clone(&fixture.store),
         RequestRelay::mismatch(&fixture.provider_id),
@@ -282,7 +282,7 @@ fn kernel_rejects_provider_response_mismatch() {
 
 #[test]
 fn kernel_rejects_a_revoked_request_provider_before_relay() {
-    let fixture = RequestRouteFixture::new("hermes-module-request-revoked-provider", 1);
+    let fixture = RequestRouteFixture::new("makosh-module-request-revoked-provider", 1);
     fixture
         .store
         .transition_module_registration(&fixture.provider_id, ModuleRegistrationState::Revoked)

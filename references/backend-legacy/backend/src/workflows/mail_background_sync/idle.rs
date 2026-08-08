@@ -1,8 +1,8 @@
 use std::time::Duration;
 
 use crate::platform::communications::email_sync::{IMAP_ALL_MAILBOXES, plan_email_sync};
-use hermes_communications_api::email_sync::EmailSyncAdapterConfig;
-use hermes_communications_api::mail_resources::{ImapIdleWaitOutcome, ImapIdleWaitRequest};
+use makosh_communications_api::email_sync::EmailSyncAdapterConfig;
+use makosh_communications_api::mail_resources::{ImapIdleWaitOutcome, ImapIdleWaitRequest};
 
 use super::errors::MailSyncError;
 use super::service::MailBackgroundSyncService;

@@ -2,7 +2,7 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 use crate::platform::secrets::models::{SecretKind, SecretStoreKind};
-use hermes_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::CommunicationProviderKind;
 
 use super::constants::{
     DEFAULT_GOOGLE_AUTHORIZATION_ENDPOINT, DEFAULT_GOOGLE_TOKEN_ENDPOINT,

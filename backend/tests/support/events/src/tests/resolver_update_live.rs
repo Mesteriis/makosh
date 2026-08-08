@@ -1,11 +1,11 @@
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     NatsAccountJwtUpdateV1, NatsResolverAccountJwtPublisherV1, NatsResolverSystemCredentialsV1,
 };
 
-const ENDPOINT: &str = "HERMES_NATS_JWT_TEST_ENDPOINT";
-const ACCOUNT_PUBLIC_KEY_FILE: &str = "HERMES_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE";
-const ACCOUNT_JWT_FILE: &str = "HERMES_NATS_JWT_ACCOUNT_JWT_FILE";
-const SYSTEM_CREDENTIALS_FILE: &str = "HERMES_NATS_JWT_RESOLVER_UPDATE_CREDS_FILE";
+const ENDPOINT: &str = "MAKOSH_NATS_JWT_TEST_ENDPOINT";
+const ACCOUNT_PUBLIC_KEY_FILE: &str = "MAKOSH_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE";
+const ACCOUNT_JWT_FILE: &str = "MAKOSH_NATS_JWT_ACCOUNT_JWT_FILE";
+const SYSTEM_CREDENTIALS_FILE: &str = "MAKOSH_NATS_JWT_RESOLVER_UPDATE_CREDS_FILE";
 
 #[tokio::test(flavor = "multi_thread")]
 #[ignore = "requires the JWT resolver Docker contour"]

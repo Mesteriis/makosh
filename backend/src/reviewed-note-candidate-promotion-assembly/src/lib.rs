@@ -13,15 +13,15 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use hermes_reviewed_note_candidate_promotion_persistence::schema::reviewed_note_candidate_promotion_storage_bundle_v1;
-use hermes_reviewed_note_candidate_promotion_runtime::{
+use makosh_reviewed_note_candidate_promotion_persistence::schema::reviewed_note_candidate_promotion_storage_bundle_v1;
+use makosh_reviewed_note_candidate_promotion_runtime::{
     reviewed_note_candidate_promotion_module_descriptor_v1,
     reviewed_note_candidate_promotion_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
@@ -34,7 +34,7 @@ pub const STORAGE_BUNDLE_FILE_V1: &str = "reviewed_note_candidate_promotion.stor
 pub const ARTIFACT_FRAGMENT_FILE_V1: &str =
     "reviewed_note_candidate_promotion.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH_V1: &str = "bin/hermes-reviewed-note-candidate-promotion-runtime";
+const RUNTIME_RELATIVE_PATH_V1: &str = "bin/makosh-reviewed-note-candidate-promotion-runtime";
 const DESCRIPTOR_RELATIVE_PATH_V1: &str =
     "contracts/reviewed_note_candidate_promotion.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH_V1: &str =
@@ -248,8 +248,8 @@ fn write_new_private_file(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
 mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 
-    use hermes_runtime_protocol::validation::descriptor::decode_descriptor_v1;
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_runtime_protocol::validation::descriptor::decode_descriptor_v1;
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -276,7 +276,7 @@ mod tests {
         assert_eq!(descriptor.owner_id, "reviewed_note_candidate_promotion");
         assert_eq!(
             descriptor.module_kind,
-            hermes_runtime_protocol::v1::ModuleKindV1::Workflow as i32
+            makosh_runtime_protocol::v1::ModuleKindV1::Workflow as i32
         );
         assert_eq!(storage.owner_id, "reviewed_note_candidate_promotion");
         assert_eq!(fragment.owner_id, "reviewed_note_candidate_promotion");
@@ -318,7 +318,7 @@ mod tests {
     fn temporary_directory() -> PathBuf {
         let id = NEXT_TEMPORARY_ID.fetch_add(1, Ordering::Relaxed);
         let path = std::env::temp_dir().join(format!(
-            "hermes-reviewed-note-candidate-promotion-assembly-{}-{id}",
+            "makosh-reviewed-note-candidate-promotion-assembly-{}-{id}",
             std::process::id()
         ));
         let _ = fs::remove_dir_all(&path);

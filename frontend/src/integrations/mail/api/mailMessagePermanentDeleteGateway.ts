@@ -5,7 +5,7 @@ import {
 	MailMessagePermanentDeleteConfirmationV1,
 	type MailMessagePermanentDeleteOperationStatusV1,
 	MailMessagePermanentDeleteStatusRequestV1Schema,
-} from '../../../gen/hermes/mail/message_permanent_delete/v1/client_pb'
+} from '../../../gen/makosh/mail/message_permanent_delete/v1/client_pb'
 import { getMailMessagePermanentDeleteCommandConnectClient } from './mailMessagePermanentDeleteCommandClient'
 import { getMailMessagePermanentDeleteQueryConnectClient } from './mailMessagePermanentDeleteQueryClient'
 

@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_communications_api::commands::{
+use makosh_communications_api::commands::{
     CommunicationProviderCommand, CommunicationProviderCommandDiagnostic,
     CommunicationProviderCommandDiagnostics, CommunicationProviderCommandStatusCount,
     NewCommunicationProviderCommand, ProviderCommandMirrorPort, ProviderCommandMirrorPortFuture,
@@ -15,7 +15,7 @@ use self::events::{
     EVENT_COMPLETED, EVENT_EXECUTING, EVENT_FAILED, EVENT_REQUESTED, EVENT_RETRY_REQUESTED,
     append_provider_command_event, append_provider_command_events,
 };
-use hermes_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::errors::EventStoreError;
 
 mod diagnostics;
 mod events;

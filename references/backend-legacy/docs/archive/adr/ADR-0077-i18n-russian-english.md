@@ -2,15 +2,15 @@
 
 Status: Accepted
 Date: 2026-06-08
-Deciders: Alex (hermes-hub maintainer)
+Deciders: Alex (makosh maintainer)
 
 ## Context
 
-Hermes Hub is a personal knowledge system. The primary user is Russian-speaking, but technical collaborators and future extensibility benefit from English as a secondary language. Hardcoding strings in one language creates maintenance debt and makes switching impractical.
+Макошь is a personal knowledge system. The primary user is Russian-speaking, but technical collaborators and future extensibility benefit from English as a secondary language. Hardcoding strings in one language creates maintenance debt and makes switching impractical.
 
 ## Decision
 
-The Hermes Hub desktop interface supports **two languages: Russian (ru) and English (en)** via a lightweight i18n system.
+The Макошь desktop interface supports **two languages: Russian (ru) and English (en)** via a lightweight i18n system.
 
 **Mechanism:**
 - JSON translation dictionaries under `frontend/src/lib/i18n/` (`en.json`, `ru.json`)

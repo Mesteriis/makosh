@@ -1,4 +1,4 @@
-use hermes_vault_protocol::{
+use makosh_vault_protocol::{
     LeaseAudienceV1, SecretClassV1, VaultCiphertextFrameV1, VaultTransportBindingV1,
     VaultTransportCommandV1, VaultTransportDirectionV1, VaultTransportError,
     VaultTransportPublicKey, VaultTransportSessionV1, seal,
@@ -47,30 +47,30 @@ fn public_hpke_sender_binds_ciphertext_to_generation_audience_epoch_and_request(
 #[test]
 fn store_command_round_trip_rejects_an_empty_credential_payload() {
     let command = VaultTransportCommandV1::StoreLease {
-        lease_id: hermes_vault_protocol::LeaseIdV1::new("b".repeat(32))
+        lease_id: makosh_vault_protocol::LeaseIdV1::new("b".repeat(32))
             .expect("typed lease identifier"),
         secret_class: SecretClassV1::ProviderCredential,
         payload: b"credential-command-payload".to_vec(),
     };
     assert_eq!(
-        hermes_vault_protocol::VaultTransportCommandV1::decode(&command.encode()),
+        makosh_vault_protocol::VaultTransportCommandV1::decode(&command.encode()),
         Ok(command)
     );
     assert_eq!(
-        hermes_vault_protocol::VaultTransportCommandV1::decode(
+        makosh_vault_protocol::VaultTransportCommandV1::decode(
             &VaultTransportCommandV1::RevokeAudience.encode(),
         ),
         Ok(VaultTransportCommandV1::RevokeAudience)
     );
     let mut empty = resolve_command().encode();
     empty[1] = 2;
-    assert!(hermes_vault_protocol::VaultTransportCommandV1::decode(&empty).is_err());
+    assert!(makosh_vault_protocol::VaultTransportCommandV1::decode(&empty).is_err());
 }
 
 #[test]
 fn generated_token_command_carries_no_secret_payload() {
     let command = VaultTransportCommandV1::GenerateOpaqueToken {
-        lease_id: hermes_vault_protocol::LeaseIdV1::new("c".repeat(32))
+        lease_id: makosh_vault_protocol::LeaseIdV1::new("c".repeat(32))
             .expect("typed lease identifier"),
         secret_class: SecretClassV1::PlatformCredential,
     };
@@ -90,16 +90,16 @@ fn issue_lease_command_round_trip_preserves_all_fences() {
         9,
     )
     .expect("typed audience");
-    let request = hermes_vault_protocol::VaultLeaseIssueRequestV1::new(
+    let request = makosh_vault_protocol::VaultLeaseIssueRequestV1::new(
         "vault-instance".to_owned(),
         3,
         2,
         "storage".to_owned(),
-        hermes_vault_protocol::VaultPurposeRequestV1::new(
+        makosh_vault_protocol::VaultPurposeRequestV1::new(
             "storage.runtime.credential".to_owned(),
             "storage-notes".to_owned(),
             vec![SecretClassV1::PlatformCredential],
-            vec![hermes_vault_protocol::VaultActionV1::Resolve],
+            vec![makosh_vault_protocol::VaultActionV1::Resolve],
             60,
         )
         .expect("typed purpose"),
@@ -117,7 +117,7 @@ fn issue_lease_command_round_trip_preserves_all_fences() {
 
 fn assert_rejects_context_substitution(
     keys: &VaultTransportKeyPair,
-    frame: hermes_vault_protocol::VaultCiphertextFrameV1,
+    frame: makosh_vault_protocol::VaultCiphertextFrameV1,
     audience: LeaseAudienceV1,
 ) {
     let stale_epoch = VaultTransportBindingV1::new(
@@ -324,8 +324,8 @@ fn sealed_session(
 
 fn resolve_command() -> VaultTransportCommandV1 {
     VaultTransportCommandV1::ResolveLease {
-        lease_id: hermes_vault_protocol::LeaseIdV1::new("a".repeat(32))
+        lease_id: makosh_vault_protocol::LeaseIdV1::new("a".repeat(32))
             .expect("typed lease identifier"),
-        secret_class: hermes_vault_protocol::SecretClassV1::ProviderCredential,
+        secret_class: makosh_vault_protocol::SecretClassV1::ProviderCredential,
     }
 }

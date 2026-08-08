@@ -3,11 +3,11 @@
 Статус: Принято
 Дата: 2026-07-16
 Состояние реализации: `vault_v1` открыт на exact five-package Vault owner
-cut. Public `hermes-vault-protocol` проверяет bounded typed purpose,
+cut. Public `makosh-vault-protocol` проверяет bounded typed purpose,
 ordered secret classes/actions, exact `configuration_instance` scope и TTL.
-`hermes-vault-key-provider-file` создаёт или открывает только owner-private
+`makosh-vault-key-provider-file` создаёт или открывает только owner-private
 0600 regular wrapping-key file без symlink traversal. Separate
-`hermes-vault-runtime` создаёт SQLCipher database через raw key API с private
+`makosh-vault-runtime` создаёт SQLCipher database через raw key API с private
 0700 directory/0600 file boundary. Unlocked store держит одну dedicated
 bounded SQLite actor connection (queue 64, deadline 2 seconds), поэтому
 record operations не открывают конкурирующие database connections. File wrapping key шифрует отдельный
@@ -38,7 +38,7 @@ only after current recovery-key unwrap; platform slot и encrypted database пр
 fencing собран в private `VaultService`: до decrypt он требует exact one-time
 lease audience и scope owner/configuration/purpose/class/revision. Этот core
 ещё не доступен через IPC и не доказывает Kernel authorization. HPKE frame
-sender contract доступен только через public `hermes-vault-protocol`, а ephemeral
+sender contract доступен только через public `makosh-vault-protocol`, а ephemeral
 receiver private key остаётся в private Vault runtime. `VaultTransportSessionV1`
 держит opaque HPKE frame вместе с exact binding, а private bounded replay guard
 отклоняет stale generation, wrong direction и повторный request ID только после
@@ -56,7 +56,7 @@ rotation fail-closes normal open. Multi-slot anchor требует current Recov
 и не меняется при его отсутствии.
 `Resolve` additionally requires the declared `VaultActionV1::Resolve`; a lease
 for create or replacement cannot be repurposed as a secret-read lease.
-`hermes-vault-runtime serve` открывает только initialized store и владеет private
+`makosh-vault-runtime serve` открывает только initialized store и владеет private
 `vault.sock`: он выдаёт ограниченный status с runtime generation и ephemeral
 HPKE public key, но не публикует paths, keys или credential metadata. Runtime
 protocol уже содержит bounded opaque `VaultCiphertextRouteV1`; Kernel сверяет
@@ -110,7 +110,7 @@ ciphertext frame для этого ключа. Kernel не получает plai
 - [ADR-0225: Первый recovery-only Kernel slice и фазовые ворота](ADR-0225-first-production-recovery-only-kernel-slice-and-phase-gates.md).
 
 Этот ADR уточняет перечисленные решения, но не заменяет их. Он определяет
-отдельный Hermes Vault для credential material и не меняет ownership Kernel
+отдельный Макошь Vault для credential material и не меняет ownership Kernel
 Control Store, PostgreSQL, provider operational state, blobs или client/device
 identity.
 
@@ -119,7 +119,7 @@ Vault packages/process не входят в `kernel_recovery_only_v1` и отк�
 
 ## Контекст
 
-Hermes должен безопасно хранить:
+Макошь должен безопасно хранить:
 
 - passwords и app passwords;
 - API/client secrets;
@@ -160,9 +160,9 @@ domain или integration:
 ~~~text
 Kernel supervisor
     ↓ lifecycle, GrantSet context, fencing, opaque routing
-hermes-vault-runtime                 отдельный managed OS process
-    ├─ hermes-vault-store-sqlcipher
-    └─ hermes-vault-key-provider-file
+makosh-vault-runtime                 отдельный managed OS process
+    ├─ makosh-vault-store-sqlcipher
+    └─ makosh-vault-key-provider-file
             ↓
 authorized module runtime
     получает только process-bound CredentialLeaseV1
@@ -193,7 +193,7 @@ Vault runtime:
 
 Module runtime:
 
-- зависит только от public `hermes-vault-protocol`;
+- зависит только от public `makosh-vault-protocol`;
 - не получает SQLite path, SQL, key slots, root key или enumeration API;
 - получает material только в рамках approved purpose и process-bound lease;
 - хранит plaintext в памяти минимально необходимое время и zeroize-ит его при
@@ -208,36 +208,36 @@ Vault registration и альтернативная implementation/topology за�
 
 ~~~text
 backend/src/platform/vault/protocol/
-    hermes-vault-protocol
+    makosh-vault-protocol
     platform:vault:contract
 
 backend/src/platform/vault/managed_client/
-    hermes-managed-vault-client
+    makosh-managed-vault-client
     platform:vault:contract
 
 backend/src/platform/vault/key_provider/
-    hermes-vault-key-provider
+    makosh-vault-key-provider
     platform:vault:contract
 
 backend/src/platform/vault/runtime/
-    hermes-vault-runtime
+    makosh-vault-runtime
     platform:vault:runtime
     component: vault_service
 
 backend/src/platform/vault/store_sqlcipher/
-    hermes-vault-store-sqlcipher
+    makosh-vault-store-sqlcipher
     platform:vault:persistence
 
 backend/src/platform/vault/key_provider_file/
-    hermes-vault-key-provider-file
+    makosh-vault-key-provider-file
     platform:vault:implementation
 ~~~
 
-`hermes-vault-key-provider` является внутренним adapter port владельца Vault.
+`makosh-vault-key-provider` является внутренним adapter port владельца Vault.
 Kernel, modules и Gateway не зависят от него. Новый Vault package или platform
 adapter требует изменения этого ADR и executable policy.
 
-`hermes-managed-vault-client` является единственным публичным contract для
+`makosh-managed-vault-client` является единственным публичным contract для
 managed module runtime, которому требуется provider credential. Он принимает
 только Kernel-inherited authenticated local FD и строит HPKE ciphertext frames
 для scoped lease request; он не открывает Vault store, не получает root/wrapping
@@ -303,7 +303,7 @@ single writer actor
 - raw SQL, row types и file paths не пересекают persistence boundary;
 - unknown cipher/schema/record major version fails closed;
 - schema и embedded migrations принадлежат
-  `hermes-vault-store-sqlcipher`;
+  `makosh-vault-store-sqlcipher`;
 - migration возможна только после успешного unlock;
 - destructive downgrade, plaintext export и automatic fallback запрещены.
 
@@ -319,7 +319,7 @@ Kernel или modules.
 
 ~~~text
 PlatformWrappingKey                 RecoveryKeyV1
-owner-private file adapter          хранится владельцем вне Hermes
+owner-private file adapter          хранится владельцем вне Макошь
           │                              │
           └──── authenticated KeySlotV1 ─┘
                             ↓
@@ -333,7 +333,7 @@ owner-private file adapter          хранится владельцем вне
   file `0600`, которым владеет отдельный `FileWrappingKeyAdapter` Vault.
 - Owner/device ES256 signing key ADR-0218 не используется для Vault encryption
   или wrapping.
-- `RecoveryKeyV1` — независимые 32 random bytes; Hermes показывает их один раз
+- `RecoveryKeyV1` — независимые 32 random bytes; Макошь показывает их один раз
   и не сохраняет plaintext.
 - Human representation `RecoveryKeyV1` — 24-word BIP-39 entropy encoding с
   checksum и English word list. Используется только entropy-to-mnemonic

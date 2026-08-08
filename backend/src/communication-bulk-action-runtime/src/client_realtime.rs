@@ -1,13 +1,13 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_bulk_action_api::{
+use makosh_communication_bulk_action_api::{
     COMMUNICATION_BULK_ACTION_REALTIME_EVENT_KIND_V1,
     wire::{BulkDeliveryBatchStateV1 as WireBatchState, BulkDeliveryStatusChangedV1},
 };
-use hermes_communication_bulk_action_persistence::{
+use makosh_communication_bulk_action_persistence::{
     BulkDeliveryBatchStateV1, BulkDeliveryPersistenceErrorV1, CommunicationBulkActionPersistenceV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeClientRealtimePublishRequestV1, ManagedRuntimeControlRequestV1,

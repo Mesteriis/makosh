@@ -1,6 +1,6 @@
 use std::{path::PathBuf, process::ExitCode};
 
-use hermes_desktop_call_recording_assembly::materialize_release_assembly_v1;
+use makosh_desktop_call_recording_assembly::materialize_release_assembly_v1;
 
 const OPTIONS: [&str; 3] = ["--build-id", "--output-dir", "--runtime"];
 

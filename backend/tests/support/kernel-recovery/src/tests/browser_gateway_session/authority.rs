@@ -2,7 +2,7 @@ use super::*;
 
 #[test]
 fn browser_gateway_authority_persists_the_verified_assertion_counter() {
-    let root = unique_target_root("hermes-browser-gateway-assertion");
+    let root = unique_target_root("makosh-browser-gateway-assertion");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let path = root.join("control.sqlite");
     let store =
@@ -11,7 +11,7 @@ fn browser_gateway_authority_persists_the_verified_assertion_counter() {
         .claim_initial_owner(&InitialOwnerIdentity::new("owner-1", "desktop-1", [4; 65]))
         .expect("claim initial owner");
     let enrollment = BrowserDeviceEnrollmentV1::new(
-        hermes_kernel_control_store::BrowserDeviceEnrollmentInputV1 {
+        makosh_kernel_control_store::BrowserDeviceEnrollmentInputV1 {
             owner_id: "owner-1".to_owned(),
             device_id: "browser-1".to_owned(),
             credential_id: vec![1],

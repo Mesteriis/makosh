@@ -1,9 +1,9 @@
 //! Disposable PostgreSQL proof for the cross-channel forward durable lifecycle.
 
-use hermes_communication_cross_channel_forward_core::{
+use makosh_communication_cross_channel_forward_core::{
     CrossChannelForwardDraftV1, CrossChannelForwardStateV1,
 };
-use hermes_communication_cross_channel_forward_persistence::{
+use makosh_communication_cross_channel_forward_persistence::{
     CommunicationCrossChannelForwardPersistenceV1, CreateCrossChannelForwardOutcomeV1,
     CreateCrossChannelForwardV1, CrossChannelForwardBlobReceiptV1,
     CrossChannelForwardCleanupReasonV1, CrossChannelForwardDeliveryRejectedEventV1,
@@ -11,7 +11,7 @@ use hermes_communication_cross_channel_forward_persistence::{
     CrossChannelForwardPersistenceErrorV1, CrossChannelForwardPreparedEventV1,
     CrossChannelForwardPreparedSourceV1, CrossChannelForwardWorkStageV1,
 };
-use hermes_communication_delivery_intent_ingress_api::{
+use makosh_communication_delivery_intent_ingress_api::{
     CommunicationDeliveryIntentIngressEnvelopeContextV1,
     build_communication_delivery_intent_rejected_outbox_record_v1,
     build_communication_delivery_intent_submit_outbox_record_v1,
@@ -21,7 +21,7 @@ use hermes_communication_delivery_intent_ingress_api::{
         CommunicationDeliveryIntentSubmittedV1, DeliveryIntentBodySourceReceiptV1,
     },
 };
-use hermes_communications_cross_channel_forward_source_api::{
+use makosh_communications_cross_channel_forward_source_api::{
     CrossChannelForwardSourceEnvelopeContextV1,
     build_cross_channel_forward_source_prepare_outbox_record_v1,
     build_cross_channel_forward_source_prepared_outbox_record_v1,
@@ -32,7 +32,7 @@ use hermes_communications_cross_channel_forward_source_api::{
     },
 };
 
-const POSTGRES_URL: &str = "HERMES_COMMUNICATION_CROSS_CHANNEL_FORWARD_POSTGRES_URL";
+const POSTGRES_URL: &str = "MAKOSH_COMMUNICATION_CROSS_CHANNEL_FORWARD_POSTGRES_URL";
 const OWNER: &str = "owner-1";
 
 #[tokio::test]
@@ -226,7 +226,7 @@ async fn event_handoff_is_atomic_replay_fenced_and_survives_reconnect() {
             .await
             .expect("source prepare candidate")
             .expect("accepted operation"),
-        hermes_communication_cross_channel_forward_persistence::
+        makosh_communication_cross_channel_forward_persistence::
             CrossChannelForwardSourcePrepareCandidateV1 {
                 forward_id: [1; 16],
                 source_message_id: [2; 16],
@@ -234,7 +234,7 @@ async fn event_handoff_is_atomic_replay_fenced_and_survives_reconnect() {
             }
     );
     let source_context = CrossChannelForwardSourceEnvelopeContextV1 {
-        module_id: "hermes-communication-cross-channel-forward-runtime".to_owned(),
+        module_id: "makosh-communication-cross-channel-forward-runtime".to_owned(),
         runtime_instance_id: "forward-runtime-1".to_owned(),
         runtime_generation: 7,
         recorded_at_unix_seconds: 1_800_000_000,
@@ -275,7 +275,7 @@ async fn event_handoff_is_atomic_replay_fenced_and_survives_reconnect() {
         .expect("mark source prepare published");
 
     let communications_context = CrossChannelForwardSourceEnvelopeContextV1 {
-        module_id: "hermes-communications-runtime".to_owned(),
+        module_id: "makosh-communications-runtime".to_owned(),
         runtime_instance_id: "communications-runtime-1".to_owned(),
         runtime_generation: 11,
         recorded_at_unix_seconds: 1_800_000_001,
@@ -335,7 +335,7 @@ async fn event_handoff_is_atomic_replay_fenced_and_survives_reconnect() {
         OWNER,
         1_800_000_031,
         &CommunicationDeliveryIntentIngressEnvelopeContextV1 {
-            module_id: "hermes-communication-cross-channel-forward-runtime".to_owned(),
+            module_id: "makosh-communication-cross-channel-forward-runtime".to_owned(),
             runtime_instance_id: "forward-runtime-1".to_owned(),
             runtime_generation: 7,
             recorded_at_unix_seconds: 1_800_000_001,
@@ -415,7 +415,7 @@ async fn event_handoff_is_atomic_replay_fenced_and_survives_reconnect() {
             logical_owner_id: OWNER.to_owned(),
         },
         &CommunicationDeliveryIntentIngressEnvelopeContextV1 {
-            module_id: "hermes-communication-delivery-intent-runtime".to_owned(),
+            module_id: "makosh-communication-delivery-intent-runtime".to_owned(),
             runtime_instance_id: "delivery-runtime-1".to_owned(),
             runtime_generation: 13,
             recorded_at_unix_seconds: 1_800_000_003,
@@ -603,7 +603,7 @@ async fn event_handoff_is_atomic_replay_fenced_and_survives_reconnect() {
     )
     .expect("source rejected");
     let rejected_event =
-        hermes_communication_cross_channel_forward_persistence::CrossChannelForwardRejectedEventV1 {
+        makosh_communication_cross_channel_forward_persistence::CrossChannelForwardRejectedEventV1 {
             result_message_id: *rejected_result.message_id(),
             envelope_sha256: *rejected_result.envelope_sha256(),
             logical_owner_id: OWNER.to_owned(),
@@ -645,7 +645,7 @@ fn create_command(
 
 fn source_context_for_delivery() -> CommunicationDeliveryIntentIngressEnvelopeContextV1 {
     CommunicationDeliveryIntentIngressEnvelopeContextV1 {
-        module_id: "hermes-communication-cross-channel-forward-runtime".to_owned(),
+        module_id: "makosh-communication-cross-channel-forward-runtime".to_owned(),
         runtime_instance_id: "forward-runtime-1".to_owned(),
         runtime_generation: 7,
         recorded_at_unix_seconds: 1_800_000_004,
@@ -655,7 +655,7 @@ fn source_context_for_delivery() -> CommunicationDeliveryIntentIngressEnvelopeCo
 
 fn delivery_result_context() -> CommunicationDeliveryIntentIngressEnvelopeContextV1 {
     CommunicationDeliveryIntentIngressEnvelopeContextV1 {
-        module_id: "hermes-communication-delivery-intent-runtime".to_owned(),
+        module_id: "makosh-communication-delivery-intent-runtime".to_owned(),
         runtime_instance_id: "delivery-runtime-1".to_owned(),
         runtime_generation: 13,
         recorded_at_unix_seconds: 1_800_000_005,

@@ -1,13 +1,13 @@
 use std::os::unix::fs::PermissionsExt;
 
-use hermes_runtime_protocol::v1::{VaultCiphertextRouteDirectionV1, VaultCiphertextRouteV1};
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_protocol::{
+use makosh_runtime_protocol::v1::{VaultCiphertextRouteDirectionV1, VaultCiphertextRouteV1};
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_protocol::{
     LeaseAudienceV1, SecretClassV1, VaultActionV1, VaultLeaseIssueRequestV1, VaultPurposeRequestV1,
     VaultTransportBindingV1, VaultTransportCommandV1, VaultTransportDirectionV1, seal,
 };
-use hermes_vault_store_sqlcipher::{SecretRecordScope, VaultStore};
+use makosh_vault_store_sqlcipher::{SecretRecordScope, VaultStore};
 use p256::ecdsa::signature::Signer;
 use p256::ecdsa::{Signature, SigningKey};
 use prost::Message;
@@ -292,7 +292,7 @@ fn execute_command(
     )
     .expect("route binding");
     let frame = seal(keys.public_key(), &binding, &command.encode()).expect("seal route command");
-    let session = hermes_vault_protocol::VaultTransportSessionV1::new(binding, frame);
+    let session = makosh_vault_protocol::VaultTransportSessionV1::new(binding, frame);
     let response = crate::transport::session::execute_session(guard, keys, service, &session, 201)
         .expect("execute session command");
     let response_binding = VaultTransportBindingV1::new(
@@ -350,7 +350,7 @@ fn assert_response(
     response_recipient: &VaultTransportKeyPair,
     audience: LeaseAudienceV1,
     command: &VaultTransportCommandV1,
-    response: hermes_runtime_protocol::v1::VaultCiphertextResponseV1,
+    response: makosh_runtime_protocol::v1::VaultCiphertextResponseV1,
 ) {
     let response_binding = VaultTransportBindingV1::new(
         3,
@@ -374,7 +374,7 @@ fn assert_response(
 fn route_from_binding(
     audience: &LeaseAudienceV1,
     binding: &VaultTransportBindingV1,
-    frame: &hermes_vault_protocol::VaultCiphertextFrameV1,
+    frame: &makosh_vault_protocol::VaultCiphertextFrameV1,
     response_recipient: &VaultTransportKeyPair,
     signing_key: &SigningKey,
 ) -> VaultCiphertextRouteV1 {
@@ -408,16 +408,16 @@ fn route_from_binding(
 
 fn sign_route(route: &mut VaultCiphertextRouteV1, signing_key: &SigningKey) {
     route.kernel_authorization_signature_raw.clear();
-    let mut message = b"hermes.vault-route-authorization.v1\0".to_vec();
+    let mut message = b"makosh.vault-route-authorization.v1\0".to_vec();
     message.extend_from_slice(&route.encode_to_vec());
     let signature: Signature = signing_key.sign(&message);
     route.kernel_authorization_signature_raw = signature.to_bytes().to_vec();
 }
 
 fn response_frame(
-    response: hermes_runtime_protocol::v1::VaultCiphertextResponseV1,
-) -> hermes_vault_protocol::VaultCiphertextFrameV1 {
-    hermes_vault_protocol::VaultCiphertextFrameV1::from_parts(
+    response: makosh_runtime_protocol::v1::VaultCiphertextResponseV1,
+) -> makosh_vault_protocol::VaultCiphertextFrameV1 {
+    makosh_vault_protocol::VaultCiphertextFrameV1::from_parts(
         response.hpke_encapped_key,
         response.ciphertext,
         response.hpke_authentication_tag,

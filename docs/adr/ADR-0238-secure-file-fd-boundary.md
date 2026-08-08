@@ -1,8 +1,8 @@
 # ADR-0238: Secure-file FD boundary
 
-Статус: Принято  
-Дата: 2026-07-20  
-Состояние реализации: foundation реализован в `hermes-secure-file`; Vault
+Статус: Принято
+Дата: 2026-07-20
+Состояние реализации: foundation реализован в `makosh-secure-file`; Vault
 wrapping key и Gateway TLS material переведены. Остальные Vault recovery и
 release readers должны мигрировать до admission первого owner.
 
@@ -22,7 +22,7 @@ release readers должны мигрировать до admission первог�
 
 ## Решение
 
-`hermes-secure-file` — узкий public platform contract для bounded Unix reads.
+`makosh-secure-file` — узкий public platform contract для bounded Unix reads.
 Он открывает final pathname descriptor с `O_NOFOLLOW | O_CLOEXEC`, проверяет
 уже открытый descriptor как non-empty regular file и читает не больше exact
 лимита. Проверка не доверяет предварительному `metadata(path)`.

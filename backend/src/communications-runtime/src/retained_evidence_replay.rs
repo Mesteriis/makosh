@@ -1,15 +1,15 @@
-use hermes_communications_retained_evidence_replay_contract::{
+use makosh_communications_retained_evidence_replay_contract::{
     validate_communications_replay_command_v1,
     wire::{
         ReplayCommunicationsEvidenceCommandV1, ReplayCommunicationsEvidenceFailureV1,
         ReplayCommunicationsEvidenceOutcomeV1, ReplayCommunicationsEvidenceResultV1,
     },
 };
-use hermes_communications_retained_evidence_replay_persistence::{
+use makosh_communications_retained_evidence_replay_persistence::{
     CommunicationsRetainedEvidenceReplayPersistenceV1, RetainedCommunicationsReplayAuditV1,
     RetainedCommunicationsReplayErrorV1, RetainedCommunicationsReplayPhaseV1,
 };
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum CommunicationsRetainedEvidenceReplayErrorV1 {

@@ -16,10 +16,10 @@ This decision was superseded by ADR-0038 because read endpoints also expose priv
 
 Rules:
 
-- `HERMES_LOCAL_WRITE_TOKEN` configures the local write token.
-- Empty `HERMES_LOCAL_WRITE_TOKEN` is invalid configuration.
+- `MAKOSH_LOCAL_WRITE_TOKEN` configures the local write token.
+- Empty `MAKOSH_LOCAL_WRITE_TOKEN` is invalid configuration.
 - `POST /api/events` requires `Authorization: Bearer <token>`.
-- If `HERMES_LOCAL_WRITE_TOKEN` is not configured, write commands fail closed with `503 write_token_not_configured`.
+- If `MAKOSH_LOCAL_WRITE_TOKEN` is not configured, write commands fail closed with `503 write_token_not_configured`.
 - If the bearer token is missing or invalid, write commands return `401 invalid_write_token`.
 - `GET /healthz` and `GET /readyz` remain unauthenticated operational probes.
 
@@ -28,6 +28,6 @@ This token is a local-development and local-desktop command guard, not a substit
 ## Consequences
 
 - Accidental unauthenticated writes to the event log are blocked.
-- Local smoke and development commands must provide `HERMES_LOCAL_WRITE_TOKEN`.
+- Local smoke and development commands must provide `MAKOSH_LOCAL_WRITE_TOKEN`.
 - `docker/.env.example` may contain only a non-secret placeholder token.
 - Before network exposure, multi-user access, plugins or agents can perform writes, this temporary token must be replaced or wrapped by the full capability policy model.

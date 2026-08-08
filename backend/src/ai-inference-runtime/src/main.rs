@@ -4,12 +4,12 @@ use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
-use hermes_ai_inference_persistence::schema::ai_inference_storage_bundle_v1;
-use hermes_ai_inference_runtime::{
+use makosh_ai_inference_persistence::schema::ai_inference_storage_bundle_v1;
+use makosh_ai_inference_runtime::{
     AiInferenceManagedRuntimeErrorV1, AiInferenceManagedRuntimeV1, AiInferenceRuntimeAdmissionV1,
     ai_inference_module_descriptor_v1, ai_inference_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedEngineRuntimeConfigurationV1,
     validation::{
         descriptor::{

@@ -7,18 +7,18 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_postgres::provider_store::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::communications::messages::provider_channel_store::ProviderChannelMessageStore;
-use hermes_hub_backend::integrations::telegram::client::models::chats::TelegramSyncState;
-use hermes_hub_backend::integrations::telegram::client::models::chats::{
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::communications::messages::provider_channel_store::ProviderChannelMessageStore;
+use makosh_hub_backend::integrations::telegram::client::models::chats::TelegramSyncState;
+use makosh_hub_backend::integrations::telegram::client::models::chats::{
     NewTelegramChat, TelegramChatKind,
 };
-use hermes_hub_backend::integrations::telegram::client::store::TelegramStore;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::integrations::telegram::client::store::TelegramStore;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const LOCAL_API_TOKEN: &str = "telegram-message-link-test-secret";
 
@@ -34,7 +34,7 @@ async fn telegram_message_ingestion_projects_public_message_link_without_erasing
     let account_id = format!("telegram-link-{suffix}");
     let chat_id = format!("100{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -63,7 +63,7 @@ async fn telegram_message_ingestion_projects_public_message_link_without_erasing
             provider_chat_id: chat_id.clone(),
             chat_kind: TelegramChatKind::Channel,
             title: "Public Link Channel".to_owned(),
-            username: Some("HermesPublicChannel".to_owned()),
+            username: Some("МакошьPublicChannel".to_owned()),
             sync_state: TelegramSyncState::Synced,
             last_message_at: None,
             metadata: json!({"runtime": "tdlib"}),
@@ -100,7 +100,7 @@ async fn telegram_message_ingestion_projects_public_message_link_without_erasing
         .expect("chat row");
     assert_eq!(
         chat_after_ingest.username.as_deref(),
-        Some("HermesPublicChannel")
+        Some("МакошьPublicChannel")
     );
     let chat_observation_rows = sqlx::query(
         r#"
@@ -124,7 +124,7 @@ async fn telegram_message_ingestion_projects_public_message_link_without_erasing
         chat_observation_rows.iter().any(|row| {
             row.get::<String, _>("kind_code") == "TELEGRAM_CHAT"
                 && row.get::<String, _>("relationship_kind") == "upsert"
-                && row.get::<Value, _>("payload")["username"] == json!("HermesPublicChannel")
+                && row.get::<Value, _>("payload")["username"] == json!("МакошьPublicChannel")
         }),
         "chat upsert observation must exist"
     );
@@ -136,7 +136,7 @@ async fn telegram_message_ingestion_projects_public_message_link_without_erasing
         .expect("projected message");
     assert_eq!(
         message.metadata["message_link"],
-        json!("https://t.me/HermesPublicChannel/4242")
+        json!("https://t.me/МакошьPublicChannel/4242")
     );
     assert_eq!(message.metadata["message_link_kind"], json!("public_t_me"));
 }
@@ -162,7 +162,7 @@ fn json_post_request(path: &str, body: Value, token: &str) -> Request<Body> {
     Request::builder()
         .method("POST")
         .uri(path)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .header(header::CONTENT_TYPE, "application/json")
         .body(Body::from(body.to_string()))
         .expect("request")
@@ -183,12 +183,12 @@ fn telegram_store(pool: &sqlx::PgPool) -> TelegramStore {
         Arc::new(CommunicationProviderSecretBindingStore::new(pool.clone())),
         Arc::new(ProviderChannelMessageStore::new(pool.clone())),
         Arc::new(
-            hermes_communications_postgres::store::CommunicationIngestionStore::new(
+            makosh_communications_postgres::store::CommunicationIngestionStore::new(
                 pool.clone(),
             ),
         ),
         Arc::new(
-            hermes_hub_backend::platform::communications::EventStoreProviderMessageObservationEventPort::new(
+            makosh_hub_backend::platform::communications::EventStoreProviderMessageObservationEventPort::new(
                 pool.clone(),
             ),
         ),

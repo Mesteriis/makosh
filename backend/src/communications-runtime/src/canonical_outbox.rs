@@ -1,17 +1,17 @@
 //! Exact canonical Communications event records for downstream owner consumers.
 
-use hermes_communications_api::{
+use makosh_communications_api::{
     AttachmentSafetyStateV1, AttachmentSafetyTransitionDecisionV1,
     COMMUNICATION_EVIDENCE_SCHEMA_SHA256, CanonicalAttachmentAnchorProjectionV1,
     CanonicalCommunicationEvidenceKindV1, CommunicationBodyStateV1, CommunicationDirectionV1,
     CommunicationProviderProvenanceV1, CommunicationSummary, wire::CommunicationEvidenceRecordedV1,
 };
-use hermes_communications_attachment_contract::{
+use makosh_communications_attachment_contract::{
     COMMUNICATIONS_ATTACHMENT_LIFECYCLE_SCHEMA_SHA256,
     admission::communication_attachment_anchor_recorded_contract_reference_v1,
     anchor_recorded_v1::AttachmentAnchorRecordedV1, lifecycle_v1::AttachmentSafetyStateChangedV1,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{
         ActorKindV1, ActorRefV1, ContractRefV1, DurableEnvelopeV1, EventMetadataV1, FenceKindV1,
@@ -48,7 +48,7 @@ pub fn build_evidence_recorded_outbox_v1(
         return Err(CanonicalOutboxBuildErrorV1::InvalidContext);
     }
     let message_id = identifier(
-        b"hermes.communications.evidence-recorded.v1\0",
+        b"makosh.communications.evidence-recorded.v1\0",
         summary.evidence_id.bytes(),
     );
     let recorded_at = Timestamp {
@@ -141,7 +141,7 @@ pub fn build_attachment_safety_state_changed_outbox_v1(
         return Err(CanonicalOutboxBuildErrorV1::InvalidContext);
     }
     let message_id = identifier(
-        b"hermes.communications.attachment-safety-state-changed.v1\0",
+        b"makosh.communications.attachment-safety-state-changed.v1\0",
         causation_message_id,
     );
     let recorded_at = Timestamp {
@@ -210,7 +210,7 @@ pub fn build_attachment_anchor_recorded_outbox_v1(
         return Err(CanonicalOutboxBuildErrorV1::InvalidContext);
     }
     let message_id = identifier(
-        b"hermes.communications.attachment-anchor-recorded.v1\0",
+        b"makosh.communications.attachment-anchor-recorded.v1\0",
         anchor.attachment_anchor_id.bytes(),
     );
     let recorded_at = Timestamp {
@@ -275,7 +275,7 @@ fn valid_context(context: &CanonicalEventContextV1) -> bool {
         && (0..1_000_000_000).contains(&context.recorded_at_nanos)
 }
 
-fn wire_contract(reference: hermes_runtime_protocol::v1::ContractReferenceV1) -> ContractRefV1 {
+fn wire_contract(reference: makosh_runtime_protocol::v1::ContractReferenceV1) -> ContractRefV1 {
     ContractRefV1 {
         owner: reference.owner,
         name: reference.name,
@@ -297,7 +297,7 @@ fn identifier(domain: &[u8], evidence_id: [u8; 16]) -> [u8; 16] {
 
 fn runtime_source_reference(runtime_instance_id: &str) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.communications.runtime-source.v1\0");
+    hasher.update(b"makosh.communications.runtime-source.v1\0");
     hasher.update(runtime_instance_id.as_bytes());
     let digest: [u8; 32] = hasher.finalize().into();
     digest[..16]
@@ -362,14 +362,14 @@ const fn attachment_safety_state_value(value: AttachmentSafetyStateV1) -> i32 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_communications_api::{
+    use makosh_communications_api::{
         CanonicalAttachmentAnchorProjectionV1, CanonicalCommunicationEvidenceKindV1,
         CommunicationAttachmentAnchorIdV1, CommunicationBodyStateV1, CommunicationDirectionV1,
         CommunicationMessageIdV1, CommunicationObservationIdV1, CommunicationProviderProvenanceV1,
         CommunicationSourceCursorV1, CommunicationSummary,
     };
-    use hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateChangedV1;
-    use hermes_events_protocol::v1::DurableEnvelopeV1;
+    use makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateChangedV1;
+    use makosh_events_protocol::v1::DurableEnvelopeV1;
 
     use super::*;
 
@@ -442,17 +442,17 @@ mod tests {
         let record = build_evidence_recorded_outbox_v1(&summary, [7; 16], &context)
             .expect("canonical Gmail evidence event");
         let envelope = DurableEnvelopeV1::decode(record.exact_bytes()).expect("envelope");
-        let payload = hermes_communications_api::wire::CommunicationEvidenceRecordedV1::decode(
+        let payload = makosh_communications_api::wire::CommunicationEvidenceRecordedV1::decode(
             envelope.payload.as_slice(),
         )
         .expect("canonical evidence payload");
 
         assert_eq!(payload.message_subject.as_deref(), Some("Quarterly update"));
         assert_eq!(
-            hermes_communications_api::wire::CommunicationProviderProvenanceV1::try_from(
+            makosh_communications_api::wire::CommunicationProviderProvenanceV1::try_from(
                 payload.provider,
             ),
-            Ok(hermes_communications_api::wire::CommunicationProviderProvenanceV1::MailGmail,),
+            Ok(makosh_communications_api::wire::CommunicationProviderProvenanceV1::MailGmail,),
         );
     }
 
@@ -525,7 +525,7 @@ mod tests {
         )
         .expect("canonical anchor handoff");
         let envelope = DurableEnvelopeV1::decode(record.exact_bytes()).expect("envelope");
-        let payload = hermes_communications_attachment_contract::anchor_recorded_v1::AttachmentAnchorRecordedV1::decode(envelope.payload.as_slice()).expect("payload");
+        let payload = makosh_communications_attachment_contract::anchor_recorded_v1::AttachmentAnchorRecordedV1::decode(envelope.payload.as_slice()).expect("payload");
 
         assert_eq!(
             envelope.contract.as_ref().expect("contract").name,

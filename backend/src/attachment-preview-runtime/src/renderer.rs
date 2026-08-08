@@ -1,15 +1,15 @@
 //! Magic-based renderer selection; provider metadata is not accepted.
 
-use hermes_attachment_preview_docx::{AttachmentPreviewDocxRendererV1, FIXED_FONT_SHA256_V1};
-use hermes_attachment_preview_image::AttachmentPreviewImageRendererV1;
-use hermes_attachment_preview_media::AttachmentPreviewMediaRendererV1;
-use hermes_attachment_preview_pdf::AttachmentPreviewPdfRendererV1;
-use hermes_attachment_preview_renderer_contract::{
+use makosh_attachment_preview_docx::{AttachmentPreviewDocxRendererV1, FIXED_FONT_SHA256_V1};
+use makosh_attachment_preview_image::AttachmentPreviewImageRendererV1;
+use makosh_attachment_preview_media::AttachmentPreviewMediaRendererV1;
+use makosh_attachment_preview_pdf::AttachmentPreviewPdfRendererV1;
+use makosh_attachment_preview_renderer_contract::{
     AttachmentPreviewRenderRequestV1, AttachmentPreviewRenderResultV1,
     AttachmentPreviewRendererErrorV1, AttachmentPreviewRendererV1, AttachmentPreviewSourceFormatV1,
     detect_attachment_preview_source_format_v1,
 };
-use hermes_attachment_preview_text::AttachmentPreviewTextRendererV1;
+use makosh_attachment_preview_text::AttachmentPreviewTextRendererV1;
 use sha2::{Digest, Sha256};
 
 #[derive(Clone, Copy, Debug, Default)]
@@ -49,20 +49,20 @@ impl AttachmentPreviewRendererRuntimeV1 {
 #[must_use]
 pub fn attachment_preview_renderer_identity_v1() -> [u8; 32] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.attachment-preview.renderer-runtime.v1\0");
+    digest.update(b"makosh.attachment-preview.renderer-runtime.v1\0");
     digest.update(env!("CARGO_PKG_VERSION").as_bytes());
-    digest.update(hermes_attachment_preview_text::PACKAGE.as_bytes());
-    digest.update(hermes_attachment_preview_image::PACKAGE.as_bytes());
-    digest.update(hermes_attachment_preview_pdf::PACKAGE.as_bytes());
-    digest.update(hermes_attachment_preview_docx::PACKAGE.as_bytes());
+    digest.update(makosh_attachment_preview_text::PACKAGE.as_bytes());
+    digest.update(makosh_attachment_preview_image::PACKAGE.as_bytes());
+    digest.update(makosh_attachment_preview_pdf::PACKAGE.as_bytes());
+    digest.update(makosh_attachment_preview_docx::PACKAGE.as_bytes());
     digest.update(FIXED_FONT_SHA256_V1.as_bytes());
-    digest.update(hermes_attachment_preview_media::PACKAGE.as_bytes());
+    digest.update(makosh_attachment_preview_media::PACKAGE.as_bytes());
     digest.finalize().into()
 }
 
 #[cfg(test)]
 mod tests {
-    use hermes_attachment_preview_api::wire::{
+    use makosh_attachment_preview_api::wire::{
         AttachmentPreviewContentTypeV1, AttachmentPreviewKindV1,
     };
 
@@ -71,14 +71,14 @@ mod tests {
     #[test]
     fn dispatches_by_magic_without_a_provider_hint() {
         let rendered = AttachmentPreviewRendererRuntimeV1
-            .render(b"hello\r\nHermes\r\n")
+            .render(b"hello\r\nmakosh\r\n")
             .expect("text preview");
         assert_eq!(rendered.preview_kind, AttachmentPreviewKindV1::Text);
         assert_eq!(
             rendered.content_type,
             AttachmentPreviewContentTypeV1::TextUtf8
         );
-        assert_eq!(rendered.bytes, b"hello\nHermes\n");
+        assert_eq!(rendered.bytes, b"hello\nmakosh\n");
     }
 
     #[test]

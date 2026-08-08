@@ -2,7 +2,7 @@
 
 use std::io::{Cursor, Read};
 
-use hermes_attachment_text_extraction_parser_contract::{
+use makosh_attachment_text_extraction_parser_contract::{
     ATTACHMENT_TEXT_PARSER_MAX_OUTPUT_BYTES_V1, AttachmentTextParserErrorV1,
     AttachmentTextParserKindV1, AttachmentTextParserOutputV1, bounded_parser_output_v1,
     validate_source_bound,
@@ -10,7 +10,7 @@ use hermes_attachment_text_extraction_parser_contract::{
 use quick_xml::{Reader, escape::unescape, events::Event};
 use zip::ZipArchive;
 
-pub const PACKAGE: &str = "hermes-attachment-text-extraction-docx";
+pub const PACKAGE: &str = "makosh-attachment-text-extraction-docx";
 const MAX_DOCUMENT_XML_BYTES_V1: u64 = 8 * 1024 * 1024;
 
 pub fn extract_docx_text_v1(
@@ -116,13 +116,13 @@ mod tests {
         let source = docx_bytes(
             br#"<?xml version="1.0" encoding="UTF-8"?>
             <w:document xmlns:w="urn:w"><w:body>
-              <w:p><w:r><w:t>Hello &amp; Hermes</w:t></w:r></w:p>
+              <w:p><w:r><w:t>Hello &amp; makosh</w:t></w:r></w:p>
               <w:p><w:r><w:t>second</w:t></w:r><w:tab/><w:r><w:t>cell</w:t></w:r></w:p>
             </w:body></w:document>"#,
         );
         let output = extract_docx_text_v1(&source).expect("DOCX text");
         assert_eq!(output.parser, AttachmentTextParserKindV1::Docx);
-        assert_eq!(output.text_utf8, b"Hello & Hermes\nsecond\tcell");
+        assert_eq!(output.text_utf8, b"Hello & makosh\nsecond\tcell");
     }
 
     #[test]

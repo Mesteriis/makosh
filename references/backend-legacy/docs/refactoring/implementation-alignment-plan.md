@@ -1,7 +1,7 @@
 # Implementation Alignment Plan
 
 This document maps the current repository implementation to the canonical
-Hermes product model.
+Макошь product model.
 
 It is a planning document only. It does not authorize code changes, route
 renames, schema migrations or API redesign without a follow-up implementation
@@ -21,7 +21,7 @@ Canonical references:
 - [ADR-0087 Contradiction Observation Persistence](../archive/adr/ADR-0087-contradiction-observation-persistence.md)
 - [ADR-0088 Obligation Persistence](../archive/adr/ADR-0088-obligation-persistence.md)
 
-Hermes is a local-first Personal Memory System. Communications are the primary
+Макошь is a local-first Personal Memory System. Communications are the primary
 ingestion spine. Domains own source-of-truth entities. Engines produce derived
 views, candidates, scores and review items.
 
@@ -57,10 +57,10 @@ implementation evidence:
   local surface coverage, not product-wide completion of Memory, Knowledge,
   Obligations, Decisions or Polygraph.
 - `docs/architecture/security-model.md` now follows ADR-0056 and current code:
-  `HERMES_LOCAL_API_SECRET` plus `X-Hermes-Secret` are current; token/actor-id
+  `MAKOSH_LOCAL_API_SECRET` plus `X-Макошь-Secret` are current; token/actor-id
   headers are historical terms from superseded ADRs.
 - `docs/architecture/context-diagram.md` and
-  `docs/architecture/container-diagram.md` now show Hermes as the Personal
+  `docs/architecture/container-diagram.md` now show Макошь as the Personal
   Memory System with Communications, Events, Documents, shared Engines and the
   Owner Persona.
 - `docs/reviews/backend-architecture-review-2026-06-06.md` is explicitly marked
@@ -96,7 +96,7 @@ implementation evidence:
   reading and assigning the current Owner Persona; legacy `/api/v1/persons/*`
   routes are retired and covered by regression tests.
 - `/api/v1/ai/agents` now materializes registry-backed AI agents (`HESTIA`,
-  `HERMES`, `MNEMOSYNE`, `ATHENA`, `HEPHAESTUS`) as `persona_type = ai_agent`
+  `MAKOSH`, `MNEMOSYNE`, `ATHENA`, `HEPHAESTUS`) as `persona_type = ai_agent`
   Personas and graph nodes. Compatibility email identities use lowercase agent
   IDs at `sh-inc.ru`, such as `hestia@sh-inc.ru`.
 - `ai_agent_runs` now stores `agent_persona_id` and `owner_persona_id`

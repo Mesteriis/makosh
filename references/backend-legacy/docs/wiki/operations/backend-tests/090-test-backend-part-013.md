@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Добавляется страница `operations/backend-tests.md` с описанием набора интеграционных тестов для бэкенда `hermes-hub`, сфокусированных на Telegram. Страница отсутствовала в wiki, и её создание необходимо для документирования тестового покрытия, структуры тестов и проверяемых сценариев.
+Добавляется страница `operations/backend-tests.md` с описанием набора интеграционных тестов для бэкенда `makosh`, сфокусированных на Telegram. Страница отсутствовала в wiki, и её создание необходимо для документирования тестового покрытия, структуры тестов и проверяемых сценариев.
 
 ## Предложенные страницы
 
@@ -25,13 +25,13 @@ generated_by: code-wiki-ru
 ```markdown
 # Backend Tests
 
-Страница описывает набор интеграционных тестов для бэкенда `hermes-hub`. Все тесты написаны на Rust, используют `tokio`/`axum`/`sqlx` и работают с изолированной БД через `TestContext`.
+Страница описывает набор интеграционных тестов для бэкенда `makosh`. Все тесты написаны на Rust, используют `tokio`/`axum`/`sqlx` и работают с изолированной БД через `TestContext`.
 
 ## Общая структура тестов
 
 - Тесты расположены в `backend/tests/`.
 - Каждый файл содержит один или несколько `#[tokio::test]`.
-- Для авторизации API-запросов используется заголовок `x-hermes-secret` с константой `LOCAL_API_TOKEN`.
+- Для авторизации API-запросов используется заголовок `x-makosh-secret` с константой `LOCAL_API_TOKEN`.
 - Основные утилиты:
   - `TestContext` из `testkit` предоставляет `connection_string()`, `pool()` и `database()`.
   - `build_router_with_database` собирает маршрутизатор `axum`.
@@ -136,11 +136,11 @@ generated_by: code-wiki-ru
 - `telegram_fixture_sync_chats_returns_account_chat_metadata` (`telegram_messages_basic`) — файл обрезан.
 
 - `telegram_message_ingestion_projects_public_message_link_without_erasing_chat_username` (`telegram_message_links`)
-  - Создаёт публичный канал (`TelegramChatKind::Channel`) с `username: "HermesPublicChannel"`.
+  - Создаёт публичный канал (`TelegramChatKind::Channel`) с `username: "МакошьPublicChannel"`.
   - Импортирует фиктивное сообщение.
   - Чат сохраняет `username` после импорта.
-  - Запись `observations` типа `TELEGRAM_CHAT` с `relationship_kind: "upsert"` и `payload.username: "HermesPublicChannel"` присутствует.
-  - Спроецированное сообщение имеет `metadata.message_link: "https://t.me/HermesPublicChannel/4242"` и `metadata.message_link_kind: "public_t_me"`.
+  - Запись `observations` типа `TELEGRAM_CHAT` с `relationship_kind: "upsert"` и `payload.username: "МакошьPublicChannel"` присутствует.
+  - Спроецированное сообщение имеет `metadata.message_link: "https://t.me/МакошьPublicChannel/4242"` и `metadata.message_link_kind: "public_t_me"`.
 
 ### Реакции и ссылки (`telegram_reactions`, `telegram_reference_idempotency`)
 
@@ -198,7 +198,7 @@ generated_by: code-wiki-ru
   - Ответ также 503, ошибка `telegram_tdlib_runtime_unavailable`.
 
 - `telegram_live_smoke_syncs_configured_account_when_explicitly_enabled`
-  - Выполняется только при `HERMES_TELEGRAM_LIVE_SMOKE=1`.
+  - Выполняется только при `MAKOSH_TELEGRAM_LIVE_SMOKE=1`.
   - Использует реальные TDLib-путь, API-ключи, `account_id`, `chat_id` из переменных окружения.
   - `POST /api/v1/integrations/telegram/runtime/start` возвращает `runtime_kind: "tdlib_qr_authorized"`, `status: "running"`.
   - `POST /api/v1/integrations/telegram/provider-sync/history` возвращает `status: "synced"`, `runtime_kind: "tdlib_qr_authorized"`.
@@ -222,7 +222,7 @@ generated_by: code-wiki-ru
   - Удалённый аккаунт блокирует команды `edit`, `delete`, `restore-visibility`, `pin`, реакции — статус 400, отсутствие записей в `telegram_provider_write_commands`, `api_audit_log`, `event_log`, `telegram_message_versions`, `telegram_message_tombstones`, `telegram_message_reactions`. Метаданные сообщения не изменены.
 
 - `backend/tests/telegram_message_links.rs`
-  - Публичный канал: после импорта сохраняется `username`, создаётся observation `TELEGRAM_CHAT`. Сообщение получает `message_link` вида `https://t.me/HermesPublicChannel/4242` и `message_link_kind: "public_t_me"`.
+  - Публичный канал: после импорта сохраняется `username`, создаётся observation `TELEGRAM_CHAT`. Сообщение получает `message_link` вида `https://t.me/МакошьPublicChannel/4242` и `message_link_kind: "public_t_me"`.
 
 - `backend/tests/telegram_message_mark_read_capability_gates.rs`
   - Фиктивный аккаунт блокирует `mark-read`: 400, нет команд, нет событий, нет аудита, метаданные чата (`last_read_inbox_provider_message_id`, `unread_count`, `mention_count`) не изменяются.
@@ -249,7 +249,7 @@ generated_by: code-wiki-ru
   - Маршрут `/members` предпочитает provider roster (source: `tdlib`) над message heuristic. Join/leave энквеят команды (status: `queued`). Сверка join-команды через `reconcile_join_commands_from_provider_roster`; `telegram_self_provider_member_id` возвращает `user:{id}` для корректного `external_account_id`.
 
 - `backend/tests/telegram_qr_login.rs`
-  - Недоступность TDLib: 503, `telegram_tdlib_runtime_unavailable`. Использование сконфигурированных app credentials без передачи в payload. Live smoke test (включается переменной `HERMES_TELEGRAM_LIVE_SMOKE`): `runtime/start` → running, `provider-sync/history` → synced. Неизвестный setup: 404, `telegram_qr_login_not_found`.
+  - Недоступность TDLib: 503, `telegram_tdlib_runtime_unavailable`. Использование сконфигурированных app credentials без передачи в payload. Live smoke test (включается переменной `MAKOSH_TELEGRAM_LIVE_SMOKE`): `runtime/start` → running, `provider-sync/history` → synced. Неизвестный setup: 404, `telegram_qr_login_not_found`.
 
 - `backend/tests/telegram_reactions.rs`
   - Сверка реакций: команда `react` с совпадающей реакцией → completed/observed; `unreact` при отсутствии реакции в списке → completed/observed; `react` с несовпадающей → failed/mismatch с ошибкой `Provider observed a different reaction state than requested` и деталями `expected_is_chosen`/`observed_is_chosen`.

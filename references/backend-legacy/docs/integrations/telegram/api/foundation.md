@@ -6,8 +6,8 @@
 
 Все текущие маршруты защищены локальным API guard из ADR-0056, если явно не
 указано иначе. Browser WebSocket clients передают local secret через
-`hermes_secret`, потому что native WebSocket requests не могут выставить
-`X-Hermes-Secret`.
+`makosh_secret`, потому что native WebSocket requests не могут выставить
+`X-Макошь-Secret`.
 
 ## Base
 

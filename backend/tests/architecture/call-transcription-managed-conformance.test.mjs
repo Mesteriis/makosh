@@ -22,7 +22,7 @@ test('call transcription managed conformance proves the exact clean-room contour
   ] = await Promise.all([
     read('backend/architecture/policy.json'),
     read(
-      'backend/src/desktop-call-recording-api/proto/hermes/desktop_call_recording/v1/recording.proto',
+      'backend/src/desktop-call-recording-api/proto/makosh/desktop_call_recording/v1/recording.proto',
     ),
     read('backend/src/desktop-call-recording-runtime/src/client_port.rs'),
     read('backend/src/call-transcription-runtime/src/blob.rs'),

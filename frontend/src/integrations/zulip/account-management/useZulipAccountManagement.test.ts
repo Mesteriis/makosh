@@ -5,13 +5,13 @@ import {
 	ClientModuleSettingsBootstrapV1Schema,
 	ClientSettingValueEntryV1Schema,
 	ClientSettingValueV1Schema,
-} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	ZulipCredentialBindingStateV1,
-} from '../../../gen/hermes/zulip/account/v1/client_pb'
+} from '../../../gen/makosh/zulip/account/v1/client_pb'
 import {
 	ZulipAccountStatusV1Schema,
-} from '../../../gen/hermes/zulip/operational/v1/client_pb'
+} from '../../../gen/makosh/zulip/operational/v1/client_pb'
 import { useZulipAccountManagement } from './useZulipAccountManagement'
 
 describe('useZulipAccountManagement', () => {
@@ -61,7 +61,7 @@ describe('useZulipAccountManagement', () => {
 		const controller = useZulipAccountManagement(
 			() => create(ClientModuleBootstrapV1Schema, {
 				registrationId: 'zulip.local',
-				moduleId: 'hermes-zulip-runtime',
+				moduleId: 'makosh-zulip-runtime',
 				capabilityIds: ['zulip.operational.query.v1'],
 			}),
 			workflow as never,
@@ -76,7 +76,7 @@ describe('useZulipAccountManagement', () => {
 function zulipModule() {
 	return create(ClientModuleBootstrapV1Schema, {
 		registrationId: 'zulip.local',
-		moduleId: 'hermes-zulip-runtime',
+		moduleId: 'makosh-zulip-runtime',
 		capabilityIds: [
 			'zulip.operational.query.v1',
 			'zulip.account.lifecycle.v1',

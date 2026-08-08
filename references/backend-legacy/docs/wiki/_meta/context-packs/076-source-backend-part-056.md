@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/workflows/mail_background_sync/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/store.rs`
 - Size bytes / Размер в байтах: `427`
 - Included characters / Включено символов: `427`
 - Truncated / Обрезано: `no`
@@ -89,7 +89,7 @@ impl MailSyncStore {
 
 ### `backend/src/workflows/mail_background_sync/store/account.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/store/account.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/store/account.rs`
 - Size bytes / Размер в байтах: `614`
 - Included characters / Включено символов: `614`
 - Truncated / Обрезано: `no`
@@ -120,7 +120,7 @@ impl MailSyncStore {
 
 ### `backend/src/workflows/mail_background_sync/store/orphaned.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/store/orphaned.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/store/orphaned.rs`
 - Size bytes / Размер в байтах: `2310`
 - Included characters / Включено символов: `2310`
 - Truncated / Обрезано: `no`
@@ -203,7 +203,7 @@ impl MailSyncStore {
 
 ### `backend/src/workflows/mail_background_sync/store/run_finish.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/store/run_finish.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/store/run_finish.rs`
 - Size bytes / Размер в байтах: `3343`
 - Included characters / Включено символов: `3343`
 - Truncated / Обрезано: `no`
@@ -313,7 +313,7 @@ impl MailSyncStore {
 
 ### `backend/src/workflows/mail_background_sync/store/run_latest.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/store/run_latest.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/store/run_latest.rs`
 - Size bytes / Размер в байтах: `1506`
 - Included characters / Включено символов: `1506`
 - Truncated / Обрезано: `no`
@@ -375,7 +375,7 @@ impl MailSyncStore {
 
 ### `backend/src/workflows/mail_background_sync/store/run_progress.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/store/run_progress.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/store/run_progress.rs`
 - Size bytes / Размер в байтах: `4701`
 - Included characters / Включено символов: `4701`
 - Truncated / Обрезано: `no`
@@ -531,7 +531,7 @@ impl MailSyncStore {
 
 ### `backend/src/workflows/mail_background_sync/store/run_start.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/store/run_start.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/store/run_start.rs`
 - Size bytes / Размер в байтах: `3158`
 - Included characters / Включено символов: `3158`
 - Truncated / Обрезано: `no`
@@ -633,7 +633,7 @@ impl MailSyncStore {
 
 ### `backend/src/workflows/mail_background_sync/store/scheduling.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/store/scheduling.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/store/scheduling.rs`
 - Size bytes / Размер в байтах: `2305`
 - Included characters / Включено символов: `2305`
 - Truncated / Обрезано: `no`
@@ -704,7 +704,7 @@ impl MailSyncStore {
 
 ### `backend/src/workflows/mail_background_sync/store/settings.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/store/settings.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/store/settings.rs`
 - Size bytes / Размер в байтах: `2470`
 - Included characters / Включено символов: `2470`
 - Truncated / Обрезано: `no`
@@ -782,7 +782,7 @@ impl MailSyncStore {
 
 ### `backend/src/workflows/mail_background_sync/store/statuses.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/store/statuses.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/store/statuses.rs`
 - Size bytes / Размер в байтах: `3016`
 - Included characters / Включено символов: `3016`
 - Truncated / Обрезано: `no`
@@ -862,7 +862,7 @@ impl MailSyncStore {
 
 ### `backend/src/workflows/mail_background_sync/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/validation.rs`
 - Size bytes / Размер в байтах: `1855`
 - Included characters / Включено символов: `1855`
 - Truncated / Обрезано: `no`
@@ -932,7 +932,7 @@ pub(super) fn mail_sync_run_id(account_id: &str) -> String {
 
 ### `backend/src/workflows/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mod.rs`
 - Size bytes / Размер в байтах: `753`
 - Included characters / Включено символов: `753`
 - Truncated / Обрезано: `no`
@@ -964,7 +964,7 @@ pub mod zoom_signal_detection;
 
 ### `backend/src/workflows/person_derived_evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/person_derived_evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/person_derived_evidence.rs`
 - Size bytes / Размер в байтах: `12941`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1312,7 +1312,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/workflows/project_link_review_effects.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/project_link_review_effects.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/project_link_review_effects.rs`
 - Size bytes / Размер в байтах: `11985`
 - Included characters / Включено символов: `11985`
 - Truncated / Обрезано: `no`
@@ -1651,7 +1651,7 @@ fn required_string<'a>(
 
 ### `backend/src/workflows/realtime_conversation_memory_pipeline.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/realtime_conversation_memory_pipeline.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/realtime_conversation_memory_pipeline.rs`
 - Size bytes / Размер в байтах: `1839`
 - Included characters / Включено символов: `1839`
 - Truncated / Обрезано: `no`
@@ -1709,7 +1709,7 @@ pub fn plan_memory_pipeline(
 
 ### `backend/src/workflows/realtime_conversation_radar_projection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/realtime_conversation_radar_projection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/realtime_conversation_radar_projection.rs`
 - Size bytes / Размер в байтах: `3929`
 - Included characters / Включено символов: `3929`
 - Truncated / Обрезано: `no`
@@ -1816,7 +1816,7 @@ pub fn call_bundle_radar_candidates(
 
 ### `backend/src/workflows/realtime_conversation_transcript_execution.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/realtime_conversation_transcript_execution.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/realtime_conversation_transcript_execution.rs`
 - Size bytes / Размер в байтах: `11969`
 - Included characters / Включено символов: `11969`
 - Truncated / Обрезано: `no`
@@ -1844,10 +1844,10 @@ use crate::platform::realtime_conversation::{
 
 pub const REALTIME_CONVERSATION_TRANSCRIPT_EXECUTION_CONSUMER: &str =
     "realtime_conversation_transcript_execution";
-const TRANSCRIBER_PATH_ENV: &str = "HERMES_REALTIME_CONVERSATION_TRANSCRIBER";
-const TRANSCRIBER_ARGS_JSON_ENV: &str = "HERMES_REALTIME_CONVERSATION_TRANSCRIBER_ARGS_JSON";
+const TRANSCRIBER_PATH_ENV: &str = "MAKOSH_REALTIME_CONVERSATION_TRANSCRIBER";
+const TRANSCRIBER_ARGS_JSON_ENV: &str = "MAKOSH_REALTIME_CONVERSATION_TRANSCRIBER_ARGS_JSON";
 const TRANSCRIBER_TIMEOUT_SECONDS_ENV: &str =
-    "HERMES_REALTIME_CONVERSATION_TRANSCRIBER_TIMEOUT_SECONDS";
+    "MAKOSH_REALTIME_CONVERSATION_TRANSCRIBER_TIMEOUT_SECONDS";
 const DEFAULT_TRANSCRIBER_TIMEOUT_SECONDS: u64 = 900;
 
 #[derive(Debug, Error)]
@@ -2066,17 +2066,17 @@ async fn run_transcriber_command(
         spawn_blocking(move || {
             let mut command = Command::new(&config.executable);
             command.args(&config.args);
-            command.env("HERMES_TRANSCRIPT_BUNDLE_ID", &payload.bundle_id);
-            command.env("HERMES_TRANSCRIPT_ACCOUNT_ID", &payload.account_id);
+            command.env("MAKOSH_TRANSCRIPT_BUNDLE_ID", &payload.bundle_id);
+            command.env("MAKOSH_TRANSCRIPT_ACCOUNT_ID", &payload.account_id);
             command.env(
-                "HERMES_TRANSCRIPT_CONFERENCE_ID",
+                "MAKOSH_TRANSCRIPT_CONFERENCE_ID",
                 payload.conference_id.as_deref().unwrap_or(""),
             );
-            command.env("HERMES_TRANSCRIPT_PROVIDER_KIND", &payload.provider_kind);
-            command.env("HERMES_TRANSCRIPT_BUNDLE_ROOT", &payload.bundle_root);
-            command.env("HERMES_TRANSCRIPT_MANIFEST_PATH", &payload.manifest_path);
-            command.env("HERMES_TRANSCRIPT_AUDIO_PATH", &payload.audio_path);
-            command.env("HERMES_TRANSCRIPT_MANIFEST_JSON", manifest_json);
+            command.env("MAKOSH_TRANSCRIPT_PROVIDER_KIND", &payload.provider_kind);
+            command.env("MAKOSH_TRANSCRIPT_BUNDLE_ROOT", &payload.bundle_root);
+            command.env("MAKOSH_TRANSCRIPT_MANIFEST_PATH", &payload.manifest_path);
+            command.env("MAKOSH_TRANSCRIPT_AUDIO_PATH", &payload.audio_path);
+            command.env("MAKOSH_TRANSCRIPT_MANIFEST_JSON", manifest_json);
             command.output()
         }),
     )
@@ -2174,7 +2174,7 @@ mod tests {
 
 ### `backend/src/workflows/realtime_conversation_transcript_projection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/realtime_conversation_transcript_projection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/realtime_conversation_transcript_projection.rs`
 - Size bytes / Размер в байтах: `11212`
 - Included characters / Включено символов: `11212`
 - Truncated / Обрезано: `no`
@@ -2512,7 +2512,7 @@ mod tests {
 
 ### `backend/src/workflows/review_inbox.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/review_inbox.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/review_inbox.rs`
 - Size bytes / Размер в байтах: `20065`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2857,7 +2857,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/workflows/review_mirror.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/review_mirror.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/review_mirror.rs`
 - Size bytes / Размер в байтах: `35344`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3235,7 +3235,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/workflows/review_promotion/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/review_promotion/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/review_promotion/mod.rs`
 - Size bytes / Размер в байтах: `43167`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3501,7 +3501,7 @@ impl ReviewPromotionService {
                         source_kind: Some("observation".to_owned()),
                         source_id: Some(primary_observation_id),
                         source_type: Some("observation".to_owned()),
-                        hermes_status: Some("ready".to_owned()),
+                        makosh_status: Some("ready".to_owned()),
                         priority_score: Some(item.confidence),
                         why: Some(item.summary.clone()),
                         tags: Some(json!(["review_promoted"])),
@@ -3510,13 +3510,13 @@ impl ReviewPromotionService {
                     .await?;
                 self.link_review_transition_observation(
                     &review_observation,
-                   
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/workflows/task_creation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/task_creation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/task_creation.rs`
 - Size bytes / Размер в байтах: `2423`
 - Included characters / Включено символов: `2423`
 - Truncated / Обрезано: `no`
@@ -3564,7 +3564,7 @@ pub(crate) async fn create_task_from_workflow_input(
                 source_id: Some(input.source_id),
                 source_type: Some(input.source_type),
                 project_id: None,
-                hermes_status: Some("new".to_owned()),
+                makosh_status: Some("new".to_owned()),
                 priority_score: None,
                 area: None,
                 why: None,

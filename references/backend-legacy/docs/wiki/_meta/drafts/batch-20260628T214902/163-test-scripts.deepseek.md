@@ -63,7 +63,7 @@
 
 ## `run-nextest.sh`
 
-- **Назначение**: запускает `cargo nextest run` с заданным профилем через вспомогательный бинарный файл `hermes_test_session`.
+- **Назначение**: запускает `cargo nextest run` с заданным профилем через вспомогательный бинарный файл `makosh_test_session`.
 - **Запуск**: `bash scripts/test/run-nextest.sh [profile] [-- дополнительные аргументы nextest]`
   - `profile` — имя nextest-профиля, по умолчанию `default`.
 - **Что делает**:
@@ -73,10 +73,10 @@
     - `CARGO_TARGET_DIR` — по умолчанию `target/validate-test` (если не задана).
     - `CARGO_INCREMENTAL` = `0` (по умолчанию).
     - `NEXTEST_SHOW_PROGRESS` — по умолчанию `bar`.
-  - Запускает: `cargo run --manifest-path crates/testkit/Cargo.toml --bin hermes_test_session -- cargo nextest run --manifest-path backend/Cargo.toml --profile ${PROFILE} --show-progress ${NEXTEST_SHOW_PROGRESS} --test-threads ${HERMES_NEXTEST_JOBS:-4} "$@"`.
+  - Запускает: `cargo run --manifest-path crates/testkit/Cargo.toml --bin makosh_test_session -- cargo nextest run --manifest-path backend/Cargo.toml --profile ${PROFILE} --show-progress ${NEXTEST_SHOW_PROGRESS} --test-threads ${MAKOSH_NEXTEST_JOBS:-4} "$@"`.
   - Дополнительные аргументы `$@` передаются напрямую в `cargo nextest`.
 - **Переменные окружения**:
-  - `HERMES_NEXTEST_JOBS` — количество потоков тестирования (по умолчанию `4`).
+  - `MAKOSH_NEXTEST_JOBS` — количество потоков тестирования (по умолчанию `4`).
   - `NEXTEST_SHOW_PROGRESS` — формат индикатора прогресса (по умолчанию `bar`).
   - `CARGO_TARGET_DIR` — путь к целевой директории сборки тестов (по умолчанию `target/validate-test`).
   - `CARGO_INCREMENTAL` — отключение инкрементальной компиляции (по умолчанию `0`).
@@ -93,10 +93,10 @@
     - `CARGO_TARGET_DIR` — по умолчанию `target/coverage-build`.
     - `CARGO_INCREMENTAL` = `0`.
   - Выполняет очистку предыдущих данных покрытия: `cargo llvm-cov clean --workspace`.
-  - Запускает: `cargo run --manifest-path crates/testkit/Cargo.toml --bin hermes_test_session -- cargo llvm-cov nextest --manifest-path backend/Cargo.toml --profile ${PROFILE} --show-progress ${NEXTEST_SHOW_PROGRESS} --test-threads ${HERMES_NEXTEST_JOBS:-4} "$@"`.
+  - Запускает: `cargo run --manifest-path crates/testkit/Cargo.toml --bin makosh_test_session -- cargo llvm-cov nextest --manifest-path backend/Cargo.toml --profile ${PROFILE} --show-progress ${NEXTEST_SHOW_PROGRESS} --test-threads ${MAKOSH_NEXTEST_JOBS:-4} "$@"`.
 - **Переменные окружения**:
   - `CARGO_TARGET_DIR` — путь для артефактов покрытия (по умолчанию `target/coverage-build`).
-  - `NEXTEST_SHOW_PROGRESS`, `HERMES_NEXTEST_JOBS`, `CARGO_INCREMENTAL` — аналогично `run-nextest.sh`.
+  - `NEXTEST_SHOW_PROGRESS`, `MAKOSH_NEXTEST_JOBS`, `CARGO_INCREMENTAL` — аналогично `run-nextest.sh`.
 ```
 
 ### Source coverage / Покрытие источников
@@ -104,8 +104,8 @@
 - **`scripts/test/analyze-nextest-junit.mjs`** — то, как скрипт парсит аргументы, извлекает атрибуты тестов, вычисляет перцентили, формирует JSON и Markdown отчёты, выводит прогресс-бар, а также форматы выходных файлов.
 - **`scripts/test/backend-test-targets.mjs`** — источник правил категоризации целей тестов (`architecture`, `snapshot`, `e2e`, `integration`), способ подсчёта `#[test]`/`#[tokio::test]`, два режима работы (`summary` и `targets`), структура выводимого JSON.
 - **`scripts/test/collect-performance-reports.sh`** — маппинг входных JUnit-файлов (`target/nextest/default/junit.xml`, `ci`, `integration`) на имена suite, вызов `analyze-nextest-junit.mjs`, путь для выходных отчётов (`reports/test-performance/<suite>`), поведение при отсутствии файлов.
-- **`scripts/test/run-nextest.sh`** — принимаемый профиль (по умолчанию `default`), переменные окружения (`CARGO_TARGET_DIR`, `CARGO_INCREMENTAL`, `NEXTEST_SHOW_PROGRESS`, `HERMES_NEXTEST_JOBS`), использование `hermes_test_session`, передача дополнительных аргументов в `cargo nextest`.
-- **`scripts/test/run-llvm-cov.sh`** — принимаемый профиль (по умолчанию `ci`), использование `cargo llvm-cov nextest`, очистка `cargo llvm-cov clean --workspace`, переменные окружения (аналогичные `run-nextest.sh`, но `CARGO_TARGET_DIR` по умолчанию `target/coverage-build`), запуск через `hermes_test_session`.
+- **`scripts/test/run-nextest.sh`** — принимаемый профиль (по умолчанию `default`), переменные окружения (`CARGO_TARGET_DIR`, `CARGO_INCREMENTAL`, `NEXTEST_SHOW_PROGRESS`, `MAKOSH_NEXTEST_JOBS`), использование `makosh_test_session`, передача дополнительных аргументов в `cargo nextest`.
+- **`scripts/test/run-llvm-cov.sh`** — принимаемый профиль (по умолчанию `ci`), использование `cargo llvm-cov nextest`, очистка `cargo llvm-cov clean --workspace`, переменные окружения (аналогичные `run-nextest.sh`, но `CARGO_TARGET_DIR` по умолчанию `target/coverage-build`), запуск через `makosh_test_session`.
 
 ### Drift candidates / Кандидаты на drift
 

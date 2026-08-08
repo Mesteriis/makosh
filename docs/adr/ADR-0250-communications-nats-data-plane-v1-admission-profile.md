@@ -29,8 +29,8 @@ integration-owned transaction
 ```
 
 Integration может зависеть только от
-`hermes-communications-ingress`. Она не зависит от
-`hermes-communications-api`, domain, persistence или runtime. Communications
+`makosh-communications-ingress`. Она не зависит от
+`makosh-communications-api`, domain, persistence или runtime. Communications
 не импортирует integration contracts, runtimes, SDK или persistence.
 
 Допустимые входы:

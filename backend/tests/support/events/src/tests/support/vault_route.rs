@@ -3,11 +3,11 @@
 use std::collections::VecDeque;
 use std::future::{Future, ready};
 
-use hermes_events_jetstream::{NatsVaultRouteFailureV1, NatsVaultRoutePortV1};
-use hermes_runtime_protocol::v1::{
+use makosh_events_jetstream::{NatsVaultRouteFailureV1, NatsVaultRoutePortV1};
+use makosh_runtime_protocol::v1::{
     VaultCiphertextResponseV1, VaultCiphertextRouteDirectionV1, VaultCiphertextRouteV1,
 };
-use hermes_vault_protocol::{
+use makosh_vault_protocol::{
     LeaseAudienceV1, VaultTransportBindingV1, VaultTransportDirectionV1, VaultTransportPublicKey,
     seal,
 };

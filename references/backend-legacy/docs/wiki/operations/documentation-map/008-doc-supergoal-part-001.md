@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Добавить в русскую Obsidian‑wiki страницу `operations/documentation-map.md` – централизованную карту текущих и запланированных работ по выравниванию документации и реализации в Hermes Hub. Страница формируется исключительно на основе встроенных в контекст файлов суперцелей `hermes-docs-alignment` и `hermes-frontend-migration-vue-3`. Описывается статус, фазы, выявленные расхождения (gaps), архитектурные ограничения и связанные ADR для инициативы «Hermes Docs Alignment», а также даётся ссылка на завершённую миграцию фронтенда.
+Добавить в русскую Obsidian‑wiki страницу `operations/documentation-map.md` – централизованную карту текущих и запланированных работ по выравниванию документации и реализации в Макошь. Страница формируется исключительно на основе встроенных в контекст файлов суперцелей `makosh-docs-alignment` и `makosh-frontend-migration-vue-3`. Описывается статус, фазы, выявленные расхождения (gaps), архитектурные ограничения и связанные ADR для инициативы «Макошь Docs Alignment», а также даётся ссылка на завершённую миграцию фронтенда.
 
 ## Предложенные страницы
 
@@ -25,11 +25,11 @@ generated_by: code-wiki-ru
 ```markdown
 # Карта документации
 
-Обзор инициатив по выравниванию документации и реализации в Hermes Hub.
+Обзор инициатив по выравниванию документации и реализации в Макошь.
 
-## Supergoal: Hermes Docs Alignment
+## Supergoal: Макошь Docs Alignment
 
-**Каталог запуска:** `.supergoal/hermes-docs-alignment-Q2wXmK`
+**Каталог запуска:** `.supergoal/makosh-docs-alignment-Q2wXmK`
 **Статус:** планирование (по состоянию на 2026-06-14)
 **Текущая фаза:** 0 (ни одна не начата)
 **Всего фаз:** 10
@@ -104,54 +104,54 @@ generated_by: code-wiki-ru
 
 ### Связанные суперцели
 
-- **Миграция фронтенда на Vue 3** (`.supergoal/hermes-frontend-migration-vue-3-WzENWm`)
+- **Миграция фронтенда на Vue 3** (`.supergoal/makosh-frontend-migration-vue-3-WzENWm`)
   **Статус:** завершена (2026‑06‑14). 15 фаз выполнены. Фронтенд полностью на Vue 3, Pinia, TanStack Query.
   Эта работа обеспечила целевую архитектуру фронтенда, на которую опирается выравнивание документации.
 
 ### Примечание
 
-Все детальные спецификации фаз, acceptance criteria и инвентаризационные отчёты находятся в рабочем каталоге `.supergoal/hermes-docs-alignment-Q2wXmK/`. Данная страница является операционной сводкой и не заменяет исходные планы.
+Все детальные спецификации фаз, acceptance criteria и инвентаризационные отчёты находятся в рабочем каталоге `.supergoal/makosh-docs-alignment-Q2wXmK/`. Данная страница является операционной сводкой и не заменяет исходные планы.
 ```
 
 ## Покрытие источников
 
-- **`.supergoal/hermes-docs-alignment-Q2wXmK/ROADMAP.md`** (первые 12000 символов, файл обрезан)
+- **`.supergoal/makosh-docs-alignment-Q2wXmK/ROADMAP.md`** (первые 12000 символов, файл обрезан)
   Факты: название задачи, тип, дата создания, количество фаз (10), стек (Rust/Axum, Vue 3/Pinia/TanStack, Tauri 2), перечень 12 gaps, карта фаз и их зависимости, deliverable-описания фаз 1–… (фазы 1 и далее присутствуют в видимой части), топ-3 рисков, assumptions (совместимость API, депрекация `"contact"`, Notes как легковесный domain и т.д.). Использовано для таблицы фаз, списка gaps, рисков и архитектурного контекста.
 
-- **`.supergoal/hermes-docs-alignment-Q2wXmK/STATE.md`** (1841 символов, не обрезан)
+- **`.supergoal/makosh-docs-alignment-Q2wXmK/STATE.md`** (1841 символов, не обрезан)
   Факты: статус `PLANNING`, текущая фаза 0, дата начала и последнего обновления, таблица статуса всех фаз (все `pending`), инженерные проверки (`pending`), notable events (создание плана, выявление 12 gaps). Использовано для заполнения статуса суперцели.
 
-- **`.supergoal/hermes-docs-alignment-Q2wXmK/THINKING.md`** (первые 12000 символов, файл обрезан)
+- **`.supergoal/makosh-docs-alignment-Q2wXmK/THINKING.md`** (первые 12000 символов, файл обрезан)
   Факты: цели (5 пунктов), архитектурные и продуктовые ограничения (ADR-0001, 0008, 0084, 0085, 0086, 0077, 0026, 0031, 0093, master‑spec), кодовые рамки (Rust/Axum, ~300+ файлов, 12 domains, 11 engines, 200+ эндпоинтов, 74 миграции), риски (7 пунктов), Memory Hits (миграция завершена, God‑component, cross‑domain imports и т.д.). Использовано для раздела «Архитектурные ограничения» и для подтверждения завершённости миграции.
 
 - **Файлы фаз 1–10** (каждый вложен полностью или без обрезки в пределах лимита)
   Факты: structure‑спецификации каждой фазы, обязательные команды, acceptance criteria, зависимости. Использованы для заполнения таблицы фаз с ключевыми результатами.
 
-- **`.supergoal/hermes-frontend-migration-vue-3-WzENWm/STATE.md`** (первые 12000 символов, файл обрезан)
+- **`.supergoal/makosh-frontend-migration-vue-3-WzENWm/STATE.md`** (первые 12000 символов, файл обрезан)
   Факты: статус `COMPLETED`, текущая фаза 15, завершены все 15 фаз, build pass на каждой, notable events с перечислением результатов каждой фазы. Использовано для упоминания завершённой миграции в разделе «Связанные суперцели».
 
 ## Исходные файлы
 
-- [`.supergoal/hermes-docs-alignment-Q2wXmK/ROADMAP.md`](../../../../.supergoal/hermes-docs-alignment-Q2wXmK/ROADMAP.md)
-- [`.supergoal/hermes-docs-alignment-Q2wXmK/STATE.md`](../../../../.supergoal/hermes-docs-alignment-Q2wXmK/STATE.md)
-- [`.supergoal/hermes-docs-alignment-Q2wXmK/THINKING.md`](../../../../.supergoal/hermes-docs-alignment-Q2wXmK/THINKING.md)
-- [`.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-1.md`](../../../../.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-1.md)
-- [`.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-10.md`](../../../../.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-10.md)
-- [`.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-2.md`](../../../../.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-2.md)
-- [`.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-3.md`](../../../../.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-3.md)
-- [`.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-4.md`](../../../../.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-4.md)
-- [`.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-5.md`](../../../../.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-5.md)
-- [`.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-6.md`](../../../../.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-6.md)
-- [`.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-7.md`](../../../../.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-7.md)
-- [`.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-8.md`](../../../../.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-8.md)
-- [`.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-9.md`](../../../../.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-9.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/PROTOCOL.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/PROTOCOL.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/ROADMAP.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/ROADMAP.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/STATE.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/STATE.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/THINKING.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/THINKING.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/context.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/context.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-1.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-1.md)
+- [`.supergoal/makosh-docs-alignment-Q2wXmK/ROADMAP.md`](../../../../.supergoal/makosh-docs-alignment-Q2wXmK/ROADMAP.md)
+- [`.supergoal/makosh-docs-alignment-Q2wXmK/STATE.md`](../../../../.supergoal/makosh-docs-alignment-Q2wXmK/STATE.md)
+- [`.supergoal/makosh-docs-alignment-Q2wXmK/THINKING.md`](../../../../.supergoal/makosh-docs-alignment-Q2wXmK/THINKING.md)
+- [`.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-1.md`](../../../../.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-1.md)
+- [`.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-10.md`](../../../../.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-10.md)
+- [`.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-2.md`](../../../../.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-2.md)
+- [`.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-3.md`](../../../../.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-3.md)
+- [`.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-4.md`](../../../../.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-4.md)
+- [`.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-5.md`](../../../../.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-5.md)
+- [`.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-6.md`](../../../../.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-6.md)
+- [`.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-7.md`](../../../../.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-7.md)
+- [`.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-8.md`](../../../../.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-8.md)
+- [`.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-9.md`](../../../../.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-9.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/PROTOCOL.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/PROTOCOL.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/ROADMAP.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/ROADMAP.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/STATE.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/STATE.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/THINKING.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/THINKING.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/context.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/context.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-1.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-1.md)
 
 ## Кандидаты на drift
 
-Из предоставленного контекста расхождения кода/документации/ADR не видны – все встроенные файлы являются плановыми артефактами самой суперцели `hermes-docs-alignment` и архивом завершённой миграции фронтенда. Они не содержат исходного кода продукта, файлов ADR или текущих wiki‑страниц, которые можно было бы сравнить с планом. Поэтому дрифт не может быть подтверждён или опровергнут.
+Из предоставленного контекста расхождения кода/документации/ADR не видны – все встроенные файлы являются плановыми артефактами самой суперцели `makosh-docs-alignment` и архивом завершённой миграции фронтенда. Они не содержат исходного кода продукта, файлов ADR или текущих wiki‑страниц, которые можно было бы сравнить с планом. Поэтому дрифт не может быть подтверждён или опровергнут.

@@ -25,7 +25,7 @@ const emit = defineEmits<{
 	clear: []
 }>()
 
-const classes = computed(() => ['hermes-native-control', props.class])
+const classes = computed(() => ['makosh-native-control', props.class])
 const canClear = computed(() => Boolean(props.modelValue) && !props.disabled && !props.readonly)
 
 function handleInput(event: Event): void {
@@ -42,8 +42,8 @@ function clearSearch(): void {
 </script>
 
 <template>
-	<div class="hermes-affix-control hermes-affix-control--leading hermes-affix-control--trailing">
-		<span class="hermes-affix-control__leading" aria-hidden="true">
+	<div class="makosh-affix-control makosh-affix-control--leading makosh-affix-control--trailing">
+		<span class="makosh-affix-control__leading" aria-hidden="true">
 			<Icon icon="tabler:search" size="1rem" />
 		</span>
 		<input
@@ -57,8 +57,8 @@ function clearSearch(): void {
 			:value="modelValue"
 			@input="handleInput"
 		/>
-		<span v-if="canClear" class="hermes-affix-control__trailing">
-			<button class="hermes-input-clear" type="button" :aria-label="clearLabel" @click="clearSearch">
+		<span v-if="canClear" class="makosh-affix-control__trailing">
+			<button class="makosh-input-clear" type="button" :aria-label="clearLabel" @click="clearSearch">
 				<Icon icon="tabler:x" size="1rem" />
 			</button>
 		</span>

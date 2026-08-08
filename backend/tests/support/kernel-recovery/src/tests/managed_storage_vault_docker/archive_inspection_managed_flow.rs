@@ -12,7 +12,9 @@ use super::{
     mail_attachment_flow::wait_for_attachment_state,
 };
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
-use hermes_attachment_archive_inspection_api::{
+use http_body_util::BodyExt as _;
+use hyper::{Request, StatusCode, body::Bytes};
+use makosh_attachment_archive_inspection_api::{
     ATTACHMENT_ARCHIVE_INSPECTION_COMMAND_CONNECT_PATH_V1,
     ATTACHMENT_ARCHIVE_INSPECTION_QUERY_CONNECT_PATH_V1,
     ATTACHMENT_ARCHIVE_INSPECTION_REALTIME_CONTRACT_NAME_V1,
@@ -23,11 +25,9 @@ use hermes_attachment_archive_inspection_api::{
         StartArchiveInspectionRequestV1, StartArchiveInspectionResponseV1,
     },
 };
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     ClientRealtimeEventV1, ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
 };
-use http_body_util::BodyExt as _;
-use hyper::{Request, StatusCode, body::Bytes};
 use sqlx::{
     Row,
     postgres::{PgConnectOptions, PgPoolOptions, PgSslMode},
@@ -38,9 +38,9 @@ use crate::identity::device::signer::DeviceSigner;
 
 const PRIVATE_ARCHIVE_COMMENT: &[u8] = b"private-archive-comment";
 
-type ArchiveInspectionGateway = hermes_gateway_runtime::GatewayApplicationRouter<
+type ArchiveInspectionGateway = makosh_gateway_runtime::GatewayApplicationRouter<
     crate::identity::browser_gateway::ControlStoreBrowserAuthority,
-    hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 >;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -59,11 +59,11 @@ struct ArchiveInspectionDiagnosticsV1 {
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Blob, NATS, Communications, Attachment Security and Archive Inspection binaries"]
 fn managed_archive_inspection_reaches_gateway_sse_and_replays_after_restart() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let clamav = AttachmentSecurityClamAvFixture::start();
-    let root = unique_target_root("hermes-managed-archive-inspection");
+    let root = unique_target_root("makosh-managed-archive-inspection");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -71,13 +71,13 @@ fn managed_archive_inspection_reaches_gateway_sse_and_replays_after_restart() {
     );
     let release = installed_archive_inspection_ensemble_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             ARCHIVE_INSPECTION_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -94,7 +94,7 @@ fn managed_archive_inspection_reaches_gateway_sse_and_replays_after_restart() {
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     configure_archive_inspection_realtime_v1(&supervisor, &store, realtime.clone());
     supervisor
@@ -160,7 +160,7 @@ fn managed_archive_inspection_reaches_gateway_sse_and_replays_after_restart() {
     assert_clean_attachment_security_verdict_flow(&store, &attachment, &blob, &clamav, &zip);
     assert_eq!(
         wait_for_attachment_state(&store, &supervisor, attachment.attachment_anchor_id),
-        hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
+        makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
             as u32
     );
     wait_for_archive_evidence();
@@ -293,7 +293,7 @@ fn managed_archive_inspection_reaches_gateway_sse_and_replays_after_restart() {
     supervisor.shutdown().expect("stop managed processes");
     shutdown.store(true, Ordering::SeqCst);
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Archive Inspection fixture");
     std::fs::remove_dir_all(data).expect("remove short Archive Inspection Kernel fixture");
@@ -388,7 +388,7 @@ fn archive_inspection_gateway(
     supervisor: &ManagedRuntimeSupervisor,
     root: &Path,
     data: &Path,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 ) -> ArchiveInspectionGateway {
     let configuration = crate::platform::gateway::BrowserGatewayConfigurationV1::new(
         "127.0.0.1:9443".parse().expect("loopback Gateway address"),
@@ -532,22 +532,22 @@ fn archive_diagnostics() -> ArchiveInspectionDiagnosticsV1 {
         .block_on(async {
             let password = Zeroizing::new(
                 std::fs::read_to_string(required(
-                    "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+                    "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
                 ))
                 .expect("read disposable PostgreSQL credential")
                 .trim()
                 .to_owned(),
             );
             let options = PgConnectOptions::new()
-                .host(&required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
+                .host(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
                 .port(
-                    required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+                    required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
                         .parse()
                         .expect("valid PostgreSQL port"),
                 )
-                .username("hermes_postgres_admin")
+                .username("makosh_postgres_admin")
                 .password(password.as_str())
-                .database("hermes_storage_authenticated")
+                .database("makosh_storage_authenticated")
                 .ssl_mode(PgSslMode::Disable);
             let pool = PgPoolOptions::new()
                 .max_connections(1)
@@ -556,14 +556,14 @@ fn archive_diagnostics() -> ArchiveInspectionDiagnosticsV1 {
                 .expect("connect Archive Inspection diagnostics");
             let row = sqlx::query(
                 "SELECT \
-                 (SELECT count(*) FROM hermes_data.attachment_archive_inspection_scan_candidates) AS candidates, \
-                 (SELECT count(*) FROM hermes_data.attachment_archive_inspection_safety_facts) AS safety_facts, \
-                 (SELECT count(*) FROM hermes_data.attachment_archive_inspection_custody_delegation_requests) AS custody_requests, \
-                 (SELECT count(*) FROM hermes_data.attachment_archive_inspection_custody_delegation_requests WHERE state = 2 AND published_at_unix_millis IS NULL) AS pending_custody_outbox, \
-                 (SELECT count(*) FROM hermes_data.attachment_archive_inspection_custody_result_inbox) AS custody_results, \
-                 (SELECT count(*) FROM hermes_data.attachment_archive_inspection_jobs) AS jobs, \
-                 (SELECT coalesce(sum(attempt_count), 0) FROM hermes_data.attachment_archive_inspection_jobs) AS attempts, \
-                 (SELECT count(*) FROM hermes_data.attachment_archive_inspection_reports) AS reports",
+                 (SELECT count(*) FROM makosh_data.attachment_archive_inspection_scan_candidates) AS candidates, \
+                 (SELECT count(*) FROM makosh_data.attachment_archive_inspection_safety_facts) AS safety_facts, \
+                 (SELECT count(*) FROM makosh_data.attachment_archive_inspection_custody_delegation_requests) AS custody_requests, \
+                 (SELECT count(*) FROM makosh_data.attachment_archive_inspection_custody_delegation_requests WHERE state = 2 AND published_at_unix_millis IS NULL) AS pending_custody_outbox, \
+                 (SELECT count(*) FROM makosh_data.attachment_archive_inspection_custody_result_inbox) AS custody_results, \
+                 (SELECT count(*) FROM makosh_data.attachment_archive_inspection_jobs) AS jobs, \
+                 (SELECT coalesce(sum(attempt_count), 0) FROM makosh_data.attachment_archive_inspection_jobs) AS attempts, \
+                 (SELECT count(*) FROM makosh_data.attachment_archive_inspection_reports) AS reports",
             )
             .fetch_one(&pool)
             .await

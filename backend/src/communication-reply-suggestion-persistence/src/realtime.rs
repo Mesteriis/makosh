@@ -1,4 +1,4 @@
-use hermes_communication_reply_suggestion_core::{
+use makosh_communication_reply_suggestion_core::{
     ReplySuggestionRejectionCodeV1, ReplySuggestionStateV1,
 };
 use sqlx::{Postgres, Row, Transaction};
@@ -38,7 +38,7 @@ impl crate::CommunicationReplySuggestionPersistenceV1 {
             sqlx::query(
                 "SELECT realtime_sequence, run_id, state, state_revision,
                         rejection_code, occurred_at_unix_millis
-                 FROM hermes_data.communication_reply_suggestion_realtime
+                 FROM makosh_data.communication_reply_suggestion_realtime
                  WHERE logical_owner_id = $1 AND realtime_sequence > $2
                  ORDER BY realtime_sequence
                  LIMIT $3",
@@ -55,7 +55,7 @@ impl crate::CommunicationReplySuggestionPersistenceV1 {
                  FROM (
                    SELECT realtime_sequence, run_id, state, state_revision,
                           rejection_code, occurred_at_unix_millis
-                   FROM hermes_data.communication_reply_suggestion_realtime
+                   FROM makosh_data.communication_reply_suggestion_realtime
                    WHERE logical_owner_id = $1
                    ORDER BY realtime_sequence DESC
                    LIMIT $2
@@ -79,13 +79,13 @@ pub(crate) async fn insert_realtime_transition(
     occurred_at_unix_millis: i64,
 ) -> Result<(), ReplySuggestionPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.communication_reply_suggestion_realtime (
+        "INSERT INTO makosh_data.communication_reply_suggestion_realtime (
            logical_owner_id, run_id, state, state_revision,
            rejection_code, occurred_at_unix_millis
          )
          SELECT logical_owner_id, run_id, state, state_revision,
                 rejection_code, $1
-         FROM hermes_data.communication_reply_suggestion_runs
+         FROM makosh_data.communication_reply_suggestion_runs
          WHERE logical_owner_id = $2 AND run_id = $3",
     )
     .bind(occurred_at_unix_millis)

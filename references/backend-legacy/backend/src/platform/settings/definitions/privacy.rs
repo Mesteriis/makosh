@@ -10,7 +10,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
             value_kind: SettingValueKind::Boolean,
             default_value: json!(false),
             label: "Zoom remote transcript downloads",
-            description: "Allow Hermes to fetch transcript-like text files directly from Zoom recording URLs during webhook processing and manual provider sync.",
+            description: "Allow Макошь to fetch transcript-like text files directly from Zoom recording URLs during webhook processing and manual provider sync.",
             metadata: json!({
                 "ui_control": "checkbox",
                 "stores_private_content": false,
@@ -25,7 +25,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
             value_kind: SettingValueKind::Boolean,
             default_value: json!(false),
             label: "Zoom remote recording downloads",
-            description: "Allow Hermes to fetch non-transcript Zoom recording files directly from Zoom recording URLs during manual provider sync and scheduled recording sync.",
+            description: "Allow Макошь to fetch non-transcript Zoom recording files directly from Zoom recording URLs during manual provider sync and scheduled recording sync.",
             metadata: json!({
                 "ui_control": "checkbox",
                 "stores_private_content": true,
@@ -57,7 +57,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
             value_kind: SettingValueKind::Integer,
             default_value: json!(0),
             label: "Zoom transcript retention (days)",
-            description: "Owner-visible retention policy for Zoom transcript evidence imported or observed by Hermes. Set to 0 to retain transcript evidence until explicit review or later manual cleanup.",
+            description: "Owner-visible retention policy for Zoom transcript evidence imported or observed by Макошь. Set to 0 to retain transcript evidence until explicit review or later manual cleanup.",
             metadata: json!({
                 "ui_control": "number",
                 "stores_private_content": true,

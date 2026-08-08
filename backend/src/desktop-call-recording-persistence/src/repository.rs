@@ -1,5 +1,5 @@
-use hermes_desktop_call_recording_core::RecordingStateV1;
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_desktop_call_recording_core::RecordingStateV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sha2::{Digest, Sha256};
 use sqlx::{
     PgPool, Postgres, Row, Transaction,
@@ -53,7 +53,7 @@ impl DesktopCallRecordingRepositoryV1 {
     }
 
     pub async fn verify_storage_ready(&self) -> Result<(), PersistenceErrorV1> {
-        sqlx::query("SELECT 1 FROM hermes_data.desktop_call_recording_runs LIMIT 0")
+        sqlx::query("SELECT 1 FROM makosh_data.desktop_call_recording_runs LIMIT 0")
             .execute(&self.pool)
             .await
             .map(|_| ())
@@ -83,14 +83,14 @@ impl DesktopCallRecordingRepositoryV1 {
                 Err(PersistenceErrorV1::Conflict)
             };
         }
-        sqlx::query("INSERT INTO hermes_data.desktop_call_recording_runs (logical_owner_id, operation_id, request_sha256, call_evidence_id, call_evidence_revision, recording_evidence_id, recording_revision, run_state, device_actor_sha256, challenge_id, challenge_expires_at_unix_ms, maximum_duration_millis, consent_policy_revision) VALUES ($1,$2,$3,$4,$5,$6,1,1,$7,$8,$9,$10,$11)")
+        sqlx::query("INSERT INTO makosh_data.desktop_call_recording_runs (logical_owner_id, operation_id, request_sha256, call_evidence_id, call_evidence_revision, recording_evidence_id, recording_revision, run_state, device_actor_sha256, challenge_id, challenge_expires_at_unix_ms, maximum_duration_millis, consent_policy_revision) VALUES ($1,$2,$3,$4,$5,$6,1,1,$7,$8,$9,$10,$11)")
             .bind(&run.logical_owner_id).bind(run.operation_id.as_slice()).bind(run.request_sha256.as_slice())
             .bind(run.call_evidence_id.as_slice()).bind(to_i64(run.call_evidence_revision)?)
             .bind(run.recording_evidence_id.as_slice()).bind(run.device_actor_sha256.as_slice())
             .bind(run.challenge_id.as_slice()).bind(run.challenge_expires_at_unix_ms)
             .bind(to_i64(run.maximum_duration_millis)?).bind(i32::try_from(run.consent_policy_revision).map_err(|_| PersistenceErrorV1::InvalidInput)?)
             .execute(&mut *tx).await.map_err(storage)?;
-        sqlx::query("INSERT INTO hermes_data.desktop_call_recording_host_commands (command_id, logical_owner_id, recording_evidence_id, command_kind, command_revision) VALUES ($1,$2,$3,1,1)")
+        sqlx::query("INSERT INTO makosh_data.desktop_call_recording_host_commands (command_id, logical_owner_id, recording_evidence_id, command_kind, command_revision) VALUES ($1,$2,$3,1,1)")
             .bind(begin_command_id.as_slice()).bind(&run.logical_owner_id).bind(run.recording_evidence_id.as_slice())
             .execute(&mut *tx).await.map_err(storage)?;
         insert_realtime(
@@ -145,14 +145,14 @@ impl DesktopCallRecordingRepositoryV1 {
             .expected_revision
             .checked_add(1)
             .ok_or(PersistenceErrorV1::InvalidInput)?;
-        let command = sqlx::query("UPDATE hermes_data.desktop_call_recording_host_commands SET completed_at_unix_ms=$1 WHERE command_id=$2 AND logical_owner_id=$3 AND recording_evidence_id=$4 AND command_kind=1 AND leased_by_sha256=$5 AND completed_at_unix_ms IS NULL AND lease_expires_at_unix_ms >= $1")
+        let command = sqlx::query("UPDATE makosh_data.desktop_call_recording_host_commands SET completed_at_unix_ms=$1 WHERE command_id=$2 AND logical_owner_id=$3 AND recording_evidence_id=$4 AND command_kind=1 AND leased_by_sha256=$5 AND completed_at_unix_ms IS NULL AND lease_expires_at_unix_ms >= $1")
             .bind(write.started_at_unix_ms).bind(write.command_id.as_slice()).bind(&write.logical_owner_id)
             .bind(write.recording_evidence_id.as_slice()).bind(write.claim_sha256.as_slice())
             .execute(&mut *tx).await.map_err(storage)?;
         if command.rows_affected() != 1 {
             return Err(PersistenceErrorV1::Conflict);
         }
-        let run = sqlx::query("UPDATE hermes_data.desktop_call_recording_runs SET recording_revision=$1,run_state=2,started_at_unix_ms=$2,consent_receipt_id=$3 WHERE logical_owner_id=$4 AND recording_evidence_id=$5 AND recording_revision=$6 AND run_state=1 AND challenge_expires_at_unix_ms >= $2")
+        let run = sqlx::query("UPDATE makosh_data.desktop_call_recording_runs SET recording_revision=$1,run_state=2,started_at_unix_ms=$2,consent_receipt_id=$3 WHERE logical_owner_id=$4 AND recording_evidence_id=$5 AND recording_revision=$6 AND run_state=1 AND challenge_expires_at_unix_ms >= $2")
             .bind(to_i64(next_revision)?).bind(write.started_at_unix_ms).bind(write.consent_receipt_id.as_slice())
             .bind(&write.logical_owner_id).bind(write.recording_evidence_id.as_slice()).bind(to_i64(write.expected_revision)?)
             .execute(&mut *tx).await.map_err(storage)?;
@@ -212,7 +212,7 @@ impl DesktopCallRecordingRepositoryV1 {
                 .checked_add(1)
                 .ok_or(PersistenceErrorV1::InvalidInput)?,
         )?;
-        let result = sqlx::query("UPDATE hermes_data.desktop_call_recording_runs SET recording_revision=$1, run_state=4, ended_at_unix_ms=$2, source_reference_id=$3, source_declared_bytes=$4, source_duration_millis=$5, source_sha256=$6 WHERE logical_owner_id=$7 AND recording_evidence_id=$8 AND recording_revision=$9 AND run_state=3 AND consent_receipt_id=$10")
+        let result = sqlx::query("UPDATE makosh_data.desktop_call_recording_runs SET recording_revision=$1, run_state=4, ended_at_unix_ms=$2, source_reference_id=$3, source_declared_bytes=$4, source_duration_millis=$5, source_sha256=$6 WHERE logical_owner_id=$7 AND recording_evidence_id=$8 AND recording_revision=$9 AND run_state=3 AND consent_receipt_id=$10")
             .bind(next).bind(metadata.ended_at_unix_ms)
             .bind(metadata.source_reference_id.as_slice()).bind(to_i64(metadata.source_declared_bytes)?)
             .bind(to_i64(metadata.source_duration_millis)?).bind(metadata.source_sha256.as_slice())
@@ -273,7 +273,7 @@ impl DesktopCallRecordingRepositoryV1 {
         {
             return Err(PersistenceErrorV1::InvalidInput);
         }
-        let rows = sqlx::query("WITH candidates AS (SELECT command_id FROM hermes_data.desktop_call_recording_host_commands WHERE completed_at_unix_ms IS NULL AND (lease_expires_at_unix_ms IS NULL OR lease_expires_at_unix_ms < $1) ORDER BY command_revision, command_id FOR UPDATE SKIP LOCKED LIMIT $2) UPDATE hermes_data.desktop_call_recording_host_commands AS commands SET leased_by_sha256=$3, lease_expires_at_unix_ms=$4 FROM candidates WHERE commands.command_id=candidates.command_id RETURNING commands.command_id, commands.logical_owner_id, commands.recording_evidence_id, commands.command_kind, commands.command_revision")
+        let rows = sqlx::query("WITH candidates AS (SELECT command_id FROM makosh_data.desktop_call_recording_host_commands WHERE completed_at_unix_ms IS NULL AND (lease_expires_at_unix_ms IS NULL OR lease_expires_at_unix_ms < $1) ORDER BY command_revision, command_id FOR UPDATE SKIP LOCKED LIMIT $2) UPDATE makosh_data.desktop_call_recording_host_commands AS commands SET leased_by_sha256=$3, lease_expires_at_unix_ms=$4 FROM candidates WHERE commands.command_id=candidates.command_id RETURNING commands.command_id, commands.logical_owner_id, commands.recording_evidence_id, commands.command_kind, commands.command_revision")
             .bind(now_unix_ms).bind(i64::from(limit)).bind(claim_sha256.as_slice()).bind(now_unix_ms + lease_millis)
             .fetch_all(&self.pool).await.map_err(storage)?;
         rows.into_iter()
@@ -321,7 +321,7 @@ impl DesktopCallRecordingRepositoryV1 {
             tx.commit().await.map_err(storage)?;
             return Ok(run);
         }
-        sqlx::query("INSERT INTO hermes_data.desktop_call_recording_host_commands (command_id,logical_owner_id,recording_evidence_id,command_kind,command_revision) VALUES ($1,$2,$3,2,$4) ON CONFLICT (command_id) DO NOTHING")
+        sqlx::query("INSERT INTO makosh_data.desktop_call_recording_host_commands (command_id,logical_owner_id,recording_evidence_id,command_kind,command_revision) VALUES ($1,$2,$3,2,$4) ON CONFLICT (command_id) DO NOTHING")
             .bind(command_id.as_slice()).bind(owner).bind(recording_id.as_slice())
             .bind(to_i64(run.recording_revision)?).execute(&mut *tx).await.map_err(storage)?;
         tx.commit().await.map_err(storage)?;
@@ -337,7 +337,7 @@ impl DesktopCallRecordingRepositoryV1 {
         if zero(&command_id) || zero(&claim_sha256) || completed_at_unix_ms <= 0 {
             return Err(PersistenceErrorV1::InvalidInput);
         }
-        let result = sqlx::query("UPDATE hermes_data.desktop_call_recording_host_commands SET completed_at_unix_ms=$1 WHERE command_id=$2 AND leased_by_sha256=$3 AND completed_at_unix_ms IS NULL AND lease_expires_at_unix_ms >= $1")
+        let result = sqlx::query("UPDATE makosh_data.desktop_call_recording_host_commands SET completed_at_unix_ms=$1 WHERE command_id=$2 AND leased_by_sha256=$3 AND completed_at_unix_ms IS NULL AND lease_expires_at_unix_ms >= $1")
             .bind(completed_at_unix_ms).bind(command_id.as_slice()).bind(claim_sha256.as_slice())
             .execute(&self.pool).await.map_err(storage)?;
         if result.rows_affected() == 1 {
@@ -354,7 +354,7 @@ impl DesktopCallRecordingRepositoryV1 {
         if !(1..=128).contains(&limit) {
             return Err(PersistenceErrorV1::InvalidInput);
         }
-        let rows = sqlx::query("SELECT sequence_id,event_id,logical_owner_id,recording_evidence_id,contract_name,envelope_sha256,exact_envelope_bytes FROM hermes_data.desktop_call_recording_outbox WHERE delivered_at_unix_ms IS NULL ORDER BY sequence_id LIMIT $1")
+        let rows = sqlx::query("SELECT sequence_id,event_id,logical_owner_id,recording_evidence_id,contract_name,envelope_sha256,exact_envelope_bytes FROM makosh_data.desktop_call_recording_outbox WHERE delivered_at_unix_ms IS NULL ORDER BY sequence_id LIMIT $1")
             .bind(i64::from(limit)).fetch_all(&self.pool).await.map_err(storage)?;
         rows.into_iter().map(decode_outbox).collect()
     }
@@ -368,7 +368,7 @@ impl DesktopCallRecordingRepositoryV1 {
         if zero(&event_id) || zero(&envelope_sha256) || delivered_at_unix_ms <= 0 {
             return Err(PersistenceErrorV1::InvalidInput);
         }
-        let result = sqlx::query("UPDATE hermes_data.desktop_call_recording_outbox SET delivered_at_unix_ms=$1 WHERE event_id=$2 AND envelope_sha256=$3 AND delivered_at_unix_ms IS NULL")
+        let result = sqlx::query("UPDATE makosh_data.desktop_call_recording_outbox SET delivered_at_unix_ms=$1 WHERE event_id=$2 AND envelope_sha256=$3 AND delivered_at_unix_ms IS NULL")
             .bind(delivered_at_unix_ms).bind(event_id.as_slice()).bind(envelope_sha256.as_slice())
             .execute(&self.pool).await.map_err(storage)?;
         if result.rows_affected() == 1 {
@@ -385,7 +385,7 @@ impl DesktopCallRecordingRepositoryV1 {
         if !(1..=128).contains(&limit) {
             return Err(PersistenceErrorV1::InvalidInput);
         }
-        let rows = sqlx::query("SELECT sequence_id,logical_owner_id,recording_evidence_id,recording_revision,occurred_at_unix_ms,payload_bytes,payload_sha256 FROM hermes_data.desktop_call_recording_realtime WHERE published_at_unix_ms IS NULL ORDER BY sequence_id LIMIT $1")
+        let rows = sqlx::query("SELECT sequence_id,logical_owner_id,recording_evidence_id,recording_revision,occurred_at_unix_ms,payload_bytes,payload_sha256 FROM makosh_data.desktop_call_recording_realtime WHERE published_at_unix_ms IS NULL ORDER BY sequence_id LIMIT $1")
             .bind(i64::from(limit)).fetch_all(&self.pool).await.map_err(storage)?;
         rows.into_iter().map(decode_realtime).collect()
     }
@@ -399,7 +399,7 @@ impl DesktopCallRecordingRepositoryV1 {
         if sequence_id <= 0 || zero(&payload_sha256) || published_at_unix_ms <= 0 {
             return Err(PersistenceErrorV1::InvalidInput);
         }
-        let result = sqlx::query("UPDATE hermes_data.desktop_call_recording_realtime SET published_at_unix_ms=$1 WHERE sequence_id=$2 AND payload_sha256=$3 AND published_at_unix_ms IS NULL")
+        let result = sqlx::query("UPDATE makosh_data.desktop_call_recording_realtime SET published_at_unix_ms=$1 WHERE sequence_id=$2 AND payload_sha256=$3 AND published_at_unix_ms IS NULL")
             .bind(published_at_unix_ms).bind(sequence_id).bind(payload_sha256.as_slice())
             .execute(&self.pool).await.map_err(storage)?;
         if result.rows_affected() == 1 {
@@ -428,7 +428,7 @@ impl DesktopCallRecordingRepositoryV1 {
             {
                 return Err(PersistenceErrorV1::InvalidInput);
             }
-            let result = sqlx::query("UPDATE hermes_data.desktop_call_recording_host_commands SET completed_at_unix_ms=$1 WHERE command_id=$2 AND logical_owner_id=$3 AND recording_evidence_id=$4 AND leased_by_sha256=$5 AND completed_at_unix_ms IS NULL AND lease_expires_at_unix_ms >= $1")
+            let result = sqlx::query("UPDATE makosh_data.desktop_call_recording_host_commands SET completed_at_unix_ms=$1 WHERE command_id=$2 AND logical_owner_id=$3 AND recording_evidence_id=$4 AND leased_by_sha256=$5 AND completed_at_unix_ms IS NULL AND lease_expires_at_unix_ms >= $1")
                 .bind(completion.completed_at_unix_ms).bind(completion.command_id.as_slice())
                 .bind(write.owner).bind(write.recording_id.as_slice())
                 .bind(completion.claim_sha256.as_slice()).execute(&mut *tx).await.map_err(storage)?;
@@ -436,7 +436,7 @@ impl DesktopCallRecordingRepositoryV1 {
                 return Err(PersistenceErrorV1::Conflict);
             }
         }
-        let result = sqlx::query("UPDATE hermes_data.desktop_call_recording_runs SET recording_revision=$1, run_state=$2, started_at_unix_ms=COALESCE($3,started_at_unix_ms), public_error_code=$4 WHERE logical_owner_id=$5 AND recording_evidence_id=$6 AND recording_revision=$7 AND run_state=$8")
+        let result = sqlx::query("UPDATE makosh_data.desktop_call_recording_runs SET recording_revision=$1, run_state=$2, started_at_unix_ms=COALESCE($3,started_at_unix_ms), public_error_code=$4 WHERE logical_owner_id=$5 AND recording_evidence_id=$6 AND recording_revision=$7 AND run_state=$8")
             .bind(to_i64(write.expected_revision + 1)?).bind(write.next_state).bind(write.started_at).bind(write.error).bind(write.owner).bind(write.recording_id.as_slice()).bind(to_i64(write.expected_revision)?).bind(write.expected_state)
             .execute(&mut *tx).await.map_err(storage)?;
         if result.rows_affected() != 1 {
@@ -473,9 +473,9 @@ struct TransitionWriteV1<'a> {
     realtime: &'a RealtimeTransitionV1,
 }
 
-const RUN_COLUMNS_BY_RECORDING: &str = "SELECT logical_owner_id,operation_id,request_sha256,call_evidence_id,call_evidence_revision,recording_evidence_id,recording_revision,run_state,device_actor_sha256,challenge_id,challenge_expires_at_unix_ms,maximum_duration_millis,consent_policy_revision,started_at_unix_ms,ended_at_unix_ms,consent_receipt_id,source_reference_id,source_declared_bytes,source_duration_millis,source_sha256,public_error_code FROM hermes_data.desktop_call_recording_runs WHERE logical_owner_id=$1 AND recording_evidence_id=$2";
-const RUN_COLUMNS_BY_RECORDING_FOR_UPDATE: &str = "SELECT logical_owner_id,operation_id,request_sha256,call_evidence_id,call_evidence_revision,recording_evidence_id,recording_revision,run_state,device_actor_sha256,challenge_id,challenge_expires_at_unix_ms,maximum_duration_millis,consent_policy_revision,started_at_unix_ms,ended_at_unix_ms,consent_receipt_id,source_reference_id,source_declared_bytes,source_duration_millis,source_sha256,public_error_code FROM hermes_data.desktop_call_recording_runs WHERE logical_owner_id=$1 AND recording_evidence_id=$2 FOR UPDATE";
-const RUN_COLUMNS_BY_OPERATION: &str = "SELECT logical_owner_id,operation_id,request_sha256,call_evidence_id,call_evidence_revision,recording_evidence_id,recording_revision,run_state,device_actor_sha256,challenge_id,challenge_expires_at_unix_ms,maximum_duration_millis,consent_policy_revision,started_at_unix_ms,ended_at_unix_ms,consent_receipt_id,source_reference_id,source_declared_bytes,source_duration_millis,source_sha256,public_error_code FROM hermes_data.desktop_call_recording_runs WHERE logical_owner_id=$1 AND operation_id=$2";
+const RUN_COLUMNS_BY_RECORDING: &str = "SELECT logical_owner_id,operation_id,request_sha256,call_evidence_id,call_evidence_revision,recording_evidence_id,recording_revision,run_state,device_actor_sha256,challenge_id,challenge_expires_at_unix_ms,maximum_duration_millis,consent_policy_revision,started_at_unix_ms,ended_at_unix_ms,consent_receipt_id,source_reference_id,source_declared_bytes,source_duration_millis,source_sha256,public_error_code FROM makosh_data.desktop_call_recording_runs WHERE logical_owner_id=$1 AND recording_evidence_id=$2";
+const RUN_COLUMNS_BY_RECORDING_FOR_UPDATE: &str = "SELECT logical_owner_id,operation_id,request_sha256,call_evidence_id,call_evidence_revision,recording_evidence_id,recording_revision,run_state,device_actor_sha256,challenge_id,challenge_expires_at_unix_ms,maximum_duration_millis,consent_policy_revision,started_at_unix_ms,ended_at_unix_ms,consent_receipt_id,source_reference_id,source_declared_bytes,source_duration_millis,source_sha256,public_error_code FROM makosh_data.desktop_call_recording_runs WHERE logical_owner_id=$1 AND recording_evidence_id=$2 FOR UPDATE";
+const RUN_COLUMNS_BY_OPERATION: &str = "SELECT logical_owner_id,operation_id,request_sha256,call_evidence_id,call_evidence_revision,recording_evidence_id,recording_revision,run_state,device_actor_sha256,challenge_id,challenge_expires_at_unix_ms,maximum_duration_millis,consent_policy_revision,started_at_unix_ms,ended_at_unix_ms,consent_receipt_id,source_reference_id,source_declared_bytes,source_duration_millis,source_sha256,public_error_code FROM makosh_data.desktop_call_recording_runs WHERE logical_owner_id=$1 AND operation_id=$2";
 
 async fn load_by_operation(
     tx: &mut Transaction<'_, Postgres>,
@@ -505,7 +505,7 @@ async fn insert_realtime(
     {
         return Err(PersistenceErrorV1::InvalidInput);
     }
-    sqlx::query("INSERT INTO hermes_data.desktop_call_recording_realtime (logical_owner_id,recording_evidence_id,recording_revision,occurred_at_unix_ms,payload_bytes,payload_sha256) VALUES ($1,$2,$3,$4,$5,$6)")
+    sqlx::query("INSERT INTO makosh_data.desktop_call_recording_realtime (logical_owner_id,recording_evidence_id,recording_revision,occurred_at_unix_ms,payload_bytes,payload_sha256) VALUES ($1,$2,$3,$4,$5,$6)")
         .bind(owner).bind(recording.as_slice()).bind(to_i64(revision)?).bind(value.occurred_at_unix_ms).bind(&value.payload_bytes).bind(value.payload_sha256.as_slice()).execute(&mut **tx).await.map_err(storage)?;
     Ok(())
 }
@@ -523,7 +523,7 @@ async fn insert_outbox(
     {
         return Err(PersistenceErrorV1::InvalidInput);
     }
-    sqlx::query("INSERT INTO hermes_data.desktop_call_recording_outbox (event_id,logical_owner_id,recording_evidence_id,contract_name,envelope_sha256,exact_envelope_bytes) VALUES ($1,$2,$3,$4,$5,$6)")
+    sqlx::query("INSERT INTO makosh_data.desktop_call_recording_outbox (event_id,logical_owner_id,recording_evidence_id,contract_name,envelope_sha256,exact_envelope_bytes) VALUES ($1,$2,$3,$4,$5,$6)")
         .bind(value.event_id.as_slice()).bind(owner).bind(recording.as_slice()).bind(&value.contract_name).bind(value.envelope_sha256.as_slice()).bind(&value.exact_envelope_bytes).execute(&mut **tx).await.map_err(storage)?;
     Ok(())
 }

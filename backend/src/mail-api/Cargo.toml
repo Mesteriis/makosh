@@ -1,5 +1,5 @@
 [package]
-name = "hermes-mail-api"
+name = "makosh-mail-api"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -11,7 +11,7 @@ path = "src/lib.rs"
 default = []
 conformance-test-support = []
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "mail"
 surface = "contract"

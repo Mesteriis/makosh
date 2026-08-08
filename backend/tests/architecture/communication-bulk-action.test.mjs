@@ -87,7 +87,7 @@ test('bulk delivery managed runtime uses request RPC and safe replay without dom
       ),
       readFile(
         new URL(
-          'src/communication-bulk-action-api/proto/hermes/communication_bulk_action/v1/bulk_action.proto',
+          'src/communication-bulk-action-api/proto/makosh/communication_bulk_action/v1/bulk_action.proto',
           BACKEND_ROOT,
         ),
         'utf8',
@@ -227,11 +227,11 @@ test('bulk delivery managed runtime uses request RPC and safe replay without dom
       .filter(({ owner }) => owner === 'communication_bulk_action')
       .map(({ name, surface }) => `${name}:${surface}`),
     [
-      'hermes-communication-bulk-action-api:contract',
-      'hermes-communication-bulk-action-core:implementation',
-      'hermes-communication-bulk-action-persistence:persistence',
-      'hermes-communication-bulk-action-runtime:runtime',
-      'hermes-communication-bulk-action-assembly:assembly',
+      'makosh-communication-bulk-action-api:contract',
+      'makosh-communication-bulk-action-core:implementation',
+      'makosh-communication-bulk-action-persistence:persistence',
+      'makosh-communication-bulk-action-runtime:runtime',
+      'makosh-communication-bulk-action-assembly:assembly',
     ],
   );
   assert.match(apiManifest, /role = "workflow"[\s\S]*surface = "contract"/);
@@ -247,7 +247,7 @@ test('bulk delivery managed runtime uses request RPC and safe replay without dom
   assert.match(assemblyManifest, /role = "workflow"[\s\S]*surface = "assembly"/);
   assert.doesNotMatch(
     `${apiManifest}\n${coreManifest}\n${persistenceManifest}\n${runtimeManifest}`,
-    /hermes-(?:communications-domain|mail|telegram|whatsapp|zulip|kernel)/,
+    /makosh-(?:communications-domain|mail|telegram|whatsapp|zulip|kernel)/,
   );
   assert.match(api, /COMMUNICATION_BULK_ACTION_MAX_TARGETS_V1: usize = 100/);
   assert.match(core, /MAX_TARGET_BODY_BYTES_V1: usize = 64 \* 1024/);
@@ -297,13 +297,13 @@ test('bulk delivery managed runtime uses request RPC and safe replay without dom
   );
   assert.match(
     conformanceRunner,
-    /HERMES_COMMUNICATION_BULK_ACTION_RUNTIME_BIN/,
+    /MAKOSH_COMMUNICATION_BULK_ACTION_RUNTIME_BIN/,
   );
   assert.match(
     conformanceRunner,
     /managed_bulk_action_reaches_gateway_sse_and_replays_after_restart/,
   );
-  assert.match(devRelease, /hermes-communication-bulk-action-assembly/);
+  assert.match(devRelease, /makosh-communication-bulk-action-assembly/);
   assert.match(
     developmentAssembly,
     /COMMUNICATION_BULK_ACTION_RUNTIME_ARTIFACT/,
@@ -314,6 +314,6 @@ test('bulk delivery managed runtime uses request RPC and safe replay without dom
   );
   assert.doesNotMatch(
     `${runtimeWorker}\n${runtimeClient}`,
-    /body_utf8.*(?:log|event|status)|hermes-(?:mail|telegram|whatsapp|zulip)/,
+    /body_utf8.*(?:log|event|status)|makosh-(?:mail|telegram|whatsapp|zulip)/,
   );
 });

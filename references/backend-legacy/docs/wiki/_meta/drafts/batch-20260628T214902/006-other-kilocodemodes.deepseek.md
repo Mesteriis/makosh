@@ -113,7 +113,7 @@ tags: [компонент, конфигурация]
 
 ### Source coverage / Покрытие источников
 
-- **Файл:** `.kilocodemodes` (полный путь: `/Users/avm/projects/Personal/hermes-hub/.kilocodemodes`, размер 98626 байт, предоставлено первые 12000 символов)
+- **Файл:** `.kilocodemodes` (полный путь: `/Users/avm/projects/Personal/makosh/.kilocodemodes`, размер 98626 байт, предоставлено первые 12000 символов)
   - Определение пользовательского режима **AutoBuild**: slug `autobuild`, описание, группы `[read, edit, command]`, roleDefinition с правилами работы (файловые инструменты, пути, идемпотентность, кроссплатформенность, дисциплина вывода), подкоманды (schedule, run, list, cancel, status, one-shot), структура workflow-файлов, guarded fix режим (scope_globs, max_files, require_clean_git, rollback_on, порядок проверки, вердикты), шаблоны самовосстановления.
   - Определение режима **Doc‑writer**: slug `doc-writer`, описание, группы `[read, edit, command]`, roleDefinition с миссией, условиями активации, предикатом публичного API, входными и выходными данными, границами, правилами роста памяти.
   - Определение режима **KDream** (частично): slug `kdream`, описание, группы `[read, edit, command]` (подтверждено начало списка), начальные строки roleDefinition (обрыв после `m…`). Полный текст не доступен.

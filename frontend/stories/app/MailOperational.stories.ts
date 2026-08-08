@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 
-import { MailCompositionModeV1 } from '../../src/gen/hermes/mail/composition/v1/client_pb'
+import { MailCompositionModeV1 } from '../../src/gen/makosh/mail/composition/v1/client_pb'
 import MailOperationalPage from '../../src/integrations/mail/presentation/MailOperationalPage.vue'
 import type { MailCompositionModel } from '../../src/integrations/mail/presentation/mailCompositionModel'
 import type { MailDeliveryModel } from '../../src/integrations/mail/presentation/mailDeliveryModel'
@@ -12,7 +12,7 @@ import type { MailSyncHealthModel } from '../../src/integrations/mail/presentati
 import type { MailSyncModel } from '../../src/integrations/mail/presentation/mailSyncModel'
 
 const meta = {
-	title: 'Hermes App/Communications/Mail Operational',
+	title: 'Макошь App/Communications/Mail Operational',
 	component: MailOperationalPage,
 	parameters: { layout: 'fullscreen' },
 } satisfies Meta
@@ -72,18 +72,18 @@ const compositionModel: MailCompositionModel = {
 		templateId: 'template-1',
 		revision: '3',
 		name: 'Status update',
-		subjectTemplate: 'Hermes status: {{subject}}',
+		subjectTemplate: 'Макошь status: {{subject}}',
 		textBodyTemplate: 'Current status: {{status}}',
 		variables: 'subject\nstatus',
 		locale: 'en',
 		previewValues: 'subject=Clean-room delivery\nstatus=ready',
-		previewSummary: 'Hermes status: Clean-room delivery',
+		previewSummary: 'Макошь status: Clean-room delivery',
 	},
 	signature: {
 		signatureId: 'signature-1',
 		revision: '2',
 		name: 'Owner',
-		textBody: 'Hermes owner',
+		textBody: 'Макошь owner',
 		isDefault: true,
 	},
 }

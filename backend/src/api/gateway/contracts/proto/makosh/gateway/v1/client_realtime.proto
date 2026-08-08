@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package makosh.gateway.v1;
+
+// Client-safe realtime data. This is physically distinct from the internal
+// DurableEnvelopeV1 and may only be produced by an owner contract explicitly
+// admitted for client delivery.
+message ClientRealtimeEventV1 {
+  bytes event_id = 1;
+  string cursor = 2;
+  string contract_name = 3;
+  uint32 contract_version = 4;
+  string event_kind = 5;
+  uint64 occurred_at_unix_millis = 6;
+  string causation_id = 7;
+  string correlation_id = 8;
+  string trace_id = 9;
+  bytes payload = 10;
+}
+
+// Explicitly tells a client that its requested replay position is no longer
+// available. The client must invalidate affected projections and re-query; it
+// must never treat this as a silent cursor reset.
+message ClientReplayGapV1 {
+  string requested_cursor = 1;
+  string earliest_available_cursor = 2;
+  string reason_code = 3;
+}
+
+enum ClientRealtimeStreamStateKindV1 {
+  CLIENT_REALTIME_STREAM_STATE_KIND_UNSPECIFIED = 0;
+  CLIENT_REALTIME_STREAM_STATE_KIND_OPEN = 1;
+  CLIENT_REALTIME_STREAM_STATE_KIND_REPLAYING = 2;
+  CLIENT_REALTIME_STREAM_STATE_KIND_CLOSED = 3;
+}
+
+message ClientRealtimeStreamStateV1 {
+  ClientRealtimeStreamStateKindV1 state = 1;
+  string cursor = 2;
+}
+
+message ClientRealtimeFrameV1 {
+  oneof frame {
+    ClientRealtimeEventV1 event = 1;
+    ClientReplayGapV1 replay_gap = 2;
+    ClientRealtimeStreamStateV1 stream_state = 3;
+  }
+}

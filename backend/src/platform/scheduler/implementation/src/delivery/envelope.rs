@@ -1,15 +1,15 @@
 //! Creates the exact owner-neutral command envelope for one fenced Scheduler fire.
 
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_events_protocol::{
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_events_protocol::{
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
         SourceFenceV1, SourceRefV1, durable_envelope_v1::Semantics,
     },
     validation::envelope::validate_envelope_v1,
 };
-use hermes_scheduler_protocol::v1::JobTriggerKindV1;
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::v1::JobTriggerKindV1;
+use makosh_scheduler_protocol::{
     ScheduleRunLeaseV1, ScheduleSpecV1, build_scheduled_job_command_v1,
 };
 use prost::Message;

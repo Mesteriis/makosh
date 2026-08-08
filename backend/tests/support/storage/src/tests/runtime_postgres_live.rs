@@ -1,19 +1,19 @@
 //! Live runtime-adapter conformance for PostgreSQL platform-schema bootstrap.
 
-use hermes_storage_postgres::PostgresRuntimeSessionProbeV1;
-use hermes_storage_protocol::v1::{
+use makosh_storage_postgres::PostgresRuntimeSessionProbeV1;
+use makosh_storage_protocol::v1::{
     StorageBindingV1, StorageBundleV1, StorageDeploymentProfileV1, StorageEffectiveBudgetsV1,
     StorageMigrationStepV1, StorageRuntimeTopologyV1,
 };
-use hermes_storage_protocol::validation::storage_binding_from_message;
+use makosh_storage_protocol::validation::storage_binding_from_message;
 use prost::Message;
 use sha2::{Digest, Sha256};
 use zeroize::Zeroizing;
 
-const AUTHENTICATED_TEST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_TEST";
-const PASSWORD_FILE_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE";
-const POSTGRES_HOST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST";
-const POSTGRES_PORT_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT";
+const AUTHENTICATED_TEST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_TEST";
+const PASSWORD_FILE_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE";
+const POSTGRES_HOST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST";
+const POSTGRES_PORT_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT";
 
 #[test]
 #[ignore = "requires the disposable authenticated Storage Compose contour"]
@@ -95,7 +95,7 @@ fn topology() -> StorageRuntimeTopologyV1 {
         topology_revision: 1,
         storage_generation: 1,
         storage_instance_id: "storage_main".to_owned(),
-        database_id: "hermes_storage_authenticated".to_owned(),
+        database_id: "makosh_storage_authenticated".to_owned(),
         deployment_profile: StorageDeploymentProfileV1::MacosTauriEmbedded as i32,
         postgres_artifact_sha256: vec![1; 32],
         pgbouncer_artifact_sha256: vec![2; 32],
@@ -112,7 +112,7 @@ fn binding(storage_bundle_digest: [u8; 32]) -> StorageBindingV1 {
     StorageBindingV1 {
         storage_instance_id: "storage_main".to_owned(),
         storage_generation: 1,
-        database_id: "hermes_storage_authenticated".to_owned(),
+        database_id: "makosh_storage_authenticated".to_owned(),
         owner: "notes".to_owned(),
         registration_id: "registration_runtime_postgres".to_owned(),
         runtime_instance_id: "runtime_postgres".to_owned(),
@@ -144,7 +144,7 @@ fn runtime_credential_with_password(
 }
 
 fn bundle() -> StorageBundleV1 {
-    let sql = b"CREATE TABLE hermes_data.notes_runtime_bootstrap_probe (probe_id uuid);".to_vec();
+    let sql = b"CREATE TABLE makosh_data.notes_runtime_bootstrap_probe (probe_id uuid);".to_vec();
     StorageBundleV1 {
         major: 1,
         revision: 1,

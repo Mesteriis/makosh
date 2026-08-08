@@ -1,13 +1,13 @@
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     ClientRealtimeEventV1, ClientRealtimeFrameV1, ClientSystemStatusChangedV1,
     client_realtime_frame_v1::Frame,
 };
-use hermes_gateway_session_contract::ClientSystemComponentStatusProjectionV1;
+use makosh_gateway_session_contract::ClientSystemComponentStatusProjectionV1;
 use prost::Message;
 
 use crate::browser::system_status::wire_system_statuses;
 
-pub(super) const SYSTEM_STATUS_CONTRACT_NAME: &str = "hermes.gateway.system-status";
+pub(super) const SYSTEM_STATUS_CONTRACT_NAME: &str = "makosh.gateway.system-status";
 pub(super) const SYSTEM_STATUS_EVENT_KIND: &str = "platform.system_status.changed";
 
 pub(super) fn encoded_payload(

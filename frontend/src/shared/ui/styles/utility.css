@@ -1,26 +1,26 @@
-.hermes-copy-button,
-.hermes-theme-switcher,
-.hermes-locale-switcher,
-.hermes-keyboard-hint,
-.hermes-shortcut,
-.hermes-provider-icon,
-.hermes-status-icon,
-.hermes-entity-icon,
-.hermes-file-icon {
+.makosh-copy-button,
+.makosh-theme-switcher,
+.makosh-locale-switcher,
+.makosh-keyboard-hint,
+.makosh-shortcut,
+.makosh-provider-icon,
+.makosh-status-icon,
+.makosh-entity-icon,
+.makosh-file-icon {
 	color: var(--h-color-text);
 	font-family: var(--h-font-sans);
 }
 
-.hermes-copy-button--copied {
+.makosh-copy-button--copied {
 	color: var(--h-color-success-strong, var(--h-color-success));
 }
 
-.hermes-copy-button--error {
+.makosh-copy-button--error {
 	color: var(--h-color-danger-strong, var(--h-color-danger));
 }
 
-.hermes-theme-switcher,
-.hermes-locale-switcher {
+.makosh-theme-switcher,
+.makosh-locale-switcher {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--h-space-1);
@@ -31,19 +31,19 @@
 	padding: var(--h-space-1);
 }
 
-.hermes-theme-switcher {
+.makosh-theme-switcher {
 	gap: var(--h-space-2);
 }
 
-.hermes-theme-switcher__group {
+.makosh-theme-switcher__group {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--h-space-1);
 	min-width: 0;
 }
 
-.hermes-theme-switcher__option,
-.hermes-locale-switcher__option {
+.makosh-theme-switcher__option,
+.makosh-locale-switcher__option {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -59,21 +59,21 @@
 	cursor: pointer;
 }
 
-.hermes-theme-switcher__option[aria-checked='true'],
-.hermes-locale-switcher__option[aria-checked='true'] {
+.makosh-theme-switcher__option[aria-checked='true'],
+.makosh-locale-switcher__option[aria-checked='true'] {
 	border-color: var(--h-color-border);
 	background: var(--h-color-surface);
 	color: var(--h-color-text-strong);
 	box-shadow: var(--h-shadow-xs);
 }
 
-.hermes-theme-switcher__option:disabled,
-.hermes-locale-switcher__option:disabled {
+.makosh-theme-switcher__option:disabled,
+.makosh-locale-switcher__option:disabled {
 	cursor: not-allowed;
 	opacity: 0.48;
 }
 
-.hermes-theme-switcher__swatch {
+.makosh-theme-switcher__swatch {
 	width: var(--h-space-3);
 	height: var(--h-space-3);
 	border: 1px solid var(--h-color-border-strong);
@@ -81,24 +81,24 @@
 	background: var(--h-color-surface);
 }
 
-.hermes-theme-switcher__swatch[data-theme-swatch='base-light'] {
+.makosh-theme-switcher__swatch[data-theme-swatch='base-light'] {
 	background: linear-gradient(135deg, #ffffff 0%, #ffffff 48%, #2563eb 52%, #2563eb 100%);
 }
 
-.hermes-theme-switcher__swatch[data-theme-swatch='base-dark'] {
+.makosh-theme-switcher__swatch[data-theme-swatch='base-dark'] {
 	background: linear-gradient(135deg, #090b10 0%, #090b10 48%, #8ab4ff 52%, #8ab4ff 100%);
 }
 
-.hermes-theme-switcher__swatch[data-theme-swatch='hermes-light'] {
+.makosh-theme-switcher__swatch[data-theme-swatch='makosh-light'] {
 	background: linear-gradient(135deg, #ffffff 0%, #ffffff 48%, #087c6f 52%, #087c6f 100%);
 }
 
-.hermes-theme-switcher__swatch[data-theme-swatch='hermes-dark'] {
+.makosh-theme-switcher__swatch[data-theme-swatch='makosh-dark'] {
 	background: linear-gradient(135deg, #02090b 0%, #02090b 48%, #2df0ce 52%, #2df0ce 100%);
 }
 
-.hermes-keyboard-hint,
-.hermes-shortcut {
+.makosh-keyboard-hint,
+.makosh-shortcut {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--h-space-2);
@@ -107,27 +107,27 @@
 	font-size: var(--h-font-size-sm);
 }
 
-.hermes-keyboard-hint__keys,
-.hermes-shortcut {
+.makosh-keyboard-hint__keys,
+.makosh-shortcut {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--h-space-1);
 }
 
-.hermes-keyboard-hint__label {
+.makosh-keyboard-hint__label {
 	color: var(--h-color-text-soft);
 	font-weight: 650;
 }
 
-.hermes-shortcut__joiner {
+.makosh-shortcut__joiner {
 	color: var(--h-color-text-muted);
 	font-size: var(--h-font-size-xs);
 }
 
-.hermes-provider-icon,
-.hermes-status-icon,
-.hermes-entity-icon,
-.hermes-file-icon {
+.makosh-provider-icon,
+.makosh-status-icon,
+.makosh-entity-icon,
+.makosh-file-icon {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -139,50 +139,50 @@
 	color: var(--h-color-text-soft);
 }
 
-.hermes-provider-icon--mail,
-.hermes-provider-icon--documents,
-.hermes-entity-icon--document,
-.hermes-file-icon--text,
-.hermes-file-icon--pdf {
+.makosh-provider-icon--mail,
+.makosh-provider-icon--documents,
+.makosh-entity-icon--document,
+.makosh-file-icon--text,
+.makosh-file-icon--pdf {
 	color: var(--h-color-danger-strong, var(--h-color-danger));
 	background: var(--h-color-danger-muted);
 }
 
-.hermes-provider-icon--telegram,
-.hermes-provider-icon--calendar,
-.hermes-status-icon--active,
-.hermes-status-icon--syncing,
-.hermes-entity-icon--event,
-.hermes-file-icon--image,
-.hermes-file-icon--video {
+.makosh-provider-icon--telegram,
+.makosh-provider-icon--calendar,
+.makosh-status-icon--active,
+.makosh-status-icon--syncing,
+.makosh-entity-icon--event,
+.makosh-file-icon--image,
+.makosh-file-icon--video {
 	color: var(--h-color-info);
 	background: var(--h-color-info-muted);
 }
 
-.hermes-provider-icon--whatsapp,
-.hermes-status-icon--success,
-.hermes-entity-icon--person,
-.hermes-file-icon--audio {
+.makosh-provider-icon--whatsapp,
+.makosh-status-icon--success,
+.makosh-entity-icon--person,
+.makosh-file-icon--audio {
 	color: var(--h-color-success-strong, var(--h-color-success));
 	background: var(--h-color-success-muted);
 }
 
-.hermes-status-icon--warning,
-.hermes-entity-icon--obligation,
-.hermes-file-icon--archive {
+.makosh-status-icon--warning,
+.makosh-entity-icon--obligation,
+.makosh-file-icon--archive {
 	color: var(--h-color-warning-strong, var(--h-color-warning));
 	background: var(--h-color-warning-muted);
 }
 
-.hermes-status-icon--danger {
+.makosh-status-icon--danger {
 	color: var(--h-color-danger-strong, var(--h-color-danger));
 	background: var(--h-color-danger-muted);
 }
 
-.hermes-entity-icon--knowledge,
-.hermes-entity-icon--project,
-.hermes-file-icon--code,
-.hermes-file-icon--spreadsheet {
+.makosh-entity-icon--knowledge,
+.makosh-entity-icon--project,
+.makosh-file-icon--code,
+.makosh-file-icon--spreadsheet {
 	color: var(--h-color-accent);
 	background: var(--h-color-accent-muted);
 }

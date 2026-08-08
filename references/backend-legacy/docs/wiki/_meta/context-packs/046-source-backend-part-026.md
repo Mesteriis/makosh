@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/domains/obligations/models/entity_kind.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/models/entity_kind.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/models/entity_kind.rs`
 - Size bytes / Размер в байтах: `1615`
 - Included characters / Включено символов: `1615`
 - Truncated / Обрезано: `no`
@@ -117,7 +117,7 @@ impl ObligationEntityKind {
 
 ### `backend/src/domains/obligations/models/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/models/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/models/evidence.rs`
 - Size bytes / Размер в байтах: `2581`
 - Included characters / Включено символов: `2581`
 - Truncated / Обрезано: `no`
@@ -206,7 +206,7 @@ impl NewObligationEvidence {
 
 ### `backend/src/domains/obligations/models/obligation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/models/obligation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/models/obligation.rs`
 - Size bytes / Размер в байтах: `3445`
 - Included characters / Включено символов: `3445`
 - Truncated / Обрезано: `no`
@@ -323,7 +323,7 @@ impl NewObligation {
 
 ### `backend/src/domains/obligations/models/read_model.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/models/read_model.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/models/read_model.rs`
 - Size bytes / Размер в байтах: `877`
 - Included characters / Включено символов: `877`
 - Truncated / Обрезано: `no`
@@ -358,7 +358,7 @@ pub struct Obligation {
 
 ### `backend/src/domains/obligations/models/source_kind.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/models/source_kind.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/models/source_kind.rs`
 - Size bytes / Размер в байтах: `987`
 - Included characters / Включено символов: `987`
 - Truncated / Обрезано: `no`
@@ -405,7 +405,7 @@ impl ObligationEvidenceSourceKind {
 
 ### `backend/src/domains/obligations/models/states.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/models/states.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/models/states.rs`
 - Size bytes / Размер в байтах: `1896`
 - Included characters / Включено символов: `1896`
 - Truncated / Обрезано: `no`
@@ -488,7 +488,7 @@ impl ObligationRiskState {
 
 ### `backend/src/domains/obligations/ports.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/ports.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/ports.rs`
 - Size bytes / Размер в байтах: `63`
 - Included characters / Включено символов: `63`
 - Truncated / Обрезано: `no`
@@ -499,7 +499,7 @@ pub use super::store::ObligationStore as ObligationReviewPort;
 
 ### `backend/src/domains/obligations/row_mapping.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/row_mapping.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/row_mapping.rs`
 - Size bytes / Размер в байтах: `2430`
 - Included characters / Включено символов: `2430`
 - Truncated / Обрезано: `no`
@@ -570,7 +570,7 @@ fn parse_risk_state(value: String) -> Result<ObligationRiskState, ObligationStor
 
 ### `backend/src/domains/obligations/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/service.rs`
 - Size bytes / Размер в байтах: `2025`
 - Included characters / Включено символов: `2025`
 - Truncated / Обрезано: `no`
@@ -612,7 +612,7 @@ impl ObligationCommandService {
                         "obligation_id": obligation_id,
                         "review_state": review_state.as_str(),
                         "operation": "obligation_review",
-                        "actor_id": "hermes-frontend",
+                        "actor_id": "makosh-frontend",
                     }),
                     format!("obligation://{obligation_id}/review"),
                 )
@@ -647,7 +647,7 @@ pub enum ObligationCommandServiceError {
 
 ### `backend/src/domains/obligations/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/store.rs`
 - Size bytes / Размер в байтах: `11932`
 - Included characters / Включено символов: `11932`
 - Truncated / Обрезано: `no`
@@ -1035,7 +1035,7 @@ async fn validate_evidence_observations_exist(
 
 ### `backend/src/domains/obligations/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/validation.rs`
 - Size bytes / Размер в байтах: `1220`
 - Included characters / Включено символов: `1220`
 - Truncated / Обрезано: `no`
@@ -1097,7 +1097,7 @@ pub(super) fn validate_json_object(
 
 ### `backend/src/domains/organizations/api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/api.rs`
 - Size bytes / Размер в байтах: `22163`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1405,13 +1405,13 @@ impl OrganizationStore {
             } else {
                 sqlx::query(
                 "SELECT organization_id, display_name, legal_name, org_type, status, country, city,
-             
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/domains/organizations/core.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/core.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/core.rs`
 - Size bytes / Размер в байтах: `750`
 - Included characters / Включено символов: `750`
 - Truncated / Обрезано: `no`
@@ -1442,7 +1442,7 @@ pub use related::{RelatedOrgStore, RelatedOrganization};
 
 ### `backend/src/domains/organizations/core/aliases.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/core/aliases.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/core/aliases.rs`
 - Size bytes / Размер в байтах: `4338`
 - Included characters / Включено символов: `4338`
 - Truncated / Обрезано: `no`
@@ -1584,7 +1584,7 @@ fn normalize_alias_type(alias_type: &str) -> &str {
 
 ### `backend/src/domains/organizations/core/contact_links.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/core/contact_links.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/core/contact_links.rs`
 - Size bytes / Размер в байтах: `7255`
 - Included characters / Включено символов: `7255`
 - Truncated / Обрезано: `no`
@@ -1798,7 +1798,7 @@ impl OrgContactLinkStore {
 
 ### `backend/src/domains/organizations/core/departments.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/core/departments.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/core/departments.rs`
 - Size bytes / Размер в байтах: `3860`
 - Included characters / Включено символов: `3860`
 - Truncated / Обрезано: `no`
@@ -1925,7 +1925,7 @@ impl OrgDepartmentStore {
 
 ### `backend/src/domains/organizations/core/domains.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/core/domains.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/core/domains.rs`
 - Size bytes / Размер в байтах: `5035`
 - Included characters / Включено символов: `5035`
 - Truncated / Обрезано: `no`
@@ -2080,7 +2080,7 @@ impl OrgDomainStore {
 
 ### `backend/src/domains/organizations/core/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/core/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/core/errors.rs`
 - Size bytes / Размер в байтах: `303`
 - Included characters / Включено символов: `303`
 - Truncated / Обрезано: `no`
@@ -2103,7 +2103,7 @@ pub enum OrgCoreError {
 
 ### `backend/src/domains/organizations/core/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/core/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/core/evidence.rs`
 - Size bytes / Размер в байтах: `3971`
 - Included characters / Включено символов: `3971`
 - Truncated / Обрезано: `no`
@@ -2268,7 +2268,7 @@ fn merge_metadata(base: Value, extra: Option<Value>) -> Value {
 
 ### `backend/src/domains/organizations/core/identity.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/core/identity.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/core/identity.rs`
 - Size bytes / Размер в байтах: `4761`
 - Included characters / Включено символов: `4761`
 - Truncated / Обрезано: `no`
@@ -2409,7 +2409,7 @@ impl OrgIdentityStore {
 
 ### `backend/src/domains/organizations/core/related.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/core/related.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/core/related.rs`
 - Size bytes / Размер в байтах: `2607`
 - Included characters / Включено символов: `2607`
 - Truncated / Обрезано: `no`
@@ -2492,7 +2492,7 @@ impl RelatedOrgStore {
 
 ### `backend/src/domains/organizations/enrichment.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/enrichment.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/enrichment.rs`
 - Size bytes / Размер в байтах: `4958`
 - Included characters / Включено символов: `4958`
 - Truncated / Обрезано: `no`
@@ -2638,7 +2638,7 @@ pub enum OrgEnrichmentError {
 
 ### `backend/src/domains/organizations/finance.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/finance.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/finance.rs`
 - Size bytes / Размер в байтах: `10534`
 - Included characters / Включено символов: `10534`
 - Truncated / Обрезано: `no`
@@ -2915,7 +2915,7 @@ pub enum OrgFinanceError {
 
 ### `backend/src/domains/organizations/health.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/health.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/health.rs`
 - Size bytes / Размер в байтах: `8846`
 - Included characters / Включено символов: `8846`
 - Truncated / Обрезано: `no`
@@ -3143,7 +3143,7 @@ pub enum OrgHealthError {
 
 ### `backend/src/domains/organizations/investigator.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/organizations/investigator.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/organizations/investigator.rs`
 - Size bytes / Размер в байтах: `4764`
 - Included characters / Включено символов: `4764`
 - Truncated / Обрезано: `no`

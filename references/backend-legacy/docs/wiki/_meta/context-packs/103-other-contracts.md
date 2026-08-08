@@ -21,9 +21,9 @@
 - Group / Группа: `contracts`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -53,9 +53,9 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ## Source Files / Исходные файлы
 
-### `contracts/proto/hermes/common/v1/common.proto`
+### `contracts/proto/makosh/common/v1/common.proto`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/contracts/proto/hermes/common/v1/common.proto`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/contracts/proto/makosh/common/v1/common.proto`
 - Size bytes / Размер в байтах: `185`
 - Included characters / Включено символов: `185`
 - Truncated / Обрезано: `no`
@@ -63,7 +63,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 ```text
 syntax = "proto3";
 
-package hermes.common.v1;
+package makosh.common.v1;
 
 message PageRequest {
   uint32 limit = 1;
@@ -76,9 +76,9 @@ message PageResponse {
 }
 ```
 
-### `contracts/proto/hermes/communications/v1/communications.proto`
+### `contracts/proto/makosh/communications/v1/communications.proto`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/contracts/proto/hermes/communications/v1/communications.proto`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/contracts/proto/makosh/communications/v1/communications.proto`
 - Size bytes / Размер в байтах: `31511`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -86,9 +86,9 @@ message PageResponse {
 ```text
 syntax = "proto3";
 
-package hermes.communications.v1;
+package makosh.communications.v1;
 
-import "hermes/common/v1/common.proto";
+import "makosh/common/v1/common.proto";
 
 message CommunicationMessageAttachment {
   string attachment_id = 1;
@@ -629,9 +629,9 @@ message RichTemplateMailMergePrevi
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
-### `contracts/proto/hermes/events/v1/event_envelope.proto`
+### `contracts/proto/makosh/events/v1/event_envelope.proto`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/contracts/proto/hermes/events/v1/event_envelope.proto`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/contracts/proto/makosh/events/v1/event_envelope.proto`
 - Size bytes / Размер в байтах: `570`
 - Included characters / Включено символов: `570`
 - Truncated / Обрезано: `no`
@@ -639,7 +639,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 ```text
 syntax = "proto3";
 
-package hermes.events.v1;
+package makosh.events.v1;
 
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
@@ -660,9 +660,9 @@ message EventEnvelope {
 }
 ```
 
-### `contracts/proto/hermes/signal_hub/v1/signal_hub.proto`
+### `contracts/proto/makosh/signal_hub/v1/signal_hub.proto`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/contracts/proto/hermes/signal_hub/v1/signal_hub.proto`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/contracts/proto/makosh/signal_hub/v1/signal_hub.proto`
 - Size bytes / Размер в байтах: `11978`
 - Included characters / Включено символов: `11978`
 - Truncated / Обрезано: `no`
@@ -670,7 +670,7 @@ message EventEnvelope {
 ```text
 syntax = "proto3";
 
-package hermes.signal_hub.v1;
+package makosh.signal_hub.v1;
 
 message SignalSource {
   string id = 1;

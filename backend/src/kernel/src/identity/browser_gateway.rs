@@ -2,7 +2,7 @@
 
 use std::sync::Arc;
 
-use hermes_gateway_session_contract::{
+use makosh_gateway_session_contract::{
     BrowserAssertionAuthority, BrowserAuthenticationAuthority, BrowserDeviceAuthority,
     BrowserDeviceCredentialV1, BrowserDevicePrincipalV1, BrowserEnrollmentAuthority,
     BrowserEnrollmentV1, BrowserPairingAuthority, ClientBootstrapAuthority,
@@ -11,12 +11,12 @@ use hermes_gateway_session_contract::{
     ClientSurfaceAvailabilityProjectionV1, ClientSurfaceAvailabilityStateV1, ClientSurfaceIdV1,
     GatewayIdentityFenceV1,
 };
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BrowserDeviceEnrollmentInputV1, BrowserDeviceEnrollmentV1, BrowserDeviceIdentityV1,
     BrowserDeviceStateV1, ModuleGrantSnapshot, SettingsApplyState,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     SETTINGS_CONFIGURATION_CATALOG_CAPABILITY_ID,
     v1::{SettingClientVisibilityV1, SettingsSchemaV1, setting_value_v1::Value},
     validation::descriptor::{
@@ -460,7 +460,7 @@ fn settings_schema(
 
 fn visible_entry(
     schema: &SettingsSchemaV1,
-    entry: &hermes_runtime_protocol::v1::SettingsValueEntryV1,
+    entry: &makosh_runtime_protocol::v1::SettingsValueEntryV1,
 ) -> Option<Result<ClientSettingValueEntryV1, String>> {
     let definition = schema
         .definitions
@@ -490,7 +490,7 @@ fn visible_entry(
 }
 
 fn project_value(
-    value: &hermes_runtime_protocol::v1::SettingValueV1,
+    value: &makosh_runtime_protocol::v1::SettingValueV1,
 ) -> Option<ClientSettingValueV1> {
     Some(match value.value.as_ref()? {
         Value::BooleanValue(value) => ClientSettingValueV1::Boolean(*value),

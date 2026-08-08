@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::StoredEventEnvelope;
+use makosh_events_api::StoredEventEnvelope;
 
 use super::errors::TimelineEngineError;
 use super::models::{TimelineEntry, TimelineReplay};

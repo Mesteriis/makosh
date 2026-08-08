@@ -27,8 +27,8 @@ use crate::domains::signal_hub::store::{
     SignalRuntimeState, SignalRuntimeStateUpdate, SignalSource,
 };
 use crate::platform::settings::store::ApplicationSettingsStore;
-use hermes_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
-use hermes_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
+use makosh_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
+use makosh_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
 
 #[derive(Serialize)]
 pub(crate) struct SignalHubSourcesResponse {
@@ -269,7 +269,7 @@ pub(crate) async fn get_signal_hub_fixture_sources(
         .clone();
     let items = SignalFixtureSourceService::new(
         SignalHubStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .list_fixture_sources()?;
 
@@ -287,7 +287,7 @@ pub(crate) async fn get_signal_hub_profiles(
     let items = SignalHubProfileService::new(
         SignalHubStore::new(pool.clone()),
         ApplicationSettingsStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .list_profiles()
     .await?;
@@ -307,7 +307,7 @@ pub(crate) async fn post_signal_hub_profile(
     let item = SignalHubProfileService::new(
         SignalHubStore::new(pool.clone()),
         ApplicationSettingsStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .create_profile(&SignalProfileCreate {
         code: body.code,
@@ -332,7 +332,7 @@ pub(crate) async fn post_signal_hub_apply_profile(
     let item = SignalHubProfileService::new(
         SignalHubStore::new(pool.clone()),
         ApplicationSettingsStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .apply_profile(&profile_code)
     .await?;
@@ -353,7 +353,7 @@ pub(crate) async fn patch_signal_hub_profile(
     let item = SignalHubProfileService::new(
         SignalHubStore::new(pool.clone()),
         ApplicationSettingsStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .update_profile(&SignalProfileUpdate {
         code: profile_code,
@@ -378,7 +378,7 @@ pub(crate) async fn delete_signal_hub_profile(
     let item = SignalHubProfileService::new(
         SignalHubStore::new(pool.clone()),
         ApplicationSettingsStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .remove_profile(&profile_code)
     .await?;
@@ -397,7 +397,7 @@ pub(crate) async fn post_signal_hub_enable_source(
         .clone();
     let item = SignalHubControlService::new(
         SignalHubStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .enable_source(&source_code, None)
     .await?;
@@ -416,7 +416,7 @@ pub(crate) async fn post_signal_hub_disable_source(
         .clone();
     let item = SignalHubControlService::new(
         SignalHubStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .disable_source(&source_code, None)
     .await?;
@@ -448,7 +448,7 @@ pub(crate) async fn post_signal_hub_connection(
         .clone();
     let item = SignalHubConnectionService::new(
         SignalHubStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .create_connection(&SignalConnectionCreate {
         source_code: request.source_code,
@@ -475,7 +475,7 @@ pub(crate) async fn patch_signal_hub_connection(
         .clone();
     let item = SignalHubConnectionService::new(
         SignalHubStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .update_connection(&SignalConnectionUpdate {
         id: connection_id,
@@ -501,7 +501,7 @@ pub(crate) async fn delete_signal_hub_connection(
         .clone();
     let item = SignalHubConnectionService::new(
         SignalHubStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .remove_connection(&connection_id)
     .await?;
@@ -603,7 +603,7 @@ pub(crate) async fn post_signal_hub_replay_request(
         .clone();
     let replay_request = SignalHubReplayService::new(
         SignalHubStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .request_replay(&SignalReplayRequestCreate {
         source_code: request.source_code.and_then(non_empty_string),
@@ -615,7 +615,7 @@ pub(crate) async fn post_signal_hub_replay_request(
         to_time: request.to_time,
         target_consumer: request.target_consumer.and_then(non_empty_string),
         target_projection: request.target_projection.and_then(non_empty_string),
-        requested_by: "hermes-frontend".to_owned(),
+        requested_by: "makosh-frontend".to_owned(),
         metadata: request.metadata,
     })
     .await?;
@@ -634,7 +634,7 @@ pub(crate) async fn post_signal_hub_emit_fixture_signal(
         .clone();
     let item = SignalFixtureSourceService::new(
         SignalHubStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .emit_fixture(&SignalFixtureEmitRequest { fixture_id })
     .await?;
@@ -687,7 +687,7 @@ pub(crate) async fn post_signal_hub_mute_signals(
         .clone();
     let item = SignalHubControlService::new(
         SignalHubStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .mute_signals(&control_request_from_body(request)?)
     .await?;
@@ -706,7 +706,7 @@ pub(crate) async fn post_signal_hub_unmute_signals(
         .clone();
     let item = SignalHubControlService::new(
         SignalHubStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .unmute_signals(&control_request_from_body(request)?)
     .await?;
@@ -725,7 +725,7 @@ pub(crate) async fn post_signal_hub_pause_signals(
         .clone();
     let item = SignalHubControlService::new(
         SignalHubStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .pause_signals(&control_request_from_body(request)?)
     .await?;
@@ -744,7 +744,7 @@ pub(crate) async fn post_signal_hub_resume_signals(
         .clone();
     let item = SignalHubControlService::new(
         SignalHubStore::new(pool.clone()),
-        hermes_events_postgres::store::EventStore::new(pool),
+        makosh_events_postgres::store::EventStore::new(pool),
     )
     .resume_signals(&control_request_from_body(request)?)
     .await?;

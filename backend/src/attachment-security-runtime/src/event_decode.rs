@@ -1,23 +1,23 @@
 //! Exact durable-envelope decoding for the engine's two admitted inputs.
 
-use hermes_attachment_security_contract::{
+use makosh_attachment_security_contract::{
     admission::attachment_security_scan_candidate_observed_contract_reference_v1,
     v1::AttachmentSecurityScanCandidateObservedV1,
 };
-use hermes_attachment_security_core::{
+use makosh_attachment_security_core::{
     AttachmentSecurityCanonicalStateFactV1, AttachmentSecurityScanCandidateV1,
     CanonicalAttachmentSafetyStateV1,
 };
-use hermes_communications_attachment_contract::{
+use makosh_communications_attachment_contract::{
     admission::communication_attachment_safety_state_changed_contract_reference_v1,
     lifecycle_v1::{AttachmentSafetyStateChangedV1, AttachmentSafetyStateV1},
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, DurableEnvelopeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 use sha2::{Digest, Sha256};
 
@@ -225,12 +225,12 @@ pub enum AttachmentSecurityDeliveryDecodeErrorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_attachment_security_contract::{
+    use makosh_attachment_security_contract::{
         AttachmentSecurityObservationContextV1, AttachmentSecurityScanCandidateFactV1,
         build_attachment_security_scan_candidate_outbox_record_v1,
     };
-    use hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateChangedV1;
-    use hermes_events_protocol::v1::{
+    use makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateChangedV1;
+    use makosh_events_protocol::v1::{
         ActorKindV1, ActorRefV1, ContractRefV1, DurableEnvelopeV1, EventMetadataV1, FenceKindV1,
         SourceFenceV1, SourceRefV1,
     };
@@ -254,7 +254,7 @@ mod tests {
             &AttachmentSecurityObservationContextV1 {
                 runtime_instance_id: "mail-runtime-1".to_owned(),
                 runtime_generation: 1,
-                module_id: "hermes-mail-runtime".to_owned(),
+                module_id: "makosh-mail-runtime".to_owned(),
                 recorded_at_unix_seconds: 1_700_000_001,
                 recorded_at_nanos: 0,
             },
@@ -288,7 +288,7 @@ mod tests {
                 schema_sha256: contract.schema_sha256,
             }),
             source: Some(SourceRefV1 {
-                module_id: "hermes-communications-runtime".to_owned(),
+                module_id: "makosh-communications-runtime".to_owned(),
                 runtime_instance_id: vec![7; 16],
                 runtime_generation: 3,
             }),

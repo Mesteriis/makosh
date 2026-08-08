@@ -1,9 +1,9 @@
-use hermes_events_protocol::RuntimeNatsJwtCredentialV1;
-use hermes_runtime_protocol::v1::{
+use makosh_events_protocol::RuntimeNatsJwtCredentialV1;
+use makosh_runtime_protocol::v1::{
     SchedulerRuntimeReceiptConsumerBindingV1, SchedulerRuntimeReceiptKindV1,
     SchedulerRuntimeScheduleControlBindingV1,
 };
-use hermes_scheduler_jetstream::{
+use makosh_scheduler_jetstream::{
     SchedulerJetStreamReceiptPortErrorV1, SchedulerJetStreamReceiptPortV1,
     SchedulerJetStreamScheduleControlPortErrorV1, SchedulerJetStreamScheduleControlPortV1,
 };
@@ -38,7 +38,7 @@ async fn schedule_control_port_rejects_expired_credentials_and_wildcard_bindings
     ));
 
     let mut wildcard = schedule_control_binding();
-    wildcard.filter_subject = "hermes.command.v1.scheduler.>".to_owned();
+    wildcard.filter_subject = "makosh.command.v1.scheduler.>".to_owned();
     let invalid = SchedulerJetStreamScheduleControlPortV1::connect(
         "nats://127.0.0.1:4222",
         credential(u64::MAX),
@@ -54,7 +54,7 @@ async fn schedule_control_port_rejects_expired_credentials_and_wildcard_bindings
 #[tokio::test]
 async fn scheduler_jetstream_port_rejects_a_binding_before_connecting() {
     let mut invalid = binding();
-    invalid.filter_subject = "hermes.ack.v1.>".to_owned();
+    invalid.filter_subject = "makosh.ack.v1.>".to_owned();
     let result = SchedulerJetStreamReceiptPortV1::connect(
         "nats://127.0.0.1:4222",
         credential(u64::MAX),
@@ -82,9 +82,9 @@ fn credential(expires_at_unix_seconds: u64) -> RuntimeNatsJwtCredentialV1 {
 fn binding() -> SchedulerRuntimeReceiptConsumerBindingV1 {
     SchedulerRuntimeReceiptConsumerBindingV1 {
         kind: SchedulerRuntimeReceiptKindV1::Acceptance as i32,
-        stream_name: "HERMES_ACK_V1".to_owned(),
+        stream_name: "MAKOSH_ACK_V1".to_owned(),
         durable_name: "scheduler_receipt_acceptance".to_owned(),
-        filter_subject: "hermes.ack.v1.mail.job_receipt.v1".to_owned(),
+        filter_subject: "makosh.ack.v1.mail.job_receipt.v1".to_owned(),
         ack_wait_millis: 30_000,
         max_deliver: 8,
         max_ack_pending: 32,
@@ -93,13 +93,13 @@ fn binding() -> SchedulerRuntimeReceiptConsumerBindingV1 {
 
 fn schedule_control_binding() -> SchedulerRuntimeScheduleControlBindingV1 {
     SchedulerRuntimeScheduleControlBindingV1 {
-        stream_name: "HERMES_COMMAND_V1".to_owned(),
+        stream_name: "MAKOSH_COMMAND_V1".to_owned(),
         durable_name: "scheduler_schedule_control".to_owned(),
-        filter_subject: "hermes.command.v1.scheduler.schedule_control.v1".to_owned(),
+        filter_subject: "makosh.command.v1.scheduler.schedule_control.v1".to_owned(),
         ack_wait_millis: 30_000,
         max_deliver: 8,
         max_ack_pending: 32,
-        result_subject: "hermes.result.v1.scheduler.schedule_control.v1".to_owned(),
+        result_subject: "makosh.result.v1.scheduler.schedule_control.v1".to_owned(),
         command_contract_revision: 1,
         command_schema_sha256: vec![7; 32],
         result_contract_revision: 1,

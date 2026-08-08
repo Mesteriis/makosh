@@ -1,4 +1,4 @@
-use hermes_communications_api::accounts::ProviderAccountLookupPort;
+use makosh_communications_api::accounts::ProviderAccountLookupPort;
 use std::path::PathBuf;
 use std::sync::Arc;
 
@@ -11,9 +11,9 @@ use crate::platform::communications::email_sync::{
     imap_mailbox_stream_prefix, plan_email_sync,
 };
 use crate::vault::HostVault;
-use hermes_communications_api::evidence::CommunicationEvidencePort;
-use hermes_communications_api::mail_resources::SharedEmailProviderSyncPort;
-use hermes_communications_api::mail_resources::SharedMailProviderResourceCommandPort;
+use makosh_communications_api::evidence::CommunicationEvidencePort;
+use makosh_communications_api::mail_resources::SharedEmailProviderSyncPort;
+use makosh_communications_api::mail_resources::SharedMailProviderResourceCommandPort;
 
 use super::errors::MailSyncError;
 use super::models::progress::MailSyncTrigger;

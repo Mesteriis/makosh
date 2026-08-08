@@ -1,11 +1,11 @@
-use hermes_hub_backend::domains::personas::api::store::PersonaProjectionStore;
-use hermes_hub_backend::domains::personas::core::interaction_contexts::{
+use makosh_hub_backend::domains::personas::api::store::PersonaProjectionStore;
+use makosh_hub_backend::domains::personas::core::interaction_contexts::{
     NewPersonaInteractionContext, PersonaInteractionContextStore,
 };
-use hermes_hub_backend::domains::personas::enrichment::store::PersonaEnrichmentStore;
-use hermes_hub_backend::domains::personas::enrichment_engine::EnrichmentResultStore;
-use hermes_hub_backend::domains::personas::health::PersonaHealthStore;
-use hermes_hub_backend::domains::personas::memory::facts::PersonaFactStore;
+use makosh_hub_backend::domains::personas::enrichment::store::PersonaEnrichmentStore;
+use makosh_hub_backend::domains::personas::enrichment_engine::EnrichmentResultStore;
+use makosh_hub_backend::domains::personas::health::PersonaHealthStore;
+use makosh_hub_backend::domains::personas::memory::facts::PersonaFactStore;
 use serde_json::json;
 
 use super::support::{live_personas_pool, unique_suffix};

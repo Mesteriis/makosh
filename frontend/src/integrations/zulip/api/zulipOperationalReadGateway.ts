@@ -13,7 +13,7 @@ import {
 	ZulipOperationalQueryV1Schema,
 	type ZulipOperationalEventKindV1,
 	type ZulipOperationalQueryV1,
-} from '../../../gen/hermes/zulip/operational/v1/client_pb'
+} from '../../../gen/makosh/zulip/operational/v1/client_pb'
 import { getZulipOperationalReadConnectClient } from './zulipOperationalReadClient'
 
 const DEFAULT_PAGE_LIMIT = 50

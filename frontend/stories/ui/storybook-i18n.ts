@@ -43,7 +43,7 @@ const en = {
 		typographyTitle: 'Typography',
 		typographyDescription: 'Readable text primitives with stable size, tone and weight contracts.',
 		heading: 'Review-ready context surface',
-		paragraph: 'Hermes primitives keep domain language out of shared UI while preserving predictable layout.',
+		paragraph: 'Макошь primitives keep domain language out of shared UI while preserving predictable layout.',
 		muted: 'Muted supporting text',
 		strong: 'Strong text',
 		accent: 'Accent text',
@@ -106,7 +106,7 @@ const en = {
 			{ id: 'memory', label: 'Memory' }
 		],
 		breadcrumbs: [
-			{ id: 'home', label: 'Hermes' },
+			{ id: 'home', label: 'Макошь' },
 			{ id: 'workspace', label: 'Workspace' },
 			{ id: 'review', label: 'Review queue', current: true }
 		],
@@ -248,7 +248,7 @@ const en = {
 		sideTitle: 'Context rail',
 		inspectorTitle: 'Evidence inspector',
 		inspectorDescription: 'Generic properties, not provider runtime state.',
-		topTitle: 'Hermes workspace',
+		topTitle: 'Макошь workspace',
 		topDescription: 'UI Lab layout shell',
 		bottomLabel: 'Workspace footer',
 		statusLabel: 'Workspace status',
@@ -348,7 +348,7 @@ const en = {
 		],
 		messages: [
 			{ id: 'msg-1', author: 'Alex', timestamp: '09:12', meta: 'source-linked', direction: 'inbound' as const, body: 'Can we preserve the original evidence before turning this into a task?' },
-			{ id: 'msg-2', author: 'Hermes', timestamp: '09:13', meta: 'review candidate', direction: 'outbound' as const, body: 'Yes. The candidate stays separate until owner review.' },
+			{ id: 'msg-2', author: 'Макошь', timestamp: '09:13', meta: 'review candidate', direction: 'outbound' as const, body: 'Yes. The candidate stays separate until owner review.' },
 			{ id: 'msg-3', author: 'System', timestamp: '09:14', meta: 'local state', direction: 'system' as const, body: 'Delivery state is visual only in shared UI.' }
 		],
 		attachments: [
@@ -366,7 +366,7 @@ const en = {
 		title: 'Utility primitives',
 		description: 'Small UI helpers for copy actions, switches, keyboard hints and semantic icons.',
 		copyTitle: 'Copy action',
-		copyValue: 'hermes://local/context-pack',
+		copyValue: 'makosh://local/context-pack',
 		copyLabel: 'Copy reference',
 		copiedLabel: 'Copied',
 		errorLabel: 'Copy unavailable',
@@ -543,7 +543,7 @@ const en = {
 	},
 	foundation: {
 		iconTitle: 'Icon system',
-		iconDescription: 'Icons render through the Hermes Icon wrapper, not through domain-owned vendor imports.',
+		iconDescription: 'Icons render through the Макошь Icon wrapper, not through domain-owned vendor imports.',
 		sharedPrimitive: 'Shared primitive',
 		separatorTitle: 'Separators',
 		separatorDescription: 'Dividers use tokenized borders and stable orientation contracts.',
@@ -566,8 +566,8 @@ const en = {
 	},
 	overlay: {
 		title: 'Overlay primitives',
-		description: 'Dropdown, dialog, sheet, tooltip and popover behavior comes from Reka UI. Hermes owns the style.',
-		menu: 'Hermes menu',
+		description: 'Dropdown, dialog, sheet, tooltip and popover behavior comes from Reka UI. Макошь owns the style.',
+		menu: 'Макошь menu',
 		navigation: 'Navigation',
 		communications: 'Communications',
 		radar: 'Radar',
@@ -603,7 +603,7 @@ const en = {
 		overlayHostTitle: 'Overlay host',
 		overlayHostDescription: 'A passive host layer for custom non-modal surfaces.',
 		portalTitle: 'Portal surface',
-		portalDescription: 'Portal keeps overlay placement inside Hermes UI Kit.',
+		portalDescription: 'Portal keeps overlay placement inside Макошь UI Kit.',
 		focusTrapTitle: 'Focus trap',
 		focusTrapDescription: 'Tab and Shift+Tab stay inside this demo region.'
 	},
@@ -649,11 +649,11 @@ const en = {
 		options: [
 			{ value: 'base-light', label: 'Base Light', description: 'Primary clean neutral light theme.' },
 			{ value: 'base-dark', label: 'Base Dark', description: 'Neutral dark theme with the same component contracts.' },
-			{ value: 'hermes-light', label: 'Hermes Light', description: 'Bright Hermes theme with emerald system accents.' },
-			{ value: 'hermes-dark', label: 'Hermes Dark', description: 'Emerald Hermes dark theme on the same tokens.' }
+			{ value: 'makosh-light', label: 'Макошь Light', description: 'Bright Макошь theme with emerald system accents.' },
+			{ value: 'makosh-dark', label: 'Макошь Dark', description: 'Emerald Макошь dark theme on the same tokens.' }
 		],
 		swatches: ['Background', 'Surface', 'Raised', 'Text', 'Muted', 'Accent', 'Danger', 'Border'],
-		cardTitle: 'Hermes surface',
+		cardTitle: 'Макошь surface',
 		cardDescription: 'Same component, different token set.',
 		searchValue: 'Search Telegram, Radar, Knowledge',
 		contextBadge: 'Context'
@@ -697,7 +697,7 @@ const ru: StorybookText = {
 		typographyTitle: 'Типографика',
 		typographyDescription: 'Читаемые текстовые примитивы со стабильными контрактами размера, тона и веса.',
 		heading: 'Контекстная поверхность для проверки',
-		paragraph: 'Примитивы Hermes не несут доменный язык в shared UI и сохраняют предсказуемую раскладку.',
+		paragraph: 'Примитивы Макошь не несут доменный язык в shared UI и сохраняют предсказуемую раскладку.',
 		muted: 'Приглушенный вспомогательный текст',
 		strong: 'Акцентированный текст',
 		accent: 'Текст акцента',
@@ -760,7 +760,7 @@ const ru: StorybookText = {
 			{ id: 'memory', label: 'Память' }
 		],
 		breadcrumbs: [
-			{ id: 'home', label: 'Hermes' },
+			{ id: 'home', label: 'Макошь' },
 			{ id: 'workspace', label: 'Workspace' },
 			{ id: 'review', label: 'Очередь проверки', current: true }
 		],
@@ -902,7 +902,7 @@ const ru: StorybookText = {
 		sideTitle: 'Context rail',
 		inspectorTitle: 'Inspector доказательств',
 		inspectorDescription: 'Generic properties, не provider runtime state.',
-		topTitle: 'Hermes workspace',
+		topTitle: 'Макошь workspace',
 		topDescription: 'UI Lab layout shell',
 		bottomLabel: 'Footer workspace',
 		statusLabel: 'Статус workspace',
@@ -1002,7 +1002,7 @@ const ru: StorybookText = {
 		],
 		messages: [
 			{ id: 'msg-1', author: 'Alex', timestamp: '09:12', meta: 'source-linked', direction: 'inbound' as const, body: 'Сохраним original evidence до превращения этого в task?' },
-			{ id: 'msg-2', author: 'Hermes', timestamp: '09:13', meta: 'review candidate', direction: 'outbound' as const, body: 'Да. Candidate остается отдельно до owner review.' },
+			{ id: 'msg-2', author: 'Макошь', timestamp: '09:13', meta: 'review candidate', direction: 'outbound' as const, body: 'Да. Candidate остается отдельно до owner review.' },
 			{ id: 'msg-3', author: 'System', timestamp: '09:14', meta: 'local state', direction: 'system' as const, body: 'Delivery state в shared UI только визуальный.' }
 		],
 		attachments: [
@@ -1020,7 +1020,7 @@ const ru: StorybookText = {
 		title: 'Utility-примитивы',
 		description: 'Малые UI helpers для copy actions, switchers, keyboard hints и semantic icons.',
 		copyTitle: 'Copy action',
-		copyValue: 'hermes://local/context-pack',
+		copyValue: 'makosh://local/context-pack',
 		copyLabel: 'Скопировать reference',
 		copiedLabel: 'Скопировано',
 		errorLabel: 'Copy недоступен',
@@ -1197,7 +1197,7 @@ const ru: StorybookText = {
 	},
 	foundation: {
 		iconTitle: 'Система иконок',
-		iconDescription: 'Иконки проходят через Hermes Icon wrapper, а не через vendor-импорты в доменах.',
+		iconDescription: 'Иконки проходят через Макошь Icon wrapper, а не через vendor-импорты в доменах.',
 		sharedPrimitive: 'Общий примитив',
 		separatorTitle: 'Разделители',
 		separatorDescription: 'Разделители используют токены границ и стабильный контракт ориентации.',
@@ -1220,8 +1220,8 @@ const ru: StorybookText = {
 	},
 	overlay: {
 		title: 'Overlay-примитивы',
-		description: 'Dropdown, dialog, sheet, tooltip и popover используют поведение Reka UI. Стилем владеет Hermes.',
-		menu: 'Меню Hermes',
+		description: 'Dropdown, dialog, sheet, tooltip и popover используют поведение Reka UI. Стилем владеет Макошь.',
+		menu: 'Меню Макошь',
 		navigation: 'Навигация',
 		communications: 'Коммуникации',
 		radar: 'Радар',
@@ -1257,7 +1257,7 @@ const ru: StorybookText = {
 		overlayHostTitle: 'Overlay host',
 		overlayHostDescription: 'Пассивный слой host для кастомных non-modal поверхностей.',
 		portalTitle: 'Portal surface',
-		portalDescription: 'Portal держит placement overlay внутри Hermes UI Kit.',
+		portalDescription: 'Portal держит placement overlay внутри Макошь UI Kit.',
 		focusTrapTitle: 'Focus trap',
 		focusTrapDescription: 'Tab и Shift+Tab остаются внутри этой demo-области.'
 	},
@@ -1303,11 +1303,11 @@ const ru: StorybookText = {
 		options: [
 			{ value: 'base-light', label: 'Базовая светлая', description: 'Основная чистая нейтральная тема.' },
 			{ value: 'base-dark', label: 'Базовая темная', description: 'Нейтральная темная тема с теми же контрактами компонентов.' },
-			{ value: 'hermes-light', label: 'Hermes светлая', description: 'Светлая тема Hermes с emerald-акцентами системы.' },
-			{ value: 'hermes-dark', label: 'Hermes темная', description: 'Темная тема Hermes с emerald-акцентами на тех же токенах.' }
+			{ value: 'makosh-light', label: 'Макошь светлая', description: 'Светлая тема Макошь с emerald-акцентами системы.' },
+			{ value: 'makosh-dark', label: 'Макошь темная', description: 'Темная тема Макошь с emerald-акцентами на тех же токенах.' }
 		],
 		swatches: ['Фон', 'Поверхность', 'Raised', 'Текст', 'Muted', 'Акцент', 'Опасность', 'Граница'],
-		cardTitle: 'Поверхность Hermes',
+		cardTitle: 'Поверхность Макошь',
 		cardDescription: 'Тот же компонент, другой набор токенов.',
 		searchValue: 'Поиск Telegram, Radar, Knowledge',
 		contextBadge: 'Контекст'
@@ -1349,7 +1349,7 @@ const es: StorybookText = {
 		typographyTitle: 'Tipografía',
 		typographyDescription: 'Primitivos de texto legibles con contratos estables de tamaño, tono y peso.',
 		heading: 'Superficie de contexto lista para revisión',
-		paragraph: 'Los primitivos Hermes mantienen el lenguaje de dominio fuera de shared UI y preservan layout predecible.',
+		paragraph: 'Los primitivos Макошь mantienen el lenguaje de dominio fuera de shared UI y preservan layout predecible.',
 		muted: 'Texto auxiliar atenuado',
 		strong: 'Texto fuerte',
 		accent: 'Texto de acento',
@@ -1412,7 +1412,7 @@ const es: StorybookText = {
 			{ id: 'memory', label: 'Memoria' }
 		],
 		breadcrumbs: [
-			{ id: 'home', label: 'Hermes' },
+			{ id: 'home', label: 'Макошь' },
 			{ id: 'workspace', label: 'Workspace' },
 			{ id: 'review', label: 'Cola de revisión', current: true }
 		],
@@ -1554,7 +1554,7 @@ const es: StorybookText = {
 		sideTitle: 'Rail de contexto',
 		inspectorTitle: 'Inspector de evidencia',
 		inspectorDescription: 'Propiedades genéricas, no estado runtime de proveedor.',
-		topTitle: 'Hermes workspace',
+		topTitle: 'Макошь workspace',
 		topDescription: 'Shell de layout UI Lab',
 		bottomLabel: 'Footer de workspace',
 		statusLabel: 'Estado de workspace',
@@ -1654,7 +1654,7 @@ const es: StorybookText = {
 		],
 		messages: [
 			{ id: 'msg-1', author: 'Alex', timestamp: '09:12', meta: 'source-linked', direction: 'inbound' as const, body: 'Podemos preservar original evidence antes de convertir esto en task?' },
-			{ id: 'msg-2', author: 'Hermes', timestamp: '09:13', meta: 'review candidate', direction: 'outbound' as const, body: 'Sí. Candidate queda separado hasta owner review.' },
+			{ id: 'msg-2', author: 'Макошь', timestamp: '09:13', meta: 'review candidate', direction: 'outbound' as const, body: 'Sí. Candidate queda separado hasta owner review.' },
 			{ id: 'msg-3', author: 'System', timestamp: '09:14', meta: 'local state', direction: 'system' as const, body: 'Delivery state en shared UI es solo visual.' }
 		],
 		attachments: [
@@ -1672,7 +1672,7 @@ const es: StorybookText = {
 		title: 'Primitivos utility',
 		description: 'Pequeños UI helpers para copy actions, switchers, keyboard hints y semantic icons.',
 		copyTitle: 'Copy action',
-		copyValue: 'hermes://local/context-pack',
+		copyValue: 'makosh://local/context-pack',
 		copyLabel: 'Copiar reference',
 		copiedLabel: 'Copiado',
 		errorLabel: 'Copy no disponible',
@@ -1849,7 +1849,7 @@ const es: StorybookText = {
 	},
 	foundation: {
 		iconTitle: 'Sistema de iconos',
-		iconDescription: 'Los iconos pasan por el wrapper Hermes Icon, no por imports vendor en dominios.',
+		iconDescription: 'Los iconos pasan por el wrapper Макошь Icon, no por imports vendor en dominios.',
 		sharedPrimitive: 'Primitivo compartido',
 		separatorTitle: 'Separadores',
 		separatorDescription: 'Los divisores usan bordes tokenizados y contratos estables de orientación.',
@@ -1872,8 +1872,8 @@ const es: StorybookText = {
 	},
 	overlay: {
 		title: 'Primitivos overlay',
-		description: 'Dropdown, dialog, sheet, tooltip y popover usan comportamiento de Reka UI. Hermes posee el estilo.',
-		menu: 'Menú Hermes',
+		description: 'Dropdown, dialog, sheet, tooltip y popover usan comportamiento de Reka UI. Макошь posee el estilo.',
+		menu: 'Menú Макошь',
 		navigation: 'Navegación',
 		communications: 'Comunicaciones',
 		radar: 'Radar',
@@ -1909,7 +1909,7 @@ const es: StorybookText = {
 		overlayHostTitle: 'Overlay host',
 		overlayHostDescription: 'Capa host pasiva para superficies custom no modales.',
 		portalTitle: 'Superficie Portal',
-		portalDescription: 'Portal mantiene la colocación de overlay dentro de Hermes UI Kit.',
+		portalDescription: 'Portal mantiene la colocación de overlay dentro de Макошь UI Kit.',
 		focusTrapTitle: 'Focus trap',
 		focusTrapDescription: 'Tab y Shift+Tab se quedan dentro de esta región demo.'
 	},
@@ -1955,11 +1955,11 @@ const es: StorybookText = {
 		options: [
 			{ value: 'base-light', label: 'Base clara', description: 'Tema claro neutral principal.' },
 			{ value: 'base-dark', label: 'Base oscura', description: 'Tema oscuro neutral con los mismos contratos de componentes.' },
-			{ value: 'hermes-light', label: 'Hermes claro', description: 'Tema Hermes claro con acentos esmeralda del sistema.' },
-			{ value: 'hermes-dark', label: 'Hermes oscuro', description: 'Tema Hermes oscuro con acento esmeralda sobre los mismos tokens.' }
+			{ value: 'makosh-light', label: 'Макошь claro', description: 'Tema Макошь claro con acentos esmeralda del sistema.' },
+			{ value: 'makosh-dark', label: 'Макошь oscuro', description: 'Tema Макошь oscuro con acento esmeralda sobre los mismos tokens.' }
 		],
 		swatches: ['Fondo', 'Superficie', 'Elevada', 'Texto', 'Muted', 'Acento', 'Peligro', 'Borde'],
-		cardTitle: 'Superficie Hermes',
+		cardTitle: 'Superficie Макошь',
 		cardDescription: 'Mismo componente, distinto conjunto de tokens.',
 		searchValue: 'Buscar Telegram, Radar, Knowledge',
 		contextBadge: 'Contexto'

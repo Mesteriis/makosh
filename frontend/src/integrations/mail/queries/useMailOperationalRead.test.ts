@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { MailFolderKindV1 } from '../../../gen/hermes/mail/operational/v1/client_pb'
+import { MailFolderKindV1 } from '../../../gen/makosh/mail/operational/v1/client_pb'
 import {
 	getMailOperationalMessage,
 	listMailOperationalFolders,

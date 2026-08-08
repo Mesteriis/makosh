@@ -1,6 +1,6 @@
 import { createClient, type Client } from '@connectrpc/connect'
 
-import { WhatsAppOperationalQueryService } from '../../../gen/hermes/whatsapp/operational/v1/client_pb'
+import { WhatsAppOperationalQueryService } from '../../../gen/makosh/whatsapp/operational/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 let client: Client<typeof WhatsAppOperationalQueryService> | null = null

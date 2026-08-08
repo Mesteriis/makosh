@@ -1,4 +1,4 @@
-use hermes_mail_api::{
+use makosh_mail_api::{
     DEFAULT_WINDOW, MAX_HOST_LEN, MAX_WINDOW, MAX_WINDOWS, valid_host, valid_message_bytes,
     valid_plain_text_bytes, valid_port, valid_window,
 };

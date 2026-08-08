@@ -7,7 +7,7 @@ mod wire;
 
 use std::fmt::{Debug, Formatter};
 
-use hermes_zulip_api::{
+use makosh_zulip_api::{
     ZulipAccountV1, ZulipCommandV1, ZulipEventQueueV1, ZulipHistoryPageV1, ZulipPolledEventV1,
 };
 use zeroize::Zeroizing;
@@ -15,7 +15,7 @@ use zeroize::Zeroizing;
 pub use command::ZulipHttpRequestV1;
 pub use wire::{ZulipHttpErrorV1, ZulipHttpResponseV1};
 
-pub const PACKAGE: &str = "hermes-zulip-http";
+pub const PACKAGE: &str = "makosh-zulip-http";
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct ZulipHttpConfigV1 {
@@ -131,7 +131,7 @@ fn valid_realm_url(realm_url: &str) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_zulip_api::{ZulipCommandV1, ZulipReactionOperationV1, ZulipReactionV1};
+    use makosh_zulip_api::{ZulipCommandV1, ZulipReactionOperationV1, ZulipReactionV1};
 
     fn config() -> ZulipHttpConfigV1 {
         ZulipHttpConfigV1::new(

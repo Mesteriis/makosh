@@ -9,15 +9,15 @@ use std::{
     time::Duration,
 };
 
-use hermes_reviewed_note_candidate_promotion_persistence::schema::reviewed_note_candidate_promotion_storage_bundle_v1;
-use hermes_reviewed_note_candidate_promotion_runtime::{
+use makosh_reviewed_note_candidate_promotion_persistence::schema::reviewed_note_candidate_promotion_storage_bundle_v1;
+use makosh_reviewed_note_candidate_promotion_runtime::{
     ReviewedNoteCandidatePromotionManagedRuntimeErrorV1,
     ReviewedNoteCandidatePromotionManagedRuntimeV1,
     ReviewedNoteCandidatePromotionRuntimeAdmissionV1,
     reviewed_note_candidate_promotion_module_descriptor_v1,
     reviewed_note_candidate_promotion_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
@@ -125,7 +125,7 @@ fn retry(
         | Err(ReviewedNoteCandidatePromotionManagedRuntimeErrorV1::EventUnavailable)
         | Err(ReviewedNoteCandidatePromotionManagedRuntimeErrorV1::Unavailable)
         | Err(ReviewedNoteCandidatePromotionManagedRuntimeErrorV1::Persistence(
-            hermes_reviewed_note_candidate_promotion_persistence::ReviewedNoteCandidatePromotionPersistenceErrorV1::StorageUnavailable,
+            makosh_reviewed_note_candidate_promotion_persistence::ReviewedNoteCandidatePromotionPersistenceErrorV1::StorageUnavailable,
         )) => Ok(()),
         Err(error) => Err(runtime_error(error)),
     }

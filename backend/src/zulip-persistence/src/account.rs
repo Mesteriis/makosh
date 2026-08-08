@@ -1,6 +1,6 @@
 //! Zulip-owned credential revision binding and account retirement state.
 
-use hermes_zulip_api::account::{
+use makosh_zulip_api::account::{
     ZulipAccountLifecycleCommandV1, ZulipAccountLifecycleReceiptV1, ZulipCredentialBindingStateV1,
     validate_account_lifecycle_command,
 };
@@ -37,7 +37,7 @@ impl ZulipDurablePersistence {
                 credential_revision,
             } => {
                 sqlx::query(
-                    "INSERT INTO hermes_data.zulip_account_credential_bindings \
+                    "INSERT INTO makosh_data.zulip_account_credential_bindings \
                      (account_id, configuration_instance_id, credential_revision, binding_revision, \
                       state, updated_at_unix_seconds) \
                      VALUES ($1, $2, $3, 1, 2, $4) ON CONFLICT (account_id) DO NOTHING \
@@ -58,7 +58,7 @@ impl ZulipDurablePersistence {
                 credential_revision,
             } => {
                 sqlx::query(
-                    "UPDATE hermes_data.zulip_account_credential_bindings \
+                    "UPDATE makosh_data.zulip_account_credential_bindings \
                      SET credential_revision = $1, binding_revision = binding_revision + 1, \
                          state = 2, applied_runtime_generation = NULL, \
                          updated_at_unix_seconds = $2 \
@@ -83,7 +83,7 @@ impl ZulipDurablePersistence {
                 expected_binding_revision,
             } => {
                 sqlx::query(
-                    "UPDATE hermes_data.zulip_account_credential_bindings \
+                    "UPDATE makosh_data.zulip_account_credential_bindings \
                      SET binding_revision = binding_revision + 1, state = 4, \
                          applied_runtime_generation = NULL, updated_at_unix_seconds = $1 \
                      WHERE account_id = $2 AND configuration_instance_id = $3 \
@@ -124,7 +124,7 @@ impl ZulipDurablePersistence {
         sqlx::query(
             "SELECT account_id, configuration_instance_id, credential_revision, binding_revision, \
              state, applied_runtime_generation \
-             FROM hermes_data.zulip_account_credential_bindings WHERE account_id = $1",
+             FROM makosh_data.zulip_account_credential_bindings WHERE account_id = $1",
         )
         .bind(account_id)
         .fetch_optional(&self.pool)
@@ -175,7 +175,7 @@ impl ZulipDurablePersistence {
             return Err(ZulipDurablePersistenceError::InvalidRow);
         }
         let result = sqlx::query(
-            "UPDATE hermes_data.zulip_account_credential_bindings \
+            "UPDATE makosh_data.zulip_account_credential_bindings \
              SET state = 3, applied_runtime_generation = $1, updated_at_unix_seconds = $2 \
              WHERE account_id = $3 AND configuration_instance_id = $4 \
                AND binding_revision = $5 AND credential_revision = $6 AND state IN (2, 3)",

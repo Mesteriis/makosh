@@ -1,7 +1,7 @@
-use hermes_attachment_translation_persistence::{
+use makosh_attachment_translation_persistence::{
     AttachmentTranslationPersistenceErrorV1, AttachmentTranslationPersistenceV1,
 };
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum AttachmentTranslationEventRelayErrorV1 {

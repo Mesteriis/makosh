@@ -1,4 +1,4 @@
-# Hermes Engines
+# Макошь Engines
 
 Engines are reusable mechanisms used by domains. They are not domains and do not
 own primary entities.

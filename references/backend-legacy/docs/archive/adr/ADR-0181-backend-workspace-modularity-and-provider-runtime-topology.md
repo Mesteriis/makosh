@@ -19,12 +19,12 @@ Clarifies:
 - ADR-0101 WhatsApp Provider Runtime Selection
 - ADR-0102 Zoom Provider Runtime Boundary
 - ADR-0104 Yandex Telemost Provider Runtime Boundary
-- ADR-0105 Zulip Reference Provider and Hermes Lab
+- ADR-0105 Zulip Reference Provider and Макошь Lab
 - ADR Architecture Communication Contract
 
 ## Context
 
-Hermes has a single large backend crate. Module boundaries communicate intent,
+Макошь has a single large backend crate. Module boundaries communicate intent,
 but they do not keep provider SDKs, SQL stores, vault implementation and domain
 code out of the same compiler unit. The result is broad rebuilds and runtime
 composition that is difficult to isolate or test independently.
@@ -51,21 +51,21 @@ path, and Protobuf plus ConnectRPC remain typed command/query contracts.
 
 Every real source requires a deterministic fixture source. Recovery fixtures
 remain schema-agnostic, idempotent and free of IDs, secret references and user
-data. Redis, Kafka and RabbitMQ are not event substrates for Hermes.
+data. Redis, Kafka and RabbitMQ are not event substrates for Макошь.
 
 ### Cargo workspace boundaries
 
-Hermes evolves through a layered Cargo workspace. The initial stable boundaries
-are `hermes-kernel`, event/provider/vault/blob/observation API crates, provider
+Макошь evolves through a layered Cargo workspace. The initial stable boundaries
+are `makosh-kernel`, event/provider/vault/blob/observation API crates, provider
 implementations, domain API and persistence crates, application/workflow
 orchestration, and runtime composition crates. Observation API crates own only
-stable observation models and validation; `hermes-observations-postgres` owns
+stable observation models and validation; `makosh-observations-postgres` owns
 observation transactions and PostgreSQL behavior as a persistence adapter.
-`hermes-communications-api` owns provider-account and evidence ports;
-`hermes-communications-postgres` owns their SQL implementations, including
+`makosh-communications-api` owns provider-account and evidence ports;
+`makosh-communications-postgres` owns their SQL implementations, including
 the atomic raw-evidence/observation write and ingestion checkpoints. Credential
 resolution remains outside that adapter, behind the vault boundary.
-`hermes-signal-hub-api` owns provider-neutral raw-signal command and runtime
+`makosh-signal-hub-api` owns provider-neutral raw-signal command and runtime
 query contracts. Its PostgreSQL persistence adapter will be extracted by
 responsibility (connections, profiles, policies, runtime state, replay and
 health), rather than moving the existing store as a single unit.
@@ -118,10 +118,10 @@ spool sequence, provenance and observed/occurred timestamps.
 The JetStream subjects are:
 
 ```text
-hermes.provider.commands.v1.<provider>.<account>
-hermes.provider.results.v1.<provider>.<account>
-hermes.provider.observations.v1.<provider>.<account>.<kind>
-hermes.provider.acks.v1.<provider>.<account>
+makosh.provider.commands.v1.<provider>.<account>
+makosh.provider.results.v1.<provider>.<account>
+makosh.provider.observations.v1.<provider>.<account>.<kind>
+makosh.provider.acks.v1.<provider>.<account>
 ```
 
 Existing canonical `signal.*`, `integration.*` and `communication.*` event
@@ -160,7 +160,7 @@ The connector phase adds technical `provider_runtime_leases` storage and a
 observations. Connectors own only provider-native session state and their
 bounded spool; canonical evidence and business state remain in core.
 
-The Tauri package continues to launch `hermes-hub-backend` during migration.
+The Tauri package continues to launch `makosh-backend` during migration.
 It becomes the desktop composition runtime and may supervise optional connector
 children after packaging and smoke validation succeed.
 

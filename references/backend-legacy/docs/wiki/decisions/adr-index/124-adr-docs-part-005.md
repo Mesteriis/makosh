@@ -38,7 +38,7 @@ generated_by: code-wiki-ru
 
 ### Архетип коммуникации
 
-- **``ADR Architecture Communication Contract``** (Принято, 2026-06-20) — устанавливает единый контракт взаимодействия компонентов Hermes. Определяет типы взаимодействия (`direct_call`, `command_port`, `query_port`, `event`, `projection`, `runtime_integration_api`) и правила импорта для backend- и frontend-слоёв. Заменяет ADR-0073 и ADR-0095. Валидируется через `make architecture-check` на основе `scripts/architecture-contract.json`.
+- **``ADR Architecture Communication Contract``** (Принято, 2026-06-20) — устанавливает единый контракт взаимодействия компонентов Макошь. Определяет типы взаимодействия (`direct_call`, `command_port`, `query_port`, `event`, `projection`, `runtime_integration_api`) и правила импорта для backend- и frontend-слоёв. Заменяет ADR-0073 и ADR-0095. Валидируется через `make architecture-check` на основе `scripts/architecture-contract.json`.
 
 ### Поставщики и рантаймы
 

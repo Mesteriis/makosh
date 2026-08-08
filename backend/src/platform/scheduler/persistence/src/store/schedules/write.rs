@@ -57,7 +57,7 @@ async fn insert_schedule(
     change: &SchedulerScheduleUpsertV1,
 ) -> Result<bool, SchedulerScheduleStoreErrorV1> {
     let changed = query(
-        "INSERT INTO hermes_platform.scheduler_schedules (schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms, updated_at_unix_ms) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) ON CONFLICT (schedule_id) DO NOTHING",
+        "INSERT INTO makosh_platform.scheduler_schedules (schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms, updated_at_unix_ms) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) ON CONFLICT (schedule_id) DO NOTHING",
     )
     .bind(change.spec().schedule_id().bytes().to_vec())
     .bind(revision(change)?)
@@ -85,7 +85,7 @@ async fn lock_schedule(
     change: &SchedulerScheduleUpsertV1,
 ) -> Result<PersistedScheduleRowV1, SchedulerScheduleStoreErrorV1> {
     query(
-        "SELECT schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms FROM hermes_platform.scheduler_schedules WHERE schedule_id = $1 FOR UPDATE",
+        "SELECT schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms FROM makosh_platform.scheduler_schedules WHERE schedule_id = $1 FOR UPDATE",
     )
     .bind(change.spec().schedule_id().bytes().to_vec())
     .fetch_one(&mut **transaction)
@@ -99,7 +99,7 @@ async fn update_schedule(
     change: &SchedulerScheduleUpsertV1,
 ) -> Result<(), SchedulerScheduleStoreErrorV1> {
     let updated = query(
-        "UPDATE hermes_platform.scheduler_schedules SET schedule_revision = $2, job_owner = $3, job_name = $4, job_major = $5, contract_name = $6, contract_revision = $7, contract_schema_sha256 = $8, scope_id = $9, concurrency_key = $10, max_parallelism = $11, enabled = $12, policy_bytes = $13, next_due_at_unix_ms = $14, updated_at_unix_ms = $15 WHERE schedule_id = $1",
+        "UPDATE makosh_platform.scheduler_schedules SET schedule_revision = $2, job_owner = $3, job_name = $4, job_major = $5, contract_name = $6, contract_revision = $7, contract_schema_sha256 = $8, scope_id = $9, concurrency_key = $10, max_parallelism = $11, enabled = $12, policy_bytes = $13, next_due_at_unix_ms = $14, updated_at_unix_ms = $15 WHERE schedule_id = $1",
     )
     .bind(change.spec().schedule_id().bytes().to_vec())
     .bind(revision(change)?)

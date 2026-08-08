@@ -61,14 +61,14 @@ generated_by: code-wiki-ru
 
 ### API событий
 
-- **Защита**: Все эндпойнты (`/api/v1/events`, `/api/v1/events/{id}`, `/api/v1/audit/events`, `/api/events/stream`, `/api/events/ws`) требуют заголовок `x-hermes-secret`, совпадающий с локальным секретом. Неверный или отсутствующий секрет — `403 Forbidden`, ошибка `invalid_api_secret`.
+- **Защита**: Все эндпойнты (`/api/v1/events`, `/api/v1/events/{id}`, `/api/v1/audit/events`, `/api/events/stream`, `/api/events/ws`) требуют заголовок `x-makosh-secret`, совпадающий с локальным секретом. Неверный или отсутствующий секрет — `403 Forbidden`, ошибка `invalid_api_secret`.
 - **Порядок проверок**: Проверка секрета выполняется до проверки actor и доступа к базе данных. При отсутствии БД возвращается `503 Service Unavailable`.
 - **Валидация**: Невалидный конверт (пустой `event_type`) — `400 Bad Request`, ошибка `invalid_event_envelope`.
 - **Round-trip**: POST создаёт событие, GET возвращает идентичные поля. Аудит (`api_audit_log`) фиксирует `event.append` и `event.get`. Прямые изменения `api_audit_log` блокируются.
 - **Not Found**: GET несуществующего события — `404 Not Found`, аудит фиксирует `event.get`.
 - **Long poll**: `GET /api/v1/events?after_position=...` возвращает пакет событий, `next_after_position`, `has_more`. Аудит записывает `event.list` с параметрами.
 - **SSE**: `GET /api/events/stream?after_position=...` отдаёт события как `text/event-stream` с полями `id`, `event`, JSON-данными.
-- **WebSocket**: `GET /api/events/ws?after_position=...&hermes_secret=...` возвращает `101 Switching Protocols`.
+- **WebSocket**: `GET /api/events/ws?after_position=...&makosh_secret=...` возвращает `101 Switching Protocols`.
 - **Trace API**: `GET /api/v1/events/{event_id}/trace` возвращает трассу с `edges`, `root_event_ids`, `missing_parent_ids`, `orphan_event_ids`. `GET /api/v1/events/{event_id}/children` — дочерние события.
 
 ## Графовая платформа

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package makosh.runtime.v1;
+
+import "makosh/runtime/v1/recovery.proto";
+
+// One exact, launch-scoped artifact staged by Kernel after intersecting the
+// verified descriptor, effective grants and signed distribution manifest.
+// It is private bootstrap data and is never exposed through Gateway, events,
+// Settings, health or telemetry.
+message ManagedRuntimeArtifactBindingV1 {
+  string artifact_id = 1;
+  RuntimeArtifactUseV1 use = 2;
+  string staged_path = 3;
+  uint64 size_bytes = 4;
+  bytes sha256 = 5;
+}

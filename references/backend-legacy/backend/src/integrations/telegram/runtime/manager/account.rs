@@ -1,7 +1,7 @@
 use crate::integrations::telegram::client::errors::TelegramError;
 use crate::integrations::telegram::client::identifiers::ensure_telegram_account_active;
-use hermes_communications_api::accounts::ProviderAccount;
-use hermes_communications_api::accounts::ProviderAccountLookupPort;
+use makosh_communications_api::accounts::ProviderAccount;
+use makosh_communications_api::accounts::ProviderAccountLookupPort;
 
 use super::super::status::load_telegram_account;
 

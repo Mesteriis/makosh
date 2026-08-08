@@ -25,7 +25,7 @@ authority, а domain не импортирует их clients или storage.
 
 ### Отдельная content capability
 
-Создаётся отдельная build unit `hermes-communications-content-api` и exact
+Создаётся отдельная build unit `makosh-communications-content-api` и exact
 capability `communications.content.v1`. Metadata contract
 `communications.query.v1` не расширяется content bytes или Blob fields.
 

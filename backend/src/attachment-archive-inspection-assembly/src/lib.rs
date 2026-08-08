@@ -8,23 +8,23 @@ use std::io::Write;
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 
-use hermes_attachment_archive_inspection_persistence::attachment_archive_inspection_storage_bundle_v1;
-use hermes_attachment_archive_inspection_runtime::{
+use makosh_attachment_archive_inspection_persistence::attachment_archive_inspection_storage_bundle_v1;
+use makosh_attachment_archive_inspection_runtime::{
     admission::attachment_archive_inspection_module_descriptor_v1,
     settings::attachment_archive_inspection_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
 pub const ARCHIVE_INSPECTION_ASSEMBLY_FRAGMENT_VERSION_V1: u32 = 1;
 pub const ARCHIVE_INSPECTION_ASSEMBLY_OWNER_ID: &str =
-    hermes_attachment_archive_inspection_api::ATTACHMENT_ARCHIVE_INSPECTION_OWNER_V1;
+    makosh_attachment_archive_inspection_api::ATTACHMENT_ARCHIVE_INSPECTION_OWNER_V1;
 pub const ARCHIVE_INSPECTION_ASSEMBLY_MODULE_ID: &str =
-    hermes_attachment_archive_inspection_api::ATTACHMENT_ARCHIVE_INSPECTION_MODULE_ID_V1;
+    makosh_attachment_archive_inspection_api::ATTACHMENT_ARCHIVE_INSPECTION_MODULE_ID_V1;
 pub const ARCHIVE_INSPECTION_RUNTIME_ARTIFACT_ID: &str = "attachment_archive_inspection.runtime.v1";
 pub const ARCHIVE_INSPECTION_STORAGE_ARTIFACT_ID: &str = "attachment_archive_inspection.storage.v1";
 pub const ARCHIVE_INSPECTION_DESCRIPTOR_FILE: &str =
@@ -36,7 +36,7 @@ pub const ARCHIVE_INSPECTION_STORAGE_BUNDLE_FILE: &str =
 pub const ARCHIVE_INSPECTION_ARTIFACT_FRAGMENT_FILE: &str =
     "attachment-archive-inspection.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH: &str = "bin/hermes-attachment-archive-inspection-runtime";
+const RUNTIME_RELATIVE_PATH: &str = "bin/makosh-attachment-archive-inspection-runtime";
 const DESCRIPTOR_RELATIVE_PATH: &str =
     "contracts/attachment-archive-inspection.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH: &str = "contracts/attachment-archive-inspection.runtime.settings.pb";
@@ -252,10 +252,10 @@ fn write_new_private_file(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
 mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         decode_descriptor_v1, decode_settings_schema_v1,
     };
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -286,7 +286,7 @@ mod tests {
         assert_eq!(descriptor.module_id, ARCHIVE_INSPECTION_ASSEMBLY_MODULE_ID);
         assert_eq!(
             descriptor.module_kind,
-            hermes_runtime_protocol::v1::ModuleKindV1::Engine as i32
+            makosh_runtime_protocol::v1::ModuleKindV1::Engine as i32
         );
         assert_eq!(settings.major, 1);
         assert_eq!(storage.owner_id, ARCHIVE_INSPECTION_ASSEMBLY_OWNER_ID);
@@ -315,7 +315,7 @@ mod tests {
     fn temporary_directory() -> PathBuf {
         let id = NEXT_ID.fetch_add(1, Ordering::Relaxed);
         let path = std::env::temp_dir().join(format!(
-            "hermes-archive-inspection-assembly-{}-{id}",
+            "makosh-archive-inspection-assembly-{}-{id}",
             std::process::id()
         ));
         if path.exists() {

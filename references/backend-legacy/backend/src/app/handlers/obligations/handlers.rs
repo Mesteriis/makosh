@@ -9,10 +9,10 @@ use crate::application::review_transitions::ObligationReviewApplicationService;
 use crate::domains::obligations::models::read_model::Obligation;
 use crate::domains::obligations::models::states::ObligationReviewState;
 use crate::platform::audit::models::NewApiAuditRecord;
-use hermes_obligations_api::{ObligationListQuery, ObligationReadPort};
-use hermes_obligations_postgres::ObligationPostgresReadQuery;
+use makosh_obligations_api::{ObligationListQuery, ObligationReadPort};
+use makosh_obligations_postgres::ObligationPostgresReadQuery;
 
-const OBLIGATION_API_ACTOR_ID: &str = "hermes-frontend";
+const OBLIGATION_API_ACTOR_ID: &str = "makosh-frontend";
 const DEFAULT_OBLIGATION_LIMIT: i64 = 50;
 const MIN_OBLIGATION_LIMIT: i64 = 1;
 const MAX_OBLIGATION_LIMIT: i64 = 100;

@@ -1,9 +1,9 @@
-use hermes_hub_backend::application::review_transitions::TaskCandidateReviewApplicationService;
-use hermes_hub_backend::domains::tasks::candidates::models::{
+use makosh_hub_backend::application::review_transitions::TaskCandidateReviewApplicationService;
+use makosh_hub_backend::domains::tasks::candidates::models::{
     TaskCandidateReviewCommand, TaskCandidateReviewState,
 };
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 use serde_json::json;
 use sqlx::Row;
 

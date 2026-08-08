@@ -4,8 +4,8 @@ use std::os::fd::{AsRawFd, FromRawFd};
 use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 
-use hermes_events_authority_runtime_control::serve_inherited as serve_control_inherited;
-use hermes_runtime_protocol::{
+use makosh_events_authority_runtime_control::serve_inherited as serve_control_inherited;
+use makosh_runtime_protocol::{
     v1::EventsAuthorityRuntimeConfigurationV1,
     validation::events_authority::validate_events_authority_runtime_configuration,
 };

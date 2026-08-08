@@ -2,7 +2,7 @@ use super::*;
 
 #[test]
 fn browser_pairing_is_single_use_and_fenced_by_owner_identity_epoch() {
-    let root = unique_target_root("hermes-browser-gateway-pairing");
+    let root = unique_target_root("makosh-browser-gateway-pairing");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = Arc::new(
         SqliteControlStore::create(&root.join("control.sqlite"), "instance-browser", 1)
@@ -34,7 +34,7 @@ fn browser_pairing_is_single_use_and_fenced_by_owner_identity_epoch() {
         .begin(&authority, approval, "hub.local", 1_000)
         .expect("begin pairing");
     let enrollment = BrowserDeviceEnrollmentV1::new(
-        hermes_kernel_control_store::BrowserDeviceEnrollmentInputV1 {
+        makosh_kernel_control_store::BrowserDeviceEnrollmentInputV1 {
             owner_id: "owner-1".to_owned(),
             device_id: "browser-1".to_owned(),
             credential_id: vec![1],

@@ -1,5 +1,5 @@
 [package]
-name = "hermes-vault-api"
+name = "makosh-vault-api"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.89"
@@ -7,6 +7,6 @@ publish = false
 license = "MIT"
 [dependencies]
 chrono = { version = "0.4", default-features = false, features = ["serde"] }
-hermes-provider-api = { path = "../provider-api" }
+makosh-provider-api = { path = "../provider-api" }
 serde = { version = "1", features = ["derive"] }
 thiserror = "2"

@@ -22,7 +22,7 @@ const emit = defineEmits<{
   'update:open': [value: boolean]
 }>()
 
-const contentClasses = computed(() => ['hermes-popover-content', props.class])
+const contentClasses = computed(() => ['makosh-popover-content', props.class])
 const internalOpen = ref(false)
 const resolvedOpen = computed(() => props.open ?? internalOpen.value)
 const contentRef = ref<HTMLElement | { $el?: Element | null } | null>(null)
@@ -59,10 +59,10 @@ function setOpen(value: boolean): void {
         @mouseenter="cancelMouseLeaveDismiss"
         @mouseleave="scheduleMouseLeaveDismiss"
       >
-        <PopoverArrow class="hermes-popover-arrow" />
+        <PopoverArrow class="makosh-popover-arrow" />
         <slot />
-        <PopoverClose class="hermes-popover-close" as-child>
-          <button class="hermes-popover-close-btn" :aria-label="closeLabel">
+        <PopoverClose class="makosh-popover-close" as-child>
+          <button class="makosh-popover-close-btn" :aria-label="closeLabel">
             <Icon icon="tabler:x" size="0.875rem" />
           </button>
         </PopoverClose>

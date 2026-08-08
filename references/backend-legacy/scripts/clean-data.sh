@@ -10,7 +10,7 @@ source "$SCRIPT_DIR/lib/env.sh"
 # shellcheck source=./lib/postgres.sh
 source "$SCRIPT_DIR/lib/postgres.sh"
 
-load_hermes_env
+load_makosh_env
 confirm_or_exit "This will delete local PostgreSQL data under $(postgres_data_dir)." "DELETE"
 compose_cmd down --remove-orphans >/dev/null 2>&1 || true
 rm -rf "$(postgres_data_dir)"

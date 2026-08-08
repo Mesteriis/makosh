@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use hermes_decisions_api::DecisionRead;
+use makosh_decisions_api::DecisionRead;
 
 #[derive(Debug, Deserialize)]
 pub(crate) struct DecisionReviewApiRequest {

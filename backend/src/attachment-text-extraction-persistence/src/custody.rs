@@ -1,11 +1,11 @@
 //! Exact custody command outbox owned by the text-extraction workflow.
 
-use hermes_attachment_text_extraction_core::{
+use makosh_attachment_text_extraction_core::{
     AttachmentTextExtractionErrorV1, AttachmentTextExtractionStateV1,
     AttachmentTextExtractionStatusV1, AttachmentTextExtractionTransitionV1,
     transition_attachment_text_status_v1,
 };
-use hermes_attachment_text_extraction_ingress::{
+use makosh_attachment_text_extraction_ingress::{
     ATTACHMENT_TEXT_EXTRACTION_MAX_PROOF_BYTES_V1, ATTACHMENT_TEXT_EXTRACTION_MAX_SOURCE_BYTES_V1,
     attachment_text_custody_delegated_message_id_v1,
     attachment_text_custody_delegation_rejected_message_id_v1,
@@ -64,7 +64,7 @@ impl AttachmentTextExtractionPersistenceV1 {
         }
         let mut transaction = self.pool.begin().await.map_err(storage_unavailable)?;
         let evidence = sqlx::query(
-            "SELECT r.run_id FROM hermes_data.attachment_text_extraction_runs r JOIN hermes_data.attachment_text_extraction_scan_candidates c ON c.logical_owner_id=r.logical_owner_id AND c.attachment_anchor_id=r.attachment_anchor_id JOIN hermes_data.attachment_text_extraction_safety_facts s ON s.logical_owner_id=r.logical_owner_id AND s.attachment_anchor_id=r.attachment_anchor_id WHERE r.logical_owner_id=$1 AND r.run_id=$2 AND c.message_id=$3 AND s.message_id=$4 AND s.next_state=5",
+            "SELECT r.run_id FROM makosh_data.attachment_text_extraction_runs r JOIN makosh_data.attachment_text_extraction_scan_candidates c ON c.logical_owner_id=r.logical_owner_id AND c.attachment_anchor_id=r.attachment_anchor_id JOIN makosh_data.attachment_text_extraction_safety_facts s ON s.logical_owner_id=r.logical_owner_id AND s.attachment_anchor_id=r.attachment_anchor_id WHERE r.logical_owner_id=$1 AND r.run_id=$2 AND c.message_id=$3 AND s.message_id=$4 AND s.next_state=5",
         )
         .bind(logical_owner_id)
         .bind(record.run_id.as_slice())
@@ -78,7 +78,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             return Err(AttachmentTextExtractionPersistenceErrorV1::EvidenceConflict);
         }
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.attachment_text_extraction_custody_outbox (logical_owner_id,request_id,run_id,candidate_message_id,safety_message_id,envelope_sha256,exact_envelope_bytes,published_at_unix_millis,created_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,NULL,$8) ON CONFLICT (logical_owner_id,run_id) DO NOTHING",
+            "INSERT INTO makosh_data.attachment_text_extraction_custody_outbox (logical_owner_id,request_id,run_id,candidate_message_id,safety_message_id,envelope_sha256,exact_envelope_bytes,published_at_unix_millis,created_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,NULL,$8) ON CONFLICT (logical_owner_id,run_id) DO NOTHING",
         )
         .bind(logical_owner_id)
         .bind(record.request_id.as_slice())
@@ -92,7 +92,7 @@ impl AttachmentTextExtractionPersistenceV1 {
         .await
         .map_err(storage_unavailable)?;
         if inserted.rows_affected() == 0 {
-            let existing = sqlx::query("SELECT request_id,envelope_sha256,exact_envelope_bytes FROM hermes_data.attachment_text_extraction_custody_outbox WHERE logical_owner_id=$1 AND run_id=$2")
+            let existing = sqlx::query("SELECT request_id,envelope_sha256,exact_envelope_bytes FROM makosh_data.attachment_text_extraction_custody_outbox WHERE logical_owner_id=$1 AND run_id=$2")
                 .bind(logical_owner_id).bind(record.run_id.as_slice()).fetch_one(&mut *transaction).await.map_err(storage_unavailable)?;
             if existing
                 .try_get::<Vec<u8>, _>("request_id")
@@ -125,7 +125,7 @@ impl AttachmentTextExtractionPersistenceV1 {
         if !valid_owner(logical_owner_id) || !(1..=MAX_OUTBOX_ITEMS_V1).contains(&limit) {
             return Err(AttachmentTextExtractionPersistenceErrorV1::InvalidInput);
         }
-        sqlx::query("SELECT request_id,envelope_sha256,exact_envelope_bytes FROM hermes_data.attachment_text_extraction_custody_outbox WHERE logical_owner_id=$1 AND published_at_unix_millis IS NULL ORDER BY created_at_unix_millis,request_id LIMIT $2")
+        sqlx::query("SELECT request_id,envelope_sha256,exact_envelope_bytes FROM makosh_data.attachment_text_extraction_custody_outbox WHERE logical_owner_id=$1 AND published_at_unix_millis IS NULL ORDER BY created_at_unix_millis,request_id LIMIT $2")
             .bind(logical_owner_id).bind(i64::from(limit)).fetch_all(&self.pool).await.map_err(storage_unavailable)?
             .into_iter().map(|row| {
                 let item = UnpublishedAttachmentTextCustodyDelegationV1 {
@@ -161,7 +161,7 @@ impl AttachmentTextExtractionPersistenceV1 {
         {
             return Err(AttachmentTextExtractionPersistenceErrorV1::InvalidInput);
         }
-        let changed = sqlx::query("UPDATE hermes_data.attachment_text_extraction_custody_outbox SET published_at_unix_millis=$1 WHERE logical_owner_id=$2 AND request_id=$3 AND envelope_sha256=$4 AND published_at_unix_millis IS NULL AND created_at_unix_millis <= $1")
+        let changed = sqlx::query("UPDATE makosh_data.attachment_text_extraction_custody_outbox SET published_at_unix_millis=$1 WHERE logical_owner_id=$2 AND request_id=$3 AND envelope_sha256=$4 AND published_at_unix_millis IS NULL AND created_at_unix_millis <= $1")
             .bind(published_at_unix_millis).bind(logical_owner_id).bind(message_id.as_slice()).bind(envelope_sha256.as_slice())
             .execute(&self.pool).await.map_err(storage_unavailable)?.rows_affected();
         if changed == 1 {
@@ -218,7 +218,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             ResultInboxInsertV1::New => {}
         }
         let work = AttachmentTextDelegatedWorkV1 {
-            request: hermes_attachment_text_extraction_core::AttachmentTextExtractionRequestV1 {
+            request: makosh_attachment_text_extraction_core::AttachmentTextExtractionRequestV1 {
                 run_id: request.run_id,
                 operation_id: request.operation_id,
                 attachment_anchor_id: request.attachment_anchor_id,
@@ -356,7 +356,7 @@ async fn lock_request(
     request_id: [u8; 16],
 ) -> Result<LockedDelegationRequestV1, AttachmentTextExtractionPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT o.run_id,o.candidate_message_id,o.safety_message_id,r.operation_id,r.attachment_anchor_id,c.declared_size AS candidate_declared_size,c.blob_receipt_sha256 AS candidate_receipt_sha256 FROM hermes_data.attachment_text_extraction_custody_outbox o JOIN hermes_data.attachment_text_extraction_runs r ON r.logical_owner_id=o.logical_owner_id AND r.run_id=o.run_id JOIN hermes_data.attachment_text_extraction_scan_candidates c ON c.logical_owner_id=o.logical_owner_id AND c.message_id=o.candidate_message_id AND c.attachment_anchor_id=r.attachment_anchor_id WHERE o.logical_owner_id=$1 AND o.request_id=$2 FOR UPDATE OF o,r,c",
+        "SELECT o.run_id,o.candidate_message_id,o.safety_message_id,r.operation_id,r.attachment_anchor_id,c.declared_size AS candidate_declared_size,c.blob_receipt_sha256 AS candidate_receipt_sha256 FROM makosh_data.attachment_text_extraction_custody_outbox o JOIN makosh_data.attachment_text_extraction_runs r ON r.logical_owner_id=o.logical_owner_id AND r.run_id=o.run_id JOIN makosh_data.attachment_text_extraction_scan_candidates c ON c.logical_owner_id=o.logical_owner_id AND c.message_id=o.candidate_message_id AND c.attachment_anchor_id=r.attachment_anchor_id WHERE o.logical_owner_id=$1 AND o.request_id=$2 FOR UPDATE OF o,r,c",
     )
     .bind(logical_owner_id)
     .bind(request_id.as_slice())
@@ -397,7 +397,7 @@ async fn insert_result_inbox(
     fact: ResultInboxFactV1<'_>,
 ) -> Result<ResultInboxInsertV1, AttachmentTextExtractionPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.attachment_text_extraction_custody_result_inbox (logical_owner_id,message_id,envelope_sha256,request_id,run_id,attachment_anchor_id,result_kind,processed_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT DO NOTHING",
+        "INSERT INTO makosh_data.attachment_text_extraction_custody_result_inbox (logical_owner_id,message_id,envelope_sha256,request_id,run_id,attachment_anchor_id,result_kind,processed_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT DO NOTHING",
     )
     .bind(fact.logical_owner_id)
     .bind(fact.message_id.as_slice())
@@ -414,7 +414,7 @@ async fn insert_result_inbox(
         return Ok(ResultInboxInsertV1::New);
     }
     let row = sqlx::query(
-        "SELECT message_id,envelope_sha256,request_id,run_id,attachment_anchor_id,result_kind FROM hermes_data.attachment_text_extraction_custody_result_inbox WHERE logical_owner_id=$1 AND (message_id=$2 OR request_id=$3) FOR UPDATE",
+        "SELECT message_id,envelope_sha256,request_id,run_id,attachment_anchor_id,result_kind FROM makosh_data.attachment_text_extraction_custody_result_inbox WHERE logical_owner_id=$1 AND (message_id=$2 OR request_id=$3) FOR UPDATE",
     )
     .bind(fact.logical_owner_id)
     .bind(fact.message_id.as_slice())
@@ -445,7 +445,7 @@ async fn transition_custody_result_run(
     occurred_at_unix_millis: i64,
 ) -> Result<(), AttachmentTextExtractionPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT state,state_revision FROM hermes_data.attachment_text_extraction_runs WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE",
+        "SELECT state,state_revision FROM makosh_data.attachment_text_extraction_runs WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE",
     )
     .bind(logical_owner_id)
     .bind(run_id.as_slice())

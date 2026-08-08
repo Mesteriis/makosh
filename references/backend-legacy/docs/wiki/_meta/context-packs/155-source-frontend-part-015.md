@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/platform/bootstrap/realtimeTelegramCachePatches.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtimeTelegramCachePatches.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtimeTelegramCachePatches.test.ts`
 - Size bytes / Размер в байтах: `24632`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -403,7 +403,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/platform/bootstrap/realtimeTelegramCommandPatches.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtimeTelegramCommandPatches.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtimeTelegramCommandPatches.test.ts`
 - Size bytes / Размер в байтах: `21934`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -434,7 +434,7 @@ describe('telegram command realtime cache patch handling', () => {
         last_error: null,
         result_payload: {},
         audit_metadata: {},
-        actor_id: 'hermes-frontend',
+        actor_id: 'makosh-frontend',
         happened_at: '2026-06-17T09:00:00Z',
         next_attempt_at: null,
         last_attempt_at: '2026-06-17T09:00:00Z',
@@ -544,7 +544,7 @@ describe('telegram command realtime cache patch handling', () => {
         last_error: null,
         result_payload: {},
         audit_metadata: {},
-        actor_id: 'hermes-frontend',
+        actor_id: 'makosh-frontend',
         happened_at: '2026-06-17T09:00:00Z',
         next_attempt_at: null,
         last_attempt_at: '2026-06-17T09:00:00Z',
@@ -643,7 +643,7 @@ describe('telegram command realtime cache patch handling', () => {
         last_error: null,
         result_payload: {},
         audit_metadata: {},
-        actor_id: 'hermes-frontend',
+        actor_id: 'makosh-frontend',
         happened_at: '2026-06-17T09:00:00Z',
         next_attempt_at: null,
         last_attempt_at: '2026-06-17T09:00:00Z',
@@ -764,7 +764,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/platform/bootstrap/realtimeTelegramCommandQueryFilters.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtimeTelegramCommandQueryFilters.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtimeTelegramCommandQueryFilters.test.ts`
 - Size bytes / Размер в байтах: `2281`
 - Included characters / Включено символов: `2281`
 - Truncated / Обрезано: `no`
@@ -834,7 +834,7 @@ describe('telegram command realtime query filters', () => {
 
 ### `frontend/src/platform/bootstrap/realtimeTelegramInvalidation.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtimeTelegramInvalidation.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtimeTelegramInvalidation.test.ts`
 - Size bytes / Размер в байтах: `6314`
 - Included characters / Включено символов: `6314`
 - Truncated / Обрезано: `no`
@@ -1059,7 +1059,7 @@ describe('telegram realtime invalidation handling', () => {
 
 ### `frontend/src/platform/bootstrap/realtimeTelegramMediaCachePatches.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtimeTelegramMediaCachePatches.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtimeTelegramMediaCachePatches.test.ts`
 - Size bytes / Размер в байтах: `12220`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1422,7 +1422,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/platform/bootstrap/realtimeTelegramMembersSync.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtimeTelegramMembersSync.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtimeTelegramMembersSync.test.ts`
 - Size bytes / Размер в байтах: `1939`
 - Included characters / Включено символов: `1939`
 - Truncated / Обрезано: `no`
@@ -1489,7 +1489,7 @@ describe('telegram members sync realtime handling', () => {
 
 ### `frontend/src/platform/bootstrap/realtimeTelegramParticipantPatches.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtimeTelegramParticipantPatches.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtimeTelegramParticipantPatches.test.ts`
 - Size bytes / Размер в байтах: `7076`
 - Included characters / Включено символов: `7076`
 - Truncated / Обрезано: `no`
@@ -1733,7 +1733,7 @@ describe('telegram participant realtime cache patching', () => {
 
 ### `frontend/src/platform/bootstrap/realtimeTelegramProviderChatUpdates.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtimeTelegramProviderChatUpdates.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtimeTelegramProviderChatUpdates.test.ts`
 - Size bytes / Размер в байтах: `6862`
 - Included characters / Включено символов: `6862`
 - Truncated / Обрезано: `no`
@@ -1954,7 +1954,7 @@ describe('telegram provider chat.updated cache patching', () => {
 
 ### `frontend/src/platform/bootstrap/realtimeTelegramTopicPatches.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtimeTelegramTopicPatches.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtimeTelegramTopicPatches.test.ts`
 - Size bytes / Размер в байтах: `3459`
 - Included characters / Включено символов: `3459`
 - Truncated / Обрезано: `no`
@@ -2057,7 +2057,7 @@ describe('telegram realtime topic cache patch handling', () => {
 
 ### `frontend/src/platform/bootstrap/realtimeWhatsAppCachePatches.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtimeWhatsAppCachePatches.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtimeWhatsAppCachePatches.test.ts`
 - Size bytes / Размер в байтах: `22551`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2218,7 +2218,7 @@ describe('whatsapp realtime cache patch handling', () => {
 			{
 				session_id: 'session-1',
 				account_id: 'account-1',
-				device_name: 'Hermes Desktop',
+				device_name: 'Макошь Desktop',
 				companion_runtime: 'fixture' as const,
 				link_state: 'qr_pending' as const,
 				local_state_path: 'docker/data/whatsapp/session-1',
@@ -2483,13 +2483,13 @@ describe('whatsapp realtime cache patch handling', () => {
 							started_at: '2026-06-16T09:00:00Z',
 							ended_at: '2026-06-16T09:05:00Z',
 							observed_at: '2026-06-16T09:05:00Z',
-						
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `frontend/src/platform/bootstrap/realtimeWhatsAppInvalidation.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtimeWhatsAppInvalidation.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtimeWhatsAppInvalidation.test.ts`
 - Size bytes / Размер в байтах: `6840`
 - Included characters / Включено символов: `6840`
 - Truncated / Обрезано: `no`
@@ -2740,7 +2740,7 @@ describe('whatsapp realtime invalidation handling', () => {
 
 ### `frontend/src/platform/bootstrap/realtimeZoomInvalidation.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/realtimeZoomInvalidation.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/realtimeZoomInvalidation.test.ts`
 - Size bytes / Размер в байтах: `1686`
 - Included characters / Включено символов: `1686`
 - Truncated / Обрезано: `no`
@@ -2797,7 +2797,7 @@ describe('zoom realtime invalidation handling', () => {
 
 ### `frontend/src/platform/bootstrap/useTelegramMediaUploadWorkflow.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/useTelegramMediaUploadWorkflow.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/useTelegramMediaUploadWorkflow.test.ts`
 - Size bytes / Размер в байтах: `2177`
 - Included characters / Включено символов: `2177`
 - Truncated / Обрезано: `no`
@@ -2865,7 +2865,7 @@ describe('telegramMediaTypeForFile', () => {
 
 ### `frontend/src/platform/bootstrap/useTelegramMediaUploadWorkflow.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/bootstrap/useTelegramMediaUploadWorkflow.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/bootstrap/useTelegramMediaUploadWorkflow.ts`
 - Size bytes / Размер в байтах: `5163`
 - Included characters / Включено символов: `5163`
 - Truncated / Обрезано: `no`
@@ -3018,7 +3018,7 @@ async function fileToBase64(file: File): Promise<string> {
 
 ### `frontend/src/platform/config/env.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/config/env.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/config/env.test.ts`
 - Size bytes / Размер в байтах: `1387`
 - Included characters / Включено символов: `1387`
 - Truncated / Обрезано: `no`
@@ -3028,9 +3028,9 @@ import { describe, expect, it } from 'vitest'
 import { loadFrontendConfig } from './env'
 
 describe('frontend env config', () => {
-	it('uses Hermes env names and default backend URL', () => {
+	it('uses Макошь env names and default backend URL', () => {
 		const config = loadFrontendConfig({
-			VITE_HERMES_LOCAL_API_SECRET: 'dev-secret'
+			VITE_MAKOSH_LOCAL_API_SECRET: 'dev-secret'
 		})
 
 		expect(config.apiBaseUrl).toBe('http://127.0.0.1:8080')
@@ -3041,13 +3041,13 @@ describe('frontend env config', () => {
 	})
 
 	it('rejects missing local API secret', () => {
-		expect(() => loadFrontendConfig({})).toThrow('VITE_HERMES_LOCAL_API_SECRET is required')
+		expect(() => loadFrontendConfig({})).toThrow('VITE_MAKOSH_LOCAL_API_SECRET is required')
 	})
 
-	it('accepts explicit Hermes backend URL', () => {
+	it('accepts explicit Макошь backend URL', () => {
 		const config = loadFrontendConfig({
-			VITE_HERMES_API_BASE_URL: 'http://127.0.0.1:9090/',
-			VITE_HERMES_LOCAL_API_SECRET: 'dev-secret'
+			VITE_MAKOSH_API_BASE_URL: 'http://127.0.0.1:9090/',
+			VITE_MAKOSH_LOCAL_API_SECRET: 'dev-secret'
 		})
 
 		expect(config.apiBaseUrl).toBe('http://127.0.0.1:9090')
@@ -3057,8 +3057,8 @@ describe('frontend env config', () => {
 
 	it('can opt back to WebSocket transport selection', () => {
 		const config = loadFrontendConfig({
-			VITE_HERMES_LOCAL_API_SECRET: 'dev-secret',
-			VITE_HERMES_REALTIME_TRANSPORT: 'websocket'
+			VITE_MAKOSH_LOCAL_API_SECRET: 'dev-secret',
+			VITE_MAKOSH_REALTIME_TRANSPORT: 'websocket'
 		})
 
 		expect(config.realtimeTransport).toBe('websocket')
@@ -3068,7 +3068,7 @@ describe('frontend env config', () => {
 
 ### `frontend/src/platform/config/env.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/config/env.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/config/env.ts`
 - Size bytes / Размер в байтах: `1767`
 - Included characters / Включено символов: `1767`
 - Truncated / Обрезано: `no`
@@ -3089,21 +3089,21 @@ const DEFAULT_API_BASE_URL = 'http://127.0.0.1:8080'
 
 export function loadFrontendConfig(env: EnvSource = import.meta.env): FrontendConfig {
 	const apiBaseUrl = normalizeBaseUrl(
-		stringValue(env.VITE_HERMES_API_BASE_URL) ?? DEFAULT_API_BASE_URL
+		stringValue(env.VITE_MAKOSH_API_BASE_URL) ?? DEFAULT_API_BASE_URL
 	)
-	const apiSecret = stringValue(env.VITE_HERMES_LOCAL_API_SECRET)
+	const apiSecret = stringValue(env.VITE_MAKOSH_LOCAL_API_SECRET)
 
 	if (!apiSecret) {
-		throw new Error('VITE_HERMES_LOCAL_API_SECRET is required')
+		throw new Error('VITE_MAKOSH_LOCAL_API_SECRET is required')
 	}
 
 	return {
 		apiBaseUrl,
 		apiSecret,
-		sseUrl: stringValue(env.VITE_HERMES_SSE_URL) ?? `${apiBaseUrl}/api/events/stream`,
+		sseUrl: stringValue(env.VITE_MAKOSH_SSE_URL) ?? `${apiBaseUrl}/api/events/stream`,
 		webSocketUrl:
-			stringValue(env.VITE_HERMES_WEBSOCKET_URL) ?? defaultWebSocketUrl(apiBaseUrl),
-		realtimeTransport: realtimeTransportPreference(env.VITE_HERMES_REALTIME_TRANSPORT)
+			stringValue(env.VITE_MAKOSH_WEBSOCKET_URL) ?? defaultWebSocketUrl(apiBaseUrl),
+		realtimeTransport: realtimeTransportPreference(env.VITE_MAKOSH_REALTIME_TRANSPORT)
 	}
 }
 
@@ -3135,7 +3135,7 @@ function realtimeTransportPreference(
 
 ### `frontend/src/platform/connect/communicationsClient.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/connect/communicationsClient.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/connect/communicationsClient.ts`
 - Size bytes / Размер в байтах: `1202`
 - Included characters / Включено символов: `1202`
 - Truncated / Обрезано: `no`
@@ -3145,7 +3145,7 @@ import { createClient } from '@connectrpc/connect'
 import { createConnectTransport } from '@connectrpc/connect-web'
 import type { Client } from '@connectrpc/connect'
 import { ApiClient } from '../api/ApiClient'
-import { CommunicationsService } from '../../gen/hermes/communications/v1/communications_pb'
+import { CommunicationsService } from '../../gen/makosh/communications/v1/communications_pb'
 
 let communicationsClient: Client<typeof CommunicationsService> | null = null
 
@@ -3157,7 +3157,7 @@ function createCommunicationsConnectClient(): Client<typeof CommunicationsServic
 		useBinaryFormat: false,
 		fetch: (input, init) => {
 			const headers = new Headers(init?.headers)
-			headers.set('X-Hermes-Secret', secret)
+			headers.set('X-Макошь-Secret', secret)
 			return fetch(input, {
 				...init,
 				headers
@@ -3183,7 +3183,7 @@ export function resetCommunicationsConnectClientForTests(): void {
 
 ### `frontend/src/platform/connect/signalHubClient.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/connect/signalHubClient.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/connect/signalHubClient.ts`
 - Size bytes / Размер в байтах: `1124`
 - Included characters / Включено символов: `1124`
 - Truncated / Обрезано: `no`
@@ -3193,7 +3193,7 @@ import { createClient } from '@connectrpc/connect'
 import { createConnectTransport } from '@connectrpc/connect-web'
 import type { Client } from '@connectrpc/connect'
 import { ApiClient } from '../api/ApiClient'
-import { SignalHubService } from '../../gen/hermes/signal_hub/v1/signal_hub_pb'
+import { SignalHubService } from '../../gen/makosh/signal_hub/v1/signal_hub_pb'
 
 let signalHubClient: Client<typeof SignalHubService> | null = null
 
@@ -3205,7 +3205,7 @@ function createSignalHubConnectClient(): Client<typeof SignalHubService> {
 		useBinaryFormat: false,
 		fetch: (input, init) => {
 			const headers = new Headers(init?.headers)
-			headers.set('X-Hermes-Secret', secret)
+			headers.set('X-Макошь-Secret', secret)
 			return fetch(input, {
 				...init,
 				headers
@@ -3231,7 +3231,7 @@ export function resetSignalHubConnectClientForTests(): void {
 
 ### `frontend/src/platform/event-tracing/EventTracePanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/event-tracing/EventTracePanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/event-tracing/EventTracePanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `683`
 - Included characters / Включено символов: `683`
 - Truncated / Обрезано: `no`
@@ -3258,7 +3258,7 @@ describe('EventTracePanel boundary', () => {
 
 ### `frontend/src/platform/event-tracing/api.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/event-tracing/api.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/event-tracing/api.test.ts`
 - Size bytes / Размер в байтах: `1899`
 - Included characters / Включено символов: `1899`
 - Truncated / Обрезано: `no`
@@ -3336,7 +3336,7 @@ function emptyTrace() {
 
 ### `frontend/src/platform/event-tracing/api.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/event-tracing/api.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/event-tracing/api.ts`
 - Size bytes / Размер в байтах: `1468`
 - Included characters / Включено символов: `1468`
 - Truncated / Обрезано: `no`
@@ -3392,7 +3392,7 @@ function limitQuery(limit: number): string {
 
 ### `frontend/src/platform/event-tracing/index.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/event-tracing/index.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/event-tracing/index.ts`
 - Size bytes / Размер в байтах: `422`
 - Included characters / Включено символов: `422`
 - Truncated / Обрезано: `no`
@@ -3422,7 +3422,7 @@ export type {
 
 ### `frontend/src/platform/event-tracing/queries.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/event-tracing/queries.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/event-tracing/queries.test.ts`
 - Size bytes / Размер в байтах: `773`
 - Included characters / Включено символов: `773`
 - Truncated / Обрезано: `no`
@@ -3450,7 +3450,7 @@ describe('event trace query keys', () => {
 
 ### `frontend/src/platform/event-tracing/queries.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/event-tracing/queries.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/event-tracing/queries.ts`
 - Size bytes / Размер в байтах: `2696`
 - Included characters / Включено символов: `2696`
 - Truncated / Обрезано: `no`
@@ -3536,7 +3536,7 @@ function normalizeIdentifier(value: string | null | undefined): string | null {
 
 ### `frontend/src/platform/event-tracing/types.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/platform/event-tracing/types.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/platform/event-tracing/types.ts`
 - Size bytes / Размер в байтах: `1125`
 - Included characters / Включено символов: `1125`
 - Truncated / Обрезано: `no`

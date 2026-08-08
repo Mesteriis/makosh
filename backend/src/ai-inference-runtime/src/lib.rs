@@ -17,4 +17,4 @@ pub use managed_runtime::{
     AiInferenceManagedRuntimeErrorV1, AiInferenceManagedRuntimeV1, AiInferenceRuntimeAdmissionV1,
 };
 
-pub const PACKAGE: &str = "hermes-ai-inference-runtime";
+pub const PACKAGE: &str = "makosh-ai-inference-runtime";

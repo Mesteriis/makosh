@@ -7,13 +7,13 @@ use std::io::Write;
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 
-use hermes_ollama_ai_api::ollama_ai_settings_schema_v1;
-use hermes_ollama_ai_persistence::schema::ollama_ai_storage_bundle_v1;
-use hermes_ollama_ai_runtime::ollama_ai_module_descriptor_v1;
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_ollama_ai_api::ollama_ai_settings_schema_v1;
+use makosh_ollama_ai_persistence::schema::ollama_ai_storage_bundle_v1;
+use makosh_ollama_ai_runtime::ollama_ai_module_descriptor_v1;
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
@@ -25,7 +25,7 @@ pub const OLLAMA_AI_SETTINGS_FILE_V1: &str = "ollama-ai.runtime.settings.pb";
 pub const OLLAMA_AI_STORAGE_BUNDLE_FILE_V1: &str = "ollama-ai.storage.bundle.pb";
 pub const OLLAMA_AI_ARTIFACT_FRAGMENT_FILE_V1: &str = "ollama-ai.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH_V1: &str = "bin/hermes-ollama-ai-runtime";
+const RUNTIME_RELATIVE_PATH_V1: &str = "bin/makosh-ollama-ai-runtime";
 const DESCRIPTOR_RELATIVE_PATH_V1: &str = "contracts/ollama-ai.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH_V1: &str = "contracts/ollama-ai.runtime.settings.pb";
 const STORAGE_RELATIVE_PATH_V1: &str = "storage/ollama-ai.storage.bundle.pb";
@@ -237,7 +237,7 @@ fn write_new_private_file_v1(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
 mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 
-    use hermes_runtime_protocol::validation::descriptor::decode_descriptor_v1;
+    use makosh_runtime_protocol::validation::descriptor::decode_descriptor_v1;
 
     use super::*;
 
@@ -257,7 +257,7 @@ mod tests {
             serde_json::from_slice(&fs::read(paths.artifact_fragment).expect("fragment"))
                 .expect("fragment");
         assert_eq!(descriptor.owner_id, "ollama");
-        assert_eq!(fragment.module_id, "hermes-ollama-ai-runtime");
+        assert_eq!(fragment.module_id, "makosh-ollama-ai-runtime");
         assert_eq!(fragment.artifacts.len(), 2);
         fs::remove_dir_all(root).expect("cleanup");
     }
@@ -265,7 +265,7 @@ mod tests {
     fn temporary_directory() -> PathBuf {
         let id = NEXT_TEMPORARY_ID.fetch_add(1, Ordering::Relaxed);
         let path = std::env::temp_dir().join(format!(
-            "hermes-ollama-ai-assembly-{}-{id}",
+            "makosh-ollama-ai-assembly-{}-{id}",
             std::process::id()
         ));
         fs::create_dir(&path).expect("temporary root");

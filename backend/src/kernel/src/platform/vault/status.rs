@@ -1,13 +1,13 @@
 //! Reads the sanitized status of the exact live managed Vault runtime.
 
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     GetVaultRuntimeStatusRequestV1, ManagedVaultRuntimeControlRequestV1,
     ManagedVaultRuntimeControlResponseV1, VaultRuntimeStateV1, VaultRuntimeStatusV1,
     managed_vault_runtime_control_request_v1::Operation,
     managed_vault_runtime_control_response_v1::Result as ResponseResult,
 };
-use hermes_runtime_protocol::validation::vault::validate_vault_runtime_status_v1;
+use makosh_runtime_protocol::validation::vault::validate_vault_runtime_status_v1;
 use prost::Message;
 
 use crate::platform::vault::{binding::VAULT_PROCESS_ID, launch};

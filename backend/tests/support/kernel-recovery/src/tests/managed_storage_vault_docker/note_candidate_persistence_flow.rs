@@ -2,14 +2,14 @@
 
 use super::*;
 
-use hermes_knowledge_command_api::{
+use makosh_knowledge_command_api::{
     KnowledgeCommandEnvelopeContextV1,
     build_create_knowledge_note_from_reviewed_candidate_outbox_record_v1,
     wire::{
         CreateKnowledgeNoteFromReviewedCandidateCommandV1, KnowledgeTargetBoundCandidateReceiptV1,
     },
 };
-use hermes_review_note_candidate_promotion_api::{
+use makosh_review_note_candidate_promotion_api::{
     ReviewNoteCandidatePromotionEnvelopeContextV1,
     build_review_note_candidate_promotion_result_outbox_record_v1,
     wire::{
@@ -17,11 +17,11 @@ use hermes_review_note_candidate_promotion_api::{
         ReviewNoteCandidatePromotionResultV1,
     },
 };
-use hermes_reviewed_note_candidate_promotion_core::{
+use makosh_reviewed_note_candidate_promotion_core::{
     REVIEWED_NOTE_CANDIDATE_PROMOTION_MODULE_ID_V1, derive_reviewed_note_candidate_command_id_v1,
     derive_reviewed_note_candidate_result_id_v1,
 };
-use hermes_reviewed_note_candidate_promotion_persistence::{
+use makosh_reviewed_note_candidate_promotion_persistence::{
     PersistPromotionApprovalOutcomeV1, PersistPromotionApprovalV1,
     PersistPromotionMaterializationV1, PersistPromotionResultOutcomeV1,
     PersistPromotionTerminalResultV1, PromotionBlobReceiptV1, ReservePromotionApprovalOutcomeV1,
@@ -245,7 +245,7 @@ fn promotion_result_outbox_v1(
     review_id: [u8; 16],
     candidate_id: [u8; 16],
     note_id: [u8; 16],
-) -> hermes_events_protocol::delivery::OutboxRecordV1 {
+) -> makosh_events_protocol::delivery::OutboxRecordV1 {
     let result_id = derive_reviewed_note_candidate_result_id_v1(
         knowledge_result_message_id,
         knowledge_command_id,

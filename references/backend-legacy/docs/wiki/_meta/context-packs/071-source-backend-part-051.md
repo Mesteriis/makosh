@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/platform/events/trace_context.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/trace_context.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/trace_context.rs`
 - Size bytes / Размер в байтах: `1135`
 - Included characters / Включено символов: `1135`
 - Truncated / Обрезано: `no`
@@ -104,7 +104,7 @@ impl TraceContext {
 
 ### `backend/src/platform/events/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/events/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/events/validation.rs`
 - Size bytes / Размер в байтах: `534`
 - Included characters / Включено символов: `534`
 - Truncated / Обрезано: `no`
@@ -139,7 +139,7 @@ pub(super) fn validate_object(
 
 ### `backend/src/platform/formatting.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/formatting.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/formatting.rs`
 - Size bytes / Размер в байтах: `240`
 - Included characters / Включено символов: `240`
 - Truncated / Обрезано: `no`
@@ -157,7 +157,7 @@ pub(crate) fn text_preview(value: &str, max_chars: usize) -> String {
 
 ### `backend/src/platform/graph.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/graph.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/graph.rs`
 - Size bytes / Размер в байтах: `1019`
 - Included characters / Включено символов: `1019`
 - Truncated / Обрезано: `no`
@@ -206,7 +206,7 @@ pub fn node_id(kind: GraphNodeKind, stable_key: &str) -> String {
 
 ### `backend/src/platform/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/mod.rs`
 - Size bytes / Размер в байтах: `289`
 - Included characters / Включено символов: `289`
 - Truncated / Обрезано: `no`
@@ -231,7 +231,7 @@ pub mod storage;
 
 ### `backend/src/platform/observations/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/observations/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/observations/errors.rs`
 - Size bytes / Размер в байтах: `980`
 - Included characters / Включено символов: `980`
 - Truncated / Обрезано: `no`
@@ -277,7 +277,7 @@ pub enum ObservationStoreError {
 
 ### `backend/src/platform/observations/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/observations/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/observations/mod.rs`
 - Size bytes / Размер в байтах: `691`
 - Included characters / Включено символов: `691`
 - Truncated / Обрезано: `no`
@@ -305,7 +305,7 @@ pub use store::{ObservationStore, observation_captured_event_id};
 
 ### `backend/src/platform/observations/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/observations/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/observations/models.rs`
 - Size bytes / Размер в байтах: `8916`
 - Included characters / Включено символов: `8916`
 - Truncated / Обрезано: `no`
@@ -620,7 +620,7 @@ pub(super) fn validate_score(
 
 ### `backend/src/platform/observations/review_links.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/observations/review_links.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/observations/review_links.rs`
 - Size bytes / Размер в байтах: `4634`
 - Included characters / Включено символов: `4634`
 - Truncated / Обрезано: `no`
@@ -806,7 +806,7 @@ fn build_domain_entity_link(
 
 ### `backend/src/platform/observations/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/observations/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/observations/store.rs`
 - Size bytes / Размер в байтах: `16313`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1202,7 +1202,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/platform/projections.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/projections.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/projections.rs`
 - Size bytes / Размер в байтах: `1904`
 - Included characters / Включено символов: `1904`
 - Truncated / Обрезано: `no`
@@ -1287,7 +1287,7 @@ pub enum ProjectionRunnerError {
 
 ### `backend/src/platform/realtime_conversation/bundle.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/realtime_conversation/bundle.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/realtime_conversation/bundle.rs`
 - Size bytes / Размер в байтах: `4126`
 - Included characters / Включено символов: `4126`
 - Truncated / Обрезано: `no`
@@ -1386,7 +1386,7 @@ pub fn build_call_bundle_manifest(
         pipeline_state: CallBundlePipelineState::queued_from_local_recording(),
         privacy_policy: CallBundlePrivacyPolicy::local_visible_capture(),
         provenance: json!({
-            "source": "hermes_realtime_conversation_bundle_builder",
+            "source": "makosh_realtime_conversation_bundle_builder",
             "single_source_of_truth": false,
             "notes": "Provider DOM speaker state is only a hint for later AI processing."
         }),
@@ -1396,7 +1396,7 @@ pub fn build_call_bundle_manifest(
 
 ### `backend/src/platform/realtime_conversation/events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/realtime_conversation/events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/realtime_conversation/events.rs`
 - Size bytes / Размер в байтах: `1316`
 - Included characters / Включено символов: `1316`
 - Truncated / Обрезано: `no`
@@ -1428,7 +1428,7 @@ pub const REALTIME_CONVERSATION_RADAR_SIGNALS_DETECTED: &str =
 
 ### `backend/src/platform/realtime_conversation/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/realtime_conversation/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/realtime_conversation/mod.rs`
 - Size bytes / Размер в байтах: `593`
 - Included characters / Включено символов: `593`
 - Truncated / Обрезано: `no`
@@ -1454,7 +1454,7 @@ pub use provider::{
 
 ### `backend/src/platform/realtime_conversation/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/realtime_conversation/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/realtime_conversation/models.rs`
 - Size bytes / Размер в байтах: `6047`
 - Included characters / Включено символов: `6047`
 - Truncated / Обрезано: `no`
@@ -1658,7 +1658,7 @@ impl RealtimeConversationProviderCapabilities {
 
 ### `backend/src/platform/realtime_conversation/provider.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/realtime_conversation/provider.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/realtime_conversation/provider.rs`
 - Size bytes / Размер в байтах: `2912`
 - Included characters / Включено символов: `2912`
 - Truncated / Обрезано: `no`
@@ -1741,7 +1741,7 @@ pub fn generic_webview_provider_capabilities(
 
 ### `backend/src/platform/secrets.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/secrets.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/secrets.rs`
 - Size bytes / Размер в байтах: `601`
 - Included characters / Включено символов: `601`
 - Truncated / Обрезано: `no`
@@ -1770,7 +1770,7 @@ pub use store::SecretReferenceStore;
 
 ### `backend/src/platform/secrets/crypto.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/secrets/crypto.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/secrets/crypto.rs`
 - Size bytes / Размер в байтах: `1747`
 - Included characters / Включено символов: `1747`
 - Truncated / Обрезано: `no`
@@ -1829,7 +1829,7 @@ pub(super) fn database_vault_cipher(
 
 ### `backend/src/platform/secrets/database_vault.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/secrets/database_vault.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/secrets/database_vault.rs`
 - Size bytes / Размер в байтах: `6992`
 - Included characters / Включено символов: `6992`
 - Truncated / Обрезано: `no`
@@ -2057,7 +2057,7 @@ impl DatabaseEncryptedVaultError {
 
 ### `backend/src/platform/secrets/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/secrets/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/secrets/errors.rs`
 - Size bytes / Размер в байтах: `980`
 - Included characters / Включено символов: `980`
 - Truncated / Обрезано: `no`
@@ -2104,7 +2104,7 @@ pub enum SecretResolutionError {
 
 ### `backend/src/platform/secrets/file_vault.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/secrets/file_vault.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/secrets/file_vault.rs`
 - Size bytes / Размер в байтах: `6795`
 - Included characters / Включено символов: `6795`
 - Truncated / Обрезано: `no`
@@ -2322,7 +2322,7 @@ impl EncryptedVaultError {
 
 ### `backend/src/platform/secrets/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/secrets/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/secrets/models.rs`
 - Size bytes / Размер в байтах: `4660`
 - Included characters / Включено символов: `4660`
 - Truncated / Обрезано: `no`
@@ -2499,7 +2499,7 @@ impl NewSecretReference {
 
 ### `backend/src/platform/secrets/paths.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/secrets/paths.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/secrets/paths.rs`
 - Size bytes / Размер в байтах: `193`
 - Included characters / Включено символов: `193`
 - Truncated / Обрезано: `no`
@@ -2510,14 +2510,14 @@ use std::path::{Path, PathBuf};
 pub fn default_vault_path(home_dir: &Path) -> PathBuf {
     home_dir
         .join(".config")
-        .join("hermes-hub")
+        .join("makosh")
         .join("secrets.vault.json")
 }
 ```
 
 ### `backend/src/platform/secrets/resolver.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/secrets/resolver.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/secrets/resolver.rs`
 - Size bytes / Размер в байтах: `2036`
 - Included characters / Включено символов: `2036`
 - Truncated / Обрезано: `no`
@@ -2594,7 +2594,7 @@ impl SecretResolver for InMemorySecretResolver {
 
 ### `backend/src/platform/secrets/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/secrets/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/secrets/store.rs`
 - Size bytes / Размер в байтах: `3463`
 - Included characters / Включено символов: `3463`
 - Truncated / Обрезано: `no`

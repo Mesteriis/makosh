@@ -1,9 +1,9 @@
-use hermes_communications_ingress::{
+use makosh_communications_ingress::{
     BodyAvailabilityV1, CommunicationDirectionV1, CommunicationEvidenceKindV1,
     ObservationEnvelopeContextV1, ProviderProvenanceV1, SourceEnvelope, SourceScopeEnvelope,
     build_observation_outbox_record_v1, new_scoped_communication_observation_draft,
 };
-use hermes_events_protocol::validation::envelope::decode_envelope_v1;
+use makosh_events_protocol::validation::envelope::decode_envelope_v1;
 use prost::Message;
 
 #[test]
@@ -103,7 +103,7 @@ fn builds_a_fenced_exact_envelope_without_provider_locator() {
             .windows(b"private-imap-uid-42".len())
             .any(|window| { window == b"private-imap-uid-42" })
     );
-    let payload = hermes_communications_ingress::v1::CommunicationObservationV1::decode(
+    let payload = makosh_communications_ingress::v1::CommunicationObservationV1::decode(
         envelope.payload.as_slice(),
     )
     .expect("typed payload");

@@ -1,13 +1,13 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use sqlx::postgres::{PgPool, PgRow};
 use sqlx::{Postgres, Row, Transaction};
 use uuid::Uuid;
 
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::store::EventStore;
 
 use super::errors::PersonaCoreError;
 use super::evidence::link_persona_entity_in_transaction;
@@ -213,7 +213,7 @@ async fn append_role_assigned_event(
         role.assigned_at,
         json!({
             "kind": "personas",
-            "provider": "hermes",
+            "provider": "makosh",
             "source_id": &role.persona_id,
         }),
         json!({
@@ -248,7 +248,7 @@ async fn append_role_removed_event(
         Utc::now(),
         json!({
             "kind": "personas",
-            "provider": "hermes",
+            "provider": "makosh",
             "source_id": &role.persona_id,
         }),
         json!({

@@ -8,9 +8,9 @@ pub use settings::{
     ollama_ai_settings_schema_bytes_v1, ollama_ai_settings_schema_v1,
 };
 
-pub const PACKAGE: &str = "hermes-ollama-ai-api";
+pub const PACKAGE: &str = "makosh-ollama-ai-api";
 pub const OLLAMA_OWNER_ID_V1: &str = "ollama";
-pub const OLLAMA_AI_MODULE_ID_V1: &str = "hermes-ollama-ai-runtime";
+pub const OLLAMA_AI_MODULE_ID_V1: &str = "makosh-ollama-ai-runtime";
 pub const OLLAMA_AI_PROVIDER_CAPABILITY_ID_V1: &str = "ai.provider.generate.v1";
 pub const OLLAMA_AI_SUMMARY_CAPABILITY_ID_V1: &str = "ai.provider.summarize.v1";
 pub const OLLAMA_AI_TRANSLATION_CAPABILITY_ID_V1: &str = "ai.provider.translate.v1";

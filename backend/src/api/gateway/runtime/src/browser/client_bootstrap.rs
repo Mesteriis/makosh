@@ -1,12 +1,16 @@
 use bytes::Bytes;
-use hermes_gateway_protocol::v1::{
+use http_body_util::{BodyExt, Limited};
+use hyper::body::Body;
+use hyper::header::{CACHE_CONTROL, CONTENT_TYPE, COOKIE, HeaderName};
+use hyper::{Method, Request, Response, StatusCode};
+use makosh_gateway_protocol::v1::{
     ClientBootstrapRequestV1, ClientBootstrapResponseV1, ClientModuleBootstrapV1,
     ClientModuleSettingsBootstrapV1, ClientModuleSettingsTargetBootstrapV1,
     ClientSettingValueEntryV1, ClientSettingValueV1 as WireValue, ClientSettingsApplyStateV1,
     ClientSurfaceAvailabilityStateV1 as WireSurfaceState, ClientSurfaceAvailabilityV1,
     ClientSurfaceIdV1 as WireSurfaceId, client_setting_value_v1::Value,
 };
-use hermes_gateway_session_contract::{
+use makosh_gateway_session_contract::{
     BrowserAuthenticationAuthority, ClientBootstrapAuthority, ClientBootstrapProjectionV1,
     ClientModuleProjectionV1, ClientModuleSettingsProjectionV1,
     ClientModuleSettingsTargetProjectionV1, ClientSettingValueEntryV1 as ProjectionEntry,
@@ -14,16 +18,12 @@ use hermes_gateway_session_contract::{
     ClientSurfaceAvailabilityStateV1 as ProjectionSurfaceState,
     ClientSurfaceIdV1 as ProjectionSurfaceId,
 };
-use http_body_util::{BodyExt, Limited};
-use hyper::body::Body;
-use hyper::header::{CACHE_CONTROL, CONTENT_TYPE, COOKIE, HeaderName};
-use hyper::{Method, Request, Response, StatusCode};
 use prost::Message;
 
 use super::system_status::wire_system_statuses;
 use crate::{GatewayHttpResponse, SharedBrowserGatewaySessionService, full_gateway_body};
 
-const BOOTSTRAP_PATH: &str = "/hermes.gateway.v1.ClientBootstrapService/GetBootstrap";
+const BOOTSTRAP_PATH: &str = "/makosh.gateway.v1.ClientBootstrapService/GetBootstrap";
 const MAX_REQUEST_BYTES: usize = 1_024;
 const CONNECT_PROTOCOL_VERSION: HeaderName = HeaderName::from_static("connect-protocol-version");
 const CONNECT_ERROR_CODE: HeaderName = HeaderName::from_static("connect-error-code");

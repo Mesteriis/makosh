@@ -4,8 +4,8 @@ use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
-use hermes_communications_export_persistence::schema::communications_export_storage_bundle_v1;
-use hermes_communications_export_runtime::{
+use makosh_communications_export_persistence::schema::communications_export_storage_bundle_v1;
+use makosh_communications_export_runtime::{
     admission::{
         communications_export_module_descriptor_v1, communications_export_settings_schema_bytes_v1,
     },
@@ -14,7 +14,7 @@ use hermes_communications_export_runtime::{
         CommunicationsExportRuntimeV1,
     },
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
@@ -152,14 +152,14 @@ where
     loop {
         executor.block_on(consume_or_tick(&mut runtime, &mut maintenance))?;
         if executor.block_on(runtime.relay_outbox()).is_err()
-            && std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some()
+            && std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some()
         {
             eprintln!("developer_communications_export_outbox_retry=true");
         }
         if executor
             .block_on(runtime.pump_client_realtime_once())
             .is_err()
-            && std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some()
+            && std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some()
         {
             eprintln!("developer_communications_export_client_realtime_retry=true");
         }

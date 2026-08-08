@@ -6,7 +6,7 @@ use crate::domains::communications::messages::errors::MessageProjectionError;
 use crate::domains::communications::messages::ids::message_id;
 use crate::domains::communications::messages::models::{NewProjectedMessage, ProjectedMessage};
 use crate::domains::communications::messages::rows::row_to_projected_message;
-use hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore;
+use makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore;
 
 impl MessageProjectionStore {
     pub async fn upsert_email_message(
@@ -401,11 +401,11 @@ async fn reconcile_provider_folder_memberships_in_transaction(
 }
 
 fn provider_read_state(metadata: &Value) -> bool {
-    hermes_communications_api::provider_state::observed_read_state(metadata)
+    makosh_communications_api::provider_state::observed_read_state(metadata)
 }
 
 fn provider_starred_state(metadata: &Value) -> Option<bool> {
-    hermes_communications_api::provider_state::observed_starred_state(metadata)
+    makosh_communications_api::provider_state::observed_starred_state(metadata)
 }
 
 #[cfg(test)]

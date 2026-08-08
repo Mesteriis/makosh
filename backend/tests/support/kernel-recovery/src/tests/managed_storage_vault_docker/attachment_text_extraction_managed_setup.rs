@@ -7,14 +7,14 @@ use std::os::unix::fs::PermissionsExt;
 use crate::platform::client_realtime::ClientRealtimePublishHandlerV1;
 use crate::platform::managed::signed_bundle::SignedRuntimeResource;
 
-use hermes_attachment_text_extraction_api::{
+use makosh_attachment_text_extraction_api::{
     ATTACHMENT_TEXT_EXTRACTION_MODULE_ID_V1, ATTACHMENT_TEXT_EXTRACTION_OWNER_V1,
 };
-use hermes_attachment_text_extraction_persistence::{
+use makosh_attachment_text_extraction_persistence::{
     ATTACHMENT_TEXT_EXTRACTION_STORAGE_BUNDLE_REVISION_V1,
     attachment_text_extraction_storage_bundle_v1,
 };
-use hermes_attachment_text_extraction_runtime::{
+use makosh_attachment_text_extraction_runtime::{
     ATTACHMENT_TEXT_EXTRACTION_OCR_ENGLISH_ARTIFACT_ID_V1,
     ATTACHMENT_TEXT_EXTRACTION_OCR_RUNNER_ARTIFACT_ID_V1,
     ATTACHMENT_TEXT_EXTRACTION_OCR_RUSSIAN_ARTIFACT_ID_V1,
@@ -22,8 +22,8 @@ use hermes_attachment_text_extraction_runtime::{
     attachment_text_extraction_module_descriptor_v1,
     attachment_text_extraction_settings_schema_bytes_v1,
 };
-use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-use hermes_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
+use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+use makosh_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
 
 const ATTACHMENT_TEXT_EXTRACTION_RELEASE_ARTIFACT_ID_V1: &str =
     "attachment_text_extraction.runtime.v1";
@@ -87,7 +87,7 @@ pub(super) fn admit_attachment_text_extraction_runtime_v1(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             ATTACHMENT_TEXT_EXTRACTION_RELEASE_ARTIFACT_ID_V1,
             Sha256::digest(
                 std::fs::read(attachment_text_extraction_binary())
@@ -328,22 +328,22 @@ pub(super) fn attachment_text_extraction_runtime_resources_v1() -> [SignedRuntim
     [
         SignedRuntimeResource::read_only_data(
             ATTACHMENT_TEXT_EXTRACTION_OCR_ENGLISH_ARTIFACT_ID_V1,
-            binary("HERMES_ATTACHMENT_TEXT_EXTRACTION_OCR_ENG"),
+            binary("MAKOSH_ATTACHMENT_TEXT_EXTRACTION_OCR_ENG"),
             ATTACHMENT_TEXT_EXTRACTION_MODULE_ID_V1,
         ),
         SignedRuntimeResource::native_executable(
             ATTACHMENT_TEXT_EXTRACTION_OCR_RUNNER_ARTIFACT_ID_V1,
-            binary("HERMES_ATTACHMENT_TEXT_EXTRACTION_OCR_RUNNER"),
+            binary("MAKOSH_ATTACHMENT_TEXT_EXTRACTION_OCR_RUNNER"),
             ATTACHMENT_TEXT_EXTRACTION_MODULE_ID_V1,
         ),
         SignedRuntimeResource::read_only_data(
             ATTACHMENT_TEXT_EXTRACTION_OCR_RUSSIAN_ARTIFACT_ID_V1,
-            binary("HERMES_ATTACHMENT_TEXT_EXTRACTION_OCR_RUS"),
+            binary("MAKOSH_ATTACHMENT_TEXT_EXTRACTION_OCR_RUS"),
             ATTACHMENT_TEXT_EXTRACTION_MODULE_ID_V1,
         ),
     ]
 }
 
 fn attachment_text_extraction_binary() -> PathBuf {
-    binary("HERMES_ATTACHMENT_TEXT_EXTRACTION_RUNTIME_BIN")
+    binary("MAKOSH_ATTACHMENT_TEXT_EXTRACTION_RUNTIME_BIN")
 }

@@ -32,13 +32,13 @@ conformance ещё не реализован, поэтому `mail_contacts_sync
 ADR-0379 требует для Contacts-to-Mail направления bounded changed event и
 отдельный target-bound Blob handoff. Пять исходных Contacts units не содержат
 публичного source-port контракта. Добавление export messages в
-`hermes-contacts-command-api` смешало бы mutation authority и source custody,
+`makosh-contacts-command-api` смешало бы mutation authority и source custody,
 а перенос contact fields в durable event раскрыл бы business data Event Hub.
 
 ## Решение
 
 Добавляется шестая Contacts-owned unit
-`hermes-contacts-mail-sync-source-api`. Она владеет только публичным source port
+`makosh-contacts-mail-sync-source-api`. Она владеет только публичным source port
 для `mail_contacts_sync`:
 
 - `ContactChangedForMailSyncV1` — bounded event с opaque `contact_id`, exact
@@ -48,7 +48,7 @@ ADR-0379 требует для Contacts-to-Mail направления bounded c
 - prepared/rejected terminal results;
 - exact plaintext `ContactMailSyncSourceContentV1`, который никогда не входит в
   durable envelope и доступен только через Blob custody, привязанную к
-  `hermes-mail-runtime`.
+  `makosh-mail-runtime`.
 
 Contacts runtime материализует snapshot из Contacts-owned storage и пишет Blob
 только для exact Mail target owner/module/capability. Workflow проверяет только

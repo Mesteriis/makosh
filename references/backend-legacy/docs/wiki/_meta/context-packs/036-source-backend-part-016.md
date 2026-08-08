@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -53,16 +53,16 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ## Source Files / Исходные файлы
 
-### `backend/src/bin/hermes_email_sync_dev/fetch.rs`
+### `backend/src/bin/makosh_email_sync_dev/fetch.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_email_sync_dev/fetch.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_email_sync_dev/fetch.rs`
 - Size bytes / Размер в байтах: `911`
 - Included characters / Включено символов: `911`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::integrations::mail::gmail::client::{ImapFetchOptions, ImapNetworkClient};
-use hermes_hub_backend::integrations::mail::sync::EmailSyncBatch;
+use makosh_hub_backend::integrations::mail::gmail::client::{ImapFetchOptions, ImapNetworkClient};
+use makosh_hub_backend::integrations::mail::sync::EmailSyncBatch;
 
 use crate::config::DevEmailSyncConfig;
 use crate::errors::DevEmailSyncError;
@@ -92,15 +92,15 @@ pub(super) async fn fetch_raw_messages(
 }
 ```
 
-### `backend/src/bin/hermes_email_sync_dev/provider.rs`
+### `backend/src/bin/makosh_email_sync_dev/provider.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_email_sync_dev/provider.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_email_sync_dev/provider.rs`
 - Size bytes / Размер в байтах: `1579`
 - Included characters / Включено символов: `1579`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::communications::core::EmailProviderKind;
+use makosh_hub_backend::domains::communications::core::EmailProviderKind;
 
 use crate::errors::DevEmailSyncError;
 
@@ -142,15 +142,15 @@ pub(super) fn default_host(provider_kind: EmailProviderKind) -> &'static str {
 }
 ```
 
-### `backend/src/bin/hermes_email_sync_dev/report.rs`
+### `backend/src/bin/makosh_email_sync_dev/report.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_email_sync_dev/report.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_email_sync_dev/report.rs`
 - Size bytes / Размер в байтах: `965`
 - Included characters / Включено символов: `965`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::workflows::email_sync_pipeline::EmailSyncPipelineReport;
+use makosh_hub_backend::workflows::email_sync_pipeline::EmailSyncPipelineReport;
 use serde::Serialize;
 
 use crate::config::DevEmailSyncConfig;
@@ -186,21 +186,21 @@ impl DevEmailSyncReport {
 }
 ```
 
-### `backend/src/bin/hermes_email_sync_dev/runner.rs`
+### `backend/src/bin/makosh_email_sync_dev/runner.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_email_sync_dev/runner.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_email_sync_dev/runner.rs`
 - Size bytes / Размер в байтах: `2208`
 - Included characters / Включено символов: `2208`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::communications::core::CommunicationIngestionStore;
-use hermes_hub_backend::domains::communications::core::CommunicationProviderAccountStore;
-use hermes_hub_backend::domains::communications::storage::LocalCommunicationBlobStore;
-use hermes_hub_backend::integrations::mail::sync::imap_mailbox_stream_id;
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::email_sync_pipeline::project_email_sync_batch_with_mail_blobs;
+use makosh_hub_backend::domains::communications::core::CommunicationIngestionStore;
+use makosh_hub_backend::domains::communications::core::CommunicationProviderAccountStore;
+use makosh_hub_backend::domains::communications::storage::LocalCommunicationBlobStore;
+use makosh_hub_backend::integrations::mail::sync::imap_mailbox_stream_id;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::email_sync_pipeline::project_email_sync_batch_with_mail_blobs;
 
 use crate::account::upsert_dev_provider_account;
 use crate::checkpoint::last_seen_uid;
@@ -251,18 +251,18 @@ pub(super) async fn run_dev_email_sync(
 }
 ```
 
-### `backend/src/bin/hermes_graph_project.rs`
+### `backend/src/bin/makosh_graph_project.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_graph_project.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_graph_project.rs`
 - Size bytes / Размер в байтах: `2323`
 - Included characters / Включено символов: `2323`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::graph::core::{GraphCount, GraphStore, GraphSummary};
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::graph_projection::{
+use makosh_hub_backend::domains::graph::core::{GraphCount, GraphStore, GraphSummary};
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::graph_projection::{
     GraphProjectionReport, GraphProjectionService,
 };
 use serde::Serialize;
@@ -270,7 +270,7 @@ use thiserror::Error;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    hermes_hub_backend::app::init_tracing();
+    makosh_hub_backend::app::init_tracing();
 
     let config = AppConfig::from_env()?;
     let database_url = config
@@ -342,17 +342,17 @@ fn total_count(counts: &[GraphCount]) -> i64 {
 }
 ```
 
-### `backend/src/bin/hermes_migrate.rs`
+### `backend/src/bin/makosh_migrate.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_migrate.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_migrate.rs`
 - Size bytes / Размер в байтах: `540`
 - Included characters / Включено символов: `540`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::app::init_tracing;
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::init_tracing;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -364,15 +364,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .ok_or("DATABASE_URL is required for migrations")?;
 
     Database::connect(Some(database_url)).await?;
-    println!("Hermes backend migrations and startup repairs completed.");
+    println!("Макошь backend migrations and startup repairs completed.");
 
     Ok(())
 }
 ```
 
-### `backend/src/bin/hermes_whatsapp_business_cloud_edge_proxy.rs`
+### `backend/src/bin/makosh_whatsapp_business_cloud_edge_proxy.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_whatsapp_business_cloud_edge_proxy.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_whatsapp_business_cloud_edge_proxy.rs`
 - Size bytes / Размер в байтах: `23311`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -395,13 +395,13 @@ use tracing::Instrument;
 use url::Url;
 
 const DEFAULT_BIND_ADDR: &str = "127.0.0.1:8787";
-const DEFAULT_HERMES_BASE_URL: &str = "http://127.0.0.1:8080";
+const DEFAULT_MAKOSH_BASE_URL: &str = "http://127.0.0.1:8080";
 const PUBLIC_WEBHOOK_PATH: &str = "/webhooks/whatsapp/business-cloud";
-const PROTECTED_HERMES_WEBHOOK_PATH: &str =
+const PROTECTED_MAKOSH_WEBHOOK_PATH: &str =
     "/api/v1/integrations/whatsapp/runtime-bridge/business-cloud/webhooks";
-const PROTECTED_HERMES_MANIFEST_PATH: &str =
+const PROTECTED_MAKOSH_MANIFEST_PATH: &str =
     "/api/v1/integrations/whatsapp/runtime-bridge/business-cloud/proxy-manifest";
-const HERMES_SECRET_HEADER: &str = "X-Hermes-Secret";
+const MAKOSH_SECRET_HEADER: &str = "X-Макошь-Secret";
 const BUSINESS_CLOUD_SIGNATURE_HEADER: &str = "X-Hub-Signature-256";
 
 #[derive(Clone)]
@@ -413,8 +413,8 @@ struct EdgeState {
 #[derive(Clone, Debug)]
 struct EdgeConfig {
     bind_addr: SocketAddr,
-    hermes_base_url: Url,
-    hermes_secret: String,
+    makosh_base_url: Url,
+    makosh_secret: String,
     account_id: Option<String>,
 }
 
@@ -428,8 +428,8 @@ struct HealthResponse {
 struct EdgeManifestResponse {
     service: &'static str,
     public_webhook_path: &'static str,
-    protected_hermes_webhook_path: &'static str,
-    protected_hermes_manifest_path: &'static str,
+    protected_makosh_webhook_path: &'static str,
+    protected_makosh_manifest_path: &'static str,
     local_auth_header: &'static str,
     signature_header: &'static str,
     get_forwarding: &'static str,
@@ -447,11 +447,11 @@ struct ErrorResponse {
 #[tokio::main]
 async fn main() -> Result<()> {
     color_eyre::install()?;
-    hermes_hub_backend::app::init_tracing();
-    let flow_id = std::env::var("HERMES_FLOW_ID")
+    makosh_hub_backend::app::init_tracing();
+    let flow_id = std::env::var("MAKOSH_FLOW_ID")
         .unwrap_or_else(|_| "whatsapp-business-cloud-edge-proxy".to_owned());
     let runtime_span =
-        tracing::info_span!("hermes_whatsapp_business_cloud_edge_proxy", flow_id = %flow_id);
+        tracing::info_span!("makosh_whatsapp_business_cloud_edge_proxy", flow_id = %flow_id);
 
     async move {
         let config = Arc::new(EdgeConfig::from_env()?);
@@ -461,7 +461,7 @@ async fn main() -> Result<()> {
         tracing::info!(
             bind_addr = %config.bind_addr,
             public_webhook_path = PUBLIC_WEBHOOK_PATH,
-            hermes_base_url = %config.hermes_base_url,
+            makosh_base_url = %config.makosh_base_url,
             "starting WhatsApp Business Cloud edge proxy"
         );
         axum::serve(listener, router(config)).await?;
@@ -490,49 +490,49 @@ fn router(config: Arc<EdgeConfig>) -> Router {
 async fn healthz() -> Json<HealthResponse> {
     Json(HealthResponse {
         status: "ok",
-        service: "hermes-whatsapp-business-cloud-edge-proxy",
+        service: "makosh-whatsapp-business-cloud-edge-proxy",
     })
 }
 
 async fn readyz(State(state): State<EdgeState>) -> Response {
     match state
         .config
-        .hermes_url(PROTECTED_HERMES_MANIFEST_PATH, None, false)
+        .makosh_url(PROTECTED_MAKOSH_MANIFEST_PATH, None, false)
     {
         Ok(url) => match state
             .client
             .get(url)
-            .header(HERMES_SECRET_HEADER, state.config.hermes_secret.as_str())
+            .header(MAKOSH_SECRET_HEADER, state.config.makosh_secret.as_str())
             .send()
             .await
         {
             Ok(response) if response.status().is_success() => Json(HealthResponse {
                 status: "ready",
-                service: "hermes-whatsapp-business-cloud-edge-proxy",
+                service: "makosh-whatsapp-business-cloud-edge-proxy",
             })
             .into_response(),
             Ok(response) => sanitized_error_response(
                 StatusCode::BAD_GATEWAY,
-                "hermes_proxy_manifest_unavailable",
+                "makosh_proxy_manifest_unavailable",
                 response.status(),
             ),
             Err(error) => {
-                tracing::warn!(error = %error, "Hermes proxy manifest readiness check failed");
+                tracing::warn!(error = %error, "Макошь proxy manifest readiness check failed");
                 (
                     StatusCode::BAD_GATEWAY,
                     Json(ErrorResponse {
-                        error: "hermes_proxy_manifest_unavailable",
+                        error: "makosh_proxy_manifest_unavailable",
                     }),
                 )
                     .into_response()
             }
         },
         Err(error) => {
-            tracing::warn!(error = %error, "Hermes manifest URL is invalid");
+            tracing::warn!(error = %error, "Макошь manifest URL is invalid");
             (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Json(ErrorResponse {
-                    error: "hermes_proxy_manifest_url_invalid",
+                    error: "makosh_proxy_manifest_url_invalid",
                 }),
             )
                 .into_response()
@@ -542,14 +542,14 @@ async fn readyz(State(state): State<EdgeState>) -> Response {
 
 async fn edge_manifest(State(state): State<EdgeState>) -> Json<EdgeManifestResponse> {
     Json(EdgeManifestResponse {
-        service: "hermes-whatsapp-business-cloud-edge-proxy",
+        service: "makosh-whatsapp-business-cloud-edge-proxy",
         public_webhook_path: PUBLIC_WEBHOOK_PATH,
-        protected_hermes_webhook_path: PROTECTED_HERMES_WEBHOOK_PATH,
-        protected_hermes_manifest_path: PROTECTED_HERMES_MANIFEST_PATH,
-        local_auth_header: HERMES_SECRET_HEADER,
+        protected_makosh_webhook_path: PROTECTED_MAKOSH_WEBHOOK_PATH,
+        protected_makosh_manifest_path: PROTECTED_MAKOSH_MANIFEST_PATH,
+        local_auth_header: MAKOSH_SECRET_HEADER,
         signature_header: BUSINESS_CLOUD_SIGNATURE_HEADER,
-        get_forwarding: "forward_hub_query_params_and_optional_account_id_to_protected_hermes",
-        post_forwarding: "forward_exact_raw_body_and_x_hub_signature_256_to_protected_hermes",
+        get_forwarding: "forward_hub_query_params_and_optional_account_id_to_protected_makosh",
+        post_forwarding: "forward_exact_raw_body_and_x_hub_signature_256_to_protected_makosh",
         payload_policy: "post_body_is_not_parsed_or_rewritten_by_edge_proxy",
         secret_policy: "local_api_secret_is_env_only_and_never_returned",
         configured_account_id: state.config.account_id.is_some(),
@@ -563,15 +563,15 @@ async fn forward_business_cloud_webhook_get(
     let url =
         match state
             .config
-            .hermes_url(PROTECTED_HERMES_WEBHOOK_PATH, raw_query.as_deref(), true)
+            .makosh_url(PROTECTED_MAKOSH_WEBHOOK_PATH, raw_query.as_deref(), true)
         {
             Ok(url) => url,
             Err(error) => {
-                tracing::warn!(error = %error, "Hermes webhook URL is invalid");
+                tracing::warn!(error = %error, "Макошь webhook URL is invalid");
                 return (
                     StatusCode::INTERNAL_SERVER_ERROR,
                     Json(ErrorResponse {
-                        error: "hermes_webhook_url_invalid",
+                        error: "makosh_webhook_url_invalid",
                     }),
                 )
                     .into_response();
@@ -580,7 +580,7 @@ async fn forward_business_cloud_webhook_get(
     let response = state
         .client
         .get(url)
-        .header(HERMES_SECRET_HEADER, state.config.hermes_secret.as_str())
+        .header(MAKOSH_SECRET_HEADER, state.config.makosh_secret.as_str())
         .send()
         .await;
     forward_upstream_response(response).await
@@ -610,15 +610,15 @@ async fn forward_business_cloud_webhook_post(
     };
     let url = match state
         .config
-        .hermes_url(PROTECTED_HERMES_WEBHOOK_PATH, None, false)
+        .makosh_url(PROTECTED_MAKOSH_WEBHOOK_PATH, None, false)
     {
         Ok(url) => url,
         Err(error) => {
-            tracing::warn!(error = %error, "Hermes webhook URL is invalid");
+            tracing::warn!(error = %error, "Макошь webhook URL is invalid");
             return (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Json(ErrorResponse {
-                    error: "hermes_webhook_url_invalid",
+                    error: "makosh_webhook_url_invalid",
                 }),
             )
                 .into_response();
@@ -627,7 +627,7 @@ async fn forward_business_cloud_webhook_post(
     let mut request = state
         .client
         .post(url)
-        .header(HERMES_SECRET_HEADER, state.config.hermes_secret.as_str())
+        .header(MAKOSH_SECRET_HEADER, state.config.makosh_secret.as_str())
         .header(BUSINESS_CLOUD_SIGNATURE_HEADER, signature)
         .body(body);
     if let Some(content_type) = headers
@@ -653,11 +653,11 @@ async fn forward_upstream_response(
             let body = match response.bytes().await {
                 Ok(body) => body,
                 Err(error) => {
-                    tracing::warn!(error = %error, "failed to read successful Hermes webhook response");
+                    tracing::warn!(error = %error, "failed to read successful Макошь webhook response");
                     return (
                         StatusCode::BAD_GATEWAY,
                         Json(ErrorResponse {
-                            error: "hermes_response_read_failed",
+                            error: "makosh_response_read_failed",
                         }),
                     )
                         .into_response();
@@ -673,15 +673,15 @@ async fn forward_upstream_response(
         }
         Ok(response) => sanitized_error_response(
             StatusCode::BAD_GATEWAY,
-            "hermes_webhook_rejected",
+            "makosh_webhook_rejected",
             response.status(),
         ),
         Err(error) => {
-            tracing::warn!(error = %error, "Hermes webhook forwarding failed");
+            tracing::warn!(error = %error, "Макошь webhook forwarding failed");
             (
                 StatusCode::BAD_GATEWAY,
                 Json(ErrorResponse {
-                    error: "hermes_webhook_unreachable",
+                    error: "makosh_webhook_unreachable",
                 }),
             )
                 .into_response()
@@ -696,7 +696,7 @@ fn sanitized_error_response(
 ) -> Response {
     tracing::warn!(
         upstream_status = upstream_status.as_u16(),
-        "Hermes webhook proxy rejected request"
+        "Макошь webhook proxy rejected request"
     );
     (status, Json(ErrorResponse { error })).into_response()
 }
@@ -708,43 +708,43 @@ fn response_status(status: reqwest::StatusCode) -> StatusCode {
 impl EdgeConfig {
     fn from_env() -> Result<Self> {
         let bind_addr = env_or_default(
-            "HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_BIND_ADDR",
+            "MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_BIND_ADDR",
             DEFAULT_BIND_ADDR,
         )
         .parse::<SocketAddr>()
-        .context("invalid HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_BIND_ADDR")?;
-        let hermes_base_url = env_or_default(
-            "HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_HERMES_BASE_URL",
-            DEFAULT_HERMES_BASE_URL,
+        .context("invalid MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_BIND_ADDR")?;
+        let makosh_base_url = env_or_default(
+            "MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_MAKOSH_BASE_URL",
+            DEFAULT_MAKOSH_BASE_URL,
         );
-        let hermes_base_url = parse_base_url(&hermes_base_url)?;
-        let hermes_secret = optional_env("HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_HERMES_SECRET")
-            .or_else(|| optional_env("HERMES_LOCAL_API_SECRET"))
+        let makosh_base_url = parse_base_url(&makosh_base_url)?;
+        let makosh_secret = optional_env("MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_MAKOSH_SECRET")
+            .or_else(|| optional_env("MAKOSH_LOCAL_API_SECRET"))
             .ok_or_else(|| {
                 eyre!(
-                    "HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_HERMES_SECRET or HERMES_LOCAL_API_SECRET must be set"
+                    "MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_MAKOSH_SECRET or MAKOSH_LOCAL_API_SECRET must be set"
                 )
             })?;
-        let account_id = optional_env("HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_ACCOUNT_ID");
+        let account_id = optional_env("MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_ACCOUNT_ID");
 
         Ok(Self {
             bind_addr,
-            hermes_base_url,
-            hermes_secret,
+            makosh_base_url,
+            makosh_secret,
             account_id,
         })
     }
 
-    fn hermes_url(
+    fn makosh_url(
         &self,
         protected_path: &str,
         raw_que
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
-### `backend/src/bin/hermes_zoom_edge_proxy.rs`
+### `backend/src/bin/makosh_zoom_edge_proxy.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/bin/hermes_zoom_edge_proxy.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/bin/makosh_zoom_edge_proxy.rs`
 - Size bytes / Размер в байтах: `19264`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -767,11 +767,11 @@ use tracing::Instrument;
 use url::Url;
 
 const DEFAULT_BIND_ADDR: &str = "127.0.0.1:8788";
-const DEFAULT_HERMES_BASE_URL: &str = "http://127.0.0.1:8080";
+const DEFAULT_MAKOSH_BASE_URL: &str = "http://127.0.0.1:8080";
 const PUBLIC_WEBHOOK_PATH: &str = "/webhooks/zoom";
-const PROTECTED_HERMES_WEBHOOK_PATH: &str = "/api/v1/integrations/zoom/runtime-bridge/webhooks";
-const PROTECTED_HERMES_CAPABILITIES_PATH: &str = "/api/v1/integrations/zoom/capabilities";
-const HERMES_SECRET_HEADER: &str = "X-Hermes-Secret";
+const PROTECTED_MAKOSH_WEBHOOK_PATH: &str = "/api/v1/integrations/zoom/runtime-bridge/webhooks";
+const PROTECTED_MAKOSH_CAPABILITIES_PATH: &str = "/api/v1/integrations/zoom/capabilities";
+const MAKOSH_SECRET_HEADER: &str = "X-Макошь-Secret";
 const ZOOM_SIGNATURE_HEADER: &str = "x-zm-signature";
 const ZOOM_TIMESTAMP_HEADER: &str = "x-zm-request-timestamp";
 
@@ -784,8 +784,8 @@ struct EdgeState {
 #[derive(Clone, Debug)]
 struct EdgeConfig {
     bind_addr: SocketAddr,
-    hermes_base_url: Url,
-    hermes_secret: String,
+    makosh_base_url: Url,
+    makosh_secret: String,
     account_id: Option<String>,
 }
 
@@ -799,8 +799,8 @@ struct HealthResponse {
 struct EdgeManifestResponse {
     service: &'static str,
     public_webhook_path: &'static str,
-    protected_hermes_webhook_path: &'static str,
-    protected_hermes_capabilities_path: &'static str,
+    protected_makosh_webhook_path: &'static str,
+    protected_makosh_capabilities_path: &'static str,
     local_auth_header: &'static str,
     signature_header: &'static str,
     timestamp_header: &'static str,
@@ -818,9 +818,9 @@ struct ErrorResponse {
 #[tokio::main]
 async fn main() -> Result<()> {
     color_eyre::install()?;
-    hermes_hub_backend::app::init_tracing();
-    let flow_id = std::env::var("HERMES_FLOW_ID").unwrap_or_else(|_| "zoom-edge-proxy".to_owned());
-    let runtime_span = tracing::info_span!("hermes_zoom_edge_proxy", flow_id = %flow_id);
+    makosh_hub_backend::app::init_tracing();
+    let flow_id = std::env::var("MAKOSH_FLOW_ID").unwrap_or_else(|_| "zoom-edge-proxy".to_owned());
+    let runtime_span = tracing::info_span!("makosh_zoom_edge_proxy", flow_id = %flow_id);
 
     async move {
         let config = Arc::new(EdgeConfig::from_env()?);
@@ -830,7 +830,7 @@ async fn main() -> Result<()> {
         tracing::info!(
             bind_addr = %config.bind_addr,
             public_webhook_path = PUBLIC_WEBHOOK_PATH,
-            hermes_base_url = %config.hermes_base_url,
+            makosh_base_url = %config.makosh_base_url,
             "starting Zoom edge proxy"
         );
         axum::serve(listener, router(config)).await?;
@@ -856,22 +856,22 @@ fn router(config: Arc<EdgeConfig>) -> Router {
 async fn healthz() -> Json<HealthResponse> {
     Json(HealthResponse {
         status: "ok",
-        service: "hermes-zoom-edge-proxy",
+        service: "makosh-zoom-edge-proxy",
     })
 }
 
 async fn readyz(State(state): State<EdgeState>) -> Response {
     let url = match state
         .config
-        .hermes_url(PROTECTED_HERMES_CAPABILITIES_PATH, None, false)
+        .makosh_url(PROTECTED_MAKOSH_CAPABILITIES_PATH, None, false)
     {
         Ok(url) => url,
         Err(error) => {
-            tracing::warn!(error = %error, "Hermes Zoom capabilities URL is invalid");
+            tracing::warn!(error = %error, "Макошь Zoom capabilities URL is invalid");
             return (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Json(ErrorResponse {
-                    error: "hermes_zoom_capabilities_url_invalid",
+                    error: "makosh_zoom_capabilities_url_invalid",
                 }),
             )
                 .into_response();
@@ -881,26 +881,26 @@ async fn readyz(State(state): State<EdgeState>) -> Response {
     match state
         .client
         .get(url)
-        .header(HERMES_SECRET_HEADER, state.config.hermes_secret.as_str())
+        .header(MAKOSH_SECRET_HEADER, state.config.makosh_secret.as_str())
         .send()
         .await
     {
         Ok(response) if response.status().is_success() => Json(HealthResponse {
             status: "ready",
-            service: "hermes-zoom-edge-proxy",
+            service: "makosh-zoom-edge-proxy",
         })
         .into_response(),
         Ok(response) => sanitized_error_response(
             StatusCode::BAD_GATEWAY,
-            "hermes_zoom_capabilities_unavailable",
+            "makosh_zoom_capabilities_unavailable",
             response.status(),
         ),
         Err(error) => {
-            tracing::warn!(error = %error, "Hermes Zoom capabilities readiness check failed");
+            tracing::warn!(error = %error, "Макошь Zoom capabilities readiness check failed");
             (
                 StatusCode::BAD_GATEWAY,
                 Json(ErrorResponse {
-                    error: "hermes_zoom_capabilities_unavailable",
+                    error: "makosh_zoom_capabilities_unavailable",
                 }),
             )
                 .into_response()
@@ -910,14 +910,14 @@ async fn readyz(State(state): State<EdgeState>) -> Response {
 
 async fn edge_manifest(State(state): State<EdgeState>) -> Json<EdgeManifestResponse> {
     Json(EdgeManifestResponse {
-        service: "hermes-zoom-edge-proxy",
+        service: "makosh-zoom-edge-proxy",
         public_webhook_path: PUBLIC_WEBHOOK_PATH,
-        protected_hermes_webhook_path: PROTECTED_HERMES_WEBHOOK_PATH,
-        protected_hermes_capabilities_path: PROTECTED_HERMES_CAPABILITIES_PATH,
-        local_auth_header: HERMES_SECRET_HEADER,
+        protected_makosh_webhook_path: PROTECTED_MAKOSH_WEBHOOK_PATH,
+        protected_makosh_capabilities_path: PROTECTED_MAKOSH_CAPABILITIES_PATH,
+        local_auth_header: MAKOSH_SECRET_HEADER,
         signature_header: ZOOM_SIGNATURE_HEADER,
         timestamp_header: ZOOM_TIMESTAMP_HEADER,
-        post_forwarding: "forward_exact_raw_body_x_zm_signature_x_zm_timestamp_and_optional_account_id_to_protected_hermes",
+        post_forwarding: "forward_exact_raw_body_x_zm_signature_x_zm_timestamp_and_optional_account_id_to_protected_makosh",
         payload_policy: "post_body_is_not_parsed_or_rewritten_by_edge_proxy",
         secret_policy: "local_api_secret_is_env_only_and_never_returned",
         configured_account_id: state.config.account_id.is_some(),
@@ -933,15 +933,15 @@ async fn forward_zoom_webhook_post(
     let url =
         match state
             .config
-            .hermes_url(PROTECTED_HERMES_WEBHOOK_PATH, raw_query.as_deref(), true)
+            .makosh_url(PROTECTED_MAKOSH_WEBHOOK_PATH, raw_query.as_deref(), true)
         {
             Ok(url) => url,
             Err(error) => {
-                tracing::warn!(error = %error, "Hermes Zoom webhook URL is invalid");
+                tracing::warn!(error = %error, "Макошь Zoom webhook URL is invalid");
                 return (
                     StatusCode::INTERNAL_SERVER_ERROR,
                     Json(ErrorResponse {
-                        error: "hermes_zoom_webhook_url_invalid",
+                        error: "makosh_zoom_webhook_url_invalid",
                     }),
                 )
                     .into_response();
@@ -951,7 +951,7 @@ async fn forward_zoom_webhook_post(
     let mut request = state
         .client
         .post(url)
-        .header(HERMES_SECRET_HEADER, state.config.hermes_secret.as_str())
+        .header(MAKOSH_SECRET_HEADER, state.config.makosh_secret.as_str())
         .body(body);
     request = copy_header(request, &headers, header::CONTENT_TYPE.as_str());
     request = copy_header(request, &headers, ZOOM_SIGNATURE_HEADER);
@@ -984,11 +984,11 @@ async fn forward_upstream_response(
             let body = match response.bytes().await {
                 Ok(body) => body,
                 Err(error) => {
-                    tracing::warn!(error = %error, "failed to read successful Hermes Zoom webhook response");
+                    tracing::warn!(error = %error, "failed to read successful Макошь Zoom webhook response");
                     return (
                         StatusCode::BAD_GATEWAY,
                         Json(ErrorResponse {
-                            error: "hermes_response_read_failed",
+                            error: "makosh_response_read_failed",
                         }),
                     )
                         .into_response();
@@ -1004,15 +1004,15 @@ async fn forward_upstream_response(
         }
         Ok(response) => sanitized_error_response(
             StatusCode::BAD_GATEWAY,
-            "hermes_zoom_webhook_rejected",
+            "makosh_zoom_webhook_rejected",
             response.status(),
         ),
         Err(error) => {
-            tracing::warn!(error = %error, "Hermes Zoom webhook forwarding failed");
+            tracing::warn!(error = %error, "Макошь Zoom webhook forwarding failed");
             (
                 StatusCode::BAD_GATEWAY,
                 Json(ErrorResponse {
-                    error: "hermes_zoom_webhook_unreachable",
+                    error: "makosh_zoom_webhook_unreachable",
                 }),
             )
                 .into_response()
@@ -1027,7 +1027,7 @@ fn sanitized_error_response(
 ) -> Response {
     tracing::warn!(
         upstream_status = upstream_status.as_u16(),
-        "Hermes Zoom webhook proxy rejected request"
+        "Макошь Zoom webhook proxy rejected request"
     );
     (status, Json(ErrorResponse { error })).into_response()
 }
@@ -1038,28 +1038,28 @@ fn response_status(status: reqwest::StatusCode) -> StatusCode {
 
 impl EdgeConfig {
     fn from_env() -> Result<Self> {
-        let bind_addr = env_or_default("HERMES_ZOOM_EDGE_BIND_ADDR", DEFAULT_BIND_ADDR)
+        let bind_addr = env_or_default("MAKOSH_ZOOM_EDGE_BIND_ADDR", DEFAULT_BIND_ADDR)
             .parse::<SocketAddr>()
-            .context("invalid HERMES_ZOOM_EDGE_BIND_ADDR")?;
-        let hermes_base_url =
-            env_or_default("HERMES_ZOOM_EDGE_HERMES_BASE_URL", DEFAULT_HERMES_BASE_URL);
-        let hermes_base_url = parse_base_url(&hermes_base_url)?;
-        let hermes_secret = optional_env("HERMES_ZOOM_EDGE_HERMES_SECRET")
-            .or_else(|| optional_env("HERMES_LOCAL_API_SECRET"))
+            .context("invalid MAKOSH_ZOOM_EDGE_BIND_ADDR")?;
+        let makosh_base_url =
+            env_or_default("MAKOSH_ZOOM_EDGE_MAKOSH_BASE_URL", DEFAULT_MAKOSH_BASE_URL);
+        let makosh_base_url = parse_base_url(&makosh_base_url)?;
+        let makosh_secret = optional_env("MAKOSH_ZOOM_EDGE_MAKOSH_SECRET")
+            .or_else(|| optional_env("MAKOSH_LOCAL_API_SECRET"))
             .ok_or_else(|| {
-                eyre!("HERMES_ZOOM_EDGE_HERMES_SECRET or HERMES_LOCAL_API_SECRET must be set")
+                eyre!("MAKOSH_ZOOM_EDGE_MAKOSH_SECRET or MAKOSH_LOCAL_API_SECRET must be set")
             })?;
-        let account_id = optional_env("HERMES_ZOOM_EDGE_ACCOUNT_ID");
+        let account_id = optional_env("MAKOSH_ZOOM_EDGE_ACCOUNT_ID");
 
         Ok(Self {
             bind_addr,
-            hermes_base_url,
-            hermes_secret,
+            makosh_base_url,
+            makosh_secret,
             account_id,
         })
     }
 
-    fn hermes_url(
+    fn makosh_url(
         &self,
         protected_path: &str,
         raw_query: Option<&str>,
@@ -1067,9 +1067,9 @@ impl EdgeConfig {
     ) -> Result<Url> {
         let path = protected_path.trim_start_matches('/');
         let mut url = self
-            .hermes_base_url
+            .makosh_base_url
             .join(path)
-            .with_context(|| format!("joining Hermes path `{protected_path}`"))?;
+            .with_context(|| format!("joining Макошь path `{protected_path}`"))?;
         url.set_query(raw_query.filter(|value| !value.trim().is_empty()));
         if include_account_id && let Some(account_id) = &self.account_id {
             url.query_pairs_mut().append_pair("account_id", account_id);
@@ -1081,9 +1081,9 @@ impl EdgeConfig {
 fn parse_base_url(raw: &str) -> Result<Url> {
     let trimmed = raw.trim().trim_end_matches('/');
     if trimmed.is_empty() {
-        return Err(eyre!("HERMES_ZOOM_EDGE_HERMES_BASE_URL must not be empty"));
+        return Err(eyre!("MAKOSH_ZOOM_EDGE_MAKOSH_BASE_URL must not be empty"));
     }
-    Url::parse(&format!("{trimmed}/")).with_context(|| "invalid HERMES_ZOOM_EDGE_HERMES_BASE_URL")
+    Url::parse(&format!("{trimmed}/")).with_context(|| "invalid MAKOSH_ZOOM_EDGE_MAKOSH_BASE_URL")
 }
 
 fn env_or_default(name: &str, default: &str) -> String {
@@ -1106,12 +1106,12 @@ mod tests {
     use tokio::task::JoinHandle;
 
     #[derive(Clone, Default)]
-    struct FakeHermesState {
-        captured: Arc<tokio::sync::Mutex<FakeHermesCaptured>>,
+    struct FakeМакошьState {
+        captured: Arc<tokio::sync::Mutex<FakeМакошьCaptured>>,
     }
 
     #[derive(Clone, Debug, Default)]
-    struct FakeHermesCaptured {
+    struct FakeМакошьCaptured {
         capabilities_secret: Option<String>,
         w
 ```
@@ -1119,7 +1119,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/contracts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/contracts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/contracts.rs`
 - Size bytes / Размер в байтах: `34`
 - Included characters / Включено символов: `34`
 - Truncated / Обрезано: `no`
@@ -1130,7 +1130,7 @@ connectrpc::include_generated!();
 
 ### `backend/src/domains/calendar/brain.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/brain.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/brain.rs`
 - Size bytes / Размер в байтах: `6887`
 - Included characters / Включено символов: `6882`
 - Truncated / Обрезано: `no`
@@ -1307,7 +1307,7 @@ pub enum CalendarBrainError {
 
 ### `backend/src/domains/calendar/command_service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/command_service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/command_service.rs`
 - Size bytes / Размер в байтах: `27106`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1659,13 +1659,13 @@ impl CalendarCommandService {
                 }),
                 format!("calendar-event://{event_id}/meeting-note"),
                 json!({
-              
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/domains/calendar/core.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/core.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/core.rs`
 - Size bytes / Размер в байтах: `633`
 - Included characters / Включено символов: `633`
 - Truncated / Обрезано: `no`
@@ -1692,7 +1692,7 @@ pub use relations::{EventRelation, EventRelationStore};
 
 ### `backend/src/domains/calendar/core/agendas.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/core/agendas.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/core/agendas.rs`
 - Size bytes / Размер в байтах: `2944`
 - Included characters / Включено символов: `2944`
 - Truncated / Обрезано: `no`
@@ -1792,7 +1792,7 @@ impl EventAgendaStore {
 
 ### `backend/src/domains/calendar/core/checklists.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/core/checklists.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/core/checklists.rs`
 - Size bytes / Размер в байтах: `2820`
 - Included characters / Включено символов: `2820`
 - Truncated / Обрезано: `no`
@@ -1889,7 +1889,7 @@ impl EventChecklistStore {
 
 ### `backend/src/domains/calendar/core/context_packs.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/core/context_packs.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/core/context_packs.rs`
 - Size bytes / Размер в байтах: `4436`
 - Included characters / Включено символов: `4436`
 - Truncated / Обрезано: `no`
@@ -2035,7 +2035,7 @@ fn optional_string(value: &Value, key: &str) -> Option<String> {
 
 ### `backend/src/domains/calendar/core/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/core/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/core/errors.rs`
 - Size bytes / Размер в байтах: `440`
 - Included characters / Включено символов: `440`
 - Truncated / Обрезано: `no`
@@ -2061,7 +2061,7 @@ pub enum CalendarCoreError {
 
 ### `backend/src/domains/calendar/core/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/core/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/core/evidence.rs`
 - Size bytes / Размер в байтах: `541`
 - Included characters / Включено символов: `541`
 - Truncated / Обрезано: `no`
@@ -2095,7 +2095,7 @@ pub(crate) async fn link_calendar_entity(
 
 ### `backend/src/domains/calendar/core/participants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/core/participants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/core/participants.rs`
 - Size bytes / Размер в байтах: `5127`
 - Included characters / Включено символов: `5127`
 - Truncated / Обрезано: `no`
@@ -2252,7 +2252,7 @@ impl EventParticipantStore {
 
 ### `backend/src/domains/calendar/core/relations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/core/relations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/core/relations.rs`
 - Size bytes / Размер в байтах: `5550`
 - Included characters / Включено символов: `5550`
 - Truncated / Обрезано: `no`
@@ -2425,7 +2425,7 @@ impl EventRelationStore {
 
 ### `backend/src/domains/calendar/events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/events.rs`
 - Size bytes / Размер в байтах: `509`
 - Included characters / Включено символов: `509`
 - Truncated / Обрезано: `no`
@@ -2453,7 +2453,7 @@ pub use source_store::CalendarSourceStore;
 
 ### `backend/src/domains/calendar/events/account_store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/events/account_store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/events/account_store.rs`
 - Size bytes / Размер в байтах: `14982`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2798,7 +2798,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/domains/calendar/events/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/events/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/events/errors.rs`
 - Size bytes / Размер в байтах: `276`
 - Included characters / Включено символов: `276`
 - Truncated / Обрезано: `no`
@@ -2819,7 +2819,7 @@ pub enum CalendarError {
 
 ### `backend/src/domains/calendar/events/event_store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/events/event_store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/events/event_store.rs`
 - Size bytes / Размер в байтах: `40215`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3092,7 +3092,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/domains/calendar/events/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/events/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/events/models.rs`
 - Size bytes / Размер в байтах: `3536`
 - Included characters / Включено символов: `3536`
 - Truncated / Обрезано: `no`
@@ -3213,7 +3213,7 @@ pub struct CalendarEventUpdate {
 
 ### `backend/src/domains/calendar/events/queries.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/events/queries.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/events/queries.rs`
 - Size bytes / Размер в байтах: `377`
 - Included characters / Включено символов: `377`
 - Truncated / Обрезано: `no`

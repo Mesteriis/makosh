@@ -1,25 +1,25 @@
 use base64::Engine;
 use base64::engine::general_purpose::URL_SAFE_NO_PAD;
-use hermes_gateway_protocol::{
+use http_body_util::{BodyExt, Full};
+use hyper::body::Bytes;
+use hyper::{Request, StatusCode};
+use makosh_gateway_protocol::{
     v1::{
         ClientRealtimeEventV1, ClientRealtimeFrameV1, ClientSystemStatusChangedV1,
         client_realtime_frame_v1::Frame,
     },
     validation::validate_client_realtime_frame,
 };
-use hermes_gateway_runtime::{
+use makosh_gateway_runtime::{
     BrowserRealtimeRouter, BrowserRealtimeSubscriptionSource, ClientRealtimeSubscriptionV1,
     InMemoryBrowserRealtimeSource,
 };
-use hermes_gateway_session::{BrowserGatewaySessionService, BrowserSession};
-use hermes_gateway_session_contract::{
+use makosh_gateway_session::{BrowserGatewaySessionService, BrowserSession};
+use makosh_gateway_session_contract::{
     BrowserAssertionAuthority, BrowserAuthenticationAuthority, BrowserDeviceAuthority,
     BrowserDeviceCredentialV1, BrowserDevicePrincipalV1, ClientSystemComponentIdV1,
     ClientSystemComponentStateV1, ClientSystemComponentStatusProjectionV1, GatewayIdentityFenceV1,
 };
-use http_body_util::{BodyExt, Full};
-use hyper::body::Bytes;
-use hyper::{Request, StatusCode};
 use prost::Message;
 use std::sync::Arc;
 use tokio::sync::broadcast;
@@ -220,7 +220,7 @@ fn system_status_transition_reaches_the_shared_gateway_sse_without_bootstrap_pol
     let status_event = parse_realtime_frames(&body)
         .into_iter()
         .find_map(|frame| match frame.frame {
-            Some(Frame::Event(event)) if event.contract_name == "hermes.gateway.system-status" => {
+            Some(Frame::Event(event)) if event.contract_name == "makosh.gateway.system-status" => {
                 Some(event)
             }
             _ => None,
@@ -238,7 +238,7 @@ fn valid_frame(cursor: &str) -> ClientRealtimeFrameV1 {
         frame: Some(Frame::Event(ClientRealtimeEventV1 {
             event_id: vec![1; 16],
             cursor: cursor.to_owned(),
-            contract_name: "hermes.client.status".to_owned(),
+            contract_name: "makosh.client.status".to_owned(),
             contract_version: 1,
             event_kind: "status_changed".to_owned(),
             occurred_at_unix_millis: 1,
@@ -255,7 +255,7 @@ fn invalid_frame(cursor: &str) -> ClientRealtimeFrameV1 {
         frame: Some(Frame::Event(ClientRealtimeEventV1 {
             event_id: vec![1; 16],
             cursor: cursor.to_owned(),
-            contract_name: "hermes.client.status".to_owned(),
+            contract_name: "makosh.client.status".to_owned(),
             contract_version: 1,
             event_kind: "status_changed".to_owned(),
             occurred_at_unix_millis: 1,

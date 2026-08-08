@@ -2,54 +2,54 @@
 
 use super::*;
 
-use hermes_communication_note_candidate_api::{
+use makosh_communication_note_candidate_api::{
     COMMUNICATION_NOTE_CANDIDATE_MODULE_ID_V1, COMMUNICATION_NOTE_CANDIDATE_OWNER_V1,
 };
-use hermes_communication_note_candidate_persistence::{
+use makosh_communication_note_candidate_persistence::{
     COMMUNICATION_NOTE_CANDIDATE_STORAGE_BUNDLE_REVISION_V1,
     communication_note_candidate_extraction_storage_bundle_v1,
 };
-use hermes_communication_note_candidate_runtime::{
+use makosh_communication_note_candidate_runtime::{
     COMMUNICATION_NOTE_CANDIDATE_STORAGE_CAPABILITY_ID_V1,
     communication_note_candidate_module_descriptor_v1,
     communication_note_candidate_settings_schema_bytes_v1,
 };
-use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_knowledge_command_api::{KNOWLEDGE_MODULE_ID_V1, KNOWLEDGE_OWNER_ID_V1};
-use hermes_knowledge_persistence::{
+use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_knowledge_command_api::{KNOWLEDGE_MODULE_ID_V1, KNOWLEDGE_OWNER_ID_V1};
+use makosh_knowledge_persistence::{
     KNOWLEDGE_STORAGE_BUNDLE_REVISION_V1, knowledge_storage_bundle_v1,
 };
-use hermes_knowledge_runtime::{
+use makosh_knowledge_runtime::{
     KNOWLEDGE_STORAGE_CAPABILITY_ID_V1, knowledge_module_descriptor_v1,
     knowledge_settings_schema_bytes_v1,
 };
-use hermes_review_note_candidate_api::{
+use makosh_review_note_candidate_api::{
     REVIEW_NOTE_CANDIDATE_MODULE_ID_V1, REVIEW_NOTE_CANDIDATE_OWNER_V1,
 };
-use hermes_review_note_candidate_persistence::{
+use makosh_review_note_candidate_persistence::{
     REVIEW_NOTE_CANDIDATE_STORAGE_BUNDLE_REVISION_V1, review_note_candidate_storage_bundle_v1,
 };
-use hermes_review_note_candidate_runtime::{
+use makosh_review_note_candidate_runtime::{
     REVIEW_NOTE_CANDIDATE_STORAGE_CAPABILITY_ID_V1, review_note_candidate_module_descriptor_v1,
     review_note_candidate_settings_schema_bytes_v1,
 };
-use hermes_reviewed_note_candidate_promotion_core::{
+use makosh_reviewed_note_candidate_promotion_core::{
     REVIEWED_NOTE_CANDIDATE_PROMOTION_MODULE_ID_V1, REVIEWED_NOTE_CANDIDATE_PROMOTION_OWNER_V1,
 };
-use hermes_reviewed_note_candidate_promotion_persistence::schema::{
+use makosh_reviewed_note_candidate_promotion_persistence::schema::{
     REVIEWED_NOTE_CANDIDATE_PROMOTION_STORAGE_BUNDLE_REVISION_V1,
     reviewed_note_candidate_promotion_storage_bundle_v1,
 };
-use hermes_reviewed_note_candidate_promotion_runtime::{
+use makosh_reviewed_note_candidate_promotion_runtime::{
     REVIEWED_NOTE_CANDIDATE_PROMOTION_STORAGE_CAPABILITY_ID_V1,
     reviewed_note_candidate_promotion_module_descriptor_v1,
     reviewed_note_candidate_promotion_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedWorkflowRuntimeConfigurationV1, ModuleDescriptorV1, ModuleKindV1,
 };
-use hermes_storage_protocol::v1::StorageBundleV1;
+use makosh_storage_protocol::v1::StorageBundleV1;
 
 const NOTE_CANDIDATE_BUILD_ID_V1: &str = "managed-reviewed-note-candidate-live";
 pub(super) const NOTE_CANDIDATE_LOGICAL_HUMAN_OWNER_ID_V1: &str = "owner-1";
@@ -149,7 +149,7 @@ fn note_candidate_units_v1() -> [NoteCandidateManagedUnitV1; 4] {
         NoteCandidateManagedUnitV1 {
             label: "Communication Note Candidate",
             artifact_id: "communication_note_candidate_extraction.runtime.v1",
-            binary_environment: "HERMES_COMMUNICATION_NOTE_CANDIDATE_RUNTIME_BIN",
+            binary_environment: "MAKOSH_COMMUNICATION_NOTE_CANDIDATE_RUNTIME_BIN",
             storage_capability_id: COMMUNICATION_NOTE_CANDIDATE_STORAGE_CAPABILITY_ID_V1,
             storage_revision: COMMUNICATION_NOTE_CANDIDATE_STORAGE_BUNDLE_REVISION_V1,
             descriptor: communication_note_candidate_module_descriptor_v1(
@@ -161,7 +161,7 @@ fn note_candidate_units_v1() -> [NoteCandidateManagedUnitV1; 4] {
         NoteCandidateManagedUnitV1 {
             label: "Review Note Candidate",
             artifact_id: "review.note-candidate.runtime.v1",
-            binary_environment: "HERMES_REVIEW_NOTE_CANDIDATE_RUNTIME_BIN",
+            binary_environment: "MAKOSH_REVIEW_NOTE_CANDIDATE_RUNTIME_BIN",
             storage_capability_id: REVIEW_NOTE_CANDIDATE_STORAGE_CAPABILITY_ID_V1,
             storage_revision: REVIEW_NOTE_CANDIDATE_STORAGE_BUNDLE_REVISION_V1,
             descriptor: review_note_candidate_module_descriptor_v1(NOTE_CANDIDATE_BUILD_ID_V1),
@@ -171,7 +171,7 @@ fn note_candidate_units_v1() -> [NoteCandidateManagedUnitV1; 4] {
         NoteCandidateManagedUnitV1 {
             label: "Reviewed Note Candidate Promotion",
             artifact_id: "reviewed_note_candidate_promotion.runtime.v1",
-            binary_environment: "HERMES_REVIEWED_NOTE_CANDIDATE_PROMOTION_RUNTIME_BIN",
+            binary_environment: "MAKOSH_REVIEWED_NOTE_CANDIDATE_PROMOTION_RUNTIME_BIN",
             storage_capability_id: REVIEWED_NOTE_CANDIDATE_PROMOTION_STORAGE_CAPABILITY_ID_V1,
             storage_revision: REVIEWED_NOTE_CANDIDATE_PROMOTION_STORAGE_BUNDLE_REVISION_V1,
             descriptor: reviewed_note_candidate_promotion_module_descriptor_v1(
@@ -183,7 +183,7 @@ fn note_candidate_units_v1() -> [NoteCandidateManagedUnitV1; 4] {
         NoteCandidateManagedUnitV1 {
             label: "Knowledge",
             artifact_id: "knowledge.runtime.v1",
-            binary_environment: "HERMES_KNOWLEDGE_RUNTIME_BIN",
+            binary_environment: "MAKOSH_KNOWLEDGE_RUNTIME_BIN",
             storage_capability_id: KNOWLEDGE_STORAGE_CAPABILITY_ID_V1,
             storage_revision: KNOWLEDGE_STORAGE_BUNDLE_REVISION_V1,
             descriptor: knowledge_module_descriptor_v1(NOTE_CANDIDATE_BUILD_ID_V1),
@@ -217,7 +217,7 @@ fn admit_note_candidate_unit_v1(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             unit.artifact_id,
             Sha256::digest(
                 std::fs::read(binary(unit.binary_environment))
@@ -433,7 +433,7 @@ fn start_reserved_note_candidate_unit_v1(
 fn active_note_candidate_storage_binding_v1(
     store: &SqliteControlStore,
     admitted: &AdmittedNoteCandidateRuntimeV1,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(
             &admitted.registration_id,

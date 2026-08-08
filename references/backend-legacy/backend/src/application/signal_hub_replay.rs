@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::{NewEventEnvelope, StoredEventEnvelope};
-use hermes_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
+use makosh_events_api::{NewEventEnvelope, StoredEventEnvelope};
+use makosh_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
 use serde_json::json;
 use std::sync::Arc;
 
@@ -30,10 +30,10 @@ use crate::workflows::yandex_telemost_calendar_matching::project_yandex_telemost
 use crate::workflows::zoom_calendar_matching::{
     ZOOM_CALENDAR_MATCHING_CONSUMER, project_zoom_calendar_matching_event,
 };
-use hermes_events_api::EventLogQuery;
-use hermes_events_postgres::consumers::EventConsumerStore;
-use hermes_events_postgres::cursors::ProjectionCursorStore;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_api::EventLogQuery;
+use makosh_events_postgres::consumers::EventConsumerStore;
+use makosh_events_postgres::cursors::ProjectionCursorStore;
+use makosh_events_postgres::store::EventStore;
 
 #[path = "signal_hub_replay_runtime.rs"]
 mod signal_hub_replay_runtime;

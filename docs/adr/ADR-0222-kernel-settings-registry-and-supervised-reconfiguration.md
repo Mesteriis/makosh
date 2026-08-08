@@ -4,7 +4,7 @@
 Дата: 2026-07-15
 Состояние реализации: Частично реализовано: `SettingsSchemaV1`, bounded
 structural validation и проверка exact `setting_id`/value-type against schema
-существуют в `hermes-runtime-protocol`; private Control Store хранит exact
+существуют в `makosh-runtime-protocol`; private Control Store хранит exact
 schema binding, desired protobuf snapshot, независимую effective revision,
 explicit apply state и sanitized reason code с optimistic-concurrency fencing.
 Schema admission, constraints, owner-specific semantic validation, Gateway API
@@ -408,7 +408,7 @@ Kernel останавливает claims этой capability, drains, перед
 generation/revision состояние остаётся `awaiting_external_restart`.
 
 Kernel hard policy может потребовать более строгий apply mode, но никогда не
-ослабляет declared minimum. Auto restart всего Hermes запрещён.
+ослабляет declared minimum. Auto restart всего Макошь запрещён.
 
 ### Change watcher
 
@@ -480,10 +480,10 @@ Gateway. Gateway возвращает composed catalog grouped по product area
 grant epoch, desired/effective revisions, apply state и typed values только
 для `editable`/`read_only` definitions. `hidden` entries и non-current values
 не сериализуются; non-current module остаётся в composition с
-`sections_enabled=false`. Он не заменяет будущий `hermes.settings.v1`.
+`sections_enabled=false`. Он не заменяет будущий `makosh.settings.v1`.
 
 Первая public client surface — generated platform service
-`hermes.settings.v1` с bounded methods:
+`makosh.settings.v1` с bounded methods:
 
 - `ListSections`;
 - `GetSettings`;

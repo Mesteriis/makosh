@@ -1,7 +1,7 @@
 //! Owner-local custody work queue. Source receipts remain private and only a
 //! successful Blob Platform transfer may create a canonical target reference.
 
-use hermes_communications_api::{
+use makosh_communications_api::{
     CommunicationBodyBlobReferenceV1, CommunicationConversationIdV1, CommunicationMessageIdV1,
     CommunicationObservationIdV1,
 };
@@ -40,7 +40,7 @@ impl CommunicationsDurablePersistence {
         completed_at_unix_seconds: i64,
     ) -> Result<bool, CommunicationsBodyCustodyTransferErrorV1> {
         let row = sqlx::query(
-            "SELECT evidence.body_blob_ref, evidence.body_blob_reference_id, evidence.body_blob_declared_bytes, evidence.body_blob_sha256 FROM hermes_data.communications_body_custody_transfers AS source JOIN hermes_data.communications_body_custody_transfer_lifecycle AS lifecycle ON lifecycle.evidence_id = source.evidence_id JOIN hermes_data.communications_evidence_summaries AS evidence ON evidence.observation_id = source.evidence_id WHERE lifecycle.state = 2 AND evidence.body_state = 4 AND source.source_reference_id = $1 AND source.declared_bytes = $2 AND source.plaintext_sha256 = $3 ORDER BY lifecycle.completed_at_unix_seconds DESC NULLS LAST, source.evidence_id DESC LIMIT 1",
+            "SELECT evidence.body_blob_ref, evidence.body_blob_reference_id, evidence.body_blob_declared_bytes, evidence.body_blob_sha256 FROM makosh_data.communications_body_custody_transfers AS source JOIN makosh_data.communications_body_custody_transfer_lifecycle AS lifecycle ON lifecycle.evidence_id = source.evidence_id JOIN makosh_data.communications_evidence_summaries AS evidence ON evidence.observation_id = source.evidence_id WHERE lifecycle.state = 2 AND evidence.body_state = 4 AND source.source_reference_id = $1 AND source.declared_bytes = $2 AND source.plaintext_sha256 = $3 ORDER BY lifecycle.completed_at_unix_seconds DESC NULLS LAST, source.evidence_id DESC LIMIT 1",
         )
         .bind(claimed.source_reference_id.as_slice())
         .bind(i64::try_from(claimed.declared_bytes).map_err(|_| CommunicationsBodyCustodyTransferErrorV1::InvalidRow)?)
@@ -101,7 +101,7 @@ impl CommunicationsDurablePersistence {
             .await
             .map_err(|_| CommunicationsBodyCustodyTransferErrorV1::StorageUnavailable)?;
         let row = sqlx::query(
-            "SELECT transfer.evidence_id, transfer.envelope_sha256, transfer.source_reference_id, transfer.declared_bytes, transfer.plaintext_sha256, transfer.source_custody_proof FROM hermes_data.communications_body_custody_transfer_lifecycle AS lifecycle JOIN hermes_data.communications_body_custody_transfers AS transfer ON transfer.evidence_id = lifecycle.evidence_id JOIN hermes_data.communications_evidence_summaries AS evidence ON evidence.observation_id = lifecycle.evidence_id WHERE lifecycle.state = 1 AND (lifecycle.lease_expires_at_unix_seconds IS NULL OR lifecycle.lease_expires_at_unix_seconds <= $1) ORDER BY evidence.observed_at_unix_seconds DESC, lifecycle.evidence_id DESC LIMIT 1 FOR UPDATE OF lifecycle SKIP LOCKED",
+            "SELECT transfer.evidence_id, transfer.envelope_sha256, transfer.source_reference_id, transfer.declared_bytes, transfer.plaintext_sha256, transfer.source_custody_proof FROM makosh_data.communications_body_custody_transfer_lifecycle AS lifecycle JOIN makosh_data.communications_body_custody_transfers AS transfer ON transfer.evidence_id = lifecycle.evidence_id JOIN makosh_data.communications_evidence_summaries AS evidence ON evidence.observation_id = lifecycle.evidence_id WHERE lifecycle.state = 1 AND (lifecycle.lease_expires_at_unix_seconds IS NULL OR lifecycle.lease_expires_at_unix_seconds <= $1) ORDER BY evidence.observed_at_unix_seconds DESC, lifecycle.evidence_id DESC LIMIT 1 FOR UPDATE OF lifecycle SKIP LOCKED",
         )
         .bind(now_unix_seconds)
         .fetch_optional(&mut *transaction)
@@ -116,7 +116,7 @@ impl CommunicationsDurablePersistence {
         };
         let claimed = claimed_from_row(row, worker_id)?;
         let lease = sqlx::query(
-            "UPDATE hermes_data.communications_body_custody_transfer_lifecycle SET claimed_by = $2, lease_expires_at_unix_seconds = $3 WHERE evidence_id = $1 AND state = 1",
+            "UPDATE makosh_data.communications_body_custody_transfer_lifecycle SET claimed_by = $2, lease_expires_at_unix_seconds = $3 WHERE evidence_id = $1 AND state = 1",
         )
         .bind(claimed.evidence_id.bytes().as_slice())
         .bind(worker_id)
@@ -151,7 +151,7 @@ impl CommunicationsDurablePersistence {
             .await
             .map_err(|_| CommunicationsBodyCustodyTransferErrorV1::StorageUnavailable)?;
         let evidence = sqlx::query(
-            "SELECT message.message_id, message.conversation_id, evidence.observed_at_unix_seconds FROM hermes_data.communications_evidence_summaries AS evidence LEFT JOIN hermes_data.communications_messages AS message ON message.last_evidence_id = evidence.observation_id WHERE evidence.observation_id = $1 AND evidence.body_state = 2",
+            "SELECT message.message_id, message.conversation_id, evidence.observed_at_unix_seconds FROM makosh_data.communications_evidence_summaries AS evidence LEFT JOIN makosh_data.communications_messages AS message ON message.last_evidence_id = evidence.observation_id WHERE evidence.observation_id = $1 AND evidence.body_state = 2",
         )
         .bind(claimed.evidence_id.bytes().as_slice())
         .fetch_optional(&mut *transaction)
@@ -172,7 +172,7 @@ impl CommunicationsDurablePersistence {
             .try_get("observed_at_unix_seconds")
             .map_err(|_| CommunicationsBodyCustodyTransferErrorV1::InvalidRow)?;
         let settled = sqlx::query(
-            "UPDATE hermes_data.communications_body_custody_transfer_lifecycle SET state = 2, completed_at_unix_seconds = $3, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE evidence_id = $1 AND state = 1 AND claimed_by = $2",
+            "UPDATE makosh_data.communications_body_custody_transfer_lifecycle SET state = 2, completed_at_unix_seconds = $3, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE evidence_id = $1 AND state = 1 AND claimed_by = $2",
         )
         .bind(claimed.evidence_id.bytes().as_slice())
         .bind(&claimed.worker_id)
@@ -184,7 +184,7 @@ impl CommunicationsDurablePersistence {
             return Err(CommunicationsBodyCustodyTransferErrorV1::ClaimLost);
         }
         let summary = sqlx::query(
-            "UPDATE hermes_data.communications_evidence_summaries SET body_state = 4, body_blob_ref = $2, body_blob_reference_id = $3, body_blob_declared_bytes = $4, body_blob_sha256 = $5 WHERE observation_id = $1 AND body_state = 2",
+            "UPDATE makosh_data.communications_evidence_summaries SET body_state = 4, body_blob_ref = $2, body_blob_reference_id = $3, body_blob_declared_bytes = $4, body_blob_sha256 = $5 WHERE observation_id = $1 AND body_state = 2",
         )
         .bind(claimed.evidence_id.bytes().as_slice())
         .bind(&target.blob_ref)
@@ -202,7 +202,7 @@ impl CommunicationsDurablePersistence {
         }
         if let Some(message_id) = message_id {
             let message = sqlx::query(
-                "UPDATE hermes_data.communications_messages SET body_state = 3, canonical_body_state = 4, canonical_revision = canonical_revision + 1 WHERE message_id = $1 AND last_evidence_id = $2",
+                "UPDATE makosh_data.communications_messages SET body_state = 3, canonical_body_state = 4, canonical_revision = canonical_revision + 1 WHERE message_id = $1 AND last_evidence_id = $2",
             )
             .bind(message_id.as_slice())
             .bind(claimed.evidence_id.bytes().as_slice())
@@ -250,7 +250,7 @@ impl CommunicationsDurablePersistence {
             .await
             .map_err(|_| CommunicationsBodyCustodyTransferErrorV1::StorageUnavailable)?;
         let result = sqlx::query(
-            "UPDATE hermes_data.communications_body_custody_transfer_lifecycle SET state = 3, completed_at_unix_seconds = $3, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE evidence_id = $1 AND state = 1 AND claimed_by = $2",
+            "UPDATE makosh_data.communications_body_custody_transfer_lifecycle SET state = 3, completed_at_unix_seconds = $3, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE evidence_id = $1 AND state = 1 AND claimed_by = $2",
         )
         .bind(claimed.evidence_id.bytes().as_slice())
         .bind(&claimed.worker_id)
@@ -262,7 +262,7 @@ impl CommunicationsDurablePersistence {
             return Ok(false);
         }
         let summary = sqlx::query(
-            "UPDATE hermes_data.communications_evidence_summaries SET body_state = 3, body_admission_failure = 4 WHERE observation_id = $1 AND body_state = 2",
+            "UPDATE makosh_data.communications_evidence_summaries SET body_state = 3, body_admission_failure = 4 WHERE observation_id = $1 AND body_state = 2",
         )
         .bind(claimed.evidence_id.bytes().as_slice())
         .execute(&mut *transaction)
@@ -272,7 +272,7 @@ impl CommunicationsDurablePersistence {
             return Err(CommunicationsBodyCustodyTransferErrorV1::ClaimLost);
         }
         sqlx::query(
-            "UPDATE hermes_data.communications_messages SET body_state = 3, canonical_body_state = 3, canonical_revision = canonical_revision + 1 WHERE last_evidence_id = $1 AND canonical_body_state = 2",
+            "UPDATE makosh_data.communications_messages SET body_state = 3, canonical_body_state = 3, canonical_revision = canonical_revision + 1 WHERE last_evidence_id = $1 AND canonical_body_state = 2",
         )
         .bind(claimed.evidence_id.bytes().as_slice())
         .execute(&mut *transaction)
@@ -293,7 +293,7 @@ impl CommunicationsDurablePersistence {
         claimed: &ClaimedCommunicationsBodyCustodyTransferV1,
     ) -> Result<bool, CommunicationsBodyCustodyTransferErrorV1> {
         let result = sqlx::query(
-            "UPDATE hermes_data.communications_body_custody_transfer_lifecycle SET claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE evidence_id = $1 AND state = 1 AND claimed_by = $2",
+            "UPDATE makosh_data.communications_body_custody_transfer_lifecycle SET claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE evidence_id = $1 AND state = 1 AND claimed_by = $2",
         )
         .bind(claimed.evidence_id.bytes().as_slice())
         .bind(&claimed.worker_id)
@@ -309,7 +309,7 @@ async fn enqueue_index_job(
     job: &CommunicationsDerivedIndexJobV1,
 ) -> Result<(), CommunicationsBodyCustodyTransferErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.communications_derived_index_jobs (job_id, operation, evidence_id, message_id, conversation_id, blob_ref, blob_reference_id, blob_declared_bytes, blob_sha256, projection_revision, observed_at_unix_seconds, created_at_unix_seconds) VALUES ($1, 1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) ON CONFLICT (job_id) DO UPDATE SET operation = EXCLUDED.operation, evidence_id = EXCLUDED.evidence_id, message_id = EXCLUDED.message_id, conversation_id = EXCLUDED.conversation_id, blob_ref = EXCLUDED.blob_ref, blob_reference_id = EXCLUDED.blob_reference_id, blob_declared_bytes = EXCLUDED.blob_declared_bytes, blob_sha256 = EXCLUDED.blob_sha256, projection_revision = EXCLUDED.projection_revision, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, created_at_unix_seconds = EXCLUDED.created_at_unix_seconds, completed_at_unix_seconds = NULL, outcome = NULL, failure_code = NULL, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE hermes_data.communications_derived_index_jobs.completed_at_unix_seconds IS NOT NULL",
+        "INSERT INTO makosh_data.communications_derived_index_jobs (job_id, operation, evidence_id, message_id, conversation_id, blob_ref, blob_reference_id, blob_declared_bytes, blob_sha256, projection_revision, observed_at_unix_seconds, created_at_unix_seconds) VALUES ($1, 1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) ON CONFLICT (job_id) DO UPDATE SET operation = EXCLUDED.operation, evidence_id = EXCLUDED.evidence_id, message_id = EXCLUDED.message_id, conversation_id = EXCLUDED.conversation_id, blob_ref = EXCLUDED.blob_ref, blob_reference_id = EXCLUDED.blob_reference_id, blob_declared_bytes = EXCLUDED.blob_declared_bytes, blob_sha256 = EXCLUDED.blob_sha256, projection_revision = EXCLUDED.projection_revision, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, created_at_unix_seconds = EXCLUDED.created_at_unix_seconds, completed_at_unix_seconds = NULL, outcome = NULL, failure_code = NULL, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE makosh_data.communications_derived_index_jobs.completed_at_unix_seconds IS NOT NULL",
     )
     .bind(job.job_id.as_slice())
     .bind(job.evidence_id.bytes().as_slice())

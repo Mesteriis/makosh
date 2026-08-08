@@ -35,8 +35,8 @@ Request:
 ```json
 {
   "account_id": "zoom_live_primary",
-  "endpoint_url": "https://hermes.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks",
-  "subscription_name": "Hermes Zoom Runtime",
+  "endpoint_url": "https://makosh.example.test/api/v1/integrations/zoom/runtime-bridge/webhooks",
+  "subscription_name": "Макошь Zoom Runtime",
   "event_types": [
     "meeting.started",
     "meeting.ended",
@@ -53,7 +53,7 @@ Behavior:
 - OAuth user accounts exchange client_credentials for app-owned management tokens;
 - Server-to-Server accounts exchange account_credentials for app-owned management tokens;
 - when the managed subscription already matches endpoint + event types, response status is unchanged;
-- when the managed subscription is missing or stale, Hermes deletes the stale managed subscription and recreates it.
+- when the managed subscription is missing or stale, Макошь deletes the stale managed subscription and recreates it.
 ```
 
 ## Webhook subscription remove
@@ -240,7 +240,7 @@ delete.
 
 | Field | Meaning |
 |---|---|
-| `account_id` | Hermes provider account id. |
+| `account_id` | Макошь provider account id. |
 | `provider_kind` | `zoom_user` or `zoom_server_to_server`. |
 | `runtime_kind` | `zoom_fixture_runtime`, `zoom_live_blocked_runtime` or `zoom_live_authorized_runtime`. |
 | `status` | Derived lifecycle status. |

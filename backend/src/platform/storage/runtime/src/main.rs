@@ -4,11 +4,11 @@ mod admin;
 mod cli;
 mod control;
 mod recovery;
-pub(crate) use hermes_storage_vault as vault;
+pub(crate) use makosh_storage_vault as vault;
 
 use std::path::Path;
 
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     v1::StorageRuntimeConfigurationV1, validation::validate_storage_runtime_configuration,
 };
 use prost::Message;

@@ -1,6 +1,6 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-communication-cross-channel-forward-core";
+pub const PACKAGE: &str = "makosh-communication-cross-channel-forward-core";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct CrossChannelForwardDraftV1 {

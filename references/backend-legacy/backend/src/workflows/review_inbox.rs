@@ -1,4 +1,4 @@
-use hermes_events_api::StoredEventEnvelope;
+use makosh_events_api::StoredEventEnvelope;
 use serde_json::json;
 use sqlx::Row;
 use sqlx::postgres::PgPool;
@@ -26,7 +26,7 @@ use crate::workflows::review_mirror::{
     sync_identity_candidate_review_state_in_transaction, sync_identity_candidate_to_review,
     task::ensure_task_candidate_review_item,
 };
-use hermes_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::errors::EventStoreError;
 
 #[derive(Debug, Error)]
 pub enum ReviewInboxWorkflowError {
@@ -613,7 +613,7 @@ mod tests {
     use serde_json::{Map, Value, json};
 
     use super::identity_candidate_payload_from_event;
-    use hermes_events_api::{EventEnvelope, StoredEventEnvelope};
+    use makosh_events_api::{EventEnvelope, StoredEventEnvelope};
 
     #[test]
     fn identity_candidate_replay_accepts_legacy_person_identifiers() {

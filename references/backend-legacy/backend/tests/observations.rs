@@ -1,14 +1,14 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::collections::HashSet;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::{TimeZone, Utc};
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_observations_api::models::{
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_observations_api::models::{
     NewObservation, NewObservationIngestionRun, NewObservationLink, ObservationIngestionRunStatus,
     ObservationOriginKind,
 };
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_postgres::store::ObservationStore;
 use serde_json::{Value, json};
 use sqlx::Row;
 use sqlx::postgres::PgPool;
@@ -30,7 +30,7 @@ async fn manual_capture_creates_observation_without_vault_source_against_postgre
                 ObservationOriginKind::Manual,
                 observed_at,
                 json!({
-                    "transcript": "Record the Hermes evidence architecture decision.",
+                    "transcript": "Record the Макошь evidence architecture decision.",
                     "duration_seconds": 42
                 }),
                 format!("manual://voice-memo/{suffix}"),
@@ -66,7 +66,7 @@ async fn manual_capture_creates_observation_without_vault_source_against_postgre
 
     assert_eq!(
         payload["transcript"],
-        json!("Record the Hermes evidence architecture decision.")
+        json!("Record the Макошь evidence architecture decision.")
     );
     assert_eq!(provenance["captured_by"], json!("manual_voice_memo"));
 
@@ -379,9 +379,9 @@ async fn browser_capture_creates_observation_without_vault_source_against_postgr
                 ObservationOriginKind::BrowserCapture,
                 Utc.with_ymd_and_hms(2026, 6, 18, 10, 15, 0).unwrap(),
                 json!({
-                    "url": "https://example.com/hermes",
+                    "url": "https://example.com/makosh",
                     "selection": "Canonical evidence store",
-                    "window_title": format!("Hermes Browser {suffix}")
+                    "window_title": format!("Макошь Browser {suffix}")
                 }),
                 format!("browser://tab/{suffix}"),
             )

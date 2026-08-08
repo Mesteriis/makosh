@@ -78,7 +78,7 @@ fn classify_next_delivery<T, E>(
 }
 
 fn unavailable_at(stage: &str) -> RuntimePullDeliveryErrorV1 {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_runtime_pull_delivery_unavailable stage={stage}");
     }
     RuntimePullDeliveryErrorV1::Unavailable

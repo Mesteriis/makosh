@@ -1,10 +1,10 @@
 //! Resolves Event Hub route entries from approved Control Store state.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleEventEnvelopeKindV1, ModuleEventRouteDirectionV1, ModuleEventRouteRequestInputV1,
     ModuleEventRouteRequestV1, ModuleGrantSnapshot, ModuleRegistryStore,
 };
-use hermes_kernel_control_store_sqlite::StoreError;
+use makosh_kernel_control_store_sqlite::StoreError;
 
 const SCHEDULER_MODULE_ID_V1: &str = "scheduler";
 const SCHEDULER_OWNER_ID_V1: &str = "scheduler";
@@ -169,12 +169,12 @@ where
 
 #[cfg(test)]
 mod tests {
-    use hermes_kernel_control_store::{
+    use makosh_kernel_control_store::{
         ModuleDescriptorRegistrationRequestsV1, ModuleEventDeliveryPolicyV1,
         ModuleEventSubscriptionRequirementV1, ModuleRegistration, ModuleRegistrationState,
         ModuleSchedulerJobRequestV1,
     };
-    use hermes_kernel_control_store_sqlite::SqliteControlStore;
+    use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
     use super::*;
 
@@ -209,7 +209,7 @@ mod tests {
 
     fn fixture_root(label: &str) -> std::path::PathBuf {
         std::env::temp_dir().join(format!(
-            "hermes-event-catalog-{}-{label}",
+            "makosh-event-catalog-{}-{label}",
             std::process::id()
         ))
     }

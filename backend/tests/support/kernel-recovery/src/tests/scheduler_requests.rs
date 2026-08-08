@@ -1,8 +1,8 @@
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     InitialOwnerIdentity, ModuleRegistration, ModuleRegistrationState, ModuleSchedulerJobRequestV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     CapabilityCriticalityV1, CapabilityDescriptorV1, CapabilityRequestV1, ContractReferenceV1,
     ModuleDescriptorV1, ModuleKindV1, SchedulerJobRequestV1, UpsertSchedulerScheduleRequestV1,
     capability_request_v1::Request,
@@ -16,7 +16,7 @@ use super::common::unique_target_root;
 
 #[test]
 fn control_store_retains_owner_bound_scheduler_job_contracts_atomically() {
-    let root = unique_target_root("hermes-scheduler-job-request");
+    let root = unique_target_root("makosh-scheduler-job-request");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -26,7 +26,7 @@ fn control_store_retains_owner_bound_scheduler_job_contracts_atomically() {
         .create_pending_registration_with_descriptor_requests(
             &registration(),
             &["scheduler.jobs".to_owned()],
-            hermes_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
+            makosh_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
                 storage: &[],
                 events: &[],
                 blobs: &[],
@@ -68,7 +68,7 @@ fn control_store_retains_owner_bound_scheduler_job_contracts_atomically() {
 
 #[test]
 fn control_store_rejects_foreign_or_duplicate_scheduler_job_contracts_atomically() {
-    let root = unique_target_root("hermes-scheduler-job-request-invalid");
+    let root = unique_target_root("makosh-scheduler-job-request-invalid");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -89,7 +89,7 @@ fn control_store_rejects_foreign_or_duplicate_scheduler_job_contracts_atomically
                 .create_pending_registration_with_descriptor_requests(
                     &registration(),
                     &["scheduler.jobs".to_owned()],
-                    hermes_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
+                    makosh_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
                         storage: &[],
                         events: &[],
                         blobs: &[],
@@ -117,7 +117,7 @@ fn control_store_rejects_foreign_or_duplicate_scheduler_job_contracts_atomically
 
 #[test]
 fn module_registration_retains_descriptor_declared_scheduler_job_contract() {
-    let root = unique_target_root("hermes-scheduler-job-descriptor-registration");
+    let root = unique_target_root("makosh-scheduler-job-descriptor-registration");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -150,7 +150,7 @@ fn module_registration_retains_descriptor_declared_scheduler_job_contract() {
 
 #[test]
 fn scheduler_schedule_admission_requires_the_current_exact_approved_job_contract() {
-    let root = unique_target_root("hermes-scheduler-schedule-admission");
+    let root = unique_target_root("makosh-scheduler-schedule-admission");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -159,7 +159,7 @@ fn scheduler_schedule_admission_requires_the_current_exact_approved_job_contract
         .create_pending_registration_with_descriptor_requests(
             &registration(),
             &["scheduler.jobs".to_owned()],
-            hermes_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
+            makosh_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
                 storage: &[],
                 events: &[],
                 blobs: &[],

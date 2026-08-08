@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { MailMessageLocationOperationOutcomeV1 } from '../../../gen/hermes/mail/message_location/v1/client_pb'
+import { MailMessageLocationOperationOutcomeV1 } from '../../../gen/makosh/mail/message_location/v1/client_pb'
 import {
 	getMailMessageLocationStatus,
 	mutateMailMessageLocation,

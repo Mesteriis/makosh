@@ -3,7 +3,7 @@
 Статус: Принято
 Дата: 2026-07-24
 Состояние реализации: owner-neutral wire foundation реализован в
-`hermes-runtime-protocol`, а Kernel реализует exact intersection verified
+`makosh-runtime-protocol`, а Kernel реализует exact intersection verified
 descriptor/effective grants/signed manifest, launch-scoped staging native
 dependencies и owner-private integration state root. Telegram runtime больше
 не принимает artifact/database paths через settings: он проверяет exact staged
@@ -107,12 +107,12 @@ Request находится внутри exact capability descriptor. Generic
 Для Telegram exact logical binding:
 
 ```text
-module_id   = hermes-telegram-runtime
+module_id   = makosh-telegram-runtime
 artifact_id = telegram.tdjson.v1
 use         = native_dynamic_library
 ```
 
-`hermes-telegram-tdlib` остаётся owner-local adapter package, а native TDLib
+`makosh-telegram-tdlib` остаётся owner-local adapter package, а native TDLib
 artifact — отдельная release assembly unit. Ни artifact, ни adapter не входят
 в Communications build unit.
 
@@ -169,14 +169,14 @@ state_generation
 state_layout_revision
 ```
 
-Root детерминированно scoped по Hermes instance, logical owner, module
+Root детерминированно scoped по Макошь instance, logical owner, module
 registration и opaque configuration instance. Client, settings и provider не
 передают filesystem path. Account label, phone, email, provider body или
 credential metadata в path не попадают.
 
 Kernel отвечает только за:
 
-- выбор корня внутри explicit Hermes data directory;
+- выбор корня внутри explicit Макошь data directory;
 - создание private parent/child directories без symlink traversal;
 - permissions, owner binding и current state generation;
 - отсутствие path alias между registrations/configuration instances;

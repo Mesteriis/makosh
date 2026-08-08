@@ -1,6 +1,6 @@
 //! Mail-owned durable account lifecycle journal and tombstone.
 
-use hermes_mail_api::{
+use makosh_mail_api::{
     account::MailCredentialPurposeV1,
     account_lifecycle::{
         MailAccountLifecycleActionV1, MailAccountLifecycleCommandV1, MailAccountLifecycleReceiptV1,
@@ -13,7 +13,7 @@ use sqlx::{Postgres, Row, Transaction};
 use crate::{MailDurablePersistence, MailDurablePersistenceError};
 
 pub const MAIL_SCHEMA_V8: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.mail_account_lifecycle_operations (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_account_lifecycle_operations (
     operation_id TEXT PRIMARY KEY,
     connection_id TEXT NOT NULL,
     configuration_instance_id TEXT NOT NULL,
@@ -25,9 +25,9 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_account_lifecycle_operations (
     UNIQUE (connection_id, lifecycle_revision)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.mail_account_lifecycle_credentials (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_account_lifecycle_credentials (
     operation_id TEXT NOT NULL
-        REFERENCES hermes_data.mail_account_lifecycle_operations (operation_id),
+        REFERENCES makosh_data.mail_account_lifecycle_operations (operation_id),
     purpose SMALLINT NOT NULL CHECK (purpose IN (1, 2, 3, 4)),
     binding_revision BIGINT,
     credential_revision BIGINT NOT NULL CHECK (credential_revision > 0),
@@ -37,11 +37,11 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_account_lifecycle_credentials (
     CHECK (binding_revision IS NULL OR binding_revision > 0)
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.mail_account_tombstones (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_account_tombstones (
     connection_id TEXT PRIMARY KEY,
     configuration_instance_id TEXT NOT NULL,
     operation_id TEXT NOT NULL UNIQUE
-        REFERENCES hermes_data.mail_account_lifecycle_operations (operation_id),
+        REFERENCES makosh_data.mail_account_lifecycle_operations (operation_id),
     lifecycle_revision BIGINT NOT NULL CHECK (lifecycle_revision > 0),
     deleted_at_unix_seconds BIGINT NOT NULL CHECK (deleted_at_unix_seconds > 0)
 );
@@ -85,7 +85,7 @@ impl MailDurablePersistence {
         let tombstoned = sqlx::query_scalar::<_, bool>(
             "SELECT EXISTS(
                 SELECT 1
-                FROM hermes_data.mail_account_tombstones
+                FROM makosh_data.mail_account_tombstones
                 WHERE connection_id = $1
              )",
         )
@@ -98,7 +98,7 @@ impl MailDurablePersistence {
         }
         let current_revision = sqlx::query(
             "SELECT lifecycle_revision
-             FROM hermes_data.mail_account_lifecycle_operations
+             FROM makosh_data.mail_account_lifecycle_operations
              WHERE connection_id = $1
              ORDER BY lifecycle_revision DESC
              LIMIT 1
@@ -120,7 +120,7 @@ impl MailDurablePersistence {
         let credentials = lifecycle_credentials(&mut transaction, &command.connection_id).await?;
         let state = aggregate_lifecycle_state(&credentials);
         sqlx::query(
-            "INSERT INTO hermes_data.mail_account_lifecycle_operations (
+            "INSERT INTO makosh_data.mail_account_lifecycle_operations (
                 operation_id, connection_id, configuration_instance_id, action,
                 lifecycle_revision, state, requested_at_unix_seconds, updated_at_unix_seconds
              ) VALUES ($1, $2, $3, $4, $5, $6, $7, $7)",
@@ -137,12 +137,12 @@ impl MailDurablePersistence {
         .map_err(|_| MailDurablePersistenceError::Database)?;
         for progress in &credentials {
             let statement = if progress.purpose == MailCredentialPurposeV1::IcloudCardDavPassword {
-                "INSERT INTO hermes_data.mail_icloud_carddav_lifecycle_credentials (
+                "INSERT INTO makosh_data.mail_icloud_carddav_lifecycle_credentials (
                     operation_id, purpose, binding_revision, credential_revision,
                     state, updated_at_unix_seconds
                  ) VALUES ($1, $2, $3, $4, $5, $6)"
             } else {
-                "INSERT INTO hermes_data.mail_account_lifecycle_credentials (
+                "INSERT INTO makosh_data.mail_account_lifecycle_credentials (
                     operation_id, purpose, binding_revision, credential_revision,
                     state, updated_at_unix_seconds
                  ) VALUES ($1, $2, $3, $4, $5, $6)"
@@ -209,7 +209,7 @@ impl MailDurablePersistence {
             .map_err(|_| MailDurablePersistenceError::Database)?;
         let operation = sqlx::query(
             "SELECT configuration_instance_id, action, lifecycle_revision
-             FROM hermes_data.mail_account_lifecycle_operations
+             FROM makosh_data.mail_account_lifecycle_operations
              WHERE operation_id = $1 AND connection_id = $2
              FOR UPDATE",
         )
@@ -220,11 +220,11 @@ impl MailDurablePersistence {
         .map_err(|_| MailDurablePersistenceError::Database)?
         .ok_or(MailDurablePersistenceError::InvalidRow)?;
         let lifecycle_statement = if purpose == MailCredentialPurposeV1::IcloudCardDavPassword {
-            "UPDATE hermes_data.mail_icloud_carddav_lifecycle_credentials
+            "UPDATE makosh_data.mail_icloud_carddav_lifecycle_credentials
              SET state = $1, updated_at_unix_seconds = $2
              WHERE operation_id = $3 AND purpose = $4 AND state IN (1, 4)"
         } else {
-            "UPDATE hermes_data.mail_account_lifecycle_credentials
+            "UPDATE makosh_data.mail_account_lifecycle_credentials
              SET state = $1, updated_at_unix_seconds = $2
              WHERE operation_id = $3 AND purpose = $4 AND state IN (1, 4)"
         };
@@ -243,7 +243,7 @@ impl MailDurablePersistence {
             lifecycle_credentials_for_operation(&mut transaction, operation_id).await?;
         let lifecycle_state = aggregate_lifecycle_state(&credentials);
         sqlx::query(
-            "UPDATE hermes_data.mail_account_lifecycle_operations
+            "UPDATE makosh_data.mail_account_lifecycle_operations
              SET state = $1, updated_at_unix_seconds = $2
              WHERE operation_id = $3",
         )
@@ -264,13 +264,13 @@ impl MailDurablePersistence {
                 .find(|progress| progress.purpose == purpose)
                 .ok_or(MailDurablePersistenceError::InvalidRow)?;
             let binding_statement = if purpose == MailCredentialPurposeV1::IcloudCardDavPassword {
-                "UPDATE hermes_data.mail_icloud_carddav_credential_bindings
+                "UPDATE makosh_data.mail_icloud_carddav_credential_bindings
                  SET state = $1, applied_runtime_generation = NULL,
                      updated_at_unix_seconds = $2
                  WHERE connection_id = $3 AND purpose = $4
                    AND binding_revision = $5 AND credential_revision = $6"
             } else {
-                "UPDATE hermes_data.mail_account_credential_bindings
+                "UPDATE makosh_data.mail_account_credential_bindings
                  SET state = $1, applied_runtime_generation = NULL,
                      updated_at_unix_seconds = $2
                  WHERE connection_id = $3 AND purpose = $4
@@ -334,7 +334,7 @@ impl MailDurablePersistence {
         }
         let Some(row) = sqlx::query(
             "SELECT action, lifecycle_revision, state
-             FROM hermes_data.mail_account_lifecycle_operations
+             FROM makosh_data.mail_account_lifecycle_operations
              WHERE operation_id = $1 AND connection_id = $2",
         )
         .bind(operation_id)
@@ -374,7 +374,7 @@ impl MailDurablePersistence {
         }
         let operation_id = sqlx::query(
             "SELECT operation_id
-             FROM hermes_data.mail_account_lifecycle_operations
+             FROM makosh_data.mail_account_lifecycle_operations
              WHERE connection_id = $1
              ORDER BY lifecycle_revision DESC
              LIMIT 1",
@@ -406,7 +406,7 @@ impl MailDurablePersistence {
         }
         sqlx::query_scalar::<_, bool>(
             "SELECT EXISTS(
-                SELECT 1 FROM hermes_data.mail_account_tombstones WHERE connection_id = $1
+                SELECT 1 FROM makosh_data.mail_account_tombstones WHERE connection_id = $1
              )",
         )
         .bind(connection_id)
@@ -422,11 +422,11 @@ async fn lifecycle_credentials(
 ) -> Result<Vec<MailCredentialLifecycleProgressV1>, MailDurablePersistenceError> {
     let basic = sqlx::query(
         "SELECT purpose, binding_revision, credential_revision
-         FROM hermes_data.mail_account_credential_bindings
+         FROM makosh_data.mail_account_credential_bindings
          WHERE connection_id = $1 AND state NOT IN (5)
          UNION ALL
          SELECT purpose, binding_revision, credential_revision
-         FROM hermes_data.mail_icloud_carddav_credential_bindings
+         FROM makosh_data.mail_icloud_carddav_credential_bindings
          WHERE connection_id = $1 AND state NOT IN (5)
          ORDER BY purpose",
     )
@@ -450,7 +450,7 @@ async fn lifecycle_credentials(
         .collect::<Result<Vec<_>, MailDurablePersistenceError>>()?;
     if let Some(row) = sqlx::query(
         "SELECT access_token_revision, refresh_credential_revision
-         FROM hermes_data.mail_gmail_oauth_credential_bindings
+         FROM makosh_data.mail_gmail_oauth_credential_bindings
          WHERE connection_id = $1",
     )
     .bind(connection_id)
@@ -482,11 +482,11 @@ async fn lifecycle_credentials_for_operation(
 ) -> Result<Vec<MailCredentialLifecycleProgressV1>, MailDurablePersistenceError> {
     let rows = sqlx::query(
         "SELECT purpose, state, binding_revision, credential_revision
-         FROM hermes_data.mail_account_lifecycle_credentials
+         FROM makosh_data.mail_account_lifecycle_credentials
          WHERE operation_id = $1
          UNION ALL
          SELECT purpose, state, binding_revision, credential_revision
-         FROM hermes_data.mail_icloud_carddav_lifecycle_credentials
+         FROM makosh_data.mail_icloud_carddav_lifecycle_credentials
          WHERE operation_id = $1
          ORDER BY purpose",
     )
@@ -503,11 +503,11 @@ async fn lifecycle_credentials_for_pool(
 ) -> Result<Vec<MailCredentialLifecycleProgressV1>, MailDurablePersistenceError> {
     let rows = sqlx::query(
         "SELECT purpose, state, binding_revision, credential_revision
-         FROM hermes_data.mail_account_lifecycle_credentials
+         FROM makosh_data.mail_account_lifecycle_credentials
          WHERE operation_id = $1
          UNION ALL
          SELECT purpose, state, binding_revision, credential_revision
-         FROM hermes_data.mail_icloud_carddav_lifecycle_credentials
+         FROM makosh_data.mail_icloud_carddav_lifecycle_credentials
          WHERE operation_id = $1
          ORDER BY purpose",
     )
@@ -571,7 +571,7 @@ async fn insert_account_tombstone_values(
     deleted_at_unix_seconds: i64,
 ) -> Result<(), MailDurablePersistenceError> {
     sqlx::query(
-        "INSERT INTO hermes_data.mail_account_tombstones (
+        "INSERT INTO makosh_data.mail_account_tombstones (
             connection_id, configuration_instance_id, operation_id,
             lifecycle_revision, deleted_at_unix_seconds
          ) VALUES ($1, $2, $3, $4, $5)",

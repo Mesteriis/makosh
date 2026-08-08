@@ -43,8 +43,8 @@ const { cancelMouseLeaveDismiss, scheduleMouseLeaveDismiss } = useMouseLeaveDism
 	getBoundaryElements: () => [rootRef.value, listboxRef.value]
 })
 
-const classes = computed(() => ['hermes-autocomplete', props.class])
-const listId = computed(() => `${props.id ?? 'hermes-autocomplete'}-listbox`)
+const classes = computed(() => ['makosh-autocomplete', props.class])
+const listId = computed(() => `${props.id ?? 'makosh-autocomplete'}-listbox`)
 const filteredOptions = computed(() => {
 	const query = props.modelValue.trim().toLocaleLowerCase()
 	const options = query
@@ -138,7 +138,7 @@ function handleFocusout(event: FocusEvent): void {
 		@mouseleave="scheduleMouseLeaveDismiss"
 	>
 		<input
-			class="hermes-native-control"
+			class="makosh-native-control"
 			:aria-activedescendant="activeDescendant"
 			:aria-autocomplete="'list'"
 			:aria-controls="listId"
@@ -155,12 +155,12 @@ function handleFocusout(event: FocusEvent): void {
 			@input="handleInput"
 			@keydown="handleKeydown"
 		/>
-		<ul v-if="isOpen" :id="listId" ref="listboxRef" class="hermes-autocomplete__listbox" role="listbox">
+		<ul v-if="isOpen" :id="listId" ref="listboxRef" class="makosh-autocomplete__listbox" role="listbox">
 			<li
 				v-for="(option, index) in filteredOptions"
 				:id="optionId(index)"
 				:key="option.value"
-				class="hermes-autocomplete__option"
+				class="makosh-autocomplete__option"
 				:aria-selected="index === activeIndex"
 				role="option"
 				tabindex="-1"
@@ -168,7 +168,7 @@ function handleFocusout(event: FocusEvent): void {
 			>
 				{{ option.label }}
 			</li>
-			<li v-if="filteredOptions.length === 0" class="hermes-autocomplete__empty" role="presentation">
+			<li v-if="filteredOptions.length === 0" class="makosh-autocomplete__empty" role="presentation">
 				{{ noResultsLabel }}
 			</li>
 		</ul>

@@ -1,5 +1,5 @@
 [package]
-name = "hermes-kernel-control-store-sqlite"
+name = "makosh-kernel-control-store-sqlite"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,12 +7,12 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "core"
 owner = "kernel"
 surface = "persistence"
 
 [dependencies]
-hermes-kernel-control-store = { path = "../contract" }
+makosh-kernel-control-store = { path = "../contract" }
 rusqlite = { version = "=0.32.0", default-features = false, features = ["backup", "bundled"] }
 sha2 = { version = "=0.11.0", default-features = false }

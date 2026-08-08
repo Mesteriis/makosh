@@ -3,7 +3,7 @@ import { FormField, FormLabel, TreeSelect } from '@/shared/ui'
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Tree Select',
+	title: 'Макошь UI/General/Tree Select',
 	render: (_args, context) => ({
 		components: { FormField, FormLabel, TreeSelect },
 		data() {

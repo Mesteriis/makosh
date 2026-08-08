@@ -56,7 +56,7 @@ fn verdict_evidence_id(
     verdict: AttachmentSecurityVerdictV1,
 ) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-security.closed-verdict.v1\0");
+    hasher.update(b"makosh.attachment-security.closed-verdict.v1\0");
     hasher.update(job.candidate_message_id);
     hasher.update(job.canonical_state_message_id);
     hasher.update(job.blob_receipt_sha256);

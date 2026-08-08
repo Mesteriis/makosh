@@ -1,4 +1,4 @@
-use hermes_communication_reply_suggestion_api::{
+use makosh_communication_reply_suggestion_api::{
     COMMUNICATION_REPLY_SUGGESTION_CONTRACT_MAJOR_V1,
     wire::{
         GetReplySuggestionRequestV1, GetReplySuggestionResponseV1, ReplySuggestionCandidateV1,
@@ -8,15 +8,15 @@ use hermes_communication_reply_suggestion_api::{
         StartReplySuggestionResponseV1,
     },
 };
-use hermes_communication_reply_suggestion_core::{
+use makosh_communication_reply_suggestion_core::{
     ReplySuggestionCompletenessV1, ReplySuggestionDraftV1, ReplySuggestionLanguageV1,
     ReplySuggestionRejectionCodeV1, ReplySuggestionStateV1, ReplySuggestionToneV1,
 };
-use hermes_communication_reply_suggestion_persistence::{
+use makosh_communication_reply_suggestion_persistence::{
     CommunicationReplySuggestionPersistenceV1, CreateReplySuggestionOutcomeV1,
     CreateReplySuggestionRunV1, PersistedReplySuggestionRunV1, ReplySuggestionPersistenceErrorV1,
 };
-use hermes_communications_ai_source_api::{
+use makosh_communications_ai_source_api::{
     CommunicationReplySourceEnvelopeContextV1,
     build_communication_reply_source_prepare_outbox_record_v1,
 };
@@ -165,7 +165,7 @@ fn source_prepare_record(
     runtime: &ReplySuggestionClientRuntimeContextV1<'_>,
     draft: &ReplySuggestionDraftV1,
     now_unix_millis: i64,
-) -> Option<hermes_events_protocol::delivery::OutboxRecordV1> {
+) -> Option<makosh_events_protocol::delivery::OutboxRecordV1> {
     if now_unix_millis <= 0
         || runtime.runtime_instance_id.is_empty()
         || runtime.runtime_generation == 0
@@ -183,7 +183,7 @@ fn source_prepare_record(
         deadline,
         &CommunicationReplySourceEnvelopeContextV1 {
             module_id:
-                hermes_communication_reply_suggestion_api::COMMUNICATION_REPLY_SUGGESTION_MODULE_ID_V1
+                makosh_communication_reply_suggestion_api::COMMUNICATION_REPLY_SUGGESTION_MODULE_ID_V1
                     .to_owned(),
             runtime_instance_id: runtime.runtime_instance_id.to_owned(),
             runtime_generation: runtime.runtime_generation,
@@ -220,7 +220,7 @@ fn get_response(run: PersistedReplySuggestionRunV1) -> Vec<u8> {
 
 fn run_id(logical_owner_id: &str, operation_id: &[u8; 16]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communication_reply_suggestion.run.v1\0");
+    digest.update(b"makosh.communication_reply_suggestion.run.v1\0");
     digest.update(logical_owner_id.as_bytes());
     digest.update([0]);
     digest.update(operation_id);

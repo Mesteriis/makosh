@@ -1,4 +1,4 @@
-ALTER TABLE hermes_data.mail_address_book_upsert_inbox
+ALTER TABLE makosh_data.mail_address_book_upsert_inbox
     ADD COLUMN target_contact_snapshot_reference_id BYTEA CHECK (
         target_contact_snapshot_reference_id IS NULL OR
         octet_length(target_contact_snapshot_reference_id) = 16

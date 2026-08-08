@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
@@ -318,7 +318,7 @@ fn outbox_error(_: OutboxRecordError) -> AttachmentTextCustodyEnvelopeBuildError
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_events_protocol::v1::DurableEnvelopeV1;
+    use makosh_events_protocol::v1::DurableEnvelopeV1;
 
     fn context(module_id: &str) -> AttachmentTextCustodyEnvelopeContextV1 {
         AttachmentTextCustodyEnvelopeContextV1 {
@@ -348,7 +348,7 @@ mod tests {
         let record = build_request_attachment_text_custody_delegation_outbox_record_v1(
             request(),
             1_800_000_030,
-            &context("hermes-attachment-text-extraction-runtime"),
+            &context("makosh-attachment-text-extraction-runtime"),
         )
         .expect("valid command");
         let envelope = DurableEnvelopeV1::decode(record.exact_bytes()).expect("envelope");
@@ -380,7 +380,7 @@ mod tests {
         let record = build_attachment_text_custody_delegated_outbox_record_v1(
             [1; 16],
             payload,
-            &context("hermes-attachment-security-runtime"),
+            &context("makosh-attachment-security-runtime"),
         )
         .expect("valid result");
         let envelope = DurableEnvelopeV1::decode(record.exact_bytes()).expect("envelope");
@@ -410,7 +410,7 @@ mod tests {
             build_attachment_text_custody_delegated_outbox_record_v1(
                 [1; 16],
                 payload.clone(),
-                &context("hermes-attachment-security-runtime"),
+                &context("makosh-attachment-security-runtime"),
             ),
             Err(AttachmentTextCustodyEnvelopeBuildErrorV1::InvalidPayload)
         );
@@ -420,7 +420,7 @@ mod tests {
             build_attachment_text_custody_delegated_outbox_record_v1(
                 [1; 16],
                 payload,
-                &context("hermes-attachment-security-runtime"),
+                &context("makosh-attachment-security-runtime"),
             ),
             Err(AttachmentTextCustodyEnvelopeBuildErrorV1::InvalidPayload)
         );

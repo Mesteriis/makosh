@@ -1,6 +1,6 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-communication-summary-core";
+pub const PACKAGE: &str = "makosh-communication-summary-core";
 pub const COMMUNICATION_SUMMARY_MAX_BYTES_V1: usize = 64 * 1024;
 pub const COMMUNICATION_SUMMARY_MAX_CONFIDENCE_BASIS_POINTS_V1: u32 = 10_000;
 

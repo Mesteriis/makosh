@@ -1,4 +1,4 @@
-use hermes_attachment_preview_evidence_replay_api::{
+use makosh_attachment_preview_evidence_replay_api::{
     ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_CONTRACT_MAJOR_V1,
     ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_MODULE_ID_V1, ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_OWNER_V1,
     wire::{
@@ -7,22 +7,22 @@ use hermes_attachment_preview_evidence_replay_api::{
         StartAttachmentPreviewEvidenceReplayResponseV1,
     },
 };
-use hermes_attachment_preview_evidence_replay_core::{
+use makosh_attachment_preview_evidence_replay_core::{
     AuthenticatedReplayOperationRequestV1, ReplayProducerV1,
 };
-use hermes_attachment_preview_evidence_replay_persistence::{
+use makosh_attachment_preview_evidence_replay_persistence::{
     AttachmentPreviewEvidenceReplayPersistenceV1, ReplayCommandOutboxRecordV1,
     ReplayOperationCreateOutcomeV1, ReplayPersistenceErrorV1,
 };
-use hermes_communications_retained_evidence_replay_contract::{
+use makosh_communications_retained_evidence_replay_contract::{
     CommunicationsReplayCommandEnvelopeContextV1, build_communications_replay_command_outbox_v1,
     wire::ReplayCommunicationsEvidenceCommandV1,
 };
-use hermes_mail_retained_evidence_replay_contract::{
+use makosh_mail_retained_evidence_replay_contract::{
     MailReplayCommandEnvelopeContextV1, build_mail_replay_command_outbox_v1,
     wire::ReplayMailEvidenceCommandV1,
 };
-use hermes_runtime_protocol::v1::{ModuleClientRequestV1, ModuleClientResponseV1};
+use makosh_runtime_protocol::v1::{ModuleClientRequestV1, ModuleClientResponseV1};
 use prost::Message;
 use sha2::{Digest, Sha256};
 
@@ -219,7 +219,7 @@ fn start_error(
 
 fn device_actor_sha256_v1(logical_owner_id: &str, authenticated_device_id: &str) -> [u8; 32] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.attachment-preview-evidence-replay.device-actor.v1\0");
+    digest.update(b"makosh.attachment-preview-evidence-replay.device-actor.v1\0");
     digest.update(logical_owner_id.as_bytes());
     digest.update([0]);
     digest.update(authenticated_device_id.as_bytes());

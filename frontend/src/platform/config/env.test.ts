@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest'
 import { loadFrontendConfig } from './env'
 
 describe('frontend env config', () => {
-	it('uses Hermes env names and default backend URL', () => {
+	it('uses Макошь env names and default backend URL', () => {
 		const config = loadFrontendConfig({
-			VITE_HERMES_LOCAL_API_SECRET: 'dev-secret'
+			VITE_MAKOSH_LOCAL_API_SECRET: 'dev-secret'
 		})
 
 		expect(config.apiBaseUrl).toBe('http://127.0.0.1:8080')
@@ -18,10 +18,10 @@ describe('frontend env config', () => {
 		expect(config.apiSecret).toBe('change-me-local-api-secret')
 	})
 
-	it('accepts explicit Hermes backend URL', () => {
+	it('accepts explicit Макошь backend URL', () => {
 		const config = loadFrontendConfig({
-			VITE_HERMES_API_BASE_URL: 'http://127.0.0.1:9090/',
-			VITE_HERMES_LOCAL_API_SECRET: 'dev-secret'
+			VITE_MAKOSH_API_BASE_URL: 'http://127.0.0.1:9090/',
+			VITE_MAKOSH_LOCAL_API_SECRET: 'dev-secret'
 		})
 
 		expect(config.apiBaseUrl).toBe('http://127.0.0.1:9090')

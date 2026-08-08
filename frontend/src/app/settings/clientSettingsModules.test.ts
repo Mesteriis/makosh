@@ -10,7 +10,7 @@ describe('client settings module ownership', () => {
 		] as never
 
 		expect(clientSettingsModule(modules, 'mail')).toMatchObject({
-			moduleId: 'hermes-mail-runtime',
+			moduleId: 'makosh-mail-runtime',
 		})
 		expect(clientSettingsModule(modules, 'zulip')).toBeNull()
 	})

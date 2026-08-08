@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `test`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/tests/ai_control_center.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/ai_control_center.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/ai_control_center.rs`
 - Size bytes / Размер в байтах: `27552`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -67,16 +67,16 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::ai::control_center::{
+use makosh_hub_backend::ai::control_center::{
     AiControlCenterError, AiControlCenterStore, AiModelRouteUpdateRequest,
     AiProviderConsentRequest, AiProviderCreateRequest,
 };
-use hermes_hub_backend::app::{build_router, build_router_with_database};
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::secrets::{
+use makosh_hub_backend::app::{build_router, build_router_with_database};
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::secrets::{
     NewSecretReference, SecretKind, SecretReferenceStore, SecretStoreKind,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use testkit::context::TestContext;
 
 const LOCAL_API_TOKEN: &str = "ai-control-center-test-token";
@@ -89,8 +89,8 @@ fn json_request(method: Method, uri: &str, body: Value) -> Request<Body> {
     Request::builder()
         .method(method)
         .uri(uri)
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
-        .header("x-hermes-actor-id", "hermes-frontend")
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-actor-id", "makosh-frontend")
         .header(header::CONTENT_TYPE, "application/json")
         .body(Body::from(body.to_string()))
         .expect("request")
@@ -99,8 +99,8 @@ fn json_request(method: Method, uri: &str, body: Value) -> Request<Body> {
 fn get_request(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
-        .header("x-hermes-actor-id", "hermes-frontend")
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-actor-id", "makosh-frontend")
         .body(Body::empty())
         .expect("request")
 }
@@ -258,7 +258,7 @@ async fn remote_api_provider_models_require_host_vault_secret_before_private_con
     let prompt_error = store
         .test_prompt(
             "prompt:system:global:default_chat",
-            &hermes_hub_backend::ai::control_center::AiPromptTestRequest {
+            &makosh_hub_backend::ai::control_center::AiPromptTestRequest {
                 prompt_version_id: "prompt-version:system:global:default_chat:v1".to_owned(),
                 provider_id: provider.provider_id.clone(),
                 model_key: "gpt-5.5".to_owned(),
@@ -267,7 +267,7 @@ async fn remote_api_provider_models_require_host_vault_secret_before_private_con
                 score: None,
                 notes: None,
             },
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect_err("prompt preview selection requires provider readiness");
@@ -418,7 +418,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/ai_smoke.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/ai_smoke.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/ai_smoke.rs`
 - Size bytes / Размер в байтах: `1876`
 - Included characters / Включено символов: `1876`
 - Truncated / Обрезано: `no`
@@ -426,18 +426,18 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 ```rust
 use std::env;
 
-use hermes_hub_backend::integrations::ollama::client::{OllamaClient, OllamaClientConfig};
+use makosh_hub_backend::integrations::ollama::client::{OllamaClient, OllamaClientConfig};
 
 #[tokio::test]
 async fn live_ollama_qwen3_runtime_smoke() {
-    let Some(base_url) = env::var("HERMES_OLLAMA_BASE_URL").ok() else {
-        eprintln!("skipping live Ollama smoke test: HERMES_OLLAMA_BASE_URL is not set");
+    let Some(base_url) = env::var("MAKOSH_OLLAMA_BASE_URL").ok() else {
+        eprintln!("skipping live Ollama smoke test: MAKOSH_OLLAMA_BASE_URL is not set");
         return;
     };
-    let chat_model = env::var("HERMES_OLLAMA_CHAT_MODEL").unwrap_or_else(|_| "qwen3:4b".to_owned());
+    let chat_model = env::var("MAKOSH_OLLAMA_CHAT_MODEL").unwrap_or_else(|_| "qwen3:4b".to_owned());
     let embed_model =
-        env::var("HERMES_OLLAMA_EMBED_MODEL").unwrap_or_else(|_| "qwen3-embedding:4b".to_owned());
-    let timeout_seconds = env::var("HERMES_OLLAMA_TIMEOUT_SECONDS")
+        env::var("MAKOSH_OLLAMA_EMBED_MODEL").unwrap_or_else(|_| "qwen3-embedding:4b".to_owned());
+    let timeout_seconds = env::var("MAKOSH_OLLAMA_TIMEOUT_SECONDS")
         .ok()
         .and_then(|value| value.parse::<u64>().ok())
         .unwrap_or(120);
@@ -462,17 +462,17 @@ async fn live_ollama_qwen3_runtime_smoke() {
     );
 
     let chat = client
-        .chat("Return exactly this token and nothing else: hermes-ai-smoke-ok")
+        .chat("Return exactly this token and nothing else: makosh-ai-smoke-ok")
         .await
         .expect("Ollama chat");
     assert!(
-        chat.content.contains("hermes-ai-smoke-ok"),
+        chat.content.contains("makosh-ai-smoke-ok"),
         "unexpected chat response: {}",
         chat.content
     );
 
     let embedding = client
-        .embed("Hermes Hub V3 AI semantic retrieval smoke")
+        .embed("Макошь V3 AI semantic retrieval smoke")
         .await
         .expect("Ollama embed");
     assert_eq!(embedding.embedding.len(), 2560);
@@ -481,7 +481,7 @@ async fn live_ollama_qwen3_runtime_smoke() {
 
 ### `backend/tests/calendar.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar.rs`
 - Size bytes / Размер в байтах: `350`
 - Included characters / Включено символов: `350`
 - Truncated / Обрезано: `no`
@@ -503,14 +503,14 @@ mod support;
 
 ### `backend/tests/calendar/account_event.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar/account_event.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar/account_event.rs`
 - Size bytes / Размер в байтах: `6685`
 - Included characters / Включено символов: `6685`
 - Truncated / Обрезано: `no`
 
 ```rust
 use chrono::{Duration, Utc};
-use hermes_hub_backend::domains::calendar::events::{
+use makosh_hub_backend::domains::calendar::events::{
     CalendarAccountStore, CalendarAccountUpdate, CalendarEventListQuery, CalendarEventStore,
     CalendarEventUpdate, CalendarSourceStore, NewCalendarEvent,
 };
@@ -733,18 +733,18 @@ async fn event_reschedule_and_status_against_postgres() {
 
 ### `backend/tests/calendar/event_context.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar/event_context.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar/event_context.rs`
 - Size bytes / Размер в байтах: `5982`
 - Included characters / Включено символов: `5982`
 - Truncated / Обрезано: `no`
 
 ```rust
 use chrono::{Duration, Utc};
-use hermes_hub_backend::domains::calendar::core::{
+use makosh_hub_backend::domains::calendar::core::{
     ContextPackInput, EventAgendaStore, EventChecklistStore, EventContextPackStore,
     EventParticipantStore, EventRelationStore,
 };
-use hermes_hub_backend::domains::calendar::events::{
+use makosh_hub_backend::domains::calendar::events::{
     CalendarAccountStore, CalendarEventStore, NewCalendarEvent,
 };
 use serde_json::json;
@@ -938,22 +938,22 @@ async fn event_agenda_and_checklist_against_postgres() {
 
 ### `backend/tests/calendar/intelligence_sync.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar/intelligence_sync.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar/intelligence_sync.rs`
 - Size bytes / Размер в байтах: `5342`
 - Included characters / Включено символов: `5342`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::calendar::brain::CalendarBrainService;
-use hermes_hub_backend::domains::calendar::core::{
+use makosh_hub_backend::domains::calendar::brain::CalendarBrainService;
+use makosh_hub_backend::domains::calendar::core::{
     EventAgendaStore, EventChecklistStore, EventContextPackStore, EventParticipantStore,
     EventRelationStore,
 };
-use hermes_hub_backend::domains::calendar::events::CalendarEventStore;
-use hermes_hub_backend::domains::calendar::health::CalendarWatchtowerService;
-use hermes_hub_backend::domains::calendar::intelligence::CalendarIntelligenceService;
-use hermes_hub_backend::domains::calendar::rules::CalendarRuleStore;
-use hermes_hub_backend::domains::calendar::scheduling::{DeadlineStore, FocusBlockStore};
+use makosh_hub_backend::domains::calendar::events::CalendarEventStore;
+use makosh_hub_backend::domains::calendar::health::CalendarWatchtowerService;
+use makosh_hub_backend::domains::calendar::intelligence::CalendarIntelligenceService;
+use makosh_hub_backend::domains::calendar::rules::CalendarRuleStore;
+use makosh_hub_backend::domains::calendar::scheduling::{DeadlineStore, FocusBlockStore};
 
 use super::support::{disconnected_pool, live_pool};
 
@@ -1056,7 +1056,7 @@ async fn brain_services_against_postgres() {
 
 #[test]
 fn sync_ics_export() {
-    let ics = hermes_hub_backend::domains::calendar::sync::export_event_ics(
+    let ics = makosh_hub_backend::domains::calendar::sync::export_event_ics(
         "Test Meeting",
         Some("Description"),
         Some("Office"),
@@ -1072,7 +1072,7 @@ fn sync_ics_export() {
 
 #[test]
 fn sync_markdown_export() {
-    let md = hermes_hub_backend::domains::calendar::sync::export_event_md(
+    let md = makosh_hub_backend::domains::calendar::sync::export_event_md(
         "Test Meeting",
         Some("Description"),
         Some("Office"),
@@ -1117,22 +1117,22 @@ async fn disconnected_pool_rules_store() {
 
 ### `backend/tests/calendar/meeting_outcomes.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar/meeting_outcomes.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar/meeting_outcomes.rs`
 - Size bytes / Размер в байтах: `10249`
 - Included characters / Включено символов: `10249`
 - Truncated / Обрезано: `no`
 
 ```rust
 use chrono::{Duration, Utc};
-use hermes_hub_backend::application::CalendarMeetingOutcomeApplicationService;
-use hermes_hub_backend::domains::calendar::events::{
+use makosh_hub_backend::application::CalendarMeetingOutcomeApplicationService;
+use makosh_hub_backend::domains::calendar::events::{
     CalendarAccountStore, CalendarEventStore, NewCalendarEvent,
 };
-use hermes_hub_backend::domains::calendar::meetings::{MeetingNoteStore, MeetingOutcomeStore};
-use hermes_hub_backend::domains::decisions::{
+use makosh_hub_backend::domains::calendar::meetings::{MeetingNoteStore, MeetingOutcomeStore};
+use makosh_hub_backend::domains::decisions::{
     DecisionEntityKind, DecisionReviewState, DecisionStore,
 };
-use hermes_hub_backend::domains::obligations::{
+use makosh_hub_backend::domains::obligations::{
     ObligationEntityKind, ObligationReviewState, ObligationStore,
 };
 
@@ -1413,15 +1413,15 @@ async fn meeting_outcome_promise_creates_suggested_obligation_and_review_item_wi
 
 ### `backend/tests/calendar/scheduling_rules.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar/scheduling_rules.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar/scheduling_rules.rs`
 - Size bytes / Размер в байтах: `2597`
 - Included characters / Включено символов: `2597`
 - Truncated / Обрезано: `no`
 
 ```rust
 use chrono::{Duration, Utc};
-use hermes_hub_backend::domains::calendar::rules::CalendarRuleStore;
-use hermes_hub_backend::domains::calendar::scheduling::{DeadlineStore, FocusBlockStore};
+use makosh_hub_backend::domains::calendar::rules::CalendarRuleStore;
+use makosh_hub_backend::domains::calendar::scheduling::{DeadlineStore, FocusBlockStore};
 use serde_json::json;
 
 use super::support::{live_pool, unique_suffix};
@@ -1507,7 +1507,7 @@ async fn calendar_rules_crud_against_postgres() {
 
 ### `backend/tests/calendar/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar/support.rs`
 - Size bytes / Размер в байтах: `854`
 - Included characters / Включено символов: `854`
 - Truncated / Обрезано: `no`
@@ -1516,7 +1516,7 @@ async fn calendar_rules_crud_against_postgres() {
 use std::time::{SystemTime, UNIX_EPOCH};
 use testkit::context::TestContext;
 
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 use sqlx::PgPool;
 use sqlx::postgres::PgPoolOptions;
 
@@ -1538,14 +1538,14 @@ pub async fn live_pool() -> Option<PgPool> {
 
 pub fn disconnected_pool() -> PgPool {
     PgPoolOptions::new()
-        .connect_lazy("postgres://hermes:unused@127.0.0.1:1/hermes_hub")
+        .connect_lazy("postgres://makosh:unused@127.0.0.1:1/makosh_hub")
         .expect("create lazy test pool")
 }
 ```
 
 ### `backend/tests/calendar_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar_api.rs`
 - Size bytes / Размер в байтах: `294`
 - Included characters / Включено символов: `294`
 - Truncated / Обрезано: `no`
@@ -1567,7 +1567,7 @@ mod support;
 
 ### `backend/tests/calendar_api/accounts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar_api/accounts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar_api/accounts.rs`
 - Size bytes / Размер в байтах: `6283`
 - Included characters / Включено символов: `6283`
 - Truncated / Обрезано: `no`
@@ -1583,7 +1583,7 @@ use super::support::{
     LOCAL_API_TOKEN, build_cal_app, delete_request_with_token, get_request_with_token, json_body,
     post_request_with_token, put_request_with_token, unique_suffix, urlencoding_percent_encode,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 
 #[tokio::test]
 async fn calendar_accounts_crud_against_postgres() {
@@ -1781,7 +1781,7 @@ async fn calendar_accounts_list_returns_items() {
 
 ### `backend/tests/calendar_api/auth.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar_api/auth.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar_api/auth.rs`
 - Size bytes / Размер в байтах: `1003`
 - Included characters / Включено символов: `1003`
 - Truncated / Обрезано: `no`
@@ -1791,7 +1791,7 @@ use axum::http::StatusCode;
 use serde_json::json;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router;
+use makosh_hub_backend::app::build_router;
 
 use super::support::{config_with_api_token, get_request, json_body};
 
@@ -1806,7 +1806,7 @@ async fn calendar_accounts_rejects_missing_local_api_secret() {
     let body = json_body(response).await;
     assert_eq!(
         body,
-        json!({"error": "invalid_api_secret", "message": "missing or invalid x-hermes-secret header"})
+        json!({"error": "invalid_api_secret", "message": "missing or invalid x-makosh-secret header"})
     );
 }
 
@@ -1823,7 +1823,7 @@ async fn calendar_events_rejects_missing_local_api_secret() {
 
 ### `backend/tests/calendar_api/event_details.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar_api/event_details.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar_api/event_details.rs`
 - Size bytes / Размер в байтах: `22255`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1839,7 +1839,7 @@ use super::support::{
     LOCAL_API_TOKEN, build_cal_app, create_cal_event, get_request_with_token, json_body,
     post_request_with_token, unique_suffix, urlencoding_percent_encode,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 
 async fn event_get_endpoint_returns_non_server_error(path_suffix: &str) -> Option<Value> {
     let test_context = TestContext::new().await;
@@ -2221,7 +2221,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/calendar_api/events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar_api/events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar_api/events.rs`
 - Size bytes / Размер в байтах: `18664`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2239,7 +2239,7 @@ use super::support::{
     get_request_with_token, json_body, post_request_with_token, put_request_with_token,
     unique_suffix, urlencoding_percent_encode,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 
 #[tokio::test]
 async fn calendar_events_crud_against_postgres() {
@@ -2605,7 +2605,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/calendar_api/misc.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar_api/misc.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar_api/misc.rs`
 - Size bytes / Размер в байтах: `18564`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2622,7 +2622,7 @@ use super::support::{
     LOCAL_API_TOKEN, build_cal_app, delete_request_with_token, get_request_with_token, json_body,
     post_request_with_token, put_request_with_token, unique_suffix, urlencoding_percent_encode,
 };
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::storage::Database;
 
 async fn get_calendar_endpoint_returns_non_server_error(path: &str) {
     let test_context = TestContext::new().await;
@@ -2988,13 +2988,13 @@ async fn cal_rules_crud() {
     assert_ne!(updated_observation_id, created_observation_id);
 
     let response = app
-     
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/tests/calendar_api/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar_api/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar_api/support.rs`
 - Size bytes / Размер в байтах: `4129`
 - Included characters / Включено символов: `4129`
 - Truncated / Обрезано: `no`
@@ -3010,9 +3010,9 @@ use chrono::{Duration, Utc};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 
 pub const LOCAL_API_TOKEN: &str = "cal-api-test-token";
 
@@ -3030,7 +3030,7 @@ pub fn get_request(uri: &str) -> Request<Body> {
 pub fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -3040,7 +3040,7 @@ pub fn post_request_with_token(uri: &str, body: Value, token: &str) -> Request<B
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -3050,7 +3050,7 @@ pub fn put_request_with_token(uri: &str, body: Value, token: &str) -> Request<Bo
         .method(Method::PUT)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -3059,7 +3059,7 @@ pub fn delete_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .method(Method::DELETE)
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -3142,7 +3142,7 @@ pub async fn create_cal_event(app: &axum::Router, suffix: u128) -> Option<(Strin
 
 ### `backend/tests/calendar_api_architecture.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar_api_architecture.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar_api_architecture.rs`
 - Size bytes / Размер в байтах: `1726`
 - Included characters / Включено символов: `1726`
 - Truncated / Обрезано: `no`
@@ -3206,7 +3206,7 @@ fn is_calendar_api_test_file(path: &Path) -> bool {
 
 ### `backend/tests/calendar_architecture.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calendar_architecture.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calendar_architecture.rs`
 - Size bytes / Размер в байтах: `1932`
 - Included characters / Включено символов: `1932`
 - Truncated / Обрезано: `no`
@@ -3278,7 +3278,7 @@ fn is_calendar_test_file(path: &Path) -> bool {
 
 ### `backend/tests/calls_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/calls_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/calls_api.rs`
 - Size bytes / Размер в байтах: `3143`
 - Included characters / Включено символов: `3143`
 - Truncated / Обрезано: `no`
@@ -3292,9 +3292,9 @@ use axum::http::{Method, Request, StatusCode, header};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::{build_router, build_router_with_database};
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::{build_router, build_router_with_database};
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 
 const TOKEN: &str = "calls-test-token";
 
@@ -3305,7 +3305,7 @@ fn cfg() -> AppConfig {
 fn get(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("req")
 }
@@ -3315,7 +3315,7 @@ fn post(uri: &str, body: Value, token: &str) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("req")
 }
@@ -3391,7 +3391,7 @@ async fn call_transcript_404() {
 
 ### `backend/tests/characterization_communication.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/characterization_communication.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/characterization_communication.rs`
 - Size bytes / Размер в байтах: `6412`
 - Included characters / Включено символов: `6336`
 - Truncated / Обрезано: `no`
@@ -3412,9 +3412,9 @@ use axum::http::{Method, Request, StatusCode, header};
 use serde_json::Value;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 
 const TOKEN: &str = "char-comm-test-token";
 
@@ -3425,7 +3425,7 @@ fn cfg(db: &str) -> AppConfig {
 fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", TOKEN)
+        .header("x-makosh-secret", TOKEN)
         .body(Body::empty())
         .expect("req")
 }
@@ -3435,7 +3435,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", TOKEN)
+        .header("x-makosh-secret", TOKEN)
         .body(Body::from(body.to_string()))
         .expect("req")
 }
@@ -3615,7 +3615,7 @@ async fn char_workflow_actions_endpoint_accepts_valid_body() {
 
 ### `backend/tests/characterization_person.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/characterization_person.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/characterization_person.rs`
 - Size bytes / Размер в байтах: `6439`
 - Included characters / Включено символов: `6349`
 - Truncated / Обрезано: `no`
@@ -3636,9 +3636,9 @@ use axum::http::{Method, Request, StatusCode, header};
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 
 const TOKEN: &str = "char-person-test-token";
 
@@ -3649,7 +3649,7 @@ fn cfg(db: &str) -> AppConfig {
 fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", TOKEN)
+        .header("x-makosh-secret", TOKEN)
         .body(Body::empty())
         .expect("req")
 }
@@ -3659,7 +3659,7 @@ fn put(uri: &str, body: Value) -> Request<Body> {
         .method(Method::PUT)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", TOKEN)
+        .header("x-makosh-secret", TOKEN)
         .body(Body::from(body.to_string()))
         .expect("req")
 }
@@ -3837,7 +3837,7 @@ async fn char_persona_update_accepts_valid_body() {
 
 ### `backend/tests/communication_ingestion.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/communication_ingestion.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/communication_ingestion.rs`
 - Size bytes / Размер в байтах: `348`
 - Included characters / Включено символов: `348`
 - Truncated / Обрезано: `no`
@@ -3857,7 +3857,7 @@ mod support;
 
 ### `backend/tests/communication_ingestion/contracts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/communication_ingestion/contracts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/communication_ingestion/contracts.rs`
 - Size bytes / Размер в байтах: `5180`
 - Included characters / Включено символов: `5180`
 - Truncated / Обрезано: `no`

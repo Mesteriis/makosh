@@ -10,14 +10,14 @@ pub use envelope::{
     build_submit_review_note_candidate_outbox_record_v1,
 };
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-review-note-candidate-api";
+pub const PACKAGE: &str = "makosh-review-note-candidate-api";
 pub const REVIEW_NOTE_CANDIDATE_OWNER_V1: &str = "review";
-pub const REVIEW_NOTE_CANDIDATE_MODULE_ID_V1: &str = "hermes-review-note-candidate-runtime";
+pub const REVIEW_NOTE_CANDIDATE_MODULE_ID_V1: &str = "makosh-review-note-candidate-runtime";
 pub const REVIEW_NOTE_CANDIDATE_CLIENT_CAPABILITY_ID_V1: &str = "review.note-candidate.client.v1";
 pub const REVIEW_NOTE_CANDIDATE_SUBMISSION_CAPABILITY_ID_V1: &str =
     "review.note-candidate.submission.v1";
@@ -31,7 +31,7 @@ pub const REVIEW_NOTE_CANDIDATE_BLOB_TARGET_CAPABILITY_ID_V1: &str =
 pub const REVIEWED_NOTE_CANDIDATE_PROMOTION_BLOB_TARGET_OWNER_ID_V1: &str =
     "reviewed_note_candidate_promotion";
 pub const REVIEWED_NOTE_CANDIDATE_PROMOTION_BLOB_TARGET_MODULE_ID_V1: &str =
-    "hermes-reviewed-note-candidate-promotion-runtime";
+    "makosh-reviewed-note-candidate-promotion-runtime";
 pub const REVIEWED_NOTE_CANDIDATE_PROMOTION_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "reviewed-note-candidate-promotion.source.blob.v1";
 
@@ -50,9 +50,9 @@ pub const REVIEW_NOTE_CANDIDATE_REALTIME_EVENT_KIND_V1: &str =
     "review.note-candidate.status_changed";
 
 pub const REVIEW_NOTE_CANDIDATE_COMMAND_CONNECT_PATH_V1: &str =
-    "/hermes.review.note_candidate.v1.ReviewNoteCandidateCommandService/Decide";
+    "/makosh.review.note_candidate.v1.ReviewNoteCandidateCommandService/Decide";
 pub const REVIEW_NOTE_CANDIDATE_QUERY_CONNECT_PATH_V1: &str =
-    "/hermes.review.note_candidate.v1.ReviewNoteCandidateQueryService/Get";
+    "/makosh.review.note_candidate.v1.ReviewNoteCandidateQueryService/Get";
 pub const REVIEW_NOTE_CANDIDATE_CONTRACT_MAJOR_V1: u32 = 1;
 pub const REVIEW_NOTE_CANDIDATE_CONTRACT_REVISION_V1: u32 = 1;
 pub const REVIEW_NOTE_CANDIDATE_MAX_BLOB_BYTES_V1: u64 = 16 * 1024;
@@ -62,7 +62,7 @@ pub const REVIEW_NOTE_CANDIDATE_MAX_IN_FLIGHT_V1: u32 = 32;
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.review.note_candidate.v1.rs"
+        "/makosh.review.note_candidate.v1.rs"
     ));
 }
 
@@ -207,7 +207,7 @@ mod tests {
     #[test]
     fn note_candidate_is_an_exact_review_capability() {
         assert_eq!(REVIEW_NOTE_CANDIDATE_OWNER_V1, "review");
-        assert_ne!(REVIEW_NOTE_CANDIDATE_MODULE_ID_V1, "hermes-review-runtime");
+        assert_ne!(REVIEW_NOTE_CANDIDATE_MODULE_ID_V1, "makosh-review-runtime");
         assert!(REVIEW_NOTE_CANDIDATE_COMMAND_CONNECT_PATH_V1.starts_with('/'));
         assert!(REVIEW_NOTE_CANDIDATE_QUERY_CONNECT_PATH_V1.starts_with('/'));
         let Some(Request::EventRoute(route)) =
@@ -224,7 +224,7 @@ mod tests {
 
     #[test]
     fn durable_and_realtime_contracts_exclude_private_candidate_text() {
-        let source = include_str!("../proto/hermes/review/note_candidate/v1/note_candidate.proto");
+        let source = include_str!("../proto/makosh/review/note_candidate/v1/note_candidate.proto");
         assert!(source.contains("ReviewNoteCandidateContentV1"));
         assert!(source.contains("NoteCandidateApprovedForPromotionV1"));
         let durable = source

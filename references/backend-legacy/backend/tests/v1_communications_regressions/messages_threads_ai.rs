@@ -3,16 +3,16 @@ use std::net::SocketAddr;
 use axum::http::StatusCode;
 use axum::routing::{get as axum_get, post as axum_post};
 use axum::{Json, Router};
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::ai::control_center::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::ai::control_center::{
     models::{AiModelAvailabilityUpdateRequest, AiModelRouteUpdateRequest},
     store::AiControlCenterStore,
 };
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::signal_hub::store::SignalHubStore;
-use hermes_hub_backend::platform::settings::store::ApplicationSettingsStore;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::signal_hub::store::SignalHubStore;
+use makosh_hub_backend::platform::settings::store::ApplicationSettingsStore;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
 use serde_json::json;
 use tokio::net::TcpListener;
 use tower::ServiceExt;
@@ -390,11 +390,11 @@ async fn router_with_ollama(database_url: &str, ollama_base_url: &str) -> axum::
         .await
         .expect("database connection");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(T, database_url)
+        makosh_backend_testkit::app::config_with_secret_and_database_url(T, database_url)
             .with_test_pairs([
-                ("HERMES_OLLAMA_BASE_URL", ollama_base_url),
-                ("HERMES_OLLAMA_CHAT_MODEL", "qwen3:4b"),
-                ("HERMES_OLLAMA_EMBED_MODEL", "qwen3-embedding:4b"),
+                ("MAKOSH_OLLAMA_BASE_URL", ollama_base_url),
+                ("MAKOSH_OLLAMA_CHAT_MODEL", "qwen3:4b"),
+                ("MAKOSH_OLLAMA_EMBED_MODEL", "qwen3-embedding:4b"),
             ])
             .expect("config"),
         database,
@@ -459,7 +459,7 @@ async fn configure_fake_ollama_setting(pool: &sqlx::PgPool, ollama_base_url: &st
         .update_setting_value(
             "ai.ollama_base_url",
             &json!(ollama_base_url),
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("fake Ollama setting");
@@ -476,7 +476,7 @@ async fn configure_fake_ollama_setting(pool: &sqlx::PgPool, ollama_base_url: &st
                 model_key: chat_model.to_owned(),
                 is_available: true,
             },
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("fake Ollama chat model availability");
@@ -488,7 +488,7 @@ async fn configure_fake_ollama_setting(pool: &sqlx::PgPool, ollama_base_url: &st
                 model_key: embedding_model.to_owned(),
                 is_available: true,
             },
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("fake Ollama embedding model availability");

@@ -13,8 +13,8 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-counter',
-  `hermes-counter--${props.tone}`,
+  'makosh-counter',
+  `makosh-counter--${props.tone}`,
   props.class
 ])
 
@@ -23,7 +23,7 @@ const displayValue = computed(() => props.max === undefined ? String(props.value
 
 <template>
   <span :class="classes" :aria-label="label">
-    <strong class="hermes-counter-value">{{ displayValue }}</strong>
-    <span v-if="label" class="hermes-counter-label">{{ label }}</span>
+    <strong class="makosh-counter-value">{{ displayValue }}</strong>
+    <span v-if="label" class="makosh-counter-label">{{ label }}</span>
   </span>
 </template>

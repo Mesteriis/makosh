@@ -38,8 +38,8 @@ async function authenticate(): Promise<void> {
 <template>
 	<main class="browser-access-gate" data-ui-theme="base-light">
 		<section class="browser-access-gate__card">
-			<Icon icon="tabler:shield-lock" size="32" /><h1>Hermes Hub</h1>
-			<p>Each browser device requires approval in the Hermes CLI. No password, token or session is stored in this client.</p>
+			<Icon icon="tabler:shield-lock" size="32" /><h1>Макошь</h1>
+			<p>Each browser device requires approval in the Макошь CLI. No password, token or session is stored in this client.</p>
 			<form v-if="!canAuthenticate" @submit.prevent="enroll"><label for="pairing-id">Pairing code</label><input id="pairing-id" v-model="pairingId" autocomplete="off" inputmode="text" maxlength="64" :disabled="busy"><button class="primary-button" :disabled="busy">{{ busy ? 'Connecting…' : 'Connect browser' }}</button></form>
 			<button v-else class="primary-button" :disabled="busy" @click="authenticate">{{ busy ? 'Waiting for device key…' : 'Sign in with device key' }}</button>
 			<p v-if="error" class="inline-error" role="alert">{{ error }}</p>

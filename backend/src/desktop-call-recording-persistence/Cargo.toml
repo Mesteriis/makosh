@@ -1,5 +1,5 @@
 [package]
-name = "hermes-desktop-call-recording-persistence"
+name = "makosh-desktop-call-recording-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,13 +7,13 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "desktop_call_recording"
 surface = "persistence"
 
 [dependencies]
-hermes-desktop-call-recording-core = { path = "../desktop-call-recording-core" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-desktop-call-recording-core = { path = "../desktop-call-recording-core" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 sha2 = { version = "=0.11.0", default-features = false }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

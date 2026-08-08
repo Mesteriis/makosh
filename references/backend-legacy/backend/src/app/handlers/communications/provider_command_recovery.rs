@@ -1,6 +1,6 @@
 use super::*;
 
-use hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore;
+use makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore;
 
 #[derive(Serialize)]
 pub(crate) struct ProviderCommandRetryResponse {

@@ -10,7 +10,7 @@ const props = withDefaults(defineProps<{
   forceMount: false
 })
 
-const classes = computed(() => ['hermes-tab-content', props.class])
+const classes = computed(() => ['makosh-tab-content', props.class])
 </script>
 
 <template>

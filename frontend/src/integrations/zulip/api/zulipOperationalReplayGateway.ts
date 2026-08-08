@@ -3,7 +3,7 @@ import { create } from '@bufbuild/protobuf'
 import {
 	ZulipOperationalReplayRequestV1Schema,
 	type ZulipOperationalReplayResponseV1,
-} from '../../../gen/hermes/zulip/operational/realtime/v1/client_pb'
+} from '../../../gen/makosh/zulip/operational/realtime/v1/client_pb'
 import { getZulipOperationalRealtimeConnectClient } from './zulipOperationalRealtimeClient'
 
 const DEFAULT_REPLAY_LIMIT = 100

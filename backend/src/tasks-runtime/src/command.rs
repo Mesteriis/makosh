@@ -1,19 +1,19 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{CommandMetadataV1, ContractRefV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::ContractReferenceV1,
 };
-use hermes_tasks_command_api::{
+use makosh_tasks_command_api::{
     TASKS_MODULE_ID_V1, TASKS_REVIEWED_CANDIDATE_COMMAND_CAPABILITY_ID_V1,
     TasksCommandEnvelopeContextV1, build_task_created_from_reviewed_candidate_outbox_record_v1,
     build_task_creation_from_reviewed_candidate_rejected_outbox_record_v1,
@@ -23,11 +23,11 @@ use hermes_tasks_command_api::{
         TaskCreationFromReviewedCandidateRejectedV1, TaskCreationRejectCodeV1,
     },
 };
-use hermes_tasks_core::{
+use makosh_tasks_core::{
     ReviewedCandidateTaskDraftV1, TaskProvenanceV1, TaskTimestampV1,
     create_task_from_reviewed_candidate_v1,
 };
-use hermes_tasks_persistence::{
+use makosh_tasks_persistence::{
     CompleteReviewedCandidateTaskV1, PersistReviewedCandidateMaterializationV1,
     PersistedReviewedCandidateCommandV1, RejectReviewedCandidateTaskV1,
     ReserveReviewedCandidateCommandOutcomeV1, ReserveReviewedCandidateCommandV1,
@@ -260,7 +260,7 @@ async fn materialize_candidate(
     channel: &mut ManagedControlChannelV2<UnixStream>,
     dispatcher: &mut dyn ManagedControlRequestDispatcherV2<UnixStream>,
     command: &PersistedReviewedCandidateCommandV1,
-) -> Result<hermes_tasks_persistence::TasksBlobCleanupV1, TasksCommandErrorV1> {
+) -> Result<makosh_tasks_persistence::TasksBlobCleanupV1, TasksCommandErrorV1> {
     if let Some(materialization) = command.materialization.clone() {
         return Ok(materialization);
     }
@@ -316,7 +316,7 @@ async fn cleanup_command(
     channel: &mut ManagedControlChannelV2<UnixStream>,
     dispatcher: &mut dyn ManagedControlRequestDispatcherV2<UnixStream>,
     command: &PersistedReviewedCandidateCommandV1,
-    cleanup: &hermes_tasks_persistence::TasksBlobCleanupV1,
+    cleanup: &makosh_tasks_persistence::TasksBlobCleanupV1,
     runtime: &TasksCommandRuntimeContextV1<'_>,
 ) -> Result<(), TasksCommandErrorV1> {
     if command.cleanup_completed_at_unix_millis.is_some() {
@@ -340,7 +340,7 @@ async fn cleanup_command_with_outcome(
     channel: &mut ManagedControlChannelV2<UnixStream>,
     dispatcher: &mut dyn ManagedControlRequestDispatcherV2<UnixStream>,
     command: &PersistedReviewedCandidateCommandV1,
-    cleanup: &hermes_tasks_persistence::TasksBlobCleanupV1,
+    cleanup: &makosh_tasks_persistence::TasksBlobCleanupV1,
     accepted: bool,
     now_unix_millis: i64,
 ) -> Result<(), TasksCommandErrorV1> {
@@ -524,7 +524,7 @@ fn event_error(_: RuntimePullDeliveryErrorV1) -> TasksCommandErrorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_tasks_command_api::{
+    use makosh_tasks_command_api::{
         TasksCommandEnvelopeContextV1, build_create_task_from_reviewed_candidate_outbox_record_v1,
         wire::TasksTargetBoundCandidateReceiptV1,
     };

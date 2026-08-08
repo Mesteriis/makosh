@@ -67,8 +67,8 @@ INSERT INTO projects (
     target_date
 )
 VALUES (
-    'project:v1:hermes-hub',
-    'Hermes Hub',
+    'project:v1:makosh',
+    'Макошь',
     'Product Development',
     'active',
     'Personal knowledge system for local-first communications, documents, graph memory and workflows.',
@@ -81,7 +81,7 @@ ON CONFLICT (project_id) DO NOTHING;
 
 INSERT INTO project_keywords (project_id, keyword)
 VALUES
-    ('project:v1:hermes-hub', 'Hermes Hub'),
-    ('project:v1:hermes-hub', 'Hermes Project'),
-    ('project:v1:hermes-hub', 'hermes')
+    ('project:v1:makosh', 'Макошь'),
+    ('project:v1:makosh', 'Макошь Project'),
+    ('project:v1:makosh', 'makosh')
 ON CONFLICT (project_id, keyword) DO NOTHING;

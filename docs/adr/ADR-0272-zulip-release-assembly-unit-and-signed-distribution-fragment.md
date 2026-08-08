@@ -4,7 +4,7 @@
 Дата: 2026-07-24
 Состояние реализации: Реализовано в `81449906e` и `ff2c53983`. Canonical Zulip
 runtime descriptor, settings schema и immutable owner-local Storage bundle
-материализуются отдельной `hermes-zulip-assembly` unit в exact unsigned
+материализуются отдельной `makosh-zulip-assembly` unit в exact unsigned
 двухэлементный fragment. Generic compiler повторно проверяет и подписывает
 runtime/Storage bindings; Rust, distribution и architecture guards доказывают
 gates 1–7. `zulip_integration_v1` этим не открыт.
@@ -33,11 +33,11 @@ Telegram assembly вместе с `tdjson` entry создало бы ложну�
 Вводится отдельный Cargo package:
 
 ```text
-package = hermes-zulip-assembly
+package = makosh-zulip-assembly
 role    = integration
 owner   = zulip
 surface = assembly
-binary  = hermes-zulip-assembly
+binary  = makosh-zulip-assembly
 ```
 
 Assembly является build-time tool. Kernel никогда его не запускает. Он имеет
@@ -112,7 +112,7 @@ fences, live provider and event conformance остаются обязатель�
 
 Текущее evidence:
 
-- `cargo test -p hermes-zulip-persistence -p hermes-zulip-assembly`: 7 passed;
+- `cargo test -p makosh-zulip-persistence -p makosh-zulip-assembly`: 7 passed;
 - strict Clippy для Zulip persistence/runtime/assembly: passed;
 - signed distribution compiler test materializes exact Zulip assembly output
   and binds runtime/Storage digests: passed;

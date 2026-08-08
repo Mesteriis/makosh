@@ -3,10 +3,10 @@ use std::net::SocketAddr;
 use axum::http::{HeaderMap, StatusCode};
 use axum::routing::{get, post};
 use axum::{Json, Router};
-use hermes_hub_backend::integrations::omniroute::client::{
+use makosh_hub_backend::integrations::omniroute::client::{
     OmniRouteClient, config::OmniRouteClientConfig, error::OmniRouteError,
 };
-use hermes_hub_backend::platform::secrets::models::ResolvedSecret;
+use makosh_hub_backend::platform::secrets::models::ResolvedSecret;
 use serde_json::{Value, json};
 use tokio::net::TcpListener;
 
@@ -33,14 +33,14 @@ async fn omniroute_client_round_trips_openai_compatible_models_chat_and_embeddin
         .expect("required models");
 
     let chat = client
-        .chat("Return exactly: hermes-omniroute-ok")
+        .chat("Return exactly: makosh-omniroute-ok")
         .await
         .expect("chat");
-    assert_eq!(chat.content, "hermes-omniroute-ok");
+    assert_eq!(chat.content, "makosh-omniroute-ok");
     assert_eq!(chat.model, "codex/gpt-5.5");
 
     let embedding = client
-        .embed("Hermes Hub source-backed retrieval")
+        .embed("Макошь source-backed retrieval")
         .await
         .expect("embedding");
     assert_eq!(
@@ -147,7 +147,7 @@ async fn spawn_fake_omniroute(mode: FakeOmniRouteMode) -> String {
                                         "index": 0,
                                         "message": {
                                             "role": "assistant",
-                                            "content": "<think>hidden</think>\nhermes-omniroute-ok"
+                                            "content": "<think>hidden</think>\nmakosh-omniroute-ok"
                                         }
                                     }
                                 ]

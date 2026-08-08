@@ -1,10 +1,10 @@
 #![forbid(unsafe_code)]
 
-use hermes_attachment_preview_api::wire::{
+use makosh_attachment_preview_api::wire::{
     AttachmentPreviewContentTypeV1, AttachmentPreviewKindV1,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-preview-renderer-contract";
+pub const PACKAGE: &str = "makosh-attachment-preview-renderer-contract";
 pub const ATTACHMENT_PREVIEW_MAX_SOURCE_BYTES_V1: usize = 100 * 1024 * 1024;
 pub const ATTACHMENT_PREVIEW_MAX_IMAGE_PIXELS_V1: u64 = 16_000_000;
 

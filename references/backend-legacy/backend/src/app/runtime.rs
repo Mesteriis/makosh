@@ -1,9 +1,9 @@
 use super::router::ApplicationComponents;
-use hermes_communications_postgres::runtime_leases::ProviderRuntimeLeaseStore;
-use hermes_desktop_runtime::{
+use makosh_communications_postgres::runtime_leases::ProviderRuntimeLeaseStore;
+use makosh_desktop_runtime::{
     NoopRuntimeLifecycleObserver, RuntimeShutdownConfig, RuntimeSupervisor,
 };
-use hermes_worker_runtime::WorkerRuntime;
+use makosh_worker_runtime::WorkerRuntime;
 use serde_json::Value;
 use sqlx::PgPool;
 use tokio_util::sync::CancellationToken;
@@ -109,7 +109,7 @@ async fn acquire_in_process_leases(pool: &sqlx::PgPool) -> Result<(), String> {
                 provider.as_str(),
                 account_id.as_str(),
                 topology,
-                "hermes-hub-backend",
+                "makosh-backend",
                 chrono::Duration::hours(1),
             )
             .await
@@ -128,7 +128,7 @@ async fn revoke_runtime_leases(pool: &PgPool) -> Result<(), String> {
     let leases = ProviderRuntimeLeaseStore::new(pool.clone());
     for (account_id, provider) in accounts {
         leases
-            .revoke(provider.as_str(), account_id.as_str(), "hermes-hub-backend")
+            .revoke(provider.as_str(), account_id.as_str(), "makosh-backend")
             .await
             .map_err(|error| error.to_string())?;
     }

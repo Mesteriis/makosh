@@ -1,8 +1,8 @@
-use hermes_attachment_archive_inspection_core::{
+use makosh_attachment_archive_inspection_core::{
     ArchiveInspectionCustodyDelegationIntentV1, ArchiveInspectionErrorV1, ArchiveInspectionStateV1,
     ArchiveInspectionTransitionV1, transition_archive_inspection_status_v1,
 };
-use hermes_attachment_archive_inspection_ingress::{
+use makosh_attachment_archive_inspection_ingress::{
     ARCHIVE_INSPECTION_CUSTODY_DELEGATION_REQUESTED_CONTRACT_NAME_V1,
     ATTACHMENT_ARCHIVE_INSPECTION_INGRESS_CONTRACT_MAJOR_V1,
     ATTACHMENT_ARCHIVE_INSPECTION_INGRESS_CONTRACT_REVISION_V1,
@@ -16,7 +16,7 @@ use hermes_attachment_archive_inspection_ingress::{
         ArchiveInspectionCustodyDelegationRejectedV1, RequestArchiveInspectionCustodyDelegationV1,
     },
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{DurableEnvelopeV1, durable_envelope_v1::Semantics},
     validation::envelope::validate_envelope_v1,
@@ -51,7 +51,7 @@ pub(crate) async fn enqueue_archive_inspection_custody_delegation(
         intent.safety_message_id,
     );
     sqlx::query(
-        "INSERT INTO hermes_data.attachment_archive_inspection_custody_delegation_requests (
+        "INSERT INTO makosh_data.attachment_archive_inspection_custody_delegation_requests (
            logical_owner_id, request_id, run_id, attachment_anchor_id,
            candidate_message_id, candidate_envelope_sha256,
            safety_message_id, safety_evidence_id, state,
@@ -75,7 +75,7 @@ pub(crate) async fn enqueue_archive_inspection_custody_delegation(
     let row = sqlx::query(
         "SELECT request_id, attachment_anchor_id, candidate_message_id,
                 candidate_envelope_sha256, safety_message_id, safety_evidence_id
-         FROM hermes_data.attachment_archive_inspection_custody_delegation_requests
+         FROM makosh_data.attachment_archive_inspection_custody_delegation_requests
          WHERE logical_owner_id = $1 AND run_id = $2",
     )
     .bind(logical_owner_id)
@@ -111,7 +111,7 @@ impl AttachmentArchiveInspectionPersistenceV1 {
             "SELECT request_id, run_id, attachment_anchor_id, candidate_message_id,
                     candidate_envelope_sha256, safety_message_id, safety_evidence_id,
                     created_at_unix_millis
-             FROM hermes_data.attachment_archive_inspection_custody_delegation_requests
+             FROM makosh_data.attachment_archive_inspection_custody_delegation_requests
              WHERE logical_owner_id = $1 AND state = 1
              ORDER BY created_at_unix_millis, request_id
              LIMIT $2",
@@ -168,7 +168,7 @@ impl AttachmentArchiveInspectionPersistenceV1 {
             return Err(ArchiveInspectionPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.attachment_archive_inspection_custody_delegation_requests
+            "UPDATE makosh_data.attachment_archive_inspection_custody_delegation_requests
              SET state = 2, envelope_sha256 = $1, exact_envelope_bytes = $2,
                  updated_at_unix_millis = $3
              WHERE logical_owner_id = $4 AND request_id = $5 AND state = 1
@@ -213,7 +213,7 @@ impl AttachmentArchiveInspectionPersistenceV1 {
         }
         sqlx::query(
             "SELECT request_id, envelope_sha256, exact_envelope_bytes
-             FROM hermes_data.attachment_archive_inspection_custody_delegation_requests
+             FROM makosh_data.attachment_archive_inspection_custody_delegation_requests
              WHERE logical_owner_id = $1 AND state >= 2
                AND published_at_unix_millis IS NULL
              ORDER BY created_at_unix_millis, request_id
@@ -258,7 +258,7 @@ impl AttachmentArchiveInspectionPersistenceV1 {
             return Err(ArchiveInspectionPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.attachment_archive_inspection_custody_delegation_requests
+            "UPDATE makosh_data.attachment_archive_inspection_custody_delegation_requests
              SET published_at_unix_millis = $1, updated_at_unix_millis = $1
              WHERE logical_owner_id = $2 AND request_id = $3
                AND envelope_sha256 = $4 AND state >= 2
@@ -475,8 +475,8 @@ async fn lock_request(
         "SELECT requests.state, requests.run_id, runs.operation_id,
                 requests.attachment_anchor_id, requests.candidate_message_id,
                 requests.safety_message_id, requests.safety_evidence_id
-         FROM hermes_data.attachment_archive_inspection_custody_delegation_requests requests
-         JOIN hermes_data.attachment_archive_inspection_runs runs
+         FROM makosh_data.attachment_archive_inspection_custody_delegation_requests requests
+         JOIN makosh_data.attachment_archive_inspection_runs runs
            ON runs.logical_owner_id = requests.logical_owner_id
           AND runs.run_id = requests.run_id
          WHERE requests.logical_owner_id = $1 AND requests.request_id = $2
@@ -510,7 +510,7 @@ async fn insert_result_inbox(
     processed_at_unix_millis: i64,
 ) -> Result<ResultInboxInsertV1, ArchiveInspectionPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.attachment_archive_inspection_custody_result_inbox (
+        "INSERT INTO makosh_data.attachment_archive_inspection_custody_result_inbox (
            logical_owner_id, message_id, envelope_sha256, request_id,
            result_kind, processed_at_unix_millis
          ) VALUES ($1, $2, $3, $4, $5, $6)
@@ -532,7 +532,7 @@ async fn insert_result_inbox(
     }
     let row = sqlx::query(
         "SELECT envelope_sha256, request_id, result_kind
-         FROM hermes_data.attachment_archive_inspection_custody_result_inbox
+         FROM makosh_data.attachment_archive_inspection_custody_result_inbox
          WHERE logical_owner_id = $1 AND message_id = $2",
     )
     .bind(logical_owner_id)
@@ -590,7 +590,7 @@ async fn finish_request(
     updated_at_unix_millis: i64,
 ) -> Result<(), ArchiveInspectionPersistenceErrorV1> {
     let updated = sqlx::query(
-        "UPDATE hermes_data.attachment_archive_inspection_custody_delegation_requests
+        "UPDATE makosh_data.attachment_archive_inspection_custody_delegation_requests
          SET state = $1, result_message_id = $2, updated_at_unix_millis = $3
          WHERE logical_owner_id = $4 AND request_id = $5 AND state = 2",
     )
@@ -756,7 +756,7 @@ fn storage_error(_: sqlx::Error) -> ArchiveInspectionPersistenceErrorV1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_attachment_archive_inspection_ingress::{
+    use makosh_attachment_archive_inspection_ingress::{
         ArchiveInspectionCustodyEnvelopeContextV1,
         build_request_archive_inspection_custody_delegation_outbox_record_v1,
     };
@@ -826,7 +826,7 @@ mod tests {
             request.clone(),
             1_800_000_030,
             &ArchiveInspectionCustodyEnvelopeContextV1 {
-                module_id: "hermes-attachment-archive-inspection-runtime".to_owned(),
+                module_id: "makosh-attachment-archive-inspection-runtime".to_owned(),
                 runtime_instance_id: "archive-runtime-1".to_owned(),
                 runtime_generation: 7,
                 recorded_at_unix_seconds: 1_800_000_000,

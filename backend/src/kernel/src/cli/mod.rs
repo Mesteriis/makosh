@@ -9,7 +9,7 @@ use clap::{Args, Parser, Subcommand};
 use crate::platform::gateway::BrowserGatewayConfigurationV1;
 
 #[derive(Parser)]
-#[command(name = "hermes-kernel")]
+#[command(name = "makosh-kernel")]
 pub(crate) struct Cli {
     #[arg(long)]
     pub(crate) data_dir: Option<PathBuf>,

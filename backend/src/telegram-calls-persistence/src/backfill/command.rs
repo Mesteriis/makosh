@@ -1,13 +1,13 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     v1::{ActorKindV1, DurableEnvelopeV1, FenceKindV1, durable_envelope_v1::Semantics},
     validation::envelope::validate_envelope_v1,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     SCHEDULER_JOB_DESCRIPTOR_SET_V1,
     v1::{OwnerJobCommandV1, OwnerJobTriggerKindV1},
     validate_owner_job_command_v1,
 };
-use hermes_telegram_calls_core::{
+use makosh_telegram_calls_core::{
     TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_MAJOR_V1, TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_NAME_V1,
     TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_OWNER_V1, TELEGRAM_CALLS_REALTIME_BACKFILL_SCOPE_V1,
     telegram_calls_realtime_backfill_idempotency_key_v1,
@@ -19,7 +19,7 @@ use sha2::{Digest, Sha256};
 use super::TelegramCallsBackfillErrorV1;
 
 const MAX_COMMAND_ENVELOPE_BYTES: usize = 256 * 1024;
-const TELEGRAM_RUNTIME_MODULE_ID: &str = "hermes-telegram-runtime";
+const TELEGRAM_RUNTIME_MODULE_ID: &str = "makosh-telegram-runtime";
 const JOB_EXECUTE_CAPABILITY: &str = "job_execute";
 
 pub(super) struct ParsedBackfillCommandV1 {
@@ -186,11 +186,11 @@ fn timestamp_matches(timestamp: Option<&prost_types::Timestamp>, unix_millis: i6
 
 #[cfg(test)]
 mod tests {
-    use hermes_events_protocol::v1::{
+    use makosh_events_protocol::v1::{
         ActorRefV1, CommandMetadataV1, ContractRefV1, SourceFenceV1, SourceRefV1,
     };
-    use hermes_scheduler_protocol::v1::{JobLeaseV1, OwnerJobCommandV1};
-    use hermes_telegram_calls_core::{
+    use makosh_scheduler_protocol::v1::{JobLeaseV1, OwnerJobCommandV1};
+    use makosh_telegram_calls_core::{
         telegram_calls_realtime_backfill_job_kind_v1,
         telegram_calls_realtime_backfill_lease_expiry_v1,
         telegram_calls_realtime_backfill_scope_v1,
@@ -228,7 +228,7 @@ mod tests {
         let job = telegram_calls_realtime_backfill_job_kind_v1();
         let payload = OwnerJobCommandV1 {
             job_run_id: run_id.bytes().to_vec(),
-            job_kind: Some(hermes_scheduler_protocol::v1::JobKindV1 {
+            job_kind: Some(makosh_scheduler_protocol::v1::JobKindV1 {
                 owner: job.owner().to_owned(),
                 name: job.name().to_owned(),
                 major: u32::from(job.major()),

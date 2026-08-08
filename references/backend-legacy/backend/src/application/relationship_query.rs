@@ -1,4 +1,4 @@
-use hermes_relationships_api::{
+use makosh_relationships_api::{
     RelationshipRead, RelationshipReviewError, RelationshipReviewFuture, RelationshipReviewPort,
     RelationshipReviewRequest,
 };

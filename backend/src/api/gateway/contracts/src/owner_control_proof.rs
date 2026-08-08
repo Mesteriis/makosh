@@ -1,6 +1,6 @@
 //! Canonical owner-control challenge proof encoding.
 
-const PROOF_DOMAIN: &[u8] = b"hermes.owner-control-session.v1\0";
+const PROOF_DOMAIN: &[u8] = b"makosh.owner-control-session.v1\0";
 
 pub fn owner_control_proof_message_v1(
     kernel_instance_id: &str,
@@ -31,7 +31,7 @@ mod tests {
         let message = owner_control_proof_message_v1("kernel", "owner", "device", 7, &[3; 32])
             .expect("proof message");
 
-        assert!(message.starts_with(b"hermes.owner-control-session.v1\0\0\x06kernel"));
+        assert!(message.starts_with(b"makosh.owner-control-session.v1\0\0\x06kernel"));
         assert!(message.ends_with(&[3; 32]));
     }
 }

@@ -6,7 +6,7 @@ import type { WhatsAppOperationalReadModel } from '../../src/integrations/whatsa
 import type { WhatsAppOperationalReplayModel } from '../../src/integrations/whatsapp/presentation/whatsAppOperationalReplayModel'
 
 const meta = {
-	title: 'Hermes App/Communications/WhatsApp Operational',
+	title: 'Макошь App/Communications/WhatsApp Operational',
 	component: WhatsAppOperationalPage,
 	parameters: { layout: 'fullscreen' },
 } satisfies Meta

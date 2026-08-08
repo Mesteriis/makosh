@@ -2,11 +2,11 @@
 
 ## Mission
 
-Hermes Hub is a local-first Personal Memory System with a Personal Operating
+Макошь is a local-first Personal Memory System with a Personal Operating
 System style interface for communications, knowledge, memory, relationships,
 projects, documents, decisions, obligations and context.
 
-Hermes includes full operational experiences for bundled communication
+Макошь includes full operational experiences for bundled communication
 integrations and a provider-neutral context layer above them. It does not reduce
 to disconnected email clients, messengers, CRM systems, task trackers, calendar
 apps or note-taking tools. It preserves their evidence as durable,
@@ -20,7 +20,7 @@ Canonical vocabulary lives in:
 
 ## North Star
 
-After years of use, Hermes should reliably answer:
+After years of use, Макошь should reliably answer:
 
 - what changed in the owner's world over a period;
 - what obligations exist and where they came from;
@@ -31,12 +31,12 @@ After years of use, Hermes should reliably answer:
 - what the full history of a Persona or Organization is;
 - what context matters before acting.
 
-Answers must be explainable. Hermes must show source records, events, documents,
+Answers must be explainable. Макошь must show source records, events, documents,
 communications and relationships behind each conclusion.
 
 ## Non-Product Boundaries
 
-Hermes Hub is not merely:
+Макошь is not merely:
 
 - disconnected email and messenger clients with an AI filter or unified inbox;
 - a CRM;
@@ -75,7 +75,7 @@ pipelines.
 ## Success Criteria
 
 - The owner can find any meaningful interaction after years of use.
-- Hermes connects communications, documents, Personas, Organizations, Projects,
+- Макошь connects communications, documents, Personas, Organizations, Projects,
   Tasks, Events, Decisions and Obligations without requiring manual
   classification of everything.
 - AI answers include verifiable source references.

@@ -1,6 +1,6 @@
 //! Exact descriptor and capability admission for the Attachment Security engine.
 
-use hermes_attachment_archive_inspection_ingress::{
+use makosh_attachment_archive_inspection_ingress::{
     ATTACHMENT_SECURITY_ARCHIVE_DELEGATION_CAPABILITY_ID_V1,
     archive_inspection_custody_delegated_contract_reference_v1,
     archive_inspection_custody_delegated_publish_request_v1,
@@ -8,7 +8,7 @@ use hermes_attachment_archive_inspection_ingress::{
     archive_inspection_custody_delegation_rejected_publish_request_v1,
     archive_inspection_custody_delegation_requested_contract_reference_v1,
 };
-use hermes_attachment_preview_ingress::{
+use makosh_attachment_preview_ingress::{
     ATTACHMENT_SECURITY_PREVIEW_DELEGATION_CAPABILITY_ID_V1,
     attachment_preview_custody_delegated_contract_reference_v1,
     attachment_preview_custody_delegated_publish_request_v1,
@@ -16,13 +16,13 @@ use hermes_attachment_preview_ingress::{
     attachment_preview_custody_delegation_rejected_publish_request_v1,
     attachment_preview_custody_delegation_requested_contract_reference_v1,
 };
-use hermes_attachment_security_contract::admission::{
+use makosh_attachment_security_contract::admission::{
     ATTACHMENT_SECURITY_BLOB_CUSTODY_TARGET_CAPABILITY_ID,
     ATTACHMENT_SECURITY_BLOB_CUSTODY_TARGET_MODULE_ID,
     ATTACHMENT_SECURITY_BLOB_CUSTODY_TARGET_OWNER_ID, ATTACHMENT_SECURITY_MAX_IN_FLIGHT,
     attachment_security_scan_candidate_observed_contract_reference_v1,
 };
-use hermes_attachment_text_extraction_ingress::{
+use makosh_attachment_text_extraction_ingress::{
     ATTACHMENT_SECURITY_TEXT_EXTRACTION_DELEGATION_CAPABILITY_ID_V1,
     attachment_text_custody_delegated_contract_reference_v1,
     attachment_text_custody_delegated_publish_request_v1,
@@ -30,13 +30,13 @@ use hermes_attachment_text_extraction_ingress::{
     attachment_text_custody_delegation_rejected_publish_request_v1,
     attachment_text_custody_delegation_requested_contract_reference_v1,
 };
-use hermes_communications_attachment_contract::admission::{
+use makosh_communications_attachment_contract::admission::{
     COMMUNICATION_ATTACHMENT_MAX_IN_FLIGHT,
     communication_attachment_safety_state_changed_contract_reference_v1,
     communication_attachment_safety_verdict_observed_contract_reference_v1,
     communication_attachment_safety_verdict_observed_publish_request_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, ModuleDescriptorV1, ModuleKindV1,
@@ -329,7 +329,7 @@ fn storage() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::validate_descriptor_v1;
+    use makosh_runtime_protocol::validation::descriptor::validate_descriptor_v1;
 
     use super::*;
 

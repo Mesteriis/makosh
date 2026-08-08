@@ -2,7 +2,7 @@ use serde_json::{Value, json};
 use sqlx::Transaction;
 use sqlx::postgres::{PgPool, Postgres};
 
-use hermes_observations_api::models::NewObservationLink;
+use makosh_observations_api::models::NewObservationLink;
 
 use crate::errors::ObservationStoreError;
 use crate::store::ObservationStore;

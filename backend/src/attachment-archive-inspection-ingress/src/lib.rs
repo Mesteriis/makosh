@@ -8,13 +8,13 @@ pub use envelope::{
     build_archive_inspection_custody_delegation_rejected_outbox_record_v1,
     build_request_archive_inspection_custody_delegation_outbox_record_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-attachment-archive-inspection-ingress";
+pub const PACKAGE: &str = "makosh-attachment-archive-inspection-ingress";
 pub const ATTACHMENT_ARCHIVE_INSPECTION_INGRESS_OWNER_V1: &str = "attachment_archive_inspection";
 pub const ARCHIVE_INSPECTION_CUSTODY_DELEGATION_REQUESTED_CONTRACT_NAME_V1: &str =
     "archive_inspection_custody_delegation_requested";
@@ -32,14 +32,14 @@ pub const ATTACHMENT_SECURITY_ARCHIVE_DELEGATION_CAPABILITY_ID_V1: &str =
 pub const ATTACHMENT_ARCHIVE_INSPECTION_BLOB_TARGET_OWNER_ID_V1: &str =
     "attachment_archive_inspection";
 pub const ATTACHMENT_ARCHIVE_INSPECTION_BLOB_TARGET_MODULE_ID_V1: &str =
-    "hermes-attachment-archive-inspection-runtime";
+    "makosh-attachment-archive-inspection-runtime";
 pub const ATTACHMENT_ARCHIVE_INSPECTION_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "attachment_archive_inspection.blob.v1";
 
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.attachment_archive_inspection.ingress.v1.rs"
+        "/makosh.attachment_archive_inspection.ingress.v1.rs"
     ));
 }
 
@@ -60,7 +60,7 @@ pub fn archive_inspection_custody_delegation_request_id_v1(
     safety_message_id: [u8; 16],
 ) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-archive-inspection.custody-delegation-request.v1\0");
+    hasher.update(b"makosh.attachment-archive-inspection.custody-delegation-request.v1\0");
     hasher.update(archive_run_id);
     hasher.update(candidate_message_id);
     hasher.update(safety_message_id);
@@ -196,7 +196,7 @@ fn event_route(
 
 fn custody_result_message_id_v1(label: &[u8], request_id: [u8; 16]) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-archive-inspection.custody-result.v1\0");
+    hasher.update(b"makosh.attachment-archive-inspection.custody-result.v1\0");
     hasher.update(label);
     hasher.update(request_id);
     hasher.finalize()[..16].try_into().expect("digest prefix")
@@ -214,7 +214,7 @@ mod tests {
         );
         assert_eq!(
             ATTACHMENT_ARCHIVE_INSPECTION_BLOB_TARGET_MODULE_ID_V1,
-            "hermes-attachment-archive-inspection-runtime"
+            "makosh-attachment-archive-inspection-runtime"
         );
         assert_eq!(
             ATTACHMENT_ARCHIVE_INSPECTION_BLOB_TARGET_CAPABILITY_ID_V1,

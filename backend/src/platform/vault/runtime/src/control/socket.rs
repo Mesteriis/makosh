@@ -7,7 +7,7 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     GetVaultRuntimeStatusRequestV1, VaultRuntimeControlRequestV1, VaultRuntimeControlResponseV1,
     VaultRuntimeStateV1, VaultRuntimeStatusV1, vault_runtime_control_request_v1::Operation,
     vault_runtime_control_response_v1::Result as ResponseResult,

@@ -1,9 +1,9 @@
 //! Disposable PostgreSQL proof for the Delayed Delivery durable lifecycle.
 
-use hermes_communication_delayed_delivery_core::{
+use makosh_communication_delayed_delivery_core::{
     DelayedDeliveryDraftV1, DelayedDeliveryStateV1, prepare_delayed_delivery_v1,
 };
-use hermes_communication_delayed_delivery_persistence::{
+use makosh_communication_delayed_delivery_persistence::{
     ApplySchedulerResultOutcomeV1, ApplySchedulerResultV1, ClaimDueExecutionOutcomeV1,
     ClaimDueExecutionV1, CreateDelayedDeliveryOperationOutcomeV1, CreateDelayedDeliveryOperationV1,
     DelayedDeliveryBodyCleanupReasonV1, DelayedDeliveryBodyReceiptV1,
@@ -14,7 +14,7 @@ use hermes_communication_delayed_delivery_persistence::{
 };
 use sqlx::{PgPool, postgres::PgPoolOptions};
 
-const POSTGRES_URL: &str = "HERMES_COMMUNICATION_DELAYED_DELIVERY_POSTGRES_URL";
+const POSTGRES_URL: &str = "MAKOSH_COMMUNICATION_DELAYED_DELIVERY_POSTGRES_URL";
 const OWNER: &str = "owner-1";
 const CREATED_AT: u64 = 1_000;
 const DELIVER_AT: u64 = 6_000;
@@ -219,7 +219,7 @@ async fn durable_lifecycle_survives_restart_and_fences_duplicates_and_cancel_rac
 }
 
 async fn assert_cancel_too_late_race(
-    persistence: &hermes_communication_delayed_delivery_persistence::CommunicationDelayedDeliveryPersistenceV1,
+    persistence: &makosh_communication_delayed_delivery_persistence::CommunicationDelayedDeliveryPersistenceV1,
 ) {
     persistence
         .create_operation(&create_command(2, 20))
@@ -259,7 +259,7 @@ async fn assert_cancel_too_late_race(
 }
 
 async fn assert_cancelled_cleanup_enqueued(
-    persistence: &hermes_communication_delayed_delivery_persistence::CommunicationDelayedDeliveryPersistenceV1,
+    persistence: &makosh_communication_delayed_delivery_persistence::CommunicationDelayedDeliveryPersistenceV1,
 ) {
     persistence
         .create_operation(&create_command(3, 30))
@@ -370,7 +370,7 @@ fn durable_message(message_id: u8, contract_kind: &'static str) -> DelayedDelive
 }
 
 async fn install_schema(pool: &PgPool) {
-    sqlx::raw_sql("CREATE SCHEMA IF NOT EXISTS hermes_data;")
+    sqlx::raw_sql("CREATE SCHEMA IF NOT EXISTS makosh_data;")
         .execute(pool)
         .await
         .expect("create Delayed Delivery schema");
@@ -386,7 +386,7 @@ async fn install_schema(pool: &PgPool) {
 
 async fn connect(
     database_url: &str,
-) -> hermes_communication_delayed_delivery_persistence::CommunicationDelayedDeliveryPersistenceV1 {
+) -> makosh_communication_delayed_delivery_persistence::CommunicationDelayedDeliveryPersistenceV1 {
     DelayedDeliveryPersistenceConformanceV1::connect_url(database_url)
         .await
         .expect("connect Delayed Delivery persistence")

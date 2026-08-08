@@ -160,10 +160,10 @@ paths, inbound attachment store lookup и bypass scan запрещены.
 
 ### Functional units and SRP
 
-- `hermes-mail-api`: composition language, validation and canonical wire;
-- `hermes-mail-persistence`: owner-local schema, optimistic concurrency,
+- `makosh-mail-api`: composition language, validation and canonical wire;
+- `makosh-mail-persistence`: owner-local schema, optimistic concurrency,
   idempotency and scoped queries;
-- `hermes-mail-runtime`: exact route dispatch only;
+- `makosh-mail-runtime`: exact route dispatch only;
 - generated Mail clients: one client per exact service;
 - Mail controllers: draft, template/signature and delivery composition
   responsibilities separated;

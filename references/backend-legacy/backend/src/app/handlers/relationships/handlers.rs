@@ -7,13 +7,13 @@ use crate::app::error::types::ApiError;
 use crate::app::state::AppState;
 use crate::application::relationship_query::RelationshipReviewAdapter;
 use crate::platform::audit::models::NewApiAuditRecord;
-use hermes_relationships_api::{
+use makosh_relationships_api::{
     RelationshipListQuery, RelationshipReviewError, RelationshipReviewPort,
     RelationshipReviewRequest,
 };
-use hermes_relationships_postgres::RelationshipPostgresQuery;
+use makosh_relationships_postgres::RelationshipPostgresQuery;
 
-const RELATIONSHIP_API_ACTOR_ID: &str = "hermes-frontend";
+const RELATIONSHIP_API_ACTOR_ID: &str = "makosh-frontend";
 const DEFAULT_RELATIONSHIP_LIMIT: i64 = 50;
 const MIN_RELATIONSHIP_LIMIT: i64 = 1;
 const MAX_RELATIONSHIP_LIMIT: i64 = 100;
@@ -32,13 +32,13 @@ pub(crate) async fn get_v1_relationships(
         .ok_or(ApiError::DatabaseNotConfigured)?
         .clone();
     let adapter = RelationshipPostgresQuery::new(pool);
-    let items = hermes_relationships_api::RelationshipQueryPort::list(&adapter, query)
+    let items = makosh_relationships_api::RelationshipQueryPort::list(&adapter, query)
         .await
         .map_err(|error| match error {
-            hermes_relationships_api::RelationshipQueryError::InvalidQuery(message) => {
+            makosh_relationships_api::RelationshipQueryError::InvalidQuery(message) => {
                 ApiError::InvalidRelationshipQuery(message)
             }
-            hermes_relationships_api::RelationshipQueryError::Failed(message) => {
+            makosh_relationships_api::RelationshipQueryError::Failed(message) => {
                 ApiError::FailedPrecondition(message)
             }
         })?;
@@ -50,7 +50,7 @@ pub(crate) async fn put_v1_relationship_review(
     State(state): State<AppState>,
     Path(relationship_id): Path<String>,
     Json(request): Json<RelationshipReviewRequest>,
-) -> Result<Json<hermes_relationships_api::RelationshipRead>, ApiError> {
+) -> Result<Json<makosh_relationships_api::RelationshipRead>, ApiError> {
     let relationship_id = validate_required_query_value(Some(&relationship_id))?;
     api_audit_log(&state)?
         .record(&NewApiAuditRecord::relationship_review_set(

@@ -1,16 +1,16 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_note_candidate_core::{
+use makosh_communication_note_candidate_core::{
     CommunicationNoteCandidateRejectionCodeV1, CommunicationNoteCandidateStateV1,
     CommunicationNoteCandidateTransitionV1, CommunicationNoteSourceContentV1,
     extract_communication_note_candidates_v1,
 };
-use hermes_communication_note_candidate_persistence::{
+use makosh_communication_note_candidate_persistence::{
     CommunicationNoteCandidatePersistenceErrorV1, CommunicationNoteCandidatePersistenceV1,
     PersistedCommunicationNoteCandidateRunV1,
 };
-use hermes_communications_note_source_api::wire::CommunicationNoteSourceContentV1 as WireSourceContent;
-use hermes_runtime_protocol::managed_control::{
+use makosh_communications_note_source_api::wire::CommunicationNoteSourceContentV1 as WireSourceContent;
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
 use prost::Message;

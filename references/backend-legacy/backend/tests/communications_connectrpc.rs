@@ -1,31 +1,31 @@
 use axum::body::to_bytes;
 use axum::http::StatusCode;
 use chrono::Utc;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::domains::communications::drafts::{
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::domains::communications::drafts::{
     CommunicationDraftStore, DraftStatus, NewCommunicationDraft,
 };
-use hermes_hub_backend::domains::communications::messages::projection::project_raw_email_message;
-use hermes_hub_backend::domains::communications::messages::store::MessageProjectionStore;
-use hermes_hub_backend::domains::communications::outbox::{
+use makosh_hub_backend::domains::communications::messages::projection::project_raw_email_message;
+use makosh_hub_backend::domains::communications::messages::store::MessageProjectionStore;
+use makosh_hub_backend::domains::communications::outbox::{
     CommunicationOutboxStatus, CommunicationOutboxStore, NewCommunicationOutboxItem,
 };
-use hermes_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
-use hermes_hub_backend::domains::communications::storage::models::{
+use makosh_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
+use makosh_hub_backend::domains::communications::storage::models::{
     CommunicationAttachmentDisposition, NewCommunicationAttachment,
     NewCommunicationAttachmentImport, NewCommunicationBlob,
 };
-use hermes_hub_backend::domains::communications::storage::scanner::{
+use makosh_hub_backend::domains::communications::storage::scanner::{
     AttachmentSafetyScanReport, AttachmentSafetyScanStatus,
 };
-use hermes_hub_backend::domains::communications::storage::store::CommunicationStorageStore;
+use makosh_hub_backend::domains::communications::storage::store::CommunicationStorageStore;
 
-use hermes_backend_testkit::app::{TestApp, post_json};
-use hermes_backend_testkit::composition::router_for_context;
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
+use makosh_backend_testkit::app::{TestApp, post_json};
+use makosh_backend_testkit::composition::router_for_context;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
@@ -45,7 +45,7 @@ async fn communications_connect_api_requires_local_api_secret() {
         .oneshot(
             axum::http::Request::builder()
                 .method("POST")
-                .uri("/hermes.communications.v1.CommunicationsService/ListMessages")
+                .uri("/makosh.communications.v1.CommunicationsService/ListMessages")
                 .header("content-type", "application/json")
                 .body(axum::body::Body::from("{}"))
                 .expect("connect request without secret"),
@@ -56,7 +56,7 @@ async fn communications_connect_api_requires_local_api_secret() {
 
     let allowed_response = router
         .oneshot(post_json(
-            "/hermes.communications.v1.CommunicationsService/ListMessages",
+            "/makosh.communications.v1.CommunicationsService/ListMessages",
             json!({}),
         ))
         .await
@@ -226,7 +226,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ListMessages",
+                "/makosh.communications.v1.CommunicationsService/ListMessages",
                 json!({
                     "account_id": "acct-connectrpc-mail",
                     "limit": 10
@@ -251,7 +251,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/GetMessage",
+                "/makosh.communications.v1.CommunicationsService/GetMessage",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -270,7 +270,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/TransitionMessageWorkflowState",
+                "/makosh.communications.v1.CommunicationsService/TransitionMessageWorkflowState",
                 json!({
                     "message_id": projected.message_id,
                     "workflow_state": "reviewed"
@@ -288,7 +288,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/TrashMessage",
+                "/makosh.communications.v1.CommunicationsService/TrashMessage",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -304,7 +304,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/RestoreMessage",
+                "/makosh.communications.v1.CommunicationsService/RestoreMessage",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -320,7 +320,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/MarkMessageRead",
+                "/makosh.communications.v1.CommunicationsService/MarkMessageRead",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -337,7 +337,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/DeleteMessageFromProvider",
+                "/makosh.communications.v1.CommunicationsService/DeleteMessageFromProvider",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -354,7 +354,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/RestoreMessage",
+                "/makosh.communications.v1.CommunicationsService/RestoreMessage",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -369,7 +369,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/BulkMessageAction",
+                "/makosh.communications.v1.CommunicationsService/BulkMessageAction",
                 json!({
                     "action": "trash",
                     "message_ids": [projected.message_id]
@@ -386,7 +386,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/RestoreMessage",
+                "/makosh.communications.v1.CommunicationsService/RestoreMessage",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -401,7 +401,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ToggleMessagePin",
+                "/makosh.communications.v1.CommunicationsService/ToggleMessagePin",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -417,7 +417,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ToggleMessageImportant",
+                "/makosh.communications.v1.CommunicationsService/ToggleMessageImportant",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -432,7 +432,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ToggleMessageMute",
+                "/makosh.communications.v1.CommunicationsService/ToggleMessageMute",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -447,7 +447,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/SnoozeMessage",
+                "/makosh.communications.v1.CommunicationsService/SnoozeMessage",
                 json!({
                     "message_id": projected.message_id,
                     "until": "2026-06-30T10:00:00Z"
@@ -463,7 +463,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/AddMessageLabel",
+                "/makosh.communications.v1.CommunicationsService/AddMessageLabel",
                 json!({
                     "message_id": projected.message_id,
                     "label": "follow-up"
@@ -479,7 +479,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/RemoveMessageLabel",
+                "/makosh.communications.v1.CommunicationsService/RemoveMessageLabel",
                 json!({
                     "message_id": projected.message_id,
                     "label": "follow-up"
@@ -495,7 +495,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ListMessageWorkflowStateCounts",
+                "/makosh.communications.v1.CommunicationsService/ListMessageWorkflowStateCounts",
                 json!({
                     "account_id": "acct-connectrpc-mail",
                     "local_state": "active"
@@ -515,7 +515,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ListSubscriptions",
+                "/makosh.communications.v1.CommunicationsService/ListSubscriptions",
                 json!({
                     "account_id": "acct-connectrpc-mail",
                     "limit": 10
@@ -532,7 +532,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/GetMailboxHealth",
+                "/makosh.communications.v1.CommunicationsService/GetMailboxHealth",
                 json!({
                     "account_id": "acct-connectrpc-mail"
                 }),
@@ -548,7 +548,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ListTopSenders",
+                "/makosh.communications.v1.CommunicationsService/ListTopSenders",
                 json!({
                     "account_id": "acct-connectrpc-mail",
                     "limit": 10
@@ -565,7 +565,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ListCommunicationBlockers",
+                "/makosh.communications.v1.CommunicationsService/ListCommunicationBlockers",
                 json!({}),
             ))
             .await
@@ -582,7 +582,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/SearchMessages",
+                "/makosh.communications.v1.CommunicationsService/SearchMessages",
                 json!({
                     "query": "ConnectRPC",
                     "limit": 10
@@ -600,7 +600,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/DetectMessageLanguage",
+                "/makosh.communications.v1.CommunicationsService/DetectMessageLanguage",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -615,7 +615,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/AnalyzeMessage",
+                "/makosh.communications.v1.CommunicationsService/AnalyzeMessage",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -634,7 +634,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/GetMessageExplain",
+                "/makosh.communications.v1.CommunicationsService/GetMessageExplain",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -649,7 +649,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/GetMessageSmartCc",
+                "/makosh.communications.v1.CommunicationsService/GetMessageSmartCc",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -664,7 +664,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/GetMessageExport",
+                "/makosh.communications.v1.CommunicationsService/GetMessageExport",
                 json!({
                     "message_id": projected.message_id,
                     "format": "json"
@@ -682,7 +682,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/GetMessageAuth",
+                "/makosh.communications.v1.CommunicationsService/GetMessageAuth",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -698,7 +698,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/GetMessageSignature",
+                "/makosh.communications.v1.CommunicationsService/GetMessageSignature",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -713,7 +713,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/GenerateAiReply",
+                "/makosh.communications.v1.CommunicationsService/GenerateAiReply",
                 json!({
                     "message_id": projected.message_id,
                     "tone": "business",
@@ -735,7 +735,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/GenerateAiReplyVariants",
+                "/makosh.communications.v1.CommunicationsService/GenerateAiReplyVariants",
                 json!({
                     "message_id": projected.message_id,
                     "languages": ["en"],
@@ -752,7 +752,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/TranslateMessage",
+                "/makosh.communications.v1.CommunicationsService/TranslateMessage",
                 json!({
                     "message_id": projected.message_id,
                     "target_language": "es"
@@ -769,7 +769,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ExtractMessageTasks",
+                "/makosh.communications.v1.CommunicationsService/ExtractMessageTasks",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -784,7 +784,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ExtractMessageNotes",
+                "/makosh.communications.v1.CommunicationsService/ExtractMessageNotes",
                 json!({
                     "message_id": projected.message_id
                 }),
@@ -799,7 +799,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ListThreads",
+                "/makosh.communications.v1.CommunicationsService/ListThreads",
                 json!({
                     "account_id": "acct-connectrpc-mail",
                     "limit": 10
@@ -815,7 +815,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ListThreadMessages",
+                "/makosh.communications.v1.CommunicationsService/ListThreadMessages",
                 json!({
                     "account_id": "acct-connectrpc-mail",
                     "subject": "ConnectRPC Thread",
@@ -835,7 +835,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/TranslateThread",
+                "/makosh.communications.v1.CommunicationsService/TranslateThread",
                 json!({
                     "account_id": "acct-connectrpc-mail",
                     "subject": "ConnectRPC Thread",
@@ -859,7 +859,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/SearchAttachments",
+                "/makosh.communications.v1.CommunicationsService/SearchAttachments",
                 json!({
                     "account_id": "acct-connectrpc-mail",
                     "query": "connectrpc-note",
@@ -879,7 +879,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/GetAttachmentPreview",
+                "/makosh.communications.v1.CommunicationsService/GetAttachmentPreview",
                 json!({
                     "attachment_id": seeded_attachment.attachment_id
                 }),
@@ -899,7 +899,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ExtractAttachmentText",
+                "/makosh.communications.v1.CommunicationsService/ExtractAttachmentText",
                 json!({ "attachment_id": seeded_attachment.attachment_id }),
             ))
             .await
@@ -917,7 +917,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/GetAttachmentExtractedText",
+                "/makosh.communications.v1.CommunicationsService/GetAttachmentExtractedText",
                 json!({ "attachment_id": seeded_attachment.attachment_id }),
             ))
             .await
@@ -938,7 +938,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
     let pdf_attachment_preview = router
         .clone()
         .oneshot(post_json(
-            "/hermes.communications.v1.CommunicationsService/GetAttachmentPreview",
+            "/makosh.communications.v1.CommunicationsService/GetAttachmentPreview",
             json!({
                 "attachment_id": seeded_pdf_attachment.attachment_id
             }),
@@ -963,7 +963,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/GetAttachmentPreview",
+                "/makosh.communications.v1.CommunicationsService/GetAttachmentPreview",
                 json!({
                     "attachment_id": seeded_pdf_attachment.attachment_id
                 }),
@@ -996,7 +996,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
     let quarantined_preview = router
         .clone()
         .oneshot(post_json(
-            "/hermes.communications.v1.CommunicationsService/GetAttachmentPreview",
+            "/makosh.communications.v1.CommunicationsService/GetAttachmentPreview",
             json!({ "attachment_id": quarantined_attachment.attachment_id }),
         ))
         .await
@@ -1006,7 +1006,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
     let quarantined_translation = router
         .clone()
         .oneshot(post_json(
-            "/hermes.communications.v1.CommunicationsService/TranslateAttachment",
+            "/makosh.communications.v1.CommunicationsService/TranslateAttachment",
             json!({
                 "attachment_id": quarantined_attachment.attachment_id,
                 "target_language": "en",
@@ -1021,7 +1021,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/TranslateAttachment",
+                "/makosh.communications.v1.CommunicationsService/TranslateAttachment",
                 json!({
                     "attachment_id": seeded_attachment.attachment_id,
                     "target_language": "en",
@@ -1051,7 +1051,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ListSavedSearches",
+                "/makosh.communications.v1.CommunicationsService/ListSavedSearches",
                 json!({
                     "account_id": "acct-connectrpc-mail",
                     "page": { "limit": 10, "cursor": "" }
@@ -1067,7 +1067,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/CreateSavedSearch",
+                "/makosh.communications.v1.CommunicationsService/CreateSavedSearch",
                 json!({
                     "name": "ConnectRPC invoices",
                     "account_id": "acct-connectrpc-mail",
@@ -1097,7 +1097,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/UpdateSavedSearch",
+                "/makosh.communications.v1.CommunicationsService/UpdateSavedSearch",
                 json!({
                     "saved_search_id": saved_search_id,
                     "name": "ConnectRPC waiting invoices",
@@ -1119,7 +1119,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/DeleteSavedSearch",
+                "/makosh.communications.v1.CommunicationsService/DeleteSavedSearch",
                 json!({
                     "saved_search_id": saved_search_id
                 }),
@@ -1134,7 +1134,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ListFolders",
+                "/makosh.communications.v1.CommunicationsService/ListFolders",
                 json!({
                     "account_id": "acct-connectrpc-mail",
                     "page": { "limit": 10, "cursor": "" }
@@ -1150,7 +1150,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/CreateFolder",
+                "/makosh.communications.v1.CommunicationsService/CreateFolder",
                 json!({
                     "account_id": "acct-connectrpc-mail",
                     "name": "ConnectRPC Clients",
@@ -1173,7 +1173,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/UpdateFolder",
+                "/makosh.communications.v1.CommunicationsService/UpdateFolder",
                 json!({
                     "folder_id": folder_id,
                     "name": "ConnectRPC VIP Clients",
@@ -1191,7 +1191,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/CopyMessageToFolder",
+                "/makosh.communications.v1.CommunicationsService/CopyMessageToFolder",
                 json!({
                     "folder_id": folder_id,
                     "message_id": projected.message_id
@@ -1207,7 +1207,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ListFolderMessages",
+                "/makosh.communications.v1.CommunicationsService/ListFolderMessages",
                 json!({
                     "folder_id": folder_id,
                     "page": { "limit": 10, "cursor": "" }
@@ -1226,7 +1226,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/MoveMessageToFolder",
+                "/makosh.communications.v1.CommunicationsService/MoveMessageToFolder",
                 json!({
                     "folder_id": folder_id,
                     "message_id": projected.message_id
@@ -1242,7 +1242,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/DeleteFolder",
+                "/makosh.communications.v1.CommunicationsService/DeleteFolder",
                 json!({
                     "folder_id": folder_id
                 }),
@@ -1257,7 +1257,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ListDrafts",
+                "/makosh.communications.v1.CommunicationsService/ListDrafts",
                 json!({
                     "account_id": "acct-connectrpc-mail",
                     "page": { "limit": 10, "cursor": "" }
@@ -1285,7 +1285,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/CreateDraft",
+                "/makosh.communications.v1.CommunicationsService/CreateDraft",
                 json!({
                     "draft_id": "draft-connectrpc-2",
                     "account_id": "acct-connectrpc-mail",
@@ -1310,7 +1310,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/DeleteDraft",
+                "/makosh.communications.v1.CommunicationsService/DeleteDraft",
                 json!({
                     "draft_id": "draft-connectrpc-2"
                 }),
@@ -1325,7 +1325,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/ListOutbox",
+                "/makosh.communications.v1.CommunicationsService/ListOutbox",
                 json!({
                     "account_id": "acct-connectrpc-mail",
                     "page": { "limit": 10, "cursor": "" }
@@ -1341,7 +1341,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/UndoOutboxItem",
+                "/makosh.communications.v1.CommunicationsService/UndoOutboxItem",
                 json!({
                     "outbox_id": "outbox-connectrpc-1"
                 }),
@@ -1357,7 +1357,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/SendMessage",
+                "/makosh.communications.v1.CommunicationsService/SendMessage",
                 json!({
                     "account_id": "acct-connectrpc-mail",
                     "to_recipients": ["receiver@example.com"],
@@ -1398,7 +1398,7 @@ async fn communications_connect_api_exposes_provider_neutral_queries_and_send() 
         router
             .clone()
             .oneshot(post_json(
-                "/hermes.communications.v1.CommunicationsService/RedirectMessage",
+                "/makosh.communications.v1.CommunicationsService/RedirectMessage",
                 json!({
                     "message_id": projected.message_id,
                     "to_recipients": ["redirect@example.com"],
@@ -1526,7 +1526,7 @@ async fn store_connectrpc_completed_safe_preview(
         INSERT INTO communication_attachment_safe_previews (
             attachment_id, status, renderer, source_sha256, preview_blob_id,
             preview_content_type, preview_size_bytes, rendered_at
-        ) VALUES ($1, 'completed', 'hermes.attachment-extractor.pdf_preview.v1', $2, $3, 'image/png', $4, now())
+        ) VALUES ($1, 'completed', 'makosh.attachment-extractor.pdf_preview.v1', $2, $3, 'image/png', $4, now())
         "#,
     )
     .bind(attachment_id)

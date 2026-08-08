@@ -22,7 +22,7 @@ const providerIcons: Record<ProviderIconKind, string> = {
 	generic: 'tabler:plug-connected'
 }
 
-const classes = computed(() => ['hermes-provider-icon', `hermes-provider-icon--${props.provider}`, props.class])
+const classes = computed(() => ['makosh-provider-icon', `makosh-provider-icon--${props.provider}`, props.class])
 const accessibleLabel = computed(() => props.label ?? props.provider)
 </script>
 

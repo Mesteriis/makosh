@@ -39,11 +39,11 @@ const emit = defineEmits<{
 }>()
 
 const classes = computed(() => [
-	'hermes-chat-input',
+	'makosh-chat-input',
 	{
-		'hermes-chat-input--disabled': props.disabled,
-		'hermes-chat-input--auto-grow': props.autoGrow,
-		'hermes-chat-input--loading': props.loading
+		'makosh-chat-input--disabled': props.disabled,
+		'makosh-chat-input--auto-grow': props.autoGrow,
+		'makosh-chat-input--loading': props.loading
 	},
 	props.class
 ])
@@ -99,12 +99,12 @@ watch(
 
 <template>
 	<form :class="classes" @submit.prevent="submit">
-		<label v-if="label" class="hermes-chat-input__label" :for="id">{{ label }}</label>
-		<div class="hermes-chat-input__surface">
+		<label v-if="label" class="makosh-chat-input__label" :for="id">{{ label }}</label>
+		<div class="makosh-chat-input__surface">
 			<textarea
 				:id="id"
 				ref="textareaRef"
-				class="hermes-chat-input__textarea"
+				class="makosh-chat-input__textarea"
 				:disabled="disabled || loading"
 				:maxlength="maxLength"
 				:placeholder="placeholder"
@@ -114,7 +114,7 @@ watch(
 				@keydown.ctrl.enter.prevent="submit"
 				@keydown.meta.enter.prevent="submit"
 			/>
-			<div class="hermes-chat-input__actions">
+			<div class="makosh-chat-input__actions">
 				<IconButton
 					v-if="showAttach"
 					icon="tabler:paperclip"
@@ -130,7 +130,7 @@ watch(
 				</Button>
 			</div>
 		</div>
-		<div v-if="helper || remaining !== undefined" class="hermes-chat-input__meta">
+		<div v-if="helper || remaining !== undefined" class="makosh-chat-input__meta">
 			<span v-if="helper">{{ helper }}</span>
 			<span v-if="remaining !== undefined">{{ remaining }}</span>
 		</div>

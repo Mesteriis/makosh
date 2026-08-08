@@ -71,7 +71,7 @@ binding и не расширяет GrantSet.
 
 Решение не создаёт общий owner facade:
 
-- `hermes-runtime-protocol` владеет wire field и structural validation;
+- `makosh-runtime-protocol` владеет wire field и structural validation;
 - Kernel owner-control dispatch владеет authenticated staging;
 - каждый Engine runtime сам валидирует и применяет human owner только в своих
   owner-local responsibilities;

@@ -4,7 +4,7 @@ import { storybookLocaleFromGlobals } from './storybook-i18n'
 import { generalStoryCopy } from './general-story-copy'
 
 const meta = {
-	title: 'Hermes UI/General/Radio',
+	title: 'Макошь UI/General/Radio',
 	component: RadioGroup,
 	render: (_args, context) => ({
 		components: { Radio, RadioGroup },

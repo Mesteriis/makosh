@@ -1,19 +1,19 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub(crate) use axum::Router;
 pub(crate) use axum::body::{Body, to_bytes};
 pub(crate) use axum::http::{Method, Request, StatusCode, header};
-pub(crate) use hermes_hub_backend::app::router::{build_router, build_router_with_database};
-pub(crate) use hermes_hub_backend::platform::config::app_config::AppConfig;
-pub(crate) use hermes_hub_backend::platform::storage::database::Database;
+pub(crate) use makosh_hub_backend::app::router::{build_router, build_router_with_database};
+pub(crate) use makosh_hub_backend::platform::config::app_config::AppConfig;
+pub(crate) use makosh_hub_backend::platform::storage::database::Database;
 pub(crate) use serde_json::{Value, json};
 pub(crate) use tower::ServiceExt;
 
 pub(crate) const LOCAL_API_TOKEN: &str = "tasks-api-test-token";
 
 pub(crate) fn config_with_api_token() -> AppConfig {
-    hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+    makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
 }
 
 pub(crate) async fn test_database_url(test_name: &str) -> Option<String> {
@@ -33,7 +33,7 @@ pub(crate) fn get_request(uri: &str) -> Request<Body> {
 pub(crate) fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -43,7 +43,7 @@ pub(crate) fn post_request_with_token(uri: &str, body: Value, token: &str) -> Re
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -53,7 +53,7 @@ pub(crate) fn put_request_with_token(uri: &str, body: Value, token: &str) -> Req
         .method(Method::PUT)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -62,7 +62,7 @@ pub(crate) fn delete_request_with_token(uri: &str, token: &str) -> Request<Body>
     Request::builder()
         .method(Method::DELETE)
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -90,7 +90,7 @@ pub(crate) async fn build_tasks_app(database_url: &str) -> Router {
         .await
         .expect("database connection");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url,
         ),

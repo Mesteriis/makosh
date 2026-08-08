@@ -15,7 +15,7 @@ test('Review attention contract and core are separate owner units', async () => 
     backendSource('src/review-attention-core/Cargo.toml'),
     backendSource('src/review-attention-api/src/lib.rs'),
     backendSource(
-      'src/review-attention-api/proto/hermes/review/attention/client/v1/client.proto',
+      'src/review-attention-api/proto/makosh/review/attention/client/v1/client.proto',
     ),
     backendSource('src/review-attention-core/src/lib.rs'),
   ]);
@@ -73,8 +73,8 @@ test('Review attention persistence is owner-local atomic and operation-idempoten
   assert.match(manifest, /role = "domain"/);
   assert.match(manifest, /owner = "review"/);
   assert.match(manifest, /surface = "persistence"/);
-  assert.match(manifest, /hermes-review-attention-core/);
-  assert.match(manifest, /hermes-storage-protocol/);
+  assert.match(manifest, /makosh-review-attention-core/);
+  assert.match(manifest, /makosh-storage-protocol/);
   assert.doesNotMatch(manifest, /communications-|mail-|telegram-|whatsapp-|zulip-/);
   assert.match(repository, /\.pool\s*\.begin\(\)/);
   assert.match(repository, /ON CONFLICT \(logical_owner_id, operation_id\) DO NOTHING/);
@@ -90,10 +90,10 @@ test('Review attention persistence is owner-local atomic and operation-idempoten
   assert.match(realtime, /\.bind\(logical_owner_id\)/);
   assert.match(realtime, /REVIEW_ATTENTION_REALTIME_REPLAY_LIMIT_V1: u16 = 256/);
   assert.match(schema, /owner_id: "review"/);
-  assert.match(migration, /hermes_data\.review_attention_state/);
-  assert.match(migration, /hermes_data\.review_attention_operations/);
+  assert.match(migration, /makosh_data\.review_attention_state/);
+  assert.match(migration, /makosh_data\.review_attention_operations/);
   assert.match(migration, /expected_revision BIGINT NOT NULL/);
-  assert.match(realtimeMigration, /hermes_data\.review_attention_realtime/);
+  assert.match(realtimeMigration, /makosh_data\.review_attention_realtime/);
   assert.match(realtimeMigration, /UNIQUE \(logical_owner_id, attention_id, state_revision\)/);
   assert.doesNotMatch(
     `${repository}\n${query}\n${realtime}\n${migration}\n${realtimeMigration}`,
@@ -139,7 +139,7 @@ test('Review managed runtime owns exact client dispatch and shared realtime repl
   assert.match(main, /ManagedDomainRuntimeConfigurationV1/);
   assert.doesNotMatch(
     `${admission}\n${clientPort}\n${managedRuntime}\n${realtime}\n${main}`,
-    /hermes_communications|communication_observed|Event Hub|event_hub_endpoint|JetStream|provider_account/,
+    /makosh_communications|communication_observed|Event Hub|event_hub_endpoint|JetStream|provider_account/,
   );
 });
 
@@ -153,8 +153,8 @@ test('Review release assembly is a separate unsigned domain build unit', async (
   assert.match(manifest, /role = "domain"/);
   assert.match(manifest, /owner = "review"/);
   assert.match(manifest, /surface = "assembly"/);
-  assert.match(manifest, /hermes-review-attention-persistence/);
-  assert.match(manifest, /hermes-review-attention-runtime/);
+  assert.match(manifest, /makosh-review-attention-persistence/);
+  assert.match(manifest, /makosh-review-attention-runtime/);
   assert.doesNotMatch(manifest, /kernel|gateway|communications-|mail-|telegram-|whatsapp-|zulip-/);
   assert.match(assembly, /review_attention_module_descriptor_v1/);
   assert.match(assembly, /review_attention_settings_schema_v1/);

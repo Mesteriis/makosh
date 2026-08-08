@@ -1,22 +1,22 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-attachment-preview-evidence-replay-api";
+pub const PACKAGE: &str = "makosh-attachment-preview-evidence-replay-api";
 pub const ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_OWNER_V1: &str = "attachment_preview_evidence_replay";
 pub const ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_MODULE_ID_V1: &str =
-    "hermes-attachment-preview-evidence-replay-runtime";
+    "makosh-attachment-preview-evidence-replay-runtime";
 pub const ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_CAPABILITY_ID_V1: &str =
     "attachment-preview-evidence-replay.command.v1";
 pub const ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_CONTRACT_NAME_V1: &str =
     "attachment_preview_evidence_replay.command";
 pub const ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_CONTRACT_MAJOR_V1: u32 = 1;
 pub const ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_CONTRACT_REVISION_V1: u32 = 2;
-pub const ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_CONNECT_PATH_V1: &str = "/hermes.attachment_preview_evidence_replay.v1.AttachmentPreviewEvidenceReplayCommandService/Start";
+pub const ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_CONNECT_PATH_V1: &str = "/makosh.attachment_preview_evidence_replay.v1.AttachmentPreviewEvidenceReplayCommandService/Start";
 pub const ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_MAX_MESSAGES_PER_PRODUCER_V1: usize = 16;
 
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.attachment_preview_evidence_replay.v1.rs"
+        "/makosh.attachment_preview_evidence_replay.v1.rs"
     ));
 }
 
@@ -42,7 +42,7 @@ mod tests {
             16
         );
         let source =
-            include_str!("../proto/hermes/attachment_preview_evidence_replay/v1/replay.proto");
+            include_str!("../proto/makosh/attachment_preview_evidence_replay/v1/replay.proto");
         assert!(!source.contains("subject"));
         assert!(!source.contains("predicate"));
         assert!(!source.contains("payload_bytes"));

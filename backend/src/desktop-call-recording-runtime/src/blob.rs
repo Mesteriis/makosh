@@ -1,13 +1,13 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTargetV1, ManagedBlobSessionRequestV1,
     request_managed_blob_session_v2,
 };
-use hermes_call_transcription_ingress::{
+use makosh_call_transcription_ingress::{
     OWNER_ID_V1 as TARGET_OWNER_ID_V1, TARGET_BLOB_CAPABILITY_ID_V1, TARGET_MODULE_ID_V1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::BlobDataOperationV1,
 };
@@ -82,7 +82,7 @@ pub fn write_recording_blob_v1(
 
 fn source_reference_id(recording_evidence_id: [u8; 16], sha256: [u8; 32]) -> [u8; 16] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.desktop-call-recording.source-copy.v1\0");
+    hash.update(b"makosh.desktop-call-recording.source-copy.v1\0");
     hash.update(recording_evidence_id);
     hash.update(sha256);
     hash.finalize()[..16]

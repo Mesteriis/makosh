@@ -15,7 +15,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   proto: new URL(
-    'src/mail-api/proto/hermes/mail/sync_health/v1/client.proto',
+    'src/mail-api/proto/makosh/mail/sync_health/v1/client.proto',
     BACKEND_ROOT,
   ),
   validator: new URL('src/mail-api/src/sync_health.rs', BACKEND_ROOT),
@@ -44,7 +44,7 @@ const paths = {
   api: new URL('src/mail-api/src/lib.rs', BACKEND_ROOT),
   frontendGenerator: new URL('frontend/scripts/generate-proto.mjs', PROJECT_ROOT),
   frontendGenerated: new URL(
-    'frontend/src/gen/hermes/mail/sync_health/v1/client_pb.ts',
+    'frontend/src/gen/makosh/mail/sync_health/v1/client_pb.ts',
     PROJECT_ROOT,
   ),
   frontendClient: new URL(
@@ -129,7 +129,7 @@ test('Mail sync health is exact, restart-safe and cut over through its generated
   assert.match(adr, /First-party frontend cutover выполнен/);
   assert.match(adr, /Gate `mail_sync_health_v1` открыт как `implemented`/);
 
-  assert.match(proto, /package hermes\.mail\.sync_health\.v1/);
+  assert.match(proto, /package makosh\.mail\.sync_health\.v1/);
   assert.match(
     proto,
     /oneof query[\s\S]*get_status[\s\S]*list_runs[\s\S]*get_run/,
@@ -154,16 +154,16 @@ test('Mail sync health is exact, restart-safe and cut over through its generated
   assert.match(contract, /mail\.sync\.health\.query\.v1/);
   assert.match(
     contract,
-    /\/hermes\.mail\.sync_health\.v1\.MailSyncHealthQueryService\/Query/,
+    /\/makosh\.mail\.sync_health\.v1\.MailSyncHealthQueryService\/Query/,
   );
 
   assert.match(
     persistence,
-    /CREATE TABLE IF NOT EXISTS hermes_data\.mail_sync_runs/,
+    /CREATE TABLE IF NOT EXISTS makosh_data\.mail_sync_runs/,
   );
   assert.match(
     persistence,
-    /CREATE TABLE IF NOT EXISTS hermes_data\.mail_sync_status/,
+    /CREATE TABLE IF NOT EXISTS makosh_data\.mail_sync_status/,
   );
   assert.match(persistence, /mail_sync_runs_one_current_per_connection_idx/);
   assert.match(persistence, /begin_sync_run/);
@@ -231,7 +231,7 @@ test('Mail sync health is exact, restart-safe and cut over through its generated
   );
   assert.doesNotMatch(
     gmailWorker,
-    /MailBootstrapError|crate::managed|MailDurablePersistence|ManagedControlChannel|BlobDataClient|communications_outbox|hermes_communications/,
+    /MailBootstrapError|crate::managed|MailDurablePersistence|ManagedControlChannel|BlobDataClient|communications_outbox|makosh_communications/,
   );
   assert.doesNotMatch(
     runtime,
@@ -268,7 +268,7 @@ test('Mail sync health is exact, restart-safe and cut over through its generated
   assert.match(runtimeRoot, /active\.pages = None/);
   assert.match(
     build,
-    /proto\/hermes\/mail\/sync_health\/v1\/client\.proto/,
+    /proto\/makosh\/mail\/sync_health\/v1\/client\.proto/,
   );
   assert.match(api, /pub mod sync_health;/);
   assert.match(
@@ -309,6 +309,6 @@ test('Mail sync health is exact, restart-safe and cut over through its generated
       frontendPanel,
       frontendRoute,
     ].join('\n'),
-    /hermes_communications|domains\/communications|hermes_scheduler|hermes_kernel/i,
+    /makosh_communications|domains\/communications|makosh_scheduler|makosh_kernel/i,
   );
 });

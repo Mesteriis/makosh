@@ -1,8 +1,8 @@
-# Hermes Product Master Spec
+# Макошь Product Master Spec
 
 ## Status
 
-This is the product-level source of truth for active Hermes documentation.
+This is the product-level source of truth for active Макошь documentation.
 
 It describes the target product model and the current implementation baseline at
 the same time. When these differ, the target model governs future product
@@ -14,7 +14,7 @@ implementation details.
 
 ## Canonical Product Definition
 
-Hermes Hub is a local-first Personal Memory System.
+Макошь is a local-first Personal Memory System.
 
 Its product experience is a personal operating surface for:
 
@@ -33,7 +33,7 @@ document viewers are product surfaces, not the product thesis.
 
 ## Product Thesis
 
-Hermes turns communications into durable personal memory and actionable context.
+Макошь turns communications into durable personal memory and actionable context.
 
 The product has two connected layers:
 
@@ -64,7 +64,7 @@ Communication
   -> Timeline / Dossier / Recall
 ```
 
-Hermes should help the owner answer:
+Макошь should help the owner answer:
 
 - what happened;
 - who and what is involved;
@@ -74,9 +74,9 @@ Hermes should help the owner answer:
 - what obligations, decisions or tasks emerged;
 - what context is needed before acting.
 
-## What Hermes Is Not
+## What Макошь Is Not
 
-Hermes is not merely a disconnected collection of:
+Макошь is not merely a disconnected collection of:
 
 - email and messenger clients without a shared evidence/context layer;
 - a CRM;
@@ -87,13 +87,13 @@ Hermes is not merely a disconnected collection of:
 - a generic knowledge base;
 - an AI chatbot.
 
-Provider operational surfaces are first-class parts of Hermes, but they are not
+Provider operational surfaces are first-class parts of Макошь, but they are not
 independent business domains. Durable context and promoted business truth still
 belong to the neutral source-backed memory system.
 
 ## Communication As Primary Ingestion Spine
 
-Communication is the primary way real-world signals enter Hermes.
+Communication is the primary way real-world signals enter Макошь.
 
 Communication includes:
 
@@ -121,7 +121,7 @@ records can also create durable memory.
 
 ## Source Evidence To Memory Flow
 
-Hermes must preserve evidence before extracting meaning.
+Макошь must preserve evidence before extracting meaning.
 
 ```text
 Provider or local source
@@ -145,7 +145,7 @@ Rules:
 
 ## Domain Model
 
-Hermes domains are not separate applications. They are ownership boundaries
+Макошь domains are not separate applications. They are ownership boundaries
 inside one memory system.
 
 | Domain | Product role | Source-of-truth responsibility |
@@ -383,7 +383,7 @@ Incoming Communication
 
 ## Review, Confidence And Provenance
 
-Hermes must distinguish:
+Макошь must distinguish:
 
 - source evidence;
 - accepted domain truth;

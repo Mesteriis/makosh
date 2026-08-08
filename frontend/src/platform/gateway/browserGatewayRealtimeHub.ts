@@ -3,7 +3,7 @@ import {
 	type BrowserGatewayRealtimeObserver,
 	type BrowserGatewayRealtimeSubscription,
 } from './browserGatewayRealtime'
-import type { ClientRealtimeStreamStateV1 } from '../../gen/hermes/gateway/v1/client_realtime_pb'
+import type { ClientRealtimeStreamStateV1 } from '../../gen/makosh/gateway/v1/client_realtime_pb'
 
 type BrowserGatewayRealtimePort = {
 	subscribe(observer: BrowserGatewayRealtimeObserver): BrowserGatewayRealtimeSubscription

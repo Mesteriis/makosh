@@ -3,7 +3,7 @@ import type {
 	MailDraftV1,
 	MailSignatureV1,
 	MailTemplateV1,
-} from '../../../gen/hermes/mail/composition/v1/client_pb'
+} from '../../../gen/makosh/mail/composition/v1/client_pb'
 
 export type MailCompositionStatus = 'blocked' | 'loading' | 'ready' | 'empty' | 'error'
 export type MailCompositionBusyAction = 'refresh' | 'draft' | 'template' | 'signature' | 'preview' | null

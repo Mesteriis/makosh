@@ -1,4 +1,4 @@
-ALTER TABLE hermes_data.communications_export_jobs
+ALTER TABLE makosh_data.communications_export_jobs
   ADD COLUMN logical_owner_id TEXT CHECK (
     logical_owner_id IS NULL
     OR (
@@ -8,7 +8,7 @@ ALTER TABLE hermes_data.communications_export_jobs
   );
 
 CREATE INDEX communications_export_jobs_owner_pending_idx
-  ON hermes_data.communications_export_jobs (
+  ON makosh_data.communications_export_jobs (
     logical_owner_id,
     updated_at_unix_seconds,
     export_id

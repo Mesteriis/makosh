@@ -7,7 +7,7 @@ describe('emailHtml remote image privacy boundary', () => {
 
     expect(source).toContain('remoteImageUrlsFromHtml')
     expect(source).toContain('rewriteRemoteImageSources')
-    expect(source).toContain('data-hermes-remote-src')
+    expect(source).toContain('data-makosh-remote-src')
     expect(source).toContain('isRemoteImageUrl')
     expect(source).not.toContain('fetch(')
     expect(source).not.toContain('ApiClient')

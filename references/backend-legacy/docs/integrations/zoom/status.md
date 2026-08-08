@@ -19,7 +19,7 @@ As of this implementation pass, the current checkout contains:
 
 - `backend/src/integrations/zoom`;
 - `frontend/src/integrations/zoom`;
-- `backend/src/bin/hermes_zoom_edge_proxy.rs`;
+- `backend/src/bin/makosh_zoom_edge_proxy.rs`;
 - migration `backend/migrations/0160_add_zoom_provider_kind.sql`;
 - `/api/v1/integrations/zoom/*` routes;
 - Zoom event constants under the platform event bus.
@@ -124,7 +124,7 @@ Backend/frontend static checks pass:
 | Provider-neutral Calls/Meetings view | Communications `calls` and `meetings` sections surface shared call evidence, transcript reads, participant snapshots and recording references, including projected Zoom meetings. | Present and targeted-tested. |
 | Live provider runtime | Authorized accounts can be started into a running live runtime, and the background recording-sync worker polls recent Zoom cloud recordings through the existing provider-sync boundary. | Present and targeted-tested. |
 | Webhook signature verification | Protected account-scoped runtime bridge. | Present and targeted-tested for URL validation, meeting events, recording events and invalid signatures. |
-| Public/edge webhook receiver | Standalone `hermes-zoom-edge-proxy`. | Present and targeted-tested for readiness, raw body forwarding, Zoom header forwarding and account scoping. |
+| Public/edge webhook receiver | Standalone `makosh-zoom-edge-proxy`. | Present and targeted-tested for readiness, raw body forwarding, Zoom header forwarding and account scoping. |
 | Cloud recording download worker | Authorized accounts can best-effort import provider-side recording media files through the existing recording-sync boundary and signed recording webhooks after explicit owner-visible opt-in, local blob persistence and heuristic safety scan. | Present and targeted-tested. |
 | Calendar matching workflow | Downstream workflow, not integration ownership. | Implemented and targeted-tested via `zoom.meeting.observed` -> Calendar event relation projection. |
 | Participant identity resolution | Downstream candidate/review workflow. | Implemented and targeted-tested for conservative `attach_email_address` identity-candidate generation from `zoom.meeting.observed` participants into the existing Review inbox pipeline. |

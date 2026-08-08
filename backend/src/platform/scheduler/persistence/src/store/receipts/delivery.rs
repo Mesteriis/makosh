@@ -1,7 +1,7 @@
 //! Durable Scheduler receipt consumption with acknowledgement after commit.
 
-use hermes_scheduler::decode_job_run_receipt_envelope_v1;
-use hermes_scheduler_protocol::{
+use makosh_scheduler::decode_job_run_receipt_envelope_v1;
+use makosh_scheduler_protocol::{
     SchedulerReceiptDeliveryPortV1, SchedulerReceiptDeliveryV1, v1::JobRunOutcomeV1,
 };
 
@@ -67,7 +67,7 @@ where
 
     async fn apply_acceptance(
         &self,
-        receipt: &hermes_scheduler_protocol::v1::JobRunReceiptV1,
+        receipt: &makosh_scheduler_protocol::v1::JobRunReceiptV1,
     ) -> Result<SchedulerReceiptConsumeOutcomeV1, SchedulerReceiptConsumeErrorV1> {
         let acceptance = SchedulerRunAcceptanceV1::try_from(receipt)
             .map_err(|_| SchedulerReceiptConsumeErrorV1::InvalidReceipt)?;
@@ -84,7 +84,7 @@ where
 
     async fn apply_terminal(
         &self,
-        receipt: &hermes_scheduler_protocol::v1::JobRunReceiptV1,
+        receipt: &makosh_scheduler_protocol::v1::JobRunReceiptV1,
     ) -> Result<SchedulerReceiptConsumeOutcomeV1, SchedulerReceiptConsumeErrorV1> {
         let terminal = SchedulerRunTerminalResultV1::try_from(receipt)
             .map_err(|_| SchedulerReceiptConsumeErrorV1::InvalidReceipt)?;

@@ -2,10 +2,10 @@
 
 use std::future::Future;
 
-use hermes_storage_control::{
+use makosh_storage_control::{
     StorageFenceOutcomeV1, StoragePoolFenceCommandV1, StoragePoolFencePortV1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 
 use crate::{PoolAliasV1, PoolLifecycleCommandV1, PoolLifecycleOutcomeV1};
 

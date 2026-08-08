@@ -1,8 +1,8 @@
-use hermes_communications_ingress::ProviderProvenanceV1;
-use hermes_mail_api::{
+use makosh_communications_ingress::ProviderProvenanceV1;
+use makosh_mail_api::{
     DEFAULT_WINDOW, IMAP_PORT, MAX_MESSAGE_BYTES, MAX_PLAIN_TEXT_BYTES, MAX_WINDOW, MAX_WINDOWS,
 };
-use hermes_mail_core::{
+use makosh_mail_core::{
     ConnectionTracker, MailConnection, MailConnectionState, MailOperation, MailStatePolicy,
     bounded_window, draft_ingress_observation, validate_sync_request,
 };
@@ -83,7 +83,7 @@ fn ingress_observation_validation() {
     assert_eq!(draft.source.external_record_id, "source");
     assert_eq!(
         draft.body,
-        hermes_communications_ingress::BodyAvailabilityV1::Unavailable
+        makosh_communications_ingress::BodyAvailabilityV1::Unavailable
     );
 
     assert!(

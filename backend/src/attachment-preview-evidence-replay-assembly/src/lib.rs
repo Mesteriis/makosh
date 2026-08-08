@@ -8,15 +8,15 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use hermes_attachment_preview_evidence_replay_persistence::attachment_preview_evidence_replay_storage_bundle_v1;
-use hermes_attachment_preview_evidence_replay_runtime::{
+use makosh_attachment_preview_evidence_replay_persistence::attachment_preview_evidence_replay_storage_bundle_v1;
+use makosh_attachment_preview_evidence_replay_runtime::{
     attachment_preview_evidence_replay_module_descriptor_v1,
     attachment_preview_evidence_replay_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
@@ -29,7 +29,7 @@ pub const STORAGE_BUNDLE_FILE_V1: &str = "attachment_preview_evidence_replay.sto
 pub const ARTIFACT_FRAGMENT_FILE_V1: &str =
     "attachment_preview_evidence_replay.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH_V1: &str = "bin/hermes-attachment-preview-evidence-replay-runtime";
+const RUNTIME_RELATIVE_PATH_V1: &str = "bin/makosh-attachment-preview-evidence-replay-runtime";
 const DESCRIPTOR_RELATIVE_PATH_V1: &str =
     "contracts/attachment_preview_evidence_replay.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH_V1: &str =
@@ -243,8 +243,8 @@ fn write_new_private_file(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
 mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 
-    use hermes_runtime_protocol::validation::descriptor::decode_descriptor_v1;
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_runtime_protocol::validation::descriptor::decode_descriptor_v1;
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -278,7 +278,7 @@ mod tests {
     fn temporary_directory() -> PathBuf {
         let id = NEXT_TEMPORARY_ID.fetch_add(1, Ordering::Relaxed);
         let path = std::env::temp_dir().join(format!(
-            "hermes-attachment-preview-evidence-replay-assembly-{}-{id}",
+            "makosh-attachment-preview-evidence-replay-assembly-{}-{id}",
             std::process::id()
         ));
         let _ = fs::remove_dir_all(&path);

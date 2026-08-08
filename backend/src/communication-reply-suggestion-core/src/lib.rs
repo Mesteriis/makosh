@@ -1,6 +1,6 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-communication-reply-suggestion-core";
+pub const PACKAGE: &str = "makosh-communication-reply-suggestion-core";
 pub const REPLY_SUGGESTION_MAX_SUBJECT_BYTES_V1: usize = 998;
 pub const REPLY_SUGGESTION_MAX_BODY_BYTES_V1: usize = 64 * 1024;
 pub const REPLY_SUGGESTION_MAX_CONFIDENCE_BASIS_POINTS_V1: u32 = 10_000;

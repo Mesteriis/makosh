@@ -4,7 +4,7 @@ use std::collections::HashSet;
 use std::sync::{Arc, LazyLock, Mutex};
 use std::time::Duration;
 
-use hermes_desktop_runtime::{
+use makosh_desktop_runtime::{
     RuntimeExitPolicy, RuntimeTaskClass, RuntimeTaskFactory, RuntimeTaskFuture, RuntimeTaskSpec,
 };
 use serde_json::json;
@@ -295,9 +295,9 @@ fn zoom_calendar_matching_projection_task(
     let task: RuntimeTaskFactory = Arc::new(move |cancellation: CancellationToken| {
         let pool = pool.clone();
         Box::pin(async move {
-            let runner = hermes_events_postgres::consumers::EventConsumerRunner::new(
+            let runner = makosh_events_postgres::consumers::EventConsumerRunner::new(
                 pool.clone(),
-                hermes_events_postgres::consumers::EventConsumerConfig::new(
+                makosh_events_postgres::consumers::EventConsumerConfig::new(
                     crate::workflows::zoom_calendar_matching::ZOOM_CALENDAR_MATCHING_CONSUMER,
                 ),
             );
@@ -360,9 +360,9 @@ fn zoom_signal_detection_projection_task(
     let task: RuntimeTaskFactory = Arc::new(move |cancellation: CancellationToken| {
         let pool = pool.clone();
         Box::pin(async move {
-            let runner = hermes_events_postgres::consumers::EventConsumerRunner::new(
+            let runner = makosh_events_postgres::consumers::EventConsumerRunner::new(
                 pool.clone(),
-                hermes_events_postgres::consumers::EventConsumerConfig::new(
+                makosh_events_postgres::consumers::EventConsumerConfig::new(
                     crate::workflows::zoom_signal_detection::ZOOM_SIGNAL_DETECTION_CONSUMER,
                 ),
             );
@@ -425,9 +425,9 @@ fn zoom_participant_identity_projection_task(
     let task: RuntimeTaskFactory = Arc::new(move |cancellation: CancellationToken| {
         let pool = pool.clone();
         Box::pin(async move {
-            let runner = hermes_events_postgres::consumers::EventConsumerRunner::new(
+            let runner = makosh_events_postgres::consumers::EventConsumerRunner::new(
                 pool.clone(),
-                hermes_events_postgres::consumers::EventConsumerConfig::new(
+                makosh_events_postgres::consumers::EventConsumerConfig::new(
                     crate::workflows::zoom_participant_identity::ZOOM_PARTICIPANT_IDENTITY_CONSUMER,
                 ),
             );

@@ -1,4 +1,4 @@
-//! Fixed Hermes platform schema bootstrap.
+//! Fixed Макошь platform schema bootstrap.
 
 mod password_file;
 mod schemas;

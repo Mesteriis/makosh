@@ -1,4 +1,4 @@
-use hermes_attachment_text_extraction_api::{
+use makosh_attachment_text_extraction_api::{
     ATTACHMENT_TEXT_EXTRACTION_CONTRACT_MAJOR_V1, ATTACHMENT_TEXT_EXTRACTION_MODULE_ID_V1,
     ATTACHMENT_TEXT_EXTRACTION_OWNER_V1,
     wire::{
@@ -9,16 +9,16 @@ use hermes_attachment_text_extraction_api::{
         StartAttachmentTextExtractionRequestV1, StartAttachmentTextExtractionResponseV1,
     },
 };
-use hermes_attachment_text_extraction_core::{
+use makosh_attachment_text_extraction_core::{
     AttachmentTextExtractionErrorV1, AttachmentTextExtractionStateV1, AttachmentTextFormatV1,
     visible_attachment_text_v1,
 };
-use hermes_attachment_text_extraction_persistence::{
+use makosh_attachment_text_extraction_persistence::{
     AttachmentTextExtractionPersistenceErrorV1, AttachmentTextExtractionPersistenceV1,
     CreateAttachmentTextExtractionRunOutcomeV1, CreateAttachmentTextExtractionRunV1,
     PersistedAttachmentTextExtractionRunV1,
 };
-use hermes_runtime_protocol::v1::{ModuleClientRequestV1, ModuleClientResponseV1};
+use makosh_runtime_protocol::v1::{ModuleClientRequestV1, ModuleClientResponseV1};
 use prost::Message;
 
 use crate::contracts::{command_contract_v1, content_contract_v1, query_contract_v1};

@@ -33,7 +33,7 @@ import {
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Form',
+	title: 'Макошь UI/General/Form',
 	render: (_args, context) => ({
 		components: {
 			Autocomplete,

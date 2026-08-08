@@ -19,4 +19,4 @@ pub use managed_runtime::{
     ReviewedTaskCandidatePromotionRuntimeAdmissionV1,
 };
 
-pub const PACKAGE: &str = "hermes-reviewed-task-candidate-promotion-runtime";
+pub const PACKAGE: &str = "makosh-reviewed-task-candidate-promotion-runtime";

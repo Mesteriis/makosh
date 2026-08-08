@@ -4,7 +4,7 @@ import { storybookLocaleFromGlobals } from './storybook-i18n'
 import { generalStoryCopy } from './general-story-copy'
 
 const meta = {
-	title: 'Hermes UI/General/Tag Input',
+	title: 'Макошь UI/General/Tag Input',
 	component: TagInput,
 	render: (_args, context) => ({
 		components: { FormField, FormLabel, TagInput },

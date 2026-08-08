@@ -10,33 +10,33 @@ type WizardStoryExpectation = {
 const wizardStories: readonly WizardStoryExpectation[] = [
 	{
 		fileName: 'GmailWizard.stories.ts',
-		storyTitle: 'Hermes App/Wizard/Gmail',
+		storyTitle: 'Макошь App/Wizard/Gmail',
 		modelKey: 'gmail'
 	},
 	{
 		fileName: 'ICloudMailWizard.stories.ts',
-		storyTitle: 'Hermes App/Wizard/iCloud Mail',
+		storyTitle: 'Макошь App/Wizard/iCloud Mail',
 		modelKey: 'icloud'
 	},
 	{
 		fileName: 'TelegramWizard.stories.ts',
-		storyTitle: 'Hermes App/Wizard/Telegram',
+		storyTitle: 'Макошь App/Wizard/Telegram',
 		modelKey: 'telegram'
 	},
 	{
 		fileName: 'WhatsAppWizard.stories.ts',
-		storyTitle: 'Hermes App/Wizard/WhatsApp',
+		storyTitle: 'Макошь App/Wizard/WhatsApp',
 		modelKey: 'whatsapp'
 	},
 	{
 		fileName: 'AIProviderWizard.stories.ts',
-		storyTitle: 'Hermes App/Wizard/AI Provider',
+		storyTitle: 'Макошь App/Wizard/AI Provider',
 		modelKey: 'ai'
 	}
 ]
 
-describe('Hermes App wizard Storybook coverage', () => {
-	it('keeps provider and AI wizards in the Hermes App/Wizard group', () => {
+describe('Макошь App wizard Storybook coverage', () => {
+	it('keeps provider and AI wizards in the Макошь App/Wizard group', () => {
 		for (const story of wizardStories) {
 			const storyUrl = new URL(`./${story.fileName}`, import.meta.url)
 			expect(existsSync(storyUrl)).toBe(true)
@@ -56,7 +56,7 @@ describe('Hermes App wizard Storybook coverage', () => {
 
 		expect(storySources).toContain('Steps')
 		expect(storySources).toContain('Мастер подключения')
-		expect(storySources).not.toContain('Hermes App Wizard')
+		expect(storySources).not.toContain('Макошь App Wizard')
 		expect(storySources).not.toContain('Callback URL')
 		expect(storySources).not.toContain('Vault binding')
 		expect(storySources).not.toContain('secret_ref')

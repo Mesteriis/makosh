@@ -549,7 +549,7 @@ export async function materializeReleaseDistribution(artifacts, destination) {
   const parent = dirname(destination);
   assertNonSymlinkDirectory(parent, 'release distribution output directory');
   assertReleaseDistributionAbsent(destination);
-  const staging = mkdtempSync(join(parent, '.hermes-distribution-'));
+  const staging = mkdtempSync(join(parent, '.makosh-distribution-'));
   try {
     for (const artifact of artifacts) {
       await copyVerifiedReleaseFile(staging, artifact.relativePath, artifact.sourcePath, artifact);

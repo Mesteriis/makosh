@@ -1,23 +1,23 @@
 //! Managed Event Hub execution for provider commands and terminal results.
 
-use hermes_communication_delivery_intent_core::CommunicationProviderProvenanceV1;
-use hermes_communication_delivery_intent_event_adapters::DeliveryIntentCommandContextV1;
-use hermes_communication_delivery_intent_persistence::DeliveryIntentClaimV1;
-use hermes_events_jetstream::{RuntimeSubscribePermitV1, receive_runtime_pull_delivery};
-use hermes_mail_delivery_intent_contract::{
+use makosh_communication_delivery_intent_core::CommunicationProviderProvenanceV1;
+use makosh_communication_delivery_intent_event_adapters::DeliveryIntentCommandContextV1;
+use makosh_communication_delivery_intent_persistence::DeliveryIntentClaimV1;
+use makosh_events_jetstream::{RuntimeSubscribePermitV1, receive_runtime_pull_delivery};
+use makosh_mail_delivery_intent_contract::{
     mail_delivery_intent_rejected_contract_reference_v1,
     mail_delivery_intent_succeeded_contract_reference_v1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
-use hermes_telegram_delivery_intent_contract::{
+use makosh_runtime_protocol::v1::ContractReferenceV1;
+use makosh_telegram_delivery_intent_contract::{
     telegram_delivery_intent_rejected_contract_reference_v1,
     telegram_delivery_intent_succeeded_contract_reference_v1,
 };
-use hermes_whatsapp_delivery_intent_contract::{
+use makosh_whatsapp_delivery_intent_contract::{
     whatsapp_delivery_intent_rejected_contract_reference_v1,
     whatsapp_delivery_intent_succeeded_contract_reference_v1,
 };
-use hermes_zulip_delivery_intent_contract::{
+use makosh_zulip_delivery_intent_contract::{
     zulip_delivery_intent_rejected_contract_reference_v1,
     zulip_delivery_intent_succeeded_contract_reference_v1,
 };

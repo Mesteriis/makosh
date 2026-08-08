@@ -1,6 +1,6 @@
 use std::os::unix::fs::{PermissionsExt, symlink};
 
-use hermes_storage_postgres::{InitdbPasswordFileV1, PostgresAdapterErrorV1};
+use makosh_storage_postgres::{InitdbPasswordFileV1, PostgresAdapterErrorV1};
 use tempfile::TempDir;
 use zeroize::Zeroizing;
 

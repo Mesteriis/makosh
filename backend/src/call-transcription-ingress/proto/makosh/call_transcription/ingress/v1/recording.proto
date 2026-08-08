@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package makosh.call_transcription.ingress.v1;
+
+message RecordingReadyV1 {
+  bytes event_id = 1;
+  bytes request_id = 2;
+  bytes call_evidence_id = 3;
+  uint64 call_evidence_revision = 4;
+  bytes recording_evidence_id = 5;
+  uint64 recording_revision = 6;
+  bytes consent_receipt_id = 7;
+  uint32 consent_policy_revision = 8;
+  string consent_scope = 9;
+  string audio_format = 10;
+  uint64 declared_bytes = 11;
+  uint64 duration_millis = 12;
+  bytes audio_sha256 = 13;
+  bytes target_blob_reference_id = 14;
+  bytes custody_transfer_source_proof = 15;
+  string logical_owner_id = 16;
+}
+
+message RecordingRejectedV1 {
+  bytes event_id = 1;
+  bytes request_id = 2;
+  bytes call_evidence_id = 3;
+  uint64 call_evidence_revision = 4;
+  bytes recording_evidence_id = 5;
+  uint64 recording_revision = 6;
+  string rejection_code = 7;
+  string logical_owner_id = 8;
+}

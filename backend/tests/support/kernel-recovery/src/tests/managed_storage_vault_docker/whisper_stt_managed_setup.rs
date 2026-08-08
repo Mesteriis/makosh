@@ -3,15 +3,15 @@
 use super::*;
 
 use crate::platform::managed::signed_bundle::SignedRuntimeResource;
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_runtime_protocol::v1::{
     ManagedIntegrationRuntimeConfigurationV1, SettingValueV1, SettingsSnapshotV1,
     SettingsValueEntryV1, setting_value_v1::Value,
 };
-use hermes_whisper_stt_persistence::schema::{
+use makosh_whisper_stt_persistence::schema::{
     WHISPER_STT_STORAGE_BUNDLE_REVISION_V1, whisper_stt_storage_bundle_v1,
 };
-use hermes_whisper_stt_runtime::{
+use makosh_whisper_stt_runtime::{
     WHISPER_STT_MODEL_ARTIFACT_ID_V1, WHISPER_STT_MODULE_ID_V1, WHISPER_STT_OWNER_ID_V1,
     WHISPER_STT_RUNNER_ARTIFACT_ID_V1, WHISPER_STT_STORAGE_CAPABILITY_ID_V1,
     whisper_stt_module_descriptor_v1, whisper_stt_settings_schema_bytes_v1,
@@ -84,7 +84,7 @@ pub(super) fn admit_whisper_stt_runtime_v1(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             WHISPER_STT_RELEASE_ARTIFACT_ID_V1,
             Sha256::digest(
                 std::fs::read(whisper_stt_binary()).expect("Whisper STT runtime binary"),
@@ -297,7 +297,7 @@ fn setting_entry_v1(setting_id: &str, value: u64) -> SettingsValueEntryV1 {
 fn whisper_stt_storage_binding_v1(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(registration_id, WHISPER_STT_STORAGE_CAPABILITY_ID_V1)
         .expect("read Whisper STT Storage binding")
@@ -318,17 +318,17 @@ pub(super) fn whisper_stt_runtime_resources_v1() -> [SignedRuntimeResource; 2] {
     [
         SignedRuntimeResource::read_only_data(
             WHISPER_STT_MODEL_ARTIFACT_ID_V1,
-            binary("HERMES_WHISPER_STT_MODEL"),
+            binary("MAKOSH_WHISPER_STT_MODEL"),
             WHISPER_STT_MODULE_ID_V1,
         ),
         SignedRuntimeResource::native_executable(
             WHISPER_STT_RUNNER_ARTIFACT_ID_V1,
-            binary("HERMES_WHISPER_STT_RUNNER"),
+            binary("MAKOSH_WHISPER_STT_RUNNER"),
             WHISPER_STT_MODULE_ID_V1,
         ),
     ]
 }
 
 fn whisper_stt_binary() -> PathBuf {
-    binary("HERMES_WHISPER_STT_RUNTIME_BIN")
+    binary("MAKOSH_WHISPER_STT_RUNTIME_BIN")
 }

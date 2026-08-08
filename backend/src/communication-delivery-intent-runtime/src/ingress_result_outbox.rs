@@ -1,7 +1,7 @@
-use hermes_communication_delivery_intent_persistence::{
+use makosh_communication_delivery_intent_persistence::{
     CommunicationDeliveryIntentPersistenceV1, DeliveryIntentPersistenceErrorV1,
 };
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
 
 use crate::runtime::{DeliveryIntentManagedRuntimeV1, DeliveryIntentRuntimeErrorV1};
 

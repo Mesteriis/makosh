@@ -1,4 +1,4 @@
-use hermes_contacts_command_api::{
+use makosh_contacts_command_api::{
     bind_mail_address_book_provider_link_contract_reference_v1,
     bind_mail_address_book_provider_link_publish_request_v1,
     bind_mail_address_book_provider_link_rejected_consume_request_v1,
@@ -8,7 +8,7 @@ use hermes_contacts_command_api::{
     mail_address_book_provider_link_bound_contract_reference_v1,
     upsert_contact_command_contract_reference_v1, upsert_contact_command_publish_request_v1,
 };
-use hermes_contacts_mail_sync_source_api::{
+use makosh_contacts_mail_sync_source_api::{
     contact_changed_for_mail_sync_consume_request_v1,
     contact_changed_for_mail_sync_contract_reference_v1,
     contact_mail_sync_source_prepare_contract_reference_v1,
@@ -18,21 +18,21 @@ use hermes_contacts_mail_sync_source_api::{
     contact_mail_sync_source_rejected_consume_request_v1,
     contact_mail_sync_source_rejected_contract_reference_v1,
 };
-use hermes_mail_address_book_contract::MailAddressBookContractV1;
-use hermes_mail_contacts_sync_api::{
+use makosh_mail_address_book_contract::MailAddressBookContractV1;
+use makosh_mail_contacts_sync_api::{
     MAIL_CONTACTS_SYNC_CAPABILITY_ID_V1, MAIL_CONTACTS_SYNC_COMMAND_CONNECT_PATH_V1,
     MAIL_CONTACTS_SYNC_MODULE_ID_V1, MAIL_CONTACTS_SYNC_OWNER_ID_V1,
     MAIL_CONTACTS_SYNC_QUERY_CONNECT_PATH_V1, mail_contacts_sync_query_contract_v1,
     mail_contacts_sync_realtime_contract_v1, mail_contacts_sync_start_contract_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityCriticalityV1, CapabilityDescriptorV1, CapabilityRequestV1, ClientRpcRouteV1,
     ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1, EventRouteRequestV1,
     EventSubscriptionRequirementV1, ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1,
     ProvidedSurfaceKindV1, ProvidedSurfaceV1, RuntimeBudgetRequestV1, SchedulerJobRequestV1,
     SettingsSchemaRefV1, StorageNamespaceRequestV1, capability_request_v1::Request,
 };
-use hermes_scheduler_protocol::SCHEDULER_JOB_DESCRIPTOR_SET_V1;
+use makosh_scheduler_protocol::SCHEDULER_JOB_DESCRIPTOR_SET_V1;
 use sha2::{Digest, Sha256};
 
 use crate::settings::mail_contacts_sync_settings_schema_bytes_v1;
@@ -376,7 +376,7 @@ fn storage_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         validate_descriptor_v1, validate_settings_schema_v1,
     };
 

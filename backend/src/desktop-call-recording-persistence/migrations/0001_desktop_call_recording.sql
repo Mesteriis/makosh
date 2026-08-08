@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.desktop_call_recording_runs (
+CREATE TABLE makosh_data.desktop_call_recording_runs (
     logical_owner_id TEXT NOT NULL,
     operation_id BYTEA NOT NULL,
     request_sha256 BYTEA NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE hermes_data.desktop_call_recording_runs (
     CHECK (public_error_code IS NULL OR (length(public_error_code) BETWEEN 1 AND 96))
 );
 
-CREATE TABLE hermes_data.desktop_call_recording_host_commands (
+CREATE TABLE makosh_data.desktop_call_recording_host_commands (
     command_id BYTEA PRIMARY KEY,
     logical_owner_id TEXT NOT NULL,
     recording_evidence_id BYTEA NOT NULL,
@@ -56,9 +56,9 @@ CREATE TABLE hermes_data.desktop_call_recording_host_commands (
 );
 
 CREATE INDEX desktop_call_recording_host_commands_claim
-ON hermes_data.desktop_call_recording_host_commands (completed_at_unix_ms, lease_expires_at_unix_ms, command_revision);
+ON makosh_data.desktop_call_recording_host_commands (completed_at_unix_ms, lease_expires_at_unix_ms, command_revision);
 
-CREATE TABLE hermes_data.desktop_call_recording_outbox (
+CREATE TABLE makosh_data.desktop_call_recording_outbox (
     sequence_id BIGSERIAL PRIMARY KEY,
     event_id BYTEA NOT NULL UNIQUE,
     logical_owner_id TEXT NOT NULL,
@@ -74,9 +74,9 @@ CREATE TABLE hermes_data.desktop_call_recording_outbox (
 );
 
 CREATE INDEX desktop_call_recording_outbox_pending
-ON hermes_data.desktop_call_recording_outbox (sequence_id) WHERE delivered_at_unix_ms IS NULL;
+ON makosh_data.desktop_call_recording_outbox (sequence_id) WHERE delivered_at_unix_ms IS NULL;
 
-CREATE TABLE hermes_data.desktop_call_recording_realtime (
+CREATE TABLE makosh_data.desktop_call_recording_realtime (
     sequence_id BIGSERIAL PRIMARY KEY,
     logical_owner_id TEXT NOT NULL,
     recording_evidence_id BYTEA NOT NULL,

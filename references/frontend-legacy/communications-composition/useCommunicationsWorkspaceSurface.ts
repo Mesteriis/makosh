@@ -56,7 +56,7 @@ export function useCommunicationsWorkspaceSurface() {
       {
         id: 'communications-evidence-first',
         labelKey: 'Evidence-first projection',
-        descriptionKey: 'Provider events become source evidence before Hermes promotes durable entities.',
+        descriptionKey: 'Provider events become source evidence before Макошь promotes durable entities.',
         icon: 'tabler:shield-check',
         status: 'available',
         kind: 'projection',

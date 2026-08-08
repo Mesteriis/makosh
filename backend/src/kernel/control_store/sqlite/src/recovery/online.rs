@@ -1,6 +1,6 @@
 //! Online recovery-fence advancement through the Control Store actor.
 
-use hermes_kernel_control_store::ControlStore;
+use makosh_kernel_control_store::ControlStore;
 use rusqlite::params;
 
 use crate::{SqliteControlStore, StoreError};
@@ -14,7 +14,7 @@ impl SqliteControlStore {
         self.with_connection(move |connection| {
             let transaction = connection.transaction()?;
             transaction.execute(
-                "UPDATE hermes_kernel_control_store_metadata
+                "UPDATE makosh_kernel_control_store_metadata
                  SET generation = ?1, identity_epoch = ?2, grant_epoch = ?3 WHERE singleton = 1",
                 params![
                     as_sql(next_generation)?,

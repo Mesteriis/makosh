@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::io::{BufRead, BufReader, ErrorKind, Write};
 use std::net::{SocketAddr, TcpListener, TcpStream};
 use std::sync::{Arc, Mutex};
@@ -13,15 +13,15 @@ use serde_json::{Value, json};
 use tokio::time::{Duration, sleep};
 use tower::ServiceExt;
 
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::domains::calendar::events::account_store::CalendarAccountStore;
-use hermes_hub_backend::domains::calendar::events::models::CalendarAccount;
-use hermes_hub_backend::platform::secrets::models::SecretReference;
-use hermes_hub_backend::platform::secrets::models::{SecretKind, SecretStoreKind};
-use hermes_hub_backend::platform::secrets::store::SecretReferenceStore;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::vault::HostVault;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::domains::calendar::events::account_store::CalendarAccountStore;
+use makosh_hub_backend::domains::calendar::events::models::CalendarAccount;
+use makosh_hub_backend::platform::secrets::models::SecretReference;
+use makosh_hub_backend::platform::secrets::models::{SecretKind, SecretStoreKind};
+use makosh_hub_backend::platform::secrets::store::SecretReferenceStore;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::vault::HostVault;
 
 pub const LOCAL_API_TOKEN: &str = "account-setup-test-token";
 
@@ -295,7 +295,7 @@ pub fn json_request_with_token_and_actor(
         .method("POST")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -312,7 +312,7 @@ pub fn delete_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .method("DELETE")
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -329,7 +329,7 @@ where
             "/api/v1/vault/collect-entropy",
             json!({ "events": vault_entropy_events(2_000) }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("entropy response");
@@ -340,7 +340,7 @@ where
             "/api/v1/vault/create",
             json!({}),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("vault create response");
@@ -350,7 +350,7 @@ where
 pub async fn wait_for_provider_account(
     communication_store: &CommunicationIngestionStore,
     account_id: &str,
-) -> hermes_communications_api::accounts::ProviderAccount {
+) -> makosh_communications_api::accounts::ProviderAccount {
     for _ in 0..50 {
         if let Some(account) = communication_store
             .provider_account(account_id)
@@ -387,7 +387,7 @@ pub async fn wait_for_provider_account_secret_binding(
     communication_store: &CommunicationIngestionStore,
     account_id: &str,
     secret_purpose: ProviderAccountSecretPurpose,
-) -> hermes_communications_api::accounts::ProviderAccountSecretBinding {
+) -> makosh_communications_api::accounts::ProviderAccountSecretBinding {
     for _ in 0..50 {
         if let Some(binding) = communication_store
             .provider_account_secret_binding(account_id, secret_purpose)

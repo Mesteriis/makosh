@@ -73,15 +73,15 @@ test('delivery intent body is materialized once into an exact provider-bound Blo
     ),
   ]);
 
-  assert.match(runtimeManifest, /hermes-blob-client/);
+  assert.match(runtimeManifest, /makosh-blob-client/);
   for (const provider of ['mail', 'telegram', 'whatsapp', 'zulip']) {
     assert.match(
       runtimeManifest,
-      new RegExp(`hermes-${provider}-delivery-intent-contract`),
+      new RegExp(`makosh-${provider}-delivery-intent-contract`),
     );
     assert.doesNotMatch(
       runtimeManifest,
-      new RegExp(`hermes-${provider}-(?:runtime|persistence)`),
+      new RegExp(`makosh-${provider}-(?:runtime|persistence)`),
     );
   }
 

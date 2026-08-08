@@ -3,7 +3,7 @@ use std::sync::Arc;
 use serde_json::Value;
 use tokio::sync::broadcast;
 
-use hermes_events_api::{EventEnvelope, NewEventEnvelope};
+use makosh_events_api::{EventEnvelope, NewEventEnvelope};
 
 /// Max events in the broadcast ring buffer before oldest are dropped.
 const BUS_CAPACITY: usize = 4096;

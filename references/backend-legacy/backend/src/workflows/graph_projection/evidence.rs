@@ -1,7 +1,7 @@
 use serde_json::json;
 
 use crate::domains::graph::core::models::{GraphEvidenceSourceKind, NewGraphEvidence};
-use hermes_projects_api::{ProjectMatchedDocument, ProjectMatchedMessage};
+use makosh_projects_api::{ProjectMatchedDocument, ProjectMatchedMessage};
 
 use super::models::MessageRow;
 

@@ -21,9 +21,9 @@
 - Group / Группа: `README`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,20 +55,20 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/README.md`
 - Size bytes / Размер в байтах: `11835`
 - Included characters / Включено символов: `10334`
 - Truncated / Обрезано: `no`
 
 ````markdown
-# Hermes Hub
+# Макошь
 
-Hermes Hub - локальная Personal Memory System для коммуникаций, знаний,
+Макошь - локальная Personal Memory System для коммуникаций, знаний,
 памяти, отношений, проектов, документов, решений, обязательств и контекста.
 
 Проектируемая система объединяет Communications, Personas, Organizations,
 Projects, Documents, Tasks, Events, Knowledge, Decisions и Obligations в одну
-локальную модель памяти. Hermes не является почтовым клиентом, мессенджером,
+локальную модель памяти. Макошь не является почтовым клиентом, мессенджером,
 CRM, task tracker, calendar app или note-taking app. Центральная идея -
 долговременная, переносимая память владельца, построенная на событиях, графе
 знаний, RAG, vector search и структурированных проекциях, без fine-tuning
@@ -140,11 +140,11 @@ Current architecture completion report:
 
 ## Open Source
 
-Hermes Hub is published as an open source repository under the MIT License.
+Макошь is published as an open source repository under the MIT License.
 
 Documentation portal:
 
-- [Hermes Hub Documentation](https://mesteriis.github.io/hermes-os/) - styled
+- [Макошь Documentation](https://mesteriis.github.io/makosh-os/) - styled
   GitHub Pages entrypoint for the canonical documentation model.
 - [Repository Documentation Index](docs/README.md) - source documentation in
   the repository.
@@ -179,7 +179,7 @@ Before contributing:
 
 - [docs/foundation](docs/foundation) - каноническая модель, glossary, engines и domain map.
 - [docs/site](docs/site) - GitHub Pages documentation portal styled with the
-  Hermes shell design language.
+  Макошь shell design language.
 - [docs/vision](docs/vision) - долгосрочное видение.
 - [docs/product](docs/product) - charter, scope и продуктовые границы.
 - [docs/architecture](docs/architecture) - системная архитектура и ключевые технические модели.
@@ -254,7 +254,7 @@ Cargo artifacts are split by workflow:
 `make clean-build` clean only the corresponding artifact family. `make clean-data`
 требует подтверждения и удаляет только локальные данные PostgreSQL под
 `docker/data/postgres/`. `make clean-vault` требует подтверждения и удаляет
-только локальные данные vault под `HERMES_HOST_VAULT_HOME`.
+только локальные данные vault под `MAKOSH_HOST_VAULT_HOME`.
 
 Создать timestamped backup PostgreSQL и host vault:
 
@@ -281,14 +281,14 @@ make vault-restore
 `/api/v1/events` и `/api/v1/audit/events` требуют локальный API secret header:
 
 ```sh
-X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>
+X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>
 ```
 
 `/api/v1/status` используется desktop shell и также требует локальный API secret header:
 
 ```sh
 GET /api/v1/status
-X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>
+X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>
 ```
 
 Communication message read endpoints for the desktop shell use the same local API secret and secret header:
@@ -296,7 +296,7 @@ Communication message read endpoints for the desktop shell use the same local AP
 ```sh
 GET /api/v1/communications/messages?limit=50
 GET /api/v1/communications/messages/<message_id>
-X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>
+X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>
 ```
 
 The message list reads canonical `communication_messages`; message detail returns canonical body text plus attachment metadata and local blob references. It does not read or return attachment bytes.
@@ -311,7 +311,7 @@ GET /api/v1/ai/runs/<run_id>
 POST /api/v1/ai/answers
 POST /api/v1/ai/task-candidates/refresh
 POST /api/v1/ai/meeting-prep
-X-Hermes-Secret: <HERMES_LOCAL_API_SECRET>
+X-Макошь-Secret: <MAKOSH_LOCAL_API_SECRET>
 ```
 
 AI task extraction writes only `suggested` task candidates. Existing review APIs remain the only path to active tasks.
@@ -319,7 +319,7 @@ AI task extraction writes only `suggested` task candidates. Existing review APIs
 Account setup endpoints require the host vault to be initialized and unlocked.
 New credential payloads are stored in the host vault; PostgreSQL stores
 non-secret account metadata, secret references and account-to-secret bindings.
-`HERMES_SECRET_VAULT_KEY` remains a legacy migration compatibility variable only.
+`MAKOSH_SECRET_VAULT_KEY` remains a legacy migration compatibility variable only.
 
 UI scope is desktop/laptop only while ADR-0031 is active; mobile UI is not implemented or validated.
 

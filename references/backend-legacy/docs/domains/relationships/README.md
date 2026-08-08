@@ -2,10 +2,10 @@
 
 Status: documentation package aligned to the current repository structure.
 
-Relationships are first-class source-of-truth records connecting Hermes world
+Relationships are first-class source-of-truth records connecting Макошь world
 entities.
 
-Hermes is relationship-first: Personas, Organizations, Projects,
+Макошь is relationship-first: Personas, Organizations, Projects,
 Communications, Documents, Tasks, Events, Decisions, Obligations and Knowledge
 items gain meaning from source-backed relationships.
 

@@ -7,9 +7,9 @@ use async_std::{
     io::{ReadExt, WriteExt},
     net::TcpStream,
 };
-use hermes_mail_api::{OutgoingMailV1, SmtpEndpointV1, valid_host, valid_mailbox, valid_smtp_port};
+use makosh_mail_api::{OutgoingMailV1, SmtpEndpointV1, valid_host, valid_mailbox, valid_smtp_port};
 
-pub const PACKAGE: &str = "hermes-mail-smtp";
+pub const PACKAGE: &str = "makosh-mail-smtp";
 const MAX_RESPONSE_LINE_BYTES: usize = 4 * 1024;
 const SMTP_OPERATION_TIMEOUT: Duration = Duration::from_secs(15);
 
@@ -80,7 +80,7 @@ async fn send_implicit_tls_inner(
         .map_err(|_| SmtpAdapterErrorV1::Unavailable)?;
 
     expect_response(&mut stream, 220).await?;
-    send_line(&mut stream, "EHLO hermes.local").await?;
+    send_line(&mut stream, "EHLO makosh.local").await?;
     expect_response(&mut stream, 250).await?;
     let credentials = base64_encode(format!("\0{}\0{password}", endpoint.username).as_bytes());
     send_line(&mut stream, &format!("AUTH PLAIN {credentials}")).await?;

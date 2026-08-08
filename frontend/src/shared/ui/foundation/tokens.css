@@ -67,7 +67,7 @@
 	box-sizing: border-box;
 }
 
-.hermes-theme-provider {
+.makosh-theme-provider {
 	min-height: 100%;
 	background: var(--h-color-bg);
 	color: var(--h-color-text);
@@ -79,7 +79,7 @@
 	box-shadow: var(--h-focus-ring);
 }
 
-.hermes-sr-only {
+.makosh-sr-only {
 	position: absolute;
 	width: 1px;
 	height: 1px;

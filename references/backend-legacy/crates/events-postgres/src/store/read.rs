@@ -1,7 +1,7 @@
 use super::EventStore;
 use crate::errors::EventStoreError;
 use crate::rows::{row_to_event, row_to_stored_event};
-use hermes_events_api::{EventEnvelope, EventLogQuery, StoredEventEnvelope};
+use makosh_events_api::{EventEnvelope, EventLogQuery, StoredEventEnvelope};
 use sqlx::{Postgres, QueryBuilder};
 
 impl EventStore {

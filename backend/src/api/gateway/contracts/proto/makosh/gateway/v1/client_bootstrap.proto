@@ -1,0 +1,146 @@
+syntax = "proto3";
+
+package makosh.gateway.v1;
+
+// Authenticated, owner-scoped composition sent after browser session creation.
+// It contains no hidden settings, raw schema/snapshot bytes or credentials.
+message ClientBootstrapRequestV1 {}
+
+message ClientBootstrapResponseV1 {
+  uint32 major = 1;
+  repeated ClientModuleBootstrapV1 modules = 2;
+  repeated ClientSurfaceAvailabilityV1 surfaces = 3;
+  repeated ClientSystemComponentStatusV1 system_status = 4;
+}
+
+enum ClientSystemComponentIdV1 {
+  CLIENT_SYSTEM_COMPONENT_ID_V1_UNSPECIFIED = 0;
+  CLIENT_SYSTEM_COMPONENT_ID_V1_KERNEL = 1;
+  CLIENT_SYSTEM_COMPONENT_ID_V1_CONTROL_STORE = 2;
+  CLIENT_SYSTEM_COMPONENT_ID_V1_MODULE_CONTROL_PLANE = 3;
+  CLIENT_SYSTEM_COMPONENT_ID_V1_GATEWAY = 4;
+  CLIENT_SYSTEM_COMPONENT_ID_V1_VAULT = 5;
+  CLIENT_SYSTEM_COMPONENT_ID_V1_STORAGE_CONTROL = 6;
+  CLIENT_SYSTEM_COMPONENT_ID_V1_POSTGRESQL = 7;
+  CLIENT_SYSTEM_COMPONENT_ID_V1_PGBOUNCER = 8;
+  CLIENT_SYSTEM_COMPONENT_ID_V1_NATS = 9;
+  CLIENT_SYSTEM_COMPONENT_ID_V1_EVENT_HUB = 10;
+  CLIENT_SYSTEM_COMPONENT_ID_V1_SCHEDULER = 11;
+  CLIENT_SYSTEM_COMPONENT_ID_V1_CLOCK = 12;
+  CLIENT_SYSTEM_COMPONENT_ID_V1_BLOB = 13;
+  CLIENT_SYSTEM_COMPONENT_ID_V1_TELEMETRY = 14;
+  CLIENT_SYSTEM_COMPONENT_ID_V1_SSE = 15;
+}
+
+enum ClientSystemComponentStateV1 {
+  CLIENT_SYSTEM_COMPONENT_STATE_V1_UNSPECIFIED = 0;
+  CLIENT_SYSTEM_COMPONENT_STATE_V1_HEALTHY = 1;
+  CLIENT_SYSTEM_COMPONENT_STATE_V1_DEGRADED = 2;
+  CLIENT_SYSTEM_COMPONENT_STATE_V1_UNAVAILABLE = 3;
+  CLIENT_SYSTEM_COMPONENT_STATE_V1_NOT_ADMITTED = 4;
+}
+
+message ClientSystemComponentStatusV1 {
+  ClientSystemComponentIdV1 component_id = 1;
+  ClientSystemComponentStateV1 state = 2;
+  string sanitized_reason_code = 3;
+}
+
+// Compiled first-party client surfaces. The Kernel may enable only a surface
+// whose owner contract is admitted; it never supplies labels, markup or code.
+enum ClientSurfaceIdV1 {
+  CLIENT_SURFACE_ID_V1_UNSPECIFIED = 0;
+  CLIENT_SURFACE_ID_V1_DASHBOARD = 1;
+  CLIENT_SURFACE_ID_V1_COMMUNICATIONS = 2;
+  CLIENT_SURFACE_ID_V1_MAIL = 3;
+  CLIENT_SURFACE_ID_V1_TELEGRAM = 4;
+  CLIENT_SURFACE_ID_V1_REVIEW = 5;
+  CLIENT_SURFACE_ID_V1_PERSONAS = 6;
+  CLIENT_SURFACE_ID_V1_KNOWLEDGE = 7;
+  CLIENT_SURFACE_ID_V1_TASKS = 8;
+  CLIENT_SURFACE_ID_V1_CALENDAR = 9;
+  CLIENT_SURFACE_ID_V1_DOCUMENTS = 10;
+  CLIENT_SURFACE_ID_V1_SETTINGS = 11;
+  CLIENT_SURFACE_ID_V1_WHATSAPP = 12;
+  CLIENT_SURFACE_ID_V1_ZULIP = 13;
+}
+
+enum ClientSurfaceAvailabilityStateV1 {
+  CLIENT_SURFACE_AVAILABILITY_STATE_V1_UNSPECIFIED = 0;
+  CLIENT_SURFACE_AVAILABILITY_STATE_V1_AVAILABLE = 1;
+  CLIENT_SURFACE_AVAILABILITY_STATE_V1_NOT_ADMITTED = 2;
+  CLIENT_SURFACE_AVAILABILITY_STATE_V1_STARTING = 3;
+  CLIENT_SURFACE_AVAILABILITY_STATE_V1_BLOCKED = 4;
+  CLIENT_SURFACE_AVAILABILITY_STATE_V1_UNAVAILABLE = 5;
+}
+
+message ClientSurfaceAvailabilityV1 {
+  ClientSurfaceIdV1 surface_id = 1;
+  ClientSurfaceAvailabilityStateV1 state = 2;
+  string sanitized_reason_code = 3;
+  uint32 supported_client_contract_major = 4;
+}
+
+message ClientModuleBootstrapV1 {
+  string registration_id = 1;
+  string module_id = 2;
+  uint64 grant_epoch = 3;
+  repeated string capability_ids = 4;
+  bool sections_enabled = 5;
+  ClientModuleSettingsBootstrapV1 settings = 6;
+  repeated ClientModuleSettingsTargetBootstrapV1 settings_targets = 7;
+}
+
+message ClientModuleSettingsTargetBootstrapV1 {
+  string configuration_instance_id = 1;
+  uint64 desired_revision = 2;
+  uint64 effective_revision = 3;
+  ClientSettingsApplyStateV1 apply_state = 4;
+  string sanitized_reason_code = 5;
+  repeated ClientSettingValueEntryV1 values = 6;
+}
+
+message ClientModuleSettingsBootstrapV1 {
+  uint32 schema_major = 1;
+  uint32 schema_revision = 2;
+  uint64 desired_revision = 3;
+  uint64 effective_revision = 4;
+  ClientSettingsApplyStateV1 apply_state = 5;
+  string sanitized_reason_code = 6;
+  repeated ClientSettingValueEntryV1 values = 7;
+}
+
+enum ClientSettingsApplyStateV1 {
+  CLIENT_SETTINGS_APPLY_STATE_V1_UNSPECIFIED = 0;
+  CLIENT_SETTINGS_APPLY_STATE_V1_CURRENT = 1;
+  CLIENT_SETTINGS_APPLY_STATE_V1_PENDING_VALIDATION = 2;
+  CLIENT_SETTINGS_APPLY_STATE_V1_PENDING_APPLY = 3;
+  CLIENT_SETTINGS_APPLY_STATE_V1_APPLYING = 4;
+  CLIENT_SETTINGS_APPLY_STATE_V1_AWAITING_EXTERNAL_RESTART = 5;
+  CLIENT_SETTINGS_APPLY_STATE_V1_BLOCKED_CONFIG = 6;
+}
+
+message ClientSettingValueEntryV1 {
+  string setting_id = 1;
+  ClientSettingValueV1 value = 2;
+  string display_name = 3;
+  bool editable = 4;
+}
+
+message ClientSettingValueV1 {
+  oneof value {
+    bool boolean_value = 1;
+    sint64 signed_integer_value = 2;
+    uint64 unsigned_integer_value = 3;
+    string decimal_value = 4;
+    string string_value = 5;
+    uint64 duration_millis = 6;
+    int64 timestamp_unix_millis = 7;
+    string enum_value = 8;
+    string resource_reference = 9;
+  }
+}
+
+service ClientBootstrapService {
+  rpc GetBootstrap(ClientBootstrapRequestV1) returns (ClientBootstrapResponseV1);
+}

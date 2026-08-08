@@ -1,6 +1,6 @@
 # Security Policy
 
-Hermes Hub handles personal communications, documents, credentials references
+Макошь handles personal communications, documents, credentials references
 and local AI workflows. Please report security issues privately.
 
 ## Supported Versions

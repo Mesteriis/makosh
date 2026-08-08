@@ -20,7 +20,7 @@ Request:
   "account_id": "zoom_fixture_primary",
   "meeting_id": "987654321",
   "meeting_uuid": "meeting-uuid",
-  "topic": "Hermes Zoom Review",
+  "topic": "Макошь Zoom Review",
   "host_email": "owner@example.test",
   "join_url": "https://example.invalid/j/987654321",
   "started_at": "2026-06-27T10:00:00Z",
@@ -224,13 +224,13 @@ POST /api/v1/integrations/zoom/runtime-bridge/webhooks?account_id=<zoom_account_
 
 This protected runtime-bridge route handles account-scoped Zoom webhook
 notifications. It is not a public internet receiver; the standalone
-`hermes-zoom-edge-proxy` may forward raw Zoom webhook requests here after
+`makosh-zoom-edge-proxy` may forward raw Zoom webhook requests here after
 preserving the raw body and Zoom headers.
 
 The implemented public/edge ingress for that forwarding role is:
 
 ```text
-hermes-zoom-edge-proxy
+makosh-zoom-edge-proxy
 PUBLIC:  POST /webhooks/zoom
 FORWARDS TO:  POST /api/v1/integrations/zoom/runtime-bridge/webhooks?account_id=...
 ```

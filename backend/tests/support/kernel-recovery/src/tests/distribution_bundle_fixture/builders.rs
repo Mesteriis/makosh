@@ -41,7 +41,7 @@ pub(super) fn bundle_manifest(
     DistributionManifestV1 {
         major: 1,
         revision: 1,
-        distribution_id: "hermes-desktop".to_owned(),
+        distribution_id: "makosh-desktop".to_owned(),
         release_version: "1.0.0".to_owned(),
         build_id: "build-1".to_owned(),
         target_triple: "aarch64-apple-darwin".to_owned(),

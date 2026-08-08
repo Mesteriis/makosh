@@ -6,8 +6,8 @@ use std::io::Write;
 use std::os::unix::fs::OpenOptionsExt;
 use std::path::Path;
 
-use hermes_kernel_control_store_sqlite::{SqliteControlStore, StagedControlStoreRestore};
-use hermes_secure_file::{SecureReadPolicy, read as read_secure_file};
+use makosh_kernel_control_store_sqlite::{SqliteControlStore, StagedControlStoreRestore};
+use makosh_secure_file::{SecureReadPolicy, read as read_secure_file};
 
 use crate::control_store::lifecycle::{
     installation_anchor_path, open_validated_control_store, read_installation_anchor,
@@ -19,8 +19,8 @@ use super::fence as recovery_fence;
 
 const STORE_FILE: &str = "control-store.sqlite";
 const RUNTIME_STORE_FILE: &str = "kernel-control-store.sqlite";
-const ANCHOR_FILE: &str = ".hermes-installation-anchor-v1";
-const FENCE_FILE: &str = ".hermes-recovery-fence-v1";
+const ANCHOR_FILE: &str = ".makosh-installation-anchor-v1";
+const FENCE_FILE: &str = ".makosh-recovery-fence-v1";
 
 pub(crate) fn capture(data_dir: &Path, destination: &Path) -> Result<(), String> {
     validate_empty_private_directory(destination, "Control Store media destination")?;
@@ -85,7 +85,7 @@ fn install_target(
     source: &Path,
     target: &Path,
     instance_id: &str,
-    fences: hermes_kernel_control_store::RecoveryFences,
+    fences: makosh_kernel_control_store::RecoveryFences,
 ) -> Result<(), String> {
     let staged_path = target.join(".kernel-control-store.sqlite.restore.tmp");
     let result = StagedControlStoreRestore::prepare(

@@ -1,9 +1,9 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-attachment-text-extraction-api";
+pub const PACKAGE: &str = "makosh-attachment-text-extraction-api";
 pub const ATTACHMENT_TEXT_EXTRACTION_OWNER_V1: &str = "attachment_text_extraction";
 pub const ATTACHMENT_TEXT_EXTRACTION_MODULE_ID_V1: &str =
-    "hermes-attachment-text-extraction-runtime";
+    "makosh-attachment-text-extraction-runtime";
 pub const ATTACHMENT_TEXT_EXTRACTION_CAPABILITY_ID_V1: &str = "attachment.text_extraction.v1";
 pub const ATTACHMENT_TEXT_EXTRACTION_COMMAND_CONTRACT_NAME_V1: &str =
     "attachment.text_extraction.command";
@@ -16,11 +16,11 @@ pub const ATTACHMENT_TEXT_EXTRACTION_REALTIME_CONTRACT_NAME_V1: &str =
 pub const ATTACHMENT_TEXT_EXTRACTION_REALTIME_EVENT_KIND_V1: &str =
     "attachment.text_extraction.status_changed";
 pub const ATTACHMENT_TEXT_EXTRACTION_COMMAND_CONNECT_PATH_V1: &str =
-    "/hermes.attachment_text_extraction.v1.AttachmentTextExtractionCommandService/Start";
+    "/makosh.attachment_text_extraction.v1.AttachmentTextExtractionCommandService/Start";
 pub const ATTACHMENT_TEXT_EXTRACTION_QUERY_CONNECT_PATH_V1: &str =
-    "/hermes.attachment_text_extraction.v1.AttachmentTextExtractionQueryService/Get";
+    "/makosh.attachment_text_extraction.v1.AttachmentTextExtractionQueryService/Get";
 pub const ATTACHMENT_TEXT_EXTRACTION_CONTENT_CONNECT_PATH_V1: &str =
-    "/hermes.attachment_text_extraction.v1.AttachmentTextExtractionContentService/ReadText";
+    "/makosh.attachment_text_extraction.v1.AttachmentTextExtractionContentService/ReadText";
 pub const ATTACHMENT_TEXT_EXTRACTION_CONTRACT_MAJOR_V1: u32 = 1;
 pub const ATTACHMENT_TEXT_EXTRACTION_CONTRACT_REVISION_V1: u32 = 1;
 pub const ATTACHMENT_TEXT_EXTRACTION_MAX_DERIVED_BYTES_V1: usize = 1024 * 1024;
@@ -29,7 +29,7 @@ pub const ATTACHMENT_TEXT_EXTRACTION_MAX_VISIBLE_BYTES_V1: usize = 64 * 1024;
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.attachment_text_extraction.v1.rs"
+        "/makosh.attachment_text_extraction.v1.rs"
     ));
 }
 
@@ -53,7 +53,7 @@ mod tests {
         assert!(ATTACHMENT_TEXT_EXTRACTION_QUERY_CONNECT_PATH_V1.starts_with('/'));
         assert!(ATTACHMENT_TEXT_EXTRACTION_CONTENT_CONNECT_PATH_V1.starts_with('/'));
         let source =
-            include_str!("../proto/hermes/attachment_text_extraction/v1/text_extraction.proto");
+            include_str!("../proto/makosh/attachment_text_extraction/v1/text_extraction.proto");
         assert!(source.contains("rpc ReadText"));
         let status = source
             .split("message GetAttachmentTextExtractionResponseV1")

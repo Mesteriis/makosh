@@ -8,7 +8,7 @@ new tables, APIs or migrations.
 
 ## Purpose
 
-Memory is the durable reason Hermes exists. The system should turn evidence into
+Memory is the durable reason Макошь exists. The system should turn evidence into
 source-backed context that helps the owner understand what happened, what
 changed and what should be done.
 
@@ -122,6 +122,6 @@ It must not:
 
 ## Reasons For Existence
 
-Without a memory architecture, Hermes would be a set of provider clients and
+Without a memory architecture, Макошь would be a set of provider clients and
 CRUD surfaces. Memory turns raw evidence into durable understanding while
 preserving uncertainty, review and provenance.

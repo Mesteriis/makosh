@@ -6,9 +6,9 @@ use std::{
     time::Duration,
 };
 
-use hermes_attachment_text_extraction_api::ATTACHMENT_TEXT_EXTRACTION_OWNER_V1;
-use hermes_attachment_text_extraction_persistence::attachment_text_extraction_storage_bundle_v1;
-use hermes_attachment_text_extraction_runtime::{
+use makosh_attachment_text_extraction_api::ATTACHMENT_TEXT_EXTRACTION_OWNER_V1;
+use makosh_attachment_text_extraction_persistence::attachment_text_extraction_storage_bundle_v1;
+use makosh_attachment_text_extraction_runtime::{
     AttachmentTextExtractionParserRuntimeV1, attachment_text_extraction_module_descriptor_v1,
     attachment_text_extraction_settings_schema_bytes_v1,
     prepare_attachment_text_extraction_ocr_resources_v1,
@@ -17,7 +17,7 @@ use hermes_attachment_text_extraction_runtime::{
         current_runtime_time_v1,
     },
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
@@ -239,9 +239,9 @@ fn write_stdout(bytes: &[u8], artifact: &str) -> Result<(), String> {
 
 fn diagnostic(
     stage: &str,
-    error: hermes_attachment_text_extraction_runtime::runtime::AttachmentTextExtractionRuntimeErrorV1,
+    error: makosh_attachment_text_extraction_runtime::runtime::AttachmentTextExtractionRuntimeErrorV1,
 ) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!(
             "developer_attachment_text_extraction_runtime_error stage={stage} error={error:?}"
         );

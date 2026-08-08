@@ -5,8 +5,8 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use super::*;
 
 use crate::identity::device::signer::DeviceSigner;
-use hermes_events_jetstream::DurableSubjectV1;
-use hermes_mail_address_book_contract::{
+use makosh_events_jetstream::DurableSubjectV1;
+use makosh_mail_address_book_contract::{
     MAIL_ADDRESS_BOOK_COMMAND_SOURCE_MODULE_ID_V1, MailAddressBookContractV1,
     MailAddressBookEnvelopeContextV1, build_fetch_mail_address_book_page_command_v1,
     build_upsert_mail_address_book_entry_command_v1,
@@ -16,40 +16,40 @@ use hermes_mail_address_book_contract::{
         MailAddressBookRejectCodeV1, UpsertMailAddressBookEntryCommandV1,
     },
 };
-use hermes_mail_api::{
+use makosh_mail_api::{
     account::{MailCredentialBindingStateV1, MailCredentialPurposeV1},
     account_lifecycle::{
         MailAccountLifecycleActionV1, MailAccountLifecycleCommandV1, MailAccountLifecycleStateV1,
         MailCredentialLifecycleStateV1,
     },
 };
-use hermes_mail_persistence::GmailOAuthCredentialBindingV1;
+use makosh_mail_persistence::GmailOAuthCredentialBindingV1;
 
-const OBSERVATION_SUBJECT_V1: &str = "hermes.observation.v1.mail.>";
-const RESULT_SUBJECT_V1: &str = "hermes.result.v1.mail.>";
+const OBSERVATION_SUBJECT_V1: &str = "makosh.observation.v1.mail.>";
+const RESULT_SUBJECT_V1: &str = "makosh.result.v1.mail.>";
 
 #[test]
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, NATS, Mail and Google People TLS fixture"]
 fn managed_mail_google_people_page_is_exact_restart_safe_and_private() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let provider = MailGmailFixture::start();
-    let root = unique_target_root("hermes-managed-mail-google-people");
+    let root = unique_target_root("makosh-managed-mail-google-people");
     let data = private_directory(short_communications_kernel_data_directory());
     let vault_dir = private_directory(data.join("vault"));
     initialize_vault(&vault_dir, &credential_directory());
     let seeded = seed_mail_vault(&vault_dir);
     let release = installed_communications_mail_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             "owner-1",
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -203,7 +203,7 @@ fn managed_mail_google_people_page_is_exact_restart_safe_and_private() {
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Google People fixture");
     std::fs::remove_dir_all(data).expect("remove Google People Kernel fixture");
@@ -213,24 +213,24 @@ fn managed_mail_google_people_page_is_exact_restart_safe_and_private() {
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, NATS, Mail and CardDAV TLS fixture"]
 fn managed_mail_carddav_page_uses_separate_credential_and_read_only_provider() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let provider = MailCardDavFixture::start();
-    let root = unique_target_root("hermes-managed-mail-carddav");
+    let root = unique_target_root("makosh-managed-mail-carddav");
     let data = private_directory(short_communications_kernel_data_directory());
     let vault_dir = private_directory(data.join("vault"));
     initialize_vault(&vault_dir, &credential_directory());
     seed_mail_vault(&vault_dir);
     let release = installed_communications_mail_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             "owner-1",
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -378,7 +378,7 @@ fn managed_mail_carddav_page_uses_separate_credential_and_read_only_provider() {
         .shutdown()
         .expect("stop managed CardDAV processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove CardDAV fixture");
     std::fs::remove_dir_all(data).expect("remove CardDAV Kernel fixture");
@@ -388,7 +388,7 @@ fn fetch_command(
     command_id: [u8; 16],
     run_id: [u8; 16],
     page_sequence: u64,
-) -> hermes_events_protocol::delivery::OutboxRecordV1 {
+) -> makosh_events_protocol::delivery::OutboxRecordV1 {
     let now = wall_seconds();
     build_fetch_mail_address_book_page_command_v1(
         FetchMailAddressBookPageCommandV1 {
@@ -416,7 +416,7 @@ fn upsert_command(
     command_id: [u8; 16],
     run_id: [u8; 16],
     expected_contact_revision: u64,
-) -> hermes_events_protocol::delivery::OutboxRecordV1 {
+) -> makosh_events_protocol::delivery::OutboxRecordV1 {
     let now = wall_seconds();
     build_upsert_mail_address_book_entry_command_v1(
         UpsertMailAddressBookEntryCommandV1 {
@@ -444,7 +444,7 @@ fn upsert_command(
 
 async fn publish(
     context: &async_nats::jetstream::Context,
-    record: &hermes_events_protocol::delivery::OutboxRecordV1,
+    record: &makosh_events_protocol::delivery::OutboxRecordV1,
 ) {
     let envelope =
         DurableEnvelopeV1::decode(record.exact_bytes()).expect("decode address-book fetch command");

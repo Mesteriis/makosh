@@ -54,7 +54,7 @@ ownership ядра и process isolation collector должны быть разд
 
 ### Роль Telemetry Hub
 
-**Telemetry Hub** — обязательная technical capability Hermes для
+**Telemetry Hub** — обязательная technical capability Макошь для
 структурированных logs, metrics, traces, crash/lifecycle reports и их
 sanitized diagnostics.
 
@@ -162,7 +162,7 @@ PostgreSQL, JetStream, vault или module-owned storage.
 
 Store:
 
-- находится в Hermes private data directory;
+- находится в Макошь private data directory;
 - использует directories `0700` и files `0600`;
 - имеет bounded retention одновременно по age и total bytes;
 - использует rotation и atomic segment finalization;

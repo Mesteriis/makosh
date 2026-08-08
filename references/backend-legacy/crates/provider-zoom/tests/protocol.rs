@@ -1,4 +1,4 @@
-use hermes_provider_zoom::protocol::{
+use makosh_provider_zoom::protocol::{
     ZOOM_DEFAULT_WEBHOOK_EVENT_TYPES, ZOOM_DEFAULT_WEBHOOK_SUBSCRIPTION_NAME,
     ZOOM_LIVE_AUTHORIZED_RUNTIME_KIND, ZOOM_RUNTIME_KIND, ZoomAuthShape, sanitize_zoom_payload,
     validate_array, validate_non_empty, validate_object, zoom_authorization_url,
@@ -57,7 +57,7 @@ fn auth_shape_and_runtime_defaults_are_owned_by_the_provider_protocol() {
     );
     assert_eq!(
         ZOOM_DEFAULT_WEBHOOK_SUBSCRIPTION_NAME,
-        "Hermes Zoom Runtime"
+        "Макошь Zoom Runtime"
     );
     assert!(ZOOM_DEFAULT_WEBHOOK_EVENT_TYPES.contains(&"recording.completed"));
 }

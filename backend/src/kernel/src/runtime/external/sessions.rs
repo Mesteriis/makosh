@@ -3,8 +3,8 @@
 use std::collections::{HashMap, VecDeque};
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
-use hermes_kernel_control_store::ExternalRuntimeAttestation;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store::ExternalRuntimeAttestation;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use p256::ecdsa::signature::Verifier;
 use p256::ecdsa::{Signature, VerifyingKey};
 
@@ -21,7 +21,7 @@ const SESSION_TTL: Duration = Duration::from_secs(300);
 const MAX_PENDING_CHALLENGES: usize = 32;
 const MAX_SESSIONS: usize = 32;
 const MAX_BEGINS_PER_MINUTE: usize = 16;
-const PROOF_DOMAIN: &[u8] = b"hermes.external-runtime-session.v1\0";
+const PROOF_DOMAIN: &[u8] = b"makosh.external-runtime-session.v1\0";
 const VAULT_ROUTE_CAPABILITY_ID: &str = "vault.lease.resolve";
 
 #[derive(Clone)]
@@ -319,7 +319,7 @@ impl ExternalRuntimeSessions {
         store: &SqliteControlStore,
         session_id: &str,
         vault_runtime_generation: u64,
-        route: hermes_runtime_protocol::v1::VaultCiphertextRouteV1,
+        route: makosh_runtime_protocol::v1::VaultCiphertextRouteV1,
     ) -> Result<ValidatedVaultCiphertextRoute, String> {
         self.purge();
         let session = self
@@ -390,7 +390,7 @@ fn current_attestation(
     registration_id: &str,
     runtime_id: &str,
     runtime_generation: u64,
-) -> Result<hermes_kernel_control_store::GrantSet, String> {
+) -> Result<makosh_kernel_control_store::GrantSet, String> {
     let snapshot = store
         .module_grant_snapshot(registration_id)
         .map_err(format_store_error)?
@@ -414,7 +414,7 @@ fn current_attestation(
 fn current_grants(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> Result<hermes_kernel_control_store::GrantSet, String> {
+) -> Result<makosh_kernel_control_store::GrantSet, String> {
     store
         .module_grant_snapshot(registration_id)
         .map_err(format_store_error)?

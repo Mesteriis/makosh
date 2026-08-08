@@ -1,4 +1,4 @@
-use hermes_attachment_preview_core::{
+use makosh_attachment_preview_core::{
     AttachmentPreviewStatusV1, accepted_attachment_preview_status_v1,
 };
 use sqlx::{Postgres, Row, Transaction};
@@ -33,7 +33,7 @@ impl AttachmentPreviewPersistenceV1 {
         )
         .await?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.attachment_preview_runs (logical_owner_id,run_id,operation_id,request_fingerprint,attachment_anchor_id,state,state_revision,preview_kind,content_type,preview_size_bytes,truncated,error_code,created_at_unix_millis,updated_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,NULL,NULL,0,FALSE,NULL,$8,$8) ON CONFLICT (logical_owner_id,operation_id) DO NOTHING",
+            "INSERT INTO makosh_data.attachment_preview_runs (logical_owner_id,run_id,operation_id,request_fingerprint,attachment_anchor_id,state,state_revision,preview_kind,content_type,preview_size_bytes,truncated,error_code,created_at_unix_millis,updated_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,NULL,NULL,0,FALSE,NULL,$8,$8) ON CONFLICT (logical_owner_id,operation_id) DO NOTHING",
         )
         .bind(&create.logical_owner_id)
         .bind(run_id.as_slice())
@@ -111,7 +111,7 @@ impl AttachmentPreviewPersistenceV1 {
             return Err(AttachmentPreviewPersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "SELECT run_id,derived_reference_id,derived_receipt_sha256,source_receipt_sha256,renderer_identity_sha256,preview_kind,content_type,preview_size_bytes,truncated,runtime_generation,grant_epoch FROM hermes_data.attachment_preview_artifacts WHERE logical_owner_id=$1 AND run_id=$2",
+            "SELECT run_id,derived_reference_id,derived_receipt_sha256,source_receipt_sha256,renderer_identity_sha256,preview_kind,content_type,preview_size_bytes,truncated,runtime_generation,grant_epoch FROM makosh_data.attachment_preview_artifacts WHERE logical_owner_id=$1 AND run_id=$2",
         )
         .bind(logical_owner_id)
         .bind(run_id.as_slice())
@@ -135,7 +135,7 @@ impl AttachmentPreviewPersistenceV1 {
             return Err(AttachmentPreviewPersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "SELECT realtime_sequence,run_id,state,state_revision,preview_kind,content_type,preview_size_bytes,truncated,error_code,occurred_at_unix_millis FROM hermes_data.attachment_preview_realtime WHERE logical_owner_id=$1 AND realtime_sequence>$2 ORDER BY realtime_sequence LIMIT $3",
+            "SELECT realtime_sequence,run_id,state,state_revision,preview_kind,content_type,preview_size_bytes,truncated,error_code,occurred_at_unix_millis FROM makosh_data.attachment_preview_realtime WHERE logical_owner_id=$1 AND realtime_sequence>$2 ORDER BY realtime_sequence LIMIT $3",
         )
         .bind(logical_owner_id)
         .bind(i64::try_from(after_sequence).map_err(invalid_input)?)
@@ -149,7 +149,7 @@ impl AttachmentPreviewPersistenceV1 {
     }
 }
 
-const RUN_SELECT_V1: &str = "SELECT logical_owner_id,run_id,operation_id,request_fingerprint,attachment_anchor_id,state,state_revision,preview_kind,content_type,preview_size_bytes,truncated,error_code,created_at_unix_millis,updated_at_unix_millis FROM hermes_data.attachment_preview_runs WHERE logical_owner_id=$1 AND run_id=$2";
+const RUN_SELECT_V1: &str = "SELECT logical_owner_id,run_id,operation_id,request_fingerprint,attachment_anchor_id,state,state_revision,preview_kind,content_type,preview_size_bytes,truncated,error_code,created_at_unix_millis,updated_at_unix_millis FROM makosh_data.attachment_preview_runs WHERE logical_owner_id=$1 AND run_id=$2";
 
 async fn find_by_operation(
     transaction: &mut Transaction<'_, Postgres>,
@@ -157,7 +157,7 @@ async fn find_by_operation(
     operation_id: [u8; 16],
 ) -> Result<Option<PersistedAttachmentPreviewRunV1>, AttachmentPreviewPersistenceErrorV1> {
     sqlx::query(
-        "SELECT logical_owner_id,run_id,operation_id,request_fingerprint,attachment_anchor_id,state,state_revision,preview_kind,content_type,preview_size_bytes,truncated,error_code,created_at_unix_millis,updated_at_unix_millis FROM hermes_data.attachment_preview_runs WHERE logical_owner_id=$1 AND operation_id=$2",
+        "SELECT logical_owner_id,run_id,operation_id,request_fingerprint,attachment_anchor_id,state,state_revision,preview_kind,content_type,preview_size_bytes,truncated,error_code,created_at_unix_millis,updated_at_unix_millis FROM makosh_data.attachment_preview_runs WHERE logical_owner_id=$1 AND operation_id=$2",
     )
         .bind(logical_owner_id)
         .bind(operation_id.as_slice())
@@ -174,7 +174,7 @@ pub(crate) async fn load_run_for_update(
     run_id: [u8; 16],
 ) -> Result<Option<PersistedAttachmentPreviewRunV1>, AttachmentPreviewPersistenceErrorV1> {
     sqlx::query(
-        "SELECT logical_owner_id,run_id,operation_id,request_fingerprint,attachment_anchor_id,state,state_revision,preview_kind,content_type,preview_size_bytes,truncated,error_code,created_at_unix_millis,updated_at_unix_millis FROM hermes_data.attachment_preview_runs WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE",
+        "SELECT logical_owner_id,run_id,operation_id,request_fingerprint,attachment_anchor_id,state,state_revision,preview_kind,content_type,preview_size_bytes,truncated,error_code,created_at_unix_millis,updated_at_unix_millis FROM makosh_data.attachment_preview_runs WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE",
     )
         .bind(logical_owner_id)
         .bind(run_id.as_slice())
@@ -197,7 +197,7 @@ pub(crate) async fn update_run_status(
         return Err(AttachmentPreviewPersistenceErrorV1::InvalidInput);
     }
     let result = sqlx::query(
-        "UPDATE hermes_data.attachment_preview_runs SET state=$1,state_revision=$2,preview_kind=$3,content_type=$4,preview_size_bytes=$5,truncated=$6,error_code=$7,updated_at_unix_millis=$8 WHERE logical_owner_id=$9 AND run_id=$10 AND state_revision=$11",
+        "UPDATE makosh_data.attachment_preview_runs SET state=$1,state_revision=$2,preview_kind=$3,content_type=$4,preview_size_bytes=$5,truncated=$6,error_code=$7,updated_at_unix_millis=$8 WHERE logical_owner_id=$9 AND run_id=$10 AND state_revision=$11",
     )
     .bind(state_code(next.state))
     .bind(i64::try_from(next.state_revision).map_err(invalid_input)?)
@@ -227,7 +227,7 @@ pub(crate) async fn append_realtime(
         return Err(AttachmentPreviewPersistenceErrorV1::InvalidInput);
     }
     sqlx::query(
-        "INSERT INTO hermes_data.attachment_preview_realtime (logical_owner_id,run_id,state,state_revision,preview_kind,content_type,preview_size_bytes,truncated,error_code,occurred_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
+        "INSERT INTO makosh_data.attachment_preview_realtime (logical_owner_id,run_id,state,state_revision,preview_kind,content_type,preview_size_bytes,truncated,error_code,occurred_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
     )
     .bind(logical_owner_id)
     .bind(run_id.as_slice())
@@ -252,7 +252,7 @@ pub(crate) async fn lock_anchor(
 ) -> Result<(), AttachmentPreviewPersistenceErrorV1> {
     let mut hasher = sha2::Sha256::new();
     use sha2::Digest;
-    hasher.update(b"hermes.attachment-preview.anchor-lock.v1\0");
+    hasher.update(b"makosh.attachment-preview.anchor-lock.v1\0");
     hasher.update(logical_owner_id.as_bytes());
     hasher.update(attachment_anchor_id);
     let digest: [u8; 32] = hasher.finalize().into();
@@ -397,13 +397,13 @@ pub(crate) fn valid_artifact(value: &PersistedAttachmentPreviewArtifactV1) -> bo
         && valid_sha256(&value.renderer_identity_sha256)
         && value.runtime_generation > 0
         && value.grant_epoch > 0
-        && hermes_attachment_preview_core::validate_preview_output_v1(
+        && makosh_attachment_preview_core::validate_preview_output_v1(
             value.content_type,
             value.preview_size_bytes,
         )
         .is_ok()
         && value.preview_kind
-            != hermes_attachment_preview_api::wire::AttachmentPreviewKindV1::Unspecified
+            != makosh_attachment_preview_api::wire::AttachmentPreviewKindV1::Unspecified
 }
 
 pub(crate) fn id16(value: Vec<u8>) -> Result<[u8; 16], AttachmentPreviewPersistenceErrorV1> {

@@ -1,20 +1,20 @@
 [package]
-name = "hermes-events-authority-runtime"
+name = "makosh-events-authority-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
 [[bin]]
-name = "hermes-events-authority-runtime"
+name = "makosh-events-authority-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "events"
 surface = "runtime"
 
 [dependencies]
-hermes-events-authority-runtime-control = { path = "control" }
-hermes-runtime-protocol = { path = "../../../runtime_protocol" }
+makosh-events-authority-runtime-control = { path = "control" }
+makosh-runtime-protocol = { path = "../../../runtime_protocol" }
 libc = "=0.2.186"
 prost = "=0.14.4"

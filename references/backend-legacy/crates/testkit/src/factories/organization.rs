@@ -1,4 +1,4 @@
-use hermes_hub_backend::domains::organizations::api::OrganizationStore;
+use makosh_hub_backend::domains::organizations::api::OrganizationStore;
 use sqlx::postgres::PgPool;
 use uuid::Uuid;
 
@@ -37,8 +37,8 @@ impl<'a> OrganizationFactory<'a> {
     pub async fn create(
         self,
     ) -> Result<
-        hermes_hub_backend::domains::organizations::api::Organization,
-        hermes_hub_backend::domains::organizations::api::OrganizationError,
+        makosh_hub_backend::domains::organizations::api::Organization,
+        makosh_hub_backend::domains::organizations::api::OrganizationError,
     > {
         let store = OrganizationStore::new(self.pool.clone());
         store

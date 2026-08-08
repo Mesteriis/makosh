@@ -100,7 +100,7 @@ pub(super) fn communication_provider_command(
         provider_observed_at: command.provider_observed_at,
         reconciled_at: command.reconciled_at,
         dead_lettered_at: command.dead_lettered_at,
-        actor_id: "hermes-frontend".to_owned(),
+        actor_id: "makosh-frontend".to_owned(),
         happened_at: command.created_at,
         completed_at: command.completed_at,
         created_at: command.created_at,
@@ -109,7 +109,7 @@ pub(super) fn communication_provider_command(
 }
 
 pub(super) fn canonical_provider_chat_id(
-    command: &hermes_communications_api::commands::CommunicationProviderCommand,
+    command: &makosh_communications_api::commands::CommunicationProviderCommand,
 ) -> Option<&str> {
     command
         .provider_conversation_id

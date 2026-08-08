@@ -15,8 +15,8 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-table-shell',
-  `hermes-table-shell--${props.density}`,
+  'makosh-table-shell',
+  `makosh-table-shell--${props.density}`,
   props.class
 ])
 
@@ -28,26 +28,26 @@ function cellValue(row: DataTableRow, key: string): string {
 
 <template>
   <div :class="classes">
-    <table class="hermes-table">
-      <caption v-if="caption" class="hermes-table-caption">{{ caption }}</caption>
+    <table class="makosh-table">
+      <caption v-if="caption" class="makosh-table-caption">{{ caption }}</caption>
       <thead>
         <tr>
           <th
             v-for="column in columns"
             :key="column.key"
             scope="col"
-            :class="['hermes-table-heading', `hermes-table-cell--${column.align ?? 'left'}`]"
+            :class="['makosh-table-heading', `makosh-table-cell--${column.align ?? 'left'}`]"
           >
             {{ column.label }}
           </th>
         </tr>
       </thead>
       <tbody v-if="rows.length > 0">
-        <tr v-for="(row, rowIndex) in rows" :key="String(row.id ?? rowIndex)" class="hermes-table-row">
+        <tr v-for="(row, rowIndex) in rows" :key="String(row.id ?? rowIndex)" class="makosh-table-row">
           <td
             v-for="column in columns"
             :key="column.key"
-            :class="['hermes-table-cell', `hermes-table-cell--${column.align ?? 'left'}`]"
+            :class="['makosh-table-cell', `makosh-table-cell--${column.align ?? 'left'}`]"
           >
             <slot :name="`cell-${column.key}`" :row="row" :column="column" :value="cellValue(row, column.key)">
               {{ cellValue(row, column.key) }}
@@ -57,7 +57,7 @@ function cellValue(row: DataTableRow, key: string): string {
       </tbody>
       <tbody v-else>
         <tr>
-          <td class="hermes-table-empty" :colspan="Math.max(columns.length, 1)">
+          <td class="makosh-table-empty" :colspan="Math.max(columns.length, 1)">
             {{ emptyText }}
           </td>
         </tr>

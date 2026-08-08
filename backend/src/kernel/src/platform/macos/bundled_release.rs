@@ -2,9 +2,9 @@
 
 use std::path::Path;
 
-use hermes_kernel_control_store::{BundledManagedLaunchBinding, OperationIdV1};
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::DistributionArtifactKindV1;
+use makosh_kernel_control_store::{BundledManagedLaunchBinding, OperationIdV1};
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::DistributionArtifactKindV1;
 use sha2::{Digest, Sha256};
 
 use crate::distribution::bundle_verifier::VerifiedDistributionBundle;
@@ -188,7 +188,7 @@ fn proposal_request_digest(
     descriptor_sha256: &[u8; 32],
 ) -> [u8; 32] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.bundled-managed-artifact-proposal.v2");
+    digest.update(b"makosh.bundled-managed-artifact-proposal.v2");
     update_length_prefixed(&mut digest, distribution_id.as_bytes());
     update_length_prefixed(&mut digest, artifact_id.as_bytes());
     digest.update(descriptor_sha256);

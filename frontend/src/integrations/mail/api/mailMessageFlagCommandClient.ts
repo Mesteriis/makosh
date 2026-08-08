@@ -1,6 +1,6 @@
 import { createClient, type Client } from '@connectrpc/connect'
 
-import { MailMessageFlagCommandService } from '../../../gen/hermes/mail/message_flags/v1/client_pb'
+import { MailMessageFlagCommandService } from '../../../gen/makosh/mail/message_flags/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 let mailMessageFlagCommandClient: Client<typeof MailMessageFlagCommandService> | null = null

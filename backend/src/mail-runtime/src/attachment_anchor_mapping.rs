@@ -1,23 +1,23 @@
 //! Mail-owned validation and persistence of the Communications anchor handoff.
 
-use hermes_communications_attachment_contract::{
+use makosh_communications_attachment_contract::{
     admission::communication_attachment_anchor_recorded_contract_reference_v1,
     anchor_recorded_v1::AttachmentAnchorRecordedV1,
 };
-use hermes_communications_ingress::admission::communication_observed_contract_reference_v1;
-use hermes_events_jetstream::{
+use makosh_communications_ingress::admission::communication_observed_contract_reference_v1;
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimeSubscribePermitV1, receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, DurableEnvelopeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_mail_persistence::{
+use makosh_mail_persistence::{
     MailAttachmentAnchorMappingOutcomeV1, MailAttachmentAnchorMappingV1, MailDurablePersistence,
     MailDurablePersistenceError,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 
 use crate::admission::MAIL_MODULE_ID;
@@ -187,7 +187,7 @@ fn sha256(value: &[u8]) -> Result<[u8; 32], MailAttachmentAnchorMappingErrorV1> 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_events_protocol::v1::EventMetadataV1;
+    use makosh_events_protocol::v1::EventMetadataV1;
 
     fn handoff(payload: AttachmentAnchorRecordedV1) -> DurableEnvelopeV1 {
         DurableEnvelopeV1 {

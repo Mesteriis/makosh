@@ -2,8 +2,8 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use hermes_events_protocol::delivery::OutboxRecordV1;
-use hermes_mail_api::operational::{
+use makosh_events_protocol::delivery::OutboxRecordV1;
+use makosh_mail_api::operational::{
     MailFolderKindV1, MailFolderV1, MailMessageDetailV1, MailMessageFlagV1, MailMessageSummaryV1,
     MailOperationalPageV1, MailOperationalQueryResponseV1, MailOperationalQueryV1, MailThreadV1,
     validate_operational_message, validate_operational_query,
@@ -18,7 +18,7 @@ use crate::{
 };
 
 pub const MAIL_SCHEMA_V9: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.mail_operational_folders (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_operational_folders (
     connection_id TEXT NOT NULL,
     folder_id TEXT NOT NULL,
     display_name TEXT NOT NULL,
@@ -39,9 +39,9 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_operational_folders (
     CHECK (updated_at_unix_seconds > 0)
 );
 CREATE INDEX IF NOT EXISTS mail_operational_folders_cursor_idx
-    ON hermes_data.mail_operational_folders
+    ON makosh_data.mail_operational_folders
     (connection_id, updated_at_unix_seconds DESC, cursor_sequence DESC);
-CREATE TABLE IF NOT EXISTS hermes_data.mail_operational_threads (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_operational_threads (
     connection_id TEXT NOT NULL,
     provider_thread_id TEXT NOT NULL,
     subject TEXT,
@@ -61,9 +61,9 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_operational_threads (
     CHECK (updated_at_unix_seconds > 0)
 );
 CREATE INDEX IF NOT EXISTS mail_operational_threads_cursor_idx
-    ON hermes_data.mail_operational_threads
+    ON makosh_data.mail_operational_threads
     (connection_id, updated_at_unix_seconds DESC, cursor_sequence DESC);
-CREATE TABLE IF NOT EXISTS hermes_data.mail_operational_messages (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_operational_messages (
     connection_id TEXT NOT NULL,
     provider_message_id TEXT NOT NULL,
     provider_thread_id TEXT NOT NULL,
@@ -88,25 +88,25 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_operational_messages (
     CHECK (updated_at_unix_seconds > 0)
 );
 CREATE INDEX IF NOT EXISTS mail_operational_messages_thread_idx
-    ON hermes_data.mail_operational_messages
+    ON makosh_data.mail_operational_messages
     (connection_id, provider_thread_id, updated_at_unix_seconds DESC, provider_message_id DESC);
 CREATE INDEX IF NOT EXISTS mail_operational_messages_cursor_idx
-    ON hermes_data.mail_operational_messages
+    ON makosh_data.mail_operational_messages
     (connection_id, updated_at_unix_seconds DESC, cursor_sequence DESC);
-CREATE TABLE IF NOT EXISTS hermes_data.mail_operational_message_folders (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_operational_message_folders (
     connection_id TEXT NOT NULL,
     provider_message_id TEXT NOT NULL,
     folder_id TEXT NOT NULL,
     PRIMARY KEY (connection_id, provider_message_id, folder_id),
     FOREIGN KEY (connection_id, provider_message_id)
-        REFERENCES hermes_data.mail_operational_messages (connection_id, provider_message_id)
+        REFERENCES makosh_data.mail_operational_messages (connection_id, provider_message_id)
         ON DELETE CASCADE,
     FOREIGN KEY (connection_id, folder_id)
-        REFERENCES hermes_data.mail_operational_folders (connection_id, folder_id)
+        REFERENCES makosh_data.mail_operational_folders (connection_id, folder_id)
         ON DELETE CASCADE
 );
 CREATE INDEX IF NOT EXISTS mail_operational_message_folders_folder_idx
-    ON hermes_data.mail_operational_message_folders
+    ON makosh_data.mail_operational_message_folders
     (connection_id, folder_id, provider_message_id);
 "#;
 
@@ -270,7 +270,7 @@ impl MailDurablePersistence {
         if cursor.is_some() {
             require_cursor_anchor(
                 sqlx::query(
-                    "SELECT EXISTS(SELECT 1 FROM hermes_data.mail_operational_folders \
+                    "SELECT EXISTS(SELECT 1 FROM makosh_data.mail_operational_folders \
                      WHERE connection_id = $1 AND updated_at_unix_seconds = $2 \
                        AND cursor_sequence = $3) AS present",
                 )
@@ -284,7 +284,7 @@ impl MailDurablePersistence {
         let rows = sqlx::query(
             "SELECT connection_id, folder_id, display_name, kind, total_messages, \
              unread_messages, projection_revision, updated_at_unix_seconds, cursor_sequence \
-             FROM hermes_data.mail_operational_folders WHERE connection_id = $1 \
+             FROM makosh_data.mail_operational_folders WHERE connection_id = $1 \
                AND (updated_at_unix_seconds, cursor_sequence) < ($2, $3) \
              ORDER BY updated_at_unix_seconds DESC, cursor_sequence DESC LIMIT $4",
         )
@@ -317,11 +317,11 @@ impl MailDurablePersistence {
         if cursor.is_some() {
             require_cursor_anchor(
                 sqlx::query(
-                    "SELECT EXISTS(SELECT 1 FROM hermes_data.mail_operational_threads AS thread \
+                    "SELECT EXISTS(SELECT 1 FROM makosh_data.mail_operational_threads AS thread \
                      WHERE thread.connection_id = $1 AND thread.updated_at_unix_seconds = $2 \
                        AND thread.cursor_sequence = $3 AND ($4::TEXT IS NULL OR EXISTS( \
-                         SELECT 1 FROM hermes_data.mail_operational_messages AS message \
-                         JOIN hermes_data.mail_operational_message_folders AS membership \
+                         SELECT 1 FROM makosh_data.mail_operational_messages AS message \
+                         JOIN makosh_data.mail_operational_message_folders AS membership \
                            ON membership.connection_id = message.connection_id \
                           AND membership.message_id = message.message_id \
                          WHERE message.connection_id = thread.connection_id \
@@ -340,10 +340,10 @@ impl MailDurablePersistence {
             "SELECT thread.connection_id, thread.provider_thread_id, thread.subject, \
              thread.latest_snippet, thread.latest_at_unix_seconds, thread.message_count, \
              thread.unread_count, thread.projection_revision, thread.updated_at_unix_seconds, \
-             thread.cursor_sequence FROM hermes_data.mail_operational_threads AS thread \
+             thread.cursor_sequence FROM makosh_data.mail_operational_threads AS thread \
              WHERE thread.connection_id = $1 AND ($2::TEXT IS NULL OR EXISTS( \
-               SELECT 1 FROM hermes_data.mail_operational_messages AS message \
-               JOIN hermes_data.mail_operational_message_folders AS membership \
+               SELECT 1 FROM makosh_data.mail_operational_messages AS message \
+               JOIN makosh_data.mail_operational_message_folders AS membership \
                  ON membership.connection_id = message.connection_id \
                 AND membership.message_id = message.message_id \
                WHERE message.connection_id = thread.connection_id \
@@ -388,13 +388,13 @@ impl MailDurablePersistence {
         if cursor.is_some() {
             require_cursor_anchor(
                 sqlx::query(
-                    "SELECT EXISTS(SELECT 1 FROM hermes_data.mail_operational_messages AS message \
+                    "SELECT EXISTS(SELECT 1 FROM makosh_data.mail_operational_messages AS message \
                      WHERE message.connection_id = $1 \
                        AND COALESCE(message.sent_at_unix_seconds, 1) = $2 \
                        AND message.cursor_sequence = $3 \
                        AND ($4::TEXT IS NULL OR message.provider_thread_id = $4) \
                        AND ($5::TEXT IS NULL OR EXISTS( \
-                         SELECT 1 FROM hermes_data.mail_operational_message_folders AS membership \
+                         SELECT 1 FROM makosh_data.mail_operational_message_folders AS membership \
                          WHERE membership.connection_id = message.connection_id \
                            AND membership.message_id = message.message_id \
                            AND membership.folder_id = $5))) AS present",
@@ -415,11 +415,11 @@ impl MailDurablePersistence {
              message.has_plain_text, message.has_attachments, message.observation_anchor_id, \
              message.projection_revision, message.updated_at_unix_seconds, \
              COALESCE(message.sent_at_unix_seconds, 1) AS message_order_unix_seconds, \
-             message.cursor_sequence FROM hermes_data.mail_operational_messages AS message \
+             message.cursor_sequence FROM makosh_data.mail_operational_messages AS message \
              WHERE message.connection_id = $1 \
                AND ($2::TEXT IS NULL OR message.provider_thread_id = $2) \
                AND ($3::TEXT IS NULL OR EXISTS( \
-                 SELECT 1 FROM hermes_data.mail_operational_message_folders AS membership \
+                 SELECT 1 FROM makosh_data.mail_operational_message_folders AS membership \
                  WHERE membership.connection_id = message.connection_id \
                    AND membership.message_id = message.message_id \
                    AND membership.folder_id = $3)) \
@@ -458,7 +458,7 @@ impl MailDurablePersistence {
             "SELECT connection_id, message_id, provider_thread_id, subject, sender, \
              recipients, snippet, sent_at_unix_seconds, flags, has_plain_text, has_attachments, \
              observation_anchor_id, projection_revision FROM \
-             hermes_data.mail_operational_messages \
+             makosh_data.mail_operational_messages \
              WHERE connection_id = $1 AND message_id = $2",
         )
         .bind(connection_id)
@@ -483,7 +483,7 @@ impl MailDurablePersistence {
         }
         let rows = sqlx::query(
             "SELECT message_id, folder_id FROM \
-             hermes_data.mail_operational_message_folders \
+             makosh_data.mail_operational_message_folders \
              WHERE connection_id = $1 AND message_id = ANY($2) \
              ORDER BY message_id, folder_id",
         )
@@ -835,7 +835,7 @@ async fn upsert_operational_message(
     observed_at_unix_seconds: i64,
 ) -> Result<(), MailDurablePersistenceError> {
     let old = sqlx::query(
-        "SELECT provider_thread_id FROM hermes_data.mail_operational_messages \
+        "SELECT provider_thread_id FROM makosh_data.mail_operational_messages \
          WHERE connection_id = $1 AND message_id = $2",
     )
     .bind(&message.connection_id)
@@ -849,7 +849,7 @@ async fn upsert_operational_message(
         .transpose()
         .map_err(|_| MailDurablePersistenceError::InvalidRow)?;
     let old_folder_rows = sqlx::query(
-        "SELECT folder_id FROM hermes_data.mail_operational_message_folders \
+        "SELECT folder_id FROM makosh_data.mail_operational_message_folders \
          WHERE connection_id = $1 AND message_id = $2",
     )
     .bind(&message.connection_id)
@@ -881,7 +881,7 @@ async fn upsert_operational_message(
         .map(|flag| message_flag_id(*flag))
         .collect::<Vec<_>>();
     sqlx::query(
-        "INSERT INTO hermes_data.mail_operational_messages \
+        "INSERT INTO makosh_data.mail_operational_messages \
          (connection_id, provider_message_id, provider_thread_id, subject, sender, recipients, \
           snippet, sent_at_unix_seconds, flags, has_plain_text, has_attachments, \
           observation_anchor_id, updated_at_unix_seconds) \
@@ -893,23 +893,23 @@ async fn upsert_operational_message(
            has_plain_text = EXCLUDED.has_plain_text, has_attachments = EXCLUDED.has_attachments, \
            observation_anchor_id = EXCLUDED.observation_anchor_id, \
            projection_revision = CASE \
-             WHEN (hermes_data.mail_operational_messages.provider_thread_id, \
-                   hermes_data.mail_operational_messages.subject, \
-                   hermes_data.mail_operational_messages.sender, \
-                   hermes_data.mail_operational_messages.recipients, \
-                   hermes_data.mail_operational_messages.snippet, \
-                   hermes_data.mail_operational_messages.sent_at_unix_seconds, \
-                   hermes_data.mail_operational_messages.flags, \
-                   hermes_data.mail_operational_messages.has_plain_text, \
-                   hermes_data.mail_operational_messages.has_attachments, \
-                   hermes_data.mail_operational_messages.observation_anchor_id) \
+             WHEN (makosh_data.mail_operational_messages.provider_thread_id, \
+                   makosh_data.mail_operational_messages.subject, \
+                   makosh_data.mail_operational_messages.sender, \
+                   makosh_data.mail_operational_messages.recipients, \
+                   makosh_data.mail_operational_messages.snippet, \
+                   makosh_data.mail_operational_messages.sent_at_unix_seconds, \
+                   makosh_data.mail_operational_messages.flags, \
+                   makosh_data.mail_operational_messages.has_plain_text, \
+                   makosh_data.mail_operational_messages.has_attachments, \
+                   makosh_data.mail_operational_messages.observation_anchor_id) \
                   IS DISTINCT FROM \
                   (EXCLUDED.provider_thread_id, EXCLUDED.subject, EXCLUDED.sender, \
                    EXCLUDED.recipients, EXCLUDED.snippet, EXCLUDED.sent_at_unix_seconds, \
                    EXCLUDED.flags, EXCLUDED.has_plain_text, EXCLUDED.has_attachments, \
                    EXCLUDED.observation_anchor_id) \
-             THEN hermes_data.mail_operational_messages.projection_revision + 1 \
-             ELSE hermes_data.mail_operational_messages.projection_revision END, \
+             THEN makosh_data.mail_operational_messages.projection_revision + 1 \
+             ELSE makosh_data.mail_operational_messages.projection_revision END, \
            updated_at_unix_seconds = EXCLUDED.updated_at_unix_seconds",
     )
     .bind(&message.connection_id)
@@ -941,7 +941,7 @@ async fn upsert_operational_message(
     }
 
     sqlx::query(
-        "DELETE FROM hermes_data.mail_operational_message_folders \
+        "DELETE FROM makosh_data.mail_operational_message_folders \
          WHERE connection_id = $1 AND message_id = $2",
     )
     .bind(&message.connection_id)
@@ -951,7 +951,7 @@ async fn upsert_operational_message(
     .map_err(|_| MailDurablePersistenceError::Database)?;
     for folder in &message.folders {
         sqlx::query(
-            "INSERT INTO hermes_data.mail_operational_message_folders \
+            "INSERT INTO makosh_data.mail_operational_message_folders \
              (connection_id, provider_message_id, folder_id) VALUES ($1, $2, $3)",
         )
         .bind(&message.connection_id)
@@ -1002,16 +1002,16 @@ pub(crate) async fn refresh_thread(
         "WITH aggregate AS ( \
            SELECT COUNT(*)::BIGINT AS message_count, \
              COUNT(*) FILTER (WHERE NOT (1 = ANY(flags)))::BIGINT AS unread_count \
-           FROM hermes_data.mail_operational_messages \
+           FROM makosh_data.mail_operational_messages \
            WHERE connection_id = $1 AND provider_thread_id = $2 \
          ), latest AS ( \
            SELECT subject, snippet, sent_at_unix_seconds \
-           FROM hermes_data.mail_operational_messages \
+           FROM makosh_data.mail_operational_messages \
            WHERE connection_id = $1 AND provider_thread_id = $2 \
            ORDER BY sent_at_unix_seconds DESC NULLS LAST, \
              updated_at_unix_seconds DESC, message_id DESC LIMIT 1 \
          ) \
-         INSERT INTO hermes_data.mail_operational_threads \
+         INSERT INTO makosh_data.mail_operational_threads \
            (connection_id, provider_thread_id, subject, latest_snippet, latest_at_unix_seconds, \
             message_count, unread_count, updated_at_unix_seconds) \
          SELECT $1, $2, latest.subject, latest.snippet, latest.sent_at_unix_seconds, \
@@ -1021,16 +1021,16 @@ pub(crate) async fn refresh_thread(
            latest_at_unix_seconds = EXCLUDED.latest_at_unix_seconds, \
            message_count = EXCLUDED.message_count, unread_count = EXCLUDED.unread_count, \
            projection_revision = CASE \
-             WHEN (hermes_data.mail_operational_threads.subject, \
-                   hermes_data.mail_operational_threads.latest_snippet, \
-                   hermes_data.mail_operational_threads.latest_at_unix_seconds, \
-                   hermes_data.mail_operational_threads.message_count, \
-                   hermes_data.mail_operational_threads.unread_count) \
+             WHEN (makosh_data.mail_operational_threads.subject, \
+                   makosh_data.mail_operational_threads.latest_snippet, \
+                   makosh_data.mail_operational_threads.latest_at_unix_seconds, \
+                   makosh_data.mail_operational_threads.message_count, \
+                   makosh_data.mail_operational_threads.unread_count) \
                   IS DISTINCT FROM \
                   (EXCLUDED.subject, EXCLUDED.latest_snippet, EXCLUDED.latest_at_unix_seconds, \
                    EXCLUDED.message_count, EXCLUDED.unread_count) \
-             THEN hermes_data.mail_operational_threads.projection_revision + 1 \
-             ELSE hermes_data.mail_operational_threads.projection_revision END, \
+             THEN makosh_data.mail_operational_threads.projection_revision + 1 \
+             ELSE makosh_data.mail_operational_threads.projection_revision END, \
            updated_at_unix_seconds = EXCLUDED.updated_at_unix_seconds",
     )
     .bind(connection_id)
@@ -1041,7 +1041,7 @@ pub(crate) async fn refresh_thread(
     .map_err(|_| MailDurablePersistenceError::Database)?;
     if result.rows_affected() == 0 {
         sqlx::query(
-            "DELETE FROM hermes_data.mail_operational_threads \
+            "DELETE FROM makosh_data.mail_operational_threads \
              WHERE connection_id = $1 AND provider_thread_id = $2",
         )
         .bind(connection_id)
@@ -1060,7 +1060,7 @@ pub(crate) async fn refresh_folder(
     observed_at_unix_seconds: i64,
 ) -> Result<(), MailDurablePersistenceError> {
     sqlx::query(
-        "UPDATE hermes_data.mail_operational_folders AS folder SET \
+        "UPDATE makosh_data.mail_operational_folders AS folder SET \
            total_messages = counts.total_messages, unread_messages = counts.unread_messages, \
            projection_revision = CASE \
              WHEN (folder.total_messages, folder.unread_messages) \
@@ -1070,8 +1070,8 @@ pub(crate) async fn refresh_folder(
          FROM ( \
            SELECT COUNT(*)::BIGINT AS total_messages, \
              COUNT(*) FILTER (WHERE NOT (1 = ANY(message.flags)))::BIGINT AS unread_messages \
-           FROM hermes_data.mail_operational_message_folders AS membership \
-           JOIN hermes_data.mail_operational_messages AS message \
+           FROM makosh_data.mail_operational_message_folders AS membership \
+           JOIN makosh_data.mail_operational_messages AS message \
              ON message.connection_id = membership.connection_id \
             AND message.message_id = membership.message_id \
            WHERE membership.connection_id = $1 AND membership.folder_id = $2 \
@@ -1097,17 +1097,17 @@ pub(crate) async fn upsert_operational_folder(
         return Err(MailDurablePersistenceError::InvalidRow);
     }
     sqlx::query(
-        "INSERT INTO hermes_data.mail_operational_folders \
+        "INSERT INTO makosh_data.mail_operational_folders \
          (connection_id, folder_id, display_name, kind, updated_at_unix_seconds) \
          VALUES ($1, $2, $3, $4, $5) \
          ON CONFLICT (connection_id, folder_id) DO UPDATE SET \
            display_name = EXCLUDED.display_name, kind = EXCLUDED.kind, \
            projection_revision = CASE \
-             WHEN (hermes_data.mail_operational_folders.display_name, \
-                   hermes_data.mail_operational_folders.kind) \
+             WHEN (makosh_data.mail_operational_folders.display_name, \
+                   makosh_data.mail_operational_folders.kind) \
                   IS DISTINCT FROM (EXCLUDED.display_name, EXCLUDED.kind) \
-             THEN hermes_data.mail_operational_folders.projection_revision + 1 \
-             ELSE hermes_data.mail_operational_folders.projection_revision END, \
+             THEN makosh_data.mail_operational_folders.projection_revision + 1 \
+             ELSE makosh_data.mail_operational_folders.projection_revision END, \
            updated_at_unix_seconds = EXCLUDED.updated_at_unix_seconds",
     )
     .bind(connection_id)
@@ -1191,7 +1191,7 @@ mod tests {
         );
         assert_eq!(
             MAIL_SCHEMA_V9
-                .matches("CREATE TABLE IF NOT EXISTS hermes_data.mail_")
+                .matches("CREATE TABLE IF NOT EXISTS makosh_data.mail_")
                 .count(),
             4
         );
@@ -1228,6 +1228,6 @@ mod tests {
         );
         assert!(!cursor.contains("account-1"));
         assert!(!cursor.contains("INBOX"));
-        assert!(cursor.len() < hermes_mail_api::operational::MAX_OPERATIONAL_CURSOR_BYTES);
+        assert!(cursor.len() < makosh_mail_api::operational::MAX_OPERATIONAL_CURSOR_BYTES);
     }
 }

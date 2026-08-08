@@ -1,6 +1,6 @@
 # Architecture - Signal Hub
 
-Signal Hub is the platform-level source control plane for Hermes.
+Signal Hub is the platform-level source control plane for Макошь.
 
 It sits before Communications, Calendar, Documents, Tasks, Radar and other
 domains. It controls whether external or fixture sources may publish signals

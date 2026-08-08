@@ -11,7 +11,7 @@ use crate::tests::common::{Signer, SigningKey, unique_target_root};
 
 #[test]
 fn capture_coordinator_publishes_every_enabled_component_in_canonical_order() {
-    let parent = private_parent("hermes-whole-capture");
+    let parent = private_parent("makosh-whole-capture");
     let destination = parent.join("published");
     let signer = TestSigner::new();
     let public_key = signer.key.verifying_key().to_sec1_point(false);
@@ -46,7 +46,7 @@ fn capture_coordinator_publishes_every_enabled_component_in_canonical_order() {
 
 #[test]
 fn capture_coordinator_omits_disabled_conditional_components() {
-    let parent = private_parent("hermes-whole-capture-required");
+    let parent = private_parent("makosh-whole-capture-required");
     let destination = parent.join("published");
     let signer = TestSigner::new();
     let encryption_key = encryption_key();
@@ -69,7 +69,7 @@ fn capture_coordinator_omits_disabled_conditional_components() {
 
 #[test]
 fn capture_coordinator_removes_staging_after_component_failure() {
-    let parent = private_parent("hermes-whole-capture-failure");
+    let parent = private_parent("makosh-whole-capture-failure");
     let destination = parent.join("published");
     let signer = TestSigner::new();
     let encryption_key = encryption_key();

@@ -1,4 +1,4 @@
-# Hermes legacy documentation reference
+# Макошь legacy documentation reference
 
 > Historical snapshot only. Nothing under this directory is active policy or
 > current implementation status for the clean-room system. Active documentation
@@ -8,12 +8,12 @@
 # Previous documentation index
 
 This directory contains product, foundation, architecture, domain, ADR and
-implementation-status documentation for Hermes Hub.
+implementation-status documentation for Макошь.
 
-Hermes documentation has one active product model:
+Макошь documentation has one active product model:
 
 ```text
-Hermes is a local-first Personal Memory System.
+Макошь is a local-first Personal Memory System.
 ```
 
 Communication is the primary ingestion spine, but not the only source of
@@ -21,8 +21,8 @@ evidence.
 
 Styled documentation portal:
 
-- [Hermes Hub Documentation](https://mesteriis.github.io/hermes-os/) - GitHub
-  Pages entrypoint using the Hermes shell design language.
+- [Макошь Documentation](https://mesteriis.github.io/makosh-os/) - GitHub
+  Pages entrypoint using the Макошь shell design language.
 
 ## Reading Order
 

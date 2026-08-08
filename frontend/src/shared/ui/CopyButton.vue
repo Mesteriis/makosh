@@ -43,7 +43,7 @@ const icon = computed(() => {
 	}
 	return 'tabler:copy'
 })
-const classes = computed(() => ['hermes-copy-button', `hermes-copy-button--${state.value}`, props.class].filter(Boolean).join(' '))
+const classes = computed(() => ['makosh-copy-button', `makosh-copy-button--${state.value}`, props.class].filter(Boolean).join(' '))
 
 async function copy(): Promise<void> {
 	if (props.disabled || !props.value) {

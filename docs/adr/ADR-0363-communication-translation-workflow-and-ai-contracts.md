@@ -48,13 +48,13 @@ Clean-room inventory разделяет эти причины изменения
 Translation реализуется отдельным owner `communication_translation` в пяти
 units:
 
-- `hermes-communication-translation-api` — generated Start/Get/realtime
+- `makosh-communication-translation-api` — generated Start/Get/realtime
   contract;
-- `hermes-communication-translation-core` — pure lifecycle и validation;
-- `hermes-communication-translation-persistence` — owner-local PostgreSQL
+- `makosh-communication-translation-core` — pure lifecycle и validation;
+- `makosh-communication-translation-persistence` — owner-local PostgreSQL
   state, inbox/outbox и realtime replay;
-- `hermes-communication-translation-runtime` — managed workflow orchestration;
-- `hermes-communication-translation-assembly` — unsigned descriptor, settings
+- `makosh-communication-translation-runtime` — managed workflow orchestration;
+- `makosh-communication-translation-assembly` — unsigned descriptor, settings
   schema, Storage bundle и release fragment.
 
 Workflow не принадлежит Communications, AI или Ollama и не импортирует их

@@ -2,7 +2,7 @@
 
 Status: target architecture with current code boundary.
 
-`backend/src/ai/hub.rs` is the single application boundary for AI work in Hermes.
+`backend/src/ai/hub.rs` is the single application boundary for AI work in Макошь.
 Provider adapters can still live in `backend/src/integrations/*`, and low-level runtime
 contracts can still live in `backend/src/platform/ai_runtime.rs`, but product domains,
 workflows and AI services must not call provider runtimes directly.
@@ -22,7 +22,7 @@ provider runtime adapter
 This keeps provider details out of business code, because apparently every system
 tries to become a provider-specific hairball unless physically restrained.
 
-For Hermes specifically, direct in-process calls from workflows and app-side
+For Макошь specifically, direct in-process calls from workflows and app-side
 services are valid when they are part of domain orchestration, must return
 quickly, and do not require durable user-visible async status before
 completion. In these cases, workflow code should call `AiHub` synchronously
@@ -84,11 +84,11 @@ AI Hub does **not** own:
 - final review decisions.
 
 AI output remains a candidate, suggestion, summary, classification or draft. It is not
-a fact accepted into Hermes memory until the owning domain or review workflow records it.
+a fact accepted into Макошь memory until the owning domain or review workflow records it.
 
 ## Two-tier model strategy
 
-Hermes uses two different kinds of AI work.
+Макошь uses two different kinds of AI work.
 
 ### 1. Small local Rust agents
 
@@ -129,7 +129,7 @@ into product code.
 ### Future: Rust-native embedded inference
 
 The current built-in local model path uses Ollama as a provider runtime. It does not
-run LLM inference inside the Hermes Rust process.
+run LLM inference inside the Макошь Rust process.
 
 A future AI Hub slice should add a Rust-native embedded model backend for small,
 offline tasks where local latency and privacy matter more than model size. Target
@@ -178,7 +178,7 @@ Current model routes:
 | `meeting_prep` | meeting preparation |
 
 Routes are capability names, not provider names. The model behind a route comes from
-AI Hub routing. In a configured workspace Hermes expects explicit route assignment and
+AI Hub routing. In a configured workspace Макошь expects explicit route assignment and
 fails the request when a required route is missing or the chosen model is unavailable.
 For public async API requests, that failure is recorded as a failed run instead of
 only surfacing as a synchronous transport error.

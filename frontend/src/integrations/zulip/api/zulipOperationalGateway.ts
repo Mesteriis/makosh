@@ -1,7 +1,7 @@
 import type {
 	ZulipCommandOperationStatusV1,
 	ZulipCommandReceiptV1,
-} from '../../../gen/hermes/zulip/v1/client_pb'
+} from '../../../gen/makosh/zulip/v1/client_pb'
 import { getZulipCommandConnectClient } from './zulipCommandClient'
 import { getZulipQueryConnectClient } from './zulipQueryClient'
 

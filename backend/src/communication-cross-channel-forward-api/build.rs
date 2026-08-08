@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/communication_cross_channel_forward/v1/forward.proto"],
+            &["proto/makosh/communication_cross_channel_forward/v1/forward.proto"],
             &["proto"],
         )
         .expect("Communication cross-channel forward protocol must compile");

@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.review_attention_realtime (
+CREATE TABLE makosh_data.review_attention_realtime (
     realtime_sequence BIGSERIAL PRIMARY KEY,
     logical_owner_id TEXT NOT NULL,
     attention_id BYTEA NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE hermes_data.review_attention_realtime (
 );
 
 CREATE INDEX review_attention_realtime_owner_sequence_idx
-ON hermes_data.review_attention_realtime (
+ON makosh_data.review_attention_realtime (
     logical_owner_id,
     realtime_sequence
 );

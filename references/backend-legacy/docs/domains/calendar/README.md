@@ -1,8 +1,8 @@
-# Hermes Calendar And Events
+# Макошь Calendar And Events
 
 Status: documentation package aligned to the current repository structure.
 
-Calendar is the scheduled-event channel inside Hermes. Hermes is not a calendar
+Calendar is the scheduled-event channel inside Макошь. Макошь is not a calendar
 app. Calendar data becomes Events, Communications, Decisions, Obligations,
 Tasks, Documents and Relationships in the Personal Memory System.
 

@@ -26,16 +26,16 @@ ADR-0373 первоначально требовал negative evidence для `u
 network, native dynamic libraries и runtime data files:
 
 ```text
-hermes-attachment-preview-text
-hermes-attachment-preview-image
-hermes-attachment-preview-pdf
-hermes-attachment-preview-docx
-hermes-attachment-preview-media
+makosh-attachment-preview-text
+makosh-attachment-preview-image
+makosh-attachment-preview-pdf
+makosh-attachment-preview-docx
+makosh-attachment-preview-media
 ```
 
 Все пять packages являются отдельными единицами сборки по функциональной
 ответственности, но не отдельными OS-процессами. Они статически связаны с
-`hermes-attachment-preview-runtime`. DOCX font включён compile-time bytes с
+`makosh-attachment-preview-runtime`. DOCX font включён compile-time bytes с
 pinned digest. После успешной проверки exact runtime executable отдельного
 renderer lifecycle, socket, staged executable или mutable model resource нет.
 

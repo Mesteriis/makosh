@@ -1,4 +1,4 @@
-use hermes_communication_delayed_delivery_core::{
+use makosh_communication_delayed_delivery_core::{
     DelayedDeliveryOperationV1, DelayedDeliveryStateV1,
 };
 use sha2::{Digest, Sha256};
@@ -102,7 +102,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
             .await
             .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.communication_delayed_delivery_operations (
+            "INSERT INTO makosh_data.communication_delayed_delivery_operations (
                logical_owner_id, delayed_operation_id, delivery_operation_id,
                canonical_conversation_id, canonical_reply_message_id,
                request_fingerprint, body_reference_id, body_declared_bytes,
@@ -162,7 +162,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         }
         let row = sqlx::query(
             "SELECT request_fingerprint, state_revision
-             FROM hermes_data.communication_delayed_delivery_operations
+             FROM makosh_data.communication_delayed_delivery_operations
              WHERE logical_owner_id = $1 AND delayed_operation_id = $2",
         )
         .bind(&command.logical_owner_id)
@@ -211,7 +211,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
             .await
             .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
         let affected = sqlx::query(
-            "UPDATE hermes_data.communication_delayed_delivery_operations
+            "UPDATE makosh_data.communication_delayed_delivery_operations
              SET state = $3, state_revision = state_revision + 1,
                  updated_at_unix_millis = $4
              WHERE logical_owner_id = $1 AND delayed_operation_id = $2
@@ -295,7 +295,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
             .await
             .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.communication_delayed_delivery_scheduler_inbox (
+            "INSERT INTO makosh_data.communication_delayed_delivery_scheduler_inbox (
                logical_owner_id, message_id, envelope_sha256,
                delayed_operation_id, received_at_unix_millis
              ) VALUES ($1, $2, $3, $4, $5)
@@ -355,7 +355,7 @@ async fn insert_outbox(
     created_at: i64,
 ) -> Result<(), DelayedDeliveryPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.communication_delayed_delivery_outbox (
+        "INSERT INTO makosh_data.communication_delayed_delivery_outbox (
            logical_owner_id, message_id, delayed_operation_id, contract_kind,
            envelope_sha256, envelope_bytes, created_at_unix_millis
          ) VALUES ($1, $2, $3, $4, $5, $6, $7)",
@@ -379,7 +379,7 @@ async fn verify_duplicate_inbox(
 ) -> Result<(), DelayedDeliveryPersistenceErrorV1> {
     let row = sqlx::query(
         "SELECT envelope_sha256, delayed_operation_id
-         FROM hermes_data.communication_delayed_delivery_scheduler_inbox
+         FROM makosh_data.communication_delayed_delivery_scheduler_inbox
          WHERE logical_owner_id = $1 AND message_id = $2",
     )
     .bind(&command.logical_owner_id)
@@ -409,7 +409,7 @@ async fn verify_existing_outbox(
 ) -> Result<(), DelayedDeliveryPersistenceErrorV1> {
     let row = sqlx::query(
         "SELECT message_id, envelope_sha256, envelope_bytes
-         FROM hermes_data.communication_delayed_delivery_outbox
+         FROM makosh_data.communication_delayed_delivery_outbox
          WHERE logical_owner_id = $1 AND delayed_operation_id = $2
            AND message_id = $3
            AND contract_kind = 'scheduler.schedule.command.v1'",
@@ -439,7 +439,7 @@ async fn apply_scheduler_transition(
 ) -> Result<(), DelayedDeliveryPersistenceErrorV1> {
     if let SchedulerScheduleResultV1::Ensured { schedule_revision } = command.result {
         let affected = sqlx::query(
-            "UPDATE hermes_data.communication_delayed_delivery_operations
+            "UPDATE makosh_data.communication_delayed_delivery_operations
              SET state = CASE WHEN state = $3 THEN $4 ELSE state END,
                  state_revision = state_revision + 1,
                  scheduler_schedule_revision = $5,
@@ -465,7 +465,7 @@ async fn apply_scheduler_transition(
     }
     if command.result == SchedulerScheduleResultV1::TooLate {
         let affected = sqlx::query(
-            "UPDATE hermes_data.communication_delayed_delivery_operations
+            "UPDATE makosh_data.communication_delayed_delivery_operations
              SET state = CASE WHEN state = $3 THEN $4 ELSE state END,
                  state_revision = state_revision + 1,
                  updated_at_unix_millis = $5
@@ -510,7 +510,7 @@ async fn apply_scheduler_transition(
         ),
     };
     let affected = sqlx::query(
-        "UPDATE hermes_data.communication_delayed_delivery_operations
+        "UPDATE makosh_data.communication_delayed_delivery_operations
          SET state = $3, state_revision = state_revision + 1,
              scheduler_schedule_revision = COALESCE($4, scheduler_schedule_revision),
              error_code = $5, updated_at_unix_millis = $6
@@ -562,7 +562,7 @@ async fn status_in_transaction(
         "SELECT delayed_operation_id, delivery_operation_id, state, state_revision,
                 deliver_at_unix_millis, scheduler_schedule_revision, error_code,
                 created_at_unix_millis, updated_at_unix_millis
-         FROM hermes_data.communication_delayed_delivery_operations
+         FROM makosh_data.communication_delayed_delivery_operations
          WHERE logical_owner_id = $1 AND delayed_operation_id = $2",
     )
     .bind(logical_owner_id)
@@ -696,7 +696,7 @@ fn row_error(_: sqlx::Error) -> DelayedDeliveryPersistenceErrorV1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_communication_delayed_delivery_core::{
+    use makosh_communication_delayed_delivery_core::{
         DelayedDeliveryDraftV1, prepare_delayed_delivery_v1,
     };
 

@@ -1,6 +1,6 @@
 # CardDescription
 
-Description primitive for the Hermes `Card` surface.
+Description primitive for the Макошь `Card` surface.
 
 Use for concise supporting text under a card title.
 

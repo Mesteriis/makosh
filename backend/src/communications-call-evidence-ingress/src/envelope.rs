@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
@@ -46,25 +46,25 @@ pub fn build_call_evidence_observed_outbox_record_v1(
 
     let call_evidence_id = call_evidence_id(draft);
     let source_call_cursor = source_cursor(
-        b"hermes.communications.call-evidence.source-call.v1\0",
+        b"makosh.communications.call-evidence.source-call.v1\0",
         draft,
         &draft.external_call_id,
     );
     let account_cursor = source_cursor(
-        b"hermes.communications.call-evidence.account.v1\0",
+        b"makosh.communications.call-evidence.account.v1\0",
         draft,
         &draft.external_account_id,
     );
     let conversation_cursor = draft.external_conversation_id.as_ref().map(|value| {
         scoped_cursor(
-            b"hermes.communications.call-evidence.conversation.v1\0",
+            b"makosh.communications.call-evidence.conversation.v1\0",
             account_cursor,
             value,
         )
     });
     let participant_cursor = draft.external_participant_id.as_ref().map(|value| {
         scoped_cursor(
-            b"hermes.communications.call-evidence.participant.v1\0",
+            b"makosh.communications.call-evidence.participant.v1\0",
             account_cursor,
             value,
         )
@@ -168,7 +168,7 @@ fn valid_runtime_identity(value: &str) -> bool {
 
 fn call_evidence_id(draft: &CallEvidenceObservationDraftV1) -> [u8; 16] {
     let digest = source_cursor(
-        b"hermes.communications.call-evidence.id.v1\0",
+        b"makosh.communications.call-evidence.id.v1\0",
         draft,
         &draft.external_call_id,
     );
@@ -177,7 +177,7 @@ fn call_evidence_id(draft: &CallEvidenceObservationDraftV1) -> [u8; 16] {
 
 fn observation_message_id(draft: &CallEvidenceObservationDraftV1) -> [u8; 16] {
     let digest = source_cursor(
-        b"hermes.communications.call-evidence.observation.v1\0",
+        b"makosh.communications.call-evidence.observation.v1\0",
         draft,
         &draft.observation_id,
     );
@@ -207,7 +207,7 @@ fn scoped_cursor(domain: &[u8], account_cursor: [u8; 32], value: &str) -> [u8; 3
 
 fn runtime_source_reference(runtime_instance_id: &str) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.runtime.source-reference.v1\0");
+    hasher.update(b"makosh.runtime.source-reference.v1\0");
     hasher.update(runtime_instance_id.as_bytes());
     let digest: [u8; 32] = hasher.finalize().into();
     digest[..16].try_into().expect("fixed digest prefix")
@@ -269,7 +269,7 @@ fn outbox_error(_: OutboxRecordError) -> CallEvidenceEnvelopeBuildErrorV1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_events_protocol::validation::envelope::decode_envelope_v1;
+    use makosh_events_protocol::validation::envelope::decode_envelope_v1;
 
     fn draft(observation_id: &str, revision: u64) -> CallEvidenceObservationDraftV1 {
         CallEvidenceObservationDraftV1 {
@@ -296,7 +296,7 @@ mod tests {
 
     fn context() -> CallEvidenceEnvelopeContextV1 {
         CallEvidenceEnvelopeContextV1 {
-            module_id: "hermes-telegram-runtime".to_owned(),
+            module_id: "makosh-telegram-runtime".to_owned(),
             runtime_instance_id: "telegram-runtime-1".to_owned(),
             runtime_generation: 7,
             recorded_at_unix_seconds: 1_700_000_021,

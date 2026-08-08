@@ -1,7 +1,7 @@
 //! Persists Settings validation and apply lifecycle acknowledgements.
 
-use hermes_kernel_control_store::{SettingsApplyState, SettingsRegistryStore};
-use hermes_kernel_control_store_sqlite::StoreError;
+use makosh_kernel_control_store::{SettingsApplyState, SettingsRegistryStore};
+use makosh_kernel_control_store_sqlite::StoreError;
 
 pub enum ApplyAcknowledgement {
     ValidationAccepted,

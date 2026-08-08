@@ -1,4 +1,4 @@
-use hermes_communications_api::calls::{
+use makosh_communications_api::calls::{
     CanonicalCallReadError, CanonicalCallReadPort, CanonicalCallRecord,
 };
 use sqlx::{PgPool, Row};

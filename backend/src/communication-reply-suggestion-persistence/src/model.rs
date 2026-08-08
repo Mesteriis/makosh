@@ -1,4 +1,4 @@
-use hermes_communication_reply_suggestion_core::{
+use makosh_communication_reply_suggestion_core::{
     ReplySuggestionDraftV1, ReplySuggestionRejectionCodeV1, ReplySuggestionStatusV1,
     ReplySuggestionTransitionV1,
 };
@@ -87,7 +87,7 @@ pub enum ReplySuggestionPersistenceErrorV1 {
 
 pub(crate) fn request_fingerprint(draft: &ReplySuggestionDraftV1) -> [u8; 32] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.communication_reply_suggestion.start.v1\0");
+    hash.update(b"makosh.communication_reply_suggestion.start.v1\0");
     hash.update(draft.source_message_id);
     hash.update(draft.expected_source_revision.to_be_bytes());
     hash.update([tone_code(draft.tone)]);
@@ -96,9 +96,9 @@ pub(crate) fn request_fingerprint(draft: &ReplySuggestionDraftV1) -> [u8; 32] {
 }
 
 pub(crate) const fn tone_code(
-    value: hermes_communication_reply_suggestion_core::ReplySuggestionToneV1,
+    value: makosh_communication_reply_suggestion_core::ReplySuggestionToneV1,
 ) -> u8 {
-    use hermes_communication_reply_suggestion_core::ReplySuggestionToneV1;
+    use makosh_communication_reply_suggestion_core::ReplySuggestionToneV1;
     match value {
         ReplySuggestionToneV1::Professional => 1,
         ReplySuggestionToneV1::Friendly => 2,
@@ -108,9 +108,9 @@ pub(crate) const fn tone_code(
 }
 
 pub(crate) const fn language_code(
-    value: hermes_communication_reply_suggestion_core::ReplySuggestionLanguageV1,
+    value: makosh_communication_reply_suggestion_core::ReplySuggestionLanguageV1,
 ) -> u8 {
-    use hermes_communication_reply_suggestion_core::ReplySuggestionLanguageV1;
+    use makosh_communication_reply_suggestion_core::ReplySuggestionLanguageV1;
     match value {
         ReplySuggestionLanguageV1::Source => 1,
         ReplySuggestionLanguageV1::English => 2,
@@ -146,7 +146,7 @@ pub(crate) fn nonzero<const N: usize>(value: &[u8; N]) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use hermes_communication_reply_suggestion_core::{
+    use makosh_communication_reply_suggestion_core::{
         ReplySuggestionLanguageV1, ReplySuggestionToneV1,
     };
 

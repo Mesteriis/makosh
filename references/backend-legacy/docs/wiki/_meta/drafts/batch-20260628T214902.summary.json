@@ -1,14 +1,14 @@
 {
   "batch_id": "batch-20260628T214902",
   "chunks": 163,
-  "draft_dir": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902",
+  "draft_dir": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902",
   "failed": 0,
-  "log_dir": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902",
-  "manifest_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902.resume2-manifest.jsonl",
+  "log_dir": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902",
+  "manifest_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902.resume2-manifest.jsonl",
   "passed": 163,
   "records": [
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/001-config-cargo.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/001-config-cargo.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -21,15 +21,15 @@
         }
       ],
       "chunk_id": "001-config-cargo",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/001-config-cargo.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/001-config-cargo.deepseek.md",
       "elapsed_seconds": 0,
       "index": 1,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/001-config-cargo.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/001-config-cargo.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/002-config-config.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/002-config-config.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -42,15 +42,15 @@
         }
       ],
       "chunk_id": "002-config-config",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/002-config-config.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/002-config-config.deepseek.md",
       "elapsed_seconds": 0,
       "index": 2,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/002-config-config.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/002-config-config.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/003-doc-github.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/003-doc-github.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -63,15 +63,15 @@
         }
       ],
       "chunk_id": "003-doc-github",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/003-doc-github.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/003-doc-github.deepseek.md",
       "elapsed_seconds": 0,
       "index": 3,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/003-doc-github.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/003-doc-github.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/004-config-github.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/004-config-github.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -84,15 +84,15 @@
         }
       ],
       "chunk_id": "004-config-github",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/004-config-github.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/004-config-github.deepseek.md",
       "elapsed_seconds": 0,
       "index": 4,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/004-config-github.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/004-config-github.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/005-config-gitignore.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/005-config-gitignore.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -105,15 +105,15 @@
         }
       ],
       "chunk_id": "005-config-gitignore",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/005-config-gitignore.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/005-config-gitignore.deepseek.md",
       "elapsed_seconds": 0,
       "index": 5,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/005-config-gitignore.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/005-config-gitignore.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/006-other-kilocodemodes.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/006-other-kilocodemodes.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -126,15 +126,15 @@
         }
       ],
       "chunk_id": "006-other-kilocodemodes",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/006-other-kilocodemodes.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/006-other-kilocodemodes.deepseek.md",
       "elapsed_seconds": 0,
       "index": 6,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/006-other-kilocodemodes.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/006-other-kilocodemodes.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/007-config-pre-commit-config.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/007-config-pre-commit-config.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -147,15 +147,15 @@
         }
       ],
       "chunk_id": "007-config-pre-commit-config",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/007-config-pre-commit-config.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/007-config-pre-commit-config.deepseek.md",
       "elapsed_seconds": 0,
       "index": 7,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/007-config-pre-commit-config.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/007-config-pre-commit-config.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/008-doc-supergoal-part-001.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/008-doc-supergoal-part-001.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -168,15 +168,15 @@
         }
       ],
       "chunk_id": "008-doc-supergoal-part-001",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/008-doc-supergoal-part-001.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/008-doc-supergoal-part-001.deepseek.md",
       "elapsed_seconds": 0,
       "index": 8,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/008-doc-supergoal-part-001.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/008-doc-supergoal-part-001.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/009-doc-supergoal-part-002.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/009-doc-supergoal-part-002.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -189,15 +189,15 @@
         }
       ],
       "chunk_id": "009-doc-supergoal-part-002",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/009-doc-supergoal-part-002.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/009-doc-supergoal-part-002.deepseek.md",
       "elapsed_seconds": 0,
       "index": 9,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/009-doc-supergoal-part-002.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/009-doc-supergoal-part-002.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/010-source-supergoal.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/010-source-supergoal.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -210,15 +210,15 @@
         }
       ],
       "chunk_id": "010-source-supergoal",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/010-source-supergoal.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/010-source-supergoal.deepseek.md",
       "elapsed_seconds": 0,
       "index": 10,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/010-source-supergoal.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/010-source-supergoal.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/011-doc-AGENTS.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/011-doc-AGENTS.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -231,15 +231,15 @@
         }
       ],
       "chunk_id": "011-doc-AGENTS",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/011-doc-AGENTS.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/011-doc-AGENTS.deepseek.md",
       "elapsed_seconds": 0,
       "index": 11,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/011-doc-AGENTS.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/011-doc-AGENTS.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/012-doc-CODE_OF_CONDUCT.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/012-doc-CODE_OF_CONDUCT.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -252,15 +252,15 @@
         }
       ],
       "chunk_id": "012-doc-CODE_OF_CONDUCT",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/012-doc-CODE_OF_CONDUCT.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/012-doc-CODE_OF_CONDUCT.deepseek.md",
       "elapsed_seconds": 0,
       "index": 12,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/012-doc-CODE_OF_CONDUCT.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/012-doc-CODE_OF_CONDUCT.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/013-doc-CONTRIBUTING.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/013-doc-CONTRIBUTING.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -273,15 +273,15 @@
         }
       ],
       "chunk_id": "013-doc-CONTRIBUTING",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/013-doc-CONTRIBUTING.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/013-doc-CONTRIBUTING.deepseek.md",
       "elapsed_seconds": 0,
       "index": 13,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/013-doc-CONTRIBUTING.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/013-doc-CONTRIBUTING.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/014-config-Cargo.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/014-config-Cargo.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -294,15 +294,15 @@
         }
       ],
       "chunk_id": "014-config-Cargo",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/014-config-Cargo.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/014-config-Cargo.deepseek.md",
       "elapsed_seconds": 0,
       "index": 14,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/014-config-Cargo.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/014-config-Cargo.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/015-other-LICENSE.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/015-other-LICENSE.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -315,15 +315,15 @@
         }
       ],
       "chunk_id": "015-other-LICENSE",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/015-other-LICENSE.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/015-other-LICENSE.deepseek.md",
       "elapsed_seconds": 0,
       "index": 15,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/015-other-LICENSE.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/015-other-LICENSE.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/016-config-Makefile.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/016-config-Makefile.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -336,15 +336,15 @@
         }
       ],
       "chunk_id": "016-config-Makefile",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/016-config-Makefile.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/016-config-Makefile.deepseek.md",
       "elapsed_seconds": 0,
       "index": 16,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/016-config-Makefile.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/016-config-Makefile.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/017-doc-README.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/017-doc-README.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -357,15 +357,15 @@
         }
       ],
       "chunk_id": "017-doc-README",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/017-doc-README.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/017-doc-README.deepseek.md",
       "elapsed_seconds": 0,
       "index": 17,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/017-doc-README.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/017-doc-README.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/018-doc-SECURITY.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/018-doc-SECURITY.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -378,15 +378,15 @@
         }
       ],
       "chunk_id": "018-doc-SECURITY",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/018-doc-SECURITY.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/018-doc-SECURITY.deepseek.md",
       "elapsed_seconds": 0,
       "index": 18,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/018-doc-SECURITY.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/018-doc-SECURITY.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/019-config-backend.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/019-config-backend.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -399,15 +399,15 @@
         }
       ],
       "chunk_id": "019-config-backend",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/019-config-backend.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/019-config-backend.deepseek.md",
       "elapsed_seconds": 0,
       "index": 19,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/019-config-backend.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/019-config-backend.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/020-doc-backend.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/020-doc-backend.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -420,15 +420,15 @@
         }
       ],
       "chunk_id": "020-doc-backend",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/020-doc-backend.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/020-doc-backend.deepseek.md",
       "elapsed_seconds": 0,
       "index": 20,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/020-doc-backend.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/020-doc-backend.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/021-source-backend-part-001.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/021-source-backend-part-001.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -441,15 +441,15 @@
         }
       ],
       "chunk_id": "021-source-backend-part-001",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/021-source-backend-part-001.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/021-source-backend-part-001.deepseek.md",
       "elapsed_seconds": 0,
       "index": 21,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/021-source-backend-part-001.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/021-source-backend-part-001.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/022-source-backend-part-002.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/022-source-backend-part-002.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -462,15 +462,15 @@
         }
       ],
       "chunk_id": "022-source-backend-part-002",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/022-source-backend-part-002.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/022-source-backend-part-002.deepseek.md",
       "elapsed_seconds": 0,
       "index": 22,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/022-source-backend-part-002.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/022-source-backend-part-002.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/023-source-backend-part-003.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/023-source-backend-part-003.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -483,15 +483,15 @@
         }
       ],
       "chunk_id": "023-source-backend-part-003",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/023-source-backend-part-003.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/023-source-backend-part-003.deepseek.md",
       "elapsed_seconds": 0,
       "index": 23,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/023-source-backend-part-003.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/023-source-backend-part-003.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/024-source-backend-part-004.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/024-source-backend-part-004.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -504,15 +504,15 @@
         }
       ],
       "chunk_id": "024-source-backend-part-004",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/024-source-backend-part-004.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/024-source-backend-part-004.deepseek.md",
       "elapsed_seconds": 0,
       "index": 24,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/024-source-backend-part-004.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/024-source-backend-part-004.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/025-source-backend-part-005.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/025-source-backend-part-005.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -525,15 +525,15 @@
         }
       ],
       "chunk_id": "025-source-backend-part-005",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/025-source-backend-part-005.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/025-source-backend-part-005.deepseek.md",
       "elapsed_seconds": 0,
       "index": 25,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/025-source-backend-part-005.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/025-source-backend-part-005.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/026-source-backend-part-006.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/026-source-backend-part-006.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -546,15 +546,15 @@
         }
       ],
       "chunk_id": "026-source-backend-part-006",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/026-source-backend-part-006.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/026-source-backend-part-006.deepseek.md",
       "elapsed_seconds": 0,
       "index": 26,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/026-source-backend-part-006.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/026-source-backend-part-006.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/027-source-backend-part-007.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/027-source-backend-part-007.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -567,15 +567,15 @@
         }
       ],
       "chunk_id": "027-source-backend-part-007",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/027-source-backend-part-007.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/027-source-backend-part-007.deepseek.md",
       "elapsed_seconds": 0,
       "index": 27,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/027-source-backend-part-007.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/027-source-backend-part-007.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/028-source-backend-part-008.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/028-source-backend-part-008.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -588,15 +588,15 @@
         }
       ],
       "chunk_id": "028-source-backend-part-008",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/028-source-backend-part-008.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/028-source-backend-part-008.deepseek.md",
       "elapsed_seconds": 0,
       "index": 28,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/028-source-backend-part-008.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/028-source-backend-part-008.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/029-source-backend-part-009.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/029-source-backend-part-009.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -609,15 +609,15 @@
         }
       ],
       "chunk_id": "029-source-backend-part-009",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/029-source-backend-part-009.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/029-source-backend-part-009.deepseek.md",
       "elapsed_seconds": 0,
       "index": 29,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/029-source-backend-part-009.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/029-source-backend-part-009.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/030-source-backend-part-010.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/030-source-backend-part-010.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -630,15 +630,15 @@
         }
       ],
       "chunk_id": "030-source-backend-part-010",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/030-source-backend-part-010.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/030-source-backend-part-010.deepseek.md",
       "elapsed_seconds": 0,
       "index": 30,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/030-source-backend-part-010.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/030-source-backend-part-010.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/031-source-backend-part-011.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/031-source-backend-part-011.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -651,15 +651,15 @@
         }
       ],
       "chunk_id": "031-source-backend-part-011",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/031-source-backend-part-011.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/031-source-backend-part-011.deepseek.md",
       "elapsed_seconds": 0,
       "index": 31,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/031-source-backend-part-011.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/031-source-backend-part-011.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/032-source-backend-part-012.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/032-source-backend-part-012.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -672,15 +672,15 @@
         }
       ],
       "chunk_id": "032-source-backend-part-012",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/032-source-backend-part-012.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/032-source-backend-part-012.deepseek.md",
       "elapsed_seconds": 0,
       "index": 32,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/032-source-backend-part-012.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/032-source-backend-part-012.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/033-source-backend-part-013.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/033-source-backend-part-013.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -693,15 +693,15 @@
         }
       ],
       "chunk_id": "033-source-backend-part-013",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/033-source-backend-part-013.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/033-source-backend-part-013.deepseek.md",
       "elapsed_seconds": 0,
       "index": 33,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/033-source-backend-part-013.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/033-source-backend-part-013.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/034-source-backend-part-014.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/034-source-backend-part-014.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -714,15 +714,15 @@
         }
       ],
       "chunk_id": "034-source-backend-part-014",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/034-source-backend-part-014.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/034-source-backend-part-014.deepseek.md",
       "elapsed_seconds": 0,
       "index": 34,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/034-source-backend-part-014.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/034-source-backend-part-014.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/035-source-backend-part-015.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/035-source-backend-part-015.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -735,15 +735,15 @@
         }
       ],
       "chunk_id": "035-source-backend-part-015",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/035-source-backend-part-015.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/035-source-backend-part-015.deepseek.md",
       "elapsed_seconds": 0,
       "index": 35,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/035-source-backend-part-015.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/035-source-backend-part-015.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/036-source-backend-part-016.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/036-source-backend-part-016.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -756,15 +756,15 @@
         }
       ],
       "chunk_id": "036-source-backend-part-016",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/036-source-backend-part-016.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/036-source-backend-part-016.deepseek.md",
       "elapsed_seconds": 0,
       "index": 36,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/036-source-backend-part-016.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/036-source-backend-part-016.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/037-source-backend-part-017.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/037-source-backend-part-017.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -777,15 +777,15 @@
         }
       ],
       "chunk_id": "037-source-backend-part-017",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/037-source-backend-part-017.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/037-source-backend-part-017.deepseek.md",
       "elapsed_seconds": 0,
       "index": 37,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/037-source-backend-part-017.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/037-source-backend-part-017.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/038-source-backend-part-018.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/038-source-backend-part-018.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -798,15 +798,15 @@
         }
       ],
       "chunk_id": "038-source-backend-part-018",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/038-source-backend-part-018.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/038-source-backend-part-018.deepseek.md",
       "elapsed_seconds": 0,
       "index": 38,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/038-source-backend-part-018.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/038-source-backend-part-018.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/039-source-backend-part-019.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/039-source-backend-part-019.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -819,15 +819,15 @@
         }
       ],
       "chunk_id": "039-source-backend-part-019",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/039-source-backend-part-019.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/039-source-backend-part-019.deepseek.md",
       "elapsed_seconds": 0,
       "index": 39,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/039-source-backend-part-019.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/039-source-backend-part-019.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/040-source-backend-part-020.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/040-source-backend-part-020.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -840,15 +840,15 @@
         }
       ],
       "chunk_id": "040-source-backend-part-020",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/040-source-backend-part-020.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/040-source-backend-part-020.deepseek.md",
       "elapsed_seconds": 0,
       "index": 40,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/040-source-backend-part-020.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/040-source-backend-part-020.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/041-source-backend-part-021.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/041-source-backend-part-021.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -861,15 +861,15 @@
         }
       ],
       "chunk_id": "041-source-backend-part-021",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/041-source-backend-part-021.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/041-source-backend-part-021.deepseek.md",
       "elapsed_seconds": 0,
       "index": 41,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/041-source-backend-part-021.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/041-source-backend-part-021.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/042-source-backend-part-022.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/042-source-backend-part-022.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -882,15 +882,15 @@
         }
       ],
       "chunk_id": "042-source-backend-part-022",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/042-source-backend-part-022.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/042-source-backend-part-022.deepseek.md",
       "elapsed_seconds": 0,
       "index": 42,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/042-source-backend-part-022.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/042-source-backend-part-022.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/043-source-backend-part-023.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/043-source-backend-part-023.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -903,15 +903,15 @@
         }
       ],
       "chunk_id": "043-source-backend-part-023",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/043-source-backend-part-023.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/043-source-backend-part-023.deepseek.md",
       "elapsed_seconds": 0,
       "index": 43,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/043-source-backend-part-023.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/043-source-backend-part-023.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/044-source-backend-part-024.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/044-source-backend-part-024.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -924,15 +924,15 @@
         }
       ],
       "chunk_id": "044-source-backend-part-024",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/044-source-backend-part-024.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/044-source-backend-part-024.deepseek.md",
       "elapsed_seconds": 0,
       "index": 44,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/044-source-backend-part-024.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/044-source-backend-part-024.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/045-source-backend-part-025.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/045-source-backend-part-025.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -945,15 +945,15 @@
         }
       ],
       "chunk_id": "045-source-backend-part-025",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/045-source-backend-part-025.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/045-source-backend-part-025.deepseek.md",
       "elapsed_seconds": 0,
       "index": 45,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/045-source-backend-part-025.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/045-source-backend-part-025.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/046-source-backend-part-026.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/046-source-backend-part-026.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -966,15 +966,15 @@
         }
       ],
       "chunk_id": "046-source-backend-part-026",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/046-source-backend-part-026.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/046-source-backend-part-026.deepseek.md",
       "elapsed_seconds": 0,
       "index": 46,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/046-source-backend-part-026.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/046-source-backend-part-026.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/047-source-backend-part-027.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/047-source-backend-part-027.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -987,15 +987,15 @@
         }
       ],
       "chunk_id": "047-source-backend-part-027",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/047-source-backend-part-027.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/047-source-backend-part-027.deepseek.md",
       "elapsed_seconds": 0,
       "index": 47,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/047-source-backend-part-027.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/047-source-backend-part-027.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/048-source-backend-part-028.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/048-source-backend-part-028.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1008,15 +1008,15 @@
         }
       ],
       "chunk_id": "048-source-backend-part-028",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/048-source-backend-part-028.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/048-source-backend-part-028.deepseek.md",
       "elapsed_seconds": 0,
       "index": 48,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/048-source-backend-part-028.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/048-source-backend-part-028.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/049-source-backend-part-029.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/049-source-backend-part-029.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1029,15 +1029,15 @@
         }
       ],
       "chunk_id": "049-source-backend-part-029",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/049-source-backend-part-029.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/049-source-backend-part-029.deepseek.md",
       "elapsed_seconds": 0,
       "index": 49,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/049-source-backend-part-029.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/049-source-backend-part-029.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/050-source-backend-part-030.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/050-source-backend-part-030.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1050,15 +1050,15 @@
         }
       ],
       "chunk_id": "050-source-backend-part-030",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/050-source-backend-part-030.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/050-source-backend-part-030.deepseek.md",
       "elapsed_seconds": 0,
       "index": 50,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/050-source-backend-part-030.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/050-source-backend-part-030.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/051-source-backend-part-031.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/051-source-backend-part-031.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1071,15 +1071,15 @@
         }
       ],
       "chunk_id": "051-source-backend-part-031",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/051-source-backend-part-031.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/051-source-backend-part-031.deepseek.md",
       "elapsed_seconds": 0,
       "index": 51,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/051-source-backend-part-031.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/051-source-backend-part-031.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/052-source-backend-part-032.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/052-source-backend-part-032.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1092,15 +1092,15 @@
         }
       ],
       "chunk_id": "052-source-backend-part-032",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/052-source-backend-part-032.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/052-source-backend-part-032.deepseek.md",
       "elapsed_seconds": 0,
       "index": 52,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/052-source-backend-part-032.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/052-source-backend-part-032.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/053-source-backend-part-033.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/053-source-backend-part-033.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1113,15 +1113,15 @@
         }
       ],
       "chunk_id": "053-source-backend-part-033",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/053-source-backend-part-033.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/053-source-backend-part-033.deepseek.md",
       "elapsed_seconds": 0,
       "index": 53,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/053-source-backend-part-033.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/053-source-backend-part-033.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/054-source-backend-part-034.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/054-source-backend-part-034.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1134,15 +1134,15 @@
         }
       ],
       "chunk_id": "054-source-backend-part-034",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/054-source-backend-part-034.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/054-source-backend-part-034.deepseek.md",
       "elapsed_seconds": 0,
       "index": 54,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/054-source-backend-part-034.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/054-source-backend-part-034.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/055-source-backend-part-035.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/055-source-backend-part-035.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1155,15 +1155,15 @@
         }
       ],
       "chunk_id": "055-source-backend-part-035",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/055-source-backend-part-035.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/055-source-backend-part-035.deepseek.md",
       "elapsed_seconds": 0,
       "index": 55,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/055-source-backend-part-035.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/055-source-backend-part-035.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/056-source-backend-part-036.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/056-source-backend-part-036.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1176,15 +1176,15 @@
         }
       ],
       "chunk_id": "056-source-backend-part-036",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/056-source-backend-part-036.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/056-source-backend-part-036.deepseek.md",
       "elapsed_seconds": 0,
       "index": 56,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/056-source-backend-part-036.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/056-source-backend-part-036.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/057-source-backend-part-037.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/057-source-backend-part-037.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1197,15 +1197,15 @@
         }
       ],
       "chunk_id": "057-source-backend-part-037",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/057-source-backend-part-037.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/057-source-backend-part-037.deepseek.md",
       "elapsed_seconds": 0,
       "index": 57,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/057-source-backend-part-037.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/057-source-backend-part-037.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/058-source-backend-part-038.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/058-source-backend-part-038.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1218,15 +1218,15 @@
         }
       ],
       "chunk_id": "058-source-backend-part-038",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/058-source-backend-part-038.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/058-source-backend-part-038.deepseek.md",
       "elapsed_seconds": 0,
       "index": 58,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/058-source-backend-part-038.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/058-source-backend-part-038.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/059-source-backend-part-039.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/059-source-backend-part-039.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1239,15 +1239,15 @@
         }
       ],
       "chunk_id": "059-source-backend-part-039",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/059-source-backend-part-039.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/059-source-backend-part-039.deepseek.md",
       "elapsed_seconds": 0,
       "index": 59,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/059-source-backend-part-039.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/059-source-backend-part-039.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/060-source-backend-part-040.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/060-source-backend-part-040.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1260,15 +1260,15 @@
         }
       ],
       "chunk_id": "060-source-backend-part-040",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/060-source-backend-part-040.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/060-source-backend-part-040.deepseek.md",
       "elapsed_seconds": 0,
       "index": 60,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/060-source-backend-part-040.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/060-source-backend-part-040.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/061-source-backend-part-041.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/061-source-backend-part-041.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1281,15 +1281,15 @@
         }
       ],
       "chunk_id": "061-source-backend-part-041",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/061-source-backend-part-041.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/061-source-backend-part-041.deepseek.md",
       "elapsed_seconds": 0,
       "index": 61,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/061-source-backend-part-041.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/061-source-backend-part-041.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/062-source-backend-part-042.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/062-source-backend-part-042.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1302,15 +1302,15 @@
         }
       ],
       "chunk_id": "062-source-backend-part-042",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/062-source-backend-part-042.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/062-source-backend-part-042.deepseek.md",
       "elapsed_seconds": 0,
       "index": 62,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/062-source-backend-part-042.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/062-source-backend-part-042.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/063-source-backend-part-043.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/063-source-backend-part-043.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1323,15 +1323,15 @@
         }
       ],
       "chunk_id": "063-source-backend-part-043",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/063-source-backend-part-043.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/063-source-backend-part-043.deepseek.md",
       "elapsed_seconds": 0,
       "index": 63,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/063-source-backend-part-043.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/063-source-backend-part-043.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/064-source-backend-part-044.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/064-source-backend-part-044.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1344,15 +1344,15 @@
         }
       ],
       "chunk_id": "064-source-backend-part-044",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/064-source-backend-part-044.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/064-source-backend-part-044.deepseek.md",
       "elapsed_seconds": 0,
       "index": 64,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/064-source-backend-part-044.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/064-source-backend-part-044.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/065-source-backend-part-045.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/065-source-backend-part-045.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1365,15 +1365,15 @@
         }
       ],
       "chunk_id": "065-source-backend-part-045",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/065-source-backend-part-045.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/065-source-backend-part-045.deepseek.md",
       "elapsed_seconds": 0,
       "index": 65,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/065-source-backend-part-045.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/065-source-backend-part-045.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/066-source-backend-part-046.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/066-source-backend-part-046.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1386,15 +1386,15 @@
         }
       ],
       "chunk_id": "066-source-backend-part-046",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/066-source-backend-part-046.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/066-source-backend-part-046.deepseek.md",
       "elapsed_seconds": 0,
       "index": 66,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/066-source-backend-part-046.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/066-source-backend-part-046.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/067-source-backend-part-047.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/067-source-backend-part-047.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1407,15 +1407,15 @@
         }
       ],
       "chunk_id": "067-source-backend-part-047",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/067-source-backend-part-047.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/067-source-backend-part-047.deepseek.md",
       "elapsed_seconds": 0,
       "index": 67,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/067-source-backend-part-047.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/067-source-backend-part-047.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/068-source-backend-part-048.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/068-source-backend-part-048.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1428,15 +1428,15 @@
         }
       ],
       "chunk_id": "068-source-backend-part-048",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/068-source-backend-part-048.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/068-source-backend-part-048.deepseek.md",
       "elapsed_seconds": 0,
       "index": 68,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/068-source-backend-part-048.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/068-source-backend-part-048.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/069-source-backend-part-049.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/069-source-backend-part-049.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1449,15 +1449,15 @@
         }
       ],
       "chunk_id": "069-source-backend-part-049",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/069-source-backend-part-049.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/069-source-backend-part-049.deepseek.md",
       "elapsed_seconds": 0,
       "index": 69,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/069-source-backend-part-049.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/069-source-backend-part-049.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/070-source-backend-part-050.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/070-source-backend-part-050.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1470,15 +1470,15 @@
         }
       ],
       "chunk_id": "070-source-backend-part-050",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/070-source-backend-part-050.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/070-source-backend-part-050.deepseek.md",
       "elapsed_seconds": 0,
       "index": 70,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/070-source-backend-part-050.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/070-source-backend-part-050.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/071-source-backend-part-051.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/071-source-backend-part-051.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1491,15 +1491,15 @@
         }
       ],
       "chunk_id": "071-source-backend-part-051",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/071-source-backend-part-051.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/071-source-backend-part-051.deepseek.md",
       "elapsed_seconds": 0,
       "index": 71,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/071-source-backend-part-051.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/071-source-backend-part-051.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/072-source-backend-part-052.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/072-source-backend-part-052.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1512,15 +1512,15 @@
         }
       ],
       "chunk_id": "072-source-backend-part-052",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/072-source-backend-part-052.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/072-source-backend-part-052.deepseek.md",
       "elapsed_seconds": 0,
       "index": 72,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/072-source-backend-part-052.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/072-source-backend-part-052.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/073-source-backend-part-053.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/073-source-backend-part-053.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1533,15 +1533,15 @@
         }
       ],
       "chunk_id": "073-source-backend-part-053",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/073-source-backend-part-053.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/073-source-backend-part-053.deepseek.md",
       "elapsed_seconds": 0,
       "index": 73,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/073-source-backend-part-053.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/073-source-backend-part-053.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/074-source-backend-part-054.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/074-source-backend-part-054.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1554,15 +1554,15 @@
         }
       ],
       "chunk_id": "074-source-backend-part-054",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/074-source-backend-part-054.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/074-source-backend-part-054.deepseek.md",
       "elapsed_seconds": 0,
       "index": 74,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/074-source-backend-part-054.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/074-source-backend-part-054.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/075-source-backend-part-055.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/075-source-backend-part-055.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1575,15 +1575,15 @@
         }
       ],
       "chunk_id": "075-source-backend-part-055",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/075-source-backend-part-055.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/075-source-backend-part-055.deepseek.md",
       "elapsed_seconds": 0,
       "index": 75,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/075-source-backend-part-055.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/075-source-backend-part-055.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/076-source-backend-part-056.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/076-source-backend-part-056.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1596,15 +1596,15 @@
         }
       ],
       "chunk_id": "076-source-backend-part-056",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/076-source-backend-part-056.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/076-source-backend-part-056.deepseek.md",
       "elapsed_seconds": 0,
       "index": 76,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/076-source-backend-part-056.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/076-source-backend-part-056.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/077-source-backend-part-057.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/077-source-backend-part-057.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1617,15 +1617,15 @@
         }
       ],
       "chunk_id": "077-source-backend-part-057",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/077-source-backend-part-057.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/077-source-backend-part-057.deepseek.md",
       "elapsed_seconds": 0,
       "index": 77,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/077-source-backend-part-057.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/077-source-backend-part-057.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/078-test-backend-part-001.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/078-test-backend-part-001.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1638,15 +1638,15 @@
         }
       ],
       "chunk_id": "078-test-backend-part-001",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/078-test-backend-part-001.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/078-test-backend-part-001.deepseek.md",
       "elapsed_seconds": 0,
       "index": 78,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/078-test-backend-part-001.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/078-test-backend-part-001.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/079-test-backend-part-002.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/079-test-backend-part-002.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1659,15 +1659,15 @@
         }
       ],
       "chunk_id": "079-test-backend-part-002",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/079-test-backend-part-002.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/079-test-backend-part-002.deepseek.md",
       "elapsed_seconds": 0,
       "index": 79,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/079-test-backend-part-002.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/079-test-backend-part-002.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/080-test-backend-part-003.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/080-test-backend-part-003.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1680,15 +1680,15 @@
         }
       ],
       "chunk_id": "080-test-backend-part-003",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/080-test-backend-part-003.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/080-test-backend-part-003.deepseek.md",
       "elapsed_seconds": 0,
       "index": 80,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/080-test-backend-part-003.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/080-test-backend-part-003.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/081-test-backend-part-004.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/081-test-backend-part-004.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1701,15 +1701,15 @@
         }
       ],
       "chunk_id": "081-test-backend-part-004",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/081-test-backend-part-004.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/081-test-backend-part-004.deepseek.md",
       "elapsed_seconds": 0,
       "index": 81,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/081-test-backend-part-004.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/081-test-backend-part-004.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/082-test-backend-part-005.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/082-test-backend-part-005.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1722,15 +1722,15 @@
         }
       ],
       "chunk_id": "082-test-backend-part-005",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/082-test-backend-part-005.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/082-test-backend-part-005.deepseek.md",
       "elapsed_seconds": 0,
       "index": 82,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/082-test-backend-part-005.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/082-test-backend-part-005.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/083-test-backend-part-006.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/083-test-backend-part-006.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1743,15 +1743,15 @@
         }
       ],
       "chunk_id": "083-test-backend-part-006",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/083-test-backend-part-006.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/083-test-backend-part-006.deepseek.md",
       "elapsed_seconds": 0,
       "index": 83,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/083-test-backend-part-006.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/083-test-backend-part-006.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/084-test-backend-part-007.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/084-test-backend-part-007.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1764,15 +1764,15 @@
         }
       ],
       "chunk_id": "084-test-backend-part-007",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/084-test-backend-part-007.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/084-test-backend-part-007.deepseek.md",
       "elapsed_seconds": 0,
       "index": 84,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/084-test-backend-part-007.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/084-test-backend-part-007.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/085-test-backend-part-008.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/085-test-backend-part-008.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1785,15 +1785,15 @@
         }
       ],
       "chunk_id": "085-test-backend-part-008",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/085-test-backend-part-008.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/085-test-backend-part-008.deepseek.md",
       "elapsed_seconds": 0,
       "index": 85,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/085-test-backend-part-008.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/085-test-backend-part-008.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/086-test-backend-part-009.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/086-test-backend-part-009.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1806,15 +1806,15 @@
         }
       ],
       "chunk_id": "086-test-backend-part-009",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/086-test-backend-part-009.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/086-test-backend-part-009.deepseek.md",
       "elapsed_seconds": 0,
       "index": 86,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/086-test-backend-part-009.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/086-test-backend-part-009.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/087-test-backend-part-010.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/087-test-backend-part-010.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1827,15 +1827,15 @@
         }
       ],
       "chunk_id": "087-test-backend-part-010",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/087-test-backend-part-010.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/087-test-backend-part-010.deepseek.md",
       "elapsed_seconds": 0,
       "index": 87,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/087-test-backend-part-010.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/087-test-backend-part-010.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/088-test-backend-part-011.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/088-test-backend-part-011.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1848,15 +1848,15 @@
         }
       ],
       "chunk_id": "088-test-backend-part-011",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/088-test-backend-part-011.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/088-test-backend-part-011.deepseek.md",
       "elapsed_seconds": 0,
       "index": 88,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/088-test-backend-part-011.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/088-test-backend-part-011.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/089-test-backend-part-012.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/089-test-backend-part-012.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1869,15 +1869,15 @@
         }
       ],
       "chunk_id": "089-test-backend-part-012",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/089-test-backend-part-012.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/089-test-backend-part-012.deepseek.md",
       "elapsed_seconds": 0,
       "index": 89,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/089-test-backend-part-012.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/089-test-backend-part-012.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/090-test-backend-part-013.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/090-test-backend-part-013.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1890,15 +1890,15 @@
         }
       ],
       "chunk_id": "090-test-backend-part-013",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/090-test-backend-part-013.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/090-test-backend-part-013.deepseek.md",
       "elapsed_seconds": 0,
       "index": 90,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/090-test-backend-part-013.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/090-test-backend-part-013.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/091-test-backend-part-014.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/091-test-backend-part-014.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1911,15 +1911,15 @@
         }
       ],
       "chunk_id": "091-test-backend-part-014",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/091-test-backend-part-014.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/091-test-backend-part-014.deepseek.md",
       "elapsed_seconds": 0,
       "index": 91,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/091-test-backend-part-014.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/091-test-backend-part-014.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/092-test-backend-part-015.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/092-test-backend-part-015.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1932,15 +1932,15 @@
         }
       ],
       "chunk_id": "092-test-backend-part-015",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/092-test-backend-part-015.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/092-test-backend-part-015.deepseek.md",
       "elapsed_seconds": 0,
       "index": 92,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/092-test-backend-part-015.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/092-test-backend-part-015.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/093-test-backend-part-016.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/093-test-backend-part-016.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1953,15 +1953,15 @@
         }
       ],
       "chunk_id": "093-test-backend-part-016",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/093-test-backend-part-016.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/093-test-backend-part-016.deepseek.md",
       "elapsed_seconds": 0,
       "index": 93,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/093-test-backend-part-016.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/093-test-backend-part-016.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/094-other-backend-part-001.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/094-other-backend-part-001.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1974,15 +1974,15 @@
         }
       ],
       "chunk_id": "094-other-backend-part-001",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/094-other-backend-part-001.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/094-other-backend-part-001.deepseek.md",
       "elapsed_seconds": 0,
       "index": 94,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/094-other-backend-part-001.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/094-other-backend-part-001.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/095-other-backend-part-002.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/095-other-backend-part-002.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -1995,15 +1995,15 @@
         }
       ],
       "chunk_id": "095-other-backend-part-002",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/095-other-backend-part-002.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/095-other-backend-part-002.deepseek.md",
       "elapsed_seconds": 0,
       "index": 95,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/095-other-backend-part-002.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/095-other-backend-part-002.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/096-other-backend-part-003.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/096-other-backend-part-003.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2016,15 +2016,15 @@
         }
       ],
       "chunk_id": "096-other-backend-part-003",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/096-other-backend-part-003.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/096-other-backend-part-003.deepseek.md",
       "elapsed_seconds": 0,
       "index": 96,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/096-other-backend-part-003.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/096-other-backend-part-003.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/097-other-backend-part-004.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/097-other-backend-part-004.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2037,15 +2037,15 @@
         }
       ],
       "chunk_id": "097-other-backend-part-004",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/097-other-backend-part-004.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/097-other-backend-part-004.deepseek.md",
       "elapsed_seconds": 0,
       "index": 97,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/097-other-backend-part-004.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/097-other-backend-part-004.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/098-other-backend-part-005.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/098-other-backend-part-005.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2058,15 +2058,15 @@
         }
       ],
       "chunk_id": "098-other-backend-part-005",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/098-other-backend-part-005.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/098-other-backend-part-005.deepseek.md",
       "elapsed_seconds": 0,
       "index": 98,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/098-other-backend-part-005.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/098-other-backend-part-005.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/099-other-backend-part-006.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/099-other-backend-part-006.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2079,15 +2079,15 @@
         }
       ],
       "chunk_id": "099-other-backend-part-006",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/099-other-backend-part-006.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/099-other-backend-part-006.deepseek.md",
       "elapsed_seconds": 0,
       "index": 99,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/099-other-backend-part-006.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/099-other-backend-part-006.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/100-other-backend-part-007.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/100-other-backend-part-007.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2100,15 +2100,15 @@
         }
       ],
       "chunk_id": "100-other-backend-part-007",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/100-other-backend-part-007.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/100-other-backend-part-007.deepseek.md",
       "elapsed_seconds": 0,
       "index": 100,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/100-other-backend-part-007.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/100-other-backend-part-007.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/101-config-bacon.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/101-config-bacon.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2121,15 +2121,15 @@
         }
       ],
       "chunk_id": "101-config-bacon",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/101-config-bacon.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/101-config-bacon.deepseek.md",
       "elapsed_seconds": 0,
       "index": 101,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/101-config-bacon.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/101-config-bacon.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/102-doc-canonical-evidence-final-report.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/102-doc-canonical-evidence-final-report.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2142,15 +2142,15 @@
         }
       ],
       "chunk_id": "102-doc-canonical-evidence-final-report",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/102-doc-canonical-evidence-final-report.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/102-doc-canonical-evidence-final-report.deepseek.md",
       "elapsed_seconds": 0,
       "index": 102,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/102-doc-canonical-evidence-final-report.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/102-doc-canonical-evidence-final-report.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/103-other-contracts.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/103-other-contracts.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2163,15 +2163,15 @@
         }
       ],
       "chunk_id": "103-other-contracts",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/103-other-contracts.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/103-other-contracts.deepseek.md",
       "elapsed_seconds": 0,
       "index": 103,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/103-other-contracts.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/103-other-contracts.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/104-config-crates.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/104-config-crates.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2184,15 +2184,15 @@
         }
       ],
       "chunk_id": "104-config-crates",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/104-config-crates.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/104-config-crates.deepseek.md",
       "elapsed_seconds": 0,
       "index": 104,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/104-config-crates.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/104-config-crates.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/105-source-crates.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/105-source-crates.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2205,15 +2205,15 @@
         }
       ],
       "chunk_id": "105-source-crates",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/105-source-crates.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/105-source-crates.deepseek.md",
       "elapsed_seconds": 0,
       "index": 105,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/105-source-crates.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/105-source-crates.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/106-test-crates.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/106-test-crates.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2226,15 +2226,15 @@
         }
       ],
       "chunk_id": "106-test-crates",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/106-test-crates.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/106-test-crates.deepseek.md",
       "elapsed_seconds": 0,
       "index": 106,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/106-test-crates.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/106-test-crates.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/107-config-deny.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/107-config-deny.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2247,15 +2247,15 @@
         }
       ],
       "chunk_id": "107-config-deny",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/107-config-deny.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/107-config-deny.deepseek.md",
       "elapsed_seconds": 0,
       "index": 107,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/107-config-deny.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/107-config-deny.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/108-other-docker.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/108-other-docker.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2268,15 +2268,15 @@
         }
       ],
       "chunk_id": "108-other-docker",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/108-other-docker.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/108-other-docker.deepseek.md",
       "elapsed_seconds": 0,
       "index": 108,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/108-other-docker.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/108-other-docker.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/109-config-docker.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/109-config-docker.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2289,15 +2289,15 @@
         }
       ],
       "chunk_id": "109-config-docker",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/109-config-docker.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/109-config-docker.deepseek.md",
       "elapsed_seconds": 0,
       "index": 109,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/109-config-docker.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/109-config-docker.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/110-doc-docs-part-001.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/110-doc-docs-part-001.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2310,15 +2310,15 @@
         }
       ],
       "chunk_id": "110-doc-docs-part-001",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/110-doc-docs-part-001.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/110-doc-docs-part-001.deepseek.md",
       "elapsed_seconds": 0,
       "index": 110,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/110-doc-docs-part-001.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/110-doc-docs-part-001.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/111-doc-docs-part-002.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/111-doc-docs-part-002.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2331,15 +2331,15 @@
         }
       ],
       "chunk_id": "111-doc-docs-part-002",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/111-doc-docs-part-002.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/111-doc-docs-part-002.deepseek.md",
       "elapsed_seconds": 0,
       "index": 111,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/111-doc-docs-part-002.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/111-doc-docs-part-002.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/112-doc-docs-part-003.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/112-doc-docs-part-003.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2352,15 +2352,15 @@
         }
       ],
       "chunk_id": "112-doc-docs-part-003",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/112-doc-docs-part-003.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/112-doc-docs-part-003.deepseek.md",
       "elapsed_seconds": 0,
       "index": 112,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/112-doc-docs-part-003.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/112-doc-docs-part-003.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/113-doc-docs-part-004.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/113-doc-docs-part-004.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2373,15 +2373,15 @@
         }
       ],
       "chunk_id": "113-doc-docs-part-004",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/113-doc-docs-part-004.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/113-doc-docs-part-004.deepseek.md",
       "elapsed_seconds": 0,
       "index": 113,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/113-doc-docs-part-004.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/113-doc-docs-part-004.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/114-doc-docs-part-005.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/114-doc-docs-part-005.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2394,15 +2394,15 @@
         }
       ],
       "chunk_id": "114-doc-docs-part-005",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/114-doc-docs-part-005.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/114-doc-docs-part-005.deepseek.md",
       "elapsed_seconds": 0,
       "index": 114,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/114-doc-docs-part-005.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/114-doc-docs-part-005.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/115-doc-docs-part-006.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/115-doc-docs-part-006.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2415,15 +2415,15 @@
         }
       ],
       "chunk_id": "115-doc-docs-part-006",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/115-doc-docs-part-006.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/115-doc-docs-part-006.deepseek.md",
       "elapsed_seconds": 0,
       "index": 115,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/115-doc-docs-part-006.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/115-doc-docs-part-006.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/116-doc-docs-part-007.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/116-doc-docs-part-007.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2436,15 +2436,15 @@
         }
       ],
       "chunk_id": "116-doc-docs-part-007",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/116-doc-docs-part-007.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/116-doc-docs-part-007.deepseek.md",
       "elapsed_seconds": 0,
       "index": 116,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/116-doc-docs-part-007.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/116-doc-docs-part-007.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/117-doc-docs-part-008.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/117-doc-docs-part-008.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2457,15 +2457,15 @@
         }
       ],
       "chunk_id": "117-doc-docs-part-008",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/117-doc-docs-part-008.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/117-doc-docs-part-008.deepseek.md",
       "elapsed_seconds": 0,
       "index": 117,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/117-doc-docs-part-008.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/117-doc-docs-part-008.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/118-doc-docs-part-009.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/118-doc-docs-part-009.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2478,15 +2478,15 @@
         }
       ],
       "chunk_id": "118-doc-docs-part-009",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/118-doc-docs-part-009.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/118-doc-docs-part-009.deepseek.md",
       "elapsed_seconds": 0,
       "index": 118,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/118-doc-docs-part-009.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/118-doc-docs-part-009.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/119-doc-docs-part-010.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/119-doc-docs-part-010.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2499,15 +2499,15 @@
         }
       ],
       "chunk_id": "119-doc-docs-part-010",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/119-doc-docs-part-010.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/119-doc-docs-part-010.deepseek.md",
       "elapsed_seconds": 0,
       "index": 119,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/119-doc-docs-part-010.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/119-doc-docs-part-010.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/120-adr-docs-part-001.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/120-adr-docs-part-001.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2520,15 +2520,15 @@
         }
       ],
       "chunk_id": "120-adr-docs-part-001",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/120-adr-docs-part-001.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/120-adr-docs-part-001.deepseek.md",
       "elapsed_seconds": 0,
       "index": 120,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/120-adr-docs-part-001.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/120-adr-docs-part-001.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/121-adr-docs-part-002.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/121-adr-docs-part-002.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2541,15 +2541,15 @@
         }
       ],
       "chunk_id": "121-adr-docs-part-002",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/121-adr-docs-part-002.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/121-adr-docs-part-002.deepseek.md",
       "elapsed_seconds": 0,
       "index": 121,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/121-adr-docs-part-002.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/121-adr-docs-part-002.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/122-adr-docs-part-003.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/122-adr-docs-part-003.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2562,15 +2562,15 @@
         }
       ],
       "chunk_id": "122-adr-docs-part-003",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/122-adr-docs-part-003.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/122-adr-docs-part-003.deepseek.md",
       "elapsed_seconds": 0,
       "index": 122,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/122-adr-docs-part-003.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/122-adr-docs-part-003.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/123-adr-docs-part-004.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/123-adr-docs-part-004.bounded-agent.json",
       "attempts": [
         {
           "attempt": 0,
@@ -2583,15 +2583,15 @@
         }
       ],
       "chunk_id": "123-adr-docs-part-004",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/123-adr-docs-part-004.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/123-adr-docs-part-004.deepseek.md",
       "elapsed_seconds": 0,
       "index": 123,
       "status": "passed-existing",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/123-adr-docs-part-004.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/123-adr-docs-part-004.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/124-adr-docs-part-005.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/124-adr-docs-part-005.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2604,15 +2604,15 @@
         }
       ],
       "chunk_id": "124-adr-docs-part-005",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/124-adr-docs-part-005.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/124-adr-docs-part-005.deepseek.md",
       "elapsed_seconds": 57.94,
       "index": 124,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/124-adr-docs-part-005.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/124-adr-docs-part-005.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/125-other-docs.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/125-other-docs.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2625,15 +2625,15 @@
         }
       ],
       "chunk_id": "125-other-docs",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/125-other-docs.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/125-other-docs.deepseek.md",
       "elapsed_seconds": 49.14,
       "index": 125,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/125-other-docs.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/125-other-docs.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/126-config-frontend.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/126-config-frontend.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2646,15 +2646,15 @@
         }
       ],
       "chunk_id": "126-config-frontend",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/126-config-frontend.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/126-config-frontend.deepseek.md",
       "elapsed_seconds": 77.9,
       "index": 126,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/126-config-frontend.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/126-config-frontend.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/127-doc-frontend.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/127-doc-frontend.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2667,15 +2667,15 @@
         }
       ],
       "chunk_id": "127-doc-frontend",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/127-doc-frontend.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/127-doc-frontend.deepseek.md",
       "elapsed_seconds": 66.23,
       "index": 127,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/127-doc-frontend.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/127-doc-frontend.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/128-other-frontend-part-001.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/128-other-frontend-part-001.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2688,15 +2688,15 @@
         }
       ],
       "chunk_id": "128-other-frontend-part-001",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/128-other-frontend-part-001.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/128-other-frontend-part-001.deepseek.md",
       "elapsed_seconds": 30.69,
       "index": 128,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/128-other-frontend-part-001.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/128-other-frontend-part-001.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/129-other-frontend-part-002.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/129-other-frontend-part-002.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2709,15 +2709,15 @@
         }
       ],
       "chunk_id": "129-other-frontend-part-002",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/129-other-frontend-part-002.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/129-other-frontend-part-002.deepseek.md",
       "elapsed_seconds": 14.36,
       "index": 129,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/129-other-frontend-part-002.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/129-other-frontend-part-002.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/130-other-frontend-part-003.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/130-other-frontend-part-003.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2730,15 +2730,15 @@
         }
       ],
       "chunk_id": "130-other-frontend-part-003",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/130-other-frontend-part-003.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/130-other-frontend-part-003.deepseek.md",
       "elapsed_seconds": 19.17,
       "index": 130,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/130-other-frontend-part-003.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/130-other-frontend-part-003.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/131-other-frontend-part-004.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/131-other-frontend-part-004.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2751,15 +2751,15 @@
         }
       ],
       "chunk_id": "131-other-frontend-part-004",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/131-other-frontend-part-004.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/131-other-frontend-part-004.deepseek.md",
       "elapsed_seconds": 63.56,
       "index": 131,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/131-other-frontend-part-004.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/131-other-frontend-part-004.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/132-other-frontend-part-005.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/132-other-frontend-part-005.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2772,15 +2772,15 @@
         }
       ],
       "chunk_id": "132-other-frontend-part-005",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/132-other-frontend-part-005.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/132-other-frontend-part-005.deepseek.md",
       "elapsed_seconds": 108.33,
       "index": 132,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/132-other-frontend-part-005.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/132-other-frontend-part-005.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/133-other-frontend-part-006.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/133-other-frontend-part-006.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2793,15 +2793,15 @@
         }
       ],
       "chunk_id": "133-other-frontend-part-006",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/133-other-frontend-part-006.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/133-other-frontend-part-006.deepseek.md",
       "elapsed_seconds": 94.49,
       "index": 133,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/133-other-frontend-part-006.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/133-other-frontend-part-006.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/134-other-frontend-part-007.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/134-other-frontend-part-007.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2814,15 +2814,15 @@
         }
       ],
       "chunk_id": "134-other-frontend-part-007",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/134-other-frontend-part-007.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/134-other-frontend-part-007.deepseek.md",
       "elapsed_seconds": 114.86,
       "index": 134,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/134-other-frontend-part-007.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/134-other-frontend-part-007.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/135-other-frontend-part-008.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/135-other-frontend-part-008.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2835,15 +2835,15 @@
         }
       ],
       "chunk_id": "135-other-frontend-part-008",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/135-other-frontend-part-008.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/135-other-frontend-part-008.deepseek.md",
       "elapsed_seconds": 76.94,
       "index": 135,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/135-other-frontend-part-008.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/135-other-frontend-part-008.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/136-other-frontend-part-009.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/136-other-frontend-part-009.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2856,15 +2856,15 @@
         }
       ],
       "chunk_id": "136-other-frontend-part-009",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/136-other-frontend-part-009.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/136-other-frontend-part-009.deepseek.md",
       "elapsed_seconds": 71.12,
       "index": 136,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/136-other-frontend-part-009.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/136-other-frontend-part-009.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/137-other-frontend-part-010.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/137-other-frontend-part-010.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2888,15 +2888,15 @@
         }
       ],
       "chunk_id": "137-other-frontend-part-010",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/137-other-frontend-part-010.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/137-other-frontend-part-010.deepseek.md",
       "elapsed_seconds": 161.32,
       "index": 137,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/137-other-frontend-part-010.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/137-other-frontend-part-010.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/138-other-frontend-part-011.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/138-other-frontend-part-011.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2909,15 +2909,15 @@
         }
       ],
       "chunk_id": "138-other-frontend-part-011",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/138-other-frontend-part-011.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/138-other-frontend-part-011.deepseek.md",
       "elapsed_seconds": 118.7,
       "index": 138,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/138-other-frontend-part-011.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/138-other-frontend-part-011.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/139-other-frontend-part-012.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/139-other-frontend-part-012.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2930,15 +2930,15 @@
         }
       ],
       "chunk_id": "139-other-frontend-part-012",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/139-other-frontend-part-012.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/139-other-frontend-part-012.deepseek.md",
       "elapsed_seconds": 95.66,
       "index": 139,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/139-other-frontend-part-012.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/139-other-frontend-part-012.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/140-other-frontend-part-013.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/140-other-frontend-part-013.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2951,15 +2951,15 @@
         }
       ],
       "chunk_id": "140-other-frontend-part-013",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/140-other-frontend-part-013.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/140-other-frontend-part-013.deepseek.md",
       "elapsed_seconds": 120.86,
       "index": 140,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/140-other-frontend-part-013.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/140-other-frontend-part-013.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/141-source-frontend-part-001.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/141-source-frontend-part-001.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2972,15 +2972,15 @@
         }
       ],
       "chunk_id": "141-source-frontend-part-001",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/141-source-frontend-part-001.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/141-source-frontend-part-001.deepseek.md",
       "elapsed_seconds": 83.1,
       "index": 141,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/141-source-frontend-part-001.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/141-source-frontend-part-001.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/142-source-frontend-part-002.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/142-source-frontend-part-002.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -2993,15 +2993,15 @@
         }
       ],
       "chunk_id": "142-source-frontend-part-002",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/142-source-frontend-part-002.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/142-source-frontend-part-002.deepseek.md",
       "elapsed_seconds": 98.03,
       "index": 142,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/142-source-frontend-part-002.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/142-source-frontend-part-002.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/143-source-frontend-part-003.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/143-source-frontend-part-003.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3014,15 +3014,15 @@
         }
       ],
       "chunk_id": "143-source-frontend-part-003",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/143-source-frontend-part-003.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/143-source-frontend-part-003.deepseek.md",
       "elapsed_seconds": 128.64,
       "index": 143,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/143-source-frontend-part-003.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/143-source-frontend-part-003.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/144-source-frontend-part-004.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/144-source-frontend-part-004.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3035,15 +3035,15 @@
         }
       ],
       "chunk_id": "144-source-frontend-part-004",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/144-source-frontend-part-004.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/144-source-frontend-part-004.deepseek.md",
       "elapsed_seconds": 80.87,
       "index": 144,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/144-source-frontend-part-004.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/144-source-frontend-part-004.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/145-source-frontend-part-005.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/145-source-frontend-part-005.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3056,15 +3056,15 @@
         }
       ],
       "chunk_id": "145-source-frontend-part-005",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/145-source-frontend-part-005.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/145-source-frontend-part-005.deepseek.md",
       "elapsed_seconds": 88.97,
       "index": 145,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/145-source-frontend-part-005.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/145-source-frontend-part-005.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/146-source-frontend-part-006.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/146-source-frontend-part-006.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3077,15 +3077,15 @@
         }
       ],
       "chunk_id": "146-source-frontend-part-006",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/146-source-frontend-part-006.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/146-source-frontend-part-006.deepseek.md",
       "elapsed_seconds": 84.53,
       "index": 146,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/146-source-frontend-part-006.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/146-source-frontend-part-006.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/147-source-frontend-part-007.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/147-source-frontend-part-007.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3098,15 +3098,15 @@
         }
       ],
       "chunk_id": "147-source-frontend-part-007",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/147-source-frontend-part-007.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/147-source-frontend-part-007.deepseek.md",
       "elapsed_seconds": 61.25,
       "index": 147,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/147-source-frontend-part-007.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/147-source-frontend-part-007.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/148-source-frontend-part-008.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/148-source-frontend-part-008.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3119,15 +3119,15 @@
         }
       ],
       "chunk_id": "148-source-frontend-part-008",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/148-source-frontend-part-008.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/148-source-frontend-part-008.deepseek.md",
       "elapsed_seconds": 106.05,
       "index": 148,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/148-source-frontend-part-008.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/148-source-frontend-part-008.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/149-source-frontend-part-009.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/149-source-frontend-part-009.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3140,15 +3140,15 @@
         }
       ],
       "chunk_id": "149-source-frontend-part-009",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/149-source-frontend-part-009.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/149-source-frontend-part-009.deepseek.md",
       "elapsed_seconds": 149.31,
       "index": 149,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/149-source-frontend-part-009.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/149-source-frontend-part-009.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/150-source-frontend-part-010.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/150-source-frontend-part-010.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3161,15 +3161,15 @@
         }
       ],
       "chunk_id": "150-source-frontend-part-010",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/150-source-frontend-part-010.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/150-source-frontend-part-010.deepseek.md",
       "elapsed_seconds": 79.05,
       "index": 150,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/150-source-frontend-part-010.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/150-source-frontend-part-010.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/151-source-frontend-part-011.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/151-source-frontend-part-011.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3182,15 +3182,15 @@
         }
       ],
       "chunk_id": "151-source-frontend-part-011",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/151-source-frontend-part-011.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/151-source-frontend-part-011.deepseek.md",
       "elapsed_seconds": 75.24,
       "index": 151,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/151-source-frontend-part-011.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/151-source-frontend-part-011.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/152-source-frontend-part-012.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/152-source-frontend-part-012.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3203,15 +3203,15 @@
         }
       ],
       "chunk_id": "152-source-frontend-part-012",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/152-source-frontend-part-012.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/152-source-frontend-part-012.deepseek.md",
       "elapsed_seconds": 93.74,
       "index": 152,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/152-source-frontend-part-012.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/152-source-frontend-part-012.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/153-source-frontend-part-013.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/153-source-frontend-part-013.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3224,15 +3224,15 @@
         }
       ],
       "chunk_id": "153-source-frontend-part-013",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/153-source-frontend-part-013.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/153-source-frontend-part-013.deepseek.md",
       "elapsed_seconds": 100.6,
       "index": 153,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/153-source-frontend-part-013.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/153-source-frontend-part-013.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/154-source-frontend-part-014.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/154-source-frontend-part-014.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3245,15 +3245,15 @@
         }
       ],
       "chunk_id": "154-source-frontend-part-014",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/154-source-frontend-part-014.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/154-source-frontend-part-014.deepseek.md",
       "elapsed_seconds": 50.87,
       "index": 154,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/154-source-frontend-part-014.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/154-source-frontend-part-014.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/155-source-frontend-part-015.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/155-source-frontend-part-015.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3266,15 +3266,15 @@
         }
       ],
       "chunk_id": "155-source-frontend-part-015",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/155-source-frontend-part-015.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/155-source-frontend-part-015.deepseek.md",
       "elapsed_seconds": 60.73,
       "index": 155,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/155-source-frontend-part-015.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/155-source-frontend-part-015.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/156-source-frontend-part-016.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/156-source-frontend-part-016.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3287,15 +3287,15 @@
         }
       ],
       "chunk_id": "156-source-frontend-part-016",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/156-source-frontend-part-016.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/156-source-frontend-part-016.deepseek.md",
       "elapsed_seconds": 85.95,
       "index": 156,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/156-source-frontend-part-016.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/156-source-frontend-part-016.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/157-source-frontend-part-017.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/157-source-frontend-part-017.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3308,15 +3308,15 @@
         }
       ],
       "chunk_id": "157-source-frontend-part-017",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/157-source-frontend-part-017.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/157-source-frontend-part-017.deepseek.md",
       "elapsed_seconds": 79.12,
       "index": 157,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/157-source-frontend-part-017.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/157-source-frontend-part-017.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/158-doc-plans.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/158-doc-plans.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3329,15 +3329,15 @@
         }
       ],
       "chunk_id": "158-doc-plans",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/158-doc-plans.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/158-doc-plans.deepseek.md",
       "elapsed_seconds": 25.06,
       "index": 158,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/158-doc-plans.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/158-doc-plans.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/159-doc-reports.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/159-doc-reports.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3350,15 +3350,15 @@
         }
       ],
       "chunk_id": "159-doc-reports",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/159-doc-reports.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/159-doc-reports.deepseek.md",
       "elapsed_seconds": 59.21,
       "index": 159,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/159-doc-reports.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/159-doc-reports.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/160-config-reports.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/160-config-reports.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3371,15 +3371,15 @@
         }
       ],
       "chunk_id": "160-config-reports",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/160-config-reports.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/160-config-reports.deepseek.md",
       "elapsed_seconds": 39.94,
       "index": 160,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/160-config-reports.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/160-config-reports.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/161-config-scripts.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/161-config-scripts.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3392,15 +3392,15 @@
         }
       ],
       "chunk_id": "161-config-scripts",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/161-config-scripts.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/161-config-scripts.deepseek.md",
       "elapsed_seconds": 56.95,
       "index": 161,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/161-config-scripts.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/161-config-scripts.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/162-source-scripts.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/162-source-scripts.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3413,15 +3413,15 @@
         }
       ],
       "chunk_id": "162-source-scripts",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/162-source-scripts.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/162-source-scripts.deepseek.md",
       "elapsed_seconds": 98.45,
       "index": 162,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/162-source-scripts.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/162-source-scripts.stderr.log",
       "total": 163
     },
     {
-      "agent_json_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/163-test-scripts.bounded-agent.json",
+      "agent_json_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/163-test-scripts.bounded-agent.json",
       "attempts": [
         {
           "attempt": 1,
@@ -3434,11 +3434,11 @@
         }
       ],
       "chunk_id": "163-test-scripts",
-      "draft_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/drafts/batch-20260628T214902/163-test-scripts.deepseek.md",
+      "draft_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/drafts/batch-20260628T214902/163-test-scripts.deepseek.md",
       "elapsed_seconds": 56.19,
       "index": 163,
       "status": "passed",
-      "stderr_path": "/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta/opencode-logs/batch-20260628T214902/163-test-scripts.stderr.log",
+      "stderr_path": "/Users/avm/projects/Personal/makosh/docs/wiki/_meta/opencode-logs/batch-20260628T214902/163-test-scripts.stderr.log",
       "total": 163
     }
   ]

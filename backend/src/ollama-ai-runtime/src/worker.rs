@@ -1,17 +1,17 @@
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     validate_provider_reply_generation_request_v1,
     wire::{AiInferenceTerminalStatusV1, AiProviderReplyGenerationRequestV1},
 };
-use hermes_ollama_ai_api::OllamaAiRuntimeSettingsV1;
-use hermes_ollama_ai_core::{
+use makosh_ollama_ai_api::OllamaAiRuntimeSettingsV1;
+use makosh_ollama_ai_core::{
     OllamaAiRunStateV1, OllamaGenerationPlanV1, OllamaHttpGenerationV1, accept_ollama_request_v1,
     begin_ollama_request_v1, complete_ollama_request_v1, mark_ollama_uncertain_v1,
     reject_ollama_request_v1,
 };
-use hermes_ollama_ai_http::{
+use makosh_ollama_ai_http::{
     OllamaAiHttpErrorV1, OllamaModelRevisionV1, discover_model_revision_v1, generate_reply_v1,
 };
-use hermes_ollama_ai_persistence::{
+use makosh_ollama_ai_persistence::{
     OllamaAiPersistenceErrorV1, OllamaAiPersistenceV1, OllamaAiTransitionV1, PersistedOllamaAiRunV1,
 };
 use prost::Message;
@@ -39,19 +39,19 @@ pub(crate) trait OllamaAiExecutionPortV1 {
     async fn generate_summary(
         &mut self,
         settings: &OllamaAiRuntimeSettingsV1,
-        plan: &hermes_ollama_ai_core::OllamaSummaryGenerationPlanV1,
+        plan: &makosh_ollama_ai_core::OllamaSummaryGenerationPlanV1,
     ) -> Result<OllamaHttpGenerationV1, OllamaAiHttpErrorV1>;
 
     async fn generate_translation(
         &mut self,
         settings: &OllamaAiRuntimeSettingsV1,
-        plan: &hermes_ollama_ai_core::OllamaTranslationPlanV1,
+        plan: &makosh_ollama_ai_core::OllamaTranslationPlanV1,
     ) -> Result<OllamaHttpGenerationV1, OllamaAiHttpErrorV1>;
 
     async fn generate_explanation(
         &mut self,
         settings: &OllamaAiRuntimeSettingsV1,
-        plan: &hermes_ollama_ai_core::OllamaExplanationPlanV1,
+        plan: &makosh_ollama_ai_core::OllamaExplanationPlanV1,
     ) -> Result<OllamaHttpGenerationV1, OllamaAiHttpErrorV1>;
 }
 
@@ -76,25 +76,25 @@ impl OllamaAiExecutionPortV1 for LocalOllamaAiExecutionPortV1 {
     async fn generate_summary(
         &mut self,
         settings: &OllamaAiRuntimeSettingsV1,
-        plan: &hermes_ollama_ai_core::OllamaSummaryGenerationPlanV1,
+        plan: &makosh_ollama_ai_core::OllamaSummaryGenerationPlanV1,
     ) -> Result<OllamaHttpGenerationV1, OllamaAiHttpErrorV1> {
-        hermes_ollama_ai_http::generate_summary_v1(settings, plan).await
+        makosh_ollama_ai_http::generate_summary_v1(settings, plan).await
     }
 
     async fn generate_translation(
         &mut self,
         settings: &OllamaAiRuntimeSettingsV1,
-        plan: &hermes_ollama_ai_core::OllamaTranslationPlanV1,
+        plan: &makosh_ollama_ai_core::OllamaTranslationPlanV1,
     ) -> Result<OllamaHttpGenerationV1, OllamaAiHttpErrorV1> {
-        hermes_ollama_ai_http::generate_translation_v1(settings, plan).await
+        makosh_ollama_ai_http::generate_translation_v1(settings, plan).await
     }
 
     async fn generate_explanation(
         &mut self,
         settings: &OllamaAiRuntimeSettingsV1,
-        plan: &hermes_ollama_ai_core::OllamaExplanationPlanV1,
+        plan: &makosh_ollama_ai_core::OllamaExplanationPlanV1,
     ) -> Result<OllamaHttpGenerationV1, OllamaAiHttpErrorV1> {
-        hermes_ollama_ai_http::generate_explanation_v1(settings, plan).await
+        makosh_ollama_ai_http::generate_explanation_v1(settings, plan).await
     }
 }
 
@@ -228,7 +228,7 @@ async fn mark_uncertain_v1(
 async fn persist_transition_v1(
     persistence: &OllamaAiPersistenceV1,
     current: &PersistedOllamaAiRunV1,
-    next_run: hermes_ollama_ai_core::OllamaAiRunV1,
+    next_run: makosh_ollama_ai_core::OllamaAiRunV1,
 ) -> Result<PersistedOllamaAiRunV1, OllamaAiWorkerErrorV1> {
     persistence
         .persist_transition(OllamaAiTransitionV1 {

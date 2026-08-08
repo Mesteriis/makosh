@@ -1,25 +1,25 @@
 //! Live owner proof, opaque HPKE provisioning and restart-safe Vault receipt.
 
-use hermes_gateway_protocol::v1::{
+use http_body_util::{BodyExt, Full};
+use hyper::body::Bytes;
+use hyper::{Request, StatusCode};
+use makosh_gateway_protocol::v1::{
     AuthorizeOwnerVaultProvisioningRequestV1, CommitOwnerVaultProvisioningRequestV1,
     OwnerVaultActionV1, OwnerVaultSecretClassV1, PrepareOwnerVaultProvisioningRequestV1,
 };
-use hermes_gateway_runtime::{
+use makosh_gateway_runtime::{
     GatewayApplicationRouter, InMemoryBrowserRealtimeSource, OWNER_VAULT_AUTHORIZE_PATH,
     OWNER_VAULT_COMMIT_PATH, OWNER_VAULT_PREPARE_PATH, OwnerVaultClientPrincipalV1,
     OwnerVaultProvisioningHandlerV1, OwnerVaultProvisioningRouteErrorV1,
 };
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleDescriptorRegistrationRequestsV1, ModuleVaultPurposeRequestV1,
 };
-use hermes_vault_protocol::{
+use makosh_vault_protocol::{
     LeaseAudienceV1, LeaseIdV1, SecretClassV1, VaultActionV1, VaultCiphertextFrameV1,
     VaultProvisioningReceiptV1, VaultResponseRecipientV1, VaultTransportBindingV1,
     VaultTransportCommandV1, VaultTransportDirectionV1, VaultTransportPublicKey, seal,
 };
-use http_body_util::{BodyExt, Full};
-use hyper::body::Bytes;
-use hyper::{Request, StatusCode};
 
 use super::common::*;
 use crate::identity::browser_gateway::ControlStoreBrowserAuthority;
@@ -37,7 +37,7 @@ const PURPOSE: &str = "mail.imap.password";
 #[test]
 #[ignore = "builds and launches the real Vault runtime binary"]
 fn owner_vault_provisioning_survives_vault_restart_with_durable_idempotency() {
-    let root = unique_target_root("hermes-owner-vault-live");
+    let root = unique_target_root("makosh-owner-vault-live");
     let data = vault_fixture::private_directory(root.join("kernel"));
     vault_fixture::initialize_vault(&data);
     let release = InstalledSignedBundle::install(
@@ -128,7 +128,7 @@ fn owner_vault_provisioning_survives_vault_restart_with_durable_idempotency() {
         Arc::clone(&store),
         &data,
         supervisor.clone(),
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(1_024)
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(1_024)
             .expect("test realtime source"),
         &configuration,
         None,
@@ -234,7 +234,7 @@ fn prepare(
     principal: &OwnerVaultClientPrincipalV1,
     operation_id: [u8; 16],
     response_public_key: &[u8; 32],
-) -> hermes_gateway_protocol::v1::PrepareOwnerVaultProvisioningResponseV1 {
+) -> makosh_gateway_protocol::v1::PrepareOwnerVaultProvisioningResponseV1 {
     handler
         .prepare(
             principal,
@@ -263,7 +263,7 @@ fn seal_commit_payload(
     operation_id: [u8; 16],
     payload: &[u8],
     recipient: VaultResponseRecipientV1,
-    authorized: hermes_gateway_protocol::v1::AuthorizeOwnerVaultProvisioningResponseV1,
+    authorized: makosh_gateway_protocol::v1::AuthorizeOwnerVaultProvisioningResponseV1,
 ) -> PendingOwnerVaultCommitV1 {
     let audience = audience(&authorized);
     let lease_binding = binding(
@@ -321,7 +321,7 @@ fn seal_commit_payload(
 fn open_committed_receipt(
     recipient: VaultResponseRecipientV1,
     command_binding: VaultTransportBindingV1,
-    committed: hermes_gateway_protocol::v1::CommitOwnerVaultProvisioningResponseV1,
+    committed: makosh_gateway_protocol::v1::CommitOwnerVaultProvisioningResponseV1,
 ) -> VaultProvisioningReceiptV1 {
     let receipt_binding = VaultTransportBindingV1::new(
         committed.vault_runtime_generation,
@@ -355,7 +355,7 @@ fn provision_once_through_gateway(
     payload: &[u8],
 ) -> VaultProvisioningReceiptV1 {
     let recipient = VaultResponseRecipientV1::generate();
-    let prepared: hermes_gateway_protocol::v1::PrepareOwnerVaultProvisioningResponseV1 =
+    let prepared: makosh_gateway_protocol::v1::PrepareOwnerVaultProvisioningResponseV1 =
         gateway_call(
             router,
             runtime,
@@ -430,7 +430,7 @@ where
 }
 
 fn audience(
-    authorized: &hermes_gateway_protocol::v1::AuthorizeOwnerVaultProvisioningResponseV1,
+    authorized: &makosh_gateway_protocol::v1::AuthorizeOwnerVaultProvisioningResponseV1,
 ) -> LeaseAudienceV1 {
     LeaseAudienceV1::new(
         authorized.audience_registration_id.clone(),
@@ -442,7 +442,7 @@ fn audience(
 }
 
 fn binding(
-    authorized: &hermes_gateway_protocol::v1::AuthorizeOwnerVaultProvisioningResponseV1,
+    authorized: &makosh_gateway_protocol::v1::AuthorizeOwnerVaultProvisioningResponseV1,
     audience: LeaseAudienceV1,
     request_id: [u8; 16],
     operation_digest: [u8; 32],
@@ -488,7 +488,7 @@ fn admit_owner_browser_and_mail(store: &Arc<SqliteControlStore>) -> SigningKey {
         PURPOSE,
         120,
         VaultSecretClassV1::ProviderCredential as u8,
-        hermes_runtime_protocol::v1::VaultActionV1::Create as u8,
+        makosh_runtime_protocol::v1::VaultActionV1::Create as u8,
         1,
     );
     store

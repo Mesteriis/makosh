@@ -1,6 +1,6 @@
 use chrono::{TimeZone, Utc};
-use hermes_blob_api::BlobRef;
-use hermes_provider_api::{
+use makosh_blob_api::BlobRef;
+use makosh_provider_api::{
     CredentialLease, ProviderCommandEnvelope, ProviderCommandInput, ProviderId, ProviderManifest,
     ProviderObservationEnvelope, ProviderObservationInput, RuntimeTopology,
 };

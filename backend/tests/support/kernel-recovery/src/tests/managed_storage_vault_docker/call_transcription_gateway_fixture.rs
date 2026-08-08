@@ -5,7 +5,9 @@ use std::time::{Duration, Instant};
 use super::*;
 
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
-use hermes_call_transcription_api::{
+use http_body_util::BodyExt as _;
+use hyper::{Request, StatusCode, body::Bytes};
+use makosh_call_transcription_api::{
     GET_CONNECT_PATH_V1, REALTIME_CONTRACT_NAME_V1, REALTIME_EVENT_KIND_V1,
     TRANSCRIPT_BLOB_PATH_V1,
     wire::{
@@ -13,15 +15,13 @@ use hermes_call_transcription_api::{
         GetCallTranscriptionResponseV1, ReadCallTranscriptRequestV1,
     },
 };
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     ClientRealtimeEventV1, ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
 };
-use http_body_util::BodyExt as _;
-use hyper::{Request, StatusCode, body::Bytes};
 
-pub(super) type CallTranscriptionGateway = hermes_gateway_runtime::GatewayApplicationRouter<
+pub(super) type CallTranscriptionGateway = makosh_gateway_runtime::GatewayApplicationRouter<
     crate::identity::browser_gateway::ControlStoreBrowserAuthority,
-    hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 >;
 
 pub(super) fn call_transcription_gateway_v1(
@@ -29,7 +29,7 @@ pub(super) fn call_transcription_gateway_v1(
     supervisor: &ManagedRuntimeSupervisor,
     root: &Path,
     data: &Path,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 ) -> CallTranscriptionGateway {
     let configuration = crate::platform::gateway::BrowserGatewayConfigurationV1::new(
         "127.0.0.1:9443".parse().expect("loopback Gateway address"),
@@ -178,7 +178,7 @@ pub(super) fn open_call_transcription_sse_v1(
     router: &CallTranscriptionGateway,
     runtime: &tokio::runtime::Runtime,
     cookie: &str,
-) -> hermes_gateway_runtime::GatewayHttpResponse {
+) -> makosh_gateway_runtime::GatewayHttpResponse {
     let response = runtime.block_on(
         router.route(
             Request::builder()
@@ -195,7 +195,7 @@ pub(super) fn open_call_transcription_sse_v1(
 
 pub(super) fn read_terminal_call_transcription_sse_v1(
     runtime: &tokio::runtime::Runtime,
-    response: hermes_gateway_runtime::GatewayHttpResponse,
+    response: makosh_gateway_runtime::GatewayHttpResponse,
     run_id: &[u8],
 ) -> ClientRealtimeEventV1 {
     runtime.block_on(async {

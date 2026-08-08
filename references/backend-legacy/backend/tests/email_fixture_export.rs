@@ -3,10 +3,10 @@ use base64::engine::general_purpose::STANDARD as BASE64_STANDARD;
 use chrono::{TimeZone, Utc};
 use serde_json::json;
 
-use hermes_communications_api::accounts::CommunicationProviderKind;
-use hermes_communications_api::email_sync::{EmailSyncBatch, FetchedCommunicationSourceMessage};
-use hermes_hub_backend::domains::communications::fixtures::export::export_fixture_messages_from_sync_batch;
-use hermes_hub_backend::domains::communications::fixtures::export::models::EmailFixtureExportOptions;
+use makosh_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::email_sync::{EmailSyncBatch, FetchedCommunicationSourceMessage};
+use makosh_hub_backend::domains::communications::fixtures::export::export_fixture_messages_from_sync_batch;
+use makosh_hub_backend::domains::communications::fixtures::export::models::EmailFixtureExportOptions;
 
 #[test]
 fn imap_raw_message_exports_redacted_fixture_without_personal_content() {

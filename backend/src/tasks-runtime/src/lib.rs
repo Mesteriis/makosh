@@ -14,4 +14,4 @@ pub use managed_runtime::{
     TasksManagedRuntimeErrorV1, TasksManagedRuntimeV1, TasksRuntimeAdmissionV1,
 };
 
-pub const PACKAGE: &str = "hermes-tasks-runtime";
+pub const PACKAGE: &str = "makosh-tasks-runtime";

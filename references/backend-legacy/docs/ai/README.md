@@ -1,4 +1,4 @@
-# Hermes AI Layer
+# Макошь AI Layer
 
 Status: documentation package aligned to the current repository structure.
 

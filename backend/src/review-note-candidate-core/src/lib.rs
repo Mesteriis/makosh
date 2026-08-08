@@ -15,7 +15,7 @@ pub use model::{
     derive_review_note_candidate_id_v1, validate_review_note_candidate_v1,
 };
 
-pub const PACKAGE: &str = "hermes-review-note-candidate-core";
+pub const PACKAGE: &str = "makosh-review-note-candidate-core";
 pub const STABLE_ID_BYTES_V1: usize = 16;
 pub const DIGEST_BYTES_V1: usize = 32;
 pub const MAX_LOGICAL_OWNER_ID_BYTES_V1: usize = 128;

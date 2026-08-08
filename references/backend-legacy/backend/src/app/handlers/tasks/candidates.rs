@@ -25,7 +25,7 @@ pub(crate) async fn put_task_candidate_review(
     Path(task_candidate_id): Path<String>,
     Json(request): Json<TaskCandidateReviewApiRequest>,
 ) -> Result<Json<TaskCandidateReviewApiResponse>, ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let command = request.into_command(task_candidate_id, actor_id)?;
     api_audit_log(&state)?
         .record(&NewApiAuditRecord::task_candidate_review_set(

@@ -12,7 +12,7 @@
 - [ADR-0204: Встроенные integration-плагины и нейтральная граница контекста](../adr/ADR-0204-bundled-integration-plugins-and-provider-neutral-context-boundary.md);
 - [ADR-0205: Core Gateway и транспорт клиентских приложений](../adr/ADR-0205-core-gateway-and-client-transport.md);
 - [ADR-0206: Конституция Kernel и автомат запуска и восстановления](../adr/ADR-0206-kernel-constitution-boot-and-recovery-state-machine.md).
-- [ADR-0207: Канонический реестр бизнес-доменов Hermes](../adr/ADR-0207-canonical-business-domain-registry.md).
+- [ADR-0207: Канонический реестр бизнес-доменов Макошь](../adr/ADR-0207-canonical-business-domain-registry.md).
 - [ADR-0208: Allowlist разработки доменов и запрет проекций](../adr/ADR-0208-domain-development-allowlist-and-projection-freeze.md).
 - [ADR-0209: Kernel Event Hub и контроль подписок](../adr/ADR-0209-kernel-event-hub-and-subscription-control-plane.md).
 - [ADR-0210: Telemetry Hub и локальная диагностика](../adr/ADR-0210-telemetry-hub-and-local-diagnostics.md).
@@ -82,7 +82,7 @@
 
 Supervisor является подсистемой Kernel. Он управляет managed PostgreSQL,
 PgBouncer, Storage Control, NATS, Vault, Blob, Telemetry Collector и managed
-module runtimes, но не является отдельным обязательным Hermes-процессом. External runtime он
+module runtimes, но не является отдельным обязательным Макошь-процессом. External runtime он
 авторизует, fences и наблюдает без process control. Kernel перезапускается Tauri
 или OS watchdog.
 
@@ -122,7 +122,7 @@ exclusive lock и explicit target по ADR-0218.
 - `event` — immutable факт владельца state через outbox и JetStream;
 - `observation` — факт внешнего наблюдения с provenance и cursor;
 - `result` — только terminal outcome durable command;
-- `ack` — отдельный durable Hermes message о durable acceptance, canonical
+- `ack` — отдельный durable Макошь message о durable acceptance, canonical
   persistence или terminal handling; это не JetStream ACK;
 - `projection` — rebuildable read/search model, построенная из owned facts;
 - `client_rpc` — owner-specific ConnectRPC query/request/command через Gateway;
@@ -174,7 +174,7 @@ manual command → owner outbox ──────────────┘
 - Исполняемый handler, JobExecution, checkpoint и business result принадлежат
   target module.
 - JetStream ACK подтверждает broker delivery после durable owner inbox commit и
-  не является Hermes Ack-envelope. При необходимости owner отдельно публикует
+  не является Макошь Ack-envelope. При необходимости owner отдельно публикует
   `DURABLE_ACCEPTANCE` Ack; terminal status возвращается result, progress —
   event.
 
@@ -245,7 +245,7 @@ Producer/consumer adapters проверяют ADR-0220 envelope/catalog без
 
 Kernel и Core Gateway не имеют Cargo dependencies на owner-specific module
 packages. Они обнаруживают capabilities через exact `ModuleDescriptorV1` в
-`hermes-runtime-protocol`. Descriptor является runtime declaration, но не
+`makosh-runtime-protocol`. Descriptor является runtime declaration, но не
 executable trust и не GrantSet. Signed bundled distribution manifest или
 owner-pinned binding отдельно pin-ит executable, descriptor и settings schema
 digests для managed launch. Module runtime зависит от общего runtime protocol,
@@ -314,8 +314,8 @@ provider-to-domain mapping.
 
 На compile boundary integration может импортировать из business domains только
 exact public Communications contract units:
-`hermes-communications-ingress` для general provider-neutral evidence и
-`hermes-communications-attachment-contract` для attachment lifecycle.
+`makosh-communications-ingress` для general provider-neutral evidence и
+`makosh-communications-attachment-contract` для attachment lifecycle.
 Client-facing Communications API, Communications implementation, persistence
 и runtime для integration недоступны. Остальное взаимодействие происходит
 через описанные envelopes и Core routing, а не через Rust imports.
@@ -450,7 +450,7 @@ online export выполняется maintenance-task того же actor.
 не reset-ит его молча и не запускает data plane по defaults: minimal bootstrap
 recovery surface online допускает только sanitized status/validate/export.
 Restore/reset являются exclusive offline operations и используют внешний
-`.hermes-recovery-fence-v1`; reservation/store mismatch оставляет Kernel в
+`.makosh-recovery-fence-v1`; reservation/store mismatch оставляет Kernel в
 recovery-only.
 
 ## Vault и credential leases

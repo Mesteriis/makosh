@@ -1,6 +1,6 @@
 //! Exact technical admission for the independently managed workflow runtime.
 
-use hermes_communication_delivery_intent_api::{
+use makosh_communication_delivery_intent_api::{
     COMMUNICATION_DELIVERY_INTENT_CAPABILITY_ID_V1,
     COMMUNICATION_DELIVERY_INTENT_COMMAND_CONNECT_PATH_V1,
     COMMUNICATION_DELIVERY_INTENT_COMMAND_CONTRACT_NAME_V1,
@@ -11,7 +11,7 @@ use hermes_communication_delivery_intent_api::{
     COMMUNICATION_DELIVERY_INTENT_REALTIME_CONTRACT_NAME_V1,
     COMMUNICATION_DELIVERY_INTENT_SCHEMA_SHA256,
 };
-use hermes_communication_delivery_intent_ingress_api::{
+use makosh_communication_delivery_intent_ingress_api::{
     communication_delivery_intent_rejected_contract_reference_v1,
     communication_delivery_intent_rejected_publish_request_v1,
     communication_delivery_intent_submit_consume_request_v1,
@@ -19,8 +19,8 @@ use hermes_communication_delivery_intent_ingress_api::{
     communication_delivery_intent_submitted_contract_reference_v1,
     communication_delivery_intent_submitted_publish_request_v1,
 };
-use hermes_communications_api::COMMUNICATIONS_QUERY_SCHEMA_SHA256;
-use hermes_runtime_protocol::v1::{
+use makosh_communications_api::COMMUNICATIONS_QUERY_SCHEMA_SHA256;
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ClientRpcRouteV1, ContractReferenceV1, ModuleDescriptorV1, ModuleKindV1,
     ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1, RuntimeBudgetRequestV1,
@@ -283,7 +283,7 @@ pub fn communication_delivery_intent_module_descriptor_v1(build_id: &str) -> Mod
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         validate_descriptor_v1, validate_settings_schema_v1,
     };
 

@@ -28,7 +28,7 @@ const emit = defineEmits<{
 
 const familyOptions = computed(() => props.familyOptions?.length ? props.familyOptions : uiThemeFamilyOptions)
 const modeOptions = computed(() => props.modeOptions?.length ? props.modeOptions : uiThemeModeOptions)
-const classes = computed(() => ['hermes-theme-switcher', props.class])
+const classes = computed(() => ['makosh-theme-switcher', props.class])
 const resolvedTheme = computed(() => normalizeUiThemeName(props.modelValue))
 const resolvedThemeSelection = computed(() => themeNameToSelection(resolvedTheme.value))
 
@@ -43,11 +43,11 @@ function updateMode(mode: UiThemeMode): void {
 
 <template>
 	<div :class="classes" role="group" :aria-label="label">
-		<div class="hermes-theme-switcher__group" role="radiogroup" :aria-label="`${label}: family`">
+		<div class="makosh-theme-switcher__group" role="radiogroup" :aria-label="`${label}: family`">
 			<button
 				v-for="option in familyOptions"
 				:key="option.value"
-				class="hermes-theme-switcher__option"
+				class="makosh-theme-switcher__option"
 				type="button"
 				role="radio"
 				:aria-checked="resolvedThemeSelection.family === option.value"
@@ -56,7 +56,7 @@ function updateMode(mode: UiThemeMode): void {
 				@click="updateFamily(option.value)"
 			>
 				<span
-					class="hermes-theme-switcher__swatch"
+					class="makosh-theme-switcher__swatch"
 					:data-theme-swatch="themeSelectionToName(option.value, resolvedThemeSelection.mode)"
 					aria-hidden="true"
 				/>
@@ -64,11 +64,11 @@ function updateMode(mode: UiThemeMode): void {
 			</button>
 		</div>
 
-		<div class="hermes-theme-switcher__group" role="radiogroup" :aria-label="`${label}: mode`">
+		<div class="makosh-theme-switcher__group" role="radiogroup" :aria-label="`${label}: mode`">
 			<button
 				v-for="option in modeOptions"
 				:key="option.value"
-				class="hermes-theme-switcher__option"
+				class="makosh-theme-switcher__option"
 				type="button"
 				role="radio"
 				:aria-checked="resolvedThemeSelection.mode === option.value"

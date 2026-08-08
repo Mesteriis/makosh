@@ -1,5 +1,5 @@
 [package]
-name = "hermes-graph-postgres"
+name = "makosh-graph-postgres"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.89"
@@ -8,5 +8,5 @@ license = "MIT"
 
 [dependencies]
 chrono = { version = "0.4", default-features = false, features = ["clock", "serde"] }
-hermes-graph-api = { path = "../graph-api" }
+makosh-graph-api = { path = "../graph-api" }
 sqlx = { version = "0.8", default-features = false, features = ["chrono", "postgres", "runtime-tokio-rustls"] }

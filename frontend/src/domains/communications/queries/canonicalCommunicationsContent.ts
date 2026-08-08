@@ -2,10 +2,10 @@ import { create, toBinary } from '@bufbuild/protobuf'
 
 import {
 	ReadMessageBodyRequestV1Schema,
-} from '../../../gen/hermes/communications/content/read/v1/read_pb'
+} from '../../../gen/makosh/communications/content/read/v1/read_pb'
 import type {
 	IssueMessageBodyReadResponseV1,
-} from '../../../gen/hermes/communications/content/ticket/v1/ticket_pb'
+} from '../../../gen/makosh/communications/content/ticket/v1/ticket_pb'
 import { getCommunicationsContentTicketConnectClient } from '../../../platform/connect/communicationsContentTicketClient'
 import { BrowserGatewayFetch } from '../../../platform/gateway/browserGatewayFetch'
 

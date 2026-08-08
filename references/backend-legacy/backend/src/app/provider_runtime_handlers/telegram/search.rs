@@ -1,6 +1,6 @@
 use axum::Json;
 use axum::extract::{Path, Query, State};
-use hermes_communications_api::attachments::CanonicalMessageAttachmentReadPort;
+use makosh_communications_api::attachments::CanonicalMessageAttachmentReadPort;
 use serde::{Deserialize, Serialize};
 
 use super::chats::{
@@ -14,8 +14,8 @@ use crate::application::telegram_runtime;
 use crate::domains::communications::messages::provider_channel_store::ProviderChannelMessageStore;
 use crate::integrations::telegram::client::errors::TelegramError;
 use crate::integrations::telegram::client::models::chats::TelegramChat;
-use hermes_communications_api::conversations::ConversationReadPort;
-use hermes_communications_api::provider_messages::ProviderChannelMessage;
+use makosh_communications_api::conversations::ConversationReadPort;
+use makosh_communications_api::provider_messages::ProviderChannelMessage;
 
 const COMMUNICATION_SEARCH_CHANNEL_KINDS: &[&str] =
     &["telegram_user", "telegram_bot", "whatsapp_web"];
@@ -394,7 +394,7 @@ pub(crate) async fn search_telegram_media(
         .collect::<Vec<_>>();
     if !message_ids.is_empty() {
         let attachment_rows =
-            hermes_communications_postgres::attachments::CanonicalMessageAttachmentReadStore::new(
+            makosh_communications_postgres::attachments::CanonicalMessageAttachmentReadStore::new(
                 pool.clone(),
             )
             .list_for_messages(&message_ids)
@@ -524,7 +524,7 @@ async fn canonical_pinned_messages(
         .expect("database pool configured")
         .clone();
     let row =
-        hermes_communications_postgres::conversations::ConversationReadStore::new(pool.clone())
+        makosh_communications_postgres::conversations::ConversationReadStore::new(pool.clone())
             .get_conversation(conversation_id, &["whatsapp_web"])
             .await
             .map_err(|error| TelegramError::InvalidRequest(error.to_string()))?;

@@ -37,11 +37,11 @@ test('communication summary agreement keeps workflow domain engine and integrati
     ],
   });
   for (const unit of [
-    'hermes-communication-summary-api',
-    'hermes-communication-summary-core',
-    'hermes-communication-summary-persistence',
-    'hermes-communication-summary-runtime',
-    'hermes-communication-summary-assembly',
+    'makosh-communication-summary-api',
+    'makosh-communication-summary-core',
+    'makosh-communication-summary-persistence',
+    'makosh-communication-summary-runtime',
+    'makosh-communication-summary-assembly',
   ]) {
     assert.match(adr, new RegExp(`\\b${unit}\\b`));
   }
@@ -75,8 +75,8 @@ test('Communications summary source is a distinct event and target-bound Blob ha
   assert.match(eventRuntime, /communication_summary_source_prepare_contract_reference_v1/);
   assert.match(eventRuntime, /CommunicationsConsumerV1::SummarySourcePrepare/);
   assert.match(sourceApi, /"communication_summary"/);
-  assert.match(sourceApi, /"hermes-communication-summary-runtime"/);
-  assert.doesNotMatch(runtime, /hermes_ollama|ollama|provider_sdk|provider identity/i);
+  assert.match(sourceApi, /"makosh-communication-summary-runtime"/);
+  assert.doesNotMatch(runtime, /makosh_ollama|ollama|provider_sdk|provider identity/i);
   assert.doesNotMatch(replyRuntime, /PrepareCommunicationSummarySourceCommandV1/);
 });
 
@@ -85,7 +85,7 @@ test('summary API and core are isolated concrete workflow units', async () => {
     backendSource('src/communication-summary-api/Cargo.toml'),
     backendSource('src/communication-summary-api/src/lib.rs'),
     backendSource(
-      'src/communication-summary-api/proto/hermes/communication_summary/v1/summary.proto',
+      'src/communication-summary-api/proto/makosh/communication_summary/v1/summary.proto',
     ),
     backendSource('src/communication-summary-core/Cargo.toml'),
     backendSource('src/communication-summary-core/src/lib.rs'),
@@ -96,7 +96,7 @@ test('summary API and core are isolated concrete workflow units', async () => {
     assert.match(manifest, /owner = "communication_summary"/);
     assert.doesNotMatch(
       manifest,
-      /hermes-communications-|hermes-ai-inference|hermes-ollama|hermes-mail|hermes-telegram/,
+      /makosh-communications-|makosh-ai-inference|makosh-ollama|makosh-mail|makosh-telegram/,
     );
   }
   assert.match(apiManifest, /surface = "contract"/);
@@ -141,11 +141,11 @@ test('summary persistence owns atomic workflow state without foreign storage or 
   assert.match(outbox, /unpublished_source_prepare_events/);
   assert.match(realtime, /client_realtime_window/);
   assert.match(schema, /owner_id: "communication_summary"/);
-  assert.match(migration, /CREATE TABLE hermes_data\.communication_summary_runs/);
+  assert.match(migration, /CREATE TABLE makosh_data\.communication_summary_runs/);
   assert.match(migration, /UNIQUE \(logical_owner_id, operation_id\)/);
-  assert.match(migration, /CREATE TABLE hermes_data\.communication_summary_inbox/);
-  assert.match(migration, /CREATE TABLE hermes_data\.communication_summary_outbox/);
-  assert.match(migration, /CREATE TABLE hermes_data\.communication_summary_realtime/);
+  assert.match(migration, /CREATE TABLE makosh_data\.communication_summary_inbox/);
+  assert.match(migration, /CREATE TABLE makosh_data\.communication_summary_outbox/);
+  assert.match(migration, /CREATE TABLE makosh_data\.communication_summary_realtime/);
   assert.doesNotMatch(
     `${manifest}\n${migration}`,
     /communications_|mail_|telegram_|whatsapp_|zulip_|source_body|prompt|provider_id|model_id|endpoint/,
@@ -187,11 +187,11 @@ test('summary runtime and assembly expose only exact event request and release b
       .filter(({ owner }) => owner === 'communication_summary')
       .map(({ name, surface }) => [name, surface]),
     [
-      ['hermes-communication-summary-api', 'contract'],
-      ['hermes-communication-summary-core', 'implementation'],
-      ['hermes-communication-summary-persistence', 'persistence'],
-      ['hermes-communication-summary-runtime', 'runtime'],
-      ['hermes-communication-summary-assembly', 'assembly'],
+      ['makosh-communication-summary-api', 'contract'],
+      ['makosh-communication-summary-core', 'implementation'],
+      ['makosh-communication-summary-persistence', 'persistence'],
+      ['makosh-communication-summary-runtime', 'runtime'],
+      ['makosh-communication-summary-assembly', 'assembly'],
     ],
   );
   assert.match(manifest, /role = "workflow"/);
@@ -214,12 +214,12 @@ test('summary runtime and assembly expose only exact event request and release b
   assert.match(assemblyManifest, /surface = "assembly"/);
   assert.match(assembly, /communication_summary\.release-artifacts\.json/);
   assert.match(assembly, /communication_summary_storage_bundle_v1/);
-  assert.match(release, /--package hermes-communication-summary-runtime/);
-  assert.match(release, /--package hermes-communication-summary-assembly/);
+  assert.match(release, /--package makosh-communication-summary-runtime/);
+  assert.match(release, /--package makosh-communication-summary-assembly/);
   assert.match(release, /communication_summary\.release-artifacts\.json/);
   assert.doesNotMatch(
     `${manifest}\n${assemblyManifest}`,
-    /hermes-communications-runtime|hermes-ai-inference-(core|runtime|persistence)|hermes-ollama/,
+    /makosh-communications-runtime|makosh-ai-inference-(core|runtime|persistence)|makosh-ollama/,
   );
 });
 
@@ -253,13 +253,13 @@ test('signed Summary conformance crosses Gateway SSE event and request boundarie
   assert.match(flow, /CommunicationSummaryErrorCodeSourceRejected/);
   assert.match(flow, /transition_registration/);
   assert.match(flow, /assert_private_content_absent/);
-  assert.match(managedScript, /hermes-communication-summary-runtime/);
+  assert.match(managedScript, /makosh-communication-summary-runtime/);
   assert.match(
     managedScript,
     /managed_communication_summary_reaches_ai_and_replays_through_gateway_sse/,
   );
   assert.doesNotMatch(
     `${setup}\n${flow}`,
-    /hermes_communication_reply_suggestion|hermes_mail_runtime|hermes_telegram_runtime|hermes_whatsapp_runtime|hermes_zulip_runtime/,
+    /makosh_communication_reply_suggestion|makosh_mail_runtime|makosh_telegram_runtime|makosh_whatsapp_runtime|makosh_zulip_runtime/,
   );
 });

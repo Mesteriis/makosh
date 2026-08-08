@@ -3,12 +3,12 @@
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 use futures_util::StreamExt;
-use hermes_attachment_security_contract::{
+use makosh_attachment_security_contract::{
     AttachmentSecurityObservationContextV1, AttachmentSecurityScanCandidateFactV1,
     build_attachment_security_scan_candidate_outbox_record_v1,
 };
-use hermes_attachment_security_runtime::admission::ATTACHMENT_SECURITY_MODULE_ID;
-use hermes_communications_attachment_contract::{
+use makosh_attachment_security_runtime::admission::ATTACHMENT_SECURITY_MODULE_ID;
+use makosh_communications_attachment_contract::{
     AttachmentBlobAdmissionFactV1, AttachmentBlobAdmissionTransitionV1,
     AttachmentBlobExpectedStateV1, AttachmentObservationEnvelopeContextV1,
     AttachmentSafetyVerdictFactV1, build_attachment_blob_admission_outbox_record_v1,
@@ -21,7 +21,7 @@ use hermes_communications_attachment_contract::{
         AttachmentSafetyVerdictV1,
     },
 };
-use hermes_events_protocol::validation::envelope::decode_envelope_v1;
+use makosh_events_protocol::validation::envelope::decode_envelope_v1;
 use prost::Message;
 use zeroize::Zeroizing;
 
@@ -35,16 +35,16 @@ use super::attachment_security_persistence_fixture::{
 use super::*;
 
 const COMMUNICATIONS_OBSERVATION_SUBJECT: &str =
-    "hermes.observation.v1.communications.communication_observed.v1";
+    "makosh.observation.v1.communications.communication_observed.v1";
 const ATTACHMENT_ANCHOR_SUBJECT: &str =
-    "hermes.event.v1.communications.communication_attachment_anchor_recorded.v1";
-const ATTACHMENT_ADMISSION_SUBJECT: &str = "hermes.observation.v1.communications.\
+    "makosh.event.v1.communications.communication_attachment_anchor_recorded.v1";
+const ATTACHMENT_ADMISSION_SUBJECT: &str = "makosh.observation.v1.communications.\
     communication_attachment_blob_admission_observed.v1";
 const ATTACHMENT_STATE_SUBJECT: &str =
-    "hermes.event.v1.communications.communication_attachment_safety_state_changed.v1";
-const ATTACHMENT_SCAN_CANDIDATE_SUBJECT: &str = "hermes.observation.v1.attachment_security.\
+    "makosh.event.v1.communications.communication_attachment_safety_state_changed.v1";
+const ATTACHMENT_SCAN_CANDIDATE_SUBJECT: &str = "makosh.observation.v1.attachment_security.\
     attachment_security_scan_candidate_observed.v1";
-const ATTACHMENT_VERDICT_SUBJECT: &str = "hermes.observation.v1.communications.\
+const ATTACHMENT_VERDICT_SUBJECT: &str = "makosh.observation.v1.communications.\
     communication_attachment_safety_verdict_observed.v1";
 
 pub(super) struct CommunicationsAttachmentFixtureV1 {
@@ -71,12 +71,12 @@ pub(super) fn prepare_communications_attachment_for_scan(
     let external_record_id = format!("attachment-security-record-{scenario_id}");
     let external_conversation_id = format!("attachment-security-conversation-{scenario_id}");
     let provider_media_locator = format!("attachment-security-private-media-{scenario_id}");
-    let base = hermes_communications_ingress::new_scoped_communication_observation_draft(
+    let base = makosh_communications_ingress::new_scoped_communication_observation_draft(
         format!("attachment-security-base-{scenario_id}"),
-        hermes_communications_ingress::SourceEnvelope {
-            provider: hermes_communications_ingress::ProviderProvenanceV1::MailImap,
+        makosh_communications_ingress::SourceEnvelope {
+            provider: makosh_communications_ingress::ProviderProvenanceV1::MailImap,
             external_record_id: external_record_id.clone(),
-            scope: Some(hermes_communications_ingress::SourceScopeEnvelope {
+            scope: Some(makosh_communications_ingress::SourceScopeEnvelope {
                 external_account_id: external_account_id.clone(),
                 external_conversation_id: Some(external_conversation_id.clone()),
                 external_participant_id: None,
@@ -85,15 +85,15 @@ pub(super) fn prepare_communications_attachment_for_scan(
                 external_forward_origin_record_id: None,
             }),
         },
-        hermes_communications_ingress::CommunicationEvidenceKindV1::ChatMessage,
-        hermes_communications_ingress::BodyAvailabilityV1::MetadataOnly,
-        hermes_communications_ingress::CommunicationDirectionV1::Incoming,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::ChatMessage,
+        makosh_communications_ingress::BodyAvailabilityV1::MetadataOnly,
+        makosh_communications_ingress::CommunicationDirectionV1::Incoming,
         Some(base_time),
     )
     .expect("build Attachment Security base observation");
-    let base_record = hermes_communications_ingress::build_observation_outbox_record_v1(
+    let base_record = makosh_communications_ingress::build_observation_outbox_record_v1(
         &base,
-        &hermes_communications_ingress::ObservationEnvelopeContextV1 {
+        &makosh_communications_ingress::ObservationEnvelopeContextV1 {
             runtime_instance_id: format!("attachment-security-source-{scenario_id}"),
             runtime_generation: 1,
             module_id: "attachment-security-fixture-source".to_owned(),
@@ -102,12 +102,12 @@ pub(super) fn prepare_communications_attachment_for_scan(
         },
     )
     .expect("build Attachment Security base envelope");
-    let attachment = hermes_communications_ingress::new_scoped_communication_observation_draft(
+    let attachment = makosh_communications_ingress::new_scoped_communication_observation_draft(
         format!("attachment-security-media-{scenario_id}"),
-        hermes_communications_ingress::SourceEnvelope {
-            provider: hermes_communications_ingress::ProviderProvenanceV1::MailImap,
+        makosh_communications_ingress::SourceEnvelope {
+            provider: makosh_communications_ingress::ProviderProvenanceV1::MailImap,
             external_record_id,
-            scope: Some(hermes_communications_ingress::SourceScopeEnvelope {
+            scope: Some(makosh_communications_ingress::SourceScopeEnvelope {
                 external_account_id,
                 external_conversation_id: Some(external_conversation_id),
                 external_participant_id: None,
@@ -116,26 +116,26 @@ pub(super) fn prepare_communications_attachment_for_scan(
                 external_forward_origin_record_id: None,
             }),
         },
-        hermes_communications_ingress::CommunicationEvidenceKindV1::MediaChanged,
-        hermes_communications_ingress::BodyAvailabilityV1::MetadataOnly,
-        hermes_communications_ingress::CommunicationDirectionV1::Incoming,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::MediaChanged,
+        makosh_communications_ingress::BodyAvailabilityV1::MetadataOnly,
+        makosh_communications_ingress::CommunicationDirectionV1::Incoming,
         Some(base_time + 1),
     )
     .expect("build Attachment Security media observation");
-    let attachment = hermes_communications_ingress::with_attachment_descriptor(
+    let attachment = makosh_communications_ingress::with_attachment_descriptor(
         attachment,
-        hermes_communications_ingress::AttachmentDescriptorV1 {
+        makosh_communications_ingress::AttachmentDescriptorV1 {
             filename: Some(format!("{scenario_id}.bin")),
             media_type: "application/octet-stream".to_owned(),
             declared_bytes: declared_size,
             sha256: Some(receipt_sha256),
-            disposition: hermes_communications_ingress::AttachmentDispositionV1::Attachment,
+            disposition: makosh_communications_ingress::AttachmentDispositionV1::Attachment,
         },
     )
     .expect("attach Attachment Security descriptor");
-    let attachment_record = hermes_communications_ingress::build_observation_outbox_record_v1(
+    let attachment_record = makosh_communications_ingress::build_observation_outbox_record_v1(
         &attachment,
-        &hermes_communications_ingress::ObservationEnvelopeContextV1 {
+        &makosh_communications_ingress::ObservationEnvelopeContextV1 {
             runtime_instance_id: format!("attachment-security-source-{scenario_id}"),
             runtime_generation: 1,
             module_id: "attachment-security-fixture-source".to_owned(),
@@ -182,7 +182,7 @@ pub(super) fn prepare_communications_attachment_for_scan(
                 attachment_record.message_id().to_vec()
             );
             let anchor =
-                hermes_communications_attachment_contract::anchor_recorded_v1::AttachmentAnchorRecordedV1::decode(
+                makosh_communications_attachment_contract::anchor_recorded_v1::AttachmentAnchorRecordedV1::decode(
                     anchor_envelope.payload.as_slice(),
                 )
                 .expect("attachment anchor payload");
@@ -343,9 +343,9 @@ pub(super) fn assert_stale_attachment_security_verdict_cas_is_rejected(
             causation_message_id: attachment.blob_admitted_state_message_id,
             correlation_id: attachment.correlation_id,
             expected_state:
-                hermes_communications_attachment_contract::AttachmentSafetyExpectedStateV1::BlobAdmitted,
+                makosh_communications_attachment_contract::AttachmentSafetyExpectedStateV1::BlobAdmitted,
             verdict:
-                hermes_communications_attachment_contract::AttachmentSafetyVerdictV1::Quarantined,
+                makosh_communications_attachment_contract::AttachmentSafetyVerdictV1::Quarantined,
             observed_at_unix_seconds: observed_at,
         },
         &AttachmentObservationEnvelopeContextV1 {
@@ -781,7 +781,7 @@ pub(super) fn assert_attachment_security_custody_failure_is_fail_closed(
 fn build_attachment_security_candidate(
     attachment: &CommunicationsAttachmentFixtureV1,
     blob: &AttachmentSecurityFixtureBlobV1,
-) -> hermes_events_protocol::delivery::OutboxRecordV1 {
+) -> makosh_events_protocol::delivery::OutboxRecordV1 {
     let observed_at = current_unix_seconds();
     build_attachment_security_scan_candidate_outbox_record_v1(
         &AttachmentSecurityScanCandidateFactV1 {
@@ -888,7 +888,7 @@ async fn wait_for_pending_outage_verdict(
 async fn publish_exact(
     context: &async_nats::jetstream::Context,
     subject: &str,
-    record: &hermes_events_protocol::delivery::OutboxRecordV1,
+    record: &makosh_events_protocol::delivery::OutboxRecordV1,
 ) {
     context
         .publish(subject.to_owned(), record.exact_bytes().to_vec().into())
@@ -936,7 +936,7 @@ async fn attachment_security_scan_job_diagnostics(
 }
 
 async fn attachment_security_pending_verdict_outbox()
--> Vec<hermes_events_protocol::delivery::OutboxRecordV1> {
+-> Vec<makosh_events_protocol::delivery::OutboxRecordV1> {
     let persistence = attachment_security_conformance_persistence().await;
     persistence
         .pending_verdict_outbox(64)
@@ -948,21 +948,21 @@ async fn attachment_security_conformance_persistence() -> AttachmentSecurityPers
 {
     let password = Zeroizing::new(
         std::fs::read_to_string(required(
-            "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+            "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
         ))
         .expect("read disposable PostgreSQL credential")
         .trim()
         .to_owned(),
     );
-    let port = required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+    let port = required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
         .parse::<u16>()
         .expect("valid PostgreSQL port");
     AttachmentSecurityPersistenceConformanceV1::connect(
-        &required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST"),
+        &required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"),
         port,
-        "hermes_postgres_admin",
+        "makosh_postgres_admin",
         password.as_str(),
-        "hermes_storage_authenticated",
+        "makosh_storage_authenticated",
     )
     .await
     .expect("connect Attachment Security conformance persistence")

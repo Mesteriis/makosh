@@ -1,5 +1,5 @@
 [package]
-name = "hermes-projects-postgres"
+name = "makosh-projects-postgres"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.85"
@@ -7,6 +7,6 @@ publish = false
 
 [dependencies]
 chrono = { version = "0.4", default-features = false, features = ["clock", "serde"] }
-hermes-projects-api = { path = "../projects-api" }
+makosh-projects-api = { path = "../projects-api" }
 sqlx = { version = "0.8", default-features = false, features = ["chrono", "json", "postgres", "runtime-tokio-rustls"] }
 serde_json = "1"

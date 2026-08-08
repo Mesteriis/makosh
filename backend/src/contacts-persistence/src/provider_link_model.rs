@@ -1,4 +1,4 @@
-use hermes_contacts_core::ContactProviderKindV1;
+use makosh_contacts_core::ContactProviderKindV1;
 
 use crate::ContactsOutboxRecordV1;
 

@@ -1,6 +1,6 @@
 //! Fenced durable extraction jobs and terminal artifact metadata.
 
-use hermes_attachment_text_extraction_core::{
+use makosh_attachment_text_extraction_core::{
     AttachmentTextExtractionErrorV1, AttachmentTextExtractionRequestV1,
     AttachmentTextExtractionStateV1, AttachmentTextExtractionStatusV1,
     AttachmentTextExtractionTransitionV1, transition_attachment_text_status_v1,
@@ -62,7 +62,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             .ok_or(AttachmentTextExtractionPersistenceErrorV1::InvalidInput)?;
         let mut transaction = self.pool.begin().await.map_err(storage_unavailable)?;
         let row = sqlx::query(
-            "SELECT job_id FROM hermes_data.attachment_text_extraction_jobs WHERE logical_owner_id=$1 AND state=1 AND attempt_count<max_attempts ORDER BY created_at_unix_millis,job_id FOR UPDATE SKIP LOCKED LIMIT 1",
+            "SELECT job_id FROM makosh_data.attachment_text_extraction_jobs WHERE logical_owner_id=$1 AND state=1 AND attempt_count<max_attempts ORDER BY created_at_unix_millis,job_id FOR UPDATE SKIP LOCKED LIMIT 1",
         )
         .bind(logical_owner_id)
         .fetch_optional(&mut *transaction)
@@ -74,7 +74,7 @@ impl AttachmentTextExtractionPersistenceV1 {
         };
         let job_id = id16(row.try_get("job_id").map_err(invalid_row)?)?;
         let changed = sqlx::query(
-            "UPDATE hermes_data.attachment_text_extraction_jobs SET state=2,attempt_count=attempt_count+1,worker_id=$3,runtime_generation=$4,grant_epoch=$5,lease_fence=lease_fence+1,lease_expires_at_unix_millis=$6,updated_at_unix_millis=$7 WHERE logical_owner_id=$1 AND job_id=$2 AND state=1",
+            "UPDATE makosh_data.attachment_text_extraction_jobs SET state=2,attempt_count=attempt_count+1,worker_id=$3,runtime_generation=$4,grant_epoch=$5,lease_fence=lease_fence+1,lease_expires_at_unix_millis=$6,updated_at_unix_millis=$7 WHERE logical_owner_id=$1 AND job_id=$2 AND state=1",
         )
         .bind(logical_owner_id)
         .bind(job_id.as_slice())
@@ -110,7 +110,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             return Err(AttachmentTextExtractionPersistenceErrorV1::InvalidInput);
         }
         let changed = sqlx::query(
-            "UPDATE hermes_data.attachment_text_extraction_jobs SET target_reference_id=$8,target_receipt_sha256=$9,updated_at_unix_millis=$7 WHERE logical_owner_id=$1 AND job_id=$2 AND state=2 AND worker_id=$3 AND runtime_generation=$4 AND grant_epoch=$5 AND lease_fence=$6 AND lease_expires_at_unix_millis>$7 AND ((target_reference_id IS NULL AND target_receipt_sha256 IS NULL) OR (target_reference_id=$8 AND target_receipt_sha256=$9))",
+            "UPDATE makosh_data.attachment_text_extraction_jobs SET target_reference_id=$8,target_receipt_sha256=$9,updated_at_unix_millis=$7 WHERE logical_owner_id=$1 AND job_id=$2 AND state=2 AND worker_id=$3 AND runtime_generation=$4 AND grant_epoch=$5 AND lease_fence=$6 AND lease_expires_at_unix_millis>$7 AND ((target_reference_id IS NULL AND target_receipt_sha256 IS NULL) OR (target_reference_id=$8 AND target_receipt_sha256=$9))",
         )
         .bind(&claimed.logical_owner_id)
         .bind(claimed.job_id.as_slice())
@@ -164,7 +164,7 @@ impl AttachmentTextExtractionPersistenceV1 {
         )
         .map_err(|_| AttachmentTextExtractionPersistenceErrorV1::EvidenceConflict)?;
         sqlx::query(
-            "INSERT INTO hermes_data.attachment_text_extraction_artifacts (logical_owner_id,run_id,derived_reference_id,derived_receipt_sha256,source_receipt_sha256,parser_identity_sha256,format_code,extracted_size_bytes,extraction_truncated,committed_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
+            "INSERT INTO makosh_data.attachment_text_extraction_artifacts (logical_owner_id,run_id,derived_reference_id,derived_receipt_sha256,source_receipt_sha256,parser_identity_sha256,format_code,extracted_size_bytes,extraction_truncated,committed_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
         )
         .bind(&claimed.logical_owner_id)
         .bind(artifact.run_id.as_slice())
@@ -243,7 +243,7 @@ impl AttachmentTextExtractionPersistenceV1 {
         }
         let mut transaction = self.pool.begin().await.map_err(storage_unavailable)?;
         let retry_count = sqlx::query(
-            "UPDATE hermes_data.attachment_text_extraction_jobs SET state=1,worker_id=NULL,runtime_generation=NULL,grant_epoch=NULL,lease_expires_at_unix_millis=NULL,updated_at_unix_millis=$2 WHERE logical_owner_id=$1 AND state=2 AND lease_expires_at_unix_millis<=$2 AND attempt_count<max_attempts",
+            "UPDATE makosh_data.attachment_text_extraction_jobs SET state=1,worker_id=NULL,runtime_generation=NULL,grant_epoch=NULL,lease_expires_at_unix_millis=NULL,updated_at_unix_millis=$2 WHERE logical_owner_id=$1 AND state=2 AND lease_expires_at_unix_millis<=$2 AND attempt_count<max_attempts",
         )
         .bind(logical_owner_id)
         .bind(now_unix_millis)
@@ -252,7 +252,7 @@ impl AttachmentTextExtractionPersistenceV1 {
         .map_err(storage_unavailable)?
         .rows_affected();
         let exhausted = sqlx::query(
-            "SELECT job_id,run_id FROM hermes_data.attachment_text_extraction_jobs WHERE logical_owner_id=$1 AND state=2 AND lease_expires_at_unix_millis<=$2 AND attempt_count>=max_attempts ORDER BY job_id FOR UPDATE",
+            "SELECT job_id,run_id FROM makosh_data.attachment_text_extraction_jobs WHERE logical_owner_id=$1 AND state=2 AND lease_expires_at_unix_millis<=$2 AND attempt_count>=max_attempts ORDER BY job_id FOR UPDATE",
         )
         .bind(logical_owner_id)
         .bind(now_unix_millis)
@@ -263,7 +263,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             let job_id = id16(row.try_get("job_id").map_err(invalid_row)?)?;
             let run_id = id16(row.try_get("run_id").map_err(invalid_row)?)?;
             let changed = sqlx::query(
-                "UPDATE hermes_data.attachment_text_extraction_jobs SET state=4,worker_id=NULL,runtime_generation=NULL,grant_epoch=NULL,lease_expires_at_unix_millis=NULL,updated_at_unix_millis=$3 WHERE logical_owner_id=$1 AND job_id=$2 AND state=2",
+                "UPDATE makosh_data.attachment_text_extraction_jobs SET state=4,worker_id=NULL,runtime_generation=NULL,grant_epoch=NULL,lease_expires_at_unix_millis=NULL,updated_at_unix_millis=$3 WHERE logical_owner_id=$1 AND job_id=$2 AND state=2",
             )
             .bind(logical_owner_id)
             .bind(job_id.as_slice())
@@ -317,7 +317,7 @@ pub(crate) async fn enqueue_attachment_text_work(
     );
     let proof_sha256: [u8; 32] = Sha256::digest(&work.custody_transfer_source_proof).into();
     sqlx::query(
-        "INSERT INTO hermes_data.attachment_text_extraction_jobs (logical_owner_id,job_id,run_id,request_id,result_message_id,attachment_anchor_id,candidate_message_id,safety_message_id,source_reference_id,target_reference_id,target_receipt_sha256,source_receipt_sha256,source_declared_size,custody_transfer_source_proof,custody_proof_sha256,state,attempt_count,max_attempts,worker_id,runtime_generation,grant_epoch,lease_fence,lease_expires_at_unix_millis,created_at_unix_millis,updated_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,NULL,NULL,$10,$11,$12,$13,1,0,$14,NULL,NULL,NULL,0,NULL,$15,$15) ON CONFLICT (logical_owner_id,run_id) DO NOTHING",
+        "INSERT INTO makosh_data.attachment_text_extraction_jobs (logical_owner_id,job_id,run_id,request_id,result_message_id,attachment_anchor_id,candidate_message_id,safety_message_id,source_reference_id,target_reference_id,target_receipt_sha256,source_receipt_sha256,source_declared_size,custody_transfer_source_proof,custody_proof_sha256,state,attempt_count,max_attempts,worker_id,runtime_generation,grant_epoch,lease_fence,lease_expires_at_unix_millis,created_at_unix_millis,updated_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,NULL,NULL,$10,$11,$12,$13,1,0,$14,NULL,NULL,NULL,0,NULL,$15,$15) ON CONFLICT (logical_owner_id,run_id) DO NOTHING",
     )
     .bind(logical_owner_id)
     .bind(job_id.as_slice())
@@ -338,7 +338,7 @@ pub(crate) async fn enqueue_attachment_text_work(
     .await
     .map_err(storage_unavailable)?;
     let row = sqlx::query(
-        "SELECT job_id,request_id,result_message_id,attachment_anchor_id,candidate_message_id,safety_message_id,source_reference_id,source_receipt_sha256,source_declared_size,custody_transfer_source_proof,custody_proof_sha256 FROM hermes_data.attachment_text_extraction_jobs WHERE logical_owner_id=$1 AND run_id=$2",
+        "SELECT job_id,request_id,result_message_id,attachment_anchor_id,candidate_message_id,safety_message_id,source_reference_id,source_receipt_sha256,source_declared_size,custody_transfer_source_proof,custody_proof_sha256 FROM makosh_data.attachment_text_extraction_jobs WHERE logical_owner_id=$1 AND run_id=$2",
     )
     .bind(logical_owner_id)
     .bind(work.request.run_id.as_slice())
@@ -381,7 +381,7 @@ async fn load_claimed_job(
     job_id: [u8; 16],
 ) -> Result<ClaimedAttachmentTextExtractionJobV1, AttachmentTextExtractionPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT j.run_id,r.operation_id,j.attachment_anchor_id,j.request_id,j.result_message_id,i.envelope_sha256,j.candidate_message_id,j.safety_message_id,j.source_reference_id,j.target_reference_id,j.target_receipt_sha256,j.source_receipt_sha256,j.source_declared_size,j.custody_transfer_source_proof,j.attempt_count,j.max_attempts,j.worker_id,j.runtime_generation,j.grant_epoch,j.lease_fence,j.lease_expires_at_unix_millis FROM hermes_data.attachment_text_extraction_jobs j JOIN hermes_data.attachment_text_extraction_runs r ON r.logical_owner_id=j.logical_owner_id AND r.run_id=j.run_id JOIN hermes_data.attachment_text_extraction_custody_result_inbox i ON i.logical_owner_id=j.logical_owner_id AND i.message_id=j.result_message_id WHERE j.logical_owner_id=$1 AND j.job_id=$2 AND j.state=2",
+        "SELECT j.run_id,r.operation_id,j.attachment_anchor_id,j.request_id,j.result_message_id,i.envelope_sha256,j.candidate_message_id,j.safety_message_id,j.source_reference_id,j.target_reference_id,j.target_receipt_sha256,j.source_receipt_sha256,j.source_declared_size,j.custody_transfer_source_proof,j.attempt_count,j.max_attempts,j.worker_id,j.runtime_generation,j.grant_epoch,j.lease_fence,j.lease_expires_at_unix_millis FROM makosh_data.attachment_text_extraction_jobs j JOIN makosh_data.attachment_text_extraction_runs r ON r.logical_owner_id=j.logical_owner_id AND r.run_id=j.run_id JOIN makosh_data.attachment_text_extraction_custody_result_inbox i ON i.logical_owner_id=j.logical_owner_id AND i.message_id=j.result_message_id WHERE j.logical_owner_id=$1 AND j.job_id=$2 AND j.state=2",
     )
     .bind(logical_owner_id)
     .bind(job_id.as_slice())
@@ -450,7 +450,7 @@ async fn verify_claim(
     completed_at_unix_millis: i64,
 ) -> Result<(), AttachmentTextExtractionPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT worker_id,runtime_generation,grant_epoch,lease_fence,lease_expires_at_unix_millis FROM hermes_data.attachment_text_extraction_jobs WHERE logical_owner_id=$1 AND job_id=$2 AND state=2 FOR UPDATE",
+        "SELECT worker_id,runtime_generation,grant_epoch,lease_fence,lease_expires_at_unix_millis FROM makosh_data.attachment_text_extraction_jobs WHERE logical_owner_id=$1 AND job_id=$2 AND state=2 FOR UPDATE",
     )
     .bind(&claimed.logical_owner_id)
     .bind(claimed.job_id.as_slice())
@@ -489,7 +489,7 @@ async fn verify_target_receipt(
     claimed: &ClaimedAttachmentTextExtractionJobV1,
 ) -> Result<(), AttachmentTextExtractionPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT target_reference_id,target_receipt_sha256 FROM hermes_data.attachment_text_extraction_jobs WHERE logical_owner_id=$1 AND job_id=$2 AND state=2 AND lease_fence=$3 FOR UPDATE",
+        "SELECT target_reference_id,target_receipt_sha256 FROM makosh_data.attachment_text_extraction_jobs WHERE logical_owner_id=$1 AND job_id=$2 AND state=2 AND lease_fence=$3 FOR UPDATE",
     )
     .bind(&claimed.logical_owner_id)
     .bind(claimed.job_id.as_slice())
@@ -519,7 +519,7 @@ async fn finish_claim(
     completed_at_unix_millis: i64,
 ) -> Result<(), AttachmentTextExtractionPersistenceErrorV1> {
     let changed = sqlx::query(
-        "UPDATE hermes_data.attachment_text_extraction_jobs SET state=$3,worker_id=NULL,runtime_generation=NULL,grant_epoch=NULL,lease_expires_at_unix_millis=NULL,updated_at_unix_millis=$4 WHERE logical_owner_id=$1 AND job_id=$2 AND state=2 AND lease_fence=$5",
+        "UPDATE makosh_data.attachment_text_extraction_jobs SET state=$3,worker_id=NULL,runtime_generation=NULL,grant_epoch=NULL,lease_expires_at_unix_millis=NULL,updated_at_unix_millis=$4 WHERE logical_owner_id=$1 AND job_id=$2 AND state=2 AND lease_fence=$5",
     )
     .bind(&claimed.logical_owner_id)
     .bind(claimed.job_id.as_slice())
@@ -543,7 +543,7 @@ async fn load_extracting_run(
     run_id: [u8; 16],
 ) -> Result<(AttachmentTextExtractionStateV1, u64), AttachmentTextExtractionPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT state,state_revision FROM hermes_data.attachment_text_extraction_runs WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE",
+        "SELECT state,state_revision FROM makosh_data.attachment_text_extraction_runs WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE",
     )
     .bind(logical_owner_id)
     .bind(run_id.as_slice())

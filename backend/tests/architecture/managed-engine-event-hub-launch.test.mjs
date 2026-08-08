@@ -67,10 +67,10 @@ test('signed managed AI conformance uses the exact eventless pair and no event a
   assert.match(flow, /restart_ai_inference_runtime_v1/);
   assert.match(flow, /assert_eq!\(replayed, first\)/);
   assert.match(flow, /conflicting\.maximum_output_tokens \+= 1/);
-  assert.match(script, /'hermes-ai-inference-runtime'/);
+  assert.match(script, /'makosh-ai-inference-runtime'/);
   assert.match(
     script,
     /managed_ai_inference_routes_to_ollama_and_replays_after_restart/,
   );
-  assert.match(script, /HERMES_AI_INFERENCE_RUNTIME_BIN/);
+  assert.match(script, /MAKOSH_AI_INFERENCE_RUNTIME_BIN/);
 });

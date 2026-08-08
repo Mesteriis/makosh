@@ -16,7 +16,7 @@ const feedbackComponents = [
 	'LoadingOverlay'
 ]
 
-describe('Hermes UI feedback component contracts', () => {
+describe('Макошь UI feedback component contracts', () => {
 	it('keeps the feedback batch documented and exported through the UI kit', () => {
 		const uiRoot = fileURLToPath(new URL('.', import.meta.url))
 		const barrel = readFileSync(join(uiRoot, 'index.ts'), 'utf8')

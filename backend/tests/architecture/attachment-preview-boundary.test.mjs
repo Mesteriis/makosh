@@ -59,14 +59,14 @@ test('public Preview contract separates status ticket and private client blob by
     readFile(new URL('src/attachment-preview-api/Cargo.toml', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/attachment-preview-api/proto/hermes/attachment_preview/v1/preview.proto',
+        'src/attachment-preview-api/proto/makosh/attachment_preview/v1/preview.proto',
         BACKEND_ROOT,
       ),
       'utf8',
     ),
     readFile(
       new URL(
-        'src/attachment-preview-api/proto/hermes/attachment_preview/read/v1/read.proto',
+        'src/attachment-preview-api/proto/makosh/attachment_preview/read/v1/read.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -77,7 +77,7 @@ test('public Preview contract separates status ticket and private client blob by
   assert.match(manifest, /role = "workflow"/);
   assert.match(manifest, /owner = "attachment_preview"/);
   assert.match(manifest, /surface = "contract"/);
-  assert.doesNotMatch(manifest, /hermes-(?:communications|attachment-security|blob|kernel)/);
+  assert.doesNotMatch(manifest, /makosh-(?:communications|attachment-security|blob|kernel)/);
   assert.match(controlProto, /rpc Start/);
   assert.match(controlProto, /rpc Get/);
   assert.match(controlProto, /rpc IssueRead/);
@@ -182,7 +182,7 @@ test('Preview logs errors health and telemetry expose only fixed-shape technical
       readFile(new URL('src/attachment-preview-runtime/src/runtime.rs', BACKEND_ROOT), 'utf8'),
       readFile(
         new URL(
-          'src/platform/runtime_protocol/proto/hermes/runtime/v1/managed_runtime_control.proto',
+          'src/platform/runtime_protocol/proto/makosh/runtime/v1/managed_runtime_control.proto',
           BACKEND_ROOT,
         ),
         'utf8',
@@ -244,10 +244,10 @@ test('pure Preview core owns evidence join lifecycle and output policy only', as
     readFile(new URL('src/attachment-preview-core/src/policy.rs', BACKEND_ROOT), 'utf8'),
   ]);
 
-  assert.match(manifest, /hermes-attachment-preview-api/);
+  assert.match(manifest, /makosh-attachment-preview-api/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications|attachment-security|blob|events|runtime|storage|kernel)|\b(?:sqlx|tokio)\s*=/,
+    /makosh-(?:communications|attachment-security|blob|events|runtime|storage|kernel)|\b(?:sqlx|tokio)\s*=/,
   );
   assert.match(join, /AttachmentPreviewCustodyDelegationIntentV1/);
   const intent = join.slice(
@@ -266,7 +266,7 @@ test('pure Preview core owns evidence join lifecycle and output policy only', as
   assert.match(policy, /validate_preview_output_v1/);
   assert.doesNotMatch(
     `${source}\n${join}\n${lifecycle}\n${policy}`,
-    /TcpStream|File::|sqlx|postgres|nats|jetstream|hermes_communications|hermes_attachment_security/,
+    /TcpStream|File::|sqlx|postgres|nats|jetstream|makosh_communications|makosh_attachment_security/,
   );
 });
 
@@ -322,14 +322,14 @@ test('Preview persistence owns replay jobs artifacts tickets and realtime withou
   assert.match(manifest, /owner = "attachment_preview"/);
   assert.match(manifest, /surface = "persistence"/);
   for (const dependency of [
-    'hermes-attachment-preview-api',
-    'hermes-attachment-preview-core',
-    'hermes-attachment-preview-ingress',
-    'hermes-storage-protocol',
+    'makosh-attachment-preview-api',
+    'makosh-attachment-preview-core',
+    'makosh-attachment-preview-ingress',
+    'makosh-storage-protocol',
   ]) assert.match(manifest, new RegExp(dependency));
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications|attachment-security|blob|events|runtime|kernel|attachment-text-extraction|attachment-archive-inspection)/,
+    /makosh-(?:communications|attachment-security|blob|events|runtime|kernel|attachment-text-extraction|attachment-archive-inspection)/,
   );
   for (const table of [
     'attachment_preview_runs',
@@ -342,7 +342,7 @@ test('Preview persistence owns replay jobs artifacts tickets and realtime withou
     'attachment_preview_artifacts',
     'attachment_preview_read_tickets',
     'attachment_preview_realtime',
-  ]) assert.match(migration, new RegExp(`hermes_data\\.${table}`));
+  ]) assert.match(migration, new RegExp(`makosh_data\\.${table}`));
   assert.match(evidence, /AttachmentPreviewEvidenceJoinV1/);
   assert.match(custody, /exact_envelope_bytes/);
   assert.match(jobs, /FOR UPDATE SKIP LOCKED/);
@@ -359,7 +359,7 @@ test('Preview persistence owns replay jobs artifacts tickets and realtime withou
   );
   assert.doesNotMatch(
     implementation,
-    /TcpStream|Command::|hermes_communications|hermes_attachment_security|hermes_blob_/,
+    /TcpStream|Command::|makosh_communications|makosh_attachment_security|makosh_blob_/,
   );
   assert.doesNotMatch(evidence, /ticket_sha256|target_receipt_sha256/);
   assert.doesNotMatch(tickets, /custody_transfer_source_proof|exact_envelope_bytes/);
@@ -370,7 +370,7 @@ test('target-owned Preview ingress carries event custody without caller authorit
     readFile(new URL('src/attachment-preview-ingress/Cargo.toml', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/attachment-preview-ingress/proto/hermes/attachment_preview/ingress/v1/custody_delegation.proto',
+        'src/attachment-preview-ingress/proto/makosh/attachment_preview/ingress/v1/custody_delegation.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -383,7 +383,7 @@ test('target-owned Preview ingress carries event custody without caller authorit
   assert.match(manifest, /surface = "contract"/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications|attachment-security|blob|kernel|attachment-preview-(?:api|core|runtime|persistence|assembly))/,
+    /makosh-(?:communications|attachment-security|blob|kernel|attachment-preview-(?:api|core|runtime|persistence|assembly))/,
   );
   assert.match(proto, /message RequestAttachmentPreviewCustodyDelegationV1/);
   assert.match(proto, /message AttachmentPreviewCustodyDelegatedV1/);
@@ -417,7 +417,7 @@ test('renderer contract is byte-only and metadata cannot select behavior', async
   assert.match(manifest, /surface = "contract"/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications|attachment-security|blob|events|runtime|storage|kernel)/,
+    /makosh-(?:communications|attachment-security|blob|events|runtime|storage|kernel)/,
   );
   assert.match(source, /detect_attachment_preview_source_format_v1/);
   assert.match(source, /source_bytes: &'a \[u8\]/);
@@ -440,10 +440,10 @@ test('safe text image and media adapters are three isolated byte-only units', as
     readFile(new URL('src/attachment-preview-media/src/lib.rs', BACKEND_ROOT), 'utf8'),
   ]);
   for (const manifest of [textManifest, imageManifest, mediaManifest]) {
-    assert.match(manifest, /hermes-attachment-preview-renderer-contract/);
+    assert.match(manifest, /makosh-attachment-preview-renderer-contract/);
     assert.doesNotMatch(
       manifest,
-      /hermes-(?:communications|attachment-security|blob|events|runtime|storage|kernel)|\b(?:sqlx|tokio)\s*=/,
+      /makosh-(?:communications|attachment-security|blob|events|runtime|storage|kernel)|\b(?:sqlx|tokio)\s*=/,
     );
   }
   assert.doesNotMatch(textManifest, /\bimage\s*=/);
@@ -473,7 +473,7 @@ test('PDF adapter rasterizes one bounded page without native or owner authority'
   assert.match(manifest, /image = \{ version = "=0\.25\.9", default-features = false, features = \["png"\] \}/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications|attachment-security|blob|events|runtime|storage|kernel)|\b(?:sqlx|tokio)\s*=/,
+    /makosh-(?:communications|attachment-security|blob|events|runtime|storage|kernel)|\b(?:sqlx|tokio)\s*=/,
   );
   assert.match(source, /render_first_page_v1/);
   assert.match(source, /MAX_RENDER_DIMENSION_V1/);
@@ -504,7 +504,7 @@ test('DOCX adapter rebuilds a bounded fixed-font card without external resources
   assert.match(manifest, /zip = \{ version = "=6\.0\.0", default-features = false, features = \["deflate-flate2-zlib-rs"\] \}/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications|attachment-security|blob|events|runtime|storage|kernel|attachment-text-extraction)|\b(?:sqlx|tokio|reqwest)\s*=/,
+    /makosh-(?:communications|attachment-security|blob|events|runtime|storage|kernel|attachment-text-extraction)|\b(?:sqlx|tokio|reqwest)\s*=/,
   );
   assert.match(source, /include_bytes!\("\.\.\/assets\/DejaVuSans\.ttf"\)/);
   assert.match(source, /FIXED_FONT_SHA256_V1/);
@@ -552,7 +552,7 @@ test('managed Preview runtime composes public contracts without owning assembly 
   assert.match(manifest, /\[\[bin\]\]/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications-domain|attachment-security-engine|attachment-preview-assembly|attachment-text-extraction|attachment-archive-inspection)/,
+    /makosh-(?:communications-domain|attachment-security-engine|attachment-preview-assembly|attachment-text-extraction|attachment-archive-inspection)/,
   );
   assert.match(admission, /ClientBlob/);
   assert.match(admission, /ATTACHMENT_PREVIEW_MAX_VIDEO_BYTES_V1/);
@@ -570,7 +570,7 @@ test('managed Preview runtime composes public contracts without owning assembly 
   assert.match(clientPort, /redeem_read_ticket/);
   assert.match(realtime, /PublishClientRealtime/);
   assert.match(renderer, /detect_attachment_preview_source_format_v1/);
-  assert.match(blob, /hermes\.attachment-preview\.derived-blob\.v1/);
+  assert.match(blob, /makosh\.attachment-preview\.derived-blob\.v1/);
   assert.doesNotMatch(
     source,
     /sqlx::|TcpListener|Command::|data_url|ticket_plaintext|provider_id|account_id|filename|content_type_hint/,
@@ -602,11 +602,11 @@ test('development release builds and signs the exact Preview assembly fragment',
     readFile(new URL('development/assembly/src/main.rs', BACKEND_ROOT), 'utf8'),
   ]);
 
-  assert.match(release, /--package hermes-attachment-preview-runtime/);
-  assert.match(release, /--package hermes-attachment-preview-assembly/);
+  assert.match(release, /--package makosh-attachment-preview-runtime/);
+  assert.match(release, /--package makosh-attachment-preview-assembly/);
   assert.match(
     release,
-    /hermes-attachment-preview-assembly"[\s\S]*--runtime "\$cargo_target_dir\/debug\/hermes-attachment-preview-runtime"/,
+    /makosh-attachment-preview-assembly"[\s\S]*--runtime "\$cargo_target_dir\/debug\/makosh-attachment-preview-runtime"/,
   );
   assert.match(
     release,
@@ -700,8 +700,8 @@ test('Preview has an authenticated exact signed managed admission gate', async (
   assert.match(persistence, /attachment_preview_artifacts/);
   assert.match(persistence, /replace_attachment_preview_job_source_receipt_v1/);
   assert.match(persistence, /expire_attachment_preview_job_lease_v1/);
-  assert.match(harness, /-p'[\s\S]*hermes-attachment-preview-runtime/);
-  assert.match(harness, /HERMES_ATTACHMENT_PREVIEW_RUNTIME_BIN/);
+  assert.match(harness, /-p'[\s\S]*makosh-attachment-preview-runtime/);
+  assert.match(harness, /MAKOSH_ATTACHMENT_PREVIEW_RUNTIME_BIN/);
   assert.match(harness, /managed_attachment_preview_reaches_gateway_blob_sse_and_replays_after_restart/);
-  assert.doesNotMatch(`${setup}\n${flow}\n${formats}\n${persistence}`, /hermes_communications_(?:domain|persistence)|hermes_attachment_security_(?:core|persistence|runtime)/);
+  assert.doesNotMatch(`${setup}\n${flow}\n${formats}\n${persistence}`, /makosh_communications_(?:domain|persistence)|makosh_attachment_security_(?:core|persistence|runtime)/);
 });

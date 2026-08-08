@@ -5,9 +5,9 @@ use rusqlite::Transaction;
 
 pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
     transaction.execute_batch(
-        "CREATE TABLE hermes_kernel_settings_configuration_target (
+        "CREATE TABLE makosh_kernel_settings_configuration_target (
             registration_id TEXT NOT NULL
-                REFERENCES hermes_kernel_settings_schema_binding(registration_id)
+                REFERENCES makosh_kernel_settings_schema_binding(registration_id)
                 ON DELETE CASCADE,
             configuration_instance_id TEXT NOT NULL,
             desired_revision INTEGER NOT NULL CHECK (desired_revision >= 0),
@@ -30,7 +30,7 @@ pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
                 created_operation_id IS NULL OR length(created_operation_id) = 16
             )
          ) STRICT;
-         INSERT INTO hermes_kernel_settings_configuration_target (
+         INSERT INTO makosh_kernel_settings_configuration_target (
             registration_id,
             configuration_instance_id,
             desired_revision,
@@ -46,22 +46,22 @@ pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
                 apply_state,
                 sanitized_reason_code,
                 NULL
-         FROM hermes_kernel_settings_schema_binding;
+         FROM makosh_kernel_settings_schema_binding;
 
-         CREATE TABLE hermes_kernel_settings_desired_snapshot_v44 (
+         CREATE TABLE makosh_kernel_settings_desired_snapshot_v44 (
             registration_id TEXT NOT NULL,
             configuration_instance_id TEXT NOT NULL,
             revision INTEGER NOT NULL CHECK (revision >= 1),
             snapshot_bytes BLOB NOT NULL,
             PRIMARY KEY (registration_id, configuration_instance_id),
             FOREIGN KEY (registration_id, configuration_instance_id)
-                REFERENCES hermes_kernel_settings_configuration_target(
+                REFERENCES makosh_kernel_settings_configuration_target(
                     registration_id,
                     configuration_instance_id
                 )
                 ON DELETE CASCADE
          ) STRICT;
-         INSERT INTO hermes_kernel_settings_desired_snapshot_v44 (
+         INSERT INTO makosh_kernel_settings_desired_snapshot_v44 (
             registration_id,
             configuration_instance_id,
             revision,
@@ -71,12 +71,12 @@ pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
                 registration_id,
                 revision,
                 snapshot_bytes
-         FROM hermes_kernel_settings_desired_snapshot;
-         DROP TABLE hermes_kernel_settings_desired_snapshot;
-         ALTER TABLE hermes_kernel_settings_desired_snapshot_v44
-            RENAME TO hermes_kernel_settings_desired_snapshot;
+         FROM makosh_kernel_settings_desired_snapshot;
+         DROP TABLE makosh_kernel_settings_desired_snapshot;
+         ALTER TABLE makosh_kernel_settings_desired_snapshot_v44
+            RENAME TO makosh_kernel_settings_desired_snapshot;
 
-         UPDATE hermes_kernel_control_store_metadata
+         UPDATE makosh_kernel_control_store_metadata
          SET schema_version = 44 WHERE singleton = 1;",
     )?;
     Ok(())
@@ -93,18 +93,18 @@ mod tests {
         connection
             .execute_batch(
                 "PRAGMA foreign_keys = ON;
-                 CREATE TABLE hermes_kernel_control_store_metadata (
+                 CREATE TABLE makosh_kernel_control_store_metadata (
                     singleton INTEGER PRIMARY KEY,
                     schema_version INTEGER NOT NULL
                  ) STRICT;
-                 INSERT INTO hermes_kernel_control_store_metadata VALUES (1, 43);
-                 CREATE TABLE hermes_kernel_module_registration (
+                 INSERT INTO makosh_kernel_control_store_metadata VALUES (1, 43);
+                 CREATE TABLE makosh_kernel_module_registration (
                     registration_id TEXT PRIMARY KEY
                  ) STRICT;
-                 INSERT INTO hermes_kernel_module_registration VALUES ('mail-runtime');
-                 CREATE TABLE hermes_kernel_settings_schema_binding (
+                 INSERT INTO makosh_kernel_module_registration VALUES ('mail-runtime');
+                 CREATE TABLE makosh_kernel_settings_schema_binding (
                     registration_id TEXT PRIMARY KEY
-                        REFERENCES hermes_kernel_module_registration(registration_id)
+                        REFERENCES makosh_kernel_module_registration(registration_id)
                         ON DELETE CASCADE,
                     schema_major INTEGER NOT NULL,
                     schema_revision INTEGER NOT NULL,
@@ -114,7 +114,7 @@ mod tests {
                     apply_state TEXT NOT NULL,
                     sanitized_reason_code TEXT
                  ) STRICT;
-                 INSERT INTO hermes_kernel_settings_schema_binding VALUES (
+                 INSERT INTO makosh_kernel_settings_schema_binding VALUES (
                     'mail-runtime',
                     2,
                     2,
@@ -124,14 +124,14 @@ mod tests {
                     'current',
                     NULL
                  );
-                 CREATE TABLE hermes_kernel_settings_desired_snapshot (
+                 CREATE TABLE makosh_kernel_settings_desired_snapshot (
                     registration_id TEXT PRIMARY KEY
-                        REFERENCES hermes_kernel_settings_schema_binding(registration_id)
+                        REFERENCES makosh_kernel_settings_schema_binding(registration_id)
                         ON DELETE CASCADE,
                     revision INTEGER NOT NULL,
                     snapshot_bytes BLOB NOT NULL
                  ) STRICT;
-                 INSERT INTO hermes_kernel_settings_desired_snapshot VALUES (
+                 INSERT INTO makosh_kernel_settings_desired_snapshot VALUES (
                     'mail-runtime',
                     3,
                     x'010203'
@@ -149,7 +149,7 @@ mod tests {
                         desired_revision,
                         effective_revision,
                         apply_state
-                 FROM hermes_kernel_settings_configuration_target
+                 FROM makosh_kernel_settings_configuration_target
                  WHERE registration_id = 'mail-runtime'",
                 [],
                 |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?)),
@@ -162,7 +162,7 @@ mod tests {
         let snapshot: (String, i64, Vec<u8>) = connection
             .query_row(
                 "SELECT configuration_instance_id, revision, snapshot_bytes
-                 FROM hermes_kernel_settings_desired_snapshot
+                 FROM makosh_kernel_settings_desired_snapshot
                  WHERE registration_id = ?1",
                 params!["mail-runtime"],
                 |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
@@ -177,16 +177,16 @@ mod tests {
         connection
             .execute_batch(
                 "PRAGMA foreign_keys = ON;
-                 CREATE TABLE hermes_kernel_control_store_metadata (
+                 CREATE TABLE makosh_kernel_control_store_metadata (
                     singleton INTEGER PRIMARY KEY,
                     schema_version INTEGER NOT NULL
                  ) STRICT;
-                 INSERT INTO hermes_kernel_control_store_metadata VALUES (1, 43);
-                 CREATE TABLE hermes_kernel_module_registration (
+                 INSERT INTO makosh_kernel_control_store_metadata VALUES (1, 43);
+                 CREATE TABLE makosh_kernel_module_registration (
                     registration_id TEXT PRIMARY KEY
                  ) STRICT;
-                 INSERT INTO hermes_kernel_module_registration VALUES ('mail-runtime');
-                 CREATE TABLE hermes_kernel_settings_schema_binding (
+                 INSERT INTO makosh_kernel_module_registration VALUES ('mail-runtime');
+                 CREATE TABLE makosh_kernel_settings_schema_binding (
                     registration_id TEXT PRIMARY KEY,
                     schema_major INTEGER NOT NULL,
                     schema_revision INTEGER NOT NULL,
@@ -196,10 +196,10 @@ mod tests {
                     apply_state TEXT NOT NULL,
                     sanitized_reason_code TEXT
                  ) STRICT;
-                 INSERT INTO hermes_kernel_settings_schema_binding VALUES (
+                 INSERT INTO makosh_kernel_settings_schema_binding VALUES (
                     'mail-runtime', 2, 2, zeroblob(32), 0, 0, 'current', NULL
                  );
-                 CREATE TABLE hermes_kernel_settings_desired_snapshot (
+                 CREATE TABLE makosh_kernel_settings_desired_snapshot (
                     registration_id TEXT PRIMARY KEY,
                     revision INTEGER NOT NULL,
                     snapshot_bytes BLOB NOT NULL
@@ -213,7 +213,7 @@ mod tests {
         let operation_id = [7_u8; 16];
         connection
             .execute(
-                "INSERT INTO hermes_kernel_settings_configuration_target VALUES (
+                "INSERT INTO makosh_kernel_settings_configuration_target VALUES (
                     'mail-runtime', 'account-a', 1, 0, 'blocked_config',
                     'required_settings_missing', ?1
                  )",
@@ -223,7 +223,7 @@ mod tests {
         assert!(
             connection
                 .execute(
-                    "INSERT INTO hermes_kernel_settings_configuration_target VALUES (
+                    "INSERT INTO makosh_kernel_settings_configuration_target VALUES (
                         'mail-runtime', 'account-b', 1, 0, 'blocked_config',
                         'required_settings_missing', ?1
                      )",

@@ -9,11 +9,11 @@ export function dependency(name, kind = null) {
   };
 }
 
-export function workspacePackage(name, hermes, dependencies = []) {
+export function workspacePackage(name, makosh, dependencies = []) {
   return {
     id: `path+file:///workspace/${name}#0.1.0`,
     name,
-    metadata: { hermes },
+    metadata: { makosh },
     dependencies,
   };
 }
@@ -68,7 +68,7 @@ export function metadata(packages, externalPackages = []) {
 
 export function kernel(dependencies = [], metadataOverrides = {}) {
   return workspacePackage(
-    'hermes-kernel',
+    'makosh-kernel',
     {
       role: 'core',
       owner: 'kernel',
@@ -90,7 +90,7 @@ export function kernel(dependencies = [], metadataOverrides = {}) {
 
 export function runtimeProtocol(dependencies = [], metadataOverrides = {}) {
   return workspacePackage(
-    'hermes-runtime-protocol',
+    'makosh-runtime-protocol',
     {
       role: 'platform',
       owner: 'runtime_protocol',
@@ -103,7 +103,7 @@ export function runtimeProtocol(dependencies = [], metadataOverrides = {}) {
 
 export function vaultProtocol(dependencies = [], metadataOverrides = {}) {
   return workspacePackage(
-    'hermes-vault-protocol',
+    'makosh-vault-protocol',
     {
       role: 'platform',
       owner: 'vault',
@@ -124,7 +124,7 @@ export function vaultPackages({
   return [
     vaultProtocol(protocolDependencies, overrides.protocol),
     workspacePackage(
-      'hermes-managed-vault-client',
+      'makosh-managed-vault-client',
       {
         role: 'platform',
         owner: 'vault',
@@ -134,7 +134,7 @@ export function vaultPackages({
       managedClientDependencies,
     ),
     workspacePackage(
-      'hermes-vault-key-provider',
+      'makosh-vault-key-provider',
       {
         role: 'platform',
         owner: 'vault',
@@ -144,7 +144,7 @@ export function vaultPackages({
       keyProviderDependencies,
     ),
     workspacePackage(
-      'hermes-vault-runtime',
+      'makosh-vault-runtime',
       {
         role: 'platform',
         owner: 'vault',
@@ -154,13 +154,13 @@ export function vaultPackages({
       },
       runtimeDependencies,
     ),
-    workspacePackage('hermes-vault-store-sqlcipher', {
+    workspacePackage('makosh-vault-store-sqlcipher', {
       role: 'platform',
       owner: 'vault',
       surface: 'persistence',
       ...overrides.store,
     }),
-    workspacePackage('hermes-vault-key-provider-file', {
+    workspacePackage('makosh-vault-key-provider-file', {
       role: 'platform',
       owner: 'vault',
       surface: 'implementation',
@@ -171,7 +171,7 @@ export function vaultPackages({
 
 export function storageProtocol(dependencies = [], metadataOverrides = {}) {
   return workspacePackage(
-    'hermes-storage-protocol',
+    'makosh-storage-protocol',
     {
       role: 'platform',
       owner: 'storage',
@@ -195,7 +195,7 @@ export function storagePackages({
   return [
     storageProtocol(protocolDependencies, overrides.protocol),
     workspacePackage(
-      'hermes-storage-control',
+      'makosh-storage-control',
       {
         role: 'platform',
         owner: 'storage',
@@ -205,7 +205,7 @@ export function storagePackages({
       controlDependencies,
     ),
     workspacePackage(
-      'hermes-storage-vault',
+      'makosh-storage-vault',
       {
         role: 'platform',
         owner: 'storage',
@@ -233,7 +233,7 @@ function storageRuntimePackages({
 }) {
   return [
     workspacePackage(
-      'hermes-storage-runtime',
+      'makosh-storage-runtime',
       {
         role: 'platform',
         owner: 'storage',
@@ -244,7 +244,7 @@ function storageRuntimePackages({
       runtimeDependencies,
     ),
     workspacePackage(
-      'hermes-storage-postgres',
+      'makosh-storage-postgres',
       {
         role: 'platform',
         owner: 'storage',
@@ -254,7 +254,7 @@ function storageRuntimePackages({
       postgresDependencies,
     ),
     workspacePackage(
-      'hermes-storage-pgbouncer',
+      'makosh-storage-pgbouncer',
       {
         role: 'platform',
         owner: 'storage',
@@ -264,7 +264,7 @@ function storageRuntimePackages({
       pgbouncerDependencies,
     ),
     workspacePackage(
-      'hermes-storage-migrations',
+      'makosh-storage-migrations',
       {
         role: 'platform',
         owner: 'storage',

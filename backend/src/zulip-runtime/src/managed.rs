@@ -7,48 +7,48 @@ use std::os::unix::net::UnixStream;
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTargetV1, ManagedBlobSessionRequestV1,
     request_managed_blob_session_v2,
 };
-use hermes_communications_ingress::{
+use makosh_communications_ingress::{
     BodyAdmissionFailureV1, BodyBlobReceiptV1, COMMUNICATIONS_BLOB_CUSTODY_TARGET_CAPABILITY_ID,
     COMMUNICATIONS_BLOB_CUSTODY_TARGET_MODULE_ID, COMMUNICATIONS_BLOB_CUSTODY_TARGET_OWNER_ID,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
 };
-use hermes_managed_vault_client::{
+use makosh_managed_vault_client::{
     ManagedProviderCredentialClientV2, ManagedProviderCredentialContextV1,
     ManagedProviderCredentialErrorV1, ManagedProviderCredentialRequestV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobDataOperationV1, ManagedRuntimeClientDeliveryResponseV1, ManagedRuntimeControlRequestV1,
     ManagedRuntimeControlResponseV1, ManagedRuntimeReadyRequestV1,
     ManagedStorageRuntimeConfigurationV1, ModuleClientResponseV1,
     managed_runtime_control_request_v1::Operation,
     managed_runtime_control_response_v1::Result as ControlResult,
 };
-use hermes_runtime_protocol::validation::module_client::{
+use makosh_runtime_protocol::validation::module_client::{
     validate_module_client_request_v1, validate_module_client_response_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{
         ManagedControlChannelV2, ManagedControlRequestDispatcherV2, ManagedControlTransportErrorV2,
         RejectManagedControlRequestsV2,
     },
     validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES,
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
-use hermes_vault_protocol::SecretClassV1;
-use hermes_zulip_api::{
+use makosh_vault_protocol::SecretClassV1;
+use makosh_zulip_api::{
     ZulipAccountV1, ZulipCommandOperationStatusV1, ZulipCommandV1, ZulipEventQueueV1,
     account::{
         ZulipAccountLifecycleCommandV1, ZulipAccountLifecycleReceiptV1,
@@ -58,10 +58,10 @@ use hermes_zulip_api::{
     operational::{ZulipOperationalQueryResponseV1, ZulipOperationalQueryV1},
     realtime::{ZulipOperationalReplayRequestV1, ZulipOperationalReplayResponseV1},
 };
-use hermes_zulip_core::credential_lease_purpose;
-use hermes_zulip_delivery_intent_contract::zulip_delivery_intent_execute_contract_reference_v1;
-use hermes_zulip_http::ZulipHttpConfigV1;
-use hermes_zulip_persistence::ZulipDurablePersistence;
+use makosh_zulip_core::credential_lease_purpose;
+use makosh_zulip_delivery_intent_contract::zulip_delivery_intent_execute_contract_reference_v1;
+use makosh_zulip_http::ZulipHttpConfigV1;
+use makosh_zulip_persistence::ZulipDurablePersistence;
 use prost::Message;
 use sha2::{Digest, Sha256};
 
@@ -505,7 +505,7 @@ impl ZulipAdmittedRuntimeV1 {
         &self,
         command: &ZulipCommandV1,
         requested_at_unix_seconds: i64,
-    ) -> Result<hermes_zulip_api::ZulipCommandReceiptV1, super::ZulipRuntimeErrorV1> {
+    ) -> Result<makosh_zulip_api::ZulipCommandReceiptV1, super::ZulipRuntimeErrorV1> {
         if self.provider_http()?.is_none() {
             return Err(super::ZulipRuntimeErrorV1::Credential);
         }
@@ -984,15 +984,15 @@ mod control_dispatch_tests {
     use std::os::unix::net::UnixStream;
     use std::thread;
 
-    use hermes_runtime_protocol::managed_control::ManagedControlChannelV2;
-    use hermes_runtime_protocol::v1::{
+    use makosh_runtime_protocol::managed_control::ManagedControlChannelV2;
+    use makosh_runtime_protocol::v1::{
         ContractReferenceV1, ManagedRuntimeClientDeliveryRequestV1, ManagedRuntimeControlAckV1,
         ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
         ManagedRuntimeReadyRequestV1, ModuleClientRequestV1,
         managed_runtime_control_frame_v2::Frame, managed_runtime_control_request_v1::Operation,
         managed_runtime_control_response_v1::Result as ControlResult,
     };
-    use hermes_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
+    use makosh_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
 
     use super::ZulipBusyControlDispatcher;
 
@@ -1010,7 +1010,7 @@ mod control_dispatch_tests {
                             ManagedRuntimeClientDeliveryRequestV1 {
                                 request: Some(ModuleClientRequestV1 {
                                     protocol_major: 1,
-                                    module_id: "hermes-zulip-runtime".to_owned(),
+                                    module_id: "makosh-zulip-runtime".to_owned(),
                                     owner_id: "zulip".to_owned(),
                                     contract: Some(ContractReferenceV1 {
                                         owner: "zulip".to_owned(),

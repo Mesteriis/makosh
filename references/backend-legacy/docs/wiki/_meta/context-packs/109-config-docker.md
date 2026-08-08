@@ -21,9 +21,9 @@
 - Group / Группа: `docker`
 - Role / Роль: `config`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,24 +55,24 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docker/docker-compose.yml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docker/docker-compose.yml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docker/docker-compose.yml`
 - Size bytes / Размер в байтах: `2475`
 - Included characters / Включено символов: `2475`
 - Truncated / Обрезано: `no`
 
 ```yaml
-name: hermes-hub-dev
+name: makosh-dev
 
 services:
   postgres:
     image: pgvector/pgvector:0.8.2-pg16
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${HERMES_POSTGRES_DB:?Set HERMES_POSTGRES_DB in docker/.env}
-      POSTGRES_USER: ${HERMES_POSTGRES_USER:?Set HERMES_POSTGRES_USER in docker/.env}
-      POSTGRES_PASSWORD: ${HERMES_POSTGRES_PASSWORD:?Set HERMES_POSTGRES_PASSWORD in docker/.env}
+      POSTGRES_DB: ${MAKOSH_POSTGRES_DB:?Set MAKOSH_POSTGRES_DB in docker/.env}
+      POSTGRES_USER: ${MAKOSH_POSTGRES_USER:?Set MAKOSH_POSTGRES_USER in docker/.env}
+      POSTGRES_PASSWORD: ${MAKOSH_POSTGRES_PASSWORD:?Set MAKOSH_POSTGRES_PASSWORD in docker/.env}
     ports:
-      - "${HERMES_POSTGRES_BIND:-127.0.0.1}:${HERMES_POSTGRES_PORT:-5432}:5432"
+      - "${MAKOSH_POSTGRES_BIND:-127.0.0.1}:${MAKOSH_POSTGRES_PORT:-5432}:5432"
     volumes:
       - type: bind
         source: ./data/postgres
@@ -89,8 +89,8 @@ services:
     restart: unless-stopped
     command: ["-js", "-sd", "/data", "-m", "8222"]
     ports:
-      - "${HERMES_NATS_BIND:-127.0.0.1}:${HERMES_NATS_PORT:-4222}:4222"
-      - "${HERMES_NATS_MONITOR_BIND:-127.0.0.1}:${HERMES_NATS_MONITOR_PORT:-8222}:8222"
+      - "${MAKOSH_NATS_BIND:-127.0.0.1}:${MAKOSH_NATS_PORT:-4222}:4222"
+      - "${MAKOSH_NATS_MONITOR_BIND:-127.0.0.1}:${MAKOSH_NATS_MONITOR_PORT:-8222}:8222"
     volumes:
       - type: bind
         source: ./data/nats
@@ -111,14 +111,14 @@ services:
       target: whatsapp-business-cloud-edge-proxy
     restart: unless-stopped
     environment:
-      HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_BIND_ADDR: 0.0.0.0:8787
-      HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_HERMES_BASE_URL: ${HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_HERMES_BASE_URL:-http://host.docker.internal:8080}
-      HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_ACCOUNT_ID: ${HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_ACCOUNT_ID:-}
-      HERMES_LOCAL_API_SECRET: ${HERMES_LOCAL_API_SECRET:?Set HERMES_LOCAL_API_SECRET in docker/.env}
-      HERMES_LOG_FORMAT: ${HERMES_LOG_FORMAT:-json}
-      RUST_LOG: ${HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_RUST_LOG:-info}
+      MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_BIND_ADDR: 0.0.0.0:8787
+      MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_MAKOSH_BASE_URL: ${MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_MAKOSH_BASE_URL:-http://host.docker.internal:8080}
+      MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_ACCOUNT_ID: ${MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_ACCOUNT_ID:-}
+      MAKOSH_LOCAL_API_SECRET: ${MAKOSH_LOCAL_API_SECRET:?Set MAKOSH_LOCAL_API_SECRET in docker/.env}
+      MAKOSH_LOG_FORMAT: ${MAKOSH_LOG_FORMAT:-json}
+      RUST_LOG: ${MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_RUST_LOG:-info}
     ports:
-      - "${HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_BIND:-127.0.0.1}:${HERMES_WHATSAPP_BUSINESS_CLOUD_EDGE_PORT:-8787}:8787"
+      - "${MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_BIND:-127.0.0.1}:${MAKOSH_WHATSAPP_BUSINESS_CLOUD_EDGE_PORT:-8787}:8787"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     healthcheck:

@@ -4,19 +4,19 @@ mod jobs;
 mod realtime;
 pub mod schema;
 
-use hermes_storage_protocol::StorageBindingV1;
 pub use jobs::{
     CommunicationsExportArtifactReceiptV1, CommunicationsExportClaimV1,
     CommunicationsExportJobStatusV1, CommunicationsExportPreparedItemV1,
     CommunicationsExportSourceReceiptV1,
 };
+use makosh_storage_protocol::StorageBindingV1;
 pub use realtime::CommunicationsExportRealtimeTransitionV1;
 use sqlx::{
     PgPool,
     postgres::{PgConnectOptions, PgPoolOptions},
 };
 
-pub const PACKAGE: &str = "hermes-communications-export-persistence";
+pub const PACKAGE: &str = "makosh-communications-export-persistence";
 
 #[derive(Clone)]
 pub struct CommunicationsExportPersistenceV1 {

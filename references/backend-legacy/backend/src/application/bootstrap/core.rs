@@ -1,6 +1,6 @@
 //! Provider-neutral runtime tasks owned by the desktop composition layer.
 
-use hermes_desktop_runtime::RuntimeTaskSpec;
+use makosh_desktop_runtime::RuntimeTaskSpec;
 
 use super::ApplicationBootstrapContext;
 

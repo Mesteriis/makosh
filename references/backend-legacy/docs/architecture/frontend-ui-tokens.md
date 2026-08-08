@@ -1,8 +1,8 @@
-# Hermes UI Tokens
+# Макошь UI Tokens
 
 ## Token layers
 
-Hermes UI использует два слоя токенов.
+Макошь UI использует два слоя токенов.
 
 ### Legacy compatibility tokens
 
@@ -144,7 +144,7 @@ low contrast borders
 no neon glow
 ```
 
-### Hermes
+### Макошь
 
 Signature theme.
 

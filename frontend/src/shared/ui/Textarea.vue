@@ -22,8 +22,8 @@ const emit = defineEmits<{
 }>()
 
 const classes = computed(() => [
-  'hermes-textarea',
-  { 'hermes-textarea--error': props.error },
+  'makosh-textarea',
+  { 'makosh-textarea--error': props.error },
   props.class
 ])
 
@@ -34,7 +34,7 @@ function handleInput(event: Event): void {
 </script>
 
 <template>
-  <div class="hermes-textarea-wrapper">
+  <div class="makosh-textarea-wrapper">
     <textarea
       :class="classes"
       :id="id"
@@ -45,6 +45,6 @@ function handleInput(event: Event): void {
       :rows="rows"
       @input="handleInput"
     />
-    <span v-if="error" class="hermes-textarea-error">{{ error }}</span>
+    <span v-if="error" class="makosh-textarea-error">{{ error }}</span>
   </div>
 </template>

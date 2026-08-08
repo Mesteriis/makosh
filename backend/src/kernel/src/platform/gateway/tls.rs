@@ -1,7 +1,7 @@
 use std::path::Path;
 use std::sync::Arc;
 
-use hermes_secure_file::{SecureReadPolicy, read as read_secure_file};
+use makosh_secure_file::{SecureReadPolicy, read as read_secure_file};
 use quinn::ServerConfig as QuinnServerConfig;
 use quinn::crypto::rustls::QuicServerConfig;
 use rustls::ServerConfig;

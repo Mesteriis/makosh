@@ -1,6 +1,6 @@
 //! Exact Mail replay terminal-result envelope builder.
 
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
@@ -20,8 +20,8 @@ use crate::{
     wire::{ReplayMailEvidenceCommandV1, ReplayMailEvidenceOutcomeV1, ReplayMailEvidenceResultV1},
 };
 
-const COMMAND_MESSAGE_DOMAIN_V1: &[u8] = b"hermes.mail.retained-evidence-replay.command.v1";
-const RESULT_MESSAGE_DOMAIN_V1: &[u8] = b"hermes.mail.retained-evidence-replay.result.v1";
+const COMMAND_MESSAGE_DOMAIN_V1: &[u8] = b"makosh.mail.retained-evidence-replay.command.v1";
+const RESULT_MESSAGE_DOMAIN_V1: &[u8] = b"makosh.mail.retained-evidence-replay.result.v1";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct MailReplayCommandEnvelopeContextV1 {
@@ -270,7 +270,7 @@ fn command_outbox_error(_: OutboxRecordError) -> MailReplayCommandEnvelopeErrorV
 
 #[cfg(test)]
 mod tests {
-    use hermes_events_protocol::{
+    use makosh_events_protocol::{
         v1::{ResultOutcomeV1, durable_envelope_v1::Semantics},
         validation::envelope::decode_envelope_v1,
     };

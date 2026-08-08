@@ -6,7 +6,7 @@ use sqlx::postgres::{PgPool, PgRow};
 use sqlx::{Postgres, Row, Transaction};
 use thiserror::Error;
 
-use hermes_communications_api::mail_resources::{
+use makosh_communications_api::mail_resources::{
     DiscoveredMailProviderResource, MailProviderResourceCommandPort, MailProviderResourceKind,
     MailProviderResourcePortError, MailProviderSemanticRole,
 };
@@ -126,7 +126,7 @@ pub enum MailProviderResourceError {
     LocalFolderAccountMismatch(String),
 
     #[error(transparent)]
-    Parse(#[from] hermes_communications_api::mail_resources::MailProviderResourceParseError),
+    Parse(#[from] makosh_communications_api::mail_resources::MailProviderResourceParseError),
 }
 
 #[derive(Clone)]

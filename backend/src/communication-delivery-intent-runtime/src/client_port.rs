@@ -2,7 +2,7 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_delivery_intent_api::{
+use makosh_communication_delivery_intent_api::{
     COMMUNICATION_DELIVERY_INTENT_CONTRACT_MAJOR_V1, COMMUNICATION_DELIVERY_INTENT_MODULE_ID_V1,
     COMMUNICATION_DELIVERY_INTENT_OWNER_V1,
     wire::{
@@ -10,8 +10,8 @@ use hermes_communication_delivery_intent_api::{
         GetDeliveryIntentStatusResponseV1,
     },
 };
-use hermes_communication_delivery_intent_persistence::DeliveryIntentStatusRecordV1;
-use hermes_runtime_protocol::{
+use makosh_communication_delivery_intent_persistence::DeliveryIntentStatusRecordV1;
+use makosh_runtime_protocol::{
     managed_control::ManagedControlRequestDispatcherV2,
     v1::{ModuleClientRequestV1, ModuleClientResponseV1},
 };

@@ -5,18 +5,18 @@ pub mod owner_derived_key;
 use std::io::{Read, Write};
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
     ManagedRuntimeProviderCredentialRequestV1, ManagedRuntimeVaultRouteRequestV1,
     VaultCiphertextResponseV1, VaultCiphertextRouteDirectionV1, VaultCiphertextRouteV1,
     managed_runtime_control_request_v1::Operation,
     managed_runtime_control_response_v1::Result as ControlResult,
 };
-use hermes_runtime_protocol::vault_request_id::next_vault_transport_request_id_v1;
-use hermes_vault_protocol::{
+use makosh_runtime_protocol::vault_request_id::next_vault_transport_request_id_v1;
+use makosh_vault_protocol::{
     LeaseAudienceV1, LeaseIdV1, SecretClassV1, VaultActionV1, VaultCiphertextFrameV1,
     VaultLeaseIssueRequestV1, VaultPurposeRequestV1, VaultResponseRecipientV1,
     VaultTransportBindingV1, VaultTransportCommandV1, VaultTransportDirectionV1,
@@ -248,7 +248,7 @@ impl ManagedProviderCredentialClientV1 {
         action: VaultActionV1,
         recipient_public_key_x25519: &[u8; 32],
     ) -> Result<
-        hermes_runtime_protocol::v1::ManagedRuntimeProviderCredentialDeliveryV1,
+        makosh_runtime_protocol::v1::ManagedRuntimeProviderCredentialDeliveryV1,
         ManagedProviderCredentialErrorV1,
     > {
         write_frame(
@@ -595,7 +595,7 @@ impl<'a> ManagedProviderCredentialClientV2<'a> {
         action: VaultActionV1,
         recipient_public_key_x25519: &[u8; 32],
     ) -> Result<
-        hermes_runtime_protocol::v1::ManagedRuntimeProviderCredentialDeliveryV1,
+        makosh_runtime_protocol::v1::ManagedRuntimeProviderCredentialDeliveryV1,
         ManagedProviderCredentialErrorV1,
     > {
         let response = self
@@ -858,19 +858,19 @@ mod tests {
     use std::os::unix::net::UnixStream;
     use std::thread;
 
-    use hermes_runtime_protocol::managed_control::{
+    use makosh_runtime_protocol::managed_control::{
         ManagedControlChannelV2, RejectManagedControlRequestsV2,
     };
-    use hermes_runtime_protocol::v1::{
+    use makosh_runtime_protocol::v1::{
         ManagedRuntimeControlResponseV1, ManagedRuntimeProviderCredentialDeliveryV1,
         ManagedRuntimeReadyRequestV1, managed_runtime_control_frame_v2::Frame,
         managed_runtime_control_request_v1::Operation,
         managed_runtime_control_response_v1::Result as ControlResult,
     };
-    use hermes_runtime_protocol::validation::managed_control::{
+    use makosh_runtime_protocol::validation::managed_control::{
         MANAGED_CONTROL_CORRELATION_ID_BYTES, MANAGED_CONTROL_TRANSPORT_MAJOR_V2,
     };
-    use hermes_vault_protocol::{SecretClassV1, VaultActionV1};
+    use makosh_vault_protocol::{SecretClassV1, VaultActionV1};
 
     use super::{
         MAX_FRAME_BYTES, ManagedProviderCredentialClientV2, ManagedProviderCredentialErrorV1,
@@ -904,7 +904,7 @@ mod tests {
             channel
                 .write_request(
                     [9; MANAGED_CONTROL_CORRELATION_ID_BYTES],
-                    hermes_runtime_protocol::v1::ManagedRuntimeControlRequestV1 {
+                    makosh_runtime_protocol::v1::ManagedRuntimeControlRequestV1 {
                         operation: Some(Operation::Ready(ManagedRuntimeReadyRequestV1::default())),
                     },
                 )

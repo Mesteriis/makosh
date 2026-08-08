@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, ContractRefV1, DurableEnvelopeV1, EventMetadataV1, FenceKindV1,
@@ -187,7 +187,7 @@ mod tests {
                 logical_owner_id: "owner-1".to_owned(),
             },
             &ReviewTaskCandidatePromotionEnvelopeContextV1 {
-                module_id: "hermes-reviewed-task-candidate-promotion-runtime".to_owned(),
+                module_id: "makosh-reviewed-task-candidate-promotion-runtime".to_owned(),
                 runtime_instance_id: "runtime-1".to_owned(),
                 runtime_generation: 1,
                 recorded_at_unix_seconds: 1_800_000_000,
@@ -197,7 +197,7 @@ mod tests {
         .expect("promotion result");
         assert_eq!(record.message_id(), &[1; 16]);
         let envelope =
-            hermes_events_protocol::validation::envelope::decode_envelope_v1(record.exact_bytes())
+            makosh_events_protocol::validation::envelope::decode_envelope_v1(record.exact_bytes())
                 .expect("envelope");
         assert_eq!(envelope.partition_key, vec![2; 16]);
         assert_eq!(envelope.causation_message_id, vec![9; 16]);

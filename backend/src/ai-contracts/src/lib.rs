@@ -23,7 +23,7 @@ pub use explanation::{
     validate_explanation_source_content_v1, validate_provider_explanation_request_v1,
     validate_provider_explanation_result_v1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 pub use translation::{
     compute_provider_translation_request_digest_v1,
     compute_translation_inference_request_digest_v1, decode_translation_source_content_v1,
@@ -47,7 +47,7 @@ pub use validation::{
     validate_summary_source_content_v1,
 };
 
-pub const PACKAGE: &str = "hermes-ai-contracts";
+pub const PACKAGE: &str = "makosh-ai-contracts";
 pub const AI_OWNER_V1: &str = "ai";
 pub const AI_CONTRACT_MAJOR_V1: u32 = 1;
 pub const AI_CONTRACT_REVISION_V1: u32 = 4;
@@ -76,7 +76,7 @@ pub const AI_PROVIDER_TRANSLATION_CAPABILITY_ID_V1: &str = "ai.provider.translat
 pub const AI_EXPLANATION_REQUEST_CAPABILITY_ID_V1: &str = "ai.explanation.request.v1";
 pub const AI_PROVIDER_EXPLANATION_CAPABILITY_ID_V1: &str = "ai.provider.explain.v1";
 pub const AI_INFERENCE_BLOB_CAPABILITY_ID_V1: &str = "ai.inference.blob.v1";
-pub const AI_INFERENCE_MODULE_ID_V1: &str = "hermes-ai-inference-runtime";
+pub const AI_INFERENCE_MODULE_ID_V1: &str = "makosh-ai-inference-runtime";
 pub const AI_MAX_PRIVATE_SOURCE_BYTES_V1: u64 = 256 * 1024;
 pub const AI_MAX_OUTPUT_BYTES_V1: u32 = 64 * 1024;
 pub const AI_MAX_OUTPUT_TOKENS_V1: u32 = 4_096;
@@ -88,7 +88,7 @@ pub const AI_MAX_EXPLANATION_REASONS_V1: u32 = 8;
 pub const AI_MAX_EXPLANATION_REASON_TEXT_BYTES_V1: u32 = 512;
 
 pub mod wire {
-    include!(concat!(env!("OUT_DIR"), "/hermes.ai.contracts.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.ai.contracts.v1.rs"));
 }
 
 include!(concat!(env!("OUT_DIR"), "/ai_contracts_schema.rs"));
@@ -153,7 +153,7 @@ fn contract_reference(name: &str) -> ContractReferenceV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::v1::ContractReferenceV1;
+    use makosh_runtime_protocol::v1::ContractReferenceV1;
 
     use super::*;
 

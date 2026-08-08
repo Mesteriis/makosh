@@ -35,7 +35,7 @@ process.stdout.write(process.argv.join(' ').includes('storage_migration_ledger')
 if (!process.env.PGSERVICEFILE || process.argv.includes('--clean') || process.argv.some((value) => value.includes('pass@'))) process.exit(72);
 process.exit(0);
 `);
-  writeFileSync(connectionUrl, 'postgresql://restore_role:pass@127.0.0.1/hermes_restore?sslmode=require\n', { mode: 0o600 });
+  writeFileSync(connectionUrl, 'postgresql://restore_role:pass@127.0.0.1/makosh_restore?sslmode=require\n', { mode: 0o600 });
   writeFileSync(input, 'custom dump', { mode: 0o600 });
   chmodSync(connectionUrl, 0o600);
   chmodSync(input, 0o600);
@@ -43,7 +43,7 @@ process.exit(0);
 }
 
 test('restores only into an empty PostgreSQL target without credentials in arguments', () => {
-  const root = temporaryDirectory('hermes-postgres-restore-');
+  const root = temporaryDirectory('makosh-postgres-restore-');
   try {
     const values = fixtures(root);
     const result = run([
@@ -58,7 +58,7 @@ test('restores only into an empty PostgreSQL target without credentials in argum
 });
 
 test('refuses a non-empty PostgreSQL target before pg_restore', () => {
-  const root = temporaryDirectory('hermes-postgres-restore-nonempty-');
+  const root = temporaryDirectory('makosh-postgres-restore-nonempty-');
   try {
     const values = fixtures(root, false);
     const result = run([
@@ -73,7 +73,7 @@ test('refuses a non-empty PostgreSQL target before pg_restore', () => {
 });
 
 test('rejects a restored database without the Storage migration ledger', () => {
-  const root = temporaryDirectory('hermes-postgres-restore-ledger-');
+  const root = temporaryDirectory('makosh-postgres-restore-ledger-');
   try {
     const values = fixtures(root, true, false);
     const result = run([

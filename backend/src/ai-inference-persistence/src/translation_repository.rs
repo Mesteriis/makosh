@@ -1,8 +1,8 @@
-use hermes_ai_contracts::wire::{
+use makosh_ai_contracts::wire::{
     AiContextReceiptV1, AiInferenceReceiptV1, AiPrivateSourceReceiptV1, AiUseCaseV1,
     CommunicationTranslationInferenceRequestV1, CommunicationTranslationInferenceResultV1,
 };
-use hermes_ai_inference_core::{AiInferenceRunStateV1, AiTranslationRunV1};
+use makosh_ai_inference_core::{AiInferenceRunStateV1, AiTranslationRunV1};
 use sqlx::{Row, postgres::PgRow};
 
 use crate::{
@@ -24,7 +24,7 @@ impl AiInferencePersistenceV1 {
         let context = request.context.as_ref().ok_or(invalid_input())?;
         let source = request.source.as_ref().ok_or(invalid_input())?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.ai_translation_runs (
+            "INSERT INTO makosh_data.ai_translation_runs (
                logical_owner_id, run_id, request_digest, context_id, source_evidence_id,
                source_evidence_revision, contract_major, contract_revision,
                contract_schema_sha256, source_reference_id, source_declared_bytes,
@@ -72,7 +72,7 @@ impl AiInferencePersistenceV1 {
                 AiInferenceRunStateV1::Accepted | AiInferenceRunStateV1::Executing
             ) {
                 let updated = sqlx::query(
-                    "UPDATE hermes_data.ai_translation_runs SET source_custody_proof=$1
+                    "UPDATE makosh_data.ai_translation_runs SET source_custody_proof=$1
                      WHERE logical_owner_id=$2 AND run_id=$3 AND request_digest=$4 AND run_state IN (1,2)",
                 )
                 .bind(&source.custody_transfer_source_proof)
@@ -155,7 +155,7 @@ impl AiInferencePersistenceV1 {
         let result = transition.next_run.terminal_result.as_ref();
         let receipt = result.and_then(|result| result.inference_receipt.as_ref());
         let updated = sqlx::query(
-            "UPDATE hermes_data.ai_translation_runs SET state_revision=$4, run_state=$5,
+            "UPDATE makosh_data.ai_translation_runs SET state_revision=$4, run_state=$5,
              selected_provider_settings_revision=$6, result_translated_text_utf8=$7,
              result_detected_source_language=$8, result_target_language=$9,
              result_model_revision_sha256=$10, result_prompt_policy_sha256=$11,
@@ -207,7 +207,7 @@ const SELECT_TRANSLATION_RUN: &str = "SELECT logical_owner_id, run_id, request_d
  result_detected_source_language, result_target_language, result_model_revision_sha256,
  result_prompt_policy_sha256, result_provider_policy_revision, result_completeness,
  result_confidence_basis_points, result_terminal_status
- FROM hermes_data.ai_translation_runs WHERE logical_owner_id=$1 AND run_id=$2";
+ FROM makosh_data.ai_translation_runs WHERE logical_owner_id=$1 AND run_id=$2";
 const SELECT_TRANSLATION_RUN_FOR_UPDATE: &str =
     "SELECT logical_owner_id, run_id, request_digest, context_id,
  source_evidence_id, source_evidence_revision, contract_major, contract_revision,
@@ -218,7 +218,7 @@ const SELECT_TRANSLATION_RUN_FOR_UPDATE: &str =
  result_detected_source_language, result_target_language, result_model_revision_sha256,
  result_prompt_policy_sha256, result_provider_policy_revision, result_completeness,
  result_confidence_basis_points, result_terminal_status
- FROM hermes_data.ai_translation_runs
+ FROM makosh_data.ai_translation_runs
  WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE";
 const SELECT_RECOVERABLE_TRANSLATION_RUNS: &str =
     "SELECT logical_owner_id, run_id, request_digest, context_id,
@@ -230,7 +230,7 @@ const SELECT_RECOVERABLE_TRANSLATION_RUNS: &str =
  result_detected_source_language, result_target_language, result_model_revision_sha256,
  result_prompt_policy_sha256, result_provider_policy_revision, result_completeness,
  result_confidence_basis_points, result_terminal_status
- FROM hermes_data.ai_translation_runs
+ FROM makosh_data.ai_translation_runs
  WHERE logical_owner_id=$1 AND run_state IN (1,2)
  ORDER BY state_revision, run_id LIMIT $2";
 

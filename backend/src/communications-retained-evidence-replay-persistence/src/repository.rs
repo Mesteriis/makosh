@@ -1,8 +1,8 @@
-use hermes_communications_attachment_contract::{
+use makosh_communications_attachment_contract::{
     COMMUNICATIONS_ATTACHMENT_LIFECYCLE_SCHEMA_SHA256,
     lifecycle_v1::{AttachmentSafetyStateChangedV1, AttachmentSafetyStateV1},
 };
-use hermes_events_protocol::{delivery::OutboxRecordV1, validation::envelope::decode_envelope_v1};
+use makosh_events_protocol::{delivery::OutboxRecordV1, validation::envelope::decode_envelope_v1};
 use prost::Message;
 use sqlx::{PgPool, Row};
 
@@ -65,8 +65,8 @@ impl CommunicationsRetainedEvidenceReplayPersistenceV1 {
     pub async fn verify_storage_ready(&self) -> Result<(), RetainedCommunicationsReplayErrorV1> {
         sqlx::query(
             "SELECT replay.attachment_anchor_id, scan.message_id \
-             FROM hermes_data.communications_retained_evidence_replay_index replay, \
-                  hermes_data.communications_retained_evidence_replay_scan scan \
+             FROM makosh_data.communications_retained_evidence_replay_index replay, \
+                  makosh_data.communications_retained_evidence_replay_scan scan \
              WHERE FALSE",
         )
         .execute(&self.pool)
@@ -85,8 +85,8 @@ impl CommunicationsRetainedEvidenceReplayPersistenceV1 {
         }
         let rows = sqlx::query(
             "SELECT outbox.exact_envelope_bytes \
-             FROM hermes_data.communications_domain_outbox outbox \
-             LEFT JOIN hermes_data.communications_retained_evidence_replay_scan scan \
+             FROM makosh_data.communications_domain_outbox outbox \
+             LEFT JOIN makosh_data.communications_retained_evidence_replay_scan scan \
                ON scan.message_id = outbox.message_id \
              WHERE scan.message_id IS NULL \
              ORDER BY outbox.created_at_unix_seconds ASC, outbox.message_id ASC \
@@ -124,8 +124,8 @@ impl CommunicationsRetainedEvidenceReplayPersistenceV1 {
         let row = sqlx::query(
             "SELECT replay.message_id, replay.envelope_sha256, replay.contract_schema_sha256, \
                     outbox.exact_envelope_bytes \
-             FROM hermes_data.communications_retained_evidence_replay_index replay \
-             JOIN hermes_data.communications_domain_outbox outbox \
+             FROM makosh_data.communications_retained_evidence_replay_index replay \
+             JOIN makosh_data.communications_domain_outbox outbox \
                ON outbox.message_id = replay.message_id \
              WHERE replay.attachment_anchor_id = $1 \
                AND replay.contract_owner = $2 \
@@ -167,8 +167,8 @@ impl CommunicationsRetainedEvidenceReplayPersistenceV1 {
         let row = sqlx::query(
             "SELECT replay.attachment_anchor_id, replay.envelope_sha256, \
                     replay.contract_schema_sha256, outbox.exact_envelope_bytes \
-             FROM hermes_data.communications_retained_evidence_replay_index replay \
-             JOIN hermes_data.communications_domain_outbox outbox \
+             FROM makosh_data.communications_retained_evidence_replay_index replay \
+             JOIN makosh_data.communications_domain_outbox outbox \
                ON outbox.message_id = replay.message_id \
              WHERE replay.message_id = $1 \
                AND replay.contract_owner = $2 \
@@ -206,7 +206,7 @@ impl CommunicationsRetainedEvidenceReplayPersistenceV1 {
     ) -> Result<bool, RetainedCommunicationsReplayErrorV1> {
         validate_audit(audit)?;
         sqlx::query(
-            "INSERT INTO hermes_data.communications_retained_evidence_replay_audit \
+            "INSERT INTO makosh_data.communications_retained_evidence_replay_audit \
                 (operation_id, logical_owner_id, owner_device_actor_sha256, producer_registration_id, \
                  producer_runtime_generation, producer_grant_epoch, logical_attempt, \
                  original_message_id, original_envelope_sha256, phase, recorded_at_unix_seconds) \
@@ -243,7 +243,7 @@ impl CommunicationsRetainedEvidenceReplayPersistenceV1 {
             *record.envelope_sha256(),
         )?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.communications_retained_evidence_replay_index \
+            "INSERT INTO makosh_data.communications_retained_evidence_replay_index \
                 (attachment_anchor_id, message_id, envelope_sha256, contract_owner, contract_name, \
                  contract_major, contract_revision, contract_schema_sha256, indexed_at_unix_seconds) \
              VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) \
@@ -279,7 +279,7 @@ impl CommunicationsRetainedEvidenceReplayPersistenceV1 {
         scanned_at_unix_seconds: i64,
     ) -> Result<(), RetainedCommunicationsReplayErrorV1> {
         sqlx::query(
-            "INSERT INTO hermes_data.communications_retained_evidence_replay_scan \
+            "INSERT INTO makosh_data.communications_retained_evidence_replay_scan \
                 (message_id, scanned_at_unix_seconds) VALUES ($1, $2) \
              ON CONFLICT (message_id) DO NOTHING",
         )
@@ -311,7 +311,7 @@ fn verify_record(
 }
 
 fn is_safe_for_delivery_event(
-    envelope: &hermes_events_protocol::v1::DurableEnvelopeV1,
+    envelope: &makosh_events_protocol::v1::DurableEnvelopeV1,
 ) -> Result<bool, RetainedCommunicationsReplayErrorV1> {
     if !is_safety_contract(envelope.contract.as_ref()) {
         return Ok(false);
@@ -321,7 +321,7 @@ fn is_safe_for_delivery_event(
     Ok(payload.next_state == AttachmentSafetyStateV1::SafeForDelivery as i32)
 }
 
-fn is_safety_contract(contract: Option<&hermes_events_protocol::v1::ContractRefV1>) -> bool {
+fn is_safety_contract(contract: Option<&makosh_events_protocol::v1::ContractRefV1>) -> bool {
     contract.is_some_and(|contract| {
         contract.owner == SAFETY_CONTRACT_OWNER
             && contract.name == SAFETY_CONTRACT_NAME
@@ -400,7 +400,7 @@ fn input_error<T>(_: T) -> RetainedCommunicationsReplayErrorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_events_protocol::v1::{
+    use makosh_events_protocol::v1::{
         ActorKindV1, ActorRefV1, ContractRefV1, DurableEnvelopeV1, EventMetadataV1, FenceKindV1,
         SourceFenceV1, SourceRefV1, durable_envelope_v1::Semantics,
     };

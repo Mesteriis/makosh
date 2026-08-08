@@ -71,7 +71,7 @@ runtime launch contract и typed event contract.
 Решение не создаёт общий owner service или business facade. Изменения
 распределены по существующим единицам:
 
-- `hermes-runtime-protocol` — transport contract;
+- `makosh-runtime-protocol` — transport contract;
 - Kernel launch adapters — authenticated staging;
 - provider integration runtime/mapper — source observation;
 - Communications runtime consumer — tenancy validation;

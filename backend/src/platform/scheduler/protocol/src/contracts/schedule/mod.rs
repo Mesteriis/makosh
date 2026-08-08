@@ -2,7 +2,7 @@
 
 mod encoding;
 
-use hermes_clock_protocol::{TimeZoneContextV1, UtcMillisV1};
+use makosh_clock_protocol::{TimeZoneContextV1, UtcMillisV1};
 
 use crate::contracts::job::JobContractBindingV1;
 

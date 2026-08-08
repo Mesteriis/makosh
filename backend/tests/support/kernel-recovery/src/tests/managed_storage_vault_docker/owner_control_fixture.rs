@@ -4,7 +4,7 @@ use super::*;
 
 use std::os::unix::fs::{FileTypeExt, PermissionsExt};
 
-use hermes_gateway_protocol::owner_control_client::{
+use makosh_gateway_protocol::owner_control_client::{
     OwnerControlClientV1, OwnerControlProofSignerV1,
 };
 

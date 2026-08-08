@@ -8,12 +8,12 @@ pub use envelope::{
     build_communication_task_source_prepared_outbox_record_v1,
     build_communication_task_source_rejected_outbox_record_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-communications-task-source-api";
+pub const PACKAGE: &str = "makosh-communications-task-source-api";
 pub const COMMUNICATIONS_TASK_SOURCE_OWNER_V1: &str = "communications";
 pub const COMMUNICATION_TASK_SOURCE_PREPARE_CONTRACT_NAME_V1: &str =
     "communication_task_source_prepare";
@@ -30,14 +30,14 @@ pub const COMMUNICATIONS_TASK_SOURCE_CAPABILITY_ID_V1: &str = "communications.ta
 pub const COMMUNICATION_TASK_SOURCE_BLOB_TARGET_OWNER_ID_V1: &str =
     "communication_task_candidate_extraction";
 pub const COMMUNICATION_TASK_SOURCE_BLOB_TARGET_MODULE_ID_V1: &str =
-    "hermes-communication-task-candidate-runtime";
+    "makosh-communication-task-candidate-runtime";
 pub const COMMUNICATION_TASK_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "communication_task_candidate_extraction.source.blob.v1";
 
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communications.task_source.v1.rs"
+        "/makosh.communications.task_source.v1.rs"
     ));
 }
 
@@ -203,7 +203,7 @@ mod tests {
             "communication_task_candidate_extraction.source.blob.v1"
         );
         let source =
-            include_str!("../proto/hermes/communications/task_source/v1/task_source.proto");
+            include_str!("../proto/makosh/communications/task_source/v1/task_source.proto");
         assert!(source.contains("CommunicationTaskSourceContentV1"));
         assert!(source.contains("subject_utf8"));
         assert!(source.contains("body_utf8"));

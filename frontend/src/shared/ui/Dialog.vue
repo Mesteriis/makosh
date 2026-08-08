@@ -23,7 +23,7 @@ const emit = defineEmits<{
   'update:open': [value: boolean]
 }>()
 
-const contentClasses = computed(() => ['hermes-dialog-content', props.contentClass])
+const contentClasses = computed(() => ['makosh-dialog-content', props.contentClass])
 
 function handleOutsideCloseEvent(event: Event): void {
   if (props.closeOnInteractOutside) return
@@ -37,26 +37,26 @@ function handleOutsideCloseEvent(event: Event): void {
       <slot name="trigger" />
     </DialogTrigger>
     <DialogPortal>
-      <DialogOverlay class="hermes-dialog-overlay">
+      <DialogOverlay class="makosh-dialog-overlay">
         <DialogContent
           :class="contentClasses"
           @interact-outside="handleOutsideCloseEvent"
           @pointer-down-outside="handleOutsideCloseEvent"
         >
-          <div class="hermes-dialog-header">
-            <DialogTitle v-if="title" class="hermes-dialog-title">{{ title }}</DialogTitle>
-            <DialogDescription v-if="description" class="hermes-dialog-description">{{ description }}</DialogDescription>
+          <div class="makosh-dialog-header">
+            <DialogTitle v-if="title" class="makosh-dialog-title">{{ title }}</DialogTitle>
+            <DialogDescription v-if="description" class="makosh-dialog-description">{{ description }}</DialogDescription>
             <slot name="header" />
           </div>
-          <div class="hermes-dialog-body">
+          <div class="makosh-dialog-body">
             <slot />
           </div>
-          <div v-if="$slots.footer" class="hermes-dialog-footer">
+          <div v-if="$slots.footer" class="makosh-dialog-footer">
             <slot name="footer" />
           </div>
           <slot name="chrome" />
-          <DialogClose v-if="showClose" class="hermes-dialog-close" as-child>
-            <button class="hermes-dialog-close-btn" type="button" :aria-label="closeLabel">
+          <DialogClose v-if="showClose" class="makosh-dialog-close" as-child>
+            <button class="makosh-dialog-close-btn" type="button" :aria-label="closeLabel">
               <Icon icon="tabler:x" size="1.125rem" />
             </button>
           </DialogClose>

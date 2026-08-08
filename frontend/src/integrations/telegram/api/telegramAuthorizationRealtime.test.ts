@@ -4,10 +4,10 @@ import { describe, expect, it, vi } from 'vitest'
 import {
 	ClientRealtimeEventV1Schema,
 	type ClientRealtimeEventV1,
-} from '../../../gen/hermes/gateway/v1/client_realtime_pb'
+} from '../../../gen/makosh/gateway/v1/client_realtime_pb'
 import {
 	AuthorizationStatusResponseSchema,
-} from '../../../gen/hermes/telegram/v1/client_pb'
+} from '../../../gen/makosh/telegram/v1/client_pb'
 import type { BrowserGatewayRealtimeObserver } from '../../../platform/gateway/browserGatewayRealtime'
 import { openTelegramAuthorizationRealtime } from './telegramAuthorizationRealtime'
 

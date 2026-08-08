@@ -1,11 +1,11 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 use sqlx::Postgres;
 use sqlx::postgres::PgPool;
 
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::store::EventStore;
 
 use super::errors::PersonaTrustError;
 use super::models::PersonaPromise;
@@ -93,7 +93,7 @@ async fn append_promise_created_event(
         promise.promised_at,
         json!({
             "kind": "persona_promise",
-            "provider": "hermes",
+            "provider": "makosh",
             "source_id": promise.id,
         }),
         json!({

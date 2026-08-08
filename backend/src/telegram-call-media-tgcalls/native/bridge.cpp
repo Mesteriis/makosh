@@ -44,7 +44,7 @@ struct BridgeState {
     std::deque<QueuedEvent> events;
     size_t queued_bytes = 0;
     bool overflowed = false;
-    uint32_t state = HERMES_TGCALLS_CONNECTING_V1;
+    uint32_t state = MAKOSH_TGCALLS_CONNECTING_V1;
     bool failed = false;
     bool established = false;
     bool stopped = false;
@@ -67,20 +67,20 @@ struct BridgeState {
     }
 
     void update(tgcalls::State next) {
-        uint32_t mapped = HERMES_TGCALLS_CONNECTING_V1;
+        uint32_t mapped = MAKOSH_TGCALLS_CONNECTING_V1;
         switch (next) {
             case tgcalls::State::WaitInit:
             case tgcalls::State::WaitInitAck:
-                mapped = HERMES_TGCALLS_CONNECTING_V1;
+                mapped = MAKOSH_TGCALLS_CONNECTING_V1;
                 break;
             case tgcalls::State::Established:
-                mapped = HERMES_TGCALLS_ESTABLISHED_V1;
+                mapped = MAKOSH_TGCALLS_ESTABLISHED_V1;
                 break;
             case tgcalls::State::Reconnecting:
-                mapped = HERMES_TGCALLS_RECONNECTING_V1;
+                mapped = MAKOSH_TGCALLS_RECONNECTING_V1;
                 break;
             case tgcalls::State::Failed:
-                mapped = HERMES_TGCALLS_FAILED_V1;
+                mapped = MAKOSH_TGCALLS_FAILED_V1;
                 break;
         }
         {
@@ -95,7 +95,7 @@ struct BridgeState {
             }
         }
         push(QueuedEvent {
-            .kind = HERMES_TGCALLS_STATE_EVENT_V1,
+            .kind = MAKOSH_TGCALLS_STATE_EVENT_V1,
             .state = mapped,
             .payload = {},
         });
@@ -124,7 +124,7 @@ struct StopCompletion {
 
 struct Session {
     std::unique_ptr<tgcalls::Instance> instance;
-    std::shared_ptr<std::array<uint8_t, HERMES_TGCALLS_KEY_BYTES_V1>> key;
+    std::shared_ptr<std::array<uint8_t, MAKOSH_TGCALLS_KEY_BYTES_V1>> key;
     std::shared_ptr<BridgeState> bridge;
     std::shared_ptr<StopCompletion> stop_completion;
     bool stopped = false;
@@ -139,7 +139,7 @@ void register_implementations() {
         tgcalls::Register<tgcalls::InstanceV2CompatImpl>();
         tgcalls::Register<tgcalls::InstanceV2ReferenceImpl>();
         tgcalls::SetLoggingFunction([](const std::string &) {
-            // Native debug output may contain provider-derived data. Hermes
+            // Native debug output may contain provider-derived data. Макошь
             // deliberately exposes no bridge logging callback.
         });
     });
@@ -153,25 +153,25 @@ bool bounded_string(const char *value, bool required) {
     return length <= kMaximumStringBytes && (!required || length > 0);
 }
 
-std::string peer_tag_hex(const uint8_t peer_tag[HERMES_TGCALLS_PEER_TAG_BYTES_V1]) {
+std::string peer_tag_hex(const uint8_t peer_tag[MAKOSH_TGCALLS_PEER_TAG_BYTES_V1]) {
     std::ostringstream output;
     output << std::hex << std::setfill('0');
-    for (size_t index = 0; index < HERMES_TGCALLS_PEER_TAG_BYTES_V1; ++index) {
+    for (size_t index = 0; index < MAKOSH_TGCALLS_PEER_TAG_BYTES_V1; ++index) {
         output << std::setw(2) << static_cast<unsigned int>(peer_tag[index]);
     }
     return output.str();
 }
 
-bool valid_server(const HermesTgCallsServerV1 &server) {
-    if (server.abi_version != HERMES_TGCALLS_ABI_VERSION_V1
+bool valid_server(const МакошьTgCallsServerV1 &server) {
+    if (server.abi_version != MAKOSH_TGCALLS_ABI_VERSION_V1
         || server.port == 0
         || !bounded_string(server.host, true)) {
         return false;
     }
-    if (server.kind == HERMES_TGCALLS_TELEGRAM_REFLECTOR_V1) {
+    if (server.kind == MAKOSH_TGCALLS_TELEGRAM_REFLECTOR_V1) {
         return true;
     }
-    if (server.kind == HERMES_TGCALLS_WEBRTC_V1) {
+    if (server.kind == MAKOSH_TGCALLS_WEBRTC_V1) {
         return bounded_string(server.username, false)
             && bounded_string(server.password, false)
             && (server.supports_stun != 0 || server.supports_turn != 0);
@@ -180,7 +180,7 @@ bool valid_server(const HermesTgCallsServerV1 &server) {
 }
 
 std::vector<tgcalls::RtcServer> map_servers(
-    const HermesTgCallsServerV1 *servers,
+    const МакошьTgCallsServerV1 *servers,
     size_t count) {
     std::vector<tgcalls::RtcServer> mapped;
     mapped.reserve(count);
@@ -191,7 +191,7 @@ std::vector<tgcalls::RtcServer> map_servers(
         server.host = source.host;
         server.port = source.port;
         server.isTcp = source.is_tcp != 0;
-        if (source.kind == HERMES_TGCALLS_TELEGRAM_REFLECTOR_V1) {
+        if (source.kind == MAKOSH_TGCALLS_TELEGRAM_REFLECTOR_V1) {
             server.login = "reflector";
             server.password = peer_tag_hex(source.peer_tag);
             server.isTurn = true;
@@ -201,7 +201,7 @@ std::vector<tgcalls::RtcServer> map_servers(
             server.isTurn = source.supports_turn != 0;
         }
         mapped.push_back(std::move(server));
-        if (source.kind == HERMES_TGCALLS_WEBRTC_V1
+        if (source.kind == MAKOSH_TGCALLS_WEBRTC_V1
             && source.supports_stun != 0
             && source.supports_turn != 0) {
             auto stun = mapped.back();
@@ -213,9 +213,9 @@ std::vector<tgcalls::RtcServer> map_servers(
     return mapped;
 }
 
-void fill_snapshot(Session &session, HermesTgCallsSnapshotV1 *output) {
+void fill_snapshot(Session &session, МакошьTgCallsSnapshotV1 *output) {
     std::lock_guard<std::mutex> lock(session.bridge->mutex);
-    output->abi_version = HERMES_TGCALLS_ABI_VERSION_V1;
+    output->abi_version = MAKOSH_TGCALLS_ABI_VERSION_V1;
     output->state = session.bridge->state;
     output->duration_seconds = session.bridge->duration_seconds();
     output->connection_id = session.connection_id;
@@ -224,44 +224,44 @@ void fill_snapshot(Session &session, HermesTgCallsSnapshotV1 *output) {
 
 } // namespace
 
-extern "C" uint32_t hermes_tgcalls_abi_version_v1(void) {
-    return HERMES_TGCALLS_ABI_VERSION_V1;
+extern "C" uint32_t makosh_tgcalls_abi_version_v1(void) {
+    return MAKOSH_TGCALLS_ABI_VERSION_V1;
 }
 
-extern "C" size_t hermes_tgcalls_version_count_v1(void) {
+extern "C" size_t makosh_tgcalls_version_count_v1(void) {
     register_implementations();
     return tgcalls::Meta::Versions().size();
 }
 
-extern "C" int32_t hermes_tgcalls_version_at_v1(
+extern "C" int32_t makosh_tgcalls_version_at_v1(
     size_t index,
     char *output,
     size_t output_capacity) {
     register_implementations();
     const auto versions = tgcalls::Meta::Versions();
     if (index >= versions.size() || output == nullptr) {
-        return HERMES_TGCALLS_INVALID_ARGUMENT_V1;
+        return MAKOSH_TGCALLS_INVALID_ARGUMENT_V1;
     }
     const auto &version = versions[index];
     if (output_capacity <= version.size()) {
-        return HERMES_TGCALLS_BUFFER_TOO_SMALL_V1;
+        return MAKOSH_TGCALLS_BUFFER_TOO_SMALL_V1;
     }
     std::memcpy(output, version.data(), version.size());
     output[version.size()] = '\0';
-    return HERMES_TGCALLS_OK_V1;
+    return MAKOSH_TGCALLS_OK_V1;
 }
 
-extern "C" int32_t hermes_tgcalls_max_layer_v1(void) {
+extern "C" int32_t makosh_tgcalls_max_layer_v1(void) {
     register_implementations();
     return tgcalls::Meta::MaxLayer();
 }
 
-extern "C" int32_t hermes_tgcalls_session_create_v1(
-    const HermesTgCallsSessionConfigV1 *config,
+extern "C" int32_t makosh_tgcalls_session_create_v1(
+    const МакошьTgCallsSessionConfigV1 *config,
     void **session_out) {
     if (config == nullptr
         || session_out == nullptr
-        || config->abi_version != HERMES_TGCALLS_ABI_VERSION_V1
+        || config->abi_version != MAKOSH_TGCALLS_ABI_VERSION_V1
         || !bounded_string(config->library_version, true)
         || !bounded_string(config->call_config, false)
         || !bounded_string(config->custom_parameters, false)
@@ -270,15 +270,15 @@ extern "C" int32_t hermes_tgcalls_session_create_v1(
         || config->initialization_timeout_seconds <= 0.0
         || config->receive_timeout_seconds <= 0.0
         || config->encryption_key == nullptr
-        || config->encryption_key_length != HERMES_TGCALLS_KEY_BYTES_V1
+        || config->encryption_key_length != MAKOSH_TGCALLS_KEY_BYTES_V1
         || config->servers == nullptr
         || config->server_count == 0
         || config->server_count > kMaximumServers * 2) {
-        return HERMES_TGCALLS_INVALID_ARGUMENT_V1;
+        return MAKOSH_TGCALLS_INVALID_ARGUMENT_V1;
     }
     for (size_t index = 0; index < config->server_count; ++index) {
         if (!valid_server(config->servers[index])) {
-            return HERMES_TGCALLS_INVALID_ARGUMENT_V1;
+            return MAKOSH_TGCALLS_INVALID_ARGUMENT_V1;
         }
     }
 
@@ -286,12 +286,12 @@ extern "C" int32_t hermes_tgcalls_session_create_v1(
     const std::string requested_version(config->library_version);
     const auto versions = tgcalls::Meta::Versions();
     if (std::find(versions.begin(), versions.end(), requested_version) == versions.end()) {
-        return HERMES_TGCALLS_UNSUPPORTED_VERSION_V1;
+        return MAKOSH_TGCALLS_UNSUPPORTED_VERSION_V1;
     }
 
     auto key =
-        std::make_shared<std::array<uint8_t, HERMES_TGCALLS_KEY_BYTES_V1>>();
-    std::copy_n(config->encryption_key, HERMES_TGCALLS_KEY_BYTES_V1, key->begin());
+        std::make_shared<std::array<uint8_t, MAKOSH_TGCALLS_KEY_BYTES_V1>>();
+    std::copy_n(config->encryption_key, MAKOSH_TGCALLS_KEY_BYTES_V1, key->begin());
     auto bridge = std::make_shared<BridgeState>();
     auto descriptor = tgcalls::Descriptor {
         .version = requested_version,
@@ -339,7 +339,7 @@ extern "C" int32_t hermes_tgcalls_session_create_v1(
         .remotePrefferedAspectRatioUpdated = [](float) {},
         .signalingDataEmitted = [bridge](const std::vector<uint8_t> &data) {
             bridge->push(QueuedEvent {
-                .kind = HERMES_TGCALLS_SIGNALING_EVENT_V1,
+                .kind = MAKOSH_TGCALLS_SIGNALING_EVENT_V1,
                 .state = 0,
                 .payload = data,
             });
@@ -359,17 +359,17 @@ extern "C" int32_t hermes_tgcalls_session_create_v1(
     auto instance = tgcalls::Meta::Create(requested_version, std::move(descriptor));
     if (!instance) {
         std::fill(key->begin(), key->end(), 0);
-        return HERMES_TGCALLS_NATIVE_FAILURE_V1;
+        return MAKOSH_TGCALLS_NATIVE_FAILURE_V1;
     }
     auto session = std::make_unique<Session>();
     session->instance = std::move(instance);
     session->key = std::move(key);
     session->bridge = std::move(bridge);
     *session_out = session.release();
-    return HERMES_TGCALLS_OK_V1;
+    return MAKOSH_TGCALLS_OK_V1;
 }
 
-extern "C" int32_t hermes_tgcalls_session_receive_signaling_v1(
+extern "C" int32_t makosh_tgcalls_session_receive_signaling_v1(
     void *session,
     const uint8_t *data,
     size_t data_length) {
@@ -379,74 +379,74 @@ extern "C" int32_t hermes_tgcalls_session_receive_signaling_v1(
         || data == nullptr
         || data_length == 0
         || data_length > kMaximumSignalingBytes) {
-        return HERMES_TGCALLS_INVALID_ARGUMENT_V1;
+        return MAKOSH_TGCALLS_INVALID_ARGUMENT_V1;
     }
     typed->instance->receiveSignalingData(std::vector<uint8_t>(data, data + data_length));
-    return HERMES_TGCALLS_OK_V1;
+    return MAKOSH_TGCALLS_OK_V1;
 }
 
-extern "C" int32_t hermes_tgcalls_session_set_muted_v1(void *session, uint8_t muted) {
+extern "C" int32_t makosh_tgcalls_session_set_muted_v1(void *session, uint8_t muted) {
     auto *typed = static_cast<Session *>(session);
     if (typed == nullptr || typed->stopped) {
-        return HERMES_TGCALLS_INVALID_STATE_V1;
+        return MAKOSH_TGCALLS_INVALID_STATE_V1;
     }
     typed->instance->setMuteMicrophone(muted != 0);
-    return HERMES_TGCALLS_OK_V1;
+    return MAKOSH_TGCALLS_OK_V1;
 }
 
-extern "C" int32_t hermes_tgcalls_session_poll_event_v1(
+extern "C" int32_t makosh_tgcalls_session_poll_event_v1(
     void *session,
-    HermesTgCallsEventV1 *event_out,
+    МакошьTgCallsEventV1 *event_out,
     uint8_t *payload_out,
     size_t payload_capacity) {
     auto *typed = static_cast<Session *>(session);
     if (typed == nullptr || event_out == nullptr) {
-        return HERMES_TGCALLS_INVALID_ARGUMENT_V1;
+        return MAKOSH_TGCALLS_INVALID_ARGUMENT_V1;
     }
     std::lock_guard<std::mutex> lock(typed->bridge->mutex);
     if (typed->bridge->overflowed) {
-        return HERMES_TGCALLS_QUEUE_OVERFLOW_V1;
+        return MAKOSH_TGCALLS_QUEUE_OVERFLOW_V1;
     }
     if (typed->bridge->events.empty()) {
-        return HERMES_TGCALLS_OK_V1;
+        return MAKOSH_TGCALLS_OK_V1;
     }
     const auto &event = typed->bridge->events.front();
-    event_out->abi_version = HERMES_TGCALLS_ABI_VERSION_V1;
+    event_out->abi_version = MAKOSH_TGCALLS_ABI_VERSION_V1;
     event_out->kind = event.kind;
     event_out->state = event.state;
     event_out->payload_length = event.payload.size();
     if (event.payload.size() > payload_capacity
         || (!event.payload.empty() && payload_out == nullptr)) {
-        return HERMES_TGCALLS_BUFFER_TOO_SMALL_V1;
+        return MAKOSH_TGCALLS_BUFFER_TOO_SMALL_V1;
     }
     if (!event.payload.empty()) {
         std::copy(event.payload.begin(), event.payload.end(), payload_out);
     }
     typed->bridge->queued_bytes -= event.payload.size();
     typed->bridge->events.pop_front();
-    return HERMES_TGCALLS_EVENT_V1;
+    return MAKOSH_TGCALLS_EVENT_V1;
 }
 
-extern "C" int32_t hermes_tgcalls_session_snapshot_v1(
+extern "C" int32_t makosh_tgcalls_session_snapshot_v1(
     void *session,
-    HermesTgCallsSnapshotV1 *snapshot_out) {
+    МакошьTgCallsSnapshotV1 *snapshot_out) {
     auto *typed = static_cast<Session *>(session);
     if (typed == nullptr || snapshot_out == nullptr) {
-        return HERMES_TGCALLS_INVALID_ARGUMENT_V1;
+        return MAKOSH_TGCALLS_INVALID_ARGUMENT_V1;
     }
     if (!typed->stopped) {
         typed->connection_id = typed->instance->getPreferredRelayId();
     }
     fill_snapshot(*typed, snapshot_out);
-    return HERMES_TGCALLS_OK_V1;
+    return MAKOSH_TGCALLS_OK_V1;
 }
 
-extern "C" int32_t hermes_tgcalls_session_stop_v1(
+extern "C" int32_t makosh_tgcalls_session_stop_v1(
     void *session,
-    HermesTgCallsSnapshotV1 *snapshot_out) {
+    МакошьTgCallsSnapshotV1 *snapshot_out) {
     auto *typed = static_cast<Session *>(session);
     if (typed == nullptr || snapshot_out == nullptr) {
-        return HERMES_TGCALLS_INVALID_ARGUMENT_V1;
+        return MAKOSH_TGCALLS_INVALID_ARGUMENT_V1;
     }
     if (!typed->stopped) {
         typed->connection_id = typed->instance->getPreferredRelayId();
@@ -466,7 +466,7 @@ extern "C" int32_t hermes_tgcalls_session_stop_v1(
         if (!completion->changed.wait_for(lock, kStopTimeout, [completion] {
                 return completion->completed;
             })) {
-            return HERMES_TGCALLS_NATIVE_FAILURE_V1;
+            return MAKOSH_TGCALLS_NATIVE_FAILURE_V1;
         }
         lock.unlock();
         typed->instance.reset();
@@ -481,14 +481,14 @@ extern "C" int32_t hermes_tgcalls_session_stop_v1(
         }
     }
     fill_snapshot(*typed, snapshot_out);
-    return HERMES_TGCALLS_OK_V1;
+    return MAKOSH_TGCALLS_OK_V1;
 }
 
-extern "C" int32_t hermes_tgcalls_session_destroy_v1(void *session) {
+extern "C" int32_t makosh_tgcalls_session_destroy_v1(void *session) {
     auto *typed = static_cast<Session *>(session);
     if (typed == nullptr || !typed->stopped) {
-        return HERMES_TGCALLS_INVALID_STATE_V1;
+        return MAKOSH_TGCALLS_INVALID_STATE_V1;
     }
     delete typed;
-    return HERMES_TGCALLS_OK_V1;
+    return MAKOSH_TGCALLS_OK_V1;
 }

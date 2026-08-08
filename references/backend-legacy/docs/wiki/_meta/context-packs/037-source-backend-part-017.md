@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/domains/calendar/events/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/events/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/events/rows.rs`
 - Size bytes / Размер в байтах: `1477`
 - Included characters / Включено символов: `1477`
 - Truncated / Обрезано: `no`
@@ -99,7 +99,7 @@ pub(super) fn row_to_event(row: PgRow) -> Result<CalendarEvent, sqlx::Error> {
 
 ### `backend/src/domains/calendar/events/source_store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/events/source_store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/events/source_store.rs`
 - Size bytes / Размер в байтах: `6117`
 - Included characters / Включено символов: `6117`
 - Truncated / Обрезано: `no`
@@ -280,7 +280,7 @@ fn next_id(prefix: &str) -> String {
 
 ### `backend/src/domains/calendar/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/evidence.rs`
 - Size bytes / Размер в байтах: `1959`
 - Included characters / Включено символов: `1959`
 - Truncated / Обрезано: `no`
@@ -359,7 +359,7 @@ fn merge_metadata(base_metadata: Value, extra_metadata: Option<Value>) -> Value 
 
 ### `backend/src/domains/calendar/health.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/health.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/health.rs`
 - Size bytes / Размер в байтах: `8683`
 - Included characters / Включено символов: `8575`
 - Truncated / Обрезано: `no`
@@ -557,7 +557,7 @@ impl CalendarWatchtowerService {
 
 ### `backend/src/domains/calendar/intelligence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/intelligence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/intelligence.rs`
 - Size bytes / Размер в байтах: `286`
 - Included characters / Включено символов: `286`
 - Truncated / Обрезано: `no`
@@ -580,7 +580,7 @@ pub use models::{BackToBackGroup, EventAnalysis, EventFingerprint, LocationInfo}
 
 ### `backend/src/domains/calendar/intelligence/analytics.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/intelligence/analytics.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/intelligence/analytics.rs`
 - Size bytes / Размер в байтах: `2334`
 - Included characters / Включено символов: `2334`
 - Truncated / Обрезано: `no`
@@ -658,7 +658,7 @@ fn fallback_time_category(title: &str) -> String {
 
 ### `backend/src/domains/calendar/intelligence/classification.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/intelligence/classification.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/intelligence/classification.rs`
 - Size bytes / Размер в байтах: `1868`
 - Included characters / Включено символов: `1776`
 - Truncated / Обрезано: `no`
@@ -716,7 +716,7 @@ pub(super) fn contains_any(value: &str, needles: &[&str]) -> bool {
 
 ### `backend/src/domains/calendar/intelligence/conference.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/intelligence/conference.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/intelligence/conference.rs`
 - Size bytes / Размер в байтах: `1413`
 - Included characters / Включено символов: `1413`
 - Truncated / Обрезано: `no`
@@ -768,7 +768,7 @@ impl CalendarIntelligenceService {
 
 ### `backend/src/domains/calendar/intelligence/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/intelligence/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/intelligence/errors.rs`
 - Size bytes / Размер в байтах: `151`
 - Included characters / Включено символов: `151`
 - Truncated / Обрезано: `no`
@@ -785,7 +785,7 @@ pub enum CalendarIntelligenceError {
 
 ### `backend/src/domains/calendar/intelligence/fingerprint.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/intelligence/fingerprint.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/intelligence/fingerprint.rs`
 - Size bytes / Размер в байтах: `1550`
 - Included characters / Включено символов: `1523`
 - Truncated / Обрезано: `no`
@@ -845,7 +845,7 @@ fn recurrence_hint(value: &str) -> Option<String> {
 
 ### `backend/src/domains/calendar/intelligence/location.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/intelligence/location.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/intelligence/location.rs`
 - Size bytes / Размер в байтах: `1620`
 - Included characters / Включено символов: `1584`
 - Truncated / Обрезано: `no`
@@ -899,7 +899,7 @@ fn parsed_location_name(original: &str, lower: &str, is_online: bool) -> Option<
 
 ### `backend/src/domains/calendar/intelligence/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/intelligence/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/intelligence/models.rs`
 - Size bytes / Размер в байтах: `793`
 - Included characters / Включено символов: `793`
 - Truncated / Обрезано: `no`
@@ -940,7 +940,7 @@ pub struct BackToBackGroup {
 
 ### `backend/src/domains/calendar/intelligence/scoring.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/intelligence/scoring.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/intelligence/scoring.rs`
 - Size bytes / Размер в байтах: `2228`
 - Included characters / Включено символов: `2216`
 - Truncated / Обрезано: `no`
@@ -1035,7 +1035,7 @@ impl CalendarIntelligenceService {
 
 ### `backend/src/domains/calendar/meetings.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/meetings.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/meetings.rs`
 - Size bytes / Размер в байтах: `489`
 - Included characters / Включено символов: `489`
 - Truncated / Обрезано: `no`
@@ -1061,7 +1061,7 @@ pub use transcripts::EventTranscriptStore as EventTranscriptPort;
 
 ### `backend/src/domains/calendar/meetings/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/meetings/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/meetings/errors.rs`
 - Size bytes / Размер в байтах: `304`
 - Included characters / Включено символов: `304`
 - Truncated / Обрезано: `no`
@@ -1084,7 +1084,7 @@ pub enum MeetingsError {
 
 ### `backend/src/domains/calendar/meetings/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/meetings/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/meetings/models.rs`
 - Size bytes / Размер в байтах: `1469`
 - Included characters / Включено символов: `1469`
 - Truncated / Обрезано: `no`
@@ -1148,7 +1148,7 @@ pub struct EventTranscript {
 
 ### `backend/src/domains/calendar/meetings/notes.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/meetings/notes.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/meetings/notes.rs`
 - Size bytes / Размер в байтах: `2289`
 - Included characters / Включено символов: `2289`
 - Truncated / Обрезано: `no`
@@ -1234,7 +1234,7 @@ impl MeetingNoteStore {
 
 ### `backend/src/domains/calendar/meetings/outcomes.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/meetings/outcomes.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/meetings/outcomes.rs`
 - Size bytes / Размер в байтах: `5254`
 - Included characters / Включено символов: `5254`
 - Truncated / Обрезано: `no`
@@ -1408,7 +1408,7 @@ impl MeetingOutcomeStore {
 
 ### `backend/src/domains/calendar/meetings/recordings.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/meetings/recordings.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/meetings/recordings.rs`
 - Size bytes / Размер в байтах: `6045`
 - Included characters / Включено символов: `6045`
 - Truncated / Обрезано: `no`
@@ -1598,7 +1598,7 @@ impl EventRecordingStore {
 
 ### `backend/src/domains/calendar/meetings/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/meetings/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/meetings/rows.rs`
 - Size bytes / Размер в байтах: `2906`
 - Included characters / Включено символов: `2906`
 - Truncated / Обрезано: `no`
@@ -1675,7 +1675,7 @@ pub(super) fn row_to_event_transcript(row: PgRow) -> Result<EventTranscript, Mee
 
 ### `backend/src/domains/calendar/meetings/transcripts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/meetings/transcripts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/meetings/transcripts.rs`
 - Size bytes / Размер в байтах: `2976`
 - Included characters / Включено символов: `2976`
 - Truncated / Обрезано: `no`
@@ -1778,7 +1778,7 @@ impl EventTranscriptStore {
 
 ### `backend/src/domains/calendar/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/mod.rs`
 - Size bytes / Размер в байтах: `232`
 - Included characters / Включено символов: `232`
 - Truncated / Обрезано: `no`
@@ -1801,7 +1801,7 @@ pub mod sync;
 
 ### `backend/src/domains/calendar/reminders.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/reminders.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/reminders.rs`
 - Size bytes / Размер в байтах: `6340`
 - Included characters / Включено символов: `6340`
 - Truncated / Обрезано: `no`
@@ -1998,7 +1998,7 @@ pub enum ReminderError {
 
 ### `backend/src/domains/calendar/rules.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/rules.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/rules.rs`
 - Size bytes / Размер в байтах: `8275`
 - Included characters / Включено символов: `8275`
 - Truncated / Обрезано: `no`
@@ -2225,7 +2225,7 @@ pub enum CalendarRuleError {
 
 ### `backend/src/domains/calendar/scheduling.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/calendar/scheduling.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/calendar/scheduling.rs`
 - Size bytes / Размер в байтах: `11776`
 - Included characters / Включено символов: `11428`
 - Truncated / Обрезано: `no`

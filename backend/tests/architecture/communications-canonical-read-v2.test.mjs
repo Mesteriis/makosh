@@ -8,7 +8,7 @@ const PROJECT_ROOT = new URL('../../../', import.meta.url);
 const paths = {
   inventory: new URL('architecture/communications-settings-reconstruction.json', BACKEND_ROOT),
   proto: new URL(
-    'src/communications-api/proto/hermes/communications/query/v1/query.proto',
+    'src/communications-api/proto/makosh/communications/query/v1/query.proto',
     BACKEND_ROOT,
   ),
   admission: new URL('src/communications-runtime/src/admission.rs', BACKEND_ROOT),
@@ -80,7 +80,7 @@ test('Communications canonical read v2 is one exact owner contract and admitted 
   assert.doesNotMatch(moduleQuery, /mail|telegram|whatsapp|zulip/i);
   assert.match(
     admission,
-    /\/hermes\.communications\.query\.v1\.CommunicationsQueryService\/Query/,
+    /\/makosh\.communications\.query\.v1\.CommunicationsQueryService\/Query/,
   );
 });
 

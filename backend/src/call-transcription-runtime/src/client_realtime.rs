@@ -1,14 +1,14 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_call_transcription_api::{
+use makosh_call_transcription_api::{
     REALTIME_CONTRACT_NAME_V1, REALTIME_EVENT_KIND_V1, contract_reference_v1,
     wire::{CallTranscriptionArtifactV1 as WireArtifact, CallTranscriptionStatusChangedV1},
 };
-use hermes_call_transcription_core::{CallTranscriptionStateV1, TranscriptArtifactV1};
-use hermes_call_transcription_persistence::{
+use makosh_call_transcription_core::{CallTranscriptionStateV1, TranscriptArtifactV1};
+use makosh_call_transcription_persistence::{
     CallTranscriptionPersistenceErrorV1, CallTranscriptionPersistenceV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeClientRealtimePublishRequestV1, ManagedRuntimeControlRequestV1,
@@ -139,7 +139,7 @@ fn event_id(run_id: [u8; 16], state_revision: u64) -> [u8; 16] {
 
 #[cfg(test)]
 mod tests {
-    use hermes_call_transcription_core::{
+    use makosh_call_transcription_core::{
         CallTranscriptionCompletenessV1, CallTranscriptionLanguageV1, CallTranscriptionStateV1,
         TranscriptArtifactV1,
     };

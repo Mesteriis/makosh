@@ -10,7 +10,7 @@ describe('canonical Communications detail presentation model', () => {
 			status: 'ready',
 			statusMessage: '',
 			message: {
-				$typeName: 'hermes.communications.query.v1.MessageSummaryV1',
+				$typeName: 'makosh.communications.query.v1.MessageSummaryV1',
 				messageId,
 				conversationId,
 				sourceCursorSha256: new Uint8Array(32),
@@ -22,7 +22,7 @@ describe('canonical Communications detail presentation model', () => {
 				direction: 1,
 			},
 			conversation: {
-				$typeName: 'hermes.communications.query.v1.ConversationSummaryV1',
+				$typeName: 'makosh.communications.query.v1.ConversationSummaryV1',
 				conversationId,
 				accountCursorSha256: new Uint8Array(32),
 				conversationCursorSha256: new Uint8Array(32),
@@ -51,7 +51,7 @@ describe('canonical Communications detail presentation model', () => {
 
 	it('admits preview only for safe-for-delivery attachment evidence', () => {
 		const attachment = (state: number) => ({
-			$typeName: 'hermes.communications.query.v1.AttachmentAnchorSummaryV1' as const,
+			$typeName: 'makosh.communications.query.v1.AttachmentAnchorSummaryV1' as const,
 			attachmentAnchorId: new Uint8Array(16).fill(state),
 			messageId: new Uint8Array(16),
 			mediaCursorSha256: new Uint8Array(32),

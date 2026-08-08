@@ -5,7 +5,7 @@ use std::sync::{Arc, LazyLock, Mutex};
 use std::time::Duration;
 
 use chrono::Utc;
-use hermes_desktop_runtime::{
+use makosh_desktop_runtime::{
     RuntimeExitPolicy, RuntimeTaskClass, RuntimeTaskFactory, RuntimeTaskFuture, RuntimeTaskSpec,
 };
 use serde_json::json;
@@ -70,7 +70,7 @@ fn mail_background_sync_task(context: ApplicationBootstrapContext) -> Option<Run
                     pool.clone(),
                     vault,
                     Arc::new(
-                        hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
+                        makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
                             pool.clone(),
                         ),
                     ),
@@ -82,9 +82,9 @@ fn mail_background_sync_task(context: ApplicationBootstrapContext) -> Option<Run
                     pool.clone(),
                 ),
             ),
-            Arc::new(hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(pool.clone())),
+            Arc::new(makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(pool.clone())),
             Arc::new(
-                hermes_communications_postgres::store::CommunicationIngestionStore::new(
+                makosh_communications_postgres::store::CommunicationIngestionStore::new(
                     pool.clone(),
                 ),
             ),
@@ -211,14 +211,14 @@ fn address_book_sync_task(context: ApplicationBootstrapContext) -> Option<Runtim
                     pool.clone(),
                     vault,
                     Arc::new(
-                        hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
+                        makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
                             pool.clone(),
                         ),
                     ),
                     crate::workflows::mail_background_sync::DEFAULT_GMAIL_API_BASE_URL,
                 ),
             ),
-            Arc::new(hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(pool.clone())),
+            Arc::new(makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(pool.clone())),
         );
             let mut tick = tokio::time::interval(Duration::from_secs(300));
             tick.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Skip);

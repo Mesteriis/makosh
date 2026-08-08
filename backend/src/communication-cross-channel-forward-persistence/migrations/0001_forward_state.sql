@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communication_cross_channel_forward_operations (
+CREATE TABLE makosh_data.communication_cross_channel_forward_operations (
   logical_owner_id TEXT NOT NULL CHECK (
     char_length(logical_owner_id) BETWEEN 1 AND 128
   ),
@@ -85,7 +85,7 @@ CREATE TABLE hermes_data.communication_cross_channel_forward_operations (
 );
 
 CREATE INDEX communication_cross_channel_forward_claim_idx
-  ON hermes_data.communication_cross_channel_forward_operations (
+  ON makosh_data.communication_cross_channel_forward_operations (
     logical_owner_id,
     next_attempt_at_unix_millis,
     updated_at_unix_millis,
@@ -93,7 +93,7 @@ CREATE INDEX communication_cross_channel_forward_claim_idx
   )
   WHERE state BETWEEN 1 AND 3;
 
-CREATE TABLE hermes_data.communication_cross_channel_forward_cleanup (
+CREATE TABLE makosh_data.communication_cross_channel_forward_cleanup (
   logical_owner_id TEXT NOT NULL CHECK (
     char_length(logical_owner_id) BETWEEN 1 AND 128
   ),
@@ -120,21 +120,21 @@ CREATE TABLE hermes_data.communication_cross_channel_forward_cleanup (
   ),
   PRIMARY KEY (logical_owner_id, forward_id),
   FOREIGN KEY (logical_owner_id, forward_id) REFERENCES
-    hermes_data.communication_cross_channel_forward_operations (
+    makosh_data.communication_cross_channel_forward_operations (
       logical_owner_id,
       forward_id
     )
 );
 
 CREATE INDEX communication_cross_channel_forward_cleanup_pending_idx
-  ON hermes_data.communication_cross_channel_forward_cleanup (
+  ON makosh_data.communication_cross_channel_forward_cleanup (
     logical_owner_id,
     next_attempt_at_unix_millis,
     forward_id
   )
   WHERE completed_at_unix_millis IS NULL;
 
-CREATE TABLE hermes_data.communication_cross_channel_forward_realtime (
+CREATE TABLE makosh_data.communication_cross_channel_forward_realtime (
   logical_owner_id TEXT NOT NULL CHECK (
     char_length(logical_owner_id) BETWEEN 1 AND 128
   ),
@@ -150,7 +150,7 @@ CREATE TABLE hermes_data.communication_cross_channel_forward_realtime (
   realtime_sequence BIGINT GENERATED ALWAYS AS IDENTITY,
   PRIMARY KEY (logical_owner_id, forward_id, state_revision),
   FOREIGN KEY (logical_owner_id, forward_id) REFERENCES
-    hermes_data.communication_cross_channel_forward_operations (
+    makosh_data.communication_cross_channel_forward_operations (
       logical_owner_id,
       forward_id
     ),
@@ -161,7 +161,7 @@ CREATE TABLE hermes_data.communication_cross_channel_forward_realtime (
 );
 
 CREATE UNIQUE INDEX communication_cross_channel_forward_realtime_sequence_idx
-  ON hermes_data.communication_cross_channel_forward_realtime (
+  ON makosh_data.communication_cross_channel_forward_realtime (
     logical_owner_id,
     realtime_sequence
   );

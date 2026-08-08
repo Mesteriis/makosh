@@ -1,11 +1,11 @@
-use hermes_events_api::StoredEventEnvelope;
+use makosh_events_api::StoredEventEnvelope;
 use std::future::Future;
 
 use thiserror::Error;
 
-use hermes_events_postgres::cursors::ProjectionCursorStore;
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::cursors::ProjectionCursorStore;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::store::EventStore;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ProjectionBatchOutcome {

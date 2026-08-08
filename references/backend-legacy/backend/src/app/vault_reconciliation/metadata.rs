@@ -1,6 +1,6 @@
 use serde_json::{Value, json};
 
-use hermes_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::CommunicationProviderKind;
 
 pub(super) fn fallback_provider_account_config(
     provider_kind: CommunicationProviderKind,

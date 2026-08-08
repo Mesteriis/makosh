@@ -1,6 +1,6 @@
 //! Exact descriptor and capability admission for the Communications owner runtime.
 
-use hermes_communications_ai_source_api::{
+use makosh_communications_ai_source_api::{
     communication_explanation_source_prepare_consume_request_v1,
     communication_explanation_source_prepared_contract_reference_v1,
     communication_explanation_source_prepared_publish_request_v1,
@@ -22,51 +22,51 @@ use hermes_communications_ai_source_api::{
     communication_translation_source_rejected_contract_reference_v1,
     communication_translation_source_rejected_publish_request_v1,
 };
-use hermes_communications_api::{
+use makosh_communications_api::{
     COMMUNICATION_EVIDENCE_SCHEMA_SHA256, COMMUNICATIONS_QUERY_SCHEMA_SHA256,
 };
-use hermes_communications_attachment_contract::admission::{
+use makosh_communications_attachment_contract::admission::{
     COMMUNICATION_ATTACHMENT_MAX_IN_FLIGHT,
     communication_attachment_anchor_recorded_contract_reference_v1,
     communication_attachment_blob_admission_observed_contract_reference_v1,
     communication_attachment_safety_state_changed_contract_reference_v1,
     communication_attachment_safety_verdict_observed_contract_reference_v1,
 };
-use hermes_communications_call_evidence_api::{
+use makosh_communications_call_evidence_api::{
     CALL_EVIDENCE_CLIENT_CAPABILITY_ID_V1, CALL_EVIDENCE_CLIENT_CONTRACT_MAJOR_V1,
     CALL_EVIDENCE_CLIENT_CONTRACT_REVISION_V1, CALL_EVIDENCE_CLIENT_OWNER_V1,
     CALL_EVIDENCE_CLIENT_SCHEMA_SHA256_V1, CALL_EVIDENCE_QUERY_CONNECT_PATH_V1,
     CALL_EVIDENCE_QUERY_CONTRACT_NAME_V1, CALL_EVIDENCE_REALTIME_CONTRACT_NAME_V1,
 };
-use hermes_communications_call_evidence_ingress::{
+use makosh_communications_call_evidence_ingress::{
     call_evidence_observed_consume_request_v1, call_evidence_observed_contract_reference_v1,
 };
-use hermes_communications_content_api::{
+use makosh_communications_content_api::{
     COMMUNICATIONS_CONTENT_READ_SCHEMA_SHA256, COMMUNICATIONS_CONTENT_TICKET_SCHEMA_SHA256,
     CONTENT_CONTRACT_MAJOR_V1, CONTENT_CONTRACT_REVISION_V1, CONTENT_READ_BLOB_PATH_V1,
     CONTENT_READ_CONTRACT_NAME_V1, CONTENT_TICKET_CONNECT_PATH_V1, CONTENT_TICKET_CONTRACT_NAME_V1,
     MAX_MESSAGE_BODY_BYTES_V1,
 };
-use hermes_communications_cross_channel_forward_source_api::{
+use makosh_communications_cross_channel_forward_source_api::{
     cross_channel_forward_source_prepare_consume_request_v1,
     cross_channel_forward_source_prepared_contract_reference_v1,
     cross_channel_forward_source_prepared_publish_request_v1,
     cross_channel_forward_source_rejected_contract_reference_v1,
     cross_channel_forward_source_rejected_publish_request_v1,
 };
-use hermes_communications_evidence_export_source_api::{
+use makosh_communications_evidence_export_source_api::{
     evidence_export_prepare_consume_request_v1, evidence_export_prepared_contract_reference_v1,
     evidence_export_prepared_publish_request_v1, evidence_export_rejected_contract_reference_v1,
     evidence_export_rejected_publish_request_v1,
 };
-use hermes_communications_ingress::admission::{
+use makosh_communications_ingress::admission::{
     COMMUNICATION_OBSERVED_MAX_IN_FLIGHT, communication_observed_contract_reference_v1,
 };
-use hermes_communications_ingress::{
+use makosh_communications_ingress::{
     COMMUNICATIONS_BLOB_CUSTODY_TARGET_CAPABILITY_ID, COMMUNICATIONS_BLOB_CUSTODY_TARGET_MODULE_ID,
     COMMUNICATIONS_BLOB_CUSTODY_TARGET_OWNER_ID,
 };
-use hermes_communications_note_source_api::{
+use makosh_communications_note_source_api::{
     COMMUNICATIONS_NOTE_SOURCE_CAPABILITY_ID_V1,
     communication_note_source_prepare_consume_request_v1,
     communication_note_source_prepared_contract_reference_v1,
@@ -74,7 +74,7 @@ use hermes_communications_note_source_api::{
     communication_note_source_rejected_contract_reference_v1,
     communication_note_source_rejected_publish_request_v1,
 };
-use hermes_communications_recipient_source_api::{
+use makosh_communications_recipient_source_api::{
     COMMUNICATIONS_RECIPIENT_SOURCE_CAPABILITY_ID_V1,
     communication_recipient_source_prepare_consume_request_v1,
     communication_recipient_source_prepared_contract_reference_v1,
@@ -82,21 +82,21 @@ use hermes_communications_recipient_source_api::{
     communication_recipient_source_rejected_contract_reference_v1,
     communication_recipient_source_rejected_publish_request_v1,
 };
-use hermes_communications_retained_evidence_replay_contract::{
+use makosh_communications_retained_evidence_replay_contract::{
     communications_replay_command_consume_request_v1,
     communications_replay_result_publish_request_v1,
 };
-use hermes_communications_saved_query_api::{
+use makosh_communications_saved_query_api::{
     COMMUNICATIONS_SAVED_SEARCH_SCHEMA_SHA256, SAVED_SEARCH_CONNECT_PATH_V1,
     SAVED_SEARCH_CONTRACT_MAJOR_V1, SAVED_SEARCH_CONTRACT_NAME_V1,
     SAVED_SEARCH_CONTRACT_REVISION_V1,
 };
-use hermes_communications_sender_insights_api::{
+use makosh_communications_sender_insights_api::{
     COMMUNICATIONS_SENDER_INSIGHTS_SCHEMA_SHA256, SENDER_INSIGHTS_CONNECT_PATH_V1,
     SENDER_INSIGHTS_CONTRACT_MAJOR_V1, SENDER_INSIGHTS_CONTRACT_NAME_V1,
     SENDER_INSIGHTS_CONTRACT_REVISION_V1,
 };
-use hermes_communications_task_source_api::{
+use makosh_communications_task_source_api::{
     COMMUNICATIONS_TASK_SOURCE_CAPABILITY_ID_V1,
     communication_task_source_prepare_consume_request_v1,
     communication_task_source_prepared_contract_reference_v1,
@@ -104,7 +104,7 @@ use hermes_communications_task_source_api::{
     communication_task_source_rejected_contract_reference_v1,
     communication_task_source_rejected_publish_request_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, ModuleDescriptorV1, ModuleKindV1,
@@ -569,7 +569,7 @@ pub fn communications_call_evidence_client_capability_v1() -> CapabilityDescript
             ProvidedSurfaceV1 {
                 kind: ProvidedSurfaceKindV1::ClientRpc as i32,
                 contract: Some(communications_call_evidence_query_contract_reference_v1()),
-                client_rpc_route: Some(hermes_runtime_protocol::v1::ClientRpcRouteV1 {
+                client_rpc_route: Some(makosh_runtime_protocol::v1::ClientRpcRouteV1 {
                     path: CALL_EVIDENCE_QUERY_CONNECT_PATH_V1.to_owned(),
                 }),
                 client_blob_route: None,
@@ -705,7 +705,7 @@ pub fn communications_content_capability_v1() -> CapabilityDescriptorV1 {
             ProvidedSurfaceV1 {
                 kind: ProvidedSurfaceKindV1::ClientRpc as i32,
                 contract: Some(communications_content_ticket_contract_reference_v1()),
-                client_rpc_route: Some(hermes_runtime_protocol::v1::ClientRpcRouteV1 {
+                client_rpc_route: Some(makosh_runtime_protocol::v1::ClientRpcRouteV1 {
                     path: CONTENT_TICKET_CONNECT_PATH_V1.to_owned(),
                 }),
                 client_blob_route: None,
@@ -714,7 +714,7 @@ pub fn communications_content_capability_v1() -> CapabilityDescriptorV1 {
                 kind: ProvidedSurfaceKindV1::ClientBlob as i32,
                 contract: Some(communications_content_read_contract_reference_v1()),
                 client_rpc_route: None,
-                client_blob_route: Some(hermes_runtime_protocol::v1::ClientBlobRouteV1 {
+                client_blob_route: Some(makosh_runtime_protocol::v1::ClientBlobRouteV1 {
                     path: CONTENT_READ_BLOB_PATH_V1.to_owned(),
                     max_response_bytes: MAX_MESSAGE_BODY_BYTES_V1,
                 }),
@@ -910,8 +910,8 @@ pub fn communications_query_capability_v1() -> CapabilityDescriptorV1 {
             ProvidedSurfaceV1 {
                 kind: ProvidedSurfaceKindV1::ClientRpc as i32,
                 contract: Some(communications_query_contract_reference_v1()),
-                client_rpc_route: Some(hermes_runtime_protocol::v1::ClientRpcRouteV1 {
-                    path: "/hermes.communications.query.v1.CommunicationsQueryService/Query"
+                client_rpc_route: Some(makosh_runtime_protocol::v1::ClientRpcRouteV1 {
+                    path: "/makosh.communications.query.v1.CommunicationsQueryService/Query"
                         .to_owned(),
                 }),
                 client_blob_route: None,
@@ -930,7 +930,7 @@ pub fn communications_saved_search_capability_v1() -> CapabilityDescriptorV1 {
         provides: vec![ProvidedSurfaceV1 {
             kind: ProvidedSurfaceKindV1::ClientRpc as i32,
             contract: Some(communications_saved_search_contract_reference_v1()),
-            client_rpc_route: Some(hermes_runtime_protocol::v1::ClientRpcRouteV1 {
+            client_rpc_route: Some(makosh_runtime_protocol::v1::ClientRpcRouteV1 {
                 path: SAVED_SEARCH_CONNECT_PATH_V1.to_owned(),
             }),
             client_blob_route: None,
@@ -948,7 +948,7 @@ pub fn communications_sender_insights_capability_v1() -> CapabilityDescriptorV1 
         provides: vec![ProvidedSurfaceV1 {
             kind: ProvidedSurfaceKindV1::ClientRpc as i32,
             contract: Some(communications_sender_insights_contract_reference_v1()),
-            client_rpc_route: Some(hermes_runtime_protocol::v1::ClientRpcRouteV1 {
+            client_rpc_route: Some(makosh_runtime_protocol::v1::ClientRpcRouteV1 {
                 path: SENDER_INSIGHTS_CONNECT_PATH_V1.to_owned(),
             }),
             client_blob_route: None,
@@ -1131,7 +1131,7 @@ pub fn communications_module_descriptor_v1(build_id: &str) -> ModuleDescriptorV1
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         validate_descriptor_v1, validate_settings_schema_v1,
     };
 

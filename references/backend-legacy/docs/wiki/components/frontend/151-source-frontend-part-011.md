@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Страница `components/frontend.md` должна быть создана (или обновлена) для документирования структуры фронтенд-кодовой базы Hermes Hub. На основе приложенных исходных файлов описываются доменные типы (tasks, timeline), API-клиенты, паттерны хранилищ (Pinia) и запросов (TanStack Query), сгенерированный Protobuf-код (common, communications, events, signal_hub), а также интеграционные модули для почты (Mail) и Telegram с их формами, API, запросами и граничными тестами. Всё изложение опирается исключительно на представленный исходный код.
+Страница `components/frontend.md` должна быть создана (или обновлена) для документирования структуры фронтенд-кодовой базы Макошь. На основе приложенных исходных файлов описываются доменные типы (tasks, timeline), API-клиенты, паттерны хранилищ (Pinia) и запросов (TanStack Query), сгенерированный Protobuf-код (common, communications, events, signal_hub), а также интеграционные модули для почты (Mail) и Telegram с их формами, API, запросами и граничными тестами. Всё изложение опирается исключительно на представленный исходный код.
 
 ---
 
@@ -34,7 +34,7 @@ generated_by: code-wiki-ru
 - **domains** – предметные типы и логика (задачи, таймлайн).
 - **integrations** – API, формы, запросы и компоненты для интеграций с почтой и Telegram.
 - **gen** – сгенерированный из `.proto`-файлов код (Protobuf-сообщения и сервисы).
-- **platform/api** – единый HTTP-клиент `ApiClient`, аутентифицирующий запросы заголовком `X-Hermes-Secret`.
+- **platform/api** – единый HTTP-клиент `ApiClient`, аутентифицирующий запросы заголовком `X-Макошь-Secret`.
 - **shared** – общие типы и запросы, переиспользуемые несколькими модулями (например, синхронизация почты).
 
 Общие паттерны:
@@ -85,7 +85,7 @@ interface TaskCandidate {
 interface Task {
   task_id: string; task_candidate_id: string | null; title: string; description: string | null;
   source_kind: string; source_id: string; source_type: string; project_id: string | null;
-  status: string; hermes_status: string;
+  status: string; makosh_status: string;
   priority_score: number | null; risk_score: number | null; readiness_score: number | null;
   area: string | null; why: string | null; outcome: string | null;
   due_at: string | null; completed_at: string | null; archived_at: string | null;
@@ -188,7 +188,7 @@ interface TimelineFilters {
 
 ### common/v1
 
-Файл: `frontend/src/gen/hermes/common/v1/common_pb.ts`
+Файл: `frontend/src/gen/makosh/common/v1/common_pb.ts`
 
 ```ts
 type PageRequest = { limit: number; cursor: string }
@@ -197,7 +197,7 @@ type PageResponse = { nextCursor: string; hasMore: boolean }
 
 ### communications/v1
 
-Файл: `frontend/src/gen/hermes/communications/v1/communications_pb.ts` (обрезан после 12 000 символов).
+Файл: `frontend/src/gen/makosh/communications/v1/communications_pb.ts` (обрезан после 12 000 символов).
 
 Основные видимые сообщения и RPC:
 
@@ -223,7 +223,7 @@ type PageResponse = { nextCursor: string; hasMore: boolean }
 
 ### events/v1
 
-Файл: `frontend/src/gen/hermes/events/v1/event_envelope_pb.ts`
+Файл: `frontend/src/gen/makosh/events/v1/event_envelope_pb.ts`
 
 ```ts
 type EventEnvelope = {
@@ -237,7 +237,7 @@ type EventEnvelope = {
 
 ### signal_hub/v1
 
-Файл: `frontend/src/gen/hermes/signal_hub/v1/signal_hub_pb.ts` (обрезан после 12 000 символов).
+Файл: `frontend/src/gen/makosh/signal_hub/v1/signal_hub_pb.ts` (обрезан после 12 000 символов).
 
 Видимые модели и RPC:
 
@@ -360,11 +360,11 @@ RPC: `ListSources`, `GetSource`, `ListCapabilities`, `ListFixtureSources`, `List
 - `frontend/src/domains/timeline/queries/useTimelineQuery.ts` — query `useTimelineMessagesQuery`, ключ `['timeline-messages']`, вызов `fetchCommunicationMessages(500)`, `refetchOnMount: 'always'`, `staleTime: 30_000`.
 - `frontend/src/domains/timeline/stores/timeline.ts` — хранилище Pinia `timeline-ui`, поля `messages`, `error`, `isLoading`, `filters`, геттер `filteredMessages` (без фактической фильтрации), actions `setMessages`, `setLoading`, `setError`, `toggleFilter`.
 - `frontend/src/domains/timeline/types/timeline.ts` — интерфейсы `TimelineMessage`, `TimelineFilters` и тип `TimelineFilterKind`.
-- `frontend/src/gen/hermes/common/v1/common_pb.ts` — сообщения `PageRequest`, `PageResponse`.
-- `frontend/src/gen/hermes/communications/v1/communications_pb.ts` — сообщения `CommunicationMessage`, `CommunicationMessageAttachment`, RPC для списков, получения, перехода workflow, обновления локального состояния, пометки прочитанным, массовых операций, toggle, snooze, анализа, объяснения, экспорта, AI-ответов, аутентификации писем, подписок, состояния почтового ящика; файл обрезан, подтверждена только начальная часть.
-- `frontend/src/gen/hermes/events/v1/event_envelope_pb.ts` — сообщение `EventEnvelope`.
-- `frontend/src/gen/hermes/signal_hub/v1/signal_hub_pb.ts` — модели `SignalSource`, `SignalCapability`, `SignalFixtureSource`, `SignalConnection`, `SignalHealth`, `SignalRuntimeState`, `SignalPolicy`, `SignalProfile`, `SignalReplayRequest` и соответствующие RPC; файл обрезан.
-- `frontend/src/integrations/mail/api/accountSetup.test.ts` — тесты для `startGmailOAuthSetup` и `setupImapEmailAccount` с проверкой URL, метода, заголовка `X-Hermes-Secret` и тела запроса.
+- `frontend/src/gen/makosh/common/v1/common_pb.ts` — сообщения `PageRequest`, `PageResponse`.
+- `frontend/src/gen/makosh/communications/v1/communications_pb.ts` — сообщения `CommunicationMessage`, `CommunicationMessageAttachment`, RPC для списков, получения, перехода workflow, обновления локального состояния, пометки прочитанным, массовых операций, toggle, snooze, анализа, объяснения, экспорта, AI-ответов, аутентификации писем, подписок, состояния почтового ящика; файл обрезан, подтверждена только начальная часть.
+- `frontend/src/gen/makosh/events/v1/event_envelope_pb.ts` — сообщение `EventEnvelope`.
+- `frontend/src/gen/makosh/signal_hub/v1/signal_hub_pb.ts` — модели `SignalSource`, `SignalCapability`, `SignalFixtureSource`, `SignalConnection`, `SignalHealth`, `SignalRuntimeState`, `SignalPolicy`, `SignalProfile`, `SignalReplayRequest` и соответствующие RPC; файл обрезан.
+- `frontend/src/integrations/mail/api/accountSetup.test.ts` — тесты для `startGmailOAuthSetup` и `setupImapEmailAccount` с проверкой URL, метода, заголовка `X-Макошь-Secret` и тела запроса.
 - `frontend/src/integrations/mail/api/accountSetup.ts` — функции `startGmailOAuthSetup` и `setupImapEmailAccount`, типы запросов и ответов.
 - `frontend/src/integrations/mail/api/syncApi.ts` — функции `fetchMailSyncStatus`, `fetchMailSyncSettings`, `updateMailSyncSettings`, `runMailSyncNow`, `runMailFullResync`.
 - `frontend/src/integrations/mail/components/AccountSetupModal.boundary.test.ts` — граничные проверки на использование vee-validate, форм, мутаций и отсутствие `setTimeout`.
@@ -390,10 +390,10 @@ RPC: `ListSources`, `GetSource`, `ListCapabilities`, `ListFixtureSources`, `List
 - [`frontend/src/domains/timeline/queries/useTimelineQuery.ts`](../../../../frontend/src/domains/timeline/queries/useTimelineQuery.ts)
 - [`frontend/src/domains/timeline/stores/timeline.ts`](../../../../frontend/src/domains/timeline/stores/timeline.ts)
 - [`frontend/src/domains/timeline/types/timeline.ts`](../../../../frontend/src/domains/timeline/types/timeline.ts)
-- [`frontend/src/gen/hermes/common/v1/common_pb.ts`](../../../../frontend/src/gen/hermes/common/v1/common_pb.ts)
-- [`frontend/src/gen/hermes/communications/v1/communications_pb.ts`](../../../../frontend/src/gen/hermes/communications/v1/communications_pb.ts)
-- [`frontend/src/gen/hermes/events/v1/event_envelope_pb.ts`](../../../../frontend/src/gen/hermes/events/v1/event_envelope_pb.ts)
-- [`frontend/src/gen/hermes/signal_hub/v1/signal_hub_pb.ts`](../../../../frontend/src/gen/hermes/signal_hub/v1/signal_hub_pb.ts)
+- [`frontend/src/gen/makosh/common/v1/common_pb.ts`](../../../../frontend/src/gen/makosh/common/v1/common_pb.ts)
+- [`frontend/src/gen/makosh/communications/v1/communications_pb.ts`](../../../../frontend/src/gen/makosh/communications/v1/communications_pb.ts)
+- [`frontend/src/gen/makosh/events/v1/event_envelope_pb.ts`](../../../../frontend/src/gen/makosh/events/v1/event_envelope_pb.ts)
+- [`frontend/src/gen/makosh/signal_hub/v1/signal_hub_pb.ts`](../../../../frontend/src/gen/makosh/signal_hub/v1/signal_hub_pb.ts)
 - [`frontend/src/integrations/mail/api/accountSetup.test.ts`](../../../../frontend/src/integrations/mail/api/accountSetup.test.ts)
 - [`frontend/src/integrations/mail/api/accountSetup.ts`](../../../../frontend/src/integrations/mail/api/accountSetup.ts)
 - [`frontend/src/integrations/mail/api/syncApi.ts`](../../../../frontend/src/integrations/mail/api/syncApi.ts)

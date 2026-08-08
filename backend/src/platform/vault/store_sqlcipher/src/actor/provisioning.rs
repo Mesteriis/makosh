@@ -1,6 +1,6 @@
 //! Durable idempotent write-only provisioning transaction.
 
-use hermes_vault_protocol::{
+use makosh_vault_protocol::{
     VaultActionV1, VaultProvisioningReceiptV1, VaultProvisioningStateV1, state_for_action,
 };
 use rusqlite::{Connection, OptionalExtension, Transaction};
@@ -225,7 +225,7 @@ fn insert_encrypted(
 
 fn intent_digest(mutation: &VaultProvisioningMutationV1) -> [u8; 32] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.owner-vault-provisioning.intent.v1\0");
+    digest.update(b"makosh.owner-vault-provisioning.intent.v1\0");
     digest.update([mutation.action().code() as u8]);
     let (owner, configuration, purpose, class, revision) = mutation.scope().metadata();
     append(&mut digest, owner.as_bytes());

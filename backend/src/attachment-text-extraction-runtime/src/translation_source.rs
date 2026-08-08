@@ -2,13 +2,13 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_attachment_text_extraction_api::ATTACHMENT_TEXT_EXTRACTION_MODULE_ID_V1;
-use hermes_attachment_text_extraction_persistence::{
+use makosh_attachment_text_extraction_api::ATTACHMENT_TEXT_EXTRACTION_MODULE_ID_V1;
+use makosh_attachment_text_extraction_persistence::{
     AttachmentTextExtractionPersistenceErrorV1, AttachmentTextExtractionPersistenceV1,
     PersistTranslationSourceResultV1, TranslationSourceSnapshotOutcomeV1,
     TranslationSourceSnapshotV1,
 };
-use hermes_attachment_translation_ingress::{
+use makosh_attachment_translation_ingress::{
     ATTACHMENT_TEXT_EXTRACTION_TRANSLATION_SOURCE_CAPABILITY_ID_V1,
     ATTACHMENT_TRANSLATION_BLOB_TARGET_MODULE_ID_V1, AttachmentTranslationSourceEnvelopeContextV1,
     attachment_translation_source_request_id_v1,
@@ -20,12 +20,12 @@ use hermes_attachment_translation_ingress::{
         AttachmentTranslationSourceRejectedV1, RequestAttachmentTranslationSourceV1,
     },
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::managed_control::ManagedControlChannelV2;
+use makosh_runtime_protocol::managed_control::ManagedControlChannelV2;
 use prost::Message;
 
 use crate::blob::{BlobErrorV1, read_artifact_v1, write_translation_source_v1};
@@ -335,7 +335,7 @@ trait ContractLikeV1 {
     fn schema_sha256(&self) -> &[u8];
 }
 
-impl ContractLikeV1 for hermes_runtime_protocol::v1::ContractReferenceV1 {
+impl ContractLikeV1 for makosh_runtime_protocol::v1::ContractReferenceV1 {
     fn owner(&self) -> &str {
         &self.owner
     }
@@ -382,7 +382,7 @@ fn persistence_error(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_attachment_translation_ingress::{
+    use makosh_attachment_translation_ingress::{
         AttachmentTranslationSourceEnvelopeContextV1,
         build_request_attachment_translation_source_outbox_record_v1,
     };

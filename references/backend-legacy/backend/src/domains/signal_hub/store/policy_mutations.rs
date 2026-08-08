@@ -1,4 +1,4 @@
-use hermes_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode};
+use makosh_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode};
 use uuid::Uuid;
 
 use super::{SignalHubError, SignalHubStore, SignalProfilePolicy};
@@ -21,7 +21,7 @@ impl SignalHubStore {
                 created_by,
                 expires_at
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, 'hermes-frontend', $8)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, 'makosh-frontend', $8)
             "#,
         )
         .bind(id)

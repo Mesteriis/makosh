@@ -2,13 +2,13 @@
 
 use super::*;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobCustodySourceProofV1, ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
     ManagedRuntimeModuleRequestDeliveryV1, ManagedRuntimeModuleRequestResponseV1,
     managed_runtime_control_request_v1::Operation,
     managed_runtime_control_response_v1::Result as ControlResult,
 };
-use hermes_speech_to_text_api::{
+use makosh_speech_to_text_api::{
     SPEECH_TO_TEXT_MODULE_ID_V1, SPEECH_TO_TEXT_OWNER_V1, seal_speech_to_text_request_v1,
     speech_to_text_contract_reference_v1, validate_speech_to_text_result_v1,
     wire::{
@@ -16,8 +16,8 @@ use hermes_speech_to_text_api::{
         SpeechToTextResultV1, SpeechToTextTerminalStatusV1,
     },
 };
-use hermes_speech_to_text_runtime::SPEECH_TO_TEXT_BLOB_CAPABILITY_ID_V1;
-use hermes_speech_transcript_artifact::{
+use makosh_speech_to_text_runtime::SPEECH_TO_TEXT_BLOB_CAPABILITY_ID_V1;
+use makosh_speech_transcript_artifact::{
     validate_speech_transcript_document_v1, wire::SpeechTranscriptDocumentV1,
 };
 
@@ -25,10 +25,10 @@ use hermes_speech_transcript_artifact::{
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Blob and pinned Whisper binaries"]
 fn managed_speech_to_text_routes_whisper_private_blob_and_replays_after_restart() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-whisper-stt");
+    let root = unique_target_root("makosh-managed-whisper-stt");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -36,13 +36,13 @@ fn managed_speech_to_text_routes_whisper_private_blob_and_replays_after_restart(
     );
     let release = installed_whisper_stt_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_store(&root, release.kernel()));
     blob_binding::bind_installed_release(&store, release.kernel())
         .expect("bind signed Blob release");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             WHISPER_STT_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             [4; 65],
@@ -92,7 +92,7 @@ fn managed_speech_to_text_routes_whisper_private_blob_and_replays_after_restart(
     assert_eq!(provider.runtime_generation, 1);
     assert!(provider.grant_epoch > 0);
     assert_eq!(engine.runtime_generation, 1);
-    let audio = std::fs::read(required("HERMES_WHISPER_STT_TEST_WAV"))
+    let audio = std::fs::read(required("MAKOSH_WHISPER_STT_TEST_WAV"))
         .expect("read bounded Whisper STT WAV fixture");
     let source_blob = source.write_audio(&store, &supervisor, &data, [0x91; 16], &audio);
     let source_proof =
@@ -164,7 +164,7 @@ fn managed_speech_to_text_routes_whisper_private_blob_and_replays_after_restart(
         .flat_map(|segment| segment.content_utf8.iter().copied())
         .collect::<Vec<_>>();
     let text = std::str::from_utf8(&text).expect("private transcript utf8");
-    assert!(text.to_ascii_lowercase().contains("hermes"));
+    assert!(text.to_ascii_lowercase().contains("makosh"));
 
     let previous_provider_generation = provider.runtime_generation;
     let previous_engine_generation = engine.runtime_generation;
@@ -240,7 +240,7 @@ fn managed_speech_to_text_routes_whisper_private_blob_and_replays_after_restart(
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Whisper STT fixture");
     std::fs::remove_dir_all(data).expect("remove short Whisper STT kernel data fixture");

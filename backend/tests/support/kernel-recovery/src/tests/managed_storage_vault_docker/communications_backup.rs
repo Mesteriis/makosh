@@ -11,7 +11,7 @@ use std::{
 use super::{required, storage_binary};
 
 pub(super) fn assert_communications_storage_backup_restore(root: &Path) {
-    const DATABASE: &str = "hermes_storage_authenticated";
+    const DATABASE: &str = "makosh_storage_authenticated";
     let backup_root = root.join("communications-postgres-backup");
     fs::create_dir(&backup_root).expect("create Communications backup directory");
     fs::set_permissions(&backup_root, fs::Permissions::from_mode(0o700))
@@ -24,19 +24,19 @@ pub(super) fn assert_communications_storage_backup_restore(root: &Path) {
             ("--pg-dump", tools.pg_dump.as_path()),
             (
                 "--host",
-                Path::new(&required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST")),
+                Path::new(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST")),
             ),
             (
                 "--port",
-                Path::new(&required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")),
+                Path::new(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")),
             ),
             ("--database", Path::new(DATABASE)),
-            ("--username", Path::new("hermes_postgres_admin")),
+            ("--username", Path::new("makosh_postgres_admin")),
             ("--ssl-mode", Path::new("disable")),
             (
                 "--password-file",
                 Path::new(&required(
-                    "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+                    "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
                 )),
             ),
             (
@@ -49,7 +49,7 @@ pub(super) fn assert_communications_storage_backup_restore(root: &Path) {
     let absent = postgres_command(
         &tools.container,
         DATABASE,
-        "SELECT to_regclass('hermes_data.communications_evidence_summaries') IS NULL",
+        "SELECT to_regclass('makosh_data.communications_evidence_summaries') IS NULL",
     );
     assert_eq!(
         absent.trim(),
@@ -63,19 +63,19 @@ pub(super) fn assert_communications_storage_backup_restore(root: &Path) {
             ("--psql", tools.psql.as_path()),
             (
                 "--host",
-                Path::new(&required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST")),
+                Path::new(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST")),
             ),
             (
                 "--port",
-                Path::new(&required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")),
+                Path::new(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")),
             ),
             ("--database", Path::new(DATABASE)),
-            ("--username", Path::new("hermes_postgres_admin")),
+            ("--username", Path::new("makosh_postgres_admin")),
             ("--ssl-mode", Path::new("disable")),
             (
                 "--password-file",
                 Path::new(&required(
-                    "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+                    "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
                 )),
             ),
             ("--input", backup_root.join("communications.dump").as_path()),
@@ -84,7 +84,7 @@ pub(super) fn assert_communications_storage_backup_restore(root: &Path) {
     let restored = postgres_command(
         &tools.container,
         DATABASE,
-        "SELECT count(*) > 0 FROM hermes_data.communications_evidence_summaries",
+        "SELECT count(*) > 0 FROM makosh_data.communications_evidence_summaries",
     );
     assert_eq!(
         restored.trim(),
@@ -102,7 +102,7 @@ struct PostgresRecoveryTools {
 
 impl PostgresRecoveryTools {
     fn install(root: &Path, target_database: &str) -> Self {
-        let container = required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_CONTAINER");
+        let container = required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_CONTAINER");
         assert!(container.bytes().all(|byte| byte.is_ascii_hexdigit()));
         assert!(
             target_database
@@ -117,21 +117,21 @@ impl PostgresRecoveryTools {
             &directory,
             "pg_dump",
             &format!(
-                "#!/bin/sh\nset -eu\noutput=\nwhile [ $# -gt 0 ]; do\n  case \"$1\" in\n    --file) output=$2; shift 2 ;;\n    *) shift ;;\n  esac\ndone\n[ -n \"$output\" ]\nexec docker exec {container} sh -ceu 'export PGPASSWORD=\"$(cat /run/secrets/storage_postgres_admin_password)\"; exec pg_dump --username=hermes_postgres_admin --format=custom --no-owner --no-privileges --dbname=hermes_storage_authenticated' > \"$output\"\n"
+                "#!/bin/sh\nset -eu\noutput=\nwhile [ $# -gt 0 ]; do\n  case \"$1\" in\n    --file) output=$2; shift 2 ;;\n    *) shift ;;\n  esac\ndone\n[ -n \"$output\" ]\nexec docker exec {container} sh -ceu 'export PGPASSWORD=\"$(cat /run/secrets/storage_postgres_admin_password)\"; exec pg_dump --username=makosh_postgres_admin --format=custom --no-owner --no-privileges --dbname=makosh_storage_authenticated' > \"$output\"\n"
             ),
         );
         let pg_restore = write_recovery_tool(
             &directory,
             "pg_restore",
             &format!(
-                "#!/bin/sh\nset -eu\ninput=\nfor value in \"$@\"; do input=$value; done\n[ -n \"$input\" ]\ndocker cp \"$input\" {container}:/tmp/hermes-communications-recovery.dump\nexec docker exec {container} sh -ceu 'export PGPASSWORD=\"$(cat /run/secrets/storage_postgres_admin_password)\"; exec pg_restore --username=hermes_postgres_admin --no-owner --no-privileges --exit-on-error --single-transaction --dbname={target_database} /tmp/hermes-communications-recovery.dump'\n"
+                "#!/bin/sh\nset -eu\ninput=\nfor value in \"$@\"; do input=$value; done\n[ -n \"$input\" ]\ndocker cp \"$input\" {container}:/tmp/makosh-communications-recovery.dump\nexec docker exec {container} sh -ceu 'export PGPASSWORD=\"$(cat /run/secrets/storage_postgres_admin_password)\"; exec pg_restore --username=makosh_postgres_admin --no-owner --no-privileges --exit-on-error --single-transaction --dbname={target_database} /tmp/makosh-communications-recovery.dump'\n"
             ),
         );
         let psql = write_recovery_tool(
             &directory,
             "psql",
             &format!(
-                "#!/bin/sh\nset -eu\nquery=\nwhile [ $# -gt 0 ]; do\n  case \"$1\" in\n    --command) query=$2; shift 2 ;;\n    *) shift ;;\n  esac\ndone\n[ -n \"$query\" ]\nexec docker exec {container} sh -ceu 'export PGPASSWORD=\"$(cat /run/secrets/storage_postgres_admin_password)\"; exec psql --username=hermes_postgres_admin --tuples-only --no-align --dbname={target_database} --command \"$1\"' -- \"$query\"\n"
+                "#!/bin/sh\nset -eu\nquery=\nwhile [ $# -gt 0 ]; do\n  case \"$1\" in\n    --command) query=$2; shift 2 ;;\n    *) shift ;;\n  esac\ndone\n[ -n \"$query\" ]\nexec docker exec {container} sh -ceu 'export PGPASSWORD=\"$(cat /run/secrets/storage_postgres_admin_password)\"; exec psql --username=makosh_postgres_admin --tuples-only --no-align --dbname={target_database} --command \"$1\"' -- \"$query\"\n"
             ),
         );
         Self {
@@ -169,7 +169,7 @@ fn postgres_command(container: &str, database: &str, query: &str) -> String {
     let output = Command::new("docker")
         .args([
             "exec", container, "sh", "-ceu",
-            "export PGPASSWORD=\"$(cat /run/secrets/storage_postgres_admin_password)\"; exec psql --username=hermes_postgres_admin --tuples-only --no-align --dbname=\"$1\" --command \"$2\"",
+            "export PGPASSWORD=\"$(cat /run/secrets/storage_postgres_admin_password)\"; exec psql --username=makosh_postgres_admin --tuples-only --no-align --dbname=\"$1\" --command \"$2\"",
             "--", database, query,
         ])
         .output()

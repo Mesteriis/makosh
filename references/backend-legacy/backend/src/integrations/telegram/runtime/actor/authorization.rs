@@ -30,7 +30,7 @@ pub(super) fn prepare_tdlib_client(
     }));
     client.send_json(&json!({
         "@type": "getAuthorizationState",
-        "@extra": "hermes-runtime-initial-authorization-state"
+        "@extra": "makosh-runtime-initial-authorization-state"
     }))?;
     Ok(())
 }

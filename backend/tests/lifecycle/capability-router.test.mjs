@@ -85,7 +85,7 @@ async function suspendAndReapprove(socketPaths, dataDir, registrationId) {
 }
 
 test('capability router requires the current approved external runtime generation', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-kernel-capability-router-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-kernel-capability-router-'));
   const dataDir = join(root, 'data');
   let server;
   try {

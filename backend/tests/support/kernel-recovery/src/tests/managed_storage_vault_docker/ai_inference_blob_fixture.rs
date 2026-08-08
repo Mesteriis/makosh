@@ -2,12 +2,12 @@
 
 use super::*;
 
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     AI_INFERENCE_BLOB_CAPABILITY_ID_V1, AI_INFERENCE_MODULE_ID_V1, AI_OWNER_V1,
 };
-use hermes_blob_client::BlobDataClient;
-use hermes_kernel_control_store::{ModuleBlobOperationV1, ModuleBlobQuotaRequestV1};
-use hermes_runtime_protocol::v1::{BlobDataOperationV1, ManagedRuntimeBlobSessionRequestV1};
+use makosh_blob_client::BlobDataClient;
+use makosh_kernel_control_store::{ModuleBlobOperationV1, ModuleBlobQuotaRequestV1};
+use makosh_runtime_protocol::v1::{BlobDataOperationV1, ManagedRuntimeBlobSessionRequestV1};
 
 use crate::runtime::lifecycle::control::{
     ManagedRuntimeBlobSessionHandler, ManagedRuntimeExpectation,

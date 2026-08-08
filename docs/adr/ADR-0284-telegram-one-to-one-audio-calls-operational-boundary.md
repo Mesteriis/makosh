@@ -13,7 +13,7 @@ durable `InitiateAudioCall`/`EndCall`, provider-result reconciliation,
 idempotency conflict и restart. `telegram_call_media_v1` и umbrella
 `telegram_calls_operational_v1` остаются закрыты. Для media реализованы
 отдельные typed contract и
-`hermes-telegram-call-media-tgcalls`, exact-source build script, native C ABI,
+`makosh-telegram-call-media-tgcalls`, exact-source build script, native C ABI,
 system-audio implementation patch, exact dylib loader и Kernel-staged
 assembly/runtime binding. TDLib `callStateReady` и bidirectional signaling
 преобразуются в secret-safe media plan, исполняются через pinned tgcalls port и
@@ -140,11 +140,11 @@ result не закрывают production admission.
 Calls добавляет Telegram-owned units:
 
 ```text
-hermes-telegram-calls-api
-hermes-telegram-calls-core
-hermes-telegram-calls-persistence
-hermes-telegram-call-media-contract
-hermes-telegram-call-media-tgcalls
+makosh-telegram-calls-api
+makosh-telegram-calls-core
+makosh-telegram-calls-persistence
+makosh-telegram-call-media-contract
+makosh-telegram-call-media-tgcalls
 ```
 
 Их причины изменения:
@@ -163,11 +163,11 @@ hermes-telegram-call-media-tgcalls
 
 Существующие units сохраняют свои responsibilities:
 
-- `hermes-telegram-tdlib` кодирует call signaling и преобразует `updateCall` в
+- `makosh-telegram-tdlib` кодирует call signaling и преобразует `updateCall` в
   typed provider updates;
-- `hermes-telegram-runtime` координирует calls ports under current
+- `makosh-telegram-runtime` координирует calls ports under current
   runtime/storage/grant fences;
-- `hermes-telegram-assembly` materializes descriptor, storage and exact native
+- `makosh-telegram-assembly` materializes descriptor, storage and exact native
   artifact binding;
 - generic distribution compiler проверяет и подписывает полный release;
 - frontend `src/integrations/telegram` владеет generated clients, controller и
@@ -183,9 +183,9 @@ workflow, assembly или independently managed module runtime. Runtime не
 
 | Capability | Contract | Route |
 |---|---|---|
-| `telegram.calls.query.v1` | `telegram.calls.query.v1` | `/hermes.telegram.calls.v1.TelegramCallsQueryService/Query` |
-| `telegram.calls.command.v1` | `telegram.calls.command.v1` | `/hermes.telegram.calls.v1.TelegramCallsCommandService/Execute` |
-| `telegram.calls.realtime.v1` | `telegram.calls.realtime.v1` | `/hermes.telegram.calls.v1.TelegramCallsRealtimeService/Replay` |
+| `telegram.calls.query.v1` | `telegram.calls.query.v1` | `/makosh.telegram.calls.v1.TelegramCallsQueryService/Query` |
+| `telegram.calls.command.v1` | `telegram.calls.command.v1` | `/makosh.telegram.calls.v1.TelegramCallsCommandService/Execute` |
+| `telegram.calls.realtime.v1` | `telegram.calls.realtime.v1` | `/makosh.telegram.calls.v1.TelegramCallsRealtimeService/Replay` |
 
 Query contract содержит:
 
@@ -213,7 +213,7 @@ realtime или operation query.
 
 ### Identity и state
 
-Hermes создаёт stable owner-local `call_session_id`. TDLib `call.id` хранится
+Макошь создаёт stable owner-local `call_session_id`. TDLib `call.id` хранится
 только как current runtime-scoped signal identity и никогда не используется
 как durable key самостоятельно. Ненулевой TDLib `call.unique_id` атомарно
 привязывается к session как persistent provider identity.

@@ -1,9 +1,9 @@
 use super::common::*;
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleEventEnvelopeKindV1, PlatformEventHubTopologyV1, PlatformEventStreamBudgetV1,
     PlatformEventsAuthorityConfigurationV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     DescribeManagedRuntimeResponseV1, EventsAuthorityRuntimeControlRequestV1,
     EventsAuthorityRuntimeControlResponseV1, EventsAuthorityRuntimeStateV1,
     EventsAuthorityRuntimeStatusV1, GetEventsAuthorityRuntimeStatusRequestV1,
@@ -79,7 +79,7 @@ struct AuthorityLaunchFixture {
 
 impl AuthorityLaunchFixture {
     fn new() -> Self {
-        let root = unique_target_root("hermes-events-authority-managed-launch");
+        let root = unique_target_root("makosh-events-authority-managed-launch");
         std::fs::create_dir_all(&root).expect("create fixture directory");
         let authority_descriptor = authority_descriptor();
         let authority_schema = authority_schema();
@@ -267,7 +267,7 @@ fn write_authority_child(
 fn authority_status_request_length() -> usize {
     EventsAuthorityRuntimeControlRequestV1 {
         operation: Some(
-            hermes_runtime_protocol::v1::events_authority_runtime_control_request_v1::Operation::GetStatus(
+            makosh_runtime_protocol::v1::events_authority_runtime_control_request_v1::Operation::GetStatus(
                 GetEventsAuthorityRuntimeStatusRequestV1 {},
             ),
         ),

@@ -11,7 +11,7 @@ export async function legacyRecoveryOperationIdV1(
 	const digest = await crypto.subtle.digest(
 		'SHA-256',
 		new TextEncoder().encode(
-			`hermes-legacy-provider-recovery-v1\0${bundleFingerprintSha256}\0${sourceHandle}\0${step}`,
+			`makosh-legacy-provider-recovery-v1\0${bundleFingerprintSha256}\0${sourceHandle}\0${step}`,
 		),
 	)
 	const operationId = new Uint8Array(digest).slice(0, 16)

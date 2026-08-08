@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communication_delayed_delivery_body_cleanup (
+CREATE TABLE makosh_data.communication_delayed_delivery_body_cleanup (
   logical_owner_id TEXT NOT NULL CHECK (
     char_length(logical_owner_id) BETWEEN 1 AND 128
   ),
@@ -23,14 +23,14 @@ CREATE TABLE hermes_data.communication_delayed_delivery_body_cleanup (
   ),
   PRIMARY KEY (logical_owner_id, delayed_operation_id),
   FOREIGN KEY (logical_owner_id, delayed_operation_id) REFERENCES
-    hermes_data.communication_delayed_delivery_operations (
+    makosh_data.communication_delayed_delivery_operations (
       logical_owner_id,
       delayed_operation_id
     )
 );
 
 CREATE INDEX communication_delayed_delivery_cleanup_pending_idx
-  ON hermes_data.communication_delayed_delivery_body_cleanup (
+  ON makosh_data.communication_delayed_delivery_body_cleanup (
     logical_owner_id,
     next_attempt_at_unix_millis,
     delayed_operation_id

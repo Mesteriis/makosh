@@ -5,7 +5,7 @@
 Дата: 2026-07-30
 
 Состояние реализации: generated provider-neutral contract build unit
-`hermes-communications-cross-channel-forward-source-api` реализован. Он
+`makosh-communications-cross-channel-forward-source-api` реализован. Он
 фиксирует три exact durable contracts, direction-specific route requests,
 target-bound Blob audience и валидируемые `DurableEnvelopeV1` outbox records
 без provider identity или plaintext. Communications persistence теперь
@@ -38,7 +38,7 @@ business owners и не удовлетворяет event-only границе cle
 Вводится отдельная Communications-owned contract build unit:
 
 ```text
-hermes-communications-cross-channel-forward-source-api
+makosh-communications-cross-channel-forward-source-api
 ```
 
 Она содержит три exact durable contracts:
@@ -60,7 +60,7 @@ Target workflow не выбирается payload. Contract unit compile-time ф
 
 ```text
 target owner      communication_cross_channel_forward
-target module     hermes-communication-cross-channel-forward-runtime
+target module     makosh-communication-cross-channel-forward-runtime
 target capability communication_cross_channel_forward.blob.v1
 ```
 

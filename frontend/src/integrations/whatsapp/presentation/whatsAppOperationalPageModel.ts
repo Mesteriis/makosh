@@ -1,4 +1,4 @@
-import type { WhatsAppCommandOperationStatusV1 } from '../../../gen/hermes/whatsapp/v1/client_pb'
+import type { WhatsAppCommandOperationStatusV1 } from '../../../gen/makosh/whatsapp/v1/client_pb'
 
 export type WhatsAppOperationalPageModel = {
 	accountId: string

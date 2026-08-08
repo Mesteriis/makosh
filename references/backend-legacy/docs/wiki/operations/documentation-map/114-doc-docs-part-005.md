@@ -17,7 +17,7 @@ generated_by: code-wiki-ru
 ## Резюме
 
 Создать в русской Obsidian‑wiki страницу `operations/documentation-map.md`.
-Страница описывает структуру документации Hermes Hub: разделы Foundation, Engines, Интеграции и ссылки на ADR, чтобы служить точкой входа для навигации.
+Страница описывает структуру документации Макошь: разделы Foundation, Engines, Интеграции и ссылки на ADR, чтобы служить точкой входа для навигации.
 Всё содержание опирается только на встроенные в задачу исходные файлы.
 
 ## Предложенные страницы
@@ -25,9 +25,9 @@ generated_by: code-wiki-ru
 - `operations/documentation-map.md`
 
 ```markdown
-# Карта документации Hermes Hub
+# Карта документации Макошь
 
-Эта страница описывает организацию и назначение документации Hermes Hub и помогает быстро найти нужный раздел.
+Эта страница описывает организацию и назначение документации Макошь и помогает быстро найти нужный раздел.
 
 ## Foundation (Основа)
 
@@ -57,7 +57,7 @@ generated_by: code-wiki-ru
 ## Интеграции
 
 Интеграции — это адаптеры провайдеров и протоколов. Они наблюдают за внешними системами, сохраняют источник происхождения (provenance) и генерируют события или свидетельства для доменов.
-Интеграция **не является** доменом продукта Hermes.
+Интеграция **не является** доменом продукта Макошь.
 
 Каталог интеграций: ``integrations/README``.
 
@@ -102,7 +102,7 @@ generated_by: code-wiki-ru
 ## Покрытие источников
 
 - `docs/foundation/README.md` — назначение Foundation: «Foundation documents define canonical vocabulary, product model and long-term architecture constraints.»
-- `docs/foundation/vision.md` — identity продукта: «Hermes Hub is a local-first Personal Memory System.»
+- `docs/foundation/vision.md` — identity продукта: «Макошь is a local-first Personal Memory System.»
 - `docs/foundation/glossary.md` — канонический глоссарий терминов.
 - `docs/foundation/world-model.md` — модель мира: первичные сущности, производные объекты, модель отношений.
 - `docs/foundation/architecture-principles.md` — 12 архитектурных принципов.

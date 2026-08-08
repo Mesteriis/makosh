@@ -1,16 +1,16 @@
 use super::*;
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     BrowserGatewayAccessModeV1, BrowserSessionStatusResponseV1, ClientBootstrapResponseV1,
     ClientSettingsApplyStateV1, ClientSurfaceAvailabilityStateV1, ClientSurfaceIdV1,
     ClientSystemComponentIdV1, ClientSystemComponentStateV1,
     client_setting_value_v1::Value as GatewayValue,
 };
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleRegistration, ModuleRegistrationState, SettingsApplyState, SettingsDesiredSnapshot,
     SettingsInitialSnapshot, SettingsSchemaBinding,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     SettingApplyModeV1, SettingClientVisibilityV1, SettingDefinitionV1, SettingMutationAuthorityV1,
     SettingTargetScopeV1, SettingValueTypeV1, SettingValueV1, SettingsSchemaV1, SettingsSnapshotV1,
     SettingsValueEntryV1, setting_value_v1::Value,
@@ -18,8 +18,8 @@ use hermes_runtime_protocol::v1::{
 use prost::Message;
 use sha2::{Digest, Sha256};
 
-const SESSION_STATUS_PATH: &str = "/hermes.gateway.v1.BrowserSessionService/GetStatus";
-const BOOTSTRAP_PATH: &str = "/hermes.gateway.v1.ClientBootstrapService/GetBootstrap";
+const SESSION_STATUS_PATH: &str = "/makosh.gateway.v1.BrowserSessionService/GetStatus";
+const BOOTSTRAP_PATH: &str = "/makosh.gateway.v1.ClientBootstrapService/GetBootstrap";
 
 #[test]
 fn browser_connect_session_status_is_cookie_only_and_owner_neutral() {
@@ -71,7 +71,7 @@ fn browser_connect_session_status_is_cookie_only_and_owner_neutral() {
 
 #[test]
 fn lan_development_mode_bypasses_cookie_only_for_direct_same_origin_requests() {
-    let root = unique_target_root("hermes-browser-gateway-lan-development");
+    let root = unique_target_root("makosh-browser-gateway-lan-development");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = Arc::new(
         SqliteControlStore::create(&root.join("control.sqlite"), "instance-development", 1)
@@ -130,7 +130,7 @@ fn lan_development_mode_bypasses_cookie_only_for_direct_same_origin_requests() {
 #[test]
 fn loopback_development_mode_requires_the_exact_private_proxy_hop() {
     const PROOF: &str = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
-    let root = unique_target_root("hermes-browser-gateway-loopback-development");
+    let root = unique_target_root("makosh-browser-gateway-loopback-development");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = Arc::new(
         SqliteControlStore::create(&root.join("control.sqlite"), "instance-development", 1)
@@ -153,7 +153,7 @@ fn loopback_development_mode_requires_the_exact_private_proxy_hop() {
     let admitted_headers = [
         ("host", "127.0.0.1:5173"),
         ("origin", "http://127.0.0.1:5173"),
-        ("x-hermes-development-proxy-proof", PROOF),
+        ("x-makosh-development-proxy-proof", PROOF),
     ];
 
     let status_response = runtime
@@ -177,22 +177,22 @@ fn loopback_development_mode_requires_the_exact_private_proxy_hop() {
         vec![
             ("host", "127.0.0.1:5173"),
             ("origin", "http://127.0.0.1:5173"),
-            ("x-hermes-development-proxy-proof", "bad"),
+            ("x-makosh-development-proxy-proof", "bad"),
         ],
         vec![
             ("host", "127.0.0.1:9444"),
             ("origin", "http://127.0.0.1:5173"),
-            ("x-hermes-development-proxy-proof", PROOF),
+            ("x-makosh-development-proxy-proof", PROOF),
         ],
         vec![
             ("host", "127.0.0.1:5173"),
             ("origin", "http://127.0.0.1:9444"),
-            ("x-hermes-development-proxy-proof", PROOF),
+            ("x-makosh-development-proxy-proof", PROOF),
         ],
         vec![
             ("host", "127.0.0.1:5173"),
             ("origin", "http://127.0.0.1:5173"),
-            ("x-hermes-development-proxy-proof", PROOF),
+            ("x-makosh-development-proxy-proof", PROOF),
             ("x-forwarded-for", "203.0.113.4"),
         ],
     ] {
@@ -409,7 +409,7 @@ fn assert_bootstrap_requires_session(fixture: &AuthenticationHttpFixture) {
         StatusCode::UNAUTHORIZED
     );
     assert_eq!(
-        read_bootstrap_status(fixture, Some("__Host-hermes-session=invalid")),
+        read_bootstrap_status(fixture, Some("__Host-makosh-session=invalid")),
         StatusCode::UNAUTHORIZED
     );
 }
@@ -471,7 +471,7 @@ fn admit_owner_scoped_modules(fixture: &AuthenticationHttpFixture) {
             ],
             "registration-catalog" => vec![
                 "mail.delivery.query.v1".to_owned(),
-                hermes_runtime_protocol::SETTINGS_CONFIGURATION_CATALOG_CAPABILITY_ID.to_owned(),
+                makosh_runtime_protocol::SETTINGS_CONFIGURATION_CATALOG_CAPABILITY_ID.to_owned(),
             ],
             _ => vec!["sections.read".to_owned()],
         };
@@ -503,7 +503,7 @@ fn admit_current_visible_settings(fixture: &AuthenticationHttpFixture) {
         .store
         .admit_settings_schema(
             &SettingsSchemaBinding::new(
-                hermes_kernel_control_store::SettingsSchemaBindingInputV1 {
+                makosh_kernel_control_store::SettingsSchemaBindingInputV1 {
                     registration_id: "registration-visible".to_owned(),
                     schema_major: 1,
                     schema_revision: 1,
@@ -557,7 +557,7 @@ fn admit_current_catalog_target(fixture: &AuthenticationHttpFixture) {
         .store
         .admit_settings_schema(
             &SettingsSchemaBinding::new(
-                hermes_kernel_control_store::SettingsSchemaBindingInputV1 {
+                makosh_kernel_control_store::SettingsSchemaBindingInputV1 {
                     registration_id: "registration-catalog".to_owned(),
                     schema_major: 1,
                     schema_revision: 1,

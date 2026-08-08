@@ -30,10 +30,10 @@ const percentage = computed(() => {
 const dashOffset = computed(() => circumference - (percentage.value / 100) * circumference)
 
 const classes = computed(() => [
-  'hermes-circular-progress',
-  `hermes-circular-progress--${props.size}`,
-  `hermes-circular-progress--${props.tone}`,
-  { 'hermes-circular-progress--indeterminate': props.indeterminate },
+  'makosh-circular-progress',
+  `makosh-circular-progress--${props.size}`,
+  `makosh-circular-progress--${props.tone}`,
+  { 'makosh-circular-progress--indeterminate': props.indeterminate },
   props.class
 ])
 
@@ -51,10 +51,10 @@ const ariaValueText = computed(() => props.indeterminate ? props.label ?? 'Loadi
     :aria-valuenow="ariaValueNow"
     :aria-valuetext="ariaValueText"
   >
-    <svg class="hermes-circular-progress-svg" viewBox="0 0 48 48" aria-hidden="true">
-      <circle class="hermes-circular-progress-track" cx="24" cy="24" :r="radius" />
+    <svg class="makosh-circular-progress-svg" viewBox="0 0 48 48" aria-hidden="true">
+      <circle class="makosh-circular-progress-track" cx="24" cy="24" :r="radius" />
       <circle
-        class="hermes-circular-progress-value"
+        class="makosh-circular-progress-value"
         cx="24"
         cy="24"
         :r="radius"
@@ -62,7 +62,7 @@ const ariaValueText = computed(() => props.indeterminate ? props.label ?? 'Loadi
         :stroke-dashoffset="dashOffset"
       />
     </svg>
-    <span v-if="showValue && !indeterminate" class="hermes-circular-progress-label">
+    <span v-if="showValue && !indeterminate" class="makosh-circular-progress-label">
       {{ percentage }}%
     </span>
   </div>

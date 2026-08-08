@@ -135,7 +135,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
             source_reference.ok_or(CrossChannelForwardPersistenceErrorV1::InvalidRow)?;
         let source_proof = source_proof.ok_or(CrossChannelForwardPersistenceErrorV1::InvalidRow)?;
         let cleanup_inserted = sqlx::query(
-            "INSERT INTO hermes_data.communication_cross_channel_forward_cleanup (
+            "INSERT INTO makosh_data.communication_cross_channel_forward_cleanup (
                logical_owner_id, forward_id, source_blob_reference,
                source_custody_proof, reason, attempt_count,
                next_attempt_at_unix_millis, created_at_unix_millis,
@@ -161,7 +161,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
             .transpose()
             .map_err(|_| CrossChannelForwardPersistenceErrorV1::InvalidInput)?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_cross_channel_forward_operations
+            "UPDATE makosh_data.communication_cross_channel_forward_operations
              SET state = $1, state_revision = state_revision + 1,
                  delivery_intent_id = $2, error_code = $3,
                  source_blob_reference = NULL, source_custody_proof = NULL,
@@ -205,7 +205,7 @@ async fn dispatch_row(
 ) -> Result<([u8; 16], Option<Vec<u8>>, Option<Vec<u8>>), CrossChannelForwardPersistenceErrorV1> {
     let row: DispatchRowV1 = sqlx::query_as(
         "SELECT forward_id, source_blob_reference, source_custody_proof
-         FROM hermes_data.communication_cross_channel_forward_operations
+         FROM makosh_data.communication_cross_channel_forward_operations
          WHERE logical_owner_id = $1
            AND delivery_intent_command_id = $2
            AND delivery_submit_message_id = $3

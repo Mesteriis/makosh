@@ -26,16 +26,16 @@ mod projection_cache;
 pub mod settings;
 pub mod vault_credentials;
 
-use hermes_blob_client::BlobDataClient;
-use hermes_blob_client_contract::BlobReadPort;
-use hermes_communications_ingress::{
+use makosh_blob_client::BlobDataClient;
+use makosh_blob_client_contract::BlobReadPort;
+use makosh_communications_ingress::{
     BodyAdmissionFailureV1, BodyAvailabilityV1, BodyBlobReceiptV1, CommunicationObservationDraft,
     ObservationEnvelopeContextV1, build_observation_outbox_record_v1, with_admitted_body_blob,
     with_body_admission_failure,
 };
-use hermes_events_protocol::delivery::OutboxRecordV1;
-use hermes_runtime_protocol::v1::BlobDataSessionGrantV1;
-use hermes_telegram_api::{
+use makosh_events_protocol::delivery::OutboxRecordV1;
+use makosh_runtime_protocol::v1::BlobDataSessionGrantV1;
+use makosh_telegram_api::{
     TelegramAccount, TelegramAccountSetup, TelegramAccountState, TelegramContractError,
     TelegramDeliveryState, TelegramDownloadFile, TelegramFileSnapshot, TelegramMessageObservation,
     TelegramMessageTombstone, TelegramOperation, TelegramParticipantFilter,
@@ -48,8 +48,8 @@ use hermes_telegram_api::{
     validate_provider_command, validate_provider_query, validate_runtime_reconfiguration_request,
     validate_setup,
 };
-use hermes_telegram_call_media_contract::{TelegramCallReadyMaterialV1, TelegramCallSecretBytesV1};
-use hermes_telegram_core::{
+use makosh_telegram_call_media_contract::{TelegramCallReadyMaterialV1, TelegramCallSecretBytesV1};
+use makosh_telegram_core::{
     TelegramLifecycle, accept_operation, accept_runtime_reconfiguration,
     complete_runtime_reconfiguration, credential_lease_purposes, event_chat_state,
     event_message_mutation, fail_runtime_reconfiguration, observation_draft,
@@ -57,8 +57,8 @@ use hermes_telegram_core::{
     project_message, provider_event_draft, qr_login_password_required, qr_login_password_submitted,
     qr_login_preparing, qr_login_qr_issued, qr_login_ready,
 };
-use hermes_telegram_persistence::{TelegramDurablePersistence, TelegramDurablePersistenceError};
-use hermes_telegram_tdlib::{
+use makosh_telegram_persistence::{TelegramDurablePersistence, TelegramDurablePersistenceError};
+use makosh_telegram_tdlib::{
     TdJsonLibrary, TdJsonTransport, TdlibAuthorizationDriver, TdlibAuthorizationEvent,
     TdlibAuthorizationParameters, TdlibCallObservation, TdlibError, TdlibProviderUpdate,
     TdlibRequest, TdlibResponse, TdlibTransport, TelegramMediaMaterializer, get_chats_request,
@@ -74,7 +74,7 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use projection_cache::TelegramRuntimeProjectionCache;
 
-pub const PACKAGE: &str = "hermes-telegram-runtime";
+pub const PACKAGE: &str = "makosh-telegram-runtime";
 
 #[derive(Debug)]
 pub enum TelegramCallProviderUpdate {
@@ -103,18 +103,18 @@ pub enum TelegramDurableExecutionError {
 }
 
 fn event_chat_operational_state(
-    event: &hermes_telegram_api::TelegramProviderEvent,
+    event: &makosh_telegram_api::TelegramProviderEvent,
 ) -> Option<(&str, &str)> {
     match event {
-        hermes_telegram_api::TelegramProviderEvent::ChatPositionChanged(position) => {
+        makosh_telegram_api::TelegramProviderEvent::ChatPositionChanged(position) => {
             Some((&position.account_id, &position.provider_chat_id))
         }
-        hermes_telegram_api::TelegramProviderEvent::ChatNotificationChanged {
+        makosh_telegram_api::TelegramProviderEvent::ChatNotificationChanged {
             account_id,
             provider_chat_id,
             ..
         }
-        | hermes_telegram_api::TelegramProviderEvent::ChatMarkedUnreadChanged {
+        | makosh_telegram_api::TelegramProviderEvent::ChatMarkedUnreadChanged {
             account_id,
             provider_chat_id,
             ..
@@ -166,12 +166,12 @@ pub enum TelegramDurableProjectionError {
 static NEXT_MEDIA_FILE_ID: AtomicU64 = AtomicU64::new(1);
 
 fn provider_event_matches_command(
-    event: &hermes_telegram_api::TelegramProviderEvent,
+    event: &makosh_telegram_api::TelegramProviderEvent,
     command: &TelegramProviderCommand,
 ) -> bool {
     match (event, command) {
         (
-            hermes_telegram_api::TelegramProviderEvent::MessagePinned {
+            makosh_telegram_api::TelegramProviderEvent::MessagePinned {
                 account_id,
                 provider_chat_id,
                 provider_message_id,
@@ -191,7 +191,7 @@ fn provider_event_matches_command(
                 && is_pinned == active
         }
         (
-            hermes_telegram_api::TelegramProviderEvent::ReactionChanged {
+            makosh_telegram_api::TelegramProviderEvent::ReactionChanged {
                 account_id,
                 provider_chat_id,
                 provider_message_id,
@@ -214,7 +214,7 @@ fn provider_event_matches_command(
                 && is_active == active
         }
         (
-            hermes_telegram_api::TelegramProviderEvent::ReactionsObserved {
+            makosh_telegram_api::TelegramProviderEvent::ReactionsObserved {
                 account_id,
                 provider_chat_id,
                 provider_message_id,
@@ -237,7 +237,7 @@ fn provider_event_matches_command(
                 })
         }
         (
-            hermes_telegram_api::TelegramProviderEvent::ChatMarkedUnreadChanged {
+            makosh_telegram_api::TelegramProviderEvent::ChatMarkedUnreadChanged {
                 account_id,
                 provider_chat_id,
                 is_marked_as_unread,
@@ -254,7 +254,7 @@ fn provider_event_matches_command(
                 && is_marked_as_unread == unread
         }
         (
-            hermes_telegram_api::TelegramProviderEvent::ChatUnreadChanged {
+            makosh_telegram_api::TelegramProviderEvent::ChatUnreadChanged {
                 account_id,
                 provider_chat_id,
                 last_read_inbox_message_id,
@@ -273,7 +273,7 @@ fn provider_event_matches_command(
                 && last_read_inbox_message_id.as_deref() == Some(command_message_id.as_str())
         }
         (
-            hermes_telegram_api::TelegramProviderEvent::ChatNotificationChanged {
+            makosh_telegram_api::TelegramProviderEvent::ChatNotificationChanged {
                 account_id,
                 provider_chat_id,
                 mute_for_seconds,
@@ -291,7 +291,7 @@ fn provider_event_matches_command(
                 && (*mute_for_seconds > 0) == *muted
         }
         (
-            hermes_telegram_api::TelegramProviderEvent::ChatPositionChanged(position),
+            makosh_telegram_api::TelegramProviderEvent::ChatPositionChanged(position),
             TelegramProviderCommand::Archive {
                 account_id,
                 provider_chat_id,
@@ -305,7 +305,7 @@ fn provider_event_matches_command(
                 && (position.order > 0) == *archived
         }
         (
-            hermes_telegram_api::TelegramProviderEvent::TopicChanged(topic),
+            makosh_telegram_api::TelegramProviderEvent::TopicChanged(topic),
             TelegramProviderCommand::SetTopicClosed {
                 account_id,
                 provider_chat_id,
@@ -320,7 +320,7 @@ fn provider_event_matches_command(
                 && topic.is_closed == *is_closed
         }
         (
-            hermes_telegram_api::TelegramProviderEvent::ChatFoldersChanged {
+            makosh_telegram_api::TelegramProviderEvent::ChatFoldersChanged {
                 account_id,
                 folders,
             },
@@ -345,7 +345,7 @@ fn provider_event_matches_command(
                 })
         }
         (
-            hermes_telegram_api::TelegramProviderEvent::ChatFoldersChanged {
+            makosh_telegram_api::TelegramProviderEvent::ChatFoldersChanged {
                 account_id,
                 folders,
             },
@@ -366,7 +366,7 @@ fn provider_event_matches_command(
                 })
         }
         (
-            hermes_telegram_api::TelegramProviderEvent::ParticipantChanged(participant),
+            makosh_telegram_api::TelegramProviderEvent::ParticipantChanged(participant),
             TelegramProviderCommand::Join {
                 account_id,
                 provider_chat_id,
@@ -378,7 +378,7 @@ fn provider_event_matches_command(
                 && !matches!(participant.status.as_str(), "left" | "banned")
         }
         (
-            hermes_telegram_api::TelegramProviderEvent::ParticipantChanged(participant),
+            makosh_telegram_api::TelegramProviderEvent::ParticipantChanged(participant),
             TelegramProviderCommand::Leave {
                 account_id,
                 provider_chat_id,
@@ -394,12 +394,12 @@ fn provider_event_matches_command(
 }
 
 fn provider_event_targets_command(
-    event: &hermes_telegram_api::TelegramProviderEvent,
+    event: &makosh_telegram_api::TelegramProviderEvent,
     command: &TelegramProviderCommand,
 ) -> bool {
     match (event, command) {
         (
-            hermes_telegram_api::TelegramProviderEvent::MessagePinned {
+            makosh_telegram_api::TelegramProviderEvent::MessagePinned {
                 account_id,
                 provider_chat_id,
                 provider_message_id,
@@ -413,7 +413,7 @@ fn provider_event_targets_command(
             },
         )
         | (
-            hermes_telegram_api::TelegramProviderEvent::ReactionChanged {
+            makosh_telegram_api::TelegramProviderEvent::ReactionChanged {
                 account_id,
                 provider_chat_id,
                 provider_message_id,
@@ -427,7 +427,7 @@ fn provider_event_targets_command(
             },
         )
         | (
-            hermes_telegram_api::TelegramProviderEvent::ReactionsObserved {
+            makosh_telegram_api::TelegramProviderEvent::ReactionsObserved {
                 account_id,
                 provider_chat_id,
                 provider_message_id,
@@ -445,7 +445,7 @@ fn provider_event_targets_command(
                 && provider_message_id == command_message_id
         }
         (
-            hermes_telegram_api::TelegramProviderEvent::ChatMarkedUnreadChanged {
+            makosh_telegram_api::TelegramProviderEvent::ChatMarkedUnreadChanged {
                 account_id,
                 provider_chat_id,
                 ..
@@ -457,7 +457,7 @@ fn provider_event_targets_command(
             },
         )
         | (
-            hermes_telegram_api::TelegramProviderEvent::ChatUnreadChanged {
+            makosh_telegram_api::TelegramProviderEvent::ChatUnreadChanged {
                 account_id,
                 provider_chat_id,
                 ..
@@ -469,7 +469,7 @@ fn provider_event_targets_command(
             },
         )
         | (
-            hermes_telegram_api::TelegramProviderEvent::ChatNotificationChanged {
+            makosh_telegram_api::TelegramProviderEvent::ChatNotificationChanged {
                 account_id,
                 provider_chat_id,
                 ..
@@ -481,8 +481,8 @@ fn provider_event_targets_command(
             },
         )
         | (
-            hermes_telegram_api::TelegramProviderEvent::ParticipantChanged(
-                hermes_telegram_api::TelegramParticipant {
+            makosh_telegram_api::TelegramProviderEvent::ParticipantChanged(
+                makosh_telegram_api::TelegramParticipant {
                     account_id,
                     provider_chat_id,
                     ..
@@ -495,8 +495,8 @@ fn provider_event_targets_command(
             },
         )
         | (
-            hermes_telegram_api::TelegramProviderEvent::ParticipantChanged(
-                hermes_telegram_api::TelegramParticipant {
+            makosh_telegram_api::TelegramProviderEvent::ParticipantChanged(
+                makosh_telegram_api::TelegramParticipant {
                     account_id,
                     provider_chat_id,
                     ..
@@ -509,7 +509,7 @@ fn provider_event_targets_command(
             },
         ) => account_id == command_account_id && provider_chat_id == command_chat_id,
         (
-            hermes_telegram_api::TelegramProviderEvent::ChatPositionChanged(position),
+            makosh_telegram_api::TelegramProviderEvent::ChatPositionChanged(position),
             TelegramProviderCommand::Archive {
                 account_id,
                 provider_chat_id,
@@ -521,7 +521,7 @@ fn provider_event_targets_command(
                 && position.list_kind == "archive"
         }
         (
-            hermes_telegram_api::TelegramProviderEvent::TopicChanged(topic),
+            makosh_telegram_api::TelegramProviderEvent::TopicChanged(topic),
             TelegramProviderCommand::SetTopicClosed {
                 account_id,
                 provider_chat_id,
@@ -534,7 +534,7 @@ fn provider_event_targets_command(
                 && topic.provider_topic_id == *provider_topic_id
         }
         (
-            hermes_telegram_api::TelegramProviderEvent::ChatFoldersChanged {
+            makosh_telegram_api::TelegramProviderEvent::ChatFoldersChanged {
                 account_id,
                 folders,
             },
@@ -546,7 +546,7 @@ fn provider_event_targets_command(
             },
         )
         | (
-            hermes_telegram_api::TelegramProviderEvent::ChatFoldersChanged {
+            makosh_telegram_api::TelegramProviderEvent::ChatFoldersChanged {
                 account_id,
                 folders,
             },
@@ -588,7 +588,7 @@ pub struct TelegramBlobMaterializationSession {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_telegram_api::{
+    use makosh_telegram_api::{
         TelegramMessageObservation, TelegramMessageReferences, TelegramProviderEvent,
     };
 
@@ -739,7 +739,7 @@ mod tests {
             observed_at_unix_seconds: 1,
         };
         let event = TelegramProviderEvent::MessageCreated(observation.clone());
-        let draft = hermes_telegram_core::observation_draft(observation).expect("draft");
+        let draft = makosh_telegram_core::observation_draft(observation).expect("draft");
         let receipt = BodyBlobReceiptV1 {
             blob_ref: "blob-content:test".to_owned(),
             reference_id: [7; 16],
@@ -780,7 +780,7 @@ mod tests {
             api_hash_revision: 5,
             session_encryption_key_revision: 6,
         }));
-        let draft = hermes_telegram_core::observation_draft(TelegramMessageObservation {
+        let draft = makosh_telegram_core::observation_draft(TelegramMessageObservation {
             account_id: "account".to_owned(),
             provider_chat_id: "chat".to_owned(),
             provider_message_id: "message".to_owned(),
@@ -799,7 +799,7 @@ mod tests {
             .communication_observation_record(&draft)
             .expect("Telegram outbox record");
         let envelope =
-            hermes_events_protocol::validation::envelope::decode_envelope_v1(record.exact_bytes())
+            makosh_events_protocol::validation::envelope::decode_envelope_v1(record.exact_bytes())
                 .expect("durable observation envelope");
         let source = envelope.source.expect("durable observation source");
 
@@ -876,7 +876,7 @@ impl<R: BlobReadPort> TelegramMediaMaterializer for TelegramBlobMaterializer<R> 
         let file_id = NEXT_MEDIA_FILE_ID.fetch_add(1, Ordering::Relaxed);
         let path = self
             .temp_dir
-            .join(format!("hermes-telegram-media-{file_id}"));
+            .join(format!("makosh-telegram-media-{file_id}"));
         let mut file = OpenOptions::new()
             .write(true)
             .create_new(true)
@@ -912,7 +912,7 @@ pub struct TelegramRuntime<T> {
     lifecycle: TelegramLifecycle,
     media_materializer: Option<TelegramBlobMaterializer<BlobDataClient>>,
     call_media:
-        Option<Box<dyn hermes_telegram_call_media_contract::TelegramCallSignalingMediaPort>>,
+        Option<Box<dyn makosh_telegram_call_media_contract::TelegramCallSignalingMediaPort>>,
     active_call_media: Option<calls_execution::TelegramActiveCallMediaSession>,
     admission: Option<TelegramRuntimeAdmission>,
     pending_reconfiguration: Option<TelegramRuntimeReconfiguration>,
@@ -925,7 +925,7 @@ pub struct TelegramRuntimeComposition {
     authorization: Option<TdlibAuthorizationDriver>,
     runtime: Option<TelegramRuntime<TdJsonTransport>>,
     call_media:
-        Option<Box<dyn hermes_telegram_call_media_contract::TelegramCallSignalingMediaPort>>,
+        Option<Box<dyn makosh_telegram_call_media_contract::TelegramCallSignalingMediaPort>>,
     admission: Option<TelegramRuntimeAdmission>,
     pending_reconfiguration: Option<TelegramRuntimeReconfiguration>,
 }
@@ -1036,7 +1036,7 @@ impl TelegramRuntimeComposition {
         if matches!(
             &event,
             Some(TdlibAuthorizationEvent::State(
-                hermes_telegram_tdlib::TdlibAuthorizationUpdate::Ready
+                makosh_telegram_tdlib::TdlibAuthorizationUpdate::Ready
             ))
         ) {
             let authorization = self.authorization.take().ok_or_else(|| {
@@ -1079,7 +1079,7 @@ impl TelegramRuntimeComposition {
 
     pub fn install_call_media_port(
         &mut self,
-        port: Box<dyn hermes_telegram_call_media_contract::TelegramCallSignalingMediaPort>,
+        port: Box<dyn makosh_telegram_call_media_contract::TelegramCallSignalingMediaPort>,
     ) {
         self.call_media = Some(port);
     }
@@ -1352,8 +1352,8 @@ where
 
     pub fn authorize_media_session(
         &mut self,
-        session: hermes_blob_client::ManagedBlobSessionV1,
-        intent: &hermes_telegram_api::TelegramBlobIntentV1,
+        session: makosh_blob_client::ManagedBlobSessionV1,
+        intent: &makosh_telegram_api::TelegramBlobIntentV1,
     ) -> Result<(), TdlibError> {
         if self.media_materializer.is_none() {
             let reader = BlobDataClient::new(session.data_socket_path).map_err(|_| {
@@ -1472,7 +1472,7 @@ where
         &self,
         account_id: &str,
         configuration_instance_id: &str,
-    ) -> Result<Vec<hermes_telegram_core::VaultPurposeRequestV1>, TelegramContractError> {
+    ) -> Result<Vec<makosh_telegram_core::VaultPurposeRequestV1>, TelegramContractError> {
         self.persistence
             .account(account_id)
             .ok_or(TelegramContractError::AccountUnknown)?;
@@ -1562,9 +1562,9 @@ where
             .ok_or_else(|| TdlibError::Protocol("Telegram operation is unknown".to_owned()))?;
         if !matches!(
             operation.state,
-            hermes_telegram_api::TelegramOperationState::Failed
-                | hermes_telegram_api::TelegramOperationState::DeadLetter
-                | hermes_telegram_api::TelegramOperationState::RetryScheduled
+            makosh_telegram_api::TelegramOperationState::Failed
+                | makosh_telegram_api::TelegramOperationState::DeadLetter
+                | makosh_telegram_api::TelegramOperationState::RetryScheduled
         ) {
             return Err(TdlibError::Protocol(
                 "Telegram operation is not retryable".to_owned(),
@@ -2003,9 +2003,9 @@ where
         limit: i64,
         worker_id: &str,
         mut issue_media_session: impl FnMut(
-            &hermes_telegram_api::TelegramBlobIntentV1,
+            &makosh_telegram_api::TelegramBlobIntentV1,
         ) -> Result<
-            hermes_blob_client::ManagedBlobSessionV1,
+            makosh_blob_client::ManagedBlobSessionV1,
             TdlibError,
         >,
     ) -> Result<Vec<TelegramOperation>, TelegramDurableExecutionError> {
@@ -2086,7 +2086,7 @@ where
                 }
             };
             next_operation.provider_observed_at_unix_seconds = (next_operation.state
-                == hermes_telegram_api::TelegramOperationState::Completed)
+                == makosh_telegram_api::TelegramOperationState::Completed)
                 .then_some(now_unix_seconds);
             durable
                 .save_operation(&next_operation)
@@ -2137,7 +2137,7 @@ where
         &mut self,
         account_id: &str,
         limit: u32,
-    ) -> Result<Vec<hermes_telegram_api::TelegramChat>, TdlibError> {
+    ) -> Result<Vec<makosh_telegram_api::TelegramChat>, TdlibError> {
         let response = self.execute(account_id, get_chats_request(account_id, limit)?)?;
         match response {
             TdlibResponse::Chats(chats) => {
@@ -2157,7 +2157,7 @@ where
         durable: &TelegramDurablePersistence,
         account_id: &str,
         limit: u32,
-    ) -> Result<Vec<hermes_telegram_api::TelegramChat>, TelegramDurableProjectionError> {
+    ) -> Result<Vec<makosh_telegram_api::TelegramChat>, TelegramDurableProjectionError> {
         let chats = self
             .load_chats(account_id, limit)
             .map_err(TelegramDurableProjectionError::Provider)?;
@@ -2200,9 +2200,9 @@ where
         account_id: &str,
         provider_chat_id: &str,
         from_message_id: Option<i64>,
-        mode: hermes_telegram_api::TelegramHistorySyncMode,
+        mode: makosh_telegram_api::TelegramHistorySyncMode,
         limit: u32,
-    ) -> Result<hermes_telegram_api::TelegramHistoryPage, TdlibError> {
+    ) -> Result<makosh_telegram_api::TelegramHistoryPage, TdlibError> {
         let mut cursor = from_message_id;
         let mut observations = Vec::new();
         loop {
@@ -2234,7 +2234,7 @@ where
                 })?;
             }
             observations.extend(page);
-            if !matches!(mode, hermes_telegram_api::TelegramHistorySyncMode::Full)
+            if !matches!(mode, makosh_telegram_api::TelegramHistorySyncMode::Full)
                 || page_len < limit as usize
                 || next_cursor.is_none()
                 || next_cursor == cursor
@@ -2246,10 +2246,10 @@ where
         let next_from_message_id = observations
             .last()
             .and_then(|message| message.provider_message_id.parse::<i64>().ok());
-        let has_more = !matches!(mode, hermes_telegram_api::TelegramHistorySyncMode::Full)
+        let has_more = !matches!(mode, makosh_telegram_api::TelegramHistorySyncMode::Full)
             && observations.len() >= limit as usize
             && next_from_message_id.is_some();
-        Ok(hermes_telegram_api::TelegramHistoryPage {
+        Ok(makosh_telegram_api::TelegramHistoryPage {
             items: observations,
             next_from_message_id,
             has_more,
@@ -2463,7 +2463,7 @@ where
         &self,
         account_id: &str,
         limit: u32,
-    ) -> Vec<hermes_telegram_api::TelegramChat> {
+    ) -> Vec<makosh_telegram_api::TelegramChat> {
         self.persistence.chats_for_account(account_id, limit)
     }
 
@@ -2478,7 +2478,7 @@ where
     pub fn operations_for_account(
         &self,
         account_id: &str,
-    ) -> Vec<hermes_telegram_api::TelegramOperation> {
+    ) -> Vec<makosh_telegram_api::TelegramOperation> {
         self.persistence.operations_for_account(account_id)
     }
 
@@ -2487,7 +2487,7 @@ where
         account_id: &str,
         provider_chat_id: &str,
         limit: u32,
-    ) -> Vec<hermes_telegram_api::TelegramMessageProjection> {
+    ) -> Vec<makosh_telegram_api::TelegramMessageProjection> {
         self.persistence
             .messages_for_chat(account_id, provider_chat_id, limit)
     }
@@ -2497,7 +2497,7 @@ where
         account_id: &str,
         provider_chat_id: &str,
         provider_message_id: &str,
-    ) -> Vec<hermes_telegram_api::TelegramReactionObservation> {
+    ) -> Vec<makosh_telegram_api::TelegramReactionObservation> {
         self.persistence
             .reactions(&format!(
                 "telegram:{account_id}:{provider_chat_id}:{provider_message_id}"
@@ -2746,7 +2746,7 @@ where
         for update in updates {
             match update {
                 TdlibProviderUpdate::Operational(event) => {
-                    if hermes_telegram_api::provider_event_account_id(&event) != account_id {
+                    if makosh_telegram_api::provider_event_account_id(&event) != account_id {
                         return Err(TdlibError::Protocol(
                             "Telegram provider event belongs to another account".to_owned(),
                         ));
@@ -2838,20 +2838,20 @@ where
 
     pub fn map_observation(
         &self,
-        observation: hermes_telegram_api::TelegramMessageObservation,
+        observation: makosh_telegram_api::TelegramMessageObservation,
     ) -> Result<CommunicationObservationDraft, TelegramContractError> {
         observation_draft(observation)
     }
 
     pub fn ingest_message(
         &mut self,
-        observation: hermes_telegram_api::TelegramMessageObservation,
+        observation: makosh_telegram_api::TelegramMessageObservation,
     ) -> Result<CommunicationObservationDraft, TelegramContractError> {
         let projection = project_message(&observation)?;
         let message_id = projection.message_id.clone();
         if self.persistence.message_versions(&message_id).is_none() {
             self.persistence
-                .append_message_version(hermes_telegram_api::TelegramMessageVersion {
+                .append_message_version(makosh_telegram_api::TelegramMessageVersion {
                     version_id: format!("{message_id}:version:1"),
                     message_id: message_id.clone(),
                     account_id: projection.account_id.clone(),
@@ -2860,13 +2860,13 @@ where
                     version_number: 1,
                     body_text: projection.text.clone(),
                     observed_at_unix_seconds: projection.observed_at_unix_seconds,
-                    source: hermes_telegram_api::TelegramMessageVersionSource::Provider,
+                    source: makosh_telegram_api::TelegramMessageVersionSource::Provider,
                 });
         }
         self.persistence.put_message(projection);
         if let Some(media) = &observation.media {
             if let Some(provider_file_id) = &media.provider_file_id {
-                self.track_attachment(hermes_telegram_api::TelegramAttachmentProjection {
+                self.track_attachment(makosh_telegram_api::TelegramAttachmentProjection {
                     attachment_id: format!(
                         "telegram:{}:{}:{}:{}",
                         observation.account_id,
@@ -2878,7 +2878,7 @@ where
                     provider_chat_id: observation.provider_chat_id.clone(),
                     provider_message_id: observation.provider_message_id.clone(),
                     provider_file_id: provider_file_id.clone(),
-                    state: hermes_telegram_api::TelegramAttachmentDownloadState::Pending,
+                    state: makosh_telegram_api::TelegramAttachmentDownloadState::Pending,
                     size_bytes: None,
                     filename: media.filename.clone(),
                     content_type: media.content_type.clone(),
@@ -2890,7 +2890,7 @@ where
         Ok(draft)
     }
 
-    pub fn upsert_chat(&mut self, chat: hermes_telegram_api::TelegramChat) {
+    pub fn upsert_chat(&mut self, chat: makosh_telegram_api::TelegramChat) {
         self.persistence.put_chat(chat);
     }
 
@@ -2904,31 +2904,31 @@ where
         F: FnMut(&[u8]) -> Result<BodyBlobReceiptV1, BodyAdmissionFailureV1>,
     {
         match &frame.event {
-            hermes_telegram_api::TelegramProviderEvent::ChatFoldersChanged { folders, .. } => {
+            makosh_telegram_api::TelegramProviderEvent::ChatFoldersChanged { folders, .. } => {
                 durable
                     .upsert_chat_folders(folders)
                     .await
                     .map_err(TelegramDurableProjectionError::Persistence)?;
             }
-            hermes_telegram_api::TelegramProviderEvent::ChatPositionChanged(position) => {
+            makosh_telegram_api::TelegramProviderEvent::ChatPositionChanged(position) => {
                 durable
                     .upsert_chat_position(position)
                     .await
                     .map_err(TelegramDurableProjectionError::Persistence)?;
             }
-            hermes_telegram_api::TelegramProviderEvent::ChatAvatarChanged(avatar) => {
+            makosh_telegram_api::TelegramProviderEvent::ChatAvatarChanged(avatar) => {
                 durable
                     .upsert_chat_avatar(avatar)
                     .await
                     .map_err(TelegramDurableProjectionError::Persistence)?;
             }
-            hermes_telegram_api::TelegramProviderEvent::ParticipantChanged(participant) => {
+            makosh_telegram_api::TelegramProviderEvent::ParticipantChanged(participant) => {
                 durable
                     .upsert_participant(participant)
                     .await
                     .map_err(TelegramDurableProjectionError::Persistence)?;
             }
-            hermes_telegram_api::TelegramProviderEvent::MessageCreated(observation) => {
+            makosh_telegram_api::TelegramProviderEvent::MessageCreated(observation) => {
                 let projection = project_message(observation)
                     .map_err(TelegramDurableProjectionError::Contract)?;
                 durable
@@ -2949,7 +2949,7 @@ where
                 }
                 if let Some(media) = &observation.media {
                     if let Some(provider_file_id) = &media.provider_file_id {
-                        let attachment = hermes_telegram_api::TelegramAttachmentProjection {
+                        let attachment = makosh_telegram_api::TelegramAttachmentProjection {
                             attachment_id: format!(
                                 "telegram:{}:{}:{}:{}",
                                 observation.account_id,
@@ -2961,7 +2961,7 @@ where
                             provider_chat_id: observation.provider_chat_id.clone(),
                             provider_message_id: observation.provider_message_id.clone(),
                             provider_file_id: provider_file_id.clone(),
-                            state: hermes_telegram_api::TelegramAttachmentDownloadState::Pending,
+                            state: makosh_telegram_api::TelegramAttachmentDownloadState::Pending,
                             size_bytes: None,
                             filename: media.filename.clone(),
                             content_type: media.content_type.clone(),
@@ -2974,7 +2974,7 @@ where
                     }
                 }
             }
-            hermes_telegram_api::TelegramProviderEvent::FileChanged(file) => {
+            makosh_telegram_api::TelegramProviderEvent::FileChanged(file) => {
                 durable
                     .upsert_file(file)
                     .await
@@ -2985,7 +2985,7 @@ where
                     .map_err(TelegramDurableProjectionError::Persistence)?;
                 for attachment in attachments {
                     if let Some(draft) =
-                        hermes_telegram_core::attachment_observation_draft(&attachment)
+                        makosh_telegram_core::attachment_observation_draft(&attachment)
                             .map_err(TelegramDurableProjectionError::Contract)?
                     {
                         let (record, recorded_at_unix_seconds) = self
@@ -2998,13 +2998,13 @@ where
                     }
                 }
             }
-            hermes_telegram_api::TelegramProviderEvent::TopicChanged(topic) => {
+            makosh_telegram_api::TelegramProviderEvent::TopicChanged(topic) => {
                 durable
                     .upsert_topic(topic)
                     .await
                     .map_err(TelegramDurableProjectionError::Persistence)?;
             }
-            hermes_telegram_api::TelegramProviderEvent::MessageEdited {
+            makosh_telegram_api::TelegramProviderEvent::MessageEdited {
                 account_id,
                 provider_chat_id,
                 provider_message_id,
@@ -3025,7 +3025,7 @@ where
                     .saturating_sub(1);
                 if version_number > 0 {
                     durable
-                        .upsert_message_version(&hermes_telegram_api::TelegramMessageVersion {
+                        .upsert_message_version(&makosh_telegram_api::TelegramMessageVersion {
                             version_id: format!("{message_id}:version:{version_number}"),
                             message_id,
                             account_id: account_id.clone(),
@@ -3034,13 +3034,13 @@ where
                             version_number,
                             body_text: text.clone(),
                             observed_at_unix_seconds: *observed_at_unix_seconds,
-                            source: hermes_telegram_api::TelegramMessageVersionSource::Provider,
+                            source: makosh_telegram_api::TelegramMessageVersionSource::Provider,
                         })
                         .await
                         .map_err(TelegramDurableProjectionError::Persistence)?;
                 }
             }
-            hermes_telegram_api::TelegramProviderEvent::MessageDeleted {
+            makosh_telegram_api::TelegramProviderEvent::MessageDeleted {
                 account_id,
                 provider_chat_id,
                 provider_message_id,
@@ -3049,13 +3049,13 @@ where
                 let message_id =
                     format!("telegram:{account_id}:{provider_chat_id}:{provider_message_id}");
                 durable
-                    .upsert_tombstone(&hermes_telegram_api::TelegramMessageTombstone {
+                    .upsert_tombstone(&makosh_telegram_api::TelegramMessageTombstone {
                         tombstone_id: format!("{message_id}:tombstone:provider"),
                         message_id: message_id.clone(),
                         account_id: account_id.clone(),
                         provider_chat_id: provider_chat_id.clone(),
                         provider_message_id: provider_message_id.clone(),
-                        reason: hermes_telegram_api::TelegramTombstoneReason::ProviderDeleted,
+                        reason: makosh_telegram_api::TelegramTombstoneReason::ProviderDeleted,
                         observed_at_unix_seconds: 0,
                         is_provider_delete: *is_permanent,
                         is_locally_visible: false,
@@ -3063,7 +3063,7 @@ where
                     .await
                     .map_err(TelegramDurableProjectionError::Persistence)?;
             }
-            hermes_telegram_api::TelegramProviderEvent::ReactionsObserved {
+            makosh_telegram_api::TelegramProviderEvent::ReactionsObserved {
                 account_id,
                 provider_chat_id,
                 provider_message_id,
@@ -3134,7 +3134,7 @@ where
 
     pub fn track_attachment(
         &mut self,
-        attachment: hermes_telegram_api::TelegramAttachmentProjection,
+        attachment: makosh_telegram_api::TelegramAttachmentProjection,
     ) -> Result<(), TelegramContractError> {
         if attachment.attachment_id.trim().is_empty()
             || attachment.account_id.trim().is_empty()
@@ -3150,20 +3150,20 @@ where
 
     pub fn apply_provider_event(
         &mut self,
-        event: hermes_telegram_api::TelegramProviderEvent,
+        event: makosh_telegram_api::TelegramProviderEvent,
     ) -> Result<Option<CommunicationObservationDraft>, TelegramContractError> {
         match &event {
-            hermes_telegram_api::TelegramProviderEvent::ChatFoldersChanged { folders, .. } => {
+            makosh_telegram_api::TelegramProviderEvent::ChatFoldersChanged { folders, .. } => {
                 self.persistence.put_chat_folders(folders.clone());
             }
-            hermes_telegram_api::TelegramProviderEvent::ChatPositionChanged(position) => {
+            makosh_telegram_api::TelegramProviderEvent::ChatPositionChanged(position) => {
                 self.persistence.put_chat_position(position.clone());
                 self.refresh_chat_operational_state(
                     &position.account_id,
                     &position.provider_chat_id,
                 );
             }
-            hermes_telegram_api::TelegramProviderEvent::ChatNotificationChanged {
+            makosh_telegram_api::TelegramProviderEvent::ChatNotificationChanged {
                 account_id,
                 provider_chat_id,
                 use_default_mute_for,
@@ -3179,13 +3179,13 @@ where
                 self.persistence
                     .put_chat_operational_state(account_id, provider_chat_id, state);
             }
-            hermes_telegram_api::TelegramProviderEvent::ChatAvatarChanged(avatar) => {
+            makosh_telegram_api::TelegramProviderEvent::ChatAvatarChanged(avatar) => {
                 self.persistence.put_chat_avatar(avatar.clone());
             }
-            hermes_telegram_api::TelegramProviderEvent::ParticipantChanged(participant) => {
+            makosh_telegram_api::TelegramProviderEvent::ParticipantChanged(participant) => {
                 self.persistence.upsert_participant(participant.clone());
             }
-            hermes_telegram_api::TelegramProviderEvent::ChatMarkedUnreadChanged {
+            makosh_telegram_api::TelegramProviderEvent::ChatMarkedUnreadChanged {
                 account_id,
                 provider_chat_id,
                 is_marked_as_unread,
@@ -3199,12 +3199,12 @@ where
                 self.persistence
                     .put_chat_operational_state(account_id, provider_chat_id, state);
             }
-            hermes_telegram_api::TelegramProviderEvent::FileChanged(file) => {
+            makosh_telegram_api::TelegramProviderEvent::FileChanged(file) => {
                 self.persistence.put_file(file.clone());
                 self.persistence
                     .apply_file_to_attachments(&file.account_id, file);
             }
-            hermes_telegram_api::TelegramProviderEvent::MessageSendFailed {
+            makosh_telegram_api::TelegramProviderEvent::MessageSendFailed {
                 account_id,
                 provider_chat_id,
                 old_provider_message_id,
@@ -3218,7 +3218,7 @@ where
                     TelegramDeliveryState::SendFailed,
                 );
             }
-            hermes_telegram_api::TelegramProviderEvent::MessageSendSucceeded {
+            makosh_telegram_api::TelegramProviderEvent::MessageSendSucceeded {
                 account_id,
                 provider_chat_id,
                 old_provider_message_id,
@@ -3232,7 +3232,7 @@ where
                     TelegramDeliveryState::Sent,
                 );
             }
-            hermes_telegram_api::TelegramProviderEvent::ReactionsObserved {
+            makosh_telegram_api::TelegramProviderEvent::ReactionsObserved {
                 account_id,
                 provider_chat_id,
                 provider_message_id,
@@ -3243,16 +3243,16 @@ where
                     reactions.clone(),
                 );
             }
-            hermes_telegram_api::TelegramProviderEvent::TopicChanged(topic) => {
+            makosh_telegram_api::TelegramProviderEvent::TopicChanged(topic) => {
                 self.persistence.put_topic(topic.clone());
             }
             _ => {}
         }
-        if let hermes_telegram_api::TelegramProviderEvent::MessageCreated(observation) = &event {
+        if let makosh_telegram_api::TelegramProviderEvent::MessageCreated(observation) = &event {
             return self.ingest_message(observation.clone()).map(Some);
         }
         match &event {
-            hermes_telegram_api::TelegramProviderEvent::MessageEdited {
+            makosh_telegram_api::TelegramProviderEvent::MessageEdited {
                 account_id,
                 provider_chat_id,
                 provider_message_id,
@@ -3263,7 +3263,7 @@ where
                     format!("telegram:{account_id}:{provider_chat_id}:{provider_message_id}");
                 let version_number = self.persistence.next_message_version_number(&message_id);
                 self.persistence.append_message_version(
-                    hermes_telegram_api::TelegramMessageVersion {
+                    makosh_telegram_api::TelegramMessageVersion {
                         version_id: format!("{message_id}:version:{version_number}"),
                         message_id: message_id.clone(),
                         account_id: account_id.clone(),
@@ -3272,14 +3272,14 @@ where
                         version_number,
                         body_text: text.clone(),
                         observed_at_unix_seconds: *observed_at_unix_seconds,
-                        source: hermes_telegram_api::TelegramMessageVersionSource::Provider,
+                        source: makosh_telegram_api::TelegramMessageVersionSource::Provider,
                     },
                 );
                 if let Some(text) = text {
                     self.persistence.apply_message_text_edit(&message_id, text);
                 }
             }
-            hermes_telegram_api::TelegramProviderEvent::MessageDeleted {
+            makosh_telegram_api::TelegramProviderEvent::MessageDeleted {
                 account_id,
                 provider_chat_id,
                 provider_message_id,
@@ -3288,13 +3288,13 @@ where
                 let message_id =
                     format!("telegram:{account_id}:{provider_chat_id}:{provider_message_id}");
                 self.persistence.append_message_tombstone(
-                    hermes_telegram_api::TelegramMessageTombstone {
+                    makosh_telegram_api::TelegramMessageTombstone {
                         tombstone_id: format!("{message_id}:tombstone:provider"),
                         message_id,
                         account_id: account_id.clone(),
                         provider_chat_id: provider_chat_id.clone(),
                         provider_message_id: provider_message_id.clone(),
-                        reason: hermes_telegram_api::TelegramTombstoneReason::ProviderDeleted,
+                        reason: makosh_telegram_api::TelegramTombstoneReason::ProviderDeleted,
                         observed_at_unix_seconds: 0,
                         is_provider_delete: *is_permanent,
                         is_locally_visible: false,
@@ -3362,7 +3362,7 @@ where
         self.persistence.put_chat_operational_state(
             account_id,
             provider_chat_id,
-            hermes_telegram_api::TelegramChatOperationalState {
+            makosh_telegram_api::TelegramChatOperationalState {
                 is_archived: positions
                     .iter()
                     .any(|position| position.list_kind == "archive" && position.order > 0),
@@ -3374,9 +3374,9 @@ where
 
     fn reconcile_provider_operations(
         &mut self,
-        event: &hermes_telegram_api::TelegramProviderEvent,
+        event: &makosh_telegram_api::TelegramProviderEvent,
     ) {
-        let account_id = hermes_telegram_api::provider_event_account_id(event).to_owned();
+        let account_id = makosh_telegram_api::provider_event_account_id(event).to_owned();
         let expected_self_member_id = self
             .persistence
             .account(&account_id)
@@ -3387,7 +3387,7 @@ where
                 continue;
             };
             if let (
-                hermes_telegram_api::TelegramProviderEvent::ParticipantChanged(participant),
+                makosh_telegram_api::TelegramProviderEvent::ParticipantChanged(participant),
                 TelegramProviderCommand::Join { .. } | TelegramProviderCommand::Leave { .. },
             ) = (event, command)
             {
@@ -3406,8 +3406,8 @@ where
             };
             if matches!(
                 operation.state,
-                hermes_telegram_api::TelegramOperationState::Running
-                    | hermes_telegram_api::TelegramOperationState::AwaitingProvider
+                makosh_telegram_api::TelegramOperationState::Running
+                    | makosh_telegram_api::TelegramOperationState::AwaitingProvider
             ) {
                 self.persistence.reconcile_operation(
                     &operation_id,
@@ -3422,7 +3422,7 @@ where
         account_id: &str,
         setup_id: &str,
         expires_at_unix_seconds: u64,
-    ) -> Result<hermes_telegram_api::TelegramQrLoginSession, TelegramContractError> {
+    ) -> Result<makosh_telegram_api::TelegramQrLoginSession, TelegramContractError> {
         self.persistence
             .account(account_id)
             .ok_or(TelegramContractError::AccountUnknown)?;
@@ -3439,7 +3439,7 @@ where
         &mut self,
         setup_id: &str,
         qr_link: &str,
-    ) -> Result<hermes_telegram_api::TelegramQrLoginSession, TelegramContractError> {
+    ) -> Result<makosh_telegram_api::TelegramQrLoginSession, TelegramContractError> {
         let session = self
             .persistence
             .qr_session(setup_id)
@@ -3452,7 +3452,7 @@ where
     pub fn mark_qr_password_required(
         &mut self,
         setup_id: &str,
-    ) -> Result<hermes_telegram_api::TelegramQrLoginSession, TelegramContractError> {
+    ) -> Result<makosh_telegram_api::TelegramQrLoginSession, TelegramContractError> {
         let session = self
             .persistence
             .qr_session(setup_id)
@@ -3465,7 +3465,7 @@ where
     pub fn submit_qr_password(
         &mut self,
         setup_id: &str,
-    ) -> Result<hermes_telegram_api::TelegramQrLoginSession, TelegramContractError> {
+    ) -> Result<makosh_telegram_api::TelegramQrLoginSession, TelegramContractError> {
         let session = self
             .persistence
             .qr_session(setup_id)
@@ -3478,7 +3478,7 @@ where
     pub fn complete_qr_login(
         &mut self,
         setup_id: &str,
-    ) -> Result<hermes_telegram_api::TelegramQrLoginSession, TelegramContractError> {
+    ) -> Result<makosh_telegram_api::TelegramQrLoginSession, TelegramContractError> {
         let session = self
             .persistence
             .qr_session(setup_id)
@@ -3491,23 +3491,23 @@ where
 
 fn admit_provider_event_body<F>(
     draft: CommunicationObservationDraft,
-    event: &hermes_telegram_api::TelegramProviderEvent,
+    event: &makosh_telegram_api::TelegramProviderEvent,
     body_admitter: &mut F,
 ) -> Result<CommunicationObservationDraft, TelegramDurableProjectionError>
 where
     F: FnMut(&[u8]) -> Result<BodyBlobReceiptV1, BodyAdmissionFailureV1>,
 {
     let text = match event {
-        hermes_telegram_api::TelegramProviderEvent::MessageCreated(observation) => {
+        makosh_telegram_api::TelegramProviderEvent::MessageCreated(observation) => {
             observation.text.as_deref()
         }
-        hermes_telegram_api::TelegramProviderEvent::MessageEdited { text, .. } => text.as_deref(),
+        makosh_telegram_api::TelegramProviderEvent::MessageEdited { text, .. } => text.as_deref(),
         _ => None,
     };
     let Some(text) = text else {
         return Ok(draft);
     };
-    hermes_telegram_api::validate_text(text).map_err(TelegramDurableProjectionError::Contract)?;
+    makosh_telegram_api::validate_text(text).map_err(TelegramDurableProjectionError::Contract)?;
     if draft.body != BodyAvailabilityV1::Unavailable {
         return Err(TelegramDurableProjectionError::Contract(
             TelegramContractError::InvalidTransition,

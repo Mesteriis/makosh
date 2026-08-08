@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/integrations/telegram/client/references.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/references.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/references.rs`
 - Size bytes / Размер в байтах: `12169`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -447,7 +447,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/telegram/client/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/rows.rs`
 - Size bytes / Размер в байтах: `9242`
 - Included characters / Включено символов: `9242`
 - Truncated / Обрезано: `no`
@@ -670,7 +670,7 @@ pub(super) fn row_to_telegram_forward_ref(row: PgRow) -> Result<TelegramForwardR
 
 ### `backend/src/integrations/telegram/client/search.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/search.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/search.rs`
 - Size bytes / Размер в байтах: `2846`
 - Included characters / Включено символов: `2846`
 - Truncated / Обрезано: `no`
@@ -772,7 +772,7 @@ impl TelegramStore {
 
 ### `backend/src/integrations/telegram/client/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/store.rs`
 - Size bytes / Размер в байтах: `2380`
 - Included characters / Включено символов: `2380`
 - Truncated / Обрезано: `no`
@@ -849,7 +849,7 @@ impl TelegramStore {
 
 ### `backend/src/integrations/telegram/client/tests.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/tests.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/tests.rs`
 - Size bytes / Размер в байтах: `1866`
 - Included characters / Включено символов: `1866`
 - Truncated / Обрезано: `no`
@@ -918,7 +918,7 @@ fn chat_list_limit_allows_full_metadata_window() {
 
 ### `backend/src/integrations/telegram/client/topics.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/topics.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/topics.rs`
 - Size bytes / Размер в байтах: `6814`
 - Included characters / Включено символов: `6814`
 - Truncated / Обрезано: `no`
@@ -1140,7 +1140,7 @@ pub async fn list_topic_message_ids(
 
 ### `backend/src/integrations/telegram/client/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/validation.rs`
 - Size bytes / Размер в байтах: `1514`
 - Included characters / Включено символов: `1514`
 - Truncated / Обрезано: `no`
@@ -1206,7 +1206,7 @@ pub(super) fn validate_object(field: &'static str, value: &Value) -> Result<(), 
 
 ### `backend/src/integrations/telegram/client/vault.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/client/vault.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/client/vault.rs`
 - Size bytes / Размер в байтах: `2197`
 - Included characters / Включено символов: `2197`
 - Truncated / Обрезано: `no`
@@ -1281,7 +1281,7 @@ impl TelegramSecretVault {
 
 ### `backend/src/integrations/telegram/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/mod.rs`
 - Size bytes / Размер в байтах: `49`
 - Included characters / Включено символов: `49`
 - Truncated / Обрезано: `no`
@@ -1294,7 +1294,7 @@ pub mod tdjson;
 
 ### `backend/src/integrations/telegram/runtime.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime.rs`
 - Size bytes / Размер в байтах: `1174`
 - Included characters / Включено символов: `1174`
 - Truncated / Обрезано: `no`
@@ -1333,7 +1333,7 @@ pub use self::models::{
 
 ### `backend/src/integrations/telegram/runtime/actor.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/actor.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/actor.rs`
 - Size bytes / Размер в байтах: `366`
 - Included characters / Включено символов: `366`
 - Truncated / Обрезано: `no`
@@ -1362,7 +1362,7 @@ pub(super) use self::support::oldest_tdlib_message_id;
 
 ### `backend/src/integrations/telegram/runtime/actor/authorization.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/actor/authorization.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/actor/authorization.rs`
 - Size bytes / Размер в байтах: `3786`
 - Included characters / Включено символов: `3786`
 - Truncated / Обрезано: `no`
@@ -1395,7 +1395,7 @@ pub(super) fn prepare_tdlib_client(
     }));
     client.send_json(&json!({
         "@type": "getAuthorizationState",
-        "@extra": "hermes-runtime-initial-authorization-state"
+        "@extra": "makosh-runtime-initial-authorization-state"
     }))?;
     Ok(())
 }
@@ -1472,7 +1472,7 @@ pub(super) fn wait_for_tdlib_ready(
 
 ### `backend/src/integrations/telegram/runtime/actor/chats.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/actor/chats.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/actor/chats.rs`
 - Size bytes / Размер в байтах: `2939`
 - Included characters / Включено символов: `2939`
 - Truncated / Обрезано: `no`
@@ -1492,7 +1492,7 @@ pub(super) fn actor_load_chats(
     client: &TdJsonClient,
     limit: i32,
 ) -> Result<Vec<TelegramTdlibChatSnapshot>, TelegramError> {
-    let load_extra = "hermes-runtime-load-chats";
+    let load_extra = "makosh-runtime-load-chats";
     client.send_json(&tdjson::tdlib_load_chats_request(limit, load_extra))?;
     let load_response = receive_tdlib_extra(client, load_extra, TDJSON_COMMAND_TIMEOUT)?;
     if tdjson::tdlib_error_message(&load_response).is_some() && !is_tdlib_not_found(&load_response)
@@ -1503,7 +1503,7 @@ pub(super) fn actor_load_chats(
         ));
     }
 
-    let chats_extra = "hermes-runtime-get-chats";
+    let chats_extra = "makosh-runtime-get-chats";
     client.send_json(&tdjson::tdlib_get_chats_request(limit, chats_extra))?;
     let chats_response = receive_tdlib_extra(client, chats_extra, TDJSON_COMMAND_TIMEOUT)?;
     if let Some(message) = tdjson::tdlib_error_message(&chats_response) {
@@ -1512,7 +1512,7 @@ pub(super) fn actor_load_chats(
     let chat_ids = tdjson::parse_tdlib_chat_ids(&chats_response)?;
     let mut snapshots = Vec::with_capacity(chat_ids.len());
     for chat_id in chat_ids {
-        let extra = format!("hermes-runtime-get-chat-{chat_id}");
+        let extra = format!("makosh-runtime-get-chat-{chat_id}");
         client.send_json(&tdjson::tdlib_get_chat_request(chat_id, &extra))?;
         let chat_response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
         if let Some(message) = tdjson::tdlib_error_message(&chat_response) {
@@ -1529,7 +1529,7 @@ pub(super) fn actor_get_chat_folders(
 ) -> Result<Vec<TelegramTdlibChatFolderSnapshot>, TelegramError> {
     let mut snapshots = Vec::with_capacity(folder_ids.len());
     for folder_id in folder_ids {
-        let extra = format!("hermes-runtime-get-chat-folder-{folder_id}");
+        let extra = format!("makosh-runtime-get-chat-folder-{folder_id}");
         client.send_json(&tdjson::tdlib_get_chat_folder_request(*folder_id, &extra))?;
         let response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
         if let Some(message) = tdjson::tdlib_error_message(&response) {
@@ -1550,7 +1550,7 @@ fn is_tdlib_not_found(event: &Value) -> bool {
 
 ### `backend/src/integrations/telegram/runtime/actor/download.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/actor/download.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/actor/download.rs`
 - Size bytes / Размер в байтах: `826`
 - Included characters / Включено символов: `826`
 - Truncated / Обрезано: `no`
@@ -1567,7 +1567,7 @@ pub(super) fn actor_download_file(
     file_id: i64,
     priority: i32,
 ) -> Result<TelegramTdlibFileSnapshot, TelegramError> {
-    let extra = format!("hermes-runtime-download-file-{file_id}");
+    let extra = format!("makosh-runtime-download-file-{file_id}");
     client.send_json(&tdjson::tdlib_download_file_request(
         file_id, priority, &extra,
     ))?;
@@ -1581,7 +1581,7 @@ pub(super) fn actor_download_file(
 
 ### `backend/src/integrations/telegram/runtime/actor/driver.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/actor/driver.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/actor/driver.rs`
 - Size bytes / Размер в байтах: `15460`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1928,7 +1928,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/telegram/runtime/actor/edit.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/actor/edit.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/actor/edit.rs`
 - Size bytes / Размер в байтах: `9590`
 - Included characters / Включено символов: `9590`
 - Truncated / Обрезано: `no`
@@ -1949,7 +1949,7 @@ pub(super) fn actor_edit_message(
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
     let message_id = tdlib_provider_message_id(provider_message_id)?;
-    let extra = format!("hermes-edit-{}", command_id.trim());
+    let extra = format!("makosh-edit-{}", command_id.trim());
     client.send_json(&tdjson::tdlib_edit_message_text_request(
         chat_id, message_id, new_text, &extra,
     )?)?;
@@ -1969,7 +1969,7 @@ pub(super) fn actor_delete_message(
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
     let message_id = tdlib_provider_message_id(provider_message_id)?;
-    let extra = format!("hermes-delete-{}", command_id.trim());
+    let extra = format!("makosh-delete-{}", command_id.trim());
     client.send_json(&tdjson::tdlib_delete_messages_request(
         chat_id,
         &[message_id],
@@ -1993,7 +1993,7 @@ pub(super) fn actor_set_reaction(
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
     let message_id = tdlib_provider_message_id(provider_message_id)?;
-    let extra = format!("hermes-reaction-{}", command_id.trim());
+    let extra = format!("makosh-reaction-{}", command_id.trim());
     let request = if is_active {
         tdjson::tdlib_add_message_reaction_request(chat_id, message_id, reaction_emoji, &extra)
     } else {
@@ -2016,7 +2016,7 @@ pub(super) fn actor_pin_message(
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
     let message_id = tdlib_provider_message_id(provider_message_id)?;
-    let extra = format!("hermes-pin-{}", command_id.trim());
+    let extra = format!("makosh-pin-{}", command_id.trim());
     let request = if pin {
         tdjson::tdlib_pin_chat_message_request(chat_id, message_id, false, &extra)
     } else {
@@ -2039,7 +2039,7 @@ pub(super) fn actor_toggle_chat_unread(
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
     if is_marked_as_unread {
-        let extra = format!("hermes-chat-unread-{}", command_id.trim());
+        let extra = format!("makosh-chat-unread-{}", command_id.trim());
         client.send_json(&tdjson::tdlib_toggle_chat_marked_as_unread_request(
             chat_id, true, &extra,
         ))?;
@@ -2052,7 +2052,7 @@ pub(super) fn actor_toggle_chat_unread(
 
     if let Some(provider_message_id) = read_through_provider_message_id {
         let message_id = tdlib_provider_message_id(provider_message_id)?;
-        let extra = format!("hermes-chat-read-{}", command_id.trim());
+        let extra = format!("makosh-chat-read-{}", command_id.trim());
         client.send_json(&tdjson::tdlib_view_messages_request(
             chat_id,
             &[message_id],
@@ -2066,7 +2066,7 @@ pub(super) fn actor_toggle_chat_unread(
         return Ok(());
     }
 
-    let extra = format!("hermes-chat-read-toggle-{}", command_id.trim());
+    let extra = format!("makosh-chat-read-toggle-{}", command_id.trim());
     client.send_json(&tdjson::tdlib_toggle_chat_marked_as_unread_request(
         chat_id, false, &extra,
     ))?;
@@ -2084,7 +2084,7 @@ pub(super) fn actor_toggle_chat_archive(
     command_id: &str,
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let extra = format!("hermes-chat-archive-{}", command_id.trim());
+    let extra = format!("makosh-chat-archive-{}", command_id.trim());
     client.send_json(&tdjson::tdlib_add_chat_to_list_request(
         chat_id, archived, &extra,
     ))?;
@@ -2102,7 +2102,7 @@ pub(super) fn actor_toggle_chat_mute(
     command_id: &str,
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let extra = format!("hermes-chat-mute-{}", command_id.trim());
+    let extra = format!("makosh-chat-mute-{}", command_id.trim());
     client.send_json(&tdjson::tdlib_set_chat_mute_request(chat_id, muted, &extra))?;
     let response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
     if let Some(message) = tdjson::tdlib_error_message(&response) {
@@ -2118,7 +2118,7 @@ pub(super) fn actor_add_chat_to_folder(
     command_id: &str,
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let extra = format!("hermes-chat-folder-{}", command_id.trim());
+    let extra = format!("makosh-chat-folder-{}", command_id.trim());
     client.send_json(&tdjson::tdlib_add_chat_to_folder_request(
         chat_id,
         provider_folder_id,
@@ -2138,7 +2138,7 @@ pub(super) fn actor_remove_chat_from_folder(
     command_id: &str,
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let get_extra = format!("hermes-chat-folder-remove-get-{}", command_id.trim());
+    let get_extra = format!("makosh-chat-folder-remove-get-{}", command_id.trim());
     client.send_json(&tdjson::tdlib_get_chat_folder_request(
         provider_folder_id,
         &get_extra,
@@ -2148,7 +2148,7 @@ pub(super) fn actor_remove_chat_from_folder(
         return Err(TelegramError::TdlibRuntime(message));
     }
 
-    let edit_extra = format!("hermes-chat-folder-remove-{}", command_id.trim());
+    let edit_extra = format!("makosh-chat-folder-remove-{}", command_id.trim());
     client.send_json(&tdjson::tdlib_edit_chat_folder_remove_chat_request(
         provider_folder_id,
         chat_id,
@@ -2168,7 +2168,7 @@ pub(super) fn actor_join_chat(
     command_id: &str,
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let extra = format!("hermes-chat-join-{}", command_id.trim());
+    let extra = format!("makosh-chat-join-{}", command_id.trim());
     client.send_json(&tdjson::tdlib_join_chat_request(chat_id, &extra))?;
     let response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
     if let Some(message) = tdjson::tdlib_error_message(&response) {
@@ -2183,7 +2183,7 @@ pub(super) fn actor_leave_chat(
     command_id: &str,
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let extra = format!("hermes-chat-leave-{}", command_id.trim());
+    let extra = format!("makosh-chat-leave-{}", command_id.trim());
     client.send_json(&tdjson::tdlib_leave_chat_request(chat_id, &extra))?;
     let response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
     if let Some(message) = tdjson::tdlib_error_message(&response) {
@@ -2195,7 +2195,7 @@ pub(super) fn actor_leave_chat(
 
 ### `backend/src/integrations/telegram/runtime/actor/history.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/actor/history.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/actor/history.rs`
 - Size bytes / Размер в байтах: `1851`
 - Included characters / Включено символов: `1851`
 - Truncated / Обрезано: `no`
@@ -2224,7 +2224,7 @@ pub(super) fn actor_sync_history(
 
     loop {
         let extra = format!(
-            "hermes-runtime-history-{chat_id}-{}-{page_index}",
+            "makosh-runtime-history-{chat_id}-{}-{page_index}",
             cursor.unwrap_or(0)
         );
         client.send_json(&tdjson::tdlib_get_chat_history_request(
@@ -2258,7 +2258,7 @@ pub(super) fn actor_sync_history(
 
 ### `backend/src/integrations/telegram/runtime/actor/participants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/actor/participants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/actor/participants.rs`
 - Size bytes / Размер в байтах: `3665`
 - Included characters / Включено символов: `3665`
 - Truncated / Обрезано: `no`
@@ -2315,7 +2315,7 @@ fn actor_get_supergroup_members_with_filter(
     while items.len() < target_limit as usize {
         let remaining = target_limit - items.len() as i32;
         let page_limit = remaining.clamp(1, TDLIB_SUPERGROUP_MEMBER_PAGE_LIMIT);
-        let extra = format!("hermes-supergroup-members-{filter_name}-{supergroup_id}-{offset}");
+        let extra = format!("makosh-supergroup-members-{filter_name}-{supergroup_id}-{offset}");
         client.send_json(&request_builder(supergroup_id, offset, page_limit, &extra))?;
         let response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
         if let Some(message) = tdjson::tdlib_error_message(&response) {
@@ -2344,7 +2344,7 @@ pub(super) fn actor_get_basic_group_members(
     client: &TdJsonClient,
     basic_group_id: i64,
 ) -> Result<Vec<TelegramTdlibChatMemberSnapshot>, TelegramError> {
-    let group_extra = format!("hermes-basic-group-{basic_group_id}");
+    let group_extra = format!("makosh-basic-group-{basic_group_id}");
     client.send_json(&tdjson::tdlib_get_basic_group_request(
         basic_group_id,
         &group_extra,
@@ -2354,7 +2354,7 @@ pub(super) fn actor_get_basic_group_members(
         return Err(TelegramError::TdlibRuntime(message));
     }
 
-    let full_info_extra = format!("hermes-basic-group-full-info-{basic_group_id}");
+    let full_info_extra = format!("makosh-basic-group-full-info-{basic_group_id}");
     client.send_json(&tdjson::tdlib_get_basic_group_full_info_request(
         basic_group_id,
         &full_info_extra,
@@ -2370,7 +2370,7 @@ pub(super) fn actor_get_basic_group_members(
 
 ### `backend/src/integrations/telegram/runtime/actor/responses.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/actor/responses.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/actor/responses.rs`
 - Size bytes / Размер в байтах: `1809`
 - Included characters / Включено символов: `1809`
 - Truncated / Обрезано: `no`
@@ -2434,7 +2434,7 @@ pub(super) fn tdlib_provider_message_id(provider_message_id: &str) -> Result<i64
 
 ### `backend/src/integrations/telegram/runtime/actor/search.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/actor/search.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/actor/search.rs`
 - Size bytes / Размер в байтах: `1839`
 - Included characters / Включено символов: `1839`
 - Truncated / Обрезано: `no`
@@ -2451,7 +2451,7 @@ pub(super) fn actor_search_messages(
     query: &str,
     limit: i32,
 ) -> Result<Vec<TelegramTdlibMessageSnapshot>, TelegramError> {
-    let extra = format!("hermes-search-{}", uuid_extra(query));
+    let extra = format!("makosh-search-{}", uuid_extra(query));
     client.send_json(&tdjson::tdlib_search_messages_request(query, limit, &extra))?;
     let response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
     if let Some(message) = tdjson::tdlib_error_message(&response) {
@@ -2467,7 +2467,7 @@ pub(super) fn actor_search_chat_messages(
     limit: i32,
 ) -> Result<Vec<TelegramTdlibMessageSnapshot>, TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let extra = format!("hermes-search-chat-{chat_id}-{}", uuid_extra(query));
+    let extra = format!("makosh-search-chat-{chat_id}-{}", uuid_extra(query));
     client.send_json(&tdjson::tdlib_search_chat_messages_request(
         chat_id, query, limit, &extra,
     ))?;
@@ -2492,7 +2492,7 @@ fn uuid_extra(query: &str) -> String {
 
 ### `backend/src/integrations/telegram/runtime/actor/send.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/actor/send.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/actor/send.rs`
 - Size bytes / Размер в байтах: `3695`
 - Included characters / Включено символов: `3695`
 - Truncated / Обрезано: `no`
@@ -2510,7 +2510,7 @@ pub(super) fn actor_send_text(
     request: &TelegramManualSendRequest,
 ) -> Result<TelegramTdlibMessageSnapshot, TelegramError> {
     let chat_id = tdlib_provider_chat_id(&request.provider_chat_id)?;
-    let extra = format!("hermes-runtime-send-{}", request.command_id.trim());
+    let extra = format!("makosh-runtime-send-{}", request.command_id.trim());
     client.send_json(&tdjson::tdlib_send_text_message_request(
         chat_id,
         &request.text,
@@ -2529,7 +2529,7 @@ pub(super) fn actor_send_media(
 ) -> Result<TelegramTdlibMessageSnapshot, TelegramError> {
     request.validate()?;
     let chat_id = tdlib_provider_chat_id(&request.provider_chat_id)?;
-    let extra = format!("hermes-media-send-{}", request.command_id.trim());
+    let extra = format!("makosh-media-send-{}", request.command_id.trim());
     client.send_json(&tdjson::tdlib_send_media_message_request(
         chat_id,
         request.media_type,
@@ -2554,7 +2554,7 @@ pub(super) fn actor_send_reply(
 ) -> Result<TelegramTdlibMessageSnapshot, TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
     let reply_to_message_id = tdlib_provider_message_id(reply_to_provider_message_id)?;
-    let extra = format!("hermes-reply-{}", command_id.trim());
+    let extra = format!("makosh-reply-{}", command_id.trim());
     client.send_json(&tdjson::tdlib_send_reply_request(
         chat_id,
         reply_to_message_id,
@@ -2578,7 +2578,7 @@ pub(super) fn actor_send_forward(
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
     let from_chat_id = tdlib_provider_chat_id(from_provider_chat_id)?;
     let message_id = tdlib_provider_message_id(from_provider_message_id)?;
-    let extra = format!("hermes-forward-{}", command_id.trim());
+    let extra = format!("makosh-forward-{}", command_id.trim());
     client.send_json(&tdjson::tdlib_send_forward_request(
         chat_id,
         from_chat_id,
@@ -2595,7 +2595,7 @@ pub(super) fn actor_send_forward(
 
 ### `backend/src/integrations/telegram/runtime/actor/session.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/actor/session.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/actor/session.rs`
 - Size bytes / Размер в байтах: `2034`
 - Included characters / Включено символов: `2034`
 - Truncated / Обрезано: `no`
@@ -2659,7 +2659,7 @@ pub(in crate::integrations::telegram::runtime) async fn optional_telegram_sessio
 
 ### `backend/src/integrations/telegram/runtime/actor/spawn.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/actor/spawn.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/actor/spawn.rs`
 - Size bytes / Размер в байтах: `1769`
 - Included characters / Включено символов: `1769`
 - Truncated / Обрезано: `no`
@@ -2716,7 +2716,7 @@ pub(in crate::integrations::telegram::runtime) fn spawn_tdlib_actor(
 
 ### `backend/src/integrations/telegram/runtime/actor/start_request.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/actor/start_request.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/actor/start_request.rs`
 - Size bytes / Размер в байтах: `1712`
 - Included characters / Включено символов: `1712`
 - Truncated / Обрезано: `no`
@@ -2735,7 +2735,7 @@ pub(super) fn tdlib_start_request_from_account(
 ) -> Result<TelegramQrLoginStartRequest, TelegramError> {
     let api_id = config.telegram_api_id().ok_or_else(|| {
         TelegramError::InvalidRequest(
-            "HERMES_TELEGRAM_API_ID is required for Telegram TDLib runtime".to_owned(),
+            "MAKOSH_TELEGRAM_API_ID is required for Telegram TDLib runtime".to_owned(),
         )
     })?;
     let api_hash = config
@@ -2743,7 +2743,7 @@ pub(super) fn tdlib_start_request_from_account(
         .map(|secret| secret.expose_for_runtime().to_owned())
         .ok_or_else(|| {
             TelegramError::InvalidRequest(
-                "HERMES_TELEGRAM_API_HASH is required for Telegram TDLib runtime".to_owned(),
+                "MAKOSH_TELEGRAM_API_HASH is required for Telegram TDLib runtime".to_owned(),
             )
         })?;
     let tdlib_data_path = account
@@ -2774,7 +2774,7 @@ pub(super) fn tdlib_start_request_from_account(
 
 ### `backend/src/integrations/telegram/runtime/actor/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/actor/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/actor/support.rs`
 - Size bytes / Размер в байтах: `857`
 - Included characters / Включено символов: `857`
 - Truncated / Обрезано: `no`

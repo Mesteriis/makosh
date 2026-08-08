@@ -51,10 +51,10 @@ pub(super) fn normalize_non_empty(field: &'static str, value: &str) -> Result<St
 
 pub(super) fn actor_id_from_headers(headers: &HeaderMap) -> String {
     headers
-        .get("x-hermes-actor-id")
+        .get("x-makosh-actor-id")
         .and_then(|value| value.to_str().ok())
         .map(str::trim)
         .filter(|value| !value.is_empty())
-        .unwrap_or("hermes-frontend")
+        .unwrap_or("makosh-frontend")
         .to_owned()
 }

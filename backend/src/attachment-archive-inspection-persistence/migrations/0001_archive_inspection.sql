@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.attachment_archive_inspection_runs (
+CREATE TABLE makosh_data.attachment_archive_inspection_runs (
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
     operation_id BYTEA NOT NULL,
@@ -30,14 +30,14 @@ CREATE TABLE hermes_data.attachment_archive_inspection_runs (
 );
 
 CREATE INDEX attachment_archive_inspection_runs_anchor_idx
-ON hermes_data.attachment_archive_inspection_runs (
+ON makosh_data.attachment_archive_inspection_runs (
     logical_owner_id,
     attachment_anchor_id,
     state,
     run_id
 );
 
-CREATE TABLE hermes_data.attachment_archive_inspection_event_inbox (
+CREATE TABLE makosh_data.attachment_archive_inspection_event_inbox (
     logical_owner_id TEXT NOT NULL,
     message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE hermes_data.attachment_archive_inspection_event_inbox (
     CHECK (processed_at_unix_millis > 0)
 );
 
-CREATE TABLE hermes_data.attachment_archive_inspection_scan_candidates (
+CREATE TABLE makosh_data.attachment_archive_inspection_scan_candidates (
     logical_owner_id TEXT NOT NULL,
     attachment_anchor_id BYTEA NOT NULL,
     message_id BYTEA NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE hermes_data.attachment_archive_inspection_scan_candidates (
     CHECK (length(custody_transfer_source_proof) BETWEEN 1 AND 2048)
 );
 
-CREATE TABLE hermes_data.attachment_archive_inspection_safety_facts (
+CREATE TABLE makosh_data.attachment_archive_inspection_safety_facts (
     logical_owner_id TEXT NOT NULL,
     attachment_anchor_id BYTEA NOT NULL,
     message_id BYTEA NOT NULL,
@@ -94,7 +94,7 @@ CREATE TABLE hermes_data.attachment_archive_inspection_safety_facts (
     CHECK (length(evidence_id) = 16)
 );
 
-CREATE TABLE hermes_data.attachment_archive_inspection_custody_delegation_requests (
+CREATE TABLE makosh_data.attachment_archive_inspection_custody_delegation_requests (
     logical_owner_id TEXT NOT NULL,
     request_id BYTEA NOT NULL,
     run_id BYTEA NOT NULL,
@@ -113,7 +113,7 @@ CREATE TABLE hermes_data.attachment_archive_inspection_custody_delegation_reques
     PRIMARY KEY (logical_owner_id, request_id),
     UNIQUE (logical_owner_id, run_id),
     FOREIGN KEY (logical_owner_id, run_id)
-        REFERENCES hermes_data.attachment_archive_inspection_runs (
+        REFERENCES makosh_data.attachment_archive_inspection_runs (
             logical_owner_id,
             run_id
         ),
@@ -156,7 +156,7 @@ CREATE TABLE hermes_data.attachment_archive_inspection_custody_delegation_reques
 );
 
 CREATE INDEX attachment_archive_inspection_custody_delegation_outbox_idx
-ON hermes_data.attachment_archive_inspection_custody_delegation_requests (
+ON makosh_data.attachment_archive_inspection_custody_delegation_requests (
     logical_owner_id,
     state,
     published_at_unix_millis,
@@ -164,7 +164,7 @@ ON hermes_data.attachment_archive_inspection_custody_delegation_requests (
     request_id
 );
 
-CREATE TABLE hermes_data.attachment_archive_inspection_custody_result_inbox (
+CREATE TABLE makosh_data.attachment_archive_inspection_custody_result_inbox (
     logical_owner_id TEXT NOT NULL,
     message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -173,7 +173,7 @@ CREATE TABLE hermes_data.attachment_archive_inspection_custody_result_inbox (
     processed_at_unix_millis BIGINT NOT NULL,
     PRIMARY KEY (logical_owner_id, message_id),
     FOREIGN KEY (logical_owner_id, request_id)
-        REFERENCES hermes_data.attachment_archive_inspection_custody_delegation_requests (
+        REFERENCES makosh_data.attachment_archive_inspection_custody_delegation_requests (
             logical_owner_id,
             request_id
         ),
@@ -185,7 +185,7 @@ CREATE TABLE hermes_data.attachment_archive_inspection_custody_result_inbox (
     CHECK (processed_at_unix_millis > 0)
 );
 
-CREATE TABLE hermes_data.attachment_archive_inspection_jobs (
+CREATE TABLE makosh_data.attachment_archive_inspection_jobs (
     logical_owner_id TEXT NOT NULL,
     job_id BYTEA NOT NULL,
     run_id BYTEA NOT NULL,
@@ -214,7 +214,7 @@ CREATE TABLE hermes_data.attachment_archive_inspection_jobs (
     PRIMARY KEY (logical_owner_id, job_id),
     UNIQUE (logical_owner_id, run_id),
     FOREIGN KEY (logical_owner_id, delegation_request_id)
-        REFERENCES hermes_data.attachment_archive_inspection_custody_delegation_requests (
+        REFERENCES makosh_data.attachment_archive_inspection_custody_delegation_requests (
             logical_owner_id,
             request_id
         ),
@@ -267,14 +267,14 @@ CREATE TABLE hermes_data.attachment_archive_inspection_jobs (
 );
 
 CREATE INDEX attachment_archive_inspection_jobs_claim_idx
-ON hermes_data.attachment_archive_inspection_jobs (
+ON makosh_data.attachment_archive_inspection_jobs (
     logical_owner_id,
     state,
     created_at_unix_millis,
     job_id
 );
 
-CREATE TABLE hermes_data.attachment_archive_inspection_reports (
+CREATE TABLE makosh_data.attachment_archive_inspection_reports (
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
     entry_count INTEGER NOT NULL,
@@ -288,7 +288,7 @@ CREATE TABLE hermes_data.attachment_archive_inspection_reports (
     CHECK (completed_at_unix_millis > 0)
 );
 
-CREATE TABLE hermes_data.attachment_archive_inspection_report_entries (
+CREATE TABLE makosh_data.attachment_archive_inspection_report_entries (
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
     entry_ordinal INTEGER NOT NULL,
@@ -306,7 +306,7 @@ CREATE TABLE hermes_data.attachment_archive_inspection_report_entries (
     CHECK (entry_kind IN (1, 2))
 );
 
-CREATE TABLE hermes_data.attachment_archive_inspection_realtime (
+CREATE TABLE makosh_data.attachment_archive_inspection_realtime (
     realtime_sequence BIGSERIAL PRIMARY KEY,
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
@@ -323,7 +323,7 @@ CREATE TABLE hermes_data.attachment_archive_inspection_realtime (
 );
 
 CREATE INDEX attachment_archive_inspection_realtime_owner_idx
-ON hermes_data.attachment_archive_inspection_realtime (
+ON makosh_data.attachment_archive_inspection_realtime (
     logical_owner_id,
     realtime_sequence
 );

@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/public/assets/shell-backgrounds/dna-blueprint.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/shell-backgrounds/dna-blueprint.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/shell-backgrounds/dna-blueprint.png`
 - Size bytes / Размер в байтах: `1615389`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -64,7 +64,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/public/assets/shell-backgrounds/eclipse-grid.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/shell-backgrounds/eclipse-grid.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/shell-backgrounds/eclipse-grid.png`
 - Size bytes / Размер в байтах: `1714098`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -73,7 +73,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/public/assets/shell-backgrounds/forest-network.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/shell-backgrounds/forest-network.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/shell-backgrounds/forest-network.png`
 - Size bytes / Размер в байтах: `1842532`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -82,7 +82,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/public/assets/shell-backgrounds/forest-stream.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/shell-backgrounds/forest-stream.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/shell-backgrounds/forest-stream.png`
 - Size bytes / Размер в байтах: `2046984`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -91,7 +91,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/public/assets/shell-backgrounds/knowledge-map.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/shell-backgrounds/knowledge-map.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/shell-backgrounds/knowledge-map.png`
 - Size bytes / Размер в байтах: `2183777`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -100,7 +100,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/public/assets/shell-backgrounds/network-mesh.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/shell-backgrounds/network-mesh.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/shell-backgrounds/network-mesh.png`
 - Size bytes / Размер в байтах: `1369759`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -109,7 +109,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/public/assets/shell-backgrounds/node-frame.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/shell-backgrounds/node-frame.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/shell-backgrounds/node-frame.png`
 - Size bytes / Размер в байтах: `1360646`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -118,7 +118,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/public/assets/shell-backgrounds/rune-gold.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/shell-backgrounds/rune-gold.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/shell-backgrounds/rune-gold.png`
 - Size bytes / Размер в байтах: `2406826`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -127,7 +127,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/public/assets/shell-backgrounds/rune-teal.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/public/assets/shell-backgrounds/rune-teal.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/public/assets/shell-backgrounds/rune-teal.png`
 - Size bytes / Размер в байтах: `2336484`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -136,7 +136,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/src-tauri/icons/128x128.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/128x128.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/128x128.png`
 - Size bytes / Размер в байтах: `11624`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`

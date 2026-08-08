@@ -1,6 +1,6 @@
 use std::io::{Cursor, Read};
 
-use hermes_attachment_preview_renderer_contract::AttachmentPreviewRendererErrorV1;
+use makosh_attachment_preview_renderer_contract::AttachmentPreviewRendererErrorV1;
 use quick_xml::{Reader, XmlVersion, events::Event};
 use zip::{CompressionMethod, ZipArchive};
 

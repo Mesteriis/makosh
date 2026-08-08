@@ -5,7 +5,9 @@ use super::*;
 use std::time::Instant;
 
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
-use hermes_communication_task_candidate_api::{
+use http_body_util::BodyExt as _;
+use hyper::{Request, StatusCode, body::Bytes};
+use makosh_communication_task_candidate_api::{
     COMMUNICATION_TASK_CANDIDATE_COMMAND_CONNECT_PATH_V1,
     COMMUNICATION_TASK_CANDIDATE_QUERY_CONNECT_PATH_V1,
     COMMUNICATION_TASK_CANDIDATE_REALTIME_CONTRACT_NAME_V1,
@@ -17,10 +19,10 @@ use hermes_communication_task_candidate_api::{
         StartCommunicationTaskCandidateResponseV1,
     },
 };
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     ClientRealtimeEventV1, ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
 };
-use hermes_review_task_candidate_api::{
+use makosh_review_task_candidate_api::{
     REVIEW_TASK_CANDIDATE_COMMAND_CONNECT_PATH_V1, REVIEW_TASK_CANDIDATE_QUERY_CONNECT_PATH_V1,
     REVIEW_TASK_CANDIDATE_REALTIME_CONTRACT_NAME_V1, REVIEW_TASK_CANDIDATE_REALTIME_EVENT_KIND_V1,
     wire::{
@@ -31,15 +33,13 @@ use hermes_review_task_candidate_api::{
         ReviewTaskCandidateStatusChangedV1,
     },
 };
-use hermes_review_task_candidate_core::derive_review_task_candidate_id_v1;
-use http_body_util::BodyExt as _;
-use hyper::{Request, StatusCode, body::Bytes};
+use makosh_review_task_candidate_core::derive_review_task_candidate_id_v1;
 use sqlx::postgres::{PgConnectOptions, PgPoolOptions, PgSslMode};
 use zeroize::Zeroizing;
 
-pub(super) type TaskCandidateGateway = hermes_gateway_runtime::GatewayApplicationRouter<
+pub(super) type TaskCandidateGateway = makosh_gateway_runtime::GatewayApplicationRouter<
     crate::identity::browser_gateway::ControlStoreBrowserAuthority,
-    hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 >;
 
 pub(super) struct TaskCandidateReviewsV1 {
@@ -61,7 +61,7 @@ pub(super) fn task_candidate_gateway_v1(
     supervisor: &ManagedRuntimeSupervisor,
     root: &Path,
     data: &Path,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 ) -> TaskCandidateGateway {
     let configuration = crate::platform::gateway::BrowserGatewayConfigurationV1::new(
         "127.0.0.1:9443".parse().expect("loopback Gateway address"),
@@ -320,31 +320,31 @@ fn task_candidate_storage_diagnostics_v1(runtime: &tokio::runtime::Runtime) -> S
         let pool = task_candidate_admin_pool_v1().await;
         let review_outbox: (i64, i64) = sqlx::query_as(
             "SELECT count(*), count(*) FILTER (WHERE published_at_unix_millis IS NOT NULL)
-             FROM hermes_data.review_task_candidate_outbox",
+             FROM makosh_data.review_task_candidate_outbox",
         )
         .fetch_one(&pool)
         .await
         .expect("Review outbox diagnostics");
         let workflow: (i64, i64, i64) = sqlx::query_as(
             "SELECT
-               (SELECT count(*) FROM hermes_data.reviewed_task_candidate_promotion_requests),
-               (SELECT count(*) FROM hermes_data.reviewed_task_candidate_promotion_result_inbox),
-               (SELECT count(*) FROM hermes_data.reviewed_task_candidate_promotion_outbox)",
+               (SELECT count(*) FROM makosh_data.reviewed_task_candidate_promotion_requests),
+               (SELECT count(*) FROM makosh_data.reviewed_task_candidate_promotion_result_inbox),
+               (SELECT count(*) FROM makosh_data.reviewed_task_candidate_promotion_outbox)",
         )
         .fetch_one(&pool)
         .await
         .expect("promotion workflow diagnostics");
         let tasks: (i64, i64, i64) = sqlx::query_as(
             "SELECT
-               (SELECT count(*) FROM hermes_data.tasks_reviewed_candidate_inbox),
-               (SELECT count(*) FROM hermes_data.tasks_state),
-               (SELECT count(*) FROM hermes_data.tasks_outbox)",
+               (SELECT count(*) FROM makosh_data.tasks_reviewed_candidate_inbox),
+               (SELECT count(*) FROM makosh_data.tasks_state),
+               (SELECT count(*) FROM makosh_data.tasks_outbox)",
         )
         .fetch_one(&pool)
         .await
         .expect("Tasks diagnostics");
         let review_results: i64 = sqlx::query_scalar(
-            "SELECT count(*) FROM hermes_data.review_task_candidate_promotion_inbox",
+            "SELECT count(*) FROM makosh_data.review_task_candidate_promotion_inbox",
         )
         .fetch_one(&pool)
         .await
@@ -424,7 +424,7 @@ pub(super) fn assert_exact_task_materialization_v1(
     runtime.block_on(async {
         let pool = task_candidate_admin_pool_v1().await;
         let approved: i64 = sqlx::query_scalar(
-            "SELECT count(*) FROM hermes_data.tasks_state
+            "SELECT count(*) FROM makosh_data.tasks_state
              WHERE logical_owner_id=$1 AND approved_candidate_id=$2",
         )
         .bind(TASK_CANDIDATE_LOGICAL_HUMAN_OWNER_ID_V1)
@@ -433,7 +433,7 @@ pub(super) fn assert_exact_task_materialization_v1(
         .await
         .expect("count approved candidate Tasks");
         let rejected: i64 = sqlx::query_scalar(
-            "SELECT count(*) FROM hermes_data.tasks_state
+            "SELECT count(*) FROM makosh_data.tasks_state
              WHERE logical_owner_id=$1 AND approved_candidate_id=$2",
         )
         .bind(TASK_CANDIDATE_LOGICAL_HUMAN_OWNER_ID_V1)
@@ -458,7 +458,7 @@ pub(super) fn assert_no_task_materialization_v1(
             &reviews.rejected_candidate_id,
         ] {
             let count: i64 = sqlx::query_scalar(
-                "SELECT count(*) FROM hermes_data.tasks_state
+                "SELECT count(*) FROM makosh_data.tasks_state
                  WHERE logical_owner_id=$1 AND approved_candidate_id=$2",
             )
             .bind(TASK_CANDIDATE_LOGICAL_HUMAN_OWNER_ID_V1)
@@ -644,22 +644,22 @@ where
 pub(super) async fn task_candidate_admin_pool_v1() -> sqlx::PgPool {
     let password = Zeroizing::new(
         std::fs::read_to_string(required(
-            "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+            "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
         ))
         .expect("read disposable PostgreSQL credential")
         .trim()
         .to_owned(),
     );
     let options = PgConnectOptions::new()
-        .host(&required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
+        .host(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
         .port(
-            required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+            required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
                 .parse()
                 .expect("valid PostgreSQL port"),
         )
-        .username("hermes_postgres_admin")
+        .username("makosh_postgres_admin")
         .password(password.as_str())
-        .database("hermes_storage_authenticated")
+        .database("makosh_storage_authenticated")
         .ssl_mode(PgSslMode::Disable);
     PgPoolOptions::new()
         .max_connections(1)

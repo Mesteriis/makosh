@@ -1,4 +1,4 @@
-# Hermes Organizations
+# Макошь Organizations
 
 Status: documentation package aligned to the current repository structure.
 

@@ -4,7 +4,7 @@
 //! dependencies. Transport and spool implementations belong to the connector
 //! composition root and can be tested independently of provider execution.
 
-use hermes_provider_api::{
+use makosh_provider_api::{
     CredentialLease, ProviderCommandEnvelope, ProviderCommandResult, ProviderManifest,
     ProviderRuntimePort, ProviderRuntimePortError, RuntimeTopology,
 };
@@ -12,10 +12,10 @@ use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 pub const CONTROL_PROTOCOL_VERSION: u32 = 1;
-pub const COMMAND_SUBJECT_PREFIX: &str = "hermes.provider.commands.v1";
-pub const RESULT_SUBJECT_PREFIX: &str = "hermes.provider.results.v1";
-pub const OBSERVATION_SUBJECT_PREFIX: &str = "hermes.provider.observations.v1";
-pub const ACK_SUBJECT_PREFIX: &str = "hermes.provider.acks.v1";
+pub const COMMAND_SUBJECT_PREFIX: &str = "makosh.provider.commands.v1";
+pub const RESULT_SUBJECT_PREFIX: &str = "makosh.provider.results.v1";
+pub const OBSERVATION_SUBJECT_PREFIX: &str = "makosh.provider.observations.v1";
+pub const ACK_SUBJECT_PREFIX: &str = "makosh.provider.acks.v1";
 pub const DEFAULT_SPOOL_MAX_AGE_SECS: u64 = 7 * 24 * 60 * 60;
 
 pub fn command_subject(provider: &str, account: &str) -> Result<String, SubjectError> {
@@ -414,8 +414,8 @@ pub enum ControlProtocolError {
 }
 
 pub fn manifest() -> ProviderManifest {
-    hermes_provider_zulip::runtime::ZulipInProcessRuntime::new(
-        hermes_provider_zulip::runtime::ZulipRuntimeConfig::new(
+    makosh_provider_zulip::runtime::ZulipInProcessRuntime::new(
+        makosh_provider_zulip::runtime::ZulipRuntimeConfig::new(
             "connector-account",
             "http://invalid.local",
             "connector@example.invalid",
@@ -547,7 +547,7 @@ mod tests {
         assert!(
             response
                 .manifest
-                .supports(hermes_provider_api::RuntimeTopology::SharedConnector)
+                .supports(makosh_provider_api::RuntimeTopology::SharedConnector)
         );
     }
 
@@ -582,7 +582,7 @@ mod tests {
     #[test]
     fn sqlite_spool_persists_and_fences_entries() {
         let path =
-            std::env::temp_dir().join(format!("hermes-zulip-spool-{}.db", std::process::id()));
+            std::env::temp_dir().join(format!("makosh-zulip-spool-{}.db", std::process::id()));
         let _ = std::fs::remove_file(&path);
         let spool = SqliteSpool::open(&path, 100).unwrap();
         let entry = SpoolEntry {
@@ -610,11 +610,11 @@ mod tests {
     fn subject_builders_reject_ambiguous_segments() {
         assert_eq!(
             command_subject("zulip", "account-1").unwrap(),
-            "hermes.provider.commands.v1.zulip.account-1"
+            "makosh.provider.commands.v1.zulip.account-1"
         );
         assert_eq!(
             observation_subject("zulip", "account-1", "message").unwrap(),
-            "hermes.provider.observations.v1.zulip.account-1.message"
+            "makosh.provider.observations.v1.zulip.account-1.message"
         );
         assert_eq!(
             command_subject("zulip.bad", "account-1"),

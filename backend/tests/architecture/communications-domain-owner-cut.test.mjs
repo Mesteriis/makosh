@@ -12,14 +12,14 @@ const COMMUNICATIONS_PERSISTENCE_ROOT = new URL('src/communications-persistence/
 const COMMUNICATIONS_RUNTIME_ROOT = new URL('src/communications-runtime/src/', BACKEND_ROOT);
 const POLICY_PATH = new URL('architecture/policy.json', BACKEND_ROOT);
 const FORBIDDEN_INTEGRATION_IMPLEMENTATIONS = [
-  'hermes_mail_',
-  'hermes_telegram_',
-  'hermes_whatsapp_',
-  'hermes_zulip_',
+  'makosh_mail_',
+  'makosh_telegram_',
+  'makosh_whatsapp_',
+  'makosh_zulip_',
 ];
 const FORBIDDEN_DOMAIN_IMPLEMENTATIONS = [
   ...FORBIDDEN_INTEGRATION_IMPLEMENTATIONS,
-  'hermes_blob_',
+  'makosh_blob_',
 ];
 
 test('Communications domain does not import integration or Blob implementations', async () => {
@@ -302,35 +302,35 @@ test('Communications remains isolated after Knowledge owner admission', async ()
       .filter((entry) => entry.role === 'integration')
       .map((entry) => entry.name),
     [
-      'hermes-mail-api',
-      'hermes-mail-core',
-      'hermes-mail-imap',
-      'hermes-mail-gmail',
-      'hermes-mail-smtp',
-      'hermes-mail-persistence',
-      'hermes-mail-runtime',
-      'hermes-mail-assembly',
-      'hermes-mail-delivery-intent-contract',
-      'hermes-telegram-delivery-intent-contract',
-      'hermes-whatsapp-delivery-intent-contract',
-      'hermes-zulip-delivery-intent-contract',
-      'hermes-ollama-ai-api',
-      'hermes-ollama-ai-assembly',
-      'hermes-ollama-ai-core',
-      'hermes-ollama-ai-http',
-      'hermes-ollama-ai-persistence',
-      'hermes-ollama-ai-runtime',
-      'hermes-mail-retained-evidence-replay-persistence',
-      'hermes-mail-retained-evidence-replay-contract',
-      'hermes-mail-address-book-contract',
-      'hermes-mail-address-book-persistence',
-      'hermes-mail-google-people',
-      'hermes-mail-carddav',
-      'hermes-desktop-call-recording-api',
-      'hermes-desktop-call-recording-core',
-      'hermes-desktop-call-recording-persistence',
-      'hermes-desktop-call-recording-runtime',
-      'hermes-desktop-call-recording-assembly',
+      'makosh-mail-api',
+      'makosh-mail-core',
+      'makosh-mail-imap',
+      'makosh-mail-gmail',
+      'makosh-mail-smtp',
+      'makosh-mail-persistence',
+      'makosh-mail-runtime',
+      'makosh-mail-assembly',
+      'makosh-mail-delivery-intent-contract',
+      'makosh-telegram-delivery-intent-contract',
+      'makosh-whatsapp-delivery-intent-contract',
+      'makosh-zulip-delivery-intent-contract',
+      'makosh-ollama-ai-api',
+      'makosh-ollama-ai-assembly',
+      'makosh-ollama-ai-core',
+      'makosh-ollama-ai-http',
+      'makosh-ollama-ai-persistence',
+      'makosh-ollama-ai-runtime',
+      'makosh-mail-retained-evidence-replay-persistence',
+      'makosh-mail-retained-evidence-replay-contract',
+      'makosh-mail-address-book-contract',
+      'makosh-mail-address-book-persistence',
+      'makosh-mail-google-people',
+      'makosh-mail-carddav',
+      'makosh-desktop-call-recording-api',
+      'makosh-desktop-call-recording-core',
+      'makosh-desktop-call-recording-persistence',
+      'makosh-desktop-call-recording-runtime',
+      'makosh-desktop-call-recording-assembly',
     ],
     'Mail admission plus provider delivery contracts must remain exact integration build units',
   );
@@ -386,7 +386,7 @@ test('Communications custody transfer keeps source receipts private and uses onl
 
   const runtime = runtimeSources.map((source) => source.content).join('\n');
   assert.match(runtime, /request_managed_blob_custody_transfer/);
-  assert.doesNotMatch(runtime, /hermes_blob_service|BlobContentLifecycleStore/);
+  assert.doesNotMatch(runtime, /makosh_blob_service|BlobContentLifecycleStore/);
 
   for (const source of runtimeSources.filter((source) => source.path.includes('/query'))) {
     assert.doesNotMatch(source.content, /source_blob_ref|source_custody_proof/);

@@ -5,10 +5,10 @@ use chrono::Utc;
 use serde_json::json;
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::integrations::telegram::client::references;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::integrations::telegram::client::references;
+use makosh_hub_backend::platform::storage::database::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_ok, get_request_with_token, json_body, json_post_request_with_actor,
     unique_suffix,
@@ -24,7 +24,7 @@ async fn telegram_reference_routes_return_enriched_message_summaries() {
     let account_id = format!("telegram-reference-{suffix}");
     let chat_id = format!("reference-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -382,7 +382,7 @@ async fn telegram_chat_detail_and_members_routes_return_projected_data() {
     let account_id = format!("telegram-chat-detail-{suffix}");
     let chat_id = format!("chat-detail-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -487,7 +487,7 @@ async fn telegram_folders_route_returns_projection_backed_filters() {
     let suffix = unique_suffix();
     let account_id = format!("telegram-folders-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )

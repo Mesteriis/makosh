@@ -6,7 +6,7 @@ import type { ZulipOperationalReadModel } from '../../src/integrations/zulip/pre
 import type { ZulipOperationalReplayModel } from '../../src/integrations/zulip/presentation/zulipOperationalReplayModel'
 
 const meta = {
-	title: 'Hermes App/Communications/Zulip Operational',
+	title: 'Макошь App/Communications/Zulip Operational',
 	component: ZulipOperationalPage,
 	parameters: { layout: 'fullscreen' },
 } satisfies Meta

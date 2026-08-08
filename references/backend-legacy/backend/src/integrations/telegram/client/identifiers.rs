@@ -1,5 +1,5 @@
-use hermes_communications_api::accounts::ProviderAccount;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::ProviderAccount;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 

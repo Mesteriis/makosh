@@ -1,5 +1,5 @@
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::Value;
 use serde_json::json;
 use uuid::Uuid;
@@ -8,8 +8,8 @@ use super::store::{
     SignalConnection, SignalConnectionCreate, SignalConnectionUpdate, SignalHubError,
     SignalHubStore,
 };
-use hermes_events_postgres::store::EventStore;
-use hermes_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
+use makosh_events_postgres::store::EventStore;
+use makosh_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
 
 #[derive(Clone)]
 pub struct SignalHubConnectionService {

@@ -58,7 +58,7 @@ pub use settings::{
     mail_contacts_sync_settings_schema_bytes_v1, mail_contacts_sync_settings_schema_v1,
 };
 
-pub const PACKAGE: &str = "hermes-mail-contacts-sync-runtime";
+pub const PACKAGE: &str = "makosh-mail-contacts-sync-runtime";
 
 /// Cross-owner durable commands remain bounded while allowing the sequential
 /// managed event pumps to recover from a short broker or runtime outage.

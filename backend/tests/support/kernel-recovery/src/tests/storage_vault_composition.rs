@@ -6,15 +6,15 @@ use std::os::unix::net::UnixStream;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 
-use hermes_kernel_control_store::{PlatformManagedProcessBinding, PlatformManagedProcessLaunch};
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store::{PlatformManagedProcessBinding, PlatformManagedProcessLaunch};
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeControlRequestV1,
     managed_runtime_control_request_v1::Operation as ManagedOperation,
 };
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_protocol::LeaseAudienceV1;
-use hermes_vault_store_sqlcipher::VaultStore;
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_protocol::LeaseAudienceV1;
+use makosh_vault_store_sqlcipher::VaultStore;
 use prost::Message;
 
 use super::common::*;
@@ -34,7 +34,7 @@ use crate::vault::{
 
 #[test]
 fn kernel_routes_storage_credential_bootstrap_through_a_live_vault_service() {
-    let root = unique_target_root("hermes-storage-vault-composition");
+    let root = unique_target_root("makosh-storage-vault-composition");
     let data_dir = private_directory(&root.join("kernel"));
     let vault_dir = private_directory(&root.join("vault"));
     let store = Arc::new(configured_store(&root));
@@ -263,11 +263,11 @@ fn storage_expectation() -> ManagedRuntimeExpectation {
 
 fn write_response(
     channel: &mut UnixStream,
-    result: Option<Result<hermes_runtime_protocol::v1::VaultCiphertextResponseV1, String>>,
+    result: Option<Result<makosh_runtime_protocol::v1::VaultCiphertextResponseV1, String>>,
 ) {
     let result = result.unwrap_or_else(|| Err("managed Vault route is unavailable".to_owned()));
     if let Err(error) = &result
-        && std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some()
+        && std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some()
     {
         eprintln!("developer_storage_vault_route_error={error}");
     }

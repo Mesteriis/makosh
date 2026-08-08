@@ -1,16 +1,16 @@
 use chrono::{Duration, Utc};
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::domains::calendar::events::{
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::domains::calendar::events::{
     event_store::CalendarEventStore, models::NewCalendarEvent,
 };
-use hermes_hub_backend::domains::calendar::meetings::notes::MeetingNoteStore;
-use hermes_hub_backend::domains::personas::api::store::PersonaProjectionStore;
-use hermes_hub_backend::engines::consistency::{
+use makosh_hub_backend::domains::calendar::meetings::notes::MeetingNoteStore;
+use makosh_hub_backend::domains::personas::api::store::PersonaProjectionStore;
+use makosh_hub_backend::engines::consistency::{
     models::{ContradictionSeverity, ContradictionSourceKind},
     store::ContradictionObservationStore,
 };
-use hermes_hub_backend::platform::calls::{
+use makosh_hub_backend::platform::calls::{
     models::{CallDirection, CallState, NewCallTranscript, NewTelegramCall, TranscriptStatus},
     store::CallIntelligenceStore,
 };

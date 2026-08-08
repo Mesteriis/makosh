@@ -1,21 +1,21 @@
-CREATE TABLE hermes_data.attachment_security_join_locks (
+CREATE TABLE makosh_data.attachment_security_join_locks (
   attachment_anchor_id BYTEA PRIMARY KEY CHECK (
     octet_length(attachment_anchor_id) = 16
   )
 );
 
-CREATE TABLE hermes_data.attachment_security_event_inbox (
+CREATE TABLE makosh_data.attachment_security_event_inbox (
   message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
   envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
   event_kind SMALLINT NOT NULL CHECK (event_kind IN (1, 2)),
   consumed_at_unix_seconds BIGINT NOT NULL
 );
 
-CREATE TABLE hermes_data.attachment_security_scan_candidates (
+CREATE TABLE makosh_data.attachment_security_scan_candidates (
   attachment_anchor_id BYTEA PRIMARY KEY REFERENCES
-    hermes_data.attachment_security_join_locks (attachment_anchor_id),
+    makosh_data.attachment_security_join_locks (attachment_anchor_id),
   message_id BYTEA NOT NULL UNIQUE REFERENCES
-    hermes_data.attachment_security_event_inbox (message_id),
+    makosh_data.attachment_security_event_inbox (message_id),
   blob_reference_id BYTEA NOT NULL CHECK (octet_length(blob_reference_id) = 16),
   declared_size BIGINT NOT NULL CHECK (
     declared_size BETWEEN 0 AND 67108864
@@ -30,11 +30,11 @@ CREATE TABLE hermes_data.attachment_security_scan_candidates (
   observed_at_unix_seconds BIGINT NOT NULL
 );
 
-CREATE TABLE hermes_data.attachment_security_canonical_states (
+CREATE TABLE makosh_data.attachment_security_canonical_states (
   attachment_anchor_id BYTEA PRIMARY KEY REFERENCES
-    hermes_data.attachment_security_join_locks (attachment_anchor_id),
+    makosh_data.attachment_security_join_locks (attachment_anchor_id),
   message_id BYTEA NOT NULL UNIQUE REFERENCES
-    hermes_data.attachment_security_event_inbox (message_id),
+    makosh_data.attachment_security_event_inbox (message_id),
   expected_state SMALLINT NOT NULL CHECK (expected_state = 2),
   next_state SMALLINT NOT NULL CHECK (next_state = 3),
   evidence_id BYTEA NOT NULL CHECK (octet_length(evidence_id) = 16),
@@ -42,7 +42,7 @@ CREATE TABLE hermes_data.attachment_security_canonical_states (
   observed_at_unix_seconds BIGINT NOT NULL
 );
 
-CREATE TABLE hermes_data.attachment_security_join_quarantines (
+CREATE TABLE makosh_data.attachment_security_join_quarantines (
   evidence_id BYTEA NOT NULL CHECK (octet_length(evidence_id) = 16),
   source_message_id BYTEA NOT NULL CHECK (octet_length(source_message_id) = 16),
   attachment_anchor_id BYTEA NOT NULL CHECK (
@@ -54,7 +54,7 @@ CREATE TABLE hermes_data.attachment_security_join_quarantines (
   PRIMARY KEY (evidence_id, source_message_id)
 );
 
-CREATE TABLE hermes_data.attachment_security_verdict_outbox (
+CREATE TABLE makosh_data.attachment_security_verdict_outbox (
   message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
   envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
   exact_envelope_bytes BYTEA NOT NULL CHECK (
@@ -64,14 +64,14 @@ CREATE TABLE hermes_data.attachment_security_verdict_outbox (
   published_at_unix_seconds BIGINT
 );
 
-CREATE TABLE hermes_data.attachment_security_scan_jobs (
+CREATE TABLE makosh_data.attachment_security_scan_jobs (
   job_id BYTEA PRIMARY KEY CHECK (octet_length(job_id) = 16),
   candidate_message_id BYTEA NOT NULL UNIQUE REFERENCES
-    hermes_data.attachment_security_scan_candidates (message_id),
+    makosh_data.attachment_security_scan_candidates (message_id),
   canonical_state_message_id BYTEA NOT NULL UNIQUE REFERENCES
-    hermes_data.attachment_security_canonical_states (message_id),
+    makosh_data.attachment_security_canonical_states (message_id),
   attachment_anchor_id BYTEA NOT NULL UNIQUE REFERENCES
-    hermes_data.attachment_security_join_locks (attachment_anchor_id),
+    makosh_data.attachment_security_join_locks (attachment_anchor_id),
   blob_reference_id BYTEA NOT NULL CHECK (octet_length(blob_reference_id) = 16),
   declared_size BIGINT NOT NULL CHECK (
     declared_size BETWEEN 0 AND 67108864
@@ -93,7 +93,7 @@ CREATE TABLE hermes_data.attachment_security_scan_jobs (
   lease_expires_at_unix_seconds BIGINT,
   completed_at_unix_seconds BIGINT,
   outbox_message_id BYTEA REFERENCES
-    hermes_data.attachment_security_verdict_outbox (message_id),
+    makosh_data.attachment_security_verdict_outbox (message_id),
   CHECK (
     (state = 1 AND completed_at_unix_seconds IS NULL AND outbox_message_id IS NULL)
     OR (state = 2 AND completed_at_unix_seconds IS NOT NULL AND outbox_message_id IS NOT NULL)
@@ -106,14 +106,14 @@ CREATE TABLE hermes_data.attachment_security_scan_jobs (
 );
 
 CREATE INDEX attachment_security_scan_jobs_pending_idx
-  ON hermes_data.attachment_security_scan_jobs (
+  ON makosh_data.attachment_security_scan_jobs (
     next_attempt_at_unix_seconds,
     job_id
   )
   WHERE state = 1;
 
 CREATE INDEX attachment_security_verdict_outbox_pending_idx
-  ON hermes_data.attachment_security_verdict_outbox (
+  ON makosh_data.attachment_security_verdict_outbox (
     created_at_unix_seconds,
     message_id
   )

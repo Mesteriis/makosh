@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use std::process::ExitCode;
 
-use hermes_ollama_ai_assembly::materialize_ollama_ai_release_assembly_v1;
+use makosh_ollama_ai_assembly::materialize_ollama_ai_release_assembly_v1;
 
 const OPTIONS: [&str; 3] = ["--build-id", "--output-dir", "--runtime"];
 
@@ -14,7 +14,7 @@ struct Arguments {
 fn main() -> ExitCode {
     let Some(arguments) = arguments(std::env::args().skip(1).collect()) else {
         return fail(
-            "usage: hermes-ollama-ai-assembly --build-id <id> \
+            "usage: makosh-ollama-ai-assembly --build-id <id> \
              --output-dir <absolute-path> --runtime <absolute-path>",
         );
     };

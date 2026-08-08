@@ -1,4 +1,4 @@
-use hermes_attachment_text_extraction_api::ATTACHMENT_TEXT_EXTRACTION_MAX_DERIVED_BYTES_V1;
+use makosh_attachment_text_extraction_api::ATTACHMENT_TEXT_EXTRACTION_MAX_DERIVED_BYTES_V1;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum AttachmentTextExtractionStateV1 {

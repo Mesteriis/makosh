@@ -1,5 +1,5 @@
 [package]
-name = "hermes-zulip-http"
+name = "makosh-zulip-http"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -11,7 +11,7 @@ path = "src/lib.rs"
 default = []
 conformance-test-support = []
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "zulip"
 surface = "implementation"
@@ -19,6 +19,6 @@ surface = "implementation"
 [dependencies]
 async-native-tls = "=0.6.0"
 async-std = "=1.13.2"
-hermes-zulip-api = { path = "../zulip-api" }
+makosh-zulip-api = { path = "../zulip-api" }
 serde_json = "=1.0.150"
 zeroize = "=1.9.0"

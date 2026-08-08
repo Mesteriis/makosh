@@ -44,7 +44,7 @@ function request(socketPath, message) {
 function command(dataDir, ...args) {
   return spawnSync(
     'cargo',
-    ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, ...args],
+    ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, ...args],
     { cwd: backendRoot, encoding: 'utf8' },
   );
 }
@@ -66,7 +66,7 @@ function moduleDescriptor() {
 async function startRegistrationServer(dataDir) {
   const server = spawn(
     'cargo',
-    ['run', '-q', '-p', 'hermes-kernel', '--', '--data-dir', dataDir, 'serve'],
+    ['run', '-q', '-p', 'makosh-kernel', '--', '--data-dir', dataDir, 'serve'],
     { cwd: backendRoot, stdio: ['ignore', 'pipe', 'pipe'] },
   );
   const socketPath = await new Promise((resolve, reject) => {
@@ -104,7 +104,7 @@ function sessionId(response) {
 }
 
 test('module registration IPC bounds pending admission and exposes only own status', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-kernel-module-registration-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-kernel-module-registration-'));
   const dataDir = join(root, 'data');
   let server;
   let socketPath;

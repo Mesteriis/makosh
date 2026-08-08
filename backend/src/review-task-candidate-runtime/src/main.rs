@@ -9,15 +9,15 @@ use std::{
     time::Duration,
 };
 
-use hermes_review_task_candidate_persistence::{
+use makosh_review_task_candidate_persistence::{
     ReviewTaskCandidatePersistenceErrorV1, review_task_candidate_storage_bundle_v1,
 };
-use hermes_review_task_candidate_runtime::{
+use makosh_review_task_candidate_runtime::{
     ReviewTaskCandidateManagedRuntimeErrorV1, ReviewTaskCandidateManagedRuntimeV1,
     ReviewTaskCandidateRuntimeAdmissionV1, review_task_candidate_module_descriptor_v1,
     review_task_candidate_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedDomainRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,

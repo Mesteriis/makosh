@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/communications/v1/evidence.proto"],
+            &["proto/makosh/communications/v1/evidence.proto"],
             &["proto"],
         )
         .expect("communications evidence protocol must compile");
@@ -26,7 +26,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&query_descriptor)
         .compile_protos(
-            &["proto/hermes/communications/query/v1/query.proto"],
+            &["proto/makosh/communications/query/v1/query.proto"],
             &["proto"],
         )
         .expect("communications query protocol must compile");

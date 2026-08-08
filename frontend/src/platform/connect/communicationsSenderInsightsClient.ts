@@ -1,7 +1,7 @@
 import { createClient } from '@connectrpc/connect'
 import type { Client } from '@connectrpc/connect'
 
-import { CommunicationsSenderInsightsService } from '../../gen/hermes/communications/sender_insights/v1/sender_insights_pb'
+import { CommunicationsSenderInsightsService } from '../../gen/makosh/communications/sender_insights/v1/sender_insights_pb'
 import { createBrowserGatewayConnectTransport } from '../gateway/browserGatewayConnect'
 
 let senderInsightsClient: Client<typeof CommunicationsSenderInsightsService> | null = null

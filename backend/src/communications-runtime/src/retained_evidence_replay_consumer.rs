@@ -1,6 +1,6 @@
 //! Durable Communications replay command consumer.
 
-use hermes_communications_retained_evidence_replay_contract::{
+use makosh_communications_retained_evidence_replay_contract::{
     COMMUNICATIONS_REPLAY_CAPABILITY_ID_V1, COMMUNICATIONS_REPLAY_SOURCE_MODULE_ID_V1,
     CommunicationsReplayResultEnvelopeContextV1, build_communications_replay_result_outbox_v1,
     communications_replay_command_contract_reference_v1, validate_communications_replay_command_v1,
@@ -9,19 +9,19 @@ use hermes_communications_retained_evidence_replay_contract::{
         ReplayCommunicationsEvidenceOutcomeV1, ReplayCommunicationsEvidenceResultV1,
     },
 };
-use hermes_communications_retained_evidence_replay_persistence::{
+use makosh_communications_retained_evidence_replay_persistence::{
     CommunicationsReplayCommandAdmissionV1, CommunicationsReplayCommandInboxOutcomeV1,
     CommunicationsRetainedEvidenceReplayPersistenceV1, RetainedCommunicationsReplayErrorV1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePublishPermitV1, RuntimeSubscribePermitV1,
     try_receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1, v1::durable_envelope_v1::Semantics,
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 
 use crate::retained_evidence_replay::{
@@ -288,7 +288,7 @@ fn terminal_result(
 }
 
 fn exact_contract(
-    value: Option<&hermes_events_protocol::v1::ContractRefV1>,
+    value: Option<&makosh_events_protocol::v1::ContractRefV1>,
     expected: &ContractReferenceV1,
 ) -> bool {
     value.is_some_and(|value| {
@@ -310,10 +310,10 @@ fn id16(value: &[u8]) -> Result<[u8; 16], CommunicationsReplayCommandDecodeError
 
 #[cfg(test)]
 mod tests {
-    use hermes_communications_retained_evidence_replay_contract::{
+    use makosh_communications_retained_evidence_replay_contract::{
         CommunicationsReplayCommandEnvelopeContextV1, build_communications_replay_command_outbox_v1,
     };
-    use hermes_events_protocol::{
+    use makosh_events_protocol::{
         delivery::OutboxRecordV1, v1::durable_envelope_v1::Semantics,
         validation::envelope::decode_envelope_v1,
     };

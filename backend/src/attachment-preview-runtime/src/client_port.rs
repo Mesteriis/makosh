@@ -1,6 +1,6 @@
 //! Generated client contracts and private `client_blob` authorization.
 
-use hermes_attachment_preview_api::{
+use makosh_attachment_preview_api::{
     ATTACHMENT_PREVIEW_CONTRACT_MAJOR_V1, ATTACHMENT_PREVIEW_MODULE_ID_V1,
     ATTACHMENT_PREVIEW_OWNER_V1, ATTACHMENT_PREVIEW_READ_TICKET_BYTES_V1,
     read_wire::ReadAttachmentPreviewRequestV1,
@@ -11,12 +11,12 @@ use hermes_attachment_preview_api::{
         StartAttachmentPreviewRequestV1, StartAttachmentPreviewResponseV1,
     },
 };
-use hermes_attachment_preview_persistence::{
+use makosh_attachment_preview_persistence::{
     AttachmentPreviewPersistenceErrorV1, AttachmentPreviewPersistenceV1,
     CreateAttachmentPreviewRunOutcomeV1, CreateAttachmentPreviewRunV1,
     IssueAttachmentPreviewTicketV1, PersistedAttachmentPreviewRunV1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ModuleClientBlobAuthorizationV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
 use prost::Message;
@@ -322,7 +322,7 @@ fn valid_identity(value: &str) -> bool {
 
 fn device_actor_sha256_v1(logical_owner_id: &str, authenticated_device_id: &str) -> [u8; 32] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.attachment-preview.device-actor.v1\0");
+    digest.update(b"makosh.attachment-preview.device-actor.v1\0");
     digest.update(logical_owner_id.as_bytes());
     digest.update([0]);
     digest.update(authenticated_device_id.as_bytes());

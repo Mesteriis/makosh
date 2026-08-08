@@ -14,9 +14,9 @@ Require a temporary local API actor identity header for protected local event AP
 
 Rules:
 
-- Protected local event API requests must include `Authorization: Bearer <HERMES_LOCAL_API_TOKEN>`.
-- After the bearer token is valid, protected local event API requests must include `X-Hermes-Actor-Id`.
-- `X-Hermes-Actor-Id` is a stable local client identifier, not a secret.
+- Protected local event API requests must include `Authorization: Bearer <MAKOSH_LOCAL_API_TOKEN>`.
+- After the bearer token is valid, protected local event API requests must include `X-Макошь-Actor-Id`.
+- `X-Макошь-Actor-Id` is a stable local client identifier, not a secret.
 - The accepted actor ID character set is ASCII letters, digits, `.`, `_`, `-`, `:`, `@` and `/`.
 - Actor IDs must be non-empty after trimming and at most 128 bytes.
 - Missing or invalid actor IDs return `400 invalid_actor_id`.
@@ -27,6 +27,6 @@ Rules:
 ## Consequences
 
 - Local event API audit records can distinguish authorized local clients.
-- Existing clients must send `X-Hermes-Actor-Id` in addition to the bearer token.
+- Existing clients must send `X-Макошь-Actor-Id` in addition to the bearer token.
 - This remains self-asserted identity while the temporary token model exists.
 - The full capability runtime must replace this with authenticated capability and actor identifiers before multi-user access, plugins or agents are allowed to perform broad reads or writes.

@@ -1,5 +1,5 @@
-use hermes_obligations_api::{ObligationEvidence, ObligationUpsert, ObligationWritePort};
-use hermes_obligations_postgres::ObligationPostgresReadQuery;
+use makosh_obligations_api::{ObligationEvidence, ObligationUpsert, ObligationWritePort};
+use makosh_obligations_postgres::ObligationPostgresReadQuery;
 use sqlx::PgPool;
 
 use super::errors::ObligationStoreError;
@@ -127,7 +127,7 @@ impl ObligationReviewPort {
             })
             .collect();
         let value =
-            hermes_obligations_postgres::ObligationPostgresReadQuery::upsert_in_transaction(
+            makosh_obligations_postgres::ObligationPostgresReadQuery::upsert_in_transaction(
                 transaction,
                 &input,
                 &items,
@@ -144,13 +144,13 @@ impl ObligationReviewPort {
         observation_id: Option<&str>,
         metadata: Option<serde_json::Value>,
     ) -> Result<Obligation, ObligationStoreError> {
-        let value = hermes_obligations_postgres::ObligationPostgresReadQuery::set_review_state_in_transaction(transaction, obligation_id, review_state.as_str(), observation_id, metadata).await.map_err(|e| ObligationStoreError::Write(e.to_string()))?;
+        let value = makosh_obligations_postgres::ObligationPostgresReadQuery::set_review_state_in_transaction(transaction, obligation_id, review_state.as_str(), observation_id, metadata).await.map_err(|e| ObligationStoreError::Write(e.to_string()))?;
         from_api(value)
     }
 }
 
 fn from_api(
-    value: hermes_obligations_api::ObligationRead,
+    value: makosh_obligations_api::ObligationRead,
 ) -> Result<Obligation, ObligationStoreError> {
     Ok(Obligation {
         obligation_id: value.obligation_id,

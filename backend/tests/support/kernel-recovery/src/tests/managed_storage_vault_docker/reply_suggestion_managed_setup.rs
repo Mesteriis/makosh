@@ -3,21 +3,21 @@
 use super::*;
 
 use crate::platform::client_realtime::ClientRealtimePublishHandlerV1;
-use hermes_communication_reply_suggestion_api::{
+use makosh_communication_reply_suggestion_api::{
     COMMUNICATION_REPLY_SUGGESTION_MODULE_ID_V1, COMMUNICATION_REPLY_SUGGESTION_OWNER_V1,
 };
-use hermes_communication_reply_suggestion_persistence::{
+use makosh_communication_reply_suggestion_persistence::{
     COMMUNICATION_REPLY_SUGGESTION_STORAGE_BUNDLE_REVISION_V1,
     communication_reply_suggestion_storage_bundle_v1,
 };
-use hermes_communication_reply_suggestion_runtime::{
+use makosh_communication_reply_suggestion_runtime::{
     COMMUNICATION_REPLY_SUGGESTION_STORAGE_CAPABILITY_ID_V1,
     communication_reply_suggestion_module_descriptor_v1,
     communication_reply_suggestion_settings_schema_bytes_v1,
 };
-use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
+use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
 
 const REPLY_SUGGESTION_RELEASE_ARTIFACT_ID_V1: &str = "communication_reply_suggestion.runtime.v1";
 const REPLY_SUGGESTION_BUILD_ID_V1: &str = "managed-reply-suggestion-live";
@@ -85,7 +85,7 @@ pub(super) fn admit_reply_suggestion_runtime_v1(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             REPLY_SUGGESTION_RELEASE_ARTIFACT_ID_V1,
             Sha256::digest(
                 std::fs::read(reply_suggestion_binary()).expect("Reply Suggestion runtime binary"),
@@ -284,7 +284,7 @@ fn start_reserved_reply_suggestion_runtime_v1(
 fn reply_suggestion_storage_binding_v1(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(
             registration_id,
@@ -296,5 +296,5 @@ fn reply_suggestion_storage_binding_v1(
 }
 
 fn reply_suggestion_binary() -> PathBuf {
-    binary("HERMES_COMMUNICATION_REPLY_SUGGESTION_RUNTIME_BIN")
+    binary("MAKOSH_COMMUNICATION_REPLY_SUGGESTION_RUNTIME_BIN")
 }

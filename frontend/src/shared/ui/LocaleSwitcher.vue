@@ -23,7 +23,7 @@ const emit = defineEmits<{
 	'update:modelValue': [value: string]
 }>()
 
-const classes = computed(() => ['hermes-locale-switcher', props.class])
+const classes = computed(() => ['makosh-locale-switcher', props.class])
 </script>
 
 <template>
@@ -31,7 +31,7 @@ const classes = computed(() => ['hermes-locale-switcher', props.class])
 		<button
 			v-for="option in options"
 			:key="option.value"
-			class="hermes-locale-switcher__option"
+			class="makosh-locale-switcher__option"
 			type="button"
 			role="radio"
 			:aria-checked="modelValue === option.value"

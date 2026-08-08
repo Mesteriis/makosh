@@ -1,22 +1,22 @@
 use axum::body::Body;
 use axum::http::{Request, StatusCode, header};
-use hermes_communications_api::accounts::CommunicationProviderKind;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
 use serde_json::{Value, json};
 use sqlx::Row;
 use tempfile::tempdir;
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::calendar::events::account_store::CalendarAccountStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::calendar::events::account_store::CalendarAccountStore;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::secrets::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::secrets::{
     models::SecretStoreKind, resolver::SecretResolver, store::SecretReferenceStore,
 };
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::vault::{HostVault, models::HostVaultConfig};
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::vault::{HostVault, models::HostVaultConfig};
 
 use super::support::{
     LOCAL_API_TOKEN, MockTokenServer, get_request, json_body, json_request_with_token_and_actor,
@@ -35,19 +35,19 @@ async fn gmail_oauth_start_api_uses_configured_google_desktop_client_against_pos
         .await
         .expect("database connection");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+        makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_VAULT_HOME",
+                    "MAKOSH_VAULT_HOME",
                     vault_home.to_str().expect("vault path"),
                 ),
                 (
-                    "HERMES_DEV_KEY_PATH",
+                    "MAKOSH_DEV_KEY_PATH",
                     dev_key_path.to_str().expect("dev key path"),
                 ),
                 (
-                    "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
+                    "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
                     r#"{
                     "installed": {
                         "client_id": "desktop-client-id.apps.googleusercontent.com",
@@ -73,7 +73,7 @@ async fn gmail_oauth_start_api_uses_configured_google_desktop_client_against_pos
                 "redirect_uri": "http://127.0.0.1:8080/api/v1/integrations/mail/accounts/gmail/oauth/callback"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -102,22 +102,22 @@ async fn gmail_oauth_start_api_requires_initialized_host_vault_against_postgres(
     let dev_key_path = vault_dir.path().join("dev").join("master.key");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
         .with_test_pairs([
-            ("HERMES_DEV_MODE", "true"),
+            ("MAKOSH_DEV_MODE", "true"),
             (
-                "HERMES_VAULT_HOME",
+                "MAKOSH_VAULT_HOME",
                 vault_home.to_str().expect("vault path"),
             ),
             (
-                "HERMES_DEV_KEY_PATH",
+                "MAKOSH_DEV_KEY_PATH",
                 dev_key_path.to_str().expect("dev key path"),
             ),
             (
-                "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
+                "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
                 r#"{
                     "installed": {
                         "client_id": "desktop-client-id.apps.googleusercontent.com",
@@ -144,7 +144,7 @@ async fn gmail_oauth_start_api_requires_initialized_host_vault_against_postgres(
                 "redirect_uri": "http://127.0.0.1:8080/api/v1/integrations/mail/accounts/gmail/oauth/callback"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -164,18 +164,18 @@ async fn gmail_oauth_start_api_reopens_initialized_host_vault_after_restart_agai
     let dev_key_path = vault_dir.path().join("dev").join("master.key");
 
     let initialized_app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
         .with_test_pairs([
-            ("HERMES_DEV_MODE", "true"),
+            ("MAKOSH_DEV_MODE", "true"),
             (
-                "HERMES_VAULT_HOME",
+                "MAKOSH_VAULT_HOME",
                 vault_home.to_str().expect("vault path"),
             ),
             (
-                "HERMES_DEV_KEY_PATH",
+                "MAKOSH_DEV_KEY_PATH",
                 dev_key_path.to_str().expect("dev key path"),
             ),
         ])
@@ -187,22 +187,22 @@ async fn gmail_oauth_start_api_reopens_initialized_host_vault_after_restart_agai
     unlock_test_vault(initialized_app).await;
 
     let restarted_app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
         .with_test_pairs([
-            ("HERMES_DEV_MODE", "true"),
+            ("MAKOSH_DEV_MODE", "true"),
             (
-                "HERMES_VAULT_HOME",
+                "MAKOSH_VAULT_HOME",
                 vault_home.to_str().expect("vault path"),
             ),
             (
-                "HERMES_DEV_KEY_PATH",
+                "MAKOSH_DEV_KEY_PATH",
                 dev_key_path.to_str().expect("dev key path"),
             ),
             (
-                "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
+                "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_JSON",
                 r#"{
                     "installed": {
                         "client_id": "desktop-client-id.apps.googleusercontent.com",
@@ -229,7 +229,7 @@ async fn gmail_oauth_start_api_reopens_initialized_host_vault_after_restart_agai
                 "redirect_uri": "http://127.0.0.1:8080/api/v1/integrations/mail/accounts/gmail/oauth/callback"
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -255,18 +255,18 @@ async fn gmail_oauth_callback_completes_pending_grant_without_api_secret() {
     let vault_home = vault_dir.path().join("vault");
     let dev_key_path = vault_dir.path().join("dev").join("master.key");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
         .with_test_pairs([
-            ("HERMES_DEV_MODE", "true"),
+            ("MAKOSH_DEV_MODE", "true"),
             (
-                "HERMES_VAULT_HOME",
+                "MAKOSH_VAULT_HOME",
                 vault_home.to_str().expect("vault path"),
             ),
             (
-                "HERMES_DEV_KEY_PATH",
+                "MAKOSH_DEV_KEY_PATH",
                 dev_key_path.to_str().expect("dev key path"),
             ),
         ])
@@ -287,12 +287,12 @@ async fn gmail_oauth_callback_completes_pending_grant_without_api_secret() {
                 "display_name": "Google Workspace",
                 "client_id": "desktop-client-id",
                 "redirect_uri": "http://127.0.0.1:8080/api/v1/integrations/mail/accounts/gmail/oauth/callback",
-                "app_return_url": "http://127.0.0.1:5174/?hermes_oauth=gmail_connected",
+                "app_return_url": "http://127.0.0.1:5174/?makosh_oauth=gmail_connected",
                 "authorization_endpoint": format!("{}/authorize", token_server.base_url()),
                 "token_endpoint": format!("{}/token", token_server.base_url())
             }),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("start response");
@@ -311,10 +311,10 @@ async fn gmail_oauth_callback_completes_pending_grant_without_api_secret() {
     let callback_body = text_body(callback_response).await;
     assert!(callback_body.contains("Google mail connected"));
     assert!(callback_body.contains(&account_id));
-    assert!(callback_body.contains("hermes:gmail-oauth-connected"));
+    assert!(callback_body.contains("makosh:gmail-oauth-connected"));
     assert!(callback_body.contains("postMessage"));
     assert!(callback_body.contains("window.close"));
-    assert!(callback_body.contains("hermes_oauth=gmail_connected"));
+    assert!(callback_body.contains("makosh_oauth=gmail_connected"));
     assert!(!callback_body.contains("gmail-access-token"));
     assert!(!callback_body.contains("gmail-refresh-token"));
 
@@ -534,7 +534,7 @@ async fn gmail_oauth_callback_completes_pending_grant_without_api_secret() {
 #[tokio::test]
 async fn gmail_oauth_callback_rejects_unknown_state_without_api_secret() {
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
+        makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
         Database::disabled(),
     );
 
@@ -561,7 +561,7 @@ async fn gmail_oauth_callback_rejects_unknown_state_without_api_secret() {
 #[tokio::test]
 async fn gmail_oauth_callback_rejects_missing_code_without_leaking_secrets() {
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
+        makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
         Database::disabled(),
     );
 
@@ -583,7 +583,7 @@ async fn gmail_oauth_callback_rejects_missing_code_without_leaking_secrets() {
 #[tokio::test]
 async fn gmail_oauth_start_and_complete_still_require_api_secret() {
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
+        makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
         Database::disabled(),
     );
 

@@ -21,7 +21,7 @@ export type ToastContext = {
 }
 
 export const TOAST_INJECTION_KEY: InjectionKey<ToastContext> =
-  Symbol('hermes-toast-context')
+  Symbol('makosh-toast-context')
 
 const noopToastContext: ToastContext = {
   addToast: () => '',

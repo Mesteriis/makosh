@@ -6,7 +6,7 @@ use sha2::{Digest, Sha256};
 use super::super::errors::TelegramError;
 use super::super::validation::validate_non_empty;
 use super::chats::TelegramChatKind;
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq)]
 pub struct NewTelegramMessage {

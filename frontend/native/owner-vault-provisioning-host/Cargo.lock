@@ -443,7 +443,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-legacy-provider-recovery"
+name = "makosh-legacy-provider-recovery"
 version = "0.1.0"
 dependencies = [
  "base64",
@@ -458,7 +458,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-owner-device-proof-host"
+name = "makosh-owner-device-proof-host"
 version = "0.1.0"
 dependencies = [
  "p256",
@@ -466,12 +466,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-owner-vault-provisioning-host"
+name = "makosh-owner-vault-provisioning-host"
 version = "0.1.0"
 dependencies = [
- "hermes-legacy-provider-recovery",
- "hermes-owner-device-proof-host",
- "hermes-vault-protocol",
+ "makosh-legacy-provider-recovery",
+ "makosh-owner-device-proof-host",
+ "makosh-vault-protocol",
  "serde",
  "serde_json",
  "sha2 0.11.0",
@@ -480,7 +480,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hermes-vault-protocol"
+name = "makosh-vault-protocol"
 version = "0.1.0"
 dependencies = [
  "hpke",

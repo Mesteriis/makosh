@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/workflows/telegram_media_storage.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/telegram_media_storage.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/telegram_media_storage.rs`
 - Size bytes / Размер в байтах: `13428`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -385,7 +385,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/workflows/workflow_action_person_projection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/workflow_action_person_projection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/workflow_action_person_projection.rs`
 - Size bytes / Размер в байтах: `1936`
 - Included characters / Включено символов: `1936`
 - Truncated / Обрезано: `no`
@@ -448,7 +448,7 @@ pub(crate) async fn create_person_projection_in_transaction(
 
 ### `backend/src/workflows/yandex_telemost_calendar_matching.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/yandex_telemost_calendar_matching.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/yandex_telemost_calendar_matching.rs`
 - Size bytes / Размер в байтах: `8161`
 - Included characters / Включено символов: `8161`
 - Truncated / Обрезано: `no`
@@ -695,7 +695,7 @@ fn required_nested_string<'a>(
 
 ### `backend/src/workflows/zoom_calendar_matching.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/zoom_calendar_matching.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/zoom_calendar_matching.rs`
 - Size bytes / Размер в байтах: `5041`
 - Included characters / Включено символов: `5041`
 - Truncated / Обрезано: `no`
@@ -859,7 +859,7 @@ fn optional_payload_datetime(payload: &Value, field: &'static str) -> Option<Dat
 
 ### `backend/src/workflows/zoom_participant_identity.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/zoom_participant_identity.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/zoom_participant_identity.rs`
 - Size bytes / Размер в байтах: `3718`
 - Included characters / Включено символов: `3718`
 - Truncated / Обрезано: `no`
@@ -990,7 +990,7 @@ fn optional_payload_string<'a>(payload: &'a Value, field: &'static str) -> Optio
 
 ### `backend/src/workflows/zoom_signal_detection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/zoom_signal_detection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/zoom_signal_detection.rs`
 - Size bytes / Размер в байтах: `6386`
 - Included characters / Включено символов: `6386`
 - Truncated / Обрезано: `no`

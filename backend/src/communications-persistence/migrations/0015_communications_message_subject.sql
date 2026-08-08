@@ -1,4 +1,4 @@
-ALTER TABLE hermes_data.communications_evidence_summaries
+ALTER TABLE makosh_data.communications_evidence_summaries
   ADD COLUMN message_subject TEXT CHECK (
     message_subject IS NULL
     OR (

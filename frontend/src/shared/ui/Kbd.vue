@@ -5,7 +5,7 @@ const props = withDefaults(defineProps<{
 	class?: string
 }>(), {})
 
-const classes = computed(() => ['hermes-kbd', props.class])
+const classes = computed(() => ['makosh-kbd', props.class])
 </script>
 
 <template>

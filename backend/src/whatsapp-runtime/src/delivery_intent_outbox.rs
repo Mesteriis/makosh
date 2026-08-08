@@ -1,7 +1,7 @@
 //! WhatsApp-owned exact-byte relay for delivery-intent terminal results.
 
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
-use hermes_whatsapp_persistence::{WhatsAppDeliveryIntentStoreV1, WhatsAppDurablePersistenceError};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_whatsapp_persistence::{WhatsAppDeliveryIntentStoreV1, WhatsAppDurablePersistenceError};
 
 #[derive(Debug)]
 pub enum WhatsAppDeliveryIntentOutboxRelayErrorV1 {

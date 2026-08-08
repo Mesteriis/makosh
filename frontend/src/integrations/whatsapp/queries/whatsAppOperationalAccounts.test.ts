@@ -6,7 +6,7 @@ import {
 	ClientModuleSettingsBootstrapV1Schema,
 	ClientSettingValueEntryV1Schema,
 	ClientSettingValueV1Schema,
-} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	whatsAppOperationalAccountFingerprint,
 	whatsAppOperationalQueryAccounts,
@@ -35,7 +35,7 @@ function whatsAppModule(
 	registrationId: string,
 	capabilityIds: string[],
 	accountId: string,
-	moduleId = 'hermes-whatsapp-runtime',
+	moduleId = 'makosh-whatsapp-runtime',
 ) {
 	return create(ClientModuleBootstrapV1Schema, {
 		registrationId,

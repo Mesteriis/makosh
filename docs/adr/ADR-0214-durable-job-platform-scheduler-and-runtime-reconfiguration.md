@@ -3,7 +3,7 @@
 Статус: Принято
 Дата: 2026-07-15
 Состояние реализации: `scheduler_persistence_foundation_v1` включает owner-neutral
-`hermes-scheduler-protocol` и отдельный `hermes-scheduler` reconciliation/lease
+`makosh-scheduler-protocol` и отдельный `makosh-scheduler` reconciliation/lease
 component. Они фиксируют versioned JobKind и payload contract binding, opaque
 schedule scope, explicit opaque `ConcurrencyKeyV1`, bounded
 trigger/overlap/misfire/retry/deadline policies,
@@ -17,8 +17,8 @@ Executor. Этот тип не имеет schedule identity или Scheduler pol
 Telegram-specific owner-local executor реализован по ADR-0285 с exact durable
 command, bounded checkpoint, runtime-generation/lease fencing и managed
 conformance; он не добавляет Telegram handler в Scheduler.
-`hermes-scheduler-persistence` предоставляет exact `StorageBundleV1` для
-`hermes_platform.scheduler_schedules`, `scheduler_runs`, `scheduler_dispatches`
+`makosh-scheduler-persistence` предоставляет exact `StorageBundleV1` для
+`makosh_platform.scheduler_schedules`, `scheduler_runs`, `scheduler_dispatches`
 и bounded `scheduler_concurrency` slots; bundle проходит canonical digest и PostgreSQL
 AST admission Storage Control. Schedule policy сохраняется только в
 versioned canonical binary form; upsert использует schedule revision и
@@ -52,7 +52,7 @@ receipt consumer получает exact bytes только через owner-neut
 Kernel/Event-Hub-authorized pull consumer. Consumer сначала фиксирует fenced
 acceptance/terminal state в PostgreSQL и только затем ACK-ит JetStream. Live
 PostgreSQL + JetStream conformance доказывает оба шага для owner receipt.
-`hermes-scheduler-runtime` уже является отдельным managed-child binary: он
+`makosh-scheduler-runtime` уже является отдельным managed-child binary: он
 проверяет descriptor-bound inherited channel, получает fenced PostgreSQL
 credential только через Kernel-mediated ciphertext Vault route, открывает
 PgBouncer pool только из typed Storage binding и получает отдельный ephemeral
@@ -141,8 +141,8 @@ active binding; revoke останавливает runtime и не создаёт
 Runtime protocol теперь дополнительно фиксирует bounded non-secret набор
 Event-Hub-authorized command publisher bindings и receipt bindings: publisher
 содержит exact command subject, а для каждого approved owner receipt contract
-есть по одной acceptance на `HERMES_ACK_V1` и terminal на
-`HERMES_RESULT_V1`. Receipt binding содержит exact durable consumer, subject и
+есть по одной acceptance на `MAKOSH_ACK_V1` и terminal на
+`MAKOSH_RESULT_V1`. Receipt binding содержит exact durable consumer, subject и
 bounded JetStream budget; Kernel обязан сверить все bindings с approved
 topology перед передачей managed child. Это не даёт Scheduler права самому
 выбирать broker subject или consumer.
@@ -208,7 +208,7 @@ Telemetry, module control plane и managed-launch trust.
 
 ## Контекст
 
-Hermes должен выполнять несколько разных видов фоновой работы:
+Макошь должен выполнять несколько разных видов фоновой работы:
 
 - периодический опрос внешних систем, например получение почты;
 - задания, вызванные domain или integration event;
@@ -246,7 +246,7 @@ ADR обязателен для любой технической фоновой
 
 ## Решение
 
-Вводится platform capability **Hermes Job Platform** из двух частей:
+Вводится platform capability **Макошь Job Platform** из двух частей:
 
 1. отдельный independently restartable Scheduler runtime;
 2. owner-local Job Executor внутри каждого module runtime, которому нужна
@@ -298,7 +298,7 @@ command handler. Все три пути используют один Job Comman
 - `ScheduleRevision` — версия persisted schedule configuration.
 
 Термин `Task` не используется для технического job, потому что `Tasks` является
-отдельным business domain Hermes.
+отдельным business domain Макошь.
 
 ## Где находится исполняемый код
 
@@ -362,21 +362,21 @@ Descriptor описывает capability, а не передаёт реализ�
 что его потребляют Scheduler и несколько независимых module runtimes:
 
 ```text
-backend/src/platform/scheduler/protocol/       hermes-scheduler-protocol
-backend/src/platform/scheduler/implementation/ hermes-scheduler
-backend/src/platform/scheduler/persistence/    hermes-scheduler-persistence
-backend/src/platform/scheduler/runtime/        hermes-scheduler-runtime
+backend/src/platform/scheduler/protocol/       makosh-scheduler-protocol
+backend/src/platform/scheduler/implementation/ makosh-scheduler
+backend/src/platform/scheduler/persistence/    makosh-scheduler-persistence
+backend/src/platform/scheduler/runtime/        makosh-scheduler-runtime
 ```
 
-`hermes-scheduler-protocol` содержит только JobKind descriptor, job payload
+`makosh-scheduler-protocol` содержит только JobKind descriptor, job payload
 messages, schedule/execution lifecycle states и typed errors. Он не определяет
 второй outer envelope: любой job command/result использует
-`DurableEnvelopeV1` из `hermes-events-protocol` ADR-0220. Scheduler protocol не
+`DurableEnvelopeV1` из `makosh-events-protocol` ADR-0220. Scheduler protocol не
 содержит SQLx, NATS client, provider SDK, domain types или runtime bootstrap.
 
 Owner-local handler остаётся в существующих `domain`, `integration`,
 `workflow` или `engine` packages владельца. Отдельный общий
-`hermes-worker-runtime`, registry всех handlers или Celery-like application
+`makosh-worker-runtime`, registry всех handlers или Celery-like application
 package запрещён.
 
 ## Владение persisted state
@@ -819,7 +819,7 @@ workflow requirements, которые Job Platform не покрывает.
 ### Apalis как cross-module architecture contract
 
 Отклонено: библиотека может быть исследована как owner-local implementation
-detail, но не должна владеть Hermes envelopes, module boundaries или
+detail, но не должна владеть Макошь envelopes, module boundaries или
 inter-module delivery semantics.
 
 ## Ссылки

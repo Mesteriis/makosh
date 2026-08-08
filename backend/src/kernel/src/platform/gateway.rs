@@ -11,7 +11,7 @@ use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
-use hermes_gateway_runtime::{
+use makosh_gateway_runtime::{
     BrowserBootstrapRouter, BrowserPairingRouter, ClientRpcRouteErrorV1, ClientRpcRouteHandler,
     ClientRpcRouteV1, ClientRpcRouter, GatewayApplicationRouter, GatewayHttp3ListenerV1,
     GatewayLanDevelopmentListenerV1, GatewayLoopbackListenerV1, GatewayLoopbackTlsListenerV1,
@@ -19,12 +19,12 @@ use hermes_gateway_runtime::{
     OwnerModuleSettingsRouter, OwnerVaultProvisioningRouter, PairedRemoteProfileV1,
     SharedBrowserPairingManager,
 };
-use hermes_gateway_session::{
+use makosh_gateway_session::{
     BrowserGatewaySessionService, BrowserPairingChallengeV1, BrowserPairingManager,
     BrowserWebauthnVerifier, OwnerPairingApprovalV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, DistributionArtifactKindV1, DistributionManifestArtifactV1,
     ModuleClientRequestV1, ModuleClientResponseV1,
 };
@@ -443,7 +443,7 @@ pub(crate) fn gateway_service(
                 let response = ModuleClientResponseV1::decode(response_bytes.as_slice())
                     .map_err(|_| ClientRpcRouteErrorV1::Internal)?;
                 if !response.error_code.is_empty() {
-                    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                         eprintln!(
                             "developer_gateway_client_rpc_module_error registration={} code={}",
                             route_registration_id, response.error_code,
@@ -465,7 +465,7 @@ pub(crate) fn gateway_service(
                     route.capability_id(),
                     route.owner(),
                     route.contract_name(),
-                    hermes_gateway_runtime::ClientRpcContractVersionV1 {
+                    makosh_gateway_runtime::ClientRpcContractVersionV1 {
                         major: route.contract_major(),
                         revision: route.contract_revision(),
                     },
@@ -735,7 +735,7 @@ fn map_module_client_rpc_error(error: &str) -> ClientRpcRouteErrorV1 {
 #[cfg(test)]
 mod client_rpc_request_tests {
     use super::*;
-    use hermes_gateway_runtime::ClientRpcContractVersionV1;
+    use makosh_gateway_runtime::ClientRpcContractVersionV1;
 
     #[test]
     fn owner_client_rpc_envelope_preserves_an_empty_protobuf_request() {

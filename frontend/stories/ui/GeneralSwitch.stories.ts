@@ -4,7 +4,7 @@ import { storybookLocaleFromGlobals } from './storybook-i18n'
 import { generalStoryCopy } from './general-story-copy'
 
 const meta = {
-	title: 'Hermes UI/General/Switch',
+	title: 'Макошь UI/General/Switch',
 	component: Switch,
 	render: (_args, context) => ({
 		components: { Switch },

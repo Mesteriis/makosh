@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.contacts_mail_provider_link_inbox (
+CREATE TABLE makosh_data.contacts_mail_provider_link_inbox (
     logical_owner_id TEXT NOT NULL,
     command_message_id BYTEA NOT NULL,
     command_envelope_sha256 BYTEA NOT NULL,

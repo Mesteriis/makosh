@@ -2,9 +2,9 @@
 
 use std::path::Path;
 
-use hermes_kernel_control_store::PlatformManagedProcessBinding;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::ModuleKindV1;
+use makosh_kernel_control_store::PlatformManagedProcessBinding;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::ModuleKindV1;
 
 use crate::distribution::bundle_verifier::{
     VerifiedDistributionArtifact, VerifiedDistributionBundle,

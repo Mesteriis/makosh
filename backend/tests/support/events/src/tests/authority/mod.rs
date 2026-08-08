@@ -1,7 +1,7 @@
 //! NATS account-signing authority conformance tests.
 
-use hermes_events_authority::{NatsCredentialAuthorityErrorV1, NatsJwtCredentialAuthorityV1};
-use hermes_events_jetstream::{
+use makosh_events_authority::{NatsCredentialAuthorityErrorV1, NatsJwtCredentialAuthorityV1};
+use makosh_events_jetstream::{
     DurableSubjectV1, NatsAccountSignerFenceV1, NatsJwtPermissionSetV1,
     NatsRuntimeCredentialFenceV1, NatsVaultRouteContextV1, StreamKindV1,
 };
@@ -125,7 +125,7 @@ fn permissions() -> NatsJwtPermissionSetV1 {
 }
 
 fn vault_public_key() -> [u8; 32] {
-    hermes_vault_protocol::VaultResponseRecipientV1::generate()
+    makosh_vault_protocol::VaultResponseRecipientV1::generate()
         .public_key()
         .as_bytes()
         .to_owned()

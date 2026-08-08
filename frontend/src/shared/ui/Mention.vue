@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<{
 	tone: 'accent'
 })
 
-const classes = computed(() => ['hermes-mention', `hermes-mention--${props.tone}`, props.class])
+const classes = computed(() => ['makosh-mention', `makosh-mention--${props.tone}`, props.class])
 </script>
 
 <template>

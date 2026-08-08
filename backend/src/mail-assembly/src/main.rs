@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 use std::path::PathBuf;
 use std::process::ExitCode;
 
-use hermes_mail_assembly::materialize_mail_release_assembly_v1;
+use makosh_mail_assembly::materialize_mail_release_assembly_v1;
 
 const OPTIONS: [&str; 3] = ["--build-id", "--output-dir", "--runtime"];
 
@@ -22,7 +22,7 @@ fn main() -> ExitCode {
             ExitCode::SUCCESS
         }
         None => fail(
-            "usage: hermes-mail-assembly --build-id <id> --output-dir <absolute-path> \
+            "usage: makosh-mail-assembly --build-id <id> --output-dir <absolute-path> \
              --runtime <absolute-path>",
         ),
     }
@@ -67,7 +67,7 @@ mod tests {
     fn parses_each_exact_option_once_in_any_order() {
         let parsed = arguments(vec![
             "--runtime".to_owned(),
-            "/tmp/hermes-mail-runtime".to_owned(),
+            "/tmp/makosh-mail-runtime".to_owned(),
             "--build-id".to_owned(),
             "build-1".to_owned(),
             "--output-dir".to_owned(),
@@ -77,7 +77,7 @@ mod tests {
 
         assert_eq!(parsed.build_id, "build-1");
         assert_eq!(parsed.output_directory, PathBuf::from("/tmp/mail-assembly"));
-        assert_eq!(parsed.runtime, PathBuf::from("/tmp/hermes-mail-runtime"));
+        assert_eq!(parsed.runtime, PathBuf::from("/tmp/makosh-mail-runtime"));
     }
 
     #[test]

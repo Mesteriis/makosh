@@ -8,8 +8,8 @@ use crate::integrations::whatsapp::client::errors::WhatsappWebError;
 use crate::integrations::whatsapp::client::models::{NewWhatsappWebSession, WhatsappWebSession};
 use crate::integrations::whatsapp::client::rows::row_to_whatsapp_web_session;
 use crate::integrations::whatsapp::client::validation::validate_limit;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 
 async fn capture_whatsapp_session_observation(
     transaction: &mut Transaction<'_, Postgres>,

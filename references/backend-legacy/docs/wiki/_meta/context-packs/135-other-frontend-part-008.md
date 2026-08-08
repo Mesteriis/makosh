@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/domains/communications/providers/whatsapp/views/WhatsAppCommunicationsChatPane.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/providers/whatsapp/views/WhatsAppCommunicationsChatPane.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/providers/whatsapp/views/WhatsAppCommunicationsChatPane.vue`
 - Size bytes / Размер в байтах: `12358`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -326,13 +326,13 @@ function messageSystemSummary(message: WhatsAppPanelMessage): string | null {
 				{{ emptyStateMessage }}
 			</div>
 		</div>
-		<form class="provider-inline-form" 
+		<form class="provider-inline-form"
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `frontend/src/domains/communications/providers/whatsapp/views/WhatsAppCommunicationsDetailPane.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/providers/whatsapp/views/WhatsAppCommunicationsDetailPane.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/providers/whatsapp/views/WhatsAppCommunicationsDetailPane.vue`
 - Size bytes / Размер в байтах: `10409`
 - Included characters / Включено символов: `10408`
 - Truncated / Обрезано: `no`
@@ -572,7 +572,7 @@ function messagePreview(message: { text?: string; body_text_preview?: string | n
 
 ### `frontend/src/domains/communications/providers/whatsapp/views/WhatsAppCommunicationsPanel.css`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/providers/whatsapp/views/WhatsAppCommunicationsPanel.css`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/providers/whatsapp/views/WhatsAppCommunicationsPanel.css`
 - Size bytes / Размер в байтах: `7076`
 - Included characters / Включено символов: `7076`
 - Truncated / Обрезано: `no`
@@ -922,7 +922,7 @@ function messagePreview(message: { text?: string; body_text_preview?: string | n
 
 ### `frontend/src/domains/communications/providers/whatsapp/views/WhatsAppCommunicationsPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/providers/whatsapp/views/WhatsAppCommunicationsPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/providers/whatsapp/views/WhatsAppCommunicationsPanel.vue`
 - Size bytes / Размер в байтах: `25855`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1243,7 +1243,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/views/CommunicationsEmptyPage.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/views/CommunicationsEmptyPage.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/views/CommunicationsEmptyPage.vue`
 - Size bytes / Размер в байтах: `980`
 - Included characters / Включено символов: `980`
 - Truncated / Обрезано: `no`
@@ -1302,7 +1302,7 @@ const { t } = useI18n()
 
 ### `frontend/src/domains/communications/views/CommunicationsPage.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/views/CommunicationsPage.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/views/CommunicationsPage.vue`
 - Size bytes / Размер в байтах: `11684`
 - Included characters / Включено символов: `11684`
 - Truncated / Обрезано: `no`
@@ -1625,7 +1625,7 @@ const {
 
 ### `frontend/src/domains/documents/components/DocumentsInsights.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/documents/components/DocumentsInsights.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/documents/components/DocumentsInsights.vue`
 - Size bytes / Размер в байтах: `367`
 - Included characters / Включено символов: `367`
 - Truncated / Обрезано: `no`
@@ -1649,7 +1649,7 @@ const { t } = useI18n()
 
 ### `frontend/src/domains/documents/components/DocumentsList.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/documents/components/DocumentsList.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/documents/components/DocumentsList.vue`
 - Size bytes / Размер в байтах: `3231`
 - Included characters / Включено символов: `3231`
 - Truncated / Обрезано: `no`
@@ -1754,7 +1754,7 @@ const totalSize = computed(() => virtualizer.value.getTotalSize())
 
 ### `frontend/src/domains/documents/components/DocumentsNavigation.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/documents/components/DocumentsNavigation.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/documents/components/DocumentsNavigation.vue`
 - Size bytes / Размер в байтах: `1065`
 - Included characters / Включено символов: `1065`
 - Truncated / Обрезано: `no`
@@ -1771,7 +1771,7 @@ const smartCollections = [
   'Shared with Me 18', 'Requires Review 7', 'Contracts & Legal 23', 'Financial 15'
 ]
 const myFolders = [
-  'Hermes Hub', 'Projects', 'Personal', 'Work', 'Archive 2024', 'Clients', 'References'
+  'Макошь', 'Projects', 'Personal', 'Work', 'Archive 2024', 'Clients', 'References'
 ]
 </script>
 
@@ -1798,7 +1798,7 @@ const myFolders = [
 
 ### `frontend/src/domains/documents/components/DocumentsProcessingJobs.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/documents/components/DocumentsProcessingJobs.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/documents/components/DocumentsProcessingJobs.vue`
 - Size bytes / Размер в байтах: `1349`
 - Included characters / Включено символов: `1349`
 - Truncated / Обрезано: `no`
@@ -1852,7 +1852,7 @@ const emit = defineEmits<{
 
 ### `frontend/src/domains/documents/components/DocumentsSourceCards.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/documents/components/DocumentsSourceCards.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/documents/components/DocumentsSourceCards.vue`
 - Size bytes / Размер в байтах: `853`
 - Included characters / Включено символов: `853`
 - Truncated / Обрезано: `no`
@@ -1889,7 +1889,7 @@ const sources = [
 
 ### `frontend/src/domains/documents/views/DocumentsPage.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/documents/views/DocumentsPage.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/documents/views/DocumentsPage.vue`
 - Size bytes / Размер в байтах: `3043`
 - Included characters / Включено символов: `3043`
 - Truncated / Обрезано: `no`
@@ -1919,7 +1919,7 @@ const documentProcessingJobs = computed(() => jobsData.value?.items ?? [])
 const documents = computed<DocDisplayItem[]>(() =>
   documentProcessingJobs.value.map((job) => ({
     name: `${job.document_id} (${job.step})`,
-    source: 'Hermes Hub',
+    source: 'Макошь',
     project: job.status,
     type: job.step,
     date: job.queued_at,
@@ -1987,7 +1987,7 @@ onMounted(() => {
 
 ### `frontend/src/domains/home/components/HomeActiveProjects.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/home/components/HomeActiveProjects.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/home/components/HomeActiveProjects.vue`
 - Size bytes / Размер в байтах: `1499`
 - Included characters / Включено символов: `1499`
 - Truncated / Обрезано: `no`
@@ -2043,7 +2043,7 @@ const emit = defineEmits<{
 
 ### `frontend/src/domains/home/components/HomeMetrics.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/home/components/HomeMetrics.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/home/components/HomeMetrics.vue`
 - Size bytes / Размер в байтах: `2149`
 - Included characters / Включено символов: `2145`
 - Truncated / Обрезано: `no`
@@ -2151,7 +2151,7 @@ defineProps<{
 
 ### `frontend/src/domains/home/components/HomePeopleTalked.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/home/components/HomePeopleTalked.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/home/components/HomePeopleTalked.vue`
 - Size bytes / Размер в байтах: `936`
 - Included characters / Включено символов: `936`
 - Truncated / Обрезано: `no`
@@ -2192,7 +2192,7 @@ defineProps<{
 
 ### `frontend/src/domains/home/components/HomePriorities.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/home/components/HomePriorities.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/home/components/HomePriorities.vue`
 - Size bytes / Размер в байтах: `954`
 - Included characters / Включено символов: `953`
 - Truncated / Обрезано: `no`
@@ -2235,7 +2235,7 @@ defineProps<{
 
 ### `frontend/src/domains/home/components/HomeSystemStatus.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/home/components/HomeSystemStatus.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/home/components/HomeSystemStatus.vue`
 - Size bytes / Размер в байтах: `651`
 - Included characters / Включено символов: `651`
 - Truncated / Обрезано: `no`
@@ -2267,7 +2267,7 @@ defineProps<{
 
 ### `frontend/src/domains/home/components/HomeUpcoming.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/home/components/HomeUpcoming.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/home/components/HomeUpcoming.vue`
 - Size bytes / Размер в байтах: `927`
 - Included characters / Включено символов: `927`
 - Truncated / Обрезано: `no`
@@ -2294,7 +2294,7 @@ import Icon from '../../../shared/ui/Icon.vue'
         </article>
         <article>
           <time>Tomorrow</time>
-          <strong>10:00 Project Hermes - Planning</strong>
+          <strong>10:00 Project Макошь - Planning</strong>
           <span>15:00 Design Review</span>
         </article>
       </div>
@@ -2308,7 +2308,7 @@ import Icon from '../../../shared/ui/Icon.vue'
 
 ### `frontend/src/domains/home/components/HomeWhatsNew.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/home/components/HomeWhatsNew.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/home/components/HomeWhatsNew.vue`
 - Size bytes / Размер в байтах: `1205`
 - Included characters / Включено символов: `1205`
 - Truncated / Обрезано: `no`
@@ -2356,7 +2356,7 @@ defineProps<{
 
 ### `frontend/src/domains/home/views/HomePage.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/home/views/HomePage.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/home/views/HomePage.vue`
 - Size bytes / Размер в байтах: `4254`
 - Included characters / Включено символов: `4250`
 - Truncated / Обрезано: `no`
@@ -2505,7 +2505,7 @@ function navigateToProjects() {
 
 ### `frontend/src/domains/knowledge/components/KnowledgeGraphCanvas.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/knowledge/components/KnowledgeGraphCanvas.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/knowledge/components/KnowledgeGraphCanvas.vue`
 - Size bytes / Размер в байтах: `4449`
 - Included characters / Включено символов: `4449`
 - Truncated / Обрезано: `no`
@@ -2699,7 +2699,7 @@ const store = useKnowledgeStore()
 
 ### `frontend/src/domains/knowledge/components/KnowledgeNodeInspector.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/knowledge/components/KnowledgeNodeInspector.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/knowledge/components/KnowledgeNodeInspector.vue`
 - Size bytes / Размер в байтах: `4912`
 - Included characters / Включено символов: `4911`
 - Truncated / Обрезано: `no`
@@ -2887,7 +2887,7 @@ const store = useKnowledgeStore()
 
 ### `frontend/src/domains/knowledge/components/KnowledgePolygraphReview.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/knowledge/components/KnowledgePolygraphReview.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/knowledge/components/KnowledgePolygraphReview.vue`
 - Size bytes / Размер в байтах: `5826`
 - Included characters / Включено символов: `5826`
 - Truncated / Обрезано: `no`
@@ -3130,7 +3130,7 @@ async function handleReview(
 
 ### `frontend/src/domains/knowledge/views/KnowledgePage.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/knowledge/views/KnowledgePage.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/knowledge/views/KnowledgePage.vue`
 - Size bytes / Размер в байтах: `9355`
 - Included characters / Включено символов: `9355`
 - Truncated / Обрезано: `no`
@@ -3547,7 +3547,7 @@ async function loadGraphNodeChoices() {
 
 ### `frontend/src/domains/notes/components/NotesInsights.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/notes/components/NotesInsights.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/notes/components/NotesInsights.vue`
 - Size bytes / Размер в байтах: `363`
 - Included characters / Включено символов: `363`
 - Truncated / Обрезано: `no`

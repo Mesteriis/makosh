@@ -1,7 +1,7 @@
 use crate::platform::secrets::store::SecretReferenceStore;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
-use hermes_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
-use hermes_communications_api::email::{OutgoingEmail, SmtpConfig};
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
+use makosh_communications_api::email::{OutgoingEmail, SmtpConfig};
 use std::future::Future;
 use std::pin::Pin;
 
@@ -11,7 +11,7 @@ use sqlx::postgres::PgPool;
 use crate::domains::communications::credentials::{
     ProviderCredentialError, ProviderCredentialReader,
 };
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
 

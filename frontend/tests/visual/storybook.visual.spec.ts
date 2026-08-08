@@ -1,12 +1,12 @@
 import { expect, test } from '@playwright/test'
 import type { APIRequestContext, Page } from '@playwright/test'
 
-const CANONICAL_THEMES = ['base-light', 'base-dark', 'hermes-light', 'hermes-dark'] as const
+const CANONICAL_THEMES = ['base-light', 'base-dark', 'makosh-light', 'makosh-dark'] as const
 // Product visual policy: screenshot every story in the canonical product baseline theme.
-// Cross-theme token regressions are covered by Hermes UI/Foundation/Themes, which renders all canonical themes side by side.
+// Cross-theme token regressions are covered by Макошь UI/Foundation/Themes, which renders all canonical themes side by side.
 const VISUAL_SNAPSHOT_THEMES = ['base-light'] as const
 const LOCALES = ['en'] as const
-const STORY_FILTER = process.env.HERMES_VISUAL_STORY_FILTER?.trim().toLocaleLowerCase() || null
+const STORY_FILTER = process.env.MAKOSH_VISUAL_STORY_FILTER?.trim().toLocaleLowerCase() || null
 
 const VIEWPORTS = [
 	{ name: 'w320', width: 320, height: 900 },
@@ -18,7 +18,7 @@ const VIEWPORTS = [
 	{ name: 'w5120', width: 5120, height: 1440 }
 ] as const
 
-const GENERAL_STORY_TITLE_PREFIX = 'Hermes UI/General/'
+const GENERAL_STORY_TITLE_PREFIX = 'Макошь UI/General/'
 
 type UiThemeName = (typeof CANONICAL_THEMES)[number]
 type StorybookLocale = (typeof LOCALES)[number]
@@ -46,7 +46,7 @@ interface StoryBucket {
 const STORY_BUCKETS: readonly StoryBucket[] = [
 	{
 		name: 'app-and-foundation',
-		includes: (story) => story.title.startsWith('Hermes App/') || story.title.startsWith('Hermes UI/Foundation/')
+		includes: (story) => story.title.startsWith('Макошь App/') || story.title.startsWith('Макошь UI/Foundation/')
 	},
 	{
 		name: 'general-a-d',
@@ -129,7 +129,7 @@ const ACTIVE_STORY_BUCKETS: readonly StoryBucket[] = STORY_FILTER
 		]
 	: STORY_BUCKETS
 
-test.describe('Hermes UI Storybook visual regression', () => {
+test.describe('Макошь UI Storybook visual regression', () => {
 	test.describe.configure({ mode: 'serial' })
 
 	test('story buckets cover all Storybook stories', async ({ request }) => {
@@ -292,7 +292,7 @@ function snapshotName(story: StorybookStory, locale: StorybookLocale, theme: UiT
 }
 
 function themeFamily(theme: UiThemeName): string {
-	return theme.startsWith('hermes-') ? 'hermes' : 'base'
+	return theme.startsWith('makosh-') ? 'makosh' : 'base'
 }
 
 function themeMode(theme: UiThemeName): string {

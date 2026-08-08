@@ -7,7 +7,7 @@ fn main() {
     let descriptor = output.join("mail-replay-v1.bin");
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
-        .compile_protos(&["proto/hermes/mail/replay/v1/replay.proto"], &["proto"])
+        .compile_protos(&["proto/makosh/mail/replay/v1/replay.proto"], &["proto"])
         .expect("Mail replay contract compiles");
     let digest: [u8; 32] = Sha256::digest(std::fs::read(&descriptor).expect("descriptor")).into();
     std::fs::write(

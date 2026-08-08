@@ -1,5 +1,5 @@
-use hermes_communication_delivery_intent_core::CommunicationProviderProvenanceV1;
-use hermes_events_protocol::delivery::OutboxRecordV1;
+use makosh_communication_delivery_intent_core::CommunicationProviderProvenanceV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
 use sqlx::Row;
 
 use crate::{
@@ -71,7 +71,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
             .map_err(|_| DeliveryIntentPersistenceErrorV1::StorageUnavailable)?;
         let claim_exists = sqlx::query_scalar::<_, i32>(
             "SELECT 1
-             FROM hermes_data.communication_delivery_intent_jobs
+             FROM makosh_data.communication_delivery_intent_jobs
              WHERE logical_owner_id = $1 AND intent_id = $2
                AND state = $3 AND claimed_by = $4 AND claim_epoch = $5
                AND lease_expires_at_unix_seconds >= $6
@@ -91,7 +91,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
             return Err(DeliveryIntentPersistenceErrorV1::ClaimLost);
         }
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.communication_delivery_intent_provider_outbox (
+            "INSERT INTO makosh_data.communication_delivery_intent_provider_outbox (
                message_id, envelope_sha256, exact_envelope_bytes,
                logical_owner_id, intent_id, provider_kind, claim_epoch,
                created_at_unix_seconds
@@ -117,7 +117,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
             let row = sqlx::query(
                 "SELECT envelope_sha256, exact_envelope_bytes,
                         logical_owner_id, intent_id, provider_kind, claim_epoch
-                 FROM hermes_data.communication_delivery_intent_provider_outbox
+                 FROM makosh_data.communication_delivery_intent_provider_outbox
                  WHERE message_id = $1",
             )
             .bind(record.message_id().as_slice())
@@ -171,7 +171,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
         }
         let rows = sqlx::query(
             "SELECT exact_envelope_bytes
-             FROM hermes_data.communication_delivery_intent_provider_outbox
+             FROM makosh_data.communication_delivery_intent_provider_outbox
              WHERE provider_kind = $1 AND published_at_unix_seconds IS NULL
              ORDER BY created_at_unix_seconds ASC, message_id ASC
              LIMIT $2",
@@ -202,7 +202,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
         }
         let row = sqlx::query(
             "SELECT exact_envelope_bytes
-             FROM hermes_data.communication_delivery_intent_provider_outbox
+             FROM makosh_data.communication_delivery_intent_provider_outbox
              WHERE logical_owner_id = $1
                AND intent_id = $2
                AND provider_kind = $3
@@ -249,7 +249,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
             .map_err(|_| DeliveryIntentPersistenceErrorV1::StorageUnavailable)?;
         let outbox = sqlx::query(
             "SELECT published_at_unix_seconds
-             FROM hermes_data.communication_delivery_intent_provider_outbox
+             FROM makosh_data.communication_delivery_intent_provider_outbox
              WHERE message_id = $1 AND logical_owner_id = $2 AND intent_id = $3
                AND provider_kind = $4
              FOR UPDATE",
@@ -276,7 +276,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
             return Ok(status);
         }
         let row = sqlx::query(
-            "UPDATE hermes_data.communication_delivery_intent_jobs
+            "UPDATE makosh_data.communication_delivery_intent_jobs
              SET state = $1,
                  state_revision = state_revision + 1,
                  provider_operation_id = $2,
@@ -303,7 +303,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
         .ok_or(DeliveryIntentPersistenceErrorV1::ClaimLost)?;
         let status = status_from_row(&row)?;
         sqlx::query(
-            "UPDATE hermes_data.communication_delivery_intent_provider_outbox
+            "UPDATE makosh_data.communication_delivery_intent_provider_outbox
              SET published_at_unix_seconds = $1
              WHERE message_id = $2 AND published_at_unix_seconds IS NULL",
         )
@@ -344,7 +344,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
             .map_err(|_| DeliveryIntentPersistenceErrorV1::StorageUnavailable)?;
         let existing = sqlx::query(
             "SELECT envelope_sha256, logical_owner_id, intent_id, command_message_id
-             FROM hermes_data.communication_delivery_intent_result_inbox
+             FROM makosh_data.communication_delivery_intent_result_inbox
              WHERE message_id = $1
              FOR UPDATE",
         )
@@ -386,7 +386,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
         }
         let command_exists = sqlx::query_scalar::<_, i32>(
             "SELECT 1
-             FROM hermes_data.communication_delivery_intent_provider_outbox
+             FROM makosh_data.communication_delivery_intent_provider_outbox
              WHERE message_id = $1 AND logical_owner_id = $2 AND intent_id = $3
                AND published_at_unix_seconds IS NOT NULL",
         )
@@ -418,7 +418,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
             ),
         };
         let row = sqlx::query(
-            "UPDATE hermes_data.communication_delivery_intent_jobs
+            "UPDATE makosh_data.communication_delivery_intent_jobs
              SET state = $1,
                  state_revision = state_revision + 1,
                  provider_operation_id = $2,
@@ -451,7 +451,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
         )
         .await?;
         sqlx::query(
-            "INSERT INTO hermes_data.communication_delivery_intent_result_inbox (
+            "INSERT INTO makosh_data.communication_delivery_intent_result_inbox (
                message_id, envelope_sha256, logical_owner_id, intent_id,
                command_message_id, consumed_at_unix_seconds
              ) VALUES ($1, $2, $3, $4, $5, $6)",
@@ -497,7 +497,7 @@ async fn status_in_transaction(
     let row = sqlx::query(
         "SELECT intent_id, state, state_revision,
                 provider_operation_id, rejection_code
-         FROM hermes_data.communication_delivery_intent_jobs
+         FROM makosh_data.communication_delivery_intent_jobs
          WHERE logical_owner_id = $1 AND intent_id = $2",
     )
     .bind(logical_owner_id)

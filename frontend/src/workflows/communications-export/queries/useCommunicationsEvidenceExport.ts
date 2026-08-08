@@ -1,6 +1,6 @@
 import { computed, onUnmounted, ref, watch, type ComputedRef } from 'vue'
 
-import { EvidenceExportStatusV1 } from '../../../gen/hermes/communications_export/v1/export_pb'
+import { EvidenceExportStatusV1 } from '../../../gen/makosh/communications_export/v1/export_pb'
 import { downloadBytesFile } from '../../../shared/file/downloadBytes'
 import {
 	getCommunicationsEvidenceExportStatus,
@@ -141,7 +141,7 @@ export function useCommunicationsEvidenceExport(
 		try {
 			const bytes = await readCommunicationsEvidenceExport(exportId.value)
 			downloadBytesFile(
-				`hermes-communications-evidence-${bytesKey(exportId.value).slice(0, 12)}.jsonl`,
+				`makosh-communications-evidence-${bytesKey(exportId.value).slice(0, 12)}.jsonl`,
 				bytes,
 				'application/x-ndjson',
 			)

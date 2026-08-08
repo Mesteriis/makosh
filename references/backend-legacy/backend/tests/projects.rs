@@ -1,26 +1,26 @@
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::Utc;
 use serde_json::json;
 use sqlx::postgres::PgPool;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::domains::communications::messages::projection::project_raw_email_message;
-use hermes_hub_backend::domains::communications::messages::store::MessageProjectionStore;
-use hermes_hub_backend::domains::documents::core::{
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::domains::communications::messages::projection::project_raw_email_message;
+use makosh_hub_backend::domains::communications::messages::store::MessageProjectionStore;
+use makosh_hub_backend::domains::documents::core::{
     models::NewDocumentImport, store::DocumentImportStore,
 };
-use hermes_hub_backend::domains::personas::api::store::PersonaProjectionStore;
-use hermes_hub_backend::domains::projects::core::{models::NewProject, store::ProjectStore};
-use hermes_hub_backend::domains::projects::link_reviews::{
+use makosh_hub_backend::domains::personas::api::store::PersonaProjectionStore;
+use makosh_hub_backend::domains::projects::core::{models::NewProject, store::ProjectStore};
+use makosh_hub_backend::domains::projects::link_reviews::{
     models::{ProjectLinkReviewCommand, ProjectLinkReviewState, ProjectLinkTargetKind},
     store::ProjectLinkReviewStore,
 };
 
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::storage::database::Database;
 
 #[tokio::test]
 async fn project_detail_links_keyword_messages_documents_and_personas_against_postgres() {

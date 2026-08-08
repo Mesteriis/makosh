@@ -4,7 +4,7 @@ import { storybookLocaleFromGlobals } from './storybook-i18n'
 import { generalStoryCopy } from './general-story-copy'
 
 const meta = {
-	title: 'Hermes UI/General/Toggle Group',
+	title: 'Макошь UI/General/Toggle Group',
 	component: ToggleGroup,
 	render: (_args, context) => ({
 		components: { ToggleGroup },
@@ -29,7 +29,7 @@ const meta = {
 					<ToggleGroup v-model="selectedMany" multiple :aria-label="copy.controls.toggleGroup" :items="copy.toggles" />
 					<ToggleGroup
 						v-model="selectedLanguage"
-						class="hermes-toggle-group--tabs"
+						class="makosh-toggle-group--tabs"
 						aria-label="Language"
 						:items="languages"
 					/>

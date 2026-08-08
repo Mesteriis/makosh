@@ -8,34 +8,34 @@ use std::io::Write;
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::v1::StorageBundleV1;
-use hermes_storage_protocol::validation::validate_storage_bundle;
-use hermes_telegram_automation_persistence::schema::{
+use makosh_storage_protocol::v1::StorageBundleV1;
+use makosh_storage_protocol::validation::validate_storage_bundle;
+use makosh_telegram_automation_persistence::schema::{
     TELEGRAM_AUTOMATION_STORAGE_REVISION_V1, telegram_automation_storage_migration_v1,
 };
-use hermes_telegram_calls_persistence::{
+use makosh_telegram_calls_persistence::{
     TELEGRAM_CALLS_STORAGE_REVISION_V1, TELEGRAM_CALLS_STORAGE_REVISION_V2,
     TELEGRAM_CALLS_STORAGE_REVISION_V3, TELEGRAM_CALLS_STORAGE_REVISION_V4,
     TELEGRAM_CALLS_STORAGE_REVISION_V5, telegram_calls_storage_migration_v1,
     telegram_calls_storage_migration_v2, telegram_calls_storage_migration_v3,
     telegram_calls_storage_migration_v4, telegram_calls_storage_migration_v5,
 };
-use hermes_telegram_persistence::{
+use makosh_telegram_persistence::{
     TELEGRAM_DELIVERY_INTENT_STORAGE_REVISION_V1, TELEGRAM_DELIVERY_ROUTE_STORAGE_REVISION_V1,
     telegram_delivery_intent_storage_migration_v1, telegram_delivery_route_storage_migration_v1,
     telegram_storage_bundle_v1,
 };
-use hermes_telegram_runtime::admission::telegram_module_descriptor_v1;
-use hermes_telegram_runtime::settings::telegram_settings_schema_v1;
+use makosh_telegram_runtime::admission::telegram_module_descriptor_v1;
+use makosh_telegram_runtime::settings::telegram_settings_schema_v1;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
 pub const TELEGRAM_ASSEMBLY_FRAGMENT_VERSION_V1: u32 = 1;
 pub const TELEGRAM_ASSEMBLY_OWNER_ID: &str = "telegram";
-pub const TELEGRAM_ASSEMBLY_MODULE_ID: &str = "hermes-telegram-runtime";
+pub const TELEGRAM_ASSEMBLY_MODULE_ID: &str = "makosh-telegram-runtime";
 pub const TELEGRAM_RUNTIME_ARTIFACT_ID: &str = "telegram.runtime.v1";
 pub const TELEGRAM_STORAGE_ARTIFACT_ID: &str = "telegram.storage.v1";
 pub const TELEGRAM_TDJSON_ARTIFACT_ID: &str = "telegram.tdjson.v1";
@@ -53,12 +53,12 @@ pub const TELEGRAM_SETTINGS_FILE: &str = "telegram.runtime.settings.pb";
 pub const TELEGRAM_STORAGE_BUNDLE_FILE: &str = "telegram.storage.bundle.pb";
 pub const TELEGRAM_ARTIFACT_FRAGMENT_FILE: &str = "telegram.release-artifacts.json";
 
-const TELEGRAM_RUNTIME_RELATIVE_PATH: &str = "bin/hermes-telegram-runtime";
+const TELEGRAM_RUNTIME_RELATIVE_PATH: &str = "bin/makosh-telegram-runtime";
 const TELEGRAM_DESCRIPTOR_RELATIVE_PATH: &str = "contracts/telegram.runtime.descriptor.pb";
 const TELEGRAM_SETTINGS_RELATIVE_PATH: &str = "contracts/telegram.runtime.settings.pb";
 const TELEGRAM_STORAGE_RELATIVE_PATH: &str = "storage/telegram.storage.bundle.pb";
 const TELEGRAM_TDJSON_RELATIVE_PATH: &str = "lib/libtdjson.dylib";
-const TELEGRAM_TGCALLS_RELATIVE_PATH: &str = "lib/libhermes_tgcalls_bridge.dylib";
+const TELEGRAM_TGCALLS_RELATIVE_PATH: &str = "lib/libmakosh_tgcalls_bridge.dylib";
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -406,7 +406,7 @@ mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 
     use super::*;
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         decode_descriptor_v1, decode_settings_schema_v1,
     };
 
@@ -417,7 +417,7 @@ mod tests {
         let root = temporary_directory();
         let runtime = root.join("runtime");
         let tdjson = root.join("libtdjson.dylib");
-        let tgcalls = root.join("libhermes_tgcalls_bridge.dylib");
+        let tgcalls = root.join("libmakosh_tgcalls_bridge.dylib");
         fs::write(&runtime, b"runtime").expect("runtime fixture");
         fs::write(&tdjson, b"tdjson").expect("TDJson fixture");
         fs::write(&tgcalls, b"tgcalls").expect("tgcalls fixture");
@@ -499,7 +499,7 @@ mod tests {
         let root = temporary_directory();
         let runtime = root.join("runtime");
         let tdjson = root.join("libtdjson.dylib");
-        let tgcalls = root.join("libhermes_tgcalls_bridge.dylib");
+        let tgcalls = root.join("libmakosh_tgcalls_bridge.dylib");
         fs::write(&runtime, b"runtime").expect("runtime fixture");
         fs::write(&tdjson, b"tdjson").expect("TDJson fixture");
         fs::write(&tgcalls, b"tgcalls").expect("tgcalls fixture");
@@ -554,7 +554,7 @@ mod tests {
         let root = temporary_directory();
         let runtime = root.join("runtime");
         let tdjson = root.join("libtdjson.dylib");
-        let tgcalls = root.join("libhermes_tgcalls_bridge.dylib");
+        let tgcalls = root.join("libmakosh_tgcalls_bridge.dylib");
         let empty_tdjson = root.join("empty-libtdjson.dylib");
         let runtime_link = root.join("runtime-link");
         fs::write(&runtime, b"runtime").expect("runtime fixture");
@@ -610,7 +610,7 @@ mod tests {
     fn temporary_directory() -> PathBuf {
         let id = NEXT_TEMPORARY_ID.fetch_add(1, Ordering::Relaxed);
         let path = std::env::temp_dir().join(format!(
-            "hermes-telegram-assembly-{}-{id}",
+            "makosh-telegram-assembly-{}-{id}",
             std::process::id()
         ));
         fs::create_dir(&path).expect("create fixture root");

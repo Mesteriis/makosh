@@ -4,7 +4,7 @@ import { storybookLocaleFromGlobals } from './storybook-i18n'
 import { generalStoryCopy } from './general-story-copy'
 
 const meta = {
-	title: 'Hermes UI/General/Checkbox',
+	title: 'Макошь UI/General/Checkbox',
 	component: Checkbox,
 	render: (_args, context) => ({
 		components: { Checkbox, FormField },

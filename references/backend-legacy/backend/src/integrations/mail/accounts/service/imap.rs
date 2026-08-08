@@ -1,5 +1,5 @@
-use hermes_communications_api::accounts::NewProviderAccount;
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::NewProviderAccount;
+use makosh_communications_api::accounts::{
     NewProviderAccountSecretBinding, ProviderAccountSecretPurpose,
 };
 

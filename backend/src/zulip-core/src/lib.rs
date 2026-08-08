@@ -1,16 +1,16 @@
 //! Zulip-specific anti-corruption mapper. No transport or domain implementation dependency.
 
-use hermes_communications_ingress::{
+use makosh_communications_ingress::{
     AttachmentDescriptorV1, AttachmentDispositionV1, BodyAvailabilityV1, CommunicationDirectionV1,
     CommunicationEvidenceKindV1, CommunicationObservationDraft, ProviderProvenanceV1,
     SourceEnvelope, SourceScopeEnvelope, new_scoped_communication_observation_draft,
 };
-use hermes_vault_protocol::{
+use makosh_vault_protocol::{
     DEFAULT_LEASE_TTL_SECONDS, SecretClassV1, VaultActionV1, VaultPurposeRequestV1,
 };
-use hermes_zulip_api::{ZulipAttachmentV1, ZulipEventV1};
+use makosh_zulip_api::{ZulipAttachmentV1, ZulipEventV1};
 
-pub const PACKAGE: &str = "hermes-zulip-core";
+pub const PACKAGE: &str = "makosh-zulip-core";
 pub const ZULIP_API_KEY_PURPOSE_ID: &str = "zulip_api_key";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -21,8 +21,8 @@ pub enum ZulipCoreError {
 
 #[cfg(test)]
 mod attachment_tests {
-    use hermes_communications_ingress::CommunicationEvidenceKindV1;
-    use hermes_zulip_api::{ZulipAttachmentV1, ZulipEventV1, operational::ZulipConversationKindV1};
+    use makosh_communications_ingress::CommunicationEvidenceKindV1;
+    use makosh_zulip_api::{ZulipAttachmentV1, ZulipEventV1, operational::ZulipConversationKindV1};
 
     use super::observation_drafts;
 
@@ -236,7 +236,7 @@ fn attachment_draft(
         .as_ref()
         .filter(|value| !value.is_empty() && value.is_ascii())
         .cloned();
-    hermes_communications_ingress::with_attachment_descriptor(
+    makosh_communications_ingress::with_attachment_descriptor(
         draft,
         AttachmentDescriptorV1 {
             filename,
@@ -298,7 +298,7 @@ mod tests {
             event_id: 1,
             provider_message_id: "m".into(),
             provider_conversation_id: "s:t".into(),
-            conversation_kind: hermes_zulip_api::operational::ZulipConversationKindV1::StreamTopic,
+            conversation_kind: makosh_zulip_api::operational::ZulipConversationKindV1::StreamTopic,
             stream_id: Some("1".into()),
             stream_name: None,
             topic: Some("t".into()),
@@ -324,7 +324,7 @@ mod tests {
             event_id: 2,
             provider_message_id: "m".into(),
             provider_conversation_id: "s:t".into(),
-            conversation_kind: hermes_zulip_api::operational::ZulipConversationKindV1::StreamTopic,
+            conversation_kind: makosh_zulip_api::operational::ZulipConversationKindV1::StreamTopic,
             stream_id: Some("1".into()),
             stream_name: None,
             topic: Some("t".into()),

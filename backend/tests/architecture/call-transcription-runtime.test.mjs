@@ -17,7 +17,7 @@ test('call transcription runtime is an event-only workflow with SSE metadata and
       read('backend/src/call-transcription-runtime/src/stt.rs'),
       read('backend/src/call-transcription-runtime/src/client_realtime.rs'),
       read('backend/src/call-transcription-runtime/src/client_port.rs'),
-      read('backend/src/platform/runtime_protocol/proto/hermes/runtime/v1/module_client.proto'),
+      read('backend/src/platform/runtime_protocol/proto/makosh/runtime/v1/module_client.proto'),
       read('docs/adr/ADR-0395-authenticated-client-session-binding-in-managed-module-transport.md'),
     ]);
   const policy = JSON.parse(policySource);
@@ -26,18 +26,18 @@ test('call transcription runtime is an event-only workflow with SSE metadata and
   );
 
   assert.equal(policy.implementation.currentSlice, 'call_transcription_managed_conformance_v1');
-  assert.deepEqual(packages.get('hermes-call-transcription-runtime'), {
-    name: 'hermes-call-transcription-runtime',
+  assert.deepEqual(packages.get('makosh-call-transcription-runtime'), {
+    name: 'makosh-call-transcription-runtime',
     role: 'workflow',
     owner: 'call_transcription',
     surface: 'runtime',
   });
-  assert.match(manifest, /\[\[bin\]\][\s\S]*hermes-call-transcription-runtime/);
-  assert.match(manifest, /hermes-call-transcription-ingress/);
-  assert.match(manifest, /hermes-speech-to-text-api/);
+  assert.match(manifest, /\[\[bin\]\][\s\S]*makosh-call-transcription-runtime/);
+  assert.match(manifest, /makosh-call-transcription-ingress/);
+  assert.match(manifest, /makosh-speech-to-text-api/);
   assert.doesNotMatch(
     manifest,
-    /hermes-communications|hermes-desktop-call-recording-(?:core|runtime)|hermes-speech-to-text-(?:core|runtime)|hermes-whisper/,
+    /makosh-communications|makosh-desktop-call-recording-(?:core|runtime)|makosh-speech-to-text-(?:core|runtime)|makosh-whisper/,
   );
 
   for (const required of [

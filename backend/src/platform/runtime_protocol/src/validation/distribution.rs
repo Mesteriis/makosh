@@ -262,7 +262,7 @@ mod tests {
         let mut manifest = DistributionManifestV1 {
             major: 1,
             revision: 1,
-            distribution_id: "hermes-desktop".to_owned(),
+            distribution_id: "makosh-desktop".to_owned(),
             release_version: "1.0.0".to_owned(),
             build_id: "build-1".to_owned(),
             target_triple: "aarch64-apple-darwin".to_owned(),
@@ -274,7 +274,7 @@ mod tests {
                 size_bytes: 1,
                 sha256: vec![7; 32],
                 required: true,
-                bound_module_id: "hermes-telegram-runtime".to_owned(),
+                bound_module_id: "makosh-telegram-runtime".to_owned(),
                 ..Default::default()
             }],
         };
@@ -294,11 +294,11 @@ mod tests {
         manifest.artifacts[0].bound_module_id.clear();
         assert!(validate_distribution_manifest_v1(&manifest).is_err());
 
-        manifest.artifacts[0].bound_module_id = "Hermes Telegram".to_owned();
+        manifest.artifacts[0].bound_module_id = "Макошь Telegram".to_owned();
         assert!(validate_distribution_manifest_v1(&manifest).is_err());
 
         manifest.artifacts[0].artifact_kind = DistributionArtifactKindV1::BrowserClientAsset as i32;
-        manifest.artifacts[0].bound_module_id = "hermes-telegram-runtime".to_owned();
+        manifest.artifacts[0].bound_module_id = "makosh-telegram-runtime".to_owned();
         assert!(validate_distribution_manifest_v1(&manifest).is_err());
     }
 }

@@ -1,5 +1,5 @@
 [package]
-name = "hermes-communications-postgres"
+name = "makosh-communications-postgres"
 publish = false
 version = "0.1.0"
 edition = "2024"
@@ -9,11 +9,11 @@ license = "MIT"
 [dependencies]
 async-trait = "0.1"
 chrono = { version = "0.4", default-features = false, features = ["clock", "serde"] }
-hermes-communications-api = { path = "../communications-api" }
-hermes-events-api = { path = "../events-api" }
-hermes-events-postgres = { path = "../events-postgres" }
-hermes-observations-api = { path = "../observations-api" }
-hermes-observations-postgres = { path = "../observations-postgres" }
+makosh-communications-api = { path = "../communications-api" }
+makosh-events-api = { path = "../events-api" }
+makosh-events-postgres = { path = "../events-postgres" }
+makosh-observations-api = { path = "../observations-api" }
+makosh-observations-postgres = { path = "../observations-postgres" }
 serde_json = "1"
 sqlx = { version = "0.8", default-features = false, features = ["chrono", "json", "postgres", "runtime-tokio-rustls"] }
 thiserror = "2"

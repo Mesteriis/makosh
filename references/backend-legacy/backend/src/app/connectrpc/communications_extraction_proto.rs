@@ -1,5 +1,5 @@
 use crate::domains::communications::extract::{ExtractedNote, ExtractedTask};
-use hermes_connectrpc_contracts::hermes::communications::v1::{
+use makosh_connectrpc_contracts::makosh::communications::v1::{
     ExtractedNote as ProtoExtractedNote, ExtractedTask as ProtoExtractedTask,
 };
 

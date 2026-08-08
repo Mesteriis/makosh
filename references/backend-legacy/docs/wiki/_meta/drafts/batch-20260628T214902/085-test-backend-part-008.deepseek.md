@@ -1,6 +1,6 @@
 ### Summary / Резюме
 
-Создать страницу `operations/backend-tests.md`, описывающую организацию, архитектурные ограничения и ключевые интеграционные тесты backend-части проекта `hermes-hub`. Документация основывается исключительно на встроенных в контекст файлах тестов (Rust, `tokio::test` и синхронные тесты). Страница фиксирует покрытые области, архитектурные правила (максимальное количество строк в тестовых файлах), а также поведение, подтверждённое в конкретных тестовых функциях.
+Создать страницу `operations/backend-tests.md`, описывающую организацию, архитектурные ограничения и ключевые интеграционные тесты backend-части проекта `makosh`. Документация основывается исключительно на встроенных в контекст файлах тестов (Rust, `tokio::test` и синхронные тесты). Страница фиксирует покрытые области, архитектурные правила (максимальное количество строк в тестовых файлах), а также поведение, подтверждённое в конкретных тестовых функциях.
 
 ### Proposed pages / Предлагаемые страницы
 
@@ -11,7 +11,7 @@
 
 ## Обзор
 
-Тесты backend-части `hermes-hub` написаны на Rust с использованием фреймворка `tokio::test` для асинхронных тестов и `#[test]` для синхронных. Интеграционные тесты поднимают изолированный экземпляр PostgreSQL через `testkit::context::TestContext`, а для внешних интеграций (Ollama, OmniRoute) используются подставные HTTP-сервера (`axum`).
+Тесты backend-части `makosh` написаны на Rust с использованием фреймворка `tokio::test` для асинхронных тестов и `#[test]` для синхронных. Интеграционные тесты поднимают изолированный экземпляр PostgreSQL через `testkit::context::TestContext`, а для внешних интеграций (Ollama, OmniRoute) используются подставные HTTP-сервера (`axum`).
 
 Архитектурные тесты проверяют соблюдение ограничения: **ни один файл с тестами для определённого домена не должен превышать 700 строк**. Это правило реализовано для групп `messages` и `person_identity`.
 
@@ -118,8 +118,8 @@
 - **`ollama_client_round_trips_chat_embed_tags_and_version`**
   - `version()` возвращает `"0.17.4"`.
   - `tags()` содержит обе модели.
-  - `chat("Return exactly: hermes-ai-ok")` возвращает `content = "hermes-ai-ok"`.
-  - `embed("Hermes Hub memory retrieval")` возвращает вектор размером 2560.
+  - `chat("Return exactly: makosh-ai-ok")` возвращает `content = "makosh-ai-ok"`.
+  - `embed("Макошь memory retrieval")` возвращает вектор размером 2560.
 - **`ollama_client_strips_qwen_thinking_blocks_from_chat_content`** – контент ответа, содержащий `<think>...</think>`, очищается до `"Final cited answer."`.
 - **`ollama_client_reports_missing_models_and_malformed_json`**
   - При отсутствии моделей в `tags` – ошибка `OllamaError::MissingModel`.
@@ -132,8 +132,8 @@
 - **`omniroute_client_round_trips_openai_compatible_models_chat_and_embeddings`**
   - `models()` содержит `codex/gpt-5.5` и `openai-compatible-chat-ollama-pve/qwen3-embedding:4b`.
   - `validate_required_models()` успешен.
-  - `chat("Return exactly: hermes-omniroute-ok")` возвращает `content = "hermes-omniroute-ok"` (после удаления `<think>` блоков).
-  - `embed("Hermes Hub source-backed retrieval")` возвращает вектор размером 2560.
+  - `chat("Return exactly: makosh-omniroute-ok")` возвращает `content = "makosh-omniroute-ok"` (после удаления `<think>` блоков).
+  - `embed("Макошь source-backed retrieval")` возвращает вектор размером 2560.
 - **`omniroute_client_reports_auth_missing_models_and_malformed_json`**
   - Неавторизованный запрос (401) – `OmniRouteError::Endpoint { status: 401 }`.
   - Отсутствие моделей – `OmniRouteError::MissingModel`.
@@ -143,7 +143,7 @@
 
 Файл обрезан после 12000 символов; тесты используют общий токен `"orgs-test-token"`.
 
-- **`orgs_auth_reject`** – запрос без заголовка `x-hermes-secret` возвращает `403 FORBIDDEN`.
+- **`orgs_auth_reject`** – запрос без заголовка `x-makosh-secret` возвращает `403 FORBIDDEN`.
 - **`orgs_crud`** – создание, получение, обновление и архивирование организации. Проверяются статусы ответов.
 - **`orgs_list`** – `GET /api/v1/organizations` возвращает успешный ответ.
 - **`orgs_search`** – `GET /api/v1/organizations/search?q=test` возвращает успешный ответ.
@@ -188,55 +188,55 @@
 
 ### Source coverage / Покрытие источников
 
-- **`backend/tests/messages/workflow.rs`**  
+- **`backend/tests/messages/workflow.rs`**
   — парсинг/валидация строк `WorkflowState`; раундтрип `as_str() -> parse()`; допустимые/недопустимые переходы; сериализация/десериализация `WorkflowState` и `WorkflowStateCount`; интеграционные тесты переходов состояний сообщения в PostgreSQL; подсчёт сообщений по состояниям; фильтрация списка сообщений по `WorkflowState`.
 
-- **`backend/tests/messages_architecture.rs`**  
+- **`backend/tests/messages_architecture.rs`**
   — архитектурный тест: ни один файл тестов сообщений не превышает 700 строк.
 
-- **`backend/tests/obligation_engine.rs`**  
+- **`backend/tests/obligation_engine.rs`**
   — обнаружение commitment из коммуникации (поля statement, quote, due_text, confidence, review_state, сущности); обнаружение request без автоподтверждения; игнорирование дедлайна без маркеров обязательства; отклонение пустого source_id.
 
-- **`backend/tests/obligations.rs`** (truncated)  
+- **`backend/tests/obligations.rs`** (truncated)
   — upsert обязательства с evidence (поля, перезапись свидетельства, отсутствие связей с задачами); проекция графа с узлами и рёбрами, graph evidence; ошибки при отсутствии evidence, некорректном confidence, частичном beneficiary.
 
-- **`backend/tests/obligations_api.rs`**  
+- **`backend/tests/obligations_api.rs`**
   — `GET /api/v1/obligations` с фильтрацией по entity и review_state; `PUT .../review` с созданием observation-link, review_item и observation (origin manual).
 
-- **`backend/tests/observations.rs`** (truncated)  
+- **`backend/tests/observations.rs`** (truncated)
   — захват manual observation (поля, событие в event_log); append-only характер (блокировка UPDATE/DELETE, моделирование удаления новым наблюдением); связи и ingestion runs; канонические коды видов наблюдений.
 
-- **`backend/tests/ollama.rs`**  
+- **`backend/tests/ollama.rs`**
   — round-trip клиента Ollama (version, tags, chat, embed); удаление блоков `<think>`; ошибки при отсутствии моделей и невалидном JSON.
 
-- **`backend/tests/omniroute.rs`**  
+- **`backend/tests/omniroute.rs`**
   — round-trip клиента OmniRoute (models, chat, embed размер 2560); ошибки 401, MissingModel, Protocol.
 
-- **`backend/tests/organizations_api.rs`** (truncated)  
+- **`backend/tests/organizations_api.rs`** (truncated)
   — авторизация (403); CRUD (create, get, update, archive); list, search, 404; sub-resource endpoints (21 штука) без 5xx; enrichment apply создаёт observation link; создание identity, alias, department; watchlist toggle; фиксация observation при ручных действиях.
 
-- **`backend/tests/person_identity.rs`**  
+- **`backend/tests/person_identity.rs`**
   — объявление подмодулей (events, merge_split, refresh_ordering, support).
 
-- **`backend/tests/person_identity/events.rs`**  
+- **`backend/tests/person_identity/events.rs`**
   — подавление кандидата после reject; восстановление состояния через apply_review_event (последний reject выигрывает).
 
-- **`backend/tests/person_identity/merge_split.rs`**  
+- **`backend/tests/person_identity/merge_split.rs`**
   — создание merge_persons кандидата; подтверждение без удаления persons; появление split_person кандидата после подтверждения merge; удаление merge из detail после подтверждения split.
 
-- **`backend/tests/person_identity/refresh_ordering.rs`**  
+- **`backend/tests/person_identity/refresh_ordering.rs`**
   — сохранение updated_at существующего split-кандидата при генерации следующего.
 
-- **`backend/tests/person_identity/support.rs`**  
+- **`backend/tests/person_identity/support.rs`**
   — вспомогательные функции (контекст, посев имён, подтверждение/промоут/aging кандидатов, проверка существования, построение ID, события).
 
-- **`backend/tests/person_identity_api.rs`** (truncated)  
+- **`backend/tests/person_identity_api.rs`** (truncated)
   — отклонение без токена; содержимое ответа GET кандидатов (поля, review_item, observation PERSON_IDENTITY_CANDIDATE); split-кандидат после confirmed merge; PUT review подтверждение.
 
-- **`backend/tests/person_identity_architecture.rs`**  
+- **`backend/tests/person_identity_architecture.rs`**
   — архитектурный тест: ограничение 700 строк для файлов person_identity.
 
-- **`backend/tests/persons.rs`**  
+- **`backend/tests/persons.rs`**
   — объявление подмодулей (health_dossier, identities, memory_preferences, projection, relationships, support) без раскрытия содержимого.
 
 ### Drift candidates / Кандидаты на drift

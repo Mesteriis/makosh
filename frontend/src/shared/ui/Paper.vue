@@ -23,12 +23,12 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-paper',
-	`hermes-paper--${props.tone}`,
-	`hermes-paper--padding-${props.padding}`,
-	`hermes-paper--radius-${props.radius}`,
-	props.bordered && 'hermes-paper--bordered',
-	props.clip && 'hermes-paper--clip',
+	'makosh-paper',
+	`makosh-paper--${props.tone}`,
+	`makosh-paper--padding-${props.padding}`,
+	`makosh-paper--radius-${props.radius}`,
+	props.bordered && 'makosh-paper--bordered',
+	props.clip && 'makosh-paper--clip',
 	props.class
 ])
 </script>

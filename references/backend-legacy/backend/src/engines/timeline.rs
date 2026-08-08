@@ -1,4 +1,4 @@
-use hermes_events_api::StoredEventEnvelope;
+use makosh_events_api::StoredEventEnvelope;
 mod analysis;
 mod cross_domain;
 pub mod errors;
@@ -11,8 +11,8 @@ mod validation;
 
 use chrono::{DateTime, Utc};
 
-use hermes_events_postgres::cursors::ProjectionCursorStore;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::cursors::ProjectionCursorStore;
+use makosh_events_postgres::store::EventStore;
 
 use self::errors::{TimelineEngineError, TimelineProjectionError};
 use self::models::{

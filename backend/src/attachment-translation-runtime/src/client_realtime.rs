@@ -1,15 +1,15 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_attachment_translation_api::wire::AttachmentTranslationArtifactV1 as WireArtifact;
-use hermes_attachment_translation_api::{
+use makosh_attachment_translation_api::wire::AttachmentTranslationArtifactV1 as WireArtifact;
+use makosh_attachment_translation_api::{
     ATTACHMENT_TRANSLATION_REALTIME_EVENT_KIND_V1, wire::AttachmentTranslationStatusChangedV1,
 };
-use hermes_attachment_translation_core::AttachmentTranslationArtifactV1;
-use hermes_attachment_translation_core::AttachmentTranslationStateV1;
-use hermes_attachment_translation_persistence::{
+use makosh_attachment_translation_core::AttachmentTranslationArtifactV1;
+use makosh_attachment_translation_core::AttachmentTranslationStateV1;
+use makosh_attachment_translation_persistence::{
     AttachmentTranslationPersistenceErrorV1, AttachmentTranslationPersistenceV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeClientRealtimePublishRequestV1, ManagedRuntimeControlRequestV1,
@@ -143,7 +143,7 @@ fn event_id(run_id: [u8; 16], state_revision: u64) -> [u8; 16] {
 
 #[cfg(test)]
 mod tests {
-    use hermes_attachment_translation_core::{
+    use makosh_attachment_translation_core::{
         AttachmentTranslationArtifactV1, AttachmentTranslationCompletenessV1,
         AttachmentTranslationDetectedLanguageV1, AttachmentTranslationLanguageV1,
         AttachmentTranslationStateV1,

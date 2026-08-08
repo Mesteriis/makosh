@@ -1,4 +1,4 @@
-use hermes_telegram_calls_core::{
+use makosh_telegram_calls_core::{
     TelegramCallDirection, TelegramCallDiscardReason, TelegramCallFailureCategory,
     TelegramCallProjectionError, TelegramCallSession, TelegramProviderCallState,
     TelegramProviderCallUpdate, project_provider_call_update,
@@ -64,12 +64,12 @@ impl TelegramCallsPersistence {
         &self,
     ) -> Result<(), TelegramCallsPersistenceError> {
         sqlx::raw_sql(
-            "DROP SCHEMA IF EXISTS hermes_data CASCADE;
-             CREATE SCHEMA hermes_data;
-             CREATE TABLE hermes_data.telegram_accounts (
+            "DROP SCHEMA IF EXISTS makosh_data CASCADE;
+             CREATE SCHEMA makosh_data;
+             CREATE TABLE makosh_data.telegram_accounts (
                  account_id TEXT PRIMARY KEY
              );
-             INSERT INTO hermes_data.telegram_accounts (account_id) VALUES ('account-1');",
+             INSERT INTO makosh_data.telegram_accounts (account_id) VALUES ('account-1');",
         )
         .execute(&self.pool)
         .await
@@ -175,7 +175,7 @@ impl TelegramCallsPersistence {
         persist_history(&mut transaction, &projected.session).await?;
         persist_legacy_frame(&mut transaction, &projected.session).await?;
         let event_sequence: i64 = sqlx::query_scalar(
-            "INSERT INTO hermes_data.telegram_call_realtime_events (\
+            "INSERT INTO makosh_data.telegram_call_realtime_events (\
              account_id, event_kind, call_session_id, call_revision, local_muted, \
              observed_at_unix_seconds\
              ) VALUES ($1, 'call', $2, $3, FALSE, $4) RETURNING event_sequence",
@@ -315,7 +315,7 @@ impl TelegramCallsPersistence {
              provider_call_unique_id, provider_user_id, direction, provider_state, \
              pending_created, pending_received, discard_reason, failure_category, revision, \
              created_at_unix_seconds, updated_at_unix_seconds, ended_at_unix_seconds \
-             FROM hermes_data.telegram_call_sessions \
+             FROM makosh_data.telegram_call_sessions \
              WHERE account_id = $1 AND call_session_id = $2",
         )
         .bind(account_id)
@@ -337,7 +337,7 @@ impl TelegramCallsPersistence {
              provider_call_unique_id, provider_user_id, direction, provider_state, \
              pending_created, pending_received, discard_reason, failure_category, revision, \
              created_at_unix_seconds, updated_at_unix_seconds, ended_at_unix_seconds \
-             FROM hermes_data.telegram_call_sessions \
+             FROM makosh_data.telegram_call_sessions \
              WHERE account_id = $1 AND runtime_generation = $2 AND tdlib_call_id = $3",
         )
         .bind(account_id)
@@ -358,7 +358,7 @@ impl TelegramCallsPersistence {
              provider_call_unique_id, provider_user_id, direction, provider_state, \
              pending_created, pending_received, discard_reason, failure_category, revision, \
              created_at_unix_seconds, updated_at_unix_seconds, ended_at_unix_seconds \
-             FROM hermes_data.telegram_call_sessions \
+             FROM makosh_data.telegram_call_sessions \
              WHERE account_id = $1 AND provider_state NOT IN ('discarded', 'error') \
              ORDER BY created_at_unix_seconds DESC, call_session_id DESC LIMIT 1",
         )
@@ -381,7 +381,7 @@ impl TelegramCallsPersistence {
              provider_call_unique_id, provider_user_id, direction, provider_state, \
              pending_created, pending_received, discard_reason, failure_category, revision, \
              created_at_unix_seconds, updated_at_unix_seconds, ended_at_unix_seconds \
-             FROM hermes_data.telegram_call_sessions \
+             FROM makosh_data.telegram_call_sessions \
              WHERE account_id = $1 AND ($2 = '' OR call_session_id > $2) \
              ORDER BY call_session_id ASC LIMIT $3",
         )
@@ -415,7 +415,7 @@ async fn load_for_update(
          provider_call_unique_id, provider_user_id, direction, provider_state, \
          pending_created, pending_received, discard_reason, failure_category, revision, \
          created_at_unix_seconds, updated_at_unix_seconds, ended_at_unix_seconds \
-         FROM hermes_data.telegram_call_sessions \
+         FROM makosh_data.telegram_call_sessions \
          WHERE account_id = $1 AND ( \
            (runtime_generation = $2 AND tdlib_call_id = $3) OR \
            ($4::BIGINT IS NOT NULL AND provider_call_unique_id = $4) \
@@ -451,7 +451,7 @@ async fn persist_session(
 
     if let Some(current) = current {
         let result = sqlx::query(
-            "UPDATE hermes_data.telegram_call_sessions SET \
+            "UPDATE makosh_data.telegram_call_sessions SET \
              provider_call_unique_id = $1, provider_state = $2, pending_created = $3, \
              pending_received = $4, discard_reason = $5, failure_category = $6, revision = $7, \
              updated_at_unix_seconds = $8, ended_at_unix_seconds = $9 \
@@ -476,7 +476,7 @@ async fn persist_session(
         }
     } else {
         sqlx::query(
-            "INSERT INTO hermes_data.telegram_call_sessions ( \
+            "INSERT INTO makosh_data.telegram_call_sessions ( \
              call_session_id, account_id, runtime_generation, tdlib_call_id, \
              provider_call_unique_id, provider_user_id, direction, provider_state, \
              pending_created, pending_received, discard_reason, failure_category, revision, \
@@ -511,7 +511,7 @@ async fn persist_history(
     session: &TelegramCallSession,
 ) -> Result<(), TelegramCallsPersistenceError> {
     sqlx::query(
-        "INSERT INTO hermes_data.telegram_call_state_history ( \
+        "INSERT INTO makosh_data.telegram_call_state_history ( \
          call_session_id, revision, provider_state, pending_created, pending_received, \
          discard_reason, failure_category, observed_at_unix_seconds \
          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
@@ -543,7 +543,7 @@ async fn persist_legacy_frame(
     session: &TelegramCallSession,
 ) -> Result<u64, TelegramCallsPersistenceError> {
     let row = sqlx::query(
-        "INSERT INTO hermes_data.telegram_call_realtime_frames ( \
+        "INSERT INTO makosh_data.telegram_call_realtime_frames ( \
          account_id, call_session_id, call_revision, provider_state, pending_created, \
          pending_received, discard_reason, failure_category, observed_at_unix_seconds \
          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING frame_sequence",

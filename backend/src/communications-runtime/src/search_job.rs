@@ -1,9 +1,9 @@
 //! Converts a canonical domain search decision into an owner-local durable job.
 
-use hermes_communications_domain::{
+use makosh_communications_domain::{
     CommunicationsSearchIndexDecisionV1, CommunicationsSearchIndexRejectionV1,
 };
-use hermes_communications_persistence::{
+use makosh_communications_persistence::{
     CommunicationsDerivedIndexFailureRecordV1, CommunicationsDerivedIndexFailureV1,
     CommunicationsDerivedIndexJobOperationV1, CommunicationsDerivedIndexJobV1,
     communications_derived_index_job_id_v1,
@@ -101,7 +101,7 @@ pub fn derived_index_work_from_decision_v1(
 
 #[cfg(test)]
 mod tests {
-    use hermes_communications_api::{CommunicationMessageIdV1, CommunicationObservationIdV1};
+    use makosh_communications_api::{CommunicationMessageIdV1, CommunicationObservationIdV1};
 
     use super::*;
 

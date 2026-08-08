@@ -7,7 +7,7 @@ descriptor revision 2 и settings schema revision 3 содержат незав�
 delivery command/query, Gmail credential и split event capabilities.
 Signed managed admission выдаёт outbound-only Gmail profile, runtime получает
 access token через exact Vault purpose и выполняет bounded HTTPS mutation через
-отдельный `hermes-mail-gmail` adapter. Live disposable contour доказывает
+отдельный `makosh-mail-gmail` adapter. Live disposable contour доказывает
 durable acceptance, отдельный terminal result, один provider mutation,
 idempotent duplicate, privacy boundary и exact-byte event replay в
 Communications после NATS outage. Outbound MIME attachments и frontend cutover
@@ -36,7 +36,7 @@ Kernel capability router
     ↓
 Mail managed runtime
     ↓ owner-local durable queue
-hermes-mail-gmail
+makosh-mail-gmail
     ↓ HTTPS Gmail API mutation
 Mail terminal delivery state + outbox
     ↓ exact DurableEnvelopeV1
@@ -106,7 +106,7 @@ Terminal state читается только через independently approved
 
 ### Provider and evidence boundary
 
-`hermes-mail-gmail` владеет HTTPS, Bearer authentication, Gmail JSON и
+`makosh-mail-gmail` владеет HTTPS, Bearer authentication, Gmail JSON и
 base64url RFC822 representation. Он не импортирует Mail persistence/runtime,
 Communications, Kernel, Gateway или Vault implementation.
 
@@ -182,9 +182,9 @@ Frontend не используется как proof backend admission.
 Live и regression proof:
 
 ```text
-HERMES_STORAGE_MANAGED_TEST_FILTER=managed_mail_gmail_runtime_mutates_once_and_replays_event_without_private_payload node scripts/test-authenticated-storage.mjs 1.97.0
-HERMES_STORAGE_MANAGED_TEST_FILTER=managed_mail_runtime_uses_kernel_leases_and_route_specific_admission node scripts/test-authenticated-storage.mjs 1.97.0
-HERMES_STORAGE_MANAGED_TEST_FILTER=managed_mail_runtime_accepts_then_completes_smtp_delivery_and_replays_event node scripts/test-authenticated-storage.mjs 1.97.0
+MAKOSH_STORAGE_MANAGED_TEST_FILTER=managed_mail_gmail_runtime_mutates_once_and_replays_event_without_private_payload node scripts/test-authenticated-storage.mjs 1.97.0
+MAKOSH_STORAGE_MANAGED_TEST_FILTER=managed_mail_runtime_uses_kernel_leases_and_route_specific_admission node scripts/test-authenticated-storage.mjs 1.97.0
+MAKOSH_STORAGE_MANAGED_TEST_FILTER=managed_mail_runtime_accepts_then_completes_smtp_delivery_and_replays_event node scripts/test-authenticated-storage.mjs 1.97.0
 ```
 
 ## Отклонённые варианты

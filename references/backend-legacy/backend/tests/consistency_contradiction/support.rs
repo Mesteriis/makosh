@@ -1,27 +1,27 @@
 #![allow(dead_code)]
 
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::Utc;
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::domains::communications::messages::projection::project_raw_email_message;
-use hermes_hub_backend::domains::communications::messages::provider_observation_projection::consume_accepted_signal_event;
-use hermes_hub_backend::domains::communications::messages::store::MessageProjectionStore;
-use hermes_hub_backend::domains::signal_hub::telegram::dispatch_telegram_raw_signal;
-use hermes_hub_backend::domains::signal_hub::whatsapp::dispatch_whatsapp_raw_signal;
-use hermes_hub_backend::domains::signal_hub::zulip::dispatch_zulip_raw_signal;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::domains::communications::messages::projection::project_raw_email_message;
+use makosh_hub_backend::domains::communications::messages::provider_observation_projection::consume_accepted_signal_event;
+use makosh_hub_backend::domains::communications::messages::store::MessageProjectionStore;
+use makosh_hub_backend::domains::signal_hub::telegram::dispatch_telegram_raw_signal;
+use makosh_hub_backend::domains::signal_hub::whatsapp::dispatch_whatsapp_raw_signal;
+use makosh_hub_backend::domains::signal_hub::zulip::dispatch_zulip_raw_signal;
 
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_provider_orchestration::observation_to_raw_communication_record;
-use hermes_provider_zulip::event_mapper::{
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_provider_orchestration::observation_to_raw_communication_record;
+use makosh_provider_zulip::event_mapper::{
     ZulipEventMappingContext, map_zulip_event_to_observation,
 };
-use hermes_provider_zulip::models::ZulipEvent;
+use makosh_provider_zulip::models::ZulipEvent;
 use serde_json::json;
 use sqlx::postgres::PgPool;
 

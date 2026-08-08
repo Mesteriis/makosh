@@ -41,7 +41,7 @@ impl TelegramPersistenceConformanceV1 {
         message_id: &[u8; 16],
     ) -> Result<bool, TelegramDurablePersistenceError> {
         let result = sqlx::query(
-            "UPDATE hermes_data.telegram_communications_outbox \
+            "UPDATE makosh_data.telegram_communications_outbox \
              SET published_at_unix_seconds = NULL \
              WHERE message_id = $1",
         )

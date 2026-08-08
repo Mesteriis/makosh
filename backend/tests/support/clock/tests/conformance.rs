@@ -1,7 +1,7 @@
-use hermes_clock_protocol::{
+use makosh_clock_protocol::{
     ClockDiscontinuityV1, ClockPolicyV1, TimeZoneContextErrorV1, TimeZoneContextV1,
 };
-use hermes_clock_runtime::{DeterministicClockV1, SystemClockV1};
+use makosh_clock_runtime::{DeterministicClockV1, SystemClockV1};
 
 #[test]
 fn fake_clock_advances_wall_and_monotonic_time_together() {

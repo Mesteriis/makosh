@@ -20,21 +20,21 @@ test('WhatsApp host, command, status, read and replay use separate exact contrac
     await Promise.all([
       readFile(
         new URL(
-          'src/whatsapp-api/proto/hermes/whatsapp/v1/client.proto',
+          'src/whatsapp-api/proto/makosh/whatsapp/v1/client.proto',
           BACKEND_ROOT,
         ),
         'utf8',
       ),
       readFile(
         new URL(
-          'src/whatsapp-api/proto/hermes/whatsapp/operational/v1/client.proto',
+          'src/whatsapp-api/proto/makosh/whatsapp/operational/v1/client.proto',
           BACKEND_ROOT,
         ),
         'utf8',
       ),
       readFile(
         new URL(
-          'src/whatsapp-api/proto/hermes/whatsapp/operational/realtime/v1/client.proto',
+          'src/whatsapp-api/proto/makosh/whatsapp/operational/realtime/v1/client.proto',
           BACKEND_ROOT,
         ),
         'utf8',
@@ -116,7 +116,7 @@ test('WhatsApp host, command, status, read and replay use separate exact contrac
   assert.match(contracts, /"whatsapp\.operational\.realtime\.v1"/);
   assert.match(
     contracts,
-    /\/hermes\.whatsapp\.operational\.v1\.WhatsAppOperationalQueryService\/Query/,
+    /\/makosh\.whatsapp\.operational\.v1\.WhatsAppOperationalQueryService\/Query/,
   );
   assert.match(contracts, /WHATSAPP_OPERATIONAL_DESCRIPTOR_SET_V1/);
   assert.match(contracts, /WHATSAPP_OPERATIONAL_REALTIME_DESCRIPTOR_SET_V1/);

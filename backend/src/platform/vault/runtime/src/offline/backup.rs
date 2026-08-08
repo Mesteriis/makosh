@@ -2,10 +2,10 @@
 
 use std::path::Path;
 
-use hermes_secure_file::{SecureReadPolicy, read as read_secure_file};
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_store_sqlcipher::{VaultRecoveryKeyV1, VaultStore};
+use makosh_secure_file::{SecureReadPolicy, read as read_secure_file};
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_store_sqlcipher::{VaultRecoveryKeyV1, VaultStore};
 use zeroize::Zeroize;
 
 const MAX_RECOVERY_KEY_FILE_BYTES: u64 = 4096;
@@ -53,7 +53,7 @@ pub(crate) fn restore(
     Ok(())
 }
 
-fn load_wrapping_key(data_dir: &Path) -> Result<hermes_vault_key_provider::WrappingKey, String> {
+fn load_wrapping_key(data_dir: &Path) -> Result<makosh_vault_key_provider::WrappingKey, String> {
     FileWrappingKeyProvider::new(&data_dir.join("platform-wrapping-key.bin"))
         .load_or_create()
         .map_err(|_| "Vault file key is unavailable".to_owned())

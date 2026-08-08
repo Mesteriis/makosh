@@ -9,7 +9,7 @@ test('Attachment Security candidate contract is provider-neutral and payload-bou
   const [proto, admission, candidate, manifest] = await Promise.all([
     readFile(
       new URL(
-        'src/attachment-security-contract/proto/hermes/attachment_security/v1/scan_candidate.proto',
+        'src/attachment-security-contract/proto/makosh/attachment_security/v1/scan_candidate.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -65,27 +65,27 @@ test('Attachment Security core and ClamAV adapter remain separate engine units',
     readFile(new URL('src/attachment-security-clamav/src/instream.rs', BACKEND_ROOT), 'utf8'),
   ]);
 
-  assert.match(coreManifest, /hermes-attachment-security-contract/);
+  assert.match(coreManifest, /makosh-attachment-security-contract/);
   assert.doesNotMatch(
     coreManifest,
-    /hermes-(?:communications|blob|attachment-security-clamav|runtime-protocol|storage-protocol)/,
+    /makosh-(?:communications|blob|attachment-security-clamav|runtime-protocol|storage-protocol)/,
   );
   assert.doesNotMatch(
     core,
-    /hermes_communications|TcpStream|std::io|postgres|sqlx|nats|jetstream/i,
+    /makosh_communications|TcpStream|std::io|postgres|sqlx|nats|jetstream/i,
   );
 
-  assert.match(clamavManifest, /hermes-attachment-security-contract/);
-  assert.match(clamavManifest, /hermes-attachment-security-core/);
+  assert.match(clamavManifest, /makosh-attachment-security-contract/);
+  assert.match(clamavManifest, /makosh-attachment-security-core/);
   assert.doesNotMatch(
     clamavManifest,
-    /hermes-(?:communications|blob|runtime-protocol|storage-protocol)/,
+    /makosh-(?:communications|blob|runtime-protocol|storage-protocol)/,
   );
   assert.match(endpoint, /Ipv4Addr::LOCALHOST/);
   assert.match(instream, /const INSTREAM_COMMAND: &\[u8\] = b"zINSTREAM\\0"/);
   assert.match(instream, /response == b"stream: OK"/);
   assert.doesNotMatch(instream, /enum ClamAvScanErrorV1[\s\S]*?\bString\b/);
-  assert.doesNotMatch(`${endpoint}\n${instream}`, /hermes_communications|blob_store|postgres|sqlx/i);
+  assert.doesNotMatch(`${endpoint}\n${instream}`, /makosh_communications|blob_store|postgres|sqlx/i);
 });
 
 test('Attachment Security persistence owns the durable join, bounded jobs and exact outbox', async () => {
@@ -189,15 +189,15 @@ test('Attachment Security persistence owns the durable join, bounded jobs and ex
   ]);
 
   assert.match(manifest, /surface = "persistence"/);
-  assert.match(manifest, /hermes-attachment-security-core/);
-  assert.match(manifest, /hermes-communications-attachment-contract/);
+  assert.match(manifest, /makosh-attachment-security-core/);
+  assert.match(manifest, /makosh-communications-attachment-contract/);
   assert.doesNotMatch(manifest, /\[features\]/);
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications-(?!attachment-contract)|blob|kernel|attachment-security-clamav)/,
+    /makosh-(?:communications-(?!attachment-contract)|blob|kernel|attachment-security-clamav)/,
   );
-  assert.equal(schema.match(/CREATE TABLE hermes_data\./g)?.length, 7);
-  assert.doesNotMatch(schema, /hermes_data\.(?:communications|mail|telegram|zulip|whatsapp)_/);
+  assert.equal(schema.match(/CREATE TABLE makosh_data\./g)?.length, 7);
+  assert.doesNotMatch(schema, /makosh_data\.(?:communications|mail|telegram|zulip|whatsapp)_/);
   assert.match(schema, /attachment_security_event_inbox/);
   assert.match(schema, /envelope_sha256/);
   assert.match(schema, /max_attempts INTEGER NOT NULL CHECK \(max_attempts BETWEEN 1 AND 32\)/);
@@ -264,7 +264,7 @@ test('Attachment Security persistence owns the durable join, bounded jobs and ex
   assert.match(jobs, /OutboxHashConflict/);
   assert.doesNotMatch(
     `${observation}\n${jobs}`,
-    /hermes_communications_(?!attachment_contract)|provider_(?:id|locator|sdk)|scanner_signature/i,
+    /makosh_communications_(?!attachment_contract)|provider_(?:id|locator|sdk)|scanner_signature/i,
   );
 });
 
@@ -281,10 +281,10 @@ test('Mail publishes scan candidates through one exact contract and a separate d
     readFile(new URL('src/mail-runtime/src/main.rs', BACKEND_ROOT), 'utf8'),
   ]);
 
-  assert.match(manifest, /^hermes-attachment-security-contract =/m);
+  assert.match(manifest, /^makosh-attachment-security-contract =/m);
   assert.doesNotMatch(
     manifest,
-    /hermes-attachment-security-(?:core|clamav|persistence|runtime|assembly)/,
+    /makosh-attachment-security-(?:core|clamav|persistence|runtime|assembly)/,
   );
   assert.match(
     admission,
@@ -309,7 +309,7 @@ test('Mail publishes scan candidates through one exact contract and a separate d
   assert.match(main, /relay_attachment_security_outbox\(now\)/);
   assert.doesNotMatch(
     `${managed}\n${durable}\n${relay}`,
-    /hermes_attachment_security_(?:core|clamav|persistence|runtime|assembly)/,
+    /makosh_attachment_security_(?:core|clamav|persistence|runtime|assembly)/,
   );
 });
 
@@ -330,22 +330,22 @@ test('Attachment Security runtime is a managed engine with event-only business b
   assert.match(manifest, /owner = "attachment_security"/);
   assert.match(manifest, /surface = "runtime"/);
   for (const dependency of [
-    'hermes-attachment-security-contract',
-    'hermes-attachment-security-core',
-    'hermes-attachment-security-clamav',
-    'hermes-attachment-security-persistence',
-    'hermes-attachment-archive-inspection-ingress',
-    'hermes-attachment-preview-ingress',
-    'hermes-attachment-text-extraction-ingress',
-    'hermes-communications-attachment-contract',
-    'hermes-blob-client',
-    'hermes-events-jetstream',
+    'makosh-attachment-security-contract',
+    'makosh-attachment-security-core',
+    'makosh-attachment-security-clamav',
+    'makosh-attachment-security-persistence',
+    'makosh-attachment-archive-inspection-ingress',
+    'makosh-attachment-preview-ingress',
+    'makosh-attachment-text-extraction-ingress',
+    'makosh-communications-attachment-contract',
+    'makosh-blob-client',
+    'makosh-events-jetstream',
   ]) {
     assert.match(manifest, new RegExp(`^${dependency} =`, 'm'));
   }
   assert.doesNotMatch(
     manifest,
-    /hermes-(?:communications-(?!attachment-contract)|mail|telegram|whatsapp|zulip|kernel)/,
+    /makosh-(?:communications-(?!attachment-contract)|mail|telegram|whatsapp|zulip|kernel)/,
   );
   assert.deepEqual(
     [...admission.matchAll(
@@ -396,7 +396,7 @@ test('Attachment Security runtime is a managed engine with event-only business b
   assert.match(outbox, /publish_exact\(permit, record\.exact_bytes\(\)\)/);
   assert.doesNotMatch(
     `${runtime}\n${scanner}\n${delegation}\n${decoder}\n${outbox}`,
-    /hermes_(?:communications_(?:domain|runtime|persistence|api)|mail|telegram|whatsapp|zulip|kernel)/,
+    /makosh_(?:communications_(?:domain|runtime|persistence|api)|mail|telegram|whatsapp|zulip|kernel)/,
   );
 });
 
@@ -404,7 +404,7 @@ test('Attachment Security Blob reads are one-use and receipt-bound below the eng
   const [protocol, client, kernelSession, serviceSession, service] = await Promise.all([
     readFile(
       new URL(
-        'src/platform/runtime_protocol/proto/hermes/runtime/v1/blob_runtime.proto',
+        'src/platform/runtime_protocol/proto/makosh/runtime/v1/blob_runtime.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -430,7 +430,7 @@ test('Attachment Security Blob reads are one-use and receipt-bound below the eng
   assert.match(service, /Sha256::digest\(plaintext\)/);
   assert.doesNotMatch(
     `${kernelSession}\n${service}`,
-    /hermes_(?:communications|attachment_security)|clamav/i,
+    /makosh_(?:communications|attachment_security)|clamav/i,
   );
 });
 
@@ -448,14 +448,14 @@ test('Cross-owner Blob custody binds a public module audience and current runtim
   ] = await Promise.all([
     readFile(
       new URL(
-        'src/platform/runtime_protocol/proto/hermes/runtime/v1/managed_runtime_control.proto',
+        'src/platform/runtime_protocol/proto/makosh/runtime/v1/managed_runtime_control.proto',
         BACKEND_ROOT,
       ),
       'utf8',
     ),
     readFile(
       new URL(
-        'src/platform/runtime_protocol/proto/hermes/runtime/v1/blob_runtime.proto',
+        'src/platform/runtime_protocol/proto/makosh/runtime/v1/blob_runtime.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -486,11 +486,11 @@ test('Cross-owner Blob custody binds a public module audience and current runtim
   assert.doesNotMatch(blobProtocol, /string target_registration_id = 19;/);
   assert.match(
     attachmentContract,
-    /ATTACHMENT_SECURITY_BLOB_CUSTODY_TARGET_MODULE_ID: &str =\s*"hermes-attachment-security-runtime"/,
+    /ATTACHMENT_SECURITY_BLOB_CUSTODY_TARGET_MODULE_ID: &str =\s*"makosh-attachment-security-runtime"/,
   );
   assert.match(
     communicationsContract,
-    /COMMUNICATIONS_BLOB_CUSTODY_TARGET_MODULE_ID: &str = "hermes-communications-runtime"/,
+    /COMMUNICATIONS_BLOB_CUSTODY_TARGET_MODULE_ID: &str = "makosh-communications-runtime"/,
   );
   assert.match(
     attachmentAdmission,
@@ -502,7 +502,7 @@ test('Cross-owner Blob custody binds a public module audience and current runtim
   );
   assert.match(mailRuntime, /module_id: ATTACHMENT_SECURITY_BLOB_CUSTODY_TARGET_MODULE_ID/);
   assert.match(mailRuntime, /module_id: COMMUNICATIONS_BLOB_CUSTODY_TARGET_MODULE_ID/);
-  assert.doesNotMatch(mailRuntime, /hermes-attachment-security-runtime|hermes-communications-runtime/);
+  assert.doesNotMatch(mailRuntime, /makosh-attachment-security-runtime|makosh-communications-runtime/);
   assert.match(kernelSession, /expectation\.module_id\(\)/);
   assert.match(kernelSession, /target_registration_id: expectation\.registration_id\(\)\.to_owned\(\)/);
   const transferStart = kernelSession.indexOf('fn issue_custody_transfer(');
@@ -540,10 +540,10 @@ test('Attachment Security release assembly is a separate unsigned engine unit', 
   assert.match(manifest, /owner = "attachment_security"/);
   assert.match(manifest, /surface = "assembly"/);
   assert.deepEqual(dependencies, [
-    'hermes-attachment-security-persistence',
-    'hermes-attachment-security-runtime',
-    'hermes-runtime-protocol',
-    'hermes-storage-protocol',
+    'makosh-attachment-security-persistence',
+    'makosh-attachment-security-runtime',
+    'makosh-runtime-protocol',
+    'makosh-storage-protocol',
     'prost',
     'serde',
     'serde_json',
@@ -565,7 +565,7 @@ test('Attachment Security release assembly is a separate unsigned engine unit', 
   assert.match(command, /--runtime/);
   assert.doesNotMatch(
     `${manifest}\n${assembly}\n${command}`,
-    /hermes-(?:communications|mail|telegram|whatsapp|zulip|kernel|blob|events)|SigningKey|sign_manifest|ed25519|p256/,
+    /makosh-(?:communications|mail|telegram|whatsapp|zulip|kernel|blob|events)|SigningKey|sign_manifest|ed25519|p256/,
   );
 });
 
@@ -635,10 +635,10 @@ test('Attachment Security managed conformance launches the signed Engine through
     ),
   ]);
 
-  assert.match(manifest, /^hermes-attachment-security-runtime =/m);
+  assert.match(manifest, /^makosh-attachment-security-runtime =/m);
   assert.match(manifest, /^sqlx =/m);
-  assert.match(script, /'-p',\s*'hermes-attachment-security-runtime'/);
-  assert.match(script, /HERMES_ATTACHMENT_SECURITY_RUNTIME_BIN:/);
+  assert.match(script, /'-p',\s*'makosh-attachment-security-runtime'/);
+  assert.match(script, /MAKOSH_ATTACHMENT_SECURITY_RUNTIME_BIN:/);
   assert.match(
     script,
     /managed_attachment_security_engine_starts_with_exact_signed_contracts/,
@@ -706,7 +706,7 @@ test('Attachment Security managed conformance launches the signed Engine through
   assert.match(persistenceFixture, /WHERE attachment_anchor_id = \$1/);
   assert.doesNotMatch(
     `${setup}\n${flow}`,
-    /hermes_communications_(?:domain|persistence|runtime)/,
+    /makosh_communications_(?:domain|persistence|runtime)/,
   );
 });
 
@@ -726,15 +726,15 @@ test('Attachment Security remains one exact engine after Mail integration admiss
   ]);
   assert.deepEqual(
     productionPackages
-      .filter(({ name }) => name.startsWith('hermes-attachment-security-'))
+      .filter(({ name }) => name.startsWith('makosh-attachment-security-'))
       .map(({ name }) => name),
     [
-      'hermes-attachment-security-contract',
-      'hermes-attachment-security-core',
-      'hermes-attachment-security-clamav',
-      'hermes-attachment-security-persistence',
-      'hermes-attachment-security-runtime',
-      'hermes-attachment-security-assembly',
+      'makosh-attachment-security-contract',
+      'makosh-attachment-security-core',
+      'makosh-attachment-security-clamav',
+      'makosh-attachment-security-persistence',
+      'makosh-attachment-security-runtime',
+      'makosh-attachment-security-assembly',
     ],
   );
   assert.deepEqual(

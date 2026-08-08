@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/speech_to_text/v1/speech_to_text.proto"],
+            &["proto/makosh/speech_to_text/v1/speech_to_text.proto"],
             &["proto"],
         )
         .expect("Speech-to-Text protocol must compile");

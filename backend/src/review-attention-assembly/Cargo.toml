@@ -1,5 +1,5 @@
 [package]
-name = "hermes-review-attention-assembly"
+name = "makosh-review-attention-assembly"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,19 +8,19 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-review-attention-assembly"
+name = "makosh-review-attention-assembly"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "domain"
 owner = "review"
 surface = "assembly"
 
 [dependencies]
-hermes-review-attention-persistence = { path = "../review-attention-persistence" }
-hermes-review-attention-runtime = { path = "../review-attention-runtime" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-review-attention-persistence = { path = "../review-attention-persistence" }
+makosh-review-attention-runtime = { path = "../review-attention-runtime" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
 serde_json = "=1.0.150"

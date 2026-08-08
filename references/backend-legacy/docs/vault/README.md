@@ -1,4 +1,4 @@
-# Hermes Vault
+# Макошь Vault
 
 Status: documentation package aligned to the current repository structure.
 

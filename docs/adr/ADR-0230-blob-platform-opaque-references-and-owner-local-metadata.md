@@ -8,7 +8,7 @@ ephemeral access fence, stable `BlobCustodyScopeV1`, operation-scoped
 descriptor grants, ephemeral Vault-response key lease, authenticated atomic
 `HBLBENC2` files, stable-custody `HBLBM002` quota persistence, grant-aware
 catalog и ciphertext-only Blob-to-Kernel Vault route adapter существуют.
-Отдельный `hermes-blob-service`
+Отдельный `makosh-blob-service`
 запускается только из verified release binding, получает one-shot private
 configuration и attests its runtime/Vault generations over inherited Kernel FD.
 Signed release binding и start разрешены только через current owner-control session;
@@ -27,7 +27,7 @@ deletion lease;
 a revoked or unavailable lease leaves ciphertext and the reservation intact.
 This is technical accounting, not owner metadata retention or an owner-liveness
 decision.
-Отдельный conformance test собирает production `hermes-blob-service` и file-backed
+Отдельный conformance test собирает production `makosh-blob-service` и file-backed
 Vault runtime, помещает оба в signed release bundle, запускает через Kernel и
 сверяет generation-bound status. Live data-path test дополнительно выпускает
 test-only P-256 signed grants, записывает и читает encrypted bytes через private
@@ -44,7 +44,7 @@ owner packages; whole-instance restore остаётся отдельной ра�
 ## Контекст
 
 Durable envelopes, telemetry and client transport не могут переносить private
-document/media bytes. Hermes нужен локальный Blob Platform, но общий filesystem
+document/media bytes. Макошь нужен локальный Blob Platform, но общий filesystem
 path, content hash или provider object key не должны становиться client/module
 capability. Blob storage также не должен становиться второй business database.
 

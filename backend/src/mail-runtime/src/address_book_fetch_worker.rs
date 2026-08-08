@@ -2,8 +2,8 @@
 
 use std::collections::BTreeSet;
 
-use hermes_events_protocol::delivery::OutboxRecordV1;
-use hermes_mail_address_book_contract::{
+use makosh_events_protocol::delivery::OutboxRecordV1;
+use makosh_mail_address_book_contract::{
     MAIL_RUNTIME_MODULE_ID_V1, MailAddressBookEnvelopeContextV1,
     MailAddressBookResultEnvelopeContextV1, build_mail_address_book_entry_observed_v1,
     build_mail_address_book_page_completed_result_v1,
@@ -13,12 +13,12 @@ use hermes_mail_address_book_contract::{
         MailAddressBookPageRejectedV1, MailAddressBookProviderKindV1, MailAddressBookRejectCodeV1,
     },
 };
-use hermes_mail_address_book_persistence::{
+use makosh_mail_address_book_persistence::{
     MailAddressBookPersistenceErrorV1, PendingMailAddressBookFetchV1,
 };
-use hermes_mail_api::{MailAddressBookProviderV1, MailInboundTransportV1};
-use hermes_mail_carddav::{CardDavAdapterErrorV1, CardDavContactV1};
-use hermes_mail_google_people::{GooglePeopleAdapterErrorV1, GooglePeopleContactV1};
+use makosh_mail_api::{MailAddressBookProviderV1, MailInboundTransportV1};
+use makosh_mail_carddav::{CardDavAdapterErrorV1, CardDavContactV1};
+use makosh_mail_google_people::{GooglePeopleAdapterErrorV1, GooglePeopleContactV1};
 use prost_types::Timestamp;
 use sha2::{Digest, Sha256};
 

@@ -3,10 +3,10 @@
 use std::path::Path;
 use std::time::Duration;
 
-use hermes_kernel_control_store::PlatformManagedProcessLaunch;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::BlobRuntimeConfigurationV1;
-use hermes_runtime_protocol::validation::blob::validate_blob_runtime_configuration;
+use makosh_kernel_control_store::PlatformManagedProcessLaunch;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::BlobRuntimeConfigurationV1;
+use makosh_runtime_protocol::validation::blob::validate_blob_runtime_configuration;
 use prost::Message;
 
 use crate::distribution::staged_contracts::StagedRuntimeContracts;
@@ -122,7 +122,7 @@ fn ensure_inactive(supervisor: &ManagedRuntimeSupervisor) -> Result<(), String> 
 
 fn blob_binding(
     store: &SqliteControlStore,
-) -> Result<hermes_kernel_control_store::PlatformManagedProcessBinding, String> {
+) -> Result<makosh_kernel_control_store::PlatformManagedProcessBinding, String> {
     store
         .platform_managed_process_binding(BLOB_PROCESS_ID)
         .map_err(|_| "Blob release binding is unavailable".to_owned())?
@@ -131,7 +131,7 @@ fn blob_binding(
 
 fn prepare_launch(
     kernel: &Path,
-    binding: &hermes_kernel_control_store::PlatformManagedProcessBinding,
+    binding: &makosh_kernel_control_store::PlatformManagedProcessBinding,
     data_dir: &Path,
     runtime_dir: &Path,
     vault_instance_id: &str,

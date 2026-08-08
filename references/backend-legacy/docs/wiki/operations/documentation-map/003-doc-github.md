@@ -45,7 +45,7 @@ generated_by: code-wiki-ru
 
 ## `.github/pull_request_template.md`
 
-Файл шаблона запроса на включение (Pull Request) в репозитории `hermes-hub`.
+Файл шаблона запроса на включение (Pull Request) в репозитории `makosh`.
 
 **Путь:** `.github/pull_request_template.md`
 

@@ -49,7 +49,7 @@ loopback_browser_owner_vault_host_v1
 
 ### Отдельная unit
 
-Provider-neutral native crate `hermes-owner-vault-provisioning-host` получает
+Provider-neutral native crate `makosh-owner-vault-provisioning-host` получает
 отдельный development server binary. Он переиспользует ту же реализацию:
 
 - bounded ephemeral X25519 response recipient;

@@ -1,5 +1,5 @@
-use hermes_communications_api::accounts::CommunicationProviderKind;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
 
 use crate::platform::secrets::database_vault::DatabaseEncryptedSecretVault;
 use crate::platform::secrets::models::{SecretKind, SecretStoreKind};

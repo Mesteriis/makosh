@@ -1,4 +1,4 @@
-use hermes_communication_delivery_intent_api::{
+use makosh_communication_delivery_intent_api::{
     COMMUNICATION_DELIVERY_INTENT_CONTRACT_MAJOR_V1,
     wire::{
         DeliveryIntentErrorCodeV1, DeliveryIntentStatusV1, SubmitDeliveryIntentRequestV1,

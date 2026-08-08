@@ -1,6 +1,6 @@
 #![forbid(unsafe_code)]
 
-use hermes_communications_call_evidence_ingress::{
+use makosh_communications_call_evidence_ingress::{
     MAX_CALL_DISPLAY_LABEL_BYTES_V1, MAX_CALL_DURATION_SECONDS_V1,
     wire::{
         CallDirectionV1 as WireDirection, CallEvidenceObservedV1,
@@ -12,7 +12,7 @@ use hermes_communications_call_evidence_ingress::{
 use prost_types::Timestamp;
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-communications-call-evidence-core";
+pub const PACKAGE: &str = "makosh-communications-call-evidence-core";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum CallProviderProvenanceV1 {
@@ -354,7 +354,7 @@ fn normalize_display_label(value: Option<&str>) -> Result<Option<String>, CallEv
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_communications_call_evidence_ingress::wire::CallEvidenceObservedV1;
+    use makosh_communications_call_evidence_ingress::wire::CallEvidenceObservedV1;
 
     fn wire(state: WireState, revision: u64) -> CallEvidenceObservedV1 {
         CallEvidenceObservedV1 {

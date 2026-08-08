@@ -1,6 +1,6 @@
-# Hermes Workflow Catalog
+# Макошь Workflow Catalog
 
-Workflows describe how evidence moves through Hermes.
+Workflows describe how evidence moves through Макошь.
 
 They are not APIs and not implementation modules. They define product behavior
 and architectural boundaries that future implementation plans must respect.

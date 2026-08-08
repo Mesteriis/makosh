@@ -3,12 +3,12 @@
 use std::path::Path;
 use std::time::Duration;
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     PlatformEventHubTopologyV1, PlatformEventsAuthorityConfigurationV1,
     PlatformManagedProcessLaunch,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     v1::EventsAuthorityRuntimeConfigurationV1,
     validation::events_authority::validate_events_authority_runtime_configuration,
 };
@@ -119,7 +119,7 @@ fn ensure_inactive(supervisor: &ManagedRuntimeSupervisor) -> Result<(), String> 
 
 fn authority_binding(
     store: &SqliteControlStore,
-) -> Result<hermes_kernel_control_store::PlatformManagedProcessBinding, String> {
+) -> Result<makosh_kernel_control_store::PlatformManagedProcessBinding, String> {
     store
         .platform_managed_process_binding(EVENTS_AUTHORITY_PROCESS_ID)
         .map_err(|_| "Events authority release binding is unavailable".to_owned())?
@@ -128,7 +128,7 @@ fn authority_binding(
 
 struct EventsAuthorityLaunchInputV1<'a> {
     kernel: &'a Path,
-    binding: &'a hermes_kernel_control_store::PlatformManagedProcessBinding,
+    binding: &'a makosh_kernel_control_store::PlatformManagedProcessBinding,
     runtime_dir: &'a Path,
     vault_instance_id: &'a str,
     configuration: &'a PlatformEventsAuthorityConfigurationV1,

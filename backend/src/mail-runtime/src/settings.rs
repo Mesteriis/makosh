@@ -1,18 +1,18 @@
 //! Mail-owned decoding of one admitted generic settings snapshot.
 
 #[cfg(not(feature = "conformance-test-support"))]
-use hermes_mail_api::valid_address_book_configuration;
+use makosh_mail_api::valid_address_book_configuration;
 #[cfg(feature = "conformance-test-support")]
-use hermes_mail_api::valid_address_book_configuration_for_conformance_v1;
-use hermes_mail_api::{
+use makosh_mail_api::valid_address_book_configuration_for_conformance_v1;
+use makosh_mail_api::{
     GmailApiEndpointV1, GmailOAuthConfigurationV1, GmailOAuthEndpointV1,
     MailAccountConfigurationV1, MailAddressBookConfigurationV1, MailAddressBookProviderV1,
     MailAddressBookTlsEndpointV1, MailCardDavEndpointV1, MailGmailConfigurationV1,
     MailImapConfigurationV1, MailInboundTransportV1, SmtpEndpointV1, valid_account_configuration,
     valid_gmail_oauth_configuration,
 };
-pub use hermes_mail_api::{MAIL_SETTINGS_SCHEMA_MAJOR_V2, MAIL_SETTINGS_SCHEMA_REVISION_V2};
-use hermes_runtime_protocol::v1::{
+pub use makosh_mail_api::{MAIL_SETTINGS_SCHEMA_MAJOR_V2, MAIL_SETTINGS_SCHEMA_REVISION_V2};
+use makosh_runtime_protocol::v1::{
     SettingApplyModeV1, SettingClientVisibilityV1, SettingDefinitionV1, SettingMutationAuthorityV1,
     SettingTargetScopeV1, SettingValueTypeV1, SettingValueV1, SettingsSchemaV1, SettingsSnapshotV1,
     setting_value_v1::Value,
@@ -567,10 +567,10 @@ fn invalid_settings() -> String {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::v1::{
+    use makosh_runtime_protocol::v1::{
         SettingValueV1, SettingsValueEntryV1, setting_value_v1::Value,
     };
-    use hermes_runtime_protocol::validation::descriptor::validate_settings_schema_v1;
+    use makosh_runtime_protocol::validation::descriptor::validate_settings_schema_v1;
 
     use super::*;
 
@@ -605,8 +605,8 @@ mod tests {
 
     #[test]
     fn production_gmail_endpoint_defaults_are_canonical() {
-        assert_eq!(hermes_mail_api::GMAIL_API_HOST, "gmail.googleapis.com");
-        assert_eq!(hermes_mail_api::GMAIL_API_HTTPS_PORT, 443);
+        assert_eq!(makosh_mail_api::GMAIL_API_HOST, "gmail.googleapis.com");
+        assert_eq!(makosh_mail_api::GMAIL_API_HTTPS_PORT, 443);
     }
 
     #[test]
@@ -622,12 +622,12 @@ mod tests {
                 Value::StringValue(if cfg!(feature = "conformance-test-support") {
                     "localhost".to_owned()
                 } else {
-                    hermes_mail_api::GOOGLE_PEOPLE_API_HOST_V1.to_owned()
+                    makosh_mail_api::GOOGLE_PEOPLE_API_HOST_V1.to_owned()
                 }),
             ),
             settings_entry(
                 ADDRESS_BOOK_GOOGLE_PEOPLE_PORT,
-                Value::UnsignedIntegerValue(u64::from(hermes_mail_api::GOOGLE_PEOPLE_API_PORT_V1)),
+                Value::UnsignedIntegerValue(u64::from(makosh_mail_api::GOOGLE_PEOPLE_API_PORT_V1)),
             ),
         ]);
         snapshot
@@ -669,12 +669,12 @@ mod tests {
         }
 
         let production_endpoint = GmailApiEndpointV1 {
-            host: hermes_mail_api::GMAIL_API_HOST.to_owned(),
-            port: hermes_mail_api::GMAIL_API_HTTPS_PORT,
+            host: makosh_mail_api::GMAIL_API_HOST.to_owned(),
+            port: makosh_mail_api::GMAIL_API_HTTPS_PORT,
             ca_certificate_pem: None,
         };
-        let gmail_api_host = if hermes_mail_api::valid_gmail_api_endpoint(&production_endpoint) {
-            hermes_mail_api::GMAIL_API_HOST
+        let gmail_api_host = if makosh_mail_api::valid_gmail_api_endpoint(&production_endpoint) {
+            makosh_mail_api::GMAIL_API_HOST
         } else {
             "127.0.0.1"
         };
@@ -689,7 +689,7 @@ mod tests {
             ),
             entry(
                 GMAIL_API_PORT,
-                Value::UnsignedIntegerValue(u64::from(hermes_mail_api::GMAIL_API_HTTPS_PORT)),
+                Value::UnsignedIntegerValue(u64::from(makosh_mail_api::GMAIL_API_HTTPS_PORT)),
             ),
             entry(GMAIL_USER_ID, Value::StringValue(user_id.to_owned())),
             entry(INBOUND_KIND, Value::StringValue("gmail".to_owned())),

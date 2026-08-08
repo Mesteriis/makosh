@@ -2,7 +2,7 @@
 
 Статус: Принято
 Дата: 2026-07-26
-Состояние реализации: реализовано. `hermes-scheduler-protocol` предоставляет
+Состояние реализации: реализовано. `makosh-scheduler-protocol` предоставляет
 отдельные `OwnerJobCommandV1`,
 `OwnerJobTriggerKindV1::UpgradeReconciliation`, owner-local lease/scope builder,
 exact descriptor set и отрицательную scheduled/upgrade interchange
@@ -42,7 +42,7 @@ Scheduler нужен для time policy. Этот backfill запускаетс�
 time policy или cross-module target. Создание фиктивного cron/one-shot schedule
 смешало бы migration lifecycle с Scheduler configuration.
 
-Текущий `hermes-scheduler-protocol` имеет только
+Текущий `makosh-scheduler-protocol` имеет только
 `ScheduledJobCommandV1`. Использовать его без `schedule_id` или подделывать
 schedule запрещено. Нужен отдельный owner-neutral command для owner-local
 upgrade reconciliation.
@@ -51,7 +51,7 @@ upgrade reconciliation.
 
 ### Owner-local upgrade command
 
-`hermes-scheduler-protocol` получает `OwnerJobCommandV1` с отдельным
+`makosh-scheduler-protocol` получает `OwnerJobCommandV1` с отдельным
 `OwnerJobTriggerKindV1::UpgradeReconciliation`. Он содержит только:
 
 - stable 16-byte `job_run_id`;
@@ -145,11 +145,11 @@ backfill. Поэтому новые realtime events не могут обогна
 ## Build units и SRP
 
 - owner-neutral wire types и validation остаются в
-  `hermes-scheduler-protocol`;
+  `makosh-scheduler-protocol`;
 - Telegram-specific job identity и policy остаются в
-  `hermes-telegram-calls-core`;
+  `makosh-telegram-calls-core`;
 - execution, lease, checkpoint и owner SQL остаются в
-  `hermes-telegram-calls-persistence`;
+  `makosh-telegram-calls-persistence`;
 - runtime только создаёт exact command, запускает bounded executor и
   координирует admission order;
 - Telegram assembly только включает новую DDL migration в exact bundle.

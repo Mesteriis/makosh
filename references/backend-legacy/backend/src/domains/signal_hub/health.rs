@@ -1,12 +1,12 @@
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 
 use super::store::{
     SignalHealth, SignalHealthCheckRequest, SignalHealthSnapshotWrite, SignalHubError,
     SignalHubStore,
 };
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 #[derive(Clone)]
 pub struct SignalHubHealthService {

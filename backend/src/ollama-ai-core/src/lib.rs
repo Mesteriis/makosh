@@ -20,7 +20,7 @@ pub use translation::{
     mark_ollama_translation_uncertain_v1, reject_ollama_translation_request_v1,
 };
 
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     AI_MAX_SUBJECT_BYTES_V1, compute_provider_reply_generation_request_digest_v1,
     validate_provider_reply_generation_request_v1, validate_provider_reply_generation_result_v1,
     wire::{
@@ -29,11 +29,11 @@ use hermes_ai_contracts::{
         AiReplyToneV1,
     },
 };
-use hermes_ollama_ai_api::{OllamaAiRuntimeSettingsV1, valid_ollama_model_name_v1};
+use makosh_ollama_ai_api::{OllamaAiRuntimeSettingsV1, valid_ollama_model_name_v1};
 use serde::Deserialize;
 use zeroize::Zeroizing;
 
-pub const PACKAGE: &str = "hermes-ollama-ai-core";
+pub const PACKAGE: &str = "makosh-ollama-ai-core";
 const OLLAMA_REPLY_POLICY_V1: &str = "Return one JSON object with exactly subject, body and language string fields. Language must be english, spanish or russian. No markdown.";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -326,7 +326,7 @@ fn subject_policy_name(value: i32) -> Result<&'static str, OllamaAiCoreErrorV1> 
 
 #[cfg(test)]
 mod tests {
-    use hermes_ai_contracts::{
+    use makosh_ai_contracts::{
         AI_LOCAL_EGRESS_POLICY_REVISION_V1,
         wire::{AiEgressPolicyV1, AiReplyLanguageV1, AiReplySubjectPolicyV1, AiReplyToneV1},
     };

@@ -1,12 +1,12 @@
 //! Telegram integration policy and provider-neutral orchestration.
 
-use hermes_communications_ingress::{
+use makosh_communications_ingress::{
     AttachmentDescriptorV1, AttachmentDispositionV1, BodyAvailabilityV1, CommunicationDirectionV1,
     CommunicationEvidenceKindV1, ProviderProvenanceV1, SourceEnvelope, SourceScopeEnvelope,
     new_communication_observation_draft, new_scoped_communication_observation_draft,
     with_attachment_descriptor, with_participant_display_label,
 };
-use hermes_telegram_api::{
+use makosh_telegram_api::{
     TelegramAccount, TelegramAccountState, TelegramAttachmentProjection,
     TelegramChatStateProjection, TelegramContractError, TelegramCredentialBinding,
     TelegramDeliveryState, TelegramMessageMutation, TelegramMessageObservation,
@@ -16,13 +16,13 @@ use hermes_telegram_api::{
     TelegramRuntimeReconfigurationState, TelegramRuntimeState, provider_command_account_id,
     provider_command_kind, provider_command_operation_id, validate_text,
 };
-use hermes_vault_protocol::{DEFAULT_LEASE_TTL_SECONDS, SecretClassV1, VaultActionV1};
+use makosh_vault_protocol::{DEFAULT_LEASE_TTL_SECONDS, SecretClassV1, VaultActionV1};
 use sha2::{Digest, Sha256};
 
-pub use hermes_vault_protocol::VaultPurposeRequestV1;
-pub use hermes_vault_protocol::{CredentialLeaseV1 as TelegramCredentialLeaseV1, LeaseAudienceV1};
+pub use makosh_vault_protocol::VaultPurposeRequestV1;
+pub use makosh_vault_protocol::{CredentialLeaseV1 as TelegramCredentialLeaseV1, LeaseAudienceV1};
 
-pub const PACKAGE: &str = "hermes-telegram-core";
+pub const PACKAGE: &str = "makosh-telegram-core";
 
 pub const TELEGRAM_API_HASH_PURPOSE_ID: &str = "telegram_api_hash";
 pub const TELEGRAM_SESSION_STORE_KEY_PURPOSE_ID: &str = "telegram_session_store_key";
@@ -36,14 +36,14 @@ pub fn credential_lease_purpose(
 
 pub fn credential_lease_purpose_for_purpose(
     configuration_instance_id: &str,
-    purpose: hermes_telegram_api::TelegramCredentialPurpose,
+    purpose: makosh_telegram_api::TelegramCredentialPurpose,
 ) -> Result<VaultPurposeRequestV1, TelegramContractError> {
     let (purpose_id, secret_class) = match purpose {
-        hermes_telegram_api::TelegramCredentialPurpose::ApiHash => (
+        makosh_telegram_api::TelegramCredentialPurpose::ApiHash => (
             TELEGRAM_API_HASH_PURPOSE_ID,
             SecretClassV1::ProviderCredential,
         ),
-        hermes_telegram_api::TelegramCredentialPurpose::SessionEncryptionKey => (
+        makosh_telegram_api::TelegramCredentialPurpose::SessionEncryptionKey => (
             TELEGRAM_SESSION_STORE_KEY_PURPOSE_ID,
             SecretClassV1::SessionStoreKey,
         ),
@@ -136,7 +136,7 @@ pub fn qr_login_ready(
     })
 }
 
-pub use hermes_communications_ingress::CommunicationObservationDraft;
+pub use makosh_communications_ingress::CommunicationObservationDraft;
 
 #[derive(Default)]
 pub struct TelegramLifecycle;
@@ -667,7 +667,7 @@ fn provider_event_identity(event: &TelegramProviderEvent) -> Result<String, Tele
     let canonical_event =
         serde_json::to_vec(event).map_err(|_| TelegramContractError::InvalidTransition)?;
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.telegram.provider-event.v1\0");
+    hasher.update(b"makosh.telegram.provider-event.v1\0");
     hasher.update(canonical_event);
     Ok(format!("telegram:event:{}", hex_digest(&hasher.finalize())))
 }
@@ -754,7 +754,7 @@ mod attachment_observation_tests {
             provider_chat_id: "chat".to_owned(),
             provider_message_id: "message".to_owned(),
             provider_file_id: "file".to_owned(),
-            state: hermes_telegram_api::TelegramAttachmentDownloadState::Pending,
+            state: makosh_telegram_api::TelegramAttachmentDownloadState::Pending,
             size_bytes: Some(5),
             filename: Some("report.pdf".to_owned()),
             content_type: Some("application/pdf".to_owned()),
@@ -847,8 +847,8 @@ fn telegram_record_id(account_id: &str, chat_id: &str, message_id: &str) -> Stri
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_telegram_api::{TelegramAccountSetup, TelegramCredentialPurpose};
-    use hermes_vault_protocol::{SecretClassV1, VaultActionV1};
+    use makosh_telegram_api::{TelegramAccountSetup, TelegramCredentialPurpose};
+    use makosh_vault_protocol::{SecretClassV1, VaultActionV1};
 
     fn account_setup() -> TelegramAccountSetup {
         TelegramAccountSetup {
@@ -909,7 +909,7 @@ mod tests {
             is_outgoing: true,
             text: Some("hello".to_owned()),
             media: None,
-            references: hermes_telegram_api::TelegramMessageReferences::default(),
+            references: makosh_telegram_api::TelegramMessageReferences::default(),
             observed_at_unix_seconds: 10,
         };
         let projection = project_message(&observation).expect("projection");

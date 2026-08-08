@@ -1,9 +1,9 @@
 //! Mail integration contract crate for ADR-0239.
 
-pub const PACKAGE: &str = "hermes-mail-api";
+pub const PACKAGE: &str = "makosh-mail-api";
 
 pub mod wire {
-    include!(concat!(env!("OUT_DIR"), "/hermes.mail.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.mail.v1.rs"));
 }
 pub mod account;
 pub mod account_lifecycle;
@@ -11,31 +11,31 @@ pub mod account_lifecycle_wire;
 pub mod account_lifecycle_wire_generated {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.mail.account_lifecycle.v1.rs"
+        "/makosh.mail.account_lifecycle.v1.rs"
     ));
 }
 pub mod account_wire;
 pub mod account_wire_generated {
-    include!(concat!(env!("OUT_DIR"), "/hermes.mail.account.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.mail.account.v1.rs"));
 }
 pub mod client_contract;
 pub mod client_wire;
 pub mod composition;
 pub mod composition_wire;
 pub mod composition_wire_generated {
-    include!(concat!(env!("OUT_DIR"), "/hermes.mail.composition.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.mail.composition.v1.rs"));
 }
 pub mod message_flags;
 pub mod message_flags_wire;
 pub mod message_flags_wire_generated {
-    include!(concat!(env!("OUT_DIR"), "/hermes.mail.message_flags.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.mail.message_flags.v1.rs"));
 }
 pub mod message_location;
 pub mod message_location_wire;
 pub mod message_location_wire_generated {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.mail.message_location.v1.rs"
+        "/makosh.mail.message_location.v1.rs"
     ));
 }
 pub mod message_permanent_delete;
@@ -43,7 +43,7 @@ pub mod message_permanent_delete_wire;
 pub mod message_permanent_delete_wire_generated {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.mail.message_permanent_delete.v1.rs"
+        "/makosh.mail.message_permanent_delete.v1.rs"
     ));
 }
 pub mod oauth;
@@ -51,16 +51,16 @@ pub mod oauth_wire;
 pub mod operational;
 pub mod operational_wire;
 pub mod operational_wire_generated {
-    include!(concat!(env!("OUT_DIR"), "/hermes.mail.operational.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.mail.operational.v1.rs"));
 }
 pub mod sync_health;
 pub mod sync_health_wire;
 pub mod sync_health_wire_generated {
-    include!(concat!(env!("OUT_DIR"), "/hermes.mail.sync_health.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.mail.sync_health.v1.rs"));
 }
 pub mod portability;
 pub mod portability_wire_generated {
-    include!(concat!(env!("OUT_DIR"), "/hermes.mail.portability.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.mail.portability.v1.rs"));
 }
 
 pub use oauth::{

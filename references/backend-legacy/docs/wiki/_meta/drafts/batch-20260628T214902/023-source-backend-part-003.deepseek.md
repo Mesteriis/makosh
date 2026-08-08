@@ -98,7 +98,7 @@
 
 Модуль: `backend/src/ai/core/service/task_candidates.rs`
 
-- Агент: `HERMES`.
+- Агент: `MAKOSH`.
 - Входные параметры: `command_id`, `query`, опционально `causation_id`, `correlation_id`.
 - Используется модель `self.model_routing.extraction`.
 - После получения цитат генерируется промпт `task_candidate_prompt`, ответ парсится в черновики кандидатов (`parse_task_candidate_drafts`).
@@ -232,7 +232,7 @@ DTO для платформенных сущностей:
 - **`backend/src/ai/core/service/retrieval.rs`** – метод `retrieve_citations`, индексация, эмбеддинг, векторный и текстовый поиск, объединение результатов.
 - **`backend/src/ai/core/service/status.rs`** – метод `status`, проверка доступности моделей, статус `ok`/`unavailable`.
 - **`backend/src/ai/core/service/task_candidate_persistence.rs`** – метод `upsert_ai_task_candidates`, фильтрация по `source_kind`, поиск `observation_id`, upsert в `task_candidates` с логикой сохранения пользовательского решения.
-- **`backend/src/ai/core/service/task_candidates.rs`** – рабочий процесс `refresh_task_candidates`, агент `HERMES`, модель `extraction`, парсинг черновиков, синхронизация с инбоксом ревью, дополнительное событие `ai.task_extraction.completed`.
+- **`backend/src/ai/core/service/task_candidates.rs`** – рабочий процесс `refresh_task_candidates`, агент `MAKOSH`, модель `extraction`, парсинг черновиков, синхронизация с инбоксом ревью, дополнительное событие `ai.task_extraction.completed`.
 - **`backend/src/ai/core/types.rs`** – структуры `AiModelRouting` (и `fallback`), `AiCitation`, `AiAnswerRequest/Response`, `AiTaskCandidateRefreshRequest/Response`, `AiMeetingPrepRequest/Response`, `AiStatusResponse`.
 - **`backend/src/ai/mod.rs`** – структура модуля `ai` (api, control_center, core).
 - **`backend/src/app/api_support.rs`** – фасад `api_support`, реэкспорт подмодулей, комментарий ADR-0073, функция `ensure_fixture_routes_enabled`.

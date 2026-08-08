@@ -5,16 +5,16 @@ use super::*;
 use crate::platform::{
     client_realtime::ClientRealtimePublishHandlerV1, managed::signed_bundle::SignedRuntimeResource,
 };
-use hermes_call_transcription_api::{MODULE_ID_V1, OWNER_ID_V1};
-use hermes_call_transcription_persistence::{
+use makosh_call_transcription_api::{MODULE_ID_V1, OWNER_ID_V1};
+use makosh_call_transcription_persistence::{
     CALL_TRANSCRIPTION_STORAGE_BUNDLE_REVISION_V1, call_transcription_storage_bundle_v1,
 };
-use hermes_call_transcription_runtime::admission::{
+use makosh_call_transcription_runtime::admission::{
     STORAGE_CAPABILITY_ID_V1, module_descriptor_v1, settings_schema_bytes_v1,
 };
-use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
+use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
 
 const RELEASE_ARTIFACT_ID_V1: &str = "call_transcription.runtime.v1";
 const BUILD_ID_V1: &str = "managed-call-transcription-live";
@@ -84,7 +84,7 @@ pub(super) fn admit_call_transcription_runtime_v1(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             RELEASE_ARTIFACT_ID_V1,
             Sha256::digest(
                 std::fs::read(call_transcription_binary())
@@ -277,7 +277,7 @@ fn start_reserved_call_transcription_runtime_v1(
 fn call_transcription_storage_binding_v1(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(registration_id, STORAGE_CAPABILITY_ID_V1)
         .expect("read Call Transcription Storage binding")
@@ -295,5 +295,5 @@ fn call_transcription_release_artifact_v1() -> SignedRuntimeArtifact {
 }
 
 fn call_transcription_binary() -> PathBuf {
-    binary("HERMES_CALL_TRANSCRIPTION_RUNTIME_BIN")
+    binary("MAKOSH_CALL_TRANSCRIPTION_RUNTIME_BIN")
 }

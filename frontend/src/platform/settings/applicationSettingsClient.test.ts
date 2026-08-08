@@ -29,7 +29,7 @@ describe('application settings client', () => {
 
 		expect(item.setting_key).toBe(FRONTEND_THEME_SETTING_KEY)
 		expect(loaded.items.find((entry) => entry.setting_key === FRONTEND_THEME_SETTING_KEY)).toEqual(item)
-		expect(JSON.parse(storage.get('hermes-application-settings-v1') ?? '{}')).toEqual({
+		expect(JSON.parse(storage.get('makosh-application-settings-v1') ?? '{}')).toEqual({
 			[FRONTEND_THEME_SETTING_KEY]: { accentColor: 'violet' }
 		})
 	})

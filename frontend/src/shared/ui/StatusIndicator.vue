@@ -16,17 +16,17 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-status-indicator',
-  `hermes-status-indicator--${props.tone}`,
-  `hermes-status-indicator--${props.size}`,
-  { 'hermes-status-indicator--pulse': props.pulse },
+  'makosh-status-indicator',
+  `makosh-status-indicator--${props.tone}`,
+  `makosh-status-indicator--${props.size}`,
+  { 'makosh-status-indicator--pulse': props.pulse },
   props.class
 ])
 </script>
 
 <template>
   <span :class="classes">
-    <span class="hermes-status-indicator-dot" aria-hidden="true" />
-    <span v-if="label" class="hermes-status-indicator-label">{{ label }}</span>
+    <span class="makosh-status-indicator-dot" aria-hidden="true" />
+    <span v-if="label" class="makosh-status-indicator-label">{{ label }}</span>
   </span>
 </template>

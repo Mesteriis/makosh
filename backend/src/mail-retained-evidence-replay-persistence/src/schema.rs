@@ -1,4 +1,4 @@
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     v1::{StorageBundleV1, StorageMigrationStepV1},
     validation::validate_storage_bundle,
 };
@@ -107,7 +107,7 @@ pub fn append_mail_retained_evidence_replay_scan_storage_v1(
 
 #[cfg(test)]
 mod tests {
-    use hermes_storage_protocol::v1::StorageMigrationStepV1;
+    use makosh_storage_protocol::v1::StorageMigrationStepV1;
 
     use super::*;
 
@@ -119,7 +119,7 @@ mod tests {
             owner_id: owner_id.to_owned(),
             steps: (1..=20)
                 .map(|revision| {
-                    let sql = format!("CREATE TABLE hermes_data.mail_test_{revision} (id BIGINT);")
+                    let sql = format!("CREATE TABLE makosh_data.mail_test_{revision} (id BIGINT);")
                         .into_bytes();
                     StorageMigrationStepV1 {
                         revision,
@@ -173,7 +173,7 @@ mod tests {
         assert!(sql.contains("mail_retained_evidence_replay_result_outbox"));
         assert!(sql.contains("exact_envelope_bytes"));
         assert!(!sql.contains("communications_"));
-        assert!(!sql.contains("UPDATE hermes_data.mail_attachment_security_outbox"));
+        assert!(!sql.contains("UPDATE makosh_data.mail_attachment_security_outbox"));
     }
 
     #[test]
@@ -198,6 +198,6 @@ mod tests {
         assert!(!sql.contains("communications_"));
         assert!(!sql.contains("payload"));
         assert!(!sql.contains("subject"));
-        assert!(!sql.contains("UPDATE hermes_data.mail_attachment_security_outbox"));
+        assert!(!sql.contains("UPDATE makosh_data.mail_attachment_security_outbox"));
     }
 }

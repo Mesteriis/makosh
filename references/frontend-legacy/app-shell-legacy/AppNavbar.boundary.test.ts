@@ -39,9 +39,9 @@ describe('AppNavbar boundary', () => {
     expect(source).toContain('aria-label="Dashboard"')
     expect(source).toContain('class="app-navbar__brand"')
     expect(source).toContain('@click="handleBrandClick"')
-    expect(source).toContain("import { hermesBrandAssets } from '../assets/brand'")
-    expect(source).toContain(':src="hermesBrandAssets.logoMarkLight"')
-    expect(source).toContain(':src="hermesBrandAssets.logoMarkDark"')
+    expect(source).toContain("import { makoshBrandAssets } from '../assets/brand'")
+    expect(source).toContain(':src="makoshBrandAssets.logoMarkLight"')
+    expect(source).toContain(':src="makoshBrandAssets.logoMarkDark"')
     expect(source).toContain('app-navbar__brand-logo--light')
     expect(source).toContain('app-navbar__brand-logo--dark')
     expect(source.indexOf('class="app-navbar__brand"')).toBeLessThan(
@@ -108,7 +108,7 @@ describe('AppNavbar boundary', () => {
     expect(source).toContain(
       "import ToggleGroup from '../ToggleGroup.vue'"
     )
-    expect(source).toContain('hermes-toggle-group--tabs')
+    expect(source).toContain('makosh-toggle-group--tabs')
     expect(source).toContain('Смена языка')
     expect(source).toContain('Смена темы')
     expect(source).toContain('Семейство темы')
@@ -149,10 +149,10 @@ describe('AppNavbar boundary', () => {
     expect(layoutCss).toContain('width: 100dvw')
     expect(layoutCss).toContain('height: 100dvh')
     expect(layoutCss).toContain('max-height: 100%')
-    expect(layoutCss).toContain('.hermes-app-layout__main')
+    expect(layoutCss).toContain('.makosh-app-layout__main')
     expect(layoutCss).toContain('overflow: auto')
     expect(layoutCss).toContain(
-      '.hermes-app-layout__rail,\n.hermes-app-layout__sidebar,\n.hermes-app-layout__inspector'
+      '.makosh-app-layout__rail,\n.makosh-app-layout__sidebar,\n.makosh-app-layout__inspector'
     )
   })
 
@@ -167,7 +167,7 @@ describe('AppNavbar boundary', () => {
     )
 
     expect(tabletStyles).toContain("grid-template-areas: 'workspace'")
-    expect(tabletStyles).toContain('.hermes-app-layout--has-rail')
+    expect(tabletStyles).toContain('.makosh-app-layout--has-rail')
     expect(tabletStyles).toContain("grid-template-areas: 'rail workspace'")
   })
 
@@ -225,7 +225,7 @@ describe('AppNavbar boundary', () => {
     expect(root).not.toContain('PersonasWorkspaceView')
     expect(root).toContain("import AppNavbar from '../../shared/ui/shell/AppNavbar.vue'")
     expect(root).toContain('const navbar = useClientNavigationSurface()')
-    expect(clientNavigation).toContain("currentThemeFamily = ref<UiThemeFamily>('hermes')")
+    expect(clientNavigation).toContain("currentThemeFamily = ref<UiThemeFamily>('makosh')")
     expect(clientNavigation).toContain("currentThemeMode = ref<UiThemeMode>('dark')")
     expect(root).toContain('const breadcrumbs = navbar.breadcrumbs')
     expect(root).toContain('const currentTheme = navbar.currentTheme')
@@ -337,7 +337,7 @@ describe('AppNavbar boundary', () => {
     expect(surface).toContain('themeModeOptions')
     expect(surface).toContain('Light')
     expect(surface).toContain('Dark')
-    expect(surface).toContain('Hermes')
+    expect(surface).toContain('Макошь')
     expect(surface).toContain('healthStatusLabelVisibleMs = 5000')
     expect(surface).toContain('healthStatusLabelVisibleMs')
     expect(surface).toContain('HEALTH_RECOVERY_REFRESH_MS = 5_000')
@@ -401,7 +401,7 @@ describe('AppNavbar boundary', () => {
     const surface = useAppLayoutNavbarSurface()
 
     surface.selectReturnRouteFromSearch(
-      '?hermes_route=settings&hermes_oauth=gmail_connected'
+      '?makosh_route=settings&makosh_oauth=gmail_connected'
     )
 
     expect(surface.selectedRouteId.value).toBe('settings')
@@ -467,7 +467,7 @@ describe('AppNavbar boundary', () => {
     expect(surface.currentTheme.value).toBe('base-light')
     expect(surface.themeFamilyOptions.map((option) => option.value)).toEqual([
       'base',
-      'hermes',
+      'makosh',
     ])
     expect(surface.themeModeOptions.map((option) => option.value)).toEqual([
       'light',
@@ -477,19 +477,19 @@ describe('AppNavbar boundary', () => {
     surface.selectThemeMode('dark')
     expect(surface.currentTheme.value).toBe('base-dark')
 
-    surface.selectThemeFamily('hermes')
-    expect(surface.currentTheme.value).toBe('hermes-dark')
+    surface.selectThemeFamily('makosh')
+    expect(surface.currentTheme.value).toBe('makosh-dark')
 
     surface.selectThemeMode('light')
-    expect(surface.currentTheme.value).toBe('hermes-light')
+    expect(surface.currentTheme.value).toBe('makosh-light')
 
     surface.selectThemeFamily('base')
     expect(surface.currentTheme.value).toBe('base-light')
-    surface.selectThemeFamily('hermes')
+    surface.selectThemeFamily('makosh')
     surface.selectThemeMode('dark')
     surface.selectThemeFamily('light')
-    surface.selectThemeMode('hermes')
-    expect(surface.currentTheme.value).toBe('hermes-dark')
+    surface.selectThemeMode('makosh')
+    expect(surface.currentTheme.value).toBe('makosh-dark')
   })
 })
 

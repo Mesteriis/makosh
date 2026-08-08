@@ -1,17 +1,17 @@
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     validate_attachment_translation_inference_request_v1,
     wire::{
         AiInferenceTerminalStatusV1, AiProviderTranslationRequestV1,
         AttachmentTranslationInferenceRequestV1,
     },
 };
-use hermes_ai_inference_core::{
+use makosh_ai_inference_core::{
     AiAttachmentTranslationExecutionPlanV1, AiInferenceCoreErrorV1, AiInferenceRunStateV1,
     accept_attachment_translation_inference_v1, attachment_translation_inference_execution_plan_v1,
     begin_attachment_translation_inference_v1, build_attachment_translation_provider_input_v1,
     complete_attachment_translation_inference_v1, reject_attachment_translation_inference_v1,
 };
-use hermes_ai_inference_persistence::{
+use makosh_ai_inference_persistence::{
     AiAttachmentTranslationTransitionV1, AiInferencePersistenceErrorV1, AiInferencePersistenceV1,
     PersistedAiAttachmentTranslationRunV1,
 };

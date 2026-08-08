@@ -23,4 +23,4 @@ pub use schema::{
     ATTACHMENT_TRANSLATION_STORAGE_BUNDLE_REVISION_V1, attachment_translation_storage_bundle_v1,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-translation-persistence";
+pub const PACKAGE: &str = "makosh-attachment-translation-persistence";

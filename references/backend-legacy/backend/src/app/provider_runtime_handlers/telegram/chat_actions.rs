@@ -1,7 +1,7 @@
 use axum::Json;
 use axum::extract::{Path, State};
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 
 use super::helpers::{

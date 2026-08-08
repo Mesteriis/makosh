@@ -1,7 +1,7 @@
 ### Summary / Резюме
 
-В русскую wiki необходимо добавить (или обновить) страницу `operations/configuration.md`, документирующую файл `.config/nextest.toml`.  
-Файл содержит требуемую версию nextest, базовый профиль `default` и два дополнительных — `ci` и `integration`, с настройками повторных запусков, таймаутов, уровней вывода статусов и параметрами JUnit-отчётов.  
+В русскую wiki необходимо добавить (или обновить) страницу `operations/configuration.md`, документирующую файл `.config/nextest.toml`.
+Файл содержит требуемую версию nextest, базовый профиль `default` и два дополнительных — `ci` и `integration`, с настройками повторных запусков, таймаутов, уровней вывода статусов и параметрами JUnit-отчётов.
 Все утверждения в предлагаемой странице напрямую подкреплены содержимым исходного файла.
 
 ### Proposed pages / Предлагаемые страницы
@@ -11,7 +11,7 @@
 ```markdown
 # Конфигурация nextest
 
-Файл `.config/nextest.toml` задаёт поведение инструмента nextest.  
+Файл `.config/nextest.toml` задаёт поведение инструмента nextest.
 Требуемая версия: `0.9.131`, рекомендуемая: `0.9.138`.
 
 ## Профили
@@ -38,7 +38,7 @@
 | Параметр                | Значение                     |
 | ----------------------- | ---------------------------- |
 | `path`                  | `"junit.xml"`                |
-| `report-name`           | `"hermes-backend-default"`   |
+| `report-name`           | `"makosh-backend-default"`   |
 | `store-success-output`  | `false`                      |
 | `store-failure-output`  | `true`                       |
 
@@ -60,7 +60,7 @@
 | Параметр      | Значение                |
 | ------------- | ----------------------- |
 | `path`        | `"junit.xml"`           |
-| `report-name` | `"hermes-backend-ci"`   |
+| `report-name` | `"makosh-backend-ci"`   |
 
 Остальные параметры JUnit-отчёта унаследованы от `default`.
 
@@ -82,7 +82,7 @@
 | Параметр      | Значение                       |
 | ------------- | ------------------------------ |
 | `path`        | `"junit.xml"`                  |
-| `report-name` | `"hermes-backend-integration"` |
+| `report-name` | `"makosh-backend-integration"` |
 
 Остальные параметры JUnit-отчёта унаследованы от `default`.
 ```

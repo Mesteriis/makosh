@@ -5,19 +5,19 @@
 //! scheduler, or runtime process management.
 
 use chrono::{DateTime, Utc};
-use hermes_communications_api::commands::{
+use makosh_communications_api::commands::{
     CommunicationProviderCommand, ProviderCommandQueuePort, ProviderCommandQueuePortError,
 };
-use hermes_communications_api::evidence::{
+use makosh_communications_api::evidence::{
     CommunicationEvidencePort, CommunicationEvidencePortError, NewRawCommunicationRecord,
     StoredRawCommunicationRecord,
 };
-use hermes_provider_api::{
+use makosh_provider_api::{
     CredentialLease, ProviderCommandEnvelope, ProviderCommandInput, ProviderCommandResult,
     ProviderContractError, ProviderId, ProviderObservationEnvelope, ProviderRuntimePort,
     ProviderRuntimePortError,
 };
-use hermes_signal_hub_api::raw_signals::{ProviderRawSignalInput, ProviderRawSignalPort};
+use makosh_signal_hub_api::raw_signals::{ProviderRawSignalInput, ProviderRawSignalPort};
 use serde_json::Value;
 use serde_json::json;
 use thiserror::Error;
@@ -42,7 +42,7 @@ pub fn observation_to_raw_communication_record(
 /// Converts a persisted Communications command into the provider-neutral
 /// envelope consumed by an in-process adapter or connector client.
 pub fn communication_command_to_provider_envelope(
-    command: &hermes_communications_api::commands::CommunicationProviderCommand,
+    command: &makosh_communications_api::commands::CommunicationProviderCommand,
     provider_id: ProviderId,
     now: DateTime<Utc>,
     deadline: DateTime<Utc>,

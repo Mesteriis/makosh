@@ -1,15 +1,15 @@
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleRegistration, ModuleRegistrationState, ModuleStorageRequestV1,
     PlatformStorageBindingInputV1, PlatformStorageBindingV1, PlatformStorageBundleV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use sha2::{Digest, Sha256};
 
 use super::common::unique_target_root;
 
 #[test]
 fn control_store_retains_only_exact_descriptor_storage_requests() {
-    let root = unique_target_root("hermes-storage-request");
+    let root = unique_target_root("makosh-storage-request");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -44,7 +44,7 @@ fn control_store_retains_only_exact_descriptor_storage_requests() {
 
 #[test]
 fn control_store_rejects_cross_owner_or_unrequested_storage_requests() {
-    let root = unique_target_root("hermes-storage-request-invalid");
+    let root = unique_target_root("makosh-storage-request-invalid");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -85,7 +85,7 @@ fn control_store_rejects_cross_owner_or_unrequested_storage_requests() {
 
 #[test]
 fn control_store_keeps_only_the_next_durable_storage_binding_revision() {
-    let root = unique_target_root("hermes-storage-binding");
+    let root = unique_target_root("makosh-storage-binding");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -109,7 +109,7 @@ fn control_store_keeps_only_the_next_durable_storage_binding_revision() {
         .expect("reserve first binding for revoke");
     assert!(matches!(
         revoking.state(),
-        hermes_kernel_control_store::PlatformStorageBindingStateV1::Revoking
+        makosh_kernel_control_store::PlatformStorageBindingStateV1::Revoking
     ));
     assert_eq!(
         store
@@ -133,7 +133,7 @@ fn control_store_keeps_only_the_next_durable_storage_binding_revision() {
 
 #[test]
 fn control_store_atomically_reserves_all_active_storage_bindings_for_a_registration() {
-    let root = unique_target_root("hermes-registration-storage-revoke");
+    let root = unique_target_root("makosh-registration-storage-revoke");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -180,7 +180,7 @@ fn control_store_atomically_reserves_all_active_storage_bindings_for_a_registrat
     );
     assert!(reserved.iter().all(|binding| matches!(
         binding.state(),
-        hermes_kernel_control_store::PlatformStorageBindingStateV1::Revoking
+        makosh_kernel_control_store::PlatformStorageBindingStateV1::Revoking
     )));
     assert_eq!(
         store
@@ -194,7 +194,7 @@ fn control_store_atomically_reserves_all_active_storage_bindings_for_a_registrat
             .expect("read unrelated Storage binding")
             .expect("unrelated Storage binding")
             .state(),
-        hermes_kernel_control_store::PlatformStorageBindingStateV1::Active
+        makosh_kernel_control_store::PlatformStorageBindingStateV1::Active
     ));
 
     std::fs::remove_dir_all(root).expect("remove fixture directory");
@@ -202,7 +202,7 @@ fn control_store_atomically_reserves_all_active_storage_bindings_for_a_registrat
 
 #[test]
 fn registration_storage_fence_remains_durable_when_storage_runtime_is_unavailable() {
-    let root = unique_target_root("hermes-registration-storage-fence");
+    let root = unique_target_root("makosh-registration-storage-fence");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -228,7 +228,7 @@ fn registration_storage_fence_remains_durable_when_storage_runtime_is_unavailabl
             .expect("read reserved Storage binding")
             .expect("reserved Storage binding")
             .state(),
-        hermes_kernel_control_store::PlatformStorageBindingStateV1::Revoking
+        makosh_kernel_control_store::PlatformStorageBindingStateV1::Revoking
     ));
 
     std::fs::remove_dir_all(root).expect("remove fixture directory");
@@ -236,7 +236,7 @@ fn registration_storage_fence_remains_durable_when_storage_runtime_is_unavailabl
 
 #[test]
 fn control_store_retains_one_immutable_canonical_bundle_per_owner_revision() {
-    let root = unique_target_root("hermes-storage-bundle");
+    let root = unique_target_root("makosh-storage-bundle");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");

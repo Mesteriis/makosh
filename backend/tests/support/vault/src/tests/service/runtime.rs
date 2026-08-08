@@ -1,12 +1,12 @@
 use std::os::unix::fs::PermissionsExt;
 
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_protocol::{
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_protocol::{
     LeaseAudienceV1, SecretClassV1, VaultActionV1, VaultLeaseIssueRequestV1, VaultPurposeRequestV1,
     VaultTransportCommandV1,
 };
-use hermes_vault_store_sqlcipher::{SecretRecordScope, VaultStore};
+use makosh_vault_store_sqlcipher::{SecretRecordScope, VaultStore};
 use tempfile::TempDir;
 
 use crate::service::runtime::{VaultSecretReplaceRequestV1, VaultService, VaultServiceError};
@@ -400,7 +400,7 @@ fn transport_issue_lease_requires_the_exact_encrypted_route_audience() {
     let issued = service
         .execute_command_once(&command, &audience, 100)
         .expect("issue through transport");
-    let lease_id = hermes_vault_protocol::LeaseIdV1::new(
+    let lease_id = makosh_vault_protocol::LeaseIdV1::new(
         String::from_utf8(issued.to_vec()).expect("lease identifier text"),
     )
     .expect("typed lease identifier");
@@ -433,7 +433,7 @@ struct ReplacementFixture {
     _temporary: TempDir,
     service: VaultService,
     audience: LeaseAudienceV1,
-    prior_record: hermes_vault_store_sqlcipher::SecretRecordId,
+    prior_record: makosh_vault_store_sqlcipher::SecretRecordId,
     prior_scope: SecretRecordScope,
     next_scope: SecretRecordScope,
 }
@@ -541,9 +541,9 @@ fn lease_request(
 
 fn assert_lease_is_invalidated(
     service: &mut VaultService,
-    lease_id: &hermes_vault_protocol::LeaseIdV1,
+    lease_id: &makosh_vault_protocol::LeaseIdV1,
     audience: &LeaseAudienceV1,
-    record_id: &hermes_vault_store_sqlcipher::SecretRecordId,
+    record_id: &makosh_vault_store_sqlcipher::SecretRecordId,
     scope: &SecretRecordScope,
 ) {
     assert!(matches!(

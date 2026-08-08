@@ -4,7 +4,7 @@ use std::net::SocketAddr;
 use std::path::PathBuf;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-use hermes_kernel_control_store::ServerBootstrapPairing;
+use makosh_kernel_control_store::ServerBootstrapPairing;
 use sha2::{Digest, Sha256};
 
 use crate::identity::enrollment::store::prepare_pristine;

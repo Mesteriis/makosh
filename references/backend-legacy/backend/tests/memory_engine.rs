@@ -1,5 +1,5 @@
 use chrono::{Duration, TimeZone, Utc};
-use hermes_hub_backend::engines::memory::{
+use makosh_hub_backend::engines::memory::{
     MemoryEngine,
     models::{
         MemoryCardDraft, MemoryContextSource, MemoryEntityRef, MemoryFactDraft, MemoryFactState,
@@ -87,7 +87,7 @@ fn memory_engine_builds_source_backed_context_pack_for_entity() {
             affected_entity_kind: "persona".to_owned(),
             affected_entity_id: persona_id.to_owned(),
             fact_type: "project".to_owned(),
-            value: "Hermes Hub".to_owned(),
+            value: "Макошь".to_owned(),
             source: "documents:doc-1".to_owned(),
             confidence: 0.81,
             review_state: "accepted".to_owned(),
@@ -155,7 +155,7 @@ fn memory_engine_detects_missing_source_backed_fact_types_for_entity() {
             affected_entity_kind: "persona".to_owned(),
             affected_entity_id: persona_id.to_owned(),
             fact_type: "project".to_owned(),
-            value: "Hermes Hub".to_owned(),
+            value: "Макошь".to_owned(),
             source: "documents:doc-1".to_owned(),
             confidence: 0.81,
             review_state: "accepted".to_owned(),
@@ -202,7 +202,7 @@ fn memory_engine_detects_stale_source_backed_facts_for_entity() {
             affected_entity_kind: "persona".to_owned(),
             affected_entity_id: persona_id.to_owned(),
             fact_type: "project".to_owned(),
-            value: "Hermes Hub".to_owned(),
+            value: "Макошь".to_owned(),
             source: "documents:doc-1".to_owned(),
             confidence: 0.81,
             review_state: "accepted".to_owned(),
@@ -236,7 +236,7 @@ fn memory_engine_detects_stale_source_backed_facts_for_entity() {
 
 #[test]
 fn memory_engine_assembles_cross_domain_context_for_related_entities() {
-    let project_id = "project:hermes-hub";
+    let project_id = "project:makosh";
     let related_entities = vec![
         MemoryEntityRef {
             entity_kind: "communication".to_owned(),
@@ -256,7 +256,7 @@ fn memory_engine_assembles_cross_domain_context_for_related_entities() {
             item_kind: "fact".to_owned(),
             title: "status".to_owned(),
             body: "Implementation alignment is in progress.".to_owned(),
-            source: "projects:hermes-hub".to_owned(),
+            source: "projects:makosh".to_owned(),
             confidence: 0.95,
             review_state: "accepted".to_owned(),
         },
@@ -323,7 +323,7 @@ fn memory_engine_assembles_cross_domain_context_for_related_entities() {
     assert_eq!(
         pack.entity_citations,
         vec![
-            "project:project:hermes-hub".to_owned(),
+            "project:project:makosh".to_owned(),
             "communication:communication:email-1".to_owned(),
             "document:document:architecture-note".to_owned(),
         ]
@@ -331,7 +331,7 @@ fn memory_engine_assembles_cross_domain_context_for_related_entities() {
     assert_eq!(
         pack.source_citations,
         vec![
-            "projects:hermes-hub".to_owned(),
+            "projects:makosh".to_owned(),
             "communication_messages:message-1".to_owned(),
             "documents:architecture-note".to_owned(),
         ]

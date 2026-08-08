@@ -4,13 +4,13 @@ use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
-use hermes_ollama_ai_api::{decode_ollama_ai_settings_v1, ollama_ai_settings_schema_bytes_v1};
-use hermes_ollama_ai_persistence::schema::ollama_ai_storage_bundle_v1;
-use hermes_ollama_ai_runtime::{
+use makosh_ollama_ai_api::{decode_ollama_ai_settings_v1, ollama_ai_settings_schema_bytes_v1};
+use makosh_ollama_ai_persistence::schema::ollama_ai_storage_bundle_v1;
+use makosh_ollama_ai_runtime::{
     OllamaAiManagedRuntimeErrorV1, OllamaAiManagedRuntimeV1, OllamaAiRuntimeAdmissionV1,
     ollama_ai_module_descriptor_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedIntegrationRuntimeConfigurationV1,
     validation::{
         descriptor::{

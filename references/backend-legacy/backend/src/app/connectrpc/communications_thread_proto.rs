@@ -1,7 +1,7 @@
 use crate::domains::communications::threads::CommunicationThread;
 use crate::domains::communications::threads::ThreadMessage;
 use chrono::{DateTime, Utc};
-use hermes_connectrpc_contracts::hermes::communications::v1::ThreadMessage as ProtoThreadMessage;
+use makosh_connectrpc_contracts::makosh::communications::v1::ThreadMessage as ProtoThreadMessage;
 fn timestamp_string(value: DateTime<Utc>) -> String {
     value.to_rfc3339()
 }
@@ -33,8 +33,8 @@ pub(super) fn message(item: ThreadMessage) -> ProtoThreadMessage {
 
 pub(super) fn thread(
     item: CommunicationThread,
-) -> hermes_connectrpc_contracts::hermes::communications::v1::CommunicationThread {
-    hermes_connectrpc_contracts::hermes::communications::v1::CommunicationThread {
+) -> makosh_connectrpc_contracts::makosh::communications::v1::CommunicationThread {
+    makosh_connectrpc_contracts::makosh::communications::v1::CommunicationThread {
         thread_id: item.thread_id,
         account_id: item.account_id,
         subject: item.subject,

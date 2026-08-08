@@ -1,15 +1,15 @@
-use hermes_speech_to_text_api::{
+use makosh_speech_to_text_api::{
     validate_speech_to_text_request_v1,
     wire::{
         SpeechLanguageV1, SpeechToTextRejectCodeV1, SpeechToTextRequestV1, SpeechToTextResultV1,
         SpeechToTextTerminalStatusV1,
     },
 };
-use hermes_whisper_stt_core::{
+use makosh_whisper_stt_core::{
     WHISPER_STT_POLICY_REVISION_V1, WhisperSttExecutionPlanV1, plan_whisper_stt_execution_v1,
     reject_whisper_stt_result_v1,
 };
-use hermes_whisper_stt_persistence::{
+use makosh_whisper_stt_persistence::{
     PersistedWhisperSttRunV1, WhisperSttPersistenceErrorV1, WhisperSttPersistenceV1,
     WhisperSttReadyMetadataV1, WhisperSttRunIdentityV1, WhisperSttRunStateV1,
     WhisperSttTransitionV1,

@@ -7,14 +7,14 @@ fn main() {
 
     compile_contract(
         &output,
-        "proto/hermes/communications/content/ticket/v1/ticket.proto",
+        "proto/makosh/communications/content/ticket/v1/ticket.proto",
         "communications-content-ticket-v1.bin",
         "COMMUNICATIONS_CONTENT_TICKET_SCHEMA_SHA256",
         "communications_content_ticket_schema.rs",
     );
     compile_contract(
         &output,
-        "proto/hermes/communications/content/read/v1/read.proto",
+        "proto/makosh/communications/content/read/v1/read.proto",
         "communications-content-read-v1.bin",
         "COMMUNICATIONS_CONTENT_READ_SCHEMA_SHA256",
         "communications_content_read_schema.rs",

@@ -1,4 +1,4 @@
-use hermes_provider_whatsapp::ids::{
+use makosh_provider_whatsapp::ids::{
     whatsapp_web_message_id, whatsapp_web_raw_record_id, whatsapp_web_session_id,
 };
 

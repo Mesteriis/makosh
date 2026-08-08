@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package makosh.gateway.v1;
+
+// Owner-neutral confirmation of the current browser device session. It carries
+// no owner content, opaque session identifier, credential material or grant.
+message BrowserSessionStatusRequestV1 {}
+
+message BrowserSessionStatusResponseV1 {
+  uint32 major = 1;
+  uint64 session_expires_at_unix_millis = 2;
+  BrowserGatewayAccessModeV1 access_mode = 3;
+}
+
+enum BrowserGatewayAccessModeV1 {
+  BROWSER_GATEWAY_ACCESS_MODE_V1_UNSPECIFIED = 0;
+  BROWSER_GATEWAY_ACCESS_MODE_V1_PAIRED = 1;
+  BROWSER_GATEWAY_ACCESS_MODE_V1_LAN_DEVELOPMENT = 2;
+  BROWSER_GATEWAY_ACCESS_MODE_V1_LOCAL_DEVELOPMENT = 3;
+}
+
+service BrowserSessionService {
+  rpc GetStatus(BrowserSessionStatusRequestV1) returns (BrowserSessionStatusResponseV1);
+}

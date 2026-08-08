@@ -4,9 +4,9 @@ use axum::http::StatusCode;
 use serde_json::json;
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::platform::storage::database::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_ok, get_request_with_token, json_body, json_post_request_with_actor,
     unique_suffix,
@@ -25,7 +25,7 @@ async fn removed_account_blocks_manual_send_before_message_audit_and_events() {
     let provider_chat_id = format!("send-gates-chat-{suffix}");
     let command_id = format!("send-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -57,7 +57,7 @@ async fn removed_account_blocks_manual_send_before_message_audit_and_events() {
             "chat_title": "Manual Send Gate Chat",
             "sender_id": format!("sender-{suffix}"),
             "sender_display_name": "Maria Petrova",
-            "text": "Can Hermes still send after account removal?",
+            "text": "Can Макошь still send after account removal?",
             "import_batch_id": format!("telegram-send-gates-{suffix}"),
             "occurred_at": "2026-06-06T12:00:00Z",
             "delivery_state": "received"
@@ -75,7 +75,7 @@ async fn removed_account_blocks_manual_send_before_message_audit_and_events() {
                 .uri(format!(
                     "/api/v1/integrations/telegram/accounts/{account_id}"
                 ))
-                .header("x-hermes-secret", LOCAL_API_TOKEN)
+                .header("x-makosh-secret", LOCAL_API_TOKEN)
                 .body(axum::body::Body::empty())
                 .expect("delete request"),
         )

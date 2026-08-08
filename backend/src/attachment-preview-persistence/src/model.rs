@@ -1,8 +1,8 @@
-use hermes_attachment_preview_api::wire::{
+use makosh_attachment_preview_api::wire::{
     AttachmentPreviewContentTypeV1, AttachmentPreviewErrorCodeV1, AttachmentPreviewKindV1,
     AttachmentPreviewStateV1,
 };
-use hermes_attachment_preview_core::{
+use makosh_attachment_preview_core::{
     AttachmentPreviewCustodyDelegationIntentV1, AttachmentPreviewSafetyStateV1,
     AttachmentPreviewStatusV1, validate_attachment_preview_status_v1,
 };
@@ -180,7 +180,7 @@ pub struct RedeemedAttachmentPreviewTicketV1 {
 #[must_use]
 pub fn attachment_preview_run_id_v1(logical_owner_id: &str, operation_id: [u8; 16]) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-preview.run.v1\0");
+    hasher.update(b"makosh.attachment-preview.run.v1\0");
     hasher.update(logical_owner_id.as_bytes());
     hasher.update(operation_id);
     hasher.finalize()[..16].try_into().expect("digest prefix")
@@ -189,7 +189,7 @@ pub fn attachment_preview_run_id_v1(logical_owner_id: &str, operation_id: [u8; 1
 #[must_use]
 pub fn attachment_preview_request_fingerprint_v1(attachment_anchor_id: [u8; 16]) -> [u8; 32] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-preview.request.v1\0");
+    hasher.update(b"makosh.attachment-preview.request.v1\0");
     hasher.update(attachment_anchor_id);
     hasher.finalize().into()
 }
@@ -203,7 +203,7 @@ pub fn attachment_preview_job_id_v1(
     delegation_result_message_id: [u8; 16],
 ) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-preview.job.v1\0");
+    hasher.update(b"makosh.attachment-preview.job.v1\0");
     hasher.update(run_id);
     hasher.update(operation_id);
     hasher.update(attachment_anchor_id);

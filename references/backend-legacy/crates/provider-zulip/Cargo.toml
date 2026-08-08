@@ -1,5 +1,5 @@
 [package]
-name = "hermes-provider-zulip"
+name = "makosh-provider-zulip"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.89"
@@ -9,7 +9,7 @@ license = "MIT"
 [dependencies]
 async-trait = "0.1"
 chrono = { version = "0.4", default-features = false, features = ["clock", "serde"] }
-hermes-provider-api = { path = "../provider-api" }
+makosh-provider-api = { path = "../provider-api" }
 reqwest = { version = "0.12", default-features = false, features = ["json", "multipart", "rustls-tls"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

@@ -1,6 +1,6 @@
 //! Immutable Vault route context supplied by a verified runtime launch.
 
-use hermes_vault_protocol::{VaultTransportPublicKey, validate_vault_instance_id};
+use makosh_vault_protocol::{VaultTransportPublicKey, validate_vault_instance_id};
 
 #[derive(Clone)]
 pub struct NatsVaultRouteContextV1 {

@@ -3,7 +3,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 
-describe('Hermes UI editor component contracts', () => {
+describe('Макошь UI editor component contracts', () => {
 	it('keeps RichTextEditor documented and exported through the UI kit', () => {
 		const uiRoot = fileURLToPath(new URL('.', import.meta.url))
 		const barrel = readFileSync(join(uiRoot, 'index.ts'), 'utf8')
@@ -66,6 +66,6 @@ describe('Hermes UI editor component contracts', () => {
 		expect(storySources).not.toContain("tags: ['autodocs']")
 		expect(storySources).not.toContain('tags: ["autodocs"]')
 		expect(storybookMain).toContain("'../stories/**/*.mdx'")
-		expect(docsSource).toContain('<Meta title="Hermes UI/Docs" />')
+		expect(docsSource).toContain('<Meta title="Макошь UI/Docs" />')
 	})
 })

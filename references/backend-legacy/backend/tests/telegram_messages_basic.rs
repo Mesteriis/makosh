@@ -5,13 +5,13 @@ use chrono::Utc;
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::communications::messages::provider_observation_projection::consume_accepted_signal_event;
-use hermes_hub_backend::domains::signal_hub::telegram::dispatch_telegram_raw_signal;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::communications::messages::provider_observation_projection::consume_accepted_signal_event;
+use makosh_hub_backend::domains::signal_hub::telegram::dispatch_telegram_raw_signal;
+use makosh_hub_backend::platform::storage::database::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_ok, get_request_with_token, json_body, json_post_request_with_actor,
     json_post_request_with_explicit_actor_header, json_put_request_with_actor, unique_suffix,
@@ -28,9 +28,9 @@ async fn telegram_manual_send_records_sent_message_and_redacted_provider_write_a
     let account_id = format!("telegram-send-{suffix}");
     let chat_id = format!("send-chat-{suffix}");
     let command_id = format!("manual-send-{suffix}");
-    let message_text = "Manual Telegram reply from Hermes.";
+    let message_text = "Manual Telegram reply from Макошь.";
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -62,7 +62,7 @@ async fn telegram_manual_send_records_sent_message_and_redacted_provider_write_a
             "chat_title": "Manual Send Chat",
             "sender_id": format!("sender-{suffix}"),
             "sender_display_name": "Maria Petrova",
-            "text": "Can Hermes reply here?",
+            "text": "Can Макошь reply here?",
             "import_batch_id": format!("telegram-fixture-{suffix}"),
             "occurred_at": "2026-06-06T12:00:00Z",
             "delivery_state": "received"
@@ -124,7 +124,7 @@ async fn telegram_manual_send_records_sent_message_and_redacted_provider_write_a
         .find(|message| message["delivery_state"] == "sent")
         .expect("sent message");
     assert_eq!(sent_message["body_text_preview"], json!(message_text));
-    assert_eq!(sent_message["sender_display_name"], json!("Hermes"));
+    assert_eq!(sent_message["sender_display_name"], json!("Макошь"));
 
     let audit_metadata: Value = sqlx::query_scalar(
         r#"
@@ -137,7 +137,7 @@ async fn telegram_manual_send_records_sent_message_and_redacted_provider_write_a
         LIMIT 1
         "#,
     )
-    .bind("hermes-frontend")
+    .bind("makosh-frontend")
     .bind(send_body["message_id"].as_str().expect("message id"))
     .fetch_one(&pool)
     .await
@@ -166,7 +166,7 @@ async fn telegram_manual_send_records_sent_message_and_redacted_provider_write_a
             &format!("/api/v1/communications/conversations/{chat_id}/messages"),
             json!({
                 "account_id": account_id,
-                "text": "Provider-neutral Telegram send from Hermes."
+                "text": "Provider-neutral Telegram send from Макошь."
             }),
             LOCAL_API_TOKEN,
         ))
@@ -205,7 +205,7 @@ async fn telegram_raw_message_endpoint_returns_sanitized_source_evidence() {
     let chat_id = format!("raw-chat-{suffix}");
     let provider_message_id = format!("raw-message-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -326,7 +326,7 @@ async fn telegram_fixture_sync_chats_returns_account_chat_metadata() {
     let account_id = format!("telegram-sync-chats-{suffix}");
     let chat_id = format!("sync-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -401,7 +401,7 @@ async fn telegram_fixture_sync_selected_history_returns_projected_messages() {
     let selected_chat_id = format!("selected-chat-{suffix}");
     let other_chat_id = format!("other-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -501,7 +501,7 @@ async fn telegram_group_history_policy_is_local_and_persisted() {
     let account_id = format!("telegram-history-policy-{suffix}");
     let provider_chat_id = format!("group-history-policy-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )

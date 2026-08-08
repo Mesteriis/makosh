@@ -1,7 +1,7 @@
 use std::path::Path;
 use std::process::Command;
 
-use hermes_kernel_control_store::PlatformManagedProcessBinding;
+use makosh_kernel_control_store::PlatformManagedProcessBinding;
 
 use crate::distribution::staged_artifact::StagedNativeArtifact;
 use crate::platform::macos::native_launch;

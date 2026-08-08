@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Создаётся страница `operations/documentation-map.md` — карта документации фронтенда Hermes Hub. Она перечисляет имеющиеся документы по фронтенду, кратко описывает их содержание и указывает на известные расхождения между текущим состоянием кода и документацией/ADR, выявленные в ходе code review от 2026-06-14. Всё содержание страницы опирается исключительно на встроенные в этот context pack исходные файлы; ссылки на ADR, не включённые в пакет, документируются только как упоминания без раскрытия содержания.
+Создаётся страница `operations/documentation-map.md` — карта документации фронтенда Макошь. Она перечисляет имеющиеся документы по фронтенду, кратко описывает их содержание и указывает на известные расхождения между текущим состоянием кода и документацией/ADR, выявленные в ходе code review от 2026-06-14. Всё содержание страницы опирается исключительно на встроенные в этот context pack исходные файлы; ссылки на ADR, не включённые в пакет, документируются только как упоминания без раскрытия содержания.
 
 ## Предложенные страницы
 
@@ -25,7 +25,7 @@ generated_by: code-wiki-ru
 ```markdown
 # Карта документации фронтенда
 
-Страница-оглавление по документации фронтенда Hermes Hub. Описывает доступные файлы документации и основные факты из них.
+Страница-оглавление по документации фронтенда Макошь. Описывает доступные файлы документации и основные факты из них.
 
 ## Документы
 
@@ -36,17 +36,17 @@ generated_by: code-wiki-ru
 - **Стек:** Vue 3 + TypeScript, сборка Tauri, Vite, Tailwind.
 - **Область применения:** десктопная оболочка для локальных backend API; визарды настройки учётных записей Gmail, iCloud и IMAP; рабочие поверхности для графов, проектов, задач, идентичности Persona, документов и локальных AI-воркфлоу. Мобильный UI исключён текущим `ADR-0031`.
 - **Стили:** глобальные стили подгружаются из `src/assets/styles/tokens.css` и `src/assets/styles/app.css`. Компоненты используют scoped `<style>` и классы Tailwind. Inline-стили в продакшен-компонентах запрещены. Минимальное окно — `800x600`, при меньших размерах показывается viewport guard (не мобильная поддержка).
-- **Скэффолд:** проект создан командами `pnpm create vue@latest . -- --typescript --force` и `pnpm tauri init --ci --app-name "Hermes Hub" ...`.
+- **Скэффолд:** проект создан командами `pnpm create vue@latest . -- --typescript --force` и `pnpm tauri init --ci --app-name "Макошь" ...`.
 - **Команды разработки:**
   - `make dev` — запуск полного dev-стека (PostgreSQL в Docker, backend через `bacon`, фронтенд на `http://127.0.0.1:5174`).
   - `make logs` — агрегированный plain-text лог.
   - `make build` — продакшен-сборка: фронтенд, backend, ресурсы Google OAuth, TDLib, встраиваемый backend sidecar, затем `pnpm tauri build`.
   - `make migrate`, `make clean`, `make clean-vault`.
-- **Встраиваемый TDLib runtime:** macOS-релиз пакует `libtdjson.dylib` из `frontend/src-tauri/resources/tdlib/`. Файлы не коммитятся; `make build` подготавливает ресурс, копируя из `HERMES_TDJSON_SOURCE`, `HERMES_TDJSON_PATH`, Homebrew `tdlib` или по фиксированным путям. Для CI можно собрать TDLib из исходников через `HERMES_TDLIB_BUILD_FROM_SOURCE=1 make build`. Linux — только контейнеры, без десктопного пакета TDLib.
-- **Telegram QR-вход:** требует учётные данные приложения Telegram. Для разработки — переменные окружения `HERMES_TELEGRAM_API_ID` и `HERMES_TELEGRAM_API_HASH`. Для упакованных сборок — `HERMES_BUNDLED_TELEGRAM_API_ID` и `HERMES_BUNDLED_TELEGRAM_API_HASH`, которые лаунчер передаёт backend-sidecar как `HERMES_TELEGRAM_API_ID` и `HERMES_TELEGRAM_API_HASH`.
-- **Google OAuth:** нужен один Desktop-клиент проекта. Релизная сборка копирует JSON-файл клиента в `frontend/src-tauri/resources/google-oauth/client_secret.json` (игнорируется Git). Читается из `HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH` (`docker/.env`) или `HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_SOURCE` (shell). Лаунчер передаёт путь к backend-sidecar как `HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH`.
+- **Встраиваемый TDLib runtime:** macOS-релиз пакует `libtdjson.dylib` из `frontend/src-tauri/resources/tdlib/`. Файлы не коммитятся; `make build` подготавливает ресурс, копируя из `MAKOSH_TDJSON_SOURCE`, `MAKOSH_TDJSON_PATH`, Homebrew `tdlib` или по фиксированным путям. Для CI можно собрать TDLib из исходников через `MAKOSH_TDLIB_BUILD_FROM_SOURCE=1 make build`. Linux — только контейнеры, без десктопного пакета TDLib.
+- **Telegram QR-вход:** требует учётные данные приложения Telegram. Для разработки — переменные окружения `MAKOSH_TELEGRAM_API_ID` и `MAKOSH_TELEGRAM_API_HASH`. Для упакованных сборок — `MAKOSH_BUNDLED_TELEGRAM_API_ID` и `MAKOSH_BUNDLED_TELEGRAM_API_HASH`, которые лаунчер передаёт backend-sidecar как `MAKOSH_TELEGRAM_API_ID` и `MAKOSH_TELEGRAM_API_HASH`.
+- **Google OAuth:** нужен один Desktop-клиент проекта. Релизная сборка копирует JSON-файл клиента в `frontend/src-tauri/resources/google-oauth/client_secret.json` (игнорируется Git). Читается из `MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH` (`docker/.env`) или `MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_SOURCE` (shell). Лаунчер передаёт путь к backend-sidecar как `MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH`.
 - **Встраиваемый backend sidecar:** macOS-релиз пакует Rust-бэкенд как Tauri-sidecar из `frontend/src-tauri/binaries/`. Бинарники не коммитятся; `make build` подготавливает их перед `tauri build`.
-- **Архитектура:** доменно-ориентированная структура в `src/domains/` (14 доменов: home, settings, personas, organizations, projects, tasks, calendar, documents, notes, knowledge, review, agents, timeline, communications, telegram, whatsapp). Общая структура домена: `types/`, `api/`, `queries/` (TanStack Query), `stores/` (Pinia), `components/`, `views/`. Поток данных: API → TanStack Query → компонент, или API → Pinia Store → компонент. Все запросы используют `X-Hermes-Secret` через централизованный `ApiClient` (`src/platform/api/ApiClient.ts`).
+- **Архитектура:** доменно-ориентированная структура в `src/domains/` (14 доменов: home, settings, personas, organizations, projects, tasks, calendar, documents, notes, knowledge, review, agents, timeline, communications, telegram, whatsapp). Общая структура домена: `types/`, `api/`, `queries/` (TanStack Query), `stores/` (Pinia), `components/`, `views/`. Поток данных: API → TanStack Query → компонент, или API → Pinia Store → компонент. Все запросы используют `X-Макошь-Secret` через централизованный `ApiClient` (`src/platform/api/ApiClient.ts`).
 - **Валидация:** `make build`. Полный стек: `make dev`.
 
 ### `frontend/docs/code-review-2026-06-14.md`
@@ -79,7 +79,7 @@ generated_by: code-wiki-ru
 ### `frontend/src-tauri/binaries/README.md`
 
 - Описывает каталог генерируемых Tauri-sidecar бинарников.
-- macOS-релиз ожидает файлы: `hermes-hub-backend-aarch64-apple-darwin` и `hermes-hub-backend-x86_64-apple-darwin`.
+- macOS-релиз ожидает файлы: `makosh-backend-aarch64-apple-darwin` и `makosh-backend-x86_64-apple-darwin`.
 - Генерация выполняется командой `make backend-sidecar-macos`.
 - Бинарники не коммитятся в репозиторий.
 
@@ -88,23 +88,23 @@ generated_by: code-wiki-ru
 - Пакетируется в Tauri-бандл как `$RESOURCES/google-oauth/`.
 - Для релиза в каталоге должен лежать `client_secret.json`.
 - Используется команда `make google-oauth-resource`, затем сборка фронтенда.
-- `make google-oauth-resource` копирует JSON из `HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH` (`docker/.env`) или `HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_SOURCE` (shell).
+- `make google-oauth-resource` копирует JSON из `MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH` (`docker/.env`) или `MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_SOURCE` (shell).
 - Сгенерированный `client_secret.json` добавлен в `.gitignore`.
-- Упакованный лаунчер передаёт путь к файлу в backend-sidecar как `HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH`.
+- Упакованный лаунчер передаёт путь к файлу в backend-sidecar как `MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH`.
 
 ### `frontend/src-tauri/resources/tdlib/README.md`
 
 - Пакетируется в Tauri-бандл как `$RESOURCES/tdlib/`.
 - Для macOS-релиза необходимо разместить `libtdjson.dylib` в одном из каталогов: `macos-arm64/`, `macos-x64/` или `macos-universal/`.
-- Заполнение каталога выполняется через `make tdlib-macos-resource`, который ищет библиотеку по `HERMES_TDJSON_SOURCE`, `HERMES_TDJSON_PATH`, Homebrew `tdlib`.
-- Для CI сборку TDLib из исходников можно включить флагом `HERMES_TDLIB_BUILD_FROM_SOURCE=1 make tdlib-macos-resource`.
+- Заполнение каталога выполняется через `make tdlib-macos-resource`, который ищет библиотеку по `MAKOSH_TDJSON_SOURCE`, `MAKOSH_TDJSON_PATH`, Homebrew `tdlib`.
+- Для CI сборку TDLib из исходников можно включить флагом `MAKOSH_TDLIB_BUILD_FROM_SOURCE=1 make tdlib-macos-resource`.
 - Сгенерированные динамические библиотеки не коммитятся.
 - Linux — только dev-контейнеры; десктопный TDLib-ресурс не пакетируется.
 ```
 
 ## Покрытие источников
 
-- **`frontend/README.md`** — полностью покрыт: стек, область применения, контракт стилей, минимальное окно, команды скэффолда и разработки (`make dev`, `make build`, прочие), встраиваемые ресурсы (TDLib, Telegram-учётные данные, Google OAuth, backend sidecar), архитектура (домены, структура, поток данных, `ApiClient`, `X-Hermes-Secret`), валидация.
+- **`frontend/README.md`** — полностью покрыт: стек, область применения, контракт стилей, минимальное окно, команды скэффолда и разработки (`make dev`, `make build`, прочие), встраиваемые ресурсы (TDLib, Telegram-учётные данные, Google OAuth, backend sidecar), архитектура (домены, структура, поток данных, `ApiClient`, `X-Макошь-Secret`), валидация.
 - **`frontend/docs/code-review-2026-06-14.md`** (обрезан до 12000 символов) — покрыты: дата ревью, охват (80+ файлов, категории), критические и крупные проблемы (инициализация `ApiClient`, расхождение имён переменных окружения, некорректная отрисовка писем, пустой rendered view, утрата валидационного гейта, прямой вызов API из представлений, дрейф i18n), ссылки на ADR, данные валидационных прогонов. Часть об AI Control Center diff также зафиксирована в той мере, в какой она вошла в обрезанный фрагмент. Полный текст ревью остаётся за пределами контекст-пакета.
 - **`frontend/src-tauri/binaries/README.md`** — полностью покрыт: ожидаемые имена бинарников для macOS, команда генерации, факт некоммитности.
 - **`frontend/src-tauri/resources/google-oauth/README.md`** — полностью покрыт: целевой файл, команда подготовки ресурса, источники конфигурации (env), игнорирование `client_secret.json` Git-ом, способ передачи пути в backend-sidecar.
@@ -123,7 +123,7 @@ generated_by: code-wiki-ru
 На основе предоставленного контекста выявлены следующие расхождения между кодом и документацией/ADR:
 
 1. **Инициализация `ApiClient`** — `frontend/README.md` описывает использование `ApiClient` для авторизованных запросов, однако ревью от 2026-06-14 фиксирует отсутствие вызова `ApiClient.init()` в entrypoint, что приводит к падению рантайма (контракт `ApiClient` не выполняется).
-2. **Имена переменных окружения для конфигурации** — `frontend/README.md` не задаёт конкретные имена, но ревью указывает, что текущий `config/index.ts` читает `VITE_API_BASE_URL` / `VITE_HERMES_API_SECRET` с дефолтом `http://localhost:3000`, тогда как Makefile использует `VITE_HERMES_API_BASE_URL` и `VITE_HERMES_LOCAL_API_SECRET`, а backend слушает `127.0.0.1:8080`. Наблюдается расхождение между READMED-описанными командами и фактической конфигурацией.
+2. **Имена переменных окружения для конфигурации** — `frontend/README.md` не задаёт конкретные имена, но ревью указывает, что текущий `config/index.ts` читает `VITE_API_BASE_URL` / `VITE_MAKOSH_API_SECRET` с дефолтом `http://localhost:3000`, тогда как Makefile использует `VITE_MAKOSH_API_BASE_URL` и `VITE_MAKOSH_LOCAL_API_SECRET`, а backend слушает `127.0.0.1:8080`. Наблюдается расхождение между READMED-описанными командами и фактической конфигурацией.
 3. **Безопасность отрисовки писем** — README не описывает модель безопасности рендеринга, но ревью указывает на регресс: `innerHTML`-вставка недостаточно очищенного HTML (отсутствие удаление атрибутов-обработчиков, опасных URL) и неэкранированный plain text. Это несоответствие ожидаемому контракту обработки ненадёжного ввода.
 4. **Валидационный гейт** — README предполагает `make build` как валидацию упаковки, но не описывает полную проверку. Ревью отмечает, что ранее существовавший `frontend-check` теперь заменён только на сборку, а тесты удалены (оставлен один placeholder). Это уменьшает покрытие по сравнению с предполагаемой зрелостью проекта.
 5. **Нарушение `ADR-0093` (TanStack Query boundary)** — `frontend/README.md` описывает поток данных через TanStack Query, но ревью фиксирует прямые API-вызовы из представлений Calendar и Tasks, что прямо противоречит контракту, зафиксированному в ADR-0093 (содержание ADR не включено в пакет, но факт нарушения задокументирован ревью).

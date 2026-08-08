@@ -4,7 +4,7 @@ Status: Accepted
 
 ## Context
 
-Hermes is moving to a layered architecture where integrations, domains, engines
+Макошь is moving to a layered architecture where integrations, domains, engines
 and UI modules do not call each other's handlers or domain services directly.
 Communication channels such as Email, Telegram and WhatsApp should publish
 source evidence and provider state. Domain owners should react through durable

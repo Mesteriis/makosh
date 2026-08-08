@@ -6,7 +6,7 @@ import type {
 	MessageReferenceSummaryV1,
 	MessageSummaryV1,
 	ObservedParticipantSummaryV1,
-} from '../../../gen/hermes/communications/query/v1/query_pb'
+} from '../../../gen/makosh/communications/query/v1/query_pb'
 import { getCommunicationsQueryConnectClient } from '../../../platform/connect/communicationsQueryClient'
 
 const MAX_PAGE_LIMIT = 100

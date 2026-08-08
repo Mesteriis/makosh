@@ -1,7 +1,7 @@
 use crate::integrations::telegram::client::errors::TelegramError;
 use crate::integrations::telegram::tdjson::client::TdJsonClient;
 use crate::integrations::telegram::tdjson::{self};
-use hermes_provider_telegram::tdlib::{chats, messages};
+use makosh_provider_telegram::tdlib::{chats, messages};
 
 use super::super::TDJSON_COMMAND_TIMEOUT;
 use super::responses::{receive_tdlib_extra, tdlib_provider_chat_id, tdlib_provider_message_id};
@@ -15,7 +15,7 @@ pub(super) fn actor_edit_message(
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
     let message_id = tdlib_provider_message_id(provider_message_id)?;
-    let extra = format!("hermes-edit-{}", command_id.trim());
+    let extra = format!("makosh-edit-{}", command_id.trim());
     client.send_json(
         &messages::edit_text(chat_id, message_id, new_text, &extra)
             .map_err(|error| TelegramError::InvalidRequest(error.to_string()))?,
@@ -36,7 +36,7 @@ pub(super) fn actor_delete_message(
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
     let message_id = tdlib_provider_message_id(provider_message_id)?;
-    let extra = format!("hermes-delete-{}", command_id.trim());
+    let extra = format!("makosh-delete-{}", command_id.trim());
     client.send_json(&messages::delete_messages(
         chat_id,
         &[message_id],
@@ -60,7 +60,7 @@ pub(super) fn actor_set_reaction(
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
     let message_id = tdlib_provider_message_id(provider_message_id)?;
-    let extra = format!("hermes-reaction-{}", command_id.trim());
+    let extra = format!("makosh-reaction-{}", command_id.trim());
     let request = if is_active {
         messages::add_reaction(chat_id, message_id, reaction_emoji, &extra)
     } else {
@@ -83,7 +83,7 @@ pub(super) fn actor_pin_message(
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
     let message_id = tdlib_provider_message_id(provider_message_id)?;
-    let extra = format!("hermes-pin-{}", command_id.trim());
+    let extra = format!("makosh-pin-{}", command_id.trim());
     let request = if pin {
         messages::pin_message(chat_id, message_id, false, &extra)
     } else {
@@ -106,7 +106,7 @@ pub(super) fn actor_toggle_chat_unread(
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
     if is_marked_as_unread {
-        let extra = format!("hermes-chat-unread-{}", command_id.trim());
+        let extra = format!("makosh-chat-unread-{}", command_id.trim());
         client.send_json(&chats::toggle_marked_as_unread(chat_id, true, &extra))?;
         let response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
         if let Some(message) = tdjson::parsing::events::tdlib_error_message(&response) {
@@ -117,7 +117,7 @@ pub(super) fn actor_toggle_chat_unread(
 
     if let Some(provider_message_id) = read_through_provider_message_id {
         let message_id = tdlib_provider_message_id(provider_message_id)?;
-        let extra = format!("hermes-chat-read-{}", command_id.trim());
+        let extra = format!("makosh-chat-read-{}", command_id.trim());
         client.send_json(&messages::view_messages(
             chat_id,
             &[message_id],
@@ -131,7 +131,7 @@ pub(super) fn actor_toggle_chat_unread(
         return Ok(());
     }
 
-    let extra = format!("hermes-chat-read-toggle-{}", command_id.trim());
+    let extra = format!("makosh-chat-read-toggle-{}", command_id.trim());
     client.send_json(&chats::toggle_marked_as_unread(chat_id, false, &extra))?;
     let response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
     if let Some(message) = tdjson::parsing::events::tdlib_error_message(&response) {
@@ -147,7 +147,7 @@ pub(super) fn actor_toggle_chat_archive(
     command_id: &str,
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let extra = format!("hermes-chat-archive-{}", command_id.trim());
+    let extra = format!("makosh-chat-archive-{}", command_id.trim());
     client.send_json(&chats::add_chat_to_list(chat_id, archived, &extra))?;
     let response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
     if let Some(message) = tdjson::parsing::events::tdlib_error_message(&response) {
@@ -163,7 +163,7 @@ pub(super) fn actor_toggle_chat_mute(
     command_id: &str,
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let extra = format!("hermes-chat-mute-{}", command_id.trim());
+    let extra = format!("makosh-chat-mute-{}", command_id.trim());
     client.send_json(&chats::set_chat_mute(chat_id, muted, &extra))?;
     let response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
     if let Some(message) = tdjson::parsing::events::tdlib_error_message(&response) {
@@ -179,7 +179,7 @@ pub(super) fn actor_add_chat_to_folder(
     command_id: &str,
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let extra = format!("hermes-chat-folder-{}", command_id.trim());
+    let extra = format!("makosh-chat-folder-{}", command_id.trim());
     client.send_json(&chats::add_chat_to_folder(
         chat_id,
         provider_folder_id,
@@ -199,14 +199,14 @@ pub(super) fn actor_remove_chat_from_folder(
     command_id: &str,
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let get_extra = format!("hermes-chat-folder-remove-get-{}", command_id.trim());
+    let get_extra = format!("makosh-chat-folder-remove-get-{}", command_id.trim());
     client.send_json(&chats::get_chat_folder(provider_folder_id, &get_extra))?;
     let folder_response = receive_tdlib_extra(client, &get_extra, TDJSON_COMMAND_TIMEOUT)?;
     if let Some(message) = tdjson::parsing::events::tdlib_error_message(&folder_response) {
         return Err(TelegramError::TdlibRuntime(message));
     }
 
-    let edit_extra = format!("hermes-chat-folder-remove-{}", command_id.trim());
+    let edit_extra = format!("makosh-chat-folder-remove-{}", command_id.trim());
     client.send_json(
         &tdjson::folder_requests::tdlib_edit_chat_folder_remove_chat_request(
             provider_folder_id,
@@ -228,7 +228,7 @@ pub(super) fn actor_join_chat(
     command_id: &str,
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let extra = format!("hermes-chat-join-{}", command_id.trim());
+    let extra = format!("makosh-chat-join-{}", command_id.trim());
     client.send_json(&chats::join_chat(chat_id, &extra))?;
     let response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
     if let Some(message) = tdjson::parsing::events::tdlib_error_message(&response) {
@@ -243,7 +243,7 @@ pub(super) fn actor_leave_chat(
     command_id: &str,
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let extra = format!("hermes-chat-leave-{}", command_id.trim());
+    let extra = format!("makosh-chat-leave-{}", command_id.trim());
     client.send_json(&chats::leave_chat(chat_id, &extra))?;
     let response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
     if let Some(message) = tdjson::parsing::events::tdlib_error_message(&response) {

@@ -25,7 +25,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
         }
         let row = sqlx::query(
             "SELECT forward_id, source_message_id, target_conversation_id
-             FROM hermes_data.communication_cross_channel_forward_operations
+             FROM makosh_data.communication_cross_channel_forward_operations
              WHERE logical_owner_id = $1 AND state = $2
              ORDER BY created_at_unix_millis, forward_id
              LIMIT 1",

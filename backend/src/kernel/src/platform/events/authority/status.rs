@@ -1,10 +1,10 @@
 //! Sanitized current status of the managed Events credential authority.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     PlatformEventHubTopologyV1, PlatformEventsAuthorityConfigurationV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     v1::{
         EventsAuthorityRuntimeControlRequestV1, EventsAuthorityRuntimeControlResponseV1,
         EventsAuthorityRuntimeStateV1, EventsAuthorityRuntimeStatusV1,

@@ -1,6 +1,6 @@
 //! Ephemeral content-key lease received from the Vault route.
 
-use hermes_blob_protocol::{BlobAccessFenceV1, BlobCustodyScopeV1, BlobRefV1};
+use makosh_blob_protocol::{BlobAccessFenceV1, BlobCustodyScopeV1, BlobRefV1};
 use sha2::{Digest, Sha256};
 use zeroize::Zeroizing;
 
@@ -71,7 +71,7 @@ const MAX_VAULT_RESPONSE_BYTES: usize = 16 * 1024;
 
 fn derive_key(reference: &BlobRefV1, response: &[u8]) -> [u8; 32] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.blob.content-key.v1\0");
+    hash.update(b"makosh.blob.content-key.v1\0");
     hash.update(reference.reference_id());
     hash.update(response);
     hash.finalize().into()

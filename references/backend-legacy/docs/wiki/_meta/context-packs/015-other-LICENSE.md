@@ -21,9 +21,9 @@
 - Group / Группа: `LICENSE`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `LICENSE`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/LICENSE`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/LICENSE`
 - Size bytes / Размер в байтах: `1066`
 - Included characters / Включено символов: `1066`
 - Truncated / Обрезано: `no`

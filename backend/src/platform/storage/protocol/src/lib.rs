@@ -5,7 +5,7 @@ mod model;
 pub mod validation;
 
 pub mod v1 {
-    include!(concat!(env!("OUT_DIR"), "/hermes.storage.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.storage.v1.rs"));
 }
 
 pub use model::{

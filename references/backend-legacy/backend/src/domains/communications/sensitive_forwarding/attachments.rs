@@ -96,7 +96,7 @@ pub(super) async fn copy_forwardable_attachments_to_outbox(
             )
             VALUES (
                 $1, $2, 'mail', $3, $4, $5, $6, $7,
-                'sensitive_forwarding', 'hermes-mail-automation',
+                'sensitive_forwarding', 'makosh-mail-automation',
                 'clean', $8, $9, $10, $11, $12, now()
             )
             ON CONFLICT (attachment_id)

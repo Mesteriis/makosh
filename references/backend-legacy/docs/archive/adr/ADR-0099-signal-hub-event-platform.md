@@ -21,7 +21,7 @@ Clarifies:
 
 ## Context
 
-Hermes is growing from a Communications-centered local system into a Personal
+Макошь is growing from a Communications-centered local system into a Personal
 Operating System for memory, context and decisions. Email, Telegram and WhatsApp
 are only the first external sources. Future sources include GitHub, Browser
 capture, RSS, Calendar providers, Filesystem, Home Assistant, voice input and
@@ -46,7 +46,7 @@ Communications would incorrectly make all signals communication-shaped.
 
 ## Decision
 
-Hermes introduces Signal Hub as a first-class system domain.
+Макошь introduces Signal Hub as a first-class system domain.
 
 Signal Hub owns:
 
@@ -70,12 +70,12 @@ Signal Hub does not own:
 - Radar state;
 - Tasks, Personas, Documents, Calendar, Knowledge or Graph state.
 
-All new external and synthetic signal sources enter Hermes through Signal Hub
+All new external and synthetic signal sources enter Макошь through Signal Hub
 control state and the Event Backbone.
 
 ## Event Platform Decision
 
-Hermes designs the event platform from the start for:
+Макошь designs the event platform from the start for:
 
 - PostgreSQL append-only `event_log` as audit/recovery source of truth;
 - NATS JetStream as durable production delivery and fan-out transport;

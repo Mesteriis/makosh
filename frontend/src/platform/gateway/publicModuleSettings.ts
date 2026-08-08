@@ -3,7 +3,7 @@ import {
 	type ClientModuleBootstrapV1,
 	type ClientModuleSettingsTargetBootstrapV1,
 	type ClientSettingValueV1,
-} from '../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../gen/makosh/gateway/v1/client_bootstrap_pb'
 
 export type PublicModuleSettingRow = {
 	key: string

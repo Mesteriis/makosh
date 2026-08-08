@@ -1,6 +1,6 @@
 //! Hashed, one-use, actor-bound private-content read tickets.
 
-use hermes_attachment_preview_api::{
+use makosh_attachment_preview_api::{
     ATTACHMENT_PREVIEW_READ_TICKET_TTL_SECONDS_V1, wire::AttachmentPreviewStateV1,
 };
 use sqlx::Row;
@@ -28,7 +28,7 @@ impl AttachmentPreviewPersistenceV1 {
             .ok_or(AttachmentPreviewPersistenceErrorV1::InvalidInput)?;
         let mut transaction = self.pool.begin().await.map_err(storage_unavailable)?;
         let row = sqlx::query(
-            "SELECT r.state_revision,r.content_type,r.preview_size_bytes,a.derived_reference_id,a.derived_receipt_sha256,a.renderer_identity_sha256,a.runtime_generation,a.grant_epoch FROM hermes_data.attachment_preview_runs r JOIN hermes_data.attachment_preview_artifacts a ON a.logical_owner_id=r.logical_owner_id AND a.run_id=r.run_id WHERE r.logical_owner_id=$1 AND r.run_id=$2 AND r.state=$3 FOR UPDATE OF r,a",
+            "SELECT r.state_revision,r.content_type,r.preview_size_bytes,a.derived_reference_id,a.derived_receipt_sha256,a.renderer_identity_sha256,a.runtime_generation,a.grant_epoch FROM makosh_data.attachment_preview_runs r JOIN makosh_data.attachment_preview_artifacts a ON a.logical_owner_id=r.logical_owner_id AND a.run_id=r.run_id WHERE r.logical_owner_id=$1 AND r.run_id=$2 AND r.state=$3 FOR UPDATE OF r,a",
         )
         .bind(logical_owner_id)
         .bind(request.run_id.as_slice())
@@ -60,7 +60,7 @@ impl AttachmentPreviewPersistenceV1 {
         )
         .map_err(invalid_row)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.attachment_preview_read_tickets (logical_owner_id,ticket_sha256,device_actor_sha256,run_id,state_revision,derived_reference_id,derived_receipt_sha256,renderer_identity_sha256,content_type,preview_size_bytes,runtime_generation,grant_epoch,expires_at_unix_seconds,used_at_unix_seconds,created_at_unix_seconds) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,NULL,$14) ON CONFLICT (logical_owner_id,ticket_sha256) DO NOTHING",
+            "INSERT INTO makosh_data.attachment_preview_read_tickets (logical_owner_id,ticket_sha256,device_actor_sha256,run_id,state_revision,derived_reference_id,derived_receipt_sha256,renderer_identity_sha256,content_type,preview_size_bytes,runtime_generation,grant_epoch,expires_at_unix_seconds,used_at_unix_seconds,created_at_unix_seconds) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,NULL,$14) ON CONFLICT (logical_owner_id,ticket_sha256) DO NOTHING",
         )
         .bind(logical_owner_id)
         .bind(request.ticket_sha256.as_slice())
@@ -112,7 +112,7 @@ impl AttachmentPreviewPersistenceV1 {
         }
         let mut transaction = self.pool.begin().await.map_err(storage_unavailable)?;
         let row = sqlx::query(
-            "SELECT t.device_actor_sha256,t.run_id,t.state_revision,t.derived_reference_id,t.derived_receipt_sha256,t.renderer_identity_sha256,t.content_type,t.preview_size_bytes,t.runtime_generation,t.grant_epoch,t.expires_at_unix_seconds,t.used_at_unix_seconds,r.state,r.state_revision AS current_state_revision,a.derived_reference_id AS current_reference_id,a.derived_receipt_sha256 AS current_receipt_sha256,a.renderer_identity_sha256 AS current_renderer_sha256,a.runtime_generation AS current_runtime_generation,a.grant_epoch AS current_grant_epoch FROM hermes_data.attachment_preview_read_tickets t JOIN hermes_data.attachment_preview_runs r ON r.logical_owner_id=t.logical_owner_id AND r.run_id=t.run_id JOIN hermes_data.attachment_preview_artifacts a ON a.logical_owner_id=t.logical_owner_id AND a.run_id=t.run_id WHERE t.logical_owner_id=$1 AND t.ticket_sha256=$2 FOR UPDATE OF t,r,a",
+            "SELECT t.device_actor_sha256,t.run_id,t.state_revision,t.derived_reference_id,t.derived_receipt_sha256,t.renderer_identity_sha256,t.content_type,t.preview_size_bytes,t.runtime_generation,t.grant_epoch,t.expires_at_unix_seconds,t.used_at_unix_seconds,r.state,r.state_revision AS current_state_revision,a.derived_reference_id AS current_reference_id,a.derived_receipt_sha256 AS current_receipt_sha256,a.renderer_identity_sha256 AS current_renderer_sha256,a.runtime_generation AS current_runtime_generation,a.grant_epoch AS current_grant_epoch FROM makosh_data.attachment_preview_read_tickets t JOIN makosh_data.attachment_preview_runs r ON r.logical_owner_id=t.logical_owner_id AND r.run_id=t.run_id JOIN makosh_data.attachment_preview_artifacts a ON a.logical_owner_id=t.logical_owner_id AND a.run_id=t.run_id WHERE t.logical_owner_id=$1 AND t.ticket_sha256=$2 FOR UPDATE OF t,r,a",
         )
         .bind(logical_owner_id)
         .bind(ticket_sha256.as_slice())
@@ -158,7 +158,7 @@ impl AttachmentPreviewPersistenceV1 {
             return Err(AttachmentPreviewPersistenceErrorV1::StaleFence);
         }
         let changed = sqlx::query(
-            "UPDATE hermes_data.attachment_preview_read_tickets SET used_at_unix_seconds=$1 WHERE logical_owner_id=$2 AND ticket_sha256=$3 AND used_at_unix_seconds IS NULL AND expires_at_unix_seconds>=$1",
+            "UPDATE makosh_data.attachment_preview_read_tickets SET used_at_unix_seconds=$1 WHERE logical_owner_id=$2 AND ticket_sha256=$3 AND used_at_unix_seconds IS NULL AND expires_at_unix_seconds>=$1",
         )
         .bind(now_unix_seconds)
         .bind(logical_owner_id)

@@ -301,7 +301,7 @@ pub(crate) fn parse_tdlib_chat_position_snapshot(
             "folder".to_owned(),
             list.get("chat_folder_id").and_then(Value::as_i64),
         ),
-        // TDLib may add client-only list types. They do not map to Hermes folder
+        // TDLib may add client-only list types. They do not map to Макошь folder
         // semantics, so ignore the update instead of terminating the actor.
         _ => return Ok(None),
     };

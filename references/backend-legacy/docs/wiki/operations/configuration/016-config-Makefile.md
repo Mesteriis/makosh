@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-На основе предоставленного (обрезанного) `Makefile` репозитория `hermes-hub` создаётся страница русской Obsidian‑wiki `operations/configuration.md`. Страница документирует:
+На основе предоставленного (обрезанного) `Makefile` репозитория `makosh` создаётся страница русской Obsidian‑wiki `operations/configuration.md`. Страница документирует:
 
 - назначение и общую структуру `Makefile` как точки входа для операций,
 - переменные конфигурации (`?=`‑переменные, автоматическое обнаружение `sccache`),
@@ -35,7 +35,7 @@ generated_by: code-wiki-ru
 ```markdown
 # Конфигурация операций
 
-Операции разработки, тестирования, проверок и очистки проекта `hermes-hub`
+Операции разработки, тестирования, проверок и очистки проекта `makosh`
 управляются через команды `make`. Основной файл — `Makefile` в корне
 репозитория.
 
@@ -61,7 +61,7 @@ generated_by: code-wiki-ru
 | `CARGO_VALIDATE_TEST_TARGET_DIR` | `$(CARGO_TARGET_ROOT)/validate-test` | Артефакты тестов валидации |
 | `CARGO_BUILD_TARGET_DIR` | `$(CARGO_TARGET_ROOT)/build` | Артефакты релизных сборок |
 | `CARGO_COVERAGE_TARGET_DIR` | `$(CARGO_TARGET_ROOT)/coverage` | Артефакты покрытия |
-| `HERMES_NEXTEST_JOBS` | `4` | Количество потоков для `cargo-nextest` |
+| `MAKOSH_NEXTEST_JOBS` | `4` | Количество потоков для `cargo-nextest` |
 | `CARGO_AUDIT_IGNORES` | `RUSTSEC-2023-0071` | Список игнорируемых advisory для `cargo-audit` |
 
 *Примечание:* Полный список переменных может быть шире; исходный файл обрезан
@@ -280,7 +280,7 @@ make clean-vault   Delete local vault data after confirmation
 Факты, покрытые страницей:
 
 - Установка `SHELL`, `.DEFAULT_GOAL := help`
-- Переменные: `CARGO_TARGET_ROOT`, `CARGO_DEV_TARGET_DIR`, `CARGO_VALIDATE_TARGET_DIR`, `CARGO_VALIDATE_CLIPPY_TARGET_DIR`, `CARGO_VALIDATE_TEST_TARGET_DIR`, `CARGO_BUILD_TARGET_DIR`, `CARGO_COVERAGE_TARGET_DIR`, `HERMES_NEXTEST_JOBS`, `CARGO_AUDIT_IGNORES`, `SCCACHE_BIN`, `RUSTC_WRAPPER` (условно)
+- Переменные: `CARGO_TARGET_ROOT`, `CARGO_DEV_TARGET_DIR`, `CARGO_VALIDATE_TARGET_DIR`, `CARGO_VALIDATE_CLIPPY_TARGET_DIR`, `CARGO_VALIDATE_TEST_TARGET_DIR`, `CARGO_BUILD_TARGET_DIR`, `CARGO_COVERAGE_TARGET_DIR`, `MAKOSH_NEXTEST_JOBS`, `CARGO_AUDIT_IGNORES`, `SCCACHE_BIN`, `RUSTC_WRAPPER` (условно)
 - Формирование `CARGO_AUDIT_IGNORE_FLAGS` и списков целей (`BACKEND_ARCHITECTURE_TARGETS`, `BACKEND_E2E_TARGETS`, `BACKEND_INTEGRATION_TARGETS`, `BACKEND_SNAPSHOT_TARGETS`) через вызовы `node scripts/test/backend-test-targets.mjs`
 - Полный текст цели `help` (перечень команд с описаниями)
 - Правила для `docker-env`, `dev`, `logs`, `build`, `migrate`

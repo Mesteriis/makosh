@@ -1,4 +1,4 @@
-use hermes_events_api::EventEnvelope;
+use makosh_events_api::EventEnvelope;
 mod list;
 mod refresh;
 mod review;

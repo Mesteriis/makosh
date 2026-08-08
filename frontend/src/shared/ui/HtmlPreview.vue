@@ -21,10 +21,10 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-html-preview',
-	`hermes-html-preview--${props.format}`,
+	'makosh-html-preview',
+	`makosh-html-preview--${props.format}`,
 	{
-		'hermes-html-preview--blocked': props.format === 'html' && !props.sanitized
+		'makosh-html-preview--blocked': props.format === 'html' && !props.sanitized
 	},
 	props.class
 ])
@@ -41,18 +41,18 @@ const safeHtml = computed(() => {
 
 <template>
 	<article :class="classes">
-		<h3 v-if="title" class="hermes-media-title">{{ title }}</h3>
+		<h3 v-if="title" class="makosh-media-title">{{ title }}</h3>
 		<iframe
 			v-if="shouldIsolateHtml"
-			class="hermes-html-preview__frame"
+			class="makosh-html-preview__frame"
 			sandbox="allow-same-origin"
 			:srcdoc="safeHtml"
 			:title="title || 'HTML preview'"
 		/>
-		<div v-else-if="canRenderHtml" class="hermes-html-preview__content" v-html="safeHtml" />
-		<pre v-else-if="hasContent" class="hermes-html-preview__text">{{ content }}</pre>
-		<p v-else class="hermes-media-empty">{{ emptyLabel }}</p>
-		<p v-if="format === 'html' && hasContent && !sanitized" class="hermes-html-preview__safety">
+		<div v-else-if="canRenderHtml" class="makosh-html-preview__content" v-html="safeHtml" />
+		<pre v-else-if="hasContent" class="makosh-html-preview__text">{{ content }}</pre>
+		<p v-else class="makosh-media-empty">{{ emptyLabel }}</p>
+		<p v-if="format === 'html' && hasContent && !sanitized" class="makosh-html-preview__safety">
 			{{ unsafeLabel }}
 		</p>
 	</article>

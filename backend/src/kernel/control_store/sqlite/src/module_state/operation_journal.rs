@@ -1,4 +1,4 @@
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     OperationAdmissionV1, OperationIdV1, OperationJournalStore, OperationStatusV1,
     OperationTerminalOutcomeV1,
 };
@@ -24,7 +24,7 @@ impl SqliteControlStore {
                 }
                 Some(_) => return Err(StoreError::OperationRequestDigestConflict),
                 None => {
-                    transaction.execute("INSERT INTO hermes_kernel_operation_journal (operation_id, request_digest, deadline_unix_millis, terminal_kind, terminal_payload) VALUES (?1, ?2, ?3, NULL, NULL)", params![operation_id.as_bytes().as_slice(), request_digest.as_slice(), deadline])?;
+                    transaction.execute("INSERT INTO makosh_kernel_operation_journal (operation_id, request_digest, deadline_unix_millis, terminal_kind, terminal_payload) VALUES (?1, ?2, ?3, NULL, NULL)", params![operation_id.as_bytes().as_slice(), request_digest.as_slice(), deadline])?;
                     OperationAdmissionV1::Admitted
                 }
             };
@@ -56,7 +56,7 @@ impl SqliteControlStore {
                 };
             }
             let (kind, payload) = encode_outcome(&outcome);
-            transaction.execute("UPDATE hermes_kernel_operation_journal SET terminal_kind=?1, terminal_payload=?2 WHERE operation_id=?3", params![kind, payload, operation_id.as_bytes().as_slice()])?;
+            transaction.execute("UPDATE makosh_kernel_operation_journal SET terminal_kind=?1, terminal_payload=?2 WHERE operation_id=?3", params![kind, payload, operation_id.as_bytes().as_slice()])?;
             transaction.commit()?;
             Ok(())
         })
@@ -105,7 +105,7 @@ fn load_status(
     connection: &rusqlite::Connection,
     id: OperationIdV1,
 ) -> Result<Option<([u8; 32], OperationStatusV1)>, StoreError> {
-    connection.query_row("SELECT request_digest, terminal_kind, terminal_payload FROM hermes_kernel_operation_journal WHERE operation_id=?1", [id.as_bytes().as_slice()], |row| {
+    connection.query_row("SELECT request_digest, terminal_kind, terminal_payload FROM makosh_kernel_operation_journal WHERE operation_id=?1", [id.as_bytes().as_slice()], |row| {
         let digest: Vec<u8> = row.get(0)?;
         let kind: Option<String> = row.get(1)?;
         let payload: Option<Vec<u8>> = row.get(2)?;

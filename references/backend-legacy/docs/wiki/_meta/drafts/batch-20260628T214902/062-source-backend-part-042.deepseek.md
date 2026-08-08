@@ -232,8 +232,8 @@
 
 `tdlib_start_request_from_account()` требует из `AppConfig`:
 
-- `api_id` (HERMES_TELEGRAM_API_ID)
-- `api_hash` (HERMES_TELEGRAM_API_HASH)
+- `api_id` (MAKOSH_TELEGRAM_API_ID)
+- `api_hash` (MAKOSH_TELEGRAM_API_HASH)
 - `tdlib_data_path` из `account.config["tdlib_data_path"]`
 
 Формирует `TelegramQrLoginStartRequest` с необязательным `session_encryption_key`.

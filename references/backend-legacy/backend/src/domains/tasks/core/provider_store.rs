@@ -4,9 +4,9 @@ use sqlx::postgres::{PgPool, PgRow};
 
 use super::errors::TaskCoreError;
 use super::providers::TaskProviderAccount;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::review_links::link_domain_entity_in_transaction;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::review_links::link_domain_entity_in_transaction;
+use makosh_observations_postgres::store::ObservationStore;
 
 pub struct TaskProviderStore {
     pool: PgPool,
@@ -131,7 +131,7 @@ async fn link_domain_owned_entity_in_transaction(
     relationship_kind: &str,
     base_metadata: serde_json::Value,
     extra_metadata: Option<serde_json::Value>,
-) -> Result<(), hermes_observations_postgres::errors::ObservationStoreError> {
+) -> Result<(), makosh_observations_postgres::errors::ObservationStoreError> {
     let metadata = match extra_metadata {
         Some(extra) if base_metadata.is_object() && extra.is_object() => {
             let mut merged = base_metadata;

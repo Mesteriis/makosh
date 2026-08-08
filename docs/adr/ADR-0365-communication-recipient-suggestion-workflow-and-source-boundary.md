@@ -54,19 +54,19 @@ Clean-room recipient suggestion отвечает на один вопрос: к�
 Recipient Suggestion является owner `communication_recipient_suggestion` и
 реализуется в пяти независимых workflow units:
 
-- `hermes-communication-recipient-suggestion-api` — generated Start/Get и
+- `makosh-communication-recipient-suggestion-api` — generated Start/Get и
   realtime contract;
-- `hermes-communication-recipient-suggestion-core` — pure lifecycle,
+- `makosh-communication-recipient-suggestion-core` — pure lifecycle,
   deterministic signal evaluation и validation;
-- `hermes-communication-recipient-suggestion-persistence` — owner-local
+- `makosh-communication-recipient-suggestion-persistence` — owner-local
   PostgreSQL state, inbox/outbox и realtime replay;
-- `hermes-communication-recipient-suggestion-runtime` — managed workflow
+- `makosh-communication-recipient-suggestion-runtime` — managed workflow
   orchestration;
-- `hermes-communication-recipient-suggestion-assembly` — unsigned descriptor,
+- `makosh-communication-recipient-suggestion-assembly` — unsigned descriptor,
   settings schema, Storage bundle и release fragment.
 
 Communications отдельно владеет public source contract unit
-`hermes-communications-recipient-source-api` и своей runtime implementation.
+`makosh-communications-recipient-source-api` и своей runtime implementation.
 Ни одна workflow unit не импортирует Communications implementation или storage.
 Communications не импортирует workflow implementation.
 

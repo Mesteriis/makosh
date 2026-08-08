@@ -5,7 +5,9 @@ use std::collections::BTreeSet;
 use super::*;
 
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
-use hermes_communications_call_evidence_api::{
+use http_body_util::BodyExt as _;
+use hyper::{Request, StatusCode, body::Bytes};
+use makosh_communications_call_evidence_api::{
     CALL_EVIDENCE_QUERY_CONNECT_PATH_V1, CALL_EVIDENCE_REALTIME_CONTRACT_NAME_V1,
     wire::{
         CallEvidenceChangedV1, CallEvidenceQueryRequestV1, CallEvidenceQueryResponseV1,
@@ -14,23 +16,21 @@ use hermes_communications_call_evidence_api::{
         call_evidence_query_response_v1::Result as CallEvidenceQueryResult,
     },
 };
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
 };
-use hermes_telegram_calls_api::{
+use makosh_telegram_calls_api::{
     contract::TelegramCallsContractV1,
     wire::{
         CallsCommandRequestV1, InitiateAudioCallRequestV1, calls_command_request_v1,
         calls_command_response_v1,
     },
 };
-use hermes_telegram_calls_core::{
+use makosh_telegram_calls_core::{
     TelegramCallDirection, TelegramCallDiscardReason, TelegramProviderCallState,
     TelegramProviderCallUpdate,
 };
-use hermes_telegram_calls_persistence::TelegramCallsPersistence;
-use http_body_util::BodyExt as _;
-use hyper::{Request, StatusCode, body::Bytes};
+use makosh_telegram_calls_persistence::TelegramCallsPersistence;
 
 const HUMAN_OWNER_ID: &str = "owner-1";
 
@@ -332,7 +332,7 @@ fn read_call_evidence_sse(
     runtime: &tokio::runtime::Runtime,
     cookie: &str,
     expected_id: &[u8],
-) -> hermes_gateway_protocol::v1::ClientRealtimeEventV1 {
+) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1 {
     let response = runtime.block_on(
         router.route(
             Request::builder()
@@ -357,7 +357,7 @@ fn read_call_evidence_sse(
 async fn find_call_evidence_event<B>(
     mut body: B,
     expected_id: &[u8],
-) -> hermes_gateway_protocol::v1::ClientRealtimeEventV1
+) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1
 where
     B: hyper::body::Body<Data = Bytes> + Unpin,
     B::Error: std::fmt::Debug,
@@ -397,7 +397,7 @@ where
 }
 
 fn assert_call_evidence_event_is_client_safe(
-    event: &hermes_gateway_protocol::v1::ClientRealtimeEventV1,
+    event: &makosh_gateway_protocol::v1::ClientRealtimeEventV1,
     expected_id: &[u8],
     private_provider_id: &[u8],
 ) {

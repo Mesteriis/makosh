@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package makosh.knowledge.command.v1;
+
+// Exact target-domain command. Presentation bytes remain in the Knowledge-bound
+// Blob referenced by candidate_content and never enter the durable envelope.
+message CreateKnowledgeNoteFromReviewedCandidateCommandV1 {
+  bytes command_id = 1;
+  bytes approved_candidate_id = 2;
+  bytes candidate_digest = 3;
+  bytes source_evidence_id = 4;
+  uint64 source_evidence_revision = 5;
+  bytes review_id = 6;
+  uint64 decision_revision = 7;
+  bytes decided_by_owner_device_id = 8;
+  KnowledgeTargetBoundCandidateReceiptV1 candidate_content = 9;
+  string logical_owner_id = 10;
+}
+
+message KnowledgeNoteCreatedFromReviewedCandidateV1 {
+  bytes command_id = 1;
+  bytes approved_candidate_id = 2;
+  bytes note_id = 3;
+  uint64 note_revision = 4;
+  string logical_owner_id = 5;
+}
+
+message KnowledgeNoteCreationFromReviewedCandidateRejectedV1 {
+  bytes command_id = 1;
+  bytes approved_candidate_id = 2;
+  KnowledgeNoteCreationRejectCodeV1 code = 3;
+  string logical_owner_id = 4;
+}
+
+message KnowledgeTargetBoundCandidateReceiptV1 {
+  bytes reference_id = 1;
+  uint64 declared_bytes = 2;
+  bytes sha256 = 3;
+  bytes custody_transfer_source_proof = 4;
+}
+
+// Plaintext schema held only by the Knowledge-target-bound Blob.
+message ReviewedKnowledgeNoteContentV1 {
+  string title = 1;
+  string excerpt = 2;
+  repeated KnowledgeNoteTopicHintV1 topic_hints = 3;
+  KnowledgeNoteSourceBasisV1 source_basis = 4;
+  uint32 confidence_basis_points = 5;
+}
+
+enum KnowledgeNoteSourceBasisV1 {
+  KNOWLEDGE_NOTE_SOURCE_BASIS_UNSPECIFIED = 0;
+  KNOWLEDGE_NOTE_SOURCE_BASIS_SUBJECT = 1;
+  KNOWLEDGE_NOTE_SOURCE_BASIS_BODY = 2;
+  KNOWLEDGE_NOTE_SOURCE_BASIS_COMBINED = 3;
+}
+
+enum KnowledgeNoteTopicHintV1 {
+  KNOWLEDGE_NOTE_TOPIC_HINT_UNSPECIFIED = 0;
+  KNOWLEDGE_NOTE_TOPIC_HINT_FINANCIAL = 1;
+  KNOWLEDGE_NOTE_TOPIC_HINT_LEGAL = 2;
+  KNOWLEDGE_NOTE_TOPIC_HINT_DECISION_STATEMENT = 3;
+  KNOWLEDGE_NOTE_TOPIC_HINT_DEADLINE_STATEMENT = 4;
+}
+
+enum KnowledgeNoteCreationRejectCodeV1 {
+  KNOWLEDGE_NOTE_CREATION_REJECT_CODE_UNSPECIFIED = 0;
+  KNOWLEDGE_NOTE_CREATION_REJECT_CODE_INVALID_REQUEST = 1;
+  KNOWLEDGE_NOTE_CREATION_REJECT_CODE_BLOB_UNAVAILABLE = 2;
+  KNOWLEDGE_NOTE_CREATION_REJECT_CODE_BLOB_MISMATCH = 3;
+  KNOWLEDGE_NOTE_CREATION_REJECT_CODE_CONFLICT = 4;
+  KNOWLEDGE_NOTE_CREATION_REJECT_CODE_POLICY = 5;
+}

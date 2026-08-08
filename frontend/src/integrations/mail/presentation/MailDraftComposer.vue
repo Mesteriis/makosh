@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MailCompositionModeV1 } from '../../../gen/hermes/mail/composition/v1/client_pb'
+import { MailCompositionModeV1 } from '../../../gen/makosh/mail/composition/v1/client_pb'
 import type {
 	MailCompositionModel,
 	MailDraftEditorPatch,

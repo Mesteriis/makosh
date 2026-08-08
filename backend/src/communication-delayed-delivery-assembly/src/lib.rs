@@ -10,22 +10,22 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use hermes_communication_delayed_delivery_persistence::schema::communication_delayed_delivery_storage_bundle_v1;
-use hermes_communication_delayed_delivery_runtime::{
+use makosh_communication_delayed_delivery_persistence::schema::communication_delayed_delivery_storage_bundle_v1;
+use makosh_communication_delayed_delivery_runtime::{
     communication_delayed_delivery_module_descriptor_v1,
     communication_delayed_delivery_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
 pub const DELAYED_DELIVERY_ASSEMBLY_FRAGMENT_VERSION_V1: u32 = 1;
 pub const DELAYED_DELIVERY_ASSEMBLY_OWNER_ID: &str = "communication_delayed_delivery";
 pub const DELAYED_DELIVERY_ASSEMBLY_MODULE_ID: &str =
-    "hermes-communication-delayed-delivery-runtime";
+    "makosh-communication-delayed-delivery-runtime";
 pub const DELAYED_DELIVERY_RUNTIME_ARTIFACT_ID: &str = "communication_delayed_delivery.runtime.v1";
 pub const DELAYED_DELIVERY_STORAGE_ARTIFACT_ID: &str = "communication_delayed_delivery.storage.v1";
 pub const DELAYED_DELIVERY_DESCRIPTOR_FILE: &str =
@@ -37,7 +37,7 @@ pub const DELAYED_DELIVERY_STORAGE_BUNDLE_FILE: &str =
 pub const DELAYED_DELIVERY_ARTIFACT_FRAGMENT_FILE: &str =
     "communication_delayed_delivery.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH: &str = "bin/hermes-communication-delayed-delivery-runtime";
+const RUNTIME_RELATIVE_PATH: &str = "bin/makosh-communication-delayed-delivery-runtime";
 const DESCRIPTOR_RELATIVE_PATH: &str =
     "contracts/communication_delayed_delivery.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH: &str = "contracts/communication_delayed_delivery.runtime.settings.pb";
@@ -263,8 +263,8 @@ mod tests {
         sync::atomic::{AtomicU64, Ordering},
     };
 
-    use hermes_runtime_protocol::v1::{ModuleDescriptorV1, SettingsSchemaV1};
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_runtime_protocol::v1::{ModuleDescriptorV1, SettingsSchemaV1};
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -273,7 +273,7 @@ mod tests {
     #[test]
     fn materializes_exact_unsigned_workflow_runtime_and_storage_fragment() {
         let root = temporary_directory();
-        let runtime = root.join("hermes-communication-delayed-delivery-runtime");
+        let runtime = root.join("makosh-communication-delayed-delivery-runtime");
         fs::write(&runtime, b"runtime").expect("write runtime");
         let output = root.join("assembly");
         let paths = materialize_delayed_delivery_release_assembly_v1(&output, "build-1", &runtime)

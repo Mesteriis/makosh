@@ -16,7 +16,7 @@ import {
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/Foundation/Primitives',
+	title: 'Макошь UI/Foundation/Primitives',
 	render: (_args, context) => ({
 		components: {
 			Chip,

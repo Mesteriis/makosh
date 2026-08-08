@@ -1,8 +1,8 @@
 use chrono::Utc;
-use hermes_backend_testkit::containers::zulip::{ProvisionedZulipRealm, ZulipServer};
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::accounts::{
+use makosh_backend_testkit::containers::zulip::{ProvisionedZulipRealm, ZulipServer};
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{
     NewProviderAccountSecretBinding, ProviderAccountSecretPurpose,
 };
 use serde_json::{Value, json};
@@ -16,54 +16,54 @@ use tokio::time::{Duration, Instant, sleep};
 
 const LIVE_WAIT_LOG_INTERVAL: Duration = Duration::from_secs(5);
 
-use hermes_communications_api::commands::{
+use makosh_communications_api::commands::{
     CommunicationProviderCommand, NewCommunicationProviderCommand,
 };
-use hermes_communications_api::evidence::NewIngestionCheckpoint;
-use hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore;
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_api::evidence::NewIngestionCheckpoint;
+use makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore;
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_events_api::EventLogQuery;
-use hermes_events_api::StoredEventEnvelope;
-use hermes_events_postgres::store::EventStore;
-use hermes_hub_backend::application::zulip_attachment_download::ZulipAttachmentDownloadWorker;
-use hermes_hub_backend::application::zulip_command_executor::ZulipCommandWorker;
-use hermes_hub_backend::application::zulip_event_ingest::ZulipEventIngestWorker;
-use hermes_hub_backend::application::zulip_provider_observation_reconciliation::reconcile_zulip_provider_observation_event;
-use hermes_hub_backend::domains::communications::messages::models::ProjectedMessage;
-use hermes_hub_backend::domains::communications::messages::provider_observation_projection::consume_accepted_signal_event;
-use hermes_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
-use hermes_hub_backend::domains::communications::storage::models::{
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_events_api::EventLogQuery;
+use makosh_events_api::StoredEventEnvelope;
+use makosh_events_postgres::store::EventStore;
+use makosh_hub_backend::application::zulip_attachment_download::ZulipAttachmentDownloadWorker;
+use makosh_hub_backend::application::zulip_command_executor::ZulipCommandWorker;
+use makosh_hub_backend::application::zulip_event_ingest::ZulipEventIngestWorker;
+use makosh_hub_backend::application::zulip_provider_observation_reconciliation::reconcile_zulip_provider_observation_event;
+use makosh_hub_backend::domains::communications::messages::models::ProjectedMessage;
+use makosh_hub_backend::domains::communications::messages::provider_observation_projection::consume_accepted_signal_event;
+use makosh_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
+use makosh_hub_backend::domains::communications::storage::models::{
     ImportedCommunicationAttachment, NewCommunicationAttachmentImport, NewCommunicationBlob,
 };
-use hermes_hub_backend::domains::communications::storage::store::CommunicationStorageStore;
-use hermes_hub_backend::domains::signal_hub::store::SignalHubStore;
-use hermes_hub_backend::domains::signal_hub::zulip::dispatch_zulip_raw_signal;
-use hermes_provider_orchestration::observation_to_raw_communication_record;
+use makosh_hub_backend::domains::communications::storage::store::CommunicationStorageStore;
+use makosh_hub_backend::domains::signal_hub::store::SignalHubStore;
+use makosh_hub_backend::domains::signal_hub::zulip::dispatch_zulip_raw_signal;
+use makosh_provider_orchestration::observation_to_raw_communication_record;
 
-use hermes_hub_backend::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
-use hermes_hub_backend::platform::events::bus::InMemoryEventBus;
-use hermes_hub_backend::platform::secrets::models::{
+use makosh_hub_backend::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
+use makosh_hub_backend::platform::events::bus::InMemoryEventBus;
+use makosh_hub_backend::platform::secrets::models::{
     NewSecretReference, SecretKind, SecretStoreKind,
 };
-use hermes_hub_backend::platform::secrets::resolver::InMemorySecretResolver;
-use hermes_hub_backend::platform::secrets::store::SecretReferenceStore;
-use hermes_hub_backend::workflows::review_inbox::refresh_message_task_candidates_into_review;
-use hermes_provider_zulip::client::{
+use makosh_hub_backend::platform::secrets::resolver::InMemorySecretResolver;
+use makosh_hub_backend::platform::secrets::store::SecretReferenceStore;
+use makosh_hub_backend::workflows::review_inbox::refresh_message_task_candidates_into_review;
+use makosh_provider_zulip::client::{
     ZulipApiClient, ZulipClientConfig, ZulipReactionRequest, ZulipUpdateMessageRequest,
 };
-use hermes_provider_zulip::event_mapper::{
+use makosh_provider_zulip::event_mapper::{
     ZulipEventMappingContext, map_zulip_event_to_observation,
 };
-use hermes_provider_zulip::models::ZulipEvent;
+use makosh_provider_zulip::models::ZulipEvent;
 
 #[tokio::test]
-#[ignore = "starts the real Zulip Docker compose stack; set HERMES_ZULIP_TESTCONTAINERS=1"]
+#[ignore = "starts the real Zulip Docker compose stack; set MAKOSH_ZULIP_TESTCONTAINERS=1"]
 async fn zulip_testcontainers_server_exercises_provider_surface() {
     if !ZulipServer::enabled() {
-        eprintln!("skipping: HERMES_ZULIP_TESTCONTAINERS=1 is not set");
+        eprintln!("skipping: MAKOSH_ZULIP_TESTCONTAINERS=1 is not set");
         return;
     }
 
@@ -85,7 +85,7 @@ async fn zulip_testcontainers_server_exercises_provider_surface() {
         .expect("register Zulip event queue");
     assert_eq!(queue.result, "success");
     let mut cursor = ZulipEventCursor::new(queue.queue_id, queue.last_event_id);
-    let trace = LiveHermesTrace::new(&realm).await;
+    let trace = LiveМакошьTrace::new(&realm).await;
 
     let stream_message = bot_client
         .send_stream_message(
@@ -105,14 +105,14 @@ async fn zulip_testcontainers_server_exercises_provider_surface() {
     assert_eq!(stream_projection.channel_kind, "zulip");
     assert_eq!(
         stream_projection.subject,
-        "hermes-lab / live-provider-surface"
+        "makosh-lab / live-provider-surface"
     );
     trace.assert_task_review_candidate(&stream_projection).await;
 
     let direct_message = bot_client
         .send_direct_message_to_user_ids(
             &[realm.human_user_id],
-            "Direct Zulip check from Hermes bot",
+            "Direct Zulip check from Макошь bot",
         )
         .await
         .expect("send Zulip direct message");
@@ -130,7 +130,7 @@ async fn zulip_testcontainers_server_exercises_provider_surface() {
     );
 
     let upload = bot_client
-        .upload_file_bytes("hermes-fact.txt", b"zulip live fixture attachment".to_vec())
+        .upload_file_bytes("makosh-fact.txt", b"zulip live fixture attachment".to_vec())
         .await
         .expect("upload Zulip file");
     assert!(
@@ -148,7 +148,7 @@ async fn zulip_testcontainers_server_exercises_provider_surface() {
         .send_stream_message(
             &realm.stream_name,
             "live-provider-attachment",
-            &format!("[hermes-fact.txt]({})", upload.uri),
+            &format!("[makosh-fact.txt]({})", upload.uri),
         )
         .await
         .expect("send Zulip attachment message");
@@ -258,7 +258,7 @@ async fn zulip_testcontainers_server_exercises_provider_surface() {
     write_lab_backend_evidence_report(&realm);
 }
 
-struct LiveHermesTrace {
+struct LiveМакошьTrace {
     _ctx: TestContext,
     pool: PgPool,
     account_id: String,
@@ -266,9 +266,9 @@ struct LiveHermesTrace {
     resolver: InMemorySecretResolver,
 }
 
-impl LiveHermesTrace {
+impl LiveМакошьTrace {
     async fn new(realm: &ProvisionedZulipRealm) -> Self {
-        eprintln!("[zulip-live] preparing Hermes trace database");
+        eprintln!("[zulip-live] preparing Макошь trace database");
         let ctx = TestContext::new().await;
         let pool = ctx.pool().clone();
         let account_id = "zulip-live-account".to_owned();
@@ -310,7 +310,7 @@ impl LiveHermesTrace {
 
     async fn record_event(&self, event: ZulipEvent) -> ProjectedMessage {
         eprintln!(
-            "[zulip-live] tracing real Zulip `{}` event {} through Hermes",
+            "[zulip-live] tracing real Zulip `{}` event {} through Макошь",
             event.event_type, event.id
         );
         let mapping_context =
@@ -419,7 +419,7 @@ impl LiveHermesTrace {
         assert_eq!(task_count, 0);
         assert_eq!(obligation_count, 0);
         eprintln!(
-            "[zulip-live] Hermes pipeline produced review task candidate without durable task"
+            "[zulip-live] Макошь pipeline produced review task candidate without durable task"
         );
     }
 
@@ -497,7 +497,7 @@ impl LiveHermesTrace {
                     "zulip",
                     "send_stream_message_with_upload",
                     "zulip-live-worker:stream-upload:1",
-                    "hermes-live-test",
+                    "makosh-live-test",
                 )
                 .provider_conversation_id(format!("{}/live-worker-upload", realm.stream_name))
                 .target_ref(json!({
@@ -675,7 +675,7 @@ impl LiveHermesTrace {
             .expect("project live queue recovery accepted Zulip message")
             .expect("live queue recovery Zulip projection");
         assert_eq!(projected.provider_record_id, provider_message_id);
-        assert_eq!(projected.subject, "hermes-lab / live-queue-recovery");
+        assert_eq!(projected.subject, "makosh-lab / live-queue-recovery");
         eprintln!("[zulip-live] live Zulip event queue re-registration passed");
     }
 
@@ -927,13 +927,13 @@ async fn bind_zulip_api_key(
 }
 
 fn write_lab_backend_evidence_report(realm: &ProvisionedZulipRealm) {
-    let Ok(report_dir) = env::var("HERMES_ZULIP_LIVE_REPORT_DIR") else {
+    let Ok(report_dir) = env::var("MAKOSH_ZULIP_LIVE_REPORT_DIR") else {
         return;
     };
 
     fs::create_dir_all(&report_dir).expect("create Zulip live Lab backend report directory");
     let finished_at = Utc::now().to_rfc3339();
-    let scenario_id = env::var("HERMES_ZULIP_LIVE_SCENARIO_ID")
+    let scenario_id = env::var("MAKOSH_ZULIP_LIVE_SCENARIO_ID")
         .unwrap_or_else(|_| "zulip_backend_live_trace".to_owned());
     let report = json!({
         "harness": "backend/tests/zulip_live.rs",

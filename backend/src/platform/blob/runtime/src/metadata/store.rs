@@ -6,7 +6,7 @@ use std::os::unix::fs::OpenOptionsExt;
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 
-use hermes_blob_protocol::{BlobAccessFenceV1, BlobCustodyScopeV1, BlobQuotaGrantV1, BlobRefV1};
+use makosh_blob_protocol::{BlobAccessFenceV1, BlobCustodyScopeV1, BlobQuotaGrantV1, BlobRefV1};
 
 use crate::storage::{BlobStorageError, root};
 

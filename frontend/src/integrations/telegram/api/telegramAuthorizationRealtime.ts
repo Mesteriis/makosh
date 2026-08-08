@@ -1,7 +1,7 @@
 import { fromBinary } from '@bufbuild/protobuf'
 
-import type { ClientRealtimeEventV1 } from '../../../gen/hermes/gateway/v1/client_realtime_pb'
-import { AuthorizationStatusResponseSchema } from '../../../gen/hermes/telegram/v1/client_pb'
+import type { ClientRealtimeEventV1 } from '../../../gen/makosh/gateway/v1/client_realtime_pb'
+import { AuthorizationStatusResponseSchema } from '../../../gen/makosh/telegram/v1/client_pb'
 import {
 	getBrowserGatewayRealtimeHub,
 	type BrowserGatewayRealtimeHub,

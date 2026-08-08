@@ -1,13 +1,13 @@
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_events_protocol::v1::{
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_events_protocol::v1::{
     ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
     SourceFenceV1, SourceRefV1, durable_envelope_v1::Semantics,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     OwnerJobLeaseV1, SCHEDULER_JOB_DESCRIPTOR_SET_V1, build_owner_job_command_v1,
     v1::OwnerJobTriggerKindV1,
 };
-use hermes_telegram_calls_core::{
+use makosh_telegram_calls_core::{
     TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_MAJOR_V1, TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_NAME_V1,
     TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_OWNER_V1, TELEGRAM_CALLS_REALTIME_BACKFILL_SCOPE_V1,
     TelegramCallCommand, TelegramCallDirection, TelegramCallDiscardReason,
@@ -18,7 +18,7 @@ use hermes_telegram_calls_core::{
     telegram_calls_realtime_backfill_message_id_v1, telegram_calls_realtime_backfill_run_id_v1,
     telegram_calls_realtime_backfill_scope_v1,
 };
-use hermes_telegram_calls_persistence::{
+use makosh_telegram_calls_persistence::{
     TelegramCallRealtimeEvent, TelegramCallRealtimePayload, TelegramCallsBackfillErrorV1,
     TelegramCallsBackfillPhaseV1, TelegramCallsBackfillStateV1, TelegramCallsPersistence,
     TelegramCallsPersistenceError,
@@ -27,7 +27,7 @@ use prost::Message;
 use prost_types::Timestamp;
 use sha2::{Digest, Sha256};
 
-const DATABASE_URL_ENV: &str = "HERMES_TELEGRAM_CALLS_POSTGRES_URL";
+const DATABASE_URL_ENV: &str = "MAKOSH_TELEGRAM_CALLS_POSTGRES_URL";
 
 #[tokio::test]
 #[ignore = "requires a disposable PostgreSQL database"]
@@ -482,7 +482,7 @@ fn calls_backfill_envelope(accepted_at_unix_millis: i64, runtime_generation: u64
             schema_sha256: Sha256::digest(SCHEDULER_JOB_DESCRIPTOR_SET_V1).to_vec(),
         }),
         source: Some(SourceRefV1 {
-            module_id: "hermes-telegram-runtime".to_owned(),
+            module_id: "makosh-telegram-runtime".to_owned(),
             runtime_instance_id: runtime_source_reference("runtime-1").to_vec(),
             runtime_generation,
         }),
@@ -494,12 +494,12 @@ fn calls_backfill_envelope(accepted_at_unix_millis: i64, runtime_generation: u64
         correlation_id: run_id.bytes().to_vec(),
         actor: Some(ActorRefV1 {
             kind: ActorKindV1::System as i32,
-            actor_id: b"hermes-telegram-runtime".to_vec(),
+            actor_id: b"makosh-telegram-runtime".to_vec(),
         }),
         trace: None,
         source_fence: Some(SourceFenceV1 {
             kind: FenceKindV1::RuntimeLease as i32,
-            scope_id: b"hermes-telegram-runtime".to_vec(),
+            scope_id: b"makosh-telegram-runtime".to_vec(),
             epoch: runtime_generation,
         }),
         semantics: Some(Semantics::Command(CommandMetadataV1 {
@@ -550,7 +550,7 @@ fn timestamp(unix_millis: i64) -> Timestamp {
 
 fn runtime_source_reference(runtime_instance_id: &str) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.runtime.source-reference.v1\0");
+    hasher.update(b"makosh.runtime.source-reference.v1\0");
     hasher.update(runtime_instance_id.as_bytes());
     let digest: [u8; 32] = hasher.finalize().into();
     digest[..16].try_into().expect("fixed digest prefix")

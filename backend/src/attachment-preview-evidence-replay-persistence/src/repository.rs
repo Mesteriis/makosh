@@ -1,13 +1,13 @@
-use hermes_attachment_preview_evidence_replay_api::wire::{
+use makosh_attachment_preview_evidence_replay_api::wire::{
     AttachmentPreviewEvidenceReplayErrorV1, AttachmentPreviewEvidenceReplayStateV1,
 };
-use hermes_attachment_preview_evidence_replay_core::{
+use makosh_attachment_preview_evidence_replay_core::{
     AuthenticatedReplayOperationRequestV1, ReplayFailureV1, ReplayOperationStateV1,
     ReplayProducerOutcomeV1, ReplayProducerResultV1, ReplayProducerV1,
     accepted_replay_operation_v1, observe_producer_result_v1, plan_replay_operation_v1,
     replay_operation_status_v1,
 };
-use hermes_events_protocol::{delivery::OutboxRecordV1, validation::envelope::decode_envelope_v1};
+use makosh_events_protocol::{delivery::OutboxRecordV1, validation::envelope::decode_envelope_v1};
 use sha2::{Digest, Sha256};
 use sqlx::{Postgres, Row, Transaction};
 
@@ -107,7 +107,7 @@ impl AttachmentPreviewEvidenceReplayPersistenceV1 {
         let fingerprint = request_fingerprint_v1(request);
         let mut transaction = self.pool.begin().await.map_err(storage_unavailable)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.attachment_preview_evidence_replay_operations (operation_id,attachment_anchor_id,logical_owner_id,owner_device_actor_sha256,request_fingerprint,state,error,state_revision,accepted_at_unix_seconds,completed_at_unix_seconds) VALUES ($1,$2,$3,$4,$5,$6,$7,1,$8,NULL) ON CONFLICT (operation_id) DO NOTHING",
+            "INSERT INTO makosh_data.attachment_preview_evidence_replay_operations (operation_id,attachment_anchor_id,logical_owner_id,owner_device_actor_sha256,request_fingerprint,state,error,state_revision,accepted_at_unix_seconds,completed_at_unix_seconds) VALUES ($1,$2,$3,$4,$5,$6,$7,1,$8,NULL) ON CONFLICT (operation_id) DO NOTHING",
         )
         .bind(request.operation_id.as_slice())
         .bind(request.attachment_anchor_id.as_slice())
@@ -196,7 +196,7 @@ impl AttachmentPreviewEvidenceReplayPersistenceV1 {
         }
         let mut transaction = self.pool.begin().await.map_err(storage_unavailable)?;
         let rows = sqlx::query(
-            "SELECT message_id,envelope_sha256,exact_envelope_bytes,operation_id,producer FROM hermes_data.attachment_preview_evidence_replay_anchor_command_outbox WHERE published_at_unix_seconds IS NULL ORDER BY created_at_unix_seconds,message_id LIMIT $1",
+            "SELECT message_id,envelope_sha256,exact_envelope_bytes,operation_id,producer FROM makosh_data.attachment_preview_evidence_replay_anchor_command_outbox WHERE published_at_unix_seconds IS NULL ORDER BY created_at_unix_seconds,message_id LIMIT $1",
         )
         .bind(i64::from(limit))
         .fetch_all(&mut *transaction)
@@ -231,7 +231,7 @@ impl AttachmentPreviewEvidenceReplayPersistenceV1 {
             return Err(ReplayPersistenceErrorV1::InvalidInput);
         }
         let result = sqlx::query(
-            "UPDATE hermes_data.attachment_preview_evidence_replay_anchor_command_outbox SET published_at_unix_seconds=$1 WHERE message_id=$2 AND published_at_unix_seconds IS NULL",
+            "UPDATE makosh_data.attachment_preview_evidence_replay_anchor_command_outbox SET published_at_unix_seconds=$1 WHERE message_id=$2 AND published_at_unix_seconds IS NULL",
         )
         .bind(published_at_unix_seconds)
         .bind(message_id.as_slice())
@@ -242,7 +242,7 @@ impl AttachmentPreviewEvidenceReplayPersistenceV1 {
             return Ok(());
         }
         let exists = sqlx::query_scalar::<_, bool>(
-            "SELECT EXISTS(SELECT 1 FROM hermes_data.attachment_preview_evidence_replay_anchor_command_outbox WHERE message_id=$1 AND published_at_unix_seconds IS NOT NULL)",
+            "SELECT EXISTS(SELECT 1 FROM makosh_data.attachment_preview_evidence_replay_anchor_command_outbox WHERE message_id=$1 AND published_at_unix_seconds IS NOT NULL)",
         )
         .bind(message_id.as_slice())
         .fetch_one(&self.pool)
@@ -297,7 +297,7 @@ impl AttachmentPreviewEvidenceReplayPersistenceV1 {
             .ok_or(ReplayPersistenceErrorV1::InvalidRow)?;
         let completed_at = terminal(next_state).then_some(accepted_at_unix_seconds);
         let updated = sqlx::query(
-            "UPDATE hermes_data.attachment_preview_evidence_replay_operations SET state=$1,error=$2,state_revision=$3,completed_at_unix_seconds=$4 WHERE operation_id=$5 AND state_revision=$6",
+            "UPDATE makosh_data.attachment_preview_evidence_replay_operations SET state=$1,error=$2,state_revision=$3,completed_at_unix_seconds=$4 WHERE operation_id=$5 AND state_revision=$6",
         )
         .bind(state_code(next_state))
         .bind(error_code(next_error))
@@ -336,7 +336,7 @@ async fn load_operation(
 ) -> Result<Option<LoadedOperationV1>, ReplayPersistenceErrorV1> {
     let row = if for_update {
         sqlx::query(
-            "SELECT operation_id,attachment_anchor_id,logical_owner_id,owner_device_actor_sha256,state,error,state_revision,accepted_at_unix_seconds,completed_at_unix_seconds FROM hermes_data.attachment_preview_evidence_replay_operations WHERE operation_id=$1 FOR UPDATE",
+            "SELECT operation_id,attachment_anchor_id,logical_owner_id,owner_device_actor_sha256,state,error,state_revision,accepted_at_unix_seconds,completed_at_unix_seconds FROM makosh_data.attachment_preview_evidence_replay_operations WHERE operation_id=$1 FOR UPDATE",
         )
         .bind(operation_id.as_slice())
         .fetch_optional(&mut **transaction)
@@ -344,7 +344,7 @@ async fn load_operation(
         .map_err(storage_unavailable)?
     } else {
         sqlx::query(
-            "SELECT operation_id,attachment_anchor_id,logical_owner_id,owner_device_actor_sha256,state,error,state_revision,accepted_at_unix_seconds,completed_at_unix_seconds FROM hermes_data.attachment_preview_evidence_replay_operations WHERE operation_id=$1",
+            "SELECT operation_id,attachment_anchor_id,logical_owner_id,owner_device_actor_sha256,state,error,state_revision,accepted_at_unix_seconds,completed_at_unix_seconds FROM makosh_data.attachment_preview_evidence_replay_operations WHERE operation_id=$1",
         )
         .bind(operation_id.as_slice())
         .fetch_optional(&mut **transaction)
@@ -423,7 +423,7 @@ async fn load_producers(
     operation_id: [u8; 16],
 ) -> Result<Vec<LoadedProducerV1>, ReplayPersistenceErrorV1> {
     let rows = sqlx::query(
-        "SELECT producer,outcome,failure FROM hermes_data.attachment_preview_evidence_replay_anchor_producers WHERE operation_id=$1 ORDER BY producer",
+        "SELECT producer,outcome,failure FROM makosh_data.attachment_preview_evidence_replay_anchor_producers WHERE operation_id=$1 ORDER BY producer",
     )
     .bind(operation_id.as_slice())
     .fetch_all(&mut **transaction)
@@ -433,7 +433,7 @@ async fn load_producers(
     for row in rows {
         let producer = producer_from_code(row.try_get("producer").map_err(invalid_row)?)?;
         let ids = sqlx::query_scalar::<_, Vec<u8>>(
-            "SELECT original_message_id FROM hermes_data.attachment_preview_evidence_replay_anchor_result_messages WHERE operation_id=$1 AND producer=$2 ORDER BY ordinal",
+            "SELECT original_message_id FROM makosh_data.attachment_preview_evidence_replay_anchor_result_messages WHERE operation_id=$1 AND producer=$2 ORDER BY ordinal",
         )
         .bind(operation_id.as_slice())
         .bind(producer_code(producer))
@@ -469,7 +469,7 @@ async fn insert_producer(
     producer: ReplayProducerV1,
 ) -> Result<(), ReplayPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.attachment_preview_evidence_replay_anchor_producers (operation_id,producer,outcome,failure) VALUES ($1,$2,0,0)",
+        "INSERT INTO makosh_data.attachment_preview_evidence_replay_anchor_producers (operation_id,producer,outcome,failure) VALUES ($1,$2,0,0)",
     )
     .bind(operation_id.as_slice())
     .bind(producer_code(producer))
@@ -486,7 +486,7 @@ async fn insert_command(
     created_at_unix_seconds: i64,
 ) -> Result<(), ReplayPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.attachment_preview_evidence_replay_anchor_command_outbox (message_id,envelope_sha256,exact_envelope_bytes,operation_id,producer,created_at_unix_seconds,published_at_unix_seconds) VALUES ($1,$2,$3,$4,$5,$6,NULL)",
+        "INSERT INTO makosh_data.attachment_preview_evidence_replay_anchor_command_outbox (message_id,envelope_sha256,exact_envelope_bytes,operation_id,producer,created_at_unix_seconds,published_at_unix_seconds) VALUES ($1,$2,$3,$4,$5,$6,NULL)",
     )
     .bind(command.message_id.as_slice())
     .bind(command.envelope_sha256.as_slice())
@@ -506,7 +506,7 @@ async fn load_command_message_id(
     producer: ReplayProducerV1,
 ) -> Result<[u8; 16], ReplayPersistenceErrorV1> {
     let value = sqlx::query_scalar::<_, Vec<u8>>(
-        "SELECT message_id FROM hermes_data.attachment_preview_evidence_replay_anchor_command_outbox WHERE operation_id=$1 AND producer=$2",
+        "SELECT message_id FROM makosh_data.attachment_preview_evidence_replay_anchor_command_outbox WHERE operation_id=$1 AND producer=$2",
     )
     .bind(operation_id.as_slice())
     .bind(producer_code(producer))
@@ -529,7 +529,7 @@ async fn inspect_result_inbox(
     record: &ReplayResultInboxRecordV1,
 ) -> Result<ResultInboxStateV1, ReplayPersistenceErrorV1> {
     let rows = sqlx::query(
-        "SELECT message_id,envelope_sha256,operation_id,producer FROM hermes_data.attachment_preview_evidence_replay_anchor_result_inbox WHERE message_id=$1 OR (operation_id=$2 AND producer=$3) FOR UPDATE",
+        "SELECT message_id,envelope_sha256,operation_id,producer FROM makosh_data.attachment_preview_evidence_replay_anchor_result_inbox WHERE message_id=$1 OR (operation_id=$2 AND producer=$3) FOR UPDATE",
     )
     .bind(record.message_id.as_slice())
     .bind(record.operation_id.as_slice())
@@ -562,7 +562,7 @@ async fn insert_result_inbox(
     accepted_at_unix_seconds: i64,
 ) -> Result<(), ReplayPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.attachment_preview_evidence_replay_anchor_result_inbox (message_id,envelope_sha256,operation_id,producer,accepted_at_unix_seconds) VALUES ($1,$2,$3,$4,$5)",
+        "INSERT INTO makosh_data.attachment_preview_evidence_replay_anchor_result_inbox (message_id,envelope_sha256,operation_id,producer,accepted_at_unix_seconds) VALUES ($1,$2,$3,$4,$5)",
     )
     .bind(record.message_id.as_slice())
     .bind(record.envelope_sha256.as_slice())
@@ -581,7 +581,7 @@ async fn update_producer_result(
     result: &ReplayProducerResultV1,
 ) -> Result<(), ReplayPersistenceErrorV1> {
     let updated = sqlx::query(
-        "UPDATE hermes_data.attachment_preview_evidence_replay_anchor_producers SET outcome=$1,failure=$2 WHERE operation_id=$3 AND producer=$4 AND outcome=0 AND failure=0",
+        "UPDATE makosh_data.attachment_preview_evidence_replay_anchor_producers SET outcome=$1,failure=$2 WHERE operation_id=$3 AND producer=$4 AND outcome=0 AND failure=0",
     )
     .bind(outcome_code(result.outcome))
     .bind(failure_code(result.failure))
@@ -595,7 +595,7 @@ async fn update_producer_result(
     }
     for (ordinal, message_id) in result.original_message_ids.iter().enumerate() {
         sqlx::query(
-            "INSERT INTO hermes_data.attachment_preview_evidence_replay_anchor_result_messages (operation_id,producer,ordinal,original_message_id) VALUES ($1,$2,$3,$4)",
+            "INSERT INTO makosh_data.attachment_preview_evidence_replay_anchor_result_messages (operation_id,producer,ordinal,original_message_id) VALUES ($1,$2,$3,$4)",
         )
         .bind(operation_id.as_slice())
         .bind(producer_code(result.producer))
@@ -754,7 +754,7 @@ fn invalid_input<T>(_: T) -> ReplayPersistenceErrorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_communications_retained_evidence_replay_contract::{
+    use makosh_communications_retained_evidence_replay_contract::{
         CommunicationsReplayCommandEnvelopeContextV1,
         build_communications_replay_command_outbox_v1, wire::ReplayCommunicationsEvidenceCommandV1,
     };

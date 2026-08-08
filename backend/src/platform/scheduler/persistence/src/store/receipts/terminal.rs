@@ -1,5 +1,5 @@
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_scheduler_protocol::{
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_scheduler_protocol::{
     RetryPolicyV1, SchedulerReceiptValidationErrorV1,
     v1::{JobRunOutcomeV1, JobRunReceiptV1},
     validate_job_run_receipt_v1,
@@ -93,7 +93,7 @@ async fn retry_due(
     result: &SchedulerRunTerminalResultV1,
 ) -> Result<Option<UtcMillisV1>, SchedulerRunClaimErrorV1> {
     let (attempt_count, max_attempts, base_backoff_millis) = query_as::<_, (i32, i32, i64)>(
-        "SELECT runs.attempt_count, retries.retry_max_attempts, retries.retry_base_backoff_millis FROM hermes_platform.scheduler_runs AS runs JOIN hermes_platform.scheduler_run_retries AS retries ON retries.run_id = runs.run_id WHERE runs.run_id = $1 AND runs.lease_epoch = $2 FOR UPDATE OF retries",
+        "SELECT runs.attempt_count, retries.retry_max_attempts, retries.retry_base_backoff_millis FROM makosh_platform.scheduler_runs AS runs JOIN makosh_platform.scheduler_run_retries AS retries ON retries.run_id = runs.run_id WHERE runs.run_id = $1 AND runs.lease_epoch = $2 FOR UPDATE OF retries",
     )
     .bind(result.run_id.to_vec())
     .bind(i64::try_from(result.lease_epoch).map_err(|_| SchedulerRunClaimErrorV1::Denied)?)
@@ -131,7 +131,7 @@ async fn transition_to_retry_wait(
         "failed"
     };
     let updated = query(
-        "UPDATE hermes_platform.scheduler_runs SET state = $4, attempt_count = attempt_count + 1 WHERE run_id = $1 AND lease_epoch = $2 AND dispatch_message_id = $3 AND state = 'running'",
+        "UPDATE makosh_platform.scheduler_runs SET state = $4, attempt_count = attempt_count + 1 WHERE run_id = $1 AND lease_epoch = $2 AND dispatch_message_id = $3 AND state = 'running'",
     )
     .bind(result.run_id.to_vec())
     .bind(i64::try_from(result.lease_epoch).map_err(|_| SchedulerRunClaimErrorV1::Denied)?)
@@ -144,7 +144,7 @@ async fn transition_to_retry_wait(
         .then_some(())
         .ok_or(SchedulerRunClaimErrorV1::Denied)?;
     query(
-        "UPDATE hermes_platform.scheduler_run_retries SET next_attempt_at_unix_ms = $2 WHERE run_id = $1",
+        "UPDATE makosh_platform.scheduler_run_retries SET next_attempt_at_unix_ms = $2 WHERE run_id = $1",
     )
     .bind(result.run_id.to_vec())
     .bind(retry_due.map(UtcMillisV1::value))
@@ -158,7 +158,7 @@ async fn locked_run_state(
     transaction: &mut Transaction<'_, Postgres>,
     result: &SchedulerRunTerminalResultV1,
 ) -> Result<(String, String), SchedulerRunClaimErrorV1> {
-    query_as("SELECT runs.state, runs.concurrency_key FROM hermes_platform.scheduler_runs AS runs JOIN hermes_platform.scheduler_dispatches AS dispatch ON dispatch.run_id = runs.run_id AND dispatch.lease_epoch = runs.lease_epoch JOIN hermes_platform.scheduler_run_acceptances AS acceptance ON acceptance.command_message_id = dispatch.message_id AND acceptance.run_id = runs.run_id AND acceptance.lease_epoch = runs.lease_epoch WHERE runs.run_id = $1 AND runs.lease_epoch = $2 AND runs.dispatch_message_id = $3 AND dispatch.message_id = $3 AND dispatch.state = 'published' AND runs.lease_expires_at_unix_ms > $4 FOR UPDATE OF runs, dispatch, acceptance")
+    query_as("SELECT runs.state, runs.concurrency_key FROM makosh_platform.scheduler_runs AS runs JOIN makosh_platform.scheduler_dispatches AS dispatch ON dispatch.run_id = runs.run_id AND dispatch.lease_epoch = runs.lease_epoch JOIN makosh_platform.scheduler_run_acceptances AS acceptance ON acceptance.command_message_id = dispatch.message_id AND acceptance.run_id = runs.run_id AND acceptance.lease_epoch = runs.lease_epoch WHERE runs.run_id = $1 AND runs.lease_epoch = $2 AND runs.dispatch_message_id = $3 AND dispatch.message_id = $3 AND dispatch.state = 'published' AND runs.lease_expires_at_unix_ms > $4 FOR UPDATE OF runs, dispatch, acceptance")
         .bind(result.run_id.to_vec()).bind(i64::try_from(result.lease_epoch).map_err(|_| SchedulerRunClaimErrorV1::Denied)?).bind(result.command_message_id.to_vec()).bind(result.observed_at.value())
         .fetch_optional(&mut **transaction)
         .await
@@ -170,7 +170,7 @@ async fn insert_result(
     transaction: &mut Transaction<'_, Postgres>,
     result: &SchedulerRunTerminalResultV1,
 ) -> Result<(), SchedulerRunClaimErrorV1> {
-    let inserted = query("INSERT INTO hermes_platform.scheduler_run_results (command_message_id, run_id, lease_epoch, outcome, observed_at_unix_ms) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (command_message_id) DO NOTHING")
+    let inserted = query("INSERT INTO makosh_platform.scheduler_run_results (command_message_id, run_id, lease_epoch, outcome, observed_at_unix_ms) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (command_message_id) DO NOTHING")
         .bind(result.command_message_id.to_vec()).bind(result.run_id.to_vec()).bind(i64::try_from(result.lease_epoch).map_err(|_| SchedulerRunClaimErrorV1::Denied)?).bind(result.state).bind(result.observed_at.value())
         .execute(&mut **transaction).await.map_err(unavailable)?;
     (inserted.rows_affected() == 1)
@@ -182,7 +182,7 @@ async fn update_run(
     transaction: &mut Transaction<'_, Postgres>,
     result: &SchedulerRunTerminalResultV1,
 ) -> Result<(), SchedulerRunClaimErrorV1> {
-    let updated = query("UPDATE hermes_platform.scheduler_runs SET state = $4 WHERE run_id = $1 AND lease_epoch = $2 AND dispatch_message_id = $3 AND state = 'running'")
+    let updated = query("UPDATE makosh_platform.scheduler_runs SET state = $4 WHERE run_id = $1 AND lease_epoch = $2 AND dispatch_message_id = $3 AND state = 'running'")
         .bind(result.run_id.to_vec()).bind(i64::try_from(result.lease_epoch).map_err(|_| SchedulerRunClaimErrorV1::Denied)?).bind(result.command_message_id.to_vec()).bind(result.state)
         .execute(&mut **transaction).await.map_err(unavailable)?;
     (updated.rows_affected() == 1)
@@ -195,7 +195,7 @@ async fn release_slot(
     concurrency_key: &str,
     result: &SchedulerRunTerminalResultV1,
 ) -> Result<(), SchedulerRunClaimErrorV1> {
-    let updated = query("UPDATE hermes_platform.scheduler_concurrency SET active_runs = active_runs - 1, updated_at_unix_ms = $2 WHERE concurrency_key = $1 AND active_runs > 0")
+    let updated = query("UPDATE makosh_platform.scheduler_concurrency SET active_runs = active_runs - 1, updated_at_unix_ms = $2 WHERE concurrency_key = $1 AND active_runs > 0")
         .bind(concurrency_key).bind(result.observed_at.value())
         .execute(&mut **transaction).await.map_err(unavailable)?;
     (updated.rows_affected() == 1)
@@ -208,7 +208,7 @@ async fn duplicate_result(
     result: &SchedulerRunTerminalResultV1,
     state: &str,
 ) -> Result<SchedulerRunTerminalResultOutcomeV1, SchedulerRunClaimErrorV1> {
-    let matches = query_scalar("SELECT EXISTS (SELECT 1 FROM hermes_platform.scheduler_run_results WHERE command_message_id = $1 AND run_id = $2 AND lease_epoch = $3 AND outcome = $4)")
+    let matches = query_scalar("SELECT EXISTS (SELECT 1 FROM makosh_platform.scheduler_run_results WHERE command_message_id = $1 AND run_id = $2 AND lease_epoch = $3 AND outcome = $4)")
         .bind(result.command_message_id.to_vec()).bind(result.run_id.to_vec()).bind(i64::try_from(result.lease_epoch).map_err(|_| SchedulerRunClaimErrorV1::Denied)?).bind(result.state)
         .fetch_one(&mut **transaction).await.map_err(unavailable)?;
     (matches

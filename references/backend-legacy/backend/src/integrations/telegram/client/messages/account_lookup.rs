@@ -1,4 +1,4 @@
-use hermes_communications_api::accounts::ProviderAccount;
+use makosh_communications_api::accounts::ProviderAccount;
 
 use super::super::errors::TelegramError;
 use super::super::store::TelegramStore;

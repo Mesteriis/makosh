@@ -1,7 +1,7 @@
 //! Canonical non-wildcard durable subject grammar.
 
-use hermes_events_protocol::v1::DurableEnvelopeV1;
-use hermes_events_protocol::v1::durable_envelope_v1::Semantics;
+use makosh_events_protocol::v1::DurableEnvelopeV1;
+use makosh_events_protocol::v1::durable_envelope_v1::Semantics;
 
 use crate::topology::StreamKindV1;
 
@@ -66,7 +66,7 @@ impl DurableSubjectV1 {
     pub fn parse(value: &str) -> Result<Self, SubjectError> {
         let mut parts = value.split('.');
         let (
-            Some("hermes"),
+            Some("makosh"),
             Some(kind),
             Some("v1"),
             Some(owner),
@@ -116,7 +116,7 @@ impl DurableSubjectV1 {
     #[must_use]
     pub fn as_str(&self) -> String {
         format!(
-            "hermes.{}.v1.{}.{}.v{}",
+            "makosh.{}.v1.{}.{}.v{}",
             self.kind.subject_token(),
             self.owner,
             self.contract,

@@ -1,11 +1,11 @@
-use hermes_communication_delayed_delivery_api::{
+use makosh_communication_delayed_delivery_api::{
     COMMUNICATION_DELAYED_DELIVERY_CANCEL_CONNECT_PATH_V1,
     COMMUNICATION_DELAYED_DELIVERY_CAPABILITY_ID_V1, COMMUNICATION_DELAYED_DELIVERY_MODULE_ID_V1,
     COMMUNICATION_DELAYED_DELIVERY_OWNER_V1,
     COMMUNICATION_DELAYED_DELIVERY_SCHEDULE_CONNECT_PATH_V1,
     COMMUNICATION_DELAYED_DELIVERY_STATUS_CONNECT_PATH_V1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ClientRpcRouteV1, ClockTimerRequestV1, ContractReferenceV1,
     DurableEnvelopeKindV1, EventRouteDirectionV1, EventRouteRequestV1,
@@ -14,7 +14,7 @@ use hermes_runtime_protocol::v1::{
     SettingsSchemaRefV1, SettingsSchemaV1, StorageNamespaceRequestV1,
     capability_request_v1::Request,
 };
-use hermes_scheduler_protocol::SCHEDULER_JOB_DESCRIPTOR_SET_V1;
+use makosh_scheduler_protocol::SCHEDULER_JOB_DESCRIPTOR_SET_V1;
 use prost::Message;
 use sha2::{Digest, Sha256};
 
@@ -252,7 +252,7 @@ fn client_capability() -> CapabilityDescriptorV1 {
 }
 
 fn client_surface(
-    contract: hermes_runtime_protocol::v1::ContractReferenceV1,
+    contract: makosh_runtime_protocol::v1::ContractReferenceV1,
     path: &str,
 ) -> ProvidedSurfaceV1 {
     ProvidedSurfaceV1 {
@@ -328,7 +328,7 @@ fn clock_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::{
+    use makosh_runtime_protocol::{
         v1::capability_request_v1::Request,
         validation::descriptor::{validate_descriptor_v1, validate_settings_schema_v1},
     };

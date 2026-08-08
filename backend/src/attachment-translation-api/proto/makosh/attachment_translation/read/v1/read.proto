@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package makosh.attachment_translation.read.v1;
+
+// Body for the exact descriptor-declared client_blob route. Success returns
+// private translated UTF-8 bytes, never internal Blob authority.
+message ReadAttachmentTranslationRequestV1 {
+  uint32 protocol_major = 1;
+  bytes opaque_read_ticket = 2;
+}

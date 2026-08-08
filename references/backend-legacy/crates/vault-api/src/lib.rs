@@ -7,7 +7,7 @@ use std::future::Future;
 use std::pin::Pin;
 
 use chrono::{DateTime, Utc};
-use hermes_provider_api::{CredentialLease, ProviderId};
+use makosh_provider_api::{CredentialLease, ProviderId};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
@@ -90,7 +90,7 @@ pub enum VaultApiError {
 #[cfg(test)]
 mod tests {
     use chrono::{TimeZone, Utc};
-    use hermes_provider_api::ProviderId;
+    use makosh_provider_api::ProviderId;
 
     use super::{CredentialLeaseRequest, VaultApiError};
 

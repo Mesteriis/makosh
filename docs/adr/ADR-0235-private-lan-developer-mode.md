@@ -1,7 +1,7 @@
 # ADR-0235: Private-LAN developer mode
 
 Статус: Заменено
-Дата: 2026-07-20  
+Дата: 2026-07-20
 Состояние реализации: historical evidence only. Durable LAN setting и
 cookie-free owner principal удалены migration 35→36; действующее решение —
 [ADR-0237](ADR-0237-temporary-private-lan-development-without-owner-authority.md).
@@ -46,7 +46,7 @@ status используют тот же owner-scoped authority, что paired mo
 Plain HTTP разрешён только этому direct private-LAN developer listener. Он не
 принимает TLS inputs и не является transport profile для paired/public clients.
 
-Developer mode ограничивает только входящий доступ к Hermes. Исходящие
+Developer mode ограничивает только входящий доступ к Макошь. Исходящие
 соединения самого Kernel, platform runtimes и provider integrations не
 фильтруются этим режимом: они сохраняют обычный доступ к provider/API.
 

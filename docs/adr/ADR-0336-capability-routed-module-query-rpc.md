@@ -129,7 +129,7 @@ client route само по себе не открывает module query.
    атомарно сохраняет intent/outbox;
 6. Submit возвращает `accepted`; terminal provider result остаётся event-only.
 
-Workflow импортирует только `hermes-communications-api`, а не Communications
+Workflow импортирует только `makosh-communications-api`, а не Communications
 runtime, persistence или integration packages. Kernel/Gateway не импортируют
 оба owner API.
 

@@ -43,7 +43,7 @@ module runtimes настолько, чтобы сохранить безопас
 
 Kernel владеет только следующими обязанностями:
 
-1. boot/recovery state machine всего локального экземпляра Hermes;
+1. boot/recovery state machine всего локального экземпляра Макошь;
 2. supervisor managed infrastructure и independently restartable module
    runtimes;
 3. module registry, проверка `ModuleDescriptorV1`, protocol, signed distribution
@@ -117,7 +117,7 @@ payload или implementation managed services.
 Vault является отдельным verified managed process владельца `platform/vault`
 по ADR-0223. Kernel supervisor управляет его lifecycle и маршрутизирует только
 versioned ciphertext frames с authorization/fencing context. Kernel не линкует
-`hermes-vault-runtime`, SQLCipher, crypto или file-key adapters, не получает
+`makosh-vault-runtime`, SQLCipher, crypto или file-key adapters, не получает
 credential plaintext/keys и не хранит Vault anchor, key slots, secret bindings
 или leases в Control Store. Vault failure блокирует только capabilities с
 явной credential dependency; остальной recovery/control plane продолжает
@@ -266,7 +266,7 @@ Runtime запускается топологически; независимы�
 - единственный explicit non-secret `--data-dir` override;
 - immutable signed bundled distribution inventory.
 
-Обязательного configuration file, Hermes-specific environment overlay,
+Обязательного configuration file, Макошь-specific environment overlay,
 directory scanning или silent fallback нет. Полная граница определена
 ADR-0217.
 

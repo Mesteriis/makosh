@@ -11,7 +11,7 @@ local model lifecycle instead of bootstrap-enabled local defaults.
 
 ADR-0049 introduced the V3 local AI runtime with Ollama defaults. ADR-0081 added explicit OmniRoute support, but the current settings surface still exposes AI as generic `application_settings` rows. That does not scale to built-in runtime management, CLI-backed local agents, remote API providers, per-capability model routing, or editable prompt templates.
 
-Hermes Hub handles private communications and documents. AI provider configuration must preserve the local-first posture, keep secrets in the host vault from ADR-0076, and make remote-context consent explicit.
+Макошь handles private communications and documents. AI provider configuration must preserve the local-first posture, keep secrets in the host vault from ADR-0076, and make remote-context consent explicit.
 
 ## Decision
 
@@ -24,7 +24,7 @@ Rules:
 - API provider secrets are stored only through host-vault secret references. Environment-backed OmniRoute remains a legacy/bootstrap fallback.
 - Remote/API providers require explicit provider-level consent before they can be used for private-context workflows.
 - CLI agents are provider bridges only. They may execute only allowlisted fixed command/argument presets and must not become autonomous workflow actors in this slice.
-- Built-in Ollama runtime management is desktop/macOS-first. Hermes may install/start/update the runtime automatically, but curated local model downloads require explicit user confirmation and do not auto-assign routes.
+- Built-in Ollama runtime management is desktop/macOS-first. Макошь may install/start/update the runtime automatically, but curated local model downloads require explicit user confirmation and do not auto-assign routes.
 - Model routing uses stable capability slots instead of one global chat model. Embedding routes must keep the current 2560-dimension constraint until a future ADR changes the semantic index shape.
 - Prompt templates are versioned. System prompts are seeded/read-only, while user prompts and active versions are stored as domain records.
 - Prompt evaluation runs may persist model output and metadata, but audit/event payloads must not store raw private source text, API keys or provider secret values.

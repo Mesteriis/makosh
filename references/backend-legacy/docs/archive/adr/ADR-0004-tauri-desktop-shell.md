@@ -4,7 +4,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub is local-first and needs desktop integration for files, local services, secret storage, notifications and possible provider bridge workflows.
+Макошь is local-first and needs desktop integration for files, local services, secret storage, notifications and possible provider bridge workflows.
 
 ## Decision
 

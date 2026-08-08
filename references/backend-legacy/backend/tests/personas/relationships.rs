@@ -1,12 +1,12 @@
 use chrono::{Duration, Utc};
-use hermes_hub_backend::domains::obligations::models::{
+use makosh_hub_backend::domains::obligations::models::{
     entity_kind::ObligationEntityKind, states::ObligationStatus,
 };
-use hermes_hub_backend::domains::personas::api::store::PersonaProjectionStore;
-use hermes_hub_backend::domains::personas::core::roles::PersonaRoleStore;
-use hermes_hub_backend::domains::personas::enrichment::store::PersonaEnrichmentStore;
-use hermes_hub_backend::domains::personas::intelligence::CommunicationFingerprint;
-use hermes_hub_backend::domains::personas::trust::promises::PersonaPromiseStore;
+use makosh_hub_backend::domains::personas::api::store::PersonaProjectionStore;
+use makosh_hub_backend::domains::personas::core::roles::PersonaRoleStore;
+use makosh_hub_backend::domains::personas::enrichment::store::PersonaEnrichmentStore;
+use makosh_hub_backend::domains::personas::intelligence::CommunicationFingerprint;
+use makosh_hub_backend::domains::personas::trust::promises::PersonaPromiseStore;
 
 use super::support::{live_personas_pool, run_persona_derived_evidence_consumer, unique_suffix};
 
@@ -368,5 +368,5 @@ async fn persona_promise_create_materializes_user_confirmed_obligation_without_t
             .expect("task link count");
     assert_eq!(task_link_count, 0);
 }
-use hermes_hub_backend::domains::obligations::models::states::ObligationReviewState;
-use hermes_hub_backend::domains::obligations::store::ObligationStore;
+use makosh_hub_backend::domains::obligations::models::states::ObligationReviewState;
+use makosh_hub_backend::domains::obligations::store::ObligationStore;

@@ -1,6 +1,6 @@
 //! Owner-pinned external artifact bindings.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleRegistrationState, OwnerPinnedArtifactBinding, OwnerPinnedArtifactBindingInputV1,
 };
 use rusqlite::{OptionalExtension, params};
@@ -24,7 +24,7 @@ impl SqliteControlStore {
                 return Err(StoreError::InvalidOwnerPinnedArtifactBinding);
             }
             let changed = transaction.execute(
-                "INSERT INTO hermes_kernel_owner_pinned_artifact_binding
+                "INSERT INTO makosh_kernel_owner_pinned_artifact_binding
                  (registration_id, binding_revision, canonical_artifact_path, artifact_sha256,
                   artifact_size, artifact_device, artifact_inode, owner_signature_raw)
                  VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
@@ -33,7 +33,7 @@ impl SqliteControlStore {
                  artifact_sha256=excluded.artifact_sha256, artifact_size=excluded.artifact_size,
                  artifact_device=excluded.artifact_device, artifact_inode=excluded.artifact_inode,
                  owner_signature_raw=excluded.owner_signature_raw
-                 WHERE excluded.binding_revision = hermes_kernel_owner_pinned_artifact_binding.binding_revision + 1",
+                 WHERE excluded.binding_revision = makosh_kernel_owner_pinned_artifact_binding.binding_revision + 1",
                 params![binding.registration_id(), as_sql(binding.binding_revision())?, binding.canonical_artifact_path(), binding.artifact_sha256().as_slice(), as_sql(binding.artifact_size())?, as_sql(binding.artifact_device())?, as_sql(binding.artifact_inode())?, binding.owner_signature_raw().as_slice()],
             )?;
             if changed != 1 {
@@ -58,7 +58,7 @@ impl SqliteControlStore {
             let binding = transaction.query_row(
                 "SELECT binding_revision, canonical_artifact_path, artifact_sha256, artifact_size,
                  artifact_device, artifact_inode, owner_signature_raw
-                 FROM hermes_kernel_owner_pinned_artifact_binding WHERE registration_id = ?1",
+                 FROM makosh_kernel_owner_pinned_artifact_binding WHERE registration_id = ?1",
                 [&registration_id],
                 |row| decode_binding(row, &registration_id),
             ).optional()?;

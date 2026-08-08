@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/domains/communications/components/MailResourceOverviewStrip.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MailResourceOverviewStrip.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MailResourceOverviewStrip.boundary.test.ts`
 - Size bytes / Размер в байтах: `1033`
 - Included characters / Включено символов: `1033`
 - Truncated / Обрезано: `no`
@@ -89,7 +89,7 @@ describe('MailResourceOverviewStrip boundary', () => {
 
 ### `frontend/src/domains/communications/components/MessageAiReplyPanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MessageAiReplyPanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MessageAiReplyPanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `812`
 - Included characters / Включено символов: `812`
 - Truncated / Обрезано: `no`
@@ -118,7 +118,7 @@ describe('MessageAiReplyPanel boundary', () => {
 
 ### `frontend/src/domains/communications/components/MessageAttachmentsTab.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MessageAttachmentsTab.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MessageAttachmentsTab.boundary.test.ts`
 - Size bytes / Размер в байтах: `1705`
 - Included characters / Включено символов: `1705`
 - Truncated / Обрезано: `no`
@@ -163,7 +163,7 @@ describe('MessageAttachmentsTab boundary', () => {
 
 ### `frontend/src/domains/communications/components/MessageBodyTab.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MessageBodyTab.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MessageBodyTab.boundary.test.ts`
 - Size bytes / Размер в байтах: `2094`
 - Included characters / Включено символов: `2094`
 - Truncated / Обрезано: `no`
@@ -219,7 +219,7 @@ describe('MessageBodyTab bilingual reply boundary', () => {
 
 ### `frontend/src/domains/communications/components/MessageLocalIntelligencePanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MessageLocalIntelligencePanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MessageLocalIntelligencePanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `754`
 - Included characters / Включено символов: `754`
 - Truncated / Обрезано: `no`
@@ -247,7 +247,7 @@ describe('MessageLocalIntelligencePanel boundary', () => {
 
 ### `frontend/src/domains/communications/components/MessageRelatedTab.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MessageRelatedTab.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MessageRelatedTab.boundary.test.ts`
 - Size bytes / Размер в байтах: `1775`
 - Included characters / Включено символов: `1775`
 - Truncated / Обрезано: `no`
@@ -297,7 +297,7 @@ describe('MessageRelatedTab export boundary', () => {
 
 ### `frontend/src/domains/communications/components/MessageTrustReviewPanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/MessageTrustReviewPanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/MessageTrustReviewPanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `702`
 - Included characters / Включено символов: `702`
 - Truncated / Обрезано: `no`
@@ -324,7 +324,7 @@ describe('MessageTrustReviewPanel boundary', () => {
 
 ### `frontend/src/domains/communications/components/OutboxStatusStrip.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/OutboxStatusStrip.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/OutboxStatusStrip.boundary.test.ts`
 - Size bytes / Размер в байтах: `910`
 - Included characters / Включено символов: `910`
 - Truncated / Обрезано: `no`
@@ -357,7 +357,7 @@ describe('OutboxStatusStrip boundary', () => {
 
 ### `frontend/src/domains/communications/components/RichComposeEditor.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/RichComposeEditor.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/RichComposeEditor.boundary.test.ts`
 - Size bytes / Размер в байтах: `3494`
 - Included characters / Включено символов: `3494`
 - Truncated / Обрезано: `no`
@@ -443,7 +443,7 @@ describe('RichComposeEditor boundaries', () => {
 
 ### `frontend/src/domains/communications/components/SavedSearchRuleGroupEditor.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/SavedSearchRuleGroupEditor.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/SavedSearchRuleGroupEditor.boundary.test.ts`
 - Size bytes / Размер в байтах: `816`
 - Included characters / Включено символов: `816`
 - Truncated / Обрезано: `no`
@@ -470,7 +470,7 @@ describe('SavedSearchRuleGroupEditor boundaries', () => {
 
 ### `frontend/src/domains/communications/components/SavedSearchStrip.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/SavedSearchStrip.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/SavedSearchStrip.boundary.test.ts`
 - Size bytes / Размер в байтах: `3290`
 - Included characters / Включено символов: `3290`
 - Truncated / Обрезано: `no`
@@ -536,7 +536,7 @@ describe('SavedSearchStrip prefetch boundary', () => {
 
 ### `frontend/src/domains/communications/components/ThreadAttachmentInsightPanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/ThreadAttachmentInsightPanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/ThreadAttachmentInsightPanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `1080`
 - Included characters / Включено символов: `1080`
 - Truncated / Обрезано: `no`
@@ -568,7 +568,7 @@ describe('ThreadAttachmentInsightPanel boundaries', () => {
 
 ### `frontend/src/domains/communications/components/ThreadConversationView.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/ThreadConversationView.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/ThreadConversationView.boundary.test.ts`
 - Size bytes / Размер в байтах: `5058`
 - Included characters / Включено символов: `5058`
 - Truncated / Обрезано: `no`
@@ -665,7 +665,7 @@ describe('ThreadConversationView boundary', () => {
 
 ### `frontend/src/domains/communications/components/ThreadInlineReplyComposer.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/ThreadInlineReplyComposer.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/ThreadInlineReplyComposer.boundary.test.ts`
 - Size bytes / Размер в байтах: `1231`
 - Included characters / Включено символов: `1231`
 - Truncated / Обрезано: `no`
@@ -704,7 +704,7 @@ describe('ThreadInlineReplyComposer boundary', () => {
 
 ### `frontend/src/domains/communications/components/attachmentSearchTable.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/attachmentSearchTable.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/attachmentSearchTable.test.ts`
 - Size bytes / Размер в байтах: `1516`
 - Included characters / Включено символов: `1516`
 - Truncated / Обрезано: `no`
@@ -764,7 +764,7 @@ describe('attachment search table helpers', () => {
 
 ### `frontend/src/domains/communications/components/attachmentSearchTable.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/attachmentSearchTable.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/attachmentSearchTable.ts`
 - Size bytes / Размер в байтах: `788`
 - Included characters / Включено символов: `788`
 - Truncated / Обрезано: `no`
@@ -808,7 +808,7 @@ export function attachmentSearchTableRowId(result: AttachmentSearchResult): stri
 
 ### `frontend/src/domains/communications/components/attachmentTable.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/attachmentTable.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/attachmentTable.test.ts`
 - Size bytes / Размер в байтах: `4849`
 - Included characters / Включено символов: `4849`
 - Truncated / Обрезано: `no`
@@ -965,7 +965,7 @@ describe('attachment table helpers', () => {
 
 ### `frontend/src/domains/communications/components/attachmentTable.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/attachmentTable.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/attachmentTable.ts`
 - Size bytes / Размер в байтах: `5080`
 - Included characters / Включено символов: `5080`
 - Truncated / Обрезано: `no`
@@ -1143,7 +1143,7 @@ function isPreviewAllowedByScanStatus(attachment: CommunicationAttachment): bool
 
 ### `frontend/src/domains/communications/components/mailDragDrop.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/mailDragDrop.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/mailDragDrop.test.ts`
 - Size bytes / Размер в байтах: `1776`
 - Included characters / Включено символов: `1776`
 - Truncated / Обрезано: `no`
@@ -1186,7 +1186,7 @@ describe('mail drag/drop helpers', () => {
     expect(parseCommunicationMessageDragPayload(JSON.stringify({ kind: 'mail-message-selection', message_id: 'msg-1', message_ids: [''] }))).toBeNull()
   })
 
-  it('detects the custom Hermes mail drag type', () => {
+  it('detects the custom Макошь mail drag type', () => {
     expect(hasCommunicationMessageDragType([MAIL_MESSAGE_DRAG_TYPE, 'text/plain'])).toBe(true)
     expect(hasCommunicationMessageDragType(['text/plain'])).toBe(false)
   })
@@ -1195,13 +1195,13 @@ describe('mail drag/drop helpers', () => {
 
 ### `frontend/src/domains/communications/components/mailDragDrop.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/mailDragDrop.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/mailDragDrop.ts`
 - Size bytes / Размер в байтах: `1882`
 - Included characters / Включено символов: `1882`
 - Truncated / Обрезано: `no`
 
 ```typescript
-export const MAIL_MESSAGE_DRAG_TYPE = 'application/x-hermes-mail-message-selection'
+export const MAIL_MESSAGE_DRAG_TYPE = 'application/x-makosh-mail-message-selection'
 
 export type CommunicationMessageDragPayload = {
   kind: 'mail-message-selection'
@@ -1256,7 +1256,7 @@ function uniqueNonBlankIds(values: string[]): string[] {
 
 ### `frontend/src/domains/communications/components/mailFolderOrdering.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/mailFolderOrdering.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/mailFolderOrdering.test.ts`
 - Size bytes / Размер в байтах: `2768`
 - Included characters / Включено символов: `2768`
 - Truncated / Обрезано: `no`
@@ -1342,7 +1342,7 @@ describe('mail folder ordering', () => {
 
 ### `frontend/src/domains/communications/components/mailFolderOrdering.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/mailFolderOrdering.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/mailFolderOrdering.ts`
 - Size bytes / Размер в байтах: `3932`
 - Included characters / Включено символов: `3932`
 - Truncated / Обрезано: `no`
@@ -1350,7 +1350,7 @@ describe('mail folder ordering', () => {
 ```typescript
 import type { CommunicationFolder } from '../types/folders'
 
-export const MAIL_FOLDER_REORDER_DRAG_TYPE = 'application/x-hermes-mail-folder-reorder'
+export const MAIL_FOLDER_REORDER_DRAG_TYPE = 'application/x-makosh-mail-folder-reorder'
 const SORT_ORDER_STEP = 1000
 
 export type CommunicationFolderReorderPayload = {
@@ -1452,7 +1452,7 @@ function midpointSortOrder(previous: number | null, next: number | null): number
 
 ### `frontend/src/domains/communications/components/mailFolderPresentation.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/mailFolderPresentation.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/mailFolderPresentation.test.ts`
 - Size bytes / Размер в байтах: `3131`
 - Included characters / Включено символов: `3131`
 - Truncated / Обрезано: `no`
@@ -1505,7 +1505,7 @@ describe('mail folder presentation helpers', () => {
   it('normalizes blank segments and trims whitespace in folder paths', () => {
     const row = deriveCommunicationFolderDisplayRow(folder({
       folder_id: 'folder-3',
-      name: '  Archives //  2026 // ' 
+      name: '  Archives //  2026 // '
     }))
 
     expect(row.depth).toBe(1)
@@ -1557,7 +1557,7 @@ describe('mail folder presentation helpers', () => {
 
 ### `frontend/src/domains/communications/components/mailFolderPresentation.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/mailFolderPresentation.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/mailFolderPresentation.ts`
 - Size bytes / Размер в байтах: `3488`
 - Included characters / Включено символов: `3488`
 - Truncated / Обрезано: `no`
@@ -1680,7 +1680,7 @@ function isDescendantPath(parentPathParts: string[], candidatePathParts: string[
 
 ### `frontend/src/domains/communications/components/outboxStatus.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/outboxStatus.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/outboxStatus.test.ts`
 - Size bytes / Размер в байтах: `3653`
 - Included characters / Включено символов: `3653`
 - Truncated / Обрезано: `no`

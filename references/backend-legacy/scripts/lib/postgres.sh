@@ -25,7 +25,7 @@ ensure_postgres_client_dependencies() {
 }
 
 postgres_up() {
-	load_hermes_env
+	load_makosh_env
 	ensure_postgres_runtime_dependencies
 	info "Starting PostgreSQL container"
 	compose_cmd up -d --wait postgres
@@ -33,14 +33,14 @@ postgres_up() {
 }
 
 nats_up() {
-	load_hermes_env
+	load_makosh_env
 	ensure_postgres_runtime_dependencies
 	info "Starting NATS container"
 	compose_cmd up -d --wait nats
 }
 
 clamav_up() {
-	load_hermes_env
+	load_makosh_env
 	ensure_postgres_runtime_dependencies
 	info "Starting ClamAV container"
 	compose_cmd up -d --wait clamav
@@ -57,27 +57,27 @@ wait_for_postgres() {
 		sleep 1
 		index=$((index + 1))
 	done
-	error "PostgreSQL did not become ready on 127.0.0.1:$HERMES_POSTGRES_PORT"
+	error "PostgreSQL did not become ready on 127.0.0.1:$MAKOSH_POSTGRES_PORT"
 	exit 1
 }
 
 postgres_status() {
-	load_hermes_env
+	load_makosh_env
 	compose_cmd ps postgres
 }
 
 nats_status() {
-	load_hermes_env
+	load_makosh_env
 	compose_cmd ps nats
 }
 
 clamav_status() {
-	load_hermes_env
+	load_makosh_env
 	compose_cmd ps clamav
 }
 
 postgres_stop() {
-	load_hermes_env
+	load_makosh_env
 	compose_cmd stop postgres
 }
 

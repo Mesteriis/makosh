@@ -4,7 +4,7 @@ use std::collections::HashSet;
 use std::sync::{Arc, LazyLock, Mutex};
 use std::time::Duration;
 
-use hermes_desktop_runtime::{
+use makosh_desktop_runtime::{
     RuntimeExitPolicy, RuntimeTaskClass, RuntimeTaskFactory, RuntimeTaskFuture, RuntimeTaskSpec,
 };
 use serde_json::json;
@@ -44,9 +44,9 @@ fn whatsapp_runtime_event_projection_task(
         let pool = pool.clone();
         let vault = vault.clone();
         Box::pin(async move {
-            let runner = hermes_events_postgres::consumers::EventConsumerRunner::new(
+            let runner = makosh_events_postgres::consumers::EventConsumerRunner::new(
                 pool.clone(),
-                hermes_events_postgres::consumers::EventConsumerConfig::new(
+                makosh_events_postgres::consumers::EventConsumerConfig::new(
                     crate::application::whatsapp_runtime_event_projection::WHATSAPP_RUNTIME_EVENT_CONSUMER,
                 ),
             );
@@ -84,7 +84,7 @@ fn whatsapp_runtime_event_projection_task(
                                 event,
                             )
                             .await
-                            .map_err(hermes_events_postgres::errors::EventStoreError::ConsumerHandlerFailed)
+                            .map_err(makosh_events_postgres::errors::EventStoreError::ConsumerHandlerFailed)
                         }
                     })
                     .await
@@ -119,9 +119,9 @@ fn whatsapp_provider_observation_reconciliation_task(
         let pool = pool.clone();
         let event_bus = event_bus.clone();
         Box::pin(async move {
-            let runner = hermes_events_postgres::consumers::EventConsumerRunner::new(
+            let runner = makosh_events_postgres::consumers::EventConsumerRunner::new(
                 pool.clone(),
-                hermes_events_postgres::consumers::EventConsumerConfig::new(
+                makosh_events_postgres::consumers::EventConsumerConfig::new(
                     crate::application::whatsapp_provider_observation_reconciliation::WHATSAPP_PROVIDER_OBSERVATION_RECONCILIATION_CONSUMER,
                 ),
             );
@@ -159,7 +159,7 @@ fn whatsapp_provider_observation_reconciliation_task(
                                 event,
                             )
                             .await
-                            .map_err(hermes_events_postgres::errors::EventStoreError::ConsumerHandlerFailed)
+                            .map_err(makosh_events_postgres::errors::EventStoreError::ConsumerHandlerFailed)
                         }
                     })
                     .await

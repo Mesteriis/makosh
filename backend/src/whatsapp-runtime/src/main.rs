@@ -6,7 +6,7 @@ use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::{ManagedIntegrationHostBridgeConfigurationV1, ManagedIntegrationRuntimeConfigurationV1},
     validation::{
         descriptor::{
@@ -17,7 +17,7 @@ use hermes_runtime_protocol::{
         managed_integration_runtime::validate_managed_integration_runtime_configuration,
     },
 };
-use hermes_whatsapp_runtime::{WhatsAppRuntimeAdmission, managed, settings};
+use makosh_whatsapp_runtime::{WhatsAppRuntimeAdmission, managed, settings};
 use prost::Message;
 
 struct InheritedPaths {
@@ -109,7 +109,7 @@ where
             .map_err(|_| "WhatsApp runtime client delivery failed".to_owned())?;
         match executor.block_on(admitted.consume_next_delivery_intent(now)) {
             Ok(_) | Err(
-                hermes_whatsapp_runtime::delivery_intent_consumer::WhatsAppDeliveryIntentConsumeErrorV1::Unavailable,
+                makosh_whatsapp_runtime::delivery_intent_consumer::WhatsAppDeliveryIntentConsumeErrorV1::Unavailable,
             ) => {}
             Err(_) => {
                 return Err("WhatsApp delivery-intent consume failed".to_owned());
@@ -123,9 +123,9 @@ where
             .map_err(|_| "WhatsApp host bridge delivery failed".to_owned())?;
         match executor.block_on(admitted.relay_communications_outbox(now)) {
             Ok(_)
-            | Err(hermes_whatsapp_runtime::WhatsAppCommunicationsOutboxRelayError::Unavailable) => {
+            | Err(makosh_whatsapp_runtime::WhatsAppCommunicationsOutboxRelayError::Unavailable) => {
             }
-            Err(hermes_whatsapp_runtime::WhatsAppCommunicationsOutboxRelayError::Persistence(
+            Err(makosh_whatsapp_runtime::WhatsAppCommunicationsOutboxRelayError::Persistence(
                 _,
             )) => {
                 return Err("WhatsApp runtime outbox persistence failed".to_owned());
@@ -134,10 +134,10 @@ where
         match executor.block_on(admitted.relay_delivery_intent_outbox(now)) {
             Ok(_)
             | Err(
-                hermes_whatsapp_runtime::delivery_intent_outbox::WhatsAppDeliveryIntentOutboxRelayErrorV1::Unavailable,
+                makosh_whatsapp_runtime::delivery_intent_outbox::WhatsAppDeliveryIntentOutboxRelayErrorV1::Unavailable,
             ) => {}
             Err(
-                hermes_whatsapp_runtime::delivery_intent_outbox::WhatsAppDeliveryIntentOutboxRelayErrorV1::Persistence(
+                makosh_whatsapp_runtime::delivery_intent_outbox::WhatsAppDeliveryIntentOutboxRelayErrorV1::Persistence(
                     _,
                 ),
             ) => {

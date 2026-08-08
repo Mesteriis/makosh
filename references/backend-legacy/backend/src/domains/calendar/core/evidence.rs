@@ -1,8 +1,8 @@
 use serde_json::Value;
 use sqlx::postgres::PgPool;
 
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::review_links::link_domain_entity;
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::review_links::link_domain_entity;
 
 pub(crate) async fn link_calendar_entity(
     pool: &PgPool,

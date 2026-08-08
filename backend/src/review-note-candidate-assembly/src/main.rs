@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use std::process::ExitCode;
 
-use hermes_review_note_candidate_assembly::materialize_review_note_candidate_release_assembly_v1;
+use makosh_review_note_candidate_assembly::materialize_review_note_candidate_release_assembly_v1;
 
 const OPTIONS: [&str; 3] = ["--build-id", "--output-dir", "--runtime"];
 
@@ -14,7 +14,7 @@ struct Arguments {
 fn main() -> ExitCode {
     let Some(arguments) = arguments(std::env::args().skip(1).collect()) else {
         return fail(
-            "usage: hermes-review-note-candidate-assembly --build-id <id> \
+            "usage: makosh-review-note-candidate-assembly --build-id <id> \
              --output-dir <absolute-path> --runtime <absolute-path>",
         );
     };

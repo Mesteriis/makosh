@@ -8,12 +8,12 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     BeginModuleRegistrationResponseV1, DescribeModuleRegistrationResponseV1,
     GetOwnModuleRegistrationStatusResponseV1, HelloModuleRegistrationResponseV1,
     ModuleRegistrationRequestV1, ModuleRegistrationResponseV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use prost::Message;
 
 use crate::infrastructure::filesystem::remove_stale_owner_unix_socket;
@@ -90,8 +90,8 @@ fn handle(
     sessions: &mut RegistrationSessions,
     request: ModuleRegistrationRequestV1,
 ) -> ModuleRegistrationResponseV1 {
-    use hermes_gateway_protocol::v1::module_registration_request_v1::Operation;
-    use hermes_gateway_protocol::v1::module_registration_response_v1::Result;
+    use makosh_gateway_protocol::v1::module_registration_request_v1::Operation;
+    use makosh_gateway_protocol::v1::module_registration_response_v1::Result;
 
     let result = match request.operation {
         Some(Operation::Hello(_)) => Ok(Result::Hello(HelloModuleRegistrationResponseV1 {
@@ -136,7 +136,7 @@ fn handle(
 }
 
 fn registration_response(
-    result: Result<hermes_gateway_protocol::v1::module_registration_response_v1::Result, String>,
+    result: Result<makosh_gateway_protocol::v1::module_registration_response_v1::Result, String>,
 ) -> ModuleRegistrationResponseV1 {
     match result {
         Ok(result) => ModuleRegistrationResponseV1 {

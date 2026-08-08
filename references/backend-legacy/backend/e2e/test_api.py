@@ -1,10 +1,10 @@
 """
-End-to-end API tests for Hermes Hub backend.
+End-to-end API tests for Макошь backend.
 
 Run against a live backend:
-    HERMES_API_SECRET=... pytest backend/e2e/test_api.py -v
+    MAKOSH_API_SECRET=... pytest backend/e2e/test_api.py -v
 
-Requires the backend running at HERMES_BACKEND_URL (default http://127.0.0.1:18082).
+Requires the backend running at MAKOSH_BACKEND_URL (default http://127.0.0.1:18082).
 """
 import os
 import uuid
@@ -14,8 +14,8 @@ from http import HTTPStatus
 import pytest
 import requests
 
-BACKEND = os.environ.get("HERMES_BACKEND_URL", "http://127.0.0.1:18082")
-SECRET = os.environ.get("HERMES_API_SECRET", "change-me-local-api-secret")
+BACKEND = os.environ.get("MAKOSH_BACKEND_URL", "http://127.0.0.1:18082")
+SECRET = os.environ.get("MAKOSH_API_SECRET", "change-me-local-api-secret")
 
 
 def uid() -> str:
@@ -23,19 +23,19 @@ def uid() -> str:
 
 
 def api(path: str, **kwargs) -> requests.Response:
-    return requests.get(f"{BACKEND}{path}", headers={"x-hermes-secret": SECRET}, **kwargs)
+    return requests.get(f"{BACKEND}{path}", headers={"x-makosh-secret": SECRET}, **kwargs)
 
 
 def post(path: str, json=None, **kwargs) -> requests.Response:
-    return requests.post(f"{BACKEND}{path}", json=json, headers={"x-hermes-secret": SECRET}, **kwargs)
+    return requests.post(f"{BACKEND}{path}", json=json, headers={"x-makosh-secret": SECRET}, **kwargs)
 
 
 def put(path: str, json=None, **kwargs) -> requests.Response:
-    return requests.put(f"{BACKEND}{path}", json=json, headers={"x-hermes-secret": SECRET}, **kwargs)
+    return requests.put(f"{BACKEND}{path}", json=json, headers={"x-makosh-secret": SECRET}, **kwargs)
 
 
 def delete(path: str, **kwargs) -> requests.Response:
-    return requests.delete(f"{BACKEND}{path}", headers={"x-hermes-secret": SECRET}, **kwargs)
+    return requests.delete(f"{BACKEND}{path}", headers={"x-makosh-secret": SECRET}, **kwargs)
 
 
 # ═══════════════════════════════════ Health ══════════════════════════════════
@@ -61,7 +61,7 @@ def test_api_rejects_missing_secret():
 
 
 def test_api_rejects_invalid_secret():
-    r = requests.get(f"{BACKEND}/api/v1/status", headers={"x-hermes-secret": "wrong"})
+    r = requests.get(f"{BACKEND}/api/v1/status", headers={"x-makosh-secret": "wrong"})
     assert r.status_code == HTTPStatus.FORBIDDEN
 
 

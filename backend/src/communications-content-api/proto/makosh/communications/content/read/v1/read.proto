@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package makosh.communications.content.read.v1;
+
+// Request body for the descriptor-declared client_blob route. Success returns
+// exact application/octet-stream bytes, never a Protobuf Blob reference.
+message ReadMessageBodyRequestV1 {
+  uint32 protocol_major = 1;
+  bytes opaque_read_capability = 2;
+}

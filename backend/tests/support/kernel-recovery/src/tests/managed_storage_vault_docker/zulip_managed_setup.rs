@@ -2,22 +2,22 @@
 
 use super::*;
 
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_protocol::SecretClassV1;
-use hermes_vault_store_sqlcipher::{SecretRecordId, SecretRecordScope, VaultStore};
-use hermes_zulip_api::client_contract::{ZULIP_MODULE_ID, ZULIP_OWNER_ID, ZulipClientContractV1};
-use hermes_zulip_api::{
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_protocol::SecretClassV1;
+use makosh_vault_store_sqlcipher::{SecretRecordId, SecretRecordScope, VaultStore};
+use makosh_zulip_api::client_contract::{ZULIP_MODULE_ID, ZULIP_OWNER_ID, ZulipClientContractV1};
+use makosh_zulip_api::{
     ZulipClientRequestV1, ZulipClientResponseV1,
     account::{
         ZulipAccountLifecycleCommandV1, ZulipAccountLifecycleReceiptV1,
         ZulipCredentialBindingStateV1,
     },
 };
-use hermes_zulip_core::credential_lease_purpose;
-use hermes_zulip_persistence::{ZULIP_STORAGE_BUNDLE_REVISION_V3, zulip_storage_bundle_v1};
-use hermes_zulip_runtime::client_port::{decode_module_response, encode_module_request};
-use hermes_zulip_runtime::{
+use makosh_zulip_core::credential_lease_purpose;
+use makosh_zulip_persistence::{ZULIP_STORAGE_BUNDLE_REVISION_V3, zulip_storage_bundle_v1};
+use makosh_zulip_runtime::client_port::{decode_module_response, encode_module_request};
+use makosh_zulip_runtime::{
     admission::{
         ZULIP_BLOB_CAPABILITY_ID, ZULIP_CREDENTIALS_CAPABILITY_ID, ZULIP_EVENTS_CAPABILITY_ID,
         ZULIP_STORAGE_CAPABILITY_ID, zulip_module_descriptor_v1,
@@ -162,7 +162,7 @@ pub(super) fn admit_zulip_runtime(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             ZULIP_RELEASE_ARTIFACT_ID,
             Sha256::digest(std::fs::read(zulip_binary()).expect("Zulip runtime binary bytes"))
                 .into(),
@@ -254,7 +254,7 @@ pub(super) fn bind_zulip_credential(
             }
         };
         let envelope =
-            hermes_runtime_protocol::v1::ModuleClientResponseV1::decode(response.as_slice())
+            makosh_runtime_protocol::v1::ModuleClientResponseV1::decode(response.as_slice())
                 .expect("decode Zulip credential binding envelope");
         if envelope.error_code.is_empty() {
             break response;
@@ -343,7 +343,7 @@ pub(super) fn start_zulip_runtime(
         .platform_event_hub_topology()
         .expect("read Event Hub topology")
         .expect("Event Hub topology");
-    let configuration = hermes_runtime_protocol::v1::ManagedIntegrationRuntimeConfigurationV1 {
+    let configuration = makosh_runtime_protocol::v1::ManagedIntegrationRuntimeConfigurationV1 {
         major: 1,
         logical_owner_id: ZULIP_OWNER_ID.to_owned(),
         registration_id: admitted.registration_id.clone(),
@@ -432,8 +432,8 @@ pub(super) fn zulip_settings_snapshot(
     registration_id: &str,
     revision: u64,
     realm_url: &str,
-) -> hermes_runtime_protocol::v1::SettingsSnapshotV1 {
-    use hermes_runtime_protocol::v1::{
+) -> makosh_runtime_protocol::v1::SettingsSnapshotV1 {
+    use makosh_runtime_protocol::v1::{
         SettingValueV1, SettingsValueEntryV1, setting_value_v1::Value,
     };
 
@@ -444,7 +444,7 @@ pub(super) fn zulip_settings_snapshot(
         }
     }
 
-    hermes_runtime_protocol::v1::SettingsSnapshotV1 {
+    makosh_runtime_protocol::v1::SettingsSnapshotV1 {
         target_id: registration_id.to_owned(),
         revision,
         values: vec![
@@ -503,5 +503,5 @@ fn current_zulip_settings_snapshot(
 }
 
 fn zulip_binary() -> PathBuf {
-    binary("HERMES_ZULIP_RUNTIME_BIN")
+    binary("MAKOSH_ZULIP_RUNTIME_BIN")
 }

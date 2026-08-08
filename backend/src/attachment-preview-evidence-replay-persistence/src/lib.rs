@@ -4,7 +4,7 @@ mod model;
 mod repository;
 mod schema;
 
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool,
     postgres::{PgConnectOptions, PgPoolOptions},
@@ -21,7 +21,7 @@ pub use schema::{
     attachment_preview_evidence_replay_storage_bundle_v1,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-preview-evidence-replay-persistence";
+pub const PACKAGE: &str = "makosh-attachment-preview-evidence-replay-persistence";
 
 pub struct AttachmentPreviewEvidenceReplayPersistenceV1 {
     pub(crate) pool: PgPool,
@@ -63,7 +63,7 @@ impl AttachmentPreviewEvidenceReplayPersistenceV1 {
 
     pub async fn verify_storage_ready(&self) -> Result<(), ReplayPersistenceErrorV1> {
         sqlx::query(
-            "SELECT 1 FROM hermes_data.attachment_preview_evidence_replay_operations, hermes_data.attachment_preview_evidence_replay_anchor_producers, hermes_data.attachment_preview_evidence_replay_anchor_result_messages, hermes_data.attachment_preview_evidence_replay_anchor_command_outbox, hermes_data.attachment_preview_evidence_replay_anchor_result_inbox LIMIT 0",
+            "SELECT 1 FROM makosh_data.attachment_preview_evidence_replay_operations, makosh_data.attachment_preview_evidence_replay_anchor_producers, makosh_data.attachment_preview_evidence_replay_anchor_result_messages, makosh_data.attachment_preview_evidence_replay_anchor_command_outbox, makosh_data.attachment_preview_evidence_replay_anchor_result_inbox LIMIT 0",
         )
         .execute(&self.pool)
         .await

@@ -11,15 +11,15 @@ use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     CommitOwnerModuleSettingsRequestV1, CommitOwnerModuleSettingsResponseV1,
     PrepareOwnerModuleSettingsRequestV1, PrepareOwnerModuleSettingsResponseV1,
     prepare_owner_module_settings_request_v1,
 };
-use hermes_gateway_runtime::{
+use makosh_gateway_runtime::{
     OwnerBrowserPrincipalV1, OwnerModuleSettingsHandlerV1, OwnerModuleSettingsRouteErrorV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use prost::Message;
 use sha2::{Digest, Sha256};
 
@@ -226,7 +226,7 @@ fn challenge_digest(
     nonce: &[u8; 32],
 ) -> [u8; 32] {
     let mut digest = Sha256::new();
-    digest_field(&mut digest, b"hermes.owner_module_settings.challenge.v1");
+    digest_field(&mut digest, b"makosh.owner_module_settings.challenge.v1");
     digest_field(&mut digest, principal.owner_id().as_bytes());
     digest_field(&mut digest, principal.device_id().as_bytes());
     digest_field(&mut digest, principal.session_id().as_bytes());

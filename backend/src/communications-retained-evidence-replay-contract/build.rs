@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/communications/replay/v1/replay.proto"],
+            &["proto/makosh/communications/replay/v1/replay.proto"],
             &["proto"],
         )
         .expect("Communications replay contract compiles");

@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/integrations/mail/rfc822.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/rfc822.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/rfc822.rs`
 - Size bytes / Размер в байтах: `198`
 - Included characters / Включено символов: `198`
 - Truncated / Обрезано: `no`
@@ -69,7 +69,7 @@ pub use crate::platform::communications::rfc822::{
 
 ### `backend/src/integrations/mail/send.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/send.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/send.rs`
 - Size bytes / Размер в байтах: `10245`
 - Included characters / Включено символов: `10245`
 - Truncated / Обрезано: `no`
@@ -160,7 +160,7 @@ async fn starttls_smtp(
     if !greeting.starts_with("220") {
         return Err(EmailSendError::Protocol(greeting));
     }
-    write_cmd(&mut reader, "EHLO hermes-hub\r\n").await?;
+    write_cmd(&mut reader, "EHLO makosh\r\n").await?;
     read_ehlo_response(&mut reader, &mut buf).await?;
     write_cmd(&mut reader, "STARTTLS\r\n").await?;
     let response = read_line(&mut reader, &mut buf).await?;
@@ -180,7 +180,7 @@ async fn send_smtp_after_greeting<T: AsyncRead + AsyncWrite + Unpin>(
     email: &OutgoingEmail,
 ) -> Result<SendResult, EmailSendError> {
     let mut buf = String::new();
-    write_cmd(&mut reader, "EHLO hermes-hub\r\n").await?;
+    write_cmd(&mut reader, "EHLO makosh\r\n").await?;
     read_ehlo_response(&mut reader, &mut buf).await?;
     write_cmd(&mut reader, "AUTH LOGIN\r\n").await?;
     read_line(&mut reader, &mut buf).await?;
@@ -322,7 +322,7 @@ fn multipart_alternative_boundary(email: &OutgoingEmail) -> String {
         suffix.push(hex_char(byte >> 4));
         suffix.push(hex_char(byte & 0x0f));
     }
-    format!("hermes-alt-{suffix}")
+    format!("makosh-alt-{suffix}")
 }
 
 fn hex_char(value: u8) -> char {
@@ -372,7 +372,7 @@ mod tests {
         )));
 
         assert!(message.contains("MIME-Version: 1.0\r\n"));
-        assert!(message.contains("Content-Type: multipart/alternative; boundary=\"hermes-alt-"));
+        assert!(message.contains("Content-Type: multipart/alternative; boundary=\"makosh-alt-"));
         assert!(message.contains("Content-Type: text/plain; charset=utf-8\r\n"));
         assert!(message.contains("Content-Transfer-Encoding: 8bit\r\n\r\nPlain body\r\n"));
         assert!(message.contains("Content-Type: text/html; charset=utf-8\r\n"));
@@ -387,7 +387,7 @@ mod tests {
 
 ### `backend/src/integrations/mail/sync.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/sync.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/sync.rs`
 - Size bytes / Размер в байтах: `305`
 - Included characters / Включено символов: `305`
 - Truncated / Обрезано: `no`
@@ -407,7 +407,7 @@ pub use planning::{imap_mailbox_stream_id, plan_email_sync};
 
 ### `backend/src/integrations/mail/sync/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/sync/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/sync/errors.rs`
 - Size bytes / Размер в байтах: `61`
 - Included characters / Включено символов: `61`
 - Truncated / Обрезано: `no`
@@ -418,7 +418,7 @@ pub use crate::platform::communications::EmailSyncPlanError;
 
 ### `backend/src/integrations/mail/sync/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/sync/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/sync/models.rs`
 - Size bytes / Размер в байтах: `194`
 - Included characters / Включено символов: `194`
 - Truncated / Обрезано: `no`
@@ -432,7 +432,7 @@ pub use crate::platform::communications::{
 
 ### `backend/src/integrations/mail/sync/planning.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/sync/planning.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/sync/planning.rs`
 - Size bytes / Размер в байтах: `84`
 - Included characters / Включено символов: `84`
 - Truncated / Обрезано: `no`
@@ -443,7 +443,7 @@ pub use crate::platform::communications::{imap_mailbox_stream_id, plan_email_syn
 
 ### `backend/src/integrations/mail/sync_provider.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mail/sync_provider.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mail/sync_provider.rs`
 - Size bytes / Размер в байтах: `6676`
 - Included characters / Включено символов: `6676`
 - Truncated / Обрезано: `no`
@@ -629,7 +629,7 @@ impl EmailProviderSyncPort for LiveEmailProviderSyncPort {
 
 ### `backend/src/integrations/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/mod.rs`
 - Size bytes / Размер в байтах: `144`
 - Included characters / Включено символов: `144`
 - Truncated / Обрезано: `no`
@@ -647,7 +647,7 @@ pub mod zoom;
 
 ### `backend/src/integrations/ollama/client.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/ollama/client.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/ollama/client.rs`
 - Size bytes / Размер в байтах: `1929`
 - Included characters / Включено символов: `1929`
 - Truncated / Обрезано: `no`
@@ -724,7 +724,7 @@ impl OllamaClient {
 
 ### `backend/src/integrations/ollama/client/catalog.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/ollama/client/catalog.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/ollama/client/catalog.rs`
 - Size bytes / Размер в байтах: `1224`
 - Included characters / Включено символов: `1224`
 - Truncated / Обрезано: `no`
@@ -771,7 +771,7 @@ impl OllamaClient {
 
 ### `backend/src/integrations/ollama/client/chat.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/ollama/client/chat.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/ollama/client/chat.rs`
 - Size bytes / Размер в байтах: `1685`
 - Included characters / Включено символов: `1685`
 - Truncated / Обрезано: `no`
@@ -834,7 +834,7 @@ impl OllamaClient {
 
 ### `backend/src/integrations/ollama/client/config.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/ollama/client/config.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/ollama/client/config.rs`
 - Size bytes / Размер в байтах: `890`
 - Included characters / Включено символов: `890`
 - Truncated / Обрезано: `no`
@@ -871,7 +871,7 @@ impl OllamaClientConfig {
 
 ### `backend/src/integrations/ollama/client/embeddings.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/ollama/client/embeddings.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/ollama/client/embeddings.rs`
 - Size bytes / Размер в байтах: `1649`
 - Included characters / Включено символов: `1649`
 - Truncated / Обрезано: `no`
@@ -934,7 +934,7 @@ impl OllamaClient {
 
 ### `backend/src/integrations/ollama/client/error.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/ollama/client/error.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/ollama/client/error.rs`
 - Size bytes / Размер в байтах: `472`
 - Included characters / Включено символов: `472`
 - Truncated / Обрезано: `no`
@@ -963,7 +963,7 @@ pub enum OllamaError {
 
 ### `backend/src/integrations/ollama/client/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/ollama/client/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/ollama/client/models.rs`
 - Size bytes / Размер в байтах: `316`
 - Included characters / Включено символов: `316`
 - Truncated / Обрезано: `no`
@@ -986,7 +986,7 @@ pub struct OllamaEmbedResult {
 
 ### `backend/src/integrations/ollama/client/responses.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/ollama/client/responses.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/ollama/client/responses.rs`
 - Size bytes / Размер в байтах: `946`
 - Included characters / Включено символов: `946`
 - Truncated / Обрезано: `no`
@@ -1032,7 +1032,7 @@ pub(in crate::integrations::ollama::client) struct EmbedResponse {
 
 ### `backend/src/integrations/ollama/client/sanitization.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/ollama/client/sanitization.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/ollama/client/sanitization.rs`
 - Size bytes / Размер в байтах: `633`
 - Included characters / Включено символов: `633`
 - Truncated / Обрезано: `no`
@@ -1059,7 +1059,7 @@ pub(in crate::integrations::ollama::client) fn strip_thinking_content(content: &
 
 ### `backend/src/integrations/ollama/client/transport.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/ollama/client/transport.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/ollama/client/transport.rs`
 - Size bytes / Размер в байтах: `1553`
 - Included characters / Включено символов: `1553`
 - Truncated / Обрезано: `no`
@@ -1130,7 +1130,7 @@ where
 
 ### `backend/src/integrations/ollama/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/ollama/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/ollama/mod.rs`
 - Size bytes / Размер в байтах: `16`
 - Included characters / Включено символов: `16`
 - Truncated / Обрезано: `no`
@@ -1141,7 +1141,7 @@ pub mod client;
 
 ### `backend/src/integrations/omniroute/client.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/omniroute/client.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/omniroute/client.rs`
 - Size bytes / Размер в байтах: `2011`
 - Included characters / Включено символов: `2011`
 - Truncated / Обрезано: `no`
@@ -1224,7 +1224,7 @@ impl OmniRouteClient {
 
 ### `backend/src/integrations/omniroute/client/catalog.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/omniroute/client/catalog.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/omniroute/client/catalog.rs`
 - Size bytes / Размер в байтах: `975`
 - Included characters / Включено символов: `975`
 - Truncated / Обрезано: `no`
@@ -1271,7 +1271,7 @@ struct ModelItem {
 
 ### `backend/src/integrations/omniroute/client/chat.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/omniroute/client/chat.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/omniroute/client/chat.rs`
 - Size bytes / Размер в байтах: `2559`
 - Included characters / Включено символов: `2559`
 - Truncated / Обрезано: `no`
@@ -1370,7 +1370,7 @@ struct ChatMessage {
 
 ### `backend/src/integrations/omniroute/client/config.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/omniroute/client/config.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/omniroute/client/config.rs`
 - Size bytes / Размер в байтах: `883`
 - Included characters / Включено символов: `883`
 - Truncated / Обрезано: `no`
@@ -1412,7 +1412,7 @@ impl OmniRouteClientConfig {
 
 ### `backend/src/integrations/omniroute/client/embeddings.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/omniroute/client/embeddings.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/omniroute/client/embeddings.rs`
 - Size bytes / Размер в байтах: `1629`
 - Included characters / Включено символов: `1629`
 - Truncated / Обрезано: `no`
@@ -1479,7 +1479,7 @@ struct EmbeddingItem {
 
 ### `backend/src/integrations/omniroute/client/error.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/omniroute/client/error.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/omniroute/client/error.rs`
 - Size bytes / Размер в байтах: `562`
 - Included characters / Включено символов: `562`
 - Truncated / Обрезано: `no`

@@ -21,9 +21,9 @@ const emit = defineEmits<{
 }>()
 
 const classes = computed(() => [
-	'hermes-text-button',
-	`hermes-text-button--${props.size}`,
-	`hermes-text-button--${props.tone}`,
+	'makosh-text-button',
+	`makosh-text-button--${props.size}`,
+	`makosh-text-button--${props.tone}`,
 	props.class
 ])
 

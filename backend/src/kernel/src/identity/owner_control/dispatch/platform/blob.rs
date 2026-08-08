@@ -2,11 +2,11 @@
 
 use std::path::Path;
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     BindPlatformBlobReleaseRequestV1, BindPlatformBlobReleaseResponseV1,
     StartPlatformBlobRuntimeRequestV1, StartPlatformBlobRuntimeResponseV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use super::{OwnerControlSessions, OwnerResult, stop_if_active};
 use crate::platform::blob::binding;

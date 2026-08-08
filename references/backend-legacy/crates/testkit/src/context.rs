@@ -1,6 +1,6 @@
 use crate::vault::{TestVault, new_test_vault};
-use hermes_hub_backend::platform::config::app_config::AppConfig;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::config::app_config::AppConfig;
+use makosh_hub_backend::platform::storage::database::Database;
 use std::path::Path;
 
 /// Isolated test environment with a fresh migrated database.
@@ -22,7 +22,7 @@ use std::path::Path;
 /// }
 /// ```
 pub struct TestContext {
-    session: hermes_test_session::TestDatabaseSession,
+    session: makosh_test_session::TestDatabaseSession,
     vault: TestVault,
 }
 
@@ -35,9 +35,9 @@ impl TestContext {
     /// 4. Runs migrations through that endpoint (or directly for standalone tests)
     /// 5. Returns a ready-to-use pool
     pub async fn new() -> Self {
-        let session = hermes_test_session::TestDatabaseSession::new().await;
+        let session = makosh_test_session::TestDatabaseSession::new().await;
         let vault = new_test_vault();
-        hermes_hub_backend::platform::settings::store::ApplicationSettingsStore::new(
+        makosh_hub_backend::platform::settings::store::ApplicationSettingsStore::new(
             session.pool().clone(),
         )
         .repair_declared_settings()
@@ -84,7 +84,7 @@ impl TestContext {
     pub async fn app_config_with_nats(&self, api_secret: impl Into<String>) -> AppConfig {
         self.vault.apply_to_config(
             AppConfig::test_with_api_secret_and_database_url(api_secret, self.connection_string())
-                .with_test_pairs([("HERMES_NATS_SERVER_URL", self.nats_server_url().await)])
+                .with_test_pairs([("MAKOSH_NATS_SERVER_URL", self.nats_server_url().await)])
                 .expect("test NATS config must be valid"),
         )
     }

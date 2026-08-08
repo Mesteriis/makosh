@@ -1,6 +1,6 @@
 import { computed, onBeforeUnmount, ref } from 'vue'
 
-import type { TelegramAccountResponse } from '../../../gen/hermes/telegram/v1/client_pb'
+import type { TelegramAccountResponse } from '../../../gen/makosh/telegram/v1/client_pb'
 import {
 	getTelegramAuthorizationStatus,
 	submitTelegramAuthorizationPassword,

@@ -1,4 +1,4 @@
-use hermes_events_api::{EventEnvelope, EventEnvelopeError, NewEventEnvelope, StoredEventEnvelope};
+use makosh_events_api::{EventEnvelope, EventEnvelopeError, NewEventEnvelope, StoredEventEnvelope};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
 use sqlx::postgres::PgPool;
@@ -7,9 +7,9 @@ use thiserror::Error;
 use crate::domains::signal_hub::raw_signal_port::RawSignalProcessingPort;
 use crate::domains::signal_hub::store::SignalHubError;
 use crate::platform::events::bus::zoom_event_types;
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_events_postgres::store::EventStore;
-use hermes_signal_hub_api::raw_signals::{
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::store::EventStore;
+use makosh_signal_hub_api::raw_signals::{
     RawSignalCommandPort, RawSignalInput, RawSignalPortError, RawSignalRuntimeQueryPort,
 };
 

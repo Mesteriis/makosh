@@ -5,12 +5,12 @@ Date: 2026-06-27
 
 ## Context
 
-Hermes integrates communication providers without turning each provider into a
+Макошь integrates communication providers without turning each provider into a
 product domain. Zoom contains meetings, recordings, participants, transcripts
-and webhook/runtime concerns, but Hermes must treat those as provider
+and webhook/runtime concerns, but Макошь must treat those as provider
 observations that feed memory and context.
 
-Hermes already follows the provider/channel rule for Telegram and WhatsApp:
+Макошь already follows the provider/channel rule for Telegram and WhatsApp:
 provider-specific runtime code belongs under integrations, while product
 meaning belongs to provider-neutral domains, workflows and engines.
 

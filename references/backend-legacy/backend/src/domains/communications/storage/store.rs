@@ -1,9 +1,9 @@
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 use sqlx::postgres::PgPool;
 
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use crate::domains::communications::archive_inspection::{
     ArchiveInspectionReport, archive_inspection_cache_metadata,
@@ -185,7 +185,7 @@ impl CommunicationStorageStore {
                     "message_id": stored.message_id,
                 }),
             )
-            .actor(json!({ "actor_id": "hermes-attachment-scanner" }))
+            .actor(json!({ "actor_id": "makosh-attachment-scanner" }))
             .payload(json!({
                 "attachment_id": stored.attachment_id,
                 "message_id": stored.message_id,
@@ -404,7 +404,7 @@ impl CommunicationStorageStore {
                 "message_id": stored.message_id,
             }),
         )
-        .actor(json!({ "actor_id": "hermes-attachment-scanner" }))
+        .actor(json!({ "actor_id": "makosh-attachment-scanner" }))
         .payload(json!({
             "attachment_id": stored.attachment_id,
             "message_id": stored.message_id,

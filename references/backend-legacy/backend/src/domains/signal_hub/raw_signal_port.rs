@@ -1,10 +1,10 @@
-use hermes_events_api::EventEnvelope;
-use hermes_events_postgres::store::EventStore;
-use hermes_signal_hub_api::raw_signals::{
+use makosh_events_api::EventEnvelope;
+use makosh_events_postgres::store::EventStore;
+use makosh_signal_hub_api::raw_signals::{
     RawSignalCommandPort, RawSignalInput, RawSignalOutcome, RawSignalPortError,
     RawSignalPortFuture, RawSignalRuntimeQueryPort,
 };
-use hermes_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
+use makosh_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
 use sqlx::postgres::PgPool;
 use std::sync::Arc;
 

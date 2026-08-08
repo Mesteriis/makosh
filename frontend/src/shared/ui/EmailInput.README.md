@@ -1,6 +1,6 @@
 # EmailInput
 
-Email-specialized Hermes input.
+Email-specialized Макошь input.
 
 Use when the browser should expose email keyboard and validation semantics.
 

@@ -2,13 +2,13 @@
 
 Status: Superseded by ADR-0076
 
-This decision was superseded by ADR-0076, which moves new encrypted secret payloads out of PostgreSQL into a dedicated host vault under `~/.hermes/vault` while leaving PostgreSQL with non-secret metadata and account bindings.
+This decision was superseded by ADR-0076, which moves new encrypted secret payloads out of PostgreSQL into a dedicated host vault under `~/.makosh/vault` while leaving PostgreSQL with non-secret metadata and account bindings.
 
 Supersedes: ADR-0016, ADR-0042, ADR-0044
 
 ## Context
 
-The previous secret model kept provider credential values outside PostgreSQL. `secret_references` stored metadata and account bindings, while ADR-0044 placed encrypted secret values in a local JSON vault file selected by `HERMES_SECRET_VAULT_PATH`.
+The previous secret model kept provider credential values outside PostgreSQL. `secret_references` stored metadata and account bindings, while ADR-0044 placed encrypted secret values in a local JSON vault file selected by `MAKOSH_SECRET_VAULT_PATH`.
 
 That split makes backup, restore and local operational state harder than the rest of the local-first system: provider account metadata lives in PostgreSQL, but the encrypted credential payloads live in a separate file that must be moved and restored independently.
 
@@ -25,11 +25,11 @@ Rules:
 - New account setup writes provider credential values to `encrypted_secret_vault_entries` and marks the corresponding `secret_references.store_kind` as `database_encrypted_vault`.
 - `encrypted_secret_vault_entries` stores only encrypted payload material: `secret_ref`, KDF identifier, salt, nonce, ciphertext and timestamps.
 - Plaintext provider credentials, OAuth token bundles, app passwords, mailbox passwords, API tokens and private keys must never be stored in provider account config, secret reference metadata, event payloads, audit records, logs, tests or docs.
-- `HERMES_SECRET_VAULT_KEY` remains outside PostgreSQL and is required to decrypt database vault entries. It must not be logged, committed or persisted in PostgreSQL.
+- `MAKOSH_SECRET_VAULT_KEY` remains outside PostgreSQL and is required to decrypt database vault entries. It must not be logged, committed or persisted in PostgreSQL.
 - Hardware identifiers such as CPU, board or disk serial numbers are not valid vault keys. They are non-secret, may be unavailable or unstable, and may only be used as non-secret binding context if an OS-backed key resolver later needs it.
-- `HERMES_SECRET_VAULT_PATH` is no longer required for account setup. File-backed encrypted vault code may exist only as a legacy compatibility or explicit local migration utility, not as the primary write path.
+- `MAKOSH_SECRET_VAULT_PATH` is no longer required for account setup. File-backed encrypted vault code may exist only as a legacy compatibility or explicit local migration utility, not as the primary write path.
 - Database vault entries use per-entry AES-256-GCM encryption with an Argon2id-derived key, random per-entry salt, random nonce and authenticated `secret_ref` associated data.
-- Database backups now include encrypted credential payloads. Restores require the matching external `HERMES_SECRET_VAULT_KEY`.
+- Database backups now include encrypted credential payloads. Restores require the matching external `MAKOSH_SECRET_VAULT_KEY`.
 - SQL migrations must not attempt to decrypt or import existing file-vault secrets, because migrations do not have a safe credential/key interaction boundary. Any file-vault import must be an explicit trusted local operation.
 
 ## Consequences
@@ -44,7 +44,7 @@ Positive:
 Negative:
 
 - PostgreSQL backups now contain high-value ciphertext and require stricter handling.
-- Losing `HERMES_SECRET_VAULT_KEY` makes encrypted database vault entries unrecoverable.
+- Losing `MAKOSH_SECRET_VAULT_KEY` makes encrypted database vault entries unrecoverable.
 - The database vault becomes security-critical persistence code.
 - Existing file-vault installations need an explicit migration/import workflow before old `encrypted_vault` references are fully moved.
 

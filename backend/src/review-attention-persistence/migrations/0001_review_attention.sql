@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.review_attention_state (
+CREATE TABLE makosh_data.review_attention_state (
     logical_owner_id TEXT NOT NULL,
     attention_id BYTEA NOT NULL,
     source_evidence_id BYTEA NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE hermes_data.review_attention_state (
     )
 );
 
-CREATE TABLE hermes_data.review_attention_operations (
+CREATE TABLE makosh_data.review_attention_operations (
     logical_owner_id TEXT NOT NULL,
     operation_id BYTEA NOT NULL,
     request_sha256 BYTEA NOT NULL,
@@ -79,7 +79,7 @@ CREATE TABLE hermes_data.review_attention_operations (
 );
 
 CREATE INDEX review_attention_state_pending_idx
-ON hermes_data.review_attention_state (
+ON makosh_data.review_attention_state (
     logical_owner_id,
     disposition,
     pinned,

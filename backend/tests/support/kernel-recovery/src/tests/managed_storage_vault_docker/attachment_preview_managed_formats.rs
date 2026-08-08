@@ -3,7 +3,8 @@
 use std::io::{Cursor, Write};
 
 use base64::{Engine as _, engine::general_purpose::STANDARD};
-use hermes_attachment_preview_api::{
+use hyper::StatusCode;
+use makosh_attachment_preview_api::{
     ATTACHMENT_PREVIEW_COMMAND_CONNECT_PATH_V1, ATTACHMENT_PREVIEW_TICKET_CONNECT_PATH_V1,
     wire::{
         AttachmentPreviewContentTypeV1, AttachmentPreviewErrorCodeV1, AttachmentPreviewKindV1,
@@ -12,7 +13,6 @@ use hermes_attachment_preview_api::{
         StartAttachmentPreviewResponseV1,
     },
 };
-use hyper::StatusCode;
 use prost::Message;
 use zip::{CompressionMethod, ZipWriter, write::SimpleFileOptions};
 
@@ -57,8 +57,8 @@ pub(super) fn assert_managed_attachment_preview_formats_v1(
     gateway_runtime: &tokio::runtime::Runtime,
     cookie: &str,
 ) {
-    let filter = std::env::var("HERMES_ATTACHMENT_PREVIEW_MANAGED_FORMAT_FILTER").ok();
-    let failure_filter = std::env::var("HERMES_ATTACHMENT_PREVIEW_MANAGED_FAILURE_FILTER").ok();
+    let filter = std::env::var("MAKOSH_ATTACHMENT_PREVIEW_MANAGED_FORMAT_FILTER").ok();
+    let failure_filter = std::env::var("MAKOSH_ATTACHMENT_PREVIEW_MANAGED_FAILURE_FILTER").ok();
     assert!(
         filter.is_none() || failure_filter.is_none(),
         "managed Preview format and failure filters are mutually exclusive"
@@ -103,7 +103,7 @@ pub(super) fn assert_managed_attachment_preview_formats_v1(
         );
         assert_eq!(
             wait_for_attachment_state(store, supervisor, attachment.attachment_anchor_id),
-            hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
+            makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
                 as u32
         );
 
@@ -291,7 +291,7 @@ fn assert_managed_attachment_preview_failures_v1(
         assert_clean_attachment_security_verdict_flow(store, &attachment, &blob, clamav, &source);
         assert_eq!(
             wait_for_attachment_state(store, supervisor, attachment.attachment_anchor_id),
-            hermes_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
+            makosh_communications_attachment_contract::lifecycle_v1::AttachmentSafetyStateV1::SafeForDelivery
                 as u32
         );
         let accepted = post_attachment_preview_proto_v1::<_, StartAttachmentPreviewResponseV1>(
@@ -511,7 +511,7 @@ fn mp4_box_v1(kind: &[u8; 4], payload: &[u8]) -> Vec<u8> {
 
 #[test]
 fn managed_format_fixtures_cross_the_exact_runtime_renderer_dispatch() {
-    let renderer = hermes_attachment_preview_runtime::renderer::AttachmentPreviewRendererRuntimeV1;
+    let renderer = makosh_attachment_preview_runtime::renderer::AttachmentPreviewRendererRuntimeV1;
     for format in managed_preview_formats_v1() {
         let rendered = renderer
             .render(&format.source)
@@ -526,7 +526,7 @@ fn managed_format_fixtures_cross_the_exact_runtime_renderer_dispatch() {
 fn oversized_docx_fixture_is_small_but_exceeds_the_bounded_expansion() {
     let source = oversized_docx_v1();
     assert!(source.len() < 1024 * 1024);
-    let error = hermes_attachment_preview_runtime::renderer::AttachmentPreviewRendererRuntimeV1
+    let error = makosh_attachment_preview_runtime::renderer::AttachmentPreviewRendererRuntimeV1
         .render(&source)
         .expect_err("oversized DOCX must fail closed");
     assert_eq!(format!("{error:?}"), "SourceTooLarge");

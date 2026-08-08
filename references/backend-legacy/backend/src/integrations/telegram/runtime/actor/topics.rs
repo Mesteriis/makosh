@@ -1,7 +1,7 @@
 use crate::integrations::telegram::client::errors::TelegramError;
 use crate::integrations::telegram::tdjson::client::TdJsonClient;
 use crate::integrations::telegram::tdjson::{self, snapshots::TelegramTdlibTopicSnapshot};
-use hermes_provider_telegram::tdlib::topics;
+use makosh_provider_telegram::tdlib::topics;
 
 use super::super::TDJSON_COMMAND_TIMEOUT;
 use super::responses::{receive_tdlib_extra, tdlib_provider_chat_id};
@@ -12,7 +12,7 @@ pub(super) fn actor_get_forum_topics(
     limit: i32,
 ) -> Result<Vec<TelegramTdlibTopicSnapshot>, TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let extra = format!("hermes-forum-topics-{provider_chat_id}");
+    let extra = format!("makosh-forum-topics-{provider_chat_id}");
     client.send_json(&topics::get_forum_topics(chat_id, limit, &extra))?;
     let response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
     if let Some(message) = tdjson::parsing::events::tdlib_error_message(&response) {
@@ -28,7 +28,7 @@ pub(super) fn actor_create_forum_topic(
     command_id: &str,
 ) -> Result<TelegramTdlibTopicSnapshot, TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let extra = format!("hermes-forum-topic-create-{command_id}");
+    let extra = format!("makosh-forum-topic-create-{command_id}");
     client.send_json(
         &topics::create_forum_topic(chat_id, title, &extra)
             .map_err(|error| TelegramError::InvalidRequest(error.to_string()))?,
@@ -48,7 +48,7 @@ pub(super) fn actor_toggle_forum_topic_closed(
     command_id: &str,
 ) -> Result<(), TelegramError> {
     let chat_id = tdlib_provider_chat_id(provider_chat_id)?;
-    let extra = format!("hermes-forum-topic-closed-{command_id}");
+    let extra = format!("makosh-forum-topic-closed-{command_id}");
     client.send_json(&topics::toggle_forum_topic_closed(
         chat_id,
         provider_topic_id,

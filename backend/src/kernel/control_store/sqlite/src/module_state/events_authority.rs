@@ -1,6 +1,6 @@
 //! SQLite persistence for managed Events Authority public configuration.
 
-use hermes_kernel_control_store::PlatformEventsAuthorityConfigurationV1;
+use makosh_kernel_control_store::PlatformEventsAuthorityConfigurationV1;
 use rusqlite::{OptionalExtension, params};
 
 use crate::{SqliteControlStore, StoreError};
@@ -16,7 +16,7 @@ impl SqliteControlStore {
         let configuration = configuration.clone();
         self.with_connection(move |connection| {
             let changed = connection.execute(
-                "INSERT INTO hermes_kernel_platform_events_authority_configuration (singleton, revision, account_public_key, signer_credential_revision) VALUES (1, ?1, ?2, ?3) ON CONFLICT(singleton) DO UPDATE SET revision=excluded.revision, account_public_key=excluded.account_public_key, signer_credential_revision=excluded.signer_credential_revision WHERE excluded.revision = hermes_kernel_platform_events_authority_configuration.revision + 1 AND excluded.signer_credential_revision >= hermes_kernel_platform_events_authority_configuration.signer_credential_revision",
+                "INSERT INTO makosh_kernel_platform_events_authority_configuration (singleton, revision, account_public_key, signer_credential_revision) VALUES (1, ?1, ?2, ?3) ON CONFLICT(singleton) DO UPDATE SET revision=excluded.revision, account_public_key=excluded.account_public_key, signer_credential_revision=excluded.signer_credential_revision WHERE excluded.revision = makosh_kernel_platform_events_authority_configuration.revision + 1 AND excluded.signer_credential_revision >= makosh_kernel_platform_events_authority_configuration.signer_credential_revision",
                 params![as_sql(configuration.revision())?, configuration.account_public_key(), as_sql(configuration.signer_credential_revision())?],
             )?;
             (changed == 1)
@@ -31,7 +31,7 @@ impl SqliteControlStore {
         self.with_connection(move |connection| {
             connection
                 .query_row(
-                    "SELECT revision, account_public_key, signer_credential_revision FROM hermes_kernel_platform_events_authority_configuration WHERE singleton=1",
+                    "SELECT revision, account_public_key, signer_credential_revision FROM makosh_kernel_platform_events_authority_configuration WHERE singleton=1",
                     [],
                     |row| Ok(PlatformEventsAuthorityConfigurationV1::new(as_u64(row.get(0)?, 0)?, row.get::<_, String>(1)?, as_u64(row.get(2)?, 2)?)),
                 )

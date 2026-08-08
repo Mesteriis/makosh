@@ -1,4 +1,4 @@
-use hermes_runtime_protocol::v1::SettingsSchemaV1;
+use makosh_runtime_protocol::v1::SettingsSchemaV1;
 use prost::Message;
 
 pub const SETTINGS_SCHEMA_MAJOR_V1: u32 = 1;

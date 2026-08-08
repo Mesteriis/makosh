@@ -20,7 +20,7 @@ import {
 	type PrepareOwnerModuleSettingsRequestV1,
 	type UpdateOwnerModuleSettingsReceiptV1,
 	UpdateOwnerModuleSettingsV1Schema,
-} from '../../gen/hermes/gateway/v1/owner_module_settings_pb'
+} from '../../gen/makosh/gateway/v1/owner_module_settings_pb'
 import { createBrowserGatewayConnectTransport } from '../gateway/browserGatewayConnect'
 import type { OwnerDeviceProofV1 } from '../gateway/ownerDeviceProof'
 import { createOwnerDeviceProofV1 } from '../gateway/ownerDeviceProofFactory'

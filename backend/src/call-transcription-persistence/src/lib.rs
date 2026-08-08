@@ -28,4 +28,4 @@ pub use schema::{
     call_transcription_storage_bundle_v1,
 };
 
-pub const PACKAGE: &str = "hermes-call-transcription-persistence";
+pub const PACKAGE: &str = "makosh-call-transcription-persistence";

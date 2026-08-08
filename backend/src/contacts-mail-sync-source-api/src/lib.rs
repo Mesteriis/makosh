@@ -10,12 +10,12 @@ pub use envelope::{
     build_contact_mail_sync_source_prepared_outbox_record_v1,
     build_contact_mail_sync_source_rejected_outbox_record_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-contacts-mail-sync-source-api";
+pub const PACKAGE: &str = "makosh-contacts-mail-sync-source-api";
 pub const CONTACTS_MAIL_SYNC_SOURCE_OWNER_V1: &str = "contacts";
 pub const CONTACT_CHANGED_FOR_MAIL_SYNC_CONTRACT_NAME_V1: &str = "contact_changed_for_mail_sync";
 pub const CONTACT_MAIL_SYNC_SOURCE_PREPARE_CONTRACT_NAME_V1: &str =
@@ -31,16 +31,16 @@ pub const CONTACT_MAIL_SYNC_SOURCE_MAX_PROOF_BYTES_V1: usize = 2_048;
 pub const CONTACT_MAIL_SYNC_SOURCE_MAX_IN_FLIGHT_V1: u32 = 32;
 pub const CONTACTS_MAIL_SYNC_SOURCE_CAPABILITY_ID_V1: &str = "contacts.mail-sync-source.v1";
 pub const CONTACT_MAIL_SYNC_SOURCE_REQUESTER_MODULE_ID_V1: &str =
-    "hermes-mail-contacts-sync-runtime";
+    "makosh-mail-contacts-sync-runtime";
 pub const CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_OWNER_ID_V1: &str = "mail";
-pub const CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_MODULE_ID_V1: &str = "hermes-mail-runtime";
+pub const CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_MODULE_ID_V1: &str = "makosh-mail-runtime";
 pub const CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "mail.address-book.contact-source.blob.v1";
 
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.contacts.mail_sync_source.v1.rs"
+        "/makosh.contacts.mail_sync_source.v1.rs"
     ));
 }
 
@@ -200,10 +200,10 @@ mod tests {
         assert_eq!(CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_OWNER_ID_V1, "mail");
         assert_eq!(
             CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_MODULE_ID_V1,
-            "hermes-mail-runtime"
+            "makosh-mail-runtime"
         );
         let source =
-            include_str!("../proto/hermes/contacts/mail_sync_source/v1/mail_sync_source.proto");
+            include_str!("../proto/makosh/contacts/mail_sync_source/v1/mail_sync_source.proto");
         let changed = source
             .split("message ContactChangedForMailSyncV1")
             .nth(1)

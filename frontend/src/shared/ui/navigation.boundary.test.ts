@@ -16,7 +16,7 @@ const navigationComponents = [
 	'SearchPalette'
 ]
 
-describe('Hermes UI navigation component contracts', () => {
+describe('Макошь UI navigation component contracts', () => {
 	it('keeps the navigation batch documented and exported through the UI kit', () => {
 		const uiRoot = fileURLToPath(new URL('.', import.meta.url))
 		const barrel = readFileSync(join(uiRoot, 'index.ts'), 'utf8')

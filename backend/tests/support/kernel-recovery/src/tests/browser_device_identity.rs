@@ -1,11 +1,11 @@
 use super::common::*;
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BrowserDeviceEnrollmentInputV1, BrowserDeviceEnrollmentV1, BrowserDeviceStateV1,
 };
 
 #[test]
 fn browser_device_identity_is_admitted_and_revoked_with_an_epoch_fence() {
-    let root = unique_target_root("hermes-browser-device-identity");
+    let root = unique_target_root("makosh-browser-device-identity");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let path = root.join("control.sqlite");
     let store = SqliteControlStore::create(&path, "instance-browser", 1).expect("create store");
@@ -54,7 +54,7 @@ fn browser_device_identity_is_admitted_and_revoked_with_an_epoch_fence() {
 
 #[test]
 fn browser_device_identity_rejects_foreign_owner_and_malformed_registration() {
-    let root = unique_target_root("hermes-browser-device-owner");
+    let root = unique_target_root("makosh-browser-device-owner");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let path = root.join("control.sqlite");
     let store = SqliteControlStore::create(&path, "instance-browser", 1).expect("create store");
@@ -101,7 +101,7 @@ fn browser_device_identity_rejects_foreign_owner_and_malformed_registration() {
 
 #[test]
 fn browser_assertion_counter_is_durable_and_never_regresses_after_initial_zero() {
-    let root = unique_target_root("hermes-browser-device-counter");
+    let root = unique_target_root("makosh-browser-device-counter");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let path = root.join("control.sqlite");
     let store = SqliteControlStore::create(&path, "instance-browser", 1).expect("create store");

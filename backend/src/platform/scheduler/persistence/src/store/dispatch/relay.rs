@@ -1,4 +1,4 @@
-use hermes_events_protocol::delivery::{
+use makosh_events_protocol::delivery::{
     OutboxEntryV1, OutboxPublishReceiptV1, OutboxRelayErrorV1, OwnerOutboxStorePortV1,
 };
 use sqlx::{Postgres, Transaction, query};
@@ -41,7 +41,7 @@ async fn mark_run_dispatched(
     entry: &OutboxEntryV1,
 ) -> Result<(), OutboxRelayErrorV1> {
     let updated = query(
-        "UPDATE hermes_platform.scheduler_runs AS runs SET state = 'dispatched' FROM hermes_platform.scheduler_dispatches AS dispatch WHERE dispatch.message_id = $1 AND dispatch.state = 'pending' AND runs.run_id = dispatch.run_id AND runs.lease_epoch = dispatch.lease_epoch AND runs.state = 'pending_dispatch'",
+        "UPDATE makosh_platform.scheduler_runs AS runs SET state = 'dispatched' FROM makosh_platform.scheduler_dispatches AS dispatch WHERE dispatch.message_id = $1 AND dispatch.state = 'pending' AND runs.run_id = dispatch.run_id AND runs.lease_epoch = dispatch.lease_epoch AND runs.state = 'pending_dispatch'",
     )
     .bind(entry.record().message_id().to_vec())
     .execute(&mut **transaction)
@@ -58,7 +58,7 @@ async fn mark_dispatch_published(
     receipt: &OutboxPublishReceiptV1,
 ) -> Result<(), OutboxRelayErrorV1> {
     let updated = query(
-        "UPDATE hermes_platform.scheduler_dispatches SET state = 'published', published_stream = $2, published_sequence = $3 WHERE message_id = $1 AND state = 'pending'",
+        "UPDATE makosh_platform.scheduler_dispatches SET state = 'published', published_stream = $2, published_sequence = $3 WHERE message_id = $1 AND state = 'pending'",
     )
     .bind(entry.record().message_id().to_vec())
     .bind(receipt.stream())

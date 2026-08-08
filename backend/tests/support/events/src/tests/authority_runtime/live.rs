@@ -1,7 +1,7 @@
 //! Live broker conformance for authority-owned Event Hub reconciliation.
 
 use async_nats::jetstream::consumer::PullConsumer;
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     DurableEnvelopeKindV1, EventHubConsumerTopologyV1, EventHubStreamTopologyV1,
     EventsAuthorityRuntimeControlRequestV1, EventsAuthorityRuntimeControlResponseV1,
     ReconcileEventsTopologyRequestV1,
@@ -20,7 +20,7 @@ const LEASE_ID: &str = "0123456789abcdef0123456789abcdef";
 #[test]
 #[ignore = "requires the authenticated Docker JetStream contour"]
 fn authority_runtime_reconciles_broker_topology_through_vault_credential() {
-    let endpoint = required("HERMES_NATS_TEST_ENDPOINT");
+    let endpoint = required("MAKOSH_NATS_TEST_ENDPOINT");
     let (mut kernel, worker, account_seed) = start_runtime();
     complete_descriptor_and_signer_bootstrap(&mut kernel, &account_seed);
     assert_ready(&mut kernel);
@@ -28,7 +28,7 @@ fn authority_runtime_reconciles_broker_topology_through_vault_credential() {
     answer_vault_request(&mut kernel, LEASE_ID.as_bytes().to_vec());
     answer_vault_request(
         &mut kernel,
-        required("HERMES_NATS_EVENT_HUB_PASSWORD").into_bytes(),
+        required("MAKOSH_NATS_EVENT_HUB_PASSWORD").into_bytes(),
     );
     assert_reconciled(&mut kernel);
     assert_broker_topology(&endpoint);
@@ -50,7 +50,7 @@ fn reconcile_request() -> EventsAuthorityRuntimeControlRequestV1 {
                 consumers: vec![EventHubConsumerTopologyV1 {
                     envelope_kind: DurableEnvelopeKindV1::Event as i32,
                     durable_name: "notes_projection".to_owned(),
-                    filter_subject: "hermes.event.v1.notes.changed.v1".to_owned(),
+                    filter_subject: "makosh.event.v1.notes.changed.v1".to_owned(),
                     max_ack_pending: 16,
                     max_deliver: 3,
                     ack_wait_millis: 2_000,
@@ -79,15 +79,15 @@ fn assert_broker_topology(endpoint: &str) {
         .block_on(async {
             let client = async_nats::ConnectOptions::new()
                 .user_and_password(
-                    required("HERMES_NATS_EVENT_HUB_USERNAME"),
-                    required("HERMES_NATS_EVENT_HUB_PASSWORD"),
+                    required("MAKOSH_NATS_EVENT_HUB_USERNAME"),
+                    required("MAKOSH_NATS_EVENT_HUB_PASSWORD"),
                 )
                 .connect(endpoint)
                 .await
                 .expect("connect Event Hub verifier");
             let context = async_nats::jetstream::new(client);
             let stream = context
-                .get_stream("HERMES_EVENT_V1")
+                .get_stream("MAKOSH_EVENT_V1")
                 .await
                 .expect("Event stream is reconciled");
             assert_eq!(stream.cached_info().config.max_bytes, 1_048_576);
@@ -97,7 +97,7 @@ fn assert_broker_topology(endpoint: &str) {
                 .expect("Event consumer is reconciled");
             assert_eq!(
                 consumer.cached_info().config.filter_subject,
-                "hermes.event.v1.notes.changed.v1"
+                "makosh.event.v1.notes.changed.v1"
             );
         });
 }

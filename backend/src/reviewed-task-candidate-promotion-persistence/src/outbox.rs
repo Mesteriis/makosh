@@ -1,4 +1,4 @@
-use hermes_events_protocol::delivery::OutboxRecordV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
 use sqlx::{Postgres, Row, Transaction};
 
 use crate::{
@@ -16,7 +16,7 @@ pub(crate) async fn insert_exact_outbox(
     created_at_unix_millis: i64,
 ) -> Result<(), ReviewedTaskCandidatePromotionPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.reviewed_task_candidate_promotion_outbox (
+        "INSERT INTO makosh_data.reviewed_task_candidate_promotion_outbox (
            logical_owner_id, message_id, envelope_sha256, envelope_bytes,
            created_at_unix_millis
          ) VALUES ($1, $2, $3, $4, $5)
@@ -44,7 +44,7 @@ pub(crate) async fn verify_exact_outbox(
 ) -> Result<(), ReviewedTaskCandidatePromotionPersistenceErrorV1> {
     let row = sqlx::query(
         "SELECT envelope_sha256, envelope_bytes
-         FROM hermes_data.reviewed_task_candidate_promotion_outbox
+         FROM makosh_data.reviewed_task_candidate_promotion_outbox
          WHERE logical_owner_id = $1 AND message_id = $2",
     )
     .bind(logical_owner_id)
@@ -79,7 +79,7 @@ impl ReviewedTaskCandidatePromotionPersistenceV1 {
         }
         sqlx::query(
             "SELECT message_id, envelope_sha256, envelope_bytes
-             FROM hermes_data.reviewed_task_candidate_promotion_outbox
+             FROM makosh_data.reviewed_task_candidate_promotion_outbox
              WHERE logical_owner_id = $1 AND published_at_unix_millis IS NULL
              ORDER BY created_at_unix_millis, message_id
              LIMIT $2",
@@ -109,7 +109,7 @@ impl ReviewedTaskCandidatePromotionPersistenceV1 {
             return Err(ReviewedTaskCandidatePromotionPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.reviewed_task_candidate_promotion_outbox
+            "UPDATE makosh_data.reviewed_task_candidate_promotion_outbox
              SET published_at_unix_millis = $1
              WHERE logical_owner_id = $2 AND message_id = $3
                AND envelope_sha256 = $4

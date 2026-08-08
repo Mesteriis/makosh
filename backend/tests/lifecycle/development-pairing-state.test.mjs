@@ -8,7 +8,7 @@ import { join } from 'node:path';
 import test from 'node:test';
 
 const backendRoot = new URL('../../', import.meta.url).pathname;
-const runtime = join(backendRoot, 'target', 'debug', 'hermes-development-kernel-operator');
+const runtime = join(backendRoot, 'target', 'debug', 'makosh-development-kernel-operator');
 
 function execute(args) {
   return spawnSync(runtime, args, { encoding: 'utf8' });
@@ -96,7 +96,7 @@ function responseChallenge(response) {
 }
 
 test('development pairing consumes a token once and stores only its digest', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-development-pairing-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-development-pairing-'));
   const stateDir = join(root, 'state');
   try {
     const token = createPairing(stateDir);
@@ -119,7 +119,7 @@ test('development pairing consumes a token once and stores only its digest', asy
 });
 
 test('development pairing expires instead of accepting a stale token', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-development-pairing-expiry-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-development-pairing-expiry-'));
   const stateDir = join(root, 'state');
   try {
     const token = createPairing(stateDir, 1);
@@ -141,7 +141,7 @@ test('development pairing expires instead of accepting a stale token', async () 
 });
 
 test('concurrent development pairing consumes have one winner', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-development-pairing-concurrent-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-development-pairing-concurrent-'));
   const stateDir = join(root, 'state');
   try {
     const token = createPairing(stateDir);
@@ -154,7 +154,7 @@ test('concurrent development pairing consumes have one winner', async () => {
 });
 
 test('development TLS pairing pins its certificate and requires a file-signed proof', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-development-pairing-tls-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-development-pairing-tls-'));
   const stateDir = join(root, 'state');
   const keyDir = join(root, 'device-key');
   const kernelDataDir = join(root, 'kernel-data');
@@ -181,14 +181,14 @@ test('development TLS pairing pins its certificate and requires a file-signed pr
     const rejected = await tlsRequest(
       endpoint,
       fingerprint,
-      `POST /v1/initial-owner-enrollment HTTP/1.1\r\nHost: localhost\r\nAuthorization: Bearer ${token}\r\nX-Hermes-Owner-Id: owner_1\r\nX-Hermes-Device-Id: device_1\r\nX-Hermes-Device-Public-Key-Sec1: ${publicKey}\r\nX-Hermes-Device-Signature-Raw: ${'00'.repeat(64)}\r\n\r\n`,
+      `POST /v1/initial-owner-enrollment HTTP/1.1\r\nHost: localhost\r\nAuthorization: Bearer ${token}\r\nX-Макошь-Owner-Id: owner_1\r\nX-Макошь-Device-Id: device_1\r\nX-Макошь-Device-Public-Key-Sec1: ${publicKey}\r\nX-Макошь-Device-Signature-Raw: ${'00'.repeat(64)}\r\n\r\n`,
     );
     assert.match(rejected, /^HTTP\/1\.1 400 Bad Request/m, rejected);
 
     const accepted = await tlsRequest(
       endpoint,
       fingerprint,
-      `POST /v1/initial-owner-enrollment HTTP/1.1\r\nHost: localhost\r\nAuthorization: Bearer ${token}\r\nX-Hermes-Owner-Id: owner_1\r\nX-Hermes-Device-Id: device_1\r\nX-Hermes-Device-Public-Key-Sec1: ${publicKey}\r\nX-Hermes-Device-Signature-Raw: ${signature}\r\n\r\n`,
+      `POST /v1/initial-owner-enrollment HTTP/1.1\r\nHost: localhost\r\nAuthorization: Bearer ${token}\r\nX-Макошь-Owner-Id: owner_1\r\nX-Макошь-Device-Id: device_1\r\nX-Макошь-Device-Public-Key-Sec1: ${publicKey}\r\nX-Макошь-Device-Signature-Raw: ${signature}\r\n\r\n`,
     );
     assert.match(accepted, /^HTTP\/1\.1 201 Created/m, accepted);
     const exited = await listener.exited;
@@ -202,7 +202,7 @@ test('development TLS pairing pins its certificate and requires a file-signed pr
 
     const imported = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-development-kernel-operator', '--', '--data-dir', kernelDataDir, 'initial-owner-import-pairing', '--pairing-state-dir', stateDir],
+      ['run', '-q', '-p', 'makosh-development-kernel-operator', '--', '--data-dir', kernelDataDir, 'initial-owner-import-pairing', '--pairing-state-dir', stateDir],
       { cwd: backendRoot, encoding: 'utf8' },
     );
     assert.equal(imported.status, 0, imported.stderr);
@@ -210,7 +210,7 @@ test('development TLS pairing pins its certificate and requires a file-signed pr
     assert.match(imported.stdout, /development_remote_initial_owner_enrolled=true\nowner_id=owner_1\ndevice_id=device_1/);
     const replay = spawnSync(
       'cargo',
-      ['run', '-q', '-p', 'hermes-development-kernel-operator', '--', '--data-dir', kernelDataDir, 'initial-owner-import-pairing', '--pairing-state-dir', stateDir],
+      ['run', '-q', '-p', 'makosh-development-kernel-operator', '--', '--data-dir', kernelDataDir, 'initial-owner-import-pairing', '--pairing-state-dir', stateDir],
       { cwd: backendRoot, encoding: 'utf8' },
     );
     assert.notEqual(replay.status, 0);
@@ -225,7 +225,7 @@ test('development TLS pairing pins its certificate and requires a file-signed pr
 });
 
 test('development pairing completes after an interrupted matching receipt write', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-development-pairing-recovery-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-development-pairing-recovery-'));
   const stateDir = join(root, 'state');
   const keyDir = join(root, 'device-key');
   const token = createPairing(stateDir);
@@ -255,7 +255,7 @@ test('development pairing completes after an interrupted matching receipt write'
     const accepted = await tlsRequest(
       endpoint,
       fingerprint,
-      `POST /v1/initial-owner-enrollment HTTP/1.1\r\nHost: localhost\r\nAuthorization: Bearer ${token}\r\nX-Hermes-Owner-Id: owner_1\r\nX-Hermes-Device-Id: device_1\r\nX-Hermes-Device-Public-Key-Sec1: ${publicKey}\r\nX-Hermes-Device-Signature-Raw: ${signature}\r\n\r\n`,
+      `POST /v1/initial-owner-enrollment HTTP/1.1\r\nHost: localhost\r\nAuthorization: Bearer ${token}\r\nX-Макошь-Owner-Id: owner_1\r\nX-Макошь-Device-Id: device_1\r\nX-Макошь-Device-Public-Key-Sec1: ${publicKey}\r\nX-Макошь-Device-Signature-Raw: ${signature}\r\n\r\n`,
     );
     assert.match(accepted, /^HTTP\/1\.1 201 Created/m, accepted);
     const exited = await listener.exited;

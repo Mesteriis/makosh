@@ -1,23 +1,23 @@
 use axum::body::{Body, to_bytes};
 use axum::http::{Method, Request, StatusCode, header};
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{
     NewProviderAccountSecretBinding, ProviderAccountSecretPurpose,
 };
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::signal_hub::store::SignalHubStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::signal_hub::store::SignalHubStore;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::secrets::models::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::secrets::models::{
     NewSecretReference, SecretKind, SecretStoreKind,
 };
-use hermes_hub_backend::platform::secrets::store::SecretReferenceStore;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::secrets::store::SecretReferenceStore;
+use makosh_hub_backend::platform::storage::database::Database;
 use sqlx::Row;
 
 const TOKEN: &str = "mail-account-management-test-token";
@@ -27,7 +27,7 @@ async fn app(ctx: &TestContext) -> axum::Router {
         .await
         .expect("database");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             TOKEN,
             ctx.connection_string().as_str(),
         ),
@@ -39,7 +39,7 @@ fn request(method: Method, uri: &str, body: Option<Value>) -> Request<Body> {
     let mut builder = Request::builder()
         .method(method)
         .uri(uri)
-        .header("x-hermes-secret", TOKEN);
+        .header("x-makosh-secret", TOKEN);
     if body.is_some() {
         builder = builder.header(header::CONTENT_TYPE, "application/json");
     }

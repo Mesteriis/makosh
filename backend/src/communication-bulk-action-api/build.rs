@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/communication_bulk_action/v1/bulk_action.proto"],
+            &["proto/makosh/communication_bulk_action/v1/bulk_action.proto"],
             &["proto"],
         )
         .expect("Communication bulk action protocol must compile");

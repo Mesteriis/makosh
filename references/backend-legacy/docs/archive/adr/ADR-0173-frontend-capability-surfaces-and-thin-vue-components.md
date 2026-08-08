@@ -6,12 +6,12 @@ Date: 2026-07-02
 Clarifies:
 
 - ADR-0093 - Frontend Platform Migration to Vue 3
-- ADR-0172 - Hermes UI Kit на базе shadcn-vue / Reka UI
+- ADR-0172 - Макошь UI Kit на базе shadcn-vue / Reka UI
 - ADR-architecture-communication-contract
 
 ## Context
 
-Hermes frontend использует Vue 3, Pinia и TanStack Query. Backend постепенно
+Макошь frontend использует Vue 3, Pinia и TanStack Query. Backend постепенно
 открывает больше доменных, workflow, AI, review, communications, provider
 runtime и settings capabilities. Если UI будет подключать эти capabilities
 напрямую из `.vue` файлов, бизнес-потоки снова расползутся по шаблонам,
@@ -176,7 +176,7 @@ const tasks = useQuery({ queryKey: ['tasks'], queryFn: fetchTasks })
 </script>
 ```
 
-Query keys must keep existing Hermes ownership:
+Query keys must keep existing Макошь ownership:
 
 - product/business data uses domain roots such as `['communications', ...]`;
 - provider runtime/setup data uses integration roots such as

@@ -3,7 +3,9 @@
 use super::*;
 
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
-use hermes_communication_bulk_action_api::{
+use http_body_util::BodyExt as _;
+use hyper::{Request, StatusCode, body::Bytes};
+use makosh_communication_bulk_action_api::{
     COMMUNICATION_BULK_ACTION_COMMAND_CONNECT_PATH_V1,
     COMMUNICATION_BULK_ACTION_QUERY_CONNECT_PATH_V1,
     COMMUNICATION_BULK_ACTION_REALTIME_CONTRACT_NAME_V1,
@@ -14,25 +16,23 @@ use hermes_communication_bulk_action_api::{
         GetBulkDeliveryStatusResponseV1, StartBulkDeliveryRequestV1, StartBulkDeliveryResponseV1,
     },
 };
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
 };
-use http_body_util::BodyExt as _;
-use hyper::{Request, StatusCode, body::Bytes};
 
-type BulkActionGateway = hermes_gateway_runtime::GatewayApplicationRouter<
+type BulkActionGateway = makosh_gateway_runtime::GatewayApplicationRouter<
     crate::identity::browser_gateway::ControlStoreBrowserAuthority,
-    hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 >;
 
 #[test]
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Blob, NATS, Communications and bulk-action binaries"]
 fn managed_bulk_action_reaches_gateway_sse_and_replays_after_restart() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-bulk-action-realtime");
+    let root = unique_target_root("makosh-managed-bulk-action-realtime");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -40,11 +40,11 @@ fn managed_bulk_action_reaches_gateway_sse_and_replays_after_restart() {
     );
     let release = installed_communications_bulk_action_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             BULK_ACTION_LOGICAL_OWNER_ID,
             "desktop-1",
             [4; 65],
@@ -60,7 +60,7 @@ fn managed_bulk_action_reaches_gateway_sse_and_replays_after_restart() {
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(32).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(32).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     configure_delivery_intent_runtime_routes(&supervisor, &store, realtime.clone());
     supervisor
@@ -238,7 +238,7 @@ fn managed_bulk_action_reaches_gateway_sse_and_replays_after_restart() {
     );
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove fixture");
     std::fs::remove_dir_all(data).expect("remove kernel fixture");
@@ -249,7 +249,7 @@ fn canonical_conversation_for_message(
     supervisor: &ManagedRuntimeSupervisor,
     message_id: &[u8],
 ) -> Vec<u8> {
-    use hermes_communications_api::query_wire::{
+    use makosh_communications_api::query_wire::{
         CommunicationsQueryRequestV1, GetMessageRequestV1,
         communications_query_request_v1::Operation, communications_query_response_v1::Result,
     };
@@ -280,7 +280,7 @@ fn canonical_conversation_for_message(
         &CommunicationsQueryRequestV1 {
             protocol_major: 1,
             operation: Some(Operation::GetConversation(
-                hermes_communications_api::query_wire::GetConversationRequestV1 {
+                makosh_communications_api::query_wire::GetConversationRequestV1 {
                     conversation_id: conversation_id.clone(),
                 },
             )),
@@ -299,7 +299,7 @@ fn bulk_action_gateway(
     supervisor: &ManagedRuntimeSupervisor,
     root: &Path,
     data: &Path,
-    realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
 ) -> BulkActionGateway {
     let configuration = crate::platform::gateway::BrowserGatewayConfigurationV1::new(
         "127.0.0.1:9443".parse().expect("loopback Gateway address"),
@@ -326,7 +326,7 @@ fn read_bulk_action_sse_event(
     cookie: &str,
     last_event_id: Option<&str>,
     expected_state: BulkDeliveryBatchStateV1,
-) -> hermes_gateway_protocol::v1::ClientRealtimeEventV1 {
+) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1 {
     let mut request = Request::builder()
         .method("GET")
         .uri("/api/realtime/v1/events")
@@ -362,7 +362,7 @@ fn read_bulk_action_sse_event(
 async fn find_bulk_action_event<B>(
     mut body: B,
     expected_state: BulkDeliveryBatchStateV1,
-) -> hermes_gateway_protocol::v1::ClientRealtimeEventV1
+) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1
 where
     B: hyper::body::Body<Data = Bytes> + Unpin,
     B::Error: std::fmt::Debug,
@@ -398,7 +398,7 @@ where
 }
 
 fn assert_client_safe_event(
-    event: &hermes_gateway_protocol::v1::ClientRealtimeEventV1,
+    event: &makosh_gateway_protocol::v1::ClientRealtimeEventV1,
     batch_id: &[u8],
     expected_state: BulkDeliveryBatchStateV1,
     private_body: &[u8],

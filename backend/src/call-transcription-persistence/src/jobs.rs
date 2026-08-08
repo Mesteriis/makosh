@@ -1,4 +1,4 @@
-use hermes_call_transcription_core::{
+use makosh_call_transcription_core::{
     CallTranscriptionRejectionV1, CallTranscriptionStateV1, CallTranscriptionTransitionV1,
     PendingTranscriptV1, transition_v1,
 };
@@ -31,7 +31,7 @@ pub(crate) async fn enqueue_stt_job(
 ) -> Result<(), CallTranscriptionPersistenceErrorV1> {
     let job_id = call_transcription_job_id_v1(run_id, stt_request_id);
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.call_transcription_jobs (
+        "INSERT INTO makosh_data.call_transcription_jobs (
            logical_owner_id,job_id,run_id,stt_request_id,stt_request_digest,
            state,attempt_count,max_attempts,lease_fence,created_at_unix_millis,
            updated_at_unix_millis
@@ -54,7 +54,7 @@ pub(crate) async fn enqueue_stt_job(
     }
     let existing = sqlx::query(
         "SELECT job_id,stt_request_id,stt_request_digest FROM
-         hermes_data.call_transcription_jobs WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE",
+         makosh_data.call_transcription_jobs WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE",
     )
     .bind(logical_owner_id)
     .bind(run_id.as_slice())
@@ -95,7 +95,7 @@ impl CallTranscriptionPersistenceV1 {
             .ok_or(CallTranscriptionPersistenceErrorV1::InvalidInput)?;
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         let row = sqlx::query(
-            "SELECT job_id FROM hermes_data.call_transcription_jobs
+            "SELECT job_id FROM makosh_data.call_transcription_jobs
              WHERE logical_owner_id=$1 AND attempt_count<max_attempts
                AND (state=1 OR (state=2 AND lease_expires_at_unix_millis<$2))
              ORDER BY created_at_unix_millis,job_id FOR UPDATE SKIP LOCKED LIMIT 1",
@@ -111,7 +111,7 @@ impl CallTranscriptionPersistenceV1 {
         };
         let job_id = id16(row.try_get("job_id").map_err(row_error)?)?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.call_transcription_jobs SET state=2,
+            "UPDATE makosh_data.call_transcription_jobs SET state=2,
              attempt_count=attempt_count+1,worker_id=$1,runtime_generation=$2,
              grant_epoch=$3,lease_fence=lease_fence+1,lease_expires_at_unix_millis=$4,
              updated_at_unix_millis=$5 WHERE logical_owner_id=$6 AND job_id=$7
@@ -279,7 +279,7 @@ impl CallTranscriptionPersistenceV1 {
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         let job = sqlx::query(
             "SELECT run_id,runtime_generation,grant_epoch FROM
-             hermes_data.call_transcription_jobs WHERE logical_owner_id=$1 AND job_id=$2
+             makosh_data.call_transcription_jobs WHERE logical_owner_id=$1 AND job_id=$2
              AND state=3 FOR UPDATE",
         )
         .bind(&input.logical_owner_id)
@@ -325,7 +325,7 @@ impl CallTranscriptionPersistenceV1 {
             .as_ref()
             .ok_or(CallTranscriptionPersistenceErrorV1::InvalidTransition)?;
         let changed = sqlx::query(
-            "UPDATE hermes_data.call_transcription_runs SET state=$1,state_revision=$2,
+            "UPDATE makosh_data.call_transcription_runs SET state=$1,state_revision=$2,
              pending_transcript_reference_id=NULL,pending_transcript_sha256=NULL,
              pending_transcript_size_bytes=NULL,pending_detected_language=NULL,
              pending_duration_millis=NULL,pending_segment_count=NULL,
@@ -403,8 +403,8 @@ impl CallTranscriptionPersistenceV1 {
             "SELECT j.run_id,j.result_receipt_sha256,r.state,
              r.pending_transcript_reference_id,r.pending_transcript_sha256,
              r.stt_result_receipt_sha256
-             FROM hermes_data.call_transcription_jobs j
-             JOIN hermes_data.call_transcription_runs r
+             FROM makosh_data.call_transcription_jobs j
+             JOIN makosh_data.call_transcription_runs r
                ON r.logical_owner_id=j.logical_owner_id AND r.run_id=j.run_id
              WHERE j.logical_owner_id=$1 AND j.job_id=$2 AND j.state=3
              FOR UPDATE OF j,r",
@@ -436,7 +436,7 @@ impl CallTranscriptionPersistenceV1 {
             return Err(CallTranscriptionPersistenceErrorV1::RevisionConflict);
         }
         let changed = sqlx::query(
-            "UPDATE hermes_data.call_transcription_jobs SET runtime_generation=$1,
+            "UPDATE makosh_data.call_transcription_jobs SET runtime_generation=$1,
              grant_epoch=$2,updated_at_unix_millis=$3
              WHERE logical_owner_id=$4 AND job_id=$5 AND state=3",
         )
@@ -467,7 +467,7 @@ impl CallTranscriptionPersistenceV1 {
             return Err(CallTranscriptionPersistenceErrorV1::InvalidInput);
         }
         let changed = sqlx::query(
-            "UPDATE hermes_data.call_transcription_runs SET
+            "UPDATE makosh_data.call_transcription_runs SET
              source_cleanup_completed_at_unix_millis=$1,updated_at_unix_millis=$1
              WHERE logical_owner_id=$2 AND run_id=$3 AND state IN (5,6)
                AND source_reference_id=$4 AND source_receipt_sha256=$5
@@ -496,7 +496,7 @@ impl CallTranscriptionPersistenceV1 {
         }
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         let retried = sqlx::query(
-            "UPDATE hermes_data.call_transcription_jobs SET state=1,worker_id=NULL,
+            "UPDATE makosh_data.call_transcription_jobs SET state=1,worker_id=NULL,
              runtime_generation=NULL,grant_epoch=NULL,lease_expires_at_unix_millis=NULL,
              updated_at_unix_millis=$2 WHERE logical_owner_id=$1 AND state=2
                AND lease_expires_at_unix_millis<=$2 AND attempt_count<max_attempts",
@@ -508,7 +508,7 @@ impl CallTranscriptionPersistenceV1 {
         .map_err(storage_error)?
         .rows_affected();
         let exhausted = sqlx::query(
-            "SELECT job_id,run_id FROM hermes_data.call_transcription_jobs
+            "SELECT job_id,run_id FROM makosh_data.call_transcription_jobs
              WHERE logical_owner_id=$1 AND state=2 AND lease_expires_at_unix_millis<=$2
                AND attempt_count>=max_attempts ORDER BY job_id FOR UPDATE",
         )
@@ -539,7 +539,7 @@ impl CallTranscriptionPersistenceV1 {
             )
             .await?;
             let changed = sqlx::query(
-                "UPDATE hermes_data.call_transcription_jobs SET state=4,worker_id=NULL,
+                "UPDATE makosh_data.call_transcription_jobs SET state=4,worker_id=NULL,
                  lease_expires_at_unix_millis=NULL,updated_at_unix_millis=$3
                  WHERE logical_owner_id=$1 AND job_id=$2 AND state=2",
             )
@@ -581,7 +581,7 @@ async fn lock_leased_job(
     now_unix_millis: i64,
 ) -> Result<LockedJobV1, CallTranscriptionPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT run_id FROM hermes_data.call_transcription_jobs
+        "SELECT run_id FROM makosh_data.call_transcription_jobs
          WHERE logical_owner_id=$1 AND job_id=$2 AND state=2 AND worker_id=$3
            AND runtime_generation=$4 AND grant_epoch=$5 AND lease_fence=$6
            AND lease_expires_at_unix_millis>=$7 FOR UPDATE",
@@ -608,13 +608,13 @@ async fn persist_pending_result(
     logical_owner_id: &str,
     run_id: [u8; 16],
     current_revision: u64,
-    next: &hermes_call_transcription_core::CallTranscriptionStatusV1,
+    next: &makosh_call_transcription_core::CallTranscriptionStatusV1,
     pending: &PendingTranscriptV1,
     result_receipt_sha256: [u8; 32],
     occurred_at_unix_millis: i64,
 ) -> Result<(), CallTranscriptionPersistenceErrorV1> {
     let changed = sqlx::query(
-        "UPDATE hermes_data.call_transcription_runs SET state=$1,state_revision=$2,
+        "UPDATE makosh_data.call_transcription_runs SET state=$1,state_revision=$2,
          stt_result_receipt_sha256=$3,pending_transcript_reference_id=$4,
          pending_transcript_sha256=$5,pending_transcript_size_bytes=$6,
          pending_detected_language=$7,pending_duration_millis=$8,
@@ -655,7 +655,7 @@ async fn finish_job(
     occurred_at_unix_millis: i64,
 ) -> Result<(), CallTranscriptionPersistenceErrorV1> {
     let changed = sqlx::query(
-        "UPDATE hermes_data.call_transcription_jobs SET state=$1,worker_id=NULL,
+        "UPDATE makosh_data.call_transcription_jobs SET state=$1,worker_id=NULL,
          lease_expires_at_unix_millis=NULL,result_receipt_sha256=$2,
          updated_at_unix_millis=$3 WHERE logical_owner_id=$4 AND job_id=$5 AND state=2
            AND worker_id=$6 AND runtime_generation=$7 AND grant_epoch=$8 AND lease_fence=$9",

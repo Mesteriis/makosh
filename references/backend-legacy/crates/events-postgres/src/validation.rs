@@ -1,4 +1,4 @@
-use hermes_events_api::EventEnvelopeError;
+use makosh_events_api::EventEnvelopeError;
 
 pub(super) fn validate_non_empty(
     field_name: &'static str,

@@ -9,8 +9,8 @@ use std::{
     time::Duration,
 };
 
-use hermes_attachment_preview_evidence_replay_persistence::attachment_preview_evidence_replay_storage_bundle_v1;
-use hermes_attachment_preview_evidence_replay_runtime::{
+use makosh_attachment_preview_evidence_replay_persistence::attachment_preview_evidence_replay_storage_bundle_v1;
+use makosh_attachment_preview_evidence_replay_runtime::{
     attachment_preview_evidence_replay_module_descriptor_v1,
     attachment_preview_evidence_replay_settings_schema_bytes_v1,
     managed_runtime::{
@@ -19,7 +19,7 @@ use hermes_attachment_preview_evidence_replay_runtime::{
         AttachmentPreviewEvidenceReplayRuntimeAdmissionV1,
     },
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
@@ -121,7 +121,7 @@ fn retry(
         | Err(AttachmentPreviewEvidenceReplayManagedRuntimeErrorV1::EventUnavailable)
         | Err(AttachmentPreviewEvidenceReplayManagedRuntimeErrorV1::Unavailable)
         | Err(AttachmentPreviewEvidenceReplayManagedRuntimeErrorV1::Persistence(
-            hermes_attachment_preview_evidence_replay_persistence::ReplayPersistenceErrorV1::StorageUnavailable,
+            makosh_attachment_preview_evidence_replay_persistence::ReplayPersistenceErrorV1::StorageUnavailable,
         )) => Ok(()),
         Err(error) => Err(runtime_error(error)),
     }

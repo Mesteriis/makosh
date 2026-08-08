@@ -361,7 +361,7 @@ describe('Communications workspace surface', () => {
     expect(mailComposeOptionsSource).toContain('composeAiPanelActions')
     expect(mailComposeOptionsSource).toContain('composeContextPanelSections')
     expect(mailWorkspaceSource).not.toContain('{{ account.account_id }}')
-    expect(communicationDomainElementsCss).toContain('.mail-compose-dialog.hermes-dialog-content')
+    expect(communicationDomainElementsCss).toContain('.mail-compose-dialog.makosh-dialog-content')
     expect(communicationDomainElementsCss).toContain('--compose-edge-rail-width')
     expect(communicationDomainElementsCss).toContain('--compose-edge-panel-width')
     expect(communicationDomainElementsCss).toContain('--compose-edge-rail-gap')
@@ -369,28 +369,28 @@ describe('Communications workspace surface', () => {
     expect(communicationDomainElementsCss).toContain('.compose-edge-panel__rail-button')
     expect(communicationDomainElementsCss).toContain('.compose-edge-panel.is-open .compose-edge-panel__surface')
     expect(communicationDomainElementsCss).toMatch(
-      /\.mail-compose-dialog \.hermes-dialog-header\s*\{[^}]*border-bottom: 0;/s
+      /\.mail-compose-dialog \.makosh-dialog-header\s*\{[^}]*border-bottom: 0;/s
     )
     expect(communicationDomainElementsCss).toMatch(
-      /\.mail-compose-dialog \.hermes-dialog-header\s*\{[^}]*border-radius: 12px;/s
+      /\.mail-compose-dialog \.makosh-dialog-header\s*\{[^}]*border-radius: 12px;/s
     )
     expect(communicationDomainElementsCss).toMatch(
-      /\.mail-compose-dialog \.hermes-dialog-footer\s*\{[^}]*border-top: 0;/s
+      /\.mail-compose-dialog \.makosh-dialog-footer\s*\{[^}]*border-top: 0;/s
     )
     expect(communicationDomainElementsCss).toMatch(
-      /\.mail-compose-dialog \.hermes-dialog-footer\s*\{[^}]*border-radius: 12px;/s
+      /\.mail-compose-dialog \.makosh-dialog-footer\s*\{[^}]*border-radius: 12px;/s
     )
     expect(communicationDomainElementsCss).toMatch(
       /\.mail-compose-dialog \.mail-compose-card\s*\{[^}]*border: 0;[^}]*box-shadow: none;[^}]*outline: 0;/s
     )
     expect(communicationDomainElementsCss).toMatch(
-      /\.mail-compose-dialog \.hermes-dialog-body\s*\{[^}]*overflow: hidden;/s
+      /\.mail-compose-dialog \.makosh-dialog-body\s*\{[^}]*overflow: hidden;/s
     )
     expect(communicationDomainElementsCss).toMatch(
       /\.mail-compose-panel__fields\s*\{[^}]*overflow-y: auto;/s
     )
     expect(communicationDomainElementsCss).toMatch(
-      /\.mail-compose-panel__editor \.hermes-rich-text-editor__prosemirror blockquote\s*\{[^}]*border-left: 3px solid/s
+      /\.mail-compose-panel__editor \.makosh-rich-text-editor__prosemirror blockquote\s*\{[^}]*border-left: 3px solid/s
     )
     expect(communicationDomainElementsCss).toMatch(
       /\.compose-edge-panel__surface\s*\{[^}]*opacity: 0;[^}]*pointer-events: none;[^}]*visibility: hidden;/s
@@ -409,7 +409,7 @@ describe('Communications workspace surface', () => {
     )
     expect(communicationDomainElementsCss).toContain('.mail-compose-close-confirm__save')
     expect(communicationDomainElementsCss).toMatch(
-      /\.mail-compose-close-confirm \.hermes-alert-dialog-body\s*\{[^}]*justify-content: flex-end;/s
+      /\.mail-compose-close-confirm \.makosh-alert-dialog-body\s*\{[^}]*justify-content: flex-end;/s
     )
     expect(communicationDomainElementsCss).toMatch(
       /\.compose-edge-panel--left\s*\{[^}]*grid-template-columns: var\(--compose-edge-rail-width\) var\(--compose-edge-panel-width\);[^}]*transform: translateX\(calc\(-1 \* \(var\(--compose-edge-rail-width\) \+ var\(--compose-edge-rail-gap\)\)\)\);/s

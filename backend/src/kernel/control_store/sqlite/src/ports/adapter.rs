@@ -1,6 +1,6 @@
 //! Narrow Control Store port implementations over the SQLite actor facade.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BrowserDeviceEnrollmentV1, BrowserDeviceIdentityV1, BundledArtifactProposalStore,
     BundledManagedArtifactProposalInputV1, BundledManagedArtifactProposalReceiptV1,
     BundledManagedLaunchBinding, ControlStore, EventHubTopologyStore, EventsAuthorityStore,
@@ -20,7 +20,7 @@ use hermes_kernel_control_store::{
 use crate::{SqliteControlStore, StoreError};
 
 impl HealthRecoveryStore for SqliteControlStore {
-    fn control_store_snapshot(&self) -> &hermes_kernel_control_store::ControlStore {
+    fn control_store_snapshot(&self) -> &makosh_kernel_control_store::ControlStore {
         self.snapshot()
     }
 }
@@ -33,7 +33,7 @@ impl BundledArtifactProposalStore for SqliteControlStore {
         proposal: &BundledManagedArtifactProposalInputV1,
         registration: &ModuleRegistration,
         capabilities: &[String],
-        requests: hermes_kernel_control_store::ModuleDescriptorRegistrationRequestsV1<'_>,
+        requests: makosh_kernel_control_store::ModuleDescriptorRegistrationRequestsV1<'_>,
     ) -> Result<BundledManagedArtifactProposalReceiptV1, Self::Error> {
         SqliteControlStore::propose_bundled_managed_artifact(
             self,
@@ -153,7 +153,7 @@ impl ModuleRegistryStore for SqliteControlStore {
         &self,
         registration: &ModuleRegistration,
         capabilities: &[String],
-        requests: hermes_kernel_control_store::ModuleDescriptorRegistrationRequestsV1<'_>,
+        requests: makosh_kernel_control_store::ModuleDescriptorRegistrationRequestsV1<'_>,
     ) -> Result<(), Self::Error> {
         SqliteControlStore::create_pending_registration_with_descriptor_requests(
             self,
@@ -166,7 +166,7 @@ impl ModuleRegistryStore for SqliteControlStore {
         &self,
         registration: &ModuleRegistration,
         capabilities: &[String],
-        requests: hermes_kernel_control_store::ModuleDescriptorRegistrationRequestsV1<'_>,
+        requests: makosh_kernel_control_store::ModuleDescriptorRegistrationRequestsV1<'_>,
     ) -> Result<(), Self::Error> {
         SqliteControlStore::create_pending_registration_with_all_descriptor_requests(
             self,
@@ -179,7 +179,7 @@ impl ModuleRegistryStore for SqliteControlStore {
         &self,
         registration: &ModuleRegistration,
         capabilities: &[String],
-        requests: hermes_kernel_control_store::ModuleDescriptorRegistrationRequestsV1<'_>,
+        requests: makosh_kernel_control_store::ModuleDescriptorRegistrationRequestsV1<'_>,
     ) -> Result<(), Self::Error> {
         SqliteControlStore::upgrade_approved_registration_with_all_descriptor_requests(
             self,
@@ -293,7 +293,7 @@ impl SettingsRegistryStore for SqliteControlStore {
         expected: &SettingsSchemaBinding,
         successor: &SettingsSchemaBinding,
         schema_bytes: &[u8],
-        target_successors: &[hermes_kernel_control_store::SettingsSchemaTargetSuccessor],
+        target_successors: &[makosh_kernel_control_store::SettingsSchemaTargetSuccessor],
     ) -> Result<(), Self::Error> {
         SqliteControlStore::upgrade_settings_schema_with_successor(
             self,
@@ -316,7 +316,7 @@ impl SettingsRegistryStore for SqliteControlStore {
         &self,
         registration_id: &str,
         configuration_instance_id: &str,
-    ) -> Result<Option<hermes_kernel_control_store::SettingsConfigurationTarget>, Self::Error> {
+    ) -> Result<Option<makosh_kernel_control_store::SettingsConfigurationTarget>, Self::Error> {
         SqliteControlStore::settings_configuration_target(
             self,
             registration_id,
@@ -326,7 +326,7 @@ impl SettingsRegistryStore for SqliteControlStore {
     fn settings_configuration_targets(
         &self,
         registration_id: &str,
-    ) -> Result<Vec<hermes_kernel_control_store::SettingsConfigurationTarget>, Self::Error> {
+    ) -> Result<Vec<makosh_kernel_control_store::SettingsConfigurationTarget>, Self::Error> {
         SqliteControlStore::settings_configuration_targets(self, registration_id)
     }
     fn commit_desired_settings_snapshot(
@@ -337,7 +337,7 @@ impl SettingsRegistryStore for SqliteControlStore {
     }
     fn materialize_initial_settings_snapshot(
         &self,
-        update: &hermes_kernel_control_store::SettingsInitialSnapshot,
+        update: &makosh_kernel_control_store::SettingsInitialSnapshot,
     ) -> Result<u64, Self::Error> {
         SqliteControlStore::materialize_initial_settings_snapshot(self, update)
     }
@@ -466,7 +466,7 @@ impl StorageBindingStore for SqliteControlStore {
 
     fn record_platform_storage_binding(
         &self,
-        binding: &hermes_kernel_control_store::PlatformStorageBindingV1,
+        binding: &makosh_kernel_control_store::PlatformStorageBindingV1,
     ) -> Result<(), Self::Error> {
         SqliteControlStore::record_platform_storage_binding(self, binding)
     }
@@ -475,7 +475,7 @@ impl StorageBindingStore for SqliteControlStore {
         &self,
         registration_id: &str,
         capability_id: &str,
-    ) -> Result<Option<hermes_kernel_control_store::PlatformStorageBindingV1>, Self::Error> {
+    ) -> Result<Option<makosh_kernel_control_store::PlatformStorageBindingV1>, Self::Error> {
         SqliteControlStore::platform_storage_binding(self, registration_id, capability_id)
     }
 
@@ -484,7 +484,7 @@ impl StorageBindingStore for SqliteControlStore {
         registration_id: &str,
         capability_id: &str,
         binding_revision: u64,
-    ) -> Result<hermes_kernel_control_store::PlatformStorageBindingV1, Self::Error> {
+    ) -> Result<makosh_kernel_control_store::PlatformStorageBindingV1, Self::Error> {
         SqliteControlStore::begin_platform_storage_binding_revocation(
             self,
             registration_id,
@@ -496,13 +496,13 @@ impl StorageBindingStore for SqliteControlStore {
     fn begin_registration_storage_bindings_revocation(
         &self,
         registration_id: &str,
-    ) -> Result<Vec<hermes_kernel_control_store::PlatformStorageBindingV1>, Self::Error> {
+    ) -> Result<Vec<makosh_kernel_control_store::PlatformStorageBindingV1>, Self::Error> {
         SqliteControlStore::begin_registration_storage_bindings_revocation(self, registration_id)
     }
 
     fn platform_storage_bindings(
         &self,
-    ) -> Result<Vec<hermes_kernel_control_store::PlatformStorageBindingV1>, Self::Error> {
+    ) -> Result<Vec<makosh_kernel_control_store::PlatformStorageBindingV1>, Self::Error> {
         SqliteControlStore::platform_storage_bindings(self)
     }
 }
@@ -512,7 +512,7 @@ impl StorageBundleStore for SqliteControlStore {
 
     fn record_platform_storage_bundle(
         &self,
-        bundle: &hermes_kernel_control_store::PlatformStorageBundleV1,
+        bundle: &makosh_kernel_control_store::PlatformStorageBundleV1,
     ) -> Result<(), Self::Error> {
         SqliteControlStore::record_platform_storage_bundle(self, bundle)
     }
@@ -521,7 +521,7 @@ impl StorageBundleStore for SqliteControlStore {
         &self,
         owner_id: &str,
         revision: u64,
-    ) -> Result<Option<hermes_kernel_control_store::PlatformStorageBundleV1>, Self::Error> {
+    ) -> Result<Option<makosh_kernel_control_store::PlatformStorageBundleV1>, Self::Error> {
         SqliteControlStore::platform_storage_bundle(self, owner_id, revision)
     }
 }

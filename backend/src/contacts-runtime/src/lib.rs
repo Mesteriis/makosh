@@ -15,4 +15,4 @@ pub use managed_runtime::{
     ContactsManagedRuntimeErrorV1, ContactsManagedRuntimeV1, ContactsRuntimeAdmissionV1,
 };
 
-pub const PACKAGE: &str = "hermes-contacts-runtime";
+pub const PACKAGE: &str = "makosh-contacts-runtime";

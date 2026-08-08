@@ -1,6 +1,6 @@
 # Checkbox
 
-Native checkbox wrapped in Hermes UI styling.
+Native checkbox wrapped in Макошь UI styling.
 
 Use for independent boolean settings and toggles where checkbox semantics are clearer than switch semantics.
 

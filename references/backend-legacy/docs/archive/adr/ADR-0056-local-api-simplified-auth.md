@@ -10,8 +10,8 @@ The backend serves a **single local user** via a desktop app (Tauri shell).
 There is no multi-tenancy, no external network exposure (binds `127.0.0.1`),
 and no user-facing authentication.
 
-Previous ADRs mandated per-request `HERMES_LOCAL_API_TOKEN` verification
-and `x-hermes-actor-id` extraction in every handler. This added boilerplate
+Previous ADRs mandated per-request `MAKOSH_LOCAL_API_TOKEN` verification
+and `x-makosh-actor-id` extraction in every handler. This added boilerplate
 to 200+ handlers with zero security benefit for a single-user local app.
 
 ## Decision
@@ -23,17 +23,17 @@ If the header is missing or wrong → 403. No per-handler auth code.
 
 ```rust
 Router::new()
-    .layer(require_secret_layer("X-Hermes-Secret", &secret))
+    .layer(require_secret_layer("X-Макошь-Secret", &secret))
     .route(...)
 ```
 
 ### 2. Actor identity is a constant
 
-All audit records use `"hermes-frontend"` as the actor.
-No `x-hermes-actor-id` header extraction.
+All audit records use `"makosh-frontend"` as the actor.
+No `x-makosh-actor-id` header extraction.
 
 ```rust
-NewApiAuditRecord::setting_set("hermes-frontend", "theme")
+NewApiAuditRecord::setting_set("makosh-frontend", "theme")
 ```
 
 ### 3. Handlers are plain
@@ -50,8 +50,8 @@ No `verify_local_api_capability`, no `AuthActor`, no `require_auth`.
 ## Consequences
 
 ### Removed
-- `HERMES_LOCAL_API_TOKEN` configuration
-- `x-hermes-actor-id` header requirement
+- `MAKOSH_LOCAL_API_TOKEN` configuration
+- `x-makosh-actor-id` header requirement
 - `verify_local_api_capability()` function
 - `local_api_actor()` function
 - `LocalApiActor` struct
@@ -64,7 +64,7 @@ No `verify_local_api_capability`, no `AuthActor`, no `require_auth`.
 ### Migration
 1. Remove token config from `AppConfig`, `docker/.env`
 2. Remove token/actor verification from all handlers
-3. Replace `actor.actor_id` with `"hermes-frontend"` in audit calls
+3. Replace `actor.actor_id` with `"makosh-frontend"` in audit calls
 4. Add router-level secret layer
 5. Delete `verify_local_api_capability`, `local_api_actor`, `is_valid_actor_id_byte`, `LocalApiActor`
 

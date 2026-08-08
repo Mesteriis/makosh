@@ -1,8 +1,8 @@
-# Hermes Foundation Vision
+# Макошь Foundation Vision
 
 ## Canonical Definition
 
-Hermes Hub is a local-first Personal Memory System.
+Макошь is a local-first Personal Memory System.
 
 Its product experience should feel like a Personal Operating System for:
 
@@ -16,7 +16,7 @@ Its product experience should feel like a Personal Operating System for:
 - obligations;
 - context.
 
-Hermes combines provider-specific operational communication experiences with a
+Макошь combines provider-specific operational communication experiences with a
 provider-neutral memory and context layer. Those operational surfaces are
 first-class interfaces, but not independent business domains or disconnected
 products.
@@ -27,9 +27,9 @@ must not create separate durable truth or provider/domain contracts.
 
 ## Primary Value
 
-The primary value of Hermes is context.
+The primary value of Макошь is context.
 
-CRUD is necessary plumbing. It is not the product thesis. Hermes exists to answer
+CRUD is necessary plumbing. It is not the product thesis. Макошь exists to answer
 questions such as:
 
 - what happened;
@@ -41,7 +41,7 @@ questions such as:
 
 ## System Shape
 
-Hermes stores knowledge about:
+Макошь stores knowledge about:
 
 - Personas;
 - Organizations;
@@ -59,7 +59,7 @@ lets agents operate over that context with explicit permissions.
 
 ## Non-Identity
 
-Hermes must not be described as only:
+Макошь must not be described as only:
 
 - a collection of disconnected email and messenger clients;
 - a CRM;
@@ -82,7 +82,7 @@ Personal Memory System
 
 ## North Star
 
-After years of use, Hermes should be able to explain:
+After years of use, Макошь should be able to explain:
 
 - the history of a Persona, Organization, Project or Document;
 - the evidence behind a Decision;

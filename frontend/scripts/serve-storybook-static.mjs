@@ -3,9 +3,9 @@ import { stat } from 'node:fs/promises'
 import { createServer } from 'node:http'
 import { extname, join, normalize, resolve, sep } from 'node:path'
 
-const root = resolve(process.cwd(), process.env.HERMES_STORYBOOK_STATIC_DIR ?? 'storybook-static')
-const host = process.env.HERMES_STORYBOOK_HOST ?? 'localhost'
-const port = Number(process.env.HERMES_STORYBOOK_PORT ?? '6006')
+const root = resolve(process.cwd(), process.env.MAKOSH_STORYBOOK_STATIC_DIR ?? 'storybook-static')
+const host = process.env.MAKOSH_STORYBOOK_HOST ?? 'localhost'
+const port = Number(process.env.MAKOSH_STORYBOOK_PORT ?? '6006')
 
 const mimeTypes = new Map([
 	['.css', 'text/css; charset=utf-8'],
@@ -40,7 +40,7 @@ const server = createServer(async (request, response) => {
 })
 
 server.listen(port, host, () => {
-	console.log(`Hermes Storybook static server listening at http://${host}:${port}`)
+	console.log(`Макошь Storybook static server listening at http://${host}:${port}`)
 })
 
 process.on('SIGINT', shutdown)

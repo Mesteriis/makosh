@@ -1,5 +1,5 @@
 [package]
-name = "hermes-attachment-preview-evidence-replay-persistence"
+name = "makosh-attachment-preview-evidence-replay-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,19 +7,19 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "attachment_preview_evidence_replay"
 surface = "persistence"
 
 [dependencies]
-hermes-attachment-preview-evidence-replay-api = { path = "../attachment-preview-evidence-replay-api" }
-hermes-attachment-preview-evidence-replay-core = { path = "../attachment-preview-evidence-replay-core" }
-hermes-communications-retained-evidence-replay-contract = { path = "../communications-retained-evidence-replay-contract" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-mail-retained-evidence-replay-contract = { path = "../mail-retained-evidence-replay-contract" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-attachment-preview-evidence-replay-api = { path = "../attachment-preview-evidence-replay-api" }
+makosh-attachment-preview-evidence-replay-core = { path = "../attachment-preview-evidence-replay-core" }
+makosh-communications-retained-evidence-replay-contract = { path = "../communications-retained-evidence-replay-contract" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-mail-retained-evidence-replay-contract = { path = "../mail-retained-evidence-replay-contract" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

@@ -15,4 +15,4 @@ pub use admission::{
     attachment_preview_evidence_replay_settings_schema_v1,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-preview-evidence-replay-runtime";
+pub const PACKAGE: &str = "makosh-attachment-preview-evidence-replay-runtime";

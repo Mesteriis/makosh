@@ -1,6 +1,6 @@
-use hermes_hub_backend::domains::personas::core::errors::PersonaCoreError;
-use hermes_hub_backend::domains::personas::core::identities::PersonaIdentityStore;
-use hermes_hub_backend::domains::personas::core::interaction_contexts::{
+use makosh_hub_backend::domains::personas::core::errors::PersonaCoreError;
+use makosh_hub_backend::domains::personas::core::identities::PersonaIdentityStore;
+use makosh_hub_backend::domains::personas::core::interaction_contexts::{
     NewPersonaInteractionContext, PersonaInteractionContextStore,
 };
 use sqlx::postgres::PgPool;

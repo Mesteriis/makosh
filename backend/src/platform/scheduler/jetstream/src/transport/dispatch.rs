@@ -2,7 +2,7 @@
 
 use std::{collections::BTreeSet, time::Duration};
 
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     RuntimeNatsJwtCredentialV1,
     delivery::{
         ExactOutboxPublisherPortV1, OutboxPublishReceiptV1, OutboxRecordV1, OutboxRelayErrorV1,
@@ -11,7 +11,7 @@ use hermes_events_protocol::{
     v1::{DurableEnvelopeV1, durable_envelope_v1::Semantics},
     validation::envelope::{decode_envelope_v1, validate_envelope_v1},
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::SchedulerRuntimeDispatchPublisherBindingV1,
     validation::scheduler::validate_scheduler_runtime_dispatch_publisher_binding,
 };
@@ -90,7 +90,7 @@ impl SchedulerJetStreamDispatchPortV1 {
             .map(|outcome| {
                 matches!(
                     outcome,
-                    hermes_events_protocol::delivery::OutboxRelayOutcomeV1::Published { .. }
+                    makosh_events_protocol::delivery::OutboxRelayOutcomeV1::Published { .. }
                 )
             })
             .map_err(map_relay_error)
@@ -130,7 +130,7 @@ fn command_subject(envelope: &DurableEnvelopeV1) -> Option<String> {
     let contract = envelope.contract.as_ref()?;
     matches!(envelope.semantics, Some(Semantics::Command(_))).then(|| {
         format!(
-            "hermes.command.v1.{}.{}.v{}",
+            "makosh.command.v1.{}.{}.v{}",
             contract.owner, contract.name, contract.major
         )
     })

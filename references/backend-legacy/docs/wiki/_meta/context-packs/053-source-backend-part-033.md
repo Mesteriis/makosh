@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/domains/signal_hub/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/signal_hub/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/signal_hub/service.rs`
 - Size bytes / Размер в байтах: `9169`
 - Included characters / Включено символов: `9169`
 - Truncated / Обрезано: `no`
@@ -345,7 +345,7 @@ fn build_derived_event(
 
 ### `backend/src/domains/signal_hub/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/signal_hub/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/signal_hub/store.rs`
 - Size bytes / Размер в байтах: `95236`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -672,13 +672,13 @@ impl SignalHubStore {
                             {
                                 sqlx::query(
                                     r#"
-                    
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/domains/signal_hub/telegram.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/signal_hub/telegram.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/signal_hub/telegram.rs`
 - Size bytes / Размер в байтах: `3694`
 - Included characters / Включено символов: `3694`
 - Truncated / Обрезано: `no`
@@ -784,7 +784,7 @@ fn accepted_telegram_signal_event_id(raw_event_id: &str) -> String {
 
 ### `backend/src/domains/signal_hub/whatsapp.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/signal_hub/whatsapp.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/signal_hub/whatsapp.rs`
 - Size bytes / Размер в байтах: `4102`
 - Included characters / Включено символов: `4102`
 - Truncated / Обрезано: `no`
@@ -899,7 +899,7 @@ fn whatsapp_raw_signal_event_id(raw_record_id: &str) -> String {
 
 ### `backend/src/domains/tasks/api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/api.rs`
 - Size bytes / Размер в байтах: `20728`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -929,7 +929,7 @@ pub struct Task {
     pub source_type: String,
     pub project_id: Option<String>,
     pub status: String,
-    pub hermes_status: String,
+    pub makosh_status: String,
     pub priority_score: Option<f64>,
     pub risk_score: Option<f64>,
     pub readiness_score: Option<f64>,
@@ -996,15 +996,15 @@ impl TaskStore {
         let task_id = format!("task:v1:{ts:x}");
         let tags = req.tags.clone().unwrap_or_else(|| json!([]));
         let row = sqlx::query(
-            "INSERT INTO tasks (task_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, hermes_status, priority_score, area, why, due_at, energy_type, confidentiality, tags, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id)
+            "INSERT INTO tasks (task_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, makosh_status, priority_score, area, why, due_at, energy_type, confidentiality, tags, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id)
              VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)
-             RETURNING task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, hermes_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at"
+             RETURNING task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, makosh_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at"
         ).bind(&task_id).bind(&req.title).bind(req.description.as_deref())
          .bind(req.provenance_kind.as_deref().ok_or(TaskError::MissingProvenance)?)
          .bind(req.provenance_id.as_deref().ok_or(TaskError::MissingProvenance)?)
          .bind(req.source_kind.as_deref().unwrap_or("manual")).bind(req.source_id.as_deref().unwrap_or("manual"))
          .bind(req.source_type.as_deref().unwrap_or("manual")).bind(req.project_id.as_deref())
-         .bind(req.hermes_status.as_deref().unwrap_or("new")).bind(req.priority_score)
+         .bind(req.makosh_status.as_deref().unwrap_or("new")).bind(req.priority_score)
          .bind(req.area.as_deref()).bind(req.why.as_deref()).bind(req.due_at)
          .bind(req.energy_type.as_deref()).bind(req.confidentiality.as_deref().unwrap_or("private_local"))
          .bind(&tags).bind(req.linked_person_id.as_deref()).bind(req.linked_organization_id.as_deref())
@@ -1036,7 +1036,7 @@ impl TaskStore {
     }
 
     pub async fn get(&self, task_id: &str) -> Result<Option<Task>, TaskError> {
-        let row = sqlx::query("SELECT task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, hermes_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at FROM tasks WHERE task_id=$1")
+        let row = sqlx::query("SELECT task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, makosh_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at FROM tasks WHERE task_id=$1")
             .bind(task_id).fetch_optional(&self.pool).await?;
         row.map(|r| row_to_task(r).map_err(TaskError::from))
             .transpose()
@@ -1045,7 +1045,7 @@ impl TaskStore {
     pub async fn list(&self, query: &TaskListQuery) -> Result<Vec<Task>, TaskError> {
         let limit = query.limit.unwrap_or(100).clamp(1, 500);
         let rows = sqlx::query(
-            "SELECT task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, hermes_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at FROM tasks WHERE ($1::text IS NULL OR hermes_status=$1) AND ($2::text IS NULL OR project_id=$2) AND ($3::text IS NULL OR source_type=$3) ORDER BY COALESCE(priority_score,0) DESC, due_at ASC NULLS LAST, created_at DESC LIMIT $4"
+            "SELECT task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, makosh_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at FROM tasks WHERE ($1::text IS NULL OR makosh_status=$1) AND ($2::text IS NULL OR project_id=$2) AND ($3::text IS NULL OR source_type=$3) ORDER BY COALESCE(priority_score,0) DESC, due_at ASC NULLS LAST, created_at DESC LIMIT $4"
         ).bind(query.status.as_deref()).bind(query.project_id.as_deref()).bind(query.source_type.as_deref()).bind(limit)
          .fetch_all(&self.pool).await?;
         rows.into_iter()
@@ -1087,9 +1087,9 @@ impl TaskStore {
     ) -> Result<Task, TaskError> {
         let mut transaction = self.pool.begin().await?;
         let row = sqlx::query(
-            "UPDATE tasks SET title=COALESCE($2,title), description=COALESCE($3,description), hermes_status=COALESCE($4,hermes_status), priority_score=COALESCE($5,priority_score), risk_score=COALESCE($6,risk_score), readiness_score=COALESCE($7,readiness_score), area=COALESCE($8,area), why=COALESCE($9,why), outcome=COALESCE($10,outcome), due_at=COALESCE($11,due_at), waiting_reason=COALESCE($12,waiting_reason), energy_type=COALESCE($13,energy_type), confidentiality=COALESCE($14,confidentiality), tags=COALESCE($15,tags), task_metadata=COALESCE($16,task_metadata), linked_person_id=COALESCE($17,linked_person_id), linked_organization_id=COALESCE($18,linked_organization_id), completed_at=COALESCE($19,completed_at), updated_at=now() WHERE task_id=$1 RETURNING task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, hermes_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at"
+            "UPDATE tasks SET title=COALESCE($2,title), description=COALESCE($3,description), makosh_status=COALESCE($4,makosh_status), priority_score=COALESCE($5,priority_score), risk_score=COALESCE($6,risk_score), readiness_score=COALESCE($7,readiness_score), area=COALESCE($8,area), why=COALESCE($9,why), outcome=COALESCE($10,outcome), due_at=COALESCE($11,due_at), waiting_reason=COALESCE($12,waiting_reason), energy_type=COALESCE($13,energy_type), confidentiality=COALESCE($14,confidentiality), tags=COALESCE($15,tags), task_metadata=COALESCE($16,task_metadata), linked_person_id=COALESCE($17,linked_person_id), linked_organization_id=COALESCE($18,linked_organization_id), completed_at=COALESCE($19,completed_at), updated_at=now() WHERE task_id=$1 RETURNING task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, makosh_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at"
         ).bind(task_id).bind(update.title.as_deref()).bind(update.description.as_deref())
-         .bind(update.hermes_status.as_deref()).bind(update.priority_score).bind(update.risk_score).bind(update.readiness_score)
+         .bind(update.makosh_status.as_deref()).bind(update.priority_score).bind(update.risk_score).bind(update.readiness_score)
          .bind(update.area.as_deref()).bind(update.why.as_deref()).bind(update.outcome.as_deref())
          .bind(update.due_at).bind(update.waiting_reason.as_deref()).bind(update.energy_type.as_deref())
          .bind(update.confidentiality.as_deref()).bind(update.tags.as_ref()).bind(update.task_metadata.as_ref())
@@ -1147,7 +1147,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/domains/tasks/brain.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/brain.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/brain.rs`
 - Size bytes / Размер в байтах: `4716`
 - Included characters / Включено символов: `4716`
 - Truncated / Обрезано: `no`
@@ -1166,7 +1166,7 @@ pub struct TaskBrainService;
 
 impl TaskBrainService {
     pub async fn explain_task(pool: &PgPool, task_id: &str) -> Result<Value, TaskBrainError> {
-        let task = sqlx::query("SELECT task_id, title, description, source_type, hermes_status, why, outcome, due_at FROM tasks WHERE task_id=$1")
+        let task = sqlx::query("SELECT task_id, title, description, source_type, makosh_status, why, outcome, due_at FROM tasks WHERE task_id=$1")
             .bind(task_id).fetch_optional(pool).await?;
         let task = task.ok_or(TaskBrainError::NotFound)?;
 
@@ -1184,7 +1184,7 @@ impl TaskBrainService {
             "description": task.try_get::<Option<String>,_>("description").unwrap_or(None),
             "what": format!("Task: {}", task.try_get::<String,_>("title").unwrap_or_default()),
             "why": task.try_get::<Option<String>,_>("why").unwrap_or(Some("No reason recorded".into())),
-            "status": task.try_get::<String,_>("hermes_status").unwrap_or_default(),
+            "status": task.try_get::<String,_>("makosh_status").unwrap_or_default(),
             "source": task.try_get::<String,_>("source_type").unwrap_or_default(),
             "context": ctx.map(|r| json!({
                 "summary": r.summary,
@@ -1201,7 +1201,7 @@ impl TaskBrainService {
 
     pub async fn search_tasks(pool: &PgPool, query: &str) -> Result<Value, TaskBrainError> {
         let pattern = format!("%{query}%");
-        let rows = sqlx::query("SELECT task_id, title, hermes_status, priority_score, due_at FROM tasks WHERE title ILIKE $1 OR description ILIKE $1 ORDER BY COALESCE(priority_score,0) DESC LIMIT 20")
+        let rows = sqlx::query("SELECT task_id, title, makosh_status, priority_score, due_at FROM tasks WHERE title ILIKE $1 OR description ILIKE $1 ORDER BY COALESCE(priority_score,0) DESC LIMIT 20")
             .bind(&pattern).fetch_all(pool).await?;
         let items: Vec<Value> = rows
             .iter()
@@ -1209,7 +1209,7 @@ impl TaskBrainService {
                 json!({
                     "task_id": r.try_get::<String,_>("task_id").unwrap_or_default(),
                     "title": r.try_get::<String,_>("title").unwrap_or_default(),
-                    "status": r.try_get::<String,_>("hermes_status").unwrap_or_default(),
+                    "status": r.try_get::<String,_>("makosh_status").unwrap_or_default(),
                     "priority": r.try_get::<Option<f64>,_>("priority_score").unwrap_or(None),
                     "due_at": r.try_get::<Option<DateTime<Utc>>,_>("due_at").unwrap_or(None),
                 })
@@ -1226,11 +1226,11 @@ impl TaskBrainService {
             .map(|d| DateTime::from_naive_utc_and_offset(d, Utc))
             .unwrap_or(now);
 
-        let active = sqlx::query("SELECT COUNT(*) as cnt FROM tasks WHERE hermes_status IN ('new','triaged','ready','in_progress','waiting','blocked','review')")
+        let active = sqlx::query("SELECT COUNT(*) as cnt FROM tasks WHERE makosh_status IN ('new','triaged','ready','in_progress','waiting','blocked','review')")
             .fetch_one(pool).await?;
-        let overdue = sqlx::query("SELECT COUNT(*) as cnt FROM tasks WHERE due_at < $1 AND hermes_status NOT IN ('done','cancelled','archived')")
+        let overdue = sqlx::query("SELECT COUNT(*) as cnt FROM tasks WHERE due_at < $1 AND makosh_status NOT IN ('done','cancelled','archived')")
             .bind(now).fetch_one(pool).await?;
-        let high_risk = sqlx::query("SELECT task_id, title FROM tasks WHERE risk_score > 0.7 AND hermes_status NOT IN ('done','cancelled','archived') ORDER BY risk_score DESC LIMIT 5")
+        let high_risk = sqlx::query("SELECT task_id, title FROM tasks WHERE risk_score > 0.7 AND makosh_status NOT IN ('done','cancelled','archived') ORDER BY risk_score DESC LIMIT 5")
             .fetch_all(pool).await?;
 
         Ok(json!({
@@ -1257,7 +1257,7 @@ pub enum TaskBrainError {
 
 ### `backend/src/domains/tasks/candidates.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/candidates.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/candidates.rs`
 - Size bytes / Размер в байтах: `604`
 - Included characters / Включено символов: `604`
 - Truncated / Обрезано: `no`
@@ -1288,7 +1288,7 @@ pub use store::TaskCandidateStore as TaskCandidatePort;
 
 ### `backend/src/domains/tasks/candidates/constants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/candidates/constants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/candidates/constants.rs`
 - Size bytes / Размер в байтах: `1166`
 - Included characters / Включено символов: `1166`
 - Truncated / Обрезано: `no`
@@ -1316,7 +1316,7 @@ pub(crate) const OWNER_PERSONA_EXTRACTION_CONTEXT_ID: &str = "persona:owner";
 
 ### `backend/src/domains/tasks/candidates/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/candidates/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/candidates/errors.rs`
 - Size bytes / Размер в байтах: `1832`
 - Included characters / Включено символов: `1832`
 - Truncated / Обрезано: `no`
@@ -1393,7 +1393,7 @@ pub enum TaskCandidateError {
 
 ### `backend/src/domains/tasks/candidates/events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/candidates/events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/candidates/events.rs`
 - Size bytes / Размер в байтах: `2784`
 - Included characters / Включено символов: `2784`
 - Truncated / Обрезано: `no`
@@ -1491,7 +1491,7 @@ fn required_payload_string(
 
 ### `backend/src/domains/tasks/candidates/extraction.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/candidates/extraction.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/candidates/extraction.rs`
 - Size bytes / Размер в байтах: `3128`
 - Included characters / Включено символов: `3128`
 - Truncated / Обрезано: `no`
@@ -1603,7 +1603,7 @@ pub(crate) fn task_candidate_payload_from_obligation(
 
 ### `backend/src/domains/tasks/candidates/ids.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/candidates/ids.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/candidates/ids.rs`
 - Size bytes / Размер в байтах: `710`
 - Included characters / Включено символов: `710`
 - Truncated / Обрезано: `no`
@@ -1637,7 +1637,7 @@ fn fnv1a64_hex(value: &str) -> String {
 
 ### `backend/src/domains/tasks/candidates/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/candidates/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/candidates/models.rs`
 - Size bytes / Размер в байтах: `3938`
 - Included characters / Включено символов: `3938`
 - Truncated / Обрезано: `no`
@@ -1783,7 +1783,7 @@ pub(crate) struct StoredCandidateRow {
 
 ### `backend/src/domains/tasks/candidates/persistence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/candidates/persistence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/candidates/persistence.rs`
 - Size bytes / Размер в байтах: `7316`
 - Included characters / Включено символов: `7316`
 - Truncated / Обрезано: `no`
@@ -2004,7 +2004,7 @@ pub(crate) fn row_to_task_candidate(row: PgRow) -> Result<TaskCandidate, TaskCan
 
 ### `backend/src/domains/tasks/candidates/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/candidates/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/candidates/service.rs`
 - Size bytes / Размер в байтах: `2349`
 - Included characters / Включено символов: `2349`
 - Truncated / Обрезано: `no`
@@ -2087,7 +2087,7 @@ pub enum TaskCandidateReviewServiceError {
 
 ### `backend/src/domains/tasks/candidates/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/candidates/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/candidates/store.rs`
 - Size bytes / Размер в байтах: `1958`
 - Included characters / Включено символов: `1958`
 - Truncated / Обрезано: `no`
@@ -2169,7 +2169,7 @@ impl TaskCandidateStore {
 
 ### `backend/src/domains/tasks/candidates/store/list.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/candidates/store/list.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/candidates/store/list.rs`
 - Size bytes / Размер в байтах: `1047`
 - Included characters / Включено символов: `1047`
 - Truncated / Обрезано: `no`
@@ -2220,7 +2220,7 @@ pub(super) async fn list_candidates(
 
 ### `backend/src/domains/tasks/candidates/store/refresh.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/candidates/store/refresh.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/candidates/store/refresh.rs`
 - Size bytes / Размер в байтах: `7666`
 - Included characters / Включено символов: `7666`
 - Truncated / Обрезано: `no`
@@ -2484,7 +2484,7 @@ async fn upsert_suggested_candidate(
 
 ### `backend/src/domains/tasks/candidates/store/review.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/candidates/store/review.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/candidates/store/review.rs`
 - Size bytes / Размер в байтах: `12858`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2831,7 +2831,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/domains/tasks/candidates/store/task_activation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/candidates/store/task_activation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/candidates/store/task_activation.rs`
 - Size bytes / Размер в байтах: `2450`
 - Included characters / Включено символов: `2450`
 - Truncated / Обрезано: `no`
@@ -2877,7 +2877,7 @@ pub(super) async fn upsert_task_in_transaction(
             source_type,
             project_id,
             status,
-            hermes_status,
+            makosh_status,
             created_from_event_id,
             created_by_actor_id
         )
@@ -2892,7 +2892,7 @@ pub(super) async fn upsert_task_in_transaction(
             source_type = EXCLUDED.source_type,
             project_id = EXCLUDED.project_id,
             status = EXCLUDED.status,
-            hermes_status = EXCLUDED.hermes_status,
+            makosh_status = EXCLUDED.makosh_status,
             created_from_event_id = EXCLUDED.created_from_event_id,
             created_by_actor_id = EXCLUDED.created_by_actor_id,
             updated_at = now()
@@ -2917,7 +2917,7 @@ pub(super) async fn upsert_task_in_transaction(
 
 ### `backend/src/domains/tasks/candidates/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/candidates/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/candidates/validation.rs`
 - Size bytes / Размер в байтах: `982`
 - Included characters / Включено символов: `982`
 - Truncated / Обрезано: `no`
@@ -2959,7 +2959,7 @@ pub(crate) fn text_preview(value: &str, max_chars: usize) -> String {
 
 ### `backend/src/domains/tasks/command_service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/command_service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/command_service.rs`
 - Size bytes / Размер в байтах: `26037`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3019,7 +3019,7 @@ impl TaskCommandService {
                     "task_id": task_id,
                     "title": update.title.as_deref(),
                     "description": update.description.as_deref(),
-                    "hermes_status": update.hermes_status.as_deref(),
+                    "makosh_status": update.makosh_status.as_deref(),
                     "priority_score": update.priority_score,
                     "risk_score": update.risk_score,
                     "readiness_score": update.readiness_score,
@@ -3183,7 +3183,7 @@ impl TaskCommandService {
             task.project_id.is_some(),
         );
         let next_action = TaskIntelligenceService::suggest_next_action(
-            &task.hermes_status,
+            &task.makosh_status,
             false,
             false,
             task.waiting_reason.as_deref(),
@@ -3317,7 +3317,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/domains/tasks/core.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/core.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/core.rs`
 - Size bytes / Размер в байтах: `935`
 - Included characters / Включено символов: `935`
 - Truncated / Обрезано: `no`
@@ -3353,7 +3353,7 @@ pub use subtasks::{TaskSubtask, TaskSubtaskStore};
 
 ### `backend/src/domains/tasks/core/checklists.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/core/checklists.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/core/checklists.rs`
 - Size bytes / Размер в байтах: `3319`
 - Included characters / Включено символов: `3319`
 - Truncated / Обрезано: `no`
@@ -3481,7 +3481,7 @@ impl TaskChecklistStore {
 
 ### `backend/src/domains/tasks/core/context_packs.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/tasks/core/context_packs.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/tasks/core/context_packs.rs`
 - Size bytes / Размер в байтах: `3523`
 - Included characters / Включено символов: `3523`
 - Truncated / Обрезано: `no`

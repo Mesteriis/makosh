@@ -4,10 +4,10 @@ use axum::http::StatusCode;
 use serde_json::json;
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::integrations::telegram::client::commands;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::integrations::telegram::client::commands;
+use makosh_hub_backend::platform::storage::database::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_ok, get_request_with_token, json_body, unique_suffix,
 };
@@ -26,7 +26,7 @@ async fn telegram_commands_endpoint_filters_by_chat_and_kind() {
     let other_chat_id = format!("command-filter-other-{suffix}");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -123,7 +123,7 @@ async fn insert_command(
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({"source": "telegram_commands_query_filters"}),
         json!({"provider_chat_id": provider_chat_id}),
         json!({"source": "test"}),

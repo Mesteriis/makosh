@@ -1,5 +1,5 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
-use hermes_communications_api::commands::{
+use makosh_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
+use makosh_communications_api::commands::{
     CommunicationProviderCommand, ProviderCommandQueuePort, ProviderCommandQueuePortError,
 };
 use std::sync::Arc;
@@ -18,12 +18,12 @@ use crate::integrations::mail::read_state::{
     EmailProviderMessageMutation, EmailReadStateError, LiveEmailReadStateService,
 };
 use crate::vault::HostVault;
-use hermes_communications_api::mail_resources::{
+use makosh_communications_api::mail_resources::{
     MailProviderResourceKind, MailProviderSemanticRole,
 };
-use hermes_communications_postgres::errors::CommunicationIngestionError;
-use hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore;
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_postgres::errors::CommunicationIngestionError;
+use makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore;
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
 
@@ -375,7 +375,7 @@ pub enum MailProviderCommandWorkerError {
 #[cfg(test)]
 mod tests {
     use chrono::{Duration, Utc};
-    use hermes_backend_testkit::context::TestContext;
+    use makosh_backend_testkit::context::TestContext;
     use serde_json::json;
     use tempfile::tempdir;
 
@@ -388,15 +388,15 @@ mod tests {
     use crate::integrations::mail::read_state::{
         EmailProviderMessageMutation, EmailReadStateError,
     };
-    use hermes_communications_api::accounts::{
+    use makosh_communications_api::accounts::{
         CommunicationProviderKind, NewProviderAccount, ProviderAccount,
     };
-    use hermes_communications_api::commands::NewCommunicationProviderCommand;
-    use hermes_communications_api::mail_resources::{
+    use makosh_communications_api::commands::NewCommunicationProviderCommand;
+    use makosh_communications_api::mail_resources::{
         MailProviderResourceKind, MailProviderSemanticRole,
     };
-    use hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore;
-    use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
+    use makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore;
+    use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
 
     use crate::vault::HostVault;
     use crate::vault::models::HostVaultConfig;

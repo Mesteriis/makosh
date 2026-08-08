@@ -24,14 +24,14 @@ make -C backend generate-release-signing-key \
 make -C backend build-distribution-release \
   RELEASE_DISTRIBUTION_INPUT=/absolute/distribution-release.json \
   RELEASE_SIGNING_KEY=/absolute/release-p256.pem \
-  RELEASE_TRUST_ROOT=/absolute/hermes-release-trust-root.pb \
-  SIGNED_DISTRIBUTION_MANIFEST=/absolute/hermes-signed-distribution-manifest.pb \
-  DISTRIBUTION_BUNDLE=/absolute/hermes-distribution
+  RELEASE_TRUST_ROOT=/absolute/makosh-release-trust-root.pb \
+  SIGNED_DISTRIBUTION_MANIFEST=/absolute/makosh-signed-distribution-manifest.pb \
+  DISTRIBUTION_BUNDLE=/absolute/makosh-distribution
 
 make -C backend package-local-macos \
-  RELEASE_TRUST_ROOT=/absolute/hermes-release-trust-root.pb \
-  SIGNED_DISTRIBUTION_MANIFEST=/absolute/hermes-signed-distribution-manifest.pb \
-  DISTRIBUTION_BUNDLE=/absolute/hermes-distribution
+  RELEASE_TRUST_ROOT=/absolute/makosh-release-trust-root.pb \
+  SIGNED_DISTRIBUTION_MANIFEST=/absolute/makosh-signed-distribution-manifest.pb \
+  DISTRIBUTION_BUNDLE=/absolute/makosh-distribution
 ```
 
 `package-local-macos` first stages the exact signed resources and Kernel
@@ -39,7 +39,7 @@ sidecar, then runs the frontend build and Tauri app bundle with no Apple
 identity. It adds an ad-hoc code signature only after Tauri has assembled the
 bundle; this is local code integrity, not a Developer-ID certificate. Tauri
 consumes the target-qualified staged input and packages the runtime sidecar as
-`Contents/MacOS/hermes-kernel`, which is also the exact path the Kernel loader
+`Contents/MacOS/makosh-kernel`, which is also the exact path the Kernel loader
 and optional Apple-release verifier require. Keep the P-256 private key
 owner-readable and outside Git. Its public
 verification key is embedded into `ReleaseTrustRootV1`; key rotation remains
@@ -50,7 +50,7 @@ specifically for a future Apple Developer-ID-signed, notarized bundle.
 
 `verify-macos-release-manifest.mjs` is optional release hardening for a signed
 Tauri application bundle. When used, it checks the packaged
-and the packaged `hermes-kernel-aarch64-apple-darwin` sidecar on an Apple
+and the packaged `makosh-kernel-aarch64-apple-darwin` sidecar on an Apple
 Silicon macOS release host. The manifest requires the expected Apple Team ID,
 the exact SHA-256 digest of the sidecar and the exact SHA-256 digest of the
 binary `ReleaseTrustRootV1` resource, signed `DistributionManifestV1` envelope
@@ -77,9 +77,9 @@ artifacts with:
 make -C backend build-distribution-release \
   RELEASE_DISTRIBUTION_INPUT=/absolute/distribution-release.json \
   RELEASE_SIGNING_KEY=/absolute/release-p256.pem \
-  RELEASE_TRUST_ROOT=/absolute/hermes-release-trust-root.pb \
-  SIGNED_DISTRIBUTION_MANIFEST=/absolute/hermes-signed-distribution-manifest.pb \
-  DISTRIBUTION_BUNDLE=/absolute/hermes-distribution
+  RELEASE_TRUST_ROOT=/absolute/makosh-release-trust-root.pb \
+  SIGNED_DISTRIBUTION_MANIFEST=/absolute/makosh-signed-distribution-manifest.pb \
+  DISTRIBUTION_BUNDLE=/absolute/makosh-distribution
 ```
 
 For a new offline/local release authority, generate the P-256 signing key once

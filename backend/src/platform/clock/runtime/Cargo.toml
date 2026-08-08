@@ -1,5 +1,5 @@
 [package]
-name = "hermes-clock-runtime"
+name = "makosh-clock-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,10 +7,10 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "clock"
 surface = "implementation"
 
 [dependencies]
-hermes-clock-protocol = { path = "../protocol" }
+makosh-clock-protocol = { path = "../protocol" }

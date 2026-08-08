@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/domains/settings/components/SignalHubOperationsTab.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/SignalHubOperationsTab.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/SignalHubOperationsTab.vue`
 - Size bytes / Размер в байтах: `14296`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -99,7 +99,7 @@ const replayTargetConsumers = computed(() => props.state.replayTargetConsumers.v
       <form class="policy-form" @submit.prevent="state.handleCreateConnection">
         <label>
           <span>{{ t('Source') }}</span>
-          <select v-model="state.connectionSourceCode.value" class="hermes-select-control">
+          <select v-model="state.connectionSourceCode.value" class="makosh-select-control">
             <option v-for="source in connectionCapableSources" :key="source.code" :value="source.code">
               {{ source.display_name }}
             </option>
@@ -107,13 +107,13 @@ const replayTargetConsumers = computed(() => props.state.replayTargetConsumers.v
         </label>
         <label>
           <span>{{ t('Display Name') }}</span>
-          <input v-model="state.connectionDisplayName.value" class="hermes-input-control" type="text" :placeholder="t('Connection display name')" />
+          <input v-model="state.connectionDisplayName.value" class="makosh-input-control" type="text" :placeholder="t('Connection display name')" />
         </label>
         <label>
           <span>{{ t('Profile') }}</span>
-          <input v-model="state.connectionProfile.value" class="hermes-input-control" type="text" :placeholder="t('Connection profile')" />
+          <input v-model="state.connectionProfile.value" class="makosh-input-control" type="text" :placeholder="t('Connection profile')" />
         </label>
-        <button type="submit" class="hermes-btn" :disabled="state.isCreatingConnection.value">
+        <button type="submit" class="makosh-btn" :disabled="state.isCreatingConnection.value">
           <Icon icon="tabler:plug-connected" />
           {{ state.isCreatingConnection.value ? t('Creating') : t('Create Connection') }}
         </button>
@@ -133,11 +133,11 @@ const replayTargetConsumers = computed(() => props.state.replayTargetConsumers.v
           </div>
           <b class="signal-pill" :data-tone="statusTone(connection.status)">{{ connection.status }}</b>
           <div class="runtime-actions">
-            <button type="button" class="hermes-btn hermes-btn--outline hermes-btn--compact" :disabled="state.isUpdatingConnection.value || connection.status === 'connected'" @click="state.handleSetConnectionStatus(connection.id, 'connected')">{{ t('Connect') }}</button>
-            <button type="button" class="hermes-btn hermes-btn--outline hermes-btn--compact" :disabled="state.isUpdatingConnection.value || connection.status === 'paused'" @click="state.handleSetConnectionStatus(connection.id, 'paused')">{{ t('Pause') }}</button>
-            <button type="button" class="hermes-btn hermes-btn--outline hermes-btn--compact" :disabled="state.isUpdatingConnection.value || connection.status === 'muted'" @click="state.handleSetConnectionStatus(connection.id, 'muted')">{{ t('Mute') }}</button>
-            <button type="button" class="hermes-btn hermes-btn--outline hermes-btn--compact" :disabled="state.isUpdatingConnection.value || connection.status === 'disabled'" @click="state.handleSetConnectionStatus(connection.id, 'disabled')">{{ t('Disable') }}</button>
-            <button type="button" class="hermes-btn hermes-btn--outline hermes-btn--compact" :disabled="state.isUpdatingConnection.value || connection.status === 'removed'" @click="state.handleRemoveConnection(connection.id)">{{ t('Remove') }}</button>
+            <button type="button" class="makosh-btn makosh-btn--outline makosh-btn--compact" :disabled="state.isUpdatingConnection.value || connection.status === 'connected'" @click="state.handleSetConnectionStatus(connection.id, 'connected')">{{ t('Connect') }}</button>
+            <button type="button" class="makosh-btn makosh-btn--outline makosh-btn--compact" :disabled="state.isUpdatingConnection.value || connection.status === 'paused'" @click="state.handleSetConnectionStatus(connection.id, 'paused')">{{ t('Pause') }}</button>
+            <button type="button" class="makosh-btn makosh-btn--outline makosh-btn--compact" :disabled="state.isUpdatingConnection.value || connection.status === 'muted'" @click="state.handleSetConnectionStatus(connection.id, 'muted')">{{ t('Mute') }}</button>
+            <button type="button" class="makosh-btn makosh-btn--outline makosh-btn--compact" :disabled="state.isUpdatingConnection.value || connection.status === 'disabled'" @click="state.handleSetConnectionStatus(connection.id, 'disabled')">{{ t('Disable') }}</button>
+            <button type="button" class="makosh-btn makosh-btn--outline makosh-btn--compact" :disabled="state.isUpdatingConnection.value || connection.status === 'removed'" @click="state.handleRemoveConnection(connection.id)">{{ t('Remove') }}</button>
           </div>
         </div>
       </div>
@@ -159,10 +159,10 @@ const replayTargetConsumers = computed(() => props.state.replayTargetConsumers.v
         </div>
         <b class="signal-pill" :data-tone="runtimeTone(runtime.state)">{{ runtime.state }}</b>
         <div class="runtime-actions">
-          <button type="button" class="hermes-btn hermes-btn--outline hermes-btn--compact" :disabled="state.isUpdatingRuntime.value || runtime.state === 'running'" @click="state.handleSetRuntimeState(runtime, 'running')">{{ t('Run') }}</button>
-          <button type="button" class="hermes-btn hermes-btn--outline hermes-btn--compact" :disabled="state.isUpdatingRuntime.value || runtime.state === 'paused'" @click="state.handleSetRuntimeState(runtime, 'paused')">{{ t('Pause') }}</button>
-          <button type="button" class="hermes-btn hermes-btn--outline hermes-btn--compact" :disabled="state.isUpdatingRuntime.value || runtime.state === 'muted'" @click="state.handleSetRuntimeState(runtime, 'muted')">{{ t('Mute') }}</button>
-          <button type="button" class="hermes-btn hermes-btn--outline hermes-btn--compact" :disabled="state.isUpdatingRuntime.value || runtime.state === 'stopped'" @click="state.handleSetRuntimeState(runtime, 'stopped')">{{ t('Stop') }}</button>
+          <button type="button" class="makosh-btn makosh-btn--outline makosh-btn--compact" :disabled="state.isUpdatingRuntime.value || runtime.state === 'running'" @click="state.handleSetRuntimeState(runtime, 'running')">{{ t('Run') }}</button>
+          <button type="button" class="makosh-btn makosh-btn--outline makosh-btn--compact" :disabled="state.isUpdatingRuntime.value || runtime.state === 'paused'" @click="state.handleSetRuntimeState(runtime, 'paused')">{{ t('Pause') }}</button>
+          <button type="button" class="makosh-btn makosh-btn--outline makosh-btn--compact" :disabled="state.isUpdatingRuntime.value || runtime.state === 'muted'" @click="state.handleSetRuntimeState(runtime, 'muted')">{{ t('Mute') }}</button>
+          <button type="button" class="makosh-btn makosh-btn--outline makosh-btn--compact" :disabled="state.isUpdatingRuntime.value || runtime.state === 'stopped'" @click="state.handleSetRuntimeState(runtime, 'stopped')">{{ t('Stop') }}</button>
         </div>
       </div>
     </div>
@@ -184,7 +184,7 @@ const replayTargetConsumers = computed(() => props.state.replayTargetConsumers.v
         <b class="signal-pill" :data-tone="healthTone(item.level)">{{ item.level }}</b>
         <div class="runtime-actions">
           <small>{{ item.next_retry_at ? `${t('Retry')} ${item.next_retry_at}` : item.last_ok_at ?? item.last_failure_at ?? t('No heartbeat') }}</small>
-          <button type="button" class="hermes-btn hermes-btn--outline hermes-btn--compact" :disabled="state.isRunningHealthCheck.value" @click="state.handleRunHealthCheck(item.source_code, item.connection_id)">
+          <button type="button" class="makosh-btn makosh-btn--outline makosh-btn--compact" :disabled="state.isRunningHealthCheck.value" @click="state.handleRunHealthCheck(item.source_code, item.connection_id)">
             {{ state.isRunningHealthCheck.value ? t('Checking') : t('Run Check') }}
           </button>
         </div>
@@ -197,7 +197,7 @@ const replayTargetConsumers = computed(() => props.state.replayTargetConsumers.v
       <form class="policy-form" @submit.prevent="state.handleCreateReplayRequest">
         <label>
           <span>{{ t('Source') }}</span>
-          <select v-model="state.replaySourceCode.value" class="hermes-select-control">
+          <select v-model="state.replaySourceCode.value" class="makosh-select-control">
             <option value="">{{ t('All sources') }}</option>
             <option v-for="source in sources.filter((item) => item.supports_replay)" :key="source.code" :value="source.code">
               {{ source.display_name }}
@@ -206,7 +206,7 @@ const replayTargetConsumers = computed(() => props.state.replayTargetConsumers.v
         </label>
         <label>
           <span>{{ t('Connection') }}</span>
-          <select v-model="state.replayConnectionId.value" class="hermes-select-control">
+          <select v-model="state.replayConnectionId.value" class="makosh-select-control">
             <option value="">{{ t('All source connections') }}</option>
             <option v-for="connection in replayScopedConnections" :key="connection.id" :value="connection.id">
               {{ connection.display_name }} / {{ connection.status }}
@@ -215,34 +215,34 @@ const replayTargetConsumers = computed(() => props.state.replayTargetConsumers.v
         </label>
         <label>
           <span>{{ t('Event Pattern') }}</span>
-          <input v-model="state.replayEventPattern.value" class="hermes-input-control" type="text" :placeholder="t('signal.raw.telegram.*')" />
+          <input v-model="state.replayEventPattern.value" class="makosh-input-control" type="text" :placeholder="t('signal.raw.telegram.*')" />
         </label>
         <label>
           <span>{{ t('Selector Mode') }}</span>
-          <select v-model="state.replaySelectorMode.value" class="hermes-select-control">
+          <select v-model="state.replaySelectorMode.value" class="makosh-select-control">
             <option value="all">{{ t('Whole pattern') }}</option>
             <option value="position">{{ t('Event log position') }}</option>
             <option value="time">{{ t('Occurred time') }}</option>
           </select>
         </label>
         <div v-if="state.replaySelectorMode.value === 'position'" class="replay-selector-grid">
-          <label><span>{{ t('From Position') }}</span><input v-model="state.replayFromPosition.value" class="hermes-input-control" type="text" inputmode="numeric" placeholder="10" /></label>
-          <label><span>{{ t('To Position') }}</span><input v-model="state.replayToPosition.value" class="hermes-input-control" type="text" inputmode="numeric" placeholder="20" /></label>
+          <label><span>{{ t('From Position') }}</span><input v-model="state.replayFromPosition.value" class="makosh-input-control" type="text" inputmode="numeric" placeholder="10" /></label>
+          <label><span>{{ t('To Position') }}</span><input v-model="state.replayToPosition.value" class="makosh-input-control" type="text" inputmode="numeric" placeholder="20" /></label>
         </div>
         <div v-else-if="state.replaySelectorMode.value === 'time'" class="replay-selector-grid">
-          <label><span>{{ t('From Time') }}</span><input v-model="state.replayFromTime.value" class="hermes-input-control" type="text" placeholder="2026-06-23T00:00:00Z" /></label>
-          <label><span>{{ t('To Time') }}</span><input v-model="state.replayToTime.value" class="hermes-input-control" type="text" placeholder="2026-06-23T01:00:00Z" /></label>
+          <label><span>{{ t('From Time') }}</span><input v-model="state.replayFromTime.value" class="makosh-input-control" type="text" placeholder="2026-06-23T00:00:00Z" /></label>
+          <label><span>{{ t('To Time') }}</span><input v-model="state.replayToTime.value" class="makosh-input-control" type="text" placeholder="2026-06-23T01:00:00Z" /></label>
         </div>
         <label>
           <span>{{ t('Target Consumer') }}</span>
-          <select v-model="state.replayTargetConsumer.value" class="hermes-select-control">
+          <select v-model="state.replayTargetConsumer.value" class="makosh-select-control">
             <option value="">{{ t('All downstream consumers') }}</option>
             <option v-for="runtimeKind in replayTargetConsumers" :key="runtimeKind" :value="runtimeKind">{{ runtimeKind }}</option>
           </select>
         </label>
         <label>
           <span>{{ t('Target Projection') }}</span>
-          <select v-model="state.replayTargetProjection.value" class="hermes-select-control">
+          <select v-model="state.replayTargetProjection.value" class="makosh-select-control">
             <option value="">{{ t('No projection rebuild') }}</option>
             <option value="communication_messages">{{ t('Communications accepted-signal projection') }}</option>
             <option value="person_derived_evidence">{{ t('Person derived-evidence projection') }}</option>
@@ -253,7 +253,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/settings/components/SignalHubProfilesPoliciesTab.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/SignalHubProfilesPoliciesTab.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/SignalHubProfilesPoliciesTab.vue`
 - Size bytes / Размер в байтах: `13182`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -287,7 +287,7 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
           <span>{{ t('Profile Code') }}</span>
           <input
             v-model="state.profileCodeInput.value"
-            class="hermes-input-control"
+            class="makosh-input-control"
             type="text"
             :placeholder="t('quiet_hours')"
             :disabled="Boolean(selectedProfile)"
@@ -297,7 +297,7 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
           <span>{{ t('Display Name') }}</span>
           <input
             v-model="state.profileDisplayNameInput.value"
-            class="hermes-input-control"
+            class="makosh-input-control"
             type="text"
             :placeholder="t('Quiet Hours')"
             :disabled="selectedProfile?.is_system"
@@ -307,7 +307,7 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
           <span>{{ t('Description') }}</span>
           <input
             v-model="state.profileDescriptionInput.value"
-            class="hermes-input-control"
+            class="makosh-input-control"
             type="text"
             :placeholder="t('What this profile changes')"
             :disabled="selectedProfile?.is_system"
@@ -316,7 +316,7 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
         <div class="replay-selector-grid">
           <label>
             <span>{{ t('Scope') }}</span>
-            <select v-model="state.profilePolicyScope.value" class="hermes-select-control" :disabled="selectedProfile?.is_system">
+            <select v-model="state.profilePolicyScope.value" class="makosh-select-control" :disabled="selectedProfile?.is_system">
               <option value="event_pattern">{{ t('Event Pattern') }}</option>
               <option value="source">{{ t('Source') }}</option>
               <option value="connection">{{ t('Connection') }}</option>
@@ -325,7 +325,7 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
           </label>
           <label>
             <span>{{ t('Mode') }}</span>
-            <select v-model="state.profilePolicyMode.value" class="hermes-select-control" :disabled="selectedProfile?.is_system">
+            <select v-model="state.profilePolicyMode.value" class="makosh-select-control" :disabled="selectedProfile?.is_system">
               <option value="paused">{{ t('Pause') }}</option>
               <option value="muted">{{ t('Mute') }}</option>
               <option value="disabled">{{ t('Disable') }}</option>
@@ -335,7 +335,7 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
         </div>
         <label v-if="state.profilePolicyScope.value === 'source' || state.profilePolicyScope.value === 'connection'">
           <span>{{ t('Source') }}</span>
-          <select v-model="state.profilePolicySourceCode.value" class="hermes-select-control" :disabled="selectedProfile?.is_system">
+          <select v-model="state.profilePolicySourceCode.value" class="makosh-select-control" :disabled="selectedProfile?.is_system">
             <option
               v-for="source in state.profilePolicyScope.value === 'connection' ? connectionCapableSources : sources"
               :key="source.code"
@@ -347,7 +347,7 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
         </label>
         <label v-if="state.profilePolicyScope.value === 'connection'">
           <span>{{ t('Connection') }}</span>
-          <select v-model="state.profilePolicyConnectionId.value" class="hermes-select-control" :disabled="selectedProfile?.is_system">
+          <select v-model="state.profilePolicyConnectionId.value" class="makosh-select-control" :disabled="selectedProfile?.is_system">
             <option value="">{{ t('Select connection') }}</option>
             <option v-for="connection in profileScopeConnections" :key="connection.id" :value="connection.id">
               {{ connection.display_name }} / {{ connection.status }}
@@ -358,7 +358,7 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
           <span>{{ t('Pattern') }}</span>
           <input
             v-model="state.profilePolicyEventPattern.value"
-            class="hermes-input-control"
+            class="makosh-input-control"
             type="text"
             placeholder="signal.raw.*"
             :disabled="selectedProfile?.is_system"
@@ -368,14 +368,14 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
           <span>{{ t('Reason') }}</span>
           <input
             v-model="state.profilePolicyReason.value"
-            class="hermes-input-control"
+            class="makosh-input-control"
             type="text"
             :placeholder="t('Profile policy reason')"
             :disabled="selectedProfile?.is_system"
           />
         </label>
         <div class="runtime-actions">
-          <button type="button" class="hermes-btn hermes-btn--outline hermes-btn--compact" :disabled="selectedProfile?.is_system" @click="state.addDraftProfilePolicy">
+          <button type="button" class="makosh-btn makosh-btn--outline makosh-btn--compact" :disabled="selectedProfile?.is_system" @click="state.addDraftProfilePolicy">
             <Icon icon="tabler:list-plus" />
             {{ t('Add Policy') }}
           </button>
@@ -397,7 +397,7 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
               <button
                 v-if="!selectedProfile?.is_system"
                 type="button"
-                class="hermes-btn hermes-btn--outline hermes-btn--compact"
+                class="makosh-btn makosh-btn--outline makosh-btn--compact"
                 @click="state.removeDraftProfilePolicy(index)"
               >
                 {{ t('Remove') }}
@@ -406,7 +406,7 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
           </template>
         </div>
         <div class="runtime-actions">
-          <button type="submit" class="hermes-btn" :disabled="state.isSavingProfile.value || selectedProfile?.is_system">
+          <button type="submit" class="makosh-btn" :disabled="state.isSavingProfile.value || selectedProfile?.is_system">
             <Icon icon="tabler:device-floppy" />
             {{
               selectedProfile
@@ -414,13 +414,13 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
                 : state.isSavingProfile.value ? t('Creating') : t('Create Profile')
             }}
           </button>
-          <button type="button" class="hermes-btn hermes-btn--outline" @click="state.resetProfileEditor">
+          <button type="button" class="makosh-btn makosh-btn--outline" @click="state.resetProfileEditor">
             {{ t('Reset') }}
           </button>
           <button
             v-if="selectedProfile && !selectedProfile.is_system"
             type="button"
-            class="hermes-btn hermes-btn--outline"
+            class="makosh-btn makosh-btn--outline"
             :disabled="state.isRemovingProfile.value"
             @click="state.handleRemoveProfile(selectedProfile.code)"
           >
@@ -454,7 +454,7 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
             <small class="profile-description">
               {{ profile.source_policies.slice(0, 2).map((policy) => profilePolicyLabel(t, connections, policy)).join(' • ') || t('No profile policies') }}
             </small>
-            <button type="button" class="hermes-btn hermes-btn--outline hermes-btn--compact" :disabled="state.isApplyingProfile.value || profile.is_active" @click.stop="state.handleApplyProfile(profile.code)">
+            <button type="button" class="makosh-btn makosh-btn--outline makosh-btn--compact" :disabled="state.isApplyingProfile.value || profile.is_active" @click.stop="state.handleApplyProfile(profile.code)">
               {{ profile.is_active ? t('Applied') : t('Apply') }}
             </button>
           </div>
@@ -467,7 +467,7 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
     <form class="policy-form" @submit.prevent="state.handleCreatePolicy">
       <label>
         <span>{{ t('Scope') }}</span>
-        <select v-model="state.policyScope.value" class="hermes-select-control">
+        <select v-model="state.policyScope.value" class="makosh-select-control">
           <option value="event_pattern">{{ t('Event Pattern') }}</option>
           <option value="source">{{ t('Source') }}</option>
           <option value="connection">{{ t('Connection') }}</option>
@@ -476,7 +476,7 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
       </label>
       <label>
         <span>{{ t('Mode') }}</span>
-        <select v-model="state.policyMode.value" class="hermes-select-control">
+        <select v-model="state.policyMode.value" class="makosh-select-control">
           <option value="paused">{{ t('Pause') }}</option>
           <option value="muted">{{ t('Mute') }}</option>
           <option value="disabled">{{ t('Disable') }}</option>
@@ -485,19 +485,19 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
       </label>
       <label v-if="state.policyScope.value === 'source'">
         <span>{{ t('Source') }}</span>
-        <select v-model="state.policySourceCode.value" class="hermes-select-control">
+        <select v-model="state.policySourceCode.value" class="makosh-select-control">
           <option v-for="source in sources" :key="source.code" :value="source.code">{{ source.display_name }}</option>
         </select>
       </label>
       <label v-if="state.policyScope.value === 'connection'">
         <span>{{ t('Source') }}</span>
-        <select v-model="state.policySourceCode.value" class="hermes-select-control">
+        <select v-model="state.policySourceCode.value" class="makosh-select-control">
           <option v-for="source in connectionCapableSources" :key="source.code" :value="source.code">{{ source.display_name }}</option>
         </select>
       </label>
       <label v-if="state.policyScope.value === 'connection'">
         <span>{{ t('Connection') }}</span>
-        <select v-model="state.policyConnectionId.value" class="hermes-select-control">
+        <select v-model="state.policyConnectionId.value" class="makosh-select-control">
           <option value="">{{ t('Select connection') }}</option>
           <option v-for="connection in policyScopeConnections" :key="connection.id" :value="connection.id">
             {{ connection.display_name }} / {{ connection.status }}
@@ -506,22 +506,22 @@ const policyScopeConnections = computed(() => props.state.policyScopeConnections
       </label>
       <label v-if="state.policyScope.value === 'event_pattern'">
         <span>{{ t('Pattern') }}</span>
-        <input v-model="state.policyEventPattern.value" class="hermes-input-control" type="text" placeholder="signal.raw.*" />
+        <input v-model="state.policyEventPattern.value" class="makosh-input-control" type="text" placeholder="signal.raw.*" />
       </label>
       <label>
         <span>{{ t('Reason') }}</span>
-        <input v-model="state.policyReason.value" class="hermes-input-control" type="text" :placeholder="t('Policy reason')" />
+        <input v-model="state.policyReason.value" class="makosh-input-control" type="text" :placeholder="t('Policy reason')" />
       </label>
-      <button type="submit" class="hermes-btn" :disabled="state.isCreatingPolicy.value || state.isUpdatingSignalControls.value">
+      <button type="submit" class="makosh-btn" :disabled="state.isCreatingPolicy.value || state.isUpdatingSignalControls.value">
         <Icon icon="tabler:shield-plus" />
         {{ state.isCreatingPolicy.value || state.isUpdatingSignalControls.value ? t('Saving') : t('Create Policy') }}
-   
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `frontend/src/domains/settings/components/SignalHubSettings.css`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/SignalHubSettings.css`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/SignalHubSettings.css`
 - Size bytes / Размер в байтах: `7501`
 - Included characters / Включено символов: `7501`
 - Truncated / Обрезано: `no`
@@ -582,7 +582,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 .signal-table-row.selected { border-color: var(--hh-accent); }
 .signal-table-main { display: grid; grid-template-columns: 18px minmax(0, 1fr); align-items: center; gap: 10px; min-width: 0; }
 .signal-detail-text { line-height: 1.4; }
-.signal-detail-text--bad { color: var(--hermes-danger, #f87171) !important; }
+.signal-detail-text--bad { color: var(--makosh-danger, #f87171) !important; }
 .signal-pill { border-radius: 999px; font-size: 10px; font-weight: 760; line-height: 1; padding: 6px 8px; text-transform: uppercase; }
 .signal-pill[data-tone='good'] { background: rgba(34, 197, 94, 0.12); color: #4ade80; }
 .signal-pill[data-tone='warn'] { background: rgba(245, 158, 11, 0.12); color: #fbbf24; }
@@ -598,7 +598,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/settings/components/SignalHubSettings.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/SignalHubSettings.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/SignalHubSettings.vue`
 - Size bytes / Размер в байтах: `2961`
 - Included characters / Включено символов: `2961`
 - Truncated / Обрезано: `no`
@@ -626,7 +626,7 @@ const state = useSignalHubSettingsController()
         </div>
         <button
           type="button"
-          class="hermes-btn hermes-btn--outline"
+          class="makosh-btn makosh-btn--outline"
           :disabled="state.isRestoringFixture.value"
           @click="state.handleRestoreFixture"
         >
@@ -680,7 +680,7 @@ const state = useSignalHubSettingsController()
 
 ### `frontend/src/domains/settings/components/SignalHubSourcesTab.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/SignalHubSourcesTab.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/SignalHubSourcesTab.vue`
 - Size bytes / Размер в байтах: `6477`
 - Included characters / Включено символов: `6477`
 - Truncated / Обрезано: `no`
@@ -718,11 +718,11 @@ const fixtureSources = computed(() => props.state.fixtureSources.value)
       <div class="source-toolbar">
         <input
           v-model="state.sourceSearch"
-          class="hermes-input-control"
+          class="makosh-input-control"
           type="search"
           :placeholder="t('Search sources')"
         />
-        <select v-model="state.sourceCategory" class="hermes-select-control">
+        <select v-model="state.sourceCategory" class="makosh-select-control">
           <option v-for="category in categories" :key="category" :value="category">
             {{ category === 'all' ? t('All') : category }}
           </option>
@@ -813,7 +813,7 @@ const fixtureSources = computed(() => props.state.fixtureSources.value)
       <div class="runtime-actions">
         <button
           type="button"
-          class="hermes-btn hermes-btn--outline hermes-btn--compact"
+          class="makosh-btn makosh-btn--outline makosh-btn--compact"
           :disabled="state.isUpdatingSignalControls.value"
           @click="state.handleEnableSource(selectedSource.code)"
         >
@@ -822,7 +822,7 @@ const fixtureSources = computed(() => props.state.fixtureSources.value)
         </button>
         <button
           type="button"
-          class="hermes-btn hermes-btn--outline hermes-btn--compact"
+          class="makosh-btn makosh-btn--outline makosh-btn--compact"
           :disabled="state.isUpdatingSignalControls.value"
           @click="state.handleDisableSource(selectedSource.code)"
         >
@@ -837,7 +837,7 @@ const fixtureSources = computed(() => props.state.fixtureSources.value)
       >
         <label>
           <span>{{ t('Fixture Signal') }}</span>
-          <select v-model="state.fixtureSignalId.value" class="hermes-select-control">
+          <select v-model="state.fixtureSignalId.value" class="makosh-select-control">
             <option
               v-for="fixture in fixtureSources"
               :key="fixture.fixture_id"
@@ -847,7 +847,7 @@ const fixtureSources = computed(() => props.state.fixtureSources.value)
             </option>
           </select>
         </label>
-        <button type="submit" class="hermes-btn" :disabled="state.isEmittingFixture.value">
+        <button type="submit" class="makosh-btn" :disabled="state.isEmittingFixture.value">
           <Icon icon="tabler:test-pipe" />
           {{ state.isEmittingFixture.value ? t('Emitting') : t('Emit Fixture') }}
         </button>
@@ -868,7 +868,7 @@ const fixtureSources = computed(() => props.state.fixtureSources.value)
 
 ### `frontend/src/domains/settings/components/appearance/AccentPicker.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/appearance/AccentPicker.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/appearance/AccentPicker.vue`
 - Size bytes / Размер в байтах: `2355`
 - Included characters / Включено символов: `2355`
 - Truncated / Обрезано: `no`
@@ -993,7 +993,7 @@ const labels: Record<AccentColorId, string> = {
 
 ### `frontend/src/domains/settings/components/appearance/AppearanceHeader.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/appearance/AppearanceHeader.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/appearance/AppearanceHeader.vue`
 - Size bytes / Размер в байтах: `1653`
 - Included characters / Включено символов: `1653`
 - Truncated / Обрезано: `no`
@@ -1020,7 +1020,7 @@ defineEmits<{
 			<p>{{ description }}</p>
 		</div>
 			<div class="appearance-settings-actions">
-				<button type="button" class="hermes-btn hermes-btn--outline" @click="$emit('reset')">
+				<button type="button" class="makosh-btn makosh-btn--outline" @click="$emit('reset')">
 					Default
 				</button>
 				<div class="appearance-save-status">
@@ -1085,7 +1085,7 @@ defineEmits<{
 
 ### `frontend/src/domains/settings/components/appearance/BackgroundPicker.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/appearance/BackgroundPicker.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/appearance/BackgroundPicker.vue`
 - Size bytes / Размер в байтах: `3556`
 - Included characters / Включено символов: `3556`
 - Truncated / Обрезано: `no`
@@ -1223,7 +1223,7 @@ const labels: Record<ShellBackgroundId, string> = {
 
 ### `frontend/src/domains/settings/components/appearance/SpacingDensityControl.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/appearance/SpacingDensityControl.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/appearance/SpacingDensityControl.vue`
 - Size bytes / Размер в байтах: `1790`
 - Included characters / Включено символов: `1790`
 - Truncated / Обрезано: `no`
@@ -1328,7 +1328,7 @@ const labels: Record<SpacingDensity, string> = {
 
 ### `frontend/src/domains/settings/components/appearance/ThemeRangeControl.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/appearance/ThemeRangeControl.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/appearance/ThemeRangeControl.vue`
 - Size bytes / Размер в байтах: `1732`
 - Included characters / Включено символов: `1732`
 - Truncated / Обрезано: `no`
@@ -1436,7 +1436,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 ### `frontend/src/domains/settings/components/sidebar/SidebarGroupEditor.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/sidebar/SidebarGroupEditor.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/sidebar/SidebarGroupEditor.vue`
 - Size bytes / Размер в байтах: `4546`
 - Included characters / Включено символов: `4540`
 - Truncated / Обрезано: `no`
@@ -1492,7 +1492,7 @@ defineEmits<{
       <div class="sidebar-config-group-actions">
         <button
           type="button"
-          class="hermes-btn hermes-btn--icon"
+          class="makosh-btn makosh-btn--icon"
           :disabled="rootIndex <= 0"
           @click="$emit('moveGroup', group.id, -1)"
         >
@@ -1500,7 +1500,7 @@ defineEmits<{
         </button>
         <button
           type="button"
-          class="hermes-btn hermes-btn--icon"
+          class="makosh-btn makosh-btn--icon"
           :disabled="rootIndex === rootItemCount - 1"
           @click="$emit('moveGroup', group.id, 1)"
         >
@@ -1508,7 +1508,7 @@ defineEmits<{
         </button>
         <button
           type="button"
-          class="hermes-btn hermes-btn--icon hermes-btn--destructive"
+          class="makosh-btn makosh-btn--icon makosh-btn--destructive"
           :disabled="group.id === 'communications'"
           @click="$emit('removeGroup', group.id)"
         >
@@ -1602,7 +1602,7 @@ defineEmits<{
 
 ### `frontend/src/domains/settings/components/sidebar/SidebarItemEditor.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/sidebar/SidebarItemEditor.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/sidebar/SidebarItemEditor.vue`
 - Size bytes / Размер в байтах: `3507`
 - Included characters / Включено символов: `3503`
 - Truncated / Обрезано: `no`
@@ -1652,7 +1652,7 @@ defineEmits<{
     <div class="sidebar-config-item-controls">
       <select
         v-if="moveTargetOptions"
-        class="hermes-select-control"
+        class="makosh-select-control"
         :value="moveTargetValue"
         @change="$emit('moveToGroup', itemId, ($event.target as HTMLSelectElement).value)"
       >
@@ -1663,16 +1663,16 @@ defineEmits<{
           {{ option.label }}
         </option>
       </select>
-      <button type="button" class="hermes-btn hermes-btn--icon" @click="$emit('moveUp', itemId)">
+      <button type="button" class="makosh-btn makosh-btn--icon" @click="$emit('moveUp', itemId)">
         ↑
       </button>
-      <button type="button" class="hermes-btn hermes-btn--icon" @click="$emit('moveDown', itemId)">
+      <button type="button" class="makosh-btn makosh-btn--icon" @click="$emit('moveDown', itemId)">
         ↓
       </button>
       <button
         v-if="showDividerControl"
         type="button"
-        class="hermes-btn hermes-btn--icon"
+        class="makosh-btn makosh-btn--icon"
         :class="{ active: dividerActive }"
         :disabled="dividerDisabled"
         @click="$emit('toggleDivider', itemId)"
@@ -1681,7 +1681,7 @@ defineEmits<{
       </button>
       <button
         type="button"
-        class="hermes-btn hermes-btn--icon"
+        class="makosh-btn makosh-btn--icon"
         :class="{ active: !hidden }"
         @click="$emit('toggleHidden', itemId)"
       >
@@ -1755,7 +1755,7 @@ defineEmits<{
 
 ### `frontend/src/domains/settings/components/sidebar/SidebarNavigationList.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/sidebar/SidebarNavigationList.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/sidebar/SidebarNavigationList.vue`
 - Size bytes / Размер в байтах: `5285`
 - Included characters / Включено символов: `5278`
 - Truncated / Обрезано: `no`
@@ -1818,7 +1818,7 @@ defineEmits<{
           <div class="sidebar-config-item-controls">
             <button
               type="button"
-              class="hermes-btn hermes-btn--icon"
+              class="makosh-btn makosh-btn--icon"
               :disabled="rootIndex === 0"
               @click="$emit('moveGroup', entry.group.id, -1)"
             >
@@ -1826,7 +1826,7 @@ defineEmits<{
             </button>
             <button
               type="button"
-              class="hermes-btn hermes-btn--icon"
+              class="makosh-btn makosh-btn--icon"
               :disabled="rootIndex === rootItemCount - 1"
               @click="$emit('moveGroup', entry.group.id, 1)"
             >
@@ -1834,7 +1834,7 @@ defineEmits<{
             </button>
             <button
               type="button"
-              class="hermes-btn hermes-btn--icon hermes-btn--destructive"
+              class="makosh-btn makosh-btn--icon makosh-btn--destructive"
               :disabled="entry.group.id === 'communications'"
               @click="$emit('removeGroup', entry.group.id)"
             >
@@ -1967,7 +1967,7 @@ defineEmits<{
 
 ### `frontend/src/domains/settings/components/sidebar/SidebarSettingsSummary.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/sidebar/SidebarSettingsSummary.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/sidebar/SidebarSettingsSummary.vue`
 - Size bytes / Размер в байтах: `2889`
 - Included characters / Включено символов: `2889`
 - Truncated / Обрезано: `no`
@@ -2023,7 +2023,7 @@ defineEmits<{
           {{ itemLabels[itemId]?.label ?? itemId }}
           <button
             type="button"
-            class="hermes-btn hermes-btn--ghost"
+            class="makosh-btn makosh-btn--ghost"
             @click="$emit('toggleHidden', itemId)"
           >
             {{ showLabel }}
@@ -2100,7 +2100,7 @@ defineEmits<{
 
 ### `frontend/src/domains/settings/views/SettingsPage.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/views/SettingsPage.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/views/SettingsPage.vue`
 - Size bytes / Размер в байтах: `6561`
 - Included characters / Включено символов: `6561`
 - Truncated / Обрезано: `no`
@@ -2340,7 +2340,7 @@ const integrationCount = appSettingsData.value?.items?.length ?? 0
 
 ### `frontend/src/domains/tasks/components/TaskList.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/tasks/components/TaskList.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/tasks/components/TaskList.vue`
 - Size bytes / Размер в байтах: `5615`
 - Included characters / Включено символов: `5613`
 - Truncated / Обрезано: `no`
@@ -2458,7 +2458,7 @@ function isTask(item: Task | TaskCandidate): item is Task {
               <span>{{ taskSourceLabel(allRows[virtualRow.index] as Task) }}</span>
               <span>{{ (allRows[virtualRow.index] as Task).project_id ?? t('Unassigned') }}</span>
               <time>{{ taskCreatedTime((allRows[virtualRow.index] as Task).created_at) }}</time>
-              <em>{{ (allRows[virtualRow.index] as Task).hermes_status }}</em>
+              <em>{{ (allRows[virtualRow.index] as Task).makosh_status }}</em>
             </label>
 
             <!-- Candidate row -->
@@ -2497,7 +2497,7 @@ function isTask(item: Task | TaskCandidate): item is Task {
 
 ### `frontend/src/domains/tasks/components/TasksDecisionObligationReview.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/tasks/components/TasksDecisionObligationReview.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/tasks/components/TasksDecisionObligationReview.vue`
 - Size bytes / Размер в байтах: `5590`
 - Included characters / Включено символов: `5588`
 - Truncated / Обрезано: `no`
@@ -2650,7 +2650,7 @@ function obligationReviewId(obligation: Obligation): string {
 
 ### `frontend/src/domains/tasks/views/TasksPage.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/tasks/views/TasksPage.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/tasks/views/TasksPage.vue`
 - Size bytes / Размер в байтах: `8175`
 - Included characters / Включено символов: `8175`
 - Truncated / Обрезано: `no`
@@ -2868,7 +2868,7 @@ onMounted(() => {
 
 ### `frontend/src/domains/timeline/components/TimelineFilters.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/timeline/components/TimelineFilters.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/timeline/components/TimelineFilters.vue`
 - Size bytes / Размер в байтах: `740`
 - Included characters / Включено символов: `740`
 - Truncated / Обрезано: `no`
@@ -2908,7 +2908,7 @@ const filterItems: Array<keyof TimelineFiltersType> = ['Messages', 'Documents', 
 
 ### `frontend/src/domains/timeline/components/TimelineStream.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/timeline/components/TimelineStream.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/timeline/components/TimelineStream.vue`
 - Size bytes / Размер в байтах: `2507`
 - Included characters / Включено символов: `2507`
 - Truncated / Обрезано: `no`
@@ -3016,7 +3016,7 @@ const totalSize = computed(() => virtualizer.value.getTotalSize())
 
 ### `frontend/src/domains/timeline/views/TimelinePage.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/timeline/views/TimelinePage.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/timeline/views/TimelinePage.vue`
 - Size bytes / Размер в байтах: `1929`
 - Included characters / Включено символов: `1929`
 - Truncated / Обрезано: `no`
@@ -3106,7 +3106,7 @@ watch(isLoading, (val) => {
 
 ### `frontend/src/integrations/mail/components/AccountSetupModal.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/mail/components/AccountSetupModal.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/mail/components/AccountSetupModal.vue`
 - Size bytes / Размер в байтах: `13384`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3527,7 +3527,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/integrations/mail/components/MailSyncSettingsStrip.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/mail/components/MailSyncSettingsStrip.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/mail/components/MailSyncSettingsStrip.vue`
 - Size bytes / Размер в байтах: `5313`
 - Included characters / Включено символов: `5313`
 - Truncated / Обрезано: `no`

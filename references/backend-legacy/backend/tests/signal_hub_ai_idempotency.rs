@@ -1,10 +1,10 @@
 use chrono::Utc;
-use hermes_backend_testkit::app::TestApp;
-use hermes_backend_testkit::composition::router_for_context;
-use hermes_backend_testkit::context::TestContext;
-use hermes_events_api::NewEventEnvelope;
-use hermes_events_postgres::store::EventStore;
-use hermes_hub_backend::domains::signal_hub::ai::dispatch_ai_helper_signal;
+use makosh_backend_testkit::app::TestApp;
+use makosh_backend_testkit::composition::router_for_context;
+use makosh_backend_testkit::context::TestContext;
+use makosh_events_api::NewEventEnvelope;
+use makosh_events_postgres::store::EventStore;
+use makosh_hub_backend::domains::signal_hub::ai::dispatch_ai_helper_signal;
 use serde_json::json;
 
 async fn test_app() -> TestApp {
@@ -98,7 +98,7 @@ async fn repeated_new_ai_signal_reuses_deterministic_event_identity() {
 async fn dispatch_test_mail_ai_signal(
     pool: sqlx::PgPool,
     source_id: &str,
-) -> Option<hermes_events_api::EventEnvelope> {
+) -> Option<makosh_events_api::EventEnvelope> {
     dispatch_ai_helper_signal(
         pool,
         "mail_intelligence",

@@ -6,7 +6,7 @@ Status: accepted; refined by ADR-0276
 
 The hidden Tauri WebView remains host-owned. Its only provider/runtime surface
 is the private `whatsapp.host_bridge.v1` contract in
-`hermes-whatsapp-api::host_bridge`.
+`makosh-whatsapp-api::host_bridge`.
 
 The bridge carries one exact typed operation at a time: sanitized provider
 observation metadata toward the runtime, or a bounded command claim toward the

@@ -8,7 +8,7 @@ use std::{
     sync::Mutex,
 };
 
-use hermes_blob_protocol::{BlobAccessFenceV1, BlobCustodyScopeV1, BlobRefV1};
+use makosh_blob_protocol::{BlobAccessFenceV1, BlobCustodyScopeV1, BlobRefV1};
 use sha2::{Digest, Sha256};
 
 use crate::{metadata::BlobMetadataLedger, storage::root};
@@ -301,7 +301,7 @@ mod tests {
     use std::os::unix::fs::PermissionsExt;
     use std::time::{SystemTime, UNIX_EPOCH};
 
-    use hermes_blob_protocol::{
+    use makosh_blob_protocol::{
         BlobAccessFenceV1, BlobBackupClassV1, BlobCustodyScopeV1, BlobQuotaGrantV1, BlobRefV1,
     };
 
@@ -427,7 +427,7 @@ mod tests {
             .expect("time")
             .as_nanos();
         let root = std::env::temp_dir().join(format!(
-            "hermes-blob-release-{}-{nonce}",
+            "makosh-blob-release-{}-{nonce}",
             std::process::id()
         ));
         fs::create_dir(&root).expect("create root");

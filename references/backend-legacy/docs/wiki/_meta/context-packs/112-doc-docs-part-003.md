@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docs/domains/graph/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/graph/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/graph/README.md`
 - Size bytes / Размер в байтах: `2066`
 - Included characters / Включено символов: `2066`
 - Truncated / Обрезано: `no`
@@ -67,7 +67,7 @@ Status: documentation package aligned to the current repository structure.
 
 ## Purpose
 
-The knowledge graph represents durable relationships between Hermes world-model
+The knowledge graph represents durable relationships between Макошь world-model
 entities. It is the primary substrate for relationship-aware memory and context.
 
 The graph is not a generic visualization feature. It stores relationship records
@@ -151,7 +151,7 @@ the relationship source of truth.
 
 ### `docs/domains/notes/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/notes/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/notes/README.md`
 - Size bytes / Размер в байтах: `1292`
 - Included characters / Включено символов: `1292`
 - Truncated / Обрезано: `no`
@@ -161,7 +161,7 @@ the relationship source of truth.
 
 Status: documentation package aligned to the current repository structure.
 
-Notes are lightweight capture artifacts in the current Hermes model.
+Notes are lightweight capture artifacts in the current Макошь model.
 
 They are not a first-class domain unless a future ADR promotes them.
 
@@ -206,7 +206,7 @@ lightweight notes as document-like artifacts.
 
 ### `docs/domains/obligations/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/obligations/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/obligations/README.md`
 - Size bytes / Размер в байтах: `5417`
 - Included characters / Включено символов: `5417`
 - Truncated / Обрезано: `no`
@@ -367,13 +367,13 @@ Related behavior still exists through:
 
 ### `docs/domains/organizations/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/organizations/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/organizations/README.md`
 - Size bytes / Размер в байтах: `1112`
 - Included characters / Включено символов: `1112`
 - Truncated / Обрезано: `no`
 
 ```markdown
-# Hermes Organizations
+# Макошь Organizations
 
 Status: documentation package aligned to the current repository structure.
 
@@ -422,7 +422,7 @@ Organizations do not own:
 
 ### `docs/domains/organizations/api.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/organizations/api.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/organizations/api.md`
 - Size bytes / Размер в байтах: `2331`
 - Included characters / Включено символов: `2179`
 - Truncated / Обрезано: `no`
@@ -513,7 +513,7 @@ Base: `/api/v1/`
 
 ### `docs/domains/organizations/architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/organizations/architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/organizations/architecture.md`
 - Size bytes / Размер в байтах: `1820`
 - Included characters / Включено символов: `1820`
 - Truncated / Обрезано: `no`
@@ -586,7 +586,7 @@ approved sources
 
 ### `docs/domains/organizations/data-model.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/organizations/data-model.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/organizations/data-model.md`
 - Size bytes / Размер в байтах: `1490`
 - Included characters / Включено символов: `1490`
 - Truncated / Обрезано: `no`
@@ -631,7 +631,7 @@ Full implementation schema lives in migrations `0038`-`0043`.
 
 ### `docs/domains/organizations/spec.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/organizations/spec.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/organizations/spec.md`
 - Size bytes / Размер в байтах: `2564`
 - Included characters / Включено символов: `2564`
 - Truncated / Обрезано: `no`
@@ -721,20 +721,20 @@ and engine boundaries still need to be kept explicit in future plans.
 
 ### `docs/domains/persons/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/persons/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/persons/README.md`
 - Size bytes / Размер в байтах: `4604`
 - Included characters / Включено символов: `4590`
 - Truncated / Обрезано: `no`
 
 ````markdown
-# Hermes Hub — Persona Intelligence
+# Макошь — Persona Intelligence
 
 Status: documentation package aligned to the current repository structure.
 
-`persons` is the domain that lets Hermes understand people, remember relationships
+`persons` is the domain that lets Макошь understand people, remember relationships
 and build context.
 
-Hermes no longer treats people as contacts. A Persona is not an address-book
+Макошь no longer treats people as contacts. A Persona is not an address-book
 entry, CRM lead or contact card. A Persona is a durable memory anchor for a
 subject in the local knowledge graph.
 
@@ -746,7 +746,7 @@ Build context.
 
 ## Domain Vision
 
-Hermes is a Personal Memory System. The persons domain provides the Persona
+Макошь is a Personal Memory System. The persons domain provides the Persona
 Intelligence layer for that system:
 
 - **Identity**: digital traces that can point to the same subject.
@@ -785,7 +785,7 @@ Persona:
   dossier_read_model:
 ```
 
-`Persona.id` is the logical identity of the subject inside Hermes. Current
+`Persona.id` is the logical identity of the subject inside Макошь. Current
 backend tables may still use `person_id` and `/persons` compatibility APIs until
 an implementation migration is designed, but new domain language must use
 Persona.
@@ -815,7 +815,7 @@ Persona:
   is_self: true
 ```
 
-Hermes does not need a separate `UserProfile` or Self domain. Agents, UI actions,
+Макошь does not need a separate `UserProfile` or Self domain. Agents, UI actions,
 capability checks and generated observations must be attributable to the Owner
 Persona when they act for the system owner.
 
@@ -901,7 +901,7 @@ Persona Intelligence includes:
 
 ### `docs/domains/persons/api.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/persons/api.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/persons/api.md`
 - Size bytes / Размер в байтах: `1433`
 - Included characters / Включено символов: `1433`
 - Truncated / Обрезано: `no`
@@ -945,7 +945,7 @@ requires a separate ADR and implementation plan.
 
 ### `docs/domains/persons/architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/persons/architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/persons/architecture.md`
 - Size bytes / Размер в байтах: `8744`
 - Included characters / Включено символов: `8742`
 - Truncated / Обрезано: `no`
@@ -959,8 +959,8 @@ that every backend table or route has already been migrated.
 
 ## Architectural Position
 
-Hermes is a local-first Personal Memory System. The persons domain owns Persona
-Intelligence: the structures that allow Hermes to understand subjects, remember
+Макошь is a local-first Personal Memory System. The persons domain owns Persona
+Intelligence: the structures that allow Макошь to understand subjects, remember
 relationships and build context over time.
 
 The domain sits between raw evidence and user-facing memory:
@@ -988,7 +988,7 @@ provider records / documents / messages / calendar events
 
 ## Persona
 
-`Persona` is the root aggregate for a subject in Hermes.
+`Persona` is the root aggregate for a subject in Макошь.
 
 ```yaml
 Persona:
@@ -1014,7 +1014,7 @@ must use Persona as the domain concept.
 ## Self Persona
 
 There is one and only one `Persona` with `is_self: true`. It represents the owner
-of the local Hermes instance.
+of the local Макошь instance.
 
 Consequences:
 
@@ -1221,7 +1221,7 @@ Relevant ADR:
 
 ### `docs/domains/persons/blockers.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/persons/blockers.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/persons/blockers.md`
 - Size bytes / Размер в байтах: `3028`
 - Included characters / Включено символов: `3026`
 - Truncated / Обрезано: `no`
@@ -1268,7 +1268,7 @@ relevant ADR review and repository validation.
 
 ### `docs/domains/persons/data-model.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/persons/data-model.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/persons/data-model.md`
 - Size bytes / Размер в байтах: `10982`
 - Included characters / Включено символов: `10980`
 - Truncated / Обрезано: `no`
@@ -1668,7 +1668,7 @@ These concepts must not appear as target domain primitives:
 
 ### `docs/domains/persons/spec.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/persons/spec.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/persons/spec.md`
 - Size bytes / Размер в байтах: `1277`
 - Included characters / Включено символов: `1277`
 - Truncated / Обрезано: `no`
@@ -1681,7 +1681,7 @@ These concepts must not appear as target domain primitives:
 The persons domain owns Persona Intelligence: digital representations of
 subjects, their identities, relationships, memory anchors and dossier views.
 
-Hermes does not treat people as contacts. Personas are durable memory anchors in
+Макошь does not treat people as contacts. Personas are durable memory anchors in
 the knowledge graph.
 
 ## Persona View
@@ -1736,7 +1736,7 @@ Ambiguous Personas must not be silently collapsed.
 
 ### `docs/domains/persons/status.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/persons/status.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/persons/status.md`
 - Size bytes / Размер в байтах: `6659`
 - Included characters / Включено символов: `6657`
 - Truncated / Обрезано: `no`
@@ -1828,7 +1828,7 @@ is required only when implementation or migration code changes.
 
 ### `docs/domains/projects/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/projects/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/projects/README.md`
 - Size bytes / Размер в байтах: `2635`
 - Included characters / Включено символов: `2635`
 - Truncated / Обрезано: `no`
@@ -1841,7 +1841,7 @@ Status: documentation package aligned to the current repository structure.
 Projects are bounded work contexts that connect communications, documents,
 tasks, decisions, obligations, Personas, Organizations and events.
 
-Hermes is not a project management tool. A Project is a context boundary inside
+Макошь is not a project management tool. A Project is a context boundary inside
 the Personal Memory System.
 
 ## Responsibilities
@@ -1929,7 +1929,7 @@ Personas, Organizations and Tasks.
 
 ### `docs/domains/relationships/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/relationships/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/relationships/README.md`
 - Size bytes / Размер в байтах: `4213`
 - Included characters / Включено символов: `4213`
 - Truncated / Обрезано: `no`
@@ -1939,10 +1939,10 @@ Personas, Organizations and Tasks.
 
 Status: documentation package aligned to the current repository structure.
 
-Relationships are first-class source-of-truth records connecting Hermes world
+Relationships are first-class source-of-truth records connecting Макошь world
 entities.
 
-Hermes is relationship-first: Personas, Organizations, Projects,
+Макошь is relationship-first: Personas, Organizations, Projects,
 Communications, Documents, Tasks, Events, Decisions, Obligations and Knowledge
 items gain meaning from source-backed relationships.
 
@@ -2075,7 +2075,7 @@ explicit review is reset.
 
 ### `docs/domains/review/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/review/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/review/README.md`
 - Size bytes / Размер в байтах: `1872`
 - Included characters / Включено символов: `1872`
 - Truncated / Обрезано: `no`
@@ -2140,23 +2140,23 @@ or workflow boundary.
 
 ### `docs/domains/signal-hub/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/signal-hub/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/signal-hub/README.md`
 - Size bytes / Размер в байтах: `18090`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
 
 ````markdown
-# Hermes Signal Hub
+# Макошь Signal Hub
 
 Status: `IMPLEMENTATION STARTED`, 2026-06-23.
 
 Signal Hub is the system control plane for external and synthetic signal
-sources in Hermes. It is not a messenger UI, not an email client and not a
+sources in Макошь. It is not a messenger UI, not an email client and not a
 provider-specific integration folder. Signal Hub owns the durable registry of
 sources, connections, capabilities, runtime state, health, profiles, mute/pause
 policies and recovery fixtures.
 
-Hermes receives signals from the world and turns them into Communications,
+Макошь receives signals from the world and turns them into Communications,
 Radar, Review, domain objects, Memory and Knowledge. Signal Hub controls the
 first boundary of that chain.
 
@@ -2254,7 +2254,7 @@ accepted-signal Communications consumers beyond the current slices, broader
 replay semantics and broader UI/control coverage for the not-yet-migrated
 surfaces.
 
-Current migration note: Telegram provider-observation events now enter Hermes as
+Current migration note: Telegram provider-observation events now enter Макошь as
 `signal.raw.telegram.*.observed` and the Communications projection consumes the
 accepted Signal Hub family for that slice. These provider-observation raw
 events now also use the durable outbox-dispatch path instead of only appending
@@ -2374,7 +2374,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/domains/signal-hub/api.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/signal-hub/api.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/signal-hub/api.md`
 - Size bytes / Размер в байтах: `12587`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2441,7 +2441,7 @@ definitions so custom profile authoring/editing can stay inside Settings
 without dropping back to ad hoc JSON or REST-only shims.
 
 The same root contract set now also has a live provider-neutral
-`hermes.communications.v1.CommunicationsService` backend slice for:
+`makosh.communications.v1.CommunicationsService` backend slice for:
 
 - `ListMessages`
 - `GetMessage`
@@ -2509,7 +2509,7 @@ The same root contract set now also has a live provider-neutral
 - `RedirectMessage`
 
 That communications slice currently reuses existing Communications stores and
-confirmed send path under the same router-level `X-Hermes-Secret` boundary; it
+confirmed send path under the same router-level `X-Макошь-Secret` boundary; it
 does not replace all legacy REST endpoints yet. The frontend now also exposes a
 dedicated typed wrapper around this `communications/v1` service for targeted
 query/command usage and regression coverage, and the current provider-neutral
@@ -2784,7 +2784,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/domains/signal-hub/architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/signal-hub/architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/signal-hub/architecture.md`
 - Size bytes / Размер в байтах: `8660`
 - Included characters / Включено символов: `8660`
 - Truncated / Обрезано: `no`
@@ -2800,10 +2800,10 @@ Signal Hub is the control plane for source activation, source runtime state,
 source capabilities, source health, mute/pause policies, replay and deterministic
 fixtures.
 
-It exists because Hermes must handle many signal sources without turning every
+It exists because Макошь must handle many signal sources without turning every
 provider into a separate product domain. Mail, Telegram, WhatsApp, GitHub,
 Browser capture, RSS, Calendar, Filesystem and Home Assistant should all enter
-Hermes through one governed source boundary.
+Макошь through one governed source boundary.
 
 ## High-Level Flow
 
@@ -2889,7 +2889,7 @@ SignalSource
 
 ## Event Store And Transport Split
 
-Hermes keeps source-of-truth event history in PostgreSQL and uses NATS JetStream
+Макошь keeps source-of-truth event history in PostgreSQL and uses NATS JetStream
 as the delivery transport.
 
 ```text
@@ -3088,7 +3088,7 @@ records.
 
 ### `docs/domains/signal-hub/blockers.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/signal-hub/blockers.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/signal-hub/blockers.md`
 - Size bytes / Размер в байтах: `2126`
 - Included characters / Включено символов: `2126`
 - Truncated / Обрезано: `no`
@@ -3144,7 +3144,7 @@ These are intentionally not blockers for the first implementation:
 
 ### `docs/domains/signal-hub/data-model.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/signal-hub/data-model.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/signal-hub/data-model.md`
 - Size bytes / Размер в байтах: `5725`
 - Included characters / Включено символов: `5725`
 - Truncated / Обрезано: `no`
@@ -3161,7 +3161,7 @@ schema-agnostic fixture definitions.
 
 ### SignalSource
 
-Canonical source type known to Hermes.
+Canonical source type known to Макошь.
 
 Fields:
 
@@ -3570,7 +3570,7 @@ The derived hash must not include secrets or full raw private bodies.
 
 ### `docs/domains/signal-hub/fixtures.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/domains/signal-hub/fixtures.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/domains/signal-hub/fixtures.md`
 - Size bytes / Размер в байтах: `6169`
 - Included characters / Включено символов: `6139`
 - Truncated / Обрезано: `no`
@@ -3603,7 +3603,7 @@ Current implementation note:
 ## System Recovery Fixture
 
 The system recovery fixture defines the canonical built-in Signal Hub sources
-that must exist for Hermes to operate.
+that must exist for Макошь to operate.
 
 It is used for:
 
@@ -3872,6 +3872,6 @@ real sources disabled or muted
 fixture source enabled
 ```
 
-Hermes downstream domains should process fixture events exactly like normal
+Макошь downstream domains should process fixture events exactly like normal
 source events.
 ````

@@ -1,15 +1,15 @@
 //! Applies only Kernel-staged, fenced bindings to the private PgBouncer include.
 
-use hermes_storage_pgbouncer::{
+use makosh_storage_pgbouncer::{
     PLATFORM_ADMIN_USERNAME, PgBouncerAuthEntryV1, PgBouncerAuthFileV1,
     PgBouncerDatabaseConfigFileV1, PgBouncerRuntimeConfigV1, PoolAliasV1,
     TokioPostgresPgBouncerAdminPortV1, database_is_configured, reload_configuration,
 };
-use hermes_storage_postgres::{StorageRoleSpecV1, read_runtime_role_scram_verifier};
-use hermes_storage_protocol::v1::{
+use makosh_storage_postgres::{StorageRoleSpecV1, read_runtime_role_scram_verifier};
+use makosh_storage_protocol::v1::{
     StorageBindingV1, StorageRuntimeConfigurationV1, StorageRuntimeTopologyV1,
 };
-use hermes_storage_protocol::validation::validate_storage_runtime_configuration;
+use makosh_storage_protocol::validation::validate_storage_runtime_configuration;
 use std::time::Duration;
 use zeroize::Zeroizing;
 
@@ -92,8 +92,8 @@ struct AuthorizedPoolReplaceInputV1<'a> {
     postgres_credential: &'a Zeroizing<Vec<u8>>,
     pgbouncer_credential_bytes: &'a Zeroizing<Vec<u8>>,
     runtime_credentials: &'a [RuntimeRoleCredentialV1],
-    endpoint: &'a hermes_storage_pgbouncer::PgBouncerAdminEndpointV1,
-    pgbouncer_credential: &'a hermes_storage_pgbouncer::PgBouncerAdminCredentialV1,
+    endpoint: &'a makosh_storage_pgbouncer::PgBouncerAdminEndpointV1,
+    pgbouncer_credential: &'a makosh_storage_pgbouncer::PgBouncerAdminCredentialV1,
     entries: &'a [PgBouncerRuntimeConfigV1],
 }
 
@@ -180,8 +180,8 @@ fn database_entry(
 }
 
 async fn reload_and_verify(
-    endpoint: &hermes_storage_pgbouncer::PgBouncerAdminEndpointV1,
-    credential: &hermes_storage_pgbouncer::PgBouncerAdminCredentialV1,
+    endpoint: &makosh_storage_pgbouncer::PgBouncerAdminEndpointV1,
+    credential: &makosh_storage_pgbouncer::PgBouncerAdminCredentialV1,
     entries: &[PgBouncerRuntimeConfigV1],
 ) -> Result<(), String> {
     for attempt in 1..=RELOAD_ATTEMPTS {
@@ -197,8 +197,8 @@ async fn reload_and_verify(
 }
 
 async fn reload_and_verify_once(
-    endpoint: &hermes_storage_pgbouncer::PgBouncerAdminEndpointV1,
-    credential: &hermes_storage_pgbouncer::PgBouncerAdminCredentialV1,
+    endpoint: &makosh_storage_pgbouncer::PgBouncerAdminEndpointV1,
+    credential: &makosh_storage_pgbouncer::PgBouncerAdminCredentialV1,
     entries: &[PgBouncerRuntimeConfigV1],
 ) -> Result<(), String> {
     let mut admin = TokioPostgresPgBouncerAdminPortV1::connect(endpoint, credential)

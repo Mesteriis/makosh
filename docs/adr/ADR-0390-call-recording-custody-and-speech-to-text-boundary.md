@@ -78,26 +78,26 @@ Workflow принимает только завершённую owner-authorized
 `call_transcription_v1` состоит из независимых units с одной причиной
 изменения:
 
-- `hermes-call-transcription-api` — generated Start/Get/ReadTranscript и
+- `makosh-call-transcription-api` — generated Start/Get/ReadTranscript и
   realtime client contracts;
-- `hermes-call-transcription-ingress` — target-owned recording-ready/rejected
+- `makosh-call-transcription-ingress` — target-owned recording-ready/rejected
   durable contracts и target Blob tuple;
-- `hermes-call-transcription-core` — provider-neutral lifecycle и invariants;
-- `hermes-call-transcription-persistence` — owner-local inbox, runs, jobs,
+- `makosh-call-transcription-core` — provider-neutral lifecycle и invariants;
+- `makosh-call-transcription-persistence` — owner-local inbox, runs, jobs,
   outbox, tickets and recovery;
-- `hermes-call-transcription-runtime` — managed orchestration, event consumer,
+- `makosh-call-transcription-runtime` — managed orchestration, event consumer,
   STT request routing, Blob materialization и client ports;
-- `hermes-call-transcription-assembly` — unsigned runtime, descriptor,
+- `makosh-call-transcription-assembly` — unsigned runtime, descriptor,
   settings schema и storage artifacts.
 
 Speech recognition является отдельным engine:
 
-- `hermes-speech-to-text-api` — typed request/result contract;
-- `hermes-speech-to-text-core` — engine lifecycle and result validation;
-- `hermes-speech-to-text-persistence` — engine-local durable execution state;
-- `hermes-speech-to-text-runtime` — request routing and provider selection by
+- `makosh-speech-to-text-api` — typed request/result contract;
+- `makosh-speech-to-text-core` — engine lifecycle and result validation;
+- `makosh-speech-to-text-persistence` — engine-local durable execution state;
+- `makosh-speech-to-text-runtime` — request routing and provider selection by
   admitted capability, without provider-name branches;
-- `hermes-speech-to-text-assembly` — exact engine release artifacts.
+- `makosh-speech-to-text-assembly` — exact engine release artifacts.
 
 Concrete Whisper/whisper.cpp execution является integration и получает
 собственные contract/core/process/runtime/assembly units. Она не импортируется
@@ -131,7 +131,7 @@ speaker segments не хранятся в PostgreSQL и не передаютс�
 
 ### Recording source and consent
 
-`hermes-call-transcription-ingress` определяет exact recording-ready payload:
+`makosh-call-transcription-ingress` определяет exact recording-ready payload:
 
 - request/run/call evidence identities and revisions;
 - recording evidence ID and revision;

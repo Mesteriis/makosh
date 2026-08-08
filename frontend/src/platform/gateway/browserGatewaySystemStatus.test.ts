@@ -6,9 +6,9 @@ import {
 	ClientSystemComponentStateV1,
 	ClientModuleBootstrapV1Schema,
 	ClientSystemComponentStatusV1Schema,
-} from '../../gen/hermes/gateway/v1/client_bootstrap_pb'
-import { ClientRealtimeEventV1Schema } from '../../gen/hermes/gateway/v1/client_realtime_pb'
-import { ClientSystemStatusChangedV1Schema } from '../../gen/hermes/gateway/v1/client_system_status_realtime_pb'
+} from '../../gen/makosh/gateway/v1/client_bootstrap_pb'
+import { ClientRealtimeEventV1Schema } from '../../gen/makosh/gateway/v1/client_realtime_pb'
+import { ClientSystemStatusChangedV1Schema } from '../../gen/makosh/gateway/v1/client_system_status_realtime_pb'
 import type { ClientBootstrapSnapshot } from './clientBootstrap'
 import {
 	applyClientSystemStatusEvent,

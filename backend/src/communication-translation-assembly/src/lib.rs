@@ -10,21 +10,21 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use hermes_communication_translation_persistence::communication_translation_storage_bundle_v1;
-use hermes_communication_translation_runtime::{
+use makosh_communication_translation_persistence::communication_translation_storage_bundle_v1;
+use makosh_communication_translation_runtime::{
     communication_translation_module_descriptor_v1, communication_translation_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
 pub const COMMUNICATION_TRANSLATION_ASSEMBLY_FRAGMENT_VERSION_V1: u32 = 1;
 pub const COMMUNICATION_TRANSLATION_ASSEMBLY_OWNER_ID: &str = "communication_translation";
 pub const COMMUNICATION_TRANSLATION_ASSEMBLY_MODULE_ID: &str =
-    "hermes-communication-translation-runtime";
+    "makosh-communication-translation-runtime";
 pub const COMMUNICATION_TRANSLATION_RUNTIME_ARTIFACT_ID: &str =
     "communication_translation.runtime.v1";
 pub const COMMUNICATION_TRANSLATION_STORAGE_ARTIFACT_ID: &str =
@@ -38,7 +38,7 @@ pub const COMMUNICATION_TRANSLATION_STORAGE_BUNDLE_FILE: &str =
 pub const COMMUNICATION_TRANSLATION_ARTIFACT_FRAGMENT_FILE: &str =
     "communication_translation.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH: &str = "bin/hermes-communication-translation-runtime";
+const RUNTIME_RELATIVE_PATH: &str = "bin/makosh-communication-translation-runtime";
 const DESCRIPTOR_RELATIVE_PATH: &str = "contracts/communication_translation.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH: &str = "contracts/communication_translation.runtime.settings.pb";
 const STORAGE_RELATIVE_PATH: &str = "storage/communication_translation.storage.bundle.pb";
@@ -273,8 +273,8 @@ fn write_new_private_file(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
 mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 
-    use hermes_runtime_protocol::v1::ModuleDescriptorV1;
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_runtime_protocol::v1::ModuleDescriptorV1;
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -283,7 +283,7 @@ mod tests {
     #[test]
     fn materializes_exact_unsigned_runtime_and_storage_fragment() {
         let root = temporary_directory();
-        let runtime = root.join("hermes-communication-translation-runtime");
+        let runtime = root.join("makosh-communication-translation-runtime");
         fs::write(&runtime, b"runtime").expect("runtime");
         let paths = materialize_communication_translation_release_assembly_v1(
             &root.join("assembly"),

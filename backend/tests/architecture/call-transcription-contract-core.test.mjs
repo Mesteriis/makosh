@@ -11,7 +11,7 @@ test('call transcription client contract and pure core are separate workflow uni
     read('backend/architecture/policy.json'),
     read('backend/src/call-transcription-api/Cargo.toml'),
     read('backend/src/call-transcription-core/Cargo.toml'),
-    read('backend/src/call-transcription-api/proto/hermes/call_transcription/v1/transcription.proto'),
+    read('backend/src/call-transcription-api/proto/makosh/call_transcription/v1/transcription.proto'),
     read('backend/src/call-transcription-api/src/lib.rs'),
     read('backend/src/call-transcription-core/src/lib.rs'),
   ]);
@@ -20,20 +20,20 @@ test('call transcription client contract and pure core are separate workflow uni
     policy.implementation.productionPackages.map((descriptor) => [descriptor.name, descriptor]),
   );
 
-  assert.deepEqual(packages.get('hermes-call-transcription-api'), {
-    name: 'hermes-call-transcription-api',
+  assert.deepEqual(packages.get('makosh-call-transcription-api'), {
+    name: 'makosh-call-transcription-api',
     role: 'workflow',
     owner: 'call_transcription',
     surface: 'contract',
   });
-  assert.deepEqual(packages.get('hermes-call-transcription-core'), {
-    name: 'hermes-call-transcription-core',
+  assert.deepEqual(packages.get('makosh-call-transcription-core'), {
+    name: 'makosh-call-transcription-core',
     role: 'workflow',
     owner: 'call_transcription',
     surface: 'implementation',
   });
-  assert.match(apiManifest, /hermes-runtime-protocol/);
-  assert.match(coreManifest, /hermes-call-transcription-api/);
+  assert.match(apiManifest, /makosh-runtime-protocol/);
+  assert.match(coreManifest, /makosh-call-transcription-api/);
   assert.match(proto, /StartCallTranscriptionRequestV1/);
   assert.match(proto, /IssueCallTranscriptReadRequestV1/);
   assert.match(proto, /recording_evidence_id/);
@@ -58,10 +58,10 @@ test('call transcription client contract and pure core are separate workflow uni
     assert.doesNotMatch(proto, new RegExp(forbidden));
   }
   for (const forbiddenDependency of [
-    'hermes-communications',
-    'hermes-desktop-call-recording',
-    'hermes-speech-to-text',
-    'hermes-whisper',
+    'makosh-communications',
+    'makosh-desktop-call-recording',
+    'makosh-speech-to-text',
+    'makosh-whisper',
     'sqlx',
     'async-nats',
   ]) {

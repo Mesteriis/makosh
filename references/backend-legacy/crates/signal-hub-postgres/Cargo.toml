@@ -1,5 +1,5 @@
 [package]
-name = "hermes-signal-hub-postgres"
+name = "makosh-signal-hub-postgres"
 publish = false
 version = "0.1.0"
 edition = "2024"
@@ -7,8 +7,8 @@ rust-version = "1.89"
 license = "MIT"
 
 [dependencies]
-hermes-events-api = { path = "../events-api" }
-hermes-signal-hub-api = { path = "../signal-hub-api" }
+makosh-events-api = { path = "../events-api" }
+makosh-signal-hub-api = { path = "../signal-hub-api" }
 serde_json = "1"
 sqlx = { version = "0.8", default-features = false, features = ["chrono", "json", "postgres", "runtime-tokio-rustls", "uuid"] }
 uuid = { version = "1", features = ["v7"] }

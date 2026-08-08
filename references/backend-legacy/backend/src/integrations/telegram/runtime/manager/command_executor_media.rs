@@ -1,11 +1,11 @@
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::{Value, json};
 use sqlx::PgPool;
 
 use crate::integrations::telegram::client::models::messages::TelegramProviderWriteCommand;
 use crate::platform::events::bus::InMemoryEventBus;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 pub(super) async fn emit_media_upload_event(
     event_bus: &InMemoryEventBus,
@@ -121,7 +121,7 @@ mod tests {
             last_error: None,
             result_payload: json!({}),
             audit_metadata: json!({}),
-            actor_id: "hermes-frontend".to_owned(),
+            actor_id: "makosh-frontend".to_owned(),
             happened_at: Utc::now(),
             next_attempt_at: None,
             last_attempt_at: None,

@@ -1,12 +1,12 @@
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
-use hermes_mail_retained_evidence_replay_contract::{
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_mail_retained_evidence_replay_contract::{
     validate_mail_replay_command_v1,
     wire::{
         ReplayMailEvidenceCommandV1, ReplayMailEvidenceFailureV1, ReplayMailEvidenceOutcomeV1,
         ReplayMailEvidenceResultV1,
     },
 };
-use hermes_mail_retained_evidence_replay_persistence::{
+use makosh_mail_retained_evidence_replay_persistence::{
     MailRetainedEvidenceReplayPersistenceV1, RetainedMailReplayAuditV1, RetainedMailReplayErrorV1,
     RetainedMailReplayPhaseV1,
 };

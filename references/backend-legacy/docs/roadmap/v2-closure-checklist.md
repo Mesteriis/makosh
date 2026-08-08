@@ -2,7 +2,7 @@
 
 ## Release Goal
 
-Version 2.0 is complete when Hermes Hub makes graph-backed memory central:
+Version 2.0 is complete when Макошь makes graph-backed memory central:
 messages, Persona-compatible identity records, documents and projects are
 connected through rebuildable graph projections, reviewable workflow candidates,
 visible document processing state and desktop-only backend-backed UI surfaces.

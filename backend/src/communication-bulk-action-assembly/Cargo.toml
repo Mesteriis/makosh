@@ -1,5 +1,5 @@
 [package]
-name = "hermes-communication-bulk-action-assembly"
+name = "makosh-communication-bulk-action-assembly"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,19 +8,19 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-communication-bulk-action-assembly"
+name = "makosh-communication-bulk-action-assembly"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "communication_bulk_action"
 surface = "assembly"
 
 [dependencies]
-hermes-communication-bulk-action-persistence = { path = "../communication-bulk-action-persistence" }
-hermes-communication-bulk-action-runtime = { path = "../communication-bulk-action-runtime" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-communication-bulk-action-persistence = { path = "../communication-bulk-action-persistence" }
+makosh-communication-bulk-action-runtime = { path = "../communication-bulk-action-runtime" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
 serde_json = "=1.0.150"

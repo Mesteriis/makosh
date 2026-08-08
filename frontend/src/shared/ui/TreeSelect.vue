@@ -48,14 +48,14 @@ const rootRef = ref<HTMLElement | null>(null)
 const popoverRef = ref<HTMLElement | null>(null)
 const treeRef = ref<HTMLElement | null>(null)
 const isPopoverPositioned = ref(false)
-const componentId = `hermes-tree-select-${useId()}`
+const componentId = `makosh-tree-select-${useId()}`
 let isTrackingPopoverGeometry = false
 const { cancelMouseLeaveDismiss, scheduleMouseLeaveDismiss } = useMouseLeaveDismiss(closeTree, undefined, {
 	isOpen,
 	getBoundaryElements: () => [rootRef.value, popoverRef.value]
 })
 
-const classes = computed(() => ['hermes-tree-select', props.class])
+const classes = computed(() => ['makosh-tree-select', props.class])
 const treeId = computed(() => `${componentId}-tree`)
 const canInteract = computed(() => !props.disabled && !props.readonly)
 const accessibleLabel = computed(() => props.ariaLabel ?? props.placeholder)
@@ -187,7 +187,7 @@ function scrollActiveItemIntoView(): void {
 }
 
 function getTriggerElement(): HTMLElement | null {
-	return rootRef.value?.querySelector<HTMLElement>('.hermes-tree-select__trigger') ?? null
+	return rootRef.value?.querySelector<HTMLElement>('.makosh-tree-select__trigger') ?? null
 }
 
 function updatePopoverGeometry(): void {
@@ -457,8 +457,8 @@ onBeforeUnmount(removePopoverGeometryListeners)
 		@mouseleave="scheduleMouseLeaveDismiss"
 	>
 		<button
-			class="hermes-tree-select__trigger"
-			:class="{ 'hermes-tree-select__trigger--readonly': readonly }"
+			class="makosh-tree-select__trigger"
+			:class="{ 'makosh-tree-select__trigger--readonly': readonly }"
 			type="button"
 			:aria-activedescendant="activeItemId"
 			:aria-controls="treeId"
@@ -470,37 +470,37 @@ onBeforeUnmount(removePopoverGeometryListeners)
 			role="combobox"
 			@click="toggleTree"
 		>
-			<span class="hermes-tree-select__value" :class="{ 'hermes-tree-select__value--placeholder': !selectedOption }">
+			<span class="makosh-tree-select__value" :class="{ 'makosh-tree-select__value--placeholder': !selectedOption }">
 				{{ displayLabel }}
 			</span>
-			<Icon icon="tabler:chevron-down" size="1rem" class="hermes-tree-select__chevron" aria-hidden="true" />
+			<Icon icon="tabler:chevron-down" size="1rem" class="makosh-tree-select__chevron" aria-hidden="true" />
 		</button>
 		<Teleport to="body">
 			<div
 				v-if="isOpen"
 				ref="popoverRef"
-				class="hermes-tree-select__popover"
-				:class="{ 'hermes-tree-select__popover--positioned': isPopoverPositioned }"
+				class="makosh-tree-select__popover"
+				:class="{ 'makosh-tree-select__popover--positioned': isPopoverPositioned }"
 				@mouseenter="cancelMouseLeaveDismiss"
 				@mouseleave="scheduleMouseLeaveDismiss"
 			>
 				<ul
 					:id="treeId"
 					ref="treeRef"
-					class="hermes-tree-select__tree"
+					class="makosh-tree-select__tree"
 					role="tree"
 					:aria-label="treeAriaLabel"
 				>
 					<li
 						v-for="(item, index) in visibleItems"
 						:key="item.option.value"
-						class="hermes-tree-select__item"
+						class="makosh-tree-select__item"
 						role="none"
 					>
 						<button
 							:id="treeItemId(index)"
-							class="hermes-tree-select__row"
-							:class="{ 'hermes-tree-select__row--active': index === activeIndex }"
+							class="makosh-tree-select__row"
+							:class="{ 'makosh-tree-select__row--active': index === activeIndex }"
 							type="button"
 							role="treeitem"
 							:aria-disabled="item.isDisabled"
@@ -514,36 +514,36 @@ onBeforeUnmount(removePopoverGeometryListeners)
 							@mousedown.prevent
 							@click="handleItemClick(item, index)"
 						>
-							<span class="hermes-tree-select__spacer" aria-hidden="true">
+							<span class="makosh-tree-select__spacer" aria-hidden="true">
 								<span
 									v-for="depth in Math.max(item.level - 1, 0)"
 									:key="depth"
-									class="hermes-tree-select__spacer-step"
+									class="makosh-tree-select__spacer-step"
 								></span>
 							</span>
 							<Icon
 								v-if="item.hasChildren"
 								:icon="item.isExpanded ? 'tabler:chevron-down' : 'tabler:chevron-right'"
 								size="0.875rem"
-								class="hermes-tree-select__disclosure"
+								class="makosh-tree-select__disclosure"
 								aria-hidden="true"
 							/>
-							<span v-else class="hermes-tree-select__leaf-spacer" aria-hidden="true"></span>
-							<Icon v-if="item.option.icon" :icon="item.option.icon" size="1rem" class="hermes-tree-select__icon" aria-hidden="true" />
-							<span class="hermes-tree-select__body">
-								<span class="hermes-tree-select__label">{{ item.option.label }}</span>
-								<span v-if="item.option.description" class="hermes-tree-select__description">{{ item.option.description }}</span>
+							<span v-else class="makosh-tree-select__leaf-spacer" aria-hidden="true"></span>
+							<Icon v-if="item.option.icon" :icon="item.option.icon" size="1rem" class="makosh-tree-select__icon" aria-hidden="true" />
+							<span class="makosh-tree-select__body">
+								<span class="makosh-tree-select__label">{{ item.option.label }}</span>
+								<span v-if="item.option.description" class="makosh-tree-select__description">{{ item.option.description }}</span>
 							</span>
 							<Icon
 								v-if="item.isSelectable && item.option.value === modelValue"
 								icon="tabler:check"
 								size="0.875rem"
-								class="hermes-tree-select__check"
+								class="makosh-tree-select__check"
 								aria-hidden="true"
 							/>
 						</button>
 					</li>
-					<li v-if="visibleItems.length === 0" class="hermes-tree-select__empty" role="presentation">{{ emptyLabel }}</li>
+					<li v-if="visibleItems.length === 0" class="makosh-tree-select__empty" role="presentation">{{ emptyLabel }}</li>
 				</ul>
 			</div>
 		</Teleport>

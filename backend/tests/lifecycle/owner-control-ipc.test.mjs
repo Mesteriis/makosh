@@ -102,7 +102,7 @@ function configurePlatformEventHubTopology(sessionId) {
 function configurePlatformStorageTopology(sessionId, generation, instanceId) {
   return field(17, Buffer.concat([
     text(1, sessionId), uint64(2, generation), text(3, instanceId),
-    text(4, 'hermes'), uint64(5, 1), field(6, Buffer.alloc(32, 3)),
+    text(4, 'makosh'), uint64(5, 1), field(6, Buffer.alloc(32, 3)),
     field(7, Buffer.alloc(32, 4)),
     text(8, '127.0.0.1'), uint64(9, 5432), text(10, '127.0.0.1'), uint64(11, 6432),
     text(12, 'postgres'), uint64(13, 5432),
@@ -306,7 +306,7 @@ async function exerciseSettingsMutation(context, dataDir, staleSessionId) {
 }
 
 test('owner control IPC requires a current owner-device proof for mutations', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-kernel-owner-control-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-kernel-owner-control-'));
   const dataDir = join(root, 'data');
   let server;
   let ownerSocket;

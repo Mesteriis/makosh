@@ -1,11 +1,11 @@
 //! Transactional conversion of due schedules into exact Scheduler dispatch records.
 
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_events_protocol::delivery::OutboxRecordV1;
-use hermes_scheduler::{
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
+use makosh_scheduler::{
     ScheduleContinuationV1, SchedulerDispatchIdentityV1, build_scheduled_job_envelope_v1, plan_due,
 };
-use hermes_scheduler_protocol::{JobRunIdV1, ScheduleRunLeaseV1, v1::JobTriggerKindV1};
+use makosh_scheduler_protocol::{JobRunIdV1, ScheduleRunLeaseV1, v1::JobTriggerKindV1};
 use prost::Message;
 use sha2::{Digest, Sha256};
 use sqlx::{Postgres, Row, Transaction, query};
@@ -75,7 +75,7 @@ impl SchedulerPostgresStoreV1 {
             return Err(SchedulerMaterializationErrorV1::InvalidLimit);
         }
         let rows = query(
-            "SELECT runs.run_id FROM hermes_platform.scheduler_runs AS runs JOIN hermes_platform.scheduler_run_retries AS retries ON retries.run_id = runs.run_id WHERE runs.state = 'retry_wait' AND retries.next_attempt_at_unix_ms <= $1 ORDER BY retries.next_attempt_at_unix_ms, runs.run_id LIMIT $2",
+            "SELECT runs.run_id FROM makosh_platform.scheduler_runs AS runs JOIN makosh_platform.scheduler_run_retries AS retries ON retries.run_id = runs.run_id WHERE runs.state = 'retry_wait' AND retries.next_attempt_at_unix_ms <= $1 ORDER BY retries.next_attempt_at_unix_ms, runs.run_id LIMIT $2",
         )
         .bind(now.value())
         .bind(i64::from(limit))
@@ -230,7 +230,7 @@ async fn lock_due_retry(
     now: UtcMillisV1,
 ) -> Result<Option<DueRetryV1>, SchedulerMaterializationErrorV1> {
     let row = query(
-        "SELECT runs.run_id AS run_id, runs.lease_epoch AS run_lease_epoch, runs.scheduled_for_unix_ms AS run_scheduled_for, runs.fire_key AS run_fire_key, schedules.schedule_id, schedules.schedule_revision, schedules.job_owner, schedules.job_name, schedules.job_major, schedules.contract_name, schedules.contract_revision, schedules.contract_schema_sha256, schedules.scope_id, schedules.concurrency_key, schedules.max_parallelism, schedules.enabled, schedules.policy_bytes, schedules.next_due_at_unix_ms FROM hermes_platform.scheduler_runs AS runs JOIN hermes_platform.scheduler_run_retries AS retries ON retries.run_id = runs.run_id JOIN hermes_platform.scheduler_schedules AS schedules ON schedules.schedule_id = runs.schedule_id AND schedules.schedule_revision = runs.schedule_revision WHERE runs.run_id = $1 AND runs.state = 'retry_wait' AND retries.next_attempt_at_unix_ms <= $2 AND schedules.enabled = TRUE FOR UPDATE OF runs, retries, schedules",
+        "SELECT runs.run_id AS run_id, runs.lease_epoch AS run_lease_epoch, runs.scheduled_for_unix_ms AS run_scheduled_for, runs.fire_key AS run_fire_key, schedules.schedule_id, schedules.schedule_revision, schedules.job_owner, schedules.job_name, schedules.job_major, schedules.contract_name, schedules.contract_revision, schedules.contract_schema_sha256, schedules.scope_id, schedules.concurrency_key, schedules.max_parallelism, schedules.enabled, schedules.policy_bytes, schedules.next_due_at_unix_ms FROM makosh_platform.scheduler_runs AS runs JOIN makosh_platform.scheduler_run_retries AS retries ON retries.run_id = runs.run_id JOIN makosh_platform.scheduler_schedules AS schedules ON schedules.schedule_id = runs.schedule_id AND schedules.schedule_revision = runs.schedule_revision WHERE runs.run_id = $1 AND runs.state = 'retry_wait' AND retries.next_attempt_at_unix_ms <= $2 AND schedules.enabled = TRUE FOR UPDATE OF runs, retries, schedules",
     )
     .bind(run_id)
     .bind(now.value())
@@ -274,7 +274,7 @@ async fn lock_current_due(
     candidate: &SchedulerDueScheduleV1,
 ) -> Result<Option<SchedulerDueScheduleV1>, SchedulerMaterializationErrorV1> {
     let row = query(
-        "SELECT schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms FROM hermes_platform.scheduler_schedules WHERE schedule_id = $1 AND enabled = TRUE FOR UPDATE",
+        "SELECT schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms FROM makosh_platform.scheduler_schedules WHERE schedule_id = $1 AND enabled = TRUE FOR UPDATE",
     )
     .bind(candidate.spec().schedule_id().bytes().to_vec())
     .fetch_optional(&mut **transaction)
@@ -414,7 +414,7 @@ async fn advance_schedule(
         ScheduleContinuationV1::AfterTerminalDelay(_) => return Ok(()),
     };
     let updated = query(
-        "UPDATE hermes_platform.scheduler_schedules SET enabled = $1, next_due_at_unix_ms = $2, updated_at_unix_ms = $3 WHERE schedule_id = $4 AND schedule_revision = $5 AND enabled = TRUE AND next_due_at_unix_ms = $6",
+        "UPDATE makosh_platform.scheduler_schedules SET enabled = $1, next_due_at_unix_ms = $2, updated_at_unix_ms = $3 WHERE schedule_id = $4 AND schedule_revision = $5 AND enabled = TRUE AND next_due_at_unix_ms = $6",
     )
     .bind(enabled)
     .bind(next_due.value())
@@ -432,7 +432,7 @@ async fn advance_schedule(
 
 fn fire_key(schedule: &SchedulerDueScheduleV1, scheduled_for: UtcMillisV1) -> [u8; 32] {
     digest(
-        b"hermes.scheduler.fire.v1",
+        b"makosh.scheduler.fire.v1",
         &[
             &schedule.spec().schedule_id().bytes(),
             &schedule.spec().revision().value().to_be_bytes(),
@@ -443,7 +443,7 @@ fn fire_key(schedule: &SchedulerDueScheduleV1, scheduled_for: UtcMillisV1) -> [u
 
 fn dispatch_key(run_id: [u8; 16], lease_epoch: u64) -> [u8; 32] {
     digest(
-        b"hermes.scheduler.dispatch.v1",
+        b"makosh.scheduler.dispatch.v1",
         &[&run_id, &lease_epoch.to_be_bytes()],
     )
 }

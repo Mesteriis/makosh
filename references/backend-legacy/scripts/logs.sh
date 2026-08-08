@@ -8,7 +8,7 @@ source "$SCRIPT_DIR/lib/common.sh"
 
 current_log_dir="$LOG_ROOT/current"
 live_log="$current_log_dir/live.log"
-follow_logs="${HERMES_LOGS_FOLLOW:-1}"
+follow_logs="${MAKOSH_LOGS_FOLLOW:-1}"
 
 if [ ! -L "$current_log_dir" ] && [ ! -d "$current_log_dir" ]; then
 	error "No active dev log session found at $current_log_dir. Run make dev first."

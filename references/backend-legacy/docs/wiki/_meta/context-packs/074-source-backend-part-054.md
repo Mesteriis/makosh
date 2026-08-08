@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/workflows/email_intelligence/tests.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_intelligence/tests.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_intelligence/tests.rs`
 - Size bytes / Размер в байтах: `5736`
 - Included characters / Включено символов: `5736`
 - Truncated / Обрезано: `no`
@@ -256,7 +256,7 @@ fn email_category_from_str_all_valid() {
 
 ### `backend/src/workflows/email_sync_pipeline.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_sync_pipeline.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_sync_pipeline.rs`
 - Size bytes / Размер в байтах: `451`
 - Included characters / Включено символов: `451`
 - Truncated / Обрезано: `no`
@@ -284,7 +284,7 @@ pub use service::project_email_sync_batch_with_mail_blobs;
 
 ### `backend/src/workflows/email_sync_pipeline/attachments.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_sync_pipeline/attachments.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_sync_pipeline/attachments.rs`
 - Size bytes / Размер в байтах: `3501`
 - Included characters / Включено символов: `3501`
 - Truncated / Обрезано: `no`
@@ -382,7 +382,7 @@ fn mail_attachment_disposition(
 
 ### `backend/src/workflows/email_sync_pipeline/candidates.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_sync_pipeline/candidates.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_sync_pipeline/candidates.rs`
 - Size bytes / Размер в байтах: `1387`
 - Included characters / Включено символов: `1387`
 - Truncated / Обрезано: `no`
@@ -432,7 +432,7 @@ pub(crate) async fn refresh_message_context_candidates(
 
 ### `backend/src/workflows/email_sync_pipeline/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_sync_pipeline/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_sync_pipeline/errors.rs`
 - Size bytes / Размер в байтах: `2975`
 - Included characters / Включено символов: `2975`
 - Truncated / Обрезано: `no`
@@ -539,7 +539,7 @@ pub enum EmailSyncPipelineError {
 
 ### `backend/src/workflows/email_sync_pipeline/ids.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_sync_pipeline/ids.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_sync_pipeline/ids.rs`
 - Size bytes / Размер в байтах: `663`
 - Included characters / Включено символов: `663`
 - Truncated / Обрезано: `no`
@@ -570,7 +570,7 @@ fn append_raw_record_id_component(encoded: &mut String, value: &str) {
 
 ### `backend/src/workflows/email_sync_pipeline/knowledge.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_sync_pipeline/knowledge.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_sync_pipeline/knowledge.rs`
 - Size bytes / Размер в байтах: `2660`
 - Included characters / Включено символов: `2660`
 - Truncated / Обрезано: `no`
@@ -650,7 +650,7 @@ pub(crate) async fn project_message_knowledge(
 
 ### `backend/src/workflows/email_sync_pipeline/organizations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_sync_pipeline/organizations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_sync_pipeline/organizations.rs`
 - Size bytes / Размер в байтах: `5504`
 - Included characters / Включено символов: `5504`
 - Truncated / Обрезано: `no`
@@ -819,7 +819,7 @@ async fn materialize_email_participant_member_relationship(
 
 ### `backend/src/workflows/email_sync_pipeline/participants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_sync_pipeline/participants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_sync_pipeline/participants.rs`
 - Size bytes / Размер в байтах: `1909`
 - Included characters / Включено символов: `1909`
 - Truncated / Обрезано: `no`
@@ -897,7 +897,7 @@ fn clean_display_name(value: &str) -> Option<String> {
 
 ### `backend/src/workflows/email_sync_pipeline/raw_payload.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_sync_pipeline/raw_payload.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_sync_pipeline/raw_payload.rs`
 - Size bytes / Размер в байтах: `2757`
 - Included characters / Включено символов: `2757`
 - Truncated / Обрезано: `no`
@@ -980,7 +980,7 @@ fn required_payload_string<'a>(
 
 ### `backend/src/workflows/email_sync_pipeline/raw_records.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_sync_pipeline/raw_records.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_sync_pipeline/raw_records.rs`
 - Size bytes / Размер в байтах: `2498`
 - Included characters / Включено символов: `2498`
 - Truncated / Обрезано: `no`
@@ -1053,7 +1053,7 @@ pub(crate) async fn project_raw_records(
 
 ### `backend/src/workflows/email_sync_pipeline/recording.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_sync_pipeline/recording.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_sync_pipeline/recording.rs`
 - Size bytes / Размер в байтах: `5172`
 - Included characters / Включено символов: `5172`
 - Truncated / Обрезано: `no`
@@ -1214,7 +1214,7 @@ fn validate_non_empty(field: &'static str, value: &str) -> Result<String, EmailS
 
 ### `backend/src/workflows/email_sync_pipeline/relationships.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_sync_pipeline/relationships.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_sync_pipeline/relationships.rs`
 - Size bytes / Размер в байтах: `1087`
 - Included characters / Включено символов: `1087`
 - Truncated / Обрезано: `no`
@@ -1261,7 +1261,7 @@ pub(crate) async fn insert_relationship_event(
 
 ### `backend/src/workflows/email_sync_pipeline/report.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_sync_pipeline/report.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_sync_pipeline/report.rs`
 - Size bytes / Размер в байтах: `760`
 - Included characters / Включено символов: `760`
 - Truncated / Обрезано: `no`
@@ -1292,7 +1292,7 @@ pub struct EmailSyncPipelineReport {
 
 ### `backend/src/workflows/email_sync_pipeline/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_sync_pipeline/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_sync_pipeline/service.rs`
 - Size bytes / Размер в байтах: `3155`
 - Included characters / Включено символов: `3155`
 - Truncated / Обрезано: `no`
@@ -1372,7 +1372,7 @@ pub async fn project_email_sync_batch_with_mail_blobs(
 
 ### `backend/src/workflows/graph_projection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/graph_projection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/graph_projection.rs`
 - Size bytes / Размер в байтах: `296`
 - Included characters / Включено символов: `296`
 - Truncated / Обрезано: `no`
@@ -1399,7 +1399,7 @@ pub use service::GraphProjectionService;
 
 ### `backend/src/workflows/graph_projection/constants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/graph_projection/constants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/graph_projection/constants.rs`
 - Size bytes / Размер в байтах: `57`
 - Included characters / Включено символов: `57`
 - Truncated / Обрезано: `no`
@@ -1410,7 +1410,7 @@ pub(super) const PROJECT_KEYWORD_CONFIDENCE: f64 = 0.75;
 
 ### `backend/src/workflows/graph_projection/decisions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/graph_projection/decisions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/graph_projection/decisions.rs`
 - Size bytes / Размер в байтах: `8974`
 - Included characters / Включено символов: `8974`
 - Truncated / Обрезано: `no`
@@ -1702,7 +1702,7 @@ pub(super) fn entity_graph_node_kind(
 
 ### `backend/src/workflows/graph_projection/documents.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/graph_projection/documents.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/graph_projection/documents.rs`
 - Size bytes / Размер в байтах: `1482`
 - Included characters / Включено символов: `1482`
 - Truncated / Обрезано: `no`
@@ -1759,7 +1759,7 @@ impl GraphProjectionService {
 
 ### `backend/src/workflows/graph_projection/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/graph_projection/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/graph_projection/errors.rs`
 - Size bytes / Размер в байтах: `775`
 - Included characters / Включено символов: `775`
 - Truncated / Обрезано: `no`
@@ -1794,7 +1794,7 @@ pub enum GraphProjectionError {
 
 ### `backend/src/workflows/graph_projection/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/graph_projection/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/graph_projection/evidence.rs`
 - Size bytes / Размер в байтах: `1841`
 - Included characters / Включено символов: `1841`
 - Truncated / Обрезано: `no`
@@ -1850,7 +1850,7 @@ pub(super) fn project_document_evidence(document: &ProjectMatchedDocument) -> Ne
 
 ### `backend/src/workflows/graph_projection/helpers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/graph_projection/helpers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/graph_projection/helpers.rs`
 - Size bytes / Размер в байтах: `962`
 - Included characters / Включено символов: `962`
 - Truncated / Обрезано: `no`
@@ -1884,7 +1884,7 @@ pub(super) fn project_review_confidence(review_state: ProjectLinkReviewState) ->
 
 ### `backend/src/workflows/graph_projection/messages.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/graph_projection/messages.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/graph_projection/messages.rs`
 - Size bytes / Размер в байтах: `6197`
 - Included characters / Включено символов: `6197`
 - Truncated / Обрезано: `no`
@@ -2093,7 +2093,7 @@ impl GraphProjectionService {
 
 ### `backend/src/workflows/graph_projection/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/graph_projection/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/graph_projection/models.rs`
 - Size bytes / Размер в байтах: `2591`
 - Included characters / Включено символов: `2591`
 - Truncated / Обрезано: `no`
@@ -2186,7 +2186,7 @@ pub(super) enum RelationshipDirection {
 
 ### `backend/src/workflows/graph_projection/obligations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/graph_projection/obligations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/graph_projection/obligations.rs`
 - Size bytes / Размер в байтах: `9113`
 - Included characters / Включено символов: `9113`
 - Truncated / Обрезано: `no`

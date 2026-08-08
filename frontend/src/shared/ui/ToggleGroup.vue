@@ -30,8 +30,8 @@ const emit = defineEmits<{
 }>()
 
 const classes = computed(() => [
-	'hermes-toggle-group',
-	{ 'hermes-toggle-group--multiple': props.multiple },
+	'makosh-toggle-group',
+	{ 'makosh-toggle-group--multiple': props.multiple },
 	props.class
 ])
 
@@ -67,8 +67,8 @@ function toggleItem(item: ToggleGroupItem): void {
 			v-for="item in items"
 			:key="item.value"
 			:class="[
-				'hermes-toggle-group__item',
-				item.iconOnly && 'hermes-toggle-group__item--icon-only'
+				'makosh-toggle-group__item',
+				item.iconOnly && 'makosh-toggle-group__item--icon-only'
 			]"
 			type="button"
 			:aria-label="item.iconOnly ? item.label : undefined"
@@ -81,7 +81,7 @@ function toggleItem(item: ToggleGroupItem): void {
 				v-if="item.icon"
 				:icon="item.icon"
 				:size="item.iconOnly ? '1.15rem' : '1rem'"
-				class="hermes-toggle-group__icon"
+				class="makosh-toggle-group__icon"
 				aria-hidden="true"
 			/>
 			<span v-if="!item.iconOnly">{{ item.label }}</span>

@@ -32,7 +32,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
         let row = sqlx::query(
             "SELECT logical_owner_id, intent_id, reference_id, declared_bytes,
                     sha256, custody_source_proof, reason, attempt_count
-             FROM hermes_data.communication_delivery_intent_ingress_cleanup
+             FROM makosh_data.communication_delivery_intent_ingress_cleanup
              WHERE logical_owner_id = $1
                AND completed_at_unix_seconds IS NULL
                AND next_attempt_at_unix_seconds <= $2
@@ -60,7 +60,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
             return Err(DeliveryIntentPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_delivery_intent_ingress_cleanup
+            "UPDATE makosh_data.communication_delivery_intent_ingress_cleanup
              SET completed_at_unix_seconds = $1,
                  updated_at_unix_seconds = $1
              WHERE logical_owner_id = $2 AND intent_id = $3
@@ -95,7 +95,7 @@ impl CommunicationDeliveryIntentPersistenceV1 {
         let expected_attempt_count = i16::try_from(expected_attempt_count)
             .map_err(|_| DeliveryIntentPersistenceErrorV1::InvalidInput)?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_delivery_intent_ingress_cleanup
+            "UPDATE makosh_data.communication_delivery_intent_ingress_cleanup
              SET attempt_count = LEAST(attempt_count + 1, 32),
                  next_attempt_at_unix_seconds = $1,
                  updated_at_unix_seconds = $2

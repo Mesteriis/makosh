@@ -1,6 +1,6 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ContractReferenceV1, ManagedRuntimeClientRealtimePublishRequestV1,
@@ -12,7 +12,7 @@ use hermes_runtime_protocol::{
         validate_managed_client_realtime_publish_response_v1,
     },
 };
-use hermes_telegram_api::{
+use makosh_telegram_api::{
     TelegramAuthorizationStatus,
     client_contract::{
         TELEGRAM_AUTHORIZATION_STATUS_CHANGED_CONTRACT_NAME_V1, TELEGRAM_CLIENT_CONTRACT_MAJOR,
@@ -106,7 +106,7 @@ where
 
 fn event_id(owner: &str, generation: u64, revision: u64, state: &str) -> [u8; 16] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.telegram.authorization.client-realtime.v1\0");
+    hash.update(b"makosh.telegram.authorization.client-realtime.v1\0");
     hash.update(owner.as_bytes());
     hash.update([0]);
     hash.update(generation.to_be_bytes());

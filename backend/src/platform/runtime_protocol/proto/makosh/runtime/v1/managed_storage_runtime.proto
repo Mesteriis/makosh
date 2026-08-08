@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package makosh.runtime.v1;
+
+// Short-lived, non-secret storage and Vault facts for an independently
+// supervised managed runtime. Credential material is resolved only through
+// the inherited Kernel route and is not representable here.
+message ManagedStorageRuntimeConfigurationV1 {
+  string database_id = 1;
+  string pgbouncer_host = 2;
+  uint32 pgbouncer_port = 3;
+  string runtime_principal = 4;
+  uint64 storage_generation = 5;
+  uint64 credential_revision = 6;
+  string storage_instance_id = 7;
+  string owner = 8;
+  uint64 role_epoch = 9;
+  string pool_alias = 10;
+  uint32 max_connections = 11;
+  uint32 statement_timeout_millis = 12;
+  uint64 storage_bundle_revision = 13;
+  bytes storage_bundle_digest = 14;
+  string vault_instance_id = 15;
+  uint64 vault_runtime_generation = 16;
+  bytes vault_hpke_public_key_x25519 = 17;
+  string runtime_instance_id = 18;
+  // Storage owner namespace copied from the admitted binding identity. A
+  // workflow may serve a distinct logical human owner without changing its
+  // module-owned database namespace.
+  string logical_owner_id = 19;
+}

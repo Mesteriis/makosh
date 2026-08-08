@@ -1,7 +1,7 @@
-use hermes_communications_api::accounts::ProviderAccountPortError;
-use hermes_communications_api::accounts::ProviderSecretBindingPortError;
-use hermes_events_api::EventEnvelopeError;
-use hermes_provider_zoom::protocol::ZoomProtocolError;
+use makosh_communications_api::accounts::ProviderAccountPortError;
+use makosh_communications_api::accounts::ProviderSecretBindingPortError;
+use makosh_events_api::EventEnvelopeError;
+use makosh_provider_zoom::protocol::ZoomProtocolError;
 use thiserror::Error;
 
 use crate::platform::calls::errors::CallError;
@@ -10,7 +10,7 @@ use crate::platform::secrets::errors::{SecretReferenceError, SecretResolutionErr
 use crate::platform::settings::errors::SettingsError;
 use crate::platform::storage::errors::StorageError;
 use crate::vault::errors::HostVaultError;
-use hermes_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::errors::EventStoreError;
 
 #[derive(Debug, Error)]
 pub enum ZoomError {

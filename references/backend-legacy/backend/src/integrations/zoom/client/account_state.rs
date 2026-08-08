@@ -5,7 +5,7 @@ use super::super::models::{ZoomAccount, ZoomTranscriptObservationRequest};
 use super::auth::validate_account_id;
 use super::{ZoomError, ZoomStore};
 use crate::platform::calls::models::{CallDirection, CallState, NewProviderCall};
-use hermes_provider_zoom::protocol::ZOOM_PROVIDER_KIND_STR;
+use makosh_provider_zoom::protocol::ZOOM_PROVIDER_KIND_STR;
 
 impl ZoomStore {
     pub(super) async fn zoom_account(&self, account_id: &str) -> Result<ZoomAccount, ZoomError> {

@@ -5,9 +5,9 @@ use sqlx::{Postgres, Transaction};
 
 use super::errors::CalendarError;
 use super::models::{CalendarAccount, CalendarAccountUpdate};
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::review_links::link_domain_entity_in_transaction;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::review_links::link_domain_entity_in_transaction;
+use makosh_observations_postgres::store::ObservationStore;
 
 #[derive(Clone)]
 pub struct CalendarAccountStore {
@@ -390,7 +390,7 @@ async fn link_vault_owned_entity_in_transaction(
     relationship_kind: &str,
     base_metadata: serde_json::Value,
     extra_metadata: Option<serde_json::Value>,
-) -> Result<(), hermes_observations_postgres::errors::ObservationStoreError> {
+) -> Result<(), makosh_observations_postgres::errors::ObservationStoreError> {
     let metadata = match extra_metadata {
         Some(extra) if base_metadata.is_object() && extra.is_object() => {
             let mut merged = base_metadata;

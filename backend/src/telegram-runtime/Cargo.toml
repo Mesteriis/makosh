@@ -1,50 +1,50 @@
 [package]
-name = "hermes-telegram-runtime"
+name = "makosh-telegram-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
 [lib]
-name = "hermes_telegram_runtime"
+name = "makosh_telegram_runtime"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-telegram-runtime"
+name = "makosh-telegram-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "telegram"
 surface = "runtime"
 
 [dependencies]
-hermes-blob-client-contract = { path = "../platform/blob/client-contract" }
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-clock-protocol = { path = "../platform/clock/protocol" }
-hermes-communications-ingress = { path = "../communications-ingress" }
-hermes-communications-call-evidence-ingress = { path = "../communications-call-evidence-ingress" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-events-jetstream = { path = "../platform/events/jetstream" }
-hermes-managed-vault-client = { path = "../platform/vault/managed_client" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-scheduler-protocol = { path = "../platform/scheduler/protocol" }
-hermes-secure-file = { path = "../platform/secure_file" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
-hermes-telegram-core = { path = "../telegram-core" }
-hermes-telegram-api = { path = "../telegram-api" }
-hermes-telegram-automation-api = { path = "../telegram-automation-api" }
-hermes-telegram-automation-core = { path = "../telegram-automation-core" }
-hermes-telegram-automation-persistence = { path = "../telegram-automation-persistence" }
-hermes-telegram-calls-api = { path = "../telegram-calls-api" }
-hermes-telegram-calls-core = { path = "../telegram-calls-core" }
-hermes-telegram-calls-persistence = { path = "../telegram-calls-persistence" }
-hermes-telegram-call-media-contract = { path = "../telegram-call-media-contract" }
-hermes-telegram-call-media-tgcalls = { path = "../telegram-call-media-tgcalls" }
-hermes-telegram-delivery-intent-contract = { path = "../telegram-delivery-intent-contract" }
-hermes-telegram-persistence = { path = "../telegram-persistence" }
-hermes-telegram-tdlib = { path = "../telegram-tdlib" }
-hermes-vault-protocol = { path = "../platform/vault/protocol" }
+makosh-blob-client-contract = { path = "../platform/blob/client-contract" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-clock-protocol = { path = "../platform/clock/protocol" }
+makosh-communications-ingress = { path = "../communications-ingress" }
+makosh-communications-call-evidence-ingress = { path = "../communications-call-evidence-ingress" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-managed-vault-client = { path = "../platform/vault/managed_client" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-scheduler-protocol = { path = "../platform/scheduler/protocol" }
+makosh-secure-file = { path = "../platform/secure_file" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
+makosh-telegram-core = { path = "../telegram-core" }
+makosh-telegram-api = { path = "../telegram-api" }
+makosh-telegram-automation-api = { path = "../telegram-automation-api" }
+makosh-telegram-automation-core = { path = "../telegram-automation-core" }
+makosh-telegram-automation-persistence = { path = "../telegram-automation-persistence" }
+makosh-telegram-calls-api = { path = "../telegram-calls-api" }
+makosh-telegram-calls-core = { path = "../telegram-calls-core" }
+makosh-telegram-calls-persistence = { path = "../telegram-calls-persistence" }
+makosh-telegram-call-media-contract = { path = "../telegram-call-media-contract" }
+makosh-telegram-call-media-tgcalls = { path = "../telegram-call-media-tgcalls" }
+makosh-telegram-delivery-intent-contract = { path = "../telegram-delivery-intent-contract" }
+makosh-telegram-persistence = { path = "../telegram-persistence" }
+makosh-telegram-tdlib = { path = "../telegram-tdlib" }
+makosh-vault-protocol = { path = "../platform/vault/protocol" }
 getrandom = { version = "=0.4.3", default-features = false }
 libc = "=0.2.186"
 prost = "=0.14.4"

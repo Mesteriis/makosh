@@ -1,5 +1,5 @@
 [package]
-name = "hermes-signal-hub-api"
+name = "makosh-signal-hub-api"
 publish = false
 version = "0.1.0"
 edition = "2024"
@@ -8,7 +8,7 @@ license = "MIT"
 
 [dependencies]
 chrono = "0.4"
-hermes-events-api = { path = "../events-api" }
+makosh-events-api = { path = "../events-api" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 thiserror = "2"

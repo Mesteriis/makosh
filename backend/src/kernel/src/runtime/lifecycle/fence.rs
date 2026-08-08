@@ -1,6 +1,6 @@
 //! Current managed-module runtime authority derived from durable Kernel state.
 
-use hermes_kernel_control_store::RuntimeTrustStore;
+use makosh_kernel_control_store::RuntimeTrustStore;
 
 pub(crate) fn current_managed_runtime_matches<S>(
     store: &S,

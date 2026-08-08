@@ -44,7 +44,7 @@ Communications business state remains provider-neutral and lives under:
 | POST | `/api/v1/integrations/telegram/provider-sync/chats` | Provider chat sync |
 | POST | `/api/v1/integrations/telegram/provider-sync/history` | Provider history sync |
 | POST | `/api/v1/communications/conversations/{telegram_chat_id}/avatar` | Download the current TDLib chat photo to local blob storage |
-| GET | `/api/v1/communications/conversations/{telegram_chat_id}/avatar` | Read a locally stored raster chat photo; requires the normal Hermes API secret header |
+| GET | `/api/v1/communications/conversations/{telegram_chat_id}/avatar` | Read a locally stored raster chat photo; requires the normal Макошь API secret header |
 
 ## Topics
 
@@ -81,7 +81,7 @@ Communications business state remains provider-neutral and lives under:
 ## Notes
 
 - Provider search and provider sync remain integration-scoped runtime surfaces.
-- Chat avatar bytes remain local and content-addressed. Hermes only serves JPEG, PNG, or WebP
+- Chat avatar bytes remain local and content-addressed. Макошь only serves JPEG, PNG, or WebP
   after matching the stored blob to the current TDLib file reference; an avatar is never projected
   as a message attachment or exposed as a TDLib filesystem path.
 - Provider-command message routes under `/api/v1/integrations/telegram/provider-commands/messages/*` are debug/control/recovery surfaces, not normal Communication UI APIs.

@@ -1,4 +1,4 @@
-use hermes_blob_protocol::{BlobCustodyScopeV1, BlobRefV1};
+use makosh_blob_protocol::{BlobCustodyScopeV1, BlobRefV1};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub(crate) struct BlobMetadataRecordV1 {

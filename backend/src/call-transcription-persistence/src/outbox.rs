@@ -14,7 +14,7 @@ pub(crate) async fn insert_outbox(
     created_at_unix_millis: i64,
 ) -> Result<(), CallTranscriptionPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.call_transcription_outbox
+        "INSERT INTO makosh_data.call_transcription_outbox
          (logical_owner_id,message_id,envelope_sha256,envelope_bytes,created_at_unix_millis)
          VALUES ($1,$2,$3,$4,$5)",
     )
@@ -42,7 +42,7 @@ impl CallTranscriptionPersistenceV1 {
         }
         sqlx::query(
             "SELECT message_id,envelope_sha256,envelope_bytes FROM
-             hermes_data.call_transcription_outbox WHERE logical_owner_id=$1
+             makosh_data.call_transcription_outbox WHERE logical_owner_id=$1
                AND published_at_unix_millis IS NULL
              ORDER BY created_at_unix_millis,message_id LIMIT $2",
         )
@@ -77,7 +77,7 @@ impl CallTranscriptionPersistenceV1 {
             return Err(CallTranscriptionPersistenceErrorV1::InvalidInput);
         }
         let changed = sqlx::query(
-            "UPDATE hermes_data.call_transcription_outbox SET published_at_unix_millis=$1
+            "UPDATE makosh_data.call_transcription_outbox SET published_at_unix_millis=$1
              WHERE logical_owner_id=$2 AND message_id=$3 AND envelope_sha256=$4
                AND published_at_unix_millis IS NULL AND created_at_unix_millis<=$1",
         )

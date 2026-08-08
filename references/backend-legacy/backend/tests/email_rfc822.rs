@@ -1,5 +1,5 @@
-use hermes_hub_backend::platform::communications::rfc822::models::ParsedEmailAttachmentDisposition;
-use hermes_hub_backend::platform::communications::rfc822::parser::parse_rfc822_message;
+use makosh_hub_backend::platform::communications::rfc822::models::ParsedEmailAttachmentDisposition;
+use makosh_hub_backend::platform::communications::rfc822::parser::parse_rfc822_message;
 
 #[test]
 fn rfc822_parser_extracts_nested_multipart_attachments_for_current_basic_slice() {
@@ -95,7 +95,7 @@ fn rfc822_parser_preserves_source_headers_with_folded_values() {
         "Subject: Folded headers\r\n",
         "From: Sender <sender@example.invalid>\r\n",
         "To: Recipient <recipient@example.invalid>\r\n",
-        "X-Hermes-Trace: first line\r\n",
+        "X-Макошь-Trace: first line\r\n",
         "\tcontinued line\r\n",
         "Content-Type: text/plain; charset=utf-8\r\n",
         "\r\n",
@@ -105,7 +105,7 @@ fn rfc822_parser_preserves_source_headers_with_folded_values() {
     let parsed = parse_rfc822_message(raw.as_bytes()).expect("parse folded header message");
 
     assert!(parsed.headers.contains(&(
-        "X-Hermes-Trace".to_owned(),
+        "X-Макошь-Trace".to_owned(),
         "first line continued line".to_owned()
     )));
     assert!(parsed.headers.contains(&(

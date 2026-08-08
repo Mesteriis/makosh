@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import {
 	MailAccountReadinessV1,
 	MailProviderPathReadinessV1,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
 import { listMailAccounts } from '../api/mailAccountQueryClient'
 import { useMailAccountConnections } from './useMailAccountConnections'
 
@@ -12,7 +12,7 @@ vi.mock('../api/mailAccountQueryClient', () => ({
 }))
 
 const modules = [{
-	moduleId: 'hermes-mail-runtime',
+	moduleId: 'makosh-mail-runtime',
 	registrationId: 'mail-registration',
 	sectionsEnabled: true,
 	capabilityIds: ['mail.account.catalog.query.v1'],

@@ -1,9 +1,9 @@
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BundledManagedLaunchBinding, InitialOwnerIdentity, ManagedLaunchRecord, ModuleClientRpcRouteV1,
     ModuleRegistration, ModuleRegistrationState,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::{
     CapabilityCriticalityV1, CapabilityDescriptorV1, ClientRpcRouteV1, ContractReferenceV1,
     ModuleClientRequestV1, ModuleDescriptorV1, ModuleKindV1, ProvidedSurfaceKindV1,
     ProvidedSurfaceV1,
@@ -19,7 +19,7 @@ use super::common::unique_target_root;
 
 #[test]
 fn control_store_exposes_only_approved_owner_client_rpc_routes() {
-    let root = unique_target_root("hermes-client-rpc-route");
+    let root = unique_target_root("makosh-client-rpc-route");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -52,12 +52,12 @@ fn control_store_exposes_only_approved_owner_client_rpc_routes() {
             "notes.query",
             "owner_notes",
             "notes.query",
-            hermes_kernel_control_store::ModuleClientRpcContractVersionV1 {
+            makosh_kernel_control_store::ModuleClientRpcContractVersionV1 {
                 major: 1,
                 revision: 1,
             },
             [7; 32],
-            "/hermes.notes.v1.NotesQueryService/Query",
+            "/makosh.notes.v1.NotesQueryService/Query",
         )],
     );
     std::fs::remove_dir_all(root).expect("remove fixture directory");
@@ -65,12 +65,12 @@ fn control_store_exposes_only_approved_owner_client_rpc_routes() {
 
 #[test]
 fn control_store_rejects_foreign_or_duplicate_client_rpc_routes_atomically() {
-    let root = unique_target_root("hermes-client-rpc-route-invalid");
+    let root = unique_target_root("makosh-client-rpc-route-invalid");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
-    let valid = client_route("owner_notes", "/hermes.notes.v1.NotesQueryService/Query");
-    let foreign = client_route("owner_other", "/hermes.notes.v1.NotesQueryService/Query");
+    let valid = client_route("owner_notes", "/makosh.notes.v1.NotesQueryService/Query");
+    let foreign = client_route("owner_other", "/makosh.notes.v1.NotesQueryService/Query");
 
     for routes in [vec![foreign], vec![valid.clone(), valid]] {
         assert!(
@@ -78,7 +78,7 @@ fn control_store_rejects_foreign_or_duplicate_client_rpc_routes_atomically() {
                 .create_pending_registration_with_all_descriptor_requests(
                     &registration(),
                     &["notes.query".to_owned()],
-                    hermes_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
+                    makosh_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
                         storage: &[],
                         events: &[],
                         blobs: &[],
@@ -107,7 +107,7 @@ fn control_store_rejects_foreign_or_duplicate_client_rpc_routes_atomically() {
 #[test]
 fn managed_client_route_rejects_a_stale_runtime_generation_before_relay() {
     let (root, store, registration, grant_epoch, request) =
-        managed_route_fixture("hermes-client-rpc-stale-generation");
+        managed_route_fixture("makosh-client-rpc-stale-generation");
     let route = ManagedCapabilityRouteRequest::new(
         &registration,
         "runtime-current",
@@ -128,7 +128,7 @@ fn managed_client_route_rejects_a_stale_runtime_generation_before_relay() {
 #[test]
 fn managed_client_route_rejects_a_replaced_runtime_binding_before_relay() {
     let (root, store, registration, grant_epoch, request) =
-        managed_route_fixture("hermes-client-rpc-replaced-binding");
+        managed_route_fixture("makosh-client-rpc-replaced-binding");
     store
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             &registration,
@@ -254,7 +254,7 @@ fn client_route(owner: &str, path: &str) -> ModuleClientRpcRouteV1 {
         "notes.query",
         owner,
         "notes.query",
-        hermes_kernel_control_store::ModuleClientRpcContractVersionV1 {
+        makosh_kernel_control_store::ModuleClientRpcContractVersionV1 {
             major: 1,
             revision: 1,
         },
@@ -286,7 +286,7 @@ fn descriptor() -> ModuleDescriptorV1 {
                     schema_sha256: vec![7; 32],
                 }),
                 client_rpc_route: Some(ClientRpcRouteV1 {
-                    path: "/hermes.notes.v1.NotesQueryService/Query".to_owned(),
+                    path: "/makosh.notes.v1.NotesQueryService/Query".to_owned(),
                 }),
                 client_blob_route: None,
             }],

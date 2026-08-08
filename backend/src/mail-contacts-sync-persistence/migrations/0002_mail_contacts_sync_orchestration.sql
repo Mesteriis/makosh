@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.mail_contacts_sync_pages (
+CREATE TABLE makosh_data.mail_contacts_sync_pages (
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
     page_sequence BIGINT NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE hermes_data.mail_contacts_sync_pages (
     CHECK (length(completed_envelope_sha256) = 32)
 );
 
-CREATE TABLE hermes_data.mail_contacts_sync_entries (
+CREATE TABLE makosh_data.mail_contacts_sync_entries (
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
     page_sequence BIGINT NOT NULL,
@@ -41,10 +41,10 @@ CREATE TABLE hermes_data.mail_contacts_sync_entries (
     CHECK ((outcome = 0 AND outcome_message_id IS NULL AND outcome_envelope_sha256 IS NULL AND NOT outcome_accounted)
         OR (outcome != 0 AND length(outcome_message_id) = 16 AND length(outcome_envelope_sha256) = 32)),
     FOREIGN KEY (logical_owner_id, run_id)
-        REFERENCES hermes_data.mail_contacts_sync_runs (logical_owner_id, run_id)
+        REFERENCES makosh_data.mail_contacts_sync_runs (logical_owner_id, run_id)
 );
 
 CREATE INDEX mail_contacts_sync_entries_run_idx
-ON hermes_data.mail_contacts_sync_entries (
+ON makosh_data.mail_contacts_sync_entries (
     logical_owner_id, run_id, page_sequence, outcome_accounted, contact_command_id
 );

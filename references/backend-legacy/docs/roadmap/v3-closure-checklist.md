@@ -2,7 +2,7 @@
 
 ## Release Goal
 
-Version 3.0 is complete when Hermes Hub exposes local, source-backed AI workflows over the existing memory spine: Ollama runtime health, pgvector semantic retrieval, cited answers, suggested task candidates, meeting prep packets, persisted agent run history and desktop AI surfaces.
+Version 3.0 is complete when Макошь exposes local, source-backed AI workflows over the existing memory spine: Ollama runtime health, pgvector semantic retrieval, cited answers, suggested task candidates, meeting prep packets, persisted agent run history and desktop AI surfaces.
 
 ## In Scope
 
@@ -11,7 +11,7 @@ Version 3.0 is complete when Hermes Hub exposes local, source-backed AI workflow
 - Semantic indexing from existing canonical projections.
 - Retrieval planner combining semantic nearest neighbors and local text match signals.
 - Prompt builder that treats retrieved source text as untrusted context.
-- Registered agents: `HESTIA`, `HERMES`, `MNEMOSYNE`, `ATHENA`.
+- Registered agents: `HESTIA`, `MAKOSH`, `MNEMOSYNE`, `ATHENA`.
 - Persisted AI run history with model config, prompt template version, citations, answer, timings, constant frontend actor and correlation IDs.
 - Canonical events for AI run requested/completed/failed and task extraction completion.
 - Protected AI APIs with local shared secret header.
@@ -39,7 +39,7 @@ Version 3.0 is complete when Hermes Hub exposes local, source-backed AI workflow
 - [x] `task_candidates` supports `agent_run_id` for AI-suggested candidates.
 - [x] Ollama client covers `/api/version`, `/api/tags`, `/api/chat` and `/api/embed`.
 - [x] AI APIs expose status, agents, run history, answers, task refresh and meeting prep.
-- [x] AI APIs require `X-Hermes-Secret`.
+- [x] AI APIs require `X-Макошь-Secret`.
 - [x] AI answers return citations and persist completed run history.
 - [x] AI task extraction creates suggested candidates only.
 - [x] Meeting prep returns a source-backed briefing without calendar writes.

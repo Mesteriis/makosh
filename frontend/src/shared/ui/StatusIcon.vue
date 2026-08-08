@@ -23,7 +23,7 @@ const statusIcons: Record<StatusIconKind, string> = {
 	syncing: 'tabler:refresh'
 }
 
-const classes = computed(() => ['hermes-status-icon', `hermes-status-icon--${props.status}`, props.class])
+const classes = computed(() => ['makosh-status-icon', `makosh-status-icon--${props.status}`, props.class])
 const accessibleLabel = computed(() => props.label ?? props.status)
 </script>
 

@@ -1,5 +1,5 @@
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_scheduler_protocol::ScheduleSpecV1;
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_scheduler_protocol::ScheduleSpecV1;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SchedulerScheduleUpsertV1 {

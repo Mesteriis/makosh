@@ -1,4 +1,4 @@
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::errors::ObservationStoreError;
 use thiserror::Error;
 
 #[derive(Debug, Error)]
@@ -13,10 +13,10 @@ pub enum ProviderCommunicationMessagePortError {
     Sqlx(#[from] sqlx::Error),
 
     #[error(transparent)]
-    EventStore(#[from] hermes_events_postgres::errors::EventStoreError),
+    EventStore(#[from] makosh_events_postgres::errors::EventStoreError),
 
     #[error(transparent)]
-    EventEnvelope(#[from] hermes_events_api::EventEnvelopeError),
+    EventEnvelope(#[from] makosh_events_api::EventEnvelopeError),
 
     #[error(transparent)]
     Json(#[from] serde_json::Error),

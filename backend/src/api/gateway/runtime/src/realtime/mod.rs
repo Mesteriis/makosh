@@ -10,21 +10,21 @@ use std::sync::{Arc, Mutex};
 use base64::{Engine, engine::general_purpose::URL_SAFE_NO_PAD};
 use bytes::Bytes;
 use futures_util::{StreamExt, stream};
-use hermes_gateway_protocol::{
+use http_body_util::{BodyExt, StreamBody};
+use hyper::body::Frame as HttpFrame;
+use hyper::header::{CACHE_CONTROL, CONTENT_TYPE, COOKIE, HeaderName};
+use hyper::{Method, Request, Response, StatusCode};
+use makosh_gateway_protocol::{
     v1::{
         ClientRealtimeFrameV1, ClientRealtimeStreamStateKindV1, ClientReplayGapV1,
         client_realtime_frame_v1::Frame,
     },
     validation::validate_client_realtime_frame,
 };
-use hermes_gateway_session::BrowserSession;
-use hermes_gateway_session_contract::{
+use makosh_gateway_session::BrowserSession;
+use makosh_gateway_session_contract::{
     BrowserAuthenticationAuthority, ClientSystemComponentStatusProjectionV1,
 };
-use http_body_util::{BodyExt, StreamBody};
-use hyper::body::Frame as HttpFrame;
-use hyper::header::{CACHE_CONTROL, CONTENT_TYPE, COOKIE, HeaderName};
-use hyper::{Method, Request, Response, StatusCode};
 use prost::Message;
 use tokio::sync::broadcast;
 
@@ -457,7 +457,7 @@ fn replay_gap_with_earliest(
 fn stream_state(state: ClientRealtimeStreamStateKindV1, cursor: &str) -> ClientRealtimeFrameV1 {
     ClientRealtimeFrameV1 {
         frame: Some(Frame::StreamState(
-            hermes_gateway_protocol::v1::ClientRealtimeStreamStateV1 {
+            makosh_gateway_protocol::v1::ClientRealtimeStreamStateV1 {
                 state: state as i32,
                 cursor: cursor.to_owned(),
             },
@@ -472,7 +472,7 @@ fn encode_sse(frame: &ClientRealtimeFrameV1) -> Bytes {
         payload.push_str(cursor);
         payload.push('\n');
     }
-    payload.push_str("event: hermes.realtime.v1\n");
+    payload.push_str("event: makosh.realtime.v1\n");
     payload.push_str("data: ");
     payload.push_str(&URL_SAFE_NO_PAD.encode(frame.encode_to_vec()));
     payload.push_str("\n\n");
@@ -513,9 +513,9 @@ fn response(status: StatusCode, body: &'static str) -> GatewayHttpResponse {
 
 #[cfg(test)]
 mod tests {
-    use hermes_gateway_protocol::v1::{ClientRealtimeEventV1, ClientSystemStatusChangedV1};
-    use hermes_gateway_session::BrowserGatewaySessionService;
-    use hermes_gateway_session_contract::{
+    use makosh_gateway_protocol::v1::{ClientRealtimeEventV1, ClientSystemStatusChangedV1};
+    use makosh_gateway_session::BrowserGatewaySessionService;
+    use makosh_gateway_session_contract::{
         BrowserAssertionAuthority, BrowserAuthenticationAuthority, BrowserDeviceAuthority,
         BrowserDeviceCredentialV1, BrowserDevicePrincipalV1, ClientSystemComponentIdV1,
         ClientSystemComponentStateV1, GatewayIdentityFenceV1,

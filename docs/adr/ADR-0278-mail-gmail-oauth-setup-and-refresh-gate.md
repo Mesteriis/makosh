@@ -58,7 +58,7 @@ Kernel capability router
         ↓
 Mail managed runtime
         ├─→ Mail-owned PKCE/operation state
-        ├─→ hermes-mail-gmail HTTPS token exchange
+        ├─→ makosh-mail-gmail HTTPS token exchange
         └─→ Kernel-issued action lease → encrypted Vault
 ```
 
@@ -200,16 +200,16 @@ events, subjects, logs, errors, health или settings.
 Responsibilities остаются раздельными:
 
 ```text
-hermes-mail-api          generated operational contracts
-hermes-mail-core         PKCE/state/operation decisions without I/O
-hermes-mail-gmail        Google HTTPS/form/JSON adapter
-hermes-mail-persistence  owner-local attempts, bindings and operation state
-hermes-mail-runtime      composition and Vault/provider orchestration
-hermes-managed-vault-client
+makosh-mail-api          generated operational contracts
+makosh-mail-core         PKCE/state/operation decisions without I/O
+makosh-mail-gmail        Google HTTPS/form/JSON adapter
+makosh-mail-persistence  owner-local attempts, bindings and operation state
+makosh-mail-runtime      composition and Vault/provider orchestration
+makosh-managed-vault-client
                          provider-neutral correlated encrypted Vault port
 ```
 
-`hermes-mail-gmail` не зависит от persistence/runtime/Kernel/Gateway/Vault или
+`makosh-mail-gmail` не зависит от persistence/runtime/Kernel/Gateway/Vault или
 Communications. Platform Vault client не знает Gmail/Mail purposes.
 
 ## Phase gate `mail_gmail_oauth_v1`

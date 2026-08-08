@@ -25,7 +25,7 @@ pub(super) fn derive_master_key(
     let digest = hasher.finalize();
     let hkdf = Hkdf::<sha2::Sha256>::new(None, &digest);
     let mut key = [0_u8; MASTER_KEY_LEN];
-    hkdf.expand(b"hermes-host-vault:master:v1", &mut key)
+    hkdf.expand(b"makosh-host-vault:master:v1", &mut key)
         .map_err(|_| HostVaultError::Crypto)?;
     Ok(key)
 }
@@ -36,7 +36,7 @@ pub(super) fn derive_domain_key(
 ) -> Result<[u8; MASTER_KEY_LEN], HostVaultError> {
     let hkdf = Hkdf::<sha2::Sha256>::new(None, master_key);
     let mut key = [0_u8; MASTER_KEY_LEN];
-    let mut info = b"hermes-host-vault:v1:".to_vec();
+    let mut info = b"makosh-host-vault:v1:".to_vec();
     info.extend_from_slice(label);
     hkdf.expand(&info, &mut key)
         .map_err(|_| HostVaultError::Crypto)?;

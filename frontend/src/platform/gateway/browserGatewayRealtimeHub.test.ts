@@ -5,7 +5,7 @@ import {
 	ClientRealtimeEventV1Schema,
 	ClientRealtimeStreamStateV1Schema,
 	ClientReplayGapV1Schema,
-} from '../../gen/hermes/gateway/v1/client_realtime_pb'
+} from '../../gen/makosh/gateway/v1/client_realtime_pb'
 import type {
 	BrowserGatewayRealtimeObserver,
 	BrowserGatewayRealtimeSubscription,

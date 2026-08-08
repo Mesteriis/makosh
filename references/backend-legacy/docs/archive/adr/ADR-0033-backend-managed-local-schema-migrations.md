@@ -4,7 +4,7 @@ Status: Proposed
 
 ## Context
 
-Hermes Hub is a local-first desktop product with PostgreSQL as primary store. The user must be able to start the local app without manually applying schema changes, while schema evolution still needs explicit, reviewable migration files.
+Макошь is a local-first desktop product with PostgreSQL as primary store. The user must be able to start the local app without manually applying schema changes, while schema evolution still needs explicit, reviewable migration files.
 
 ## Decision
 

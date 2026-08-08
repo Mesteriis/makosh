@@ -1,5 +1,5 @@
 [package]
-name = "hermes-mail-contacts-sync-api"
+name = "makosh-mail-contacts-sync-api"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,13 +7,13 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "mail_contacts_sync"
 surface = "contract"
 
 [dependencies]
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
 prost = "=0.14.4"
 
 [build-dependencies]

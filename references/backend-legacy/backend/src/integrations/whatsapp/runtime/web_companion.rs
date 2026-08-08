@@ -1,6 +1,6 @@
-use hermes_communications_api::accounts::ProviderAccountCommandPort;
-use hermes_communications_api::accounts::ProviderSecretBindingCommandPort;
-use hermes_communications_api::commands::ProviderCommandMirrorPort;
+use makosh_communications_api::accounts::ProviderAccountCommandPort;
+use makosh_communications_api::accounts::ProviderSecretBindingCommandPort;
+use makosh_communications_api::commands::ProviderCommandMirrorPort;
 use std::sync::Arc;
 
 use serde_json::{Value, json};
@@ -67,7 +67,7 @@ pub(super) fn web_companion_bridge_contract_health_check() -> Value {
                 "window_label_pattern": "whatsapp-companion-*",
                 "caller_window_label_must_match_account": true,
                 "metadata_sanitizer": "secret_and_private_content_key_drop",
-                "backend_auth": "X-Hermes-Secret_from_tauri_process_env_only",
+                "backend_auth": "X-Макошь-Secret_from_tauri_process_env_only",
                 "backend_target": "loopback_http_runtime_bridge_only",
                 "typed_projection": "not_attempted_until_richer_typed_payload",
                 "domain_mutation": "forbidden",

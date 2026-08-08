@@ -2,7 +2,7 @@
 
 use std::collections::BTreeMap;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     SchedulerRuntimeReceiptConsumerBindingV1, SchedulerRuntimeReceiptKindV1,
 };
 
@@ -96,8 +96,8 @@ fn binding(
 
 fn stream_name(kind: SchedulerRuntimeReceiptKindV1) -> &'static str {
     match kind {
-        SchedulerRuntimeReceiptKindV1::Acceptance => "HERMES_ACK_V1",
-        SchedulerRuntimeReceiptKindV1::Terminal => "HERMES_RESULT_V1",
+        SchedulerRuntimeReceiptKindV1::Acceptance => "MAKOSH_ACK_V1",
+        SchedulerRuntimeReceiptKindV1::Terminal => "MAKOSH_RESULT_V1",
         SchedulerRuntimeReceiptKindV1::Unspecified => "",
     }
 }

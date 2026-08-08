@@ -130,31 +130,31 @@ Contacts state.
 
 Contacts получает минимальный production slice из шести units:
 
-- `hermes-contacts-command-api` — exact durable upsert command и terminal
+- `makosh-contacts-command-api` — exact durable upsert command и terminal
   result contracts;
-- `hermes-contacts-mail-sync-source-api` — bounded changed event и отдельный
+- `makosh-contacts-mail-sync-source-api` — bounded changed event и отдельный
   target-bound source handoff для обратного Mail sync;
-- `hermes-contacts-core` — canonical identity normalization, merge/conflict
+- `makosh-contacts-core` — canonical identity normalization, merge/conflict
   invariants и deterministic IDs;
-- `hermes-contacts-persistence` — Contacts-owned canonical state, inbox/outbox
+- `makosh-contacts-persistence` — Contacts-owned canonical state, inbox/outbox
   и provider provenance;
-- `hermes-contacts-runtime` — managed command consumer/result publisher;
-- `hermes-contacts-assembly` — descriptor, empty initial Settings schema,
+- `makosh-contacts-runtime` — managed command consumer/result publisher;
+- `makosh-contacts-assembly` — descriptor, empty initial Settings schema,
   Storage bundle и unsigned release fragment.
 
 Mail добавляет integration-owned contract unit
-`hermes-mail-address-book-contract` с typed provider observations, provider
+`makosh-mail-address-book-contract` с typed provider observations, provider
 write commands и terminal results. Provider adapter остаётся в Mail runtime.
 
 Workflow получает пять units:
 
-- `hermes-mail-contacts-sync-api` — generated Start/Get/replayable realtime;
-- `hermes-mail-contacts-sync-core` — pure direction, correlation and lifecycle;
-- `hermes-mail-contacts-sync-persistence` — owner-local run, inbox/outbox,
+- `makosh-mail-contacts-sync-api` — generated Start/Get/replayable realtime;
+- `makosh-mail-contacts-sync-core` — pure direction, correlation and lifecycle;
+- `makosh-mail-contacts-sync-persistence` — owner-local run, inbox/outbox,
   checkpoints and realtime replay;
-- `hermes-mail-contacts-sync-runtime` — event orchestration and Scheduler job
+- `makosh-mail-contacts-sync-runtime` — event orchestration and Scheduler job
   handler;
-- `hermes-mail-contacts-sync-assembly` — descriptor, typed Settings schema,
+- `makosh-mail-contacts-sync-assembly` — descriptor, typed Settings schema,
   Storage bundle and unsigned release fragment.
 
 Assembly не является domain, integration или workflow implementation и не
@@ -264,9 +264,9 @@ Gate открыт после:
 5. signed managed runtime evidence through real Vault, Storage and NATS;
 6. duplicate/conflict, restart, revoke, generation/grant and privacy gates.
 
-Executable evidence: `hermes-contacts-command-api`, `hermes-contacts-core`,
-`hermes-contacts-persistence`, `hermes-contacts-runtime` и
-`hermes-contacts-assembly` являются отдельными Contacts-owned units без Mail или
+Executable evidence: `makosh-contacts-command-api`, `makosh-contacts-core`,
+`makosh-contacts-persistence`, `makosh-contacts-runtime` и
+`makosh-contacts-assembly` являются отдельными Contacts-owned units без Mail или
 Communications imports. Disposable PostgreSQL проверяет atomic success/rejection,
 exact replay и conflict fencing. Managed conformance запускает signed Contacts
 process через Kernel admission, Vault credential lease, PgBouncer и NATS,

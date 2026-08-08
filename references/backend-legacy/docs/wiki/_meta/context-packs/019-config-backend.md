@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `config`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/Cargo.lock`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/Cargo.lock`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/Cargo.lock`
 - Size bytes / Размер в байтах: `96499`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -550,20 +550,20 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/Cargo.toml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/Cargo.toml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/Cargo.toml`
 - Size bytes / Размер в байтах: `3149`
 - Included characters / Включено символов: `3149`
 - Truncated / Обрезано: `no`
 
 ```toml
 [package]
-name = "hermes-hub-backend"
+name = "makosh-backend"
 publish = false
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.89"
 license = "MIT"
-default-run = "hermes-hub-backend"
+default-run = "makosh-backend"
 
 [features]
 default = []
@@ -572,44 +572,44 @@ whatsapp-native-md-runtime = ["dep:wa-rs", "dep:wa-rs-core"]
 whatsapp-business-cloud-runtime = []
 
 [lib]
-name = "hermes_hub_backend"
+name = "makosh_hub_backend"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-hub-backend"
+name = "makosh-backend"
 path = "src/main.rs"
 
 [[bin]]
-name = "hermes-graph-project"
-path = "src/bin/hermes_graph_project.rs"
+name = "makosh-graph-project"
+path = "src/bin/makosh_graph_project.rs"
 
 [[bin]]
-name = "hermes-email-fixture-export"
-path = "src/bin/hermes_email_fixture_export.rs"
+name = "makosh-email-fixture-export"
+path = "src/bin/makosh_email_fixture_export.rs"
 
 [[bin]]
-name = "hermes-email-fixture-dev"
-path = "src/bin/hermes_email_fixture_dev.rs"
+name = "makosh-email-fixture-dev"
+path = "src/bin/makosh_email_fixture_dev.rs"
 
 [[bin]]
-name = "hermes-email-sync-dev"
-path = "src/bin/hermes_email_sync_dev.rs"
+name = "makosh-email-sync-dev"
+path = "src/bin/makosh_email_sync_dev.rs"
 
 [[bin]]
-name = "hermes-email-reproject-dev"
-path = "src/bin/hermes_email_reproject_dev.rs"
+name = "makosh-email-reproject-dev"
+path = "src/bin/makosh_email_reproject_dev.rs"
 
 [[bin]]
-name = "hermes-document-process"
-path = "src/bin/hermes_document_process.rs"
+name = "makosh-document-process"
+path = "src/bin/makosh_document_process.rs"
 
 [[bin]]
-name = "hermes-whatsapp-business-cloud-edge-proxy"
-path = "src/bin/hermes_whatsapp_business_cloud_edge_proxy.rs"
+name = "makosh-whatsapp-business-cloud-edge-proxy"
+path = "src/bin/makosh_whatsapp_business_cloud_edge_proxy.rs"
 
 [[bin]]
-name = "hermes-zoom-edge-proxy"
-path = "src/bin/hermes_zoom_edge_proxy.rs"
+name = "makosh-zoom-edge-proxy"
+path = "src/bin/makosh_zoom_edge_proxy.rs"
 
 [dependencies]
 aes-gcm = "0.10"
@@ -666,7 +666,7 @@ tower = { version = "0.5", features = ["util"] }
 
 ### `backend/fixtures/signal_hub/system_sources.toml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/fixtures/signal_hub/system_sources.toml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/fixtures/signal_hub/system_sources.toml`
 - Size bytes / Размер в байтах: `3399`
 - Included characters / Включено символов: `3399`
 - Truncated / Обрезано: `no`

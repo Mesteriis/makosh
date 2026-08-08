@@ -124,8 +124,8 @@ fn eml_import_service(
         .ok_or(ApiError::DatabaseNotConfigured)?
         .clone();
     Ok(crate::application::eml_import::EmlImportService::new(
-        hermes_communications_postgres::store::CommunicationIngestionStore::new(pool.clone()),
-        hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
+        makosh_communications_postgres::store::CommunicationIngestionStore::new(pool.clone()),
+        makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
             pool.clone(),
         ),
         crate::domains::communications::messages::store::MessageProjectionStore::new(pool.clone()),

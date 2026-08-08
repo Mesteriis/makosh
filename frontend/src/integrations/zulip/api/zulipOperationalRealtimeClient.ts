@@ -1,7 +1,7 @@
 import { createClient } from '@connectrpc/connect'
 import type { Client } from '@connectrpc/connect'
 
-import { ZulipOperationalRealtimeService } from '../../../gen/hermes/zulip/operational/realtime/v1/client_pb'
+import { ZulipOperationalRealtimeService } from '../../../gen/makosh/zulip/operational/realtime/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 let client: Client<typeof ZulipOperationalRealtimeService> | null = null

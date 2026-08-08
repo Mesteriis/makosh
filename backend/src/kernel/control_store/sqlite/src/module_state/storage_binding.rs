@@ -1,6 +1,6 @@
 //! SQLite persistence for durable non-secret Storage binding fences.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     PlatformStorageBindingInputV1, PlatformStorageBindingStateV1, PlatformStorageBindingV1,
 };
 use rusqlite::{OptionalExtension, params};
@@ -16,7 +16,7 @@ impl SqliteControlStore {
         self.with_connection(move |connection| {
             verify_initial_revision(connection, &binding)?;
             let changed = connection.execute(
-                "INSERT INTO hermes_kernel_platform_storage_binding
+                "INSERT INTO makosh_kernel_platform_storage_binding
                  (registration_id, capability_id, owner_id, binding_revision, topology_revision,
                   storage_generation, runtime_instance_id, runtime_generation, grant_epoch,
                   role_epoch, runtime_principal, connection_budget, statement_timeout_millis,
@@ -38,7 +38,7 @@ impl SqliteControlStore {
                    storage_bundle_revision=excluded.storage_bundle_revision,
                    storage_bundle_digest=excluded.storage_bundle_digest,
                    state=excluded.state
-                 WHERE excluded.binding_revision = hermes_kernel_platform_storage_binding.binding_revision + 1",
+                 WHERE excluded.binding_revision = makosh_kernel_platform_storage_binding.binding_revision + 1",
                 params![
                     binding.registration_id(), binding.capability_id(), binding.owner_id(),
                     as_sql(binding.binding_revision())?, as_sql(binding.topology_revision())?,
@@ -71,7 +71,7 @@ impl SqliteControlStore {
                     runtime_instance_id, runtime_generation, grant_epoch, role_epoch,
                     runtime_principal, connection_budget, statement_timeout_millis,
                     credential_lease_revision, storage_bundle_revision, storage_bundle_digest, state
-             FROM hermes_kernel_platform_storage_binding
+             FROM makosh_kernel_platform_storage_binding
              WHERE registration_id = ?1 AND capability_id = ?2",
                     params![registration_id, capability_id],
                     |row| decode_binding(row, &registration_id, &capability_id),
@@ -91,7 +91,7 @@ impl SqliteControlStore {
         let capability_id = capability_id.to_owned();
         self.with_connection(move |connection| {
             let changed = connection.execute(
-                "UPDATE hermes_kernel_platform_storage_binding
+                "UPDATE makosh_kernel_platform_storage_binding
                  SET state = 2
                  WHERE registration_id = ?1 AND capability_id = ?2 AND binding_revision = ?3 AND state = 1",
                 params![registration_id, capability_id, as_sql(binding_revision)?],
@@ -102,7 +102,7 @@ impl SqliteControlStore {
                         runtime_instance_id, runtime_generation, grant_epoch, role_epoch,
                         runtime_principal, connection_budget, statement_timeout_millis,
                         credential_lease_revision, storage_bundle_revision, storage_bundle_digest, state
-                 FROM hermes_kernel_platform_storage_binding
+                 FROM makosh_kernel_platform_storage_binding
                  WHERE registration_id = ?1 AND capability_id = ?2",
                     params![registration_id, capability_id],
                     |row| decode_binding(row, &registration_id, &capability_id),
@@ -130,7 +130,7 @@ impl SqliteControlStore {
             let active_capability_ids = {
                 let mut statement = transaction.prepare(
                     "SELECT capability_id
-                     FROM hermes_kernel_platform_storage_binding
+                     FROM makosh_kernel_platform_storage_binding
                      WHERE registration_id = ?1 AND state = 1
                      ORDER BY capability_id",
                 )?;
@@ -139,7 +139,7 @@ impl SqliteControlStore {
                     .collect::<Result<Vec<_>, _>>()?
             };
             let changed = transaction.execute(
-                "UPDATE hermes_kernel_platform_storage_binding
+                "UPDATE makosh_kernel_platform_storage_binding
                  SET state = 2
                  WHERE registration_id = ?1 AND state = 1",
                 params![registration_id],
@@ -155,7 +155,7 @@ impl SqliteControlStore {
                             connection_budget, statement_timeout_millis,
                             credential_lease_revision, storage_bundle_revision,
                             storage_bundle_digest, state
-                     FROM hermes_kernel_platform_storage_binding
+                     FROM makosh_kernel_platform_storage_binding
                      WHERE registration_id = ?1 AND state = 2
                      ORDER BY capability_id",
                 )?;
@@ -179,7 +179,7 @@ impl SqliteControlStore {
                         runtime_generation, grant_epoch, role_epoch, runtime_principal,
                         connection_budget, statement_timeout_millis, credential_lease_revision,
                         storage_bundle_revision, storage_bundle_digest, state
-                 FROM hermes_kernel_platform_storage_binding
+                 FROM makosh_kernel_platform_storage_binding
                  ORDER BY registration_id, capability_id",
             )?;
             statement
@@ -196,7 +196,7 @@ fn verify_initial_revision(
 ) -> Result<(), StoreError> {
     let exists = connection.query_row(
         "SELECT EXISTS(
-             SELECT 1 FROM hermes_kernel_platform_storage_binding
+             SELECT 1 FROM makosh_kernel_platform_storage_binding
              WHERE registration_id = ?1 AND capability_id = ?2
          )",
         params![binding.registration_id(), binding.capability_id()],

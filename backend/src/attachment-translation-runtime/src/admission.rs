@@ -1,11 +1,11 @@
-use hermes_ai_contracts::attachment_translation_inference_contract_reference_v1;
-use hermes_attachment_translation_api::{
+use makosh_ai_contracts::attachment_translation_inference_contract_reference_v1;
+use makosh_attachment_translation_api::{
     ATTACHMENT_TRANSLATION_CAPABILITY_ID_V1, ATTACHMENT_TRANSLATION_COMMAND_CONNECT_PATH_V1,
     ATTACHMENT_TRANSLATION_MAX_RESULT_BYTES_V1, ATTACHMENT_TRANSLATION_MODULE_ID_V1,
     ATTACHMENT_TRANSLATION_OWNER_V1, ATTACHMENT_TRANSLATION_QUERY_CONNECT_PATH_V1,
     ATTACHMENT_TRANSLATION_READ_BLOB_PATH_V1, ATTACHMENT_TRANSLATION_TICKET_CONNECT_PATH_V1,
 };
-use hermes_attachment_translation_ingress::{
+use makosh_attachment_translation_ingress::{
     ATTACHMENT_TRANSLATION_BLOB_TARGET_CAPABILITY_ID_V1,
     attachment_translation_source_prepared_consume_request_v1,
     attachment_translation_source_prepared_contract_reference_v1,
@@ -14,7 +14,7 @@ use hermes_attachment_translation_ingress::{
     attachment_translation_source_requested_contract_reference_v1,
     attachment_translation_source_requested_publish_request_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ClientBlobRouteV1, ClientRpcRouteV1, ContractReferenceV1,
     ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1,
@@ -250,7 +250,7 @@ fn storage_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::{
+    use makosh_runtime_protocol::{
         v1::ModuleKindV1,
         validation::descriptor::{validate_descriptor_v1, validate_settings_schema_v1},
     };

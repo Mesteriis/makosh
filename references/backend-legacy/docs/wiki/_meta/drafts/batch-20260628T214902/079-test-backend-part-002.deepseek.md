@@ -1,13 +1,13 @@
 ### Summary / Резюме
 
-Предлагаю создать (или полностью заменить) wiki-страницу `operations/backend-tests.md`, документирующую организацию, покрытие и ключевые паттерны интеграционных тестов бэкенда Hermes Hub. Текущий контекст не содержит существующей версии этой страницы, поэтому документ строится исключительно на основе встроенных исходных файлов тестов. Цель — дать обзор доменов, протестированных на уровне сервисов и HTTP API, структуры каталога тестов и используемой тестовой инфраструктуры.
+Предлагаю создать (или полностью заменить) wiki-страницу `operations/backend-tests.md`, документирующую организацию, покрытие и ключевые паттерны интеграционных тестов бэкенда Макошь. Текущий контекст не содержит существующей версии этой страницы, поэтому документ строится исключительно на основе встроенных исходных файлов тестов. Цель — дать обзор доменов, протестированных на уровне сервисов и HTTP API, структуры каталога тестов и используемой тестовой инфраструктуры.
 
 ### Proposed pages / Предлагаемые страницы
 
 #### `operations/backend-tests.md`
 
 ```markdown
-# Бэкенд-тесты Hermes Hub
+# Бэкенд-тесты Макошь
 
 ## Обзор
 
@@ -20,7 +20,7 @@
 - Ингестия коммуникационных данных (контракты провайдеров, сохранение чекпоинтов)
 - Архитектурные тесты на соблюдение лимитов строк
 
-Тесты используют `testkit::context::TestContext` для поднятия изолированной PostgreSQL БД (вероятно, через testcontainers), подключаются через `Database::connect`, а для API-тестов аутентифицируются заголовком `x-hermes-secret`.
+Тесты используют `testkit::context::TestContext` для поднятия изолированной PostgreSQL БД (вероятно, через testcontainers), подключаются через `Database::connect`, а для API-тестов аутентифицируются заголовком `x-makosh-secret`.
 
 ## Структура тестов
 
@@ -51,11 +51,11 @@
 ### `ai_smoke.rs`
 
 - Опциональный живой дымовой тест с Ollama. Зависит от переменных окружения:
-  - `HERMES_OLLAMA_BASE_URL` — если не задана, тест пропускается.
-  - `HERMES_OLLAMA_CHAT_MODEL` (по умолчанию `qwen3:4b`)
-  - `HERMES_OLLAMA_EMBED_MODEL` (по умолчанию `qwen3-embedding:4b`)
-  - `HERMES_OLLAMA_TIMEOUT_SECONDS` (по умолчанию 120)
-- Проверяет версию Ollama, наличие chat и embedding моделей в списке `tags`, успешный chat-ответ с токеном `hermes-ai-smoke-ok` и размер embedding-вектора 2560.
+  - `MAKOSH_OLLAMA_BASE_URL` — если не задана, тест пропускается.
+  - `MAKOSH_OLLAMA_CHAT_MODEL` (по умолчанию `qwen3:4b`)
+  - `MAKOSH_OLLAMA_EMBED_MODEL` (по умолчанию `qwen3-embedding:4b`)
+  - `MAKOSH_OLLAMA_TIMEOUT_SECONDS` (по умолчанию 120)
+- Проверяет версию Ollama, наличие chat и embedding моделей в списке `tags`, успешный chat-ответ с токеном `makosh-ai-smoke-ok` и размер embedding-вектора 2560.
 
 ## Календарь (доменный слой)
 
@@ -100,11 +100,11 @@
 
 ## Календарь (HTTP API)
 
-Тесты используют вспомогательные функции из `calendar_api/support.rs`: `build_cal_app`, `create_cal_event`, хелперы запросов с `x-hermes-secret`, `unique_suffix`, `urlencoding_percent_encode`.
+Тесты используют вспомогательные функции из `calendar_api/support.rs`: `build_cal_app`, `create_cal_event`, хелперы запросов с `x-makosh-secret`, `unique_suffix`, `urlencoding_percent_encode`.
 
 ### `calendar_api/auth.rs`
 
-- Обращение к `/api/v1/calendar/accounts` и `/api/v1/calendar/events` без заголовка `x-hermes-secret` возвращает `403 FORBIDDEN` с телом `{"error":"invalid_api_secret","message":"missing or invalid x-hermes-secret header"}`.
+- Обращение к `/api/v1/calendar/accounts` и `/api/v1/calendar/events` без заголовка `x-makosh-secret` возвращает `403 FORBIDDEN` с телом `{"error":"invalid_api_secret","message":"missing or invalid x-makosh-secret header"}`.
 
 ### `calendar_api/accounts.rs`
 
@@ -163,7 +163,7 @@
 
 ### `calls_api.rs`
 
-- Запрос без `x-hermes-secret` к `/api/v1/calls` — `403 FORBIDDEN`.
+- Запрос без `x-makosh-secret` к `/api/v1/calls` — `403 FORBIDDEN`.
 - `GET /api/v1/calls` с токеном возвращает не-серверную ошибку, тело содержит `items`.
 - `POST /api/v1/calls` с полями `call_type`, `chat_id`, `direction`, `state`, `initiated_at`, `duration_seconds` создаёт запись без серверной ошибки.
 - `GET /api/v1/calls/call:nonexistent-.../transcript` возвращает либо `404`, либо успех.
@@ -193,7 +193,7 @@
 
 - **Тестовый контекст**: `testkit::context::TestContext` предоставляет строку подключения к временной БД (вероятно testcontainers), автоматически применяет миграции.
 - **Observation-трекинг**: множество тестов проверяют, что мутации (создание, обновление, удаление) порождают observation-записи с `origin_kind = "manual"` и соответствующие связи `observation_links`.
-- **Аутентификация API**: заголовок `x-hermes-secret` с токеном, заданным в конфигурации (`testkit::app::config_with_secret`).
+- **Аутентификация API**: заголовок `x-makosh-secret` с токеном, заданным в конфигурации (`testkit::app::config_with_secret`).
 - **Отключённый пул**: для тестов, не требующих реального подключения, используется `disconnected_pool()` (lazy connect к несуществующему хосту).
 
 ## Ограничения контекста

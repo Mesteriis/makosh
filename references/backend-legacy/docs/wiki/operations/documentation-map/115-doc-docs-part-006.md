@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Добавляется страница `operations/documentation-map.md` — навигационная карта всей документации по интеграционным каналам (Telegram, WhatsApp) в проекте Hermes. Она собирает ссылки на существующие страницы архитектуры, API, статуса, анализа блокеров и исследовательские документы, делая wiki самодостаточной для поиска нужного артефакта. Страница пишется на русском, использует Obsidian-совместимые wikilinks относительно корня репозитория.
+Добавляется страница `operations/documentation-map.md` — навигационная карта всей документации по интеграционным каналам (Telegram, WhatsApp) в проекте Макошь. Она собирает ссылки на существующие страницы архитектуры, API, статуса, анализа блокеров и исследовательские документы, делая wiki самодостаточной для поиска нужного артефакта. Страница пишется на русском, использует Obsidian-совместимые wikilinks относительно корня репозитория.
 
 ## Предложенные страницы
 
@@ -25,7 +25,7 @@ generated_by: code-wiki-ru
 ```markdown
 # Карта документации
 
-Навигационная карта документации по интеграционным каналам связи Hermes.
+Навигационная карта документации по интеграционным каналам связи Макошь.
 Здесь перечислены все страницы, покрывающие архитектуру, API, статус реализации,
 анализ блокеров, продуктовые исследования и плановые документы для Telegram и WhatsApp.
 
@@ -92,7 +92,7 @@ generated_by: code-wiki-ru
 - **ADR-0050** — V4 Telegram policy automation и call intelligence
 - **ADR-0051** — WhatsApp Web companion boundary
 - **ADR-0052** — Capability/action confirmation policy
-- **ADR-0056** — Router-level `X-Hermes-Secret` local API auth
+- **ADR-0056** — Router-level `X-Макошь-Secret` local API auth
 - **ADR-0074** — Multi-channel identity traces (WhatsApp/phone)
 - **ADR-0076** — Host vault для новых secret payloads
 - **ADR-0083** — Account-scoped TDLib runtime slice (Telegram)

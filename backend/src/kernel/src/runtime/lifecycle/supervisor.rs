@@ -17,7 +17,7 @@ use crate::runtime::lifecycle::control::{
     ManagedRuntimeVaultRouteHandler,
 };
 use crate::runtime::managed::execution::ManagedChildExecutionPolicy;
-use hermes_runtime_protocol::managed_control::ManagedControlTransportMajorV1;
+use makosh_runtime_protocol::managed_control::ManagedControlTransportMajorV1;
 
 #[path = "supervisor/worker.rs"]
 mod worker;

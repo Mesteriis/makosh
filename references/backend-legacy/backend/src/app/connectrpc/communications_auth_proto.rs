@@ -1,5 +1,5 @@
 use crate::domains::communications::spf_dkim::{AuthResults, SpfDkimReport};
-use hermes_connectrpc_contracts::hermes::communications::v1::{
+use makosh_connectrpc_contracts::makosh::communications::v1::{
     MessageAuthReport as ProtoMessageAuthReport, MessageAuthResult as ProtoMessageAuthResult,
     MessageAuthRiskReport as ProtoMessageAuthRiskReport,
 };

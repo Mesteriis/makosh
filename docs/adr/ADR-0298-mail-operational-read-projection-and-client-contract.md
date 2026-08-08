@@ -37,8 +37,8 @@ Historical Mail UI и API смешивали разные authority:
 
 ### Ownership и маршрут
 
-`hermes-mail-api` владеет exact Protobuf package
-`hermes.mail.operational.v1`. После полного admission один capability
+`makosh-mail-api` владеет exact Protobuf package
+`makosh.mail.operational.v1`. После полного admission один capability
 `mail.operational.query.v1` маршрутизируется:
 
 ```text
@@ -51,7 +51,7 @@ first-party client
 
 Core Gateway проверяет session, GrantSet, runtime generation и exact contract
 hash, но не декодирует Mail payload. Kernel/Gateway не импортируют
-`hermes-mail-api`. Mail runtime не вызывает Communications query, Blob или
+`makosh-mail-api`. Mail runtime не вызывает Communications query, Blob или
 другой owner.
 
 ### Exact query surface

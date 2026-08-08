@@ -2,9 +2,9 @@
 
 use std::path::Path;
 
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     v1::{
         ManagedWorkflowRuntimeConfigurationV1, ModuleKindV1, SettingTargetScopeV1, SettingsSchemaV1,
     },
@@ -198,7 +198,7 @@ fn effective_granted_capability_ids(
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::v1::{
+    use makosh_runtime_protocol::v1::{
         SettingDefinitionV1, SettingTargetScopeV1, SettingsSchemaV1,
     };
 

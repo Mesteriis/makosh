@@ -13,7 +13,7 @@ use crate::domains::relationships::models::{
     RelationshipReviewState,
 };
 use crate::platform::graph::GraphNodeKind;
-use hermes_relationships_postgres::RelationshipPostgresQuery;
+use makosh_relationships_postgres::RelationshipPostgresQuery;
 
 /// Coordinates two bounded contexts in one PostgreSQL transaction. Relationship
 /// persistence remains owned by Relationships; Graph owns the materialized
@@ -258,8 +258,8 @@ pub enum RelationshipGraphCoordinatorError {
 
 fn to_api_relationship(
     relationship: &NewRelationship,
-) -> hermes_relationships_api::RelationshipUpsert {
-    hermes_relationships_api::RelationshipUpsert {
+) -> makosh_relationships_api::RelationshipUpsert {
+    makosh_relationships_api::RelationshipUpsert {
         relationship_id: crate::domains::relationships::ids::relationship_id(
             relationship.source_entity_kind,
             &relationship.source_entity_id,
@@ -284,25 +284,25 @@ fn to_api_relationship(
 
 fn to_api_evidence(
     evidence: &NewRelationshipEvidence,
-) -> hermes_relationships_api::RelationshipEvidence {
-    hermes_relationships_api::RelationshipEvidence {
+) -> makosh_relationships_api::RelationshipEvidence {
+    makosh_relationships_api::RelationshipEvidence {
         source_kind: match evidence.source_kind.as_str() {
-            "observation" => hermes_relationships_api::RelationshipEvidenceSourceKind::Observation,
+            "observation" => makosh_relationships_api::RelationshipEvidenceSourceKind::Observation,
             "communication" => {
-                hermes_relationships_api::RelationshipEvidenceSourceKind::Communication
+                makosh_relationships_api::RelationshipEvidenceSourceKind::Communication
             }
-            "document" => hermes_relationships_api::RelationshipEvidenceSourceKind::Document,
-            "event" => hermes_relationships_api::RelationshipEvidenceSourceKind::Event,
-            "memory" => hermes_relationships_api::RelationshipEvidenceSourceKind::Memory,
-            "knowledge" => hermes_relationships_api::RelationshipEvidenceSourceKind::Knowledge,
-            "decision" => hermes_relationships_api::RelationshipEvidenceSourceKind::Decision,
-            "obligation" => hermes_relationships_api::RelationshipEvidenceSourceKind::Obligation,
-            "task" => hermes_relationships_api::RelationshipEvidenceSourceKind::Task,
-            "project" => hermes_relationships_api::RelationshipEvidenceSourceKind::Project,
+            "document" => makosh_relationships_api::RelationshipEvidenceSourceKind::Document,
+            "event" => makosh_relationships_api::RelationshipEvidenceSourceKind::Event,
+            "memory" => makosh_relationships_api::RelationshipEvidenceSourceKind::Memory,
+            "knowledge" => makosh_relationships_api::RelationshipEvidenceSourceKind::Knowledge,
+            "decision" => makosh_relationships_api::RelationshipEvidenceSourceKind::Decision,
+            "obligation" => makosh_relationships_api::RelationshipEvidenceSourceKind::Obligation,
+            "task" => makosh_relationships_api::RelationshipEvidenceSourceKind::Task,
+            "project" => makosh_relationships_api::RelationshipEvidenceSourceKind::Project,
             "organization" => {
-                hermes_relationships_api::RelationshipEvidenceSourceKind::Organization
+                makosh_relationships_api::RelationshipEvidenceSourceKind::Organization
             }
-            _ => hermes_relationships_api::RelationshipEvidenceSourceKind::Persona,
+            _ => makosh_relationships_api::RelationshipEvidenceSourceKind::Persona,
         },
         source_id: evidence.source_id.clone(),
         observation_id: evidence.observation_id.clone(),
@@ -313,34 +313,34 @@ fn to_api_evidence(
 
 fn api_entity_kind(
     kind: RelationshipEntityKind,
-) -> hermes_relationships_api::RelationshipEntityKind {
+) -> makosh_relationships_api::RelationshipEntityKind {
     match kind.as_str() {
-        "persona" => hermes_relationships_api::RelationshipEntityKind::Persona,
-        "organization" => hermes_relationships_api::RelationshipEntityKind::Organization,
-        "project" => hermes_relationships_api::RelationshipEntityKind::Project,
-        "communication" => hermes_relationships_api::RelationshipEntityKind::Communication,
-        "document" => hermes_relationships_api::RelationshipEntityKind::Document,
-        "task" => hermes_relationships_api::RelationshipEntityKind::Task,
-        "event" => hermes_relationships_api::RelationshipEntityKind::Event,
-        "decision" => hermes_relationships_api::RelationshipEntityKind::Decision,
-        "obligation" => hermes_relationships_api::RelationshipEntityKind::Obligation,
-        _ => hermes_relationships_api::RelationshipEntityKind::Knowledge,
+        "persona" => makosh_relationships_api::RelationshipEntityKind::Persona,
+        "organization" => makosh_relationships_api::RelationshipEntityKind::Organization,
+        "project" => makosh_relationships_api::RelationshipEntityKind::Project,
+        "communication" => makosh_relationships_api::RelationshipEntityKind::Communication,
+        "document" => makosh_relationships_api::RelationshipEntityKind::Document,
+        "task" => makosh_relationships_api::RelationshipEntityKind::Task,
+        "event" => makosh_relationships_api::RelationshipEntityKind::Event,
+        "decision" => makosh_relationships_api::RelationshipEntityKind::Decision,
+        "obligation" => makosh_relationships_api::RelationshipEntityKind::Obligation,
+        _ => makosh_relationships_api::RelationshipEntityKind::Knowledge,
     }
 }
 
 fn api_review_state(
     state: RelationshipReviewState,
-) -> hermes_relationships_api::RelationshipReviewState {
+) -> makosh_relationships_api::RelationshipReviewState {
     match state.as_str() {
-        "system_accepted" => hermes_relationships_api::RelationshipReviewState::SystemAccepted,
-        "user_confirmed" => hermes_relationships_api::RelationshipReviewState::UserConfirmed,
-        "user_rejected" => hermes_relationships_api::RelationshipReviewState::UserRejected,
-        _ => hermes_relationships_api::RelationshipReviewState::Suggested,
+        "system_accepted" => makosh_relationships_api::RelationshipReviewState::SystemAccepted,
+        "user_confirmed" => makosh_relationships_api::RelationshipReviewState::UserConfirmed,
+        "user_rejected" => makosh_relationships_api::RelationshipReviewState::UserRejected,
+        _ => makosh_relationships_api::RelationshipReviewState::Suggested,
     }
 }
 
 fn from_api_relationship(
-    relationship: hermes_relationships_api::RelationshipRead,
+    relationship: makosh_relationships_api::RelationshipRead,
 ) -> Result<Relationship, String> {
     Ok(Relationship {
         relationship_id: relationship.relationship_id,

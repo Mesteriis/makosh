@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue'
-import { hermesRadioGroupKey } from './RadioGroup.context'
+import { makoshRadioGroupKey } from './RadioGroup.context'
 
 const props = withDefaults(defineProps<{
 	value: string | number
@@ -18,12 +18,12 @@ const emit = defineEmits<{
 	'update:modelValue': [value: string | number]
 }>()
 
-const group = inject(hermesRadioGroupKey, null)
+const group = inject(makoshRadioGroupKey, null)
 const selectedValue = computed(() => group?.modelValue.value ?? props.modelValue)
 const isDisabled = computed(() => props.disabled || Boolean(group?.disabled.value))
 const inputName = computed(() => group?.name ?? props.name)
 const checked = computed(() => selectedValue.value === props.value)
-const classes = computed(() => ['hermes-radio', { 'hermes-radio--disabled': isDisabled.value }, props.class])
+const classes = computed(() => ['makosh-radio', { 'makosh-radio--disabled': isDisabled.value }, props.class])
 
 function handleChange(): void {
 	if (isDisabled.value) return
@@ -35,7 +35,7 @@ function handleChange(): void {
 <template>
 	<label :class="classes">
 		<input
-			class="hermes-radio-input"
+			class="makosh-radio-input"
 			:checked="checked"
 			:disabled="isDisabled"
 			:name="inputName"

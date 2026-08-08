@@ -1,18 +1,18 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_mail_contacts_sync_api::{
+use makosh_mail_contacts_sync_api::{
     MAIL_CONTACTS_SYNC_REALTIME_EVENT_KIND_V1, mail_contacts_sync_realtime_contract_v1,
     wire::{
         MailContactsSyncErrorCodeV1 as WireError, MailContactsSyncStateV1 as WireState,
         MailContactsSyncStatusChangedV1,
     },
 };
-use hermes_mail_contacts_sync_core::{MailContactsSyncRejectCodeV1, MailContactsSyncStateV1};
-use hermes_mail_contacts_sync_persistence::{
+use makosh_mail_contacts_sync_core::{MailContactsSyncRejectCodeV1, MailContactsSyncStateV1};
+use makosh_mail_contacts_sync_persistence::{
     MailContactsSyncPersistenceErrorV1, MailContactsSyncPersistenceV1,
     MailContactsSyncRealtimeTransitionV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeClientRealtimePublishRequestV1, ManagedRuntimeControlRequestV1,
@@ -167,7 +167,7 @@ fn event_id(run_id: [u8; 16], state_revision: u64) -> [u8; 16] {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::client_realtime::validate_managed_client_realtime_publish_request_v1;
+    use makosh_runtime_protocol::validation::client_realtime::validate_managed_client_realtime_publish_request_v1;
 
     use super::*;
 

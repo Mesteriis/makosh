@@ -3,7 +3,7 @@
 use chacha20poly1305::aead::{Aead, KeyInit, Payload};
 use chacha20poly1305::{XChaCha20Poly1305, XNonce};
 use getrandom::fill;
-use hermes_blob_protocol::{BlobBackupClassV1, BlobCustodyScopeV1, BlobRefV1};
+use makosh_blob_protocol::{BlobBackupClassV1, BlobCustodyScopeV1, BlobRefV1};
 
 use super::store::BlobStorageError;
 

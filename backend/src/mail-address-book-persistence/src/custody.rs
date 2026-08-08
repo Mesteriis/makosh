@@ -31,7 +31,7 @@ impl MailAddressBookPersistenceV1 {
                     target_contact_snapshot_reference_id,
                     target_contact_snapshot_receipt_sha256,
                     snapshot_custody_recorded_at_unix_seconds
-             FROM hermes_data.mail_address_book_upsert_inbox
+             FROM makosh_data.mail_address_book_upsert_inbox
              WHERE command_id = $1
              FOR UPDATE",
         )
@@ -54,7 +54,7 @@ impl MailAddressBookPersistenceV1 {
             Some(_) => return Err(MailAddressBookPersistenceErrorV1::Conflict),
             None => {
                 let updated = sqlx::query(
-                    "UPDATE hermes_data.mail_address_book_upsert_inbox
+                    "UPDATE makosh_data.mail_address_book_upsert_inbox
                      SET target_contact_snapshot_reference_id = $2,
                          target_contact_snapshot_receipt_sha256 = $3,
                          snapshot_custody_recorded_at_unix_seconds = $4

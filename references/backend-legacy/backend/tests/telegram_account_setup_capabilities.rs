@@ -6,11 +6,11 @@ use sqlx::Row;
 use tempfile::tempdir;
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::platform::secrets::models::{SecretKind, SecretStoreKind};
-use hermes_hub_backend::platform::secrets::store::SecretReferenceStore;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::platform::secrets::models::{SecretKind, SecretStoreKind};
+use makosh_hub_backend::platform::secrets::store::SecretReferenceStore;
+use makosh_hub_backend::platform::storage::database::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_capability_status, assert_ok, get_request_with_token, json_body,
     json_post_request_with_actor, unique_suffix, vault_entropy_events,
@@ -27,18 +27,18 @@ async fn telegram_live_account_setup_stores_bot_token_in_host_vault() {
     let suffix = unique_suffix();
     let account_id = format!("telegram-bot-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
         .with_test_pairs([
-            ("HERMES_DEV_MODE", "true"),
+            ("MAKOSH_DEV_MODE", "true"),
             (
-                "HERMES_VAULT_HOME",
+                "MAKOSH_VAULT_HOME",
                 vault_dir.path().join("vault").to_str().expect("vault path"),
             ),
             (
-                "HERMES_DEV_KEY_PATH",
+                "MAKOSH_DEV_KEY_PATH",
                 vault_dir
                     .path()
                     .join("dev")
@@ -80,7 +80,7 @@ async fn telegram_live_account_setup_stores_bot_token_in_host_vault() {
                 "account_id": account_id,
                 "provider_kind": "telegram_bot",
                 "display_name": "Telegram Bot",
-                "external_account_id": format!("@hermes_bot_{suffix}"),
+                "external_account_id": format!("@makosh_bot_{suffix}"),
                 "bot_token": "123456:telegram-bot-token",
                 "transcription_enabled": false
             }),
@@ -158,18 +158,18 @@ async fn telegram_qr_authorized_account_setup_persists_metadata_without_host_vau
     let account_id = format!("telegram-user-{suffix}");
     let tdlib_data_path = format!("docker/data/telegram/{account_id}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
         .with_test_pairs([
-            ("HERMES_DEV_MODE", "true"),
+            ("MAKOSH_DEV_MODE", "true"),
             (
-                "HERMES_VAULT_HOME",
+                "MAKOSH_VAULT_HOME",
                 vault_dir.path().join("vault").to_str().expect("vault path"),
             ),
             (
-                "HERMES_DEV_KEY_PATH",
+                "MAKOSH_DEV_KEY_PATH",
                 vault_dir
                     .path()
                     .join("dev")
@@ -177,8 +177,8 @@ async fn telegram_qr_authorized_account_setup_persists_metadata_without_host_vau
                     .to_str()
                     .expect("dev key path"),
             ),
-            ("HERMES_TELEGRAM_API_ID", "12345"),
-            ("HERMES_TELEGRAM_API_HASH", "telegram-api-hash"),
+            ("MAKOSH_TELEGRAM_API_ID", "12345"),
+            ("MAKOSH_TELEGRAM_API_HASH", "telegram-api-hash"),
         ])
         .expect("config"),
         database,
@@ -253,18 +253,18 @@ async fn telegram_finalized_qr_account_setup_infers_qr_authorized_runtime() {
     let account_id = format!("telegram-user-inferred-{suffix}");
     let tdlib_data_path = format!("docker/data/telegram/{account_id}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
         .with_test_pairs([
-            ("HERMES_DEV_MODE", "true"),
+            ("MAKOSH_DEV_MODE", "true"),
             (
-                "HERMES_VAULT_HOME",
+                "MAKOSH_VAULT_HOME",
                 vault_dir.path().join("vault").to_str().expect("vault path"),
             ),
             (
-                "HERMES_DEV_KEY_PATH",
+                "MAKOSH_DEV_KEY_PATH",
                 vault_dir
                     .path()
                     .join("dev")
@@ -272,8 +272,8 @@ async fn telegram_finalized_qr_account_setup_infers_qr_authorized_runtime() {
                     .to_str()
                     .expect("dev key path"),
             ),
-            ("HERMES_TELEGRAM_API_ID", "12345"),
-            ("HERMES_TELEGRAM_API_HASH", "telegram-api-hash"),
+            ("MAKOSH_TELEGRAM_API_ID", "12345"),
+            ("MAKOSH_TELEGRAM_API_HASH", "telegram-api-hash"),
         ])
         .expect("config"),
         database,
@@ -324,7 +324,7 @@ async fn telegram_finalized_qr_account_setup_infers_qr_authorized_runtime() {
 #[tokio::test]
 async fn telegram_live_account_setup_api_requires_configured_database() {
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
+        makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
         Database::disabled(),
     );
 
@@ -351,15 +351,15 @@ async fn telegram_live_account_setup_api_requires_configured_database() {
 #[tokio::test]
 async fn telegram_capabilities_report_qr_login_readiness_inputs() {
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+        makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
             .with_test_pairs([
-                ("HERMES_DEV_MODE", "true"),
+                ("MAKOSH_DEV_MODE", "true"),
                 (
-                    "HERMES_TDJSON_PATH",
-                    "/tmp/hermes-hub-test-missing-libtdjson.dylib",
+                    "MAKOSH_TDJSON_PATH",
+                    "/tmp/makosh-test-missing-libtdjson.dylib",
                 ),
-                ("HERMES_TELEGRAM_API_ID", "12345"),
-                ("HERMES_TELEGRAM_API_HASH", "telegram-api-hash"),
+                ("MAKOSH_TELEGRAM_API_ID", "12345"),
+                ("MAKOSH_TELEGRAM_API_HASH", "telegram-api-hash"),
             ])
             .expect("config"),
         Database::disabled(),
@@ -392,7 +392,7 @@ async fn telegram_account_capabilities_report_account_scope_and_bot_overrides() 
     let user_account_id = format!("telegram-cap-user-{suffix}");
     let bot_account_id = format!("telegram-cap-bot-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )

@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use hermes_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::CommunicationProviderKind;
 
 use super::errors::EmailProviderNetworkError;
 use super::helpers::validate_non_empty;

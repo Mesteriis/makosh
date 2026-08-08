@@ -19,14 +19,14 @@ Mail owner after ADR-0239's IMAP read-only slice.
 The exact package split is:
 
 ```text
-hermes-mail-api
-hermes-mail-core
-hermes-mail-smtp
-hermes-mail-persistence
-hermes-mail-runtime
+makosh-mail-api
+makosh-mail-core
+makosh-mail-smtp
+makosh-mail-persistence
+makosh-mail-runtime
 ```
 
-`hermes-mail-smtp` may depend on its public Mail API and selected TLS/runtime
+`makosh-mail-smtp` may depend on its public Mail API and selected TLS/runtime
 libraries only. It must not depend on Mail persistence, Mail runtime,
 Communications, Gateway, Blob implementation, Vault implementation or a
 provider SDK. Mail runtime is the only composition root and resolves an
@@ -62,7 +62,7 @@ inbound attachment mapping as a cross-owner store lookup.
 
 ## Consequences
 
-No SMTP code may be hidden in `hermes-mail-imap`, `hermes-mail-core` may not
+No SMTP code may be hidden in `makosh-mail-imap`, `makosh-mail-core` may not
 open sockets, and Communications cannot become a generic outbound provider
 dispatcher. Enabling SMTP does not implicitly enable Gmail mutation or
 outbound attachments.
@@ -80,7 +80,7 @@ The implemented plain-text SMTP slice proves:
   operation ID is rejected;
 - a claimed delivery is never automatically replayed after an ambiguous
   provider outcome, preventing unsafe SMTP double-send;
-- `hermes-mail-smtp` performs bounded implicit-TLS SMTP with an optional
+- `makosh-mail-smtp` performs bounded implicit-TLS SMTP with an optional
   bounded custom CA for conformance and a whole-operation deadline;
 - SMTP password resolution uses only `mail_smtp_password` for the admitted
   configuration and never falls back to the IMAP credential;
@@ -94,5 +94,5 @@ The implemented plain-text SMTP slice proves:
 The focused live proof is:
 
 ```text
-HERMES_STORAGE_MANAGED_TEST_FILTER=managed_mail_runtime_accepts_then_completes_smtp_delivery_and_replays_event node scripts/test-authenticated-storage.mjs 1.97.0
+MAKOSH_STORAGE_MANAGED_TEST_FILTER=managed_mail_runtime_accepts_then_completes_smtp_delivery_and_replays_event node scripts/test-authenticated-storage.mjs 1.97.0
 ```

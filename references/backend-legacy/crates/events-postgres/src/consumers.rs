@@ -8,7 +8,7 @@ use sqlx::postgres::PgPool;
 use super::errors::EventStoreError;
 use super::store::EventStore;
 use super::validation::validate_non_empty;
-use hermes_events_api::StoredEventEnvelope;
+use makosh_events_api::StoredEventEnvelope;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct EventConsumerConfig {

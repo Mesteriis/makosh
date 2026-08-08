@@ -4,7 +4,7 @@ use std::os::fd::{FromRawFd, RawFd};
 use std::os::unix::net::UnixStream;
 
 pub const PLATFORM_CONTROL_INHERITED_FD_V1: RawFd = 3;
-pub const PLATFORM_CONTROL_INHERITED_FD_ENV_V1: &str = "HERMES_PLATFORM_CONTROL_FD";
+pub const PLATFORM_CONTROL_INHERITED_FD_ENV_V1: &str = "MAKOSH_PLATFORM_CONTROL_FD";
 
 pub fn open_inherited_platform_control_v1() -> Result<UnixStream, PlatformControlFdErrorV1> {
     let value = std::env::var(PLATFORM_CONTROL_INHERITED_FD_ENV_V1)

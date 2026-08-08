@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communication_delivery_intent_ingress_inbox (
+CREATE TABLE makosh_data.communication_delivery_intent_ingress_inbox (
   command_message_id BYTEA PRIMARY KEY CHECK (
     octet_length(command_message_id) = 16
   ),
@@ -18,12 +18,12 @@ CREATE TABLE hermes_data.communication_delivery_intent_ingress_inbox (
 );
 
 CREATE UNIQUE INDEX communication_delivery_intent_ingress_identity_idx
-  ON hermes_data.communication_delivery_intent_ingress_inbox (
+  ON makosh_data.communication_delivery_intent_ingress_inbox (
     logical_owner_id,
     intent_id
   );
 
-CREATE TABLE hermes_data.communication_delivery_intent_ingress_result_outbox (
+CREATE TABLE makosh_data.communication_delivery_intent_ingress_result_outbox (
   message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
   envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
   exact_envelope_bytes BYTEA NOT NULL CHECK (
@@ -45,13 +45,13 @@ CREATE TABLE hermes_data.communication_delivery_intent_ingress_result_outbox (
     OR published_at_unix_seconds >= created_at_unix_seconds
   ),
   FOREIGN KEY (command_message_id) REFERENCES
-    hermes_data.communication_delivery_intent_ingress_inbox (
+    makosh_data.communication_delivery_intent_ingress_inbox (
       command_message_id
     )
 );
 
 CREATE INDEX communication_delivery_intent_ingress_result_pending_idx
-  ON hermes_data.communication_delivery_intent_ingress_result_outbox (
+  ON makosh_data.communication_delivery_intent_ingress_result_outbox (
     created_at_unix_seconds,
     message_id
   )

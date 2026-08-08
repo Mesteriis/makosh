@@ -1,11 +1,11 @@
 //! Bounded scan-job claims, retry exhaustion and exact verdict outbox storage.
 
-use hermes_attachment_security_core::AttachmentSecurityScanJobV1;
-use hermes_communications_attachment_contract::{
+use makosh_attachment_security_core::AttachmentSecurityScanJobV1;
+use makosh_communications_attachment_contract::{
     AttachmentSafetyExpectedStateV1, AttachmentSafetyVerdictOutboxRecordV1,
     AttachmentSafetyVerdictV1,
 };
-use hermes_events_protocol::delivery::OutboxRecordV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
 use sha2::{Digest, Sha256};
 use sqlx::{Postgres, Row, Transaction};
 
@@ -51,7 +51,7 @@ pub(crate) async fn enqueue_scan_job(
     let max_attempts = i32::try_from(retry_policy.max_attempts())
         .map_err(|_| AttachmentSecurityPersistenceErrorV1::InvalidInput)?;
     sqlx::query(
-        "INSERT INTO hermes_data.attachment_security_scan_jobs (job_id, candidate_message_id, canonical_state_message_id, attachment_anchor_id, blob_reference_id, declared_size, blob_receipt_sha256, causation_message_id, correlation_id, state, max_attempts, next_attempt_at_unix_seconds, retry_policy_revision) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 1, $10, $11, $12) ON CONFLICT (job_id) DO NOTHING",
+        "INSERT INTO makosh_data.attachment_security_scan_jobs (job_id, candidate_message_id, canonical_state_message_id, attachment_anchor_id, blob_reference_id, declared_size, blob_receipt_sha256, causation_message_id, correlation_id, state, max_attempts, next_attempt_at_unix_seconds, retry_policy_revision) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 1, $10, $11, $12) ON CONFLICT (job_id) DO NOTHING",
     )
     .bind(job_id.as_slice())
     .bind(job.candidate_message_id.as_slice())
@@ -92,14 +92,14 @@ impl AttachmentSecurityPersistenceV1 {
             .await
             .map_err(|_| AttachmentSecurityPersistenceErrorV1::StorageUnavailable)?;
         sqlx::query(
-            "UPDATE hermes_data.attachment_security_scan_jobs SET state = 3, completed_at_unix_seconds = $1, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE state = 1 AND attempt_count >= max_attempts AND (lease_expires_at_unix_seconds IS NULL OR lease_expires_at_unix_seconds <= $1)",
+            "UPDATE makosh_data.attachment_security_scan_jobs SET state = 3, completed_at_unix_seconds = $1, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE state = 1 AND attempt_count >= max_attempts AND (lease_expires_at_unix_seconds IS NULL OR lease_expires_at_unix_seconds <= $1)",
         )
         .bind(claimed_at_unix_seconds)
         .execute(&mut *transaction)
         .await
         .map_err(|_| AttachmentSecurityPersistenceErrorV1::StorageUnavailable)?;
         let row = sqlx::query(
-            "WITH next_job AS (SELECT job_id FROM hermes_data.attachment_security_scan_jobs WHERE state = 1 AND next_attempt_at_unix_seconds <= $2 AND attempt_count < max_attempts AND (lease_expires_at_unix_seconds IS NULL OR lease_expires_at_unix_seconds <= $2) ORDER BY next_attempt_at_unix_seconds ASC, job_id ASC LIMIT 1 FOR UPDATE SKIP LOCKED) UPDATE hermes_data.attachment_security_scan_jobs AS job SET claimed_by = $1, lease_expires_at_unix_seconds = $3, attempt_count = job.attempt_count + 1 FROM next_job, hermes_data.attachment_security_scan_candidates AS source_candidate, hermes_data.attachment_security_event_inbox AS candidate_inbox WHERE job.job_id = next_job.job_id AND source_candidate.message_id = job.candidate_message_id AND candidate_inbox.message_id = source_candidate.message_id RETURNING job.job_id, job.candidate_message_id, job.canonical_state_message_id, job.attachment_anchor_id, job.blob_reference_id, job.declared_size, job.blob_receipt_sha256, job.causation_message_id, job.correlation_id, job.attempt_count, job.max_attempts, source_candidate.custody_transfer_source_proof, candidate_inbox.envelope_sha256 AS candidate_envelope_sha256, job.target_blob_reference_id, job.target_blob_receipt_sha256",
+            "WITH next_job AS (SELECT job_id FROM makosh_data.attachment_security_scan_jobs WHERE state = 1 AND next_attempt_at_unix_seconds <= $2 AND attempt_count < max_attempts AND (lease_expires_at_unix_seconds IS NULL OR lease_expires_at_unix_seconds <= $2) ORDER BY next_attempt_at_unix_seconds ASC, job_id ASC LIMIT 1 FOR UPDATE SKIP LOCKED) UPDATE makosh_data.attachment_security_scan_jobs AS job SET claimed_by = $1, lease_expires_at_unix_seconds = $3, attempt_count = job.attempt_count + 1 FROM next_job, makosh_data.attachment_security_scan_candidates AS source_candidate, makosh_data.attachment_security_event_inbox AS candidate_inbox WHERE job.job_id = next_job.job_id AND source_candidate.message_id = job.candidate_message_id AND candidate_inbox.message_id = source_candidate.message_id RETURNING job.job_id, job.candidate_message_id, job.canonical_state_message_id, job.attachment_anchor_id, job.blob_reference_id, job.declared_size, job.blob_receipt_sha256, job.causation_message_id, job.correlation_id, job.attempt_count, job.max_attempts, source_candidate.custody_transfer_source_proof, candidate_inbox.envelope_sha256 AS candidate_envelope_sha256, job.target_blob_reference_id, job.target_blob_receipt_sha256",
         )
         .bind(worker_id)
         .bind(claimed_at_unix_seconds)
@@ -131,7 +131,7 @@ impl AttachmentSecurityPersistenceV1 {
             return Err(AttachmentSecurityPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.attachment_security_scan_jobs SET target_blob_reference_id = $5, target_blob_receipt_sha256 = $6 WHERE job_id = $1 AND state = 1 AND claimed_by = $2 AND attempt_count = $3 AND lease_expires_at_unix_seconds > $4 AND ((target_blob_reference_id IS NULL AND target_blob_receipt_sha256 IS NULL) OR (target_blob_reference_id = $5 AND target_blob_receipt_sha256 = $6))",
+            "UPDATE makosh_data.attachment_security_scan_jobs SET target_blob_reference_id = $5, target_blob_receipt_sha256 = $6 WHERE job_id = $1 AND state = 1 AND claimed_by = $2 AND attempt_count = $3 AND lease_expires_at_unix_seconds > $4 AND ((target_blob_reference_id IS NULL AND target_blob_receipt_sha256 IS NULL) OR (target_blob_reference_id = $5 AND target_blob_receipt_sha256 = $6))",
         )
         .bind(claimed.job_id.as_slice())
         .bind(&claimed.worker_id)
@@ -169,7 +169,7 @@ impl AttachmentSecurityPersistenceV1 {
             .await
             .map_err(|_| AttachmentSecurityPersistenceErrorV1::StorageUnavailable)?;
         let row = sqlx::query(
-            "SELECT attempt_count, max_attempts FROM hermes_data.attachment_security_scan_jobs WHERE job_id = $1 AND state = 1 AND claimed_by = $2 AND attempt_count = $3 AND lease_expires_at_unix_seconds > $4 FOR UPDATE",
+            "SELECT attempt_count, max_attempts FROM makosh_data.attachment_security_scan_jobs WHERE job_id = $1 AND state = 1 AND claimed_by = $2 AND attempt_count = $3 AND lease_expires_at_unix_seconds > $4 FOR UPDATE",
         )
         .bind(claimed.job_id.as_slice())
         .bind(&claimed.worker_id)
@@ -190,7 +190,7 @@ impl AttachmentSecurityPersistenceV1 {
             .map_err(|_| AttachmentSecurityPersistenceErrorV1::InvalidRow)?;
         let outcome = if attempt_count >= max_attempts {
             sqlx::query(
-                "UPDATE hermes_data.attachment_security_scan_jobs SET state = 3, completed_at_unix_seconds = $4, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE job_id = $1 AND state = 1 AND claimed_by = $2 AND attempt_count = $3",
+                "UPDATE makosh_data.attachment_security_scan_jobs SET state = 3, completed_at_unix_seconds = $4, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE job_id = $1 AND state = 1 AND claimed_by = $2 AND attempt_count = $3",
             )
             .bind(claimed.job_id.as_slice())
             .bind(&claimed.worker_id)
@@ -205,7 +205,7 @@ impl AttachmentSecurityPersistenceV1 {
                 return Err(AttachmentSecurityPersistenceErrorV1::InvalidInput);
             }
             sqlx::query(
-                "UPDATE hermes_data.attachment_security_scan_jobs SET next_attempt_at_unix_seconds = $4, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE job_id = $1 AND state = 1 AND claimed_by = $2 AND attempt_count = $3",
+                "UPDATE makosh_data.attachment_security_scan_jobs SET next_attempt_at_unix_seconds = $4, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE job_id = $1 AND state = 1 AND claimed_by = $2 AND attempt_count = $3",
             )
             .bind(claimed.job_id.as_slice())
             .bind(&claimed.worker_id)
@@ -242,7 +242,7 @@ impl AttachmentSecurityPersistenceV1 {
             .await
             .map_err(|_| AttachmentSecurityPersistenceErrorV1::StorageUnavailable)?;
         let current = sqlx::query(
-            "SELECT job_id FROM hermes_data.attachment_security_scan_jobs WHERE job_id = $1 AND state = 1 AND claimed_by = $2 AND lease_expires_at_unix_seconds > $3 AND attempt_count = $4 FOR UPDATE",
+            "SELECT job_id FROM makosh_data.attachment_security_scan_jobs WHERE job_id = $1 AND state = 1 AND claimed_by = $2 AND lease_expires_at_unix_seconds > $3 AND attempt_count = $4 FOR UPDATE",
         )
         .bind(claimed.job_id.as_slice())
         .bind(&claimed.worker_id)
@@ -259,7 +259,7 @@ impl AttachmentSecurityPersistenceV1 {
         }
         insert_exact_outbox(&mut transaction, exact_record, completed_at_unix_seconds).await?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.attachment_security_scan_jobs SET state = 2, completed_at_unix_seconds = $4, outbox_message_id = $5, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE job_id = $1 AND state = 1 AND claimed_by = $2 AND attempt_count = $3",
+            "UPDATE makosh_data.attachment_security_scan_jobs SET state = 2, completed_at_unix_seconds = $4, outbox_message_id = $5, claimed_by = NULL, lease_expires_at_unix_seconds = NULL WHERE job_id = $1 AND state = 1 AND claimed_by = $2 AND attempt_count = $3",
         )
         .bind(claimed.job_id.as_slice())
         .bind(&claimed.worker_id)
@@ -289,7 +289,7 @@ impl AttachmentSecurityPersistenceV1 {
             return Err(AttachmentSecurityPersistenceErrorV1::InvalidInput);
         }
         let rows = sqlx::query(
-            "SELECT exact_envelope_bytes FROM hermes_data.attachment_security_verdict_outbox WHERE published_at_unix_seconds IS NULL ORDER BY created_at_unix_seconds ASC, message_id ASC LIMIT $1",
+            "SELECT exact_envelope_bytes FROM makosh_data.attachment_security_verdict_outbox WHERE published_at_unix_seconds IS NULL ORDER BY created_at_unix_seconds ASC, message_id ASC LIMIT $1",
         )
         .bind(i64::from(limit))
         .fetch_all(&self.pool)
@@ -315,7 +315,7 @@ impl AttachmentSecurityPersistenceV1 {
             return Err(AttachmentSecurityPersistenceErrorV1::InvalidInput);
         }
         let result = sqlx::query(
-            "UPDATE hermes_data.attachment_security_verdict_outbox SET published_at_unix_seconds = $2 WHERE message_id = $1 AND published_at_unix_seconds IS NULL",
+            "UPDATE makosh_data.attachment_security_verdict_outbox SET published_at_unix_seconds = $2 WHERE message_id = $1 AND published_at_unix_seconds IS NULL",
         )
         .bind(message_id.as_slice())
         .bind(published_at_unix_seconds)
@@ -329,7 +329,7 @@ impl AttachmentSecurityPersistenceV1 {
 #[must_use]
 pub fn attachment_security_scan_job_id_v1(job: &AttachmentSecurityScanJobV1) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.attachment-security.scan-job.v1\0");
+    digest.update(b"makosh.attachment-security.scan-job.v1\0");
     digest.update(job.candidate_message_id);
     digest.update(job.canonical_state_message_id);
     digest.update(job.attachment_anchor_id);
@@ -343,7 +343,7 @@ async fn insert_exact_outbox(
     created_at_unix_seconds: i64,
 ) -> Result<(), AttachmentSecurityPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.attachment_security_verdict_outbox (message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING",
+        "INSERT INTO makosh_data.attachment_security_verdict_outbox (message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds) VALUES ($1, $2, $3, $4) ON CONFLICT (message_id) DO NOTHING",
     )
     .bind(record.message_id().as_slice())
     .bind(record.envelope_sha256().as_slice())
@@ -356,7 +356,7 @@ async fn insert_exact_outbox(
         return Ok(());
     }
     let row = sqlx::query(
-        "SELECT envelope_sha256, exact_envelope_bytes FROM hermes_data.attachment_security_verdict_outbox WHERE message_id = $1",
+        "SELECT envelope_sha256, exact_envelope_bytes FROM makosh_data.attachment_security_verdict_outbox WHERE message_id = $1",
     )
     .bind(record.message_id().as_slice())
     .fetch_one(&mut **transaction)
@@ -504,7 +504,7 @@ fn valid_worker_id(value: &str) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_communications_attachment_contract::{
+    use makosh_communications_attachment_contract::{
         AttachmentObservationEnvelopeContextV1, AttachmentSafetyVerdictFactV1,
         build_attachment_safety_verdict_outbox_record_v1,
     };

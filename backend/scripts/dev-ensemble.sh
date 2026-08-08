@@ -13,15 +13,15 @@ owner_vault_host_address="127.0.0.1:9445"
 owner_vault_host_target="http://$owner_vault_host_address"
 browser_origin="http://127.0.0.1:5173"
 browser_url="$browser_origin/"
-no_browser="${HERMES_DEV_NO_BROWSER:-1}"
-data_dir="${HERMES_DEV_DATA_DIR:-$project_root/.local/kernel-dev}"
-cargo_target_dir="${HERMES_DEV_CARGO_TARGET_DIR:-$backend_root/target}"
-release_root="${HERMES_DEV_RELEASE_ROOT:-$project_root/.local/dev-release}"
-distribution_id="hermes-local-development"
+no_browser="${MAKOSH_DEV_NO_BROWSER:-1}"
+data_dir="${MAKOSH_DEV_DATA_DIR:-$project_root/.local/kernel-dev}"
+cargo_target_dir="${MAKOSH_DEV_CARGO_TARGET_DIR:-$backend_root/target}"
+release_root="${MAKOSH_DEV_RELEASE_ROOT:-$project_root/.local/dev-release}"
+distribution_id="makosh-local-development"
 generation_metadata_name="development-distribution-generation"
-startup_timeout_seconds="${HERMES_DEV_STARTUP_TIMEOUT_SECONDS:-120}"
+startup_timeout_seconds="${MAKOSH_DEV_STARTUP_TIMEOUT_SECONDS:-120}"
 rust_toolchain="${RUST_TOOLCHAIN:-1.97.0}"
-legacy_recovery_bundle_root="${HERMES_LEGACY_PROVIDER_RECOVERY_BUNDLE_ROOT:-}"
+legacy_recovery_bundle_root="${MAKOSH_LEGACY_PROVIDER_RECOVERY_BUNDLE_ROOT:-}"
 legacy_recovery_frontend_flag=0
 kernel_pid=""
 owner_vault_host_pid=""
@@ -30,7 +30,7 @@ temporary_dir=""
 proof_file=""
 
 fail() {
-	printf 'Hermes development assembly failed: %s\n' "$1" >&2
+	printf 'Макошь development assembly failed: %s\n' "$1" >&2
 	exit 1
 }
 
@@ -62,11 +62,11 @@ fi
 
 run_compose() {
 	env \
-		HERMES_STORAGE_POSTGRES_SECRET_FILE="$data_dir/developer-platform-credentials/postgres-admin-password" \
-		HERMES_STORAGE_PGBOUNCER_SECRET_FILE="$data_dir/developer-platform-credentials/pgbouncer-admin-password" \
-		HERMES_STORAGE_PGBOUNCER_DATABASES_DIRECTORY="$runtime_dir/storage/pgbouncer" \
-		HERMES_STORAGE_PGBOUNCER_AUTH_DIRECTORY="$runtime_dir/storage/pgbouncer/auth" \
-		HERMES_STORAGE_PGBOUNCER_RUNTIME_UID="$(id -u)" \
+		MAKOSH_STORAGE_POSTGRES_SECRET_FILE="$data_dir/developer-platform-credentials/postgres-admin-password" \
+		MAKOSH_STORAGE_PGBOUNCER_SECRET_FILE="$data_dir/developer-platform-credentials/pgbouncer-admin-password" \
+		MAKOSH_STORAGE_PGBOUNCER_DATABASES_DIRECTORY="$runtime_dir/storage/pgbouncer" \
+		MAKOSH_STORAGE_PGBOUNCER_AUTH_DIRECTORY="$runtime_dir/storage/pgbouncer/auth" \
+		MAKOSH_STORAGE_PGBOUNCER_RUNTIME_UID="$(id -u)" \
 		docker compose -f "$compose_file" "$@"
 }
 
@@ -142,27 +142,27 @@ done
 case "$no_browser" in
 	0) require_command open ;;
 	1) ;;
-	*) fail "HERMES_DEV_NO_BROWSER must be 0 or 1" ;;
+	*) fail "MAKOSH_DEV_NO_BROWSER must be 0 or 1" ;;
 esac
-require_absolute_directory_path "HERMES_DEV_DATA_DIR" "$data_dir"
-require_absolute_directory_path "HERMES_DEV_CARGO_TARGET_DIR" "$cargo_target_dir"
-require_absolute_directory_path "HERMES_DEV_RELEASE_ROOT" "$release_root"
+require_absolute_directory_path "MAKOSH_DEV_DATA_DIR" "$data_dir"
+require_absolute_directory_path "MAKOSH_DEV_CARGO_TARGET_DIR" "$cargo_target_dir"
+require_absolute_directory_path "MAKOSH_DEV_RELEASE_ROOT" "$release_root"
 case "$startup_timeout_seconds" in
-	''|*[!0-9]*) fail "HERMES_DEV_STARTUP_TIMEOUT_SECONDS must be a positive integer" ;;
+	''|*[!0-9]*) fail "MAKOSH_DEV_STARTUP_TIMEOUT_SECONDS must be a positive integer" ;;
 esac
-test "$startup_timeout_seconds" -gt 0 || fail "HERMES_DEV_STARTUP_TIMEOUT_SECONDS must be positive"
+test "$startup_timeout_seconds" -gt 0 || fail "MAKOSH_DEV_STARTUP_TIMEOUT_SECONDS must be positive"
 
 require_available_port 5173
 require_available_port 9444
 require_available_port 9445
 
 printf '%s\n' 'Materializing the signed clean-room development release...'
-HERMES_DEV_CARGO_TARGET_DIR="$cargo_target_dir" \
+MAKOSH_DEV_CARGO_TARGET_DIR="$cargo_target_dir" \
 	"$backend_root/scripts/materialize-dev-release.sh"
-kernel_bin="$release_root/HermesDev.app/Contents/MacOS/hermes-kernel"
+kernel_bin="$release_root/МакошьDev.app/Contents/MacOS/makosh-kernel"
 generation_metadata="$release_root/$generation_metadata_name"
-development_assembly_bin="$cargo_target_dir/debug/hermes-development-assembly"
-owner_vault_host_bin="$cargo_target_dir/debug/hermes-owner-vault-development-host"
+development_assembly_bin="$cargo_target_dir/debug/makosh-development-assembly"
+owner_vault_host_bin="$cargo_target_dir/debug/makosh-owner-vault-development-host"
 test -x "$kernel_bin" || fail "signed Kernel development binary is unavailable"
 test -x "$development_assembly_bin" || fail "development assembly unit is unavailable"
 test -f "$generation_metadata" && test ! -L "$generation_metadata" \
@@ -183,7 +183,7 @@ cargo +"$rust_toolchain" build \
 	--locked \
 	--manifest-path "$frontend_root/native/owner-vault-provisioning-host/Cargo.toml" \
 	--features development-server \
-	--bin hermes-owner-vault-development-host \
+	--bin makosh-owner-vault-development-host \
 	--target-dir "$cargo_target_dir"
 test -x "$owner_vault_host_bin" || fail "development Owner Vault host is unavailable"
 
@@ -235,12 +235,12 @@ run_compose up --detach --wait
 # admin-only auth file.
 if ! run_compose exec --no-TTY pgbouncer \
 	test -r /etc/pgbouncer/pgbouncer.ini \
-		-a -r /etc/hermes/runtime/databases.ini \
-		-a -r /etc/hermes/auth/users.txt; then
+		-a -r /etc/makosh/runtime/databases.ini \
+		-a -r /etc/makosh/auth/users.txt; then
 	run_compose up --detach --no-deps --force-recreate --wait pgbouncer
 fi
 
-temporary_dir="$(mktemp -d "${TMPDIR:-/tmp}/hermes-dev-assembly.XXXXXX")"
+temporary_dir="$(mktemp -d "${TMPDIR:-/tmp}/makosh-dev-assembly.XXXXXX")"
 chmod 700 "$temporary_dir"
 proof_file="$temporary_dir/gateway-proof"
 node -e \
@@ -282,9 +282,9 @@ if test "$legacy_recovery_frontend_flag" = 1; then
 		|| fail "legacy provider recovery host readiness probe failed"
 fi
 
-printf '%s\n' 'Starting Hermes Kernel and loopback Core Gateway...'
+printf '%s\n' 'Starting Макошь Kernel and loopback Core Gateway...'
 start_kernel() {
-	env HERMES_DEVELOPER_VERBOSE=1 "$kernel_bin" \
+	env MAKOSH_DEVELOPER_VERBOSE=1 "$kernel_bin" \
 		--data-dir "$data_dir" \
 		serve \
 		--browser-gateway-listen-address "$gateway_address" \
@@ -358,12 +358,12 @@ fi
 printf '%s\n' 'Starting the Vue/Vite browser client...'
 (
 	cd "$frontend_root"
-	exec env HERMES_DEV_GATEWAY_TARGET="$gateway_target" \
-		HERMES_DEV_GATEWAY_PROOF_FILE="$proof_file" \
-		HERMES_DEV_OWNER_VAULT_HOST_TARGET="$owner_vault_host_target" \
-		VITE_HERMES_DEV_OWNER_VAULT_HOST=1 \
-		VITE_HERMES_DEV_OWNER_DEVICE_PROOF_HOST=1 \
-		VITE_HERMES_LEGACY_PROVIDER_RECOVERY="$legacy_recovery_frontend_flag" \
+	exec env MAKOSH_DEV_GATEWAY_TARGET="$gateway_target" \
+		MAKOSH_DEV_GATEWAY_PROOF_FILE="$proof_file" \
+		MAKOSH_DEV_OWNER_VAULT_HOST_TARGET="$owner_vault_host_target" \
+		VITE_MAKOSH_DEV_OWNER_VAULT_HOST=1 \
+		VITE_MAKOSH_DEV_OWNER_DEVICE_PROOF_HOST=1 \
+		VITE_MAKOSH_LEGACY_PROVIDER_RECOVERY="$legacy_recovery_frontend_flag" \
 		pnpm exec vite --host 127.0.0.1 --strictPort
 ) &
 frontend_pid=$!
@@ -381,7 +381,7 @@ while :; do
 	sleep 1
 done
 
-printf 'Hermes development ensemble is ready at %s\n' "$browser_url"
+printf 'Макошь development ensemble is ready at %s\n' "$browser_url"
 if test "$no_browser" = 0; then
 	open "$browser_url"
 	printf '%s\n' 'Browser opened. Press Ctrl-C to stop the full local ensemble.'

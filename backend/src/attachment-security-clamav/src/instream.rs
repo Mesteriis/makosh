@@ -1,6 +1,6 @@
 use std::io::{self, Read, Write};
 
-use hermes_attachment_security_core::ScannerOutcomeV1;
+use makosh_attachment_security_core::ScannerOutcomeV1;
 use sha2::{Digest, Sha256};
 
 use crate::ClamAvInstreamLimitsV1;

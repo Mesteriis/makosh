@@ -25,7 +25,7 @@ Current implementation note:
 ## System Recovery Fixture
 
 The system recovery fixture defines the canonical built-in Signal Hub sources
-that must exist for Hermes to operate.
+that must exist for Макошь to operate.
 
 It is used for:
 
@@ -294,5 +294,5 @@ real sources disabled or muted
 fixture source enabled
 ```
 
-Hermes downstream domains should process fixture events exactly like normal
+Макошь downstream domains should process fixture events exactly like normal
 source events.

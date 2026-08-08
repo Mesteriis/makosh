@@ -36,18 +36,18 @@ impl MailAddressBookPersistenceConformanceV1 {
     ) -> Result<(), MailAddressBookPersistenceErrorV1> {
         persistence
             .pool
-            .execute("DROP SCHEMA IF EXISTS hermes_data CASCADE")
+            .execute("DROP SCHEMA IF EXISTS makosh_data CASCADE")
             .await
             .map_err(storage_error)?;
         persistence
             .pool
-            .execute("CREATE SCHEMA hermes_data")
+            .execute("CREATE SCHEMA makosh_data")
             .await
             .map_err(storage_error)?;
         persistence
             .pool
             .execute(
-                "CREATE TABLE hermes_data.mail_gmail_oauth_credential_bindings (
+                "CREATE TABLE makosh_data.mail_gmail_oauth_credential_bindings (
                     account_id TEXT PRIMARY KEY
                 )",
             )

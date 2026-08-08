@@ -1,6 +1,6 @@
 //! Module registrations, grants, and external runtime attestations.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ExternalRuntimeAttestation, GrantSet, ModuleBlobQuotaRequestV1, ModuleEventRouteRequestV1,
     ModuleGrantSnapshot, ModuleRegistration, ModuleRegistrationState, ModuleStorageRequestV1,
 };
@@ -53,7 +53,7 @@ impl SqliteControlStore {
         self.create_pending_registration_with_descriptor_requests(
             registration,
             requested_capability_ids,
-            hermes_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
+            makosh_kernel_control_store::ModuleDescriptorRegistrationRequestsV1 {
                 storage: storage_requests,
                 events: event_requests,
                 blobs: blob_requests,
@@ -73,7 +73,7 @@ impl SqliteControlStore {
         &self,
         registration: &ModuleRegistration,
         requested_capability_ids: &[String],
-        requests: hermes_kernel_control_store::ModuleDescriptorRegistrationRequestsV1<'_>,
+        requests: makosh_kernel_control_store::ModuleDescriptorRegistrationRequestsV1<'_>,
     ) -> Result<(), StoreError> {
         self.create_pending_registration_with_all_descriptor_requests(
             registration,
@@ -86,7 +86,7 @@ impl SqliteControlStore {
         &self,
         registration: &ModuleRegistration,
         requested_capability_ids: &[String],
-        requests: hermes_kernel_control_store::ModuleDescriptorRegistrationRequestsV1<'_>,
+        requests: makosh_kernel_control_store::ModuleDescriptorRegistrationRequestsV1<'_>,
     ) -> Result<(), StoreError> {
         validate_pending_registration(registration, requested_capability_ids)?;
         validate_storage_requests(registration, requested_capability_ids, requests.storage)?;
@@ -171,7 +171,7 @@ impl SqliteControlStore {
         &self,
         registration: &ModuleRegistration,
         requested_capability_ids: &[String],
-        requests: hermes_kernel_control_store::ModuleDescriptorRegistrationRequestsV1<'_>,
+        requests: makosh_kernel_control_store::ModuleDescriptorRegistrationRequestsV1<'_>,
     ) -> Result<(), StoreError> {
         if registration.state() != ModuleRegistrationState::Approved
             || !valid_identity_token(registration.registration_id())
@@ -253,55 +253,55 @@ impl SqliteControlStore {
                 return Err(StoreError::InvalidModuleRegistrationTransition);
             }
             transaction.execute(
-                "DELETE FROM hermes_kernel_module_storage_request WHERE registration_id = ?1",
+                "DELETE FROM makosh_kernel_module_storage_request WHERE registration_id = ?1",
                 [registration.registration_id()],
             )?;
             transaction.execute(
-                "DELETE FROM hermes_kernel_module_event_route_request WHERE registration_id = ?1",
+                "DELETE FROM makosh_kernel_module_event_route_request WHERE registration_id = ?1",
                 [registration.registration_id()],
             )?;
             transaction.execute(
-                "DELETE FROM hermes_kernel_module_blob_quota_request WHERE registration_id = ?1",
+                "DELETE FROM makosh_kernel_module_blob_quota_request WHERE registration_id = ?1",
                 [registration.registration_id()],
             )?;
             transaction.execute(
-                "DELETE FROM hermes_kernel_module_scheduler_job_request WHERE registration_id = ?1",
+                "DELETE FROM makosh_kernel_module_scheduler_job_request WHERE registration_id = ?1",
                 [registration.registration_id()],
             )?;
             transaction.execute(
-                "DELETE FROM hermes_kernel_module_vault_purpose_request WHERE registration_id = ?1",
+                "DELETE FROM makosh_kernel_module_vault_purpose_request WHERE registration_id = ?1",
                 [registration.registration_id()],
             )?;
             transaction.execute(
-                "DELETE FROM hermes_kernel_module_client_rpc_route_request WHERE registration_id = ?1",
+                "DELETE FROM makosh_kernel_module_client_rpc_route_request WHERE registration_id = ?1",
                 [registration.registration_id()],
             )?;
             transaction.execute(
-                "DELETE FROM hermes_kernel_module_client_blob_route_request WHERE registration_id = ?1",
+                "DELETE FROM makosh_kernel_module_client_blob_route_request WHERE registration_id = ?1",
                 [registration.registration_id()],
             )?;
             transaction.execute(
-                "DELETE FROM hermes_kernel_module_client_realtime_route_request WHERE registration_id = ?1",
+                "DELETE FROM makosh_kernel_module_client_realtime_route_request WHERE registration_id = ?1",
                 [registration.registration_id()],
             )?;
             transaction.execute(
-                "DELETE FROM hermes_kernel_module_query_rpc_route_request WHERE registration_id = ?1",
+                "DELETE FROM makosh_kernel_module_query_rpc_route_request WHERE registration_id = ?1",
                 [registration.registration_id()],
             )?;
             transaction.execute(
-                "DELETE FROM hermes_kernel_module_request_rpc_route_request WHERE registration_id = ?1",
+                "DELETE FROM makosh_kernel_module_request_rpc_route_request WHERE registration_id = ?1",
                 [registration.registration_id()],
             )?;
             transaction.execute(
-                "DELETE FROM hermes_kernel_module_contract_dependency WHERE registration_id = ?1",
+                "DELETE FROM makosh_kernel_module_contract_dependency WHERE registration_id = ?1",
                 [registration.registration_id()],
             )?;
             transaction.execute(
-                "DELETE FROM hermes_kernel_module_registration_capability WHERE registration_id = ?1",
+                "DELETE FROM makosh_kernel_module_registration_capability WHERE registration_id = ?1",
                 [registration.registration_id()],
             )?;
             let changed = transaction.execute(
-                "UPDATE hermes_kernel_module_registration
+                "UPDATE makosh_kernel_module_registration
                  SET descriptor_sha256 = ?2, grant_epoch = ?3
                  WHERE registration_id = ?1 AND descriptor_sha256 = ?4
                    AND grant_epoch = ?5 AND state = 'approved'",
@@ -318,7 +318,7 @@ impl SqliteControlStore {
             }
             for capability in &capabilities {
                 transaction.execute(
-                    "INSERT INTO hermes_kernel_module_registration_capability
+                    "INSERT INTO makosh_kernel_module_registration_capability
                      (registration_id, capability_id, approved) VALUES (?1, ?2, 1)",
                     params![registration.registration_id(), capability],
                 )?;
@@ -469,7 +469,7 @@ pub(crate) fn insert_pending_registration(
     capabilities: &[String],
 ) -> Result<(), StoreError> {
     let changed = connection.execute(
-        "INSERT OR IGNORE INTO hermes_kernel_module_registration
+        "INSERT OR IGNORE INTO makosh_kernel_module_registration
          (registration_id, module_id, owner_id, descriptor_sha256, state, grant_epoch)
          VALUES (?1, ?2, ?3, ?4, 'pending', 1)",
         params![
@@ -484,7 +484,7 @@ pub(crate) fn insert_pending_registration(
     }
     for capability in capabilities {
         connection.execute(
-            "INSERT INTO hermes_kernel_module_registration_capability
+            "INSERT INTO makosh_kernel_module_registration_capability
              (registration_id, capability_id, approved) VALUES (?1, ?2, 0)",
             params![registration.registration_id(), capability],
         )?;
@@ -506,7 +506,7 @@ fn approve_registration(
         return Err(StoreError::InvalidModuleRegistrationTransition);
     }
     transaction.execute(
-        "UPDATE hermes_kernel_module_registration_capability SET approved = 0 WHERE registration_id = ?1",
+        "UPDATE makosh_kernel_module_registration_capability SET approved = 0 WHERE registration_id = ?1",
         [registration_id],
     )?;
     approve_capabilities(&transaction, registration_id, capabilities)?;
@@ -528,7 +528,7 @@ fn approve_capabilities(
 ) -> Result<(), StoreError> {
     for capability in capabilities {
         let changed = connection.execute(
-            "UPDATE hermes_kernel_module_registration_capability SET approved = 1
+            "UPDATE makosh_kernel_module_registration_capability SET approved = 1
              WHERE registration_id = ?1 AND capability_id = ?2",
             params![registration_id, capability],
         )?;
@@ -549,7 +549,7 @@ fn transition_registration(
         .checked_add(1)
         .ok_or(StoreError::RecoveryFenceOverflow)?;
     let changed = connection.execute(
-        "UPDATE hermes_kernel_module_registration SET state = ?1, grant_epoch = ?2
+        "UPDATE makosh_kernel_module_registration SET state = ?1, grant_epoch = ?2
          WHERE registration_id = ?3 AND state = ?4 AND grant_epoch = ?5",
         params![
             next.as_str(),
@@ -594,13 +594,13 @@ fn write_attestation(
         return Err(StoreError::StaleExternalRuntimeAttestation);
     }
     let changed = transaction.execute(
-        "INSERT INTO hermes_kernel_external_runtime_attestation
+        "INSERT INTO makosh_kernel_external_runtime_attestation
          (registration_id, runtime_id, runtime_generation, grant_epoch, distribution_sha256)
          VALUES (?1, ?2, ?3, ?4, ?5)
          ON CONFLICT(registration_id) DO UPDATE SET runtime_id=excluded.runtime_id,
          runtime_generation=excluded.runtime_generation, grant_epoch=excluded.grant_epoch,
          distribution_sha256=excluded.distribution_sha256
-         WHERE excluded.runtime_generation > hermes_kernel_external_runtime_attestation.runtime_generation",
+         WHERE excluded.runtime_generation > makosh_kernel_external_runtime_attestation.runtime_generation",
         params![attestation.registration_id(), attestation.runtime_id(), as_sql(attestation.runtime_generation())?, as_sql(attestation.grant_epoch())?, attestation.distribution_sha256().as_slice()],
     )?;
     if changed != 1 {
@@ -622,7 +622,7 @@ fn read_effective_attestation(
     let result = transaction
         .query_row(
             "SELECT runtime_id, runtime_generation, grant_epoch, distribution_sha256
-         FROM hermes_kernel_external_runtime_attestation
+         FROM makosh_kernel_external_runtime_attestation
          WHERE registration_id = ?1 AND grant_epoch = ?2",
             params![registration_id, as_sql(registration.grant_epoch())?],
             |row| decode_attestation(row, registration_id),
@@ -639,7 +639,7 @@ pub(crate) fn read_module_registration(
     connection
         .query_row(
             "SELECT registration_id, module_id, owner_id, descriptor_sha256, state, grant_epoch
-         FROM hermes_kernel_module_registration WHERE registration_id = ?1",
+         FROM makosh_kernel_module_registration WHERE registration_id = ?1",
             [registration_id],
             decode_registration,
         )
@@ -660,7 +660,7 @@ fn read_approved_registrations(
 ) -> Result<Vec<ModuleRegistration>, StoreError> {
     let mut statement = connection.prepare(
         "SELECT registration_id, module_id, owner_id, descriptor_sha256, state, grant_epoch
-         FROM hermes_kernel_module_registration WHERE state = 'approved' ORDER BY registration_id",
+         FROM makosh_kernel_module_registration WHERE state = 'approved' ORDER BY registration_id",
     )?;
     let rows = statement.query_map([], decode_registration)?;
     rows.collect::<Result<Vec<_>, _>>()
@@ -672,7 +672,7 @@ pub(crate) fn read_approved_capabilities(
     registration_id: &str,
 ) -> Result<Vec<String>, StoreError> {
     let mut statement = connection.prepare(
-        "SELECT capability_id FROM hermes_kernel_module_registration_capability
+        "SELECT capability_id FROM makosh_kernel_module_registration_capability
          WHERE registration_id = ?1 AND approved = 1 ORDER BY capability_id",
     )?;
     let rows = statement.query_map([registration_id], |row| row.get::<_, String>(0))?;

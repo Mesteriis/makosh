@@ -9,7 +9,7 @@ use crate::kernel_operator;
 use crate::platform::commands as platform_commands;
 
 #[derive(Parser)]
-#[command(name = "hermes-development-kernel-operator")]
+#[command(name = "makosh-development-kernel-operator")]
 pub(crate) struct Cli {
     #[arg(long)]
     data_dir: Option<PathBuf>,

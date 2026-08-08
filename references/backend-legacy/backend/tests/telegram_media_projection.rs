@@ -1,5 +1,5 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 mod telegram_support;
 
 use axum::http::StatusCode;
@@ -7,13 +7,13 @@ use chrono::Utc;
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::communications::messages::provider_observation_projection::consume_accepted_signal_event;
-use hermes_hub_backend::domains::signal_hub::telegram::dispatch_telegram_raw_signal;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::communications::messages::provider_observation_projection::consume_accepted_signal_event;
+use makosh_hub_backend::domains::signal_hub::telegram::dispatch_telegram_raw_signal;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::platform::storage::database::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_ok, json_body, json_post_request_with_actor, unique_suffix,
 };
@@ -111,7 +111,7 @@ async fn telegram_fixture_media_download_fails_closed_without_live_runtime() {
     let chat_id = format!("media-chat-{suffix}");
     let provider_message_id = format!("media-message-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )

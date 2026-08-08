@@ -13,7 +13,7 @@ provider-observed reconciliation gates pass.
 
 ## Context
 
-Hermes needs full WhatsApp functionality plus Hermes-specific memory, Radar, Review, Timeline, Search, AI and workflow features.
+Макошь needs full WhatsApp functionality plus Макошь-specific memory, Radar, Review, Timeline, Search, AI and workflow features.
 
 The current repository already contains a WhatsApp fixture/runtime foundation:
 
@@ -51,7 +51,7 @@ Official Business Cloud API remains a separate business provider shape. It does 
 
 ## Decision
 
-Hermes will use a **multi-provider runtime boundary** for WhatsApp.
+Макошь will use a **multi-provider runtime boundary** for WhatsApp.
 
 Provider shapes:
 
@@ -89,7 +89,7 @@ Compatibility:
   recursively redacts secret-like/private content metadata, maps known event
   families to protected `/runtime-bridge/*` paths and posts the sanitized
   metadata observation to the protected local runtime-events bridge with
-  `X-Hermes-Secret` from the Tauri process environment only. It must not mutate
+  `X-Макошь-Secret` from the Tauri process environment only. It must not mutate
   domains or complete provider commands. The WhatsApp Runtime panel exposes the
   owner-visible `Open Companion` action through the typed Tauri bridge, but
   public WebView runtime availability remains blocked until manual smoke passes.
@@ -124,9 +124,9 @@ Current spike result, 2026-06-26:
   `ureq-client`.
 - `wa-rs 0.2.0` with the same transport feature set fails on Rust 1.88 because
   transitive `tokio-websockets 0.13.3` requires Rust 1.89.
-- Hermes backend MSRV is raised to Rust 1.89 so the native transport boundary
+- Макошь backend MSRV is raised to Rust 1.89 so the native transport boundary
   can compile without weakening the selected SDK feature set.
-- Hermes therefore wires the experimental `whatsapp-native-md-runtime` feature
+- Макошь therefore wires the experimental `whatsapp-native-md-runtime` feature
   to optional `wa-rs` dependency for compile-boundary validation only. This does
   not make live runtime support accepted or available.
 - The public runtime availability gate remains false for `native_md` and
@@ -241,7 +241,7 @@ Current spike result, 2026-06-26:
 
 ### Rejected foundation
 
-Do not use `whatsappweb-rs` as the main provider foundation because it is old, heavily WIP and has no release posture suitable for Hermes.
+Do not use `whatsappweb-rs` as the main provider foundation because it is old, heavily WIP and has no release posture suitable for Макошь.
 
 ### Future official business provider
 
@@ -284,17 +284,17 @@ Meta-like Business Cloud text messages and delivery statuses into the existing
 message/receipt evidence spine, while unsupported webhook entries are preserved
 as sanitized degraded runtime evidence. The local bridge verifies challenge
 tokens and `X-Hub-Signature-256` raw-body HMAC-SHA256 signatures using
-host-vault secrets before ingestion. Because ADR-0056 keeps Hermes `/api/v1`
-behind `X-Hermes-Secret`, public Meta webhook exposure still requires an
-explicit proxy/edge bridge; Hermes itself is not opened as an unauthenticated
-public endpoint. Hermes exposes a protected proxy manifest at
+host-vault secrets before ingestion. Because ADR-0056 keeps Макошь `/api/v1`
+behind `X-Макошь-Secret`, public Meta webhook exposure still requires an
+explicit proxy/edge bridge; Макошь itself is not opened as an unauthenticated
+public endpoint. Макошь exposes a protected proxy manifest at
 `/api/v1/integrations/whatsapp/runtime-bridge/business-cloud/proxy-manifest`
 that states the edge forwarding contract, raw-body/signature policy and
 per-account binding readiness without reading or returning secret values.
-The repository also provides `hermes-whatsapp-business-cloud-edge-proxy` as the
+The repository also provides `makosh-whatsapp-business-cloud-edge-proxy` as the
 standalone local bridge artifact: it exposes public
 `/webhooks/whatsapp/business-cloud`, forwards GET challenge queries and exact
-POST raw bodies/signatures to protected Hermes with `X-Hermes-Secret`, and does
+POST raw bodies/signatures to protected Макошь with `X-Макошь-Secret`, and does
 not parse webhook JSON or read host-vault secrets. Optional edge `account_id`
 scope is applied only to GET challenge forwarding; manifest readiness checks
 do not carry account query state. The edge bridge is packaged as an opt-in
@@ -320,7 +320,7 @@ Third-party provider libraries live only behind:
 backend/src/integrations/whatsapp/runtime/*
 ```
 
-Hermes application, workflow, domain, engine and UI-facing backend code must
+Макошь application, workflow, domain, engine and UI-facing backend code must
 depend on the replaceable Rust boundary:
 
 ```rust
@@ -405,7 +405,7 @@ They can become available only after:
 
 Positive:
 
-- Hermes avoids writing the WhatsApp protocol from scratch.
+- Макошь avoids writing the WhatsApp protocol from scratch.
 - Provider instability is isolated.
 - The existing Communications/Radar/Review architecture remains intact.
 - Business Cloud support can be added later without corrupting personal provider assumptions.
@@ -434,7 +434,7 @@ Negative:
 
 This ADR can move from Proposed to Accepted only when:
 
-1. `whatsapp-rust` compiles on Hermes Rust toolchain or fallback is selected.
+1. `whatsapp-rust` compiles on Макошь Rust toolchain or fallback is selected.
 2. QR/pair-code session lifecycle can be surfaced without leaking secrets.
 3. Inbound message events can be mapped to source-backed observations.
 4. Media metadata can be mapped without storing bytes in PostgreSQL.

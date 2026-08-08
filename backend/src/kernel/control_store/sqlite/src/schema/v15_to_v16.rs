@@ -4,7 +4,7 @@ use crate::StoreError;
 
 pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
     transaction.execute_batch(
-        "CREATE TABLE hermes_kernel_platform_storage_topology (
+        "CREATE TABLE makosh_kernel_platform_storage_topology (
             singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
             revision INTEGER NOT NULL CHECK (revision >= 1),
             storage_generation INTEGER NOT NULL CHECK (storage_generation >= 1),
@@ -14,7 +14,7 @@ pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
             postgres_artifact_sha256 BLOB NOT NULL CHECK (length(postgres_artifact_sha256) = 32),
             pgbouncer_artifact_sha256 BLOB NOT NULL CHECK (length(pgbouncer_artifact_sha256) = 32)
         ) STRICT;
-        UPDATE hermes_kernel_control_store_metadata SET schema_version = 16 WHERE singleton = 1;",
+        UPDATE makosh_kernel_control_store_metadata SET schema_version = 16 WHERE singleton = 1;",
     )?;
     Ok(())
 }

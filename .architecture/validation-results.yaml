@@ -3,19 +3,19 @@ kind: validation-results
 scope: backend-wide-source-layout
 results:
   - {id: VAL-0008, status: passed, command: node --test backend/tests/architecture/semantic-source-layout.test.mjs}
-  - {id: TEST-0005, status: passed, command: cargo +1.97.0 test --manifest-path backend/Cargo.toml --locked -p hermes-telemetry-testkit --no-fail-fast}
-  - {id: TEST-0006, status: passed, command: cargo +1.97.0 test --manifest-path backend/Cargo.toml --locked -p hermes-clock-testkit --no-fail-fast}
-  - {id: TEST-0007, status: passed, command: cargo +1.97.0 test --manifest-path backend/Cargo.toml --locked -p hermes-vault-testkit --no-fail-fast}
+  - {id: TEST-0005, status: passed, command: cargo +1.97.0 test --manifest-path backend/Cargo.toml --locked -p makosh-telemetry-testkit --no-fail-fast}
+  - {id: TEST-0006, status: passed, command: cargo +1.97.0 test --manifest-path backend/Cargo.toml --locked -p makosh-clock-testkit --no-fail-fast}
+  - {id: TEST-0007, status: passed, command: cargo +1.97.0 test --manifest-path backend/Cargo.toml --locked -p makosh-vault-testkit --no-fail-fast}
   - {id: VAL-0001, status: passed, command: make -C backend validate}
   - {id: VAL-0006, status: passed, command: git diff --check}
   - {id: VAL-0007, status: passed, command: node --test backend/tests/lifecycle/development-module-operator-simulation.test.mjs}
   - {id: FORMAT-0001, status: passed, command: cargo +1.97.0 fmt --manifest-path backend/Cargo.toml --all --check}
-  - {id: CHECK-0001, status: passed, command: cargo +1.97.0 check --manifest-path backend/Cargo.toml -p hermes-development-kernel-operator}
+  - {id: CHECK-0001, status: passed, command: cargo +1.97.0 check --manifest-path backend/Cargo.toml -p makosh-development-kernel-operator}
   - {id: SRP-0001, status: passed, command: node backend/scripts/check-srp-policy.mjs}
-  - {id: CHECK-0002, status: passed, command: cargo +1.97.0 check --manifest-path backend/Cargo.toml -p hermes-kernel -p hermes-telemetry-collector}
-  - {id: TEST-0001, status: passed, command: cargo +1.97.0 test --manifest-path backend/Cargo.toml -p hermes-kernel-recovery-testkit telemetry_ -- --test-threads=8}
+  - {id: CHECK-0002, status: passed, command: cargo +1.97.0 check --manifest-path backend/Cargo.toml -p makosh-kernel -p makosh-telemetry-collector}
+  - {id: TEST-0001, status: passed, command: cargo +1.97.0 test --manifest-path backend/Cargo.toml -p makosh-kernel-recovery-testkit telemetry_ -- --test-threads=8}
   - {id: TEST-0002, status: passed, command: node --test backend/tests/lifecycle/telemetry-collector.test.mjs}
-  - {id: TEST-0003, status: passed, command: cargo +1.97.0 test --manifest-path backend/Cargo.toml -p hermes-telemetry-testkit -- --test-threads=8}
+  - {id: TEST-0003, status: passed, command: cargo +1.97.0 test --manifest-path backend/Cargo.toml -p makosh-telemetry-testkit -- --test-threads=8}
   - {id: TEST-0004, status: passed, command: node --test backend/tests/lifecycle/owner-control-ipc.test.mjs}
   - {id: VAL-0002, status: passed, command: make -C backend validate}
 notes:

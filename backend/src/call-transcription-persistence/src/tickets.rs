@@ -1,5 +1,5 @@
-use hermes_call_transcription_api::READ_TICKET_TTL_SECONDS_V1;
-use hermes_call_transcription_core::CallTranscriptionStateV1;
+use makosh_call_transcription_api::READ_TICKET_TTL_SECONDS_V1;
+use makosh_call_transcription_core::CallTranscriptionStateV1;
 use sqlx::Row;
 
 use crate::{
@@ -26,7 +26,7 @@ impl CallTranscriptionPersistenceV1 {
         let row = sqlx::query(
             "SELECT state_revision,artifact_reference_id,artifact_receipt_sha256,
              artifact_transcript_size_bytes,artifact_runtime_generation,artifact_grant_epoch
-             FROM hermes_data.call_transcription_runs WHERE logical_owner_id=$1
+             FROM makosh_data.call_transcription_runs WHERE logical_owner_id=$1
                AND run_id=$2 AND state=$3 FOR UPDATE",
         )
         .bind(logical_owner_id)
@@ -44,7 +44,7 @@ impl CallTranscriptionPersistenceV1 {
         let state_revision = unsigned_row(&row, "state_revision")?;
         let transcript_size_bytes = unsigned_row(&row, "artifact_transcript_size_bytes")?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.call_transcription_read_tickets (
+            "INSERT INTO makosh_data.call_transcription_read_tickets (
                logical_owner_id,ticket_sha256,device_actor_sha256,client_session_sha256,
                run_id,state_revision,artifact_reference_id,artifact_receipt_sha256,
                transcript_size_bytes,runtime_generation,grant_epoch,expires_at_unix_seconds,
@@ -117,8 +117,8 @@ impl CallTranscriptionPersistenceV1 {
              r.artifact_receipt_sha256 AS current_receipt_sha256,
              r.artifact_runtime_generation AS current_runtime_generation,
              r.artifact_grant_epoch AS current_grant_epoch
-             FROM hermes_data.call_transcription_read_tickets t
-             JOIN hermes_data.call_transcription_runs r
+             FROM makosh_data.call_transcription_read_tickets t
+             JOIN makosh_data.call_transcription_runs r
                ON r.logical_owner_id=t.logical_owner_id AND r.run_id=t.run_id
              WHERE t.logical_owner_id=$1 AND t.ticket_sha256=$2 FOR UPDATE OF t,r",
         )
@@ -159,7 +159,7 @@ impl CallTranscriptionPersistenceV1 {
             return Err(CallTranscriptionPersistenceErrorV1::StaleFence);
         }
         let changed = sqlx::query(
-            "UPDATE hermes_data.call_transcription_read_tickets SET used_at_unix_seconds=$1
+            "UPDATE makosh_data.call_transcription_read_tickets SET used_at_unix_seconds=$1
              WHERE logical_owner_id=$2 AND ticket_sha256=$3
                AND used_at_unix_seconds IS NULL AND expires_at_unix_seconds>=$1",
         )

@@ -21,8 +21,8 @@ const toneIcons: Record<CalloutTone, string> = {
 }
 
 const classes = computed(() => [
-	'hermes-callout',
-	`hermes-callout--${props.tone}`,
+	'makosh-callout',
+	`makosh-callout--${props.tone}`,
 	props.class
 ])
 
@@ -35,17 +35,17 @@ const resolvedIcon = computed(() => props.icon ?? toneIcons[props.tone])
 			v-if="resolvedIcon"
 			:icon="resolvedIcon"
 			size="1.125rem"
-			class="hermes-callout-icon"
+			class="makosh-callout-icon"
 		/>
-		<div class="hermes-callout-body">
-			<div v-if="$slots.title" class="hermes-callout-title">
+		<div class="makosh-callout-body">
+			<div v-if="$slots.title" class="makosh-callout-title">
 				<slot name="title" />
 			</div>
-			<div class="hermes-callout-content">
+			<div class="makosh-callout-content">
 				<slot />
 			</div>
 		</div>
-		<div v-if="$slots.actions" class="hermes-callout-actions">
+		<div v-if="$slots.actions" class="makosh-callout-actions">
 			<slot name="actions" />
 		</div>
 	</section>

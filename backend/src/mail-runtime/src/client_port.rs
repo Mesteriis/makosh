@@ -1,13 +1,13 @@
-use hermes_mail_api::client_contract::{
+use makosh_mail_api::client_contract::{
     MAIL_CLIENT_CONTRACT_MAJOR, MAIL_CLIENT_CONTRACT_REVISION, MAIL_CLIENT_DESCRIPTOR_SET_V1,
     MAIL_MODULE_ID, MAIL_OWNER_ID, MailClientContractV1,
 };
-use hermes_mail_api::{
+use makosh_mail_api::{
     MailClientRequestV1, MailClientResponseV1, account_lifecycle_wire, account_wire, client_wire,
     composition_wire, message_flags_wire, message_location_wire, message_permanent_delete_wire,
     oauth_wire, operational_wire, sync_health_wire,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
 use prost::Message;
@@ -338,7 +338,7 @@ pub async fn handle_client_request(
         MailClientRequestV1::RetireAccount(value) => runtime
             .apply_account_lifecycle(
                 &value,
-                hermes_mail_api::account_lifecycle::MailAccountLifecycleActionV1::Retire,
+                makosh_mail_api::account_lifecycle::MailAccountLifecycleActionV1::Retire,
                 requested_at_unix_seconds,
             )
             .await
@@ -347,7 +347,7 @@ pub async fn handle_client_request(
         MailClientRequestV1::DeleteAccount(value) => runtime
             .apply_account_lifecycle(
                 &value,
-                hermes_mail_api::account_lifecycle::MailAccountLifecycleActionV1::Delete,
+                makosh_mail_api::account_lifecycle::MailAccountLifecycleActionV1::Delete,
                 requested_at_unix_seconds,
             )
             .await
@@ -478,10 +478,10 @@ fn request_connection_id(request: &MailClientRequestV1) -> Option<&str> {
         MailClientRequestV1::GmailOAuthRefresh(value) => Some(&value.connection_id),
         MailClientRequestV1::GmailOAuthStatus(value) => Some(&value.connection_id),
         MailClientRequestV1::CompositionCommand(value) => {
-            Some(hermes_mail_api::composition::composition_command_connection_id(value))
+            Some(makosh_mail_api::composition::composition_command_connection_id(value))
         }
         MailClientRequestV1::CompositionQuery(value) => {
-            Some(hermes_mail_api::composition::composition_query_connection_id(value))
+            Some(makosh_mail_api::composition::composition_query_connection_id(value))
         }
         MailClientRequestV1::MessageFlagCommand(value) => Some(&value.connection_id),
         MailClientRequestV1::MessageFlagStatus(value) => Some(&value.connection_id),
@@ -490,10 +490,10 @@ fn request_connection_id(request: &MailClientRequestV1) -> Option<&str> {
         MailClientRequestV1::MessagePermanentDeleteCommand(value) => Some(&value.connection_id),
         MailClientRequestV1::MessagePermanentDeleteStatus(value) => Some(&value.connection_id),
         MailClientRequestV1::OperationalQuery(value) => {
-            Some(hermes_mail_api::operational::operational_query_connection_id(value))
+            Some(makosh_mail_api::operational::operational_query_connection_id(value))
         }
         MailClientRequestV1::SyncHealthQuery(value) => {
-            Some(hermes_mail_api::sync_health::sync_health_query_connection_id(value))
+            Some(makosh_mail_api::sync_health::sync_health_query_connection_id(value))
         }
     }
 }
@@ -723,7 +723,7 @@ pub fn decode_module_response(
 
 #[cfg(test)]
 mod tests {
-    use hermes_mail_api::{
+    use makosh_mail_api::{
         MailDeliveryStatusRequestV1, MailSendMailRequestV1, MailSyncInboxRequestV1,
         account::{
             MailAccountCatalogRequestV1, MailAccountCatalogV1, MailAccountReadinessV1,

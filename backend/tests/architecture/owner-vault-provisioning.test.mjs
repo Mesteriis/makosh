@@ -35,7 +35,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   gatewayContract: new URL(
-    'src/api/gateway/contracts/proto/hermes/gateway/v1/owner_vault_provisioning.proto',
+    'src/api/gateway/contracts/proto/makosh/gateway/v1/owner_vault_provisioning.proto',
     BACKEND_ROOT,
   ),
   gatewayRouter: new URL(
@@ -124,7 +124,7 @@ test('owner Vault provisioning primitive is write-only durable and platform-neut
   assert.match(gatewayContract, /rpc Prepare[\s\S]*rpc Authorize[\s\S]*rpc Commit/);
   assert.match(gatewayContract, /enum OwnerVaultSecretClassV1/);
   assert.match(gatewayContract, /enum OwnerVaultActionV1/);
-  assert.doesNotMatch(gatewayContract, /hermes\/runtime\/v1\/recovery\.proto/);
+  assert.doesNotMatch(gatewayContract, /makosh\/runtime\/v1\/recovery\.proto/);
   assert.match(gatewayRouter, /authorize_request/);
   assert.match(gatewayRouter, /is_lan_development/);
   assert.match(gatewayRouter, /require_mutation_origin/);
@@ -140,6 +140,6 @@ test('owner Vault provisioning primitive is write-only durable and platform-neut
   assert.match(liveConformance, /assert_eq!\(replay, first\)/);
   assert.doesNotMatch(
     `${command}\n${receipt}\n${service}\n${persistence}\n${gatewayContract}\n${gatewayRouter}\n${kernelAuthority}\n${kernelOwnerProof}\n${kernelCeremony}\n${kernelRoute}`,
-    /hermes_(?:mail|telegram|whatsapp|zulip|communications)|Mail|Telegram|WhatsApp|Zulip/,
+    /makosh_(?:mail|telegram|whatsapp|zulip|communications)|Mail|Telegram|WhatsApp|Zulip/,
   );
 });

@@ -108,7 +108,7 @@ mod tests {
     fn accepts_an_empty_protobuf_request_payload() {
         let request = ModuleClientRequestV1 {
             protocol_major: 1,
-            module_id: "hermes-mail-runtime".to_owned(),
+            module_id: "makosh-mail-runtime".to_owned(),
             owner_id: "integration.mail".to_owned(),
             logical_owner_id: "owner-1".to_owned(),
             authenticated_device_id: "device-1".to_owned(),
@@ -124,7 +124,7 @@ mod tests {
     fn authenticated_owner_device_and_session_context_are_atomic() {
         let mut request = ModuleClientRequestV1 {
             protocol_major: 1,
-            module_id: "hermes-mail-runtime".to_owned(),
+            module_id: "makosh-mail-runtime".to_owned(),
             owner_id: "integration.mail".to_owned(),
             logical_owner_id: "owner-1".to_owned(),
             authenticated_device_id: String::new(),

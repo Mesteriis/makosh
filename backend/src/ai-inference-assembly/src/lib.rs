@@ -10,14 +10,14 @@ use std::io::Write;
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 
-use hermes_ai_inference_persistence::schema::ai_inference_storage_bundle_v1;
-use hermes_ai_inference_runtime::{
+use makosh_ai_inference_persistence::schema::ai_inference_storage_bundle_v1;
+use makosh_ai_inference_runtime::{
     ai_inference_module_descriptor_v1, ai_inference_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
@@ -29,7 +29,7 @@ pub const AI_INFERENCE_SETTINGS_FILE_V1: &str = "ai-inference.runtime.settings.p
 pub const AI_INFERENCE_STORAGE_BUNDLE_FILE_V1: &str = "ai-inference.storage.bundle.pb";
 pub const AI_INFERENCE_ARTIFACT_FRAGMENT_FILE_V1: &str = "ai-inference.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH_V1: &str = "bin/hermes-ai-inference-runtime";
+const RUNTIME_RELATIVE_PATH_V1: &str = "bin/makosh-ai-inference-runtime";
 const DESCRIPTOR_RELATIVE_PATH_V1: &str = "contracts/ai-inference.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH_V1: &str = "contracts/ai-inference.runtime.settings.pb";
 const STORAGE_RELATIVE_PATH_V1: &str = "storage/ai-inference.storage.bundle.pb";
@@ -243,10 +243,10 @@ fn write_new_private_file(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
 mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         decode_descriptor_v1, decode_settings_schema_v1,
     };
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -272,7 +272,7 @@ mod tests {
                 .expect("typed fragment");
 
         assert_eq!(descriptor.owner_id, "ai");
-        assert_eq!(descriptor.module_id, "hermes-ai-inference-runtime");
+        assert_eq!(descriptor.module_id, "makosh-ai-inference-runtime");
         assert_eq!(fragment.owner_id, "ai");
         assert_eq!(fragment.module_id, descriptor.module_id);
         assert_eq!(fragment.artifacts.len(), 2);
@@ -308,7 +308,7 @@ mod tests {
     fn temporary_directory() -> PathBuf {
         let id = NEXT_TEMPORARY_ID.fetch_add(1, Ordering::Relaxed);
         let path = std::env::temp_dir().join(format!(
-            "hermes-ai-inference-assembly-{}-{id}",
+            "makosh-ai-inference-assembly-{}-{id}",
             std::process::id()
         ));
         fs::create_dir(&path).expect("temporary root");

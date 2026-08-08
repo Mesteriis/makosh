@@ -8,8 +8,8 @@ use thiserror::Error;
 
 use crate::domains::communications::evidence::{link_mail_entity_in_transaction, merge_metadata};
 use crate::domains::communications::messages::states::{LocalMessageState, WorkflowState};
-use hermes_events_postgres::store::EventStore;
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_events_postgres::store::EventStore;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 mod cursors;
 mod events;
@@ -720,9 +720,9 @@ pub enum CommunicationFolderError {
     #[error(transparent)]
     Serde(#[from] serde_json::Error),
     #[error(transparent)]
-    EventStore(#[from] hermes_events_postgres::errors::EventStoreError),
+    EventStore(#[from] makosh_events_postgres::errors::EventStoreError),
     #[error(transparent)]
-    EventEnvelope(#[from] hermes_events_api::EventEnvelopeError),
+    EventEnvelope(#[from] makosh_events_api::EventEnvelopeError),
     #[error("invalid mail folder field: {0}")]
     Invalid(&'static str),
     #[error("invalid mail folder cursor")]

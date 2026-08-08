@@ -1,7 +1,7 @@
 import { createClient } from '@connectrpc/connect'
 import type { Client } from '@connectrpc/connect'
 
-import { WhatsAppCommandService } from '../../../gen/hermes/whatsapp/v1/client_pb'
+import { WhatsAppCommandService } from '../../../gen/makosh/whatsapp/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 let client: Client<typeof WhatsAppCommandService> | null = null

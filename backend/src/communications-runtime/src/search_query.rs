@@ -1,9 +1,9 @@
 //! Executes an owner-local search query with a transient Vault-derived key.
 
-use hermes_communications_api::CommunicationSearchHitV1;
-use hermes_communications_domain::normalize_search_query_v1;
-use hermes_communications_persistence::CommunicationsDurablePersistence;
-use hermes_runtime_protocol::managed_control::{
+use makosh_communications_api::CommunicationSearchHitV1;
+use makosh_communications_domain::normalize_search_query_v1;
+use makosh_communications_persistence::CommunicationsDurablePersistence;
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
 use std::os::unix::net::UnixStream;

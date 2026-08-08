@@ -1,5 +1,5 @@
 [package]
-name = "hermes-speech-to-text-assembly"
+name = "makosh-speech-to-text-assembly"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,19 +8,19 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-speech-to-text-assembly"
+name = "makosh-speech-to-text-assembly"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "engine"
 owner = "speech_to_text"
 surface = "assembly"
 
 [dependencies]
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-speech-to-text-persistence = { path = "../speech-to-text-persistence" }
-hermes-speech-to-text-runtime = { path = "../speech-to-text-runtime" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-speech-to-text-persistence = { path = "../speech-to-text-persistence" }
+makosh-speech-to-text-runtime = { path = "../speech-to-text-runtime" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
 serde_json = "=1.0.150"

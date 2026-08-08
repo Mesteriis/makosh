@@ -2,20 +2,20 @@
 
 use super::*;
 
-use hermes_communication_delayed_delivery_api::{
+use makosh_communication_delayed_delivery_api::{
     COMMUNICATION_DELAYED_DELIVERY_MODULE_ID_V1, COMMUNICATION_DELAYED_DELIVERY_OWNER_V1,
 };
-use hermes_communication_delayed_delivery_persistence::schema::{
+use makosh_communication_delayed_delivery_persistence::schema::{
     COMMUNICATION_DELAYED_DELIVERY_STORAGE_BUNDLE_REVISION_V4,
     communication_delayed_delivery_storage_bundle_v1,
 };
-use hermes_communication_delayed_delivery_runtime::{
+use makosh_communication_delayed_delivery_runtime::{
     COMMUNICATION_DELAYED_DELIVERY_STORAGE_CAPABILITY_ID_V1,
     communication_delayed_delivery_module_descriptor_v1,
     communication_delayed_delivery_settings_schema_bytes_v1,
 };
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
 
 const DELAYED_DELIVERY_RELEASE_ARTIFACT_ID: &str = "communication_delayed_delivery.runtime.v1";
 pub(super) const DELAYED_DELIVERY_LOGICAL_OWNER_ID: &str = "owner-1";
@@ -76,7 +76,7 @@ pub(super) fn admit_delayed_delivery_runtime(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             DELAYED_DELIVERY_RELEASE_ARTIFACT_ID,
             Sha256::digest(
                 std::fs::read(delayed_delivery_binary())
@@ -250,7 +250,7 @@ pub(super) fn restart_delayed_delivery_runtime(
 fn delayed_delivery_storage_binding(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(
             registration_id,
@@ -262,5 +262,5 @@ fn delayed_delivery_storage_binding(
 }
 
 fn delayed_delivery_binary() -> PathBuf {
-    binary("HERMES_COMMUNICATION_DELAYED_DELIVERY_RUNTIME_BIN")
+    binary("MAKOSH_COMMUNICATION_DELAYED_DELIVERY_RUNTIME_BIN")
 }

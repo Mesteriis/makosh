@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/communications/ingress/v1/observation.proto"],
+            &["proto/makosh/communications/ingress/v1/observation.proto"],
             &["proto"],
         )
         .expect("communications ingress protocol must compile");

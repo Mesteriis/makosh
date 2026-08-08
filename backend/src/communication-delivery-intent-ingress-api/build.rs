@@ -9,7 +9,7 @@ fn main() {
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
             &[
-                "proto/hermes/communication_delivery_intent/ingress/v1/delivery_intent_ingress.proto",
+                "proto/makosh/communication_delivery_intent/ingress/v1/delivery_intent_ingress.proto",
             ],
             &["proto"],
         )

@@ -1,12 +1,12 @@
 import { computed, ref, shallowRef } from 'vue'
 
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import type {
 	ZulipAccountStatusV1,
 	ZulipConversationV1,
 	ZulipMessageV1,
 	ZulipOperationalEventV1,
-} from '../../../gen/hermes/zulip/operational/v1/client_pb'
+} from '../../../gen/makosh/zulip/operational/v1/client_pb'
 import {
 	getZulipOperationalAccountStatus,
 	listZulipOperationalConversations,

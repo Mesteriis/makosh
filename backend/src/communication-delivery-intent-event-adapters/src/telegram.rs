@@ -1,5 +1,5 @@
-use hermes_events_protocol::{delivery::OutboxRecordV1, v1::ResultOutcomeV1};
-use hermes_telegram_delivery_intent_contract::{
+use makosh_events_protocol::{delivery::OutboxRecordV1, v1::ResultOutcomeV1};
+use makosh_telegram_delivery_intent_contract::{
     TELEGRAM_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1, TELEGRAM_DELIVERY_INTENT_TARGET_MODULE_ID_V1,
     telegram_delivery_intent_execute_contract_reference_v1,
     telegram_delivery_intent_rejected_contract_reference_v1,
@@ -19,7 +19,7 @@ use crate::{
     decode_result_envelope_v1, validate_result_identity_v1,
 };
 
-const MESSAGE_DOMAIN: &[u8] = b"hermes.telegram.delivery-intent.execute.v1";
+const MESSAGE_DOMAIN: &[u8] = b"makosh.telegram.delivery-intent.execute.v1";
 
 pub fn build_execute_outbox_v1(
     intent_id: [u8; 16],

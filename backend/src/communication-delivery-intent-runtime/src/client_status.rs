@@ -1,9 +1,9 @@
 //! Client-safe mapping of durable delivery-intent state and rejection.
 
-use hermes_communication_delivery_intent_api::wire::{
+use makosh_communication_delivery_intent_api::wire::{
     DeliveryIntentErrorCodeV1, DeliveryIntentStatusV1,
 };
-use hermes_communication_delivery_intent_persistence::DeliveryIntentStateV1;
+use makosh_communication_delivery_intent_persistence::DeliveryIntentStateV1;
 
 pub(crate) const fn status_value(state: DeliveryIntentStateV1) -> i32 {
     match state {

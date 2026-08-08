@@ -150,7 +150,7 @@ async function exerciseAuthorizedRoutes(context) {
 }
 
 test('external runtime session IPC requires a bound key proof and fences stale routes', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'hermes-kernel-runtime-session-'));
+  const root = await mkdtemp(join(tmpdir(), 'makosh-kernel-runtime-session-'));
   const dataDir = join(root, 'data');
   let server;
   try {

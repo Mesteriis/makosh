@@ -2,7 +2,7 @@
 
 ## Product Feel
 
-Hermes Hub should feel like a serious personal operating environment: fast, calm, dense, modern and explainable. The design language can use glassmorphism selectively, but readability and workflow speed take priority over decoration.
+Макошь should feel like a serious personal operating environment: fast, calm, dense, modern and explainable. The design language can use glassmorphism selectively, but readability and workflow speed take priority over decoration.
 
 ## Inspirations
 

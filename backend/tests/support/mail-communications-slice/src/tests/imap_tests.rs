@@ -1,6 +1,6 @@
-use hermes_mail_api::IMAP_PORT;
-use hermes_mail_api::MAX_WINDOW;
-use hermes_mail_imap::{
+use makosh_mail_api::IMAP_PORT;
+use makosh_mail_api::MAX_WINDOW;
+use makosh_mail_imap::{
     ImapMessage, ImapSyncAccessV1, ImapSyncRequestV1, supports_read_only_sync, sync_inbox,
 };
 

@@ -8,14 +8,14 @@ use thiserror::Error;
 use crate::domains::personas::command_service::{
     PersonaCommandService, PersonaCommandServiceError, ProviderAddressBookEntryPersonaCommand,
 };
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::{
     CommunicationProviderKind, ProviderAccount, ProviderAccountLookupPort, ProviderAccountPortError,
 };
-use hermes_communications_api::address_book::{
+use makosh_communications_api::address_book::{
     AddressBookProviderEntry, AddressBookProviderFetchRequest, AddressBookProviderSyncError,
     AddressBookProviderUpsertRequest, SharedAddressBookProviderSyncPort,
 };
-use hermes_communications_postgres::errors::CommunicationIngestionError;
+use makosh_communications_postgres::errors::CommunicationIngestionError;
 
 const ADDRESS_BOOK_SYNC_POLL_INTERVAL_SECONDS: i64 = 3600;
 const ADDRESS_BOOK_SYNC_PAGE_SIZE: u16 = 500;

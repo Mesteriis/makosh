@@ -6,27 +6,27 @@
 //! These live tests use the shared testcontainers pgvector fixture with
 //! per-test migrated databases.
 
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 
 use axum::body::{Body, to_bytes};
 use axum::http::{Method, Request, StatusCode, header};
 use serde_json::Value;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::platform::config::app_config::AppConfig;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::platform::config::app_config::AppConfig;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const TOKEN: &str = "char-comm-test-token";
 
 fn cfg(db: &str) -> AppConfig {
-    hermes_backend_testkit::app::config_with_secret_and_database_url(TOKEN, db)
+    makosh_backend_testkit::app::config_with_secret_and_database_url(TOKEN, db)
 }
 
 fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", TOKEN)
+        .header("x-makosh-secret", TOKEN)
         .body(Body::empty())
         .expect("req")
 }
@@ -36,7 +36,7 @@ fn post(uri: &str, body: Value) -> Request<Body> {
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", TOKEN)
+        .header("x-makosh-secret", TOKEN)
         .body(Body::from(body.to_string()))
         .expect("req")
 }

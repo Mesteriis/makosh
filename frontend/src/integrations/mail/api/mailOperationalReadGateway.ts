@@ -11,7 +11,7 @@ import {
 	type MailMessagePageV1,
 	type MailOperationalQueryV1,
 	type MailThreadPageV1,
-} from '../../../gen/hermes/mail/operational/v1/client_pb'
+} from '../../../gen/makosh/mail/operational/v1/client_pb'
 import { getMailOperationalQueryConnectClient } from './mailOperationalQueryClient'
 
 const DEFAULT_PAGE_LIMIT = 50

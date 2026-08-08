@@ -1,4 +1,4 @@
-CREATE TABLE hermes_platform.scheduler_schedules (
+CREATE TABLE makosh_platform.scheduler_schedules (
   schedule_id BYTEA PRIMARY KEY,
   schedule_revision BIGINT NOT NULL,
   job_owner TEXT NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE hermes_platform.scheduler_schedules (
   updated_at_unix_ms BIGINT NOT NULL
 );
 
-CREATE TABLE hermes_platform.scheduler_runs (
+CREATE TABLE makosh_platform.scheduler_runs (
   run_id BYTEA PRIMARY KEY,
   schedule_id BYTEA NOT NULL,
   schedule_revision BIGINT NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE hermes_platform.scheduler_runs (
   created_at_unix_ms BIGINT NOT NULL
 );
 
-CREATE TABLE hermes_platform.scheduler_concurrency (
+CREATE TABLE makosh_platform.scheduler_concurrency (
   concurrency_key TEXT PRIMARY KEY,
   active_runs INTEGER NOT NULL,
   max_parallelism INTEGER NOT NULL,

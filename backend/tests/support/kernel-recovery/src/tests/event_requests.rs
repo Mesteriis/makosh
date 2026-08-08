@@ -1,8 +1,8 @@
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleEventEnvelopeKindV1, ModuleEventRouteDirectionV1, ModuleEventRouteRequestV1,
     ModuleRegistration, ModuleRegistrationState,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use crate::platform::events::catalog;
 
@@ -10,7 +10,7 @@ use super::common::unique_target_root;
 
 #[test]
 fn control_store_retains_exact_descriptor_event_routes_with_registration() {
-    let root = unique_target_root("hermes-event-route-request");
+    let root = unique_target_root("makosh-event-route-request");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -66,7 +66,7 @@ fn control_store_retains_exact_descriptor_event_routes_with_registration() {
 
 #[test]
 fn control_store_rejects_event_routes_without_a_unique_requested_capability() {
-    let root = unique_target_root("hermes-event-route-request-invalid");
+    let root = unique_target_root("makosh-event-route-request-invalid");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -105,12 +105,12 @@ fn control_store_rejects_event_routes_without_a_unique_requested_capability() {
 
 #[test]
 fn control_store_rejects_consumer_without_explicit_delivery_policy() {
-    let root = unique_target_root("hermes-event-route-consumer-policy");
+    let root = unique_target_root("makosh-event-route-consumer-policy");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
     let consumer = ModuleEventRouteRequestV1::new(
-        hermes_kernel_control_store::ModuleEventRouteRequestInputV1 {
+        makosh_kernel_control_store::ModuleEventRouteRequestInputV1 {
             registration_id: "registration_notes".to_owned(),
             capability_id: "events.consume".to_owned(),
             envelope_kind: ModuleEventEnvelopeKindV1::Event,
@@ -147,7 +147,7 @@ fn control_store_rejects_consumer_without_explicit_delivery_policy() {
 
 #[test]
 fn event_catalog_rejects_incompatible_contract_revisions_before_broker_reconciliation() {
-    let root = unique_target_root("hermes-event-route-conflict");
+    let root = unique_target_root("makosh-event-route-conflict");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -175,7 +175,7 @@ fn event_catalog_rejects_incompatible_contract_revisions_before_broker_reconcili
             &["events.publish".to_owned()],
             &[],
             &[ModuleEventRouteRequestV1::new(
-                hermes_kernel_control_store::ModuleEventRouteRequestInputV1 {
+                makosh_kernel_control_store::ModuleEventRouteRequestInputV1 {
                     registration_id: "registration_search".to_owned(),
                     capability_id: "events.publish".to_owned(),
                     envelope_kind: ModuleEventEnvelopeKindV1::Event,
@@ -223,7 +223,7 @@ fn event_route(capability_id: &str) -> ModuleEventRouteRequestV1 {
 
 fn event_route_with_limit(capability_id: &str, max_in_flight: u16) -> ModuleEventRouteRequestV1 {
     ModuleEventRouteRequestV1::new(
-        hermes_kernel_control_store::ModuleEventRouteRequestInputV1 {
+        makosh_kernel_control_store::ModuleEventRouteRequestInputV1 {
             registration_id: "registration_notes".to_owned(),
             capability_id: capability_id.to_owned(),
             envelope_kind: ModuleEventEnvelopeKindV1::Event,

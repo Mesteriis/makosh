@@ -1,8 +1,8 @@
 //! Mail-owned construction of address-book provider clients from admitted settings.
 
-use hermes_mail_api::{MailAddressBookTlsEndpointV1, MailCardDavEndpointV1};
-use hermes_mail_carddav::{CardDavAdapterErrorV1, CardDavClientV1};
-use hermes_mail_google_people::{GooglePeopleAdapterErrorV1, GooglePeopleClientV1};
+use makosh_mail_api::{MailAddressBookTlsEndpointV1, MailCardDavEndpointV1};
+use makosh_mail_carddav::{CardDavAdapterErrorV1, CardDavClientV1};
+use makosh_mail_google_people::{GooglePeopleAdapterErrorV1, GooglePeopleClientV1};
 
 pub(crate) fn google_people_client_v1(
     endpoint: &MailAddressBookTlsEndpointV1,
@@ -17,8 +17,8 @@ pub(crate) fn google_people_client_v1(
     }
     #[cfg(not(feature = "conformance-test-support"))]
     {
-        if endpoint.host != hermes_mail_api::GOOGLE_PEOPLE_API_HOST_V1
-            || endpoint.port != hermes_mail_api::GOOGLE_PEOPLE_API_PORT_V1
+        if endpoint.host != makosh_mail_api::GOOGLE_PEOPLE_API_HOST_V1
+            || endpoint.port != makosh_mail_api::GOOGLE_PEOPLE_API_PORT_V1
             || endpoint.ca_certificate_pem.is_some()
         {
             return Err(GooglePeopleAdapterErrorV1::InvalidRequest);
@@ -41,9 +41,9 @@ pub(crate) fn carddav_client_v1(
     }
     #[cfg(not(feature = "conformance-test-support"))]
     {
-        if endpoint.tls.host != hermes_mail_api::ICLOUD_CARDDAV_HOST_V1
-            || endpoint.tls.port != hermes_mail_api::ICLOUD_CARDDAV_PORT_V1
-            || endpoint.base_path != hermes_mail_api::ICLOUD_CARDDAV_BASE_PATH_V1
+        if endpoint.tls.host != makosh_mail_api::ICLOUD_CARDDAV_HOST_V1
+            || endpoint.tls.port != makosh_mail_api::ICLOUD_CARDDAV_PORT_V1
+            || endpoint.base_path != makosh_mail_api::ICLOUD_CARDDAV_BASE_PATH_V1
             || endpoint.tls.ca_certificate_pem.is_some()
         {
             return Err(CardDavAdapterErrorV1::InvalidRequest);

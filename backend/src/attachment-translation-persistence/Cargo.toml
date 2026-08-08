@@ -1,5 +1,5 @@
 [package]
-name = "hermes-attachment-translation-persistence"
+name = "makosh-attachment-translation-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,14 +7,14 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "attachment_translation"
 surface = "persistence"
 
 [dependencies]
-hermes-attachment-translation-api = { path = "../attachment-translation-api" }
-hermes-attachment-translation-core = { path = "../attachment-translation-core" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-attachment-translation-api = { path = "../attachment-translation-api" }
+makosh-attachment-translation-core = { path = "../attachment-translation-core" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 sha2 = { version = "=0.11.0", default-features = false }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

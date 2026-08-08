@@ -7,7 +7,7 @@ use super::super::models::finish::FinishRun;
 use super::super::models::runs::MailSyncRun;
 use super::super::rows::row_to_run;
 use super::MailSyncStore;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 impl MailSyncStore {
     pub(in crate::workflows::mail_background_sync) async fn finish_run(

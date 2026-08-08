@@ -1,7 +1,7 @@
 # Retired legacy OAuth bundle resource
 
 Clean-room Tauri builds never package this directory and never forward OAuth
-configuration to `hermes-kernel`. Provider-specific OAuth provisioning belongs
+configuration to `makosh-kernel`. Provider-specific OAuth provisioning belongs
 to a future owner/integration boundary after the Vault and Gateway contracts
 are implemented.
 

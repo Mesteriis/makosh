@@ -1,4 +1,4 @@
-use hermes_communication_bulk_action_api::{
+use makosh_communication_bulk_action_api::{
     COMMUNICATION_BULK_ACTION_CONTRACT_MAJOR_V1, COMMUNICATION_BULK_ACTION_MAX_STATUS_PAGE_V1,
     wire::{
         BulkDeliveryBatchStateV1 as WireBatchState, BulkDeliveryErrorCodeV1,
@@ -7,8 +7,8 @@ use hermes_communication_bulk_action_api::{
         StartBulkDeliveryRequestV1, StartBulkDeliveryResponseV1,
     },
 };
-use hermes_communication_bulk_action_core::{BulkDeliveryDraftV1, BulkDeliveryTargetDraftV1};
-use hermes_communication_bulk_action_persistence::{
+use makosh_communication_bulk_action_core::{BulkDeliveryDraftV1, BulkDeliveryTargetDraftV1};
+use makosh_communication_bulk_action_persistence::{
     BulkDeliveryBatchStateV1, BulkDeliveryPersistenceErrorV1, BulkDeliveryTargetStateV1,
     CommunicationBulkActionPersistenceV1, CreateBulkDeliveryOutcomeV1, CreateBulkDeliveryV1,
 };

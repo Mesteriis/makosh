@@ -1,5 +1,5 @@
 use chrono::{Duration, Utc};
-use hermes_hub_backend::domains::calendar::events::{
+use makosh_hub_backend::domains::calendar::events::{
     account_store::CalendarAccountStore,
     event_store::CalendarEventStore,
     models::{CalendarAccountUpdate, CalendarEventUpdate, NewCalendarEvent},

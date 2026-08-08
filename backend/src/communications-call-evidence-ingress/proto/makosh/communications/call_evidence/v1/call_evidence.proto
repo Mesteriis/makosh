@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package makosh.communications.call_evidence.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Provider locators, signaling, media, credentials, transcripts and arbitrary
+// metadata are intentionally absent.
+message CallEvidenceObservedV1 {
+  bytes call_evidence_id = 1;
+  bytes source_call_cursor_sha256 = 2;
+  bytes account_cursor_sha256 = 3;
+  bytes conversation_cursor_sha256 = 4;
+  bytes participant_cursor_sha256 = 5;
+  CallProviderProvenanceV1 provider = 6;
+  CallDirectionV1 direction = 7;
+  CallMediaKindV1 media_kind = 8;
+  CallLifecycleStateV1 state = 9;
+  CallTerminalDispositionV1 terminal_disposition = 10;
+  uint64 source_revision = 11;
+  google.protobuf.Timestamp started_at = 12;
+  google.protobuf.Timestamp connected_at = 13;
+  google.protobuf.Timestamp ended_at = 14;
+  optional uint64 duration_seconds = 15;
+  // Presentation evidence only. It is not identity or authorization input.
+  optional string participant_display_label = 16;
+  // Stable human-owner scope. Module and provider owner identities are not
+  // valid substitutes for this value.
+  string logical_owner_id = 17;
+}
+
+enum CallProviderProvenanceV1 {
+  CALL_PROVIDER_PROVENANCE_V1_UNSPECIFIED = 0;
+  CALL_PROVIDER_PROVENANCE_V1_TELEGRAM = 1;
+  CALL_PROVIDER_PROVENANCE_V1_WHATSAPP_WEB = 2;
+  CALL_PROVIDER_PROVENANCE_V1_ZOOM = 3;
+  CALL_PROVIDER_PROVENANCE_V1_YANDEX_TELEMOST = 4;
+}
+
+enum CallDirectionV1 {
+  CALL_DIRECTION_V1_UNSPECIFIED = 0;
+  CALL_DIRECTION_V1_INCOMING = 1;
+  CALL_DIRECTION_V1_OUTGOING = 2;
+  CALL_DIRECTION_V1_UNKNOWN = 3;
+}
+
+enum CallMediaKindV1 {
+  CALL_MEDIA_KIND_V1_UNSPECIFIED = 0;
+  CALL_MEDIA_KIND_V1_ONE_TO_ONE_AUDIO = 1;
+  CALL_MEDIA_KIND_V1_MEETING = 2;
+}
+
+enum CallLifecycleStateV1 {
+  CALL_LIFECYCLE_STATE_V1_UNSPECIFIED = 0;
+  CALL_LIFECYCLE_STATE_V1_OBSERVED = 1;
+  CALL_LIFECYCLE_STATE_V1_RINGING = 2;
+  CALL_LIFECYCLE_STATE_V1_CONNECTING = 3;
+  CALL_LIFECYCLE_STATE_V1_ACTIVE = 4;
+  CALL_LIFECYCLE_STATE_V1_ENDED = 5;
+}
+
+enum CallTerminalDispositionV1 {
+  CALL_TERMINAL_DISPOSITION_V1_UNSPECIFIED = 0;
+  CALL_TERMINAL_DISPOSITION_V1_COMPLETED = 1;
+  CALL_TERMINAL_DISPOSITION_V1_MISSED = 2;
+  CALL_TERMINAL_DISPOSITION_V1_DECLINED = 3;
+  CALL_TERMINAL_DISPOSITION_V1_DISCONNECTED = 4;
+  CALL_TERMINAL_DISPOSITION_V1_FAILED = 5;
+  CALL_TERMINAL_DISPOSITION_V1_CANCELED = 6;
+}

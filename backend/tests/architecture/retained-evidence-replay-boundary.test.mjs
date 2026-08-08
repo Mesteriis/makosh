@@ -15,18 +15,18 @@ test('retained evidence replay protocol is an isolated workflow contract', async
   ]);
   const policy = JSON.parse(policySource);
   const descriptor = policy.implementation.productionPackages.find(
-    ({ name }) => name === 'hermes-retained-evidence-replay-protocol',
+    ({ name }) => name === 'makosh-retained-evidence-replay-protocol',
   );
 
   assert.deepEqual(descriptor, {
-    name: 'hermes-retained-evidence-replay-protocol',
+    name: 'makosh-retained-evidence-replay-protocol',
     role: 'workflow',
     owner: 'attachment_preview_evidence_replay',
     surface: 'contract',
   });
   assert.match(manifest, /owner = "attachment_preview_evidence_replay"/);
-  assert.doesNotMatch(manifest, /hermes-kernel/);
-  assert.doesNotMatch(manifest, /hermes-events-jetstream/);
+  assert.doesNotMatch(manifest, /makosh-kernel/);
+  assert.doesNotMatch(manifest, /makosh-events-jetstream/);
   assert.doesNotMatch(manifest, /sqlx/);
   assert.ok(
     policy.implementation.ownerInventory.workflows.includes(
@@ -37,7 +37,7 @@ test('retained evidence replay protocol is an isolated workflow contract', async
 
 test('replay request is provider-neutral and carries one exact attachment anchor', async () => {
   const proto = await read(
-    'src/attachment-preview-evidence-replay-protocol/proto/hermes/events/replay/v1/retained_evidence_replay.proto',
+    'src/attachment-preview-evidence-replay-protocol/proto/makosh/events/replay/v1/retained_evidence_replay.proto',
   );
   const implementation = await read(
     'src/attachment-preview-evidence-replay-protocol/src/lib.rs',
@@ -68,26 +68,26 @@ test('Communications retained replay persistence is an owner-local build unit', 
   const policy = JSON.parse(policySource);
   const descriptor = policy.implementation.productionPackages.find(
     ({ name }) =>
-      name === 'hermes-communications-retained-evidence-replay-persistence',
+      name === 'makosh-communications-retained-evidence-replay-persistence',
   );
 
   assert.deepEqual(descriptor, {
-    name: 'hermes-communications-retained-evidence-replay-persistence',
+    name: 'makosh-communications-retained-evidence-replay-persistence',
     role: 'domain',
     owner: 'communications',
     surface: 'persistence',
   });
   assert.match(manifest, /owner = "communications"/);
   assert.match(manifest, /surface = "persistence"/);
-  assert.doesNotMatch(manifest, /hermes-(?:mail|attachment-security|kernel)/);
+  assert.doesNotMatch(manifest, /makosh-(?:mail|attachment-security|kernel)/);
   assert.match(repository, /communications_domain_outbox/);
   assert.match(repository, /OutboxRecordV1::accept/);
   assert.match(repository, /decode_envelope_v1/);
   assert.match(repository, /COMMUNICATIONS_ATTACHMENT_LIFECYCLE_SCHEMA_SHA256/);
   assert.match(repository, /ON CONFLICT \(operation_id, original_message_id, logical_attempt, phase\) DO NOTHING/);
   assert.match(storageBundle, /append_communications_retained_evidence_replay_storage_v1/);
-  assert.match(migration, /REFERENCES hermes_data\.communications_domain_outbox/);
-  assert.doesNotMatch(migration, /REFERENCES hermes_data\.(?:mail|attachment_security)_/);
+  assert.match(migration, /REFERENCES makosh_data\.communications_domain_outbox/);
+  assert.doesNotMatch(migration, /REFERENCES makosh_data\.(?:mail|attachment_security)_/);
   assert.doesNotMatch(migration, /\b(?:UPDATE|DELETE)\b/);
 });
 
@@ -119,27 +119,27 @@ test('Mail retained replay persistence is integration-owned and storage-isolated
     ]);
   const policy = JSON.parse(policySource);
   const descriptor = policy.implementation.productionPackages.find(
-    ({ name }) => name === 'hermes-mail-retained-evidence-replay-persistence',
+    ({ name }) => name === 'makosh-mail-retained-evidence-replay-persistence',
   );
 
   assert.deepEqual(descriptor, {
-    name: 'hermes-mail-retained-evidence-replay-persistence',
+    name: 'makosh-mail-retained-evidence-replay-persistence',
     role: 'integration',
     owner: 'mail',
     surface: 'persistence',
   });
   assert.match(manifest, /role = "integration"/);
   assert.match(manifest, /owner = "mail"/);
-  assert.doesNotMatch(manifest, /hermes-communications-(?:domain|persistence|runtime)/);
-  assert.doesNotMatch(manifest, /hermes-(?:attachment-security-runtime|kernel)/);
+  assert.doesNotMatch(manifest, /makosh-communications-(?:domain|persistence|runtime)/);
+  assert.doesNotMatch(manifest, /makosh-(?:attachment-security-runtime|kernel)/);
   assert.match(repository, /mail_attachment_security_outbox/);
   assert.match(repository, /OutboxRecordV1::accept/);
   assert.match(repository, /ATTACHMENT_SECURITY_SCAN_CANDIDATE_SCHEMA_SHA256/);
   assert.match(repository, /ON CONFLICT \(operation_id, original_message_id, logical_attempt, phase\) DO NOTHING/);
   assert.match(runtimeBundle, /append_mail_retained_evidence_replay_storage_v1/);
   assert.match(assembly, /mail_runtime_storage_bundle_v1/);
-  assert.match(migration, /REFERENCES hermes_data\.mail_attachment_security_outbox/);
-  assert.doesNotMatch(migration, /REFERENCES hermes_data\.communications_/);
+  assert.match(migration, /REFERENCES makosh_data\.mail_attachment_security_outbox/);
+  assert.doesNotMatch(migration, /REFERENCES makosh_data\.communications_/);
   assert.doesNotMatch(migration, /\b(?:UPDATE|DELETE)\b/);
 });
 
@@ -167,10 +167,10 @@ test('producer replay routes are separate owner-specific contract units', async 
 
   assert.match(communicationsManifest, /role = "domain"/);
   assert.match(communicationsManifest, /owner = "communications"/);
-  assert.doesNotMatch(communicationsManifest, /hermes-(?:mail|retained-evidence-replay-protocol)/);
+  assert.doesNotMatch(communicationsManifest, /makosh-(?:mail|retained-evidence-replay-protocol)/);
   assert.match(mailManifest, /role = "integration"/);
   assert.match(mailManifest, /owner = "mail"/);
-  assert.doesNotMatch(mailManifest, /hermes-(?:communications|retained-evidence-replay-protocol)/);
+  assert.doesNotMatch(mailManifest, /makosh-(?:communications|retained-evidence-replay-protocol)/);
   assert.match(communicationsContract, /communications_retained_evidence_replay_command/);
   assert.match(communicationsContract, /communications_retained_evidence_replay_result/);
   assert.match(mailContract, /mail_retained_evidence_replay_command/);
@@ -200,8 +200,8 @@ test('producer adapters publish only verified original bytes with append-only au
   }
   assert.match(communications, /retained_attachment_safety_event\(attachment_anchor_id\)/);
   assert.match(mail, /retained_scan_candidate\(attachment_anchor_id\)/);
-  assert.doesNotMatch(communications, /hermes_mail|mail_/);
-  assert.doesNotMatch(mail, /hermes_communications|communications_/);
+  assert.doesNotMatch(communications, /makosh_mail|mail_/);
+  assert.doesNotMatch(mail, /makosh_communications|communications_/);
 });
 
 test('producer replay delivery is durable owner-local and never rewrites source evidence', async () => {
@@ -234,7 +234,7 @@ test('producer replay delivery is durable owner-local and never rewrites source 
     assert.match(migration, /command_inbox/);
     assert.match(migration, /result_outbox/);
     assert.match(migration, /exact_envelope_bytes/);
-    assert.doesNotMatch(migration, /UPDATE hermes_data/);
+    assert.doesNotMatch(migration, /UPDATE makosh_data/);
     assert.doesNotMatch(delivery, /domain_outbox|attachment_security_outbox/);
   }
 
@@ -243,8 +243,8 @@ test('producer replay delivery is durable owner-local and never rewrites source 
     /append_communications_retained_evidence_replay_delivery_storage_v1/,
   );
   assert.match(mailBundle, /append_mail_retained_evidence_replay_delivery_storage_v1/);
-  assert.doesNotMatch(communicationsDelivery, /hermes_mail|mail_/);
-  assert.doesNotMatch(mailDelivery, /hermes_communications|communications_/);
+  assert.doesNotMatch(communicationsDelivery, /makosh_mail|mail_/);
+  assert.doesNotMatch(mailDelivery, /makosh_communications|communications_/);
 });
 
 test('replay delivery migrations are additive exact successor revisions', async () => {
@@ -305,10 +305,10 @@ test('producer replay indexing uses bounded owner-local scan ledgers', async () 
     [communicationsMigration, communicationsRepository],
     [mailMigration, mailRepository],
   ]) {
-    assert.match(migration, /message_id BYTEA PRIMARY KEY REFERENCES hermes_data\./);
+    assert.match(migration, /message_id BYTEA PRIMARY KEY REFERENCES makosh_data\./);
     assert.doesNotMatch(migration, /subject|payload|exact_envelope_bytes/);
     assert.doesNotMatch(migration, /\b(?:UPDATE|DELETE)\b/);
-    assert.match(repository, /LEFT JOIN hermes_data\..*_retained_evidence_replay_scan scan/);
+    assert.match(repository, /LEFT JOIN makosh_data\..*_retained_evidence_replay_scan scan/);
     assert.match(repository, /LIMIT \$1/);
     assert.match(repository, /mark_scanned/);
   }
@@ -337,8 +337,8 @@ test('producer contracts build exact workflow commands and causal terminal resul
     assert.match(source, /OutboxRecordV1::accept/);
     assert.doesNotMatch(source, /subject|predicate|payload_bytes|map</);
   }
-  assert.doesNotMatch(communications, /hermes_mail|mail_/);
-  assert.doesNotMatch(mail, /hermes_communications|communications_/);
+  assert.doesNotMatch(communications, /makosh_mail|mail_/);
+  assert.doesNotMatch(mail, /makosh_communications|communications_/);
 });
 
 test('producer consumers persist terminal result before Ack and retry infrastructure outage', async () => {
@@ -385,21 +385,21 @@ test('producer consumers persist terminal result before Ack and retry infrastruc
       relay.indexOf('publish_exact') < relay.indexOf('mark_replay_result_published'),
     );
   }
-  assert.doesNotMatch(communicationsConsumer, /hermes_mail|mail_/);
-  assert.doesNotMatch(mailConsumer, /hermes_communications|communications_/);
+  assert.doesNotMatch(communicationsConsumer, /makosh_mail|mail_/);
+  assert.doesNotMatch(mailConsumer, /makosh_communications|communications_/);
   assert.match(communicationsManagedFixture, /COMMUNICATIONS_RETAINED_EVIDENCE_REPLAY_CAPABILITY_ID/);
   assert.match(communicationsManagedFixture, /communications_replay_command_contract_reference_v1/);
   assert.match(communicationsManagedFixture, /communications_replay_result_contract_reference_v1/);
   assert.match(mailManagedFixture, /MAIL_RETAINED_EVIDENCE_REPLAY_CAPABILITY_ID/);
   assert.match(mailManagedFixture, /MAIL_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1/);
   assert.match(mailManagedFixture, /mail_runtime_storage_bundle_v1/);
-  assert.match(testkitManifest, /hermes-communications-retained-evidence-replay-contract/);
+  assert.match(testkitManifest, /makosh-communications-retained-evidence-replay-contract/);
 });
 
 test('replay coordination is a separate workflow with owner-local operation storage', async () => {
   const [api, coreManifest, persistenceManifest, migration, runtimeManifest, assemblyManifest] =
     await Promise.all([
-      read('src/attachment-preview-evidence-replay-api/proto/hermes/attachment_preview_evidence_replay/v1/replay.proto'),
+      read('src/attachment-preview-evidence-replay-api/proto/makosh/attachment_preview_evidence_replay/v1/replay.proto'),
       read('src/attachment-preview-evidence-replay-core/Cargo.toml'),
       read('src/attachment-preview-evidence-replay-persistence/Cargo.toml'),
       read('src/attachment-preview-evidence-replay-persistence/migrations/0002_provider_neutral_anchor_replay.sql'),
@@ -410,7 +410,7 @@ test('replay coordination is a separate workflow with owner-local operation stor
   for (const manifest of [coreManifest, persistenceManifest, runtimeManifest, assemblyManifest]) {
     assert.match(manifest, /role = "workflow"/);
     assert.match(manifest, /owner = "attachment_preview_evidence_replay"/);
-    assert.doesNotMatch(manifest, /hermes-(?:communications-runtime|mail-runtime|kernel)/);
+    assert.doesNotMatch(manifest, /makosh-(?:communications-runtime|mail-runtime|kernel)/);
   }
   assert.doesNotMatch(api, /logical_owner_id|owner_device_actor|subject|predicate|payload_bytes|map</);
   assert.match(api, /bytes attachment_anchor_id = 3/);
@@ -476,7 +476,7 @@ test('replay workflow is an admitted managed runtime with exact event grants', a
   assert.match(managed, /Operation::ClientDelivery/);
   assert.match(managed, /dispatch_replay_client_request_v1/);
   assert.match(managed, /relay_replay_commands_once_v1/);
-  assert.doesNotMatch(managed, /hermes_(?:communications_runtime|mail_runtime|kernel)/);
+  assert.doesNotMatch(managed, /makosh_(?:communications_runtime|mail_runtime|kernel)/);
   assert.match(communicationsAdmission, /communications_replay_command_consume_request_v1/);
   assert.match(communicationsAdmission, /communications_replay_result_publish_request_v1/);
   assert.match(communicationsRuntime, /consume_next_communications_replay_command_v1/);
@@ -485,7 +485,7 @@ test('replay workflow is an admitted managed runtime with exact event grants', a
   assert.match(mailAdmission, /mail_replay_result_publish_request_v1/);
   assert.match(mailRuntime, /consume_next_mail_replay_command_v1/);
   assert.match(mailRuntime, /relay_mail_replay_result_once_v1/);
-  assert.match(developmentRelease, /hermes-attachment-preview-evidence-replay-assembly/);
+  assert.match(developmentRelease, /makosh-attachment-preview-evidence-replay-assembly/);
   assert.match(developmentAssembly, /ModuleRuntimeKindV1::Workflow/);
   assert.match(developmentAssembly, /ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT/);
   assert.match(managedSetup, /attachment_preview_evidence_replay_storage_bundle_v1/);
@@ -493,7 +493,7 @@ test('replay workflow is an admitted managed runtime with exact event grants', a
   assert.match(managedSetup, /storage_successor::reserve/);
   assert.match(managedFlow, /managed_attachment_preview_evidence_replay_runtime_starts_with_exact_signed_contracts/);
   assert.match(managedFlow, /runtime_generation, 2/);
-  assert.match(managedScript, /HERMES_ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_BIN/);
+  assert.match(managedScript, /MAKOSH_ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_BIN/);
 });
 
 test('managed recovery gate expires broker history and proves SSE plus client blob delivery', async () => {

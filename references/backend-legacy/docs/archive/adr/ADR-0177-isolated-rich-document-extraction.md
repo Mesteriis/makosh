@@ -8,7 +8,7 @@ Date: 2026-07-12
 PDF, DOCX and OCR extraction runs only in a separate local worker. The worker
 has no network egress, receives one bounded blob through a private local
 transport, writes only derived artifacts, and is subject to CPU, memory, time
-and temporary-storage limits. The main Hermes API process never invokes office
+and temporary-storage limits. The main Макошь API process never invokes office
 or PDF parsers directly.
 
 The local Compose environment provisions the worker as `attachment-extractor`.
@@ -19,7 +19,7 @@ also keeps a private Unix socket for in-container diagnostics, sees
 `docker/data/mail` read-only, and runs with a read-only root filesystem,
 dropped capabilities, process/memory/CPU limits and a bounded `noexec`
 temporary filesystem. It supports bounded PDF text, DOCX XML and local English
-OCR extraction and bounded first-page PDF-to-PNG rendering. The Hermes command
+OCR extraction and bounded first-page PDF-to-PNG rendering. The Макошь command
 client is introduced separately; until it
 is enabled, rich documents remain quarantined for preview and extraction.
 Text-like attachments continue to use the bounded local UTF-8 extractor.

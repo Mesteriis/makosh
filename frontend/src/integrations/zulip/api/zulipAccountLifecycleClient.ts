@@ -7,7 +7,7 @@ import {
 	ZulipAccountLifecycleService,
 	ZulipBindCredentialV1Schema,
 	ZulipRetireAccountV1Schema,
-} from '../../../gen/hermes/zulip/account/v1/client_pb'
+} from '../../../gen/makosh/zulip/account/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 let lifecycleClient: Client<typeof ZulipAccountLifecycleService> | null = null

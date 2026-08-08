@@ -7,9 +7,9 @@ use crate::domains::communications::command_service::{
 };
 use crate::platform::audit::errors::ApiAuditError;
 use crate::platform::audit::models::NewApiAuditRecord;
-use hermes_communications_api::email::OutgoingEmail;
-use hermes_communications_postgres::errors::CommunicationIngestionError;
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_communications_api::email::OutgoingEmail;
+use makosh_communications_postgres::errors::CommunicationIngestionError;
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
 
 #[derive(Clone)]
 pub(crate) struct CommunicationSendDependencies {
@@ -121,7 +121,7 @@ pub(crate) async fn send_email(
 
     deps.audit_log
         .record(&NewApiAuditRecord::communication_email_send(
-            "hermes-frontend",
+            "makosh-frontend",
             &account.account_id,
             recipient_count,
         ))

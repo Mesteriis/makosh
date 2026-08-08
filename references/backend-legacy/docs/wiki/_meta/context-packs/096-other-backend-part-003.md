@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/migrations/0051_tasks_rules_templates.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0051_tasks_rules_templates.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0051_tasks_rules_templates.sql`
 - Size bytes / Размер в байтах: `3251`
 - Included characters / Включено символов: `3251`
 - Truncated / Обрезано: `no`
@@ -113,7 +113,7 @@ CREATE INDEX IF NOT EXISTS task_snapshots_task_idx ON task_snapshots (task_id);
 
 ### `backend/migrations/0052_remove_frontend_actor_setting.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0052_remove_frontend_actor_setting.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0052_remove_frontend_actor_setting.sql`
 - Size bytes / Размер в байтах: `74`
 - Included characters / Включено символов: `74`
 - Truncated / Обрезано: `no`
@@ -125,7 +125,7 @@ WHERE setting_key = 'frontend.actor_id';
 
 ### `backend/migrations/0053_fix_person_identity_candidate_kind_constraints.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0053_fix_person_identity_candidate_kind_constraints.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0053_fix_person_identity_candidate_kind_constraints.sql`
 - Size bytes / Размер в байтах: `1484`
 - Included characters / Включено символов: `1484`
 - Truncated / Обрезано: `no`
@@ -173,7 +173,7 @@ CREATE UNIQUE INDEX person_identity_merge_pair_idx
 
 ### `backend/migrations/0054_add_host_vault_secret_store_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0054_add_host_vault_secret_store_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0054_add_host_vault_secret_store_kind.sql`
 - Size bytes / Размер в байтах: `388`
 - Included characters / Включено символов: `388`
 - Truncated / Обрезано: `no`
@@ -197,7 +197,7 @@ ALTER TABLE secret_references
 
 ### `backend/migrations/0055_mail_sync_local_trash.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0055_mail_sync_local_trash.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0055_mail_sync_local_trash.sql`
 - Size bytes / Размер в байтах: `5094`
 - Included characters / Включено символов: `5094`
 - Truncated / Обрезано: `no`
@@ -302,7 +302,7 @@ CREATE INDEX IF NOT EXISTS communication_message_participants_person_idx
 
 ### `backend/migrations/0056_email_invoices_linked_person.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0056_email_invoices_linked_person.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0056_email_invoices_linked_person.sql`
 - Size bytes / Размер в байтах: `253`
 - Included characters / Включено символов: `253`
 - Truncated / Обрезано: `no`
@@ -319,7 +319,7 @@ CREATE INDEX IF NOT EXISTS email_invoices_linked_person_idx
 
 ### `backend/migrations/0057_ai_control_center.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0057_ai_control_center.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0057_ai_control_center.sql`
 - Size bytes / Размер в байтах: `11554`
 - Included characters / Включено символов: `11554`
 - Truncated / Обрезано: `no`
@@ -628,7 +628,7 @@ VALUES
         'prompt-version:system:global:default_chat:v1',
         'prompt:system:global:default_chat',
         'v1',
-        'Answer using only cited Hermes context. Query: {{query}}',
+        'Answer using only cited Макошь context. Query: {{query}}',
         '["query"]'::jsonb,
         'active',
         'system:ai-control-center'
@@ -647,7 +647,7 @@ ON CONFLICT (prompt_version_id) DO NOTHING;
 
 ### `backend/migrations/0058_allow_empty_telegram_tdlib_message_bodies.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0058_allow_empty_telegram_tdlib_message_bodies.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0058_allow_empty_telegram_tdlib_message_bodies.sql`
 - Size bytes / Размер в байтах: `438`
 - Included characters / Включено символов: `438`
 - Truncated / Обрезано: `no`
@@ -669,7 +669,7 @@ ALTER TABLE communication_messages
 
 ### `backend/migrations/0059_persona_owner_type_constraints.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0059_persona_owner_type_constraints.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0059_persona_owner_type_constraints.sql`
 - Size bytes / Размер в байтах: `770`
 - Included characters / Включено символов: `770`
 - Truncated / Обрезано: `no`
@@ -706,7 +706,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS persons_single_self_idx
 
 ### `backend/migrations/0060_create_relationships.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0060_create_relationships.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0060_create_relationships.sql`
 - Size bytes / Размер в байтах: `4371`
 - Included characters / Включено символов: `4371`
 - Truncated / Обрезано: `no`
@@ -831,7 +831,7 @@ CREATE INDEX IF NOT EXISTS relationship_evidence_source_idx
 
 ### `backend/migrations/0061_relationship_graph_projection.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0061_relationship_graph_projection.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0061_relationship_graph_projection.sql`
 - Size bytes / Размер в байтах: `802`
 - Included characters / Включено символов: `802`
 - Truncated / Обрезано: `no`
@@ -863,7 +863,7 @@ ADD CONSTRAINT graph_evidence_source_kind CHECK (
 
 ### `backend/migrations/0062_create_contradiction_observations.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0062_create_contradiction_observations.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0062_create_contradiction_observations.sql`
 - Size bytes / Размер в байтах: `3318`
 - Included characters / Включено символов: `3318`
 - Truncated / Обрезано: `no`
@@ -957,7 +957,7 @@ CREATE INDEX IF NOT EXISTS contradiction_observations_old_source_idx
 
 ### `backend/migrations/0063_create_obligations.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0063_create_obligations.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0063_create_obligations.sql`
 - Size bytes / Размер в байтах: `5485`
 - Included characters / Включено символов: `5485`
 - Truncated / Обрезано: `no`
@@ -1110,7 +1110,7 @@ CREATE INDEX IF NOT EXISTS obligation_task_links_task_idx
 
 ### `backend/migrations/0064_create_decisions.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0064_create_decisions.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0064_create_decisions.sql`
 - Size bytes / Размер в байтах: `4943`
 - Included characters / Включено символов: `4943`
 - Truncated / Обрезано: `no`
@@ -1247,7 +1247,7 @@ CREATE INDEX IF NOT EXISTS decision_impacted_entities_entity_idx
 
 ### `backend/migrations/0065_decision_graph_projection.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0065_decision_graph_projection.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0065_decision_graph_projection.sql`
 - Size bytes / Размер в байтах: `610`
 - Included characters / Включено символов: `610`
 - Truncated / Обрезано: `no`
@@ -1283,7 +1283,7 @@ ADD CONSTRAINT graph_evidence_source_kind CHECK (
 
 ### `backend/migrations/0066_obligation_graph_projection.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0066_obligation_graph_projection.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0066_obligation_graph_projection.sql`
 - Size bytes / Размер в байтах: `654`
 - Included characters / Включено символов: `654`
 - Truncated / Обрезано: `no`
@@ -1321,7 +1321,7 @@ ADD CONSTRAINT graph_evidence_source_kind CHECK (
 
 ### `backend/migrations/0067_task_candidate_kind_metadata.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0067_task_candidate_kind_metadata.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0067_task_candidate_kind_metadata.sql`
 - Size bytes / Размер в байтах: `1020`
 - Included characters / Включено символов: `1020`
 - Truncated / Обрезано: `no`
@@ -1362,7 +1362,7 @@ CREATE INDEX IF NOT EXISTS task_candidates_candidate_kind_idx
 
 ### `backend/migrations/0068_expand_relationship_graph_node_kinds.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0068_expand_relationship_graph_node_kinds.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0068_expand_relationship_graph_node_kinds.sql`
 - Size bytes / Размер в байтах: `380`
 - Included characters / Включено символов: `380`
 - Truncated / Обрезано: `no`
@@ -1389,7 +1389,7 @@ ADD CONSTRAINT graph_nodes_kind CHECK (
 
 ### `backend/migrations/0069_relax_task_candidate_requirement.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0069_relax_task_candidate_requirement.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0069_relax_task_candidate_requirement.sql`
 - Size bytes / Размер в байтах: `858`
 - Included characters / Включено символов: `858`
 - Truncated / Обрезано: `no`
@@ -1436,7 +1436,7 @@ ALTER TABLE tasks
 
 ### `backend/migrations/0070_ai_run_persona_attribution.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0070_ai_run_persona_attribution.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0070_ai_run_persona_attribution.sql`
 - Size bytes / Размер в байтах: `542`
 - Included characters / Включено символов: `542`
 - Truncated / Обрезано: `no`
@@ -1457,7 +1457,7 @@ CREATE INDEX IF NOT EXISTS ai_agent_runs_owner_persona_idx
 
 ### `backend/migrations/0071_person_identity_trace_types.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0071_person_identity_trace_types.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0071_person_identity_trace_types.sql`
 - Size bytes / Размер в байтах: `439`
 - Included characters / Включено символов: `439`
 - Truncated / Обрезано: `no`
@@ -1478,7 +1478,7 @@ ALTER TABLE person_identities
 
 ### `backend/migrations/0072_person_identity_disputed_status.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0072_person_identity_disputed_status.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0072_person_identity_disputed_status.sql`
 - Size bytes / Размер в байтах: `267`
 - Included characters / Включено символов: `267`
 - Truncated / Обрезано: `no`
@@ -1495,7 +1495,7 @@ ALTER TABLE person_identities
 
 ### `backend/migrations/0073_person_identity_unattached_traces.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0073_person_identity_unattached_traces.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0073_person_identity_unattached_traces.sql`
 - Size bytes / Размер в байтах: `72`
 - Included characters / Включено символов: `72`
 - Truncated / Обрезано: `no`
@@ -1507,7 +1507,7 @@ ALTER TABLE person_identities
 
 ### `backend/migrations/0074_persona_dossier_snapshots.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0074_persona_dossier_snapshots.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0074_persona_dossier_snapshots.sql`
 - Size bytes / Размер в байтах: `1468`
 - Included characters / Включено символов: `1468`
 - Truncated / Обрезано: `no`
@@ -1547,7 +1547,7 @@ CREATE INDEX IF NOT EXISTS persona_dossier_snapshots_review_state_idx
 
 ### `backend/migrations/0075_allow_empty_email_draft_subject.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0075_allow_empty_email_draft_subject.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0075_allow_empty_email_draft_subject.sql`
 - Size bytes / Размер в байтах: `87`
 - Included characters / Включено символов: `87`
 - Truncated / Обрезано: `no`

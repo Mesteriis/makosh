@@ -1,28 +1,28 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::fs;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::Utc;
 use tempfile::tempdir;
 
-use hermes_hub_backend::platform::secrets::database_vault::DatabaseEncryptedSecretVault;
-use hermes_hub_backend::platform::secrets::errors::SecretResolutionError;
-use hermes_hub_backend::platform::secrets::file_vault::EncryptedSecretVault;
-use hermes_hub_backend::platform::secrets::models::{
+use makosh_hub_backend::platform::secrets::database_vault::DatabaseEncryptedSecretVault;
+use makosh_hub_backend::platform::secrets::errors::SecretResolutionError;
+use makosh_hub_backend::platform::secrets::file_vault::EncryptedSecretVault;
+use makosh_hub_backend::platform::secrets::models::{
     NewSecretReference, ResolvedSecret, SecretKind, SecretReference, SecretStoreKind,
 };
-use hermes_hub_backend::platform::secrets::resolver::SecretResolver;
-use hermes_hub_backend::platform::secrets::store::SecretReferenceStore;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::vault::HostVault;
-use hermes_hub_backend::vault::models::{
+use makosh_hub_backend::platform::secrets::resolver::SecretResolver;
+use makosh_hub_backend::platform::secrets::store::SecretReferenceStore;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::vault::HostVault;
+use makosh_hub_backend::vault::models::{
     EntropyEvent, HostVaultConfig, SecretEntryContext, VaultMode,
 };
 
 #[tokio::test]
 async fn encrypted_vault_persists_secrets_without_plaintext_leakage() {
     let directory = tempdir().expect("tempdir");
-    let vault_path = directory.path().join("hermes-secrets.vault.json");
+    let vault_path = directory.path().join("makosh-secrets.vault.json");
     let vault = EncryptedSecretVault::new(
         &vault_path,
         ResolvedSecret::new("correct horse battery staple").expect("vault key"),
@@ -49,7 +49,7 @@ async fn encrypted_vault_persists_secrets_without_plaintext_leakage() {
 #[tokio::test]
 async fn encrypted_vault_rejects_wrong_master_key() {
     let directory = tempdir().expect("tempdir");
-    let vault_path = directory.path().join("hermes-secrets.vault.json");
+    let vault_path = directory.path().join("makosh-secrets.vault.json");
     let vault = EncryptedSecretVault::new(
         &vault_path,
         ResolvedSecret::new("correct horse battery staple").expect("vault key"),

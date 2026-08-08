@@ -1,4 +1,4 @@
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     v1::{StorageBundleV1, StorageMigrationStepV1},
     validation::validate_storage_bundle,
 };
@@ -57,7 +57,7 @@ pub fn append_mail_address_book_storage_v1(
 
 #[cfg(test)]
 mod tests {
-    use hermes_storage_protocol::v1::StorageMigrationStepV1;
+    use makosh_storage_protocol::v1::StorageMigrationStepV1;
 
     use super::*;
 
@@ -69,7 +69,7 @@ mod tests {
             owner_id: owner_id.to_owned(),
             steps: (1..=23)
                 .map(|revision| {
-                    let sql = format!("CREATE TABLE hermes_data.mail_test_{revision} (id BIGINT);")
+                    let sql = format!("CREATE TABLE makosh_data.mail_test_{revision} (id BIGINT);")
                         .into_bytes();
                     StorageMigrationStepV1 {
                         revision: if revision <= 20 {
@@ -114,7 +114,7 @@ mod tests {
         assert!(provider_page_sql.contains("mail_address_book_fetch_inbox"));
         assert!(provider_page_sql.contains("mail_address_book_fetch_outbox"));
         assert!(
-            !format!("{upsert_sql}\n{custody_sql}").contains("CREATE TABLE hermes_data.contacts_")
+            !format!("{upsert_sql}\n{custody_sql}").contains("CREATE TABLE makosh_data.contacts_")
         );
         assert!(!format!("{upsert_sql}\n{custody_sql}").contains("mail_contacts_sync_"));
     }

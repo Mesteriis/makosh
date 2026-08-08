@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::{Value, json};
 
 use super::constants::{

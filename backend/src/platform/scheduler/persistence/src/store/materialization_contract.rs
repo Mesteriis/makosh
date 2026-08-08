@@ -2,7 +2,7 @@
 
 use std::collections::BTreeSet;
 
-use hermes_scheduler::SchedulerDispatchIdentityV1;
+use makosh_scheduler::SchedulerDispatchIdentityV1;
 
 use super::SchedulerDueScheduleV1;
 
@@ -116,7 +116,7 @@ pub enum SchedulerMaterializationErrorV1 {
 fn command_subject(schedule: &SchedulerDueScheduleV1) -> String {
     let job = schedule.spec().binding().job_kind();
     format!(
-        "hermes.command.v1.{}.{}.v{}",
+        "makosh.command.v1.{}.{}.v{}",
         job.owner(),
         job.name(),
         job.major()
@@ -124,7 +124,7 @@ fn command_subject(schedule: &SchedulerDueScheduleV1) -> String {
 }
 
 fn valid_command_subject(subject: &str) -> bool {
-    subject.starts_with("hermes.command.v1.")
+    subject.starts_with("makosh.command.v1.")
         && !subject.contains('>')
         && subject.split('.').all(|segment| !segment.is_empty())
 }

@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/domains/notes/components/NotesList.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/notes/components/NotesList.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/notes/components/NotesList.vue`
 - Size bytes / Размер в байтах: `2345`
 - Included characters / Включено символов: `2345`
 - Truncated / Обрезано: `no`
@@ -143,7 +143,7 @@ const totalSize = computed(() => virtualizer.value.getTotalSize())
 
 ### `frontend/src/domains/notes/components/NotesSourceFilters.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/notes/components/NotesSourceFilters.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/notes/components/NotesSourceFilters.vue`
 - Size bytes / Размер в байтах: `1300`
 - Included characters / Включено символов: `1300`
 - Truncated / Обрезано: `no`
@@ -202,7 +202,7 @@ const tags = ['#project', '#research', '#meeting', '#idea', '#reference', '#part
 
 ### `frontend/src/domains/notes/views/NotesPage.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/notes/views/NotesPage.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/notes/views/NotesPage.vue`
 - Size bytes / Размер в байтах: `2438`
 - Included characters / Включено символов: `2438`
 - Truncated / Обрезано: `no`
@@ -225,10 +225,10 @@ const store = useNotesStore()
 const { data: notesData } = useNotesQuery()
 
 const fallbackNotes: NoteItem[] = [
-  { title: 'Welcome to Notes', body: 'This is your personal notes workspace. Notes from connected sources will appear here.', source: 'Hermes Hub', tag: '#reference', time: new Date().toISOString(), icon: 'tabler:notes' },
-  { title: 'Meeting Notes Template', body: 'Use this template to capture key decisions, action items, and follow-ups from meetings.', source: 'Hermes Hub', tag: '#meeting', time: new Date().toISOString(), icon: 'tabler:clipboard-list' },
-  { title: 'Project Ideas', body: 'A collection of project ideas and brainstorming notes for future development.', source: 'Hermes Hub', tag: '#idea', time: new Date().toISOString(), icon: 'tabler:lightbulb' },
-  { title: 'Research Notes', body: 'Research findings and references organized by topic for easy retrieval.', source: 'Hermes Hub', tag: '#research', time: new Date().toISOString(), icon: 'tabler:books' }
+  { title: 'Welcome to Notes', body: 'This is your personal notes workspace. Notes from connected sources will appear here.', source: 'Макошь', tag: '#reference', time: new Date().toISOString(), icon: 'tabler:notes' },
+  { title: 'Meeting Notes Template', body: 'Use this template to capture key decisions, action items, and follow-ups from meetings.', source: 'Макошь', tag: '#meeting', time: new Date().toISOString(), icon: 'tabler:clipboard-list' },
+  { title: 'Project Ideas', body: 'A collection of project ideas and brainstorming notes for future development.', source: 'Макошь', tag: '#idea', time: new Date().toISOString(), icon: 'tabler:lightbulb' },
+  { title: 'Research Notes', body: 'Research findings and references organized by topic for easy retrieval.', source: 'Макошь', tag: '#research', time: new Date().toISOString(), icon: 'tabler:books' }
 ]
 
 const notes = computed<NoteItem[]>(() => notesData.value?.items ?? fallbackNotes)
@@ -267,7 +267,7 @@ const notes = computed<NoteItem[]>(() => notesData.value?.items ?? fallbackNotes
 
 ### `frontend/src/domains/organizations/components/OrganizationsDetail.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/organizations/components/OrganizationsDetail.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/organizations/components/OrganizationsDetail.vue`
 - Size bytes / Размер в байтах: `4552`
 - Included characters / Включено символов: `4551`
 - Truncated / Обрезано: `no`
@@ -397,7 +397,7 @@ defineProps<{
 
 ### `frontend/src/domains/organizations/components/OrganizationsList.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/organizations/components/OrganizationsList.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/organizations/components/OrganizationsList.vue`
 - Size bytes / Размер в байтах: `2507`
 - Included characters / Включено символов: `2503`
 - Truncated / Обрезано: `no`
@@ -498,7 +498,7 @@ const emit = defineEmits<{
 
 ### `frontend/src/domains/organizations/views/OrganizationsPage.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/organizations/views/OrganizationsPage.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/organizations/views/OrganizationsPage.vue`
 - Size bytes / Размер в байтах: `2202`
 - Included characters / Включено символов: `2202`
 - Truncated / Обрезано: `no`
@@ -581,7 +581,7 @@ const orgPeople = computed(() => [])
 
 ### `frontend/src/domains/personas/components/PersonsDetail.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/personas/components/PersonsDetail.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/personas/components/PersonsDetail.vue`
 - Size bytes / Размер в байтах: `5973`
 - Included characters / Включено символов: `5972`
 - Truncated / Обрезано: `no`
@@ -697,7 +697,7 @@ defineProps<{
         <Icon icon="tabler:user" :size="42" />
         <div>
           <h2>No person selected</h2>
-          <p>Hermes Hub will show relationship memory here after persons are imported from local sources.</p>
+          <p>Макошь will show relationship memory here after persons are imported from local sources.</p>
         </div>
       </section>
     </template>
@@ -738,7 +738,7 @@ defineProps<{
 
 ### `frontend/src/domains/personas/components/PersonsIdentityReview.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/personas/components/PersonsIdentityReview.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/personas/components/PersonsIdentityReview.vue`
 - Size bytes / Размер в байтах: `4403`
 - Included characters / Включено символов: `4399`
 - Truncated / Обрезано: `no`
@@ -860,7 +860,7 @@ defineProps<{
 
 ### `frontend/src/domains/personas/components/PersonsIdentityTraceReview.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/personas/components/PersonsIdentityTraceReview.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/personas/components/PersonsIdentityTraceReview.vue`
 - Size bytes / Размер в байтах: `5446`
 - Included characters / Включено символов: `5444`
 - Truncated / Обрезано: `no`
@@ -1047,7 +1047,7 @@ function personaLabel(person: PersonaOption): string {
 
 ### `frontend/src/domains/personas/components/PersonsList.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/personas/components/PersonsList.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/personas/components/PersonsList.vue`
 - Size bytes / Размер в байтах: `3991`
 - Included characters / Включено символов: `3991`
 - Truncated / Обрезано: `no`
@@ -1189,7 +1189,7 @@ const totalSize = computed(() => virtualizer.value.getTotalSize())
 
 ### `frontend/src/domains/personas/components/PersonsRelationshipReview.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/personas/components/PersonsRelationshipReview.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/personas/components/PersonsRelationshipReview.vue`
 - Size bytes / Размер в байтах: `5036`
 - Included characters / Включено символов: `5032`
 - Truncated / Обрезано: `no`
@@ -1351,7 +1351,7 @@ function relationshipPeer(relationship: Relationship): string {
 
 ### `frontend/src/domains/personas/views/PersonsPage.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/personas/views/PersonsPage.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/personas/views/PersonsPage.vue`
 - Size bytes / Размер в байтах: `6465`
 - Included characters / Включено символов: `6465`
 - Truncated / Обрезано: `no`
@@ -1540,7 +1540,7 @@ async function loadTraces() {
 
 ### `frontend/src/domains/projects/components/ProjectsDashboard.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/projects/components/ProjectsDashboard.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/projects/components/ProjectsDashboard.vue`
 - Size bytes / Размер в байтах: `5454`
 - Included characters / Включено символов: `5453`
 - Truncated / Обрезано: `no`
@@ -1662,7 +1662,7 @@ function projectMessageSender(message: ProjectMessageSummary): string {
 
 ### `frontend/src/domains/projects/components/ProjectsHero.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/projects/components/ProjectsHero.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/projects/components/ProjectsHero.vue`
 - Size bytes / Размер в байтах: `4636`
 - Included characters / Включено символов: `4632`
 - Truncated / Обрезано: `no`
@@ -1774,7 +1774,7 @@ const props = defineProps<{
 
 ### `frontend/src/domains/projects/components/ProjectsRail.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/projects/components/ProjectsRail.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/projects/components/ProjectsRail.vue`
 - Size bytes / Размер в байтах: `2667`
 - Included characters / Включено символов: `2667`
 - Truncated / Обрезано: `no`
@@ -1844,7 +1844,7 @@ const props = defineProps<{
 
 ### `frontend/src/domains/projects/views/ProjectsPage.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/projects/views/ProjectsPage.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/projects/views/ProjectsPage.vue`
 - Size bytes / Размер в байтах: `3134`
 - Included characters / Включено символов: `3134`
 - Truncated / Обрезано: `no`
@@ -1939,7 +1939,7 @@ function formatNumber(value: number): string {
 
 ### `frontend/src/domains/review/views/ReviewPage.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/review/views/ReviewPage.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/review/views/ReviewPage.vue`
 - Size bytes / Размер в байтах: `20723`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2289,13 +2289,13 @@ function reviewItemKindLabel(itemKind: ReviewItem['item_kind']): string {
         </div>
         <div v-else class="panel-items">
           <div
-          
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `frontend/src/domains/settings/components/AISettingsControlCenter.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/AISettingsControlCenter.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/AISettingsControlCenter.vue`
 - Size bytes / Размер в байтах: `5601`
 - Included characters / Включено символов: `5601`
 - Truncated / Обрезано: `no`
@@ -2370,13 +2370,13 @@ const statusCards = [
         <section class="ai-section">
           <h3>{{ t('Quick Actions') }}</h3>
           <div class="ai-quick-actions">
-            <button type="button" class="hermes-btn hermes-btn--outline" disabled>
+            <button type="button" class="makosh-btn makosh-btn--outline" disabled>
               {{ t('Test Connection') }}
             </button>
-            <button type="button" class="hermes-btn hermes-btn--outline" disabled>
+            <button type="button" class="makosh-btn makosh-btn--outline" disabled>
               {{ t('Run Diagnostics') }}
             </button>
-            <button type="button" class="hermes-btn hermes-btn--outline" disabled>
+            <button type="button" class="makosh-btn makosh-btn--outline" disabled>
               {{ t('View Logs') }}
             </button>
           </div>
@@ -2527,7 +2527,7 @@ const statusCards = [
 
 ### `frontend/src/domains/settings/components/AppearanceSettings.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/AppearanceSettings.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/AppearanceSettings.vue`
 - Size bytes / Размер в байтах: `4124`
 - Included characters / Включено символов: `4124`
 - Truncated / Обрезано: `no`
@@ -2679,7 +2679,7 @@ function pickAllowedNumber<T extends BackgroundBrightness | PanelOpacity | Panel
 
 ### `frontend/src/domains/settings/components/ApplicationSettings.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/ApplicationSettings.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/ApplicationSettings.vue`
 - Size bytes / Размер в байтах: `9660`
 - Included characters / Включено символов: `9660`
 - Truncated / Обрезано: `no`
@@ -2812,7 +2812,7 @@ function handleInput(setting: ApplicationSetting, event: Event) {
               <!-- Select control -->
               <select
                 v-if="settingControlType(setting) === 'select'"
-                class="hermes-select-control"
+                class="makosh-select-control"
                 :value="settingDraftValue(setting)"
                 :disabled="!setting.is_editable"
                 @change="(e) => handleInput(setting, e)"
@@ -2842,7 +2842,7 @@ function handleInput(setting: ApplicationSetting, event: Event) {
               <input
                 v-else-if="settingControlType(setting) === 'number'"
                 type="number"
-                class="hermes-input-control"
+                class="makosh-input-control"
                 :value="settingDraftValue(setting)"
                 :disabled="!setting.is_editable"
                 @input="(e) => handleInput(setting, e)"
@@ -2852,7 +2852,7 @@ function handleInput(setting: ApplicationSetting, event: Event) {
               <input
                 v-else
                 type="text"
-                class="hermes-input-control"
+                class="makosh-input-control"
                 :value="settingDraftValue(setting)"
                 :disabled="!setting.is_editable"
                 @input="(e) => handleInput(setting, e)"
@@ -2862,7 +2862,7 @@ function handleInput(setting: ApplicationSetting, event: Event) {
               <button
                 v-if="settingHasChanged(setting)"
                 type="button"
-                class="hermes-btn hermes-btn--primary"
+                class="makosh-btn makosh-btn--primary"
                 :disabled="store.savingSettingKey === setting.setting_key"
                 @click="handleSave(setting)"
               >
@@ -2941,8 +2941,8 @@ function handleInput(setting: ApplicationSetting, event: Event) {
   flex-shrink: 0;
 }
 
-.hermes-select-control,
-.hermes-input-control {
+.makosh-select-control,
+.makosh-input-control {
   min-width: 160px;
   height: 2.125rem;
   padding: 0 0.625rem;
@@ -2955,13 +2955,13 @@ function handleInput(setting: ApplicationSetting, event: Event) {
   outline: none;
 }
 
-.hermes-select-control:focus-visible,
-.hermes-input-control:focus-visible {
+.makosh-select-control:focus-visible,
+.makosh-input-control:focus-visible {
   box-shadow: 0 0 0 2px var(--hh-focus-ring);
   border-color: var(--hh-accent);
 }
 
-.hermes-input-control[type="checkbox"] {
+.makosh-input-control[type="checkbox"] {
   min-width: auto;
   width: 1rem;
   height: 1rem;
@@ -3019,7 +3019,7 @@ function handleInput(setting: ApplicationSetting, event: Event) {
 
 ### `frontend/src/domains/settings/components/IntegrationsSettings.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/IntegrationsSettings.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/IntegrationsSettings.vue`
 - Size bytes / Размер в байтах: `14669`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3243,7 +3243,7 @@ async function handleImport() {
       <div v-if="selectedAccount" class="integration-inspector">
         <header>
           <h3>{{ providerDisplayName(selectedAccount) }}</h3>
-          <button type="button" class="hermes-btn hermes-btn--ghost" @click="store.selectIntegration(null)">
+          <button type="button" class="makosh-btn makosh-btn--ghost" @click="store.selectIntegration(null)">
             {{ t('Close') }}
           </button>
         </header>
@@ -3258,13 +3258,13 @@ async function handleImport() {
         </div>
 
         <div v-if="isMailProvider(selectedAccount.provider_kind)" class="inspector-actions">
-          <button type="button" class="hermes-btn hermes-btn--outline" :disabled="activeMailAction===selectedAccount.account_id" @click="handleExport(selectedAccount.account_id)">
+          <button type="button" class="makosh-btn makosh-btn--outline" :disabled="activeMailAction===selectedAccount.account_id" @click="handleExport(selectedAccount.account_id)">
             {{ t('Export') }}
           </button>
-          <button type="button" class="hermes-btn hermes-btn--outline" :disabled="activeMailAction===selectedAccount.account_id" @click="handleLogout(selectedAccount.account_id)">
+          <button type="button" class="makosh-btn makosh-btn--outline" :disabled="activeMailAction===selectedAccount.account_id" @click="handleLogout(selectedAccount.account_id)">
             {{ t('Logout') }}
           </button>
-          <button type="button" class="hermes-btn hermes-btn--destructive" :disabled="activeMailAction===selectedAccount.account_id" @click="handleDelete(selectedAccount.account_id)">
+          <button type="button" class="makosh-btn makosh-btn--destructive" :disabled="activeMailAction===selectedAccount.account_id" @click="handleDelete(selectedAccount.account_id)">
             {{ t('Delete') }}
           </button>
         </div>
@@ -3275,12 +3275,12 @@ async function handleImport() {
       <YandexTelemostSettingsPanelShell :selected-account="selectedAccount" />
 
       <div class="integration-import-section">
-        <button type="button" class="hermes-btn hermes-btn--secondary" @click="isImportPanelOpen = !isImportPanelOpen">
+        <button type="button" class="makosh-btn makosh-btn--secondary" @click="isImportPanelOpen = !isImportPanelOpen">
           {{ isImportPanelOpen ? t('Cancel') : t('Import Mail Settings') }}
         </button>
         <div v-if="isImportPanelOpen" class="import-panel">
           <textarea v-model="mailImportJson" class="import-textarea" rows="6" :placeholder="t('Paste exported mail account JSON here...')" />
-          <button type="button" class="hermes-btn hermes-btn--primary" :disabled="!mailImportJson.trim()" @click="handleImport">
+          <button type="button" class="makosh-btn makosh-btn--primary" :disabled="!mailImportJson.trim()" @click="handleImport">
             {{ t('Import') }}
           </button>
         </div>
@@ -3305,7 +3305,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/settings/components/LanguageSettings.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/LanguageSettings.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/LanguageSettings.vue`
 - Size bytes / Размер в байтах: `2197`
 - Included characters / Включено символов: `2190`
 - Truncated / Обрезано: `no`
@@ -3344,7 +3344,7 @@ async function updateLocale(value: string) {
       <header class="panel-title-row">
         <div>
           <h2>{{ t('Interface Language') }}</h2>
-          <p>{{ t('Choose the display language for the Hermes Hub interface.') }}</p>
+          <p>{{ t('Choose the display language for the Макошь interface.') }}</p>
         </div>
       </header>
       <div class="settings-category-list">
@@ -3352,7 +3352,7 @@ async function updateLocale(value: string) {
           <span>{{ t('Language') }}</span>
           <div class="setting-control">
             <select
-              class="hermes-select-control"
+              class="makosh-select-control"
               :value="locale"
               @change="(e) => updateLocale((e.target as HTMLSelectElement).value)"
             >
@@ -3368,7 +3368,7 @@ async function updateLocale(value: string) {
 </template>
 
 <style scoped>
-.hermes-select-control {
+.makosh-select-control {
   min-width: 180px;
   height: 2.125rem;
   padding: 0 0.625rem;
@@ -3382,7 +3382,7 @@ async function updateLocale(value: string) {
   outline: none;
 }
 
-.hermes-select-control:focus-visible {
+.makosh-select-control:focus-visible {
   box-shadow: 0 0 0 2px var(--hh-focus-ring);
   border-color: var(--hh-accent);
 }
@@ -3391,7 +3391,7 @@ async function updateLocale(value: string) {
 
 ### `frontend/src/domains/settings/components/SidebarSettings.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/settings/components/SidebarSettings.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/settings/components/SidebarSettings.vue`
 - Size bytes / Размер в байтах: `9969`
 - Included characters / Включено символов: `9969`
 - Truncated / Обрезано: `no`
@@ -3508,7 +3508,7 @@ async function handleSaveSidebar(): Promise<void> {
         <div class="sidebar-settings-actions">
           <button
             type="button"
-            class="hermes-btn hermes-btn--outline"
+            class="makosh-btn makosh-btn--outline"
             :disabled="!sidebar.sidebarDraft || store.isSidebarSettingsSaving"
             @click="sidebar.cancelSidebarSettingsEditing()"
           >
@@ -3516,7 +3516,7 @@ async function handleSaveSidebar(): Promise<void> {
           </button>
           <button
             type="button"
-            class="hermes-btn hermes-btn--outline"
+            class="makosh-btn makosh-btn--outline"
             :disabled="store.isSidebarSettingsSaving"
             @click="sidebar.resetSidebarSettingsToDefault()"
           >
@@ -3524,7 +3524,7 @@ async function handleSaveSidebar(): Promise<void> {
           </button>
           <button
             type="button"
-            class="hermes-btn hermes-btn--primary"
+            class="makosh-btn makosh-btn--primary"
             :disabled="!sidebar.sidebarDraft || store.isSidebarSettingsSaving"
             @click="handleSaveSidebar"
           >
@@ -3544,7 +3544,7 @@ async function handleSaveSidebar(): Promise<void> {
             autocomplete="off"
           />
         </label>
-        <button type="submit" class="hermes-btn hermes-btn--secondary">
+        <button type="submit" class="makosh-btn makosh-btn--secondary">
           {{ t('Create Group') }}
         </button>
       </form>

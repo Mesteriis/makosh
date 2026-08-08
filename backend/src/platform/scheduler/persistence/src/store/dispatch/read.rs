@@ -1,4 +1,4 @@
-use hermes_events_protocol::delivery::{OutboxEntryV1, OutboxRecordV1, OutboxRelayErrorV1};
+use makosh_events_protocol::delivery::{OutboxEntryV1, OutboxRecordV1, OutboxRelayErrorV1};
 use sqlx::query_as;
 
 use crate::SchedulerPostgresStoreV1;
@@ -7,7 +7,7 @@ impl SchedulerPostgresStoreV1 {
     /// Reads one pending exact dispatch without changing its durable state.
     pub async fn next_pending_dispatch(&self) -> Result<Option<OutboxEntryV1>, OutboxRelayErrorV1> {
         let row = query_as::<_, (Vec<u8>, Vec<u8>, Vec<u8>)>(
-            "SELECT message_id, envelope_sha256, exact_envelope_bytes FROM hermes_platform.scheduler_dispatches WHERE state = 'pending' ORDER BY created_at_unix_ms, message_id LIMIT 1",
+            "SELECT message_id, envelope_sha256, exact_envelope_bytes FROM makosh_platform.scheduler_dispatches WHERE state = 'pending' ORDER BY created_at_unix_ms, message_id LIMIT 1",
         )
         .fetch_optional(self.pool())
         .await

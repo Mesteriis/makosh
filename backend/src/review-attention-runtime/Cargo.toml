@@ -1,5 +1,5 @@
 [package]
-name = "hermes-review-attention-runtime"
+name = "makosh-review-attention-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,21 +8,21 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-review-attention-runtime"
+name = "makosh-review-attention-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "domain"
 owner = "review"
 surface = "runtime"
 
 [dependencies]
-hermes-review-attention-api = { path = "../review-attention-api" }
-hermes-review-attention-core = { path = "../review-attention-core" }
-hermes-review-attention-persistence = { path = "../review-attention-persistence" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
+makosh-review-attention-api = { path = "../review-attention-api" }
+makosh-review-attention-core = { path = "../review-attention-core" }
+makosh-review-attention-persistence = { path = "../review-attention-persistence" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }

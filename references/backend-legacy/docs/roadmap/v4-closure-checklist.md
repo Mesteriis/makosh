@@ -2,7 +2,7 @@
 
 ## Release Goal
 
-Version 4.0 is complete when Hermes Hub provides a desktop-configurable Telegram client foundation with multiple Telegram user and bot accounts, policy-approved automated sending, 1:1 audio call state, local call transcription artifacts, plugin/capability policy visibility and backup-aware V4 data handling.
+Version 4.0 is complete when Макошь provides a desktop-configurable Telegram client foundation with multiple Telegram user and bot accounts, policy-approved automated sending, 1:1 audio call state, local call transcription artifacts, plugin/capability policy visibility and backup-aware V4 data handling.
 
 ## In Scope
 

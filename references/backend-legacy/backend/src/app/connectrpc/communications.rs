@@ -60,10 +60,10 @@ use crate::domains::communications::threads::{CommunicationThreadError, Communic
 use crate::platform::audit::models::NewApiAuditRecord;
 use crate::platform::config::app_config::AppConfig;
 use crate::vault::HostVault;
-use hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore;
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
-use hermes_connectrpc_contracts::hermes::common::v1::PageResponse;
-use hermes_connectrpc_contracts::hermes::communications::v1::{
+use makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore;
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_connectrpc_contracts::makosh::common::v1::PageResponse;
+use makosh_connectrpc_contracts::makosh::communications::v1::{
     AddMessageLabelResponse, AiReplyRequest as ProtoAiReplyRequest,
     AiReplyResponse as ProtoAiReplyResponse, AiReplyVariantsRequest as ProtoAiReplyVariantsRequest,
     AiReplyVariantsResponse as ProtoAiReplyVariantsResponse, AnalyzeMessageRequest,

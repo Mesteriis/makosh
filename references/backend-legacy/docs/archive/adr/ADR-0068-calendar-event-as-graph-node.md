@@ -4,7 +4,7 @@ Status: Proposed
 
 ## Context
 
-Calendar events in Hermes must not be isolated time-block rectangles. Each event is a system node connected to Personas, organizations, projects, documents, tasks, emails, and notes. ADR-0045 established the graph core projection. Events need explicit, queryable relationships.
+Calendar events in Макошь must not be isolated time-block rectangles. Each event is a system node connected to Personas, organizations, projects, documents, tasks, emails, and notes. ADR-0045 established the graph core projection. Events need explicit, queryable relationships.
 
 ## Decision
 

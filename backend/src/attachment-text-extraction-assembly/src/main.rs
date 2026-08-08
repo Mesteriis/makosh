@@ -1,6 +1,6 @@
 use std::{collections::BTreeMap, path::PathBuf, process::ExitCode};
 
-use hermes_attachment_text_extraction_assembly::materialize_attachment_text_extraction_release_assembly_v1;
+use makosh_attachment_text_extraction_assembly::materialize_attachment_text_extraction_release_assembly_v1;
 
 const OPTIONS: [&str; 6] = [
     "--build-id",
@@ -14,7 +14,7 @@ const OPTIONS: [&str; 6] = [
 fn main() -> ExitCode {
     let Some(arguments) = arguments(std::env::args().skip(1).collect()) else {
         return fail(
-            "usage: hermes-attachment-text-extraction-assembly --build-id <id> \
+            "usage: makosh-attachment-text-extraction-assembly --build-id <id> \
              --output-dir <absolute-path> --runtime <absolute-path> \
              --ocr-runner <absolute-path> --ocr-eng <absolute-path> \
              --ocr-rus <absolute-path>",

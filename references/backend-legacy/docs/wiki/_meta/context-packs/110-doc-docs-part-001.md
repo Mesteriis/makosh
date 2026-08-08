@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,21 +55,21 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docs/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/README.md`
 - Size bytes / Размер в байтах: `8518`
 - Included characters / Включено символов: `8518`
 - Truncated / Обрезано: `no`
 
 ````markdown
-# Hermes Documentation
+# Макошь Documentation
 
 This directory contains product, foundation, architecture, domain, ADR and
-implementation-status documentation for Hermes Hub.
+implementation-status documentation for Макошь.
 
-Hermes documentation has one active product model:
+Макошь documentation has one active product model:
 
 ```text
-Hermes is a local-first Personal Memory System.
+Макошь is a local-first Personal Memory System.
 ```
 
 Communication is the primary ingestion spine, but not the only source of
@@ -77,8 +77,8 @@ evidence.
 
 Styled documentation portal:
 
-- [Hermes Hub Documentation](https://mesteriis.github.io/hermes-os/) - GitHub
-  Pages entrypoint using the Hermes shell design language.
+- [Макошь Documentation](https://mesteriis.github.io/makosh-os/) - GitHub
+  Pages entrypoint using the Макошь shell design language.
 
 ## Reading Order
 
@@ -274,13 +274,13 @@ architecture or ADR document explicitly references them as active requirements.
 
 ### `docs/ai/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/ai/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/ai/README.md`
 - Size bytes / Размер в байтах: `699`
 - Included characters / Включено символов: `699`
 - Truncated / Обрезано: `no`
 
 ```markdown
-# Hermes AI Layer
+# Макошь AI Layer
 
 Status: documentation package aligned to the current repository structure.
 
@@ -304,7 +304,7 @@ and review workflows stay in their owning domain, engine or workflow docs.
 
 ### `docs/ai/agents/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/ai/agents/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/ai/agents/README.md`
 - Size bytes / Размер в байтах: `349`
 - Included characters / Включено символов: `349`
 - Truncated / Обрезано: `no`
@@ -314,7 +314,7 @@ and review workflows stay in their owning domain, engine or workflow docs.
 
 Status: documentation package aligned to the current repository structure.
 
-This package documents Hermes agent actors and local AI architecture. Agents are
+This package documents Макошь agent actors and local AI architecture. Agents are
 audited, permissioned actors; they are not sources of truth.
 
 ## Navigation
@@ -325,7 +325,7 @@ audited, permissioned actors; they are not sources of truth.
 
 ### `docs/ai/agents/agent-architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/ai/agents/agent-architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/ai/agents/agent-architecture.md`
 - Size bytes / Размер в байтах: `2483`
 - Included characters / Включено символов: `2483`
 - Truncated / Обрезано: `no`
@@ -357,7 +357,7 @@ through both the acting agent Persona and the Owner Persona.
 | Agent | Role |
 |---|---|
 | HESTIA | coordinator, intent routing, policy mediation |
-| HERMES | communications triage, threads, drafting, channel context |
+| MAKOSH | communications triage, threads, drafting, channel context |
 | MNEMOSYNE | memory, graph linking, recall, provenance |
 | ATHENA | analysis, trend detection, decision support |
 | HEPHAESTUS | development, maintenance and tool automation |
@@ -412,7 +412,7 @@ exports require explicit confirmation and audit events.
 
 ### `docs/ai/agents/local-ai-architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/ai/agents/local-ai-architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/ai/agents/local-ai-architecture.md`
 - Size bytes / Размер в байтах: `1484`
 - Included characters / Включено символов: `1484`
 - Truncated / Обрезано: `no`
@@ -477,13 +477,13 @@ can replace any model without losing history.
 
 ### `docs/app/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/app/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/app/README.md`
 - Size bytes / Размер в байтах: `1036`
 - Included characters / Включено символов: `1036`
 - Truncated / Обрезано: `no`
 
 ```markdown
-# Hermes App Layer
+# Макошь App Layer
 
 Status: documentation package aligned to the current repository structure.
 
@@ -514,13 +514,13 @@ response behavior. Cross-domain orchestration belongs in
 
 ### `docs/application/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/application/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/application/README.md`
 - Size bytes / Размер в байтах: `873`
 - Included characters / Включено символов: `873`
 - Truncated / Обрезано: `no`
 
 ```markdown
-# Hermes Application Services
+# Макошь Application Services
 
 Status: documentation package aligned to the current repository structure.
 
@@ -547,7 +547,7 @@ Durable entity ownership still belongs to `docs/domains/`.
 
 ### `docs/architecture/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/README.md`
 - Size bytes / Размер в байтах: `1031`
 - Included characters / Включено символов: `1031`
 - Truncated / Обрезано: `no`
@@ -587,7 +587,7 @@ provider-specific and engine-specific details live in their owning packages.
 
 ### `docs/architecture/agents.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/agents.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/agents.md`
 - Size bytes / Размер в байтах: `3005`
 - Included characters / Включено символов: `3005`
 - Truncated / Обрезано: `no`
@@ -603,7 +603,7 @@ autonomous writes, provider side effects or plugin execution.
 
 ## Purpose
 
-Agents help the Owner Persona operate Hermes. They retrieve context, explain
+Agents help the Owner Persona operate Макошь. They retrieve context, explain
 evidence, propose actions and execute approved tool workflows. They do not own
 truth.
 
@@ -704,14 +704,14 @@ Agents write through:
 
 ## Reasons For Existence
 
-Hermes can contain more context than the owner can manually inspect. Agents are
+Макошь can contain more context than the owner can manually inspect. Agents are
 useful when they can assemble cited context and propose next actions without
 becoming an uncited source of truth or an unsafe automation layer.
 ````
 
 ### `docs/architecture/architecture-overview.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/architecture-overview.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/architecture-overview.md`
 - Size bytes / Размер в байтах: `4189`
 - Included characters / Включено символов: `4189`
 - Truncated / Обрезано: `no`
@@ -721,7 +721,7 @@ becoming an uncited source of truth or an unsafe automation layer.
 
 ## Architectural Thesis
 
-Hermes Hub is a local-first Personal Memory System. Its durable system of record
+Макошь is a local-first Personal Memory System. Its durable system of record
 combines append-only observations, canonical events, domain entities,
 relationships, document artifacts and rebuildable indexes. AI uses these stores
 as context and never becomes the durable memory layer itself.
@@ -881,7 +881,7 @@ The following components must be replaceable behind stable boundaries:
 
 ### `docs/architecture/communications.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/communications.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/communications.md`
 - Size bytes / Размер в байтах: `6663`
 - Included characters / Включено символов: `6663`
 - Truncated / Обрезано: `no`
@@ -899,8 +899,8 @@ frontend/backend boundary guards.
 
 ## Purpose
 
-Communications are the primary intake spine for Hermes. Messages, calls,
-meetings, provider events and communication attachments enter Hermes as source
+Communications are the primary intake spine for Макошь. Messages, calls,
+meetings, provider events and communication attachments enter Макошь as source
 evidence, then feed memory, relationships, decisions, obligations, tasks,
 projects, documents and context.
 
@@ -1070,8 +1070,8 @@ Frontend channel work must use:
 
 ## Reasons For Existence
 
-Communications exist because real-world context mostly enters Hermes through
-interaction. Hermes must understand not just message bodies, but timing,
+Communications exist because real-world context mostly enters Макошь through
+interaction. Макошь must understand not just message bodies, but timing,
 participants, silence, replies, attachments, delivery, source provenance and
 provider state. Without a shared Communications model, each channel would
 duplicate lifecycle, capability, audit, search, attachment and extraction logic.
@@ -1079,7 +1079,7 @@ duplicate lifecycle, capability, audit, search, attachment and extraction logic.
 
 ### `docs/architecture/component-communication.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/component-communication.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/component-communication.md`
 - Size bytes / Размер в байтах: `1665`
 - Included characters / Включено символов: `1665`
 - Truncated / Обрезано: `no`
@@ -1145,7 +1145,7 @@ Direct provider roots are forbidden:
 
 ### `docs/architecture/container-diagram.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/container-diagram.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/container-diagram.md`
 - Size bytes / Размер в байтах: `2601`
 - Included characters / Включено символов: `2601`
 - Truncated / Обрезано: `no`
@@ -1237,7 +1237,7 @@ flowchart TB
 
 ### `docs/architecture/context-diagram.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/context-diagram.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/context-diagram.md`
 - Size bytes / Размер в байтах: `1641`
 - Included characters / Включено символов: `1641`
 - Truncated / Обрезано: `no`
@@ -1249,18 +1249,18 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    User["Owner Persona"] --> Hermes["Hermes Hub\nPersonal Memory System"]
+    User["Owner Persona"] --> Макошь["Макошь\nPersonal Memory System"]
 
-    Hermes <--> Email["Email providers\nIMAP/SMTP/API"]
-    Hermes <--> Telegram["Telegram"]
-    Hermes <--> WhatsApp["WhatsApp"]
-    Hermes <--> Calendar["Calendar providers"]
-    Hermes <--> Files["Local file system"]
-    Hermes <--> Ollama["Ollama local models"]
-    Hermes <--> OptionalCloud["Optional cloud services"]
+    Макошь <--> Email["Email providers\nIMAP/SMTP/API"]
+    Макошь <--> Telegram["Telegram"]
+    Макошь <--> WhatsApp["WhatsApp"]
+    Макошь <--> Calendar["Calendar providers"]
+    Макошь <--> Files["Local file system"]
+    Макошь <--> Ollama["Ollama local models"]
+    Макошь <--> OptionalCloud["Optional cloud services"]
 
-    Hermes --> Backup["Local/self-hosted backups"]
-    Hermes --> Telemetry["Local OpenTelemetry collector"]
+    Макошь --> Backup["Local/self-hosted backups"]
+    Макошь --> Telemetry["Local OpenTelemetry collector"]
 ```
 
 ## External Actors
@@ -1279,7 +1279,7 @@ flowchart LR
 
 ## Context Rules
 
-- Hermes Hub must continue to operate without optional cloud services.
+- Макошь must continue to operate without optional cloud services.
 - External providers are never the canonical memory layer.
 - Provider records are preserved as source evidence for Communications, Events,
   Documents and downstream Memory.
@@ -1288,7 +1288,7 @@ flowchart LR
 
 ### `docs/architecture/domain-map.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/domain-map.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/domain-map.md`
 - Size bytes / Размер в байтах: `3568`
 - Included characters / Включено символов: `3568`
 - Truncated / Обрезано: `no`
@@ -1371,7 +1371,7 @@ flowchart LR
 
 ### `docs/architecture/domains.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/domains.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/domains.md`
 - Size bytes / Размер в байтах: `7628`
 - Included characters / Включено символов: `7628`
 - Truncated / Обрезано: `no`
@@ -1387,8 +1387,8 @@ implementation refactoring plan.
 
 ## Purpose
 
-This document defines the current target bounded contexts for Hermes. A domain
-exists when Hermes needs durable source-of-truth ownership for an entity,
+This document defines the current target bounded contexts for Макошь. A domain
+exists when Макошь needs durable source-of-truth ownership for an entity,
 lifecycle or invariant.
 
 ## Domain Ownership Rule
@@ -1405,17 +1405,17 @@ Agents propose and act through capabilities.
 
 | Domain | Owns | Does not own | Reason for existence |
 |---|---|---|---|
-| Personas | Persona identity, Owner Persona, identity traces, Persona memory anchors, Persona dossiers. | Provider messages, Organization lifecycle, Project lifecycle, generic graph traversal. | Hermes needs durable subjects for people, AI agents, system actors and organization proxies. |
+| Personas | Persona identity, Owner Persona, identity traces, Persona memory anchors, Persona dossiers. | Provider messages, Organization lifecycle, Project lifecycle, generic graph traversal. | Макошь needs durable subjects for people, AI agents, system actors and organization proxies. |
 | Organizations | Organization identity, domains, aliases, relationships, portals, procedures, playbooks, organization memory. | Persona identity, Project ownership, provider accounts. | Collective actors need memory and procedures independent from individual Personas. |
 | Communications | Conversations, messages, participants as observed, channel accounts, source communication metadata, delivery/draft state, communication attachments. | Persona truth, Task lifecycle, Decision truth, Obligation truth, global Memory. | Communications are the primary evidence intake spine. |
 | Documents | Document artifacts, versions, extracted content, document metadata, document evidence, promoted attachment artifacts. | General Knowledge truth, Task status, provider message lifecycle. | Documents are durable evidence artifacts and local knowledge sources. |
 | Projects | Bounded work contexts, project state, project links, project decisions as references, project memory views. | Organization identity, Task lifecycle, Decision truth, document versions. | Projects gather context around long-running work. |
 | Tasks | Actionable work items, status lifecycle, local overlays, task evidence, provider overlays. | Obligations as commitments, every follow-up, provider message delivery. | Some memory becomes executable work with lifecycle. |
 | Calendar/Events | Scheduled events, meetings, attendees, calendar source identity, event evidence. | Global Timeline Engine, Decision/Obligation truth. | Time-bound facts and meetings provide context and source evidence. |
-| Relationships | Durable semantic links, relation type, trust score, strength score, confidence, evidence, review state. | Graph indexes, Trust Engine computation, Timeline rendering. | Hermes is relationship-first; links need a source-of-truth owner. |
-| Decisions | Durable choices, rationale, alternatives, evidence and impacted entities. | Generic notes, Project state, AI summaries. | Hermes must remember why a direction was chosen. |
+| Relationships | Durable semantic links, relation type, trust score, strength score, confidence, evidence, review state. | Graph indexes, Trust Engine computation, Timeline rendering. | Макошь is relationship-first; links need a source-of-truth owner. |
+| Decisions | Durable choices, rationale, alternatives, evidence and impacted entities. | Generic notes, Project state, AI summaries. | Макошь must remember why a direction was chosen. |
 | Obligations | Commitments, duties, beneficiaries, status, evidence, review state and links to fulfillment. | Task lifecycle, every reminder, provider delivery state. | A commitment is not the same as a task that may fulfill it. |
-| Review | Review inbox items, approval, dismissal, promotion state and evidence links for candidates. | Domain truth, Radar philosophy, provider state. | Hermes needs one concrete owner-facing inbox for promotion and triage. |
+| Review | Review inbox items, approval, dismissal, promotion state and evidence links for candidates. | Domain truth, Radar philosophy, provider state. | Макошь needs one concrete owner-facing inbox for promotion and triage. |
 | Knowledge Graph | Graph nodes, graph edges, graph evidence as projection/traversal substrate. | Relationship semantics when first-class Relationship records exist, raw provider sync, binary storage. | Relationship-aware memory and traversal need a queryable graph substrate. |
 | Agents | Agent identity, run records, capability policy integration, proposed actions, approvals, denials, audit trail. | Domain truth, private data truth, credentials. | Agents need an auditable actor and tool boundary. |
 
@@ -1502,7 +1502,7 @@ empty. Working application settings code lives under `platform/settings`.
 
 ### `docs/architecture/event-model.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/event-model.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/event-model.md`
 - Size bytes / Размер в байтах: `3201`
 - Included characters / Включено символов: `3201`
 - Truncated / Обрезано: `no`
@@ -1513,12 +1513,12 @@ empty. Working application settings code lives under `platform/settings`.
 ## Purpose
 
 The event model is the system spine. It records facts that happened in or
-around Hermes Hub and lets projections build current state, graph links,
+around Макошь and lets projections build current state, graph links,
 indexes and user-facing timelines.
 
 Communications are the primary ingestion spine for external interaction
 evidence. The event model is the canonical internal spine that preserves what
-happened after evidence enters Hermes.
+happened after evidence enters Макошь.
 
 ## Event Categories
 
@@ -1541,7 +1541,7 @@ happened after evidence enters Hermes.
 
 ```json
 {
-  "event_id": "01HERMES...",
+  "event_id": "01MAKOSH...",
   "event_type": "message_received",
   "schema_version": 1,
   "occurred_at": "2026-06-04T12:00:00Z",
@@ -1645,7 +1645,7 @@ Projection failures must be observable and replayable. A broken projection must 
 
 ### `docs/architecture/memory.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/memory.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/memory.md`
 - Size bytes / Размер в байтах: `4364`
 - Included characters / Включено символов: `4364`
 - Truncated / Обрезано: `no`
@@ -1661,7 +1661,7 @@ new tables, APIs or migrations.
 
 ## Purpose
 
-Memory is the durable reason Hermes exists. The system should turn evidence into
+Memory is the durable reason Макошь exists. The system should turn evidence into
 source-backed context that helps the owner understand what happened, what
 changed and what should be done.
 
@@ -1775,14 +1775,14 @@ It must not:
 
 ## Reasons For Existence
 
-Without a memory architecture, Hermes would be a set of provider clients and
+Without a memory architecture, Макошь would be a set of provider clients and
 CRUD surfaces. Memory turns raw evidence into durable understanding while
 preserving uncertainty, review and provenance.
 ````
 
 ### `docs/architecture/plugin-architecture.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/plugin-architecture.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/plugin-architecture.md`
 - Size bytes / Размер в байтах: `1227`
 - Included characters / Включено символов: `1227`
 - Truncated / Обрезано: `no`
@@ -1792,7 +1792,7 @@ preserving uncertainty, review and provenance.
 
 ## Purpose
 
-Plugins allow Hermes Hub to extend providers, tools, document processors, UI panels and AI capabilities without turning the core system into an unbounded integration layer.
+Plugins allow Макошь to extend providers, tools, document processors, UI panels and AI capabilities without turning the core system into an unbounded integration layer.
 
 ## Plugin Types
 
@@ -1836,7 +1836,7 @@ Plugins are untrusted by default. The system must prefer least privilege and mak
 
 ### `docs/architecture/principles.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/principles.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/principles.md`
 - Size bytes / Размер в байтах: `4379`
 - Included characters / Включено символов: `4379`
 - Truncated / Обрезано: `no`
@@ -1853,13 +1853,13 @@ before code changes.
 
 ## Purpose
 
-This document defines the active principles that guide Hermes architecture.
+This document defines the active principles that guide Макошь architecture.
 
 ## Principles
 
 ### 1. Personal First
 
-Hermes serves the local owner first. Provider integrations, agents, plugins and
+Макошь serves the local owner first. Provider integrations, agents, plugins and
 automation exist only inside owner-controlled boundaries.
 
 Responsibilities:
@@ -1877,7 +1877,7 @@ Boundaries:
 
 ### 2. Memory First
 
-Hermes preserves evidence and memory before optimizing workflow surfaces.
+Макошь preserves evidence and memory before optimizing workflow surfaces.
 
 Responsibilities:
 
@@ -1929,7 +1929,7 @@ Boundaries:
 
 ### 5. No MVP
 
-Hermes is a long-term local-first Personal Operating System. Thin slices are
+Макошь is a long-term local-first Personal Operating System. Thin slices are
 allowed; fake product semantics are not.
 
 Responsibilities:
@@ -1972,7 +1972,7 @@ These principles connect the rest of the canonical architecture:
 
 ### `docs/architecture/privacy-model.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/privacy-model.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/privacy-model.md`
 - Size bytes / Размер в байтах: `1918`
 - Included characters / Включено символов: `1918`
 - Truncated / Обрезано: `no`
@@ -2040,7 +2040,7 @@ Exports must be structured, documented and independent from a specific LLM provi
 
 ### `docs/architecture/radar.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/radar.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/radar.md`
 - Size bytes / Размер в байтах: `3657`
 - Included characters / Включено символов: `3657`
 - Truncated / Обрезано: `no`
@@ -2149,7 +2149,7 @@ Radar would consume outputs from:
 
 ## Reasons For Existence
 
-Radar may be valuable because Hermes needs a single owner-facing review surface
+Radar may be valuable because Макошь needs a single owner-facing review surface
 for "things worth attention" without collapsing them into Tasks. Many important
 signals are not tasks:
 
@@ -2182,7 +2182,7 @@ Before Radar becomes a domain, a future RFC/ADR must define:
 
 ### `docs/architecture/refactoring-plan.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/refactoring-plan.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/refactoring-plan.md`
 - Size bytes / Размер в байтах: `7225`
 - Included characters / Включено символов: `6829`
 - Truncated / Обрезано: `no`
@@ -2443,7 +2443,7 @@ pub struct PersonSearchResponse {
 
 ### `docs/architecture/security-model.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/security-model.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/security-model.md`
 - Size bytes / Размер в байтах: `3240`
 - Included characters / Включено символов: `3240`
 - Truncated / Обрезано: `no`
@@ -2480,12 +2480,12 @@ Initial product mode is single-user local desktop. The architecture must still d
 - export and backup permissions
 
 ADR-0056 defines the current local API guard. The backend applies a router-level
-shared secret check with `HERMES_LOCAL_API_SECRET` and the `X-Hermes-Secret`
-header. Audit records use the constant `hermes-frontend` actor and never store
+shared secret check with `MAKOSH_LOCAL_API_SECRET` and the `X-Макошь-Secret`
+header. Audit records use the constant `makosh-frontend` actor and never store
 API secrets.
 
-Older token and actor-id ADRs are superseded. `HERMES_LOCAL_API_TOKEN` and
-`X-Hermes-Actor-Id` are historical compatibility terms, not the current
+Older token and actor-id ADRs are superseded. `MAKOSH_LOCAL_API_TOKEN` and
+`X-Макошь-Actor-Id` are historical compatibility terms, not the current
 application auth boundary.
 
 ADR-0052 defines the long-term capability runtime direction: backend application-layer policy checks, scoped capability grants, explicit confirmation for high-risk actions unless a scoped automation policy applies, and audit metadata for allowed and rejected high-risk decisions.
@@ -2494,9 +2494,9 @@ ADR-0052 defines the long-term capability runtime direction: backend application
 
 Secrets must never be hardcoded or committed. Provider tokens, passwords, app passwords, private keys and recovery material belong behind the secret resolver boundary.
 
-ADR-0076 defines the current vault model. New secret payloads live in the dedicated host vault under `~/.hermes/vault`, backed by a local `vault.db` SQLite database. PostgreSQL stores only non-secret `secret_references`, provider account metadata and account-to-secret bindings.
+ADR-0076 defines the current vault model. New secret payloads live in the dedicated host vault under `~/.makosh/vault`, backed by a local `vault.db` SQLite database. PostgreSQL stores only non-secret `secret_references`, provider account metadata and account-to-secret bindings.
 
-Release runtime is macOS-only and uses Keychain for the master key. Docker/debug development may use `HERMES_DEV_MODE=true` with `HERMES_DEV_KEY_PATH`; release builds must reject dev storage. `HERMES_SECRET_VAULT_KEY` is legacy migration compatibility only and is not the normal runtime vault key.
+Release runtime is macOS-only and uses Keychain for the master key. Docker/debug development may use `MAKOSH_DEV_MODE=true` with `MAKOSH_DEV_KEY_PATH`; release builds must reject dev storage. `MAKOSH_SECRET_VAULT_KEY` is legacy migration compatibility only and is not the normal runtime vault key.
 
 Secret values must remain out of ordinary application tables, provider account config, event payloads, audit records, logs, tests and docs. Recovery phrases and recovery files are sensitive and must not be logged.
 
@@ -2519,7 +2519,7 @@ Imported messages and documents are untrusted input. The agent runtime must trea
 
 ### `docs/architecture/signal-hub.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/architecture/signal-hub.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/architecture/signal-hub.md`
 - Size bytes / Размер в байтах: `1787`
 - Included characters / Включено символов: `1787`
 - Truncated / Обрезано: `no`
@@ -2527,7 +2527,7 @@ Imported messages and documents are untrusted input. The agent runtime must trea
 ````markdown
 # Architecture - Signal Hub
 
-Signal Hub is the platform-level source control plane for Hermes.
+Signal Hub is the platform-level source control plane for Макошь.
 
 It sits before Communications, Calendar, Documents, Tasks, Radar and other
 domains. It controls whether external or fixture sources may publish signals

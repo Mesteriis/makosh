@@ -2,8 +2,8 @@
 
 use std::time::{Duration, Instant};
 
-use hermes_events_protocol::validation::envelope::decode_envelope_v1;
-use hermes_mail_api::{
+use makosh_events_protocol::validation::envelope::decode_envelope_v1;
+use makosh_mail_api::{
     MailClientRequestV1, MailClientResponseV1, MailSendMailRequestV1,
     client_contract::MailClientContractV1,
 };
@@ -20,25 +20,25 @@ const PRIVATE_RECIPIENT: &str = "recipient@example.test";
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, Mail, SMTP and NATS"]
 fn managed_mail_runtime_accepts_then_completes_smtp_delivery_and_replays_event() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
     let imap = MailImapFixture::start();
     let smtp = MailSmtpFixture::start();
-    let root = unique_target_root("hermes-managed-mail-smtp-delivery");
+    let root = unique_target_root("makosh-managed-mail-smtp-delivery");
     let data = private_directory(short_communications_kernel_data_directory());
     let vault_dir = private_directory(data.join("vault"));
     initialize_vault(&vault_dir, &credential_directory());
     seed_mail_vault(&vault_dir);
     let release = installed_communications_mail_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             "owner-1",
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -204,7 +204,7 @@ fn managed_mail_runtime_accepts_then_completes_smtp_delivery_and_replays_event()
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Mail SMTP fixture");
     std::fs::remove_dir_all(data).expect("remove short kernel data fixture");

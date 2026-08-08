@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/platform/secrets/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/secrets/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/secrets/validation.rs`
 - Size bytes / Размер в байтах: `1363`
 - Included characters / Включено символов: `1363`
 - Truncated / Обрезано: `no`
@@ -121,7 +121,7 @@ pub(super) fn validate_database_non_empty(
 
 ### `backend/src/platform/settings.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings.rs`
 - Size bytes / Размер в байтах: `318`
 - Included characters / Включено символов: `318`
 - Truncated / Обрезано: `no`
@@ -144,7 +144,7 @@ pub use store::ApplicationSettingsStore;
 
 ### `backend/src/platform/settings/ai_runtime.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/ai_runtime.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/ai_runtime.rs`
 - Size bytes / Размер в байтах: `4604`
 - Included characters / Включено символов: `4604`
 - Truncated / Обрезано: `no`
@@ -259,7 +259,7 @@ fn integer_value(settings: &[ApplicationSetting], setting_key: &str) -> Option<i
 
 ### `backend/src/platform/settings/constants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/constants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/constants.rs`
 - Size bytes / Размер в байтах: `289`
 - Included characters / Включено символов: `289`
 - Truncated / Обрезано: `no`
@@ -274,7 +274,7 @@ pub(crate) const UI_STATE_MAX_BYTES: u64 = 65_536;
 
 ### `backend/src/platform/settings/definitions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/definitions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/definitions.rs`
 - Size bytes / Размер в байтах: `905`
 - Included characters / Включено символов: `905`
 - Truncated / Обрезано: `no`
@@ -316,7 +316,7 @@ pub(crate) fn declared_application_settings() -> Vec<DeclaredApplicationSetting>
 
 ### `backend/src/platform/settings/definitions/ai.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/definitions/ai.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/definitions/ai.rs`
 - Size bytes / Размер в байтах: `369`
 - Included characters / Включено символов: `369`
 - Truncated / Обрезано: `no`
@@ -339,7 +339,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
 
 ### `backend/src/platform/settings/definitions/ai/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/definitions/ai/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/definitions/ai/models.rs`
 - Size bytes / Размер в байтах: `2462`
 - Included characters / Включено символов: `2462`
 - Truncated / Обрезано: `no`
@@ -410,7 +410,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
 
 ### `backend/src/platform/settings/definitions/ai/provider.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/definitions/ai/provider.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/definitions/ai/provider.rs`
 - Size bytes / Размер в байтах: `2008`
 - Included characters / Включено символов: `2008`
 - Truncated / Обрезано: `no`
@@ -455,12 +455,12 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
             value_kind: SettingValueKind::String,
             default_value: json!("https://ai.sh-inc.ru/v1"),
             label: "OmniRoute base URL",
-            description: "OpenAI-compatible OmniRoute endpoint. API key is read from HERMES_OMNIROUTE_API_KEY, never from application settings.",
+            description: "OpenAI-compatible OmniRoute endpoint. API key is read from MAKOSH_OMNIROUTE_API_KEY, never from application settings.",
             metadata: json!({
                 "ui_control": "text",
                 "placeholder": "https://ai.sh-inc.ru/v1",
                 "stores_secret": false,
-                "key_env": "HERMES_OMNIROUTE_API_KEY"
+                "key_env": "MAKOSH_OMNIROUTE_API_KEY"
             }),
             is_editable: true,
         },
@@ -470,7 +470,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
 
 ### `backend/src/platform/settings/definitions/ai/runtime.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/definitions/ai/runtime.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/definitions/ai/runtime.rs`
 - Size bytes / Размер в байтах: `647`
 - Included characters / Включено символов: `647`
 - Truncated / Обрезано: `no`
@@ -501,7 +501,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
 
 ### `backend/src/platform/settings/definitions/frontend.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/definitions/frontend.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/definitions/frontend.rs`
 - Size bytes / Размер в байтах: `437`
 - Included characters / Включено символов: `437`
 - Truncated / Обрезано: `no`
@@ -526,7 +526,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
 
 ### `backend/src/platform/settings/definitions/frontend/appearance.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/definitions/frontend/appearance.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/definitions/frontend/appearance.rs`
 - Size bytes / Размер в байтах: `1728`
 - Included characters / Включено символов: `1728`
 - Truncated / Обрезано: `no`
@@ -581,7 +581,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
 
 ### `backend/src/platform/settings/definitions/frontend/bootstrap.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/definitions/frontend/bootstrap.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/definitions/frontend/bootstrap.rs`
 - Size bytes / Размер в байтах: `770`
 - Included characters / Включено символов: `770`
 - Truncated / Обрезано: `no`
@@ -603,7 +603,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
             "ui_control": "text",
             "placeholder": "http://127.0.0.1:8080",
             "bootstrap": true,
-            "env_var": "VITE_HERMES_API_BASE_URL"
+            "env_var": "VITE_MAKOSH_API_BASE_URL"
         }),
         is_editable: true,
     }]
@@ -612,7 +612,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
 
 ### `backend/src/platform/settings/definitions/frontend/layout.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/definitions/frontend/layout.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/definitions/frontend/layout.rs`
 - Size bytes / Размер в байтах: `2609`
 - Included characters / Включено символов: `2609`
 - Truncated / Обрезано: `no`
@@ -699,7 +699,7 @@ fn sidebar_setting() -> DeclaredApplicationSetting {
 
 ### `backend/src/platform/settings/definitions/frontend/state.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/definitions/frontend/state.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/definitions/frontend/state.rs`
 - Size bytes / Размер в байтах: `1741`
 - Included characters / Включено символов: `1741`
 - Truncated / Обрезано: `no`
@@ -757,7 +757,7 @@ fn ui_state_setting() -> DeclaredApplicationSetting {
 
 ### `backend/src/platform/settings/definitions/privacy.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/definitions/privacy.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/definitions/privacy.rs`
 - Size bytes / Размер в байтах: `4780`
 - Included characters / Включено символов: `4780`
 - Truncated / Обрезано: `no`
@@ -775,7 +775,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
             value_kind: SettingValueKind::Boolean,
             default_value: json!(false),
             label: "Zoom remote transcript downloads",
-            description: "Allow Hermes to fetch transcript-like text files directly from Zoom recording URLs during webhook processing and manual provider sync.",
+            description: "Allow Макошь to fetch transcript-like text files directly from Zoom recording URLs during webhook processing and manual provider sync.",
             metadata: json!({
                 "ui_control": "checkbox",
                 "stores_private_content": false,
@@ -790,7 +790,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
             value_kind: SettingValueKind::Boolean,
             default_value: json!(false),
             label: "Zoom remote recording downloads",
-            description: "Allow Hermes to fetch non-transcript Zoom recording files directly from Zoom recording URLs during manual provider sync and scheduled recording sync.",
+            description: "Allow Макошь to fetch non-transcript Zoom recording files directly from Zoom recording URLs during manual provider sync and scheduled recording sync.",
             metadata: json!({
                 "ui_control": "checkbox",
                 "stores_private_content": true,
@@ -822,7 +822,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
             value_kind: SettingValueKind::Integer,
             default_value: json!(0),
             label: "Zoom transcript retention (days)",
-            description: "Owner-visible retention policy for Zoom transcript evidence imported or observed by Hermes. Set to 0 to retain transcript evidence until explicit review or later manual cleanup.",
+            description: "Owner-visible retention policy for Zoom transcript evidence imported or observed by Макошь. Set to 0 to retain transcript evidence until explicit review or later manual cleanup.",
             metadata: json!({
                 "ui_control": "number",
                 "stores_private_content": true,
@@ -873,7 +873,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
 
 ### `backend/src/platform/settings/definitions/server.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/definitions/server.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/definitions/server.rs`
 - Size bytes / Размер в байтах: `1355`
 - Included characters / Включено символов: `1355`
 - Truncated / Обрезано: `no`
@@ -897,7 +897,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
                 "placeholder": "127.0.0.1:8080",
                 "restart_required": true,
                 "bootstrap": true,
-                "env_var": "HERMES_HTTP_ADDR"
+                "env_var": "MAKOSH_HTTP_ADDR"
             }),
             is_editable: true,
         },
@@ -919,7 +919,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
 
 ### `backend/src/platform/settings/definitions/tests.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/definitions/tests.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/definitions/tests.rs`
 - Size bytes / Размер в байтах: `7359`
 - Included characters / Включено символов: `7359`
 - Truncated / Обрезано: `no`
@@ -1119,7 +1119,7 @@ fn yandex_telemost_speaker_timeline_retention_setting_is_declared_as_editable_in
 
 ### `backend/src/platform/settings/definitions/ui.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/definitions/ui.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/definitions/ui.rs`
 - Size bytes / Размер в байтах: `1162`
 - Included characters / Включено символов: `1162`
 - Truncated / Обрезано: `no`
@@ -1163,7 +1163,7 @@ pub(super) fn declared_settings() -> Vec<DeclaredApplicationSetting> {
 
 ### `backend/src/platform/settings/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/errors.rs`
 - Size bytes / Размер в байтах: `1128`
 - Included characters / Включено символов: `1128`
 - Truncated / Обрезано: `no`
@@ -1215,7 +1215,7 @@ impl SettingsError {
 
 ### `backend/src/platform/settings/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/models.rs`
 - Size bytes / Размер в байтах: `4127`
 - Included characters / Включено символов: `4127`
 - Truncated / Обрезано: `no`
@@ -1359,7 +1359,7 @@ impl TryFrom<&str> for SettingValueKind {
 
 ### `backend/src/platform/settings/persistence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/persistence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/persistence.rs`
 - Size bytes / Размер в байтах: `6579`
 - Included characters / Включено символов: `6579`
 - Truncated / Обрезано: `no`
@@ -1579,7 +1579,7 @@ pub(crate) fn row_to_setting(row: PgRow) -> Result<ApplicationSetting, SettingsE
 
 ### `backend/src/platform/settings/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/store.rs`
 - Size bytes / Размер в байтах: `5899`
 - Included characters / Включено символов: `5899`
 - Truncated / Обрезано: `no`
@@ -1786,7 +1786,7 @@ impl ApplicationSettingsStore {
 
 ### `backend/src/platform/settings/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/settings/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/settings/validation.rs`
 - Size bytes / Размер в байтах: `3839`
 - Included characters / Включено символов: `3839`
 - Truncated / Обрезано: `no`
@@ -1915,7 +1915,7 @@ pub(crate) fn validate_non_empty(field: &'static str, value: &str) -> Result<(),
 
 ### `backend/src/platform/storage/communication_media.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/storage/communication_media.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/storage/communication_media.rs`
 - Size bytes / Размер в байтах: `13104`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2177,7 +2177,7 @@ pub fn scan_attachment(request: &SafetyScanRequest<'_>) -> Result<SafetyScanRepo
 
     Ok(SafetyScanReport {
         status,
-        engine: Some("hermes_heuristic_v1".to_owned()),
+        engine: Some("makosh_heuristic_v1".to_owned()),
         checked_at: Some(Utc::now()),
         summary: Some(scan_summary(status).to_owned()),
         metadata: json!({
@@ -2329,7 +2329,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/platform/storage/database.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/storage/database.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/storage/database.rs`
 - Size bytes / Размер в байтах: `4345`
 - Included characters / Включено символов: `4345`
 - Truncated / Обрезано: `no`

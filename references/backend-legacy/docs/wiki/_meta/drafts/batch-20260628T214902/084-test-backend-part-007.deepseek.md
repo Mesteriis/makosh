@@ -16,7 +16,7 @@
 Общий подход:
 - Тестовый контекст создаёт свежую базу данных через `live_graph_api_context` / `live_projection_context` и удаляет её при завершении (`cleanup()`).
 - Для изоляции данных используется `unique_suffix()` (наносекунды системного времени).
-- Взаимодействие с API выполняется через `axum::Router` с заголовком `x-hermes-secret` и заданным токеном.
+- Взаимодействие с API выполняется через `axum::Router` с заголовком `x-makosh-secret` и заданным токеном.
 
 ## Graph API Tests
 
@@ -91,7 +91,7 @@
 
 - `GET /healthz` всегда возвращает `200` с телом:
   ```json
-  {"status":"ok","service":"hermes-hub-backend"}
+  {"status":"ok","service":"makosh-backend"}
   ```
 - `GET /readyz` без сконфигурированной базы данных возвращает `503` и `"status": "degraded"`. Проверки `database` и `migrations` имеют статус `"not_configured"`.
 - С базой данных `readyz` возвращает `200`, статус `"ok"`, сообщения `"database is reachable"` и `"required database migrations are applied"`.

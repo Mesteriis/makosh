@@ -52,9 +52,9 @@
 
 `HostVaultConfig`:
 
-- `home: PathBuf` – корневая директория хранилища (по умолчанию `$HOME/.hermes/vault`).
+- `home: PathBuf` – корневая директория хранилища (по умолчанию `$HOME/.makosh/vault`).
 - `dev_mode: bool` – флаг режима разработки (запрещён в release-сборках).
-- `dev_key_path: PathBuf` – путь к dev-ключу (по умолчанию `$HOME/.hermes/dev/master.key`).
+- `dev_key_path: PathBuf` – путь к dev-ключу (по умолчанию `$HOME/.makosh/dev/master.key`).
 
 ### Состояния
 
@@ -71,7 +71,7 @@
 - `needs_biometric: bool` – требуется биометрическая разблокировка (инициализировано, не dev_mode).
 - `needs_recovery: bool` – не инициализировано.
 - `version: u16` – версия хранилища (константа `VAULT_VERSION = 1`).
-- `recoverable: bool` – существует ли файл восстановления `hermes-recovery.key`.
+- `recoverable: bool` – существует ли файл восстановления `makosh-recovery.key`.
 - `entropy_progress: u8` – процент накопленной энтропии (0–100).
 
 ### Энтропия
@@ -106,7 +106,7 @@
 
 ### Хранение мастер-ключа
 
-- `has_stored_master_key()`: в dev‑режиме проверяет наличие файла `dev_key_path`, иначе на macOS использует `keyring` (service = `"hermes-hub"`, user = `"host-vault-master-key"`). На других платформах release-сборка возвращает `UnsupportedPlatform`.
+- `has_stored_master_key()`: в dev‑режиме проверяет наличие файла `dev_key_path`, иначе на macOS использует `keyring` (service = `"makosh"`, user = `"host-vault-master-key"`). На других платформах release-сборка возвращает `UnsupportedPlatform`.
 - `store_master_key()` / `load_master_key()` – кодирование base64, запись/чтение через Keychain или безопасный файл.
 
 Безопасное файловое хранение:
@@ -122,9 +122,9 @@
 
 - `derive_master_key(os_random, entropy)`:
   1. `SHA512(os_random || entropy_json || timestamp_nanos)`.
-  2. `HKDF(SHA256, ikm = digest, info = "hermes-host-vault:master:v1")` → 32 байта.
+  2. `HKDF(SHA256, ikm = digest, info = "makosh-host-vault:master:v1")` → 32 байта.
 - `derive_domain_key(master_key, label)`:
-  1. `HKDF(SHA256, ikm = master_key, info = "hermes-host-vault:v1:" || label)` → 32 байта.
+  1. `HKDF(SHA256, ikm = master_key, info = "makosh-host-vault:v1:" || label)` → 32 байта.
 - `entry_aad(secret_ref, context)` – строка ассоциированных данных для AEAD:
   `"v={VAULT_VERSION};ref={secret_ref};kind={entry_kind};account_id={account_id};purpose={purpose};secret_kind={secret_kind}"`.
 - `recovery_phrase(master_key)` – 16 групп шестнадцатеричных байт через пробел.
@@ -142,7 +142,7 @@
 
 Целостность:
 
-- `write_vault_check` – шифрует строку `"hermes-host-vault"` доменным ключом `"integrity"` (XChaCha20Poly1305) и сохраняет.
+- `write_vault_check` – шифрует строку `"makosh-host-vault"` доменным ключом `"integrity"` (XChaCha20Poly1305) и сохраняет.
 - `read_vault_check` – расшифровывает и сверяет; при ошибке версий возвращает `UnsupportedVaultVersion`, при ошибке расшифровки – `Crypto`.
 
 ### Операции с секретами
@@ -173,7 +173,7 @@
 - `export_recovery()`:
   1. Генерирует фразу восстановления из текущего мастер-ключа.
   2. Вычисляет recovery-ключ как `derive_domain_key(key, b"recovery")`.
-  3. Шифрует мастер-ключ XChaCha20Poly1305 (nonce, ciphertext) и сохраняет в защищённый файл `hermes-recovery.key` (JSON с версией, nonce, ciphertext).
+  3. Шифрует мастер-ключ XChaCha20Poly1305 (nonce, ciphertext) и сохраняет в защищённый файл `makosh-recovery.key` (JSON с версией, nonce, ciphertext).
   4. Возвращает `RecoveryExportResponse { path, recovery_phrase }`.
 - `import_recovery(recovery_phrase)` – восстанавливает ключ из фразы, сохраняет, разблокирует, записывает vault check.
 
@@ -274,15 +274,15 @@
 - **`backend/src/vault/crypto.rs`**: функции `derive_master_key`, `derive_domain_key`, `entry_aad`, `recovery_phrase`, `master_key_from_recovery_phrase`, `decode_master_key`, `entropy_progress`, `validate_non_empty`; используемые алгоритмы (SHA512, HKDF-SHA256, base64).
 - **`backend/src/vault/errors.rs`**: полный `HostVaultError` enum, метод `public_message()`, функция `host_secret_store_failure`.
 - **`backend/src/vault/files.rs`**: функции безопасной работы с файлами (`write_secure_file`, `ensure_secure_dir`, `ensure_secure_file`, `guard_release_dev_mode`), права доступа `0o700`/`0o600`.
-- **`backend/src/vault/key_store.rs`**: методы `has_stored_master_key`, `store_master_key`, `load_master_key`, использование Keychain (`"hermes-hub"`/`"host-vault-master-key"`) или dev-файла; base64-кодирование.
+- **`backend/src/vault/key_store.rs`**: методы `has_stored_master_key`, `store_master_key`, `load_master_key`, использование Keychain (`"makosh"`/`"host-vault-master-key"`) или dev-файла; base64-кодирование.
 - **`backend/src/vault/lifecycle.rs`**: методы жизненного цикла (`new`, `status`, `collect_entropy`, `create`, `unlock`, `unlock_existing`, `lock`), внутренние `domain_key`, `current_master_key`, `set_unlocked`, `is_unlocked`; зависимость от энтропии, генерация OS‑random.
 - **`backend/src/vault/manifest.rs`**: методы `account_secret_manifest`, `upsert_account_secret_manifest_entry`, `upsert_manifest_entry`, `delete_manifest_entry`; структура SQL-запросов, таблица `account_secret_manifest`, store_kind `'host_vault'`.
 - **`backend/src/vault/mod.rs`**: структура `HostVault` с полями `home`, `dev_mode`, `dev_key_path`, `state`, `entropy`; публичный реэкспорт.
 - **`backend/src/vault/models.rs`**: все модели (`HostVaultConfig`, `VaultMode`, `VaultStatus`, `EntropyEvent`, `SecretEntryContext`, `RecoveryExportResponse`, `HostVaultManifestEntry`, `RecoveryFile`, `StoredVaultEntry`, `SessionKey`, `HostVaultState`; `Zeroize` на `SessionKey`).
-- **`backend/src/vault/paths.rs`**: функции `default_vault_home`, `default_dev_key_path` с путями `$HOME/.hermes/vault` и `$HOME/.hermes/dev/master.key`.
+- **`backend/src/vault/paths.rs`**: функции `default_vault_home`, `default_dev_key_path` с путями `$HOME/.makosh/vault` и `$HOME/.makosh/dev/master.key`.
 - **`backend/src/vault/recovery.rs`**: методы `export_recovery` (создание recovery-файла и фразы) и `import_recovery` (восстановление по фразе); использование XChaCha20Poly1305, доменного ключа `b"recovery"`.
 - **`backend/src/vault/secrets.rs`**: реализация `SecretResolver`; методы `store_secret`, `resolve_host_secret`, `read_secret`, `delete_secret`; шифрование XChaCha20Poly1305 с ключом `b"encryption"` и AAD; таблица `vault_entries`.
-- **`backend/src/vault/storage.rs`**: инициализация SQLite (`initialize_database`) с таблицами `vault_entries`, `account_secret_manifest`, `vault_check`; проверка целостности (`write_vault_check`, `read_vault_check`) с доменным ключом `b"integrity"`; пути `vault.db`, `hermes-recovery.key`.
+- **`backend/src/vault/storage.rs`**: инициализация SQLite (`initialize_database`) с таблицами `vault_entries`, `account_secret_manifest`, `vault_check`; проверка целостности (`write_vault_check`, `read_vault_check`) с доменным ключом `b"integrity"`; пути `vault.db`, `makosh-recovery.key`.
 - **`backend/src/workflows/consistency_review.rs`**: `ContradictionReviewService` и `review_manual`; функции синхронизации `sync_contradiction_review_item`, `ensure_contradiction_review_item_in_transaction`, `sync_contradiction_review_state_in_transaction`; маппинг статусов `Suggested`→`New`, `UserConfirmed`→`Approved`, `UserRejected`→`Dismissed`; ошибки `ContradictionReviewWorkflowError`, `ContradictionReviewServiceError`.
 - **`backend/src/workflows/email_fixture_pipeline.rs`**: функции `import_fixture_email_messages_for_dev`, `project_fixture_email_messages`; модели `EmailFixturePipelineRequest`, `EmailFixtureImportPipelineReport`, `EmailFixtureProjectionPipelineReport`; конфигурации провайдеров (Gmail, iCloud, IMAP); ошибка `EmailFixturePipelineError`.
 - **`backend/src/workflows/email_intelligence/mod.rs`**: публичный реэкспорт `EmailCategory`, `EmailIntelligenceError`, `EmailAnalysis`, `EmailKnowledgeCandidate`, `EmailSummaryContract`, `EmailIntelligenceService`.

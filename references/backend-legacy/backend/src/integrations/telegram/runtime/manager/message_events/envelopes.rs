@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::{EventEnvelopeError, NewEventEnvelope};
+use makosh_events_api::{EventEnvelopeError, NewEventEnvelope};
 use serde_json::{Value, json};
 use sqlx::PgPool;
 
@@ -7,7 +7,7 @@ use crate::integrations::telegram::client::models::messages::TelegramMessage;
 use crate::integrations::telegram::client::models::messages::TelegramMessageTombstone;
 use crate::platform::events::bus::InMemoryEventBus;
 use crate::platform::events::bus::telegram_event_types;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 pub(super) async fn append_and_broadcast(
     pool: Option<PgPool>,

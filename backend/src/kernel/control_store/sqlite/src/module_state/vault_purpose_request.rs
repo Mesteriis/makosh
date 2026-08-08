@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use hermes_kernel_control_store::{ModuleRegistration, ModuleVaultPurposeRequestV1};
+use makosh_kernel_control_store::{ModuleRegistration, ModuleVaultPurposeRequestV1};
 use rusqlite::{Connection, params};
 
 use crate::{SqliteControlStore, StoreError, valid_capability_ids, valid_identity_token};
@@ -57,7 +57,7 @@ pub(crate) fn insert_vault_purpose_requests(
 ) -> Result<(), StoreError> {
     for request in requests {
         connection.execute(
-            "INSERT INTO hermes_kernel_module_vault_purpose_request
+            "INSERT INTO makosh_kernel_module_vault_purpose_request
              (registration_id, capability_id, purpose_id, requested_lease_ttl_seconds, secret_class, action, target_scope, key_schema_revision)
              VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
             params![request.registration_id(), request.capability_id(), request.purpose_id(),
@@ -75,7 +75,7 @@ fn read_vault_purpose_requests(
 ) -> Result<Vec<ModuleVaultPurposeRequestV1>, StoreError> {
     let mut statement = connection.prepare(
         "SELECT purpose_id, requested_lease_ttl_seconds, secret_class, action, target_scope, key_schema_revision
-         FROM hermes_kernel_module_vault_purpose_request
+         FROM makosh_kernel_module_vault_purpose_request
          WHERE registration_id = ?1 AND capability_id = ?2
          ORDER BY purpose_id, secret_class, action",
     )?;
@@ -96,7 +96,7 @@ fn read_vault_purpose_requests(
             capability_id,
             purpose_id,
             u16::try_from(ttl).map_err(|_| StoreError::InvalidModuleVaultPurposeRequest)?,
-            hermes_kernel_control_store::ModuleVaultPurposePolicyV1 {
+            makosh_kernel_control_store::ModuleVaultPurposePolicyV1 {
                 secret_class: u8::try_from(secret_class)
                     .map_err(|_| StoreError::InvalidModuleVaultPurposeRequest)?,
                 action: u8::try_from(action)
@@ -129,7 +129,7 @@ fn valid_purpose_shape(request: &ModuleVaultPurposeRequestV1) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use hermes_kernel_control_store::ModuleVaultPurposeRequestV1;
+    use makosh_kernel_control_store::ModuleVaultPurposeRequestV1;
 
     use super::valid_purpose_shape;
 
@@ -140,7 +140,7 @@ mod tests {
             "search",
             "communications.search.index",
             60,
-            hermes_kernel_control_store::ModuleVaultPurposePolicyV1 {
+            makosh_kernel_control_store::ModuleVaultPurposePolicyV1 {
                 secret_class: 6,
                 action: 7,
                 target_scope: 2,
@@ -153,7 +153,7 @@ mod tests {
             "search",
             "communications.search.index",
             60,
-            hermes_kernel_control_store::ModuleVaultPurposePolicyV1 {
+            makosh_kernel_control_store::ModuleVaultPurposePolicyV1 {
                 secret_class: 6,
                 action: 7,
                 target_scope: 1,
@@ -166,7 +166,7 @@ mod tests {
             "search",
             "communications.search.index",
             60,
-            hermes_kernel_control_store::ModuleVaultPurposePolicyV1 {
+            makosh_kernel_control_store::ModuleVaultPurposePolicyV1 {
                 secret_class: 6,
                 action: 7,
                 target_scope: 2,

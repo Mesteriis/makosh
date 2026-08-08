@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_communications_api::commands::NewCommunicationProviderCommand;
+use makosh_communications_api::commands::NewCommunicationProviderCommand;
 use serde_json::{Value, json};
 use sqlx::postgres::PgPool;
 use thiserror::Error;
@@ -31,16 +31,16 @@ use super::saved_searches::{
 };
 use super::storage::errors::{AttachmentSafetyScanError, CommunicationStorageError};
 use crate::domains::communications::evidence::merge_metadata;
-use hermes_communications_api::accounts::ProviderAccount;
-use hermes_communications_api::email::OutgoingEmail;
-use hermes_communications_postgres::provider_commands::{
+use makosh_communications_api::accounts::ProviderAccount;
+use makosh_communications_api::email::OutgoingEmail;
+use makosh_communications_postgres::provider_commands::{
     CommunicationProviderCommandError, CommunicationProviderCommandStore,
 };
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::store::ObservationStore;
 
-const LOCAL_USER_ACTOR_ID: &str = "hermes-local-user";
+const LOCAL_USER_ACTOR_ID: &str = "makosh-local-user";
 
 #[derive(Clone)]
 pub struct CommunicationCommandService {

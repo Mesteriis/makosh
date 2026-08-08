@@ -1,5 +1,5 @@
 use super::common::*;
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     GetVaultRuntimeStatusRequestV1, ManagedVaultRuntimeControlRequestV1,
     ManagedVaultRuntimeControlResponseV1, VaultRuntimeStateV1, VaultRuntimeStatusV1,
     managed_vault_runtime_control_request_v1::Operation,
@@ -86,7 +86,7 @@ fn status_child_fixture() -> (
     staged_native_artifact::StagedNativeArtifact,
     ManagedRuntimeExpectation,
 ) {
-    let root = unique_target_root("hermes-managed-vault-status");
+    let root = unique_target_root("makosh-managed-vault-status");
     let descriptor = ModuleDescriptorV1 {
         descriptor_major: 1,
         descriptor_revision: 1,
@@ -111,7 +111,7 @@ fn status_child_fixture() -> (
     std::fs::create_dir_all(&root).expect("create status fixture");
     let describe = ManagedRuntimeControlRequestV1 {
         operation: Some(
-            hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
+            makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
                 DescribeManagedRuntimeRequestV1 {
                     descriptor_bytes,
                     settings_schema_bytes: Vec::new(),

@@ -24,8 +24,8 @@ const emit = defineEmits<{
 }>()
 
 const classes = computed(() => [
-	'hermes-attachment-chip',
-	`hermes-attachment-chip--${props.tone}`,
+	'makosh-attachment-chip',
+	`makosh-attachment-chip--${props.tone}`,
 	props.class
 ])
 </script>
@@ -33,9 +33,9 @@ const classes = computed(() => [
 <template>
 	<span :class="classes">
 		<Icon :icon="icon" size="1rem" />
-		<span class="hermes-attachment-chip__copy">
-			<span class="hermes-attachment-chip__name">{{ name }}</span>
-			<span v-if="meta" class="hermes-attachment-chip__meta">{{ meta }}</span>
+		<span class="makosh-attachment-chip__copy">
+			<span class="makosh-attachment-chip__name">{{ name }}</span>
+			<span v-if="meta" class="makosh-attachment-chip__meta">{{ meta }}</span>
 		</span>
 		<IconButton
 			v-if="removable"

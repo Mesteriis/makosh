@@ -1,7 +1,7 @@
 //! Admits one verified signed-release module artifact as a durable managed launch binding.
 
-use hermes_kernel_control_store::{BundledManagedLaunchBinding, ModuleRegistration};
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store::{BundledManagedLaunchBinding, ModuleRegistration};
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use crate::distribution::bundle_verifier::VerifiedDistributionBundle;
 use crate::modules::settings::schema as settings_schema;

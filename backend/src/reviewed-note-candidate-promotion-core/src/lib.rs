@@ -2,10 +2,10 @@
 
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-reviewed-note-candidate-promotion-core";
+pub const PACKAGE: &str = "makosh-reviewed-note-candidate-promotion-core";
 pub const REVIEWED_NOTE_CANDIDATE_PROMOTION_OWNER_V1: &str = "reviewed_note_candidate_promotion";
 pub const REVIEWED_NOTE_CANDIDATE_PROMOTION_MODULE_ID_V1: &str =
-    "hermes-reviewed-note-candidate-promotion-runtime";
+    "makosh-reviewed-note-candidate-promotion-runtime";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ReviewedNoteCandidatePromotionIdentityErrorV1 {
@@ -35,7 +35,7 @@ pub fn derive_reviewed_note_candidate_command_id_v1(
         return Err(ReviewedNoteCandidatePromotionIdentityErrorV1::InvalidDecisionRevision);
     }
     Ok(digest(
-        b"hermes.reviewed-note-candidate-promotion.command.v1",
+        b"makosh.reviewed-note-candidate-promotion.command.v1",
         &[
             approval_message_id.as_slice(),
             review_id.as_slice(),
@@ -60,7 +60,7 @@ pub fn derive_reviewed_note_candidate_result_id_v1(
         return Err(ReviewedNoteCandidatePromotionIdentityErrorV1::InvalidReviewId);
     }
     Ok(digest(
-        b"hermes.reviewed-note-candidate-promotion.result.v1",
+        b"makosh.reviewed-note-candidate-promotion.result.v1",
         &[
             knowledge_result_message_id.as_slice(),
             command_id.as_slice(),

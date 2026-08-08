@@ -11,8 +11,8 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-button-group',
-	`hermes-button-group--${props.orientation}`,
+	'makosh-button-group',
+	`makosh-button-group--${props.orientation}`,
 	props.class
 ])
 </script>

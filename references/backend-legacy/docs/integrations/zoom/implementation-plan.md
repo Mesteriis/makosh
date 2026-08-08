@@ -84,7 +84,7 @@ Deliverables:
   refreshing expiring HostVault token bundles;
 - scheduled token maintenance daemon; implemented through backend bootstrap,
   Signal Hub runtime gating, HostVault unlock gating and
-  `HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`;
+  `MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED`;
 - token rotation policy; implemented through explicit refresh thresholds,
   proactive maintenance threshold metadata, expiry handling and
   `zoom_token_rotation_required` failure/expiry blocker exposure in runtime
@@ -103,7 +103,7 @@ Deliverables:
 
 - webhook endpoint under integration runtime boundary; implemented for
   protected account-scoped runtime bridge;
-- public/edge receiver; implemented as `hermes-zoom-edge-proxy`, which
+- public/edge receiver; implemented as `makosh-zoom-edge-proxy`, which
   forwards raw public Zoom webhook bodies and `x-zm-*` headers to the
   protected runtime bridge;
 - signature verification before bridge ingestion; implemented for normal

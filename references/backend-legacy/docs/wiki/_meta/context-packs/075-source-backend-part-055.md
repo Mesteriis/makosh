@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/workflows/graph_projection/persons.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/graph_projection/persons.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/graph_projection/persons.rs`
 - Size bytes / Размер в байтах: `2338`
 - Included characters / Включено символов: `2338`
 - Truncated / Обрезано: `no`
@@ -138,7 +138,7 @@ impl GraphProjectionService {
 
 ### `backend/src/workflows/graph_projection/projects.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/graph_projection/projects.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/graph_projection/projects.rs`
 - Size bytes / Размер в байтах: `6787`
 - Included characters / Включено символов: `6787`
 - Truncated / Обрезано: `no`
@@ -343,7 +343,7 @@ impl GraphProjectionService {
 
 ### `backend/src/workflows/graph_projection/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/graph_projection/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/graph_projection/rows.rs`
 - Size bytes / Размер в байтах: `1932`
 - Included characters / Включено символов: `1932`
 - Truncated / Обрезано: `no`
@@ -409,7 +409,7 @@ fn recipients_from_value(value: Value) -> Result<Vec<String>, GraphProjectionErr
 
 ### `backend/src/workflows/graph_projection/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/graph_projection/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/graph_projection/service.rs`
 - Size bytes / Размер в байтах: `1620`
 - Included characters / Включено символов: `1620`
 - Truncated / Обрезано: `no`
@@ -468,7 +468,7 @@ impl GraphProjectionService {
 
 ### `backend/src/workflows/mail_background_sync.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync.rs`
 - Size bytes / Размер в байтах: `808`
 - Included characters / Включено символов: `808`
 - Truncated / Обрезано: `no`
@@ -504,7 +504,7 @@ pub use self::store::MailSyncStore;
 
 ### `backend/src/workflows/mail_background_sync/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/errors.rs`
 - Size bytes / Размер в байтах: `1620`
 - Included characters / Включено символов: `1620`
 - Truncated / Обрезано: `no`
@@ -573,7 +573,7 @@ pub(super) enum ProviderSyncError {
 
 ### `backend/src/workflows/mail_background_sync/events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/events.rs`
 - Size bytes / Размер в байтах: `2810`
 - Included characters / Включено символов: `2810`
 - Truncated / Обрезано: `no`
@@ -670,7 +670,7 @@ fn system_time_nanos() -> u128 {
 
 ### `backend/src/workflows/mail_background_sync/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/evidence.rs`
 - Size bytes / Размер в байтах: `2683`
 - Included characters / Включено символов: `2683`
 - Truncated / Обрезано: `no`
@@ -754,7 +754,7 @@ pub(super) async fn capture_mail_sync_run_observation(
 
 ### `backend/src/workflows/mail_background_sync/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/models.rs`
 - Size bytes / Размер в байтах: `587`
 - Included characters / Включено символов: `587`
 - Truncated / Обрезано: `no`
@@ -781,7 +781,7 @@ pub(in crate::workflows::mail_background_sync) use progress::{
 
 ### `backend/src/workflows/mail_background_sync/models/failures.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/models/failures.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/models/failures.rs`
 - Size bytes / Размер в байтах: `4018`
 - Included characters / Включено символов: `4018`
 - Truncated / Обрезано: `no`
@@ -884,7 +884,7 @@ impl From<ProviderSyncError> for SanitizedSyncFailure {
 
 ### `backend/src/workflows/mail_background_sync/models/finish.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/models/finish.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/models/finish.rs`
 - Size bytes / Размер в байтах: `2352`
 - Included characters / Включено символов: `2352`
 - Truncated / Обрезано: `no`
@@ -945,7 +945,7 @@ impl FinishRun {
 
 ### `backend/src/workflows/mail_background_sync/models/progress.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/models/progress.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/models/progress.rs`
 - Size bytes / Размер в байтах: `2371`
 - Included characters / Включено символов: `2371`
 - Truncated / Обрезано: `no`
@@ -1036,7 +1036,7 @@ impl ProgressMode {
 
 ### `backend/src/workflows/mail_background_sync/models/runs.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/models/runs.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/models/runs.rs`
 - Size bytes / Размер в байтах: `3421`
 - Included characters / Включено символов: `3421`
 - Truncated / Обрезано: `no`
@@ -1145,7 +1145,7 @@ fn checkpoint_is_present(checkpoint: Option<&Value>) -> bool {
 
 ### `backend/src/workflows/mail_background_sync/models/settings.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/models/settings.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/models/settings.rs`
 - Size bytes / Размер в байтах: `650`
 - Included characters / Включено символов: `650`
 - Truncated / Обрезано: `no`
@@ -1180,7 +1180,7 @@ pub struct MailSyncDueAccount {
 
 ### `backend/src/workflows/mail_background_sync/models/status.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/models/status.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/models/status.rs`
 - Size bytes / Размер в байтах: `769`
 - Included characters / Включено символов: `769`
 - Truncated / Обрезано: `no`
@@ -1213,7 +1213,7 @@ pub struct MailSyncStatus {
 
 ### `backend/src/workflows/mail_background_sync/provider.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/provider.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/provider.rs`
 - Size bytes / Размер в байтах: `1176`
 - Included characters / Включено символов: `1176`
 - Truncated / Обрезано: `no`
@@ -1266,7 +1266,7 @@ impl MailBackgroundSyncService {
 
 ### `backend/src/workflows/mail_background_sync/provider/gmail.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/provider/gmail.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/provider/gmail.rs`
 - Size bytes / Размер в байтах: `2396`
 - Included characters / Включено символов: `2396`
 - Truncated / Обрезано: `no`
@@ -1347,7 +1347,7 @@ impl MailBackgroundSyncService {
 
 ### `backend/src/workflows/mail_background_sync/provider/gmail/history.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/provider/gmail/history.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/provider/gmail/history.rs`
 - Size bytes / Размер в байтах: `2813`
 - Included characters / Включено символов: `2813`
 - Truncated / Обрезано: `no`
@@ -1431,7 +1431,7 @@ impl MailBackgroundSyncService {
 
 ### `backend/src/workflows/mail_background_sync/provider/gmail/message_list.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/provider/gmail/message_list.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/provider/gmail/message_list.rs`
 - Size bytes / Размер в байтах: `2268`
 - Included characters / Включено символов: `2268`
 - Truncated / Обрезано: `no`
@@ -1502,7 +1502,7 @@ impl MailBackgroundSyncService {
 
 ### `backend/src/workflows/mail_background_sync/provider/imap.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/provider/imap.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/provider/imap.rs`
 - Size bytes / Размер в байтах: `3874`
 - Included characters / Включено символов: `3874`
 - Truncated / Обрезано: `no`
@@ -1611,7 +1611,7 @@ impl MailBackgroundSyncService {
 
 ### `backend/src/workflows/mail_background_sync/provider/projection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/provider/projection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/provider/projection.rs`
 - Size bytes / Размер в байтах: `2790`
 - Included characters / Включено символов: `2790`
 - Truncated / Обрезано: `no`
@@ -1694,7 +1694,7 @@ impl MailBackgroundSyncService {
 
 ### `backend/src/workflows/mail_background_sync/provider/summary.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/provider/summary.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/provider/summary.rs`
 - Size bytes / Размер в байтах: `1308`
 - Included characters / Включено символов: `1308`
 - Truncated / Обрезано: `no`
@@ -1731,7 +1731,7 @@ impl ProviderSyncSummary {
 
 ### `backend/src/workflows/mail_background_sync/provider/types.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/provider/types.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/provider/types.rs`
 - Size bytes / Размер в байтах: `1243`
 - Included characters / Включено символов: `1243`
 - Truncated / Обрезано: `no`
@@ -1766,7 +1766,7 @@ pub(in crate::workflows::mail_background_sync::provider) struct ImapAccountConfi
 
 ### `backend/src/workflows/mail_background_sync/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/rows.rs`
 - Size bytes / Размер в байтах: `3323`
 - Included characters / Включено символов: `3323`
 - Truncated / Обрезано: `no`
@@ -1848,7 +1848,7 @@ pub(super) fn row_to_run(row: PgRow) -> Result<MailSyncRun, MailSyncError> {
 
 ### `backend/src/workflows/mail_background_sync/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/mail_background_sync/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/mail_background_sync/service.rs`
 - Size bytes / Размер в байтах: `8847`
 - Included characters / Включено символов: `8847`
 - Truncated / Обрезано: `no`

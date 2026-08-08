@@ -1,18 +1,18 @@
 import {
 	ClientSettingsApplyStateV1,
 	type ClientModuleSettingsTargetBootstrapV1,
-} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	MailAccountReadinessV1,
 	MailCredentialBindingStateV1,
 	MailCredentialPurposeV1,
 	type MailAccountStatusV1,
 	type MailCredentialBindingReceiptV1,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
 import type {
 	GmailOAuthStartedV1,
 	MailAcceptedV1,
-} from '../../../gen/hermes/mail/v1/client_pb'
+} from '../../../gen/makosh/mail/v1/client_pb'
 import {
 	createLegacyProviderRecoveryHostV1,
 	legacyProviderRecoveryOperationKeyFromStepV1,

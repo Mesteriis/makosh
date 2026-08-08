@@ -3,16 +3,16 @@
 use std::os::unix::net::UnixStream;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTargetV1, ManagedBlobSessionRequestV1,
     request_managed_blob_session_v2,
 };
-use hermes_communications_ingress::{
+use makosh_communications_ingress::{
     BodyAdmissionFailureV1, BodyBlobReceiptV1, COMMUNICATIONS_BLOB_CUSTODY_TARGET_CAPABILITY_ID,
     COMMUNICATIONS_BLOB_CUSTODY_TARGET_MODULE_ID, COMMUNICATIONS_BLOB_CUSTODY_TARGET_OWNER_ID,
 };
-use hermes_runtime_protocol::v1::BlobDataOperationV1;
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::v1::BlobDataOperationV1;
+use makosh_runtime_protocol::{
     managed_control::{
         ManagedControlChannelV2, ManagedControlRequestDispatcherV2, ManagedControlTransportErrorV2,
     },
@@ -27,15 +27,15 @@ use hermes_runtime_protocol::{
         validate_module_client_request_v1, validate_module_client_response_v1,
     },
 };
-use hermes_telegram_automation_persistence::TelegramAutomationPersistence;
-use hermes_telegram_calls_core::{
+use makosh_telegram_automation_persistence::TelegramAutomationPersistence;
+use makosh_telegram_calls_core::{
     TelegramCallDirection, TelegramCallDiscardReason, TelegramCallFailureCategory,
     TelegramCallMediaState, TelegramCallMediaUpdate, TelegramProviderCallState,
     TelegramProviderCallUpdate,
 };
-use hermes_telegram_calls_persistence::{TelegramCallsPersistence, TelegramCallsPersistenceError};
-use hermes_telegram_persistence::{TelegramDurablePersistence, TelegramDurablePersistenceError};
-use hermes_telegram_tdlib::{
+use makosh_telegram_calls_persistence::{TelegramCallsPersistence, TelegramCallsPersistenceError};
+use makosh_telegram_persistence::{TelegramDurablePersistence, TelegramDurablePersistenceError};
+use makosh_telegram_tdlib::{
     TdJsonTransport, TdlibAuthorizationEvent, TdlibAuthorizationUpdate, TdlibCallDirection,
     TdlibCallDiscardReason, TdlibCallFailureCategory, TdlibCallObservation, TdlibCallState,
     TdlibError,
@@ -90,7 +90,7 @@ pub enum TelegramDurableProcessError {
 pub struct TelegramProcessLoop {
     composition: TelegramRuntimeComposition,
     provider_cursor: Option<String>,
-    authorization_status: Option<hermes_telegram_api::TelegramAuthorizationStatus>,
+    authorization_status: Option<makosh_telegram_api::TelegramAuthorizationStatus>,
     authorization_status_revision: u64,
     published_authorization_status_revision: u64,
     durable_restore_required: bool,
@@ -121,13 +121,13 @@ impl TelegramProcessLoop {
     #[must_use]
     pub fn authorization_status(
         &self,
-    ) -> Option<&hermes_telegram_api::TelegramAuthorizationStatus> {
+    ) -> Option<&makosh_telegram_api::TelegramAuthorizationStatus> {
         self.authorization_status.as_ref()
     }
 
     fn update_authorization_status(
         &mut self,
-        status: hermes_telegram_api::TelegramAuthorizationStatus,
+        status: makosh_telegram_api::TelegramAuthorizationStatus,
     ) {
         if self.authorization_status.as_ref() == Some(&status) {
             return;
@@ -138,7 +138,7 @@ impl TelegramProcessLoop {
 
     fn pending_authorization_status_changed(
         &self,
-    ) -> Option<(hermes_telegram_api::TelegramAuthorizationStatus, u64)> {
+    ) -> Option<(makosh_telegram_api::TelegramAuthorizationStatus, u64)> {
         if self.authorization_status_revision <= self.published_authorization_status_revision {
             return None;
         }
@@ -181,7 +181,7 @@ impl TelegramProcessLoop {
         &mut self,
         durable: &TelegramDurablePersistence,
         handle: &tokio::runtime::Handle,
-        authorization_parameters: hermes_telegram_tdlib::TdlibAuthorizationParameters,
+        authorization_parameters: makosh_telegram_tdlib::TdlibAuthorizationParameters,
     ) -> Result<(), TelegramClientTransportError> {
         let pending = self
             .composition
@@ -426,7 +426,7 @@ impl TelegramProcessLoop {
     async fn drain_call_media_events(
         &mut self,
         calls: &TelegramCallsPersistence,
-        call: &hermes_telegram_calls_core::TelegramCallSession,
+        call: &makosh_telegram_calls_core::TelegramCallSession,
         observed_at_unix_seconds: u64,
         limit: usize,
     ) -> Result<(), TelegramDurableProcessError> {
@@ -764,7 +764,7 @@ fn admit_telegram_plaintext(
     control_channel: &mut ManagedControlChannelV2<UnixStream>,
     plaintext: &[u8],
 ) -> Result<BodyBlobReceiptV1, BodyAdmissionFailureV1> {
-    if plaintext.is_empty() || plaintext.len() > hermes_telegram_api::MAX_TEXT_BYTES {
+    if plaintext.is_empty() || plaintext.len() > makosh_telegram_api::MAX_TEXT_BYTES {
         return Err(BodyAdmissionFailureV1::SizeLimitExceeded);
     }
     let mut reference_id = [0_u8; 16];
@@ -828,7 +828,7 @@ async fn persist_call_observation(
     logical_human_owner_id: &str,
     runtime_instance_id: &str,
     observed_at_unix_seconds: u64,
-) -> Result<hermes_telegram_calls_core::TelegramCallSession, TelegramDurableProcessError> {
+) -> Result<makosh_telegram_calls_core::TelegramCallSession, TelegramDurableProcessError> {
     let update = call_update(observation, runtime_generation, observed_at_unix_seconds);
     let suggested_call_session_id = if update.direction == TelegramCallDirection::Outgoing {
         calls
@@ -899,19 +899,19 @@ fn call_update(
 }
 
 fn call_media_state(
-    state: hermes_telegram_call_media_contract::TelegramCallMediaStateV1,
+    state: makosh_telegram_call_media_contract::TelegramCallMediaStateV1,
 ) -> TelegramCallMediaState {
     match state {
-        hermes_telegram_call_media_contract::TelegramCallMediaStateV1::Connecting => {
+        makosh_telegram_call_media_contract::TelegramCallMediaStateV1::Connecting => {
             TelegramCallMediaState::Connecting
         }
-        hermes_telegram_call_media_contract::TelegramCallMediaStateV1::Established => {
+        makosh_telegram_call_media_contract::TelegramCallMediaStateV1::Established => {
             TelegramCallMediaState::Active
         }
-        hermes_telegram_call_media_contract::TelegramCallMediaStateV1::Reconnecting => {
+        makosh_telegram_call_media_contract::TelegramCallMediaStateV1::Reconnecting => {
             TelegramCallMediaState::Reconnecting
         }
-        hermes_telegram_call_media_contract::TelegramCallMediaStateV1::Failed => {
+        makosh_telegram_call_media_contract::TelegramCallMediaStateV1::Failed => {
             TelegramCallMediaState::Failed
         }
     }
@@ -1058,16 +1058,16 @@ fn handle_client_delivery(
         .map_err(|_| "Telegram runtime reconfiguration failed".to_owned())
 }
 
-fn authorize_media_for_request<T: hermes_telegram_tdlib::TdlibTransport>(
+fn authorize_media_for_request<T: makosh_telegram_tdlib::TdlibTransport>(
     channel: &mut ManagedControlChannelV2<UnixStream>,
     runtime: &mut crate::TelegramRuntime<T>,
-    request: &hermes_runtime_protocol::v1::ModuleClientRequestV1,
+    request: &makosh_runtime_protocol::v1::ModuleClientRequestV1,
 ) -> Result<(), String> {
-    let Ok(command) = hermes_telegram_api::client_wire::decode_command(&request.request_payload)
+    let Ok(command) = makosh_telegram_api::client_wire::decode_command(&request.request_payload)
     else {
         return Ok(());
     };
-    let hermes_telegram_api::TelegramProviderCommand::SendMedia(media) = command else {
+    let makosh_telegram_api::TelegramProviderCommand::SendMedia(media) = command else {
         return Ok(());
     };
     let mut dispatcher = TelegramBusyControlDispatcher;
@@ -1168,9 +1168,9 @@ fn write_control_error(
 
 fn authorization_status(
     event: &TdlibAuthorizationEvent,
-) -> hermes_telegram_api::TelegramAuthorizationStatus {
+) -> makosh_telegram_api::TelegramAuthorizationStatus {
     match event {
-        TdlibAuthorizationEvent::QrLink(link) => hermes_telegram_api::TelegramAuthorizationStatus {
+        TdlibAuthorizationEvent::QrLink(link) => makosh_telegram_api::TelegramAuthorizationStatus {
             state: "waiting_qr_scan".to_owned(),
             qr_link: Some(link.clone()),
             password_hint: None,
@@ -1189,7 +1189,7 @@ fn authorization_status(
                 TdlibAuthorizationUpdate::Error { .. } => ("error", None),
                 TdlibAuthorizationUpdate::Other(_) => ("other", None),
             };
-            hermes_telegram_api::TelegramAuthorizationStatus {
+            makosh_telegram_api::TelegramAuthorizationStatus {
                 state: state_name.to_owned(),
                 qr_link: None,
                 password_hint,
@@ -1203,15 +1203,15 @@ mod control_dispatch_tests {
     use std::os::unix::net::UnixStream;
     use std::thread;
 
-    use hermes_runtime_protocol::managed_control::ManagedControlChannelV2;
-    use hermes_runtime_protocol::v1::{
+    use makosh_runtime_protocol::managed_control::ManagedControlChannelV2;
+    use makosh_runtime_protocol::v1::{
         ContractReferenceV1, ManagedRuntimeClientDeliveryRequestV1, ManagedRuntimeControlAckV1,
         ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
         ManagedRuntimeReadyRequestV1, ModuleClientRequestV1,
         managed_runtime_control_frame_v2::Frame, managed_runtime_control_request_v1::Operation,
         managed_runtime_control_response_v1::Result as ControlResult,
     };
-    use hermes_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
+    use makosh_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
 
     use super::TelegramBusyControlDispatcher;
 

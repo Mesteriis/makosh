@@ -1,14 +1,14 @@
 [package]
-name = "hermes-development-assembly"
+name = "makosh-development-assembly"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
 [[bin]]
-name = "hermes-development-assembly"
+name = "makosh-development-assembly"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "development"
 owner = "development"
 surface = "assembly"
@@ -18,7 +18,7 @@ components = []
 clap = { version = "=4.6.2", default-features = false, features = ["derive", "error-context", "help", "std", "usage"] }
 directories = "=6.0.0"
 getrandom = "=0.4.3"
-hermes-gateway-protocol = { path = "../../src/api/gateway/contracts" }
+makosh-gateway-protocol = { path = "../../src/api/gateway/contracts" }
 nats-jwt = "=0.3.0"
 p256 = { version = "=0.14.0", default-features = false, features = ["ecdsa"] }
 sha2 = "=0.11.0"

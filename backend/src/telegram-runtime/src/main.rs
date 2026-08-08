@@ -3,7 +3,7 @@
 use std::ffi::{OsStr, OsString};
 use std::path::{Path, PathBuf};
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedIntegrationRuntimeConfigurationV1,
     validation::{
         descriptor::{
@@ -13,9 +13,9 @@ use hermes_runtime_protocol::{
         managed_integration_runtime::validate_managed_integration_runtime_configuration,
     },
 };
-use hermes_telegram_call_media_tgcalls::TgCallsMediaAdapter;
-use hermes_telegram_runtime::{bootstrap, process, settings};
-use hermes_telegram_tdlib::TdJsonLibrary;
+use makosh_telegram_call_media_tgcalls::TgCallsMediaAdapter;
+use makosh_telegram_runtime::{bootstrap, process, settings};
+use makosh_telegram_tdlib::TdJsonLibrary;
 use prost::Message;
 
 mod runtime_bindings;
@@ -91,13 +91,13 @@ where
             configuration.event_credential_revision,
         ))
         .map_err(|error| {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_telegram_runtime_admission_error={error:?}");
             }
             "Telegram runtime admission was rejected".to_owned()
         })?;
     process::serve_admitted_provider_loop(admitted, &runtime).inspect_err(|error| {
-        if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+        if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
             eprintln!(
                 "developer_telegram_provider_loop_error={}",
                 provider_loop_error_stage(error)

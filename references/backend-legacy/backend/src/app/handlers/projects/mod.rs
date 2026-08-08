@@ -12,10 +12,10 @@ use crate::domains::projects::link_reviews::models::{
 use crate::domains::projects::link_reviews::service::ProjectLinkReviewService;
 use crate::platform::graph::GraphNodeKind;
 use crate::platform::graph::node_id;
-use hermes_projects_api::{
+use makosh_projects_api::{
     ProjectCandidateReadPort, ProjectDetail, ProjectListResponse, ProjectReadPort,
 };
-use hermes_projects_postgres::ProjectPostgresReadQuery;
+use makosh_projects_postgres::ProjectPostgresReadQuery;
 
 use crate::app::api_support::{
     query_parsing::projects::*, review_commands::*, review_lists::*, stores::domain_stores::*,
@@ -141,7 +141,7 @@ pub(crate) async fn put_project_link_review(
     Path(project_id): Path<String>,
     Json(request): Json<ProjectLinkReviewApiRequest>,
 ) -> Result<Json<ProjectLinkReviewApiResponse>, ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let command = request.into_command(project_id, actor_id)?;
 
     api_audit_log(&state)?
@@ -162,12 +162,12 @@ pub(crate) async fn put_project_link_review(
     let result = ProjectLinkReviewService::new(pool.clone())
         .review_manual(&command)
         .await?;
-    let stored_event = hermes_events_postgres::store::EventStore::new(pool.clone())
+    let stored_event = makosh_events_postgres::store::EventStore::new(pool.clone())
         .get_by_id(&result.event_id)
         .await?
         .ok_or_else(|| {
             ApiError::Store(
-                hermes_events_postgres::errors::EventStoreError::ConsumerHandlerFailed(
+                makosh_events_postgres::errors::EventStoreError::ConsumerHandlerFailed(
                     "project link review event was not stored".to_owned(),
                 ),
             )
@@ -194,7 +194,7 @@ pub(crate) async fn put_project_link_review(
     .map_err(ApiError::Projects)?
     .ok_or_else(|| {
         ApiError::Store(
-            hermes_events_postgres::errors::EventStoreError::ConsumerHandlerFailed(
+            makosh_events_postgres::errors::EventStoreError::ConsumerHandlerFailed(
                 "project link review observation link was not stored".to_owned(),
             ),
         )

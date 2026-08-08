@@ -1,5 +1,5 @@
 [package]
-name = "hermes-telegram-call-media-tgcalls"
+name = "makosh-telegram-call-media-tgcalls"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,12 +7,12 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "telegram"
 surface = "implementation"
 
 [dependencies]
-hermes-telegram-call-media-contract = { path = "../telegram-call-media-contract" }
+makosh-telegram-call-media-contract = { path = "../telegram-call-media-contract" }
 libloading = "=0.8.9"
 zeroize = "=1.9.0"

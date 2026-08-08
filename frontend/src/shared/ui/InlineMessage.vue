@@ -22,8 +22,8 @@ const toneIcons: Record<InlineMessageTone, string> = {
 }
 
 const classes = computed(() => [
-  'hermes-inline-message',
-  `hermes-inline-message--${props.tone}`,
+  'makosh-inline-message',
+  `makosh-inline-message--${props.tone}`,
   props.class
 ])
 
@@ -32,7 +32,7 @@ const resolvedIcon = computed(() => props.icon ?? toneIcons[props.tone])
 
 <template>
   <p :class="classes">
-    <Icon :icon="resolvedIcon" size="0.95rem" class="hermes-inline-message-icon" />
+    <Icon :icon="resolvedIcon" size="0.95rem" class="makosh-inline-message-icon" />
     <span v-if="message">{{ message }}</span>
     <slot v-else />
   </p>

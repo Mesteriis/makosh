@@ -1,5 +1,5 @@
-use hermes_runtime_protocol::v1::SchedulerRuntimeStorageBindingV1;
-use hermes_scheduler_persistence::{
+use makosh_runtime_protocol::v1::SchedulerRuntimeStorageBindingV1;
+use makosh_scheduler_persistence::{
     SchedulerPostgresEndpointV1, SchedulerRecoveryDatabaseV1, SchedulerStoreConnectionErrorV1,
     scheduler_storage_binding_from_runtime,
 };
@@ -22,7 +22,7 @@ fn scheduler_recovery_database_rejects_secret_or_url_shaped_arguments() {
         SchedulerRecoveryDatabaseV1::new(
             "127.0.0.1".to_owned(),
             5432,
-            "hermes".to_owned(),
+            "makosh".to_owned(),
             "recovery".to_owned(),
             "verify-full",
         )
@@ -32,7 +32,7 @@ fn scheduler_recovery_database_rejects_secret_or_url_shaped_arguments() {
         SchedulerRecoveryDatabaseV1::new(
             "user:secret@localhost".to_owned(),
             5432,
-            "hermes".to_owned(),
+            "makosh".to_owned(),
             "recovery".to_owned(),
             "require",
         )
@@ -52,7 +52,7 @@ fn scheduler_recovery_database_rejects_secret_or_url_shaped_arguments() {
         SchedulerRecoveryDatabaseV1::new(
             "127.0.0.1".to_owned(),
             5432,
-            "hermes".to_owned(),
+            "makosh".to_owned(),
             "recovery".to_owned(),
             "unknown",
         )
@@ -80,7 +80,7 @@ fn scheduler_storage_binding_matches_authenticated_runtime_fences() {
 
 fn configuration() -> SchedulerRuntimeStorageBindingV1 {
     SchedulerRuntimeStorageBindingV1 {
-        database_id: "hermes_scheduler".to_owned(),
+        database_id: "makosh_scheduler".to_owned(),
         pgbouncer_host: "127.0.0.1".to_owned(),
         pgbouncer_port: 6432,
         runtime_principal: "scheduler_runtime".to_owned(),

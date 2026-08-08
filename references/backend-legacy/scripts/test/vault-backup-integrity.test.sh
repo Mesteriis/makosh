@@ -7,7 +7,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 # shellcheck source=../lib/common.sh
 source "$REPO_ROOT/scripts/lib/common.sh"
 
-temporary_root="$(mktemp -d "${TMPDIR:-/tmp}/hermes-vault-backup-test.XXXXXX")"
+temporary_root="$(mktemp -d "${TMPDIR:-/tmp}/makosh-vault-backup-test.XXXXXX")"
 trap 'rm -rf "$temporary_root"' EXIT
 
 expect_failure() {

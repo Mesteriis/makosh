@@ -1,7 +1,7 @@
 # ADR-0239: First owner Mail/IMAP read-only vertical slice
 
 Статус: Принято
-Дата: 2026-07-20  
+Дата: 2026-07-20
 Состояние реализации: Частично реализовано. Этот ADR authorizes только exact
 Mail/Communications exception из executable phase policy: он не открывает
 `first_owner_v1` для других owner packages и пока ограничен policy + inventory
@@ -33,30 +33,30 @@ framework или будущих POP3/SMTP capabilities.
 Один atomic policy change добавляет только следующие packages:
 
 ```text
-hermes-mail-api
-hermes-mail-core
-hermes-mail-imap
-hermes-mail-persistence
-hermes-mail-runtime
-hermes-communications-ingress
-hermes-communications-api
-hermes-communications-domain
-hermes-communications-persistence
-hermes-communications-runtime
+makosh-mail-api
+makosh-mail-core
+makosh-mail-imap
+makosh-mail-persistence
+makosh-mail-runtime
+makosh-communications-ingress
+makosh-communications-api
+makosh-communications-domain
+makosh-communications-persistence
+makosh-communications-runtime
 ```
 
-`hermes-mail-api`, `hermes-communications-api` и
-`hermes-communications-ingress` содержат только versioned typed public
+`makosh-mail-api`, `makosh-communications-api` и
+`makosh-communications-ingress` содержат только versioned typed public
 contracts. `mail-core` содержит synchronous reconciliation, idempotency and
 cursor ports; он не зависит от IMAP, Vault, PostgreSQL, NATS или
 Communications implementation. `mail-imap` — rustls protocol adapter и не
 видит persistence, Gateway или domain implementation. Каждый persistence
 package владеет только своим schema, inbox/outbox и storage port. Только
 соответствующий `*-runtime` композирует private packages; Mail runtime вызывает
-Communications только через public `hermes-communications-ingress`.
+Communications только через public `makosh-communications-ingress`.
 
 Kernel/Gateway не получают dependency на эти packages. Нельзя создавать
-`hermes-mail`, `hermes-communications` или shared provider-SDK god-crate,
+`makosh-mail`, `makosh-communications` или shared provider-SDK god-crate,
 cross-owner SQL, direct module socket, legacy re-export или любую production
 path/import/generated reference под `references/**`.
 
@@ -97,7 +97,7 @@ INTERNALDATE, content digest)` match; otherwise a new evidence identity is
 created.
 
 Retry execution is driven by an adapter-local retry policy object inside
-`hermes-mail-imap`, not by ad-hoc hardcoded literals in the loop. This keeps
+`makosh-mail-imap`, not by ad-hoc hardcoded literals in the loop. This keeps
 `max_attempts` and per-attempt delay independently tunable and test-covered.
 The historical implementation used `MAX_SYNC_ATTEMPTS = 255` and
 `RETRY_DELAY_MILLIS = 120`; ADR-0325 supersedes that implementation contract.

@@ -2,7 +2,7 @@ use super::common::*;
 
 #[test]
 fn storage_launch_arguments_expose_only_staged_contract_paths() {
-    let root = unique_target_root("hermes-storage-launch-arguments");
+    let root = unique_target_root("makosh-storage-launch-arguments");
     let contracts = StagedRuntimeContracts::stage_with_runtime_configuration(
         &root.join("contracts"),
         b"descriptor",

@@ -5,7 +5,7 @@ use std::os::unix::net::UnixStream;
 use std::task::{Context, Poll, Waker};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-use hermes_blob_runtime::{
+use makosh_blob_runtime::{
     lease::BlobKeyLeaseV1,
     release::{
         BlobCustodyReleaseErrorV1, BlobCustodyReleaseLedgerV1,
@@ -14,7 +14,7 @@ use hermes_blob_runtime::{
     storage::{BlobContentLifecycleStore, BlobContentWriteRequestV1, BlobCustodyTransferRequestV1},
     vault::{BlobContentKeyFenceV1, BlobVaultKeyLeaseAdapterV1, BlobVaultRoutePortV1},
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobCustodyReleaseGrantV1, BlobCustodyReleaseOutcomeV1, BlobCustodyReleaseResponseV1,
     BlobDataOperationV1, BlobDataRequestV1, BlobDataResponseV1, blob_data_request_v1::Operation,
 };
@@ -200,7 +200,7 @@ where
                 ) {
                     return Err(());
                 }
-                let range = hermes_blob_protocol::BlobRangeV1::new(
+                let range = makosh_blob_protocol::BlobRangeV1::new(
                     read.start,
                     read.end_exclusive,
                     session.reference().declared_size(),
@@ -292,9 +292,9 @@ where
 
     fn content_key_for(
         &mut self,
-        reference: &hermes_blob_protocol::BlobRefV1,
-        access: &hermes_blob_protocol::BlobAccessFenceV1,
-        custody: &hermes_blob_protocol::BlobCustodyScopeV1,
+        reference: &makosh_blob_protocol::BlobRefV1,
+        access: &makosh_blob_protocol::BlobAccessFenceV1,
+        custody: &makosh_blob_protocol::BlobCustodyScopeV1,
         key_revision: u64,
         now: u64,
     ) -> Result<BlobKeyLeaseV1, ()> {
@@ -321,13 +321,13 @@ fn exact_plaintext_binding(expected_plaintext_sha256: Option<&[u8; 32]>, plainte
 }
 
 fn developer_denied(stage: &str) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_blob_data_request_denied stage={stage}");
     }
 }
 
-fn developer_storage_denied(stage: &str, error: &hermes_blob_runtime::storage::BlobLifecycleError) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+fn developer_storage_denied(stage: &str, error: &makosh_blob_runtime::storage::BlobLifecycleError) {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_blob_data_request_denied stage={stage} error={error:?}");
     }
 }

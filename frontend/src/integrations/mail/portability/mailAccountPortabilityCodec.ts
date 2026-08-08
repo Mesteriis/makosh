@@ -9,7 +9,7 @@ import {
 	type MailAccountStatusV1,
 	MailConnectorProfileV1,
 	MailProviderPathReadinessV1,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
 import {
 	MailAccountConfigurationV1Schema,
 	type MailAccountExportV1,
@@ -22,11 +22,11 @@ import {
 	MailImapConfigurationV1Schema,
 	MailSmtpConfigurationV1Schema,
 	MailTlsEndpointV1Schema,
-} from '../../../gen/hermes/mail/portability/v1/portability_pb'
+} from '../../../gen/makosh/mail/portability/v1/portability_pb'
 import type {
 	ExportEffectiveOwnerModuleSettingsReceiptV1,
 	OwnerSettingEntryV1,
-} from '../../../gen/hermes/gateway/v1/owner_module_settings_pb'
+} from '../../../gen/makosh/gateway/v1/owner_module_settings_pb'
 import type { OwnerSettingInputV1 } from '../../../platform/settings'
 import {
 	mailAddressBookSettingsInputsV1,

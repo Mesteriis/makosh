@@ -3,7 +3,7 @@ use axum::extract::{Path, Query, State};
 use axum::http::{HeaderMap, StatusCode};
 use axum::response::Html;
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde::Deserialize;
 use serde_json::json;
 use uuid::Uuid;
@@ -30,7 +30,7 @@ use crate::integrations::ollama::client::OllamaClient;
 use crate::integrations::ollama::client::config::OllamaClientConfig;
 use crate::vault::errors::HostVaultError;
 use crate::vault::models::VaultMode;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use super::helpers::{ai_control_center_store, request_actor_id};
 use super::models::{AiModelListResponse, AiPromptListResponse, AiProviderListResponse};
@@ -656,7 +656,7 @@ fn ai_provider_auth_callback_success_page(
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Hermes Hub AI provider</title>
+  <title>Макошь AI provider</title>
   <style>
     body {{ margin: 0; font-family: system-ui, sans-serif; color: #182033; background: #f5f6f8; }}
     main {{ max-width: 720px; margin: 48px auto; background: #fff; border: 1px solid #d9dee7; border-radius: 8px; padding: 24px; }}
@@ -666,7 +666,7 @@ fn ai_provider_auth_callback_success_page(
     window.setTimeout(function () {{
       try {{
         if (window.opener && !window.opener.closed) {{
-          window.opener.postMessage({{ type: 'hermes:ai-provider-connected', providerId: '{provider_id}' }}, '*');
+          window.opener.postMessage({{ type: 'makosh:ai-provider-connected', providerId: '{provider_id}' }}, '*');
         }}
       }} catch (_error) {{}}
       try {{ window.close(); }} catch (_error) {{}}
@@ -676,10 +676,10 @@ fn ai_provider_auth_callback_success_page(
 <body>
   <main>
     <h1>AI provider connected</h1>
-    <p>Hermes Hub connected {display_name} through the local callback flow.</p>
+    <p>Макошь connected {display_name} through the local callback flow.</p>
     <p>Provider</p>
     <code>{provider_id}</code>
-    <p>This tab will close automatically. Return to Hermes Hub settings if it stays open.</p>
+    <p>This tab will close automatically. Return to Макошь settings if it stays open.</p>
   </main>
 </body>
 </html>"#
@@ -703,7 +703,7 @@ fn ai_provider_auth_callback_waiting_page(
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Hermes Hub AI provider</title>
+  <title>Макошь AI provider</title>
   <style>
     body {{ margin: 0; font-family: system-ui, sans-serif; color: #182033; background: #f5f6f8; }}
     main {{ max-width: 720px; margin: 48px auto; background: #fff; border: 1px solid #d9dee7; border-radius: 8px; padding: 24px; }}
@@ -716,7 +716,7 @@ fn ai_provider_auth_callback_waiting_page(
     <p>{message}</p>
     <p>Command</p>
     <code>{command}</code>
-    <p>After the CLI is signed in, reopen the Hermes callback link from Settings.</p>
+    <p>After the CLI is signed in, reopen the Макошь callback link from Settings.</p>
   </main>
 </body>
 </html>"#
@@ -736,7 +736,7 @@ fn ai_provider_auth_callback_error_page(
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Hermes Hub AI provider</title>
+  <title>Макошь AI provider</title>
   <style>
     body {{ margin: 0; font-family: system-ui, sans-serif; color: #182033; background: #f5f6f8; }}
     main {{ max-width: 720px; margin: 48px auto; background: #fff; border: 1px solid #d9dee7; border-radius: 8px; padding: 24px; }}
@@ -746,7 +746,7 @@ fn ai_provider_auth_callback_error_page(
   <main>
     <h1>AI provider connection failed</h1>
     <p>{message}</p>
-    <p>Return to Hermes Hub and start the AI provider connection again.</p>
+    <p>Return to Макошь and start the AI provider connection again.</p>
   </main>
 </body>
 </html>"#

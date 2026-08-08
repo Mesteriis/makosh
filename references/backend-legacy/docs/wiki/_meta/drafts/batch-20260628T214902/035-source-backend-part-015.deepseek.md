@@ -1,6 +1,6 @@
 ## Summary / Резюме
 
-Предлагается создать страницу `components/backend.md` в русской Obsidian‑wiki на основе встроенных исходников. Страница описывает слой приложений (`application`) и бинарные утилиты (`bin`) backend‑крейта Hermes Hub, фиксируя реальные структуры, функции, конвейеры команд и связи между модулями так, как они представлены в предоставленном контексте.
+Предлагается создать страницу `components/backend.md` в русской Obsidian‑wiki на основе встроенных исходников. Страница описывает слой приложений (`application`) и бинарные утилиты (`bin`) backend‑крейта Макошь, фиксируя реальные структуры, функции, конвейеры команд и связи между модулями так, как они представлены в предоставленном контексте.
 
 ## Proposed pages / Предлагаемые страницы
 
@@ -244,48 +244,48 @@ DTO `WhatsAppSanitizedRuntimeEventDto` содержит метаданные, и
 
 ## Бинарные утилиты (`bin/`)
 
-Все бинарные крейты используют `hermes_hub_backend::app::init_tracing()` и
-конфигурируются через переменные окружения с префиксом `HERMES_*`.
+Все бинарные крейты используют `makosh_hub_backend::app::init_tracing()` и
+конфигурируются через переменные окружения с префиксом `MAKOSH_*`.
 
-### `hermes_document_process`
+### `makosh_document_process`
 
-- Источник: `backend/src/bin/hermes_document_process.rs`
+- Источник: `backend/src/bin/makosh_document_process.rs`
 - Назначение: запуск очереди обработки документов.
 - Параметры: `DATABASE_URL` (обязательно), аргумент командной строки `limit`
   (по умолчанию 25).
 - Использует `DocumentProcessingStore::run_queued_jobs(limit)`, выводит
   JSON‑отчёт.
 
-### `hermes_email_fixture_dev`
+### `makosh_email_fixture_dev`
 
-- Источник: `backend/src/bin/hermes_email_fixture_dev.rs`
-- Режимы: `import` и `project` (переменная `HERMES_EMAIL_FIXTURE_MODE`,
+- Источник: `backend/src/bin/makosh_email_fixture_dev.rs`
+- Режимы: `import` и `project` (переменная `MAKOSH_EMAIL_FIXTURE_MODE`,
   по умолчанию `project`).
-- Провайдер: `HERMES_EMAIL_FIXTURE_PROVIDER` (`gmail`, `icloud`, `imap`;
+- Провайдер: `MAKOSH_EMAIL_FIXTURE_PROVIDER` (`gmail`, `icloud`, `imap`;
   по умолчанию `icloud`).
 - Другие переменные: путь к фикстуре, ID аккаунта, отображаемое имя,
   внешний email, batch ID.
 - В режиме `import` вызывает `import_fixture_email_messages_for_dev`, в
   режиме `project` – `project_fixture_email_messages`.
 
-### `hermes_email_fixture_export`
+### `makosh_email_fixture_export`
 
-- Источник: `backend/src/bin/hermes_email_fixture_export.rs`
+- Источник: `backend/src/bin/makosh_email_fixture_export.rs`
 - Назначение: экспорт сырых email‑сообщений из iCloud (IMAP) в
   редактуированный JSON‑фикстурный файл.
-- Переменные окружения: `HERMES_IMAP_FIXTURE_{USERNAME,PASSWORD,HOST,PORT,TLS,MAILBOX,MAX_MESSAGES,LAST_SEEN_UID,OUTPUT}`
+- Переменные окружения: `MAKOSH_IMAP_FIXTURE_{USERNAME,PASSWORD,HOST,PORT,TLS,MAILBOX,MAX_MESSAGES,LAST_SEEN_UID,OUTPUT}`
   с резервными значениями (`ICLOUD_LOGIN`, `ICLOUD_2FA`).
 - Использует `ImapNetworkClient`, `EmailFixtureExportOptions` и
   `export_fixture_messages_from_sync_batch`. Результат сохраняется в
   файл, в stdout выводится JSON‑отчёт.
 
-### `hermes_email_sync_dev`
+### `makosh_email_sync_dev`
 
-- Источник: `backend/src/bin/hermes_email_sync_dev.rs` и подмодули в
-  `backend/src/bin/hermes_email_sync_dev/` (`account.rs`,
+- Источник: `backend/src/bin/makosh_email_sync_dev.rs` и подмодули в
+  `backend/src/bin/makosh_email_sync_dev/` (`account.rs`,
   `checkpoint.rs`, `config.rs`, `env.rs`, `errors.rs`, `provider.rs` и др.).
 - Назначение: полный цикл IMAP‑синхронизации почты для разработки.
-- Конфигурация из переменных `HERMES_EMAIL_SYNC_*` (провайдер, учётные
+- Конфигурация из переменных `MAKOSH_EMAIL_SYNC_*` (провайдер, учётные
   данные, хост, порт, mailbox, лимит сообщений, blob‑root, import batch).
 - Поддерживаемые провайдеры: `icloud` и `imap`; Gmail явно не
   поддерживается в данной утилите.
@@ -294,14 +294,14 @@ DTO `WhatsAppSanitizedRuntimeEventDto` содержит метаданные, и
   чекпойнта, выполняет сетевую выборку и передаёт данные в конвейер
   синхронизации.
 
-### `hermes_email_reproject_dev`
+### `makosh_email_reproject_dev`
 
-- Источник: `backend/src/bin/hermes_email_reproject_dev.rs`
+- Источник: `backend/src/bin/makosh_email_reproject_dev.rs`
 - Назначение: повторная проекция email‑сообщений из сырых записей,
   например, для исправления проблем с кодировкой.
-- Конфигурация: `HERMES_EMAIL_REPROJECT_ACCOUNT_ID` (опционально),
-  `HERMES_EMAIL_REPROJECT_ONLY_CORRUPT` (по умолчанию `true`),
-  `HERMES_EMAIL_REPROJECT_BLOB_ROOT` (по умолчанию
+- Конфигурация: `MAKOSH_EMAIL_REPROJECT_ACCOUNT_ID` (опционально),
+  `MAKOSH_EMAIL_REPROJECT_ONLY_CORRUPT` (по умолчанию `true`),
+  `MAKOSH_EMAIL_REPROJECT_BLOB_ROOT` (по умолчанию
   `docker/data/mail`).
 - Запрашивает записи `communication_raw_records` со связью в
   `communication_messages`; при `only_corrupt=true` фильтрует сообщения с
@@ -328,16 +328,16 @@ DTO `WhatsAppSanitizedRuntimeEventDto` содержит метаданные, и
 - `backend/src/application/zoom_calendar_matching.rs` – делегирование в workflows.
 - `backend/src/application/zoom_participant_identity.rs` – делегирование в workflows.
 - `backend/src/application/zoom_signal_detection.rs` – делегирование в workflows.
-- `backend/src/bin/hermes_document_process.rs` – утилита, переменные окружения, `DocumentProcessingStore`, вывод отчёта.
-- `backend/src/bin/hermes_email_fixture_dev.rs` – режимы `import`/`project`, конфигурация, функции `import_fixture_email_messages_for_dev` / `project_fixture_email_messages`.
-- `backend/src/bin/hermes_email_fixture_export.rs` – IMAP‑экспорт фикстур, переменные окружения, `ImapNetworkClient`, `EmailFixtureExportOptions`, редакция.
-- `backend/src/bin/hermes_email_reproject_dev.rs` – репроекция email, фильтрация по‑аккаунту и corrupt‑сообщениям, функции `parse_raw_email_message_from_blob`, `project_parsed_raw_email_message`, отчёт.
-- `backend/src/bin/hermes_email_sync_dev.rs` – структура утилиты, подмодули, `DevEmailSyncConfig`, `run_dev_email_sync`.
-- `backend/src/bin/hermes_email_sync_dev/account.rs` – `upsert_dev_provider_account`.
-- `backend/src/bin/hermes_email_sync_dev/checkpoint.rs` – `last_seen_uid`.
-- `backend/src/bin/hermes_email_sync_dev/config.rs` – `DevEmailSyncConfig`, переменные окружения, провайдеры.
-- `backend/src/bin/hermes_email_sync_dev/env.rs` – вспомогательные функции для переменных окружения.
-- `backend/src/bin/hermes_email_sync_dev/errors.rs` – `DevEmailSyncError` и его варианты.
+- `backend/src/bin/makosh_document_process.rs` – утилита, переменные окружения, `DocumentProcessingStore`, вывод отчёта.
+- `backend/src/bin/makosh_email_fixture_dev.rs` – режимы `import`/`project`, конфигурация, функции `import_fixture_email_messages_for_dev` / `project_fixture_email_messages`.
+- `backend/src/bin/makosh_email_fixture_export.rs` – IMAP‑экспорт фикстур, переменные окружения, `ImapNetworkClient`, `EmailFixtureExportOptions`, редакция.
+- `backend/src/bin/makosh_email_reproject_dev.rs` – репроекция email, фильтрация по‑аккаунту и corrupt‑сообщениям, функции `parse_raw_email_message_from_blob`, `project_parsed_raw_email_message`, отчёт.
+- `backend/src/bin/makosh_email_sync_dev.rs` – структура утилиты, подмодули, `DevEmailSyncConfig`, `run_dev_email_sync`.
+- `backend/src/bin/makosh_email_sync_dev/account.rs` – `upsert_dev_provider_account`.
+- `backend/src/bin/makosh_email_sync_dev/checkpoint.rs` – `last_seen_uid`.
+- `backend/src/bin/makosh_email_sync_dev/config.rs` – `DevEmailSyncConfig`, переменные окружения, провайдеры.
+- `backend/src/bin/makosh_email_sync_dev/env.rs` – вспомогательные функции для переменных окружения.
+- `backend/src/bin/makosh_email_sync_dev/errors.rs` – `DevEmailSyncError` и его варианты.
 
 ## Drift candidates / Кандидаты на drift
 

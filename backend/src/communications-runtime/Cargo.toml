@@ -1,50 +1,50 @@
 [package]
-name = "hermes-communications-runtime"
+name = "makosh-communications-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
 [[bin]]
-name = "hermes-communications-runtime"
+name = "makosh-communications-runtime"
 path = "src/main.rs"
 
 [lib]
-name = "hermes_communications_runtime"
+name = "makosh_communications_runtime"
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "domain"
 owner = "communications"
 surface = "runtime"
 
 [dependencies]
-hermes-communications-api = { path = "../communications-api" }
-hermes-communications-ai-source-api = { path = "../communications-ai-source-api" }
-hermes-communications-attachment-contract = { path = "../communications-attachment-contract" }
-hermes-communications-call-evidence-api = { path = "../communications-call-evidence-api" }
-hermes-communications-call-evidence-core = { path = "../communications-call-evidence-core" }
-hermes-communications-call-evidence-ingress = { path = "../communications-call-evidence-ingress" }
-hermes-communications-call-evidence-persistence = { path = "../communications-call-evidence-persistence" }
-hermes-communications-content-api = { path = "../communications-content-api" }
-hermes-communications-evidence-export-source-api = { path = "../communications-evidence-export-source-api" }
-hermes-communications-cross-channel-forward-source-api = { path = "../communications-cross-channel-forward-source-api" }
-hermes-communications-saved-query-api = { path = "../communications-saved-query-api" }
-hermes-communications-sender-insights-api = { path = "../communications-sender-insights-api" }
-hermes-communications-domain = { path = "../communications-domain" }
-hermes-communications-ingress = { path = "../communications-ingress" }
-hermes-communications-note-source-api = { path = "../communications-note-source-api" }
-hermes-communications-persistence = { path = "../communications-persistence" }
-hermes-communications-recipient-source-api = { path = "../communications-recipient-source-api" }
-hermes-communications-retained-evidence-replay-persistence = { path = "../communications-retained-evidence-replay-persistence" }
-hermes-communications-retained-evidence-replay-contract = { path = "../communications-retained-evidence-replay-contract" }
-hermes-communications-task-source-api = { path = "../communications-task-source-api" }
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-events-jetstream = { path = "../platform/events/jetstream" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
-hermes-managed-vault-client = { path = "../platform/vault/managed_client" }
+makosh-communications-api = { path = "../communications-api" }
+makosh-communications-ai-source-api = { path = "../communications-ai-source-api" }
+makosh-communications-attachment-contract = { path = "../communications-attachment-contract" }
+makosh-communications-call-evidence-api = { path = "../communications-call-evidence-api" }
+makosh-communications-call-evidence-core = { path = "../communications-call-evidence-core" }
+makosh-communications-call-evidence-ingress = { path = "../communications-call-evidence-ingress" }
+makosh-communications-call-evidence-persistence = { path = "../communications-call-evidence-persistence" }
+makosh-communications-content-api = { path = "../communications-content-api" }
+makosh-communications-evidence-export-source-api = { path = "../communications-evidence-export-source-api" }
+makosh-communications-cross-channel-forward-source-api = { path = "../communications-cross-channel-forward-source-api" }
+makosh-communications-saved-query-api = { path = "../communications-saved-query-api" }
+makosh-communications-sender-insights-api = { path = "../communications-sender-insights-api" }
+makosh-communications-domain = { path = "../communications-domain" }
+makosh-communications-ingress = { path = "../communications-ingress" }
+makosh-communications-note-source-api = { path = "../communications-note-source-api" }
+makosh-communications-persistence = { path = "../communications-persistence" }
+makosh-communications-recipient-source-api = { path = "../communications-recipient-source-api" }
+makosh-communications-retained-evidence-replay-persistence = { path = "../communications-retained-evidence-replay-persistence" }
+makosh-communications-retained-evidence-replay-contract = { path = "../communications-retained-evidence-replay-contract" }
+makosh-communications-task-source-api = { path = "../communications-task-source-api" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
+makosh-managed-vault-client = { path = "../platform/vault/managed_client" }
 getrandom = "=0.4.3"
 libc = "=0.2.186"
 prost = "=0.14.4"

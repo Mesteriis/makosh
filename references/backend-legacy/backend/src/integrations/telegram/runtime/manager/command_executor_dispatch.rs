@@ -7,7 +7,7 @@ use crate::integrations::telegram::client::models::messages::TelegramProviderWri
 use crate::integrations::telegram::tdjson::{
     snapshots::TelegramTdlibMessageSnapshot, snapshots::TelegramTdlibTopicSnapshot,
 };
-use hermes_provider_telegram::tdlib::types::TdlibMediaKind;
+use makosh_provider_telegram::tdlib::types::TdlibMediaKind;
 
 use super::super::commands::{
     request_actor_add_chat_to_folder, request_actor_create_forum_topic,

@@ -1,4 +1,4 @@
-.hermes-command-content {
+.makosh-command-content {
 	position: fixed;
 	top: 84px;
 	left: 50%;
@@ -11,10 +11,10 @@
 	border-radius: var(--h-radius-xl);
 	overflow: hidden;
 	box-shadow: var(--h-shadow-lg);
-	animation: hermes-command-in var(--h-motion-default);
+	animation: makosh-command-in var(--h-motion-default);
 }
 
-.hermes-command-input-wrapper {
+.makosh-command-input-wrapper {
 	display: flex;
 	align-items: center;
 	gap: 10px;
@@ -22,12 +22,12 @@
 	padding: 12px 14px;
 }
 
-.hermes-command-search-icon {
+.makosh-command-search-icon {
 	color: var(--h-color-text-muted);
 	flex: 0 0 auto;
 }
 
-.hermes-command-input {
+.makosh-command-input {
 	width: 100%;
 	min-width: 0;
 	border: 0;
@@ -38,11 +38,11 @@
 	outline: 0;
 }
 
-.hermes-command-input::placeholder {
+.makosh-command-input::placeholder {
 	color: var(--h-color-text-muted);
 }
 
-.hermes-command-list {
+.makosh-command-list {
 	display: grid;
 	gap: 8px;
 	min-height: 0;
@@ -50,12 +50,12 @@
 	overflow: auto;
 }
 
-.hermes-command-group {
+.makosh-command-group {
 	display: grid;
 	gap: 3px;
 }
 
-.hermes-command-group-label {
+.makosh-command-group-label {
 	color: var(--h-color-text-muted);
 	font-size: 11px;
 	font-weight: 760;
@@ -64,7 +64,7 @@
 	text-transform: uppercase;
 }
 
-.hermes-command-item {
+.makosh-command-item {
 	display: flex;
 	align-items: center;
 	gap: 11px;
@@ -80,24 +80,24 @@
 	cursor: pointer;
 }
 
-.hermes-command-item:hover,
-.hermes-command-item--selected {
+.makosh-command-item:hover,
+.makosh-command-item--selected {
 	background: var(--h-color-surface-hover);
 	color: var(--h-color-text-strong);
 }
 
-.hermes-command-item-icon {
+.makosh-command-item-icon {
 	color: var(--h-color-accent);
 	flex: 0 0 auto;
 }
 
-.hermes-command-item-text {
+.makosh-command-item-text {
 	display: grid;
 	gap: 2px;
 	min-width: 0;
 }
 
-.hermes-command-item-label {
+.makosh-command-item-label {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -105,7 +105,7 @@
 	font-weight: 700;
 }
 
-.hermes-command-item-desc {
+.makosh-command-item-desc {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -113,7 +113,7 @@
 	font-size: 12px;
 }
 
-.hermes-command-empty {
+.makosh-command-empty {
 	display: grid;
 	place-items: center;
 	gap: 8px;
@@ -122,7 +122,7 @@
 	font-size: 13px;
 }
 
-@keyframes hermes-command-in {
+@keyframes makosh-command-in {
 	from { opacity: 0; transform: translateX(-50%) translateY(-8px) scale(0.985); }
 	to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 }

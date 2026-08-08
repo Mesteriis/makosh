@@ -4,7 +4,7 @@ use std::collections::HashSet;
 use std::sync::{Arc, LazyLock, Mutex};
 use std::time::Duration;
 
-use hermes_desktop_runtime::{
+use makosh_desktop_runtime::{
     RuntimeExitPolicy, RuntimeTaskClass, RuntimeTaskError, RuntimeTaskFactory, RuntimeTaskFuture,
     RuntimeTaskSpec,
 };
@@ -36,7 +36,7 @@ fn event_outbox_dispatcher_task(context: ApplicationBootstrapContext) -> Option<
     let database_url = context.database_url?;
     let Some(nats_server_url) = context.nats_server_url else {
         tracing::info!(
-            "event outbox dispatcher skipped because HERMES_NATS_SERVER_URL is not configured"
+            "event outbox dispatcher skipped because MAKOSH_NATS_SERVER_URL is not configured"
         );
         return None;
     };
@@ -52,7 +52,7 @@ fn event_outbox_dispatcher_task(context: ApplicationBootstrapContext) -> Option<
         Box::pin(async move {
             let bus = tokio::select! {
                 _ = cancellation.cancelled() => return Ok(()),
-                result = hermes_events_nats::jetstream::NatsJetStreamEventBus::connect(&nats_server_url) => {
+                result = makosh_events_nats::jetstream::NatsJetStreamEventBus::connect(&nats_server_url) => {
                     result.map_err(|error| {
                         tracing::warn!(
                             error = %error,
@@ -66,7 +66,7 @@ fn event_outbox_dispatcher_task(context: ApplicationBootstrapContext) -> Option<
                 }
             };
             let dispatcher = crate::platform::events::dispatcher::EventOutboxDispatcher::new(
-                hermes_events_postgres::store::EventStore::new(pool.clone()),
+                makosh_events_postgres::store::EventStore::new(pool.clone()),
                 bus,
             )
             .with_realtime_bus(realtime_bus);
@@ -130,7 +130,7 @@ fn signal_replay_dispatcher_task(context: ApplicationBootstrapContext) -> Option
         Box::pin(async move {
             let replay_service = crate::application::signal_hub_replay::SignalHubReplayService::new(
                 crate::domains::signal_hub::store::SignalHubStore::new(pool.clone()),
-                hermes_events_postgres::store::EventStore::new(pool.clone()),
+                makosh_events_postgres::store::EventStore::new(pool.clone()),
             );
             let mut tick = tokio::time::interval(Duration::from_secs(5));
             tick.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Skip);

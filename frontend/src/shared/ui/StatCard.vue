@@ -17,8 +17,8 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-stat-card',
-	`hermes-stat-card--${props.tone}`,
+	'makosh-stat-card',
+	`makosh-stat-card--${props.tone}`,
 	props.class
 ])
 </script>
@@ -29,13 +29,13 @@ const classes = computed(() => [
 			v-if="icon"
 			:icon="icon"
 			size="1.25rem"
-			class="hermes-stat-card-icon"
+			class="makosh-stat-card-icon"
 		/>
-		<div class="hermes-stat-card-body">
-			<span class="hermes-stat-card-label">{{ label }}</span>
-			<strong class="hermes-stat-card-value">{{ value }}</strong>
-			<span v-if="trend" class="hermes-stat-card-trend">{{ trend }}</span>
-			<p v-if="description" class="hermes-stat-card-description">{{ description }}</p>
+		<div class="makosh-stat-card-body">
+			<span class="makosh-stat-card-label">{{ label }}</span>
+			<strong class="makosh-stat-card-value">{{ value }}</strong>
+			<span v-if="trend" class="makosh-stat-card-trend">{{ trend }}</span>
+			<p v-if="description" class="makosh-stat-card-description">{{ description }}</p>
 		</div>
 	</article>
 </template>

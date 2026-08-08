@@ -11,7 +11,7 @@
 ```markdown
 # Backend-компоненты
 
-В этом документе описаны серверные компоненты системы hermes-hub, охватывающие домены **обязательств (obligations)** и **организаций (organizations)**, согласно текущему исходному коду.
+В этом документе описаны серверные компоненты системы makosh, охватывающие домены **обязательств (obligations)** и **организаций (organizations)**, согласно текущему исходному коду.
 
 ## Обязательства (obligations)
 
@@ -113,7 +113,7 @@
 
 #### Contact links (связи с лицами)
 - **`OrgContactLink`**: `id`, `organization_id`, `person_id`, `role`, `department`, `source`, `confidence`, `valid_from`, `valid_to`, `is_primary`, `created_at`, `updated_at`.
-- **`OrgContactLinkStore`**: 
+- **`OrgContactLinkStore`**:
   - `list_by_org` — сортировка по `is_primary DESC, role`.
   - `link` / `link_with_observation` — вставка/обновление (конфликт `ON CONFLICT (organization_id, person_id, role) DO UPDATE`).
   - `link_email_participant_with_observation` — вставляет/обновляет запись с ролью `email_participant`, источником `email_sync`, `confidence=1.0`. Возвращает `(OrgContactLink, inserted)`.
@@ -126,7 +126,7 @@
 
 #### Domains (домены)
 - **`OrganizationDomain`**: `id`, `organization_id`, `domain`, `domain_type`, `source`, `confidence`, `last_verified_at`, `created_at`.
-- **`OrgDomainStore`**: 
+- **`OrgDomainStore`**:
   - `list`, `add`.
   - `upsert_email_domain` — вставляет домен с типом `email`, если не существует ни одной записи с `domain_type != 'former'`; возвращает `bool` — был ли вставлен.
   - `upsert_email_domain_in_transaction` — транзакционная версия.

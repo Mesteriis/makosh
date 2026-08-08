@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Страница `components/backend.md` должна быть создана или обновлена, чтобы отразить текущую схему базы данных Hermes Hub, определённую в миграциях с 0001 по 0025. Предыдущая версия (если существовала) могла не включать последние изменения: поддержку Telegram‑звонков, WhatsApp Web, шифрованное хранилище секретов в БД, таблицу прикладных настроек, состояние рабочего процесса сообщений и AI‑рантайм с pgvector. Новая страница даёт русскоязычный обзор всех основных таблиц, их ограничений, индексов и назначения.
+Страница `components/backend.md` должна быть создана или обновлена, чтобы отразить текущую схему базы данных Макошь, определённую в миграциях с 0001 по 0025. Предыдущая версия (если существовала) могла не включать последние изменения: поддержку Telegram‑звонков, WhatsApp Web, шифрованное хранилище секретов в БД, таблицу прикладных настроек, состояние рабочего процесса сообщений и AI‑рантайм с pgvector. Новая страница даёт русскоязычный обзор всех основных таблиц, их ограничений, индексов и назначения.
 
 ## Предложенные страницы
 
@@ -27,7 +27,7 @@ generated_by: code-wiki-ru
 ```markdown
 # Backend
 
-Backend Hermes Hub работает с PostgreSQL и предоставляет API для фронтенда. Схема базы строится последовательными миграциями и реализует следующие подсистемы.
+Backend Макошь работает с PostgreSQL и предоставляет API для фронтенда. Схема базы строится последовательными миграциями и реализует следующие подсистемы.
 
 ## Event Sourcing
 
@@ -226,12 +226,12 @@ Append‑only сырые записи от провайдеров:
 ### `projects`
 - `project_id` (PK), `name`, `kind`, `status` (`planning`, `active`, `on_hold`, `completed`, `archived`), `description`, `owner_display_name`
 - `progress_percent` (0–100), `start_date`, `target_date` (nullable)
-- Seed‑запись: проект «Hermes Hub» (`project:v1:hermes-hub`) с прогрессом 75%
+- Seed‑запись: проект «Макошь» (`project:v1:makosh`) с прогрессом 75%
 
 ### `project_keywords`
 Ключевые слова проекта:
 - PK `(project_id, keyword)`, `keyword` непустое
-- Seed‑ключи: `Hermes Hub`, `Hermes Project`, `hermes`
+- Seed‑ключи: `Макошь`, `Макошь Project`, `makosh`
 
 ### `project_link_reviews`
 Ревью связей проектов с сообщениями/документами:
@@ -332,7 +332,7 @@ Append‑only сырые записи от провайдеров:
 - **0010_create_graph_core.sql** — таблицы `graph_nodes`, `graph_edges`, `graph_evidence`, все колонки, CHECK‑ограничения (включая допустимые значения relationship), уникальности, индексы, уникальный индекс активных связей.
 - **0011_create_mail_blob_storage.sql** — таблицы `communication_mail_blobs`, `communication_attachments`, все колонки, ограничения, уникальности, индексы.
 - **0012_add_attachment_scan_metadata.sql** — колонки сканирования в `communication_attachments` (`scan_status`, `scan_engine`, `scan_checked_at`, `scan_summary`, `scan_metadata`) и их CHECK‑ограничения.
-- **0013_create_projects_and_extend_graph.sql** — таблицы `projects`, `project_keywords`, seed‑запись проекта Hermes Hub, seed‑ключевые слова, расширение CHECK‑ограничений `graph_nodes_kind` и `graph_edges_relationship_type`, новые индексы.
+- **0013_create_projects_and_extend_graph.sql** — таблицы `projects`, `project_keywords`, seed‑запись проекта Макошь, seed‑ключевые слова, расширение CHECK‑ограничений `graph_nodes_kind` и `graph_edges_relationship_type`, новые индексы.
 - **0014_create_project_link_reviews.sql** — таблица `project_link_reviews`, все колонки, PK, CHECK‑ограничения, индексы.
 - **0015_create_task_candidates.sql** — таблицы `task_candidates`, `tasks`, все колонки, ограничения, уникальности, индексы.
 - **0016_create_contact_identity_reviews.sql** — таблица `contact_identity_candidates`, все колонки, ограничения, уникальный индекс для пар merge, прочие индексы.

@@ -1,6 +1,6 @@
 //! Immutable public routing context supplied by the trusted Kernel launch path.
 
-use hermes_vault_protocol::{VaultTransportPublicKey, validate_vault_instance_id};
+use makosh_vault_protocol::{VaultTransportPublicKey, validate_vault_instance_id};
 
 #[derive(Clone)]
 pub struct StorageVaultRouteContextV1 {

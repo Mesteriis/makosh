@@ -1,22 +1,22 @@
 repos:
   - repo: local
     hooks:
-      - id: hermes-architecture-guards
-        name: Hermes architecture and code guards
+      - id: makosh-architecture-guards
+        name: Макошь architecture and code guards
         entry: make architecture-check
         language: system
         pass_filenames: false
         always_run: true
 
-      - id: hermes-code-boundaries
-        name: Hermes code boundary guards
+      - id: makosh-code-boundaries
+        name: Макошь code boundary guards
         entry: make code-boundaries-check
         language: system
         pass_filenames: false
         files: ^(backend/src/|frontend/src/|Makefile$)
 
-      - id: hermes-rust-fmt
-        name: Hermes Rust format check
+      - id: makosh-rust-fmt
+        name: Макошь Rust format check
         entry: make backend-fmt-check
         language: system
         pass_filenames: false
@@ -24,15 +24,15 @@ repos:
 
 # Clippy runs in CI (backend-clippy job) and via `bacon clippy` during dev.
 # Full-workspace clippy in pre-commit is too slow (5-10 min) for interactive use.
-#       - id: hermes-rust-clippy
-#         name: Hermes Rust clippy
+#       - id: makosh-rust-clippy
+#         name: Макошь Rust clippy
 #         entry: make backend-clippy
 #         language: system
 #         pass_filenames: false
 #         files: ^backend/.*\.rs$
 
-      - id: hermes-frontend-lint
-        name: Hermes frontend lint (style + TypeScript/Vue, no tests)
+      - id: makosh-frontend-lint
+        name: Макошь frontend lint (style + TypeScript/Vue, no tests)
         entry: make frontend-lint
         language: system
         pass_filenames: false

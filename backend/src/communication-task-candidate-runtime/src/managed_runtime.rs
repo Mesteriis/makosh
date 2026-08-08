@@ -1,20 +1,20 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_task_candidate_api::{
+use makosh_communication_task_candidate_api::{
     COMMUNICATION_TASK_CANDIDATE_MODULE_ID_V1, COMMUNICATION_TASK_CANDIDATE_OWNER_V1,
 };
-use hermes_communication_task_candidate_persistence::{
+use makosh_communication_task_candidate_persistence::{
     CommunicationTaskCandidatePersistenceErrorV1, CommunicationTaskCandidatePersistenceV1,
 };
-use hermes_communications_task_source_api::{
+use makosh_communications_task_source_api::{
     communication_task_source_prepared_contract_reference_v1,
     communication_task_source_rejected_contract_reference_v1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::{
         ContractReferenceV1, ManagedRuntimeClientDeliveryResponseV1,
@@ -27,11 +27,11 @@ use hermes_runtime_protocol::{
         validate_module_client_request_v1, validate_module_client_response_v1,
     },
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 
@@ -731,7 +731,7 @@ mod tests {
     fn module_identity_is_exact_workflow_unit() {
         assert_eq!(
             COMMUNICATION_TASK_CANDIDATE_MODULE_ID_V1,
-            "hermes-communication-task-candidate-runtime"
+            "makosh-communication-task-candidate-runtime"
         );
     }
 

@@ -1,9 +1,9 @@
 # Wiki Update Plan
 
 - Generated at: `2026-06-28T19:48:55Z`
-- Repository: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository: `/Users/avm/projects/Personal/makosh`
+- Wiki path: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Chunks: `163`
 
 ## 001-config-cargo
@@ -86,25 +86,25 @@
 - Target pages:
   - `operations/documentation-map.md`
 - Source paths:
-  - `.supergoal/hermes-docs-alignment-Q2wXmK/ROADMAP.md`
-  - `.supergoal/hermes-docs-alignment-Q2wXmK/STATE.md`
-  - `.supergoal/hermes-docs-alignment-Q2wXmK/THINKING.md`
-  - `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-1.md`
-  - `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-10.md`
-  - `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-2.md`
-  - `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-3.md`
-  - `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-4.md`
-  - `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-5.md`
-  - `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-6.md`
-  - `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-7.md`
-  - `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-8.md`
-  - `.supergoal/hermes-docs-alignment-Q2wXmK/phases/phase-9.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/PROTOCOL.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/ROADMAP.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/STATE.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/THINKING.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/context.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-1.md`
+  - `.supergoal/makosh-docs-alignment-Q2wXmK/ROADMAP.md`
+  - `.supergoal/makosh-docs-alignment-Q2wXmK/STATE.md`
+  - `.supergoal/makosh-docs-alignment-Q2wXmK/THINKING.md`
+  - `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-1.md`
+  - `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-10.md`
+  - `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-2.md`
+  - `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-3.md`
+  - `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-4.md`
+  - `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-5.md`
+  - `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-6.md`
+  - `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-7.md`
+  - `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-8.md`
+  - `.supergoal/makosh-docs-alignment-Q2wXmK/phases/phase-9.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/PROTOCOL.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/ROADMAP.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/STATE.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/THINKING.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/context.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-1.md`
 
 ## 009-doc-supergoal-part-002
 
@@ -114,22 +114,22 @@
 - Target pages:
   - `operations/documentation-map.md`
 - Source paths:
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-10.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-11.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-12.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-13.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-14.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-15.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-2.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-3.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-4.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-5.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-6.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-7.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-8.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-9.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-map.md`
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/tools.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-10.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-11.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-12.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-13.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-14.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-15.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-2.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-3.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-4.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-5.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-6.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-7.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-8.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-9.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-map.md`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/tools.md`
 
 ## 010-source-supergoal
 
@@ -139,7 +139,7 @@
 - Target pages:
   - `components/supergoal.md`
 - Source paths:
-  - `.supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-state.sh`
+  - `.supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-state.sh`
 
 ## 011-doc-AGENTS
 
@@ -741,16 +741,16 @@
   - `backend/src/application/zoom_calendar_matching.rs`
   - `backend/src/application/zoom_participant_identity.rs`
   - `backend/src/application/zoom_signal_detection.rs`
-  - `backend/src/bin/hermes_document_process.rs`
-  - `backend/src/bin/hermes_email_fixture_dev.rs`
-  - `backend/src/bin/hermes_email_fixture_export.rs`
-  - `backend/src/bin/hermes_email_reproject_dev.rs`
-  - `backend/src/bin/hermes_email_sync_dev.rs`
-  - `backend/src/bin/hermes_email_sync_dev/account.rs`
-  - `backend/src/bin/hermes_email_sync_dev/checkpoint.rs`
-  - `backend/src/bin/hermes_email_sync_dev/config.rs`
-  - `backend/src/bin/hermes_email_sync_dev/env.rs`
-  - `backend/src/bin/hermes_email_sync_dev/errors.rs`
+  - `backend/src/bin/makosh_document_process.rs`
+  - `backend/src/bin/makosh_email_fixture_dev.rs`
+  - `backend/src/bin/makosh_email_fixture_export.rs`
+  - `backend/src/bin/makosh_email_reproject_dev.rs`
+  - `backend/src/bin/makosh_email_sync_dev.rs`
+  - `backend/src/bin/makosh_email_sync_dev/account.rs`
+  - `backend/src/bin/makosh_email_sync_dev/checkpoint.rs`
+  - `backend/src/bin/makosh_email_sync_dev/config.rs`
+  - `backend/src/bin/makosh_email_sync_dev/env.rs`
+  - `backend/src/bin/makosh_email_sync_dev/errors.rs`
 
 ## 036-source-backend-part-016
 
@@ -760,14 +760,14 @@
 - Target pages:
   - `components/backend.md`
 - Source paths:
-  - `backend/src/bin/hermes_email_sync_dev/fetch.rs`
-  - `backend/src/bin/hermes_email_sync_dev/provider.rs`
-  - `backend/src/bin/hermes_email_sync_dev/report.rs`
-  - `backend/src/bin/hermes_email_sync_dev/runner.rs`
-  - `backend/src/bin/hermes_graph_project.rs`
-  - `backend/src/bin/hermes_migrate.rs`
-  - `backend/src/bin/hermes_whatsapp_business_cloud_edge_proxy.rs`
-  - `backend/src/bin/hermes_zoom_edge_proxy.rs`
+  - `backend/src/bin/makosh_email_sync_dev/fetch.rs`
+  - `backend/src/bin/makosh_email_sync_dev/provider.rs`
+  - `backend/src/bin/makosh_email_sync_dev/report.rs`
+  - `backend/src/bin/makosh_email_sync_dev/runner.rs`
+  - `backend/src/bin/makosh_graph_project.rs`
+  - `backend/src/bin/makosh_migrate.rs`
+  - `backend/src/bin/makosh_whatsapp_business_cloud_edge_proxy.rs`
+  - `backend/src/bin/makosh_zoom_edge_proxy.rs`
   - `backend/src/contracts.rs`
   - `backend/src/domains/calendar/brain.rs`
   - `backend/src/domains/calendar/command_service.rs`
@@ -2778,10 +2778,10 @@
 - Target pages:
   - `components/contracts.md`
 - Source paths:
-  - `contracts/proto/hermes/common/v1/common.proto`
-  - `contracts/proto/hermes/communications/v1/communications.proto`
-  - `contracts/proto/hermes/events/v1/event_envelope.proto`
-  - `contracts/proto/hermes/signal_hub/v1/signal_hub.proto`
+  - `contracts/proto/makosh/common/v1/common.proto`
+  - `contracts/proto/makosh/communications/v1/communications.proto`
+  - `contracts/proto/makosh/events/v1/event_envelope.proto`
+  - `contracts/proto/makosh/signal_hub/v1/signal_hub.proto`
 
 ## 104-config-crates
 
@@ -2802,7 +2802,7 @@
   - `components/crates.md`
 - Source paths:
   - `crates/testkit/src/app.rs`
-  - `crates/testkit/src/bin/hermes_test_session.rs`
+  - `crates/testkit/src/bin/makosh_test_session.rs`
   - `crates/testkit/src/containers/mod.rs`
   - `crates/testkit/src/containers/nats.rs`
   - `crates/testkit/src/containers/postgres.rs`
@@ -3333,8 +3333,8 @@
 - Target pages:
   - `components/docs.md`
 - Source paths:
-  - `docs/site/assets/hermes-logo-mark.png`
-  - `docs/site/hermes-docs.css`
+  - `docs/site/assets/makosh-logo-mark.png`
+  - `docs/site/makosh-docs.css`
   - `docs/site/index.html`
 
 ## 126-config-frontend
@@ -3392,18 +3392,18 @@
   - `components/frontend.md`
 - Source paths:
   - `frontend/index.html`
-  - `frontend/public/assets/hermes-icon-128.png`
-  - `frontend/public/assets/hermes-icon-16.png`
-  - `frontend/public/assets/hermes-icon-180.png`
-  - `frontend/public/assets/hermes-icon-192.png`
-  - `frontend/public/assets/hermes-icon-256.png`
-  - `frontend/public/assets/hermes-icon-32.png`
-  - `frontend/public/assets/hermes-icon-48.png`
-  - `frontend/public/assets/hermes-icon-512.png`
-  - `frontend/public/assets/hermes-icon-64.png`
-  - `frontend/public/assets/hermes-logo-mark.png`
-  - `frontend/public/assets/hermes-logo.png`
-  - `frontend/public/assets/hermes-reference-avatar.png`
+  - `frontend/public/assets/makosh-icon-128.png`
+  - `frontend/public/assets/makosh-icon-16.png`
+  - `frontend/public/assets/makosh-icon-180.png`
+  - `frontend/public/assets/makosh-icon-192.png`
+  - `frontend/public/assets/makosh-icon-256.png`
+  - `frontend/public/assets/makosh-icon-32.png`
+  - `frontend/public/assets/makosh-icon-48.png`
+  - `frontend/public/assets/makosh-icon-512.png`
+  - `frontend/public/assets/makosh-icon-64.png`
+  - `frontend/public/assets/makosh-logo-mark.png`
+  - `frontend/public/assets/makosh-logo.png`
+  - `frontend/public/assets/makosh-reference-avatar.png`
   - `frontend/public/assets/shell-backgrounds/data-stream.png`
 
 ## 129-other-frontend-part-002
@@ -4109,10 +4109,10 @@
   - `frontend/src/domains/timeline/queries/useTimelineQuery.ts`
   - `frontend/src/domains/timeline/stores/timeline.ts`
   - `frontend/src/domains/timeline/types/timeline.ts`
-  - `frontend/src/gen/hermes/common/v1/common_pb.ts`
-  - `frontend/src/gen/hermes/communications/v1/communications_pb.ts`
-  - `frontend/src/gen/hermes/events/v1/event_envelope_pb.ts`
-  - `frontend/src/gen/hermes/signal_hub/v1/signal_hub_pb.ts`
+  - `frontend/src/gen/makosh/common/v1/common_pb.ts`
+  - `frontend/src/gen/makosh/communications/v1/communications_pb.ts`
+  - `frontend/src/gen/makosh/events/v1/event_envelope_pb.ts`
+  - `frontend/src/gen/makosh/signal_hub/v1/signal_hub_pb.ts`
   - `frontend/src/integrations/mail/api/accountSetup.test.ts`
   - `frontend/src/integrations/mail/api/accountSetup.ts`
   - `frontend/src/integrations/mail/api/syncApi.ts`

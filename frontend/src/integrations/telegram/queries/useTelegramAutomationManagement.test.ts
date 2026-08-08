@@ -54,7 +54,7 @@ describe('Telegram automation management controller', () => {
 			revision: 1n,
 			createdAtUnixSeconds: 1n,
 			updatedAtUnixSeconds: 1n,
-			$typeName: 'hermes.telegram.automation.v1.AutomationTemplateV1',
+			$typeName: 'makosh.telegram.automation.v1.AutomationTemplateV1',
 		})
 		controller.updateTemplateId('template-1')
 		controller.updateTemplateName('Greeting')
@@ -81,7 +81,7 @@ describe('Telegram automation management controller', () => {
 			renderedText: 'Hello Ada',
 			renderedSha256: new Uint8Array([1, 2]),
 			createdAtUnixSeconds: 1n,
-			$typeName: 'hermes.telegram.automation.v1.AutomationPreviewReceiptV1',
+			$typeName: 'makosh.telegram.automation.v1.AutomationPreviewReceiptV1',
 		})
 		controller.updatePreviewPolicyId('policy-1')
 		controller.updatePreviewAccountId('account-1')

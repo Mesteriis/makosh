@@ -1,5 +1,5 @@
 [package]
-name = "hermes-telegram-calls-core"
+name = "makosh-telegram-calls-core"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,11 +7,11 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "telegram"
 surface = "implementation"
 
 [dependencies]
-hermes-scheduler-protocol = { path = "../platform/scheduler/protocol" }
+makosh-scheduler-protocol = { path = "../platform/scheduler/protocol" }
 sha2 = { version = "=0.10.9", default-features = false }

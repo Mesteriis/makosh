@@ -3,11 +3,11 @@ use std::{
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
-use hermes_attachment_preview_api::{
+use makosh_attachment_preview_api::{
     ATTACHMENT_PREVIEW_MODULE_ID_V1, ATTACHMENT_PREVIEW_OWNER_V1,
     wire::AttachmentPreviewErrorCodeV1,
 };
-use hermes_attachment_preview_ingress::{
+use makosh_attachment_preview_ingress::{
     AttachmentPreviewCustodyEnvelopeContextV1,
     attachment_preview_custody_delegated_contract_reference_v1,
     attachment_preview_custody_delegation_rejected_contract_reference_v1,
@@ -15,21 +15,21 @@ use hermes_attachment_preview_ingress::{
     build_request_attachment_preview_custody_delegation_outbox_record_v1,
     wire::RequestAttachmentPreviewCustodyDelegationV1,
 };
-use hermes_attachment_preview_persistence::{
+use makosh_attachment_preview_persistence::{
     AttachmentPreviewPersistenceErrorV1, AttachmentPreviewPersistenceV1,
     PersistAttachmentPreviewCustodyDelegationV1, PreviewTargetBlobReceiptV1,
     RenderedAttachmentPreviewArtifactV1,
 };
-use hermes_attachment_preview_renderer_contract::AttachmentPreviewRendererErrorV1;
-use hermes_attachment_security_contract::admission::attachment_security_scan_candidate_observed_contract_reference_v1;
-use hermes_communications_attachment_contract::admission::communication_attachment_safety_state_changed_contract_reference_v1;
-use hermes_events_jetstream::{
+use makosh_attachment_preview_renderer_contract::AttachmentPreviewRendererErrorV1;
+use makosh_attachment_security_contract::admission::attachment_security_scan_candidate_observed_contract_reference_v1;
+use makosh_communications_attachment_contract::admission::communication_attachment_safety_state_changed_contract_reference_v1;
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
     try_receive_runtime_pull_delivery,
 };
-use hermes_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
+use makosh_runtime_protocol::{
     managed_control::{
         ManagedControlChannelV2, ManagedControlRequestDispatcherV2, ManagedControlTransportErrorV2,
     },
@@ -44,11 +44,11 @@ use hermes_runtime_protocol::{
         validate_module_client_request_v1, validate_module_client_response_v1,
     },
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 use zeroize::Zeroizing;
@@ -104,7 +104,7 @@ impl ManagedControlRequestDispatcherV2<UnixStream>
         &mut self,
         channel: &mut ManagedControlChannelV2<UnixStream>,
         correlation_id: [u8; MANAGED_CONTROL_CORRELATION_ID_BYTES],
-        request: hermes_runtime_protocol::v1::ManagedRuntimeControlRequestV1,
+        request: makosh_runtime_protocol::v1::ManagedRuntimeControlRequestV1,
     ) -> Result<(), ManagedControlTransportErrorV2> {
         let response = match request.operation {
             Some(Operation::ClientDelivery(delivery)) => match delivery.request {
@@ -645,7 +645,7 @@ fn client_error_response_v1(request_id: u64, error_code: &str) -> ModuleClientRe
 }
 
 fn developer_job_stage(stage: &str) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_attachment_preview_job_denied stage={stage}");
     }
 }

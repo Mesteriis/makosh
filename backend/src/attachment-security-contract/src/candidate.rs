@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
@@ -147,7 +147,7 @@ fn validate_context(
 
 fn candidate_message_id(fact: &AttachmentSecurityScanCandidateFactV1) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-security.scan-candidate-message.v2\0");
+    hasher.update(b"makosh.attachment-security.scan-candidate-message.v2\0");
     hasher.update(fact.attachment_anchor_id);
     hasher.update(fact.blob_reference_id);
     hasher.update(fact.declared_size.to_be_bytes());
@@ -161,7 +161,7 @@ fn candidate_message_id(fact: &AttachmentSecurityScanCandidateFactV1) -> [u8; 16
 
 fn candidate_source_cursor_sha256(fact: &AttachmentSecurityScanCandidateFactV1) -> [u8; 32] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.attachment-security.scan-candidate-source.v2\0");
+    hasher.update(b"makosh.attachment-security.scan-candidate-source.v2\0");
     hasher.update(fact.attachment_anchor_id);
     hasher.update(fact.blob_reference_id);
     hasher.update(fact.declared_size.to_be_bytes());
@@ -172,7 +172,7 @@ fn candidate_source_cursor_sha256(fact: &AttachmentSecurityScanCandidateFactV1) 
 
 fn runtime_source_reference(runtime_instance_id: &str) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.runtime.source-reference.v1\0");
+    hasher.update(b"makosh.runtime.source-reference.v1\0");
     hasher.update(runtime_instance_id.as_bytes());
     let digest: [u8; 32] = hasher.finalize().into();
     digest[..16]
@@ -207,7 +207,7 @@ fn outbox_error(_: OutboxRecordError) -> AttachmentSecurityObservationBuildError
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_events_protocol::validation::envelope::decode_envelope_v1;
+    use makosh_events_protocol::validation::envelope::decode_envelope_v1;
 
     #[test]
     fn candidate_is_anchor_partitioned_and_contains_only_bounded_blob_identity() {

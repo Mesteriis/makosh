@@ -21,8 +21,8 @@ fn control_store_media_restores_authority_and_advances_all_fences() {
     assert_eq!(
         names(&fixture.media),
         [
-            ".hermes-installation-anchor-v1",
-            ".hermes-recovery-fence-v1",
+            ".makosh-installation-anchor-v1",
+            ".makosh-recovery-fence-v1",
             "control-store.sqlite",
         ]
         .into_iter()
@@ -61,8 +61,8 @@ fn control_store_media_rejects_replayed_authority_from_another_instance() {
     capture(&first.source, &first.media).expect("capture first instance");
     capture(&second.source, &second.media).expect("capture second instance");
     std::fs::copy(
-        second.media.join(".hermes-recovery-fence-v1"),
-        first.media.join(".hermes-recovery-fence-v1"),
+        second.media.join(".makosh-recovery-fence-v1"),
+        first.media.join(".makosh-recovery-fence-v1"),
     )
     .expect("replace authority fence");
 
@@ -77,8 +77,8 @@ fn control_store_media_rejects_a_fence_that_does_not_match_its_snapshot() {
     capture(&fixture.source, &fixture.media).expect("capture instance");
     restore_to_empty_target(&fixture.media, &fixture.target).expect("restore instance");
     std::fs::copy(
-        fixture.target.join(".hermes-recovery-fence-v1"),
-        fixture.media.join(".hermes-recovery-fence-v1"),
+        fixture.target.join(".makosh-recovery-fence-v1"),
+        fixture.media.join(".makosh-recovery-fence-v1"),
     )
     .expect("replace snapshot fence with later fence");
     let second_target = fixture.root.join("second-target");

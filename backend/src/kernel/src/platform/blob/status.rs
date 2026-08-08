@@ -1,7 +1,7 @@
 //! Verifies the sanitized status of the exact live Blob managed child.
 
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     v1::{
         BlobRuntimeControlRequestV1, BlobRuntimeControlResponseV1, BlobRuntimeStateV1,
         GetBlobRuntimeStatusRequestV1, blob_runtime_control_request_v1::Operation,

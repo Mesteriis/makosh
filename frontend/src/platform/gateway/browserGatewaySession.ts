@@ -5,7 +5,7 @@ import {
 	BrowserGatewayAccessModeV1,
 	BrowserSessionService,
 	BrowserSessionStatusRequestV1Schema,
-} from '../../gen/hermes/gateway/v1/browser_session_pb'
+} from '../../gen/makosh/gateway/v1/browser_session_pb'
 import { createBrowserGatewayConnectTransport } from './browserGatewayConnect'
 
 export type BrowserGatewaySessionStatus = {

@@ -1,6 +1,6 @@
 use chrono::Utc;
-use hermes_communications_api::accounts::ProviderAccountLookupPort;
-use hermes_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
+use makosh_communications_api::accounts::ProviderAccountLookupPort;
+use makosh_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
 
 use crate::integrations::telegram::client::errors::TelegramError;
 use crate::integrations::telegram::tdjson::client::TdJsonLibrary;

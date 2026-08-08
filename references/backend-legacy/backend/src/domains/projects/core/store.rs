@@ -1,4 +1,4 @@
-use hermes_projects_api::ProjectWritePort;
+use makosh_projects_api::ProjectWritePort;
 use sqlx::postgres::PgPool;
 
 use super::constants::{DEFAULT_PROJECT_LIMIT, PROJECT_DETAIL_ITEM_LIMIT};
@@ -19,8 +19,8 @@ impl ProjectStore {
     }
 
     pub async fn upsert_project(&self, project: &NewProject) -> Result<Project, ProjectStoreError> {
-        let value = hermes_projects_postgres::ProjectPostgresReadQuery::new(self.pool.clone())
-            .upsert(&hermes_projects_api::ProjectUpsert {
+        let value = makosh_projects_postgres::ProjectPostgresReadQuery::new(self.pool.clone())
+            .upsert(&makosh_projects_api::ProjectUpsert {
                 project_id: project.project_id.clone(),
                 name: project.name.clone(),
                 kind: project.kind.clone(),

@@ -1,10 +1,10 @@
 //! Bounded PostgreSQL platform-schema reconciliation at Storage startup.
 
-use hermes_storage_postgres::{
+use makosh_storage_postgres::{
     PLATFORM_ADMIN_USERNAME, PostgresAdminConnectorV1, StorageRoleSpecV1, ensure_platform_schemas,
     ensure_storage_roles, read_readiness, set_runtime_role_password,
 };
-use hermes_storage_protocol::{StorageBindingV1, v1::StorageRuntimeTopologyV1};
+use makosh_storage_protocol::{StorageBindingV1, v1::StorageRuntimeTopologyV1};
 use zeroize::Zeroizing;
 
 pub(crate) struct RuntimeRoleCredentialV1 {
@@ -101,7 +101,7 @@ async fn reconcile_roles(
         ensure_storage_roles(&connector, &spec)
             .await
             .map_err(|error| {
-                if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                     eprintln!("developer_storage_role_reconciliation_error={error:?}");
                 }
                 "Storage role reconciliation is unavailable".to_owned()

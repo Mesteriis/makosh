@@ -1,11 +1,11 @@
 use std::collections::BTreeSet;
 
-use hermes_contacts_core::{
+use makosh_contacts_core::{
     ContactIdentityMatchV1, ContactProviderKindV1, ContactProviderProvenanceV1, ContactTimestampV1,
     ContactUpsertOutcomeV1, ContactV1, decide_contact_upsert_v1, normalize_email_v1,
     normalize_phone_v1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool, Postgres, Row, Transaction,
     postgres::{PgConnectOptions, PgPoolOptions},
@@ -209,7 +209,7 @@ impl ContactsPersistenceV1 {
             return Err(ContactsPersistenceErrorV1::InvalidInput);
         }
         let row = sqlx::query(
-            "SELECT display_name, contact_revision FROM hermes_data.contacts_state \
+            "SELECT display_name, contact_revision FROM makosh_data.contacts_state \
              WHERE logical_owner_id = $1 AND contact_id = $2",
         )
         .bind(logical_owner_id)
@@ -223,7 +223,7 @@ impl ContactsPersistenceV1 {
             return Err(ContactsPersistenceErrorV1::StaleSource);
         }
         let email_addresses = sqlx::query_scalar::<_, String>(
-            "SELECT normalized_email FROM hermes_data.contacts_email_identities \
+            "SELECT normalized_email FROM makosh_data.contacts_email_identities \
              WHERE logical_owner_id = $1 AND contact_id = $2 ORDER BY normalized_email",
         )
         .bind(logical_owner_id)
@@ -232,7 +232,7 @@ impl ContactsPersistenceV1 {
         .await
         .map_err(storage)?;
         let phone_numbers = sqlx::query_scalar::<_, String>(
-            "SELECT normalized_phone FROM hermes_data.contacts_phone_identities \
+            "SELECT normalized_phone FROM makosh_data.contacts_phone_identities \
              WHERE logical_owner_id = $1 AND contact_id = $2 ORDER BY normalized_phone",
         )
         .bind(logical_owner_id)
@@ -241,7 +241,7 @@ impl ContactsPersistenceV1 {
         .await
         .map_err(storage)?;
         let links = sqlx::query(
-            "SELECT provider_entry_id, provider_etag FROM hermes_data.contacts_provider_links \
+            "SELECT provider_entry_id, provider_etag FROM makosh_data.contacts_provider_links \
              WHERE logical_owner_id = $1 AND contact_id = $2 AND source_account_id = $3 \
              ORDER BY provider_kind, provider_entry_id LIMIT 2",
         )
@@ -328,7 +328,7 @@ impl ContactsPersistenceV1 {
             return Err(ContactsPersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "SELECT message_id, envelope_sha256, envelope_bytes FROM hermes_data.contacts_outbox \
+            "SELECT message_id, envelope_sha256, envelope_bytes FROM makosh_data.contacts_outbox \
              WHERE logical_owner_id = $1 AND published_at_unix_millis IS NULL \
              ORDER BY created_at_unix_millis, message_id LIMIT $2",
         )
@@ -355,7 +355,7 @@ impl ContactsPersistenceV1 {
             return Err(ContactsPersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "UPDATE hermes_data.contacts_outbox SET published_at_unix_millis = $3 \
+            "UPDATE makosh_data.contacts_outbox SET published_at_unix_millis = $3 \
              WHERE logical_owner_id = $1 AND message_id = $2 \
              AND (published_at_unix_millis IS NULL OR published_at_unix_millis = $3)",
         )
@@ -374,7 +374,7 @@ async fn reserve_source_inbox(
     input: &ReserveContactMailSyncSourceV1,
 ) -> Result<bool, ContactsPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.contacts_mail_sync_source_inbox (logical_owner_id, \
+        "INSERT INTO makosh_data.contacts_mail_sync_source_inbox (logical_owner_id, \
          command_message_id, command_envelope_sha256, operation_id, command_fingerprint, \
          contact_id, expected_contact_revision, target_mail_account_id, received_at_unix_millis) \
          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT DO NOTHING",
@@ -401,7 +401,7 @@ async fn load_source_inbox(
     let row = sqlx::query(
         "SELECT command_envelope_sha256, operation_id, command_fingerprint, contact_id, \
          expected_contact_revision, target_mail_account_id, completed, reject_code, \
-         result_message_id FROM hermes_data.contacts_mail_sync_source_inbox \
+         result_message_id FROM makosh_data.contacts_mail_sync_source_inbox \
          WHERE logical_owner_id = $1 AND command_message_id = $2 FOR UPDATE",
     )
     .bind(&input.logical_owner_id)
@@ -411,7 +411,7 @@ async fn load_source_inbox(
     .map_err(storage)?;
     let Some(row) = row else {
         let reused_operation = sqlx::query_scalar::<_, bool>(
-            "SELECT TRUE FROM hermes_data.contacts_mail_sync_source_inbox \
+            "SELECT TRUE FROM makosh_data.contacts_mail_sync_source_inbox \
              WHERE logical_owner_id = $1 AND operation_id = $2 FOR UPDATE",
         )
         .bind(&input.logical_owner_id)
@@ -476,7 +476,7 @@ async fn complete_source_inbox(
     input: &PersistContactMailSyncSourceResultV1,
 ) -> Result<(), ContactsPersistenceErrorV1> {
     let result = sqlx::query(
-        "UPDATE hermes_data.contacts_mail_sync_source_inbox SET completed = TRUE, \
+        "UPDATE makosh_data.contacts_mail_sync_source_inbox SET completed = TRUE, \
          reject_code = $3, result_message_id = $4, completed_at_unix_millis = $5 \
          WHERE logical_owner_id = $1 AND command_message_id = $2 AND NOT completed",
     )
@@ -500,7 +500,7 @@ async fn reserve_inbox(
     fingerprint: [u8; 32],
 ) -> Result<bool, ContactsPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.contacts_mail_entry_inbox (logical_owner_id, \
+        "INSERT INTO makosh_data.contacts_mail_entry_inbox (logical_owner_id, \
          command_message_id, command_envelope_sha256, command_id, command_fingerprint, \
          entry_digest, received_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7) \
          ON CONFLICT DO NOTHING",
@@ -523,7 +523,7 @@ async fn reserve_rejected_inbox(
     input: &RejectMailEntryCommandV1,
 ) -> Result<bool, ContactsPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.contacts_mail_entry_inbox (logical_owner_id, \
+        "INSERT INTO makosh_data.contacts_mail_entry_inbox (logical_owner_id, \
          command_message_id, command_envelope_sha256, command_id, command_fingerprint, \
          entry_digest, received_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7) \
          ON CONFLICT DO NOTHING",
@@ -548,7 +548,7 @@ async fn load_inbox(
     let row = sqlx::query(
         "SELECT command_envelope_sha256, command_id, command_fingerprint, entry_digest, \
          completed, contact_id, contact_revision, outcome, reject_code, result_message_id \
-         FROM hermes_data.contacts_mail_entry_inbox \
+         FROM makosh_data.contacts_mail_entry_inbox \
          WHERE logical_owner_id = $1 AND command_message_id = $2 FOR UPDATE",
     )
     .bind(&input.draft.logical_owner_id)
@@ -558,7 +558,7 @@ async fn load_inbox(
     .map_err(storage)?;
     let Some(row) = row else {
         let reused_command = sqlx::query_scalar::<_, bool>(
-            "SELECT TRUE FROM hermes_data.contacts_mail_entry_inbox \
+            "SELECT TRUE FROM makosh_data.contacts_mail_entry_inbox \
              WHERE logical_owner_id = $1 AND command_id = $2 FOR UPDATE",
         )
         .bind(&input.draft.logical_owner_id)
@@ -613,7 +613,7 @@ async fn load_rejected_inbox(
 ) -> Result<RejectedMailEntryCommandV1, ContactsPersistenceErrorV1> {
     let row = sqlx::query(
         "SELECT command_message_id, command_envelope_sha256, command_fingerprint, entry_digest, \
-         completed, reject_code, result_message_id FROM hermes_data.contacts_mail_entry_inbox \
+         completed, reject_code, result_message_id FROM makosh_data.contacts_mail_entry_inbox \
          WHERE logical_owner_id = $1 AND (command_message_id = $2 OR command_id = $3) \
          ORDER BY command_message_id = $2 DESC LIMIT 1 FOR UPDATE",
     )
@@ -661,7 +661,7 @@ async fn load_outbox(
     message_id: [u8; 16],
 ) -> Result<ContactsOutboxRecordV1, ContactsPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT message_id, envelope_sha256, envelope_bytes FROM hermes_data.contacts_outbox \
+        "SELECT message_id, envelope_sha256, envelope_bytes FROM makosh_data.contacts_outbox \
          WHERE logical_owner_id = $1 AND message_id = $2",
     )
     .bind(owner)
@@ -680,7 +680,7 @@ async fn load_identity_match(
     let owner = &input.draft.logical_owner_id;
     let provenance = &input.draft.provenance;
     let provider_link_contact_id = sqlx::query_scalar::<_, Vec<u8>>(
-        "SELECT contact_id FROM hermes_data.contacts_provider_links \
+        "SELECT contact_id FROM makosh_data.contacts_provider_links \
          WHERE logical_owner_id = $1 AND provider_kind = $2 AND source_account_id = $3 \
          AND provider_entry_id = $4 FOR UPDATE",
     )
@@ -697,7 +697,7 @@ async fn load_identity_match(
     let phones = normalized_phones(&input.draft.phone_numbers)?;
     let email_contact_ids = load_identity_ids(
         transaction,
-        "SELECT contact_id FROM hermes_data.contacts_email_identities \
+        "SELECT contact_id FROM makosh_data.contacts_email_identities \
          WHERE logical_owner_id = $1 AND normalized_email = ANY($2) FOR UPDATE",
         owner,
         &emails,
@@ -705,7 +705,7 @@ async fn load_identity_match(
     .await?;
     let phone_contact_ids = load_identity_ids(
         transaction,
-        "SELECT contact_id FROM hermes_data.contacts_phone_identities \
+        "SELECT contact_id FROM makosh_data.contacts_phone_identities \
          WHERE logical_owner_id = $1 AND normalized_phone = ANY($2) FOR UPDATE",
         owner,
         &phones,
@@ -762,7 +762,7 @@ async fn load_contact(
 ) -> Result<ContactV1, ContactsPersistenceErrorV1> {
     let row = sqlx::query(
         "SELECT display_name, contact_revision, created_at_unix_seconds, created_at_nanos, \
-         updated_at_unix_seconds, updated_at_nanos FROM hermes_data.contacts_state \
+         updated_at_unix_seconds, updated_at_nanos FROM makosh_data.contacts_state \
          WHERE logical_owner_id = $1 AND contact_id = $2 FOR UPDATE",
     )
     .bind(owner)
@@ -772,7 +772,7 @@ async fn load_contact(
     .map_err(storage)?
     .ok_or(ContactsPersistenceErrorV1::NotFound)?;
     let emails = sqlx::query_scalar::<_, String>(
-        "SELECT normalized_email FROM hermes_data.contacts_email_identities \
+        "SELECT normalized_email FROM makosh_data.contacts_email_identities \
          WHERE logical_owner_id = $1 AND contact_id = $2 ORDER BY normalized_email",
     )
     .bind(owner)
@@ -781,7 +781,7 @@ async fn load_contact(
     .await
     .map_err(storage)?;
     let phones = sqlx::query_scalar::<_, String>(
-        "SELECT normalized_phone FROM hermes_data.contacts_phone_identities \
+        "SELECT normalized_phone FROM makosh_data.contacts_phone_identities \
          WHERE logical_owner_id = $1 AND contact_id = $2 ORDER BY normalized_phone",
     )
     .bind(owner)
@@ -817,7 +817,7 @@ async fn load_latest_provenance(
     let row = sqlx::query(
         "SELECT provider_kind, source_account_id, provider_entry_id, provider_etag, \
          source_revision, entry_digest, observed_at_unix_seconds, observed_at_nanos \
-         FROM hermes_data.contacts_provider_links WHERE logical_owner_id = $1 AND contact_id = $2 \
+         FROM makosh_data.contacts_provider_links WHERE logical_owner_id = $1 AND contact_id = $2 \
          ORDER BY observed_at_unix_seconds DESC, observed_at_nanos DESC, provider_entry_id LIMIT 1",
     )
     .bind(owner)
@@ -849,13 +849,13 @@ async fn persist_contact(
         return Err(ContactsPersistenceErrorV1::InvalidInput);
     }
     let result = sqlx::query(
-        "INSERT INTO hermes_data.contacts_state (logical_owner_id, contact_id, display_name, \
+        "INSERT INTO makosh_data.contacts_state (logical_owner_id, contact_id, display_name, \
          contact_revision, created_at_unix_seconds, created_at_nanos, updated_at_unix_seconds, \
          updated_at_nanos) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) \
          ON CONFLICT (logical_owner_id, contact_id) DO UPDATE SET display_name = EXCLUDED.display_name, \
          contact_revision = EXCLUDED.contact_revision, updated_at_unix_seconds = \
          EXCLUDED.updated_at_unix_seconds, updated_at_nanos = EXCLUDED.updated_at_nanos \
-         WHERE hermes_data.contacts_state.contact_revision + 1 = EXCLUDED.contact_revision",
+         WHERE makosh_data.contacts_state.contact_revision + 1 = EXCLUDED.contact_revision",
     )
     .bind(&contact.logical_owner_id)
     .bind(contact.contact_id.as_slice())
@@ -872,7 +872,7 @@ async fn persist_contact(
         return Err(ContactsPersistenceErrorV1::CommandConflict);
     }
     sqlx::query(
-        "DELETE FROM hermes_data.contacts_email_identities WHERE logical_owner_id = $1 AND contact_id = $2",
+        "DELETE FROM makosh_data.contacts_email_identities WHERE logical_owner_id = $1 AND contact_id = $2",
     )
     .bind(&contact.logical_owner_id)
     .bind(contact.contact_id.as_slice())
@@ -880,7 +880,7 @@ async fn persist_contact(
     .await
     .map_err(storage)?;
     sqlx::query(
-        "DELETE FROM hermes_data.contacts_phone_identities WHERE logical_owner_id = $1 AND contact_id = $2",
+        "DELETE FROM makosh_data.contacts_phone_identities WHERE logical_owner_id = $1 AND contact_id = $2",
     )
     .bind(&contact.logical_owner_id)
     .bind(contact.contact_id.as_slice())
@@ -889,7 +889,7 @@ async fn persist_contact(
     .map_err(storage)?;
     for email in &contact.email_addresses {
         sqlx::query(
-            "INSERT INTO hermes_data.contacts_email_identities (logical_owner_id, normalized_email, contact_id) VALUES ($1,$2,$3)",
+            "INSERT INTO makosh_data.contacts_email_identities (logical_owner_id, normalized_email, contact_id) VALUES ($1,$2,$3)",
         )
         .bind(&contact.logical_owner_id)
         .bind(email)
@@ -900,7 +900,7 @@ async fn persist_contact(
     }
     for phone in &contact.phone_numbers {
         sqlx::query(
-            "INSERT INTO hermes_data.contacts_phone_identities (logical_owner_id, normalized_phone, contact_id) VALUES ($1,$2,$3)",
+            "INSERT INTO makosh_data.contacts_phone_identities (logical_owner_id, normalized_phone, contact_id) VALUES ($1,$2,$3)",
         )
         .bind(&contact.logical_owner_id)
         .bind(phone)
@@ -918,14 +918,14 @@ async fn persist_provider_link(
 ) -> Result<(), ContactsPersistenceErrorV1> {
     let provenance = &contact.provenance;
     let result = sqlx::query(
-        "INSERT INTO hermes_data.contacts_provider_links (logical_owner_id, provider_kind, \
+        "INSERT INTO makosh_data.contacts_provider_links (logical_owner_id, provider_kind, \
          source_account_id, provider_entry_id, contact_id, provider_etag, source_revision, \
          entry_digest, observed_at_unix_seconds, observed_at_nanos) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) \
          ON CONFLICT (logical_owner_id, provider_kind, source_account_id, provider_entry_id) \
          DO UPDATE SET provider_etag = EXCLUDED.provider_etag, source_revision = EXCLUDED.source_revision, \
          entry_digest = EXCLUDED.entry_digest, observed_at_unix_seconds = EXCLUDED.observed_at_unix_seconds, \
-         observed_at_nanos = EXCLUDED.observed_at_nanos WHERE hermes_data.contacts_provider_links.contact_id = \
-         EXCLUDED.contact_id AND hermes_data.contacts_provider_links.source_revision <= EXCLUDED.source_revision",
+         observed_at_nanos = EXCLUDED.observed_at_nanos WHERE makosh_data.contacts_provider_links.contact_id = \
+         EXCLUDED.contact_id AND makosh_data.contacts_provider_links.source_revision <= EXCLUDED.source_revision",
     )
     .bind(&contact.logical_owner_id)
     .bind(provider_kind(provenance.provider_kind))
@@ -956,7 +956,7 @@ async fn insert_outbox(
         return Err(ContactsPersistenceErrorV1::InvalidInput);
     }
     let result = sqlx::query(
-        "INSERT INTO hermes_data.contacts_outbox (logical_owner_id, message_id, envelope_sha256, \
+        "INSERT INTO makosh_data.contacts_outbox (logical_owner_id, message_id, envelope_sha256, \
          envelope_bytes, created_at_unix_millis) VALUES ($1,$2,$3,$4,$5) ON CONFLICT DO NOTHING",
     )
     .bind(owner)
@@ -981,7 +981,7 @@ async fn complete_inbox(
     result_message_id: [u8; 16],
 ) -> Result<(), ContactsPersistenceErrorV1> {
     let result = sqlx::query(
-        "UPDATE hermes_data.contacts_mail_entry_inbox SET completed = TRUE, contact_id = $3, \
+        "UPDATE makosh_data.contacts_mail_entry_inbox SET completed = TRUE, contact_id = $3, \
          contact_revision = $4, outcome = $5, result_message_id = $6, \
          completed_at_unix_millis = $7 WHERE logical_owner_id = $1 AND \
          command_message_id = $2 AND NOT completed",
@@ -1007,7 +1007,7 @@ async fn complete_rejected_inbox(
     input: &RejectMailEntryCommandV1,
 ) -> Result<(), ContactsPersistenceErrorV1> {
     let result = sqlx::query(
-        "UPDATE hermes_data.contacts_mail_entry_inbox SET completed = TRUE, reject_code = $3, \
+        "UPDATE makosh_data.contacts_mail_entry_inbox SET completed = TRUE, reject_code = $3, \
          result_message_id = $4, completed_at_unix_millis = $5 WHERE logical_owner_id = $1 \
          AND command_message_id = $2 AND NOT completed",
     )
@@ -1129,9 +1129,9 @@ fn reject_error(value: ContactMailEntryRejectCodeV1) -> ContactsPersistenceError
 }
 
 fn map_decision(
-    value: hermes_contacts_core::ContactUpsertDecisionErrorV1,
+    value: makosh_contacts_core::ContactUpsertDecisionErrorV1,
 ) -> ContactsPersistenceErrorV1 {
-    use hermes_contacts_core::ContactUpsertDecisionErrorV1 as Error;
+    use makosh_contacts_core::ContactUpsertDecisionErrorV1 as Error;
     match value {
         Error::InvalidDraft | Error::ExistingContactRequired => {
             ContactsPersistenceErrorV1::InvalidInput

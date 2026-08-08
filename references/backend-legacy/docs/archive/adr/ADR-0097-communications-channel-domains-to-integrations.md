@@ -26,7 +26,7 @@ provider setup/runtime APIs live under `/api/v1/integrations/*`.
 
 ## Context
 
-Hermes accumulated channel-shaped implementation surfaces while building email,
+Макошь accumulated channel-shaped implementation surfaces while building email,
 Telegram and WhatsApp support. Email started as the first communication
 implementation. Telegram later gained a large account/runtime/message UI and was
 documented as a completed "base domain". WhatsApp documentation also described a
@@ -48,7 +48,7 @@ AI/workflow state or provider command envelopes.
 
 ## Decision
 
-Hermes has one Communications domain.
+Макошь has one Communications domain.
 
 Rules:
 

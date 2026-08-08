@@ -1,4 +1,4 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 
 use serde_json::json;
 use sqlx::Row;
@@ -8,7 +8,7 @@ use super::support::{
     LOCAL_API_TOKEN, build_cal_app, delete_request_with_token, get_request_with_token, json_body,
     post_request_with_token, put_request_with_token, unique_suffix, urlencoding_percent_encode,
 };
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::storage::database::Database;
 
 #[tokio::test]
 async fn calendar_accounts_crud_against_postgres() {

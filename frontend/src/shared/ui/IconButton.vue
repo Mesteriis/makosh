@@ -23,7 +23,7 @@ const emit = defineEmits<{
 	click: [event: MouseEvent]
 }>()
 
-const classes = computed(() => ['hermes-icon-button', props.class].filter(Boolean).join(' '))
+const classes = computed(() => ['makosh-icon-button', props.class].filter(Boolean).join(' '))
 </script>
 
 <template>

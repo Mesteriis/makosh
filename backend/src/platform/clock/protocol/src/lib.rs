@@ -1,4 +1,4 @@
-//! Public, UTC-only time contracts for Hermes platform components.
+//! Public, UTC-only time contracts for Макошь platform components.
 
 mod time;
 

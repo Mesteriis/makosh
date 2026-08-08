@@ -1,5 +1,5 @@
 [package]
-name = "hermes-communication-delayed-delivery-runtime"
+name = "makosh-communication-delayed-delivery-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,28 +8,28 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-communication-delayed-delivery-runtime"
+name = "makosh-communication-delayed-delivery-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "communication_delayed_delivery"
 surface = "runtime"
 
 [dependencies]
-hermes-communication-delayed-delivery-api = { path = "../communication-delayed-delivery-api" }
-hermes-communication-delayed-delivery-core = { path = "../communication-delayed-delivery-core" }
-hermes-communication-delayed-delivery-event-adapters = { path = "../communication-delayed-delivery-event-adapters" }
-hermes-communication-delayed-delivery-execution = { path = "../communication-delayed-delivery-execution" }
-hermes-communication-delayed-delivery-persistence = { path = "../communication-delayed-delivery-persistence" }
-hermes-communication-delayed-delivery-runtime-adapters = { path = "../communication-delayed-delivery-runtime-adapters" }
-hermes-communication-delayed-delivery-store-adapters = { path = "../communication-delayed-delivery-store-adapters" }
-hermes-communication-delivery-intent-api = { path = "../communication-delivery-intent-api" }
-hermes-events-jetstream = { path = "../platform/events/jetstream" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-scheduler-protocol = { path = "../platform/scheduler/protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
+makosh-communication-delayed-delivery-api = { path = "../communication-delayed-delivery-api" }
+makosh-communication-delayed-delivery-core = { path = "../communication-delayed-delivery-core" }
+makosh-communication-delayed-delivery-event-adapters = { path = "../communication-delayed-delivery-event-adapters" }
+makosh-communication-delayed-delivery-execution = { path = "../communication-delayed-delivery-execution" }
+makosh-communication-delayed-delivery-persistence = { path = "../communication-delayed-delivery-persistence" }
+makosh-communication-delayed-delivery-runtime-adapters = { path = "../communication-delayed-delivery-runtime-adapters" }
+makosh-communication-delayed-delivery-store-adapters = { path = "../communication-delayed-delivery-store-adapters" }
+makosh-communication-delivery-intent-api = { path = "../communication-delivery-intent-api" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-scheduler-protocol = { path = "../platform/scheduler/protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }

@@ -17,22 +17,22 @@ pub mod host_bridge_transport;
 pub mod managed;
 pub mod settings;
 
-use hermes_communications_ingress::{
+use makosh_communications_ingress::{
     CommunicationEvidenceKindV1, CommunicationObservationDraft, ObservationEnvelopeBuildErrorV1,
     ObservationEnvelopeContextV1, build_observation_outbox_record_v1,
 };
-use hermes_whatsapp_api::host_bridge::WhatsAppHostBridgeEnvelopeV1;
-use hermes_whatsapp_api::{
+use makosh_whatsapp_api::host_bridge::WhatsAppHostBridgeEnvelopeV1;
+use makosh_whatsapp_api::{
     WhatsAppProviderCommand, WhatsAppProviderCommandStateV1, WhatsAppProviderCommandStatusV1,
     client_wire, provider_command_account_id, provider_command_operation_id,
     validate_provider_command,
 };
-use hermes_whatsapp_core::{
+use makosh_whatsapp_core::{
     WhatsAppCoreError, WhatsAppOperationalProjectionError, WhatsAppOperationalProjectionV1,
     communication_observation_draft, project_host_observation,
     project_operational_host_observation,
 };
-use hermes_whatsapp_persistence::{
+use makosh_whatsapp_persistence::{
     WhatsAppClaimedCommandV1, WhatsAppDeliveryRouteLocatorV1, WhatsAppDurablePersistence,
     WhatsAppDurablePersistenceError, WhatsAppHostObservationRecordV1,
     WhatsAppOperationalObservationV1, WhatsAppProviderCommandStateV1 as PersistedCommandStateV1,
@@ -42,7 +42,7 @@ pub use communications_outbox::{
     WhatsAppCommunicationsOutboxRelayError, relay_communications_outbox_once,
 };
 
-pub const PACKAGE: &str = "hermes-whatsapp-runtime";
+pub const PACKAGE: &str = "makosh-whatsapp-runtime";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct WhatsAppRuntimeIdentity {
@@ -96,7 +96,7 @@ impl WhatsAppRuntimeIdentity {
         ObservationEnvelopeContextV1 {
             runtime_instance_id: self.runtime_instance_id.clone(),
             runtime_generation: self.runtime_generation,
-            module_id: "hermes-whatsapp-runtime".to_owned(),
+            module_id: "makosh-whatsapp-runtime".to_owned(),
             recorded_at_unix_seconds,
             recorded_at_nanos,
         }
@@ -119,10 +119,10 @@ pub async fn accept_host_observation(
     recorded_at_unix_seconds: i64,
     recorded_at_nanos: i32,
 ) -> Result<(), WhatsAppHostIngressError> {
-    hermes_whatsapp_api::host_bridge::validate_host_bridge_envelope(envelope)
+    makosh_whatsapp_api::host_bridge::validate_host_bridge_envelope(envelope)
         .map_err(WhatsAppCoreError::HostBridge)
         .map_err(WhatsAppHostIngressError::Core)?;
-    if let hermes_whatsapp_api::host_bridge::WhatsAppHostObservationV1::CommandResult {
+    if let makosh_whatsapp_api::host_bridge::WhatsAppHostObservationV1::CommandResult {
         operation_id,
         host_claim_id,
         succeeded,
@@ -302,27 +302,27 @@ fn decode_claimed_commands(
 }
 
 const fn evidence_kind_value(
-    value: hermes_communications_ingress::CommunicationEvidenceKindV1,
+    value: makosh_communications_ingress::CommunicationEvidenceKindV1,
 ) -> i16 {
     match value {
-        hermes_communications_ingress::CommunicationEvidenceKindV1::EmailMessage => 1,
-        hermes_communications_ingress::CommunicationEvidenceKindV1::ChatMessage => 2,
-        hermes_communications_ingress::CommunicationEvidenceKindV1::MessageEdited => 3,
-        hermes_communications_ingress::CommunicationEvidenceKindV1::MessageDeleted => 4,
-        hermes_communications_ingress::CommunicationEvidenceKindV1::ReactionChanged => 5,
-        hermes_communications_ingress::CommunicationEvidenceKindV1::DeliveryStateChanged => 6,
-        hermes_communications_ingress::CommunicationEvidenceKindV1::ConversationStateChanged => 7,
-        hermes_communications_ingress::CommunicationEvidenceKindV1::ParticipantChanged => 8,
-        hermes_communications_ingress::CommunicationEvidenceKindV1::MediaChanged => 9,
-        hermes_communications_ingress::CommunicationEvidenceKindV1::TopicChanged => 10,
-        hermes_communications_ingress::CommunicationEvidenceKindV1::TypingChanged => 11,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::EmailMessage => 1,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::ChatMessage => 2,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::MessageEdited => 3,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::MessageDeleted => 4,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::ReactionChanged => 5,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::DeliveryStateChanged => 6,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::ConversationStateChanged => 7,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::ParticipantChanged => 8,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::MediaChanged => 9,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::TopicChanged => 10,
+        makosh_communications_ingress::CommunicationEvidenceKindV1::TypingChanged => 11,
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_whatsapp_api::host_bridge::{
+    use makosh_whatsapp_api::host_bridge::{
         HOST_BRIDGE_PROTOCOL_MAJOR, HOST_BRIDGE_PROTOCOL_REVISION, WhatsAppHostObservationV1,
     };
 
@@ -344,15 +344,15 @@ mod tests {
 
         assert_eq!(
             draft.source.provider,
-            hermes_communications_ingress::ProviderProvenanceV1::WhatsAppWeb
+            makosh_communications_ingress::ProviderProvenanceV1::WhatsAppWeb
         );
         assert_eq!(
             draft.kind,
-            hermes_communications_ingress::CommunicationEvidenceKindV1::ChatMessage
+            makosh_communications_ingress::CommunicationEvidenceKindV1::ChatMessage
         );
         assert_eq!(
             draft.body,
-            hermes_communications_ingress::BodyAvailabilityV1::MetadataOnly
+            makosh_communications_ingress::BodyAvailabilityV1::MetadataOnly
         );
     }
 

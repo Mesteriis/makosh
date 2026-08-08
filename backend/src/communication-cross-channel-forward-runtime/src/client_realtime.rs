@@ -1,13 +1,13 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_cross_channel_forward_api::{
+use makosh_communication_cross_channel_forward_api::{
     COMMUNICATION_CROSS_CHANNEL_FORWARD_REALTIME_EVENT_KIND_V1,
     wire::CrossChannelForwardStatusChangedV1,
 };
-use hermes_communication_cross_channel_forward_persistence::{
+use makosh_communication_cross_channel_forward_persistence::{
     CommunicationCrossChannelForwardPersistenceV1, CrossChannelForwardPersistenceErrorV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeClientRealtimePublishRequestV1, ManagedRuntimeControlRequestV1,

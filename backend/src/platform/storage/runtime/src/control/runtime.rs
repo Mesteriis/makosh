@@ -2,12 +2,12 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeControlRequestV1, ManagedRuntimeReadyRequestV1,
     managed_runtime_control_request_v1::Operation as ManagedOperation,
 };
-use hermes_storage_control::{StorageEndpointPreflightV1, preflight_storage_endpoints};
-use hermes_storage_protocol::{
+use makosh_storage_control::{StorageEndpointPreflightV1, preflight_storage_endpoints};
+use makosh_storage_protocol::{
     v1::{
         GetStorageRuntimeStatusRequestV1, StorageRuntimeConfigurationV1,
         StorageRuntimeControlRequestV1, StorageRuntimeControlResponseV1, StorageRuntimeStateV1,
@@ -121,7 +121,7 @@ fn serve_authenticated(
     mut channel: UnixStream,
     identity: ManagedStorageRuntimeIdentityV1,
     mut configuration: StorageRuntimeConfigurationV1,
-    mut active_bindings: Vec<hermes_storage_protocol::v1::StorageBindingV1>,
+    mut active_bindings: Vec<makosh_storage_protocol::v1::StorageBindingV1>,
 ) -> Result<(), String> {
     channel
         .set_read_timeout(None)
@@ -151,7 +151,7 @@ fn bootstrap_platform_services(
     channel: &mut UnixStream,
     identity: &ManagedStorageRuntimeIdentityV1,
     configuration: &StorageRuntimeConfigurationV1,
-) -> Result<Vec<hermes_storage_protocol::v1::StorageBindingV1>, String> {
+) -> Result<Vec<makosh_storage_protocol::v1::StorageBindingV1>, String> {
     let topology = configuration.topology.as_ref().expect("validated topology");
     let pgbouncer_credential = resolve_platform_credential(
         channel,
@@ -205,7 +205,7 @@ pub(super) fn resolve_runtime_credentials(
 
 fn resolve_runtime_credential(
     vault: &mut StorageVaultLeaseAdapterV1<InheritedVaultRoutePortV1>,
-    binding: hermes_storage_protocol::v1::StorageBindingV1,
+    binding: makosh_storage_protocol::v1::StorageBindingV1,
 ) -> Result<RuntimeRoleCredentialV1, String> {
     let binding = storage_binding_from_message(&binding)
         .map_err(|_| "Storage binding is invalid".to_owned())?;
@@ -285,7 +285,7 @@ fn response_for(
     request: StorageRuntimeControlRequestV1,
     identity: &ManagedStorageRuntimeIdentityV1,
     configuration: &mut StorageRuntimeConfigurationV1,
-    active_bindings: &mut Vec<hermes_storage_protocol::v1::StorageBindingV1>,
+    active_bindings: &mut Vec<makosh_storage_protocol::v1::StorageBindingV1>,
 ) -> StorageRuntimeControlResponseV1 {
     if validate_storage_runtime_control_request(&request).is_err() {
         return error_response("operation_not_available");
@@ -311,7 +311,7 @@ fn response_for(
                     revoked_response(binding)
                 })
                 .unwrap_or_else(|error| {
-                    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                         eprintln!("developer_storage_binding_revocation_error={error}");
                     }
                     error_response(revocation_error_code(&error))
@@ -331,7 +331,7 @@ fn response_for(
                 )
                 .map(active_response)
                 .unwrap_or_else(|error| {
-                    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                         eprintln!("developer_storage_binding_apply_error={error}");
                     }
                     error_response(apply_error_code(&error))
@@ -375,7 +375,7 @@ fn revocation_error_code(error: &str) -> &'static str {
 }
 
 fn revoked_response(
-    binding: hermes_storage_protocol::v1::StorageBindingV1,
+    binding: makosh_storage_protocol::v1::StorageBindingV1,
 ) -> StorageRuntimeControlResponseV1 {
     StorageRuntimeControlResponseV1 {
         result: Some(ResponseResult::RevokedBinding(binding)),
@@ -384,7 +384,7 @@ fn revoked_response(
 }
 
 fn active_response(
-    binding: hermes_storage_protocol::v1::StorageBindingV1,
+    binding: makosh_storage_protocol::v1::StorageBindingV1,
 ) -> StorageRuntimeControlResponseV1 {
     StorageRuntimeControlResponseV1 {
         result: Some(ResponseResult::ActiveBinding(binding)),
@@ -395,7 +395,7 @@ fn active_response(
 fn status_response(
     runtime_generation: u64,
     configuration: &StorageRuntimeConfigurationV1,
-    active_bindings: &[hermes_storage_protocol::v1::StorageBindingV1],
+    active_bindings: &[makosh_storage_protocol::v1::StorageBindingV1],
 ) -> StorageRuntimeControlResponseV1 {
     let topology = configuration.topology.as_ref().expect("validated topology");
     let preflight = preflight_storage_endpoints(topology);

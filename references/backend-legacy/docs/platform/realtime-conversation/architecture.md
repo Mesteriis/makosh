@@ -96,6 +96,6 @@ source = screenshots/screen-00042.png
 ## Reprocessing
 
 The bundle is intentionally artifact-first. When diarization, Whisper, OCR or
-entity extraction improves, Hermes can rerun the pipeline without asking the
+entity extraction improves, Макошь can rerun the pipeline without asking the
 provider for the meeting again. Providers are unreliable memory. Local evidence
 is less glamorous, but it survives product redesigns.

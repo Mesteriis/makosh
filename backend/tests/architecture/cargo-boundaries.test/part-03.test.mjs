@@ -21,7 +21,7 @@ import { eventsProtocol, metadata } from './support.mjs';
 test('rejects a singular blocked domain hidden in metadata owner', () => {
   const packages = [
     kernel(),
-    workspacePackage('hermes-generic-runtime', {
+    workspacePackage('makosh-generic-runtime', {
       role: 'integration',
       owner: 'project',
       surface: 'runtime',
@@ -35,7 +35,7 @@ for (const provider of ['mail', 'telegram', 'whatsapp', 'zulip']) {
   test(`rejects provider ${provider} as a business domain`, () => {
     const packages = [
       kernel(),
-      workspacePackage(`hermes-${provider}-runtime`, {
+      workspacePackage(`makosh-${provider}-runtime`, {
         role: 'domain',
         owner: provider,
         surface: 'runtime',
@@ -49,7 +49,7 @@ for (const provider of ['mail', 'telegram', 'whatsapp', 'zulip']) {
 test('prevents an integration from claiming an enabled business domain identity', () => {
   const packages = [
     kernel(),
-    workspacePackage('hermes-telegram-runtime', {
+    workspacePackage('makosh-telegram-runtime', {
       role: 'integration',
       owner: 'communications',
       surface: 'runtime',
@@ -65,7 +65,7 @@ for (const owner of ['graph', 'timeline', 'search', 'context']) {
   test(`rejects a Cargo package for blocked projection ${owner}`, () => {
     const packages = [
       kernel(),
-      workspacePackage(`hermes-${owner}-runtime`, {
+      workspacePackage(`makosh-${owner}-runtime`, {
         role: 'engine',
         owner,
         surface: 'runtime',
@@ -81,11 +81,11 @@ for (const owner of ['graph', 'timeline', 'search', 'context']) {
 test('rejects missing and unknown package roles', () => {
   const packages = [
     kernel(),
-    workspacePackage('hermes-no-role', {
+    workspacePackage('makosh-no-role', {
       owner: 'events',
       surface: 'contract',
     }),
-    workspacePackage('hermes-many-roles', {
+    workspacePackage('makosh-many-roles', {
       role: ['platform', 'domain'],
       owner: 'events',
       surface: 'contract',
@@ -103,11 +103,11 @@ for (const kind of [null, 'build', 'dev']) {
     const packages = [
       kernel(),
       workspacePackage(
-        'hermes-tasks-runtime',
+        'makosh-tasks-runtime',
         { role: 'domain', owner: 'tasks', surface: 'runtime' },
-        [dependency('hermes-contacts-contracts', kind)],
+        [dependency('makosh-contacts-contracts', kind)],
       ),
-      workspacePackage('hermes-contacts-contracts', {
+      workspacePackage('makosh-contacts-contracts', {
         role: 'domain',
         owner: 'contacts',
         surface: 'contract',
@@ -121,15 +121,15 @@ for (const kind of [null, 'build', 'dev']) {
 
 
 for (const target of [
-  { name: 'hermes-contacts-contracts', role: 'domain', owner: 'contacts' },
-  { name: 'hermes-mail-analysis-contracts', role: 'workflow', owner: 'mail_analysis' },
-  { name: 'hermes-telegram-contracts', role: 'integration', owner: 'telegram' },
+  { name: 'makosh-contacts-contracts', role: 'domain', owner: 'contacts' },
+  { name: 'makosh-mail-analysis-contracts', role: 'workflow', owner: 'mail_analysis' },
+  { name: 'makosh-telegram-contracts', role: 'integration', owner: 'telegram' },
 ]) {
   test(`prevents AI from acquiring cross-owner context through ${target.role} ${target.owner}`, () => {
     const packages = [
       kernel(),
       workspacePackage(
-        'hermes-ai-runtime',
+        'makosh-ai-runtime',
         { role: 'domain', owner: 'ai', surface: 'runtime' },
         [dependency(target.name)],
       ),
@@ -149,22 +149,22 @@ for (const target of [
 test('allows a use-case workflow to assemble AI context from explicit owner contracts', () => {
   const packages = [
     kernel(),
-    workspacePackage('hermes-ai-contracts', {
+    workspacePackage('makosh-ai-contracts', {
       role: 'domain',
       owner: 'ai',
       surface: 'contract',
     }),
-    workspacePackage('hermes-contacts-contracts', {
+    workspacePackage('makosh-contacts-contracts', {
       role: 'domain',
       owner: 'contacts',
       surface: 'contract',
     }),
     workspacePackage(
-      'hermes-contact-summary-workflow',
+      'makosh-contact-summary-workflow',
       { role: 'workflow', owner: 'contact_summary', surface: 'runtime' },
       [
-        dependency('hermes-ai-contracts'),
-        dependency('hermes-contacts-contracts'),
+        dependency('makosh-ai-contracts'),
+        dependency('makosh-contacts-contracts'),
       ],
     ),
   ];
@@ -177,7 +177,7 @@ test('allows a use-case workflow to assemble AI context from explicit owner cont
 test('rejects the blocked projection role independently of its owner name', () => {
   const packages = [
     kernel(),
-    workspacePackage('hermes-derived-reader', {
+    workspacePackage('makosh-derived-reader', {
       role: 'projection',
       owner: 'derived_reader',
       surface: 'runtime',
@@ -192,7 +192,7 @@ test('rejects the blocked projection role independently of its owner name', () =
 test('rejects singular aliases of blocked domains in package names', () => {
   const packages = [
     kernel(),
-    workspacePackage('hermes-project-runtime', {
+    workspacePackage('makosh-project-runtime', {
       role: 'platform',
       owner: 'events',
       surface: 'runtime',
@@ -205,12 +205,12 @@ test('rejects singular aliases of blocked domains in package names', () => {
 
 
 test('allows a workflow to use contracts but not implementations', () => {
-  const contactsContract = workspacePackage('hermes-contacts-contracts', {
+  const contactsContract = workspacePackage('makosh-contacts-contracts', {
     role: 'domain',
     owner: 'contacts',
     surface: 'contract',
   });
-  const contactsRuntime = workspacePackage('hermes-contacts-runtime', {
+  const contactsRuntime = workspacePackage('makosh-contacts-runtime', {
     role: 'domain',
     owner: 'contacts',
     surface: 'runtime',
@@ -220,14 +220,14 @@ test('allows a workflow to use contracts but not implementations', () => {
     kernel(),
     contactsContract,
     workspacePackage(
-      'hermes-contact-import-workflow',
+      'makosh-contact-import-workflow',
       { role: 'workflow', owner: 'contact_import', surface: 'runtime' },
-      [dependency('hermes-contacts-contracts')],
+      [dependency('makosh-contacts-contracts')],
     ),
   ];
   assert.deepEqual(validateCargoMetadata(canonicalPolicyForTests(), metadata(allowed)), []);
 
-  const workflowContract = workspacePackage('hermes-delivery-intent-contract', {
+  const workflowContract = workspacePackage('makosh-delivery-intent-contract', {
     role: 'workflow',
     owner: 'delivery_intent',
     surface: 'contract',
@@ -236,9 +236,9 @@ test('allows a workflow to use contracts but not implementations', () => {
     kernel(),
     workflowContract,
     workspacePackage(
-      'hermes-bulk-delivery-workflow',
+      'makosh-bulk-delivery-workflow',
       { role: 'workflow', owner: 'bulk_delivery', surface: 'runtime' },
-      [dependency('hermes-delivery-intent-contract')],
+      [dependency('makosh-delivery-intent-contract')],
     ),
   ];
   assert.deepEqual(
@@ -250,27 +250,27 @@ test('allows a workflow to use contracts but not implementations', () => {
     kernel(),
     contactsRuntime,
     workspacePackage(
-      'hermes-contact-import-workflow',
+      'makosh-contact-import-workflow',
       { role: 'workflow', owner: 'contact_import', surface: 'runtime' },
-      [dependency('hermes-contacts-runtime')],
+      [dependency('makosh-contacts-runtime')],
     ),
   ];
   assert.ok(codes(validateCargoMetadata(canonicalPolicyForTests(), metadata(forbidden))).has('implementation_dependency'));
 });
 
 test('allows the Kernel runtime to compose only the exact Core Gateway adapters', () => {
-  const gatewaySession = workspacePackage('hermes-gateway-session', {
+  const gatewaySession = workspacePackage('makosh-gateway-session', {
     role: 'api',
     owner: 'gateway',
     surface: 'implementation',
   });
-  const gatewayRuntime = workspacePackage('hermes-gateway-runtime', {
+  const gatewayRuntime = workspacePackage('makosh-gateway-runtime', {
     role: 'api',
     owner: 'gateway',
     surface: 'implementation',
   });
   const packages = [
-    kernel([dependency('hermes-gateway-session'), dependency('hermes-gateway-runtime')]),
+    kernel([dependency('makosh-gateway-session'), dependency('makosh-gateway-runtime')]),
     gatewaySession,
     gatewayRuntime,
   ];
@@ -282,11 +282,11 @@ test('allows the Kernel runtime to compose only the exact Core Gateway adapters'
 
 test('keeps a contract independent from its owner runtime and persistence', () => {
   for (const targetSurface of ['runtime', 'persistence']) {
-    const targetName = `hermes-contacts-${targetSurface}`;
+    const targetName = `makosh-contacts-${targetSurface}`;
     const packages = [
       kernel(),
       workspacePackage(
-        'hermes-contacts-contracts',
+        'makosh-contacts-contracts',
         { role: 'domain', owner: 'contacts', surface: 'contract' },
         [dependency(targetName)],
       ),
@@ -305,11 +305,11 @@ test('keeps a contract independent from its owner runtime and persistence', () =
 
 test('keeps domain implementation independent from persistence while runtime composes both', () => {
   const implementation = workspacePackage(
-    'hermes-contacts-implementation',
+    'makosh-contacts-implementation',
     { role: 'domain', owner: 'contacts', surface: 'implementation' },
-    [dependency('hermes-contacts-persistence')],
+    [dependency('makosh-contacts-persistence')],
   );
-  const persistence = workspacePackage('hermes-contacts-persistence', {
+  const persistence = workspacePackage('makosh-contacts-persistence', {
     role: 'domain',
     owner: 'contacts',
     surface: 'persistence',
@@ -320,14 +320,14 @@ test('keeps domain implementation independent from persistence while runtime com
   const allowed = [
     kernel(),
     workspacePackage(
-      'hermes-contacts-runtime',
+      'makosh-contacts-runtime',
       { role: 'domain', owner: 'contacts', surface: 'runtime' },
       [
-        dependency('hermes-contacts-implementation'),
-        dependency('hermes-contacts-persistence'),
+        dependency('makosh-contacts-implementation'),
+        dependency('makosh-contacts-persistence'),
       ],
     ),
-    workspacePackage('hermes-contacts-implementation', {
+    workspacePackage('makosh-contacts-implementation', {
       role: 'domain',
       owner: 'contacts',
       surface: 'implementation',
@@ -338,22 +338,22 @@ test('keeps domain implementation independent from persistence while runtime com
 });
 
 test('allows an owner assembly unit to compose runtime and persistence only downstream', () => {
-  const runtime = workspacePackage('hermes-telegram-runtime', {
+  const runtime = workspacePackage('makosh-telegram-runtime', {
     role: 'integration',
     owner: 'telegram',
     surface: 'runtime',
   });
-  const persistence = workspacePackage('hermes-telegram-persistence', {
+  const persistence = workspacePackage('makosh-telegram-persistence', {
     role: 'integration',
     owner: 'telegram',
     surface: 'persistence',
   });
   const assembly = workspacePackage(
-    'hermes-telegram-assembly',
+    'makosh-telegram-assembly',
     { role: 'integration', owner: 'telegram', surface: 'assembly' },
     [
-      dependency('hermes-telegram-persistence'),
-      dependency('hermes-telegram-runtime'),
+      dependency('makosh-telegram-persistence'),
+      dependency('makosh-telegram-runtime'),
     ],
   );
 
@@ -366,9 +366,9 @@ test('allows an owner assembly unit to compose runtime and persistence only down
   );
 
   const reversedRuntime = workspacePackage(
-    'hermes-telegram-runtime',
+    'makosh-telegram-runtime',
     { role: 'integration', owner: 'telegram', surface: 'runtime' },
-    [dependency('hermes-telegram-assembly')],
+    [dependency('makosh-telegram-assembly')],
   );
   assert.ok(codes(validateCargoMetadata(
     canonicalPolicyForTests(),
@@ -377,22 +377,22 @@ test('allows an owner assembly unit to compose runtime and persistence only down
 });
 
 test('keeps the Mail release assembly downstream from Mail runtime and persistence', () => {
-  const runtime = workspacePackage('hermes-mail-runtime', {
+  const runtime = workspacePackage('makosh-mail-runtime', {
     role: 'integration',
     owner: 'mail',
     surface: 'runtime',
   });
-  const persistence = workspacePackage('hermes-mail-persistence', {
+  const persistence = workspacePackage('makosh-mail-persistence', {
     role: 'integration',
     owner: 'mail',
     surface: 'persistence',
   });
   const assembly = workspacePackage(
-    'hermes-mail-assembly',
+    'makosh-mail-assembly',
     { role: 'integration', owner: 'mail', surface: 'assembly' },
     [
-      dependency('hermes-mail-persistence'),
-      dependency('hermes-mail-runtime'),
+      dependency('makosh-mail-persistence'),
+      dependency('makosh-mail-runtime'),
     ],
   );
 
@@ -407,17 +407,17 @@ test('keeps the Mail release assembly downstream from Mail runtime and persisten
   for (const [forbiddenConsumer, expectedCode] of [
     [
       workspacePackage(
-        'hermes-mail-runtime',
+        'makosh-mail-runtime',
         { role: 'integration', owner: 'mail', surface: 'runtime' },
-        [dependency('hermes-mail-assembly')],
+        [dependency('makosh-mail-assembly')],
       ),
       'forbidden_dependency',
     ],
     [
       workspacePackage(
-        'hermes-communications-runtime',
+        'makosh-communications-runtime',
         { role: 'domain', owner: 'communications', surface: 'runtime' },
-        [dependency('hermes-mail-assembly')],
+        [dependency('makosh-mail-assembly')],
       ),
       'implementation_dependency',
     ],
@@ -436,7 +436,7 @@ for (const sqlClient of ['sqlx']) {
     const forbidden = [
       kernel(),
       workspacePackage(
-        'hermes-contacts-runtime',
+        'makosh-contacts-runtime',
         { role: 'domain', owner: 'contacts', surface: 'runtime' },
         [dependency(sqlClient)],
       ),
@@ -446,7 +446,7 @@ for (const sqlClient of ['sqlx']) {
     const allowed = [
       kernel(),
       workspacePackage(
-        'hermes-contacts-persistence',
+        'makosh-contacts-persistence',
         { role: 'domain', owner: 'contacts', surface: 'persistence' },
         [dependency(sqlClient)],
       ),
@@ -462,7 +462,7 @@ for (const alternativeClient of ['tokio-postgres', 'postgres', 'diesel', 'sea-or
     const packages = [
       kernel(),
       workspacePackage(
-        'hermes-contacts-persistence',
+        'makosh-contacts-persistence',
         { role: 'domain', owner: 'contacts', surface: 'persistence' },
         [dependency(alternativeClient)],
       ),
@@ -478,20 +478,20 @@ for (const alternativeClient of ['tokio-postgres', 'postgres', 'diesel', 'sea-or
 
 
 test('isolates the Kernel SQLite client in its persistence adapter', () => {
-  const contract = workspacePackage('hermes-kernel-control-store', {
+  const contract = workspacePackage('makosh-kernel-control-store', {
     role: 'core',
     owner: 'kernel',
     surface: 'contract',
   });
   const sqliteAdapter = workspacePackage(
-    'hermes-kernel-control-store-sqlite',
+    'makosh-kernel-control-store-sqlite',
     { role: 'core', owner: 'kernel', surface: 'persistence' },
-    [dependency('hermes-kernel-control-store'), dependency('rusqlite')],
+    [dependency('makosh-kernel-control-store'), dependency('rusqlite')],
   );
   const allowed = [
     kernel([
-      dependency('hermes-kernel-control-store'),
-      dependency('hermes-kernel-control-store-sqlite'),
+      dependency('makosh-kernel-control-store'),
+      dependency('makosh-kernel-control-store-sqlite'),
     ]),
     contract,
     sqliteAdapter,
@@ -511,9 +511,9 @@ test('isolates the Kernel SQLite client in its persistence adapter', () => {
     kernel(),
     sqliteAdapter,
     workspacePackage(
-      'hermes-telegram-runtime',
+      'makosh-telegram-runtime',
       { role: 'integration', owner: 'telegram', surface: 'runtime' },
-      [dependency('hermes-kernel-control-store-sqlite')],
+      [dependency('makosh-kernel-control-store-sqlite')],
     ),
   ];
   assert.ok(
@@ -527,7 +527,7 @@ test('isolates the Kernel SQLite client in its persistence adapter', () => {
 test('rejects an unregistered core-owned package', () => {
   const packages = [
     kernel(),
-    workspacePackage('hermes-kernel-unlisted-helper', {
+    workspacePackage('makosh-kernel-unlisted-helper', {
       role: 'core',
       owner: 'kernel',
       surface: 'contract',
@@ -545,7 +545,7 @@ test('rejects an unregistered core-owned package', () => {
 test('keeps Event Hub, telemetry control and settings registry exclusive to Kernel', () => {
   const packages = [
     kernel(),
-    workspacePackage('hermes-events-runtime', {
+    workspacePackage('makosh-events-runtime', {
       role: 'platform',
       owner: 'events',
       surface: 'runtime',
@@ -561,7 +561,7 @@ test('keeps Event Hub, telemetry control and settings registry exclusive to Kern
 test('keeps settings registry exclusive to Kernel', () => {
   const packages = [
     kernel(),
-    workspacePackage('hermes-runtime-settings', {
+    workspacePackage('makosh-runtime-settings', {
       role: 'platform',
       owner: 'runtime_protocol',
       surface: 'runtime',
@@ -577,7 +577,7 @@ test('keeps settings registry exclusive to Kernel', () => {
 test('rejects a settings registry package outside Kernel without component metadata', () => {
   const packages = [
     kernel(),
-    workspacePackage('hermes-settings-registry', {
+    workspacePackage('makosh-settings-registry', {
       role: 'platform',
       owner: 'runtime_protocol',
       surface: 'runtime',
@@ -590,7 +590,7 @@ test('rejects a settings registry package outside Kernel without component metad
 test('rejects an Event Hub package outside Kernel even without component metadata', () => {
   const packages = [
     kernel(),
-    workspacePackage('hermes-event-hub', {
+    workspacePackage('makosh-event-hub', {
       role: 'platform',
       owner: 'events',
       surface: 'runtime',

@@ -5,7 +5,7 @@ use super::webauthn::{
     BrowserAssertionMaterialV1, BrowserAuthenticationCeremonyV1, BrowserCredentialMaterialV1,
     BrowserWebauthnVerifier,
 };
-use hermes_gateway_session_contract::{
+use makosh_gateway_session_contract::{
     BrowserAssertionAuthority, BrowserAuthenticationAuthority, BrowserDeviceAuthority,
     GatewayIdentityFenceV1,
 };

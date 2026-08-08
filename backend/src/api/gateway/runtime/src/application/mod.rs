@@ -5,15 +5,15 @@ use std::future::Future;
 use std::pin::Pin;
 
 use bytes::Bytes;
-use hermes_gateway_session_contract::{
-    BrowserAuthenticationAuthority, BrowserEnrollmentAuthority, ClientBootstrapAuthority,
-};
 use http_body_util::Full;
 use hyper::Request;
 use hyper::body::Body;
 use hyper::header::{HOST, ORIGIN};
 use hyper::service::Service;
 use hyper::{Response, StatusCode};
+use makosh_gateway_session_contract::{
+    BrowserAuthenticationAuthority, BrowserEnrollmentAuthority, ClientBootstrapAuthority,
+};
 
 use crate::{
     BrowserAuthenticationRouter, BrowserBootstrapRouter, BrowserPairingRouter,
@@ -26,9 +26,9 @@ use crate::{
 const AUTHENTICATION_PREFIX: &str = "/browser/v1/authentication/";
 const PAIRING_PREFIX: &str = "/browser/v1/pairing/";
 const REALTIME_PATH: &str = "/api/realtime/v1/events";
-const SESSION_STATUS_PATH: &str = "/hermes.gateway.v1.BrowserSessionService/GetStatus";
-const CLIENT_BOOTSTRAP_PATH: &str = "/hermes.gateway.v1.ClientBootstrapService/GetBootstrap";
-const DEVELOPMENT_PROXY_PROOF_HEADER: &str = "x-hermes-development-proxy-proof";
+const SESSION_STATUS_PATH: &str = "/makosh.gateway.v1.BrowserSessionService/GetStatus";
+const CLIENT_BOOTSTRAP_PATH: &str = "/makosh.gateway.v1.ClientBootstrapService/GetBootstrap";
+const DEVELOPMENT_PROXY_PROOF_HEADER: &str = "x-makosh-development-proxy-proof";
 
 /// Composes technical health, browser authentication and client-safe realtime
 /// without adding an owner API or mounting a listener.

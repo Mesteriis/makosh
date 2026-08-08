@@ -10,15 +10,15 @@ const props = withDefaults(defineProps<{
 }>(), {})
 
 const classes = computed(() => [
-  'hermes-description-list',
+  'makosh-description-list',
   props.class
 ])
 </script>
 
 <template>
   <section :class="classes" :aria-label="title">
-    <h3 v-if="title" class="hermes-display-title">{{ title }}</h3>
-    <dl class="hermes-description-list-grid">
+    <h3 v-if="title" class="makosh-display-title">{{ title }}</h3>
+    <dl class="makosh-description-list-grid">
       <KeyValue
         v-for="item in items"
         :key="item.id"

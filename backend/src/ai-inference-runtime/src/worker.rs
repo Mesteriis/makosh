@@ -1,16 +1,16 @@
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     validate_reply_inference_request_v1,
     wire::{
         AiInferenceTerminalStatusV1, AiProviderReplyGenerationRequestV1,
         CommunicationReplySuggestionInferenceRequestV1,
     },
 };
-use hermes_ai_inference_core::{
+use makosh_ai_inference_core::{
     AiInferenceCoreErrorV1, AiInferenceExecutionPlanV1, AiInferenceRunStateV1,
     accept_reply_inference_v1, begin_reply_inference_v1, build_reply_provider_input_v1,
     complete_reply_inference_v1, reject_reply_inference_v1, reply_inference_execution_plan_v1,
 };
-use hermes_ai_inference_persistence::{
+use makosh_ai_inference_persistence::{
     AiInferencePersistenceErrorV1, AiInferencePersistenceV1, AiInferenceTransitionV1,
     PersistedAiInferenceRunV1,
 };
@@ -202,7 +202,7 @@ fn persistence_error(error: AiInferencePersistenceErrorV1) -> AiInferenceWorkerE
 
 #[cfg(test)]
 mod tests {
-    use hermes_ai_contracts::{
+    use makosh_ai_contracts::{
         AI_LOCAL_EGRESS_POLICY_REVISION_V1,
         wire::{
             AiEgressPolicyV1, AiPrivateSourceReceiptV1, AiReplyLanguageV1, AiReplySubjectPolicyV1,

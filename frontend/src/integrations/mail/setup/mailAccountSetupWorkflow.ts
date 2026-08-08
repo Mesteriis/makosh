@@ -1,12 +1,12 @@
 import type {
 	MailAccountStatusV1,
 	MailCredentialBindingReceiptV1,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
-import { MailCredentialPurposeV1 } from '../../../gen/hermes/mail/account/v1/client_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
+import { MailCredentialPurposeV1 } from '../../../gen/makosh/mail/account/v1/client_pb'
 import type {
 	GmailOAuthStartedV1,
 	MailAcceptedV1,
-} from '../../../gen/hermes/mail/v1/client_pb'
+} from '../../../gen/makosh/mail/v1/client_pb'
 import {
 	ManagedIntegrationSetupV1,
 	type ManagedIntegrationSetupReceiptV1,

@@ -5,7 +5,7 @@ import {
 	ClientModuleBootstrapV1Schema,
 	ClientModuleSettingsTargetBootstrapV1Schema,
 	ClientSettingsApplyStateV1,
-} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import { useMailPendingSettingsActivation } from './useMailPendingSettingsActivation'
 
 describe('useMailPendingSettingsActivation', () => {
@@ -13,7 +13,7 @@ describe('useMailPendingSettingsActivation', () => {
 		const applyManagedIntegration = vi.fn().mockResolvedValue({ applyState: 'current' })
 		const module = create(ClientModuleBootstrapV1Schema, {
 			registrationId: 'mail-registration',
-			moduleId: 'hermes-mail-runtime',
+			moduleId: 'makosh-mail-runtime',
 			capabilityIds: ['mail.storage.v1'],
 			settingsTargets: [
 				create(ClientModuleSettingsTargetBootstrapV1Schema, {

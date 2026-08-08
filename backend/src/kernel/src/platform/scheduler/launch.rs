@@ -2,9 +2,9 @@
 
 use std::path::Path;
 
-use hermes_kernel_control_store::{PlatformStorageBindingStateV1, PlatformStorageBindingV1};
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store::{PlatformStorageBindingStateV1, PlatformStorageBindingV1};
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     v1::{SchedulerRuntimeConfigurationV1, SchedulerRuntimeStorageBindingV1},
     validation::scheduler::validate_scheduler_runtime_configuration,
 };
@@ -52,7 +52,7 @@ pub(crate) fn topology_fingerprint(
     )
     .map_err(|_| "Scheduler receipt topology is unavailable".to_owned())?;
     let mut digest = Sha256::new();
-    digest.update(b"hermes.scheduler.runtime-topology.v1");
+    digest.update(b"makosh.scheduler.runtime-topology.v1");
     digest.update(event_topology.revision().to_be_bytes());
     digest.update(event_topology.credential_revision().to_be_bytes());
     update_optional_message(
@@ -199,7 +199,7 @@ fn stage_contracts(
 pub(crate) fn validate_storage_binding(
     reservation: &ManagedLaunchReservation,
     binding: &PlatformStorageBindingV1,
-    topology: &hermes_kernel_control_store::PlatformStorageTopology,
+    topology: &makosh_kernel_control_store::PlatformStorageTopology,
 ) -> Result<(), String> {
     (binding.state() == PlatformStorageBindingStateV1::Active
         && binding.registration_id() == reservation.registration_id()
@@ -213,7 +213,7 @@ pub(crate) fn validate_storage_binding(
 }
 
 struct SchedulerRuntimeEventConfigurationV1<'a> {
-    event_topology: &'a hermes_kernel_control_store::PlatformEventHubTopologyV1,
+    event_topology: &'a makosh_kernel_control_store::PlatformEventHubTopologyV1,
     topology: &'a topology::EventTopologyPlanV1,
     schedule_control: super::schedule_control::SchedulerScheduleControlConfigurationV1,
 }
@@ -221,7 +221,7 @@ struct SchedulerRuntimeEventConfigurationV1<'a> {
 fn runtime_configuration(
     reservation: &ManagedLaunchReservation,
     storage_binding: &PlatformStorageBindingV1,
-    storage_topology: &hermes_kernel_control_store::PlatformStorageTopology,
+    storage_topology: &makosh_kernel_control_store::PlatformStorageTopology,
     vault_instance_id: &str,
     vault: &vault_status::ManagedVaultStatus,
     events: SchedulerRuntimeEventConfigurationV1<'_>,
@@ -297,7 +297,7 @@ fn inherited_arguments(contracts: &StagedRuntimeContracts) -> Result<Vec<String>
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::v1::SchedulerRuntimeScheduleControlGrantV1;
+    use makosh_runtime_protocol::v1::SchedulerRuntimeScheduleControlGrantV1;
 
     use super::*;
 
@@ -324,7 +324,7 @@ mod tests {
 
     fn message_digest(message: &impl Message) -> [u8; 32] {
         let mut digest = Sha256::new();
-        digest.update(b"hermes.scheduler.runtime-topology.v1");
+        digest.update(b"makosh.scheduler.runtime-topology.v1");
         update_message(&mut digest, b"schedule-control-grant", message);
         digest.finalize().into()
     }

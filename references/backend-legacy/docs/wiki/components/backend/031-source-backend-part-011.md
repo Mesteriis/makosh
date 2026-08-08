@@ -157,9 +157,9 @@ struct PersonaReadModel {
   - только `review_state` — фильтр по состоянию ревью;
   - `entity_kind` + `entity_id` — фильтр по сущности.
   Запрещено комбинировать `review_state` с сущностными фильтрами. Лимит валидируется: разрешён диапазон 1–100, по умолчанию 50.
-- **`put_v1_relationship_review`** — обновляет состояние ревью отношения через `RelationshipReviewApplicationService.review_manual`. Аудируется с actor "hermes-frontend".
+- **`put_v1_relationship_review`** — обновляет состояние ревью отношения через `RelationshipReviewApplicationService.review_manual`. Аудируется с actor "makosh-frontend".
 
-Константы: actor — `"hermes-frontend"`, лимит по умолчанию — 50, минимум — 1, максимум — 100.
+Константы: actor — `"makosh-frontend"`, лимит по умолчанию — 50, минимум — 1, максимум — 100.
 
 ---
 
@@ -194,7 +194,7 @@ struct PersonaReadModel {
 
 - **`get_application_settings`** — возвращает все настройки (`list_settings`).
 - **`get_application_settings_accounts`** — список аккаунтов провайдеров коммуникаций (`CommunicationProviderAccountStore.list`).
-- **`put_application_setting`** — обновляет значение настройки по ключу. Actor: `"hermes-frontend"`. Операция аудируется (`NewApiAuditRecord::application_setting_set`).
+- **`put_application_setting`** — обновляет значение настройки по ключу. Actor: `"makosh-frontend"`. Операция аудируется (`NewApiAuditRecord::application_setting_set`).
 
 ---
 

@@ -146,7 +146,7 @@ pub(crate) async fn local_provider_auth_probe(
                 "codex",
                 &["login", "status"],
                 "Codex CLI is authenticated.",
-                "Run `codex login` in a trusted terminal, then open the Hermes callback again.",
+                "Run `codex login` in a trusted terminal, then open the Макошь callback again.",
             )
             .await
         }
@@ -154,7 +154,7 @@ pub(crate) async fn local_provider_auth_probe(
             "claude",
             &["auth", "status", "--json"],
             "Claude CLI is authenticated.",
-            "Run `claude auth login` in a trusted terminal, then open the Hermes callback again.",
+            "Run `claude auth login` in a trusted terminal, then open the Макошь callback again.",
         )
         .await,
         _ => Err(AiControlCenterError::InvalidRequest(

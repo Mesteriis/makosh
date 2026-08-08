@@ -11,4 +11,4 @@ pub use model::{
 };
 pub use repository::SpeechToTextPersistenceV1;
 
-pub const PACKAGE: &str = "hermes-speech-to-text-persistence";
+pub const PACKAGE: &str = "makosh-speech-to-text-persistence";

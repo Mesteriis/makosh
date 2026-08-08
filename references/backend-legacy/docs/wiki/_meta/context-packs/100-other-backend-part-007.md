@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/migrations/0151_create_communication_read_receipts.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0151_create_communication_read_receipts.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0151_create_communication_read_receipts.sql`
 - Size bytes / Размер в байтах: `2663`
 - Included characters / Включено символов: `2663`
 - Truncated / Обрезано: `no`
@@ -131,7 +131,7 @@ ON CONFLICT (receipt_id) DO NOTHING;
 
 ### `backend/migrations/0152_create_canonical_communication_aux_tables.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0152_create_canonical_communication_aux_tables.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0152_create_canonical_communication_aux_tables.sql`
 - Size bytes / Размер в байтах: `10104`
 - Included characters / Включено символов: `10104`
 - Truncated / Обрезано: `no`
@@ -395,7 +395,7 @@ ON CONFLICT (cert_id) DO NOTHING;
 
 ### `backend/migrations/0153_allow_person_semantic_sources.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0153_allow_person_semantic_sources.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0153_allow_person_semantic_sources.sql`
 - Size bytes / Размер в байтах: `283`
 - Included characters / Включено символов: `283`
 - Truncated / Обрезано: `no`
@@ -411,7 +411,7 @@ ALTER TABLE semantic_embeddings
 
 ### `backend/migrations/0154_create_signal_hub.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0154_create_signal_hub.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0154_create_signal_hub.sql`
 - Size bytes / Размер в байтах: `8758`
 - Included characters / Включено символов: `8758`
 - Truncated / Обрезано: `no`
@@ -620,7 +620,7 @@ CREATE INDEX IF NOT EXISTS signal_replay_requests_status_idx
 
 ### `backend/migrations/0155_create_event_outbox.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0155_create_event_outbox.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0155_create_event_outbox.sql`
 - Size bytes / Размер в байтах: `1338`
 - Included characters / Включено символов: `1338`
 - Truncated / Обрезано: `no`
@@ -663,7 +663,7 @@ CREATE INDEX IF NOT EXISTS event_log_subject_gin_idx
 
 ### `backend/migrations/0156_add_event_trace_indexes.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0156_add_event_trace_indexes.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0156_add_event_trace_indexes.sql`
 - Size bytes / Размер в байтах: `280`
 - Included characters / Включено символов: `280`
 - Truncated / Обрезано: `no`
@@ -680,7 +680,7 @@ CREATE INDEX IF NOT EXISTS event_log_causation_id_position_idx
 
 ### `backend/migrations/0157_create_whatsapp_provider_write_commands.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0157_create_whatsapp_provider_write_commands.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0157_create_whatsapp_provider_write_commands.sql`
 - Size bytes / Размер в байтах: `7259`
 - Included characters / Включено символов: `7259`
 - Truncated / Обрезано: `no`
@@ -868,7 +868,7 @@ ON CONFLICT (command_id) DO NOTHING;
 
 ### `backend/migrations/0158_extend_whatsapp_session_link_state_for_pair_code.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0158_extend_whatsapp_session_link_state_for_pair_code.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0158_extend_whatsapp_session_link_state_for_pair_code.sql`
 - Size bytes / Размер в байтах: `407`
 - Included characters / Включено символов: `407`
 - Truncated / Обрезано: `no`
@@ -893,7 +893,7 @@ ALTER TABLE whatsapp_web_sessions
 
 ### `backend/migrations/0159_add_whatsapp_business_cloud_provider_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0159_add_whatsapp_business_cloud_provider_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0159_add_whatsapp_business_cloud_provider_kind.sql`
 - Size bytes / Размер в байтах: `1319`
 - Included characters / Включено символов: `1319`
 - Truncated / Обрезано: `no`
@@ -943,7 +943,7 @@ ALTER TABLE communication_provider_account_secret_refs
 
 ### `backend/migrations/0160_add_zoom_provider_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0160_add_zoom_provider_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0160_add_zoom_provider_kind.sql`
 - Size bytes / Размер в байтах: `1481`
 - Included characters / Включено символов: `1481`
 - Truncated / Обрезано: `no`
@@ -996,7 +996,7 @@ CREATE INDEX IF NOT EXISTS telegram_calls_zoom_provider_idx
 
 ### `backend/migrations/0161_expand_communication_delivery_state.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0161_expand_communication_delivery_state.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0161_expand_communication_delivery_state.sql`
 - Size bytes / Размер в байтах: `416`
 - Included characters / Включено символов: `416`
 - Truncated / Обрезано: `no`
@@ -1021,7 +1021,7 @@ ALTER TABLE communication_messages
 
 ### `backend/migrations/0162_extend_canonical_provider_commands_runtime_state.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0162_extend_canonical_provider_commands_runtime_state.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0162_extend_canonical_provider_commands_runtime_state.sql`
 - Size bytes / Размер в байтах: `825`
 - Included characters / Включено символов: `825`
 - Truncated / Обрезано: `no`
@@ -1045,7 +1045,7 @@ ALTER TABLE communication_provider_commands
 
 ### `backend/migrations/0163_expand_communication_message_channel_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0163_expand_communication_message_channel_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0163_expand_communication_message_channel_kind.sql`
 - Size bytes / Размер в байтах: `388`
 - Included characters / Включено символов: `388`
 - Truncated / Обрезано: `no`
@@ -1068,7 +1068,7 @@ ALTER TABLE communication_messages
 
 ### `backend/migrations/0164_expand_calendar_event_relation_entity_type.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0164_expand_calendar_event_relation_entity_type.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0164_expand_calendar_event_relation_entity_type.sql`
 - Size bytes / Размер в байтах: `413`
 - Included characters / Включено символов: `413`
 - Truncated / Обрезано: `no`
@@ -1097,7 +1097,7 @@ ADD CONSTRAINT event_relations_entity_type_check CHECK (
 
 ### `backend/migrations/0165_add_yandex_telemost_provider_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0165_add_yandex_telemost_provider_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0165_add_yandex_telemost_provider_kind.sql`
 - Size bytes / Размер в байтах: `1387`
 - Included characters / Включено символов: `1387`
 - Truncated / Обрезано: `no`
@@ -1148,7 +1148,7 @@ ALTER TABLE communication_provider_account_secret_refs
 
 ### `backend/migrations/0166_add_realtime_conversation_radar_signal_observation_kind.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0166_add_realtime_conversation_radar_signal_observation_kind.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0166_add_realtime_conversation_radar_signal_observation_kind.sql`
 - Size bytes / Размер в байтах: `678`
 - Included characters / Включено символов: `678`
 - Truncated / Обрезано: `no`

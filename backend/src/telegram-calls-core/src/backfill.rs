@@ -1,4 +1,4 @@
-use hermes_scheduler_protocol::{JobKindV1, JobRunIdV1, OpaqueOwnerJobScopeV1};
+use makosh_scheduler_protocol::{JobKindV1, JobRunIdV1, OpaqueOwnerJobScopeV1};
 use sha2::{Digest, Sha256};
 
 pub const TELEGRAM_CALLS_REALTIME_BACKFILL_JOB_OWNER_V1: &str = "telegram";
@@ -11,9 +11,9 @@ pub const TELEGRAM_CALLS_REALTIME_BACKFILL_LEASE_TTL_MILLIS_V1: i64 = 60_000;
 const _: () = assert!(TELEGRAM_CALLS_REALTIME_BACKFILL_BATCH_SIZE_V1 <= 256);
 const _: () = assert!(TELEGRAM_CALLS_REALTIME_BACKFILL_MAX_BATCHES_PER_BOOT_V1 <= 4_096);
 
-const RUN_ID_LABEL: &[u8] = b"hermes.telegram.calls.realtime-backfill.run.v1";
-const MESSAGE_ID_LABEL: &[u8] = b"hermes.telegram.calls.realtime-backfill.message.v1";
-const IDEMPOTENCY_KEY_LABEL: &[u8] = b"hermes.telegram.calls.realtime-backfill.idempotency.v1";
+const RUN_ID_LABEL: &[u8] = b"makosh.telegram.calls.realtime-backfill.run.v1";
+const MESSAGE_ID_LABEL: &[u8] = b"makosh.telegram.calls.realtime-backfill.message.v1";
+const IDEMPOTENCY_KEY_LABEL: &[u8] = b"makosh.telegram.calls.realtime-backfill.idempotency.v1";
 
 #[must_use]
 pub fn telegram_calls_realtime_backfill_job_kind_v1() -> JobKindV1 {

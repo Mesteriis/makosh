@@ -23,17 +23,17 @@ test('Telegram automation packages are independent integration build units', asy
   }
   assert.doesNotMatch(apiManifest, /telegram-automation-core|sqlx|telegram-runtime/);
   assert.doesNotMatch(coreManifest, /sqlx|prost|telegram-runtime|telegram-persistence/);
-  assert.match(persistenceManifest, /hermes-telegram-automation-core/);
-  assert.doesNotMatch(persistenceManifest, /hermes-telegram-api|hermes-telegram-tdlib/);
-  assert.match(runtimeManifest, /hermes-telegram-automation-api/);
-  assert.match(runtimeManifest, /hermes-telegram-automation-core/);
-  assert.match(runtimeManifest, /hermes-telegram-automation-persistence/);
+  assert.match(persistenceManifest, /makosh-telegram-automation-core/);
+  assert.doesNotMatch(persistenceManifest, /makosh-telegram-api|makosh-telegram-tdlib/);
+  assert.match(runtimeManifest, /makosh-telegram-automation-api/);
+  assert.match(runtimeManifest, /makosh-telegram-automation-core/);
+  assert.match(runtimeManifest, /makosh-telegram-automation-persistence/);
 });
 
 test('Telegram automation exposes exact query and command routes without a generic engine', async () => {
   const [contract, proto, admission, runtimePort] = await Promise.all([
     source('src/telegram-automation-api/src/contract.rs'),
-    source('src/telegram-automation-api/proto/hermes/telegram/automation/v1/automation.proto'),
+    source('src/telegram-automation-api/proto/makosh/telegram/automation/v1/automation.proto'),
     source('src/telegram-runtime/src/admission.rs'),
     source('src/telegram-runtime/src/automation_client_port.rs'),
   ]);
@@ -48,7 +48,7 @@ test('Telegram automation exposes exact query and command routes without a gener
   assert.match(proto, /service TelegramAutomationQueryService/);
   assert.match(proto, /service TelegramAutomationCommandService/);
   assert.doesNotMatch(proto, /\bgoogle\.protobuf\.Any\b|\bmap\s*</);
-  assert.doesNotMatch(runtimePort, /hermes_communications|hermes_telegram_tdlib/);
+  assert.doesNotMatch(runtimePort, /makosh_communications|makosh_telegram_tdlib/);
   assert.doesNotMatch(runtimePort, /serde_json|Value|HashMap/);
 });
 
@@ -64,6 +64,6 @@ test('Telegram assembly composes automation storage without becoming runtime', a
   assert.match(assembly, /telegram_automation_storage_migration_v1/);
   assert.match(schema, /telegram_automation_templates/);
   assert.match(schema, /telegram_automation_preview_receipts/);
-  assert.doesNotMatch(schema, /hermes_data\.communications_/);
+  assert.doesNotMatch(schema, /makosh_data\.communications_/);
   assert.doesNotMatch(assembly, /render_preview|AutomationPolicyDraft/);
 });

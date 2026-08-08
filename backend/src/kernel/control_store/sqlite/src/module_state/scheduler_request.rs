@@ -2,7 +2,7 @@
 
 use std::collections::BTreeSet;
 
-use hermes_kernel_control_store::{ModuleRegistration, ModuleSchedulerJobRequestV1};
+use makosh_kernel_control_store::{ModuleRegistration, ModuleSchedulerJobRequestV1};
 use rusqlite::{Connection, params};
 
 use crate::{SqliteControlStore, StoreError, valid_capability_ids, valid_identity_token};
@@ -58,7 +58,7 @@ pub(crate) fn insert_scheduler_job_requests(
 ) -> Result<(), StoreError> {
     for request in requests {
         connection.execute(
-            "INSERT INTO hermes_kernel_module_scheduler_job_request
+            "INSERT INTO makosh_kernel_module_scheduler_job_request
              (registration_id, capability_id, job_owner, job_name, job_major, job_revision,
               contract_schema_sha256)
              VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
@@ -83,7 +83,7 @@ fn read_scheduler_job_requests(
 ) -> Result<Vec<ModuleSchedulerJobRequestV1>, StoreError> {
     let mut statement = connection.prepare(
         "SELECT job_owner, job_name, job_major, job_revision, contract_schema_sha256
-         FROM hermes_kernel_module_scheduler_job_request
+         FROM makosh_kernel_module_scheduler_job_request
          WHERE registration_id = ?1 AND capability_id = ?2
          ORDER BY job_owner, job_name, job_major",
     )?;

@@ -1,7 +1,7 @@
 import type {
 	MailDeliveryOperationStatusV1,
 	SyncInboxAcceptedV1,
-} from '../../../gen/hermes/mail/v1/client_pb'
+} from '../../../gen/makosh/mail/v1/client_pb'
 import { getMailDeliveryCommandConnectClient } from './mailDeliveryCommandClient'
 import { getMailDeliveryQueryConnectClient } from './mailDeliveryQueryClient'
 import { getMailSyncConnectClient } from './mailSyncClient'

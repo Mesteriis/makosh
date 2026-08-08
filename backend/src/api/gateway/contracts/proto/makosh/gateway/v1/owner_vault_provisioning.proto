@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package makosh.gateway.v1;
+
+enum OwnerVaultSecretClassV1 {
+  OWNER_VAULT_SECRET_CLASS_V1_UNSPECIFIED = 0;
+  OWNER_VAULT_SECRET_CLASS_V1_PROVIDER_CREDENTIAL = 1;
+  OWNER_VAULT_SECRET_CLASS_V1_OAUTH_REFRESH_CREDENTIAL = 2;
+  OWNER_VAULT_SECRET_CLASS_V1_SESSION_CREDENTIAL_BLOB = 3;
+  OWNER_VAULT_SECRET_CLASS_V1_SESSION_STORE_KEY = 5;
+}
+
+enum OwnerVaultActionV1 {
+  OWNER_VAULT_ACTION_V1_UNSPECIFIED = 0;
+  OWNER_VAULT_ACTION_V1_CREATE = 1;
+  OWNER_VAULT_ACTION_V1_REPLACE_CAS = 2;
+  OWNER_VAULT_ACTION_V1_RETIRE = 3;
+  OWNER_VAULT_ACTION_V1_DELETE = 4;
+}
+
+// Public write-only platform ceremony. The authenticated browser session
+// supplies the human owner and device; callers cannot select either identity.
+message PrepareOwnerVaultProvisioningRequestV1 {
+  bytes operation_id = 1;
+  string target_registration_id = 2;
+  string capability_id = 3;
+  string configuration_instance_id = 4;
+  string purpose_id = 5;
+  OwnerVaultSecretClassV1 secret_class = 6;
+  OwnerVaultActionV1 action = 7;
+  uint64 secret_revision = 8;
+  bytes response_recipient_hpke_public_key_x25519 = 9;
+}
+
+message PrepareOwnerVaultProvisioningResponseV1 {
+  uint32 major = 1;
+  string challenge_id = 2;
+  bytes challenge_bytes = 3;
+  uint64 expires_at_unix_millis = 4;
+}
+
+message AuthorizeOwnerVaultProvisioningRequestV1 {
+  string challenge_id = 1;
+  bytes device_signature_raw = 2;
+}
+
+message AuthorizeOwnerVaultProvisioningResponseV1 {
+  uint32 major = 1;
+  string provisioning_session_id = 2;
+  uint64 expires_at_unix_millis = 3;
+  uint64 vault_runtime_generation = 4;
+  bytes vault_hpke_public_key_x25519 = 5;
+  string audience_registration_id = 6;
+  string audience_runtime_instance_id = 7;
+  uint64 audience_runtime_generation = 8;
+  uint64 audience_grant_epoch = 9;
+  bytes lease_request_id = 10;
+  bytes lease_operation_digest_sha256 = 11;
+  bytes command_request_id = 12;
+  bytes lease_response_hpke_encapped_key = 13;
+  bytes lease_response_ciphertext = 14;
+  bytes lease_response_hpke_authentication_tag = 15;
+}
+
+message CommitOwnerVaultProvisioningRequestV1 {
+  string provisioning_session_id = 1;
+  bytes operation_digest_sha256 = 2;
+  bytes hpke_encapped_key = 3;
+  bytes ciphertext = 4;
+  bytes hpke_authentication_tag = 5;
+}
+
+// The host adapter opens this exact response and maps only the typed sanitized
+// VaultProvisioningReceiptV1 to application code.
+message CommitOwnerVaultProvisioningResponseV1 {
+  uint32 major = 1;
+  uint64 vault_runtime_generation = 2;
+  bytes command_request_id = 3;
+  bytes operation_digest_sha256 = 4;
+  bytes receipt_hpke_encapped_key = 5;
+  bytes receipt_ciphertext = 6;
+  bytes receipt_hpke_authentication_tag = 7;
+}
+
+service OwnerVaultProvisioningService {
+  rpc Prepare(PrepareOwnerVaultProvisioningRequestV1)
+      returns (PrepareOwnerVaultProvisioningResponseV1);
+  rpc Authorize(AuthorizeOwnerVaultProvisioningRequestV1)
+      returns (AuthorizeOwnerVaultProvisioningResponseV1);
+  rpc Commit(CommitOwnerVaultProvisioningRequestV1)
+      returns (CommitOwnerVaultProvisioningResponseV1);
+}

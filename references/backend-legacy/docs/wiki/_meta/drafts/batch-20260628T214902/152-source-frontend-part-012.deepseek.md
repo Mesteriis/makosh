@@ -158,8 +158,8 @@
   - `'telegram.media.upload.started'`
   - `'telegram.media.upload.progress'`
 
-  Если команда с `command_id` из `payload` уже есть в списке, обновляются поля: `status`, `retry_count`, `max_retries`, `last_error`, `result_payload`, `next_attempt_at`, `last_attempt_at`, `provider_observed_at`, `provider_state`, `reconciliation_status`, `reconciled_at`, `dead_lettered_at`, `completed_at`, `updated_at`.  
-  Если команда отсутствует и в `payload` есть `account_id`, создаётся новая запись (вставка в начало списка). При этом соблюдаются фильтры, закодированные в `queryKey`: `accountId` (позиция 3), `providerChatId` (5), `providerMessageId` (6) и `commandKinds` (7). Новый `command_kind` определяется по `eventType` или `payload.command_kind`, а также по `payload.action` (для `'join'` и `'leave'`). `actor_id` по умолчанию `'hermes-frontend'`.
+  Если команда с `command_id` из `payload` уже есть в списке, обновляются поля: `status`, `retry_count`, `max_retries`, `last_error`, `result_payload`, `next_attempt_at`, `last_attempt_at`, `provider_observed_at`, `provider_state`, `reconciliation_status`, `reconciled_at`, `dead_lettered_at`, `completed_at`, `updated_at`.
+  Если команда отсутствует и в `payload` есть `account_id`, создаётся новая запись (вставка в начало списка). При этом соблюдаются фильтры, закодированные в `queryKey`: `accountId` (позиция 3), `providerChatId` (5), `providerMessageId` (6) и `commandKinds` (7). Новый `command_kind` определяется по `eventType` или `payload.command_kind`, а также по `payload.action` (для `'join'` и `'leave'`). `actor_id` по умолчанию `'makosh-frontend'`.
 
 ## Форма настройки аккаунта Telegram
 
@@ -192,7 +192,7 @@
 
 - `telegramCommandRetrySummary(command)` — возвращает строку вида `"N/M retries used"` или `"No retry budget"` (если `max_retries === 0`).
 - `isTelegramCommandDeadLetter(command)` — `true`, если статус `'dead_letter'` или (`status === 'failed'` и `retry_count >= max_retries > 0`).
-- `telegramCommandAuditState(command)` — возвращает объект `{ label, detail, tone, is_dead_letter }`.  
+- `telegramCommandAuditState(command)` — возвращает объект `{ label, detail, tone, is_dead_letter }`.
   Учитывает:
   - статус команды (`queued`, `executing`, `completed`, `failed`, `dead_letter`)
   - тип команды (`send_media`, `mark_read`, `mark_unread`, `folder_add`, `folder_remove`, `edit`, `delete`, `react`, `unreact`, `pin`, `unpin`, `archive`, `unarchive` и др.)

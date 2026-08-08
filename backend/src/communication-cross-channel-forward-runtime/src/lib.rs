@@ -36,7 +36,7 @@ pub use source_results::{
     consume_source_prepared_once_v1, consume_source_rejected_once_v1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-cross-channel-forward-runtime";
+pub const PACKAGE: &str = "makosh-communication-cross-channel-forward-runtime";
 pub const COMMUNICATION_CROSS_CHANNEL_FORWARD_BLOB_CAPABILITY_ID_V1: &str =
     "communication_cross_channel_forward.blob.v1";
 pub use admission::{

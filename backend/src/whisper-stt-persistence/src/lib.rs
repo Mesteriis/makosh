@@ -11,4 +11,4 @@ pub use model::{
 };
 pub use repository::WhisperSttPersistenceV1;
 
-pub const PACKAGE: &str = "hermes-whisper-stt-persistence";
+pub const PACKAGE: &str = "makosh-whisper-stt-persistence";

@@ -1,6 +1,6 @@
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 
-const WHATSAPP_MODULE_ID = 'hermes-whatsapp-runtime'
+const WHATSAPP_MODULE_ID = 'makosh-whatsapp-runtime'
 const WHATSAPP_ACCOUNT_ID_SETTING = 'whatsapp.account_id'
 const MAX_ACCOUNT_ID_BYTES = 512
 const textEncoder = new TextEncoder()

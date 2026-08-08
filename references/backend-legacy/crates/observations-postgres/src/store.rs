@@ -1,13 +1,13 @@
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 use sha2::{Digest, Sha256};
 use sqlx::postgres::{PgPool, PgRow};
 use sqlx::{Postgres, Row, Transaction};
 
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use crate::errors::ObservationStoreError;
-use hermes_observations_api::models::{
+use makosh_observations_api::models::{
     NewObservation, NewObservationIngestionRun, NewObservationLink, Observation,
     ObservationIngestionRun, ObservationIngestionRunStatus, ObservationKindDefinition,
     ObservationLink, ObservationOriginKind, validate_json_object, validate_non_empty,

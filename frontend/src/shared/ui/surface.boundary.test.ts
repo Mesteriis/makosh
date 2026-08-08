@@ -24,7 +24,7 @@ const surfaceComponents = [
 	'ActionCard'
 ]
 
-describe('Hermes UI surface component contracts', () => {
+describe('Макошь UI surface component contracts', () => {
 	it('keeps the surface pack documented and exported through the UI kit', () => {
 		const uiRoot = fileURLToPath(new URL('.', import.meta.url))
 		const barrel = readFileSync(join(uiRoot, 'index.ts'), 'utf8')
@@ -79,10 +79,10 @@ describe('Hermes UI surface component contracts', () => {
 
 		const cssSource = existsSync(stylesPath) ? readFileSync(stylesPath, 'utf8') : ''
 
-		expect(cssSource).toContain('.hermes-surface--clip')
-		expect(cssSource).toContain('.hermes-card--clip')
-		expect(surfaceSelectorsWithImplicitOverflowHidden(cssSource, 'hermes-surface')).toEqual([])
-		expect(surfaceSelectorsWithImplicitOverflowHidden(cssSource, 'hermes-card')).toEqual([])
+		expect(cssSource).toContain('.makosh-surface--clip')
+		expect(cssSource).toContain('.makosh-card--clip')
+		expect(surfaceSelectorsWithImplicitOverflowHidden(cssSource, 'makosh-surface')).toEqual([])
+		expect(surfaceSelectorsWithImplicitOverflowHidden(cssSource, 'makosh-card')).toEqual([])
 	})
 
 	it('keeps Card signal state presentation-only and motion-safe', () => {
@@ -90,18 +90,18 @@ describe('Hermes UI surface component contracts', () => {
 		const cardSource = readFileSync(join(uiRoot, 'primitives/Card.vue'), 'utf8')
 		const cssSource = readFileSync(join(uiRoot, 'styles/surfaces.css'), 'utf8')
 		const storySource = readFileSync(join(uiRoot, '../../../stories/ui/GeneralSurface.stories.ts'), 'utf8')
-		const signalCss = cssSource.slice(cssSource.indexOf('.hermes-card--signal'), cssSource.indexOf('.hermes-card-header'))
+		const signalCss = cssSource.slice(cssSource.indexOf('.makosh-card--signal'), cssSource.indexOf('.makosh-card-header'))
 
 		expect(cardSource).toContain('signal?: boolean')
 		expect(cardSource).toContain('signalTone?: CardSignalTone')
 		expect(cardSource).toContain('signalPulse?: boolean')
-		expect(cssSource).toContain('.hermes-card--signal')
-		expect(cssSource).toContain('@keyframes hermes-card-signal-border')
-		expect(cssSource).toContain('@keyframes hermes-card-signal-inner')
+		expect(cssSource).toContain('.makosh-card--signal')
+		expect(cssSource).toContain('@keyframes makosh-card-signal-border')
+		expect(cssSource).toContain('@keyframes makosh-card-signal-inner')
 		expect(signalCss).not.toContain('conic-gradient')
 		expect(signalCss).not.toContain('mask-composite')
 		expect(signalCss).not.toContain('rotate(')
-		expect(signalCss).not.toContain('hermes-card-signal-edge')
+		expect(signalCss).not.toContain('makosh-card-signal-edge')
 		expect(cssSource).toContain('@media (prefers-reduced-motion: reduce)')
 		expect(storySource).toContain(':signal="signalCard.active"')
 		expect(storySource).toContain(':signal-tone="signalCard.tone"')

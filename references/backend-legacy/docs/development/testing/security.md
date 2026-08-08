@@ -16,7 +16,7 @@ Notes:
 
 - `cargo-udeps` requires nightly Rust to execute.
 - `cargo-deny` is broader than `cargo-audit`; it also checks sources, versions, and licenses.
-- `make audit` intentionally passes `--ignore RUSTSEC-2023-0071`. The affected `rsa` crate is pulled into `Cargo.lock` through `sqlx-mysql`, while the active backend/`hermes-backend-testkit` SQLx graph uses PostgreSQL only and `cargo tree -i sqlx-mysql` prints no active path. The upstream advisory has no fixed version, so this is a documented lockfile-only exception rather than a hidden greenwash.
+- `make audit` intentionally passes `--ignore RUSTSEC-2023-0071`. The affected `rsa` crate is pulled into `Cargo.lock` through `sqlx-mysql`, while the active backend/`makosh-backend-testkit` SQLx graph uses PostgreSQL only and `cargo tree -i sqlx-mysql` prints no active path. The upstream advisory has no fixed version, so this is a documented lockfile-only exception rather than a hidden greenwash.
 
 Current repository state as of `2026-06-23`:
 

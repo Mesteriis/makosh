@@ -11,7 +11,7 @@ Telegram принадлежит Communications Domain как **channel/source bo
 Invariant: A channel is never a domain. A channel is an integration. A
 communication is the domain object.
 
-Telegram должен поставлять Hermes:
+Telegram должен поставлять Макошь:
 
 - raw provider evidence;
 - provider-specific metadata;
@@ -82,7 +82,7 @@ Trace reconstruction belongs to `platform/events`.
 | ADR-0046 | Blob storage and scanner boundary for attachment bytes |
 | ADR-0050 | V4 Telegram policy automation and call intelligence |
 | ADR-0052 | Capability/action confirmation policy |
-| ADR-0056 | Router-level `X-Hermes-Secret` local API auth |
+| ADR-0056 | Router-level `X-Макошь-Secret` local API auth |
 | ADR-0076 | Host vault for new secret payloads |
 | ADR-0083 | Account-scoped TDLib runtime slice |
 | ADR-0085 | Communication spine and Polygraph integration |
@@ -114,7 +114,7 @@ Trace reconstruction belongs to `platform/events`.
 | Store/helpers | `frontend/src/integrations/telegram/stores/telegram.ts` | Local UI state, filters, derived lists |
 | Components | `frontend/src/integrations/telegram/components/` | Chat list, timeline, composer, action rail, inspector |
 
-Realtime delivery on the frontend is shared with the rest of Hermes through
+Realtime delivery on the frontend is shared with the rest of Макошь through
 `frontend/src/platform/bootstrap/realtime.ts`; Telegram panels consume
 communications-scoped query state and cache patches instead of opening a second
 channel-scoped socket.

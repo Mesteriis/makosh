@@ -1,4 +1,4 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 
 use serde_json::{Value, json};
 use sqlx::Row;
@@ -8,7 +8,7 @@ use super::support::{
     LOCAL_API_TOKEN, build_cal_app, create_cal_event, get_request_with_token, json_body,
     post_request_with_token, unique_suffix, urlencoding_percent_encode,
 };
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::storage::database::Database;
 
 async fn event_get_endpoint_returns_non_server_error(path_suffix: &str) -> Option<Value> {
     let test_context = TestContext::new().await;

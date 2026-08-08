@@ -1,12 +1,12 @@
-use hermes_call_transcription_ingress::{
+use makosh_call_transcription_ingress::{
     recording_ready_publish_request_v1, recording_rejected_publish_request_v1,
 };
-use hermes_desktop_call_recording_api::{
+use makosh_desktop_call_recording_api::{
     GET_CONTRACT_NAME_V1, HOST_CONTRACT_NAME_V1, MODULE_ID_V1, OWNER_ID_V1,
     REALTIME_CONTRACT_NAME_V1, START_CONTRACT_NAME_V1, STOP_CONTRACT_NAME_V1,
     contract_reference_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ClientRpcRouteV1, HostCapabilityRequestV1, ModuleDescriptorV1,
     ModuleKindV1, ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1,
@@ -26,9 +26,9 @@ pub const BLOB_CAPABILITY_ID_V1: &str = "desktop_call_recording.blob.v1";
 pub const STORAGE_CAPABILITY_ID_V1: &str = "desktop_call_recording.storage.v1";
 pub const BLOB_CUSTODY_SCOPE_V1: &str = "desktop_call_recording.private_audio.v1";
 pub const START_PATH_V1: &str =
-    "/hermes.desktop_call_recording.v1.DesktopCallRecordingService/Start";
-pub const STOP_PATH_V1: &str = "/hermes.desktop_call_recording.v1.DesktopCallRecordingService/Stop";
-pub const GET_PATH_V1: &str = "/hermes.desktop_call_recording.v1.DesktopCallRecordingService/Get";
+    "/makosh.desktop_call_recording.v1.DesktopCallRecordingService/Start";
+pub const STOP_PATH_V1: &str = "/makosh.desktop_call_recording.v1.DesktopCallRecordingService/Stop";
+pub const GET_PATH_V1: &str = "/makosh.desktop_call_recording.v1.DesktopCallRecordingService/Get";
 
 #[must_use]
 pub fn module_descriptor_v1(build_id: &str) -> ModuleDescriptorV1 {
@@ -163,7 +163,7 @@ fn storage_capability() -> CapabilityDescriptorV1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_runtime_protocol::validation::descriptor::validate_descriptor_v1;
+    use makosh_runtime_protocol::validation::descriptor::validate_descriptor_v1;
     #[test]
     fn descriptor_is_an_integration_with_separate_capabilities() {
         let descriptor = module_descriptor_v1("test");

@@ -2,11 +2,11 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     NatsAccountJwtUpdateV1, NatsResolverAccountJwtPublisherV1, NatsResolverCredentialFenceV1,
     NatsResolverCredentialLeaseAdapterV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::{
         ApplyEventsAccountJwtUpdateRequestV1, ApplyEventsAccountJwtUpdateResponseV1,
         EventsAuthorityRuntimeConfigurationV1, EventsAuthorityRuntimeControlResponseV1,

@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
@@ -314,7 +314,7 @@ fn valid_safety_verdict_fact(fact: &AttachmentSafetyVerdictFactV1) -> bool {
 
 fn attachment_blob_admission_message_id(fact: &AttachmentBlobAdmissionFactV1) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.communications.attachment-blob-admission-observation.v1\0");
+    hasher.update(b"makosh.communications.attachment-blob-admission-observation.v1\0");
     hasher.update(fact.attachment_anchor_id);
     hasher.update(fact.source_observation_id);
     hasher.update([attachment_blob_expected_state_value(fact.expected_state) as u8]);
@@ -325,7 +325,7 @@ fn attachment_blob_admission_message_id(fact: &AttachmentBlobAdmissionFactV1) ->
 
 fn attachment_safety_verdict_message_id(fact: &AttachmentSafetyVerdictFactV1) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.communications.attachment-safety-verdict-observation.v1\0");
+    hasher.update(b"makosh.communications.attachment-safety-verdict-observation.v1\0");
     hasher.update(fact.attachment_anchor_id);
     hasher.update(fact.evidence_id);
     hasher.update(fact.causation_message_id);
@@ -339,7 +339,7 @@ fn attachment_safety_verdict_source_cursor_sha256(
     fact: &AttachmentSafetyVerdictFactV1,
 ) -> [u8; 32] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.communications.attachment-safety-verdict-source-cursor.v1\0");
+    hasher.update(b"makosh.communications.attachment-safety-verdict-source-cursor.v1\0");
     hasher.update(fact.attachment_anchor_id);
     hasher.update(fact.evidence_id);
     hasher.update(fact.causation_message_id);
@@ -383,7 +383,7 @@ const fn attachment_blob_transition_value(value: AttachmentBlobAdmissionTransiti
 
 fn runtime_source_reference(runtime_instance_id: &str) -> [u8; 16] {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.runtime.source-reference.v1\0");
+    hasher.update(b"makosh.runtime.source-reference.v1\0");
     hasher.update(runtime_instance_id.as_bytes());
     let digest: [u8; 32] = hasher.finalize().into();
     digest[..16]
@@ -426,7 +426,7 @@ fn outbox_error(_: OutboxRecordError) -> AttachmentObservationEnvelopeBuildError
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_events_protocol::validation::envelope::decode_envelope_v1;
+    use makosh_events_protocol::validation::envelope::decode_envelope_v1;
 
     #[test]
     fn blob_admission_is_anchor_partitioned_and_schema_bound() {

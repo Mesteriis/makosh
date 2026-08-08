@@ -1,4 +1,4 @@
-const LEGACY_SECRET_HEADER = 'x-hermes-secret'
+const LEGACY_SECRET_HEADER = 'x-makosh-secret'
 
 export type BrowserGatewayFetchOptions = {
 	origin?: string

@@ -1,7 +1,7 @@
 //! Deterministic bounded RFC822/MIME composition for Mail delivery.
 
 use base64::{Engine as _, engine::general_purpose::STANDARD};
-use hermes_mail_api::{MailContractError, OutgoingMailV1, valid_mailbox, valid_message_bytes};
+use makosh_mail_api::{MailContractError, OutgoingMailV1, valid_mailbox, valid_message_bytes};
 use sha2::{Digest, Sha256};
 
 pub const MAX_OUTBOUND_ATTACHMENT_BYTES: usize = 16 * 1024 * 1024;
@@ -34,7 +34,7 @@ pub fn compose_rfc822_with_attachments(
     if attachments.is_empty() {
         return Ok(plain_text_message(from_address, message));
     }
-    if attachments.len() > hermes_mail_api::MAX_DELIVERY_ATTACHMENTS {
+    if attachments.len() > makosh_mail_api::MAX_DELIVERY_ATTACHMENTS {
         return Err(MailContractError::InvalidPayload);
     }
     if attachments.iter().enumerate().any(|(index, attachment)| {
@@ -169,14 +169,14 @@ fn valid_media_type(value: &str) -> bool {
 
 fn mime_boundary(message: &OutgoingMailV1, attachments: &[OutboundAttachmentV1]) -> String {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.mail.outbound-mime-boundary.v1\0");
+    hasher.update(b"makosh.mail.outbound-mime-boundary.v1\0");
     hasher.update(message.operation_id.as_bytes());
     for attachment in attachments {
         hasher.update(attachment.anchor_id);
         hasher.update(Sha256::digest(&attachment.bytes));
     }
     let digest = hasher.finalize();
-    let mut boundary = String::from("hermes-");
+    let mut boundary = String::from("makosh-");
     for byte in &digest[..16] {
         use std::fmt::Write as _;
         write!(&mut boundary, "{byte:02x}").expect("writing to String cannot fail");

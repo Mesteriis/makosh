@@ -61,7 +61,7 @@ test('note candidate agreement separates Communications workflow Review and Know
     readFile(new URL('src/communication-note-candidate-api/src/lib.rs', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/communication-note-candidate-api/proto/hermes/communication_note_candidate/v1/note_candidate.proto',
+        'src/communication-note-candidate-api/proto/makosh/communication_note_candidate/v1/note_candidate.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -87,7 +87,7 @@ test('note candidate agreement separates Communications workflow Review and Know
     readFile(new URL('src/communications-note-source-api/src/lib.rs', BACKEND_ROOT), 'utf8'),
     readFile(
       new URL(
-        'src/communications-note-source-api/proto/hermes/communications/note_source/v1/note_source.proto',
+        'src/communications-note-source-api/proto/makosh/communications/note_source/v1/note_source.proto',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -191,14 +191,14 @@ test('note candidate agreement separates Communications workflow Review and Know
   assert.match(authenticatedStorageRunner, /managed_note_candidate_approve_reject_reaches_gateway_sse_and_replays_after_restart/);
 
   for (const unit of [
-    'hermes-communication-note-candidate-api',
-    'hermes-communication-note-candidate-core',
-    'hermes-communication-note-candidate-persistence',
-    'hermes-communication-note-candidate-runtime',
-    'hermes-communication-note-candidate-assembly',
-    'hermes-communications-note-source-api',
+    'makosh-communication-note-candidate-api',
+    'makosh-communication-note-candidate-core',
+    'makosh-communication-note-candidate-persistence',
+    'makosh-communication-note-candidate-runtime',
+    'makosh-communication-note-candidate-assembly',
+    'makosh-communications-note-source-api',
   ]) {
-    assert.match(workspace, new RegExp(`"src/${unit.replace('hermes-', '')}"`));
+    assert.match(workspace, new RegExp(`"src/${unit.replace('makosh-', '')}"`));
     assert.match(adr, new RegExp(`\\b${unit}\\b`));
   }
 
@@ -226,7 +226,7 @@ test('note candidate agreement separates Communications workflow Review and Know
   assert.match(lifecycle, /SourceIdentityMismatch/);
   assert.doesNotMatch(
     `${core}\n${extraction}\n${lifecycle}`,
-    /hermes_communications|hermes_review|hermes_knowledge|ollama|reqwest|sqlx|prompt/,
+    /makosh_communications|makosh_review|makosh_knowledge|ollama|reqwest|sqlx|prompt/,
   );
 
   assert.match(persistenceManifest, /role = "workflow"/);
@@ -246,7 +246,7 @@ test('note candidate agreement separates Communications workflow Review and Know
   assert.match(persistenceOutbox, /mark_event_published/);
   assert.doesNotMatch(
     `${persistence}\n${persistenceModel}\n${persistenceRepository}\n${migration}`,
-    /hermes_communications|hermes_review|hermes_knowledge|ollama|prompt|provider_id/,
+    /makosh_communications|makosh_review|makosh_knowledge|ollama|prompt|provider_id/,
   );
 
   assert.match(sourceManifest, /role = "domain"/);
@@ -279,11 +279,11 @@ test('note candidate agreement separates Communications workflow Review and Know
   assert.match(runtimeReviewSubmission, /write_review_candidate_v1/);
   assert.match(runtimeReviewSubmission, /SubmitNoteCandidateForReviewCommandV1/);
   assert.match(runtimeSourceResults, /materialize_note_source_v1/);
-  assert.match(runtimeManifest, /hermes-review-note-candidate-api/);
-  assert.doesNotMatch(runtimeManifest, /hermes-review-note-candidate-(core|persistence|runtime|assembly)/);
+  assert.match(runtimeManifest, /makosh-review-note-candidate-api/);
+  assert.doesNotMatch(runtimeManifest, /makosh-review-note-candidate-(core|persistence|runtime|assembly)/);
   assert.doesNotMatch(
     `${runtime}\n${runtimeAdmission}\n${runtimeExtraction}\n${runtimeReviewSubmission}\n${runtimeSourceResults}`,
-    /hermes_review_note_candidate_(core|persistence|runtime|assembly)|hermes_knowledge|ollama|reqwest|prompt|provider_id/,
+    /makosh_review_note_candidate_(core|persistence|runtime|assembly)|makosh_knowledge|ollama|reqwest|prompt|provider_id/,
   );
 
   assert.match(assemblyManifest, /role = "workflow"/);
@@ -292,9 +292,9 @@ test('note candidate agreement separates Communications workflow Review and Know
   assert.match(assembly, /communication_note_candidate_extraction_storage_bundle_v1/);
   assert.match(assembly, /communication_note_candidate_extraction\.runtime\.v1/);
   assert.match(assembly, /communication_note_candidate_extraction\.storage\.v1/);
-  assert.doesNotMatch(assembly, /hermes_communications|hermes_review|hermes_knowledge|ollama|provider_id/);
+  assert.doesNotMatch(assembly, /makosh_communications|makosh_review|makosh_knowledge|ollama|provider_id/);
 
-  assert.match(communicationsRuntimeManifest, /hermes-communications-note-source-api/);
+  assert.match(communicationsRuntimeManifest, /makosh-communications-note-source-api/);
   assert.match(communicationsAdmission, /communications_note_source_capability_v1/);
   assert.match(communicationsAdmission, /communications\.note-source\.blob\.v1/);
   assert.match(communicationsEventRuntime, /consume_next_note_source_prepare_v1/);

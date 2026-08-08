@@ -5,11 +5,11 @@ import {
 	ClientModuleSettingsBootstrapV1Schema,
 	ClientSettingValueEntryV1Schema,
 	ClientSettingValueV1Schema,
-} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	MailAccountReadinessV1,
 	MailAccountStatusV1Schema,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
 import { useMailAccountManagement } from './useMailAccountManagement'
 
 describe('useMailAccountManagement', () => {
@@ -60,7 +60,7 @@ describe('useMailAccountManagement', () => {
 		const controller = useMailAccountManagement(
 			() => create(ClientModuleBootstrapV1Schema, {
 				registrationId: 'mail.local',
-				moduleId: 'hermes-mail-runtime',
+				moduleId: 'makosh-mail-runtime',
 				capabilityIds: ['mail.account.query.v1'],
 			}),
 			workflow as never,
@@ -76,7 +76,7 @@ describe('useMailAccountManagement', () => {
 function mailModule() {
 	return create(ClientModuleBootstrapV1Schema, {
 		registrationId: 'mail.local',
-		moduleId: 'hermes-mail-runtime',
+		moduleId: 'makosh-mail-runtime',
 		capabilityIds: [
 			'mail.account.catalog.query.v1',
 			'mail.account.query.v1',

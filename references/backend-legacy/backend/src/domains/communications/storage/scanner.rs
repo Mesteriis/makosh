@@ -264,7 +264,7 @@ impl AttachmentSafetyScanner for HeuristicAttachmentSafetyScanner {
 
         Ok(AttachmentSafetyScanReport {
             status,
-            engine: Some("hermes_heuristic_v1".to_owned()),
+            engine: Some("makosh_heuristic_v1".to_owned()),
             checked_at: Some(Utc::now()),
             summary: Some(scan_summary(status).to_owned()),
             metadata: json!({
@@ -425,7 +425,7 @@ mod tests {
             .expect("scan report");
 
         assert_eq!(report.status, AttachmentSafetyScanStatus::Malicious);
-        assert_eq!(report.engine.as_deref(), Some("hermes_heuristic_v1"));
+        assert_eq!(report.engine.as_deref(), Some("makosh_heuristic_v1"));
         assert!(report.checked_at.is_some());
         assert_eq!(
             report.summary.as_deref(),
@@ -449,7 +449,7 @@ mod tests {
             .expect("scan report");
 
         assert_eq!(report.status, AttachmentSafetyScanStatus::Suspicious);
-        assert_eq!(report.engine.as_deref(), Some("hermes_heuristic_v1"));
+        assert_eq!(report.engine.as_deref(), Some("makosh_heuristic_v1"));
         assert!(report.checked_at.is_some());
         assert_eq!(
             report.summary.as_deref(),

@@ -9,7 +9,7 @@ pub use model::{
     TasksValidationErrorV1, derive_task_id_v1, task_creation_fingerprint_v1, validate_task_v1,
 };
 
-pub const PACKAGE: &str = "hermes-tasks-core";
+pub const PACKAGE: &str = "makosh-tasks-core";
 pub const STABLE_ID_BYTES_V1: usize = 16;
 pub const DIGEST_BYTES_V1: usize = 32;
 pub const MAX_LOGICAL_OWNER_ID_BYTES_V1: usize = 128;

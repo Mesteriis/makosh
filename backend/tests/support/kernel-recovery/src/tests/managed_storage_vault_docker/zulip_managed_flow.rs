@@ -2,16 +2,16 @@
 
 use super::*;
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleRegistrationState, PlatformStorageBindingStateV1, SettingsApplyState,
 };
-use hermes_zulip_api::{
+use makosh_zulip_api::{
     ZulipClientRequestV1, ZulipClientResponseV1, ZulipCommandV1,
     account::{ZulipAccountLifecycleCommandV1, ZulipCredentialBindingStateV1},
     client_contract::ZulipClientContractV1,
     operational::{ZulipOperationalQueryResponseV1, ZulipOperationalQueryV1},
 };
-use hermes_zulip_runtime::{
+use makosh_zulip_runtime::{
     admission::ZULIP_STORAGE_CAPABILITY_ID,
     client_port::{decode_module_response, encode_module_request},
 };
@@ -255,7 +255,7 @@ fn current_zulip_runtime(
 fn query_zulip_account_status(
     contour: &ManagedZulipContour,
     runtime: &StartedZulipRuntime,
-) -> hermes_zulip_api::operational::ZulipAccountStatusV1 {
+) -> makosh_zulip_api::operational::ZulipAccountStatusV1 {
     let request =
         ZulipClientRequestV1::OperationalQuery(ZulipOperationalQueryV1::GetAccountStatus {
             account_id: ZULIP_ACCOUNT_ID.to_owned(),
@@ -282,7 +282,7 @@ fn apply_zulip_account_lifecycle(
     contour: &ManagedZulipContour,
     runtime: &StartedZulipRuntime,
     command: ZulipAccountLifecycleCommandV1,
-) -> hermes_zulip_api::account::ZulipAccountLifecycleReceiptV1 {
+) -> makosh_zulip_api::account::ZulipAccountLifecycleReceiptV1 {
     let encoded = encode_module_request(43, &ZulipClientRequestV1::AccountLifecycle(command))
         .expect("encode Zulip account lifecycle");
     let response = route_zulip_until_available(
@@ -331,7 +331,7 @@ fn route_zulip_until_available(
             }
         };
         let envelope =
-            hermes_runtime_protocol::v1::ModuleClientResponseV1::decode(response.as_slice())
+            makosh_runtime_protocol::v1::ModuleClientResponseV1::decode(response.as_slice())
                 .expect("decode Zulip client response envelope");
         if envelope.error_code.is_empty() {
             return response;

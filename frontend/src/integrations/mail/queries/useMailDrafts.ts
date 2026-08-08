@@ -3,7 +3,7 @@ import {
 	MailCompositionModeV1,
 	type MailDraftV1,
 	type MailTemplatePreviewV1,
-} from '../../../gen/hermes/mail/composition/v1/client_pb'
+} from '../../../gen/makosh/mail/composition/v1/client_pb'
 import {
 	deleteMailDraft,
 	listMailDrafts,

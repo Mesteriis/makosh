@@ -6,30 +6,30 @@ const BACKEND_ROOT = new URL('../..', import.meta.url);
 const POLICY_PATH = new URL('architecture/policy.json', BACKEND_ROOT);
 
 const MAIL_PACKAGES = [
-  'hermes-mail-api',
-  'hermes-mail-core',
-  'hermes-mail-imap',
-  'hermes-mail-gmail',
-  'hermes-mail-smtp',
-  'hermes-mail-persistence',
-  'hermes-mail-runtime',
-  'hermes-mail-assembly',
+  'makosh-mail-api',
+  'makosh-mail-core',
+  'makosh-mail-imap',
+  'makosh-mail-gmail',
+  'makosh-mail-smtp',
+  'makosh-mail-persistence',
+  'makosh-mail-runtime',
+  'makosh-mail-assembly',
 ];
 
 const PROVIDER_DELIVERY_CONTRACT_PACKAGES = [
-  'hermes-mail-delivery-intent-contract',
-  'hermes-telegram-delivery-intent-contract',
-  'hermes-whatsapp-delivery-intent-contract',
-  'hermes-zulip-delivery-intent-contract',
+  'makosh-mail-delivery-intent-contract',
+  'makosh-telegram-delivery-intent-contract',
+  'makosh-whatsapp-delivery-intent-contract',
+  'makosh-zulip-delivery-intent-contract',
 ];
 
 const STAGED_OLLAMA_PACKAGES = [
-  'hermes-ollama-ai-api',
-  'hermes-ollama-ai-assembly',
-  'hermes-ollama-ai-core',
-  'hermes-ollama-ai-http',
-  'hermes-ollama-ai-persistence',
-  'hermes-ollama-ai-runtime',
+  'makosh-ollama-ai-api',
+  'makosh-ollama-ai-assembly',
+  'makosh-ollama-ai-core',
+  'makosh-ollama-ai-http',
+  'makosh-ollama-ai-persistence',
+  'makosh-ollama-ai-runtime',
 ];
 
 const MAIL_CAPABILITIES = [
@@ -58,69 +58,69 @@ const MAIL_CAPABILITIES = [
 ];
 
 const MAIL_CARGO_FEATURES = {
-  'hermes-contacts-persistence': {
+  'makosh-contacts-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-mail-contacts-sync-persistence': {
+  'makosh-mail-contacts-sync-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-communication-cross-channel-forward-persistence': {
+  'makosh-communication-cross-channel-forward-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-communication-delayed-delivery-persistence': {
+  'makosh-communication-delayed-delivery-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-communication-delivery-intent-persistence': {
+  'makosh-communication-delivery-intent-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-reviewed-task-candidate-promotion-persistence': {
+  'makosh-reviewed-task-candidate-promotion-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-reviewed-note-candidate-promotion-persistence': {
+  'makosh-reviewed-note-candidate-promotion-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-mail-api': {
+  'makosh-mail-api': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-mail-imap': {
+  'makosh-mail-imap': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-mail-gmail': {
+  'makosh-mail-gmail': {
     default: [],
-    'conformance-test-support': ['hermes-mail-api/conformance-test-support'],
+    'conformance-test-support': ['makosh-mail-api/conformance-test-support'],
   },
-  'hermes-mail-persistence': {
+  'makosh-mail-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-mail-runtime': {
+  'makosh-mail-runtime': {
     default: [],
     'conformance-test-support': [
-      'hermes-mail-api/conformance-test-support',
-      'hermes-mail-carddav/conformance-test-support',
-      'hermes-mail-gmail/conformance-test-support',
-      'hermes-mail-google-people/conformance-test-support',
-      'hermes-mail-imap/conformance-test-support',
+      'makosh-mail-api/conformance-test-support',
+      'makosh-mail-carddav/conformance-test-support',
+      'makosh-mail-gmail/conformance-test-support',
+      'makosh-mail-google-people/conformance-test-support',
+      'makosh-mail-imap/conformance-test-support',
     ],
   },
-  'hermes-mail-address-book-persistence': {
+  'makosh-mail-address-book-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-mail-google-people': {
+  'makosh-mail-google-people': {
     default: [],
     'conformance-test-support': [],
   },
-  'hermes-mail-carddav': {
+  'makosh-mail-carddav': {
     default: [],
     'conformance-test-support': [],
   },
@@ -176,17 +176,17 @@ test('Mail outbound attachments keep provider delivery contracts as separate int
       ...MAIL_PACKAGES,
       ...PROVIDER_DELIVERY_CONTRACT_PACKAGES,
       ...STAGED_OLLAMA_PACKAGES,
-      'hermes-mail-retained-evidence-replay-persistence',
-      'hermes-mail-retained-evidence-replay-contract',
-      'hermes-mail-address-book-contract',
-      'hermes-mail-address-book-persistence',
-      'hermes-mail-google-people',
-      'hermes-mail-carddav',
-      'hermes-desktop-call-recording-api',
-      'hermes-desktop-call-recording-core',
-      'hermes-desktop-call-recording-persistence',
-      'hermes-desktop-call-recording-runtime',
-      'hermes-desktop-call-recording-assembly',
+      'makosh-mail-retained-evidence-replay-persistence',
+      'makosh-mail-retained-evidence-replay-contract',
+      'makosh-mail-address-book-contract',
+      'makosh-mail-address-book-persistence',
+      'makosh-mail-google-people',
+      'makosh-mail-carddav',
+      'makosh-desktop-call-recording-api',
+      'makosh-desktop-call-recording-core',
+      'makosh-desktop-call-recording-persistence',
+      'makosh-desktop-call-recording-runtime',
+      'makosh-desktop-call-recording-assembly',
     ],
   );
   assert.deepEqual(
@@ -216,7 +216,7 @@ test('Mail outbound attachments keep provider delivery contracts as separate int
 test('generated Mail client carries only bounded canonical attachment anchor IDs', async () => {
   const [proto, api, wire] = await Promise.all([
     readFile(
-      new URL('src/mail-api/proto/hermes/mail/v1/client.proto', BACKEND_ROOT),
+      new URL('src/mail-api/proto/makosh/mail/v1/client.proto', BACKEND_ROOT),
       'utf8',
     ),
     readFile(new URL('src/mail-api/src/lib.rs', BACKEND_ROOT), 'utf8'),
@@ -262,22 +262,22 @@ test('Mail core, provider adapters and composition root keep functional SRP boun
 
   assert.doesNotMatch(
     mime,
-    /hermes_(?:communications|attachment_security|blob|storage|mail_(?:smtp|gmail|persistence|runtime))/,
+    /makosh_(?:communications|attachment_security|blob|storage|mail_(?:smtp|gmail|persistence|runtime))/,
   );
   assert.doesNotMatch(
     `${coreManifest}\n${smtpManifest}\n${gmailManifest}`,
-    /hermes-(?:communications-(?:api|domain|persistence|runtime)|attachment-security|blob|mail-(?:persistence|runtime))/,
+    /makosh-(?:communications-(?:api|domain|persistence|runtime)|attachment-security|blob|mail-(?:persistence|runtime))/,
   );
   assert.doesNotMatch(
     `${smtpManifest}\n${gmailManifest}`,
-    /hermes-(?:communications|attachment-security|blob|storage)/,
+    /makosh-(?:communications|attachment-security|blob|storage)/,
   );
-  assert.match(runtimeManifest, /^hermes-communications-attachment-contract =/m);
-  assert.match(runtimeManifest, /^hermes-communications-ingress =/m);
-  assert.match(runtimeManifest, /^hermes-blob-client =/m);
+  assert.match(runtimeManifest, /^makosh-communications-attachment-contract =/m);
+  assert.match(runtimeManifest, /^makosh-communications-ingress =/m);
+  assert.match(runtimeManifest, /^makosh-blob-client =/m);
   assert.doesNotMatch(
     runtimeManifest,
-    /hermes-communications-(?:api|domain|persistence|runtime)/,
+    /makosh-communications-(?:api|domain|persistence|runtime)/,
   );
   assert.match(mime, /MAX_OUTBOUND_ATTACHMENT_BYTES: usize = 16 \* 1024 \* 1024/);
   assert.match(mime, /MAX_OUTBOUND_RFC822_BYTES: usize = 24 \* 1024 \* 1024/);
@@ -314,7 +314,7 @@ test('canonical attachment safety reaches Mail only as a durable event projectio
   assert.match(projection, /exact_permit_contract/);
   assert.doesNotMatch(
     `${projection}\n${runtimeManifest}`,
-    /hermes_(?:communications_(?:api|domain|persistence|runtime))|communications\.(?:query|request)/,
+    /makosh_(?:communications_(?:api|domain|persistence|runtime))|communications\.(?:query|request)/,
   );
 });
 
@@ -338,7 +338,7 @@ test('Mail owns durable materialization while Blob owns attachment bytes', async
   );
   assert.doesNotMatch(
     `${attachments}\n${durable}`,
-    /hermes_data\.(?:communications|attachment_security)_/,
+    /makosh_data\.(?:communications|attachment_security)_/,
   );
   assert.match(durable, /request_sha256/);
   assert.match(durable, /rendered_rfc822_sha256/);

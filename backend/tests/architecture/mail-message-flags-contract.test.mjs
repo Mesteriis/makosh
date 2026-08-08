@@ -15,7 +15,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   proto: new URL(
-    'src/mail-api/proto/hermes/mail/message_flags/v1/client.proto',
+    'src/mail-api/proto/makosh/mail/message_flags/v1/client.proto',
     BACKEND_ROOT,
   ),
   validator: new URL('src/mail-api/src/message_flags.rs', BACKEND_ROOT),
@@ -44,7 +44,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   generatedClient: new URL(
-    'frontend/src/gen/hermes/mail/message_flags/v1/client_pb.ts',
+    'frontend/src/gen/makosh/mail/message_flags/v1/client_pb.ts',
     PROJECT_ROOT,
   ),
   frontendCommandClient: new URL(
@@ -139,7 +139,7 @@ test('Mail message flags stay provider-owned, durable, typed and separately admi
   assert.match(adr, /provider-side-effect-free exact\s+replay/);
   assert.match(adr, /Communications не владеет provider flags/);
 
-  assert.match(proto, /package hermes\.mail\.message_flags\.v1/);
+  assert.match(proto, /package makosh\.mail\.message_flags\.v1/);
   assert.match(proto, /enum MailMessageFlagKindV1[\s\S]*READ[\s\S]*STARRED/);
   assert.match(proto, /service MailMessageFlagCommandService/);
   assert.match(proto, /service MailMessageFlagQueryService/);
@@ -160,12 +160,12 @@ test('Mail message flags stay provider-owned, durable, typed and separately admi
 
   assert.match(
     persistence,
-    /CREATE TABLE IF NOT EXISTS hermes_data\.mail_message_flag_operations/,
+    /CREATE TABLE IF NOT EXISTS makosh_data\.mail_message_flag_operations/,
   );
   assert.match(persistence, /exact_command_bytes BYTEA/);
   assert.match(persistence, /request_sha256 BYTEA/);
   assert.match(persistence, /if changed \{/);
-  assert.doesNotMatch(persistence, /REFERENCES hermes_data/);
+  assert.doesNotMatch(persistence, /REFERENCES makosh_data/);
   assert.match(schema, /MAIL_STORAGE_BUNDLE_REVISION_V12: u32 = 12/);
 
   assert.match(gmail, /gmail\.modify/);
@@ -207,6 +207,6 @@ test('Mail message flags stay provider-owned, durable, typed and separately admi
 
   assert.doesNotMatch(
     `${proto}\n${validator}\n${wire}\n${persistence}\n${gmail}\n${imap}`,
-    /hermes_communications|domains\/communications|communications::/i,
+    /makosh_communications|domains\/communications|communications::/i,
   );
 });

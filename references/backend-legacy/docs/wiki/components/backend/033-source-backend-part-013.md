@@ -27,7 +27,7 @@ generated_by: code-wiki-ru
 
 ## Обзор
 
-Backend Hermes Hub — HTTP-сервер на Rust (фреймворк `axum`), обслуживающий REST API и WebSocket-подключения. Точка входа — `backend/src/app/router.rs`.
+Backend Макошь — HTTP-сервер на Rust (фреймворк `axum`), обслуживающий REST API и WebSocket-подключения. Точка входа — `backend/src/app/router.rs`.
 
 ## Запуск и логирование
 
@@ -37,7 +37,7 @@ Backend Hermes Hub — HTTP-сервер на Rust (фреймворк `axum`), 
 - привязывается к адресу `config.http_addr()`;
 - строит роутер вызовом `build_router_with_database(config, database)`.
 
-Логирование настраивается функцией `init_tracing`. Формат определяется переменной окружения `HERMES_LOG_FORMAT` (значения `"json"` или `"plain"`). Фильтр инициализируется из переменной `RUST_LOG` с fallback-уровнем `info`.
+Логирование настраивается функцией `init_tracing`. Формат определяется переменной окружения `MAKOSH_LOG_FORMAT` (значения `"json"` или `"plain"`). Фильтр инициализируется из переменной `RUST_LOG` с fallback-уровнем `info`.
 
 ## Состояние приложения (`AppState`)
 
@@ -73,7 +73,7 @@ pub(crate) struct AppState {
 
 2. Connect RPC-маршруты — `crate::app::connectrpc::protected_routes(…)`.
 
-3. Защищённые API-маршруты — `routes::protected_routes(api_secret)` с применением middleware `guard::require_secret`, проверяющего заголовок `x-hermes-secret`.
+3. Защищённые API-маршруты — `routes::protected_routes(api_secret)` с применением middleware `guard::require_secret`, проверяющего заголовок `x-makosh-secret`.
 
 CORS разрешает только локальные источники:
 - схема `http`/`https` на `localhost`, `127.0.0.1`, `::1`;

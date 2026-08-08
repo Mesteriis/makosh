@@ -1,32 +1,32 @@
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::Utc;
 use serde_json::json;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_events_api::NewEventEnvelope;
-use hermes_events_postgres::consumers::EventConsumerConfig;
-use hermes_events_postgres::consumers::EventConsumerRunner;
-use hermes_events_postgres::store::EventStore;
-use hermes_hub_backend::domains::communications::messages::projection::project_raw_email_message;
-use hermes_hub_backend::domains::communications::messages::store::MessageProjectionStore;
-use hermes_hub_backend::domains::projects::core::models::NewProject;
-use hermes_hub_backend::domains::projects::core::store::ProjectStore;
-use hermes_hub_backend::domains::projects::link_reviews::models::{
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_events_api::NewEventEnvelope;
+use makosh_events_postgres::consumers::EventConsumerConfig;
+use makosh_events_postgres::consumers::EventConsumerRunner;
+use makosh_events_postgres::store::EventStore;
+use makosh_hub_backend::domains::communications::messages::projection::project_raw_email_message;
+use makosh_hub_backend::domains::communications::messages::store::MessageProjectionStore;
+use makosh_hub_backend::domains::projects::core::models::NewProject;
+use makosh_hub_backend::domains::projects::core::store::ProjectStore;
+use makosh_hub_backend::domains::projects::link_reviews::models::{
     ProjectLinkReviewCommand, ProjectLinkReviewCommandResult, ProjectLinkReviewState,
     ProjectLinkTargetKind,
 };
-use hermes_hub_backend::domains::projects::link_reviews::store::ProjectLinkReviewStore;
-use hermes_hub_backend::domains::relationships::{
+use makosh_hub_backend::domains::projects::link_reviews::store::ProjectLinkReviewStore;
+use makosh_hub_backend::domains::relationships::{
     models::{RelationshipEntityKind, RelationshipReviewState},
     store::RelationshipStore,
 };
 
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::workflows::project_link_review_effects::{
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::workflows::project_link_review_effects::{
     PROJECT_LINK_REVIEW_EFFECTS_CONSUMER, project_link_review_effect_event,
 };
 
@@ -686,6 +686,6 @@ fn unique_suffix() -> u128 {
         .expect("system clock after unix epoch")
         .as_nanos()
 }
-use hermes_hub_backend::domains::decisions::models::entity_kind::DecisionEntityKind;
-use hermes_hub_backend::domains::decisions::models::states::DecisionReviewState;
-use hermes_hub_backend::domains::decisions::store::DecisionStore;
+use makosh_hub_backend::domains::decisions::models::entity_kind::DecisionEntityKind;
+use makosh_hub_backend::domains::decisions::models::states::DecisionReviewState;
+use makosh_hub_backend::domains::decisions::store::DecisionStore;

@@ -61,7 +61,7 @@ pub use super::command_service::*;
 - `start_at`, `end_at` — дата-время в формате, совместимом с `TZID`
 - `timezone` — часовой пояс (по умолчанию `Europe/Madrid`)
 
-PRODID фиксирован: `-//Hermes Hub//Calendar//EN`.
+PRODID фиксирован: `-//Макошь//Calendar//EN`.
 
 #### Markdown-экспорт
 
@@ -217,7 +217,7 @@ Observation создаётся с origin `VaultSource`, confidence `1.0`, kind-�
 - `copy_message_to_folder` — копирование сообщения в папку с observation.
 - `move_message_to_folder` — перемещение сообщения в папку с observation (дальше файл обрезан).
 
-Каждая мутация фиксирует observation с типом источника `"hermes-frontend"`, actor-id `"hermes-frontend"`, и связывает сущности через `CommunicationFolderStore` или `CommunicationDraftStore`.
+Каждая мутация фиксирует observation с типом источника `"makosh-frontend"`, actor-id `"makosh-frontend"`, и связывает сущности через `CommunicationFolderStore` или `CommunicationDraftStore`.
 
 ### Bulk Actions
 

@@ -3,9 +3,9 @@ import {
 	type MailAccountCatalogV1,
 	type MailAccountStatusV1,
 	type MailCredentialBindingReceiptV1,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
-import type { MailAccountLifecycleReceiptV1 } from '../../../gen/hermes/mail/account_lifecycle/v1/client_pb'
-import type { ApplyOwnerManagedIntegrationSettingsReceiptV1 } from '../../../gen/hermes/gateway/v1/owner_module_settings_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
+import type { MailAccountLifecycleReceiptV1 } from '../../../gen/makosh/mail/account_lifecycle/v1/client_pb'
+import type { ApplyOwnerManagedIntegrationSettingsReceiptV1 } from '../../../gen/makosh/gateway/v1/owner_module_settings_pb'
 import { OwnerModuleSettingsClientV1 } from '../../../platform/settings/ownerModuleSettingsClient'
 import {
 	OwnerVaultActionV1,

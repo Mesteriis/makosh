@@ -1,8 +1,8 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1, v1::durable_envelope_v1::Semantics,
     validation::envelope::decode_envelope_v1,
 };
-use hermes_mail_address_book_contract::{
+use makosh_mail_address_book_contract::{
     MailAddressBookContractV1, validate_mail_address_book_entry_upsert_rejected_v1,
     validate_mail_address_book_entry_upserted_v1,
     wire::{MailAddressBookEntryUpsertRejectedV1, MailAddressBookEntryUpsertedV1},
@@ -47,7 +47,7 @@ impl MailAddressBookPersistenceV1 {
         validate_admission(admission, accepted_at_unix_seconds)?;
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.mail_address_book_upsert_inbox
+            "INSERT INTO makosh_data.mail_address_book_upsert_inbox
                 (command_message_id, command_envelope_sha256, command_id, run_id,
                  logical_owner_id, account_id, contact_snapshot_reference_id,
                  contact_snapshot_sha256, expected_contact_revision,
@@ -76,7 +76,7 @@ impl MailAddressBookPersistenceV1 {
             return Ok(MailAddressBookCommandInboxOutcomeV1::Accepted);
         }
         let rows = sqlx::query(
-            "SELECT * FROM hermes_data.mail_address_book_upsert_inbox
+            "SELECT * FROM makosh_data.mail_address_book_upsert_inbox
              WHERE command_message_id = $1 OR command_id = $2
              FOR UPDATE",
         )
@@ -123,7 +123,7 @@ impl MailAddressBookPersistenceV1 {
         }
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         let row = sqlx::query(
-            "SELECT state FROM hermes_data.mail_address_book_upsert_inbox
+            "SELECT state FROM makosh_data.mail_address_book_upsert_inbox
              WHERE command_id = $1 FOR UPDATE",
         )
         .bind(command_id.as_slice())
@@ -135,7 +135,7 @@ impl MailAddressBookPersistenceV1 {
         let outcome = match state {
             0 => {
                 let updated = sqlx::query(
-                    "UPDATE hermes_data.mail_address_book_upsert_inbox
+                    "UPDATE makosh_data.mail_address_book_upsert_inbox
                      SET state = 1, dispatch_started_at_unix_seconds = $2
                      WHERE command_id = $1 AND state = 0",
                 )
@@ -168,7 +168,7 @@ impl MailAddressBookPersistenceV1 {
         }
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         let inbox = sqlx::query(
-            "SELECT * FROM hermes_data.mail_address_book_upsert_inbox
+            "SELECT * FROM makosh_data.mail_address_book_upsert_inbox
              WHERE command_id = $1 FOR UPDATE",
         )
         .bind(command_id.as_slice())
@@ -179,7 +179,7 @@ impl MailAddressBookPersistenceV1 {
         let pending = job_from_row(inbox)?;
         verify_result_record(result, &pending.admission)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.mail_address_book_upsert_result_outbox
+            "INSERT INTO makosh_data.mail_address_book_upsert_result_outbox
                 (message_id, envelope_sha256, exact_envelope_bytes, command_id,
                  command_message_id, created_at_unix_seconds)
              VALUES ($1, $2, $3, $4, $5, $6)
@@ -200,7 +200,7 @@ impl MailAddressBookPersistenceV1 {
             let existing = sqlx::query(
                 "SELECT message_id, envelope_sha256, exact_envelope_bytes,
                         command_message_id
-                 FROM hermes_data.mail_address_book_upsert_result_outbox
+                 FROM makosh_data.mail_address_book_upsert_result_outbox
                  WHERE command_id = $1",
             )
             .bind(command_id.as_slice())
@@ -212,7 +212,7 @@ impl MailAddressBookPersistenceV1 {
             MailAddressBookResultStoreOutcomeV1::AlreadyStored
         };
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_address_book_upsert_inbox
+            "UPDATE makosh_data.mail_address_book_upsert_inbox
              SET state = 2 WHERE command_id = $1 AND state <> 2",
         )
         .bind(command_id.as_slice())
@@ -239,8 +239,8 @@ impl MailAddressBookPersistenceV1 {
                     inbox.contact_snapshot_sha256, inbox.expected_contact_revision,
                     inbox.contact_snapshot_declared_bytes,
                     inbox.contact_snapshot_custody_source_proof
-             FROM hermes_data.mail_address_book_upsert_result_outbox result
-             JOIN hermes_data.mail_address_book_upsert_inbox inbox
+             FROM makosh_data.mail_address_book_upsert_result_outbox result
+             JOIN makosh_data.mail_address_book_upsert_inbox inbox
                ON inbox.command_message_id = result.command_message_id
               AND inbox.command_id = result.command_id
              WHERE result.published_at_unix_seconds IS NULL
@@ -263,7 +263,7 @@ impl MailAddressBookPersistenceV1 {
             return Err(MailAddressBookPersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "UPDATE hermes_data.mail_address_book_upsert_result_outbox
+            "UPDATE makosh_data.mail_address_book_upsert_result_outbox
              SET published_at_unix_seconds = $1
              WHERE message_id = $2 AND published_at_unix_seconds IS NULL",
         )
@@ -283,7 +283,7 @@ async fn jobs_with_state(
 ) -> Result<Vec<PendingMailAddressBookUpsertV1>, MailAddressBookPersistenceErrorV1> {
     validate_limit(limit)?;
     let rows = sqlx::query(
-        "SELECT * FROM hermes_data.mail_address_book_upsert_inbox
+        "SELECT * FROM makosh_data.mail_address_book_upsert_inbox
          WHERE state = $1
          ORDER BY accepted_at_unix_seconds, command_message_id
          LIMIT $2",
@@ -548,7 +548,7 @@ fn row_error<T>(_: T) -> MailAddressBookPersistenceErrorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_mail_address_book_contract::{
+    use makosh_mail_address_book_contract::{
         MailAddressBookResultEnvelopeContextV1, build_mail_address_book_entry_upserted_result_v1,
         wire::MailAddressBookEntryUpsertedV1,
     };
@@ -602,7 +602,7 @@ mod tests {
                 provider_entry_id: "people/c1".to_owned(),
                 provider_etag: "etag-1".to_owned(),
                 applied_contact_revision: admission.expected_contact_revision,
-                provider_kind: hermes_mail_address_book_contract::wire::MailAddressBookProviderKindV1::MailAddressBookProviderKindGooglePeople as i32,
+                provider_kind: makosh_mail_address_book_contract::wire::MailAddressBookProviderKindV1::MailAddressBookProviderKindGooglePeople as i32,
             },
             &MailAddressBookResultEnvelopeContextV1 {
                 runtime_instance_id: "mail-runtime-instance".to_owned(),

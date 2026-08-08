@@ -1,4 +1,4 @@
-use hermes_communication_cross_channel_forward_core::{
+use makosh_communication_cross_channel_forward_core::{
     CrossChannelForwardDraftV1, CrossChannelForwardStateV1, validate_cross_channel_forward_v1,
 };
 use sha2::{Digest, Sha256};
@@ -61,7 +61,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
             .await
             .map_err(|_| CrossChannelForwardPersistenceErrorV1::StorageUnavailable)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.communication_cross_channel_forward_operations (
+            "INSERT INTO makosh_data.communication_cross_channel_forward_operations (
                logical_owner_id, forward_id, request_fingerprint,
                source_message_id, target_conversation_id,
                target_reply_message_id, state, state_revision,
@@ -94,7 +94,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
         }
         let row = sqlx::query(
             "SELECT request_fingerprint, state_revision
-             FROM hermes_data.communication_cross_channel_forward_operations
+             FROM makosh_data.communication_cross_channel_forward_operations
              WHERE logical_owner_id = $1 AND forward_id = $2",
         )
         .bind(&command.logical_owner_id)
@@ -137,7 +137,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
                     delivery_intent_id, delivery_intent_command_id,
                     delivery_submit_message_id, error_code,
                     created_at_unix_millis, updated_at_unix_millis
-             FROM hermes_data.communication_cross_channel_forward_operations
+             FROM makosh_data.communication_cross_channel_forward_operations
              WHERE logical_owner_id = $1 AND forward_id = $2",
         )
         .bind(logical_owner_id)

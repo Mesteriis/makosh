@@ -15,17 +15,17 @@ fn distribution_bundle_verifier_requires_the_signed_target_and_exact_artifact_by
 
 #[test]
 fn signed_browser_bootstrap_artifact_is_read_only_after_manifest_verification() {
-    let root = unique_target_root("hermes-browser-bootstrap-bundle");
+    let root = unique_target_root("makosh-browser-bootstrap-bundle");
     let bootstrap_path = root.join("browser/bootstrap.html");
     std::fs::create_dir_all(bootstrap_path.parent().expect("bootstrap parent"))
         .expect("create bootstrap directory");
-    let bootstrap = b"<!doctype html><title>Hermes</title>".to_vec();
+    let bootstrap = b"<!doctype html><title>makosh</title>".to_vec();
     std::fs::write(&bootstrap_path, &bootstrap).expect("write bootstrap");
     let signing_key = SigningKey::from_bytes((&[23_u8; 32]).into()).expect("test signing key");
     let manifest = DistributionManifestV1 {
         major: 1,
         revision: 1,
-        distribution_id: "hermes-desktop".to_owned(),
+        distribution_id: "makosh-desktop".to_owned(),
         release_version: "1.0.0".to_owned(),
         build_id: "browser-bootstrap".to_owned(),
         target_triple: "aarch64-apple-darwin".to_owned(),
@@ -66,7 +66,7 @@ fn signed_browser_bootstrap_artifact_is_read_only_after_manifest_verification() 
         crate::platform::macos::bundled_release::propose_verified_artifact(
             &store,
             "browser.bootstrap",
-            "hermes-desktop",
+            "makosh-desktop",
             1,
             [3; 16],
             &verified,
@@ -82,14 +82,14 @@ fn signed_browser_bootstrap_artifact_is_read_only_after_manifest_verification() 
 
 #[test]
 fn browser_bundle_verification_hashes_only_the_signed_artifact_kinds_it_serves() {
-    let root = unique_target_root("hermes-selected-browser-artifacts");
+    let root = unique_target_root("makosh-selected-browser-artifacts");
     let bootstrap_path = root.join("browser/bootstrap.html");
     let infrastructure_path = root.join("bin/platform-runtime");
     std::fs::create_dir_all(bootstrap_path.parent().expect("bootstrap parent"))
         .expect("create bootstrap directory");
     std::fs::create_dir_all(infrastructure_path.parent().expect("infrastructure parent"))
         .expect("create infrastructure directory");
-    let bootstrap = b"<!doctype html><title>Hermes</title>".to_vec();
+    let bootstrap = b"<!doctype html><title>makosh</title>".to_vec();
     let infrastructure = b"signed but unused platform executable".to_vec();
     std::fs::write(&bootstrap_path, &bootstrap).expect("write bootstrap");
     std::fs::write(&infrastructure_path, &infrastructure).expect("write infrastructure");
@@ -97,7 +97,7 @@ fn browser_bundle_verification_hashes_only_the_signed_artifact_kinds_it_serves()
     let manifest = DistributionManifestV1 {
         major: 1,
         revision: 1,
-        distribution_id: "hermes-desktop".to_owned(),
+        distribution_id: "makosh-desktop".to_owned(),
         release_version: "1.0.0".to_owned(),
         build_id: "selected-browser-artifacts".to_owned(),
         target_triple: "aarch64-apple-darwin".to_owned(),
@@ -242,7 +242,7 @@ impl DistributionBundleFixture {
     }
 
     fn new_for(identity: BundleIdentity) -> Self {
-        let root = unique_target_root("hermes-distribution-bundle");
+        let root = unique_target_root("makosh-distribution-bundle");
         let artifact_path = root.join(identity.artifact_relative_path);
         let descriptor_path = root.join(identity.descriptor_relative_path);
         let settings_schema_path = root.join(identity.settings_schema_relative_path);
@@ -268,7 +268,7 @@ impl DistributionBundleFixture {
                 display_name: "Runtime enabled".to_owned(),
                 default_value: Some(SettingValueV1 {
                     value: Some(
-                        hermes_runtime_protocol::v1::setting_value_v1::Value::BooleanValue(true),
+                        makosh_runtime_protocol::v1::setting_value_v1::Value::BooleanValue(true),
                     ),
                 }),
                 optional: false,
@@ -400,7 +400,7 @@ impl DistributionBundleFixture {
                     setting_id: "runtime.enabled".to_owned(),
                     value: Some(SettingValueV1 {
                         value: Some(
-                            hermes_runtime_protocol::v1::setting_value_v1::Value::BooleanValue(
+                            makosh_runtime_protocol::v1::setting_value_v1::Value::BooleanValue(
                                 true,
                             ),
                         ),
@@ -424,7 +424,7 @@ impl DistributionBundleFixture {
         let proposal = crate::platform::macos::bundled_release::propose_verified_artifact(
             &store,
             "runtime.mail",
-            "hermes-desktop",
+            "makosh-desktop",
             1,
             [4; 16],
             verified,
@@ -459,7 +459,7 @@ impl DistributionBundleFixture {
             crate::platform::macos::bundled_release::propose_verified_artifact(
                 &store,
                 "runtime.mail",
-                "hermes-desktop",
+                "makosh-desktop",
                 2,
                 [6; 16],
                 verified,
@@ -577,7 +577,7 @@ impl DistributionBundleFixture {
     }
 
     fn artifact_bytes() -> &'static [u8] {
-        b"Hermes signed module runtime"
+        b"makosh signed module runtime"
     }
 }
 

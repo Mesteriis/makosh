@@ -6,7 +6,7 @@ fn client_realtime_contract_rejects_unversioned_and_sse_unsafe_cursors() {
         frame: Some(Frame::Event(ClientRealtimeEventV1 {
             event_id: vec![1; 16],
             cursor: "cursor-1".to_owned(),
-            contract_name: "hermes.client.status".to_owned(),
+            contract_name: "makosh.client.status".to_owned(),
             contract_version: 1,
             event_kind: "status_changed".to_owned(),
             occurred_at_unix_millis: 1,

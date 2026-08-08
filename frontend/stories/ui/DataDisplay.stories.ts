@@ -35,7 +35,7 @@ import {
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Data Display'
+	title: 'Макошь UI/General/Data Display'
 } satisfies Meta
 
 export default meta
@@ -103,7 +103,7 @@ export const TablesAndLists: Story = {
 				<Card>
 					<CardContent>
 						<div class="storybook-row">
-							<Avatar fallback="HH" alt="Hermes Hub" />
+							<Avatar fallback="HH" alt="Макошь" />
 							<Progress :model-value="64" />
 							<Skeleton width="40%" height="12px" />
 						</div>

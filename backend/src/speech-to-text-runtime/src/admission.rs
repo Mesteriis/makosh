@@ -1,11 +1,11 @@
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1, ProvidedSurfaceKindV1,
     ProvidedSurfaceV1, RuntimeBudgetRequestV1, SettingsSchemaRefV1, SettingsSchemaV1,
     StorageNamespaceRequestV1, capability_request_v1::Request,
 };
-pub use hermes_speech_to_text_api::SPEECH_TO_TEXT_BLOB_CAPABILITY_ID_V1;
-use hermes_speech_to_text_api::{
+pub use makosh_speech_to_text_api::SPEECH_TO_TEXT_BLOB_CAPABILITY_ID_V1;
+use makosh_speech_to_text_api::{
     SPEECH_TO_TEXT_CAPABILITY_ID_V1, SPEECH_TO_TEXT_MAX_AUDIO_BYTES_V1,
     SPEECH_TO_TEXT_MAX_TRANSCRIPT_BYTES_V1, SPEECH_TO_TEXT_MODULE_ID_V1, SPEECH_TO_TEXT_OWNER_V1,
     speech_to_text_contract_reference_v1, speech_to_text_provider_contract_reference_v1,
@@ -132,7 +132,7 @@ fn transcribe_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         validate_descriptor_v1, validate_settings_schema_v1,
     };
 

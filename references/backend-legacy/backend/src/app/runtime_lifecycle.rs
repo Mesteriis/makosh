@@ -1,13 +1,13 @@
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 
-use hermes_desktop_runtime::{
+use makosh_desktop_runtime::{
     RuntimeExitPolicy, RuntimeLifecycleEvent, RuntimeLifecycleObserver, RuntimeTaskClass,
     RuntimeTaskError, RuntimeTaskFactory, RuntimeTaskFuture, RuntimeTaskLifecycleTarget,
     RuntimeTaskSpec,
 };
-use hermes_signal_hub_api::runtime_lifecycle::{RuntimeLifecyclePort, RuntimeLifecycleUpdate};
-use hermes_signal_hub_postgres::runtime_lifecycle::RuntimeLifecycleStore;
+use makosh_signal_hub_api::runtime_lifecycle::{RuntimeLifecyclePort, RuntimeLifecycleUpdate};
+use makosh_signal_hub_postgres::runtime_lifecycle::RuntimeLifecycleStore;
 use serde_json::json;
 use sqlx::postgres::PgPool;
 use tokio::sync::mpsc;
@@ -176,7 +176,7 @@ fn runtime_task_class_name(class: RuntimeTaskClass) -> &'static str {
 mod tests {
     use std::sync::Arc;
 
-    use hermes_desktop_runtime::{
+    use makosh_desktop_runtime::{
         RuntimeExitPolicy, RuntimeLifecycleEvent, RuntimeTaskClass, RuntimeTaskFactory,
         RuntimeTaskFuture, RuntimeTaskSpec,
     };

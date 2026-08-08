@@ -4,7 +4,7 @@ use std::collections::HashSet;
 use std::sync::{Arc, LazyLock, Mutex};
 use std::time::Duration;
 
-use hermes_desktop_runtime::{
+use makosh_desktop_runtime::{
     RuntimeExitPolicy, RuntimeTaskClass, RuntimeTaskFactory, RuntimeTaskFuture, RuntimeTaskSpec,
 };
 use serde_json::json;
@@ -68,9 +68,9 @@ fn communication_provider_observation_projection_task(
     let task: RuntimeTaskFactory = Arc::new(move |cancellation: CancellationToken| {
         let pool = pool.clone();
         Box::pin(async move {
-            let runner = hermes_events_postgres::consumers::EventConsumerRunner::new(
+            let runner = makosh_events_postgres::consumers::EventConsumerRunner::new(
                 pool.clone(),
-                hermes_events_postgres::consumers::EventConsumerConfig::new(
+                makosh_events_postgres::consumers::EventConsumerConfig::new(
                     crate::domains::communications::messages::provider_observation_projection::COMMUNICATION_PROVIDER_OBSERVATION_CONSUMER,
                 ),
             );
@@ -135,9 +135,9 @@ fn persona_derived_evidence_projection_task(
     let task: RuntimeTaskFactory = Arc::new(move |cancellation: CancellationToken| {
         let pool = pool.clone();
         Box::pin(async move {
-            let runner = hermes_events_postgres::consumers::EventConsumerRunner::new(
+            let runner = makosh_events_postgres::consumers::EventConsumerRunner::new(
                 pool.clone(),
-                hermes_events_postgres::consumers::EventConsumerConfig::new(
+                makosh_events_postgres::consumers::EventConsumerConfig::new(
                     crate::workflows::persona_derived_evidence::PERSONA_DERIVED_EVIDENCE_CONSUMER,
                 ),
             );
@@ -200,9 +200,9 @@ fn persona_identity_review_inbox_projection_task(
     let task: RuntimeTaskFactory = Arc::new(move |cancellation: CancellationToken| {
         let pool = pool.clone();
         Box::pin(async move {
-            let runner = hermes_events_postgres::consumers::EventConsumerRunner::new(
+            let runner = makosh_events_postgres::consumers::EventConsumerRunner::new(
                 pool.clone(),
-                hermes_events_postgres::consumers::EventConsumerConfig::new(
+                makosh_events_postgres::consumers::EventConsumerConfig::new(
                     crate::workflows::review_inbox::PERSONA_IDENTITY_REVIEW_INBOX_CONSUMER,
                 ),
             );
@@ -265,9 +265,9 @@ fn project_link_review_effects_projection_task(
     let task: RuntimeTaskFactory = Arc::new(move |cancellation: CancellationToken| {
         let pool = pool.clone();
         Box::pin(async move {
-            let runner = hermes_events_postgres::consumers::EventConsumerRunner::new(
+            let runner = makosh_events_postgres::consumers::EventConsumerRunner::new(
             pool.clone(),
-            hermes_events_postgres::consumers::EventConsumerConfig::new(
+            makosh_events_postgres::consumers::EventConsumerConfig::new(
                 crate::workflows::project_link_review_effects::PROJECT_LINK_REVIEW_EFFECTS_CONSUMER,
             ),
         );
@@ -323,7 +323,7 @@ fn realtime_conversation_transcript_execution_task(
 ) -> Option<RuntimeTaskSpec> {
     if !crate::workflows::realtime_conversation_transcript_execution::realtime_conversation_transcriber_is_configured() {
         tracing::info!(
-            "HERMES_REALTIME_CONVERSATION_TRANSCRIBER is not configured; realtime conversation transcript execution consumer is disabled"
+            "MAKOSH_REALTIME_CONVERSATION_TRANSCRIBER is not configured; realtime conversation transcript execution consumer is disabled"
         );
         return None;
     }
@@ -338,9 +338,9 @@ fn realtime_conversation_transcript_execution_task(
         let pool = pool.clone();
         let event_bus = event_bus.clone();
         Box::pin(async move {
-            let runner = hermes_events_postgres::consumers::EventConsumerRunner::new(
+            let runner = makosh_events_postgres::consumers::EventConsumerRunner::new(
                 pool.clone(),
-                hermes_events_postgres::consumers::EventConsumerConfig::new(
+                makosh_events_postgres::consumers::EventConsumerConfig::new(
                     crate::workflows::realtime_conversation_transcript_execution::REALTIME_CONVERSATION_TRANSCRIPT_EXECUTION_CONSUMER,
                 ),
             );
@@ -405,9 +405,9 @@ fn realtime_conversation_transcript_projection_task(
     let task: RuntimeTaskFactory = Arc::new(move |cancellation: CancellationToken| {
         let pool = pool.clone();
         Box::pin(async move {
-            let runner = hermes_events_postgres::consumers::EventConsumerRunner::new(
+            let runner = makosh_events_postgres::consumers::EventConsumerRunner::new(
                 pool.clone(),
-                hermes_events_postgres::consumers::EventConsumerConfig::new(
+                makosh_events_postgres::consumers::EventConsumerConfig::new(
                     crate::workflows::realtime_conversation_transcript_projection::REALTIME_CONVERSATION_TRANSCRIPT_PROJECTION_CONSUMER,
                 ),
             );
@@ -470,9 +470,9 @@ fn signal_hub_raw_signal_dispatcher_task(
     let task: RuntimeTaskFactory = Arc::new(move |cancellation: CancellationToken| {
         let pool = pool.clone();
         Box::pin(async move {
-            let runner = hermes_events_postgres::consumers::EventConsumerRunner::new(
+            let runner = makosh_events_postgres::consumers::EventConsumerRunner::new(
                 pool.clone(),
-                hermes_events_postgres::consumers::EventConsumerConfig::new(
+                makosh_events_postgres::consumers::EventConsumerConfig::new(
                     crate::domains::signal_hub::service::SIGNAL_HUB_RAW_SIGNAL_CONSUMER,
                 ),
             );

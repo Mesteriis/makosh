@@ -1,7 +1,7 @@
 use crate::support::*;
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::domains::signal_hub::store::SignalHubStore;
-use hermes_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::domains::signal_hub::store::SignalHubStore;
+use makosh_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
 
 #[tokio::test]
 async fn ai_answer_api_returns_source_backed_answer_and_persists_run() {
@@ -31,20 +31,20 @@ async fn ai_answer_api_returns_source_backed_answer_and_persists_run() {
         &format!("ai-answer-{suffix}@example.com"),
         &[format!("ai-recipient-{suffix}@example.com")],
         &format!("provider-ai-answer-{suffix}"),
-        &format!("Hermes AI roadmap {retrieval_token}"),
+        &format!("Макошь AI roadmap {retrieval_token}"),
         &format!("The V3 AI plan for {retrieval_token} uses Ollama and source-backed citations."),
     )
     .await;
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
         .with_test_pairs([
-            ("HERMES_OLLAMA_BASE_URL", ollama_base_url.as_str()),
-            ("HERMES_OLLAMA_CHAT_MODEL", "qwen3:4b"),
-            ("HERMES_OLLAMA_EMBED_MODEL", "qwen3-embedding:4b"),
+            ("MAKOSH_OLLAMA_BASE_URL", ollama_base_url.as_str()),
+            ("MAKOSH_OLLAMA_CHAT_MODEL", "qwen3:4b"),
+            ("MAKOSH_OLLAMA_EMBED_MODEL", "qwen3-embedding:4b"),
         ])
         .expect("config"),
         database,
@@ -83,7 +83,7 @@ async fn ai_answer_api_returns_source_backed_answer_and_persists_run() {
     assert_eq!(stored.embedding_model, "qwen3-embedding:4b");
     assert_eq!(
         stored.answer.as_deref(),
-        Some("Hermes Hub V3 is source-backed.")
+        Some("Макошь V3 is source-backed.")
     );
     assert_eq!(stored.status, "completed");
     assert!(stored.duration_ms.expect("duration") >= 0);
@@ -192,14 +192,14 @@ async fn ai_answer_api_is_blocked_when_ai_source_is_muted_by_signal_hub() {
         .expect("create ai mute policy");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
         .with_test_pairs([
-            ("HERMES_OLLAMA_BASE_URL", ollama_base_url.as_str()),
-            ("HERMES_OLLAMA_CHAT_MODEL", "qwen3:4b"),
-            ("HERMES_OLLAMA_EMBED_MODEL", "qwen3-embedding:4b"),
+            ("MAKOSH_OLLAMA_BASE_URL", ollama_base_url.as_str()),
+            ("MAKOSH_OLLAMA_CHAT_MODEL", "qwen3:4b"),
+            ("MAKOSH_OLLAMA_EMBED_MODEL", "qwen3-embedding:4b"),
         ])
         .expect("config"),
         database,
@@ -250,18 +250,18 @@ async fn ai_answer_missing_route_becomes_failed_run_instead_of_sync_api_error() 
         .update_setting_value(
             "ai.ollama_base_url",
             &json!(ollama_base_url),
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("fake Ollama setting");
 
     let suffix = unique_suffix();
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
-        .with_test_pairs([("HERMES_OLLAMA_BASE_URL", ollama_base_url.as_str())])
+        .with_test_pairs([("MAKOSH_OLLAMA_BASE_URL", ollama_base_url.as_str())])
         .expect("config"),
         database,
     );
@@ -325,11 +325,11 @@ async fn ai_task_refresh_creates_suggested_candidates_without_active_tasks() {
     .await;
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
-        .with_test_pairs([("HERMES_OLLAMA_BASE_URL", ollama_base_url.as_str())])
+        .with_test_pairs([("MAKOSH_OLLAMA_BASE_URL", ollama_base_url.as_str())])
         .expect("config"),
         database,
     );

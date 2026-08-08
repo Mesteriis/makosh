@@ -1,9 +1,9 @@
 //! Assembles one opaque persistence write from a domain-approved search index job.
 
-use hermes_communications_domain::{
+use makosh_communications_domain::{
     CommunicationsSearchIndexJobV1, normalize_search_document_tokens_v1,
 };
-use hermes_communications_persistence::CommunicationsSearchProjectionWriteV1;
+use makosh_communications_persistence::CommunicationsSearchProjectionWriteV1;
 
 use crate::search_digest::keyed_search_token_digest_v1;
 

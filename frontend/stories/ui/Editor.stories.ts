@@ -4,7 +4,7 @@ import { HtmlPreview, KeyboardHint, RichTextEditor } from '@/shared/ui'
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Editor',
+	title: 'Макошь UI/General/Editor',
 	component: RichTextEditor
 } satisfies Meta<typeof RichTextEditor>
 

@@ -39,15 +39,15 @@ use crate::integrations::telegram::client::{commands, reactions, references};
 use crate::platform::audit::models::NewApiAuditRecord;
 use crate::platform::events::bus::InMemoryEventBus;
 use crate::platform::events::bus::telegram_event_types;
-use hermes_communications_api::canonical::CanonicalMessageReadPort;
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_events_api::NewEventEnvelope;
-use hermes_events_postgres::store::EventStore;
+use makosh_communications_api::canonical::CanonicalMessageReadPort;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_events_api::NewEventEnvelope;
+use makosh_events_postgres::store::EventStore;
 
 #[path = "communication_provider_writes_runtime.rs"]
 mod communication_provider_writes_runtime;
 
-const AUDIT_ACTOR_ID: &str = "hermes-frontend";
+const AUDIT_ACTOR_ID: &str = "makosh-frontend";
 
 pub(crate) fn new_telegram_command_id() -> String {
     commands::new_command_id()

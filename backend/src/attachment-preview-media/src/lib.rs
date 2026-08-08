@@ -1,15 +1,15 @@
 #![forbid(unsafe_code)]
 
-use hermes_attachment_preview_api::{
+use makosh_attachment_preview_api::{
     ATTACHMENT_PREVIEW_MAX_AUDIO_BYTES_V1, ATTACHMENT_PREVIEW_MAX_VIDEO_BYTES_V1,
     wire::{AttachmentPreviewContentTypeV1, AttachmentPreviewKindV1},
 };
-use hermes_attachment_preview_renderer_contract::{
+use makosh_attachment_preview_renderer_contract::{
     AttachmentPreviewRenderRequestV1, AttachmentPreviewRenderResultV1,
     AttachmentPreviewRendererErrorV1, AttachmentPreviewRendererV1, AttachmentPreviewSourceFormatV1,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-preview-media";
+pub const PACKAGE: &str = "makosh-attachment-preview-media";
 const MAX_MP4_BOXES_V1: usize = 1_024;
 
 #[derive(Clone, Copy, Debug, Default)]

@@ -16,7 +16,7 @@ date: 2026-06-28
 
 # Backend-тесты
 
-Набор интеграционных и unit-тестов для email-подсистемы `hermes-hub-backend`.
+Набор интеграционных и unit-тестов для email-подсистемы `makosh-backend`.
 
 Все тесты выполняются в `#[tokio::test]` (асинхронно) либо как синхронные `#[test]` и используют изолированную базу данных PostgreSQL, предоставляемую `TestContext` из `testkit`.
 
@@ -44,7 +44,7 @@ backend/tests/
 
 - **`TestContext::new().await`** – запускает временный экземпляр PostgreSQL.
 - **`live_setup_context(test_name)`** – возвращает `(Database, CommunicationIngestionStore, SecretReferenceStore, u128 unique_suffix)`.
-- **`json_request_with_token_and_actor`** – формирует POST-запрос с JSON-телом и заголовком `x-hermes-secret`.
+- **`json_request_with_token_and_actor`** – формирует POST-запрос с JSON-телом и заголовком `x-makosh-secret`.
 - **`unlock_test_vault(app)`** – выполняет сбор энтропии и создание HostVault через API `/api/v1/vault/collect-entropy` и `/api/v1/vault/create`.
 - Мок-серверы **`MockTokenServer`** (OAuth token endpoint) и **`MockSmtpServer`** (SMTP) запускаются на случайных портах и собирают запросы/команды для проверок.
 
@@ -224,7 +224,7 @@ backend/tests/
   - HTML-ссылки с quoted-printable экранированием раскодируются корректно (например, `href="https://click.example.invalid/privacy?qs=abc"`)
 
 - **`rfc822_parser_preserves_source_headers_with_folded_values`**
-  - Свёрнутые заголовки (folding) объединяются: `X-Hermes-Trace: first line\n\tcontinued line` → `"first line continued line"`
+  - Свёрнутые заголовки (folding) объединяются: `X-Макошь-Trace: first line\n\tcontinued line` → `"first line continued line"`
 
 - **`rfc822_parser_extracts_rfc2231_continued_attachment_filenames`**
   - Имена файлов, закодированные по RFC 2231 (`name*0*=…`, `name*1*=…`), корректно собираются с поддержкой Unicode (в т.ч. кириллицы)

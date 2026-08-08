@@ -1,10 +1,10 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTargetV1, ManagedBlobSessionRequestV1,
     request_managed_blob_session_v2,
 };
-use hermes_contacts_mail_sync_source_api::{
+use makosh_contacts_mail_sync_source_api::{
     CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1,
     CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_MODULE_ID_V1,
     CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_OWNER_ID_V1, CONTACT_MAIL_SYNC_SOURCE_MAX_BYTES_V1,
@@ -20,21 +20,21 @@ use hermes_contacts_mail_sync_source_api::{
         PrepareContactMailSyncSourceCommandV1,
     },
 };
-use hermes_contacts_persistence::{
+use makosh_contacts_persistence::{
     ContactMailSyncSourceRejectCodeV1 as PersistenceRejectCodeV1, ContactMailSyncSourceSnapshotV1,
     ContactsOutboxRecordV1, ContactsPersistenceErrorV1, ContactsPersistenceV1,
     PersistContactMailSyncSourceResultV1, ReserveContactMailSyncSourceV1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{CommandMetadataV1, ContractRefV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{BlobDataOperationV1, ContractReferenceV1},
 };
@@ -433,7 +433,7 @@ fn envelope_context(
     runtime: &ContactsSourceRuntimeContextV1<'_>,
 ) -> ContactsMailSyncSourceEnvelopeContextV1 {
     ContactsMailSyncSourceEnvelopeContextV1 {
-        module_id: "hermes-contacts-runtime".to_owned(),
+        module_id: "makosh-contacts-runtime".to_owned(),
         runtime_instance_id: runtime.runtime_instance_id.to_owned(),
         runtime_generation: runtime.runtime_generation,
         recorded_at_unix_seconds: runtime.now_unix_millis / 1_000,

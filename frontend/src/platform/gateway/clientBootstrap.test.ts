@@ -10,7 +10,7 @@ import {
 	ClientSurfaceAvailabilityStateV1,
 	ClientSurfaceAvailabilityV1Schema,
 	ClientSurfaceIdV1,
-} from '../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import { clientSurfaceCatalog } from '../client-runtime/clientSurfaces'
 import { validateClientBootstrap } from './clientBootstrap'
 

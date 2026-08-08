@@ -1,5 +1,5 @@
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::{Value, json};
 use sqlx::Row;
 use sqlx::postgres::PgPool;
@@ -61,15 +61,15 @@ use crate::workflows::review_inbox::{
     refresh_message_decisions_into_review, refresh_message_knowledge_candidates_into_review,
     refresh_message_people_candidates_into_review, refresh_message_task_candidates_into_review,
 };
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
-use hermes_events_postgres::store::EventStore;
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_events_postgres::store::EventStore;
 
 #[path = "communication_fixture_observations.rs"]
 mod communication_fixture_observations;
 #[path = "communication_fixture_persistence.rs"]
 mod communication_fixture_persistence;
 
-const AUDIT_ACTOR_ID: &str = "hermes-frontend";
+const AUDIT_ACTOR_ID: &str = "makosh-frontend";
 const WHATSAPP_CHANNEL_KINDS: &[&str] = &["whatsapp_web"];
 
 #[derive(Clone)]

@@ -28,10 +28,10 @@ pub(super) fn configure_scheduler_jetstream(store: &SqliteControlStore) {
                     .expect("create Scheduler Event stream");
             }
             for consumer in plan.consumers() {
-                let stream_name = if consumer.subject().as_str().starts_with("hermes.ack.") {
-                    "HERMES_ACK_V1"
+                let stream_name = if consumer.subject().as_str().starts_with("makosh.ack.") {
+                    "MAKOSH_ACK_V1"
                 } else {
-                    "HERMES_RESULT_V1"
+                    "MAKOSH_RESULT_V1"
                 };
                 context
                     .create_consumer_on_stream(
@@ -59,17 +59,17 @@ fn scheduler_stream_details(
 ) -> (&'static str, &'static str) {
     match kind {
         event_topology::subject::EventStreamKindV1::Command => {
-            ("HERMES_COMMAND_V1", "hermes.command.v1.>")
+            ("MAKOSH_COMMAND_V1", "makosh.command.v1.>")
         }
-        event_topology::subject::EventStreamKindV1::Ack => ("HERMES_ACK_V1", "hermes.ack.v1.>"),
+        event_topology::subject::EventStreamKindV1::Ack => ("MAKOSH_ACK_V1", "makosh.ack.v1.>"),
         event_topology::subject::EventStreamKindV1::Result => {
-            ("HERMES_RESULT_V1", "hermes.result.v1.>")
+            ("MAKOSH_RESULT_V1", "makosh.result.v1.>")
         }
         event_topology::subject::EventStreamKindV1::Event => {
-            ("HERMES_EVENT_V1", "hermes.event.v1.>")
+            ("MAKOSH_EVENT_V1", "makosh.event.v1.>")
         }
         event_topology::subject::EventStreamKindV1::Observation => {
-            ("HERMES_OBSERVATION_V1", "hermes.observation.v1.>")
+            ("MAKOSH_OBSERVATION_V1", "makosh.observation.v1.>")
         }
     }
 }
@@ -93,13 +93,13 @@ pub(super) fn configure_scheduler_delivery_observer(store: &SqliteControlStore) 
                 .create_consumer_on_stream(
                     async_nats::jetstream::consumer::pull::Config {
                         durable_name: Some("scheduler_recovery_delivery".to_owned()),
-                        filter_subject: "hermes.command.v1.platform.maintenance.v1".to_owned(),
+                        filter_subject: "makosh.command.v1.platform.maintenance.v1".to_owned(),
                         deliver_policy: async_nats::jetstream::consumer::DeliverPolicy::New,
                         ack_policy: async_nats::jetstream::consumer::AckPolicy::Explicit,
                         max_ack_pending: 1,
                         ..Default::default()
                     },
-                    "HERMES_COMMAND_V1",
+                    "MAKOSH_COMMAND_V1",
                 )
                 .await
                 .expect("create Scheduler recovery delivery observer");
@@ -122,7 +122,7 @@ pub(super) fn recovered_scheduler_delivery(store: &SqliteControlStore) -> Durabl
                     .expect("connect Scheduler delivery observer"),
             );
             let stream = context
-                .get_stream("HERMES_COMMAND_V1")
+                .get_stream("MAKOSH_COMMAND_V1")
                 .await
                 .expect("read Scheduler command stream");
             let consumer: async_nats::jetstream::consumer::PullConsumer = stream

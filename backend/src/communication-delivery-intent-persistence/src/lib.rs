@@ -12,7 +12,6 @@ pub mod schema;
 pub use client_realtime::DeliveryIntentClientRealtimeTransitionV1;
 #[cfg(feature = "conformance-test-support")]
 pub use conformance::DeliveryIntentPersistenceConformanceV1;
-use hermes_storage_protocol::StorageBindingV1;
 pub use ingress_cleanup::{
     DeliveryIntentIngressCleanupJobV1, DeliveryIntentIngressCleanupReasonV1,
 };
@@ -25,6 +24,7 @@ pub use intents::{
     DeliveryIntentClaimV1, DeliveryIntentPersistenceErrorV1, DeliveryIntentStateV1,
     DeliveryIntentStatusRecordV1,
 };
+use makosh_storage_protocol::StorageBindingV1;
 pub use provider_events::{
     ApplyTerminalDeliveryResultOutcomeV1, EnqueueProviderCommandOutcomeV1,
     ProviderCommandOutboxEntryV1, TerminalDeliveryResultV1, TerminalDeliveryResultValueV1,
@@ -34,7 +34,7 @@ use sqlx::{
     postgres::{PgConnectOptions, PgPoolOptions},
 };
 
-pub const PACKAGE: &str = "hermes-communication-delivery-intent-persistence";
+pub const PACKAGE: &str = "makosh-communication-delivery-intent-persistence";
 
 #[derive(Clone)]
 pub struct CommunicationDeliveryIntentPersistenceV1 {

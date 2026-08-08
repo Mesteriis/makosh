@@ -3,7 +3,7 @@
 use chacha20poly1305::aead::{Aead, KeyInit, Payload};
 use chacha20poly1305::{XChaCha20Poly1305, XNonce};
 use getrandom::fill;
-use hermes_vault_protocol::{
+use makosh_vault_protocol::{
     MAX_CREDENTIAL_BYTES, MAX_SESSION_CREDENTIAL_BYTES, SecretClassV1, VaultProtocolError,
     VaultPurposeRequestV1, validate_logical_owner_id,
 };
@@ -145,7 +145,7 @@ impl SecretRecordScope {
 
     pub fn matches_lease_request(
         &self,
-        request: &hermes_vault_protocol::VaultLeaseIssueRequestV1,
+        request: &makosh_vault_protocol::VaultLeaseIssueRequestV1,
     ) -> bool {
         self.logical_owner_id == request.logical_owner_id()
             && self.configuration_instance_id == request.purpose().configuration_instance_id()

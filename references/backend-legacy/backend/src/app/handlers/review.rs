@@ -28,8 +28,8 @@ use crate::engines::context_packs::{
     store::ContextPackStore,
 };
 use crate::workflows::review_promotion::ReviewPromotionService;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 
 const DEFAULT_REVIEW_LIMIT: i64 = 50;
 const MIN_REVIEW_LIMIT: i64 = 1;
@@ -327,7 +327,7 @@ async fn review_item_trace_id(state: &AppState, review_item_id: &str) -> Result<
         return Err(ApiError::DatabaseNotConfigured);
     };
 
-    let trace_id = hermes_events_postgres::store::EventStore::new(pool.clone())
+    let trace_id = makosh_events_postgres::store::EventStore::new(pool.clone())
         .first_trace_id_for_subject("review_item_id", review_item_id)
         .await
         .map_err(|error| {

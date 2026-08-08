@@ -1,5 +1,5 @@
-use hermes_communications_api::accounts::ProviderAccountCommandPort;
-use hermes_communications_api::accounts::ProviderSecretBindingCommandPort;
+use makosh_communications_api::accounts::ProviderAccountCommandPort;
+use makosh_communications_api::accounts::ProviderSecretBindingCommandPort;
 mod constructors;
 mod gmail_complete;
 mod gmail_payloads;

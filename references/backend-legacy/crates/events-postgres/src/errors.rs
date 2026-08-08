@@ -1,6 +1,6 @@
 use thiserror::Error;
 
-use hermes_events_api::EventEnvelopeError;
+use makosh_events_api::EventEnvelopeError;
 
 #[derive(Debug, Error)]
 pub enum EventStoreError {

@@ -1,11 +1,11 @@
 use chrono::{DateTime, Utc};
-use hermes_obligations_api::{
+use makosh_obligations_api::{
     ObligationEvidence, ObligationListFuture, ObligationListQuery, ObligationQueryError,
     ObligationRead, ObligationReadPort, ObligationUpsert, ObligationWriteError,
     ObligationWriteFuture, ObligationWritePort,
 };
-use hermes_observations_postgres::review_links::link_domain_entity_in_transaction;
-use hermes_observations_postgres::review_links::materialize_review_transition_link_in_transaction;
+use makosh_observations_postgres::review_links::link_domain_entity_in_transaction;
+use makosh_observations_postgres::review_links::materialize_review_transition_link_in_transaction;
 use serde_json::Value;
 use sqlx::{PgPool, Row};
 

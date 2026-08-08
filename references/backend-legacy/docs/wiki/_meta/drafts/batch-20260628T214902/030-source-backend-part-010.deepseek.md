@@ -11,7 +11,7 @@
 
 ## Обзор
 
-Данный документ описывает слой HTTP-обработчиков backend-приложения Hermes Hub,
+Данный документ описывает слой HTTP-обработчиков backend-приложения Макошь,
 расположенный в `backend/src/app/handlers`. Обработчики сгруппированы по доменным
 областям и реализованы с использованием фреймворка Axum.
 
@@ -126,7 +126,7 @@
 ### Константы
 
 - Лимит по умолчанию: 50, минимум 1, максимум 100.
-- Actor ID для аудита: `"hermes-frontend"`.
+- Actor ID для аудита: `"makosh-frontend"`.
 
 ## Organizations (организации)
 
@@ -193,7 +193,7 @@
 
 ### Compatibility (роли, персоны)
 
-- **Roles**: 
+- **Roles**:
   - `get_person_roles` – роли лица.
   - `post_person_role` – назначить роль (`PersonCommandService::assign_role_manual`).
   - `delete_person_role` – удалить роль; возвращает `{"deleted": bool}`.

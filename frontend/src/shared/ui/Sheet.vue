@@ -20,8 +20,8 @@ const emit = defineEmits<{
 }>()
 
 const contentClasses = computed(() => [
-  'hermes-sheet-content',
-  `hermes-sheet--${props.side}`,
+  'makosh-sheet-content',
+  `makosh-sheet--${props.side}`,
   props.contentClass
 ])
 </script>
@@ -32,21 +32,21 @@ const contentClasses = computed(() => [
       <slot name="trigger" />
     </DialogTrigger>
     <DialogPortal>
-      <DialogOverlay class="hermes-sheet-overlay">
+      <DialogOverlay class="makosh-sheet-overlay">
         <DialogContent :class="contentClasses">
-          <div class="hermes-sheet-header">
-            <DialogTitle v-if="title" class="hermes-sheet-title">{{ title }}</DialogTitle>
-            <DialogDescription v-if="description" class="hermes-sheet-description">{{ description }}</DialogDescription>
+          <div class="makosh-sheet-header">
+            <DialogTitle v-if="title" class="makosh-sheet-title">{{ title }}</DialogTitle>
+            <DialogDescription v-if="description" class="makosh-sheet-description">{{ description }}</DialogDescription>
             <slot name="header" />
           </div>
-          <div class="hermes-sheet-body">
+          <div class="makosh-sheet-body">
             <slot />
           </div>
-          <div v-if="$slots.footer" class="hermes-sheet-footer">
+          <div v-if="$slots.footer" class="makosh-sheet-footer">
             <slot name="footer" />
           </div>
-          <DialogClose class="hermes-sheet-close" as-child>
-            <button class="hermes-sheet-close-btn">
+          <DialogClose class="makosh-sheet-close" as-child>
+            <button class="makosh-sheet-close-btn">
               <Icon icon="tabler:x" size="1.125rem" />
             </button>
           </DialogClose>

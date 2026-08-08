@@ -1,6 +1,6 @@
 use chrono::Utc;
-use hermes_events_api::{EventEnvelope, NewEventEnvelope};
-use hermes_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
+use makosh_events_api::{EventEnvelope, NewEventEnvelope};
+use makosh_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
 use sqlx::postgres::PgPool;
@@ -9,7 +9,7 @@ use std::sync::Arc;
 use super::service::signal_hub_raw_dispatcher_allows_processing;
 use super::service::{SignalHubSignalService, SignalProcessingOutcome};
 use super::store::{SignalHubError, SignalHubStore};
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 pub async fn dispatch_ai_helper_signal(
     pool: PgPool,

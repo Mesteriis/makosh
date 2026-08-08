@@ -17,10 +17,10 @@
 
 | Псевдоним | Выполняемая команда |
 |---|---|
-| `hermes-nextest` | `nextest run --manifest-path backend/Cargo.toml` |
-| `hermes-nextest-ci` | `nextest run --manifest-path backend/Cargo.toml --profile ci` |
-| `hermes-nextest-integration` | `nextest run --manifest-path backend/Cargo.toml --profile integration --tests` |
-| `hermes-llvm-cov` | `llvm-cov --manifest-path backend/Cargo.toml` |
+| `makosh-nextest` | `nextest run --manifest-path backend/Cargo.toml` |
+| `makosh-nextest-ci` | `nextest run --manifest-path backend/Cargo.toml --profile ci` |
+| `makosh-nextest-integration` | `nextest run --manifest-path backend/Cargo.toml --profile integration --tests` |
+| `makosh-llvm-cov` | `llvm-cov --manifest-path backend/Cargo.toml` |
 
 Все перечисленные псевдонимы указывают `--manifest-path backend/Cargo.toml`.
 ```
@@ -29,7 +29,7 @@
 
 | Исходный файл | Покрытые факты |
 |---|---|
-| `.cargo/config.toml` | определённые псевдонимы `hermes-nextest`, `hermes-nextest-ci`, `hermes-nextest-integration`, `hermes-llvm-cov` и соответствующие им команды |
+| `.cargo/config.toml` | определённые псевдонимы `makosh-nextest`, `makosh-nextest-ci`, `makosh-nextest-integration`, `makosh-llvm-cov` и соответствующие им команды |
 
 ### Drift candidates / Кандидаты на drift
 

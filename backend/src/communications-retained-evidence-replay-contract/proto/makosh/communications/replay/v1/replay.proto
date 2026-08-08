@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package makosh.communications.replay.v1;
+
+message ReplayCommunicationsEvidenceCommandV1 {
+  bytes operation_id = 1;
+  string logical_owner_id = 2;
+  bytes owner_device_actor_sha256 = 3;
+  reserved 4 to 7;
+  bytes attachment_anchor_id = 8;
+}
+
+message ReplayCommunicationsEvidenceResultV1 {
+  bytes operation_id = 1;
+  ReplayCommunicationsEvidenceOutcomeV1 outcome = 2;
+  repeated bytes original_message_ids = 3;
+  ReplayCommunicationsEvidenceFailureV1 failure = 4;
+}
+
+enum ReplayCommunicationsEvidenceOutcomeV1 {
+  REPLAY_COMMUNICATIONS_EVIDENCE_OUTCOME_V1_UNSPECIFIED = 0;
+  REPLAY_COMMUNICATIONS_EVIDENCE_OUTCOME_V1_PUBLISHED = 1;
+  REPLAY_COMMUNICATIONS_EVIDENCE_OUTCOME_V1_ALREADY_PUBLISHED = 2;
+  REPLAY_COMMUNICATIONS_EVIDENCE_OUTCOME_V1_REJECTED = 3;
+  REPLAY_COMMUNICATIONS_EVIDENCE_OUTCOME_V1_UNAVAILABLE = 4;
+}
+
+enum ReplayCommunicationsEvidenceFailureV1 {
+  REPLAY_COMMUNICATIONS_EVIDENCE_FAILURE_V1_UNSPECIFIED = 0;
+  REPLAY_COMMUNICATIONS_EVIDENCE_FAILURE_V1_NOT_FOUND = 1;
+  REPLAY_COMMUNICATIONS_EVIDENCE_FAILURE_V1_HASH_MISMATCH = 2;
+  REPLAY_COMMUNICATIONS_EVIDENCE_FAILURE_V1_WRONG_CONTRACT = 3;
+  REPLAY_COMMUNICATIONS_EVIDENCE_FAILURE_V1_STALE_RUNTIME_FENCE = 4;
+  REPLAY_COMMUNICATIONS_EVIDENCE_FAILURE_V1_STALE_GRANT_FENCE = 5;
+  REPLAY_COMMUNICATIONS_EVIDENCE_FAILURE_V1_OWNER_MISMATCH = 6;
+  REPLAY_COMMUNICATIONS_EVIDENCE_FAILURE_V1_PUBLISH_UNAVAILABLE = 7;
+}

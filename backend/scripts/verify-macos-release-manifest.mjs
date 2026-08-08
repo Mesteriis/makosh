@@ -68,28 +68,28 @@ export function validateManifest(manifest) {
     if (!isExpectedBundleArtifactPath(
       bundle.path,
       sidecar?.path,
-      ['Contents', 'MacOS', 'hermes-kernel'],
+      ['Contents', 'MacOS', 'makosh-kernel'],
     )) {
       errors.push('artifacts.kernel_sidecar must be the Tauri-normalized Kernel sidecar inside the bundle');
     }
     if (!isExpectedBundleArtifactPath(
       bundle.path,
       trustRoot?.path,
-      ['Contents', 'Resources', 'hermes-kernel-release', 'hermes-release-trust-root.pb'],
+      ['Contents', 'Resources', 'makosh-kernel-release', 'makosh-release-trust-root.pb'],
     )) {
       errors.push('artifacts.release_trust_root must be inside the signed managed-launch resource directory');
     }
     if (!isExpectedBundleArtifactPath(
       bundle.path,
       signedManifest?.path,
-      ['Contents', 'Resources', 'hermes-kernel-release', 'hermes-signed-distribution-manifest.pb'],
+      ['Contents', 'Resources', 'makosh-kernel-release', 'makosh-signed-distribution-manifest.pb'],
     )) {
       errors.push('artifacts.signed_distribution_manifest must be inside the signed managed-launch resource directory');
     }
     if (!isExpectedBundleArtifactPath(
       bundle.path,
       distributionRoot?.path,
-      ['Contents', 'Resources', 'hermes-kernel-release', 'distribution'],
+      ['Contents', 'Resources', 'makosh-kernel-release', 'distribution'],
     )) {
       errors.push('artifacts.distribution_root must be inside the signed managed-launch resource directory');
     }

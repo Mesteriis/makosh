@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Создать страницу `operations/backend-tests.md` в русской Obsidian wiki проекта hermes-hub. В неё войдёт описание структуры интеграционных тестов бэкенда, используемых паттернов, а также обзор каждого тестового файла/модуля, основанный исключительно на предоставленных исходниках. Это закроет пробел в документации: ранее wiki не описывала покрытие и контракты тестов V1 Communications API.
+Создать страницу `operations/backend-tests.md` в русской Obsidian wiki проекта makosh. В неё войдёт описание структуры интеграционных тестов бэкенда, используемых паттернов, а также обзор каждого тестового файла/модуля, основанный исключительно на предоставленных исходниках. Это закроет пробел в документации: ранее wiki не описывала покрытие и контракты тестов V1 Communications API.
 
 ## Предложенные страницы
 
@@ -31,7 +31,7 @@ generated_by: code-wiki-ru
 
 - База данных: `TestContext::new().await` предоставляет временный инстанс PostgreSQL.
 - Роутер: `build_router_with_database`, конфигурация — `testkit::app::config_with_secret_and_database_url`.
-- Аутентификация: HTTP-заголовок `x-hermes-secret` с тестовым значением (определяется константой в каждом файле, например `"v1comms-attachment-search-test-token"`).
+- Аутентификация: HTTP-заголовок `x-makosh-secret` с тестовым значением (определяется константой в каждом файле, например `"v1comms-attachment-search-test-token"`).
 - Проверка состояния БД: прямые SQL-запросы через `sqlx::query`, `sqlx::query_scalar`, `sqlx::query_scalar` и методы `Row::try_get`.
 - Искусственные AI-зависимости: Fake-сервер Ollama поднимается как `axum::Router` на случайном порту; его URL записывается в настройку `ai.ollama_base_url` через `ApplicationSettingsStore`.
 - Общий вспомогательный модуль: `v1_communications_regressions/support.rs` (хелперы `get`, `post`, `delete`, `post_with_actor`, `uid`, `response_json`, `router`, функции посева сообщений).
@@ -160,7 +160,7 @@ generated_by: code-wiki-ru
 
 Общие функции:
 
-- `get(uri)` – GET‑запрос с заголовком `x-hermes-secret`
+- `get(uri)` – GET‑запрос с заголовком `x-makosh-secret`
 - `post(uri, body)` / `post_with_actor(uri, body)` – POST‑запросы с JSON‑телом
 - `delete(uri)` – DELETE‑запрос
 - `uid()` – генерация уникального суффикса (наносекунды)

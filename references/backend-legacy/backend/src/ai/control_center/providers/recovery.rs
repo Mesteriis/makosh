@@ -1,6 +1,6 @@
 use serde_json::{Value, json};
 
-use hermes_observations_api::models::ObservationOriginKind;
+use makosh_observations_api::models::ObservationOriginKind;
 
 use super::super::errors::AiControlCenterError;
 use super::super::evidence::{

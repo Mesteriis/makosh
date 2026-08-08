@@ -61,7 +61,7 @@ function graphicsText(locale: string) {
 }
 
 const meta = {
-	title: 'Hermes UI/General/Graphics',
+	title: 'Макошь UI/General/Graphics',
 	render: (_args, context) => ({
 		components: {
 			CandlestickChart,

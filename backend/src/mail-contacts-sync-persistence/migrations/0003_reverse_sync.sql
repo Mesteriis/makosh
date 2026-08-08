@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.mail_contacts_sync_reverse_inbox (
+CREATE TABLE makosh_data.mail_contacts_sync_reverse_inbox (
     logical_owner_id TEXT NOT NULL,
     event_message_id BYTEA NOT NULL,
     event_envelope_sha256 BYTEA NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE hermes_data.mail_contacts_sync_reverse_inbox (
     CHECK (length(event_envelope_sha256) = 32),
     CHECK (completed_at_unix_millis > 0)
 );
-CREATE TABLE hermes_data.mail_contacts_sync_reverse_operations (
+CREATE TABLE makosh_data.mail_contacts_sync_reverse_operations (
     logical_owner_id TEXT NOT NULL,
     operation_id BYTEA NOT NULL,
     source_event_message_id BYTEA NOT NULL,

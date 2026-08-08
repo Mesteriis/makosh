@@ -10,15 +10,15 @@ const props = withDefaults(defineProps<{
 	keys: () => []
 })
 
-const classes = computed(() => ['hermes-keyboard-hint', props.class])
+const classes = computed(() => ['makosh-keyboard-hint', props.class])
 </script>
 
 <template>
 	<span :class="classes">
-		<span v-if="label" class="hermes-keyboard-hint__label">{{ label }}</span>
-		<span class="hermes-keyboard-hint__keys" aria-hidden="true">
+		<span v-if="label" class="makosh-keyboard-hint__label">{{ label }}</span>
+		<span class="makosh-keyboard-hint__keys" aria-hidden="true">
 			<Kbd v-for="key in keys" :key="key">{{ key }}</Kbd>
 		</span>
-		<span class="hermes-sr-only">{{ [label, ...keys].filter(Boolean).join(' ') }}</span>
+		<span class="makosh-sr-only">{{ [label, ...keys].filter(Boolean).join(' ') }}</span>
 	</span>
 </template>

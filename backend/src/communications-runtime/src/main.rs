@@ -6,8 +6,8 @@ use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-use hermes_communications_retained_evidence_replay_persistence::RetainedCommunicationsReplayErrorV1;
-use hermes_communications_runtime::{
+use makosh_communications_retained_evidence_replay_persistence::RetainedCommunicationsReplayErrorV1;
+use makosh_communications_runtime::{
     admission::{communications_module_descriptor_v1, communications_settings_schema_bytes_v1},
     consumer::CommunicationsDeliveryErrorV1,
     event_runtime::{
@@ -17,7 +17,7 @@ use hermes_communications_runtime::{
     retained_evidence_replay_result::CommunicationsReplayResultRelayErrorV1,
     storage_bundle::communications_runtime_storage_bundle_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedDomainRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
@@ -162,24 +162,24 @@ where
         let now = i64::try_from(now.as_secs())
             .map_err(|_| "Communications runtime clock is unavailable".to_owned())?;
         if let Err(error) = executor.block_on(runtime.relay_domain_outbox(now)) {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_communications_runtime_outbox_error={error:?}");
             }
             if !error.is_retryable() {
-                if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                     eprintln!("developer_communications_runtime_outbox_terminal=true");
                 }
                 return Err("Communications runtime outbox relay failed".to_owned());
             }
         }
         if let Err(error) = executor.block_on(runtime.relay_replay_result(now)) {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_communications_runtime_replay_result_error={error:?}");
             }
             match error {
                 CommunicationsReplayResultRelayErrorV1::EventUnavailable
                 | CommunicationsReplayResultRelayErrorV1::Persistence(
-                    hermes_communications_retained_evidence_replay_persistence::RetainedCommunicationsReplayErrorV1::StorageUnavailable,
+                    makosh_communications_retained_evidence_replay_persistence::RetainedCommunicationsReplayErrorV1::StorageUnavailable,
                 ) => {}
                 _ => return Err("Communications replay result relay failed".to_owned()),
             }
@@ -211,7 +211,7 @@ async fn consume_or_tick(
         .try_handle_control_delivery()
         .await
         .map_err(|error| {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_communications_runtime_client_delivery_error={error:?}");
             }
             "Communications runtime client delivery failed".to_owned()
@@ -240,7 +240,7 @@ async fn consume_or_tick(
             }
         }
         Err(error) => {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_communications_runtime_terminal_delivery_error={error:?}");
             }
             Err("Communications runtime event delivery failed".to_owned())
@@ -260,7 +260,7 @@ async fn run_maintenance_tick(runtime: &mut CommunicationsEventRuntimeV1) -> Res
     {
         Ok(_) | Err(RetainedCommunicationsReplayErrorV1::StorageUnavailable) => {}
         Err(error) => {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_communications_runtime_replay_index_error={error:?}");
             }
             return Err("Communications runtime replay index maintenance failed".to_owned());
@@ -277,7 +277,7 @@ async fn run_maintenance_tick(runtime: &mut CommunicationsEventRuntimeV1) -> Res
         }
         custody_processed = custody_processed.saturating_add(1);
     }
-    if custody_processed > 0 && std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if custody_processed > 0 && std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_communications_runtime_custody_processed={custody_processed}");
     }
     runtime
@@ -297,7 +297,7 @@ async fn run_maintenance_tick(runtime: &mut CommunicationsEventRuntimeV1) -> Res
 }
 
 fn maintenance_error(stage: &str, error: CommunicationsEventRuntimeErrorV1) -> String {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!(
             "developer_communications_runtime_maintenance_error stage={stage} error={error:?}"
         );

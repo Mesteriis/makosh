@@ -1,13 +1,13 @@
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ResultMetadataV1, ResultOutcomeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_review_task_candidate_promotion_api::{
+use makosh_review_task_candidate_promotion_api::{
     ReviewTaskCandidatePromotionEnvelopeContextV1,
     build_review_task_candidate_promotion_result_outbox_record_v1,
     wire::{
@@ -15,12 +15,12 @@ use hermes_review_task_candidate_promotion_api::{
         ReviewTaskCandidatePromotionResultV1,
     },
 };
-use hermes_reviewed_task_candidate_promotion_core::derive_reviewed_task_candidate_result_id_v1;
-use hermes_reviewed_task_candidate_promotion_persistence::{
+use makosh_reviewed_task_candidate_promotion_core::derive_reviewed_task_candidate_result_id_v1;
+use makosh_reviewed_task_candidate_promotion_persistence::{
     PersistPromotionTerminalResultV1, ReviewedTaskCandidatePromotionOutcomeV1 as StoredOutcome,
     ReviewedTaskCandidatePromotionPersistenceErrorV1, ReviewedTaskCandidatePromotionPersistenceV1,
 };
-use hermes_tasks_command_api::{
+use makosh_tasks_command_api::{
     task_created_from_reviewed_candidate_contract_reference_v1,
     task_creation_from_reviewed_candidate_rejected_contract_reference_v1,
     wire::{
@@ -270,7 +270,7 @@ fn promotion_context(
     runtime: &ReviewedTaskCandidatePromotionRuntimeContextV1<'_>,
 ) -> ReviewTaskCandidatePromotionEnvelopeContextV1 {
     ReviewTaskCandidatePromotionEnvelopeContextV1 {
-        module_id: hermes_reviewed_task_candidate_promotion_core::REVIEWED_TASK_CANDIDATE_PROMOTION_MODULE_ID_V1.to_owned(),
+        module_id: makosh_reviewed_task_candidate_promotion_core::REVIEWED_TASK_CANDIDATE_PROMOTION_MODULE_ID_V1.to_owned(),
         runtime_instance_id: runtime.runtime_instance_id.to_owned(),
         runtime_generation: runtime.runtime_generation,
         recorded_at_unix_seconds: runtime.now_unix_millis / 1_000,
@@ -285,7 +285,7 @@ fn event_error(_: RuntimePullDeliveryErrorV1) -> ReviewedTaskCandidatePromotionE
 
 #[cfg(test)]
 mod tests {
-    use hermes_tasks_command_api::{
+    use makosh_tasks_command_api::{
         TasksCommandEnvelopeContextV1, build_task_created_from_reviewed_candidate_outbox_record_v1,
         build_task_creation_from_reviewed_candidate_rejected_outbox_record_v1,
         wire::{TaskCreatedFromReviewedCandidateV1, TaskCreationFromReviewedCandidateRejectedV1},

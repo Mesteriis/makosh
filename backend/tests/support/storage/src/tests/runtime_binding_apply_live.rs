@@ -1,17 +1,17 @@
 //! Live conformance for Storage Runtime's authorized PgBouncer binding apply.
 
-use hermes_storage_protocol::v1::{
+use makosh_storage_protocol::v1::{
     StorageBindingV1, StorageDeploymentProfileV1, StorageEffectiveBudgetsV1,
     StorageRuntimeConfigurationV1, StorageRuntimeTopologyV1,
 };
 use zeroize::Zeroizing;
 
-const AUTHENTICATED_TEST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_TEST";
-const DATABASES_FILE_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_DATABASES_FILE";
-const AUTH_FILE_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_AUTH_FILE";
-const PASSWORD_FILE_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE";
-const PGBOUNCER_HOST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_HOST";
-const PGBOUNCER_PORT_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PORT";
+const AUTHENTICATED_TEST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_TEST";
+const DATABASES_FILE_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_DATABASES_FILE";
+const AUTH_FILE_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_AUTH_FILE";
+const PASSWORD_FILE_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE";
+const PGBOUNCER_HOST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_HOST";
+const PGBOUNCER_PORT_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PORT";
 
 #[test]
 #[ignore = "requires the disposable authenticated Storage Compose contour"]
@@ -45,7 +45,7 @@ fn topology() -> StorageRuntimeTopologyV1 {
         topology_revision: 1,
         storage_generation: 1,
         storage_instance_id: "storage_main".to_owned(),
-        database_id: "hermes_storage_authenticated".to_owned(),
+        database_id: "makosh_storage_authenticated".to_owned(),
         deployment_profile: StorageDeploymentProfileV1::MacosTauriEmbedded as i32,
         postgres_artifact_sha256: vec![1; 32],
         pgbouncer_artifact_sha256: vec![2; 32],
@@ -62,7 +62,7 @@ fn binding() -> StorageBindingV1 {
     StorageBindingV1 {
         storage_instance_id: "storage_main".to_owned(),
         storage_generation: 1,
-        database_id: "hermes_storage_authenticated".to_owned(),
+        database_id: "makosh_storage_authenticated".to_owned(),
         owner: "notes".to_owned(),
         registration_id: "registration_live".to_owned(),
         runtime_instance_id: "runtime_live".to_owned(),

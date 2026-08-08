@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::{NewEventEnvelope, StoredEventEnvelope};
+use makosh_events_api::{NewEventEnvelope, StoredEventEnvelope};
 use serde_json::{Value, json};
 use sqlx::postgres::PgPool;
 use uuid::Uuid;
@@ -13,9 +13,9 @@ use crate::integrations::whatsapp::client::models::{
 use crate::integrations::whatsapp::runtime::contracts::WhatsAppProviderCommand;
 use crate::platform::events::bus::InMemoryEventBus;
 use crate::platform::events::bus::whatsapp_event_types;
-use hermes_communications_api::evidence::StoredRawCommunicationRecord;
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
-use hermes_events_postgres::store::EventStore;
+use makosh_communications_api::evidence::StoredRawCommunicationRecord;
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_events_postgres::store::EventStore;
 
 pub(crate) const WHATSAPP_PROVIDER_OBSERVATION_RECONCILIATION_CONSUMER: &str =
     "whatsapp_provider_observation_reconciliation";
@@ -32,7 +32,7 @@ pub(crate) async fn reconcile_whatsapp_provider_observation_event(
     let account_store = CommunicationProviderAccountStore::new(pool.clone());
     let raw_record_id = required_subject_str(&event.event.subject, "raw_record_id")?;
     let raw_record =
-        hermes_communications_postgres::store::CommunicationIngestionStore::new(pool.clone())
+        makosh_communications_postgres::store::CommunicationIngestionStore::new(pool.clone())
             .raw_record(raw_record_id)
             .await
             .map_err(|error| error.to_string())?
@@ -215,7 +215,7 @@ async fn publish_whatsapp_command_event(
         json!({
             "channel": "whatsapp",
             "account_id": command.account_id,
-            "actor_id": "hermes-frontend",
+            "actor_id": "makosh-frontend",
             "kind": "whatsapp_provider_commands",
             "source_id": source_id,
         }),

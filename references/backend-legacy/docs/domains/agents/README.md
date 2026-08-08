@@ -2,7 +2,7 @@
 
 Status: documentation package aligned to the current repository structure.
 
-Agents are tool-mediated actors that help the Owner Persona operate Hermes.
+Agents are tool-mediated actors that help the Owner Persona operate Макошь.
 
 Agents are not source-of-truth owners. They work through permissions, audit
 records, source evidence and reviewable actions.
@@ -36,7 +36,7 @@ AI agents can exist in the Persona graph as:
 PersonaType: ai_agent
 ```
 
-This allows Hermes to represent HESTIA and future agents as actors with
+This allows Макошь to represent HESTIA and future agents as actors with
 relationships, permissions and provenance. The Owner Persona remains the only
 `is_self: true` Persona.
 

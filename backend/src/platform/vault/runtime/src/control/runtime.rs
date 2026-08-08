@@ -2,13 +2,13 @@
 
 use prost::Message;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     GetVaultRuntimeStatusRequestV1, ManagedVaultRuntimeControlRequestV1,
     ManagedVaultRuntimeControlResponseV1, VaultRuntimeStateV1, VaultRuntimeStatusV1,
     managed_vault_runtime_control_request_v1::Operation,
     managed_vault_runtime_control_response_v1::Result as ResponseResult,
 };
-use hermes_runtime_protocol::validation::vault::validate_vault_runtime_status_v1;
+use makosh_runtime_protocol::validation::vault::validate_vault_runtime_status_v1;
 
 use crate::control::inherited::{open_and_describe, read_frame, write_frame};
 use crate::service::runtime::VaultService;
@@ -48,7 +48,7 @@ pub(crate) fn serve_on_channel(
             authorization_key_sec1,
         )
         .unwrap_or_else(|error| {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_vault_operation_denied={error}");
                 return error_response(&format!("developer_denied_{error}"));
             }

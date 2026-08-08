@@ -9,7 +9,7 @@ use crate::domains::communications::storage::scanner::{
 use crate::platform::communications::rfc822::models::{
     ParsedEmailAttachment, ParsedEmailAttachmentDisposition,
 };
-use hermes_communications_api::evidence::StoredRawCommunicationRecord;
+use makosh_communications_api::evidence::StoredRawCommunicationRecord;
 
 use super::errors::EmailSyncPipelineError;
 

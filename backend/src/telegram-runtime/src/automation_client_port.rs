@@ -5,8 +5,8 @@
 
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_runtime_protocol::v1::{ContractReferenceV1, ModuleClientRequestV1};
-use hermes_telegram_automation_api::{
+use makosh_runtime_protocol::v1::{ContractReferenceV1, ModuleClientRequestV1};
+use makosh_telegram_automation_api::{
     contract::{
         TELEGRAM_AUTOMATION_CONTRACT_MAJOR, TELEGRAM_AUTOMATION_CONTRACT_REVISION,
         TELEGRAM_AUTOMATION_DESCRIPTOR_SET_V1, TELEGRAM_AUTOMATION_MODULE_ID,
@@ -20,12 +20,12 @@ use hermes_telegram_automation_api::{
         automation_command_response_v1, automation_query_request_v1, automation_query_response_v1,
     },
 };
-use hermes_telegram_automation_core::{
+use makosh_telegram_automation_core::{
     AutomationError, AutomationPolicy, AutomationPolicyDraft, AutomationPreviewReceipt,
     AutomationPreviewRequest, AutomationTemplate, AutomationTemplateDraft, AutomationVariable,
     validate_identifier,
 };
-use hermes_telegram_automation_persistence::{
+use makosh_telegram_automation_persistence::{
     PersistedMutation, TelegramAutomationPersistence, TelegramAutomationPersistenceError,
 };
 use prost::Message;
@@ -545,7 +545,7 @@ mod tests {
     fn exact_automation_route_is_detected_without_accepting_umbrella_contract() {
         let query = AutomationQueryRequestV1 {
             request: Some(automation_query_request_v1::Request::GetTemplate(
-                hermes_telegram_automation_api::wire::GetAutomationTemplateQueryV1 {
+                makosh_telegram_automation_api::wire::GetAutomationTemplateQueryV1 {
                     template_id: "template-1".to_owned(),
                 },
             )),

@@ -40,11 +40,11 @@ owner в integration facade.
 Вводится отдельная Cargo assembly unit:
 
 ```text
-package = hermes-mail-assembly
+package = makosh-mail-assembly
 role    = integration
 owner   = mail
 surface = assembly
-binary  = hermes-mail-assembly
+binary  = makosh-mail-assembly
 ```
 
 Это build-time tool, а не managed runtime. Он не входит в

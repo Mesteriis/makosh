@@ -8,7 +8,7 @@ use std::{
     time::Duration,
 };
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedIntegrationRuntimeConfigurationV1,
     validation::{
         descriptor::{
@@ -18,8 +18,8 @@ use hermes_runtime_protocol::{
         managed_integration_runtime::validate_managed_integration_runtime_configuration,
     },
 };
-use hermes_whisper_stt_persistence::schema::whisper_stt_storage_bundle_v1;
-use hermes_whisper_stt_runtime::{
+use makosh_whisper_stt_persistence::schema::whisper_stt_storage_bundle_v1;
+use makosh_whisper_stt_runtime::{
     WhisperSttManagedRuntimeErrorV1, WhisperSttManagedRuntimeV1, WhisperSttRuntimeAdmissionV1,
     decode_whisper_stt_settings_v1, prepare_whisper_stt_resources_v1,
     whisper_stt_module_descriptor_v1, whisper_stt_settings_schema_bytes_v1,

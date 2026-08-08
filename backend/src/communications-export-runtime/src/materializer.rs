@@ -2,20 +2,20 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobClientError, BlobDataClient, ManagedBlobCustodyTransferRequestV1,
     ManagedBlobSessionRequestV1, request_managed_blob_custody_transfer_v2,
     request_managed_blob_session_v2,
 };
-use hermes_communications_export_core::{
+use makosh_communications_export_core::{
     EvidenceExportBodyV1, EvidenceExportItemV1, EvidenceExportManifestV1,
     MAX_EXPORT_ARTIFACT_BYTES_V1, encode_evidence_export_jsonl_v1,
 };
-use hermes_communications_export_persistence::{
+use makosh_communications_export_persistence::{
     CommunicationsExportArtifactReceiptV1, CommunicationsExportClaimV1,
     CommunicationsExportPersistenceErrorV1, CommunicationsExportPersistenceV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::BlobDataOperationV1,
 };

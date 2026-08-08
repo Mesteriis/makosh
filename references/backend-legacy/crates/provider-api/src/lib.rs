@@ -4,7 +4,7 @@ use std::future::Future;
 use std::pin::Pin;
 
 use chrono::{DateTime, Utc};
-use hermes_kernel::identifiers::{IdentifierError, validate_slug};
+use makosh_kernel::identifiers::{IdentifierError, validate_slug};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use thiserror::Error;

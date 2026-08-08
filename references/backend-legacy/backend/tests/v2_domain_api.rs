@@ -1,13 +1,13 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
 use axum::http::{Request, StatusCode};
-use hermes_hub_backend::app::router::{build_router, build_router_with_database};
-use hermes_hub_backend::domains::personas::api::store::PersonaProjectionStore;
-use hermes_hub_backend::domains::tasks::api::{NewTask, TaskStore};
-use hermes_hub_backend::platform::config::app_config::AppConfig;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::app::router::{build_router, build_router_with_database};
+use makosh_hub_backend::domains::personas::api::store::PersonaProjectionStore;
+use makosh_hub_backend::domains::tasks::api::{NewTask, TaskStore};
+use makosh_hub_backend::platform::config::app_config::AppConfig;
+use makosh_hub_backend::platform::storage::database::Database;
 use serde_json::{Value, json};
 use sqlx::PgPool;
 use tower::ServiceExt;
@@ -28,7 +28,7 @@ async fn domain_routes_build_and_require_local_api_secret() {
         json_body(response).await,
         json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 
@@ -61,7 +61,7 @@ async fn tasks_endpoint_returns_first_class_task_payload_against_postgres() {
             title: format!("V1 first-class task {suffix}"),
             description: Some("contract test task".to_owned()),
             source_type: Some("manual".to_owned()),
-            hermes_status: Some("ready".to_owned()),
+            makosh_status: Some("ready".to_owned()),
             priority_score: Some(0.7),
             tags: Some(json!(["api-test"])),
             ..Default::default()
@@ -70,7 +70,7 @@ async fn tasks_endpoint_returns_first_class_task_payload_against_postgres() {
         .expect("seed task");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -81,7 +81,7 @@ async fn tasks_endpoint_returns_first_class_task_payload_against_postgres() {
         .oneshot(get_request_with_token_and_actor(
             "/api/v1/tasks?limit=100",
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -97,7 +97,7 @@ async fn tasks_endpoint_returns_first_class_task_payload_against_postgres() {
 
     assert_eq!(item["title"], json!(task.title));
     assert_eq!(item["source_type"], json!("observation"));
-    assert_eq!(item["hermes_status"], json!("ready"));
+    assert_eq!(item["makosh_status"], json!("ready"));
     assert_eq!(item["confidentiality"], json!("private_local"));
     assert_eq!(item["task_metadata"], json!({}));
 }
@@ -119,7 +119,7 @@ async fn persona_health_endpoint_returns_single_persona_health_against_postgres(
     seed_person_health(&pool, &person.persona_id).await;
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -130,7 +130,7 @@ async fn persona_health_endpoint_returns_single_persona_health_against_postgres(
         .oneshot(get_request_with_token_and_actor(
             &format!("/api/v1/personas/{}/health", person.persona_id),
             LOCAL_API_TOKEN,
-            "hermes-frontend",
+            "makosh-frontend",
         ))
         .await
         .expect("response");
@@ -145,7 +145,7 @@ async fn persona_health_endpoint_returns_single_persona_health_against_postgres(
 }
 
 fn config_with_api_token() -> AppConfig {
-    hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+    makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
 }
 
 fn get_request(uri: &str) -> Request<Body> {
@@ -158,7 +158,7 @@ fn get_request(uri: &str) -> Request<Body> {
 fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -166,7 +166,7 @@ fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
 fn get_request_with_token_and_actor(uri: &str, token: &str, _actor_id: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }

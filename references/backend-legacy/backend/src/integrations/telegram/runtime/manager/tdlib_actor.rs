@@ -1,5 +1,5 @@
 use crate::platform::secrets::store::SecretReferenceStore;
-use hermes_communications_api::accounts::{ProviderAccount, ProviderSecretBindingLookupPort};
+use makosh_communications_api::accounts::{ProviderAccount, ProviderSecretBindingLookupPort};
 use std::sync::mpsc::Sender;
 
 use chrono::Utc;

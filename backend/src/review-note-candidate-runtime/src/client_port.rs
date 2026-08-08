@@ -1,6 +1,6 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_review_note_candidate_api::{
+use makosh_review_note_candidate_api::{
     REVIEW_NOTE_CANDIDATE_CONTRACT_MAJOR_V1, REVIEW_NOTE_CANDIDATE_MODULE_ID_V1,
     ReviewNoteCandidateEnvelopeContextV1, build_review_note_candidate_approved_outbox_record_v1,
     wire::{
@@ -13,18 +13,18 @@ use hermes_review_note_candidate_api::{
         ReviewNoteCandidateSummaryV1,
     },
 };
-use hermes_review_note_candidate_core::{
+use makosh_review_note_candidate_core::{
     ReviewNoteCandidateDecisionV1, ReviewNoteCandidatePromotionStatusV1,
     ReviewNoteCandidateStateV1, ReviewNoteCandidateTimestampV1, ReviewNoteCandidateV1,
     ReviewNoteSourceBasisV1, ReviewNoteTopicHintV1,
 };
-use hermes_review_note_candidate_persistence::{
+use makosh_review_note_candidate_persistence::{
     CheckReviewNoteCandidateDecisionReplayV1, DecideReviewNoteCandidateOperationV1,
     ReviewNoteCandidateDecisionOutcomeV1, ReviewNoteCandidateOutboxRecordV1,
     ReviewNoteCandidatePersistenceErrorV1, ReviewNoteCandidatePersistenceV1,
     ReviewNoteCandidateRealtimeTransitionV1,
 };
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
 use prost::Message;
@@ -366,7 +366,7 @@ fn timestamp_millis(value: ReviewNoteCandidateTimestampV1) -> Option<u64> {
 
 fn owner_device_actor_id(authenticated_device_id: &str) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.owner-device.actor.v1\0");
+    digest.update(b"makosh.owner-device.actor.v1\0");
     digest.update(authenticated_device_id.as_bytes());
     digest.finalize()[..16].try_into().expect("digest prefix")
 }

@@ -19,4 +19,4 @@ pub use schema::{
     communication_reply_suggestion_storage_bundle_v1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-reply-suggestion-persistence";
+pub const PACKAGE: &str = "makosh-communication-reply-suggestion-persistence";

@@ -1,6 +1,6 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     communication_translation_inference_contract_reference_v1,
     validate_translation_inference_request_v1, validate_translation_inference_result_v1,
     wire::{
@@ -9,17 +9,17 @@ use hermes_ai_contracts::{
         CommunicationTranslationInferenceResultV1,
     },
 };
-use hermes_communication_translation_core::{
+use makosh_communication_translation_core::{
     CommunicationTranslationCandidateV1, CommunicationTranslationCompletenessV1,
     CommunicationTranslationDetectedLanguageV1, CommunicationTranslationLanguageV1,
     CommunicationTranslationRejectionCodeV1, CommunicationTranslationStateV1,
     CommunicationTranslationTransitionV1,
 };
-use hermes_communication_translation_persistence::{
+use makosh_communication_translation_persistence::{
     CommunicationTranslationPersistenceErrorV1, CommunicationTranslationPersistenceV1,
     PersistedCommunicationTranslationRunV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeControlRequestV1, ManagedRuntimeModuleRequestRequestV1,

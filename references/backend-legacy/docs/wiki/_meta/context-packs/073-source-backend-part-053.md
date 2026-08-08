@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/platform/storage/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/storage/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/storage/errors.rs`
 - Size bytes / Размер в байтах: `481`
 - Included characters / Включено символов: `481`
 - Truncated / Обрезано: `no`
@@ -87,7 +87,7 @@ pub enum StorageError {
 
 ### `backend/src/platform/storage/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/storage/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/storage/mod.rs`
 - Size bytes / Размер в байтах: `530`
 - Included characters / Включено символов: `530`
 - Truncated / Обрезано: `no`
@@ -111,7 +111,7 @@ pub use models::{DatabaseReadiness, MigrationReadiness, ReadinessStatus};
 
 ### `backend/src/platform/storage/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/storage/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/storage/models.rs`
 - Size bytes / Размер в байтах: `1821`
 - Included characters / Включено символов: `1821`
 - Truncated / Обрезано: `no`
@@ -204,7 +204,7 @@ pub enum ReadinessStatus {
 
 ### `backend/src/vault/constants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/vault/constants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/vault/constants.rs`
 - Size bytes / Размер в байтах: `138`
 - Included characters / Включено символов: `138`
 - Truncated / Обрезано: `no`
@@ -217,7 +217,7 @@ pub(super) const MASTER_KEY_LEN: usize = 32;
 
 ### `backend/src/vault/crypto.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/vault/crypto.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/vault/crypto.rs`
 - Size bytes / Размер в байтах: `3252`
 - Included characters / Включено символов: `3252`
 - Truncated / Обрезано: `no`
@@ -250,7 +250,7 @@ pub(super) fn derive_master_key(
     let digest = hasher.finalize();
     let hkdf = Hkdf::<sha2::Sha256>::new(None, &digest);
     let mut key = [0_u8; MASTER_KEY_LEN];
-    hkdf.expand(b"hermes-host-vault:master:v1", &mut key)
+    hkdf.expand(b"makosh-host-vault:master:v1", &mut key)
         .map_err(|_| HostVaultError::Crypto)?;
     Ok(key)
 }
@@ -261,7 +261,7 @@ pub(super) fn derive_domain_key(
 ) -> Result<[u8; MASTER_KEY_LEN], HostVaultError> {
     let hkdf = Hkdf::<sha2::Sha256>::new(None, master_key);
     let mut key = [0_u8; MASTER_KEY_LEN];
-    let mut info = b"hermes-host-vault:v1:".to_vec();
+    let mut info = b"makosh-host-vault:v1:".to_vec();
     info.extend_from_slice(label);
     hkdf.expand(&info, &mut key)
         .map_err(|_| HostVaultError::Crypto)?;
@@ -326,7 +326,7 @@ pub(super) fn validate_non_empty(field: &'static str, value: &str) -> Result<(),
 
 ### `backend/src/vault/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/vault/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/vault/errors.rs`
 - Size bytes / Размер в байтах: `3490`
 - Included characters / Включено символов: `3490`
 - Truncated / Обрезано: `no`
@@ -438,7 +438,7 @@ pub(super) fn host_secret_store_failure(error: HostVaultError) -> SecretResoluti
 
 ### `backend/src/vault/files.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/vault/files.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/vault/files.rs`
 - Size bytes / Размер в байтах: `1408`
 - Included characters / Включено символов: `1408`
 - Truncated / Обрезано: `no`
@@ -500,7 +500,7 @@ pub(super) fn guard_release_dev_mode(dev_mode: bool) -> Result<(), HostVaultErro
 
 ### `backend/src/vault/key_store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/vault/key_store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/vault/key_store.rs`
 - Size bytes / Размер в байтах: `2030`
 - Included characters / Включено символов: `2030`
 - Truncated / Обрезано: `no`
@@ -517,7 +517,7 @@ use super::crypto::decode_master_key;
 use super::errors::HostVaultError;
 use super::files::write_secure_file;
 
-const SERVICE_NAME: &str = "hermes-hub";
+const SERVICE_NAME: &str = "makosh";
 const KEYCHAIN_USER: &str = "host-vault-master-key";
 
 impl HostVault {
@@ -580,7 +580,7 @@ fn keyring_entry() -> Result<keyring::Entry, HostVaultError> {
 
 ### `backend/src/vault/lifecycle.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/vault/lifecycle.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/vault/lifecycle.rs`
 - Size bytes / Размер в байтах: `5274`
 - Included characters / Включено символов: `5274`
 - Truncated / Обрезано: `no`
@@ -751,7 +751,7 @@ impl HostVault {
 
 ### `backend/src/vault/manifest.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/vault/manifest.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/vault/manifest.rs`
 - Size bytes / Размер в байтах: `3677`
 - Included characters / Включено символов: `3677`
 - Truncated / Обрезано: `no`
@@ -860,7 +860,7 @@ impl HostVault {
 
 ### `backend/src/vault/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/vault/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/vault/mod.rs`
 - Size bytes / Размер в байтах: `675`
 - Included characters / Включено символов: `675`
 - Truncated / Обрезано: `no`
@@ -902,7 +902,7 @@ pub struct HostVault {
 
 ### `backend/src/vault/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/vault/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/vault/models.rs`
 - Size bytes / Размер в байтах: `2346`
 - Included characters / Включено символов: `2346`
 - Truncated / Обрезано: `no`
@@ -1016,7 +1016,7 @@ pub(super) enum HostVaultState {
 
 ### `backend/src/vault/paths.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/vault/paths.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/vault/paths.rs`
 - Size bytes / Размер в байтах: `255`
 - Included characters / Включено символов: `255`
 - Truncated / Обрезано: `no`
@@ -1025,17 +1025,17 @@ pub(super) enum HostVaultState {
 use std::path::{Path, PathBuf};
 
 pub fn default_vault_home(home_dir: &Path) -> PathBuf {
-    home_dir.join(".hermes").join("vault")
+    home_dir.join(".makosh").join("vault")
 }
 
 pub fn default_dev_key_path(home_dir: &Path) -> PathBuf {
-    home_dir.join(".hermes").join("dev").join("master.key")
+    home_dir.join(".makosh").join("dev").join("master.key")
 }
 ```
 
 ### `backend/src/vault/recovery.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/vault/recovery.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/vault/recovery.rs`
 - Size bytes / Размер в байтах: `1901`
 - Included characters / Включено символов: `1901`
 - Truncated / Обрезано: `no`
@@ -1091,7 +1091,7 @@ impl HostVault {
 
 ### `backend/src/vault/secrets.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/vault/secrets.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/vault/secrets.rs`
 - Size bytes / Размер в байтах: `5914`
 - Included characters / Включено символов: `5914`
 - Truncated / Обрезано: `no`
@@ -1263,7 +1263,7 @@ impl SecretResolver for HostVault {
 
 ### `backend/src/vault/storage.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/vault/storage.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/vault/storage.rs`
 - Size bytes / Размер в байтах: `5233`
 - Included characters / Включено символов: `5233`
 - Truncated / Обрезано: `no`
@@ -1340,7 +1340,7 @@ impl HostVault {
     }
 
     pub(super) fn recovery_file_path(&self) -> PathBuf {
-        self.home.join("hermes-recovery.key")
+        self.home.join("makosh-recovery.key")
     }
 
     pub(super) fn write_vault_check(&self) -> Result<(), HostVaultError> {
@@ -1352,7 +1352,7 @@ impl HostVault {
             .encrypt(
                 &nonce,
                 Payload {
-                    msg: b"hermes-host-vault",
+                    msg: b"makosh-host-vault",
                     aad: aad.as_bytes(),
                 },
             )
@@ -1426,7 +1426,7 @@ impl HostVault {
 
 ### `backend/src/workflows/consistency_review.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/consistency_review.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/consistency_review.rs`
 - Size bytes / Размер в байтах: `7654`
 - Included characters / Включено символов: `7654`
 - Truncated / Обрезано: `no`
@@ -1478,7 +1478,7 @@ impl ContradictionReviewService {
                         "review_state": review_state.as_str(),
                         "resolution": resolution,
                         "operation": "contradiction_review",
-                        "actor_id": "hermes-frontend",
+                        "actor_id": "makosh-frontend",
                     }),
                     format!("contradiction://{observation_id}/review"),
                 )
@@ -1493,7 +1493,7 @@ impl ContradictionReviewService {
             .set_review_state_with_observation(
                 observation_id,
                 review_state,
-                "hermes-frontend",
+                "makosh-frontend",
                 resolution,
                 Some(&review_observation.observation_id),
                 None,
@@ -1654,7 +1654,7 @@ pub enum ContradictionReviewServiceError {
 
 ### `backend/src/workflows/email_fixture_pipeline.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_fixture_pipeline.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_fixture_pipeline.rs`
 - Size bytes / Размер в байтах: `7743`
 - Included characters / Включено символов: `7743`
 - Truncated / Обрезано: `no`
@@ -1891,7 +1891,7 @@ pub enum EmailFixturePipelineError {
 
 ### `backend/src/workflows/email_intelligence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_intelligence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_intelligence.rs`
 - Size bytes / Размер в байтах: `305`
 - Included characters / Включено символов: `305`
 - Truncated / Обрезано: `no`
@@ -1915,7 +1915,7 @@ pub use service::EmailIntelligenceService;
 
 ### `backend/src/workflows/email_intelligence/categories.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_intelligence/categories.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_intelligence/categories.rs`
 - Size bytes / Размер в байтах: `1935`
 - Included characters / Включено символов: `1935`
 - Truncated / Обрезано: `no`
@@ -1982,7 +1982,7 @@ impl EmailCategory {
 
 ### `backend/src/workflows/email_intelligence/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_intelligence/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_intelligence/errors.rs`
 - Size bytes / Размер в байтах: `430`
 - Included characters / Включено символов: `430`
 - Truncated / Обрезано: `no`
@@ -2008,7 +2008,7 @@ pub enum EmailIntelligenceError {
 
 ### `backend/src/workflows/email_intelligence/heuristics.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_intelligence/heuristics.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_intelligence/heuristics.rs`
 - Size bytes / Размер в байтах: `10417`
 - Included characters / Включено символов: `10417`
 - Truncated / Обрезано: `no`
@@ -2398,7 +2398,7 @@ fn push_candidate_bounded(
 
 ### `backend/src/workflows/email_intelligence/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_intelligence/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_intelligence/models.rs`
 - Size bytes / Размер в байтах: `1839`
 - Included characters / Включено символов: `1839`
 - Truncated / Обрезано: `no`
@@ -2465,7 +2465,7 @@ pub struct EmailSummaryContract {
 
 ### `backend/src/workflows/email_intelligence/prompt.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_intelligence/prompt.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_intelligence/prompt.rs`
 - Size bytes / Размер в байтах: `1941`
 - Included characters / Включено символов: `1941`
 - Truncated / Обрезано: `no`
@@ -2516,7 +2516,7 @@ Respond with ONLY the JSON object.",
 
 ### `backend/src/workflows/email_intelligence/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/workflows/email_intelligence/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/workflows/email_intelligence/service.rs`
 - Size bytes / Размер в байтах: `5108`
 - Included characters / Включено символов: `5108`
 - Truncated / Обрезано: `no`

@@ -28,7 +28,7 @@ pub const ZOOM_PROVIDER_SYNC_MAX_PAGE_SIZE: usize = 100;
 pub const ZOOM_PROVIDER_SYNC_DEFAULT_MAX_MEETINGS: usize = 100;
 pub const ZOOM_PROVIDER_SYNC_MAX_MEETINGS: usize = 500;
 pub const ZOOM_MAX_RECORDING_MEDIA_DOWNLOAD_BYTES: usize = 268_435_456;
-pub const ZOOM_DEFAULT_WEBHOOK_SUBSCRIPTION_NAME: &str = "Hermes Zoom Runtime";
+pub const ZOOM_DEFAULT_WEBHOOK_SUBSCRIPTION_NAME: &str = "Макошь Zoom Runtime";
 pub const ZOOM_DEFAULT_WEBHOOK_EVENT_TYPES: &[&str] = &[
     "meeting.started",
     "meeting.ended",

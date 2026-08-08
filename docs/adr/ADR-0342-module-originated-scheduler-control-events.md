@@ -82,11 +82,11 @@ scheduler.schedule.result.v1
 Это расширение существующих Scheduler build units:
 
 ```text
-hermes-scheduler-protocol
-hermes-scheduler
-hermes-scheduler-persistence
-hermes-scheduler-jetstream
-hermes-scheduler-runtime
+makosh-scheduler-protocol
+makosh-scheduler
+makosh-scheduler-persistence
+makosh-scheduler-jetstream
+makosh-scheduler-runtime
 ```
 
 Новый generic workflow/runtime owner не создаётся. Protocol отвечает только за
@@ -151,7 +151,7 @@ provider/account identity, raw errors, runtime coordinates и executable paths
 запрещены.
 
 Scheduler result/due envelope использует стабильный
-`SCHEDULER_RUNTIME_MODULE_ID_V1 = hermes-scheduler-runtime` как source module;
+`SCHEDULER_RUNTIME_MODULE_ID_V1 = makosh-scheduler-runtime` как source module;
 environment-specific registration ID (`scheduler_developer` и аналоги)
 остаётся control-plane identity и в durable data plane не публикуется.
 

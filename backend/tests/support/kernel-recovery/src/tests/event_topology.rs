@@ -1,11 +1,11 @@
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BundledManagedLaunchBinding, ManagedLaunchRecord, ModuleEventDeliveryPolicyV1,
     ModuleEventEnvelopeKindV1, ModuleEventRouteDirectionV1, ModuleEventRouteRequestV1,
     ModuleEventSubscriptionRequirementV1, ModuleRegistration, ModuleRegistrationState,
     PlatformEventHubTopologyV1, PlatformEventStreamBudgetV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::ManagedRuntimeEventCredentialRequestV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::ManagedRuntimeEventCredentialRequestV1;
 use std::sync::Arc;
 
 use super::common::unique_target_root;
@@ -31,7 +31,7 @@ fn approved_catalog_builds_deterministic_exact_event_topology() {
     assert_eq!(first.publishers().len(), 1);
     assert_eq!(
         first.publishers()[0].subject().as_str(),
-        "hermes.event.v1.owner_notes.changed.v1"
+        "makosh.event.v1.owner_notes.changed.v1"
     );
     assert_eq!(first.consumers().len(), 1);
     assert_eq!(first.consumers()[0].max_in_flight(), 32);
@@ -42,7 +42,7 @@ fn approved_catalog_builds_deterministic_exact_event_topology() {
     );
     assert_eq!(
         first.consumers()[0].subject().as_str(),
-        "hermes.event.v1.owner_notes.changed.v1"
+        "makosh.event.v1.owner_notes.changed.v1"
     );
     assert!(first.consumers()[0].durable_name().starts_with("event-"));
     std::fs::remove_dir_all(root).expect("remove fixture directory");
@@ -62,7 +62,7 @@ fn event_hub_recovery_snapshot_is_exact_and_bound_to_restored_control_state() {
     let replacement = PlatformEventHubTopologyV1::new(
         2,
         "nats://127.0.0.1:4222",
-        "hermes_event_hub",
+        "makosh_event_hub",
         2,
         event_hub_topology().stream_budgets().to_vec(),
     );
@@ -95,7 +95,7 @@ fn kernel_derives_event_credential_subjects_only_from_current_approved_topology(
     assert_eq!(request.grant_epoch, 2);
     assert_eq!(
         request.publish_subjects,
-        ["hermes.event.v1.owner_notes.changed.v1"]
+        ["makosh.event.v1.owner_notes.changed.v1"]
     );
     assert!(request.subscribe_subjects.is_empty());
     let stale = approved_registration("registration_notes", "module_notes", "owner_notes", 3);
@@ -167,22 +167,22 @@ fn kernel_derives_scheduler_receipt_bindings_only_from_approved_topology() {
         .expect("Scheduler receipt bindings");
 
     assert_eq!(bindings.len(), 2);
-    assert_eq!(bindings[0].stream_name, "HERMES_ACK_V1");
+    assert_eq!(bindings[0].stream_name, "MAKOSH_ACK_V1");
     assert_eq!(
         bindings[0].filter_subject,
-        "hermes.ack.v1.owner_notes.job_receipt.v1"
+        "makosh.ack.v1.owner_notes.job_receipt.v1"
     );
-    assert_eq!(bindings[1].stream_name, "HERMES_RESULT_V1");
+    assert_eq!(bindings[1].stream_name, "MAKOSH_RESULT_V1");
     assert_eq!(
         bindings[1].filter_subject,
-        "hermes.result.v1.owner_notes.job_receipt.v1"
+        "makosh.result.v1.owner_notes.job_receipt.v1"
     );
     assert_eq!(
         topology::scheduler_dispatch_bindings(&topology, "scheduler_runtime", 2)
             .expect("Scheduler dispatch bindings"),
         [
-            hermes_runtime_protocol::v1::SchedulerRuntimeDispatchPublisherBindingV1 {
-                subject: "hermes.command.v1.owner_notes.sync_job.v1".to_owned(),
+            makosh_runtime_protocol::v1::SchedulerRuntimeDispatchPublisherBindingV1 {
+                subject: "makosh.command.v1.owner_notes.sync_job.v1".to_owned(),
             }
         ]
     );
@@ -297,7 +297,7 @@ fn event_topology_fixture() -> (
     topology::EventTopologyPlanV1,
     ModuleRegistration,
 ) {
-    let root = unique_target_root("hermes-event-topology");
+    let root = unique_target_root("makosh-event-topology");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = Arc::new(
         SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
@@ -338,7 +338,7 @@ fn event_topology_fixture() -> (
 }
 
 fn scheduler_receipt_fixture() -> (std::path::PathBuf, Arc<SqliteControlStore>) {
-    let root = unique_target_root("hermes-scheduler-receipt-topology");
+    let root = unique_target_root("makosh-scheduler-receipt-topology");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = Arc::new(
         SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
@@ -387,7 +387,7 @@ fn scheduler_dispatch_route(
     capability_id: &str,
 ) -> ModuleEventRouteRequestV1 {
     ModuleEventRouteRequestV1::new(
-        hermes_kernel_control_store::ModuleEventRouteRequestInputV1 {
+        makosh_kernel_control_store::ModuleEventRouteRequestInputV1 {
             registration_id: registration_id.to_owned(),
             capability_id: capability_id.to_owned(),
             envelope_kind: ModuleEventEnvelopeKindV1::Command,
@@ -409,7 +409,7 @@ fn scheduler_receipt_route(
     envelope_kind: ModuleEventEnvelopeKindV1,
 ) -> ModuleEventRouteRequestV1 {
     ModuleEventRouteRequestV1::new(
-        hermes_kernel_control_store::ModuleEventRouteRequestInputV1 {
+        makosh_kernel_control_store::ModuleEventRouteRequestInputV1 {
             registration_id: registration_id.to_owned(),
             capability_id: capability_id.to_owned(),
             envelope_kind,
@@ -452,7 +452,7 @@ fn register(
     capability_id: &str,
 ) {
     let route = ModuleEventRouteRequestV1::new(
-        hermes_kernel_control_store::ModuleEventRouteRequestInputV1 {
+        makosh_kernel_control_store::ModuleEventRouteRequestInputV1 {
             registration_id: registration.registration_id().to_owned(),
             capability_id: capability_id.to_owned(),
             envelope_kind: ModuleEventEnvelopeKindV1::Event,

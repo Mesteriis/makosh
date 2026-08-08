@@ -2,8 +2,8 @@
 
 use std::collections::BTreeSet;
 
-use hermes_storage_migrations::admit_storage_bundle;
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageRuntimeConfigurationV1};
+use makosh_storage_migrations::admit_storage_bundle;
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageRuntimeConfigurationV1};
 
 type BundleKeyV1 = (String, u64);
 
@@ -39,7 +39,7 @@ pub(super) fn quarantine_invalid_desired_bindings(
         .desired_bindings
         .len()
         .saturating_sub(desired_bindings.len());
-    if quarantined > 0 && std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if quarantined > 0 && std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_storage_quarantined_invalid_bindings={quarantined}");
     }
     StorageRuntimeConfigurationV1 {
@@ -55,7 +55,7 @@ fn bundle_key(bundle: &StorageBundleV1) -> BundleKeyV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_storage_protocol::v1::{
+    use makosh_storage_protocol::v1::{
         StorageBindingV1, StorageBundleV1, StorageMigrationStepV1, StorageRuntimeConfigurationV1,
     };
     use sha2::{Digest, Sha256};
@@ -66,9 +66,9 @@ mod tests {
     fn invalid_owner_bundle_is_removed_without_affecting_valid_owner() {
         let valid = bundle(
             "notes",
-            b"CREATE TABLE hermes_data.notes_entries (entry_id UUID PRIMARY KEY);",
+            b"CREATE TABLE makosh_data.notes_entries (entry_id UUID PRIMARY KEY);",
         );
-        let invalid = bundle("tasks", b"UPDATE hermes_data.tasks_entries SET state = 1;");
+        let invalid = bundle("tasks", b"UPDATE makosh_data.tasks_entries SET state = 1;");
         let configuration = StorageRuntimeConfigurationV1 {
             desired_bindings: vec![binding("notes"), binding("tasks")],
             desired_bundles: vec![valid.clone(), invalid],

@@ -1,19 +1,19 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
 use axum::http::{Request, StatusCode, header};
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
-use hermes_events_postgres::store::EventStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::documents::core::{
+use makosh_events_api::NewEventEnvelope;
+use makosh_events_postgres::store::EventStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::documents::core::{
     models::NewDocumentImport, store::DocumentImportStore,
 };
-use hermes_hub_backend::domains::documents::processing::{
+use makosh_hub_backend::domains::documents::processing::{
     models::DocumentProcessingStep, store::DocumentProcessingStore,
 };
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::storage::database::Database;
 use serde_json::Value;
 use sqlx::query_scalar;
 use tower::ServiceExt;
@@ -22,8 +22,8 @@ const LOCAL_API_TOKEN: &str = "document-processing-api-test-token";
 
 #[tokio::test]
 async fn get_document_processing_jobs_rejects_missing_local_api_secret() {
-    let app = hermes_hub_backend::app::router::build_router(
-        hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
+    let app = makosh_hub_backend::app::router::build_router(
+        makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN),
     );
 
     let response = app
@@ -37,7 +37,7 @@ async fn get_document_processing_jobs_rejects_missing_local_api_secret() {
         body,
         serde_json::json!({
             "error": "invalid_api_secret",
-            "message": "missing or invalid x-hermes-secret header"
+            "message": "missing or invalid x-makosh-secret header"
         })
     );
 }
@@ -51,7 +51,7 @@ async fn get_document_processing_for_missing_document_returns_404() {
         .await
         .expect("database connection");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -106,7 +106,7 @@ async fn document_processing_api_returns_expected_payloads() {
         .expect("enqueue jobs");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -207,7 +207,7 @@ async fn post_document_processing_job_retry_requeues_failed_job() {
     .expect("mark extract job failed");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -253,7 +253,7 @@ async fn post_document_processing_job_retry_requeues_failed_job() {
         .await
         .expect("document processing retry audit record");
     assert_eq!(audit_record.0, "document_processing.job.retry");
-    assert_eq!(audit_record.1, "hermes-frontend");
+    assert_eq!(audit_record.1, "makosh-frontend");
     assert_eq!(audit_record.2, "POST");
     assert_eq!(
         audit_record.3,
@@ -331,7 +331,7 @@ async fn post_document_processing_job_retry_rejects_non_failed_job_with_stable_b
         .expect("extract text job");
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -397,7 +397,7 @@ async fn post_document_processing_job_retry_command_collision_returns_stable_con
     append_retry_event_for_job(&pool, &command_id, &existing_job_id).await;
 
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -445,7 +445,7 @@ fn get_request(uri: &str) -> Request<Body> {
 fn get_request_with_actor(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -454,7 +454,7 @@ fn post_json_request(uri: &str, token: &str, body: Value) -> Request<Body> {
     Request::builder()
         .method("POST")
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .header(header::CONTENT_TYPE, "application/json")
         .body(Body::from(body.to_string()))
         .expect("request")

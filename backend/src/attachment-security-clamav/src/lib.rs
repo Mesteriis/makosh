@@ -8,4 +8,4 @@ pub use endpoint::{
 };
 pub use instream::{ClamAvScanErrorV1, scan_clamav_instream_v1};
 
-pub const PACKAGE: &str = "hermes-attachment-security-clamav";
+pub const PACKAGE: &str = "makosh-attachment-security-clamav";

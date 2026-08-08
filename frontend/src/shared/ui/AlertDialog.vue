@@ -33,8 +33,8 @@ const emit = defineEmits<{
 }>()
 
 const contentClasses = computed(() => [
-	'hermes-alert-dialog-content',
-	`hermes-alert-dialog-content--${props.tone}`,
+	'makosh-alert-dialog-content',
+	`makosh-alert-dialog-content--${props.tone}`,
 	props.contentClass
 ])
 </script>
@@ -45,26 +45,26 @@ const contentClasses = computed(() => [
 			<slot name="trigger" />
 		</AlertDialogTrigger>
 		<AlertDialogPortal>
-			<AlertDialogOverlay class="hermes-alert-dialog-overlay">
+			<AlertDialogOverlay class="makosh-alert-dialog-overlay">
 				<AlertDialogContent :class="contentClasses">
-					<div class="hermes-alert-dialog-header">
-						<AlertDialogTitle v-if="title" class="hermes-alert-dialog-title">{{ title }}</AlertDialogTitle>
-						<AlertDialogDescription v-if="description" class="hermes-alert-dialog-description">
+					<div class="makosh-alert-dialog-header">
+						<AlertDialogTitle v-if="title" class="makosh-alert-dialog-title">{{ title }}</AlertDialogTitle>
+						<AlertDialogDescription v-if="description" class="makosh-alert-dialog-description">
 							{{ description }}
 						</AlertDialogDescription>
 						<slot name="header" />
 					</div>
-					<div v-if="$slots.default" class="hermes-alert-dialog-body">
+					<div v-if="$slots.default" class="makosh-alert-dialog-body">
 						<slot />
 					</div>
-					<div class="hermes-alert-dialog-footer">
+					<div class="makosh-alert-dialog-footer">
 						<AlertDialogCancel as-child @click="emit('cancel')">
-							<button class="hermes-alert-dialog-cancel">
+							<button class="makosh-alert-dialog-cancel">
 								<slot name="cancel">{{ cancelLabel }}</slot>
 							</button>
 						</AlertDialogCancel>
 						<AlertDialogAction as-child @click="emit('action')">
-							<button :class="['hermes-alert-dialog-action', `hermes-alert-dialog-action--${tone}`]">
+							<button :class="['makosh-alert-dialog-action', `makosh-alert-dialog-action--${tone}`]">
 								<slot name="action">{{ actionLabel }}</slot>
 							</button>
 						</AlertDialogAction>

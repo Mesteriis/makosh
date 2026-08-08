@@ -1,7 +1,7 @@
 # Portal
 
 ## Description
-Small Vue Teleport wrapper owned by Hermes UI Kit.
+Small Vue Teleport wrapper owned by Макошь UI Kit.
 
 ## When to use
 Use when shared UI needs to render overlay content outside the local DOM subtree.

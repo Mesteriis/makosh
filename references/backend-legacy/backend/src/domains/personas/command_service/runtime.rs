@@ -887,7 +887,7 @@ impl PersonaCommandService {
         payload: Value,
         source_ref: String,
         provenance: Value,
-    ) -> Result<hermes_observations_api::models::Observation, PersonaCommandServiceError> {
+    ) -> Result<makosh_observations_api::models::Observation, PersonaCommandServiceError> {
         Ok(ObservationStore::new(self.pool.clone())
             .capture(
                 &NewObservation::new(
@@ -909,7 +909,7 @@ impl PersonaCommandService {
         payload: Value,
         source_ref: String,
         provenance: Value,
-    ) -> Result<hermes_observations_api::models::Observation, PersonaCommandServiceError> {
+    ) -> Result<makosh_observations_api::models::Observation, PersonaCommandServiceError> {
         Ok(ObservationStore::new(self.pool.clone())
             .capture(
                 &NewObservation::new(

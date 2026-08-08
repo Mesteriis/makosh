@@ -53,7 +53,7 @@ test('Review task-candidate is an exact domain capability, not an attention faca
       readFile(new URL('src/review-task-candidate-api/src/envelope.rs', BACKEND_ROOT), 'utf8'),
       readFile(
         new URL(
-          'src/review-task-candidate-api/proto/hermes/review/task_candidate/v1/task_candidate.proto',
+          'src/review-task-candidate-api/proto/makosh/review/task_candidate/v1/task_candidate.proto',
           BACKEND_ROOT,
         ),
         'utf8',
@@ -92,13 +92,13 @@ test('Review task-candidate is an exact domain capability, not an attention faca
 
   assert.equal(policy.implementation.currentSlice, 'call_transcription_managed_conformance_v1');
   for (const unit of [
-    'hermes-review-task-candidate-api',
-    'hermes-review-task-candidate-core',
-    'hermes-review-task-candidate-persistence',
-    'hermes-review-task-candidate-runtime',
-    'hermes-review-task-candidate-assembly',
+    'makosh-review-task-candidate-api',
+    'makosh-review-task-candidate-core',
+    'makosh-review-task-candidate-persistence',
+    'makosh-review-task-candidate-runtime',
+    'makosh-review-task-candidate-assembly',
   ]) {
-    assert.match(workspace, new RegExp(`"src/${unit.replace('hermes-', '')}"`));
+    assert.match(workspace, new RegExp(`"src/${unit.replace('makosh-', '')}"`));
     assert.match(adr, new RegExp(`\\b${unit}\\b`));
     assert.equal(policy.implementation.productionPackages.some(({ name }) => name === unit), true);
   }
@@ -128,7 +128,7 @@ test('Review task-candidate is an exact domain capability, not an attention faca
   assert.match(lifecycle, /approval_is_terminal_and_starts_separate_promotion/);
   assert.match(lifecycle, /rejection_never_requests_promotion/);
   assert.match(lifecycle, /stale_revision_and_missing_human_actor_are_rejected/);
-  assert.doesNotMatch(`${core}\n${model}\n${lifecycle}`, /review_attention|hermes_communications|hermes_tasks|ollama|sqlx|reqwest/);
+  assert.doesNotMatch(`${core}\n${model}\n${lifecycle}`, /review_attention|makosh_communications|makosh_tasks|ollama|sqlx|reqwest/);
   assert.match(persistenceManifest, /owner = "review"/);
   assert.match(persistenceManifest, /surface = "persistence"/);
   assert.match(persistence, /ReviewTaskCandidatePersistenceV1/);
@@ -157,7 +157,7 @@ test('Review task-candidate is an exact domain capability, not an attention faca
   assert.match(admission, /review_task_candidate_submit_consume_request_v1/);
   assert.match(admission, /review_task_candidate_promotion_result_consume_request_v1/);
   assert.match(admission, /BlobQuotaOperationV1::Write/);
-  assert.doesNotMatch(admission, /hermes_tasks|hermes_communications|ollama/);
+  assert.doesNotMatch(admission, /makosh_tasks|makosh_communications|ollama/);
   assert.match(managedRuntime, /request_managed_runtime_event_access_v2/);
   assert.match(managedRuntime, /logical_human_owner_id/);
   assert.match(managedRuntime, /authenticated_device_id/);
@@ -173,7 +173,7 @@ test('Review task-candidate is an exact domain capability, not an attention faca
   assert.match(promotionResult, /persist_promotion_result/);
   assert.match(promotionResult, /delivery\.acknowledge\(\)/);
   assert.match(promotionResult, /ReviewTaskCandidatePromotionResultV1/);
-  assert.doesNotMatch(promotionResult, /hermes_tasks|reviewed_task_candidate_promotion_runtime/);
+  assert.doesNotMatch(promotionResult, /makosh_tasks|reviewed_task_candidate_promotion_runtime/);
   assert.match(runtimeMain, /serve-inherited/);
   assert.match(assemblyManifest, /surface = "assembly"/);
   assert.match(assembly, /materialize_review_task_candidate_release_assembly_v1/);
@@ -185,6 +185,6 @@ test('Review task-candidate is an exact domain capability, not an attention faca
   assert.doesNotMatch(assembly, /private_key|launch_managed|serve-inherited/);
   assert.doesNotMatch(
     `${managedRuntime}\n${submission}\n${blobMaterialization}\n${clientPort}`,
-    /hermes_tasks::|hermes_communications::|hermes_ollama/,
+    /makosh_tasks::|makosh_communications::|makosh_ollama/,
   );
 });

@@ -49,10 +49,10 @@ tags:
 Каждая настройка описывается структурой `DeclaredApplicationSetting` (ключ, категория, тип значения, значение по умолчанию, метаданные, флаг редактируемости). Метаданные определяют UI-контрол (`text`, `select`, `number`, `checkbox`, `hidden`, `appearance`, `json`, `language`), допустимые значения, ограничения `min`/`max`, размер и запрещённые ключи для JSON-настроек, флаг `bootstrap`, необходимость рестарта и др.
 
 Примеры деклараций:
-- `server.http_addr` (строка, по умолчанию `"127.0.0.1:8080"`; имеет `bootstrap: true`, `restart_required: true`, `env_var: "HERMES_HTTP_ADDR"`);
-- `frontend.api_base_url` (строка, по умолчанию `"http://127.0.0.1:8080"`; `bootstrap: true`, `env_var: "VITE_HERMES_API_BASE_URL"`);
+- `server.http_addr` (строка, по умолчанию `"127.0.0.1:8080"`; имеет `bootstrap: true`, `restart_required: true`, `env_var: "MAKOSH_HTTP_ADDR"`);
+- `frontend.api_base_url` (строка, по умолчанию `"http://127.0.0.1:8080"`; `bootstrap: true`, `env_var: "VITE_MAKOSH_API_BASE_URL"`);
 - `ai.provider` (select, значения `"ollama"` или `"omniroute"`, по умолчанию `"ollama"`; `stores_secret: false`);
-- `ai.omniroute_base_url` (строка, по умолчанию `"https://ai.sh-inc.ru/v1"`; API-ключ из переменной окружения `HERMES_OMNIROUTE_API_KEY`, никогда не хранится в настройках);
+- `ai.omniroute_base_url` (строка, по умолчанию `"https://ai.sh-inc.ru/v1"`; API-ключ из переменной окружения `MAKOSH_OMNIROUTE_API_KEY`, никогда не хранится в настройках);
 - `frontend.theme` (JSON, версия схемы 1, описывает фон, яркость, акцентный цвет, прозрачность панели, blur);
 - `frontend.layout` (JSON, версия схемы 2, хранит размещение виджетов);
 - `frontend.sidebar` (JSON, версия схемы 3, задаёт группировку и порядок пунктов сайдбара);
@@ -131,7 +131,7 @@ AI-модели по умолчанию: чат `qwen3:4b` (ollama), `codex/gpt-
 - Сравнивает Content-Type и расширение, при несовпадении — `Suspicious`;
 - Статусы агрегируются с повышением серьёзности; при отсутствии причин возвращается `NotScanned`.
 
-Результат упаковывается в `SafetyScanReport` с указанием движка `"hermes_heuristic_v1"`, временной метки, списка причин и полной метаинформации в `metadata`.
+Результат упаковывается в `SafetyScanReport` с указанием движка `"makosh_heuristic_v1"`, временной метки, списка причин и полной метаинформации в `metadata`.
 
 ### Импорт вложений
 
@@ -172,11 +172,11 @@ AI-модели по умолчанию: чат `qwen3:4b` (ollama), `codex/gpt-
 | `backend/src/platform/settings/definitions.rs` | Агрегация declared-настроек и публичные функции `declared_setting_keys`, `declared_setting`, `declared_application_settings` |
 | `backend/src/platform/settings/definitions/ai.rs` | Агрегация настроек провайдера, моделей и runtime |
 | `backend/src/platform/settings/definitions/ai/models.rs` | Декларации моделей чата и эмбеддингов для Ollama и OmniRoute, значения по умолчанию, метаданные |
-| `backend/src/platform/settings/definitions/ai/provider.rs` | Декларации `ai.provider`, URL Ollama и OmniRoute, политика API-ключа через `HERMES_OMNIROUTE_API_KEY` |
+| `backend/src/platform/settings/definitions/ai/provider.rs` | Декларации `ai.provider`, URL Ollama и OmniRoute, политика API-ключа через `MAKOSH_OMNIROUTE_API_KEY` |
 | `backend/src/platform/settings/definitions/ai/runtime.rs` | Декларация `ai.timeout_seconds` с ограничениями 1..600 |
 | `backend/src/platform/settings/definitions/frontend.rs` | Агрегация frontend-настроек |
 | `backend/src/platform/settings/definitions/frontend/appearance.rs` | Декларация `frontend.theme`, версия схемы, допустимые значения фона, яркости, цветов, прозрачности, blur |
-| `backend/src/platform/settings/definitions/frontend/bootstrap.rs` | Декларация `frontend.api_base_url`, флаг `bootstrap`, связь с `VITE_HERMES_API_BASE_URL` |
+| `backend/src/platform/settings/definitions/frontend/bootstrap.rs` | Декларация `frontend.api_base_url`, флаг `bootstrap`, связь с `VITE_MAKOSH_API_BASE_URL` |
 | `backend/src/platform/settings/definitions/frontend/layout.rs` | Декларации `frontend.layout` и `frontend.sidebar`, версии схем, структура сайдбара (rootItemIds, groups) |
 | `backend/src/platform/settings/definitions/frontend/state.rs` | Декларации `frontend.locale` (en, ru) и `frontend.ui_state` (скрытое, max_bytes, forbidden_keys) |
 | `backend/src/platform/settings/definitions/privacy.rs` | Декларации политик для Zoom и Yandex Telemost (разрешения на скачивание, retention дни), метаданные scope, policy_kind, stores_private_content |

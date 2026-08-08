@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 #[test]
 fn staged_native_artifact_creates_a_private_verified_execution_copy() {
     let fixture_name = format!(
-        "hermes-staged-artifact-{}-{}",
+        "makosh-staged-artifact-{}-{}",
         std::process::id(),
         std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -14,7 +14,7 @@ fn staged_native_artifact_creates_a_private_verified_execution_copy() {
     let root = std::env::temp_dir().join(fixture_name);
     let source = root.join("signed-runtime");
     let launch_directory = root.join("runtime/launch");
-    let bytes = b"Hermes verified staged runtime";
+    let bytes = b"makosh verified staged runtime";
     std::fs::create_dir_all(&root).expect("create fixture root");
     std::fs::write(&source, bytes).expect("write source artifact");
     let expected_digest: [u8; 32] = Sha256::digest(bytes).into();
@@ -44,7 +44,7 @@ fn staged_native_artifact_creates_a_private_verified_execution_copy() {
 #[test]
 fn staged_native_artifact_removes_a_copy_with_the_wrong_digest() {
     let root = std::env::temp_dir().join(format!(
-        "hermes-staged-artifact-reject-{}-{}",
+        "makosh-staged-artifact-reject-{}-{}",
         std::process::id(),
         std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -68,7 +68,7 @@ fn staged_native_artifact_removes_a_copy_with_the_wrong_digest() {
 #[test]
 fn bounded_managed_child_execution_retries_only_within_its_explicit_budget() {
     let root = std::env::temp_dir().join(format!(
-        "hermes-managed-child-execution-{}-{}",
+        "makosh-managed-child-execution-{}-{}",
         std::process::id(),
         std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -104,7 +104,7 @@ fn bounded_managed_child_execution_retries_only_within_its_explicit_budget() {
 #[test]
 fn bounded_managed_child_execution_terminates_a_stalled_child() {
     let root = std::env::temp_dir().join(format!(
-        "hermes-managed-child-timeout-{}-{}",
+        "makosh-managed-child-timeout-{}-{}",
         std::process::id(),
         std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -134,7 +134,7 @@ fn bounded_managed_child_execution_terminates_a_stalled_child() {
 #[test]
 fn creates_and_reopens_a_trustworthy_control_store() {
     let path = std::env::temp_dir().join(format!(
-        "hermes-control-store-{}.sqlite",
+        "makosh-control-store-{}.sqlite",
         std::process::id()
     ));
     let _ = std::fs::remove_file(&path);
@@ -152,7 +152,7 @@ fn creates_and_reopens_a_trustworthy_control_store() {
 #[test]
 fn recovery_fences_advance_monotonically() {
     let path = std::env::temp_dir().join(format!(
-        "hermes-control-store-fences-{}.sqlite",
+        "makosh-control-store-fences-{}.sqlite",
         std::process::id()
     ));
     let _ = std::fs::remove_file(&path);
@@ -173,7 +173,7 @@ fn recovery_fences_advance_monotonically() {
 #[test]
 fn staged_restore_suspends_authority_and_replaces_every_fence() {
     let root = std::env::temp_dir().join(format!(
-        "hermes-staged-control-store-restore-{}",
+        "makosh-staged-control-store-restore-{}",
         std::process::id()
     ));
     let (source, staged) = prepare_staged_restore_fixture(&root);
@@ -278,7 +278,7 @@ fn assert_staged_authority_is_suspended(staged: &Path) {
 #[test]
 fn initial_owner_claim_is_atomic_and_keeps_only_the_public_key() {
     let path = std::env::temp_dir().join(format!(
-        "hermes-control-store-owner-{}.sqlite",
+        "makosh-control-store-owner-{}.sqlite",
         std::process::id()
     ));
     let _ = std::fs::remove_file(&path);
@@ -311,7 +311,7 @@ fn initial_owner_claim_is_atomic_and_keeps_only_the_public_key() {
 #[test]
 fn server_bootstrap_pairing_claims_the_initial_owner_once_and_rejects_replay() {
     let path = std::env::temp_dir().join(format!(
-        "hermes-control-store-server-pairing-{}.sqlite",
+        "makosh-control-store-server-pairing-{}.sqlite",
         std::process::id()
     ));
     let _ = std::fs::remove_file(&path);
@@ -357,7 +357,7 @@ fn server_bootstrap_pairing_claims_the_initial_owner_once_and_rejects_replay() {
 #[test]
 fn server_bootstrap_pairing_expires_before_an_owner_claim() {
     let path = std::env::temp_dir().join(format!(
-        "hermes-control-store-server-pairing-expiry-{}.sqlite",
+        "makosh-control-store-server-pairing-expiry-{}.sqlite",
         std::process::id()
     ));
     let _ = std::fs::remove_file(&path);

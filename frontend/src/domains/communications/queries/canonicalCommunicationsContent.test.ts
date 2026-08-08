@@ -1,7 +1,7 @@
 import { fromBinary } from '@bufbuild/protobuf'
 import { describe, expect, it, vi } from 'vitest'
 
-import { ReadMessageBodyRequestV1Schema } from '../../../gen/hermes/communications/content/read/v1/read_pb'
+import { ReadMessageBodyRequestV1Schema } from '../../../gen/makosh/communications/content/read/v1/read_pb'
 import { readCanonicalCommunicationContent } from './canonicalCommunicationsContent'
 
 describe('canonical Communications content adapter', () => {
@@ -11,7 +11,7 @@ describe('canonical Communications content adapter', () => {
 		const body = new TextEncoder().encode('Exact canonical body')
 		const issueTicket = vi.fn().mockResolvedValue({
 			$typeName:
-				'hermes.communications.content.ticket.v1.IssueMessageBodyReadResponseV1',
+				'makosh.communications.content.ticket.v1.IssueMessageBodyReadResponseV1',
 			opaqueReadCapability: capability,
 			declaredBytes: BigInt(body.byteLength),
 			expiresAtUnixSeconds: 100n,
@@ -51,7 +51,7 @@ describe('canonical Communications content adapter', () => {
 	it('fails closed for invalid IDs, tickets, media types and lengths', async () => {
 		const ticket = {
 			$typeName:
-				'hermes.communications.content.ticket.v1.IssueMessageBodyReadResponseV1',
+				'makosh.communications.content.ticket.v1.IssueMessageBodyReadResponseV1',
 			opaqueReadCapability: new Uint8Array(32).fill(1),
 			declaredBytes: 3n,
 			expiresAtUnixSeconds: 100n,

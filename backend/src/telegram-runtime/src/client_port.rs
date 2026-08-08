@@ -1,9 +1,9 @@
 //! Typed client port for Telegram operational commands, queries and replay.
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
-use hermes_telegram_api::{
+use makosh_telegram_api::{
     MAX_PAGE_SIZE, TelegramClientRequest, TelegramClientResponse,
     client_contract::{
         TELEGRAM_CLIENT_CONTRACT_MAJOR, TELEGRAM_CLIENT_CONTRACT_REVISION,
@@ -11,9 +11,9 @@ use hermes_telegram_api::{
         TelegramClientContractV1,
     },
 };
-use hermes_telegram_core::project_message;
-use hermes_telegram_persistence::{TelegramDurablePersistence, TelegramDurablePersistenceError};
-use hermes_telegram_tdlib::{TdlibError, TdlibTransport};
+use makosh_telegram_core::project_message;
+use makosh_telegram_persistence::{TelegramDurablePersistence, TelegramDurablePersistenceError};
+use makosh_telegram_tdlib::{TdlibError, TdlibTransport};
 use prost::Message;
 use sha2::{Digest, Sha256};
 
@@ -31,16 +31,16 @@ pub enum TelegramClientPortError {
 fn reconfiguration_error_code(error: TelegramDurableLifecycleError) -> &'static str {
     match error {
         TelegramDurableLifecycleError::Contract(
-            hermes_telegram_api::TelegramContractError::RuntimeEpochConflict,
+            makosh_telegram_api::TelegramContractError::RuntimeEpochConflict,
         ) => "RUNTIME_EPOCH_CONFLICT",
         TelegramDurableLifecycleError::Contract(
-            hermes_telegram_api::TelegramContractError::ReconfigurationCollision,
+            makosh_telegram_api::TelegramContractError::ReconfigurationCollision,
         ) => "RECONFIGURATION_COLLISION",
         TelegramDurableLifecycleError::Contract(
-            hermes_telegram_api::TelegramContractError::ReconfigurationInProgress,
+            makosh_telegram_api::TelegramContractError::ReconfigurationInProgress,
         ) => "RECONFIGURATION_IN_PROGRESS",
         TelegramDurableLifecycleError::Contract(
-            hermes_telegram_api::TelegramContractError::ReconfigurationUnknown,
+            makosh_telegram_api::TelegramContractError::ReconfigurationUnknown,
         ) => "RECONFIGURATION_UNKNOWN",
         TelegramDurableLifecycleError::Contract(_) => "RECONFIGURATION_REJECTED",
         TelegramDurableLifecycleError::Persistence(_) => "RECONFIGURATION_UNAVAILABLE",
@@ -98,8 +98,8 @@ fn request_contract(
 
 fn lifecycle_wire_request(
     request: &TelegramClientRequest,
-) -> Option<hermes_telegram_api::client_wire::TelegramLifecycleRequest> {
-    use hermes_telegram_api::client_wire::TelegramLifecycleRequest;
+) -> Option<makosh_telegram_api::client_wire::TelegramLifecycleRequest> {
+    use makosh_telegram_api::client_wire::TelegramLifecycleRequest;
     match request {
         TelegramClientRequest::ProvisionAccount { setup } => {
             Some(TelegramLifecycleRequest::Provision(setup.clone()))
@@ -129,9 +129,9 @@ fn lifecycle_wire_request(
 }
 
 fn client_request_from_lifecycle(
-    request: hermes_telegram_api::client_wire::TelegramLifecycleRequest,
+    request: makosh_telegram_api::client_wire::TelegramLifecycleRequest,
 ) -> TelegramClientRequest {
-    use hermes_telegram_api::client_wire::TelegramLifecycleRequest;
+    use makosh_telegram_api::client_wire::TelegramLifecycleRequest;
     match request {
         TelegramLifecycleRequest::Provision(setup) => {
             TelegramClientRequest::ProvisionAccount { setup }
@@ -178,10 +178,10 @@ pub fn encode_module_request(
         TelegramClientContractV1::Authorization => {
             let request = match request {
                 TelegramClientRequest::AuthorizationStatus => {
-                    hermes_telegram_api::client_wire::TelegramAuthorizationRequest::Status
+                    makosh_telegram_api::client_wire::TelegramAuthorizationRequest::Status
                 }
                 TelegramClientRequest::SubmitAuthorizationPassword { password } => {
-                    hermes_telegram_api::client_wire::TelegramAuthorizationRequest::SubmitPassword(
+                    makosh_telegram_api::client_wire::TelegramAuthorizationRequest::SubmitPassword(
                         password.clone(),
                     )
                 }
@@ -191,7 +191,7 @@ pub fn encode_module_request(
                     ));
                 }
             };
-            hermes_telegram_api::client_wire::encode_request(&request)
+            makosh_telegram_api::client_wire::encode_request(&request)
         }
         TelegramClientContractV1::Lifecycle => {
             let lifecycle = lifecycle_wire_request(request).ok_or_else(|| {
@@ -199,11 +199,11 @@ pub fn encode_module_request(
                     "Telegram lifecycle request has no generated wire mapping".to_owned(),
                 )
             })?;
-            hermes_telegram_api::client_wire::encode_lifecycle_request(&lifecycle)
+            makosh_telegram_api::client_wire::encode_lifecycle_request(&lifecycle)
         }
         TelegramClientContractV1::Command => match request {
             TelegramClientRequest::Command(command) => {
-                hermes_telegram_api::client_wire::encode_command(command)
+                makosh_telegram_api::client_wire::encode_command(command)
             }
             _ => {
                 return Err(TelegramClientPortError::Protocol(
@@ -213,7 +213,7 @@ pub fn encode_module_request(
         },
         TelegramClientContractV1::Query => match request {
             TelegramClientRequest::Query(query) => {
-                hermes_telegram_api::client_wire::encode_query(query)
+                makosh_telegram_api::client_wire::encode_query(query)
             }
             _ => {
                 return Err(TelegramClientPortError::Protocol(
@@ -226,7 +226,7 @@ pub fn encode_module_request(
                 account_id,
                 after_sequence,
                 limit,
-            } => hermes_telegram_api::client_wire::encode_realtime_request(
+            } => makosh_telegram_api::client_wire::encode_realtime_request(
                 account_id,
                 *after_sequence,
                 *limit,
@@ -239,7 +239,7 @@ pub fn encode_module_request(
         },
         TelegramClientContractV1::Reconfiguration => match request {
             TelegramClientRequest::Reconfiguration(request) => {
-                hermes_telegram_api::client_wire::encode_reconfiguration_request(request)
+                makosh_telegram_api::client_wire::encode_reconfiguration_request(request)
             }
             _ => {
                 return Err(TelegramClientPortError::Protocol(
@@ -268,24 +268,24 @@ pub fn decode_module_request(
     let (request_id, contract, request_payload) = decode_module_request_payload(bytes)?;
     let request = match contract {
         TelegramClientContractV1::Authorization => {
-            match hermes_telegram_api::client_wire::decode_request(&request_payload).map_err(
+            match makosh_telegram_api::client_wire::decode_request(&request_payload).map_err(
                 |_| {
                     TelegramClientPortError::Protocol(
                         "Telegram authorization request payload is invalid".to_owned(),
                     )
                 },
             )? {
-                hermes_telegram_api::client_wire::TelegramAuthorizationRequest::Status => {
+                makosh_telegram_api::client_wire::TelegramAuthorizationRequest::Status => {
                     TelegramClientRequest::AuthorizationStatus
                 }
-                hermes_telegram_api::client_wire::TelegramAuthorizationRequest::SubmitPassword(
+                makosh_telegram_api::client_wire::TelegramAuthorizationRequest::SubmitPassword(
                     password,
                 ) => TelegramClientRequest::SubmitAuthorizationPassword { password },
             }
         }
         TelegramClientContractV1::Lifecycle => {
             let request =
-                hermes_telegram_api::client_wire::decode_lifecycle_request(&request_payload)
+                makosh_telegram_api::client_wire::decode_lifecycle_request(&request_payload)
                     .map(client_request_from_lifecycle)
                     .map_err(|_| {
                         TelegramClientPortError::Protocol(
@@ -300,7 +300,7 @@ pub fn decode_module_request(
             request
         }
         TelegramClientContractV1::Command => {
-            hermes_telegram_api::client_wire::decode_command(&request_payload)
+            makosh_telegram_api::client_wire::decode_command(&request_payload)
                 .map(TelegramClientRequest::Command)
                 .map_err(|_| {
                     TelegramClientPortError::Protocol(
@@ -309,7 +309,7 @@ pub fn decode_module_request(
                 })?
         }
         TelegramClientContractV1::Query => {
-            hermes_telegram_api::client_wire::decode_query(&request_payload)
+            makosh_telegram_api::client_wire::decode_query(&request_payload)
                 .map(TelegramClientRequest::Query)
                 .map_err(|_| {
                     TelegramClientPortError::Protocol(
@@ -319,7 +319,7 @@ pub fn decode_module_request(
         }
         TelegramClientContractV1::Realtime => {
             let (account_id, after_sequence, limit) =
-                hermes_telegram_api::client_wire::decode_realtime_request(&request_payload)
+                makosh_telegram_api::client_wire::decode_realtime_request(&request_payload)
                     .map_err(|_| {
                         TelegramClientPortError::Protocol(
                             "Telegram realtime request payload is invalid".to_owned(),
@@ -332,7 +332,7 @@ pub fn decode_module_request(
             }
         }
         TelegramClientContractV1::Reconfiguration => {
-            hermes_telegram_api::client_wire::decode_reconfiguration_request(&request_payload)
+            makosh_telegram_api::client_wire::decode_reconfiguration_request(&request_payload)
                 .map(TelegramClientRequest::Reconfiguration)
                 .map_err(|_| {
                     TelegramClientPortError::Protocol(
@@ -401,12 +401,12 @@ pub fn encode_module_response(
         TelegramClientContractV1::Authorization => {
             let response = match response {
                 TelegramClientResponse::AuthorizationStatus(status) => {
-                    hermes_telegram_api::client_wire::TelegramAuthorizationResponse::Status(
+                    makosh_telegram_api::client_wire::TelegramAuthorizationResponse::Status(
                         status.clone(),
                     )
                 }
                 TelegramClientResponse::AuthorizationPasswordAccepted => {
-                    hermes_telegram_api::client_wire::TelegramAuthorizationResponse::PasswordAccepted
+                    makosh_telegram_api::client_wire::TelegramAuthorizationResponse::PasswordAccepted
                 }
                 _ => {
                     return Err(TelegramClientPortError::Protocol(
@@ -414,10 +414,10 @@ pub fn encode_module_response(
                     ));
                 }
             };
-            hermes_telegram_api::client_wire::encode_response(&response)
+            makosh_telegram_api::client_wire::encode_response(&response)
         }
         TelegramClientContractV1::Lifecycle => {
-            hermes_telegram_api::client_wire::encode_lifecycle_response(response).ok_or_else(
+            makosh_telegram_api::client_wire::encode_lifecycle_response(response).ok_or_else(
                 || {
                     TelegramClientPortError::Protocol(
                         "Telegram lifecycle response has another response family".to_owned(),
@@ -427,7 +427,7 @@ pub fn encode_module_response(
         }
         TelegramClientContractV1::Command => match response {
             TelegramClientResponse::Operation(operation) => {
-                hermes_telegram_api::client_wire::encode_command_response(operation)
+                makosh_telegram_api::client_wire::encode_command_response(operation)
             }
             _ => {
                 return Err(TelegramClientPortError::Protocol(
@@ -437,7 +437,7 @@ pub fn encode_module_response(
         },
         TelegramClientContractV1::Query => match response {
             TelegramClientResponse::Query(query_response) => {
-                hermes_telegram_api::client_wire::encode_query_response(query_response).ok_or_else(
+                makosh_telegram_api::client_wire::encode_query_response(query_response).ok_or_else(
                     || {
                         TelegramClientPortError::Protocol(
                             "Telegram query response has no generated wire mapping".to_owned(),
@@ -453,7 +453,7 @@ pub fn encode_module_response(
         },
         TelegramClientContractV1::Realtime => match response {
             TelegramClientResponse::Realtime(page) => {
-                hermes_telegram_api::client_wire::encode_realtime_response(page)
+                makosh_telegram_api::client_wire::encode_realtime_response(page)
             }
             _ => {
                 return Err(TelegramClientPortError::Protocol(
@@ -463,7 +463,7 @@ pub fn encode_module_response(
         },
         TelegramClientContractV1::Reconfiguration => match response {
             TelegramClientResponse::Reconfiguration(reconfiguration) => {
-                hermes_telegram_api::client_wire::encode_reconfiguration_response(reconfiguration)
+                makosh_telegram_api::client_wire::encode_reconfiguration_response(reconfiguration)
             }
             _ => {
                 return Err(TelegramClientPortError::Protocol(
@@ -496,22 +496,22 @@ pub fn decode_module_response(
     }
     let response = match contract {
         TelegramClientContractV1::Authorization => {
-            match hermes_telegram_api::client_wire::decode_response(&envelope.response_payload)
+            match makosh_telegram_api::client_wire::decode_response(&envelope.response_payload)
                 .map_err(|_| {
                     TelegramClientPortError::Protocol(
                         "Telegram authorization response payload is invalid".to_owned(),
                     )
                 })? {
-                hermes_telegram_api::client_wire::TelegramAuthorizationResponse::Status(
+                makosh_telegram_api::client_wire::TelegramAuthorizationResponse::Status(
                     status,
                 ) => TelegramClientResponse::AuthorizationStatus(status),
-                hermes_telegram_api::client_wire::TelegramAuthorizationResponse::PasswordAccepted => {
+                makosh_telegram_api::client_wire::TelegramAuthorizationResponse::PasswordAccepted => {
                     TelegramClientResponse::AuthorizationPasswordAccepted
                 }
             }
         }
         TelegramClientContractV1::Lifecycle => {
-            hermes_telegram_api::client_wire::decode_lifecycle_response(&envelope.response_payload)
+            makosh_telegram_api::client_wire::decode_lifecycle_response(&envelope.response_payload)
                 .map_err(|_| {
                     TelegramClientPortError::Protocol(
                         "Telegram lifecycle response payload is invalid".to_owned(),
@@ -519,7 +519,7 @@ pub fn decode_module_response(
                 })?
         }
         TelegramClientContractV1::Command => {
-            hermes_telegram_api::client_wire::decode_command_response(&envelope.response_payload)
+            makosh_telegram_api::client_wire::decode_command_response(&envelope.response_payload)
                 .map(TelegramClientResponse::Operation)
                 .map_err(|_| {
                     TelegramClientPortError::Protocol(
@@ -528,7 +528,7 @@ pub fn decode_module_response(
                 })?
         }
         TelegramClientContractV1::Query => {
-            hermes_telegram_api::client_wire::decode_query_response(&envelope.response_payload)
+            makosh_telegram_api::client_wire::decode_query_response(&envelope.response_payload)
                 .map(TelegramClientResponse::Query)
                 .map_err(|_| {
                     TelegramClientPortError::Protocol(
@@ -537,7 +537,7 @@ pub fn decode_module_response(
                 })?
         }
         TelegramClientContractV1::Realtime => {
-            hermes_telegram_api::client_wire::decode_realtime_response(&envelope.response_payload)
+            makosh_telegram_api::client_wire::decode_realtime_response(&envelope.response_payload)
                 .map(TelegramClientResponse::Realtime)
                 .map_err(|_| {
                     TelegramClientPortError::Protocol(
@@ -546,7 +546,7 @@ pub fn decode_module_response(
                 })?
         }
         TelegramClientContractV1::Reconfiguration => {
-            hermes_telegram_api::client_wire::decode_reconfiguration_response(
+            makosh_telegram_api::client_wire::decode_reconfiguration_response(
                 &envelope.response_payload,
             )
             .map(TelegramClientResponse::Reconfiguration)
@@ -642,7 +642,7 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
                     .await?
             }
             TelegramClientRequest::Query(
-                hermes_telegram_api::TelegramProviderQuery::LoadHistory {
+                makosh_telegram_api::TelegramProviderQuery::LoadHistory {
                     account_id,
                     provider_chat_id,
                     from_message_id,
@@ -672,13 +672,13 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
                         .map_err(TelegramClientPortError::Persistence)?;
                 }
                 TelegramClientResponse::Query(
-                    hermes_telegram_api::TelegramProviderQueryResponse::HistoryPage(page),
+                    makosh_telegram_api::TelegramProviderQueryResponse::HistoryPage(page),
                 )
             }
             TelegramClientRequest::Query(
-                hermes_telegram_api::TelegramProviderQuery::Operations { account_id, limit },
+                makosh_telegram_api::TelegramProviderQuery::Operations { account_id, limit },
             ) => TelegramClientResponse::Query(
-                hermes_telegram_api::TelegramProviderQueryResponse::Operations(
+                makosh_telegram_api::TelegramProviderQueryResponse::Operations(
                     durable
                         .operations_for_account(&account_id, i64::from(limit))
                         .await
@@ -686,12 +686,12 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
                 ),
             ),
             TelegramClientRequest::Query(
-                hermes_telegram_api::TelegramProviderQuery::ChatAvatar {
+                makosh_telegram_api::TelegramProviderQuery::ChatAvatar {
                     account_id,
                     provider_chat_id,
                 },
             ) => TelegramClientResponse::Query(
-                hermes_telegram_api::TelegramProviderQueryResponse::ChatAvatar(
+                makosh_telegram_api::TelegramProviderQueryResponse::ChatAvatar(
                     durable
                         .chat_avatar(&account_id, &provider_chat_id)
                         .await
@@ -699,9 +699,9 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
                 ),
             ),
             TelegramClientRequest::Query(
-                hermes_telegram_api::TelegramProviderQuery::Attachment { attachment_id, .. },
+                makosh_telegram_api::TelegramProviderQuery::Attachment { attachment_id, .. },
             ) => TelegramClientResponse::Query(
-                hermes_telegram_api::TelegramProviderQueryResponse::Attachment(
+                makosh_telegram_api::TelegramProviderQueryResponse::Attachment(
                     durable
                         .attachment(&attachment_id)
                         .await
@@ -709,11 +709,11 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
                 ),
             ),
             TelegramClientRequest::Query(
-                hermes_telegram_api::TelegramProviderQuery::MessageReferences {
+                makosh_telegram_api::TelegramProviderQuery::MessageReferences {
                     message_id, ..
                 },
             ) => TelegramClientResponse::Query(
-                hermes_telegram_api::TelegramProviderQueryResponse::MessageReferences(
+                makosh_telegram_api::TelegramProviderQueryResponse::MessageReferences(
                     durable
                         .message_references(&message_id)
                         .await
@@ -721,14 +721,14 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
                 ),
             ),
             TelegramClientRequest::Query(
-                hermes_telegram_api::TelegramProviderQuery::ReplyChain {
+                makosh_telegram_api::TelegramProviderQuery::ReplyChain {
                     account_id,
                     provider_chat_id,
                     provider_message_id,
                     limit,
                 },
             ) => TelegramClientResponse::Query(
-                hermes_telegram_api::TelegramProviderQueryResponse::ReplyChain(
+                makosh_telegram_api::TelegramProviderQueryResponse::ReplyChain(
                     durable
                         .reply_chain(
                             &account_id,
@@ -741,14 +741,14 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
                 ),
             ),
             TelegramClientRequest::Query(
-                hermes_telegram_api::TelegramProviderQuery::ForwardChain {
+                makosh_telegram_api::TelegramProviderQuery::ForwardChain {
                     account_id,
                     provider_chat_id,
                     provider_message_id,
                     limit,
                 },
             ) => TelegramClientResponse::Query(
-                hermes_telegram_api::TelegramProviderQueryResponse::ForwardChain(
+                makosh_telegram_api::TelegramProviderQueryResponse::ForwardChain(
                     durable
                         .forward_chain(
                             &account_id,
@@ -761,13 +761,13 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
                 ),
             ),
             TelegramClientRequest::Query(
-                hermes_telegram_api::TelegramProviderQuery::AttachmentForMessage {
+                makosh_telegram_api::TelegramProviderQuery::AttachmentForMessage {
                     account_id,
                     provider_chat_id,
                     provider_message_id,
                 },
             ) => TelegramClientResponse::Query(
-                hermes_telegram_api::TelegramProviderQueryResponse::Attachment(
+                makosh_telegram_api::TelegramProviderQueryResponse::Attachment(
                     durable
                         .attachment_for_message(
                             &account_id,
@@ -778,11 +778,11 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
                         .map_err(TelegramClientPortError::Persistence)?,
                 ),
             ),
-            TelegramClientRequest::Query(hermes_telegram_api::TelegramProviderQuery::File {
+            TelegramClientRequest::Query(makosh_telegram_api::TelegramProviderQuery::File {
                 account_id,
                 provider_file_id,
             }) => TelegramClientResponse::Query(
-                hermes_telegram_api::TelegramProviderQueryResponse::File(
+                makosh_telegram_api::TelegramProviderQueryResponse::File(
                     durable
                         .file(&account_id, &provider_file_id)
                         .await
@@ -790,7 +790,7 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
                 ),
             ),
             TelegramClientRequest::Query(
-                hermes_telegram_api::TelegramProviderQuery::Commands {
+                makosh_telegram_api::TelegramProviderQuery::Commands {
                     account_id,
                     provider_chat_id,
                     provider_message_id,
@@ -798,7 +798,7 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
                     limit,
                 },
             ) => TelegramClientResponse::Query(
-                hermes_telegram_api::TelegramProviderQueryResponse::Commands(
+                makosh_telegram_api::TelegramProviderQueryResponse::Commands(
                     durable
                         .command_records_for_account(
                             &account_id,
@@ -812,13 +812,13 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
                 ),
             ),
             TelegramClientRequest::Query(
-                hermes_telegram_api::TelegramProviderQuery::ReactionSummary {
+                makosh_telegram_api::TelegramProviderQuery::ReactionSummary {
                     account_id,
                     provider_chat_id,
                     provider_message_id,
                 },
             ) => TelegramClientResponse::Query(
-                hermes_telegram_api::TelegramProviderQueryResponse::ReactionSummary(
+                makosh_telegram_api::TelegramProviderQueryResponse::ReactionSummary(
                     durable
                         .reaction_summary(&format!(
                             "telegram:{account_id}:{provider_chat_id}:{provider_message_id}"
@@ -828,14 +828,14 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
                 ),
             ),
             TelegramClientRequest::Query(
-                hermes_telegram_api::TelegramProviderQuery::TopicMessageIds {
+                makosh_telegram_api::TelegramProviderQuery::TopicMessageIds {
                     account_id,
                     provider_chat_id,
                     provider_topic_id,
                     limit,
                 },
             ) => TelegramClientResponse::Query(
-                hermes_telegram_api::TelegramProviderQueryResponse::TopicMessageIds(
+                makosh_telegram_api::TelegramProviderQueryResponse::TopicMessageIds(
                     durable
                         .message_ids_for_topic(
                             &account_id,
@@ -919,7 +919,7 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
             |frame| frame.sequence,
         );
         Ok(TelegramClientResponse::Realtime(
-            hermes_telegram_api::TelegramRealtimeReplayPage {
+            makosh_telegram_api::TelegramRealtimeReplayPage {
                 frames,
                 earliest_available_sequence,
                 latest_sequence,
@@ -933,7 +933,7 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_telegram_api::TelegramProviderQuery;
+    use makosh_telegram_api::TelegramProviderQuery;
 
     fn load_chats_request() -> TelegramClientRequest {
         TelegramClientRequest::Query(TelegramProviderQuery::LoadChats {
@@ -958,7 +958,7 @@ mod tests {
     #[test]
     fn reconfiguration_request_round_trips_only_through_the_exact_contract() {
         let request = TelegramClientRequest::Reconfiguration(
-            hermes_telegram_api::TelegramRuntimeReconfigurationRequest::Begin {
+            makosh_telegram_api::TelegramRuntimeReconfigurationRequest::Begin {
                 reconfiguration_id: "reconfiguration-1".to_owned(),
                 account_id: "account-1".to_owned(),
                 expected_runtime_epoch: 7,
@@ -975,7 +975,7 @@ mod tests {
     #[test]
     fn folder_reassignment_round_trips_only_through_the_command_contract() {
         let request = TelegramClientRequest::Command(
-            hermes_telegram_api::TelegramProviderCommand::ReassignChatFolders {
+            makosh_telegram_api::TelegramProviderCommand::ReassignChatFolders {
                 operation_id: "folder-reassign-1".to_owned(),
                 account_id: "account-1".to_owned(),
                 provider_chat_id: "chat-1".to_owned(),
@@ -1047,7 +1047,7 @@ mod tests {
     #[test]
     fn query_response_decodes_only_with_query_contract() {
         let response = TelegramClientResponse::Query(
-            hermes_telegram_api::TelegramProviderQueryResponse::Chats(Vec::new()),
+            makosh_telegram_api::TelegramProviderQueryResponse::Chats(Vec::new()),
         );
         let encoded =
             encode_module_response(TelegramClientContractV1::Query, 45, &response).expect("encode");
@@ -1066,7 +1066,7 @@ mod tests {
     #[test]
     fn realtime_response_decodes_only_with_realtime_contract() {
         let response =
-            TelegramClientResponse::Realtime(hermes_telegram_api::TelegramRealtimeReplayPage {
+            TelegramClientResponse::Realtime(makosh_telegram_api::TelegramRealtimeReplayPage {
                 frames: Vec::new(),
                 earliest_available_sequence: 0,
                 latest_sequence: 0,

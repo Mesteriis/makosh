@@ -1,5 +1,5 @@
 use super::common::*;
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     DescribeManagedRuntimeResponseV1, GetTelemetryDiagnosticsRequestV1,
     ManagedRuntimeReadyRequestV1, TelemetryDiagnosticsV1, TelemetryRuntimeControlRequestV1,
     TelemetryRuntimeControlResponseV1,
@@ -66,9 +66,9 @@ struct SignedTelemetryLaunchFixture {
 
 impl SignedTelemetryLaunchFixture {
     fn new(crash_after_describe: bool) -> Self {
-        let root = unique_target_root("hermes-telemetry-managed-launch");
-        let kernel = root.join("Hermes.app/Contents/MacOS/hermes-kernel");
-        let resources = root.join("Hermes.app/Contents/Resources/hermes-kernel-release");
+        let root = unique_target_root("makosh-telemetry-managed-launch");
+        let kernel = root.join("Макошь.app/Contents/MacOS/makosh-kernel");
+        let resources = root.join("Макошь.app/Contents/Resources/makosh-kernel-release");
         let distribution = resources.join("distribution");
         let crash_marker = root.join("crash-attempts");
         std::fs::create_dir_all(kernel.parent().expect("Kernel directory"))
@@ -205,7 +205,7 @@ fn write_child(
 fn managed_describe(contracts: &TelemetryContracts) -> Vec<u8> {
     ManagedRuntimeControlRequestV1 {
         operation: Some(
-            hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
+            makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
                 DescribeManagedRuntimeRequestV1 {
                     descriptor_bytes: contracts.descriptor.clone(),
                     settings_schema_bytes: contracts.schema.clone(),
@@ -309,11 +309,11 @@ fn write_release_resources(
     let manifest = telemetry_manifest(artifact, contracts);
     let (signed, root) = sign_manifest(&manifest);
     std::fs::write(
-        resources.join("hermes-signed-distribution-manifest.pb"),
+        resources.join("makosh-signed-distribution-manifest.pb"),
         signed,
     )
     .expect("write signed manifest");
-    std::fs::write(resources.join("hermes-release-trust-root.pb"), root).expect("write trust root");
+    std::fs::write(resources.join("makosh-release-trust-root.pb"), root).expect("write trust root");
 }
 
 fn telemetry_manifest(
@@ -323,7 +323,7 @@ fn telemetry_manifest(
     DistributionManifestV1 {
         major: 1,
         revision: 1,
-        distribution_id: "hermes-telemetry-test".to_owned(),
+        distribution_id: "makosh-telemetry-test".to_owned(),
         release_version: "1.0.0".to_owned(),
         build_id: "telemetry-build".to_owned(),
         target_triple: TARGET.to_owned(),

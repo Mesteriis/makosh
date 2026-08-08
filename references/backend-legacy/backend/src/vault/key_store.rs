@@ -9,7 +9,7 @@ use super::crypto::decode_master_key;
 use super::errors::HostVaultError;
 use super::files::write_secure_file;
 
-const SERVICE_NAME: &str = "hermes-hub";
+const SERVICE_NAME: &str = "makosh";
 const KEYCHAIN_USER: &str = "host-vault-master-key";
 
 impl HostVault {

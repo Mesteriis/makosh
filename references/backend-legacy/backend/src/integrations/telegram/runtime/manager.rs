@@ -1,6 +1,6 @@
 use crate::platform::secrets::store::SecretReferenceStore;
-use hermes_communications_api::accounts::ProviderAccountLookupPort;
-use hermes_communications_api::accounts::ProviderSecretBindingLookupPort;
+use makosh_communications_api::accounts::ProviderAccountLookupPort;
+use makosh_communications_api::accounts::ProviderSecretBindingLookupPort;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 

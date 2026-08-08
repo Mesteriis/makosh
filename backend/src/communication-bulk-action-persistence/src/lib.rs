@@ -11,7 +11,7 @@ pub use execution::{
     BulkDeliveryTargetClaimV1, CompleteTargetOutcomeV1, MAX_TARGET_ATTEMPTS_V1,
     TARGET_LEASE_SECONDS_V1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 pub use realtime::BulkDeliveryClientRealtimeTransitionV1;
 use sqlx::{
     PgPool,
@@ -22,7 +22,7 @@ pub use status::{
     BulkDeliveryTargetStatusV1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-bulk-action-persistence";
+pub const PACKAGE: &str = "makosh-communication-bulk-action-persistence";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum BulkDeliveryPersistenceErrorV1 {

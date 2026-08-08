@@ -9,7 +9,7 @@ Version 5 adds WhatsApp as a long-term communication memory source. The reliable
 - WhatsApp Web and desktop are linked-device companion experiences, not documented personal-account APIs.
 - The official WhatsApp Business Platform Cloud API is for business messaging and requires Meta business assets such as a business portfolio, WhatsApp Business Account and business phone number.
 - WhatsApp's consumer terms restrict unauthorized automated access, impermissible collection and unauthorized software or APIs that function like the service.
-- Hermes Hub is local-first and personal. It must preserve user-controlled local memory without turning WhatsApp Web into a hidden scraping or automation channel.
+- Макошь is local-first and personal. It must preserve user-controlled local memory without turning WhatsApp Web into a hidden scraping or automation channel.
 
 References checked during this decision:
 
@@ -38,7 +38,7 @@ Rules:
 
 Positive:
 
-- Hermes Hub can model WhatsApp Web without pretending that an unofficial stable personal API exists.
+- Макошь can model WhatsApp Web without pretending that an unofficial stable personal API exists.
 - The provider boundary keeps WhatsApp Web runtime fragility away from canonical messages, graph projections and AI workflows.
 - Fixture/manual state allows backend and UI work to start without live WhatsApp credentials or hidden browser automation.
 - Session state and secrets stay outside PostgreSQL, preserving backup and debugging safety.

@@ -15,7 +15,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   proto: new URL(
-    'src/mail-api/proto/hermes/mail/operational/v1/client.proto',
+    'src/mail-api/proto/makosh/mail/operational/v1/client.proto',
     BACKEND_ROOT,
   ),
   validator: new URL('src/mail-api/src/operational.rs', BACKEND_ROOT),
@@ -39,7 +39,7 @@ const paths = {
   build: new URL('src/mail-api/build.rs', BACKEND_ROOT),
   api: new URL('src/mail-api/src/lib.rs', BACKEND_ROOT),
   generatedClient: new URL(
-    'frontend/src/gen/hermes/mail/operational/v1/client_pb.ts',
+    'frontend/src/gen/makosh/mail/operational/v1/client_pb.ts',
     PROJECT_ROOT,
   ),
   frontendClient: new URL(
@@ -134,7 +134,7 @@ test('Mail operational read contract is typed, bounded and admitted with fronten
   assert.match(adr, /full body[\s\S]*communications_content_read_v1/);
   assert.match(adr, /Runtime is not assembly/);
 
-  assert.match(proto, /package hermes\.mail\.operational\.v1/);
+  assert.match(proto, /package makosh\.mail\.operational\.v1/);
   assert.match(
     proto,
     /oneof query[\s\S]*list_folders[\s\S]*list_threads[\s\S]*list_messages[\s\S]*get_message/,
@@ -158,19 +158,19 @@ test('Mail operational read contract is typed, bounded and admitted with fronten
   assert.match(contract, /mail\.operational\.query\.v1/);
   assert.match(
     contract,
-    /\/hermes\.mail\.operational\.v1\.MailOperationalQueryService\/Query/,
+    /\/makosh\.mail\.operational\.v1\.MailOperationalQueryService\/Query/,
   );
   assert.match(
     persistence,
-    /CREATE TABLE IF NOT EXISTS hermes_data\.mail_operational_folders/,
+    /CREATE TABLE IF NOT EXISTS makosh_data\.mail_operational_folders/,
   );
   assert.match(
     persistence,
-    /CREATE TABLE IF NOT EXISTS hermes_data\.mail_operational_threads/,
+    /CREATE TABLE IF NOT EXISTS makosh_data\.mail_operational_threads/,
   );
   assert.match(
     persistence,
-    /CREATE TABLE IF NOT EXISTS hermes_data\.mail_operational_messages/,
+    /CREATE TABLE IF NOT EXISTS makosh_data\.mail_operational_messages/,
   );
   assert.match(persistence, /require_cursor_anchor/);
   assert.match(
@@ -199,7 +199,7 @@ test('Mail operational read contract is typed, bounded and admitted with fronten
   assert.match(managedFlow, /managed-mail-imap-password/);
   assert.match(
     build,
-    /proto\/hermes\/mail\/operational\/v1\/client\.proto/,
+    /proto\/makosh\/mail\/operational\/v1\/client\.proto/,
   );
   assert.match(api, /pub mod operational;/);
   assert.match(generatedClient, /export const MailOperationalQueryService/);
@@ -221,7 +221,7 @@ test('Mail operational read contract is typed, bounded and admitted with fronten
   assert.match(frontendLayout, /mail\.operational\.query\.v1/);
   assert.doesNotMatch(
     `${proto}\n${validator}\n${wire}\n${persistence}`,
-    /hermes_communications|domains\/communications|mail-runtime|mail-persistence|hermes-kernel/i,
+    /makosh_communications|domains\/communications|mail-runtime|mail-persistence|makosh-kernel/i,
   );
   assert.doesNotMatch(
     `${generatedClient}\n${frontendClient}\n${frontendGateway}\n${frontendConnections}\n${frontendController}\n${frontendPresentation}\n${frontendRoute}`,

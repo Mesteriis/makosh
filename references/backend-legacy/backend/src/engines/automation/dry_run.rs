@@ -1,9 +1,9 @@
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 use sqlx::postgres::PgPool;
 
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use super::constants::{
     AUTOMATION_SEND_DRY_RUN_EVENT_TYPE, AUTOMATION_SOURCE_KIND, AUTOMATION_SOURCE_PROVIDER,

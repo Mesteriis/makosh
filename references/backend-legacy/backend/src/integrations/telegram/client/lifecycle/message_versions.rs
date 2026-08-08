@@ -9,8 +9,8 @@ use crate::integrations::telegram::client::evidence::link_telegram_entity_in_tra
 use crate::integrations::telegram::client::models::messages::TelegramMessage;
 use crate::integrations::telegram::client::models::messages::TelegramMessageVersion;
 use crate::integrations::telegram::client::rows::row_to_telegram_message_version;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 
 async fn capture_message_version_observation_in_transaction(
     transaction: &mut Transaction<'_, Postgres>,

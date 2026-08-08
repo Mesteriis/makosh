@@ -3,9 +3,9 @@
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
-use hermes_kernel_control_store::{ManagedLaunchRecord, PlatformStorageBindingStateV1};
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store::{ManagedLaunchRecord, PlatformStorageBindingStateV1};
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     managed_control::select_managed_control_transport,
     v1::{
         ManagedDomainRuntimeConfigurationV1, ManagedEngineRuntimeConfigurationV1,
@@ -38,7 +38,7 @@ const MAX_RUNTIME: Duration = Duration::from_secs(300);
 
 pub(crate) struct ManagedLaunchReservation {
     registration_id: String,
-    binding: hermes_kernel_control_store::BundledManagedLaunchBinding,
+    binding: makosh_kernel_control_store::BundledManagedLaunchBinding,
     record: ManagedLaunchRecord,
     expectation: ManagedRuntimeExpectation,
     policy: ManagedChildExecutionPolicy,
@@ -65,7 +65,7 @@ impl ManagedLaunchReservation {
     }
 
     #[must_use]
-    pub(crate) fn binding(&self) -> &hermes_kernel_control_store::BundledManagedLaunchBinding {
+    pub(crate) fn binding(&self) -> &makosh_kernel_control_store::BundledManagedLaunchBinding {
         &self.binding
     }
 
@@ -131,7 +131,7 @@ pub fn start(
 
 fn selected_kernel_executable() -> Result<std::path::PathBuf, String> {
     #[cfg(test)]
-    if let Some(executable) = std::env::var_os("HERMES_TEST_KERNEL_EXECUTABLE") {
+    if let Some(executable) = std::env::var_os("MAKOSH_TEST_KERNEL_EXECUTABLE") {
         return Ok(std::path::PathBuf::from(executable));
     }
     std::env::current_exe().map_err(|_| "Kernel executable path is unavailable".to_owned())

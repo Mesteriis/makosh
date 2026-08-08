@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/domains/agents/components/AgentsRail.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/agents/components/AgentsRail.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/agents/components/AgentsRail.vue`
 - Size bytes / Размер в байтах: `2150`
 - Included characters / Включено символов: `2148`
 - Truncated / Обрезано: `no`
@@ -130,7 +130,7 @@ function formatAgentPersonaName(agentId: string): string {
 
 ### `frontend/src/domains/agents/components/AgentsRuntimeMetrics.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/agents/components/AgentsRuntimeMetrics.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/agents/components/AgentsRuntimeMetrics.vue`
 - Size bytes / Размер в байтах: `1755`
 - Included characters / Включено символов: `1755`
 - Truncated / Обрезано: `no`
@@ -200,7 +200,7 @@ function formatAgentPersonaName(agentId: string): string {
 
 ### `frontend/src/domains/agents/components/AgentsWorkflows.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/agents/components/AgentsWorkflows.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/agents/components/AgentsWorkflows.vue`
 - Size bytes / Размер в байтах: `5602`
 - Included characters / Включено символов: `5602`
 - Truncated / Обрезано: `no`
@@ -434,7 +434,7 @@ const emit = defineEmits<Emits>()
 
 ### `frontend/src/domains/agents/views/AgentsPage.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/agents/views/AgentsPage.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/agents/views/AgentsPage.vue`
 - Size bytes / Размер в байтах: `3584`
 - Included characters / Включено символов: `3584`
 - Truncated / Обрезано: `no`
@@ -555,7 +555,7 @@ watch(isLoading, (val) => {
 
 ### `frontend/src/domains/calendar/components/CalendarSourceStatus.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/calendar/components/CalendarSourceStatus.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/calendar/components/CalendarSourceStatus.vue`
 - Size bytes / Размер в байтах: `892`
 - Included characters / Включено символов: `892`
 - Truncated / Обрезано: `no`
@@ -592,7 +592,7 @@ defineProps<{
 
 ### `frontend/src/domains/calendar/components/CalendarToolbar.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/calendar/components/CalendarToolbar.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/calendar/components/CalendarToolbar.vue`
 - Size bytes / Размер в байтах: `1908`
 - Included characters / Включено символов: `1908`
 - Truncated / Обрезано: `no`
@@ -659,7 +659,7 @@ function setMode(mode: CalendarViewMode) {
 
 ### `frontend/src/domains/calendar/components/CalendarUpcoming.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/calendar/components/CalendarUpcoming.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/calendar/components/CalendarUpcoming.vue`
 - Size bytes / Размер в байтах: `1134`
 - Included characters / Включено символов: `1134`
 - Truncated / Обрезано: `no`
@@ -709,7 +709,7 @@ function handleClick(evt: CalendarEvent) {
 
 ### `frontend/src/domains/calendar/components/CalendarWeekGrid.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/calendar/components/CalendarWeekGrid.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/calendar/components/CalendarWeekGrid.vue`
 - Size bytes / Размер в байтах: `2281`
 - Included characters / Включено символов: `2281`
 - Truncated / Обрезано: `no`
@@ -778,7 +778,7 @@ function handleEventClick(evt: CalendarEvent) {
 
 ### `frontend/src/domains/calendar/views/CalendarPage.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/calendar/views/CalendarPage.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/calendar/views/CalendarPage.vue`
 - Size bytes / Размер в байтах: `9903`
 - Included characters / Включено символов: `9903`
 - Truncated / Обрезано: `no`
@@ -1064,7 +1064,7 @@ onMounted(() => {
 
 ### `frontend/src/domains/communications/components/AttachmentSearchPanel.css`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/AttachmentSearchPanel.css`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/AttachmentSearchPanel.css`
 - Size bytes / Размер в байтах: `4114`
 - Included characters / Включено символов: `4114`
 - Truncated / Обрезано: `no`
@@ -1271,7 +1271,7 @@ onMounted(() => {
 
 ### `frontend/src/domains/communications/components/AttachmentSearchPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/AttachmentSearchPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/AttachmentSearchPanel.vue`
 - Size bytes / Размер в байтах: `9110`
 - Included characters / Включено символов: `9110`
 - Truncated / Обрезано: `no`
@@ -1536,7 +1536,7 @@ function handleResultsScroll() {
 
 ### `frontend/src/domains/communications/components/BilingualReplyPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/BilingualReplyPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/BilingualReplyPanel.vue`
 - Size bytes / Размер в байтах: `8104`
 - Included characters / Включено символов: `8104`
 - Truncated / Обрезано: `no`
@@ -1846,7 +1846,7 @@ function sendPreparedReply(): void {
 
 ### `frontend/src/domains/communications/components/BulkActionsBar.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/BulkActionsBar.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/BulkActionsBar.vue`
 - Size bytes / Размер в байтах: `4843`
 - Included characters / Включено символов: `4843`
 - Truncated / Обрезано: `no`
@@ -2019,7 +2019,7 @@ function handleActionDragOver(event: DragEvent) {
 
 ### `frontend/src/domains/communications/components/CommunicationFolderStrip.css`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationFolderStrip.css`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationFolderStrip.css`
 - Size bytes / Размер в байтах: `5397`
 - Included characters / Включено символов: `5397`
 - Truncated / Обрезано: `no`
@@ -2308,7 +2308,7 @@ function handleActionDragOver(event: DragEvent) {
 
 ### `frontend/src/domains/communications/components/CommunicationFolderStrip.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationFolderStrip.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationFolderStrip.vue`
 - Size bytes / Размер в байтах: `18447`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2650,13 +2650,13 @@ async function handleFolderDrop(event: DragEvent, folder: CommunicationFolder) {
               <button
                 class="mail-folder-select"
                 type="button"
-                
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `frontend/src/domains/communications/components/CommunicationList.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationList.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationList.vue`
 - Size bytes / Размер в байтах: `4956`
 - Included characters / Включено символов: `4956`
 - Truncated / Обрезано: `no`
@@ -2854,7 +2854,7 @@ watch(() => props.selectedIndex, (idx) => {
 
 ### `frontend/src/domains/communications/components/CommunicationListItem.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationListItem.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationListItem.vue`
 - Size bytes / Размер в байтах: `5625`
 - Included characters / Включено символов: `5625`
 - Truncated / Обрезано: `no`
@@ -3082,7 +3082,7 @@ function handleDragStart(event: DragEvent) {
 
 ### `frontend/src/domains/communications/components/CommunicationViewer.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationViewer.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationViewer.vue`
 - Size bytes / Размер в байтах: `11600`
 - Included characters / Включено символов: `11600`
 - Truncated / Обрезано: `no`
@@ -3483,7 +3483,7 @@ function transitionAiState(aiState: CommunicationAiState): void {
 
 ### `frontend/src/domains/communications/components/CommunicationsActionBar.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationsActionBar.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationsActionBar.vue`
 - Size bytes / Размер в байтах: `6459`
 - Included characters / Включено символов: `6459`
 - Truncated / Обрезано: `no`
@@ -3572,7 +3572,7 @@ const messageExportDownloadHref = computed(() => {
 </script>
 
 <template>
-  <Teleport to="#hermes-topbar-slot">
+  <Teleport to="#makosh-topbar-slot">
     <CommunicationsTopbarSlot
       :search-query="searchQuery"
       :is-sync-busy="isSyncBusy"
@@ -3728,7 +3728,7 @@ const messageExportDownloadHref = computed(() => {
 
 ### `frontend/src/domains/communications/components/CommunicationsCallsPanel.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationsCallsPanel.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationsCallsPanel.vue`
 - Size bytes / Размер в байтах: `14224`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -4066,7 +4066,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/domains/communications/components/CommunicationsContextInspector.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/components/CommunicationsContextInspector.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/components/CommunicationsContextInspector.vue`
 - Size bytes / Размер в байтах: `5514`
 - Included characters / Включено символов: `5514`
 - Truncated / Обрезано: `no`

@@ -1,6 +1,6 @@
 //! Exact durable subjects and stream kinds without a broker dependency.
 
-use hermes_kernel_control_store::ModuleEventEnvelopeKindV1;
+use makosh_kernel_control_store::ModuleEventEnvelopeKindV1;
 
 const MAX_SUBJECT_TOKEN_BYTES: usize = 64;
 
@@ -87,7 +87,7 @@ impl EventSubjectV1 {
     #[must_use]
     pub fn as_str(&self) -> String {
         format!(
-            "hermes.{}.v1.{}.{}.v{}",
+            "makosh.{}.v1.{}.{}.v{}",
             self.kind.subject_token(),
             self.owner,
             self.contract,

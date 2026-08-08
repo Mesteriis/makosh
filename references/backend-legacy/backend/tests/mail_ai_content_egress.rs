@@ -1,18 +1,18 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 use serde_json::json;
 use std::sync::Arc;
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::domains::communications::ai_state::{
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::domains::communications::ai_state::{
     CommunicationAiState, CommunicationAiStateStore,
 };
-use hermes_hub_backend::domains::communications::messages::projection::project_raw_email_message;
-use hermes_hub_backend::domains::communications::messages::store::MessageProjectionStore;
-use hermes_hub_backend::domains::communications::sensitive_forwarding::SensitiveForwardingPgStore;
+use makosh_hub_backend::domains::communications::messages::projection::project_raw_email_message;
+use makosh_hub_backend::domains::communications::messages::store::MessageProjectionStore;
+use makosh_hub_backend::domains::communications::sensitive_forwarding::SensitiveForwardingPgStore;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::workflows::email_intelligence::pipeline::MailAiPipelineService;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::workflows::email_intelligence::pipeline::MailAiPipelineService;
 
 #[tokio::test]
 async fn external_mail_ai_requires_explicit_body_egress_permission() {

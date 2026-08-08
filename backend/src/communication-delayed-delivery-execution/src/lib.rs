@@ -21,7 +21,7 @@ pub use worker::{
     DelayedDeliveryExecutionOutcomeV1, DelayedDeliveryWorkerErrorV1, execute_due_delivery_v1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-delayed-delivery-execution";
+pub const PACKAGE: &str = "makosh-communication-delayed-delivery-execution";
 pub use cleanup::{
     DelayedDeliveryCleanupErrorV1, DelayedDeliveryCleanupOutcomeV1, process_body_cleanup_once_v1,
 };

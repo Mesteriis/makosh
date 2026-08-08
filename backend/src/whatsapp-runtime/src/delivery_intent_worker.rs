@@ -2,9 +2,9 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::managed_control::ManagedControlChannelV2;
-use hermes_whatsapp_delivery_intent_contract::wire::WhatsAppDeliveryIntentRejectCodeV1;
-use hermes_whatsapp_persistence::{
+use makosh_runtime_protocol::managed_control::ManagedControlChannelV2;
+use makosh_whatsapp_delivery_intent_contract::wire::WhatsAppDeliveryIntentRejectCodeV1;
+use makosh_whatsapp_persistence::{
     ClaimedWhatsAppDeliveryIntentJobV1, WHATSAPP_DELIVERY_INTENT_MAX_ATTEMPTS_V1,
     WhatsAppDeliveryIntentJobStateV1, WhatsAppDeliveryIntentStoreV1, WhatsAppDurablePersistence,
     WhatsAppProviderCommandStateV1,
@@ -322,7 +322,7 @@ fn result_context(
 }
 
 fn operation_completed_at(
-    operation: &hermes_whatsapp_persistence::WhatsAppProviderCommandStatusV1,
+    operation: &makosh_whatsapp_persistence::WhatsAppProviderCommandStatusV1,
     fallback_unix_seconds: i64,
 ) -> Result<i64, WhatsAppDeliveryIntentWorkerErrorV1> {
     operation
@@ -336,7 +336,7 @@ fn operation_completed_at(
 
 fn worker_id(runtime_instance_id: &str, runtime_generation: u64) -> String {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.whatsapp.delivery-intent.worker.v1");
+    hasher.update(b"makosh.whatsapp.delivery-intent.worker.v1");
     hasher.update(runtime_instance_id.as_bytes());
     hasher.update(runtime_generation.to_be_bytes());
     let digest: [u8; 32] = hasher.finalize().into();

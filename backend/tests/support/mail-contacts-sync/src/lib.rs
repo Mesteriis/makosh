@@ -1,3 +1,3 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-mail-contacts-sync-testkit";
+pub const PACKAGE: &str = "makosh-mail-contacts-sync-testkit";

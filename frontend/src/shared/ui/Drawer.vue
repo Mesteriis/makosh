@@ -33,9 +33,9 @@ const emit = defineEmits<{
 }>()
 
 const contentClasses = computed(() => [
-	'hermes-drawer-content',
-	`hermes-drawer--${props.side}`,
-	`hermes-drawer--${props.size}`,
+	'makosh-drawer-content',
+	`makosh-drawer--${props.side}`,
+	`makosh-drawer--${props.size}`,
 	props.contentClass
 ])
 </script>
@@ -46,24 +46,24 @@ const contentClasses = computed(() => [
 			<slot name="trigger" />
 		</DialogTrigger>
 		<DialogPortal>
-			<DialogOverlay class="hermes-drawer-overlay">
+			<DialogOverlay class="makosh-drawer-overlay">
 				<DialogContent :class="contentClasses">
-					<div class="hermes-drawer-handle" aria-hidden="true" />
-					<header class="hermes-drawer-header">
-						<DialogTitle v-if="title" class="hermes-drawer-title">{{ title }}</DialogTitle>
-						<DialogDescription v-if="description" class="hermes-drawer-description">
+					<div class="makosh-drawer-handle" aria-hidden="true" />
+					<header class="makosh-drawer-header">
+						<DialogTitle v-if="title" class="makosh-drawer-title">{{ title }}</DialogTitle>
+						<DialogDescription v-if="description" class="makosh-drawer-description">
 							{{ description }}
 						</DialogDescription>
 						<slot name="header" />
 					</header>
-					<div class="hermes-drawer-body">
+					<div class="makosh-drawer-body">
 						<slot />
 					</div>
-					<footer v-if="$slots.footer" class="hermes-drawer-footer">
+					<footer v-if="$slots.footer" class="makosh-drawer-footer">
 						<slot name="footer" />
 					</footer>
-					<DialogClose class="hermes-drawer-close" as-child>
-						<button class="hermes-drawer-close-btn" type="button" :aria-label="closeLabel">
+					<DialogClose class="makosh-drawer-close" as-child>
+						<button class="makosh-drawer-close-btn" type="button" :aria-label="closeLabel">
 							<Icon icon="tabler:x" size="1.125rem" />
 						</button>
 					</DialogClose>

@@ -1,5 +1,5 @@
 use chrono::Utc;
-use hermes_provider_api::{
+use makosh_provider_api::{
     CredentialLease, ProviderCommandDisposition, ProviderCommandEnvelope, ProviderCommandResult,
     ProviderId, ProviderManifest, ProviderRuntimePort, ProviderRuntimePortError,
     ProviderRuntimePortFuture, RuntimeTopology,

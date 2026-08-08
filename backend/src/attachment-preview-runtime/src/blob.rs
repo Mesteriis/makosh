@@ -1,13 +1,13 @@
 use std::{os::unix::net::UnixStream, time::Duration};
 
-use hermes_attachment_preview_persistence::{
+use makosh_attachment_preview_persistence::{
     ClaimedAttachmentPreviewJobV1, PreviewTargetBlobReceiptV1,
 };
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTransferRequestV1, ManagedBlobSessionRequestV1,
     request_managed_blob_custody_transfer_v2, request_managed_blob_session_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::BlobDataOperationV1,
 };
@@ -204,7 +204,7 @@ fn derived_reference_id(
     derived_receipt: [u8; 32],
 ) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.attachment-preview.derived-blob.v1\0");
+    digest.update(b"makosh.attachment-preview.derived-blob.v1\0");
     digest.update(run_id);
     digest.update(source_receipt);
     digest.update(renderer_identity);
@@ -222,7 +222,7 @@ fn id16(value: &[u8]) -> Result<[u8; 16], BlobErrorV1> {
 }
 
 fn developer_blob_stage(stage: &str) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_attachment_preview_blob_denied stage={stage}");
     }
 }

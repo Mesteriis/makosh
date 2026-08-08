@@ -60,7 +60,7 @@ local provenance.
   "account_id": "telemost-main",
   "conference_id": "abcdef",
   "join_url": "https://telemost.yandex.ru/j/abcdef",
-  "display_name": "Hermes Owner"
+  "display_name": "Макошь Owner"
 }
 ```
 
@@ -92,7 +92,7 @@ yandex_telemost_speaker_timeline_append
 ## Recording completion bridge
 
 After local `ffmpeg` capture stops, the desktop client posts the completed
-recording manifest back to Hermes:
+recording manifest back to Макошь:
 
 ```json
 {
@@ -110,7 +110,7 @@ recording manifest back to Hermes:
 }
 ```
 
-Hermes validates that all paths stay under `output_dir`, materializes the
+Макошь validates that all paths stay under `output_dir`, materializes the
 provider-neutral Call Bundle files (`manifest.json`, `meeting.json`,
 `provider.json`, `participants.json`, `event-track.jsonl`,
 `speaker-hints.jsonl`), publishes
@@ -131,7 +131,7 @@ policy for local Telemost artifacts under `provenance.retention_policy`.
 ## Transcript completion bridge
 
 After local STT finishes, the desktop/runtime side posts the transcript result
-back to Hermes:
+back to Макошь:
 
 ```json
 {
@@ -156,7 +156,7 @@ back to Hermes:
 }
 ```
 
-Hermes validates the bundle root and manifest, writes `transcript.json`,
+Макошь validates the bundle root and manifest, writes `transcript.json`,
 `transcript.md` and optional `summary.md`, updates `manifest.json`, publishes
 `realtime_conversation.transcript.completed`, and projects the transcript into
 the `documents` domain through the provider-neutral transcript workflow.
@@ -183,25 +183,25 @@ runtime paths required for STT execution:
 }
 ```
 
-If `HERMES_REALTIME_CONVERSATION_TRANSCRIBER` is present, Hermes runs that
+If `MAKOSH_REALTIME_CONVERSATION_TRANSCRIBER` is present, Макошь runs that
 local executable and passes bundle metadata through environment variables:
 
 ```text
-HERMES_TRANSCRIPT_BUNDLE_ID
-HERMES_TRANSCRIPT_ACCOUNT_ID
-HERMES_TRANSCRIPT_CONFERENCE_ID
-HERMES_TRANSCRIPT_PROVIDER_KIND
-HERMES_TRANSCRIPT_BUNDLE_ROOT
-HERMES_TRANSCRIPT_MANIFEST_PATH
-HERMES_TRANSCRIPT_AUDIO_PATH
-HERMES_TRANSCRIPT_MANIFEST_JSON
+MAKOSH_TRANSCRIPT_BUNDLE_ID
+MAKOSH_TRANSCRIPT_ACCOUNT_ID
+MAKOSH_TRANSCRIPT_CONFERENCE_ID
+MAKOSH_TRANSCRIPT_PROVIDER_KIND
+MAKOSH_TRANSCRIPT_BUNDLE_ROOT
+MAKOSH_TRANSCRIPT_MANIFEST_PATH
+MAKOSH_TRANSCRIPT_AUDIO_PATH
+MAKOSH_TRANSCRIPT_MANIFEST_JSON
 ```
 
 Optional settings:
 
 ```text
-HERMES_REALTIME_CONVERSATION_TRANSCRIBER_ARGS_JSON='["--flag","value"]'
-HERMES_REALTIME_CONVERSATION_TRANSCRIBER_TIMEOUT_SECONDS=900
+MAKOSH_REALTIME_CONVERSATION_TRANSCRIBER_ARGS_JSON='["--flag","value"]'
+MAKOSH_REALTIME_CONVERSATION_TRANSCRIBER_TIMEOUT_SECONDS=900
 ```
 
 The executable must emit JSON on stdout with:
@@ -210,7 +210,7 @@ The executable must emit JSON on stdout with:
 
 ## Local artifact retention cleanup
 
-Hermes now supports owner-visible retention cleanup for local Telemost files:
+Макошь now supports owner-visible retention cleanup for local Telemost files:
 
 ```json
 {
@@ -230,7 +230,7 @@ privacy.yandex_telemost_speaker_timeline_retention_days
 
 `0` disables automatic cleanup for that artifact class.
 
-When a bundle is cleaned, Hermes removes:
+When a bundle is cleaned, Макошь removes:
 
 - `audio.mp3` when the recording retention policy has expired;
 - `speaker-timeline.jsonl`, `speaker-timeline.txt`, and

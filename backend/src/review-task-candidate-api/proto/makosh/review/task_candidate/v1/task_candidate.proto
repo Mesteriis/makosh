@@ -1,0 +1,161 @@
+syntax = "proto3";
+
+package makosh.review.task_candidate.v1;
+
+message DecideReviewTaskCandidateRequestV1 {
+  uint32 protocol_major = 1;
+  bytes operation_id = 2;
+  bytes review_id = 3;
+  uint64 expected_review_revision = 4;
+  ReviewTaskCandidateDecisionV1 decision = 5;
+}
+
+message DecideReviewTaskCandidateResponseV1 {
+  ReviewTaskCandidateSummaryV1 review = 1;
+  bool replayed = 2;
+  ReviewTaskCandidateErrorCodeV1 error = 15;
+}
+
+message GetReviewTaskCandidateRequestV1 {
+  uint32 protocol_major = 1;
+  bytes review_id = 2;
+}
+
+message GetReviewTaskCandidateResponseV1 {
+  ReviewTaskCandidateSummaryV1 review = 1;
+  ReviewTaskCandidateErrorCodeV1 error = 15;
+}
+
+message ReviewTaskCandidateSummaryV1 {
+  bytes review_id = 1;
+  bytes candidate_id = 2;
+  bytes candidate_digest = 3;
+  bytes source_evidence_id = 4;
+  uint64 source_evidence_revision = 5;
+  string title = 6;
+  optional string due_text_hint = 7;
+  optional string assignee_label_hint = 8;
+  ReviewTaskCandidateStateV1 state = 9;
+  ReviewTaskCandidatePromotionStatusV1 promotion_status = 10;
+  uint64 review_revision = 11;
+  optional bytes decided_by_owner_device_id = 12;
+  optional uint64 decided_at_unix_millis = 13;
+}
+
+message ReviewTaskCandidateStatusChangedV1 {
+  bytes review_id = 1;
+  bytes candidate_id = 2;
+  ReviewTaskCandidateStateV1 state = 3;
+  ReviewTaskCandidatePromotionStatusV1 promotion_status = 4;
+  uint64 review_revision = 5;
+  uint64 occurred_at_unix_millis = 6;
+  ReviewTaskCandidateErrorCodeV1 error = 15;
+}
+
+service ReviewTaskCandidateCommandService {
+  rpc Decide(DecideReviewTaskCandidateRequestV1)
+      returns (DecideReviewTaskCandidateResponseV1);
+}
+
+service ReviewTaskCandidateQueryService {
+  rpc Get(GetReviewTaskCandidateRequestV1)
+      returns (GetReviewTaskCandidateResponseV1);
+}
+
+// Exact workflow-to-Review durable command. Candidate presentation bytes are
+// held only by the Review-target-bound Blob referenced here.
+message SubmitTaskCandidateForReviewCommandV1 {
+  bytes submission_id = 1;
+  bytes candidate_id = 2;
+  bytes candidate_digest = 3;
+  bytes source_evidence_id = 4;
+  uint64 source_evidence_revision = 5;
+  ReviewTargetBoundCandidateReceiptV1 candidate_content = 6;
+  string logical_owner_id = 7;
+}
+
+message TaskCandidateReviewSubmittedV1 {
+  bytes submission_id = 1;
+  bytes review_id = 2;
+  bytes candidate_id = 3;
+  bytes candidate_digest = 4;
+  uint64 review_revision = 5;
+  string logical_owner_id = 6;
+}
+
+message TaskCandidateReviewSubmissionRejectedV1 {
+  bytes submission_id = 1;
+  bytes candidate_id = 2;
+  ReviewTaskCandidateSubmissionRejectCodeV1 code = 3;
+  string logical_owner_id = 4;
+}
+
+// Exact Review-to-Tasks durable event. Presentation bytes are transferred to
+// a new Tasks-target-bound Blob before this event is persisted.
+message TaskCandidateApprovedForPromotionV1 {
+  bytes review_id = 1;
+  bytes candidate_id = 2;
+  bytes candidate_digest = 3;
+  bytes source_evidence_id = 4;
+  uint64 source_evidence_revision = 5;
+  uint64 decision_revision = 6;
+  bytes decided_by_owner_device_id = 7;
+  ReviewTargetBoundCandidateReceiptV1 candidate_content = 8;
+  string logical_owner_id = 9;
+}
+
+message ReviewTargetBoundCandidateReceiptV1 {
+  bytes reference_id = 1;
+  uint64 declared_bytes = 2;
+  bytes sha256 = 3;
+  bytes custody_transfer_source_proof = 4;
+}
+
+// Plaintext schema inside a target-bound Blob. It is never embedded in a
+// durable command, result, event or realtime frame.
+message ReviewTaskCandidateContentV1 {
+  string title = 1;
+  optional string due_text_hint = 2;
+  optional string assignee_label_hint = 3;
+}
+
+enum ReviewTaskCandidateDecisionV1 {
+  REVIEW_TASK_CANDIDATE_DECISION_UNSPECIFIED = 0;
+  REVIEW_TASK_CANDIDATE_DECISION_APPROVE = 1;
+  REVIEW_TASK_CANDIDATE_DECISION_REJECT = 2;
+}
+
+enum ReviewTaskCandidateStateV1 {
+  REVIEW_TASK_CANDIDATE_STATE_UNSPECIFIED = 0;
+  REVIEW_TASK_CANDIDATE_STATE_PENDING = 1;
+  REVIEW_TASK_CANDIDATE_STATE_APPROVED = 2;
+  REVIEW_TASK_CANDIDATE_STATE_REJECTED = 3;
+}
+
+enum ReviewTaskCandidatePromotionStatusV1 {
+  REVIEW_TASK_CANDIDATE_PROMOTION_STATUS_UNSPECIFIED = 0;
+  REVIEW_TASK_CANDIDATE_PROMOTION_STATUS_NOT_REQUESTED = 1;
+  REVIEW_TASK_CANDIDATE_PROMOTION_STATUS_PENDING = 2;
+  REVIEW_TASK_CANDIDATE_PROMOTION_STATUS_SUCCEEDED = 3;
+  REVIEW_TASK_CANDIDATE_PROMOTION_STATUS_FAILED = 4;
+}
+
+enum ReviewTaskCandidateSubmissionRejectCodeV1 {
+  REVIEW_TASK_CANDIDATE_SUBMISSION_REJECT_CODE_UNSPECIFIED = 0;
+  REVIEW_TASK_CANDIDATE_SUBMISSION_REJECT_CODE_INVALID_REQUEST = 1;
+  REVIEW_TASK_CANDIDATE_SUBMISSION_REJECT_CODE_BLOB_UNAVAILABLE = 2;
+  REVIEW_TASK_CANDIDATE_SUBMISSION_REJECT_CODE_BLOB_MISMATCH = 3;
+  REVIEW_TASK_CANDIDATE_SUBMISSION_REJECT_CODE_CONFLICT = 4;
+  REVIEW_TASK_CANDIDATE_SUBMISSION_REJECT_CODE_POLICY = 5;
+}
+
+enum ReviewTaskCandidateErrorCodeV1 {
+  REVIEW_TASK_CANDIDATE_ERROR_CODE_UNSPECIFIED = 0;
+  REVIEW_TASK_CANDIDATE_ERROR_CODE_INVALID_REQUEST = 1;
+  REVIEW_TASK_CANDIDATE_ERROR_CODE_NOT_FOUND = 2;
+  REVIEW_TASK_CANDIDATE_ERROR_CODE_REVISION_CONFLICT = 3;
+  REVIEW_TASK_CANDIDATE_ERROR_CODE_TERMINAL_DECISION = 4;
+  REVIEW_TASK_CANDIDATE_ERROR_CODE_OPERATION_CONFLICT = 5;
+  REVIEW_TASK_CANDIDATE_ERROR_CODE_POLICY = 6;
+  REVIEW_TASK_CANDIDATE_ERROR_CODE_UNAVAILABLE = 7;
+}

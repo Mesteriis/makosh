@@ -1,4 +1,4 @@
-use hermes_events_api::{EventEnvelopeError, NewEventEnvelope};
+use makosh_events_api::{EventEnvelopeError, NewEventEnvelope};
 // ADR-0073: shared API support is split into bounded helper modules while
 // route modules still import this facade during the backend decomposition phase.
 pub(crate) mod automation_calls;
@@ -39,7 +39,7 @@ use crate::platform::audit::models::ApiAuditRecord;
 use crate::platform::calls::models::{
     CallDirection, CallState, CallTranscript, NewProviderCall, ProviderCall,
 };
-use hermes_communications_postgres::store::CommunicationIngestionStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
 
 use crate::platform::config::ai::AiRuntimeProvider;
 use crate::platform::config::app_config::AppConfig;
@@ -77,7 +77,7 @@ use crate::integrations::whatsapp::client::models::WhatsappWebSession;
 use crate::platform::settings::ai_runtime::AiRuntimeSettings;
 use crate::platform::settings::models::ApplicationSetting;
 use crate::vault::models::VaultStatus;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use crate::app::error::types::ApiError;
 use crate::app::state::AppState;

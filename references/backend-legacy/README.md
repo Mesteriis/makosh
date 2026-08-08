@@ -1,4 +1,4 @@
-# Hermes legacy backend reference
+# Макошь legacy backend reference
 
 This directory contains the complete Rust backend workspace as it existed before
 the clean-room rewrite started on 2026-07-15.

@@ -15,7 +15,7 @@ use super::seed_chat;
 
 #[tokio::test]
 async fn publish_chat_position_event_marks_pin_command_as_mismatch_when_provider_disagrees() {
-    let ctx = hermes_backend_testkit::context::TestContext::new().await;
+    let ctx = makosh_backend_testkit::context::TestContext::new().await;
     let pool = ctx.pool().clone();
     let account_id = "acct-pin-mismatch";
     let provider_chat_id = "chat-pin-mismatch";
@@ -34,7 +34,7 @@ async fn publish_chat_position_event_marks_pin_command_as_mismatch_when_provider
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_runtime",
             "is_pinned": true,
@@ -116,7 +116,7 @@ async fn publish_chat_position_event_marks_pin_command_as_mismatch_when_provider
 #[tokio::test]
 async fn publish_chat_notification_settings_event_marks_unmute_command_as_mismatch_when_provider_disagrees()
  {
-    let ctx = hermes_backend_testkit::context::TestContext::new().await;
+    let ctx = makosh_backend_testkit::context::TestContext::new().await;
     let pool = ctx.pool().clone();
     let account_id = "acct-unmute-mismatch";
     let provider_chat_id = "chat-unmute-mismatch";
@@ -135,7 +135,7 @@ async fn publish_chat_notification_settings_event_marks_unmute_command_as_mismat
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_runtime",
             "is_muted": false,

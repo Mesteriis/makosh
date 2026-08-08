@@ -1,7 +1,7 @@
-use hermes_reviewed_note_candidate_promotion_core::{
+use makosh_reviewed_note_candidate_promotion_core::{
     derive_reviewed_note_candidate_command_id_v1, derive_reviewed_note_candidate_result_id_v1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool, Postgres, Row, Transaction,
     postgres::{PgConnectOptions, PgPoolOptions},
@@ -74,7 +74,7 @@ impl ReviewedNoteCandidatePromotionPersistenceV1 {
     {
         validate_reservation(input)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.reviewed_note_candidate_promotion_requests (
+            "INSERT INTO makosh_data.reviewed_note_candidate_promotion_requests (
                logical_owner_id, approval_message_id, approval_envelope_sha256,
                review_id, candidate_id, decision_revision,
                source_blob_reference_id, source_blob_declared_bytes,
@@ -125,7 +125,7 @@ impl ReviewedNoteCandidatePromotionPersistenceV1 {
             return Err(ReviewedNoteCandidatePromotionPersistenceErrorV1::InvalidInput);
         }
         let affected = sqlx::query(
-            "UPDATE hermes_data.reviewed_note_candidate_promotion_requests
+            "UPDATE makosh_data.reviewed_note_candidate_promotion_requests
              SET materialized_blob_reference_id=$1, updated_at_unix_millis=$2
              WHERE logical_owner_id=$3 AND approval_message_id=$4
                AND materialized_blob_reference_id IS NULL",
@@ -165,7 +165,7 @@ impl ReviewedNoteCandidatePromotionPersistenceV1 {
             return Err(ReviewedNoteCandidatePromotionPersistenceErrorV1::InvalidInput);
         }
         let affected = sqlx::query(
-            "UPDATE hermes_data.reviewed_note_candidate_promotion_requests
+            "UPDATE makosh_data.reviewed_note_candidate_promotion_requests
              SET cleanup_completed_at_unix_millis=$1, updated_at_unix_millis=$1
              WHERE logical_owner_id=$2 AND approval_message_id=$3
                AND materialized_blob_reference_id=$4
@@ -225,7 +225,7 @@ impl ReviewedNoteCandidatePromotionPersistenceV1 {
         }
         let row = sqlx::query(
             "SELECT review_id, candidate_id, decision_revision, knowledge_result_message_id
-             FROM hermes_data.reviewed_note_candidate_promotion_requests
+             FROM makosh_data.reviewed_note_candidate_promotion_requests
              WHERE logical_owner_id = $1 AND knowledge_command_id = $2
                AND knowledge_command_message_id IS NOT NULL",
         )
@@ -272,7 +272,7 @@ impl ReviewedNoteCandidatePromotionPersistenceV1 {
             )
             .await?;
             let updated = sqlx::query(
-                "UPDATE hermes_data.reviewed_note_candidate_promotion_requests
+                "UPDATE makosh_data.reviewed_note_candidate_promotion_requests
                  SET knowledge_command_message_id=$1, updated_at_unix_millis=$2
                  WHERE logical_owner_id=$3 AND approval_message_id=$4
                    AND knowledge_command_message_id IS NULL",
@@ -348,7 +348,7 @@ impl ReviewedNoteCandidatePromotionPersistenceV1 {
         )
         .await?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.reviewed_note_candidate_promotion_requests
+            "UPDATE makosh_data.reviewed_note_candidate_promotion_requests
              SET workflow_failure_result_id=$1, promotion_outcome=2,
                  failure_code=$2, updated_at_unix_millis=$3
              WHERE logical_owner_id=$4 AND approval_message_id=$5
@@ -404,7 +404,7 @@ impl ReviewedNoteCandidatePromotionPersistenceV1 {
             return Ok(PersistPromotionResultOutcomeV1::Duplicate);
         }
         let inbox_inserted = sqlx::query(
-            "INSERT INTO hermes_data.reviewed_note_candidate_promotion_result_inbox (
+            "INSERT INTO makosh_data.reviewed_note_candidate_promotion_result_inbox (
                logical_owner_id, result_message_id, envelope_sha256,
                knowledge_command_id, review_id, processed_at_unix_millis
              ) VALUES ($1, $2, $3, $4, $5, $6)
@@ -432,7 +432,7 @@ impl ReviewedNoteCandidatePromotionPersistenceV1 {
         .await?;
         let (outcome, note_id, failure_code) = encoded_outcome(input.outcome);
         let updated = sqlx::query(
-            "UPDATE hermes_data.reviewed_note_candidate_promotion_requests
+            "UPDATE makosh_data.reviewed_note_candidate_promotion_requests
              SET knowledge_result_message_id = $1, promotion_outcome = $2,
                  note_id = $3, failure_code = $4, updated_at_unix_millis = $5
              WHERE logical_owner_id = $6 AND knowledge_command_id = $7
@@ -590,7 +590,7 @@ async fn verify_result_inbox(
 ) -> Result<(), ReviewedNoteCandidatePromotionPersistenceErrorV1> {
     let row = sqlx::query(
         "SELECT envelope_sha256, knowledge_command_id, review_id
-         FROM hermes_data.reviewed_note_candidate_promotion_result_inbox
+         FROM makosh_data.reviewed_note_candidate_promotion_result_inbox
          WHERE logical_owner_id = $1 AND result_message_id = $2",
     )
     .bind(&input.logical_owner_id)
@@ -788,19 +788,19 @@ const REQUEST_BY_APPROVAL: &str = "SELECT logical_owner_id, approval_message_id,
      materialized_blob_reference_id, cleanup_completed_at_unix_millis, \
      knowledge_command_id, knowledge_command_message_id, workflow_failure_result_id, knowledge_result_message_id, \
      promotion_outcome, note_id, failure_code \
-     FROM hermes_data.reviewed_note_candidate_promotion_requests \
+     FROM makosh_data.reviewed_note_candidate_promotion_requests \
      WHERE logical_owner_id = $1 AND approval_message_id = $2";
 const REQUEST_BY_APPROVAL_FOR_UPDATE: &str = "SELECT logical_owner_id, approval_message_id, approval_envelope_sha256, review_id, candidate_id, decision_revision, \
      source_blob_reference_id, source_blob_declared_bytes, source_blob_sha256, source_blob_custody_proof, \
      materialized_blob_reference_id, cleanup_completed_at_unix_millis, \
      knowledge_command_id, knowledge_command_message_id, workflow_failure_result_id, knowledge_result_message_id, \
      promotion_outcome, note_id, failure_code \
-     FROM hermes_data.reviewed_note_candidate_promotion_requests \
+     FROM makosh_data.reviewed_note_candidate_promotion_requests \
      WHERE logical_owner_id = $1 AND approval_message_id = $2 FOR UPDATE";
 const REQUEST_BY_COMMAND_FOR_UPDATE: &str = "SELECT logical_owner_id, approval_message_id, approval_envelope_sha256, review_id, candidate_id, decision_revision, \
      source_blob_reference_id, source_blob_declared_bytes, source_blob_sha256, source_blob_custody_proof, \
      materialized_blob_reference_id, cleanup_completed_at_unix_millis, \
      knowledge_command_id, knowledge_command_message_id, workflow_failure_result_id, knowledge_result_message_id, \
      promotion_outcome, note_id, failure_code \
-     FROM hermes_data.reviewed_note_candidate_promotion_requests \
+     FROM makosh_data.reviewed_note_candidate_promotion_requests \
      WHERE logical_owner_id = $1 AND knowledge_command_id = $2 FOR UPDATE";

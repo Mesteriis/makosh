@@ -1,4 +1,4 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use serde_json::json;
 
 use crate::integrations::telegram::client::commands::insert_command;
@@ -31,7 +31,7 @@ async fn publish_chat_marked_as_unread_event_reconciles_mark_unread_command_and_
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_runtime",
             "is_marked_as_unread": true,
@@ -115,7 +115,7 @@ async fn publish_chat_marked_as_unread_event_marks_mark_unread_as_mismatch_when_
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_runtime",
             "is_marked_as_unread": true,

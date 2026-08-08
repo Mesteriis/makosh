@@ -3,7 +3,7 @@
 Status: `FOUNDATION_IMPLEMENTED`, 2026-06-28.
 
 Zoom is a provider runtime integration. It observes provider facts and
-translates them into Hermes evidence. It does not own product meaning.
+translates them into Макошь evidence. It does not own product meaning.
 
 Current repository state: the foundation architecture below is implemented in
 this checkout; ADR-0102 is `Accepted` after target backend and frontend zoom
@@ -38,7 +38,7 @@ Zoom observation source
 The first bridge is local/runtime-safe. A protected account-scoped webhook
 bridge validates Zoom URL validation requests and signed meeting/recording
 webhooks before normalizing them into the same bridge methods. The
-`hermes-zoom-edge-proxy` binary provides public/edge forwarding while preserving
+`makosh-zoom-edge-proxy` binary provides public/edge forwarding while preserving
 the raw body and Zoom headers for protected bridge verification.
 
 ## Runtime shapes

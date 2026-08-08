@@ -1,61 +1,61 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 use chrono::{Duration, Utc};
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use serde_json::json;
 
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_events_api::EventLogQuery;
-use hermes_events_api::NewEventEnvelope;
-use hermes_events_postgres::consumers::EventConsumerConfig;
-use hermes_events_postgres::consumers::EventConsumerRunner;
-use hermes_events_postgres::consumers::EventConsumerStore;
-use hermes_events_postgres::consumers::EventDeadLetterReviewState;
-use hermes_events_postgres::cursors::ProjectionCursorStore;
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_events_postgres::store::EventStore;
-use hermes_hub_backend::application::signal_hub_replay::SignalHubReplayService;
-use hermes_hub_backend::domains::communications::messages::provider_observation_projection::{
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_events_api::EventLogQuery;
+use makosh_events_api::NewEventEnvelope;
+use makosh_events_postgres::consumers::EventConsumerConfig;
+use makosh_events_postgres::consumers::EventConsumerRunner;
+use makosh_events_postgres::consumers::EventConsumerStore;
+use makosh_events_postgres::consumers::EventDeadLetterReviewState;
+use makosh_events_postgres::cursors::ProjectionCursorStore;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::store::EventStore;
+use makosh_hub_backend::application::signal_hub_replay::SignalHubReplayService;
+use makosh_hub_backend::domains::communications::messages::provider_observation_projection::{
     COMMUNICATION_PROVIDER_OBSERVATION_CONSUMER, consume_accepted_signal_event,
     project_accepted_signal_if_runtime_allows,
 };
-use hermes_hub_backend::domains::personas::core::roles::PERSONA_ROLE_ASSIGNED_EVENT_TYPE;
-use hermes_hub_backend::domains::signal_hub::connections::SignalHubConnectionService;
-use hermes_hub_backend::domains::signal_hub::controls::{
+use makosh_hub_backend::domains::personas::core::roles::PERSONA_ROLE_ASSIGNED_EVENT_TYPE;
+use makosh_hub_backend::domains::signal_hub::connections::SignalHubConnectionService;
+use makosh_hub_backend::domains::signal_hub::controls::{
     SignalHubControlRequest, SignalHubControlService,
 };
-use hermes_hub_backend::domains::signal_hub::fixture_source::{
+use makosh_hub_backend::domains::signal_hub::fixture_source::{
     SignalFixtureEmitRequest, SignalFixtureSourceService,
 };
-use hermes_hub_backend::domains::signal_hub::health::SignalHubHealthService;
-use hermes_hub_backend::domains::signal_hub::policies::{
+use makosh_hub_backend::domains::signal_hub::health::SignalHubHealthService;
+use makosh_hub_backend::domains::signal_hub::policies::{
     SignalPolicyDecision, SignalPolicyEvaluator,
 };
-use hermes_hub_backend::domains::signal_hub::profiles::SignalHubProfileService;
-use hermes_hub_backend::domains::signal_hub::replay_contracts::SignalReplayRequestCreate;
-use hermes_hub_backend::domains::signal_hub::service::{
+use makosh_hub_backend::domains::signal_hub::profiles::SignalHubProfileService;
+use makosh_hub_backend::domains::signal_hub::replay_contracts::SignalReplayRequestCreate;
+use makosh_hub_backend::domains::signal_hub::service::{
     SIGNAL_HUB_RAW_SIGNAL_CONSUMER, SignalHubSignalService, SignalProcessingOutcome,
     process_signal_hub_raw_event,
 };
-use hermes_hub_backend::domains::signal_hub::store::{
+use makosh_hub_backend::domains::signal_hub::store::{
     SignalConnectionCreate, SignalHealthCheckRequest, SignalHubStore, SignalRuntimeStateUpdate,
 };
-use hermes_hub_backend::domains::signal_hub::telegram::dispatch_telegram_raw_signal;
-use hermes_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
-use hermes_signal_hub_api::runtime_lifecycle::{RuntimeLifecyclePort, RuntimeLifecycleUpdate};
-use hermes_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
-use hermes_signal_hub_postgres::runtime_lifecycle::RuntimeLifecycleStore;
+use makosh_hub_backend::domains::signal_hub::telegram::dispatch_telegram_raw_signal;
+use makosh_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
+use makosh_signal_hub_api::runtime_lifecycle::{RuntimeLifecyclePort, RuntimeLifecycleUpdate};
+use makosh_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
+use makosh_signal_hub_postgres::runtime_lifecycle::RuntimeLifecycleStore;
 
-use hermes_hub_backend::platform::events::runtime::runtime_allows_processing;
-use hermes_hub_backend::platform::settings::store::ApplicationSettingsStore;
-use hermes_hub_backend::workflows::persona_derived_evidence::{
+use makosh_hub_backend::platform::events::runtime::runtime_allows_processing;
+use makosh_hub_backend::platform::settings::store::ApplicationSettingsStore;
+use makosh_hub_backend::workflows::persona_derived_evidence::{
     PERSONA_DERIVED_EVIDENCE_CONSUMER, project_persona_derived_evidence_event,
 };
-use hermes_hub_backend::workflows::project_link_review_effects::{
+use makosh_hub_backend::workflows::project_link_review_effects::{
     PROJECT_LINK_REVIEW_EFFECTS_CONSUMER, PROJECT_LINK_REVIEW_EVENT_TYPE,
     project_link_review_effect_event,
 };
@@ -820,7 +820,7 @@ async fn signal_hub_connection_status_orchestrates_operator_policy_for_signal_fl
 
     let muted_connection = connection_service
         .update_connection(
-            &hermes_hub_backend::domains::signal_hub::store::SignalConnectionUpdate {
+            &makosh_hub_backend::domains::signal_hub::store::SignalConnectionUpdate {
                 id: connection.id.clone(),
                 display_name: None,
                 status: Some("muted".to_owned()),
@@ -874,7 +874,7 @@ async fn signal_hub_connection_status_orchestrates_operator_policy_for_signal_fl
 
     let disabled_connection = connection_service
         .update_connection(
-            &hermes_hub_backend::domains::signal_hub::store::SignalConnectionUpdate {
+            &makosh_hub_backend::domains::signal_hub::store::SignalConnectionUpdate {
                 id: connection.id.clone(),
                 display_name: None,
                 status: Some("disabled".to_owned()),
@@ -928,7 +928,7 @@ async fn signal_hub_connection_status_orchestrates_operator_policy_for_signal_fl
 
     let connected_connection = connection_service
         .update_connection(
-            &hermes_hub_backend::domains::signal_hub::store::SignalConnectionUpdate {
+            &makosh_hub_backend::domains::signal_hub::store::SignalConnectionUpdate {
                 id: connection.id.clone(),
                 display_name: None,
                 status: Some("connected".to_owned()),
@@ -1683,7 +1683,7 @@ async fn signal_hub_timeline_projection_replay_rewinds_projection_cursor_and_emi
         }),
         json!({
             "kind": "project",
-            "entity_id": "project:hermes"
+            "entity_id": "project:makosh"
         }),
     )
     .payload(json!({"title": "Decision accepted"}))

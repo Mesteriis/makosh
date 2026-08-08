@@ -1,8 +1,8 @@
-use hermes_projects_api::{
+use makosh_projects_api::{
     ProjectGraphReadPort, ProjectMatchedDocument, ProjectMatchedMessage, ProjectProjectionSource,
     ProjectUpsert, ProjectWritePort,
 };
-use hermes_projects_postgres::ProjectPostgresReadQuery;
+use makosh_projects_postgres::ProjectPostgresReadQuery;
 use sqlx::PgPool;
 
 use super::core::models::{NewProject, Project};

@@ -1,14 +1,14 @@
-# Hermes Realtime Conversation Platform
+# Макошь Realtime Conversation Platform
 
 Status: `TARGET_ARCHITECTURE`, 2026-06-28.
 
 The Realtime Conversation Platform is the provider-neutral layer for live
-conversations in Hermes. Zoom, Yandex Telemost, Google Meet, Jitsi, Discord and
-future call providers are external systems. They do not own Hermes memory. They
+conversations in Макошь. Zoom, Yandex Telemost, Google Meet, Jitsi, Discord and
+future call providers are external systems. They do not own Макошь memory. They
 only provide runtime access, links, local capture opportunities and provider
 evidence.
 
-Hermes owns the durable memory object:
+Макошь owns the durable memory object:
 
 ```text
 Live conversation

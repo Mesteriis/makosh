@@ -4,7 +4,7 @@ use std::fs;
 use std::os::unix::fs::MetadataExt;
 use std::path::{Path, PathBuf};
 
-use hermes_vault_key_provider::WrappingKey;
+use makosh_vault_key_provider::WrappingKey;
 use rusqlite::Connection;
 use zeroize::Zeroizing;
 

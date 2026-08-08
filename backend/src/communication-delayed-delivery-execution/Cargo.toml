@@ -1,5 +1,5 @@
 [package]
-name = "hermes-communication-delayed-delivery-execution"
+name = "makosh-communication-delayed-delivery-execution"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,13 +7,13 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "communication_delayed_delivery"
 surface = "implementation"
 
 [dependencies]
-hermes-communication-delivery-intent-api = { path = "../communication-delivery-intent-api" }
+makosh-communication-delivery-intent-api = { path = "../communication-delivery-intent-api" }
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }
 tokio = { version = "=1.52.4", default-features = false, features = ["macros", "rt"] }

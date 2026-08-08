@@ -6,7 +6,7 @@ use std::os::unix::fs::{OpenOptionsExt, PermissionsExt};
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_telemetry_protocol::TelemetrySignalV1;
+use makosh_telemetry_protocol::TelemetrySignalV1;
 
 use super::TelemetryRetentionV1;
 

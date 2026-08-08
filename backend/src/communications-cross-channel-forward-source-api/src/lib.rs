@@ -8,12 +8,12 @@ pub use envelope::{
     build_cross_channel_forward_source_prepared_outbox_record_v1,
     build_cross_channel_forward_source_rejected_outbox_record_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-communications-cross-channel-forward-source-api";
+pub const PACKAGE: &str = "makosh-communications-cross-channel-forward-source-api";
 pub const CROSS_CHANNEL_FORWARD_SOURCE_OWNER_V1: &str = "communications";
 pub const CROSS_CHANNEL_FORWARD_SOURCE_PREPARE_CONTRACT_NAME_V1: &str =
     "cross_channel_forward_source_prepare";
@@ -31,14 +31,14 @@ pub const CROSS_CHANNEL_FORWARD_SOURCE_COMMAND_CAPABILITY_ID_V1: &str =
 pub const CROSS_CHANNEL_FORWARD_SOURCE_BLOB_TARGET_OWNER_ID_V1: &str =
     "communication_cross_channel_forward";
 pub const CROSS_CHANNEL_FORWARD_SOURCE_BLOB_TARGET_MODULE_ID_V1: &str =
-    "hermes-communication-cross-channel-forward-runtime";
+    "makosh-communication-cross-channel-forward-runtime";
 pub const CROSS_CHANNEL_FORWARD_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1: &str =
     "communication_cross_channel_forward.blob.v1";
 
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communications.cross_channel_forward_source.v1.rs"
+        "/makosh.communications.cross_channel_forward_source.v1.rs"
     ));
 }
 
@@ -211,7 +211,7 @@ mod tests {
         );
         assert_eq!(
             CROSS_CHANNEL_FORWARD_SOURCE_BLOB_TARGET_MODULE_ID_V1,
-            "hermes-communication-cross-channel-forward-runtime"
+            "makosh-communication-cross-channel-forward-runtime"
         );
         assert_eq!(
             CROSS_CHANNEL_FORWARD_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1,

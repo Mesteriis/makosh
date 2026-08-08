@@ -29,7 +29,7 @@ const emit = defineEmits<{
 	'update:modelValue': [value: DateRangeValue]
 }>()
 
-const classes = computed(() => ['hermes-date-range-picker', props.class])
+const classes = computed(() => ['makosh-date-range-picker', props.class])
 
 function updateValue(key: keyof DateRangeValue, event: Event): void {
 	const target = event.target as HTMLInputElement
@@ -39,10 +39,10 @@ function updateValue(key: keyof DateRangeValue, event: Event): void {
 
 <template>
 	<div :class="classes" role="group" :aria-label="ariaLabel">
-		<label class="hermes-date-range-picker__field">
-			<span class="hermes-date-range-picker__label">{{ startLabel }}</span>
+		<label class="makosh-date-range-picker__field">
+			<span class="makosh-date-range-picker__label">{{ startLabel }}</span>
 			<input
-				class="hermes-native-control"
+				class="makosh-native-control"
 				:disabled="disabled"
 				:max="max"
 				:min="min"
@@ -52,10 +52,10 @@ function updateValue(key: keyof DateRangeValue, event: Event): void {
 				@input="updateValue('start', $event)"
 			/>
 		</label>
-		<label class="hermes-date-range-picker__field">
-			<span class="hermes-date-range-picker__label">{{ endLabel }}</span>
+		<label class="makosh-date-range-picker__field">
+			<span class="makosh-date-range-picker__label">{{ endLabel }}</span>
 			<input
-				class="hermes-native-control"
+				class="makosh-native-control"
 				:disabled="disabled"
 				:max="max"
 				:min="min"

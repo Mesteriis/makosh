@@ -2,11 +2,11 @@
 
 use super::*;
 
-use hermes_blob_client::BlobDataClient;
-use hermes_kernel_control_store::{ModuleBlobOperationV1, ModuleBlobQuotaRequestV1};
-use hermes_runtime_protocol::v1::{BlobDataOperationV1, ManagedRuntimeBlobSessionRequestV1};
-use hermes_speech_to_text_api::{SPEECH_TO_TEXT_MODULE_ID_V1, SPEECH_TO_TEXT_OWNER_V1};
-use hermes_speech_to_text_runtime::SPEECH_TO_TEXT_BLOB_CAPABILITY_ID_V1;
+use makosh_blob_client::BlobDataClient;
+use makosh_kernel_control_store::{ModuleBlobOperationV1, ModuleBlobQuotaRequestV1};
+use makosh_runtime_protocol::v1::{BlobDataOperationV1, ManagedRuntimeBlobSessionRequestV1};
+use makosh_speech_to_text_api::{SPEECH_TO_TEXT_MODULE_ID_V1, SPEECH_TO_TEXT_OWNER_V1};
+use makosh_speech_to_text_runtime::SPEECH_TO_TEXT_BLOB_CAPABILITY_ID_V1;
 
 const SOURCE_REGISTRATION_ID_V1: &str = "whisper-stt-fixture-source";
 pub(super) const SOURCE_MODULE_ID_V1: &str = "workflow.whisper-stt-fixture-source";

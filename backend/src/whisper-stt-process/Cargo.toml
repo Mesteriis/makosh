@@ -1,5 +1,5 @@
 [package]
-name = "hermes-whisper-stt-process"
+name = "makosh-whisper-stt-process"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,13 +7,13 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "whisper_stt"
 surface = "implementation"
 
 [dependencies]
-hermes-speech-to-text-api = { path = "../speech-to-text-api" }
-hermes-whisper-stt-core = { path = "../whisper-stt-core" }
+makosh-speech-to-text-api = { path = "../speech-to-text-api" }
+makosh-whisper-stt-core = { path = "../whisper-stt-core" }
 serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
 serde_json = "=1.0.150"

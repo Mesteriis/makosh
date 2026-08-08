@@ -2,17 +2,17 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_communications_call_evidence_api::{
+use makosh_communications_call_evidence_api::{
     CALL_EVIDENCE_CLIENT_CONTRACT_MAJOR_V1, CALL_EVIDENCE_CLIENT_CONTRACT_REVISION_V1,
     CALL_EVIDENCE_CLIENT_OWNER_V1, CALL_EVIDENCE_CLIENT_SCHEMA_SHA256_V1,
     CALL_EVIDENCE_REALTIME_CONTRACT_NAME_V1, CALL_EVIDENCE_REALTIME_EVENT_KIND_V1,
     wire::CallEvidenceChangedV1,
 };
-use hermes_communications_call_evidence_persistence::{
+use makosh_communications_call_evidence_persistence::{
     CallEvidencePersistenceErrorV1, CallEvidenceRealtimeRecordV1,
     CommunicationsCallEvidencePersistenceV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ContractReferenceV1, ManagedRuntimeClientRealtimePublishRequestV1,
@@ -179,7 +179,7 @@ fn event_id(record: &CallEvidenceRealtimeRecordV1) -> [u8; 16] {
 
 #[cfg(test)]
 mod tests {
-    use hermes_communications_call_evidence_core::{
+    use makosh_communications_call_evidence_core::{
         CallLifecycleStateV1, CallTerminalDispositionV1,
     };
 

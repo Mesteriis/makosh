@@ -1,11 +1,11 @@
-use hermes_call_transcription_api::run_id_v1;
-use hermes_call_transcription_core::{
+use makosh_call_transcription_api::run_id_v1;
+use makosh_call_transcription_core::{
     CallTranscriptionCompletenessV1, CallTranscriptionDraftV1, CallTranscriptionLanguageV1,
     CallTranscriptionRejectionV1, CallTranscriptionStateV1, CallTranscriptionStatusV1,
     CallTranscriptionTransitionV1, PendingTranscriptV1, RecordingSourceV1, TranscriptArtifactV1,
     accepted_status_v1, request_fingerprint_v1, transition_v1, validate_draft_v1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool, Postgres, Row, Transaction,
     postgres::{PgConnectOptions, PgPoolOptions, PgRow},
@@ -65,12 +65,12 @@ impl CallTranscriptionPersistenceV1 {
 
     pub async fn verify_storage_ready(&self) -> Result<(), CallTranscriptionPersistenceErrorV1> {
         sqlx::query(
-            "SELECT 1 FROM hermes_data.call_transcription_runs,
-             hermes_data.call_transcription_inbox,
-             hermes_data.call_transcription_jobs,
-             hermes_data.call_transcription_outbox,
-             hermes_data.call_transcription_realtime,
-             hermes_data.call_transcription_read_tickets LIMIT 0",
+            "SELECT 1 FROM makosh_data.call_transcription_runs,
+             makosh_data.call_transcription_inbox,
+             makosh_data.call_transcription_jobs,
+             makosh_data.call_transcription_outbox,
+             makosh_data.call_transcription_realtime,
+             makosh_data.call_transcription_read_tickets LIMIT 0",
         )
         .execute(&self.pool)
         .await
@@ -99,7 +99,7 @@ impl CallTranscriptionPersistenceV1 {
         .map_err(|_| CallTranscriptionPersistenceErrorV1::InvalidTransition)?;
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.call_transcription_runs (
+            "INSERT INTO makosh_data.call_transcription_runs (
                logical_owner_id,run_id,operation_id,request_fingerprint,
                call_evidence_id,call_evidence_revision,recording_evidence_id,
                recording_revision,consent_receipt_id,consent_policy_revision,
@@ -273,7 +273,7 @@ impl CallTranscriptionPersistenceV1 {
             }
         }
         sqlx::query(
-            "INSERT INTO hermes_data.call_transcription_inbox
+            "INSERT INTO makosh_data.call_transcription_inbox
              (logical_owner_id,message_id,envelope_sha256,run_id,processed_at_unix_millis)
              VALUES ($1,$2,$3,$4,$5)",
         )
@@ -332,7 +332,7 @@ async fn inbox_duplicate(
     run_id: [u8; 16],
 ) -> Result<bool, CallTranscriptionPersistenceErrorV1> {
     let row = sqlx::query(
-        "SELECT envelope_sha256,run_id FROM hermes_data.call_transcription_inbox
+        "SELECT envelope_sha256,run_id FROM makosh_data.call_transcription_inbox
          WHERE logical_owner_id=$1 AND message_id=$2 FOR UPDATE",
     )
     .bind(logical_owner_id)
@@ -365,7 +365,7 @@ async fn update_recording_ready(
     occurred_at_unix_millis: i64,
 ) -> Result<(), CallTranscriptionPersistenceErrorV1> {
     let changed = sqlx::query(
-        "UPDATE hermes_data.call_transcription_runs SET state=$1,state_revision=$2,
+        "UPDATE makosh_data.call_transcription_runs SET state=$1,state_revision=$2,
          source_reference_id=$3,source_sha256=$4,source_declared_bytes=$5,
          source_duration_millis=$6,source_receipt_sha256=$7,stt_request_id=$8,
          stt_request_digest=$9,updated_at_unix_millis=$10
@@ -403,7 +403,7 @@ pub(crate) async fn update_rejection(
         .rejection
         .ok_or(CallTranscriptionPersistenceErrorV1::InvalidTransition)?;
     let changed = sqlx::query(
-        "UPDATE hermes_data.call_transcription_runs SET state=$1,state_revision=$2,
+        "UPDATE makosh_data.call_transcription_runs SET state=$1,state_revision=$2,
          pending_transcript_reference_id=NULL,pending_transcript_sha256=NULL,
          pending_transcript_size_bytes=NULL,pending_detected_language=NULL,
          pending_duration_millis=NULL,pending_segment_count=NULL,
@@ -479,17 +479,17 @@ const SELECT_COLUMNS: &str = "logical_owner_id,run_id,operation_id,request_finge
 const SELECT_RUN: &str = concat!(
     "SELECT ",
     "logical_owner_id,run_id,operation_id,request_fingerprint,call_evidence_id,call_evidence_revision,recording_evidence_id,recording_revision,consent_receipt_id,consent_policy_revision,requested_language,state,state_revision,source_reference_id,source_sha256,source_declared_bytes,source_duration_millis,source_receipt_sha256,source_cleanup_completed_at_unix_millis,stt_request_id,stt_request_digest,stt_result_receipt_sha256,pending_transcript_reference_id,pending_transcript_sha256,pending_transcript_size_bytes,pending_detected_language,pending_duration_millis,pending_segment_count,pending_completeness,pending_confidence_basis_points,artifact_id,artifact_reference_id,artifact_receipt_sha256,artifact_transcript_sha256,artifact_transcript_size_bytes,artifact_detected_language,artifact_duration_millis,artifact_segment_count,artifact_completeness,artifact_confidence_basis_points,artifact_runtime_generation,artifact_grant_epoch,rejection_code ",
-    "FROM hermes_data.call_transcription_runs WHERE logical_owner_id=$1 AND run_id=$2"
+    "FROM makosh_data.call_transcription_runs WHERE logical_owner_id=$1 AND run_id=$2"
 );
 const SELECT_RUN_FOR_UPDATE: &str = concat!(
     "SELECT ",
     "logical_owner_id,run_id,operation_id,request_fingerprint,call_evidence_id,call_evidence_revision,recording_evidence_id,recording_revision,consent_receipt_id,consent_policy_revision,requested_language,state,state_revision,source_reference_id,source_sha256,source_declared_bytes,source_duration_millis,source_receipt_sha256,source_cleanup_completed_at_unix_millis,stt_request_id,stt_request_digest,stt_result_receipt_sha256,pending_transcript_reference_id,pending_transcript_sha256,pending_transcript_size_bytes,pending_detected_language,pending_duration_millis,pending_segment_count,pending_completeness,pending_confidence_basis_points,artifact_id,artifact_reference_id,artifact_receipt_sha256,artifact_transcript_sha256,artifact_transcript_size_bytes,artifact_detected_language,artifact_duration_millis,artifact_segment_count,artifact_completeness,artifact_confidence_basis_points,artifact_runtime_generation,artifact_grant_epoch,rejection_code ",
-    "FROM hermes_data.call_transcription_runs WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE"
+    "FROM makosh_data.call_transcription_runs WHERE logical_owner_id=$1 AND run_id=$2 FOR UPDATE"
 );
 const SELECT_RECOVERABLE: &str = concat!(
     "SELECT ",
     "logical_owner_id,run_id,operation_id,request_fingerprint,call_evidence_id,call_evidence_revision,recording_evidence_id,recording_revision,consent_receipt_id,consent_policy_revision,requested_language,state,state_revision,source_reference_id,source_sha256,source_declared_bytes,source_duration_millis,source_receipt_sha256,source_cleanup_completed_at_unix_millis,stt_request_id,stt_request_digest,stt_result_receipt_sha256,pending_transcript_reference_id,pending_transcript_sha256,pending_transcript_size_bytes,pending_detected_language,pending_duration_millis,pending_segment_count,pending_completeness,pending_confidence_basis_points,artifact_id,artifact_reference_id,artifact_receipt_sha256,artifact_transcript_sha256,artifact_transcript_size_bytes,artifact_detected_language,artifact_duration_millis,artifact_segment_count,artifact_completeness,artifact_confidence_basis_points,artifact_runtime_generation,artifact_grant_epoch,rejection_code ",
-    "FROM hermes_data.call_transcription_runs WHERE logical_owner_id=$1 AND (state IN (2,3,4) OR (state IN (5,6) AND source_reference_id IS NOT NULL AND source_cleanup_completed_at_unix_millis IS NULL)) ORDER BY state_revision,run_id LIMIT $2"
+    "FROM makosh_data.call_transcription_runs WHERE logical_owner_id=$1 AND (state IN (2,3,4) OR (state IN (5,6) AND source_reference_id IS NOT NULL AND source_cleanup_completed_at_unix_millis IS NULL)) ORDER BY state_revision,run_id LIMIT $2"
 );
 
 fn persisted_from_row(

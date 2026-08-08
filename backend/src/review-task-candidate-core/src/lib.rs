@@ -15,7 +15,7 @@ pub use model::{
     validate_review_task_candidate_v1,
 };
 
-pub const PACKAGE: &str = "hermes-review-task-candidate-core";
+pub const PACKAGE: &str = "makosh-review-task-candidate-core";
 pub const STABLE_ID_BYTES_V1: usize = 16;
 pub const DIGEST_BYTES_V1: usize = 32;
 pub const MAX_LOGICAL_OWNER_ID_BYTES_V1: usize = 128;

@@ -1,14 +1,14 @@
-use hermes_communications_api::{
+use makosh_communications_api::{
     AttachmentDescriptorV1, AttachmentDispositionV1, CanonicalCommunicationEvidenceKindV1,
     CommunicationBodyAdmissionFailureV1, CommunicationBodyStateV1, CommunicationDirectionV1,
     CommunicationObservationIdV1, CommunicationProviderProvenanceV1, CommunicationSourceCursorV1,
     RecordCommunicationEvidenceV1,
 };
-use hermes_communications_domain::{
+use makosh_communications_domain::{
     COMMUNICATIONS_SEARCH_PROJECTION_REVISION_V1, accept_command, canonicalize_communication,
     decide_search_index_v1,
 };
-use hermes_communications_ingress::{
+use makosh_communications_ingress::{
     BodyAvailabilityV1, CommunicationDirectionV1 as IngressDirectionV1,
     CommunicationEvidenceKindV1, ProviderProvenanceV1,
     admission::{
@@ -17,16 +17,16 @@ use hermes_communications_ingress::{
     },
     v1::CommunicationObservationV1,
 };
-use hermes_communications_persistence::{
+use makosh_communications_persistence::{
     CommunicationsConsumeOutcomeV1, CommunicationsDurablePersistence,
     CommunicationsPersistenceError, PendingCommunicationsBodyCustodyTransferV1,
     PersistedCommunicationsObservationV1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{DurableEnvelopeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
@@ -324,7 +324,7 @@ fn body_from_wire(value: i32) -> Result<BodyAvailabilityV1, CommunicationsEventC
     }
 }
 fn source_body_from_wire(
-    value: Option<hermes_communications_ingress::v1::BodyBlobReceiptV1>,
+    value: Option<makosh_communications_ingress::v1::BodyBlobReceiptV1>,
     is_prior_contract: bool,
 ) -> Result<Option<SourceBodyCustodyReceiptV1>, CommunicationsEventConsumeErrorV1> {
     let Some(value) = value else { return Ok(None) };
@@ -366,7 +366,7 @@ fn body_admission_failure_from_wire(
     }
 }
 fn attachment_descriptor_from_wire(
-    value: Option<hermes_communications_ingress::v1::AttachmentDescriptorV1>,
+    value: Option<makosh_communications_ingress::v1::AttachmentDescriptorV1>,
 ) -> Result<Option<AttachmentDescriptorV1>, CommunicationsEventConsumeErrorV1> {
     let Some(value) = value else { return Ok(None) };
     let disposition = match value.disposition {
@@ -508,7 +508,7 @@ fn message_subject_from_wire(
         .transpose()
 }
 fn persistence_error(error: CommunicationsPersistenceError) -> CommunicationsEventConsumeErrorV1 {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_communications_persistence_error={error:?}");
     }
     CommunicationsEventConsumeErrorV1::PersistenceRejected
@@ -517,7 +517,7 @@ fn persistence_error(error: CommunicationsPersistenceError) -> CommunicationsEve
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_communications_ingress::{
+    use makosh_communications_ingress::{
         BodyAvailabilityV1, CommunicationDirectionV1, CommunicationEvidenceKindV1,
         ObservationEnvelopeContextV1, ProviderProvenanceV1, SourceEnvelope, SourceScopeEnvelope,
         build_observation_outbox_record_v1, new_scoped_communication_observation_draft,
@@ -651,7 +651,7 @@ mod tests {
 
     #[test]
     fn prior_body_receipt_defaults_to_plain_text_without_widening_current_contract() {
-        let legacy = hermes_communications_ingress::v1::BodyBlobReceiptV1 {
+        let legacy = makosh_communications_ingress::v1::BodyBlobReceiptV1 {
             blob_ref: "legacy-body".to_owned(),
             reference_id: vec![1; 16],
             declared_bytes: 1,

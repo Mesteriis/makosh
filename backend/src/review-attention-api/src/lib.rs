@@ -1,8 +1,8 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-review-attention-api";
+pub const PACKAGE: &str = "makosh-review-attention-api";
 pub const REVIEW_ATTENTION_OWNER_V1: &str = "review";
-pub const REVIEW_ATTENTION_MODULE_ID_V1: &str = "hermes-review-runtime";
+pub const REVIEW_ATTENTION_MODULE_ID_V1: &str = "makosh-review-runtime";
 pub const REVIEW_ATTENTION_COMMAND_CAPABILITY_ID_V1: &str =
     "review.communication-attention.command.v1";
 pub const REVIEW_ATTENTION_QUERY_CAPABILITY_ID_V1: &str = "review.communication-attention.query.v1";
@@ -17,15 +17,15 @@ pub const REVIEW_ATTENTION_REALTIME_EVENT_KIND_V1: &str = "review_attention_chan
 pub const REVIEW_ATTENTION_CONTRACT_MAJOR_V1: u32 = 1;
 pub const REVIEW_ATTENTION_CONTRACT_REVISION_V1: u32 = 1;
 pub const REVIEW_ATTENTION_COMMAND_CONNECT_PATH_V1: &str =
-    "/hermes.review.attention.client.v1.ReviewAttentionCommandService/Execute";
+    "/makosh.review.attention.client.v1.ReviewAttentionCommandService/Execute";
 pub const REVIEW_ATTENTION_QUERY_CONNECT_PATH_V1: &str =
-    "/hermes.review.attention.client.v1.ReviewAttentionQueryService/Query";
+    "/makosh.review.attention.client.v1.ReviewAttentionQueryService/Query";
 pub const REVIEW_ATTENTION_MAX_PAGE_SIZE_V1: u16 = 100;
 
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.review.attention.client.v1.rs"
+        "/makosh.review.attention.client.v1.rs"
     ));
 }
 
@@ -62,7 +62,7 @@ mod tests {
 
     #[test]
     fn client_contract_contains_no_provider_action_or_private_content() {
-        let source = include_str!("../proto/hermes/review/attention/client/v1/client.proto");
+        let source = include_str!("../proto/makosh/review/attention/client/v1/client.proto");
         for forbidden in [
             "provider",
             "archive_message",

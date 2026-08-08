@@ -14,9 +14,9 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-dock',
-	`hermes-dock--${props.position}`,
-	{ 'hermes-dock--compact': props.compact },
+	'makosh-dock',
+	`makosh-dock--${props.position}`,
+	{ 'makosh-dock--compact': props.compact },
 	props.class
 ])
 </script>

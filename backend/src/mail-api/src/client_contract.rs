@@ -1,8 +1,8 @@
 pub const MAIL_CLIENT_DESCRIPTOR_SET_V1: &[u8] =
-    include_bytes!(concat!(env!("OUT_DIR"), "/hermes.mail.v1.bin"));
+    include_bytes!(concat!(env!("OUT_DIR"), "/makosh.mail.v1.bin"));
 pub const MAIL_CLIENT_CONTRACT_MAJOR: u32 = 1;
 pub const MAIL_CLIENT_CONTRACT_REVISION: u32 = 14;
-pub const MAIL_MODULE_ID: &str = "hermes-mail-runtime";
+pub const MAIL_MODULE_ID: &str = "makosh-mail-runtime";
 pub const MAIL_OWNER_ID: &str = "mail";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -99,58 +99,58 @@ impl MailClientContractV1 {
     #[must_use]
     pub const fn connect_path(self) -> &'static str {
         match self {
-            Self::AccountCatalog => "/hermes.mail.account.v1.MailAccountCatalogService/List",
+            Self::AccountCatalog => "/makosh.mail.account.v1.MailAccountCatalogService/List",
             Self::AccountCredentialBind => {
-                "/hermes.mail.account.v1.MailAccountCredentialBindingService/Bind"
+                "/makosh.mail.account.v1.MailAccountCredentialBindingService/Bind"
             }
-            Self::AccountQuery => "/hermes.mail.account.v1.MailAccountQueryService/Get",
+            Self::AccountQuery => "/makosh.mail.account.v1.MailAccountQueryService/Get",
             Self::AccountRetire => {
-                "/hermes.mail.account_lifecycle.v1.MailAccountRetireService/Retire"
+                "/makosh.mail.account_lifecycle.v1.MailAccountRetireService/Retire"
             }
             Self::AccountDelete => {
-                "/hermes.mail.account_lifecycle.v1.MailAccountDeleteService/Delete"
+                "/makosh.mail.account_lifecycle.v1.MailAccountDeleteService/Delete"
             }
             Self::AccountLifecycleRetry => {
-                "/hermes.mail.account_lifecycle.v1.MailAccountLifecycleRetryService/Retry"
+                "/makosh.mail.account_lifecycle.v1.MailAccountLifecycleRetryService/Retry"
             }
             Self::AccountLifecycleQuery => {
-                "/hermes.mail.account_lifecycle.v1.MailAccountLifecycleStatusService/Get"
+                "/makosh.mail.account_lifecycle.v1.MailAccountLifecycleStatusService/Get"
             }
-            Self::Sync => "/hermes.mail.v1.MailSyncService/Sync",
-            Self::Delivery => "/hermes.mail.v1.MailDeliveryCommandService/Send",
-            Self::DeliveryQuery => "/hermes.mail.v1.MailDeliveryQueryService/GetOperationStatus",
-            Self::GmailOAuthStart => "/hermes.mail.v1.GmailOAuthStartService/Start",
-            Self::GmailOAuthComplete => "/hermes.mail.v1.GmailOAuthCompleteService/Complete",
-            Self::GmailOAuthRefresh => "/hermes.mail.v1.GmailOAuthRefreshService/Refresh",
-            Self::GmailOAuthQuery => "/hermes.mail.v1.GmailOAuthQueryService/GetOperationStatus",
+            Self::Sync => "/makosh.mail.v1.MailSyncService/Sync",
+            Self::Delivery => "/makosh.mail.v1.MailDeliveryCommandService/Send",
+            Self::DeliveryQuery => "/makosh.mail.v1.MailDeliveryQueryService/GetOperationStatus",
+            Self::GmailOAuthStart => "/makosh.mail.v1.GmailOAuthStartService/Start",
+            Self::GmailOAuthComplete => "/makosh.mail.v1.GmailOAuthCompleteService/Complete",
+            Self::GmailOAuthRefresh => "/makosh.mail.v1.GmailOAuthRefreshService/Refresh",
+            Self::GmailOAuthQuery => "/makosh.mail.v1.GmailOAuthQueryService/GetOperationStatus",
             Self::CompositionCommand => {
-                "/hermes.mail.composition.v1.MailCompositionCommandService/Mutate"
+                "/makosh.mail.composition.v1.MailCompositionCommandService/Mutate"
             }
             Self::CompositionQuery => {
-                "/hermes.mail.composition.v1.MailCompositionQueryService/Query"
+                "/makosh.mail.composition.v1.MailCompositionQueryService/Query"
             }
             Self::MessageFlagCommand => {
-                "/hermes.mail.message_flags.v1.MailMessageFlagCommandService/Mutate"
+                "/makosh.mail.message_flags.v1.MailMessageFlagCommandService/Mutate"
             }
             Self::MessageFlagQuery => {
-                "/hermes.mail.message_flags.v1.MailMessageFlagQueryService/GetOperationStatus"
+                "/makosh.mail.message_flags.v1.MailMessageFlagQueryService/GetOperationStatus"
             }
             Self::MessageLocationCommand => {
-                "/hermes.mail.message_location.v1.MailMessageLocationCommandService/Mutate"
+                "/makosh.mail.message_location.v1.MailMessageLocationCommandService/Mutate"
             }
             Self::MessageLocationQuery => {
-                "/hermes.mail.message_location.v1.MailMessageLocationQueryService/GetOperationStatus"
+                "/makosh.mail.message_location.v1.MailMessageLocationQueryService/GetOperationStatus"
             }
             Self::MessagePermanentDeleteCommand => {
-                "/hermes.mail.message_permanent_delete.v1.MailMessagePermanentDeleteCommandService/Mutate"
+                "/makosh.mail.message_permanent_delete.v1.MailMessagePermanentDeleteCommandService/Mutate"
             }
             Self::MessagePermanentDeleteQuery => {
-                "/hermes.mail.message_permanent_delete.v1.MailMessagePermanentDeleteQueryService/GetOperationStatus"
+                "/makosh.mail.message_permanent_delete.v1.MailMessagePermanentDeleteQueryService/GetOperationStatus"
             }
             Self::OperationalQuery => {
-                "/hermes.mail.operational.v1.MailOperationalQueryService/Query"
+                "/makosh.mail.operational.v1.MailOperationalQueryService/Query"
             }
-            Self::SyncHealthQuery => "/hermes.mail.sync_health.v1.MailSyncHealthQueryService/Query",
+            Self::SyncHealthQuery => "/makosh.mail.sync_health.v1.MailSyncHealthQueryService/Query",
         }
     }
 

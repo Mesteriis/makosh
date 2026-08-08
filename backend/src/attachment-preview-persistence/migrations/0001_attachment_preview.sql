@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.attachment_preview_runs (
+CREATE TABLE makosh_data.attachment_preview_runs (
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
     operation_id BYTEA NOT NULL,
@@ -37,9 +37,9 @@ CREATE TABLE hermes_data.attachment_preview_runs (
 );
 
 CREATE INDEX attachment_preview_runs_anchor_idx
-ON hermes_data.attachment_preview_runs (logical_owner_id, attachment_anchor_id, state, run_id);
+ON makosh_data.attachment_preview_runs (logical_owner_id, attachment_anchor_id, state, run_id);
 
-CREATE TABLE hermes_data.attachment_preview_event_inbox (
+CREATE TABLE makosh_data.attachment_preview_event_inbox (
     logical_owner_id TEXT NOT NULL,
     message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE hermes_data.attachment_preview_event_inbox (
     CHECK (processed_at_unix_millis > 0)
 );
 
-CREATE TABLE hermes_data.attachment_preview_scan_candidates (
+CREATE TABLE makosh_data.attachment_preview_scan_candidates (
     logical_owner_id TEXT NOT NULL,
     attachment_anchor_id BYTEA NOT NULL,
     message_id BYTEA NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE hermes_data.attachment_preview_scan_candidates (
     CHECK (observed_at_unix_seconds > 0)
 );
 
-CREATE TABLE hermes_data.attachment_preview_safety_facts (
+CREATE TABLE makosh_data.attachment_preview_safety_facts (
     logical_owner_id TEXT NOT NULL,
     attachment_anchor_id BYTEA NOT NULL,
     message_id BYTEA NOT NULL,
@@ -104,7 +104,7 @@ CREATE TABLE hermes_data.attachment_preview_safety_facts (
     CHECK (observed_at_unix_seconds > 0)
 );
 
-CREATE TABLE hermes_data.attachment_preview_custody_outbox (
+CREATE TABLE makosh_data.attachment_preview_custody_outbox (
     logical_owner_id TEXT NOT NULL,
     request_id BYTEA NOT NULL,
     run_id BYTEA NOT NULL,
@@ -128,9 +128,9 @@ CREATE TABLE hermes_data.attachment_preview_custody_outbox (
 );
 
 CREATE INDEX attachment_preview_custody_outbox_pending_idx
-ON hermes_data.attachment_preview_custody_outbox (logical_owner_id, published_at_unix_millis, created_at_unix_millis, request_id);
+ON makosh_data.attachment_preview_custody_outbox (logical_owner_id, published_at_unix_millis, created_at_unix_millis, request_id);
 
-CREATE TABLE hermes_data.attachment_preview_custody_result_inbox (
+CREATE TABLE makosh_data.attachment_preview_custody_result_inbox (
     logical_owner_id TEXT NOT NULL,
     message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -151,7 +151,7 @@ CREATE TABLE hermes_data.attachment_preview_custody_result_inbox (
     CHECK (processed_at_unix_millis > 0)
 );
 
-CREATE TABLE hermes_data.attachment_preview_jobs (
+CREATE TABLE makosh_data.attachment_preview_jobs (
     logical_owner_id TEXT NOT NULL,
     job_id BYTEA NOT NULL,
     run_id BYTEA NOT NULL,
@@ -208,9 +208,9 @@ CREATE TABLE hermes_data.attachment_preview_jobs (
 );
 
 CREATE INDEX attachment_preview_jobs_claim_idx
-ON hermes_data.attachment_preview_jobs (logical_owner_id, state, created_at_unix_millis, job_id);
+ON makosh_data.attachment_preview_jobs (logical_owner_id, state, created_at_unix_millis, job_id);
 
-CREATE TABLE hermes_data.attachment_preview_artifacts (
+CREATE TABLE makosh_data.attachment_preview_artifacts (
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
     derived_reference_id BYTEA NOT NULL,
@@ -239,7 +239,7 @@ CREATE TABLE hermes_data.attachment_preview_artifacts (
     CHECK (committed_at_unix_millis > 0)
 );
 
-CREATE TABLE hermes_data.attachment_preview_read_tickets (
+CREATE TABLE makosh_data.attachment_preview_read_tickets (
     logical_owner_id TEXT NOT NULL,
     ticket_sha256 BYTEA NOT NULL,
     device_actor_sha256 BYTEA NOT NULL,
@@ -274,9 +274,9 @@ CREATE TABLE hermes_data.attachment_preview_read_tickets (
 );
 
 CREATE INDEX attachment_preview_read_tickets_expiry_idx
-ON hermes_data.attachment_preview_read_tickets (logical_owner_id, expires_at_unix_seconds, ticket_sha256);
+ON makosh_data.attachment_preview_read_tickets (logical_owner_id, expires_at_unix_seconds, ticket_sha256);
 
-CREATE TABLE hermes_data.attachment_preview_realtime (
+CREATE TABLE makosh_data.attachment_preview_realtime (
     realtime_sequence BIGSERIAL PRIMARY KEY,
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
@@ -306,4 +306,4 @@ CREATE TABLE hermes_data.attachment_preview_realtime (
 );
 
 CREATE INDEX attachment_preview_realtime_owner_sequence_idx
-ON hermes_data.attachment_preview_realtime (logical_owner_id, realtime_sequence);
+ON makosh_data.attachment_preview_realtime (logical_owner_id, realtime_sequence);

@@ -67,7 +67,7 @@ entries through the existing address-book workflow. Remote iCloud contact writes
 remain unsupported.
 
 **§5 (100%)**: После открытия письма UI ждёт 2 секунды и сразу переводит
-локальную проекцию Hermes в `reviewed`. Синхронизация с провайдером выполняется
+локальную проекцию Макошь в `reviewed`. Синхронизация с провайдером выполняется
 best-effort: Gmail снимает label `UNREAD` через Gmail API; iCloud и generic IMAP
 устанавливают `\\Seen` по сохранённым `mailbox` и `UID`. Ошибка provider-write
 не откатывает локальный результат и записывается как sanitised warning. Gmail-
@@ -190,7 +190,7 @@ Outlook/Gmail-style thread controls.
 `mail.ai_state.changed` canonical events for SSE replay/invalidation. Automatic
 AI runtime orchestration and review UI remain future slices. Realtime transport
 now has a protected backend WebSocket event stream at
-`GET /api/events/ws?after_position=&hermes_secret=`, uses WebSocket-first
+`GET /api/events/ws?after_position=&makosh_secret=`, uses WebSocket-first
 browser transport selection with SSE fallback, and adds protected JSON long-poll fallback through
 `GET /api/v1/events?after_position=&limit=&wait_seconds=` with `event.list`
 audit records. The frontend now monotonically persists the last replay cursor for

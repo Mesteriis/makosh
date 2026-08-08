@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/integrations/telegram/runtime/state.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/state.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/state.rs`
 - Size bytes / Размер в байтах: `8120`
 - Included characters / Включено символов: `8120`
 - Truncated / Обрезано: `no`
@@ -313,7 +313,7 @@ pub(super) enum TelegramRuntimeEvent {
 
 ### `backend/src/integrations/telegram/runtime/status.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/status.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/status.rs`
 - Size bytes / Размер в байтах: `5441`
 - Included characters / Включено символов: `5441`
 - Truncated / Обрезано: `no`
@@ -478,7 +478,7 @@ pub(super) fn account_runtime_kind(account: &ProviderAccount) -> String {
 
 ### `backend/src/integrations/telegram/runtime/tests.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/tests.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/tests.rs`
 - Size bytes / Размер в байтах: `1187`
 - Included characters / Включено символов: `1187`
 - Truncated / Обрезано: `no`
@@ -525,7 +525,7 @@ fn history_sync_response_exposes_next_cursor() {
 
 ### `backend/src/integrations/telegram/runtime/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/validation.rs`
 - Size bytes / Размер в байтах: `631`
 - Included characters / Включено символов: `631`
 - Truncated / Обрезано: `no`
@@ -558,7 +558,7 @@ pub(super) fn validate_limit(limit: i64) -> Result<i64, TelegramError> {
 
 ### `backend/src/integrations/telegram/tdjson.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson.rs`
 - Size bytes / Размер в байтах: `3949`
 - Included characters / Включено символов: `3949`
 - Truncated / Обрезано: `no`
@@ -637,7 +637,7 @@ mod tests;
 
 ### `backend/src/integrations/telegram/tdjson/client.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/client.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/client.rs`
 - Size bytes / Размер в байтах: `7506`
 - Included characters / Включено символов: `7506`
 - Truncated / Обрезано: `no`
@@ -851,7 +851,7 @@ fn load_symbol<T: Copy>(
 
 ### `backend/src/integrations/telegram/tdjson/folder_requests.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/folder_requests.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/folder_requests.rs`
 - Size bytes / Размер в байтах: `3752`
 - Included characters / Включено символов: `3752`
 - Truncated / Обрезано: `no`
@@ -970,7 +970,7 @@ pub(crate) fn tdlib_edit_chat_folder_remove_chat_request(
 
 ### `backend/src/integrations/telegram/tdjson/identifiers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/identifiers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/identifiers.rs`
 - Size bytes / Размер в байтах: `467`
 - Included characters / Включено символов: `467`
 - Truncated / Обрезано: `no`
@@ -1000,7 +1000,7 @@ pub(super) fn safe_path_segment(value: &str) -> String {
 
 ### `backend/src/integrations/telegram/tdjson/library_paths.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/library_paths.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/library_paths.rs`
 - Size bytes / Размер в байтах: `5319`
 - Included characters / Включено символов: `5319`
 - Truncated / Обрезано: `no`
@@ -1199,7 +1199,7 @@ fn tdjson_library_file_name() -> &'static str {
 
 ### `backend/src/integrations/telegram/tdjson/parsing.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/parsing.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/parsing.rs`
 - Size bytes / Размер в байтах: `1596`
 - Included characters / Включено символов: `1596`
 - Truncated / Обрезано: `no`
@@ -1240,7 +1240,7 @@ pub(crate) use topics::{parse_tdlib_created_forum_topic, parse_tdlib_topic_list}
 
 ### `backend/src/integrations/telegram/tdjson/parsing/chats.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/parsing/chats.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/parsing/chats.rs`
 - Size bytes / Размер в байтах: `3459`
 - Included characters / Включено символов: `3459`
 - Truncated / Обрезано: `no`
@@ -1357,7 +1357,7 @@ fn tdlib_username(value: &Value) -> Option<String> {
 
 ### `backend/src/integrations/telegram/tdjson/parsing/events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/parsing/events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/parsing/events.rs`
 - Size bytes / Размер в байтах: `17543`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1689,13 +1689,13 @@ pub(crate) fn parse_tdlib_chat_position_snapshot(
     Ok(Some(TelegramTdlibChatPositionSnapshot {
         provider_chat_id,
         list_kind,
-       
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/integrations/telegram/tdjson/parsing/files.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/parsing/files.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/parsing/files.rs`
 - Size bytes / Размер в байтах: `2343`
 - Included characters / Включено символов: `2343`
 - Truncated / Обрезано: `no`
@@ -1772,7 +1772,7 @@ pub(crate) fn parse_tdlib_file_snapshot(
 
 ### `backend/src/integrations/telegram/tdjson/parsing/message_events.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/parsing/message_events.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/parsing/message_events.rs`
 - Size bytes / Размер в байтах: `10937`
 - Included characters / Включено символов: `10937`
 - Truncated / Обрезано: `no`
@@ -2106,7 +2106,7 @@ mod tests {
 
 ### `backend/src/integrations/telegram/tdjson/parsing/message_parts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/parsing/message_parts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/parsing/message_parts.rs`
 - Size bytes / Размер в байтах: `2435`
 - Included characters / Включено символов: `2435`
 - Truncated / Обрезано: `no`
@@ -2181,7 +2181,7 @@ pub(super) fn tdlib_message_text(message: &Value) -> Result<String, TelegramErro
 
 ### `backend/src/integrations/telegram/tdjson/parsing/messages.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/parsing/messages.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/parsing/messages.rs`
 - Size bytes / Размер в байтах: `2052`
 - Included characters / Включено символов: `2052`
 - Truncated / Обрезано: `no`
@@ -2257,7 +2257,7 @@ pub(crate) fn parse_tdlib_message_snapshot(
 
 ### `backend/src/integrations/telegram/tdjson/parsing/participants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/parsing/participants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/parsing/participants.rs`
 - Size bytes / Размер в байтах: `4406`
 - Included characters / Включено символов: `4406`
 - Truncated / Обрезано: `no`
@@ -2391,7 +2391,7 @@ fn status_permissions(status: &Map<String, Value>) -> Value {
 
 ### `backend/src/integrations/telegram/tdjson/parsing/topics.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/parsing/topics.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/parsing/topics.rs`
 - Size bytes / Размер в байтах: `2667`
 - Included characters / Включено символов: `2667`
 - Truncated / Обрезано: `no`
@@ -2492,7 +2492,7 @@ pub(crate) fn parse_forum_topic_info(
 
 ### `backend/src/integrations/telegram/tdjson/parsing/values.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/parsing/values.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/parsing/values.rs`
 - Size bytes / Размер в байтах: `1112`
 - Included characters / Включено символов: `1112`
 - Truncated / Обрезано: `no`
@@ -2531,7 +2531,7 @@ pub(super) fn tdlib_unix_datetime_value(value: &Value) -> Result<DateTime<Utc>, 
 
 ### `backend/src/integrations/telegram/tdjson/qr_login.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/qr_login.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/qr_login.rs`
 - Size bytes / Размер в байтах: `269`
 - Included characters / Включено символов: `269`
 - Truncated / Обрезано: `no`
@@ -2551,7 +2551,7 @@ pub(crate) use driver::start_qr_login;
 
 ### `backend/src/integrations/telegram/tdjson/qr_login/authorization.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/qr_login/authorization.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/qr_login/authorization.rs`
 - Size bytes / Размер в байтах: `7170`
 - Included characters / Включено символов: `7170`
 - Truncated / Обрезано: `no`
@@ -2636,7 +2636,7 @@ fn handle_authorization_state(
             context.client.send_json(&json!({
                 "@type": "requestQrCodeAuthentication",
                 "other_user_ids": [],
-                "@extra": "hermes-request-qr-code-authentication"
+                "@extra": "makosh-request-qr-code-authentication"
             }))?;
             state.qr_requested = true;
         }
@@ -2761,7 +2761,7 @@ fn handle_ready(
 
 ### `backend/src/integrations/telegram/tdjson/qr_login/commands.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/qr_login/commands.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/qr_login/commands.rs`
 - Size bytes / Размер в байтах: `3961`
 - Included characters / Включено символов: `3961`
 - Truncated / Обрезано: `no`
@@ -2883,7 +2883,7 @@ pub(in crate::integrations::telegram::tdjson) fn cancel_existing_qr_logins_for_a
 
 ### `backend/src/integrations/telegram/tdjson/qr_login/driver.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/qr_login/driver.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/qr_login/driver.rs`
 - Size bytes / Размер в байтах: `3399`
 - Included characters / Включено символов: `3399`
 - Truncated / Обрезано: `no`
@@ -2988,7 +2988,7 @@ fn start_qr_login_driver(
 
 ### `backend/src/integrations/telegram/tdjson/qr_login/tdlib_commands.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/qr_login/tdlib_commands.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/qr_login/tdlib_commands.rs`
 - Size bytes / Размер в байтах: `1862`
 - Included characters / Включено символов: `1862`
 - Truncated / Обрезано: `no`
@@ -3016,7 +3016,7 @@ pub(super) fn drain_qr_login_commands(
                 client.send_json(&json!({
                     "@type": "checkAuthenticationPassword",
                     "password": password,
-                    "@extra": "hermes-check-authentication-password"
+                    "@extra": "makosh-check-authentication-password"
                 }))?;
                 password_submitted = true;
             }
@@ -3050,7 +3050,7 @@ pub(super) fn close_tdlib_session(client: &TdJsonClient) {
 
 ### `backend/src/integrations/telegram/tdjson/qr_login/worker.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/qr_login/worker.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/qr_login/worker.rs`
 - Size bytes / Размер в байтах: `5506`
 - Included characters / Включено символов: `5506`
 - Truncated / Обрезано: `no`
@@ -3103,7 +3103,7 @@ pub(super) fn drive_qr_login(
     }));
     client.send_json(&json!({
         "@type": "getAuthorizationState",
-        "@extra": "hermes-initial-authorization-state"
+        "@extra": "makosh-initial-authorization-state"
     }))?;
 
     let started_at = Instant::now();

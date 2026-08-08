@@ -4,10 +4,10 @@
 //! provider discriminator and imports no workflow or Communications domain
 //! implementation.
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimeSubscribePermitV1, receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1, ResultMetadataV1,
@@ -15,8 +15,8 @@ use hermes_events_protocol::{
     },
     validation::envelope::{decode_envelope_v1, validate_envelope_v1},
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
-use hermes_telegram_delivery_intent_contract::{
+use makosh_runtime_protocol::v1::ContractReferenceV1;
+use makosh_telegram_delivery_intent_contract::{
     TELEGRAM_DELIVERY_INTENT_SOURCE_MODULE_ID_V1, TELEGRAM_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1,
     telegram_delivery_intent_execute_contract_reference_v1,
     telegram_delivery_intent_rejected_contract_reference_v1,
@@ -26,7 +26,7 @@ use hermes_telegram_delivery_intent_contract::{
         TelegramDeliveryIntentRejectedV1,
     },
 };
-use hermes_telegram_persistence::{
+use makosh_telegram_persistence::{
     TelegramDeliveryIntentAdmissionV1, TelegramDeliveryIntentInboxOutcomeV1,
     TelegramDeliveryIntentStoreV1, TelegramDurablePersistenceError,
 };
@@ -34,9 +34,9 @@ use prost::Message;
 use prost_types::Timestamp;
 use sha2::{Digest, Sha256};
 
-const MESSAGE_DOMAIN: &[u8] = b"hermes.telegram.delivery-intent.execute.v1";
-const REJECTED_MESSAGE_DOMAIN: &[u8] = b"hermes.telegram.delivery-intent.rejected.v1";
-const TELEGRAM_RUNTIME_MODULE_ID: &str = "hermes-telegram-runtime";
+const MESSAGE_DOMAIN: &[u8] = b"makosh.telegram.delivery-intent.execute.v1";
+const REJECTED_MESSAGE_DOMAIN: &[u8] = b"makosh.telegram.delivery-intent.rejected.v1";
+const TELEGRAM_RUNTIME_MODULE_ID: &str = "makosh-telegram-runtime";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DecodedTelegramDeliveryIntentV1 {
@@ -214,7 +214,7 @@ pub fn decode_telegram_delivery_intent_v1(
 }
 
 fn exact_contract(
-    value: Option<&hermes_events_protocol::v1::ContractRefV1>,
+    value: Option<&makosh_events_protocol::v1::ContractRefV1>,
     expected: &ContractReferenceV1,
 ) -> bool {
     value.is_some_and(|value| {
@@ -346,15 +346,15 @@ fn id32(value: &[u8]) -> Result<[u8; 32], TelegramDeliveryIntentDecodeErrorV1> {
 
 #[cfg(test)]
 mod tests {
-    use hermes_events_protocol::{
+    use makosh_events_protocol::{
         delivery::OutboxRecordV1,
         v1::{
             ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1,
             FenceKindV1, SourceFenceV1, SourceRefV1, durable_envelope_v1::Semantics,
         },
     };
-    use hermes_runtime_protocol::v1::ContractReferenceV1;
-    use hermes_telegram_delivery_intent_contract::{
+    use makosh_runtime_protocol::v1::ContractReferenceV1;
+    use makosh_telegram_delivery_intent_contract::{
         TELEGRAM_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1,
         wire::TelegramDeliveryIntentBodySourceReceiptV1,
     };

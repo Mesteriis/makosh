@@ -1,7 +1,7 @@
 //! Scheduler wire-command contract tests without owner implementation code.
 
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_scheduler_protocol::{
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_scheduler_protocol::{
     ConcurrencyKeyV1, JobContractBindingV1, JobKindV1, JobRunIdV1, OpaqueOwnerJobScopeV1,
     OpaqueScheduleScopeV1, OwnerJobCommandValidationErrorV1, OwnerJobLeaseV1,
     SCHEDULER_JOB_DESCRIPTOR_SET_V1, ScheduleIdV1, ScheduleRevisionV1, ScheduleRunLeaseV1,
@@ -183,13 +183,13 @@ fn schedule() -> ScheduleSpecV1 {
     let kind = JobKindV1::new("mail".into(), "fetch".into(), 1).expect("kind");
     let binding =
         JobContractBindingV1::new(kind, "mail.fetch".into(), 1, [7; 32]).expect("binding");
-    let policy = hermes_scheduler_protocol::SchedulePolicyV1::new(
-        hermes_scheduler_protocol::ScheduleTriggerV1::FixedInterval {
+    let policy = makosh_scheduler_protocol::SchedulePolicyV1::new(
+        makosh_scheduler_protocol::ScheduleTriggerV1::FixedInterval {
             interval_millis: 60_000,
         },
-        hermes_scheduler_protocol::OverlapPolicyV1::Forbid,
-        hermes_scheduler_protocol::MisfirePolicyV1::Skip,
-        hermes_scheduler_protocol::RetryPolicyV1::new(1, 1_000).expect("retry"),
+        makosh_scheduler_protocol::OverlapPolicyV1::Forbid,
+        makosh_scheduler_protocol::MisfirePolicyV1::Skip,
+        makosh_scheduler_protocol::RetryPolicyV1::new(1, 1_000).expect("retry"),
         30_000,
         0,
     )

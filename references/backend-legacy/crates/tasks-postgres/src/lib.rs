@@ -1,4 +1,4 @@
-use hermes_tasks_api::{
+use makosh_tasks_api::{
     TaskGetFuture, TaskListFuture, TaskListQuery, TaskQueryError, TaskRead, TaskReadPort,
 };
 use sqlx::{PgPool, Row};
@@ -40,8 +40,8 @@ impl TaskReadPort for TaskPostgresReadQuery {
         })
     }
 }
-const TASK_SQL: &str = "SELECT task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, hermes_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at FROM tasks WHERE ($1::text IS NULL OR hermes_status=$1) AND ($2::text IS NULL OR project_id=$2) AND ($3::text IS NULL OR source_type=$3) ORDER BY COALESCE(priority_score,0) DESC, due_at ASC NULLS LAST, created_at DESC LIMIT $4";
-const TASK_GET_SQL: &str = "SELECT task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, hermes_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at FROM tasks WHERE task_id=$1";
+const TASK_SQL: &str = "SELECT task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, makosh_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at FROM tasks WHERE ($1::text IS NULL OR makosh_status=$1) AND ($2::text IS NULL OR project_id=$2) AND ($3::text IS NULL OR source_type=$3) ORDER BY COALESCE(priority_score,0) DESC, due_at ASC NULLS LAST, created_at DESC LIMIT $4";
+const TASK_GET_SQL: &str = "SELECT task_id, task_candidate_id, title, description, provenance_kind, provenance_id, source_kind, source_id, source_type, project_id, status, makosh_status, priority_score::float8 AS priority_score, risk_score::float8 AS risk_score, readiness_score::float8 AS readiness_score, area, why, outcome, due_at, completed_at, archived_at, waiting_reason, energy_type, confidentiality, tags, task_metadata, linked_person_id, linked_organization_id, created_from_event_id, created_by_actor_id, created_at, updated_at FROM tasks WHERE task_id=$1";
 fn error(e: sqlx::Error) -> TaskQueryError {
     TaskQueryError(e.to_string())
 }
@@ -63,7 +63,7 @@ fn map_row(row: sqlx::postgres::PgRow) -> Result<TaskRead, TaskQueryError> {
         source_type: get!("source_type"),
         project_id: get!("project_id"),
         status: get!("status"),
-        hermes_status: get!("hermes_status"),
+        makosh_status: get!("makosh_status"),
         priority_score: get!("priority_score"),
         risk_score: get!("risk_score"),
         readiness_score: get!("readiness_score"),

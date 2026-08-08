@@ -43,4 +43,4 @@ pub use schema::{
     MAIL_CONTACTS_SYNC_STORAGE_BUNDLE_REVISION_V1, mail_contacts_sync_storage_bundle_v1,
 };
 
-pub const PACKAGE: &str = "hermes-mail-contacts-sync-persistence";
+pub const PACKAGE: &str = "makosh-mail-contacts-sync-persistence";

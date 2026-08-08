@@ -69,7 +69,7 @@ use crate::integrations::zoom::client::models::{
 use crate::integrations::zoom::client::store::ZoomStore as ZoomProviderRuntimeStore;
 use crate::platform::secrets::store::SecretReferenceStore;
 use crate::vault::HostVault;
-use hermes_communications_api::accounts::ProviderAccount;
+use makosh_communications_api::accounts::ProviderAccount;
 
 pub(crate) type WhatsAppProviderRuntimeRef =
     Arc<dyn crate::integrations::whatsapp::runtime::contracts::WhatsAppProviderRuntime>;

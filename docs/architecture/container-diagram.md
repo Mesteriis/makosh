@@ -12,17 +12,17 @@ Vault, но не содержит data-plane services или owner modules:
 flowchart LR
     LocalClient["Private local recovery client"] -->|"typed local IPC"| Gateway["Core Gateway\nrecovery operations only"]
     Bootstrap["File-backed ES256\ninitial owner enrollment"] --> Kernel
-    subgraph KernelProcess["hermes-kernel process"]
+    subgraph KernelProcess["makosh-kernel process"]
         Gateway --> Kernel["Supervisor + recovery state machine"]
         Kernel --> Port["Kernel Control Store port"]
         Port --> SQLite["Private SQLite adapter"]
     end
-    Fence[".hermes-recovery-fence-v1"] --> SQLite
+    Fence[".makosh-recovery-fence-v1"] --> SQLite
     Kernel -. "later gates closed" .-> Blocked["No PostgreSQL / PgBouncer / NATS / Blob / owner modules"]
 ```
 
-`hermes-events-protocol`, `hermes-runtime-protocol` и
-`hermes-gateway-protocol` и `hermes-clock-protocol` являются compile-time
+`makosh-events-protocol`, `makosh-runtime-protocol` и
+`makosh-gateway-protocol` и `makosh-clock-protocol` являются compile-time
 contracts, а не отдельными processes. `clock_v1` открыт без Clock process;
 data-plane gates остаются закрытыми.
 
@@ -196,12 +196,12 @@ release installation; Kernel verifies the signed distribution entry and exact
 bytes before every managed launch. Integrity failure blocks that component, and
 automatic rollback, downgrade or executable fallback is forbidden.
 
-`hermes-events-protocol` является shared compile-time wire boundary, а не
+`makosh-events-protocol` является shared compile-time wire boundary, а не
 отдельным process/container. Event Hub reconciles its catalog and NATS topology,
 но exact envelope bytes идут напрямую между owner outbox relay и consumer.
 Client SSE использует отдельный gateway frame и не получает internal envelope.
 
-`hermes-runtime-protocol` также не является process/container. Он определяет
+`makosh-runtime-protocol` также не является process/container. Он определяет
 `ModuleDescriptorV1`, lifecycle/control и settings schema/snapshot wire types.
 Descriptor только заявляет capabilities; GrantSet и managed launch binding
 остаются отдельными authority.

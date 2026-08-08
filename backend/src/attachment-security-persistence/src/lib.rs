@@ -8,8 +8,8 @@ mod recovery;
 mod schema;
 mod text_delegation;
 
-use hermes_attachment_security_core::AttachmentSecurityQuarantineEvidenceV1;
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_attachment_security_core::AttachmentSecurityQuarantineEvidenceV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool,
     postgres::{PgConnectOptions, PgPoolOptions},
@@ -45,7 +45,7 @@ pub use text_delegation::{
     RetryAttachmentSecurityTextDelegationOutcomeV1,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-security-persistence";
+pub const PACKAGE: &str = "makosh-attachment-security-persistence";
 
 pub struct AttachmentSecurityPersistenceV1 {
     pub(crate) pool: PgPool,
@@ -124,7 +124,7 @@ impl AttachmentSecurityPersistenceV1 {
 
     pub async fn verify_storage_ready(&self) -> Result<(), AttachmentSecurityPersistenceErrorV1> {
         sqlx::query(
-            "SELECT 1 FROM hermes_data.attachment_security_join_locks, hermes_data.attachment_security_event_inbox, hermes_data.attachment_security_scan_candidates, hermes_data.attachment_security_canonical_states, hermes_data.attachment_security_join_quarantines, hermes_data.attachment_security_verdict_outbox, hermes_data.attachment_security_scan_jobs, hermes_data.attachment_security_archive_delegation_inbox, hermes_data.attachment_security_archive_delegation_jobs, hermes_data.attachment_security_archive_delegation_outbox, hermes_data.attachment_security_text_extraction_delegation_inbox, hermes_data.attachment_security_text_extraction_delegation_jobs, hermes_data.attachment_security_text_extraction_delegation_outbox, hermes_data.attachment_security_preview_delegation_inbox, hermes_data.attachment_security_preview_delegation_jobs, hermes_data.attachment_security_preview_delegation_outbox LIMIT 0",
+            "SELECT 1 FROM makosh_data.attachment_security_join_locks, makosh_data.attachment_security_event_inbox, makosh_data.attachment_security_scan_candidates, makosh_data.attachment_security_canonical_states, makosh_data.attachment_security_join_quarantines, makosh_data.attachment_security_verdict_outbox, makosh_data.attachment_security_scan_jobs, makosh_data.attachment_security_archive_delegation_inbox, makosh_data.attachment_security_archive_delegation_jobs, makosh_data.attachment_security_archive_delegation_outbox, makosh_data.attachment_security_text_extraction_delegation_inbox, makosh_data.attachment_security_text_extraction_delegation_jobs, makosh_data.attachment_security_text_extraction_delegation_outbox, makosh_data.attachment_security_preview_delegation_inbox, makosh_data.attachment_security_preview_delegation_jobs, makosh_data.attachment_security_preview_delegation_outbox LIMIT 0",
         )
         .execute(&self.pool)
         .await

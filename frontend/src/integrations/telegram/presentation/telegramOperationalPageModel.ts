@@ -1,7 +1,7 @@
 import type {
 	TelegramChatProjection,
 	TelegramMessageProjection,
-} from '../../../gen/hermes/telegram/v1/client_pb'
+} from '../../../gen/makosh/telegram/v1/client_pb'
 
 export type TelegramOperationalStatus = 'empty' | 'error' | 'loading' | 'ready'
 

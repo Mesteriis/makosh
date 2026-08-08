@@ -328,7 +328,7 @@ pub(crate) async fn post_v1_redirect(
 
     api_audit_log(&state)?
         .record(&NewApiAuditRecord::communication_email_send(
-            "hermes-frontend",
+            "makosh-frontend",
             &outbox.account_id,
             recipient_count,
         ))

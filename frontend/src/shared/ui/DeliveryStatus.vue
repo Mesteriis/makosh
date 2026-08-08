@@ -13,13 +13,13 @@ const props = withDefaults(defineProps<{
 	status: 'sent'
 })
 
-const classes = computed(() => ['hermes-delivery-status', `hermes-delivery-status--${props.status}`, props.class])
+const classes = computed(() => ['makosh-delivery-status', `makosh-delivery-status--${props.status}`, props.class])
 </script>
 
 <template>
 	<div :class="classes">
 		<MessageStatus :status="status" :label="label" />
-		<span v-if="description" class="hermes-delivery-status__description">{{ description }}</span>
-		<time v-if="timestamp" class="hermes-delivery-status__time">{{ timestamp }}</time>
+		<span v-if="description" class="makosh-delivery-status__description">{{ description }}</span>
+		<time v-if="timestamp" class="makosh-delivery-status__time">{{ timestamp }}</time>
 	</div>
 </template>

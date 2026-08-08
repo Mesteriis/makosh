@@ -1,27 +1,27 @@
-use hermes_contacts_mail_sync_source_api::{
+use makosh_contacts_mail_sync_source_api::{
     CONTACT_MAIL_SYNC_SOURCE_MAX_BYTES_V1, CONTACT_MAIL_SYNC_SOURCE_MAX_PROOF_BYTES_V1,
     contact_mail_sync_source_prepared_contract_reference_v1,
     contact_mail_sync_source_rejected_contract_reference_v1,
     wire::{ContactMailSyncSourcePreparedV1, ContactMailSyncSourceRejectedV1},
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, ResultMetadataV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_mail_address_book_contract::{
+use makosh_mail_address_book_contract::{
     MailAddressBookEnvelopeContextV1, build_upsert_mail_address_book_entry_command_v1,
     wire::UpsertMailAddressBookEntryCommandV1,
 };
-use hermes_mail_contacts_sync_persistence::{
+use makosh_mail_contacts_sync_persistence::{
     CompleteContactMailSyncSourceV1, MailContactsSyncPersistenceErrorV1,
     MailContactsSyncPersistenceV1, OutboxEnvelopeV1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 use sha2::{Digest, Sha256};
 
@@ -182,7 +182,7 @@ fn decode_rejected(
 }
 
 fn result_identity_matches(
-    envelope: &hermes_events_protocol::v1::DurableEnvelopeV1,
+    envelope: &makosh_events_protocol::v1::DurableEnvelopeV1,
     operation_id: &[u8],
     record: &OutboxRecordV1,
 ) -> bool {
@@ -203,7 +203,7 @@ fn decode_result(
     record: &OutboxRecordV1,
     context: &MailContactsSyncSourceResultContextV1<'_>,
     expected: &ContractReferenceV1,
-) -> Result<hermes_events_protocol::v1::DurableEnvelopeV1, MailContactsSyncSourceResultErrorV1> {
+) -> Result<makosh_events_protocol::v1::DurableEnvelopeV1, MailContactsSyncSourceResultErrorV1> {
     if context.now_unix_millis <= 0 {
         return Err(MailContactsSyncSourceResultErrorV1::InvalidPayload);
     }
@@ -211,7 +211,7 @@ fn decode_result(
         .map_err(|_| MailContactsSyncSourceResultErrorV1::InvalidEnvelope)?;
     validate_contract(envelope.contract.as_ref(), expected)?;
     if envelope.source.as_ref().is_none_or(|source| {
-        source.module_id != "hermes-contacts-runtime" || source.runtime_generation == 0
+        source.module_id != "makosh-contacts-runtime" || source.runtime_generation == 0
     }) || !matches!(
         envelope.semantics,
         Some(Semantics::Result(ResultMetadataV1 { .. }))
@@ -241,7 +241,7 @@ fn envelope_context(
     context: &MailContactsSyncSourceResultContextV1<'_>,
 ) -> MailAddressBookEnvelopeContextV1 {
     MailAddressBookEnvelopeContextV1 {
-        module_id: "hermes-mail-contacts-sync-runtime".to_owned(),
+        module_id: "makosh-mail-contacts-sync-runtime".to_owned(),
         runtime_instance_id: context.runtime_instance_id.to_owned(),
         runtime_generation: context.runtime_generation,
         recorded_at_unix_seconds: context.now_unix_millis / 1_000,

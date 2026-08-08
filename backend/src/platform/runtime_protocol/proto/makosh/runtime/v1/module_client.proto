@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package makosh.runtime.v1;
+
+import "makosh/runtime/v1/recovery.proto";
+
+// Internal module-client routing envelope. The router validates identity and
+// contract metadata only; request_payload is owned and decoded by the target
+// integration contract.
+message ModuleClientRequestV1 {
+  uint32 protocol_major = 1;
+  string module_id = 2;
+  string owner_id = 3;
+  ContractReferenceV1 contract = 4;
+  uint64 request_id = 5;
+  bytes request_payload = 6;
+  // Logical human owner authenticated by Core Gateway. Empty only for
+  // non-client test/internal callers that cannot authorize client_blob.
+  string logical_owner_id = 7;
+  // Device principal authenticated by Core Gateway for this exact request.
+  // The client payload cannot set or override this value. Empty only when
+  // logical_owner_id is empty for non-client test/internal callers.
+  string authenticated_device_id = 8;
+  // Exact browser/client session authenticated by Core Gateway. The client
+  // payload cannot set or override this value. It is atomic with owner/device.
+  string authenticated_client_session_id = 9;
+}
+
+message ModuleClientResponseV1 {
+  uint32 protocol_major = 1;
+  uint64 request_id = 2;
+  bytes response_payload = 3;
+  string error_code = 4;
+}
+
+// Technical metadata returned only to the Core Gateway client_blob adapter
+// after an owner runtime consumes its opaque read capability. Content bytes
+// and Blob platform grants never cross the module control channel.
+message ModuleClientBlobAuthorizationV1 {
+  uint32 protocol_major = 1;
+  bytes reference_id = 2;
+  uint64 declared_size = 3;
+  bytes expected_plaintext_sha256 = 4;
+  uint32 backup_class = 5;
+}

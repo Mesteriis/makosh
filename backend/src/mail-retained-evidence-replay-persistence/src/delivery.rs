@@ -1,10 +1,10 @@
 //! Mail-owned durable replay command delivery and terminal result outbox.
 
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1, v1::durable_envelope_v1::Semantics,
     validation::envelope::decode_envelope_v1,
 };
-use hermes_mail_retained_evidence_replay_contract::{
+use makosh_mail_retained_evidence_replay_contract::{
     mail_replay_result_contract_reference_v1, validate_mail_replay_result_v1,
     wire::ReplayMailEvidenceResultV1,
 };
@@ -43,7 +43,7 @@ impl MailRetainedEvidenceReplayPersistenceV1 {
         validate_admission(admission, accepted_at_unix_seconds)?;
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.mail_retained_evidence_replay_command_inbox
+            "INSERT INTO makosh_data.mail_retained_evidence_replay_command_inbox
                 (message_id, envelope_sha256, operation_id, logical_owner_id, state,
                  accepted_at_unix_seconds)
              VALUES ($1, $2, $3, $4, 0, $5)
@@ -63,7 +63,7 @@ impl MailRetainedEvidenceReplayPersistenceV1 {
         }
         let row = sqlx::query(
             "SELECT message_id, envelope_sha256, operation_id, logical_owner_id, state
-             FROM hermes_data.mail_retained_evidence_replay_command_inbox
+             FROM makosh_data.mail_retained_evidence_replay_command_inbox
              WHERE message_id = $1 OR operation_id = $2
              FOR UPDATE",
         )
@@ -94,7 +94,7 @@ impl MailRetainedEvidenceReplayPersistenceV1 {
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         let inbox = sqlx::query(
             "SELECT message_id, envelope_sha256, operation_id, logical_owner_id, state
-             FROM hermes_data.mail_retained_evidence_replay_command_inbox
+             FROM makosh_data.mail_retained_evidence_replay_command_inbox
              WHERE message_id = $1
              FOR UPDATE",
         )
@@ -105,7 +105,7 @@ impl MailRetainedEvidenceReplayPersistenceV1 {
         .ok_or(RetainedMailReplayErrorV1::NotFound)?;
         verify_command_row(&inbox, admission)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.mail_retained_evidence_replay_result_outbox
+            "INSERT INTO makosh_data.mail_retained_evidence_replay_result_outbox
                 (message_id, envelope_sha256, exact_envelope_bytes, operation_id,
                  command_message_id, created_at_unix_seconds)
              VALUES ($1, $2, $3, $4, $5, $6)
@@ -125,7 +125,7 @@ impl MailRetainedEvidenceReplayPersistenceV1 {
         } else {
             let existing = sqlx::query(
                 "SELECT message_id, envelope_sha256, exact_envelope_bytes, command_message_id
-                 FROM hermes_data.mail_retained_evidence_replay_result_outbox
+                 FROM makosh_data.mail_retained_evidence_replay_result_outbox
                  WHERE operation_id = $1",
             )
             .bind(admission.operation_id.as_slice())
@@ -137,7 +137,7 @@ impl MailRetainedEvidenceReplayPersistenceV1 {
             MailReplayResultStoreOutcomeV1::AlreadyStored
         };
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_retained_evidence_replay_command_inbox
+            "UPDATE makosh_data.mail_retained_evidence_replay_command_inbox
              SET state = 1
              WHERE message_id = $1 AND state = 0",
         )
@@ -164,8 +164,8 @@ impl MailRetainedEvidenceReplayPersistenceV1 {
                     result.operation_id, result.command_message_id,
                     inbox.envelope_sha256 AS command_envelope_sha256,
                     inbox.logical_owner_id
-             FROM hermes_data.mail_retained_evidence_replay_result_outbox result
-             JOIN hermes_data.mail_retained_evidence_replay_command_inbox inbox
+             FROM makosh_data.mail_retained_evidence_replay_result_outbox result
+             JOIN makosh_data.mail_retained_evidence_replay_command_inbox inbox
                ON inbox.message_id = result.command_message_id
               AND inbox.operation_id = result.operation_id
              WHERE result.published_at_unix_seconds IS NULL
@@ -188,7 +188,7 @@ impl MailRetainedEvidenceReplayPersistenceV1 {
             return Err(RetainedMailReplayErrorV1::InvalidInput);
         }
         sqlx::query(
-            "UPDATE hermes_data.mail_retained_evidence_replay_result_outbox
+            "UPDATE makosh_data.mail_retained_evidence_replay_result_outbox
              SET published_at_unix_seconds = $1
              WHERE message_id = $2 AND published_at_unix_seconds IS NULL",
         )

@@ -8,5 +8,5 @@ Canonical content remains in the Markdown documentation packages.
 ## Navigation
 
 - [Site Entrypoint](./index.html)
-- [Site Styles](./hermes-docs.css)
+- [Site Styles](./makosh-docs.css)
 - [Assets](./assets/)

@@ -13,16 +13,16 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-property-grid',
-  `hermes-property-grid--${props.columns}`,
+  'makosh-property-grid',
+  `makosh-property-grid--${props.columns}`,
   props.class
 ])
 </script>
 
 <template>
   <section :class="classes" :aria-label="title">
-    <h3 v-if="title" class="hermes-display-title">{{ title }}</h3>
-    <dl class="hermes-property-grid-list">
+    <h3 v-if="title" class="makosh-display-title">{{ title }}</h3>
+    <dl class="makosh-property-grid-list">
       <KeyValue
         v-for="item in items"
         :key="item.id"

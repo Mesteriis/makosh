@@ -10,14 +10,14 @@ use std::io::Write;
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 
-use hermes_review_note_candidate_persistence::review_note_candidate_storage_bundle_v1;
-use hermes_review_note_candidate_runtime::{
+use makosh_review_note_candidate_persistence::review_note_candidate_storage_bundle_v1;
+use makosh_review_note_candidate_runtime::{
     review_note_candidate_module_descriptor_v1, review_note_candidate_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 use prost::Message;
 use serde::{Deserialize, Serialize};
 
@@ -33,7 +33,7 @@ pub const REVIEW_NOTE_CANDIDATE_STORAGE_BUNDLE_FILE_V1: &str =
 pub const REVIEW_NOTE_CANDIDATE_ARTIFACT_FRAGMENT_FILE_V1: &str =
     "review-note-candidate.release-artifacts.json";
 
-const RUNTIME_RELATIVE_PATH_V1: &str = "bin/hermes-review-note-candidate-runtime";
+const RUNTIME_RELATIVE_PATH_V1: &str = "bin/makosh-review-note-candidate-runtime";
 const DESCRIPTOR_RELATIVE_PATH_V1: &str = "contracts/review-note-candidate.runtime.descriptor.pb";
 const SETTINGS_RELATIVE_PATH_V1: &str = "contracts/review-note-candidate.runtime.settings.pb";
 const STORAGE_RELATIVE_PATH_V1: &str = "storage/review-note-candidate.storage.bundle.pb";
@@ -248,10 +248,10 @@ fn write_new_private_file(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
 mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         decode_descriptor_v1, decode_settings_schema_v1,
     };
-    use hermes_storage_protocol::v1::StorageBundleV1;
+    use makosh_storage_protocol::v1::StorageBundleV1;
 
     use super::*;
 
@@ -276,11 +276,11 @@ mod tests {
 
         let descriptor = decode_descriptor_v1(&descriptor_bytes).expect("descriptor");
         assert_eq!(descriptor.owner_id, "review");
-        assert_eq!(descriptor.module_id, "hermes-review-note-candidate-runtime");
+        assert_eq!(descriptor.module_id, "makosh-review-note-candidate-runtime");
         decode_settings_schema_v1(&settings_bytes).expect("settings");
         StorageBundleV1::decode(storage_bytes.as_slice()).expect("storage");
         assert_eq!(fragment.owner_id, "review");
-        assert_eq!(fragment.module_id, "hermes-review-note-candidate-runtime");
+        assert_eq!(fragment.module_id, "makosh-review-note-candidate-runtime");
         assert_eq!(fragment.artifacts.len(), 2);
         assert!(
             fragment
@@ -318,7 +318,7 @@ mod tests {
     fn temporary_directory() -> PathBuf {
         let id = NEXT_TEMPORARY_ID.fetch_add(1, Ordering::Relaxed);
         let path = std::env::temp_dir().join(format!(
-            "hermes-review-note-candidate-assembly-{}-{id}",
+            "makosh-review-note-candidate-assembly-{}-{id}",
             std::process::id()
         ));
         fs::create_dir(&path).expect("temporary root");

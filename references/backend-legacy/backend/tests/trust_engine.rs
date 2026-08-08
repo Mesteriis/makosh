@@ -1,4 +1,4 @@
-use hermes_hub_backend::engines::trust::{engine::TrustEngine, models::TrustSignalKind};
+use makosh_hub_backend::engines::trust::{engine::TrustEngine, models::TrustSignalKind};
 
 #[test]
 fn trust_engine_maps_persona_compatibility_score_to_relationship_signal() {

@@ -144,7 +144,7 @@ fn serve_connection(
     last_message: &Mutex<Vec<u8>>,
     disconnect_after_data: bool,
 ) {
-    write_response(stream, b"220 localhost ESMTP Hermes fixture\r\n");
+    write_response(stream, b"220 localhost ESMTP makosh fixture\r\n");
     expect_prefix(stream, b"EHLO ");
     write_response(stream, b"250-localhost\r\n250 AUTH PLAIN\r\n");
     expect_prefix(stream, b"AUTH PLAIN ");

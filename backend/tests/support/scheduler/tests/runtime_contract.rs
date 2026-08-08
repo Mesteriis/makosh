@@ -1,4 +1,4 @@
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::{
         SchedulerRuntimeConfigurationV1, SchedulerRuntimeControlRequestV1,
         SchedulerRuntimeControlResponseV1, SchedulerRuntimeDispatchPublisherBindingV1,
@@ -15,7 +15,7 @@ use hermes_runtime_protocol::{
         validate_scheduler_runtime_control_response,
     },
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     MisfirePolicyV1, OverlapPolicyV1, RetryPolicyV1, SchedulePolicyV1, ScheduleTriggerV1,
 };
 
@@ -75,10 +75,10 @@ fn scheduler_runtime_contract_rejects_secret_bearing_or_unbounded_configuration(
     });
     assert_invalid_configuration(|value| value.dispatch_publishers.clear());
     assert_invalid_configuration(|value| {
-        value.dispatch_publishers[0].subject = "hermes.event.v1.mail.sync_job.v1".to_owned();
+        value.dispatch_publishers[0].subject = "makosh.event.v1.mail.sync_job.v1".to_owned();
     });
     assert_invalid_configuration(|value| {
-        value.receipt_consumers[1].filter_subject = "hermes.ack.v1.mail.job_receipt.v1".to_owned();
+        value.receipt_consumers[1].filter_subject = "makosh.ack.v1.mail.job_receipt.v1".to_owned();
     });
     assert_invalid_configuration(|value| {
         value.receipt_consumers.pop();
@@ -106,12 +106,12 @@ fn assert_extended_receipts_are_allowed() {
         receipt_consumer(
             SchedulerRuntimeReceiptKindV1::Acceptance,
             "scheduler_receipt_acceptance_second",
-            "hermes.ack.v1.documents.job_receipt.v1",
+            "makosh.ack.v1.documents.job_receipt.v1",
         ),
         receipt_consumer(
             SchedulerRuntimeReceiptKindV1::Terminal,
             "scheduler_receipt_terminal_second",
-            "hermes.result.v1.documents.job_receipt.v1",
+            "makosh.result.v1.documents.job_receipt.v1",
         ),
     ]);
     assert!(validate_scheduler_runtime_configuration(&extended).is_ok());
@@ -197,7 +197,7 @@ fn schedule_policy() -> SchedulePolicyV1 {
 fn configuration() -> SchedulerRuntimeConfigurationV1 {
     SchedulerRuntimeConfigurationV1 {
         storage_binding: Some(SchedulerRuntimeStorageBindingV1 {
-            database_id: "hermes_scheduler".to_owned(),
+            database_id: "makosh_scheduler".to_owned(),
             pgbouncer_host: "127.0.0.1".to_owned(),
             pgbouncer_port: 6432,
             runtime_principal: "scheduler_runtime".to_owned(),
@@ -223,18 +223,18 @@ fn configuration() -> SchedulerRuntimeConfigurationV1 {
         receipt_batch_limit: 32,
         reconcile_interval_millis: 1_000,
         dispatch_publishers: vec![SchedulerRuntimeDispatchPublisherBindingV1 {
-            subject: "hermes.command.v1.mail.sync_job.v1".to_owned(),
+            subject: "makosh.command.v1.mail.sync_job.v1".to_owned(),
         }],
         receipt_consumers: vec![
             receipt_consumer(
                 SchedulerRuntimeReceiptKindV1::Acceptance,
                 "scheduler_receipt_acceptance",
-                "hermes.ack.v1.mail.job_receipt.v1",
+                "makosh.ack.v1.mail.job_receipt.v1",
             ),
             receipt_consumer(
                 SchedulerRuntimeReceiptKindV1::Terminal,
                 "scheduler_receipt_terminal",
-                "hermes.result.v1.mail.job_receipt.v1",
+                "makosh.result.v1.mail.job_receipt.v1",
             ),
         ],
         schedule_control: None,
@@ -244,13 +244,13 @@ fn configuration() -> SchedulerRuntimeConfigurationV1 {
 
 fn schedule_control_binding() -> SchedulerRuntimeScheduleControlBindingV1 {
     SchedulerRuntimeScheduleControlBindingV1 {
-        stream_name: "HERMES_COMMAND_V1".to_owned(),
+        stream_name: "MAKOSH_COMMAND_V1".to_owned(),
         durable_name: "scheduler_schedule_control".to_owned(),
-        filter_subject: "hermes.command.v1.scheduler.schedule_control.v1".to_owned(),
+        filter_subject: "makosh.command.v1.scheduler.schedule_control.v1".to_owned(),
         ack_wait_millis: 30_000,
         max_deliver: 8,
         max_ack_pending: 32,
-        result_subject: "hermes.result.v1.scheduler.schedule_control.v1".to_owned(),
+        result_subject: "makosh.result.v1.scheduler.schedule_control.v1".to_owned(),
         command_contract_revision: 1,
         command_schema_sha256: vec![7; 32],
         result_contract_revision: 1,
@@ -280,8 +280,8 @@ fn receipt_consumer(
     filter_subject: &str,
 ) -> SchedulerRuntimeReceiptConsumerBindingV1 {
     let stream_name = match kind {
-        SchedulerRuntimeReceiptKindV1::Acceptance => "HERMES_ACK_V1",
-        SchedulerRuntimeReceiptKindV1::Terminal => "HERMES_RESULT_V1",
+        SchedulerRuntimeReceiptKindV1::Acceptance => "MAKOSH_ACK_V1",
+        SchedulerRuntimeReceiptKindV1::Terminal => "MAKOSH_RESULT_V1",
         SchedulerRuntimeReceiptKindV1::Unspecified => unreachable!(),
     };
     SchedulerRuntimeReceiptConsumerBindingV1 {

@@ -7,14 +7,14 @@ use crate::platform::communications::errors::ProviderCommunicationMessagePortErr
 use crate::platform::communications::{
     ProviderChannelMessageCommandPort, ProviderChannelMessageLookupPort,
 };
-use hermes_communications_api::provider_messages::{
+use makosh_communications_api::provider_messages::{
     ProviderAttachmentDownloadStateUpdate, ProviderChannelMessage, ProviderHeuristicMember,
     ProviderMessageAttachmentAnchor, ProviderMessageProjectionObservationContext,
     ProviderMessageReferenceSummary,
 };
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::review_links::link_domain_entity_in_transaction;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::review_links::link_domain_entity_in_transaction;
+use makosh_observations_postgres::store::ObservationStore;
 
 #[derive(Clone)]
 pub struct ProviderChannelMessageStore {

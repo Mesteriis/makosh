@@ -2,7 +2,7 @@
 
 ## Release Goal
 
-Version 1.0 is complete when a user can run Hermes Hub locally, add
+Version 1.0 is complete when a user can run Макошь locally, add
 Gmail/iCloud/IMAP accounts, import email fixture data or read-only provider
 email batches, inspect canonical messages and Persona-compatible identity
 records, search local memory, import Markdown/PDF files into the document

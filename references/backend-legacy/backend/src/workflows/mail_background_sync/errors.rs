@@ -1,14 +1,14 @@
-use hermes_communications_api::accounts::ProviderAccountPortError;
-use hermes_communications_api::evidence::CommunicationEvidencePortError;
-use hermes_events_api::EventEnvelopeError;
+use makosh_communications_api::accounts::ProviderAccountPortError;
+use makosh_communications_api::evidence::CommunicationEvidencePortError;
+use makosh_events_api::EventEnvelopeError;
 use thiserror::Error;
 
 use crate::platform::communications::email_sync::EmailSyncPlanError;
 use crate::workflows::email_sync_pipeline::errors::EmailSyncPipelineError;
 use crate::workflows::graph_projection::errors::GraphProjectionError;
-use hermes_communications_api::mail_resources::EmailProviderSyncError;
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_communications_api::mail_resources::EmailProviderSyncError;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 #[derive(Debug, Error)]
 pub enum MailSyncError {

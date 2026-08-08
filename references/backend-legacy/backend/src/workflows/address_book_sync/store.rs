@@ -232,7 +232,7 @@ pub(super) async fn local_address_book_entries_due_for_provider_sync(
         WHERE p.is_address_book = true
           AND (
               p.email_address IS NULL
-              OR p.email_address NOT LIKE '%@hermes.invalid'
+              OR p.email_address NOT LIKE '%@makosh.invalid'
           )
           AND (
               link.persona_id IS NULL

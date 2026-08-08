@@ -1,4 +1,4 @@
-# Hermes Domain Map
+# Макошь Domain Map
 
 This document is the canonical active domain map. Historical ADR and plans may
 use older names.

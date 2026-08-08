@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { ZulipCredentialBindingStateV1 } from '../../../gen/hermes/zulip/account/v1/client_pb'
+import { ZulipCredentialBindingStateV1 } from '../../../gen/makosh/zulip/account/v1/client_pb'
 import {
 	ZulipConversationKindV1,
 	ZulipHistoryStateV1,
 	ZulipOperationalEventKindV1,
-} from '../../../gen/hermes/zulip/operational/v1/client_pb'
+} from '../../../gen/makosh/zulip/operational/v1/client_pb'
 import { buildZulipOperationalReadModel } from './zulipOperationalReadModel'
 import { buildZulipOperationalReplayModel } from './zulipOperationalReplayModel'
 

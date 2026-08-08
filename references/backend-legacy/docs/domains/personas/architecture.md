@@ -6,8 +6,8 @@ that every backend table or route has already been migrated.
 
 ## Architectural Position
 
-Hermes is a local-first Personal Memory System. The Personas domain owns Persona
-Intelligence: the structures that allow Hermes to understand subjects, remember
+Макошь is a local-first Personal Memory System. The Personas domain owns Persona
+Intelligence: the structures that allow Макошь to understand subjects, remember
 relationships and build context over time.
 
 The domain sits between raw evidence and user-facing memory:
@@ -35,7 +35,7 @@ provider records / documents / messages / calendar events
 
 ## Persona
 
-`Persona` is the root aggregate for a subject in Hermes.
+`Persona` is the root aggregate for a subject in Макошь.
 
 ```yaml
 Persona:
@@ -62,7 +62,7 @@ concept.
 ## Self Persona
 
 There is one and only one `Persona` with `is_self: true`. It represents the owner
-of the local Hermes instance.
+of the local Макошь instance.
 
 Consequences:
 

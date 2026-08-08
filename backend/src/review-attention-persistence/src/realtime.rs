@@ -1,4 +1,4 @@
-use hermes_review_attention_core::{
+use makosh_review_attention_core::{
     ReviewDispositionV1, ReviewImportanceV1, ReviewTimestampV1, STABLE_ID_BYTES_V1,
 };
 use sqlx::{Postgres, Row, Transaction};
@@ -40,7 +40,7 @@ impl ReviewAttentionPersistenceV1 {
             "SELECT realtime_sequence, attention_id, state_revision, disposition,
                     pinned, importance, snoozed_until_unix_seconds,
                     snoozed_until_nanos, occurred_at_unix_seconds, occurred_at_nanos
-             FROM hermes_data.review_attention_realtime
+             FROM makosh_data.review_attention_realtime
              WHERE logical_owner_id = $1
                AND ($2::BIGINT IS NULL OR realtime_sequence > $2)
              ORDER BY realtime_sequence ASC
@@ -59,10 +59,10 @@ impl ReviewAttentionPersistenceV1 {
 pub(crate) async fn insert_realtime_transition(
     transaction: &mut Transaction<'_, Postgres>,
     logical_owner_id: &str,
-    attention: &hermes_review_attention_core::ReviewAttentionV1,
+    attention: &makosh_review_attention_core::ReviewAttentionV1,
 ) -> Result<(), ReviewAttentionPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.review_attention_realtime (
+        "INSERT INTO makosh_data.review_attention_realtime (
            logical_owner_id, attention_id, state_revision, disposition,
            pinned, importance, snoozed_until_unix_seconds,
            snoozed_until_nanos, occurred_at_unix_seconds, occurred_at_nanos

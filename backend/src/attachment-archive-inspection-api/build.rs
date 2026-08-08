@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/attachment_archive_inspection/v1/archive_inspection.proto"],
+            &["proto/makosh/attachment_archive_inspection/v1/archive_inspection.proto"],
             &["proto"],
         )
         .expect("Attachment archive inspection protocol must compile");

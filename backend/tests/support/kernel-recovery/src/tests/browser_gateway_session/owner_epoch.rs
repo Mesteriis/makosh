@@ -2,7 +2,7 @@ use super::*;
 
 #[test]
 fn browser_pairing_binds_its_owner_epoch_fence_to_the_webauthn_ceremony() {
-    let root = unique_target_root("hermes-browser-webauthn-pairing");
+    let root = unique_target_root("makosh-browser-webauthn-pairing");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = Arc::new(
         SqliteControlStore::create(&root.join("control.sqlite"), "instance-browser", 1)

@@ -16,10 +16,10 @@ import {
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Communication',
+	title: 'Макошь UI/General/Communication',
 	component: MessageBubble,
 	args: {
-		author: 'Hermes',
+		author: 'Макошь',
 		direction: 'inbound'
 	}
 } satisfies Meta<typeof MessageBubble>

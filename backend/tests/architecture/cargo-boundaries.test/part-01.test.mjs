@@ -19,12 +19,12 @@ import { canonicalPolicyForTests } from '../support/canonical-policy.mjs';
 import { eventsProtocol, metadata } from './support.mjs';
 
 test('accepts only explicitly configured development package surfaces', () => {
-  const operator = workspacePackage('hermes-development-kernel-operator', {
+  const operator = workspacePackage('makosh-development-kernel-operator', {
     role: 'development',
     owner: 'development',
     surface: 'runtime',
   });
-  const assembly = workspacePackage('hermes-development-assembly', {
+  const assembly = workspacePackage('makosh-development-assembly', {
     role: 'development',
     owner: 'development',
     surface: 'assembly',
@@ -35,7 +35,7 @@ test('accepts only explicitly configured development package surfaces', () => {
     [],
   );
 
-  const invalidAssembly = workspacePackage('hermes-development-assembly', {
+  const invalidAssembly = workspacePackage('makosh-development-assembly', {
     role: 'development',
     owner: 'development',
     surface: 'runtime',
@@ -91,7 +91,7 @@ test('allows only one package to claim the canonical runtime protocol owner', ()
   const packages = [
     kernel(),
     runtimeProtocol(),
-    workspacePackage('hermes-runtime-protocol-alias', {
+    workspacePackage('makosh-runtime-protocol-alias', {
       role: 'platform',
       owner: 'runtime_protocol',
       surface: 'contract',
@@ -158,9 +158,9 @@ test('rejects a dependency-only reference to an undeclared Vault package', () =>
   const packages = [
     kernel(),
     workspacePackage(
-      'hermes-telegram-runtime',
+      'makosh-telegram-runtime',
       { role: 'integration', owner: 'telegram', surface: 'runtime' },
-      [dependency('hermes-vault-protocol')],
+      [dependency('makosh-vault-protocol')],
     ),
   ];
 
@@ -204,7 +204,7 @@ test('rejects undeclared packages claiming the Vault owner', () => {
   const packages = [
     kernel(),
     ...vaultPackages(),
-    workspacePackage('hermes-vault-compat', {
+    workspacePackage('makosh-vault-compat', {
       role: 'platform',
       owner: 'vault',
       surface: 'contract',
@@ -222,7 +222,7 @@ test('rejects undeclared packages claiming the Vault owner', () => {
 test('keeps the Vault service component exclusive to the canonical Vault runtime', () => {
   const packages = [
     kernel(),
-    workspacePackage('hermes-telemetry-vault-helper', {
+    workspacePackage('makosh-telemetry-vault-helper', {
       role: 'platform',
       owner: 'telemetry',
       surface: 'runtime',
@@ -282,13 +282,13 @@ for (const kind of [null, 'build', 'dev']) {
 
 
 
-test('rejects undeclared external hermes-vault package dependencies', () => {
+test('rejects undeclared external makosh-vault package dependencies', () => {
   const packages = [
     kernel(),
     workspacePackage(
-      'hermes-telegram-runtime',
+      'makosh-telegram-runtime',
       { role: 'integration', owner: 'telegram', surface: 'runtime' },
-      [dependency('hermes-vault-compat')],
+      [dependency('makosh-vault-compat')],
     ),
   ];
 
@@ -305,9 +305,9 @@ test('allows modules to use only the public Vault protocol', () => {
     kernel(),
     ...vaultPackages(),
     workspacePackage(
-      'hermes-telegram-runtime',
+      'makosh-telegram-runtime',
       { role: 'integration', owner: 'telegram', surface: 'runtime' },
-      [dependency('hermes-vault-protocol')],
+      [dependency('makosh-vault-protocol')],
     ),
   ];
   assert.deepEqual(validateCargoMetadata(canonicalPolicyForTests(), metadata(allowed)), []);
@@ -316,9 +316,9 @@ test('allows modules to use only the public Vault protocol', () => {
     kernel(),
     ...vaultPackages(),
     workspacePackage(
-      'hermes-telegram-runtime',
+      'makosh-telegram-runtime',
       { role: 'integration', owner: 'telegram', surface: 'runtime' },
-      [dependency('hermes-vault-key-provider')],
+      [dependency('makosh-vault-key-provider')],
     ),
   ];
   assert.ok(
@@ -331,7 +331,7 @@ test('allows modules to use only the public Vault protocol', () => {
 
 test('prevents Kernel from linking a private Vault package', () => {
   const packages = [
-    kernel([dependency('hermes-vault-runtime')]),
+    kernel([dependency('makosh-vault-runtime')]),
     ...vaultPackages(),
   ];
 
@@ -344,7 +344,7 @@ test('prevents Kernel from linking a private Vault package', () => {
 
 
 test('prevents Vault packages from depending on Kernel or module packages', () => {
-  const telegramApi = workspacePackage('hermes-telegram-api', {
+  const telegramApi = workspacePackage('makosh-telegram-api', {
     role: 'integration',
     owner: 'telegram',
     surface: 'contract',
@@ -352,7 +352,7 @@ test('prevents Vault packages from depending on Kernel or module packages', () =
   const packages = [
     kernel(),
     telegramApi,
-    ...vaultPackages({ runtimeDependencies: [dependency('hermes-telegram-api')] }),
+    ...vaultPackages({ runtimeDependencies: [dependency('makosh-telegram-api')] }),
   ];
 
   assert.ok(
@@ -403,25 +403,25 @@ test('accepts the intended isolated Storage Control dependency graph', () => {
     ...vaultPackages(),
     ...storagePackages({
       controlDependencies: [
-        dependency('hermes-storage-protocol'),
-        dependency('hermes-storage-vault'),
+        dependency('makosh-storage-protocol'),
+        dependency('makosh-storage-vault'),
       ],
       vaultDependencies: [
-        dependency('hermes-storage-protocol'),
-        dependency('hermes-runtime-protocol'),
-        dependency('hermes-vault-protocol'),
+        dependency('makosh-storage-protocol'),
+        dependency('makosh-runtime-protocol'),
+        dependency('makosh-vault-protocol'),
       ],
       runtimeDependencies: [
-        dependency('hermes-storage-protocol'),
-        dependency('hermes-storage-control'),
-        dependency('hermes-storage-postgres'),
-        dependency('hermes-storage-pgbouncer'),
-        dependency('hermes-storage-migrations'),
-        dependency('hermes-storage-vault'),
+        dependency('makosh-storage-protocol'),
+        dependency('makosh-storage-control'),
+        dependency('makosh-storage-postgres'),
+        dependency('makosh-storage-pgbouncer'),
+        dependency('makosh-storage-migrations'),
+        dependency('makosh-storage-vault'),
       ],
-      postgresDependencies: [dependency('hermes-storage-control'), dependency('sqlx')],
-      pgbouncerDependencies: [dependency('hermes-storage-control')],
-      migrationsDependencies: [dependency('hermes-storage-control'), dependency('pg_query')],
+      postgresDependencies: [dependency('makosh-storage-control'), dependency('sqlx')],
+      pgbouncerDependencies: [dependency('makosh-storage-control')],
+      migrationsDependencies: [dependency('makosh-storage-control'), dependency('pg_query')],
     }),
   ];
 
@@ -456,7 +456,7 @@ test('rejects undeclared packages claiming the Storage owner', () => {
   const packages = [
     kernel(),
     ...storagePackages(),
-    workspacePackage('hermes-storage-compat', {
+    workspacePackage('makosh-storage-compat', {
       role: 'platform',
       owner: 'storage',
       surface: 'contract',
@@ -474,7 +474,7 @@ test('rejects undeclared packages claiming the Storage owner', () => {
 test('keeps storage_control exclusive to the canonical Storage runtime', () => {
   const packages = [
     kernel(),
-    workspacePackage('hermes-storage-helper', {
+    workspacePackage('makosh-storage-helper', {
       role: 'platform',
       owner: 'events',
       surface: 'runtime',

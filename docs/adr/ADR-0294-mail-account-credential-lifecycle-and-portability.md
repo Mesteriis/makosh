@@ -87,10 +87,10 @@ contracts:
 
 ```text
 mail.account.credential.bind.v1
-  /hermes.mail.account.v1.MailAccountCredentialBindingService/Bind
+  /makosh.mail.account.v1.MailAccountCredentialBindingService/Bind
 
 mail.account.query.v1
-  /hermes.mail.account.v1.MailAccountQueryService/Get
+  /makosh.mail.account.v1.MailAccountQueryService/Get
 ```
 
 Bind принимает:
@@ -226,16 +226,16 @@ query. Typed export требует отдельной fresh-owner-proof operatio
 ### Units of assembly
 
 ```text
-hermes-mail-api
+makosh-mail-api
   generated account contracts and wire mapping
 
-hermes-mail-persistence
+makosh-mail-persistence
   credential binding CAS, lifecycle journal and account tombstone
 
-hermes-mail-runtime
+makosh-mail-runtime
   provider quiesce, Vault orchestration and readiness
 
-hermes-mail-imap / gmail / smtp
+makosh-mail-imap / gmail / smtp
   provider protocol adapters only
 
 Kernel settings apply
@@ -244,7 +244,7 @@ Kernel settings apply
 app portability composition
   first-party client workflow only
 
-hermes-mail-assembly
+makosh-mail-assembly
   immutable release artifacts only
 ```
 
@@ -294,7 +294,7 @@ Umbrella открыт после всех трёх gates выше и сущес�
 
 ## Evidence реализованных Phase 1 и Phase 2
 
-- `hermes-mail-api` поставляет exact generated Bind/Query contracts без
+- `makosh-mail-api` поставляет exact generated Bind/Query contracts без
   secret bytes, Vault record IDs и arbitrary purposes;
 - Mail Settings schema major 2 содержит только owner-editable non-secret
   configuration и не содержит credential revisions;
@@ -306,7 +306,7 @@ Umbrella открыт после всех трёх gates выше и сущес�
   activation revision 2 и stale-generation fencing;
 - executable architecture gate:
   `tests/architecture/mail-account-credential-binding.test.mjs`.
-- `hermes-mail-api` поставляет четыре независимых exact lifecycle contracts:
+- `makosh-mail-api` поставляет четыре независимых exact lifecycle contracts:
   Retire, Delete, explicit Retry и Status; command payload не переносит secret
   bytes, Vault record IDs или arbitrary purposes;
 - Mail Storage bundle revision 8 хранит lifecycle operation journal,
@@ -327,7 +327,7 @@ Umbrella открыт после всех трёх gates выше и сущес�
   restart fencing и отсутствие дополнительного IMAP/SMTP I/O;
 - executable architecture gate:
   `tests/architecture/mail-account-retire-delete.test.mjs`.
-- `hermes-mail-api` поставляет generated `MailAccountExportV1` с exact
+- `makosh-mail-api` поставляет generated `MailAccountExportV1` с exact
   IMAP/Gmail oneof, optional SMTP, schema/effective revision и sanitized
   readiness enums без generic maps;
 - Mail export validator повторно использует Mail account и OAuth configuration

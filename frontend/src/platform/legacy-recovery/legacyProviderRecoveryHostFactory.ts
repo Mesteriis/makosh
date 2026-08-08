@@ -2,7 +2,7 @@ import { DevelopmentLegacyProviderRecoveryHostV1 } from './developmentLegacyProv
 import type { LegacyProviderRecoveryHostV1 } from './legacyProviderRecoveryHost'
 
 export function hasLegacyProviderRecoveryHostV1(): boolean {
-	return import.meta.env.VITE_HERMES_LEGACY_PROVIDER_RECOVERY === '1'
+	return import.meta.env.VITE_MAKOSH_LEGACY_PROVIDER_RECOVERY === '1'
 }
 
 export function createLegacyProviderRecoveryHostV1(): LegacyProviderRecoveryHostV1 {

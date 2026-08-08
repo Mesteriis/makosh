@@ -2,8 +2,8 @@ use std::net::IpAddr;
 use std::path::PathBuf;
 use std::str::FromStr;
 
-use hermes_legacy_provider_recovery::LegacyProviderRecoveryErrorV1;
-use hermes_legacy_provider_recovery::preparation::{
+use makosh_legacy_provider_recovery::LegacyProviderRecoveryErrorV1;
+use makosh_legacy_provider_recovery::preparation::{
     LegacyProviderRecoveryPreparationInputV1, prepare_bundle,
 };
 
@@ -25,7 +25,7 @@ fn main() {
 }
 
 fn run() -> Result<
-    hermes_legacy_provider_recovery::preparation::LegacyProviderRecoveryPreparationReceiptV1,
+    makosh_legacy_provider_recovery::preparation::LegacyProviderRecoveryPreparationReceiptV1,
     LegacyProviderRecoveryErrorV1,
 > {
     let input = parse_args(std::env::args().skip(1))?;

@@ -1,15 +1,15 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_task_candidate_core::{
+use makosh_communication_task_candidate_core::{
     CommunicationTaskCandidateRejectionCodeV1, CommunicationTaskCandidateStateV1,
     CommunicationTaskCandidateTransitionV1,
 };
-use hermes_communication_task_candidate_persistence::{
+use makosh_communication_task_candidate_persistence::{
     CommunicationTaskCandidateInboxResultV1, CommunicationTaskCandidatePersistenceErrorV1,
     CommunicationTaskCandidatePersistenceV1, CommunicationTaskCandidateSourceResultV1,
     PersistedCommunicationTaskCandidateRunV1,
 };
-use hermes_communications_task_source_api::{
+use makosh_communications_task_source_api::{
     communication_task_source_prepared_contract_reference_v1,
     communication_task_source_rejected_contract_reference_v1,
     wire::{
@@ -17,16 +17,16 @@ use hermes_communications_task_source_api::{
         CommunicationTaskSourceRejectedV1,
     },
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, ResultOutcomeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::ContractReferenceV1,
 };
@@ -45,7 +45,7 @@ use crate::{
     review_submission::CommunicationTaskCandidateReviewSubmissionContextV1,
 };
 
-const COMMUNICATIONS_RUNTIME_MODULE_ID_V1: &str = "hermes-communications-runtime";
+const COMMUNICATIONS_RUNTIME_MODULE_ID_V1: &str = "makosh-communications-runtime";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum CommunicationTaskCandidateSourceResultErrorV1 {

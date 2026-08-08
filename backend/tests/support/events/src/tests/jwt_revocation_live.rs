@@ -1,16 +1,16 @@
 use std::path::Path;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     DurableSubjectV1, JetStreamClient, NatsJwtPermissionSetV1, NatsRuntimeCredentialFenceV1,
     RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimeNatsJwtIssuerV1, StreamKindV1,
 };
 
-const ENDPOINT: &str = "HERMES_NATS_JWT_TEST_ENDPOINT";
-const ACCOUNT_PUBLIC_KEY_FILE: &str = "HERMES_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE";
-const ACCOUNT_SIGNING_SEED_FILE: &str = "HERMES_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE";
-const READY_FILE: &str = "HERMES_NATS_JWT_REVOCATION_READY_FILE";
-const PROCEED_FILE: &str = "HERMES_NATS_JWT_REVOCATION_PROCEED_FILE";
+const ENDPOINT: &str = "MAKOSH_NATS_JWT_TEST_ENDPOINT";
+const ACCOUNT_PUBLIC_KEY_FILE: &str = "MAKOSH_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE";
+const ACCOUNT_SIGNING_SEED_FILE: &str = "MAKOSH_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE";
+const READY_FILE: &str = "MAKOSH_NATS_JWT_REVOCATION_READY_FILE";
+const PROCEED_FILE: &str = "MAKOSH_NATS_JWT_REVOCATION_PROCEED_FILE";
 
 #[tokio::test(flavor = "multi_thread")]
 #[ignore = "requires the JWT resolver Docker revocation contour"]

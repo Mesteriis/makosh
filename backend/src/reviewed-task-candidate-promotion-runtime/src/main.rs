@@ -9,15 +9,15 @@ use std::{
     time::Duration,
 };
 
-use hermes_reviewed_task_candidate_promotion_persistence::schema::reviewed_task_candidate_promotion_storage_bundle_v1;
-use hermes_reviewed_task_candidate_promotion_runtime::{
+use makosh_reviewed_task_candidate_promotion_persistence::schema::reviewed_task_candidate_promotion_storage_bundle_v1;
+use makosh_reviewed_task_candidate_promotion_runtime::{
     ReviewedTaskCandidatePromotionManagedRuntimeErrorV1,
     ReviewedTaskCandidatePromotionManagedRuntimeV1,
     ReviewedTaskCandidatePromotionRuntimeAdmissionV1,
     reviewed_task_candidate_promotion_module_descriptor_v1,
     reviewed_task_candidate_promotion_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
@@ -125,7 +125,7 @@ fn retry(
         | Err(ReviewedTaskCandidatePromotionManagedRuntimeErrorV1::EventUnavailable)
         | Err(ReviewedTaskCandidatePromotionManagedRuntimeErrorV1::Unavailable)
         | Err(ReviewedTaskCandidatePromotionManagedRuntimeErrorV1::Persistence(
-            hermes_reviewed_task_candidate_promotion_persistence::ReviewedTaskCandidatePromotionPersistenceErrorV1::StorageUnavailable,
+            makosh_reviewed_task_candidate_promotion_persistence::ReviewedTaskCandidatePromotionPersistenceErrorV1::StorageUnavailable,
         )) => Ok(()),
         Err(error) => Err(runtime_error(error)),
     }

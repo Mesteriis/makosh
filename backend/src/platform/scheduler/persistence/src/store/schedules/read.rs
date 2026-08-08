@@ -1,4 +1,4 @@
-use hermes_clock_protocol::UtcMillisV1;
+use makosh_clock_protocol::UtcMillisV1;
 use sqlx::query;
 
 use super::record::PersistedScheduleRowV1;
@@ -18,7 +18,7 @@ impl SchedulerPostgresStoreV1 {
             return Err(SchedulerScheduleStoreErrorV1::InvalidLimit);
         }
         let rows = query(
-            "SELECT schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms FROM hermes_platform.scheduler_schedules WHERE enabled = TRUE AND next_due_at_unix_ms <= $1 ORDER BY next_due_at_unix_ms, schedule_id LIMIT $2",
+            "SELECT schedule_id, schedule_revision, job_owner, job_name, job_major, contract_name, contract_revision, contract_schema_sha256, scope_id, concurrency_key, max_parallelism, enabled, policy_bytes, next_due_at_unix_ms FROM makosh_platform.scheduler_schedules WHERE enabled = TRUE AND next_due_at_unix_ms <= $1 ORDER BY next_due_at_unix_ms, schedule_id LIMIT $2",
         )
         .bind(now.value())
         .bind(i64::from(limit))

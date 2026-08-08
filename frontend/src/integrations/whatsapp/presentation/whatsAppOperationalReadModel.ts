@@ -1,12 +1,12 @@
 import type {
 	WhatsAppOperationalRuntimeStatusV1,
-} from '../../../gen/hermes/whatsapp/operational/v1/client_pb'
+} from '../../../gen/makosh/whatsapp/operational/v1/client_pb'
 import type {
 	WhatsAppDialog,
 	WhatsAppMessage,
 	WhatsAppParticipant,
 	WhatsAppProviderEventV1,
-} from '../../../gen/hermes/whatsapp/v1/client_pb'
+} from '../../../gen/makosh/whatsapp/v1/client_pb'
 import type { WhatsAppOperationalAccount } from '../queries/whatsAppOperationalAccounts'
 
 export type WhatsAppOperationalReadState = 'blocked' | 'empty' | 'error' | 'loading' | 'ready'

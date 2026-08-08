@@ -3,7 +3,7 @@
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-communications-export-core";
+pub const PACKAGE: &str = "makosh-communications-export-core";
 pub const MAX_EXPORT_ITEMS_V1: usize = 64;
 pub const MAX_EXPORT_SOURCE_BYTES_V1: usize = 16 * 1024 * 1024;
 pub const MAX_EXPORT_ARTIFACT_BYTES_V1: usize = 24 * 1024 * 1024;
@@ -92,7 +92,7 @@ pub fn encode_evidence_export_jsonl_v1(
         &mut output,
         &ManifestRecordV1 {
             record_type: "manifest",
-            schema: "hermes.communications.evidence-export.v1",
+            schema: "makosh.communications.evidence-export.v1",
             export_id: hex(&manifest.export_id),
             logical_owner_id: &manifest.logical_owner_id,
             created_at_unix_seconds: manifest.created_at_unix_seconds,

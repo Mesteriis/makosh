@@ -40,7 +40,7 @@ pub(crate) async fn create_task_from_workflow_input(
                 source_id: Some(input.source_id),
                 source_type: Some(input.source_type),
                 project_id: None,
-                hermes_status: Some("new".to_owned()),
+                makosh_status: Some("new".to_owned()),
                 priority_score: None,
                 area: None,
                 why: None,

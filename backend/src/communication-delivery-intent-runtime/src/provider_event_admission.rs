@@ -1,24 +1,24 @@
 //! Exact provider-event capability units owned by the delivery-intent workflow.
 
-use hermes_mail_delivery_intent_contract::{
+use makosh_mail_delivery_intent_contract::{
     mail_delivery_intent_execute_publish_request_v1,
     mail_delivery_intent_rejected_consume_request_v1,
     mail_delivery_intent_succeeded_consume_request_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityCriticalityV1, CapabilityDescriptorV1, CapabilityRequestV1,
 };
-use hermes_telegram_delivery_intent_contract::{
+use makosh_telegram_delivery_intent_contract::{
     telegram_delivery_intent_execute_publish_request_v1,
     telegram_delivery_intent_rejected_consume_request_v1,
     telegram_delivery_intent_succeeded_consume_request_v1,
 };
-use hermes_whatsapp_delivery_intent_contract::{
+use makosh_whatsapp_delivery_intent_contract::{
     whatsapp_delivery_intent_execute_publish_request_v1,
     whatsapp_delivery_intent_rejected_consume_request_v1,
     whatsapp_delivery_intent_succeeded_consume_request_v1,
 };
-use hermes_zulip_delivery_intent_contract::{
+use makosh_zulip_delivery_intent_contract::{
     zulip_delivery_intent_execute_publish_request_v1,
     zulip_delivery_intent_rejected_consume_request_v1,
     zulip_delivery_intent_succeeded_consume_request_v1,
@@ -93,7 +93,7 @@ fn capability(capability_id: &str, requests: Vec<CapabilityRequestV1>) -> Capabi
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::v1::{EventRouteDirectionV1, capability_request_v1::Request};
+    use makosh_runtime_protocol::v1::{EventRouteDirectionV1, capability_request_v1::Request};
 
     use super::*;
 

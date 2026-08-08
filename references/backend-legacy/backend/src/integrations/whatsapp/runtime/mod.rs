@@ -1,10 +1,10 @@
 use crate::platform::secrets::store::SecretReferenceStore;
-use hermes_communications_api::accounts::ProviderAccountLookupPort;
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::ProviderAccountLookupPort;
+use makosh_communications_api::accounts::{
     NewProviderAccountSecretBinding, ProviderAccountCommandPort, ProviderAccountSecretPurpose,
 };
-use hermes_communications_api::accounts::{ProviderAccount, ProviderSecretBindingCommandPort};
-use hermes_communications_api::commands::{
+use makosh_communications_api::accounts::{ProviderAccount, ProviderSecretBindingCommandPort};
+use makosh_communications_api::commands::{
     CommunicationProviderCommand, ProviderCommandMirrorPort,
 };
 mod account_scope;
@@ -319,7 +319,7 @@ impl WhatsappWebStore {
                  status, retry_count, max_retries, last_error, actor_id, payload, target_ref,
                  result_payload, audit_metadata, reconciliation_status)
             VALUES ($1, $2, $3, $4, $5, $6, 'blocked', $7, $8, 'cancelled', 0, 3, $9,
-                    'hermes-frontend', $10, $11, $12, $13, 'not_required')
+                    'makosh-frontend', $10, $11, $12, $13, 'not_required')
             ON CONFLICT (account_id, idempotency_key) DO NOTHING
             "#,
         )

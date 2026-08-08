@@ -2,9 +2,9 @@
 
 use std::collections::BTreeMap;
 
-use hermes_runtime_protocol::v1::VaultCiphertextRouteV1;
-use hermes_runtime_protocol::vault_request_id::vault_transport_request_position_v1;
-use hermes_vault_protocol::{
+use makosh_runtime_protocol::v1::VaultCiphertextRouteV1;
+use makosh_runtime_protocol::vault_request_id::vault_transport_request_position_v1;
+use makosh_vault_protocol::{
     LeaseAudienceV1, SecretClassV1, VaultActionV1, VaultTransportBindingV1,
     VaultTransportCommandV1, VaultTransportDirectionV1, VaultTransportError,
     VaultTransportSessionV1,
@@ -180,7 +180,7 @@ pub enum VaultSessionExecutionError {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::vault_request_id::vault_transport_request_id_v1;
+    use makosh_runtime_protocol::vault_request_id::vault_transport_request_id_v1;
 
     use super::*;
 

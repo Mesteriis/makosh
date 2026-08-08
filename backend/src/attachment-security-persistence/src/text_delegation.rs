@@ -1,6 +1,6 @@
 //! Durable Text Extraction custody-delegation inbox, work claims and result outbox.
 
-use hermes_attachment_text_extraction_ingress::{
+use makosh_attachment_text_extraction_ingress::{
     ATTACHMENT_SECURITY_TEXT_EXTRACTION_DELEGATION_CAPABILITY_ID_V1,
     ATTACHMENT_TEXT_EXTRACTION_CUSTODY_DELEGATED_CONTRACT_NAME_V1,
     ATTACHMENT_TEXT_EXTRACTION_CUSTODY_DELEGATION_REJECTED_CONTRACT_NAME_V1,
@@ -16,7 +16,7 @@ use hermes_attachment_text_extraction_ingress::{
         AttachmentTextCustodyDelegationRejectedV1, RequestAttachmentTextCustodyDelegationV1,
     },
 };
-use hermes_communications_attachment_contract::{
+use makosh_communications_attachment_contract::{
     COMMUNICATION_ATTACHMENT_SAFETY_VERDICT_OBSERVATION_SCHEMA_SHA256,
     admission::{
         COMMUNICATION_ATTACHMENT_CONTRACT_MAJOR, COMMUNICATION_ATTACHMENT_CONTRACT_OWNER,
@@ -28,7 +28,7 @@ use hermes_communications_attachment_contract::{
         AttachmentSafetyVerdictV1,
     },
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ContractRefV1, DurableEnvelopeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
@@ -168,18 +168,18 @@ impl AttachmentSecurityPersistenceV1 {
         let row = sqlx::query(
             "WITH next_job AS (
                SELECT request_message_id
-               FROM hermes_data.attachment_security_text_extraction_delegation_jobs
+               FROM makosh_data.attachment_security_text_extraction_delegation_jobs
                WHERE state = 1 AND next_attempt_at_unix_seconds <= $2
                  AND attempt_count < 8
                  AND (lease_expires_at_unix_seconds IS NULL OR lease_expires_at_unix_seconds <= $2)
                ORDER BY next_attempt_at_unix_seconds, request_message_id
                LIMIT 1 FOR UPDATE SKIP LOCKED
              )
-             UPDATE hermes_data.attachment_security_text_extraction_delegation_jobs AS job
+             UPDATE makosh_data.attachment_security_text_extraction_delegation_jobs AS job
              SET claimed_by = $1, lease_expires_at_unix_seconds = $3,
                  attempt_count = job.attempt_count + 1
              FROM next_job,
-                  hermes_data.attachment_security_text_extraction_delegation_inbox AS inbox
+                  makosh_data.attachment_security_text_extraction_delegation_inbox AS inbox
              WHERE job.request_message_id = next_job.request_message_id
                AND inbox.message_id = job.request_message_id
              RETURNING job.request_message_id, job.current_reference_id,
@@ -219,7 +219,7 @@ impl AttachmentSecurityPersistenceV1 {
             return Err(AttachmentSecurityPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.attachment_security_text_extraction_delegation_jobs
+            "UPDATE makosh_data.attachment_security_text_extraction_delegation_jobs
              SET claimed_by = NULL, lease_expires_at_unix_seconds = NULL,
                  next_attempt_at_unix_seconds = $5
              WHERE request_message_id = $1 AND state = 1 AND claimed_by = $2
@@ -262,7 +262,7 @@ impl AttachmentSecurityPersistenceV1 {
             .map_err(|_| AttachmentSecurityPersistenceErrorV1::StorageUnavailable)?;
         insert_result_outbox(&mut transaction, result, completed_at_unix_seconds).await?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.attachment_security_text_extraction_delegation_jobs
+            "UPDATE makosh_data.attachment_security_text_extraction_delegation_jobs
              SET state = 2, result_message_id = $5, completed_at_unix_seconds = $4,
                  claimed_by = NULL, lease_expires_at_unix_seconds = NULL
              WHERE request_message_id = $1 AND state = 1 AND claimed_by = $2
@@ -297,7 +297,7 @@ impl AttachmentSecurityPersistenceV1 {
         }
         sqlx::query(
             "SELECT exact_envelope_bytes
-             FROM hermes_data.attachment_security_text_extraction_delegation_outbox
+             FROM makosh_data.attachment_security_text_extraction_delegation_outbox
              WHERE published_at_unix_seconds IS NULL
              ORDER BY created_at_unix_seconds, message_id LIMIT $1",
         )
@@ -325,7 +325,7 @@ impl AttachmentSecurityPersistenceV1 {
             return Err(AttachmentSecurityPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.attachment_security_text_extraction_delegation_outbox
+            "UPDATE makosh_data.attachment_security_text_extraction_delegation_outbox
              SET published_at_unix_seconds = $2
              WHERE message_id = $1 AND published_at_unix_seconds IS NULL",
         )
@@ -345,7 +345,7 @@ async fn insert_request_inbox(
     consumed_at_unix_seconds: i64,
 ) -> Result<bool, AttachmentSecurityPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.attachment_security_text_extraction_delegation_inbox (
+        "INSERT INTO makosh_data.attachment_security_text_extraction_delegation_inbox (
            message_id, envelope_sha256, exact_envelope_bytes, request_id,
            extraction_run_id, attachment_anchor_id, candidate_message_id,
            candidate_envelope_sha256, safety_message_id, safety_evidence_id,
@@ -377,7 +377,7 @@ async fn verify_request_replay(
 ) -> Result<(), AttachmentSecurityPersistenceErrorV1> {
     let row = sqlx::query(
         "SELECT envelope_sha256, exact_envelope_bytes
-         FROM hermes_data.attachment_security_text_extraction_delegation_inbox
+         FROM makosh_data.attachment_security_text_extraction_delegation_inbox
          WHERE message_id = $1",
     )
     .bind(record.message_id().as_slice())
@@ -406,12 +406,12 @@ async fn verify_delegation_source(
         "SELECT job.target_blob_reference_id, job.target_blob_receipt_sha256,
                 candidate.declared_size, candidate.custody_transfer_source_proof,
                 verdict.exact_envelope_bytes
-         FROM hermes_data.attachment_security_scan_jobs AS job
-         JOIN hermes_data.attachment_security_scan_candidates AS candidate
+         FROM makosh_data.attachment_security_scan_jobs AS job
+         JOIN makosh_data.attachment_security_scan_candidates AS candidate
            ON candidate.message_id = job.candidate_message_id
-         JOIN hermes_data.attachment_security_event_inbox AS candidate_inbox
+         JOIN makosh_data.attachment_security_event_inbox AS candidate_inbox
            ON candidate_inbox.message_id = candidate.message_id
-         JOIN hermes_data.attachment_security_verdict_outbox AS verdict
+         JOIN makosh_data.attachment_security_verdict_outbox AS verdict
            ON verdict.message_id = job.outbox_message_id
          WHERE job.state = 2 AND job.attachment_anchor_id = $1
            AND job.candidate_message_id = $2 AND candidate_inbox.envelope_sha256 = $3
@@ -462,7 +462,7 @@ async fn insert_delegation_job(
     created_at_unix_seconds: i64,
 ) -> Result<(), AttachmentSecurityPersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.attachment_security_text_extraction_delegation_jobs (
+        "INSERT INTO makosh_data.attachment_security_text_extraction_delegation_jobs (
            request_message_id, request_id, current_reference_id,
            current_receipt_sha256, declared_size, predecessor_custody_source_proof,
            rejection_code, state, next_attempt_at_unix_seconds
@@ -493,7 +493,7 @@ async fn insert_result_outbox(
     created_at_unix_seconds: i64,
 ) -> Result<(), AttachmentSecurityPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.attachment_security_text_extraction_delegation_outbox (
+        "INSERT INTO makosh_data.attachment_security_text_extraction_delegation_outbox (
            message_id, envelope_sha256, exact_envelope_bytes, created_at_unix_seconds
          ) VALUES ($1,$2,$3,$4) ON CONFLICT (message_id) DO NOTHING",
     )
@@ -509,7 +509,7 @@ async fn insert_result_outbox(
     }
     let row = sqlx::query(
         "SELECT envelope_sha256, exact_envelope_bytes
-         FROM hermes_data.attachment_security_text_extraction_delegation_outbox
+         FROM makosh_data.attachment_security_text_extraction_delegation_outbox
          WHERE message_id = $1",
     )
     .bind(record.message_id().as_slice())
@@ -795,7 +795,7 @@ fn required_bytes(
 
 #[cfg(test)]
 mod tests {
-    use hermes_attachment_text_extraction_ingress::{
+    use makosh_attachment_text_extraction_ingress::{
         AttachmentTextCustodyEnvelopeContextV1,
         build_request_attachment_text_custody_delegation_outbox_record_v1,
     };
@@ -809,7 +809,7 @@ mod tests {
             request.clone(),
             1_700_000_100,
             &AttachmentTextCustodyEnvelopeContextV1 {
-                module_id: "hermes-attachment-text-extraction-runtime".to_owned(),
+                module_id: "makosh-attachment-text-extraction-runtime".to_owned(),
                 runtime_instance_id: "text-runtime-1".to_owned(),
                 runtime_generation: 2,
                 recorded_at_unix_seconds: 1_700_000_000,

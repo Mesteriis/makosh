@@ -24,7 +24,7 @@ const emit = defineEmits<{
 	'update:modelValue': [value: number | null]
 }>()
 
-const classes = computed(() => ['hermes-native-control', { 'hermes-native-control--error': props.error }, props.class])
+const classes = computed(() => ['makosh-native-control', { 'makosh-native-control--error': props.error }, props.class])
 const value = computed(() => props.modelValue ?? '')
 
 function handleInput(event: Event): void {
@@ -34,7 +34,7 @@ function handleInput(event: Event): void {
 </script>
 
 <template>
-	<div class="hermes-input-wrapper">
+	<div class="makosh-input-wrapper">
 		<input
 			:aria-label="ariaLabel"
 			:class="classes"
@@ -49,6 +49,6 @@ function handleInput(event: Event): void {
 			:value="value"
 			@input="handleInput"
 		/>
-		<span v-if="error" class="hermes-form-error">{{ error }}</span>
+		<span v-if="error" class="makosh-form-error">{{ error }}</span>
 	</div>
 </template>

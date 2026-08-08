@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
+use makosh_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum SignalPolicyDecision {

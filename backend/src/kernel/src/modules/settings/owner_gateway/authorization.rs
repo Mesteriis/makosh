@@ -1,12 +1,12 @@
 //! Owner-device and target-registration checks for public Settings mutations.
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     PrepareOwnerModuleSettingsRequestV1, prepare_owner_module_settings_request_v1,
 };
-use hermes_gateway_runtime::{OwnerBrowserPrincipalV1, OwnerModuleSettingsRouteErrorV1};
-use hermes_kernel_control_store::ModuleRegistrationState;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::SETTINGS_CONFIGURATION_CATALOG_CAPABILITY_ID;
+use makosh_gateway_runtime::{OwnerBrowserPrincipalV1, OwnerModuleSettingsRouteErrorV1};
+use makosh_kernel_control_store::ModuleRegistrationState;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::SETTINGS_CONFIGURATION_CATALOG_CAPABILITY_ID;
 
 use crate::platform::gateway::owner_device_proof::{self, OwnerDeviceProofErrorV1};
 
@@ -82,7 +82,7 @@ pub(super) fn authorize_target(
 }
 
 fn update_registration_id(
-    update: &hermes_gateway_protocol::v1::UpdateOwnerModuleSettingsV1,
+    update: &makosh_gateway_protocol::v1::UpdateOwnerModuleSettingsV1,
 ) -> Result<&str, OwnerModuleSettingsRouteErrorV1> {
     if update.registration_id.is_empty()
         || update.configuration_instance_id.is_empty()
@@ -95,7 +95,7 @@ fn update_registration_id(
 }
 
 fn apply_registration_id(
-    apply: &hermes_gateway_protocol::v1::ApplyOwnerManagedIntegrationSettingsV1,
+    apply: &makosh_gateway_protocol::v1::ApplyOwnerManagedIntegrationSettingsV1,
 ) -> Result<&str, OwnerModuleSettingsRouteErrorV1> {
     if apply.registration_id.is_empty()
         || apply.storage_capability_id.is_empty()
@@ -108,7 +108,7 @@ fn apply_registration_id(
 }
 
 fn apply_workflow_registration_id(
-    apply: &hermes_gateway_protocol::v1::ApplyOwnerManagedWorkflowSettingsV1,
+    apply: &makosh_gateway_protocol::v1::ApplyOwnerManagedWorkflowSettingsV1,
 ) -> Result<&str, OwnerModuleSettingsRouteErrorV1> {
     if apply.registration_id.is_empty()
         || apply.storage_capability_id.is_empty()
@@ -121,7 +121,7 @@ fn apply_workflow_registration_id(
 }
 
 fn export_registration_id(
-    export: &hermes_gateway_protocol::v1::ExportEffectiveOwnerModuleSettingsV1,
+    export: &makosh_gateway_protocol::v1::ExportEffectiveOwnerModuleSettingsV1,
 ) -> Result<&str, OwnerModuleSettingsRouteErrorV1> {
     if export.registration_id.is_empty()
         || export.configuration_instance_id.is_empty()
@@ -133,7 +133,7 @@ fn export_registration_id(
 }
 
 fn create_registration_id(
-    create: &hermes_gateway_protocol::v1::CreateOwnerModuleSettingsTargetV1,
+    create: &makosh_gateway_protocol::v1::CreateOwnerModuleSettingsTargetV1,
 ) -> Result<&str, OwnerModuleSettingsRouteErrorV1> {
     if create.registration_id.is_empty() {
         return Err(OwnerModuleSettingsRouteErrorV1::InvalidArgument);

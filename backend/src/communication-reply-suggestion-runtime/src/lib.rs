@@ -34,4 +34,4 @@ pub use source_results::{
     consume_reply_source_rejected_once_v1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-reply-suggestion-runtime";
+pub const PACKAGE: &str = "makosh-communication-reply-suggestion-runtime";

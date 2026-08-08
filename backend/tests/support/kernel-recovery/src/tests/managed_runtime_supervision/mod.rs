@@ -214,7 +214,7 @@ fn prepare_supervisor_artifacts() -> (
     staged_native_artifact::StagedNativeArtifact,
     [u8; 32],
 ) {
-    let root = unique_target_root("hermes-managed-runtime-supervisor");
+    let root = unique_target_root("makosh-managed-runtime-supervisor");
     let descriptor = ModuleDescriptorV1 {
         descriptor_major: 1,
         descriptor_revision: 1,
@@ -229,7 +229,7 @@ fn prepare_supervisor_artifacts() -> (
     let descriptor_digest = Sha256::digest(&descriptor_bytes).into();
     let request = ManagedRuntimeControlRequestV1 {
         operation: Some(
-            hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
+            makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
                 DescribeManagedRuntimeRequestV1 {
                     descriptor_bytes: descriptor_bytes.clone(),
                     settings_schema_bytes: Vec::new(),
@@ -270,7 +270,7 @@ fn prepare_crashing_supervisor_artifact() -> (
     [u8; 32],
     std::path::PathBuf,
 ) {
-    let root = unique_target_root("hermes-managed-runtime-single-attempt");
+    let root = unique_target_root("makosh-managed-runtime-single-attempt");
     let descriptor = ModuleDescriptorV1 {
         descriptor_major: 1,
         descriptor_revision: 1,
@@ -285,7 +285,7 @@ fn prepare_crashing_supervisor_artifact() -> (
     let descriptor_digest = Sha256::digest(&descriptor_bytes).into();
     let request = ManagedRuntimeControlRequestV1 {
         operation: Some(
-            hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
+            makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::Describe(
                 DescribeManagedRuntimeRequestV1 {
                     descriptor_bytes,
                     settings_schema_bytes: Vec::new(),

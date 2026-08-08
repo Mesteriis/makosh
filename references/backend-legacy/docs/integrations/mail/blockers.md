@@ -14,7 +14,7 @@ safety scanner and a timeout-bounded local ClamAV `INSTREAM` client. It can mark
 obvious executable payload magic bytes, active-content extensions, macro-enabled
 Office extensions and known MIME/filename mismatches as `malicious` or
 `suspicious`; unmatched or unavailable-scanner cases remain `not_scanned`, so
-Hermes does not mark an attachment `clean` without a real scanner verdict. The
+Макошь does not mark an attachment `clean` without a real scanner verdict. The
 local Compose environment also runs an isolated PDF/DOCX/OCR worker: it has a
 read-only blob mount, no external route, dropped Linux capabilities, a
 read-only root filesystem and bounded CPU/memory/process/temp-storage.

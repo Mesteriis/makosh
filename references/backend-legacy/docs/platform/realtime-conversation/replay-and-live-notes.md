@@ -4,7 +4,7 @@ Meeting memory should be useful during the meeting and after it.
 
 ## Live notes panel
 
-A meeting WebView can be paired with a Hermes side panel:
+A meeting WebView can be paired with a Макошь side panel:
 
 ```text
 Meeting

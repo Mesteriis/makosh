@@ -1,6 +1,6 @@
 ### Summary / Резюме
 
-Страница `components/backend.md` наполняется описанием бэкенда Hermes Hub: точка входа, структура модулей, AI‑порт, система аудита, модели звонков и интеграция с Zoom (аккаунты, формы авторизации, жизненный цикл, наблюдение встреч, константы и валидация). Информация основана исключительно на предоставленных исходных файлах.
+Страница `components/backend.md` наполняется описанием бэкенда Макошь: точка входа, структура модулей, AI‑порт, система аудита, модели звонков и интеграция с Zoom (аккаунты, формы авторизации, жизненный цикл, наблюдение встреч, константы и валидация). Информация основана исключительно на предоставленных исходных файлах.
 
 ### Proposed pages / Предлагаемые страницы
 
@@ -9,8 +9,8 @@
 ```markdown
 # Backend
 
-Бэкенд Hermes Hub — асинхронное приложение на Rust (tokio), запускаемое через `#[tokio::main]`.  
-Настройки читаются из окружения через `AppConfig::from_env()`, поток выполнения оборачивается в `tracing` span с идентификатором `HERMES_FLOW_ID`.  
+Бэкенд Макошь — асинхронное приложение на Rust (tokio), запускаемое через `#[tokio::main]`.
+Настройки читаются из окружения через `AppConfig::from_env()`, поток выполнения оборачивается в `tracing` span с идентификатором `MAKOSH_FLOW_ID`.
 Для диагностики используется `color_eyre`.
 
 Файлы: `backend/src/main.rs`, `backend/src/lib.rs`.
@@ -56,7 +56,7 @@ pub mod workflows;
 
 Файлы: `backend/src/platform/audit/` (models, store, events, reviews, settings, communication, documents, telegram, telegram_dialogs, telegram_participants, constants, helpers, errors).
 
-Система аудита фиксирует операции, инициированные через фронтенд.  
+Система аудита фиксирует операции, инициированные через фронтенд.
 Основные модели:
 
 - `NewApiAuditRecord` — структура для создания записи; поля: `actor_kind` (всегда `"frontend"`), `actor_id`, `operation`, `method`, `path_template`, `target_kind`, `target_id`, `metadata` (JSON).
@@ -178,7 +178,7 @@ pub mod workflows;
 
 | Source file | Covered facts |
 |---|---|
-| `backend/src/main.rs` | точка входа: `#[tokio::main]`, `color_eyre`, `tracing`, `HERMES_FLOW_ID`, `AppConfig::from_env()`, вызов `app::run(config)` |
+| `backend/src/main.rs` | точка входа: `#[tokio::main]`, `color_eyre`, `tracing`, `MAKOSH_FLOW_ID`, `AppConfig::from_env()`, вызов `app::run(config)` |
 | `backend/src/lib.rs` | список публичных модулей, атрибут `allow(dead_code, unused_imports, unused_variables)` |
 | `backend/src/platform/ai_runtime.rs` | трейт `AiRuntimePort`, `AiChatResult`, `AiEmbedResult`, `AiRuntimePortError` |
 | `backend/src/platform/audit.rs` | реэкспорт моделей и хранилища аудита |

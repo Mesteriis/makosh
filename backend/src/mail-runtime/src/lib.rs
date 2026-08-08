@@ -27,7 +27,7 @@ pub mod retained_evidence_replay_result;
 pub mod settings;
 pub mod storage_bundle;
 
-use hermes_mail_api::{
+use makosh_mail_api::{
     GmailOAuthConfigurationV1, MailAccountConfigurationV1, MailAddressBookConfigurationV1,
 };
 

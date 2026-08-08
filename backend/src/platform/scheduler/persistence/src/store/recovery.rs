@@ -1,6 +1,6 @@
 //! Offline recovery preparation for Scheduler-owned durable delivery state.
 
-use hermes_events_protocol::delivery::OutboxRecordV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
 use sqlx::{Postgres, Row, Transaction, query, query_scalar};
 
 use crate::SchedulerPostgresStoreV1;
@@ -76,7 +76,7 @@ async fn read_replayable_dispatches(
     transaction: &mut Transaction<'_, Postgres>,
 ) -> Result<Vec<(Vec<u8>, Vec<u8>, Vec<u8>)>, SchedulerRecoveryErrorV1> {
     let rows = query(
-        "SELECT dispatch.message_id, dispatch.envelope_sha256, dispatch.exact_envelope_bytes FROM hermes_platform.scheduler_dispatches AS dispatch JOIN hermes_platform.scheduler_runs AS runs ON runs.run_id = dispatch.run_id AND runs.lease_epoch = dispatch.lease_epoch LEFT JOIN hermes_platform.scheduler_run_acceptances AS acceptance ON acceptance.command_message_id = dispatch.message_id WHERE dispatch.state = 'published' AND runs.state = 'dispatched' AND acceptance.command_message_id IS NULL ORDER BY dispatch.created_at_unix_ms, dispatch.message_id FOR UPDATE OF dispatch, runs",
+        "SELECT dispatch.message_id, dispatch.envelope_sha256, dispatch.exact_envelope_bytes FROM makosh_platform.scheduler_dispatches AS dispatch JOIN makosh_platform.scheduler_runs AS runs ON runs.run_id = dispatch.run_id AND runs.lease_epoch = dispatch.lease_epoch LEFT JOIN makosh_platform.scheduler_run_acceptances AS acceptance ON acceptance.command_message_id = dispatch.message_id WHERE dispatch.state = 'published' AND runs.state = 'dispatched' AND acceptance.command_message_id IS NULL ORDER BY dispatch.created_at_unix_ms, dispatch.message_id FOR UPDATE OF dispatch, runs",
     )
     .fetch_all(&mut **transaction)
     .await
@@ -109,7 +109,7 @@ async fn requeue_dispatches(
     transaction: &mut Transaction<'_, Postgres>,
 ) -> Result<u64, SchedulerRecoveryErrorV1> {
     let result = query(
-        "WITH replayable AS (SELECT dispatch.message_id, dispatch.run_id, dispatch.lease_epoch FROM hermes_platform.scheduler_dispatches AS dispatch JOIN hermes_platform.scheduler_runs AS runs ON runs.run_id = dispatch.run_id AND runs.lease_epoch = dispatch.lease_epoch LEFT JOIN hermes_platform.scheduler_run_acceptances AS acceptance ON acceptance.command_message_id = dispatch.message_id WHERE dispatch.state = 'published' AND runs.state = 'dispatched' AND acceptance.command_message_id IS NULL), reset_runs AS (UPDATE hermes_platform.scheduler_runs AS runs SET state = 'pending_dispatch' FROM replayable WHERE runs.run_id = replayable.run_id AND runs.lease_epoch = replayable.lease_epoch AND runs.state = 'dispatched' RETURNING replayable.message_id) UPDATE hermes_platform.scheduler_dispatches AS dispatch SET state = 'pending', published_stream = NULL, published_sequence = NULL FROM reset_runs WHERE dispatch.message_id = reset_runs.message_id AND dispatch.state = 'published'",
+        "WITH replayable AS (SELECT dispatch.message_id, dispatch.run_id, dispatch.lease_epoch FROM makosh_platform.scheduler_dispatches AS dispatch JOIN makosh_platform.scheduler_runs AS runs ON runs.run_id = dispatch.run_id AND runs.lease_epoch = dispatch.lease_epoch LEFT JOIN makosh_platform.scheduler_run_acceptances AS acceptance ON acceptance.command_message_id = dispatch.message_id WHERE dispatch.state = 'published' AND runs.state = 'dispatched' AND acceptance.command_message_id IS NULL), reset_runs AS (UPDATE makosh_platform.scheduler_runs AS runs SET state = 'pending_dispatch' FROM replayable WHERE runs.run_id = replayable.run_id AND runs.lease_epoch = replayable.lease_epoch AND runs.state = 'dispatched' RETURNING replayable.message_id) UPDATE makosh_platform.scheduler_dispatches AS dispatch SET state = 'pending', published_stream = NULL, published_sequence = NULL FROM reset_runs WHERE dispatch.message_id = reset_runs.message_id AND dispatch.state = 'published'",
     )
     .execute(&mut **transaction)
     .await
@@ -121,11 +121,11 @@ async fn inbox_counts(
     transaction: &mut Transaction<'_, Postgres>,
 ) -> Result<(u64, u64), SchedulerRecoveryErrorV1> {
     let acceptances: i64 =
-        query_scalar("SELECT count(*) FROM hermes_platform.scheduler_run_acceptances")
+        query_scalar("SELECT count(*) FROM makosh_platform.scheduler_run_acceptances")
             .fetch_one(&mut **transaction)
             .await
             .map_err(persistence)?;
-    let results: i64 = query_scalar("SELECT count(*) FROM hermes_platform.scheduler_run_results")
+    let results: i64 = query_scalar("SELECT count(*) FROM makosh_platform.scheduler_run_results")
         .fetch_one(&mut **transaction)
         .await
         .map_err(persistence)?;

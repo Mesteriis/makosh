@@ -3,11 +3,11 @@ use std::io::{Read, Write};
 use std::os::unix::fs::{MetadataExt, OpenOptionsExt, PermissionsExt};
 use std::path::{Path, PathBuf};
 
-use hermes_kernel_control_store::{ControlStore, RecoveryFences};
+use makosh_kernel_control_store::{ControlStore, RecoveryFences};
 use sha2::{Digest, Sha256};
 
-const FILE_NAME: &str = ".hermes-recovery-fence-v1";
-const MAGIC: &[u8; 8] = b"HERMESF1";
+const FILE_NAME: &str = ".makosh-recovery-fence-v1";
+const MAGIC: &[u8; 8] = b"MAKOSHF1";
 const RECORD_BYTES: usize = 81;
 const STATE_COMMITTED: u8 = 1;
 const STATE_RESERVED: u8 = 2;

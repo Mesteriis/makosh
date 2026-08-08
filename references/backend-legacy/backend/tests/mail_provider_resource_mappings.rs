@@ -1,14 +1,14 @@
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::mail_resources::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::mail_resources::{
     DiscoveredMailProviderResource, MailProviderResourceCommandPort, MailProviderResourceKind,
     MailProviderSemanticRole,
 };
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
-use hermes_hub_backend::domains::communications::folders::{
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_hub_backend::domains::communications::folders::{
     CommunicationFolderStore, NewCommunicationFolder,
 };
-use hermes_hub_backend::domains::communications::provider_resources::{
+use makosh_hub_backend::domains::communications::provider_resources::{
     MailProviderResourceMappingUpdate, MailProviderResourceStore, NewMailProviderResource,
 };
 use serde_json::json;

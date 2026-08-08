@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/domains/documents/processing/jobs.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/processing/jobs.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/processing/jobs.rs`
 - Size bytes / Размер в байтах: `10545`
 - Included characters / Включено символов: `10545`
 - Truncated / Обрезано: `no`
@@ -418,7 +418,7 @@ pub(super) struct QueuedJob {
 
 ### `backend/src/domains/documents/processing/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/processing/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/processing/models.rs`
 - Size bytes / Размер в байтах: `4065`
 - Included characters / Включено символов: `4065`
 - Truncated / Обрезано: `no`
@@ -574,7 +574,7 @@ pub struct DocumentProcessingRetryCommandResult {
 
 ### `backend/src/domains/documents/processing/retry.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/processing/retry.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/processing/retry.rs`
 - Size bytes / Размер в байтах: `6315`
 - Included characters / Включено символов: `6315`
 - Truncated / Обрезано: `no`
@@ -770,7 +770,7 @@ impl RetryCommandEvent {
 
 ### `backend/src/domains/documents/processing/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/processing/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/processing/rows.rs`
 - Size bytes / Размер в байтах: `1840`
 - Included characters / Включено символов: `1840`
 - Truncated / Обрезано: `no`
@@ -828,7 +828,7 @@ pub(super) fn try_row_to_artifact(
 
 ### `backend/src/domains/documents/processing/runner.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/processing/runner.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/processing/runner.rs`
 - Size bytes / Размер в байтах: `5563`
 - Included characters / Включено символов: `5563`
 - Truncated / Обрезано: `no`
@@ -1014,7 +1014,7 @@ mod tests {
 
 ### `backend/src/domains/documents/processing/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/processing/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/processing/service.rs`
 - Size bytes / Размер в байтах: `2245`
 - Included characters / Включено символов: `2245`
 - Truncated / Обрезано: `no`
@@ -1092,7 +1092,7 @@ pub enum DocumentProcessingCommandServiceError {
 
 ### `backend/src/domains/documents/processing/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/processing/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/processing/store.rs`
 - Size bytes / Размер в байтах: `4546`
 - Included characters / Включено символов: `4546`
 - Truncated / Обрезано: `no`
@@ -1260,7 +1260,7 @@ impl DocumentProcessingStore {
 
 ### `backend/src/domains/documents/processing/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/processing/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/processing/validation.rs`
 - Size bytes / Размер в байтах: `783`
 - Included characters / Включено символов: `783`
 - Truncated / Обрезано: `no`
@@ -1295,7 +1295,7 @@ pub(super) fn validate_optional_limit(limit: Option<i64>) -> Result<i64, Documen
 
 ### `backend/src/domains/graph/core.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/graph/core.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/graph/core.rs`
 - Size bytes / Размер в байтах: `654`
 - Included characters / Включено символов: `654`
 - Truncated / Обрезано: `no`
@@ -1325,7 +1325,7 @@ pub use store::GraphStore as GraphProjectionPort;
 
 ### `backend/src/domains/graph/core/constants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/graph/core/constants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/graph/core/constants.rs`
 - Size bytes / Размер в байтах: `108`
 - Included characters / Включено символов: `108`
 - Truncated / Обрезано: `no`
@@ -1337,7 +1337,7 @@ pub const GRAPH_NEIGHBORHOOD_EVIDENCE_LIMIT: i64 = 100;
 
 ### `backend/src/domains/graph/core/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/graph/core/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/graph/core/errors.rs`
 - Size bytes / Размер в байтах: `1288`
 - Included characters / Включено символов: `1288`
 - Truncated / Обрезано: `no`
@@ -1387,7 +1387,7 @@ pub enum GraphStoreError {
 
 ### `backend/src/domains/graph/core/ids.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/graph/core/ids.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/graph/core/ids.rs`
 - Size bytes / Размер в байтах: `798`
 - Included characters / Включено символов: `798`
 - Truncated / Обрезано: `no`
@@ -1428,7 +1428,7 @@ pub fn evidence_id(edge_id: &str, source_kind: GraphEvidenceSourceKind, source_i
 
 ### `backend/src/domains/graph/core/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/graph/core/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/graph/core/models.rs`
 - Size bytes / Размер в байтах: `8968`
 - Included characters / Включено символов: `8968`
 - Truncated / Обрезано: `no`
@@ -1736,7 +1736,7 @@ pub struct GraphNeighborhood {
 
 ### `backend/src/domains/graph/core/queries.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/graph/core/queries.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/graph/core/queries.rs`
 - Size bytes / Размер в байтах: `8871`
 - Included characters / Включено символов: `8871`
 - Truncated / Обрезано: `no`
@@ -2015,7 +2015,7 @@ impl GraphStore {
 
 ### `backend/src/domains/graph/core/row_mapping.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/graph/core/row_mapping.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/graph/core/row_mapping.rs`
 - Size bytes / Размер в байтах: `4862`
 - Included characters / Включено символов: `4862`
 - Truncated / Обрезано: `no`
@@ -2135,7 +2135,7 @@ fn parse_evidence_source_kind(value: String) -> Result<GraphEvidenceSourceKind, 
 
 ### `backend/src/domains/graph/core/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/graph/core/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/graph/core/store.rs`
 - Size bytes / Размер в байтах: `6151`
 - Included characters / Включено символов: `6151`
 - Truncated / Обрезано: `no`
@@ -2328,7 +2328,7 @@ impl GraphStore {
 
 ### `backend/src/domains/graph/core/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/graph/core/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/graph/core/validation.rs`
 - Size bytes / Размер в байтах: `915`
 - Included characters / Включено символов: `915`
 - Truncated / Обрезано: `no`
@@ -2379,7 +2379,7 @@ pub(super) fn validate_json_object(
 
 ### `backend/src/domains/graph/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/graph/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/graph/mod.rs`
 - Size bytes / Размер в байтах: `29`
 - Included characters / Включено символов: `29`
 - Truncated / Обрезано: `no`
@@ -2391,7 +2391,7 @@ pub mod ports;
 
 ### `backend/src/domains/graph/ports.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/graph/ports.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/graph/ports.rs`
 - Size bytes / Размер в байтах: `56`
 - Included characters / Включено символов: `56`
 - Truncated / Обрезано: `no`
@@ -2402,7 +2402,7 @@ pub use super::core::GraphStore as GraphProjectionPort;
 
 ### `backend/src/domains/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/mod.rs`
 - Size bytes / Размер в байтах: `266`
 - Included characters / Включено символов: `266`
 - Truncated / Обрезано: `no`
@@ -2426,7 +2426,7 @@ pub mod tasks;
 
 ### `backend/src/domains/obligations/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/errors.rs`
 - Size bytes / Размер в байтах: `1504`
 - Included characters / Включено символов: `1504`
 - Truncated / Обрезано: `no`
@@ -2487,7 +2487,7 @@ pub enum ObligationStoreError {
 
 ### `backend/src/domains/obligations/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/evidence.rs`
 - Size bytes / Размер в байтах: `1338`
 - Included characters / Включено символов: `1338`
 - Truncated / Обрезано: `no`
@@ -2547,7 +2547,7 @@ pub(crate) async fn link_obligation_review_transition_in_transaction(
 
 ### `backend/src/domains/obligations/ids.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/ids.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/ids.rs`
 - Size bytes / Размер в байтах: `1393`
 - Included characters / Включено символов: `1393`
 - Truncated / Обрезано: `no`
@@ -2605,7 +2605,7 @@ fn normalize_statement(statement: &str) -> String {
 
 ### `backend/src/domains/obligations/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/mod.rs`
 - Size bytes / Размер в байтах: `625`
 - Included characters / Включено символов: `625`
 - Truncated / Обрезано: `no`
@@ -2635,7 +2635,7 @@ pub use store::ObligationStore as ObligationReviewPort;
 
 ### `backend/src/domains/obligations/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/obligations/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/obligations/models.rs`
 - Size bytes / Размер в байтах: `375`
 - Included characters / Включено символов: `375`
 - Truncated / Обрезано: `no`

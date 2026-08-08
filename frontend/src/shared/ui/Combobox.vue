@@ -29,8 +29,8 @@ const emit = defineEmits<{
 	select: [option: ComboboxOption]
 }>()
 
-const classes = computed(() => ['hermes-combobox', props.class])
-const listId = computed(() => `${props.id ?? 'hermes-combobox'}-options`)
+const classes = computed(() => ['makosh-combobox', props.class])
+const listId = computed(() => `${props.id ?? 'makosh-combobox'}-options`)
 
 function handleInput(event: Event): void {
 	const target = event.target as HTMLInputElement
@@ -45,7 +45,7 @@ function handleInput(event: Event): void {
 <template>
 	<div :class="classes">
 		<input
-			class="hermes-native-control"
+			class="makosh-native-control"
 			:aria-label="ariaLabel"
 			:disabled="disabled"
 			:id="id"

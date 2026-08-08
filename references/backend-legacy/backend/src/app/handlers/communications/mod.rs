@@ -55,7 +55,7 @@ use crate::workflows::mail_background_sync::{
     service::MailBackgroundSyncService,
     store::MailSyncStore,
 };
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
 
 use crate::app::api_support::{
     communications::*,

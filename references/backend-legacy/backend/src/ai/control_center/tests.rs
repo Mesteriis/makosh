@@ -26,7 +26,7 @@ fn secret_like_provider_payloads_are_rejected() {
 fn cli_provider_presets_are_allowlisted() {
     assert!(validate_cli_preset("codex").is_ok());
     assert!(validate_cli_preset("claude").is_ok());
-    assert!(validate_cli_preset("hermes").is_ok());
+    assert!(validate_cli_preset("makosh").is_ok());
 
     let error = validate_cli_preset("bash -lc env").expect_err("shell-like presets must fail");
 

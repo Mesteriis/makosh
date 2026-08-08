@@ -5,7 +5,7 @@ use crate::integrations::telegram::tdjson::client::TdJsonClient;
 use crate::integrations::telegram::tdjson::{
     self, snapshots::TelegramTdlibChatFolderSnapshot, snapshots::TelegramTdlibChatSnapshot,
 };
-use hermes_provider_telegram::tdlib::chats;
+use makosh_provider_telegram::tdlib::chats;
 
 use super::super::TDJSON_COMMAND_TIMEOUT;
 use super::responses::receive_tdlib_extra;
@@ -14,7 +14,7 @@ pub(super) fn actor_load_chats(
     client: &TdJsonClient,
     limit: i32,
 ) -> Result<Vec<TelegramTdlibChatSnapshot>, TelegramError> {
-    let load_extra = "hermes-runtime-load-chats";
+    let load_extra = "makosh-runtime-load-chats";
     client.send_json(&chats::load_chats(limit, load_extra))?;
     let load_response = receive_tdlib_extra(client, load_extra, TDJSON_COMMAND_TIMEOUT)?;
     if tdjson::parsing::events::tdlib_error_message(&load_response).is_some()
@@ -26,7 +26,7 @@ pub(super) fn actor_load_chats(
         ));
     }
 
-    let chats_extra = "hermes-runtime-get-chats";
+    let chats_extra = "makosh-runtime-get-chats";
     client.send_json(&chats::get_chats(limit, chats_extra))?;
     let chats_response = receive_tdlib_extra(client, chats_extra, TDJSON_COMMAND_TIMEOUT)?;
     if let Some(message) = tdjson::parsing::events::tdlib_error_message(&chats_response) {
@@ -35,7 +35,7 @@ pub(super) fn actor_load_chats(
     let chat_ids = tdjson::parsing::chats::parse_tdlib_chat_ids(&chats_response)?;
     let mut snapshots = Vec::with_capacity(chat_ids.len());
     for chat_id in chat_ids {
-        let extra = format!("hermes-runtime-get-chat-{chat_id}");
+        let extra = format!("makosh-runtime-get-chat-{chat_id}");
         client.send_json(&chats::get_chat(chat_id, &extra))?;
         let chat_response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
         if let Some(message) = tdjson::parsing::events::tdlib_error_message(&chat_response) {
@@ -54,7 +54,7 @@ pub(super) fn actor_get_chat_folders(
 ) -> Result<Vec<TelegramTdlibChatFolderSnapshot>, TelegramError> {
     let mut snapshots = Vec::with_capacity(folder_ids.len());
     for folder_id in folder_ids {
-        let extra = format!("hermes-runtime-get-chat-folder-{folder_id}");
+        let extra = format!("makosh-runtime-get-chat-folder-{folder_id}");
         client.send_json(&chats::get_chat_folder(*folder_id, &extra))?;
         let response = receive_tdlib_extra(client, &extra, TDJSON_COMMAND_TIMEOUT)?;
         if let Some(message) = tdjson::parsing::events::tdlib_error_message(&response) {

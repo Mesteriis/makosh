@@ -5,7 +5,7 @@ use std::{
     time::{Instant, SystemTime, UNIX_EPOCH},
 };
 
-use hermes_clock_protocol::{
+use makosh_clock_protocol::{
     ClockDiscontinuityV1, ClockPolicyV1, ClockReadingV1, MonotonicMillisV1, UtcMillisV1,
 };
 

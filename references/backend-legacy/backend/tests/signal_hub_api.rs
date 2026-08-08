@@ -1,20 +1,20 @@
 use axum::body::{Body, to_bytes};
 use axum::http::{Request, StatusCode};
 use chrono::Utc;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::communications::messages::provider_observation_projection::{
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::communications::messages::provider_observation_projection::{
     COMMUNICATION_PROVIDER_OBSERVATION_CONSUMER, project_accepted_signal_if_runtime_allows,
 };
-use hermes_hub_backend::domains::signal_hub::telegram::dispatch_telegram_raw_signal;
-use hermes_hub_backend::platform::settings::store::ApplicationSettingsStore;
+use makosh_hub_backend::domains::signal_hub::telegram::dispatch_telegram_raw_signal;
+use makosh_hub_backend::platform::settings::store::ApplicationSettingsStore;
 
-use hermes_backend_testkit::app::{TestApp, delete, get, patch_json, post_json};
-use hermes_backend_testkit::composition::router_for_context;
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::app::{TestApp, delete, get, patch_json, post_json};
+use makosh_backend_testkit::composition::router_for_context;
+use makosh_backend_testkit::context::TestContext;
 use serde_json::Value;
 use tower::ServiceExt;
 use uuid::Uuid;
@@ -309,7 +309,7 @@ async fn signal_hub_connect_api_requires_local_api_secret() {
         .oneshot(
             Request::builder()
                 .method("POST")
-                .uri("/hermes.signal_hub.v1.SignalHubService/ListSources")
+                .uri("/makosh.signal_hub.v1.SignalHubService/ListSources")
                 .header("content-type", "application/json")
                 .body(Body::from("{}"))
                 .expect("connect request without secret"),
@@ -327,7 +327,7 @@ async fn signal_hub_connect_api_requires_local_api_secret() {
     let allowed_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/ListSources",
+            "/makosh.signal_hub.v1.SignalHubService/ListSources",
             serde_json::json!({}),
         ))
         .await
@@ -342,13 +342,13 @@ async fn signal_hub_api_runs_ai_health_check_against_runtime_status() {
         .update_setting_value(
             "ai.ollama_base_url",
             &serde_json::json!("http://127.0.0.1:9"),
-            "hermes-test",
+            "makosh-test",
         )
         .await
         .expect("unreachable Ollama setting");
     let config = ctx
-        .app_config("hermes-test-api-secret")
-        .with_test_pairs([("HERMES_OLLAMA_BASE_URL", "http://127.0.0.1:9")])
+        .app_config("makosh-test-api-secret")
+        .with_test_pairs([("MAKOSH_OLLAMA_BASE_URL", "http://127.0.0.1:9")])
         .expect("ai runtime test config");
     let router = build_router_with_database(config, ctx.database());
 
@@ -507,7 +507,7 @@ async fn signal_hub_api_can_toggle_source_and_scoped_signal_controls() {
     let mute_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/MuteSignals",
+            "/makosh.signal_hub.v1.SignalHubService/MuteSignals",
             serde_json::json!({
                 "scope": "event_pattern",
                 "eventPattern": "signal.raw.telegram.*",
@@ -521,7 +521,7 @@ async fn signal_hub_api_can_toggle_source_and_scoped_signal_controls() {
     let disable_signals_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/DisableSignals",
+            "/makosh.signal_hub.v1.SignalHubService/DisableSignals",
             serde_json::json!({
                 "scope": "event_pattern",
                 "eventPattern": "signal.accepted.telegram.*",
@@ -578,7 +578,7 @@ async fn signal_hub_api_can_toggle_source_and_scoped_signal_controls() {
     let enable_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/EnableSource",
+            "/makosh.signal_hub.v1.SignalHubService/EnableSource",
             serde_json::json!({
                 "sourceCode": "telegram"
             }),
@@ -608,7 +608,7 @@ async fn signal_hub_api_can_toggle_source_and_scoped_signal_controls() {
     let unmute_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/UnmuteSignals",
+            "/makosh.signal_hub.v1.SignalHubService/UnmuteSignals",
             serde_json::json!({
                 "scope": "event_pattern",
                 "eventPattern": "signal.raw.telegram.*",
@@ -627,7 +627,7 @@ async fn signal_hub_api_can_toggle_source_and_scoped_signal_controls() {
     let enable_signals_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/EnableSignals",
+            "/makosh.signal_hub.v1.SignalHubService/EnableSignals",
             serde_json::json!({
                 "scope": "event_pattern",
                 "eventPattern": "signal.accepted.telegram.*",
@@ -829,7 +829,7 @@ async fn signal_hub_api_lists_connections_and_health() {
             replayed_count,
             metadata
         )
-        VALUES ($1, 'telegram', $2, 'signal.raw.telegram.*', 'queued', 'hermes-frontend', 3, '{"trigger":"api"}'::jsonb)
+        VALUES ($1, 'telegram', $2, 'signal.raw.telegram.*', 'queued', 'makosh-frontend', 3, '{"trigger":"api"}'::jsonb)
         "#,
     )
     .bind(replay_id)
@@ -1014,7 +1014,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let restore_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/RestoreSystemFixture",
+            "/makosh.signal_hub.v1.SignalHubService/RestoreSystemFixture",
             serde_json::json!({}),
         ))
         .await
@@ -1024,7 +1024,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let list_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/ListSources",
+            "/makosh.signal_hub.v1.SignalHubService/ListSources",
             serde_json::json!({}),
         ))
         .await
@@ -1041,7 +1041,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let runtime_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/UpdateRuntimeState",
+            "/makosh.signal_hub.v1.SignalHubService/UpdateRuntimeState",
             serde_json::json!({
                 "sourceCode": "system",
                 "runtimeKind": "signal_hub_raw_signal_dispatcher",
@@ -1070,7 +1070,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let create_policy_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/CreatePolicy",
+            "/makosh.signal_hub.v1.SignalHubService/CreatePolicy",
             serde_json::json!({
                 "scope": "event_pattern",
                 "eventPattern": "signal.raw.*",
@@ -1085,7 +1085,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let list_policies_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/ListPolicies",
+            "/makosh.signal_hub.v1.SignalHubService/ListPolicies",
             serde_json::json!({}),
         ))
         .await
@@ -1118,7 +1118,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
             replayed_count,
             metadata
         )
-        VALUES ($1, 'telegram', NULL, 'signal.raw.telegram.*', 'queued', 'hermes-frontend', 2, '{"trigger":"connect","from_position":11,"to_position":22}'::jsonb)
+        VALUES ($1, 'telegram', NULL, 'signal.raw.telegram.*', 'queued', 'makosh-frontend', 2, '{"trigger":"connect","from_position":11,"to_position":22}'::jsonb)
         "#,
     )
     .bind(replay_id)
@@ -1129,7 +1129,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let list_replay_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/ListReplayRequests",
+            "/makosh.signal_hub.v1.SignalHubService/ListReplayRequests",
             serde_json::json!({}),
         ))
         .await
@@ -1159,7 +1159,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let request_replay_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/RequestReplay",
+            "/makosh.signal_hub.v1.SignalHubService/RequestReplay",
             serde_json::json!({
                 "sourceCode": "telegram",
                 "eventPattern": "signal.raw.telegram.*",
@@ -1189,7 +1189,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let request_persona_projection_replay_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/RequestReplay",
+            "/makosh.signal_hub.v1.SignalHubService/RequestReplay",
             serde_json::json!({
                 "eventPattern": "persona.role.assigned",
                 "fromPosition": 50,
@@ -1221,7 +1221,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let run_health_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/RunHealthCheck",
+            "/makosh.signal_hub.v1.SignalHubService/RunHealthCheck",
             serde_json::json!({
                 "sourceCode": "system"
             }),
@@ -1240,7 +1240,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let list_profiles_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/ListProfiles",
+            "/makosh.signal_hub.v1.SignalHubService/ListProfiles",
             serde_json::json!({}),
         ))
         .await
@@ -1262,7 +1262,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let apply_profile_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/ApplyProfile",
+            "/makosh.signal_hub.v1.SignalHubService/ApplyProfile",
             serde_json::json!({
                 "code": "testing"
             }),
@@ -1281,7 +1281,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let list_capabilities_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/ListCapabilities",
+            "/makosh.signal_hub.v1.SignalHubService/ListCapabilities",
             serde_json::json!({
                 "sourceCode": "telegram"
             }),
@@ -1324,7 +1324,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let create_profile_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/CreateProfile",
+            "/makosh.signal_hub.v1.SignalHubService/CreateProfile",
             serde_json::json!({
                 "code": "quiet_hours",
                 "displayName": "Quiet Hours",
@@ -1356,7 +1356,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let update_profile_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/UpdateProfile",
+            "/makosh.signal_hub.v1.SignalHubService/UpdateProfile",
             serde_json::json!({
                 "code": "quiet_hours",
                 "description": "Updated quiet profile",
@@ -1387,7 +1387,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let remove_profile_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/RemoveProfile",
+            "/makosh.signal_hub.v1.SignalHubService/RemoveProfile",
             serde_json::json!({
                 "code": "quiet_hours"
             }),
@@ -1405,7 +1405,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let emit_fixture_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/EmitFixtureSignal",
+            "/makosh.signal_hub.v1.SignalHubService/EmitFixtureSignal",
             serde_json::json!({
                 "fixtureId": "fixture_basic_message"
             }),
@@ -1424,7 +1424,7 @@ async fn signal_hub_connect_api_lists_sources_and_updates_runtime_state() {
     let list_fixture_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/ListFixtureSources",
+            "/makosh.signal_hub.v1.SignalHubService/ListFixtureSources",
             serde_json::json!({}),
         ))
         .await
@@ -1454,7 +1454,7 @@ async fn signal_hub_connect_runtime_switch_takes_effect_without_restart() {
     let restore_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/RestoreSystemFixture",
+            "/makosh.signal_hub.v1.SignalHubService/RestoreSystemFixture",
             serde_json::json!({}),
         ))
         .await
@@ -1508,7 +1508,7 @@ async fn signal_hub_connect_runtime_switch_takes_effect_without_restart() {
     let pause_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/UpdateRuntimeState",
+            "/makosh.signal_hub.v1.SignalHubService/UpdateRuntimeState",
             serde_json::json!({
                 "sourceCode": "system",
                 "runtimeKind": COMMUNICATION_PROVIDER_OBSERVATION_CONSUMER,
@@ -1537,7 +1537,7 @@ async fn signal_hub_connect_runtime_switch_takes_effect_without_restart() {
     let resume_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/UpdateRuntimeState",
+            "/makosh.signal_hub.v1.SignalHubService/UpdateRuntimeState",
             serde_json::json!({
                 "sourceCode": "system",
                 "runtimeKind": COMMUNICATION_PROVIDER_OBSERVATION_CONSUMER,
@@ -1573,7 +1573,7 @@ async fn signal_hub_connect_raw_dispatcher_switch_takes_effect_without_restart()
     let restore_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/RestoreSystemFixture",
+            "/makosh.signal_hub.v1.SignalHubService/RestoreSystemFixture",
             serde_json::json!({}),
         ))
         .await
@@ -1593,7 +1593,7 @@ async fn signal_hub_connect_raw_dispatcher_switch_takes_effect_without_restart()
     let pause_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/UpdateRuntimeState",
+            "/makosh.signal_hub.v1.SignalHubService/UpdateRuntimeState",
             serde_json::json!({
                 "sourceCode": "system",
                 "runtimeKind": "signal_hub_raw_signal_dispatcher",
@@ -1651,7 +1651,7 @@ async fn signal_hub_connect_raw_dispatcher_switch_takes_effect_without_restart()
     let resume_response = router
         .clone()
         .oneshot(post_json(
-            "/hermes.signal_hub.v1.SignalHubService/UpdateRuntimeState",
+            "/makosh.signal_hub.v1.SignalHubService/UpdateRuntimeState",
             serde_json::json!({
                 "sourceCode": "system",
                 "runtimeKind": "signal_hub_raw_signal_dispatcher",

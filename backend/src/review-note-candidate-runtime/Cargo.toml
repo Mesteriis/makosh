@@ -1,5 +1,5 @@
 [package]
-name = "hermes-review-note-candidate-runtime"
+name = "makosh-review-note-candidate-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,25 +8,25 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-review-note-candidate-runtime"
+name = "makosh-review-note-candidate-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "domain"
 owner = "review"
 surface = "runtime"
 
 [dependencies]
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-events-jetstream = { path = "../platform/events/jetstream" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-review-note-candidate-api = { path = "../review-note-candidate-api" }
-hermes-review-note-candidate-core = { path = "../review-note-candidate-core" }
-hermes-review-note-candidate-persistence = { path = "../review-note-candidate-persistence" }
-hermes-review-note-candidate-promotion-api = { path = "../review-note-candidate-promotion-api" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-review-note-candidate-api = { path = "../review-note-candidate-api" }
+makosh-review-note-candidate-core = { path = "../review-note-candidate-core" }
+makosh-review-note-candidate-persistence = { path = "../review-note-candidate-persistence" }
+makosh-review-note-candidate-promotion-api = { path = "../review-note-candidate-promotion-api" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }

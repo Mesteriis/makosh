@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use std::sync::Mutex;
 use std::time::{Duration, Instant};
 
-use hermes_vault_protocol::{
+use makosh_vault_protocol::{
     LeaseAudienceV1, LeaseIdV1, SecretClassV1, VaultActionV1, VaultCiphertextFrameV1,
     VaultProvisioningReceiptV1, VaultResponseRecipientV1, VaultTransportBindingV1,
     VaultTransportCommandV1, VaultTransportDirectionV1, VaultTransportPublicKey, seal,
@@ -478,7 +478,7 @@ mod tests {
             operation_id,
             VaultActionV1::Create,
             1,
-            hermes_vault_protocol::VaultProvisioningStateV1::Active,
+            makosh_vault_protocol::VaultProvisioningStateV1::Active,
         )
         .expect("receipt");
         let receipt_binding = VaultTransportBindingV1::new(

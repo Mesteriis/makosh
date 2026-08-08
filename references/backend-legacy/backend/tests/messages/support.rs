@@ -1,22 +1,22 @@
 #![allow(dead_code)]
 
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 
-use hermes_communications_api::evidence::{
+use makosh_communications_api::evidence::{
     NewRawCommunicationRecord, StoredRawCommunicationRecord,
 };
 
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::Utc;
 use serde_json::{Value, json};
 use sqlx::postgres::{PgPool, PgPoolOptions};
 
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::domains::communications::messages::store::MessageProjectionStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::domains::communications::messages::store::MessageProjectionStore;
 
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::storage::database::Database;
 
 pub async fn live_projection_context(
     _test_name: &str,
@@ -92,7 +92,7 @@ pub async fn record_raw_email_message(
 
 pub fn disconnected_message_store() -> MessageProjectionStore {
     let pool = PgPoolOptions::new()
-        .connect_lazy("postgres://hermes:unused@127.0.0.1:1/hermes_hub")
+        .connect_lazy("postgres://makosh:unused@127.0.0.1:1/makosh_hub")
         .expect("create lazy test pool");
     MessageProjectionStore::new(pool)
 }

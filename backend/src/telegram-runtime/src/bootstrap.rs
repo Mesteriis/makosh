@@ -3,37 +3,37 @@
 use std::os::unix::net::UnixStream;
 use std::path::PathBuf;
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
 };
-use hermes_managed_vault_client::{
+use makosh_managed_vault_client::{
     ManagedProviderCredentialClientV2, ManagedProviderCredentialContextV1,
     ManagedProviderCredentialErrorV1, ManagedProviderCredentialRequestV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{
         ManagedControlChannelV2, ManagedControlRequestDispatcherV2, RejectManagedControlRequestsV2,
     },
     v1::{ManagedIntegrationRuntimeConfigurationV1, ManagedStorageRuntimeConfigurationV1},
     validation::managed_integration_runtime::validate_managed_integration_runtime_configuration,
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::StorageVaultRouteContextV1;
-use hermes_telegram_api::client_contract::TELEGRAM_OWNER_ID;
-use hermes_telegram_api::{
+use makosh_storage_vault::StorageVaultRouteContextV1;
+use makosh_telegram_api::client_contract::TELEGRAM_OWNER_ID;
+use makosh_telegram_api::{
     TelegramAccountSetup, TelegramCredentialBinding, TelegramCredentialPurpose,
 };
-use hermes_telegram_automation_persistence::TelegramAutomationPersistence;
-use hermes_telegram_calls_persistence::TelegramCallsPersistence;
-use hermes_telegram_core::credential_lease_purpose_for_purpose;
-use hermes_telegram_delivery_intent_contract::telegram_delivery_intent_execute_contract_reference_v1;
-use hermes_telegram_persistence::{TelegramDurablePersistence, TelegramDurablePersistenceError};
-use hermes_telegram_tdlib::{TdJsonLibrary, TdlibAuthorizationParameters, TdlibError};
-use hermes_vault_protocol::SecretClassV1;
+use makosh_telegram_automation_persistence::TelegramAutomationPersistence;
+use makosh_telegram_calls_persistence::TelegramCallsPersistence;
+use makosh_telegram_core::credential_lease_purpose_for_purpose;
+use makosh_telegram_delivery_intent_contract::telegram_delivery_intent_execute_contract_reference_v1;
+use makosh_telegram_persistence::{TelegramDurablePersistence, TelegramDurablePersistenceError};
+use makosh_telegram_tdlib::{TdJsonLibrary, TdlibAuthorizationParameters, TdlibError};
+use makosh_vault_protocol::SecretClassV1;
 
 use crate::admission::TELEGRAM_CREDENTIAL_LEASE_TTL_SECONDS;
 use crate::calls_backfill::complete_calls_realtime_backfill_v1;
@@ -151,7 +151,7 @@ impl TelegramProviderReconfigurationContextV1 {
 #[allow(clippy::too_many_arguments)]
 pub async fn open_admitted_runtime(
     library: TdJsonLibrary,
-    call_media: Box<dyn hermes_telegram_call_media_contract::TelegramCallSignalingMediaPort>,
+    call_media: Box<dyn makosh_telegram_call_media_contract::TelegramCallSignalingMediaPort>,
     descriptor_bytes: Vec<u8>,
     settings_schema_bytes: Vec<u8>,
     runtime_instance_id: &str,
@@ -198,7 +198,7 @@ pub async fn open_admitted_runtime(
         resolve_storage_credential_v2(control_channel, &storage_binding, storage_vault_context)
             .await
             .map_err(|error| {
-                if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                     eprintln!("developer_telegram_storage_credential_error={error:?}");
                 }
                 TelegramBootstrapError::CredentialRoute(TelegramCredentialRouteError::Unavailable)
@@ -221,7 +221,7 @@ pub async fn open_admitted_runtime(
     complete_calls_realtime_backfill_v1(&calls, &identity)
         .await
         .map_err(|error| {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_telegram_calls_backfill_error={error:?}");
             }
             TelegramBootstrapError::CallsBackfill
@@ -644,7 +644,7 @@ fn storage_binding_from_configuration(
 
 #[cfg(test)]
 mod credential_binding_tests {
-    use hermes_telegram_api::{TelegramCredentialBinding, TelegramCredentialPurpose};
+    use makosh_telegram_api::{TelegramCredentialBinding, TelegramCredentialPurpose};
 
     use super::credential_revisions;
 

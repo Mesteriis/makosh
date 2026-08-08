@@ -1,6 +1,6 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     communication_reply_inference_contract_reference_v1, validate_reply_inference_request_v1,
     validate_reply_inference_result_v1,
     wire::{
@@ -9,16 +9,16 @@ use hermes_ai_contracts::{
         CommunicationReplySuggestionInferenceResultV1,
     },
 };
-use hermes_communication_reply_suggestion_core::{
+use makosh_communication_reply_suggestion_core::{
     ReplySuggestionCandidateV1, ReplySuggestionCompletenessV1, ReplySuggestionLanguageV1,
     ReplySuggestionRejectionCodeV1, ReplySuggestionStateV1, ReplySuggestionToneV1,
     ReplySuggestionTransitionV1,
 };
-use hermes_communication_reply_suggestion_persistence::{
+use makosh_communication_reply_suggestion_persistence::{
     CommunicationReplySuggestionPersistenceV1, PersistedReplySuggestionRunV1,
     ReplySuggestionPersistenceErrorV1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         ManagedRuntimeControlRequestV1, ManagedRuntimeModuleRequestRequestV1,

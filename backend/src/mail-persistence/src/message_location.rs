@@ -1,4 +1,4 @@
-use hermes_mail_api::{
+use makosh_mail_api::{
     message_location::{
         MailMessageLocationAcceptedV1, MailMessageLocationCommandV1, MailMessageLocationKindV1,
         MailMessageLocationOperationOutcomeV1, MailMessageLocationOperationStatusV1,
@@ -18,7 +18,7 @@ use crate::{
 };
 
 pub const MAIL_SCHEMA_V15: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.mail_message_location_operations (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_message_location_operations (
     operation_id TEXT PRIMARY KEY,
     connection_id TEXT NOT NULL,
     message_id TEXT NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_message_location_operations (
     completed_at_unix_seconds BIGINT,
     projection_revision BIGINT CHECK (projection_revision > 0),
     FOREIGN KEY (connection_id, message_id)
-        REFERENCES hermes_data.mail_operational_messages (connection_id, message_id)
+        REFERENCES makosh_data.mail_operational_messages (connection_id, message_id)
         ON DELETE CASCADE,
     CHECK (
         (location_kind = 4 AND target_folder_id IS NOT NULL
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_message_location_operations (
 );
 
 CREATE INDEX IF NOT EXISTS mail_message_location_operations_pending_idx
-ON hermes_data.mail_message_location_operations (
+ON makosh_data.mail_message_location_operations (
     connection_id,
     outcome,
     requested_at_unix_seconds,
@@ -101,7 +101,7 @@ impl MailDurablePersistence {
             .await
             .map_err(|_| MailMessageLocationPersistenceErrorV1::Database)?;
         let existing = sqlx::query(
-            "SELECT request_sha256 FROM hermes_data.mail_message_location_operations \
+            "SELECT request_sha256 FROM makosh_data.mail_message_location_operations \
              WHERE operation_id = $1",
         )
         .bind(&command.operation_id)
@@ -124,7 +124,7 @@ impl MailDurablePersistence {
             });
         }
         let message_exists = sqlx::query(
-            "SELECT 1 FROM hermes_data.mail_operational_messages \
+            "SELECT 1 FROM makosh_data.mail_operational_messages \
              WHERE connection_id = $1 AND message_id = $2",
         )
         .bind(&command.connection_id)
@@ -138,7 +138,7 @@ impl MailDurablePersistence {
         }
         if let Some(target_folder_id) = command.target_folder_id.as_deref() {
             let target_exists = sqlx::query(
-                "SELECT 1 FROM hermes_data.mail_operational_folders \
+                "SELECT 1 FROM makosh_data.mail_operational_folders \
                  WHERE connection_id = $1 AND folder_id = $2",
             )
             .bind(&command.connection_id)
@@ -152,7 +152,7 @@ impl MailDurablePersistence {
             }
         }
         sqlx::query(
-            "INSERT INTO hermes_data.mail_message_location_operations \
+            "INSERT INTO makosh_data.mail_message_location_operations \
              (operation_id, connection_id, message_id, location_kind, target_folder_id, \
               request_sha256, exact_command_bytes, requested_at_unix_seconds) \
              VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
@@ -187,7 +187,7 @@ impl MailDurablePersistence {
         let row = sqlx::query(
             "SELECT operation_id, connection_id, message_id, location_kind, target_folder_id, \
              outcome, requested_at_unix_seconds, completed_at_unix_seconds, projection_revision \
-             FROM hermes_data.mail_message_location_operations \
+             FROM makosh_data.mail_message_location_operations \
              WHERE operation_id = $1 AND connection_id = $2",
         )
         .bind(&request.operation_id)
@@ -209,7 +209,7 @@ impl MailDurablePersistence {
         let row = sqlx::query(
             "SELECT operation_id, connection_id, message_id, location_kind, target_folder_id, \
              request_sha256, exact_command_bytes \
-             FROM hermes_data.mail_message_location_operations \
+             FROM makosh_data.mail_message_location_operations \
              WHERE connection_id = $1 AND outcome = 1 \
              ORDER BY requested_at_unix_seconds, operation_id LIMIT 1",
         )
@@ -230,7 +230,7 @@ impl MailDurablePersistence {
         let rows = if let Some(target) = command.target_folder_id.as_deref() {
             sqlx::query(
                 "SELECT folder_id, display_name, kind \
-                 FROM hermes_data.mail_operational_folders \
+                 FROM makosh_data.mail_operational_folders \
                  WHERE connection_id = $1 AND folder_id = $2",
             )
             .bind(&command.connection_id)
@@ -248,7 +248,7 @@ impl MailDurablePersistence {
             };
             sqlx::query(
                 "SELECT folder_id, display_name, kind \
-                 FROM hermes_data.mail_operational_folders \
+                 FROM makosh_data.mail_operational_folders \
                  WHERE connection_id = $1 AND kind = $2 ORDER BY folder_id LIMIT 2",
             )
             .bind(&command.connection_id)
@@ -294,7 +294,7 @@ impl MailDurablePersistence {
             .map_err(|_| MailMessageLocationPersistenceErrorV1::Database)?;
         let row = sqlx::query(
             "SELECT provider_thread_id, projection_revision \
-             FROM hermes_data.mail_operational_messages \
+             FROM makosh_data.mail_operational_messages \
              WHERE connection_id = $1 AND message_id = $2 FOR UPDATE",
         )
         .bind(&queued.connection_id)
@@ -310,7 +310,7 @@ impl MailDurablePersistence {
             .try_get::<i64, _>("projection_revision")
             .map_err(|_| MailMessageLocationPersistenceErrorV1::InvalidRow)?;
         let old_rows = sqlx::query(
-            "SELECT folder_id FROM hermes_data.mail_operational_message_folders \
+            "SELECT folder_id FROM makosh_data.mail_operational_message_folders \
              WHERE connection_id = $1 AND message_id = $2 ORDER BY folder_id",
         )
         .bind(&queued.connection_id)
@@ -326,7 +326,7 @@ impl MailDurablePersistence {
             })
             .collect::<Result<Vec<_>, _>>()?;
         let old_locator = sqlx::query(
-            "SELECT mailbox_id, uid_validity, uid FROM hermes_data.mail_imap_message_locators \
+            "SELECT mailbox_id, uid_validity, uid FROM makosh_data.mail_imap_message_locators \
              WHERE connection_id = $1 AND message_id = $2 FOR UPDATE",
         )
         .bind(&queued.connection_id)
@@ -353,7 +353,7 @@ impl MailDurablePersistence {
             .map_err(map_operational_error)?;
         }
         sqlx::query(
-            "DELETE FROM hermes_data.mail_operational_message_folders \
+            "DELETE FROM makosh_data.mail_operational_message_folders \
              WHERE connection_id = $1 AND message_id = $2",
         )
         .bind(&queued.connection_id)
@@ -363,7 +363,7 @@ impl MailDurablePersistence {
         .map_err(|_| MailMessageLocationPersistenceErrorV1::Database)?;
         for folder_id in &new_folder_ids {
             sqlx::query(
-                "INSERT INTO hermes_data.mail_operational_message_folders \
+                "INSERT INTO makosh_data.mail_operational_message_folders \
                  (connection_id, provider_message_id, folder_id) VALUES ($1, $2, $3)",
             )
             .bind(&queued.connection_id)
@@ -393,7 +393,7 @@ impl MailDurablePersistence {
         };
         if changed {
             sqlx::query(
-                "UPDATE hermes_data.mail_operational_messages \
+                "UPDATE makosh_data.mail_operational_messages \
                  SET projection_revision = $3, updated_at_unix_seconds = $4 \
                  WHERE connection_id = $1 AND message_id = $2",
             )
@@ -428,7 +428,7 @@ impl MailDurablePersistence {
             }
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_message_location_operations \
+            "UPDATE makosh_data.mail_message_location_operations \
              SET outcome = 2, completed_at_unix_seconds = $3, projection_revision = $4 \
              WHERE operation_id = $1 AND connection_id = $2 AND outcome = 1",
         )
@@ -470,7 +470,7 @@ impl MailDurablePersistence {
             return Err(MailMessageLocationPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.mail_message_location_operations \
+            "UPDATE makosh_data.mail_message_location_operations \
              SET outcome = $3, completed_at_unix_seconds = $4 \
              WHERE operation_id = $1 AND connection_id = $2 AND outcome = 1",
         )

@@ -1,4 +1,4 @@
-use hermes_communication_recipient_suggestion_api::{
+use makosh_communication_recipient_suggestion_api::{
     COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_MAJOR_V1,
     wire::{
         CommunicationRecipientRationaleV1 as WireRationale,
@@ -13,18 +13,18 @@ use hermes_communication_recipient_suggestion_api::{
         StartCommunicationRecipientSuggestionResponseV1,
     },
 };
-use hermes_communication_recipient_suggestion_core::{
+use makosh_communication_recipient_suggestion_core::{
     CommunicationRecipientCandidateV1, CommunicationRecipientRationaleV1,
     CommunicationRecipientRoleV1, CommunicationRecipientSourceBasisV1,
     CommunicationRecipientSuggestionDraftV1, CommunicationRecipientSuggestionRejectionCodeV1,
     CommunicationRecipientSuggestionStateV1,
 };
-use hermes_communication_recipient_suggestion_persistence::{
+use makosh_communication_recipient_suggestion_persistence::{
     CommunicationRecipientSuggestionPersistenceErrorV1,
     CommunicationRecipientSuggestionPersistenceV1, CreateCommunicationRecipientSuggestionOutcomeV1,
     CreateCommunicationRecipientSuggestionRunV1, PersistedCommunicationRecipientSuggestionRunV1,
 };
-use hermes_communications_recipient_source_api::{
+use makosh_communications_recipient_source_api::{
     CommunicationRecipientSourceEnvelopeContextV1,
     build_communication_recipient_source_prepare_outbox_record_v1,
 };
@@ -172,7 +172,7 @@ fn source_prepare_record(
     runtime: &CommunicationRecipientSuggestionClientRuntimeContextV1<'_>,
     draft: &CommunicationRecipientSuggestionDraftV1,
     now_unix_millis: i64,
-) -> Option<hermes_events_protocol::delivery::OutboxRecordV1> {
+) -> Option<makosh_events_protocol::delivery::OutboxRecordV1> {
     if now_unix_millis <= 0
         || runtime.runtime_instance_id.is_empty()
         || runtime.runtime_generation == 0
@@ -189,7 +189,7 @@ fn source_prepare_record(
         logical_owner_id,
         deadline,
         &CommunicationRecipientSourceEnvelopeContextV1 {
-            module_id: hermes_communication_recipient_suggestion_api::COMMUNICATION_RECIPIENT_SUGGESTION_MODULE_ID_V1
+            module_id: makosh_communication_recipient_suggestion_api::COMMUNICATION_RECIPIENT_SUGGESTION_MODULE_ID_V1
                 .to_owned(),
             runtime_instance_id: runtime.runtime_instance_id.to_owned(),
             runtime_generation: runtime.runtime_generation,
@@ -222,7 +222,7 @@ fn get_response(run: PersistedCommunicationRecipientSuggestionRunV1) -> Vec<u8> 
 
 fn run_id(logical_owner_id: &str, operation_id: &[u8; 16]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.communication_recipient_suggestion.run.v1\0");
+    digest.update(b"makosh.communication_recipient_suggestion.run.v1\0");
     digest.update(logical_owner_id.as_bytes());
     digest.update([0]);
     digest.update(operation_id);

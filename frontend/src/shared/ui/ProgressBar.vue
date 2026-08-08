@@ -29,23 +29,23 @@ const percentage = computed(() => {
 const progressValue = computed(() => props.indeterminate ? undefined : normalizedValue.value)
 
 const classes = computed(() => [
-  'hermes-progress-bar',
-  `hermes-progress-bar--${props.size}`,
-  `hermes-progress-bar--${props.tone}`,
-  { 'hermes-progress-bar--indeterminate': props.indeterminate },
+  'makosh-progress-bar',
+  `makosh-progress-bar--${props.size}`,
+  `makosh-progress-bar--${props.tone}`,
+  { 'makosh-progress-bar--indeterminate': props.indeterminate },
   props.class
 ])
 </script>
 
 <template>
   <div :class="classes">
-    <div v-if="label || showValue" class="hermes-progress-bar-header">
-      <label v-if="label" class="hermes-progress-bar-label" :for="id">{{ label }}</label>
-      <span v-if="showValue && !indeterminate" class="hermes-progress-bar-value">{{ percentage }}%</span>
+    <div v-if="label || showValue" class="makosh-progress-bar-header">
+      <label v-if="label" class="makosh-progress-bar-label" :for="id">{{ label }}</label>
+      <span v-if="showValue && !indeterminate" class="makosh-progress-bar-value">{{ percentage }}%</span>
     </div>
     <progress
       :id="id"
-      class="hermes-progress-bar-native"
+      class="makosh-progress-bar-native"
       :value="progressValue"
       :max="max"
     >

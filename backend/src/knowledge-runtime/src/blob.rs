@@ -1,17 +1,17 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobClientError, BlobDataClient, ManagedBlobCustodyReleaseRequestV1,
     ManagedBlobCustodyTransferRequestV1, ManagedBlobSessionRequestV1,
     request_managed_blob_custody_release_v2, request_managed_blob_custody_transfer_v2,
     request_managed_blob_session_v2,
 };
-use hermes_knowledge_command_api::{
+use makosh_knowledge_command_api::{
     KNOWLEDGE_REVIEWED_CANDIDATE_BLOB_CAPABILITY_ID_V1,
     KNOWLEDGE_REVIEWED_CANDIDATE_MAX_BLOB_BYTES_V1, wire::ReviewedKnowledgeNoteContentV1,
 };
-use hermes_knowledge_persistence::{KnowledgeBlobCleanupV1, KnowledgeBlobReceiptV1};
-use hermes_runtime_protocol::{
+use makosh_knowledge_persistence::{KnowledgeBlobCleanupV1, KnowledgeBlobReceiptV1};
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{BlobCustodyReleaseReasonV1, BlobDataOperationV1},
 };
@@ -167,7 +167,7 @@ fn validate_receipt(receipt: &KnowledgeBlobReceiptV1) -> Result<(), KnowledgeBlo
         || receipt.sha256.iter().all(|byte| *byte == 0)
         || receipt.custody_transfer_source_proof.is_empty()
         || receipt.custody_transfer_source_proof.len()
-            > hermes_knowledge_command_api::KNOWLEDGE_REVIEWED_CANDIDATE_MAX_PROOF_BYTES_V1
+            > makosh_knowledge_command_api::KNOWLEDGE_REVIEWED_CANDIDATE_MAX_PROOF_BYTES_V1
     {
         return Err(KnowledgeBlobErrorV1::InvalidReceipt);
     }
@@ -180,7 +180,7 @@ fn validate_cleanup(receipt: &KnowledgeBlobCleanupV1) -> Result<(), KnowledgeBlo
         || receipt.sha256.iter().all(|byte| *byte == 0)
         || receipt.custody_proof.is_empty()
         || receipt.custody_proof.len()
-            > hermes_knowledge_command_api::KNOWLEDGE_REVIEWED_CANDIDATE_MAX_PROOF_BYTES_V1
+            > makosh_knowledge_command_api::KNOWLEDGE_REVIEWED_CANDIDATE_MAX_PROOF_BYTES_V1
     {
         return Err(KnowledgeBlobErrorV1::InvalidReceipt);
     }
@@ -206,7 +206,7 @@ fn classify_blob_client_error_v1(error: BlobClientError) -> KnowledgeBlobErrorV1
 
 fn release_operation_id(command_id: [u8; 16]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.knowledge.reviewed-candidate.release.v1\0");
+    digest.update(b"makosh.knowledge.reviewed-candidate.release.v1\0");
     digest.update(command_id);
     digest.finalize()[..16].try_into().expect("digest prefix")
 }
@@ -214,7 +214,7 @@ fn release_operation_id(command_id: [u8; 16]) -> [u8; 16] {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_knowledge_command_api::wire::ReviewedKnowledgeNoteContentV1;
+    use makosh_knowledge_command_api::wire::ReviewedKnowledgeNoteContentV1;
 
     #[test]
     fn release_identity_is_command_stable() {

@@ -11,7 +11,7 @@ Clarifies:
 
 ## Context
 
-Hermes already uses Persona-native table, API and domain names, while several
+Макошь already uses Persona-native table, API and domain names, while several
 durable columns and internal models still use `person_id`. ADR-0074, ADR-0084
 and ADR-0090 intentionally retained those names until a dedicated physical
 migration decision was accepted.

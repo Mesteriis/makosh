@@ -1,17 +1,17 @@
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     validate_explanation_inference_request_v1,
     wire::{
         AiInferenceTerminalStatusV1, AiProviderExplanationRequestV1,
         CommunicationExplanationInferenceRequestV1,
     },
 };
-use hermes_ai_inference_core::{
+use makosh_ai_inference_core::{
     AiExplanationExecutionPlanV1, AiInferenceCoreErrorV1, AiInferenceRunStateV1,
     accept_explanation_inference_v1, begin_explanation_inference_v1,
     build_explanation_provider_input_v1, complete_explanation_inference_v1,
     explanation_inference_execution_plan_v1, reject_explanation_inference_v1,
 };
-use hermes_ai_inference_persistence::{
+use makosh_ai_inference_persistence::{
     AiExplanationTransitionV1, AiInferencePersistenceErrorV1, AiInferencePersistenceV1,
     PersistedAiExplanationRunV1,
 };

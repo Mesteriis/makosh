@@ -1,7 +1,7 @@
 use serde_json::Value;
 
 use crate::platform::communications::email_sync::{IMAP_ALL_MAILBOXES, imap_mailbox_stream_id};
-use hermes_communications_api::mail_resources::{ImapMailboxListRequest, ImapMessageFetchRequest};
+use makosh_communications_api::mail_resources::{ImapMailboxListRequest, ImapMessageFetchRequest};
 
 use super::super::errors::ProviderSyncError;
 use super::super::models::progress::{MailSyncPhase, ProgressMode, ProgressUpdate};

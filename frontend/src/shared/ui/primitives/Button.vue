@@ -29,10 +29,10 @@ const emit = defineEmits<{
 const attrs = useAttrs()
 const classes = computed(() => {
   return [
-    'hermes-btn',
-    `hermes-btn--${props.variant}`,
-    `hermes-btn--${props.size}`,
-    { 'hermes-btn--disabled': props.disabled || props.loading },
+    'makosh-btn',
+    `makosh-btn--${props.variant}`,
+    `makosh-btn--${props.size}`,
+    { 'makosh-btn--disabled': props.disabled || props.loading },
     props.class
   ]
 })
@@ -52,9 +52,9 @@ function handleClick(event: MouseEvent): void {
     :type="type"
     @click="handleClick"
   >
-    <Icon v-if="loading" icon="tabler:loader-2" size="1em" class="hermes-btn-spinner" />
+    <Icon v-if="loading" icon="tabler:loader-2" size="1em" class="makosh-btn-spinner" />
     <Icon v-else-if="icon" :icon="icon" size="1em" />
-    <span v-if="$slots.default" class="hermes-btn-text">
+    <span v-if="$slots.default" class="makosh-btn-text">
       <slot />
     </span>
   </button>

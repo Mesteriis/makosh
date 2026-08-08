@@ -6,7 +6,7 @@ fn browser_session_cookie_is_host_only_secure_and_non_persistent() {
     let header = BrowserSameOriginSessionV1::issue_cookie(&session_id).expect("session cookie");
     assert_eq!(
         header,
-        format!("__Host-hermes-session={session_id}; Path=/; Secure; HttpOnly; SameSite=Strict")
+        format!("__Host-makosh-session={session_id}; Path=/; Secure; HttpOnly; SameSite=Strict")
     );
     assert!(!header.contains("Domain="));
     assert!(!header.contains("Max-Age="));
@@ -16,7 +16,7 @@ fn browser_session_cookie_is_host_only_secure_and_non_persistent() {
         session_id
     );
     assert!(
-        BrowserSameOriginSessionV1::session_id_from_cookie("__Host-hermes-session=bad").is_err()
+        BrowserSameOriginSessionV1::session_id_from_cookie("__Host-makosh-session=bad").is_err()
     );
 }
 

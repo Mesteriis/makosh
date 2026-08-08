@@ -2,7 +2,7 @@
 
 use std::path::{Path, PathBuf};
 
-use hermes_runtime_protocol::v1::{ModuleDescriptorV1, ModuleKindV1};
+use makosh_runtime_protocol::v1::{ModuleDescriptorV1, ModuleKindV1};
 use prost::Message;
 
 use super::super::common::*;
@@ -11,7 +11,7 @@ use crate::platform::vault::managed_route::KernelManagedVaultRouteHandler;
 use crate::platform::vault::{binding as vault_binding, launch as vault_launch};
 
 pub(crate) fn vault_binary() -> PathBuf {
-    binary("HERMES_VAULT_RUNTIME_BIN")
+    binary("MAKOSH_VAULT_RUNTIME_BIN")
 }
 
 pub(crate) fn vault_descriptor() -> Vec<u8> {

@@ -10,10 +10,10 @@ const composeFile = join(
   backendDirectory,
   'tests/support/events/nats/jwt/compose.yaml',
 );
-const fixtureDirectory = await mkdtemp(join(tmpdir(), 'hermes-nats-jwt-'));
+const fixtureDirectory = await mkdtemp(join(tmpdir(), 'makosh-nats-jwt-'));
 const composeEnvironment = {
   ...process.env,
-  HERMES_NATS_JWT_FIXTURE_DIR: fixtureDirectory,
+  MAKOSH_NATS_JWT_FIXTURE_DIR: fixtureDirectory,
 };
 
 try {
@@ -27,7 +27,7 @@ try {
       'test',
       '--locked',
       '-p',
-      'hermes-events-jetstream-testkit',
+      'makosh-events-jetstream-testkit',
       'tests::jwt_live::jwt_runtime_credential_is_verified_and_broker_fences_subjects',
       '--',
       '--ignored',
@@ -36,10 +36,10 @@ try {
     ],
     {
       ...composeEnvironment,
-      HERMES_NATS_JWT_TEST_ENDPOINT: 'nats://127.0.0.1:43223',
-      HERMES_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE: credentials.accountPublicKey,
-      HERMES_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE: credentials.accountSigningSeed,
-      HERMES_NATS_JWT_EVENT_HUB_CREDS_FILE: credentials.eventHubCredentials,
+      MAKOSH_NATS_JWT_TEST_ENDPOINT: 'nats://127.0.0.1:43223',
+      MAKOSH_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE: credentials.accountPublicKey,
+      MAKOSH_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE: credentials.accountSigningSeed,
+      MAKOSH_NATS_JWT_EVENT_HUB_CREDS_FILE: credentials.eventHubCredentials,
     },
   );
   await runResolverPublisherConformance(credentials, composeEnvironment);
@@ -85,7 +85,7 @@ async function runResolverPublisherConformance(credentials, environment) {
       'test',
       '--locked',
       '-p',
-      'hermes-events-jetstream-testkit',
+      'makosh-events-jetstream-testkit',
       'tests::resolver_update_live::system_account_publishes_a_bound_account_jwt',
       '--',
       '--ignored',
@@ -94,11 +94,11 @@ async function runResolverPublisherConformance(credentials, environment) {
     ],
     {
       ...environment,
-      HERMES_NATS_TEST_ENDPOINT: 'nats://127.0.0.1:43223',
-      HERMES_NATS_JWT_TEST_ENDPOINT: 'nats://127.0.0.1:43223',
-      HERMES_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE: credentials.accountPublicKey,
-      HERMES_NATS_JWT_ACCOUNT_JWT_FILE: credentials.eventsAccountJwt,
-      HERMES_NATS_JWT_RESOLVER_UPDATE_CREDS_FILE: credentials.resolverUpdateCredentials,
+      MAKOSH_NATS_TEST_ENDPOINT: 'nats://127.0.0.1:43223',
+      MAKOSH_NATS_JWT_TEST_ENDPOINT: 'nats://127.0.0.1:43223',
+      MAKOSH_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE: credentials.accountPublicKey,
+      MAKOSH_NATS_JWT_ACCOUNT_JWT_FILE: credentials.eventsAccountJwt,
+      MAKOSH_NATS_JWT_RESOLVER_UPDATE_CREDS_FILE: credentials.resolverUpdateCredentials,
     },
   );
 }
@@ -111,7 +111,7 @@ async function runAuthorityResolverConformance(credentials, environment) {
       'test',
       '--locked',
       '-p',
-      'hermes-events-jetstream-testkit',
+      'makosh-events-jetstream-testkit',
       'tests::authority_runtime::resolver_update_live::authority_runtime_updates_the_resolver_only_with_vault_system_credentials',
       '--',
       '--ignored',
@@ -120,12 +120,12 @@ async function runAuthorityResolverConformance(credentials, environment) {
     ],
     {
       ...environment,
-      HERMES_NATS_TEST_ENDPOINT: 'nats://127.0.0.1:43223',
-      HERMES_NATS_JWT_TEST_ENDPOINT: 'nats://127.0.0.1:43223',
-      HERMES_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE: credentials.accountPublicKey,
-      HERMES_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE: credentials.accountSigningSeed,
-      HERMES_NATS_JWT_ACCOUNT_JWT_FILE: credentials.eventsAccountJwt,
-      HERMES_NATS_JWT_RESOLVER_UPDATE_CREDS_FILE: credentials.resolverUpdateCredentials,
+      MAKOSH_NATS_TEST_ENDPOINT: 'nats://127.0.0.1:43223',
+      MAKOSH_NATS_JWT_TEST_ENDPOINT: 'nats://127.0.0.1:43223',
+      MAKOSH_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE: credentials.accountPublicKey,
+      MAKOSH_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE: credentials.accountSigningSeed,
+      MAKOSH_NATS_JWT_ACCOUNT_JWT_FILE: credentials.eventsAccountJwt,
+      MAKOSH_NATS_JWT_RESOLVER_UPDATE_CREDS_FILE: credentials.resolverUpdateCredentials,
     },
   );
 }
@@ -138,9 +138,9 @@ async function buildManagedRuntimes(environment) {
       'build',
       '--locked',
       '-p',
-      'hermes-vault-runtime',
+      'makosh-vault-runtime',
       '-p',
-      'hermes-events-authority-runtime',
+      'makosh-events-authority-runtime',
     ],
     environment,
   );
@@ -154,7 +154,7 @@ async function runManagedAuthorityCredentialConformance(credentials, environment
       'test',
       '--locked',
       '-p',
-      'hermes-kernel-recovery-testkit',
+      'makosh-kernel-recovery-testkit',
       'tests::events_authority_vault::managed_jwt::kernel_managed_authority_delivers_a_broker_accepted_jwt',
       '--',
       '--ignored',
@@ -163,15 +163,15 @@ async function runManagedAuthorityCredentialConformance(credentials, environment
     ],
     {
       ...environment,
-      HERMES_EVENTS_MANAGED_JWT_TEST: '1',
-      HERMES_NATS_JWT_TEST_ENDPOINT: 'nats://127.0.0.1:43223',
-      HERMES_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE: credentials.accountPublicKey,
-      HERMES_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE: credentials.accountSigningSeed,
-      HERMES_NATS_JWT_EVENT_HUB_CREDS_FILE: credentials.eventHubCredentials,
-      HERMES_VAULT_RUNTIME_BIN: join(backendDirectory, 'target/debug/hermes-vault-runtime'),
-      HERMES_EVENTS_AUTHORITY_RUNTIME_BIN: join(
+      MAKOSH_EVENTS_MANAGED_JWT_TEST: '1',
+      MAKOSH_NATS_JWT_TEST_ENDPOINT: 'nats://127.0.0.1:43223',
+      MAKOSH_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE: credentials.accountPublicKey,
+      MAKOSH_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE: credentials.accountSigningSeed,
+      MAKOSH_NATS_JWT_EVENT_HUB_CREDS_FILE: credentials.eventHubCredentials,
+      MAKOSH_VAULT_RUNTIME_BIN: join(backendDirectory, 'target/debug/makosh-vault-runtime'),
+      MAKOSH_EVENTS_AUTHORITY_RUNTIME_BIN: join(
         backendDirectory,
-        'target/debug/hermes-events-authority-runtime',
+        'target/debug/makosh-events-authority-runtime',
       ),
     },
   );
@@ -187,7 +187,7 @@ async function verifyRevocationDisconnect(credentials, environment) {
       'test',
       '--locked',
       '-p',
-      'hermes-events-jetstream-testkit',
+      'makosh-events-jetstream-testkit',
       'tests::jwt_revocation_live::resolver_claim_update_disconnects_an_active_runtime',
       '--',
       '--ignored',
@@ -196,11 +196,11 @@ async function verifyRevocationDisconnect(credentials, environment) {
     ],
     {
       ...environment,
-      HERMES_NATS_JWT_TEST_ENDPOINT: 'nats://127.0.0.1:43223',
-      HERMES_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE: credentials.accountPublicKey,
-      HERMES_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE: credentials.accountSigningSeed,
-      HERMES_NATS_JWT_REVOCATION_READY_FILE: ready,
-      HERMES_NATS_JWT_REVOCATION_PROCEED_FILE: proceed,
+      MAKOSH_NATS_JWT_TEST_ENDPOINT: 'nats://127.0.0.1:43223',
+      MAKOSH_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE: credentials.accountPublicKey,
+      MAKOSH_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE: credentials.accountSigningSeed,
+      MAKOSH_NATS_JWT_REVOCATION_READY_FILE: ready,
+      MAKOSH_NATS_JWT_REVOCATION_PROCEED_FILE: proceed,
     },
   );
   await waitForFile(ready);

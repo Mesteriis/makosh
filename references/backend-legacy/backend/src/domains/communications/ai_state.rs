@@ -1,4 +1,4 @@
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::{DateTime, Utc};
@@ -8,8 +8,8 @@ use sqlx::postgres::{PgPool, PgRow};
 use sqlx::{Postgres, Row, Transaction};
 use thiserror::Error;
 
-use hermes_events_postgres::store::EventStore;
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_events_postgres::store::EventStore;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 const EVENT_TYPE_CHANGED: &str = "mail.ai_state.changed";
 pub const MAIL_AI_MAX_ATTEMPTS: i32 = 3;
@@ -179,7 +179,7 @@ impl CommunicationAiStateStore {
             },
         )
         .await?;
-        let event = ai_state_changed_event(&record, previous.ai_state, "hermes-frontend")?;
+        let event = ai_state_changed_event(&record, previous.ai_state, "makosh-frontend")?;
         EventStore::append_in_transaction(&mut transaction, &event).await?;
         if let Some(observation_id) = observation_id.filter(|value| !value.is_empty()) {
             link_mail_entity_in_transaction(
@@ -247,7 +247,7 @@ impl CommunicationAiStateStore {
             )
             .await?;
             let event =
-                ai_state_changed_event(&record, previous.ai_state, "hermes-mail-ai-worker")?;
+                ai_state_changed_event(&record, previous.ai_state, "makosh-mail-ai-worker")?;
             EventStore::append_in_transaction(&mut transaction, &event).await?;
         }
 
@@ -315,7 +315,7 @@ impl CommunicationAiStateStore {
             )
             .await?;
             let event =
-                ai_state_changed_event(&record, previous.ai_state, "hermes-mail-ai-worker")?;
+                ai_state_changed_event(&record, previous.ai_state, "makosh-mail-ai-worker")?;
             EventStore::append_in_transaction(&mut transaction, &event).await?;
         }
 
@@ -358,7 +358,7 @@ impl CommunicationAiStateStore {
             },
         )
         .await?;
-        let event = ai_state_changed_event(&record, previous.ai_state, "hermes-mail-ai-worker")?;
+        let event = ai_state_changed_event(&record, previous.ai_state, "makosh-mail-ai-worker")?;
         EventStore::append_in_transaction(&mut transaction, &event).await?;
         transaction.commit().await?;
 
@@ -541,7 +541,7 @@ fn ai_state_changed_event(
             "processing_lease_expires_at": record.processing_lease_expires_at,
     }))
     .provenance(json!({
-        "source_kind": if actor_id == "hermes-frontend" { "local_api" } else { "automation" },
+        "source_kind": if actor_id == "makosh-frontend" { "local_api" } else { "automation" },
         "source_id": record.message_id,
     }))
     .correlation_id(record.message_id.clone())
@@ -629,9 +629,9 @@ pub enum CommunicationAiStateError {
     #[error(transparent)]
     ObservationStore(#[from] ObservationStoreError),
     #[error(transparent)]
-    EventStore(#[from] hermes_events_postgres::errors::EventStoreError),
+    EventStore(#[from] makosh_events_postgres::errors::EventStoreError),
     #[error(transparent)]
-    EventEnvelope(#[from] hermes_events_api::EventEnvelopeError),
+    EventEnvelope(#[from] makosh_events_api::EventEnvelopeError),
     #[error("invalid mail AI state field: {0}")]
     Invalid(&'static str),
 }

@@ -8,7 +8,7 @@ const props = withDefaults(defineProps<{
 	tone: 'default'
 })
 
-const classes = computed(() => ['hermes-paragraph', `hermes-paragraph--${props.tone}`, props.class])
+const classes = computed(() => ['makosh-paragraph', `makosh-paragraph--${props.tone}`, props.class])
 </script>
 
 <template>

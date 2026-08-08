@@ -2,11 +2,11 @@
 
 use std::path::Path;
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     PlatformStorageBindingStateV1, SettingsApplyState, SettingsConfigurationTarget,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::{
     SETTINGS_CONFIGURATION_CATALOG_CAPABILITY_ID,
     v1::{
         ManagedIntegrationConfigurationInstanceV1, ManagedIntegrationHostBridgeConfigurationV1,
@@ -427,7 +427,7 @@ pub(crate) fn admitted_settings_snapshot_for_target(
 
 #[cfg(test)]
 mod tests {
-    use hermes_kernel_control_store::{
+    use makosh_kernel_control_store::{
         SettingsApplyState, SettingsConfigurationTarget, SettingsConfigurationTargetInputV1,
     };
 

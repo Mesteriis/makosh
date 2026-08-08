@@ -1,22 +1,22 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_cross_channel_forward_api::COMMUNICATION_CROSS_CHANNEL_FORWARD_OWNER_V1;
-use hermes_communication_cross_channel_forward_persistence::{
+use makosh_communication_cross_channel_forward_api::COMMUNICATION_CROSS_CHANNEL_FORWARD_OWNER_V1;
+use makosh_communication_cross_channel_forward_persistence::{
     CommunicationCrossChannelForwardPersistenceV1, CrossChannelForwardPersistenceErrorV1,
 };
-use hermes_communication_delivery_intent_ingress_api::{
+use makosh_communication_delivery_intent_ingress_api::{
     communication_delivery_intent_rejected_contract_reference_v1,
     communication_delivery_intent_submitted_contract_reference_v1,
 };
-use hermes_communications_cross_channel_forward_source_api::{
+use makosh_communications_cross_channel_forward_source_api::{
     cross_channel_forward_source_prepared_contract_reference_v1,
     cross_channel_forward_source_rejected_contract_reference_v1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::{
         ContractReferenceV1, ManagedRuntimeClientDeliveryResponseV1,
@@ -29,11 +29,11 @@ use hermes_runtime_protocol::{
         validate_module_client_request_v1, validate_module_client_response_v1,
     },
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 
@@ -469,7 +469,7 @@ async fn dispatch_client(
 ) -> ModuleClientResponseV1 {
     let valid_identity = request.protocol_major == 1
         && request.module_id
-            == hermes_communication_cross_channel_forward_api::COMMUNICATION_CROSS_CHANNEL_FORWARD_MODULE_ID_V1
+            == makosh_communication_cross_channel_forward_api::COMMUNICATION_CROSS_CHANNEL_FORWARD_MODULE_ID_V1
         && request.owner_id == COMMUNICATION_CROSS_CHANNEL_FORWARD_OWNER_V1;
     let (response_payload, accepted_route) = if valid_identity {
         if request.contract.as_ref() == Some(&cross_channel_forward_command_contract_v1()) {
@@ -811,8 +811,8 @@ mod tests {
     #[test]
     fn module_identity_is_exact_workflow_unit() {
         assert_eq!(
-            hermes_communication_cross_channel_forward_api::COMMUNICATION_CROSS_CHANNEL_FORWARD_MODULE_ID_V1,
-            "hermes-communication-cross-channel-forward-runtime"
+            makosh_communication_cross_channel_forward_api::COMMUNICATION_CROSS_CHANNEL_FORWARD_MODULE_ID_V1,
+            "makosh-communication-cross-channel-forward-runtime"
         );
     }
 }

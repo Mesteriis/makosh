@@ -37,7 +37,7 @@ if (!['baseline', 'after'].includes(mode)) {
 
 const url = process.argv[3] ?? 'http://localhost:5174/';
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-const outputDir = path.join(os.tmpdir(), `hermes-layout-${mode}-${timestamp}`);
+const outputDir = path.join(os.tmpdir(), `makosh-layout-${mode}-${timestamp}`);
 
 await mkdir(outputDir, { recursive: true });
 

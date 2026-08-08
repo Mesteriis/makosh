@@ -1,4 +1,4 @@
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     compute_provider_translation_request_digest_v1, validate_provider_translation_request_v1,
     validate_provider_translation_result_v1,
     wire::{
@@ -6,7 +6,7 @@ use hermes_ai_contracts::{
         AiProviderTranslationRequestV1, AiProviderTranslationResultV1, AiTranslationLanguageV1,
     },
 };
-use hermes_ollama_ai_api::{OllamaAiRuntimeSettingsV1, valid_ollama_model_name_v1};
+use makosh_ollama_ai_api::{OllamaAiRuntimeSettingsV1, valid_ollama_model_name_v1};
 use serde::Deserialize;
 use zeroize::Zeroizing;
 
@@ -236,7 +236,7 @@ fn detected_language(value: &str) -> Result<i32, OllamaAiCoreErrorV1> {
 
 #[cfg(test)]
 mod tests {
-    use hermes_ai_contracts::{AI_LOCAL_EGRESS_POLICY_REVISION_V1, wire::AiEgressPolicyV1};
+    use makosh_ai_contracts::{AI_LOCAL_EGRESS_POLICY_REVISION_V1, wire::AiEgressPolicyV1};
 
     use super::*;
 

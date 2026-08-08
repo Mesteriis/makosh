@@ -15,8 +15,8 @@ use crate::platform::storage::communication_media::{
 };
 use crate::platform::storage::errors::StorageError;
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_api::NewEventEnvelope;
+use makosh_events_postgres::store::EventStore;
 
 impl CommunicationStorageStore {
     pub async fn upsert_imported_attachment(
@@ -263,7 +263,7 @@ impl CommunicationStorageStore {
                 "id": imported.attachment_id,
             }),
         )
-        .actor(serde_json::json!({ "actor_id": "hermes-attachment-scanner" }))
+        .actor(serde_json::json!({ "actor_id": "makosh-attachment-scanner" }))
         .payload(serde_json::json!({
             "attachment_id": imported.attachment_id,
             "previous_scan_status": "not_scanned",

@@ -1,0 +1,52 @@
+{
+  "scenario_id": "zulip_direct_message",
+  "provider": "zulip",
+  "description": "Send a Zulip direct message and trace it as direct communication rather than stream/topic communication.",
+  "correlation_id_prefix": "lab-zulip-direct",
+  "event_types": [
+    "message"
+  ],
+  "actions": [
+    {
+      "kind": "send_direct_message",
+      "recipients": [
+        "alice@example.test"
+      ],
+      "recipient_user_ids_env": "ZULIP_DIRECT_RECIPIENT_USER_IDS",
+      "content": "Direct Макошь Lab note. Trace={{correlation_id}}"
+    }
+  ],
+  "expect": [
+    "signal.raw.zulip.message.observed"
+  ],
+  "backend_expected_stages": [
+    "signal.accepted.zulip.message",
+    "communication.message.recorded",
+    "zulip.direct_conversation"
+  ],
+  "capability_contract": [
+    {
+      "name": "provider_api.send_direct",
+      "status": "backend_test_required",
+      "evidence": "backend/tests/zulip.rs::zulip_api_client_supports_message_lifecycle_reactions_and_uploads"
+    },
+    {
+      "name": "receive.direct_message.recorded",
+      "status": "backend_test_required",
+      "evidence": "backend/tests/zulip.rs::zulip_raw_signal_projects_direct_message_without_stream_topic_shape"
+    },
+    {
+      "name": "lab.provider_send_direct",
+      "status": "execute_required",
+      "evidence": "make makosh-lab ACTION=scenario PROVIDER=zulip EXECUTE=1 SCENARIO=testing/makosh-lab/scenarios/zulip/direct-message.json"
+    }
+  ],
+  "backend_validation": {
+    "status": "not_run_by_lab",
+    "command": "cargo test --manifest-path backend/Cargo.toml --test zulip"
+  },
+  "notes": [
+    "Direct-message Lab execution against Zulip 12 should set ZULIP_DIRECT_RECIPIENT_USER_IDS to a JSON array or comma-separated list of real Zulip user IDs.",
+    "Backend validation proves direct messages are projected without stream/topic fallback."
+  ]
+}

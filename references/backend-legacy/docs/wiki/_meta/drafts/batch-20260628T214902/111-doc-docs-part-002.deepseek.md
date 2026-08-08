@@ -1,13 +1,13 @@
 ## Summary / Резюме
 
-Создать новую страницу `operations/documentation-map.md` в русской Obsidian‑wiki, которая описывает структуру проектной документации Hermes Hub и служит навигационной картой. Страница собирает информацию из доступных исходных файлов пакетов `architecture`, `development` и `domains`, а также ссылается на смежные пакеты (`integrations`, `foundation`, `platform`), упомянутые в каталоге доменов.
+Создать новую страницу `operations/documentation-map.md` в русской Obsidian‑wiki, которая описывает структуру проектной документации Макошь и служит навигационной картой. Страница собирает информацию из доступных исходных файлов пакетов `architecture`, `development` и `domains`, а также ссылается на смежные пакеты (`integrations`, `foundation`, `platform`), упомянутые в каталоге доменов.
 
 ## Proposed pages / Предлагаемые страницы
 
 ### `operations/documentation-map.md`
 
 ```markdown
-# Карта документации Hermes Hub
+# Карта документации Макошь
 
 Дата актуализации: состояние репозитория на 2026-06-18 (архитектурные страницы)
 и 2026-06-23 (инфраструктура тестирования), а также актуальный каталог доменов.
@@ -61,11 +61,11 @@
   unit, snapshot, фронтенд), push в `main` (добавляет integration, coverage, security),
   nightly (добавляет e2e и мутационное тестирование).
 - **[[development/testing/coverage]]** — Покрытие кода через `cargo-llvm-cov`, запуск через
-  `cargo nextest` в сессионной обвязке `hermes_test_session`.
+  `cargo nextest` в сессионной обвязке `makosh_test_session`.
 - **[[development/testing/mutation-testing]]** — Мутационное тестирование `cargo-mutants`,
   цель `make mutants`, выполняется в nightly CI и вручную.
 - **[[development/testing/nextest]]** — `cargo-nextest` как основной Rust-раннер, профили
-  (`default`, `ci`, `integration`), обязательное использование через `hermes_test_session`.
+  (`default`, `ci`, `integration`), обязательное использование через `makosh_test_session`.
 - **[[development/testing/security]]** — Безопасность и гигиена зависимостей:
   `cargo-audit`, `cargo-deny`, `cargo-udeps`, текущее состояние на 2026-06-23.
 - **[[development/testing/snapshots]]** — Снапшот-тестирование через `insta`, приёмка
@@ -131,9 +131,9 @@
 | `docs/development/README.md` | Индекс пакета разработки, ссылка на тестирование. |
 | `docs/development/testing/README.md` | Обзор тестовой инфраструктуры, карта команд `make`, классификация тестов, отчёты. |
 | `docs/development/testing/ci.md` | Разделение CI по pull request / push в main / nightly. |
-| `docs/development/testing/coverage.md` | Команды покрытия, запуск через `hermes_test_session`. |
+| `docs/development/testing/coverage.md` | Команды покрытия, запуск через `makosh_test_session`. |
 | `docs/development/testing/mutation-testing.md` | `cargo-mutants`, выполнение вне PR-гейта. |
-| `docs/development/testing/nextest.md` | `cargo-nextest` как основной раннер, профили, ограничение: предпочитать `make`‑цели с `hermes_test_session`. |
+| `docs/development/testing/nextest.md` | `cargo-nextest` как основной раннер, профили, ограничение: предпочитать `make`‑цели с `makosh_test_session`. |
 | `docs/development/testing/security.md` | Команды `make audit`, `make deny`, `make security`, `make udeps`, текущее состояние на 2026-06-23. |
 | `docs/development/testing/snapshots.md` | Снапшот-тестирование `insta`, приёмка новых снапшотов. |
 | `docs/development/testing/status.md` | Матрица готовности (13/16 завершено, 3/16 частично), результаты запусков валидации. |

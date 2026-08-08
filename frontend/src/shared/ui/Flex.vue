@@ -22,14 +22,14 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-flex',
-	`hermes-flex--${props.direction}`,
-	`hermes-flex--gap-${props.gap}`,
-	`hermes-flex--align-${props.align}`,
-	`hermes-flex--justify-${props.justify}`,
+	'makosh-flex',
+	`makosh-flex--${props.direction}`,
+	`makosh-flex--gap-${props.gap}`,
+	`makosh-flex--align-${props.align}`,
+	`makosh-flex--justify-${props.justify}`,
 	{
-		'hermes-flex--wrap': props.wrap,
-		'hermes-flex--inline': props.inline
+		'makosh-flex--wrap': props.wrap,
+		'makosh-flex--inline': props.inline
 	},
 	props.class
 ])

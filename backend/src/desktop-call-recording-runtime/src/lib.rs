@@ -10,7 +10,7 @@ mod managed_runtime;
 mod outbox;
 pub mod settings;
 
-pub const PACKAGE: &str = "hermes-desktop-call-recording-runtime";
+pub const PACKAGE: &str = "makosh-desktop-call-recording-runtime";
 
 pub use managed_runtime::{
     DesktopRecordingManagedRuntimeErrorV1, DesktopRecordingManagedRuntimeV1,

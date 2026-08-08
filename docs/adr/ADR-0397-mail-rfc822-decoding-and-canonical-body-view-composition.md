@@ -21,7 +21,7 @@ materialized как operational text. Копирование body в Mail Postgr
 
 ## Решение
 
-`hermes-mail-core` является единственной build unit для bounded RFC822/MIME
+`makosh-mail-core` является единственной build unit для bounded RFC822/MIME
 decoding, общей для IMAP и Gmail:
 
 - RFC 2047 `B`/`Q` encoded words декодируются до operational Subject/From/To;

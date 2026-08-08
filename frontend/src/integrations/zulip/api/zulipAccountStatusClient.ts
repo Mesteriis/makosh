@@ -6,7 +6,7 @@ import {
 	type ZulipAccountStatusV1,
 	ZulipOperationalQueryService,
 	ZulipOperationalQueryV1Schema,
-} from '../../../gen/hermes/zulip/operational/v1/client_pb'
+} from '../../../gen/makosh/zulip/operational/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 let client: Client<typeof ZulipOperationalQueryService> | null = null

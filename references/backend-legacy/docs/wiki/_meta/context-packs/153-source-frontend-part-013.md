@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/integrations/telegram/stores/telegramCommandAudit.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/stores/telegramCommandAudit.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/stores/telegramCommandAudit.ts`
 - Size bytes / Размер в байтах: `15701`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -391,7 +391,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/integrations/telegram/stores/telegramRuntimeStatus.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/stores/telegramRuntimeStatus.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/stores/telegramRuntimeStatus.test.ts`
 - Size bytes / Размер в байтах: `1848`
 - Included characters / Включено символов: `1848`
 - Truncated / Обрезано: `no`
@@ -456,7 +456,7 @@ describe('telegramRuntimeCommandTarget', () => {
 
 ### `frontend/src/integrations/telegram/stores/telegramRuntimeStatus.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/stores/telegramRuntimeStatus.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/stores/telegramRuntimeStatus.ts`
 - Size bytes / Размер в байтах: `535`
 - Included characters / Включено символов: `535`
 - Truncated / Обрезано: `no`
@@ -481,7 +481,7 @@ export function telegramRuntimeCommandTarget(status: TelegramRuntimeStatus | nul
 
 ### `frontend/src/integrations/telegram/types/automation.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/types/automation.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/types/automation.ts`
 - Size bytes / Размер в байтах: `1153`
 - Included characters / Включено символов: `1153`
 - Truncated / Обрезано: `no`
@@ -543,7 +543,7 @@ export type TelegramSendDryRunResponse = {
 
 ### `frontend/src/integrations/telegram/types/telegram.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/types/telegram.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/types/telegram.ts`
 - Size bytes / Размер в байтах: `68`
 - Included characters / Включено символов: `68`
 - Truncated / Обрезано: `no`
@@ -554,7 +554,7 @@ export type * from '../../../shared/communications/types/telegram'
 
 ### `frontend/src/integrations/telegram/types/telegramRealtime.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/types/telegramRealtime.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/types/telegramRealtime.ts`
 - Size bytes / Размер в байтах: `1483`
 - Included characters / Включено символов: `1483`
 - Truncated / Обрезано: `no`
@@ -609,7 +609,7 @@ export type TelegramRealtimeMessage =
 
 ### `frontend/src/integrations/telegram/views/TelegramRuntimePanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/telegram/views/TelegramRuntimePanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/telegram/views/TelegramRuntimePanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `1854`
 - Included characters / Включено символов: `1854`
 - Truncated / Обрезано: `no`
@@ -653,7 +653,7 @@ describe('TelegramRuntimePanel realtime boundary', () => {
 
 ### `frontend/src/integrations/whatsapp/api/whatsapp.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/api/whatsapp.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/api/whatsapp.ts`
 - Size bytes / Размер в байтах: `15190`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1049,7 +1049,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/integrations/whatsapp/api/whatsappCompanion.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/api/whatsappCompanion.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/api/whatsappCompanion.test.ts`
 - Size bytes / Размер в байтах: `8499`
 - Included characters / Включено символов: `8499`
 - Truncated / Обрезано: `no`
@@ -1266,7 +1266,7 @@ function companionManifest(overrides: Partial<{ opened_window: boolean }>) {
 
 ### `frontend/src/integrations/whatsapp/api/whatsappCompanion.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/api/whatsappCompanion.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/api/whatsappCompanion.ts`
 - Size bytes / Размер в байтах: `1610`
 - Included characters / Включено символов: `1610`
 - Truncated / Обрезано: `no`
@@ -1335,7 +1335,7 @@ function companionAccountId(accountId: string): string {
 
 ### `frontend/src/integrations/whatsapp/api/whatsappRuntime.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/api/whatsappRuntime.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/api/whatsappRuntime.test.ts`
 - Size bytes / Размер в байтах: `21903`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1539,7 +1539,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/integrations/whatsapp/queries/realtimeWhatsAppRuntimePatchValues.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/queries/realtimeWhatsAppRuntimePatchValues.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/queries/realtimeWhatsAppRuntimePatchValues.ts`
 - Size bytes / Размер в байтах: `752`
 - Included characters / Включено символов: `752`
 - Truncated / Обрезано: `no`
@@ -1571,7 +1571,7 @@ export function nullableStringValue(value: unknown, fallback: string | null): st
 
 ### `frontend/src/integrations/whatsapp/queries/realtimeWhatsAppRuntimePatches.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/queries/realtimeWhatsAppRuntimePatches.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/queries/realtimeWhatsAppRuntimePatches.ts`
 - Size bytes / Размер в байтах: `12626`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1940,7 +1940,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/integrations/whatsapp/queries/realtimeWhatsAppRuntimeSyncPatches.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/queries/realtimeWhatsAppRuntimeSyncPatches.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/queries/realtimeWhatsAppRuntimeSyncPatches.ts`
 - Size bytes / Размер в байтах: `15221`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2286,7 +2286,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/integrations/whatsapp/queries/useWhatsappQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/queries/useWhatsappQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/queries/useWhatsappQuery.ts`
 - Size bytes / Размер в байтах: `2115`
 - Included characters / Включено символов: `2115`
 - Truncated / Обрезано: `no`
@@ -2369,7 +2369,7 @@ export function useWhatsappSessionsQuery(
 
 ### `frontend/src/integrations/whatsapp/queries/useWhatsappRuntimeQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/queries/useWhatsappRuntimeQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/queries/useWhatsappRuntimeQuery.ts`
 - Size bytes / Размер в байтах: `13761`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2753,7 +2753,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `frontend/src/integrations/whatsapp/queries/whatsappQueryKeys.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/queries/whatsappQueryKeys.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/queries/whatsappQueryKeys.ts`
 - Size bytes / Размер в байтах: `1179`
 - Included characters / Включено символов: `1179`
 - Truncated / Обрезано: `no`
@@ -2780,7 +2780,7 @@ export const whatsappQueryKeys = {
 
 ### `frontend/src/integrations/whatsapp/stores/whatsapp.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/stores/whatsapp.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/stores/whatsapp.ts`
 - Size bytes / Размер в байтах: `3941`
 - Included characters / Включено символов: `3941`
 - Truncated / Обрезано: `no`
@@ -2929,7 +2929,7 @@ export const useWhatsappStore = defineStore('whatsapp-ui', () => {
 
 ### `frontend/src/integrations/whatsapp/types/whatsapp.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/types/whatsapp.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/types/whatsapp.ts`
 - Size bytes / Размер в байтах: `68`
 - Included characters / Включено символов: `68`
 - Truncated / Обрезано: `no`
@@ -2940,7 +2940,7 @@ export type * from '../../../shared/communications/types/whatsapp'
 
 ### `frontend/src/integrations/whatsapp/views/WhatsAppRuntimePanel.boundary.test.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/views/WhatsAppRuntimePanel.boundary.test.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/views/WhatsAppRuntimePanel.boundary.test.ts`
 - Size bytes / Размер в байтах: `3664`
 - Included characters / Включено символов: `3664`
 - Truncated / Обрезано: `no`
@@ -3016,7 +3016,7 @@ describe('WhatsAppRuntimePanel boundary', () => {
 
 ### `frontend/src/integrations/whatsapp/views/WhatsAppRuntimePanel.helpers.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/whatsapp/views/WhatsAppRuntimePanel.helpers.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/whatsapp/views/WhatsAppRuntimePanel.helpers.ts`
 - Size bytes / Размер в байтах: `4729`
 - Included characters / Включено символов: `4726`
 - Truncated / Обрезано: `no`
@@ -3164,7 +3164,7 @@ export function memberLabel(item: WhatsAppMembersSyncItem): string {
 
 ### `frontend/src/integrations/yandexTelemost/api/yandexTelemost.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/yandexTelemost/api/yandexTelemost.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/yandexTelemost/api/yandexTelemost.ts`
 - Size bytes / Размер в байтах: `6552`
 - Included characters / Включено символов: `6552`
 - Truncated / Обрезано: `no`
@@ -3345,7 +3345,7 @@ export async function completeYandexTelemostRecording(
 
 ### `frontend/src/integrations/yandexTelemost/queries/useYandexTelemostRuntimeQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/yandexTelemost/queries/useYandexTelemostRuntimeQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/yandexTelemost/queries/useYandexTelemostRuntimeQuery.ts`
 - Size bytes / Размер в байтах: `2024`
 - Included characters / Включено символов: `2024`
 - Truncated / Обрезано: `no`
@@ -3409,7 +3409,7 @@ export function useSetupYandexTelemostAccountMutation() {
 
 ### `frontend/src/integrations/yandexTelemost/queries/yandexTelemostQueryKeys.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/integrations/yandexTelemost/queries/yandexTelemostQueryKeys.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/integrations/yandexTelemost/queries/yandexTelemostQueryKeys.ts`
 - Size bytes / Размер в байтах: `272`
 - Included characters / Включено символов: `272`
 - Truncated / Обрезано: `no`

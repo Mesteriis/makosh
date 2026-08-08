@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
-use hermes_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
-use hermes_provider_zoom::protocol::{
+use makosh_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
+use makosh_provider_zoom::protocol::{
     DEFAULT_ZOOM_API_BASE_URL, DEFAULT_ZOOM_AUTHORIZATION_ENDPOINT, DEFAULT_ZOOM_TOKEN_ENDPOINT,
     ZOOM_DEFAULT_WEBHOOK_EVENT_TYPES, ZOOM_DEFAULT_WEBHOOK_SUBSCRIPTION_NAME,
     ZOOM_EXPLICIT_TOKEN_REFRESH_THRESHOLD_SECONDS, ZOOM_MAX_TOKEN_REFRESH_THRESHOLD_SECONDS,

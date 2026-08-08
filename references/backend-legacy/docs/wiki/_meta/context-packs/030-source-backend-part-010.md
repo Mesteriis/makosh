@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/app/handlers/decisions/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/decisions/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/decisions/mod.rs`
 - Size bytes / Размер в байтах: `188`
 - Included characters / Включено символов: `188`
 - Truncated / Обрезано: `no`
@@ -70,7 +70,7 @@ pub(crate) use models::{DecisionListQuery, DecisionListResponse, DecisionReviewA
 
 ### `backend/src/app/handlers/decisions/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/decisions/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/decisions/models.rs`
 - Size bytes / Размер в байтах: `540`
 - Included characters / Включено символов: `540`
 - Truncated / Обрезано: `no`
@@ -101,7 +101,7 @@ pub(crate) struct DecisionListResponse {
 
 ### `backend/src/app/handlers/documents/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/documents/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/documents/mod.rs`
 - Size bytes / Размер в байтах: `8216`
 - Included characters / Включено символов: `8216`
 - Truncated / Обрезано: `no`
@@ -270,7 +270,7 @@ pub(crate) async fn post_document_processing_job_retry(
     Path(job_id): Path<String>,
     Json(request): Json<DocumentProcessingRetryApiRequest>,
 ) -> Result<Json<DocumentProcessingRetryApiResponse>, ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let command = request.into_command(job_id, actor_id)?;
 
     api_audit_log(&state)?
@@ -294,7 +294,7 @@ pub(crate) async fn post_document_processing_job_retry(
 
 ### `backend/src/app/handlers/events/handlers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/events/handlers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/events/handlers.rs`
 - Size bytes / Размер в байтах: `15449`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -328,7 +328,7 @@ pub(crate) async fn post_event(
     State(state): State<AppState>,
     Json(request): Json<AppendEventRequest>,
 ) -> Result<(StatusCode, Json<AppendEventResponse>), ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
 
     let store = event_store(&state)?;
     let event = request.into_new_event()?;
@@ -354,7 +354,7 @@ pub(crate) async fn get_event(
     State(state): State<AppState>,
     Path(event_id): Path<String>,
 ) -> Result<Json<EventEnvelope>, ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
 
     let store = event_store(&state)?;
     let audit_log = api_audit_log(&state)?;
@@ -448,7 +448,7 @@ pub(crate) async fn get_events(
     let store = event_store(&state)?;
     api_audit_log(&state)?
         .record(&NewApiAuditRecord::event_list(
-            "hermes-frontend",
+            "makosh-frontend",
             after_position,
             limit,
             wait_seconds,
@@ -701,7 +701,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/app/handlers/events/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/events/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/events/mod.rs`
 - Size bytes / Размер в байтах: `43`
 - Included characters / Включено символов: `43`
 - Truncated / Обрезано: `no`
@@ -714,7 +714,7 @@ pub(crate) use handlers::*;
 
 ### `backend/src/app/handlers/graph/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/graph/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/graph/mod.rs`
 - Size bytes / Размер в байтах: `8464`
 - Included characters / Включено символов: `8464`
 - Truncated / Обрезано: `no`
@@ -911,7 +911,7 @@ pub(crate) async fn get_graph_search(
 
 ### `backend/src/app/handlers/obligations/handlers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/obligations/handlers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/obligations/handlers.rs`
 - Size bytes / Размер в байтах: `4306`
 - Included characters / Включено символов: `4306`
 - Truncated / Обрезано: `no`
@@ -929,7 +929,7 @@ use crate::domains::obligations::{
 };
 use crate::platform::audit::{ApiAuditLog, NewApiAuditRecord};
 
-const OBLIGATION_API_ACTOR_ID: &str = "hermes-frontend";
+const OBLIGATION_API_ACTOR_ID: &str = "makosh-frontend";
 const DEFAULT_OBLIGATION_LIMIT: i64 = 50;
 const MIN_OBLIGATION_LIMIT: i64 = 1;
 const MAX_OBLIGATION_LIMIT: i64 = 100;
@@ -1049,7 +1049,7 @@ fn validate_limit(limit: Option<i64>) -> Result<i64, ApiError> {
 
 ### `backend/src/app/handlers/obligations/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/obligations/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/obligations/mod.rs`
 - Size bytes / Размер в байтах: `198`
 - Included characters / Включено символов: `198`
 - Truncated / Обрезано: `no`
@@ -1064,7 +1064,7 @@ pub(crate) use models::{ObligationListQuery, ObligationListResponse, ObligationR
 
 ### `backend/src/app/handlers/obligations/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/obligations/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/obligations/models.rs`
 - Size bytes / Размер в байтах: `552`
 - Included characters / Включено символов: `552`
 - Truncated / Обрезано: `no`
@@ -1095,7 +1095,7 @@ pub(crate) struct ObligationListResponse {
 
 ### `backend/src/app/handlers/organizations/core_records.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/organizations/core_records.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/organizations/core_records.rs`
 - Size bytes / Размер в байтах: `6452`
 - Included characters / Включено символов: `6452`
 - Truncated / Обрезано: `no`
@@ -1322,7 +1322,7 @@ pub(crate) async fn get_org_related(
 
 ### `backend/src/app/handlers/organizations/directory.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/organizations/directory.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/organizations/directory.rs`
 - Size bytes / Размер в байтах: `3688`
 - Included characters / Включено символов: `3688`
 - Truncated / Обрезано: `no`
@@ -1450,7 +1450,7 @@ pub(crate) async fn post_organization_archive(
 
 ### `backend/src/app/handlers/organizations/enrichment.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/organizations/enrichment.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/organizations/enrichment.rs`
 - Size bytes / Размер в байтах: `1195`
 - Included characters / Включено символов: `1195`
 - Truncated / Обрезано: `no`
@@ -1498,7 +1498,7 @@ pub(crate) async fn post_org_enrich_apply(
 
 ### `backend/src/app/handlers/organizations/finance.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/organizations/finance.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/organizations/finance.rs`
 - Size bytes / Размер в байтах: `2718`
 - Included characters / Включено символов: `2718`
 - Truncated / Обрезано: `no`
@@ -1600,7 +1600,7 @@ pub(crate) async fn get_org_products(
 
 ### `backend/src/app/handlers/organizations/health.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/organizations/health.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/organizations/health.rs`
 - Size bytes / Размер в байтах: `1535`
 - Included characters / Включено символов: `1535`
 - Truncated / Обрезано: `no`
@@ -1660,7 +1660,7 @@ pub(crate) async fn post_org_watchlist_toggle(
 
 ### `backend/src/app/handlers/organizations/investigator.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/organizations/investigator.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/organizations/investigator.rs`
 - Size bytes / Размер в байтах: `1353`
 - Included characters / Включено символов: `1353`
 - Truncated / Обрезано: `no`
@@ -1714,7 +1714,7 @@ pub(crate) async fn get_org_context_pack(
 
 ### `backend/src/app/handlers/organizations/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/organizations/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/organizations/mod.rs`
 - Size bytes / Размер в байтах: `326`
 - Included characters / Включено символов: `326`
 - Truncated / Обрезано: `no`
@@ -1740,7 +1740,7 @@ pub(crate) use workflows::*;
 
 ### `backend/src/app/handlers/organizations/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/organizations/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/organizations/support.rs`
 - Size bytes / Размер в байтах: `503`
 - Included characters / Включено символов: `503`
 - Truncated / Обрезано: `no`
@@ -1768,7 +1768,7 @@ pub(super) fn observation_store(state: &AppState) -> Result<ObservationStore, Ap
 
 ### `backend/src/app/handlers/organizations/workflows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/organizations/workflows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/organizations/workflows.rs`
 - Size bytes / Размер в байтах: `2983`
 - Included characters / Включено символов: `2983`
 - Truncated / Обрезано: `no`
@@ -1880,7 +1880,7 @@ pub(crate) async fn get_org_templates(
 
 ### `backend/src/app/handlers/persons/compatibility.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/compatibility.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/compatibility.rs`
 - Size bytes / Размер в байтах: `4288`
 - Included characters / Включено символов: `4046`
 - Truncated / Обрезано: `no`
@@ -2025,7 +2025,7 @@ pub(crate) async fn delete_person_persona(
 
 ### `backend/src/app/handlers/persons/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/errors.rs`
 - Size bytes / Размер в байтах: `2177`
 - Included characters / Включено символов: `2177`
 - Truncated / Обрезано: `no`
@@ -2095,7 +2095,7 @@ impl From<ExportError> for ApiError {
 
 ### `backend/src/app/handlers/persons/health.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/health.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/health.rs`
 - Size bytes / Размер в байтах: `2220`
 - Included characters / Включено символов: `2100`
 - Truncated / Обрезано: `no`
@@ -2175,7 +2175,7 @@ pub(crate) async fn post_person_watchlist_toggle(
 
 ### `backend/src/app/handlers/persons/history.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/history.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/history.rs`
 - Size bytes / Размер в байтах: `5667`
 - Included characters / Включено символов: `5343`
 - Truncated / Обрезано: `no`
@@ -2317,7 +2317,7 @@ pub(crate) async fn put_identity_candidate_review(
     Path(identity_candidate_id): Path<String>,
     Json(request): Json<PersonIdentityReviewApiRequest>,
 ) -> Result<Json<PersonIdentityReviewApiResponse>, ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let command = request.into_command(identity_candidate_id, actor_id)?;
     let pool = state
         .database
@@ -2354,7 +2354,7 @@ pub(crate) async fn get_person_identity(
 
 ### `backend/src/app/handlers/persons/identity.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/identity.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/identity.rs`
 - Size bytes / Размер в байтах: `4369`
 - Included characters / Включено символов: `4369`
 - Truncated / Обрезано: `no`
@@ -2512,7 +2512,7 @@ pub(crate) async fn delete_person_identity(
 
 ### `backend/src/app/handlers/persons/intelligence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/intelligence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/intelligence.rs`
 - Size bytes / Размер в байтах: `4965`
 - Included characters / Включено символов: `4499`
 - Truncated / Обрезано: `no`
@@ -2666,7 +2666,7 @@ pub(crate) async fn get_person_risks(
 
 ### `backend/src/app/handlers/persons/investigator.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/investigator.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/investigator.rs`
 - Size bytes / Размер в байтах: `3817`
 - Included characters / Включено символов: `3709`
 - Truncated / Обрезано: `no`

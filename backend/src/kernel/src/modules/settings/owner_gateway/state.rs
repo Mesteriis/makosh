@@ -2,7 +2,7 @@
 
 use std::collections::HashMap;
 
-use hermes_gateway_protocol::v1::PrepareOwnerModuleSettingsRequestV1;
+use makosh_gateway_protocol::v1::PrepareOwnerModuleSettingsRequestV1;
 
 const MAX_PENDING_CHALLENGES: usize = 64;
 

@@ -9,7 +9,7 @@ import {
 	type MailSyncRunPageV1,
 	type MailSyncRunV1,
 	type MailSyncStatusV1,
-} from '../../../gen/hermes/mail/sync_health/v1/client_pb'
+} from '../../../gen/makosh/mail/sync_health/v1/client_pb'
 import { getMailSyncHealthConnectClient } from './mailSyncHealthClient'
 
 const DEFAULT_PAGE_LIMIT = 50

@@ -6,7 +6,7 @@ import {
 	BrowserGatewayAccessModeV1,
 	BrowserSessionService,
 	BrowserSessionStatusResponseV1Schema,
-} from '../../gen/hermes/gateway/v1/browser_session_pb'
+} from '../../gen/makosh/gateway/v1/browser_session_pb'
 import { fetchBrowserGatewaySessionStatus } from './browserGatewaySession'
 
 describe('fetchBrowserGatewaySessionStatus', () => {

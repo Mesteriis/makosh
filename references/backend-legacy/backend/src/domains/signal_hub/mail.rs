@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
-use hermes_events_api::{EventEnvelope, NewEventEnvelope};
-use hermes_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
+use makosh_events_api::{EventEnvelope, NewEventEnvelope};
+use makosh_signal_hub_postgres::raw_signals::adapter::RawSignalStore;
 use std::path::Path;
 
 use serde_json::json;
@@ -11,9 +11,9 @@ use std::sync::Arc;
 use super::service::signal_hub_raw_dispatcher_allows_processing;
 use super::service::{SignalHubSignalService, SignalProcessingOutcome};
 use super::store::{SignalHubError, SignalHubStore};
-use hermes_communications_api::evidence::StoredRawCommunicationRecord;
-use hermes_events_postgres::store::EventStore;
-use hermes_observations_postgres::store::observation_captured_event_id;
+use makosh_communications_api::evidence::StoredRawCommunicationRecord;
+use makosh_events_postgres::store::EventStore;
+use makosh_observations_postgres::store::observation_captured_event_id;
 
 pub struct MailDeliverySignalRequest<'a> {
     pub occurred_at: DateTime<Utc>,

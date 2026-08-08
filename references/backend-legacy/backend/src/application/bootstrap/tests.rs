@@ -21,9 +21,9 @@ fn telegram_runtime_reconciliation_registration_is_once_per_database_url() {
 #[test]
 fn telegram_runtime_reconciliation_only_runs_enabled_runnable_accounts() {
     let now = Utc::now();
-    let account = |config| hermes_communications_api::accounts::ProviderAccount {
+    let account = |config| makosh_communications_api::accounts::ProviderAccount {
         account_id: "telegram-account".to_owned(),
-        provider_kind: hermes_communications_api::accounts::CommunicationProviderKind::TelegramUser,
+        provider_kind: makosh_communications_api::accounts::CommunicationProviderKind::TelegramUser,
         display_name: "Telegram".to_owned(),
         external_account_id: "telegram:1".to_owned(),
         config,

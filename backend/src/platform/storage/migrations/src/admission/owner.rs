@@ -15,9 +15,9 @@ pub(super) fn is_owned_relation(relation: Option<&RangeVar>, owner: &str) -> boo
         return false;
     };
     let schema = if owner == "scheduler" {
-        "hermes_platform"
+        "makosh_platform"
     } else {
-        "hermes_data"
+        "makosh_data"
     };
     relation.catalogname.is_empty()
         && relation.schemaname == schema

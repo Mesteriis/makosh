@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Добавить страницу `operations/configuration.md` в русскую Obsidian wiki проекта Hermes Hub. Страница документирует конфигурацию фронтенда на основе встроенных исходных файлов: скрипты сборки, TypeScript-настройки, обработку .env, конфигурацию Tauri-десктопного приложения, систему разрешений (capabilities/permissions) и интернационализацию. Информация извлекается только из предоставленного контекста, без внешних дополнений.
+Добавить страницу `operations/configuration.md` в русскую Obsidian wiki проекта Макошь. Страница документирует конфигурацию фронтенда на основе встроенных исходных файлов: скрипты сборки, TypeScript-настройки, обработку .env, конфигурацию Tauri-десктопного приложения, систему разрешений (capabilities/permissions) и интернационализацию. Информация извлекается только из предоставленного контекста, без внешних дополнений.
 
 ## Предложенные страницы
 
@@ -25,7 +25,7 @@ generated_by: code-wiki-ru
 ```markdown
 # Конфигурация (Configuration)
 
-Документ описывает конфигурацию фронтенда проекта Hermes Hub: инструменты сборки и разработки, Tauri-десктопное приложение, систему разрешений, обработку переменных окружения и интернационализацию. Все факты взяты непосредственно из файлов исходного кода.
+Документ описывает конфигурацию фронтенда проекта Макошь: инструменты сборки и разработки, Tauri-десктопное приложение, систему разрешений, обработку переменных окружения и интернационализацию. Все факты взяты непосредственно из файлов исходного кода.
 
 ## Конфигурация сборки и инструментов разработки
 
@@ -108,9 +108,9 @@ allowBuilds:
 
 ```json
 {
-  "productName": "Hermes Hub",
+  "productName": "Макошь",
   "version": "0.1.0",
-  "identifier": "dev.hermes-hub.desktop",
+  "identifier": "dev.makosh.desktop",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://127.0.0.1:5173"
@@ -118,7 +118,7 @@ allowBuilds:
   "app": {
     "windows": [
       {
-        "title": "Hermes Hub",
+        "title": "Макошь",
         "width": 1280,
         "height": 800,
         "resizable": true,
@@ -132,7 +132,7 @@ allowBuilds:
   "bundle": {
     "active": true,
     "targets": "all",
-    "externalBin": ["binaries/hermes-hub-backend"],
+    "externalBin": ["binaries/makosh-backend"],
     "resources": {
       "resources/google-oauth/": "google-oauth",
       "resources/tdlib/": "tdlib"
@@ -149,7 +149,7 @@ allowBuilds:
 ```
 
 - Content Security Policy (`csp`) установлен в `null` — ограничения CSP не применяются.
-- Внешний исполняемый файл: `binaries/hermes-hub-backend`.
+- Внешний исполняемый файл: `binaries/makosh-backend`.
 - Ресурсы: папки `google-oauth` и `tdlib`.
 - Иконки для разных платформ.
 
@@ -159,8 +159,8 @@ allowBuilds:
 [package]
 name = "app"
 version = "0.1.0"
-description = "Hermes Hub desktop shell"
-authors = ["Hermes Hub"]
+description = "Макошь desktop shell"
+authors = ["Макошь"]
 edition = "2024"
 rust-version = "1.89"
 

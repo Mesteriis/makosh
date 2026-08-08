@@ -6,7 +6,7 @@ const props = withDefaults(defineProps<{
 	class?: string
 }>(), {})
 
-const classes = computed(() => ['hermes-form-hint', props.class])
+const classes = computed(() => ['makosh-form-hint', props.class])
 </script>
 
 <template>

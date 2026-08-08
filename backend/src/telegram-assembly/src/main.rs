@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 use std::path::PathBuf;
 use std::process::ExitCode;
 
-use hermes_telegram_assembly::materialize_telegram_release_assembly_v1;
+use makosh_telegram_assembly::materialize_telegram_release_assembly_v1;
 
 const OPTIONS: [&str; 5] = [
     "--build-id",
@@ -30,7 +30,7 @@ fn main() -> ExitCode {
             ExitCode::SUCCESS
         }
         None => fail(
-            "usage: hermes-telegram-assembly --build-id <id> --output-dir <absolute-path> \
+            "usage: makosh-telegram-assembly --build-id <id> --output-dir <absolute-path> \
              --runtime <absolute-path> --tdjson <absolute-path> --tgcalls <absolute-path>",
         ),
     }
@@ -79,13 +79,13 @@ mod tests {
     fn parses_each_exact_option_once_in_any_order() {
         let parsed = arguments(vec![
             "--tgcalls".to_owned(),
-            "/tmp/libhermes_tgcalls_bridge.dylib".to_owned(),
+            "/tmp/libmakosh_tgcalls_bridge.dylib".to_owned(),
             "--tdjson".to_owned(),
             "/tmp/libtdjson.dylib".to_owned(),
             "--build-id".to_owned(),
             "build-1".to_owned(),
             "--runtime".to_owned(),
-            "/tmp/hermes-telegram-runtime".to_owned(),
+            "/tmp/makosh-telegram-runtime".to_owned(),
             "--output-dir".to_owned(),
             "/tmp/telegram-assembly".to_owned(),
         ])
@@ -98,12 +98,12 @@ mod tests {
         );
         assert_eq!(
             parsed.runtime,
-            PathBuf::from("/tmp/hermes-telegram-runtime")
+            PathBuf::from("/tmp/makosh-telegram-runtime")
         );
         assert_eq!(parsed.tdjson, PathBuf::from("/tmp/libtdjson.dylib"));
         assert_eq!(
             parsed.tgcalls,
-            PathBuf::from("/tmp/libhermes_tgcalls_bridge.dylib")
+            PathBuf::from("/tmp/libmakosh_tgcalls_bridge.dylib")
         );
     }
 

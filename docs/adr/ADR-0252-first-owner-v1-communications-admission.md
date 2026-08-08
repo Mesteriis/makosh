@@ -46,20 +46,20 @@ schedules или timers.
 Первый business owner — только `communications`. Exact package inventory:
 
 ```text
-hermes-communications-ingress
-hermes-communications-attachment-contract
-hermes-communications-api
-hermes-communications-domain
-hermes-communications-persistence
-hermes-communications-runtime
+makosh-communications-ingress
+makosh-communications-attachment-contract
+makosh-communications-api
+makosh-communications-domain
+makosh-communications-persistence
+makosh-communications-runtime
 ```
 
 Integration owners `mail`, `telegram`, `whatsapp` и `zulip` не становятся
 частью Communications и не входят в этот owner inventory. Их packages,
 admission, storage, credentials и operational contracts остаются отдельными.
 Они могут публиковать только typed Communications observations через exact
-public contract units `hermes-communications-ingress` и, для attachment
-lifecycle, `hermes-communications-attachment-contract`, используя свои outbox.
+public contract units `makosh-communications-ingress` и, для attachment
+lifecycle, `makosh-communications-attachment-contract`, используя свои outbox.
 
 ## Owner capabilities
 
@@ -76,7 +76,7 @@ arbitrary SQL и generic content API не входят в admission.
 
 ## Runtime boundary
 
-`hermes-communications-runtime` является единственным composition root. Он:
+`makosh-communications-runtime` является единственным composition root. Он:
 
 - получает managed domain configuration от Kernel;
 - открывает owner-local persistence через Storage/Vault lease;
@@ -114,7 +114,7 @@ Communications не импортирует другой domain или integratio
 Вся acceptance matrix реализована. Канонический live gate:
 
 ```text
-HERMES_STORAGE_AUTHENTICATED_TEST_FILTER=managed_communications_domain_starts_with_owner_local_storage_and_events \
+MAKOSH_STORAGE_AUTHENTICATED_TEST_FILTER=managed_communications_domain_starts_with_owner_local_storage_and_events \
   node backend/scripts/test-authenticated-storage.mjs 1.97.0
 ```
 

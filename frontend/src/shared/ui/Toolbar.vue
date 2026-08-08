@@ -14,9 +14,9 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-toolbar',
-	`hermes-toolbar--${props.orientation}`,
-	`hermes-toolbar--${props.density}`,
+	'makosh-toolbar',
+	`makosh-toolbar--${props.orientation}`,
+	`makosh-toolbar--${props.density}`,
 	props.class
 ])
 </script>

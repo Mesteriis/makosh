@@ -36,7 +36,7 @@ pub(crate) async fn get_v1_email_search(
         pool.clone(),
     );
 
-    let search_path: Option<String> = std::env::var("HERMES_SEARCH_INDEX_PATH").ok();
+    let search_path: Option<String> = std::env::var("MAKOSH_SEARCH_INDEX_PATH").ok();
     if let Some(path) = search_path {
         let index = crate::engines::search::engine::SearchIndex::open_or_create(
             std::path::Path::new(&path),

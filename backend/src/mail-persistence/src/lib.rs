@@ -87,4 +87,4 @@ pub use schema::{
 };
 pub use sync_health::{MAIL_SCHEMA_V10, MailSyncRunStartOutcomeV1};
 
-pub const PACKAGE: &str = "hermes-mail-persistence";
+pub const PACKAGE: &str = "makosh-mail-persistence";

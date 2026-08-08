@@ -1,6 +1,6 @@
 # CardFooter
 
-Footer region for the Hermes `Card` surface.
+Footer region for the Макошь `Card` surface.
 
 Use for secondary actions, metadata, or closing controls at the bottom of a
 card.

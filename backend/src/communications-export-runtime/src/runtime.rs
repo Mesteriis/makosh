@@ -6,15 +6,15 @@ use std::{
     time::{SystemTime, UNIX_EPOCH},
 };
 
-use hermes_communications_evidence_export_source_api::{
+use makosh_communications_evidence_export_source_api::{
     evidence_export_prepared_contract_reference_v1, evidence_export_rejected_contract_reference_v1,
 };
-use hermes_communications_export_persistence::CommunicationsExportPersistenceV1;
-use hermes_events_jetstream::{
+use makosh_communications_export_persistence::CommunicationsExportPersistenceV1;
+use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{
         ManagedControlChannelV2, ManagedControlRequestDispatcherV2, ManagedControlTransportErrorV2,
     },
@@ -29,11 +29,11 @@ use hermes_runtime_protocol::{
         module_client::{validate_module_client_request_v1, validate_module_client_response_v1},
     },
 };
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_storage_vault::{
+use makosh_storage_vault::{
     InheritedKernelVaultRouteV2, StorageVaultLeaseAdapterV1, StorageVaultRouteContextV1,
 };
 
@@ -144,7 +144,7 @@ impl ManagedControlRequestDispatcherV2<UnixStream> for CommunicationsExportNeste
         &mut self,
         channel: &mut ManagedControlChannelV2<UnixStream>,
         correlation_id: [u8; MANAGED_CONTROL_CORRELATION_ID_BYTES],
-        request: hermes_runtime_protocol::v1::ManagedRuntimeControlRequestV1,
+        request: makosh_runtime_protocol::v1::ManagedRuntimeControlRequestV1,
     ) -> Result<(), ManagedControlTransportErrorV2> {
         let response = match request.operation {
             Some(Operation::ClientDelivery(delivery)) => match delivery.request {
@@ -218,7 +218,7 @@ impl CommunicationsExportRuntimeV1 {
             credential_revision,
         )
         .map_err(|error| {
-            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_communications_export_event_access_error={error:?}");
             }
             unavailable_at("event_access")
@@ -488,7 +488,7 @@ impl CommunicationsExportRuntimeV1 {
 }
 
 fn unavailable_at(stage: &'static str) -> CommunicationsExportRuntimeErrorV1 {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_communications_export_startup_unavailable stage={stage}");
     }
     CommunicationsExportRuntimeErrorV1::Unavailable

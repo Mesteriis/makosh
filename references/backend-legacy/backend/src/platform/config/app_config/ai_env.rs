@@ -10,43 +10,43 @@ pub(super) fn apply_ai_env(
     value: &str,
 ) -> Result<bool, ConfigError> {
     match key {
-        "HERMES_AI_PROVIDER" => {
+        "MAKOSH_AI_PROVIDER" => {
             config.ai_provider = AiRuntimeProvider::try_from(value)?;
         }
-        "HERMES_OLLAMA_BASE_URL" => {
+        "MAKOSH_OLLAMA_BASE_URL" => {
             config.ollama_base_url = non_empty(value, ConfigError::EmptyOllamaBaseUrl)?
                 .trim_end_matches('/')
                 .to_owned();
         }
-        "HERMES_OLLAMA_CHAT_MODEL" => {
+        "MAKOSH_OLLAMA_CHAT_MODEL" => {
             config.ollama_chat_model =
                 non_empty(value, ConfigError::EmptyOllamaChatModel)?.to_owned();
         }
-        "HERMES_OLLAMA_EMBED_MODEL" => {
+        "MAKOSH_OLLAMA_EMBED_MODEL" => {
             config.ollama_embed_model =
                 non_empty(value, ConfigError::EmptyOllamaEmbedModel)?.to_owned();
         }
-        "HERMES_OLLAMA_TIMEOUT_SECONDS" => {
+        "MAKOSH_OLLAMA_TIMEOUT_SECONDS" => {
             config.ollama_timeout_seconds = parse_positive_timeout(value, TimeoutTarget::Ollama)?;
         }
-        "HERMES_OMNIROUTE_BASE_URL" => {
+        "MAKOSH_OMNIROUTE_BASE_URL" => {
             config.omniroute_base_url = non_empty(value, ConfigError::EmptyOmniRouteBaseUrl)?
                 .trim_end_matches('/')
                 .to_owned();
         }
-        "HERMES_OMNIROUTE_CHAT_MODEL" => {
+        "MAKOSH_OMNIROUTE_CHAT_MODEL" => {
             config.omniroute_chat_model =
                 non_empty(value, ConfigError::EmptyOmniRouteChatModel)?.to_owned();
         }
-        "HERMES_OMNIROUTE_EMBED_MODEL" => {
+        "MAKOSH_OMNIROUTE_EMBED_MODEL" => {
             config.omniroute_embed_model =
                 non_empty(value, ConfigError::EmptyOmniRouteEmbedModel)?.to_owned();
         }
-        "HERMES_OMNIROUTE_TIMEOUT_SECONDS" => {
+        "MAKOSH_OMNIROUTE_TIMEOUT_SECONDS" => {
             config.omniroute_timeout_seconds =
                 parse_positive_timeout(value, TimeoutTarget::OmniRoute)?;
         }
-        "HERMES_OMNIROUTE_API_KEY" => {
+        "MAKOSH_OMNIROUTE_API_KEY" => {
             config.omniroute_api_key = Some(ResolvedSecret::new(non_empty(
                 value,
                 ConfigError::EmptyOmniRouteApiKey,

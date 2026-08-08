@@ -12,7 +12,7 @@ Paths below refer to the current Rust implementation under
 
 | Модуль | Файл | Назначение |
 |---|---|---|
-| Email Ingestion | `ingestion.rs` | Точка входа авто-анализа. Каждое входящее письмо проходит через Hermes. |
+| Email Ingestion | `ingestion.rs` | Точка входа авто-анализа. Каждое входящее письмо проходит через Макошь. |
 | Email Sync | `sync.rs`, `background_sync.rs` | Планирование синхронизации (Gmail/IMAP/iCloud) |
 | Email Sync Pipeline | `backend/src/workflows/email_sync_pipeline.rs` | Полный пайплайн: парсинг → проекция → анализ → вложения |
 | Email RFC822 | `rfc822.rs` | Парсинг RFC 2822 / MIME |

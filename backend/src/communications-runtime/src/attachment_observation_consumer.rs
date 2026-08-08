@@ -1,10 +1,10 @@
 //! Typed external attachment facts consumed without Blob, scanner, or integration calls.
 
-use hermes_communications_api::{
+use makosh_communications_api::{
     AttachmentSafetyStateV1, AttachmentSafetyTransitionCommandV1, AttachmentSafetyTransitionV1,
     CommunicationAttachmentAnchorIdV1, CommunicationObservationIdV1,
 };
-use hermes_communications_attachment_contract::{
+use makosh_communications_attachment_contract::{
     admission::{
         communication_attachment_blob_admission_observed_contract_reference_v1,
         communication_attachment_safety_verdict_observed_contract_reference_v1,
@@ -12,17 +12,17 @@ use hermes_communications_attachment_contract::{
     blob_admission_v1::AttachmentBlobAdmissionObservationV1,
     safety_verdict_v1::AttachmentSafetyVerdictObservationV1,
 };
-use hermes_communications_persistence::CommunicationsDurablePersistence;
-use hermes_events_jetstream::{
+use makosh_communications_persistence::CommunicationsDurablePersistence;
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{DurableEnvelopeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 
 use crate::{
@@ -268,7 +268,7 @@ fn exact_contract(value: Option<&ContractReferenceV1>, expected: &ContractRefere
 }
 
 fn exact_envelope_contract(
-    value: Option<&hermes_events_protocol::v1::ContractRefV1>,
+    value: Option<&makosh_events_protocol::v1::ContractRefV1>,
     expected: &ContractReferenceV1,
 ) -> bool {
     value.is_some_and(|value| {

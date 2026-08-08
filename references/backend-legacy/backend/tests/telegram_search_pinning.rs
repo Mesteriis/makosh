@@ -5,9 +5,9 @@ use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::platform::storage::database::Database;
 use telegram_support::{
     LOCAL_API_TOKEN, assert_ok, get_request_with_token, ingest_fixture_telegram_message, json_body,
     json_post_request_with_actor, unique_suffix,
@@ -25,7 +25,7 @@ async fn telegram_dialog_search_returns_projected_chat_matches() {
     let matching_chat_id = format!("chat-alpha-{suffix}");
     let other_chat_id = format!("chat-beta-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -113,7 +113,7 @@ async fn telegram_media_search_filters_by_free_text_query() {
     let account_id = format!("telegram-media-search-{suffix}");
     let chat_id = format!("chat-media-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -180,7 +180,7 @@ async fn telegram_media_search_filters_by_free_text_query() {
                 "download_state": "downloaded",
                 "attachment_id": "attachment-invoice-1",
                 "tdlib_file_id": 4201,
-                "local_path": "/tmp/hermes/invoice-2026.pdf"
+                "local_path": "/tmp/makosh/invoice-2026.pdf"
             },
             {
                 "file_name": "holiday-photo.jpg",
@@ -221,7 +221,7 @@ async fn telegram_media_search_filters_by_free_text_query() {
     assert_eq!(items[0]["tdlib_file_id"], json!(4201));
     assert_eq!(
         items[0]["local_path"],
-        json!("/tmp/hermes/invoice-2026.pdf")
+        json!("/tmp/makosh/invoice-2026.pdf")
     );
 }
 
@@ -237,7 +237,7 @@ async fn telegram_pinned_messages_route_returns_projection_backed_items() {
     let account_id = format!("telegram-pinned-messages-{suffix}");
     let chat_id = format!("chat-pinned-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -366,7 +366,7 @@ async fn telegram_message_created_event_includes_projected_chat_snapshot() {
     let chat_id = format!("chat-created-event-{suffix}");
     let provider_message_id = format!("provider-created-event-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -393,7 +393,7 @@ async fn telegram_message_created_event_includes_projected_chat_snapshot() {
         &account_id,
         &chat_id,
         &provider_message_id,
-        "@hermes newest message should patch dialog caches.",
+        "@makosh newest message should patch dialog caches.",
         "2026-06-06T12:00:00Z",
     )
     .await;
@@ -461,7 +461,7 @@ async fn telegram_message_pin_route_records_local_projection_command_and_audit()
     let provider_message_id = format!("provider-message-pin-{suffix}");
     let command_id = format!("pin-message-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )

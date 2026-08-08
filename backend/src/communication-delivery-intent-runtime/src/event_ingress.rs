@@ -1,9 +1,9 @@
-use hermes_communication_delivery_intent_api::COMMUNICATION_DELIVERY_INTENT_MODULE_ID_V1;
-use hermes_communication_delivery_intent_core::{
+use makosh_communication_delivery_intent_api::COMMUNICATION_DELIVERY_INTENT_MODULE_ID_V1;
+use makosh_communication_delivery_intent_core::{
     CommunicationConversationIdV1, CommunicationMessageIdV1, DeliveryIntentDraftV1,
     DeliveryIntentPlanErrorV1, plan_delivery_intent_v1,
 };
-use hermes_communication_delivery_intent_ingress_api::{
+use makosh_communication_delivery_intent_ingress_api::{
     COMMUNICATION_DELIVERY_INTENT_INGRESS_COMMAND_CAPABILITY_ID_V1,
     CommunicationDeliveryIntentIngressEnvelopeContextV1,
     build_communication_delivery_intent_rejected_outbox_record_v1,
@@ -15,19 +15,19 @@ use hermes_communication_delivery_intent_ingress_api::{
         CommunicationDeliveryIntentSubmittedV1, SubmitCommunicationDeliveryIntentCommandV1,
     },
 };
-use hermes_communication_delivery_intent_persistence::{
+use makosh_communication_delivery_intent_persistence::{
     CreateDeliveryIntentV1, DeliveryIntentIngressBlobReceiptV1, DeliveryIntentIngressDispositionV1,
     DeliveryIntentIngressEventV1,
 };
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1, receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ActorKindV1, ContractRefV1, FenceKindV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::RejectManagedControlRequestsV2, v1::ContractReferenceV1,
 };
 use prost::Message;
@@ -42,7 +42,7 @@ use crate::{
 };
 
 const CROSS_CHANNEL_FORWARD_RUNTIME_MODULE_ID_V1: &str =
-    "hermes-communication-cross-channel-forward-runtime";
+    "makosh-communication-cross-channel-forward-runtime";
 
 #[derive(Clone, Debug)]
 struct DecodedDeliveryIntentIngressV1 {
@@ -405,7 +405,7 @@ fn event_error(_: RuntimePullDeliveryErrorV1) -> DeliveryIntentRuntimeErrorV1 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_communication_delivery_intent_ingress_api::{
+    use makosh_communication_delivery_intent_ingress_api::{
         build_communication_delivery_intent_submit_outbox_record_v1,
         wire::DeliveryIntentBodySourceReceiptV1,
     };
@@ -456,7 +456,7 @@ mod tests {
         );
         assert!(
             decode_event_ingress(
-                &submit_record("hermes-communications-runtime"),
+                &submit_record("makosh-communications-runtime"),
                 "owner-1",
                 1_800_000_001
             )

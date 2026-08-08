@@ -1,6 +1,6 @@
 //! Mail-owned terminal delivery-intent result envelopes.
 
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1, ResultMetadataV1,
@@ -8,7 +8,7 @@ use hermes_events_protocol::{
     },
     validation::envelope::validate_envelope_v1,
 };
-use hermes_mail_delivery_intent_contract::{
+use makosh_mail_delivery_intent_contract::{
     mail_delivery_intent_rejected_contract_reference_v1,
     mail_delivery_intent_succeeded_contract_reference_v1,
     validate_mail_delivery_intent_rejected_v1, validate_mail_delivery_intent_succeeded_v1,
@@ -16,15 +16,15 @@ use hermes_mail_delivery_intent_contract::{
         MailDeliveryIntentRejectCodeV1, MailDeliveryIntentRejectedV1, MailDeliveryIntentSucceededV1,
     },
 };
-use hermes_mail_persistence::MailDeliveryIntentJobV1;
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_mail_persistence::MailDeliveryIntentJobV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 use prost_types::Timestamp;
 use sha2::{Digest, Sha256};
 
-const SUCCEEDED_MESSAGE_DOMAIN: &[u8] = b"hermes.mail.delivery-intent.succeeded.v1";
-const REJECTED_MESSAGE_DOMAIN: &[u8] = b"hermes.mail.delivery-intent.rejected.v1";
-const MAIL_RUNTIME_MODULE_ID: &str = "hermes-mail-runtime";
+const SUCCEEDED_MESSAGE_DOMAIN: &[u8] = b"makosh.mail.delivery-intent.succeeded.v1";
+const REJECTED_MESSAGE_DOMAIN: &[u8] = b"makosh.mail.delivery-intent.rejected.v1";
+const MAIL_RUNTIME_MODULE_ID: &str = "makosh-mail-runtime";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct MailDeliveryIntentResultContextV1 {
@@ -183,7 +183,7 @@ fn outbox_error(_: OutboxRecordError) -> MailDeliveryIntentResultErrorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_events_protocol::{
+    use makosh_events_protocol::{
         v1::{ResultOutcomeV1, durable_envelope_v1::Semantics},
         validation::envelope::decode_envelope_v1,
     };

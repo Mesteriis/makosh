@@ -5,8 +5,8 @@
 Дата: 2026-07-31
 
 Состояние реализации: реализовано в AI contracts, AI inference persistence,
-`hermes-communication-reply-suggestion-runtime` и отдельной unsigned
-`hermes-communication-reply-suggestion-assembly`. Workflow принимает
+`makosh-communication-reply-suggestion-runtime` и отдельной unsigned
+`makosh-communication-reply-suggestion-assembly`. Workflow принимает
 Communications event, переносит custody в собственный runtime, проверяет
 bounded UTF-8 body, материализует отдельный AI-target-bound Blob, сохраняет
 bounded request/cleanup receipts и подтверждает source event только после

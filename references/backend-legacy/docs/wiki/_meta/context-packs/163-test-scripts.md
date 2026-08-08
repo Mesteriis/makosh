@@ -21,9 +21,9 @@
 - Group / Группа: `scripts`
 - Role / Роль: `test`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `scripts/test/analyze-nextest-junit.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/test/analyze-nextest-junit.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/test/analyze-nextest-junit.mjs`
 - Size bytes / Размер в байтах: `4577`
 - Included characters / Включено символов: `4577`
 - Truncated / Обрезано: `no`
@@ -197,7 +197,7 @@ console.log(`Report: ${reportPath}`);
 
 ### `scripts/test/backend-test-targets.mjs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/test/backend-test-targets.mjs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/test/backend-test-targets.mjs`
 - Size bytes / Размер в байтах: `2768`
 - Included characters / Включено символов: `2768`
 - Truncated / Обрезано: `no`
@@ -317,7 +317,7 @@ process.stdout.write(`${JSON.stringify(summary, null, 2)}\n`);
 
 ### `scripts/test/collect-performance-reports.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/test/collect-performance-reports.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/test/collect-performance-reports.sh`
 - Size bytes / Размер в байтах: `795`
 - Included characters / Включено символов: `795`
 - Truncated / Обрезано: `no`
@@ -361,7 +361,7 @@ fi
 
 ### `scripts/test/run-llvm-cov.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/test/run-llvm-cov.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/test/run-llvm-cov.sh`
 - Size bytes / Размер в байтах: `916`
 - Included characters / Включено символов: `916`
 - Truncated / Обрезано: `no`
@@ -390,18 +390,18 @@ export CARGO_INCREMENTAL="${CARGO_INCREMENTAL:-0}"
 cd "${REPO_ROOT}"
 
 cargo llvm-cov clean --workspace
-cargo run --manifest-path crates/testkit/Cargo.toml --bin hermes_test_session -- \
+cargo run --manifest-path crates/testkit/Cargo.toml --bin makosh_test_session -- \
 	cargo llvm-cov nextest \
 		--manifest-path backend/Cargo.toml \
 		--profile "${PROFILE}" \
 		--show-progress "${NEXTEST_SHOW_PROGRESS}" \
-		--test-threads "${HERMES_NEXTEST_JOBS:-4}" \
+		--test-threads "${MAKOSH_NEXTEST_JOBS:-4}" \
 		"$@"
 ```
 
 ### `scripts/test/run-nextest.sh`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/scripts/test/run-nextest.sh`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/scripts/test/run-nextest.sh`
 - Size bytes / Размер в байтах: `806`
 - Included characters / Включено символов: `806`
 - Truncated / Обрезано: `no`
@@ -428,11 +428,11 @@ export CARGO_INCREMENTAL="${CARGO_INCREMENTAL:-0}"
 
 cd "${REPO_ROOT}"
 
-cargo run --manifest-path crates/testkit/Cargo.toml --bin hermes_test_session -- \
+cargo run --manifest-path crates/testkit/Cargo.toml --bin makosh_test_session -- \
 	cargo nextest run \
 		--manifest-path backend/Cargo.toml \
 		--profile "${PROFILE}" \
 		--show-progress "${NEXTEST_SHOW_PROGRESS}" \
-		--test-threads "${HERMES_NEXTEST_JOBS:-4}" \
+		--test-threads "${MAKOSH_NEXTEST_JOBS:-4}" \
 		"$@"
 ```

@@ -1,11 +1,11 @@
 //! Canonical proof bytes for the development owner-pinned artifact approval.
 
 use super::digest::ArtifactDigest;
-use hermes_kernel_control_store::InitialOwnerIdentity;
+use makosh_kernel_control_store::InitialOwnerIdentity;
 use p256::ecdsa::signature::Verifier;
 use p256::ecdsa::{Signature, VerifyingKey};
 
-const OWNER_PINNED_ARTIFACT_DOMAIN: &[u8] = b"hermes.development.owner-pinned-artifact.v1\0";
+const OWNER_PINNED_ARTIFACT_DOMAIN: &[u8] = b"makosh.development.owner-pinned-artifact.v1\0";
 
 pub fn approval_message(
     instance_id: &str,

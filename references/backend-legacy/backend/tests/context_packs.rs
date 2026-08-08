@@ -1,15 +1,15 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::{TimeZone, Utc};
-use hermes_hub_backend::engines::context_packs::{
+use makosh_hub_backend::engines::context_packs::{
     errors::ContextPackStoreError,
     models::{ContextPackKind, ContextPackSourceKind, NewContextPack, NewContextPackSource},
     store::ContextPackStore,
 };
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 use serde_json::json;
 use sqlx::postgres::{PgPool, PgPoolOptions};
 
@@ -127,7 +127,7 @@ async fn live_context_pack_context(
 
 fn disconnected_context_pack_store() -> ContextPackStore {
     let pool = PgPoolOptions::new()
-        .connect_lazy("postgres://hermes:unused@127.0.0.1:1/hermes_hub")
+        .connect_lazy("postgres://makosh:unused@127.0.0.1:1/makosh_hub")
         .expect("create lazy test pool");
     ContextPackStore::new(pool)
 }

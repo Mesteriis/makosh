@@ -30,12 +30,12 @@ describe('createBrowserGatewayConnectTransport', () => {
 		const config = vi.mocked(createConnectTransport).mock.calls[0]?.[0]
 		if (!config?.fetch) throw new Error('Connect fetch boundary was not configured')
 
-		await config.fetch('https://hub.local/hermes.gateway.v1.SessionService/Status', {
+		await config.fetch('https://hub.local/makosh.gateway.v1.SessionService/Status', {
 			method: 'POST',
 		})
 
 		expect(fetchImpl).toHaveBeenCalledWith(
-			'/hermes.gateway.v1.SessionService/Status',
+			'/makosh.gateway.v1.SessionService/Status',
 			expect.objectContaining({
 				cache: 'no-store',
 				credentials: 'same-origin',
@@ -51,7 +51,7 @@ describe('createBrowserGatewayConnectTransport', () => {
 		const config = vi.mocked(createConnectTransport).mock.calls[0]?.[0]
 		if (!config?.fetch) throw new Error('Connect fetch boundary was not configured')
 
-		expect(() => config.fetch?.('https://other.local/hermes.gateway.v1.SessionService/Status')).toThrow('same-origin')
+		expect(() => config.fetch?.('https://other.local/makosh.gateway.v1.SessionService/Status')).toThrow('same-origin')
 		expect(fetchImpl).not.toHaveBeenCalled()
 	})
 

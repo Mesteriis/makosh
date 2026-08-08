@@ -1,9 +1,9 @@
 use axum::http::StatusCode;
 use chrono::{Duration, Utc};
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_postgres::store::CommunicationIngestionStore;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_postgres::store::CommunicationIngestionStore;
 
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use serde_json::json;
 use sqlx::Row;
 use tower::ServiceExt;

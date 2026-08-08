@@ -1,5 +1,5 @@
 [package]
-name = "hermes-communication-task-candidate-runtime"
+name = "makosh-communication-task-candidate-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,26 +8,26 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-communication-task-candidate-runtime"
+name = "makosh-communication-task-candidate-runtime"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "communication_task_candidate_extraction"
 surface = "runtime"
 
 [dependencies]
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-communication-task-candidate-api = { path = "../communication-task-candidate-api" }
-hermes-communication-task-candidate-core = { path = "../communication-task-candidate-core" }
-hermes-communication-task-candidate-persistence = { path = "../communication-task-candidate-persistence" }
-hermes-communications-task-source-api = { path = "../communications-task-source-api" }
-hermes-events-jetstream = { path = "../platform/events/jetstream" }
-hermes-events-protocol = { path = "../platform/events" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-review-task-candidate-api = { path = "../review-task-candidate-api" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-storage-vault = { path = "../platform/storage/vault" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-communication-task-candidate-api = { path = "../communication-task-candidate-api" }
+makosh-communication-task-candidate-core = { path = "../communication-task-candidate-core" }
+makosh-communication-task-candidate-persistence = { path = "../communication-task-candidate-persistence" }
+makosh-communications-task-source-api = { path = "../communications-task-source-api" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-review-task-candidate-api = { path = "../review-task-candidate-api" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }

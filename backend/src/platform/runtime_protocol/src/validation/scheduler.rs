@@ -275,7 +275,7 @@ fn valid_dispatch_publishers(values: &[SchedulerRuntimeDispatchPublisherBindingV
 }
 
 fn valid_dispatch_publisher(value: &SchedulerRuntimeDispatchPublisherBindingV1) -> bool {
-    value.subject.starts_with("hermes.command.v1.") && valid_exact_subject(&value.subject)
+    value.subject.starts_with("makosh.command.v1.") && valid_exact_subject(&value.subject)
 }
 
 fn valid_schedule_control(
@@ -310,9 +310,9 @@ fn valid_schedule_control(
 }
 
 fn valid_schedule_control_binding(binding: &SchedulerRuntimeScheduleControlBindingV1) -> bool {
-    binding.stream_name == "HERMES_COMMAND_V1"
-        && binding.filter_subject == "hermes.command.v1.scheduler.schedule_control.v1"
-        && binding.result_subject == "hermes.result.v1.scheduler.schedule_control.v1"
+    binding.stream_name == "MAKOSH_COMMAND_V1"
+        && binding.filter_subject == "makosh.command.v1.scheduler.schedule_control.v1"
+        && binding.result_subject == "makosh.result.v1.scheduler.schedule_control.v1"
         && binding.command_contract_revision > 0
         && nonzero_sha256(&binding.command_schema_sha256)
         && binding.result_contract_revision > 0
@@ -369,8 +369,8 @@ fn valid_receipt_consumer(value: &SchedulerRuntimeReceiptConsumerBindingV1) -> b
         return false;
     };
     let expected = match kind {
-        SchedulerRuntimeReceiptKindV1::Acceptance => ("HERMES_ACK_V1", "hermes.ack.v1."),
-        SchedulerRuntimeReceiptKindV1::Terminal => ("HERMES_RESULT_V1", "hermes.result.v1."),
+        SchedulerRuntimeReceiptKindV1::Acceptance => ("MAKOSH_ACK_V1", "makosh.ack.v1."),
+        SchedulerRuntimeReceiptKindV1::Terminal => ("MAKOSH_RESULT_V1", "makosh.result.v1."),
         SchedulerRuntimeReceiptKindV1::Unspecified => return false,
     };
     value.stream_name == expected.0

@@ -21,9 +21,9 @@
 - Group / Группа: `crates`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `crates/testkit/src/app.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/app.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/app.rs`
 - Size bytes / Размер в байтах: `3037`
 - Included characters / Включено символов: `3037`
 - Truncated / Обрезано: `no`
@@ -64,15 +64,15 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 use axum::Router;
 use axum::body::Body;
 use axum::http::{Method, Request, header};
-use hermes_hub_backend::app::build_router_with_database;
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::app::build_router_with_database;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::Value;
 
 use crate::context::TestContext;
 use crate::vault;
 
-pub const TEST_API_SECRET: &str = "hermes-test-api-secret";
+pub const TEST_API_SECRET: &str = "makosh-test-api-secret";
 
 pub struct TestApp {
     router: Router,
@@ -143,7 +143,7 @@ pub fn empty_request(method: Method, uri: &str) -> Request<Body> {
     Request::builder()
         .method(method)
         .uri(uri)
-        .header("x-hermes-secret", TEST_API_SECRET)
+        .header("x-makosh-secret", TEST_API_SECRET)
         .body(Body::empty())
         .expect("request")
 }
@@ -152,7 +152,7 @@ pub fn json_request(method: Method, uri: &str, body: Value) -> Request<Body> {
     Request::builder()
         .method(method)
         .uri(uri)
-        .header("x-hermes-secret", TEST_API_SECRET)
+        .header("x-makosh-secret", TEST_API_SECRET)
         .header(header::CONTENT_TYPE, "application/json")
         .body(Body::from(body.to_string()))
         .expect("request")
@@ -179,9 +179,9 @@ pub fn delete(uri: &str) -> Request<Body> {
 }
 ```
 
-### `crates/testkit/src/bin/hermes_test_session.rs`
+### `crates/testkit/src/bin/makosh_test_session.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/bin/hermes_test_session.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/bin/makosh_test_session.rs`
 - Size bytes / Размер в байтах: `1460`
 - Included characters / Включено символов: `1460`
 - Truncated / Обрезано: `no`
@@ -200,11 +200,11 @@ use uuid::Uuid;
 async fn main() {
     let command_args = env::args().skip(1).collect::<Vec<_>>();
     if command_args.is_empty() {
-        eprintln!("usage: hermes-test-session <command> [args...]");
+        eprintln!("usage: makosh-test-session <command> [args...]");
         std::process::exit(2);
     }
 
-    let session_id = format!("hermes-test-{}", Uuid::new_v4());
+    let session_id = format!("makosh-test-{}", Uuid::new_v4());
     let postgres_container = PostgresContainer::start_owned().await;
     let nats_container = NatsContainer::start_owned().await;
     let status = Command::new(&command_args[0])
@@ -237,7 +237,7 @@ async fn main() {
 
 ### `crates/testkit/src/containers/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/containers/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/containers/mod.rs`
 - Size bytes / Размер в байтах: `32`
 - Included characters / Включено символов: `32`
 - Truncated / Обрезано: `no`
@@ -249,7 +249,7 @@ pub mod postgres;
 
 ### `crates/testkit/src/containers/nats.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/containers/nats.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/containers/nats.rs`
 - Size bytes / Размер в байтах: `2528`
 - Included characters / Включено символов: `2528`
 - Truncated / Обрезано: `no`
@@ -262,7 +262,7 @@ use tokio::time::{Duration, Instant, sleep};
 
 const NATS_CONNECT_TIMEOUT: Duration = Duration::from_secs(20);
 const NATS_CONNECT_RETRY_DELAY: Duration = Duration::from_millis(250);
-pub const SESSION_NATS_HOST_PORT_ENV: &str = "HERMES_TEST_NATS_HOST_PORT";
+pub const SESSION_NATS_HOST_PORT_ENV: &str = "MAKOSH_TEST_NATS_HOST_PORT";
 
 pub struct NatsContainer {
     _container: Option<ContainerAsync<GenericImage>>,
@@ -345,7 +345,7 @@ async fn wait_for_nats_port(host_port: u16) {
 
 ### `crates/testkit/src/containers/postgres.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/containers/postgres.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/containers/postgres.rs`
 - Size bytes / Размер в байтах: `4271`
 - Included characters / Включено символов: `4271`
 - Truncated / Обрезано: `no`
@@ -360,8 +360,8 @@ use tokio::time::{Duration, Instant, sleep};
 const POSTGRES_CONNECT_TIMEOUT: Duration = Duration::from_secs(20);
 const POSTGRES_CONNECT_RETRY_DELAY: Duration = Duration::from_millis(250);
 const TEST_POOL_MAX_CONNECTIONS: u32 = 2;
-pub const SESSION_POSTGRES_HOST_PORT_ENV: &str = "HERMES_TEST_POSTGRES_HOST_PORT";
-pub const SESSION_ID_ENV: &str = "HERMES_TEST_SESSION_ID";
+pub const SESSION_POSTGRES_HOST_PORT_ENV: &str = "MAKOSH_TEST_POSTGRES_HOST_PORT";
+pub const SESSION_ID_ENV: &str = "MAKOSH_TEST_SESSION_ID";
 
 pub struct PostgresContainer {
     _container: Option<ContainerAsync<GenericImage>>,
@@ -436,10 +436,10 @@ impl PostgresContainer {
 
         let pool = connect_with_retry(&db_url, "new test database").await;
 
-        hermes_hub_backend::platform::events::run_migrations(&pool)
+        makosh_hub_backend::platform::events::run_migrations(&pool)
             .await
             .expect("failed to run migrations");
-        hermes_hub_backend::platform::settings::ApplicationSettingsStore::new(pool.clone())
+        makosh_hub_backend::platform::settings::ApplicationSettingsStore::new(pool.clone())
             .repair_declared_settings()
             .await
             .expect("failed to repair application settings");
@@ -484,7 +484,7 @@ async fn connect_with_retry(database_url: &str, label: &str) -> PgPool {
 
 ### `crates/testkit/src/context.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/context.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/context.rs`
 - Size bytes / Размер в байтах: `3929`
 - Included characters / Включено символов: `3929`
 - Truncated / Обрезано: `no`
@@ -497,8 +497,8 @@ use uuid::Uuid;
 use crate::containers::nats::NatsContainer;
 use crate::containers::postgres::PostgresContainer;
 use crate::vault::{TestVault, new_test_vault};
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::storage::Database;
 use std::path::Path;
 
 static POSTGRES_CONTAINER: OnceCell<PostgresContainer> = OnceCell::const_new();
@@ -599,7 +599,7 @@ impl TestContext {
     pub async fn app_config_with_nats(&self, api_secret: impl Into<String>) -> AppConfig {
         self.vault.apply_to_config(
             AppConfig::test_with_api_secret_and_database_url(api_secret, self.connection_string())
-                .with_test_pairs([("HERMES_NATS_SERVER_URL", self.nats_server_url().await)])
+                .with_test_pairs([("MAKOSH_NATS_SERVER_URL", self.nats_server_url().await)])
                 .expect("test NATS config must be valid"),
         )
     }
@@ -618,14 +618,14 @@ impl TestContext {
 
 ### `crates/testkit/src/factories/calendar_event.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/factories/calendar_event.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/factories/calendar_event.rs`
 - Size bytes / Размер в байтах: `2351`
 - Included characters / Включено символов: `2351`
 - Truncated / Обрезано: `no`
 
 ```rust
 use chrono::{Duration, Utc};
-use hermes_hub_backend::domains::calendar::events::{CalendarEventStore, NewCalendarEvent};
+use makosh_hub_backend::domains::calendar::events::{CalendarEventStore, NewCalendarEvent};
 use sqlx::postgres::PgPool;
 use uuid::Uuid;
 
@@ -672,8 +672,8 @@ impl<'a> CalendarEventFactory<'a> {
     pub async fn create(
         self,
     ) -> Result<
-        hermes_hub_backend::domains::calendar::events::CalendarEvent,
-        hermes_hub_backend::domains::calendar::events::CalendarError,
+        makosh_hub_backend::domains::calendar::events::CalendarEvent,
+        makosh_hub_backend::domains::calendar::events::CalendarError,
     > {
         let store = CalendarEventStore::new(self.pool.clone());
         let end_at = self.start_at + Duration::minutes(self.duration_minutes);
@@ -704,13 +704,13 @@ impl<'a> CalendarEventFactory<'a> {
 
 ### `crates/testkit/src/factories/contact.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/factories/contact.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/factories/contact.rs`
 - Size bytes / Размер в байтах: `2911`
 - Included characters / Включено символов: `2911`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::persons::core::{
+use makosh_hub_backend::domains::persons::core::{
     NewPersonPersona, PersonPersonaStore, PersonsIdentityStore,
 };
 use sqlx::postgres::PgPool;
@@ -758,7 +758,7 @@ impl<'a> ContactFactory<'a> {
     /// Create a person identity and a default persona. Returns the person ID.
     pub async fn create(
         self,
-    ) -> Result<String, hermes_hub_backend::domains::persons::core::PersonCoreError> {
+    ) -> Result<String, makosh_hub_backend::domains::persons::core::PersonCoreError> {
         let identity_store = PersonsIdentityStore::new(self.pool.clone());
         let persona_store = PersonPersonaStore::new(self.pool.clone());
 
@@ -814,13 +814,13 @@ impl<'a> ContactFactory<'a> {
 
 ### `crates/testkit/src/factories/document.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/factories/document.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/factories/document.rs`
 - Size bytes / Размер в байтах: `1623`
 - Included characters / Включено символов: `1623`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
+use makosh_hub_backend::domains::documents::core::{DocumentImportStore, NewDocumentImport};
 use sha2::{Digest, Sha256};
 use sqlx::postgres::PgPool;
 use uuid::Uuid;
@@ -860,8 +860,8 @@ impl<'a> DocumentFactory<'a> {
     pub async fn create(
         self,
     ) -> Result<
-        hermes_hub_backend::domains::documents::core::ImportedDocument,
-        hermes_hub_backend::domains::documents::core::DocumentImportError,
+        makosh_hub_backend::domains::documents::core::ImportedDocument,
+        makosh_hub_backend::domains::documents::core::DocumentImportError,
     > {
         let store = DocumentImportStore::new(self.pool.clone());
         let fingerprint = format!("{:x}", Sha256::digest(self.text.as_bytes()));
@@ -879,14 +879,14 @@ impl<'a> DocumentFactory<'a> {
 
 ### `crates/testkit/src/factories/email.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/factories/email.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/factories/email.rs`
 - Size bytes / Размер в байтах: `3038`
 - Included characters / Включено символов: `3038`
 - Truncated / Обрезано: `no`
 
 ```rust
 use chrono::Utc;
-use hermes_hub_backend::domains::communications::core::{
+use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
 use sqlx::postgres::PgPool;
@@ -937,7 +937,7 @@ impl<'a> EmailFactory<'a> {
         self,
     ) -> Result<
         (NewProviderAccount, NewRawCommunicationRecord),
-        hermes_hub_backend::domains::communications::core::CommunicationIngestionError,
+        makosh_hub_backend::domains::communications::core::CommunicationIngestionError,
     > {
         let store = CommunicationIngestionStore::new(self.pool.clone());
 
@@ -981,7 +981,7 @@ impl<'a> EmailFactory<'a> {
 
 ### `crates/testkit/src/factories/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/factories/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/factories/mod.rs`
 - Size bytes / Размер в байтах: `127`
 - Included characters / Включено символов: `127`
 - Truncated / Обрезано: `no`
@@ -998,13 +998,13 @@ pub mod task;
 
 ### `crates/testkit/src/factories/organization.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/factories/organization.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/factories/organization.rs`
 - Size bytes / Размер в байтах: `1298`
 - Included characters / Включено символов: `1298`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::organizations::api::OrganizationStore;
+use makosh_hub_backend::domains::organizations::api::OrganizationStore;
 use sqlx::postgres::PgPool;
 use uuid::Uuid;
 
@@ -1043,8 +1043,8 @@ impl<'a> OrganizationFactory<'a> {
     pub async fn create(
         self,
     ) -> Result<
-        hermes_hub_backend::domains::organizations::api::Organization,
-        hermes_hub_backend::domains::organizations::api::OrganizationError,
+        makosh_hub_backend::domains::organizations::api::Organization,
+        makosh_hub_backend::domains::organizations::api::OrganizationError,
     > {
         let store = OrganizationStore::new(self.pool.clone());
         store
@@ -1056,13 +1056,13 @@ impl<'a> OrganizationFactory<'a> {
 
 ### `crates/testkit/src/factories/project.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/factories/project.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/factories/project.rs`
 - Size bytes / Размер в байтах: `1745`
 - Included characters / Включено символов: `1745`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::projects::core::{NewProject, ProjectStore};
+use makosh_hub_backend::domains::projects::core::{NewProject, ProjectStore};
 use sqlx::postgres::PgPool;
 use uuid::Uuid;
 
@@ -1103,8 +1103,8 @@ impl<'a> ProjectFactory<'a> {
     pub async fn create(
         self,
     ) -> Result<
-        hermes_hub_backend::domains::projects::core::Project,
-        hermes_hub_backend::domains::projects::core::ProjectStoreError,
+        makosh_hub_backend::domains::projects::core::Project,
+        makosh_hub_backend::domains::projects::core::ProjectStoreError,
     > {
         let store = ProjectStore::new(self.pool.clone());
         let project_id = format!("proj:v1:test:{}", Uuid::new_v4());
@@ -1127,14 +1127,14 @@ impl<'a> ProjectFactory<'a> {
 
 ### `crates/testkit/src/factories/task.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/factories/task.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/factories/task.rs`
 - Size bytes / Размер в байтах: `3323`
 - Included characters / Включено символов: `3323`
 - Truncated / Обрезано: `no`
 
 ```rust
 use chrono::Utc;
-use hermes_hub_backend::domains::tasks::api::{NewTask, TaskStore};
+use makosh_hub_backend::domains::tasks::api::{NewTask, TaskStore};
 use sqlx::postgres::PgPool;
 use uuid::Uuid;
 
@@ -1206,8 +1206,8 @@ impl<'a> TaskFactory<'a> {
     pub async fn create(
         self,
     ) -> Result<
-        hermes_hub_backend::domains::tasks::api::Task,
-        hermes_hub_backend::domains::tasks::api::TaskError,
+        makosh_hub_backend::domains::tasks::api::Task,
+        makosh_hub_backend::domains::tasks::api::TaskError,
     > {
         let store = TaskStore::new(self.pool.clone());
         let new_task = NewTask {
@@ -1219,7 +1219,7 @@ impl<'a> TaskFactory<'a> {
             source_id: Some(format!("test-src-{}", Uuid::new_v4())),
             source_type: Some("import".into()),
             project_id: self.project_id,
-            hermes_status: self.status,
+            makosh_status: self.status,
             priority_score: self.priority_score,
             area: self.area,
             why: Some("Created by TaskFactory for integration testing".into()),
@@ -1239,13 +1239,13 @@ impl<'a> TaskFactory<'a> {
 
 ### `crates/testkit/src/lib.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/lib.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/lib.rs`
 - Size bytes / Размер в байтах: `698`
 - Included characters / Включено символов: `698`
 - Truncated / Обрезано: `no`
 
 ````rust
-//! Test infrastructure for Hermes Hub.
+//! Test infrastructure for Макошь.
 //!
 //! Provides programmatic container management, isolated test databases,
 //! and entity factories for integration testing.
@@ -1277,7 +1277,7 @@ pub mod vault;
 
 ### `crates/testkit/src/vault.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/crates/testkit/src/vault.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/crates/testkit/src/vault.rs`
 - Size bytes / Размер в байтах: `1731`
 - Included characters / Включено символов: `1731`
 - Truncated / Обрезано: `no`
@@ -1286,7 +1286,7 @@ pub mod vault;
 use std::path::{Path, PathBuf};
 use std::sync::{Mutex, OnceLock};
 
-use hermes_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::config::AppConfig;
 use tempfile::TempDir;
 
 static RETAINED_VAULTS: OnceLock<Mutex<Vec<TestVault>>> = OnceLock::new();
@@ -1305,7 +1305,7 @@ pub struct TestVault {
 impl TestVault {
     pub fn new() -> Self {
         let dir = tempfile::Builder::new()
-            .prefix("hermes-test-vault-")
+            .prefix("makosh-test-vault-")
             .tempdir()
             .expect("create temporary test vault directory");
 

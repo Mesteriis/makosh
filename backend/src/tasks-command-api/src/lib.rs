@@ -9,14 +9,14 @@ pub use envelope::{
     build_task_creation_from_reviewed_candidate_rejected_outbox_record_v1,
 };
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityRequestV1, ContractReferenceV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
     EventRouteRequestV1, EventSubscriptionRequirementV1, capability_request_v1::Request,
 };
 
-pub const PACKAGE: &str = "hermes-tasks-command-api";
+pub const PACKAGE: &str = "makosh-tasks-command-api";
 pub const TASKS_OWNER_ID_V1: &str = "tasks";
-pub const TASKS_MODULE_ID_V1: &str = "hermes-tasks-runtime";
+pub const TASKS_MODULE_ID_V1: &str = "makosh-tasks-runtime";
 pub const TASKS_REVIEWED_CANDIDATE_COMMAND_CAPABILITY_ID_V1: &str =
     "tasks.reviewed-candidate.command.v1";
 pub const TASKS_REVIEWED_CANDIDATE_BLOB_CAPABILITY_ID_V1: &str = "tasks.reviewed-candidate.blob.v1";
@@ -33,7 +33,7 @@ pub const TASKS_REVIEWED_CANDIDATE_MAX_PROOF_BYTES_V1: usize = 2_048;
 pub const TASKS_REVIEWED_CANDIDATE_MAX_IN_FLIGHT_V1: u32 = 32;
 
 pub mod wire {
-    include!(concat!(env!("OUT_DIR"), "/hermes.tasks.command.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.tasks.command.v1.rs"));
 }
 
 include!(concat!(env!("OUT_DIR"), "/tasks_command_schema.rs"));
@@ -153,7 +153,7 @@ mod tests {
     #[test]
     fn exact_tasks_command_is_target_owned() {
         assert_eq!(TASKS_OWNER_ID_V1, "tasks");
-        assert_eq!(TASKS_MODULE_ID_V1, "hermes-tasks-runtime");
+        assert_eq!(TASKS_MODULE_ID_V1, "makosh-tasks-runtime");
         let Some(Request::EventRoute(route)) =
             create_task_from_reviewed_candidate_consume_request_v1().request
         else {
@@ -168,7 +168,7 @@ mod tests {
 
     #[test]
     fn durable_messages_exclude_candidate_presentation_text() {
-        let source = include_str!("../proto/hermes/tasks/command/v1/tasks_command.proto");
+        let source = include_str!("../proto/makosh/tasks/command/v1/tasks_command.proto");
         let command = source
             .split("message CreateTaskFromReviewedCandidateCommandV1")
             .nth(1)

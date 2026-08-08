@@ -10,7 +10,7 @@ mod rfc822;
 mod text;
 
 use crate::domains::communications::sources::FixtureCommunicationSourceMessage;
-use hermes_communications_api::email_sync::EmailSyncBatch;
+use makosh_communications_api::email_sync::EmailSyncBatch;
 
 use self::errors::EmailFixtureExportError;
 use self::models::{EmailFixtureExportOptions, EmailFixturePrivacyMode};

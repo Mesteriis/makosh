@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<{
   delayDuration: 400
 })
 
-const contentClasses = computed(() => ['hermes-tooltip-content', props.class])
+const contentClasses = computed(() => ['makosh-tooltip-content', props.class])
 </script>
 
 <template>
@@ -26,7 +26,7 @@ const contentClasses = computed(() => ['hermes-tooltip-content', props.class])
       <TooltipPortal>
         <TooltipContent :class="contentClasses" :side="side" :side-offset="sideOffset">
           <slot>{{ content }}</slot>
-          <TooltipArrow class="hermes-tooltip-arrow" />
+          <TooltipArrow class="makosh-tooltip-arrow" />
         </TooltipContent>
       </TooltipPortal>
     </TooltipRoot>

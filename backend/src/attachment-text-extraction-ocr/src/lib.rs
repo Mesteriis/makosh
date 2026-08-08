@@ -9,14 +9,14 @@ use std::{
     time::{Duration, Instant},
 };
 
-use hermes_attachment_text_extraction_parser_contract::{
+use makosh_attachment_text_extraction_parser_contract::{
     ATTACHMENT_TEXT_PARSER_MAX_OUTPUT_BYTES_V1, AttachmentTextParserErrorV1,
     AttachmentTextParserKindV1, AttachmentTextParserOutputV1, bounded_parser_output_v1,
     detect_attachment_text_parser_v1,
 };
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-attachment-text-extraction-ocr";
+pub const PACKAGE: &str = "makosh-attachment-text-extraction-ocr";
 pub const ATTACHMENT_TEXT_OCR_LANGUAGES_V1: &str = "eng+rus";
 const MAX_EXECUTABLE_BYTES_V1: u64 = 256 * 1024 * 1024;
 const MAX_MODEL_BYTES_V1: u64 = 128 * 1024 * 1024;

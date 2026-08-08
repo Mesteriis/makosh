@@ -8,19 +8,19 @@ use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     AuthorizeOwnerVaultProvisioningRequestV1, AuthorizeOwnerVaultProvisioningResponseV1,
     CommitOwnerVaultProvisioningRequestV1, CommitOwnerVaultProvisioningResponseV1,
     PrepareOwnerVaultProvisioningRequestV1, PrepareOwnerVaultProvisioningResponseV1,
 };
-use hermes_gateway_runtime::{
+use makosh_gateway_runtime::{
     OwnerVaultClientPrincipalV1, OwnerVaultProvisioningHandlerV1,
     OwnerVaultProvisioningRouteErrorV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_runtime_protocol::v1::VaultCiphertextResponseV1;
-use hermes_runtime_protocol::vault_request_id::next_vault_transport_request_id_v1;
-use hermes_vault_protocol::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_runtime_protocol::v1::VaultCiphertextResponseV1;
+use makosh_runtime_protocol::vault_request_id::next_vault_transport_request_id_v1;
+use makosh_vault_protocol::{
     LeaseAudienceV1, VaultCiphertextFrameV1, VaultLeaseIssueRequestV1, VaultTransportBindingV1,
     VaultTransportCommandV1, VaultTransportDirectionV1, VaultTransportPublicKey, seal,
 };
@@ -400,7 +400,7 @@ fn challenge_digest(
     nonce: &[u8; 32],
 ) -> [u8; 32] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.owner-vault-provisioning.challenge.v1");
+    digest.update(b"makosh.owner-vault-provisioning.challenge.v1");
     digest_text(&mut digest, principal.owner_id());
     digest_text(&mut digest, principal.device_id());
     digest_text(&mut digest, principal.session_id());
@@ -430,7 +430,7 @@ fn commit_request_fingerprint(
     hpke_authentication_tag: &[u8],
 ) -> [u8; 32] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.owner-vault-provisioning.commit.v1");
+    digest.update(b"makosh.owner-vault-provisioning.commit.v1");
     digest.update(operation_digest_sha256);
     digest_field(&mut digest, hpke_encapped_key);
     digest_field(&mut digest, ciphertext);

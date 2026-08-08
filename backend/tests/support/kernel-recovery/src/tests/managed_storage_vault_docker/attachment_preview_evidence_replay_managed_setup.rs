@@ -2,16 +2,16 @@
 
 use super::*;
 
-use hermes_attachment_preview_evidence_replay_api::{
+use makosh_attachment_preview_evidence_replay_api::{
     ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_MODULE_ID_V1, ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_OWNER_V1,
 };
-use hermes_attachment_preview_evidence_replay_persistence::attachment_preview_evidence_replay_storage_bundle_v1;
-use hermes_attachment_preview_evidence_replay_runtime::{
+use makosh_attachment_preview_evidence_replay_persistence::attachment_preview_evidence_replay_storage_bundle_v1;
+use makosh_attachment_preview_evidence_replay_runtime::{
     ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_STORAGE_CAPABILITY_ID_V1,
     attachment_preview_evidence_replay_module_descriptor_v1,
     attachment_preview_evidence_replay_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
+use makosh_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
 
 const REPLAY_RELEASE_ARTIFACT_ID_V1: &str = "attachment_preview_evidence_replay.runtime.v1";
 const REPLAY_BUILD_ID_V1: &str = "managed-attachment-preview-evidence-replay-live";
@@ -72,7 +72,7 @@ pub(super) fn admit_attachment_preview_evidence_replay_runtime_v1(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             REPLAY_RELEASE_ARTIFACT_ID_V1,
             Sha256::digest(
                 std::fs::read(attachment_preview_evidence_replay_binary_v1())
@@ -275,5 +275,5 @@ fn attachment_preview_evidence_replay_release_artifact_v1() -> SignedRuntimeArti
 }
 
 fn attachment_preview_evidence_replay_binary_v1() -> PathBuf {
-    binary("HERMES_ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_BIN")
+    binary("MAKOSH_ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_BIN")
 }

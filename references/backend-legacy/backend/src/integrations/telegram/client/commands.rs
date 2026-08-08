@@ -8,8 +8,8 @@ use super::errors::TelegramError;
 use super::evidence::link_telegram_entity_in_transaction;
 use super::models::messages::TelegramProviderWriteCommand;
 use super::rows::row_to_telegram_provider_write_command;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 
 #[path = "commands/queries.rs"]
 pub mod queries;

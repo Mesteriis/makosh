@@ -1,4 +1,4 @@
-use hermes_review_note_candidate_core::{
+use makosh_review_note_candidate_core::{
     ReviewNoteCandidatePromotionStatusV1, ReviewNoteCandidateStateV1,
     ReviewNoteCandidateTimestampV1, ReviewNoteCandidateV1, ReviewNoteSourceBasisV1,
     ReviewNoteTopicHintV1, validate_review_note_candidate_v1,
@@ -16,7 +16,7 @@ pub(crate) const SELECT_REVIEW_BY_ID: &str =
             topic_hints, source_basis, confidence_basis_points, state, promotion_status, review_revision,
             decided_by_owner_device_id, decided_at_unix_seconds, decided_at_nanos,
             promoted_note_id, updated_at_unix_seconds, updated_at_nanos
-     FROM hermes_data.review_note_candidate_state
+     FROM makosh_data.review_note_candidate_state
      WHERE logical_owner_id=$1 AND review_id=$2";
 
 pub(crate) const SELECT_REVIEW_FOR_UPDATE: &str =
@@ -25,7 +25,7 @@ pub(crate) const SELECT_REVIEW_FOR_UPDATE: &str =
             topic_hints, source_basis, confidence_basis_points, state, promotion_status, review_revision,
             decided_by_owner_device_id, decided_at_unix_seconds, decided_at_nanos,
             promoted_note_id, updated_at_unix_seconds, updated_at_nanos
-     FROM hermes_data.review_note_candidate_state
+     FROM makosh_data.review_note_candidate_state
      WHERE logical_owner_id=$1 AND review_id=$2 FOR UPDATE";
 
 pub(crate) const SELECT_PENDING_PROMOTIONS: &str =
@@ -34,7 +34,7 @@ pub(crate) const SELECT_PENDING_PROMOTIONS: &str =
             topic_hints, source_basis, confidence_basis_points, state, promotion_status, review_revision,
             decided_by_owner_device_id, decided_at_unix_seconds, decided_at_nanos,
             promoted_note_id, updated_at_unix_seconds, updated_at_nanos
-     FROM hermes_data.review_note_candidate_state
+     FROM makosh_data.review_note_candidate_state
      WHERE logical_owner_id=$1 AND state=2 AND promotion_status=2
      ORDER BY review_revision, review_id LIMIT $2";
 
@@ -46,7 +46,7 @@ pub(crate) const SELECT_SUBMISSION_BY_MESSAGE_ID: &str =
             candidate_blob_custody_proof, materialized_blob_reference_id,
             cleanup_completed_at_unix_millis, completed, review_id, rejected,
             received_at_unix_millis
-     FROM hermes_data.review_note_candidate_submissions
+     FROM makosh_data.review_note_candidate_submissions
      WHERE logical_owner_id=$1 AND submission_message_id=$2";
 
 pub(crate) const SELECT_SUBMISSION_FOR_UPDATE: &str =
@@ -57,7 +57,7 @@ pub(crate) const SELECT_SUBMISSION_FOR_UPDATE: &str =
             candidate_blob_custody_proof, materialized_blob_reference_id,
             cleanup_completed_at_unix_millis, completed, review_id, rejected,
             received_at_unix_millis
-     FROM hermes_data.review_note_candidate_submissions
+     FROM makosh_data.review_note_candidate_submissions
      WHERE logical_owner_id=$1 AND submission_message_id=$2 FOR UPDATE";
 
 pub(crate) const SELECT_RECOVERABLE_SUBMISSIONS: &str =
@@ -68,7 +68,7 @@ pub(crate) const SELECT_RECOVERABLE_SUBMISSIONS: &str =
             candidate_blob_custody_proof, materialized_blob_reference_id,
             cleanup_completed_at_unix_millis, completed, review_id, rejected,
             received_at_unix_millis
-     FROM hermes_data.review_note_candidate_submissions
+     FROM makosh_data.review_note_candidate_submissions
      WHERE logical_owner_id=$1
        AND (NOT completed OR (materialized_blob_reference_id IS NOT NULL
             AND cleanup_completed_at_unix_millis IS NULL))
@@ -158,7 +158,7 @@ pub(crate) async fn insert_review(
     review: &ReviewNoteCandidateV1,
 ) -> Result<(), ReviewNoteCandidatePersistenceErrorV1> {
     sqlx::query(
-        "INSERT INTO hermes_data.review_note_candidate_state (
+        "INSERT INTO makosh_data.review_note_candidate_state (
            logical_owner_id, review_id, candidate_id, candidate_digest,
            source_evidence_id, source_evidence_revision, title, excerpt,
            topic_hints, source_basis, confidence_basis_points, state, promotion_status, review_revision,
@@ -203,7 +203,7 @@ pub(crate) async fn update_review(
     review: &ReviewNoteCandidateV1,
 ) -> Result<(), ReviewNoteCandidatePersistenceErrorV1> {
     let affected = sqlx::query(
-        "UPDATE hermes_data.review_note_candidate_state
+        "UPDATE makosh_data.review_note_candidate_state
          SET state=$1, promotion_status=$2, review_revision=$3,
              decided_by_owner_device_id=$4, decided_at_unix_seconds=$5,
              decided_at_nanos=$6, promoted_note_id=$7,

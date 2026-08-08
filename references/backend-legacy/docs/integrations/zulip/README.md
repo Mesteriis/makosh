@@ -2,8 +2,8 @@
 
 Status: proposed reference provider package.
 
-Zulip is the Hermes reference communication provider for local system-level E2E
-sessions. It exists to produce real external communication events that Hermes can
+Zulip is the Макошь reference communication provider for local system-level E2E
+sessions. It exists to produce real external communication events that Макошь can
 observe, normalize, trace and assert from provider boundary to user-facing
 projections.
 
@@ -14,7 +14,7 @@ adapters. Application workers own runtime orchestration.
 
 ## Why Zulip
 
-Zulip is useful for Hermes Lab because it provides:
+Zulip is useful for Макошь Lab because it provides:
 
 - self-hosted local deployment;
 - bot/API credentials for repeatable test actions;
@@ -141,8 +141,8 @@ execution:
 - upload file bytes;
 - download same-realm `/user_uploads/...` bytes.
 
-This is only the external provider API boundary. REST is not the internal Hermes
-communication contract: Hermes durable outbox commands, capability gates,
+This is only the external provider API boundary. REST is not the internal Макошь
+communication contract: Макошь durable outbox commands, capability gates,
 Signal Hub evidence, reconciliation and UI/API command routes remain separate
 work and must not be inferred from the client methods alone.
 
@@ -203,14 +203,14 @@ The application bootstrap starts periodic Zulip event ingest, attachment
 download and command executor workers behind separate Signal Hub runtime gates
 and the unlocked HostVault gate.
 
-Hermes Lab includes a dedicated attachment scenario at
-`testing/hermes-lab/scenarios/zulip/attachment-materialization.json`. It uploads
+Макошь Lab includes a dedicated attachment scenario at
+`testing/makosh-lab/scenarios/zulip/attachment-materialization.json`. It uploads
 a file, sends a stream message containing the returned Zulip upload URI and can
 download the same-realm user-upload bytes for provider-side evidence. The Lab
 report records file size and SHA-256, not file bytes.
 
-Hermes Lab also includes
-`testing/hermes-lab/scenarios/zulip/direct-message.json` for provider-side direct
+Макошь Lab also includes
+`testing/makosh-lab/scenarios/zulip/direct-message.json` for provider-side direct
 message evidence. Direct message backend projection is covered separately so
 private/direct messages do not fall back to synthetic stream/topic subjects.
 
@@ -228,7 +228,7 @@ a provider message observation.
 ## Lab scenario flow
 
 ```text
-Hermes Lab scenario
+Макошь Lab scenario
 ↓
 Zulip API action
 ↓

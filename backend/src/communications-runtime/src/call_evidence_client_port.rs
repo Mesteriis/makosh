@@ -1,7 +1,7 @@
 //! Exact module-query and client-RPC transport adapter for call evidence reads.
 
-use hermes_communications_call_evidence_persistence::CommunicationsCallEvidencePersistenceV1;
-use hermes_runtime_protocol::{
+use makosh_communications_call_evidence_persistence::CommunicationsCallEvidencePersistenceV1;
+use makosh_runtime_protocol::{
     v1::{
         ManagedRuntimeModuleQueryDeliveryV1, ManagedRuntimeModuleQueryResponseV1,
         ModuleClientRequestV1, ModuleClientResponseV1,

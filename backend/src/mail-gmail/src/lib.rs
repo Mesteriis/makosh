@@ -10,7 +10,7 @@ use async_std::net::TcpStream;
 use base64::Engine as _;
 use base64::engine::general_purpose::URL_SAFE_NO_PAD;
 use futures_util::io::{AsyncReadExt, AsyncWriteExt};
-use hermes_mail_api::{
+use makosh_mail_api::{
     GMAIL_API_HOST, GMAIL_API_HTTPS_PORT, GmailOAuthAuthorityV1, GmailOAuthConfigurationV1,
     GmailOAuthEndpointV1, valid_ca_certificate_pem, valid_gmail_oauth_configuration,
 };
@@ -1001,15 +1001,15 @@ mod tests {
             client_id: "client-id.apps.googleusercontent.com".to_owned(),
             redirect_uri: "http://127.0.0.1:38123/oauth/callback".to_owned(),
             authorization_endpoint: GmailOAuthEndpointV1 {
-                host: hermes_mail_api::GMAIL_OAUTH_AUTHORIZATION_HOST.to_owned(),
-                port: hermes_mail_api::GMAIL_OAUTH_HTTPS_PORT,
-                path: hermes_mail_api::GMAIL_OAUTH_AUTHORIZATION_PATH.to_owned(),
+                host: makosh_mail_api::GMAIL_OAUTH_AUTHORIZATION_HOST.to_owned(),
+                port: makosh_mail_api::GMAIL_OAUTH_HTTPS_PORT,
+                path: makosh_mail_api::GMAIL_OAUTH_AUTHORIZATION_PATH.to_owned(),
                 ca_certificate_pem: None,
             },
             token_endpoint: GmailOAuthEndpointV1 {
-                host: hermes_mail_api::GMAIL_OAUTH_TOKEN_HOST.to_owned(),
-                port: hermes_mail_api::GMAIL_OAUTH_HTTPS_PORT,
-                path: hermes_mail_api::GMAIL_OAUTH_TOKEN_PATH.to_owned(),
+                host: makosh_mail_api::GMAIL_OAUTH_TOKEN_HOST.to_owned(),
+                port: makosh_mail_api::GMAIL_OAUTH_HTTPS_PORT,
+                path: makosh_mail_api::GMAIL_OAUTH_TOKEN_PATH.to_owned(),
                 ca_certificate_pem: None,
             },
         }

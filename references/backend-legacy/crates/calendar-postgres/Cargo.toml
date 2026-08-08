@@ -1,5 +1,5 @@
 [package]
-name = "hermes-calendar-postgres"
+name = "makosh-calendar-postgres"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.89"
@@ -7,5 +7,5 @@ publish = false
 
 [dependencies]
 chrono = { version = "0.4", default-features = false, features = ["clock", "serde"] }
-hermes-calendar-api = { path = "../calendar-api" }
+makosh-calendar-api = { path = "../calendar-api" }
 sqlx = { version = "0.8", default-features = false, features = ["chrono", "postgres", "runtime-tokio-rustls"] }

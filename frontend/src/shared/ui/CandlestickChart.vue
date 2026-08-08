@@ -51,30 +51,30 @@ const renderedCandles = computed(() => {
 })
 
 const classes = computed(() => [
-  'hermes-candlestick-chart',
-  `hermes-candlestick-chart--${props.size}`,
+  'makosh-candlestick-chart',
+  `makosh-candlestick-chart--${props.size}`,
   props.class
 ])
 </script>
 
 <template>
   <svg :class="classes" viewBox="0 0 132 54" role="img" :aria-label="label">
-    <line class="hermes-candlestick-chart__baseline" x1="0" y1="49" x2="132" y2="49" aria-hidden="true" />
+    <line class="makosh-candlestick-chart__baseline" x1="0" y1="49" x2="132" y2="49" aria-hidden="true" />
     <g
       v-for="candle in renderedCandles"
       :key="candle.id"
-      :class="['hermes-candlestick-chart__candle', `hermes-candlestick-chart__candle--${candle.direction}`]"
+      :class="['makosh-candlestick-chart__candle', `makosh-candlestick-chart__candle--${candle.direction}`]"
       aria-hidden="true"
     >
       <line
-        class="hermes-candlestick-chart__wick"
+        class="makosh-candlestick-chart__wick"
         :x1="candle.x"
         :x2="candle.x"
         :y1="candle.wickTop"
         :y2="candle.wickBottom"
       />
       <rect
-        class="hermes-candlestick-chart__body"
+        class="makosh-candlestick-chart__body"
         :x="candle.bodyX"
         :y="candle.bodyY"
         :width="candle.bodyWidth"

@@ -3,7 +3,7 @@
 use std::os::unix::fs::PermissionsExt;
 use std::path::PathBuf;
 
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use crate::control_store::lifecycle::bootstrap_control_store;
 use crate::infrastructure::filesystem::{

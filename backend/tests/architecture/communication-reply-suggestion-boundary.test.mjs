@@ -87,11 +87,11 @@ test('reply suggestion agreement keeps domain workflow engine and integration se
     ],
   });
 
-  assert.match(adr, /hermes-communications-ai-source-api/);
-  assert.match(adr, /hermes-ai-contracts/);
-  assert.match(adr, /hermes-communication-reply-suggestion-api/);
-  assert.match(adr, /hermes-ollama-ai-api/);
-  assert.match(adr, /hermes-ollama-ai-persistence/);
+  assert.match(adr, /makosh-communications-ai-source-api/);
+  assert.match(adr, /makosh-ai-contracts/);
+  assert.match(adr, /makosh-communication-reply-suggestion-api/);
+  assert.match(adr, /makosh-ollama-ai-api/);
+  assert.match(adr, /makosh-ollama-ai-persistence/);
   assert.match(adr, /Ollama `\/api\/chat` не предоставляет доказанного idempotency key/);
   assert.match(adr, /Client content ticket из ADR-0315 не используется/);
   assert.match(adr, /Mock or canned response не\s+является production\s+evidence/);
@@ -107,7 +107,7 @@ test('Communications AI source is one provider-neutral event contract unit', asy
     backendSource('src/communications-ai-source-api/src/lib.rs'),
     backendSource('src/communications-ai-source-api/src/envelope.rs'),
     backendSource(
-      'src/communications-ai-source-api/proto/hermes/communications/ai_source/v1/ai_source.proto',
+      'src/communications-ai-source-api/proto/makosh/communications/ai_source/v1/ai_source.proto',
     ),
   ]);
 
@@ -152,7 +152,7 @@ test('canonical Mail subject and sender reach reply source content without a pro
     workflowRuntime,
   ] = await Promise.all([
     backendSource(
-      'src/communications-ingress/proto/hermes/communications/ingress/v1/observation.proto',
+      'src/communications-ingress/proto/makosh/communications/ingress/v1/observation.proto',
     ),
     backendSource('src/communications-ingress/src/lib.rs'),
     backendSource('src/mail-core/src/lib.rs'),
@@ -203,7 +203,7 @@ test('Communications AI source runtime commits an owner-bound event handoff befo
     backendSource('scripts/test-authenticated-storage.mjs'),
   ]);
 
-  assert.match(manifest, /hermes-communications-ai-source-api/);
+  assert.match(manifest, /makosh-communications-ai-source-api/);
   assert.match(persistence, /communications_event_inbox/);
   assert.match(persistence, /communications_domain_outbox/);
   assert.match(persistence, /canonical_revision/);
@@ -245,7 +245,7 @@ test('reply suggestion client API is one concrete provider-neutral workflow cont
     backendSource('src/communication-reply-suggestion-api/Cargo.toml'),
     backendSource('src/communication-reply-suggestion-api/src/lib.rs'),
     backendSource(
-      'src/communication-reply-suggestion-api/proto/hermes/communication_reply_suggestion/v1/reply_suggestion.proto',
+      'src/communication-reply-suggestion-api/proto/makosh/communication_reply_suggestion/v1/reply_suggestion.proto',
     ),
   ]);
 
@@ -320,11 +320,11 @@ test('reply suggestion persistence is owner-local atomic replay state without pr
   assert.match(outbox, /mark_source_prepare_published/);
   assert.match(realtime, /client_realtime_window/);
   assert.match(schema, /owner_id: "communication_reply_suggestion"/);
-  assert.match(migration, /CREATE TABLE hermes_data\.communication_reply_suggestion_runs/);
+  assert.match(migration, /CREATE TABLE makosh_data\.communication_reply_suggestion_runs/);
   assert.match(migration, /UNIQUE \(logical_owner_id, operation_id\)/);
-  assert.match(migration, /CREATE TABLE hermes_data\.communication_reply_suggestion_inbox/);
-  assert.match(migration, /CREATE TABLE hermes_data\.communication_reply_suggestion_outbox/);
-  assert.match(migration, /CREATE TABLE hermes_data\.communication_reply_suggestion_realtime/);
+  assert.match(migration, /CREATE TABLE makosh_data\.communication_reply_suggestion_inbox/);
+  assert.match(migration, /CREATE TABLE makosh_data\.communication_reply_suggestion_outbox/);
+  assert.match(migration, /CREATE TABLE makosh_data\.communication_reply_suggestion_realtime/);
   assert.doesNotMatch(
     `${manifest}\n${model}\n${repository}\n${outbox}\n${realtime}\n${migration}`,
     /communications_|mail_|telegram_|whatsapp_|zulip_|source_body|prompt|provider_id|model_id|endpoint|serde_json|google\.protobuf\.Any|map</,
@@ -372,7 +372,7 @@ test('reply suggestion runtime coordinates event source, AI request, Blob custod
   assert.match(processRoot, /ManagedWorkflowRuntimeConfigurationV1/);
   assert.doesNotMatch(
     `${manifest}\n${admission}\n${sourceResults}\n${materialization}\n${inference}\n${runtime}`,
-    /hermes-mail|hermes-telegram|hermes-whatsapp|hermes-zulip|hermes-ollama|\bprovider_id\b|\bmodel_id\b|\bprompt_text\b|reqwest|hyper/,
+    /makosh-mail|makosh-telegram|makosh-whatsapp|makosh-zulip|makosh-ollama|\bprovider_id\b|\bmodel_id\b|\bprompt_text\b|reqwest|hyper/,
   );
 });
 
@@ -398,7 +398,7 @@ test('signed Reply Suggestion conformance crosses only event and request RPC bou
     flow,
     /managed_reply_suggestion_completes_real_provider_through_gateway_sse/,
   );
-  assert.match(flow, /required\("HERMES_OLLAMA_LIVE_PORT"\)/);
+  assert.match(flow, /required\("MAKOSH_OLLAMA_LIVE_PORT"\)/);
   assert.match(flow, /start_communications_domain/);
   assert.match(flow, /start_reply_suggestion_runtime_v1/);
   assert.match(flow, /start_ai_inference_runtime_v1/);
@@ -416,7 +416,7 @@ test('signed Reply Suggestion conformance crosses only event and request RPC bou
   assert.match(flow, /stop\(&ollama\.registration_id\)/);
   assert.match(flow, /ReplySuggestionErrorCodeSourceRejected/);
   assert.match(flow, /assert_private_content_absent/);
-  assert.match(managedScript, /hermes-communication-reply-suggestion-runtime/);
+  assert.match(managedScript, /makosh-communication-reply-suggestion-runtime/);
   assert.match(
     managedScript,
     /managed_reply_suggestion_reaches_ai_and_replays_through_gateway_sse/,
@@ -424,7 +424,7 @@ test('signed Reply Suggestion conformance crosses only event and request RPC bou
   assert.match(gateway, /"RUNTIME_UNAVAILABLE" => ClientRpcRouteErrorV1::Unavailable/);
   assert.doesNotMatch(
     `${setup}\n${flow}`,
-    /hermes_mail_runtime|hermes_telegram_runtime|hermes_whatsapp_runtime|hermes_zulip_runtime/,
+    /makosh_mail_runtime|makosh_telegram_runtime|makosh_whatsapp_runtime|makosh_zulip_runtime/,
   );
 });
 
@@ -447,12 +447,12 @@ test('reply suggestion assembly emits only unsigned workflow runtime and storage
   assert.match(assembly, /create_new\(true\)/);
   assert.match(assembly, /mode\(0o600\)/);
   assert.match(cli, /--runtime/);
-  assert.match(release, /--package hermes-communication-reply-suggestion-runtime/);
-  assert.match(release, /--package hermes-communication-reply-suggestion-assembly/);
+  assert.match(release, /--package makosh-communication-reply-suggestion-runtime/);
+  assert.match(release, /--package makosh-communication-reply-suggestion-assembly/);
   assert.match(release, /communication_reply_suggestion\.release-artifacts\.json/);
   assert.doesNotMatch(
     `${manifest}\n${assembly}\n${cli}`,
-    /signing|private_key|launch|hermes-communications|hermes-ollama|\bprovider_id\b|\bmodel_id\b|prompt_text/,
+    /signing|private_key|launch|makosh-communications|makosh-ollama|\bprovider_id\b|\bmodel_id\b|prompt_text/,
   );
 });
 
@@ -461,7 +461,7 @@ test('AI public contracts are one concrete provider-neutral engine unit', async 
     backendSource('src/ai-contracts/Cargo.toml'),
     backendSource('src/ai-contracts/src/lib.rs'),
     backendSource('src/ai-contracts/src/validation.rs'),
-    backendSource('src/ai-contracts/proto/hermes/ai/contracts/v1/ai.proto'),
+    backendSource('src/ai-contracts/proto/makosh/ai/contracts/v1/ai.proto'),
   ]);
 
   assert.match(manifest, /role = "engine"/);
@@ -505,7 +505,7 @@ test('AI inference core owns lifecycle and fixed policy without provider impleme
   assert.match(manifest, /role = "engine"/);
   assert.match(manifest, /owner = "ai"/);
   assert.match(manifest, /surface = "implementation"/);
-  assert.match(manifest, /hermes-ai-contracts/);
+  assert.match(manifest, /makosh-ai-contracts/);
   assert.match(core, /AiInferenceRunStateV1/);
   assert.match(core, /accept_reply_inference_v1/);
   assert.match(core, /begin_reply_inference_v1/);
@@ -542,7 +542,7 @@ test('AI inference persistence is typed owner-local and stores no private source
   assert.match(repository, /load_recoverable_runs/);
   assert.match(repository, /selected_provider_settings_revision/);
   assert.match(schema, /owner_id: "ai"/);
-  assert.match(migration, /CREATE TABLE hermes_data\.ai_inference_runs/);
+  assert.match(migration, /CREATE TABLE makosh_data\.ai_inference_runs/);
   assert.match(migration, /request_digest BYTEA/);
   assert.match(migration, /source_reference_id BYTEA/);
   assert.match(migration, /result_body_utf8 BYTEA/);
@@ -594,7 +594,7 @@ test('AI inference runtime owns exact managed execution without provider impleme
     managedFlow,
     /fn managed_ai_inference_completes_real_provider_generation\(\)/,
   );
-  assert.match(managedFlow, /required\("HERMES_OLLAMA_LIVE_PORT"\)/);
+  assert.match(managedFlow, /required\("MAKOSH_OLLAMA_LIVE_PORT"\)/);
   assert.match(managedFlow, /AiInferenceTerminalStatusReady/);
   assert.match(managedFlow, /AiInferenceCompletenessComplete/);
   assert.match(managedFlow, /"owner-2"/);
@@ -603,7 +603,7 @@ test('AI inference runtime owns exact managed execution without provider impleme
   assert.doesNotMatch(managedFlow, /canned|OllamaAiHttpFixture/i);
   assert.doesNotMatch(
     `${manifest}\n${admission}\n${ports}\n${worker}\n${runtime}`,
-    /hermes-communications|communication-reply-suggestion|hermes-ollama|reqwest|hyper|nats|\bprovider_id\b|\bmodel_id\b|endpoint|prompt_text/,
+    /makosh-communications|communication-reply-suggestion|makosh-ollama|reqwest|hyper|nats|\bprovider_id\b|\bmodel_id\b|endpoint|prompt_text/,
   );
 });
 
@@ -665,7 +665,7 @@ test('Ollama HTTP owns one bounded loopback dialect without redirects or model s
 
   assert.match(manifest, /role = "integration"/);
   assert.match(manifest, /owner = "ollama"/);
-  assert.match(manifest, /hermes-ollama-ai-core/);
+  assert.match(manifest, /makosh-ollama-ai-core/);
   assert.match(client, /OLLAMA_AI_LOOPBACK_HOST_V1/);
   assert.match(client, /"GET",\s*"\/api\/tags"/);
   assert.match(client, /"POST",\s*"\/api\/chat"/);
@@ -723,7 +723,7 @@ test('Ollama managed runtime owns provider execution and crash ambiguity fencing
   ]);
 
   assert.match(manifest, /surface = "runtime"/);
-  assert.match(manifest, /hermes-ollama-ai-http/);
+  assert.match(manifest, /makosh-ollama-ai-http/);
   assert.match(admission, /ModuleKindV1::Integration/);
   assert.match(admission, /ai_provider_reply_generation_contract_reference_v1/);
   assert.match(runtime, /Operation::DeliverModuleRequest/);
@@ -739,15 +739,15 @@ test('Ollama managed runtime owns provider execution and crash ambiguity fencing
     managedFlow,
     /fn managed_ollama_ai_runtime_completes_real_provider_generation\(\)/,
   );
-  assert.match(managedFlow, /required\("HERMES_OLLAMA_LIVE_PORT"\)/);
+  assert.match(managedFlow, /required\("MAKOSH_OLLAMA_LIVE_PORT"\)/);
   assert.match(managedFlow, /AiInferenceTerminalStatusReady/);
   assert.match(managedFlow, /"owner-2"/);
-  assert.match(managedSetup, /"hermes-conformance:latest"/);
+  assert.match(managedSetup, /"makosh-conformance:latest"/);
   assert.match(managedSetup, /Value::UnsignedIntegerValue\(30_000\)/);
   assert.doesNotMatch(managedFlow, /canned|OllamaAiHttpFixture/i);
   assert.doesNotMatch(
     `${admission}\n${runtime}\n${worker}\n${processRoot}`,
-    /hermes_communications|communications_|automatic.*download/i,
+    /makosh_communications|communications_|automatic.*download/i,
   );
 });
 
@@ -760,15 +760,15 @@ test('Ollama assembly emits only unsigned runtime contracts and owner storage in
   ]);
 
   assert.match(manifest, /surface = "assembly"/);
-  assert.match(manifest, /hermes-ollama-ai-runtime/);
+  assert.match(manifest, /makosh-ollama-ai-runtime/);
   assert.match(assembly, /ollama_ai_module_descriptor_v1/);
   assert.match(assembly, /ollama_ai_settings_schema_v1/);
   assert.match(assembly, /ollama_ai_storage_bundle_v1/);
   assert.match(assembly, /create_new\(true\)/);
   assert.match(assembly, /mode\(0o600\)/);
   assert.match(cli, /--runtime/);
-  assert.match(release, /--package hermes-ollama-ai-runtime/);
-  assert.match(release, /--package hermes-ollama-ai-assembly/);
+  assert.match(release, /--package makosh-ollama-ai-runtime/);
+  assert.match(release, /--package makosh-ollama-ai-assembly/);
   assert.match(release, /ollama-ai\.release-artifacts\.json/);
   assert.doesNotMatch(`${assembly}\n${cli}`, /signing|launch|\/api\/chat|communications_/i);
 });

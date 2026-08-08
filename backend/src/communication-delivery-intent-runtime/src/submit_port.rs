@@ -2,18 +2,18 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_communication_delivery_intent_api::{
+use makosh_communication_delivery_intent_api::{
     COMMUNICATION_DELIVERY_INTENT_CONTRACT_MAJOR_V1,
     wire::{
         DeliveryIntentErrorCodeV1, DeliveryIntentStatusV1, SubmitDeliveryIntentRequestV1,
         SubmitDeliveryIntentResponseV1,
     },
 };
-use hermes_communication_delivery_intent_core::{
+use makosh_communication_delivery_intent_core::{
     CommunicationConversationIdV1, CommunicationMessageIdV1, DeliveryIntentDraftV1,
 };
-use hermes_communication_delivery_intent_persistence::CreateDeliveryIntentOutcomeV1;
-use hermes_runtime_protocol::managed_control::ManagedControlRequestDispatcherV2;
+use makosh_communication_delivery_intent_persistence::CreateDeliveryIntentOutcomeV1;
+use makosh_runtime_protocol::managed_control::ManagedControlRequestDispatcherV2;
 use prost::Message;
 
 use crate::{

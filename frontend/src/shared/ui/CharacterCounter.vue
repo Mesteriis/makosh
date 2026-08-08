@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<{
 
 const count = computed(() => props.value.length)
 const overLimit = computed(() => props.max > 0 && count.value > props.max)
-const classes = computed(() => ['hermes-character-counter', { 'hermes-character-counter--over': overLimit.value }, props.class])
+const classes = computed(() => ['makosh-character-counter', { 'makosh-character-counter--over': overLimit.value }, props.class])
 </script>
 
 <template>

@@ -11,14 +11,14 @@ use testcontainers::core::{ExecCommand, IntoContainerPort};
 use tokio::time::{Instant, MissedTickBehavior, sleep};
 use uuid::Uuid;
 
-use hermes_test_session::containers::labels::{SESSION_ID_ENV, session_id_label_value};
+use makosh_test_session::containers::labels::{SESSION_ID_ENV, session_id_label_value};
 
-const ZULIP_ENABLE_ENV: &str = "HERMES_ZULIP_TESTCONTAINERS";
-const ZULIP_START_TIMEOUT_ENV: &str = "HERMES_ZULIP_START_TIMEOUT_SECS";
+const ZULIP_ENABLE_ENV: &str = "MAKOSH_ZULIP_TESTCONTAINERS";
+const ZULIP_START_TIMEOUT_ENV: &str = "MAKOSH_ZULIP_START_TIMEOUT_SECS";
 const DEFAULT_START_TIMEOUT_SECS: u64 = 600;
 const READINESS_POLL_INTERVAL: Duration = Duration::from_secs(2);
 const READINESS_LOG_INTERVAL: Duration = Duration::from_secs(15);
-const PROVISION_PREFIX: &str = "HERMES_ZULIP_PROVISION ";
+const PROVISION_PREFIX: &str = "MAKOSH_ZULIP_PROVISION ";
 
 type ZulipResult<T> = Result<T, Box<dyn std::error::Error + Send + Sync>>;
 
@@ -71,9 +71,9 @@ impl ZulipServer {
         }
 
         let session_id = session_id_label_value();
-        let project_name = format!("hermes-zulip-{}", Uuid::new_v4().simple());
+        let project_name = format!("makosh-zulip-{}", Uuid::new_v4().simple());
         let compose_path = compose_file_path();
-        let admin_email = "hermes-admin@example.com".to_owned();
+        let admin_email = "makosh-admin@example.com".to_owned();
 
         eprintln!(
             "[zulip-testcontainer] starting project={project_name} compose={}",
@@ -128,15 +128,15 @@ impl ZulipServer {
             READINESS_LOG_INTERVAL,
             service.exec(
                 ExecCommand::new(["sh", "-lc", provision_script()]).with_env_vars([
-                    ("HERMES_OWNER_PASSWORD", "hermes-owner-password"),
-                    ("HERMES_REALM_NAME", "Hermes Test"),
-                    ("HERMES_STREAM_NAME", "hermes-lab"),
-                    ("HERMES_OWNER_EMAIL", "owner@example.com"),
-                    ("HERMES_OWNER_NAME", "Hermes Owner"),
-                    ("HERMES_HUMAN_EMAIL", "alice@example.com"),
-                    ("HERMES_HUMAN_NAME", "Alice Example"),
-                    ("HERMES_BOT_EMAIL", "hermes-bot@example.com"),
-                    ("HERMES_BOT_NAME", "Hermes Bot"),
+                    ("MAKOSH_OWNER_PASSWORD", "makosh-owner-password"),
+                    ("MAKOSH_REALM_NAME", "Макошь Test"),
+                    ("MAKOSH_STREAM_NAME", "makosh-lab"),
+                    ("MAKOSH_OWNER_EMAIL", "owner@example.com"),
+                    ("MAKOSH_OWNER_NAME", "Макошь Owner"),
+                    ("MAKOSH_HUMAN_EMAIL", "alice@example.com"),
+                    ("MAKOSH_HUMAN_NAME", "Alice Example"),
+                    ("MAKOSH_BOT_EMAIL", "makosh-bot@example.com"),
+                    ("MAKOSH_BOT_NAME", "Макошь Bot"),
                 ]),
             ),
         )
@@ -192,27 +192,27 @@ fn compose_env(session_id: &str) -> HashMap<String, String> {
         (SESSION_ID_ENV.to_owned(), session_id.to_owned()),
         (
             "ZULIP__POSTGRES_PASSWORD".to_owned(),
-            "hermes-zulip-postgres-password".to_owned(),
+            "makosh-zulip-postgres-password".to_owned(),
         ),
         (
             "ZULIP__MEMCACHED_PASSWORD".to_owned(),
-            "hermes-zulip-memcached-password".to_owned(),
+            "makosh-zulip-memcached-password".to_owned(),
         ),
         (
             "ZULIP__RABBITMQ_PASSWORD".to_owned(),
-            "hermes-zulip-rabbitmq-password".to_owned(),
+            "makosh-zulip-rabbitmq-password".to_owned(),
         ),
         (
             "ZULIP__REDIS_PASSWORD".to_owned(),
-            "hermes-zulip-redis-password".to_owned(),
+            "makosh-zulip-redis-password".to_owned(),
         ),
         (
             "ZULIP__SECRET_KEY".to_owned(),
-            "hermes-zulip-test-secret-key-not-production-000000000000000000000000".to_owned(),
+            "makosh-zulip-test-secret-key-not-production-000000000000000000000000".to_owned(),
         ),
         (
             "ZULIP__EMAIL_PASSWORD".to_owned(),
-            "hermes-zulip-email-password".to_owned(),
+            "makosh-zulip-email-password".to_owned(),
         ),
     ])
 }

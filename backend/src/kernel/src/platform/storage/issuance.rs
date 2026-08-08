@@ -1,9 +1,9 @@
 //! Owner-authorized issuance of durable bindings for managed module runtimes.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     PlatformStorageBindingInputV1, PlatformStorageBindingStateV1, PlatformStorageBindingV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use sha2::{Digest, Sha256};
 
 use super::authorization::{
@@ -120,7 +120,7 @@ fn issue_authorized(
 fn exact_retry(
     binding: &PlatformStorageBindingV1,
     authorization: &StorageBindingAuthorizationV1,
-    topology: &hermes_kernel_control_store::PlatformStorageTopology,
+    topology: &makosh_kernel_control_store::PlatformStorageTopology,
     issue: &StorageBindingIssueV1,
 ) -> bool {
     binding.state() == PlatformStorageBindingStateV1::Active
@@ -175,7 +175,7 @@ fn validate_successor(
 
 fn bind(
     authorization: StorageBindingAuthorizationV1,
-    topology: &hermes_kernel_control_store::PlatformStorageTopology,
+    topology: &makosh_kernel_control_store::PlatformStorageTopology,
     previous: Option<&PlatformStorageBindingV1>,
     issue: StorageBindingIssueV1,
 ) -> Result<PlatformStorageBindingV1, String> {

@@ -12,7 +12,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   sourceContract: new URL(
-    'src/communications-evidence-export-source-api/proto/hermes/communications/evidence_export_source/v1/evidence_export_source.proto',
+    'src/communications-evidence-export-source-api/proto/makosh/communications/evidence_export_source/v1/evidence_export_source.proto',
     BACKEND_ROOT,
   ),
   communicationsManifest: new URL('src/communications-runtime/Cargo.toml', BACKEND_ROOT),
@@ -63,7 +63,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   ownerControl: new URL(
-    'src/api/gateway/contracts/proto/hermes/gateway/v1/owner_control.proto',
+    'src/api/gateway/contracts/proto/makosh/gateway/v1/owner_control.proto',
     BACKEND_ROOT,
   ),
   devAssembly: new URL('development/assembly/src/main.rs', BACKEND_ROOT),
@@ -157,31 +157,31 @@ test('Communications export is one exact workflow family with a public domain so
       .filter(({ owner }) => owner === 'communications_export')
       .map(({ name, surface }) => `${name}:${surface}`),
     [
-      'hermes-communications-export-api:contract',
-      'hermes-communications-export-core:implementation',
-      'hermes-communications-export-persistence:persistence',
-      'hermes-communications-export-runtime:runtime',
-      'hermes-communications-export-assembly:assembly',
+      'makosh-communications-export-api:contract',
+      'makosh-communications-export-core:implementation',
+      'makosh-communications-export-persistence:persistence',
+      'makosh-communications-export-runtime:runtime',
+      'makosh-communications-export-assembly:assembly',
     ],
   );
   assert.match(sourceManifest, /role = "domain"[\s\S]*owner = "communications"/);
   assert.match(sourceSchema, /message PrepareEvidenceExportCommandV1/);
   assert.match(sourceSchema, /message EvidenceExportPreparedV1/);
   assert.doesNotMatch(sourceSchema, /\b(?:provider|locator|map)\b/i);
-  assert.match(communicationsManifest, /hermes-communications-evidence-export-source-api/);
+  assert.match(communicationsManifest, /makosh-communications-evidence-export-source-api/);
   assert.doesNotMatch(
     communicationsManifest,
-    /hermes-communications-export-(?:api|core|persistence|runtime|assembly)/,
+    /makosh-communications-export-(?:api|core|persistence|runtime|assembly)/,
   );
   assert.match(communicationsAdmission, /communications\.export-source\.v1/);
   assert.match(workflowManifest, /role = "workflow"[\s\S]*owner = "communications_export"/);
   assert.doesNotMatch(
     workflowManifest,
-    /hermes-(?:communications-domain|communications-persistence|mail|telegram|whatsapp|zulip)/,
+    /makosh-(?:communications-domain|communications-persistence|mail|telegram|whatsapp|zulip)/,
   );
   assert.match(workflowAdmission, /ModuleKindV1::Workflow/);
   assert.match(workflowAssembly, /surface = "assembly"/);
-  assert.match(adr, /hermes-communications-export-assembly/);
+  assert.match(adr, /makosh-communications-export-assembly/);
 });
 
 test('Kernel launches workflow through a distinct provider-neutral configuration', async () => {
@@ -218,7 +218,7 @@ test('Kernel launches workflow through a distinct provider-neutral configuration
   assert.doesNotMatch(eventAccess, /&admission\.logical_owner_id/);
   assert.match(devAssembly, /ModuleRuntimeKindV1::Workflow/);
   assert.match(devAssembly, /start_reserved_workflow_runtime/);
-  assert.match(release, /hermes-communications-export-assembly/);
+  assert.match(release, /makosh-communications-export-assembly/);
   assert.match(release, /communications_export\.release-artifacts\.json/);
 });
 
@@ -279,7 +279,7 @@ test('export status is owner-local replay and publishes only through shared clie
     readFile(paths.workflowManagedRuntime, 'utf8'),
     readFile(paths.workflowRealtime, 'utf8'),
     readFile(paths.workflowPersistenceRealtime, 'utf8'),
-    readFile(new URL('src/communications-export-api/proto/hermes/communications_export/v1/export.proto', BACKEND_ROOT), 'utf8'),
+    readFile(new URL('src/communications-export-api/proto/makosh/communications_export/v1/export.proto', BACKEND_ROOT), 'utf8'),
     readFile(paths.realtimeAdr, 'utf8'),
   ]);
   assert.match(admission, /ProvidedSurfaceKindV1::ClientRealtime/);
@@ -310,7 +310,7 @@ test('managed gate deterministically rejects a canonical revision race', async (
     /SET canonical_revision = canonical_revision \+ 1[\s\S]*RETURNING canonical_revision/,
   );
   assert.match(race, /impl ManagedRuntimeBlobSessionHandler/);
-  assert.match(harness, /HERMES_ATTACHMENT_SECURITY_CLAMAV_PORT: String\(secrets\.clamavPort\)/);
+  assert.match(harness, /MAKOSH_ATTACHMENT_SECURITY_CLAMAV_PORT: String\(secrets\.clamavPort\)/);
   assert.match(adr, /Состояние реализации: implemented/);
   assert.doesNotMatch(adr, /Gate всё ещё не `implemented`/);
 });

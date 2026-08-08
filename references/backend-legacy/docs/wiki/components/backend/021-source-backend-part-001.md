@@ -25,15 +25,15 @@ generated_by: code-wiki-ru
 ```markdown
 # Backend
 
-Серверная часть Hermes Hub реализована на Rust с использованием фреймворка Axum. Основной модуль AI Hub управляет конфигурацией и жизненным циклом AI‑провайдеров, моделей, маршрутов (routes) и промптов.
+Серверная часть Макошь реализована на Rust с использованием фреймворка Axum. Основной модуль AI Hub управляет конфигурацией и жизненным циклом AI‑провайдеров, моделей, маршрутов (routes) и промптов.
 
 ## Сборка и контракты
 
 Сценарий сборки `backend/build.rs` генерирует код из proto‑контрактов с помощью `connectrpc_build`:
 
-- `../contracts/proto/hermes/common/v1/common.proto`
-- `../contracts/proto/hermes/signal_hub/v1/signal_hub.proto`
-- `../contracts/proto/hermes/communications/v1/communications.proto`
+- `../contracts/proto/makosh/common/v1/common.proto`
+- `../contracts/proto/makosh/signal_hub/v1/signal_hub.proto`
+- `../contracts/proto/makosh/communications/v1/communications.proto`
 
 Перестройка инициируется при изменении любого proto‑файла.
 
@@ -60,7 +60,7 @@ API обработчики написаны с использованием `axu
 
 #### Идентификация актора
 
-Для операций с промптами используется заголовок `x-hermes-actor-id`. Если заголовок не задан или пуст, по умолчанию подставляется `"hermes-frontend"`. Реализовано в `request_actor_id` (`helpers.rs`). Операции из рантайма (ответы, подготовка встреч) всегда используют фиксированный идентификатор `"hermes-frontend"`.
+Для операций с промптами используется заголовок `x-makosh-actor-id`. Если заголовок не задан или пуст, по умолчанию подставляется `"makosh-frontend"`. Реализовано в `request_actor_id` (`helpers.rs`). Операции из рантайма (ответы, подготовка встреч) всегда используют фиксированный идентификатор `"makosh-frontend"`.
 
 #### Управление провайдерами (`control_center.rs`)
 

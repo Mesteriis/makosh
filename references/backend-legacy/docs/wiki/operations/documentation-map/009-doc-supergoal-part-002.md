@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Страница `operations/documentation-map.md` должна быть создана или обновлена, чтобы описать структуру и содержание операционной документации, связанной с проектом миграции фронтенда (supergoal `hermes-frontend-migration-vue-3-WzENWm`). В текущем контексте доступны фазовые планы (2–15), карта репозитория (`repo-map.md`) и перечень инструментов (`tools.md`). Страница документирует состав плана, его фазы и вспомогательные файлы на русском языке.
+Страница `operations/documentation-map.md` должна быть создана или обновлена, чтобы описать структуру и содержание операционной документации, связанной с проектом миграции фронтенда (supergoal `makosh-frontend-migration-vue-3-WzENWm`). В текущем контексте доступны фазовые планы (2–15), карта репозитория (`repo-map.md`) и перечень инструментов (`tools.md`). Страница документирует состав плана, его фазы и вспомогательные файлы на русском языке.
 
 ## Предложенные страницы
 
@@ -25,12 +25,12 @@ generated_by: code-wiki-ru
 ```markdown
 # Карта документации
 
-В этом разделе собрана операционная документация, относящаяся к проекту миграции фронтенда Hermes Hub с SvelteKit на Vue 3 (`supergoal`).
+В этом разделе собрана операционная документация, относящаяся к проекту миграции фронтенда Макошь с SvelteKit на Vue 3 (`supergoal`).
 
 ## План миграции (supergoal)
 
-**Supergoal**: `hermes-frontend-migration-vue-3-WzENWm`
-Расположение: `../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/`
+**Supergoal**: `makosh-frontend-migration-vue-3-WzENWm`
+Расположение: `../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/`
 
 План состоит из 15 фаз. Каждая фаза описана в отдельном `phase-N.md` файле. Ниже представлены фазы, встроенные в данный контекст:
 
@@ -91,41 +91,41 @@ generated_by: code-wiki-ru
 
 | Источник | Факты, покрытые в предлагаемой странице |
 |----------|----------------------------------------|
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-2.md` | Фаза 2: задача, зависимости, критерии приёмки (10), обязательная команда `cd frontend && pnpm build` |
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-3.md` | Фаза 3: задача, зависимости, критерии приёмки (8) |
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-4.md` | Фаза 4: задача, зависимости, критерии приёмки (7) |
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-5.md` | Фаза 5: задача, зависимости, критерии приёмки (5) |
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-6.md` | Фаза 6: задача, зависимости, критерии приёмки (6) |
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-7.md` | Фаза 7: задача, зависимости, критерии приёмки (5) |
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-8.md` | Фаза 8: задача, зависимости, критерии приёмки (4) |
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-9.md` | Фаза 9: задача, зависимости, критерии приёмки (5) |
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-10.md` | Фаза 10: задача, зависимости, критерии приёмки (6) |
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-11.md` | Фаза 11: задача, зависимости, критерии приёмки (5) |
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-12.md` | Фаза 12: задача, зависимости, критерии приёмки (9), описание как самого сложного домена |
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-13.md` | Фаза 13: задача, зависимости, критерии приёмки (7) |
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-14.md` | Фаза 14: задача, зависимости, критерии приёмки (9), 9 подпроходов (UX, States, Edges, Security, A11y, Performance, Diff Review, Regression Sweep, Animation) |
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-15.md` | Фаза 15: задача, зависимости, критерии приёмки (8), шаги (удаление SvelteKit, обновление конфигов, валидационный прогон) |
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-map.md` | Карта репозитория: структура, статистика файлов, тесты, CI, недавняя активность |
-| `.supergoal/hermes-frontend-migration-vue-3-WzENWm/tools.md` | Перечень доступных/недоступных инструментов на Stage 0 |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-2.md` | Фаза 2: задача, зависимости, критерии приёмки (10), обязательная команда `cd frontend && pnpm build` |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-3.md` | Фаза 3: задача, зависимости, критерии приёмки (8) |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-4.md` | Фаза 4: задача, зависимости, критерии приёмки (7) |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-5.md` | Фаза 5: задача, зависимости, критерии приёмки (5) |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-6.md` | Фаза 6: задача, зависимости, критерии приёмки (6) |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-7.md` | Фаза 7: задача, зависимости, критерии приёмки (5) |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-8.md` | Фаза 8: задача, зависимости, критерии приёмки (4) |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-9.md` | Фаза 9: задача, зависимости, критерии приёмки (5) |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-10.md` | Фаза 10: задача, зависимости, критерии приёмки (6) |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-11.md` | Фаза 11: задача, зависимости, критерии приёмки (5) |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-12.md` | Фаза 12: задача, зависимости, критерии приёмки (9), описание как самого сложного домена |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-13.md` | Фаза 13: задача, зависимости, критерии приёмки (7) |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-14.md` | Фаза 14: задача, зависимости, критерии приёмки (9), 9 подпроходов (UX, States, Edges, Security, A11y, Performance, Diff Review, Regression Sweep, Animation) |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-15.md` | Фаза 15: задача, зависимости, критерии приёмки (8), шаги (удаление SvelteKit, обновление конфигов, валидационный прогон) |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-map.md` | Карта репозитория: структура, статистика файлов, тесты, CI, недавняя активность |
+| `.supergoal/makosh-frontend-migration-vue-3-WzENWm/tools.md` | Перечень доступных/недоступных инструментов на Stage 0 |
 
 ## Исходные файлы
 
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-10.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-10.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-11.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-11.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-12.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-12.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-13.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-13.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-14.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-14.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-15.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-15.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-2.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-2.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-3.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-3.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-4.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-4.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-5.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-5.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-6.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-6.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-7.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-7.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-8.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-8.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-9.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/phases/phase-9.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-map.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/repo-map.md)
-- [`.supergoal/hermes-frontend-migration-vue-3-WzENWm/tools.md`](../../../../.supergoal/hermes-frontend-migration-vue-3-WzENWm/tools.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-10.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-10.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-11.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-11.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-12.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-12.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-13.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-13.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-14.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-14.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-15.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-15.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-2.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-2.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-3.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-3.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-4.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-4.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-5.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-5.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-6.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-6.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-7.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-7.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-8.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-8.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-9.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/phases/phase-9.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-map.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/repo-map.md)
+- [`.supergoal/makosh-frontend-migration-vue-3-WzENWm/tools.md`](../../../../.supergoal/makosh-frontend-migration-vue-3-WzENWm/tools.md)
 
 ## Кандидаты на drift
 

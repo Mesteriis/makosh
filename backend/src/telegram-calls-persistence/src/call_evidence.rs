@@ -1,13 +1,13 @@
 //! Telegram-owned mapping from operational call state to public Communications evidence.
 
-use hermes_communications_call_evidence_ingress::{
+use makosh_communications_call_evidence_ingress::{
     CallDirectionV1, CallEvidenceEnvelopeBuildErrorV1, CallEvidenceEnvelopeContextV1,
     CallEvidenceObservationDraftV1, CallLifecycleStateV1, CallMediaKindV1,
     CallProviderProvenanceV1, CallTerminalDispositionV1,
     build_call_evidence_observed_outbox_record_v1,
 };
-use hermes_events_protocol::delivery::OutboxRecordV1;
-use hermes_telegram_calls_core::{
+use makosh_events_protocol::delivery::OutboxRecordV1;
+use makosh_telegram_calls_core::{
     TelegramCallDirection, TelegramCallDiscardReason, TelegramCallSession,
     TelegramProviderCallState,
 };
@@ -104,7 +104,7 @@ const fn terminal_disposition(session: &TelegramCallSession) -> Option<CallTermi
 
 #[cfg(test)]
 mod tests {
-    use hermes_events_protocol::{v1::DurableEnvelopeV1, validation::envelope::decode_envelope_v1};
+    use makosh_events_protocol::{v1::DurableEnvelopeV1, validation::envelope::decode_envelope_v1};
     use prost::Message;
 
     use super::*;

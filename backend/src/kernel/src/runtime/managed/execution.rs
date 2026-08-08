@@ -13,7 +13,7 @@ use crate::distribution::staged_artifact::StagedNativeArtifact;
 const MAX_ATTEMPTS: u8 = 8;
 const MAX_RUNTIME_SECONDS: u64 = 300;
 pub const PLATFORM_CONTROL_INHERITED_FD: i32 = 3;
-pub const PLATFORM_CONTROL_INHERITED_FD_ENV: &str = "HERMES_PLATFORM_CONTROL_FD";
+pub const PLATFORM_CONTROL_INHERITED_FD_ENV: &str = "MAKOSH_PLATFORM_CONTROL_FD";
 
 pub struct ManagedChildExecutionPolicy {
     max_attempts: u8,
@@ -116,7 +116,7 @@ pub fn spawn_with_platform_control(
     platform_control: Option<std::os::unix::net::UnixStream>,
 ) -> Result<Child, String> {
     ensure_staged_executable(staged_executable.path())?;
-    let stderr = if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    let stderr = if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         Stdio::inherit()
     } else {
         Stdio::null()
@@ -145,15 +145,15 @@ pub fn spawn_with_platform_control(
             PLATFORM_CONTROL_INHERITED_FD.to_string(),
         );
     }
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
-        command.env("HERMES_DEVELOPER_VERBOSE", "1");
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
+        command.env("MAKOSH_DEVELOPER_VERBOSE", "1");
     }
     #[cfg(test)]
     if let Some(certificate_path) =
-        std::env::var_os("HERMES_MANAGED_RUNTIME_CONFORMANCE_CA_CERT_FILE")
+        std::env::var_os("MAKOSH_MANAGED_RUNTIME_CONFORMANCE_CA_CERT_FILE")
     {
         command.env(
-            "HERMES_MANAGED_RUNTIME_CONFORMANCE_CA_CERT_FILE",
+            "MAKOSH_MANAGED_RUNTIME_CONFORMANCE_CA_CERT_FILE",
             certificate_path,
         );
     }

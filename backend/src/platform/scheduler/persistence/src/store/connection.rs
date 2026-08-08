@@ -2,8 +2,8 @@
 
 use std::time::Duration;
 
-use hermes_runtime_protocol::v1::SchedulerRuntimeStorageBindingV1;
-use hermes_storage_protocol::{
+use makosh_runtime_protocol::v1::SchedulerRuntimeStorageBindingV1;
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };

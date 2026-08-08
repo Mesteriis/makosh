@@ -2,26 +2,26 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobClientError, BlobDataClient, ManagedBlobCustodyReleaseRequestV1,
     ManagedBlobCustodyTargetV1, ManagedBlobSessionRequestV1,
     request_managed_blob_custody_release_v2, request_managed_blob_session_v2,
 };
-use hermes_communication_delayed_delivery_api::{
+use makosh_communication_delayed_delivery_api::{
     COMMUNICATION_DELAYED_DELIVERY_MODULE_ID_V1, COMMUNICATION_DELAYED_DELIVERY_OWNER_V1,
 };
-use hermes_communication_delayed_delivery_execution::{
+use makosh_communication_delayed_delivery_execution::{
     BodyCleanupErrorV1, BodyCleanupPortV1, BodyCleanupReasonV1, BodyReadErrorV1, BodyReadPortV1,
     DelayedDeliveryBodyCleanupJobV1, DelayedDeliveryExecutionClaimV1, DeliveryIntentRequestErrorV1,
     DeliveryIntentRequestPortV1,
 };
-use hermes_communication_delivery_intent_api::{
+use makosh_communication_delivery_intent_api::{
     COMMUNICATION_DELIVERY_INTENT_COMMAND_CONTRACT_NAME_V1,
     COMMUNICATION_DELIVERY_INTENT_CONTRACT_MAJOR_V1,
     COMMUNICATION_DELIVERY_INTENT_CONTRACT_REVISION_V1, COMMUNICATION_DELIVERY_INTENT_OWNER_V1,
     COMMUNICATION_DELIVERY_INTENT_SCHEMA_SHA256,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{
         BlobCustodyReleaseReasonV1, BlobDataOperationV1, ContractReferenceV1,
@@ -141,7 +141,7 @@ fn body_reference_id(
     body_sha256: [u8; 32],
 ) -> [u8; 16] {
     let digest = Sha256::new()
-        .chain_update(b"hermes.communication-delayed-delivery.body.v1\0")
+        .chain_update(b"makosh.communication-delayed-delivery.body.v1\0")
         .chain_update((logical_owner_id.len() as u64).to_be_bytes())
         .chain_update(logical_owner_id.as_bytes())
         .chain_update(delayed_operation_id)
@@ -285,7 +285,7 @@ fn body_read_error(error: BlobClientError) -> BodyReadErrorV1 {
     }
 }
 
-pub const PACKAGE: &str = "hermes-communication-delayed-delivery-runtime-adapters";
+pub const PACKAGE: &str = "makosh-communication-delayed-delivery-runtime-adapters";
 
 #[cfg(test)]
 mod tests {

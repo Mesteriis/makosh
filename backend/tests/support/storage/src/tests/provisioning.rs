@@ -1,8 +1,8 @@
-use hermes_storage_control::{
+use makosh_storage_control::{
     StorageLifecycleStateV1, StorageLifecycleV1, StorageProvisionerV1, StorageProvisioningErrorV1,
     StorageProvisioningPortV1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 
 use super::fixtures::storage_role_binding;
 

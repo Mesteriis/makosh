@@ -10,7 +10,7 @@ pub(crate) enum TelegramMessageWriteError {
     #[error(transparent)]
     Telegram(#[from] TelegramError),
     #[error(transparent)]
-    Communication(#[from] hermes_communications_postgres::errors::CommunicationIngestionError),
+    Communication(#[from] makosh_communications_postgres::errors::CommunicationIngestionError),
     #[error(transparent)]
     SignalHub(#[from] SignalHubError),
     #[error(transparent)]

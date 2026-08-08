@@ -1,9 +1,9 @@
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::{Value, json};
 
 use crate::application::ai_signal_dispatch::dispatch_ai_runtime_signal;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 use super::super::constants::AI_PROMPT_TEMPLATE_VERSION;
 use super::super::errors::AiError;

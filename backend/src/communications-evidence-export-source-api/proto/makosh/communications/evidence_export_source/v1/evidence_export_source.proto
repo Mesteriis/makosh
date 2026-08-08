@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package makosh.communications.evidence_export_source.v1;
+
+// Exact workflow request into the Communications public source port. It
+// contains canonical IDs only and never provider locators or content.
+message PrepareEvidenceExportCommandV1 {
+  bytes export_id = 1;
+  repeated bytes message_ids = 2;
+  string logical_owner_id = 3;
+}
+
+message EvidenceExportPreparedV1 {
+  bytes export_id = 1;
+  repeated EvidenceExportSourceItemV1 items = 2;
+  string logical_owner_id = 3;
+}
+
+message EvidenceExportRejectedV1 {
+  bytes export_id = 1;
+  EvidenceExportRejectCodeV1 code = 2;
+  string logical_owner_id = 3;
+}
+
+message EvidenceExportSourceItemV1 {
+  bytes message_id = 1;
+  bytes conversation_id = 2;
+  bytes evidence_id = 3;
+  uint64 evidence_revision = 4;
+  EvidenceExportDirectionV1 direction = 5;
+  int64 occurred_at_unix_seconds = 6;
+  int64 observed_at_unix_seconds = 7;
+  optional string participant_display_label = 8;
+  EvidenceExportBodyStateV1 body_state = 9;
+  optional EvidenceExportBodySourceReceiptV1 body_source = 10;
+}
+
+// Target-bound source receipt for communications_export. Plaintext and
+// provider identity are deliberately absent.
+message EvidenceExportBodySourceReceiptV1 {
+  bytes reference_id = 1;
+  uint64 declared_bytes = 2;
+  bytes sha256 = 3;
+  bytes custody_transfer_source_proof = 4;
+}
+
+enum EvidenceExportDirectionV1 {
+  EVIDENCE_EXPORT_DIRECTION_UNSPECIFIED = 0;
+  EVIDENCE_EXPORT_DIRECTION_INCOMING = 1;
+  EVIDENCE_EXPORT_DIRECTION_OUTGOING = 2;
+  EVIDENCE_EXPORT_DIRECTION_UNKNOWN = 3;
+}
+
+enum EvidenceExportBodyStateV1 {
+  EVIDENCE_EXPORT_BODY_STATE_UNSPECIFIED = 0;
+  EVIDENCE_EXPORT_BODY_STATE_ADMITTED_UTF8 = 1;
+  EVIDENCE_EXPORT_BODY_STATE_UNAVAILABLE = 2;
+}
+
+enum EvidenceExportRejectCodeV1 {
+  EVIDENCE_EXPORT_REJECT_CODE_UNSPECIFIED = 0;
+  EVIDENCE_EXPORT_REJECT_CODE_INVALID_REQUEST = 1;
+  EVIDENCE_EXPORT_REJECT_CODE_NOT_FOUND = 2;
+  EVIDENCE_EXPORT_REJECT_CODE_STALE_REVISION = 3;
+  EVIDENCE_EXPORT_REJECT_CODE_CONTENT_LIMIT = 4;
+  EVIDENCE_EXPORT_REJECT_CODE_POLICY = 5;
+}

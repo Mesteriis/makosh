@@ -23,7 +23,7 @@ impl AiService {
     ) -> Result<AiTaskCandidateRefreshResponse, AiError> {
         let command_id = validate_non_empty("command_id", &request.command_id)?;
         let query = validate_non_empty("query", &request.query)?;
-        let agent_id = "HERMES".to_owned();
+        let agent_id = "MAKOSH".to_owned();
         let started_at = Instant::now();
         let run_id = run_id_from_command("task-refresh", &command_id);
         let requested_event_id = event_id_from_command("ai.run.requested", &command_id);

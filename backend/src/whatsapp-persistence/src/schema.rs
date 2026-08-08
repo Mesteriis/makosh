@@ -1,6 +1,6 @@
 //! Immutable WhatsApp-owned schema bundle for independent Storage admission.
 
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use sha2::{Digest, Sha256};
 
 pub const WHATSAPP_STORAGE_BUNDLE_REVISION_V1: u32 = 1;
@@ -9,7 +9,7 @@ pub const WHATSAPP_STORAGE_BUNDLE_REVISION_V3: u32 = 3;
 pub const WHATSAPP_STORAGE_BUNDLE_REVISION_V4: u32 = 4;
 
 pub const WHATSAPP_SCHEMA_V1: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_communications_outbox (
+CREATE TABLE IF NOT EXISTS makosh_data.whatsapp_communications_outbox (
     message_id BYTEA PRIMARY KEY,
     envelope_sha256 BYTEA NOT NULL,
     exact_envelope_bytes BYTEA NOT NULL,
@@ -20,9 +20,9 @@ CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_communications_outbox (
     CHECK (octet_length(exact_envelope_bytes) > 0)
 );
 CREATE INDEX IF NOT EXISTS whatsapp_communications_outbox_pending_idx
-    ON hermes_data.whatsapp_communications_outbox (created_at_unix_seconds, message_id)
+    ON makosh_data.whatsapp_communications_outbox (created_at_unix_seconds, message_id)
     WHERE published_at_unix_seconds IS NULL;
-CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_host_observations (
+CREATE TABLE IF NOT EXISTS makosh_data.whatsapp_host_observations (
     account_id TEXT NOT NULL,
     provider_event_id TEXT NOT NULL,
     evidence_kind SMALLINT NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_host_observations (
     CHECK (char_length(provider_event_id) BETWEEN 1 AND 256),
     CHECK (evidence_kind BETWEEN 1 AND 11)
 );
-CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_provider_commands (
+CREATE TABLE IF NOT EXISTS makosh_data.whatsapp_provider_commands (
     operation_id TEXT PRIMARY KEY,
     account_id TEXT NOT NULL,
     exact_command_bytes BYTEA NOT NULL,
@@ -50,14 +50,14 @@ CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_provider_commands (
         OR (state IN (3, 4) AND host_claim_id IS NOT NULL AND lease_expires_at_unix_seconds IS NOT NULL AND completed_at_unix_seconds IS NOT NULL))
 );
 CREATE INDEX IF NOT EXISTS whatsapp_provider_commands_claimable_idx
-    ON hermes_data.whatsapp_provider_commands (account_id, requested_at_unix_seconds, operation_id)
+    ON makosh_data.whatsapp_provider_commands (account_id, requested_at_unix_seconds, operation_id)
     WHERE state IN (1, 2);
 "#;
 
 pub const WHATSAPP_SCHEMA_V2: &str = r#"
-ALTER TABLE hermes_data.whatsapp_host_observations
+ALTER TABLE makosh_data.whatsapp_host_observations
     ADD COLUMN IF NOT EXISTS operational_sha256 BYTEA;
-CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_operational_events (
+CREATE TABLE IF NOT EXISTS makosh_data.whatsapp_operational_events (
     sequence BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     account_id TEXT NOT NULL,
     provider_event_id TEXT NOT NULL,
@@ -75,10 +75,10 @@ CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_operational_events (
     CHECK (octet_length(event_sha256) = 32)
 );
 CREATE INDEX IF NOT EXISTS whatsapp_operational_events_account_sequence_idx
-    ON hermes_data.whatsapp_operational_events (account_id, sequence DESC);
+    ON makosh_data.whatsapp_operational_events (account_id, sequence DESC);
 CREATE INDEX IF NOT EXISTS whatsapp_operational_events_account_kind_sequence_idx
-    ON hermes_data.whatsapp_operational_events (account_id, event_kind, sequence DESC);
-CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_operational_messages (
+    ON makosh_data.whatsapp_operational_events (account_id, event_kind, sequence DESC);
+CREATE TABLE IF NOT EXISTS makosh_data.whatsapp_operational_messages (
     account_id TEXT NOT NULL,
     provider_chat_id TEXT NOT NULL,
     provider_message_id TEXT NOT NULL,
@@ -98,10 +98,10 @@ CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_operational_messages (
     CHECK (octet_length(body_text) <= 262144)
 );
 CREATE INDEX IF NOT EXISTS whatsapp_operational_messages_account_sequence_idx
-    ON hermes_data.whatsapp_operational_messages (account_id, last_sequence DESC);
+    ON makosh_data.whatsapp_operational_messages (account_id, last_sequence DESC);
 CREATE INDEX IF NOT EXISTS whatsapp_operational_messages_chat_sequence_idx
-    ON hermes_data.whatsapp_operational_messages (account_id, provider_chat_id, last_sequence DESC);
-CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_operational_dialogs (
+    ON makosh_data.whatsapp_operational_messages (account_id, provider_chat_id, last_sequence DESC);
+CREATE TABLE IF NOT EXISTS makosh_data.whatsapp_operational_dialogs (
     account_id TEXT NOT NULL,
     provider_chat_id TEXT NOT NULL,
     title TEXT NOT NULL,
@@ -121,8 +121,8 @@ CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_operational_dialogs (
     CHECK (participant_count >= 0)
 );
 CREATE INDEX IF NOT EXISTS whatsapp_operational_dialogs_account_sequence_idx
-    ON hermes_data.whatsapp_operational_dialogs (account_id, last_sequence DESC);
-CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_operational_participants (
+    ON makosh_data.whatsapp_operational_dialogs (account_id, last_sequence DESC);
+CREATE TABLE IF NOT EXISTS makosh_data.whatsapp_operational_participants (
     account_id TEXT NOT NULL,
     provider_chat_id TEXT NOT NULL,
     provider_identity_id TEXT NOT NULL,
@@ -138,8 +138,8 @@ CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_operational_participants (
     CHECK (char_length(provider_identity_id) BETWEEN 1 AND 256)
 );
 CREATE INDEX IF NOT EXISTS whatsapp_operational_participants_chat_sequence_idx
-    ON hermes_data.whatsapp_operational_participants (account_id, provider_chat_id, last_sequence DESC);
-CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_operational_tombstones (
+    ON makosh_data.whatsapp_operational_participants (account_id, provider_chat_id, last_sequence DESC);
+CREATE TABLE IF NOT EXISTS makosh_data.whatsapp_operational_tombstones (
     account_id TEXT NOT NULL,
     entity_kind SMALLINT NOT NULL,
     provider_chat_id TEXT NOT NULL,
@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_operational_tombstones (
     CHECK (observed_at_unix_seconds > 0),
     CHECK (last_sequence > 0)
 );
-CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_operational_runtime_status (
+CREATE TABLE IF NOT EXISTS makosh_data.whatsapp_operational_runtime_status (
     account_id TEXT PRIMARY KEY,
     runtime_state TEXT,
     projection_ready BOOLEAN NOT NULL,
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_operational_runtime_status (
     last_sequence BIGINT NOT NULL,
     CHECK (char_length(account_id) BETWEEN 1 AND 256)
 );
-CREATE TABLE IF NOT EXISTS hermes_data.whatsapp_operational_controls (
+CREATE TABLE IF NOT EXISTS makosh_data.whatsapp_operational_controls (
     account_id TEXT NOT NULL,
     provider_event_id TEXT NOT NULL,
     control_kind SMALLINT NOT NULL,
@@ -222,7 +222,7 @@ pub fn whatsapp_storage_bundle_v1() -> StorageBundleV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_storage_protocol::validation::validate_storage_bundle;
+    use makosh_storage_protocol::validation::validate_storage_bundle;
 
     use super::*;
 
@@ -259,12 +259,12 @@ mod tests {
             .join("\n");
         assert_eq!(sql.matches("CREATE TABLE IF NOT EXISTS ").count(), 16);
         assert_eq!(
-            sql.matches("CREATE TABLE IF NOT EXISTS hermes_data.")
+            sql.matches("CREATE TABLE IF NOT EXISTS makosh_data.")
                 .count(),
             16
         );
-        assert!(!sql.contains("hermes_data.communications_"));
-        assert!(!sql.contains("REFERENCES hermes_data.communications_"));
+        assert!(!sql.contains("makosh_data.communications_"));
+        assert!(!sql.contains("REFERENCES makosh_data.communications_"));
         for forbidden in ["INSERT ", "UPDATE ", "DELETE "] {
             assert!(!WHATSAPP_SCHEMA_V2.contains(forbidden));
         }

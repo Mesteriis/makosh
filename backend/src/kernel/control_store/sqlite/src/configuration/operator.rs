@@ -10,7 +10,7 @@ impl SqliteControlStore {
             connection
                 .query_row(
                     "SELECT developer_mode_enabled
-                     FROM hermes_kernel_operator_settings WHERE singleton = 1",
+                     FROM makosh_kernel_operator_settings WHERE singleton = 1",
                     [],
                     |row| row.get::<_, bool>(0),
                 )
@@ -22,7 +22,7 @@ impl SqliteControlStore {
     pub fn set_developer_mode_enabled(&self, enabled: bool) -> Result<(), StoreError> {
         self.with_connection(move |connection| {
             let changed = connection.execute(
-                "UPDATE hermes_kernel_operator_settings
+                "UPDATE makosh_kernel_operator_settings
                  SET developer_mode_enabled = ?1 WHERE singleton = 1",
                 params![enabled],
             )?;

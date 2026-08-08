@@ -4,7 +4,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-telegram-automation-core";
+pub const PACKAGE: &str = "makosh-telegram-automation-core";
 pub const MAX_ID_BYTES: usize = 256;
 pub const MAX_NAME_BYTES: usize = 512;
 pub const MAX_TEMPLATE_BYTES: usize = 16 * 1024;

@@ -12,9 +12,9 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-badge',
-  `hermes-badge--${props.variant}`,
-  `hermes-badge--${props.size}`,
+  'makosh-badge',
+  `makosh-badge--${props.variant}`,
+  `makosh-badge--${props.size}`,
   props.class
 ])
 </script>

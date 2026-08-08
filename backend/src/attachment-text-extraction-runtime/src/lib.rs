@@ -33,4 +33,4 @@ pub use parser::{
     AttachmentTextRuntimeParseResultV1,
 };
 
-pub const PACKAGE: &str = "hermes-attachment-text-extraction-runtime";
+pub const PACKAGE: &str = "makosh-attachment-text-extraction-runtime";

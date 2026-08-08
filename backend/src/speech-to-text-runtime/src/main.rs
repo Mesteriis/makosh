@@ -4,7 +4,7 @@ use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedEngineRuntimeConfigurationV1,
     validation::{
         descriptor::{
@@ -14,8 +14,8 @@ use hermes_runtime_protocol::{
         managed_engine_runtime::validate_managed_engine_runtime_configuration,
     },
 };
-use hermes_speech_to_text_persistence::schema::speech_to_text_storage_bundle_v1;
-use hermes_speech_to_text_runtime::{
+use makosh_speech_to_text_persistence::schema::speech_to_text_storage_bundle_v1;
+use makosh_speech_to_text_runtime::{
     SpeechToTextManagedRuntimeErrorV1, SpeechToTextManagedRuntimeV1,
     SpeechToTextRuntimeAdmissionV1, speech_to_text_module_descriptor_v1,
     speech_to_text_settings_schema_bytes_v1,

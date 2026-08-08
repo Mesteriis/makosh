@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/domains/communications/saved_searches.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/saved_searches.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/saved_searches.rs`
 - Size bytes / Размер в байтах: `27739`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -391,7 +391,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/domains/communications/search.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/search.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/search.rs`
 - Size bytes / Размер в байтах: `1454`
 - Included characters / Включено символов: `1454`
 - Truncated / Обрезано: `no`
@@ -446,7 +446,7 @@ pub enum IndexEmailError {
 
 ### `backend/src/domains/communications/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/service.rs`
 - Size bytes / Размер в байтах: `35`
 - Included characters / Включено символов: `35`
 - Truncated / Обрезано: `no`
@@ -457,7 +457,7 @@ pub use super::command_service::*;
 
 ### `backend/src/domains/communications/signatures.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/signatures.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/signatures.rs`
 - Size bytes / Размер в байтах: `484`
 - Included characters / Включено символов: `484`
 - Truncated / Обрезано: `no`
@@ -487,7 +487,7 @@ pub use trust::TrustStatus;
 
 ### `backend/src/domains/communications/signatures/certificate_type.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/signatures/certificate_type.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/signatures/certificate_type.rs`
 - Size bytes / Размер в байтах: `994`
 - Included characters / Включено символов: `994`
 - Truncated / Обрезано: `no`
@@ -536,7 +536,7 @@ impl CertificateType {
 
 ### `backend/src/domains/communications/signatures/detector.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/signatures/detector.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/signatures/detector.rs`
 - Size bytes / Размер в байтах: `1885`
 - Included characters / Включено символов: `1885`
 - Truncated / Обрезано: `no`
@@ -606,7 +606,7 @@ fn signature_detected(signature_type: CertificateType) -> SignatureDetection {
 
 ### `backend/src/domains/communications/signatures/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/signatures/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/signatures/errors.rs`
 - Size bytes / Размер в байтах: `195`
 - Included characters / Включено символов: `195`
 - Truncated / Обрезано: `no`
@@ -625,7 +625,7 @@ pub enum CertificateError {
 
 ### `backend/src/domains/communications/signatures/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/signatures/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/signatures/models.rs`
 - Size bytes / Размер в байтах: `1783`
 - Included characters / Включено символов: `1783`
 - Truncated / Обрезано: `no`
@@ -694,7 +694,7 @@ impl NewCertificate {
 
 ### `backend/src/domains/communications/signatures/provider.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/signatures/provider.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/signatures/provider.rs`
 - Size bytes / Размер в байтах: `1276`
 - Included characters / Включено символов: `1276`
 - Truncated / Обрезано: `no`
@@ -750,7 +750,7 @@ impl CertificateProvider {
 
 ### `backend/src/domains/communications/signatures/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/signatures/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/signatures/rows.rs`
 - Size bytes / Размер в байтах: `1848`
 - Included characters / Включено символов: `1848`
 - Truncated / Обрезано: `no`
@@ -796,7 +796,7 @@ pub(super) fn row_to_cert(row: PgRow) -> Result<CertificateRecord, CertificateEr
 
 ### `backend/src/domains/communications/signatures/storage_kind.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/signatures/storage_kind.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/signatures/storage_kind.rs`
 - Size bytes / Размер в байтах: `1219`
 - Included characters / Включено символов: `1219`
 - Truncated / Обрезано: `no`
@@ -846,7 +846,7 @@ impl CertificateStorageKind {
 
 ### `backend/src/domains/communications/signatures/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/signatures/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/signatures/store.rs`
 - Size bytes / Размер в байтах: `2978`
 - Included characters / Включено символов: `2978`
 - Truncated / Обрезано: `no`
@@ -922,7 +922,7 @@ impl CertificateStore {
 
 ### `backend/src/domains/communications/signatures/tests.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/signatures/tests.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/signatures/tests.rs`
 - Size bytes / Размер в байтах: `903`
 - Included characters / Включено символов: `903`
 - Truncated / Обрезано: `no`
@@ -971,7 +971,7 @@ fn cert_types_roundtrip() {
 
 ### `backend/src/domains/communications/signatures/trust.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/signatures/trust.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/signatures/trust.rs`
 - Size bytes / Размер в байтах: `1063`
 - Included characters / Включено символов: `1063`
 - Truncated / Обрезано: `no`
@@ -1018,7 +1018,7 @@ impl TrustStatus {
 
 ### `backend/src/domains/communications/sources.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/sources.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/sources.rs`
 - Size bytes / Размер в байтах: `2472`
 - Included characters / Включено символов: `2472`
 - Truncated / Обрезано: `no`
@@ -1112,7 +1112,7 @@ pub enum FixtureEmailSourceError {
 
 ### `backend/src/domains/communications/spf_dkim.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/spf_dkim.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/spf_dkim.rs`
 - Size bytes / Размер в байтах: `6325`
 - Included characters / Включено символов: `6285`
 - Truncated / Обрезано: `no`
@@ -1340,7 +1340,7 @@ mod tests {
 
 ### `backend/src/domains/communications/storage.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/storage.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/storage.rs`
 - Size bytes / Размер в байтах: `1012`
 - Included characters / Включено символов: `1012`
 - Truncated / Обрезано: `no`
@@ -1376,7 +1376,7 @@ pub use store::CommunicationStorageStore as CommunicationBlobMetadataPort;
 
 ### `backend/src/domains/communications/storage/blob_store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/storage/blob_store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/storage/blob_store.rs`
 - Size bytes / Размер в байтах: `4593`
 - Included characters / Включено символов: `4593`
 - Truncated / Обрезано: `no`
@@ -1529,7 +1529,7 @@ fn hex_char(value: u8) -> char {
 
 ### `backend/src/domains/communications/storage/constants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/storage/constants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/storage/constants.rs`
 - Size bytes / Размер в байтах: `109`
 - Included characters / Включено символов: `109`
 - Truncated / Обрезано: `no`
@@ -1541,7 +1541,7 @@ pub(crate) const SHA256_PREFIX: &str = "sha256:";
 
 ### `backend/src/domains/communications/storage/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/storage/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/storage/errors.rs`
 - Size bytes / Размер в байтах: `1598`
 - Included characters / Включено символов: `1598`
 - Truncated / Обрезано: `no`
@@ -1610,7 +1610,7 @@ pub enum AttachmentSafetyScanError {
 
 ### `backend/src/domains/communications/storage/ids.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/storage/ids.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/storage/ids.rs`
 - Size bytes / Размер в байтах: `729`
 - Included characters / Включено символов: `729`
 - Truncated / Обрезано: `no`
@@ -1643,7 +1643,7 @@ fn append_id_component(encoded: &mut String, value: &str) {
 
 ### `backend/src/domains/communications/storage/imports.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/storage/imports.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/storage/imports.rs`
 - Size bytes / Размер в байтах: `21240`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2003,7 +2003,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/domains/communications/storage/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/storage/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/storage/models.rs`
 - Size bytes / Размер в байтах: `12538`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2392,7 +2392,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/domains/communications/storage/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/storage/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/storage/rows.rs`
 - Size bytes / Размер в байтах: `3753`
 - Included characters / Включено символов: `3753`
 - Truncated / Обрезано: `no`
@@ -2492,7 +2492,7 @@ pub(crate) fn row_to_imported_attachment(
 
 ### `backend/src/domains/communications/storage/scanner.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/storage/scanner.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/storage/scanner.rs`
 - Size bytes / Размер в байтах: `11170`
 - Included characters / Включено символов: `11170`
 - Truncated / Обрезано: `no`
@@ -2652,7 +2652,7 @@ impl AttachmentSafetyScanner for HeuristicAttachmentSafetyScanner {
 
         Ok(AttachmentSafetyScanReport {
             status,
-            engine: Some("hermes_heuristic_v1".to_owned()),
+            engine: Some("makosh_heuristic_v1".to_owned()),
             checked_at: Some(Utc::now()),
             summary: Some(scan_summary(status).to_owned()),
             metadata: json!({
@@ -2824,7 +2824,7 @@ mod tests {
             .expect("scan report");
 
         assert_eq!(report.status, AttachmentSafetyScanStatus::Malicious);
-        assert_eq!(report.engine.as_deref(), Some("hermes_heuristic_v1"));
+        assert_eq!(report.engine.as_deref(), Some("makosh_heuristic_v1"));
         assert!(report.checked_at.is_some());
         assert_eq!(
             report.summary.as_deref(),
@@ -2848,7 +2848,7 @@ mod tests {
             .expect("scan report");
 
         assert_eq!(report.status, AttachmentSafetyScanStatus::Suspicious);
-        assert_eq!(report.engine.as_deref(), Some("hermes_heuristic_v1"));
+        assert_eq!(report.engine.as_deref(), Some("makosh_heuristic_v1"));
         assert!(report.checked_at.is_some());
         assert_eq!(
             report.summary.as_deref(),

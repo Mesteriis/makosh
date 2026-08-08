@@ -21,9 +21,9 @@ use crate::domains::review::ports::ReviewInboxPort;
 use crate::domains::tasks::candidates::ids::task_id_from_candidate;
 use crate::domains::tasks::candidates::models::StoredCandidateRow;
 use crate::domains::tasks::candidates::models::TaskCandidateReviewState;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::store::ObservationStore;
 
 #[derive(Debug, Error)]
 pub enum ReviewMirrorError {

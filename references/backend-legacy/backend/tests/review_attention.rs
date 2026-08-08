@@ -3,15 +3,15 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use axum::body::{Body, to_bytes};
 use axum::http::{Method, Request, StatusCode};
 use chrono::{TimeZone, Utc};
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::review::{
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::review::{
     models::{NewReviewItem, NewReviewItemEvidence, ReviewItemKind, ReviewItemStatus},
     store::ReviewInboxStore,
 };
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::store::ObservationStore;
 use serde_json::json;
 use tower::ServiceExt;
 
@@ -84,7 +84,7 @@ async fn review_attention_cards_api_returns_grouped_explainable_cards_against_po
             Request::builder()
                 .method(Method::GET)
                 .uri("/api/v1/review/attention-cards?status=active&limit=20")
-                .header("x-hermes-secret", REVIEW_API_TOKEN)
+                .header("x-makosh-secret", REVIEW_API_TOKEN)
                 .body(Body::empty())
                 .expect("attention cards request"),
         )
@@ -157,7 +157,7 @@ async fn build_review_api_app(database_url: &str) -> axum::Router {
         .await
         .expect("database connection");
     build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             REVIEW_API_TOKEN,
             database_url,
         ),

@@ -65,11 +65,11 @@ pub(crate) fn telegram_runtime_use_case_context(
         crate::application::telegram_runtime::TelegramRuntimeUseCaseContext::new(
             crate::application::telegram_runtime::TelegramRuntimeUseCaseStores {
                 provider_account_store:
-                    hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
+                    makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
                         pool.clone(),
                     ),
                 provider_secret_binding_store:
-                    hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
+                    makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
                         pool.clone(),
                     ),
                 telegram_store: build_telegram_provider_store(state)?,
@@ -94,7 +94,7 @@ pub(crate) fn telegram_message_write_service(
     Ok(
         crate::application::communication_provider_writes::TelegramMessageWriteApplicationService::new(
             build_telegram_provider_store(state)?,
-            Arc::new(hermes_communications_postgres::canonical::CanonicalMessageReadStore::new(
+            Arc::new(makosh_communications_postgres::canonical::CanonicalMessageReadStore::new(
                 database_pool(state)?,
             )),
             api_audit_log(state)?,
@@ -156,12 +156,12 @@ pub(crate) fn yandex_telemost_provider_runtime_store(
     Ok(
         crate::integrations::yandex_telemost::client::store::YandexTelemostStore::new(
             Arc::new(
-                hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
+                makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
                     pool.clone(),
                 ),
             ),
             Arc::new(
-                hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
+                makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
                     pool.clone(),
                 ),
             ),
@@ -213,12 +213,12 @@ pub(crate) fn account_setup_service(
         SecretReferenceStore::new(pool.clone()),
         state.vault.clone(),
         Arc::new(
-            hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
+            makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
                 pool.clone(),
             ),
         ),
         Arc::new(
-            hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
+            makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
                 pool,
             ),
         ),

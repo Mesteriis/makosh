@@ -1,10 +1,10 @@
 //! Telegram Calls exact-byte relay for public Communications call evidence.
 
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimeOutboxPublisherV1, RuntimePublishPermitV1,
 };
-use hermes_events_protocol::delivery::{OutboxRelayErrorV1, OutboxRelayOutcomeV1, relay_once};
-use hermes_telegram_calls_persistence::{
+use makosh_events_protocol::delivery::{OutboxRelayErrorV1, OutboxRelayOutcomeV1, relay_once};
+use makosh_telegram_calls_persistence::{
     TelegramCallEvidenceOutboxStoreV1, TelegramCallsPersistence,
 };
 

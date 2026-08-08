@@ -1,5 +1,5 @@
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_scheduler_protocol::{
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_scheduler_protocol::{
     ConcurrencyKeyV1, OverlapPolicyV1, ScheduleIdV1, ScheduleRunLeaseV1, ScheduleSpecV1,
 };
 

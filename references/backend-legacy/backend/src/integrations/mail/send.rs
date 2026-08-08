@@ -3,7 +3,7 @@ use tokio::io::{AsyncBufReadExt, AsyncRead, AsyncWrite, AsyncWriteExt, BufReader
 
 use crate::platform::communications::SmtpTransport;
 use crate::platform::secrets::models::ResolvedSecret;
-use hermes_communications_api::email::{EmailSendError, OutgoingEmail, SendResult, SmtpConfig};
+use makosh_communications_api::email::{EmailSendError, OutgoingEmail, SendResult, SmtpConfig};
 
 #[derive(Clone, Default)]
 pub struct LiveSmtpTransport;
@@ -84,7 +84,7 @@ async fn starttls_smtp(
     if !greeting.starts_with("220") {
         return Err(EmailSendError::Protocol(greeting));
     }
-    write_cmd(&mut reader, "EHLO hermes-hub\r\n").await?;
+    write_cmd(&mut reader, "EHLO makosh\r\n").await?;
     read_ehlo_response(&mut reader, &mut buf).await?;
     write_cmd(&mut reader, "STARTTLS\r\n").await?;
     let response = read_line(&mut reader, &mut buf).await?;
@@ -107,7 +107,7 @@ async fn send_smtp_after_greeting<T: AsyncRead + AsyncWrite + Unpin>(
     email: &OutgoingEmail,
 ) -> Result<SendResult, EmailSendError> {
     let mut buf = String::new();
-    write_cmd(&mut reader, "EHLO hermes-hub\r\n").await?;
+    write_cmd(&mut reader, "EHLO makosh\r\n").await?;
     read_ehlo_response(&mut reader, &mut buf).await?;
     write_cmd(&mut reader, "AUTH LOGIN\r\n").await?;
     read_line(&mut reader, &mut buf).await?;
@@ -299,7 +299,7 @@ fn multipart_alternative_boundary(email: &OutgoingEmail) -> String {
         suffix.push(hex_char(byte >> 4));
         suffix.push(hex_char(byte & 0x0f));
     }
-    format!("hermes-alt-{suffix}")
+    format!("makosh-alt-{suffix}")
 }
 
 fn multipart_mixed_boundary(email: &OutgoingEmail) -> String {
@@ -321,7 +321,7 @@ fn multipart_mixed_boundary(email: &OutgoingEmail) -> String {
         .take(12)
         .flat_map(|byte| [hex_char(byte >> 4), hex_char(byte & 0x0f)])
         .collect::<String>();
-    format!("hermes-mixed-{suffix}")
+    format!("makosh-mixed-{suffix}")
 }
 
 fn safe_attachment_filename(filename: &str) -> String {
@@ -425,7 +425,7 @@ mod tests {
         )));
 
         assert!(message.contains("MIME-Version: 1.0\r\n"));
-        assert!(message.contains("Content-Type: multipart/alternative; boundary=\"hermes-alt-"));
+        assert!(message.contains("Content-Type: multipart/alternative; boundary=\"makosh-alt-"));
         assert!(message.contains("Content-Type: text/plain; charset=utf-8\r\n"));
         assert!(message.contains("Content-Transfer-Encoding: 8bit\r\n\r\nPlain body\r\n"));
         assert!(message.contains("Content-Type: text/html; charset=utf-8\r\n"));
@@ -449,8 +449,8 @@ mod tests {
 
         let message = build_rfc2822_message(&email);
 
-        assert!(message.contains("Content-Type: multipart/mixed; boundary=\"hermes-mixed-"));
-        assert!(message.contains("Content-Type: multipart/alternative; boundary=\"hermes-alt-"));
+        assert!(message.contains("Content-Type: multipart/mixed; boundary=\"makosh-mixed-"));
+        assert!(message.contains("Content-Type: multipart/alternative; boundary=\"makosh-alt-"));
         assert!(message.contains(
             "Content-Type: application/pdf; name=\"report__Bcc: attacker@example.test.pdf\""
         ));

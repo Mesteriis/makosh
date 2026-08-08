@@ -1,4 +1,4 @@
-use hermes_communication_cross_channel_forward_api::{
+use makosh_communication_cross_channel_forward_api::{
     COMMUNICATION_CROSS_CHANNEL_FORWARD_CONTRACT_MAJOR_V1,
     wire::{
         CrossChannelForwardErrorCodeV1, CrossChannelForwardStateV1 as WireState,
@@ -6,10 +6,10 @@ use hermes_communication_cross_channel_forward_api::{
         StartCrossChannelForwardRequestV1, StartCrossChannelForwardResponseV1,
     },
 };
-use hermes_communication_cross_channel_forward_core::{
+use makosh_communication_cross_channel_forward_core::{
     CrossChannelForwardDraftV1, CrossChannelForwardStateV1,
 };
-use hermes_communication_cross_channel_forward_persistence::{
+use makosh_communication_cross_channel_forward_persistence::{
     CommunicationCrossChannelForwardPersistenceV1, CreateCrossChannelForwardOutcomeV1,
     CreateCrossChannelForwardV1, CrossChannelForwardPersistenceErrorV1,
 };

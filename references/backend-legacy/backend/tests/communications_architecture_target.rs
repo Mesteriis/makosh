@@ -349,7 +349,7 @@ fn whatsapp_removed_runtimes_have_no_binary_dependency_or_route_surface() {
                 .join("backend/src/integrations/whatsapp/runtime/business_cloud.rs")
                 .exists()
             && !root
-                .join("backend/src/bin/hermes_whatsapp_business_cloud_edge_proxy.rs")
+                .join("backend/src/bin/makosh_whatsapp_business_cloud_edge_proxy.rs")
                 .exists()
             && !root
                 .join("backend/src/application/whatsapp_command_executor.rs")

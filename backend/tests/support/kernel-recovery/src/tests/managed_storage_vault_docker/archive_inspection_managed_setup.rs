@@ -3,22 +3,22 @@
 use super::*;
 
 use crate::platform::client_realtime::ClientRealtimePublishHandlerV1;
-use hermes_attachment_archive_inspection_api::{
+use makosh_attachment_archive_inspection_api::{
     ATTACHMENT_ARCHIVE_INSPECTION_MODULE_ID_V1, ATTACHMENT_ARCHIVE_INSPECTION_OWNER_V1,
 };
-use hermes_attachment_archive_inspection_persistence::{
+use makosh_attachment_archive_inspection_persistence::{
     ATTACHMENT_ARCHIVE_INSPECTION_STORAGE_BUNDLE_REVISION_V1,
     attachment_archive_inspection_storage_bundle_v1,
 };
-use hermes_attachment_archive_inspection_runtime::{
+use makosh_attachment_archive_inspection_runtime::{
     admission::{
         ATTACHMENT_ARCHIVE_INSPECTION_STORAGE_CAPABILITY_ID,
         attachment_archive_inspection_module_descriptor_v1,
     },
     settings::attachment_archive_inspection_settings_schema_bytes_v1,
 };
-use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-use hermes_runtime_protocol::v1::{
+use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+use makosh_runtime_protocol::v1::{
     ManagedEngineRuntimeConfigurationV1, SettingValueV1, SettingsSnapshotV1, SettingsValueEntryV1,
     setting_value_v1::Value,
 };
@@ -88,7 +88,7 @@ pub(super) fn admit_archive_inspection_runtime_v1(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             ARCHIVE_INSPECTION_RELEASE_ARTIFACT_ID_V1,
             Sha256::digest(
                 std::fs::read(archive_inspection_binary())
@@ -300,5 +300,5 @@ fn archive_inspection_settings_snapshot(registration_id: &str) -> SettingsSnapsh
 }
 
 fn archive_inspection_binary() -> PathBuf {
-    binary("HERMES_ATTACHMENT_ARCHIVE_INSPECTION_RUNTIME_BIN")
+    binary("MAKOSH_ATTACHMENT_ARCHIVE_INSPECTION_RUNTIME_BIN")
 }

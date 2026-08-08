@@ -220,7 +220,7 @@ int fail(const char *reason) {
 int main(int argc, char **argv) {
     if (argc != 2 || std::string_view(argv[1]) != kExplicitConsent) {
         std::cerr
-            << "usage: hermes_tgcalls_audio_device_conformance "
+            << "usage: makosh_tgcalls_audio_device_conformance "
             << kExplicitConsent << '\n';
         return 2;
     }

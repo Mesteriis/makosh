@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.mail_contacts_sync_runs (
+CREATE TABLE makosh_data.mail_contacts_sync_runs (
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
     operation_id BYTEA NOT NULL,
@@ -44,10 +44,10 @@ CREATE TABLE hermes_data.mail_contacts_sync_runs (
 );
 
 CREATE INDEX mail_contacts_sync_recoverable_idx
-ON hermes_data.mail_contacts_sync_runs (logical_owner_id, state, state_revision)
+ON makosh_data.mail_contacts_sync_runs (logical_owner_id, state, state_revision)
 WHERE state NOT IN (6, 7);
 
-CREATE TABLE hermes_data.mail_contacts_sync_inbox (
+CREATE TABLE makosh_data.mail_contacts_sync_inbox (
     logical_owner_id TEXT NOT NULL,
     message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE hermes_data.mail_contacts_sync_inbox (
     CHECK (processed_at_unix_millis > 0)
 );
 
-CREATE TABLE hermes_data.mail_contacts_sync_outbox (
+CREATE TABLE makosh_data.mail_contacts_sync_outbox (
     logical_owner_id TEXT NOT NULL,
     message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -78,10 +78,10 @@ CREATE TABLE hermes_data.mail_contacts_sync_outbox (
 );
 
 CREATE INDEX mail_contacts_sync_outbox_pending_idx
-ON hermes_data.mail_contacts_sync_outbox (logical_owner_id, created_at_unix_millis, message_id)
+ON makosh_data.mail_contacts_sync_outbox (logical_owner_id, created_at_unix_millis, message_id)
 WHERE published_at_unix_millis IS NULL;
 
-CREATE TABLE hermes_data.mail_contacts_sync_realtime (
+CREATE TABLE makosh_data.mail_contacts_sync_realtime (
     realtime_sequence BIGSERIAL PRIMARY KEY,
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
@@ -98,4 +98,4 @@ CREATE TABLE hermes_data.mail_contacts_sync_realtime (
 );
 
 CREATE INDEX mail_contacts_sync_realtime_owner_idx
-ON hermes_data.mail_contacts_sync_realtime (logical_owner_id, realtime_sequence);
+ON makosh_data.mail_contacts_sync_realtime (logical_owner_id, realtime_sequence);

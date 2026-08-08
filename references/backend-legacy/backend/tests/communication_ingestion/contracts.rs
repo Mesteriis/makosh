@@ -1,5 +1,5 @@
 use crate::support::*;
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::{
     CommunicationProviderKind, NewProviderAccount, ProviderAccountSecretPurpose,
 };
 

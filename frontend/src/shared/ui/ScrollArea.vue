@@ -11,23 +11,23 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-scroll-area',
-  `hermes-scroll-area--${props.size}`,
-  { 'hermes-scroll-area--bounded': props.maxHeight },
+  'makosh-scroll-area',
+  `makosh-scroll-area--${props.size}`,
+  { 'makosh-scroll-area--bounded': props.maxHeight },
   props.class
 ])
 </script>
 
 <template>
   <ScrollAreaRoot :class="classes">
-    <ScrollAreaViewport class="hermes-scroll-viewport">
+    <ScrollAreaViewport class="makosh-scroll-viewport">
       <slot />
     </ScrollAreaViewport>
-    <ScrollAreaScrollbar class="hermes-scrollbar" orientation="vertical">
-      <ScrollAreaThumb class="hermes-scroll-thumb" />
+    <ScrollAreaScrollbar class="makosh-scrollbar" orientation="vertical">
+      <ScrollAreaThumb class="makosh-scroll-thumb" />
     </ScrollAreaScrollbar>
-    <ScrollAreaScrollbar class="hermes-scrollbar" orientation="horizontal">
-      <ScrollAreaThumb class="hermes-scroll-thumb" />
+    <ScrollAreaScrollbar class="makosh-scrollbar" orientation="horizontal">
+      <ScrollAreaThumb class="makosh-scroll-thumb" />
     </ScrollAreaScrollbar>
   </ScrollAreaRoot>
 </template>

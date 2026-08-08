@@ -19,7 +19,7 @@ import { canonicalPolicyForTests } from '../support/canonical-policy.mjs';
 
 export function eventsProtocol(dependencies = [], metadataOverrides = {}) {
   return workspacePackage(
-    'hermes-events-protocol',
+    'makosh-events-protocol',
     {
       role: 'platform',
       owner: 'events',

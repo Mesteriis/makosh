@@ -43,7 +43,7 @@ HTTP/3 over QUIC допускается для paired Android после conform
 использует ту же server/device identity, что защищённый HTTP/2. 0-RTT запрещён.
 Изменение IP/network path не заменяет authentication.
 
-Legacy `HERMES_LOCAL_API_SECRET`, `X-Hermes-Secret`, actor-id headers и старые
+Legacy `MAKOSH_LOCAL_API_SECRET`, `X-Макошь-Secret`, actor-id headers и старые
 auth ADR являются reference предыдущего backend и не определяют clean-room
 boundary.
 
@@ -51,9 +51,9 @@ boundary.
 
 Secrets must never be hardcoded or committed. Provider tokens, passwords, app passwords, private keys and recovery material belong behind the secret resolver boundary.
 
-ADR-0076 defines the current vault model. New secret payloads live in the dedicated host vault under `~/.hermes/vault`, backed by a local `vault.db` SQLite database. PostgreSQL stores only non-secret `secret_references`, provider account metadata and account-to-secret bindings.
+ADR-0076 defines the current vault model. New secret payloads live in the dedicated host vault under `~/.makosh/vault`, backed by a local `vault.db` SQLite database. PostgreSQL stores only non-secret `secret_references`, provider account metadata and account-to-secret bindings.
 
-Release runtime is macOS-only and uses Keychain for the master key. Docker/debug development may use `HERMES_DEV_MODE=true` with `HERMES_DEV_KEY_PATH`; release builds must reject dev storage. `HERMES_SECRET_VAULT_KEY` is legacy migration compatibility only and is not the normal runtime vault key.
+Release runtime is macOS-only and uses Keychain for the master key. Docker/debug development may use `MAKOSH_DEV_MODE=true` with `MAKOSH_DEV_KEY_PATH`; release builds must reject dev storage. `MAKOSH_SECRET_VAULT_KEY` is legacy migration compatibility only and is not the normal runtime vault key.
 
 Secret values must remain out of ordinary application tables, provider account config, event payloads, audit records, logs, tests and docs. Recovery phrases and recovery files are sensitive and must not be logged.
 

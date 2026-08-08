@@ -3,12 +3,12 @@
 ## Purpose
 
 The event model is the system spine. It records facts that happened in or
-around Hermes Hub and lets projections build current state, graph links,
+around Макошь and lets projections build current state, graph links,
 indexes and user-facing timelines.
 
 Communications are the primary ingestion spine for external interaction
 evidence. The event model is the canonical internal spine that preserves what
-happened after evidence enters Hermes.
+happened after evidence enters Макошь.
 
 ## Event Categories
 
@@ -31,7 +31,7 @@ happened after evidence enters Hermes.
 
 ```json
 {
-  "event_id": "01HERMES...",
+  "event_id": "01MAKOSH...",
   "event_type": "message_received",
   "schema_version": 1,
   "occurred_at": "2026-06-04T12:00:00Z",

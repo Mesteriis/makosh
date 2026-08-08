@@ -1,13 +1,13 @@
 use std::os::unix::fs::PermissionsExt;
 
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_protocol::{
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_protocol::{
     LeaseAudienceV1, SecretClassV1, VaultActionV1, VaultLeaseIssueRequestV1,
     VaultProvisioningReceiptV1, VaultProvisioningStateV1, VaultPurposeRequestV1,
     VaultTransportCommandV1,
 };
-use hermes_vault_store_sqlcipher::VaultStore;
+use makosh_vault_store_sqlcipher::VaultStore;
 use tempfile::TempDir;
 
 use crate::service::runtime::{VaultService, VaultServiceError};

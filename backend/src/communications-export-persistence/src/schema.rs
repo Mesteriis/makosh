@@ -1,4 +1,4 @@
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use sha2::{Digest, Sha256};
 
 pub const COMMUNICATIONS_EXPORT_STORAGE_BUNDLE_REVISION_V1: u32 = 1;
@@ -43,7 +43,7 @@ pub fn communications_export_storage_bundle_v1() -> StorageBundleV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_storage_protocol::validation::validate_storage_bundle;
+    use makosh_storage_protocol::validation::validate_storage_bundle;
 
     use super::*;
 
@@ -57,7 +57,7 @@ mod tests {
         );
         assert_eq!(bundle.steps.len(), 3);
         let sql = std::str::from_utf8(&bundle.steps[0].forward_sql_utf8).expect("utf8");
-        assert!(sql.contains("hermes_data.communications_export_jobs"));
+        assert!(sql.contains("makosh_data.communications_export_jobs"));
         assert!(!sql.contains("logical_owner_id"));
         assert!(!sql.contains("communications_messages"));
         assert!(!sql.contains("mail_"));

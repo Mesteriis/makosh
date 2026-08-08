@@ -5,7 +5,7 @@
 The Personas domain owns Persona Intelligence: digital representations of
 subjects, their identities, relationships, memory anchors and dossier views.
 
-Hermes does not treat people as contacts. Personas are durable memory anchors in
+Макошь does not treat people as contacts. Personas are durable memory anchors in
 the knowledge graph.
 
 ## Persona View

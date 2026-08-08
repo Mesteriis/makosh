@@ -77,7 +77,7 @@ ephemeral proxy proof, loopback address, Host и Origin.
 
 ### Отдельная native signing unit
 
-Provider-neutral app crate `hermes-owner-device-proof-host`:
+Provider-neutral app crate `makosh-owner-device-proof-host`:
 
 - открывает только explicit absolute initial device key file;
 - требует regular non-symlink file, exact 32 bytes и owner-only permissions;
@@ -90,7 +90,7 @@ Provider-neutral app crate `hermes-owner-device-proof-host`:
 Existing feature-gated development host server предоставляет exact endpoint:
 
 ```text
-POST /__hermes/owner-device-proof/v1/sign
+POST /__makosh/owner-device-proof/v1/sign
 ```
 
 Endpoint использует тот же exact loopback bind, Origin, private Vite

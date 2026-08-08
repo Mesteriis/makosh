@@ -3,8 +3,8 @@ use std::{
     time::Duration,
 };
 
-use hermes_attachment_security_contract::ATTACHMENT_SECURITY_MAX_SCAN_CANDIDATE_BYTES_V1;
-use hermes_attachment_security_core::ScannerOutcomeV1;
+use makosh_attachment_security_contract::ATTACHMENT_SECURITY_MAX_SCAN_CANDIDATE_BYTES_V1;
+use makosh_attachment_security_core::ScannerOutcomeV1;
 
 use crate::{ClamAvScanErrorV1, scan_clamav_instream_v1};
 

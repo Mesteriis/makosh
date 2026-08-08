@@ -3,7 +3,7 @@ import { AsyncSelect, FormField, FormLabel } from '@/shared/ui'
 import { storybookLocaleFromGlobals, storybookText } from './storybook-i18n'
 
 const meta = {
-	title: 'Hermes UI/General/Async Select',
+	title: 'Макошь UI/General/Async Select',
 	render: (_args, context) => ({
 		components: { AsyncSelect, FormField, FormLabel },
 		data() {

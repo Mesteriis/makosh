@@ -21,4 +21,4 @@ pub use schema::{
     review_note_candidate_storage_bundle_v1,
 };
 
-pub const PACKAGE: &str = "hermes-review-note-candidate-persistence";
+pub const PACKAGE: &str = "makosh-review-note-candidate-persistence";

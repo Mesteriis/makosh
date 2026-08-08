@@ -1,7 +1,7 @@
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use futures_util::StreamExt;
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     ConsumerBudgetV1, ConsumerSpecV1, DurableSubjectV1, JetStreamClient, NatsJwtConsumerGrantV1,
     NatsJwtPermissionSetV1, NatsRuntimeCredentialFenceV1, RuntimeNatsIdentity,
     RuntimeNatsJwtIssuerV1, RuntimePublishPermitV1, RuntimeSubscribePermitV1, StreamKindV1,
@@ -10,10 +10,10 @@ use prost::Message;
 
 use super::jetstream_live::event_envelope;
 
-const ENDPOINT: &str = "HERMES_NATS_JWT_TEST_ENDPOINT";
-const ACCOUNT_PUBLIC_KEY_FILE: &str = "HERMES_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE";
-const ACCOUNT_SIGNING_SEED_FILE: &str = "HERMES_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE";
-const EVENT_HUB_CREDS_FILE: &str = "HERMES_NATS_JWT_EVENT_HUB_CREDS_FILE";
+const ENDPOINT: &str = "MAKOSH_NATS_JWT_TEST_ENDPOINT";
+const ACCOUNT_PUBLIC_KEY_FILE: &str = "MAKOSH_NATS_JWT_ACCOUNT_PUBLIC_KEY_FILE";
+const ACCOUNT_SIGNING_SEED_FILE: &str = "MAKOSH_NATS_JWT_ACCOUNT_SIGNING_SEED_FILE";
+const EVENT_HUB_CREDS_FILE: &str = "MAKOSH_NATS_JWT_EVENT_HUB_CREDS_FILE";
 
 #[tokio::test(flavor = "multi_thread")]
 #[ignore = "requires the JWT resolver Docker JetStream contour"]
@@ -56,8 +56,8 @@ async fn create_event_stream(endpoint: &str) {
     let context = async_nats::jetstream::new(client);
     let stream = context
         .get_or_create_stream(async_nats::jetstream::stream::Config {
-            name: "HERMES_EVENT_V1".to_owned(),
-            subjects: vec!["hermes.event.v1.>".to_owned()],
+            name: "MAKOSH_EVENT_V1".to_owned(),
+            subjects: vec!["makosh.event.v1.>".to_owned()],
             max_bytes: 1_048_576,
             max_age: Duration::from_secs(3600),
             num_replicas: 1,
@@ -86,7 +86,7 @@ async fn create_event_stream(endpoint: &str) {
 }
 
 async fn assert_exact_runtime_delivery(
-    runtime: &hermes_events_jetstream::RuntimeJetStreamConnection,
+    runtime: &makosh_events_jetstream::RuntimeJetStreamConnection,
 ) {
     let permit =
         RuntimeSubscribePermitV1::new("registration_notes", "notes_runtime", 2, 5, consumer_spec())
@@ -116,7 +116,7 @@ async fn assert_exact_runtime_delivery(
 async fn connect_runtime(
     endpoint: &str,
     issuer: &RuntimeNatsJwtIssuerV1,
-) -> hermes_events_jetstream::RuntimeJetStreamConnection {
+) -> makosh_events_jetstream::RuntimeJetStreamConnection {
     let credential = issuer
         .issue_runtime_credential(&fence(), permissions(), unix_seconds(), 300)
         .expect("issue runtime JWT");

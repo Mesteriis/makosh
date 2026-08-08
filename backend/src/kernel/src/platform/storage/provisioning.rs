@@ -1,8 +1,8 @@
 //! Kernel-to-Storage Control admission for one already durable binding.
 
-use hermes_kernel_control_store::PlatformStorageBindingV1;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_storage_protocol::{
+use makosh_kernel_control_store::PlatformStorageBindingV1;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_storage_protocol::{
     v1::{
         ApplyStorageBindingRequestV1, StorageRuntimeControlRequestV1,
         StorageRuntimeControlResponseV1, storage_runtime_control_request_v1::Operation,

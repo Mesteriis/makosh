@@ -20,4 +20,4 @@ pub use schema::{
     communication_note_candidate_extraction_storage_bundle_v1,
 };
 
-pub const PACKAGE: &str = "hermes-communication-note-candidate-persistence";
+pub const PACKAGE: &str = "makosh-communication-note-candidate-persistence";

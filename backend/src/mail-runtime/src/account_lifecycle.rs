@@ -2,7 +2,7 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_mail_api::{
+use makosh_mail_api::{
     MailCredentialPurpose,
     account_lifecycle::{
         MailAccountLifecycleActionV1, MailAccountLifecycleCommandV1, MailAccountLifecycleReceiptV1,
@@ -12,15 +12,15 @@ use hermes_mail_api::{
         validate_lifecycle_status_request,
     },
 };
-use hermes_mail_persistence::{MailDurablePersistence, MailDurablePersistenceError};
-use hermes_managed_vault_client::{
+use makosh_mail_persistence::{MailDurablePersistence, MailDurablePersistenceError};
+use makosh_managed_vault_client::{
     ManagedProviderCredentialClientV2, ManagedProviderCredentialContextV1,
     ManagedProviderCredentialErrorV1, ManagedProviderCredentialRequestV1,
 };
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, RejectManagedControlRequestsV2,
 };
-use hermes_vault_protocol::SecretClassV1;
+use makosh_vault_protocol::SecretClassV1;
 
 use crate::{
     admission::MAIL_CREDENTIAL_LEASE_TTL_SECONDS,
@@ -190,23 +190,23 @@ fn mutate_vault_credential(
     action: MailAccountLifecycleActionV1,
 ) -> MailCredentialLifecycleStateV1 {
     let (purpose, secret_class) = match progress.purpose {
-        hermes_mail_api::account::MailCredentialPurposeV1::ImapPassword => (
+        makosh_mail_api::account::MailCredentialPurposeV1::ImapPassword => (
             MailCredentialPurpose::ImapPassword,
             SecretClassV1::ProviderCredential,
         ),
-        hermes_mail_api::account::MailCredentialPurposeV1::SmtpPassword => (
+        makosh_mail_api::account::MailCredentialPurposeV1::SmtpPassword => (
             MailCredentialPurpose::SmtpPassword,
             SecretClassV1::ProviderCredential,
         ),
-        hermes_mail_api::account::MailCredentialPurposeV1::GmailAccessToken => (
+        makosh_mail_api::account::MailCredentialPurposeV1::GmailAccessToken => (
             MailCredentialPurpose::GmailAccessToken,
             SecretClassV1::ProviderCredential,
         ),
-        hermes_mail_api::account::MailCredentialPurposeV1::GmailRefreshCredential => (
+        makosh_mail_api::account::MailCredentialPurposeV1::GmailRefreshCredential => (
             MailCredentialPurpose::GmailRefreshCredential,
             SecretClassV1::OAuthRefreshCredential,
         ),
-        hermes_mail_api::account::MailCredentialPurposeV1::IcloudCardDavPassword => (
+        makosh_mail_api::account::MailCredentialPurposeV1::IcloudCardDavPassword => (
             MailCredentialPurpose::IcloudCardDavPassword,
             SecretClassV1::ProviderCredential,
         ),

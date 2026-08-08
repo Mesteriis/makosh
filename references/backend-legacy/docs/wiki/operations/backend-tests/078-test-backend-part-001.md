@@ -16,7 +16,7 @@ generated_by: code-wiki-ru
 
 ## Резюме
 
-Чанк `078-test-backend-part-001` (роль `test`) содержит исходные файлы тестов бэкенда Hermes Hub: E2E API тесты на Python, интеграционные Rust‑тесты Telegram (реконсилиация, парсинг снапшотов, QR‑логин, запросы), AI‑тесты, архитектурный тест и вспомогательный код. На основе этих файлов предлагается создать/обновить wiki‑страницу `operations/backend-tests.md`, которая документирует организацию, покрытие и ключевые проверки бэкенд‑тестов.
+Чанк `078-test-backend-part-001` (роль `test`) содержит исходные файлы тестов бэкенда Макошь: E2E API тесты на Python, интеграционные Rust‑тесты Telegram (реконсилиация, парсинг снапшотов, QR‑логин, запросы), AI‑тесты, архитектурный тест и вспомогательный код. На основе этих файлов предлагается создать/обновить wiki‑страницу `operations/backend-tests.md`, которая документирует организацию, покрытие и ключевые проверки бэкенд‑тестов.
 
 ## Предложенные страницы
 
@@ -25,7 +25,7 @@ generated_by: code-wiki-ru
 ```markdown
 # Тесты бэкенда
 
-Тесты бэкенда Hermes Hub покрывают API‑, интеграционные и архитектурные сценарии. Они разделены на несколько уровней:
+Тесты бэкенда Макошь покрывают API‑, интеграционные и архитектурные сценарии. Они разделены на несколько уровней:
 
 - **E2E‑тесты** — сквозные тесты HTTP API на Python (pytest).
 - **Интеграционные тесты на Rust** — тесты логики интеграции с Telegram (реконсилиация команд, парсинг снапшотов, QR‑логин, построение запросов).
@@ -39,15 +39,15 @@ generated_by: code-wiki-ru
 Запуск (из исходного кода):
 
 ```bash
-HERMES_API_SECRET=... pytest backend/e2e/test_api.py -v
+MAKOSH_API_SECRET=... pytest backend/e2e/test_api.py -v
 ```
 
-Требуется запущенный бэкенд; URL задаётся через `HERMES_BACKEND_URL` (по умолчанию `http://127.0.0.1:18082`).
+Требуется запущенный бэкенд; URL задаётся через `MAKOSH_BACKEND_URL` (по умолчанию `http://127.0.0.1:18082`).
 
 ### Проверки
 
 - **Health**: `GET /healthz`, `GET /readyz` возвращают `{"status": "ok"}`.
-- **Аутентификация**: запросы без заголовка `x-hermes-secret` или с неверным значением возвращают `403 FORBIDDEN` с ошибкой `"invalid_api_secret"`.
+- **Аутентификация**: запросы без заголовка `x-makosh-secret` или с неверным значением возвращают `403 FORBIDDEN` с ошибкой `"invalid_api_secret"`.
 - **Статус API**: `GET /api/v1/status` с корректным секретом возвращает `version: "1.0"` и флаги активных «поверхностей» (`messages: true`, `persons: true`).
 - **Организации**: полный CRUD (создание, получение, обновление, архивация, поиск, под‑ресурсы, toggle watchlist). Идентификаторы организации начинаются с префикса `org:`.
 - **Календарь**: CRUD аккаунтов и событий календаря, reschedule, cancel, participants, а также read‑only эндпоинты (`deadlines`, `focus-blocks`, `watchtower`, `health`, `weekly-brief`, `search`, `rules`, `analytics/*`).
@@ -131,7 +131,7 @@ HERMES_API_SECRET=... pytest backend/e2e/test_api.py -v
 
 Файл: `tdjson/tests/environment.rs`
 
-- `macos_tdjson_candidates_prefer_bundled_tauri_resources` — проверяет, что при запуске из `/Applications/Hermes Hub.app` bundled‑ресурс (`Contents/Resources/tdlib/...`) приоритетнее `homebrew`.
+- `macos_tdjson_candidates_prefer_bundled_tauri_resources` — проверяет, что при запуске из `/Applications/Макошь.app` bundled‑ресурс (`Contents/Resources/tdlib/...`) приоритетнее `homebrew`.
 - `renders_tdlib_qr_link_as_svg` — проверяет, что `render_qr_svg` генерирует SVG длиной > 100 символов.
 
 ## Тесты AI
@@ -230,7 +230,7 @@ HERMES_API_SECRET=... pytest backend/e2e/test_api.py -v
 
 | Исходный файл | Факты, покрытые страницей |
 |---|---|
-| `backend/e2e/test_api.py` | Запуск через `pytest`, env‑переменные `HERMES_BACKEND_URL`/`HERMES_API_SECRET`; тесты health, auth (403 при отсутствии/неверном секрете), статус API (версия, поверхности); тесты организаций (CRUD, префикс `org:`, под‑ресурсы, watchlist); тесты календаря (CRUD аккаунтов/событий, reschedule, cancel, participants, read‑only эндпоинты); тесты задач (CRUD, начало теста видно). |
+| `backend/e2e/test_api.py` | Запуск через `pytest`, env‑переменные `MAKOSH_BACKEND_URL`/`MAKOSH_API_SECRET`; тесты health, auth (403 при отсутствии/неверном секрете), статус API (версия, поверхности); тесты организаций (CRUD, префикс `org:`, под‑ресурсы, watchlist); тесты календаря (CRUD аккаунтов/событий, reschedule, cancel, participants, read‑only эндпоинты); тесты задач (CRUD, начало теста видно). |
 | `backend/fixtures/signal_hub/test_signals.toml` | Тестовый сигнал с `fixture_id`, `event_type`, `payload` и `provenance`. |
 | `archive_reconciliation.rs` | Примирение archive/unarchive команд через `publish_chat_position_event`; совпадение → `completed`/`observed`, расхождение → `failed`/`mismatch` с `last_error` и `provider_state`; проверка событий `telegram.command.status_changed` и `telegram.command.reconciled` в `event_log`. |
 | `mark_unread_reconciliation.rs` | Примирение mark_unread команд; совпадение → `completed`/`observed`, расхождение → `failed`/`mismatch` с сообщением «Provider observed a different unread state»; проверка событий. |

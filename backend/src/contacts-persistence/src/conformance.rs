@@ -33,12 +33,12 @@ impl ContactsPersistenceConformanceV1 {
     ) -> Result<(), ContactsPersistenceErrorV1> {
         persistence
             .pool()
-            .execute("DROP SCHEMA IF EXISTS hermes_data CASCADE")
+            .execute("DROP SCHEMA IF EXISTS makosh_data CASCADE")
             .await
             .map_err(|_| ContactsPersistenceErrorV1::StorageUnavailable)?;
         persistence
             .pool()
-            .execute("CREATE SCHEMA hermes_data")
+            .execute("CREATE SCHEMA makosh_data")
             .await
             .map_err(|_| ContactsPersistenceErrorV1::StorageUnavailable)?;
         for step in contacts_storage_bundle_v1().steps {

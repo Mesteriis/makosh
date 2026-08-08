@@ -9,7 +9,7 @@
 - [ADR-0200: Модульная модель и изоляция runtime](ADR-0200-clean-room-module-model-and-runtime-isolation.md);
 - [ADR-0202: PostgreSQL, изоляция данных и PgBouncer](ADR-0202-postgresql-ownership-pgbouncer-and-extensions.md);
 - [ADR-0206: Конституция Kernel и автомат запуска и восстановления](ADR-0206-kernel-constitution-boot-and-recovery-state-machine.md);
-- [ADR-0207: Канонический реестр бизнес-доменов Hermes](ADR-0207-canonical-business-domain-registry.md);
+- [ADR-0207: Канонический реестр бизнес-доменов Макошь](ADR-0207-canonical-business-domain-registry.md);
 - [ADR-0208: Allowlist разработки доменов и запрет проекций](ADR-0208-domain-development-allowlist-and-projection-freeze.md).
 
 Уточняется:
@@ -72,7 +72,7 @@ Test-only workspace members могут находиться только под
 `backend/tests/support/` и обязаны иметь:
 
 ```toml
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "test"
 owner = "test"
 surface = "test_support"
@@ -134,14 +134,14 @@ Cargo lockfile, toolchain и runner configuration также создаются 
 
 ### Kernel
 
-Kernel является package `hermes-kernel`:
+Kernel является package `makosh-kernel`:
 
 ```text
 backend/src/kernel/
-├── Cargo.toml                         # hermes-kernel runtime/composition
+├── Cargo.toml                         # makosh-kernel runtime/composition
 ├── control_store/
-│   ├── contract/                     # hermes-kernel-control-store
-│   └── sqlite/                       # hermes-kernel-control-store-sqlite
+│   ├── contract/                     # makosh-kernel-control-store
+│   └── sqlite/                       # makosh-kernel-control-store-sqlite
 └── src/
     ├── main.rs                       # composition root only
     ├── cli/                          # production command syntax

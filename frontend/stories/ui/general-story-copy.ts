@@ -131,7 +131,7 @@ const en = {
 		typography: 'Typography',
 		icons: 'Icons',
 		spacing: 'Spacing',
-		heading: 'Hermes remembers with evidence',
+		heading: 'Макошь remembers with evidence',
 		paragraph: 'Shared UI keeps product surfaces readable, local-first and traceable.',
 		spacingItems: ['xs', 'sm', 'md', 'lg']
 	},
@@ -334,7 +334,7 @@ const ru: GeneralStoryCopy = {
 		typography: 'Типографика',
 		icons: 'Иконки',
 		spacing: 'Отступы',
-		heading: 'Hermes помнит через evidence',
+		heading: 'Макошь помнит через evidence',
 		paragraph: 'Shared UI сохраняет продуктовые поверхности читаемыми, local-first и traceable.',
 		spacingItems: ['xs', 'sm', 'md', 'lg']
 	},
@@ -535,7 +535,7 @@ const es: GeneralStoryCopy = {
 		typography: 'Tipografía',
 		icons: 'Iconos',
 		spacing: 'Espaciado',
-		heading: 'Hermes recuerda con evidencia',
+		heading: 'Макошь recuerda con evidencia',
 		paragraph: 'Shared UI mantiene las superficies legibles, local-first y trazables.',
 		spacingItems: ['xs', 'sm', 'md', 'lg']
 	},

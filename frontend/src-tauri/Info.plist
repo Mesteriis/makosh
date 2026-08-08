@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
   <key>NSMicrophoneUsageDescription</key>
-  <string>Hermes records the audio input you explicitly approve only to transcribe the selected call.</string>
+  <string>Макошь records the audio input you explicitly approve only to transcribe the selected call.</string>
 </dict>
 </plist>

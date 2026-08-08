@@ -1,16 +1,16 @@
 pub const ZULIP_CLIENT_DESCRIPTOR_SET_V1: &[u8] =
-    include_bytes!(concat!(env!("OUT_DIR"), "/hermes.zulip.v1.bin"));
+    include_bytes!(concat!(env!("OUT_DIR"), "/makosh.zulip.v1.bin"));
 pub const ZULIP_ACCOUNT_DESCRIPTOR_SET_V1: &[u8] =
-    include_bytes!(concat!(env!("OUT_DIR"), "/hermes.zulip.account.v1.bin"));
+    include_bytes!(concat!(env!("OUT_DIR"), "/makosh.zulip.account.v1.bin"));
 pub const ZULIP_OPERATIONAL_DESCRIPTOR_SET_V1: &[u8] =
-    include_bytes!(concat!(env!("OUT_DIR"), "/hermes.zulip.operational.v1.bin"));
+    include_bytes!(concat!(env!("OUT_DIR"), "/makosh.zulip.operational.v1.bin"));
 pub const ZULIP_OPERATIONAL_REALTIME_DESCRIPTOR_SET_V1: &[u8] = include_bytes!(concat!(
     env!("OUT_DIR"),
-    "/hermes.zulip.operational.realtime.v1.bin"
+    "/makosh.zulip.operational.realtime.v1.bin"
 ));
 pub const ZULIP_CLIENT_CONTRACT_MAJOR: u32 = 1;
 pub const ZULIP_CLIENT_CONTRACT_REVISION: u32 = 1;
-pub const ZULIP_MODULE_ID: &str = "hermes-zulip-runtime";
+pub const ZULIP_MODULE_ID: &str = "makosh-zulip-runtime";
 pub const ZULIP_OWNER_ID: &str = "zulip";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -50,14 +50,14 @@ impl ZulipClientContractV1 {
     #[must_use]
     pub const fn connect_path(self) -> &'static str {
         match self {
-            Self::AccountLifecycle => "/hermes.zulip.account.v1.ZulipAccountLifecycleService/Apply",
-            Self::Command => "/hermes.zulip.v1.ZulipCommandService/ExecuteCommand",
-            Self::Query => "/hermes.zulip.v1.ZulipQueryService/GetOperationStatus",
+            Self::AccountLifecycle => "/makosh.zulip.account.v1.ZulipAccountLifecycleService/Apply",
+            Self::Command => "/makosh.zulip.v1.ZulipCommandService/ExecuteCommand",
+            Self::Query => "/makosh.zulip.v1.ZulipQueryService/GetOperationStatus",
             Self::OperationalQuery => {
-                "/hermes.zulip.operational.v1.ZulipOperationalQueryService/Query"
+                "/makosh.zulip.operational.v1.ZulipOperationalQueryService/Query"
             }
             Self::OperationalRealtime => {
-                "/hermes.zulip.operational.realtime.v1.ZulipOperationalRealtimeService/Replay"
+                "/makosh.zulip.operational.realtime.v1.ZulipOperationalRealtimeService/Replay"
             }
         }
     }

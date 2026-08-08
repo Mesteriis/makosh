@@ -1,6 +1,6 @@
 use crate::domains::communications::bulk_actions::BulkMessageActionOutcome;
 use crate::domains::communications::messages::models::WorkflowStateCount;
-use hermes_connectrpc_contracts::hermes::communications::v1::{
+use makosh_connectrpc_contracts::makosh::communications::v1::{
     BulkMessageActionResponse as ProtoBulkMessageActionResponse,
     CommunicationSearchResult as ProtoCommunicationSearchResult,
     WorkflowStateCount as ProtoWorkflowStateCount,

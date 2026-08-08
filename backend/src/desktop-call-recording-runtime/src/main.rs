@@ -4,13 +4,13 @@ use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
-use hermes_desktop_call_recording_persistence::desktop_call_recording_storage_bundle_v1;
-use hermes_desktop_call_recording_runtime::{
+use makosh_desktop_call_recording_persistence::desktop_call_recording_storage_bundle_v1;
+use makosh_desktop_call_recording_runtime::{
     DesktopRecordingManagedRuntimeErrorV1, DesktopRecordingManagedRuntimeV1,
     DesktopRecordingRuntimeAdmissionV1, admission::module_descriptor_v1,
     settings::settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::{ManagedIntegrationHostBridgeConfigurationV1, ManagedIntegrationRuntimeConfigurationV1},
     validation::{
         descriptor::{
@@ -133,12 +133,12 @@ where
             return Err(runtime_error(error));
         }
         if executor.block_on(runtime.relay_outbox()).is_err()
-            && std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some()
+            && std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some()
         {
             eprintln!("developer_desktop_recording_outbox_retry=true");
         }
         if executor.block_on(runtime.publish_realtime()).is_err()
-            && std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some()
+            && std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some()
         {
             eprintln!("developer_desktop_recording_realtime_retry=true");
         }
@@ -147,7 +147,7 @@ where
 }
 
 fn developer_runtime_error(step: &str, error: DesktopRecordingManagedRuntimeErrorV1) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_desktop_recording_step={step} error={error:?}");
     }
 }

@@ -1,18 +1,18 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub(crate) use axum::Router;
 pub(crate) use axum::body::{Body, to_bytes};
 pub(crate) use axum::http::{Request, StatusCode};
-pub(crate) use hermes_hub_backend::app::router::{build_router, build_router_with_database};
-pub(crate) use hermes_hub_backend::domains::graph::core::models::{
+pub(crate) use makosh_hub_backend::app::router::{build_router, build_router_with_database};
+pub(crate) use makosh_hub_backend::domains::graph::core::models::{
     GraphEvidenceSourceKind, GraphReviewState, NewGraphEdge, NewGraphEvidence, NewGraphNode,
     RelationshipType,
 };
-pub(crate) use hermes_hub_backend::domains::graph::core::store::GraphStore;
-pub(crate) use hermes_hub_backend::platform::config::app_config::AppConfig;
-pub(crate) use hermes_hub_backend::platform::graph::GraphNodeKind;
-pub(crate) use hermes_hub_backend::platform::storage::database::Database;
+pub(crate) use makosh_hub_backend::domains::graph::core::store::GraphStore;
+pub(crate) use makosh_hub_backend::platform::config::app_config::AppConfig;
+pub(crate) use makosh_hub_backend::platform::graph::GraphNodeKind;
+pub(crate) use makosh_hub_backend::platform::storage::database::Database;
 pub(crate) use serde_json::{Value, json};
 pub(crate) use sqlx::postgres::{PgPool, PgPoolOptions};
 pub(crate) use tower::ServiceExt;
@@ -75,7 +75,7 @@ pub(crate) async fn live_graph_api_context(_test_name: &str) -> Option<LiveGraph
         .connect(&admin_database_url)
         .await
         .expect("admin database connection");
-    let database_name = format!("hermes_graph_api_test_{}", unique_suffix());
+    let database_name = format!("makosh_graph_api_test_{}", unique_suffix());
     assert_safe_identifier(&database_name);
     sqlx::query(&format!(
         "CREATE DATABASE {}",
@@ -92,7 +92,7 @@ pub(crate) async fn live_graph_api_context(_test_name: &str) -> Option<LiveGraph
     let pool = database.pool().expect("configured pool").clone();
     let store = GraphStore::new(pool.clone());
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             test_database_url.as_str(),
         ),
@@ -109,7 +109,7 @@ pub(crate) async fn live_graph_api_context(_test_name: &str) -> Option<LiveGraph
 }
 
 pub(crate) fn config_with_api_token() -> AppConfig {
-    hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+    makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
 }
 
 pub(crate) fn get_request(uri: &str) -> Request<Body> {
@@ -122,7 +122,7 @@ pub(crate) fn get_request(uri: &str) -> Request<Body> {
 pub(crate) fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -130,7 +130,7 @@ pub(crate) fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
 pub(crate) fn get_request_with_token_without_actor(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }

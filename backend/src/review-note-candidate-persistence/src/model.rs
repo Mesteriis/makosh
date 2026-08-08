@@ -1,4 +1,4 @@
-use hermes_review_note_candidate_core::{
+use makosh_review_note_candidate_core::{
     ReviewNoteCandidateDecisionV1, ReviewNoteCandidateDraftV1,
     ReviewNoteCandidatePromotionResultV1, ReviewNoteCandidateTimestampV1, ReviewNoteCandidateV1,
 };
@@ -151,8 +151,8 @@ pub struct ReviewNoteCandidateRealtimeTransitionV1 {
     pub sequence: u64,
     pub review_id: [u8; 16],
     pub candidate_id: [u8; 16],
-    pub state: hermes_review_note_candidate_core::ReviewNoteCandidateStateV1,
-    pub promotion_status: hermes_review_note_candidate_core::ReviewNoteCandidatePromotionStatusV1,
+    pub state: makosh_review_note_candidate_core::ReviewNoteCandidateStateV1,
+    pub promotion_status: makosh_review_note_candidate_core::ReviewNoteCandidatePromotionStatusV1,
     pub review_revision: u64,
     pub occurred_at_unix_millis: i64,
 }
@@ -197,7 +197,7 @@ fn decision_fingerprint_fields(
     owner_device_id: [u8; 16],
 ) -> [u8; 32] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.review.note-candidate.decision.v1\0");
+    hash.update(b"makosh.review.note-candidate.decision.v1\0");
     hash.update(review_id);
     hash.update(expected_review_revision.to_be_bytes());
     hash.update([match decision {

@@ -14,9 +14,9 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-resizable',
-	`hermes-resizable--${props.axis}`,
-	`hermes-resizable--${props.tone}`,
+	'makosh-resizable',
+	`makosh-resizable--${props.axis}`,
+	`makosh-resizable--${props.tone}`,
 	props.class
 ])
 </script>

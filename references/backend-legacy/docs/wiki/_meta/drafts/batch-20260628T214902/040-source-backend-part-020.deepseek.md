@@ -7,7 +7,7 @@
 ### `components/backend.md`
 
 ```markdown
-# Бэкенд Hermes Hub
+# Бэкенд Макошь
 
 Бэкенд реализован на Rust и построен по модульной архитектуре. Данная страница описывает подсистемы, видимые в предоставленных исходных файлах домена `communications`.
 
@@ -19,24 +19,24 @@
 
 Каждое входящее сообщение проходит обязательный эвристический анализ. Логика реализована в `backend/src/domains/communications/ingestion.rs`.
 
-- **Эвристическая оценка важности** (`heuristic_score`) вычисляет целочисленный балл от 0 до 100.  
-  Базовый балл: 30.  
-  Баллы добавляются за наличие ключевых слов в теме или теле письма:  
-  +15  `urgent`, `asap`, `deadline`, `immediately`, `critical`, `action required`  
-  +20  `invoice`, `payment`, `factura`, `bill`, `amount due`, `receipt`, `tax`  
-  +25  `contract`, `agreement`, `nda`, `legal`, `liability`, `confidential`, `attorney`  
-  +10  наличие знака вопроса `?`  
-  +10  ключевые слова вложений (`attached`, `attachment`, и т.д.)  
-  -20  признаки рассылки/спама (`unsubscribe`, `opt out`, …)  
-  -10  тело короче 50 символов  
+- **Эвристическая оценка важности** (`heuristic_score`) вычисляет целочисленный балл от 0 до 100.
+  Базовый балл: 30.
+  Баллы добавляются за наличие ключевых слов в теме или теле письма:
+  +15  `urgent`, `asap`, `deadline`, `immediately`, `critical`, `action required`
+  +20  `invoice`, `payment`, `factura`, `bill`, `amount due`, `receipt`, `tax`
+  +25  `contract`, `agreement`, `nda`, `legal`, `liability`, `confidential`, `attorney`
+  +10  наличие знака вопроса `?`
+  +10  ключевые слова вложений (`attached`, `attachment`, и т.д.)
+  -20  признаки рассылки/спама (`unsubscribe`, `opt out`, …)
+  -10  тело короче 50 символов
   Результат зажимается в `[0, 100]`.
 
-- **Категоризация** (`heuristic_category`) возвращает `Option<String>` со значениями:  
-  `finance` – тело содержит `invoice` / `factura` / `payment`  
-  `legal` – тело содержит `contract` / `nda` / `agreement`  
-  `marketing` – тело содержит `unsubscribe` / `newsletter`  
-  `notification` – тема или тело содержит `notification`  
-  `suspicious` – тело содержит `click here` и (`account` или `verify`)  
+- **Категоризация** (`heuristic_category`) возвращает `Option<String>` со значениями:
+  `finance` – тело содержит `invoice` / `factura` / `payment`
+  `legal` – тело содержит `contract` / `nda` / `agreement`
+  `marketing` – тело содержит `unsubscribe` / `newsletter`
+  `notification` – тема или тело содержит `notification`
+  `suspicious` – тело содержит `click here` и (`account` или `verify`)
   `None` – категория не определена.
 
 - **Детектор спама**: сообщение считается спамом, если тело содержит `unsubscribe` **и** (`buy now` / `limited offer` / `click here`).
@@ -66,7 +66,7 @@
 
 #### Идентификаторы сообщений
 
-Формат `message_id` (файл `messages/ids.rs`):  
+Формат `message_id` (файл `messages/ids.rs`):
 `msg:v1:<len-account_id>:<account_id>:<len-provider_record_id>:<provider_record_id>`.
 
 #### Модели данных
@@ -210,7 +210,7 @@
 - Идентификатор события формируется как `mail_folder_event:{event_type}:{subject_id}:{timestamp_nanos_hex}`.
 - Конверт события (`NewEventEnvelope`) включает:
   - `kind`: `"mail_folder_api"` или `"mail_folder_message"`
-  - `actor`: `"hermes-frontend"`
+  - `actor`: `"makosh-frontend"`
   - `payload`: сериализованная структура папки или ответа операции
   - `provenance`: `source_kind = "local_api"`
   - `correlation_id`: идентификатор папки или сообщения.
@@ -239,7 +239,7 @@
 - Типы событий папок: `mail.folder.created`, `mail.folder.updated`, `mail.folder.deleted`
 - Типы событий сообщений в папках: `mail.folder_message.copied`, `mail.folder_message.moved`
 - Формат идентификатора события: `mail_folder_event:{event_type}:{subject_id}:{timestamp_nanos_hex}`
-- Структура `NewEventEnvelope`: kind, actor (`hermes-frontend`), payload, provenance (`local_api`), correlation_id
+- Структура `NewEventEnvelope`: kind, actor (`makosh-frontend`), payload, provenance (`local_api`), correlation_id
 
 ### `backend/src/domains/communications/import.rs`
 - Функция `import_fixture_email_messages` и `import_fixture_email_messages_with_records`

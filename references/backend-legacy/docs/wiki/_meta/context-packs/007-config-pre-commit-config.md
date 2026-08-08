@@ -21,9 +21,9 @@
 - Group / Группа: `.pre-commit-config`
 - Role / Роль: `config`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `.pre-commit-config.yaml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/.pre-commit-config.yaml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/.pre-commit-config.yaml`
 - Size bytes / Размер в байтах: `1167`
 - Included characters / Включено символов: `1167`
 - Truncated / Обрезано: `no`
@@ -64,36 +64,36 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 repos:
   - repo: local
     hooks:
-      - id: hermes-architecture-guards
-        name: Hermes architecture and code guards
+      - id: makosh-architecture-guards
+        name: Макошь architecture and code guards
         entry: make architecture-check
         language: system
         pass_filenames: false
         always_run: true
 
-      - id: hermes-code-boundaries
-        name: Hermes code boundary guards
+      - id: makosh-code-boundaries
+        name: Макошь code boundary guards
         entry: make code-boundaries-check
         language: system
         pass_filenames: false
         files: ^(backend/src/|frontend/src/|Makefile$)
 
-      - id: hermes-rust-fmt
-        name: Hermes Rust format check
+      - id: makosh-rust-fmt
+        name: Макошь Rust format check
         entry: make backend-fmt-check
         language: system
         pass_filenames: false
         files: ^backend/.*\.rs$
 
-      - id: hermes-rust-clippy
-        name: Hermes Rust clippy
+      - id: makosh-rust-clippy
+        name: Макошь Rust clippy
         entry: make backend-clippy
         language: system
         pass_filenames: false
         files: ^backend/.*\.rs$
 
-      - id: hermes-frontend-lint
-        name: Hermes frontend lint (style + TypeScript/Vue, no tests)
+      - id: makosh-frontend-lint
+        name: Макошь frontend lint (style + TypeScript/Vue, no tests)
         entry: make frontend-lint
         language: system
         pass_filenames: false

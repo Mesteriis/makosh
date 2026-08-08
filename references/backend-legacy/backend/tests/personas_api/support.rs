@@ -1,16 +1,16 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
 use axum::http::{Method, Request, header};
 use serde_json::Value;
 
-use hermes_events_postgres::consumers::EventConsumerConfig;
-use hermes_events_postgres::consumers::EventConsumerRunner;
-use hermes_hub_backend::app::router::{build_router, build_router_with_database};
-use hermes_hub_backend::platform::config::app_config::AppConfig;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::workflows::persona_derived_evidence::{
+use makosh_events_postgres::consumers::EventConsumerConfig;
+use makosh_events_postgres::consumers::EventConsumerRunner;
+use makosh_hub_backend::app::router::{build_router, build_router_with_database};
+use makosh_hub_backend::platform::config::app_config::AppConfig;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::workflows::persona_derived_evidence::{
     PERSONA_DERIVED_EVIDENCE_CONSUMER, project_persona_derived_evidence_event,
 };
 use sqlx::postgres::PgPool;
@@ -23,9 +23,9 @@ pub fn config_with_api_token() -> AppConfig {
 
 pub fn app_config_with_pairs(mut extra_pairs: Vec<(&'static str, String)>) -> AppConfig {
     let suffix = unique_suffix();
-    let vault_home = format!("/tmp/hermes-persons-api-vault-{suffix}");
+    let vault_home = format!("/tmp/makosh-persons-api-vault-{suffix}");
     let dev_key_path = format!("{vault_home}/dev.key");
-    hermes_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
+    makosh_backend_testkit::app::config_with_secret(LOCAL_API_TOKEN)
         .with_test_dev_vault_paths(vault_home, dev_key_path)
         .with_test_pairs(extra_pairs.drain(..))
         .expect("valid local API config")
@@ -41,7 +41,7 @@ pub fn get_request(uri: &str) -> Request<Body> {
 pub fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -51,7 +51,7 @@ pub fn post_request_with_token(uri: &str, body: Value, token: &str) -> Request<B
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -61,7 +61,7 @@ pub fn put_request_with_token(uri: &str, body: Value, token: &str) -> Request<Bo
         .method(Method::PUT)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -70,7 +70,7 @@ pub fn delete_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .method(Method::DELETE)
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }

@@ -33,36 +33,36 @@ test('call evidence contracts core and persistence are separate Communications d
   assert.match(coreManifest, /surface = "implementation"/);
   assert.match(persistenceManifest, /surface = "persistence"/);
   assert.match(apiManifest, /surface = "contract"/);
-  assert.match(coreManifest, /hermes-communications-call-evidence-ingress/);
-  assert.match(persistenceManifest, /hermes-communications-call-evidence-core/);
-  assert.match(persistenceManifest, /hermes-storage-protocol/);
+  assert.match(coreManifest, /makosh-communications-call-evidence-ingress/);
+  assert.match(persistenceManifest, /makosh-communications-call-evidence-core/);
+  assert.match(persistenceManifest, /makosh-storage-protocol/);
   assert.doesNotMatch(ingressManifest, /communications-call-evidence-core/);
   assert.doesNotMatch(persistenceManifest, /telegram|whatsapp|zulip|mail-/);
 
   assert.deepEqual(
     policy.implementation.productionPackages
-      .filter(({ name }) => name.startsWith('hermes-communications-call-evidence-'))
+      .filter(({ name }) => name.startsWith('makosh-communications-call-evidence-'))
       .map(({ name, role, owner, surface }) => `${name}:${role}:${owner}:${surface}`),
     [
-      'hermes-communications-call-evidence-ingress:domain:communications:contract',
-      'hermes-communications-call-evidence-core:domain:communications:implementation',
-      'hermes-communications-call-evidence-persistence:domain:communications:persistence',
-      'hermes-communications-call-evidence-api:domain:communications:contract',
+      'makosh-communications-call-evidence-ingress:domain:communications:contract',
+      'makosh-communications-call-evidence-core:domain:communications:implementation',
+      'makosh-communications-call-evidence-persistence:domain:communications:persistence',
+      'makosh-communications-call-evidence-api:domain:communications:contract',
     ],
   );
   assert.ok(
     policy.dependencies.integrationDomainContractPackages.includes(
-      'hermes-communications-call-evidence-ingress',
+      'makosh-communications-call-evidence-ingress',
     ),
   );
   assert.ok(
     !policy.dependencies.integrationDomainContractPackages.includes(
-      'hermes-communications-call-evidence-core',
+      'makosh-communications-call-evidence-core',
     ),
   );
   assert.ok(
     !policy.dependencies.integrationDomainContractPackages.includes(
-      'hermes-communications-call-evidence-persistence',
+      'makosh-communications-call-evidence-persistence',
     ),
   );
 });
@@ -71,7 +71,7 @@ test('call evidence generated query and shared realtime are typed and client saf
   const [proto, api, persistence, queryPort, realtime, admission, runtimeMain] =
     await Promise.all([
       backendSource(
-        'src/communications-call-evidence-api/proto/hermes/communications/call_evidence/client/v1/client.proto',
+        'src/communications-call-evidence-api/proto/makosh/communications/call_evidence/client/v1/client.proto',
       ),
       backendSource('src/communications-call-evidence-api/src/lib.rs'),
       backendSource('src/communications-call-evidence-persistence/src/repository.rs'),
@@ -110,7 +110,7 @@ test('call evidence generated query and shared realtime are typed and client saf
 test('call evidence durable observation is exact typed and locator negative', async () => {
   const [proto, ingress, envelope] = await Promise.all([
     backendSource(
-      'src/communications-call-evidence-ingress/proto/hermes/communications/call_evidence/v1/call_evidence.proto',
+      'src/communications-call-evidence-ingress/proto/makosh/communications/call_evidence/v1/call_evidence.proto',
     ),
     backendSource('src/communications-call-evidence-ingress/src/lib.rs'),
     backendSource('src/communications-call-evidence-ingress/src/envelope.rs'),
@@ -160,8 +160,8 @@ test('call evidence persistence is owner local atomic and private-content negati
     ),
   ]);
 
-  assert.match(manifest, /hermes-communications-call-evidence-core/);
-  assert.match(manifest, /hermes-storage-protocol/);
+  assert.match(manifest, /makosh-communications-call-evidence-core/);
+  assert.match(manifest, /makosh-storage-protocol/);
   assert.match(repository, /existing_inbox_outcome/);
   assert.match(repository, /InboxHashConflict/);
   assert.match(repository, /FOR UPDATE/);
@@ -193,9 +193,9 @@ test('managed Communications consumer is exact fenced and acknowledges after per
     ]);
 
   for (const dependency of [
-    'hermes-communications-call-evidence-core',
-    'hermes-communications-call-evidence-ingress',
-    'hermes-communications-call-evidence-persistence',
+    'makosh-communications-call-evidence-core',
+    'makosh-communications-call-evidence-ingress',
+    'makosh-communications-call-evidence-persistence',
   ]) {
     assert.match(runtimeManifest, new RegExp(dependency));
   }
@@ -212,7 +212,7 @@ test('managed Communications consumer is exact fenced and acknowledges after per
   assert.match(eventRuntime, /CommunicationsConsumerV1::CallEvidence/);
   assert.match(eventRuntime, /call_evidence_persistence[\s\S]{0,80}\.verify_storage_ready/);
   assert.match(runtimeBundle, /append_communications_call_evidence_storage_v1/);
-  assert.doesNotMatch(assemblyManifest, /hermes-communications-persistence/);
+  assert.doesNotMatch(assemblyManifest, /makosh-communications-persistence/);
   const productionConsumer = consumer.replace(/#\[cfg\(test\)\][\s\S]*$/u, '');
   assert.doesNotMatch(
     productionConsumer,
@@ -246,10 +246,10 @@ test('Telegram owns the call evidence producer and relays exact outbox bytes', a
   ]);
 
   for (const manifest of [persistenceManifest, runtimeManifest]) {
-    assert.match(manifest, /hermes-communications-call-evidence-ingress/);
+    assert.match(manifest, /makosh-communications-call-evidence-ingress/);
     assert.doesNotMatch(
       manifest,
-      /hermes-communications-(?:call-evidence-(?:core|persistence)|runtime|assembly)/,
+      /makosh-communications-(?:call-evidence-(?:core|persistence)|runtime|assembly)/,
     );
   }
 
@@ -309,10 +309,10 @@ test('call evidence gate has live managed outage, SSE and restart evidence', asy
       'tests/support/kernel-recovery/src/tests/managed_storage_vault_docker/call_evidence_managed_flow.rs',
     ),
     backendSource(
-      'src/platform/runtime_protocol/proto/hermes/runtime/v1/managed_integration_runtime.proto',
+      'src/platform/runtime_protocol/proto/makosh/runtime/v1/managed_integration_runtime.proto',
     ),
     backendSource(
-      'src/platform/runtime_protocol/proto/hermes/runtime/v1/managed_domain_runtime.proto',
+      'src/platform/runtime_protocol/proto/makosh/runtime/v1/managed_domain_runtime.proto',
     ),
     backendSource('architecture/communications-settings-reconstruction.json'),
   ]);

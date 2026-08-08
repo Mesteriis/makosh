@@ -1,13 +1,13 @@
 use axum::Router;
 use axum::body::Body;
 use axum::http::{Method, Request, header};
-use hermes_hub_backend::platform::config::app_config::AppConfig;
+use makosh_hub_backend::platform::config::app_config::AppConfig;
 use serde_json::Value;
 
 use crate::context::TestContext;
 use crate::vault;
 
-pub const TEST_API_SECRET: &str = "hermes-test-api-secret";
+pub const TEST_API_SECRET: &str = "makosh-test-api-secret";
 
 pub struct TestApp {
     router: Router,
@@ -65,7 +65,7 @@ pub fn empty_request(method: Method, uri: &str) -> Request<Body> {
     Request::builder()
         .method(method)
         .uri(uri)
-        .header("x-hermes-secret", TEST_API_SECRET)
+        .header("x-makosh-secret", TEST_API_SECRET)
         .body(Body::empty())
         .expect("request")
 }
@@ -74,7 +74,7 @@ pub fn json_request(method: Method, uri: &str, body: Value) -> Request<Body> {
     Request::builder()
         .method(method)
         .uri(uri)
-        .header("x-hermes-secret", TEST_API_SECRET)
+        .header("x-makosh-secret", TEST_API_SECRET)
         .header(header::CONTENT_TYPE, "application/json")
         .body(Body::from(body.to_string()))
         .expect("request")

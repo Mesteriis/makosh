@@ -3,7 +3,7 @@ use serde_json::{Map, Value, json};
 use sha2::{Digest, Sha256};
 use thiserror::Error;
 
-use hermes_provider_api::{
+use makosh_provider_api::{
     ProviderContractError, ProviderId, ProviderObservationEnvelope, ProviderObservationInput,
 };
 

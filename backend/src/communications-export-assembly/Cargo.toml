@@ -1,5 +1,5 @@
 [package]
-name = "hermes-communications-export-assembly"
+name = "makosh-communications-export-assembly"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,19 +8,19 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-communications-export-assembly"
+name = "makosh-communications-export-assembly"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "communications_export"
 surface = "assembly"
 
 [dependencies]
-hermes-communications-export-persistence = { path = "../communications-export-persistence" }
-hermes-communications-export-runtime = { path = "../communications-export-runtime" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-communications-export-persistence = { path = "../communications-export-persistence" }
+makosh-communications-export-runtime = { path = "../communications-export-runtime" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
 serde_json = "=1.0.150"

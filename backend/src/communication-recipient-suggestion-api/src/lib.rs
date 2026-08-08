@@ -1,9 +1,9 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-communication-recipient-suggestion-api";
+pub const PACKAGE: &str = "makosh-communication-recipient-suggestion-api";
 pub const COMMUNICATION_RECIPIENT_SUGGESTION_OWNER_V1: &str = "communication_recipient_suggestion";
 pub const COMMUNICATION_RECIPIENT_SUGGESTION_MODULE_ID_V1: &str =
-    "hermes-communication-recipient-suggestion-runtime";
+    "makosh-communication-recipient-suggestion-runtime";
 pub const COMMUNICATION_RECIPIENT_SUGGESTION_CAPABILITY_ID_V1: &str =
     "communication.recipient-suggestion.v1";
 pub const COMMUNICATION_RECIPIENT_SUGGESTION_COMMAND_CONTRACT_NAME_V1: &str =
@@ -14,8 +14,8 @@ pub const COMMUNICATION_RECIPIENT_SUGGESTION_REALTIME_CONTRACT_NAME_V1: &str =
     "communication.recipient-suggestion.status_changed";
 pub const COMMUNICATION_RECIPIENT_SUGGESTION_REALTIME_EVENT_KIND_V1: &str =
     "communication.recipient-suggestion.status_changed";
-pub const COMMUNICATION_RECIPIENT_SUGGESTION_COMMAND_CONNECT_PATH_V1: &str = "/hermes.communication_recipient_suggestion.v1.CommunicationRecipientSuggestionCommandService/Start";
-pub const COMMUNICATION_RECIPIENT_SUGGESTION_QUERY_CONNECT_PATH_V1: &str = "/hermes.communication_recipient_suggestion.v1.CommunicationRecipientSuggestionQueryService/Get";
+pub const COMMUNICATION_RECIPIENT_SUGGESTION_COMMAND_CONNECT_PATH_V1: &str = "/makosh.communication_recipient_suggestion.v1.CommunicationRecipientSuggestionCommandService/Start";
+pub const COMMUNICATION_RECIPIENT_SUGGESTION_QUERY_CONNECT_PATH_V1: &str = "/makosh.communication_recipient_suggestion.v1.CommunicationRecipientSuggestionQueryService/Get";
 pub const COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_MAJOR_V1: u32 = 1;
 pub const COMMUNICATION_RECIPIENT_SUGGESTION_CONTRACT_REVISION_V1: u32 = 1;
 pub const COMMUNICATION_RECIPIENT_SUGGESTION_MAX_BYTES_V1: usize = 32 * 1024;
@@ -24,7 +24,7 @@ pub const COMMUNICATION_RECIPIENT_SUGGESTION_MAX_CANDIDATES_V1: usize = 3;
 pub mod wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communication_recipient_suggestion.v1.rs"
+        "/makosh.communication_recipient_suggestion.v1.rs"
     ));
 }
 
@@ -47,7 +47,7 @@ mod tests {
         assert!(COMMUNICATION_RECIPIENT_SUGGESTION_COMMAND_CONNECT_PATH_V1.starts_with('/'));
         assert!(COMMUNICATION_RECIPIENT_SUGGESTION_QUERY_CONNECT_PATH_V1.starts_with('/'));
         let source = include_str!(
-            "../proto/hermes/communication_recipient_suggestion/v1/recipient_suggestion.proto"
+            "../proto/makosh/communication_recipient_suggestion/v1/recipient_suggestion.proto"
         );
         assert!(source.contains("COMMUNICATION_RECIPIENT_ROLE_ACCOUNTING_OR_BOOKKEEPING"));
         assert!(source.contains("COMMUNICATION_RECIPIENT_ROLE_LEGAL_COUNSEL"));

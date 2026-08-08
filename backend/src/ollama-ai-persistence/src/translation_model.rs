@@ -1,5 +1,5 @@
-use hermes_ai_contracts::validate_provider_translation_result_v1;
-use hermes_ollama_ai_core::{OllamaAiRunStateV1, OllamaTranslationRunV1};
+use makosh_ai_contracts::validate_provider_translation_result_v1;
+use makosh_ollama_ai_core::{OllamaAiRunStateV1, OllamaTranslationRunV1};
 
 use crate::{OllamaAiPersistenceErrorV1, model::validate_owner};
 

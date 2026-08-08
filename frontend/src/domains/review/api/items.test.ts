@@ -31,7 +31,7 @@ describe('review items API', () => {
 		const [url, options] = fetchMock.mock.calls[0]
 		expect(url).toBe('http://127.0.0.1:8080/api/v1/review/attention-cards?status=active&limit=25')
 		expect(options.method).toBe('GET')
-		expect(new Headers(options.headers).get('X-Hermes-Secret')).toBe('test-secret')
+		expect(new Headers(options.headers).get('X-Макошь-Secret')).toBe('test-secret')
 	})
 })
 

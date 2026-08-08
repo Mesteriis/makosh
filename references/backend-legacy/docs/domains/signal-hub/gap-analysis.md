@@ -15,7 +15,7 @@ and frontend `pnpm lint` is now reduced to two oversized production files:
 `src/domains/settings/components/SignalHubSettings.vue` and
 `src/domains/communications/api/connectCommunications.ts`.
 
-The largest gap is not transport. The largest gap is ownership: Hermes needs a
+The largest gap is not transport. The largest gap is ownership: Макошь needs a
 domain that owns source registry, source runtime policy, health, profiles,
 fixtures, mute/pause/replay and source recovery without making Telegram, Mail or
 WhatsApp separate product domains.

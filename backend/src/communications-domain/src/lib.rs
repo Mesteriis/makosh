@@ -1,7 +1,7 @@
 //! Canonical evidence decisions owned exclusively by Communications.
 
-use hermes_communications_api::PACKAGE as API_PACKAGE;
-use hermes_communications_api::{
+use makosh_communications_api::PACKAGE as API_PACKAGE;
+use makosh_communications_api::{
     AttachmentSafetyTransitionCommandV1, AttachmentSafetyTransitionDecisionV1,
     CanonicalAccountProjectionV1, CanonicalAttachmentAnchorProjectionV1,
     CanonicalCommunicationEvidenceKindV1, CanonicalCommunicationProjectionV1,
@@ -31,7 +31,7 @@ pub use search::{
     normalize_search_query_v1,
 };
 
-pub const PACKAGE: &str = "hermes-communications-domain";
+pub const PACKAGE: &str = "makosh-communications-domain";
 pub fn dependency() -> &'static str {
     API_PACKAGE
 }
@@ -151,13 +151,13 @@ fn validate_body_admission(
         .is_some_and(|value| matches!(value, "text/plain" | "text/html"));
     if matches!(
         command.body,
-        hermes_communications_api::CommunicationBodyStateV1::PendingBlob
-            | hermes_communications_api::CommunicationBodyStateV1::AdmittedBlob
+        makosh_communications_api::CommunicationBodyStateV1::PendingBlob
+            | makosh_communications_api::CommunicationBodyStateV1::AdmittedBlob
     ) != media_type_is_valid
     {
         return Err(CommunicationsDomainError::InvalidAttachmentScope);
     }
-    if command.body == hermes_communications_api::CommunicationBodyStateV1::AdmittedBlob {
+    if command.body == makosh_communications_api::CommunicationBodyStateV1::AdmittedBlob {
         let Some(receipt) = command.body_blob.as_ref() else {
             return Err(CommunicationsDomainError::InvalidAttachmentScope);
         };
@@ -202,7 +202,7 @@ pub fn canonicalize_communication(
         .account_cursor
         .map(|account_cursor| CanonicalAccountProjectionV1 {
             account_id: CommunicationAccountIdV1::new(identifier(
-                b"hermes.communications.account.v1\0",
+                b"makosh.communications.account.v1\0",
                 &[&account_cursor.bytes()],
             )),
             account_cursor,
@@ -213,7 +213,7 @@ pub fn canonicalize_communication(
         (Some(account_cursor), Some(conversation_cursor)) => {
             Some(CanonicalConversationProjectionV1 {
                 conversation_id: CommunicationConversationIdV1::new(identifier(
-                    b"hermes.communications.conversation.v1\0",
+                    b"makosh.communications.conversation.v1\0",
                     &[&account_cursor.bytes(), &conversation_cursor.bytes()],
                 )),
                 account_cursor,
@@ -232,7 +232,7 @@ pub fn canonicalize_communication(
                 .ok_or(CommunicationsDomainError::MissingMessageScope)?;
             Some(CanonicalMessageProjectionV1 {
                 message_id: CommunicationMessageIdV1::new(identifier(
-                    b"hermes.communications.message.v1\0",
+                    b"makosh.communications.message.v1\0",
                     &[&summary.source_cursor.bytes()],
                 )),
                 conversation_id: conversation.conversation_id,
@@ -251,7 +251,7 @@ pub fn canonicalize_communication(
                 .as_ref()
                 .map(|conversation| CanonicalMessageProjectionV1 {
                     message_id: CommunicationMessageIdV1::new(identifier(
-                        b"hermes.communications.message.v1\0",
+                        b"makosh.communications.message.v1\0",
                         &[&summary.source_cursor.bytes()],
                     )),
                     conversation_id: conversation.conversation_id,
@@ -267,7 +267,7 @@ pub fn canonicalize_communication(
                 .as_ref()
                 .map(|conversation| CanonicalMessageProjectionV1 {
                     message_id: CommunicationMessageIdV1::new(identifier(
-                        b"hermes.communications.message.v1\0",
+                        b"makosh.communications.message.v1\0",
                         &[&summary.source_cursor.bytes()],
                     )),
                     conversation_id: conversation.conversation_id,
@@ -290,13 +290,13 @@ pub fn canonicalize_communication(
                 .filter(|message| message.direction == CommunicationDirectionV1::Incoming)
                 .map(|_| {
                     CommunicationSenderIdV1::new(identifier(
-                        b"hermes.communications.sender.v1\0",
+                        b"makosh.communications.sender.v1\0",
                         &[&participant_cursor.bytes()],
                     ))
                 });
             Some(CanonicalObservedParticipantProjectionV1 {
                 participant_id: CommunicationParticipantIdV1::new(identifier(
-                    b"hermes.communications.participant.v1\0",
+                    b"makosh.communications.participant.v1\0",
                     &[
                         &conversation.conversation_id.bytes(),
                         &participant_cursor.bytes(),
@@ -314,7 +314,7 @@ pub fn canonicalize_communication(
     let attachment_anchor = match (&message, summary.media_cursor) {
         (Some(message), Some(media_cursor)) => Some(CanonicalAttachmentAnchorProjectionV1 {
             attachment_anchor_id: CommunicationAttachmentAnchorIdV1::new(identifier(
-                b"hermes.communications.attachment-anchor.v1\0",
+                b"makosh.communications.attachment-anchor.v1\0",
                 &[&message.message_id.bytes(), &media_cursor.bytes()],
             )),
             message_id: message.message_id,
@@ -393,7 +393,7 @@ pub fn convert_client_query_error(error: CommunicationsDomainError) -> Communica
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_communications_api::{
+    use makosh_communications_api::{
         CommunicationBodyStateV1, CommunicationDirectionV1, CommunicationProviderProvenanceV1,
         CommunicationSourceCursorV1,
     };

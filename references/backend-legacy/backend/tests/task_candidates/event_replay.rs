@@ -1,5 +1,5 @@
-use hermes_hub_backend::application::review_transitions::TaskCandidateReviewApplicationService;
-use hermes_hub_backend::domains::tasks::candidates::models::TaskCandidateReviewState;
+use makosh_hub_backend::application::review_transitions::TaskCandidateReviewApplicationService;
+use makosh_hub_backend::domains::tasks::candidates::models::TaskCandidateReviewState;
 
 use super::support::{
     build_review_event, live_task_candidate_context, seed_message, unique_suffix,

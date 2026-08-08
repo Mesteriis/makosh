@@ -81,7 +81,7 @@
 	--h-shadow-lg: 0 28px 92px rgba(0, 0, 0, 0.42);
 }
 
-[data-ui-theme='hermes-light'] {
+[data-ui-theme='makosh-light'] {
 	color-scheme: light;
 	--h-color-bg: #f4fbfa;
 	--h-color-bg-muted: #e8f4f2;
@@ -119,7 +119,7 @@
 	--h-shadow-lg: 0 30px 90px rgba(6, 31, 29, 0.18);
 }
 
-[data-ui-theme='hermes-dark'] {
+[data-ui-theme='makosh-dark'] {
 	color-scheme: dark;
 	--h-color-bg: #02090b;
 	--h-color-bg-muted: #041215;

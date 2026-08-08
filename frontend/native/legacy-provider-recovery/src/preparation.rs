@@ -612,7 +612,7 @@ impl PrivateOutputDirectoryV1 {
         let parent = output_root
             .parent()
             .ok_or(LegacyProviderRecoveryErrorV1::InvalidArguments)?;
-        let temporary_root = parent.join(format!(".hermes-recovery-{}", random_hex(8)?));
+        let temporary_root = parent.join(format!(".makosh-recovery-{}", random_hex(8)?));
         fs::create_dir(&temporary_root)
             .map_err(|_| LegacyProviderRecoveryErrorV1::IoUnavailable)?;
         set_private_permissions(&temporary_root, 0o700);

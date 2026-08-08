@@ -1,9 +1,9 @@
 //! Exact-byte relay for owner-local verdict outbox records.
 
-use hermes_attachment_security_persistence::{
+use makosh_attachment_security_persistence::{
     AttachmentSecurityPersistenceErrorV1, AttachmentSecurityPersistenceV1,
 };
-use hermes_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
+use makosh_events_jetstream::{RuntimeJetStreamConnection, RuntimePublishPermitV1};
 
 pub async fn relay_attachment_security_verdict_outbox_once_v1(
     persistence: &AttachmentSecurityPersistenceV1,

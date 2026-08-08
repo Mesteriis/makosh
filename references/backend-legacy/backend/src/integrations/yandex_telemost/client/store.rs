@@ -1,14 +1,14 @@
 use crate::platform::secrets::store::SecretReferenceStore;
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::{
     NewProviderAccountSecretBinding, ProviderAccountCommandPort, ProviderAccountSecretPurpose,
 };
-use hermes_communications_api::accounts::{ProviderAccount, ProviderSecretBindingCommandPort};
-use hermes_events_api::NewEventEnvelope;
-use hermes_provider_telemost::models::{
+use makosh_communications_api::accounts::{ProviderAccount, ProviderSecretBindingCommandPort};
+use makosh_events_api::NewEventEnvelope;
+use makosh_provider_telemost::models::{
     TelemostCohost, YandexTelemostCohostPage, YandexTelemostConference,
     YandexTelemostConferencePatchRequest, YandexTelemostConferenceRequest,
 };
-use hermes_provider_telemost::protocol::{
+use makosh_provider_telemost::protocol::{
     YANDEX_TELEMOST_API_BASE_URL, YANDEX_TELEMOST_PROVIDER_KIND_STR,
     sanitize_yandex_telemost_payload, validate_api_base_url, validate_json_object,
     validate_required, yandex_telemost_oauth_token_secret_ref,
@@ -28,8 +28,8 @@ use crate::platform::events::bus::yandex_telemost_event_types;
 use crate::platform::secrets::models::{SecretKind, SecretStoreKind};
 use crate::platform::settings::store::ApplicationSettingsStore;
 use crate::vault::HostVault;
-use hermes_events_api::EventLogQuery;
-use hermes_events_postgres::store::EventStore;
+use makosh_events_api::EventLogQuery;
+use makosh_events_postgres::store::EventStore;
 
 use super::errors::YandexTelemostError;
 mod auth;

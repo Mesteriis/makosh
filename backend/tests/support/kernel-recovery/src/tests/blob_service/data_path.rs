@@ -2,7 +2,7 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobBackupClassV1, BlobDataOperationV1, BlobDataReadRangeRequestV1, BlobDataRequestV1,
     BlobDataSessionGrantV1, BlobDataWriteRequestV1, blob_data_request_v1::Operation,
 };
@@ -18,7 +18,7 @@ use crate::tests::platform_vault::live as vault_fixture;
 #[test]
 #[ignore = "builds and launches the real Blob and Vault runtime binaries"]
 fn managed_blob_writes_and_reads_through_the_live_vault_route() {
-    let root = unique_target_root("hermes-blob-data-path");
+    let root = unique_target_root("makosh-blob-data-path");
     let data = vault_fixture::private_directory(short_runtime_directory());
     let runtime = short_runtime_directory();
     vault_fixture::initialize_vault(&data);
@@ -159,7 +159,7 @@ fn signed_grant(
         blob_runtime_generation: blob_generation,
         expected_plaintext_sha256: expected_plaintext_sha256.map_or_else(Vec::new, |v| v.to_vec()),
     };
-    let mut message = b"hermes.blob-data-session.v1\0".to_vec();
+    let mut message = b"makosh.blob-data-session.v1\0".to_vec();
     message.extend_from_slice(&grant.encode_to_vec());
     grant.kernel_authorization_signature_raw = signer.sign(&message).to_vec();
     grant
@@ -177,13 +177,13 @@ struct BlobCallerIdentityV1<'a> {
 fn exchange(
     socket: &std::path::Path,
     request: BlobDataRequestV1,
-) -> Result<hermes_runtime_protocol::v1::BlobDataResponseV1, String> {
+) -> Result<makosh_runtime_protocol::v1::BlobDataResponseV1, String> {
     let mut stream = UnixStream::connect(socket).map_err(|error| error.to_string())?;
     stream
         .set_read_timeout(Some(Duration::from_secs(5)))
         .map_err(|error| error.to_string())?;
     write_frame(&mut stream, &request.encode_to_vec())?;
-    hermes_runtime_protocol::v1::BlobDataResponseV1::decode(read_frame(&mut stream)?.as_slice())
+    makosh_runtime_protocol::v1::BlobDataResponseV1::decode(read_frame(&mut stream)?.as_slice())
         .map_err(|error| error.to_string())
 }
 
@@ -198,7 +198,7 @@ fn failure(supervisor: &ManagedRuntimeSupervisor, error: String) -> ! {
     );
 }
 
-fn assert_denied(response: hermes_runtime_protocol::v1::BlobDataResponseV1) {
+fn assert_denied(response: makosh_runtime_protocol::v1::BlobDataResponseV1) {
     assert!(!response.accepted);
     assert_eq!(response.error_code, "data_request_denied");
 }
@@ -258,7 +258,7 @@ fn assert_cross_custody_read_denied(
 
 fn resign_grant(signer: &FileDeviceSigner, grant: &mut BlobDataSessionGrantV1) {
     grant.kernel_authorization_signature_raw.clear();
-    let mut message = b"hermes.blob-data-session.v1\0".to_vec();
+    let mut message = b"makosh.blob-data-session.v1\0".to_vec();
     message.extend_from_slice(&grant.encode_to_vec());
     grant.kernel_authorization_signature_raw = signer.sign(&message).to_vec();
 }

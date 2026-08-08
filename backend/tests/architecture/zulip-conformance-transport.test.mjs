@@ -28,7 +28,7 @@ test('Zulip loopback CA trust is compile-time conformance-only', async () => {
   }
   assert.match(
     runtimeManifest,
-    /conformance-test-support = \["hermes-zulip-http\/conformance-test-support"\]/,
+    /conformance-test-support = \["makosh-zulip-http\/conformance-test-support"\]/,
   );
   assert.match(
     wire,
@@ -47,10 +47,10 @@ test('Zulip loopback CA trust is compile-time conformance-only', async () => {
   );
   assert.match(
     launcher,
-    /HERMES_MANAGED_RUNTIME_CONFORMANCE_CA_CERT_FILE/,
+    /MAKOSH_MANAGED_RUNTIME_CONFORMANCE_CA_CERT_FILE/,
   );
   assert.match(
     harness,
-    /hermes-zulip-runtime\/conformance-test-support/,
+    /makosh-zulip-runtime\/conformance-test-support/,
   );
 });

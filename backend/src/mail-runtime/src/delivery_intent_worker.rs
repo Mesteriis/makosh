@@ -1,8 +1,8 @@
 //! Mail-owned delivery-intent execution lifecycle.
 
-use hermes_mail_api::MailDeliveryOutcomeV1;
-use hermes_mail_delivery_intent_contract::wire::MailDeliveryIntentRejectCodeV1;
-use hermes_mail_persistence::{
+use makosh_mail_api::MailDeliveryOutcomeV1;
+use makosh_mail_delivery_intent_contract::wire::MailDeliveryIntentRejectCodeV1;
+use makosh_mail_persistence::{
     ClaimedMailDeliveryIntentJobV1, MAIL_DELIVERY_INTENT_MAX_ATTEMPTS_V1,
     MailDeliveryIntentJobStateV1, MailDeliveryIntentStoreV1,
 };
@@ -312,7 +312,7 @@ fn result_context(
 
 fn worker_id(runtime_instance_id: &str, runtime_generation: u64) -> String {
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.mail.delivery-intent.worker.v1");
+    hasher.update(b"makosh.mail.delivery-intent.worker.v1");
     hasher.update(runtime_instance_id.as_bytes());
     hasher.update(runtime_generation.to_be_bytes());
     let digest: [u8; 32] = hasher.finalize().into();

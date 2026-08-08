@@ -1,6 +1,6 @@
 use crate::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
-use hermes_blob_api::{BlobReadError, BlobReadFuture, BlobReadPort, BlobRef};
-use hermes_communications_api::attachments::{
+use makosh_blob_api::{BlobReadError, BlobReadFuture, BlobReadPort, BlobRef};
+use makosh_communications_api::attachments::{
     AttachmentLookupPortFuture, AttachmentReference, CommunicationAttachmentLookupPort,
 };
 use std::collections::HashMap;
@@ -46,7 +46,7 @@ impl CommunicationAttachmentLookupPort for PostgresCommunicationAttachmentLookup
                     })
                 })
                 .map_err(|error| {
-                    hermes_communications_api::attachments::AttachmentLookupPortError(
+                    makosh_communications_api::attachments::AttachmentLookupPortError(
                         error.to_string(),
                     )
                 })
@@ -76,7 +76,7 @@ impl LocalBlobReadAdapter {
         account_id: impl Into<String>,
         path: impl Into<String>,
         expires_at: chrono::DateTime<chrono::Utc>,
-    ) -> Result<BlobRef, hermes_blob_api::BlobApiError> {
+    ) -> Result<BlobRef, makosh_blob_api::BlobApiError> {
         let token = uuid::Uuid::new_v4().to_string();
         self.capabilities
             .lock()

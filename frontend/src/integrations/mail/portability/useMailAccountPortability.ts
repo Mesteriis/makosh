@@ -1,5 +1,5 @@
 import { computed, ref, shallowRef } from 'vue'
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	MailAccountPortabilityWorkflowV1,
 	type MailAccountImportStateV1,
@@ -86,7 +86,7 @@ export function useMailAccountPortability(
 		))
 		const anchor = document.createElement('a')
 		anchor.href = blobUrl
-		anchor.download = `hermes-mail-${connectionId.value || 'account'}.json`
+		anchor.download = `makosh-mail-${connectionId.value || 'account'}.json`
 		anchor.click()
 		URL.revokeObjectURL(blobUrl)
 	}

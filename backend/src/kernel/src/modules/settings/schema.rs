@@ -1,13 +1,13 @@
 //! Verifies and persists the immutable SettingsSchema artifact for one module registration.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleRegistrationState, ModuleRegistryStore, SettingsApplyState, SettingsConfigurationTarget,
     SettingsConfigurationTargetInputV1, SettingsInitialSnapshot, SettingsRegistryStore,
     SettingsSchemaBinding, SettingsSchemaBindingInputV1, SettingsSchemaTargetSuccessor,
 };
-use hermes_kernel_control_store_sqlite::StoreError;
-use hermes_runtime_protocol::v1::{SettingsSchemaV1, SettingsSnapshotV1, SettingsValueEntryV1};
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_kernel_control_store_sqlite::StoreError;
+use makosh_runtime_protocol::v1::{SettingsSchemaV1, SettingsSnapshotV1, SettingsValueEntryV1};
+use makosh_runtime_protocol::validation::descriptor::{
     decode_descriptor_v1, decode_settings_schema_v1, decode_settings_snapshot_v1,
     settings_snapshot_is_complete_v1, validate_settings_snapshot_against_schema_v1,
 };
@@ -120,7 +120,7 @@ pub(crate) fn materialize_configuration_target<S>(
     registration_id: &str,
     configuration_instance_id: &str,
     created_operation_id: [u8; 16],
-) -> Result<hermes_kernel_control_store::SettingsConfigurationTarget, String>
+) -> Result<makosh_kernel_control_store::SettingsConfigurationTarget, String>
 where
     S: SettingsRegistryStore<Error = StoreError>,
 {
@@ -133,7 +133,7 @@ where
     if schema.definitions.is_empty()
         || schema.definitions.iter().any(|definition| {
             definition.target_scope
-                != hermes_runtime_protocol::v1::SettingTargetScopeV1::ConfigurationInstance as i32
+                != makosh_runtime_protocol::v1::SettingTargetScopeV1::ConfigurationInstance as i32
         })
     {
         return Err("settings schema does not admit configuration targets".to_owned());
@@ -410,8 +410,8 @@ where
 }
 
 fn validate_capability_bindings(
-    descriptor: &hermes_runtime_protocol::v1::ModuleDescriptorV1,
-    schema: &hermes_runtime_protocol::v1::SettingsSchemaV1,
+    descriptor: &makosh_runtime_protocol::v1::ModuleDescriptorV1,
+    schema: &makosh_runtime_protocol::v1::SettingsSchemaV1,
 ) -> Result<(), String> {
     for definition in &schema.definitions {
         if definition.capability_id.is_empty() {
@@ -449,7 +449,7 @@ fn validate_capability_bindings(
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::v1::{
+    use makosh_runtime_protocol::v1::{
         SettingApplyModeV1, SettingClientVisibilityV1, SettingDefinitionV1,
         SettingMutationAuthorityV1, SettingTargetScopeV1, SettingValueTypeV1, SettingValueV1,
         setting_value_v1::Value,

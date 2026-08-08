@@ -10,7 +10,7 @@ source "$SCRIPT_DIR/lib/env.sh"
 # shellcheck source=./lib/postgres.sh
 source "$SCRIPT_DIR/lib/postgres.sh"
 
-load_hermes_env
+load_makosh_env
 ensure_postgres_client_dependencies
 ensure_command pg_dump
 postgres_up
@@ -30,22 +30,22 @@ ensure_dir "$vault_target"
 ensure_dir "$mail_blobs_target"
 
 info "Creating PostgreSQL dump"
-PGPASSWORD="$HERMES_POSTGRES_PASSWORD" pg_dump \
+PGPASSWORD="$MAKOSH_POSTGRES_PASSWORD" pg_dump \
 	--host 127.0.0.1 \
-	--port "$HERMES_POSTGRES_PORT" \
-	--username "$HERMES_POSTGRES_USER" \
-	--dbname "$HERMES_POSTGRES_DB" \
+	--port "$MAKOSH_POSTGRES_PORT" \
+	--username "$MAKOSH_POSTGRES_USER" \
+	--dbname "$MAKOSH_POSTGRES_DB" \
 	--no-owner \
 	--no-privileges \
 	--file "$postgres_dump"
 
 vault_present=false
-if [ -d "$HERMES_HOST_VAULT_HOME" ]; then
+if [ -d "$MAKOSH_HOST_VAULT_HOME" ]; then
 	vault_present=true
-	info "Copying vault data from $HERMES_HOST_VAULT_HOME"
-	cp -R "$HERMES_HOST_VAULT_HOME"/. "$vault_target"/
+	info "Copying vault data from $MAKOSH_HOST_VAULT_HOME"
+	cp -R "$MAKOSH_HOST_VAULT_HOME"/. "$vault_target"/
 else
-	warn "Vault directory does not exist yet: $HERMES_HOST_VAULT_HOME"
+	warn "Vault directory does not exist yet: $MAKOSH_HOST_VAULT_HOME"
 fi
 
 # PostgreSQL stores only metadata and references. Persist the content-addressed
@@ -73,14 +73,14 @@ cat >"$manifest_path" <<EOF
   "backup_dir": "$(json_escape "$backup_dir")",
   "git_revision": "$(json_escape "$git_revision")",
   "database": {
-    "name": "$(json_escape "$HERMES_POSTGRES_DB")",
-    "user": "$(json_escape "$HERMES_POSTGRES_USER")",
+    "name": "$(json_escape "$MAKOSH_POSTGRES_DB")",
+    "user": "$(json_escape "$MAKOSH_POSTGRES_USER")",
     "host": "127.0.0.1",
-    "port": $HERMES_POSTGRES_PORT,
+    "port": $MAKOSH_POSTGRES_PORT,
     "dump_file": "postgres.sql"
   },
   "vault": {
-    "source_path": "$(json_escape "$HERMES_HOST_VAULT_HOME")",
+    "source_path": "$(json_escape "$MAKOSH_HOST_VAULT_HOME")",
     "relative_path": "vault",
     "present": $vault_present
   },
@@ -95,10 +95,10 @@ cat >"$manifest_path" <<EOF
 EOF
 
 cat >"$notes_path" <<EOF
-Hermes backup created at $(now_utc)
+Макошь backup created at $(now_utc)
 
 Contents:
-- postgres.sql: logical PostgreSQL dump for $HERMES_POSTGRES_DB
+- postgres.sql: logical PostgreSQL dump for $MAKOSH_POSTGRES_DB
 - vault/: host vault data snapshot
 - mail-blobs/: content-addressed mail message and attachment blobs
 - mail-blobs.sha256: SHA-256 and byte-size inventory for mail blobs

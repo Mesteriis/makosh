@@ -77,7 +77,7 @@ generated_by: code-wiki-ru
 Внутренние функции:
 
 - `send_smtp_after_greeting` – выполняет полный SMTP-диалог после получения приветствия сервера:
-  - `EHLO hermes-hub`
+  - `EHLO makosh`
   - `AUTH LOGIN`, передача base64-закодированных имени пользователя и пароля.
   - `MAIL FROM:<...>`
   - `RCPT TO:<...>` для каждого получателя (`to`, `cc`, `bcc`); адреса, принятые с кодом 250, записываются в `accepted_recipients`.
@@ -88,7 +88,7 @@ generated_by: code-wiki-ru
   - Заголовки `From`, `To`, `Cc`, `In-Reply-To`, `References`, `Date`, `Subject`, `MIME-Version: 1.0`.
   - Если `body_html` непустое: `Content-Type: multipart/alternative` с текстовой и HTML-частями.
   - Иначе: `Content-Type: text/plain; charset=utf-8`.
-  - Граница multipart генерируется через SHA-256 от ключевых полей письма (префикс `hermes-alt-`).
+  - Граница multipart генерируется через SHA-256 от ключевых полей письма (префикс `makosh-alt-`).
 - `base64` – кодирование в base64 (standard engine).
 
 Тесты (в том же файле):

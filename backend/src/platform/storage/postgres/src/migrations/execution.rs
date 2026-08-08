@@ -1,7 +1,7 @@
 //! Per-step DDL and canonical ledger commits share one transaction.
 
-use hermes_storage_migrations::admit_storage_bundle;
-use hermes_storage_protocol::v1::StorageBundleV1;
+use makosh_storage_migrations::admit_storage_bundle;
+use makosh_storage_protocol::v1::StorageBundleV1;
 use sqlx::{AssertSqlSafe, query, query_as, raw_sql};
 
 use crate::{
@@ -16,7 +16,7 @@ pub async fn apply_storage_bundle(
 ) -> Result<(), PostgresAdapterErrorV1> {
     admit_storage_bundle(bundle).map_err(|error| {
         let digest = match error {
-            hermes_storage_migrations::MigrationBundleAdmissionErrorV1::Step {
+            makosh_storage_migrations::MigrationBundleAdmissionErrorV1::Step {
                 revision, ..
             } => bundle
                 .steps
@@ -52,7 +52,7 @@ async fn apply_step(
     connector: &PostgresAdminConnectorV1,
     roles: &StorageRoleSpecV1,
     bundle: &StorageBundleV1,
-    step: &hermes_storage_protocol::v1::StorageMigrationStepV1,
+    step: &makosh_storage_protocol::v1::StorageMigrationStepV1,
 ) -> Result<(), PostgresAdapterErrorV1> {
     let mut transaction = connector.pool().begin().await.map_err(|_| {
         eprintln!("developer_storage_migration_failure=transaction_begin");
@@ -139,10 +139,10 @@ fn classify_recorded_step_lineage(
 async fn read_recorded_steps(
     transaction: &mut sqlx::Transaction<'_, sqlx::Postgres>,
     bundle: &StorageBundleV1,
-    step: &hermes_storage_protocol::v1::StorageMigrationStepV1,
+    step: &makosh_storage_protocol::v1::StorageMigrationStepV1,
 ) -> Result<Vec<(i32, Vec<u8>)>, PostgresAdapterErrorV1> {
     query_as::<_, (i32, Vec<u8>)>(
-        "SELECT bundle_revision, step_digest FROM hermes_platform.storage_migration_ledger WHERE owner_id = $1 AND step_revision = $2 ORDER BY bundle_revision",
+        "SELECT bundle_revision, step_digest FROM makosh_platform.storage_migration_ledger WHERE owner_id = $1 AND step_revision = $2 ORDER BY bundle_revision",
     )
     .bind(&bundle.owner_id)
     .bind(postgres_revision(step.revision)?)
@@ -154,7 +154,7 @@ async fn read_recorded_steps(
 async fn execute_step_as_owner(
     transaction: &mut sqlx::Transaction<'_, sqlx::Postgres>,
     roles: &StorageRoleSpecV1,
-    step: &hermes_storage_protocol::v1::StorageMigrationStepV1,
+    step: &makosh_storage_protocol::v1::StorageMigrationStepV1,
 ) -> Result<(), PostgresAdapterErrorV1> {
     let set_role = format!("SET LOCAL ROLE {}", roles.ddl_owner());
     query(AssertSqlSafe(set_role))
@@ -177,9 +177,9 @@ async fn execute_step_as_owner(
 async fn record_step(
     transaction: &mut sqlx::Transaction<'_, sqlx::Postgres>,
     bundle: &StorageBundleV1,
-    step: &hermes_storage_protocol::v1::StorageMigrationStepV1,
+    step: &makosh_storage_protocol::v1::StorageMigrationStepV1,
 ) -> Result<(), PostgresAdapterErrorV1> {
-    query("INSERT INTO hermes_platform.storage_migration_ledger (owner_id, bundle_revision, step_revision, step_digest) VALUES ($1, $2, $3, $4)")
+    query("INSERT INTO makosh_platform.storage_migration_ledger (owner_id, bundle_revision, step_revision, step_digest) VALUES ($1, $2, $3, $4)")
         .bind(&bundle.owner_id)
         .bind(postgres_revision(bundle.revision)?)
         .bind(postgres_revision(step.revision)?)

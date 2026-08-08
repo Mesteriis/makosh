@@ -1,7 +1,7 @@
 //! Private managed-runtime request framing for opaque Events credentials.
 
 use crate::runtime::lifecycle::control::ManagedRuntimeEventCredentialHandler;
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedRuntimeEventCredentialDeliveryV1, ManagedRuntimeEventCredentialRequestV1,
     managed_runtime_control_request_v1::Operation as RequestOperation,
     managed_runtime_control_response_v1::Result as ResponseResult,
@@ -173,7 +173,7 @@ fn credential_child_fixture() -> (
     staged_native_artifact::StagedNativeArtifact,
     ManagedRuntimeExpectation,
 ) {
-    let root = unique_target_root("hermes-managed-event-credential");
+    let root = unique_target_root("makosh-managed-event-credential");
     let descriptor = ModuleDescriptorV1 {
         descriptor_major: 1,
         descriptor_revision: 1,

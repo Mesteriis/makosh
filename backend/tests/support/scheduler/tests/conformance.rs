@@ -1,18 +1,18 @@
-use hermes_clock_protocol::{TimeZoneContextV1, UtcMillisV1};
-use hermes_clock_runtime::DeterministicClockV1;
-use hermes_scheduler::{
+use makosh_clock_protocol::{TimeZoneContextV1, UtcMillisV1};
+use makosh_clock_runtime::DeterministicClockV1;
+use makosh_scheduler::{
     DueOverlapDecisionV1, ScheduleCatalogErrorV1, ScheduleCatalogV1, ScheduleContinuationV1,
     ScheduleLeaseStateV1, SchedulePlanErrorV1, ScheduleReconcileOutcomeV1, decide_due_overlap,
     plan_due,
 };
-use hermes_scheduler_persistence::scheduler_storage_bundle_v1;
-use hermes_scheduler_protocol::{
+use makosh_scheduler_persistence::scheduler_storage_bundle_v1;
+use makosh_scheduler_protocol::{
     ConcurrencyKeyV1, JobContractBindingV1, JobKindV1, JobRunIdV1, MisfirePolicyV1,
     OpaqueScheduleScopeV1, OverlapPolicyV1, RetryPolicyV1, ScheduleErrorV1, ScheduleIdV1,
     SchedulePolicyV1, ScheduleRevisionV1, ScheduleRunLeaseV1, ScheduleSpecV1, ScheduleTriggerV1,
 };
-use hermes_storage_migrations::admit_storage_bundle;
-use hermes_storage_protocol::validation::validate_storage_bundle;
+use makosh_storage_migrations::admit_storage_bundle;
+use makosh_storage_protocol::validation::validate_storage_bundle;
 
 #[test]
 fn job_contract_binding_rejects_unversioned_names_and_empty_schema_identity() {
@@ -195,12 +195,12 @@ fn scheduler_bundle_has_owner_scoped_schedule_and_run_schema() {
     validate_storage_bundle(&bundle).expect("structural bundle validation");
     admit_storage_bundle(&bundle).expect("PostgreSQL AST admission");
     let sql = std::str::from_utf8(&bundle.steps[0].forward_sql_utf8).expect("SQL");
-    assert!(sql.contains("hermes_platform.scheduler_schedules"));
-    assert!(sql.contains("hermes_platform.scheduler_runs"));
-    assert!(sql.contains("hermes_platform.scheduler_concurrency"));
+    assert!(sql.contains("makosh_platform.scheduler_schedules"));
+    assert!(sql.contains("makosh_platform.scheduler_runs"));
+    assert!(sql.contains("makosh_platform.scheduler_concurrency"));
     assert!(bundle.steps.iter().any(|step| {
         std::str::from_utf8(&step.forward_sql_utf8)
-            .is_ok_and(|sql| sql.contains("hermes_platform.scheduler_pending_fires"))
+            .is_ok_and(|sql| sql.contains("makosh_platform.scheduler_pending_fires"))
     }));
     assert!(sql.contains("concurrency_key TEXT NOT NULL"));
     assert!(sql.contains("fire_key BYTEA NOT NULL UNIQUE"));

@@ -1,4 +1,4 @@
-use hermes_attachment_archive_inspection_api::{
+use makosh_attachment_archive_inspection_api::{
     ATTACHMENT_ARCHIVE_INSPECTION_CONTRACT_MAJOR_V1, ATTACHMENT_ARCHIVE_INSPECTION_MODULE_ID_V1,
     ATTACHMENT_ARCHIVE_INSPECTION_OWNER_V1,
     wire::{
@@ -9,16 +9,16 @@ use hermes_attachment_archive_inspection_api::{
         StartArchiveInspectionRequestV1, StartArchiveInspectionResponseV1,
     },
 };
-use hermes_attachment_archive_inspection_core::{
+use makosh_attachment_archive_inspection_core::{
     ArchiveEntryKindV1, ArchiveInspectionErrorV1, ArchiveInspectionReportV1,
     ArchiveInspectionStateV1,
 };
-use hermes_attachment_archive_inspection_persistence::{
+use makosh_attachment_archive_inspection_persistence::{
     ArchiveInspectionPersistenceErrorV1, AttachmentArchiveInspectionPersistenceV1,
     CreateArchiveInspectionRunOutcomeV1, CreateArchiveInspectionRunV1,
     PersistedArchiveInspectionRunV1,
 };
-use hermes_runtime_protocol::v1::{ModuleClientRequestV1, ModuleClientResponseV1};
+use makosh_runtime_protocol::v1::{ModuleClientRequestV1, ModuleClientResponseV1};
 use prost::Message;
 
 use crate::contracts::{
@@ -261,7 +261,7 @@ mod tests {
             entry_count: 1,
             total_uncompressed_bytes: 3,
             entries: vec![
-                hermes_attachment_archive_inspection_core::ArchiveEntryInspectionV1 {
+                makosh_attachment_archive_inspection_core::ArchiveEntryInspectionV1 {
                     normalized_path: "folder/file.txt".to_owned(),
                     compressed_size: 2,
                     uncompressed_size: 3,

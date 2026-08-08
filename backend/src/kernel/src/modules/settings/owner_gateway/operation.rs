@@ -2,15 +2,15 @@
 
 use std::path::Path;
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     ApplyOwnerManagedIntegrationSettingsReceiptV1, ApplyOwnerManagedIntegrationSettingsV1,
     ApplyOwnerManagedWorkflowSettingsReceiptV1, ApplyOwnerManagedWorkflowSettingsV1,
     CommitOwnerModuleSettingsResponseV1, UpdateOwnerModuleSettingsReceiptV1,
     UpdateOwnerModuleSettingsV1, commit_owner_module_settings_response_v1,
 };
-use hermes_gateway_runtime::OwnerModuleSettingsRouteErrorV1;
-use hermes_kernel_control_store::SettingsApplyState;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_gateway_runtime::OwnerModuleSettingsRouteErrorV1;
+use makosh_kernel_control_store::SettingsApplyState;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use prost::Message;
 
 use super::values::canonical_snapshot;

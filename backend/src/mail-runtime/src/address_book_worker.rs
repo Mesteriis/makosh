@@ -1,6 +1,6 @@
 //! Mail-owned provider execution for accepted address-book upserts.
 
-use hermes_mail_address_book_contract::{
+use makosh_mail_address_book_contract::{
     MailAddressBookResultEnvelopeContextV1,
     build_mail_address_book_entry_upsert_rejected_result_v1,
     build_mail_address_book_entry_upserted_result_v1,
@@ -9,12 +9,12 @@ use hermes_mail_address_book_contract::{
         MailAddressBookRejectCodeV1,
     },
 };
-use hermes_mail_address_book_persistence::{
+use makosh_mail_address_book_persistence::{
     MailAddressBookDispatchOutcomeV1, MailAddressBookPersistenceErrorV1,
     MailAddressBookPersistenceV1, PendingMailAddressBookUpsertV1,
 };
-use hermes_mail_api::{MailAddressBookProviderV1, MailInboundTransportV1};
-use hermes_mail_google_people::{GooglePeopleAdapterErrorV1, GooglePeopleUpsertV1};
+use makosh_mail_api::{MailAddressBookProviderV1, MailInboundTransportV1};
+use makosh_mail_google_people::{GooglePeopleAdapterErrorV1, GooglePeopleUpsertV1};
 
 use crate::{
     address_book_provider::google_people_client_v1,
@@ -245,7 +245,7 @@ pub async fn process_next_mail_address_book_upsert_v1(
                     provider_entry_id: upserted.resource_name,
                     provider_etag: upserted.etag,
                     applied_contact_revision: job.admission.expected_contact_revision,
-                    provider_kind: hermes_mail_address_book_contract::wire::MailAddressBookProviderKindV1::MailAddressBookProviderKindGooglePeople as i32,
+                    provider_kind: makosh_mail_address_book_contract::wire::MailAddressBookProviderKindV1::MailAddressBookProviderKindGooglePeople as i32,
                 },
                 &result_context(runtime, &job, now_unix_seconds),
             )

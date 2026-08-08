@@ -1,21 +1,21 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyReleaseRequestV1, ManagedBlobCustodyTargetV1,
     ManagedBlobCustodyTransferRequestV1, ManagedBlobSessionRequestV1,
     request_managed_blob_custody_release_v2, request_managed_blob_custody_transfer_v2,
     request_managed_blob_session_v2,
 };
-use hermes_knowledge_command_api::{
+use makosh_knowledge_command_api::{
     KNOWLEDGE_MODULE_ID_V1, KNOWLEDGE_OWNER_ID_V1,
     KNOWLEDGE_REVIEWED_CANDIDATE_BLOB_CAPABILITY_ID_V1,
     KNOWLEDGE_REVIEWED_CANDIDATE_MAX_BLOB_BYTES_V1,
     KNOWLEDGE_REVIEWED_CANDIDATE_MAX_PROOF_BYTES_V1,
     wire::{KnowledgeTargetBoundCandidateReceiptV1, ReviewedKnowledgeNoteContentV1},
 };
-use hermes_review_note_candidate_api::wire::ReviewNoteCandidateContentV1;
-use hermes_reviewed_note_candidate_promotion_persistence::PromotionBlobReceiptV1;
-use hermes_runtime_protocol::{
+use makosh_review_note_candidate_api::wire::ReviewNoteCandidateContentV1;
+use makosh_reviewed_note_candidate_promotion_persistence::PromotionBlobReceiptV1;
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{BlobCustodyReleaseReasonV1, BlobDataOperationV1},
 };
@@ -234,7 +234,7 @@ fn validate_receipt(source: &PromotionBlobReceiptV1) -> Result<(), PromotionBlob
 
 fn knowledge_reference_id(command_id: [u8; 16], sha256: [u8; 32]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.reviewed-note-candidate-promotion.knowledge-blob.v1\0");
+    digest.update(b"makosh.reviewed-note-candidate-promotion.knowledge-blob.v1\0");
     digest.update(command_id);
     digest.update(sha256);
     digest.finalize()[..16].try_into().expect("digest prefix")
@@ -242,7 +242,7 @@ fn knowledge_reference_id(command_id: [u8; 16], sha256: [u8; 32]) -> [u8; 16] {
 
 fn release_operation_id(approval_message_id: [u8; 16]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.reviewed-note-candidate-promotion.release-source.v1\0");
+    digest.update(b"makosh.reviewed-note-candidate-promotion.release-source.v1\0");
     digest.update(approval_message_id);
     digest.finalize()[..16].try_into().expect("digest prefix")
 }

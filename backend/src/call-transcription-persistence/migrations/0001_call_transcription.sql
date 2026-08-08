@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.call_transcription_runs (
+CREATE TABLE makosh_data.call_transcription_runs (
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
     operation_id BYTEA NOT NULL,
@@ -128,9 +128,9 @@ CREATE TABLE hermes_data.call_transcription_runs (
 );
 
 CREATE INDEX call_transcription_runs_recovery_idx
-ON hermes_data.call_transcription_runs (logical_owner_id, state, state_revision);
+ON makosh_data.call_transcription_runs (logical_owner_id, state, state_revision);
 
-CREATE TABLE hermes_data.call_transcription_inbox (
+CREATE TABLE makosh_data.call_transcription_inbox (
     logical_owner_id TEXT NOT NULL,
     message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -144,7 +144,7 @@ CREATE TABLE hermes_data.call_transcription_inbox (
     CHECK (processed_at_unix_millis > 0)
 );
 
-CREATE TABLE hermes_data.call_transcription_jobs (
+CREATE TABLE makosh_data.call_transcription_jobs (
     logical_owner_id TEXT NOT NULL,
     job_id BYTEA NOT NULL,
     run_id BYTEA NOT NULL,
@@ -189,9 +189,9 @@ CREATE TABLE hermes_data.call_transcription_jobs (
 );
 
 CREATE INDEX call_transcription_jobs_claim_idx
-ON hermes_data.call_transcription_jobs (logical_owner_id, state, created_at_unix_millis, job_id);
+ON makosh_data.call_transcription_jobs (logical_owner_id, state, created_at_unix_millis, job_id);
 
-CREATE TABLE hermes_data.call_transcription_outbox (
+CREATE TABLE makosh_data.call_transcription_outbox (
     logical_owner_id TEXT NOT NULL,
     message_id BYTEA NOT NULL,
     envelope_sha256 BYTEA NOT NULL,
@@ -209,10 +209,10 @@ CREATE TABLE hermes_data.call_transcription_outbox (
 );
 
 CREATE INDEX call_transcription_outbox_pending_idx
-ON hermes_data.call_transcription_outbox (logical_owner_id, created_at_unix_millis, message_id)
+ON makosh_data.call_transcription_outbox (logical_owner_id, created_at_unix_millis, message_id)
 WHERE published_at_unix_millis IS NULL;
 
-CREATE TABLE hermes_data.call_transcription_realtime (
+CREATE TABLE makosh_data.call_transcription_realtime (
     realtime_sequence BIGSERIAL PRIMARY KEY,
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
@@ -229,9 +229,9 @@ CREATE TABLE hermes_data.call_transcription_realtime (
 );
 
 CREATE INDEX call_transcription_realtime_owner_idx
-ON hermes_data.call_transcription_realtime (logical_owner_id, realtime_sequence);
+ON makosh_data.call_transcription_realtime (logical_owner_id, realtime_sequence);
 
-CREATE TABLE hermes_data.call_transcription_read_tickets (
+CREATE TABLE makosh_data.call_transcription_read_tickets (
     logical_owner_id TEXT NOT NULL,
     ticket_sha256 BYTEA NOT NULL,
     device_actor_sha256 BYTEA NOT NULL,
@@ -264,4 +264,4 @@ CREATE TABLE hermes_data.call_transcription_read_tickets (
 );
 
 CREATE INDEX call_transcription_read_tickets_expiry_idx
-ON hermes_data.call_transcription_read_tickets (logical_owner_id, expires_at_unix_seconds);
+ON makosh_data.call_transcription_read_tickets (logical_owner_id, expires_at_unix_seconds);

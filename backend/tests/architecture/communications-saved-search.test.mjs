@@ -10,7 +10,7 @@ const paths = {
   policy: new URL('architecture/policy.json', BACKEND_ROOT),
   manifest: new URL('src/communications-saved-query-api/Cargo.toml', BACKEND_ROOT),
   proto: new URL(
-    'src/communications-saved-query-api/proto/hermes/communications/saved_search/v1/saved_search.proto',
+    'src/communications-saved-query-api/proto/makosh/communications/saved_search/v1/saved_search.proto',
     BACKEND_ROOT,
   ),
   migration: new URL(
@@ -66,7 +66,7 @@ test('saved search is one exact Communications build-unit capability', async () 
     'communications.saved-search.v1',
   ));
   assert.match(adr, /Состояние реализации: implemented/);
-  assert.match(manifest, /name = "hermes-communications-saved-query-api"/);
+  assert.match(manifest, /name = "makosh-communications-saved-query-api"/);
   assert.match(manifest, /role = "domain"[\s\S]*owner = "communications"/);
   assert.match(proto, /service CommunicationsSavedSearchService/);
   assert.match(proto, /oneof operation/);

@@ -2,7 +2,7 @@
 
 use std::collections::{HashMap, HashSet};
 
-use hermes_telegram_api::{
+use makosh_telegram_api::{
     TelegramAccount, TelegramAccountId, TelegramAttachmentProjection, TelegramChat,
     TelegramChatAvatar, TelegramChatFolder, TelegramChatOperationalState, TelegramChatPosition,
     TelegramChatStateProjection, TelegramCommandRecord, TelegramCredentialBinding,
@@ -652,11 +652,11 @@ impl TelegramRuntimeProjectionCache {
         file: &TelegramFileSnapshot,
     ) -> usize {
         let state = if file.is_downloaded {
-            hermes_telegram_api::TelegramAttachmentDownloadState::Downloaded
+            makosh_telegram_api::TelegramAttachmentDownloadState::Downloaded
         } else if file.is_downloading {
-            hermes_telegram_api::TelegramAttachmentDownloadState::Downloading
+            makosh_telegram_api::TelegramAttachmentDownloadState::Downloading
         } else {
-            hermes_telegram_api::TelegramAttachmentDownloadState::Pending
+            makosh_telegram_api::TelegramAttachmentDownloadState::Pending
         };
         let mut updated = 0;
         for attachment in self.attachments.values_mut().filter(|attachment| {
@@ -723,7 +723,7 @@ impl TelegramRuntimeProjectionCache {
     }
 
     pub fn put_command(&mut self, command: TelegramProviderCommand) {
-        let operation_id = hermes_telegram_api::provider_command_operation_id(&command).to_owned();
+        let operation_id = makosh_telegram_api::provider_command_operation_id(&command).to_owned();
         self.commands.insert(operation_id, command);
     }
 
@@ -856,7 +856,7 @@ impl TelegramRuntimeProjectionCache {
         self.files.get(&format!("{account_id}:{provider_file_id}"))
     }
 
-    pub fn put_participants(&mut self, page: &hermes_telegram_api::TelegramParticipantPage) {
+    pub fn put_participants(&mut self, page: &makosh_telegram_api::TelegramParticipantPage) {
         self.participants.insert(
             format!(
                 "{}:{}:{:?}",
@@ -871,7 +871,7 @@ impl TelegramRuntimeProjectionCache {
             "{}:{}:{:?}",
             participant.account_id,
             participant.provider_chat_id,
-            hermes_telegram_api::TelegramParticipantFilter::Recent
+            makosh_telegram_api::TelegramParticipantFilter::Recent
         );
         let items = self.participants.entry(key).or_default();
         if let Some(existing) = items
@@ -915,7 +915,7 @@ mod tests {
     #[test]
     fn realtime_frames_are_replayable_after_provider_sequence() {
         let mut persistence = TelegramRuntimeProjectionCache::new();
-        let event = hermes_telegram_api::TelegramProviderEvent::ChatMarkedUnreadChanged {
+        let event = makosh_telegram_api::TelegramProviderEvent::ChatMarkedUnreadChanged {
             account_id: "account".to_owned(),
             provider_chat_id: "100".to_owned(),
             is_marked_as_unread: true,
@@ -966,7 +966,7 @@ mod tests {
             provider_chat_id: "100".to_owned(),
             provider_message_id: "200".to_owned(),
             provider_file_id: "300".to_owned(),
-            state: hermes_telegram_api::TelegramAttachmentDownloadState::Pending,
+            state: makosh_telegram_api::TelegramAttachmentDownloadState::Pending,
             size_bytes: None,
             filename: Some("report.pdf".to_owned()),
             content_type: None,
@@ -978,7 +978,7 @@ mod tests {
                 account_id: "account".to_owned(),
                 provider_file_id: "300".to_owned(),
                 provider_unique_id: None,
-                media_kind: Some(hermes_telegram_api::TelegramMediaKind::Document),
+                media_kind: Some(makosh_telegram_api::TelegramMediaKind::Document),
                 size_bytes: Some(42),
                 expected_size_bytes: Some(42),
                 downloaded_size_bytes: Some(42),
@@ -991,7 +991,7 @@ mod tests {
             persistence
                 .attachment("attachment-1")
                 .map(|attachment| attachment.state),
-            Some(hermes_telegram_api::TelegramAttachmentDownloadState::Downloaded)
+            Some(makosh_telegram_api::TelegramAttachmentDownloadState::Downloaded)
         );
         assert_eq!(
             persistence
@@ -1006,7 +1006,7 @@ mod tests {
         let mut persistence = TelegramRuntimeProjectionCache::new();
         persistence.replace_reactions(
             "telegram:account:chat:message",
-            vec![hermes_telegram_api::TelegramReactionObservation {
+            vec![makosh_telegram_api::TelegramReactionObservation {
                 sender_id: "user-1".to_owned(),
                 emoji: ":thumbsup:".to_owned(),
                 is_outgoing: false,

@@ -1,6 +1,6 @@
 //! Mail-owned drafts, templates and signatures with optimistic concurrency.
 
-use hermes_mail_api::{
+use makosh_mail_api::{
     composition::{
         MailCompositionCommandV1, MailCompositionEntityKindV1, MailCompositionModeV1,
         MailCompositionMutationReceiptV1, MailCompositionPageV1, MailCompositionQueryResponseV1,
@@ -18,7 +18,7 @@ use sqlx::{PgPool, Postgres, Row, Transaction, postgres::PgRow};
 use crate::MailDurablePersistence;
 
 pub const MAIL_SCHEMA_V11: &str = r#"
-CREATE TABLE IF NOT EXISTS hermes_data.mail_composition_commands (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_composition_commands (
     operation_id TEXT PRIMARY KEY,
     connection_id TEXT NOT NULL,
     request_sha256 BYTEA NOT NULL CHECK (octet_length(request_sha256) = 32),
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_composition_commands (
     completed_at_unix_seconds BIGINT
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.mail_drafts (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_drafts (
     sequence BIGSERIAL UNIQUE NOT NULL,
     connection_id TEXT NOT NULL,
     draft_id TEXT NOT NULL,
@@ -50,13 +50,13 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_drafts (
 );
 
 CREATE INDEX IF NOT EXISTS mail_drafts_connection_updated_idx
-ON hermes_data.mail_drafts (
+ON makosh_data.mail_drafts (
     connection_id,
     updated_at_unix_seconds DESC,
     sequence DESC
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.mail_templates (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_templates (
     sequence BIGSERIAL UNIQUE NOT NULL,
     connection_id TEXT NOT NULL,
     template_id TEXT NOT NULL,
@@ -72,13 +72,13 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_templates (
 );
 
 CREATE INDEX IF NOT EXISTS mail_templates_connection_updated_idx
-ON hermes_data.mail_templates (
+ON makosh_data.mail_templates (
     connection_id,
     updated_at_unix_seconds DESC,
     sequence DESC
 );
 
-CREATE TABLE IF NOT EXISTS hermes_data.mail_signatures (
+CREATE TABLE IF NOT EXISTS makosh_data.mail_signatures (
     sequence BIGSERIAL UNIQUE NOT NULL,
     connection_id TEXT NOT NULL,
     signature_id TEXT NOT NULL,
@@ -92,11 +92,11 @@ CREATE TABLE IF NOT EXISTS hermes_data.mail_signatures (
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS mail_signatures_one_default_idx
-ON hermes_data.mail_signatures (connection_id)
+ON makosh_data.mail_signatures (connection_id)
 WHERE is_default;
 
 CREATE INDEX IF NOT EXISTS mail_signatures_connection_updated_idx
-ON hermes_data.mail_signatures (
+ON makosh_data.mail_signatures (
     connection_id,
     updated_at_unix_seconds DESC,
     sequence DESC
@@ -138,7 +138,7 @@ impl MailDurablePersistence {
             .map_err(|_| MailCompositionPersistenceErrorV1::Database)?;
         let inserted = sqlx::query(
             r#"
-            INSERT INTO hermes_data.mail_composition_commands (
+            INSERT INTO makosh_data.mail_composition_commands (
                 operation_id,
                 connection_id,
                 request_sha256,
@@ -276,7 +276,7 @@ impl MailDurablePersistence {
             .map_err(|_| MailCompositionPersistenceErrorV1::InvalidRow)?;
         sqlx::query(
             r#"
-            UPDATE hermes_data.mail_composition_commands
+            UPDATE makosh_data.mail_composition_commands
             SET entity_revision = $2,
                 deleted = $3,
                 completed_at_unix_seconds = $4
@@ -413,7 +413,7 @@ async fn existing_receipt(
                entity_id,
                entity_revision,
                deleted
-        FROM hermes_data.mail_composition_commands
+        FROM makosh_data.mail_composition_commands
         WHERE operation_id = $1
         "#,
     )
@@ -452,7 +452,7 @@ async fn upsert_draft(
     let row = if let Some(expected_revision) = expected_revision {
         sqlx::query(
             r#"
-            UPDATE hermes_data.mail_drafts
+            UPDATE makosh_data.mail_drafts
             SET revision = revision + 1,
                 mode = $4,
                 provider_conversation_id = $5,
@@ -492,7 +492,7 @@ async fn upsert_draft(
     } else {
         sqlx::query(
             r#"
-            INSERT INTO hermes_data.mail_drafts (
+            INSERT INTO makosh_data.mail_drafts (
                 connection_id,
                 draft_id,
                 revision,
@@ -552,7 +552,7 @@ async fn upsert_template(
     let row = if let Some(expected_revision) = expected_revision {
         sqlx::query(
             r#"
-            UPDATE hermes_data.mail_templates
+            UPDATE makosh_data.mail_templates
             SET revision = revision + 1,
                 name = $4,
                 subject_template = $5,
@@ -582,7 +582,7 @@ async fn upsert_template(
     } else {
         sqlx::query(
             r#"
-            INSERT INTO hermes_data.mail_templates (
+            INSERT INTO makosh_data.mail_templates (
                 connection_id,
                 template_id,
                 revision,
@@ -632,7 +632,7 @@ async fn upsert_signature(
     if signature.is_default {
         sqlx::query(
             r#"
-            UPDATE hermes_data.mail_signatures
+            UPDATE makosh_data.mail_signatures
             SET is_default = FALSE,
                 revision = revision + 1,
                 updated_at_unix_seconds = $2
@@ -651,7 +651,7 @@ async fn upsert_signature(
     let row = if let Some(expected_revision) = expected_revision {
         sqlx::query(
             r#"
-            UPDATE hermes_data.mail_signatures
+            UPDATE makosh_data.mail_signatures
             SET revision = revision + 1,
                 name = $4,
                 text_body = $5,
@@ -677,7 +677,7 @@ async fn upsert_signature(
     } else {
         sqlx::query(
             r#"
-            INSERT INTO hermes_data.mail_signatures (
+            INSERT INTO makosh_data.mail_signatures (
                 connection_id,
                 signature_id,
                 revision,
@@ -730,7 +730,7 @@ async fn delete_entity(
         MailCompositionEntityKindV1::Draft => {
             sqlx::query(
                 r#"
-            DELETE FROM hermes_data.mail_drafts
+            DELETE FROM makosh_data.mail_drafts
             WHERE connection_id = $1 AND draft_id = $2 AND revision = $3
             RETURNING revision
             "#,
@@ -744,7 +744,7 @@ async fn delete_entity(
         MailCompositionEntityKindV1::Template => {
             sqlx::query(
                 r#"
-            DELETE FROM hermes_data.mail_templates
+            DELETE FROM makosh_data.mail_templates
             WHERE connection_id = $1 AND template_id = $2 AND revision = $3
             RETURNING revision
             "#,
@@ -758,7 +758,7 @@ async fn delete_entity(
         MailCompositionEntityKindV1::Signature => {
             sqlx::query(
                 r#"
-            DELETE FROM hermes_data.mail_signatures
+            DELETE FROM makosh_data.mail_signatures
             WHERE connection_id = $1 AND signature_id = $2 AND revision = $3
             RETURNING revision
             "#,
@@ -825,7 +825,7 @@ async fn get_draft(
                signature_id,
                created_at_unix_seconds,
                updated_at_unix_seconds
-        FROM hermes_data.mail_drafts
+        FROM makosh_data.mail_drafts
         WHERE connection_id = $1 AND draft_id = $2
         "#,
     )
@@ -855,7 +855,7 @@ async fn get_template(
                locale,
                created_at_unix_seconds,
                updated_at_unix_seconds
-        FROM hermes_data.mail_templates
+        FROM makosh_data.mail_templates
         WHERE connection_id = $1 AND template_id = $2
         "#,
     )
@@ -883,7 +883,7 @@ async fn get_signature(
                is_default,
                created_at_unix_seconds,
                updated_at_unix_seconds
-        FROM hermes_data.mail_signatures
+        FROM makosh_data.mail_signatures
         WHERE connection_id = $1 AND signature_id = $2
         "#,
     )
@@ -921,7 +921,7 @@ async fn list_drafts(
                created_at_unix_seconds,
                updated_at_unix_seconds,
                sequence
-        FROM hermes_data.mail_drafts
+        FROM makosh_data.mail_drafts
         WHERE connection_id = $1
           AND (
               $2::BIGINT IS NULL
@@ -967,7 +967,7 @@ async fn list_templates(
                created_at_unix_seconds,
                updated_at_unix_seconds,
                sequence
-        FROM hermes_data.mail_templates
+        FROM makosh_data.mail_templates
         WHERE connection_id = $1
           AND (
               $2::BIGINT IS NULL
@@ -1011,7 +1011,7 @@ async fn list_signatures(
                created_at_unix_seconds,
                updated_at_unix_seconds,
                sequence
-        FROM hermes_data.mail_signatures
+        FROM makosh_data.mail_signatures
         WHERE connection_id = $1
           AND (
               $2::BIGINT IS NULL
@@ -1322,7 +1322,7 @@ mod tests {
     fn schema_is_mail_owned_and_has_no_cross_owner_foreign_keys() {
         assert_eq!(
             MAIL_SCHEMA_V11
-                .matches("CREATE TABLE IF NOT EXISTS hermes_data.")
+                .matches("CREATE TABLE IF NOT EXISTS makosh_data.")
                 .count(),
             4
         );

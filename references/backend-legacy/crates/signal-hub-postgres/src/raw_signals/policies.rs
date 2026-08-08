@@ -1,5 +1,5 @@
-use hermes_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
-use hermes_signal_hub_api::raw_signals::{
+use makosh_signal_hub_api::policies::{SignalPolicy, SignalPolicyMode, SignalPolicyScope};
+use makosh_signal_hub_api::raw_signals::{
     RawSignalPersistenceError, RawSignalPersistenceErrorKind,
 };
 use sqlx::Row;

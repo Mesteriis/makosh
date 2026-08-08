@@ -7,13 +7,13 @@ Status: accepted, implementation in progress
 Telegram is migrated as an independent integration owner with separate `api`,
 `core`, provider adapter, `persistence`, and `runtime` packages. Telegram
 packages may depend only on their own contracts, platform contracts, and the
-exact neutral `hermes-communications-ingress` contract. They do not import a
+exact neutral `makosh-communications-ingress` contract. They do not import a
 communications domain implementation, Gateway implementation, or business
 domain.
 
-`hermes-telegram-tdlib` owns the TDLib wire/transport boundary. It exposes
+`makosh-telegram-tdlib` owns the TDLib wire/transport boundary. It exposes
 typed provider requests and responses but does not decide lifecycle, evidence
-promotion, or business actions. `hermes-telegram-core` owns Telegram lifecycle
+promotion, or business actions. `makosh-telegram-core` owns Telegram lifecycle
 policy and maps provider observations into neutral ingress drafts. Telegram
 state and operational projections remain Telegram-owned.
 
@@ -53,7 +53,7 @@ payload endpoint or direct Gateway-to-Telegram dependency is introduced. The
 platform module-client envelope carries exact module/owner/contract/request
 identity; payload decoding remains owned by the Telegram integration.
 
-The authorization socket uses a generated `hermes.telegram.v1` protobuf
+The authorization socket uses a generated `makosh.telegram.v1` protobuf
 payload contract. Authorization payloads are not decoded as operational client
 requests and do not use a JSON or opaque-byte fallback.
 

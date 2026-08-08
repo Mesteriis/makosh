@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet};
 use std::sync::{Arc, LazyLock, Mutex};
 use std::time::Duration;
 
-use hermes_desktop_runtime::{
+use makosh_desktop_runtime::{
     RuntimeExitPolicy, RuntimeTaskClass, RuntimeTaskFactory, RuntimeTaskFuture, RuntimeTaskSpec,
 };
 use serde_json::Value;
@@ -50,12 +50,12 @@ fn telegram_command_executor_task(context: ApplicationBootstrapContext) -> Optio
     let telegram_store = crate::integrations::telegram::client::store::TelegramStore::new(
         pool.clone(),
         Arc::new(
-            hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
+            makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
                 pool.clone(),
             ),
         ),
         Arc::new(
-            hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
+            makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
                 pool.clone(),
             ),
         ),
@@ -65,7 +65,7 @@ fn telegram_command_executor_task(context: ApplicationBootstrapContext) -> Optio
             ),
         ),
         Arc::new(
-            hermes_communications_postgres::store::CommunicationIngestionStore::new(
+            makosh_communications_postgres::store::CommunicationIngestionStore::new(
                 pool.clone(),
             ),
         ),
@@ -228,7 +228,7 @@ pub(super) async fn reconcile_runtime_once(
     reconnects: &mut HashMap<String, RuntimeReconnectState>,
 ) -> Result<(), String> {
     let account_store =
-        hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
+        makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
             pool.clone(),
         );
     let accounts = account_store
@@ -259,11 +259,11 @@ pub(super) async fn reconcile_runtime_once(
     let runtime_context = crate::application::telegram_runtime::TelegramRuntimeUseCaseContext::new(
         crate::application::telegram_runtime::TelegramRuntimeUseCaseStores {
             provider_account_store:
-                hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
+                makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
                     pool.clone(),
                 ),
             provider_secret_binding_store:
-                hermes_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
+                makosh_communications_postgres::provider_store::CommunicationProviderSecretBindingStore::new(
                     pool.clone(),
                 ),
             telegram_store:
@@ -369,7 +369,7 @@ pub(super) async fn reconcile_runtime_once(
 }
 
 pub(super) fn runtime_reconciliation_enabled(
-    account: &hermes_communications_api::accounts::ProviderAccount,
+    account: &makosh_communications_api::accounts::ProviderAccount,
 ) -> bool {
     if !account.provider_kind.is_telegram() || account.is_deleted() {
         return false;

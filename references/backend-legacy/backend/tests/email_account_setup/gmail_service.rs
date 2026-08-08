@@ -1,16 +1,16 @@
-use hermes_communications_api::accounts::CommunicationProviderKind;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
 use serde_json::{Value, json};
 
 use std::sync::Arc;
 
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
-use hermes_hub_backend::integrations::mail::accounts::models::GmailOAuthSetupRequest;
-use hermes_hub_backend::integrations::mail::accounts::service::EmailAccountSetupService;
+use makosh_hub_backend::integrations::mail::accounts::models::GmailOAuthSetupRequest;
+use makosh_hub_backend::integrations::mail::accounts::service::EmailAccountSetupService;
 
-use hermes_hub_backend::platform::secrets::{
+use makosh_hub_backend::platform::secrets::{
     database_vault::DatabaseEncryptedSecretVault,
     models::{NewSecretReference, ResolvedSecret, SecretKind, SecretStoreKind},
     resolver::SecretResolver,

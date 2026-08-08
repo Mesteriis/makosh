@@ -1,7 +1,7 @@
 //! Per-reference Blob key authority issued and resolved through Vault leases.
 
-use hermes_blob_protocol::{BlobAccessFenceV1, BlobCustodyScopeV1, BlobRefV1};
-use hermes_vault_protocol::{
+use makosh_blob_protocol::{BlobAccessFenceV1, BlobCustodyScopeV1, BlobRefV1};
+use makosh_vault_protocol::{
     DEFAULT_LEASE_TTL_SECONDS, LeaseIdV1, SecretClassV1, VaultActionV1, VaultLeaseIssueRequestV1,
     VaultPurposeRequestV1, VaultTransportCommandV1,
 };

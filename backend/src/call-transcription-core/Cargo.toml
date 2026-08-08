@@ -1,5 +1,5 @@
 [package]
-name = "hermes-call-transcription-core"
+name = "makosh-call-transcription-core"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,11 +7,11 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "call_transcription"
 surface = "implementation"
 
 [dependencies]
-hermes-call-transcription-api = { path = "../call-transcription-api" }
+makosh-call-transcription-api = { path = "../call-transcription-api" }
 sha2 = { version = "=0.11.0", default-features = false }

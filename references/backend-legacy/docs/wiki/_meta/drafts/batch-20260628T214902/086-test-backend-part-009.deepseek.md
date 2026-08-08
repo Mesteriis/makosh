@@ -1,6 +1,6 @@
 ### Summary / Резюме
 
-Создать новую русскую wiki-страницу `operations/backend-tests.md` с документированием структуры, паттернов, покрытия и архитектурных ограничений тестового набора бэкенда Hermes Hub (доменные интеграционные тесты `persons`, HTTP-API тесты `persons_api` и проверки лимитов строк). Описание формируется исключительно на основе предоставленных исходных файлов тестов.
+Создать новую русскую wiki-страницу `operations/backend-tests.md` с документированием структуры, паттернов, покрытия и архитектурных ограничений тестового набора бэкенда Макошь (доменные интеграционные тесты `persons`, HTTP-API тесты `persons_api` и проверки лимитов строк). Описание формируется исключительно на основе предоставленных исходных файлов тестов.
 
 ### Proposed pages / Предлагаемые страницы
 
@@ -86,7 +86,7 @@
 
 ### Auth (`backend/tests/persons_api/auth.rs`)
 
-- **`persons_rejects_missing_local_api_secret`** — запрос без заголовка `x-hermes-secret` возвращает 403 с телом `{"error": "invalid_api_secret", "message": "missing or invalid x-hermes-secret header"}`.
+- **`persons_rejects_missing_local_api_secret`** — запрос без заголовка `x-makosh-secret` возвращает 403 с телом `{"error": "invalid_api_secret", "message": "missing or invalid x-makosh-secret header"}`.
 
 ### Read endpoints (`backend/tests/persons_api/read_endpoints.rs`)
 
@@ -176,7 +176,7 @@
 | `backend/tests/persons/relationships.rs` | роль → relationship `has_role` + evidence `PERSON_ROLE`, удаление роли → `user_rejected`; trust-score enrichment → relationship `trusts` + evidence `PERSON_TRUST_SIGNAL` + review-зеркало; promise → Obligation со статусом `Open`/`UserConfirmed` + evidence (файл обрезан) |
 | `backend/tests/persons/support.rs` | хелперы: `live_persons_pool`, `live_persons_store`, `disconnected_persons_store`, `unique_suffix`, `run_person_derived_evidence_consumer` |
 | `backend/tests/persons_api.rs` | перечень подключённых подмодулей API-тестов |
-| `backend/tests/persons_api/auth.rs` | 403 при отсутствии `x-hermes-secret` |
+| `backend/tests/persons_api/auth.rs` | 403 при отсутствии `x-makosh-secret` |
 | `backend/tests/persons_api/dossier_owner.rs` | снапшот досье и review-состояния, `dossier_refresh`/`review_transition` observation-ссылки; `/investigate` → observation `PERSON_MUTATION`; `/owner` GET/PUT и observation `owner_assignment`; 404 для несуществующей персоны |
 | `backend/tests/persons_api/identity_traces.rs` | создание непривязанного следа (`POST /api/v1/identity-traces`), список с фильтром `status=unattached`, привязка (`PUT .../assignment`), observation `trace_assignment` и `PERSON_RECORD_MUTATION` |
 | `backend/tests/persons_api/persona_routes.rs` | `GET /api/v1/persons`, `GET /api/v1/personas?limit=20` и `GET /api/v1/personas/{id}` с native schema (identity, communication, compatibility), `PUT persona` обновляет `display_name`, `is_self`, не позволяет снять `is_self` (400), создаёт observation `persona_update` типа `PERSON_MUTATION` |

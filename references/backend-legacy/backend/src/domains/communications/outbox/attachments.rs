@@ -1,4 +1,4 @@
-use hermes_communications_api::email::OutgoingEmailAttachment;
+use makosh_communications_api::email::OutgoingEmailAttachment;
 use sha2::{Digest, Sha256};
 use sqlx::Row;
 use sqlx::postgres::PgPool;
@@ -124,7 +124,7 @@ fn loader_error(
 
 #[cfg(test)]
 mod tests {
-    use hermes_backend_testkit::context::TestContext;
+    use makosh_backend_testkit::context::TestContext;
     use serde_json::json;
 
     use super::load_sendable_attachments;
@@ -135,8 +135,8 @@ mod tests {
     };
     use crate::domains::communications::storage::store::CommunicationStorageStore;
     use crate::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
-    use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-    use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
+    use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+    use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
 
     #[tokio::test]
     async fn loader_blocks_unscanned_attachments_and_verifies_clean_blob_bytes() {

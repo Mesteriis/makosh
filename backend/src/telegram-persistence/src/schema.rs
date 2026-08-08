@@ -1,6 +1,6 @@
 //! Immutable Telegram-owned schema bundle for independent Storage admission.
 
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use sha2::{Digest, Sha256};
 
 use crate::{TELEGRAM_SCHEMA_V1, TELEGRAM_SCHEMA_V2, TELEGRAM_SCHEMA_V3};
@@ -51,7 +51,7 @@ pub fn telegram_delivery_intent_storage_migration_v1() -> StorageMigrationStepV1
 
 #[cfg(test)]
 mod tests {
-    use hermes_storage_protocol::validation::validate_storage_bundle;
+    use makosh_storage_protocol::validation::validate_storage_bundle;
 
     use super::*;
 

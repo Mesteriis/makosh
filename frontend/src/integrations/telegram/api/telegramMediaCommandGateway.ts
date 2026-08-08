@@ -1,4 +1,4 @@
-import type { TelegramOperationResponse } from '../../../gen/hermes/telegram/v1/client_pb'
+import type { TelegramOperationResponse } from '../../../gen/makosh/telegram/v1/client_pb'
 import { getTelegramOperationalConnectClient } from './telegramOperationalClient'
 
 const MAX_REFERENCE_ID_BYTES = 64

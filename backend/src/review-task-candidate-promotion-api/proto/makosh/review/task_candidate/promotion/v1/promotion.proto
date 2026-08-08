@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package makosh.review.task_candidate.promotion.v1;
+
+message ReviewTaskCandidatePromotionResultV1 {
+  bytes result_id = 1;
+  bytes review_id = 2;
+  bytes candidate_id = 3;
+  uint64 expected_review_revision = 4;
+  ReviewTaskCandidatePromotionOutcomeV1 outcome = 5;
+  optional bytes task_id = 6;
+  ReviewTaskCandidatePromotionFailureCodeV1 failure_code = 7;
+  string logical_owner_id = 8;
+}
+
+enum ReviewTaskCandidatePromotionOutcomeV1 {
+  REVIEW_TASK_CANDIDATE_PROMOTION_OUTCOME_UNSPECIFIED = 0;
+  REVIEW_TASK_CANDIDATE_PROMOTION_OUTCOME_SUCCEEDED = 1;
+  REVIEW_TASK_CANDIDATE_PROMOTION_OUTCOME_FAILED = 2;
+}
+
+enum ReviewTaskCandidatePromotionFailureCodeV1 {
+  REVIEW_TASK_CANDIDATE_PROMOTION_FAILURE_CODE_UNSPECIFIED = 0;
+  REVIEW_TASK_CANDIDATE_PROMOTION_FAILURE_CODE_INVALID_REQUEST = 1;
+  REVIEW_TASK_CANDIDATE_PROMOTION_FAILURE_CODE_BLOB_UNAVAILABLE = 2;
+  REVIEW_TASK_CANDIDATE_PROMOTION_FAILURE_CODE_BLOB_MISMATCH = 3;
+  REVIEW_TASK_CANDIDATE_PROMOTION_FAILURE_CODE_CONFLICT = 4;
+  REVIEW_TASK_CANDIDATE_PROMOTION_FAILURE_CODE_POLICY = 5;
+}

@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `adr`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docs/adr/ADR-0100-trace-first-event-observability.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0100-trace-first-event-observability.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0100-trace-first-event-observability.md`
 - Size bytes / Размер в байтах: `4964`
 - Included characters / Включено символов: `4964`
 - Truncated / Обрезано: `no`
@@ -80,7 +80,7 @@ Clarifies:
 
 ## Context
 
-Hermes already uses an event-driven architecture with an append-only
+Макошь already uses an event-driven architecture with an append-only
 `event_log`, `EventEnvelope`, outbox, event consumers, DLQ, Signal Hub and
 provider integrations. However, events are not yet consistently usable as one
 causal trace graph:
@@ -92,12 +92,12 @@ causal trace graph:
 - API and realtime surfaces do not consistently expose full trace context;
 - Timeline projection and causal trace reconstruction can be confused.
 
-Hermes needs to explain why a domain object exists without requiring Jaeger,
+Макошь needs to explain why a domain object exists without requiring Jaeger,
 Tempo, Loki, Grafana or another telemetry server.
 
 ## Decision
 
-Hermes treats canonical events as spans.
+Макошь treats canonical events as spans.
 
 `event_id` is the span identifier.
 `correlation_id` is the trace identifier.
@@ -123,7 +123,7 @@ not the canonical trace store. The canonical trace store is `event_log`.
 
 ## Trace Semantics
 
-| Concept | Hermes field |
+| Concept | Макошь field |
 |---|---|
 | Trace | `correlation_id` |
 | Span | `event_id` |
@@ -194,7 +194,7 @@ The repository should enforce:
 
 ### `docs/adr/ADR-0101-whatsapp-provider-runtime-selection.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0101-whatsapp-provider-runtime-selection.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0101-whatsapp-provider-runtime-selection.md`
 - Size bytes / Размер в байтах: `22411`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -215,7 +215,7 @@ provider-observed reconciliation gates pass.
 
 ## Context
 
-Hermes needs full WhatsApp functionality plus Hermes-specific memory, Radar, Review, Timeline, Search, AI and workflow features.
+Макошь needs full WhatsApp functionality plus Макошь-specific memory, Radar, Review, Timeline, Search, AI and workflow features.
 
 The current repository already contains a WhatsApp fixture/runtime foundation:
 
@@ -253,7 +253,7 @@ Official Business Cloud API remains a separate business provider shape. It does 
 
 ## Decision
 
-Hermes will use a **multi-provider runtime boundary** for WhatsApp.
+Макошь will use a **multi-provider runtime boundary** for WhatsApp.
 
 Provider shapes:
 
@@ -291,7 +291,7 @@ Compatibility:
   recursively redacts secret-like/private content metadata, maps known event
   families to protected `/runtime-bridge/*` paths and posts the sanitized
   metadata observation to the protected local runtime-events bridge with
-  `X-Hermes-Secret` from the Tauri process environment only. It must not mutate
+  `X-Макошь-Secret` from the Tauri process environment only. It must not mutate
   domains or complete provider commands. The WhatsApp Runtime panel exposes the
   owner-visible `Open Companion` action through the typed Tauri bridge, but
   public WebView runtime availability remains blocked until manual smoke passes.
@@ -326,9 +326,9 @@ Current spike result, 2026-06-26:
   `ureq-client`.
 - `wa-rs 0.2.0` with the same transport feature set fails on Rust 1.88 because
   transitive `tokio-websockets 0.13.3` requires Rust 1.89.
-- Hermes backend MSRV is raised to Rust 1.89 so the native transport boundary
+- Макошь backend MSRV is raised to Rust 1.89 so the native transport boundary
   can compile without weakening the selected SDK feature set.
-- Hermes therefore wires the experimental `whatsapp-native-md-runtime` feature
+- Макошь therefore wires the experimental `whatsapp-native-md-runtime` feature
   to optional `wa-rs` dependency for compile-boundary validation only. This does
   not make live runtime support accepted or available.
 - The public runtime availability gate remains false for `native_md` and
@@ -420,7 +420,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `docs/adr/ADR-0102-zoom-provider-runtime-boundary.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0102-zoom-provider-runtime-boundary.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0102-zoom-provider-runtime-boundary.md`
 - Size bytes / Размер в байтах: `4250`
 - Included characters / Включено символов: `4250`
 - Truncated / Обрезано: `no`
@@ -433,12 +433,12 @@ Date: 2026-06-27
 
 ## Context
 
-Hermes integrates communication providers without turning each provider into a
+Макошь integrates communication providers without turning each provider into a
 product domain. Zoom contains meetings, recordings, participants, transcripts
-and webhook/runtime concerns, but Hermes must treat those as provider
+and webhook/runtime concerns, but Макошь must treat those as provider
 observations that feed memory and context.
 
-Hermes already follows the provider/channel rule for Telegram and WhatsApp:
+Макошь already follows the provider/channel rule for Telegram and WhatsApp:
 provider-specific runtime code belongs under integrations, while product
 meaning belongs to provider-neutral domains, workflows and engines.
 
@@ -537,7 +537,7 @@ workflow boundaries are explicitly implemented.
 
 ### `docs/adr/ADR-0104-yandex-telemost-provider-runtime-boundary.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-0104-yandex-telemost-provider-runtime-boundary.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-0104-yandex-telemost-provider-runtime-boundary.md`
 - Size bytes / Размер в байтах: `2271`
 - Included characters / Включено символов: `2271`
 - Truncated / Обрезано: `no`
@@ -550,9 +550,9 @@ Date: 2026-06-28
 
 ## Context
 
-Hermes needs Yandex Telemost support for conference creation, conference links,
+Макошь needs Yandex Telemost support for conference creation, conference links,
 visible WebView joining, local audio capture and later transcription. Telemost is
-an external provider, not a Hermes domain.
+an external provider, not a Макошь domain.
 
 The integration also needs local desktop behavior that the backend provider API
 cannot own: visible WebView opening, system/loopback audio capture and speaker
@@ -620,7 +620,7 @@ Rejected because providers are external systems, not bounded contexts.
 
 ### Hidden background browser join and capture
 
-Rejected because it breaks the Hermes owner-visible runtime model and creates a
+Rejected because it breaks the Макошь owner-visible runtime model and creates a
 hidden capture path that the provider runtime must not own.
 
 ### Treat WebView active-speaker DOM as truth
@@ -630,7 +630,7 @@ Rejected. It is only a weak hint for diarization.
 
 ### `docs/adr/ADR-architecture-communication-contract.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/ADR-architecture-communication-contract.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/ADR-architecture-communication-contract.md`
 - Size bytes / Размер в байтах: `4342`
 - Included characters / Включено символов: `4342`
 - Truncated / Обрезано: `no`
@@ -657,7 +657,7 @@ Clarifies:
 
 ## Context
 
-Hermes has enough domain and provider surface that "do not import another
+Макошь has enough domain and provider surface that "do not import another
 domain" is no longer precise enough. The architecture needs one communication
 contract that applies to backend modules, frontend modules, events, projections,
 provider runtimes and AI outputs.
@@ -668,7 +668,7 @@ must be fixed, not registered as exceptions.
 
 ## Decision
 
-Hermes uses exactly these component interaction kinds:
+Макошь uses exactly these component interaction kinds:
 
 ```text
 direct_call
@@ -757,7 +757,7 @@ The architecture guard must fail if:
 
 ### `docs/adr/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/adr/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/adr/README.md`
 - Size bytes / Размер в байтах: `3768`
 - Included characters / Включено символов: `3768`
 - Truncated / Обрезано: `no`

@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src/domains/communications/views/useThreadReplyActions.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/communications/views/useThreadReplyActions.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/communications/views/useThreadReplyActions.ts`
 - Size bytes / Размер в байтах: `2140`
 - Included characters / Включено символов: `2140`
 - Truncated / Обрезано: `no`
@@ -119,7 +119,7 @@ export function useThreadReplyActions(store: CommunicationsStore) {
 
 ### `frontend/src/domains/documents/api/documents.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/documents/api/documents.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/documents/api/documents.ts`
 - Size bytes / Размер в байтах: `1235`
 - Included characters / Включено символов: `1235`
 - Truncated / Обрезано: `no`
@@ -162,7 +162,7 @@ export async function retryDocumentProcessingJob(
 
 ### `frontend/src/domains/documents/queries/useDocumentsQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/documents/queries/useDocumentsQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/documents/queries/useDocumentsQuery.ts`
 - Size bytes / Размер в байтах: `304`
 - Included characters / Включено символов: `304`
 - Truncated / Обрезано: `no`
@@ -181,7 +181,7 @@ export function useDocumentProcessingJobsQuery(limit = 50) {
 
 ### `frontend/src/domains/documents/stores/documents.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/documents/stores/documents.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/documents/stores/documents.ts`
 - Size bytes / Размер в байтах: `779`
 - Included characters / Включено символов: `779`
 - Truncated / Обрезано: `no`
@@ -227,7 +227,7 @@ export const useDocumentsStore = defineStore('documents-ui', () => {
 
 ### `frontend/src/domains/documents/types/documents.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/documents/types/documents.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/documents/types/documents.ts`
 - Size bytes / Размер в байтах: `1500`
 - Included characters / Включено символов: `1500`
 - Truncated / Обрезано: `no`
@@ -301,7 +301,7 @@ export interface DocDisplayItem {
 
 ### `frontend/src/domains/home/api/home.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/home/api/home.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/home/api/home.ts`
 - Size bytes / Размер в байтах: `728`
 - Included characters / Включено символов: `728`
 - Truncated / Обрезано: `no`
@@ -329,7 +329,7 @@ export async function fetchMailboxHealth(): Promise<MailboxHealth> {
 
 ### `frontend/src/domains/home/queries/useHomeQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/home/queries/useHomeQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/home/queries/useHomeQuery.ts`
 - Size bytes / Размер в байтах: `652`
 - Included characters / Включено символов: `652`
 - Truncated / Обрезано: `no`
@@ -359,7 +359,7 @@ export function useMailboxHealthQuery() {
 
 ### `frontend/src/domains/home/types/api.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/home/types/api.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/home/types/api.ts`
 - Size bytes / Размер в байтах: `967`
 - Included characters / Включено символов: `967`
 - Truncated / Обрезано: `no`
@@ -409,7 +409,7 @@ export type MailboxHealth = {
 
 ### `frontend/src/domains/home/types/home.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/home/types/home.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/home/types/home.ts`
 - Size bytes / Размер в байтах: `630`
 - Included characters / Включено символов: `630`
 - Truncated / Обрезано: `no`
@@ -462,7 +462,7 @@ export interface SystemStatusItem {
 
 ### `frontend/src/domains/knowledge/api/knowledge.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/knowledge/api/knowledge.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/knowledge/api/knowledge.ts`
 - Size bytes / Размер в байтах: `2061`
 - Included characters / Включено символов: `2061`
 - Truncated / Обрезано: `no`
@@ -538,7 +538,7 @@ export async function reviewContradiction(
 
 ### `frontend/src/domains/knowledge/queries/useKnowledgeQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/knowledge/queries/useKnowledgeQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/knowledge/queries/useKnowledgeQuery.ts`
 - Size bytes / Размер в байтах: `536`
 - Included characters / Включено символов: `536`
 - Truncated / Обрезано: `no`
@@ -570,7 +570,7 @@ export function useContradictionsQuery(limit = 50) {
 
 ### `frontend/src/domains/knowledge/stores/knowledge.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/knowledge/stores/knowledge.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/knowledge/stores/knowledge.ts`
 - Size bytes / Размер в байтах: `8317`
 - Included characters / Включено символов: `8316`
 - Truncated / Обрезано: `no`
@@ -900,7 +900,7 @@ export const useKnowledgeStore = defineStore('knowledge', () => {
 
 ### `frontend/src/domains/knowledge/types/knowledge.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/knowledge/types/knowledge.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/knowledge/types/knowledge.ts`
 - Size bytes / Размер в байтах: `3079`
 - Included characters / Включено символов: `3079`
 - Truncated / Обрезано: `no`
@@ -1051,7 +1051,7 @@ export interface ContradictionReviewRequest {
 
 ### `frontend/src/domains/notes/api/notes.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/notes/api/notes.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/notes/api/notes.ts`
 - Size bytes / Размер в байтах: `287`
 - Included characters / Включено символов: `287`
 - Truncated / Обрезано: `no`
@@ -1070,7 +1070,7 @@ export async function fetchNotes(): Promise<{ items: NoteItem[] }> {
 
 ### `frontend/src/domains/notes/queries/useNotesQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/notes/queries/useNotesQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/notes/queries/useNotesQuery.ts`
 - Size bytes / Размер в байтах: `208`
 - Included characters / Включено символов: `208`
 - Truncated / Обрезано: `no`
@@ -1089,7 +1089,7 @@ export function useNotesQuery() {
 
 ### `frontend/src/domains/notes/stores/notes.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/notes/stores/notes.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/notes/stores/notes.ts`
 - Size bytes / Размер в байтах: `979`
 - Included characters / Включено символов: `979`
 - Truncated / Обрезано: `no`
@@ -1145,7 +1145,7 @@ export const useNotesStore = defineStore('notes-ui', () => {
 
 ### `frontend/src/domains/notes/types/notes.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/notes/types/notes.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/notes/types/notes.ts`
 - Size bytes / Размер в байтах: `122`
 - Included characters / Включено символов: `122`
 - Truncated / Обрезано: `no`
@@ -1163,7 +1163,7 @@ export interface NoteItem {
 
 ### `frontend/src/domains/organizations/api/organizations.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/organizations/api/organizations.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/organizations/api/organizations.ts`
 - Size bytes / Размер в байтах: `726`
 - Included characters / Включено символов: `726`
 - Truncated / Обрезано: `no`
@@ -1192,7 +1192,7 @@ export async function fetchOrganization(orgId: string): Promise<Organization> {
 
 ### `frontend/src/domains/organizations/queries/useOrganizationsQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/organizations/queries/useOrganizationsQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/organizations/queries/useOrganizationsQuery.ts`
 - Size bytes / Размер в байтах: `632`
 - Included characters / Включено символов: `632`
 - Truncated / Обрезано: `no`
@@ -1223,7 +1223,7 @@ export function useOrganizationQuery(orgId: string) {
 
 ### `frontend/src/domains/organizations/types/organization.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/organizations/types/organization.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/organizations/types/organization.ts`
 - Size bytes / Размер в байтах: `430`
 - Included characters / Включено символов: `430`
 - Truncated / Обрезано: `no`
@@ -1249,7 +1249,7 @@ export interface Organization {
 
 ### `frontend/src/domains/personas/api/personas.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/personas/api/personas.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/personas/api/personas.ts`
 - Size bytes / Размер в байтах: `3401`
 - Included characters / Включено символов: `3401`
 - Truncated / Обрезано: `no`
@@ -1348,7 +1348,7 @@ export async function fetchOrganization(orgId: string): Promise<any> {
 
 ### `frontend/src/domains/personas/queries/usePersonasQuery.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/personas/queries/usePersonasQuery.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/personas/queries/usePersonasQuery.ts`
 - Size bytes / Размер в байтах: `1224`
 - Included characters / Включено символов: `1224`
 - Truncated / Обрезано: `no`
@@ -1401,7 +1401,7 @@ export function useRelationshipsQuery() {
 
 ### `frontend/src/domains/personas/stores/personas.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/personas/stores/personas.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/personas/stores/personas.ts`
 - Size bytes / Размер в байтах: `5104`
 - Included characters / Включено символов: `5104`
 - Truncated / Обрезано: `no`
@@ -1578,7 +1578,7 @@ export const usePersonasStore = defineStore('personas', () => {
 
 ### `frontend/src/domains/personas/types/persona.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/personas/types/persona.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/personas/types/persona.ts`
 - Size bytes / Размер в байтах: `1509`
 - Included characters / Включено символов: `1509`
 - Truncated / Обрезано: `no`
@@ -1656,7 +1656,7 @@ export interface PersonaOption {
 
 ### `frontend/src/domains/projects/api/projects.ts`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/projects/api/projects.ts`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/projects/api/projects.ts`
 - Size bytes / Размер в байтах: `660`
 - Included characters / Включено символов: `660`
 - Truncated / Обрезано: `no`

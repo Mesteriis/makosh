@@ -1,5 +1,5 @@
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_scheduler_protocol::MisfirePolicyV1;
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_scheduler_protocol::MisfirePolicyV1;
 
 use super::{DueSchedulePlanV1, ScheduleContinuationV1, SchedulePlanErrorV1};
 

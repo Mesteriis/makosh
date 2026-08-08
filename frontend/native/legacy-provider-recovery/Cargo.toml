@@ -1,5 +1,5 @@
 [package]
-name = "hermes-legacy-provider-recovery"
+name = "makosh-legacy-provider-recovery"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -8,19 +8,19 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "hermes-legacy-provider-recovery-prepare"
+name = "makosh-legacy-provider-recovery-prepare"
 path = "src/bin/prepare.rs"
 required-features = ["prepare"]
 
 [[bin]]
-name = "hermes-legacy-provider-recovery-plan"
+name = "makosh-legacy-provider-recovery-plan"
 path = "src/bin/plan.rs"
 
 [[bin]]
-name = "hermes-legacy-provider-recovery-verify"
+name = "makosh-legacy-provider-recovery-verify"
 path = "src/bin/verify.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "app"
 owner = "first_party_client"
 surface = "maintenance_source_adapter"

@@ -21,9 +21,9 @@
 - Group / Группа: `docs`
 - Role / Роль: `doc`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docs/roadmap/v2-closure-checklist.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/roadmap/v2-closure-checklist.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/roadmap/v2-closure-checklist.md`
 - Size bytes / Размер в байтах: `2649`
 - Included characters / Включено символов: `2649`
 - Truncated / Обрезано: `no`
@@ -65,7 +65,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ## Release Goal
 
-Version 2.0 is complete when Hermes Hub makes graph-backed memory central:
+Version 2.0 is complete when Макошь makes graph-backed memory central:
 messages, Persona-compatible identity records, documents and projects are
 connected through rebuildable graph projections, reviewable workflow candidates,
 visible document processing state and desktop-only backend-backed UI surfaces.
@@ -112,7 +112,7 @@ visible document processing state and desktop-only backend-backed UI surfaces.
 
 ### `docs/roadmap/v2-graph-core-checklist.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/roadmap/v2-graph-core-checklist.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/roadmap/v2-graph-core-checklist.md`
 - Size bytes / Размер в байтах: `1884`
 - Included characters / Включено символов: `1884`
 - Truncated / Обрезано: `no`
@@ -122,7 +122,7 @@ visible document processing state and desktop-only backend-backed UI surfaces.
 
 ## Release Goal
 
-The first Version 2 slice is complete when Hermes Hub builds a deterministic,
+The first Version 2 slice is complete when Макошь builds a deterministic,
 read-only Knowledge Graph projection from existing Persona-compatible identity
 records, communication messages and documents, exposes protected read APIs, and
 renders graph-backed desktop dashboard data.
@@ -168,7 +168,7 @@ renders graph-backed desktop dashboard data.
 
 ### `docs/roadmap/v3-closure-checklist.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/roadmap/v3-closure-checklist.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/roadmap/v3-closure-checklist.md`
 - Size bytes / Размер в байтах: `3033`
 - Included characters / Включено символов: `3033`
 - Truncated / Обрезано: `no`
@@ -178,7 +178,7 @@ renders graph-backed desktop dashboard data.
 
 ## Release Goal
 
-Version 3.0 is complete when Hermes Hub exposes local, source-backed AI workflows over the existing memory spine: Ollama runtime health, pgvector semantic retrieval, cited answers, suggested task candidates, meeting prep packets, persisted agent run history and desktop AI surfaces.
+Version 3.0 is complete when Макошь exposes local, source-backed AI workflows over the existing memory spine: Ollama runtime health, pgvector semantic retrieval, cited answers, suggested task candidates, meeting prep packets, persisted agent run history and desktop AI surfaces.
 
 ## In Scope
 
@@ -187,7 +187,7 @@ Version 3.0 is complete when Hermes Hub exposes local, source-backed AI workflow
 - Semantic indexing from existing canonical projections.
 - Retrieval planner combining semantic nearest neighbors and local text match signals.
 - Prompt builder that treats retrieved source text as untrusted context.
-- Registered agents: `HESTIA`, `HERMES`, `MNEMOSYNE`, `ATHENA`.
+- Registered agents: `HESTIA`, `MAKOSH`, `MNEMOSYNE`, `ATHENA`.
 - Persisted AI run history with model config, prompt template version, citations, answer, timings, constant frontend actor and correlation IDs.
 - Canonical events for AI run requested/completed/failed and task extraction completion.
 - Protected AI APIs with local shared secret header.
@@ -215,7 +215,7 @@ Version 3.0 is complete when Hermes Hub exposes local, source-backed AI workflow
 - [x] `task_candidates` supports `agent_run_id` for AI-suggested candidates.
 - [x] Ollama client covers `/api/version`, `/api/tags`, `/api/chat` and `/api/embed`.
 - [x] AI APIs expose status, agents, run history, answers, task refresh and meeting prep.
-- [x] AI APIs require `X-Hermes-Secret`.
+- [x] AI APIs require `X-Макошь-Secret`.
 - [x] AI answers return citations and persist completed run history.
 - [x] AI task extraction creates suggested candidates only.
 - [x] Meeting prep returns a source-backed briefing without calendar writes.
@@ -229,7 +229,7 @@ Version 3.0 is complete when Hermes Hub exposes local, source-backed AI workflow
 
 ### `docs/roadmap/v4-closure-checklist.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/roadmap/v4-closure-checklist.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/roadmap/v4-closure-checklist.md`
 - Size bytes / Размер в байтах: `2685`
 - Included characters / Включено символов: `2685`
 - Truncated / Обрезано: `no`
@@ -239,7 +239,7 @@ Version 3.0 is complete when Hermes Hub exposes local, source-backed AI workflow
 
 ## Release Goal
 
-Version 4.0 is complete when Hermes Hub provides a desktop-configurable Telegram client foundation with multiple Telegram user and bot accounts, policy-approved automated sending, 1:1 audio call state, local call transcription artifacts, plugin/capability policy visibility and backup-aware V4 data handling.
+Version 4.0 is complete when Макошь provides a desktop-configurable Telegram client foundation with multiple Telegram user and bot accounts, policy-approved automated sending, 1:1 audio call state, local call transcription artifacts, plugin/capability policy visibility and backup-aware V4 data handling.
 
 ## In Scope
 
@@ -285,7 +285,7 @@ Version 4.0 is complete when Hermes Hub provides a desktop-configurable Telegram
 
 ### `docs/roadmap/v5-closure-checklist.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/roadmap/v5-closure-checklist.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/roadmap/v5-closure-checklist.md`
 - Size bytes / Размер в байтах: `2456`
 - Included characters / Включено символов: `2456`
 - Truncated / Обрезано: `no`
@@ -295,7 +295,7 @@ Version 4.0 is complete when Hermes Hub provides a desktop-configurable Telegram
 
 ## Release Goal
 
-Version 5.0 is complete when Hermes Hub can use WhatsApp Web as a local-first, user-visible companion source while preserving source provenance, privacy, auditability, graph-backed recall and long-horizon personal knowledge workflows.
+Version 5.0 is complete when Макошь can use WhatsApp Web as a local-first, user-visible companion source while preserving source provenance, privacy, auditability, graph-backed recall and long-horizon personal knowledge workflows.
 
 ## In Scope
 
@@ -338,7 +338,7 @@ Version 5.0 is complete when Hermes Hub can use WhatsApp Web as a local-first, u
 
 ### `docs/site/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/site/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/site/README.md`
 - Size bytes / Размер в байтах: `350`
 - Included characters / Включено символов: `350`
 - Truncated / Обрезано: `no`
@@ -354,13 +354,13 @@ Canonical content remains in the Markdown documentation packages.
 ## Navigation
 
 - [Site Entrypoint](./index.html)
-- [Site Styles](./hermes-docs.css)
+- [Site Styles](./makosh-docs.css)
 - [Assets](./assets/)
 ```
 
 ### `docs/ui/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/ui/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/ui/README.md`
 - Size bytes / Размер в байтах: `271`
 - Included characters / Включено символов: `271`
 - Truncated / Обрезано: `no`
@@ -380,7 +380,7 @@ Implementation files live under `frontend/`.
 
 ### `docs/ui/design-system-vision.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/ui/design-system-vision.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/ui/design-system-vision.md`
 - Size bytes / Размер в байтах: `1665`
 - Included characters / Включено символов: `1665`
 - Truncated / Обрезано: `no`
@@ -390,7 +390,7 @@ Implementation files live under `frontend/`.
 
 ## Product Feel
 
-Hermes Hub should feel like a serious personal operating environment: fast, calm, dense, modern and explainable. The design language can use glassmorphism selectively, but readability and workflow speed take priority over decoration.
+Макошь should feel like a serious personal operating environment: fast, calm, dense, modern and explainable. The design language can use glassmorphism selectively, but readability and workflow speed take priority over decoration.
 
 ## Inspirations
 
@@ -444,13 +444,13 @@ Hermes Hub should feel like a serious personal operating environment: fast, calm
 
 ### `docs/vault/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/vault/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/vault/README.md`
 - Size bytes / Размер в байтах: `966`
 - Included characters / Включено символов: `966`
 - Truncated / Обрезано: `no`
 
 ```markdown
-# Hermes Vault
+# Макошь Vault
 
 Status: documentation package aligned to the current repository structure.
 
@@ -478,7 +478,7 @@ secret payload handling belongs here.
 
 ### `docs/vision/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/vision/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/vision/README.md`
 - Size bytes / Размер в байтах: `288`
 - Included characters / Включено символов: `288`
 - Truncated / Обрезано: `no`
@@ -498,7 +498,7 @@ product detail lives under `docs/product/` and `docs/foundation/`.
 
 ### `docs/vision/vision-document.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/vision/vision-document.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/vision/vision-document.md`
 - Size bytes / Размер в байтах: `2678`
 - Included characters / Включено символов: `2678`
 - Truncated / Обрезано: `no`
@@ -508,11 +508,11 @@ product detail lives under `docs/product/` and `docs/foundation/`.
 
 ## Mission
 
-Hermes Hub is a local-first Personal Memory System with a Personal Operating
+Макошь is a local-first Personal Memory System with a Personal Operating
 System style interface for communications, knowledge, memory, relationships,
 projects, documents, decisions, obligations and context.
 
-Hermes does not compete with email clients, messengers, CRM systems, task
+Макошь does not compete with email clients, messengers, CRM systems, task
 trackers, calendar apps or note-taking tools. It absorbs evidence from those
 surfaces and turns it into durable, source-backed context.
 
@@ -524,7 +524,7 @@ Canonical vocabulary lives in:
 
 ## North Star
 
-After years of use, Hermes should reliably answer:
+After years of use, Макошь should reliably answer:
 
 - what changed in the owner's world over a period;
 - what obligations exist and where they came from;
@@ -535,12 +535,12 @@ After years of use, Hermes should reliably answer:
 - what the full history of a Persona or Organization is;
 - what context matters before acting.
 
-Answers must be explainable. Hermes must show source records, events, documents,
+Answers must be explainable. Макошь must show source records, events, documents,
 communications and relationships behind each conclusion.
 
 ## Non-Product Boundaries
 
-Hermes Hub is not:
+Макошь is not:
 
 - an email client with an AI filter;
 - a messenger with a unified inbox;
@@ -580,7 +580,7 @@ pipelines.
 ## Success Criteria
 
 - The owner can find any meaningful interaction after years of use.
-- Hermes connects communications, documents, Personas, Organizations, Projects,
+- Макошь connects communications, documents, Personas, Organizations, Projects,
   Tasks, Events, Decisions and Obligations without requiring manual
   classification of everything.
 - AI answers include verifiable source references.
@@ -590,15 +590,15 @@ pipelines.
 
 ### `docs/workflows/README.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/workflows/README.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/workflows/README.md`
 - Size bytes / Размер в байтах: `1359`
 - Included characters / Включено символов: `1359`
 - Truncated / Обрезано: `no`
 
 ````markdown
-# Hermes Workflow Catalog
+# Макошь Workflow Catalog
 
-Workflows describe how evidence moves through Hermes.
+Workflows describe how evidence moves through Макошь.
 
 They are not APIs and not implementation modules. They define product behavior
 and architectural boundaries that future implementation plans must respect.
@@ -641,7 +641,7 @@ observation.
 
 ### `docs/workflows/agent-assisted-recall.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/workflows/agent-assisted-recall.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/workflows/agent-assisted-recall.md`
 - Size bytes / Размер в байтах: `1634`
 - Included characters / Включено символов: `1634`
 - Truncated / Обрезано: `no`
@@ -649,7 +649,7 @@ observation.
 ````markdown
 # Agent Assisted Recall
 
-This workflow explains how an agent retrieves and uses Hermes context.
+This workflow explains how an agent retrieves and uses Макошь context.
 
 Agents help the Owner Persona operate the Personal Memory System. They do not
 own source truth.
@@ -708,7 +708,7 @@ automation.
 
 ### `docs/workflows/communication-to-knowledge.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/workflows/communication-to-knowledge.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/workflows/communication-to-knowledge.md`
 - Size bytes / Размер в байтах: `1713`
 - Included characters / Включено символов: `1713`
 - Truncated / Обрезано: `no`
@@ -720,7 +720,7 @@ This workflow explains how a communication becomes evidence-backed knowledge.
 
 ## Trigger
 
-The workflow starts when Hermes imports or receives:
+The workflow starts when Макошь imports or receives:
 
 - email;
 - Telegram message;
@@ -779,7 +779,7 @@ workflow is not yet implemented as one explicit pipeline.
 
 ### `docs/workflows/communication-to-obligation.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/workflows/communication-to-obligation.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/workflows/communication-to-obligation.md`
 - Size bytes / Размер в байтах: `2247`
 - Included characters / Включено символов: `2247`
 - Truncated / Обрезано: `no`
@@ -858,7 +858,7 @@ review UI routing remain incomplete.
 
 ### `docs/workflows/contradiction-review.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/workflows/contradiction-review.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/workflows/contradiction-review.md`
 - Size bytes / Размер в байтах: `1754`
 - Included characters / Включено символов: `1754`
 - Truncated / Обрезано: `no`
@@ -866,7 +866,7 @@ review UI routing remain incomplete.
 ````markdown
 # Contradiction Review
 
-This workflow explains how Hermes handles conflicts between new evidence and
+This workflow explains how Макошь handles conflicts between new evidence and
 accepted memory.
 
 User-facing alias: Polygraph review.
@@ -932,7 +932,7 @@ approved during product refactoring.
 
 ### `docs/workflows/document-to-context.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/workflows/document-to-context.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/workflows/document-to-context.md`
 - Size bytes / Размер в байтах: `1644`
 - Included characters / Включено символов: `1644`
 - Truncated / Обрезано: `no`
@@ -944,7 +944,7 @@ This workflow explains how a document becomes useful context.
 
 ## Trigger
 
-The workflow starts when Hermes imports, creates or updates:
+The workflow starts when Макошь imports, creates or updates:
 
 - PDF;
 - Office document;
@@ -1001,7 +1001,7 @@ artifacts. Attachment intelligence exists under the Documents domain.
 
 ### `docs/workflows/dossier-generation.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/workflows/dossier-generation.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/workflows/dossier-generation.md`
 - Size bytes / Размер в байтах: `1620`
 - Included characters / Включено символов: `1620`
 - Truncated / Обрезано: `no`
@@ -1009,7 +1009,7 @@ artifacts. Attachment intelligence exists under the Documents domain.
 ````markdown
 # Dossier Generation
 
-This workflow explains how Hermes assembles a dossier for a Persona,
+This workflow explains how Макошь assembles a dossier for a Persona,
 Organization, Project or other entity.
 
 ## Trigger
@@ -1074,7 +1074,7 @@ cross-domain dossier workflow is not yet implemented.
 
 ### `docs/workflows/meeting-to-decisions.md`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docs/workflows/meeting-to-decisions.md`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docs/workflows/meeting-to-decisions.md`
 - Size bytes / Размер в байтах: `1875`
 - Included characters / Включено символов: `1875`
 - Truncated / Обрезано: `no`
@@ -1086,7 +1086,7 @@ This workflow explains how meetings and calls become decision memory.
 
 ## Trigger
 
-The workflow starts when Hermes has evidence from:
+The workflow starts when Макошь has evidence from:
 
 - calendar meeting;
 - call;

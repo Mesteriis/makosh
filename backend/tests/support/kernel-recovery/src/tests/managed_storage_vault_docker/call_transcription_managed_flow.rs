@@ -4,7 +4,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use super::*;
 
-use hermes_call_transcription_api::{
+use hyper::StatusCode;
+use makosh_call_transcription_api::{
     START_CONNECT_PATH_V1, TICKET_CONNECT_PATH_V1, run_id_v1,
     wire::{
         CallTranscriptionErrorCodeV1, CallTranscriptionLanguageV1, CallTranscriptionStateV1,
@@ -12,17 +13,16 @@ use hermes_call_transcription_api::{
         StartCallTranscriptionRequestV1, StartCallTranscriptionResponseV1,
     },
 };
-use hermes_desktop_call_recording_api::wire::{
+use makosh_desktop_call_recording_api::wire::{
     DesktopCaptureCompletedV1, DesktopCaptureStartedV1, DesktopRecordingHostObservationV1,
     DesktopRecordingStateV1, GetDesktopCallRecordingRequestV1, GetDesktopCallRecordingResponseV1,
     StartDesktopCallRecordingRequestV1, StartDesktopCallRecordingResponseV1,
     StopDesktopCallRecordingRequestV1, StopDesktopCallRecordingResponseV1,
     desktop_recording_host_command_v1::Command, desktop_recording_host_observation_v1::Observation,
 };
-use hermes_speech_transcript_artifact::{
+use makosh_speech_transcript_artifact::{
     validate_speech_transcript_document_v1, wire::SpeechTranscriptDocumentV1,
 };
-use hyper::StatusCode;
 
 use crate::identity::device::signer::DeviceSigner;
 
@@ -30,10 +30,10 @@ use crate::identity::device::signer::DeviceSigner;
 #[ignore = "requires disposable Docker plus real managed Recording, STT, Whisper, Vault, Storage, Blob and NATS binaries"]
 fn managed_call_transcription_reaches_recording_stt_gateway_blob_and_restarts() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-call-transcription");
+    let root = unique_target_root("makosh-managed-call-transcription");
     let data = private_directory(short_communications_kernel_data_directory());
     let runtime_dir = private_directory(data.join("r"));
     initialize_vault(
@@ -42,7 +42,7 @@ fn managed_call_transcription_reaches_recording_stt_gateway_blob_and_restarts() 
     );
     let release = installed_call_transcription_ensemble_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     blob_binding::bind_installed_release(&store, release.kernel())
@@ -50,7 +50,7 @@ fn managed_call_transcription_reaches_recording_stt_gateway_blob_and_restarts() 
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             CALL_TRANSCRIPTION_LOGICAL_OWNER_ID_V1,
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -72,7 +72,7 @@ fn managed_call_transcription_reaches_recording_stt_gateway_blob_and_restarts() 
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     configure_speech_to_text_module_request_router_v1(&supervisor, &store);
     configure_call_transcription_realtime_v1(&supervisor, &store, realtime.clone());
@@ -165,7 +165,7 @@ fn managed_call_transcription_reaches_recording_stt_gateway_blob_and_restarts() 
         post_call_transcription_proto_status_v1(
             &router,
             &gateway_runtime,
-            Some("hermes_session=wrong-actor-session"),
+            Some("makosh_session=wrong-actor-session"),
             START_CONNECT_PATH_V1,
             StartCallTranscriptionRequestV1 {
                 protocol_major: 1,
@@ -189,7 +189,7 @@ fn managed_call_transcription_reaches_recording_stt_gateway_blob_and_restarts() 
         &router,
         &gateway_runtime,
         &cookie,
-        hermes_desktop_call_recording_runtime::admission::START_PATH_V1,
+        makosh_desktop_call_recording_runtime::admission::START_PATH_V1,
         StartDesktopCallRecordingRequestV1 {
             operation_id: recording_operation_id.clone(),
             call_evidence_id: vec![0x62; 16],
@@ -212,7 +212,7 @@ fn managed_call_transcription_reaches_recording_stt_gateway_blob_and_restarts() 
         Command::BeginCapture(begin) => begin.clone(),
         Command::StopCapture(_) => panic!("expected recording begin command"),
     };
-    let wav = std::fs::read(required("HERMES_WHISPER_STT_TEST_WAV"))
+    let wav = std::fs::read(required("MAKOSH_WHISPER_STT_TEST_WAV"))
         .expect("read real bounded Call Transcription WAV");
     let wav_duration_millis = canonical_pcm_wav_duration_millis_v1(&wav);
     let started_at = wall_millis_v1() - wav_duration_millis;
@@ -233,7 +233,7 @@ fn managed_call_transcription_reaches_recording_stt_gateway_blob_and_restarts() 
         &router,
         &gateway_runtime,
         &cookie,
-        hermes_desktop_call_recording_runtime::admission::STOP_PATH_V1,
+        makosh_desktop_call_recording_runtime::admission::STOP_PATH_V1,
         StopDesktopCallRecordingRequestV1 {
             recording_evidence_id: recording_start.recording_evidence_id.clone(),
         },
@@ -269,7 +269,7 @@ fn managed_call_transcription_reaches_recording_stt_gateway_blob_and_restarts() 
         &router,
         &gateway_runtime,
         &cookie,
-        hermes_desktop_call_recording_runtime::admission::GET_PATH_V1,
+        makosh_desktop_call_recording_runtime::admission::GET_PATH_V1,
         GetDesktopCallRecordingRequestV1 {
             recording_evidence_id: recording_start.recording_evidence_id.clone(),
         },
@@ -378,8 +378,8 @@ fn managed_call_transcription_reaches_recording_stt_gateway_blob_and_restarts() 
     validate_speech_transcript_document_v1(
         &document,
         artifact.duration_millis,
-        hermes_call_transcription_api::MAX_SEGMENTS_V1,
-        hermes_call_transcription_api::MAX_TRANSCRIPT_BYTES_V1
+        makosh_call_transcription_api::MAX_SEGMENTS_V1,
+        makosh_call_transcription_api::MAX_TRANSCRIPT_BYTES_V1
             .try_into()
             .expect("bounded transcript bytes"),
     )
@@ -393,7 +393,7 @@ fn managed_call_transcription_reaches_recording_stt_gateway_blob_and_restarts() 
         std::str::from_utf8(&text)
             .expect("transcript UTF-8")
             .to_ascii_lowercase()
-            .contains("hermes")
+            .contains("makosh")
     );
     assert_eq!(
         read_call_transcript_blob_v1(
@@ -456,7 +456,7 @@ fn managed_call_transcription_reaches_recording_stt_gateway_blob_and_restarts() 
     drop(nats_client);
     shutdown.store(true, Ordering::SeqCst);
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Call Transcription release fixture");
     std::fs::remove_dir_all(data).expect("remove Call Transcription Kernel fixture");

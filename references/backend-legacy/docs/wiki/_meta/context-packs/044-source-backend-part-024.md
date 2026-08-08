@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/domains/decisions/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/decisions/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/decisions/service.rs`
 - Size bytes / Размер в байтах: `2136`
 - Included characters / Включено символов: `2136`
 - Truncated / Обрезано: `no`
@@ -97,7 +97,7 @@ impl DecisionCommandService {
                         "decision_id": decision_id,
                         "review_state": review_state.as_str(),
                         "operation": "decision_review",
-                        "actor_id": "hermes-frontend",
+                        "actor_id": "makosh-frontend",
                     }),
                     format!("decision://{decision_id}/review"),
                 )
@@ -135,7 +135,7 @@ pub enum DecisionCommandServiceError {
 
 ### `backend/src/domains/decisions/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/decisions/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/decisions/store.rs`
 - Size bytes / Размер в байтах: `12139`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -523,7 +523,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/domains/decisions/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/decisions/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/decisions/validation.rs`
 - Size bytes / Размер в байтах: `2649`
 - Included characters / Включено символов: `2649`
 - Truncated / Обрезано: `no`
@@ -633,7 +633,7 @@ pub(super) fn validate_json_array(
 
 ### `backend/src/domains/documents/attachment_intelligence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/attachment_intelligence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/attachment_intelligence.rs`
 - Size bytes / Размер в байтах: `1641`
 - Included characters / Включено символов: `1641`
 - Truncated / Обрезано: `no`
@@ -692,7 +692,7 @@ impl AttachmentIntelligenceService {
 
 ### `backend/src/domains/documents/attachment_intelligence/classification.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/attachment_intelligence/classification.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/attachment_intelligence/classification.rs`
 - Size bytes / Размер в байтах: `2141`
 - Included characters / Включено символов: `2141`
 - Truncated / Обрезано: `no`
@@ -761,7 +761,7 @@ fn is_archive_filename(filename: &str) -> bool {
 
 ### `backend/src/domains/documents/attachment_intelligence/file_kinds.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/attachment_intelligence/file_kinds.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/attachment_intelligence/file_kinds.rs`
 - Size bytes / Размер в байтах: `1758`
 - Included characters / Включено символов: `1758`
 - Truncated / Обрезано: `no`
@@ -825,7 +825,7 @@ pub(super) fn is_document_type(content_type: &str, filename: &str) -> bool {
 
 ### `backend/src/domains/documents/attachment_intelligence/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/attachment_intelligence/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/attachment_intelligence/models.rs`
 - Size bytes / Размер в байтах: `2255`
 - Included characters / Включено символов: `2255`
 - Truncated / Обрезано: `no`
@@ -926,7 +926,7 @@ pub enum AttachmentIntelligenceError {
 
 ### `backend/src/domains/documents/attachment_intelligence/tests.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/attachment_intelligence/tests.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/attachment_intelligence/tests.rs`
 - Size bytes / Размер в байтах: `2323`
 - Included characters / Включено символов: `2323`
 - Truncated / Обрезано: `no`
@@ -1007,7 +1007,7 @@ fn is_archive_detects_zip() {
 
 ### `backend/src/domains/documents/core.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/core.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/core.rs`
 - Size bytes / Размер в байтах: `424`
 - Included characters / Включено символов: `424`
 - Truncated / Обрезано: `no`
@@ -1031,7 +1031,7 @@ pub use store::DocumentImportStore as DocumentImportPort;
 
 ### `backend/src/domains/documents/core/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/core/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/core/errors.rs`
 - Size bytes / Размер в байтах: `1031`
 - Included characters / Включено символов: `1031`
 - Truncated / Обрезано: `no`
@@ -1078,7 +1078,7 @@ pub enum DocumentImportWithProcessingError {
 
 ### `backend/src/domains/documents/core/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/core/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/core/evidence.rs`
 - Size bytes / Размер в байтах: `679`
 - Included characters / Включено символов: `679`
 - Truncated / Обрезано: `no`
@@ -1113,7 +1113,7 @@ pub(crate) async fn link_document_entity_in_transaction(
 
 ### `backend/src/domains/documents/core/fingerprint.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/core/fingerprint.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/core/fingerprint.rs`
 - Size bytes / Размер в байтах: `511`
 - Included characters / Включено символов: `511`
 - Truncated / Обрезано: `no`
@@ -1137,7 +1137,7 @@ pub(super) fn local_markdown_fingerprint(extracted_text: &str) -> String {
 
 ### `backend/src/domains/documents/core/markdown.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/core/markdown.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/core/markdown.rs`
 - Size bytes / Размер в байтах: `777`
 - Included characters / Включено символов: `777`
 - Truncated / Обрезано: `no`
@@ -1179,7 +1179,7 @@ fn markdown_heading_text(line: &str) -> Option<&str> {
 
 ### `backend/src/domains/documents/core/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/core/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/core/models.rs`
 - Size bytes / Размер в байтах: `2446`
 - Included characters / Включено символов: `2446`
 - Truncated / Обрезано: `no`
@@ -1265,7 +1265,7 @@ pub struct ImportedDocument {
 
 ### `backend/src/domains/documents/core/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/core/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/core/rows.rs`
 - Size bytes / Размер в байтах: `633`
 - Included characters / Включено символов: `633`
 - Truncated / Обрезано: `no`
@@ -1294,7 +1294,7 @@ pub(super) fn row_to_imported_document(
 
 ### `backend/src/domains/documents/core/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/core/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/core/store.rs`
 - Size bytes / Размер в байтах: `9067`
 - Included characters / Включено символов: `9067`
 - Truncated / Обрезано: `no`
@@ -1556,7 +1556,7 @@ impl DocumentImportStore {
 
 ### `backend/src/domains/documents/core/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/core/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/core/validation.rs`
 - Size bytes / Размер в байтах: `1891`
 - Included characters / Включено символов: `1891`
 - Truncated / Обрезано: `no`
@@ -1621,7 +1621,7 @@ fn validate_non_empty(
 
 ### `backend/src/domains/documents/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/mod.rs`
 - Size bytes / Размер в байтах: `67`
 - Included characters / Включено символов: `67`
 - Truncated / Обрезано: `no`
@@ -1634,7 +1634,7 @@ pub mod processing;
 
 ### `backend/src/domains/documents/processing.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/processing.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/processing.rs`
 - Size bytes / Размер в байтах: `630`
 - Included characters / Включено символов: `630`
 - Truncated / Обрезано: `no`
@@ -1667,7 +1667,7 @@ pub use store::DocumentProcessingStore;
 
 ### `backend/src/domains/documents/processing/artifacts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/processing/artifacts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/processing/artifacts.rs`
 - Size bytes / Размер в байтах: `2026`
 - Included characters / Включено символов: `2026`
 - Truncated / Обрезано: `no`
@@ -1742,7 +1742,7 @@ fn content_sha256_hex(value: &str) -> String {
 
 ### `backend/src/domains/documents/processing/constants.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/processing/constants.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/processing/constants.rs`
 - Size bytes / Размер в байтах: `681`
 - Included characters / Включено символов: `681`
 - Truncated / Обрезано: `no`
@@ -1763,7 +1763,7 @@ pub(super) const RETRY_SOURCE_PROVIDER: &str = "local_api";
 
 ### `backend/src/domains/documents/processing/documents.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/processing/documents.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/processing/documents.rs`
 - Size bytes / Размер в байтах: `2529`
 - Included characters / Включено символов: `2529`
 - Truncated / Обрезано: `no`
@@ -1871,7 +1871,7 @@ pub(super) struct DocumentRecord {
 
 ### `backend/src/domains/documents/processing/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/processing/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/processing/errors.rs`
 - Size bytes / Размер в байтах: `1320`
 - Included characters / Включено символов: `1320`
 - Truncated / Обрезано: `no`
@@ -1933,7 +1933,7 @@ pub enum DocumentProcessingError {
 
 ### `backend/src/domains/documents/processing/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/processing/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/processing/evidence.rs`
 - Size bytes / Размер в байтах: `706`
 - Included characters / Включено символов: `706`
 - Truncated / Обрезано: `no`
@@ -1969,7 +1969,7 @@ pub(super) async fn link_document_processing_entity_in_transaction(
 
 ### `backend/src/domains/documents/processing/ids.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/documents/processing/ids.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/documents/processing/ids.rs`
 - Size bytes / Размер в байтах: `472`
 - Included characters / Включено символов: `472`
 - Truncated / Обрезано: `no`

@@ -2,17 +2,17 @@
 
 use super::*;
 
-use hermes_attachment_security_persistence::{
+use makosh_attachment_security_persistence::{
     ATTACHMENT_SECURITY_STORAGE_BUNDLE_REVISION_V8, attachment_security_storage_bundle_v1,
 };
-use hermes_attachment_security_runtime::{
+use makosh_attachment_security_runtime::{
     admission::{
         ATTACHMENT_SECURITY_OWNER_ID, ATTACHMENT_SECURITY_STORAGE_CAPABILITY_ID,
         attachment_security_module_descriptor_v1,
     },
     settings::attachment_security_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     ManagedEngineRuntimeConfigurationV1, SettingValueV1, SettingsSnapshotV1, SettingsValueEntryV1,
     setting_value_v1::Value,
 };
@@ -64,7 +64,7 @@ pub(super) fn admit_attachment_security_runtime(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             ATTACHMENT_SECURITY_RELEASE_ARTIFACT_ID,
             Sha256::digest(
                 std::fs::read(attachment_security_binary())
@@ -279,5 +279,5 @@ fn attachment_security_settings_snapshot(
 }
 
 fn attachment_security_binary() -> PathBuf {
-    binary("HERMES_ATTACHMENT_SECURITY_RUNTIME_BIN")
+    binary("MAKOSH_ATTACHMENT_SECURITY_RUNTIME_BIN")
 }

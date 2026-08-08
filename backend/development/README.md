@@ -22,8 +22,8 @@ docker compose -f backend/development/compose.yaml down
 ```
 
 Normally the loopback endpoints are
-`postgres://hermes_development@127.0.0.1:35432/hermes_development`,
-`postgres://hermes_development@127.0.0.1:36532/hermes_development` through
+`postgres://makosh_development@127.0.0.1:35432/makosh_development`,
+`postgres://makosh_development@127.0.0.1:36532/makosh_development` through
 PgBouncer, and `nats://127.0.0.1:34222`. Some Docker Desktop/OrbStack configurations do not
 publish fixed host ports even when Compose accepts them; use
 `node backend/scripts/print-development-platform-endpoints.mjs` to print the live native-host
@@ -65,14 +65,14 @@ and PostgreSQL `NOLOGIN` fencing through the production adapters. The Vault
 invalidation boundary is a typed successful test port in that one check because
 the contour does not yet package a live Vault service.
 
-`hermes-development-kernel-operator` is a separate development-only workspace
+`makosh-development-kernel-operator` is a separate development-only workspace
 binary. It does not control Docker or run inside Kernel. For an environment
 where the endpoints are reachable from the native host, check that boundary
 explicitly with:
 
 ```sh
 cargo +1.97.0 run --locked --manifest-path backend/Cargo.toml \
-  --package hermes-development-kernel-operator -- probe \
+  --package makosh-development-kernel-operator -- probe \
   --postgres-address 127.0.0.1:35432 \
   --nats-address 127.0.0.1:34222
 ```
@@ -86,11 +86,11 @@ for `server_bootstrap_pairing_v1` or a production Kernel initial enrollment:
 
 ```sh
 cargo +1.97.0 run --locked --manifest-path backend/Cargo.toml \
-  --package hermes-development-kernel-operator -- pairing create \
+  --package makosh-development-kernel-operator -- pairing create \
   --state-dir /absolute/private/development-pairing --ttl-seconds 300
 
 cargo +1.97.0 run --locked --manifest-path backend/Cargo.toml \
-  --package hermes-development-kernel-operator -- pairing consume \
+  --package makosh-development-kernel-operator -- pairing consume \
   --state-dir /absolute/private/development-pairing --token YOUR_256_BIT_HEX_TOKEN
 ```
 
@@ -100,7 +100,7 @@ fingerprint before it sends the bearer token or device proof:
 
 ```sh
 cargo +1.97.0 run --locked --manifest-path backend/Cargo.toml \
-  --package hermes-development-kernel-operator -- pairing listen \
+  --package makosh-development-kernel-operator -- pairing listen \
   --state-dir /absolute/private/development-pairing \
   --listen-address 127.0.0.1:0 --idle-timeout-seconds 300
 ```
@@ -113,7 +113,7 @@ owner-private `0600` ES256 file and prints only the public key and signature:
 
 ```sh
 cargo +1.97.0 run --locked --manifest-path backend/Cargo.toml \
-  --package hermes-development-kernel-operator -- pairing proof \
+  --package makosh-development-kernel-operator -- pairing proof \
   --key-dir /absolute/private/development-device-key \
   --challenge CHALLENGE_HEX --owner-id owner_1 --device-id device_1
 ```
@@ -128,7 +128,7 @@ Production Kernel has no development-profile switch:
 
 ```sh
 cargo +1.97.0 run --locked --manifest-path backend/Cargo.toml \
-  --package hermes-development-kernel-operator -- \
+  --package makosh-development-kernel-operator -- \
   --data-dir /absolute/private/kernel-data \
   initial-owner-import-pairing \
   --pairing-state-dir /absolute/private/development-pairing
@@ -143,14 +143,14 @@ record can be created and rechecked without spawning a process:
 
 ```sh
 cargo +1.97.0 run --locked --manifest-path backend/Cargo.toml \
-  --package hermes-development-kernel-operator -- \
+  --package makosh-development-kernel-operator -- \
   --data-dir /absolute/private/kernel-data \
   module-owner-pin-artifact \
   --registration-id REGISTRATION_ID \
   --artifact /absolute/path/to/local-artifact
 
 cargo +1.97.0 run --locked --manifest-path backend/Cargo.toml \
-  --package hermes-development-kernel-operator -- \
+  --package makosh-development-kernel-operator -- \
   --data-dir /absolute/private/kernel-data \
   module-owner-pinned-preflight \
   --registration-id REGISTRATION_ID

@@ -1,21 +1,21 @@
-use hermes_communication_delivery_intent_core::{
+use makosh_communication_delivery_intent_core::{
     CommunicationConversationIdV1, CommunicationDeliveryRouteV1, CommunicationProviderProvenanceV1,
     CommunicationSourceCursorV1,
 };
-use hermes_communication_delivery_intent_ingress_api::{
+use makosh_communication_delivery_intent_ingress_api::{
     CommunicationDeliveryIntentIngressEnvelopeContextV1,
     build_communication_delivery_intent_submitted_outbox_record_v1,
     communication_delivery_intent_submit_message_id_v1,
     wire::CommunicationDeliveryIntentSubmittedV1,
 };
-use hermes_communication_delivery_intent_persistence::{
+use makosh_communication_delivery_intent_persistence::{
     CommunicationDeliveryIntentPersistenceV1, CreateDeliveryIntentV1,
     DeliveryIntentBodyBlobReceiptV1, DeliveryIntentIngressBlobReceiptV1,
     DeliveryIntentIngressDispositionV1, DeliveryIntentIngressEventV1,
     DeliveryIntentPersistenceConformanceV1, DeliveryIntentPersistenceErrorV1,
 };
 
-const POSTGRES_URL: &str = "HERMES_COMMUNICATION_DELIVERY_INTENT_POSTGRES_URL";
+const POSTGRES_URL: &str = "MAKOSH_COMMUNICATION_DELIVERY_INTENT_POSTGRES_URL";
 const OWNER: &str = "owner-1";
 
 #[tokio::test]
@@ -169,7 +169,7 @@ fn create_command(intent_id: [u8; 16]) -> CreateDeliveryIntentV1 {
 fn submitted_result(
     command_message_id: [u8; 16],
     intent_id: [u8; 16],
-) -> hermes_events_protocol::delivery::OutboxRecordV1 {
+) -> makosh_events_protocol::delivery::OutboxRecordV1 {
     build_communication_delivery_intent_submitted_outbox_record_v1(
         command_message_id,
         CommunicationDeliveryIntentSubmittedV1 {
@@ -177,7 +177,7 @@ fn submitted_result(
             logical_owner_id: OWNER.to_owned(),
         },
         &CommunicationDeliveryIntentIngressEnvelopeContextV1 {
-            module_id: "hermes-communication-delivery-intent-runtime".to_owned(),
+            module_id: "makosh-communication-delivery-intent-runtime".to_owned(),
             runtime_instance_id: "delivery-intent-runtime-1".to_owned(),
             runtime_generation: 3,
             recorded_at_unix_seconds: 1_800_000_010,

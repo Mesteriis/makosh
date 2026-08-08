@@ -1,5 +1,5 @@
 use crate::domains::graph::core::models::GraphReviewState;
-use hermes_projects_api::ProjectLinkReviewState;
+use makosh_projects_api::ProjectLinkReviewState;
 
 use super::constants::PROJECT_KEYWORD_CONFIDENCE;
 

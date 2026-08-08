@@ -1,14 +1,14 @@
 [package]
-name = "hermes-development-kernel-operator"
+name = "makosh-development-kernel-operator"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
 [[bin]]
-name = "hermes-development-kernel-operator"
+name = "makosh-development-kernel-operator"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "development"
 owner = "development"
 surface = "runtime"
@@ -18,9 +18,9 @@ components = []
 clap = { version = "=4.6.2", default-features = false, features = ["derive", "error-context", "help", "std", "usage"] }
 directories = "=6.0.0"
 getrandom = "=0.4.3"
-hermes-kernel-control-store = { path = "../../src/kernel/control_store/contract" }
-hermes-kernel-control-store-sqlite = { path = "../../src/kernel/control_store/sqlite" }
-hermes-runtime-protocol = { path = "../../src/platform/runtime_protocol" }
+makosh-kernel-control-store = { path = "../../src/kernel/control_store/contract" }
+makosh-kernel-control-store-sqlite = { path = "../../src/kernel/control_store/sqlite" }
+makosh-runtime-protocol = { path = "../../src/platform/runtime_protocol" }
 p256 = { version = "=0.14.0", default-features = false, features = ["ecdsa"] }
 prost = "=0.14.4"
 rcgen = "=0.13.2"

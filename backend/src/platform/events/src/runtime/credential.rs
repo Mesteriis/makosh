@@ -13,7 +13,7 @@ use hpke::{
 };
 use zeroize::Zeroizing;
 
-const DELIVERY_INFO: &[u8] = b"hermes-events/nats-runtime-credential/v1";
+const DELIVERY_INFO: &[u8] = b"makosh-events/nats-runtime-credential/v1";
 const X25519_BYTES: usize = 32;
 const REQUEST_ID_BYTES: usize = 16;
 const TAG_BYTES: usize = 16;

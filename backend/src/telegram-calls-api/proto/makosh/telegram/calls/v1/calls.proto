@@ -1,0 +1,245 @@
+syntax = "proto3";
+
+package makosh.telegram.calls.v1;
+
+service TelegramCallsQueryService {
+  rpc Query(CallsQueryRequestV1) returns (CallsQueryResponseV1);
+}
+
+service TelegramCallsCommandService {
+  rpc Execute(CallsCommandRequestV1) returns (CallsCommandResponseV1);
+}
+
+service TelegramCallsRealtimeService {
+  rpc Replay(CallsReplayRequestV1) returns (CallsReplayResponseV1);
+}
+
+enum CallDirectionV1 {
+  CALL_DIRECTION_V1_UNSPECIFIED = 0;
+  CALL_DIRECTION_V1_INCOMING = 1;
+  CALL_DIRECTION_V1_OUTGOING = 2;
+}
+
+enum CallStateV1 {
+  CALL_STATE_V1_UNSPECIFIED = 0;
+  CALL_STATE_V1_PENDING = 1;
+  CALL_STATE_V1_EXCHANGING_KEYS = 2;
+  CALL_STATE_V1_MEDIA_READY = 3;
+  CALL_STATE_V1_CONNECTING = 4;
+  CALL_STATE_V1_ACTIVE = 5;
+  CALL_STATE_V1_HANGING_UP = 6;
+  CALL_STATE_V1_ENDED = 7;
+  CALL_STATE_V1_FAILED = 8;
+}
+
+enum CallDiscardReasonV1 {
+  CALL_DISCARD_REASON_V1_UNSPECIFIED = 0;
+  CALL_DISCARD_REASON_V1_EMPTY = 1;
+  CALL_DISCARD_REASON_V1_MISSED = 2;
+  CALL_DISCARD_REASON_V1_DECLINED = 3;
+  CALL_DISCARD_REASON_V1_DISCONNECTED = 4;
+  CALL_DISCARD_REASON_V1_HUNG_UP = 5;
+}
+
+enum CallFailureCategoryV1 {
+  CALL_FAILURE_CATEGORY_V1_UNSPECIFIED = 0;
+  CALL_FAILURE_CATEGORY_V1_NETWORK = 1;
+  CALL_FAILURE_CATEGORY_V1_NOT_AVAILABLE = 2;
+  CALL_FAILURE_CATEGORY_V1_PERMISSION = 3;
+  CALL_FAILURE_CATEGORY_V1_PROTOCOL = 4;
+  CALL_FAILURE_CATEGORY_V1_UNKNOWN = 5;
+}
+
+enum CallOperationKindV1 {
+  CALL_OPERATION_KIND_V1_UNSPECIFIED = 0;
+  CALL_OPERATION_KIND_V1_INITIATE_AUDIO = 1;
+  CALL_OPERATION_KIND_V1_ACCEPT_AUDIO = 2;
+  CALL_OPERATION_KIND_V1_DECLINE = 3;
+  CALL_OPERATION_KIND_V1_END = 4;
+  CALL_OPERATION_KIND_V1_SET_LOCAL_MUTE = 5;
+}
+
+enum CallOperationStateV1 {
+  CALL_OPERATION_STATE_V1_UNSPECIFIED = 0;
+  CALL_OPERATION_STATE_V1_ACCEPTED = 1;
+  CALL_OPERATION_STATE_V1_DISPATCHING = 2;
+  CALL_OPERATION_STATE_V1_AWAITING_PROVIDER = 3;
+  CALL_OPERATION_STATE_V1_COMPLETED = 4;
+  CALL_OPERATION_STATE_V1_FAILED = 5;
+}
+
+message TelegramCallV1 {
+  string call_session_id = 1;
+  string account_id = 2;
+  optional int64 provider_call_unique_id = 3;
+  string provider_user_id = 4;
+  CallDirectionV1 direction = 5;
+  CallStateV1 state = 6;
+  bool pending_created = 7;
+  bool pending_received = 8;
+  optional CallDiscardReasonV1 discard_reason = 9;
+  optional CallFailureCategoryV1 failure_category = 10;
+  uint64 revision = 11;
+  uint64 created_at_unix_seconds = 12;
+  uint64 updated_at_unix_seconds = 13;
+  optional uint64 ended_at_unix_seconds = 14;
+  bool local_muted = 15;
+}
+
+message CallOperationV1 {
+  string operation_id = 1;
+  string call_session_id = 2;
+  string account_id = 3;
+  string operation_kind = 4;
+  string operation_state = 5;
+  uint64 accepted_at_unix_seconds = 6;
+  optional uint64 completed_at_unix_seconds = 7;
+  CallOperationKindV1 kind = 8;
+  CallOperationStateV1 state = 9;
+  optional CallFailureCategoryV1 failure_category = 10;
+  uint64 revision = 11;
+}
+
+message ListCallsRequestV1 {
+  string account_id = 1;
+  string after_call_session_id = 2;
+  uint32 limit = 3;
+}
+
+message GetCallRequestV1 {
+  string account_id = 1;
+  string call_session_id = 2;
+}
+
+message GetActiveCallRequestV1 {
+  string account_id = 1;
+}
+
+message ListCallOperationsRequestV1 {
+  string account_id = 1;
+  string after_operation_id = 2;
+  uint32 limit = 3;
+}
+
+message GetCallOperationRequestV1 {
+  string account_id = 1;
+  string operation_id = 2;
+}
+
+message CallsQueryRequestV1 {
+  oneof request {
+    ListCallsRequestV1 list_calls = 1;
+    GetCallRequestV1 get_call = 2;
+    GetActiveCallRequestV1 get_active_call = 3;
+    ListCallOperationsRequestV1 list_call_operations = 4;
+    GetCallOperationRequestV1 get_call_operation = 5;
+  }
+}
+
+message CallListV1 {
+  repeated TelegramCallV1 calls = 1;
+  string next_call_session_id = 2;
+}
+
+message CallOperationListV1 {
+  repeated CallOperationV1 operations = 1;
+  string next_operation_id = 2;
+}
+
+message CallsFailureV1 {
+  enum Code {
+    CODE_UNSPECIFIED = 0;
+    CODE_INVALID_REQUEST = 1;
+    CODE_NOT_FOUND = 2;
+    CODE_CONFLICT = 3;
+    CODE_UNAUTHORIZED = 4;
+    CODE_UNAVAILABLE = 5;
+  }
+
+  Code code = 1;
+  string field = 2;
+}
+
+message CallsQueryResponseV1 {
+  oneof response {
+    CallListV1 call_list = 1;
+    TelegramCallV1 call = 2;
+    CallOperationListV1 operation_list = 3;
+    CallOperationV1 operation = 4;
+    CallsFailureV1 failure = 5;
+    EmptyV1 no_active_call = 6;
+  }
+}
+
+message InitiateAudioCallRequestV1 {
+  string operation_id = 1;
+  string account_id = 2;
+  string provider_user_id = 3;
+}
+
+message AcceptAudioCallRequestV1 {
+  string operation_id = 1;
+  string account_id = 2;
+  string call_session_id = 3;
+}
+
+message DeclineCallRequestV1 {
+  string operation_id = 1;
+  string account_id = 2;
+  string call_session_id = 3;
+}
+
+message EndCallRequestV1 {
+  string operation_id = 1;
+  string account_id = 2;
+  string call_session_id = 3;
+}
+
+message SetLocalMuteRequestV1 {
+  string operation_id = 1;
+  string account_id = 2;
+  string call_session_id = 3;
+  bool muted = 4;
+}
+
+message CallsCommandRequestV1 {
+  oneof request {
+    InitiateAudioCallRequestV1 initiate_audio_call = 1;
+    AcceptAudioCallRequestV1 accept_audio_call = 2;
+    DeclineCallRequestV1 decline_call = 3;
+    EndCallRequestV1 end_call = 4;
+    SetLocalMuteRequestV1 set_local_mute = 5;
+  }
+}
+
+message CallsCommandResponseV1 {
+  oneof response {
+    CallOperationV1 accepted = 1;
+    CallsFailureV1 failure = 2;
+  }
+}
+
+message CallsReplayRequestV1 {
+  string account_id = 1;
+  uint64 after_sequence = 2;
+  uint32 limit = 3;
+}
+
+message CallFrameV1 {
+  uint64 sequence = 1;
+  oneof event {
+    TelegramCallV1 call = 2;
+    CallOperationV1 operation = 3;
+  }
+}
+
+message CallsReplayResponseV1 {
+  repeated CallFrameV1 frames = 1;
+  uint64 next_sequence = 2;
+  bool reset_required = 3;
+  optional uint64 earliest_available_sequence = 4;
+  optional uint64 latest_available_sequence = 5;
+  optional CallsFailureV1 failure = 6;
+}
+
+message EmptyV1 {}

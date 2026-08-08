@@ -1,4 +1,4 @@
-# Hermes Architecture Principles
+# Макошь Architecture Principles
 
 ## 1. Context Over CRUD
 

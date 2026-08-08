@@ -16,8 +16,8 @@ tags:
 
 # Backend‑тесты
 
-Обзор ключевых интеграционных тестов бэкенда Hermes‑Hub.  
-Каждый тестовый файл проверяет контракты API, проекции событий или взаимодействие подсистем.  
+Обзор ключевых интеграционных тестов бэкенда Макошь‑Hub.
+Каждый тестовый файл проверяет контракты API, проекции событий или взаимодействие подсистем.
 Описание базируется исключительно на коде тестов, встроенном в контекст репозитория.
 
 ## `v1_communications_templates.rs`
@@ -32,7 +32,7 @@ tags:
 - **Предпросмотр рассылки (mail‑merge preview)** – `POST /api/v1/communications/templates/rich/mail-merge-preview` с `template_id` и массивом `rows`. Ответ содержит `template_id`, `row_count`, `ready_count`, `blocked_count` и массив `items` с признаком `ready` и рендером (или набором отсутствующих переменных, например, `missing_variables: ["status"]`).
 - **Удаление (delete)** – `DELETE /api/v1/communications/templates/rich/{template_id}`. Ответ включает `template_id` и `deleted: true`. После удаления шаблон отсутствует в списке.
 
-Аутентификация: заголовок `x-hermes-secret`.
+Аутентификация: заголовок `x-makosh-secret`.
 
 ## `v1_workflow_actions.rs`
 
@@ -56,14 +56,14 @@ tags:
   - В `observation_links` появляются записи для `persona` и `identity` с relationship_kind = `workflow_action_projection`.
 - **Создание заметки** – тест `workflow_action_create_note_creates_markdown_document` присутствует (детали обрезаны в предоставленном контексте).
 
-Аутентификация помимо `x-hermes-secret` включает заголовок `x-hermes-actor-id` для передачи идентификатора инициатора.
+Аутентификация помимо `x-makosh-secret` включает заголовок `x-makosh-actor-id` для передачи идентификатора инициатора.
 
 ## `v2_domain_api.rs`
 
 Тесты маршрутов доменного API (задачи, персоны).
 
-- **Проверка секрета** – запросы без `x-hermes-secret` возвращают `403` с `error: "invalid_api_secret"`. При наличии секрета, но отключённой БД, возвращается `503` с `error: "database_not_configured"`.
-- **Список задач** – `GET /api/v1/tasks?limit=100` (PostgreSQL). Для задачи, созданной через `TaskStore::create`, проверяется, что ответ содержит поля `task_id`, `title`, `source_type` (ожидается `"observation"`), `hermes_status`, `confidentiality` (`"private_local"`), `task_metadata` (пустой объект).
+- **Проверка секрета** – запросы без `x-makosh-secret` возвращают `403` с `error: "invalid_api_secret"`. При наличии секрета, но отключённой БД, возвращается `503` с `error: "database_not_configured"`.
+- **Список задач** – `GET /api/v1/tasks?limit=100` (PostgreSQL). Для задачи, созданной через `TaskStore::create`, проверяется, что ответ содержит поля `task_id`, `title`, `source_type` (ожидается `"observation"`), `makosh_status`, `confidentiality` (`"private_local"`), `task_metadata` (пустой объект).
 - **Здоровье персоны** – `GET /api/v1/persons/{person_id}/health`. Проверяется, что ответ является единичным (не коллекцией), содержит `person_id`, `health_status` (`"at_risk"`), `communication_gap_days` (`42`) и не содержит массив `items`.
 
 ## `whatsapp.rs`
@@ -82,7 +82,7 @@ tags:
   - Сообщение, отправленное через `/api/v1/integrations/whatsapp/fixtures/messages`, сохраняется и появляется в агрегатных маршрутах: список сессий (`/api/v1/integrations/whatsapp/sessions`) и список сообщений (`/api/v1/communications/messages?channel_kind=whatsapp`).
 - **Нейтральные коммуникационные маршруты** – тест `whatsapp_provider_neutral_communications_routes_dispatch_to_whatsapp_commands` (находится в предоставленном фрагменте, детали обрезаны).
 
-Аутентификация: заголовок `x-hermes-secret`.
+Аутентификация: заголовок `x-makosh-secret`.
 
 ## `whatsapp_signal_hub.rs`
 
@@ -95,7 +95,7 @@ tags:
 - **События жизненного цикла** – подтверждается, что для всех типов событий (`RUNTIME_STATUS_CHANGED`, `SYNC_STARTED`, `MEDIA_UPLOAD_REQUESTED` и т.д.) в `event_bus` определена константа, а провайдерный обработчик способен их генерировать. Функция `sanitize_event_payload` удаляет ключи `session_key`, `access_token`, `password`, `raw_body`.
 - **Live‑smoke‑свидетельства** – скрипт‑валидатор `scripts/whatsapp-live-smoke-evidence.mjs` требует префиксы типа `'raw_record:'`, `'event_log:'`, `'command:'` и т.д. Для outbound‑команд обязательно наличие `command:` плюс provider‑observed‑событий (event_log / signal_hub). Документация (`live-smoke-checklist.md`, `status.md`, `whatsapp-live-smoke-readiness.mjs`) явно фиксирует этот ужесточённый контракт.
 - **Коллектор свидетельств** – скрипт `scripts/whatsapp-live-smoke-collect-evidence.mjs` нормализует наблюдения, проверяет через валидатор и не создаёт синтетических прохождений; gate остаются pending без настоящих sanitized‑refs.
-- **Путь обновления Native MD** – скрипт `scripts/whatsapp-native-md-sdk-gap-readiness.mjs` делает обновление Rust/wa‑rs исполняемым доказательством (проверка `cargo info`, `HERMES_WA_RS_CRATES_IO_PROBE=1`). Файлы `Cargo.toml` и `Cargo.lock` зафиксированы с версиями `wa-rs = 0.2.0`, `wa-rs-core = 0.2.0`.
+- **Путь обновления Native MD** – скрипт `scripts/whatsapp-native-md-sdk-gap-readiness.mjs` делает обновление Rust/wa‑rs исполняемым доказательством (проверка `cargo info`, `MAKOSH_WA_RS_CRATES_IO_PROBE=1`). Файлы `Cargo.toml` и `Cargo.lock` зафиксированы с версиями `wa-rs = 0.2.0`, `wa-rs-core = 0.2.0`.
 
 ## `yandex_telemost_calendar_matching.rs`
 
@@ -156,7 +156,7 @@ tags:
 |-------------|---------------|
 | `backend/tests/v1_communications_templates.rs` | Сохранение, список, рендеринг, mail‑merge preview и удаление rich‑шаблонов через API v1; проверка полей `placeholder_variables`, `undeclared_variables`, `unused_variables`, `malformed_placeholders`; проверка рендеринга с подстановкой переменных; предпросмотр рассылки с `ready`/`blocked` и `missing_variables`; удаление шаблона и его отсутствие в последующем списке. |
 | `backend/tests/v1_workflow_actions.rs` (частично, первые 12000 символов) | Эндпоинт workflow‑actions без БД возвращает `503`; смена состояния сообщения через PUT с сохранением `observation_links` и `origin_kind = "manual"`; идемпотентное создание задачи с проверкой `tasks`, `observation_links` (`task_create`, `workflow_action_projection`), `event_log` без утечки определённой строки; создание контакта с генерацией persona‑ и identity‑observation‑link; наличие теста создания заметки (детали обрезаны). |
-| `backend/tests/v2_domain_api.rs` | Проверка обязательности `x-hermes-secret` (403) и требования БД (503); GET‑tasks возвращает поля задачи с `source_type = "observation"`, `confidentiality = "private_local"`; GET‑person‑health возвращает одиночный результат с `health_status`, `communication_gap_days` и без массива `items`. |
+| `backend/tests/v2_domain_api.rs` | Проверка обязательности `x-makosh-secret` (403) и требования БД (503); GET‑tasks возвращает поля задачи с `source_type = "observation"`, `confidentiality = "private_local"`; GET‑person‑health возвращает одиночный результат с `health_status`, `communication_gap_days` и без массива `items`. |
 | `backend/tests/whatsapp.rs` (частично, первые 12000 символов) | `CommunicationProviderKind` для `whatsapp_web` / `whatsapp_business_cloud`, `is_whatsapp`, `is_email`, `is_telegram`; `ProviderAccountSecretPurpose::WhatsappWebSessionKey` принимает/отклоняет типы секретов; фикстура WhatsApp Business Cloud возвращает `session.companion_runtime = "api_credentials"` и соответствующие метаданные; фикстура Native MD проверяет `provider_shape`, появление в агрегатных маршрутах сессий и сообщений. |
 | `backend/tests/whatsapp_signal_hub.rs` (частично, первые 12000 символов) | Проверка маппинга в `signal_hub/whatsapp.rs` и наличия меток в матрице фикстур; проверка констант событий event‑bus и их генерации обработчиком; санитизация `sanitize_event_payload` удаляет секретные ключи; требования к live‑smoke‑evidence (валидатор с префиксами, обязательность `command:` + provider‑observed‑refs); коллектор как не‑bypass‑путь; проверка обновления Native MD через `cargo info` и зафиксированные версии `wa-rs = 0.2.0`. |
 | `backend/tests/yandex_telemost_calendar_matching.rs` | Проекция cohosts‑события в участников календаря: два уникальных участника с `role = "attendee"` и `source = "yandex_telemost_cohost_observed"`, дедупликация email. |

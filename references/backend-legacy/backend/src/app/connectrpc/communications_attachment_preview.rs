@@ -1,7 +1,7 @@
 use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD as BASE64_STANDARD;
 use connectrpc::{Response, ServiceResult};
-use hermes_connectrpc_contracts::hermes::communications::v1::GetAttachmentPreviewResponse;
+use makosh_connectrpc_contracts::makosh::communications::v1::GetAttachmentPreviewResponse;
 
 use super::communications_attachment_policy;
 use super::communications_request_policy::invalid_argument_error;

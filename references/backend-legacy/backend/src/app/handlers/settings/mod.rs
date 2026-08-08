@@ -1,5 +1,5 @@
-use hermes_communications_api::accounts::ProviderAccountMutationOrigin;
-use hermes_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
+use makosh_communications_api::accounts::ProviderAccountMutationOrigin;
+use makosh_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
 use std::collections::HashMap;
 
 use axum::Json;
@@ -12,7 +12,7 @@ const GOOGLE_CONTACTS_WRITE_SCOPE: &str = "https://www.googleapis.com/auth/conta
 
 use crate::platform::settings::models::ApplicationSetting;
 use crate::workflows::mail_background_sync::store::MailSyncStore;
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
 
 use crate::app::api_support::{
     platform_dtos::*,
@@ -258,7 +258,7 @@ pub(crate) async fn put_application_setting(
     Path(setting_key): Path<String>,
     Json(request): Json<ApplicationSettingUpdateRequest>,
 ) -> Result<Json<ApplicationSetting>, ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
 
     api_audit_log(&state)?
         .record(&NewApiAuditRecord::application_setting_set(

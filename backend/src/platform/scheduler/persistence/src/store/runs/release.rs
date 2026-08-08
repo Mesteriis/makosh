@@ -1,5 +1,5 @@
-use hermes_clock_protocol::UtcMillisV1;
-use hermes_scheduler_protocol::ScheduleTriggerV1;
+use makosh_clock_protocol::UtcMillisV1;
+use makosh_scheduler_protocol::ScheduleTriggerV1;
 use sqlx::{Postgres, Transaction, query};
 
 use super::claim::{SchedulerPostgresStoreV1, SchedulerRunClaimErrorV1};
@@ -76,7 +76,7 @@ async fn rearm_fixed_delay(
     finished_at: UtcMillisV1,
 ) -> Result<FixedDelayCompletionOutcomeV1, SchedulerRunClaimErrorV1> {
     let updated = query(
-        "UPDATE hermes_platform.scheduler_schedules SET next_due_at_unix_ms = $1, updated_at_unix_ms = $2 WHERE schedule_id = $3 AND schedule_revision = $4 AND enabled = TRUE AND concurrency_key = $5 AND max_parallelism = $6 AND policy_bytes = $7",
+        "UPDATE makosh_platform.scheduler_schedules SET next_due_at_unix_ms = $1, updated_at_unix_ms = $2 WHERE schedule_id = $3 AND schedule_revision = $4 AND enabled = TRUE AND concurrency_key = $5 AND max_parallelism = $6 AND policy_bytes = $7",
     )
     .bind(next_due.value())
     .bind(finished_at.value())
@@ -101,7 +101,7 @@ async fn mark_run_finished(
     finished_at: UtcMillisV1,
 ) -> Result<(), SchedulerRunClaimErrorV1> {
     let updated = query(
-        "UPDATE hermes_platform.scheduler_runs SET state = 'finished' WHERE run_id = $1 AND lease_epoch = $2 AND concurrency_key = $3 AND lease_expires_at_unix_ms > $4 AND state IN ('pending_dispatch', 'dispatched', 'running')",
+        "UPDATE makosh_platform.scheduler_runs SET state = 'finished' WHERE run_id = $1 AND lease_epoch = $2 AND concurrency_key = $3 AND lease_expires_at_unix_ms > $4 AND state IN ('pending_dispatch', 'dispatched', 'running')",
     )
     .bind(claim.run_id().bytes().to_vec())
     .bind(i64::try_from(claim.lease_epoch()).map_err(|_| SchedulerRunClaimErrorV1::Denied)?)
@@ -121,7 +121,7 @@ pub(crate) async fn release_concurrency_slot(
     finished_at: UtcMillisV1,
 ) -> Result<(), SchedulerRunClaimErrorV1> {
     let updated = query(
-        "UPDATE hermes_platform.scheduler_concurrency SET active_runs = active_runs - 1, updated_at_unix_ms = $2 WHERE concurrency_key = $1 AND active_runs > 0",
+        "UPDATE makosh_platform.scheduler_concurrency SET active_runs = active_runs - 1, updated_at_unix_ms = $2 WHERE concurrency_key = $1 AND active_runs > 0",
     )
     .bind(claim.concurrency_key().value())
     .bind(finished_at.value())
@@ -138,7 +138,7 @@ pub(crate) async fn reap_expired_in_transaction(
     now: UtcMillisV1,
 ) -> Result<(), SchedulerRunClaimErrorV1> {
     query(
-        "WITH expired AS (UPDATE hermes_platform.scheduler_runs SET state = 'expired' WHERE state IN ('pending_dispatch', 'dispatched', 'running') AND lease_expires_at_unix_ms <= $1 RETURNING concurrency_key), released AS (SELECT concurrency_key, COUNT(*)::INTEGER AS released_count FROM expired GROUP BY concurrency_key) UPDATE hermes_platform.scheduler_concurrency AS slots SET active_runs = GREATEST(slots.active_runs - released.released_count, 0), updated_at_unix_ms = $1 FROM released WHERE slots.concurrency_key = released.concurrency_key",
+        "WITH expired AS (UPDATE makosh_platform.scheduler_runs SET state = 'expired' WHERE state IN ('pending_dispatch', 'dispatched', 'running') AND lease_expires_at_unix_ms <= $1 RETURNING concurrency_key), released AS (SELECT concurrency_key, COUNT(*)::INTEGER AS released_count FROM expired GROUP BY concurrency_key) UPDATE makosh_platform.scheduler_concurrency AS slots SET active_runs = GREATEST(slots.active_runs - released.released_count, 0), updated_at_unix_ms = $1 FROM released WHERE slots.concurrency_key = released.concurrency_key",
     )
     .bind(now.value())
     .execute(&mut **transaction)

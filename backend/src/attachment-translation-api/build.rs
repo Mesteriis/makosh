@@ -9,14 +9,14 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&control_descriptor)
         .compile_protos(
-            &["proto/hermes/attachment_translation/v1/translation.proto"],
+            &["proto/makosh/attachment_translation/v1/translation.proto"],
             &["proto"],
         )
         .expect("Attachment Translation control protocol must compile");
     prost_build::Config::new()
         .file_descriptor_set_path(&read_descriptor)
         .compile_protos(
-            &["proto/hermes/attachment_translation/read/v1/read.proto"],
+            &["proto/makosh/attachment_translation/read/v1/read.proto"],
             &["proto"],
         )
         .expect("Attachment Translation read protocol must compile");

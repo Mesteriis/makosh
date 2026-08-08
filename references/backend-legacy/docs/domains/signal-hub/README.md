@@ -1,14 +1,14 @@
-# Hermes Signal Hub
+# Макошь Signal Hub
 
 Status: `IMPLEMENTATION STARTED`, 2026-06-23.
 
 Signal Hub is the system control plane for external and synthetic signal
-sources in Hermes. It is not a messenger UI, not an email client and not a
+sources in Макошь. It is not a messenger UI, not an email client and not a
 provider-specific integration folder. Signal Hub owns the durable registry of
 sources, connections, capabilities, runtime state, health, profiles, mute/pause
 policies and recovery fixtures.
 
-Hermes receives signals from the world and turns them into Communications,
+Макошь receives signals from the world and turns them into Communications,
 Radar, Review, domain objects, Memory and Knowledge. Signal Hub controls the
 first boundary of that chain.
 
@@ -106,7 +106,7 @@ accepted-signal Communications consumers beyond the current slices, broader
 replay semantics and broader UI/control coverage for the not-yet-migrated
 surfaces.
 
-Current migration note: Telegram provider-observation events now enter Hermes as
+Current migration note: Telegram provider-observation events now enter Макошь as
 `signal.raw.telegram.*.observed` and the Communications projection consumes the
 accepted Signal Hub family for that slice. These provider-observation raw
 events now also use the durable outbox-dispatch path instead of only appending

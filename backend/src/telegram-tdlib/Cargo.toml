@@ -1,5 +1,5 @@
 [package]
-name = "hermes-telegram-tdlib"
+name = "makosh-telegram-tdlib"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,15 +7,15 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "telegram"
 surface = "implementation"
 
 [dependencies]
 base64 = "=0.22.1"
-hermes-telegram-api = { path = "../telegram-api" }
-hermes-telegram-call-media-contract = { path = "../telegram-call-media-contract" }
+makosh-telegram-api = { path = "../telegram-api" }
+makosh-telegram-call-media-contract = { path = "../telegram-call-media-contract" }
 libloading = "=0.8.9"
 serde_json = "=1.0.150"
 zeroize = "=1.9.0"

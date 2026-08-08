@@ -1,6 +1,6 @@
 import { createClient, type Client } from '@connectrpc/connect'
 
-import { CommunicationsContentTicketService } from '../../gen/hermes/communications/content/ticket/v1/ticket_pb'
+import { CommunicationsContentTicketService } from '../../gen/makosh/communications/content/ticket/v1/ticket_pb'
 import { createBrowserGatewayConnectTransport } from '../gateway/browserGatewayConnect'
 
 let communicationsContentTicketClient:

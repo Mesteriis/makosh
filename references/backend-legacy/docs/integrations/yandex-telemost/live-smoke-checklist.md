@@ -3,9 +3,9 @@
 ## Preconditions
 
 ```text
-HERMES_SECRET_VAULT_KEY configured
+MAKOSH_SECRET_VAULT_KEY configured
 HostVault unlocked
-ffmpeg installed and available on PATH or HERMES_TELEMOST_FFMPEG_PATH set
+ffmpeg installed and available on PATH or MAKOSH_TELEMOST_FFMPEG_PATH set
 Yandex OAuth token has Telemost scopes
 ```
 
@@ -43,20 +43,20 @@ Linux:
 
 ```text
 yandex_telemost_prepare_audio_device
-route WebView output to hermes_telemost
-record hermes_telemost.monitor
+route WebView output to makosh_telemost
+record makosh_telemost.monitor
 ```
 
 macOS:
 
 ```text
 install/configure BlackHole 2ch or equivalent manually
-set HERMES_TELEMOST_FFMPEG_INPUT if ffmpeg needs a device index
+set MAKOSH_TELEMOST_FFMPEG_INPUT if ffmpeg needs a device index
 ```
 
 Windows:
 
 ```text
 configure WASAPI loopback or virtual audio cable
-set HERMES_TELEMOST_FFMPEG_INPUT when needed
+set MAKOSH_TELEMOST_FFMPEG_INPUT when needed
 ```

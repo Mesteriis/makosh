@@ -17,9 +17,9 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-side-panel',
-	`hermes-side-panel--${props.side}`,
-	`hermes-side-panel--${props.width}`,
+	'makosh-side-panel',
+	`makosh-side-panel--${props.side}`,
+	`makosh-side-panel--${props.width}`,
 	props.class
 ])
 
@@ -28,14 +28,14 @@ const accessibleLabel = computed(() => props.label ?? props.title)
 
 <template>
 	<component v-if="open" :is="as" :class="classes" :aria-label="accessibleLabel">
-		<header v-if="title || $slots.header" class="hermes-side-panel__header">
-			<strong v-if="title" class="hermes-side-panel__title">{{ title }}</strong>
+		<header v-if="title || $slots.header" class="makosh-side-panel__header">
+			<strong v-if="title" class="makosh-side-panel__title">{{ title }}</strong>
 			<slot name="header" />
 		</header>
-		<div class="hermes-side-panel__body">
+		<div class="makosh-side-panel__body">
 			<slot />
 		</div>
-		<footer v-if="$slots.footer" class="hermes-side-panel__footer">
+		<footer v-if="$slots.footer" class="makosh-side-panel__footer">
 			<slot name="footer" />
 		</footer>
 	</component>

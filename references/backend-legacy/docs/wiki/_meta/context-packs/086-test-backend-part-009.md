@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `test`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,18 +55,18 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/tests/persons/health_dossier.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons/health_dossier.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons/health_dossier.rs`
 - Size bytes / Размер в байтах: `5852`
 - Included characters / Включено символов: `5852`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::domains::persons::expertise::PersonExpertiseStore;
-use hermes_hub_backend::domains::persons::health::PersonHealthStore;
-use hermes_hub_backend::domains::persons::investigator::PersonInvestigator;
-use hermes_hub_backend::domains::persons::memory::{PersonFactStore, PersonPreferenceStore};
-use hermes_hub_backend::domains::persons::trust::PersonRiskStore;
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::domains::persons::expertise::PersonExpertiseStore;
+use makosh_hub_backend::domains::persons::health::PersonHealthStore;
+use makosh_hub_backend::domains::persons::investigator::PersonInvestigator;
+use makosh_hub_backend::domains::persons::memory::{PersonFactStore, PersonPreferenceStore};
+use makosh_hub_backend::domains::persons::trust::PersonRiskStore;
 
 use super::support::{live_persons_pool, unique_suffix};
 
@@ -167,7 +167,7 @@ async fn person_dossier_includes_target_sections_and_source_refs_against_postgre
         .upsert(
             &person.person_id,
             "project",
-            "Hermes Memory Graph",
+            "Макошь Memory Graph",
             "document:dossier-project",
             0.8,
         )
@@ -177,7 +177,7 @@ async fn person_dossier_includes_target_sections_and_source_refs_against_postgre
         .upsert(
             &person.person_id,
             "organization",
-            "Hermes Lab",
+            "Макошь Lab",
             "relationship:dossier-organization",
             0.85,
         )
@@ -214,8 +214,8 @@ async fn person_dossier_includes_target_sections_and_source_refs_against_postgre
         dossier_json["interests"][0]["source_refs"][0],
         "message:dossier-interest"
     );
-    assert_eq!(dossier_json["projects"][0]["value"], "Hermes Memory Graph");
-    assert_eq!(dossier_json["organizations"][0]["value"], "Hermes Lab");
+    assert_eq!(dossier_json["projects"][0]["value"], "Макошь Memory Graph");
+    assert_eq!(dossier_json["organizations"][0]["value"], "Макошь Lab");
     assert_eq!(
         dossier_json["skills"][0]["value"],
         "Rust backend architecture"
@@ -244,14 +244,14 @@ async fn person_dossier_includes_target_sections_and_source_refs_against_postgre
 
 ### `backend/tests/persons/identities.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons/identities.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons/identities.rs`
 - Size bytes / Размер в байтах: `4888`
 - Included characters / Включено символов: `4888`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::domains::persons::core::PersonsIdentityStore;
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::domains::persons::core::PersonsIdentityStore;
 
 use super::support::{live_persons_pool, unique_suffix};
 
@@ -395,18 +395,18 @@ async fn person_identities_support_unattached_trace_assignment_against_postgres(
 
 ### `backend/tests/persons/memory_preferences.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons/memory_preferences.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons/memory_preferences.rs`
 - Size bytes / Размер в байтах: `12266`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
 
 ```rust
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::domains::persons::core::{NewPersonPersona, PersonPersonaStore};
-use hermes_hub_backend::domains::persons::enrichment::PersonEnrichmentStore;
-use hermes_hub_backend::domains::persons::enrichment_engine::EnrichmentResultStore;
-use hermes_hub_backend::domains::persons::health::PersonHealthStore;
-use hermes_hub_backend::domains::persons::memory::PersonFactStore;
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::domains::persons::core::{NewPersonPersona, PersonPersonaStore};
+use makosh_hub_backend::domains::persons::enrichment::PersonEnrichmentStore;
+use makosh_hub_backend::domains::persons::enrichment_engine::EnrichmentResultStore;
+use makosh_hub_backend::domains::persons::health::PersonHealthStore;
+use makosh_hub_backend::domains::persons::memory::PersonFactStore;
 use serde_json::json;
 
 use super::support::{live_persons_pool, unique_suffix};
@@ -748,19 +748,19 @@ async fn person_watchlist_toggle_materializes_ui_preference_against_postgres() {
     assert!(!watchlist);
 
     let preference_count: i64 = sqlx::query_scalar(
-   
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/tests/persons/projection.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons/projection.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons/projection.rs`
 - Size bytes / Размер в байтах: `6973`
 - Included characters / Включено символов: `6973`
 - Truncated / Обрезано: `no`
 
 ```rust
-use hermes_hub_backend::domains::persons::api::{
+use makosh_hub_backend::domains::persons::api::{
     PersonProjectionError, PersonProjectionStore, PersonaType,
     upsert_persons_from_message_participants,
 };
@@ -985,21 +985,21 @@ async fn persons_schema_rejects_invalid_persona_type_against_postgres() {
 
 ### `backend/tests/persons/relationships.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons/relationships.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons/relationships.rs`
 - Size bytes / Размер в байтах: `12568`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
 
 ```rust
 use chrono::{Duration, Utc};
-use hermes_hub_backend::domains::obligations::{
+use makosh_hub_backend::domains::obligations::{
     ObligationEntityKind, ObligationReviewState, ObligationStatus, ObligationStore,
 };
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::domains::persons::core::PersonRoleStore;
-use hermes_hub_backend::domains::persons::enrichment::PersonEnrichmentStore;
-use hermes_hub_backend::domains::persons::intelligence::CommunicationFingerprint;
-use hermes_hub_backend::domains::persons::trust::PersonPromiseStore;
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::domains::persons::core::PersonRoleStore;
+use makosh_hub_backend::domains::persons::enrichment::PersonEnrichmentStore;
+use makosh_hub_backend::domains::persons::intelligence::CommunicationFingerprint;
+use makosh_hub_backend::domains::persons::trust::PersonPromiseStore;
 
 use super::support::{live_persons_pool, run_person_derived_evidence_consumer, unique_suffix};
 
@@ -1340,7 +1340,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/persons/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons/support.rs`
 - Size bytes / Размер в байтах: `1830`
 - Included characters / Включено символов: `1830`
 - Truncated / Обрезано: `no`
@@ -1351,10 +1351,10 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 use std::time::{SystemTime, UNIX_EPOCH};
 use testkit::context::TestContext;
 
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::platform::events::{EventConsumerConfig, EventConsumerRunner};
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::person_derived_evidence::{
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::platform::events::{EventConsumerConfig, EventConsumerRunner};
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::person_derived_evidence::{
     PERSON_DERIVED_EVIDENCE_CONSUMER, project_person_derived_evidence_event,
 };
 use sqlx::postgres::{PgPool, PgPoolOptions};
@@ -1376,7 +1376,7 @@ pub async fn live_persons_store(test_name: &str) -> Option<PersonProjectionStore
 
 pub fn disconnected_persons_store() -> PersonProjectionStore {
     let pool = PgPoolOptions::new()
-        .connect_lazy("postgres://hermes:unused@127.0.0.1:1/hermes_hub")
+        .connect_lazy("postgres://makosh:unused@127.0.0.1:1/makosh_hub")
         .expect("create lazy test pool");
     PersonProjectionStore::new(pool)
 }
@@ -1402,7 +1402,7 @@ pub async fn run_person_derived_evidence_consumer(pool: PgPool) {
 
 ### `backend/tests/persons_api.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons_api.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons_api.rs`
 - Size bytes / Размер в байтах: `666`
 - Included characters / Включено символов: `666`
 - Truncated / Обрезано: `no`
@@ -1432,7 +1432,7 @@ mod write_review_observations;
 
 ### `backend/tests/persons_api/auth.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons_api/auth.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons_api/auth.rs`
 - Size bytes / Размер в байтах: `636`
 - Included characters / Включено символов: `636`
 - Truncated / Обрезано: `no`
@@ -1455,22 +1455,22 @@ async fn persons_rejects_missing_local_api_secret() {
     let body = json_body(response).await;
     assert_eq!(
         body,
-        json!({"error": "invalid_api_secret", "message": "missing or invalid x-hermes-secret header"})
+        json!({"error": "invalid_api_secret", "message": "missing or invalid x-makosh-secret header"})
     );
 }
 ```
 
 ### `backend/tests/persons_api/dossier_owner.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons_api/dossier_owner.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons_api/dossier_owner.rs`
 - Size bytes / Размер в байтах: `9988`
 - Included characters / Включено символов: `9988`
 - Truncated / Обрезано: `no`
 
 ```rust
 use axum::http::StatusCode;
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
@@ -1752,15 +1752,15 @@ async fn person_owner_get_and_put_uses_owner_persona_against_postgres() {
 
 ### `backend/tests/persons_api/identity_traces.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons_api/identity_traces.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons_api/identity_traces.rs`
 - Size bytes / Размер в байтах: `5128`
 - Included characters / Включено символов: `5128`
 - Truncated / Обрезано: `no`
 
 ```rust
 use axum::http::StatusCode;
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::{Value, json};
 use sqlx::Row;
 use tower::ServiceExt;
@@ -1903,15 +1903,15 @@ async fn identity_traces_create_list_and_attach_unattached_trace() {
 
 ### `backend/tests/persons_api/persona_routes.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons_api/persona_routes.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons_api/persona_routes.rs`
 - Size bytes / Размер в байтах: `7194`
 - Included characters / Включено символов: `7194`
 - Truncated / Обрезано: `no`
 
 ```rust
 use axum::http::StatusCode;
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::platform::storage::Database;
 use serde_json::json;
 use sqlx::Row;
 use tower::ServiceExt;
@@ -2116,7 +2116,7 @@ async fn personas_put_updates_compatibility_projection_against_postgres() {
 
 ### `backend/tests/persons_api/read_endpoints.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons_api/read_endpoints.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons_api/read_endpoints.rs`
 - Size bytes / Размер в байтах: `4585`
 - Included characters / Включено символов: `4585`
 - Truncated / Обрезано: `no`
@@ -2262,7 +2262,7 @@ async fn person_expertise_search() {
 
 ### `backend/tests/persons_api/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons_api/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons_api/support.rs`
 - Size bytes / Размер в байтах: `4186`
 - Included characters / Включено символов: `4186`
 - Truncated / Обрезано: `no`
@@ -2275,11 +2275,11 @@ use axum::body::{Body, to_bytes};
 use axum::http::{Method, Request, header};
 use serde_json::Value;
 
-use hermes_hub_backend::app::{build_router, build_router_with_database};
-use hermes_hub_backend::platform::config::AppConfig;
-use hermes_hub_backend::platform::events::{EventConsumerConfig, EventConsumerRunner};
-use hermes_hub_backend::platform::storage::Database;
-use hermes_hub_backend::workflows::person_derived_evidence::{
+use makosh_hub_backend::app::{build_router, build_router_with_database};
+use makosh_hub_backend::platform::config::AppConfig;
+use makosh_hub_backend::platform::events::{EventConsumerConfig, EventConsumerRunner};
+use makosh_hub_backend::platform::storage::Database;
+use makosh_hub_backend::workflows::person_derived_evidence::{
     PERSON_DERIVED_EVIDENCE_CONSUMER, project_person_derived_evidence_event,
 };
 use sqlx::postgres::PgPool;
@@ -2292,7 +2292,7 @@ pub fn config_with_api_token() -> AppConfig {
 
 pub fn app_config_with_pairs(mut extra_pairs: Vec<(&'static str, String)>) -> AppConfig {
     let suffix = unique_suffix();
-    let vault_home = format!("/tmp/hermes-persons-api-vault-{suffix}");
+    let vault_home = format!("/tmp/makosh-persons-api-vault-{suffix}");
     let dev_key_path = format!("{vault_home}/dev.key");
     testkit::app::config_with_secret(LOCAL_API_TOKEN)
         .with_test_dev_vault_paths(vault_home, dev_key_path)
@@ -2310,7 +2310,7 @@ pub fn get_request(uri: &str) -> Request<Body> {
 pub fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -2320,7 +2320,7 @@ pub fn post_request_with_token(uri: &str, body: Value, token: &str) -> Request<B
         .method(Method::POST)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -2330,7 +2330,7 @@ pub fn put_request_with_token(uri: &str, body: Value, token: &str) -> Request<Bo
         .method(Method::PUT)
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -2339,7 +2339,7 @@ pub fn delete_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .method(Method::DELETE)
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -2401,7 +2401,7 @@ pub async fn run_person_derived_evidence_consumer(pool: PgPool) {
 
 ### `backend/tests/persons_api/write_entrypoints_basic.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons_api/write_entrypoints_basic.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons_api/write_entrypoints_basic.rs`
 - Size bytes / Размер в байтах: `6131`
 - Included characters / Включено символов: `6131`
 - Truncated / Обрезано: `no`
@@ -2620,7 +2620,7 @@ async fn person_watchlist_toggle() {
 
 ### `backend/tests/persons_api/write_identity_timeline.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons_api/write_identity_timeline.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons_api/write_identity_timeline.rs`
 - Size bytes / Размер в байтах: `6884`
 - Included characters / Включено символов: `6884`
 - Truncated / Обрезано: `no`
@@ -2630,8 +2630,8 @@ use serde_json::json;
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::platform::storage::Database;
 
 use super::support::{
     LOCAL_API_TOKEN, build_persons_app_with_database, delete_request_with_token, json_body,
@@ -2827,7 +2827,7 @@ async fn person_relationship_timeline_entrypoint_captures_observation_against_po
 
 ### `backend/tests/persons_api/write_memory_observations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons_api/write_memory_observations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons_api/write_memory_observations.rs`
 - Size bytes / Размер в байтах: `12171`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2837,8 +2837,8 @@ use serde_json::json;
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::platform::storage::Database;
 
 use super::support::{
     LOCAL_API_TOKEN, build_persons_app_with_database, json_body, post_request_with_token,
@@ -3176,13 +3176,13 @@ async fn person_manual_memory_entrypoints_capture_observations_against_postgres(
                ON kind.kind_definition_id = observation.kind_definition_id
              WHERE observation.observation_id = $1",
         )
-       
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/tests/persons_api/write_review_observations.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons_api/write_review_observations.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons_api/write_review_observations.rs`
 - Size bytes / Размер в байтах: `14056`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -3192,10 +3192,10 @@ use serde_json::json;
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-use hermes_hub_backend::domains::persons::enrichment_engine::EnrichmentResultStore;
-use hermes_hub_backend::domains::persons::identity::PersonIdentityStore;
-use hermes_hub_backend::platform::storage::Database;
+use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+use makosh_hub_backend::domains::persons::enrichment_engine::EnrichmentResultStore;
+use makosh_hub_backend::domains::persons::identity::PersonIdentityStore;
+use makosh_hub_backend::platform::storage::Database;
 
 use super::support::{
     LOCAL_API_TOKEN, build_persons_app_with_database, delete_request_with_token, json_body,
@@ -3546,7 +3546,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/persons_api_architecture.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons_api_architecture.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons_api_architecture.rs`
 - Size bytes / Размер в байтах: `1962`
 - Included characters / Включено символов: `1962`
 - Truncated / Обрезано: `no`
@@ -3618,7 +3618,7 @@ fn is_persons_api_test_file(path: &Path) -> bool {
 
 ### `backend/tests/persons_architecture.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/persons_architecture.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/persons_architecture.rs`
 - Size bytes / Размер в байтах: `1922`
 - Included characters / Включено символов: `1922`
 - Truncated / Обрезано: `no`

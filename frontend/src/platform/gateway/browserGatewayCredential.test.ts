@@ -19,7 +19,7 @@ describe('browser gateway credential storage', () => {
 		storeBrowserGatewayCredentialId('credential-id')
 
 		expect(readBrowserGatewayCredentialId()).toBe('credential-id')
-		expect([...entries]).toEqual([['hermes.browser.credential-id.v1', 'credential-id']])
+		expect([...entries]).toEqual([['makosh.browser.credential-id.v1', 'credential-id']])
 	})
 
 	it('fails closed when browser storage is unavailable', () => {

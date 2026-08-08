@@ -1,7 +1,7 @@
 //! Reads a status that is bound to the exact live Storage child generation.
 
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_storage_protocol::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_storage_protocol::{
     v1::{
         GetStorageRuntimeStatusRequestV1, StorageRuntimeControlRequestV1,
         StorageRuntimeControlResponseV1, StorageRuntimeStateV1, StorageRuntimeStatusV1,

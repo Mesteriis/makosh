@@ -9,15 +9,15 @@ use std::{
     time::Duration,
 };
 
-use hermes_attachment_translation_persistence::{
+use makosh_attachment_translation_persistence::{
     AttachmentTranslationPersistenceErrorV1, attachment_translation_storage_bundle_v1,
 };
-use hermes_attachment_translation_runtime::{
+use makosh_attachment_translation_runtime::{
     AttachmentTranslationManagedRuntimeErrorV1, AttachmentTranslationManagedRuntimeV1,
     AttachmentTranslationRuntimeAdmissionV1, attachment_translation_module_descriptor_v1,
     attachment_translation_settings_schema_bytes_v1,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,

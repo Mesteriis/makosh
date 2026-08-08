@@ -3,18 +3,18 @@
 use std::os::unix::fs::PermissionsExt;
 use std::sync::Arc;
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ExternalRuntimeIdentity, ModuleRegistration, ModuleRegistrationState,
     PlatformStorageBindingInputV1, PlatformStorageBindingV1,
 };
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_storage_protocol::{
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_storage_protocol::{
     StorageBindingAccessV1, StorageBindingFencesV1, StorageBindingIdentityV1, StorageBindingV1,
     StorageEffectiveBudgetsV1,
 };
-use hermes_vault_key_provider::WrappingKeyProvider;
-use hermes_vault_key_provider_file::FileWrappingKeyProvider;
-use hermes_vault_store_sqlcipher::VaultStore;
+use makosh_vault_key_provider::WrappingKeyProvider;
+use makosh_vault_key_provider_file::FileWrappingKeyProvider;
+use makosh_vault_store_sqlcipher::VaultStore;
 use p256::ecdsa::signature::Signer;
 use p256::ecdsa::{Signature, SigningKey};
 
@@ -41,7 +41,7 @@ pub(super) struct ExternalStorageVaultFixture {
 
 impl ExternalStorageVaultFixture {
     pub(super) fn new() -> Self {
-        let root = crate::tests::common::unique_target_root("hermes-external-storage-vault");
+        let root = crate::tests::common::unique_target_root("makosh-external-storage-vault");
         let data_dir = private_directory(&root.join("kernel"));
         let vault_dir = private_directory(&root.join("vault"));
         let store = Arc::new(
@@ -96,7 +96,7 @@ impl ExternalStorageVaultFixture {
     ) -> StorageBindingV1 {
         let identity = StorageBindingIdentityV1::new(
             "storage_main".to_owned(),
-            "hermes".to_owned(),
+            "makosh".to_owned(),
             "owner_1".to_owned(),
             REGISTRATION_ID.to_owned(),
             RUNTIME_ID.to_owned(),
@@ -213,7 +213,7 @@ fn proof_message(
     challenge: &crate::runtime::external::sessions::RuntimeChallenge,
     digest: [u8; 32],
 ) -> Vec<u8> {
-    let mut proof = b"hermes.external-runtime-session.v1\0".to_vec();
+    let mut proof = b"makosh.external-runtime-session.v1\0".to_vec();
     for value in [challenge.kernel_instance_id(), REGISTRATION_ID, RUNTIME_ID] {
         proof.extend_from_slice(&(value.len() as u16).to_be_bytes());
         proof.extend_from_slice(value.as_bytes());

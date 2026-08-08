@@ -2,15 +2,15 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_runtime_protocol::managed_control::{
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
-use hermes_runtime_protocol::v1::ModuleClientRequestV1;
-use hermes_telegram_api::{
+use makosh_runtime_protocol::v1::ModuleClientRequestV1;
+use makosh_telegram_api::{
     TelegramAccount, TelegramAccountState, TelegramClientRequest, TelegramClientResponse,
     TelegramRuntimeState, client_contract::TelegramClientContractV1, validate_setup,
 };
-use hermes_telegram_persistence::TelegramDurablePersistence;
+use makosh_telegram_persistence::TelegramDurablePersistence;
 use prost::Message;
 
 use crate::{
@@ -26,7 +26,7 @@ use crate::{
 pub(crate) struct TelegramConfigurationClientContextV1<'a, D> {
     pub(crate) runtime_available: bool,
     pub(crate) composition: &'a mut TelegramRuntimeComposition,
-    pub(crate) authorization_status: Option<&'a hermes_telegram_api::TelegramAuthorizationStatus>,
+    pub(crate) authorization_status: Option<&'a makosh_telegram_api::TelegramAuthorizationStatus>,
     pub(crate) durable: &'a TelegramDurablePersistence,
     pub(crate) control_channel: &'a mut ManagedControlChannelV2<UnixStream>,
     pub(crate) dispatcher: &'a mut D,
@@ -57,7 +57,7 @@ where
     let response = match request {
         TelegramClientRequest::AuthorizationStatus => {
             TelegramClientResponse::AuthorizationStatus(authorization_status.cloned().unwrap_or(
-                hermes_telegram_api::TelegramAuthorizationStatus {
+                makosh_telegram_api::TelegramAuthorizationStatus {
                     state: "starting".to_owned(),
                     qr_link: None,
                     password_hint: None,
@@ -179,7 +179,7 @@ fn owns_telegram_client_contract(request: &[u8]) -> Result<bool, TelegramClientT
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::v1::ContractReferenceV1;
+    use makosh_runtime_protocol::v1::ContractReferenceV1;
 
     use super::*;
 
@@ -187,7 +187,7 @@ mod tests {
     fn configuration_port_declines_another_telegram_build_unit_contract() {
         let request = ModuleClientRequestV1 {
             protocol_major: 1,
-            module_id: "hermes-telegram-runtime".to_owned(),
+            module_id: "makosh-telegram-runtime".to_owned(),
             owner_id: "telegram".to_owned(),
             contract: Some(ContractReferenceV1 {
                 owner: "telegram".to_owned(),

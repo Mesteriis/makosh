@@ -14,4 +14,4 @@ pub use managed_runtime::{
     KnowledgeManagedRuntimeErrorV1, KnowledgeManagedRuntimeV1, KnowledgeRuntimeAdmissionV1,
 };
 
-pub const PACKAGE: &str = "hermes-knowledge-runtime";
+pub const PACKAGE: &str = "makosh-knowledge-runtime";

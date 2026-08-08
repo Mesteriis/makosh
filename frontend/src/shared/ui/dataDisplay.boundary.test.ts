@@ -25,7 +25,7 @@ const dataDisplayComponents = [
 	'ComingSoonState'
 ]
 
-describe('Hermes UI data display component contracts', () => {
+describe('Макошь UI data display component contracts', () => {
 	it('keeps the data display batch documented and exported through the UI kit', () => {
 		const uiRoot = fileURLToPath(new URL('.', import.meta.url))
 		const barrel = readFileSync(join(uiRoot, 'index.ts'), 'utf8')

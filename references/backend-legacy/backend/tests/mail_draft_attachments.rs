@@ -1,24 +1,24 @@
 use chrono::Utc;
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
 use serde_json::json;
 
-use hermes_communications_postgres::provider_store::CommunicationProviderAccountStore;
-use hermes_hub_backend::domains::communications::drafts::{
+use makosh_communications_postgres::provider_store::CommunicationProviderAccountStore;
+use makosh_hub_backend::domains::communications::drafts::{
     CommunicationDraftStore, DraftStatus, NewCommunicationDraft,
 };
-use hermes_hub_backend::domains::communications::outbox::delivery::{
+use makosh_hub_backend::domains::communications::outbox::delivery::{
     EmailOutboxDeliveryWorker, OutboxDeliveryError, OutboxEmailSender, OutboxSendReceipt,
 };
-use hermes_hub_backend::domains::communications::outbox::{
+use makosh_hub_backend::domains::communications::outbox::{
     CommunicationOutboxStatus, CommunicationOutboxStore, NewCommunicationOutboxItem,
 };
-use hermes_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
-use hermes_hub_backend::domains::communications::storage::models::{
+use makosh_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
+use makosh_hub_backend::domains::communications::storage::models::{
     NewCommunicationAttachmentImport, NewCommunicationBlob,
 };
-use hermes_hub_backend::domains::communications::storage::store::CommunicationStorageStore;
-use hermes_hub_backend::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
+use makosh_hub_backend::domains::communications::storage::store::CommunicationStorageStore;
+use makosh_hub_backend::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
 
 #[derive(Clone)]
 struct PermanentFailureSender;
@@ -26,7 +26,7 @@ struct PermanentFailureSender;
 impl OutboxEmailSender for PermanentFailureSender {
     fn send<'a>(
         &'a self,
-        _item: &'a hermes_hub_backend::domains::communications::outbox::CommunicationOutboxItem,
+        _item: &'a makosh_hub_backend::domains::communications::outbox::CommunicationOutboxItem,
     ) -> std::pin::Pin<
         Box<
             dyn std::future::Future<Output = Result<OutboxSendReceipt, OutboxDeliveryError>>

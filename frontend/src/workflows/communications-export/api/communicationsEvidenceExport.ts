@@ -7,11 +7,11 @@ import {
 	EvidenceExportStatusChangedV1Schema,
 	type EvidenceExportStatusChangedV1,
 	type GetEvidenceExportStatusResponseV1,
-} from '../../../gen/hermes/communications_export/v1/export_pb'
+} from '../../../gen/makosh/communications_export/v1/export_pb'
 import {
 	ClientRealtimeStreamStateKindV1,
 	type ClientRealtimeEventV1,
-} from '../../../gen/hermes/gateway/v1/client_realtime_pb'
+} from '../../../gen/makosh/gateway/v1/client_realtime_pb'
 import { getCommunicationsExportCommandClient } from '../../../platform/connect/communicationsExportCommandClient'
 import { getCommunicationsExportQueryClient } from '../../../platform/connect/communicationsExportQueryClient'
 import { getCommunicationsExportTicketClient } from '../../../platform/connect/communicationsExportTicketClient'

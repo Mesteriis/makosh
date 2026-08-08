@@ -5,7 +5,7 @@
 Состояние реализации: production gate `attachment_security_engine_v1` открыт
 атомарно. Attachment-specific
 Communications schemas выделены без facade/duplicate source в
-`hermes-communications-attachment-contract`; executable dependency policy и
+`makosh-communications-attachment-contract`; executable dependency policy и
 отдельный managed Engine launch path реализованы. Engine-owned typed candidate
 contract, pure join/verdict core и bounded loopback ClamAV `INSTREAM` adapter
 реализованы отдельными Cargo units с unit и architecture coverage. Owner-local
@@ -118,7 +118,7 @@ integration state root и host-bridge semantics. Оба варианта нар�
 
 ```text
 owner_id  = attachment_security
-module_id = hermes-attachment-security-runtime
+module_id = makosh-attachment-security-runtime
 kind      = engine
 ```
 
@@ -129,41 +129,41 @@ kind      = engine
 ### Единицы сборки
 
 ```text
-hermes-communications-attachment-contract
+makosh-communications-attachment-contract
   domain-owned public attachment event/observation schemas
 
-hermes-attachment-security-contract
+makosh-attachment-security-contract
   engine-owned provider-neutral scan-candidate schema
 
-hermes-attachment-security-core
+makosh-attachment-security-core
   pure validation, durable join decision and closed verdict policy
 
-hermes-attachment-security-clamav
+makosh-attachment-security-clamav
   bounded clamd INSTREAM protocol adapter
 
-hermes-attachment-security-persistence
+makosh-attachment-security-persistence
   owner-local inbox, candidate/state join, retry job and exact outbox
 
-hermes-attachment-security-runtime
+makosh-attachment-security-runtime
   managed control, Event Hub, Blob read, scanner and relay orchestration
 
-hermes-attachment-security-assembly
+makosh-attachment-security-assembly
   descriptor/settings/Storage release composition only
 ```
 
-`hermes-communications-attachment-contract` становится единственным
+`makosh-communications-attachment-contract` становится единственным
 attachment-specific public contract package Communications. Existing
 attachment anchor, Blob-admission, safety-verdict и lifecycle schemas
 переносятся туда без facade, duplicate schema source или re-encoding adapter.
-General provider evidence остаётся в `hermes-communications-ingress`.
+General provider evidence остаётся в `makosh-communications-ingress`.
 
 Engine может зависеть только от exact allowlisted
-`hermes-communications-attachment-contract`, собственного contract/core/
+`makosh-communications-attachment-contract`, собственного contract/core/
 adapter/persistence и platform contracts. Он не импортирует
-`hermes-communications-api`, domain, runtime или persistence. Communications
-не импортирует ни один `hermes-attachment-security-*` package.
+`makosh-communications-api`, domain, runtime или persistence. Communications
+не импортирует ни один `makosh-attachment-security-*` package.
 
-Integration может зависеть от `hermes-attachment-security-contract`, но не от
+Integration может зависеть от `makosh-attachment-security-contract`, но не от
 engine core/adapter/persistence/runtime/assembly. Kernel, Gateway и platform
 packages не зависят от owner-specific engine packages.
 
@@ -208,7 +208,7 @@ runtime generation и grant epoch. Только полученный target-owne
 выдаёт/fence-ит sessions, но не читает bytes и не знает scanner verdict.
 
 Blob bytes идут напрямую из private Blob data socket в bounded engine buffer и
-затем в `hermes-attachment-security-clamav`. Maximum attachment size является
+затем в `makosh-attachment-security-clamav`. Maximum attachment size является
 hard descriptor/settings policy и никогда не расширяется payload-ом.
 
 Первый production scanner — explicit local clamd `INSTREAM` adapter:
@@ -229,7 +229,7 @@ fallback и generic endpoint map запрещены. Kernel применяет r
 
 ### Verdict authority
 
-`hermes-attachment-security-core` имеет закрытое отображение:
+`makosh-attachment-security-core` имеет закрытое отображение:
 
 ```text
 clamd OK       -> safe_for_delivery

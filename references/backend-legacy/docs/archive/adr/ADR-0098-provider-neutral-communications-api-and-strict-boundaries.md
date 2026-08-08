@@ -36,7 +36,7 @@ execution.
 
 ## Decision
 
-Hermes business Communications APIs are provider-neutral.
+Макошь business Communications APIs are provider-neutral.
 
 Provider-neutral product routes use:
 

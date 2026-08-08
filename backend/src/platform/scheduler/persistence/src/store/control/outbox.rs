@@ -1,4 +1,4 @@
-use hermes_events_protocol::delivery::{
+use makosh_events_protocol::delivery::{
     OutboxEntryV1, OutboxPublishReceiptV1, OutboxRecordV1, OutboxRelayErrorV1,
     OwnerOutboxStorePortV1,
 };
@@ -19,7 +19,7 @@ impl<'a> SchedulerScheduleControlResultOutboxV1<'a> {
 
     async fn next_result(&self) -> Result<Option<OutboxEntryV1>, OutboxRelayErrorV1> {
         let row = query_as::<_, (Vec<u8>, Vec<u8>, Vec<u8>)>(
-            "SELECT message_id, envelope_sha256, exact_envelope_bytes FROM hermes_platform.scheduler_schedule_control_results WHERE state = 'pending' ORDER BY created_at_unix_ms, message_id LIMIT 1",
+            "SELECT message_id, envelope_sha256, exact_envelope_bytes FROM makosh_platform.scheduler_schedule_control_results WHERE state = 'pending' ORDER BY created_at_unix_ms, message_id LIMIT 1",
         )
         .fetch_optional(self.store.pool())
         .await
@@ -33,7 +33,7 @@ impl<'a> SchedulerScheduleControlResultOutboxV1<'a> {
         receipt: &OutboxPublishReceiptV1,
     ) -> Result<(), OutboxRelayErrorV1> {
         let updated = query(
-            "UPDATE hermes_platform.scheduler_schedule_control_results SET state = 'published', published_stream = $2, published_sequence = $3 WHERE message_id = $1 AND state = 'pending'",
+            "UPDATE makosh_platform.scheduler_schedule_control_results SET state = 'published', published_stream = $2, published_sequence = $3 WHERE message_id = $1 AND state = 'pending'",
         )
         .bind(entry.record().message_id().to_vec())
         .bind(receipt.stream())
@@ -84,7 +84,7 @@ fn result_outbox_id(message_id: &[u8; 16]) -> String {
 }
 
 fn persistence(error: sqlx::Error) -> OutboxRelayErrorV1 {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_scheduler_schedule_control_persistence_error={error}");
     }
     OutboxRelayErrorV1::Persistence

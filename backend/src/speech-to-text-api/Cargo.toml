@@ -1,5 +1,5 @@
 [package]
-name = "hermes-speech-to-text-api"
+name = "makosh-speech-to-text-api"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,13 +7,13 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "engine"
 owner = "speech_to_text"
 surface = "contract"
 
 [dependencies]
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }
 

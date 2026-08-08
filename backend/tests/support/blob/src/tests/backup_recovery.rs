@@ -1,7 +1,7 @@
 use std::fs;
 use std::os::unix::fs::PermissionsExt;
 
-use hermes_blob_runtime::recovery::{
+use makosh_blob_runtime::recovery::{
     export_backup_offline, restore_backup_offline, verify_backup_offline,
 };
 

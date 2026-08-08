@@ -10,7 +10,7 @@ const props = withDefaults(defineProps<{
 	size: 'default'
 })
 
-const classes = computed(() => ['hermes-container', `hermes-container--${props.size}`, props.class])
+const classes = computed(() => ['makosh-container', `makosh-container--${props.size}`, props.class])
 </script>
 
 <template>

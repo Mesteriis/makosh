@@ -194,14 +194,14 @@ DDL или admin credential, а migration runner — право выполнит
 ### Владение и process topology
 
 Storage является platform owner `storage`. Kernel Supervisor управляет OS
-lifecycle managed PostgreSQL, PgBouncer и отдельного `hermes-storage-runtime`.
+lifecycle managed PostgreSQL, PgBouncer и отдельного `makosh-storage-runtime`.
 Дополнительный host supervisor не вводится.
 
 ```text
 Kernel Supervisor
 ├─ PostgreSQL
 ├─ PgBouncer
-└─ hermes-storage-runtime        control plane
+└─ makosh-storage-runtime        control plane
        ├─ cluster/bootstrap adapter
        ├─ roles/grants/budgets
        ├─ migration coordinator
@@ -210,7 +210,7 @@ Kernel Supervisor
 module runtime ── scoped binding ──> PgBouncer ──> PostgreSQL
 ```
 
-`hermes-storage-runtime`:
+`makosh-storage-runtime`:
 
 - bootstrap-ит и сверяет cluster identity;
 - управляет extensions, roles, grants, budgets и storage generation;
@@ -239,45 +239,45 @@ existing data plane. Он блокирует новые bindings, migrations и 
 Первая package topology фиксирована:
 
 ```text
-backend/src/platform/storage/protocol/     hermes-storage-protocol
-backend/src/platform/storage/control/      hermes-storage-control
-backend/src/platform/storage/vault/        hermes-storage-vault
-backend/src/platform/storage/runtime/      hermes-storage-runtime
-backend/src/platform/storage/postgres/     hermes-storage-postgres
-backend/src/platform/storage/pgbouncer/    hermes-storage-pgbouncer
-backend/src/platform/storage/migrations/   hermes-storage-migrations
+backend/src/platform/storage/protocol/     makosh-storage-protocol
+backend/src/platform/storage/control/      makosh-storage-control
+backend/src/platform/storage/vault/        makosh-storage-vault
+backend/src/platform/storage/runtime/      makosh-storage-runtime
+backend/src/platform/storage/postgres/     makosh-storage-postgres
+backend/src/platform/storage/pgbouncer/    makosh-storage-pgbouncer
+backend/src/platform/storage/migrations/   makosh-storage-migrations
 ```
 
 Metadata:
 
 | Package | role:owner:surface | Responsibility |
 |---|---|---|
-| `hermes-storage-protocol` | `platform:storage:contract` | capability request, binding, lifecycle и typed errors |
-| `hermes-storage-control` | `platform:storage:implementation` | SQL-free application orchestration и internal adapter ports |
-| `hermes-storage-vault` | `platform:storage:implementation` | shared ciphertext-only Vault route and fenced Storage credential lifecycle |
-| `hermes-storage-runtime` | `platform:storage:runtime`, component `storage_control` | privileged process composition |
-| `hermes-storage-postgres` | `platform:storage:persistence` | cluster, roles, grants, ledger и direct admin adapter |
-| `hermes-storage-pgbouncer` | `platform:storage:implementation` | pooler config, readiness, pause/drain/kill |
-| `hermes-storage-migrations` | `platform:storage:implementation` | bundle parser, AST admission и migration plan |
+| `makosh-storage-protocol` | `platform:storage:contract` | capability request, binding, lifecycle и typed errors |
+| `makosh-storage-control` | `platform:storage:implementation` | SQL-free application orchestration и internal adapter ports |
+| `makosh-storage-vault` | `platform:storage:implementation` | shared ciphertext-only Vault route and fenced Storage credential lifecycle |
+| `makosh-storage-runtime` | `platform:storage:runtime`, component `storage_control` | privileged process composition |
+| `makosh-storage-postgres` | `platform:storage:persistence` | cluster, roles, grants, ledger и direct admin adapter |
+| `makosh-storage-pgbouncer` | `platform:storage:implementation` | pooler config, readiness, pause/drain/kill |
+| `makosh-storage-migrations` | `platform:storage:implementation` | bundle parser, AST admission и migration plan |
 
-`hermes-storage-protocol` не зависит от SQL/SQLite/NATS clients, runtime
+`makosh-storage-protocol` не зависит от SQL/SQLite/NATS clients, runtime
 implementations, `serde_json` или owner modules. PostgreSQL client разрешён
-только `hermes-storage-postgres` и owner persistence packages. Migration AST
-parser разрешён `hermes-storage-migrations`, но этот package не получает
+только `makosh-storage-postgres` и owner persistence packages. Migration AST
+parser разрешён `makosh-storage-migrations`, но этот package не получает
 database credential или business owner implementation.
 
-`hermes-storage-control` содержит lifecycle use cases и internal ports, но не
-SQL, PgBouncer commands или process bootstrap. `hermes-storage-vault` владеет
+`makosh-storage-control` содержит lifecycle use cases и internal ports, но не
+SQL, PgBouncer commands или process bootstrap. `makosh-storage-vault` владеет
 одним reusable encrypted Vault route и exact Storage lease fencing; он не
-открывает PostgreSQL или PgBouncer. `hermes-storage-runtime` собирает control
+открывает PostgreSQL или PgBouncer. `makosh-storage-runtime` собирает control
 layer с concrete adapters. Такое разделение позволяет использовать тот же
 Vault route у independently supervised platform runtime без дублирования HPKE
 protocol и не превращает runtime entrypoint в god
 package.
 
 Kernel, Gateway и modules могут зависеть только от public protocol. Единственное
-явное platform исключение — `hermes-scheduler-runtime` может импортировать
-`hermes-storage-vault`: это узкий ciphertext-only adapter для уже выданного
+явное platform исключение — `makosh-scheduler-runtime` может импортировать
+`makosh-storage-vault`: это узкий ciphertext-only adapter для уже выданного
 Scheduler Storage lease, без SQL, PgBouncer или Storage Control API. Private
 storage packages не импортируют owner module packages. Owner migration bundle
 является packaged artifact, а не Cargo dependency Storage Control на все
@@ -286,23 +286,23 @@ persistence packages. Изменение persistence одного owner не д�
 
 ### Physical layout и namespaces
 
-Hermes управляет одним PostgreSQL cluster и одной logical Hermes database. В
+Макошь управляет одним PostgreSQL cluster и одной logical Макошь database. В
 ней фиксированы три platform-created schemas:
 
 | Schema | Содержимое |
 |---|---|
-| `hermes_data` | owner-prefixed business и provider operational objects |
-| `hermes_platform` | storage/event/job technical state, ledgers и shared technical tables |
-| `hermes_extensions` | extension-owned objects, если extension это поддерживает |
+| `makosh_data` | owner-prefixed business и provider operational objects |
+| `makosh_platform` | storage/event/job technical state, ledgers и shared technical tables |
+| `makosh_extensions` | extension-owned objects, если extension это поддерживает |
 
 Schema на каждый module не создаётся. Module migration не создаёт schemas,
-roles или extensions. `CREATE` у `PUBLIC` отозван во всех Hermes schemas.
+roles или extensions. `CREATE` у `PUBLIC` отозван во всех Макошь schemas.
 Runtime role получает `search_path = pg_catalog`; production SQL всегда
 schema-qualified. User-writable schema не входит в `search_path`.
 
 Каждый object имеет owner prefix даже внутри fixed schema. Cross-owner foreign
 keys и business SQL запрещены. Shared technical tables являются узкой platform
-capability, а не общим доступом к `hermes_platform`.
+capability, а не общим доступом к `makosh_platform`.
 
 ### Roles, principals и grants
 
@@ -324,7 +324,7 @@ provider account, email или иные private identifiers.
 Shared outbox/inbox/event tables принадлежат owner `events`. Module runtime не
 получает прямой DML grant на них. Вместо этого он получает `EXECUTE` только на
 versioned transaction-local functions наподобие
-`hermes_platform.events_append_outbox_v1`. Функция:
+`makosh_platform.events_append_outbox_v1`. Функция:
 
 - выводит caller из аутентифицированного runtime principal;
 - сверяет current registration/runtime/storage/grant/role generations;
@@ -341,8 +341,8 @@ session variable. Business mutation и append exact `DurableEnvelopeV1` bytes в
 outbox остаются одной локальной PostgreSQL transaction.
 
 V1 storage policy разрешает только
-`hermes_platform.events_append_outbox_v1` и
-`hermes_platform.events_accept_inbox_v1`. Новая shared technical function
+`makosh_platform.events_append_outbox_v1` и
+`makosh_platform.events_accept_inbox_v1`. Новая shared technical function
 добавляется решением её platform owner и exact policy update, а не проходит по
 шаблону имени.
 
@@ -490,12 +490,12 @@ Production authority использует PostgreSQL-compatible AST parser. Rege
 в repository является только быстрым heuristic precondition и не заменяет AST,
 roles/grants или testcontainers tests.
 
-`hermes-storage-postgres` и owner persistence adapters используют SQLx как
+`makosh-storage-postgres` и owner persistence adapters используют SQLx как
 единственный concrete PostgreSQL driver V1. Другой direct database client
 требует изменения policy и ADR, а не добавляется package-local решением.
-Checksum/lock primitives SQLx Migrator могут переиспользоваться внутри Hermes
+Checksum/lock primitives SQLx Migrator могут переиспользоваться внутри Макошь
 wrapper, но SQLx migration directory/table не являются public artifact или
-canonical authority. Hermes всё равно проверяет signed bundle digest, AST,
+canonical authority. Макошь всё равно проверяет signed bundle digest, AST,
 owner namespace, quiesce/fencing и own immutable ledger. `refinery` не вводится:
 вторая migration abstraction не решает эти platform obligations.
 
@@ -535,7 +535,7 @@ binary может быть явно запущена только при declare
 
 ### Canonical storage ledger
 
-`hermes_platform.storage_*` tables принадлежат owner `storage` и содержат:
+`makosh_platform.storage_*` tables принадлежат owner `storage` и содержат:
 
 - cluster/database identity и storage generation;
 - accepted owner bundles, steps, digests и results;

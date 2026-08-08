@@ -1,9 +1,9 @@
 #![forbid(unsafe_code)]
 
-use hermes_call_transcription_api::{MAX_SEGMENTS_V1, MAX_TRANSCRIPT_BYTES_V1};
+use makosh_call_transcription_api::{MAX_SEGMENTS_V1, MAX_TRANSCRIPT_BYTES_V1};
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-call-transcription-core";
+pub const PACKAGE: &str = "makosh-call-transcription-core";
 pub const MAX_AUDIO_BYTES_V1: u64 = 64 * 1024 * 1024;
 pub const MAX_DURATION_MILLIS_V1: u64 = 4 * 60 * 60 * 1_000;
 
@@ -152,7 +152,7 @@ pub fn request_fingerprint_v1(
 ) -> Result<[u8; 32], CallTranscriptionCoreErrorV1> {
     validate_draft_v1(draft)?;
     let mut digest = Sha256::new();
-    digest.update(b"hermes.call-transcription.request.v1\0");
+    digest.update(b"makosh.call-transcription.request.v1\0");
     digest.update(draft.operation_id);
     digest.update(draft.call_evidence_id);
     digest.update(draft.call_evidence_revision.to_be_bytes());

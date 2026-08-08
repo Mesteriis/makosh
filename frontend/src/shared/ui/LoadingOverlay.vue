@@ -13,7 +13,7 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-  'hermes-loading-overlay',
+  'makosh-loading-overlay',
   props.class
 ])
 </script>
@@ -21,9 +21,9 @@ const classes = computed(() => [
 <template>
   <div v-if="visible" :class="classes" role="status" aria-live="polite">
     <Spinner decorative size="lg" />
-    <div class="hermes-loading-overlay-copy">
-      <strong class="hermes-loading-overlay-label">{{ label }}</strong>
-      <p v-if="description" class="hermes-loading-overlay-description">{{ description }}</p>
+    <div class="makosh-loading-overlay-copy">
+      <strong class="makosh-loading-overlay-label">{{ label }}</strong>
+      <p v-if="description" class="makosh-loading-overlay-description">{{ description }}</p>
       <slot />
     </div>
   </div>

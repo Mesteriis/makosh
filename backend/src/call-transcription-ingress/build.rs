@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/call_transcription/ingress/v1/recording.proto"],
+            &["proto/makosh/call_transcription/ingress/v1/recording.proto"],
             &["proto"],
         )
         .expect("call transcription ingress protocol");

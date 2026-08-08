@@ -3,7 +3,7 @@ import { domainScaffoldModels } from './domainScaffoldFixtures'
 import { createDomainScaffoldStory } from './domainScaffoldStory'
 
 const meta = {
-  title: 'Hermes App/Event Traces/Scaffold'
+  title: 'Макошь App/Event Traces/Scaffold'
 } satisfies Meta
 
 export default meta

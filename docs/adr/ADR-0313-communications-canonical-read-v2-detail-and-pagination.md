@@ -40,10 +40,10 @@ actions, Review state и provider execution не входят в этот gate.
 Gate реализуется в существующих Communications build units:
 
 ```text
-hermes-communications-api
-hermes-communications-persistence
-hermes-communications-runtime
-hermes-communications-assembly
+makosh-communications-api
+makosh-communications-persistence
+makosh-communications-runtime
+makosh-communications-assembly
 frontend Communications domain
 ```
 
@@ -51,7 +51,7 @@ frontend Communications domain
 создаётся. Exact route остаётся:
 
 ```text
-/hermes.communications.query.v1.CommunicationsQueryService/Query
+/makosh.communications.query.v1.CommunicationsQueryService/Query
 ```
 
 `communications.query.v1` получает additive schema revision и capability

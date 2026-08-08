@@ -2,8 +2,8 @@
 
 use std::os::unix::net::UnixStream;
 
-use hermes_communications_persistence::CommunicationsDurablePersistence;
-use hermes_runtime_protocol::{
+use makosh_communications_persistence::CommunicationsDurablePersistence;
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{ManagedRuntimeModuleQueryDeliveryV1, ManagedRuntimeModuleQueryResponseV1},
     validation::module_query::validate_module_query_delivery_v1,

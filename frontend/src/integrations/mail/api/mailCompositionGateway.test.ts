@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { MailCompositionModeV1 } from '../../../gen/hermes/mail/composition/v1/client_pb'
+import { MailCompositionModeV1 } from '../../../gen/makosh/mail/composition/v1/client_pb'
 import { getMailCompositionCommandConnectClient } from './mailCompositionCommandClient'
 import { getMailCompositionQueryConnectClient } from './mailCompositionQueryClient'
 import {

@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
-use hermes_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
-use hermes_provider_telemost::protocol::{
+use makosh_communications_api::accounts::{CommunicationProviderKind, ProviderAccount};
+use makosh_provider_telemost::protocol::{
     YANDEX_TELEMOST_API_BASE_URL, YANDEX_TELEMOST_PROVIDER_KIND_STR,
 };
 use serde::{Deserialize, Serialize};
@@ -398,11 +398,11 @@ pub fn webview_manifest_for_request(
             consent_required: true,
             default_output_policy: "app_data_dir/telemost-recordings/{account_id}/{recording_session_id}",
             audio_device_policy: YandexTelemostLocalRecordingPolicy {
-                macos: "use explicit loopback input such as BlackHole 2ch; Hermes does not install kernel audio drivers silently",
-                linux: "prepare command can create a PulseAudio/PipeWire null sink named hermes_telemost and record hermes_telemost.monitor",
+                macos: "use explicit loopback input such as BlackHole 2ch; Макошь does not install kernel audio drivers silently",
+                linux: "prepare command can create a PulseAudio/PipeWire null sink named makosh_telemost and record makosh_telemost.monitor",
                 windows: "use WASAPI loopback or an explicitly configured virtual input",
-                ffmpeg_path_env: "HERMES_TELEMOST_FFMPEG_PATH",
-                ffmpeg_input_env: "HERMES_TELEMOST_FFMPEG_INPUT",
+                ffmpeg_path_env: "MAKOSH_TELEMOST_FFMPEG_PATH",
+                ffmpeg_input_env: "MAKOSH_TELEMOST_FFMPEG_INPUT",
             },
         },
         speaker_timeline: YandexTelemostSpeakerTimelinePolicy {

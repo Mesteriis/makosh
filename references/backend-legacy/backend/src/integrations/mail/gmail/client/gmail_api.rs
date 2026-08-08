@@ -1,12 +1,12 @@
-use hermes_communications_api::accounts::CommunicationProviderKind;
-use hermes_communications_api::address_book::{
+use makosh_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::address_book::{
     AddressBookProviderBatch, AddressBookProviderEntry, AddressBookProviderUpsertRequest,
 };
-use hermes_communications_api::email::{OutgoingEmail, SendResult};
-use hermes_communications_api::mail_resources::{
+use makosh_communications_api::email::{OutgoingEmail, SendResult};
+use makosh_communications_api::mail_resources::{
     DiscoveredMailProviderResource, MailProviderResourceKind, MailProviderSemanticRole,
 };
-use hermes_provider_mail::gmail::{
+use makosh_provider_mail::gmail::{
     GmailHistoryItem, GmailHistoryResponse, GmailLabel, GmailLabelsResponse, GmailListResponse,
     GmailRawMessage, GmailSendResponse, GooglePeopleConnectionsResponse, GooglePeoplePerson,
 };
@@ -18,7 +18,7 @@ use serde_json::{Map, Value, json};
 
 use crate::integrations::mail::send::build_rfc2822_message;
 use crate::platform::secrets::models::ResolvedSecret;
-use hermes_communications_api::email_sync::{EmailSyncBatch, FetchedCommunicationSourceMessage};
+use makosh_communications_api::email_sync::{EmailSyncBatch, FetchedCommunicationSourceMessage};
 
 use super::errors::EmailProviderNetworkError;
 use super::helpers::{
@@ -773,7 +773,7 @@ fn history_message_ids(history_items: Vec<GmailHistoryItem>) -> Vec<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_communications_api::accounts::CommunicationProviderKind;
+    use makosh_communications_api::accounts::CommunicationProviderKind;
     use serde_json::json;
 
     #[test]

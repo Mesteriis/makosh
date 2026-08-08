@@ -1,12 +1,12 @@
 //! Live runtime-adapter conformance for the authenticated PgBouncer contour.
 
-use hermes_storage_protocol::v1::{StorageDeploymentProfileV1, StorageRuntimeTopologyV1};
+use makosh_storage_protocol::v1::{StorageDeploymentProfileV1, StorageRuntimeTopologyV1};
 use zeroize::Zeroizing;
 
-const AUTHENTICATED_TEST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_TEST";
-const PASSWORD_FILE_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE";
-const PGBOUNCER_HOST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_HOST";
-const PGBOUNCER_PORT_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PORT";
+const AUTHENTICATED_TEST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_TEST";
+const PASSWORD_FILE_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE";
+const PGBOUNCER_HOST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_HOST";
+const PGBOUNCER_PORT_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PORT";
 
 #[test]
 #[ignore = "requires the disposable authenticated Storage Compose contour"]
@@ -23,7 +23,7 @@ fn topology() -> StorageRuntimeTopologyV1 {
         topology_revision: 1,
         storage_generation: 1,
         storage_instance_id: "storage_main".to_owned(),
-        database_id: "hermes".to_owned(),
+        database_id: "makosh".to_owned(),
         deployment_profile: StorageDeploymentProfileV1::MacosTauriEmbedded as i32,
         postgres_artifact_sha256: vec![1; 32],
         pgbouncer_artifact_sha256: vec![2; 32],

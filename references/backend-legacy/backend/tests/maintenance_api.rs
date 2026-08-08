@@ -1,11 +1,11 @@
 use axum::body::to_bytes;
 use axum::http::StatusCode;
-use hermes_backend_testkit::app::{TEST_API_SECRET, get, post_json};
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::app::{TEST_API_SECRET, get, post_json};
+use makosh_backend_testkit::context::TestContext;
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::app::router::build_router_with_database;
 
 #[tokio::test]
 async fn maintenance_overview_reports_inventory_backups_and_guarded_actions() {

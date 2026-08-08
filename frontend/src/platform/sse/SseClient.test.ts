@@ -83,7 +83,7 @@ describe('SseClient', () => {
 	expect(url).toBe('http://127.0.0.1:8080/api/realtime/v2/events?after_position=41')
     expect(init.headers).toMatchObject({
       Accept: 'text/event-stream',
-      'X-Hermes-Secret': 'test-secret',
+      'X-Макошь-Secret': 'test-secret',
       'Last-Event-ID': '41'
     })
   })

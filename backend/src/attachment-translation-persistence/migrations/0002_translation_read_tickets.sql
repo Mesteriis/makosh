@@ -1,4 +1,4 @@
-ALTER TABLE hermes_data.attachment_translation_runs
+ALTER TABLE makosh_data.attachment_translation_runs
 ADD COLUMN artifact_runtime_generation BIGINT,
 ADD COLUMN artifact_grant_epoch BIGINT,
 ADD CONSTRAINT attachment_translation_artifact_fence_check CHECK (
@@ -8,7 +8,7 @@ ADD CONSTRAINT attachment_translation_artifact_fence_check CHECK (
       AND artifact_grant_epoch > 0)
 );
 
-CREATE TABLE hermes_data.attachment_translation_read_tickets (
+CREATE TABLE makosh_data.attachment_translation_read_tickets (
     logical_owner_id TEXT NOT NULL,
     ticket_sha256 BYTEA NOT NULL,
     device_actor_sha256 BYTEA NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE hermes_data.attachment_translation_read_tickets (
 );
 
 CREATE INDEX attachment_translation_read_tickets_expiry_idx
-ON hermes_data.attachment_translation_read_tickets (
+ON makosh_data.attachment_translation_read_tickets (
     logical_owner_id,
     expires_at_unix_seconds
 );

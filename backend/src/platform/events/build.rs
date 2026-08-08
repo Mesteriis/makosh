@@ -4,6 +4,6 @@ fn main() {
         std::env::set_var("PROTOC", protoc);
     }
 
-    prost_build::compile_protos(&["proto/hermes/events/v1/envelope.proto"], &["proto"])
+    prost_build::compile_protos(&["proto/makosh/events/v1/envelope.proto"], &["proto"])
         .expect("events protocol must compile");
 }

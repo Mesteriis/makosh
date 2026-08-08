@@ -1,4 +1,4 @@
-use hermes_events_protocol::delivery::OutboxRecordV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
 use sqlx::{Postgres, Transaction};
 
 use crate::{
@@ -73,7 +73,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
             return commit(transaction).await;
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_cross_channel_forward_operations
+            "UPDATE makosh_data.communication_cross_channel_forward_operations
              SET state = $1, state_revision = state_revision + 1,
                  claimed_by = NULL, lease_expires_at_unix_millis = NULL,
                  updated_at_unix_millis = $2
@@ -148,7 +148,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
         let delivery_body_length = i64::try_from(delivery_body.declared_bytes)
             .map_err(|_| CrossChannelForwardPersistenceErrorV1::InvalidInput)?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_cross_channel_forward_operations
+            "UPDATE makosh_data.communication_cross_channel_forward_operations
              SET state = $1, state_revision = state_revision + 1,
                  source_evidence_id = $2, source_revision = $3,
                  source_body_sha256 = $4, source_body_length = $5,
@@ -229,7 +229,7 @@ impl CommunicationCrossChannelForwardPersistenceV1 {
         let error_code = i16::try_from(rejected.rejection_code)
             .map_err(|_| CrossChannelForwardPersistenceErrorV1::InvalidInput)?;
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_cross_channel_forward_operations
+            "UPDATE makosh_data.communication_cross_channel_forward_operations
              SET state = $1, state_revision = state_revision + 1,
                  source_result_message_id = $2, error_code = $3,
                  claimed_by = NULL, lease_expires_at_unix_millis = NULL,
@@ -278,7 +278,7 @@ pub(crate) async fn inbox_duplicate(
     consumed_at_unix_millis: i64,
 ) -> Result<bool, CrossChannelForwardPersistenceErrorV1> {
     let inserted = sqlx::query(
-        "INSERT INTO hermes_data.communication_cross_channel_forward_event_inbox (
+        "INSERT INTO makosh_data.communication_cross_channel_forward_event_inbox (
             message_id, envelope_sha256, event_kind, logical_owner_id,
             forward_id, consumed_at_unix_millis
          ) VALUES ($1, $2, $3, $4, $5, $6)
@@ -298,7 +298,7 @@ pub(crate) async fn inbox_duplicate(
     }
     let existing: Option<(Vec<u8>, i16, String, Vec<u8>)> = sqlx::query_as(
         "SELECT envelope_sha256, event_kind, logical_owner_id, forward_id
-         FROM hermes_data.communication_cross_channel_forward_event_inbox
+         FROM makosh_data.communication_cross_channel_forward_event_inbox
          WHERE message_id = $1",
     )
     .bind(message_id.as_slice())

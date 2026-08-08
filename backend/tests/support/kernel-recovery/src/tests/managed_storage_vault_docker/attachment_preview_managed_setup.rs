@@ -3,16 +3,16 @@
 use super::*;
 
 use crate::platform::client_realtime::ClientRealtimePublishHandlerV1;
-use hermes_attachment_preview_api::{ATTACHMENT_PREVIEW_MODULE_ID_V1, ATTACHMENT_PREVIEW_OWNER_V1};
-use hermes_attachment_preview_persistence::{
+use makosh_attachment_preview_api::{ATTACHMENT_PREVIEW_MODULE_ID_V1, ATTACHMENT_PREVIEW_OWNER_V1};
+use makosh_attachment_preview_persistence::{
     ATTACHMENT_PREVIEW_STORAGE_BUNDLE_REVISION_V1, attachment_preview_storage_bundle_v1,
 };
-use hermes_attachment_preview_runtime::{
+use makosh_attachment_preview_runtime::{
     ATTACHMENT_PREVIEW_STORAGE_CAPABILITY_ID_V1, attachment_preview_module_descriptor_v1,
     attachment_preview_settings_schema_bytes_v1,
 };
-use hermes_gateway_runtime::InMemoryBrowserRealtimeSource;
-use hermes_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
+use makosh_gateway_runtime::InMemoryBrowserRealtimeSource;
+use makosh_runtime_protocol::v1::ManagedWorkflowRuntimeConfigurationV1;
 
 const ATTACHMENT_PREVIEW_RELEASE_ARTIFACT_ID_V1: &str = "attachment_preview.runtime.v1";
 const ATTACHMENT_PREVIEW_BUILD_ID_V1: &str = "managed-attachment-preview-live";
@@ -66,7 +66,7 @@ pub(super) fn admit_attachment_preview_runtime_v1(
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             ATTACHMENT_PREVIEW_RELEASE_ARTIFACT_ID_V1,
             Sha256::digest(
                 std::fs::read(attachment_preview_binary())
@@ -276,5 +276,5 @@ pub(super) fn attachment_preview_release_artifact_v1() -> SignedRuntimeArtifact 
 }
 
 fn attachment_preview_binary() -> PathBuf {
-    binary("HERMES_ATTACHMENT_PREVIEW_RUNTIME_BIN")
+    binary("MAKOSH_ATTACHMENT_PREVIEW_RUNTIME_BIN")
 }

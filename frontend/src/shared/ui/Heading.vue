@@ -10,7 +10,7 @@ const props = withDefaults(defineProps<{
 })
 
 const tagName = computed(() => props.as ?? `h${props.level}`)
-const classes = computed(() => ['hermes-heading', `hermes-heading--${props.level}`, props.class])
+const classes = computed(() => ['makosh-heading', `makosh-heading--${props.level}`, props.class])
 </script>
 
 <template>

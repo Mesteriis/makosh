@@ -35,10 +35,10 @@ ADR-0257 и ADR-0275.
 Каждая integration владеет собственной contract build unit:
 
 ```text
-hermes-mail-delivery-intent-contract
-hermes-telegram-delivery-intent-contract
-hermes-whatsapp-delivery-intent-contract
-hermes-zulip-delivery-intent-contract
+makosh-mail-delivery-intent-contract
+makosh-telegram-delivery-intent-contract
+makosh-whatsapp-delivery-intent-contract
+makosh-zulip-delivery-intent-contract
 ```
 
 Это четыре самостоятельные единицы сборки с разными owners, Protobuf packages,
@@ -79,10 +79,10 @@ payload и свободный error text в results запрещены.
 
 | Owner | Module | Blob capability | Custody scope |
 |---|---|---|---|
-| `mail` | `hermes-mail-runtime` | `mail.blob.v1` | `mail.delivery-intent-body.v1` |
-| `telegram` | `hermes-telegram-runtime` | `telegram.blob.v1` | `telegram.delivery-intent-body.v1` |
-| `whatsapp` | `hermes-whatsapp-runtime` | `whatsapp.blob.v1` | `whatsapp.delivery-intent-body.v1` |
-| `zulip` | `hermes-zulip-runtime` | `zulip.blob.v1` | `zulip.delivery-intent-body.v1` |
+| `mail` | `makosh-mail-runtime` | `mail.blob.v1` | `mail.delivery-intent-body.v1` |
+| `telegram` | `makosh-telegram-runtime` | `telegram.blob.v1` | `telegram.delivery-intent-body.v1` |
+| `whatsapp` | `makosh-whatsapp-runtime` | `whatsapp.blob.v1` | `whatsapp.delivery-intent-body.v1` |
+| `zulip` | `makosh-zulip-runtime` | `zulip.blob.v1` | `zulip.delivery-intent-body.v1` |
 
 Contract unit владеет этими target constants. Свободный recipient в client
 payload отсутствует. Integration consumer связывает proof с exact consumed

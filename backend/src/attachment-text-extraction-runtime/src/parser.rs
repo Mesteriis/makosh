@@ -1,13 +1,13 @@
-use hermes_attachment_text_extraction_core::{
+use makosh_attachment_text_extraction_core::{
     AttachmentTextFormatV1, normalize_attachment_text_v1,
 };
-use hermes_attachment_text_extraction_docx::extract_docx_text_v1;
-use hermes_attachment_text_extraction_ocr::{TesseractOcrConfigurationV1, extract_image_text_v1};
-use hermes_attachment_text_extraction_parser_contract::{
+use makosh_attachment_text_extraction_docx::extract_docx_text_v1;
+use makosh_attachment_text_extraction_ocr::{TesseractOcrConfigurationV1, extract_image_text_v1};
+use makosh_attachment_text_extraction_parser_contract::{
     AttachmentTextParserErrorV1, AttachmentTextParserKindV1, detect_attachment_text_parser_v1,
 };
-use hermes_attachment_text_extraction_pdf::extract_pdf_text_v1;
-use hermes_attachment_text_extraction_plain::extract_plain_text_v1;
+use makosh_attachment_text_extraction_pdf::extract_pdf_text_v1;
+use makosh_attachment_text_extraction_plain::extract_plain_text_v1;
 use sha2::{Digest, Sha256};
 
 pub struct AttachmentTextExtractionParserRuntimeV1 {
@@ -75,7 +75,7 @@ impl AttachmentTextExtractionParserRuntimeV1 {
 
     fn parser_identity_v1(&self, parser: AttachmentTextParserKindV1) -> [u8; 32] {
         let mut digest = Sha256::new();
-        digest.update(b"hermes.attachment-text-extraction.parser-identity.v1\0");
+        digest.update(b"makosh.attachment-text-extraction.parser-identity.v1\0");
         match parser {
             AttachmentTextParserKindV1::PlainUtf8 => digest.update(b"plain-v1"),
             AttachmentTextParserKindV1::Pdf => digest.update(b"pdf-text-extract-0.2.0-v1"),
@@ -164,7 +164,7 @@ mod tests {
     #[test]
     fn artifact_identity_is_exact_for_the_current_parser_revision() {
         let runtime = AttachmentTextExtractionParserRuntimeV1::new(None);
-        let parsed = runtime.extract(b"Hermes").expect("plain extraction");
+        let parsed = runtime.extract(b"makosh").expect("plain extraction");
         assert!(runtime.matches_artifact_identity_v1(
             AttachmentTextFormatV1::PlainUtf8,
             parsed.parser_identity_sha256,

@@ -25,22 +25,22 @@ schema, роль или migration lifecycle.
 ## Решение
 
 Communications использует только owner-local PostgreSQL через
-`hermes-communications-persistence`. Его runtime композирует persistence, но
+`makosh-communications-persistence`. Его runtime композирует persistence, но
 domain и public contracts не зависят от `sqlx`, Storage Control или Vault.
 
 Exact owner graph:
 
 ```text
-hermes-communications-api
+makosh-communications-api
         ↑
-hermes-communications-domain
+makosh-communications-domain
         ↑
-hermes-communications-persistence
+makosh-communications-persistence
         ↑
-hermes-communications-runtime
+makosh-communications-runtime
 ```
 
-`hermes-communications-ingress` является event contract и не получает SQL
+`makosh-communications-ingress` является event contract и не получает SQL
 dependency. Integration packages не импортируют Communications persistence и
 не получают его database binding.
 

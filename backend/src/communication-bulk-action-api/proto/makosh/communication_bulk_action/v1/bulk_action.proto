@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package makosh.communication_bulk_action.v1;
+
+message StartBulkDeliveryRequestV1 {
+  uint32 protocol_major = 1;
+  bytes batch_operation_id = 2;
+  repeated BulkDeliveryTargetV1 targets = 3;
+}
+
+message BulkDeliveryTargetV1 {
+  bytes target_operation_id = 1;
+  bytes conversation_id = 2;
+  optional bytes reply_to_message_id = 3;
+  bytes body_utf8 = 4;
+}
+
+message StartBulkDeliveryResponseV1 {
+  bytes batch_id = 1;
+  BulkDeliveryBatchStateV1 state = 2;
+  uint32 target_count = 3;
+  BulkDeliveryErrorCodeV1 error = 15;
+}
+
+message GetBulkDeliveryStatusRequestV1 {
+  uint32 protocol_major = 1;
+  bytes batch_id = 2;
+  uint32 limit = 3;
+  bytes cursor = 4;
+}
+
+message GetBulkDeliveryStatusResponseV1 {
+  bytes batch_id = 1;
+  BulkDeliveryBatchStateV1 state = 2;
+  uint64 state_revision = 3;
+  repeated BulkDeliveryTargetStatusV1 targets = 4;
+  bytes next_cursor = 5;
+  BulkDeliveryErrorCodeV1 error = 15;
+}
+
+message BulkDeliveryTargetStatusV1 {
+  bytes target_operation_id = 1;
+  BulkDeliveryTargetStateV1 state = 2;
+  optional bytes delivery_intent_id = 3;
+  BulkDeliveryErrorCodeV1 error = 15;
+}
+
+message BulkDeliveryStatusChangedV1 {
+  bytes batch_id = 1;
+  BulkDeliveryBatchStateV1 state = 2;
+  uint64 state_revision = 3;
+  uint64 occurred_at_unix_millis = 4;
+}
+
+service CommunicationBulkDeliveryCommandService {
+  rpc Start(StartBulkDeliveryRequestV1)
+      returns (StartBulkDeliveryResponseV1);
+}
+
+service CommunicationBulkDeliveryQueryService {
+  rpc GetStatus(GetBulkDeliveryStatusRequestV1)
+      returns (GetBulkDeliveryStatusResponseV1);
+}
+
+enum BulkDeliveryBatchStateV1 {
+  BULK_DELIVERY_BATCH_STATE_UNSPECIFIED = 0;
+  BULK_DELIVERY_BATCH_STATE_ACCEPTED = 1;
+  BULK_DELIVERY_BATCH_STATE_COMPLETED = 2;
+  BULK_DELIVERY_BATCH_STATE_COMPLETED_WITH_ERRORS = 3;
+  BULK_DELIVERY_BATCH_STATE_REJECTED = 4;
+}
+
+enum BulkDeliveryTargetStateV1 {
+  BULK_DELIVERY_TARGET_STATE_UNSPECIFIED = 0;
+  BULK_DELIVERY_TARGET_STATE_PENDING = 1;
+  BULK_DELIVERY_TARGET_STATE_DISPATCHING = 2;
+  BULK_DELIVERY_TARGET_STATE_ACCEPTED = 3;
+  BULK_DELIVERY_TARGET_STATE_RETRYABLE = 4;
+  BULK_DELIVERY_TARGET_STATE_REJECTED = 5;
+}
+
+enum BulkDeliveryErrorCodeV1 {
+  BULK_DELIVERY_ERROR_CODE_UNSPECIFIED = 0;
+  BULK_DELIVERY_ERROR_CODE_INVALID_REQUEST = 1;
+  BULK_DELIVERY_ERROR_CODE_NOT_FOUND = 2;
+  BULK_DELIVERY_ERROR_CODE_DELIVERY_INTENT_REJECTED = 3;
+  BULK_DELIVERY_ERROR_CODE_RETRY_EXHAUSTED = 4;
+  BULK_DELIVERY_ERROR_CODE_UNAVAILABLE = 5;
+}

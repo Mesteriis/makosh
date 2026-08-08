@@ -10,4 +10,4 @@ chunk_count: 1
 
 | Chunk | Role | Group | Sources | Summary |
 |---|---|---:|---:|---|
-| [[components/scripts/162-source-scripts|162-source-scripts]] | `source` | `scripts` | 23 | Обновить страницу `components/scripts.md` в русской Obsidian‑wiki репозитория `hermes-hub`. Страница должна документировать все скрипты из директории `scripts/`, их назначение, поведение, зависимости и ключевые функции… |
+| [[components/scripts/162-source-scripts|162-source-scripts]] | `source` | `scripts` | 23 | Обновить страницу `components/scripts.md` в русской Obsidian‑wiki репозитория `makosh`. Страница должна документировать все скрипты из директории `scripts/`, их назначение, поведение, зависимости и ключевые функции… |

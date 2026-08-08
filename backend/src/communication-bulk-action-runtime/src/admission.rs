@@ -1,9 +1,9 @@
-use hermes_communication_bulk_action_api::{
+use makosh_communication_bulk_action_api::{
     COMMUNICATION_BULK_ACTION_CAPABILITY_ID_V1, COMMUNICATION_BULK_ACTION_COMMAND_CONNECT_PATH_V1,
     COMMUNICATION_BULK_ACTION_MODULE_ID_V1, COMMUNICATION_BULK_ACTION_OWNER_V1,
     COMMUNICATION_BULK_ACTION_QUERY_CONNECT_PATH_V1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     CapabilityCriticalityV1, CapabilityDescriptorV1, CapabilityRequestV1, ClientRpcRouteV1,
     ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1,
     RuntimeBudgetRequestV1, SettingsSchemaRefV1, SettingsSchemaV1, StorageNamespaceRequestV1,
@@ -100,7 +100,7 @@ fn client_capability() -> CapabilityDescriptorV1 {
 }
 
 fn client_surface(
-    contract: hermes_runtime_protocol::v1::ContractReferenceV1,
+    contract: makosh_runtime_protocol::v1::ContractReferenceV1,
     path: &str,
 ) -> ProvidedSurfaceV1 {
     ProvidedSurfaceV1 {
@@ -141,7 +141,7 @@ fn delivery_dependency_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::validation::descriptor::{
+    use makosh_runtime_protocol::validation::descriptor::{
         validate_descriptor_v1, validate_settings_schema_v1,
     };
 

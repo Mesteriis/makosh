@@ -80,12 +80,12 @@ Platform strategy:
 
 ```text
 Linux:
-  try to create PulseAudio/PipeWire null sink `hermes_telemost`
-  record `hermes_telemost.monitor`
+  try to create PulseAudio/PipeWire null sink `makosh_telemost`
+  record `makosh_telemost.monitor`
 
 macOS:
   require explicit external loopback device such as BlackHole 2ch
-  Hermes does not silently install system audio drivers
+  Макошь does not silently install system audio drivers
 
 Windows:
   use WASAPI loopback or an explicit virtual audio cable/input
@@ -129,7 +129,7 @@ transcription, diarization, Call Intelligence, Radar and Timeline workflows.
 ```text
 Yandex Telemost conference
 ↓
-visible Hermes WebView + local capture
+visible Макошь WebView + local capture
 ↓
 Call Bundle
 ↓

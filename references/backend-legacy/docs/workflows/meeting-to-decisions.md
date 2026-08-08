@@ -4,7 +4,7 @@ This workflow explains how meetings and calls become decision memory.
 
 ## Trigger
 
-The workflow starts when Hermes has evidence from:
+The workflow starts when Макошь has evidence from:
 
 - calendar meeting;
 - call;

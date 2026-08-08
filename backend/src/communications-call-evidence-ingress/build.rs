@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/communications/call_evidence/v1/call_evidence.proto"],
+            &["proto/makosh/communications/call_evidence/v1/call_evidence.proto"],
             &["proto"],
         )
         .expect("Communications call evidence ingress protocol must compile");

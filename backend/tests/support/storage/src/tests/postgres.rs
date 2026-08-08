@@ -1,4 +1,4 @@
-use hermes_storage_postgres::{StorageRoleErrorV1, StorageRoleSpecV1};
+use makosh_storage_postgres::{StorageRoleErrorV1, StorageRoleSpecV1};
 
 use super::fixtures::storage_role_binding;
 

@@ -8,7 +8,7 @@ use std::{
 
 use super::*;
 
-use hermes_desktop_call_recording_api::{
+use makosh_desktop_call_recording_api::{
     HOST_PROTOCOL_MAJOR_V1, HOST_PROTOCOL_REVISION_V1,
     wire::{
         DesktopRecordingHostCommandClaimV1, DesktopRecordingHostCommandLeaseV1,

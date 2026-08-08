@@ -21,9 +21,9 @@
 - Group / Группа: `docker`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `docker/Dockerfile`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docker/Dockerfile`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docker/Dockerfile`
 - Size bytes / Размер в байтах: `1675`
 - Included characters / Включено символов: `1675`
 - Truncated / Обрезано: `no`
@@ -103,7 +103,7 @@ COPY crates ./crates
 
 RUN cargo build \
     --manifest-path backend/Cargo.toml \
-    --bin hermes-whatsapp-business-cloud-edge-proxy \
+    --bin makosh-whatsapp-business-cloud-edge-proxy \
     --release
 
 FROM debian:bookworm-slim AS whatsapp-business-cloud-edge-proxy
@@ -118,17 +118,17 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=backend-builder \
-    /workspace/target/release/hermes-whatsapp-business-cloud-edge-proxy \
-    /usr/local/bin/hermes-whatsapp-business-cloud-edge-proxy
+    /workspace/target/release/makosh-whatsapp-business-cloud-edge-proxy \
+    /usr/local/bin/makosh-whatsapp-business-cloud-edge-proxy
 
 EXPOSE 8787
 
-CMD ["hermes-whatsapp-business-cloud-edge-proxy"]
+CMD ["makosh-whatsapp-business-cloud-edge-proxy"]
 ```
 
 ### `docker/data/.gitkeep`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/docker/data/.gitkeep`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/docker/data/.gitkeep`
 - Size bytes / Размер в байтах: `1`
 - Included characters / Включено символов: `1`
 - Truncated / Обрезано: `no`

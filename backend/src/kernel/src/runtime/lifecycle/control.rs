@@ -7,12 +7,12 @@ use std::process::Stdio;
 use std::sync::mpsc::SyncSender;
 use std::time::Duration;
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     BundledManagedLaunchBinding, ManagedLaunchRecord, ModuleRegistration,
     PlatformManagedProcessBinding, PlatformManagedProcessLaunch,
 };
-use hermes_runtime_protocol::managed_control::ManagedControlChannelV2;
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::managed_control::ManagedControlChannelV2;
+use makosh_runtime_protocol::v1::{
     DescribeManagedRuntimeResponseV1, ManagedRuntimeBlobCustodyDelegationDeliveryV1,
     ManagedRuntimeBlobCustodyDelegationRequestV1, ManagedRuntimeBlobCustodyReleaseDeliveryV1,
     ManagedRuntimeBlobCustodyReleaseRequestV1, ManagedRuntimeBlobSessionDeliveryV1,
@@ -25,10 +25,10 @@ use hermes_runtime_protocol::v1::{
     ManagedRuntimeOwnerDerivedKeyRequestV1, ManagedRuntimeProviderCredentialDeliveryV1,
     ManagedRuntimeProviderCredentialRequestV1, VaultCiphertextResponseV1, VaultCiphertextRouteV1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     decode_descriptor_v1, decode_settings_schema_v1,
 };
-use hermes_runtime_protocol::validation::vault::validate_vault_ciphertext_route_v1;
+use makosh_runtime_protocol::validation::vault::validate_vault_ciphertext_route_v1;
 use prost::Message;
 use sha2::{Digest, Sha256};
 
@@ -379,7 +379,7 @@ impl ManagedRuntimeExpectation {
     #[must_use]
     pub fn matches_ready(
         &self,
-        ready: &hermes_runtime_protocol::v1::ManagedRuntimeReadyRequestV1,
+        ready: &makosh_runtime_protocol::v1::ManagedRuntimeReadyRequestV1,
     ) -> bool {
         ready.registration_id == self.registration_id
             && ready.runtime_generation == self.runtime_generation
@@ -410,7 +410,7 @@ pub fn establish_channel(
     let response = match result {
         Ok(()) => ManagedRuntimeControlResponseV1 {
             result: Some(
-                hermes_runtime_protocol::v1::managed_runtime_control_response_v1::Result::Describe(
+                makosh_runtime_protocol::v1::managed_runtime_control_response_v1::Result::Describe(
                     DescribeManagedRuntimeResponseV1 {
                         registration_id: expectation.registration_id.clone(),
                         runtime_generation: expectation.runtime_generation,
@@ -453,7 +453,7 @@ pub fn establish_correlated_channel(
             correlation_id,
             ManagedRuntimeControlResponseV1 {
                 result: Some(
-                    hermes_runtime_protocol::v1::managed_runtime_control_response_v1::Result::Describe(
+                    makosh_runtime_protocol::v1::managed_runtime_control_response_v1::Result::Describe(
                         DescribeManagedRuntimeResponseV1 {
                             registration_id: expectation.registration_id.clone(),
                             runtime_generation: expectation.runtime_generation,
@@ -589,7 +589,7 @@ fn vault_route(frame: &[u8]) -> Option<VaultCiphertextRouteV1> {
         .ok()?
         .operation
         .and_then(|operation| match operation {
-            hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::RouteVaultCiphertext(request) => request.route,
+            makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::RouteVaultCiphertext(request) => request.route,
             _ => None,
         })?;
     validate_vault_ciphertext_route_v1(&route).ok()?;
@@ -600,7 +600,7 @@ fn validate_describe(
     request: ManagedRuntimeControlRequestV1,
     expectation: &ManagedRuntimeExpectation,
 ) -> Result<(), String> {
-    use hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation;
+    use makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation;
 
     let Some(Operation::Describe(describe)) = request.operation else {
         return Err("managed runtime control request is invalid".to_owned());

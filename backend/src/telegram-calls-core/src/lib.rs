@@ -2,7 +2,7 @@ mod backfill;
 
 pub use backfill::*;
 
-pub const PACKAGE: &str = "hermes-telegram-calls-core";
+pub const PACKAGE: &str = "makosh-telegram-calls-core";
 pub const MAX_CALL_ID_BYTES: usize = 256;
 
 use sha2::{Digest, Sha256};

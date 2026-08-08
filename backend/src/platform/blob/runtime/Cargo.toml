@@ -1,5 +1,5 @@
 [package]
-name = "hermes-blob-runtime"
+name = "makosh-blob-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,7 +7,7 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "blob"
 surface = "implementation"
@@ -15,9 +15,9 @@ surface = "implementation"
 [dependencies]
 chacha20poly1305 = { version = "=0.11.0", default-features = false, features = ["alloc", "zeroize"] }
 getrandom = { version = "=0.4.3", default-features = false }
-hermes-blob-protocol = { path = "../protocol" }
-hermes-runtime-protocol = { path = "../../runtime_protocol" }
-hermes-vault-protocol = { path = "../../vault/protocol" }
+makosh-blob-protocol = { path = "../protocol" }
+makosh-runtime-protocol = { path = "../../runtime_protocol" }
+makosh-vault-protocol = { path = "../../vault/protocol" }
 libc = "=0.2.186"
 sha2 = { version = "=0.11.0", default-features = false }
 zeroize = "=1.9.0"

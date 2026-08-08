@@ -1,4 +1,4 @@
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     envelope::validate_envelope_v1,
     v1::{
         AckDispositionV1, AckMetadataV1, AckStageV1, ActorKindV1, ActorRefV1, ContractRefV1,
@@ -6,10 +6,10 @@ use hermes_events_protocol::{
         SourceRefV1, durable_envelope_v1::Semantics,
     },
 };
-use hermes_mail_contacts_sync_api::{
+use makosh_mail_contacts_sync_api::{
     MAIL_CONTACTS_SYNC_MODULE_ID_V1, MAIL_CONTACTS_SYNC_OWNER_ID_V1,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     SCHEDULER_RUNTIME_MODULE_ID_V1,
     v1::{JobLeaseV1, JobRunOutcomeV1, JobRunReceiptV1, JobTriggerKindV1, ScheduledJobCommandV1},
     validate_job_run_receipt_v1, validate_scheduled_job_command_v1,
@@ -23,8 +23,8 @@ const JOB_MAJOR_V1: u32 = 1;
 const JOB_EXECUTE_CAPABILITY_V1: &str = "job_execute";
 const ACCEPTANCE_KIND_V1: &str = "scheduler.job_run.acceptance.v1";
 const TERMINAL_KIND_V1: &str = "scheduler.job_run.result.v1";
-const ACCEPTANCE_MESSAGE_DOMAIN_V1: &[u8] = b"hermes.mail-contacts-sync.job-acceptance.v1\0";
-const TERMINAL_MESSAGE_DOMAIN_V1: &[u8] = b"hermes.mail-contacts-sync.job-terminal.v1\0";
+const ACCEPTANCE_MESSAGE_DOMAIN_V1: &[u8] = b"makosh.mail-contacts-sync.job-acceptance.v1\0";
+const TERMINAL_MESSAGE_DOMAIN_V1: &[u8] = b"makosh.mail-contacts-sync.job-terminal.v1\0";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct MailContactsSyncDueContractV1 {
@@ -445,8 +445,8 @@ fn derived_message_id(domain: &[u8], command_message_id: &[u8; 16]) -> [u8; 16] 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use hermes_events_protocol::v1::CommandMetadataV1;
-    use hermes_scheduler_protocol::v1::{JobKindV1, JobLeaseV1};
+    use makosh_events_protocol::v1::CommandMetadataV1;
+    use makosh_scheduler_protocol::v1::{JobKindV1, JobLeaseV1};
 
     fn context() -> MailContactsSyncDueRuntimeContextV1 {
         MailContactsSyncDueRuntimeContextV1 {

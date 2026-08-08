@@ -1,6 +1,6 @@
 use super::formatting::{default_schema_version, empty_json_object};
 use super::*;
-use hermes_communications_api::accounts::ProviderAccount;
+use makosh_communications_api::accounts::ProviderAccount;
 
 #[derive(Serialize)]
 pub(crate) struct ApplicationSettingsResponse {

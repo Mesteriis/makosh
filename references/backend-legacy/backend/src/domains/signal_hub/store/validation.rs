@@ -1,4 +1,4 @@
-use hermes_signal_hub_api::policies::SignalPolicyScope;
+use makosh_signal_hub_api::policies::SignalPolicyScope;
 use serde_json::Value;
 use uuid::Uuid;
 

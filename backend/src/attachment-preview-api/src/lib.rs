@@ -1,8 +1,8 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-attachment-preview-api";
+pub const PACKAGE: &str = "makosh-attachment-preview-api";
 pub const ATTACHMENT_PREVIEW_OWNER_V1: &str = "attachment_preview";
-pub const ATTACHMENT_PREVIEW_MODULE_ID_V1: &str = "hermes-attachment-preview-runtime";
+pub const ATTACHMENT_PREVIEW_MODULE_ID_V1: &str = "makosh-attachment-preview-runtime";
 pub const ATTACHMENT_PREVIEW_COMMAND_CONTRACT_NAME_V1: &str = "attachment_preview.command";
 pub const ATTACHMENT_PREVIEW_QUERY_CONTRACT_NAME_V1: &str = "attachment_preview.query";
 pub const ATTACHMENT_PREVIEW_TICKET_CONTRACT_NAME_V1: &str = "attachment_preview.ticket";
@@ -11,11 +11,11 @@ pub const ATTACHMENT_PREVIEW_READ_CONTRACT_NAME_V1: &str = "attachment_preview.r
 pub const ATTACHMENT_PREVIEW_CONTRACT_MAJOR_V1: u32 = 1;
 pub const ATTACHMENT_PREVIEW_CONTRACT_REVISION_V1: u32 = 1;
 pub const ATTACHMENT_PREVIEW_COMMAND_CONNECT_PATH_V1: &str =
-    "/hermes.attachment_preview.v1.AttachmentPreviewCommandService/Start";
+    "/makosh.attachment_preview.v1.AttachmentPreviewCommandService/Start";
 pub const ATTACHMENT_PREVIEW_QUERY_CONNECT_PATH_V1: &str =
-    "/hermes.attachment_preview.v1.AttachmentPreviewQueryService/Get";
+    "/makosh.attachment_preview.v1.AttachmentPreviewQueryService/Get";
 pub const ATTACHMENT_PREVIEW_TICKET_CONNECT_PATH_V1: &str =
-    "/hermes.attachment_preview.v1.AttachmentPreviewTicketService/IssueRead";
+    "/makosh.attachment_preview.v1.AttachmentPreviewTicketService/IssueRead";
 pub const ATTACHMENT_PREVIEW_READ_BLOB_PATH_V1: &str = "/api/blobs/attachment-preview/v1/artifact";
 pub const ATTACHMENT_PREVIEW_REALTIME_EVENT_KIND_V1: &str = "attachment_preview.status_changed.v1";
 pub const ATTACHMENT_PREVIEW_READ_TICKET_BYTES_V1: usize = 32;
@@ -31,13 +31,13 @@ const _: () = {
 };
 
 pub mod wire {
-    include!(concat!(env!("OUT_DIR"), "/hermes.attachment_preview.v1.rs"));
+    include!(concat!(env!("OUT_DIR"), "/makosh.attachment_preview.v1.rs"));
 }
 
 pub mod read_wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.attachment_preview.read.v1.rs"
+        "/makosh.attachment_preview.read.v1.rs"
     ));
 }
 

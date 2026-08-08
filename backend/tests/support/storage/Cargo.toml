@@ -1,27 +1,27 @@
 [package]
-name = "hermes-storage-testkit"
+name = "makosh-storage-testkit"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "test"
 owner = "test"
 surface = "test_support"
 
 [dev-dependencies]
-hermes-attachment-security-persistence = { path = "../../../src/attachment-security-persistence" }
-hermes-communications-persistence = { path = "../../../src/communications-persistence" }
-hermes-storage-control = { path = "../../../src/platform/storage/control" }
-hermes-storage-migrations = { path = "../../../src/platform/storage/migrations" }
-hermes-storage-pgbouncer = { path = "../../../src/platform/storage/pgbouncer" }
-hermes-storage-postgres = { path = "../../../src/platform/storage/postgres" }
-hermes-storage-protocol = { path = "../../../src/platform/storage/protocol" }
-hermes-storage-vault = { path = "../../../src/platform/storage/vault" }
-hermes-telegram-assembly = { path = "../../../src/telegram-assembly" }
-hermes-telegram-persistence = { path = "../../../src/telegram-persistence" }
-hermes-runtime-protocol = { path = "../../../src/platform/runtime_protocol" }
-hermes-vault-protocol = { path = "../../../src/platform/vault/protocol" }
+makosh-attachment-security-persistence = { path = "../../../src/attachment-security-persistence" }
+makosh-communications-persistence = { path = "../../../src/communications-persistence" }
+makosh-storage-control = { path = "../../../src/platform/storage/control" }
+makosh-storage-migrations = { path = "../../../src/platform/storage/migrations" }
+makosh-storage-pgbouncer = { path = "../../../src/platform/storage/pgbouncer" }
+makosh-storage-postgres = { path = "../../../src/platform/storage/postgres" }
+makosh-storage-protocol = { path = "../../../src/platform/storage/protocol" }
+makosh-storage-vault = { path = "../../../src/platform/storage/vault" }
+makosh-telegram-assembly = { path = "../../../src/telegram-assembly" }
+makosh-telegram-persistence = { path = "../../../src/telegram-persistence" }
+makosh-runtime-protocol = { path = "../../../src/platform/runtime_protocol" }
+makosh-vault-protocol = { path = "../../../src/platform/vault/protocol" }
 getrandom = { version = "=0.4.3", default-features = false }
 libc = "=0.2.186"
 prost = "=0.14.4"

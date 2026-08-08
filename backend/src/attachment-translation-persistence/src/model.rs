@@ -1,4 +1,4 @@
-use hermes_attachment_translation_core::{
+use makosh_attachment_translation_core::{
     AttachmentTranslationDraftV1, AttachmentTranslationLanguageV1,
     AttachmentTranslationRejectionCodeV1, AttachmentTranslationStatusV1,
     AttachmentTranslationTransitionV1,
@@ -139,7 +139,7 @@ pub enum AttachmentTranslationPersistenceErrorV1 {
 
 pub(crate) fn request_fingerprint(draft: &AttachmentTranslationDraftV1) -> [u8; 32] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.attachment_translation.start.v1\0");
+    hash.update(b"makosh.attachment_translation.start.v1\0");
     hash.update(draft.source_extraction_run_id);
     hash.update(draft.expected_source_revision.to_be_bytes());
     hash.update([target_language_code(draft.target_language)]);

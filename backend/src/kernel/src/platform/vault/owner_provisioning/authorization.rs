@@ -1,12 +1,12 @@
 //! Exact owner, browser-device, descriptor and grant admission checks.
 
-use hermes_gateway_protocol::v1::{
+use makosh_gateway_protocol::v1::{
     OwnerVaultActionV1, OwnerVaultSecretClassV1, PrepareOwnerVaultProvisioningRequestV1,
 };
-use hermes_gateway_runtime::{OwnerVaultClientPrincipalV1, OwnerVaultProvisioningRouteErrorV1};
-use hermes_kernel_control_store::{ModuleRegistrationState, ModuleVaultPurposeRequestV1};
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
-use hermes_vault_protocol::{
+use makosh_gateway_runtime::{OwnerVaultClientPrincipalV1, OwnerVaultProvisioningRouteErrorV1};
+use makosh_kernel_control_store::{ModuleRegistrationState, ModuleVaultPurposeRequestV1};
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_vault_protocol::{
     SecretClassV1, VaultActionV1, VaultPurposeRequestV1, VaultTransportPublicKey,
 };
 
@@ -142,18 +142,18 @@ mod tests {
     use std::path::PathBuf;
     use std::time::{SystemTime, UNIX_EPOCH};
 
-    use hermes_gateway_protocol::v1::{
+    use makosh_gateway_protocol::v1::{
         OwnerVaultActionV1, OwnerVaultSecretClassV1, PrepareOwnerVaultProvisioningRequestV1,
     };
-    use hermes_gateway_runtime::{OwnerVaultClientPrincipalV1, OwnerVaultProvisioningRouteErrorV1};
-    use hermes_kernel_control_store::{
+    use makosh_gateway_runtime::{OwnerVaultClientPrincipalV1, OwnerVaultProvisioningRouteErrorV1};
+    use makosh_kernel_control_store::{
         BrowserDeviceEnrollmentInputV1, BrowserDeviceEnrollmentV1, InitialOwnerIdentity,
         ModuleDescriptorRegistrationRequestsV1, ModuleRegistration, ModuleRegistrationState,
         ModuleVaultPurposeRequestV1,
     };
-    use hermes_kernel_control_store_sqlite::SqliteControlStore;
-    use hermes_runtime_protocol::v1::{VaultActionV1 as RuntimeVaultActionV1, VaultSecretClassV1};
-    use hermes_vault_protocol::VaultResponseRecipientV1;
+    use makosh_kernel_control_store_sqlite::SqliteControlStore;
+    use makosh_runtime_protocol::v1::{VaultActionV1 as RuntimeVaultActionV1, VaultSecretClassV1};
+    use makosh_vault_protocol::VaultResponseRecipientV1;
     use p256::ecdsa::{Signature, SigningKey, signature::Signer};
 
     use super::{authorize_target, secret_class, verify_fresh_proof};
@@ -169,7 +169,7 @@ mod tests {
         assert_eq!(
             secret_class(OwnerVaultSecretClassV1::SessionStoreKey as i32)
                 .expect("session store key"),
-            hermes_vault_protocol::SecretClassV1::SessionStoreKey
+            makosh_vault_protocol::SecretClassV1::SessionStoreKey
         );
         assert_eq!(
             secret_class(OwnerVaultSecretClassV1::Unspecified as i32)
@@ -339,7 +339,7 @@ mod tests {
             .expect("clock")
             .as_nanos();
         std::env::temp_dir().join(format!(
-            "hermes-owner-vault-authorization-{}-{nanos}",
+            "makosh-owner-vault-authorization-{}-{nanos}",
             std::process::id()
         ))
     }

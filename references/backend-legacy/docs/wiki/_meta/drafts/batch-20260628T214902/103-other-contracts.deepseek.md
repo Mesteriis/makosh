@@ -1,8 +1,8 @@
 ### Summary / Резюме
 
-Чанк `103-other-contracts` требует обновить русскую wiki-страницу `components/contracts.md`.  
-На основе встроенных исходных файлов protobuf (`common.proto`, `communications.proto`, `event_envelope.proto`, `signal_hub.proto`) необходимо задокументировать структуру контрактов — ключевые сообщения, их поля и сервисные определения.  
-Страница должна давать целостное представление о контрактах, доступных в репозитории `hermes-hub`, исключая любые домыслы о семантике, не подтверждённые исходными текстами.
+Чанк `103-other-contracts` требует обновить русскую wiki-страницу `components/contracts.md`.
+На основе встроенных исходных файлов protobuf (`common.proto`, `communications.proto`, `event_envelope.proto`, `signal_hub.proto`) необходимо задокументировать структуру контрактов — ключевые сообщения, их поля и сервисные определения.
+Страница должна давать целостное представление о контрактах, доступных в репозитории `makosh`, исключая любые домыслы о семантике, не подтверждённые исходными текстами.
 
 ### Proposed pages / Предлагаемые страницы
 
@@ -12,7 +12,7 @@
 # Контракты (Contracts)
 
 В этом разделе описаны контракты (protobuf-сообщения и сервисы), используемые
-в проекте `hermes-hub`. Каждый подраздел соответствует одному `.proto`-файлу
+в проекте `makosh`. Каждый подраздел соответствует одному `.proto`-файлу
 из директории `contracts/proto`.
 
 > **Важно:** все утверждения ниже подкреплены исключительно текстом исходных
@@ -21,8 +21,8 @@
 
 ## Общие (Common)
 
-Файл: `contracts/proto/hermes/common/v1/common.proto`  
-Package: `hermes.common.v1`
+Файл: `contracts/proto/makosh/common/v1/common.proto`
+Package: `makosh.common.v1`
 
 ### `PageRequest`
 
@@ -46,8 +46,8 @@ Package: `hermes.common.v1`
 
 ## Коммуникации (Communications)
 
-Файл: `contracts/proto/hermes/communications/v1/communications.proto`  
-Package: `hermes.communications.v1`
+Файл: `contracts/proto/makosh/communications/v1/communications.proto`
+Package: `makosh.communications.v1`
 
 > ⚠️ Встроенный исходный файл обрезан после 12000 символов. Описаны только те
 > сообщения, которые попали в видимый фрагмент. Часть определений, включая
@@ -236,8 +236,8 @@ Package: `hermes.communications.v1`
 
 ## События (Events)
 
-Файл: `contracts/proto/hermes/events/v1/event_envelope.proto`  
-Package: `hermes.events.v1`
+Файл: `contracts/proto/makosh/events/v1/event_envelope.proto`
+Package: `makosh.events.v1`
 
 ### `EventEnvelope`
 
@@ -262,8 +262,8 @@ Package: `hermes.events.v1`
 
 ## Хаб сигналов (Signal Hub)
 
-Файл: `contracts/proto/hermes/signal_hub/v1/signal_hub.proto`  
-Package: `hermes.signal_hub.v1`
+Файл: `contracts/proto/makosh/signal_hub/v1/signal_hub.proto`
+Package: `makosh.signal_hub.v1`
 
 ### Сущности
 
@@ -498,13 +498,13 @@ Package: `hermes.signal_hub.v1`
 
 | Исходный файл                                                                 | Факты, покрытые предложенной страницей |
 |-------------------------------------------------------------------------------|----------------------------------------|
-| `contracts/proto/hermes/common/v1/common.proto`                               | `PageRequest` (поля: limit, cursor), `PageResponse` (поля: next_cursor, has_more). |
-| `contracts/proto/hermes/communications/v1/communications.proto` (truncated)   | Все перечисленные в документе сообщения из видимой части файла: `CommunicationMessageAttachment`, `CommunicationMessage`, `ListMessagesRequest/Response`, `GetMessageRequest/Response`, `TransitionMessageWorkflowState*`, `UpdateMessageLocalState*`, `MarkMessageRead*`, `DeleteMessageFromProvider*`, `BulkMessageAction*`, `Toggle*`, `SnoozeMessage*`, `UpdateMessageLabel*`, `MessageKnowledgeCandidate`, `MessageSummaryContract`, `AnalyzeMessage*`, `WorkflowActionSource/Input/Request/Target/Provenance/Response`, `ExplainMessage*`, `GetMessageSmartCc*`, `GetMessageExport*`, `MessageAuthResult/Report/RiskReport`, `GetMessageAuth*`, `GetMessageSignature*`, `AiReply*`, `WorkflowStateCount`, `ListMessageWorkflowStateCounts*`, `SubscriptionSource`, `ListSubscriptions*`, `MailboxHealth`, `GetMailboxHealth*`, `SenderStats`, `ListTopSenders*`, `CommunicationArchitectureBlocker`, `ListCommunicationBlockers*`, `CommunicationPersona`, `ListCommunicationPersonas*`, `RichTemplate`, `ListRichTemplates*`, `UpsertRichTemplate*`, `DeleteRichTemplate*`, `RichTemplateRender*`, `RichTemplateMailMergePreviewRow`, `RichTemplateMailMergePreviewRequest`. Сообщения после обрезки не покрыты. |
-| `contracts/proto/hermes/events/v1/event_envelope.proto`                       | `EventEnvelope` (поля: event_id, event_type, schema_version, occurred_at, recorded_at, source, actor, subject, payload, provenance, causation_id, correlation_id). |
-| `contracts/proto/hermes/signal_hub/v1/signal_hub.proto`                       | Все перечисленные сообщения: `SignalSource`, `SignalConnection`, `SignalCapability`, `SignalFixtureSource`, `SignalHealth`, `SignalRuntimeState`, `SignalPolicy`, `SignalProfile`, `SignalProfilePolicy`, `SignalReplayRequest`, а также все Request/Response-пары для операций над источниками, подключениями, политиками, профилями, воспроизведением, фикстурами, и полный список RPC сервиса `SignalHubService`. |
+| `contracts/proto/makosh/common/v1/common.proto`                               | `PageRequest` (поля: limit, cursor), `PageResponse` (поля: next_cursor, has_more). |
+| `contracts/proto/makosh/communications/v1/communications.proto` (truncated)   | Все перечисленные в документе сообщения из видимой части файла: `CommunicationMessageAttachment`, `CommunicationMessage`, `ListMessagesRequest/Response`, `GetMessageRequest/Response`, `TransitionMessageWorkflowState*`, `UpdateMessageLocalState*`, `MarkMessageRead*`, `DeleteMessageFromProvider*`, `BulkMessageAction*`, `Toggle*`, `SnoozeMessage*`, `UpdateMessageLabel*`, `MessageKnowledgeCandidate`, `MessageSummaryContract`, `AnalyzeMessage*`, `WorkflowActionSource/Input/Request/Target/Provenance/Response`, `ExplainMessage*`, `GetMessageSmartCc*`, `GetMessageExport*`, `MessageAuthResult/Report/RiskReport`, `GetMessageAuth*`, `GetMessageSignature*`, `AiReply*`, `WorkflowStateCount`, `ListMessageWorkflowStateCounts*`, `SubscriptionSource`, `ListSubscriptions*`, `MailboxHealth`, `GetMailboxHealth*`, `SenderStats`, `ListTopSenders*`, `CommunicationArchitectureBlocker`, `ListCommunicationBlockers*`, `CommunicationPersona`, `ListCommunicationPersonas*`, `RichTemplate`, `ListRichTemplates*`, `UpsertRichTemplate*`, `DeleteRichTemplate*`, `RichTemplateRender*`, `RichTemplateMailMergePreviewRow`, `RichTemplateMailMergePreviewRequest`. Сообщения после обрезки не покрыты. |
+| `contracts/proto/makosh/events/v1/event_envelope.proto`                       | `EventEnvelope` (поля: event_id, event_type, schema_version, occurred_at, recorded_at, source, actor, subject, payload, provenance, causation_id, correlation_id). |
+| `contracts/proto/makosh/signal_hub/v1/signal_hub.proto`                       | Все перечисленные сообщения: `SignalSource`, `SignalConnection`, `SignalCapability`, `SignalFixtureSource`, `SignalHealth`, `SignalRuntimeState`, `SignalPolicy`, `SignalProfile`, `SignalProfilePolicy`, `SignalReplayRequest`, а также все Request/Response-пары для операций над источниками, подключениями, политиками, профилями, воспроизведением, фикстурами, и полный список RPC сервиса `SignalHubService`. |
 
 ### Drift candidates / Кандидаты на drift
 
-Из предоставленного контекста расхождения (drift) между кодом, документацией и ADR не видны.  
-Контекст включает только исходные `.proto`-файлы; нет других wiki-страниц, ADR или реализаций для сравнения.  
+Из предоставленного контекста расхождения (drift) между кодом, документацией и ADR не видны.
+Контекст включает только исходные `.proto`-файлы; нет других wiki-страниц, ADR или реализаций для сравнения.
 Обращаем внимание, что файл `communications.proto` обрезан на 12000 символах, поэтому полный охват контракта не может быть проверен — потенциально не задокументированные сообщения могут отличаться от ожидаемых в других частях системы, но установить это из данного контекста невозможно.

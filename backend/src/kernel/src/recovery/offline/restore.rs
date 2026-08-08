@@ -4,7 +4,7 @@ use std::io::Write;
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::{
         EventsAuthorityRuntimeControlRequestV1, EventsAuthorityRuntimeControlResponseV1,
         ReconcileEventsTopologyResponseV1, events_authority_runtime_control_request_v1::Operation,
@@ -12,7 +12,7 @@ use hermes_runtime_protocol::{
     },
     validation::events_authority::validate_events_authority_runtime_control_request,
 };
-use hermes_secure_file::{SecureReadPolicy, read as read_secure_file};
+use makosh_secure_file::{SecureReadPolicy, read as read_secure_file};
 use prost::Message;
 
 use crate::cli::WholeInstanceRestoreCli;
@@ -171,7 +171,7 @@ fn restore_port<'a>(
 }
 
 fn prepare_restore_workspace(data_dir: &Path) -> Result<PathBuf, String> {
-    let restore_workspace = data_dir.join(".hermes-recovery-restore");
+    let restore_workspace = data_dir.join(".makosh-recovery-restore");
     if restore_workspace.exists() {
         crate::infrastructure::filesystem::ensure_owner_private_directory(&restore_workspace)
             .map_err(|_| "restore workspace is invalid".to_owned())?;

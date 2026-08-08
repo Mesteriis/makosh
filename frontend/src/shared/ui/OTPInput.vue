@@ -22,11 +22,11 @@ const emit = defineEmits<{
 	complete: [value: string]
 }>()
 
-const classes = computed(() => ['hermes-otp', props.class])
+const classes = computed(() => ['makosh-otp', props.class])
 const positions = computed(() => Array.from({ length: props.length }, (_value, index) => index))
 
 function inputId(index: number): string {
-	return `${props.id ?? 'hermes-otp'}-${index}`
+	return `${props.id ?? 'makosh-otp'}-${index}`
 }
 
 function digitAt(index: number): string {
@@ -109,7 +109,7 @@ function handleKeydown(index: number, event: KeyboardEvent): void {
 			v-for="index in positions"
 			:id="inputId(index)"
 			:key="index"
-			class="hermes-otp__cell"
+			class="makosh-otp__cell"
 			:aria-label="`${label} ${index + 1}`"
 			:disabled="disabled"
 			:inputmode="'numeric'"

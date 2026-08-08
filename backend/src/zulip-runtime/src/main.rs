@@ -6,7 +6,7 @@ use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedIntegrationRuntimeConfigurationV1,
     validation::{
         descriptor::{
@@ -16,7 +16,7 @@ use hermes_runtime_protocol::{
         managed_integration_runtime::validate_managed_integration_runtime_configuration,
     },
 };
-use hermes_zulip_runtime::{ZulipRuntimeAdmissionV1, managed, settings};
+use makosh_zulip_runtime::{ZulipRuntimeAdmissionV1, managed, settings};
 use prost::Message;
 
 struct InheritedPaths {
@@ -126,7 +126,7 @@ where
 }
 
 fn developer_diagnostic(message: &str) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("{message}");
     }
 }

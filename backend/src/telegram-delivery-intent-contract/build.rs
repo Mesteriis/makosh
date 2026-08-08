@@ -8,7 +8,7 @@ fn main() {
     prost_build::Config::new()
         .file_descriptor_set_path(&descriptor)
         .compile_protos(
-            &["proto/hermes/telegram/delivery_intent/v1/delivery_intent.proto"],
+            &["proto/makosh/telegram/delivery_intent/v1/delivery_intent.proto"],
             &["proto"],
         )
         .expect("Telegram delivery-intent protocol must compile");

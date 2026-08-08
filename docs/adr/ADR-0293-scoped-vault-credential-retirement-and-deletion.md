@@ -179,7 +179,7 @@ Gate требует одновременно:
 Validation evidence:
 
 ```bash
-cargo +1.97.0 test --locked -p hermes-vault-protocol -p hermes-vault-testkit
+cargo +1.97.0 test --locked -p makosh-vault-protocol -p makosh-vault-testkit
 make test-architecture
 make architecture-policy-check architecture-evidence-check srp-policy-check cargo-boundaries-check
 make clippy

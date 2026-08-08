@@ -1,8 +1,8 @@
 //! Authorizes an external runtime capability route against current fenced state.
 
-use hermes_kernel_control_store::{ModuleRegistryStore, RuntimeTrustStore};
-use hermes_kernel_control_store_sqlite::StoreError;
-use hermes_runtime_protocol::{
+use makosh_kernel_control_store::{ModuleRegistryStore, RuntimeTrustStore};
+use makosh_kernel_control_store_sqlite::StoreError;
+use makosh_runtime_protocol::{
     v1::{
         ManagedRuntimeClientDeliveryRequestV1, ManagedRuntimeControlRequestV1,
         ManagedRuntimeControlResponseV1, ModuleClientRequestV1,
@@ -197,7 +197,7 @@ where
         route.registration_id,
         ManagedRuntimeControlRequestV1 {
             operation: Some(
-                hermes_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::ClientDelivery(
+                makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation::ClientDelivery(
                     ManagedRuntimeClientDeliveryRequestV1 {
                         request: Some(request.clone()),
                     },
@@ -210,7 +210,7 @@ where
         .map_err(|_| "managed client delivery response is invalid".to_owned())?
         .result
         .and_then(|result| match result {
-            hermes_runtime_protocol::v1::managed_runtime_control_response_v1::Result::ClientDelivery(
+            makosh_runtime_protocol::v1::managed_runtime_control_response_v1::Result::ClientDelivery(
                 delivery,
             ) => delivery.response,
             _ => None,

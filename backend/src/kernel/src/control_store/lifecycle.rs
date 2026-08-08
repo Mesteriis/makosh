@@ -3,15 +3,15 @@ use std::io::Write;
 use std::os::unix::fs::OpenOptionsExt;
 use std::path::Path;
 
-use hermes_kernel_control_store::ControlStore;
-use hermes_kernel_control_store::RecoveryFences;
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store::ControlStore;
+use makosh_kernel_control_store::RecoveryFences;
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use crate::infrastructure::filesystem::{ensure_regular_file_or_absent, new_instance_id};
 use crate::recovery::fence as recovery_fence;
 
-const INSTALLATION_ANCHOR_FILE: &str = ".hermes-installation-anchor-v1";
-const INSTALLATION_ANCHOR_PREFIX: &str = "hermes-installation-anchor-v1:";
+const INSTALLATION_ANCHOR_FILE: &str = ".makosh-installation-anchor-v1";
+const INSTALLATION_ANCHOR_PREFIX: &str = "makosh-installation-anchor-v1:";
 
 pub fn installation_anchor_path(data_dir: &Path) -> std::path::PathBuf {
     data_dir.join(INSTALLATION_ANCHOR_FILE)

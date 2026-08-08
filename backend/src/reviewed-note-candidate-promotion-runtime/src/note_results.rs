@@ -1,13 +1,13 @@
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimePullDeliveryErrorV1, RuntimeSubscribePermitV1,
     receive_runtime_pull_delivery,
 };
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::OutboxRecordV1,
     v1::{ResultMetadataV1, ResultOutcomeV1, durable_envelope_v1::Semantics},
     validation::envelope::decode_envelope_v1,
 };
-use hermes_knowledge_command_api::{
+use makosh_knowledge_command_api::{
     knowledge_note_created_from_reviewed_candidate_contract_reference_v1,
     knowledge_note_creation_from_reviewed_candidate_rejected_contract_reference_v1,
     wire::{
@@ -15,7 +15,7 @@ use hermes_knowledge_command_api::{
         KnowledgeNoteCreationFromReviewedCandidateRejectedV1, KnowledgeNoteCreationRejectCodeV1,
     },
 };
-use hermes_review_note_candidate_promotion_api::{
+use makosh_review_note_candidate_promotion_api::{
     ReviewNoteCandidatePromotionEnvelopeContextV1,
     build_review_note_candidate_promotion_result_outbox_record_v1,
     wire::{
@@ -23,8 +23,8 @@ use hermes_review_note_candidate_promotion_api::{
         ReviewNoteCandidatePromotionResultV1,
     },
 };
-use hermes_reviewed_note_candidate_promotion_core::derive_reviewed_note_candidate_result_id_v1;
-use hermes_reviewed_note_candidate_promotion_persistence::{
+use makosh_reviewed_note_candidate_promotion_core::derive_reviewed_note_candidate_result_id_v1;
+use makosh_reviewed_note_candidate_promotion_persistence::{
     PersistPromotionTerminalResultV1, ReviewedNoteCandidatePromotionOutcomeV1 as StoredOutcome,
     ReviewedNoteCandidatePromotionPersistenceErrorV1, ReviewedNoteCandidatePromotionPersistenceV1,
 };
@@ -273,7 +273,7 @@ fn promotion_context(
     runtime: &ReviewedNoteCandidatePromotionRuntimeContextV1<'_>,
 ) -> ReviewNoteCandidatePromotionEnvelopeContextV1 {
     ReviewNoteCandidatePromotionEnvelopeContextV1 {
-        module_id: hermes_reviewed_note_candidate_promotion_core::REVIEWED_NOTE_CANDIDATE_PROMOTION_MODULE_ID_V1.to_owned(),
+        module_id: makosh_reviewed_note_candidate_promotion_core::REVIEWED_NOTE_CANDIDATE_PROMOTION_MODULE_ID_V1.to_owned(),
         runtime_instance_id: runtime.runtime_instance_id.to_owned(),
         runtime_generation: runtime.runtime_generation,
         recorded_at_unix_seconds: runtime.now_unix_millis / 1_000,
@@ -288,7 +288,7 @@ fn event_error(_: RuntimePullDeliveryErrorV1) -> ReviewedNoteCandidatePromotionE
 
 #[cfg(test)]
 mod tests {
-    use hermes_knowledge_command_api::{
+    use makosh_knowledge_command_api::{
         KnowledgeCommandEnvelopeContextV1,
         build_knowledge_note_created_from_reviewed_candidate_outbox_record_v1,
         build_knowledge_note_creation_from_reviewed_candidate_rejected_outbox_record_v1,

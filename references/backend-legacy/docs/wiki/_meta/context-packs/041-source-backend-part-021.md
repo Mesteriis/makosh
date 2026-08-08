@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/domains/communications/messages/store/upsert.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/messages/store/upsert.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/messages/store/upsert.rs`
 - Size bytes / Размер в байтах: `8683`
 - Included characters / Включено символов: `8683`
 - Truncated / Обрезано: `no`
@@ -320,7 +320,7 @@ impl MessageProjectionStore {
 
 ### `backend/src/domains/communications/messages/store/workflow.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/messages/store/workflow.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/messages/store/workflow.rs`
 - Size bytes / Размер в байтах: `3295`
 - Included characters / Включено символов: `3295`
 - Truncated / Обрезано: `no`
@@ -414,7 +414,7 @@ impl MessageProjectionStore {
 
 ### `backend/src/domains/communications/messages/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/messages/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/messages/validation.rs`
 - Size bytes / Размер в байтах: `497`
 - Included characters / Включено символов: `497`
 - Truncated / Обрезано: `no`
@@ -444,7 +444,7 @@ pub(crate) fn validate_limit(limit: i64) -> Result<i64, MessageProjectionError> 
 
 ### `backend/src/domains/communications/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/mod.rs`
 - Size bytes / Размер в байтах: `835`
 - Included characters / Включено символов: `835`
 - Truncated / Обрезано: `no`
@@ -497,7 +497,7 @@ pub mod threads;
 
 ### `backend/src/domains/communications/multilingual.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/multilingual.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/multilingual.rs`
 - Size bytes / Размер в байтах: `5984`
 - Included characters / Включено символов: `5964`
 - Truncated / Обрезано: `no`
@@ -701,7 +701,7 @@ mod tests {
 
 ### `backend/src/domains/communications/outbox.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/outbox.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/outbox.rs`
 - Size bytes / Размер в байтах: `31359`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1060,13 +1060,13 @@ impl CommunicationOutboxStore {
                     'read_at', receipt.read_at,
                     'source_kind', receipt.source_kind
                 ) AS latest_read_receipt
-          
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/domains/communications/outbox/delivery.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/outbox/delivery.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/outbox/delivery.rs`
 - Size bytes / Размер в байтах: `4731`
 - Included characters / Включено символов: `4731`
 - Truncated / Обрезано: `no`
@@ -1245,7 +1245,7 @@ fn duration_with_minimum_seconds(duration: Duration, minimum_seconds: i64) -> Du
 
 ### `backend/src/domains/communications/outbox/delivery_status.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/outbox/delivery_status.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/outbox/delivery_status.rs`
 - Size bytes / Размер в байтах: `8510`
 - Included characters / Включено символов: `8510`
 - Truncated / Обрезано: `no`
@@ -1479,7 +1479,7 @@ fn outbox_delivery_status_event(
             "outbox_id": record.outbox_id,
         }),
     )
-    .actor(json!({ "actor_id": "hermes-delivery-notification" }))
+    .actor(json!({ "actor_id": "makosh-delivery-notification" }))
     .payload(json!({
         "account_id": record.account_id,
         "outbox_id": record.outbox_id,
@@ -1500,7 +1500,7 @@ fn outbox_delivery_status_event(
 
 ### `backend/src/domains/communications/outbox/provider_send_store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/outbox/provider_send_store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/outbox/provider_send_store.rs`
 - Size bytes / Размер в байтах: `1908`
 - Included characters / Включено символов: `1908`
 - Truncated / Обрезано: `no`
@@ -1579,7 +1579,7 @@ pub enum ProviderSendStoreError {
 
 ### `backend/src/domains/communications/outbox/provider_sender.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/outbox/provider_sender.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/outbox/provider_sender.rs`
 - Size bytes / Размер в байтах: `4693`
 - Included characters / Включено символов: `4693`
 - Truncated / Обрезано: `no`
@@ -1734,7 +1734,7 @@ fn delivery_error(
 
 ### `backend/src/domains/communications/outbox/smtp_sender.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/outbox/smtp_sender.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/outbox/smtp_sender.rs`
 - Size bytes / Размер в байтах: `6666`
 - Included characters / Включено символов: `6666`
 - Truncated / Обрезано: `no`
@@ -1939,7 +1939,7 @@ fn delivery_error(
 
 ### `backend/src/domains/communications/personas.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/personas.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/personas.rs`
 - Size bytes / Размер в байтах: `5557`
 - Included characters / Включено символов: `5557`
 - Truncated / Обрезано: `no`
@@ -2104,7 +2104,7 @@ pub enum CommunicationPersonaError {
 
 ### `backend/src/domains/communications/ports.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/ports.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/ports.rs`
 - Size bytes / Размер в байтах: `426`
 - Included characters / Включено символов: `426`
 - Truncated / Обрезано: `no`
@@ -2119,7 +2119,7 @@ pub use super::storage::LocalCommunicationBlobStore as LocalCommunicationBlobPor
 
 ### `backend/src/domains/communications/read_receipts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/read_receipts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/read_receipts.rs`
 - Size bytes / Размер в байтах: `13913`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2495,7 +2495,7 @@ fn read_receipt_event(
             "outbox_id": receipt.outbox_id,
         }),
     )
-    .actor(json!({ "actor_id": "hermes-frontend" }))
+    .actor(json!({ "actor_id": "makosh-frontend" }))
     .payload(json!({
         "receipt_id": receipt.receipt_id,
         "account_id": receipt.account_id,
@@ -2507,7 +2507,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/domains/communications/rich_template.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/rich_template.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/rich_template.rs`
 - Size bytes / Размер в байтах: `6841`
 - Included characters / Включено символов: `6840`
 - Truncated / Обрезано: `no`
@@ -2654,7 +2654,7 @@ mod tests {
     fn vars() -> HashMap<String, String> {
         [
             ("name".into(), "Alice".into()),
-            ("project".into(), "Hermes".into()),
+            ("project".into(), "Макошь".into()),
         ]
         .into()
     }
@@ -2670,7 +2670,7 @@ mod tests {
         };
         let (s, b) = RichTemplateEngine::render(&tpl, &vars()).unwrap();
         assert_eq!(s, "Hello Alice");
-        assert_eq!(b, "Hi Alice, project Hermes");
+        assert_eq!(b, "Hi Alice, project Макошь");
     }
 
     #[test]
@@ -2736,7 +2736,7 @@ mod tests {
 
 ### `backend/src/domains/communications/rules.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/rules.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/rules.rs`
 - Size bytes / Размер в байтах: `272`
 - Included characters / Включено символов: `272`
 - Truncated / Обрезано: `no`
@@ -2761,7 +2761,7 @@ pub use store::EmailRuleStore;
 
 ### `backend/src/domains/communications/rules/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/rules/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/rules/errors.rs`
 - Size bytes / Размер в байтах: `198`
 - Included characters / Включено символов: `198`
 - Truncated / Обрезано: `no`
@@ -2781,7 +2781,7 @@ pub enum EmailRuleError {
 
 ### `backend/src/domains/communications/rules/evaluation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/rules/evaluation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/rules/evaluation.rs`
 - Size bytes / Размер в байтах: `2351`
 - Included characters / Включено символов: `2351`
 - Truncated / Обрезано: `no`
@@ -2856,7 +2856,7 @@ pub(in crate::domains::communications::rules) fn parse_actions(actions: &Value) 
 
 ### `backend/src/domains/communications/rules/mode.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/rules/mode.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/rules/mode.rs`
 - Size bytes / Размер в байтах: `998`
 - Included characters / Включено символов: `998`
 - Truncated / Обрезано: `no`
@@ -2901,7 +2901,7 @@ pub(in crate::domains::communications::rules) fn format_mode(mode: RuleMode) -> 
 
 ### `backend/src/domains/communications/rules/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/rules/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/rules/models.rs`
 - Size bytes / Размер в байтах: `1102`
 - Included characters / Включено символов: `1102`
 - Truncated / Обрезано: `no`
@@ -2956,7 +2956,7 @@ pub struct NewEmailRule {
 
 ### `backend/src/domains/communications/rules/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/rules/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/rules/rows.rs`
 - Size bytes / Размер в байтах: `1119`
 - Included characters / Включено символов: `1119`
 - Truncated / Обрезано: `no`
@@ -2994,7 +2994,7 @@ pub(in crate::domains::communications::rules) fn row_to_email_rule(
 
 ### `backend/src/domains/communications/rules/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/rules/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/rules/store.rs`
 - Size bytes / Размер в байтах: `2797`
 - Included characters / Включено символов: `2797`
 - Truncated / Обрезано: `no`
@@ -3086,7 +3086,7 @@ impl EmailRuleStore {
 
 ### `backend/src/domains/communications/rules/tests.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/rules/tests.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/rules/tests.rs`
 - Size bytes / Размер в байтах: `2614`
 - Included characters / Включено символов: `2614`
 - Truncated / Обрезано: `no`
@@ -3172,7 +3172,7 @@ fn rule_mode_parse_all() {
 
 ### `backend/src/domains/communications/rules/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/rules/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/rules/validation.rs`
 - Size bytes / Размер в байтах: `735`
 - Included characters / Включено символов: `735`
 - Truncated / Обрезано: `no`
@@ -3202,7 +3202,7 @@ impl NewEmailRule {
 
 ### `backend/src/domains/communications/saved_search_counts.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/communications/saved_search_counts.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/communications/saved_search_counts.rs`
 - Size bytes / Размер в байтах: `2996`
 - Included characters / Включено символов: `2996`
 - Truncated / Обрезано: `no`

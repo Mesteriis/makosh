@@ -1,7 +1,7 @@
 use serde_json::Value;
 
-use hermes_communications_api::accounts::ProviderAccount;
-use hermes_communications_api::evidence::CommunicationEvidencePort;
+use makosh_communications_api::accounts::ProviderAccount;
+use makosh_communications_api::evidence::CommunicationEvidencePort;
 
 use super::super::models::settings::MailSyncSettings;
 use super::super::store::MailSyncStatePort;

@@ -1,6 +1,6 @@
 use super::super::*;
 use super::helpers::trimmed_optional;
-use hermes_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::CommunicationProviderKind;
 
 #[derive(Deserialize)]
 pub(crate) struct GmailOAuthStartApiRequest {
@@ -25,7 +25,7 @@ impl GmailOAuthStartApiRequest {
             .or_else(|| config.google_oauth_client_id().map(str::to_owned))
             .ok_or(EmailAccountSetupError::InvalidRequest {
                 field: "client_id",
-                message: "must be configured as request client_id or HERMES_GOOGLE_OAUTH_CLIENT_ID",
+                message: "must be configured as request client_id or MAKOSH_GOOGLE_OAUTH_CLIENT_ID",
             })?;
         let mut request = GmailOAuthSetupRequest::new(
             self.account_id,

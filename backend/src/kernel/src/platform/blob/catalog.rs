@@ -1,9 +1,9 @@
 //! Resolves Blob quota catalog entries from approved Control Store state.
 
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleBlobQuotaRequestV1, ModuleGrantSnapshot, ModuleRegistryStore,
 };
-use hermes_kernel_control_store_sqlite::StoreError;
+use makosh_kernel_control_store_sqlite::StoreError;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BlobQuotaCatalogEntryV1 {

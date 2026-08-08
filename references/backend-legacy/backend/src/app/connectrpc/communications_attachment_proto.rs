@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use hermes_connectrpc_contracts::hermes::communications::v1::CommunicationMessageAttachment;
+use makosh_connectrpc_contracts::makosh::communications::v1::CommunicationMessageAttachment;
 use serde_json::Value;
 
 use crate::domains::communications::storage::models::StoredCommunicationAttachmentWithBlob;

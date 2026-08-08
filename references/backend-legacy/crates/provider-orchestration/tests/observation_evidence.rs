@@ -1,6 +1,6 @@
 use chrono::{TimeZone, Utc};
-use hermes_provider_api::{ProviderId, ProviderObservationEnvelope, ProviderObservationInput};
-use hermes_provider_orchestration::observation_to_raw_communication_record;
+use makosh_provider_api::{ProviderId, ProviderObservationEnvelope, ProviderObservationInput};
+use makosh_provider_orchestration::observation_to_raw_communication_record;
 use serde_json::json;
 
 #[test]

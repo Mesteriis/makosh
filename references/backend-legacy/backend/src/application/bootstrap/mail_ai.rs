@@ -237,7 +237,7 @@ enum MailAiRuntimeBuildError {
 }
 
 pub(super) async fn mail_ai_target_language(
-    owner_query: &dyn hermes_personas_api::PersonaOwnerQuery,
+    owner_query: &dyn makosh_personas_api::PersonaOwnerQuery,
 ) -> String {
     let language = owner_query.owner_language().await;
     let Ok(language) = language else {

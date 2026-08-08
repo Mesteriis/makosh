@@ -1,4 +1,4 @@
-use hermes_communication_summary_core::{
+use makosh_communication_summary_core::{
     CommunicationSummaryCandidateV1, CommunicationSummaryCompletenessV1,
     CommunicationSummaryDraftV1, CommunicationSummaryLanguageV1, CommunicationSummaryLengthV1,
     CommunicationSummaryRejectionCodeV1, CommunicationSummaryStateV1, CommunicationSummaryStatusV1,
@@ -6,7 +6,7 @@ use hermes_communication_summary_core::{
     transition_communication_summary_v1, validate_communication_summary_draft_v1,
     validate_communication_summary_status_v1,
 };
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
     PgPool, Postgres, Row, Transaction,
     postgres::{PgConnectOptions, PgPoolOptions, PgRow},
@@ -80,7 +80,7 @@ impl CommunicationSummaryPersistenceV1 {
         let fingerprint = request_fingerprint(&input.draft);
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.communication_summary_runs (
+            "INSERT INTO makosh_data.communication_summary_runs (
                logical_owner_id, run_id, operation_id, request_fingerprint,
                source_message_id, expected_source_revision, requested_length,
                requested_language, state, state_revision,
@@ -103,7 +103,7 @@ impl CommunicationSummaryPersistenceV1 {
         .rows_affected();
         if inserted == 1 {
             sqlx::query(
-                "INSERT INTO hermes_data.communication_summary_outbox (
+                "INSERT INTO makosh_data.communication_summary_outbox (
                    logical_owner_id, message_id, envelope_sha256, envelope_bytes,
                    created_at_unix_millis
                  ) VALUES ($1, $2, $3, $4, $5)",
@@ -183,7 +183,7 @@ impl CommunicationSummaryPersistenceV1 {
         let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         if let Some(row) = sqlx::query(
             "SELECT envelope_sha256, run_id
-             FROM hermes_data.communication_summary_inbox
+             FROM makosh_data.communication_summary_inbox
              WHERE logical_owner_id = $1 AND result_message_id = $2",
         )
         .bind(&input.logical_owner_id)
@@ -224,7 +224,7 @@ impl CommunicationSummaryPersistenceV1 {
         )
         .await?;
         sqlx::query(
-            "INSERT INTO hermes_data.communication_summary_inbox (
+            "INSERT INTO makosh_data.communication_summary_inbox (
                logical_owner_id, result_message_id, envelope_sha256, run_id,
                processed_at_unix_millis
              ) VALUES ($1, $2, $3, $4, $5)",
@@ -355,7 +355,7 @@ impl CommunicationSummaryPersistenceV1 {
             return Err(CommunicationSummaryPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_summary_runs
+            "UPDATE makosh_data.communication_summary_runs
              SET inference_request_bytes = $1, updated_at_unix_millis = $2
              WHERE logical_owner_id = $3 AND run_id = $4 AND state = 3
                AND inference_request_digest = $5
@@ -399,7 +399,7 @@ impl CommunicationSummaryPersistenceV1 {
             return Err(CommunicationSummaryPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.communication_summary_runs
+            "UPDATE makosh_data.communication_summary_runs
              SET inference_request_bytes = NULL,
                  source_cleanup_reference_id = NULL,
                  source_cleanup_declared_bytes = NULL,
@@ -460,7 +460,7 @@ SELECT logical_owner_id, run_id, operation_id, request_fingerprint,
        candidate_resolved_language, candidate_completeness,
        candidate_confidence_basis_points, rejection_code,
        created_at_unix_millis, updated_at_unix_millis
-FROM hermes_data.communication_summary_runs
+FROM makosh_data.communication_summary_runs
 WHERE logical_owner_id = $1 AND run_id = $2";
 
 const SELECT_RUN_FOR_UPDATE: &str = "
@@ -475,7 +475,7 @@ SELECT logical_owner_id, run_id, operation_id, request_fingerprint,
        candidate_resolved_language, candidate_completeness,
        candidate_confidence_basis_points, rejection_code,
        created_at_unix_millis, updated_at_unix_millis
-FROM hermes_data.communication_summary_runs
+FROM makosh_data.communication_summary_runs
 WHERE logical_owner_id = $1 AND run_id = $2
 FOR UPDATE";
 
@@ -491,7 +491,7 @@ SELECT logical_owner_id, run_id, operation_id, request_fingerprint,
        candidate_resolved_language, candidate_completeness,
        candidate_confidence_basis_points, rejection_code,
        created_at_unix_millis, updated_at_unix_millis
-FROM hermes_data.communication_summary_runs
+FROM makosh_data.communication_summary_runs
 WHERE logical_owner_id = $1 AND operation_id = $2";
 
 const SELECT_RECOVERABLE_RUNS: &str = "
@@ -506,7 +506,7 @@ SELECT logical_owner_id, run_id, operation_id, request_fingerprint,
        candidate_resolved_language, candidate_completeness,
        candidate_confidence_basis_points, rejection_code,
        created_at_unix_millis, updated_at_unix_millis
-FROM hermes_data.communication_summary_runs
+FROM makosh_data.communication_summary_runs
 WHERE logical_owner_id = $1 AND state IN (1, 2, 3)
 ORDER BY state_revision, run_id
 LIMIT $2";
@@ -539,7 +539,7 @@ async fn persist_status(
         .map_err(|_| CommunicationSummaryPersistenceErrorV1::InvalidTransition)?;
     let candidate = next.candidate.as_ref();
     let updated = sqlx::query(
-        "UPDATE hermes_data.communication_summary_runs
+        "UPDATE makosh_data.communication_summary_runs
          SET state = $1, state_revision = $2,
              source_evidence_id = $3, source_evidence_revision = $4,
              source_sha256 = $5, inference_request_digest = $6,

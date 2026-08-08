@@ -1,4 +1,4 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::body::{Body, to_bytes};
@@ -8,17 +8,17 @@ use sqlx::Row;
 use sqlx::postgres::PgPool;
 use tower::ServiceExt;
 
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::domains::personas::api::store::PersonaProjectionStore;
-use hermes_hub_backend::domains::relationships::{
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::domains::personas::api::store::PersonaProjectionStore;
+use makosh_hub_backend::domains::relationships::{
     models::{
         NewRelationship, NewRelationshipEvidence, Relationship, RelationshipEvidenceSourceKind,
         RelationshipReviewState,
     },
     store::RelationshipStore,
 };
-use hermes_hub_backend::platform::graph::{GraphNodeKind, node_id};
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::graph::{GraphNodeKind, node_id};
+use makosh_hub_backend::platform::storage::database::Database;
 
 const LOCAL_API_TOKEN: &str = "relationships-api-test-token";
 
@@ -217,7 +217,7 @@ async fn app_and_pool(database_url: &str) -> (axum::Router, PgPool) {
         .expect("database connection");
     let pool = database.pool().expect("configured pool").clone();
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url,
         ),
@@ -278,7 +278,7 @@ async fn seed_persona_relationship_with_state(
 fn get_request_with_token(uri: &str, token: &str) -> Request<Body> {
     Request::builder()
         .uri(uri)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -288,7 +288,7 @@ fn json_put_request(uri: &str, value: Value, token: &str) -> Request<Body> {
         .method("PUT")
         .uri(uri)
         .header(header::CONTENT_TYPE, "application/json")
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::from(value.to_string()))
         .expect("request")
 }

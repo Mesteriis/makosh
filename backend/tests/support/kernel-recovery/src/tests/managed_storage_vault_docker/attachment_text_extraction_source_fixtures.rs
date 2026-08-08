@@ -175,10 +175,10 @@ mod tests {
 
     #[test]
     fn format_fixtures_have_exact_magic_and_private_payloads() {
-        let pdf = attachment_text_pdf_source_v1("Hermes PDF");
+        let pdf = attachment_text_pdf_source_v1("makosh PDF");
         assert!(pdf.starts_with(b"%PDF-"));
-        assert!(pdf.windows(10).any(|window| window == b"Hermes PDF"));
-        let docx = attachment_text_docx_source_v1("Hermes DOCX");
+        assert!(pdf.windows(10).any(|window| window == b"makosh PDF"));
+        let docx = attachment_text_docx_source_v1("makosh DOCX");
         assert!(docx.starts_with(b"PK\x03\x04"));
         assert!(
             docx.windows(b"word/document.xml".len())

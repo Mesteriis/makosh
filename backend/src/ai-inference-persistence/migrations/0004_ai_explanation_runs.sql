@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.ai_explanation_runs (
+CREATE TABLE makosh_data.ai_explanation_runs (
     logical_owner_id TEXT NOT NULL,
     run_id BYTEA NOT NULL,
     request_digest BYTEA NOT NULL,
@@ -59,4 +59,4 @@ CREATE TABLE hermes_data.ai_explanation_runs (
 );
 
 CREATE INDEX ai_explanation_runs_pending_idx
-ON hermes_data.ai_explanation_runs (logical_owner_id, run_state, state_revision);
+ON makosh_data.ai_explanation_runs (logical_owner_id, run_state, state_revision);

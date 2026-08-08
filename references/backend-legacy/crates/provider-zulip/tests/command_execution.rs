@@ -1,6 +1,6 @@
 use std::sync::Mutex;
 
-use hermes_provider_zulip::{
+use makosh_provider_zulip::{
     client::{ZulipClientError, ZulipReactionRequest, ZulipUpdateMessageRequest},
     command_execution::{ZulipCommandTransport, ZulipExecutableCommand, execute_zulip_command},
     models::{ZulipBasicResponse, ZulipSendMessageResponse, ZulipUploadFileResponse},

@@ -13,8 +13,8 @@ async function run(service, command) {
 
 try {
   const [postgres, pgbouncer, nats] = await Promise.all([
-    run('postgres', ['psql', '-U', 'hermes_development', '-d', 'hermes_development', '-tAc', 'SELECT 1']),
-    run('postgres', ['psql', 'postgres://hermes_development@pgbouncer:6432/hermes_development', '-tAc', 'SELECT 1']),
+    run('postgres', ['psql', '-U', 'makosh_development', '-d', 'makosh_development', '-tAc', 'SELECT 1']),
+    run('postgres', ['psql', 'postgres://makosh_development@pgbouncer:6432/makosh_development', '-tAc', 'SELECT 1']),
     run('nats', ['wget', '-q', '-O', '-', 'http://127.0.0.1:8222/healthz']),
   ]);
   if (postgres.trim() !== '1') throw new Error('PostgreSQL query did not return 1');

@@ -18,10 +18,10 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => [
-	'hermes-link-button',
-	`hermes-link-button--${props.size}`,
-	`hermes-link-button--${props.tone}`,
-	{ 'hermes-link-button--disabled': props.disabled },
+	'makosh-link-button',
+	`makosh-link-button--${props.size}`,
+	`makosh-link-button--${props.tone}`,
+	{ 'makosh-link-button--disabled': props.disabled },
 	props.class
 ])
 

@@ -9,11 +9,11 @@ const paths = {
   inventory: new URL('architecture/communications-settings-reconstruction.json', BACKEND_ROOT),
   manifest: new URL('src/communications-content-api/Cargo.toml', BACKEND_ROOT),
   ticketProto: new URL(
-    'src/communications-content-api/proto/hermes/communications/content/ticket/v1/ticket.proto',
+    'src/communications-content-api/proto/makosh/communications/content/ticket/v1/ticket.proto',
     BACKEND_ROOT,
   ),
   readProto: new URL(
-    'src/communications-content-api/proto/hermes/communications/content/read/v1/read.proto',
+    'src/communications-content-api/proto/makosh/communications/content/read/v1/read.proto',
     BACKEND_ROOT,
   ),
   admission: new URL('src/communications-runtime/src/admission.rs', BACKEND_ROOT),
@@ -67,7 +67,7 @@ test('Communications content is an exact separately admitted owner capability', 
     dependsOn: ['communications_canonical_read_v2', 'communications.blob.v1'],
   });
   assert.match(adr, /Состояние реализации: implemented/);
-  assert.match(manifest, /name = "hermes-communications-content-api"/);
+  assert.match(manifest, /name = "makosh-communications-content-api"/);
   assert.match(manifest, /surface = "contract"/);
   assert.match(ticketProto, /IssueMessageBodyRead\(IssueMessageBodyReadRequestV1\)/);
   assert.match(readProto, /bytes opaque_read_capability = 2/);

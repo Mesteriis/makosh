@@ -1,7 +1,7 @@
 use sqlx::Row;
 use sqlx::postgres::PgRow;
 
-use hermes_communications_api::evidence::{IngestionCheckpoint, StoredRawCommunicationRecord};
+use makosh_communications_api::evidence::{IngestionCheckpoint, StoredRawCommunicationRecord};
 
 use crate::errors::CommunicationIngestionError;
 

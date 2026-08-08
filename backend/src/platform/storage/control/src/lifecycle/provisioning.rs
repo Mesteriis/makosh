@@ -1,6 +1,6 @@
 //! Ordered, credential-free orchestration before a binding can become active.
 
-use hermes_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::StorageBindingV1;
 
 use super::{StorageLifecycleErrorV1, StorageLifecycleV1};
 

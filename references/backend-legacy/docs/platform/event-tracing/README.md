@@ -4,12 +4,12 @@ Status: documentation package aligned to the current repository structure.
 
 ## Purpose
 
-Event Tracing is the causal observability layer of Hermes.
+Event Tracing is the causal observability layer of Макошь.
 
 It does not replace the event backbone. It formalizes how persistent events are
 connected into traces.
 
-Hermes does not need a separate telemetry server to answer:
+Макошь does not need a separate telemetry server to answer:
 
 - why does this object exist?
 - what caused this event?

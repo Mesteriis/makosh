@@ -1,13 +1,13 @@
-use hermes_kernel_control_store::{
+use makosh_kernel_control_store::{
     ModuleEventEnvelopeKindV1, PlatformEventHubTopologyV1, PlatformEventStreamBudgetV1,
 };
-use hermes_kernel_control_store_sqlite::{SqliteControlStore, StoreError};
+use makosh_kernel_control_store_sqlite::{SqliteControlStore, StoreError};
 
 use super::common::unique_target_root;
 
 #[test]
 fn event_hub_topology_is_durable_and_revision_fenced() {
-    let root = unique_target_root("hermes-event-hub-topology");
+    let root = unique_target_root("makosh-event-hub-topology");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -40,7 +40,7 @@ fn event_hub_topology_is_durable_and_revision_fenced() {
 
 #[test]
 fn event_hub_topology_requires_each_canonical_stream_and_bounded_budget() {
-    let root = unique_target_root("hermes-event-hub-topology-invalid");
+    let root = unique_target_root("makosh-event-hub-topology-invalid");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");
@@ -76,7 +76,7 @@ fn event_hub_topology_requires_each_canonical_stream_and_bounded_budget() {
 
 #[test]
 fn event_hub_topology_rejects_secret_bearing_endpoint_and_invalid_credential_fence() {
-    let root = unique_target_root("hermes-event-hub-topology-connection-invalid");
+    let root = unique_target_root("makosh-event-hub-topology-connection-invalid");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
         .expect("create Control Store");

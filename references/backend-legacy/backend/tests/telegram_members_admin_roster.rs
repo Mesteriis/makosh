@@ -4,9 +4,9 @@ use serde_json::{Value, json};
 use sqlx::query;
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::platform::storage::database::Database;
 
 const LOCAL_API_TOKEN: &str = "telegram-members-admin-test-secret";
 
@@ -18,7 +18,7 @@ async fn members_route_returns_admin_only_provider_roster_rows() {
         .await
         .expect("database connection");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -115,7 +115,7 @@ fn get(uri: &str) -> Request<Body> {
     Request::builder()
         .method("GET")
         .uri(uri)
-        .header("X-Hermes-Secret", LOCAL_API_TOKEN)
+        .header("X-Макошь-Secret", LOCAL_API_TOKEN)
         .body(Body::empty())
         .expect("request")
 }
@@ -132,7 +132,7 @@ where
                 .method("POST")
                 .uri(uri)
                 .header(header::CONTENT_TYPE, "application/json")
-                .header("X-Hermes-Secret", LOCAL_API_TOKEN)
+                .header("X-Макошь-Secret", LOCAL_API_TOKEN)
                 .body(Body::from(body.to_string()))
                 .expect("request"),
         )

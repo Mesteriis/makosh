@@ -1,6 +1,6 @@
 use crate::domains::calendar::events::account_store::CalendarAccountStore;
-use hermes_communications_api::accounts::CommunicationProviderKind;
-use hermes_communications_api::accounts::ProviderAccountSecretPurpose;
+use makosh_communications_api::accounts::CommunicationProviderKind;
+use makosh_communications_api::accounts::ProviderAccountSecretPurpose;
 
 use super::errors::HostVaultReconciliationError;
 use super::provider_recovery::RecoverableProviderSecret;

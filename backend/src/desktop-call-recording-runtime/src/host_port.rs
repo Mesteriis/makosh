@@ -1,11 +1,11 @@
-use hermes_call_transcription_ingress::{
+use makosh_call_transcription_ingress::{
     CallTranscriptionIngressEnvelopeContextV1, RECORDING_READY_CONTRACT_NAME_V1,
     RECORDING_REJECTED_CONTRACT_NAME_V1, build_recording_ready_outbox_record_v1,
     build_recording_rejected_outbox_record_v1, recording_ready_event_id_v1,
     recording_rejected_event_id_v1,
     wire::{RecordingReadyV1, RecordingRejectedV1},
 };
-use hermes_desktop_call_recording_api::{
+use makosh_desktop_call_recording_api::{
     CANONICAL_AUDIO_FORMAT_V1, CONSENT_PURPOSE_V1,
     host_bridge::{decode_operation_v1, encode_command_lease_v1, encode_observation_accepted_v1},
     wire::{
@@ -16,8 +16,8 @@ use hermes_desktop_call_recording_api::{
         desktop_recording_host_operation_v1::Operation,
     },
 };
-use hermes_desktop_call_recording_core::{RecordingStateV1, validate_canonical_wav_v1};
-use hermes_desktop_call_recording_persistence::{
+use makosh_desktop_call_recording_core::{RecordingStateV1, validate_canonical_wav_v1};
+use makosh_desktop_call_recording_persistence::{
     CaptureStartedWriteV1, ExactOutboxRecordV1, HostCommandCompletionV1, PersistedRecordingRunV1,
     PersistenceErrorV1, RejectRecordingWriteV1, TerminalRecordingMetadataV1,
 };
@@ -92,7 +92,7 @@ pub async fn handle_host_operation_v1(
                         })
                     }
                     _ => {
-                        if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                        if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
                             eprintln!(
                                 "developer_desktop_recording_claim_conflict kind={} state={:?}",
                                 leased.command_kind, run.state
@@ -467,7 +467,7 @@ fn event_context(
     now_unix_ms: i64,
 ) -> CallTranscriptionIngressEnvelopeContextV1 {
     CallTranscriptionIngressEnvelopeContextV1 {
-        module_id: hermes_desktop_call_recording_api::MODULE_ID_V1.to_owned(),
+        module_id: makosh_desktop_call_recording_api::MODULE_ID_V1.to_owned(),
         runtime_instance_id: runtime.runtime_instance_id().to_owned(),
         runtime_generation: runtime.runtime_generation(),
         recorded_at_unix_seconds: now_unix_ms / 1_000,
@@ -477,7 +477,7 @@ fn event_context(
 }
 
 fn exact_outbox(
-    record: hermes_events_protocol::delivery::OutboxRecordV1,
+    record: makosh_events_protocol::delivery::OutboxRecordV1,
     contract_name: &str,
 ) -> ExactOutboxRecordV1 {
     ExactOutboxRecordV1 {
@@ -494,7 +494,7 @@ fn consent_receipt_id(
     os_permission_revision: u32,
 ) -> [u8; 16] {
     let mut hash = Sha256::new();
-    hash.update(b"hermes.desktop-call-recording.consent-receipt.v1\0");
+    hash.update(b"makosh.desktop-call-recording.consent-receipt.v1\0");
     hash.update(run.challenge_id);
     hash.update(run.device_actor_sha256);
     hash.update(started_at_unix_ms.to_be_bytes());

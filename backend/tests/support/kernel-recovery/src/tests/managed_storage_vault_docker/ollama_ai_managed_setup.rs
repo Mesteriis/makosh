@@ -2,16 +2,16 @@
 
 use super::*;
 
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
-use hermes_ollama_ai_api::{
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_ollama_ai_api::{
     OLLAMA_AI_MODULE_ID_V1, OLLAMA_AI_STORAGE_CAPABILITY_ID_V1, OLLAMA_OWNER_ID_V1,
     ollama_ai_settings_schema_bytes_v1,
 };
-use hermes_ollama_ai_persistence::schema::{
+use makosh_ollama_ai_persistence::schema::{
     OLLAMA_AI_STORAGE_BUNDLE_REVISION_V1, ollama_ai_storage_bundle_v1,
 };
-use hermes_ollama_ai_runtime::ollama_ai_module_descriptor_v1;
-use hermes_runtime_protocol::v1::{
+use makosh_ollama_ai_runtime::ollama_ai_module_descriptor_v1;
+use makosh_runtime_protocol::v1::{
     ManagedIntegrationRuntimeConfigurationV1, SettingValueV1, SettingsSnapshotV1,
     SettingsValueEntryV1, setting_value_v1::Value,
 };
@@ -85,7 +85,7 @@ pub(super) fn admit_ollama_ai_runtime_v1(store: &SqliteControlStore) -> Admitted
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
             1,
-            "hermes-managed-runtime-conformance",
+            "makosh-managed-runtime-conformance",
             OLLAMA_AI_RELEASE_ARTIFACT_ID_V1,
             Sha256::digest(std::fs::read(ollama_ai_binary()).expect("Ollama AI runtime binary"))
                 .into(),
@@ -283,7 +283,7 @@ fn ollama_ai_settings_snapshot_v1(ollama_port: u16) -> SettingsSnapshotV1 {
         values: vec![
             setting_entry_v1(
                 "ollama.chat_model",
-                Value::StringValue("hermes-conformance:latest".to_owned()),
+                Value::StringValue("makosh-conformance:latest".to_owned()),
             ),
             setting_entry_v1(
                 "ollama.port",
@@ -304,7 +304,7 @@ fn setting_entry_v1(setting_id: &str, value: Value) -> SettingsValueEntryV1 {
 fn ollama_ai_storage_binding_v1(
     store: &SqliteControlStore,
     registration_id: &str,
-) -> hermes_kernel_control_store::PlatformStorageBindingV1 {
+) -> makosh_kernel_control_store::PlatformStorageBindingV1 {
     store
         .platform_storage_binding(registration_id, OLLAMA_AI_STORAGE_CAPABILITY_ID_V1)
         .expect("read Ollama AI Storage binding")
@@ -313,5 +313,5 @@ fn ollama_ai_storage_binding_v1(
 }
 
 fn ollama_ai_binary() -> PathBuf {
-    binary("HERMES_OLLAMA_AI_RUNTIME_BIN")
+    binary("MAKOSH_OLLAMA_AI_RUNTIME_BIN")
 }

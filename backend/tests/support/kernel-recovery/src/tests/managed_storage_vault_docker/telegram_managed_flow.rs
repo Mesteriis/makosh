@@ -4,17 +4,17 @@ use super::*;
 use std::time::Instant;
 
 use crate::platform::client_realtime::ClientRealtimePublishHandlerV1;
-use hermes_events_protocol::validation::envelope::decode_envelope_v1;
-use hermes_runtime_protocol::v1::{
+use makosh_events_protocol::validation::envelope::decode_envelope_v1;
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
-use hermes_telegram_api::{
+use makosh_telegram_api::{
     TelegramClientRequest, TelegramClientResponse, TelegramHistorySyncMode, TelegramOperationState,
     TelegramProviderCommand, TelegramProviderQuery, TelegramProviderQueryResponse,
     TelegramRuntimeReconfigurationRequest, TelegramRuntimeReconfigurationState,
     TelegramRuntimeState, TelegramSendMessage, client_contract::TelegramClientContractV1,
 };
-use hermes_telegram_automation_api::{
+use makosh_telegram_automation_api::{
     contract::{
         TELEGRAM_AUTOMATION_CONTRACT_MAJOR, TELEGRAM_AUTOMATION_CONTRACT_REVISION,
         TELEGRAM_AUTOMATION_DESCRIPTOR_SET_V1, TELEGRAM_AUTOMATION_MODULE_ID,
@@ -31,7 +31,7 @@ use hermes_telegram_automation_api::{
         automation_query_response_v1,
     },
 };
-use hermes_telegram_calls_api::{
+use makosh_telegram_calls_api::{
     contract::{
         TELEGRAM_CALLS_CONTRACT_MAJOR, TELEGRAM_CALLS_CONTRACT_REVISION,
         TELEGRAM_CALLS_DESCRIPTOR_SET_V1, TELEGRAM_CALLS_MODULE_ID, TELEGRAM_CALLS_OWNER_ID,
@@ -46,7 +46,7 @@ use hermes_telegram_calls_api::{
         calls_query_request_v1, calls_query_response_v1,
     },
 };
-use hermes_telegram_runtime::client_port::{
+use makosh_telegram_runtime::client_port::{
     TelegramClientPortError, decode_module_response, encode_module_request,
 };
 use prost::Message as _;
@@ -86,7 +86,7 @@ pub(super) struct PreparedManagedTelegramFixture {
     pub(super) data: PathBuf,
     pub(super) store: Arc<SqliteControlStore>,
     pub(super) supervisor: ManagedRuntimeSupervisor,
-    pub(super) realtime: hermes_gateway_runtime::InMemoryBrowserRealtimeSource,
+    pub(super) realtime: makosh_gateway_runtime::InMemoryBrowserRealtimeSource,
     admitted_telegram: Option<AdmittedTelegramRuntime>,
 }
 
@@ -121,7 +121,7 @@ impl Drop for PreparedManagedTelegramFixture {
     fn drop(&mut self) {
         let _ = self.supervisor.shutdown();
         unsafe {
-            std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+            std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
         }
         let _ = std::fs::remove_dir_all(&self.root);
         let _ = std::fs::remove_dir_all(&self.data);
@@ -136,21 +136,21 @@ fn prepare_managed_telegram_fixture_without_capability(
     excluded_capability_id: Option<&str>,
 ) -> PreparedManagedTelegramFixture {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-telegram-runtime");
+    let root = unique_target_root("makosh-managed-telegram-runtime");
     let data = private_directory(short_communications_kernel_data_directory());
     let vault_dir = private_directory(data.join("vault"));
     initialize_vault(&vault_dir, &credential_directory());
     seed_telegram_vault(&vault_dir);
     let release = installed_communications_telegram_release(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             "owner-1",
             "desktop-1",
             [4; 65],
@@ -163,7 +163,7 @@ fn prepare_managed_telegram_fixture_without_capability(
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
     let realtime =
-        hermes_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
+        makosh_gateway_runtime::InMemoryBrowserRealtimeSource::new(64).expect("realtime source");
     configure_route_handler(&supervisor, &store, &data);
     supervisor
         .configure_client_realtime_handler(Arc::new(ClientRealtimePublishHandlerV1::new(
@@ -230,11 +230,11 @@ fn managed_telegram_runtime_uses_kernel_leases_and_event_only_communications_han
             .await
             .expect("connect event observer");
         let observations = client
-            .subscribe("hermes.observation.v1.communications.communication_observed.v1")
+            .subscribe("makosh.observation.v1.communications.communication_observed.v1")
             .await
             .expect("subscribe Telegram observations");
         let canonical_events = client
-            .subscribe("hermes.event.v1.communications.communication_evidence_recorded.v1")
+            .subscribe("makosh.event.v1.communications.communication_evidence_recorded.v1")
             .await
             .expect("subscribe canonical Communications events");
         (observations, canonical_events)
@@ -263,7 +263,7 @@ fn managed_telegram_runtime_uses_kernel_leases_and_event_only_communications_han
             .source
             .expect("Telegram observation source")
             .module_id,
-        hermes_telegram_runtime::PACKAGE
+        makosh_telegram_runtime::PACKAGE
     );
     let canonical =
         decode_envelope_v1(canonical.payload.as_ref()).expect("Communications event envelope");
@@ -277,7 +277,7 @@ fn managed_telegram_runtime_uses_kernel_leases_and_event_only_communications_han
             .expect("connect duplicate observation publisher");
         client
             .publish(
-                "hermes.observation.v1.communications.communication_observed.v1",
+                "makosh.observation.v1.communications.communication_observed.v1",
                 observation_bytes.into(),
             )
             .await
@@ -1223,7 +1223,7 @@ fn telegram_replay(
     telegram: &StartedTelegramRuntime,
     request_id: u64,
     after_sequence: u64,
-) -> Vec<hermes_telegram_api::TelegramRealtimeFrame> {
+) -> Vec<makosh_telegram_api::TelegramRealtimeFrame> {
     let page = telegram_replay_page(store, supervisor, telegram, request_id, after_sequence);
     if page.reset_required {
         panic!(
@@ -1240,7 +1240,7 @@ fn telegram_replay_page(
     telegram: &StartedTelegramRuntime,
     request_id: u64,
     after_sequence: u64,
-) -> hermes_telegram_api::TelegramRealtimeReplayPage {
+) -> makosh_telegram_api::TelegramRealtimeReplayPage {
     match route_telegram_client(
         store,
         &supervisor.relay_port(),
@@ -1276,11 +1276,11 @@ fn managed_telegram_automation_route_is_durable_and_provider_side_effect_free() 
             .await
             .expect("connect automation event observer");
         let observations = client
-            .subscribe("hermes.observation.v1.communications.communication_observed.v1")
+            .subscribe("makosh.observation.v1.communications.communication_observed.v1")
             .await
             .expect("subscribe Telegram observations");
         let canonical_events = client
-            .subscribe("hermes.event.v1.communications.communication_evidence_recorded.v1")
+            .subscribe("makosh.event.v1.communications.communication_evidence_recorded.v1")
             .await
             .expect("subscribe canonical Communications events");
         (observations, canonical_events)
@@ -2011,7 +2011,7 @@ fn wait_for_telegram_call_operation(
     request_id: u64,
     operation_id: &str,
     expected_state: CallOperationStateV1,
-) -> hermes_telegram_calls_api::wire::CallOperationV1 {
+) -> makosh_telegram_calls_api::wire::CallOperationV1 {
     let request = CallsQueryRequestV1 {
         request: Some(calls_query_request_v1::Request::GetCallOperation(
             GetCallOperationRequestV1 {
@@ -2408,7 +2408,7 @@ fn wait_for_telegram_runtime_reconfiguration(
     supervisor: &ManagedRuntimeSupervisor,
     telegram: &StartedTelegramRuntime,
     reconfiguration_id: &str,
-) -> hermes_telegram_api::TelegramRuntimeReconfiguration {
+) -> makosh_telegram_api::TelegramRuntimeReconfiguration {
     let relay = supervisor.relay_port();
     let deadline = std::time::Instant::now() + Duration::from_secs(10);
     loop {
@@ -2548,7 +2548,7 @@ fn assert_telegram_operation_completed(
     supervisor: &ManagedRuntimeSupervisor,
     telegram: &StartedTelegramRuntime,
     operation_id: &str,
-) -> hermes_telegram_api::TelegramOperation {
+) -> makosh_telegram_api::TelegramOperation {
     let relay = supervisor.relay_port();
     let deadline = std::time::Instant::now() + Duration::from_secs(10);
     loop {

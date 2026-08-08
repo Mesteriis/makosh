@@ -12,7 +12,7 @@ function cargo(arguments_) {
 }
 
 test('production Kernel CLI exposes only the approved operational surface', () => {
-  const result = cargo(['run', '-q', '-p', 'hermes-kernel', '--', '--help']);
+  const result = cargo(['run', '-q', '-p', 'makosh-kernel', '--', '--help']);
   assert.equal(result.status, 0, result.stderr);
   for (const command of [
     'status',
@@ -40,8 +40,8 @@ test('production Kernel dependency graph excludes the development operator', () 
   const result = cargo(['metadata', '--locked', '--format-version', '1', '--no-deps']);
   assert.equal(result.status, 0, result.stderr);
   const metadata = JSON.parse(result.stdout);
-  const kernel = metadata.packages.find(({ name }) => name === 'hermes-kernel');
+  const kernel = metadata.packages.find(({ name }) => name === 'makosh-kernel');
   assert.ok(kernel);
   const dependencies = new Set(kernel.dependencies.map(({ name }) => name));
-  assert.equal(dependencies.has('hermes-development-kernel-operator'), false);
+  assert.equal(dependencies.has('makosh-development-kernel-operator'), false);
 });

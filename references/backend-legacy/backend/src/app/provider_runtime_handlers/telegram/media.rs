@@ -1,7 +1,7 @@
 use axum::Json;
 use axum::extract::State;
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use sha2::{Digest, Sha256};
@@ -22,7 +22,7 @@ use crate::integrations::telegram::runtime::models::{
     TelegramMediaDownloadRequest, TelegramMediaDownloadResponse,
 };
 use crate::platform::audit::models::NewApiAuditRecord;
-use hermes_provider_telegram::tdlib::types::TdlibMediaKind;
+use makosh_provider_telegram::tdlib::types::TdlibMediaKind;
 
 use crate::platform::events::bus::telegram_event_types;
 use crate::workflows::telegram_media_storage::{
@@ -649,7 +649,7 @@ mod tests {
                 runtime_kind: "tdlib_qr_authorized".to_owned(),
                 status: "downloaded".to_owned(),
                 tdlib_file_id: 17,
-                local_path: Some("hermes/blobs/sha256".to_owned()),
+                local_path: Some("makosh/blobs/sha256".to_owned()),
                 size_bytes: Some(128),
                 expected_size_bytes: Some(128),
                 downloaded_size_bytes: Some(128),
@@ -661,7 +661,7 @@ mod tests {
             },
         );
 
-        assert_eq!(response.local_path.as_deref(), Some("hermes/blobs/sha256"));
+        assert_eq!(response.local_path.as_deref(), Some("makosh/blobs/sha256"));
         assert_eq!(response.attachment_id.as_deref(), Some("attachment-1"));
         assert_eq!(response.blob_id.as_deref(), Some("blob-1"));
         assert_eq!(response.scan_status.as_deref(), Some("clean"));

@@ -1,16 +1,16 @@
 use std::{os::unix::net::UnixStream, time::Duration};
 
-use hermes_blob_client::{
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyTransferRequestV1, ManagedBlobSessionRequestV1,
     request_managed_blob_custody_transfer_v2, request_managed_blob_session_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::BlobDataOperationV1,
 };
-use hermes_zulip_api::ZulipCommandV1;
-use hermes_zulip_delivery_intent_contract::ZULIP_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1;
-use hermes_zulip_persistence::{
+use makosh_zulip_api::ZulipCommandV1;
+use makosh_zulip_delivery_intent_contract::ZULIP_DELIVERY_INTENT_TARGET_BLOB_CAPABILITY_ID_V1;
+use makosh_zulip_persistence::{
     ClaimedZulipDeliveryIntentJobV1, ZulipDeliveryIntentJobStateV1, ZulipDeliveryIntentJobV1,
     ZulipDurablePersistence,
 };

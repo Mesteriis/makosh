@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 use std::path::PathBuf;
 use std::process::ExitCode;
 
-use hermes_attachment_security_assembly::materialize_attachment_security_release_assembly_v1;
+use makosh_attachment_security_assembly::materialize_attachment_security_release_assembly_v1;
 
 const OPTIONS: [&str; 3] = ["--build-id", "--output-dir", "--runtime"];
 
@@ -22,7 +22,7 @@ fn main() -> ExitCode {
             ExitCode::SUCCESS
         }
         None => fail(
-            "usage: hermes-attachment-security-assembly --build-id <id> --output-dir <absolute-path> \
+            "usage: makosh-attachment-security-assembly --build-id <id> --output-dir <absolute-path> \
              --runtime <absolute-path>",
         ),
     }
@@ -67,7 +67,7 @@ mod tests {
     fn parses_each_exact_option_once_in_any_order() {
         let parsed = arguments(vec![
             "--runtime".to_owned(),
-            "/tmp/hermes-attachment-security-runtime".to_owned(),
+            "/tmp/makosh-attachment-security-runtime".to_owned(),
             "--build-id".to_owned(),
             "build-1".to_owned(),
             "--output-dir".to_owned(),
@@ -82,7 +82,7 @@ mod tests {
         );
         assert_eq!(
             parsed.runtime,
-            PathBuf::from("/tmp/hermes-attachment-security-runtime")
+            PathBuf::from("/tmp/makosh-attachment-security-runtime")
         );
     }
 

@@ -1,9 +1,9 @@
 use std::sync::Arc;
 
-use hermes_gateway_runtime::{
+use hyper::{Method, Request, StatusCode};
+use makosh_gateway_runtime::{
     GatewayHttp3ListenerV1, GatewayTechnicalRouter, PairedRemoteProfileV1,
 };
-use hyper::{Method, Request, StatusCode};
 use quinn::crypto::rustls::{QuicClientConfig, QuicServerConfig};
 use quinn::{ClientConfig as QuinnClientConfig, Endpoint, ServerConfig as QuinnServerConfig};
 use rcgen::generate_simple_self_signed;

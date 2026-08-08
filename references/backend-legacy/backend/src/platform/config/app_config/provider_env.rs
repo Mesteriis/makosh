@@ -9,16 +9,16 @@ use super::super::parsing::parse_bool_env;
 use super::AppConfig;
 
 pub(super) fn apply_bundled_google_oauth_client(config: &mut AppConfig) -> Result<(), ConfigError> {
-    if let Some(raw_json) = option_env!("HERMES_BUNDLED_GOOGLE_OAUTH_CLIENT_JSON") {
+    if let Some(raw_json) = option_env!("MAKOSH_BUNDLED_GOOGLE_OAUTH_CLIENT_JSON") {
         config.google_oauth_client = Some(GoogleOAuthClientConfig::from_client_secret_json(
             non_empty(raw_json, ConfigError::EmptyGoogleOAuthClientConfigJson)?,
         )?);
     }
-    if let Some(client_id) = option_env!("HERMES_BUNDLED_GOOGLE_OAUTH_CLIENT_ID") {
+    if let Some(client_id) = option_env!("MAKOSH_BUNDLED_GOOGLE_OAUTH_CLIENT_ID") {
         config.google_oauth_client_id =
             Some(non_empty(client_id, ConfigError::EmptyGoogleOAuthClientId)?.to_owned());
     }
-    if let Some(client_secret) = option_env!("HERMES_BUNDLED_GOOGLE_OAUTH_CLIENT_SECRET") {
+    if let Some(client_secret) = option_env!("MAKOSH_BUNDLED_GOOGLE_OAUTH_CLIENT_SECRET") {
         config.google_oauth_client_secret = Some(ResolvedSecret::new(non_empty(
             client_secret,
             ConfigError::EmptyGoogleOAuthClientSecret,
@@ -34,52 +34,52 @@ pub(super) fn apply_provider_env(
     value: &str,
 ) -> Result<bool, ConfigError> {
     match key {
-        "HERMES_TDJSON_PATH" => {
+        "MAKOSH_TDJSON_PATH" => {
             config.tdjson_path = Some(PathBuf::from(non_empty(
                 value,
                 ConfigError::EmptyTdjsonPath,
             )?));
         }
-        "HERMES_TELEGRAM_API_ID" => {
+        "MAKOSH_TELEGRAM_API_ID" => {
             config.telegram_api_id = Some(parse_telegram_api_id(value)?);
         }
-        "HERMES_TELEGRAM_API_HASH" => {
+        "MAKOSH_TELEGRAM_API_HASH" => {
             config.telegram_api_hash = Some(ResolvedSecret::new(non_empty(
                 value,
                 ConfigError::EmptyTelegramApiHash,
             )?)?);
         }
-        "HERMES_GOOGLE_OAUTH_CLIENT_ID" => {
+        "MAKOSH_GOOGLE_OAUTH_CLIENT_ID" => {
             config.google_oauth_client_id =
                 Some(non_empty(value, ConfigError::EmptyGoogleOAuthClientId)?.to_owned());
         }
-        "HERMES_GOOGLE_OAUTH_CLIENT_SECRET" => {
+        "MAKOSH_GOOGLE_OAUTH_CLIENT_SECRET" => {
             config.google_oauth_client_secret = Some(ResolvedSecret::new(non_empty(
                 value,
                 ConfigError::EmptyGoogleOAuthClientSecret,
             )?)?);
         }
-        "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_JSON" => {
+        "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_JSON" => {
             config.google_oauth_client = Some(GoogleOAuthClientConfig::from_client_secret_json(
                 non_empty(value, ConfigError::EmptyGoogleOAuthClientConfigJson)?,
             )?);
         }
-        "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH" => {
+        "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH" => {
             config.google_oauth_client = Some(google_oauth_client_from_path(value)?);
         }
-        "HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED" => {
+        "MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED" => {
             config.zoom_token_maintenance_scheduler_enabled = parse_bool_env(
-                "HERMES_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED",
+                "MAKOSH_ZOOM_TOKEN_MAINTENANCE_SCHEDULER_ENABLED",
                 value.trim(),
             )?;
         }
-        "HERMES_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED" => {
+        "MAKOSH_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED" => {
             config.zoom_recording_sync_scheduler_enabled =
-                parse_bool_env("HERMES_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED", value.trim())?;
+                parse_bool_env("MAKOSH_ZOOM_RECORDING_SYNC_SCHEDULER_ENABLED", value.trim())?;
         }
-        "HERMES_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED" => {
+        "MAKOSH_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED" => {
             config.zoom_retention_cleanup_scheduler_enabled = parse_bool_env(
-                "HERMES_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED",
+                "MAKOSH_ZOOM_RETENTION_CLEANUP_SCHEDULER_ENABLED",
                 value.trim(),
             )?;
         }

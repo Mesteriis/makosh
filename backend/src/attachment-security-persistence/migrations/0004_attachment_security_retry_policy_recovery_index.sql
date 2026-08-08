@@ -1,5 +1,5 @@
 CREATE INDEX attachment_security_scan_jobs_retry_policy_recovery_idx
-  ON hermes_data.attachment_security_scan_jobs (
+  ON makosh_data.attachment_security_scan_jobs (
     retry_policy_revision,
     state
   )

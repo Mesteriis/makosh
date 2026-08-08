@@ -429,7 +429,7 @@ impl WhatsappFixtureIngestApplicationService {
 
     pub(super) async fn record_and_accept_whatsapp_raw(
         &self,
-        raw: &hermes_communications_api::evidence::NewRawCommunicationRecord,
+        raw: &makosh_communications_api::evidence::NewRawCommunicationRecord,
     ) -> Result<AcceptedWhatsappRawRecord, CommunicationFixtureIngestError> {
         let stored_raw = CommunicationRawEvidencePort::new(self.pool.clone())
             .record_raw_source(raw)

@@ -5,8 +5,8 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::TcpStream;
 use tokio::time::timeout;
 
-const CLAMAV_ADDRESS_ENV: &str = "HERMES_CLAMAV_ADDR";
-const CLAMAV_TIMEOUT_SECONDS_ENV: &str = "HERMES_CLAMAV_TIMEOUT_SECONDS";
+const CLAMAV_ADDRESS_ENV: &str = "MAKOSH_CLAMAV_ADDR";
+const CLAMAV_TIMEOUT_SECONDS_ENV: &str = "MAKOSH_CLAMAV_TIMEOUT_SECONDS";
 const DEFAULT_TIMEOUT_SECONDS: u64 = 30;
 const STREAM_CHUNK_BYTES: usize = 16 * 1024;
 const MAX_RESPONSE_BYTES: usize = 4096;
@@ -213,10 +213,10 @@ mod tests {
     async fn live_clamav_accepts_synthetic_safe_payload() {
         let client = ClamAvClient::from_env()
             .expect("valid ClamAV config")
-            .expect("HERMES_CLAMAV_ADDR must be configured");
+            .expect("MAKOSH_CLAMAV_ADDR must be configured");
         assert_eq!(
             client
-                .scan(b"Hermes ClamAV live smoke payload")
+                .scan(b"makosh ClamAV live smoke payload")
                 .await
                 .expect("live scan"),
             ClamAvVerdict::Clean

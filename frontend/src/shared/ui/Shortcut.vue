@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<{
 	joiner: '+'
 })
 
-const classes = computed(() => ['hermes-shortcut', props.class])
+const classes = computed(() => ['makosh-shortcut', props.class])
 const accessibleLabel = computed(() => props.label ?? props.keys.join(` ${props.joiner} `))
 </script>
 
@@ -20,7 +20,7 @@ const accessibleLabel = computed(() => props.label ?? props.keys.join(` ${props.
 	<span :class="classes" :aria-label="accessibleLabel">
 		<template v-for="(key, index) in keys" :key="`${key}-${index}`">
 			<Kbd>{{ key }}</Kbd>
-			<span v-if="index < keys.length - 1" class="hermes-shortcut__joiner" aria-hidden="true">{{ joiner }}</span>
+			<span v-if="index < keys.length - 1" class="makosh-shortcut__joiner" aria-hidden="true">{{ joiner }}</span>
 		</template>
 	</span>
 </template>

@@ -25,11 +25,11 @@ function isKernelCoreGatewayAdapter(policy, source, target, targetPackageName) {
     && target.role === 'api'
     && target.owner === 'gateway'
     && target.surface === 'implementation'
-    && ['hermes-gateway-runtime', 'hermes-gateway-session'].includes(targetPackageName);
+    && ['makosh-gateway-runtime', 'makosh-gateway-session'].includes(targetPackageName);
 }
 
 function isEventHubTransportRuntimeConsumer(policy, source, target, targetPackageName) {
-  return targetPackageName === 'hermes-events-jetstream'
+  return targetPackageName === 'makosh-events-jetstream'
     && target
     && target.role === policy.events.role
     && target.owner === policy.events.owner
@@ -200,7 +200,7 @@ export function validateDependencyEdges(policy, packages, descriptors) {
         ));
       }
 
-      if (!target && dependency.name.startsWith('hermes-vault-')) {
+      if (!target && dependency.name.startsWith('makosh-vault-')) {
         violations.push(violation(
           'vault_private_dependency',
           `cargo:${pkg.name}:${kind}:${dependency.name}`,
@@ -208,7 +208,7 @@ export function validateDependencyEdges(policy, packages, descriptors) {
         ));
       }
 
-      if (!target && dependency.name.startsWith('hermes-storage-')) {
+      if (!target && dependency.name.startsWith('makosh-storage-')) {
         violations.push(violation(
           'storage_private_dependency',
           `cargo:${pkg.name}:${kind}:${dependency.name}`,

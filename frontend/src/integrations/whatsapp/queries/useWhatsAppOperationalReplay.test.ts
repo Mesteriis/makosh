@@ -6,7 +6,7 @@ import {
 	ClientModuleSettingsBootstrapV1Schema,
 	ClientSettingValueEntryV1Schema,
 	ClientSettingValueV1Schema,
-} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import { replayWhatsAppOperationalEvents } from '../api/whatsAppOperationalReplayGateway'
 import { useWhatsAppOperationalReplay } from './useWhatsAppOperationalReplay'
 
@@ -96,7 +96,7 @@ describe('WhatsApp operational replay controller', () => {
 function whatsAppModule() {
 	return create(ClientModuleBootstrapV1Schema, {
 		registrationId: 'whatsapp-primary',
-		moduleId: 'hermes-whatsapp-runtime',
+		moduleId: 'makosh-whatsapp-runtime',
 		sectionsEnabled: true,
 		capabilityIds: ['whatsapp.operational.realtime.v1'],
 		settings: create(ClientModuleSettingsBootstrapV1Schema, {

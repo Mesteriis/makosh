@@ -5,7 +5,7 @@ use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
-use hermes_desktop_call_recording_api::{
+use makosh_desktop_call_recording_api::{
     HOST_PROTOCOL_MAJOR_V1, HOST_PROTOCOL_REVISION_V1, MAX_AUDIO_BYTES_V1,
     wire::{
         DesktopRecordingHostCommandLeaseV1, DesktopRecordingHostHandshakeAcceptedV1,
@@ -13,7 +13,7 @@ use hermes_desktop_call_recording_api::{
         DesktopRecordingHostOperationV1,
     },
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     v1::ManagedIntegrationHostBridgeConfigurationV1,
     validation::integration_host_bridge::validate_managed_integration_host_bridge_configuration,
 };
@@ -174,7 +174,7 @@ fn validate_registration_id(value: &str) -> Result<(), String> {
 fn kernel_runtime_directory(data_dir: &Path) -> Result<PathBuf, String> {
     let data_dir = data_dir.canonicalize().map_err(|_| unavailable())?;
     let project =
-        directories::ProjectDirs::from("dev", "Hermes", "Hermes Hub").ok_or_else(unavailable)?;
+        directories::ProjectDirs::from("dev", "Макошь", "Макошь").ok_or_else(unavailable)?;
     let digest = Sha256::digest(data_dir.as_os_str().as_encoded_bytes());
     let instance_key = digest[..16]
         .iter()

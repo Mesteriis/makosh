@@ -1,8 +1,8 @@
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 
 use chrono::{DateTime, Utc};
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::platform::storage::models::ReadinessStatus;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::platform::storage::models::ReadinessStatus;
 
 #[tokio::test]
 async fn database_without_url_reports_not_configured() {

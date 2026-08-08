@@ -6,7 +6,7 @@ mod paths;
 
 use std::path::Path;
 
-use hermes_vault_key_provider::WrappingKey;
+use makosh_vault_key_provider::WrappingKey;
 use zeroize::Zeroizing;
 
 use crate::database::store::VaultStoreError;

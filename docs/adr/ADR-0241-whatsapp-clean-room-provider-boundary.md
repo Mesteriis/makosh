@@ -19,10 +19,10 @@ This decision explicitly opens the versioned `host_bridge_v1` seam that ADR-
 move the WebView implementation into `backend/` and does not admit the legacy
 unversioned HTTP relay as the final contract.
 
-Provider commands are validated in `hermes-whatsapp-api`, operation lifecycle
-is owned by `hermes-whatsapp-core`, projections and operation state are owned by
-`hermes-whatsapp-persistence`, and orchestration is owned by
-`hermes-whatsapp-runtime`. Provider observations enter through typed events and
+Provider commands are validated in `makosh-whatsapp-api`, operation lifecycle
+is owned by `makosh-whatsapp-core`, projections and operation state are owned by
+`makosh-whatsapp-persistence`, and orchestration is owned by
+`makosh-whatsapp-runtime`. Provider observations enter through typed events and
 are not promoted directly to durable business entities.
 
 ## Implementation state
@@ -38,9 +38,9 @@ host and runtime bind the private route to the same exact descriptor digest;
 accepted commands and their owner-local terminal status no longer pass through
 an umbrella `whatsapp.client` DTO. These prerequisites do not open the
 production phase gate. Canonical descriptor/settings/storage artifacts and the
-separate unsigned `hermes-whatsapp-assembly` now exist; one admitted runtime is
+separate unsigned `makosh-whatsapp-assembly` now exist; one admitted runtime is
 bound by hidden configuration-scoped settings to one account, and its Storage
-bundle contains only `hermes_data.whatsapp_*` tables. Exact assembly artifacts
+bundle contains only `makosh_data.whatsapp_*` tables. Exact assembly artifacts
 are included in the signed distribution, and live managed conformance proves
 owner-approved grants, signed Kernel launch, Storage admission through the
 issued PgBouncer pool alias, private host-route binding, stale generation

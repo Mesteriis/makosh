@@ -46,11 +46,11 @@ presentation boundary.
 
 ## Единицы сборки
 
-- `hermes-mail-core`: bounded MIME leaf decoding;
-- `hermes-mail-runtime`: provider ingestion и source Blob admission;
-- `hermes-communications-ingress`: event contract;
-- `hermes-communications-domain` / `persistence`: canonical descriptor custody;
-- `hermes-communications-content-api` / runtime: owner content ticket;
+- `makosh-mail-core`: bounded MIME leaf decoding;
+- `makosh-mail-runtime`: provider ingestion и source Blob admission;
+- `makosh-communications-ingress`: event contract;
+- `makosh-communications-domain` / `persistence`: canonical descriptor custody;
+- `makosh-communications-content-api` / runtime: owner content ticket;
 - `frontend/src/workflows/mail-message-content`: app composition;
 - `frontend/src/shared/sanitize` и Mail presentation: isolated rendering.
 

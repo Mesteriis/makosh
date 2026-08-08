@@ -8,7 +8,7 @@ import {
 	MailSyncRunV1Schema,
 	MailSyncStatusV1Schema,
 	MailSyncTriggerV1,
-} from '../../../gen/hermes/mail/sync_health/v1/client_pb'
+} from '../../../gen/makosh/mail/sync_health/v1/client_pb'
 import {
 	buildMailSyncHealthModel,
 	buildMailSyncRunRow,

@@ -54,7 +54,7 @@ export const domainScaffoldModels = {
       icon: 'tabler:home-stats',
       chips: ['8 сигналов', '3 требуют решения', '2 встречи'],
       body: [
-        'Hermes собирает только те элементы, которые помогают принять решение или сохранить контекст. В этом каркасе центральная область остается спокойной и сканируемой.',
+        'Макошь собирает только те элементы, которые помогают принять решение или сохранить контекст. В этом каркасе центральная область остается спокойной и сканируемой.',
         'Следующий шаг для Home - выбрать, какие блоки становятся постоянными виджетами, а какие остаются динамическими сигналами из Review и Timeline.'
       ]
     },
@@ -109,7 +109,7 @@ export const domainScaffoldModels = {
       chips: ['vendor', 'security', 'recent communication'],
       body: [
         'Карточка персоны должна объяснять отношение к владельцу: кто это, откуда известно, какие текущие контексты активны.',
-        'Raw address book entries и AI extraction остаются кандидатами, пока Hermes не подтверждает durable Persona через evidence.'
+        'Raw address book entries и AI extraction остаются кандидатами, пока Макошь не подтверждает durable Persona через evidence.'
       ]
     },
     inspectorTitle: 'Память о персоне',
@@ -271,7 +271,7 @@ export const domainScaffoldModels = {
       chips: ['needs owner', 'mail evidence', 'legal review'],
       body: [
         'Tasks должны отличаться от сырых “to-do” тем, что у каждой задачи есть источник, owner context и причина появления.',
-        'Кандидаты задач живут в Review до подтверждения, чтобы Hermes не плодил лишние durable commitments.'
+        'Кандидаты задач живут в Review до подтверждения, чтобы Макошь не плодил лишние durable commitments.'
       ]
     },
     inspectorTitle: 'Контекст задачи',
@@ -329,7 +329,7 @@ export const domainScaffoldModels = {
       ]
     },
     inspectorTitle: 'Подготовка встречи',
-    inspectorSummary: 'Hermes собирает контекст, evidence и открытые решения до звонка.',
+    inspectorSummary: 'Макошь собирает контекст, evidence и открытые решения до звонка.',
     inspectorSections: [
       {
         title: 'Prep',
@@ -437,7 +437,7 @@ export const domainScaffoldModels = {
       ]
     },
     inspectorTitle: 'Связанный контекст',
-    inspectorSummary: 'Hermes показывает, где заметка участвует в памяти.',
+    inspectorSummary: 'Макошь показывает, где заметка участвует в памяти.',
     inspectorSections: [
       {
         title: 'Links',
@@ -486,7 +486,7 @@ export const domainScaffoldModels = {
       icon: 'tabler:share',
       chips: ['decision', '3 sources', 'medium confidence'],
       body: [
-        'Knowledge Graph показывает не “красивую паутину”, а проверяемые связи, которые помогают Hermes понимать контекст.',
+        'Knowledge Graph показывает не “красивую паутину”, а проверяемые связи, которые помогают Макошь понимать контекст.',
         'Каждая связь должна иметь provenance или быть помечена как candidate, иначе граф станет красивым мусором.'
       ]
     },
@@ -540,7 +540,7 @@ export const domainScaffoldModels = {
       icon: 'tabler:clipboard-check',
       chips: ['candidate', 'needs owner', 'evidence-backed'],
       body: [
-        'Review - это предохранитель Hermes. Сюда попадает всё, что может стать business truth, но ещё не заслужило durable state.',
+        'Review - это предохранитель Макошь. Сюда попадает всё, что может стать business truth, но ещё не заслужило durable state.',
         'Экран должен помогать быстро понять источник, риск, альтернативы и последствия promotion или dismiss.'
       ]
     },
@@ -577,7 +577,7 @@ export const domainScaffoldModels = {
       },
       {
         title: 'Task candidate created',
-        summary: 'Hermes detected owner approval requirement.',
+        summary: 'Макошь detected owner approval requirement.',
         meta: '09:43',
         icon: 'tabler:checkbox'
       },
@@ -594,7 +594,7 @@ export const domainScaffoldModels = {
       icon: 'tabler:timeline',
       chips: ['source event', 'communication', 'rebuildable projection'],
       body: [
-        'Timeline показывает цепочку причин, а не просто activity feed. Это помогает понять, почему Hermes сейчас считает объект важным.',
+        'Timeline показывает цепочку причин, а не просто activity feed. Это помогает понять, почему Макошь сейчас считает объект важным.',
         'Derived projections должны быть восстановимы из событий и evidence, поэтому timeline surface должен быть особенно честным к provenance.'
       ]
     },
@@ -702,7 +702,7 @@ export const domainScaffoldModels = {
       icon: 'tabler:sparkles',
       chips: ['local AI', 'requires review', 'source cited'],
       body: [
-        'Agents workspace должен ясно отделять AI output от подтвержденного действия. Hermes может предлагать, но владелец или deterministic workflow решает.',
+        'Agents workspace должен ясно отделять AI output от подтвержденного действия. Макошь может предлагать, но владелец или deterministic workflow решает.',
         'В центре важны input evidence, proposed output, confidence и кнопки review, а не “магическая” генерация без следов.'
       ]
     },

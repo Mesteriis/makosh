@@ -56,7 +56,7 @@ const resolvedKind = computed<FileIconKind>(() => {
 	}
 	return props.kind
 })
-const classes = computed(() => ['hermes-file-icon', `hermes-file-icon--${resolvedKind.value}`, props.class])
+const classes = computed(() => ['makosh-file-icon', `makosh-file-icon--${resolvedKind.value}`, props.class])
 const accessibleLabel = computed(() => props.label ?? resolvedKind.value)
 </script>
 

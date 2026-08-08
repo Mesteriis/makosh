@@ -6,7 +6,7 @@ use super::{
     BrowserAuthenticationManager, BrowserSameOriginSessionV1, BrowserSession,
     BrowserSessionManager, BrowserWebauthnAuthenticationCeremonyV1, BrowserWebauthnVerifier,
 };
-use hermes_gateway_session_contract::{
+use makosh_gateway_session_contract::{
     BrowserAuthenticationAuthority, ClientBootstrapAuthority, ClientBootstrapProjectionV1,
 };
 

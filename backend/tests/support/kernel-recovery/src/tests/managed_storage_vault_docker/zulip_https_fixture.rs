@@ -163,7 +163,7 @@ fn serve(
                                 .accepted_connections
                                 .fetch_add(1, Ordering::Relaxed);
                         }
-                        Err(error) if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() => {
+                        Err(error) if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() => {
                             fixture_diagnostic(&format!(
                                 "developer_zulip_fixture_connection_error={error}"
                             ));
@@ -184,7 +184,7 @@ fn serve(
 }
 
 fn fixture_diagnostic(message: &str) {
-    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         let diagnostic = format!("{message}\n");
         let mut stderr = std::io::stderr().lock();
         let _ = std::io::Write::write_all(&mut stderr, diagnostic.as_bytes());

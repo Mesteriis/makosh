@@ -5,11 +5,11 @@ use std::io::Read;
 use std::os::unix::fs::MetadataExt;
 use std::path::{Path, PathBuf};
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     DistributionArtifactKindV1, DistributionManifestArtifactV1, DistributionManifestV1,
     ModuleDescriptorV1, SettingsSchemaV1,
 };
-use hermes_runtime_protocol::validation::descriptor::{
+use makosh_runtime_protocol::validation::descriptor::{
     decode_descriptor_v1, decode_settings_schema_v1,
 };
 use sha2::{Digest, Sha256};

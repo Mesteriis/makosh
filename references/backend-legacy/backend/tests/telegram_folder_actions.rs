@@ -5,9 +5,9 @@ use serde_json::json;
 use sqlx::Row;
 use tower::ServiceExt;
 
-use hermes_backend_testkit::context::TestContext;
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::platform::storage::database::Database;
+use makosh_backend_testkit::context::TestContext;
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::platform::storage::database::Database;
 use telegram_support::{LOCAL_API_TOKEN, json_body, json_post_request_with_actor, unique_suffix};
 
 #[tokio::test]
@@ -23,7 +23,7 @@ async fn telegram_folder_add_action_records_provider_write_command() {
     let provider_chat_id = format!("folder-chat-{suffix}");
     let provider_folder_id = 7_i64;
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -146,7 +146,7 @@ async fn telegram_folder_remove_action_records_provider_write_command() {
     let provider_chat_id = format!("folder-remove-chat-{suffix}");
     let provider_folder_id = 11_i64;
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
@@ -270,7 +270,7 @@ async fn telegram_folder_reassign_action_queues_add_and_remove_commands_from_cur
     let account_id = format!("telegram-folder-reassign-action-{suffix}");
     let provider_chat_id = format!("folder-reassign-chat-{suffix}");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )

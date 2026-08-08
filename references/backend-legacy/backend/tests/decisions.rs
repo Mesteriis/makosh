@@ -1,20 +1,20 @@
-use hermes_backend_testkit::context::TestContext;
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::evidence::NewRawCommunicationRecord;
+use makosh_backend_testkit::context::TestContext;
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::evidence::NewRawCommunicationRecord;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use chrono::{TimeZone, Utc};
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_hub_backend::domains::communications::messages::projection::project_raw_email_message;
-use hermes_hub_backend::domains::communications::messages::store::MessageProjectionStore;
-use hermes_hub_backend::domains::decisions::errors::DecisionStoreError;
-use hermes_hub_backend::domains::decisions::models::decision::NewDecision;
-use hermes_hub_backend::domains::decisions::models::states::DecisionStatus;
-use hermes_hub_backend::domains::documents::core::models::NewDocumentImport;
-use hermes_hub_backend::domains::documents::core::store::DocumentImportStore;
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_hub_backend::domains::communications::messages::projection::project_raw_email_message;
+use makosh_hub_backend::domains::communications::messages::store::MessageProjectionStore;
+use makosh_hub_backend::domains::decisions::errors::DecisionStoreError;
+use makosh_hub_backend::domains::decisions::models::decision::NewDecision;
+use makosh_hub_backend::domains::decisions::models::states::DecisionStatus;
+use makosh_hub_backend::domains::documents::core::models::NewDocumentImport;
+use makosh_hub_backend::domains::documents::core::store::DocumentImportStore;
 
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::workflows::graph_projection::service::GraphProjectionService;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::workflows::graph_projection::service::GraphProjectionService;
 use serde_json::{Value, json};
 use sqlx::Row;
 use sqlx::postgres::{PgPool, PgPoolOptions};
@@ -510,7 +510,7 @@ async fn decision_store_rejects_missing_evidence_before_database_write() {
         0.8,
         DecisionReviewState::Suggested,
     );
-    let impact = NewDecisionImpactedEntity::new(DecisionEntityKind::Project, "project:v1:hermes");
+    let impact = NewDecisionImpactedEntity::new(DecisionEntityKind::Project, "project:v1:makosh");
 
     let error = store
         .upsert_with_evidence(&decision, &[], &[impact])
@@ -533,7 +533,7 @@ async fn decision_store_rejects_invalid_confidence_before_database_write() {
         DecisionEvidenceSourceKind::Document,
         "document:invalid-confidence",
     );
-    let impact = NewDecisionImpactedEntity::new(DecisionEntityKind::Project, "project:v1:hermes");
+    let impact = NewDecisionImpactedEntity::new(DecisionEntityKind::Project, "project:v1:makosh");
 
     let error = store
         .upsert_with_evidence(&decision, &[evidence], &[impact])
@@ -560,7 +560,7 @@ async fn decision_store_rejects_partial_decider_before_database_write() {
         DecisionEvidenceSourceKind::Document,
         "document:partial-decider",
     );
-    let impact = NewDecisionImpactedEntity::new(DecisionEntityKind::Project, "project:v1:hermes");
+    let impact = NewDecisionImpactedEntity::new(DecisionEntityKind::Project, "project:v1:makosh");
 
     let error = store
         .upsert_with_evidence(&decision, &[evidence], &[impact])
@@ -585,7 +585,7 @@ async fn decision_store_rejects_missing_observation_evidence_against_postgres() 
     );
     let evidence =
         NewDecisionEvidence::observation(format!("observation:v1:missing-decision:{suffix}"));
-    let impact = NewDecisionImpactedEntity::new(DecisionEntityKind::Project, "project:v1:hermes");
+    let impact = NewDecisionImpactedEntity::new(DecisionEntityKind::Project, "project:v1:makosh");
 
     let error = store
         .upsert_with_evidence(&decision, &[evidence], &[impact])
@@ -608,7 +608,7 @@ async fn live_decision_context(_test_name: &str) -> Option<(PgPool, DecisionStor
 
 fn disconnected_decision_store() -> DecisionStore {
     let pool = PgPoolOptions::new()
-        .connect_lazy("postgres://hermes:unused@127.0.0.1:1/hermes_hub")
+        .connect_lazy("postgres://makosh:unused@127.0.0.1:1/makosh_hub")
         .expect("create lazy test pool");
     DecisionStore::new(pool)
 }
@@ -684,9 +684,9 @@ fn unique_suffix() -> u128 {
         .expect("system clock after unix epoch")
         .as_nanos()
 }
-use hermes_hub_backend::domains::decisions::models::entity_kind::DecisionEntityKind;
-use hermes_hub_backend::domains::decisions::models::evidence::NewDecisionEvidence;
-use hermes_hub_backend::domains::decisions::models::impacted_entity::NewDecisionImpactedEntity;
-use hermes_hub_backend::domains::decisions::models::source_kind::DecisionEvidenceSourceKind;
-use hermes_hub_backend::domains::decisions::models::states::DecisionReviewState;
-use hermes_hub_backend::domains::decisions::store::DecisionStore;
+use makosh_hub_backend::domains::decisions::models::entity_kind::DecisionEntityKind;
+use makosh_hub_backend::domains::decisions::models::evidence::NewDecisionEvidence;
+use makosh_hub_backend::domains::decisions::models::impacted_entity::NewDecisionImpactedEntity;
+use makosh_hub_backend::domains::decisions::models::source_kind::DecisionEvidenceSourceKind;
+use makosh_hub_backend::domains::decisions::models::states::DecisionReviewState;
+use makosh_hub_backend::domains::decisions::store::DecisionStore;

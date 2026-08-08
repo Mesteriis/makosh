@@ -109,7 +109,7 @@ pub async fn execute_due_delivery_v1(
 
 #[cfg(test)]
 mod tests {
-    use hermes_communication_delivery_intent_api::wire::{
+    use makosh_communication_delivery_intent_api::wire::{
         DeliveryIntentErrorCodeV1, DeliveryIntentStatusV1, SubmitDeliveryIntentResponseV1,
     };
     use prost::Message;

@@ -1,8 +1,8 @@
-use hermes_events_api::EventEnvelope;
+use makosh_events_api::EventEnvelope;
 use serde_json::Value;
 use sqlx::postgres::PgPool;
 
-use hermes_events_postgres::errors::EventStoreError;
+use makosh_events_postgres::errors::EventStoreError;
 
 pub(crate) async fn dispatch_ai_runtime_signal(
     pool: PgPool,

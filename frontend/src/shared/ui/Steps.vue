@@ -57,7 +57,7 @@ const safeStepCount = computed(() => normalizeStepCount(props.stepCount))
 const activeStep = computed(() => clampStep(props.step, safeStepCount.value))
 const isFirst = computed(() => activeStep.value <= 1)
 const isLast = computed(() => activeStep.value >= safeStepCount.value)
-const transitionName = ref('hermes-steps-slide-forward')
+const transitionName = ref('makosh-steps-slide-forward')
 
 const normalizedSteps = computed<NormalizedStepItem[]>(() => {
 	const items: NormalizedStepItem[] = []
@@ -77,8 +77,8 @@ const normalizedSteps = computed<NormalizedStepItem[]>(() => {
 const activeItem = computed(() => normalizedSteps.value[activeStep.value - 1] ?? normalizedSteps.value[0])
 const activeSlotName = computed(() => `step-${activeStep.value}`)
 const dialogContentClass = computed(() => [
-	'hermes-steps-dialog',
-	`hermes-steps-dialog--${props.size}`,
+	'makosh-steps-dialog',
+	`makosh-steps-dialog--${props.size}`,
 	props.contentClass
 ].filter(Boolean).join(' '))
 
@@ -95,7 +95,7 @@ const slotProps = computed<StepsSlotProps>(() => ({
 
 watch(activeStep, (value, previousValue) => {
 	if (value === previousValue) return
-	transitionName.value = value > previousValue ? 'hermes-steps-slide-forward' : 'hermes-steps-slide-backward'
+	transitionName.value = value > previousValue ? 'makosh-steps-slide-forward' : 'makosh-steps-slide-backward'
 })
 
 function normalizeStepCount(value: number): number {
@@ -157,19 +157,19 @@ function nextStep(): void {
 			<slot name="trigger" />
 		</template>
 
-		<section class="hermes-steps" aria-live="polite">
-			<section class="hermes-steps__content" role="region" :aria-label="activeItem.title">
+		<section class="makosh-steps" aria-live="polite">
+			<section class="makosh-steps__content" role="region" :aria-label="activeItem.title">
 				<Transition :name="transitionName" mode="out-in">
-					<div :key="activeStep" class="hermes-steps__slide">
-						<div class="hermes-steps__content-header">
+					<div :key="activeStep" class="makosh-steps__slide">
+						<div class="makosh-steps__content-header">
 							<h3>{{ activeItem.title }}</h3>
 							<p v-if="activeItem.description">{{ activeItem.description }}</p>
 							<p v-if="activeItem.requirement">{{ activeItem.requirement }}</p>
 						</div>
-						<div class="hermes-steps__slot">
+						<div class="makosh-steps__slot">
 							<slot :name="activeSlotName" v-bind="slotProps">
 								<slot v-bind="slotProps">
-									<p class="hermes-steps__empty">
+									<p class="makosh-steps__empty">
 										Provide content with the #{{ activeSlotName }} slot.
 									</p>
 								</slot>
@@ -182,24 +182,24 @@ function nextStep(): void {
 
 		<template #footer>
 			<slot name="footer" v-bind="slotProps">
-				<div class="hermes-steps__dock">
+				<div class="makosh-steps__dock">
 					<Button v-if="showCancel" variant="ghost" :disabled="busy" @click="cancel">
 						{{ cancelLabel }}
 					</Button>
 					<Button
-						class="hermes-steps__dock-back"
+						class="makosh-steps__dock-back"
 						variant="ghost"
 						icon="tabler:arrow-left"
 						:aria-label="previousLabel"
 						:disabled="isFirst || busy"
 						@click="previousStep"
 					/>
-					<nav class="hermes-steps__dots" :aria-label="stepsLabel">
+					<nav class="makosh-steps__dots" :aria-label="stepsLabel">
 						<button
 							v-for="item in normalizedSteps"
 							:key="item.index"
-							class="hermes-steps__dot"
-							:class="{ 'hermes-steps__dot--active': item.index === activeStep }"
+							class="makosh-steps__dot"
+							:class="{ 'makosh-steps__dot--active': item.index === activeStep }"
 							type="button"
 							:aria-current="item.index === activeStep ? 'step' : undefined"
 							:aria-label="item.title"
@@ -208,7 +208,7 @@ function nextStep(): void {
 						/>
 					</nav>
 					<Button
-						class="hermes-steps__dock-next"
+						class="makosh-steps__dock-next"
 						:loading="busy"
 						:disabled="!canAdvance"
 						@click="nextStep"

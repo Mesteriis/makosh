@@ -1,6 +1,6 @@
 #![forbid(unsafe_code)]
 
-pub const PACKAGE: &str = "hermes-communication-delayed-delivery-core";
+pub const PACKAGE: &str = "makosh-communication-delayed-delivery-core";
 pub const MIN_DELIVERY_DELAY_MILLIS_V1: u64 = 5_000;
 pub const MAX_DELIVERY_DELAY_MILLIS_V1: u64 = 366 * 24 * 60 * 60 * 1_000;
 pub const MAX_DELIVERY_BODY_BYTES_V1: usize = 64 * 1024;

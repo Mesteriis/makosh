@@ -3,12 +3,12 @@
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use hermes_communications_api::CommunicationMessageIdV1;
-use hermes_communications_content_api::{
+use makosh_communications_api::CommunicationMessageIdV1;
+use makosh_communications_content_api::{
     CONTENT_CONTRACT_MAJOR_V1, IssueMessageBodyReadRequestV1, IssueMessageBodyReadResponseV1,
 };
-use hermes_communications_persistence::CommunicationsDurablePersistence;
-use hermes_runtime_protocol::v1::{
+use makosh_communications_persistence::CommunicationsDurablePersistence;
+use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
 use prost::Message;

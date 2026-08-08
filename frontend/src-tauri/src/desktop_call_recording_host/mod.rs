@@ -9,7 +9,7 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use capture::{NativeCaptureV1, SelectedInputV1};
 use consent::{ConsentAuthorityV1, NativeConsentAuthorityV1};
-use hermes_desktop_call_recording_api::{
+use makosh_desktop_call_recording_api::{
     CANONICAL_AUDIO_FORMAT_V1, CONSENT_PURPOSE_V1,
     wire::{
         BeginDesktopCaptureCommandV1, DesktopCaptureCompletedV1, DesktopCaptureRejectedV1,
@@ -495,7 +495,7 @@ mod tests {
         invalid.consent_purpose = "meeting_archive".to_owned();
         assert!(validate_begin(&invalid).is_err());
         let proto = include_str!(
-            "../../../../backend/src/desktop-call-recording-api/proto/hermes/desktop_call_recording/v1/recording.proto"
+            "../../../../backend/src/desktop-call-recording-api/proto/makosh/desktop_call_recording/v1/recording.proto"
         );
         assert!(!proto.contains("consent_attested"));
     }

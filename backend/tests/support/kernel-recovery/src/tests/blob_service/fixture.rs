@@ -2,7 +2,7 @@
 
 use std::path::{Path, PathBuf};
 
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     DescribeManagedRuntimeResponseV1, GetVaultRuntimeStatusRequestV1,
     ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
     ManagedVaultRuntimeControlRequestV1, ManagedVaultRuntimeControlResponseV1, ModuleDescriptorV1,
@@ -30,7 +30,7 @@ pub(super) struct BlobServiceFixture {
 
 impl BlobServiceFixture {
     pub(super) fn new() -> Self {
-        let root = unique_target_root("hermes-blob-managed-service");
+        let root = unique_target_root("makosh-blob-managed-service");
         std::fs::create_dir_all(&root).expect("create fixture directory");
         let runtime_dir = short_runtime_directory();
         std::fs::create_dir_all(&runtime_dir).expect("create short runtime directory");
@@ -143,14 +143,14 @@ fn short_runtime_directory() -> PathBuf {
         .duration_since(std::time::UNIX_EPOCH)
         .expect("clock")
         .as_nanos();
-    std::path::PathBuf::from("/tmp").join(format!("hermes-blob-{}-{suffix}", std::process::id()))
+    std::path::PathBuf::from("/tmp").join(format!("makosh-blob-{}-{suffix}", std::process::id()))
 }
 
 fn blob_binary() -> PathBuf {
-    std::env::var_os("HERMES_BLOB_SERVICE_BIN")
+    std::env::var_os("MAKOSH_BLOB_SERVICE_BIN")
         .map(PathBuf::from)
         .filter(|path| path.is_file())
-        .expect("HERMES_BLOB_SERVICE_BIN must name a regular Blob service binary")
+        .expect("MAKOSH_BLOB_SERVICE_BIN must name a regular Blob service binary")
 }
 
 fn blob_schema() -> Vec<u8> {

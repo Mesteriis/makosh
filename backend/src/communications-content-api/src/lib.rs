@@ -1,9 +1,9 @@
 //! Public generated contracts for bounded canonical Communications body reads.
 
-pub const PACKAGE: &str = "hermes-communications-content-api";
+pub const PACKAGE: &str = "makosh-communications-content-api";
 pub const CONTENT_TICKET_CONTRACT_NAME_V1: &str = "communications.content.ticket";
 pub const CONTENT_READ_CONTRACT_NAME_V1: &str = "communications.content.read";
-pub const CONTENT_TICKET_CONNECT_PATH_V1: &str = "/hermes.communications.content.ticket.v1.CommunicationsContentTicketService/IssueMessageBodyRead";
+pub const CONTENT_TICKET_CONNECT_PATH_V1: &str = "/makosh.communications.content.ticket.v1.CommunicationsContentTicketService/IssueMessageBodyRead";
 pub const CONTENT_READ_BLOB_PATH_V1: &str = "/api/blobs/communications/v1/message-body";
 pub const CONTENT_CONTRACT_MAJOR_V1: u32 = 1;
 pub const CONTENT_CONTRACT_REVISION_V1: u32 = 1;
@@ -12,14 +12,14 @@ pub const MAX_MESSAGE_BODY_BYTES_V1: u64 = 256 * 1024;
 mod ticket_wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communications.content.ticket.v1.rs"
+        "/makosh.communications.content.ticket.v1.rs"
     ));
 }
 
 mod read_wire {
     include!(concat!(
         env!("OUT_DIR"),
-        "/hermes.communications.content.read.v1.rs"
+        "/makosh.communications.content.read.v1.rs"
     ));
 }
 

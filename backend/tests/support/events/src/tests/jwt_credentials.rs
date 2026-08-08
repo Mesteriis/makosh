@@ -1,4 +1,4 @@
-use hermes_events_jetstream::{
+use makosh_events_jetstream::{
     DurableSubjectV1, NatsJwtConsumerGrantV1, NatsJwtIssueErrorV1, NatsJwtPermissionSetV1,
     NatsRuntimeCredentialFenceV1, RuntimeNatsJwtIssuerV1, StreamKindV1,
 };

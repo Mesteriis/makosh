@@ -12,7 +12,7 @@ const PGBOUNCER_CONNECT_RETRY_DELAY: Duration = Duration::from_millis(250);
 const PGBOUNCER_MAX_CLIENT_CONNECTIONS: &str = "2000";
 const PGBOUNCER_DEFAULT_POOL_SIZE: &str = "2";
 const PGBOUNCER_MAX_PREPARED_STATEMENTS: &str = "100";
-pub const SESSION_PGBOUNCER_HOST_PORT_ENV: &str = "HERMES_TEST_PGBOUNCER_HOST_PORT";
+pub const SESSION_PGBOUNCER_HOST_PORT_ENV: &str = "MAKOSH_TEST_PGBOUNCER_HOST_PORT";
 
 /// Session-scoped PgBouncer endpoint for high-concurrency integration tests.
 ///

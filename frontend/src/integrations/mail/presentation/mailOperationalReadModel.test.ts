@@ -7,7 +7,7 @@ import {
 	MailMessageFlagV1,
 	MailMessageSummaryV1Schema,
 	MailThreadV1Schema,
-} from '../../../gen/hermes/mail/operational/v1/client_pb'
+} from '../../../gen/makosh/mail/operational/v1/client_pb'
 import {
 	buildMailFolderRows,
 	buildMailMessageDetail,

@@ -6,7 +6,7 @@ use std::os::unix::fs::{OpenOptionsExt, PermissionsExt};
 use std::path::{Path, PathBuf};
 
 use clap::{Parser, Subcommand};
-use hermes_gateway_protocol::owner_control_client::{
+use makosh_gateway_protocol::owner_control_client::{
     OwnerControlClientV1, OwnerControlProofSignerV1,
 };
 use p256::ecdsa::signature::Signer;
@@ -75,11 +75,11 @@ const ZULIP_STORAGE_ARTIFACT: &str = "zulip.storage.v1";
 const ZULIP_STORAGE_CAPABILITY: &str = "zulip.storage.v1";
 
 #[derive(Parser)]
-#[command(name = "hermes-development-assembly")]
+#[command(name = "makosh-development-assembly")]
 struct Cli {
     #[arg(long)]
     data_dir: PathBuf,
-    #[arg(long, default_value = "hermes-local-development")]
+    #[arg(long, default_value = "makosh-local-development")]
     distribution_id: String,
     #[arg(long, default_value_t = 1)]
     distribution_generation: u64,
@@ -554,7 +554,7 @@ fn client(data_dir: &Path) -> Result<OwnerControlClientV1, String> {
 }
 
 fn runtime_directory(data_dir: &Path) -> Result<PathBuf, String> {
-    let directories = directories::ProjectDirs::from("dev", "Hermes", "Hermes Hub")
+    let directories = directories::ProjectDirs::from("dev", "Макошь", "Макошь")
         .ok_or_else(|| "OS-standard local runtime directory is unavailable".to_owned())?;
     let instance_key = Sha256::digest(data_dir.as_os_str().as_encoded_bytes())
         .iter()
@@ -1141,7 +1141,7 @@ fn exact_requested_capability<'a>(
 
 fn operation_id(artifact_id: &str) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.local-development-assembly.proposal.v2");
+    digest.update(b"makosh.local-development-assembly.proposal.v2");
     digest.update([0]);
     digest.update(artifact_id.as_bytes());
     digest.finalize()[..16]
@@ -1602,7 +1602,7 @@ mod tests {
 
     fn temporary_state_path(label: &str) -> PathBuf {
         std::env::temp_dir().join(format!(
-            "hermes-development-assembly-{label}-{}-{}",
+            "makosh-development-assembly-{label}-{}-{}",
             std::process::id(),
             TEST_FILE_COUNTER.fetch_add(1, Ordering::Relaxed),
         ))
@@ -1610,7 +1610,7 @@ mod tests {
 
     fn fixture_state(distribution_generation: u64) -> DevelopmentAssemblyStateV1 {
         DevelopmentAssemblyStateV1 {
-            distribution_id: "hermes-local-development".to_owned(),
+            distribution_id: "makosh-local-development".to_owned(),
             distribution_generation,
             modules: MODULE_PLAN
                 .iter()
@@ -1798,17 +1798,17 @@ mod tests {
     fn assembly_status_requires_the_same_monotonic_distribution() {
         let state = fixture_state(7);
         assert_eq!(
-            development_assembly_status(Some(&state), "hermes-local-development", 7),
+            development_assembly_status(Some(&state), "makosh-local-development", 7),
             Ok("current"),
         );
         assert_eq!(
-            development_assembly_status(Some(&state), "hermes-local-development", 8),
+            development_assembly_status(Some(&state), "makosh-local-development", 8),
             Ok("stale"),
         );
-        assert!(development_assembly_status(Some(&state), "hermes-local-development", 6).is_err());
+        assert!(development_assembly_status(Some(&state), "makosh-local-development", 6).is_err());
         assert!(development_assembly_status(Some(&state), "other-distribution", 8).is_err());
         assert_eq!(
-            development_assembly_status(None, "hermes-local-development", 1),
+            development_assembly_status(None, "makosh-local-development", 1),
             Ok("missing"),
         );
     }
@@ -2017,7 +2017,7 @@ mod tests {
         let mut bytes = format!(
             concat!(
                 "version=2\n",
-                "distribution_id=hermes-local-development\n",
+                "distribution_id=makosh-local-development\n",
                 "distribution_generation=1\n",
                 "module_count={}\n",
             ),
@@ -2102,20 +2102,20 @@ mod tests {
     #[test]
     fn predecessor_reservation_must_finish_before_the_requested_successor() {
         let reservation = EnsembleReservationV2 {
-            distribution_id: "hermes-local-development".to_owned(),
+            distribution_id: "makosh-local-development".to_owned(),
             distribution_generation: 18,
             modules: Vec::new(),
         };
         assert_eq!(
-            validate_reservation_release(&reservation, "hermes-local-development", 18,),
+            validate_reservation_release(&reservation, "makosh-local-development", 18,),
             Ok(ReservationReleaseV1::Exact)
         );
         assert_eq!(
-            validate_reservation_release(&reservation, "hermes-local-development", 19,),
+            validate_reservation_release(&reservation, "makosh-local-development", 19,),
             Ok(ReservationReleaseV1::Predecessor)
         );
         assert!(
-            validate_reservation_release(&reservation, "hermes-local-development", 17,).is_err()
+            validate_reservation_release(&reservation, "makosh-local-development", 17,).is_err()
         );
         assert!(validate_reservation_release(&reservation, "another-distribution", 19).is_err());
     }

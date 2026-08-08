@@ -1,4 +1,4 @@
-use hermes_events_protocol::delivery::OutboxRecordV1;
+use makosh_events_protocol::delivery::OutboxRecordV1;
 
 use crate::SchedulerRunClaimV1;
 

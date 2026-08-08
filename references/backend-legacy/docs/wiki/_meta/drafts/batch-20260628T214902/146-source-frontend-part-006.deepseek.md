@@ -11,7 +11,7 @@
 
 ## Обзор
 
-Фронтенд приложения `hermes-hub` включает домен `communications`, отвечающий за работу с почтовыми сообщениями, чатами (WhatsApp) и шаблонами. Домен реализован на Vue 3 с TanStack Query, Zod и Vee-Validate.
+Фронтенд приложения `makosh` включает домен `communications`, отвечающий за работу с почтовыми сообщениями, чатами (WhatsApp) и шаблонами. Домен реализован на Vue 3 с TanStack Query, Zod и Vee-Validate.
 
 ## Формы
 

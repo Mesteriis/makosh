@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `test`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,19 +55,19 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/e2e/test_api.py`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/e2e/test_api.py`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/e2e/test_api.py`
 - Size bytes / Размер в байтах: `24493`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
 
 ```python
 """
-End-to-end API tests for Hermes Hub backend.
+End-to-end API tests for Макошь backend.
 
 Run against a live backend:
-    HERMES_API_SECRET=... pytest backend/e2e/test_api.py -v
+    MAKOSH_API_SECRET=... pytest backend/e2e/test_api.py -v
 
-Requires the backend running at HERMES_BACKEND_URL (default http://127.0.0.1:18082).
+Requires the backend running at MAKOSH_BACKEND_URL (default http://127.0.0.1:18082).
 """
 import os
 import uuid
@@ -77,8 +77,8 @@ from http import HTTPStatus
 import pytest
 import requests
 
-BACKEND = os.environ.get("HERMES_BACKEND_URL", "http://127.0.0.1:18082")
-SECRET = os.environ.get("HERMES_API_SECRET", "change-me-local-api-secret")
+BACKEND = os.environ.get("MAKOSH_BACKEND_URL", "http://127.0.0.1:18082")
+SECRET = os.environ.get("MAKOSH_API_SECRET", "change-me-local-api-secret")
 
 
 def uid() -> str:
@@ -86,19 +86,19 @@ def uid() -> str:
 
 
 def api(path: str, **kwargs) -> requests.Response:
-    return requests.get(f"{BACKEND}{path}", headers={"x-hermes-secret": SECRET}, **kwargs)
+    return requests.get(f"{BACKEND}{path}", headers={"x-makosh-secret": SECRET}, **kwargs)
 
 
 def post(path: str, json=None, **kwargs) -> requests.Response:
-    return requests.post(f"{BACKEND}{path}", json=json, headers={"x-hermes-secret": SECRET}, **kwargs)
+    return requests.post(f"{BACKEND}{path}", json=json, headers={"x-makosh-secret": SECRET}, **kwargs)
 
 
 def put(path: str, json=None, **kwargs) -> requests.Response:
-    return requests.put(f"{BACKEND}{path}", json=json, headers={"x-hermes-secret": SECRET}, **kwargs)
+    return requests.put(f"{BACKEND}{path}", json=json, headers={"x-makosh-secret": SECRET}, **kwargs)
 
 
 def delete(path: str, **kwargs) -> requests.Response:
-    return requests.delete(f"{BACKEND}{path}", headers={"x-hermes-secret": SECRET}, **kwargs)
+    return requests.delete(f"{BACKEND}{path}", headers={"x-makosh-secret": SECRET}, **kwargs)
 
 
 # ═══════════════════════════════════ Health ══════════════════════════════════
@@ -124,7 +124,7 @@ def test_api_rejects_missing_secret():
 
 
 def test_api_rejects_invalid_secret():
-    r = requests.get(f"{BACKEND}/api/v1/status", headers={"x-hermes-secret": "wrong"})
+    r = requests.get(f"{BACKEND}/api/v1/status", headers={"x-makosh-secret": "wrong"})
     assert r.status_code == HTTPStatus.FORBIDDEN
 
 
@@ -383,7 +383,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/fixtures/signal_hub/test_signals.toml`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/fixtures/signal_hub/test_signals.toml`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/fixtures/signal_hub/test_signals.toml`
 - Size bytes / Размер в байтах: `509`
 - Included characters / Включено символов: `509`
 - Truncated / Обрезано: `no`
@@ -413,7 +413,7 @@ kind = "test_fixture"
 
 ### `backend/src/integrations/telegram/runtime/manager/chat_events/tests/archive_reconciliation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/chat_events/tests/archive_reconciliation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/chat_events/tests/archive_reconciliation.rs`
 - Size bytes / Размер в байтах: `12166`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -451,7 +451,7 @@ async fn publish_chat_position_event_reconciles_archive_command_when_provider_ch
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_runtime",
             "is_archived": true,
@@ -538,7 +538,7 @@ async fn publish_chat_position_event_reconciles_unarchive_command_when_provider_
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_runtime",
             "is_archived": false,
@@ -624,7 +624,7 @@ async fn publish_chat_position_event_marks_archive_command_as_mismatch_when_prov
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_runtime",
             "is_archived": true,
@@ -724,7 +724,7 @@ async fn publish_chat_position_event_marks_unarchive_command_as_mismatch_when_pr
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_runtime",
             "is_archived": false,
@@ -804,7 +804,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/telegram/runtime/manager/chat_events/tests/mark_unread_reconciliation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/chat_events/tests/mark_unread_reconciliation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/chat_events/tests/mark_unread_reconciliation.rs`
 - Size bytes / Размер в байтах: `6382`
 - Included characters / Включено символов: `6382`
 - Truncated / Обрезано: `no`
@@ -843,7 +843,7 @@ async fn publish_chat_marked_as_unread_event_reconciles_mark_unread_command_and_
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_runtime",
             "is_marked_as_unread": true,
@@ -927,7 +927,7 @@ async fn publish_chat_marked_as_unread_event_marks_mark_unread_as_mismatch_when_
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_runtime",
             "is_marked_as_unread": true,
@@ -1012,7 +1012,7 @@ async fn publish_chat_marked_as_unread_event_marks_mark_unread_as_mismatch_when_
 
 ### `backend/src/integrations/telegram/runtime/manager/chat_events/tests/pin_mute_reconciliation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/runtime/manager/chat_events/tests/pin_mute_reconciliation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/runtime/manager/chat_events/tests/pin_mute_reconciliation.rs`
 - Size bytes / Размер в байтах: `6837`
 - Included characters / Включено символов: `6837`
 - Truncated / Обрезано: `no`
@@ -1053,7 +1053,7 @@ async fn publish_chat_position_event_marks_pin_command_as_mismatch_when_provider
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_runtime",
             "is_pinned": true,
@@ -1154,7 +1154,7 @@ async fn publish_chat_notification_settings_event_marks_unmute_command_as_mismat
         "available",
         "provider_write",
         "confirmed",
-        "hermes-frontend",
+        "makosh-frontend",
         json!({
             "source": "telegram_runtime",
             "is_muted": false,
@@ -1239,7 +1239,7 @@ async fn publish_chat_notification_settings_event_marks_unmute_command_as_mismat
 
 ### `backend/src/integrations/telegram/tdjson/tests/environment.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/tests/environment.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/tests/environment.rs`
 - Size bytes / Размер в байтах: `1348`
 - Included characters / Включено символов: `1348`
 - Truncated / Обрезано: `no`
@@ -1250,11 +1250,11 @@ use std::path::Path;
 #[cfg(target_os = "macos")]
 #[test]
 fn macos_tdjson_candidates_prefer_bundled_tauri_resources() {
-    let exe_dir = Path::new("/Applications/Hermes Hub.app/Contents/MacOS");
-    let cwd = Path::new("/workspace/hermes-hub");
+    let exe_dir = Path::new("/Applications/Макошь.app/Contents/MacOS");
+    let cwd = Path::new("/workspace/makosh");
     let candidates =
         super::super::tdjson_library_candidates_with_context(None, Some(exe_dir), Some(cwd));
-    let bundled_resource = Path::new("/Applications/Hermes Hub.app/Contents/Resources")
+    let bundled_resource = Path::new("/Applications/Макошь.app/Contents/Resources")
         .join("tdlib")
         .join(super::super::tdjson_platform_dir())
         .join("libtdjson.dylib");
@@ -1287,7 +1287,7 @@ fn renders_tdlib_qr_link_as_svg() {
 
 ### `backend/src/integrations/telegram/tdjson/tests/parsing_snapshots.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/tests/parsing_snapshots.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/tests/parsing_snapshots.rs`
 - Size bytes / Размер в байтах: `15847`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1664,7 +1664,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/integrations/telegram/tdjson/tests/qr_login_flows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/tests/qr_login_flows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/tests/qr_login_flows.rs`
 - Size bytes / Размер в байтах: `7434`
 - Included characters / Включено символов: `7434`
 - Truncated / Обрезано: `no`
@@ -1888,7 +1888,7 @@ fn qr_login_start_cancels_existing_sessions_for_same_account() {
 
 ### `backend/src/integrations/telegram/tdjson/tests/request_builders.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/integrations/telegram/tdjson/tests/request_builders.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/integrations/telegram/tdjson/tests/request_builders.rs`
 - Size bytes / Размер в байтах: `18590`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1961,14 +1961,14 @@ fn tdlib_database_key_check_uses_same_base64_key_without_plaintext_secret() {
 fn tdlib_send_text_message_request_uses_formatted_text_content() {
     let command = super::super::tdlib_send_text_message_request(
         123456789,
-        "Hello from Hermes",
-        "hermes-send-message-1",
+        "Hello from Макошь",
+        "makosh-send-message-1",
     )
     .expect("send message request");
 
     assert_eq!(command["@type"], "sendMessage");
     assert_eq!(command["chat_id"], 123456789);
-    assert_eq!(command["@extra"], "hermes-send-message-1");
+    assert_eq!(command["@extra"], "makosh-send-message-1");
     assert_eq!(
         command["input_message_content"]["@type"],
         "inputMessageText"
@@ -1979,7 +1979,7 @@ fn tdlib_send_text_message_request_uses_formatted_text_content() {
     );
     assert_eq!(
         command["input_message_content"]["text"]["text"],
-        "Hello from Hermes"
+        "Hello from Макошь"
     );
     assert_eq!(
         command["input_message_content"]["text"]["entities"],
@@ -1993,16 +1993,16 @@ fn tdlib_send_media_message_request_uses_local_document_content() {
     let command = super::super::tdlib_send_media_message_request(
         123456789,
         TelegramMediaSendType::Document,
-        "/tmp/hermes/upload.pdf",
+        "/tmp/makosh/upload.pdf",
         Some("Document caption"),
         Some("upload.pdf"),
-        "hermes-send-media-1",
+        "makosh-send-media-1",
     )
     .expect("send media request");
 
     assert_eq!(command["@type"], "sendMessage");
     assert_eq!(command["chat_id"], 123456789);
-    assert_eq!(command["@extra"], "hermes-send-media-1");
+    assert_eq!(command["@extra"], "makosh-send-media-1");
     assert_eq!(
         command["input_message_content"]["@type"],
         "inputMessageDocument"
@@ -2013,7 +2013,7 @@ fn tdlib_send_media_message_request_uses_local_document_content() {
     );
     assert_eq!(
         command["input_message_content"]["document"]["path"],
-        "/tmp/hermes/upload.pdf"
+        "/tmp/makosh/upload.pdf"
     );
     assert_eq!(
         command["input_message_content"]["caption"]["text"],
@@ -2029,7 +2029,7 @@ fn tdlib_send_media_message_request_rejects_empty_local_path() {
         "   ",
         None,
         None,
-        "hermes-send-media-empty",
+        "makosh-send-media-empty",
     );
 
     assert!(result.is_err());
@@ -2042,7 +2042,7 @@ fn tdlib_get_chat_history_request_caps_limit_to_tdlib_page_size() {
         Some(98765),
         500,
         true,
-        "hermes-history-1",
+        "makosh-history-1",
     );
 
     assert_eq!(command["@type"], "getChatHistory");
@@ -2051,12 +2051,12 @@ fn tdlib_get_chat_history_request_caps_limit_to_tdlib_page_size() {
     assert_eq!(command["offset"], 0);
     assert_eq!(command["limit"], 100);
     assert_eq!(command["only_local"], true);
-    assert_eq!(command["@extra"], "hermes-history-1");
+    assert_eq!(command["@extra"], "makosh-history-1");
 }
 
 #[test]
 fn tdlib_download_file_request_uses_synchronous_on_demand_download() {
-    let command = super::super::tdlib_download_file_request(42, 16, "hermes-download-file-42");
+    let command = super::super::tdlib_download_file_request(42, 16, "makosh-download-file-42");
 
     assert_eq!(command["@type"], "downloadFile");
     assert_eq!(command["file_id"], 42);
@@ -2064,7 +2064,7 @@ fn tdlib_download_file_request_uses_synchronous_on_demand_download() {
     assert_eq!(command["offset"], 0);
     assert_eq!(command["limit"], 0);
     assert_eq!(command["synchronous"], true);
-    assert_eq!(command["@extra"], "hermes-download-file-42");
+    assert_eq!(command["@extra"], "makosh-download-file-42");
 }
 
 #[test]
@@ -2072,7 +2072,7 @@ fn tdlib_create_forum_topic_request_uses_expected_shape() {
     let command = super::super::tdlib_create_forum_topic_request(
         123456789,
         "Release planning",
-        "hermes-topic-create-1",
+        "makosh-topic-create-1",
     )
     .expect("topic create request");
 
@@ -2080,13 +2080,13 @@ fn tdlib_create_forum_topic_request_uses_expected_shape() {
     assert_eq!(command["chat_id"], 123456789);
     assert_eq!(command["name"], "Release planning");
     assert_eq!(command["icon_custom_emoji_id"], 0);
-    assert_eq!(command["@extra"], "hermes-topic-create-1");
+    assert_eq!(command["@extra"], "makosh-topic-create-1");
 }
 
 #[test]
 fn tdlib_create_forum_topic_request_rejects_empty_title() {
     let result =
-        super::super::tdlib_create_forum_topic_request(123456789, "   ", "hermes-topic-create-2");
+        super::super::tdlib_create_forum_topic_request(123456789, "   ", "makosh-topic-create-2");
 
     assert!(result.is_err());
 }
@@ -2121,13 +2121,13 @@ fn tdlib_edit_chat_folder_remove_chat_request_preserves_shape_and_excludes_chat(
             "include_groups": true,
             "include_channels": true
         }),
-        "hermes-folder-remove-1",
+        "makosh-folder-remove-1",
     )
     .expect("folder remove request");
 
     assert_eq!(command["@type"], "editChatFolder");
     assert_eq!(command["chat_folder_id"], 7);
-    assert_eq!(command["@extra"], "hermes-folder-remove-1");
+    assert_eq!(command["@extra"], "makosh-folder-remove-1");
     assert_eq!(command["folder"]["name"]["text"], "Projects");
     assert_eq!(command["folder"]["icon"]["name"], "Custom");
     assert_eq!(command["folder"]["pinned_chat_ids"], json!([111]));
@@ -2143,14 +2143,14 @@ fn tdlib_toggle_forum_topic_is_closed_request_uses_expected_shape() {
         123456789,
         555,
         true,
-        "hermes-topic-close-1",
+        "makosh-topic-close-1",
     );
 
     assert_eq!(command["@type"], "toggleForumTopicIsClosed");
     assert_eq!(command["chat_id"], 123456789);
     assert_eq!(command["message_thread_id"], 555);
     assert_eq!(command["is_closed"], true);
-    assert_eq!(command["@extra"], "hermes-topic-close-1");
+    assert_eq!(command["@extra"], "makosh-topic-close-1");
 }
 
 #[test]
@@ -2159,14 +2159,14 @@ fn tdlib_edit_message_text_request_uses_edit_message_text_type() {
         123456789,
         987654321,
         "Updated text",
-        "hermes-edit-cmd-1",
+        "makosh-edit-cmd-1",
     )
     .expect("edit message request");
 
     assert_eq!(command["@type"], "editMessageText");
     assert_eq!(command["chat_id"], 123456789);
     assert_eq!(command["message_id"], 987654321);
-    assert_eq!(command["@extra"], "hermes-edit-cmd-1");
+    assert_eq!(command["@extra"], "makosh-edit-cmd-1");
     assert_eq!(
         command["input_message_content"]["@type"],
         "inputMessageText"
@@ -2179,7 +2179,7 @@ fn tdlib_edit_message_text_request_uses_edit_message_text_type() {
 
 #[test]
 fn tdlib_edit_message_text_request_rejects_empty_text() {
-    let result = super::super::tdlib_edit_message_text_request(123, 456, "   ", "hermes-edit-1");
+    let result = super::super::tdlib_edit_message_text_request(123, 456, "   ", "makosh-edit-1");
     assert!(result.is_err());
 }
 
@@ -2189,14 +2189,14 @@ fn tdlib_delete_messages_request_uses_delete_messages_type() {
         123456789,
         &[111, 222],
         true,
-        "hermes-delete-1",
+        "makosh-delete-1",
     );
 
     assert_eq!(command["@type"], "deleteMessages");
     assert_eq!(command["chat_id"], 123456789);
     assert_eq!(command["message_ids"], json!([111, 222]));
     assert_eq!(command["revoke"], true);
-    assert_eq!(command["@extra"], "hermes-delete-1");
+    assert_eq!(command["@extra"], "makosh-delete-1");
 }
 
 #[test]
@@ -2205,7 +2205,7 @@ fn tdlib_add_message_reaction_request_uses_add_message_reaction_type() {
         123456789,
         987654321,
         "👍",
-        "hermes-react-1",
+        "makosh-react-1",
     );
 
     assert_eq!(command["@type"], "addMessageReaction");
@@ -2214,7 +2214,7 @@ fn tdlib_add_message_reaction_request_uses_add_message_reaction_type() {
     assert_eq!(command["reaction_type"]["@type"], "reactionTypeEmoji");
     assert_eq!(command["reaction_type"]["emoji"], "👍");
     assert_eq!(command["is_big"], false);
-    assert_eq!(command["@extra"], "hermes-react-1");
+    assert_eq!(command["@extra"], "makosh-react-1");
 }
 
 #[test]
@@ -2223,36 +2223,36 @@ fn tdlib_remove_message_reaction_request_uses_remove_message_reaction_type() {
         123456789,
         987654321,
         "👍",
-        "hermes-unreact-1",
+        "makosh-unreact-1",
     );
 
     assert_eq!(command["@type"], "removeMessageReaction");
     assert_eq!(command["reaction_type"]["emoji"], "👍");
-    assert_eq!(command["@extra"], "hermes-unreact-1");
+    assert_eq!(command["@extra"], "makosh-unreact-1");
 }
 
 #[test]
 fn tdlib_pin_chat_message_request_uses_pin_chat_message_type() {
     let command =
-        super::super::tdlib_pin_chat_message_request(123456789, 987654321, false, "hermes-pin-1");
+        super::super::tdlib_pin_chat_message_request(123456789, 987654321, false, "makosh-pin-1");
 
     assert_eq!(command["@type"], "pinChatMessage");
     assert_eq!(command["chat_id"], 123456789);
     assert_eq!(command["message_id"], 987654321);
     assert_eq!(command["disable_notification"], false);
     assert_eq!(command["only_for_self"], false);
-    assert_eq!(command["@extra"], "hermes-pin-1");
+    assert_eq!(command["@extra"], "makosh-pin-1");
 }
 
 #[test]
 fn tdlib_unpin_chat_message_request_uses_unpin_chat_message_type() {
     let command =
-        super::super::tdlib_unpin_chat_message_request(123456789, 987654321, "hermes-unpin-1");
+        super::super::tdlib_unpin_chat_message_request(123456789, 987654321, "makosh-unpin-1");
 
     assert_eq!(command["@type"], "unpinChatMessage");
     assert_eq!(command["chat_id"], 123456789);
     assert_eq!(command["message_id"], 987654321);
-    assert_eq!(command["@extra"], "hermes-unpin-1");
+    assert_eq!(command["@extra"], "makosh-unpin-1");
 }
 
 #[test]
@@ -2262,7 +2262,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/platform/config/app_config/test_support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/config/app_config/test_support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/config/app_config/test_support.rs`
 - Size bytes / Размер в байтах: `2408`
 - Included characters / Включено символов: `2408`
 - Truncated / Обрезано: `no`
@@ -2356,7 +2356,7 @@ impl AppConfig {
 
 ### `backend/src/test_support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/test_support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/test_support.rs`
 - Size bytes / Размер в байтах: `3400`
 - Included characters / Включено символов: `3400`
 - Truncated / Обрезано: `no`
@@ -2469,7 +2469,7 @@ pub async fn load_communication_raw_record(
 
 ### `backend/tests/ai.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/ai.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/ai.rs`
 - Size bytes / Размер в байтах: `168`
 - Included characters / Включено символов: `168`
 - Truncated / Обрезано: `no`
@@ -2487,7 +2487,7 @@ mod support;
 
 ### `backend/tests/ai/agents.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/ai/agents.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/ai/agents.rs`
 - Size bytes / Размер в байтах: `8885`
 - Included characters / Включено символов: `8885`
 - Truncated / Обрезано: `no`
@@ -2533,7 +2533,7 @@ async fn ai_meeting_prep_returns_briefing_without_calendar_dependency() {
 
     let app = build_router_with_database(
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
-            .with_test_pairs([("HERMES_OLLAMA_BASE_URL", ollama_base_url.as_str())])
+            .with_test_pairs([("MAKOSH_OLLAMA_BASE_URL", ollama_base_url.as_str())])
             .expect("config"),
         database,
     );
@@ -2766,14 +2766,14 @@ async fn ai_agents_api_materializes_agent_personas_against_postgres() {
 
 ### `backend/tests/ai/answers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/ai/answers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/ai/answers.rs`
 - Size bytes / Размер в байтах: `12680`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
 
 ```rust
 use crate::support::*;
-use hermes_hub_backend::domains::signal_hub::{
+use makosh_hub_backend::domains::signal_hub::{
     SignalHubStore, SignalPolicy, SignalPolicyMode, SignalPolicyScope,
 };
 use testkit::context::TestContext;
@@ -2806,7 +2806,7 @@ async fn ai_answer_api_returns_source_backed_answer_and_persists_run() {
         &format!("ai-answer-{suffix}@example.com"),
         &[format!("ai-recipient-{suffix}@example.com")],
         &format!("provider-ai-answer-{suffix}"),
-        &format!("Hermes AI roadmap {retrieval_token}"),
+        &format!("Макошь AI roadmap {retrieval_token}"),
         &format!("The V3 AI plan for {retrieval_token} uses Ollama and source-backed citations."),
     )
     .await;
@@ -2814,9 +2814,9 @@ async fn ai_answer_api_returns_source_backed_answer_and_persists_run() {
     let app = build_router_with_database(
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_OLLAMA_BASE_URL", ollama_base_url.as_str()),
-                ("HERMES_OLLAMA_CHAT_MODEL", "qwen3:4b"),
-                ("HERMES_OLLAMA_EMBED_MODEL", "qwen3-embedding:4b"),
+                ("MAKOSH_OLLAMA_BASE_URL", ollama_base_url.as_str()),
+                ("MAKOSH_OLLAMA_CHAT_MODEL", "qwen3:4b"),
+                ("MAKOSH_OLLAMA_EMBED_MODEL", "qwen3-embedding:4b"),
             ])
             .expect("config"),
         database,
@@ -2847,7 +2847,7 @@ async fn ai_answer_api_returns_source_backed_answer_and_persists_run() {
     assert_eq!(body["status"], json!("completed"));
     assert_eq!(body["model"], json!("qwen3:4b"));
     assert_eq!(body["embedding_model"], json!("qwen3-embedding:4b"));
-    assert_eq!(body["answer"], json!("Hermes Hub V3 is source-backed."));
+    assert_eq!(body["answer"], json!("Макошь V3 is source-backed."));
     assert!(body["duration_ms"].as_i64().expect("duration") >= 0);
 
     let citations = body["citations"].as_array().expect("citations");
@@ -2864,7 +2864,7 @@ async fn ai_answer_api_returns_source_backed_answer_and_persists_run() {
         .expect("stored run");
     assert_eq!(
         stored.answer.as_deref(),
-        Some("Hermes Hub V3 is source-backed.")
+        Some("Макошь V3 is source-backed.")
     );
     assert_eq!(stored.status, "completed");
 
@@ -2971,9 +2971,9 @@ async fn ai_answer_api_is_blocked_when_ai_source_is_muted_by_signal_hub() {
     let app = build_router_with_database(
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
             .with_test_pairs([
-                ("HERMES_OLLAMA_BASE_URL", ollama_base_url.as_str()),
-                ("HERMES_OLLAMA_CHAT_MODEL", "qwen3:4b"),
-                ("HERMES_OLLAMA_EMBED_MODEL", "qwen3-embedding:4b"),
+                ("MAKOSH_OLLAMA_BASE_URL", ollama_base_url.as_str()),
+                ("MAKOSH_OLLAMA_CHAT_MODEL", "qwen3:4b"),
+                ("MAKOSH_OLLAMA_EMBED_MODEL", "qwen3-embedding:4b"),
             ])
             .expect("config"),
         database,
@@ -3034,7 +3034,7 @@ async fn ai_task_refresh_creates_suggested_candidates_without_active_tasks() {
 
     let app = build_router_with_database(
         testkit::app::config_with_secret_and_database_url(LOCAL_API_TOKEN, database_url.as_str())
-            .with_test_pairs([("HERMES_OLLAMA_BASE_URL", ollama_base_url.as_str())])
+            .with_test_pairs([("MAKOSH_OLLAMA_BASE_URL", ollama_base_url.as_str())])
             .expect("config"),
         database,
     );
@@ -3122,7 +3122,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/tests/ai/semantic_store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/ai/semantic_store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/ai/semantic_store.rs`
 - Size bytes / Размер в байтах: `5119`
 - Included characters / Включено символов: `5119`
 - Truncated / Обрезано: `no`
@@ -3130,7 +3130,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 ```rust
 use crate::support::*;
 use chrono::Utc;
-use hermes_hub_backend::platform::observations::{
+use makosh_hub_backend::platform::observations::{
     NewObservation, ObservationOriginKind, ObservationStore,
 };
 use sqlx::Row;
@@ -3172,7 +3172,7 @@ async fn pgvector_semantic_store_indexes_and_searches_sources_against_postgres()
             source_id: &format!("message-semantic-{suffix}"),
             observation_id: Some(message_observation.observation_id.as_str()),
             title: "Roadmap planning",
-            source_text: "Discussed Hermes Hub AI roadmap and local retrieval.",
+            source_text: "Discussed Макошь AI roadmap and local retrieval.",
             embedding_model: &embedding_model,
             embedding: &unit_embedding(0),
             graph_node_id: Some(&format!("graph:message:{suffix}")),
@@ -3199,7 +3199,7 @@ async fn pgvector_semantic_store_indexes_and_searches_sources_against_postgres()
             source_id: &format!("message-semantic-{suffix}"),
             observation_id: Some(message_observation.observation_id.as_str()),
             title: "Roadmap planning",
-            source_text: "Discussed Hermes Hub AI roadmap and local retrieval.",
+            source_text: "Discussed Макошь AI roadmap and local retrieval.",
             embedding_model: &embedding_model,
             embedding: &unit_embedding(0),
             graph_node_id: Some(&format!("graph:message:{suffix}")),
@@ -3260,7 +3260,7 @@ async fn pgvector_semantic_store_indexes_and_searches_sources_against_postgres()
 
 ### `backend/tests/ai/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/ai/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/ai/support.rs`
 - Size bytes / Размер в байтах: `8022`
 - Included characters / Включено символов: `8022`
 - Truncated / Обрезано: `no`
@@ -3274,24 +3274,24 @@ pub(crate) use axum::body::{Body, to_bytes};
 pub(crate) use axum::http::{Request, StatusCode, header};
 pub(crate) use axum::routing::{get, post};
 pub(crate) use axum::{Json, Router};
-pub(crate) use hermes_hub_backend::ai::core::{
+pub(crate) use makosh_hub_backend::ai::core::{
     AiRunStore, NewSemanticEmbedding, SemanticEmbeddingStore, SemanticSourceKind,
 };
-pub(crate) use hermes_hub_backend::app::{build_router, build_router_with_database};
-pub(crate) use hermes_hub_backend::domains::communications::core::{
+pub(crate) use makosh_hub_backend::app::{build_router, build_router_with_database};
+pub(crate) use makosh_hub_backend::domains::communications::core::{
     CommunicationIngestionStore, EmailProviderKind, NewProviderAccount, NewRawCommunicationRecord,
 };
-pub(crate) use hermes_hub_backend::domains::communications::messages::{
+pub(crate) use makosh_hub_backend::domains::communications::messages::{
     MessageProjectionStore, project_raw_email_message,
 };
-pub(crate) use hermes_hub_backend::domains::documents::core::{
+pub(crate) use makosh_hub_backend::domains::documents::core::{
     DocumentImportStore, NewDocumentImport,
 };
-pub(crate) use hermes_hub_backend::domains::persons::api::PersonProjectionStore;
-pub(crate) use hermes_hub_backend::domains::projects::core::{NewProject, ProjectStore};
-pub(crate) use hermes_hub_backend::platform::config::AppConfig;
-pub(crate) use hermes_hub_backend::platform::settings::ApplicationSettingsStore;
-pub(crate) use hermes_hub_backend::platform::storage::Database;
+pub(crate) use makosh_hub_backend::domains::persons::api::PersonProjectionStore;
+pub(crate) use makosh_hub_backend::domains::projects::core::{NewProject, ProjectStore};
+pub(crate) use makosh_hub_backend::platform::config::AppConfig;
+pub(crate) use makosh_hub_backend::platform::settings::ApplicationSettingsStore;
+pub(crate) use makosh_hub_backend::platform::storage::Database;
 pub(crate) use serde_json::{Value, json};
 pub(crate) use sqlx::Row;
 pub(crate) use sqlx::postgres::PgPool;
@@ -3343,7 +3343,7 @@ pub(crate) async fn spawn_fake_ollama() -> String {
                 } else if text.contains("meeting briefing") {
                     "Discuss V3 risks and validation evidence."
                 } else {
-                    "Hermes Hub V3 is source-backed."
+                    "Макошь V3 is source-backed."
                 };
 
                 Json(json!({
@@ -3373,7 +3373,7 @@ pub(crate) async fn configure_fake_ollama_setting(pool: &PgPool, ollama_base_url
         .update_setting_value(
             "ai.ollama_base_url",
             &json!(ollama_base_url),
-            "hermes-frontend",
+            "makosh-frontend",
         )
         .await
         .expect("fake Ollama setting");
@@ -3474,7 +3474,7 @@ pub(crate) fn get_request_with_token(path: &str, token: &str) -> Request<Body> {
     Request::builder()
         .method("GET")
         .uri(path)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .body(Body::empty())
         .expect("request")
 }
@@ -3483,7 +3483,7 @@ pub(crate) fn json_post_request_with_actor(path: &str, body: Value, token: &str)
     Request::builder()
         .method("POST")
         .uri(path)
-        .header("x-hermes-secret", token)
+        .header("x-makosh-secret", token)
         .header(header::CONTENT_TYPE, "application/json")
         .body(Body::from(body.to_string()))
         .expect("request")
@@ -3506,7 +3506,7 @@ pub(crate) fn unique_suffix() -> u128 {
 
 ### `backend/tests/ai_architecture.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/tests/ai_architecture.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/tests/ai_architecture.rs`
 - Size bytes / Размер в байтах: `1872`
 - Included characters / Включено символов: `1872`
 - Truncated / Обрезано: `no`

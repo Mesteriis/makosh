@@ -1,12 +1,12 @@
 use std::collections::BTreeSet;
 
-use hermes_kernel_control_store::ModuleQueryContractV1;
+use makosh_kernel_control_store::ModuleQueryContractV1;
 use rusqlite::{Connection, params};
 
 use crate::{SqliteControlStore, StoreError, valid_capability_ids, valid_identity_token};
 
 pub(crate) fn validate_module_query_contracts(
-    registration: &hermes_kernel_control_store::ModuleRegistration,
+    registration: &makosh_kernel_control_store::ModuleRegistration,
     capabilities: &[String],
     contracts: &[ModuleQueryContractV1],
     provider_routes: bool,
@@ -46,7 +46,7 @@ pub(crate) fn insert_module_query_rpc_routes(
 ) -> Result<(), StoreError> {
     insert_contracts(
         connection,
-        "hermes_kernel_module_query_rpc_route_request",
+        "makosh_kernel_module_query_rpc_route_request",
         routes,
     )
 }
@@ -57,7 +57,7 @@ pub(crate) fn insert_module_contract_dependencies(
 ) -> Result<(), StoreError> {
     insert_contracts(
         connection,
-        "hermes_kernel_module_contract_dependency",
+        "makosh_kernel_module_contract_dependency",
         dependencies,
     )
 }
@@ -97,7 +97,7 @@ impl SqliteControlStore {
         self.with_connection(|connection| {
             read_contracts(
                 connection,
-                "hermes_kernel_module_query_rpc_route_request",
+                "makosh_kernel_module_query_rpc_route_request",
                 None,
             )
         })
@@ -113,7 +113,7 @@ impl SqliteControlStore {
         self.with_connection(move |connection| {
             read_contracts(
                 connection,
-                "hermes_kernel_module_contract_dependency",
+                "makosh_kernel_module_contract_dependency",
                 Some((&registration_id, &capability_id)),
             )
         })
@@ -135,9 +135,9 @@ fn read_contracts(
                 route.contract_name, route.contract_major, route.contract_revision,
                 route.contract_schema_sha256
          FROM {table} AS route
-         JOIN hermes_kernel_module_registration AS registration
+         JOIN makosh_kernel_module_registration AS registration
            ON registration.registration_id = route.registration_id
-         JOIN hermes_kernel_module_registration_capability AS capability
+         JOIN makosh_kernel_module_registration_capability AS capability
            ON capability.registration_id = route.registration_id
           AND capability.capability_id = route.capability_id
          {where_clause}

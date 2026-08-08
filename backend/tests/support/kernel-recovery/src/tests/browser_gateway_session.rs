@@ -4,26 +4,26 @@ use std::sync::atomic::AtomicBool;
 
 use crate::identity::browser_gateway::ControlStoreBrowserAuthority;
 use crate::runtime::lifecycle::supervisor::ManagedRuntimeSupervisor;
-use hermes_gateway_protocol::{
-    v1::{ClientRealtimeEventV1, ClientRealtimeFrameV1, client_realtime_frame_v1::Frame},
-    validation::validate_client_realtime_frame,
-};
-use hermes_gateway_runtime::{
-    BrowserAuthenticationRouter, BrowserPairingRouter, BrowserRealtimeSubscriptionSource,
-    ClientRealtimeSubscriptionV1, GatewayApplicationRouter, InMemoryBrowserRealtimeSource,
-};
-use hermes_gateway_session::{
-    BrowserCredentialMaterialV1, BrowserGatewaySessionService, BrowserPairingManager,
-    BrowserSameOriginSessionV1, BrowserSession, BrowserWebauthnVerifier, OwnerPairingApprovalV1,
-};
-use hermes_gateway_session_contract::{
-    BrowserAssertionAuthority, BrowserAuthenticationAuthority, BrowserDeviceAuthority,
-    BrowserEnrollmentAuthority, BrowserEnrollmentV1, GatewayIdentityFenceV1,
-};
-use hermes_kernel_control_store::BrowserDeviceEnrollmentV1;
 use http_body_util::{BodyExt, Full};
 use hyper::body::Bytes;
 use hyper::{Request, StatusCode};
+use makosh_gateway_protocol::{
+    v1::{ClientRealtimeEventV1, ClientRealtimeFrameV1, client_realtime_frame_v1::Frame},
+    validation::validate_client_realtime_frame,
+};
+use makosh_gateway_runtime::{
+    BrowserAuthenticationRouter, BrowserPairingRouter, BrowserRealtimeSubscriptionSource,
+    ClientRealtimeSubscriptionV1, GatewayApplicationRouter, InMemoryBrowserRealtimeSource,
+};
+use makosh_gateway_session::{
+    BrowserCredentialMaterialV1, BrowserGatewaySessionService, BrowserPairingManager,
+    BrowserSameOriginSessionV1, BrowserSession, BrowserWebauthnVerifier, OwnerPairingApprovalV1,
+};
+use makosh_gateway_session_contract::{
+    BrowserAssertionAuthority, BrowserAuthenticationAuthority, BrowserDeviceAuthority,
+    BrowserEnrollmentAuthority, BrowserEnrollmentV1, GatewayIdentityFenceV1,
+};
+use makosh_kernel_control_store::BrowserDeviceEnrollmentV1;
 use p256::ecdsa::{Signature, SigningKey, signature::Signer};
 use sha2::{Digest, Sha256};
 use webauthn_rs_core::proto::{COSEAlgorithm, COSEEC2Key, COSEKey, COSEKeyType, ECDSACurve};
@@ -53,7 +53,7 @@ impl BrowserRealtimeSubscriptionSource for ClosedReplaySource {
                 frame: Some(Frame::Event(ClientRealtimeEventV1 {
                     event_id: vec![7; 16],
                     cursor: "cursor-1".to_owned(),
-                    contract_name: "hermes.client.status".to_owned(),
+                    contract_name: "makosh.client.status".to_owned(),
                     contract_version: 1,
                     event_kind: "status_changed".to_owned(),
                     occurred_at_unix_millis: 1,
@@ -106,7 +106,7 @@ struct AuthenticationHttpFixture {
 }
 
 fn authentication_http_fixture() -> AuthenticationHttpFixture {
-    let root = unique_target_root("hermes-browser-gateway-http-authentication");
+    let root = unique_target_root("makosh-browser-gateway-http-authentication");
     std::fs::create_dir_all(&root).expect("create fixture directory");
     let path = root.join("control.sqlite");
     let store =
@@ -117,7 +117,7 @@ fn authentication_http_fixture() -> AuthenticationHttpFixture {
     store
         .admit_browser_device(
             &BrowserDeviceEnrollmentV1::new(
-                hermes_kernel_control_store::BrowserDeviceEnrollmentInputV1 {
+                makosh_kernel_control_store::BrowserDeviceEnrollmentInputV1 {
                     owner_id: "owner-1".to_owned(),
                     device_id: "browser-1".to_owned(),
                     credential_id: vec![1],
@@ -184,7 +184,7 @@ fn admit_browser_test_device_with_identity(
     store
         .admit_browser_device(
             &BrowserDeviceEnrollmentV1::new(
-                hermes_kernel_control_store::BrowserDeviceEnrollmentInputV1 {
+                makosh_kernel_control_store::BrowserDeviceEnrollmentInputV1 {
                     owner_id: logical_owner_id.to_owned(),
                     device_id: device_id.to_owned(),
                     credential_id: vec![credential_id],
@@ -330,7 +330,7 @@ fn finish_browser_authentication(
         .expect("secure browser cookie")
         .to_str()
         .expect("cookie header");
-    assert!(cookie.starts_with("__Host-hermes-session="));
+    assert!(cookie.starts_with("__Host-makosh-session="));
     assert!(cookie.contains("Secure; HttpOnly; SameSite=Strict"));
     assert_eq!(
         fixture
@@ -374,7 +374,7 @@ fn assert_realtime_session_flow(fixture: &AuthenticationHttpFixture, session_coo
         .expect("SSE response body")
         .to_bytes();
     let realtime_body = std::str::from_utf8(&realtime_body).expect("SSE UTF-8");
-    assert!(realtime_body.starts_with("id: cursor-1\nevent: hermes.realtime.v1\ndata: "));
+    assert!(realtime_body.starts_with("id: cursor-1\nevent: makosh.realtime.v1\ndata: "));
     assert!(realtime_body.ends_with("\n\n"));
     assert!(!realtime_body.contains("client-safe"));
     let invalid_replay = fixture.runtime.block_on(

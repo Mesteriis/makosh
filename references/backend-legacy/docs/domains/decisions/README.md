@@ -4,7 +4,7 @@ Status: documentation package aligned to the current repository structure.
 
 Decisions are durable choices with rationale, evidence and consequences.
 
-Hermes needs Decisions because the Personal Memory System must remember not only
+Макошь needs Decisions because the Personal Memory System must remember not only
 what happened, but why a direction was chosen.
 
 ## Responsibilities

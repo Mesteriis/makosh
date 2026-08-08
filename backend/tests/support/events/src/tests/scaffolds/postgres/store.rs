@@ -1,6 +1,6 @@
 //! SQLx implementation of the public owner-local delivery ports for conformance only.
 
-use hermes_events_protocol::delivery::{
+use makosh_events_protocol::delivery::{
     InboxDecisionV1, OutboxEntryV1, OutboxPublishReceiptV1, OutboxRecordV1, OutboxRelayErrorV1,
     OwnerOutboxStorePortV1,
 };

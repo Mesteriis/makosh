@@ -27,4 +27,4 @@ pub use translation_model::{
     PersistedOllamaTranslationRunV1,
 };
 
-pub const PACKAGE: &str = "hermes-ollama-ai-persistence";
+pub const PACKAGE: &str = "makosh-ollama-ai-persistence";

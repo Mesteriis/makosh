@@ -1,13 +1,13 @@
 use crate::platform::secrets::store::SecretReferenceStore;
-use hermes_communications_api::accounts::NewProviderAccount;
-use hermes_communications_api::accounts::NewProviderAccountSecretBinding;
+use makosh_communications_api::accounts::NewProviderAccount;
+use makosh_communications_api::accounts::NewProviderAccountSecretBinding;
 use std::collections::HashMap;
 
 use sqlx::postgres::PgPool;
 
 use crate::ai::control_center::store::AiControlCenterStore;
 use crate::domains::calendar::events::account_store::CalendarAccountStore;
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
 

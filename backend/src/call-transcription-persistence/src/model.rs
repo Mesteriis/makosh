@@ -1,4 +1,4 @@
-use hermes_call_transcription_core::{
+use makosh_call_transcription_core::{
     CallTranscriptionDraftV1, CallTranscriptionRejectionV1, CallTranscriptionStatusV1,
     CallTranscriptionTransitionV1, RecordingSourceV1,
 };
@@ -192,7 +192,7 @@ pub struct UnpublishedCallTranscriptionEventV1 {
 pub struct CallTranscriptionRealtimeTransitionV1 {
     pub sequence: u64,
     pub run_id: [u8; 16],
-    pub state: hermes_call_transcription_core::CallTranscriptionStateV1,
+    pub state: makosh_call_transcription_core::CallTranscriptionStateV1,
     pub state_revision: u64,
     pub rejection: Option<CallTranscriptionRejectionV1>,
     pub occurred_at_unix_millis: i64,
@@ -216,7 +216,7 @@ pub enum CallTranscriptionPersistenceErrorV1 {
 #[must_use]
 pub fn call_transcription_job_id_v1(run_id: [u8; 16], request_id: [u8; 16]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.call-transcription.job.v1\0");
+    digest.update(b"makosh.call-transcription.job.v1\0");
     digest.update(run_id);
     digest.update(request_id);
     digest.finalize()[..16]

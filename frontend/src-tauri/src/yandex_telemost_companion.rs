@@ -65,7 +65,7 @@ pub(crate) async fn open_yandex_telemost_companion(
         .map_err(|error| format!("invalid Yandex Telemost join URL: {error}"))?;
     let initialization_script = telemost_initialization_script(&request, &window_label)?;
     let window = WebviewWindowBuilder::new(&app, window_label.clone(), WebviewUrl::External(url))
-        .title("Yandex Telemost · Hermes")
+        .title("Yandex Telemost · Макошь")
         .visible(true)
         .resizable(true)
         .inner_size(1220.0, 820.0)
@@ -121,7 +121,7 @@ fn telemost_initialization_script(
 (() => {{
   const ALLOWED = new Set(['{TELEMOST_ALLOWED_HOST_RU}', '{TELEMOST_ALLOWED_HOST_COM}']);
   if (!ALLOWED.has(window.location.hostname)) return;
-  window.__HERMES_YANDEX_TELEMOST_COMPANION__ = {{
+  window.__MAKOSH_YANDEX_TELEMOST_COMPANION__ = {{
     accountId: {account_id},
     conferenceId: {conference_id},
     providerShape: '{PROVIDER_SHAPE}',
@@ -225,7 +225,7 @@ mod tests {
         )
         .expect("initialization script");
 
-        assert!(script.contains("__HERMES_YANDEX_TELEMOST_COMPANION__"));
+        assert!(script.contains("__MAKOSH_YANDEX_TELEMOST_COMPANION__"));
         assert!(!script.contains("recording"));
         assert!(!script.contains("speaker"));
         assert!(!script.contains("invoke("));

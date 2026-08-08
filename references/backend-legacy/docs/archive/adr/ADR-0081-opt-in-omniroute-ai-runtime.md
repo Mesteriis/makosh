@@ -7,7 +7,7 @@ Status: Proposed
 ADR-0009 selected Ollama as the initial local AI runtime boundary and requires remote models to be opt-in and policy controlled if added later.
 ADR-0049 implemented V3 AI with Ollama as the only provider, but the local infrastructure now exposes a dedicated OpenAI-compatible OmniRoute gateway for this workstation.
 
-Hermes Hub still handles private communications and documents. Remote or routed model calls must not become implicit defaults.
+Макошь still handles private communications and documents. Remote or routed model calls must not become implicit defaults.
 
 ## Decision
 
@@ -19,7 +19,7 @@ Rules:
 - `omniroute` is enabled only by explicit runtime setting or environment override.
 - OmniRoute uses an OpenAI-compatible API boundary.
 - Non-secret provider settings may live in `application_settings`.
-- OmniRoute API keys remain outside `application_settings`; the initial implementation reads `HERMES_OMNIROUTE_API_KEY` from process environment.
+- OmniRoute API keys remain outside `application_settings`; the initial implementation reads `MAKOSH_OMNIROUTE_API_KEY` from process environment.
 - The AI run event payload records provider name and model IDs, not API keys or private prompt/document bodies.
 - Existing semantic embedding dimension validation remains enforced; changing embedding models still requires compatibility with `halfvec(2560)` unless a future ADR changes the derived index shape.
 
@@ -27,7 +27,7 @@ Rules:
 
 Positive:
 
-- Hermes Hub can use the owner-managed OmniRoute gateway without hardcoding a cloud provider.
+- Макошь can use the owner-managed OmniRoute gateway without hardcoding a cloud provider.
 - Local Ollama remains the safe default for private data.
 - Provider replacement is isolated behind a runtime client boundary.
 

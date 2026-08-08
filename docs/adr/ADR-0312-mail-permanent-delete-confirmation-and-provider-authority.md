@@ -158,22 +158,22 @@ integration outbox/event ingress, а не direct domain call.
 ### Core agreement and build units
 
 ```text
-hermes-mail-api
+makosh-mail-api
   exact delete/query contracts and Gmail OAuth authority enum
 
-hermes-mail-core
+makosh-mail-core
   pure destructive precondition and OAuth-scope decisions
 
-hermes-mail-imap
+makosh-mail-imap
   UIDPLUS + exact UID EXPUNGE adapter
 
-hermes-mail-gmail
+makosh-mail-gmail
   authority-specific consent URL and exact DELETE adapter
 
-hermes-mail-persistence
+makosh-mail-persistence
   OAuth authority binding, delete journal and atomic projection removal
 
-hermes-mail-runtime
+makosh-mail-runtime
   current-fence orchestration and provider outcome classification
 
 frontend Mail integration

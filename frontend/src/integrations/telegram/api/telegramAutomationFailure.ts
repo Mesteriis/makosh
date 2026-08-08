@@ -1,7 +1,7 @@
 import {
 	AutomationFailureCodeV1,
 	type AutomationFailureV1,
-} from '../../../gen/hermes/telegram/automation/v1/automation_pb'
+} from '../../../gen/makosh/telegram/automation/v1/automation_pb'
 
 export function telegramAutomationFailure(failure: AutomationFailureV1): Error {
 	const field = failure.field ? ` (${failure.field})` : ''

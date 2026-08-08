@@ -17,31 +17,31 @@ test('desktop recording contract core and target ingress are isolated build unit
     JSON.parse(policySource).implementation.productionPackages.map((item) => [item.name, item]),
   );
 
-  assert.deepEqual(packages.get('hermes-desktop-call-recording-api'), {
-    name: 'hermes-desktop-call-recording-api',
+  assert.deepEqual(packages.get('makosh-desktop-call-recording-api'), {
+    name: 'makosh-desktop-call-recording-api',
     role: 'integration',
     owner: 'desktop_call_recording',
     surface: 'contract',
   });
-  assert.deepEqual(packages.get('hermes-desktop-call-recording-core'), {
-    name: 'hermes-desktop-call-recording-core',
+  assert.deepEqual(packages.get('makosh-desktop-call-recording-core'), {
+    name: 'makosh-desktop-call-recording-core',
     role: 'integration',
     owner: 'desktop_call_recording',
     surface: 'implementation',
   });
-  assert.deepEqual(packages.get('hermes-call-transcription-ingress'), {
-    name: 'hermes-call-transcription-ingress',
+  assert.deepEqual(packages.get('makosh-call-transcription-ingress'), {
+    name: 'makosh-call-transcription-ingress',
     role: 'workflow',
     owner: 'call_transcription',
     surface: 'contract',
   });
-  assert.doesNotMatch(`${api}\n${core}`, /hermes-communications|call-transcription/);
+  assert.doesNotMatch(`${api}\n${core}`, /makosh-communications|call-transcription/);
   assert.doesNotMatch(ingress, /desktop-call-recording|communications/);
 });
 
 test('public recording surface is metadata-only while private host completion is bounded audio', async () => {
   const [proto, core] = await Promise.all([
-    read('backend/src/desktop-call-recording-api/proto/hermes/desktop_call_recording/v1/recording.proto'),
+    read('backend/src/desktop-call-recording-api/proto/makosh/desktop_call_recording/v1/recording.proto'),
     read('backend/src/desktop-call-recording-core/src/lib.rs'),
   ]);
   const publicSurface = proto.slice(0, proto.indexOf('message DesktopRecordingHostHandshakeV1'));
@@ -56,7 +56,7 @@ test('public recording surface is metadata-only while private host completion is
 
 test('recording ready event is target-owned and keeps audio outside durable envelopes', async () => {
   const proto = await read(
-    'backend/src/call-transcription-ingress/proto/hermes/call_transcription/ingress/v1/recording.proto',
+    'backend/src/call-transcription-ingress/proto/makosh/call_transcription/ingress/v1/recording.proto',
   );
   assert.match(proto, /message RecordingReadyV1/);
   for (const required of [
@@ -80,22 +80,22 @@ test('recording persistence owns lifecycle leases and exact outbox without priva
   const policy = JSON.parse(policySource);
   assert.deepEqual(
     policy.implementation.productionPackages.find(
-      ({ name }) => name === 'hermes-desktop-call-recording-persistence',
+      ({ name }) => name === 'makosh-desktop-call-recording-persistence',
     ),
     {
-      name: 'hermes-desktop-call-recording-persistence',
+      name: 'makosh-desktop-call-recording-persistence',
       role: 'integration',
       owner: 'desktop_call_recording',
       surface: 'persistence',
     },
   );
-  assert.match(manifest, /hermes-desktop-call-recording-core/);
+  assert.match(manifest, /makosh-desktop-call-recording-core/);
   assert.doesNotMatch(manifest, /communications|call-transcription/);
   for (const required of [
-    'hermes_data.desktop_call_recording_runs',
-    'hermes_data.desktop_call_recording_host_commands',
-    'hermes_data.desktop_call_recording_outbox',
-    'hermes_data.desktop_call_recording_realtime',
+    'makosh_data.desktop_call_recording_runs',
+    'makosh_data.desktop_call_recording_host_commands',
+    'makosh_data.desktop_call_recording_outbox',
+    'makosh_data.desktop_call_recording_realtime',
   ]) {
     assert.match(migration, new RegExp(required.replaceAll('.', '\\.')));
   }
@@ -123,17 +123,17 @@ test('desktop recording runtime is an isolated managed integration with private 
   const policy = JSON.parse(policySource);
   assert.deepEqual(
     policy.implementation.productionPackages.find(
-      ({ name }) => name === 'hermes-desktop-call-recording-runtime',
+      ({ name }) => name === 'makosh-desktop-call-recording-runtime',
     ),
     {
-      name: 'hermes-desktop-call-recording-runtime',
+      name: 'makosh-desktop-call-recording-runtime',
       role: 'integration',
       owner: 'desktop_call_recording',
       surface: 'runtime',
     },
   );
-  assert.match(manifest, /hermes-call-transcription-ingress/);
-  assert.doesNotMatch(manifest, /hermes-communications|call-transcription-(?:core|runtime|persistence)/);
+  assert.match(manifest, /makosh-call-transcription-ingress/);
+  assert.doesNotMatch(manifest, /makosh-communications|call-transcription-(?:core|runtime|persistence)/);
   assert.match(main, /serve-inherited/);
   assert.doesNotMatch(main, /consent_attested|filesystem_path|ffmpeg/i);
   assert.match(main, /ManagedIntegrationHostBridgeConfigurationV1/);
@@ -155,17 +155,17 @@ test('desktop recording assembly emits only unsigned runtime and owner storage i
   const policy = JSON.parse(policySource);
   assert.deepEqual(
     policy.implementation.productionPackages.find(
-      ({ name }) => name === 'hermes-desktop-call-recording-assembly',
+      ({ name }) => name === 'makosh-desktop-call-recording-assembly',
     ),
     {
-      name: 'hermes-desktop-call-recording-assembly',
+      name: 'makosh-desktop-call-recording-assembly',
       role: 'integration',
       owner: 'desktop_call_recording',
       surface: 'assembly',
     },
   );
-  assert.match(manifest, /hermes-desktop-call-recording-runtime/);
-  assert.match(manifest, /hermes-desktop-call-recording-persistence/);
+  assert.match(manifest, /makosh-desktop-call-recording-runtime/);
+  assert.match(manifest, /makosh-desktop-call-recording-persistence/);
   assert.doesNotMatch(manifest, /communications|call-transcription/);
   assert.match(library, /artifact_kind: "module_runtime"/);
   assert.match(library, /artifact_kind: "storage_bundle"/);
@@ -173,8 +173,8 @@ test('desktop recording assembly emits only unsigned runtime and owner storage i
     `${library}\n${main}`,
     /sign(?:ing|ature|_release)|launch|serve-inherited|private key/i,
   );
-  assert.match(release, /--package hermes-desktop-call-recording-assembly/);
-  assert.match(release, /debug\/hermes-desktop-call-recording-assembly/);
+  assert.match(release, /--package makosh-desktop-call-recording-assembly/);
+  assert.match(release, /debug\/makosh-desktop-call-recording-assembly/);
   assert.match(
     release,
     /desktop-call-recording\.release-artifacts\.json/,

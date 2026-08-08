@@ -37,7 +37,7 @@ PgBouncer, NATS, Vault и module runtimes. Исправная SQLite также 
 environment overlay или поиск прежней директории, boot перестаёт быть
 детерминированным:
 
-- разные источники могут выбрать разные Hermes instances;
+- разные источники могут выбрать разные Макошь instances;
 - ошибочная конфигурация может молча открыть пустой store;
 - Vault снова становится косвенной boot dependency;
 - recovery path начинает зависеть от того же mutable state, который должен
@@ -82,9 +82,9 @@ distribution constant и не задаётся пользователем.
 
 `--data-dir`:
 
-- является единственным Hermes-specific override первой версии;
+- является единственным Макошь-specific override первой версии;
 - принимает только абсолютный local filesystem path;
-- выбирает ровно один отдельный Hermes instance;
+- выбирает ровно один отдельный Макошь instance;
 - не объединяется с default directory и другими stores;
 - не является secret и может передаваться через argv;
 - не вызывает migration или копирование данных автоматически.
@@ -96,7 +96,7 @@ default path. Если явно выбранная директория недо
 store.
 
 OS-standard variables, которые platform API использует для системного выбора
-директорий, не являются Hermes settings. Собственные `HERMES_*` environment
+директорий, не являются Макошь settings. Собственные `MAKOSH_*` environment
 overrides, dotenv-файлы и generic environment configuration providers в
 bootstrap запрещены.
 
@@ -204,7 +204,7 @@ generic settings service или layered configuration framework.
 - `serde + toml` не добавляются, пока обязательного bootstrap file нет.
 
 Bootstrap parsing остаётся cohesive internal responsibility
-`hermes-kernel`; отдельный Cargo package без второго потребителя не
+`makosh-kernel`; отдельный Cargo package без второго потребителя не
 создаётся. Exact versions, disabled/default features и полный direct dependency
 profile первого slice зафиксированы ADR-0225 и executable policy.
 
@@ -236,7 +236,7 @@ truth, parser/migration lifecycle и отдельный failure mode.
 неявным. Эти crates не запрещены во всём продукте, но не входят в Kernel
 bootstrap.
 
-### Environment variables как Hermes configuration
+### Environment variables как Макошь configuration
 
 Отклонено: inherited environment трудно диагностировать, оно может отличаться
 между Tauri, shell и OS watchdog и допускает скрытое переключение instance.
@@ -257,7 +257,7 @@ instance или создать split-brain.
 
 - запуск без configuration file выбирает OS-standard data-local directory;
 - `--data-dir` выбирает ровно один отдельный instance;
-- Hermes-specific environment не меняет data directory;
+- Макошь-specific environment не меняет data directory;
 - invalid explicit path не вызывает fallback;
 - два process не получают один single-instance lock;
 - missing/corrupt/incompatible SQLite оставляет restricted local recovery
@@ -280,7 +280,7 @@ bootstrap invariants и negative self-tests самой policy.
 
 - Kernel действительно запускается без внешней инфраструктуры и Vault;
 - отсутствует обязательный config-file lifecycle;
-- выбор Hermes instance детерминирован и диагностируем;
+- выбор Макошь instance детерминирован и диагностируем;
 - повреждение SQLite не уничтожает recovery surface;
 - mutable settings не смешиваются с boot identity.
 

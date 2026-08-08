@@ -1,7 +1,7 @@
 import { defineConfig } from '@playwright/test'
 
-const storybookHost = process.env.HERMES_STORYBOOK_HOST ?? 'localhost'
-const storybookPort = Number(process.env.HERMES_STORYBOOK_PORT ?? '6006')
+const storybookHost = process.env.MAKOSH_STORYBOOK_HOST ?? 'localhost'
+const storybookPort = Number(process.env.MAKOSH_STORYBOOK_PORT ?? '6006')
 const storybookBaseUrl = `http://${storybookHost}:${storybookPort}`
 const storybookStaticCommand = [
 	'pnpm exec storybook build --quiet --test --output-dir storybook-static',

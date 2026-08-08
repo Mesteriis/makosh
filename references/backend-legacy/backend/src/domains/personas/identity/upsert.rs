@@ -1,5 +1,5 @@
 use chrono::Utc;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 use serde_json::json;
 use sqlx::Row;
 use sqlx::Transaction;
@@ -10,7 +10,7 @@ use super::errors::PersonaIdentityError;
 use super::models::{
     PersonaIdentityCandidateKind, PersonaIdentityCandidatePayload, PersonaIdentityReviewState,
 };
-use hermes_events_postgres::store::EventStore;
+use makosh_events_postgres::store::EventStore;
 
 const PERSONA_IDENTITY_CANDIDATE_DETECTED_EVENT_TYPE: &str = "persona_identity.candidate.detected";
 const LEGACY_PERSON_IDENTITY_CANDIDATE_DETECTED_EVENT_TYPE: &str =
@@ -139,7 +139,7 @@ async fn append_candidate_detected_event(
         Utc::now(),
         json!({
             "kind": "persona_identity",
-            "provider": "hermes",
+            "provider": "makosh",
             "source_id": format!("{identity_candidate_id}:{event_instance_id}"),
         }),
         json!({

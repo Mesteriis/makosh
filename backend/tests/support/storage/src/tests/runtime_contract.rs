@@ -1,4 +1,4 @@
-use hermes_storage_protocol::{
+use makosh_storage_protocol::{
     v1::{
         ApplyStorageBindingRequestV1, GetStorageRuntimeStatusRequestV1,
         RevokeStorageBindingRequestV1, StorageBindingV1, StorageBundleV1,
@@ -189,14 +189,14 @@ fn ready() -> StorageRuntimeStatusV1 {
     }
 }
 
-fn topology() -> hermes_storage_protocol::v1::StorageRuntimeTopologyV1 {
-    hermes_storage_protocol::v1::StorageRuntimeTopologyV1 {
+fn topology() -> makosh_storage_protocol::v1::StorageRuntimeTopologyV1 {
+    makosh_storage_protocol::v1::StorageRuntimeTopologyV1 {
         topology_revision: 1,
         storage_generation: 1,
         storage_instance_id: "storage_main".into(),
-        database_id: "hermes".into(),
+        database_id: "makosh".into(),
         deployment_profile:
-            hermes_storage_protocol::v1::StorageDeploymentProfileV1::MacosTauriEmbedded as i32,
+            makosh_storage_protocol::v1::StorageDeploymentProfileV1::MacosTauriEmbedded as i32,
         postgres_artifact_sha256: vec![1; 32],
         pgbouncer_artifact_sha256: vec![2; 32],
         postgres_host: "127.0.0.1".to_owned(),
@@ -225,7 +225,7 @@ fn binding() -> StorageBindingV1 {
     StorageBindingV1 {
         storage_instance_id: "storage_main".into(),
         storage_generation: 1,
-        database_id: "hermes".into(),
+        database_id: "makosh".into(),
         owner: "notes".into(),
         registration_id: "registration_notes".into(),
         runtime_instance_id: "runtime_notes".into(),

@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/domains/relationships/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/relationships/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/relationships/service.rs`
 - Size bytes / Размер в байтах: `2190`
 - Included characters / Включено символов: `2190`
 - Truncated / Обрезано: `no`
@@ -97,7 +97,7 @@ impl RelationshipCommandService {
                         "relationship_id": relationship_id,
                         "review_state": review_state.as_str(),
                         "operation": "relationship_review",
-                        "actor_id": "hermes-frontend",
+                        "actor_id": "makosh-frontend",
                     }),
                     format!("relationship://{relationship_id}/review"),
                 )
@@ -133,7 +133,7 @@ pub enum RelationshipCommandServiceError {
 
 ### `backend/src/domains/relationships/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/relationships/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/relationships/store.rs`
 - Size bytes / Размер в байтах: `18407`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -504,7 +504,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/domains/relationships/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/relationships/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/relationships/validation.rs`
 - Size bytes / Размер в байтах: `2917`
 - Included characters / Включено символов: `2917`
 - Truncated / Обрезано: `no`
@@ -598,7 +598,7 @@ fn validate_json_object(
 
 ### `backend/src/domains/review/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/review/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/review/errors.rs`
 - Size bytes / Размер в байтах: `1312`
 - Included characters / Включено символов: `1312`
 - Truncated / Обрезано: `no`
@@ -657,7 +657,7 @@ pub enum ReviewInboxError {
 
 ### `backend/src/domains/review/evidence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/review/evidence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/review/evidence.rs`
 - Size bytes / Размер в байтах: `142`
 - Included characters / Включено символов: `142`
 - Truncated / Обрезано: `no`
@@ -670,7 +670,7 @@ pub(crate) use crate::platform::observations::{
 
 ### `backend/src/domains/review/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/review/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/review/mod.rs`
 - Size bytes / Размер в байтах: `441`
 - Included characters / Включено символов: `441`
 - Truncated / Обрезано: `no`
@@ -694,7 +694,7 @@ pub use store::{ReviewInboxStore, ReviewItemEvidenceRecord};
 
 ### `backend/src/domains/review/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/review/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/review/models.rs`
 - Size bytes / Размер в байтах: `7833`
 - Included characters / Включено символов: `7833`
 - Truncated / Обрезано: `no`
@@ -966,7 +966,7 @@ pub(super) fn validate_score(field_name: &'static str, value: f64) -> Result<(),
 
 ### `backend/src/domains/review/service.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/review/service.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/review/service.rs`
 - Size bytes / Размер в байтах: `2402`
 - Included characters / Включено символов: `2402`
 - Truncated / Обрезано: `no`
@@ -1051,7 +1051,7 @@ pub enum ReviewInboxServiceError {
 
 ### `backend/src/domains/review/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/review/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/review/store.rs`
 - Size bytes / Размер в байтах: `22617`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1413,7 +1413,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/domains/settings/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/settings/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/settings/mod.rs`
 - Size bytes / Размер в байтах: `1`
 - Included characters / Включено символов: `1`
 - Truncated / Обрезано: `no`
@@ -1424,7 +1424,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/domains/signal_hub/ai.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/signal_hub/ai.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/signal_hub/ai.rs`
 - Size bytes / Размер в байтах: `2464`
 - Included characters / Включено символов: `2464`
 - Truncated / Обрезано: `no`
@@ -1515,7 +1515,7 @@ fn build_ai_helper_signal(
 
 ### `backend/src/domains/signal_hub/capabilities.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/signal_hub/capabilities.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/signal_hub/capabilities.rs`
 - Size bytes / Размер в байтах: `8704`
 - Included characters / Включено символов: `8704`
 - Truncated / Обрезано: `no`
@@ -1769,7 +1769,7 @@ fn control_state_reason(control_state: CapabilityControlState<'_>, base_reason: 
 
 ### `backend/src/domains/signal_hub/connections.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/signal_hub/connections.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/signal_hub/connections.rs`
 - Size bytes / Размер в байтах: `7069`
 - Included characters / Включено символов: `7069`
 - Truncated / Обрезано: `no`
@@ -2006,7 +2006,7 @@ fn connection_operator_mode(status: &str) -> Option<SignalPolicyMode> {
 
 ### `backend/src/domains/signal_hub/controls.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/signal_hub/controls.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/signal_hub/controls.rs`
 - Size bytes / Размер в байтах: `14276`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2374,7 +2374,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/domains/signal_hub/fixture_source.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/signal_hub/fixture_source.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/signal_hub/fixture_source.rs`
 - Size bytes / Размер в байтах: `7416`
 - Included characters / Включено символов: `7416`
 - Truncated / Обрезано: `no`
@@ -2620,7 +2620,7 @@ fn fixture_summary(fixture: &SignalFixtureDefinition) -> String {
 
 ### `backend/src/domains/signal_hub/fixtures.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/signal_hub/fixtures.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/signal_hub/fixtures.rs`
 - Size bytes / Размер в байтах: `9519`
 - Included characters / Включено символов: `9519`
 - Truncated / Обрезано: `no`
@@ -2929,7 +2929,7 @@ mod tests {
 
 ### `backend/src/domains/signal_hub/health.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/signal_hub/health.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/signal_hub/health.rs`
 - Size bytes / Размер в байтах: `2704`
 - Included characters / Включено символов: `2704`
 - Truncated / Обрезано: `no`
@@ -3025,7 +3025,7 @@ impl SignalHubHealthService {
 
 ### `backend/src/domains/signal_hub/mail.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/signal_hub/mail.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/signal_hub/mail.rs`
 - Size bytes / Размер в байтах: `7121`
 - Included characters / Включено символов: `7121`
 - Truncated / Обрезано: `no`
@@ -3232,7 +3232,7 @@ fn mail_delivery_signal_event_id(
 
 ### `backend/src/domains/signal_hub/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/signal_hub/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/signal_hub/mod.rs`
 - Size bytes / Размер в байтах: `1905`
 - Included characters / Включено символов: `1905`
 - Truncated / Обрезано: `no`
@@ -3291,7 +3291,7 @@ pub use self::whatsapp::dispatch_whatsapp_raw_signal;
 
 ### `backend/src/domains/signal_hub/policies.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/signal_hub/policies.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/signal_hub/policies.rs`
 - Size bytes / Размер в байтах: `5399`
 - Included characters / Включено символов: `5399`
 - Truncated / Обрезано: `no`
@@ -3506,7 +3506,7 @@ fn event_type_matches(pattern: &str, event_type: &str) -> bool {
 
 ### `backend/src/domains/signal_hub/profiles.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/domains/signal_hub/profiles.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/domains/signal_hub/profiles.rs`
 - Size bytes / Размер в байтах: `6918`
 - Included characters / Включено символов: `6918`
 - Truncated / Обрезано: `no`
@@ -3602,7 +3602,7 @@ impl SignalHubProfileService {
                 .update_setting_value(
                     ACTIVE_PROFILE_SETTING_KEY,
                     &json!("production"),
-                    "hermes-frontend",
+                    "makosh-frontend",
                 )
                 .await?;
         }
@@ -3650,7 +3650,7 @@ impl SignalHubProfileService {
             .update_setting_value(
                 ACTIVE_PROFILE_SETTING_KEY,
                 &json!(profile.code),
-                "hermes-frontend",
+                "makosh-frontend",
             )
             .await?;
         self.append_profile_event("signal.profile.applied", &profile)

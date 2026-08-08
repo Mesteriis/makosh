@@ -1,14 +1,14 @@
 [package]
-name = "hermes-kernel"
+name = "makosh-kernel"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
 [[bin]]
-name = "hermes-kernel"
+name = "makosh-kernel"
 path = "src/main.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "core"
 owner = "kernel"
 surface = "runtime"
@@ -19,18 +19,18 @@ chacha20poly1305 = { version = "=0.11.0", default-features = false, features = [
 clap = { version = "=4.6.2", default-features = false, features = ["derive", "error-context", "help", "std", "usage"] }
 directories = "=6.0.0"
 getrandom = { version = "=0.4.3", default-features = false }
-hermes-blob-client = { path = "../platform/blob/client" }
-hermes-gateway-protocol = { path = "../api/gateway/contracts" }
-hermes-gateway-runtime = { path = "../api/gateway/runtime" }
-hermes-gateway-session = { path = "../api/gateway/session" }
-hermes-gateway-session-contract = { path = "../api/gateway/session_contract" }
-hermes-kernel-control-store = { path = "control_store/contract" }
-hermes-kernel-control-store-sqlite = { path = "control_store/sqlite" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-scheduler-protocol = { path = "../platform/scheduler/protocol" }
-hermes-secure-file = { path = "../platform/secure_file" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
-hermes-vault-protocol = { path = "../platform/vault/protocol" }
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-gateway-protocol = { path = "../api/gateway/contracts" }
+makosh-gateway-runtime = { path = "../api/gateway/runtime" }
+makosh-gateway-session = { path = "../api/gateway/session" }
+makosh-gateway-session-contract = { path = "../api/gateway/session_contract" }
+makosh-kernel-control-store = { path = "control_store/contract" }
+makosh-kernel-control-store-sqlite = { path = "control_store/sqlite" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-scheduler-protocol = { path = "../platform/scheduler/protocol" }
+makosh-secure-file = { path = "../platform/secure_file" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-vault-protocol = { path = "../platform/vault/protocol" }
 p256 = { version = "=0.14.0", default-features = false, features = ["ecdsa"] }
 prost = "=0.14.4"
 quinn = "=0.11.7"

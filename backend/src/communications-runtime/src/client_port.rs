@@ -3,12 +3,12 @@
 use std::os::unix::net::UnixStream;
 use std::sync::Arc;
 
-use hermes_communications_call_evidence_persistence::CommunicationsCallEvidencePersistenceV1;
-use hermes_communications_persistence::CommunicationsDurablePersistence;
-use hermes_runtime_protocol::managed_control::{
+use makosh_communications_call_evidence_persistence::CommunicationsCallEvidencePersistenceV1;
+use makosh_communications_persistence::CommunicationsDurablePersistence;
+use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
 };
-use hermes_runtime_protocol::v1::{ModuleClientRequestV1, ModuleClientResponseV1};
+use makosh_runtime_protocol::v1::{ModuleClientRequestV1, ModuleClientResponseV1};
 use prost::Message;
 
 use crate::admission::{

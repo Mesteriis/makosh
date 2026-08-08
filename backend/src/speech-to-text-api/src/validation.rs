@@ -44,7 +44,7 @@ pub fn compute_speech_to_text_request_digest_v1(
         source.custody_transfer_source_proof.clear();
     }
     let mut hasher = Sha256::new();
-    hasher.update(b"hermes.speech-to-text.request.v1\0");
+    hasher.update(b"makosh.speech-to-text.request.v1\0");
     hasher.update(canonical.encode_to_vec());
     Ok(hasher.finalize().into())
 }

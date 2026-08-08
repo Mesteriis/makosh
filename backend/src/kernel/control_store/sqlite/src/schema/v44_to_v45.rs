@@ -5,7 +5,7 @@ use rusqlite::Transaction;
 
 pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
     transaction.execute_batch(
-        "CREATE TABLE hermes_kernel_module_query_rpc_route_request (
+        "CREATE TABLE makosh_kernel_module_query_rpc_route_request (
             registration_id TEXT NOT NULL,
             capability_id TEXT NOT NULL,
             contract_owner TEXT NOT NULL,
@@ -18,13 +18,13 @@ pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
                 contract_major, contract_revision, contract_schema_sha256
             ),
             FOREIGN KEY (registration_id, capability_id)
-                REFERENCES hermes_kernel_module_registration_capability(
+                REFERENCES makosh_kernel_module_registration_capability(
                     registration_id, capability_id
                 )
                 ON DELETE CASCADE
          ) STRICT;
 
-         CREATE TABLE hermes_kernel_module_contract_dependency (
+         CREATE TABLE makosh_kernel_module_contract_dependency (
             registration_id TEXT NOT NULL,
             capability_id TEXT NOT NULL,
             contract_owner TEXT NOT NULL,
@@ -37,13 +37,13 @@ pub(super) fn apply(transaction: &Transaction<'_>) -> Result<(), StoreError> {
                 contract_major, contract_revision, contract_schema_sha256
             ),
             FOREIGN KEY (registration_id, capability_id)
-                REFERENCES hermes_kernel_module_registration_capability(
+                REFERENCES makosh_kernel_module_registration_capability(
                     registration_id, capability_id
                 )
                 ON DELETE CASCADE
          ) STRICT;
 
-         UPDATE hermes_kernel_control_store_metadata
+         UPDATE makosh_kernel_control_store_metadata
          SET schema_version = 45 WHERE singleton = 1;",
     )?;
     Ok(())
@@ -60,17 +60,17 @@ mod tests {
         connection
             .execute_batch(
                 "PRAGMA foreign_keys = ON;
-                 CREATE TABLE hermes_kernel_control_store_metadata (
+                 CREATE TABLE makosh_kernel_control_store_metadata (
                     singleton INTEGER PRIMARY KEY,
                     schema_version INTEGER NOT NULL
                  ) STRICT;
-                 INSERT INTO hermes_kernel_control_store_metadata VALUES (1, 44);
-                 CREATE TABLE hermes_kernel_module_registration_capability (
+                 INSERT INTO makosh_kernel_control_store_metadata VALUES (1, 44);
+                 CREATE TABLE makosh_kernel_module_registration_capability (
                     registration_id TEXT NOT NULL,
                     capability_id TEXT NOT NULL,
                     PRIMARY KEY (registration_id, capability_id)
                  ) STRICT;
-                 INSERT INTO hermes_kernel_module_registration_capability
+                 INSERT INTO makosh_kernel_module_registration_capability
                  VALUES ('communications', 'canonical-read');",
             )
             .expect("v44 fixture");
@@ -80,7 +80,7 @@ mod tests {
 
         connection
             .execute(
-                "INSERT INTO hermes_kernel_module_query_rpc_route_request VALUES (
+                "INSERT INTO makosh_kernel_module_query_rpc_route_request VALUES (
                     'communications', 'canonical-read', 'communications',
                     'canonical-read', 1, 1, zeroblob(32)
                  )",
@@ -89,7 +89,7 @@ mod tests {
             .expect("exact query route");
         let version: i64 = connection
             .query_row(
-                "SELECT schema_version FROM hermes_kernel_control_store_metadata",
+                "SELECT schema_version FROM makosh_kernel_control_store_metadata",
                 [],
                 |row| row.get(0),
             )

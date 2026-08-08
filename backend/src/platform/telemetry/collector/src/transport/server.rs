@@ -5,7 +5,7 @@ use std::os::unix::fs::{FileTypeExt, PermissionsExt};
 use std::os::unix::net::{UnixListener, UnixStream};
 use std::path::Path;
 
-use hermes_telemetry_protocol::{
+use makosh_telemetry_protocol::{
     TelemetryPriorityV1, TelemetrySignalKindV1, TelemetrySignalV1, TelemetrySourceV1,
 };
 
@@ -114,7 +114,7 @@ fn decode(frame: &str) -> Result<TelemetrySignalV1, String> {
     else {
         return Err("Telemetry frame is invalid".to_owned());
     };
-    TelemetrySignalV1::new(hermes_telemetry_protocol::TelemetrySignalInputV1 {
+    TelemetrySignalV1::new(makosh_telemetry_protocol::TelemetrySignalInputV1 {
         observed_at_utc_millis: timestamp
             .parse()
             .map_err(|_| "Telemetry frame is invalid".to_owned())?,

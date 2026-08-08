@@ -32,7 +32,7 @@ transaction с domain mutation остаются частью отдельног�
 
 ## Контекст
 
-Модули Hermes работают в отдельных процессах. Система должна поддерживать:
+Модули Макошь работают в отдельных процессах. Система должна поддерживать:
 
 - управление lifecycle независимо от data-plane инфраструктуры;
 - быстрые typed query и request/reply operations;
@@ -110,7 +110,7 @@ Typed query и операции, которым необходим немедл�
 ### Состояние реализации
 
 `nats_data_plane_v1` открыт как platform gate. Executable foundation
-содержит `hermes-events-jetstream`: он отделяет Event Hub administration
+содержит `makosh-events-jetstream`: он отделяет Event Hub administration
 connection от runtime publisher connection, формирует only exact versioned
 subjects, создаёт bounded JetStream streams/consumers и публикует exact
 outbox bytes с canonical `Nats-Msg-Id`. Docker conformance использует разные
@@ -124,7 +124,7 @@ System Account resolver route и доказывает broker-side disconnect у�
 подключённого runtime. Test-only signer/key material удаляется после run и не
 становится Kernel secret. Это не заменяет catalog authority, PostgreSQL
 outbox/inbox или complete production account-signer rotation lifecycle.
-Текущий foundation добавляет отдельный `hermes-events-authority`:
+Текущий foundation добавляет отдельный `makosh-events-authority`:
 он проверяет supplied account signing key, enrol-ит его один раз только через
 encrypted authority-fenced Vault route, разрешает key лишь на время одной
 runtime-JWT issuance и никогда не передаёт его Kernel. Теперь он запускается
@@ -132,7 +132,7 @@ runtime-JWT issuance и никогда не передаёт его Kernel. Те
 Vault → Authority → Kernel → HPKE runtime delivery и broker verification JWT.
 Это всё ещё не signer rotation workflow и не managed production Account JWT
 mutation.
-`hermes-events-authority-runtime` теперь является отдельным managed executable:
+`makosh-events-authority-runtime` теперь является отдельным managed executable:
 он проходит descriptor handshake, до `ready` проверяет current signer через два
 encrypted Vault calls и затем предоставляет sanitized status и private
 credential-issuance operation на inherited channel. Операция принимает только
@@ -150,7 +150,7 @@ startup configures этот handler, а owner-private control запускает
 authority-to-runtime delivery; это всё равно foundation transport и не
 открывает `nats_data_plane_v1`.
 HPKE codec этого recipient-bound handoff находится в public
-`hermes-events-protocol`, поэтому будущий managed runtime, включая Scheduler,
+`makosh-events-protocol`, поэтому будущий managed runtime, включая Scheduler,
 может открыть только собственную доставку без зависимости от Event Hub
 implementation. Event Hub по-прежнему единственный выдаёт JWT/NKey и
 сопоставляет request с current grants/topology; public contract не даёт runtime
@@ -167,7 +167,7 @@ supervisor, а затем доказывает на отдельном broker cl
 stream/consumer. Kernel-owned Event Hub credential остаётся в Vault scope, но
 каждый его lease route fencing-ится current authority registration/runtime;
 другой managed child не может выдать себя за Event Hub principal.
-`hermes-events-jetstream` также содержит узкий resolver publisher: он принимает
+`makosh-events-jetstream` также содержит узкий resolver publisher: он принимает
 уже подписанный Account JWT, сверяет его `sub` с exact Account NKey, использует
 только scoped System Account `.creds` и публикует только в
 `$SYS.REQ.ACCOUNT.<account>.CLAIMS.UPDATE`. Live Docker contour доказывает, что
@@ -220,7 +220,7 @@ durable и повторяется после восстановления.
 Потеря publish acknowledgement может привести к повторной публикации. Поэтому
 application semantics остаётся **at least once**, даже если JetStream
 поддерживает собственные механизмы дедупликации и double acknowledgement.
-Hermes не заявляет end-to-end exactly-once.
+Макошь не заявляет end-to-end exactly-once.
 
 ### Inbox и acknowledgement
 
@@ -258,7 +258,7 @@ result или no-op и затем подтверждается. Дедуплик
 ### Envelope
 
 Точный binary wire contract определён ADR-0220. Все durable message families
-используют `DurableEnvelopeV1` из `hermes-events-protocol`:
+используют `DurableEnvelopeV1` из `makosh-events-protocol`:
 
 ```text
 common immutable header
@@ -292,12 +292,12 @@ NATS message.
 Subjects имеют versioned machine-readable grammar:
 
 ```text
-hermes.command.v1.<owner>.<contract>.v<contract-major>
-hermes.event.v1.<owner>.<contract>.v<contract-major>
-hermes.observation.v1.<owner>.<contract>.v<contract-major>
-hermes.result.v1.<owner>.<contract>.v<contract-major>
-hermes.ack.v1.<owner>.<contract>.v<contract-major>
-hermes.dead.v1.<owner>.<contract>.v<contract-major>
+makosh.command.v1.<owner>.<contract>.v<contract-major>
+makosh.event.v1.<owner>.<contract>.v<contract-major>
+makosh.observation.v1.<owner>.<contract>.v<contract-major>
+makosh.result.v1.<owner>.<contract>.v<contract-major>
+makosh.ack.v1.<owner>.<contract>.v<contract-major>
+makosh.dead.v1.<owner>.<contract>.v<contract-major>
 ```
 
 Первый `v1` — transport/envelope subject grammar major, последний token —
@@ -375,7 +375,7 @@ payload.
 Каждый module runtime получает отдельную NATS identity с allowlist на publish и
 subscribe subjects из effective GrantSet. `ModuleDescriptorV1` задаёт только
 requested contract references и не содержит NATS subjects; Event Hub выводит
-точную allowlist из catalog. Wildcard-доступ ко всему `hermes.>` запрещён для
+точную allowlist из catalog. Wildcard-доступ ко всему `makosh.>` запрещён для
 module runtimes.
 
 Business/context domain не получает subscribe permission на provider-specific

@@ -1,6 +1,6 @@
 use std::sync::mpsc;
 
-use hermes_desktop_call_recording_api::wire::BeginDesktopCaptureCommandV1;
+use makosh_desktop_call_recording_api::wire::BeginDesktopCaptureCommandV1;
 use rfd::{MessageButtons, MessageDialog, MessageDialogResult, MessageLevel};
 use tauri::{AppHandle, Manager};
 

@@ -3,7 +3,7 @@
 use super::*;
 
 use futures_util::StreamExt;
-use hermes_contacts_command_api::{
+use makosh_contacts_command_api::{
     ContactsCommandEnvelopeContextV1, build_upsert_contact_command_outbox_record_v1,
     contact_upsert_rejected_contract_reference_v1, contact_upserted_contract_reference_v1,
     wire::{
@@ -11,26 +11,26 @@ use hermes_contacts_command_api::{
         MailAddressBookProviderKindV1, UpsertContactFromMailAddressBookEntryCommandV1,
     },
 };
-use hermes_contacts_runtime::CONTACTS_STORAGE_CAPABILITY_ID_V1;
-use hermes_events_jetstream::DurableSubjectV1;
-use hermes_events_protocol::v1::DurableEnvelopeV1;
-use hermes_kernel_control_store::PlatformStorageBindingStateV1;
+use makosh_contacts_runtime::CONTACTS_STORAGE_CAPABILITY_ID_V1;
+use makosh_events_jetstream::DurableSubjectV1;
+use makosh_events_protocol::v1::DurableEnvelopeV1;
+use makosh_kernel_control_store::PlatformStorageBindingStateV1;
 use prost_types::Timestamp;
 use sqlx::postgres::{PgConnectOptions, PgPoolOptions, PgSslMode};
 use zeroize::Zeroizing;
 
 use crate::identity::device::signer::DeviceSigner;
 
-const RESULT_SUBJECT_V1: &str = "hermes.result.v1.contacts.>";
+const RESULT_SUBJECT_V1: &str = "makosh.result.v1.contacts.>";
 
 #[test]
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, NATS and Contacts binaries"]
 fn managed_contacts_command_is_atomic_replayable_and_restart_safe() {
     assert_eq!(
-        std::env::var("HERMES_STORAGE_AUTHENTICATED_TEST").as_deref(),
+        std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
     );
-    let root = unique_target_root("hermes-managed-contacts");
+    let root = unique_target_root("makosh-managed-contacts");
     let data = private_directory(short_communications_kernel_data_directory());
     initialize_vault(
         &private_directory(data.join("vault")),
@@ -38,13 +38,13 @@ fn managed_contacts_command_is_atomic_replayable_and_restart_safe() {
     );
     let release = installed_contacts_release_v1(&root);
     unsafe {
-        std::env::set_var("HERMES_TEST_KERNEL_EXECUTABLE", release.kernel());
+        std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
     let store = Arc::new(configured_communications_store(&root, release.kernel()));
     let (owner_signer, _) =
         FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     store
-        .claim_initial_owner(&hermes_kernel_control_store::InitialOwnerIdentity::new(
+        .claim_initial_owner(&makosh_kernel_control_store::InitialOwnerIdentity::new(
             CONTACTS_LOGICAL_HUMAN_OWNER_ID_V1,
             "desktop-1",
             owner_signer.public_key_sec1(),
@@ -139,14 +139,14 @@ fn managed_contacts_command_is_atomic_replayable_and_restart_safe() {
 
         let pool = contacts_admin_pool_v1().await;
         let contacts_count: i64 = sqlx::query_scalar(
-            "SELECT count(*) FROM hermes_data.contacts_state WHERE logical_owner_id=$1",
+            "SELECT count(*) FROM makosh_data.contacts_state WHERE logical_owner_id=$1",
         )
         .bind(CONTACTS_LOGICAL_HUMAN_OWNER_ID_V1)
         .fetch_one(&pool)
         .await
         .expect("count Contacts state");
         let completed_inbox: i64 = sqlx::query_scalar(
-            "SELECT count(*) FROM hermes_data.contacts_mail_entry_inbox
+            "SELECT count(*) FROM makosh_data.contacts_mail_entry_inbox
              WHERE logical_owner_id=$1 AND completed=TRUE",
         )
         .bind(CONTACTS_LOGICAL_HUMAN_OWNER_ID_V1)
@@ -227,7 +227,7 @@ fn managed_contacts_command_is_atomic_replayable_and_restart_safe() {
         .expect("join Contacts owner control server")
         .expect("Contacts owner control server");
     unsafe {
-        std::env::remove_var("HERMES_TEST_KERNEL_EXECUTABLE");
+        std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove Contacts fixture");
     std::fs::remove_dir_all(data).expect("remove Contacts Kernel fixture");
@@ -239,7 +239,7 @@ fn contact_command(
     source_revision: u64,
     recorded_at: i64,
     deadline: i64,
-) -> hermes_events_protocol::delivery::OutboxRecordV1 {
+) -> makosh_events_protocol::delivery::OutboxRecordV1 {
     build_upsert_contact_command_outbox_record_v1(
         UpsertContactFromMailAddressBookEntryCommandV1 {
             command_id: command_id.to_vec(),
@@ -272,7 +272,7 @@ fn contact_command(
 
 async fn publish(
     context: &async_nats::jetstream::Context,
-    record: &hermes_events_protocol::delivery::OutboxRecordV1,
+    record: &makosh_events_protocol::delivery::OutboxRecordV1,
 ) {
     let envelope =
         DurableEnvelopeV1::decode(record.exact_bytes()).expect("decode exact Contacts command");
@@ -322,22 +322,22 @@ fn wall_seconds() -> i64 {
 async fn contacts_admin_pool_v1() -> sqlx::PgPool {
     let password = Zeroizing::new(
         std::fs::read_to_string(required(
-            "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+            "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
         ))
         .expect("read disposable PostgreSQL credential")
         .trim()
         .to_owned(),
     );
     let options = PgConnectOptions::new()
-        .host(&required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
+        .host(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
         .port(
-            required("HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+            required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
                 .parse()
                 .expect("valid PostgreSQL port"),
         )
-        .username("hermes_postgres_admin")
+        .username("makosh_postgres_admin")
         .password(password.as_str())
-        .database("hermes_storage_authenticated")
+        .database("makosh_storage_authenticated")
         .ssl_mode(PgSslMode::Disable);
     PgPoolOptions::new()
         .max_connections(1)

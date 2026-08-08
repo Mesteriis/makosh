@@ -4,7 +4,7 @@ use std::thread;
 use crate::integrations::telegram::client::errors::TelegramError;
 use crate::integrations::telegram::tdjson;
 use crate::platform::config::app_config::AppConfig;
-use hermes_communications_api::accounts::ProviderAccount;
+use makosh_communications_api::accounts::ProviderAccount;
 use tokio::sync::mpsc::UnboundedSender;
 
 use super::super::state::{TelegramRuntimeCommand, TelegramRuntimeEvent};

@@ -1,25 +1,25 @@
 [package]
-name = "hermes-storage-runtime"
+name = "makosh-storage-runtime"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 [[bin]]
-name = "hermes-storage-runtime"
+name = "makosh-storage-runtime"
 path = "src/main.rs"
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "platform"
 owner = "storage"
 surface = "runtime"
 components = ["storage_control"]
 [dependencies]
-hermes-storage-protocol = { path = "../protocol" }
-hermes-storage-control = { path = "../control" }
-hermes-storage-postgres = { path = "../postgres" }
-hermes-storage-pgbouncer = { path = "../pgbouncer" }
-hermes-storage-migrations = { path = "../migrations" }
-hermes-runtime-protocol = { path = "../../runtime_protocol" }
-hermes-storage-vault = { path = "../vault" }
-hermes-vault-protocol = { path = "../../vault/protocol" }
+makosh-storage-protocol = { path = "../protocol" }
+makosh-storage-control = { path = "../control" }
+makosh-storage-postgres = { path = "../postgres" }
+makosh-storage-pgbouncer = { path = "../pgbouncer" }
+makosh-storage-migrations = { path = "../migrations" }
+makosh-runtime-protocol = { path = "../../runtime_protocol" }
+makosh-storage-vault = { path = "../vault" }
+makosh-vault-protocol = { path = "../../vault/protocol" }
 libc = "=0.2.186"
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }

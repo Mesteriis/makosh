@@ -9,9 +9,9 @@ use crate::domains::relationships::models::{
 };
 use crate::domains::tasks::core::errors::TaskCoreError;
 use crate::domains::tasks::core::relations::{TaskRelation, TaskRelationStore};
-use hermes_observations_api::models::{NewObservation, ObservationOriginKind};
-use hermes_observations_postgres::errors::ObservationStoreError;
-use hermes_observations_postgres::store::ObservationStore;
+use makosh_observations_api::models::{NewObservation, ObservationOriginKind};
+use makosh_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::store::ObservationStore;
 
 use super::relationship_graph::{RelationshipGraphCoordinator, RelationshipGraphCoordinatorError};
 

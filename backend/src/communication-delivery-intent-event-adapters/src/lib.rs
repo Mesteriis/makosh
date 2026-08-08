@@ -3,7 +3,7 @@ pub mod telegram;
 pub mod whatsapp;
 pub mod zulip;
 
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
         ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
@@ -11,14 +11,14 @@ use hermes_events_protocol::{
     },
     validation::envelope::validate_envelope_v1,
 };
-use hermes_runtime_protocol::v1::ContractReferenceV1;
+use makosh_runtime_protocol::v1::ContractReferenceV1;
 use prost::Message;
 use prost_types::Timestamp;
 use sha2::{Digest, Sha256};
 
-pub const PACKAGE: &str = "hermes-communication-delivery-intent-event-adapters";
+pub const PACKAGE: &str = "makosh-communication-delivery-intent-event-adapters";
 pub const DELIVERY_INTENT_RUNTIME_MODULE_ID_V1: &str =
-    "hermes-communication-delivery-intent-runtime";
+    "makosh-communication-delivery-intent-runtime";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DeliveryIntentCommandContextV1 {
@@ -257,16 +257,16 @@ fn outbox_error(_: OutboxRecordError) -> DeliveryIntentEventAdapterErrorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_events_protocol::v1::{
+    use makosh_events_protocol::v1::{
         ResultMetadataV1, ResultOutcomeV1, durable_envelope_v1::Semantics,
     };
-    use hermes_mail_delivery_intent_contract::{
+    use makosh_mail_delivery_intent_contract::{
         MAIL_DELIVERY_INTENT_EXECUTE_CONTRACT_NAME_V1,
         mail_delivery_intent_succeeded_contract_reference_v1, wire::MailDeliveryIntentSucceededV1,
     };
-    use hermes_telegram_delivery_intent_contract::TELEGRAM_DELIVERY_INTENT_EXECUTE_CONTRACT_NAME_V1;
-    use hermes_whatsapp_delivery_intent_contract::WHATSAPP_DELIVERY_INTENT_EXECUTE_CONTRACT_NAME_V1;
-    use hermes_zulip_delivery_intent_contract::ZULIP_DELIVERY_INTENT_EXECUTE_CONTRACT_NAME_V1;
+    use makosh_telegram_delivery_intent_contract::TELEGRAM_DELIVERY_INTENT_EXECUTE_CONTRACT_NAME_V1;
+    use makosh_whatsapp_delivery_intent_contract::WHATSAPP_DELIVERY_INTENT_EXECUTE_CONTRACT_NAME_V1;
+    use makosh_zulip_delivery_intent_contract::ZULIP_DELIVERY_INTENT_EXECUTE_CONTRACT_NAME_V1;
 
     use super::*;
 
@@ -382,7 +382,7 @@ mod tests {
         .encode_to_vec();
         let bytes = result_envelope(
             mail_delivery_intent_succeeded_contract_reference_v1(),
-            "hermes-mail-runtime",
+            "makosh-mail-runtime",
             intent_id,
             command_message_id,
             ResultOutcomeV1::Succeeded,
@@ -400,7 +400,7 @@ mod tests {
 
         let wrong_source = result_envelope(
             mail_delivery_intent_succeeded_contract_reference_v1(),
-            "hermes-telegram-runtime",
+            "makosh-telegram-runtime",
             intent_id,
             command_message_id,
             ResultOutcomeV1::Succeeded,

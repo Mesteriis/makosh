@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communication_delivery_intent_provider_outbox (
+CREATE TABLE makosh_data.communication_delivery_intent_provider_outbox (
   message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
   envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
   exact_envelope_bytes BYTEA NOT NULL CHECK (
@@ -18,27 +18,27 @@ CREATE TABLE hermes_data.communication_delivery_intent_provider_outbox (
     OR published_at_unix_seconds >= created_at_unix_seconds
   ),
   FOREIGN KEY (logical_owner_id, intent_id) REFERENCES
-    hermes_data.communication_delivery_intent_jobs (
+    makosh_data.communication_delivery_intent_jobs (
       logical_owner_id,
       intent_id
     )
 );
 
 CREATE UNIQUE INDEX communication_delivery_intent_provider_outbox_intent_idx
-  ON hermes_data.communication_delivery_intent_provider_outbox (
+  ON makosh_data.communication_delivery_intent_provider_outbox (
     logical_owner_id,
     intent_id
   );
 
 CREATE INDEX communication_delivery_intent_provider_outbox_pending_idx
-  ON hermes_data.communication_delivery_intent_provider_outbox (
+  ON makosh_data.communication_delivery_intent_provider_outbox (
     provider_kind,
     created_at_unix_seconds,
     message_id
   )
   WHERE published_at_unix_seconds IS NULL;
 
-CREATE TABLE hermes_data.communication_delivery_intent_result_inbox (
+CREATE TABLE makosh_data.communication_delivery_intent_result_inbox (
   message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
   envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
   logical_owner_id TEXT NOT NULL CHECK (
@@ -52,10 +52,10 @@ CREATE TABLE hermes_data.communication_delivery_intent_result_inbox (
     consumed_at_unix_seconds > 0
   ),
   FOREIGN KEY (logical_owner_id, intent_id) REFERENCES
-    hermes_data.communication_delivery_intent_jobs (
+    makosh_data.communication_delivery_intent_jobs (
       logical_owner_id,
       intent_id
     ),
   FOREIGN KEY (command_message_id) REFERENCES
-    hermes_data.communication_delivery_intent_provider_outbox (message_id)
+    makosh_data.communication_delivery_intent_provider_outbox (message_id)
 );

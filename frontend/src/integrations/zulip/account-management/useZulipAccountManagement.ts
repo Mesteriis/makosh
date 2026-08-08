@@ -1,12 +1,12 @@
 import { computed, ref, shallowRef } from 'vue'
-import { ZulipCredentialBindingStateV1 } from '../../../gen/hermes/zulip/account/v1/client_pb'
-import type { ZulipAccountStatusV1 } from '../../../gen/hermes/zulip/operational/v1/client_pb'
-import type { ClientModuleBootstrapV1 } from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import { ZulipCredentialBindingStateV1 } from '../../../gen/makosh/zulip/account/v1/client_pb'
+import type { ZulipAccountStatusV1 } from '../../../gen/makosh/zulip/operational/v1/client_pb'
+import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import { publicModuleStringSetting } from '../../../platform/gateway/publicModuleSettings'
 import { hasOwnerVaultProvisioningHostV1 } from '../../../platform/vault'
 import { ZulipAccountManagementWorkflowV1 } from './zulipAccountManagementWorkflow'
 
-const ZULIP_MODULE_ID = 'hermes-zulip-runtime'
+const ZULIP_MODULE_ID = 'makosh-zulip-runtime'
 
 type ZulipAccountManagementWorkflow = Pick<
 	ZulipAccountManagementWorkflowV1,

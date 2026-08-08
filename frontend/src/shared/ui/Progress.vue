@@ -25,10 +25,10 @@ const percentage = computed(() => {
 })
 
 const rootClasses = computed(() => [
-  'hermes-progress-root',
-  `hermes-progress--${props.size}`,
+  'makosh-progress-root',
+  `makosh-progress--${props.size}`,
   props.class,
-  { 'hermes-progress--indeterminate': props.indeterminate }
+  { 'makosh-progress--indeterminate': props.indeterminate }
 ])
 
 const indicatorRef = ref<InstanceType<typeof ProgressIndicator> | null>(null)
@@ -47,7 +47,7 @@ watchEffect(() => {
     :class="rootClasses"
     @update:model-value="(val: any) => emit('update:modelValue', Number(val))"
   >
-    <ProgressIndicator ref="indicatorRef" class="hermes-progress-indicator" />
+    <ProgressIndicator ref="indicatorRef" class="makosh-progress-indicator" />
   </ProgressRoot>
 </template>
 

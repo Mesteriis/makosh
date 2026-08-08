@@ -1,11 +1,11 @@
-CREATE TABLE hermes_data.communications_export_event_inbox (
+CREATE TABLE makosh_data.communications_export_event_inbox (
   message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
   envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
   event_kind SMALLINT NOT NULL CHECK (event_kind IN (1, 2)),
   consumed_at_unix_seconds BIGINT NOT NULL
 );
 
-CREATE TABLE hermes_data.communications_export_outbox (
+CREATE TABLE makosh_data.communications_export_outbox (
   message_id BYTEA PRIMARY KEY CHECK (octet_length(message_id) = 16),
   envelope_sha256 BYTEA NOT NULL CHECK (octet_length(envelope_sha256) = 32),
   exact_envelope_bytes BYTEA NOT NULL CHECK (
@@ -15,7 +15,7 @@ CREATE TABLE hermes_data.communications_export_outbox (
   published_at_unix_seconds BIGINT
 );
 
-CREATE TABLE hermes_data.communications_export_jobs (
+CREATE TABLE makosh_data.communications_export_jobs (
   export_id BYTEA PRIMARY KEY CHECK (octet_length(export_id) = 16),
   state SMALLINT NOT NULL CHECK (state IN (1, 2, 3, 4)),
   requested_items INTEGER NOT NULL CHECK (requested_items BETWEEN 1 AND 64),
@@ -25,7 +25,7 @@ CREATE TABLE hermes_data.communications_export_jobs (
   created_at_unix_seconds BIGINT NOT NULL,
   updated_at_unix_seconds BIGINT NOT NULL,
   source_result_message_id BYTEA UNIQUE REFERENCES
-    hermes_data.communications_export_event_inbox (message_id),
+    makosh_data.communications_export_event_inbox (message_id),
   claimed_by TEXT CHECK (
     claimed_by IS NULL OR char_length(claimed_by) BETWEEN 1 AND 128
   ),
@@ -61,9 +61,9 @@ CREATE TABLE hermes_data.communications_export_jobs (
   )
 );
 
-CREATE TABLE hermes_data.communications_export_items (
+CREATE TABLE makosh_data.communications_export_items (
   export_id BYTEA NOT NULL REFERENCES
-    hermes_data.communications_export_jobs (export_id),
+    makosh_data.communications_export_jobs (export_id),
   ordinal INTEGER NOT NULL CHECK (ordinal BETWEEN 0 AND 63),
   message_id BYTEA NOT NULL CHECK (octet_length(message_id) = 16),
   conversation_id BYTEA CHECK (
@@ -136,14 +136,14 @@ CREATE TABLE hermes_data.communications_export_items (
 );
 
 CREATE INDEX communications_export_jobs_pending_idx
-  ON hermes_data.communications_export_jobs (
+  ON makosh_data.communications_export_jobs (
     updated_at_unix_seconds,
     export_id
   )
   WHERE state IN (1, 2);
 
 CREATE INDEX communications_export_outbox_pending_idx
-  ON hermes_data.communications_export_outbox (
+  ON makosh_data.communications_export_outbox (
     created_at_unix_seconds,
     message_id
   )

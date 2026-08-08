@@ -1,10 +1,10 @@
-use hermes_communication_note_candidate_api::{
+use makosh_communication_note_candidate_api::{
     COMMUNICATION_NOTE_CANDIDATE_CAPABILITY_ID_V1,
     COMMUNICATION_NOTE_CANDIDATE_COMMAND_CONNECT_PATH_V1,
     COMMUNICATION_NOTE_CANDIDATE_MODULE_ID_V1, COMMUNICATION_NOTE_CANDIDATE_OWNER_V1,
     COMMUNICATION_NOTE_CANDIDATE_QUERY_CONNECT_PATH_V1,
 };
-use hermes_communications_note_source_api::{
+use makosh_communications_note_source_api::{
     communication_note_source_prepare_contract_reference_v1,
     communication_note_source_prepare_publish_request_v1,
     communication_note_source_prepared_consume_request_v1,
@@ -12,11 +12,11 @@ use hermes_communications_note_source_api::{
     communication_note_source_rejected_consume_request_v1,
     communication_note_source_rejected_contract_reference_v1,
 };
-use hermes_review_note_candidate_api::{
+use makosh_review_note_candidate_api::{
     review_note_candidate_submit_contract_reference_v1,
     review_note_candidate_submit_publish_request_v1,
 };
-use hermes_runtime_protocol::v1::{
+use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
     CapabilityRequestV1, ClientRpcRouteV1, ContractReferenceV1, ModuleDescriptorV1, ModuleKindV1,
     ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1, RuntimeBudgetRequestV1,
@@ -227,7 +227,7 @@ fn storage_capability() -> CapabilityDescriptorV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_runtime_protocol::{
+    use makosh_runtime_protocol::{
         v1::ModuleKindV1,
         validation::descriptor::{validate_descriptor_v1, validate_settings_schema_v1},
     };

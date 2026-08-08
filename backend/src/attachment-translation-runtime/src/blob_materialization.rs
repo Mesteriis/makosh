@@ -1,18 +1,18 @@
 use std::os::unix::net::UnixStream;
 
-use hermes_ai_contracts::{
+use makosh_ai_contracts::{
     AI_ATTACHMENT_TRANSLATION_MAX_SOURCE_BYTES_V1, AI_INFERENCE_BLOB_CAPABILITY_ID_V1,
     AI_INFERENCE_MODULE_ID_V1, AI_OWNER_V1, wire::AiPrivateSourceReceiptV1,
 };
-use hermes_attachment_translation_api::ATTACHMENT_TRANSLATION_MAX_RESULT_BYTES_V1;
-use hermes_attachment_translation_persistence::AttachmentTranslationSourceAuthorityV1;
-use hermes_blob_client::{
+use makosh_attachment_translation_api::ATTACHMENT_TRANSLATION_MAX_RESULT_BYTES_V1;
+use makosh_attachment_translation_persistence::AttachmentTranslationSourceAuthorityV1;
+use makosh_blob_client::{
     BlobDataClient, ManagedBlobCustodyReleaseRequestV1, ManagedBlobCustodyTargetV1,
     ManagedBlobCustodyTransferRequestV1, ManagedBlobSessionRequestV1,
     request_managed_blob_custody_release_v2, request_managed_blob_custody_transfer_v2,
     request_managed_blob_session_v2,
 };
-use hermes_runtime_protocol::{
+use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, ManagedControlRequestDispatcherV2},
     v1::{BlobCustodyReleaseReasonV1, BlobDataOperationV1},
 };
@@ -313,7 +313,7 @@ fn validate_source(
 
 fn ai_reference_id(run_id: [u8; 16], local_reference: [u8; 16], sha256: [u8; 32]) -> [u8; 16] {
     reference_id(
-        b"hermes.attachment_translation.ai-source.v1\0",
+        b"makosh.attachment_translation.ai-source.v1\0",
         run_id,
         local_reference,
         sha256,
@@ -322,7 +322,7 @@ fn ai_reference_id(run_id: [u8; 16], local_reference: [u8; 16], sha256: [u8; 32]
 
 fn artifact_reference_id(run_id: [u8; 16], sha256: [u8; 32]) -> [u8; 16] {
     reference_id(
-        b"hermes.attachment_translation.artifact.v1\0",
+        b"makosh.attachment_translation.artifact.v1\0",
         run_id,
         [0; 16],
         sha256,
@@ -345,7 +345,7 @@ fn reference_id(
 
 fn release_operation_id(run_id: [u8; 16], label: &[u8]) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"hermes.attachment_translation.blob-release.v1\0");
+    digest.update(b"makosh.attachment_translation.blob-release.v1\0");
     digest.update(label);
     digest.update(run_id);
     digest.finalize()[..16].try_into().expect("digest prefix")

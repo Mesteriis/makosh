@@ -8,7 +8,7 @@ const read = (path) => readFile(resolve(PROJECT_ROOT, path), 'utf8');
 
 test('provider-neutral Blob delegation reuses the exact Kernel request-provider resolver', async () => {
   const [protocol, blobSession, requestRouter, blobClient, adr] = await Promise.all([
-    read('backend/src/platform/runtime_protocol/proto/hermes/runtime/v1/managed_runtime_control.proto'),
+    read('backend/src/platform/runtime_protocol/proto/makosh/runtime/v1/managed_runtime_control.proto'),
     read('backend/src/kernel/src/platform/blob/session.rs'),
     read('backend/src/kernel/src/modules/capability/module_request.rs'),
     read('backend/src/platform/blob/client/src/lib.rs'),
@@ -32,7 +32,7 @@ test('provider-neutral Blob delegation reuses the exact Kernel request-provider 
 
 test('module request response Blob target is derived from the authenticated caller grant', async () => {
   const [protocol, requestRouter, adr] = await Promise.all([
-    read('backend/src/platform/runtime_protocol/proto/hermes/runtime/v1/managed_runtime_control.proto'),
+    read('backend/src/platform/runtime_protocol/proto/makosh/runtime/v1/managed_runtime_control.proto'),
     read('backend/src/kernel/src/modules/capability/module_request.rs'),
     read('docs/adr/ADR-0390-call-recording-custody-and-speech-to-text-boundary.md'),
   ]);

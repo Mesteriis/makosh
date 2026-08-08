@@ -2,7 +2,7 @@
 
 use std::collections::BTreeSet;
 
-use hermes_kernel_control_store::{ModuleRegistration, ModuleStorageRequestV1};
+use makosh_kernel_control_store::{ModuleRegistration, ModuleStorageRequestV1};
 use rusqlite::{Connection, OptionalExtension, params};
 
 use crate::{SqliteControlStore, StoreError, valid_capability_ids};
@@ -51,7 +51,7 @@ pub(crate) fn insert_storage_requests(
 ) -> Result<(), StoreError> {
     for request in requests {
         connection.execute(
-            "INSERT INTO hermes_kernel_module_storage_request
+            "INSERT INTO makosh_kernel_module_storage_request
              (registration_id, capability_id, owner_id, connection_budget, statement_timeout_millis)
              VALUES (?1, ?2, ?3, ?4, ?5)",
             params![
@@ -74,7 +74,7 @@ fn read_storage_request(
     connection
         .query_row(
             "SELECT owner_id, connection_budget, statement_timeout_millis
-             FROM hermes_kernel_module_storage_request
+             FROM makosh_kernel_module_storage_request
              WHERE registration_id = ?1 AND capability_id = ?2",
             params![registration_id, capability_id],
             |row| {

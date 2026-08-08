@@ -37,42 +37,42 @@ const hasFooter = computed(() => props.footer && Boolean(slots.footer))
 	<component
 		:is="props.as"
 		:class="[
-			'hermes-app-layout',
-			`hermes-app-layout--${props.density}`,
-			`hermes-app-layout--${props.mode}`,
+			'makosh-app-layout',
+			`makosh-app-layout--${props.density}`,
+			`makosh-app-layout--${props.mode}`,
 			{
-				'hermes-app-layout--has-rail': hasRail,
-				'hermes-app-layout--has-sidebar': hasSidebar,
-				'hermes-app-layout--has-inspector': hasInspector,
-				'hermes-app-layout--has-topbar': hasTopbar,
-				'hermes-app-layout--has-footer': hasFooter
+				'makosh-app-layout--has-rail': hasRail,
+				'makosh-app-layout--has-sidebar': hasSidebar,
+				'makosh-app-layout--has-inspector': hasInspector,
+				'makosh-app-layout--has-topbar': hasTopbar,
+				'makosh-app-layout--has-footer': hasFooter
 			},
 			props.class
 		]"
 	>
-		<div v-if="hasRail" class="hermes-app-layout__rail">
+		<div v-if="hasRail" class="makosh-app-layout__rail">
 			<slot name="rail" />
 		</div>
 
-		<aside v-if="hasSidebar" class="hermes-app-layout__sidebar">
+		<aside v-if="hasSidebar" class="makosh-app-layout__sidebar">
 			<slot name="sidebar" />
 		</aside>
 
-		<section class="hermes-app-layout__workspace">
-			<header v-if="hasTopbar" class="hermes-app-layout__topbar">
+		<section class="makosh-app-layout__workspace">
+			<header v-if="hasTopbar" class="makosh-app-layout__topbar">
 				<slot name="topbar" />
 			</header>
 
-			<main class="hermes-app-layout__main">
+			<main class="makosh-app-layout__main">
 				<slot />
 			</main>
 
-			<footer v-if="hasFooter" class="hermes-app-layout__footer">
+			<footer v-if="hasFooter" class="makosh-app-layout__footer">
 				<slot name="footer" />
 			</footer>
 		</section>
 
-		<aside v-if="hasInspector" class="hermes-app-layout__inspector">
+		<aside v-if="hasInspector" class="makosh-app-layout__inspector">
 			<slot name="inspector" />
 		</aside>
 	</component>

@@ -1,7 +1,7 @@
 import type { OwnerDeviceProofV1 } from './ownerDeviceProof'
 
 const DEVELOPMENT_OWNER_DEVICE_PROOF_PATH =
-	'/__hermes/owner-device-proof/v1/sign'
+	'/__makosh/owner-device-proof/v1/sign'
 
 type HostFetch = typeof fetch
 

@@ -7,7 +7,7 @@ use super::models::{
     RelationshipType,
 };
 use crate::platform::graph::GraphNodeKind;
-use hermes_graph_api::GraphCount;
+use makosh_graph_api::GraphCount;
 
 pub(super) fn row_to_node(row: PgRow) -> Result<GraphNode, GraphStoreError> {
     Ok(GraphNode {

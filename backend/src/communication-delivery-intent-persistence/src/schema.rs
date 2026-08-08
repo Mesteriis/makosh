@@ -1,4 +1,4 @@
-use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use sha2::{Digest, Sha256};
 
 pub const COMMUNICATION_DELIVERY_INTENT_STORAGE_BUNDLE_REVISION_V1: u32 = 1;
@@ -68,7 +68,7 @@ pub fn communication_delivery_intent_storage_bundle_v1() -> StorageBundleV1 {
 
 #[cfg(test)]
 mod tests {
-    use hermes_storage_protocol::validation::validate_storage_bundle;
+    use makosh_storage_protocol::validation::validate_storage_bundle;
 
     use super::*;
 
@@ -88,7 +88,7 @@ mod tests {
             .map(|step| std::str::from_utf8(&step.forward_sql_utf8).expect("utf8"))
             .collect::<Vec<_>>()
             .join("\n");
-        assert!(sql.contains("hermes_data.communication_delivery_intent_jobs"));
+        assert!(sql.contains("makosh_data.communication_delivery_intent_jobs"));
         assert!(sql.contains("body_reference_id"));
         assert!(sql.contains("body_custody_source_proof"));
         assert!(sql.contains("claim_epoch"));

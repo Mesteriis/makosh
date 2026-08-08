@@ -1,4 +1,4 @@
-/** Typed Hermes design token constants for use outside Tailwind classes */
+/** Typed Макошь design token constants for use outside Tailwind classes */
 export const theme = {
 	font: {
 		sans: [

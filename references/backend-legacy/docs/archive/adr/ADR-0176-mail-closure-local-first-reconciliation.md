@@ -7,8 +7,8 @@ Clarifies ADR-0013, ADR-0018, ADR-0092, ADR-0097 and ADR-0098.
 
 ## Decision
 
-Hermes is the canonical owner of the user's Mail workspace state. Provider
-state is an external replica that Hermes continuously reconciles through
+Макошь is the canonical owner of the user's Mail workspace state. Provider
+state is an external replica that Макошь continuously reconciles through
 durable Communications provider commands.
 
 - `is_read`, `read_changed_at` and `read_origin` are independent from

@@ -38,7 +38,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             return Err(AttachmentTextExtractionPersistenceErrorV1::InvalidInput);
         }
         let row = sqlx::query(
-            "SELECT request_envelope_sha256,request_id,translation_run_id,source_extraction_run_id,expected_source_revision FROM hermes_data.attachment_text_extraction_translation_source_inbox WHERE logical_owner_id=$1 AND request_message_id=$2",
+            "SELECT request_envelope_sha256,request_id,translation_run_id,source_extraction_run_id,expected_source_revision FROM makosh_data.attachment_text_extraction_translation_source_inbox WHERE logical_owner_id=$1 AND request_message_id=$2",
         )
         .bind(logical_owner_id)
         .bind(request_message_id.as_slice())
@@ -90,7 +90,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             return Err(AttachmentTextExtractionPersistenceErrorV1::InvalidInput);
         }
         let row = sqlx::query(
-            "SELECT r.state,r.state_revision,a.run_id,a.derived_reference_id,a.derived_receipt_sha256,a.source_receipt_sha256,a.parser_identity_sha256,a.format_code,a.extracted_size_bytes,a.extraction_truncated FROM hermes_data.attachment_text_extraction_runs r LEFT JOIN hermes_data.attachment_text_extraction_artifacts a ON a.logical_owner_id=r.logical_owner_id AND a.run_id=r.run_id WHERE r.logical_owner_id=$1 AND r.run_id=$2",
+            "SELECT r.state,r.state_revision,a.run_id,a.derived_reference_id,a.derived_receipt_sha256,a.source_receipt_sha256,a.parser_identity_sha256,a.format_code,a.extracted_size_bytes,a.extraction_truncated FROM makosh_data.attachment_text_extraction_runs r LEFT JOIN makosh_data.attachment_text_extraction_artifacts a ON a.logical_owner_id=r.logical_owner_id AND a.run_id=r.run_id WHERE r.logical_owner_id=$1 AND r.run_id=$2",
         )
         .bind(logical_owner_id)
         .bind(source_extraction_run_id.as_slice())
@@ -135,7 +135,7 @@ impl AttachmentTextExtractionPersistenceV1 {
         let mut transaction = self.pool.begin().await.map_err(storage_unavailable)?;
         if let Some(snapshot) = prepared_snapshot {
             let row = sqlx::query(
-                "SELECT r.state,r.state_revision,a.derived_reference_id,a.derived_receipt_sha256,a.extracted_size_bytes FROM hermes_data.attachment_text_extraction_runs r JOIN hermes_data.attachment_text_extraction_artifacts a ON a.logical_owner_id=r.logical_owner_id AND a.run_id=r.run_id WHERE r.logical_owner_id=$1 AND r.run_id=$2 FOR UPDATE OF r",
+                "SELECT r.state,r.state_revision,a.derived_reference_id,a.derived_receipt_sha256,a.extracted_size_bytes FROM makosh_data.attachment_text_extraction_runs r JOIN makosh_data.attachment_text_extraction_artifacts a ON a.logical_owner_id=r.logical_owner_id AND a.run_id=r.run_id WHERE r.logical_owner_id=$1 AND r.run_id=$2 FOR UPDATE OF r",
             )
             .bind(logical_owner_id)
             .bind(record.source_extraction_run_id.as_slice())
@@ -171,7 +171,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             }
         }
         let inserted = sqlx::query(
-            "INSERT INTO hermes_data.attachment_text_extraction_translation_source_inbox (logical_owner_id,request_message_id,request_envelope_sha256,request_id,translation_run_id,source_extraction_run_id,expected_source_revision,result_message_id,result_envelope_sha256,processed_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) ON CONFLICT (logical_owner_id,request_message_id) DO NOTHING",
+            "INSERT INTO makosh_data.attachment_text_extraction_translation_source_inbox (logical_owner_id,request_message_id,request_envelope_sha256,request_id,translation_run_id,source_extraction_run_id,expected_source_revision,result_message_id,result_envelope_sha256,processed_at_unix_millis) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) ON CONFLICT (logical_owner_id,request_message_id) DO NOTHING",
         )
         .bind(logical_owner_id)
         .bind(record.request_message_id.as_slice())
@@ -188,7 +188,7 @@ impl AttachmentTextExtractionPersistenceV1 {
         .map_err(storage_unavailable)?;
         if inserted.rows_affected() == 0 {
             let existing = sqlx::query(
-                "SELECT request_envelope_sha256,request_id,translation_run_id,source_extraction_run_id,expected_source_revision,result_message_id,result_envelope_sha256 FROM hermes_data.attachment_text_extraction_translation_source_inbox WHERE logical_owner_id=$1 AND request_message_id=$2",
+                "SELECT request_envelope_sha256,request_id,translation_run_id,source_extraction_run_id,expected_source_revision,result_message_id,result_envelope_sha256 FROM makosh_data.attachment_text_extraction_translation_source_inbox WHERE logical_owner_id=$1 AND request_message_id=$2",
             )
             .bind(logical_owner_id)
             .bind(record.request_message_id.as_slice())
@@ -197,7 +197,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             .map_err(storage_unavailable)?
             .ok_or(AttachmentTextExtractionPersistenceErrorV1::EvidenceConflict)?;
             let outbox = sqlx::query(
-                "SELECT exact_envelope_bytes FROM hermes_data.attachment_text_extraction_translation_source_outbox WHERE logical_owner_id=$1 AND request_message_id=$2",
+                "SELECT exact_envelope_bytes FROM makosh_data.attachment_text_extraction_translation_source_outbox WHERE logical_owner_id=$1 AND request_message_id=$2",
             )
             .bind(logical_owner_id)
             .bind(record.request_message_id.as_slice())
@@ -247,7 +247,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             return Ok(PersistTranslationSourceResultOutcomeV1::Replayed);
         }
         sqlx::query(
-            "INSERT INTO hermes_data.attachment_text_extraction_translation_source_outbox (logical_owner_id,result_message_id,request_message_id,envelope_sha256,exact_envelope_bytes,published_at_unix_millis,created_at_unix_millis) VALUES ($1,$2,$3,$4,$5,NULL,$6)",
+            "INSERT INTO makosh_data.attachment_text_extraction_translation_source_outbox (logical_owner_id,result_message_id,request_message_id,envelope_sha256,exact_envelope_bytes,published_at_unix_millis,created_at_unix_millis) VALUES ($1,$2,$3,$4,$5,NULL,$6)",
         )
         .bind(logical_owner_id)
         .bind(record.result_message_id.as_slice())
@@ -272,7 +272,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             return Err(AttachmentTextExtractionPersistenceErrorV1::InvalidInput);
         }
         sqlx::query(
-            "SELECT result_message_id,envelope_sha256,exact_envelope_bytes FROM hermes_data.attachment_text_extraction_translation_source_outbox WHERE logical_owner_id=$1 AND published_at_unix_millis IS NULL ORDER BY created_at_unix_millis,result_message_id LIMIT $2",
+            "SELECT result_message_id,envelope_sha256,exact_envelope_bytes FROM makosh_data.attachment_text_extraction_translation_source_outbox WHERE logical_owner_id=$1 AND published_at_unix_millis IS NULL ORDER BY created_at_unix_millis,result_message_id LIMIT $2",
         )
         .bind(logical_owner_id)
         .bind(i64::from(limit))
@@ -312,7 +312,7 @@ impl AttachmentTextExtractionPersistenceV1 {
             return Err(AttachmentTextExtractionPersistenceErrorV1::InvalidInput);
         }
         let changed = sqlx::query(
-            "UPDATE hermes_data.attachment_text_extraction_translation_source_outbox SET published_at_unix_millis=$1 WHERE logical_owner_id=$2 AND result_message_id=$3 AND envelope_sha256=$4 AND published_at_unix_millis IS NULL AND created_at_unix_millis <= $1",
+            "UPDATE makosh_data.attachment_text_extraction_translation_source_outbox SET published_at_unix_millis=$1 WHERE logical_owner_id=$2 AND result_message_id=$3 AND envelope_sha256=$4 AND published_at_unix_millis IS NULL AND created_at_unix_millis <= $1",
         )
         .bind(published_at_unix_millis)
         .bind(logical_owner_id)

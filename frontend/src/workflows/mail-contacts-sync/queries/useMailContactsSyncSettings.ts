@@ -4,13 +4,13 @@ import {
 	ClientSettingsApplyStateV1,
 	type ClientModuleBootstrapV1,
 	type ClientModuleSettingsTargetBootstrapV1,
-} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
 	MailContactsSyncDirectionV1,
 	MailContactsSyncStateV1,
 	type GetMailContactsSyncResponseV1,
 	type MailContactsSyncStatusChangedV1,
-} from '../../../gen/hermes/mail_contacts_sync/v1/sync_pb'
+} from '../../../gen/makosh/mail_contacts_sync/v1/sync_pb'
 import { resolveOwnerOperationIdV1 } from '../../../platform/gateway/ownerOperationId'
 import { ManagedWorkflowSetupV1 } from '../../../platform/settings/managedWorkflowSetup'
 import type { OwnerSettingInputV1 } from '../../../platform/settings/ownerModuleSettingsClient'
@@ -21,7 +21,7 @@ import {
 	type MailContactsSyncRealtimeBindingV1,
 } from '../api/mailContactsSync'
 
-const WORKFLOW_MODULE_ID = 'hermes-mail-contacts-sync-runtime'
+const WORKFLOW_MODULE_ID = 'makosh-mail-contacts-sync-runtime'
 const STORAGE_CAPABILITY_ID = 'mail_contacts_sync.storage.v1'
 const ID_BYTES = 16
 const MIN_INTERVAL_SECONDS = 300

@@ -23,7 +23,7 @@ impl AttachmentTranslationPersistenceV1 {
         }
         sqlx::query(
             "SELECT message_id, envelope_sha256, envelope_bytes
-             FROM hermes_data.attachment_translation_outbox
+             FROM makosh_data.attachment_translation_outbox
              WHERE logical_owner_id = $1 AND published_at_unix_millis IS NULL
              ORDER BY created_at_unix_millis, message_id
              LIMIT $2",
@@ -80,7 +80,7 @@ impl AttachmentTranslationPersistenceV1 {
             return Err(AttachmentTranslationPersistenceErrorV1::InvalidInput);
         }
         let updated = sqlx::query(
-            "UPDATE hermes_data.attachment_translation_outbox
+            "UPDATE makosh_data.attachment_translation_outbox
              SET published_at_unix_millis = $1
              WHERE logical_owner_id = $2 AND message_id = $3
                AND envelope_sha256 = $4

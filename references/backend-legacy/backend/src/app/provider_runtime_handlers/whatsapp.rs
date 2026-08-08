@@ -2,11 +2,11 @@ use axum::Json;
 use axum::extract::{Path, Query, State};
 use axum::http::StatusCode;
 use chrono::{DateTime, Utc};
-use hermes_communications_api::attachments::CanonicalMediaReadPort;
-use hermes_communications_api::calls::CanonicalCallReadPort;
-use hermes_communications_api::conversations::ConversationReadPort;
-use hermes_events_api::NewEventEnvelope;
-use hermes_personas_api::PersonaIdentityProjectionPort;
+use makosh_communications_api::attachments::CanonicalMediaReadPort;
+use makosh_communications_api::calls::CanonicalCallReadPort;
+use makosh_communications_api::conversations::ConversationReadPort;
+use makosh_events_api::NewEventEnvelope;
+use makosh_personas_api::PersonaIdentityProjectionPort;
 use serde::Deserialize;
 use serde_json::{Value, json};
 
@@ -63,7 +63,7 @@ pub(crate) mod sync_statuses;
 mod whatsapp_support;
 use whatsapp_support::*;
 
-const AUDIT_ACTOR_ID: &str = "hermes-frontend";
+const AUDIT_ACTOR_ID: &str = "makosh-frontend";
 
 #[derive(Deserialize)]
 pub(crate) struct WhatsAppCommandListQuery {
@@ -1678,11 +1678,11 @@ pub(crate) async fn post_whatsapp_runtime_bridge_claim_commands(
         .clone();
     let now = Utc::now();
     let projection =
-        hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore::new(
+        makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore::new(
             pool.clone(),
         );
     let account_lookup =
-        hermes_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
+        makosh_communications_postgres::provider_store::CommunicationProviderAccountStore::new(
             pool.clone(),
         );
     let imported = crate::integrations::whatsapp::runtime::command_execution::import_canonical_provider_commands(

@@ -1,4 +1,4 @@
-use hermes_clock_protocol::UtcMillisV1;
+use makosh_clock_protocol::UtcMillisV1;
 use sqlx::{Postgres, Transaction};
 
 use super::{

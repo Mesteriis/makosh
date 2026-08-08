@@ -1,5 +1,5 @@
 [package]
-name = "hermes-communication-delivery-intent-event-adapters"
+name = "makosh-communication-delivery-intent-event-adapters"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,18 +7,18 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "workflow"
 owner = "communication_delivery_intent"
 surface = "implementation"
 
 [dependencies]
-hermes-events-protocol = { path = "../platform/events" }
-hermes-mail-delivery-intent-contract = { path = "../mail-delivery-intent-contract" }
-hermes-runtime-protocol = { path = "../platform/runtime_protocol" }
-hermes-telegram-delivery-intent-contract = { path = "../telegram-delivery-intent-contract" }
-hermes-whatsapp-delivery-intent-contract = { path = "../whatsapp-delivery-intent-contract" }
-hermes-zulip-delivery-intent-contract = { path = "../zulip-delivery-intent-contract" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-mail-delivery-intent-contract = { path = "../mail-delivery-intent-contract" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-telegram-delivery-intent-contract = { path = "../telegram-delivery-intent-contract" }
+makosh-whatsapp-delivery-intent-contract = { path = "../whatsapp-delivery-intent-contract" }
+makosh-zulip-delivery-intent-contract = { path = "../zulip-delivery-intent-contract" }
 prost = "=0.14.4"
 prost-types = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }

@@ -2,7 +2,7 @@ use sqlx::{Postgres, Transaction};
 
 use super::EventStore;
 use crate::errors::EventStoreError;
-use hermes_events_api::NewEventEnvelope;
+use makosh_events_api::NewEventEnvelope;
 
 impl EventStore {
     pub async fn append(&self, event: &NewEventEnvelope) -> Result<i64, EventStoreError> {

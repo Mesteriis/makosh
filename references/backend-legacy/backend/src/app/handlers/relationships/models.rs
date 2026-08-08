@@ -1,4 +1,4 @@
-use hermes_relationships_api::RelationshipRead;
+use makosh_relationships_api::RelationshipRead;
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]

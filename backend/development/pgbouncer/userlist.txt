@@ -1,2 +1,2 @@
-"hermes_development" ""
-"hermes_pgbouncer_admin" ""
+"makosh_development" ""
+"makosh_pgbouncer_admin" ""

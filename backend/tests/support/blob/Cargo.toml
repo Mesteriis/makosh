@@ -1,5 +1,5 @@
 [package]
-name = "hermes-blob-testkit"
+name = "makosh-blob-testkit"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -7,16 +7,16 @@ license = "MIT"
 [lib]
 path = "src/lib.rs"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "test"
 owner = "test"
 surface = "test_support"
 
 [dev-dependencies]
-hermes-blob-protocol = { path = "../../../src/platform/blob/protocol" }
-hermes-blob-runtime = { path = "../../../src/platform/blob/runtime" }
-hermes-runtime-protocol = { path = "../../../src/platform/runtime_protocol" }
-hermes-vault-protocol = { path = "../../../src/platform/vault/protocol" }
+makosh-blob-protocol = { path = "../../../src/platform/blob/protocol" }
+makosh-blob-runtime = { path = "../../../src/platform/blob/runtime" }
+makosh-runtime-protocol = { path = "../../../src/platform/runtime_protocol" }
+makosh-vault-protocol = { path = "../../../src/platform/vault/protocol" }
 sha2 = { version = "=0.11.0", default-features = false }
 tempfile = "=3.27.0"
 tokio = { version = "=1.52.4", default-features = false, features = ["macros", "rt"] }

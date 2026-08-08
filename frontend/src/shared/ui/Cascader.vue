@@ -52,7 +52,7 @@ const isOpen = ref(false)
 const navigationPath = ref<TreeSelectOption[]>([])
 const activeColumnIndex = ref(0)
 const activeOptionIndex = ref(0)
-const componentId = `hermes-cascader-${useId()}`
+const componentId = `makosh-cascader-${useId()}`
 const rootRef = ref<HTMLElement | null>(null)
 const popoverRef = ref<HTMLElement | null>(null)
 const { cancelMouseLeaveDismiss, scheduleMouseLeaveDismiss } = useMouseLeaveDismiss(closeCascader, undefined, {
@@ -60,7 +60,7 @@ const { cancelMouseLeaveDismiss, scheduleMouseLeaveDismiss } = useMouseLeaveDism
 	getBoundaryElements: () => [rootRef.value, popoverRef.value]
 })
 
-const classes = computed(() => ['hermes-cascader', props.class])
+const classes = computed(() => ['makosh-cascader', props.class])
 const popoverId = computed(() => `${componentId}-popover`)
 const canInteract = computed(() => !props.disabled && !props.readonly)
 const accessibleLabel = computed(() => props.ariaLabel ?? props.placeholder)
@@ -445,8 +445,8 @@ function handleFocusout(event: FocusEvent): void {
 		@mouseleave="scheduleMouseLeaveDismiss"
 	>
 		<button
-			class="hermes-searchable-select__trigger hermes-cascader__trigger"
-			:class="{ 'hermes-searchable-select__trigger--readonly': readonly, 'hermes-cascader__trigger--readonly': readonly }"
+			class="makosh-searchable-select__trigger makosh-cascader__trigger"
+			:class="{ 'makosh-searchable-select__trigger--readonly': readonly, 'makosh-cascader__trigger--readonly': readonly }"
 			type="button"
 			role="combobox"
 			:aria-activedescendant="activeItemId"
@@ -459,33 +459,33 @@ function handleFocusout(event: FocusEvent): void {
 			@click="toggleCascader"
 		>
 			<span
-				class="hermes-searchable-select__value hermes-cascader__value"
-				:class="{ 'hermes-searchable-select__value--placeholder': !selectedOption, 'hermes-cascader__value--placeholder': !selectedOption }"
+				class="makosh-searchable-select__value makosh-cascader__value"
+				:class="{ 'makosh-searchable-select__value--placeholder': !selectedOption, 'makosh-cascader__value--placeholder': !selectedOption }"
 			>
 				{{ displayLabel }}
 			</span>
-			<Icon icon="tabler:chevron-down" size="1rem" class="hermes-searchable-select__chevron hermes-cascader__chevron" aria-hidden="true" />
+			<Icon icon="tabler:chevron-down" size="1rem" class="makosh-searchable-select__chevron makosh-cascader__chevron" aria-hidden="true" />
 		</button>
-		<div v-if="isOpen" :id="popoverId" ref="popoverRef" class="hermes-cascader__popover">
+		<div v-if="isOpen" :id="popoverId" ref="popoverRef" class="makosh-cascader__popover">
 			<ul
 				v-for="column in columns"
 				:id="columnId(column.columnIndex)"
 				:key="column.columnIndex"
-				class="hermes-cascader__column"
+				class="makosh-cascader__column"
 				role="listbox"
 				:aria-label="columnLabel(column.columnIndex)"
 			>
-				<li v-if="column.items.length === 0" class="hermes-cascader__empty" role="option" aria-disabled="true">
+				<li v-if="column.items.length === 0" class="makosh-cascader__empty" role="option" aria-disabled="true">
 					{{ emptyLabel }}
 				</li>
-				<li v-for="item in column.items" :key="item.key" class="hermes-cascader__item" role="none">
+				<li v-for="item in column.items" :key="item.key" class="makosh-cascader__item" role="none">
 					<button
 						:id="optionId(item.columnIndex, item.optionIndex)"
-						class="hermes-cascader__option"
+						class="makosh-cascader__option"
 						:class="{
-							'hermes-cascader__option--active': item.columnIndex === activeColumnIndex && item.optionIndex === activeOptionIndex,
-							'hermes-cascader__option--path': item.isInPath,
-							'hermes-cascader__option--selected': item.isSelected
+							'makosh-cascader__option--active': item.columnIndex === activeColumnIndex && item.optionIndex === activeOptionIndex,
+							'makosh-cascader__option--path': item.isInPath,
+							'makosh-cascader__option--selected': item.isSelected
 						}"
 						type="button"
 						role="option"
@@ -498,23 +498,23 @@ function handleFocusout(event: FocusEvent): void {
 						@mousedown.prevent
 						@click="activateItem(item)"
 					>
-						<Icon v-if="item.option.icon" :icon="item.option.icon" size="1rem" class="hermes-cascader__icon" aria-hidden="true" />
-						<span class="hermes-cascader__body">
-							<span class="hermes-cascader__label">{{ item.option.label }}</span>
-							<span v-if="item.option.description" class="hermes-cascader__description">{{ item.option.description }}</span>
+						<Icon v-if="item.option.icon" :icon="item.option.icon" size="1rem" class="makosh-cascader__icon" aria-hidden="true" />
+						<span class="makosh-cascader__body">
+							<span class="makosh-cascader__label">{{ item.option.label }}</span>
+							<span v-if="item.option.description" class="makosh-cascader__description">{{ item.option.description }}</span>
 						</span>
 						<Icon
 							v-if="item.isSelected"
 							icon="tabler:check"
 							size="0.875rem"
-							class="hermes-cascader__check"
+							class="makosh-cascader__check"
 							aria-hidden="true"
 						/>
 						<Icon
 							v-else-if="item.hasChildren"
 							icon="tabler:chevron-right"
 							size="0.875rem"
-							class="hermes-cascader__disclosure"
+							class="makosh-cascader__disclosure"
 							aria-hidden="true"
 						/>
 					</button>

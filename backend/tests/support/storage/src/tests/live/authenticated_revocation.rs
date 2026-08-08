@@ -2,21 +2,21 @@
 
 use std::future::Future;
 
-use hermes_storage_control::{
+use makosh_storage_control::{
     StorageFenceOutcomeV1, StorageLifecycleStateV1, StorageLifecycleV1, StorageRevokerV1,
     StorageVaultLeasePortV1,
 };
-use hermes_storage_pgbouncer::{
+use makosh_storage_pgbouncer::{
     PLATFORM_ADMIN_USERNAME, PgBouncerAdminCredentialV1, PgBouncerAdminEndpointV1,
     PgBouncerPoolFenceAdapterV1, TokioPostgresPgBouncerAdminPortV1,
 };
-use hermes_storage_postgres::{
+use makosh_storage_postgres::{
     PLATFORM_ADMIN_USERNAME as POSTGRES_ADMIN_USERNAME, PostgresAdminConnectorV1,
     PostgresRuntimeFenceAdapterV1, StorageRoleSpecV1, ensure_platform_schemas,
     ensure_storage_roles, read_storage_role_audit,
 };
-use hermes_storage_protocol::StorageBindingV1;
-use hermes_storage_protocol::v1::{
+use makosh_storage_protocol::StorageBindingV1;
+use makosh_storage_protocol::v1::{
     StorageBindingV1 as StorageBindingMessageV1, StorageDeploymentProfileV1,
     StorageEffectiveBudgetsV1, StorageRuntimeConfigurationV1, StorageRuntimeTopologyV1,
 };
@@ -26,15 +26,15 @@ use crate::admin::apply_staged_pool_configuration;
 
 use super::super::fixtures::storage_role_binding_in_database;
 
-const AUTHENTICATED_TEST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_TEST";
-const DATABASES_FILE_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_DATABASES_FILE";
-const AUTH_FILE_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_AUTH_FILE";
-const PGBOUNCER_PASSWORD_FILE_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE";
-const PGBOUNCER_HOST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_HOST";
-const PGBOUNCER_PORT_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_PGBOUNCER_PORT";
-const POSTGRES_PASSWORD_FILE_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE";
-const POSTGRES_HOST_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_POSTGRES_HOST";
-const POSTGRES_PORT_ENV: &str = "HERMES_STORAGE_AUTHENTICATED_POSTGRES_PORT";
+const AUTHENTICATED_TEST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_TEST";
+const DATABASES_FILE_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_DATABASES_FILE";
+const AUTH_FILE_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_AUTH_FILE";
+const PGBOUNCER_PASSWORD_FILE_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PASSWORD_FILE";
+const PGBOUNCER_HOST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_HOST";
+const PGBOUNCER_PORT_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_PGBOUNCER_PORT";
+const POSTGRES_PASSWORD_FILE_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE";
+const POSTGRES_HOST_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST";
+const POSTGRES_PORT_ENV: &str = "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT";
 
 #[test]
 #[ignore = "requires the disposable authenticated Storage Compose contour"]
@@ -74,7 +74,7 @@ fn authenticated_revoke_fences_the_real_pool_and_postgres_role() {
 fn binding() -> StorageBindingV1 {
     let suffix = std::process::id();
     storage_role_binding_in_database(
-        "hermes_storage_authenticated",
+        "makosh_storage_authenticated",
         &format!("storage_revoke_live_{suffix}"),
         &format!("storage_runtime_revoke_live_{suffix}"),
     )
@@ -91,7 +91,7 @@ async fn connect_and_prepare(
     let connector = PostgresAdminConnectorV1::connect_with_password(
         &required(POSTGRES_HOST_ENV),
         port(POSTGRES_PORT_ENV),
-        "hermes_storage_authenticated",
+        "makosh_storage_authenticated",
         POSTGRES_ADMIN_USERNAME,
         password,
     )
@@ -112,7 +112,7 @@ async fn revoke(
     connector: &PostgresAdminConnectorV1,
     spec: &StorageRoleSpecV1,
     pgbouncer_password: &Zeroizing<Vec<u8>>,
-) -> hermes_storage_control::StorageRevocationReportV1 {
+) -> makosh_storage_control::StorageRevocationReportV1 {
     let credential = pgbouncer_credential(pgbouncer_password);
     let admin = TokioPostgresPgBouncerAdminPortV1::connect(&pgbouncer_endpoint(), &credential)
         .await
@@ -131,7 +131,7 @@ fn configuration(binding: StorageBindingMessageV1) -> StorageRuntimeConfiguratio
             topology_revision: 1,
             storage_generation: 1,
             storage_instance_id: "storage_main".to_owned(),
-            database_id: "hermes_storage_authenticated".to_owned(),
+            database_id: "makosh_storage_authenticated".to_owned(),
             deployment_profile: StorageDeploymentProfileV1::MacosTauriEmbedded as i32,
             postgres_artifact_sha256: vec![1; 32],
             pgbouncer_artifact_sha256: vec![2; 32],

@@ -2,7 +2,7 @@
 
 use std::collections::BTreeMap;
 
-use hermes_telemetry_protocol::{TelemetryPriorityV1, TelemetrySignalV1};
+use makosh_telemetry_protocol::{TelemetryPriorityV1, TelemetrySignalV1};
 
 const MAX_SOURCES: usize = 64;
 const WINDOW_MILLIS: i64 = 1_000;

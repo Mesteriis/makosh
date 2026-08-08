@@ -1,4 +1,4 @@
-CREATE TABLE hermes_data.communication_bulk_action_batches (
+CREATE TABLE makosh_data.communication_bulk_action_batches (
   logical_owner_id TEXT NOT NULL CHECK (
     char_length(logical_owner_id) BETWEEN 1 AND 128
   ),
@@ -17,7 +17,7 @@ CREATE TABLE hermes_data.communication_bulk_action_batches (
   PRIMARY KEY (logical_owner_id, batch_id)
 );
 
-CREATE TABLE hermes_data.communication_bulk_action_targets (
+CREATE TABLE makosh_data.communication_bulk_action_targets (
   logical_owner_id TEXT NOT NULL CHECK (
     char_length(logical_owner_id) BETWEEN 1 AND 128
   ),
@@ -61,7 +61,7 @@ CREATE TABLE hermes_data.communication_bulk_action_targets (
   PRIMARY KEY (logical_owner_id, batch_id, target_operation_id),
   UNIQUE (logical_owner_id, batch_id, ordinal),
   FOREIGN KEY (logical_owner_id, batch_id) REFERENCES
-    hermes_data.communication_bulk_action_batches (
+    makosh_data.communication_bulk_action_batches (
       logical_owner_id,
       batch_id
     ),
@@ -81,7 +81,7 @@ CREATE TABLE hermes_data.communication_bulk_action_targets (
 );
 
 CREATE INDEX communication_bulk_action_claim_idx
-  ON hermes_data.communication_bulk_action_targets (
+  ON makosh_data.communication_bulk_action_targets (
     logical_owner_id,
     next_attempt_at_unix_seconds,
     updated_at_unix_seconds,

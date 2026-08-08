@@ -35,7 +35,7 @@ fn has_valid_secret(headers: &axum::http::HeaderMap, expected_secret: &str) -> b
 
 fn has_valid_secret_header(headers: &axum::http::HeaderMap, expected_secret: &str) -> bool {
     headers
-        .get("x-hermes-secret")
+        .get("x-makosh-secret")
         .and_then(|value| value.to_str().ok())
         .is_some_and(|secret| secret == expected_secret)
 }
@@ -45,7 +45,7 @@ fn secret_error_response() -> Response {
         StatusCode::FORBIDDEN,
         Json(SecretErrorResponse {
             error: "invalid_api_secret",
-            message: "missing or invalid x-hermes-secret header",
+            message: "missing or invalid x-makosh-secret header",
         }),
     )
         .into_response()

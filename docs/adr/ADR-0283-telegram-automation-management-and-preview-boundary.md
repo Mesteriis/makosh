@@ -75,9 +75,9 @@ external signal или canonical communication evidence.
 Automation добавляет три Telegram-owned Cargo packages:
 
 ```text
-hermes-telegram-automation-api
-hermes-telegram-automation-core
-hermes-telegram-automation-persistence
+makosh-telegram-automation-api
+makosh-telegram-automation-core
+makosh-telegram-automation-persistence
 ```
 
 Их ответственности:
@@ -90,12 +90,12 @@ hermes-telegram-automation-persistence
 
 Существующие units сохраняют собственные причины изменения:
 
-- `hermes-telegram-runtime` адаптирует admitted client routes к automation
+- `makosh-telegram-runtime` адаптирует admitted client routes к automation
   ports и применяет runtime/storage fences;
-- `hermes-telegram-assembly` materializes descriptor and storage artifacts;
+- `makosh-telegram-assembly` materializes descriptor and storage artifacts;
 - frontend `src/integrations/telegram` владеет generated clients, controllers
   и presentation;
-- `hermes-telegram-tdlib` не участвует в dry-run, потому что provider command
+- `makosh-telegram-tdlib` не участвует в dry-run, потому что provider command
   не выполняется.
 
 Ни automation package, ни runtime не становятся assembly. Assembly не
@@ -107,8 +107,8 @@ hermes-telegram-automation-persistence
 
 | Capability | Contract | Route |
 |---|---|---|
-| `telegram.automation.query.v1` | `telegram.automation.query.v1` | `/hermes.telegram.automation.v1.TelegramAutomationQueryService/Query` |
-| `telegram.automation.command.v1` | `telegram.automation.command.v1` | `/hermes.telegram.automation.v1.TelegramAutomationCommandService/Execute` |
+| `telegram.automation.query.v1` | `telegram.automation.query.v1` | `/makosh.telegram.automation.v1.TelegramAutomationQueryService/Query` |
+| `telegram.automation.command.v1` | `telegram.automation.command.v1` | `/makosh.telegram.automation.v1.TelegramAutomationCommandService/Execute` |
 
 Query contract содержит только:
 

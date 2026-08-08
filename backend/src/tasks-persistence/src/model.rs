@@ -1,4 +1,4 @@
-use hermes_tasks_core::{ReviewedCandidateTaskDraftV1, TaskV1, task_creation_fingerprint_v1};
+use makosh_tasks_core::{ReviewedCandidateTaskDraftV1, TaskV1, task_creation_fingerprint_v1};
 use sha2::{Digest, Sha256};
 
 pub const TASKS_RECOVERY_LIMIT_V1: u16 = 128;
@@ -50,7 +50,7 @@ pub struct ReserveReviewedCandidateCommandV1 {
 impl ReserveReviewedCandidateCommandV1 {
     pub fn command_fingerprint(&self) -> [u8; 32] {
         let mut hash = Sha256::new();
-        hash.update(b"hermes.tasks.reviewed-candidate.command.v1\0");
+        hash.update(b"makosh.tasks.reviewed-candidate.command.v1\0");
         hash.update(self.command_id);
         hash.update(self.approved_candidate_id);
         hash.update(self.candidate_digest);
@@ -189,7 +189,7 @@ pub(crate) fn valid_cleanup(value: &TasksBlobCleanupV1) -> bool {
 }
 
 pub(crate) fn valid_task(value: &TaskV1) -> bool {
-    hermes_tasks_core::validate_task_v1(value).is_ok()
+    makosh_tasks_core::validate_task_v1(value).is_ok()
 }
 
 #[cfg(test)]

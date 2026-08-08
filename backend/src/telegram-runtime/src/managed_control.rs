@@ -4,8 +4,8 @@ use std::os::fd::{AsRawFd, FromRawFd, RawFd};
 use std::os::unix::net::UnixStream;
 use std::time::Duration;
 
-use hermes_runtime_protocol::managed_control::ManagedControlChannelV2;
-use hermes_runtime_protocol::v1::ManagedRuntimeReadyRequestV1;
+use makosh_runtime_protocol::managed_control::ManagedControlChannelV2;
+use makosh_runtime_protocol::v1::ManagedRuntimeReadyRequestV1;
 
 const CONTROL_TIMEOUT: Duration = Duration::from_secs(5);
 
@@ -138,8 +138,8 @@ mod tests {
     use std::os::unix::net::UnixStream;
     use std::thread;
 
-    use hermes_runtime_protocol::managed_control::ManagedControlChannelV2;
-    use hermes_runtime_protocol::v1::{
+    use makosh_runtime_protocol::managed_control::ManagedControlChannelV2;
+    use makosh_runtime_protocol::v1::{
         DescribeManagedRuntimeResponseV1, ManagedRuntimeControlAckV1,
         ManagedRuntimeControlResponseV1, managed_runtime_control_request_v1::Operation,
         managed_runtime_control_response_v1::Result as ControlResult,

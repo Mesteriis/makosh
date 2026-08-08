@@ -6,8 +6,8 @@ pub(crate) mod managed;
 
 use std::path::PathBuf;
 
-use hermes_kernel_control_store::{InitialOwnerIdentity, StoreHealth};
-use hermes_kernel_control_store_sqlite::SqliteControlStore;
+use makosh_kernel_control_store::{InitialOwnerIdentity, StoreHealth};
+use makosh_kernel_control_store_sqlite::SqliteControlStore;
 
 use crate::cli::Command;
 use crate::control_store::lifecycle::bootstrap_control_store;
@@ -93,7 +93,7 @@ fn device_signer_status(
 }
 
 fn serve(
-    store: Result<hermes_kernel_control_store_sqlite::SqliteControlStore, String>,
+    store: Result<makosh_kernel_control_store_sqlite::SqliteControlStore, String>,
     data_dir: &std::path::Path,
     runtime_dir: &std::path::Path,
     store_path: &std::path::Path,

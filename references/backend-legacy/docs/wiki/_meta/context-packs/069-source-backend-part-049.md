@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/platform/calls/rows.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/calls/rows.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/calls/rows.rs`
 - Size bytes / Размер в байтах: `1609`
 - Included characters / Включено символов: `1609`
 - Truncated / Обрезано: `no`
@@ -104,7 +104,7 @@ pub(super) fn row_to_transcript(row: PgRow) -> Result<CallTranscript, CallError>
 
 ### `backend/src/platform/calls/store.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/calls/store.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/calls/store.rs`
 - Size bytes / Размер в байтах: `9737`
 - Included characters / Включено символов: `9737`
 - Truncated / Обрезано: `no`
@@ -411,7 +411,7 @@ impl CallIntelligenceStore {
 
 ### `backend/src/platform/calls/stt.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/calls/stt.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/calls/stt.rs`
 - Size bytes / Размер в байтах: `1113`
 - Included characters / Включено символов: `1113`
 - Truncated / Обрезано: `no`
@@ -459,7 +459,7 @@ pub struct FixtureTranscript {
 
 ### `backend/src/platform/calls/validation.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/calls/validation.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/calls/validation.rs`
 - Size bytes / Размер в байтах: `1093`
 - Included characters / Включено символов: `1093`
 - Truncated / Обрезано: `no`
@@ -509,7 +509,7 @@ pub(super) fn validate_array(field: &'static str, value: &Value) -> Result<(), C
 
 ### `backend/src/platform/capabilities.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/capabilities.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/capabilities.rs`
 - Size bytes / Размер в байтах: `3371`
 - Included characters / Включено символов: `3371`
 - Truncated / Обрезано: `no`
@@ -634,7 +634,7 @@ impl CapabilityDecision {
 
 ### `backend/src/platform/communications.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/communications.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/communications.rs`
 - Size bytes / Размер в байтах: `41725`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1013,7 +1013,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/platform/communications/email_sync.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/communications/email_sync.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/communications/email_sync.rs`
 - Size bytes / Размер в байтах: `7373`
 - Included characters / Включено символов: `7373`
 - Truncated / Обрезано: `no`
@@ -1256,7 +1256,7 @@ fn reject_secret_like_config_key(key: &str, key_path: &str) -> Result<(), EmailS
 
 ### `backend/src/platform/communications/raw_signals.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/communications/raw_signals.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/communications/raw_signals.rs`
 - Size bytes / Размер в байтах: `3164`
 - Included characters / Включено символов: `3164`
 - Truncated / Обрезано: `no`
@@ -1363,7 +1363,7 @@ fn raw_signal_event_id(source: CommunicationRawSignalSource, raw_record_id: &str
 
 ### `backend/src/platform/communications/rfc822.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/communications/rfc822.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/communications/rfc822.rs`
 - Size bytes / Размер в байтах: `302`
 - Included characters / Включено символов: `302`
 - Truncated / Обрезано: `no`
@@ -1388,7 +1388,7 @@ pub use parser::parse_rfc822_message;
 
 ### `backend/src/platform/communications/rfc822/body.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/communications/rfc822/body.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/communications/rfc822/body.rs`
 - Size bytes / Размер в байтах: `5558`
 - Included characters / Включено символов: `5558`
 - Truncated / Обрезано: `no`
@@ -1564,7 +1564,7 @@ fn non_empty_html_body(input: &str) -> Option<String> {
 
 ### `backend/src/platform/communications/rfc822/decoding.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/communications/rfc822/decoding.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/communications/rfc822/decoding.rs`
 - Size bytes / Размер в байтах: `7266`
 - Included characters / Включено символов: `7266`
 - Truncated / Обрезано: `no`
@@ -1812,7 +1812,7 @@ pub(crate) fn decode_rfc2047_words(input: &str) -> String {
 
 ### `backend/src/platform/communications/rfc822/errors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/communications/rfc822/errors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/communications/rfc822/errors.rs`
 - Size bytes / Размер в байтах: `164`
 - Included characters / Включено символов: `164`
 - Truncated / Обрезано: `no`
@@ -1829,7 +1829,7 @@ pub enum EmailRfc822ParseError {
 
 ### `backend/src/platform/communications/rfc822/headers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/communications/rfc822/headers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/communications/rfc822/headers.rs`
 - Size bytes / Размер в байтах: `6037`
 - Included characters / Включено символов: `6037`
 - Truncated / Обрезано: `no`
@@ -2040,7 +2040,7 @@ fn decode_rfc2231_parameter_value(value: &str) -> String {
 
 ### `backend/src/platform/communications/rfc822/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/communications/rfc822/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/communications/rfc822/models.rs`
 - Size bytes / Размер в байтах: `708`
 - Included characters / Включено символов: `708`
 - Truncated / Обрезано: `no`
@@ -2076,7 +2076,7 @@ pub enum ParsedEmailAttachmentDisposition {
 
 ### `backend/src/platform/communications/rfc822/multipart.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/communications/rfc822/multipart.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/communications/rfc822/multipart.rs`
 - Size bytes / Размер в байтах: `1635`
 - Included characters / Включено символов: `1635`
 - Truncated / Обрезано: `no`
@@ -2133,7 +2133,7 @@ fn trim_multipart_part_body(body: &[u8]) -> &[u8] {
 
 ### `backend/src/platform/communications/rfc822/parser.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/communications/rfc822/parser.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/communications/rfc822/parser.rs`
 - Size bytes / Размер в байтах: `1398`
 - Included characters / Включено символов: `1398`
 - Truncated / Обрезано: `no`
@@ -2175,7 +2175,7 @@ pub fn parse_rfc822_message(
 
 ### `backend/src/platform/communications/rfc822/util.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/communications/rfc822/util.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/communications/rfc822/util.rs`
 - Size bytes / Размер в байтах: `610`
 - Included characters / Включено символов: `610`
 - Truncated / Обрезано: `no`
@@ -2209,7 +2209,7 @@ pub(crate) fn non_empty_recipients(recipients: Vec<String>) -> Vec<String> {
 
 ### `backend/src/platform/communications/rfc822/wire.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/communications/rfc822/wire.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/communications/rfc822/wire.rs`
 - Size bytes / Размер в байтах: `1485`
 - Included characters / Включено символов: `1485`
 - Truncated / Обрезано: `no`
@@ -2271,7 +2271,7 @@ pub(crate) fn trim_ascii_whitespace(value: &[u8]) -> &[u8] {
 
 ### `backend/src/platform/config.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/config.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/config.rs`
 - Size bytes / Размер в байтах: `234`
 - Included characters / Включено символов: `234`
 - Truncated / Обрезано: `no`
@@ -2292,7 +2292,7 @@ pub use google::{GoogleOAuthClientConfig, GoogleOAuthClientType};
 
 ### `backend/src/platform/config/ai.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/config/ai.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/config/ai.rs`
 - Size bytes / Размер в байтах: `762`
 - Included characters / Включено символов: `762`
 - Truncated / Обрезано: `no`
@@ -2332,7 +2332,7 @@ impl TryFrom<&str> for AiRuntimeProvider {
 
 ### `backend/src/platform/config/app_config.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/config/app_config.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/config/app_config.rs`
 - Size bytes / Размер в байтах: `1477`
 - Included characters / Включено символов: `1477`
 - Truncated / Обрезано: `no`
@@ -2391,7 +2391,7 @@ pub struct AppConfig {
 
 ### `backend/src/platform/config/app_config/accessors.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/config/app_config/accessors.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/config/app_config/accessors.rs`
 - Size bytes / Размер в байтах: `3351`
 - Included characters / Включено символов: `3351`
 - Truncated / Обрезано: `no`
@@ -2535,7 +2535,7 @@ impl AppConfig {
 
 ### `backend/src/platform/config/app_config/ai_env.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/config/app_config/ai_env.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/config/app_config/ai_env.rs`
 - Size bytes / Размер в байтах: `3442`
 - Included characters / Включено символов: `3442`
 - Truncated / Обрезано: `no`
@@ -2553,43 +2553,43 @@ pub(super) fn apply_ai_env(
     value: &str,
 ) -> Result<bool, ConfigError> {
     match key {
-        "HERMES_AI_PROVIDER" => {
+        "MAKOSH_AI_PROVIDER" => {
             config.ai_provider = AiRuntimeProvider::try_from(value)?;
         }
-        "HERMES_OLLAMA_BASE_URL" => {
+        "MAKOSH_OLLAMA_BASE_URL" => {
             config.ollama_base_url = non_empty(value, ConfigError::EmptyOllamaBaseUrl)?
                 .trim_end_matches('/')
                 .to_owned();
         }
-        "HERMES_OLLAMA_CHAT_MODEL" => {
+        "MAKOSH_OLLAMA_CHAT_MODEL" => {
             config.ollama_chat_model =
                 non_empty(value, ConfigError::EmptyOllamaChatModel)?.to_owned();
         }
-        "HERMES_OLLAMA_EMBED_MODEL" => {
+        "MAKOSH_OLLAMA_EMBED_MODEL" => {
             config.ollama_embed_model =
                 non_empty(value, ConfigError::EmptyOllamaEmbedModel)?.to_owned();
         }
-        "HERMES_OLLAMA_TIMEOUT_SECONDS" => {
+        "MAKOSH_OLLAMA_TIMEOUT_SECONDS" => {
             config.ollama_timeout_seconds = parse_positive_timeout(value, TimeoutTarget::Ollama)?;
         }
-        "HERMES_OMNIROUTE_BASE_URL" => {
+        "MAKOSH_OMNIROUTE_BASE_URL" => {
             config.omniroute_base_url = non_empty(value, ConfigError::EmptyOmniRouteBaseUrl)?
                 .trim_end_matches('/')
                 .to_owned();
         }
-        "HERMES_OMNIROUTE_CHAT_MODEL" => {
+        "MAKOSH_OMNIROUTE_CHAT_MODEL" => {
             config.omniroute_chat_model =
                 non_empty(value, ConfigError::EmptyOmniRouteChatModel)?.to_owned();
         }
-        "HERMES_OMNIROUTE_EMBED_MODEL" => {
+        "MAKOSH_OMNIROUTE_EMBED_MODEL" => {
             config.omniroute_embed_model =
                 non_empty(value, ConfigError::EmptyOmniRouteEmbedModel)?.to_owned();
         }
-        "HERMES_OMNIROUTE_TIMEOUT_SECONDS" => {
+        "MAKOSH_OMNIROUTE_TIMEOUT_SECONDS" => {
             config.omniroute_timeout_seconds =
                 parse_positive_timeout(value, TimeoutTarget::OmniRoute)?;
         }
-        "HERMES_OMNIROUTE_API_KEY" => {
+        "MAKOSH_OMNIROUTE_API_KEY" => {
             config.omniroute_api_key = Some(ResolvedSecret::new(non_empty(
                 value,
                 ConfigError::EmptyOmniRouteApiKey,
@@ -2660,7 +2660,7 @@ fn timeout_error(
 
 ### `backend/src/platform/config/app_config/core_env.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/config/app_config/core_env.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/config/app_config/core_env.rs`
 - Size bytes / Размер в байтах: `2187`
 - Included characters / Включено символов: `2187`
 - Truncated / Обрезано: `no`
@@ -2680,7 +2680,7 @@ pub(super) fn apply_core_env(
     value: &str,
 ) -> Result<bool, ConfigError> {
     match key {
-        "HERMES_HTTP_ADDR" => {
+        "MAKOSH_HTTP_ADDR" => {
             let raw_addr = value.trim();
             config.http_addr = raw_addr
                 .parse()
@@ -2692,33 +2692,33 @@ pub(super) fn apply_core_env(
         "DATABASE_URL" => {
             config.database_url = Some(non_empty(value, ConfigError::EmptyDatabaseUrl)?.to_owned());
         }
-        "HERMES_LOCAL_API_SECRET" => {
+        "MAKOSH_LOCAL_API_SECRET" => {
             config.local_api_secret =
                 Some(non_empty(value, ConfigError::EmptyLocalApiSecret)?.to_owned());
         }
-        "HERMES_NATS_SERVER_URL" => {
+        "MAKOSH_NATS_SERVER_URL" => {
             config.nats_server_url =
                 Some(non_empty(value, ConfigError::EmptyNatsServerUrl)?.to_owned());
         }
-        "HERMES_SECRET_VAULT_PATH" => {
+        "MAKOSH_SECRET_VAULT_PATH" => {
             config.secret_vault_path = Some(PathBuf::from(non_empty(
                 value,
                 ConfigError::EmptySecretVaultPath,
             )?));
         }
-        "HERMES_SECRET_VAULT_KEY" => {
+        "MAKOSH_SECRET_VAULT_KEY" => {
             config.secret_vault_key = Some(ResolvedSecret::new(non_empty(
                 value,
                 ConfigError::EmptySecretVaultKey,
             )?)?);
         }
-        "HERMES_VAULT_HOME" => {
+        "MAKOSH_VAULT_HOME" => {
             config.vault_home = PathBuf::from(non_empty(value, ConfigError::EmptyVaultHome)?);
         }
-        "HERMES_DEV_MODE" => {
-            config.dev_mode = parse_bool_env("HERMES_DEV_MODE", value.trim())?;
+        "MAKOSH_DEV_MODE" => {
+            config.dev_mode = parse_bool_env("MAKOSH_DEV_MODE", value.trim())?;
         }
-        "HERMES_DEV_KEY_PATH" => {
+        "MAKOSH_DEV_KEY_PATH" => {
             config.dev_key_path = PathBuf::from(non_empty(value, ConfigError::EmptyDevKeyPath)?);
         }
         _ => return Ok(false),
@@ -2739,7 +2739,7 @@ fn non_empty(value: &str, error: ConfigError) -> Result<&str, ConfigError> {
 
 ### `backend/src/platform/config/app_config/defaults.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/platform/config/app_config/defaults.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/platform/config/app_config/defaults.rs`
 - Size bytes / Размер в байтах: `2287`
 - Included characters / Включено символов: `2287`
 - Truncated / Обрезано: `no`

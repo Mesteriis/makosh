@@ -35,7 +35,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         sqlx::query_scalar::<_, bool>(
             "SELECT EXISTS (
                SELECT 1
-               FROM hermes_data.communication_delayed_delivery_outbox
+               FROM makosh_data.communication_delayed_delivery_outbox
                WHERE logical_owner_id = $1
                  AND delayed_operation_id = $2
                  AND message_id = $3
@@ -97,7 +97,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
             .map_err(|_| DelayedDeliveryPersistenceErrorV1::InvalidInput)?;
         let query = match stream {
             DelayedDeliveryOutboxStreamV1::SchedulerCommand => {
-                "UPDATE hermes_data.communication_delayed_delivery_outbox
+                "UPDATE makosh_data.communication_delayed_delivery_outbox
                  SET published_at_unix_millis =
                    COALESCE(published_at_unix_millis, $4)
                  WHERE logical_owner_id = $1 AND message_id = $2
@@ -106,7 +106,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
                  RETURNING published_at_unix_millis"
             }
             DelayedDeliveryOutboxStreamV1::SchedulerReceipt => {
-                "UPDATE hermes_data.communication_delayed_delivery_scheduler_receipt_outbox
+                "UPDATE makosh_data.communication_delayed_delivery_scheduler_receipt_outbox
                  SET published_at_unix_millis =
                    COALESCE(published_at_unix_millis, $4)
                  WHERE logical_owner_id = $1 AND message_id = $2
@@ -146,7 +146,7 @@ async fn pending(
         DelayedDeliveryOutboxStreamV1::SchedulerCommand => {
             "SELECT delayed_operation_id, message_id, contract_kind,
                     envelope_sha256, envelope_bytes
-             FROM hermes_data.communication_delayed_delivery_outbox
+             FROM makosh_data.communication_delayed_delivery_outbox
              WHERE logical_owner_id = $1
                AND contract_kind = 'scheduler.schedule.command.v1'
                AND published_at_unix_millis IS NULL
@@ -157,7 +157,7 @@ async fn pending(
             "SELECT delayed_operation_id, message_id,
                     receipt_kind AS contract_kind,
                     envelope_sha256, envelope_bytes
-             FROM hermes_data.communication_delayed_delivery_scheduler_receipt_outbox
+             FROM makosh_data.communication_delayed_delivery_scheduler_receipt_outbox
              WHERE logical_owner_id = $1
                AND published_at_unix_millis IS NULL
              ORDER BY created_at_unix_millis ASC, message_id ASC

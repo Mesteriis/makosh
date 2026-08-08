@@ -1,7 +1,7 @@
 import { createClient } from '@connectrpc/connect'
 import type { Client } from '@connectrpc/connect'
 
-import { TelegramAuthorizationService } from '../../../gen/hermes/telegram/v1/client_pb'
+import { TelegramAuthorizationService } from '../../../gen/makosh/telegram/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 let telegramAuthorizationClient: Client<typeof TelegramAuthorizationService> | null = null

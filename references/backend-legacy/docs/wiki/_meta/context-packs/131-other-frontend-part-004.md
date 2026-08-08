@@ -21,9 +21,9 @@
 - Group / Группа: `frontend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `frontend/src-tauri/icons/icon.png`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/icons/icon.png`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/icons/icon.png`
 - Size bytes / Размер в байтах: `106906`
 - Included characters / Включено символов: `0`
 - Truncated / Обрезано: `not_applicable_binary`
@@ -64,7 +64,7 @@ _Binary file content omitted; use the path and metadata only. / Содержим
 
 ### `frontend/src-tauri/resources/tdlib/LICENSE_1_0.txt`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src-tauri/resources/tdlib/LICENSE_1_0.txt`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src-tauri/resources/tdlib/LICENSE_1_0.txt`
 - Size bytes / Размер в байтах: `1338`
 - Included characters / Включено символов: `1338`
 - Truncated / Обрезано: `no`
@@ -95,7 +95,7 @@ OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ### `frontend/src/app/App.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/App.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/App.vue`
 - Size bytes / Размер в байтах: `118`
 - Included characters / Включено символов: `118`
 - Truncated / Обрезано: `no`
@@ -112,7 +112,7 @@ import AppShell from './shell/AppShell.vue'
 
 ### `frontend/src/app/shell/AppShell.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/shell/AppShell.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/shell/AppShell.vue`
 - Size bytes / Размер в байтах: `2261`
 - Included characters / Включено символов: `2261`
 - Truncated / Обрезано: `no`
@@ -221,7 +221,7 @@ watch(
 
 ### `frontend/src/app/shell/LayoutEditControls.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/shell/LayoutEditControls.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/shell/LayoutEditControls.vue`
 - Size bytes / Размер в байтах: `2058`
 - Included characters / Включено символов: `2058`
 - Truncated / Обрезано: `no`
@@ -323,7 +323,7 @@ function handleSave(): void {
 
 ### `frontend/src/app/shell/NotificationsDrawer.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/shell/NotificationsDrawer.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/shell/NotificationsDrawer.vue`
 - Size bytes / Размер в байтах: `8159`
 - Included characters / Включено символов: `8157`
 - Truncated / Обрезано: `no`
@@ -681,7 +681,7 @@ function formatTime(date: Date): string {
 
 ### `frontend/src/app/shell/Sidebar.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/shell/Sidebar.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/shell/Sidebar.vue`
 - Size bytes / Размер в байтах: `10630`
 - Included characters / Включено символов: `10630`
 - Truncated / Обрезано: `no`
@@ -734,10 +734,10 @@ function isCommunicationItemActive(sectionId?: string): boolean {
     <!-- Brand -->
     <div class="sidebar-brand" @click="handleSelectItem('home')">
       <div class="sidebar-logo">
-        <img class="sidebar-logo-image" src="/assets/hermes-logo-mark.png" alt="" aria-hidden="true" />
+        <img class="sidebar-logo-image" src="/assets/makosh-logo-mark.png" alt="" aria-hidden="true" />
       </div>
       <div v-if="!nav.isSidebarRail" class="sidebar-brand-text">
-        <span class="sidebar-brand-name">Hermes</span>
+        <span class="sidebar-brand-name">Макошь</span>
         <span class="sidebar-brand-subtitle">Memory System</span>
       </div>
     </div>
@@ -1104,7 +1104,7 @@ function isCommunicationItemActive(sectionId?: string): boolean {
 
 ### `frontend/src/app/shell/Topbar.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/shell/Topbar.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/shell/Topbar.vue`
 - Size bytes / Размер в байтах: `8488`
 - Included characters / Включено символов: `8481`
 - Truncated / Обрезано: `no`
@@ -1152,9 +1152,9 @@ function exitApplication(): void {
 <template>
   <header class="topbar">
     <div class="topbar-slot-shell">
-      <div id="hermes-topbar-slot" class="topbar-slot" />
+      <div id="makosh-topbar-slot" class="topbar-slot" />
       <div class="topbar-slot-fallback">
-        <h1 class="topbar-title">{{ nav.activeView?.title ?? 'Hermes' }}</h1>
+        <h1 class="topbar-title">{{ nav.activeView?.title ?? 'Макошь' }}</h1>
         <p class="topbar-subtitle">{{ nav.activeView?.subtitle ?? '' }}</p>
       </div>
     </div>
@@ -1469,7 +1469,7 @@ function exitApplication(): void {
 
 ### `frontend/src/app/views/AgentsView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/views/AgentsView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/views/AgentsView.vue`
 - Size bytes / Размер в байтах: `143`
 - Included characters / Включено символов: `143`
 - Truncated / Обрезано: `no`
@@ -1486,7 +1486,7 @@ import AgentsPage from '../../domains/agents/views/AgentsPage.vue'
 
 ### `frontend/src/app/views/CalendarView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/views/CalendarView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/views/CalendarView.vue`
 - Size bytes / Размер в байтах: `151`
 - Included characters / Включено символов: `151`
 - Truncated / Обрезано: `no`
@@ -1503,7 +1503,7 @@ import CalendarPage from '../../domains/calendar/views/CalendarPage.vue'
 
 ### `frontend/src/app/views/CommunicationsView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/views/CommunicationsView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/views/CommunicationsView.vue`
 - Size bytes / Размер в байтах: `175`
 - Included characters / Включено символов: `175`
 - Truncated / Обрезано: `no`
@@ -1520,7 +1520,7 @@ import CommunicationsPage from '../../domains/communications/views/Communication
 
 ### `frontend/src/app/views/DocumentsView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/views/DocumentsView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/views/DocumentsView.vue`
 - Size bytes / Размер в байтах: `155`
 - Included characters / Включено символов: `155`
 - Truncated / Обрезано: `no`
@@ -1537,7 +1537,7 @@ import DocumentsPage from '../../domains/documents/views/DocumentsPage.vue'
 
 ### `frontend/src/app/views/EventTracingView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/views/EventTracingView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/views/EventTracingView.vue`
 - Size bytes / Размер в байтах: `172`
 - Included characters / Включено символов: `172`
 - Truncated / Обрезано: `no`
@@ -1554,7 +1554,7 @@ import EventTraceWorkspace from '../../platform/event-tracing/EventTraceWorkspac
 
 ### `frontend/src/app/views/HomeView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/views/HomeView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/views/HomeView.vue`
 - Size bytes / Размер в байтах: `135`
 - Included characters / Включено символов: `135`
 - Truncated / Обрезано: `no`
@@ -1571,7 +1571,7 @@ import HomePage from '../../domains/home/views/HomePage.vue'
 
 ### `frontend/src/app/views/KnowledgeView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/views/KnowledgeView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/views/KnowledgeView.vue`
 - Size bytes / Размер в байтах: `155`
 - Included characters / Включено символов: `155`
 - Truncated / Обрезано: `no`
@@ -1588,7 +1588,7 @@ import KnowledgePage from '../../domains/knowledge/views/KnowledgePage.vue'
 
 ### `frontend/src/app/views/NotesView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/views/NotesView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/views/NotesView.vue`
 - Size bytes / Размер в байтах: `139`
 - Included characters / Включено символов: `139`
 - Truncated / Обрезано: `no`
@@ -1605,7 +1605,7 @@ import NotesPage from '../../domains/notes/views/NotesPage.vue'
 
 ### `frontend/src/app/views/OrganizationsView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/views/OrganizationsView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/views/OrganizationsView.vue`
 - Size bytes / Размер в байтах: `171`
 - Included characters / Включено символов: `171`
 - Truncated / Обрезано: `no`
@@ -1622,7 +1622,7 @@ import OrganizationsPage from '../../domains/organizations/views/OrganizationsPa
 
 ### `frontend/src/app/views/PersonsView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/views/PersonsView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/views/PersonsView.vue`
 - Size bytes / Размер в байтах: `148`
 - Included characters / Включено символов: `148`
 - Truncated / Обрезано: `no`
@@ -1639,7 +1639,7 @@ import PersonsPage from '../../domains/personas/views/PersonsPage.vue'
 
 ### `frontend/src/app/views/ProjectsView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/views/ProjectsView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/views/ProjectsView.vue`
 - Size bytes / Размер в байтах: `151`
 - Included characters / Включено символов: `151`
 - Truncated / Обрезано: `no`
@@ -1656,7 +1656,7 @@ import ProjectsPage from '../../domains/projects/views/ProjectsPage.vue'
 
 ### `frontend/src/app/views/ReviewView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/views/ReviewView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/views/ReviewView.vue`
 - Size bytes / Размер в байтах: `143`
 - Included characters / Включено символов: `143`
 - Truncated / Обрезано: `no`
@@ -1673,7 +1673,7 @@ import ReviewPage from '../../domains/review/views/ReviewPage.vue'
 
 ### `frontend/src/app/views/SettingsView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/views/SettingsView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/views/SettingsView.vue`
 - Size bytes / Размер в байтах: `151`
 - Included characters / Включено символов: `151`
 - Truncated / Обрезано: `no`
@@ -1690,7 +1690,7 @@ import SettingsPage from '../../domains/settings/views/SettingsPage.vue'
 
 ### `frontend/src/app/views/TasksView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/views/TasksView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/views/TasksView.vue`
 - Size bytes / Размер в байтах: `139`
 - Included characters / Включено символов: `139`
 - Truncated / Обрезано: `no`
@@ -1707,7 +1707,7 @@ import TasksPage from '../../domains/tasks/views/TasksPage.vue'
 
 ### `frontend/src/app/views/TimelineView.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/app/views/TimelineView.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/app/views/TimelineView.vue`
 - Size bytes / Размер в байтах: `151`
 - Included characters / Включено символов: `151`
 - Truncated / Обрезано: `no`
@@ -1724,7 +1724,7 @@ import TimelinePage from '../../domains/timeline/views/TimelinePage.vue'
 
 ### `frontend/src/domains/agents/components/AgentsDetail.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/agents/components/AgentsDetail.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/agents/components/AgentsDetail.vue`
 - Size bytes / Размер в байтах: `2544`
 - Included characters / Включено символов: `2544`
 - Truncated / Обрезано: `no`
@@ -1842,7 +1842,7 @@ const props = defineProps<Props>()
 
 ### `frontend/src/domains/agents/components/AgentsGrid.vue`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/frontend/src/domains/agents/components/AgentsGrid.vue`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/frontend/src/domains/agents/components/AgentsGrid.vue`
 - Size bytes / Размер в байтах: `1974`
 - Included characters / Включено символов: `1974`
 - Truncated / Обрезано: `no`

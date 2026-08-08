@@ -16,4 +16,4 @@ pub use lifecycle::{
 };
 
 pub const MINIMUM_VERSION: &str = "1.25.2";
-pub const PLATFORM_ADMIN_USERNAME: &str = "hermes_pgbouncer_admin";
+pub const PLATFORM_ADMIN_USERNAME: &str = "makosh_pgbouncer_admin";

@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `source`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/src/app/handlers/persons/memory.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/memory.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/memory.rs`
 - Size bytes / Размер в байтах: `7470`
 - Included characters / Включено символов: `7018`
 - Truncated / Обрезано: `no`
@@ -295,7 +295,7 @@ pub(crate) struct NewRelationshipEventRequest {
 
 ### `backend/src/app/handlers/persons/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/mod.rs`
 - Size bytes / Размер в байтах: `376`
 - Included characters / Включено символов: `376`
 - Truncated / Обрезано: `no`
@@ -324,7 +324,7 @@ pub(crate) use profile::*;
 
 ### `backend/src/app/handlers/persons/profile.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/profile.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/profile.rs`
 - Size bytes / Размер в байтах: `387`
 - Included characters / Включено символов: `387`
 - Truncated / Обрезано: `no`
@@ -346,7 +346,7 @@ pub(crate) use search::get_person_search;
 
 ### `backend/src/app/handlers/persons/profile/actions.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/profile/actions.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/profile/actions.rs`
 - Size bytes / Размер в байтах: `2350`
 - Included characters / Включено символов: `2350`
 - Truncated / Обрезано: `no`
@@ -432,7 +432,7 @@ pub(crate) async fn put_person_notes(
 
 ### `backend/src/app/handlers/persons/profile/legacy.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/profile/legacy.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/profile/legacy.rs`
 - Size bytes / Размер в байтах: `1413`
 - Included characters / Включено символов: `1413`
 - Truncated / Обрезано: `no`
@@ -489,7 +489,7 @@ pub(crate) async fn get_person(
 
 ### `backend/src/app/handlers/persons/profile/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/profile/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/profile/models.rs`
 - Size bytes / Размер в байтах: `1745`
 - Included characters / Включено символов: `1745`
 - Truncated / Обрезано: `no`
@@ -560,7 +560,7 @@ pub(super) fn persona_read_model(person: Person) -> PersonaReadModel {
 
 ### `backend/src/app/handlers/persons/profile/owner.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/profile/owner.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/profile/owner.rs`
 - Size bytes / Размер в байтах: `1227`
 - Included characters / Включено символов: `1227`
 - Truncated / Обрезано: `no`
@@ -611,7 +611,7 @@ pub(crate) async fn put_owner_persona(
 
 ### `backend/src/app/handlers/persons/profile/personas.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/profile/personas.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/profile/personas.rs`
 - Size bytes / Размер в байтах: `2427`
 - Included characters / Включено символов: `2427`
 - Truncated / Обрезано: `no`
@@ -699,7 +699,7 @@ pub(crate) async fn put_persona(
 
 ### `backend/src/app/handlers/persons/profile/search.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/profile/search.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/profile/search.rs`
 - Size bytes / Размер в байтах: `866`
 - Included characters / Включено символов: `866`
 - Truncated / Обрезано: `no`
@@ -738,7 +738,7 @@ pub(crate) async fn get_person_search(
 
 ### `backend/src/app/handlers/persons/support.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/persons/support.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/persons/support.rs`
 - Size bytes / Размер в байтах: `1697`
 - Included characters / Включено символов: `1697`
 - Truncated / Обрезано: `no`
@@ -781,7 +781,7 @@ pub(super) use crate::platform::audit::NewApiAuditRecord;
 
 ### `backend/src/app/handlers/projects/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/projects/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/projects/mod.rs`
 - Size bytes / Размер в байтах: `15674`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -1054,7 +1054,7 @@ pub(crate) async fn put_project_link_review(
     Path(project_id): Path<String>,
     Json(request): Json<ProjectLinkReviewApiRequest>,
 ) -> Result<Json<ProjectLinkReviewApiResponse>, ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let command = request.into_command(project_id, actor_id)?;
 
     api_audit_log(&state)?
@@ -1076,7 +1076,7 @@ _Source file truncated after 12000 characters. / Исходный файл об�
 
 ### `backend/src/app/handlers/relationships/handlers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/relationships/handlers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/relationships/handlers.rs`
 - Size bytes / Размер в байтах: `4407`
 - Included characters / Включено символов: `4407`
 - Truncated / Обрезано: `no`
@@ -1096,7 +1096,7 @@ use crate::domains::relationships::{
 };
 use crate::platform::audit::{ApiAuditLog, NewApiAuditRecord};
 
-const RELATIONSHIP_API_ACTOR_ID: &str = "hermes-frontend";
+const RELATIONSHIP_API_ACTOR_ID: &str = "makosh-frontend";
 const DEFAULT_RELATIONSHIP_LIMIT: i64 = 50;
 const MIN_RELATIONSHIP_LIMIT: i64 = 1;
 const MAX_RELATIONSHIP_LIMIT: i64 = 100;
@@ -1216,7 +1216,7 @@ fn validate_limit(limit: Option<i64>) -> Result<i64, ApiError> {
 
 ### `backend/src/app/handlers/relationships/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/relationships/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/relationships/mod.rs`
 - Size bytes / Размер в байтах: `215`
 - Included characters / Включено символов: `215`
 - Truncated / Обрезано: `no`
@@ -1233,7 +1233,7 @@ pub(crate) use models::{
 
 ### `backend/src/app/handlers/relationships/models.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/relationships/models.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/relationships/models.rs`
 - Size bytes / Размер в байтах: `564`
 - Included characters / Включено символов: `564`
 - Truncated / Обрезано: `no`
@@ -1264,7 +1264,7 @@ pub(crate) struct RelationshipListResponse {
 
 ### `backend/src/app/handlers/review.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/review.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/review.rs`
 - Size bytes / Размер в байтах: `8439`
 - Included characters / Включено символов: `8439`
 - Truncated / Обрезано: `no`
@@ -1536,7 +1536,7 @@ fn validate_limit(limit: Option<i64>) -> Result<i64, ApiError> {
 
 ### `backend/src/app/handlers/settings/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/settings/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/settings/mod.rs`
 - Size bytes / Размер в байтах: `7957`
 - Included characters / Включено символов: `7957`
 - Truncated / Обрезано: `no`
@@ -1705,7 +1705,7 @@ pub(crate) async fn put_application_setting(
     Path(setting_key): Path<String>,
     Json(request): Json<ApplicationSettingUpdateRequest>,
 ) -> Result<Json<ApplicationSetting>, ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
 
     api_audit_log(&state)?
         .record(&NewApiAuditRecord::application_setting_set(
@@ -1723,7 +1723,7 @@ pub(crate) async fn put_application_setting(
 
 ### `backend/src/app/handlers/signal_hub.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/signal_hub.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/signal_hub.rs`
 - Size bytes / Размер в байтах: `24450`
 - Included characters / Включено символов: `12000`
 - Truncated / Обрезано: `yes`
@@ -2149,13 +2149,13 @@ pub(crate) async fn get_signal_hub_connections(
     let pool = state
         .database
         .pool()
-      
+
 ```
 _Source file truncated after 12000 characters. / Исходный файл обрезан после 12000 символов._
 
 ### `backend/src/app/handlers/tasks/candidates.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/tasks/candidates.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/tasks/candidates.rs`
 - Size bytes / Размер в байтах: `1661`
 - Included characters / Включено символов: `1661`
 - Truncated / Обрезано: `no`
@@ -2189,7 +2189,7 @@ pub(crate) async fn put_task_candidate_review(
     Path(task_candidate_id): Path<String>,
     Json(request): Json<TaskCandidateReviewApiRequest>,
 ) -> Result<Json<TaskCandidateReviewApiResponse>, ApiError> {
-    let actor_id = "hermes-frontend".to_string();
+    let actor_id = "makosh-frontend".to_string();
     let command = request.into_command(task_candidate_id, actor_id)?;
     api_audit_log(&state)?
         .record(&NewApiAuditRecord::task_candidate_review_set(
@@ -2213,7 +2213,7 @@ pub(crate) async fn put_task_candidate_review(
 
 ### `backend/src/app/handlers/tasks/core_records.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/tasks/core_records.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/tasks/core_records.rs`
 - Size bytes / Размер в байтах: `6585`
 - Included characters / Включено символов: `6585`
 - Truncated / Обрезано: `no`
@@ -2445,7 +2445,7 @@ pub(crate) async fn get_task_external(
 
 ### `backend/src/app/handlers/tasks/health.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/tasks/health.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/tasks/health.rs`
 - Size bytes / Размер в байтах: `1658`
 - Included characters / Включено символов: `1658`
 - Truncated / Обрезано: `no`
@@ -2511,7 +2511,7 @@ pub(crate) async fn get_task_analytics(
 
 ### `backend/src/app/handlers/tasks/intelligence.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/tasks/intelligence.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/tasks/intelligence.rs`
 - Size bytes / Размер в байтах: `3026`
 - Included characters / Включено символов: `3026`
 - Truncated / Обрезано: `no`
@@ -2566,12 +2566,12 @@ pub(crate) async fn get_task_export(
         .ok_or(ApiError::NotFound)?;
     match q.format.as_deref().unwrap_or("json") {
         "md" => Ok(Json(
-            json!({"format":"markdown","content": export_task_md(&task.title, task.description.as_deref(), &task.hermes_status, task.why.as_deref(), task.outcome.as_deref())}),
+            json!({"format":"markdown","content": export_task_md(&task.title, task.description.as_deref(), &task.makosh_status, task.why.as_deref(), task.outcome.as_deref())}),
         )),
         _ => Ok(Json(export_task_json(
             &task.title,
             task.description.as_deref(),
-            &task.hermes_status,
+            &task.makosh_status,
             task.priority_score,
             task.due_at.map(|d| d.to_rfc3339()).as_deref(),
         ))),
@@ -2619,7 +2619,7 @@ pub(crate) async fn get_task_daily_brief(
 
 ### `backend/src/app/handlers/tasks/items.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/tasks/items.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/tasks/items.rs`
 - Size bytes / Размер в байтах: `2843`
 - Included characters / Включено символов: `2843`
 - Truncated / Обрезано: `no`
@@ -2731,7 +2731,7 @@ pub(crate) async fn post_task_archive(
 
 ### `backend/src/app/handlers/tasks/mod.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/tasks/mod.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/tasks/mod.rs`
 - Size bytes / Размер в байтах: `314`
 - Included characters / Включено символов: `314`
 - Truncated / Обрезано: `no`
@@ -2757,7 +2757,7 @@ pub(crate) use rules::*;
 
 ### `backend/src/app/handlers/tasks/providers.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/tasks/providers.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/tasks/providers.rs`
 - Size bytes / Размер в байтах: `1316`
 - Included characters / Включено символов: `1316`
 - Truncated / Обрезано: `no`
@@ -2811,7 +2811,7 @@ pub(crate) async fn post_task_provider(
 
 ### `backend/src/app/handlers/tasks/rules.rs`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/src/app/handlers/tasks/rules.rs`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/src/app/handlers/tasks/rules.rs`
 - Size bytes / Размер в байтах: `2367`
 - Included characters / Включено символов: `2367`
 - Truncated / Обрезано: `no`

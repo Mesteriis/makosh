@@ -4,7 +4,7 @@
 Дата: 2026-07-24
 Состояние реализации: Реализовано для первого Mail producer. Communications
 publisher, schema-bound handoff через единственный integration boundary
-`hermes-communications-ingress`, atomic outbox insert и Mail-owned durable
+`makosh-communications-ingress`, atomic outbox insert и Mail-owned durable
 mapping реализованы. Signed managed Mail runtime получает exact Kernel
 subscription permit, принимает anchor event, проверяет исходный Mail outbox
 record и сохраняет mapping с correlation ID до Blob-result continuation.

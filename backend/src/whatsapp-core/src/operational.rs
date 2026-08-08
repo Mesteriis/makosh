@@ -2,7 +2,7 @@
 //! events. This module does not create Communications evidence or touch
 //! persistence.
 
-use hermes_whatsapp_api::{
+use makosh_whatsapp_api::{
     WhatsAppMedia, WhatsAppProviderEvent, WhatsAppRuntimeState,
     host_bridge::{
         WhatsAppHostBridgeEnvelopeV1, WhatsAppHostBridgeError, WhatsAppHostObservationV1,
@@ -217,7 +217,7 @@ fn parse_runtime_state(value: &str) -> Option<WhatsAppRuntimeState> {
 
 #[cfg(test)]
 mod tests {
-    use hermes_whatsapp_api::{
+    use makosh_whatsapp_api::{
         WhatsAppMessage,
         host_bridge::{HOST_BRIDGE_PROTOCOL_MAJOR, HOST_BRIDGE_PROTOCOL_REVISION},
     };

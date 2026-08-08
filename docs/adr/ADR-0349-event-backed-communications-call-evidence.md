@@ -50,13 +50,13 @@ transcript policy и transcript text в общей calls-модели. Эти п
 integration runtime
     └─ provider call projection/outbox producer
            ↓ typed durable observation
-hermes-communications-call-evidence-ingress
+makosh-communications-call-evidence-ingress
            ↓
-hermes-communications-call-evidence-core
+makosh-communications-call-evidence-core
            ↓
-hermes-communications-call-evidence-persistence
+makosh-communications-call-evidence-persistence
            ↓
-hermes-communications-runtime adapter
+makosh-communications-runtime adapter
            ↓
 generated Communications call query + shared client realtime
 ```

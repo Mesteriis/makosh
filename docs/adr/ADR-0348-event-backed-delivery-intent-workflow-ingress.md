@@ -5,7 +5,7 @@
 Дата: 2026-07-30
 
 Состояние реализации: generated provider-neutral contract build unit
-`hermes-communication-delivery-intent-ingress-api` реализован. Он фиксирует
+`makosh-communication-delivery-intent-ingress-api` реализован. Он фиксирует
 три exact durable contracts, direction-specific route requests, compile-time
 Blob audience и валидируемые `DurableEnvelopeV1` outbox records без plaintext
 или provider identity. Cross-channel persistence реализует exact submit
@@ -31,7 +31,7 @@ units не открывает ни `communication_delivery_intent_v1`, ни
 
 ## Контекст
 
-`hermes-communication-delivery-intent-api` является client-facing
+`makosh-communication-delivery-intent-api` является client-facing
 ConnectRPC contract. Его `SubmitDeliveryIntentRequestV1` принимает private
 `body_utf8`, что допустимо на client boundary, но недопустимо для
 workflow-to-workflow communication.
@@ -53,7 +53,7 @@ target-bound Blob custody.
 Вводится отдельная delivery-intent-owned contract build unit:
 
 ```text
-hermes-communication-delivery-intent-ingress-api
+makosh-communication-delivery-intent-ingress-api
 ```
 
 Она содержит три exact durable contracts:
@@ -80,7 +80,7 @@ Contract compile-time фиксирует Blob audience:
 
 ```text
 target owner      communication_delivery_intent
-target module     hermes-communication-delivery-intent-runtime
+target module     makosh-communication-delivery-intent-runtime
 target capability communication_delivery_intent.blob.v1
 ```
 

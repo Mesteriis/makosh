@@ -1,5 +1,5 @@
-use hermes_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
-use hermes_communications_api::accounts::{
+use makosh_communications_api::accounts::{CommunicationProviderKind, NewProviderAccount};
+use makosh_communications_api::accounts::{
     NewProviderAccountSecretBinding, ProviderAccountSecretPurpose,
 };
 use std::collections::HashMap;
@@ -13,7 +13,7 @@ use axum::response::IntoResponse;
 use axum::routing::{get, patch, post};
 use axum::{Json, Router};
 use chrono::Utc;
-use hermes_backend_testkit::context::TestContext;
+use makosh_backend_testkit::context::TestContext;
 use serde_json::{Value, json};
 use sqlx::Row;
 use sqlx::postgres::PgPool;
@@ -22,50 +22,50 @@ use tokio::net::TcpListener;
 use tower::ServiceExt;
 use url::form_urlencoded;
 
-use hermes_communications_api::commands::NewCommunicationProviderCommand;
-use hermes_communications_api::evidence::NewIngestionCheckpoint;
-use hermes_communications_postgres::provider_commands::CommunicationProviderCommandStore;
-use hermes_communications_postgres::provider_store::{
+use makosh_communications_api::commands::NewCommunicationProviderCommand;
+use makosh_communications_api::evidence::NewIngestionCheckpoint;
+use makosh_communications_postgres::provider_commands::CommunicationProviderCommandStore;
+use makosh_communications_postgres::provider_store::{
     CommunicationProviderAccountStore, CommunicationProviderSecretBindingStore,
 };
-use hermes_communications_postgres::store::CommunicationIngestionStore;
-use hermes_events_api::{EventEnvelope, StoredEventEnvelope};
-use hermes_hub_backend::app::router::build_router_with_database;
-use hermes_hub_backend::application::zulip_attachment_download::ZulipAttachmentDownloadWorker;
-use hermes_hub_backend::application::zulip_command_executor::ZulipCommandWorker;
-use hermes_hub_backend::application::zulip_event_ingest::ZulipEventIngestWorker;
-use hermes_hub_backend::application::zulip_provider_observation_reconciliation::reconcile_zulip_provider_observation_event;
-use hermes_hub_backend::domains::communications::messages::models::ProjectedMessage;
-use hermes_hub_backend::domains::communications::messages::provider_channel_store::ProviderChannelMessageStore;
-use hermes_hub_backend::domains::communications::messages::provider_observation_projection::consume_accepted_signal_event;
-use hermes_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
-use hermes_hub_backend::domains::communications::storage::models::{
+use makosh_communications_postgres::store::CommunicationIngestionStore;
+use makosh_events_api::{EventEnvelope, StoredEventEnvelope};
+use makosh_hub_backend::app::router::build_router_with_database;
+use makosh_hub_backend::application::zulip_attachment_download::ZulipAttachmentDownloadWorker;
+use makosh_hub_backend::application::zulip_command_executor::ZulipCommandWorker;
+use makosh_hub_backend::application::zulip_event_ingest::ZulipEventIngestWorker;
+use makosh_hub_backend::application::zulip_provider_observation_reconciliation::reconcile_zulip_provider_observation_event;
+use makosh_hub_backend::domains::communications::messages::models::ProjectedMessage;
+use makosh_hub_backend::domains::communications::messages::provider_channel_store::ProviderChannelMessageStore;
+use makosh_hub_backend::domains::communications::messages::provider_observation_projection::consume_accepted_signal_event;
+use makosh_hub_backend::domains::communications::storage::blob_store::LocalCommunicationBlobStore;
+use makosh_hub_backend::domains::communications::storage::models::{
     NewCommunicationAttachmentImport, NewCommunicationBlob,
 };
-use hermes_hub_backend::domains::communications::storage::store::CommunicationStorageStore;
-use hermes_hub_backend::domains::signal_hub::store::SignalHubStore;
-use hermes_hub_backend::domains::signal_hub::zulip::dispatch_zulip_raw_signal;
-use hermes_provider_orchestration::observation_to_raw_communication_record;
+use makosh_hub_backend::domains::communications::storage::store::CommunicationStorageStore;
+use makosh_hub_backend::domains::signal_hub::store::SignalHubStore;
+use makosh_hub_backend::domains::signal_hub::zulip::dispatch_zulip_raw_signal;
+use makosh_provider_orchestration::observation_to_raw_communication_record;
 
-use hermes_hub_backend::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
-use hermes_hub_backend::platform::events::bus::InMemoryEventBus;
-use hermes_hub_backend::platform::secrets::models::{
+use makosh_hub_backend::platform::communications::DEFAULT_MAIL_SYNC_BLOB_ROOT;
+use makosh_hub_backend::platform::events::bus::InMemoryEventBus;
+use makosh_hub_backend::platform::secrets::models::{
     NewSecretReference, SecretKind, SecretStoreKind,
 };
-use hermes_hub_backend::platform::secrets::resolver::InMemorySecretResolver;
-use hermes_hub_backend::platform::secrets::store::SecretReferenceStore;
-use hermes_hub_backend::platform::storage::database::Database;
-use hermes_hub_backend::workflows::review_inbox::refresh_message_task_candidates_into_review;
-use hermes_hub_backend::workflows::zulip_attachment_storage::{
+use makosh_hub_backend::platform::secrets::resolver::InMemorySecretResolver;
+use makosh_hub_backend::platform::secrets::store::SecretReferenceStore;
+use makosh_hub_backend::platform::storage::database::Database;
+use makosh_hub_backend::workflows::review_inbox::refresh_message_task_candidates_into_review;
+use makosh_hub_backend::workflows::zulip_attachment_storage::{
     ZulipAttachmentBytes, persist_zulip_attachment_bytes,
 };
-use hermes_provider_zulip::client::{
+use makosh_provider_zulip::client::{
     ZulipApiClient, ZulipClientConfig, ZulipReactionRequest, ZulipUpdateMessageRequest,
 };
-use hermes_provider_zulip::event_mapper::{
+use makosh_provider_zulip::event_mapper::{
     ZulipEventMappingContext, map_zulip_event_to_observation, zulip_raw_signal_event_type,
 };
-use hermes_provider_zulip::models::ZulipEvent;
+use makosh_provider_zulip::models::ZulipEvent;
 
 const LOCAL_API_TOKEN: &str = "zulip-api-test-secret";
 
@@ -115,18 +115,18 @@ async fn zulip_account_setup_stores_api_key_in_host_vault() {
         Utc::now().timestamp_nanos_opt().unwrap_or_default()
     );
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         )
         .with_test_pairs([
-            ("HERMES_DEV_MODE", "true"),
+            ("MAKOSH_DEV_MODE", "true"),
             (
-                "HERMES_VAULT_HOME",
+                "MAKOSH_VAULT_HOME",
                 vault_dir.path().join("vault").to_str().expect("vault path"),
             ),
             (
-                "HERMES_DEV_KEY_PATH",
+                "MAKOSH_DEV_KEY_PATH",
                 vault_dir
                     .path()
                     .join("dev")
@@ -285,7 +285,7 @@ async fn zulip_upload_command_endpoints_enqueue_reference_only_commands() {
         .await
         .expect("provider account");
     let app = build_router_with_database(
-        hermes_backend_testkit::app::config_with_secret_and_database_url(
+        makosh_backend_testkit::app::config_with_secret_and_database_url(
             LOCAL_API_TOKEN,
             database_url.as_str(),
         ),
@@ -298,7 +298,7 @@ async fn zulip_upload_command_endpoints_enqueue_reference_only_commands() {
             "/api/v1/integrations/zulip/accounts/zulip-api-upload-account/commands/stream-upload",
             json!({
                 "idempotency_key": "zulip-api-stream-upload-1",
-                "stream": "Hermes Lab",
+                "stream": "Макошь Lab",
                 "topic": "Tasks",
                 "content": "Надо проверить retention.",
                 "attachment_id": "zulip-stream-upload-import-1",
@@ -391,7 +391,7 @@ async fn zulip_upload_command_endpoints_enqueue_reference_only_commands() {
     assert_eq!(stream.command_kind, "send_stream_message_with_upload");
     assert_eq!(
         stream.provider_conversation_id.as_deref(),
-        Some("Hermes Lab/Tasks")
+        Some("Макошь Lab/Tasks")
     );
     let direct = commands
         .iter()
@@ -421,7 +421,7 @@ async fn zulip_api_client_supports_message_lifecycle_reactions_and_uploads() {
     );
 
     let stream_message = client
-        .send_stream_message("Hermes Lab", "Tasks", "Надо проверить retention.")
+        .send_stream_message("Макошь Lab", "Tasks", "Надо проверить retention.")
         .await
         .expect("send stream message");
     assert_eq!(stream_message.id, Some(7001));
@@ -494,7 +494,7 @@ async fn zulip_api_client_supports_message_lifecycle_reactions_and_uploads() {
         .expect_err("cross-realm user upload URL must be rejected");
     assert!(matches!(
         rejected,
-        hermes_provider_zulip::client::ZulipClientError::InvalidRequest(_)
+        makosh_provider_zulip::client::ZulipClientError::InvalidRequest(_)
     ));
 
     let deleted = client.delete_message(7001).await.expect("delete message");
@@ -524,12 +524,12 @@ async fn zulip_provider_commands_are_durable_idempotent_and_retryable() {
                 "zulip",
                 "send_stream_message",
                 "send:zulip-command-send-1",
-                "hermes-frontend",
+                "makosh-frontend",
             )
-            .provider_conversation_id("Hermes Lab/Tasks")
-            .target_ref(json!({"stream": "Hermes Lab", "topic": "Tasks"}))
+            .provider_conversation_id("Макошь Lab/Tasks")
+            .target_ref(json!({"stream": "Макошь Lab", "topic": "Tasks"}))
             .payload(json!({
-                "stream": "Hermes Lab",
+                "stream": "Макошь Lab",
                 "topic": "Tasks",
                 "content": "Надо проверить Zulip provider command queue."
             })),
@@ -548,12 +548,12 @@ async fn zulip_provider_commands_are_durable_idempotent_and_retryable() {
                 "zulip",
                 "send_stream_message",
                 "send:zulip-command-send-1",
-                "hermes-frontend",
+                "makosh-frontend",
             )
-            .provider_conversation_id("Hermes Lab/Tasks")
-            .target_ref(json!({"stream": "Hermes Lab", "topic": "Tasks"}))
+            .provider_conversation_id("Макошь Lab/Tasks")
+            .target_ref(json!({"stream": "Макошь Lab", "topic": "Tasks"}))
             .payload(json!({
-                "stream": "Hermes Lab",
+                "stream": "Макошь Lab",
                 "topic": "Tasks",
                 "content": "duplicate should not replace original"
             })),
@@ -654,12 +654,12 @@ async fn zulip_command_worker_executes_due_stream_command_with_resolved_api_key(
                 "zulip",
                 "send_stream_message",
                 "send:zulip-worker-send-1",
-                "hermes-frontend",
+                "makosh-frontend",
             )
-            .provider_conversation_id("Hermes Lab/Tasks")
-            .target_ref(json!({"stream": "Hermes Lab", "topic": "Tasks"}))
+            .provider_conversation_id("Макошь Lab/Tasks")
+            .target_ref(json!({"stream": "Макошь Lab", "topic": "Tasks"}))
             .payload(json!({
-                "stream": "Hermes Lab",
+                "stream": "Макошь Lab",
                 "topic": "Tasks",
                 "content": "Надо проверить retention."
             })),
@@ -758,12 +758,12 @@ async fn zulip_command_worker_uploads_local_attachment_for_stream_command() {
                 "zulip",
                 "send_stream_message_with_upload",
                 "send-upload:zulip-worker-upload-send-1",
-                "hermes-frontend",
+                "makosh-frontend",
             )
-            .provider_conversation_id("Hermes Lab/Tasks")
-            .target_ref(json!({"stream": "Hermes Lab", "topic": "Tasks"}))
+            .provider_conversation_id("Макошь Lab/Tasks")
+            .target_ref(json!({"stream": "Макошь Lab", "topic": "Tasks"}))
             .payload(json!({
-                "stream": "Hermes Lab",
+                "stream": "Макошь Lab",
                 "topic": "Tasks",
                 "content": "Надо проверить retention.",
                 "attachment_id": imported.attachment_id,
@@ -852,12 +852,12 @@ async fn zulip_command_worker_sanitizes_provider_errors_before_retrying() {
                 "zulip",
                 "send_stream_message",
                 "send:zulip-worker-send-failure-1",
-                "hermes-frontend",
+                "makosh-frontend",
             )
-            .provider_conversation_id("Hermes Lab/Tasks")
-            .target_ref(json!({"stream": "Hermes Lab", "topic": "Tasks"}))
+            .provider_conversation_id("Макошь Lab/Tasks")
+            .target_ref(json!({"stream": "Макошь Lab", "topic": "Tasks"}))
             .payload(json!({
-                "stream": "Hermes Lab",
+                "stream": "Макошь Lab",
                 "topic": "Tasks",
                 "content": "Надо проверить retention."
             })),
@@ -939,12 +939,12 @@ async fn zulip_command_worker_executes_due_commands_across_zulip_accounts() {
                     "zulip",
                     "send_stream_message",
                     format!("send:{account_id}:1"),
-                    "hermes-frontend",
+                    "makosh-frontend",
                 )
-                .provider_conversation_id("Hermes Lab/Tasks")
-                .target_ref(json!({"stream": "Hermes Lab", "topic": "Tasks"}))
+                .provider_conversation_id("Макошь Lab/Tasks")
+                .target_ref(json!({"stream": "Макошь Lab", "topic": "Tasks"}))
                 .payload(json!({
-                    "stream": "Hermes Lab",
+                    "stream": "Макошь Lab",
                     "topic": "Tasks",
                     "content": "Надо проверить retention."
                 })),
@@ -1229,12 +1229,12 @@ async fn zulip_provider_observation_reconciles_completed_send_command() {
                 "zulip",
                 "send_stream_message",
                 "send:zulip-reconcile-send-1",
-                "hermes-frontend",
+                "makosh-frontend",
             )
-            .provider_conversation_id("Hermes Lab/Tasks")
-            .target_ref(json!({"stream": "Hermes Lab", "topic": "Tasks"}))
+            .provider_conversation_id("Макошь Lab/Tasks")
+            .target_ref(json!({"stream": "Макошь Lab", "topic": "Tasks"}))
             .payload(json!({
-                "stream": "Hermes Lab",
+                "stream": "Макошь Lab",
                 "topic": "Tasks",
                 "content": "Надо проверить retention."
             })),
@@ -1265,9 +1265,9 @@ async fn zulip_provider_observation_reconciles_completed_send_command() {
             "id": 7001,
             "content": "Надо проверить retention.",
             "sender_email": "bot@example.test",
-            "sender_full_name": "Hermes Bot",
+            "sender_full_name": "Макошь Bot",
             "stream_id": 10,
-            "display_recipient": "Hermes Lab",
+            "display_recipient": "Макошь Lab",
             "topic": "Tasks"
         }
     }))
@@ -1389,9 +1389,9 @@ async fn zulip_raw_signal_projects_message_and_is_idempotent() {
             "id": 7001,
             "content": "Надо проверить backup retention до пятницы.",
             "sender_email": "bot@example.test",
-            "sender_full_name": "Hermes Bot",
+            "sender_full_name": "Макошь Bot",
             "stream_id": 10,
-            "display_recipient": "Hermes Lab",
+            "display_recipient": "Макошь Lab",
             "topic": "Tasks"
         }
     }))
@@ -1426,8 +1426,8 @@ async fn zulip_raw_signal_projects_message_and_is_idempotent() {
         .expect("projected Zulip message");
     assert_eq!(projected.channel_kind, "zulip");
     assert_eq!(projected.provider_record_id, "7001");
-    assert_eq!(projected.subject, "Hermes Lab / Tasks");
-    assert_eq!(projected.sender_display_name.as_deref(), Some("Hermes Bot"));
+    assert_eq!(projected.subject, "Макошь Lab / Tasks");
+    assert_eq!(projected.sender_display_name.as_deref(), Some("Макошь Bot"));
 
     let repeated_raw_record = ingestion
         .record_raw_source(&new_raw_record)
@@ -1524,7 +1524,7 @@ async fn zulip_raw_signal_projects_direct_message_without_stream_topic_shape() {
             "message": {
                 "id": 7005,
                 "type": "private",
-                "content": "Direct note for Hermes.",
+                "content": "Direct note for Макошь.",
                 "sender_email": "alice@example.test",
                 "sender_full_name": "Alice",
                 "display_recipient": [
@@ -1536,7 +1536,7 @@ async fn zulip_raw_signal_projects_direct_message_without_stream_topic_shape() {
                     {
                         "id": 102,
                         "email": "bot@example.test",
-                        "full_name": "Hermes Bot"
+                        "full_name": "Макошь Bot"
                     }
                 ]
             }
@@ -1546,7 +1546,7 @@ async fn zulip_raw_signal_projects_direct_message_without_stream_topic_shape() {
 
     assert_eq!(projected.channel_kind, "zulip");
     assert_eq!(projected.provider_record_id, "7005");
-    assert_eq!(projected.subject, "Direct / Alice, Hermes Bot");
+    assert_eq!(projected.subject, "Direct / Alice, Макошь Bot");
     assert_eq!(
         projected.recipients,
         vec![
@@ -1605,9 +1605,9 @@ async fn zulip_attachment_metadata_remains_evidence_only_until_bytes_are_transfe
             "id": 7002,
             "content": "См. evidence.pdf.",
             "sender_email": "bot@example.test",
-            "sender_full_name": "Hermes Bot",
+            "sender_full_name": "Макошь Bot",
             "stream_id": 10,
-            "display_recipient": "Hermes Lab",
+            "display_recipient": "Макошь Lab",
             "topic": "Evidence",
             "attachments": [
                 {
@@ -1729,9 +1729,9 @@ async fn zulip_attachment_bytes_materialize_after_safe_transfer() {
                 "id": 7003,
                 "content": "См. вложение.",
                 "sender_email": "bot@example.test",
-                "sender_full_name": "Hermes Bot",
+                "sender_full_name": "Макошь Bot",
                 "stream_id": 10,
-                "display_recipient": "Hermes Lab",
+                "display_recipient": "Макошь Lab",
                 "topic": "Evidence",
                 "attachments": [
                     {
@@ -1895,9 +1895,9 @@ async fn zulip_attachment_download_worker_materializes_pending_user_upload() {
                 "id": 7004,
                 "content": "См. вложение из Zulip.",
                 "sender_email": "bot@example.test",
-                "sender_full_name": "Hermes Bot",
+                "sender_full_name": "Макошь Bot",
                 "stream_id": 10,
-                "display_recipient": "Hermes Lab",
+                "display_recipient": "Макошь Lab",
                 "topic": "Evidence",
                 "attachments": [
                     {
@@ -2047,9 +2047,9 @@ async fn zulip_message_can_feed_review_task_candidate_without_auto_creating_task
                 "id": 7003,
                 "content": "Надо проверить backup retention до пятницы.",
                 "sender_email": "bot@example.test",
-                "sender_full_name": "Hermes Bot",
+                "sender_full_name": "Макошь Bot",
                 "stream_id": 10,
-                "display_recipient": "Hermes Lab",
+                "display_recipient": "Макошь Lab",
                 "topic": "Tasks"
             }
         }),
@@ -2203,9 +2203,9 @@ async fn zulip_message_drives_review_attention_card_and_context_pack_trace_chain
                 "id": 7101,
                 "content": "Надо проверить резервные копии до пятницы.",
                 "sender_email": "bot@example.test",
-                "sender_full_name": "Hermes Bot",
+                "sender_full_name": "Макошь Bot",
                 "stream_id": 10,
-                "display_recipient": "Hermes Lab",
+                "display_recipient": "Макошь Lab",
                 "topic": "Tasks"
             }
         }),
@@ -2245,7 +2245,7 @@ async fn zulip_message_drives_review_attention_card_and_context_pack_trace_chain
             .await
             .expect("database connection");
         build_router_with_database(
-            hermes_backend_testkit::app::config_with_secret_and_database_url(
+            makosh_backend_testkit::app::config_with_secret_and_database_url(
                 LOCAL_API_TOKEN,
                 database_url.as_str(),
             ),
@@ -2259,7 +2259,7 @@ async fn zulip_message_drives_review_attention_card_and_context_pack_trace_chain
             Request::builder()
                 .method("GET")
                 .uri("/api/v1/review/attention-cards?status=active&limit=20")
-                .header("x-hermes-secret", LOCAL_API_TOKEN)
+                .header("x-makosh-secret", LOCAL_API_TOKEN)
                 .body(Body::empty())
                 .expect("attention cards request"),
         )
@@ -2301,7 +2301,7 @@ async fn zulip_message_drives_review_attention_card_and_context_pack_trace_chain
                 .uri(format!(
                     "/api/v1/review/items/{review_item_id}/context-pack"
                 ))
-                .header("x-hermes-secret", LOCAL_API_TOKEN)
+                .header("x-makosh-secret", LOCAL_API_TOKEN)
                 .body(Body::empty())
                 .expect("review context-pack request"),
         )
@@ -2395,9 +2395,9 @@ async fn zulip_reaction_edit_delete_signals_materialize_canonical_state() {
                 "id": 7001,
                 "content": "Надо проверить backup retention до пятницы.",
                 "sender_email": "bot@example.test",
-                "sender_full_name": "Hermes Bot",
+                "sender_full_name": "Макошь Bot",
                 "stream_id": 10,
-                "display_recipient": "Hermes Lab",
+                "display_recipient": "Макошь Lab",
                 "topic": "Tasks"
             }
         }),
@@ -2719,7 +2719,7 @@ fn json_post_request(path: &str, body: Value) -> Request<Body> {
         .method("POST")
         .uri(path)
         .header("content-type", "application/json")
-        .header("x-hermes-secret", LOCAL_API_TOKEN)
+        .header("x-makosh-secret", LOCAL_API_TOKEN)
         .body(Body::from(body.to_string()))
         .expect("request")
 }
@@ -2845,9 +2845,9 @@ async fn fake_zulip_get_events(
                 "id": 7001,
                 "content": "Надо проверить backup retention до пятницы.",
                 "sender_email": "bot@example.test",
-                "sender_full_name": "Hermes Bot",
+                "sender_full_name": "Макошь Bot",
                 "stream_id": 10,
-                "display_recipient": "Hermes Lab",
+                "display_recipient": "Макошь Lab",
                 "topic": "Tasks"
             }
         }])
@@ -2879,7 +2879,7 @@ async fn fake_zulip_send_message(headers: HeaderMap, body: Bytes) -> impl IntoRe
     let form = parse_form(&body);
     let response_id = match form.get("type").map(String::as_str) {
         Some("stream") => {
-            assert_eq!(form.get("to").map(String::as_str), Some("Hermes Lab"));
+            assert_eq!(form.get("to").map(String::as_str), Some("Макошь Lab"));
             assert_eq!(form.get("topic").map(String::as_str), Some("Tasks"));
             let content = form.get("content").map(String::as_str);
             assert!(

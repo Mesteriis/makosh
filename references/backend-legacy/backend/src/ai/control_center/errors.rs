@@ -2,7 +2,7 @@ use thiserror::Error;
 
 use crate::platform::secrets::errors::SecretReferenceError;
 use crate::vault::errors::HostVaultError;
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_observations_postgres::errors::ObservationStoreError;
 
 #[derive(Debug, Error)]
 pub enum AiControlCenterError {

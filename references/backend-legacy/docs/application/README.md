@@ -1,4 +1,4 @@
-# Hermes Application Services
+# Макошь Application Services
 
 Status: documentation package aligned to the current repository structure.
 

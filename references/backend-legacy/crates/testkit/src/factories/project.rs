@@ -1,6 +1,6 @@
-use hermes_hub_backend::domains::projects::core::errors::ProjectStoreError;
-use hermes_hub_backend::domains::projects::core::models::{NewProject, Project};
-use hermes_hub_backend::domains::projects::core::store::ProjectStore;
+use makosh_hub_backend::domains::projects::core::errors::ProjectStoreError;
+use makosh_hub_backend::domains::projects::core::models::{NewProject, Project};
+use makosh_hub_backend::domains::projects::core::store::ProjectStore;
 use sqlx::postgres::PgPool;
 use uuid::Uuid;
 

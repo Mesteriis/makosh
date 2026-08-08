@@ -1,17 +1,17 @@
 [package]
-name = "hermes-communication-cross-channel-forward-testkit"
+name = "makosh-communication-cross-channel-forward-testkit"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "test"
 owner = "test"
 surface = "test_support"
 
 [dev-dependencies]
-hermes-communication-cross-channel-forward-core = { path = "../../../src/communication-cross-channel-forward-core" }
-hermes-communication-cross-channel-forward-persistence = { path = "../../../src/communication-cross-channel-forward-persistence", features = ["conformance-test-support"] }
-hermes-communication-delivery-intent-ingress-api = { path = "../../../src/communication-delivery-intent-ingress-api" }
-hermes-communications-cross-channel-forward-source-api = { path = "../../../src/communications-cross-channel-forward-source-api" }
+makosh-communication-cross-channel-forward-core = { path = "../../../src/communication-cross-channel-forward-core" }
+makosh-communication-cross-channel-forward-persistence = { path = "../../../src/communication-cross-channel-forward-persistence", features = ["conformance-test-support"] }
+makosh-communication-delivery-intent-ingress-api = { path = "../../../src/communication-delivery-intent-ingress-api" }
+makosh-communications-cross-channel-forward-source-api = { path = "../../../src/communications-cross-channel-forward-source-api" }
 tokio = { version = "=1.52.4", default-features = false, features = ["macros", "rt-multi-thread"] }

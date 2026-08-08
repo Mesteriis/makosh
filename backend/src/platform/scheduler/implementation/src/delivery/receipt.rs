@@ -1,13 +1,13 @@
 //! Binding between the Scheduler receipt payload and its durable outer envelope.
 
-use hermes_events_protocol::{
+use makosh_events_protocol::{
     v1::{
         AckDispositionV1, AckStageV1, DurableEnvelopeV1, ResultOutcomeV1,
         durable_envelope_v1::Semantics,
     },
     validation::envelope::decode_envelope_v1,
 };
-use hermes_scheduler_protocol::{
+use makosh_scheduler_protocol::{
     SchedulerReceiptValidationErrorV1,
     v1::{JobRunOutcomeV1, JobRunReceiptV1},
     validate_job_run_receipt_v1,

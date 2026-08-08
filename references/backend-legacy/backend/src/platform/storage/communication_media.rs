@@ -254,7 +254,7 @@ pub fn scan_attachment(request: &SafetyScanRequest<'_>) -> Result<SafetyScanRepo
 
     Ok(SafetyScanReport {
         status,
-        engine: Some("hermes_heuristic_v1".to_owned()),
+        engine: Some("makosh_heuristic_v1".to_owned()),
         checked_at: Some(Utc::now()),
         summary: Some(scan_summary(status).to_owned()),
         metadata: json!({

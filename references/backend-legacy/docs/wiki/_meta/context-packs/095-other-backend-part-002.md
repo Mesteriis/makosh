@@ -21,9 +21,9 @@
 - Group / Группа: `backend`
 - Role / Роль: `other`
 - Status / Статус: `pending`
-- Repository / Репозиторий: `/Users/avm/projects/Personal/hermes-hub`
-- Wiki path / Путь wiki: `/Users/avm/projects/Personal/hermes-hub/docs/wiki`
-- Metadata path / Путь metadata: `/Users/avm/projects/Personal/hermes-hub/docs/wiki/_meta`
+- Repository / Репозиторий: `/Users/avm/projects/Personal/makosh`
+- Wiki path / Путь wiki: `/Users/avm/projects/Personal/makosh/docs/wiki`
+- Metadata path / Путь metadata: `/Users/avm/projects/Personal/makosh/docs/wiki/_meta`
 - Plan generated at / План создан: `2026-06-28T19:48:55Z`
 - Per-file source limit / Лимит источника на файл: `12000` characters
 
@@ -55,7 +55,7 @@ List possible code/docs/ADR drift found in this chunk, or state that none is vis
 
 ### `backend/migrations/0026_create_email_rules.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0026_create_email_rules.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0026_create_email_rules.sql`
 - Size bytes / Размер в байтах: `885`
 - Included characters / Включено символов: `885`
 - Truncated / Обрезано: `no`
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS email_rules (
 
 ### `backend/migrations/0027_create_email_templates.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0027_create_email_templates.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0027_create_email_templates.sql`
 - Size bytes / Размер в байтах: `621`
 - Included characters / Включено символов: `621`
 - Truncated / Обрезано: `no`
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS email_templates (
 
 ### `backend/migrations/0028_create_email_personas.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0028_create_email_personas.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0028_create_email_personas.sql`
 - Size bytes / Размер в байтах: `829`
 - Included characters / Включено символов: `829`
 - Truncated / Обрезано: `no`
@@ -135,7 +135,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS email_personas_one_default_per_account
 
 ### `backend/migrations/0029_create_email_drafts.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0029_create_email_drafts.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0029_create_email_drafts.sql`
 - Size bytes / Размер в байтах: `1304`
 - Included characters / Включено символов: `1304`
 - Truncated / Обрезано: `no`
@@ -171,7 +171,7 @@ CREATE INDEX IF NOT EXISTS email_drafts_account_status_idx ON email_drafts (acco
 
 ### `backend/migrations/0030_create_email_invoices.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0030_create_email_invoices.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0030_create_email_invoices.sql`
 - Size bytes / Размер в байтах: `838`
 - Included characters / Включено символов: `838`
 - Truncated / Обрезано: `no`
@@ -202,7 +202,7 @@ CREATE INDEX IF NOT EXISTS email_invoices_status_idx ON email_invoices (status, 
 
 ### `backend/migrations/0031_create_email_legal_documents.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0031_create_email_legal_documents.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0031_create_email_legal_documents.sql`
 - Size bytes / Размер в байтах: `1092`
 - Included characters / Включено символов: `1092`
 - Truncated / Обрезано: `no`
@@ -234,7 +234,7 @@ CREATE TABLE IF NOT EXISTS email_legal_documents (
 
 ### `backend/migrations/0032_create_email_certificates.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0032_create_email_certificates.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0032_create_email_certificates.sql`
 - Size bytes / Размер в байтах: `1439`
 - Included characters / Включено символов: `1439`
 - Truncated / Обрезано: `no`
@@ -264,7 +264,7 @@ CREATE INDEX IF NOT EXISTS email_certs_expiry_idx ON email_certificates (valid_u
 
 ### `backend/migrations/0033_extend_contacts.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0033_extend_contacts.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0033_extend_contacts.sql`
 - Size bytes / Размер в байтах: `1358`
 - Included characters / Включено символов: `1358`
 - Truncated / Обрезано: `no`
@@ -295,7 +295,7 @@ CREATE INDEX IF NOT EXISTS contacts_favorite_idx ON contacts (contact_id) WHERE 
 
 ### `backend/migrations/0034_rename_contacts_to_persons.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0034_rename_contacts_to_persons.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0034_rename_contacts_to_persons.sql`
 - Size bytes / Размер в байтах: `2197`
 - Included characters / Включено символов: `2197`
 - Truncated / Обрезано: `no`
@@ -342,7 +342,7 @@ ALTER INDEX contacts_favorite_idx RENAME TO persons_favorite_idx;
 
 ### `backend/migrations/0035_person_identities_roles_personas.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0035_person_identities_roles_personas.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0035_person_identities_roles_personas.sql`
 - Size bytes / Размер в байтах: `3288`
 - Included characters / Включено символов: `3288`
 - Truncated / Обрезано: `no`
@@ -430,7 +430,7 @@ ON CONFLICT (identity_type, identity_value) WHERE status = 'active' DO NOTHING;
 
 ### `backend/migrations/0036_person_memory_timeline.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0036_person_memory_timeline.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0036_person_memory_timeline.sql`
 - Size bytes / Размер в байтах: `5324`
 - Included characters / Включено символов: `5324`
 - Truncated / Обрезано: `no`
@@ -565,7 +565,7 @@ ALTER TABLE persons
 
 ### `backend/migrations/0037_enrichment_expertise_trust.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0037_enrichment_expertise_trust.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0037_enrichment_expertise_trust.sql`
 - Size bytes / Размер в байтах: `4203`
 - Included characters / Включено символов: `4203`
 - Truncated / Обрезано: `no`
@@ -669,7 +669,7 @@ CREATE INDEX IF NOT EXISTS persons_watchlist_idx ON persons (person_id) WHERE wa
 
 ### `backend/migrations/0038_create_organizations.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0038_create_organizations.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0038_create_organizations.sql`
 - Size bytes / Размер в байтах: `2602`
 - Included characters / Включено символов: `2602`
 - Truncated / Обрезано: `no`
@@ -741,7 +741,7 @@ CREATE INDEX IF NOT EXISTS organizations_trust_score_idx ON organizations (trust
 
 ### `backend/migrations/0039_organization_identities_departments.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0039_organization_identities_departments.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0039_organization_identities_departments.sql`
 - Size bytes / Размер в байтах: `5529`
 - Included characters / Включено символов: `5529`
 - Truncated / Обрезано: `no`
@@ -862,7 +862,7 @@ CREATE INDEX IF NOT EXISTS related_orgs_org_id_idx ON related_organizations (org
 
 ### `backend/migrations/0040_organization_memory.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0040_organization_memory.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0040_organization_memory.sql`
 - Size bytes / Размер в байтах: `3833`
 - Included characters / Включено символов: `3833`
 - Truncated / Обрезано: `no`
@@ -957,7 +957,7 @@ CREATE INDEX IF NOT EXISTS org_conflicts_org_id_idx ON organization_knowledge_co
 
 ### `backend/migrations/0041_organization_timeline_workflows.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0041_organization_timeline_workflows.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0041_organization_timeline_workflows.sql`
 - Size bytes / Размер в байтах: `4032`
 - Included characters / Включено символов: `4032`
 - Truncated / Обрезано: `no`
@@ -1058,7 +1058,7 @@ CREATE INDEX IF NOT EXISTS org_playbooks_org_id_idx ON organization_playbooks (o
 
 ### `backend/migrations/0042_organization_finance_enrichment.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0042_organization_finance_enrichment.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0042_organization_finance_enrichment.sql`
 - Size bytes / Размер в байтах: `3572`
 - Included characters / Включено символов: `3572`
 - Truncated / Обрезано: `no`
@@ -1151,7 +1151,7 @@ CREATE INDEX IF NOT EXISTS org_enrichment_org_id_idx ON organization_enrichment_
 
 ### `backend/migrations/0043_organization_risks_alerts.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0043_organization_risks_alerts.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0043_organization_risks_alerts.sql`
 - Size bytes / Размер в байтах: `1371`
 - Included characters / Включено символов: `1371`
 - Truncated / Обрезано: `no`
@@ -1192,7 +1192,7 @@ CREATE INDEX IF NOT EXISTS org_alerts_org_id_idx ON organization_alerts (organiz
 
 ### `backend/migrations/0044_calendar_core.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0044_calendar_core.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0044_calendar_core.sql`
 - Size bytes / Размер в байтах: `3933`
 - Included characters / Включено символов: `3933`
 - Truncated / Обрезано: `no`
@@ -1279,7 +1279,7 @@ CREATE INDEX IF NOT EXISTS calendar_events_time_range_idx ON calendar_events (st
 
 ### `backend/migrations/0045_calendar_core_tables.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0045_calendar_core_tables.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0045_calendar_core_tables.sql`
 - Size bytes / Размер в байтах: `6725`
 - Included characters / Включено символов: `6725`
 - Truncated / Обрезано: `no`
@@ -1443,7 +1443,7 @@ CREATE INDEX IF NOT EXISTS event_transcripts_event_idx ON event_transcripts (eve
 
 ### `backend/migrations/0046_calendar_scheduling_rules.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0046_calendar_scheduling_rules.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0046_calendar_scheduling_rules.sql`
 - Size bytes / Размер в байтах: `2362`
 - Included characters / Включено символов: `2362`
 - Truncated / Обрезано: `no`
@@ -1509,7 +1509,7 @@ CREATE INDEX IF NOT EXISTS calendar_rules_enabled_idx ON calendar_rules (rule_id
 
 ### `backend/migrations/0047_calendar_extensions.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0047_calendar_extensions.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0047_calendar_extensions.sql`
 - Size bytes / Размер в байтах: `1967`
 - Included characters / Включено символов: `1967`
 - Truncated / Обрезано: `no`
@@ -1561,7 +1561,7 @@ CREATE INDEX IF NOT EXISTS event_locations_name_idx ON event_locations (parsed_n
 
 ### `backend/migrations/0048_tasks_core.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0048_tasks_core.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0048_tasks_core.sql`
 - Size bytes / Размер в байтах: `2410`
 - Included characters / Включено символов: `2410`
 - Truncated / Обрезано: `no`
@@ -1580,7 +1580,7 @@ ALTER TABLE tasks ADD COLUMN IF NOT EXISTS outcome TEXT;
 ALTER TABLE tasks ADD COLUMN IF NOT EXISTS due_at TIMESTAMPTZ;
 ALTER TABLE tasks ADD COLUMN IF NOT EXISTS completed_at TIMESTAMPTZ;
 ALTER TABLE tasks ADD COLUMN IF NOT EXISTS archived_at TIMESTAMPTZ;
-ALTER TABLE tasks ADD COLUMN IF NOT EXISTS hermes_status TEXT DEFAULT 'new';
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS makosh_status TEXT DEFAULT 'new';
 ALTER TABLE tasks ADD COLUMN IF NOT EXISTS waiting_reason TEXT;
 ALTER TABLE tasks ADD COLUMN IF NOT EXISTS energy_type TEXT;
 ALTER TABLE tasks ADD COLUMN IF NOT EXISTS confidentiality TEXT DEFAULT 'private_local';
@@ -1591,11 +1591,11 @@ ALTER TABLE tasks ADD COLUMN IF NOT EXISTS linked_organization_id TEXT;
 
 -- Drop old constraint, add new
 ALTER TABLE tasks DROP CONSTRAINT IF EXISTS tasks_status_check;
-ALTER TABLE tasks ADD CONSTRAINT tasks_hermes_status_check CHECK (hermes_status IN ('new','triaged','ready','in_progress','waiting','blocked','review','done','cancelled','archived'));
+ALTER TABLE tasks ADD CONSTRAINT tasks_makosh_status_check CHECK (makosh_status IN ('new','triaged','ready','in_progress','waiting','blocked','review','done','cancelled','archived'));
 ALTER TABLE tasks ADD CONSTRAINT tasks_source_type_check CHECK (source_type IN ('manual','email','telegram','whatsapp','calendar','meeting','document','note','jira','youtrack','github','gitlab','linear','todoist','apple_reminders','ms_todo','ai_rule','workflow','import'));
 ALTER TABLE tasks ADD CONSTRAINT tasks_confidentiality_check CHECK (confidentiality IN ('public_to_provider','private_local','sensitive','confidential'));
 
-CREATE INDEX IF NOT EXISTS tasks_hermes_status_idx ON tasks (hermes_status);
+CREATE INDEX IF NOT EXISTS tasks_makosh_status_idx ON tasks (makosh_status);
 CREATE INDEX IF NOT EXISTS tasks_due_at_idx ON tasks (due_at);
 CREATE INDEX IF NOT EXISTS tasks_priority_idx ON tasks (priority_score DESC NULLS LAST);
 CREATE INDEX IF NOT EXISTS tasks_person_idx ON tasks (linked_person_id);
@@ -1604,7 +1604,7 @@ CREATE INDEX IF NOT EXISTS tasks_org_idx ON tasks (linked_organization_id);
 
 ### `backend/migrations/0049_tasks_providers.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0049_tasks_providers.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0049_tasks_providers.sql`
 - Size bytes / Размер в байтах: `1883`
 - Included characters / Включено символов: `1883`
 - Truncated / Обрезано: `no`
@@ -1648,7 +1648,7 @@ CREATE TABLE IF NOT EXISTS provider_status_mappings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     provider TEXT NOT NULL,
     external_status TEXT NOT NULL,
-    hermes_status TEXT NOT NULL,
+    makosh_status TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     UNIQUE(provider, external_status)
 );
@@ -1656,7 +1656,7 @@ CREATE TABLE IF NOT EXISTS provider_status_mappings (
 
 ### `backend/migrations/0050_tasks_context.sql`
 
-- Resolved path / Полный путь: `/Users/avm/projects/Personal/hermes-hub/backend/migrations/0050_tasks_context.sql`
+- Resolved path / Полный путь: `/Users/avm/projects/Personal/makosh/backend/migrations/0050_tasks_context.sql`
 - Size bytes / Размер в байтах: `2748`
 - Included characters / Включено символов: `2748`
 - Truncated / Обрезано: `no`

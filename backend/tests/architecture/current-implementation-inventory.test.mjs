@@ -17,19 +17,19 @@ import { canonicalPolicyForTests } from './support/canonical-policy.mjs';
 function recoveryOnlyPackages() {
   const policy = canonicalPolicyForTests();
   return policy.implementation.productionPackages.map((descriptor) => {
-    const hermes = {
+    const makosh = {
       role: descriptor.role,
       owner: descriptor.owner,
       surface: descriptor.surface,
     };
     if (descriptor.name === policy.kernel.package) {
-      hermes.components = [...policy.implementation.kernelProfile.activeComponents];
+      makosh.components = [...policy.implementation.kernelProfile.activeComponents];
     }
     if (descriptor.name === policy.vault.runtimePackage) {
-      hermes.components = [policy.vault.runtimeComponent];
+      makosh.components = [policy.vault.runtimeComponent];
     }
     if (descriptor.name === policy.storage.runtimePackage) {
-      hermes.components = [policy.storage.runtimeComponent];
+      makosh.components = [policy.storage.runtimeComponent];
     }
     const dependencies = policy.implementation.workspaceDependencyAllowlist[descriptor.name]
       .map(({ name, kind }) => dependency(name, kind));
@@ -38,7 +38,7 @@ function recoveryOnlyPackages() {
         .map(reviewedCratesIoDependency),
     );
     return {
-      ...workspacePackage(descriptor.name, hermes, dependencies),
+      ...workspacePackage(descriptor.name, makosh, dependencies),
       targets: [{ kind: [policy.implementation.targetPolicy[descriptor.name].primaryKind] }],
       features: structuredClone(
         policy.implementation.cargoFeatureAllowlist[descriptor.name] ?? {},
@@ -87,7 +87,7 @@ test('allows an empty production source root before the first package exists', (
 
 test('requires every production source file to belong to an authorized package root', () => {
   const packageRoots = [{
-    name: 'hermes-kernel',
+    name: 'makosh-kernel',
     role: 'core',
     root: 'src/core/kernel/runtime',
   }];
@@ -122,17 +122,17 @@ test('requires every production source file to belong to an authorized package r
 
 test('allows staged integration and engine sources outside the active owner inventory only', () => {
   const policy = canonicalPolicyForTests();
-  const integration = workspacePackage('hermes-telegram-core', {
+  const integration = workspacePackage('makosh-telegram-core', {
     role: 'integration',
     owner: 'telegram',
     surface: 'implementation',
   });
-  const engine = workspacePackage('hermes-content-security-core', {
+  const engine = workspacePackage('makosh-content-security-core', {
     role: 'engine',
     owner: 'content_security',
     surface: 'implementation',
   });
-  const extraDomain = workspacePackage('hermes-extra-domain', {
+  const extraDomain = workspacePackage('makosh-extra-domain', {
     role: 'domain',
     owner: 'extra',
     surface: 'implementation',
@@ -151,7 +151,7 @@ test('allows staged integration and engine sources outside the active owner inve
       { path: 'src/telegram-core/Cargo.toml', isDirectory: false },
       { path: 'src/telegram-core/src/lib.rs', isDirectory: false },
     ], [{
-      name: 'hermes-telegram-core',
+      name: 'makosh-telegram-core',
       role: 'integration',
       root: 'src/telegram-core',
     }]),
@@ -162,7 +162,7 @@ test('allows staged integration and engine sources outside the active owner inve
       { path: 'src/content-security-core/Cargo.toml', isDirectory: false },
       { path: 'src/content-security-core/src/lib.rs', isDirectory: false },
     ], [{
-      name: 'hermes-content-security-core',
+      name: 'makosh-content-security-core',
       role: 'engine',
       root: 'src/content-security-core',
     }]),
@@ -174,11 +174,11 @@ test('allows staged integration and engine sources outside the active owner inve
   )).has('implementation_inventory'));
   assert.ok(codes(validateCurrentImplementationSourceCoverage(policy, [
     { path: 'src/extra-domain/src/lib.rs', isDirectory: false },
-  ], [{ name: 'hermes-extra-domain', role: 'domain', root: 'src/extra-domain' }])).has('implementation_source_coverage'));
+  ], [{ name: 'makosh-extra-domain', role: 'domain', root: 'src/extra-domain' }])).has('implementation_source_coverage'));
 });
 
 test('ignores a test-only workspace when enforcing the production slice', () => {
-  const packages = [workspacePackage('hermes-test-support', {
+  const packages = [workspacePackage('makosh-test-support', {
     role: 'test',
     owner: 'test',
     surface: 'test_support',
@@ -205,7 +205,7 @@ test('allows only the explicit development runtime and assembly outside producti
     [],
   );
 
-  development[1].metadata.hermes.components = ['hidden_component'];
+  development[1].metadata.makosh.components = ['hidden_component'];
   assert.ok(codes(validateCurrentImplementationInventory(
     policy,
     metadata([...recoveryOnlyPackages(), ...development]),
@@ -226,7 +226,7 @@ test('rejects missing or extra production packages', () => {
   const missing = recoveryOnlyPackages().slice(1);
   const extra = [
     ...recoveryOnlyPackages(),
-    workspacePackage('hermes-storage-protocol', {
+    workspacePackage('makosh-storage-protocol', {
       role: 'platform',
       owner: 'storage',
       surface: 'contract',
@@ -245,7 +245,7 @@ test('rejects missing or extra production packages', () => {
 
 test('rejects descriptor drift in an authorized package', () => {
   const packages = recoveryOnlyPackages();
-  packages[0].metadata.hermes.owner = 'telemetry';
+  packages[0].metadata.makosh.owner = 'telemetry';
 
   assert.ok(codes(validateCurrentImplementationInventory(
     canonicalPolicyForTests(),
@@ -260,7 +260,7 @@ test('requires only the active recovery-only Kernel components', () => {
     ['core_gateway', 'supervisor'],
   ]) {
     const packages = recoveryOnlyPackages();
-    packages.find(({ name }) => name === 'hermes-kernel').metadata.hermes.components = components;
+    packages.find(({ name }) => name === 'makosh-kernel').metadata.makosh.components = components;
 
     assert.ok(codes(validateCurrentImplementationInventory(
       canonicalPolicyForTests(),
@@ -279,15 +279,15 @@ test('allows only the declared internal current-slice dependency graph', () => {
 });
 
 for (const [packageName, dependencyName] of [
-  ['hermes-kernel', 'hermes-events-protocol'],
-  ['hermes-events-protocol', 'hermes-kernel'],
-  ['hermes-kernel', 'async-nats'],
-  ['hermes-kernel-control-store-sqlite', 'sqlx'],
-  ['hermes-kernel', 'reqwest'],
-  ['hermes-kernel', 'teloxide'],
-  ['hermes-kernel', 'mongodb'],
-  ['hermes-kernel', 'hermes-vault-protocol'],
-  ['hermes-kernel', 'hermes-provider-zulip'],
+  ['makosh-kernel', 'makosh-events-protocol'],
+  ['makosh-events-protocol', 'makosh-kernel'],
+  ['makosh-kernel', 'async-nats'],
+  ['makosh-kernel-control-store-sqlite', 'sqlx'],
+  ['makosh-kernel', 'reqwest'],
+  ['makosh-kernel', 'teloxide'],
+  ['makosh-kernel', 'mongodb'],
+  ['makosh-kernel', 'makosh-vault-protocol'],
+  ['makosh-kernel', 'makosh-provider-zulip'],
 ]) {
   test(`rejects ${packageName} dependency on ${dependencyName} in recovery-only`, () => {
     const packages = recoveryOnlyPackages();
@@ -311,7 +311,7 @@ test('allows only reviewed crates.io dependencies with their exact dependency ki
   ), []);
 
   const wrongKind = recoveryOnlyPackages();
-  wrongKind.find(({ name }) => name === 'hermes-events-protocol')
+  wrongKind.find(({ name }) => name === 'makosh-events-protocol')
     .dependencies.find(({ name }) => name === 'prost-build').kind = 'normal';
   assert.ok(codes(validateCurrentImplementationInventory(
     canonicalPolicyForTests(),
@@ -319,7 +319,7 @@ test('allows only reviewed crates.io dependencies with their exact dependency ki
   )).has('implementation_dependency'));
 
   const renamed = recoveryOnlyPackages();
-  renamed.find(({ name }) => name === 'hermes-events-protocol')
+  renamed.find(({ name }) => name === 'makosh-events-protocol')
     .dependencies.find(({ name }) => name === 'prost').rename = 'wire';
   assert.ok(codes(validateCurrentImplementationInventory(
     canonicalPolicyForTests(),
@@ -329,7 +329,7 @@ test('allows only reviewed crates.io dependencies with their exact dependency ki
 
 test('rejects a registry URL that only looks like crates.io', () => {
   const packages = recoveryOnlyPackages();
-  packages.find(({ name }) => name === 'hermes-kernel')
+  packages.find(({ name }) => name === 'makosh-kernel')
     .dependencies.find(({ name }) => name === 'clap').source =
       'registry+https://packages.example.invalid/crates.io-index';
 
@@ -359,7 +359,7 @@ test('requires exact third-party versions, default features and feature sets', (
 
   for (const mutate of mutations) {
     const packages = recoveryOnlyPackages();
-    const clap = packages.find(({ name }) => name === 'hermes-kernel')
+    const clap = packages.find(({ name }) => name === 'makosh-kernel')
       .dependencies.find(({ name }) => name === 'clap');
     mutate(clap);
 
@@ -372,12 +372,12 @@ test('requires exact third-party versions, default features and feature sets', (
 
 test('does not accept a registry namesake as a required workspace package-ID edge', () => {
   const packages = recoveryOnlyPackages();
-  const kernel = packages.find(({ name }) => name === 'hermes-kernel');
+  const kernel = packages.find(({ name }) => name === 'makosh-kernel');
   const runtimeIndex = kernel.dependencies.findIndex(
-    ({ name }) => name === 'hermes-runtime-protocol',
+    ({ name }) => name === 'makosh-runtime-protocol',
   );
   kernel.dependencies[runtimeIndex] = cratesIoDependency(
-    'hermes-runtime-protocol',
+    'makosh-runtime-protocol',
     'normal',
     { rename: 'evil_runtime', req: '=999.0.0' },
   );
@@ -390,7 +390,7 @@ test('does not accept a registry namesake as a required workspace package-ID edg
 
 test('rejects Cargo feature definitions outside the exact current-slice allowlist', () => {
   const packages = recoveryOnlyPackages();
-  packages.find(({ name }) => name === 'hermes-kernel').features = {
+  packages.find(({ name }) => name === 'makosh-kernel').features = {
     nats_data_plane_v1: [],
   };
 
@@ -407,7 +407,7 @@ test('requires one binary Kernel target without a hidden build target', () => {
     [{ kind: ['bin'] }, { kind: ['custom-build'] }],
   ]) {
     const packages = recoveryOnlyPackages();
-    packages.find(({ name }) => name === 'hermes-kernel').targets = targets;
+    packages.find(({ name }) => name === 'makosh-kernel').targets = targets;
 
     assert.ok(codes(validateCurrentImplementationInventory(
       canonicalPolicyForTests(),
@@ -418,7 +418,7 @@ test('requires one binary Kernel target without a hidden build target', () => {
 
 test('permits only a protocol codegen build target in addition to its library', () => {
   const packages = recoveryOnlyPackages();
-  packages.find(({ name }) => name === 'hermes-events-protocol').targets.push({
+  packages.find(({ name }) => name === 'makosh-events-protocol').targets.push({
     kind: ['custom-build'],
   });
 

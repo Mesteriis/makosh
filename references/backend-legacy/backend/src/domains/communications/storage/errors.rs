@@ -1,8 +1,8 @@
-use hermes_events_api::EventEnvelopeError;
+use makosh_events_api::EventEnvelopeError;
 use std::path::PathBuf;
 
-use hermes_events_postgres::errors::EventStoreError;
-use hermes_observations_postgres::errors::ObservationStoreError;
+use makosh_events_postgres::errors::EventStoreError;
+use makosh_observations_postgres::errors::ObservationStoreError;
 use thiserror::Error;
 
 #[derive(Debug, Error)]

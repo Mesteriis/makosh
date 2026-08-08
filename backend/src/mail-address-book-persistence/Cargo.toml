@@ -1,5 +1,5 @@
 [package]
-name = "hermes-mail-address-book-persistence"
+name = "makosh-mail-address-book-persistence"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -11,15 +11,15 @@ path = "src/lib.rs"
 default = []
 conformance-test-support = []
 
-[package.metadata.hermes]
+[package.metadata.makosh]
 role = "integration"
 owner = "mail"
 surface = "persistence"
 
 [dependencies]
-hermes-events-protocol = { path = "../platform/events" }
-hermes-mail-address-book-contract = { path = "../mail-address-book-contract" }
-hermes-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-mail-address-book-contract = { path = "../mail-address-book-contract" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
 prost = "=0.14.4"
 sha2 = { version = "=0.11.0", default-features = false }
 sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

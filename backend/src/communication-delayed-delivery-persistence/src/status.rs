@@ -18,7 +18,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
             "SELECT delayed_operation_id, delivery_operation_id, state, state_revision,
                     deliver_at_unix_millis, scheduler_schedule_revision, error_code,
                     created_at_unix_millis, updated_at_unix_millis
-             FROM hermes_data.communication_delayed_delivery_operations
+             FROM makosh_data.communication_delayed_delivery_operations
              WHERE logical_owner_id = $1 AND delayed_operation_id = $2",
         )
         .bind(logical_owner_id)

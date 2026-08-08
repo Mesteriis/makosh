@@ -1,5 +1,5 @@
 use crate::domains::communications::archive_inspection::ArchiveInspectionReport;
-use hermes_connectrpc_contracts::hermes::communications::v1::{
+use makosh_connectrpc_contracts::makosh::communications::v1::{
     ArchiveInspectionEntry as ProtoArchiveInspectionEntry,
     ArchiveInspectionReport as ProtoArchiveInspectionReport,
 };

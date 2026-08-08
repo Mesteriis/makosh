@@ -2,7 +2,7 @@ import {
   ClientSettingsApplyStateV1,
   ClientSurfaceAvailabilityStateV1,
   type ClientModuleBootstrapV1,
-} from '../../gen/hermes/gateway/v1/client_bootstrap_pb'
+} from '../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import {
   clientSurfaceCatalog,
   type ClientSurfaceAdapterId,

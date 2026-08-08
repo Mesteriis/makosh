@@ -5,7 +5,7 @@ import {
 	ApplyOwnerManagedIntegrationSettingsReceiptV1Schema,
 	CreateOwnerModuleSettingsTargetReceiptV1Schema,
 	UpdateOwnerModuleSettingsReceiptV1Schema,
-} from '../../../gen/hermes/gateway/v1/owner_module_settings_pb'
+} from '../../../gen/makosh/gateway/v1/owner_module_settings_pb'
 import {
 	MailAccountReadinessV1,
 	MailAccountStatusV1Schema,
@@ -15,14 +15,14 @@ import {
 	MailCredentialPurposeV1,
 	MailConnectorProfileV1,
 	MailProviderPathReadinessV1,
-} from '../../../gen/hermes/mail/account/v1/client_pb'
+} from '../../../gen/makosh/mail/account/v1/client_pb'
 import {
 	GmailOAuthOperationKindV1,
 	GmailOAuthOperationStatusV1Schema,
 	GmailOAuthOutcomeV1,
 	GmailOAuthStartedV1Schema,
 	MailAcceptedV1Schema,
-} from '../../../gen/hermes/mail/v1/client_pb'
+} from '../../../gen/makosh/mail/v1/client_pb'
 import {
 	MailAccountConfigurationV1Schema,
 	MailAccountExportV1Schema,
@@ -35,7 +35,7 @@ import {
 	MailImapConfigurationV1Schema,
 	MailSmtpConfigurationV1Schema,
 	MailTlsEndpointV1Schema,
-} from '../../../gen/hermes/mail/portability/v1/portability_pb'
+} from '../../../gen/makosh/mail/portability/v1/portability_pb'
 import { OwnerVaultActionV1 } from '../../../platform/vault'
 import { serializeMailAccountExportV1 } from './mailAccountPortabilityCodec'
 import { MAIL_SETTINGS_SCHEMA_REVISION_V2 } from './mailAccountPortabilityCodec'

@@ -12,7 +12,7 @@ import {
 	GmailOAuthStartService,
 	type MailAcceptedV1,
 	StartGmailOAuthRequestV1Schema,
-} from '../../../gen/hermes/mail/v1/client_pb'
+} from '../../../gen/makosh/mail/v1/client_pb'
 import { createBrowserGatewayConnectTransport } from '../../../platform/gateway/browserGatewayConnect'
 
 export class MailGmailOAuthClientV1 {
